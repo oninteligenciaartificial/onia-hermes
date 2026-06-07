@@ -1,0 +1,66 @@
+{
+  "template_id": "atlas_ai_media_content_package_v1",
+  "created_at": "2026-06-05",
+  "required_state_before_publish": "approved_for_private_upload_then_explicit_public_publish_approval",
+  "fields": {
+    "content_id": "",
+    "channel_id": "",
+    "language": "",
+    "market": "",
+    "format": "",
+    "pillar": "",
+    "topic": "",
+    "business_problem": "",
+    "audience": "",
+    "safe_promise": "",
+    "monetization_angle": {
+      "adsense_fit": "",
+      "affiliate_fit": "",
+      "sponsor_fit": "",
+      "product_fit": ""
+    },
+    "research": {
+      "sources": [],
+      "competitors": [],
+      "keywords": [],
+      "risks": []
+    },
+    "creative": {
+      "titles_ab": [],
+      "thumbnail_brief": "",
+      "hook": "",
+      "script_markdown": "",
+      "storyboard": [],
+      "shorts_derivatives": []
+    },
+    "production": {
+      "voice_style": "",
+      "visual_prompts": [],
+      "negative_prompt": "",
+      "music_sfx": "",
+      "asset_list": []
+    },
+    "seo": {
+      "title_final": "",
+      "description": "",
+      "tags": [],
+      "chapters": "",
+      "pinned_comment": "",
+      "disclosure_text": ""
+    },
+    "fact_check": {
+      "approval_status": "needs_revision",
+      "risk_level": "medium",
+      "required_edits": [],
+      "sources_needed": [],
+      "disclosure_required": true
+    },
+    "approval": {
+      "upload_allowed": false,
+      "publish_allowed": false,
+      "generation_spend_allowed": false,
+      "required_approval_text": "Apruebo paquete YouTube: <content_id>"
+    }
+  }
+}
+

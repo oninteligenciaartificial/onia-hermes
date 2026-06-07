@@ -1,0 +1,2 @@
+lead_id,fecha_alta,empresa,rubro,ciudad,pais,contacto_publico,canal_contacto,fuente,vendedor_origen,responsable_actual,estado_pipeline,producto_sugerido,prioridad,ultimo_contacto,proximo_seguimiento,resultado_ultimo_contacto,mensaje_enviado,monto_cobrado,servicio_vendido,comision_calculada,comision_estado,fecha_pago_comision,notas
+LEAD-0001,2026-06-01,Ejemplo Clinica Dental,dental,Santa Cruz,Bolivia,telefono-demo,WhatsApp manual,Lista Sergio,Vendedor A,Vendedor A,Nuevo,DentalGest Pro,Alta,,,,,0,DentalGest Pro mensual,0,Pendiente,,

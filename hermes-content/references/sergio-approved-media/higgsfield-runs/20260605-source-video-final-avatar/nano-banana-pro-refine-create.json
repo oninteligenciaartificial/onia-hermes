@@ -1,0 +1,43 @@
+﻿[
+  {
+    "id": "92fa8e58-6f3c-4abb-badb-e9ea348bb9e1",
+    "status": "completed",
+    "display_name": "Nano Banana Pro",
+    "job_set_type": "nano_banana_2",
+    "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/hf_20260605_151825_92fa8e58-6f3c-4abb-badb-e9ea348bb9e1.png",
+    "created_at": 1780672705.494744,
+    "params": {
+      "width": 3072,
+      "height": 5504,
+      "aspect_ratio": "9:16",
+      "resolution": "4k",
+      "batch_size": 1,
+      "input_images": [
+        {
+          "id": "c69ccef2-1fca-47f7-aedb-fd2220349991",
+          "url": "https://d2ol7oe51mr4n9.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/c69ccef2-1fca-47f7-aedb-fd2220349991_resize.jpg",
+          "type": "media_input"
+        },
+        {
+          "id": "2b3a7ac2-68e6-47d8-93e4-0044343bf6c8",
+          "url": "https://d2ol7oe51mr4n9.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/2b3a7ac2-68e6-47d8-93e4-0044343bf6c8.png",
+          "type": "media_input"
+        },
+        {
+          "id": "38637449-d112-492d-ab3d-83a84d8f7294",
+          "url": "https://d2ol7oe51mr4n9.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/38637449-d112-492d-ab3d-83a84d8f7294.png",
+          "type": "media_input"
+        },
+        {
+          "id": "9a637c09-9772-42ba-ac7d-f8c174830342",
+          "url": "https://d2ol7oe51mr4n9.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/9a637c09-9772-42ba-ac7d-f8c174830342.png",
+          "type": "media_input"
+        }
+      ],
+      "input_image": null,
+      "application": null,
+      "surface": null,
+      "prompt": "Identity-preserving refinement of the same Sergio portrait. Keep the face from the real talking-video references as the source of truth and keep the selected generated photoshoot as the style/framing source. Improve only realism and small defects: make the skin less filtered, keep natural pores, keep the Italian side part glossy and controlled, keep shoulders naturally robust, keep black blazer and black crew neck, keep warm industrial office background. Smile and teeth lock: preserve Sergio's natural smile shape from the talking-video frames, align the visible teeth cleanly, remove any crooked or warped front tooth, keep teeth natural and not too white, keep lips realistic. Do not change the person, do not change eye spacing, do not reshape nose, do not lengthen neck, do not age him, do not make him skinnier, do not make the jaw more artificial. Output one final vertical 9:16 ultra-realistic portrait, single person, no text, no watermark."
+    }
+  }
+]

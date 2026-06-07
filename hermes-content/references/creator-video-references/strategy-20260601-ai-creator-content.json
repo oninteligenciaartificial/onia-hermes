@@ -1,0 +1,172 @@
+{
+  "id": "strategy-20260601-ai-creator-content",
+  "objective": "Build ONIA's AI-video creator strategy using Sergio's creator references, current AI video workflows and Higgsfield production.",
+  "platform_priority": ["Instagram Reels", "TikTok", "YouTube Shorts", "LinkedIn reposts"],
+  "desired_result": "Create original, high-retention AI education and UGC-style sales videos that turn viewers into DMs, demo requests and client conversations.",
+  "sources_used": [
+    {
+      "source": "Sergio shared Google Drive references",
+      "finding": "The strongest references use face + UI + proof examples + bold Spanish captions + high contrast scene changes."
+    },
+    {
+      "source": "Higgsfield local CLI and docs",
+      "finding": "Marketing Studio Video, Supercomputer, Canvas, hooks/settings/avatars and product workflows can support UGC, demos, products and creative campaigns."
+    },
+    {
+      "source": "TikTok Creative Center and platform trend sources",
+      "finding": "Native pacing, creator-led proof, concise hooks and platform-native edits remain key for short-form ads."
+    },
+    {
+      "source": "YouTube and Instagram creator resources",
+      "finding": "Shorts/Reels benefit from immediate clarity, original content, visible value and repeatable series."
+    }
+  ],
+  "skills_ranked": [
+    {
+      "skill": "Hook engineering",
+      "priority": "high",
+      "utility": 10,
+      "application": "Create a curiosity, future-shock or skill-ladder hook in the first 2 seconds.",
+      "avoid": "Generic openers like 'hoy te voy a mostrar'."
+    },
+    {
+      "skill": "AI workflow storytelling",
+      "priority": "high",
+      "utility": 10,
+      "application": "Turn tool usage into a story: impossible result -> tool reveal -> proof -> practical use.",
+      "avoid": "Only screen recording with no narrative tension."
+    },
+    {
+      "skill": "Prompt engineering for video",
+      "priority": "high",
+      "utility": 9,
+      "application": "Specify subject, action, setting, camera, lighting, pacing, subtitles, proof and negative prompt.",
+      "avoid": "One-paragraph vague prompts."
+    },
+    {
+      "skill": "Reference decomposition",
+      "priority": "high",
+      "utility": 9,
+      "application": "Extract structure and retention devices without copying identity or exact edits.",
+      "avoid": "Copying creator phrases, look, music or sequence."
+    },
+    {
+      "skill": "Variant production",
+      "priority": "medium",
+      "utility": 8,
+      "application": "Produce 3 versions per idea: curiosity, education and sales/demo.",
+      "avoid": "Generating many variants before knowing the objective."
+    }
+  ],
+  "creator_reference_ranking": [
+    {
+      "reference_id": "creator-video-ref-20260601-003",
+      "utility": 10,
+      "priority": "high",
+      "use_first_for": "premium AI video workflow and Supercomputer positioning",
+      "copy_risk": 6
+    },
+    {
+      "reference_id": "creator-video-ref-20260601-001",
+      "utility": 9,
+      "priority": "high",
+      "use_first_for": "surprising Higgsfield/AI tool demos",
+      "copy_risk": 5
+    },
+    {
+      "reference_id": "creator-video-ref-20260601-002",
+      "utility": 8,
+      "priority": "medium",
+      "use_first_for": "educational skill ladder and authority videos",
+      "copy_risk": 4
+    }
+  ],
+  "workflows": [
+    {
+      "name": "Reference to ONIA original video",
+      "input": "creator reference + ONIA objective + audience",
+      "process": [
+        "extract hook type, proof mechanism and scene rhythm",
+        "choose ONIA angle",
+        "write 6-beat script",
+        "create Higgsfield prompt",
+        "create caption and CTA",
+        "generate only after approval"
+      ],
+      "tools": ["Hermes", "Video Lab", "Higgsfield CLI", "ElevenLabs optional"],
+      "output": "approved Video Lab brief"
+    },
+    {
+      "name": "Supercomputer campaign ideation",
+      "input": "objective, references, product/rubro, constraints",
+      "process": [
+        "ask Supercomputer for hooks and variants only",
+        "return outputs to Hermes",
+        "rank and select",
+        "convert selected variant to Video Lab job"
+      ],
+      "tools": ["Higgsfield Supercomputer", "Hermes", "Notion optional"],
+      "output": "ranked campaign batch"
+    },
+    {
+      "name": "Weekly AI creator content sprint",
+      "input": "3 references + 1 ONIA objective",
+      "process": [
+        "1 premium workflow explainer",
+        "1 surprising tool demo",
+        "1 educational skill ladder",
+        "1 UGC sales demo",
+        "review metrics and update reference notes"
+      ],
+      "tools": ["Hermes", "Higgsfield", "Instagram/TikTok/Shorts"],
+      "output": "4 post-ready videos per week"
+    }
+  ],
+  "production_plan_first": {
+    "video_title": "Como vender videos IA en 2026 sin parecer copia",
+    "format": "AI creator explainer + workflow demo",
+    "hook": "En 2026, vender videos no sera editar: sera controlar personajes, escenas y pruebas visuales.",
+    "script_beats": [
+      "Hook: futuro + tension",
+      "Problem: mucha gente genera videos bonitos pero no vendibles",
+      "Mechanism: Hermes define objetivo, referencia, personaje, escena y prompt",
+      "Demo: mostrar Video Lab + Higgsfield + referencia",
+      "Proof: enseñar storyboard/frames/prompts",
+      "CTA: escribeme tu rubro y te preparo una idea de video"
+    ],
+    "higgsfield_prompt": "Create a vertical 9:16 AI-video workflow explainer for ONIA. Start with future-shock hook, then show a founder/operator at desk, dark UI overlays, creator reference cards, Hermes Video Lab brief, Higgsfield prompt blocks, storyboard frames turning into a final vertical ad. Spanish captions, fast high-contrast cuts every 2-3 seconds, premium but practical, no copied creator identity, no fake claims.",
+    "negative_prompt": "No copied creator likeness, no copied watermark, no fake results, no unapproved logos, no unreadable text, no fake testimonials, no exaggerated income claims."
+  },
+  "variants_ready": [
+    {
+      "name": "Curiosity demo",
+      "hook": "Alguien me explica como este video salio de una sola referencia?",
+      "best_reference": "creator-video-ref-20260601-001"
+    },
+    {
+      "name": "Skill ladder",
+      "hook": "De principiante a operador de videos IA: este es el flujo que yo practicaria.",
+      "best_reference": "creator-video-ref-20260601-002"
+    },
+    {
+      "name": "Future shock",
+      "hook": "En 2026, el que controla personajes y escenas vende mejor que el que solo edita.",
+      "best_reference": "creator-video-ref-20260601-003"
+    }
+  ],
+  "use_first": [
+    "Reference 003 for premium Supercomputer/Higgsfield positioning",
+    "Reference 001 for surprising AI tool demo",
+    "Hook engineering + AI workflow storytelling before cinematic polish"
+  ],
+  "test_next": [
+    "Higgsfield Supercomputer for 20-hook batches",
+    "Video Lab batch creation from reference patterns",
+    "ElevenLabs voiceover for Spanish polished narration"
+  ],
+  "discard_for_now": [
+    "Direct copying of creator sequence",
+    "Pure UGC product ad without educational AI angle",
+    "Long 60s AI videos before testing 15-35s versions"
+  ]
+}

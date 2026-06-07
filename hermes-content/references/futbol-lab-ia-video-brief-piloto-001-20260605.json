@@ -1,0 +1,91 @@
+{
+  "job_id": "futbol-lab-ia-piloto-001",
+  "account": "futbol_lab_ia",
+  "client_name": "",
+  "personality": "Serious tactical football analysis with quick clean visual humor.",
+  "topic": "La IA no sabe quien gana el Mundial, pero si encuentra trampas tacticas.",
+  "objective": "awareness",
+  "audience": "Fans hispanos de futbol que quieren entender el Mundial con tactica, datos y humor.",
+  "offer": "Follow Futbol Lab IA for World Cup 2026 tactical shorts and predictions.",
+  "format": "ai_concept",
+  "duration_seconds": 45,
+  "hook": {
+    "text": "La IA no puede prometer quien gana el Mundial. Pero si puede decirte donde una defensa va a sufrir.",
+    "visual": "Profe Pixel entra al estudio, VARcito prende alarma anti-humo.",
+    "type": "contrarian",
+    "first_two_seconds_check": true
+  },
+  "script": {
+    "spoken": "La IA no puede prometer quien gana el Mundial. Si alguien te dice eso, VARcito ya esta revisando la jugada. Pero si podemos hacer algo mas util: mirar patrones, presion, espacios, transiciones y escenarios. Por ejemplo: si un equipo ataca con laterales muy altos, la pregunta no es quien gana. La pregunta es: quien le corre la espalda primero. En Futbol Lab IA vamos a explicar el Mundial con datos, tactica y un poco de caos controlado. No magia. Futbol. Y si VARcito se porta bien, predicciones.",
+    "beats": [
+      { "name": "hook", "seconds": "0-2", "line": "La IA no puede prometer quien gana el Mundial." },
+      { "name": "comic_check", "seconds": "2-6", "line": "Si alguien te dice eso, VARcito ya esta revisando la jugada." },
+      { "name": "mechanism", "seconds": "6-20", "line": "Miramos patrones, presion, espacios, transiciones y escenarios." },
+      { "name": "example", "seconds": "20-35", "line": "Si un equipo ataca con laterales muy altos, alguien le puede correr la espalda." },
+      { "name": "cta", "seconds": "35-45", "line": "Futbol Lab IA: no magia, futbol." }
+    ]
+  },
+  "cta": {
+    "text": "Sigue Futbol Lab IA para el Mundial explicado con tactica y humor.",
+    "type": "follow",
+    "keyword": "",
+    "whatsapp_allowed": false
+  },
+  "scenes": [
+    { "scene": 1, "seconds": "0-2", "visual": "Profe Pixel enters tactical studio.", "spoken_line": "La IA no puede prometer quien gana el Mundial.", "overlay_text": "La IA no adivina campeones", "asset_needed": "animated_host", "transition": "fast zoom" },
+    { "scene": 2, "seconds": "2-6", "visual": "VARcito flashes warning.", "spoken_line": "VARcito ya esta revisando la jugada.", "overlay_text": "VARcito revisando humo", "asset_needed": "animated_var_monitor", "transition": "glitch beep" },
+    { "scene": 3, "seconds": "6-14", "visual": "Tactical board shows arrows and pressure zones.", "spoken_line": "Miramos patrones, presion, espacios.", "overlay_text": "Patrones > humo", "asset_needed": "tactical_board", "transition": "board swipe" },
+    { "scene": 4, "seconds": "14-28", "visual": "Generic fullbacks push high, space opens behind.", "spoken_line": "Si un equipo ataca con laterales muy altos...", "overlay_text": "La trampa esta aqui", "asset_needed": "animated_pitch", "transition": "arrow burst" },
+    { "scene": 5, "seconds": "28-38", "visual": "Data cards presion, transicion, espacios float around.", "spoken_line": "Escenarios, no magia.", "overlay_text": "Escenarios, no magia", "asset_needed": "data_cards", "transition": "card pop" },
+    { "scene": 6, "seconds": "38-45", "visual": "Profe Pixel and VARcito face camera in generic studio.", "spoken_line": "No magia. Futbol.", "overlay_text": "Futbol + IA + tactica", "asset_needed": "end_card", "transition": "clean cut" }
+  ],
+  "visual_style": {
+    "camera": "dynamic vertical sports studio camera with quick pushes and board swipes",
+    "lighting": "premium green black white football studio lighting",
+    "colors": "pitch green, black, white, subtle neon accents",
+    "subtitles": true,
+    "pace": "visual_change_every_3_to_5_seconds",
+    "broll": ["generic tactical board", "data cards", "fictional studio", "generic pitch animation"]
+  },
+  "audio_style": {
+    "voice": "ai_draft",
+    "music": "fast clean sports beat, copyright-safe",
+    "sound_effects": ["VAR beep", "board swipe", "small whistle"],
+    "approval_required": true
+  },
+  "higgsfield_prompt": "Vertical 9:16 animated sports analysis short, 45-second modular style made of fast 3-second shots. A fictional 3D football tactics analyst named Profe Pixel enters a premium futuristic football studio with a glowing tactical board. A small fictional VAR monitor named VARcito reacts like a funny assistant. Show a generic football pitch diagram, tactical arrows, fullbacks pushing high, empty space behind them, data cards labelled presion, transicion, espacios. Tone: serious analysis with quick visual comedy. Spanish overlay text: \"La IA no adivina campeones\", \"VARcito revisando humo\", \"Patrones > humo\", \"La trampa esta aqui\", \"Escenarios, no magia\", \"Futbol + IA + tactica\". Dynamic camera, clean lighting, green black white palette, premium sports broadcast animation. No real players, no official logos, no FIFA branding, no club badges, no match footage, no official jerseys.",
+  "caption": {
+    "text": "La IA no te va a prometer el campeon. Pero puede ayudarte a ver donde se rompe un partido. Bienvenido a Futbol Lab IA.",
+    "hashtags": ["#FutbolLabIA", "#Mundial2026", "#Futbol", "#Tactica", "#IA"],
+    "cta_repeat": "Sigue el canal para mas analisis del Mundial."
+  },
+  "publish_window": {
+    "timezone": "America/La_Paz",
+    "day": "pending",
+    "time_range": "19:00-21:00"
+  },
+  "approval": {
+    "brief_state": "waiting_approval",
+    "generation_state": "not_started",
+    "publish_state": "not_approved",
+    "required_approver": "sergio"
+  },
+  "reuse_notes": {
+    "stories": "Use as 3 story frames: hook, tactical board, channel intro.",
+    "linkedin": "Not primary.",
+    "carousel": "Convert to 5-slide carousel explaining prediction vs scenario.",
+    "email": "Not needed for pilot."
+  },
+  "safety_checks": {
+    "one_idea_only": true,
+    "specific_hook": true,
+    "single_cta": true,
+    "no_private_data": true,
+    "no_unverified_claims": true,
+    "whatsapp_excluded_until_business_verification": true,
+    "no_match_footage": true,
+    "no_real_player_likeness": true,
+    "synthetic_content_disclosure_needed_if_realistic": true
+  }
+}
+

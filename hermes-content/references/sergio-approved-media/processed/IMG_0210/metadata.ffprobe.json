@@ -1,0 +1,59 @@
+﻿{
+    "programs": [
+
+    ],
+    "stream_groups": [
+
+    ],
+    "streams": [
+        {
+            "index": 0,
+            "codec_name": "hevc",
+            "codec_type": "video",
+            "width": 1920,
+            "height": 1080,
+            "pix_fmt": "yuv420p10le",
+            "side_data_list": [
+                {
+
+                },
+                {
+
+                },
+                {
+
+                }
+            ]
+        },
+        {
+            "index": 1,
+            "codec_name": "aac",
+            "codec_type": "audio"
+        },
+        {
+            "index": 2,
+            "codec_type": "data"
+        },
+        {
+            "index": 3,
+            "codec_type": "data"
+        },
+        {
+            "index": 4,
+            "codec_type": "data"
+        },
+        {
+            "index": 5,
+            "codec_type": "data"
+        },
+        {
+            "index": 6,
+            "codec_type": "data"
+        }
+    ],
+    "format": {
+        "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+        "duration": "9.238333",
+        "size": "17880205"
+    }
+}

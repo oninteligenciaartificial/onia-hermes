@@ -1,0 +1,20 @@
+{
+  "id": "2a1fee56-e9e7-4ea7-bdb4-1637f577e39e",
+  "status": "completed",
+  "display_name": "Seedance 2.0",
+  "job_set_type": "seedance_2_0",
+  "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/hf_20260605_041349_2a1fee56-e9e7-4ea7-bdb4-1637f577e39e.mp4",
+  "created_at": 1780632829.327635,
+  "params": {
+    "width": 720,
+    "height": 1280,
+    "duration": 5,
+    "resolution": "720p",
+    "aspect_ratio": "9:16",
+    "mode": "std",
+    "model": "seedance_2_0",
+    "prompt_file": "motion-option-08-prompt.txt",
+    "source_image": "still-option-08.png",
+    "notes": "Internal preview only. CLI generated audio by default; a muted local copy is created for review."
+  }
+}

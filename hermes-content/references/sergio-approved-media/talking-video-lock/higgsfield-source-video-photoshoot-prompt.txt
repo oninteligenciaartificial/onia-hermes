@@ -1,0 +1,15 @@
+Create a final premium 9:16 Sergio avatar photoshoot still for internal video generation.
+
+Use the real Sergio talking-video frames as the primary source of truth for face, mouth, lips, jaw, neck, eye movement, smile energy, and teeth. Use the best previous avatar stills only for styling: black blazer, black shirt, warm modern industrial workspace, polished Italian side-part hair, youthful founder/operator presence, slightly robust shoulders.
+
+Dental target: preserve the real mouth shape and natural smile energy from the talking video, but make the teeth clean, straight and aligned with no crooked front tooth, no uneven tooth, no missing tooth, no duplicated tooth, no warped gumline, no fake over-white veneers. The result should look like Sergio with his best natural camera-ready smile.
+
+Face target: young, handsome, friendly, natural, same eyes, brows, nose, lips, jaw, cheeks, ears, hairline, skin tone and natural asymmetry. Do not make him older. Do not create a different person. Keep realistic pores and skin texture.
+
+Hair target: glossy black Italian side part, combed upward/back with controlled volume, no hair falling forward, no helmet hair, no wet/oily look.
+
+Body/outfit: black crewneck or black shirt with black blazer, natural athletic fullness in shoulders and upper torso, not skinny, not bulky.
+
+Composition: vertical 9:16, chest-up to mid-torso, eye-level camera, warm industrial workspace with soft bokeh lights and glass/metal details. Single portrait only, no contact sheet, no text, no watermark, no UI overlay.
+
+Avoid: different person, older face, AI beauty filter, plastic skin, long thin neck, skinny shoulders, bodybuilder physique, crooked teeth, extra teeth, missing teeth, tongue artifacts, warped mouth, hair fringe, distorted blazer, text, watermark.

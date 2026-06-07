@@ -1,0 +1,106 @@
+[
+  {
+    "id": "12986c3f-ea6e-4cab-8def-0d6a33190e29",
+    "status": "completed",
+    "display_name": "GPT Image 2",
+    "job_set_type": "imagegen_2_0",
+    "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/hf_20260605_055601_12986c3f-ea6e-4cab-8def-0d6a33190e29.png",
+    "created_at": 1780638961.351972,
+    "params": {
+      "width": 2160,
+      "height": 3840,
+      "prompt": "Create a premium ultra-realistic 9:16 photoshoot portrait of Sergio for an internal avatar reference. Use the attached best previous Sergio avatar results as the visual base: youthful face, black Italian side-part hair, warm modern industrial workspace, black crewneck with black blazer, natural founder/operator presence, slightly more robust shoulders and torso, not skinny. Improve only what Sergio requested: create a perfect clean smile with straight aligned upper teeth, no crooked tooth, no uneven front tooth, no warped tooth, no missing tooth, no duplicated tooth, no jagged gumline, no over-white fake veneers. The smile should be attractive, natural, symmetrical enough to look polished, but still human and believable. Preserve the same essence: young, handsome, friendly, calm, confident, natural skin texture, real pores, healthy hair shine, side part combed upward and back, no hair falling forward, no older face, no plastic skin, no cinematic filter, no heavy retouch. Composition: vertical 9:16, chest-up to mid-torso, eye-level camera, warm industrial workspace background with soft bokeh lights and glass/metal details, black blazer and black shirt, clean premium fit, no logos, no text, no watermark. Avoid: different person, older face, model jaw exaggeration, overly separated eyes, one eye larger, long thin neck, skinny shoulders, bodybuilder muscles, Hollywood veneer teeth, crooked teeth, broken teeth, extra teeth, tongue artifacts, warped mouth, closed eyes, hair fringe over forehead, distorted blazer, UI overlay.",
+      "medias": [
+        {
+          "data": {
+            "id": "d7675d50-0af3-4753-824b-21e6ca549b55",
+            "url": "https://d2ol7oe51mr4n9.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/d7675d50-0af3-4753-824b-21e6ca549b55_resize.jpg",
+            "type": "media_input"
+          },
+          "role": "image"
+        },
+        {
+          "data": {
+            "id": "20b4c0c2-8e73-474e-a41b-47e36f9b708a",
+            "url": "https://d2ol7oe51mr4n9.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/20b4c0c2-8e73-474e-a41b-47e36f9b708a_resize.jpg",
+            "type": "media_input"
+          },
+          "role": "image"
+        },
+        {
+          "data": {
+            "id": "5c6a0660-9d09-4afb-8433-25534657a499",
+            "url": "https://d2ol7oe51mr4n9.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/5c6a0660-9d09-4afb-8433-25534657a499_resize.jpg",
+            "type": "media_input"
+          },
+          "role": "image"
+        },
+        {
+          "data": {
+            "id": "9030a669-227d-4308-a697-53e2f61869ef",
+            "url": "https://d2ol7oe51mr4n9.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/9030a669-227d-4308-a697-53e2f61869ef_resize.jpg",
+            "type": "media_input"
+          },
+          "role": "image"
+        }
+      ],
+      "aspect_ratio": "9:16",
+      "quality": "high",
+      "resolution": "4k",
+      "model": "videotape-alpha",
+      "reference_elements": []
+    }
+  },
+  {
+    "id": "20e80a50-4d2d-4aad-88d3-54972100cf32",
+    "status": "completed",
+    "display_name": "GPT Image 2",
+    "job_set_type": "imagegen_2_0",
+    "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/hf_20260605_055601_20e80a50-4d2d-4aad-88d3-54972100cf32.png",
+    "created_at": 1780638961.352007,
+    "params": {
+      "width": 2160,
+      "height": 3840,
+      "prompt": "Create a premium ultra-realistic 9:16 photoshoot portrait of Sergio for an internal avatar reference. Use the attached best previous Sergio avatar results as the visual base: youthful face, black Italian side-part hair, warm modern industrial workspace, black crewneck with black blazer, natural founder/operator presence, slightly more robust shoulders and torso, not skinny. Improve only what Sergio requested: create a perfect clean smile with straight aligned upper teeth, no crooked tooth, no uneven front tooth, no warped tooth, no missing tooth, no duplicated tooth, no jagged gumline, no over-white fake veneers. The smile should be attractive, natural, symmetrical enough to look polished, but still human and believable. Preserve the same essence: young, handsome, friendly, calm, confident, natural skin texture, real pores, healthy hair shine, side part combed upward and back, no hair falling forward, no older face, no plastic skin, no cinematic filter, no heavy retouch. Composition: vertical 9:16, chest-up to mid-torso, eye-level camera, warm industrial workspace background with soft bokeh lights and glass/metal details, black blazer and black shirt, clean premium fit, no logos, no text, no watermark. Avoid: different person, older face, model jaw exaggeration, overly separated eyes, one eye larger, long thin neck, skinny shoulders, bodybuilder muscles, Hollywood veneer teeth, crooked teeth, broken teeth, extra teeth, tongue artifacts, warped mouth, closed eyes, hair fringe over forehead, distorted blazer, UI overlay.",
+      "medias": [
+        {
+          "data": {
+            "id": "d7675d50-0af3-4753-824b-21e6ca549b55",
+            "url": "https://d2ol7oe51mr4n9.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/d7675d50-0af3-4753-824b-21e6ca549b55_resize.jpg",
+            "type": "media_input"
+          },
+          "role": "image"
+        },
+        {
+          "data": {
+            "id": "20b4c0c2-8e73-474e-a41b-47e36f9b708a",
+            "url": "https://d2ol7oe51mr4n9.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/20b4c0c2-8e73-474e-a41b-47e36f9b708a_resize.jpg",
+            "type": "media_input"
+          },
+          "role": "image"
+        },
+        {
+          "data": {
+            "id": "5c6a0660-9d09-4afb-8433-25534657a499",
+            "url": "https://d2ol7oe51mr4n9.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/5c6a0660-9d09-4afb-8433-25534657a499_resize.jpg",
+            "type": "media_input"
+          },
+          "role": "image"
+        },
+        {
+          "data": {
+            "id": "9030a669-227d-4308-a697-53e2f61869ef",
+            "url": "https://d2ol7oe51mr4n9.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/9030a669-227d-4308-a697-53e2f61869ef_resize.jpg",
+            "type": "media_input"
+          },
+          "role": "image"
+        }
+      ],
+      "aspect_ratio": "9:16",
+      "quality": "high",
+      "resolution": "4k",
+      "model": "videotape-alpha",
+      "reference_elements": []
+    }
+  }
+]

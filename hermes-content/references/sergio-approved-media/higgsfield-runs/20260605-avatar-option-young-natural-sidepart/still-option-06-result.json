@@ -1,0 +1,24 @@
+{
+  "id": "b151abaf-3621-4da1-8dcd-e5fcccb078f5",
+  "status": "completed",
+  "display_name": "GPT Image 2",
+  "job_set_type": "imagegen_2_0",
+  "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/hf_20260605_034030_b151abaf-3621-4da1-8dcd-e5fcccb078f5.png",
+  "created_at": 1780630830.89626,
+  "params": {
+    "width": 1520,
+    "height": 2688,
+    "aspect_ratio": "9:16",
+    "quality": "high",
+    "resolution": "2k",
+    "model": "videotape-alpha",
+    "prompt_file": "still-option-06-prompt.txt",
+    "source_images": [
+      "../20260605-avatar-option-italian-hair/still-option-05.png",
+      "../../processed/IMG_0331/IMG_0331_preview.jpg",
+      "../../processed/IMG_0330/IMG_0330_preview.jpg",
+      "../../processed/IMG_0329/IMG_0329_preview.jpg"
+    ],
+    "notes": "Prompt sent compacted as a single line so Higgsfield preserved all flags and media references."
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "version": "2026-06-01",
+  "purpose": "Index of creator video references shared by Sergio for ONIA/Hermes pattern analysis.",
+  "rules": [
+    "Use references as structure and rhythm only.",
+    "Do not copy exact creator words, identity, voice, music, captions, edit sequence or claims.",
+    "Reject or quarantine references with ethical_safety below 4.",
+    "Convert approved patterns into original Hermes Video Lab briefs."
+  ],
+  "intake_statuses": [
+    "pending_analysis",
+    "analyzed",
+    "approved_pattern",
+    "quarantined",
+    "archived"
+  ],
+  "references": [
+    {
+      "id": "creator-video-ref-20260601-001",
+      "status": "analyzed",
+      "local_file": "inbox/creator-video-ref-20260601-001.mp4",
+      "analysis_file": "creator-video-ref-20260601-001.json",
+      "best_for": ["AI tool demo", "Higgsfield workflow reveal", "Sergio/ONIA creator content"]
+    },
+    {
+      "id": "creator-video-ref-20260601-002",
+      "status": "analyzed",
+      "local_file": "inbox/creator-video-ref-20260601-002.mp4",
+      "analysis_file": "creator-video-ref-20260601-002.json",
+      "best_for": ["AI education", "skill ladder", "authority content"]
+    },
+    {
+      "id": "creator-video-ref-20260601-003",
+      "status": "analyzed",
+      "local_file": "inbox/creator-video-ref-20260601-003.mp4",
+      "analysis_file": "creator-video-ref-20260601-003.json",
+      "best_for": ["Supercomputer strategy", "AI video workflow", "premium client demo"]
+    },
+    {
+      "id": "creator-video-ref-20260602-001",
+      "status": "analyzed",
+      "url": "https://www.instagram.com/reel/DYC-JNqt9hh/?igsh=MWxzaXNsb2E1NHBlMQ==",
+      "analysis_file": "creator-video-ref-20260602-001.json",
+      "best_for": ["reference decomposition", "Higgsfield prompt workflow", "ONIA AI video education"]
+    },
+    {
+      "id": "creator-video-ref-20260602-002",
+      "status": "analyzed",
+      "local_file": "inbox/creator-video-ref-20260602-002.mp4",
+      "analysis_file": "creator-video-ref-20260602-002.json",
+      "best_for": ["character consistency", "AI avatar SOP", "client-safe UGC production"]
+    },
+    {
+      "id": "creator-video-ref-20260602-003",
+      "status": "analyzed",
+      "local_file": "inbox/creator-video-ref-20260602-003.mp4",
+      "analysis_file": "creator-video-ref-20260602-003.json",
+      "best_for": ["AI video tool stack", "margin protection", "Higgsfield service packaging"]
+    }
+  ]
+}

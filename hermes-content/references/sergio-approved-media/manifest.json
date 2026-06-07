@@ -1,0 +1,409 @@
+{
+    "version":  "2026-06-04",
+    "owner":  "Sergio / ONIA",
+    "approval_policy":  {
+                            "use_as_internal_reference":  "allowed_after_sergio_uploads_or_confirms",
+                            "generate_drafts":  "requires_sergio_asset_consent",
+                            "publish_or_deliver":  "requires_explicit_approval_per_asset",
+                            "voice_clone":  "requires_explicit_consent",
+                            "client_use":  "blocked_unless_client_context_is_explicitly_approved"
+                        },
+    "assets":  [
+                   {
+                       "asset_id":  "sergio-drive-20260602-img-0218-mov",
+                       "file_path":  "hermes-content/references/sergio-approved-media/inbox/IMG_0218.MOV",
+                       "type":  "video_with_voice",
+                       "brand_lane":  "sergio_personal",
+                       "approved_for_reference":  true,
+                       "approved_for_generation":  false,
+                       "approved_for_publication":  false,
+                       "notes":  "Drive upload 2026-06-02 13:25, 79.9 MB. Downloaded locally and processed. Use only as private face/voice reference until explicit generation/publication approval. Audio WAV extracted to voice-inbox/IMG_0218.wav and reference frames generated under processed/IMG_0218/frames."
+                   },
+                   {
+                       "asset_id":  "sergio-drive-20260602-img-0217-mov",
+                       "file_path":  "hermes-content/references/sergio-approved-media/inbox/IMG_0217.MOV",
+                       "type":  "video_with_voice",
+                       "brand_lane":  "sergio_personal",
+                       "approved_for_reference":  true,
+                       "approved_for_generation":  false,
+                       "approved_for_publication":  false,
+                       "notes":  "Drive upload 2026-06-02 13:24, 50.8 MB. Downloaded locally and processed. Use only as private face/voice reference until explicit generation/publication approval. Audio WAV extracted to voice-inbox/IMG_0217.wav and reference frames generated under processed/IMG_0217/frames."
+                   },
+                   {
+                       "asset_id":  "sergio-drive-20260602-img-0210-mov",
+                       "file_path":  "hermes-content/references/sergio-approved-media/inbox/IMG_0210.MOV",
+                       "type":  "video_with_voice",
+                       "brand_lane":  "sergio_personal",
+                       "approved_for_reference":  true,
+                       "approved_for_generation":  false,
+                       "approved_for_publication":  false,
+                       "notes":  "Drive upload 2026-06-02 13:23, 17.1 MB. Downloaded locally and processed. Use only as private face/voice reference until explicit generation/publication approval. Audio WAV extracted to voice-inbox/IMG_0210.wav and reference frames generated under processed/IMG_0210/frames."
+                   },
+                   {
+                       "asset_id":  "sergio-drive-20260602-img-0209-mov",
+                       "file_path":  "hermes-content/references/sergio-approved-media/inbox/IMG_0209.MOV",
+                       "type":  "video_with_voice",
+                       "brand_lane":  "sergio_personal",
+                       "approved_for_reference":  true,
+                       "approved_for_generation":  false,
+                       "approved_for_publication":  false,
+                       "notes":  "Drive upload 2026-06-02 13:22, 14.8 MB. Downloaded locally and processed. Use only as private face/voice reference until explicit generation/publication approval. Audio WAV extracted to voice-inbox/IMG_0209.wav and reference frames generated under processed/IMG_0209/frames."
+                   },
+                   {
+                       "asset_id":  "sergio-drive-20260602-img-0192-heic",
+                       "file_path":  "hermes-content/references/sergio-approved-media/inbox/IMG_0192.HEIC",
+                       "type":  "face_photo",
+                       "brand_lane":  "sergio_personal",
+                       "approved_for_reference":  true,
+                       "approved_for_generation":  false,
+                       "approved_for_publication":  false,
+                       "notes":  "Drive upload 2026-06-02 13:22, 1.5 MB. Downloaded locally and processed. Preview generated under processed/IMG_0192/ when supported by FFmpeg."
+                   },
+                   {
+                       "asset_id":  "sergio-drive-20260602-img-0195-heic",
+                       "file_path":  "hermes-content/references/sergio-approved-media/inbox/IMG_0195.HEIC",
+                       "type":  "face_photo",
+                       "brand_lane":  "sergio_personal",
+                       "approved_for_reference":  true,
+                       "approved_for_generation":  false,
+                       "approved_for_publication":  false,
+                       "notes":  "Drive upload 2026-06-02 13:21, 1.5 MB. Downloaded locally and processed. Preview generated under processed/IMG_0195/ when supported by FFmpeg."
+                   },
+                   {
+                       "asset_id":  "sergio-drive-20260602-img-0194-heic",
+                       "file_path":  "hermes-content/references/sergio-approved-media/inbox/IMG_0194.HEIC",
+                       "type":  "face_photo",
+                       "brand_lane":  "sergio_personal",
+                       "approved_for_reference":  true,
+                       "approved_for_generation":  false,
+                       "approved_for_publication":  false,
+                       "notes":  "Drive upload 2026-06-02 13:21, 1.5 MB. Downloaded locally and processed. Preview generated under processed/IMG_0194/ when supported by FFmpeg."
+                   },
+                   {
+                       "asset_id":  "sergio-drive-20260602-img-0198-heic",
+                       "file_path":  "hermes-content/references/sergio-approved-media/inbox/IMG_0198.HEIC",
+                       "type":  "face_photo",
+                       "brand_lane":  "sergio_personal",
+                       "approved_for_reference":  true,
+                       "approved_for_generation":  false,
+                       "approved_for_publication":  false,
+                       "notes":  "Downloaded locally from Drive. Preview generated at processed/IMG_0198/IMG_0198_preview.jpg. Original Drive ID: 1piYbtanSmw-Crd54nYQN9u6a253e4vua."
+                   },
+                   {
+                       "asset_id":  "sergio-drive-20260602-img-0191-heic",
+                       "file_path":  "hermes-content/references/sergio-approved-media/inbox/IMG_0191.HEIC",
+                       "type":  "face_photo",
+                       "brand_lane":  "sergio_personal",
+                       "approved_for_reference":  true,
+                       "approved_for_generation":  false,
+                       "approved_for_publication":  false,
+                       "notes":  "Drive upload 2026-06-02 13:21, 1.5 MB. Downloaded locally and processed. Preview generated under processed/IMG_0191/ when supported by FFmpeg."
+                   },
+                   {
+                       "asset_id":  "sergio-drive-20260602-img-0183-heic",
+                       "file_path":  "hermes-content/references/sergio-approved-media/inbox/IMG_0183.HEIC",
+                       "type":  "face_photo",
+                       "brand_lane":  "sergio_personal",
+                       "approved_for_reference":  true,
+                       "approved_for_generation":  false,
+                       "approved_for_publication":  false,
+                       "notes":  "Drive upload 2026-06-02 13:21, 1.4 MB. Downloaded locally and processed. Preview generated under processed/IMG_0183/ when supported by FFmpeg."
+                   },
+                   {
+                       "asset_id":  "sergio-drive-20260602-img-0180-heic",
+                       "file_path":  "hermes-content/references/sergio-approved-media/inbox/IMG_0180.HEIC",
+                       "type":  "face_photo",
+                       "brand_lane":  "sergio_personal",
+                       "approved_for_reference":  true,
+                       "approved_for_generation":  false,
+                       "approved_for_publication":  false,
+                       "notes":  "Drive upload 2026-06-02 13:21, 1.4 MB. Downloaded locally and processed. Preview generated under processed/IMG_0180/ when supported by FFmpeg."
+                   },
+                   {
+                       "asset_id":  "sergio-drive-20260602-img-0204-heic",
+                       "file_path":  "hermes-content/references/sergio-approved-media/inbox/IMG_0204.HEIC",
+                       "type":  "face_photo",
+                       "brand_lane":  "sergio_personal",
+                       "approved_for_reference":  true,
+                       "approved_for_generation":  false,
+                       "approved_for_publication":  false,
+                       "notes":  "Drive upload 2026-06-02 13:21, 1.4 MB. Downloaded locally and processed. Preview generated under processed/IMG_0204/ when supported by FFmpeg."
+                   },
+                   {
+                       "asset_id":  "sergio-drive-20260602-img-0184-heic",
+                       "file_path":  "hermes-content/references/sergio-approved-media/inbox/IMG_0184.HEIC",
+                       "type":  "face_photo",
+                       "brand_lane":  "sergio_personal",
+                       "approved_for_reference":  true,
+                       "approved_for_generation":  false,
+                       "approved_for_publication":  false,
+                       "notes":  "Drive upload 2026-06-02 13:21, 1.4 MB. Downloaded locally and processed. Preview generated under processed/IMG_0184/ when supported by FFmpeg."
+                   },
+                   {
+                       "asset_id":  "sergio-drive-20260602-img-0200-heic",
+                       "file_path":  "hermes-content/references/sergio-approved-media/inbox/IMG_0200.HEIC",
+                       "type":  "face_photo",
+                       "brand_lane":  "sergio_personal",
+                       "approved_for_reference":  true,
+                       "approved_for_generation":  false,
+                       "approved_for_publication":  false,
+                       "notes":  "Drive upload 2026-06-02 13:21, 1.4 MB. Downloaded locally and processed. Preview generated under processed/IMG_0200/ when supported by FFmpeg."
+                   },
+                   {
+                       "asset_id":  "sergio-drive-20260602-img-0190-heic",
+                       "file_path":  "hermes-content/references/sergio-approved-media/inbox/IMG_0190.HEIC",
+                       "type":  "face_photo",
+                       "brand_lane":  "sergio_personal",
+                       "approved_for_reference":  true,
+                       "approved_for_generation":  false,
+                       "approved_for_publication":  false,
+                       "notes":  "Drive upload 2026-06-02 13:21, 1.3 MB. Downloaded locally and processed. Preview generated under processed/IMG_0190/ when supported by FFmpeg."
+                   },
+                   {
+                       "asset_id":  "sergio-drive-20260602-img-0196-heic",
+                       "file_path":  "hermes-content/references/sergio-approved-media/inbox/IMG_0196.HEIC",
+                       "type":  "face_photo",
+                       "brand_lane":  "sergio_personal",
+                       "approved_for_reference":  true,
+                       "approved_for_generation":  false,
+                       "approved_for_publication":  false,
+                       "notes":  "Drive upload 2026-06-02 13:21, 1.3 MB. Downloaded locally and processed. Preview generated under processed/IMG_0196/ when supported by FFmpeg."
+                   },
+                   {
+                       "asset_id":  "sergio-drive-20260602-img-0207-heic",
+                       "file_path":  "hermes-content/references/sergio-approved-media/inbox/IMG_0207.HEIC",
+                       "type":  "face_photo",
+                       "brand_lane":  "sergio_personal",
+                       "approved_for_reference":  true,
+                       "approved_for_generation":  false,
+                       "approved_for_publication":  false,
+                       "notes":  "Drive upload 2026-06-02 13:21, 1.3 MB. Downloaded locally and processed. Preview generated under processed/IMG_0207/ when supported by FFmpeg."
+                   },
+                   {
+                       "asset_id":  "sergio-drive-20260602-img-0181-heic",
+                       "file_path":  "hermes-content/references/sergio-approved-media/inbox/IMG_0181.HEIC",
+                       "type":  "face_photo",
+                       "brand_lane":  "sergio_personal",
+                       "approved_for_reference":  true,
+                       "approved_for_generation":  false,
+                       "approved_for_publication":  false,
+                       "notes":  "Drive upload 2026-06-02 13:21, 1.3 MB. Downloaded locally and processed. Preview generated under processed/IMG_0181/ when supported by FFmpeg."
+                   },
+                   {
+                       "asset_id":  "sergio-drive-20260602-img-0199-heic",
+                       "file_path":  "hermes-content/references/sergio-approved-media/inbox/IMG_0199.HEIC",
+                       "type":  "face_photo",
+                       "brand_lane":  "sergio_personal",
+                       "approved_for_reference":  true,
+                       "approved_for_generation":  false,
+                       "approved_for_publication":  false,
+                       "notes":  "Drive upload 2026-06-02 13:21, 1.3 MB. Downloaded locally and processed. Preview generated under processed/IMG_0199/ when supported by FFmpeg."
+                   },
+                   {
+                       "asset_id":  "sergio-drive-20260602-img-0205-heic",
+                       "file_path":  "hermes-content/references/sergio-approved-media/inbox/IMG_0205.HEIC",
+                       "type":  "face_photo",
+                       "brand_lane":  "sergio_personal",
+                       "approved_for_reference":  true,
+                       "approved_for_generation":  false,
+                       "approved_for_publication":  false,
+                       "notes":  "Drive upload 2026-06-02 13:20, 1.3 MB. Downloaded locally and processed. Preview generated under processed/IMG_0205/ when supported by FFmpeg."
+                   },
+                   {
+                       "asset_id":  "sergio-drive-20260602-img-0206-heic",
+                       "file_path":  "hermes-content/references/sergio-approved-media/inbox/IMG_0206.HEIC",
+                       "type":  "face_photo",
+                       "brand_lane":  "sergio_personal",
+                       "approved_for_reference":  true,
+                       "approved_for_generation":  false,
+                       "approved_for_publication":  false,
+                       "notes":  "Drive upload 2026-06-02 13:20, 1.2 MB. Downloaded locally and processed. Preview generated under processed/IMG_0206/ when supported by FFmpeg."
+                   },
+                   {
+                       "asset_id":  "sergio-drive-20260602-img-0187-heic",
+                       "file_path":  "hermes-content/references/sergio-approved-media/inbox/IMG_0187.HEIC",
+                       "type":  "face_photo",
+                       "brand_lane":  "sergio_personal",
+                       "approved_for_reference":  true,
+                       "approved_for_generation":  false,
+                       "approved_for_publication":  false,
+                       "notes":  "Drive upload 2026-06-02 13:20, 1.2 MB. Downloaded locally and processed. Preview generated under processed/IMG_0187/ when supported by FFmpeg."
+                   },
+                   {
+                       "asset_id":  "sergio-drive-20260602-img-0186-heic",
+                       "file_path":  "hermes-content/references/sergio-approved-media/inbox/IMG_0186.HEIC",
+                       "type":  "face_photo",
+                       "brand_lane":  "sergio_personal",
+                       "approved_for_reference":  true,
+                       "approved_for_generation":  false,
+                       "approved_for_publication":  false,
+                       "notes":  "Drive upload 2026-06-02 13:20, 1.2 MB. Downloaded locally and processed. Preview generated under processed/IMG_0186/ when supported by FFmpeg."
+                   },
+                   {
+                       "asset_id":  "sergio-drive-20260602-img-0208-heic",
+                       "file_path":  "hermes-content/references/sergio-approved-media/inbox/IMG_0208.HEIC",
+                       "type":  "face_photo",
+                       "brand_lane":  "sergio_personal",
+                       "approved_for_reference":  true,
+                       "approved_for_generation":  false,
+                       "approved_for_publication":  false,
+                       "notes":  "Drive upload 2026-06-02 13:20, 1.2 MB. Downloaded locally and processed. Preview generated under processed/IMG_0208/ when supported by FFmpeg."
+                   },
+                   {
+                       "asset_id":  "sergio-drive-20260602-img-0182-heic",
+                       "file_path":  "hermes-content/references/sergio-approved-media/inbox/IMG_0182.HEIC",
+                       "type":  "face_photo",
+                       "brand_lane":  "sergio_personal",
+                       "approved_for_reference":  true,
+                       "approved_for_generation":  false,
+                       "approved_for_publication":  false,
+                       "notes":  "Drive upload 2026-06-02 13:20, 1.2 MB. Downloaded locally and processed. Preview generated under processed/IMG_0182/ when supported by FFmpeg."
+                   },
+                   {
+                       "asset_id":  "sergio-drive-20260602-img-0188-heic",
+                       "file_path":  "hermes-content/references/sergio-approved-media/inbox/IMG_0188.HEIC",
+                       "type":  "face_photo",
+                       "brand_lane":  "sergio_personal",
+                       "approved_for_reference":  true,
+                       "approved_for_generation":  false,
+                       "approved_for_publication":  false,
+                       "notes":  "Drive upload 2026-06-02 13:20, 1.1 MB. Downloaded locally and processed. Preview generated under processed/IMG_0188/ when supported by FFmpeg."
+                   },
+                   {
+                       "asset_id":  "sergio-drive-20260602-img-0189-heic",
+                       "file_path":  "hermes-content/references/sergio-approved-media/inbox/IMG_0189.HEIC",
+                       "type":  "face_photo",
+                       "brand_lane":  "sergio_personal",
+                       "approved_for_reference":  true,
+                       "approved_for_generation":  false,
+                       "approved_for_publication":  false,
+                       "notes":  "Drive upload 2026-06-02 13:20, 1.1 MB. Downloaded locally and processed. Preview generated under processed/IMG_0189/ when supported by FFmpeg."
+                   },
+                   {
+                       "asset_id":  "sergio-drive-20260602-img-0185-heic",
+                       "file_path":  "hermes-content/references/sergio-approved-media/inbox/IMG_0185.HEIC",
+                       "type":  "face_photo",
+                       "brand_lane":  "sergio_personal",
+                       "approved_for_reference":  true,
+                       "approved_for_generation":  false,
+                       "approved_for_publication":  false,
+                       "notes":  "Drive upload 2026-06-02 13:20, 1.1 MB. Downloaded locally and processed. Preview generated under processed/IMG_0185/ when supported by FFmpeg."
+                   },
+                   {
+                       "asset_id":  "sergio-drive-20260604-img-0329",
+                       "file_path":  "hermes-content/references/sergio-approved-media/inbox/IMG_0329.HEIC",
+                       "type":  "face_photo",
+                       "brand_lane":  "sergio_personal",
+                       "approved_for_reference":  true,
+                       "approved_for_generation":  true,
+                       "approved_for_publication":  false,
+                       "notes":  "Drive upload 2026-06-04 around 14:45 America/Caracas (2026-06-04T18:45:53.100Z). Drive ID 1J8Za9_NPj7whxAVXpe944xA6S78BUMKI. Downloaded locally (2.12 MB), validated as HEIC and processed. Use only as private face reference until explicit generation/publication approval. Preview generated under processed/IMG_0329/ when supported by FFmpeg. Approval 2026-06-04: Sergio explicitly approved these photos for internal avatar/video draft generation; publication, client use, and delivery remain blocked until explicit per-piece approval."
+                   },
+                   {
+                       "asset_id":  "sergio-drive-20260604-img-0331",
+                       "file_path":  "hermes-content/references/sergio-approved-media/inbox/IMG_0331.HEIC",
+                       "type":  "face_photo",
+                       "brand_lane":  "sergio_personal",
+                       "approved_for_reference":  true,
+                       "approved_for_generation":  true,
+                       "approved_for_publication":  false,
+                       "notes":  "Drive upload 2026-06-04 around 14:45 America/Caracas (2026-06-04T18:45:57.460Z). Drive ID 171sFP2_VOcLEtYcjEGLWzz14DnmSLRdK. Downloaded locally (2.17 MB), validated as HEIC and processed. Use only as private face reference until explicit generation/publication approval. Preview generated under processed/IMG_0331/ when supported by FFmpeg. Approval 2026-06-04: Sergio explicitly approved these photos for internal avatar/video draft generation; publication, client use, and delivery remain blocked until explicit per-piece approval."
+                   },
+                   {
+                       "asset_id":  "sergio-drive-20260604-img-0330",
+                       "file_path":  "hermes-content/references/sergio-approved-media/inbox/IMG_0330.HEIC",
+                       "type":  "face_photo",
+                       "brand_lane":  "sergio_personal",
+                       "approved_for_reference":  true,
+                       "approved_for_generation":  true,
+                       "approved_for_publication":  false,
+                       "notes":  "Drive upload 2026-06-04 around 14:45 America/Caracas (2026-06-04T18:46:06.612Z). Drive ID 1ONUwSChhxFvRaL_xOwvB9au99U6b94HH. Downloaded locally (2.18 MB), validated as HEIC and processed. Use only as private face reference until explicit generation/publication approval. Preview generated under processed/IMG_0330/ when supported by FFmpeg. Approval 2026-06-04: Sergio explicitly approved these photos for internal avatar/video draft generation; publication, client use, and delivery remain blocked until explicit per-piece approval."
+                   },
+                   {
+                       "asset_id":  "sergio-drive-20260604-drive-1wfyymwxkz8bxnkk2n5ymjj3yme-tixk5",
+                       "file_path":  "hermes-content/references/sergio-approved-media/inbox/drive_1WFyyMWxKz8bXnkk2N5yMjJ3yme_TIxk5.HEIC",
+                       "type":  "face_photo",
+                       "brand_lane":  "sergio_personal",
+                       "approved_for_reference":  true,
+                       "approved_for_generation":  true,
+                       "approved_for_publication":  false,
+                       "notes":  "Drive upload 2026-06-04 around 14:45 America/Caracas (2026-06-04T18:45-19:00Z). Drive ID 1WFyyMWxKz8bXnkk2N5yMjJ3yme_TIxk5. Downloaded locally (2.27 MB), validated as HEIC and processed. Use only as private face reference until explicit generation/publication approval. Preview generated under processed/drive_1WFyyMWxKz8bXnkk2N5yMjJ3yme_TIxk5/ when supported by FFmpeg. Approval 2026-06-04: Sergio explicitly approved these photos for internal avatar/video draft generation; publication, client use, and delivery remain blocked until explicit per-piece approval."
+                   },
+                   {
+                       "asset_id":  "sergio-drive-20260604-drive-107w3hsks9bbe9pft-ttwocpak-obufu",
+                       "file_path":  "hermes-content/references/sergio-approved-media/inbox/drive_107W3hsKS9bbE9PfT_tTwoCPaK-oBufU_.HEIC",
+                       "type":  "face_photo",
+                       "brand_lane":  "sergio_personal",
+                       "approved_for_reference":  true,
+                       "approved_for_generation":  true,
+                       "approved_for_publication":  false,
+                       "notes":  "Drive upload 2026-06-04 around 14:45 America/Caracas (2026-06-04T18:45-19:00Z). Drive ID 107W3hsKS9bbE9PfT_tTwoCPaK-oBufU_. Downloaded locally (2.29 MB), validated as HEIC and processed. Use only as private face reference until explicit generation/publication approval. Preview generated under processed/drive_107W3hsKS9bbE9PfT_tTwoCPaK-oBufU_/ when supported by FFmpeg. Approval 2026-06-04: Sergio explicitly approved these photos for internal avatar/video draft generation; publication, client use, and delivery remain blocked until explicit per-piece approval."
+                   },
+                   {
+                       "asset_id":  "sergio-drive-20260604-drive-14fhpzjmlrq7vvzebsdo1c-adcsmzn-vr",
+                       "file_path":  "hermes-content/references/sergio-approved-media/inbox/drive_14fhpzjmlrQ7VvzeBsDo1C-aDcSmZN-vR.HEIC",
+                       "type":  "face_photo",
+                       "brand_lane":  "sergio_personal",
+                       "approved_for_reference":  true,
+                       "approved_for_generation":  true,
+                       "approved_for_publication":  false,
+                       "notes":  "Drive upload 2026-06-04 around 14:45 America/Caracas (2026-06-04T18:45-19:00Z). Drive ID 14fhpzjmlrQ7VvzeBsDo1C-aDcSmZN-vR. Downloaded locally (2.31 MB), validated as HEIC and processed. Use only as private face reference until explicit generation/publication approval. Preview generated under processed/drive_14fhpzjmlrQ7VvzeBsDo1C-aDcSmZN-vR/ when supported by FFmpeg. Approval 2026-06-04: Sergio explicitly approved these photos for internal avatar/video draft generation; publication, client use, and delivery remain blocked until explicit per-piece approval."
+                   },
+                   {
+                       "asset_id":  "sergio-drive-20260604-drive-1ghdj5uhmaen1qnhklkzwi6ndpeljnfk5",
+                       "file_path":  "hermes-content/references/sergio-approved-media/inbox/drive_1GhDJ5UhmAen1qNhKlKZWi6NdpELJNFK5.HEIC",
+                       "type":  "face_photo",
+                       "brand_lane":  "sergio_personal",
+                       "approved_for_reference":  true,
+                       "approved_for_generation":  true,
+                       "approved_for_publication":  false,
+                       "notes":  "Drive upload 2026-06-04 around 14:45 America/Caracas (2026-06-04T18:45-19:00Z). Drive ID 1GhDJ5UhmAen1qNhKlKZWi6NdpELJNFK5. Downloaded locally (2.38 MB), validated as HEIC and processed. Use only as private face reference until explicit generation/publication approval. Preview generated under processed/drive_1GhDJ5UhmAen1qNhKlKZWi6NdpELJNFK5/ when supported by FFmpeg. Approval 2026-06-04: Sergio explicitly approved these photos for internal avatar/video draft generation; publication, client use, and delivery remain blocked until explicit per-piece approval."
+                   },
+                   {
+                       "asset_id":  "sergio-drive-20260604-drive-16t4wblddfa-yei3mpdkt0sm1ahhviqbz",
+                       "file_path":  "hermes-content/references/sergio-approved-media/inbox/drive_16t4WbLddFA_yei3mpDKT0SM1AhHViQbZ.HEIC",
+                       "type":  "face_photo",
+                       "brand_lane":  "sergio_personal",
+                       "approved_for_reference":  true,
+                       "approved_for_generation":  true,
+                       "approved_for_publication":  false,
+                       "notes":  "Drive upload 2026-06-04 around 14:45 America/Caracas (2026-06-04T18:45-19:00Z). Drive ID 16t4WbLddFA_yei3mpDKT0SM1AhHViQbZ. Downloaded locally (2.36 MB), validated as HEIC and processed. Use only as private face reference until explicit generation/publication approval. Preview generated under processed/drive_16t4WbLddFA_yei3mpDKT0SM1AhHViQbZ/ when supported by FFmpeg. Approval 2026-06-04: Sergio explicitly approved these photos for internal avatar/video draft generation; publication, client use, and delivery remain blocked until explicit per-piece approval."
+                   },
+                   {
+                       "asset_id":  "sergio-drive-20260604-drive-13weczqjg5wjodtqxb0ypenggdn-e-60i",
+                       "file_path":  "hermes-content/references/sergio-approved-media/inbox/drive_13wecZQjG5wjodTqxb0YpENggDN-E_60i.HEIC",
+                       "type":  "face_photo",
+                       "brand_lane":  "sergio_personal",
+                       "approved_for_reference":  true,
+                       "approved_for_generation":  true,
+                       "approved_for_publication":  false,
+                       "notes":  "Drive upload 2026-06-04 around 14:45 America/Caracas (2026-06-04T18:45-19:00Z). Drive ID 13wecZQjG5wjodTqxb0YpENggDN-E_60i. Downloaded locally (2.34 MB), validated as HEIC and processed. Use only as private face reference until explicit generation/publication approval. Preview generated under processed/drive_13wecZQjG5wjodTqxb0YpENggDN-E_60i/ when supported by FFmpeg. Approval 2026-06-04: Sergio explicitly approved these photos for internal avatar/video draft generation; publication, client use, and delivery remain blocked until explicit per-piece approval."
+                   },
+                   {
+                       "asset_id":  "sergio-drive-20260604-drive-15lu5r1ithctr-olgk7qjvroiccdcgvip",
+                       "file_path":  "hermes-content/references/sergio-approved-media/inbox/drive_15lU5R1ITHCtr_olgk7qJVroIcCdCGVip.HEIC",
+                       "type":  "face_photo",
+                       "brand_lane":  "sergio_personal",
+                       "approved_for_reference":  true,
+                       "approved_for_generation":  true,
+                       "approved_for_publication":  false,
+                       "notes":  "Drive upload 2026-06-04 around 14:45 America/Caracas (2026-06-04T18:45-19:00Z). Drive ID 15lU5R1ITHCtr_olgk7qJVroIcCdCGVip. Downloaded locally (2.28 MB), validated as HEIC and processed. Use only as private face reference until explicit generation/publication approval. Preview generated under processed/drive_15lU5R1ITHCtr_olgk7qJVroIcCdCGVip/ when supported by FFmpeg. Approval 2026-06-04: Sergio explicitly approved these photos for internal avatar/video draft generation; publication, client use, and delivery remain blocked until explicit per-piece approval."
+                   }
+               ],
+    "brand_lanes":  [
+                        "sergio_personal",
+                        "onia_sergio_led",
+                        "onia_narrator",
+                        "internal_test"
+                    ],
+    "required_fields":  [
+                            "asset_id",
+                            "file_path",
+                            "type",
+                            "brand_lane",
+                            "approved_for_reference",
+                            "approved_for_generation",
+                            "approved_for_publication",
+                            "notes"
+                        ]
+}

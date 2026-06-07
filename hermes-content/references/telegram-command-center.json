@@ -1,0 +1,252 @@
+{
+  "version": "2026-06-06",
+  "owner": "ONIA",
+  "objective": "Operate Hermes, ONIA projects, content production and approvals from Telegram with Hermes as the brain and n8n as scheduler/logger.",
+  "entrypoint": {
+    "cli": "hermes-command telegram --message \"<mensaje>\"",
+    "response_field": "telegram_reply",
+    "vps_wrapper": "/usr/local/bin/hermes-command"
+  },
+  "principles": [
+    "Telegram is the operating inbox.",
+    "Hermes decides using local docs, references, Notion and n8n context.",
+    "n8n schedules, waits, logs and routes.",
+    "Video Lab creates briefs and states.",
+    "Higgsfield renders only after approval.",
+    "Publishing and client-facing actions require explicit approval."
+  ],
+  "approval_gates": {
+    "create_brief": "allowed",
+    "research": "allowed",
+    "draft_message": "allowed",
+    "draft_content": "allowed",
+    "generate_video": "requires_approval",
+    "use_sergio_face_or_voice": "requires_approval_per_piece",
+    "publish_content": "requires_explicit_publish_command",
+    "contact_prospect": "requires_explicit_contact_approval",
+    "deliver_client_asset": "requires_explicit_delivery_approval",
+    "whatsapp_automation": "blocked_until_meta_business_verification"
+  },
+  "command_groups": [
+    {
+      "name": "status_planning",
+      "commands": [
+        "Estado Semana",
+        "Plan Semana",
+        "Plan Hoy",
+        "Automatizaciones ONIA",
+        "Mapa proyectos ONIA",
+        "Fabrica contenido ONIA"
+      ]
+    },
+    {
+      "name": "scheduled_operations",
+      "commands": [
+        "Radar creativo ONIA",
+        "Cola contenido diaria",
+        "Seguimientos ONIA hoy",
+        "Recordatorios Video Lab",
+        "Platform Copy Queue",
+        "Watcher Higgsfield",
+        "Registro Hermes"
+      ]
+    },
+    {
+      "name": "projects_sales",
+      "commands": [
+        "Orquesta ONIA: <empresa o rubro> | <objetivo>",
+        "Prepara venta DentalGest: <clinica>",
+        "Prepara venta Gestios: <empresa>",
+        "Prepara venta Web ONIA: <negocio>",
+        "Prepara marketing Higgsfield: <negocio> | <oferta>",
+        "Prepara consultoria ONIA: <negocio> | <dolor o proceso>"
+      ]
+    },
+    {
+      "name": "video_lab_higgsfield",
+      "commands": [
+        "Genera video Sergio: <idea>",
+        "Crea avatar Sergio: <objetivo> | <variante>",
+        "Genera Reel ONIA: <tema> | <objetivo>",
+        "Crea video cliente: <negocio> | <oferta> | <estilo>",
+        "Estado Video Lab [job_id]",
+        "Siguiente Video Lab",
+        "Aprobar video <job_id>",
+        "Rehacer video <job_id>: <cambio>",
+        "Video generado <job_id>: <url_video>",
+        "Publicar video <job_id>",
+        "Archivar video <job_id>"
+      ]
+    }
+  ],
+  "project_contexts": [
+    {
+      "id": "dentalgest",
+      "lane": "saas",
+      "audience": "Clinicas dentales de Bolivia",
+      "content_use": "demos, patient follow-up education, clinic operations, no medical guarantees",
+      "safe_cta": "Pedir demo corta"
+    },
+    {
+      "id": "gestios",
+      "lane": "saas",
+      "audience": "Pymes con Excel, tareas, clientes o reportes desordenados",
+      "content_use": "before-after operations, dashboards, task flow, owner visibility",
+      "safe_cta": "Ver tablero simple"
+    },
+    {
+      "id": "websites",
+      "lane": "service",
+      "audience": "Negocios sin captacion clara",
+      "content_use": "web audits, landing examples, lead form flows",
+      "safe_cta": "Pedir auditoria rapida"
+    },
+    {
+      "id": "higgsfield-marketing",
+      "lane": "content_service",
+      "audience": "Negocios que necesitan video constante",
+      "content_use": "UGC, reels, product demos, offer videos",
+      "safe_cta": "Pedir 3 ideas de video"
+    },
+    {
+      "id": "onia-consulting",
+      "lane": "consulting",
+      "audience": "Negocios que necesitan ordenar procesos antes de comprar herramientas",
+      "content_use": "audit, roadmap, implementation, training",
+      "safe_cta": "Pedir auditoria corta"
+    },
+    {
+      "id": "sergio-personal",
+      "lane": "founder_brand",
+      "audience": "Empresarios, pymes and ONIA audience",
+      "content_use": "founder story, building in public, lessons, real process",
+      "safe_cta": "Escribime sistema"
+    },
+    {
+      "id": "onia-brand",
+      "lane": "brand",
+      "audience": "B2B prospects",
+      "content_use": "education, authority, demos, systems",
+      "safe_cta": "Pedir demo o auditoria"
+    }
+  ],
+  "queues": [
+    "creative_inbox",
+    "video_lab_jobs",
+    "approval_queue",
+    "higgsfield_generation_queue",
+    "platform_copy_queue",
+    "publish_queue",
+    "crm_followup_queue",
+    "notion_log_queue"
+  ],
+  "active_workflows": [
+    {
+      "name": "ONIA - Telegram Command Center",
+      "id": "vuicWsvh0hwqKhYs",
+      "status": "active",
+      "legacy_name": "ONIA - Video Lab Telegram Router",
+      "active_version_id": "9c2d3776-ee6b-44d9-a36f-97ee9c40817f",
+      "role": "Routes Telegram commands to hermes-command on VPS; delegates Video Lab commands internally."
+    },
+    {
+      "name": "Hermes Telegram Chat ID Capture",
+      "id": "T3qtKnj94fBXQsxY",
+      "status": "active",
+      "role": "Captures Telegram chat id for future workflows."
+    },
+    {
+      "name": "Hermes Radar Diario Creativo y Clientes",
+      "id": "lryabRhGQW4WIuJG",
+      "status": "blocked_missing_chat_id",
+      "role": "Daily creative radar and opportunities summary."
+    },
+    {
+      "name": "ONIA - Scheduled Operations Pack",
+      "id": "VeCHKr6wkK5Wet25",
+      "status": "active",
+      "active_version_id": "63d699bb-6814-44dc-a2c2-d3f8d6c9ed4d",
+      "role": "Scheduled internal Telegram reminders for radar, content queue, CRM, Video Lab approvals, Higgsfield watcher, platform copy and Hermes registry."
+    }
+  ],
+  "planned_workflows": [
+    {
+      "name": "ONIA - Daily Content Queue",
+      "trigger": "Daily 08:00 America/La_Paz",
+      "output": "1 Sergio idea, 1 ONIA idea, client opportunities",
+      "approval_required": true,
+      "implemented_by": "ONIA - Scheduled Operations Pack"
+    },
+    {
+      "name": "ONIA - Video Approval Reminders",
+      "trigger": "Daily 10:00 and 17:00 America/La_Paz",
+      "output": "Pending briefs, generated videos and next exact commands",
+      "approval_required": true,
+      "implemented_by": "ONIA - Scheduled Operations Pack"
+    },
+    {
+      "name": "ONIA - Higgsfield Generation Watcher",
+      "trigger": "Polling or webhook when available",
+      "output": "Generated URL, costs, model, status",
+      "approval_required": true,
+      "implemented_by": "ONIA - Scheduled Operations Pack as local Video Lab watcher until Higgsfield API/MCP polling is stable"
+    },
+    {
+      "name": "ONIA - Platform Copy Router",
+      "trigger": "Video job created or before publish",
+      "output": "Instagram caption, TikTok description, YouTube title/description, LinkedIn copy",
+      "approval_required": true,
+      "implemented_by": "ONIA - Scheduled Operations Pack reminder; full router remains manual/Video Lab"
+    },
+    {
+      "name": "ONIA - CRM Follow-up",
+      "trigger": "Daily 08:30 America/La_Paz",
+      "output": "Prospect/client follow-ups and suggested messages",
+      "approval_required": true,
+      "implemented_by": "ONIA - Scheduled Operations Pack reminder; Notion sync pending n8n credential"
+    }
+  ],
+  "notion_logging": {
+    "status": "local_outbox_until_n8n_notion_credential_exists",
+    "vps_outbox": "/root/.hermes/notion-outbox/command-center-events.jsonl",
+    "vps_log": "/root/.hermes/logs/command-center-events.jsonl"
+  },
+  "daily_cadence": [
+    {
+      "time": "07:30",
+      "activity": "creative radar and opportunities"
+    },
+    {
+      "time": "08:00",
+      "activity": "daily content queue for Sergio and ONIA"
+    },
+    {
+      "time": "10:00",
+      "activity": "approval reminders"
+    },
+    {
+      "time": "15:00",
+      "activity": "platform copy and reuse package"
+    },
+    {
+      "time": "17:00",
+      "activity": "generated video review"
+    },
+    {
+      "time": "21:00",
+      "activity": "summary and blockers"
+    }
+  ],
+  "data_sources": [
+    "COORDINATION_MANIFEST.md",
+    "PROJECTS_ORCHESTRATION.md",
+    "HERMES_VIDEO_LAB.md",
+    "HERMES_CONTENT_WORKFLOW.md",
+    "N8N_AUTOMATION_PLAN.md",
+    "hermes-content/references/onia-projects-registry.json",
+    "hermes-content/references/video-brief-template.json",
+    "hermes-content/references/higgsfield-content-use-cases.json",
+    "Notion CRM, Finance, SaaS/tools and Tasks when connected",
+    "n8n workflow status when connected"
+  ]
+}

@@ -1,0 +1,37 @@
+﻿[
+  {
+    "id": "9c087cef-ab23-46ae-b8d1-90d976eb1741",
+    "status": "completed",
+    "display_name": "Kling v3.0",
+    "job_set_type": "kling3_0",
+    "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/hf_20260606_031241_9c087cef-ab23-46ae-b8d1-90d976eb1741.mp4",
+    "created_at": 1780715561.260418,
+    "params": {
+      "width": 2160,
+      "height": 3840,
+      "prompt": "Animate the approved Sergio avatar still for a 5 second internal preview. Keep identity locked exactly to the still and the real reference photos: same face, eyes, eyebrows, nose, lips, teeth, jaw, chin, ears, neck, hairline, glossy black Italian side part, skin tone and age. Motion must be very subtle and natural: tiny breathing, one natural blink, slight micro head movement, small friendly expression hold. Camera almost still, no zoom, no pan. Do not make the mouth speak unless audio/lipsync is explicitly approved. Keep teeth stable, no warped mouth, no face morphing, no hair flicker, no clothing flicker, no stretched neck, no changed person. No audio, no subtitles, no text, no watermark.",
+      "medias": [
+        {
+          "data": {
+            "id": "c7d5398c-d03f-4c9a-b6ef-fdaf70d2854f",
+            "url": "https://d2ol7oe51mr4n9.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/c7d5398c-d03f-4c9a-b6ef-fdaf70d2854f.png",
+            "type": "media_input"
+          },
+          "role": "start_image"
+        }
+      ],
+      "duration": 5,
+      "aspect_ratio": "9:16",
+      "multi_shots": false,
+      "multi_prompt": [],
+      "sound": "off",
+      "cfg_scale": 0.5,
+      "mode": "4k",
+      "kling_elements": [],
+      "kling_element_ids": [],
+      "multi_shot_mode": "custom",
+      "reference_elements": [],
+      "enhance_prompt": false
+    }
+  }
+]

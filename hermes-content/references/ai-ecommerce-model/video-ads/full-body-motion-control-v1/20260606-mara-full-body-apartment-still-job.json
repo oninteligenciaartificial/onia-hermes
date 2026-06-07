@@ -1,0 +1,33 @@
+[
+  {
+    "id": "35f988d2-37ad-4065-be42-f7cc653ff274",
+    "status": "completed",
+    "display_name": "Nano Banana Pro",
+    "job_set_type": "nano_banana_2",
+    "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/hf_20260606_140120_35f988d2-37ad-4065-be42-f7cc653ff274.png",
+    "created_at": 1780754480.803748,
+    "params": {
+      "width": 1536,
+      "height": 2752,
+      "aspect_ratio": "9:16",
+      "resolution": "2k",
+      "batch_size": 1,
+      "input_images": [
+        {
+          "id": "98cc675a-0b61-4133-83d8-ed245e804d31",
+          "url": "https://d2ol7oe51mr4n9.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/98cc675a-0b61-4133-83d8-ed245e804d31_resize.jpg",
+          "type": "media_input"
+        },
+        {
+          "id": "8c6dd632-6b17-42d4-b8ba-5af03d311da6",
+          "url": "https://d2ol7oe51mr4n9.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/8c6dd632-6b17-42d4-b8ba-5af03d311da6.png",
+          "type": "media_input"
+        }
+      ],
+      "input_image": null,
+      "application": null,
+      "surface": null,
+      "prompt": "Create a full-body vertical 9:16 identity-preserving commercial still of Mara Vale in a warm modern apartment, using the references as strict identity anchors. Same fictional adult red-haired woman: exact face, freckles, green-hazel eyes, nose, lips, jawline, copper-red wavy hair, very fair skin, soft warm smile, same healthy adult body proportions. Full body visible from head to feet. Outfit: cream fitted ribbed top, relaxed open linen shirt, high-waist tailored beige pants, small gold hoops, neutral sandals, no logos. She stands naturally in the apartment living room, one foot slightly forward as if about to walk toward camera, relaxed arms, one hand lightly touching hair, premium UGC luxury aesthetic, warm lamp, sofa, curtains, side table, plant, natural shadows, realistic skin texture, clean phone-first social frame. No product yet. No text, no watermark."
+    }
+  }
+]

@@ -1,0 +1,9 @@
+Use the uploaded three-quarter reference frame as the exact identity, exact pose, exact angle, and exact facial geometry source. Create a premium cinematic AI avatar photoshoot three-quarter portrait of the same real person, Sergio.
+
+Preserve the same face: youthful long face, same dark almond eyes, same eye spacing, same eyelids, same thick eyebrows, same straight nose from this angle, same lips, same cheek volume, same jawline, same chin, same ear, same hairline, same black side-part hair, same skin tone and same natural expression. Use the frame only as pose and identity source. Do not invent a new model.
+
+Improve production quality from the lower-resolution video frame: enhance sharpness, realistic skin detail, hair detail, clean lighting, and commercial clarity. Remove temporary pimples, small acne spots, excessive flash shine, minor lighting wrinkles, and video compression noise. Keep human pores and natural asymmetry.
+
+Wardrobe: black blazer over black crewneck shirt. Lighting: cinematic soft key light, natural catchlights, premium modern entrepreneur portrait. Background: clean modern studio or office with soft blur.
+
+Do not change eye shape, eye spacing, nose, mouth, lips, jaw, chin, age, hairline, side-part style, neck, or skull. No plastic skin, no generic model face, no older look, no anime, no cartoon, no scars, no neck scratches, no distorted anatomy.

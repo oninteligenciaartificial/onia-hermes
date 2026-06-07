@@ -1,0 +1,50 @@
+[
+  {
+    "id": "drive-ref-001",
+    "source": "google_drive",
+    "url": "https://drive.google.com/file/d/1A2Ck4jZDgnseisMmITzWrjv-Mcpo5CxW/view?usp=drivesdk",
+    "access_status": "public",
+    "processing_status": "processed",
+    "notes": "Processed into style-references.json as drive-ref-001."
+  },
+  {
+    "id": "drive-ref-002",
+    "source": "google_drive",
+    "url": "https://drive.google.com/file/d/17DFosQOs9WbZwgOYs8ywtzaUitQClthw/view?usp=drivesdk",
+    "access_status": "public",
+    "processing_status": "processed",
+    "notes": "Processed into style-references.json as drive-ref-002."
+  },
+  {
+    "id": "drive-ref-003",
+    "source": "google_drive",
+    "url": "https://drive.google.com/file/d/1oDv-9qFcpYWRPUlrQ7mK6dqO8qnbNdt0/view?usp=drivesdk",
+    "access_status": "public",
+    "processing_status": "processed",
+    "notes": "Processed into style-references.json as drive-ref-003."
+  },
+  {
+    "id": "drive-ref-004",
+    "source": "google_drive",
+    "url": "https://drive.google.com/file/d/1ukxA0cP5tJ1h0Keu1WG1kxnq25ply8kW/view?usp=drivesdk",
+    "access_status": "public",
+    "processing_status": "processed",
+    "notes": "Processed into style-references.json as drive-ref-004."
+  },
+  {
+    "id": "drive-ref-005",
+    "source": "google_drive",
+    "url": "https://drive.google.com/file/d/1k3xgVp3jqJwC4BKQgwUrV90dVVTInnAc/view?usp=drivesdk",
+    "access_status": "public",
+    "processing_status": "processed",
+    "notes": "Processed into style-references.json as drive-ref-005."
+  },
+  {
+    "id": "drive-ref-006",
+    "source": "google_drive",
+    "url": "https://drive.google.com/file/d/13kkE7bSLc0z5NBzn8XtcFNpKVu2mAMH5/view?usp=drivesdk",
+    "access_status": "public",
+    "processing_status": "processed",
+    "notes": "Processed into style-references.json as drive-ref-006."
+  }
+]

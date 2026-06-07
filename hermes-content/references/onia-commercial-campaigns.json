@@ -1,0 +1,57 @@
+{
+  "version": "2026-06-01",
+  "campaigns": [
+    {
+      "id": "dentalgest-clinicas-bolivia",
+      "project": "dentalgest",
+      "priority": 1,
+      "audience": "Clinicas dentales de Bolivia",
+      "source_reference": "hermes-content/references/prospectos-clinicas-bolivia-2026.csv",
+      "offer": "Demo DentalGest",
+      "cta": "Te puedo mostrar una demo corta de DentalGest esta semana.",
+      "approval_required": true,
+      "channels": ["Instagram/Facebook publico", "LinkedIn", "Email publico"],
+      "content_assets": ["demo corta", "reel dolor", "carrusel leads perdidos"],
+      "blocked_channels": ["WhatsApp automation"]
+    },
+    {
+      "id": "gestios-pymes-operaciones",
+      "project": "gestios",
+      "priority": 2,
+      "audience": "Pymes con operaciones en Excel, WhatsApp o reportes manuales",
+      "source_reference": "",
+      "offer": "Diagnostico operativo y demo Gesti-OS",
+      "cta": "Te muestro como quedaria tu operacion en un tablero simple.",
+      "approval_required": true,
+      "channels": ["LinkedIn", "Email publico", "Contenido fundador"],
+      "content_assets": ["demo tablero", "reel Excel infinito", "post LinkedIn"],
+      "blocked_channels": ["WhatsApp automation"]
+    },
+    {
+      "id": "web-onia-captacion",
+      "project": "websites",
+      "priority": 3,
+      "audience": "Negocios sin web clara o sin captura de leads",
+      "source_reference": "",
+      "offer": "Auditoria web y landing de captacion",
+      "cta": "Te preparo una auditoria corta con 2 mejoras puntuales.",
+      "approval_required": true,
+      "channels": ["LinkedIn", "Email publico", "Instagram publico"],
+      "content_assets": ["auditoria", "antes despues", "landing demo"],
+      "blocked_channels": ["WhatsApp automation"]
+    },
+    {
+      "id": "higgsfield-marketing-local",
+      "project": "higgsfield-marketing",
+      "priority": 4,
+      "audience": "Negocios locales que necesitan videos y contenido mensual",
+      "source_reference": "HIGGSFIELD_CLIENT_SALES_PLAYBOOK.md",
+      "offer": "3 ideas de video + pack de contenido",
+      "cta": "Te preparo 3 ideas de videos para tu negocio.",
+      "approval_required": true,
+      "channels": ["Instagram", "LinkedIn", "Demo visual"],
+      "content_assets": ["UGC demo", "video oferta", "calendario mensual"],
+      "blocked_channels": ["WhatsApp automation"]
+    }
+  ]
+}

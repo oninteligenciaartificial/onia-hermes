@@ -1,0 +1,402 @@
+{
+    "version":  "2026-06-04",
+    "status":  "internal_reference",
+    "approval_policy":  {
+                            "draft_briefs":  "allowed",
+                            "use_sergio_face_for_generation":  "requires_explicit_approval_per_asset",
+                            "use_sergio_voice_clone":  "requires_explicit_approval_per_asset",
+                            "publish_content":  "requires_explicit_final_approval",
+                            "client_facing_use":  "requires_client_and_sergio_approval"
+                        },
+    "sergio_identity_status":  {
+                                   "face_references":  "ready_for_internal_analysis",
+                                   "voice_references":  "audio_extracted_ready_for_internal_reference",
+                                   "voice_transcription":  "pending_if_openai_api_key_is_missing",
+                                   "default_visual_uniform":  "all_black_clean_simple_no_large_logos"
+                               },
+    "outfits":  [
+                    {
+                        "id":  "black_operator_basic",
+                        "description":  "Clean black t-shirt, black pants or dark jeans, dark shoes.",
+                        "best_for":  [
+                                         "daily_personal_brand",
+                                         "direct_hooks",
+                                         "founder_lessons"
+                                     ],
+                        "prompt":  "wearing a clean all-black outfit: black t-shirt, black pants, dark shoes, no visible logos"
+                    },
+                    {
+                        "id":  "black_consultant",
+                        "description":  "Black t-shirt with black overshirt, lightweight black jacket, or black blazer.",
+                        "best_for":  [
+                                         "onia_audits",
+                                         "b2b_sales",
+                                         "consulting",
+                                         "client_strategy"
+                                     ],
+                        "prompt":  "wearing a black t-shirt with a black overshirt or lightweight black jacket, professional but approachable"
+                    },
+                    {
+                        "id":  "black_technical_demo",
+                        "description":  "Black hoodie or black zip jacket with dark pants.",
+                        "best_for":  [
+                                         "technical_demos",
+                                         "n8n",
+                                         "notion",
+                                         "ai_builds",
+                                         "screen_walkthroughs"
+                                     ],
+                        "prompt":  "wearing a black hoodie or black zip jacket, practical technical operator look"
+                    },
+                    {
+                        "id":  "black_premium_meeting",
+                        "description":  "Black blazer or structured black overshirt over black t-shirt, dark pants.",
+                        "best_for":  [
+                                         "premium_clients",
+                                         "proposals",
+                                         "authority",
+                                         "formal_consulting"
+                                     ],
+                        "prompt":  "wearing a black blazer over a black t-shirt, clean premium consultant look"
+                    },
+                    {
+                        "id":  "black_content_casual",
+                        "description":  "Simple black t-shirt, minimal accessories, real workspace.",
+                        "best_for":  [
+                                         "stories",
+                                         "spontaneous_clips",
+                                         "creator_updates"
+                                     ],
+                        "prompt":  "wearing a simple black t-shirt, natural creator setup, authentic phone-camera look"
+                    }
+                ],
+    "personas":  [
+                     {
+                         "id":  "sergio_casual_directo",
+                         "lane":  "sergio",
+                         "energy":  "direct, real, practical, not guru-like",
+                         "default_outfits":  [
+                                                 "black_operator_basic",
+                                                 "black_content_casual"
+                                             ],
+                         "default_scenes":  [
+                                                "sergio_desk_direct",
+                                                "sergio_walk_phone",
+                                                "sergio_screen_overlay"
+                                            ]
+                     },
+                     {
+                         "id":  "sergio_consultor_onia",
+                         "lane":  "onia",
+                         "energy":  "practical consultant, auditor, systems operator",
+                         "default_outfits":  [
+                                                 "black_consultant",
+                                                 "black_premium_meeting"
+                                             ],
+                         "default_scenes":  [
+                                                "onia_audit_table",
+                                                "onia_whatsapp_to_crm",
+                                                "onia_dashboard_ops"
+                                            ]
+                     },
+                     {
+                         "id":  "sergio_demo_tecnica",
+                         "lane":  "sergio_or_onia",
+                         "energy":  "technical operator showing the build",
+                         "default_outfits":  [
+                                                 "black_technical_demo"
+                                             ],
+                         "default_scenes":  [
+                                                "sergio_screen_overlay",
+                                                "onia_n8n_workflow",
+                                                "sergio_build_timelapse"
+                                            ]
+                     },
+                     {
+                         "id":  "sergio_founder_story",
+                         "lane":  "sergio",
+                         "energy":  "honest founder, real process, lessons learned",
+                         "default_outfits":  [
+                                                 "black_operator_basic"
+                                             ],
+                         "default_scenes":  [
+                                                "sergio_build_timelapse",
+                                                "sergio_decision_board",
+                                                "sergio_desk_direct"
+                                            ]
+                     },
+                     {
+                         "id":  "onia_narrator_system_explainer",
+                         "lane":  "onia",
+                         "energy":  "clear, commercial, consultative",
+                         "default_outfits":  [
+
+                                             ],
+                         "default_scenes":  [
+                                                "onia_before_after",
+                                                "onia_whatsapp_to_crm",
+                                                "onia_n8n_workflow"
+                                            ]
+                     },
+                     {
+                         "id":  "client_ugc_operator",
+                         "lane":  "cliente",
+                         "energy":  "natural UGC, believable, client-safe",
+                         "default_outfits":  [
+                                                 "adapt_to_client_business"
+                                             ],
+                         "default_scenes":  [
+                                                "client_product_counter",
+                                                "client_customer_pov",
+                                                "client_operator_explains"
+                                            ]
+                     }
+                 ],
+    "scenes":  {
+                   "sergio":  [
+                                  {
+                                      "id":  "sergio_desk_direct",
+                                      "description":  "Sergio talks to camera at a real desk with laptop visible."
+                                  },
+                                  {
+                                      "id":  "sergio_screen_overlay",
+                                      "description":  "Screen workflow with Sergio face cutaway or small overlay."
+                                  },
+                                  {
+                                      "id":  "sergio_walk_phone",
+                                      "description":  "Vertical phone video while walking in a real corridor or urban setting."
+                                  },
+                                  {
+                                      "id":  "sergio_build_timelapse",
+                                      "description":  "Fast cuts of building workflow, writing prompts, checking Notion."
+                                  },
+                                  {
+                                      "id":  "sergio_decision_board",
+                                      "description":  "Whiteboard, Notion, or simple board with priorities and decisions."
+                                  },
+                                  {
+                                      "id":  "sergio_whatsapp_lead",
+                                      "description":  "Safe simulated WhatsApp or CRM lead flow with no real private data."
+                                  }
+                              ],
+                   "onia":  [
+                                {
+                                    "id":  "onia_audit_table",
+                                    "description":  "Consulting table with laptop, notes, and simple process map."
+                                },
+                                {
+                                    "id":  "onia_whatsapp_to_crm",
+                                    "description":  "Visual flow from WhatsApp to Chatwoot to CRM to follow-up."
+                                },
+                                {
+                                    "id":  "onia_n8n_workflow",
+                                    "description":  "Clean n8n workflow view with no secrets or real client data."
+                                },
+                                {
+                                    "id":  "onia_before_after",
+                                    "description":  "Manual chaos versus automated process comparison."
+                                },
+                                {
+                                    "id":  "onia_client_call_prep",
+                                    "description":  "Preparing a client call with checklist, pipeline, and notes."
+                                },
+                                {
+                                    "id":  "onia_dashboard_ops",
+                                    "description":  "Leads, follow-ups, tasks, and conversion dashboard."
+                                }
+                            ],
+                   "cliente":  [
+                                   {
+                                       "id":  "client_product_counter",
+                                       "description":  "Product on counter or table with hands demonstrating use."
+                                   },
+                                   {
+                                       "id":  "client_local_reception",
+                                       "description":  "Local business reception or shop entrance with realistic movement."
+                                   },
+                                   {
+                                       "id":  "client_operator_explains",
+                                       "description":  "Business operator explains objection or benefit naturally."
+                                   },
+                                   {
+                                       "id":  "client_customer_pov",
+                                       "description":  "Customer POV problem before buying or booking."
+                                   },
+                                   {
+                                       "id":  "client_ecommerce_demo",
+                                       "description":  "Packaging, product page, checkout, or delivery simulation."
+                                   },
+                                   {
+                                       "id":  "client_service_result",
+                                       "description":  "Service process shown realistically without exaggerated result claims."
+                                   }
+                               ]
+               },
+    "hooks":  {
+                  "problema_directo":  [
+                                           "Si tus clientes te escriben y nadie responde rapido, estas perdiendo ventas antes de empezar.",
+                                           "El problema no es que falten leads; es que nadie los ordena, califica y persigue.",
+                                           "Si cada venta depende de acordarte manualmente, tu negocio tiene una fuga."
+                                       ],
+                  "error_comun":  [
+                                      "El error es poner un bot a vender cuando todavia no tienes claro el proceso humano.",
+                                      "La mayoria automatiza el caos y despues culpa a la IA.",
+                                      "No necesitas otro sistema; necesitas que el sistema actual deje de estar roto."
+                                  ],
+                  "contrario":  [
+                                    "Yo no empezaria con un chatbot. Empezaria con el flujo de ventas.",
+                                    "La IA no deberia cerrar todas tus ventas. Deberia preparar mejores oportunidades para tu equipo.",
+                                    "Un solo numero de WhatsApp puede vender mas si esta bien operado."
+                                ],
+                  "backstage":  [
+                                    "Te muestro como convertimos una idea en un workflow que realmente se puede usar.",
+                                    "Esto es lo que reviso antes de recomendar una automatizacion a un negocio.",
+                                    "Asi preparo un video UGC antes de tocar Higgsfield."
+                                ],
+                  "mecanismo":  [
+                                    "Mira este flujo: entra el lead, se califica, se asigna y queda seguimiento.",
+                                    "Esto no es magia; son tres partes bien conectadas.",
+                                    "El secreto no es el prompt. Es el sistema que decide que prompt usar."
+                                ],
+                  "cliente_producto":  [
+                                           "Si vendes esto y la gente pregunta siempre lo mismo, este video te ayuda a cerrar mas rapido.",
+                                           "Antes de comprar, tu cliente necesita entender una sola cosa: por que esto le resuelve el problema.",
+                                           "Un buen video no grita oferta; elimina dudas."
+                                       ]
+              },
+    "prompt_blocks":  {
+                          "sergio_black_base":  "Vertical realistic phone-camera video, Sergio as a founder/operator and practical consultant, wearing a clean all-black outfit: black t-shirt, black pants, dark shoes, no visible logos, natural confident posture, direct eye contact, authentic working environment, subtle handheld movement, realistic lighting, modern Latin American business context, serious but approachable tone.",
+                          "sergio_avatar_master":  "Create a realistic vertical 9:16 talking-avatar / UGC creator video of Sergio for ONIA. Use Sergio\u0027s approved private reference pack to preserve identity consistently across shots: same face structure, short dark hair, natural expression, direct eye contact, slim young founder/operator presence. Outfit: all-black, clean, simple, no visible logos. The video must feel like a real phone-camera creator clip, not a glossy stock ad. Use natural Spanish delivery, small pauses, subtle hand movement, believable breathing, readable captions, and visual change every 2-3 seconds. Structure: hook, context, mechanism, proof of process, CTA. Use fictional/safe screens only.",
+                          "onia_base":  "Vertical business content video for ONIA, practical AI automation and sales operations consultancy, clean real workspace, WhatsApp leads, CRM board, n8n workflow and Notion dashboard shown only with fictional/safe data, consultant-led explanation, modern but realistic production, clear business problem, human sales handoff, no exaggerated claims.",
+                          "client_ugc_base":  "Vertical UGC-style sales video for a real client product or service, natural creator energy, realistic location related to the business, clear problem in the first 2 seconds, simple demonstration, believable benefit, conversational tone, no fake testimonial, no guaranteed result, no unapproved brand logos.",
+                          "negative_safe":  "No fake celebrity, no copying a real creator identity, no unapproved logos, no confidential screens, no visible private phone numbers, no fake income claims, no guaranteed results, no medical/legal/financial promises, no exaggerated testimonial, no deepfake publication, no voice clone unless approved.",
+                          "sergio_avatar_negative":  "No celebrity likeness, no copied creator identity, no changing Sergio\u0027s identity, no older-age transformation, no sexualized styling, no logos unless provided, no private screens, no real phone numbers, no fake client results, no fake revenue claims, no exaggerated guru gestures, no distorted face, no extra fingers, no broken lip-sync, no voice clone or publication unless explicitly approved."
+                      },
+    "avatar_system":  {
+                          "status":  "brief_router_implemented_higgsfield_render_requires_identity_qa",
+                          "telegram_command":  "Crea avatar Sergio: \u003cobjetivo\u003e | \u003cvariante\u003e",
+                          "cli_command":  "video-lab create_avatar --topic \"\u003cobjetivo\u003e\" --variant black_operator_basic",
+                          "prompt_formula":  "Soul ID or approved real reference image -\u003e still/outfit edit -\u003e identity review -\u003e image-to-video -\u003e identity and video QA -\u003e publish approval",
+                          "generation_warning":  "Do not use soul_cast through the CLI for Sergio identity work. Current safest route is reference-image outfit edit from approved Sergio media with nano_banana_2, then image-to-video after identity review. Current Soul ID 1238064e-1295-4cbf-9a41-861d4106e0e8 can be used for still tests, but real-photo outfit edits were more faithful in the 2026-06-04 test.",
+                          "supported_variants":  [
+                                                     "black_operator_basic",
+                                                     "black_consultant",
+                                                     "black_technical_demo",
+                                                     "black_premium_meeting"
+                                                 ],
+                          "reference_pack":  {
+                                                 "higgsfield_soul_id":  "1238064e-1295-4cbf-9a41-861d4106e0e8",
+                                                 "higgsfield_soul_name":  "Sergio ONIA 20260604 All Black",
+                                                 "higgsfield_soul_type":  "soul_2",
+                                                 "higgsfield_soul_status":  "completed",
+                                                 "face_reference_assets":  [
+                                                                               "sergio-drive-20260604-img-0331",
+                                                                               "sergio-drive-20260604-img-0329",
+                                                                               "sergio-drive-20260604-img-0330",
+                                                                               "sergio-drive-20260604-drive-15lu5r1ithctr-olgk7qjvroiccdcgvip",
+                                                                               "sergio-drive-20260604-drive-1ghdj5uhmaen1qnhklkzwi6ndpeljnfk5",
+                                                                               "sergio-drive-20260604-drive-107w3hsks9bbe9pft-ttwocpak-obufu",
+                                                                               "sergio-drive-20260604-drive-16t4wblddfa-yei3mpdkt0sm1ahhviqbz"
+                                                                           ],
+                                                 "voice_reference_assets":  [
+                                                                                "sergio-drive-20260602-img-0218-mov",
+                                                                                "sergio-drive-20260602-img-0217-mov",
+                                                                                "sergio-drive-20260602-img-0210-mov",
+                                                                                "sergio-drive-20260602-img-0209-mov"
+                                                                            ],
+                                                 "contact_sheet":  "hermes-content/references/sergio-approved-media/processed/sergio_contact_sheet_20260604.jpg",
+                                                 "approval_note":  "2026-06-04 photos are approved for internal avatar/video draft generation only. Voice cloning, client use and publication require explicit approval per piece.",
+                                                 "legacy_higgsfield_soul_ids":  [
+                                                                                    "05cebe09-5672-4d50-90b2-d92c680957f7"
+                                                                                ]
+                                             },
+                          "scenes":  [
+                                         {
+                                             "id":  "avatar_desk_confession",
+                                             "best_for":  "personal hooks and founder story"
+                                         },
+                                         {
+                                             "id":  "avatar_audit_table",
+                                             "best_for":  "ONIA consulting and audits"
+                                         },
+                                         {
+                                             "id":  "avatar_screen_operator",
+                                             "best_for":  "technical demos and proof of mechanism"
+                                         },
+                                         {
+                                             "id":  "avatar_phone_walk",
+                                             "best_for":  "direct thoughts and quick lessons"
+                                         },
+                                         {
+                                             "id":  "avatar_client_call_prep",
+                                             "best_for":  "B2B trust and premium consulting"
+                                         },
+                                         {
+                                             "id":  "avatar_lipsync_closeup",
+                                             "best_for":  "short scripts under 20 seconds"
+                                         }
+                                     ]
+                      },
+    "video_recipes":  [
+                          {
+                              "id":  "sergio_opinion_rapida",
+                              "lane":  "sergio",
+                              "persona":  "sergio_casual_directo",
+                              "outfit":  "black_operator_basic",
+                              "scenes":  [
+                                             "sergio_desk_direct",
+                                             "sergio_walk_phone"
+                                         ],
+                              "hook_category":  "error_comun",
+                              "cta":  "comment_save_or_request_review"
+                          },
+                          {
+                              "id":  "onia_auditoria",
+                              "lane":  "onia",
+                              "persona":  "sergio_consultor_onia",
+                              "outfit":  "black_consultant",
+                              "scenes":  [
+                                             "onia_audit_table",
+                                             "onia_before_after"
+                                         ],
+                              "hook_category":  "problema_directo",
+                              "cta":  "request_audit_or_diagnostic"
+                          },
+                          {
+                              "id":  "onia_demo_tecnica",
+                              "lane":  "onia",
+                              "persona":  "sergio_demo_tecnica",
+                              "outfit":  "black_technical_demo",
+                              "scenes":  [
+                                             "onia_n8n_workflow",
+                                             "onia_whatsapp_to_crm"
+                                         ],
+                              "hook_category":  "mecanismo",
+                              "cta":  "schedule_process_review"
+                          },
+                          {
+                              "id":  "cliente_producto_ugc",
+                              "lane":  "cliente",
+                              "persona":  "client_ugc_operator",
+                              "outfit":  "adapt_to_client_business",
+                              "scenes":  [
+                                             "client_product_counter",
+                                             "client_customer_pov"
+                                         ],
+                              "hook_category":  "cliente_producto",
+                              "cta":  "buy_write_or_request_info"
+                          },
+                          {
+                              "id":  "cliente_servicio_local",
+                              "lane":  "cliente",
+                              "persona":  "client_ugc_operator",
+                              "outfit":  "business_real_uniform",
+                              "scenes":  [
+                                             "client_local_reception",
+                                             "client_operator_explains"
+                                         ],
+                              "hook_category":  "problema_directo",
+                              "cta":  "book_write_or_request_quote"
+                          }
+                      ]
+}

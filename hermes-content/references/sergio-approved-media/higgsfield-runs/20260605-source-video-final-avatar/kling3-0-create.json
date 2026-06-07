@@ -1,0 +1,37 @@
+﻿[
+  {
+    "id": "ed1235be-4a1c-42fd-97f5-ca01fe94a82a",
+    "status": "completed",
+    "display_name": "Kling v3.0",
+    "job_set_type": "kling3_0",
+    "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/hf_20260605_153121_ed1235be-4a1c-42fd-97f5-ca01fe94a82a.mp4",
+    "created_at": 1780673481.187419,
+    "params": {
+      "width": 2160,
+      "height": 3840,
+      "prompt": "Animate this approved Sergio avatar portrait for a 5 second internal test. Keep identity locked to the still image and the real talking-video reference: same eyes, eyebrows, nose, lips, teeth, jaw, chin, ears, hairstyle, hairline, neck length and shoulder width. Motion must be extremely subtle and realistic: natural breathing, tiny head micro-movement, one small blink, a slight friendly smile hold, barely moving shoulders. Camera stays almost still, no zoom, no pan, no cinematic face morph. The mouth should remain stable with no warped teeth and no wide speaking mouth. Keep the glossy Italian side-part hair perfectly in place, no hair falling forward. Keep black blazer, black crew neck and warm industrial office background stable. No audio, no subtitles, no text, no watermark. Strict negative instructions: no face drift, no changed age, no stretched neck, no enlarged eyes, no crooked teeth, no extra teeth, no melting lips, no jaw morphing, no hair flicker, no clothing flicker, no new person, no beauty filter.",
+      "medias": [
+        {
+          "data": {
+            "id": "e2eaf775-1729-4b7b-a629-0ff8360a6c63",
+            "url": "https://d2ol7oe51mr4n9.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/e2eaf775-1729-4b7b-a629-0ff8360a6c63.png",
+            "type": "media_input"
+          },
+          "role": "start_image"
+        }
+      ],
+      "duration": 5,
+      "aspect_ratio": "9:16",
+      "multi_shots": false,
+      "multi_prompt": [],
+      "sound": "off",
+      "cfg_scale": 0.5,
+      "mode": "4k",
+      "kling_elements": [],
+      "kling_element_ids": [],
+      "multi_shot_mode": "custom",
+      "reference_elements": [],
+      "enhance_prompt": false
+    }
+  }
+]

@@ -1,0 +1,13 @@
+Create one single vertical 9:16 realistic phone-camera portrait of Sergio for a Kling video start frame.
+
+Use the real reference photos as the identity truth. Preserve Sergio's young natural face, real asymmetry, eye spacing, eye size, brows, nose, lips, jaw, cheeks, ears, neck length, skin tone, and hairline. Hair: glossy black Italian side part, combed upward/back and stable, not falling forward.
+
+Use the smile photos only as dental truth. If teeth are visible, keep the same real upper front teeth shape, spacing, width, smile arc, lip shape, and mouth corners. Do not whiten, straighten, resize, perfect, add, remove, or replace teeth.
+
+Composition: chest-up vertical creator portrait, centered, eye-level camera, modern simple workspace background, natural soft daylight. Black crewneck or black shirt with black blazer, clean fit, no logos. Body should look natural and slightly more robust than skinny, with normal shoulders and neck.
+
+Expression: calm, friendly, young founder/operator look. Slight relaxed smile or lightly parted lips, not a big smile, not exaggerated.
+
+Image quality: natural skin texture, realistic pores, no beauty filter, no plastic skin, no cinematic grade, no heavy contrast, no fake sharpness.
+
+Avoid: different person, older face, model face, perfect Hollywood teeth, new teeth, over-white teeth, warped mouth, one eye much larger, eyes too separated, long thin neck, skinny shoulders, hair falling forward, distorted blazer, text, watermark, UI overlay.

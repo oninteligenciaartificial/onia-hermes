@@ -1,0 +1,93 @@
+{
+  "system": "Futbol Lab IA",
+  "created_at": "2026-06-05",
+  "status": "draft_ready_for_approval",
+  "language": "es",
+  "positioning": "Futbol explicado con IA: tactica, predicciones, escenarios, humor visual y datos claros, sin clips robados.",
+  "season_1": "Mundial 2026",
+  "evergreen_after_world_cup": [
+    "Champions League",
+    "Libertadores",
+    "Eliminatorias",
+    "Fichajes",
+    "Balon de Oro",
+    "Historias tacticas",
+    "Simulaciones"
+  ],
+  "copyright_policy": {
+    "use_match_footage": false,
+    "use_broadcast_audio": false,
+    "use_fifa_logo": false,
+    "use_club_logos": false,
+    "use_real_player_likeness": false,
+    "allowed_visuals": [
+      "animated fictional hosts",
+      "generic tactical boards",
+      "generic stadiums",
+      "data cards",
+      "abstract country-color tiles",
+      "original motion graphics"
+    ]
+  },
+  "characters": [
+    {
+      "id": "profe_pixel",
+      "role": "serious tactical analyst",
+      "style": "original 3D animated host, premium sports studio, subtle humor",
+      "risk": "low_if_no_real_likeness"
+    },
+    {
+      "id": "varcito",
+      "role": "comic VAR monitor assistant",
+      "style": "minimal animated screen with quick reactions",
+      "risk": "low_if_no_official_var_branding"
+    }
+  ],
+  "content_pillars": [
+    {
+      "id": "prediccion_ia",
+      "name": "Prediccion IA en 45s",
+      "format": "short",
+      "tone": "serious_probabilistic_with_comic_relief"
+    },
+    {
+      "id": "clave_tactica",
+      "name": "La clave tactica",
+      "format": "short_or_long",
+      "tone": "educational"
+    },
+    {
+      "id": "varcito_no_perdona",
+      "name": "VARcito no perdona",
+      "format": "short",
+      "tone": "funny_but_clean"
+    },
+    {
+      "id": "dato_vs_humo",
+      "name": "Dato vs humo",
+      "format": "short",
+      "tone": "myth_busting"
+    }
+  ],
+  "pilot": {
+    "id": "piloto-001",
+    "title": "La IA no sabe quien gana el Mundial... pero si encuentra trampas tacticas",
+    "format": "short",
+    "duration_seconds": 45,
+    "approval_state": "waiting_sergio_approval_for_generation",
+    "generation_budget_requested_credits": 100
+  },
+  "first_10_ideas": [
+    "La IA no sabe quien gana el Mundial, pero si encuentra trampas tacticas.",
+    "La diferencia entre prediccion y humo en futbol.",
+    "Por que el equipo que domina la pelota tambien puede estar en peligro.",
+    "El mapa que explica una contra perfecta.",
+    "VARcito explica por que una defensa alta puede ser una invitacion.",
+    "Como leer un grupo del Mundial sin caer en fanatismo.",
+    "El equipo tapado no siempre es el que tiene mas estrellas.",
+    "Tres datos que importan mas que posesion.",
+    "Que es una transicion y por que decide partidos.",
+    "Como una seleccion puede ganar sin tener la pelota."
+  ]
+}
+

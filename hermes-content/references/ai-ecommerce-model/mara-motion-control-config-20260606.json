@@ -1,0 +1,116 @@
+{
+  "id": "mara-motion-control-config-20260606",
+  "status": "internal_draft_not_published",
+  "owner": "Sergio / ONIA",
+  "model_name": "Mara Vale",
+  "identity_lock": {
+    "master_sheet": "hermes-content/references/ai-ecommerce-model/20260605-higgsfield-luxury-identity-contact-sheet-4k-v1.png",
+    "primary_video_face_reference": "hermes-content/references/ai-ecommerce-model/identity-bank-50/photos/mara_identity_02.jpg",
+    "identity_bank": "hermes-content/references/ai-ecommerce-model/identity-bank-50/photos/",
+    "fixed_prompt": "Same fictional adult red-haired woman from the Mara Vale identity sheet. Preserve the same face, freckles, green-hazel eyes, nose, lips, jawline, copper-red wavy hair, fair skin, body proportions and soft warm smile. Do not create a similar person. Keep the exact documented identity.",
+    "negative_prompt": "No identity drift, no different person, no changed age, no changed face, no changed eyes, no changed nose, no changed lips, no changed jawline, no changed hair color, no changed body type, no plastic skin, no cartoon, no anime, no distorted hands, no fake logos, no watermarks."
+  },
+  "body_lock": {
+    "apparent_age": "young adult, late 20s",
+    "build": "healthy adult proportions, slim waist, feminine but brand-safe, not exaggerated, not sexualized",
+    "height_impression": "medium tall commercial model presence",
+    "skin": "very fair skin with natural freckles and realistic texture",
+    "hair": "long copper-red wavy hair, natural volume",
+    "expression": "soft warm smile, expressive eyes, natural micro-smiles",
+    "movement_energy": "premium UGC, lively but controlled, confident and human"
+  },
+  "default_scene": {
+    "format": "vertical 9:16",
+    "duration_seconds": 15,
+    "resolution": "720p for tests, 1080p for final if budget allows",
+    "setting": "warm modern apartment, lived-in but elegant, lamp, curtains, sofa or bed, side table, plants, natural shadows",
+    "camera": "phone-first eye-level framing, medium shot or full-body shot depending on motion, subtle handheld realism",
+    "style": "luxury UGC, realistic, premium, clean, social-native"
+  },
+  "wardrobe_presets": [
+    {
+      "id": "apartment_luxury_ugc",
+      "description": "cream fitted tank or ribbed top, relaxed linen shirt, high-waist tailored pants, small gold hoops, no logos",
+      "use_for": ["storytime", "skincare", "daily routine", "organic reel"]
+    },
+    {
+      "id": "city_lifestyle",
+      "description": "white crop-length tee or bodysuit, oversized beige blazer, straight-leg denim, simple belt, neutral sneakers or sandals, no logos",
+      "use_for": ["walking", "accessories", "fashion", "viral product"]
+    },
+    {
+      "id": "premium_beauty",
+      "description": "ivory silk blouse or minimal dress, subtle gold jewelry, polished hair, soft natural makeup, no logos",
+      "use_for": ["skincare", "perfume", "jewelry", "premium ad"]
+    },
+    {
+      "id": "athleisure_safe",
+      "description": "neutral fitted long-sleeve top, high-waist leggings or joggers, clean sneakers, brand-safe and non-sexualized",
+      "use_for": ["wellness", "morning routine", "walking product demo"]
+    }
+  ],
+  "motion_presets": [
+    {
+      "id": "full_body_walk_to_camera",
+      "description": "Mara starts full body in apartment hallway or living room, walks naturally toward camera, stops at medium shot, smiles, raises product or gestures with one hand.",
+      "best_tool": "Higgsfield Motion Control with authorized driving video, or Kling 3.0 / Seedance 2.0 if generating from prompt only"
+    },
+    {
+      "id": "apartment_storytime_active",
+      "description": "Mara sits then shifts posture, leans forward on the hook, gestures with both hands, turns head slightly, smiles, looks away briefly, then back to camera.",
+      "best_tool": "Seedance 2.0 with image + audio if stable, or visual video plus dedicated lipsync"
+    },
+    {
+      "id": "grwm_mirror_walk",
+      "description": "Mara enters frame, adjusts blazer/hair in mirror, walks to table, picks up product, speaks to camera.",
+      "best_tool": "Motion Control with owned driving video"
+    },
+    {
+      "id": "product_pickup_demo",
+      "description": "Mara walks from sofa to side table, picks up product, holds it near camera, demonstrates one simple action.",
+      "best_tool": "Kling 3.0 or Veo for visual, then lipsync if speech is needed"
+    },
+    {
+      "id": "street_lifestyle_walk",
+      "description": "Mara walks on clean city sidewalk or boutique street, natural arm swing, product visible, quick glance to camera.",
+      "best_tool": "Motion Control with licensed walking reference"
+    }
+  ],
+  "tool_routes": {
+    "exact_motion_allowed_only_with_rights": {
+      "input_required": "owned_or_licensed_driving_video",
+      "route": "Higgsfield Motion Control web/MCP or model route that accepts video reference; preserve Mara identity with master sheet and full-body still.",
+      "notes": "Do not use third-party TikTok videos as exact driving assets unless permission/licensing is confirmed."
+    },
+    "unlicensed_tiktok_reference": {
+      "input_allowed": "url_for_analysis_only",
+      "route": "Extract structure: hook timing, framing, motion category, camera rhythm, gesture density. Generate original motion with Mara.",
+      "notes": "Do not rip, redistribute, or copy exact performance."
+    },
+    "current_cli_fallbacks": {
+      "seedance_2_0": "Accepts prompt, medias, 9:16, duration, resolution, mode. Can accept image/video/audio media flags, but image+audio test failed once in Round 17.",
+      "kling3_0": "Good for visual motion from image, accepts prompt and image, but CLI rejected audio input in Round 17.",
+      "cinematic_studio_video_v2": "Accepts prompt, media array, aspect ratio, duration, genre and mode. Candidate for cinematic movement tests.",
+      "marketing_studio_video": "Best for UGC ads and product videos, but may be high-credit and needs avatar/product setup.",
+      "reframe": "Useful after a video exists; not a motion generator."
+    }
+  },
+  "default_prompt_template": {
+    "full_body_motion": "Same fictional adult red-haired woman from the Mara Vale identity sheet. Preserve exact face, freckles, green-hazel eyes, nose, lips, jawline, copper-red wavy hair, very fair skin, body proportions and soft warm smile. Full-body vertical 9:16 video in a warm modern apartment. Outfit: {wardrobe}. Motion: {motion}. She moves naturally with real body movement, visible arms and legs, natural walking weight shift, relaxed hand gestures, subtle head turns, micro-smiles, realistic blinking. Camera: phone-first but premium, slight handheld realism, no static talking head. Keep identity locked and body consistent. Scene: {setting}. No logos, no text, no watermark.",
+    "negative": "No copied real person likeness, no exact copied creator performance, no identity drift, no different face, no frozen body, no only mouth movement, no stiff pose, no robotic expression, no distorted hands, no broken walking, no warped legs, no sexualized pose, no plastic skin, no flicker, no fake logos, no unreadable text."
+  },
+  "qa_thresholds": {
+    "identity_match_min": 90,
+    "body_motion_min": 85,
+    "face_stability_min": 90,
+    "hands_legs_min": 80,
+    "scene_match_min": 85,
+    "publishable_min": 88
+  },
+  "approval_rules": {
+    "internal_preview": "allowed",
+    "client_delivery": "requires explicit approval",
+    "public_publish": "requires explicit approval",
+    "third_party_exact_motion": "requires confirmed permission or owned driving video"
+  }
+}

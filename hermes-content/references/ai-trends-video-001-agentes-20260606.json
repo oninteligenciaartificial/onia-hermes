@@ -1,0 +1,101 @@
+{
+  "content_id": "ai-trends-video-001-agentes-20260606",
+  "brand": "Radar IA",
+  "date": "2026-06-06",
+  "status": "waiting_approval",
+  "format": "vertical_9_16",
+  "duration_target_seconds": 62,
+  "language": "es",
+  "title": "La IA ya no solo responde. Ahora trabaja.",
+  "angle": "AI is moving from chat answers into workflows, agents and operational tools.",
+  "sources": [
+    "https://openai.com/index/codex-for-every-role-tool-workflow/",
+    "https://blog.google/innovation-and-ai/technology/ai/",
+    "https://www.microsoft.com/en-us/worklab/work-trend-index/agents-human-agency-and-the-opportunity-for-every-organization",
+    "https://www.anthropic.com/news/claude-opus-4-8",
+    "https://support.google.com/youtube/answer/14328491"
+  ],
+  "hook": "La noticia no es que la IA sea mas lista. La noticia es que ahora empieza a trabajar dentro de tus herramientas.",
+  "script": [
+    "La noticia no es que la IA sea mas lista.",
+    "La noticia es que ahora empieza a trabajar dentro de tus herramientas.",
+    "OpenAI esta llevando Codex mas alla del codigo: analisis, ventas, diseno, sitios y workflows.",
+    "Google habla de una era agentica de Gemini.",
+    "Microsoft dice que el problema ya no es usar IA, sino redisenar como trabaja una empresa.",
+    "Y Anthropic empuja Claude Code hacia workflows dinamicos con subagentes.",
+    "Traduccion sin humo: el chatbot que responde preguntas se esta volviendo operador.",
+    "Antes le pedias: resumeme esto.",
+    "Ahora le pides: revisa estos datos, crea el reporte, deja un sitio para el equipo y marca los riesgos.",
+    "Pero ojo: esto no funciona si tu proceso esta roto.",
+    "Un agente sobre caos solo automatiza caos.",
+    "Haz esto hoy: elige un proceso repetido, escribelo en cinco pasos y marca donde una IA puede ayudar sin tomar decisiones sensibles.",
+    "Radar IA. Que paso, por que importa, que haces hoy."
+  ],
+  "storyboard": [
+    {
+      "time": "0-2s",
+      "visual": "Black graphite background with blue radar signal.",
+      "text": "La IA ya no responde"
+    },
+    {
+      "time": "2-5s",
+      "visual": "Agent node connects to generic app panels.",
+      "text": "Ahora trabaja"
+    },
+    {
+      "time": "5-12s",
+      "visual": "Four generic cards for OpenAI, Google, Microsoft, Anthropic, labels added in edit.",
+      "text": "Todos empujan agentes"
+    },
+    {
+      "time": "12-22s",
+      "visual": "Chat interface transforms into workflow nodes.",
+      "text": "De chat -> workflow"
+    },
+    {
+      "time": "22-34s",
+      "visual": "Dashboard with data, report, site and risks.",
+      "text": "Ejecuta tareas"
+    },
+    {
+      "time": "34-45s",
+      "visual": "Tangled process turns red.",
+      "text": "Caos x IA = caos rapido"
+    },
+    {
+      "time": "45-58s",
+      "visual": "Clean five-step checklist.",
+      "text": "Haz esto hoy"
+    },
+    {
+      "time": "58-62s",
+      "visual": "Radar IA closing signal.",
+      "text": "Sin humo"
+    }
+  ],
+  "higgsfield_prompt": "Create a vertical 9:16 premium AI news short for a fictional channel called Radar IA. Style: cinematic tech newsroom, operator dashboard, modern motion graphics, realistic but slightly animated, clean high-contrast lighting. Show abstract AI agents connecting to generic app panels, workflow nodes, dashboards, reports, risk alerts and a five-step process checklist. No real logos, no fake product UI, no private data, no celebrity likeness, no distorted generated text. Leave clean areas for editor-added Spanish text. Fast but smooth camera, high retention first frame, blue and lime signal accents on graphite black background.",
+  "negative_prompt": "No real logos, no fake screenshots, no private data, no celebrity faces, no robotic humanoid cliche, no scary AI apocalypse visuals, no unreadable text, no distorted UI, no crypto style, no exaggerated guru thumbnails, no job-loss fearmongering.",
+  "platform_copy": {
+    "youtube_title": "La IA ya no solo responde. Ahora trabaja.",
+    "youtube_description": "OpenAI, Google, Microsoft y Anthropic estan empujando la IA hacia agentes y workflows. La tendencia no es solo chatbots mejores: es IA conectada a procesos reales.\n\nFuentes: OpenAI News, Google AI Blog, Microsoft Work Trend Index 2026, Anthropic News.\n\nContenido educativo. Algunas visuales pueden ser generadas con IA.",
+    "youtube_tags": [
+      "inteligencia artificial",
+      "noticias ia",
+      "agentes ia",
+      "openai codex",
+      "gemini",
+      "claude",
+      "microsoft copilot",
+      "automatizacion",
+      "ia para negocios",
+      "radar ia"
+    ],
+    "cta": "Comenta el proceso que quieres automatizar y lo convertimos en un radar."
+  },
+  "approval_required_for": [
+    "Higgsfield generation",
+    "paid voice generation",
+    "uploading to YouTube",
+    "publishing"
+  ]
+}

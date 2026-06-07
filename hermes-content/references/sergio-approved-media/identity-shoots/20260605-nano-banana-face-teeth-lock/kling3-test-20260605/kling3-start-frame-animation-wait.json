@@ -1,0 +1,35 @@
+{
+  "id": "5cc9b71b-37ec-4e16-971c-a4c17700920c",
+  "status": "completed",
+  "display_name": "Kling v3.0",
+  "job_set_type": "kling3_0",
+  "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/hf_20260605_053330_5cc9b71b-37ec-4e16-971c-a4c17700920c.mp4",
+  "created_at": 1780637610.742146,
+  "params": {
+    "width": 2160,
+    "height": 3840,
+    "prompt": "Animate this exact Sergio portrait as an internal 5-second identity QA video. Keep the same face, teeth, hair, skin, blazer, body shape, framing and background locked. No face redesign, no new teeth, no beauty filter, no cinematic grade, no plastic skin. Sergio looks at the camera and silently mouths: La IA no es magia, es ejecucion con sistemas. Movement must be minimal and natural: tiny breathing, one blink, very small head motion, controlled mouth movement, stable shoulders. Keep glossy black Italian side-part hair stable and not falling forward. Sound off. No subtitles, no text, no watermark, no UI overlay. Avoid face morphing, eye drift, one eye larger, warped mouth, tongue artifacts, older face, skinny neck, skinny shoulders, distorted blazer.",
+    "medias": [
+      {
+        "data": {
+          "id": "a66cba24-0788-4ba3-a8ec-6b526f062211",
+          "url": "https://d8j0ntlcm91z4.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/hf_20260605_053048_a66cba24-0788-4ba3-a8ec-6b526f062211.png",
+          "type": "nano_banana_2_job"
+        },
+        "role": "start_image"
+      }
+    ],
+    "duration": 5,
+    "aspect_ratio": "9:16",
+    "multi_shots": false,
+    "multi_prompt": [],
+    "sound": "off",
+    "cfg_scale": 0.5,
+    "mode": "4k",
+    "kling_elements": [],
+    "kling_element_ids": [],
+    "multi_shot_mode": "custom",
+    "reference_elements": [],
+    "enhance_prompt": false
+  }
+}

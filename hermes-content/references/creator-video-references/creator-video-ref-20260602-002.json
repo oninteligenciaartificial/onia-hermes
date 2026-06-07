@@ -1,0 +1,124 @@
+{
+  "id": "creator-video-ref-20260602-002",
+  "status": "analyzed",
+  "source": {
+    "platform": "whatsapp_file",
+    "url": "",
+    "creator_handle": "visible watermark: soy_aria_cruz",
+    "date_added": "2026-06-02",
+    "local_file": "hermes-content/references/creator-video-references/inbox/creator-video-ref-20260602-002.mp4",
+    "permission_notes": "File provided by Sergio for reference analysis. Use as structure only; do not copy creator likeness, voice, exact prompts, edit or claims."
+  },
+  "content": {
+    "topic": "character consistency and motion transfer with Kling / AI video tools",
+    "niche": "AI influencer production",
+    "audience": "AI creators, agencies and operators building repeatable characters",
+    "video_length_seconds": 120.4,
+    "language": "Spanish",
+    "offer_or_cta": "tool tutorial and workflow guidance"
+  },
+  "analysis": {
+    "first_two_seconds": "Starts with a tool update and high-value promise: maintain character consistency and copy motion from reference videos.",
+    "hook_type": "new tool test / workflow proof",
+    "hook_line_or_visual_summary": "The format promises to test whether a new motion-control/character-consistency feature is worth using.",
+    "narrative_shape": "tool update -> availability warning -> setup requirements -> step-by-step setup -> tests/results -> practical tips",
+    "scene_beats": [
+      "show final AI character outputs and dancing/motion examples",
+      "explain that consistency requires multi-angle character images",
+      "generate front/side/back/smile references with an image tool",
+      "upload reference video and character image into Kling",
+      "create an element from the character images",
+      "describe the character or use automatic description",
+      "test in different situations",
+      "give troubleshooting tips for bad imports and camera movement"
+    ],
+    "camera_behavior": "mix of AI output clips, screen recordings and creator/tool tutorial visuals",
+    "cut_rhythm": "medium-fast, tool-demo pacing; visual change every 5-10 seconds",
+    "subtitle_style": "native vertical captions plus occasional labels/tool UI text",
+    "audio_style": "Spanish tutorial voiceover; machine transcript generated locally and must be verified before quoting",
+    "proof_mechanism": "shows multiple generated character outputs, reference motion examples and UI screens",
+    "cta_style": "educational; likely invites commenting for guide/prompt",
+    "retention_devices": [
+      "tool update urgency",
+      "test/verification framing",
+      "before setup then result examples",
+      "concrete troubleshooting",
+      "specific gotchas like smile/teeth consistency"
+    ],
+    "emotional_tone": "practical, technical, testing-oriented"
+  },
+  "technical_observations": {
+    "source_resolution": "576x1024",
+    "fps": 30,
+    "duration_seconds": 120.4,
+    "has_audio": true,
+    "transcript_file": "hermes-content/references/creator-video-references/transcripts/creator-video-ref-20260602-002.txt",
+    "contact_sheet": "hermes-content/references/creator-video-references/inbox/frames/creator-video-ref-20260602-002-sheet.jpg"
+  },
+  "transcript_assisted": {
+    "quality_note": "Local faster-whisper tiny transcript. Good enough for summary, not for exact quotes.",
+    "corrected_summary": "The video explains that a motion-control/character-consistency feature can transfer movement from a reference video while keeping the same AI character. It recommends generating multiple character images from different angles, including at least one smiling with teeth, then uploading reference video and character images into Kling/Elements. It warns that some platforms may not expose the newest feature yet, and gives troubleshooting tips: re-export reference videos if Kling errors, match the first frame/posture of the reference, and avoid videos with too much camera movement.",
+    "key_takeaways": [
+      "Character consistency needs a 360-style reference set, not only one image.",
+      "A smiling-with-teeth reference matters because teeth can break consistency.",
+      "The reference video's first frame/posture should match the character image for better results.",
+      "Stable camera movement improves reliability.",
+      "Some aggregators may lag behind official model features."
+    ]
+  },
+  "workflow_extracted": {
+    "name": "Consistent AI character with reference motion",
+    "steps": [
+      "Define the character identity and visual constraints.",
+      "Generate front, side, back and smile/teeth references.",
+      "Choose a stable reference motion video.",
+      "Match character pose to the first frame of the reference video.",
+      "Create a reusable character element/profile in the video platform.",
+      "Generate test outputs in several scenes.",
+      "Reject outputs with face/teeth/body drift before client delivery."
+    ],
+    "onia_use": "Build reusable ONIA/client avatars for demos, explainers and UGC without relying on a new face prompt every time."
+  },
+  "onia_adaptation": {
+    "usable_patterns": [
+      "tool-test framing: 'probe esto para ver si sirve'",
+      "show result first, then setup",
+      "explain hidden setup steps that beginners miss",
+      "include troubleshooting tips, because that creates trust",
+      "turn character consistency into a client-safe production checklist"
+    ],
+    "best_for": [
+      "Sergio AI video education",
+      "Higgsfield production SOPs",
+      "client avatar consistency",
+      "UGC-style business videos with approved characters"
+    ],
+    "sample_onia_hook": "La razon por la que tus videos IA cambian de cara en cada escena no es el modelo: es tu sistema de referencias.",
+    "sample_higgsfield_prompt_block": "Create a vertical AI video tutorial showing a clean ONIA workflow for keeping one approved character consistent across scenes: reference board, front-side-back-smile images, stable motion reference, character profile, test grid and final approved clip. Spanish captions, screen/UI overlays, no copied creator identity.",
+    "adaptation_notes": "Very useful for ONIA production quality. Convert it into an internal checklist and client-safe explanation instead of influencer-body content."
+  },
+  "not_useful_or_use_with_care": [
+    "Influencer/body-focused examples are not the ONIA business angle.",
+    "Avoid content that looks like deepfake or unauthorized likeness cloning.",
+    "Do not promise perfect consistency; present it as a controlled workflow with review.",
+    "Avoid copying public reference motion if it is recognizable or copyrighted."
+  ],
+  "do_not_copy": [
+    "creator likeness",
+    "voice",
+    "exact tutorial text",
+    "watermark",
+    "outfit/body-focused framing",
+    "exact generated scenes",
+    "unverified model claims"
+  ],
+  "scores": {
+    "hook_strength": 8,
+    "retention_strength": 7,
+    "commercial_clarity": 8,
+    "visual_quality": 8,
+    "originality_potential": 9,
+    "ethical_safety": 5
+  },
+  "notes": "High operational value for ONIA because it explains why character consistency fails and how to systematize it."
+}

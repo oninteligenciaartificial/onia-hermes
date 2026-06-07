@@ -1,0 +1,143 @@
+{
+  "content_id": "futbol-lab-ia-video-001-francia-jordania-20260605",
+  "date": "2026-06-05",
+  "status": "waiting_approval",
+  "channel": "Futbol Lab IA",
+  "format": "youtube_short_reel_tiktok",
+  "duration_target_seconds": 62,
+  "language": "es",
+  "title": "Francia vale 78 veces mas que Jordania... pero el futbol no es Excel",
+  "core_claim": "Segun Transfermarkt, Francia ronda EUR1.5bn de valor de mercado y Jordania ronda EUR20m; el valor de mercado no equivale a resultado deportivo.",
+  "risk_level": "medium",
+  "safety_decision": "Use real names and data as editorial commentary; use generic silhouettes and cards, not AI likenesses of real footballers.",
+  "sources": [
+    {
+      "label": "Transfermarkt most valuable national teams",
+      "url": "https://www.transfermarkt.com/vereins-statistik/wertvollstenationalmannschaften/marktwertetop",
+      "used_for": "France ranking and EUR1.52bn value"
+    },
+    {
+      "label": "Transfermarkt France profile",
+      "url": "https://www.transfermarkt.com/frankreich/startseite/verein/3377",
+      "used_for": "France EUR1.55bn profile value and named player values"
+    },
+    {
+      "label": "Transfermarkt Jordan profile",
+      "url": "https://www.transfermarkt.com/jordanien/startseite/verein/15737",
+      "used_for": "Jordan around EUR20m total market value"
+    },
+    {
+      "label": "Transfermarkt Mousa Tamari",
+      "url": "https://www.transfermarkt.com/mousa-tamari/marktwertverlauf/spieler/551505",
+      "used_for": "Mousa Tamari value and Jordan rank"
+    },
+    {
+      "label": "FIFA World Cup 2026 schedule",
+      "url": "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/articles/match-schedule-fixtures-results-teams-stadiums",
+      "used_for": "48 teams, 104 fixtures, 16 host cities, June 11 to July 19"
+    },
+    {
+      "label": "YouTube GenAI disclosure",
+      "url": "https://support.google.com/youtube/answer/14328491",
+      "used_for": "AI disclosure and realistic generated content rules"
+    }
+  ],
+  "hook": "Francia vale mas de mil quinientos millones. Jordania, unos veinte. En papel, esto no es futbol: es una compra hostil.",
+  "voiceover_script": [
+    "Francia vale mas de mil quinientos millones.",
+    "Jordania, unos veinte.",
+    "En papel, esto no es futbol.",
+    "Es una compra hostil.",
+    "Solo Mbappe vale mucho mas que toda la seleccion jordana.",
+    "Y si sumas a Olise, Doue, Saliba y Dembele, la pizarra empieza a parecer Wall Street con botines.",
+    "Pero aqui viene la trampa: el valor de mercado no corre por ti.",
+    "Un equipo barato no necesita dominar.",
+    "Necesita sobrevivir diez minutos, cerrar el centro, obligarte a tirar desde lejos... y encontrar una transicion.",
+    "Jordania tiene una carta real: Mousa Tamari.",
+    "Si recibe con espacio, el partido deja de ser una tabla de Excel y se vuelve caos.",
+    "Conclusion seria: Francia tiene talento para romper casi cualquier plan.",
+    "Pero en un Mundial de 48 equipos, el dinero no compra tranquilidad.",
+    "Compra expectativa.",
+    "Y la expectativa pesa.",
+    "Futbol Lab IA. No predicciones magicas. Escenarios."
+  ],
+  "storyboard": [
+    {
+      "time": "0-3s",
+      "visual": "El Mister IA opens laptop in luxury suite with modern city background.",
+      "onscreen_text": "EUR1.55B vs EUR20M"
+    },
+    {
+      "time": "3-7s",
+      "visual": "Two abstract money towers, one huge and one tiny.",
+      "onscreen_text": "78x mas valor"
+    },
+    {
+      "time": "7-14s",
+      "visual": "Generic data cards for Mbappe, Olise, Doue, Saliba and Dembele.",
+      "onscreen_text": "Wall Street con botines"
+    },
+    {
+      "time": "14-22s",
+      "visual": "Blue team high pressing tactical board.",
+      "onscreen_text": "El dinero no corre por ti"
+    },
+    {
+      "time": "22-33s",
+      "visual": "Red team compact low block.",
+      "onscreen_text": "Cerrar el centro"
+    },
+    {
+      "time": "33-43s",
+      "visual": "Generic red winger silhouette counterattacks into space.",
+      "onscreen_text": "1 transicion = caos"
+    },
+    {
+      "time": "43-54s",
+      "visual": "VARcito alert and El Mister points at counter lane.",
+      "onscreen_text": "La expectativa pesa"
+    },
+    {
+      "time": "54-62s",
+      "visual": "Clean Futbol Lab IA closing board.",
+      "onscreen_text": "Escenarios, no magia"
+    }
+  ],
+  "higgsfield_prompts": {
+    "master_negative_prompt": "No real football player faces, no Jose Mourinho likeness, no Mbappe likeness, no Mousa Tamari likeness, no coaches, no FIFA logo, no federation badges, no official kits, no club crests, no broadcast footage, no real match footage, no copyrighted photos, no distorted hands, no unreadable text, no fake quotes, no betting claims, no guaranteed prediction, no national stereotypes, no offensive jokes.",
+    "scene_prompts": [
+      "Vertical 9:16 cinematic AI sports documentary scene. A fictional elite football manager called El Mister IA sits in a luxury modern high-rise suite at night, laptop open with abstract football data dashboard, wine glass near the table, city skyline in the background. He has an original face, elegant suit, confident serious expression with subtle humor. Slow camera push-in, premium lighting, soft shadows, realistic skin texture, high-end semi-realistic 3D human style, not cartoon, not anime, not a real celebrity. No text, no logos, no flags, no official football branding, no real player likeness.",
+      "Vertical 9:16 premium sports data visualization. Two abstract money towers inside a dark football analytics studio: one massive blue tower and one tiny red tower, both made of glowing generic currency blocks. A holographic football pitch floats between them. Cinematic lighting, green pitch reflections, high contrast, dramatic scale difference, no readable text, no logos, no flags, no official badges, no real people.",
+      "Vertical 9:16 futuristic football scouting board. Five empty premium player data cards appear on a glowing tactical wall, with generic silhouette portraits only, no real faces. Blue-white color accents, clean spaces where editor will add names later, dramatic camera slide, premium sports broadcast graphics, no official logos, no club badges, no federation marks, no readable generated text.",
+      "Vertical 9:16 animated football tactics board. Generic blue team pushes high with aggressive pressing arrows, fullbacks high, midfield compressed, glowing white tactical lines. Camera tilts over the board like a sports analyst table. Serious high-energy style, no official jerseys, no logos, no real players, no broadcast footage.",
+      "Vertical 9:16 animated tactical football board. Generic red team forms a compact low block near the box, two defensive lines, central zone closed, blue team outside with possession. Minimal cinematic sports graphics, green pitch grid, white and red lines, subtle tension, no logos, no official kits, no real players.",
+      "Vertical 9:16 cinematic football counterattack visualization. A generic red winger silhouette accelerates into open space on the right side of a glowing tactical pitch, ball icon moving ahead, blue defenders turning. Create an empty premium data card area for editor text, no face details, no real player likeness, no logos, no official kits, fast dynamic camera movement, dramatic green and red lighting.",
+      "Vertical 9:16 premium animated football studio. A small original digital VAR monitor assistant named VARcito reacts with a funny alert expression beside a tactical board, while El Mister IA points at the counterattack lane. Serious but funny tone, cinematic green and black lighting, no official VAR branding, no FIFA logo, no real people, no club badges, no readable generated text.",
+      "Vertical 9:16 clean closing shot for a fictional football analysis channel. Glowing tactical board, abstract ball icon, green black white palette, premium sports studio, space in center for editor-added logo and text, cinematic lighting, subtle particles, no official logos, no flags, no real player likeness, no generated readable text."
+    ]
+  },
+  "platform_copy": {
+    "youtube_title": "Francia vale 78 veces mas que Jordania... pero el futbol no es Excel",
+    "youtube_description": "Segun Transfermarkt, Francia ronda EUR1.5bn de valor de mercado y Jordania ronda EUR20m. Pero el valor no juega solo: en un Mundial, un bloque bajo, una transicion y un jugador rapido pueden convertir una tabla en caos.\n\nContenido generado/editado con IA para visuales originales. Datos usados como referencia editorial; no es prediccion garantizada.",
+    "youtube_tags": [
+      "futbol",
+      "mundial 2026",
+      "francia",
+      "jordania",
+      "mbappe",
+      "mousa tamari",
+      "futbol lab ia",
+      "tactica",
+      "transfermarkt"
+    ],
+    "short_caption": "EUR1.55B vs EUR20M. El futbol no es Excel.",
+    "cta": "Comenta la seleccion barata que puede romper el Mundial."
+  },
+  "approval_required_for": [
+    "Higgsfield generation",
+    "using paid voice",
+    "using any licensed photos or real player likeness",
+    "uploading to YouTube",
+    "publishing"
+  ]
+}

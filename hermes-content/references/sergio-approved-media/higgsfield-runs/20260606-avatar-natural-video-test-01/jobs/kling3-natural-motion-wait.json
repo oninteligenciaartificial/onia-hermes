@@ -1,0 +1,35 @@
+﻿{
+  "id": "f512f3da-f976-42a0-8249-bad4907d3c7d",
+  "status": "completed",
+  "display_name": "Kling v3.0",
+  "job_set_type": "kling3_0",
+  "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/hf_20260606_134704_f512f3da-f976-42a0-8249-bad4907d3c7d.mp4",
+  "created_at": 1780753624.863848,
+  "params": {
+    "width": 2160,
+    "height": 3840,
+    "prompt": "Animate this approved Sergio avatar still for a short internal motion test only. Keep the identity locked exactly to the start image and the real Sergio references: same youthful face, same dark almond eyes, same eyebrows, same nose, same lips, same jawline, same chin, same ears, same neck, same hairline, same glossy black Italian side-part hair, same skin tone and same calm founder/operator energy. Motion must be extremely subtle and natural: tiny breathing, one soft natural blink, slight micro head movement, very small shoulder settling, calm eye focus, relaxed closed mouth or barely perceptible micro-smile. The camera stays almost still, no zoom, no pan, no dramatic movement. Important: do not make him speak. No lip sync. No open mouth. No teeth movement. No mouth talking motion. No audio. No subtitles. No text. No watermark. Do not change identity or facial structure. No face morphing, no changed eyes, no changed nose, no changed lips, no changed jaw, no changed chin, no stretched neck, no hair flicker, no clothing flicker, no older face, no plastic skin, no generic model drift, no warped mouth, no deformed anatomy.",
+    "medias": [
+      {
+        "data": {
+          "id": "074fe6b1-9752-4d4f-91b3-04b6a7400349",
+          "url": "https://d2ol7oe51mr4n9.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/074fe6b1-9752-4d4f-91b3-04b6a7400349.png",
+          "type": "media_input"
+        },
+        "role": "start_image"
+      }
+    ],
+    "duration": 5,
+    "aspect_ratio": "9:16",
+    "multi_shots": false,
+    "multi_prompt": [],
+    "sound": "off",
+    "cfg_scale": 0.5,
+    "mode": "4k",
+    "kling_elements": [],
+    "kling_element_ids": [],
+    "multi_shot_mode": "custom",
+    "reference_elements": [],
+    "enhance_prompt": false
+  }
+}

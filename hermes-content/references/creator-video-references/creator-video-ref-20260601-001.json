@@ -1,0 +1,104 @@
+{
+  "id": "creator-video-ref-20260601-001",
+  "status": "analyzed",
+  "source": {
+    "platform": "google_drive",
+    "url": "https://drive.google.com/file/d/1Xrc6fO_7XeakVf-P2u0oPTlwYKqqKFvp/view?usp=drivesdk",
+    "creator_handle": "visible watermark appears to reference mndshft.ai; use as structural reference only",
+    "date_added": "2026-06-01",
+    "local_file": "hermes-content/references/creator-video-references/inbox/creator-video-ref-20260601-001.mp4",
+    "permission_notes": "Reference only. No permission to copy likeness, audio, exact edit or claims."
+  },
+  "content": {
+    "topic": "AI tool / app discovery explained through creator format",
+    "niche": "AI creator education",
+    "audience": "creators, AI users, founders, operators learning new creative tools",
+    "video_length_seconds": 47,
+    "language": "Spanish captions visible",
+    "offer_or_cta": "tool discovery / AI workflow curiosity"
+  },
+  "analysis": {
+    "first_two_seconds": "Curiosity hook with creator at table, pet interruption and caption asking why/how this is possible.",
+    "hook_type": "confusion / impossible result / explain this",
+    "hook_line_or_visual_summary": "A casual home shot creates a 'how did they do this?' question before showing the AI workflow.",
+    "narrative_shape": "curiosity hook -> creator reaction -> object/interface reveal -> AI tool name -> workflow proof -> example/person switch",
+    "scene_beats": [
+      "home creator frame with unexpected visual moment",
+      "close selfie/reaction crop",
+      "interface or folder overlay in front of face",
+      "iPhone/camera reference and body/pose example",
+      "AI tool/model name appears",
+      "screen/workflow B-roll",
+      "creator returns with summary line",
+      "second creator/outdoor example extends credibility"
+    ],
+    "camera_behavior": "phone-first, close creator framing, selfie and screen overlay mix",
+    "cut_rhythm": "fast visual change every 3-6 seconds with strong frame contrast",
+    "subtitle_style": "large Spanish keywords, centered/lower captions, occasional red emphasis",
+    "audio_style": "creator explainer; exact audio not reused",
+    "proof_mechanism": "shows interface, file/folder metaphor, model/tool label and example output",
+    "cta_style": "implicit curiosity; learn/use tool",
+    "retention_devices": ["unexpected pet/object opener", "face-to-interface overlay", "tool reveal", "scene/location switch"],
+    "emotional_tone": "curious, surprised, playful, practical"
+  },
+  "transcript_assisted": {
+    "quality_note": "Local faster-whisper transcript; minor corrections inferred from context.",
+    "corrected_summary": "La creadora muestra que Claude Code puede definir una skill para pensar y crear contenido: angulos, realismo de piel, expresiones, camara iPhone 24mm, vibe y storytelling. Luego crea un avatar en Nano Banana con nombre, cara, pelo, estilo y personalidad. Claude guarda el personaje en archivos para reutilizarlo. Con un solo prompt puede generar blogs, storytimes, anuncios y rutinas UGC, creando un sistema automatizado 24/7.",
+    "key_phrases": [
+      "crear una skill que defina como quieres que piense y cree por ti",
+      "angulos, realismo de piel, expresiones, camara iPhone de 24 milimetros",
+      "crear avatar en Nano Banana con nombre, cara, pelo, estilo y personalidad",
+      "guardar el personaje en tus archivos para usarlo en el futuro",
+      "con un solo prompt generar blogs, storytimes, anuncios y rutinas UGC"
+    ],
+    "visible_text": [
+      "Alguien me puede explicar esto???",
+      "como",
+      "piense y",
+      "Camara iPhone",
+      "Nano Banana",
+      "archivos",
+      "Con un solo"
+    ]
+  },
+  "workflow_extracted": {
+    "name": "Claude Code + Nano Banana avatar system",
+    "steps": [
+      "Crear una skill que defina como debe pensar y crear el agente.",
+      "Definir parametros visuales: angulos, piel, expresiones, lente, vibe y storytelling.",
+      "Crear avatar en Nano Banana con identidad completa.",
+      "Guardar personaje y archivos para reutilizacion.",
+      "Usar un prompt maestro para generar blogs, storytimes, anuncios y UGC."
+    ],
+    "onia_use": "Crear bibliotecas de personajes ONIA y skills de produccion para ecommerce, UGC y marca personal."
+  },
+  "onia_adaptation": {
+    "usable_patterns": [
+      "open with an impossible-looking AI result before explaining",
+      "use a physical metaphor like folder/card/tablet overlay",
+      "alternate creator face with interface proof",
+      "end with a second example to show repeatability"
+    ],
+    "best_for": ["Higgsfield tutorials", "ONIA AI tool demos", "Sergio founder content", "AI workflow explainers"],
+    "sample_onia_hook": "Alguien me explica como este video salio de una sola referencia?",
+    "sample_higgsfield_prompt_block": "Start with a casual home creator shot reacting to an impossible-looking AI video result, then cut to clean interface overlays, file/folder visual metaphor, and a second example proving repeatability. Spanish captions, phone-first, quick cuts, no copied creator identity.",
+    "adaptation_notes": "Use for ONIA videos that make AI feel surprising but practical. Replace personal aesthetic with Sergio/ONIA workspace and actual Hermes/Higgsfield workflow."
+  },
+  "do_not_copy": [
+    "creator likeness",
+    "voice",
+    "exact caption",
+    "pet/home setup as-is",
+    "watermark/branding",
+    "exact sequence"
+  ],
+  "scores": {
+    "hook_strength": 9,
+    "retention_strength": 8,
+    "commercial_clarity": 6,
+    "visual_quality": 8,
+    "originality_potential": 8,
+    "ethical_safety": 5
+  },
+  "notes": "Strongest pattern for surprising AI workflow reveal and tool demo."
+}

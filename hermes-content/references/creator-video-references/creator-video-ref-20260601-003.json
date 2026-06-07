@@ -1,0 +1,110 @@
+{
+  "id": "creator-video-ref-20260601-003",
+  "status": "analyzed",
+  "source": {
+    "platform": "google_drive",
+    "url": "https://drive.google.com/file/d/1LsMGMlNjkv8_S9jg2SPmlOvvGEo9Rggp/view?usp=drivesdk",
+    "creator_handle": "visible watermark appears to reference mndshft.ai; use as structural reference only",
+    "date_added": "2026-06-01",
+    "local_file": "hermes-content/references/creator-video-references/inbox/creator-video-ref-20260601-003.mp4",
+    "permission_notes": "Reference only. No permission to copy likeness, audio, exact edit or claims."
+  },
+  "content": {
+    "topic": "AI video agent / character consistency / frames to film",
+    "niche": "AI video production and storytelling",
+    "audience": "creators and businesses interested in AI video workflows",
+    "video_length_seconds": 54,
+    "language": "Spanish captions visible",
+    "offer_or_cta": "AI video production workflow"
+  },
+  "analysis": {
+    "first_two_seconds": "Extreme close-up and future-oriented text creates shock and curiosity.",
+    "hook_type": "future shock / tool reveal",
+    "hook_line_or_visual_summary": "Starts with a bold '2026' future signal, then reveals an AI agent/video workflow.",
+    "narrative_shape": "future shock -> tool reveal -> consistency lesson -> character lock -> time-saving benefit -> storyboard proof -> frames-to-film payoff",
+    "scene_beats": [
+      "extreme close-up with big red future/year text",
+      "dark UI reveal of AI agent/tool",
+      "talking head explains the tool",
+      "animated classroom/whiteboard step about consistency",
+      "character lock UI proof",
+      "talking head benefit: time saved",
+      "storyboard frame examples",
+      "frames-to-film final proof"
+    ],
+    "camera_behavior": "mixes extreme selfie, dark UI screen, studio talking head and generated storyboard examples",
+    "cut_rhythm": "high contrast cuts every 3-6 seconds with visual mode changes",
+    "subtitle_style": "large red hook text, white lower captions, UI labels",
+    "audio_style": "explainer with future/trend framing; exact audio not reused",
+    "proof_mechanism": "character lock, storyboard frames and generated scene examples",
+    "cta_style": "implicit: learn/use the new agent workflow",
+    "retention_devices": ["future date hook", "dark UI reveal", "whiteboard teaching moment", "character consistency proof", "frames-to-film payoff"],
+    "emotional_tone": "futuristic, educational, urgent, practical"
+  },
+  "transcript_assisted": {
+    "quality_note": "Local faster-whisper transcript; 'Shidans 2.0' corrected by context as likely Seedance 2.0.",
+    "corrected_summary": "El creador dice que la oportunidad mas infravalorada de 2026 no son los avatares de IA, sino los anuncios animados, usando Agent One de InVideo. El proceso: 1) direccion: dar idea base, comida familiar, reflujo y solucion; Agent One estructura guion tecnico plano a plano con voz en off. 2) consistencia: subir foto de referencia y crear character lock para que el protagonista sea identico. 3) storyboard: generar imagenes fijas para cada escena, incluyendo abuelos, mujer y ninos para mantener coherencia visual. 4) animacion: pasar fotogramas aprobados al modelo de video Seedance 2.0, pidiendo movimiento stop motion para mantener textura de plastilina. Resultado: pieza tipo estudio creativo. CTA: comentar InVideo.",
+    "key_phrases": [
+      "La oportunidad mas infravalorada de 2026 no son los avatares de IA, son los anuncios animados.",
+      "Agent One me estructuro un guion tecnico plano a plano con voz en off.",
+      "Subi una foto de referencia y le pedi que creara un character lock.",
+      "Generamos imagenes fijas para cada escena.",
+      "Pasamos esos fotogramas aprobados al modelo de video Seedance 2.0.",
+      "Movimiento tipo stop motion para mantener textura de plastilina."
+    ],
+    "visible_text": [
+      "de 2026",
+      "Introducing Agent One",
+      "de InVideo",
+      "reflujo y",
+      "Paso 2: Consistencia",
+      "Character lock",
+      "tiempo en",
+      "los ninos",
+      "From frames to film",
+      "fotogramas"
+    ]
+  },
+  "workflow_extracted": {
+    "name": "Animated ad from frames to film",
+    "steps": [
+      "Direccion: definir idea base, problema, contexto y solucion.",
+      "Guion tecnico: estructurar plano a plano con voz en off.",
+      "Consistencia: crear character lock con referencia visual.",
+      "Storyboard: generar imagenes fijas aprobables por escena.",
+      "Animacion: pasar fotogramas aprobados a modelo de video.",
+      "Estilo: pedir movimiento stop motion o textura especifica.",
+      "Revision: aprobar fotogramas antes de gastar video."
+    ],
+    "onia_use": "Crear anuncios animados para productos/servicios donde la historia visual importa mas que un talking head."
+  },
+  "onia_adaptation": {
+    "usable_patterns": [
+      "start with future shock only when tied to a real workflow",
+      "show character consistency as a business advantage",
+      "teach one step visually on a board",
+      "end with storyboard-to-video proof"
+    ],
+    "best_for": ["Higgsfield strategy", "Supercomputer workflow", "AI video demos", "client sales demos"],
+    "sample_onia_hook": "En 2026, vender videos no sera solo editar: sera controlar personajes, escenas y flujo.",
+    "sample_higgsfield_prompt_block": "Create a vertical AI video workflow explainer with a future-shock hook, dark tool UI reveal, warm talking head, animated classroom whiteboard for 'Paso 2: consistencia', character lock interface proof and storyboard frames turning into final film. Spanish captions, high contrast cuts, original ONIA framing.",
+    "adaptation_notes": "Use as the blueprint for ONIA's premium Higgsfield/Supercomputer pitch."
+  },
+  "do_not_copy": [
+    "creator likeness",
+    "exact 2026 framing design",
+    "tool UI sequence as-is",
+    "watermark",
+    "music/audio",
+    "exact words"
+  ],
+  "scores": {
+    "hook_strength": 9,
+    "retention_strength": 9,
+    "commercial_clarity": 8,
+    "visual_quality": 9,
+    "originality_potential": 8,
+    "ethical_safety": 5
+  },
+  "notes": "Best reference for premium AI-video workflow and Supercomputer positioning."
+}

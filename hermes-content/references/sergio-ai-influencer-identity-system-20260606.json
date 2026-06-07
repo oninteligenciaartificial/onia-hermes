@@ -1,0 +1,271 @@
+{
+  "version": "2026-06-06",
+  "status": "canonical_internal_identity_system",
+  "owner": "Sergio / ONIA",
+  "goal": "Create a consistent Sergio AI influencer/avatar for personal brand, social video, ads, reels, shorts and business content without re-asking basic identity, outfit or tool choices.",
+  "research_sources": {
+    "higgsfield": [
+      "https://higgsfield.ai/mcp",
+      "https://higgsfield.ai/ai-image",
+      "https://higgsfield.ai/ai-influencer",
+      "https://github.com/higgsfield-ai/cli",
+      "local CLI: higgsfield model list, model get, account status, soul-id list, marketing-studio ad-formats list"
+    ],
+    "tiktok": [
+      "https://ads.tiktok.com/business/creativecenter/pc/en",
+      "https://ads.tiktok.com/business/creativecenter/inspiration/topads/pc/en",
+      "https://ads.us.tiktok.com/help/article/creative-center?redirected=2"
+    ]
+  },
+  "approval_policy": {
+    "internal_reference_analysis": "allowed",
+    "internal_still_generation_from_approved_assets": "allowed when using approved Sergio identity assets",
+    "internal_video_generation": "allowed only as draft/test and requires identity QA",
+    "voice_clone_or_lipsync": "requires explicit Sergio approval per piece",
+    "publication_or_client_delivery": "requires explicit final approval per asset"
+  },
+  "source_of_truth": {
+    "primary_real_identity_pack": "hermes-content/references/sergio-approved-media/final-avatar-identity-lock/20260605-upload-0405-0409/",
+    "surgical_face_lock": "hermes-content/references/sergio-approved-media/higgsfield-runs/20260606-avatar-surgical-identity-shoot/SERGIO_SURGICAL_FACE_LOCK.md",
+    "surgical_real_anchors": "hermes-content/references/sergio-approved-media/higgsfield-runs/20260606-avatar-surgical-identity-shoot/source-anchors/",
+    "face_voice_guide": "hermes-content/docs/SERGIO_FACE_VOICE_ASSET_GUIDE.md",
+    "approved_media_manifest": "hermes-content/references/sergio-approved-media/manifest.json",
+    "style_reference_latest_best_still": "hermes-content/references/sergio-approved-media/higgsfield-runs/20260606-avatar-natural-multiref-attempt-02/outputs/01_natural_multiref_identity_attempt.png",
+    "style_reference_latest_video_test": "hermes-content/references/sergio-approved-media/higgsfield-runs/20260606-avatar-natural-video-test-01/outputs/sergio-natural-avatar-kling3-motion-4k.mp4",
+    "identity_contact_sheet": "hermes-content/references/sergio-approved-media/higgsfield-runs/20260606-avatar-surgical-identity-shoot/qa/surgical-identity-shoot-contact-sheet-v2.jpg"
+  },
+  "higgsfield_identity_refs": {
+    "preferred_route": "real reference images -> nano_banana_2 still -> identity QA -> nano_banana_2_shots sheet -> Kling/Seedance/Veo motion",
+    "completed_soul_ids": [
+      {
+        "id": "aeaa74af-5243-4dc0-8101-09b25e98a7d7",
+        "name": "Sergio ONIA Face Teeth Lock 20260605",
+        "status": "completed",
+        "use": "test only, compare against real references"
+      },
+      {
+        "id": "1238064e-1295-4cbf-9a41-861d4106e0e8",
+        "name": "Sergio ONIA 20260604 All Black",
+        "status": "completed",
+        "use": "legacy internal tests only"
+      },
+      {
+        "id": "05cebe09-5672-4d50-90b2-d92c680957f7",
+        "name": "Sergio ONIA 20260603",
+        "status": "completed",
+        "use": "legacy reference only"
+      }
+    ],
+    "do_not_use_as_identity_source": [
+      "soul_cast through CLI for Sergio until payload behavior is fixed",
+      "preset Marketing Studio avatars as Sergio",
+      "generated outputs that contradict real identity references"
+    ]
+  },
+  "face_identity_lock": {
+    "age": "young apparent age, never older corporate adult",
+    "face_shape": "natural long/slim Sergio face, not square generic model face",
+    "eyes": "dark almond eyes, natural human asymmetry, real spacing, no huge eyes, no wide-set eyes, no one eye larger",
+    "eyebrows": "thick dark natural eyebrows, keep real angle and density",
+    "nose": "straight natural nose, preserve bridge, tip and nostrils",
+    "mouth_lips": "medium/full lips, lower lip slightly fuller, preserve natural mouth shape",
+    "teeth_smile": "clean aligned natural teeth, no crooked tooth, no giant fake veneers, preserve Sergio smile geometry",
+    "jaw_chin": "defined youthful jaw and chin, not exaggerated, not cartoon masculine",
+    "skin": "warm light-brown skin tone, real pores and subtle texture, clean but not plastic",
+    "hair": "black glossy Italian side part, volume, combed back and to side, no falling fringe, no helmet hair",
+    "presence": "confident, intelligent, modern, sympathetic, premium but natural"
+  },
+  "allowed_cleanup": [
+    "remove pimples and acne marks",
+    "remove harsh shine",
+    "remove neck scratches or red marks",
+    "soften lighting wrinkles caused by bad light",
+    "reduce under-eye darkness subtly",
+    "improve hair shine and grooming",
+    "align visible teeth only while preserving natural smile shape"
+  ],
+  "prohibited_changes": [
+    "changing the person or making a similar person",
+    "changing eye spacing or eye size",
+    "reshaping nose, lips, jaw, chin, ears or skull",
+    "aging Sergio",
+    "making Sergio much skinnier",
+    "adding beard/moustache shadow unless present in real reference",
+    "making skin plastic or cartoon",
+    "using a generated image as the sole identity source",
+    "copying a TikTok creator's likeness, voice, music, exact script or brand"
+  ],
+  "full_body_lock": {
+    "body_type": "young Latin founder/operator, lean athletic but fuller and more robust than thin avatar attempts",
+    "shoulders": "naturally broader shoulders, not bodybuilder",
+    "torso": "proportional torso, not concave, not bulky",
+    "waist": "fit natural waist, not extremely skinny",
+    "arms": "proportional arms, neither thin sticks nor exaggerated muscles",
+    "hands": "realistic hands and fingers, clean nails, avoid hand focus unless needed",
+    "posture": "straight relaxed confident posture, natural neck length",
+    "accessories": "no tattoos, no jewelry, no sunglasses unless explicitly approved"
+  },
+  "wardrobe": [
+    {
+      "id": "black_operator_basic",
+      "best_for": ["daily content", "hooks", "behind the scenes"],
+      "prompt": "clean black fitted t-shirt, dark straight pants or dark jeans, dark minimalist sneakers, no visible logos"
+    },
+    {
+      "id": "black_consultant",
+      "best_for": ["ONIA audits", "B2B sales", "consulting"],
+      "prompt": "black t-shirt under a clean black overshirt or unstructured black blazer, tailored dark pants, professional but approachable"
+    },
+    {
+      "id": "black_technical_demo",
+      "best_for": ["n8n", "screen demos", "AI systems"],
+      "prompt": "black technical zip jacket or black hoodie, dark pants, practical operator look, no logos"
+    },
+    {
+      "id": "black_premium_meeting",
+      "best_for": ["premium clients", "proposals", "authority"],
+      "prompt": "structured black blazer over black crew neck or black mock neck, tailored black trousers, clean black loafers or minimalist sneakers"
+    },
+    {
+      "id": "black_lifestyle_casual",
+      "best_for": ["organic TikTok/Reels", "storytime", "casual founder content"],
+      "prompt": "black t-shirt, black open overshirt, dark jeans, natural creator style, no luxury flex"
+    },
+    {
+      "id": "black_urban_walk",
+      "best_for": ["walking hooks", "POV", "reflection clips"],
+      "prompt": "black bomber or light black jacket, black t-shirt, dark jeans, clean dark sneakers"
+    }
+  ],
+  "tool_decision_map": [
+    {
+      "task": "identity stills, full-body photos, outfit edits",
+      "tool": "Higgsfield nano_banana_2",
+      "settings": "aspect_ratio 9:16, resolution 4k for identity"
+    },
+    {
+      "task": "multi-angle identity/body sheet",
+      "tool": "Higgsfield nano_banana_2_shots",
+      "settings": "use real identity input images; validate every angle"
+    },
+    {
+      "task": "skin cleanup",
+      "tool": "Higgsfield nano_banana_2_skin_enhancer",
+      "settings": "subtle cleanup only; no structural face changes"
+    },
+    {
+      "task": "realistic cinematic motion test",
+      "tool": "Higgsfield kling3_0",
+      "settings": "9:16, duration 5, mode 4k, sound off"
+    },
+    {
+      "task": "fast social motion variant",
+      "tool": "Higgsfield seedance_2_0",
+      "settings": "9:16, duration 5, resolution 1080p, mode std"
+    },
+    {
+      "task": "higher realism/camera scene",
+      "tool": "Higgsfield veo3_1",
+      "settings": "9:16, duration 4-8, quality high/ultra"
+    },
+    {
+      "task": "UGC/ad format with product or business offer",
+      "tool": "Higgsfield marketing_studio_video",
+      "settings": "only if custom Sergio identity is preserved; do not use preset avatars as Sergio"
+    },
+    {
+      "task": "hook and retention scoring",
+      "tool": "Higgsfield brain_activity",
+      "settings": "run after MP4 export for video QA"
+    },
+    {
+      "task": "resize/reframe approved video",
+      "tool": "Higgsfield reframe",
+      "settings": "use after identity-approved video to avoid regenerating the face"
+    },
+    {
+      "task": "upscale final video",
+      "tool": "Higgsfield topaz_video",
+      "settings": "only after identity and motion pass"
+    }
+  ],
+  "default_workflow": [
+    "select topic and lane: sergio, onia or client",
+    "pull identity refs from source_of_truth",
+    "choose wardrobe based on content type",
+    "generate still or full-body photoshoot first",
+    "generate multi-angle sheet if new angle/outfit/body is introduced",
+    "perform manual identity QA",
+    "animate with Kling 3.0 for premium realism or Seedance 2.0 for faster social motion",
+    "add captions and safe CTA",
+    "run virality predictor for performance pieces",
+    "review and approve before publish"
+  ],
+  "tiktok_reference_workflow": {
+    "research_sources": [
+      "TikTok Creative Center",
+      "TikTok Top Ads",
+      "TikTok Creative Insights",
+      "user-provided TikTok links or downloaded references"
+    ],
+    "extract_only": [
+      "hook type",
+      "first visual",
+      "cut rhythm",
+      "caption placement",
+      "retention mechanism",
+      "scene logic",
+      "CTA style"
+    ],
+    "never_copy": [
+      "creator likeness",
+      "creator voice",
+      "music",
+      "exact text",
+      "exact joke",
+      "brand marks",
+      "claims",
+      "recognizable edit sequence"
+    ],
+    "formats": [
+      "pov_walk_hook",
+      "desk_confession",
+      "screen_proof",
+      "before_after_system",
+      "comment_reply",
+      "outfit_scene_transition",
+      "whiteboard_operator",
+      "phone_scenario"
+    ]
+  },
+  "prompt_blocks": {
+    "identity_block": "Use the real Sergio identity reference pack as the source of truth. Preserve the exact same person: same young face, almond dark eyes with natural human asymmetry, same eye spacing, thick dark eyebrows, straight natural nose, same medium-full lips, same natural smile shape, clean aligned natural teeth, same defined but youthful jaw and chin, same ears, same warm light-brown skin tone, same black glossy Italian side-part hair with volume and no falling fringe, same age appearance and confident intelligent presence. Do not create a similar person. Do not beautify into a generic male model.",
+    "full_body_photoshoot": "Create one ultra-realistic vertical 9:16 full-body editorial photo of Sergio for a premium AI influencer identity bank. Use the uploaded real images/videos as the identity source of truth. Preserve the exact face and hair identity. Body: young Latin founder/operator, lean athletic but fuller and more robust than previous thin avatar attempts, natural broader shoulders, proportional torso, slim but not skinny waist, relaxed confident posture, natural hands and fingers. Outfit: <outfit_prompt>. Scene: <scene_prompt>. Camera: realistic phone/camera hybrid, 35mm equivalent, eye-level or slightly below eye-level, clean cinematic light, premium but natural, sharp face, realistic skin texture, no logos, no text, no watermark.",
+    "multi_angle_identity_sheet": "Create a consistent Sergio AI influencer identity sheet in one 4K image with six clean panels: front neutral, front slight smile, 3/4 left, 3/4 right, left profile, full-body standing. Same exact person in every panel, same face, same hair, same skin tone, same age, same body proportions, same black outfit. Use simple neutral studio/workspace lighting. This is an internal identity lock sheet, not a fashion ad. Prioritize identity consistency over creativity.",
+    "kling_motion_test": "Animate this approved Sergio full-body or portrait still for a 5-second internal identity test. Keep identity perfectly locked: same eyes, eyebrows, nose, lips, teeth, jaw, chin, ears, hairline, Italian side-part hair, skin tone, body build and outfit. Motion: natural breathing, tiny head movement, one blink, subtle posture shift, minimal hand movement only if hands are already visible. Camera almost still, no zoom, no face morph, no speaking mouth unless a separate lipsync test is approved. No audio, no subtitles, no text.",
+    "tiktok_adaptation": "Recreate the structure of this TikTok reference for Sergio/ONIA without copying the creator, voice, exact script, music, brand, edit, or identity. Extract only: hook type, first visual, cut rhythm, scene logic, caption placement, retention mechanism, CTA style. Then write an original Sergio version about <topic> with the same pacing but new wording, safe claims, fictional/private-safe screens, black outfit, vertical 9:16, premium realistic AI avatar style.",
+    "negative_global": "No identity drift, no different person, no older face, no generic male model, no wide-set eyes, no one eye larger, no changed nose, no changed lips, no fake veneers, no crooked teeth, no stretched neck, no exaggerated jaw, no skinny body, no bodybuilder body, no falling fringe, no helmet hair, no beard unless visible in real reference, no neck scratches, no plastic skin, no cartoon, no anime, no logos, no private data, no fake testimonials, no guaranteed results, no copied creator likeness, no copyrighted music."
+  },
+  "defaults": {
+    "platform": "TikTok/Reels/Shorts",
+    "aspect_ratio": "9:16",
+    "identity_still_resolution": "4k",
+    "motion_test_duration_seconds": 5,
+    "organic_final_duration_seconds": "12-25",
+    "ad_final_duration_seconds": "15-30",
+    "voice": "captions or generic voice first; Sergio voice/lipsync requires explicit approval",
+    "publication": "blocked until explicit approval"
+  },
+  "qa_checklist": [
+    "still is recognizable as Sergio without explanation",
+    "eyes, nose, lips, teeth, jaw and hair match the real reference",
+    "does not look older, thinner, plastic or generic",
+    "hair is glossy Italian side part, not falling fringe",
+    "body is robust natural, not skinny and not bodybuilder",
+    "outfit is clean black with no logos",
+    "hands are natural if visible",
+    "no private data or unauthorized brands",
+    "claims are safe and verifiable",
+    "no publish/client delivery without explicit approval"
+  ]
+}

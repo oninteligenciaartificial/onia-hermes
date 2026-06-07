@@ -1,0 +1,38 @@
+[
+  {
+    "id": "92c5b5fe-b8ba-4634-a13d-5ce983eea18e",
+    "status": "completed",
+    "display_name": "Seedance 2.0",
+    "job_set_type": "seedance_2_0",
+    "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/hf_20260605_032142_92c5b5fe-b8ba-4634-a13d-5ce983eea18e.mp4",
+    "created_at": 1780629702.958884,
+    "params": {
+      "width": 720,
+      "height": 1280,
+      "prompt": "Animate this refined Sergio avatar portrait with extremely subtle premium motion. Preserve the neat Italian gentleman hairstyle exactly: side part, combed up and slightly back, controlled volume, healthy shine, no fallen fringe, no hair over forehead, no hair morphing or flicker. Preserve the corrected identity: symmetrical eyes, slightly closer eye spacing, intense focused gaze, strong defined jawline, clean neck with no scratch or red mark, fuller lean-athletic body, black blazer and black shirt. Minimal motion only: soft breathing, tiny natural head micro movement, slight eye focus, one slow natural blink, very subtle confident half-smile. Camera locked, no zoom, no pan, no talking mouth, no teeth, no hand movement, no clothing changes, no background changes. Avoid face drift, asymmetrical eyes, one eye bigger, eyes moving apart, jaw warping, neck mark returning, messy hair, wet lock, plastic skin, robotic motion, text, watermark, UI overlay.",
+      "genre": "auto",
+      "medias": [
+        {
+          "data": {
+            "id": "d859554f-ca97-423a-a20d-5c7c92ef29de",
+            "url": "https://d2ol7oe51mr4n9.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/d859554f-ca97-423a-a20d-5c7c92ef29de_resize.jpg",
+            "type": "media_input"
+          },
+          "role": "start_image"
+        }
+      ],
+      "duration": 5,
+      "resolution": "720p",
+      "aspect_ratio": "9:16",
+      "generate_audio": true,
+      "multi_shots": false,
+      "multi_shot_mode": "custom",
+      "multi_prompt": [],
+      "speedramp": "auto",
+      "reference_elements": [],
+      "prompt_language": "en",
+      "mode": "std",
+      "model": "seedance_2_0"
+    }
+  }
+]

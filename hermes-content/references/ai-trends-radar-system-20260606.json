@@ -1,0 +1,120 @@
+{
+  "brand": "Radar IA",
+  "date": "2026-06-06",
+  "status": "operational_draft",
+  "positioning": "IA news and trends translated into operational action.",
+  "promise": "Que cambio en IA, por que importa y que puedes hacer hoy.",
+  "default_format": "vertical_9_16",
+  "content_pillars": [
+    "AI agents",
+    "AI tools that change work",
+    "AI for business operators",
+    "anti-hype comparisons",
+    "platform and model news",
+    "copyable automations"
+  ],
+  "source_stack": [
+    {
+      "name": "OpenAI News",
+      "url": "https://openai.com/news/",
+      "use": "OpenAI product, research and safety launches"
+    },
+    {
+      "name": "OpenAI Codex roles and workflows",
+      "url": "https://openai.com/index/codex-for-every-role-tool-workflow/",
+      "use": "Codex moving beyond coding into role-specific workflows"
+    },
+    {
+      "name": "Google AI Blog",
+      "url": "https://blog.google/innovation-and-ai/technology/ai/",
+      "use": "Gemini, Google AI products and agentic updates"
+    },
+    {
+      "name": "Microsoft Work Trend Index 2026",
+      "url": "https://www.microsoft.com/en-us/worklab/work-trend-index/agents-human-agency-and-the-opportunity-for-every-organization",
+      "use": "AI agents at work and operating model shifts"
+    },
+    {
+      "name": "Anthropic Claude Opus 4.8",
+      "url": "https://www.anthropic.com/news/claude-opus-4-8",
+      "use": "Claude agentic work, dynamic workflows and coding agents"
+    },
+    {
+      "name": "Google Cloud AI Business Trends 2026",
+      "url": "https://blog.google/innovation-and-ai/infrastructure-and-cloud/google-cloud/ai-business-trends-report-2026/",
+      "use": "AI agents and business transformation"
+    },
+    {
+      "name": "Goldman Sachs small business AI survey 2026",
+      "url": "https://www.goldmansachs.com/pressroom/press-releases/2026/small-businesses-embrace-ai-but-need-training-and-support-to-fully-harness-it",
+      "use": "SMB AI adoption and training/integration gap"
+    },
+    {
+      "name": "YouTube GenAI disclosure",
+      "url": "https://support.google.com/youtube/answer/14328491",
+      "use": "Disclosure for realistic synthetic content"
+    }
+  ],
+  "voice": {
+    "tone": [
+      "fast",
+      "clear",
+      "anti-hype",
+      "operator-led",
+      "skeptical but useful"
+    ],
+    "brand_phrases": [
+      "IA sin humo.",
+      "La noticia no es el modelo. Es lo que ahora puedes delegar.",
+      "Si no cambia tu flujo de trabajo, es ruido.",
+      "Que paso, por que importa, que haces hoy.",
+      "No compres la herramienta. Entiende el caso de uso."
+    ],
+    "avoid": [
+      "esta IA reemplaza a todos",
+      "ganaras dinero seguro",
+      "el fin de los trabajos",
+      "herramienta milagrosa",
+      "rumor sin fuente"
+    ]
+  },
+  "short_template": [
+    "La IA acaba de cambiar <area>.",
+    "No por <hype comun>.",
+    "Sino porque ahora <capacidad nueva>.",
+    "Ejemplo: <caso concreto>.",
+    "Esto significa <impacto>.",
+    "Haz esto hoy: <accion>.",
+    "Radar IA. Sin humo."
+  ],
+  "visual_style": {
+    "format": "9:16",
+    "look": "cinematic tech newsroom + operator dashboard + motion graphics",
+    "palette": [
+      "graphite black",
+      "white",
+      "electric blue",
+      "neon lime",
+      "alert red"
+    ],
+    "allowed": [
+      "abstract AI agents",
+      "workflow nodes",
+      "dashboards",
+      "browser panels",
+      "data cards",
+      "generic UI",
+      "fictional operator host"
+    ],
+    "avoid": [
+      "unlicensed logos",
+      "fake product screenshots",
+      "private data",
+      "celebrity likeness",
+      "distorted generated text",
+      "guru visual style"
+    ]
+  },
+  "master_script_prompt": "Escribe como Radar IA: espanol claro, rapido, anti-humo, con energia de operador. Explica una noticia/trend de IA en 45-65 segundos. Estructura: que paso, por que importa, ejemplo concreto, que hacer hoy. No inventes datos. Cita fuente. No prometas ingresos. No uses tono guru. Cierra con una accion concreta y una frase de marca.",
+  "master_visual_prompt": "Create a vertical 9:16 premium AI news short for a fictional channel called Radar IA. Style: cinematic tech newsroom, operator dashboard, modern motion graphics, clean high-contrast lighting, realistic but slightly animated, not cartoon, not anime, not childish. Show abstract AI agents, workflow nodes, dashboards, browser panels, data cards, glowing signal lines and clean subtitle-safe area. No real company logos unless provided and licensed, no fake UI claims, no private data, no celebrity likeness, no distorted text. Leave space for editor-added Spanish text."
+}

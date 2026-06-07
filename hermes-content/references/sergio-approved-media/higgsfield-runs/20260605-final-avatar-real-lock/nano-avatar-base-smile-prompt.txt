@@ -1,0 +1,9 @@
+Create one ultra-realistic premium AI avatar portrait of Sergio using ONLY the uploaded real reference images as the identity source of truth. The person must remain recognizable as Sergio, not a similar attractive man. Preserve the same young face, same facial structure, same dark almond eyes, same thick eyebrows, same nose, same lips, same jawline, same chin, same ears, same neck length, same skin tone, same black side-part hair, same natural smile energy and same overall presence.
+
+Use the smiling front reference as the mouth and teeth lock. Preserve Sergio's real smile shape, dimples, lip curve and teeth proportions. Teeth should be clean, aligned and natural, no crooked front tooth, no broken tooth, no extra teeth, no fake oversized veneers. Use the neutral front reference to keep face geometry stable. Use profile references only for side geometry.
+
+Target image: vertical 9:16, chest-up to mid torso, looking at camera, friendly confident smile with visible teeth, not exaggerated. Outfit: black fitted crew neck shirt under a clean black blazer, no logos, no text. Body should look naturally athletic and slightly more robust, not skinny, not bulky. Hair must be a glossy black Italian side part, polished, lively, combed back and to the side, no hair falling forward.
+
+Style: realistic but slightly stylized premium AI character, cinematic clean lighting, high-end personal branding portrait, modern entrepreneur aesthetic, sharp realistic eyes, natural skin texture, premium but natural. Background: modern warm neutral office/studio with soft depth of field, no visible brand logos.
+
+Strict negative instructions: no identity drift, no different person, no older face, no generic male model, no plastic skin, no dead eyes, no anime, no cartoon, no overly white fake teeth, no warped mouth, no stretched neck, no over-marked jaw, no distorted ears, no logo, no text, no watermark, no hands, no extra people.

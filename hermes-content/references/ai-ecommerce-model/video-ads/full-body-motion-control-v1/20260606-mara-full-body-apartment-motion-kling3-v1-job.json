@@ -1,0 +1,37 @@
+[
+  {
+    "id": "62308425-625f-48ce-a49e-307e9eeb4387",
+    "status": "completed",
+    "display_name": "Kling v3.0",
+    "job_set_type": "kling3_0",
+    "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/hf_20260606_140522_62308425-625f-48ce-a49e-307e9eeb4387.mp4",
+    "created_at": 1780754722.428366,
+    "params": {
+      "width": 720,
+      "height": 1280,
+      "prompt": "Animate this full-body image of Mara Vale into a vertical 9:16 premium UGC video with real body movement. Preserve exact identity, face, freckles, green-hazel eyes, copper-red wavy hair, fair skin, body proportions, outfit and apartment. She starts standing full body in the living room, takes two natural small steps toward the camera with realistic weight shift, relaxed arm swing, then stops in a medium-full shot, smiles warmly, lightly adjusts her hair with one hand, gestures with the other hand near chest as if beginning a storytime, then leans slightly forward and looks directly into the camera. Camera is phone-first, subtle handheld realism, slight natural push-in, premium apartment lighting. Movement must include legs, hips, shoulders, arms, head and facial microexpressions, not only mouth movement. No text, no logos, no watermark. Avoid identity drift, broken walking, warped legs, distorted hands, frozen body, robotic expression, plastic skin, flicker.",
+      "medias": [
+        {
+          "data": {
+            "id": "5966a501-03ea-47f6-914e-10e07e17c254",
+            "url": "https://d2ol7oe51mr4n9.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/5966a501-03ea-47f6-914e-10e07e17c254_resize.jpg",
+            "type": "media_input"
+          },
+          "role": "start_image"
+        }
+      ],
+      "duration": 10,
+      "aspect_ratio": "9:16",
+      "multi_shots": false,
+      "multi_prompt": [],
+      "sound": "off",
+      "cfg_scale": 0.5,
+      "mode": "std",
+      "kling_elements": [],
+      "kling_element_ids": [],
+      "multi_shot_mode": "custom",
+      "reference_elements": [],
+      "enhance_prompt": false
+    }
+  }
+]

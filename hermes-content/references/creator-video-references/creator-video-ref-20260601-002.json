@@ -1,0 +1,101 @@
+{
+  "id": "creator-video-ref-20260601-002",
+  "status": "analyzed",
+  "source": {
+    "platform": "google_drive",
+    "url": "https://drive.google.com/file/d/1W0Eds3zYSvBuRpzDbPxIDZvVyH3Ywrx7/view?usp=drivesdk",
+    "creator_handle": "visible watermark appears to reference mndshft.ai; use as structural reference only",
+    "date_added": "2026-06-01",
+    "local_file": "hermes-content/references/creator-video-references/inbox/creator-video-ref-20260601-002.mp4",
+    "permission_notes": "Reference only. No permission to copy likeness, audio, exact edit or claims."
+  },
+  "content": {
+    "topic": "AI creator skill upgrade / people that do not exist",
+    "niche": "AI education and creator workflow",
+    "audience": "beginners who want to become competent AI creators",
+    "video_length_seconds": 37,
+    "language": "Spanish captions visible",
+    "offer_or_cta": "learn AI creation workflow"
+  },
+  "analysis": {
+    "first_two_seconds": "Talking head opens with authority, then quickly shifts to proof/examples.",
+    "hook_type": "skill ladder / beginner to expert",
+    "hook_line_or_visual_summary": "A creator frames the topic as a progression from beginner to expert, then shows synthetic people and interface proof.",
+    "narrative_shape": "authority intro -> example proof -> skill ladder graphic -> synthetic output -> interface/code prompt -> tool board",
+    "scene_beats": [
+      "talking head with microphone / strong creator identity",
+      "example of generated person with UI/code overlay",
+      "minimal typographic slide: principiante a nivel experto",
+      "synthetic person example with direct text claim",
+      "creator holding interface/code panel",
+      "tool dashboard or library overview"
+    ],
+    "camera_behavior": "alternates studio talking head, proof clips, white slide and interface B-roll",
+    "cut_rhythm": "educational cuts every 4-7 seconds, slower than pure UGC",
+    "subtitle_style": "bold red emphasis, big phrase fragments, clean whitespace",
+    "audio_style": "authority explainer; exact audio not reused",
+    "proof_mechanism": "shows examples plus interface/code proof rather than only claims",
+    "cta_style": "educational progression; implied learn/follow",
+    "retention_devices": ["beginner-to-expert promise", "synthetic person reveal", "white slide reset", "interface proof"],
+    "emotional_tone": "authoritative, educational, aspirational"
+  },
+  "transcript_assisted": {
+    "quality_note": "Local faster-whisper transcript; corrected for readability.",
+    "corrected_summary": "El creador contrasta IA de baja calidad vs IA de alta calidad y afirma que la diferencia esta en el prompt. Presenta SimClub como formacion para dominar la creacion de avatares a nivel experto, buscar realismo absurdo y automatizar avatares hiperrealistas con herramientas como Claude. El uso comercial sugerido es crear cientos de avatares en minutos para promocionar productos de ecommerce. CTA: comentar Club.",
+    "key_phrases": [
+      "Esto es IA de baja calidad y esto es IA de alta calidad.",
+      "La diferencia esta en el prompt.",
+      "dominar la creacion de avatares a nivel experto",
+      "realismo tan exagerado para que nadie note que es falso",
+      "automatizar la creacion de avatares hiperrealistas",
+      "crear cientos de avatares en minutos para promocionar productos de ecommerce"
+    ],
+    "visible_text": [
+      "PRINCIPIANTE A NIVEL experto",
+      "Estas personas no existen",
+      "verse tus",
+      "lograr un",
+      "cientos de"
+    ]
+  },
+  "workflow_extracted": {
+    "name": "Prompt quality ladder for avatar realism",
+    "steps": [
+      "Mostrar comparacion baja calidad vs alta calidad.",
+      "Atribuir la diferencia a prompts mas especificos.",
+      "Definir nivel de realismo, textura, camara, gesto y contexto.",
+      "Automatizar multiples avatares para ecommerce o UGC.",
+      "Cerrar con CTA de comentario/palabra clave."
+    ],
+    "onia_use": "Crear una skill de calidad de prompts para evitar videos IA genericos y mejorar avatares/UGC antes de renderizar."
+  },
+  "onia_adaptation": {
+    "usable_patterns": [
+      "use a skill ladder from beginner to operator",
+      "alternate face, proof, white typography and interface",
+      "turn a complex AI topic into 3 visible levels",
+      "use red emphasis for one key term only"
+    ],
+    "best_for": ["Sergio personal brand", "AI education", "ONIA authority", "Higgsfield training content"],
+    "sample_onia_hook": "De principiante a operador de videos IA: este es el flujo que yo usaria.",
+    "sample_higgsfield_prompt_block": "Create a vertical educational AI creator video: studio talking head, clean white typography slide that says 'principiante -> operador', synthetic output examples, interface proof, and a final workflow board. Spanish captions, red emphasis only on the skill ladder, no copied creator look.",
+    "adaptation_notes": "Best used to teach a repeatable ONIA process, not to sell a product directly."
+  },
+  "do_not_copy": [
+    "creator likeness",
+    "studio setup",
+    "exact phrase design",
+    "watermark",
+    "exact examples",
+    "unverified claims"
+  ],
+  "scores": {
+    "hook_strength": 7,
+    "retention_strength": 8,
+    "commercial_clarity": 7,
+    "visual_quality": 8,
+    "originality_potential": 9,
+    "ethical_safety": 5
+  },
+  "notes": "Best reference for teaching AI skills with authority and clear progression."
+}

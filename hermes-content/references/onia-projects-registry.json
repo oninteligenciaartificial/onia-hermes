@@ -1,0 +1,260 @@
+{
+  "version": "2026-06-01",
+  "owner": "ONIA",
+  "approval_policy": {
+    "research": "allowed",
+    "draft_messages": "allowed",
+    "draft_content": "allowed",
+    "contact_prospect": "requires_explicit_approval",
+    "publish_content": "requires_explicit_approval",
+    "send_client_delivery": "requires_explicit_approval",
+    "use_face_or_voice": "requires_explicit_approval",
+    "whatsapp_automation": "blocked_until_meta_business_verification"
+  },
+  "projects": [
+    {
+      "id": "dentalgest",
+      "name": "DentalGest",
+      "type": "vertical_saas",
+      "local_path": "C:\\dev\\Proyectos\\dental-saas",
+      "primary_audience": "Clinicas dentales de Bolivia",
+      "pain_signals": [
+        "mensajes de pacientes sin registrar",
+        "presupuestos pendientes sin seguimiento",
+        "citas olvidadas",
+        "consultas repartidas entre Instagram, web, llamadas y recepcion"
+      ],
+      "primary_offer": "CRM dental, agenda, seguimiento y recordatorios",
+      "pricing": {
+        "starter": "Bs. 349/mes",
+        "pro": "Bs. 590/mes",
+        "clinic": "Bs. 990/mes",
+        "onboarding_optional": {
+          "carga_guiada_express": "Bs. 290",
+          "configuracion_asistida": "Bs. 690",
+          "migracion_capacitacion_equipo": "Bs. 1490"
+        },
+        "founder_offer_first_10": ["Bs. 290/mes", "Bs. 490/mes", "Bs. 790/mes"],
+        "commission": "SaaS mensual: 50% de la primera mensualidad neta cobrada una sola vez; anual prepago: 8% del anual neto; onboarding 10%",
+        "whatsapp_addon": "pendiente hasta verificacion Meta"
+      },
+      "secondary_offers": [
+        "landing para captacion dental",
+        "contenido educativo con Higgsfield",
+        "auditoria de seguimiento de pacientes"
+      ],
+      "recommended_channels": ["Instagram/Facebook publico", "LinkedIn", "Email publico", "Web form"],
+      "default_cta": "Te puedo mostrar una demo corta de DentalGest esta semana.",
+      "crm_tags": ["dental", "saas", "alta_prioridad"]
+    },
+    {
+      "id": "gestios",
+      "name": "Gesti-OS",
+      "type": "business_management_saas",
+      "local_path": "C:\\dev\\Proyectos\\Gestios",
+      "primary_audience": "Pymes con operaciones, tareas, clientes o reportes desordenados",
+      "pain_signals": [
+        "operacion en Excel",
+        "seguimiento por WhatsApp sin estados",
+        "reportes manuales",
+        "responsables poco claros",
+        "gerencia sin visibilidad"
+      ],
+      "primary_offer": "Sistema operativo para tareas, clientes, estados y reportes",
+      "pricing": {
+        "starter": "Bs. 490/mes",
+        "operativo": "Bs. 790/mes",
+        "pro": "Bs. 1290/mes",
+        "enterprise": "desde Bs. 2490/mes",
+        "implementation_optional": {
+          "kickstart": "Bs. 790",
+          "implementacion_operativa": "Bs. 1900",
+          "procesos_a_medida": "desde Bs. 5000"
+        },
+        "commission": "SaaS mensual: 50% de la primera mensualidad neta cobrada una sola vez; anual prepago 8%; enterprise 8% del primer pago neto; implementacion 10%",
+        "addons": {
+          "whatsapp_business": "pendiente hasta verificacion Meta",
+          "siat": "USD 25/mes",
+          "pagos_qr": "USD 15/mes",
+          "ecommerce": "USD 20/mes",
+          "exportacion_contable": "USD 18/mes"
+        }
+      },
+      "secondary_offers": [
+        "dashboard operativo",
+        "automatizacion n8n",
+        "consultoria de procesos"
+      ],
+      "recommended_channels": ["LinkedIn", "Email publico", "Demo privada", "Contenido fundador"],
+      "default_cta": "Te muestro como quedaria tu operacion en un tablero simple.",
+      "crm_tags": ["gestion", "pyme", "operaciones"]
+    },
+    {
+      "id": "web-onia",
+      "name": "Web ONIA",
+      "type": "brand_site",
+      "local_path": "C:\\dev\\Proyectos\\Web-Onia",
+      "primary_audience": "Prospectos que quieren validar a ONIA",
+      "pain_signals": [
+        "falta de confianza antes de comprar",
+        "necesidad de mostrar portfolio",
+        "necesidad de explicar servicios y productos"
+      ],
+      "primary_offer": "Sitio de autoridad, portfolio y captacion",
+      "secondary_offers": [
+        "landing de campaña",
+        "casos de uso",
+        "contenido educativo"
+      ],
+      "recommended_channels": ["SEO", "Instagram bio", "LinkedIn", "Propuestas"],
+      "default_cta": "Revisa lo que podemos construir para tu negocio.",
+      "crm_tags": ["onia", "web", "marca"]
+    },
+    {
+      "id": "websites",
+      "name": "Paginas web ONIA",
+      "type": "service",
+      "local_path": "",
+      "primary_audience": "Negocios locales y profesionales con presencia digital debil",
+      "pain_signals": [
+        "no tiene web",
+        "la web no explica la oferta",
+        "no captura leads",
+        "solo depende de redes sociales"
+      ],
+      "primary_offer": "Landing o web conectada a formulario, CRM y seguimiento",
+      "pricing": {
+        "landing_express": "Bs. 1490",
+        "web_negocio": "Bs. 2900",
+        "web_pro_ia": "Bs. 5900",
+        "saas_portal_personalizado": "desde Bs. 9500",
+        "care_plan": {
+          "basico": "Bs. 190/mes",
+          "crecimiento": "Bs. 390/mes",
+          "pro": "Bs. 690/mes"
+        },
+        "commission": "Landing 10%; Web Negocio/Web Pro IA 12%; SaaS/portal 8% o 10% con margen aprobado; care plan 50% de la primera mensualidad"
+      },
+      "secondary_offers": [
+        "SEO local",
+        "contenido de lanzamiento",
+        "automatizacion de leads"
+      ],
+      "recommended_channels": ["Auditoria por LinkedIn", "Email publico", "Instagram publico"],
+      "default_cta": "Te hago una auditoria rapida de captacion.",
+      "crm_tags": ["web", "landing", "captacion"]
+    },
+    {
+      "id": "higgsfield-marketing",
+      "name": "Marketing con Higgsfield",
+      "type": "content_service",
+      "local_path": "C:\\dev\\Expermimentos\\Hermes",
+      "primary_audience": "Negocios que necesitan contenido, ads o videos de oferta",
+      "pain_signals": [
+        "publica poco",
+        "no sabe que decir en video",
+        "la oferta no se entiende",
+        "no tiene CTA ni seguimiento"
+      ],
+      "primary_offer": "Reels, UGC, videos de oferta y contenido mensual con IA",
+      "pricing": {
+        "video_unit": "Bs. 450",
+        "sprint_8": "Bs. 2200/mes",
+        "growth_16": "Bs. 3900/mes",
+        "authority_24": "Bs. 6500/mes",
+        "performance_system": "desde Bs. 9500/mes",
+        "intro_price_first_5": {
+          "sprint_8": "Bs. 1800/mes",
+          "growth_16": "Bs. 3200/mes",
+          "authority_24": "Bs. 5500/mes"
+        },
+        "commission": "Video unit 10%; Sprint/Growth/Authority 15% del primer mes neto cobrado una sola vez; Performance 10% del primer mes neto; conectores 10% del setup",
+        "connector_setup": {
+          "tiktok_api": "Bs. 900 setup + Bs. 150/mes monitoring",
+          "youtube_shorts_api": "Bs. 900 setup + Bs. 150/mes monitoring",
+          "linkedin_api": "Bs. 900 setup + Bs. 150/mes monitoring",
+          "n8n_approval_flow": "Bs. 1800 setup + Bs. 350/mes monitoring"
+        }
+      },
+      "secondary_offers": [
+        "landing de campaña",
+        "CRM de leads",
+        "reporte semanal"
+      ],
+      "recommended_channels": ["Instagram", "LinkedIn", "Demo visual", "Video de diagnostico"],
+      "default_cta": "Te preparo 3 ideas de videos para vender mejor tu servicio.",
+      "crm_tags": ["contenido", "higgsfield", "ugc"]
+    },
+    {
+      "id": "onia-consulting",
+      "name": "Consultoria e Implementaciones ONIA",
+      "type": "consulting_service",
+      "local_path": "C:\\dev\\Expermimentos\\Hermes\\hermes-content\\docs\\ONIA_CONSULTING_SERVICES_2026.md",
+      "primary_audience": "Negocios que necesitan diagnostico, instalacion, automatizacion o acompanamiento antes de comprar una herramienta suelta",
+      "pain_signals": [
+        "no sabe que sistema comprar",
+        "usa muchas herramientas sin proceso",
+        "leads o tareas sin responsable",
+        "quiere instalar IA o automatizacion pero no tiene metodologia",
+        "necesita capacitacion y SOPs"
+      ],
+      "primary_offer": "Auditoria, roadmap, instalacion, capacitacion y acompanamiento consultivo",
+      "pricing": {
+        "auditoria_express": "Bs. 250-450",
+        "diagnostico_roadmap": "Bs. 790-1200",
+        "instalacion_starter": "Bs. 1900",
+        "implementacion_operativa": "Bs. 3900-6500",
+        "sprint_ia_video_system": "Bs. 4900-8500",
+        "acompanamiento_consultivo": "Bs. 1200-2900/mes",
+        "transformacion_onia": "desde Bs. 9500",
+        "commission": "Auditorias/instalaciones 10%; implementaciones 8-10%; acompanamiento 15% del primer mes; transformacion 8% del primer pago neto"
+      },
+      "secondary_offers": [
+        "DentalGest",
+        "Gesti-OS",
+        "paginas web ONIA",
+        "Marketing con Higgsfield",
+        "conectores n8n"
+      ],
+      "recommended_channels": ["LinkedIn", "Email publico", "Demo privada", "Contenido Sergio", "Auditoria consultiva"],
+      "default_cta": "Hagamos una auditoria corta y te digo que conviene instalar primero.",
+      "crm_tags": ["consultoria", "implementacion", "auditoria", "onia"]
+    }
+  ],
+  "routing_rules": [
+    {
+      "if": "industry contains dental|odontologia|clinica dental",
+      "primary_project": "dentalgest"
+    },
+    {
+      "if": "pain contains excel|reportes|tareas|operacion|seguimiento",
+      "primary_project": "gestios"
+    },
+    {
+      "if": "signal contains no website|weak website|no landing",
+      "primary_project": "websites"
+    },
+    {
+      "if": "signal contains low content|needs videos|ads|ugc",
+      "primary_project": "higgsfield-marketing"
+    },
+    {
+      "if": "pain contains no sabe|herramientas sueltas|automatizacion|instalar|consultoria|diagnostico|roadmap",
+      "primary_project": "onia-consulting"
+    }
+  ],
+  "crm_pipeline": [
+    "Nuevo",
+    "Investigado",
+    "Calificado",
+    "Mensaje preparado",
+    "Aprobado para contactar",
+    "Contactado",
+    "Respondio",
+    "Demo",
+    "Propuesta enviada",
+    "Ganado",
+    "Perdido",
+    "No apto"
+  ]
+}

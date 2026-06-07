@@ -1,0 +1,35 @@
+{
+  "id": "1d87ca2e-4466-4de1-a02a-bd68d8112085",
+  "status": "completed",
+  "display_name": "Kling v3.0",
+  "job_set_type": "kling3_0",
+  "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/hf_20260605_140237_1d87ca2e-4466-4de1-a02a-bd68d8112085.mp4",
+  "created_at": 1780668157.478103,
+  "params": {
+    "width": 2160,
+    "height": 3840,
+    "prompt": "Animate this exact Sergio start-frame portrait as a 5-second internal identity QA video. Keep the same face, perfect aligned smile, teeth, lips, hair, skin, blazer, body shape, framing and warm industrial workspace locked. Do not redesign the face and do not change the teeth. The upper teeth must remain straight, aligned, clean and natural across all frames: no crooked teeth, no new teeth, no duplicated teeth, no warped mouth, no gum glitches, no tongue artifacts. Sergio looks at the camera and silently mouths: La IA no es magia, es ejecucion con sistemas. Movement must be minimal and natural: tiny breathing, one blink, very small head movement, stable shoulders, controlled mouth movement, friendly confident expression. Sound off. No voice, no subtitles, no text, no watermark, no UI overlay. No beauty filter, no cinematic overgrade, no plastic skin, no older face, no eye drift, no hair falling forward, no distorted blazer.",
+    "medias": [
+      {
+        "data": {
+          "id": "0f6f990e-3787-4a92-bd05-fd8c6bde19d0",
+          "url": "https://d2ol7oe51mr4n9.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/0f6f990e-3787-4a92-bd05-fd8c6bde19d0.png",
+          "type": "media_input"
+        },
+        "role": "start_image"
+      }
+    ],
+    "duration": 5,
+    "aspect_ratio": "9:16",
+    "multi_shots": false,
+    "multi_prompt": [],
+    "sound": "off",
+    "cfg_scale": 0.5,
+    "mode": "4k",
+    "kling_elements": [],
+    "kling_element_ids": [],
+    "multi_shot_mode": "custom",
+    "reference_elements": [],
+    "enhance_prompt": false
+  }
+}

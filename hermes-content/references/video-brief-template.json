@@ -1,0 +1,134 @@
+{
+  "version": "2026-06-01",
+  "purpose": "Canonical brief template for every Hermes/ONIA video before Higgsfield, ElevenLabs, n8n scheduling, or Instagram publishing.",
+  "accounts": {
+    "sergio": {
+      "personality": "Informal founder, practical, honest, building in public, no guru voice, no fake luxury, no exaggerated claims.",
+      "default_formats": ["talking_head", "screen_demo", "workspace_broll", "lesson", "behind_the_scenes"],
+      "publish_windows_bolivia": ["08:00-09:30", "12:00-13:30", "19:00-21:00"],
+      "approval_rules": ["face_required_review", "ai_voice_required_review", "publish_requires_explicit_approval"]
+    },
+    "onia": {
+      "personality": "Clear, useful, strategic, system-builder, educational and conversion-oriented.",
+      "default_formats": ["workflow_demo", "before_after", "dashboard_demo", "ai_concept", "case_study"],
+      "publish_windows_bolivia": ["09:00-11:00", "15:00-17:30"],
+      "approval_rules": ["publish_requires_explicit_approval", "no_unverified_claims"]
+    },
+    "client": {
+      "personality": "Client-safe, benefit-led, simple, compliant with the business category and approved offer.",
+      "default_formats": ["ugc_ad", "offer_video", "testimonial", "local_business_reel", "case_study"],
+      "publish_windows_bolivia": ["11:00-13:00", "18:00-20:30"],
+      "approval_rules": ["client_approval_required", "publish_requires_explicit_approval", "no_private_assets_without_permission"]
+    }
+  },
+  "brief_schema": {
+    "job_id": "",
+    "account": "sergio|onia|client",
+    "client_name": "",
+    "personality": "",
+    "topic": "",
+    "objective": "trust|lead|booking|demo_request|awareness|authority|retention|sale",
+    "audience": "",
+    "offer": "",
+    "format": "talking_head|screen_demo|ai_concept|ugc|story|carousel_to_reel|testimonial|case_study",
+    "duration_seconds": 30,
+    "hook": {
+      "text": "",
+      "visual": "",
+      "type": "pain|contrarian|proof|mistake|before_after|numbered|founder_confession|question",
+      "first_two_seconds_check": false
+    },
+    "script": {
+      "spoken": "",
+      "beats": [
+        {
+          "name": "hook",
+          "seconds": "0-2",
+          "line": ""
+        },
+        {
+          "name": "problem",
+          "seconds": "2-8",
+          "line": ""
+        },
+        {
+          "name": "mechanism",
+          "seconds": "8-22",
+          "line": ""
+        },
+        {
+          "name": "payoff",
+          "seconds": "22-28",
+          "line": ""
+        },
+        {
+          "name": "cta",
+          "seconds": "28-35",
+          "line": ""
+        }
+      ]
+    },
+    "cta": {
+      "text": "",
+      "type": "comment_keyword|dm|audit_request|save|share|book_call|follow",
+      "keyword": "",
+      "whatsapp_allowed": false
+    },
+    "scenes": [
+      {
+        "scene": 1,
+        "seconds": "0-2",
+        "visual": "",
+        "spoken_line": "",
+        "overlay_text": "",
+        "asset_needed": "",
+        "transition": ""
+      }
+    ],
+    "visual_style": {
+      "camera": "",
+      "lighting": "",
+      "colors": "",
+      "subtitles": true,
+      "pace": "visual_change_every_3_to_5_seconds",
+      "broll": []
+    },
+    "audio_style": {
+      "voice": "real|ai_draft|none",
+      "music": "",
+      "sound_effects": [],
+      "approval_required": true
+    },
+    "higgsfield_prompt": "",
+    "caption": {
+      "text": "",
+      "hashtags": [],
+      "cta_repeat": ""
+    },
+    "publish_window": {
+      "timezone": "America/La_Paz",
+      "day": "",
+      "time_range": ""
+    },
+    "approval": {
+      "brief_state": "draft_brief|waiting_approval|approved_for_generation|needs_revision",
+      "generation_state": "not_started|generating|generated|failed",
+      "publish_state": "not_approved|approved_for_publish|published",
+      "required_approver": "sergio"
+    },
+    "reuse_notes": {
+      "stories": "",
+      "linkedin": "",
+      "carousel": "",
+      "email": ""
+    },
+    "safety_checks": {
+      "one_idea_only": false,
+      "specific_hook": false,
+      "single_cta": false,
+      "no_private_data": false,
+      "no_unverified_claims": false,
+      "whatsapp_excluded_until_business_verification": true
+    }
+  }
+}

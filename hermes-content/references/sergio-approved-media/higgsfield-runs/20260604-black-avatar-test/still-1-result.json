@@ -1,0 +1,30 @@
+﻿[
+  {
+    "id": "7b95ebf6-9fda-4dfb-8146-5afba24610f0",
+    "status": "completed",
+    "display_name": "Higgsfield Soul V2",
+    "job_set_type": "text2image_soul_v2",
+    "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/hf_20260604_235531_7b95ebf6-9fda-4dfb-8146-5afba24610f0.png",
+    "created_at": 1780617331.172926,
+    "params": {
+      "prompt": "Ultra-realistic identity-preserving vertical portrait of Sergio using the trained Soul character reference. Same real face, same facial proportions, same forehead height, same eye shape and spacing, same eyebrows, same nose, same lips, same jawline, same chin, same ears, same hairline and short dark hairstyle. Natural young founder/operator, calm confident neutral expression, direct eye contact. Outfit: clean plain black fitted crew neck t-shirt, black pants, no visible logos, no patterns. Medium-close vertical 9:16 phone-camera creator video still, chest and shoulders visible, real desk and laptop softly visible behind him, soft daylight, realistic skin pores, natural asymmetry, no glamour retouch. Avoid elongated face, stretched neck, oversized eyes, model jaw, wax skin, plastic skin, CGI look, beauty filter, distorted features, extra fingers, text, watermark, logos, soccer jersey, white shirt.",
+      "width": 1152,
+      "height": 2048,
+      "batch_size": 1,
+      "seed": 755888,
+      "enhance_prompt": false,
+      "use_sage_attention": false,
+      "quality": "1080p",
+      "use_relax": false,
+      "style_id": "3db34ab5-3439-4317-9e03-08dc30852e69",
+      "style": {
+        "id": "3db34ab5-3439-4317-9e03-08dc30852e69",
+        "name": "General",
+        "url": "https://cdn.higgsfield.ai/soul-v2-style/f33d85f2-6521-4fa8-8e8f-894cfbdee578.webp",
+        "strength": 1.0
+      },
+      "style_strength": 1.0,
+      "custom_reference_id": "1238064e-1295-4cbf-9a41-861d4106e0e8"
+    }
+  }
+]

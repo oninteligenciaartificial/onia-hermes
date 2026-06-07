@@ -1,0 +1,8 @@
+file 'C:/dev/Expermimentos/Hermes/hermes-content/references/creator-video-references/inbox/frames/creator-video-ref-20260601-001-01.jpg'
+file 'C:/dev/Expermimentos/Hermes/hermes-content/references/creator-video-references/inbox/frames/creator-video-ref-20260601-001-02.jpg'
+file 'C:/dev/Expermimentos/Hermes/hermes-content/references/creator-video-references/inbox/frames/creator-video-ref-20260601-001-03.jpg'
+file 'C:/dev/Expermimentos/Hermes/hermes-content/references/creator-video-references/inbox/frames/creator-video-ref-20260601-001-04.jpg'
+file 'C:/dev/Expermimentos/Hermes/hermes-content/references/creator-video-references/inbox/frames/creator-video-ref-20260601-001-05.jpg'
+file 'C:/dev/Expermimentos/Hermes/hermes-content/references/creator-video-references/inbox/frames/creator-video-ref-20260601-001-06.jpg'
+file 'C:/dev/Expermimentos/Hermes/hermes-content/references/creator-video-references/inbox/frames/creator-video-ref-20260601-001-07.jpg'
+file 'C:/dev/Expermimentos/Hermes/hermes-content/references/creator-video-references/inbox/frames/creator-video-ref-20260601-001-08.jpg'

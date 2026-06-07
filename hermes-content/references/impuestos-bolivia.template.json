@@ -1,0 +1,50 @@
+{
+  "country": "Bolivia",
+  "business": "ONIA",
+  "status": "template_pending_user_data",
+  "disclaimer": "Plantilla operativa. Validar fechas y obligaciones con contador o fuente oficial antes de activar alertas.",
+  "taxpayer": {
+    "nit": "",
+    "nit_last_digit": "",
+    "tax_regime": "",
+    "responsible_person": "",
+    "alert_channels": ["Telegram"],
+    "timezone": "America/La_Paz"
+  },
+  "default_alert_offsets_days": [7, 3, 1],
+  "obligations": [
+    {
+      "name": "IVA",
+      "frequency": "monthly",
+      "due_rule": "Pendiente: completar segun terminacion de NIT y calendario vigente.",
+      "applies": null,
+      "confirmed": false
+    },
+    {
+      "name": "IT",
+      "frequency": "monthly",
+      "due_rule": "Pendiente: completar segun terminacion de NIT y calendario vigente.",
+      "applies": null,
+      "confirmed": false
+    },
+    {
+      "name": "RC-IVA",
+      "frequency": "monthly",
+      "due_rule": "Pendiente: confirmar si aplica y completar calendario vigente.",
+      "applies": null,
+      "confirmed": false
+    },
+    {
+      "name": "IUE",
+      "frequency": "annual",
+      "due_rule": "Pendiente: completar segun cierre fiscal y calendario vigente.",
+      "applies": null,
+      "confirmed": false
+    }
+  ],
+  "n8n": {
+    "recommended": true,
+    "workflow_name": "ONIA - Recordatorios fiscales",
+    "manual_approval_required": false
+  }
+}

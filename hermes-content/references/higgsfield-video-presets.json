@@ -1,0 +1,86 @@
+{
+  "version": 1,
+  "source": "Hermes Video Lab",
+  "defaults": {
+    "aspect_ratio": "9:16",
+    "duration_seconds": 30,
+    "approval_required": true,
+    "negative_prompt": "No copyrighted logos unless provided by the brand. No third-party likeness. No fake testimonials. No fake dashboards. No misleading financial claims. No generated Sergio face unless explicitly approved. No placeholder text."
+  },
+  "presets": [
+    {
+      "id": "sergio_building_public",
+      "lane": "sergio",
+      "format": "talking_head_screen",
+      "best_for": ["founder trust", "behind the scenes", "daily build updates"],
+      "structure": [
+        "0-2s: founder hook",
+        "2-6s: what is being built",
+        "6-14s: screen/workspace proof",
+        "14-24s: lesson or decision",
+        "24-30s: DM CTA"
+      ],
+      "style": "informal, real, phone-first, founder-led, screen recording inserts",
+      "cta": "Si quieres que te muestre el flujo, escribeme 'sistema'."
+    },
+    {
+      "id": "onia_workflow_demo",
+      "lane": "onia",
+      "format": "workflow_demo",
+      "best_for": ["automation education", "lead generation", "product proof"],
+      "structure": [
+        "0-2s: business pain hook",
+        "2-6s: show current broken process",
+        "6-16s: show automated workflow",
+        "16-25s: explain business outcome",
+        "25-30s: audit CTA"
+      ],
+      "style": "clear, premium, dashboard, before-after, labels, subtitles",
+      "cta": "Escribenos para auditar tu proceso de leads."
+    },
+    {
+      "id": "client_ugc_problem_solution",
+      "lane": "client",
+      "format": "ugc_ad",
+      "best_for": ["local services", "ecommerce", "lead generation"],
+      "structure": [
+        "0-2s: relatable problem",
+        "2-7s: product/service context",
+        "7-17s: benefit explanation",
+        "17-25s: objection handling",
+        "25-35s: direct CTA"
+      ],
+      "style": "natural phone video, human, direct, believable, native social",
+      "cta": "Escribe para mas informacion."
+    },
+    {
+      "id": "client_founder_pitch",
+      "lane": "client",
+      "format": "founder_pitch",
+      "best_for": ["high trust services", "clinics", "agencies", "consultants"],
+      "structure": [
+        "0-2s: who this is for",
+        "2-8s: why the offer exists",
+        "8-18s: what makes it different",
+        "18-28s: process or proof",
+        "28-35s: booking CTA"
+      ],
+      "style": "operator-led, calm, credible, direct-to-camera",
+      "cta": "Agenda una consulta."
+    },
+    {
+      "id": "viral_clip_recut",
+      "lane": "sergio",
+      "format": "clip_recut",
+      "best_for": ["long videos", "interviews", "screen recordings"],
+      "structure": [
+        "0-2s: strongest quote",
+        "2-8s: context",
+        "8-20s: main insight",
+        "20-30s: punchline or CTA"
+      ],
+      "style": "fast subtitles, jump cuts, headline text, clean crop",
+      "cta": "Guarda esto para cuando armes tu sistema."
+    }
+  ]
+}

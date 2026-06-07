@@ -1,0 +1,319 @@
+[
+  {
+    "id": "drive-ref-001",
+    "source": "google_drive",
+    "local_file": "references-inbox/drive-ref-1.jpg",
+    "url": "https://drive.google.com/file/d/1A2Ck4jZDgnseisMmITzWrjv-Mcpo5CxW/view?usp=drivesdk",
+    "topic": "social media algorithm education",
+    "audience": "content creators and brands",
+    "hook_type": "what you need to know",
+    "narrative_shape": "big concept -> authority cue -> practical warning",
+    "slide_rhythm": "poster-like hero slide, high typographic contrast",
+    "visual_system": "editorial collage, large serif headline, bold sans supporting text, blue duotone cutout, sticker-like labels, halftone texture",
+    "color_feel": "off-white, black, electric blue",
+    "trust_signals": ["mentions platform CEO", "expert quote framing"],
+    "cta_style": "educational save/share",
+    "onia_adaptation": "use for posts like 'Lo que debes saber para que el algoritmo no ignore tus leads'; replace person cutout with abstract dashboard/chat flow, use ONIA green instead of blue",
+    "do_not_copy": ["person image", "Portuguese text", "exact typography layout", "CEO claim unless sourced"],
+    "scores": {
+      "business_relevance": 4,
+      "originality_potential": 5,
+      "clarity": 4,
+      "visual_quality": 5,
+      "ethical_safety": 5
+    },
+    "notes": "Strong reference for bold educational hook slides."
+  },
+  {
+    "id": "drive-ref-002",
+    "source": "google_drive",
+    "local_file": "references-inbox/drive-ref-2.jpg",
+    "url": "https://drive.google.com/file/d/17DFosQOs9WbZwgOYs8ywtzaUitQClthw/view?usp=drivesdk",
+    "topic": "personal thought / contrarian opinion",
+    "audience": "creators, consultants, entrepreneurs",
+    "hook_type": "contrarian statement",
+    "narrative_shape": "bold opinion -> qualifier -> swipe cue",
+    "slide_rhythm": "minimal text-first intro slide",
+    "visual_system": "large serif type, lots of whitespace, light paper texture, orange handwritten annotation, tiny footer metadata",
+    "color_feel": "off-white, black, orange accent",
+    "trust_signals": ["creator byline", "personal thoughts label"],
+    "cta_style": "swipe/continue",
+    "onia_adaptation": "use for opinion posts like 'Odio decir que tu negocio necesita IA... bueno, a veces'; follow with practical slides explaining when automation actually matters",
+    "do_not_copy": ["exact phrase", "creator handle", "iMessage-like arrow placement"],
+    "scores": {
+      "business_relevance": 4,
+      "originality_potential": 5,
+      "clarity": 5,
+      "visual_quality": 4,
+      "ethical_safety": 5
+    },
+    "notes": "Good for contrarian hook and minimalist first slide."
+  },
+  {
+    "id": "drive-ref-003",
+    "source": "google_drive",
+    "local_file": "references-inbox/drive-ref-3.jpg",
+    "url": "https://drive.google.com/file/d/1oDv-9qFcpYWRPUlrQ7mK6dqO8qnbNdt0/view?usp=drivesdk",
+    "topic": "announcement / institutional information",
+    "audience": "students or community members",
+    "hook_type": "announcement",
+    "narrative_shape": "institutional label -> headline -> date/detail -> contact strip",
+    "slide_rhythm": "single announcement poster",
+    "visual_system": "saturated blue background, neon lime headline, large object cutout, UI selection box motif, bottom contact bar",
+    "color_feel": "royal blue, neon lime, white",
+    "trust_signals": ["logos", "contact information", "official label"],
+    "cta_style": "informational follow/contact",
+    "onia_adaptation": "use for 'Info importante' posts: webinar dates, launches, audits, events; replace animal/object with SaaS UI screenshot or WhatsApp automation graphic",
+    "do_not_copy": ["logos", "sheep image", "religious/holiday content", "exact contact bar"],
+    "scores": {
+      "business_relevance": 3,
+      "originality_potential": 4,
+      "clarity": 4,
+      "visual_quality": 4,
+      "ethical_safety": 5
+    },
+    "notes": "Useful for high-contrast announcement style; use sparingly to avoid one-note blue palette."
+  },
+  {
+    "id": "drive-ref-004",
+    "source": "google_drive",
+    "local_file": "references-inbox/drive-ref-4.jpg",
+    "url": "https://drive.google.com/file/d/1ukxA0cP5tJ1h0Keu1WG1kxnq25ply8kW/view?usp=drivesdk",
+    "topic": "resource list / useful sites",
+    "audience": "designers and creators",
+    "hook_type": "numbered resource list",
+    "narrative_shape": "big promise -> path/timeline -> named resources -> swipe cue",
+    "slide_rhythm": "curated list with visual journey",
+    "visual_system": "dramatic monochrome red photo background, huge white type, path line with nodes, small labels, bottom creator signature",
+    "color_feel": "deep red, white, black shadow",
+    "trust_signals": ["specific websites", "portfolio/byline"],
+    "cta_style": "swipe to learn",
+    "onia_adaptation": "use for '6 herramientas que una pyme deberia conocer para automatizar ventas': Chatwoot, n8n, WhatsApp Business, CRM, analytics, AI assistant",
+    "do_not_copy": ["background sofa image", "exact resource list", "creator branding", "red-dominant palette as-is"],
+    "scores": {
+      "business_relevance": 5,
+      "originality_potential": 5,
+      "clarity": 5,
+      "visual_quality": 5,
+      "ethical_safety": 5
+    },
+    "notes": "Excellent for ONIA resource-list carousels and guided path layouts."
+  },
+  {
+    "id": "drive-ref-005",
+    "source": "google_drive",
+    "local_file": "references-inbox/drive-ref-5.jpg",
+    "url": "https://drive.google.com/file/d/1k3xgVp3jqJwC4BKQgwUrV90dVVTInnAc/view?usp=drivesdk",
+    "topic": "creator motivation / retention insight",
+    "audience": "content creators and solo entrepreneurs",
+    "hook_type": "insight reframe",
+    "narrative_shape": "chat bubble claim -> typographic emphasis -> emotional truth",
+    "slide_rhythm": "minimal mobile-message metaphor",
+    "visual_system": "iMessage-style screen, green message bubble, oversized serif emphasis, editable text handles, soft grain",
+    "color_feel": "white, black, green accent",
+    "trust_signals": ["familiar phone UI metaphor"],
+    "cta_style": "reflect/save",
+    "onia_adaptation": "use for 'La mayoria de negocios no fallan por falta de IA; fallan por empezar de cero cada vez': then explain systems, templates and automation",
+    "do_not_copy": ["ELLA branding", "exact phrase", "iMessage UI exact recreation"],
+    "scores": {
+      "business_relevance": 4,
+      "originality_potential": 5,
+      "clarity": 5,
+      "visual_quality": 4,
+      "ethical_safety": 5
+    },
+    "notes": "Strong metaphor style for system/process education."
+  },
+  {
+    "id": "drive-ref-006",
+    "source": "google_drive",
+    "local_file": "references-inbox/drive-ref-6.jpg",
+    "url": "https://drive.google.com/file/d/13kkE7bSLc0z5NBzn8XtcFNpKVu2mAMH5/view?usp=drivesdk",
+    "topic": "brand visual concept / moodboard",
+    "audience": "premium fashion or visual brand clients",
+    "hook_type": "visual identity board",
+    "narrative_shape": "brand title -> mood tokens -> grid examples -> positioning copy",
+    "slide_rhythm": "moodboard grid",
+    "visual_system": "large elegant serif title, grayscale editorial photography, burgundy panels, circular category chips, modular grid",
+    "color_feel": "gray, white, deep burgundy, black",
+    "trust_signals": ["coherent visual system", "brand positioning copy", "product/editorial examples"],
+    "cta_style": "brand sophistication / portfolio",
+    "onia_adaptation": "use for ONIA brand system or case-study decks: replace fashion imagery with dashboards, website screens, automation maps, client workflow snapshots",
+    "do_not_copy": ["fashion images", "brand name", "Russian text", "exact grid"],
+    "scores": {
+      "business_relevance": 4,
+      "originality_potential": 5,
+      "clarity": 4,
+      "visual_quality": 5,
+      "ethical_safety": 5
+    },
+    "notes": "Excellent for premium case-study and visual-system references."
+  },
+  {
+    "id": "drive-ref-007",
+    "source": "google_drive",
+    "local_file": "references-inbox/drive-ref-7.jpg",
+    "url": "https://drive.google.com/file/d/1x8VchgSZJj_CG-OZgJRQduw6G6yU6tTe/view?usp=drivesdk",
+    "topic": "content creation shortcut / practical creator advice",
+    "audience": "creators, consultants, small business owners",
+    "hook_type": "shortcut promise",
+    "narrative_shape": "if I could give you one shortcut -> reveal the core system -> make it feel simple and urgent",
+    "slide_rhythm": "single photo-backed hero with highlighted words, followed by practical step slides",
+    "visual_system": "grainy lifestyle or city photo background, centered white text, blue highlighter strips behind key words, small footer/byline, nostalgic editorial texture",
+    "color_feel": "muted photo tones, white, electric blue accent",
+    "trust_signals": ["personal recommendation framing", "simple atajo/shortcut language", "creator-style footer"],
+    "cta_style": "save this shortcut / send to someone who creates content",
+    "onia_adaptation": "use for hooks like 'Si pudiera darte un atajo para no perder leads en WhatsApp, seria este'; follow with a 4-6 slide system: captura, calificacion, seguimiento, cierre, medicion",
+    "do_not_copy": ["Portuguese phrase", "exact streetcar photo", "same highlight positions", "creator footer"],
+    "scores": {
+      "business_relevance": 5,
+      "originality_potential": 5,
+      "clarity": 5,
+      "visual_quality": 5,
+      "ethical_safety": 5
+    },
+    "notes": "Great reference for human, editorial hooks that make automation feel like a practical shortcut instead of a technical topic."
+  },
+  {
+    "id": "drive-ref-008",
+    "source": "google_drive",
+    "local_file": "references-inbox/drive-ref-8.jpg",
+    "url": "https://drive.google.com/file/d/1ta81mRpEOxJQafn00c74qc4DYLTONGnQ/view?usp=drivesdk",
+    "topic": "work aesthetics / remote work reality",
+    "audience": "digital workers, founders, creators, agency operators",
+    "hook_type": "humorous question / tension contrast",
+    "narrative_shape": "big question -> honest subtext -> punchline sticker -> practical lesson",
+    "slide_rhythm": "viral meme-like hero slide, then a grounded educational explanation",
+    "visual_system": "real laptop/workspace photo, oversized neon yellow bold headline, white handwritten script overlay, small yellow label, sticker/card element in corner, casual meme energy",
+    "color_feel": "dark photo base, neon yellow, white, small brand-color sticker accents",
+    "trust_signals": ["relatable work scene", "self-aware humor", "specific app/workflow reference"],
+    "cta_style": "comment/share if this is you",
+    "onia_adaptation": "use for posts like 'Estas trabajando? tecnicamente si, operativamente no' or 'Tu WhatsApp esta abierto, pero tu sistema no esta trabajando'; turn the joke into a lesson about automated follow-up and dashboards",
+    "do_not_copy": ["Google Meet logo/sticker", "exact laptop photo", "exact English phrase", "sticker placement"],
+    "scores": {
+      "business_relevance": 4,
+      "originality_potential": 5,
+      "clarity": 4,
+      "visual_quality": 5,
+      "ethical_safety": 5
+    },
+    "notes": "Useful when ONIA needs a more viral, informal, founder-culture style instead of a polished corporate carousel."
+  },
+  {
+    "id": "instagram-carousel-ref-20260602-001",
+    "source": "instagram",
+    "url": "https://www.instagram.com/p/DY48PjolruI/?igsh=MWloaWp4Mzczbzl2ag==",
+    "source_username": "emprendeconcata",
+    "source_shortcode": "DY48PjolruI",
+    "accessed_at": "2026-06-02",
+    "post_type": "GraphSidecar",
+    "observed_slide_count": 9,
+    "observed_dimensions": {
+      "width": 1080,
+      "height": 1350
+    },
+    "asset_policy": "Inspected transiently for analysis only. No third-party images were saved, published, reused or added as ONIA assets.",
+    "topic": "carousel strategy as a swipe funnel",
+    "audience": "creators, consultants, agencies and entrepreneurs who publish educational carousels",
+    "hook_type": "system giveaway / steal-this-framework",
+    "narrative_shape": "bold system promise -> numbered rules -> strategic reframe -> comment keyword CTA",
+    "slide_rhythm": "cover with collage and proof cue; one rule per slide; final reframe; direct keyword CTA",
+    "visual_system": "warm editorial background, oversized black sans headlines, one mustard rounded highlight per slide, strong left alignment, large whitespace, minimal decoration, cover collage with tilted rounded screenshots and fake social metrics bar",
+    "color_feel": "warm off-white, black, mustard accent",
+    "trust_signals": [
+      "specific numbered rules",
+      "creator account with public audience",
+      "cover suggests prior carousel examples",
+      "caption expands the strategy instead of repeating the slides",
+      "comment keyword creates a clear next step"
+    ],
+    "cta_style": "comment keyword for deeper system or resource",
+    "design_details": {
+      "format": "portrait carousel, 4:5, 1080x1350",
+      "typography": "heavy sans for rule labels and main claims, elegant serif only on the cover hero word",
+      "spacing": "large top whitespace and generous line breaks so each slide reads fast",
+      "layout": "slides 2-7 use a consistent top-left rule badge, headline below, then short body blocks",
+      "accent": "mustard pill behind rule number or CTA word; use ONIA green only as the equivalent accent",
+      "cover": "large provocative headline plus three overlapping mini post examples and an engagement-style bar",
+      "final_slide": "minimal centered CTA with one highlighted keyword"
+    },
+    "slide_pattern": [
+      {
+        "slide": 1,
+        "job": "stop scroll",
+        "pattern": "provocative system promise plus visual proof collage"
+      },
+      {
+        "slide": 2,
+        "job": "define the first rule",
+        "pattern": "short claim about the cover's job, then three micro-principles"
+      },
+      {
+        "slide": 3,
+        "job": "earn the next swipe",
+        "pattern": "explain why slide 2 matters and leave tension open"
+      },
+      {
+        "slide": 4,
+        "job": "make each slide saveable",
+        "pattern": "one strong idea that can stand alone as a screenshot"
+      },
+      {
+        "slide": 5,
+        "job": "show the operating system",
+        "pattern": "AI helps structure; human judgment decides"
+      },
+      {
+        "slide": 6,
+        "job": "turn design into strategy",
+        "pattern": "design rules as conversion rules, not decoration"
+      },
+      {
+        "slide": 7,
+        "job": "make caption part of the system",
+        "pattern": "caption deepens, contextualizes and routes people to DM/comment"
+      },
+      {
+        "slide": 8,
+        "job": "reframe the category",
+        "pattern": "boxed statement that turns content into brand, authority and sales system"
+      },
+      {
+        "slide": 9,
+        "job": "convert",
+        "pattern": "short centered CTA with one highlighted keyword"
+      }
+    ],
+    "caption_strategy": [
+      "Caption should work as the second post, not filler.",
+      "It should explain the carousel thesis, add context and invite action.",
+      "Use a comment keyword when the next step is a resource, audit or system.",
+      "Do not repeat every slide; add the reason behind the slides."
+    ],
+    "onia_adaptation": "Use this as the model for ONIA educational carousels: 'Roba mi sistema para no perder leads', '6 reglas para que una clinica no pierda pacientes por WhatsApp', or 'El sistema simple para responder, filtrar y cerrar clientes'. Keep one job per slide, one strong idea per slide, and a final CTA such as comenta AUDITORIA or escribe SISTEMA.",
+    "onia_carousel_prompts": [
+      "6 reglas para que tu WhatsApp deje de perder ventas",
+      "Roba mi sistema para organizar leads de Instagram",
+      "El embudo invisible que una clinica dental necesita antes de comprar mas publicidad",
+      "Tu negocio no necesita mas mensajes; necesita seguimiento",
+      "Como saber si tu empresa ya esta lista para automatizar ventas"
+    ],
+    "do_not_copy": [
+      "exact wording",
+      "creator brand",
+      "creator images",
+      "same screenshot collage assets",
+      "same engagement numbers",
+      "same mustard color as a brand identity",
+      "same CTA keyword unless it fits the ONIA offer"
+    ],
+    "scores": {
+      "business_relevance": 5,
+      "originality_potential": 5,
+      "clarity": 5,
+      "visual_quality": 5,
+      "ethical_safety": 5
+    },
+    "notes": "High-value reference for ONIA carousels because it treats carousel production as a conversion system. Use the structure and rhythm only; produce original ONIA copy, visuals and examples."
+  }
+]

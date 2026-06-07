@@ -1,0 +1,88 @@
+{
+  "system": "ONIA",
+  "created_at": "2026-06-05",
+  "decision": "use_vertical_dental_front_desk_automation_first",
+  "recommended_positioning": "Clinicas Sin Pacientes Perdidos",
+  "why": [
+    "ONIA already has DentalGest",
+    "ONIA already has researched dental leads",
+    "Dental practice management software in LatAm is growing",
+    "Generic AI CRM content is saturated",
+    "Local vertical implementation is more defensible than generic YouTube content"
+  ],
+  "opportunities": [
+    {
+      "rank": 1,
+      "name": "Dental front desk and patient follow-up automation",
+      "offer_match": ["DentalGest", "Landing/Web", "Higgsfield content", "ONIA implementation"],
+      "saturation": "medium",
+      "monetization": "very_high",
+      "speed": "high",
+      "risk": "medium",
+      "decision": "use_first"
+    },
+    {
+      "rank": 2,
+      "name": "Aesthetic and private clinics appointment follow-up",
+      "offer_match": ["Landing/Web", "CRM", "Higgsfield content", "ONIA implementation"],
+      "saturation": "medium",
+      "monetization": "high",
+      "speed": "medium",
+      "risk": "medium",
+      "decision": "test_after_dental"
+    },
+    {
+      "rank": 3,
+      "name": "SMEs with Excel and WhatsApp operations",
+      "offer_match": ["GestiOS", "Consulting", "n8n workflows"],
+      "saturation": "high",
+      "monetization": "medium_high",
+      "speed": "medium",
+      "risk": "low",
+      "decision": "second_vertical"
+    },
+    {
+      "rank": 4,
+      "name": "AI videos for local business offers",
+      "offer_match": ["Higgsfield monthly packages", "Landing/Web"],
+      "saturation": "medium_high",
+      "monetization": "medium",
+      "speed": "high",
+      "risk": "low",
+      "decision": "upsell_not_core"
+    },
+    {
+      "rank": 5,
+      "name": "Generic AI CRM automation channel",
+      "offer_match": ["Consulting", "Templates"],
+      "saturation": "very_high",
+      "monetization": "high_but_slow",
+      "speed": "low",
+      "risk": "medium",
+      "decision": "do_not_focus"
+    },
+    {
+      "rank": 6,
+      "name": "Kids content",
+      "offer_match": [],
+      "saturation": "high",
+      "monetization": "low_medium",
+      "speed": "medium",
+      "risk": "high",
+      "decision": "discard"
+    }
+  ],
+  "first_campaign": {
+    "name": "Clinicas Sin Pacientes Perdidos",
+    "audience": "dental clinics in Bolivia and Spanish-speaking LatAm",
+    "primary_cta": "demo corta DentalGest",
+    "secondary_cta": "auditoria express",
+    "first_assets": [
+      "reel_no_necesitas_mas_mensajes",
+      "carousel_5_lugares_pacientes_perdidos",
+      "demo_dentalgest_consulta_cita_presupuesto",
+      "landing_clinicas_sin_pacientes_perdidos"
+    ]
+  }
+}
+

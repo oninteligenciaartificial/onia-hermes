@@ -1,0 +1,26 @@
+﻿{
+  "id": "c1cc70c3-9b38-4afd-b61c-58e5ac8e01be",
+  "status": "completed",
+  "display_name": "Nano Banana Pro",
+  "job_set_type": "nano_banana_2",
+  "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/hf_20260606_034819_c1cc70c3-9b38-4afd-b61c-58e5ac8e01be.png",
+  "created_at": 1780717699.810835,
+  "params": {
+    "width": 3072,
+    "height": 5504,
+    "aspect_ratio": "9:16",
+    "resolution": "4k",
+    "batch_size": 1,
+    "input_images": [
+      {
+        "id": "d71f95d9-815c-4780-b259-f31dc2ad811a",
+        "url": "https://d2ol7oe51mr4n9.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/d71f95d9-815c-4780-b259-f31dc2ad811a_resize.jpg",
+        "type": "media_input"
+      }
+    ],
+    "input_image": null,
+    "application": null,
+    "surface": null,
+    "prompt": "Use the uploaded smiling reference image as the exact identity, exact smile, exact teeth, exact face, exact angle, and exact facial geometry source. Create a premium cinematic AI avatar photoshoot portrait of the same real person, Sergio. This is a surgical identity-preserving edit, not a redesign. Preserve the exact same youthful face, same eyes, same eyebrows, same nose, same lips, same jawline, same chin, same skin tone, same hair, and especially the same smile mechanics: natural upper teeth shape, natural tooth size, natural gum visibility, same mouth width, same dimples and smile lines. Make the smile clean and attractive, but not fake. Teeth can be subtly cleaned and aligned only within the real smile identity, no artificial veneers and no different dental pattern. Clean only temporary pimples, small acne spots, harsh texture, excessive shine, minor lighting wrinkles, and under-eye fatigue. Keep realistic pores, natural skin, and the same face. Hair: black side-part Italian style, groomed, glossy, structured, not falling. Wardrobe: polished black blazer over clean black shirt. Lighting: premium cinematic soft light with realistic catchlights and high facial clarity. Background: clean modern office or studio, shallow depth of field. Do not create a similar person. Do not change eye spacing, eye size, nose, lips, teeth, jaw, chin, face length, age, hairline, hairstyle, skin tone, or expression identity. Avoid plastic skin, model-face drift, distorted teeth, weird mouth, low detail, blur, extra anatomy, scars, or neck scratches. Additional mandatory cleanup and youth lock: keep Sergio looking young and natural. Remove visible forehead horizontal wrinkles, acne bumps, temporary pimples, hard flash texture, rough acne texture, under-eye fatigue, and any invented beard/mustache shadow. Keep fine human pores and realistic skin detail, but the final face should look clean, fresh, healthy, and polished. Do not over-smooth. Do not change identity, facial structure, eyes, nose, lips, teeth, jaw, chin, hairline, hairstyle, skin tone, age, or expression mechanics."
+  }
+}

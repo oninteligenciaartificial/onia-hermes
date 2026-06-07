@@ -1,0 +1,7 @@
+Animate the provided portrait as a realistic cinematic founder video. Keep identity locked to the image: same face, same age impression, same eyebrows, same hair, same skin texture, same all-black outfit, same studio environment. No face morphing.
+
+Motion: subtle 5-second push-in, natural micro head movement, tiny breathing motion in shoulders and chest, calm confident eye contact with both eyes aligned, one natural blink, slight relaxed expression shift, no big smile. Body stays stable with square shoulders and balanced athletic posture.
+
+Camera and quality: vertical 9:16 cinematic portrait, premium founder interview energy, shallow depth of field, soft warm key light, gentle rim light, realistic skin highlights, no jitter, no warped eyes, no deformed neck, no flickering face, no changing outfit, no changing background, no visible text, no logos.
+
+Negative instructions: no uneven gaze, no lazy eye, no stretched face, no oversized head, no facial melting, no extra people, no exaggerated muscles, no sexualized styling, no low-resolution blur, no plastic skin, no lint or fuzz on black clothing, no camera shake.

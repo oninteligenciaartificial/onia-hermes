@@ -1,0 +1,95 @@
+{
+  "version": "2026-06-01",
+  "purpose": "Platform copy template for ONIA, Sergio and client content.",
+  "fields": {
+    "instagram_caption": {
+      "maps_to": "ig-publish --caption",
+      "formula": [
+        "hook_or_belief_shift",
+        "problem_context",
+        "mechanism_or_offer",
+        "single_cta",
+        "hashtags"
+      ],
+      "constraints": {
+        "cta_count": 1,
+        "hashtags_min": 3,
+        "hashtags_max": 8,
+        "avoid": [
+          "fake urgency",
+          "invented results",
+          "private client data",
+          "medical guarantees",
+          "financial guarantees"
+        ]
+      }
+    },
+    "tiktok_description": {
+      "status": "planned",
+      "formula": [
+        "native_short_hook",
+        "soft_cta_or_question",
+        "native_hashtags"
+      ],
+      "constraints": {
+        "hashtags_min": 2,
+        "hashtags_max": 5
+      }
+    },
+    "youtube_title": {
+      "status": "planned",
+      "max_characters_recommended": 70,
+      "formula": [
+        "result_or_tension"
+      ]
+    },
+    "youtube_description": {
+      "status": "planned",
+      "formula": [
+        "brief_summary",
+        "cta",
+        "approved_links",
+        "hashtags"
+      ]
+    },
+    "youtube_tags": {
+      "status": "planned",
+      "type": "array"
+    },
+    "linkedin_copy": {
+      "status": "planned",
+      "formula": [
+        "professional_observation",
+        "context_or_learning",
+        "mechanism_or_process",
+        "question_or_cta"
+      ]
+    }
+  },
+  "account_voice": {
+    "sergio": {
+      "personality": "first-person, practical, honest, building in public, no guru tone",
+      "cta_examples": [
+        "Escribeme tu rubro y te preparo 3 ideas.",
+        "Escribeme demo y te muestro el sistema.",
+        "Si tienes una empresa, te muestro como lo armaria."
+      ]
+    },
+    "onia": {
+      "personality": "educational, strategic, systems-focused, conversion-oriented",
+      "cta_examples": [
+        "Pide una auditoria.",
+        "Escribenos demo.",
+        "Te mostramos el flujo aplicado a tu negocio."
+      ]
+    },
+    "client": {
+      "personality": "safe, clear, brand-approved, benefit-focused",
+      "cta_examples": [
+        "Agenda una visita.",
+        "Consulta disponibilidad.",
+        "Escribenos para mas informacion."
+      ]
+    }
+  }
+}

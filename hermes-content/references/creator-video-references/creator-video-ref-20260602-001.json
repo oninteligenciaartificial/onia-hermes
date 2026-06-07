@@ -1,0 +1,114 @@
+{
+  "id": "creator-video-ref-20260602-001",
+  "status": "analyzed",
+  "source": {
+    "platform": "instagram",
+    "url": "https://www.instagram.com/reel/DYC-JNqt9hh/?igsh=MWxzaXNsb2E1NHBlMQ==",
+    "creator_handle": "soy_aria_cruz",
+    "date_added": "2026-06-02",
+    "local_file": "",
+    "permission_notes": "Reference only. No permission to copy likeness, audio, exact edit, captions, prompts, claims or creator identity."
+  },
+  "content": {
+    "topic": "reverse-engineering prompts from AI videos",
+    "niche": "AI influencer and AI video workflow education",
+    "audience": "creators, AI video operators, agencies and founders who want repeatable video generation",
+    "video_length_seconds": null,
+    "language": "Spanish",
+    "offer_or_cta": "comment keyword to receive a small guide"
+  },
+  "analysis": {
+    "first_two_seconds": "Direct value promise: get the prompt or scene structure behind any AI video.",
+    "hook_type": "shortcut / workflow reveal",
+    "hook_line_or_visual_summary": "The creator frames a common pain: seeing a strong AI video and wasting credits trying to recreate the prompt.",
+    "narrative_shape": "pain -> trick found -> tool stack -> workflow steps -> proof by repeated testing -> comment keyword CTA",
+    "scene_beats": [
+      "open with the problem of recreating a good AI video",
+      "position the method as a credit-saving shortcut",
+      "use Gemini to analyze the reference video by scenes",
+      "use ChatGPT or Claude to rewrite the prompt for your own character",
+      "use Seedance 2.0 through Higgsfield or Magnific to generate",
+      "close with comment keyword for guide"
+    ],
+    "camera_behavior": "creator-led vertical explainer mixed with AI tool/workflow references",
+    "cut_rhythm": "fast educational cuts; each tool has a specific job",
+    "subtitle_style": "short Spanish captions and tool names; likely bold, high contrast and mobile-first",
+    "audio_style": "creator explainer; do not reuse exact audio",
+    "proof_mechanism": "names specific tools and explains the role of each tool in the chain",
+    "cta_style": "comment keyword to receive guide",
+    "retention_devices": [
+      "specific problem creators recognize",
+      "credit-saving promise",
+      "tool stack list",
+      "step-by-step mechanism",
+      "guide keyword at the end"
+    ],
+    "emotional_tone": "practical, excited, shortcut-oriented"
+  },
+  "metadata_observed": {
+    "instagram_shortcode": "DYC-JNqt9hh",
+    "instagram_media_id": "3891946340035844193",
+    "media_type": "GraphVideo",
+    "observed_dimensions": {
+      "width": 640,
+      "height": 1136
+    },
+    "public_likes_observed": 3188,
+    "public_comments_observed": 3090,
+    "caption_summary": "Explains a workflow: use Gemini to break down a reference video into scenes, use ChatGPT or Claude to adapt the prompt to your AI character, and use Seedance 2.0 through Higgsfield or Magnific. Ends with a comment keyword for a guide."
+  },
+  "workflow_extracted": {
+    "name": "Reference video to original AI prompt",
+    "steps": [
+      "Choose a reference video only as inspiration.",
+      "Ask Gemini to decompose the video by scenes, camera, movement, mood and transitions.",
+      "Use ChatGPT or Claude to rewrite the structure for an original ONIA/client character.",
+      "Generate with Seedance 2.0 or a comparable video model through an approved platform.",
+      "Review for copy risk, brand fit and claim safety before publishing."
+    ],
+    "onia_use": "Turn client references into original Higgsfield prompts and Video Lab briefs without copying the creator, face, wording, music or exact edit."
+  },
+  "onia_adaptation": {
+    "usable_patterns": [
+      "make the first sentence a direct pain creators/operators have",
+      "turn a tool chain into a simple 3-step system",
+      "explain each tool by its job, not by hype",
+      "use a comment keyword when offering a guide, checklist or audit",
+      "show the reference-to-original transformation as the proof"
+    ],
+    "best_for": [
+      "Higgsfield prompt tutorials",
+      "ONIA AI video production sales",
+      "Sergio founder content",
+      "client-safe UGC workflow explainers"
+    ],
+    "sample_onia_hook": "Vi un video IA brutal y en vez de copiarlo lo converti en un sistema para crear uno original.",
+    "sample_higgsfield_prompt_block": "Create a vertical 9:16 workflow explainer showing a founder reviewing an AI video reference, breaking it into scene cards, rewriting it into an original ONIA prompt, and generating a clean business video. Fast cuts, screen overlays, Spanish captions, practical tone, no copied creator likeness or exact sequence.",
+    "adaptation_notes": "Use this as a production method, not as a content identity. It is useful for ONIA because it converts inspiration into original prompts and reduces wasted generation credits."
+  },
+  "not_useful_or_use_with_care": [
+    "Do not sell this as copying any video.",
+    "Do not imply ONIA can clone creators, faces, voices or copyrighted styles.",
+    "Do not use creator keywords or community CTA as-is.",
+    "Exact tool names can change; preserve the workflow, not the dependency."
+  ],
+  "do_not_copy": [
+    "creator likeness",
+    "voice",
+    "exact words",
+    "caption",
+    "music",
+    "watermark",
+    "exact edit sequence",
+    "unverified claims"
+  ],
+  "scores": {
+    "hook_strength": 9,
+    "retention_strength": 8,
+    "commercial_clarity": 8,
+    "visual_quality": 8,
+    "originality_potential": 9,
+    "ethical_safety": 5
+  },
+  "notes": "Very useful for ONIA/Higgsfield because it defines a practical reference-decomposition workflow. Main risk is accidentally framing the process as copying; always present it as inspiration-to-original-production."
+}

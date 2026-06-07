@@ -1,0 +1,9 @@
+de verdad chicos, no me puedo creer. ¡Ay, joder! ¡Que Cloudy haya hecho todo esto!
+Y te enseño cómo puedes hacerlo en menos de un minuto. Abre Cloud Code y crea una skill
+que defina cómo quieres que piense y cree por ti. Ángulos, realismo de piel, expresiones,
+cámara iPhone de 24 milímetros, incluso el tipo de vibe y storytelling que quieres. Después
+creas alabatar en Nano Banana con su nombre, cara, pelo, estilo, personalidad y Cloud
+guarda al personaje en tus archivos para que puedas usarlo en el futuro y no volver a crearlo desde
+cero. Y aquí viene lo loco. Con un solo prompt, Cloud Code es capaz de generar blogs, storytimes,
+anuncios y rutina su GC. Y mientras otros siguen grabándose manualmente, tu ya tienes un sistema
+automatizado trabajando 24-7.

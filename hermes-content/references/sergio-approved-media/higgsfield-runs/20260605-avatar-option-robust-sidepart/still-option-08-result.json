@@ -1,0 +1,24 @@
+{
+  "id": "f44560e7-f41d-46f5-b15c-d20ecd93931e",
+  "status": "completed",
+  "display_name": "GPT Image 2",
+  "job_set_type": "imagegen_2_0",
+  "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/hf_20260605_040735_f44560e7-f41d-46f5-b15c-d20ecd93931e.png",
+  "created_at": 1780632455.942588,
+  "params": {
+    "width": 1520,
+    "height": 2688,
+    "aspect_ratio": "9:16",
+    "quality": "high",
+    "resolution": "2k",
+    "model": "videotape-alpha",
+    "prompt_file": "still-option-08-prompt.txt",
+    "source_images": [
+      "../20260605-avatar-option-real-youth-sidepart/still-option-07.png",
+      "../../processed/IMG_0331/IMG_0331_preview.jpg",
+      "../../processed/IMG_0330/IMG_0330_preview.jpg",
+      "../../processed/IMG_0329/IMG_0329_preview.jpg"
+    ],
+    "notes": "Internal preview only. Target change: same young side-part identity with less skinny, more robust upper body."
+  }
+}

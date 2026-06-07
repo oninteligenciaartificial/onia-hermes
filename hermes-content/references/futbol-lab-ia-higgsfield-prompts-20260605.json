@@ -1,0 +1,25 @@
+{
+  "system": "Futbol Lab IA",
+  "created_at": "2026-06-05",
+  "higgsfield_status": {
+    "local_cli_checked": true,
+    "cli_version": "0.1.40",
+    "account_plan": "ultra",
+    "credits_seen_on_2026_06_05": 2338.53,
+    "generation_requires_approval": true
+  },
+  "master_prompt": "Create a vertical 9:16 animated sports analysis video for a fictional football channel called Futbol Lab IA. Style: premium animated tactical football studio, serious but funny, dynamic camera, clean lighting, no official logos, no real player likeness, no FIFA branding, no club badges, no broadcast footage. Main character: original 3D animated tactical analyst named Profe Pixel, expressive but not childish, standing beside a glowing tactical board. Secondary comic element: a small fictional VAR monitor called VARcito with a minimal face, reacting with quick visual jokes. Show generic football kits, abstract country-color tiles, tactical arrows, heat maps and data cards. The tone is energetic, smart, humorous and credible. Use Spanish on-screen text only where specified.",
+  "negative_prompt": "No real football players, no celebrity likeness, no FIFA logo, no club logos, no official jerseys, no match footage, no TV broadcast graphics, no real commentator, no copyrighted mascot, no national federation badges, no violent crowd scenes, no betting claims, no guaranteed predictions, no distorted text, no unreadable captions, no childish cartoon style.",
+  "character_prompts": {
+    "profe_pixel": "Original stylized 3D animated football tactics analyst, male-presenting but fictional, mid-30s, warm Latino appearance, short dark hair, transparent glasses, clean generic black sports jacket with no logos, confident serious expression with subtle humor, standing in a futuristic football tactics studio, glowing tactical board behind him, green pitch reflections, cinematic sports lighting, vertical 9:16, no resemblance to any real person, no logos, no text.",
+    "varcito": "Original animated VAR monitor character for a football analysis channel, small rectangular digital screen with minimal expressive face, tiny referee-style digital whistle icon, funny but clean, floating next to a tactical football board, premium sports broadcast style, green and black lighting, no FIFA branding, no official logos, no copyrighted mascot, vertical 9:16."
+  },
+  "pilot_prompt": {
+    "id": "piloto-001",
+    "title": "La IA no sabe quien gana el Mundial... pero si encuentra trampas tacticas",
+    "prompt": "Vertical 9:16 animated sports analysis short, 45-second modular style made of fast 3-second shots. A fictional 3D football tactics analyst named Profe Pixel enters a premium futuristic football studio with a glowing tactical board. A small fictional VAR monitor named VARcito reacts like a funny assistant. Show a generic football pitch diagram, tactical arrows, fullbacks pushing high, empty space behind them, data cards labelled presion, transicion, espacios. Tone: serious analysis with quick visual comedy. Spanish overlay text: \"La IA no adivina campeones\", \"VARcito revisando humo\", \"Patrones > humo\", \"La trampa esta aqui\", \"Escenarios, no magia\", \"Futbol + IA + tactica\". Dynamic camera, clean lighting, green black white palette, premium sports broadcast animation. No real players, no official logos, no FIFA branding, no club badges, no match footage, no official jerseys.",
+    "short_test_prompt_15s": "Vertical 9:16, 15-second animated teaser for Futbol Lab IA. Profe Pixel, an original fictional 3D football tactics analyst, points at a glowing tactical board while VARcito, a funny fictional VAR monitor, flashes a warning. Show arrows revealing empty space behind high fullbacks. Spanish overlay text: \"La IA no adivina campeones\" then \"pero encuentra trampas tacticas\". Premium football studio, serious but funny, dynamic camera, no real players, no FIFA branding, no club logos, no match footage.",
+    "negative_prompt": "No real players, no celebrity likeness, no FIFA logo, no club logos, no broadcast footage, no official jersey, no real commentator, no betting claim, no guaranteed prediction."
+  }
+}
+

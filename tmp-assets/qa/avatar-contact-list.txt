@@ -1,0 +1,8 @@
+file 'C:\dev\Expermimentos\Hermes\tmp-assets\qa\avatar-option-thumb-02.jpg'
+file 'C:\dev\Expermimentos\Hermes\tmp-assets\qa\avatar-option-thumb-03.jpg'
+file 'C:\dev\Expermimentos\Hermes\tmp-assets\qa\avatar-option-thumb-04.jpg'
+file 'C:\dev\Expermimentos\Hermes\tmp-assets\qa\avatar-option-thumb-05.jpg'
+file 'C:\dev\Expermimentos\Hermes\tmp-assets\qa\avatar-option-thumb-06.jpg'
+file 'C:\dev\Expermimentos\Hermes\tmp-assets\qa\avatar-option-thumb-07.jpg'
+file 'C:\dev\Expermimentos\Hermes\tmp-assets\qa\avatar-option-thumb-08.jpg'
+file 'C:\dev\Expermimentos\Hermes\tmp-assets\qa\avatar-option-thumb-09.jpg'

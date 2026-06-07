@@ -1,0 +1,46 @@
+﻿{
+  "id": "22b1fd2f-5840-46ee-8d82-4ec7f4973c3a",
+  "status": "completed",
+  "display_name": "Nano Banana Pro",
+  "job_set_type": "nano_banana_2",
+  "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/hf_20260606_042356_22b1fd2f-5840-46ee-8d82-4ec7f4973c3a.png",
+  "created_at": 1780719836.340176,
+  "params": {
+    "width": 3072,
+    "height": 5504,
+    "aspect_ratio": "9:16",
+    "resolution": "4k",
+    "batch_size": 1,
+    "input_images": [
+      {
+        "id": "691aed6a-b6d0-4e33-8a41-c123c6d7f0d9",
+        "url": "https://d2ol7oe51mr4n9.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/691aed6a-b6d0-4e33-8a41-c123c6d7f0d9_resize.jpg",
+        "type": "media_input"
+      },
+      {
+        "id": "47c50dee-0b2f-4861-876c-aee6e055fb65",
+        "url": "https://d2ol7oe51mr4n9.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/47c50dee-0b2f-4861-876c-aee6e055fb65_resize.jpg",
+        "type": "media_input"
+      },
+      {
+        "id": "5a52309d-ba15-4aa6-8ece-511b53a045ff",
+        "url": "https://d2ol7oe51mr4n9.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/5a52309d-ba15-4aa6-8ece-511b53a045ff_resize.jpg",
+        "type": "media_input"
+      },
+      {
+        "id": "4171318f-54ba-44b8-8882-6785d191de52",
+        "url": "https://d2ol7oe51mr4n9.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/4171318f-54ba-44b8-8882-6785d191de52_resize.jpg",
+        "type": "media_input"
+      },
+      {
+        "id": "f98535a6-b883-4d64-b503-f3eca1c011a8",
+        "url": "https://d2ol7oe51mr4n9.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/f98535a6-b883-4d64-b503-f3eca1c011a8.png",
+        "type": "media_input"
+      }
+    ],
+    "input_image": null,
+    "application": null,
+    "surface": null,
+    "prompt": "Create one premium, realistic, slightly stylized AI avatar portrait of Sergio for personal branding, using the uploaded reference images as the identity lock. Reference priority: 1. First image is the main identity source: exact frontal face, age, eyes, eyebrows, nose, lips, jaw, chin, skin tone and overall presence. 2. Second image is only for smile, teeth identity, mouth width, cheek movement and friendly energy. 3. Third and fourth images are only for profile geometry: nose bridge, nose tip, lips projection, chin, jawline, ear, neck, hairline and side-part hair. 4. Contact sheet is only for cross-checking that the same person remains recognizable across angles. This must look like Sergio, not a similar handsome model. Preserve his real youthful face and natural asymmetry. Keep the same dark almond eyes, natural eye spacing, natural eyelid heaviness, same thick dark eyebrows, same straight nose, same lips with fuller lower lip, same long/slim natural face shape, same defined but not exaggerated jawline, same chin, same ears and same black Italian side-part hairstyle. Keep him young, fresh and natural. Improve only what is temporary or production-related: remove pimples, acne bumps, harsh flash marks, rough temporary skin texture, under-eye fatigue, visible forehead lines caused by lighting, neck scratch artifacts, excessive shine and video/photo noise. Keep realistic fine pores, real skin texture, natural facial asymmetry and a human face. Do not make the skin plastic. Body and wardrobe: make him slightly more robust/athletic in shoulders and upper torso than the very skinny references, but keep the same face, neck, head size and essence. Polished black blazer or clean black overshirt over a black crewneck shirt, founder/operator aesthetic, no logos. Expression: calm confident, intelligent, approachable, natural eyes, slight relaxed mouth or very subtle micro-smile. Not angry, not fake, not influencer-guru. The face should feel like a high-end version of the real Sergio, still believable as a real photo. Visual style: premium cinematic portrait, modern clean office/studio background, soft natural key light, realistic catchlights, crisp hair detail, balanced color, commercial quality, 9:16 portrait, chest and shoulders visible. Strict negative rules: do not change identity, do not use a generated avatar as the face, do not create a different person, do not enlarge or separate eyes, do not reshape the nose, do not change lips, teeth pattern, jaw, chin, face length, skin tone, hairline, hairstyle, age or expression mechanics. No exaggerated square jaw, no older face, no too-thin neck, no fake model face, no plastic skin, no anime, no cartoon, no CGI look, no distorted mouth, no fake veneers, no dead eyes, no scars, no neck scratches, no beard or mustache shadow beyond the real references, no extra anatomy, no hands in frame."
+  }
+}

@@ -1,0 +1,126 @@
+{
+  "id": "creator-video-ref-20260602-003",
+  "status": "analyzed",
+  "source": {
+    "platform": "whatsapp_file",
+    "url": "",
+    "creator_handle": "visible watermark: soy_aria_cruz",
+    "date_added": "2026-06-02",
+    "local_file": "hermes-content/references/creator-video-references/inbox/creator-video-ref-20260602-003.mp4",
+    "permission_notes": "File provided by Sergio for reference analysis. Use as structure only; do not copy creator likeness, voice, exact prompts, edit or claims."
+  },
+  "content": {
+    "topic": "tool stack for creating AI influencers and avatar videos",
+    "niche": "AI influencer production / AI video tools",
+    "audience": "creators, agencies and operators learning a professional AI influencer stack",
+    "video_length_seconds": 98.8,
+    "language": "Spanish",
+    "offer_or_cta": "community/course CTA"
+  },
+  "analysis": {
+    "first_two_seconds": "List-style authority hook: these are all the AI tools you need, do not pay before watching.",
+    "hook_type": "tool stack / save money / before you buy",
+    "hook_line_or_visual_summary": "The video promises a curated stack after testing many tools, which creates authority and saves the viewer from wasted spend.",
+    "narrative_shape": "warning hook -> tested-for-a-year authority -> image generation -> animation/video -> talking avatar -> voice -> aggregator/platform advice -> community CTA",
+    "scene_beats": [
+      "show AI character fashion/beauty/cinematic examples",
+      "name planning tools for base prompt and character description",
+      "recommend image generation path for high realism",
+      "mention alternatives when moderation/censorship blocks outputs",
+      "explain animation options for non-speaking avatar video",
+      "explain talking-to-camera options",
+      "explain voice consistency and ElevenLabs",
+      "recommend aggregators/platforms when paying many tools is not profitable",
+      "close with community/detail CTA"
+    ],
+    "camera_behavior": "rapid montage of AI character outputs, tool labels, close-ups and cinematic scenes",
+    "cut_rhythm": "fast listicle pacing; one tool/category per beat",
+    "subtitle_style": "large tool-name labels over AI clips; high contrast white text",
+    "audio_style": "Spanish listicle voiceover; machine transcript generated locally and must be verified before quoting",
+    "proof_mechanism": "shows many output styles and specific tool/category roles",
+    "cta_style": "learn more in community / request guide",
+    "retention_devices": [
+      "do not pay before watching warning",
+      "tested-for-a-year authority claim",
+      "tool names on screen",
+      "multiple AI visual styles",
+      "cost/profitability angle"
+    ],
+    "emotional_tone": "fast, confident, resource-curation"
+  },
+  "technical_observations": {
+    "source_resolution": "576x1024",
+    "fps": 30,
+    "duration_seconds": 98.8,
+    "has_audio": true,
+    "transcript_file": "hermes-content/references/creator-video-references/transcripts/creator-video-ref-20260602-003.txt",
+    "contact_sheet": "hermes-content/references/creator-video-references/inbox/frames/creator-video-ref-20260602-003-sheet.jpg"
+  },
+  "transcript_assisted": {
+    "quality_note": "Local faster-whisper tiny transcript. Good enough for summary, not for exact quotes.",
+    "corrected_summary": "The video lists a practical stack for AI influencer creation: use Claude, ChatGPT or Gemini to describe the character and create the base prompt; use a high-realism image generator for first images; use alternative video models when moderation blocks some outputs; use Kling/Hailuo-like tools for cheap animation when the avatar does not need to speak; use Seedance/Google/Grok/Jimeng-like options for talking or cinematic avatar video; use ElevenLabs for voice consistency; and consider aggregators like Magnific or Higgsfield instead of paying many tools separately.",
+    "key_takeaways": [
+      "Plan the character before generating visuals.",
+      "Separate tools by job: prompt planning, image generation, animation, talking video and voice.",
+      "Cost control matters; paying many tools can destroy margin.",
+      "Aggregators can be useful when they reduce tool fragmentation.",
+      "Voice consistency is a separate production layer."
+    ]
+  },
+  "workflow_extracted": {
+    "name": "AI avatar production stack",
+    "steps": [
+      "Define character/personality and base prompt with an LLM.",
+      "Generate first high-quality character images.",
+      "Create reusable character references.",
+      "Choose animation-only or talking-to-camera path.",
+      "Generate video with the platform/model that fits the use case.",
+      "Add consistent voice when needed.",
+      "Choose aggregator/platform economics based on margin, not hype."
+    ],
+    "onia_use": "Design ONIA service packages and internal SOPs for avatar/UGC/client videos while protecting margins and avoiding unnecessary tool spend."
+  },
+  "onia_adaptation": {
+    "usable_patterns": [
+      "tool-stack listicle for operators",
+      "before-you-pay hook",
+      "separate each tool by production job",
+      "include cost-control as a serious business point",
+      "turn tool choices into a buying/production guide"
+    ],
+    "best_for": [
+      "ONIA internal production SOPs",
+      "Sergio educational Reels",
+      "Higgsfield service explanation",
+      "pricing and margin strategy for AI video services"
+    ],
+    "sample_onia_hook": "Antes de pagar 10 herramientas de video IA, separa el flujo en 5 trabajos.",
+    "sample_higgsfield_prompt_block": "Create a vertical educational video showing an ONIA AI video production stack: planning prompt, character board, image generation, animation path, talking avatar path, voice layer and cost-control dashboard. Clean UI overlays, Spanish captions, founder/operator tone, no copied influencer visuals.",
+    "adaptation_notes": "Useful for ONIA because it reinforces tool orchestration and margin discipline. Avoid influencer/fashion framing for B2B clients; translate to dentists, local businesses, SaaS demos and UGC ads."
+  },
+  "not_useful_or_use_with_care": [
+    "AI influencer/fashion examples are weak for ONIA's B2B offer unless reframed.",
+    "Censorship-bypass framing is not client-safe and should not be used in ONIA materials.",
+    "Community/course CTA is not our default CTA; ONIA should use audit, demo or guide.",
+    "Tool names can change quickly; teach the role of each tool, not a fixed vendor dependency."
+  ],
+  "do_not_copy": [
+    "creator likeness",
+    "voice",
+    "exact tool ranking",
+    "exact visual examples",
+    "watermark",
+    "body/fashion framing",
+    "community CTA",
+    "unverified claims about one-year testing"
+  ],
+  "scores": {
+    "hook_strength": 8,
+    "retention_strength": 8,
+    "commercial_clarity": 9,
+    "visual_quality": 8,
+    "originality_potential": 9,
+    "ethical_safety": 5
+  },
+  "notes": "Strongest reference in this batch for ONIA economics: separate tools by job and protect margin before selling AI video services."
+}

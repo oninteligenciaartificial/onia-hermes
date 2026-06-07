@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ONIA Pricing 2026 - Vendedores</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --bg-2: #111827;
+      --panel: #f8fafc;
+      --ink: #0b1220;
+      --muted: #475569;
+      --line: #d7dee8;
+      --blue: #2563eb;
+      --green: #059669;
+      --amber: #d97706;
+      --red: #dc2626;
+      --white: #ffffff;
+      --radius: 14px;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      overflow: hidden;
+    }
+
+    .deck {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 4px;
+      width: 0;
+      background: var(--green);
+      z-index: 20;
+      transition: width .25s ease;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      padding: 54px 64px 72px;
+      background: var(--panel);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity .25s ease;
+      overflow: hidden;
+    }
+
+    .slide.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .dark {
+      background: var(--bg);
+      color: var(--white);
+    }
+
+    .slide-inner {
+      height: 100%;
+      max-width: 1180px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 22px;
+    }
+
+    .topline {
+      color: var(--green);
+      font-weight: 700;
+      letter-spacing: .04em;
+      font-size: 14px;
+      text-transform: uppercase;
+    }
+
+    h1, h2, h3, p { margin: 0; }
+    h1 {
+      font-size: clamp(42px, 6vw, 78px);
+      line-height: .98;
+      max-width: 980px;
+    }
+
+    h2 {
+      font-size: clamp(34px, 4.3vw, 58px);
+      line-height: 1.02;
+      max-width: 1000px;
+    }
+
+    h3 {
+      font-size: 22px;
+      line-height: 1.2;
+    }
+
+    p, li {
+      font-size: 22px;
+      line-height: 1.42;
+      color: var(--muted);
+    }
+
+    .dark p, .dark li { color: #cbd5e1; }
+
+    .grid {
+      display: grid;
+      gap: 18px;
+    }
+    .cols-2 { grid-template-columns: repeat(2, 1fr); }
+    .cols-3 { grid-template-columns: repeat(3, 1fr); }
+    .cols-4 { grid-template-columns: repeat(4, 1fr); }
+
+    .card {
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 22px;
+      min-height: 130px;
+    }
+
+    .dark .card {
+      background: #172033;
+      border-color: #273449;
+      color: var(--white);
+    }
+
+    .price {
+      font-size: 38px;
+      font-weight: 800;
+      color: var(--blue);
+      margin: 10px 0 6px;
+    }
+
+    .dark .price { color: #93c5fd; }
+
+    .small {
+      font-size: 16px;
+      line-height: 1.35;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+      font-size: 20px;
+    }
+
+    th, td {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #e8eef8;
+      color: #111827;
+      font-weight: 800;
+    }
+
+    tr:last-child td { border-bottom: 0; }
+
+    .pill {
+      display: inline-block;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: #dcfce7;
+      color: #14532d;
+      font-weight: 800;
+      font-size: 15px;
+    }
+
+    .warn {
+      background: #fef3c7;
+      color: #78350f;
+    }
+
+    .callout {
+      border-left: 6px solid var(--green);
+      padding: 16px 20px;
+      background: #ecfdf5;
+      border-radius: 10px;
+    }
+
+    .dark .callout {
+      background: #123326;
+      color: var(--white);
+    }
+
+    .chart-wrap {
+      height: 320px;
+      padding: 18px;
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+    }
+
+    .nav {
+      position: fixed;
+      bottom: 22px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      z-index: 30;
+      background: rgba(15, 23, 42, .88);
+      color: var(--white);
+      border-radius: 999px;
+      padding: 8px 12px;
+    }
+
+    button {
+      border: 0;
+      background: var(--white);
+      color: var(--ink);
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      font-size: 18px;
+      cursor: pointer;
+    }
+
+    .counter { min-width: 64px; text-align: center; font-size: 14px; }
+
+    @media (max-width: 900px) {
+      body { overflow: auto; }
+      .deck { height: auto; min-height: 100vh; overflow: visible; }
+      .slide { position: static; min-height: 100vh; display: none; padding: 34px 22px 82px; }
+      .slide.active { display: block; }
+      .slide-inner { justify-content: flex-start; }
+      .cols-2, .cols-3, .cols-4 { grid-template-columns: 1fr; }
+      p, li { font-size: 18px; }
+      table { font-size: 16px; }
+      th, td { padding: 10px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="progress" id="progress"></div>
+  <main class="deck">
+    <section class="slide dark active">
+      <div class="slide-inner">
+        <div class="topline">ONIA 2026 / Vendedores</div>
+        <h1>Precios, comisiones y ofertas para vender sin improvisar</h1>
+        <p>Material interno para vender DentalGest, Gesti-OS, paginas web, Marketing con Higgsfield y conectores cross-platform.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <div class="topline">Veredicto</div>
+        <h2>El precio final se construye sobre valor, no sobre cantidad de posts.</h2>
+        <div class="grid cols-2">
+          <div class="card"><h3>SaaS</h3><p>Self-service, sin setup obligatorio. Onboarding opcional como acelerador.</p></div>
+          <div class="card"><h3>Servicios</h3><p>Precio cerrado, 50% anticipo y una comision simple sobre dinero cobrado.</p></div>
+          <div class="card"><h3>Contenido IA</h3><p>Vender sistema mensual: estrategia, videos, captions, canales y reporte.</p></div>
+          <div class="card"><h3>Conectores</h3><p>Upsell tecnico: TikTok, YouTube, LinkedIn y n8n se cobran aparte.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <div class="topline">Benchmark</div>
+        <h2>La oportunidad: Bolivia aun tiene mucho espacio para digitalizar.</h2>
+        <div class="grid cols-3">
+          <div class="card"><h3>Landing Bolivia</h3><div class="price">Bs. 829-1.935</div><p class="small">Rango local 2026 para landing simple.</p></div>
+          <div class="card"><h3>Web institucional</h3><div class="price">Bs. 1.935-6.910</div><p class="small">Rango local 2026 para web pyme.</p></div>
+          <div class="card"><h3>Social media</h3><div class="price">USD 300+</div><p class="small">Freelance basico internacional; sube con video y estrategia.</p></div>
+        </div>
+        <p class="small">Lectura comercial: ONIA puede cobrar arriba del freelancer barato cuando combina sistema, contenido, CRM, automatizacion y seguimiento.</p>
+        <p class="small">Fuentes revisadas: Avendano Design Bolivia, Conbersa, Feedbird, Carvd y Sales Cookie.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <div class="topline">DentalGest</div>
+        <h2>SaaS dental self-service: mensualidad baja, onboarding opcional.</h2>
+        <table>
+          <thead><tr><th>Plan</th><th>Precio</th><th>Para quien</th><th>Comision</th></tr></thead>
+          <tbody>
+            <tr><td>Starter</td><td>Bs. 349/mes</td><td>Consultorio pequeno</td><td>50% primera mensualidad</td></tr>
+            <tr><td>Pro</td><td>Bs. 590/mes</td><td>Clinica en crecimiento</td><td>50% primera mensualidad</td></tr>
+            <tr><td>Clinic</td><td>Bs. 990/mes</td><td>Clinica con equipo</td><td>50% primera mensualidad</td></tr>
+          </tbody>
+        </table>
+        <div class="callout"><p><strong>Oferta fundadores:</strong> primeros 10 clientes a Bs. 290, Bs. 490 y Bs. 790/mes. Onboarding opcional: Bs. 290, Bs. 690 o Bs. 1.490.</p></div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <div class="topline">Gesti-OS</div>
+        <h2>Gestion operativa para pymes que ya sienten el desorden.</h2>
+        <table>
+          <thead><tr><th>Plan</th><th>Precio</th><th>Implementacion</th><th>Comision</th></tr></thead>
+          <tbody>
+            <tr><td>Starter</td><td>Bs. 490/mes</td><td>No obligatoria</td><td>50% primera mensualidad</td></tr>
+            <tr><td>Operativo</td><td>Bs. 790/mes</td><td>Recomendada</td><td>50% primera mensualidad</td></tr>
+            <tr><td>Pro</td><td>Bs. 1.290/mes</td><td>Recomendada</td><td>50% primera mensualidad</td></tr>
+            <tr><td>Enterprise</td><td>desde Bs. 2.490/mes</td><td>Cotizada</td><td>8% primer pago</td></tr>
+          </tbody>
+        </table>
+        <p class="small">Implementacion opcional: Kickstart Bs. 790, Operativa Bs. 1.900, Procesos a medida desde Bs. 5.000.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <div class="topline">Paginas web</div>
+        <h2>La web se vende como captacion y seguimiento, no como brochure.</h2>
+        <div class="grid cols-4">
+          <div class="card"><h3>Landing Express</h3><div class="price">Bs. 1.490</div><p class="small">1 pagina, copy, formulario, CTA.</p></div>
+          <div class="card"><h3>Web Negocio</h3><div class="price">Bs. 2.900</div><p class="small">5 secciones, SEO local, CRM simple.</p></div>
+          <div class="card"><h3>Web Pro IA</h3><div class="price">Bs. 5.900</div><p class="small">Web + campana + contenido inicial.</p></div>
+          <div class="card"><h3>Portal / SaaS</h3><div class="price">Bs. 9.500+</div><p class="small">MVP, auth, dashboard y base de datos.</p></div>
+        </div>
+        <p class="small">Comision unica: Landing 10%; Web Negocio/Web Pro IA 12%; Portal/SaaS 8% o 10% con margen aprobado.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <div class="topline">Marketing con Higgsfield</div>
+        <h2>Contenido mensual que trae conversaciones, no solo vistas.</h2>
+        <table>
+          <thead><tr><th>Paquete</th><th>Precio</th><th>Incluye</th><th>Comision</th></tr></thead>
+          <tbody>
+            <tr><td>Video unit</td><td>Bs. 450</td><td>1 video completo</td><td>10%</td></tr>
+            <tr><td>Sprint 8</td><td>Bs. 2.200/mes</td><td>8 videos, 2 plataformas</td><td>15% primer mes</td></tr>
+            <tr><td>Growth 16</td><td>Bs. 3.900/mes</td><td>16 videos, 3 plataformas</td><td>15% primer mes</td></tr>
+            <tr><td>Authority 24</td><td>Bs. 6.500/mes</td><td>24 videos, 4 plataformas</td><td>15% primer mes</td></tr>
+          </tbody>
+        </table>
+        <p class="small">Precio intro primeros 5 clientes: Sprint 8 Bs. 1.800, Growth 16 Bs. 3.200, Authority 24 Bs. 5.500.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <div class="topline">Conectores</div>
+        <h2>Los conectores se venden como infraestructura de publicacion aprobada.</h2>
+        <div class="grid cols-4">
+          <div class="card"><h3>TikTok API</h3><div class="price">Bs. 900</div><p class="small">+ Bs. 150/mes monitoreo.</p></div>
+          <div class="card"><h3>YouTube Shorts</h3><div class="price">Bs. 900</div><p class="small">+ Bs. 150/mes monitoreo.</p></div>
+          <div class="card"><h3>LinkedIn API</h3><div class="price">Bs. 900</div><p class="small">+ Bs. 150/mes monitoreo.</p></div>
+          <div class="card"><h3>n8n flow</h3><div class="price">Bs. 1.800</div><p class="small">+ Bs. 350/mes monitoreo.</p></div>
+        </div>
+        <p class="small">Importante: la aprobacion de TikTok, YouTube o LinkedIn no se garantiza. Se cobra configuracion y operacion, no la aprobacion de la plataforma.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <div class="topline">Comisiones</div>
+        <h2>Que el vendedor entienda facil cuanto gana.</h2>
+        <div class="chart-wrap"><canvas id="commissionChart"></canvas></div>
+        <p class="small">Politica final: una venta, una comision. Se calcula sobre el primer cobro neto, sin meses futuros.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <div class="topline">Guion comercial</div>
+        <h2>El vendedor no ofrece tecnologia. Detecta perdida y ofrece orden.</h2>
+        <div class="grid cols-2">
+          <div class="card"><span class="pill">DentalGest</span><p>Si una clinica responde por redes pero no registra ni hace seguimiento, esta perdiendo pacientes.</p></div>
+          <div class="card"><span class="pill">Gesti-OS</span><p>Si una empresa necesita preguntar por WhatsApp para saber que pasa, necesita un tablero.</p></div>
+          <div class="card"><span class="pill">Web</span><p>Si el cliente revisa Instagram y no entiende la oferta, falta una pagina que venda.</p></div>
+          <div class="card"><span class="pill">Higgsfield</span><p>Si no saben que publicar, vendemos ideas, guion, video, caption y CTA.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <div class="topline">Reglas de venta</div>
+        <h2>Comision solo sobre dinero cobrado.</h2>
+        <div class="grid cols-3">
+          <div class="card"><h3>1. Nada gratis eterno</h3><p>Diagnostico corto, demo corta o 3 ideas. Despues se vende paquete.</p></div>
+          <div class="card"><h3>2. Sin prometer resultados</h3><p>Prometemos sistema, seguimiento y mejor ejecucion. No ventas garantizadas.</p></div>
+          <div class="card"><h3>3. Aprobacion primero</h3><p>No contactar ni publicar por ONIA sin aprobacion explicita.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide dark">
+      <div class="slide-inner">
+        <div class="topline">CTA interno</div>
+        <h2>Primer objetivo: demos, no contratos gigantes.</h2>
+        <p>Usar DentalGest para clinicas, Gesti-OS para operaciones, Web ONIA para captacion y Higgsfield para prueba visual rapida.</p>
+        <div class="callout"><p><strong>Siguiente paso del vendedor:</strong> conseguir una demo calificada o pedir permiso para enviar auditoria corta.</p></div>
+      </div>
+    </section>
+  </main>
+
+  <div class="nav">
+    <button onclick="prevSlide()" aria-label="Anterior">&lt;</button>
+    <span class="counter"><span id="current">1</span> / <span id="total">11</span></span>
+    <button onclick="nextSlide()" aria-label="Siguiente">&gt;</button>
+  </div>
+
+  <script>
+    let current = 1;
+    const slides = [...document.querySelectorAll('.slide')];
+    const total = slides.length;
+    document.getElementById('total').textContent = total;
+
+    function showSlide(n) {
+      current = Math.max(1, Math.min(total, n));
+      slides.forEach((slide, index) => slide.classList.toggle('active', index === current - 1));
+      document.getElementById('current').textContent = current;
+      document.getElementById('progress').style.width = (current / total * 100) + '%';
+    }
+
+    function nextSlide() { showSlide(current + 1); }
+    function prevSlide() { showSlide(current - 1); }
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'ArrowRight' || event.key === ' ') {
+        event.preventDefault();
+        nextSlide();
+      }
+      if (event.key === 'ArrowLeft') {
+        event.preventDefault();
+        prevSlide();
+      }
+    });
+
+    const ctx = document.getElementById('commissionChart');
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['DentalGest Pro', 'Gesti-OS Pro', 'Landing', 'Growth 16'],
+        datasets: [{
+          label: 'Comision estimada primer cobro (Bs.)',
+          data: [295, 645, 149, 585],
+          backgroundColor: ['#2563eb', '#059669', '#d97706', '#7c3aed']
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          y: { beginAtZero: true, ticks: { color: '#334155' } },
+          x: { ticks: { color: '#334155' } }
+        }
+      }
+    });
+
+    showSlide(1);
+  </script>
+</body>
+</html>

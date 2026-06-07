@@ -1,0 +1,38 @@
+[
+  {
+    "id": "f83cf9f3-910a-4f5c-8d98-d5a9a8c31ce6",
+    "status": "completed",
+    "display_name": "Seedance 2.0",
+    "job_set_type": "seedance_2_0",
+    "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/hf_20260605_000057_f83cf9f3-910a-4f5c-8d98-d5a9a8c31ce6.mp4",
+    "created_at": 1780617657.754199,
+    "params": {
+      "width": 720,
+      "height": 1280,
+      "prompt": "Animate this exact approved portrait into a 5-second vertical phone-camera creator clip. Keep Sergio's face and identity locked: no face morphing, no changed eyes, no changed eyebrows, no changed nose, no changed mouth, no changed jawline, no changed chin, no changed ears, no changed hairstyle, no long neck, no age change. Preserve the all-black outfit exactly: black t-shirt, black pants, no logos. Motion must be extremely subtle and realistic: tiny natural breathing, one small blink, slight head micro-movement, barely visible shoulder movement, camera almost still. No talking mouth movement, no subtitles, no text overlays, no social UI, no watermarks, no new objects, no private screen data. Realistic indoor light, natural phone-camera feel.",
+      "genre": "auto",
+      "medias": [
+        {
+          "data": {
+            "id": "41d3c86b-a981-4610-8166-01ca18d2c85d",
+            "url": "https://d2ol7oe51mr4n9.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/41d3c86b-a981-4610-8166-01ca18d2c85d.png",
+            "type": "media_input"
+          },
+          "role": "start_image"
+        }
+      ],
+      "duration": 5,
+      "resolution": "720p",
+      "aspect_ratio": "9:16",
+      "generate_audio": true,
+      "multi_shots": false,
+      "multi_shot_mode": "custom",
+      "multi_prompt": [],
+      "speedramp": "auto",
+      "reference_elements": [],
+      "prompt_language": "en",
+      "mode": "std",
+      "model": "seedance_2_0"
+    }
+  }
+]

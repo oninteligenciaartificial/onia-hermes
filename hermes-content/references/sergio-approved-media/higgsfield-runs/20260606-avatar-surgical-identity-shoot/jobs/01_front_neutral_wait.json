@@ -1,0 +1,26 @@
+﻿{
+  "id": "7de2084b-b4e4-4a0e-a77b-856ce8ce7d46",
+  "status": "completed",
+  "display_name": "Nano Banana Pro",
+  "job_set_type": "nano_banana_2",
+  "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/hf_20260606_034155_7de2084b-b4e4-4a0e-a77b-856ce8ce7d46.png",
+  "created_at": 1780717315.852638,
+  "params": {
+    "width": 3072,
+    "height": 5504,
+    "aspect_ratio": "9:16",
+    "resolution": "4k",
+    "batch_size": 1,
+    "input_images": [
+      {
+        "id": "933b46fd-9b71-4b3d-9cc0-38f1cceca3e0",
+        "url": "https://d2ol7oe51mr4n9.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/933b46fd-9b71-4b3d-9cc0-38f1cceca3e0_resize.jpg",
+        "type": "media_input"
+      }
+    ],
+    "input_image": null,
+    "application": null,
+    "surface": null,
+    "prompt": "Use the uploaded reference image as the exact identity, exact face, exact angle, and exact facial geometry source. Create a premium cinematic AI avatar photoshoot portrait of the same real person, Sergio. This is a surgical identity-preserving edit, not a redesign. Preserve the exact same facial identity: same youthful age, same long natural face shape, same forehead, same dark almond eyes with natural asymmetry, same eye spacing, same eyelids, same thick dark eyebrows, same straight nose, same lips, same jawline, same chin, same ears when visible, same black Italian side-part hairstyle, same hairline, same skin tone, same natural presence. Improve only production quality: clean temporary pimples, acne spots, harsh flash texture, excessive shine, small lighting wrinkles and under-eye fatigue. Keep realistic pores, natural skin texture, natural facial asymmetry, and human detail. Hair should look alive, groomed, glossy, and neatly side-parted, not falling forward. Wardrobe: polished black blazer over a clean black crewneck shirt, modern entrepreneur aesthetic. Lighting: premium cinematic soft key light, realistic catchlights, crisp facial clarity, commercial-quality portrait. Background: clean modern studio or office, softly blurred, no logos. Do not change the face. Do not make him older, thinner, wider-jawed, more generic, plastic, anime, cartoon, over-smoothed, or like another model. Do not enlarge or separate the eyes. Do not reshape the nose, mouth, teeth, jaw, chin, neck, hairline, or skull. No scars, no neck scratches, no distorted mouth, no dead eyes, no deformed anatomy."
+  }
+}

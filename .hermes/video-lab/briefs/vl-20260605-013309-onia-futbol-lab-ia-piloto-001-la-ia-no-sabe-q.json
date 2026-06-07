@@ -1,0 +1,37 @@
+{
+  "ok": true,
+  "job_id": "vl-20260605-013309-onia-futbol-lab-ia-piloto-001-la-ia-no-sabe-q",
+  "lane": "onia",
+  "topic": "Futbol Lab IA piloto-001 - La IA no sabe quien gana el Mundial, pero si encuentra trampas tacticas",
+  "objective": "Crear prueba animada 9:16 con Profe Pixel, VARcito, pizarra tactica, humor visual serio/divertido, cero clips oficiales, cero logos, cero likeness de jugadores reales",
+  "audience": "fans de futbol de 16 a 45 anos que quieren entender tactica del Mundial con humor, datos claros y visuales generados con IA",
+  "business": "",
+  "offer": "",
+  "style": "animacion vertical 9:16, pizarra tactica, personajes ficticios, energia de short educativo, serio en datos y gracioso en remates visuales",
+  "model_recommendation": "higgsfield",
+  "approval_state": "waiting_approval",
+  "state": "waiting_approval",
+  "created_at": "2026-06-05T05:33:09Z",
+  "updated_at": "2026-06-05T05:33:09Z",
+  "published_id": null,
+  "video_url": null,
+  "error": null,
+  "next_action": "approve_brief",
+  "hook": "La IA no sabe quien gana el Mundial... pero si puede ver la trampa tactica antes que tu grupo de WhatsApp.",
+  "script": [
+    "La IA no sabe quien gana el Mundial... pero si puede ver la trampa tactica antes que tu grupo de WhatsApp.",
+    "Profe Pixel abre la pizarra: cuando un equipo presiona alto, el rival no necesita magia; necesita encontrar el pase a la espalda.",
+    "VARcito se emociona y marca alerta roja: si los laterales suben al mismo tiempo, queda una autopista para el contragolpe.",
+    "Conclusion seria: no hay prediccion segura, pero si patrones que se repiten. En Futbol Lab IA los convertimos en historias visuales."
+  ],
+  "shot_list": [
+    "0-2s: balon generico flotando sobre pizarra neon, texto grande del hook",
+    "2-6s: Profe Pixel aparece frente a una cancha tactica abstracta, serio pero expresivo",
+    "6-14s: flechas animadas muestran presion alta, pase a la espalda y espacio libre",
+    "14-22s: VARcito salta dentro de un monitor generico y activa alerta comica de autopista tactica",
+    "22-30s: cierre con tablero limpio, CTA: Futbol explicado con IA, sin humo"
+  ],
+  "visual_style": "animacion vertical 9:16, pizarra tactica, personajes ficticios, energia de short educativo, serio en datos y gracioso en remates visuales",
+  "higgsfield_prompt": "Vertical 9:16 animated football explainer for YouTube Shorts. Original fictional characters only: Profe Pixel, a friendly animated tactical analyst, and VARcito, a small comic generic VAR monitor assistant. Scene: abstract football tactics board, neon white lines, green pitch grid, moving arrows, ball icon, no official logos, no national federation badges, no real player likeness, no broadcast footage. Tone: serious tactical insight with funny visual timing. Hook in first 2 seconds: 'La IA no sabe quien gana el Mundial... pero si ve la trampa tactica'. Show high pressing, fullbacks pushing too high, space behind the line, counterattack lane. Clean subtitles area, fast cuts, polished but playful, original visuals, no copied IP.",
+  "caption": "La IA no adivina campeones. Encuentra patrones.\n\nFutbol Lab IA: tactica, Mundial y humor visual sin clips robados."
+}

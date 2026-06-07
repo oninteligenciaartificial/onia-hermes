@@ -1,0 +1,11 @@
+Create one single premium vertical 9:16 start frame for a Kling 3.0 video of Sergio.
+
+Use the attached best previous Sergio avatar results as the face, hair, outfit and environment base. Keep the warm industrial workspace, black blazer over black shirt, young natural face, slightly robust shoulders, healthy glossy black Italian side-part hair, and friendly founder/operator expression.
+
+Mouth and teeth are the main correction: Sergio has a perfect natural smile with straight aligned upper teeth, no crooked teeth, no uneven front tooth, no missing or duplicated teeth, no warped mouth, no gum distortion. Teeth should look clean, aligned and attractive, but not fake veneers and not over-white.
+
+Expression for animation: Sergio looks directly at camera with a small open smile, lips naturally parted, upper teeth visible enough for dental QA, calm and charismatic, ready to silently mouth a short line. Keep face stable, realistic skin texture and normal human asymmetry.
+
+Composition: vertical 9:16, chest-up framing, eye-level camera, no hands, no text, no captions, no watermark, no UI overlay. The image must be a single portrait, not a collage, not a contact sheet.
+
+Avoid: closed mouth, huge grin, fake perfect teeth, crooked teeth, extra teeth, tongue artifacts, warped lips, AI beauty filter, plastic skin, older face, different person, thin neck, skinny shoulders, hair falling forward, distorted blazer.

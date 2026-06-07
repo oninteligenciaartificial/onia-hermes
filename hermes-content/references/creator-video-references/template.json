@@ -1,0 +1,60 @@
+{
+  "id": "creator-video-ref-YYYYMMDD-001",
+  "status": "pending_analysis",
+  "source": {
+    "platform": "instagram|tiktok|youtube|other",
+    "url": "",
+    "creator_handle": "",
+    "date_added": "2026-06-01",
+    "local_file": "",
+    "permission_notes": "Reference only. No permission to copy likeness, audio, exact edit or claims."
+  },
+  "content": {
+    "topic": "",
+    "niche": "",
+    "audience": "",
+    "video_length_seconds": null,
+    "language": "",
+    "offer_or_cta": ""
+  },
+  "analysis": {
+    "first_two_seconds": "",
+    "hook_type": "",
+    "hook_line_or_visual_summary": "",
+    "narrative_shape": "",
+    "scene_beats": [],
+    "camera_behavior": "",
+    "cut_rhythm": "",
+    "subtitle_style": "",
+    "audio_style": "",
+    "proof_mechanism": "",
+    "cta_style": "",
+    "retention_devices": [],
+    "emotional_tone": ""
+  },
+  "onia_adaptation": {
+    "usable_patterns": [],
+    "best_for": [],
+    "sample_onia_hook": "",
+    "sample_higgsfield_prompt_block": "",
+    "adaptation_notes": ""
+  },
+  "do_not_copy": [
+    "creator likeness",
+    "voice",
+    "exact words",
+    "music",
+    "brand assets",
+    "exact edit sequence",
+    "unverified claims"
+  ],
+  "scores": {
+    "hook_strength": null,
+    "retention_strength": null,
+    "commercial_clarity": null,
+    "visual_quality": null,
+    "originality_potential": null,
+    "ethical_safety": null
+  },
+  "notes": ""
+}

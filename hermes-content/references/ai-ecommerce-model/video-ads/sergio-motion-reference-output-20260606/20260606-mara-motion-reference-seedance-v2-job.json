@@ -1,0 +1,46 @@
+[
+  {
+    "id": "5166dcf2-fba5-40d5-8bf0-31bf915ce58d",
+    "status": "completed",
+    "display_name": "Seedance 2.0",
+    "job_set_type": "seedance_2_0",
+    "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/hf_20260606_142419_5166dcf2-fba5-40d5-8bf0-31bf915ce58d.mp4",
+    "created_at": 1780755859.493097,
+    "params": {
+      "width": 720,
+      "height": 1280,
+      "prompt": "Use the uploaded reference video as a motion-control guide for timing, camera angle, posture, hand gestures, leaning rhythm, head turns, speaking energy and body language. Replace the person with Mara Vale, the fictional adult red-haired AI model. Preserve Mara's exact identity from the image reference: same fair freckled skin, copper-red wavy hair, green-hazel eyes, nose, lips, jawline, warm smile and healthy adult proportions. Keep expressive hand gestures and close-camera storytime energy from the reference, but make the scene a warm modern apartment instead of an office: soft curtains, lamp, sofa, side table, plant, luxury UGC atmosphere. Outfit must be brand-safe and premium: cream fitted ribbed top under a relaxed ivory linen shirt or modest cream blazer, no deep cleavage, no logos. Natural human movement, realistic hands, expressive but not exaggerated, no robotic mouth, no identity drift, no different face, no text, no watermark.",
+      "genre": "auto",
+      "medias": [
+        {
+          "data": {
+            "id": "8dc5726b-32a5-4da5-bfdb-74a5f342409c",
+            "url": "https://d2ol7oe51mr4n9.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/8dc5726b-32a5-4da5-bfdb-74a5f342409c_resize.jpg",
+            "type": "media_input"
+          },
+          "role": "start_image"
+        },
+        {
+          "data": {
+            "id": "a839e72e-4ff0-4e44-b5f3-30088aaedf9c",
+            "url": "https://d2ol7oe51mr4n9.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/a839e72e-4ff0-4e44-b5f3-30088aaedf9c.mp4",
+            "type": "video_input"
+          },
+          "role": "video"
+        }
+      ],
+      "duration": 10,
+      "resolution": "720p",
+      "aspect_ratio": "9:16",
+      "generate_audio": true,
+      "multi_shots": false,
+      "multi_shot_mode": "custom",
+      "multi_prompt": [],
+      "speedramp": "auto",
+      "reference_elements": [],
+      "prompt_language": "en",
+      "mode": "std",
+      "model": "seedance_2_0"
+    }
+  }
+]

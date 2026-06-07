@@ -1,0 +1,24 @@
+{
+  "id": "da9a8280-c6a4-4bbe-a5c4-7b72c0b19885",
+  "status": "completed",
+  "display_name": "Nano Banana Pro",
+  "job_set_type": "nano_banana_2",
+  "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/hf_20260605_045205_da9a8280-c6a4-4bbe-a5c4-7b72c0b19885.png",
+  "created_at": 1780635125.8801,
+  "params": {
+    "width": 5504,
+    "height": 3072,
+    "aspect_ratio": "16:9",
+    "resolution": "4k",
+    "model": "nano_banana_2",
+    "prompt_file": "nano-banana-face-teeth-lock-prompt.txt",
+    "source_images": [
+      "../../processed/drive_14fhpzjmlrQ7VvzeBsDo1C-aDcSmZN-vR/drive_14fhpzjmlrQ7VvzeBsDo1C-aDcSmZN-vR_preview.jpg",
+      "../../processed/drive_1WFyyMWxKz8bXnkk2N5yMjJ3yme_TIxk5/drive_1WFyyMWxKz8bXnkk2N5yMjJ3yme_TIxk5_preview.jpg",
+      "../../processed/drive_107W3hsKS9bbE9PfT_tTwoCPaK-oBufU_/drive_107W3hsKS9bbE9PfT_tTwoCPaK-oBufU__preview.jpg",
+      "../../processed/IMG_0330/IMG_0330_preview.jpg",
+      "../../processed/IMG_0331/IMG_0331_preview.jpg"
+    ],
+    "notes": "Internal identity reference only. Target: face/teeth lock contact sheet for future Kling 3.0 and Soul ID tests."
+  }
+}

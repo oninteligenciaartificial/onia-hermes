@@ -1,0 +1,17 @@
+Generate an internal 9:16 premium talking-head avatar test of Sergio for identity QA.
+
+Use all provided Sergio references as strict identity locks. Preserve the same young face, natural asymmetry, brow shape, eye spacing, eye size, nose, lips, jaw, cheeks, ears, neck length, skin tone, hairline, and clean black side-part hairstyle. The hair must look alive, glossy, healthy, combed, and stable, not falling forward.
+
+Dental lock: when the mouth opens or forms a small smile, preserve the exact real teeth from the real dental reference photos: same upper front teeth shape, width, spacing, smile arc, lip shape, and mouth corners. Do not invent new teeth. Do not whiten, straighten, resize, replace, add, remove, or perfect the teeth.
+
+Scene: realistic phone-camera creator video in a simple modern workspace. Sergio wears a clean black crewneck or black shirt with a black blazer, no logos. Natural soft light, neutral color, realistic skin texture, no cinematic grade, no beauty filter, no wax or plastic skin.
+
+Action: Sergio looks at the camera with a calm founder/operator expression and silently mouths this short Spanish line: "La IA no es magia. Es ejecucion con sistemas." Keep the expression friendly, natural, young, and confident. Body should look natural and slightly more robust than skinny, with normal shoulders and neck.
+
+Camera: locked vertical portrait, chest-up framing, eye-level lens, no zoom, no pan, no dramatic movement.
+
+Motion: subtle natural head movement, realistic breathing, natural blink, controlled mouth movement, stable shoulders. Keep the face identity locked across all frames.
+
+Sound: off. Do not generate voice. Do not add subtitles, captions, text, watermark, UI overlays, or logos.
+
+Avoid: AI filter, plastic skin, glossy cinematic grade, older face, different person, face morphing, eyes moving apart, one eye becoming much larger, new teeth, perfect Hollywood teeth, teeth glitches, warped mouth, tongue artifacts, long thin neck, skinny shoulders, hair falling forward, collapsed side part, distorted blazer, fake text, subtitles, watermark, UI overlay.

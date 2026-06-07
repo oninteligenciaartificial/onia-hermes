@@ -1,0 +1,22 @@
+﻿{
+    "run_name":  "20260606-validation-sergio-reference-v3",
+    "status":  "internal_draft_not_published",
+    "model":  "seedance_2_0",
+    "duration":  10,
+    "reference_seconds":  12,
+    "source_copy":  "C:\\dev\\Expermimentos\\Hermes\\hermes-content\\references\\ai-ecommerce-model\\video-ads\\motion-control-runs\\20260606-validation-sergio-reference-v3\\reference-source.mp4",
+    "driving_clip":  "C:\\dev\\Expermimentos\\Hermes\\hermes-content\\references\\ai-ecommerce-model\\video-ads\\motion-control-runs\\20260606-validation-sergio-reference-v3\\reference-driving-clip.mp4",
+    "identity_image":  "C:\\dev\\Expermimentos\\Hermes\\hermes-content\\references\\ai-ecommerce-model\\video-ads\\full-body-motion-control-v1\\20260606-mara-full-body-apartment-still-v1.png",
+    "metadata":  "C:\\dev\\Expermimentos\\Hermes\\hermes-content\\references\\ai-ecommerce-model\\video-ads\\motion-control-runs\\20260606-validation-sergio-reference-v3\\reference-metadata.ffprobe.json",
+    "prompt":  "C:\\dev\\Expermimentos\\Hermes\\hermes-content\\references\\ai-ecommerce-model\\video-ads\\motion-control-runs\\20260606-validation-sergio-reference-v3\\higgsfield-motion-prompt.txt",
+    "upload_id":  "a6405832-a6f0-44a1-871a-26129f713cf2",
+    "upload_url":  "https://d2ol7oe51mr4n9.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/a6405832-a6f0-44a1-871a-26129f713cf2.mp4",
+    "cost":  {
+                 "credits":  22.5,
+                 "raw":  "22.5 credits"
+             },
+    "result_url":  null,
+    "downloaded_result":  null,
+    "visual_clean":  null,
+    "rights_note":  "Use only local, owned, licensed, or explicitly authorized reference videos for exact motion control. Public TikTok URLs are structure-only unless rights are confirmed."
+}

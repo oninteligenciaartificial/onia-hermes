@@ -1,0 +1,38 @@
+[
+  {
+    "id": "b43b0560-322f-4be0-8601-77148720e67a",
+    "status": "completed",
+    "display_name": "Seedance 2.0",
+    "job_set_type": "seedance_2_0",
+    "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/hf_20260605_001645_b43b0560-322f-4be0-8601-77148720e67a.mp4",
+    "created_at": 1780618605.065077,
+    "params": {
+      "width": 720,
+      "height": 1280,
+      "prompt": "Animate this exact identity-preserving edited photo into a 5-second vertical internal test video. Keep the same person and same face from the image absolutely stable: no face morphing, no eye changes, no nose changes, no mouth changes, no jawline changes, no neck lengthening, no age change. Preserve the black t-shirt and dark pants exactly, no logos or text. Motion only: very subtle natural breathing, tiny head micro movement, one natural blink, tiny camera handheld realism. Do not talk, do not open mouth, do not add subtitles, do not add social UI, no watermark, no new objects, no background change, no private screen data. Natural phone-camera realism.",
+      "genre": "auto",
+      "medias": [
+        {
+          "data": {
+            "id": "89641eaa-032c-426c-84ae-8238acb30366",
+            "url": "https://d2ol7oe51mr4n9.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/89641eaa-032c-426c-84ae-8238acb30366_resize.jpg",
+            "type": "media_input"
+          },
+          "role": "start_image"
+        }
+      ],
+      "duration": 5,
+      "resolution": "720p",
+      "aspect_ratio": "9:16",
+      "generate_audio": true,
+      "multi_shots": false,
+      "multi_shot_mode": "custom",
+      "multi_prompt": [],
+      "speedramp": "auto",
+      "reference_elements": [],
+      "prompt_language": "en",
+      "mode": "std",
+      "model": "seedance_2_0"
+    }
+  }
+]

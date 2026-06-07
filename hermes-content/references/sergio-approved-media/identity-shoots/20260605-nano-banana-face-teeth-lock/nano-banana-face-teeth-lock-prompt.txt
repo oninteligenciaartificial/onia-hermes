@@ -1,0 +1,17 @@
+Create a high-fidelity identity reference contact sheet for Sergio, for internal avatar consistency only. Use the attached real Sergio photos as strict identity anchors. Do not invent a new face.
+
+Primary objective: preserve Sergio's real face and teeth as a reusable identity lock for future AI video. The open-mouth and smiling reference photos are the dental lock: preserve the same tooth shape, tooth spacing, upper front teeth proportions, gum visibility, smile width, mouth corners, lip shape and natural asymmetry. Do not whiten, perfect, straighten, resize, replace, or beautify the teeth.
+
+Output: one clean 16:9 studio contact sheet with 6 labeled-looking but text-free panels, arranged in two rows of three:
+1. neutral front face, closed mouth
+2. slight smile front face, lips barely open
+3. full natural smile, teeth visible, matching the real dental references
+4. 3/4 view left, neutral expression
+5. 3/4 view right, slight smile
+6. side profile with side-part hair, natural smile
+
+Identity constraints: same young Sergio from the references, same real brow shape, eye spacing, eye size, nose, lips, jaw, cheeks, skin tone, neck, ears, hairline and side-part black hair. Keep him youthful and natural. Keep the side-part hairstyle clean and real, not over-styled.
+
+Style: realistic studio/phone-camera reference photography, neutral soft light, natural skin texture, no beauty filter, no cinematic grading, no glossy AI look. Outfit can be a plain black crewneck or black shirt; no logos. Background plain light gray, consistent lighting across all panels.
+
+Critical avoid: no different person, no model face, no older face, no plastic skin, no wax skin, no airbrushed skin, no beauty filter, no exaggerated jaw, no altered eye spacing, no one eye bigger, no new teeth, no perfect Hollywood teeth, no extra teeth, no missing teeth, no warped mouth, no tongue artifacts, no braces, no text, no watermark, no UI overlay, no labels, no hands.

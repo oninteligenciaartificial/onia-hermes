@@ -1,0 +1,18 @@
+[0.00-9.36] Kling acaba de lanzar mouse en control 3.0 con en que por 5 puedes mantener la consistencia de tu personaje, ahora de copiar los movimientos de cualquier video internet.
+[9.36-16.60] Así que, lo he puesto a prueba para ver si realmente merece la pena. De momento, solo está disponible en la web oficial de Kling.
+[16.60-23.40] Aunque también lo tienes en Xfield, pero si la función de elements que es justo la que te permite mantener mejor la consistencia.
+[23.40-28.72] Por lo que me hace pensar que te están vendiendo Kling 3.0 cuando en realidad es Kling 2.6.
+[28.72-33.84] Y en FreePik aún no está disponible así que, de momento, toca ir a la web oficial de Kling.
+[33.84-38.28] Antes de nada, necesitas generar imágenes de tu personaje desde todos los ángulos.
+[38.28-46.92] Así que, via FreePik selecciona Nano Vananapro, suve le imagen de tu personaje aquí y usa los promes que te doy para generar estas 4 imágenes.
+[46.92-57.72] El recuerda que al menos una de las imágenes tiene que salir sonriendo con los dientes, o si no la hayas se los inventará cada vez que sonrías y eso rompe por completo la consistencia.
+[57.72-63.24] Una vez tienes las imágenes, via Kling suve tu video de referencia a la izquierda y tu imagen a la derecha.
+[63.24-66.24] Ahora bajó a aparecer a esta opción de elements.
+[66.24-75.40] Le das a crear el elemento, le subes las 4 imágenes desde todos los ángulos y describes a tu personaje aquí y o le das al botón automático y listo.
+[75.40-81.24] A partir de ahora, Kling sabrá exactamente todo sobre tus rasgos y mantendrá mejor la consistencia al generar.
+[81.24-85.16] Ahora, tras probarlo en diferentes situaciones, estos son mis consejos.
+[85.16-93.16] Olo lado, si descarga su video de internet y al usarlo en Kling te da error, reimportalo en tu editor y vuelve a exportarlo sin cambiar nada.
+[93.16-96.88] Solo con eso, muchas veces ya empieza a funcionar bastante bien.
+[96.88-103.36] Por otro lado, cuanto más parecidas sea tu imagen al primer fotografa del video de referencia a mejor será tu resultado.
+[103.44-109.08] Así que, usa ese fotografa en nano-anana para generar la tu personaje en la misma postura y en cuadre.
+[109.08-116.24] E intenta evitar videos con mucho movimiento de cámara, cuanto más estable sea el tweet, no más viable será el resultado.

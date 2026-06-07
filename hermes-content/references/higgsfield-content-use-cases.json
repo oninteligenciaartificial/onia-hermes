@@ -1,0 +1,309 @@
+{
+  "version": "2026-06-01",
+  "default_negative_prompt": "No copyrighted logos unless provided. No third-party likeness. No fake testimonials. No fake results. No private data. No misleading medical, financial or legal claims. No generated Sergio face unless explicitly approved. No placeholder text.",
+  "use_cases": [
+    {
+      "industry": "clinicas_dentales",
+      "onia_offers": ["DentalGest", "landing dental", "videos educativos", "seguimiento de consultas"],
+      "video_ideas": ["lead perdido por seguimiento", "demo consulta a cita", "presupuestos pendientes", "post-consulta inteligente"],
+      "hooks": ["No siempre pierdes pacientes por precio.", "Si tus presupuestos quedan en visto, esto te interesa.", "Tu recepcion no deberia depender de notas sueltas."],
+      "cta": ["Escribe demo", "Pide una auditoria de seguimiento"],
+      "safe_claims": ["ayuda a ordenar consultas", "puede mejorar seguimiento", "centraliza oportunidades"],
+      "forbidden_claims": ["curas garantizadas", "resultados medicos", "testimonios inventados"],
+      "references_needed": ["mockup dashboard", "b-roll clinica", "logo aprobado", "capturas sin datos privados"]
+    },
+    {
+      "industry": "esteticas_dermatologia_belleza",
+      "onia_offers": ["videos de confianza", "agenda/CRM", "landing de tratamientos", "seguimiento de valoraciones"],
+      "video_ideas": ["mito vs realidad", "consulta a valoracion", "preguntas frecuentes", "confianza antes de agendar"],
+      "hooks": ["Tus consultas no deberian perderse en mensajes.", "La confianza se gana antes de la cita."],
+      "cta": ["Agenda una valoracion", "Pide informacion"],
+      "safe_claims": ["contenido informativo", "proceso de agenda claro", "seguimiento ordenado"],
+      "forbidden_claims": ["antes/despues falso", "resultados garantizados", "claims medicos no aprobados"],
+      "references_needed": ["b-roll recepcion", "visual limpio", "servicios aprobados", "restricciones medicas"]
+    },
+    {
+      "industry": "restaurantes_cafes",
+      "onia_offers": ["videos de menu", "landing de reservas", "contenido semanal", "flujo de reservas"],
+      "video_ideas": ["plato estrella", "promo dia flojo", "experiencia local", "que pedir primera vez"],
+      "hooks": ["Si estas en Santa Cruz y no sabes donde comer, mira esto.", "Este plato necesita video, no solo una foto."],
+      "cta": ["Reserva hoy", "Pide el menu"],
+      "safe_claims": ["muestra producto real", "promocion aprobada", "reserva simple"],
+      "forbidden_claims": ["resenas falsas", "descuentos no aprobados", "fotos ajenas"],
+      "references_needed": ["fotos platos", "menu", "ambiente", "promo aprobada"]
+    },
+    {
+      "industry": "inmobiliarias",
+      "onia_offers": ["videos de propiedad", "landing por propiedad", "CRM de interesados", "seguimiento de visitas"],
+      "video_ideas": ["walkthrough propiedad", "zona y beneficio", "asesor explicando", "lead a visita"],
+      "hooks": ["Una propiedad sin video claro pierde interesados antes de la visita.", "No vendas metros cuadrados, vende la vida que permite."],
+      "cta": ["Pide la ficha", "Agenda una visita"],
+      "safe_claims": ["mostrar espacios", "informacion aprobada", "agendar visita"],
+      "forbidden_claims": ["precios inventados", "disponibilidad no verificada", "inversion garantizada"],
+      "references_needed": ["fotos propiedad", "ubicacion aprobada", "precio aprobado", "datos de contacto"]
+    },
+    {
+      "industry": "gimnasios_fitness",
+      "onia_offers": ["videos reto/oferta", "landing inscripcion", "seguimiento de pruebas", "calendario mensual"],
+      "video_ideas": ["reto 7 dias", "tour gimnasio", "primera clase", "objeciones de empezar"],
+      "hooks": ["El problema no es motivacion, es empezar con un plan simple.", "Si tu gimnasio solo publica maquinas, estas perdiendo historias."],
+      "cta": ["Reserva una clase de prueba", "Escribe reto"],
+      "safe_claims": ["invita a probar", "muestra instalaciones", "explica modalidad"],
+      "forbidden_claims": ["transformaciones falsas", "promesas fisicas garantizadas"],
+      "references_needed": ["videos instalaciones", "horarios", "oferta aprobada", "entrenador autorizado"]
+    },
+    {
+      "industry": "ecommerce_tiendas",
+      "onia_offers": ["demos de producto", "videos UGC", "landing/oferta", "seguimiento de compras"],
+      "video_ideas": ["producto en uso", "unboxing", "comparativa", "preguntas frecuentes"],
+      "hooks": ["Una foto no explica por que alguien deberia comprarlo.", "Mira como se usa en 10 segundos."],
+      "cta": ["Pide catalogo", "Compra hoy"],
+      "safe_claims": ["demostracion de uso", "beneficios aprobados", "catalogo disponible"],
+      "forbidden_claims": ["stock falso", "garantias no aprobadas", "resenas inventadas"],
+      "references_needed": ["fotos producto", "beneficios reales", "precio aprobado", "catalogo"]
+    },
+    {
+      "industry": "marca_personal_profesionales",
+      "onia_offers": ["contenido founder-led", "agenda/landing", "videos educativos", "sistema de citas"],
+      "video_ideas": ["opinion experta", "errores comunes", "como trabajo", "caso anonimo"],
+      "hooks": ["Si vendes servicios, tu confianza se construye antes de la llamada.", "Tu contenido no tiene que ser viral; tiene que responder dudas reales."],
+      "cta": ["Agenda una llamada", "Guarda esto"],
+      "safe_claims": ["experiencia propia", "educacion general", "metodo de trabajo"],
+      "forbidden_claims": ["resultados garantizados", "casos privados", "promesas financieras o legales"],
+      "references_needed": ["foto profesional", "servicios", "tono de marca", "agenda"]
+    },
+    {
+      "industry": "salud_no_dental",
+      "onia_offers": ["videos educativos seguros", "agenda", "landing informativa", "seguimiento de consultas"],
+      "video_ideas": ["preguntas frecuentes", "preparacion consulta", "proceso agenda", "confianza equipo"],
+      "hooks": ["La primera impresion de tu consulta pasa antes de que el paciente llegue.", "Responder bien una duda puede convertirse en una cita."],
+      "cta": ["Agenda una consulta"],
+      "safe_claims": ["informacion general", "agenda clara", "acompanamiento administrativo"],
+      "forbidden_claims": ["diagnosticos", "curas", "resultados garantizados"],
+      "references_needed": ["restricciones medicas", "servicios aprobados", "b-roll consultorio"]
+    },
+    {
+      "industry": "educacion_cursos_academias",
+      "onia_offers": ["videos de captacion", "landing inscripcion", "CRM alumnos", "embudo seguimiento"],
+      "video_ideas": ["clase muestra", "temario", "objeciones alumno", "tour plataforma"],
+      "hooks": ["La gente no compra un curso; compra claridad sobre que va a lograr.", "Si tu curso no se entiende en video, estas perdiendo alumnos."],
+      "cta": ["Pide el temario", "Inscribete a la clase gratuita"],
+      "safe_claims": ["temario aprobado", "clase informativa", "proceso claro"],
+      "forbidden_claims": ["ingresos garantizados", "certificaciones no reales"],
+      "references_needed": ["temario", "profesor autorizado", "plataforma", "fecha aprobada"]
+    },
+    {
+      "industry": "turismo_hoteles_experiencias",
+      "onia_offers": ["videos de experiencia", "landing reserva", "calendario contenidos", "seguimiento consultas"],
+      "video_ideas": ["tour habitacion", "itinerario", "experiencia en primera persona", "fin de semana ideal"],
+      "hooks": ["La reserva empieza cuando alguien se imagina ahi.", "Tu lugar necesita sentirse antes de venderse."],
+      "cta": ["Consulta disponibilidad", "Reserva tu fecha"],
+      "safe_claims": ["mostrar experiencia", "disponibilidad confirmada", "reserva clara"],
+      "forbidden_claims": ["disponibilidad falsa", "ubicaciones enganosas", "resenas inventadas"],
+      "references_needed": ["fotos lugar", "precios aprobados", "fechas", "servicios incluidos"]
+    },
+    {
+      "industry": "automotriz_talleres_repuestos",
+      "onia_offers": ["videos de servicio", "landing cotizacion", "CRM consultas", "recordatorios mantenimiento"],
+      "video_ideas": ["tip mantenimiento", "proceso taller", "cotizacion rapida", "confianza tecnica"],
+      "hooks": ["Tu taller no solo vende arreglo, vende confianza.", "Si un cliente pregunta y nadie registra, ese trabajo se pierde."],
+      "cta": ["Pide cotizacion", "Agenda revision"],
+      "safe_claims": ["revision tecnica", "cotizacion sujeta a diagnostico", "proceso claro"],
+      "forbidden_claims": ["reparaciones garantizadas sin diagnostico", "marcas sin permiso"],
+      "references_needed": ["fotos taller", "servicios", "marcas autorizadas", "equipo"]
+    },
+    {
+      "industry": "construccion_arquitectura_interiorismo",
+      "onia_offers": ["videos de proyecto", "landing portafolio", "CRM cotizaciones", "contenido autoridad"],
+      "video_ideas": ["recorrido render/obra", "proceso diseno", "errores al construir", "portafolio narrado"],
+      "hooks": ["Antes de cotizar, el cliente necesita imaginar el resultado.", "Un buen proyecto se vende mejor cuando se explica visualmente."],
+      "cta": ["Pide una evaluacion", "Agenda una visita"],
+      "safe_claims": ["proceso visual", "portafolio aprobado", "cotizacion personalizada"],
+      "forbidden_claims": ["costos inventados", "permisos no confirmados", "obras no propias"],
+      "references_needed": ["renders propios", "fotos obra", "portfolio aprobado", "servicios"]
+    },
+    {
+      "industry": "servicios_locales",
+      "onia_offers": ["videos de confianza", "landing cotizacion", "seguimiento solicitudes", "SEO local"],
+      "video_ideas": ["problema comun", "proceso seguro", "urgencia y respuesta", "antes/despues real"],
+      "hooks": ["Cuando alguien tiene una urgencia, gana quien responde claro.", "Tu servicio necesita verse confiable en 5 segundos."],
+      "cta": ["Pide cotizacion", "Agenda servicio"],
+      "safe_claims": ["proceso real", "cotizacion clara", "respuesta ordenada"],
+      "forbidden_claims": ["garantias falsas", "fotos de trabajos ajenos"],
+      "references_needed": ["fotos reales", "servicios", "zonas de cobertura", "precios aprobados"]
+    },
+    {
+      "industry": "saas_software_b2b",
+      "onia_offers": ["demos de producto", "videos problema/solucion", "landing demo", "CRM seguimiento"],
+      "video_ideas": ["demo 30 segundos", "antes/despues operativo", "caso por rol", "problema especifico"],
+      "hooks": ["Tu software no necesita mas features; necesita que entiendan el problema.", "Una demo corta puede vender mas que una reunion larga."],
+      "cta": ["Pide demo", "Mira el flujo"],
+      "safe_claims": ["demo del flujo", "beneficio operativo", "caso de uso"],
+      "forbidden_claims": ["logos sin permiso", "metricas inventadas"],
+      "references_needed": ["capturas producto", "demo sin datos privados", "logo aprobado", "caso de uso"]
+    },
+    {
+      "industry": "sergio_marca_personal",
+      "onia_offers": ["contenido founder-led", "ONIA building in public", "captacion por confianza", "sistema de contenido"],
+      "video_ideas": ["maquina de contenido ONIA", "detras de escena Hermes+n8n+Higgsfield", "vender SaaS en Bolivia", "errores reales"],
+      "hooks": ["Estoy intentando convertir ONIA en una maquina que venda mientras construimos.", "No quiero hacer contenido bonito; quiero hacer contenido que traiga conversaciones."],
+      "cta": ["Escribeme tu rubro", "Te muestro el sistema", "Sigue el proceso"],
+      "safe_claims": ["proceso propio", "aprendizajes reales", "experimentos de ONIA"],
+      "forbidden_claims": ["ingresos inventados", "autoridad falsa", "exito rapido"],
+      "references_needed": ["clips Sergio aprobados", "pantallas Hermes", "capturas sin secretos", "workspace"]
+    }
+  ],
+  "first_production_batch": [
+    "sergio_marca_personal",
+    "clinicas_dentales",
+    "restaurantes_cafes",
+    "gestios_pymes_operaciones",
+    "web_onia_landing"
+  ],
+  "prompt_engineering_system": {
+    "version": "2026-06-01",
+    "research_sources": [
+      "https://higgsfield.ai/marketing-studio-intro",
+      "https://higgsfield.ai/marketing-automation",
+      "https://www.alici.ai/blog/ugc-hook-strategy-types-testing-2026",
+      "Higgsfield CLI: marketing-studio avatars/hooks/settings list"
+    ],
+    "core_rule": "A Higgsfield prompt must direct persona, setting, product/service action, camera behavior, 6-beat script structure, safe proof and negative constraints. Do not send generic ad prompts.",
+    "six_beat_structure": [
+      "0-2s hook: one clear visual/verbal interruption",
+      "2-5s problem: name the pain in plain language",
+      "5-10s mechanism: what changes or how the product/service works",
+      "10-18s demo: show it, do not only explain it",
+      "18-23s safe proof/detail: feature, process, routine or approved proof",
+      "23-30s CTA: one action only"
+    ],
+    "prompt_blocks_order": [
+      "job_set_type and mode",
+      "business and offer",
+      "target audience",
+      "ready character/persona",
+      "ready scenography/setting",
+      "hook line",
+      "scene flow",
+      "camera and edit language",
+      "audio/subtitle instruction",
+      "safe claims",
+      "negative prompt",
+      "CTA"
+    ],
+    "default_higgsfield_params": {
+      "job_set_type": "marketing_studio_video",
+      "aspect_ratio": "9:16",
+      "duration": 15,
+      "resolution": "720p",
+      "generate_audio": false
+    },
+    "mode_by_goal": {
+      "product_demo": "ugc_unboxing",
+      "hands_on_review": "product_review",
+      "service_explainer": "ugc_how_to",
+      "local_offer": "ugc",
+      "premium_story": "tv_spot",
+      "creative_test": "wild_card"
+    },
+    "quality_rules": [
+      "Use Spanish script lines, but prompt Higgsfield in English for better video direction.",
+      "Keep on-screen text under 6-8 words per caption.",
+      "Ask for visual change every 2-3 seconds.",
+      "Prefer demo/product action over review-only talking.",
+      "Mention exact gestures: pick up, open, pour, tap screen, show receipt, point to calendar.",
+      "Use one CTA. Do not mix follow, buy, comment and book in the same short.",
+      "Avoid fake scarcity, fake proof, exact performance claims and unapproved logos.",
+      "For long ads, generate 15s modules and edit them together instead of one vague 60s prompt."
+    ]
+  },
+  "ready_characters": [
+    {
+      "id": "practical_friend",
+      "name": "Amigo/a practico/a",
+      "use_for": ["ecommerce_tiendas", "servicios_locales", "gimnasios_fitness"],
+      "prompt": "casual local creator, friendly, direct, recommends like a friend, not an actor, natural gestures, phone-camera confidence",
+      "voice_style": "conversacional, corto, sin exagerar"
+    },
+    {
+      "id": "trusted_operator",
+      "name": "Operador/a confiable",
+      "use_for": ["clinicas_dentales", "esteticas_dermatologia_belleza", "saas_software_b2b"],
+      "prompt": "calm operator explaining a process clearly, professional but warm, avoids hype, shows steps and follow-up",
+      "voice_style": "sereno, claro, consultivo"
+    },
+    {
+      "id": "local_explorer",
+      "name": "Explorador/a local",
+      "use_for": ["restaurantes_cafes", "turismo_hoteles_experiencias", "inmobiliarias"],
+      "prompt": "local creator discovering a place, walking with phone camera, curious, spontaneous, shows environment before selling",
+      "voice_style": "natural, de recomendacion local"
+    },
+    {
+      "id": "founder_builder",
+      "name": "Fundador/a en proceso",
+      "use_for": ["marca_personal_profesionales", "sergio_marca_personal", "saas_software_b2b"],
+      "prompt": "founder-led creator at desk or workspace, honest, practical, building in public, shows real workflow without luxury",
+      "voice_style": "directo, humano, sin guru"
+    }
+  ],
+  "ready_scenographies": [
+    {
+      "id": "home_kitchen_counter",
+      "name": "Cocina / meson de casa",
+      "use_for": ["ecommerce_tiendas", "restaurantes_cafes", "productos cotidianos"],
+      "prompt": "standing at kitchen counter, natural daylight, clean surface, mug or fruit in background, casual mid-day routine",
+      "higgsfield_preset_hint": "Kitchen"
+    },
+    {
+      "id": "desk_workday",
+      "name": "Escritorio de trabajo",
+      "use_for": ["saas_software_b2b", "ecommerce_tiendas", "marca_personal_profesionales"],
+      "prompt": "desk setup, laptop open, coffee nearby, soft monitor glow, quick product mention between tasks",
+      "higgsfield_preset_hint": "Office"
+    },
+    {
+      "id": "gym_bench",
+      "name": "Banco / zona de gym",
+      "use_for": ["gimnasios_fitness", "botellas", "ropa deportiva"],
+      "prompt": "gym floor or post-workout bench, bright overhead lighting, equipment in background, energetic but realistic",
+      "higgsfield_preset_hint": "Gym"
+    },
+    {
+      "id": "street_walk",
+      "name": "Calle urbana",
+      "use_for": ["restaurantes_cafes", "servicios_locales", "turismo_hoteles_experiencias"],
+      "prompt": "walking on sidewalk or standing on urban street, handheld selfie, city backdrop, spontaneous discovery feel",
+      "higgsfield_preset_hint": "Street"
+    },
+    {
+      "id": "clean_reception",
+      "name": "Recepcion limpia",
+      "use_for": ["clinicas_dentales", "esteticas_dermatologia_belleza", "salud_no_dental"],
+      "prompt": "clean reception desk, appointment calendar, calm professional atmosphere, no procedures, no private patient data",
+      "higgsfield_preset_hint": "custom"
+    }
+  ],
+  "ready_hook_patterns": [
+    {
+      "id": "dont_buy_until_demo",
+      "formula": "No compres <producto> hasta ver esto en uso.",
+      "best_for": ["ecommerce_tiendas", "product_demo"]
+    },
+    {
+      "id": "problem_not_price",
+      "formula": "El problema no siempre es <objecion>; es <dolor real>.",
+      "best_for": ["clinicas_dentales", "saas_software_b2b", "servicios_locales"]
+    },
+    {
+      "id": "local_discovery",
+      "formula": "Si estas en <ciudad> y quieres <resultado>, mira esto.",
+      "best_for": ["restaurantes_cafes", "turismo_hoteles_experiencias"]
+    },
+    {
+      "id": "short_demo_sells",
+      "formula": "Una demo corta puede vender mas que una reunion larga.",
+      "best_for": ["saas_software_b2b", "web_onia_landing"]
+    }
+  ]
+}

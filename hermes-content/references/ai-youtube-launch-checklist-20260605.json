@@ -1,0 +1,78 @@
+{
+  "system": "Atlas AI Media",
+  "created_at": "2026-06-05",
+  "status": "draft_no_publication",
+  "focus": "high_cpm_crm_saas_ai_automation",
+  "checklists": [
+    {
+      "area": "strategy",
+      "items": [
+        { "id": "strategy-001", "task": "Confirm final channel names", "owner": "sergio", "required_before": "brand_assets", "status": "pending" },
+        { "id": "strategy-002", "task": "Confirm first pilot language", "owner": "sergio", "required_before": "production", "status": "pending", "recommended": "workflow_roi_english" },
+        { "id": "strategy-003", "task": "Confirm max monthly AI generation budget", "owner": "sergio", "required_before": "paid_generation", "status": "pending" }
+      ]
+    },
+    {
+      "area": "accounts",
+      "items": [
+        { "id": "accounts-001", "task": "Create or confirm Google account for Workflow ROI", "owner": "sergio_or_operator", "required_before": "youtube_setup", "status": "pending" },
+        { "id": "accounts-002", "task": "Create or confirm Google account for Automatiza PyME", "owner": "sergio_or_operator", "required_before": "youtube_setup", "status": "pending" },
+        { "id": "accounts-003", "task": "Create YouTube Brand Accounts", "owner": "operator", "required_before": "upload", "status": "pending" },
+        { "id": "accounts-004", "task": "Create Google Cloud project for YouTube Data API", "owner": "operator", "required_before": "youtube_api", "status": "pending" },
+        { "id": "accounts-005", "task": "Create or select Supabase project", "owner": "operator", "required_before": "database", "status": "pending" }
+      ]
+    },
+    {
+      "area": "brand_assets",
+      "items": [
+        { "id": "brand-001", "task": "Logo/avatar for Workflow ROI", "owner": "creative_agent", "required_before": "channel_launch", "status": "pending" },
+        { "id": "brand-002", "task": "Logo/avatar for Automatiza PyME", "owner": "creative_agent", "required_before": "channel_launch", "status": "pending" },
+        { "id": "brand-003", "task": "YouTube banner for both channels", "owner": "creative_agent", "required_before": "channel_launch", "status": "pending" },
+        { "id": "brand-004", "task": "Thumbnail system", "owner": "creative_agent", "required_before": "production", "status": "pending" }
+      ]
+    },
+    {
+      "area": "database",
+      "items": [
+        { "id": "db-001", "task": "Apply migration 20260605_atlas_ai_media_content_factory.sql", "owner": "operator", "required_before": "automation", "status": "pending_approval" },
+        { "id": "db-002", "task": "Create service role credential in n8n without exposing secret", "owner": "operator", "required_before": "n8n_supabase_write", "status": "pending_approval" },
+        { "id": "db-003", "task": "Validate RLS remains closed for anon", "owner": "qa_agent", "required_before": "production", "status": "pending" }
+      ]
+    },
+    {
+      "area": "automation",
+      "items": [
+        { "id": "auto-001", "task": "Review n8n draft workflow Si1cPoh65Ld4z7Ej", "owner": "operator", "required_before": "automation_run", "status": "ready" },
+        { "id": "auto-002", "task": "Run manual dry-run", "owner": "operator", "required_before": "schedule", "status": "pending" },
+        { "id": "auto-003", "task": "Connect Supabase after approval", "owner": "operator", "required_before": "queue_processing", "status": "pending_approval" },
+        { "id": "auto-004", "task": "Activate schedule only after two clean manual runs", "owner": "sergio", "required_before": "scheduled_operation", "status": "blocked_until_approval" }
+      ]
+    },
+    {
+      "area": "content",
+      "items": [
+        { "id": "content-001", "task": "Produce full package for wroi-long-001", "owner": "ai_agents", "required_before": "first_video", "status": "ready" },
+        { "id": "content-002", "task": "Produce full package for apyme-long-001", "owner": "ai_agents", "required_before": "second_video", "status": "ready" },
+        { "id": "content-003", "task": "Create 6 Shorts from first two long videos", "owner": "ai_agents", "required_before": "shorts_launch", "status": "pending" },
+        { "id": "content-004", "task": "Create first downloadable checklist", "owner": "ai_agents", "required_before": "newsletter", "status": "pending" }
+      ]
+    },
+    {
+      "area": "monetization",
+      "items": [
+        { "id": "money-001", "task": "Create affiliate disclosure template", "owner": "operator", "required_before": "affiliate_links", "status": "pending" },
+        { "id": "money-002", "task": "Research CRM/SaaS affiliate programs", "owner": "ai_agents", "required_before": "affiliate_activation", "status": "pending" },
+        { "id": "money-003", "task": "Create first template product outline", "owner": "ai_agents", "required_before": "product_sales", "status": "pending" }
+      ]
+    },
+    {
+      "area": "compliance",
+      "items": [
+        { "id": "compliance-001", "task": "Confirm no kids content strategy", "owner": "sergio", "required_before": "channel_positioning", "status": "recommended_confirmed_by_docs" },
+        { "id": "compliance-002", "task": "Use synthetic content disclosure when needed", "owner": "operator", "required_before": "upload", "status": "required" },
+        { "id": "compliance-003", "task": "Block legal/financial/medical claims unless reviewed", "owner": "fact_checker", "required_before": "publication", "status": "required" }
+      ]
+    }
+  ]
+}
+

@@ -1,0 +1,360 @@
+{
+  "version": "2026-06-04",
+  "owner": "Sergio / ONIA",
+  "objective": "Crear, comparar y perfeccionar un avatar hiperrealista de Sergio para borradores internos de marca personal y ONIA, preservando identidad facial y evitando apariencia artificial.",
+  "language": "es",
+  "approval_policy": {
+    "internal_reference": "allowed",
+    "internal_generation": "allowed only with Sergio-approved assets",
+    "publication": "blocked until explicit approval per generated piece",
+    "client_delivery": "blocked until explicit client-safe approval",
+    "voice_clone": "blocked until explicit voice-clone approval"
+  },
+  "canonical_sources_checked": [
+    "COORDINATION_MANIFEST.md",
+    "AGENTS.md",
+    "HERMES_EXECUTION_PROTOCOL.md",
+    "HIGGSFIELD_VIDEO_SYSTEM.md",
+    "HIGGSFIELD_FULL_CAPABILITIES_MAP.md",
+    "HERMES_VIDEO_LAB.md",
+    "hermes-content/docs/SERGIO_FACE_VOICE_ASSET_GUIDE.md",
+    "hermes-content/references/sergio-approved-media/manifest.json",
+    "hermes-content/references/sergio-approved-media/sergio-face-voice-profile-20260602.md",
+    "tmp-assets/video-lab/jobs/vl-20260604-004415-sergio-avatar-avatar-ultrarrealista-con-rasgos-.json"
+  ],
+  "current_external_sources_checked": [
+    {
+      "source": "Higgsfield official home",
+      "url": "https://higgsfield.ai/",
+      "useful_facts": [
+        "Higgsfield lists Nano Banana Pro, Seedance 2.0, Marketing Studio, MCP/CLI, Canvas and Cinema Studio 3.5 as current creation surfaces.",
+        "Higgsfield lists Soul 2.0, Soul ID Character, Soul Cinema and Soul Cast under image/character workflows.",
+        "Higgsfield lists Sora 2, Veo 3.1, Kling 3.0, WAN 2.6 and Seedance 2.0 under video workflows."
+      ]
+    },
+    {
+      "source": "Higgsfield AI Image page",
+      "url": "https://higgsfield.ai/ai-image",
+      "useful_facts": [
+        "Soul ID is positioned for locking the same character identity across frames.",
+        "Higgsfield supports standard formats including 1:1, 9:16 and 16:9.",
+        "Generated images can be moved into video models including Sora, Kling and Seedance."
+      ]
+    },
+    {
+      "source": "Higgsfield MCP page",
+      "url": "https://higgsfield.ai/mcp",
+      "useful_facts": [
+        "MCP exposes video analyzer, marketing video generator, Soul character training, cinematic image-to-video, viral clip generator and virality prediction.",
+        "Current listed models include Soul 2.0, Kling 3.0, Seedance 2.0, Nano Banana Pro, GPT Image 2, Seedream 4.5, Veo 3.1 and Cinema Studio 3.0."
+      ]
+    },
+    {
+      "source": "Higgsfield Kling Avatar 2.0 blog",
+      "url": "https://higgsfield.ai/blog/Meet-KlingAI-Avatar-2.0-AI-Talking-Avatars",
+      "useful_facts": [
+        "Kling Avatar 2.0 is positioned for consistent talking avatars driven by image and audio input.",
+        "The documented workflow uses image input, audio input and a text motion prompt."
+      ]
+    }
+  ],
+  "identity_reference_master": {
+    "face_pack": "hermes-content/references/sergio-approved-media",
+    "main_current_contact_sheet": "hermes-content/references/sergio-approved-media/processed/sergio_contact_sheet_20260604.jpg",
+    "approved_generation_assets": [
+      "sergio-drive-20260604-img-0329",
+      "sergio-drive-20260604-img-0330",
+      "sergio-drive-20260604-img-0331",
+      "sergio-drive-20260604-drive-1wfyymwxkz8bxnkk2n5ymjj3yme-tixk5",
+      "sergio-drive-20260604-drive-107w3hsks9bbe9pft-ttwocpak-obufu",
+      "sergio-drive-20260604-drive-14fhpzjmlrq7vvzebsdo1c-adcsmzn-vr",
+      "sergio-drive-20260604-drive-1ghdj5uhmaen1qnhklkzwi6ndpeljnfk5",
+      "sergio-drive-20260604-drive-16t4wblddfa-yei3mpdkt0sm1ahhviqbz",
+      "sergio-drive-20260604-drive-13weczqjg5wjodtqxb0ypenggdn-e-60i",
+      "sergio-drive-20260604-drive-15lu5r1ithctr-olgk7qjvroiccdcgvip"
+    ],
+    "visual_description": "Joven adulto, complexion delgada, rostro alargado natural, cabello corto oscuro peinado hacia un lado, cejas oscuras definidas, ojos oscuros expresivos, nariz recta, labios medianos, mandibula fina sin exagerar, cuello largo natural, energia tranquila y directa.",
+    "preserve": [
+      "proporciones reales del rostro",
+      "distancia y tamano natural de ojos",
+      "linea de cabello y peinado corto oscuro",
+      "estructura fina de mandibula y menton",
+      "complexion delgada",
+      "expresion honesta, calmada y cercana"
+    ],
+    "improve_subtly": [
+      "luz mas limpia",
+      "fondo menos distractor",
+      "ropa negra sin logos",
+      "postura mas segura",
+      "textura de piel natural",
+      "camara mas estable",
+      "composicion de pecho y hombros"
+    ],
+    "avoid": [
+      "hacerlo parecer otra persona",
+      "mandibula de modelo",
+      "ojos agrandados",
+      "cuello estirado",
+      "piel plastica",
+      "sonrisa demasiado perfecta",
+      "logos de la camiseta blanca original",
+      "manos o dedos deformes",
+      "overlay de interfaz tipo story"
+    ]
+  },
+  "model_decision_map": [
+    {
+      "use_case": "still maestro de identidad",
+      "primary_route": "approved real reference image -> Nano Banana Pro or Soul 2.0/Soul ID",
+      "why": "Primero se necesita un retrato aprobado sin drift antes de animar.",
+      "risk": "Soul puede embellecer o alterar rasgos; una edicion desde foto real puede conservar mejor identidad."
+    },
+    {
+      "use_case": "avatar talking head corto",
+      "primary_route": "approved still -> Seedance 2.0 or Kling Avatar 2.0 with motion prompt",
+      "why": "Movimiento minimo reduce drift y conserva confianza.",
+      "risk": "Lip-sync y gestos amplios pueden cambiar boca, ojos y mandibula."
+    },
+    {
+      "use_case": "talking avatar con audio largo",
+      "primary_route": "Kling Avatar 2.0 with image plus approved audio",
+      "why": "La ruta oficial destaca consistencia y audio-driven motion.",
+      "risk": "Voz de Sergio generada o clonada requiere aprobacion explicita."
+    },
+    {
+      "use_case": "video cinematico no talking",
+      "primary_route": "approved still -> Seedance 2.0, Veo 3.1 Lite or Kling 3.0",
+      "why": "Sirve para presencia, b-roll y loops sin exigir sincronia labial.",
+      "risk": "Movimiento de camara fuerte aumenta drift."
+    }
+  ],
+  "global_negative_prompt": "Evitar rostro falso, piel plastica, piel demasiado lisa, ojos vidriosos, ojos deformes, mirada muerta, dientes irreales, sonrisa forzada, manos deformes, dedos extra, mandibula exagerada, cara cambiada, edad incorrecta, proporciones irreales, iluminacion falsa, fondo artificial, desenfoque excesivo, low quality, uncanny valley, CGI evidente, anime, caricatura, filtro de belleza extremo, oversharpening, piel sin textura, labios deformes, cejas asimetricas, parpadeo raro, movimiento robotico, sincronia labial mala, frame inconsistente, identidad inconsistente, cambios de rostro entre frames, logos de terceros, texto o watermark.",
+  "prompt_library": [
+    {
+      "id": "p01_studio_profesional",
+      "style": "Retrato profesional de estudio",
+      "format": "1:1 and 9:16",
+      "recommended_model_route": "reference edit or Soul 2.0 still",
+      "prompt": "Retrato hiperrealista de Sergio usando las fotos aprobadas como identidad principal. Mantener su misma estructura facial, edad aparente, cabello corto oscuro, cejas oscuras, ojos naturales, nariz, labios, mandibula fina y complexion delgada. Ropa: camiseta negra limpia sin logos, opcional overshirt negra. Fondo: estudio minimalista gris claro con profundidad suave. Camara: lente 85mm, plano medio corto, luz de estudio suave con relleno natural. Expresion: calma, segura, cercana, sin sonrisa exagerada. Calidad: textura real de piel, poros visibles, color natural, cero apariencia de IA.",
+      "negative_prompt": "global_negative_prompt"
+    },
+    {
+      "id": "p02_cinematografico",
+      "style": "Retrato cinematografico",
+      "format": "9:16 and 16:9",
+      "recommended_model_route": "Soul 2.0 still -> Veo 3.1 Lite or Kling 3.0",
+      "prompt": "Sergio en retrato cinematografico realista, identidad preservada desde referencias aprobadas, ropa negra minimalista, fondo interior premium desenfocado, luz lateral suave con contraste natural, lente 50mm, profundidad de campo real, mirada directa y viva. Movimiento si es video: respiracion sutil, micro giro de cabeza, un parpadeo natural, camara casi fija. Debe parecer grabado por camara real, no un render.",
+      "negative_prompt": "global_negative_prompt"
+    },
+    {
+      "id": "p03_creador_premium",
+      "style": "Avatar tipo creador de contenido premium",
+      "format": "9:16",
+      "recommended_model_route": "reference edit -> Seedance 2.0",
+      "prompt": "Avatar hiperrealista de Sergio como fundador/operador de ONIA, mirando a camara en formato vertical. Ropa negra limpia, escritorio real, laptop cerrada o desenfocada sin datos privados, luz natural de ventana, lente 35mm de smartphone premium, postura relajada y segura. Expresion honesta, energia de creador practico, nada de guru. Movimiento: cabeza estable, respiracion, pequenas microexpresiones y gesto minimo de manos fuera de primer plano.",
+      "negative_prompt": "global_negative_prompt"
+    },
+    {
+      "id": "p04_ugc_natural",
+      "style": "Avatar UGC natural para redes sociales",
+      "format": "9:16",
+      "recommended_model_route": "approved still -> Seedance 2.0 fast/std",
+      "prompt": "Video vertical UGC natural de Sergio hablando como si hubiera grabado con telefono. Misma identidad facial de referencias aprobadas, camiseta negra sin logos, fondo sencillo de habitacion u oficina, luz real sin glamour. Camara frontal con leve handheld, plano pecho-hombros, expresion cercana. Movimiento: parpadeo natural, pausa, pequena inclinacion de cabeza. Sin claims, sin pantalla privada, sin texto incrustado.",
+      "negative_prompt": "global_negative_prompt"
+    },
+    {
+      "id": "p05_talking_head_realista",
+      "style": "Talking head realista",
+      "format": "9:16",
+      "recommended_model_route": "Kling Avatar 2.0 with approved image and approved audio",
+      "prompt": "Talking head hiperrealista de Sergio para ONIA. Usar una imagen aprobada como referencia de identidad y audio aprobado solo si existe permiso explicito. Mantener rostro estable, boca natural, dientes discretos, ojos vivos, cejas y mandibula sin cambios. Plano medio corto, camiseta negra, fondo oficina simple, luz neutra profesional. Motion prompt: habla con ritmo natural, pausas reales, microexpresiones, parpadeo natural, manos casi fuera de cuadro, sin gestos exagerados.",
+      "negative_prompt": "global_negative_prompt"
+    },
+    {
+      "id": "p06_presentador_profesional",
+      "style": "Presentador profesional",
+      "format": "16:9 and 9:16",
+      "recommended_model_route": "Soul ID still -> Kling 3.0 or Veo 3.1 Lite",
+      "prompt": "Sergio como presentador profesional de ONIA, sin perder naturalidad. Identidad preservada, ropa negra con chaqueta negra ligera, fondo de reunion o workspace moderno, luz editorial neutra, lente 50mm, plano medio. Expresion segura y consultiva, postura elegante. Movimiento: pequeno push-in de camara, manos discretas, contacto visual constante. Debe verse como grabacion real para propuesta o demo, no como anuncio falso.",
+      "negative_prompt": "global_negative_prompt"
+    },
+    {
+      "id": "p07_lifestyle_realista",
+      "style": "Lifestyle realista",
+      "format": "9:16",
+      "recommended_model_route": "reference edit -> Seedance 2.0",
+      "prompt": "Sergio en escena lifestyle realista, caminando lentamente con telefono o saliendo de una reunion, ropa negra casual sin logos, fondo urbano o pasillo interior desenfocado, luz natural, camara smartphone 35mm. Identidad facial totalmente preservada. Energia tranquila, joven fundador trabajando, no influencer de lujo. Movimiento: caminar suave, mirar a camara un segundo, respirar, gesto natural.",
+      "negative_prompt": "global_negative_prompt"
+    },
+    {
+      "id": "p08_documental_natural",
+      "style": "Documental natural",
+      "format": "16:9 and 9:16",
+      "recommended_model_route": "approved still -> Veo 3.1 Lite or Seedance 2.0",
+      "prompt": "Sergio en estilo documental natural, sentado en escritorio con notas y laptop, identidad preservada, ropa negra simple, luz de ventana, fondo real con pequenas imperfecciones, colorimetria limpia. Camara fija con lente 35mm, plano medio, sin maquillaje visible, piel real. Movimiento: pausa, mirar a laptop, volver a camara, micro sonrisa leve. Debe sentirse como una toma honesta de proceso de trabajo.",
+      "negative_prompt": "global_negative_prompt"
+    },
+    {
+      "id": "p09_publicitario_elegante",
+      "style": "Publicitario elegante",
+      "format": "9:16 and 1:1",
+      "recommended_model_route": "Soul 2.0 still -> Cinema Studio/Cinematic image-to-video",
+      "prompt": "Sergio en retrato publicitario elegante para marca personal ONIA, conservando identidad exacta. Outfit negro premium, fondo oscuro neutro o oficina premium desenfocada, luz lateral cinematografica, lente 85mm, contraste controlado, piel natural con textura. Expresion: segura, serena, cercana. Movimiento si video: muy leve push-in, respiracion, un parpadeo. No exagerar lujo ni belleza.",
+      "negative_prompt": "global_negative_prompt"
+    },
+    {
+      "id": "p10_luz_natural_ultrareal",
+      "style": "Ultra realista con luz natural",
+      "format": "9:16",
+      "recommended_model_route": "approved real photo edit -> Seedance 2.0",
+      "prompt": "Edicion hiperrealista de Sergio desde foto aprobada, manteniendo exactamente identidad, proporciones, edad aparente, cabello, ojos, nariz, boca, mandibula, cuello y complexion. Cambiar solo outfit a camiseta negra sin logos y mejorar luz natural suave. Fondo limpio de habitacion real, sin texto ni logos, plano pecho-hombros, camara smartphone realista, color natural, textura de piel real. Expresion calmada con ligera cercania. Preparar como still maestro para animacion minima.",
+      "negative_prompt": "global_negative_prompt"
+    }
+  ],
+  "test_rounds_required": [
+    {
+      "round": 1,
+      "name": "exploracion amplia",
+      "goal": "Comparar 10 estilos con stills, sin video, para encontrar identidad base."
+    },
+    {
+      "round": 2,
+      "name": "mejora de identidad",
+      "goal": "Elegir 2-3 stills y ajustar rostro, edad, ojos, mandibula y cabello."
+    },
+    {
+      "round": 3,
+      "name": "mejora de realismo",
+      "goal": "Reducir piel plastica, rigidez, fondo artificial, logos y overlays."
+    },
+    {
+      "round": 4,
+      "name": "mejora de video y movimiento",
+      "goal": "Animar solo el still aprobado con respiracion, parpadeo y micro-movimiento."
+    },
+    {
+      "round": 5,
+      "name": "version final premium",
+      "goal": "Generar variante final en 9:16, 1:1 y 16:9 despues de aprobacion visual."
+    }
+  ],
+  "evaluated_tests": [
+    {
+      "test_number": 1,
+      "model_used": "Higgsfield Soul V2",
+      "type": "still",
+      "prompt_used": "still-1-prompt.txt",
+      "negative_prompt_used": "embedded in prompt",
+      "format": "9:16",
+      "duration": null,
+      "reference_used": "trained Soul reference",
+      "variables_modified": ["close-up", "black t-shirt", "desk background", "thumb gesture"],
+      "result_observed": "Cercania e identidad general buenas, pero trae overlay de interfaz y gesto de pulgares poco premium.",
+      "errors_detected": ["overlay visible", "gesto de manos distrae", "look tipo story, no master final"],
+      "scores": {
+        "identity": 7,
+        "realism": 7,
+        "movement": 0,
+        "total": 70
+      },
+      "decision": "mejorar",
+      "next_improvement": "Rehacer sin overlay, manos fuera de cuadro y plano pecho-hombros."
+    },
+    {
+      "test_number": 2,
+      "model_used": "Higgsfield Soul V2",
+      "type": "still",
+      "prompt_used": "still-2-prompt.txt",
+      "negative_prompt_used": "embedded in prompt",
+      "format": "9:16",
+      "duration": null,
+      "reference_used": "trained Soul reference",
+      "variables_modified": ["medium shot", "black outfit", "office background", "friendly expression"],
+      "result_observed": "Base mas limpia para outfit/cuerpo. La postura se siente rigida y el fondo es muy literal.",
+      "errors_detected": ["postura estatica", "camiseta no premium", "fondo con laptop distrae"],
+      "scores": {
+        "identity": 7,
+        "realism": 7,
+        "movement": 0,
+        "total": 72
+      },
+      "decision": "guardar como referencia secundaria",
+      "next_improvement": "Usar plano medio corto, fondo mas suave y postura mas natural."
+    },
+    {
+      "test_number": 3,
+      "model_used": "Higgsfield Soul V2",
+      "type": "still",
+      "prompt_used": "still-3-prompt.txt",
+      "negative_prompt_used": "embedded in prompt",
+      "format": "9:16",
+      "duration": null,
+      "reference_used": "trained Soul reference",
+      "variables_modified": ["waist-up", "laptop foreground", "black outfit"],
+      "result_observed": "Tiene presencia de operador, pero el overlay de story y el encuadre largo lo alejan de una pieza final.",
+      "errors_detected": ["overlay visible", "encuadre demasiado largo", "brazo/mano cerca del borde"],
+      "scores": {
+        "identity": 7,
+        "realism": 7,
+        "movement": 0,
+        "total": 68
+      },
+      "decision": "descartar como final, rescatar direccion de outfit",
+      "next_improvement": "Eliminar interfaz y llevar a retrato limpio pecho-hombros."
+    },
+    {
+      "test_number": 4,
+      "model_used": "Nano Banana 2 + Seedance 2.0",
+      "type": "still-to-video",
+      "prompt_used": "Sergio ultrareal black operator motion 02",
+      "negative_prompt_used": "HIGGSFIELD_VIDEO_SYSTEM.md animation negative pattern",
+      "format": "9:16",
+      "duration": 5,
+      "reference_used": "IMG_0180 + IMG_0183, local motion file sergio_ultrareal_black_operator_motion_02_mute.mp4",
+      "variables_modified": ["reference-image identity", "black outfit", "minimal motion", "muted video"],
+      "result_observed": "Registrado en Video Lab con video_url y estado avatar_review_pending. Pendiente revision visual de Sergio.",
+      "errors_detected": ["no identity_ok yet", "needs human approval before publish"],
+      "scores": {
+        "identity": null,
+        "realism": null,
+        "movement": null,
+        "total": null
+      },
+      "decision": "review_pending",
+      "next_improvement": "Sergio debe aprobar o pedir ajuste especifico: rostro, cuello, ojos, outfit, fondo o movimiento."
+    }
+  ],
+  "winner_current": {
+    "status": "pending_human_review",
+    "best_prompt_ids": ["p10_luz_natural_ultrareal", "p03_creador_premium", "p05_talking_head_realista"],
+    "best_flow_so_far": "approved real photo edit -> identity review -> Seedance 2.0 minimal motion",
+    "best_format": "9:16 for Reels/TikTok/Shorts; create 1:1 only after identity is approved",
+    "most_repeated_errors": [
+      "identity drift from Soul-only generations",
+      "overlay/interface artifacts",
+      "rigid posture",
+      "hands distracting",
+      "over-clean or AI-like face"
+    ],
+    "corrections": [
+      "use real approved reference photo as primary identity lock",
+      "generate stills first and score them before animation",
+      "keep hands outside frame until face is approved",
+      "ask for minimal motion only",
+      "avoid logos and story UI overlays"
+    ]
+  },
+  "final_base_prompt": "Crea un avatar hiperrealista de Sergio usando las fotos aprobadas como referencia principal, conservando fielmente su identidad facial, proporciones, edad aparente, tono de piel, mirada, estructura del rostro, cabello corto oscuro y estilo personal. Mejora sutilmente su presencia con luz natural o cinematografica suave, piel real con textura, expresion segura y cercana, postura elegante, ropa negra moderna sin logos y fondo premium suavemente desenfocado. Debe parecer una grabacion real con camara profesional o smartphone premium, lente 50mm u 85mm, profundidad de campo natural, colores equilibrados, microexpresiones humanas, parpadeo natural y movimiento minimo. El avatar debe verse autentico, carismatico, profesional y creible, como una version mejor producida de la misma persona, no como otra persona.",
+  "quality_checklist_before_publication": [
+    "Sergio confirma que se reconoce claramente.",
+    "No hay cambio de edad, ojos, nariz, boca, mandibula, cuello o cabello.",
+    "No hay piel plastica ni mirada muerta.",
+    "No hay logos, texto, watermark ni datos privados.",
+    "Movimiento es minimo y natural.",
+    "Boca y audio no prometen nada no aprobado.",
+    "Video Lab tiene source, model, job_id, reference_asset y credits_used.",
+    "Job tiene identity_ok solo despues de revision humana.",
+    "Publicacion requiere comando explicito Publicar video <job_id>."
+  ]
+}

@@ -1,0 +1,30 @@
+﻿[
+  {
+    "id": "8377c6a1-5d9a-444e-a42c-53ece76d1f61",
+    "status": "completed",
+    "display_name": "Higgsfield Soul V2",
+    "job_set_type": "text2image_soul_v2",
+    "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/hf_20260604_235601_8377c6a1-5d9a-444e-a42c-53ece76d1f61.png",
+    "created_at": 1780617361.093893,
+    "params": {
+      "prompt": "Photorealistic phone-camera founder portrait of Sergio for ONIA, preserve exact identity from Soul reference: authentic face structure, slim natural build, short dark hair, realistic eyebrows, real nose/lips/chin/ears, normal human asymmetry. Wearing all-black outfit: simple black t-shirt, dark pants, no logos. Standing in a clean work room with laptop in background, relaxed posture, slight closed-mouth friendly expression, honest practical operator energy. Vertical 9:16, natural light, realistic texture, no fashion model retouch. Do not change age, do not make face longer, do not make neck longer, do not enlarge eyes, no deformed jaw, no cartoon, no AI beauty, no white jersey, no text.",
+      "width": 1152,
+      "height": 2048,
+      "batch_size": 1,
+      "seed": 838148,
+      "enhance_prompt": false,
+      "use_sage_attention": false,
+      "quality": "1080p",
+      "use_relax": false,
+      "style_id": "3db34ab5-3439-4317-9e03-08dc30852e69",
+      "style": {
+        "id": "3db34ab5-3439-4317-9e03-08dc30852e69",
+        "name": "General",
+        "url": "https://cdn.higgsfield.ai/soul-v2-style/f33d85f2-6521-4fa8-8e8f-894cfbdee578.webp",
+        "strength": 1.0
+      },
+      "style_strength": 1.0,
+      "custom_reference_id": "1238064e-1295-4cbf-9a41-861d4106e0e8"
+    }
+  }
+]

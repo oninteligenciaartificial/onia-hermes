@@ -1,0 +1,67 @@
+{
+  "id": "1ffe3605-838f-4e75-8b4c-74155b49252e",
+  "status": "completed",
+  "display_name": "Kling v3.0",
+  "job_set_type": "kling3_0",
+  "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/hf_20260605_052611_1ffe3605-838f-4e75-8b4c-74155b49252e.mp4",
+  "created_at": 1780637171.528367,
+  "params": {
+    "width": 2160,
+    "height": 3840,
+    "prompt": "Internal 9:16 5-second Sergio avatar QA. Use references as strict identity lock. Preserve same young face, natural asymmetry, brows, eyes, nose, lips, jaw, ears, skin tone, neck, hairline and glossy black Italian side-part hair. Preserve real teeth from smile references when mouth opens: same upper teeth shape, spacing, smile arc and lips; do not whiten, straighten, resize or invent teeth. Realistic phone-camera creator video in modern workspace, black shirt and black blazer, natural soft light, real skin texture, no beauty filter, no cinematic grade, no plastic skin. Sergio looks at camera and silently mouths: La IA no es magia, es ejecucion con sistemas. Friendly calm founder expression, natural but slightly robust shoulders, stable face, tiny head movement, natural blink, subtle breathing. Camera locked chest-up at eye level. Sound off. No subtitles, no text, no watermark, no UI overlay. Avoid older face, different person, face morphing, eye drift, one eye larger, warped mouth, tongue artifacts, skinny neck, hair falling forward, distorted blazer.",
+    "medias": [
+      {
+        "data": {
+          "id": "3df93afa-2ccf-4a61-9694-785a0d672aaa",
+          "url": "https://d2ol7oe51mr4n9.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/3df93afa-2ccf-4a61-9694-785a0d672aaa.png",
+          "type": "media_input"
+        },
+        "role": "start_image"
+      },
+      {
+        "data": {
+          "id": "d8e3739a-cceb-4090-ba53-70d7d2b6f53b",
+          "url": "https://d2ol7oe51mr4n9.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/d8e3739a-cceb-4090-ba53-70d7d2b6f53b_resize.jpg",
+          "type": "media_input"
+        },
+        "role": "start_image"
+      },
+      {
+        "data": {
+          "id": "9c623aa3-4987-4f55-8de3-703fa55b424a",
+          "url": "https://d2ol7oe51mr4n9.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/9c623aa3-4987-4f55-8de3-703fa55b424a_resize.jpg",
+          "type": "media_input"
+        },
+        "role": "start_image"
+      },
+      {
+        "data": {
+          "id": "ec195fd7-4713-4d7b-8905-2168b7b4b5a1",
+          "url": "https://d2ol7oe51mr4n9.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/ec195fd7-4713-4d7b-8905-2168b7b4b5a1_resize.jpg",
+          "type": "media_input"
+        },
+        "role": "start_image"
+      },
+      {
+        "data": {
+          "id": "91407155-71da-48b3-8f4d-bcb0d3760fef",
+          "url": "https://d2ol7oe51mr4n9.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/91407155-71da-48b3-8f4d-bcb0d3760fef_resize.jpg",
+          "type": "media_input"
+        },
+        "role": "start_image"
+      }
+    ],
+    "duration": 5,
+    "aspect_ratio": "9:16",
+    "multi_shots": false,
+    "multi_prompt": [],
+    "sound": "off",
+    "cfg_scale": 0.5,
+    "mode": "4k",
+    "kling_elements": [],
+    "kling_element_ids": [],
+    "multi_shot_mode": "custom",
+    "reference_elements": [],
+    "enhance_prompt": false
+  }
+}

@@ -1,0 +1,150 @@
+{
+  "ok": true,
+  "job_id": "vl-20260604-004415-sergio-avatar-avatar-ultrarrealista-con-rasgos-",
+  "lane": "sergio",
+  "topic": "avatar ultrarrealista con rasgos mejorados, camiseta negra y movimiento natural minimo",
+  "objective": "crear avatar consistente de Sergio para contenido ONIA",
+  "audience": "fundadores, negocios y clientes potenciales que necesitan confiar en Sergio y entender ONIA",
+  "business": "",
+  "offer": "Sergio / ONIA avatar",
+  "style": "realistic talking-avatar UGC, creator-led, all-black Sergio identity, phone-first vertical video",
+  "model_recommendation": "higgsfield",
+  "approval_state": "waiting_approval",
+  "state": "waiting_approval",
+  "created_at": "2026-06-04T04:44:15Z",
+  "updated_at": "2026-06-04T04:44:15Z",
+  "published_id": null,
+  "video_url": null,
+  "error": null,
+  "next_action": "approve_brief",
+  "hook": "Estoy convirtiendo esto en contenido real: avatar ultrarrealista con rasgos mejorados, camiseta negra y movimiento natural minimo.",
+  "script": [
+    "Estoy convirtiendo esto en contenido real: avatar ultrarrealista con rasgos mejorados, camiseta negra y movimiento natural minimo.",
+    "No quiero vender humo: quiero mostrar el proceso, el sistema y las decisiones reales.",
+    "El tema de este video es: avatar ultrarrealista con rasgos mejorados, camiseta negra y movimiento natural minimo.",
+    "Primero lo explico simple, despues muestro el mecanismo y cierro con una accion concreta.",
+    "Si quieres que lo convierta en un sistema para tu negocio, escribeme 'sistema'."
+  ],
+  "shot_list": [
+    "0-2s: talking-avatar close-up con hook: Estoy convirtiendo esto en contenido real: avatar ultrarrealista con rasgos mejorados, camiseta negra y movimiento natural minimo.",
+    "2-6s: corte a escritorio real, laptop y notas, contexto sin exagerar",
+    "6-12s: pantalla o pizarra con el mecanismo principal usando datos ficticios",
+    "12-20s: Sergio explica el antes/despues operativo con tono directo",
+    "20-27s: escena de accion: revisar CRM, workflow o brief de cliente",
+    "27-30s: CTA unico y subtitulo grande"
+  ],
+  "visual_style": "realistic talking-avatar UGC, creator-led, all-black Sergio identity, phone-first vertical video",
+  "higgsfield_prompt": "Create a realistic vertical 9:16 talking-avatar / UGC creator video of Sergio for ONIA. Use Sergio's approved private reference pack to preserve identity consistently across shots: same face structure, short dark hair, natural expression, direct eye contact, slim young founder/operator presence. Avatar profile: Sergio operador/fundador. Outfit: clean all-black outfit: black t-shirt, black pants or dark jeans, dark shoes, no visible logos. Persona: direct founder/operator, serious but human, practical, no guru energy. Setting: real work desk, laptop, phone, soft LED or natural window light, modern Latin American workspace. Camera: vertical 9:16 phone-camera, selfie close-up mixed with medium shot, subtle handheld movement. The video must feel like a real phone-camera creator clip, not a glossy stock ad. Topic: avatar ultrarrealista con rasgos mejorados, camiseta negra y movimiento natural minimo. Hook line in Spanish: \"Estoy convirtiendo esto en contenido real: avatar ultrarrealista con rasgos mejorados, camiseta negra y movimiento natural minimo.\". Use natural Spanish delivery, small pauses, subtle hand movement, believable breathing, readable captions, and visual change every 2-3 seconds. Scene options: Sergio seated at a real desk, laptop open, direct eye contact, one decisive sentence, warm practical tone | Sergio reviewing a simple sales audit board, sticky notes, WhatsApp-to-CRM flow with fictional data only | Sergio beside a screen overlay showing a clean automation workflow, pointing at one key step | Sergio walking slowly with phone-camera selfie, black outfit, natural hallway or urban background. Script beats: Estoy convirtiendo esto en contenido real: avatar ultrarrealista con rasgos mejorados, camiseta negra y movimiento natural minimo. | No quiero vender humo: quiero mostrar el proceso, el sistema y las decisiones reales. | El tema de este video es: avatar ultrarrealista con rasgos mejorados, camiseta negra y movimiento natural minimo. | Primero lo explico simple, despues muestro el mecanismo y cierro con una accion concreta. | Si quieres que lo convierta en un sistema para tu negocio, escribeme 'sistema'.. Negative prompt: No celebrity likeness, no copied creator identity, no changing Sergio's identity, no older-age transformation, no sexualized styling, no logos unless provided, no private screens, no real phone numbers, no fake client results, no fake revenue claims, no exaggerated guru gestures, no distorted face, no extra fingers, no broken lip-sync, no voice clone or publication unless explicitly approved.",
+  "caption": "Estoy convirtiendo esto en contenido real: avatar ultrarrealista con rasgos mejorados, camiseta negra y movimiento natural minimo.\n\navatar ultrarrealista con rasgos mejorados, camiseta negra y movimiento natural minimo\n\nEscribeme 'sistema' si quieres que revise tu proceso.",
+  "prompt_profile": "sergio_avatar",
+  "avatar_profile": "black_operator_basic",
+  "avatar_mode": "sergio_private_reference",
+  "identity_reference_pack": {
+    "higgsfield_soul_id": "05cebe09-5672-4d50-90b2-d92c680957f7",
+    "higgsfield_soul_name": "Sergio ONIA 20260603",
+    "higgsfield_soul_type": "soul_2",
+    "higgsfield_soul_status": "completed",
+    "face_reference_assets": [
+      "sergio-drive-20260602-img-0192-heic",
+      "sergio-drive-20260602-img-0195-heic",
+      "sergio-drive-20260602-img-0194-heic",
+      "sergio-drive-20260602-img-0198-heic",
+      "sergio-drive-20260602-img-0191-heic",
+      "sergio-drive-20260602-img-0183-heic"
+    ],
+    "voice_reference_assets": [
+      "sergio-drive-20260602-img-0218-mov",
+      "sergio-drive-20260602-img-0217-mov",
+      "sergio-drive-20260602-img-0210-mov",
+      "sergio-drive-20260602-img-0209-mov"
+    ],
+    "contact_sheet": "hermes-content/references/sergio-approved-media/processed/sergio_contact_sheet_20260602.jpg",
+    "approval_note": "Assets are approved as private references only. AI face generation, voice cloning, client use and publication require explicit approval per piece."
+  },
+  "scene_pack": [
+    {
+      "id": "avatar_desk_confession",
+      "prompt": "Sergio seated at a real desk, laptop open, direct eye contact, one decisive sentence, warm practical tone",
+      "best_for": "personal hooks and founder story"
+    },
+    {
+      "id": "avatar_audit_table",
+      "prompt": "Sergio reviewing a simple sales audit board, sticky notes, WhatsApp-to-CRM flow with fictional data only",
+      "best_for": "ONIA consulting and audits"
+    },
+    {
+      "id": "avatar_screen_operator",
+      "prompt": "Sergio beside a screen overlay showing a clean automation workflow, pointing at one key step",
+      "best_for": "technical demos and proof of mechanism"
+    },
+    {
+      "id": "avatar_phone_walk",
+      "prompt": "Sergio walking slowly with phone-camera selfie, black outfit, natural hallway or urban background",
+      "best_for": "direct thoughts and quick lessons"
+    },
+    {
+      "id": "avatar_client_call_prep",
+      "prompt": "Sergio preparing for a client call, laptop, notes, CRM checklist, calm confident body language",
+      "best_for": "B2B trust and premium consulting"
+    },
+    {
+      "id": "avatar_lipsync_closeup",
+      "prompt": "tight talking-avatar close-up, consistent face, natural lip-sync, subtle head movement, readable captions",
+      "best_for": "short scripts under 20 seconds"
+    }
+  ],
+  "higgsfield_params": {
+    "job_set_type": "talking_avatar_lipsync_ugc",
+    "aspect_ratio": "9:16",
+    "duration": 30,
+    "mode": "talking_avatar",
+    "secondary_modes": [
+      "lipsync",
+      "ugc_marketing",
+      "ai_influencer_consistency"
+    ],
+    "resolution": "720p",
+    "generate_audio": false,
+    "requires_reference_assets": true,
+    "requires_sergio_asset_generation_approval": true
+  },
+  "character_profile": "direct founder/operator, serious but human, practical, no guru energy",
+  "setting_profile": "real work desk, laptop, phone, soft LED or natural window light, modern Latin American workspace",
+  "outfit_profile": "clean all-black outfit: black t-shirt, black pants or dark jeans, dark shoes, no visible logos",
+  "prompt_formula": "Identity reference pack -> stable Sergio avatar -> all-black outfit -> scene and camera -> micro-movement -> Spanish script/lip-sync -> subtitles -> safe claims -> negative prompt",
+  "safe_claims": [
+    "building in public",
+    "process explanation",
+    "consulting offer",
+    "workflow demonstration with fictional data"
+  ],
+  "forbidden_claims": [
+    "fake revenue",
+    "fake client results",
+    "guaranteed outcomes",
+    "unapproved voice clone",
+    "publication without review"
+  ],
+  "negative_prompt": "No celebrity likeness, no copied creator identity, no changing Sergio's identity, no older-age transformation, no sexualized styling, no logos unless provided, no private screens, no real phone numbers, no fake client results, no fake revenue claims, no exaggerated guru gestures, no distorted face, no extra fingers, no broken lip-sync, no voice clone or publication unless explicitly approved.",
+  "platform_copy": {
+    "instagram_caption": "Estoy convirtiendo esto en contenido real: avatar ultrarrealista con rasgos mejorados, camiseta negra y movimiento natural minimo.\n\navatar ultrarrealista con rasgos mejorados, camiseta negra y movimiento natural minimo\n\nEscribeme 'sistema' si quieres que revise tu proceso.",
+    "tiktok_description": "Estoy convirtiendo esto en contenido real: avatar ultrarrealista con rasgos mejorados, camiseta negra y movimiento natural minimo. #onia #automatizacion #ia #founder #videolab",
+    "youtube_title": "Estoy convirtiendo esto en contenido real: avatar ultrarrealista con r",
+    "youtube_description": "Video avatar de Sergio para ONIA. Tema: avatar ultrarrealista con rasgos mejorados, camiseta negra y movimiento natural minimo. CTA: escribeme 'sistema'.",
+    "youtube_tags": [
+      "ONIA",
+      "Sergio",
+      "automatizacion",
+      "IA",
+      "avatar",
+      "Higgsfield"
+    ],
+    "linkedin_copy": "Estoy documentando la construccion de ONIA como sistema operativo de ventas, automatizacion y contenido. Tema del video: avatar ultrarrealista con rasgos mejorados, camiseta negra y movimiento natural minimo."
+  },
+  "approval_requirements": {
+    "brief": "Aprobar video <job_id>",
+    "face_generation": "requires explicit Sergio approval before rendering",
+    "voice_clone": "blocked until explicit voice-clone approval",
+    "publication": "Publicar video <job_id>"
+  }
+}

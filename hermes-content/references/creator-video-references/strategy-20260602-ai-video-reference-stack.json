@@ -1,0 +1,119 @@
+{
+  "id": "strategy-20260602-ai-video-reference-stack",
+  "objective": "Extract reusable ONIA/Higgsfield production principles from Sergio's Instagram Reel and WhatsApp video references.",
+  "date_created": "2026-06-02",
+  "references_used": [
+    "creator-video-ref-20260602-001",
+    "creator-video-ref-20260602-002",
+    "creator-video-ref-20260602-003"
+  ],
+  "main_verdict": "This batch is useful for ONIA because it teaches a production system: decompose references, build consistent characters, separate tools by job, and control costs. The influencer/fashion framing is not the ONIA angle; the ONIA angle is repeatable business video production for demos, ads, workflows and client-safe UGC.",
+  "useful_for_ONIA": [
+    {
+      "principle": "Reference decomposition",
+      "use": "Turn any reference into scene cards, camera notes, movement, mood and prompt blocks without copying it.",
+      "application": "Higgsfield prompts, Video Lab briefs, client campaign planning."
+    },
+    {
+      "principle": "One tool, one job",
+      "use": "Assign LLMs to planning, image models to character stills, video models to motion, voice tools to narration and Hermes to approvals/memory.",
+      "application": "Internal SOP, pricing, margin protection and onboarding sellers."
+    },
+    {
+      "principle": "Character consistency is a system",
+      "use": "Create approved character packs with front/side/back/smile references, then test before delivery.",
+      "application": "Client avatars, Sergio content, AI UGC and concept videos."
+    },
+    {
+      "principle": "Cost control is creative strategy",
+      "use": "Avoid paying many tools without a clear role; prefer aggregators only if they reduce operational cost.",
+      "application": "Service pricing, package margins, production planning."
+    },
+    {
+      "principle": "Tutorials need proof",
+      "use": "Show tool UI, reference board, before/after output or troubleshooting tip.",
+      "application": "ONIA authority Reels and client trust videos."
+    }
+  ],
+  "not_useful_or_discard": [
+    {
+      "item": "AI influencer/body/fashion focus",
+      "reason": "It can distract from ONIA's B2B automation, SaaS and client marketing positioning.",
+      "replacement": "Use dentists, restaurants, ecommerce, real estate, gyms, SaaS demos and local business workflows."
+    },
+    {
+      "item": "Copy-this-video framing",
+      "reason": "Legal and ethical risk; it can sound like cloning creators.",
+      "replacement": "Use inspiration-to-original-production framing."
+    },
+    {
+      "item": "Censorship-bypass talk",
+      "reason": "Not client-safe and not aligned with ONIA's professional offer.",
+      "replacement": "Discuss approved brand constraints and safety review."
+    },
+    {
+      "item": "Exact tool dependency",
+      "reason": "AI video tools change fast.",
+      "replacement": "Document each tool's job and allow replacement by equivalent platforms."
+    },
+    {
+      "item": "Unverified performance claims",
+      "reason": "ONIA must not sell results it cannot prove.",
+      "replacement": "Show process proof, not fake results."
+    }
+  ],
+  "ONIA_video_formats_to_create": [
+    {
+      "format": "Reference to original prompt",
+      "hook": "Vi un video IA brutal y lo converti en un prompt original para una empresa.",
+      "best_for": "Sergio / ONIA education",
+      "cta": "Comenta PROMPT o pide auditoria."
+    },
+    {
+      "format": "Character consistency checklist",
+      "hook": "La razon por la que tus videos IA cambian de cara en cada escena.",
+      "best_for": "Higgsfield production authority",
+      "cta": "Escribe VIDEO y revisamos tu idea."
+    },
+    {
+      "format": "Tool stack without wasting money",
+      "hook": "Antes de pagar 10 herramientas de video IA, separa el flujo en 5 trabajos.",
+      "best_for": "Service positioning and pricing",
+      "cta": "Pide el flujo para tu rubro."
+    },
+    {
+      "format": "Client-safe UGC system",
+      "hook": "No necesitas copiar influencers para vender con IA; necesitas un sistema aprobado.",
+      "best_for": "Client videos and agencies",
+      "cta": "Agenda demo."
+    }
+  ],
+  "Higgsfield_prompt_template": {
+    "base": "Create a vertical 9:16 educational AI video for ONIA. Show a founder/operator turning a public reference into an original business video: reference analysis cards, scene decomposition, character reference board, prompt rewrite, generation preview and final client-safe output. Spanish captions, fast but readable cuts, clean UI overlays, practical B2B tone.",
+    "negative": "No copied creator likeness, no copied voice, no recognizable third-party edit, no unapproved logos, no fake results, no body/fashion influencer framing, no censorship-bypass language, no unreadable UI text."
+  },
+  "production_rules": [
+    "Always state that references are inspiration, not source material to copy.",
+    "Use a human approval step before generating client-facing videos.",
+    "Keep generated face/voice content out of publishing until Sergio approves.",
+    "Document tool costs per video before setting prices.",
+    "If a tool changes availability, keep the workflow and replace the vendor."
+  ],
+  "ranking": {
+    "use_first": [
+      "creator-video-ref-20260602-001 for prompt extraction workflow",
+      "creator-video-ref-20260602-002 for character consistency SOP",
+      "creator-video-ref-20260602-003 for margin-aware tool stack"
+    ],
+    "test_next": [
+      "Create one ONIA Reel explaining reference decomposition.",
+      "Create one carousel from the same system.",
+      "Build a Video Lab brief template for 'reference to original video'."
+    ],
+    "discard_for_now": [
+      "AI influencer fashion examples as ONIA marketing",
+      "deepfake-like cloning language",
+      "long 100s tutorials as the default public format"
+    ]
+  }
+}

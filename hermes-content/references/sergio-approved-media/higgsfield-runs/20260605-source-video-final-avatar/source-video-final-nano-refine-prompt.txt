@@ -1,0 +1,5 @@
+Identity-preserving refinement of the same Sergio portrait. Keep the face from the real talking-video references as the source of truth and keep the selected generated photoshoot as the style/framing source. Improve only realism and small defects: make the skin less filtered, keep natural pores, keep the Italian side part glossy and controlled, keep shoulders naturally robust, keep black blazer and black crew neck, keep warm industrial office background.
+
+Smile and teeth lock: preserve Sergio's natural smile shape from the talking-video frames, align the visible teeth cleanly, remove any crooked or warped front tooth, keep teeth natural and not too white, keep lips realistic. Do not change the person, do not change eye spacing, do not reshape nose, do not lengthen neck, do not age him, do not make him skinnier, do not make the jaw more artificial.
+
+Output one final vertical 9:16 ultra-realistic portrait, single person, no text, no watermark.

@@ -1,0 +1,26 @@
+﻿{
+  "id": "7e25ad69-18b5-4503-8277-b64905d77580",
+  "status": "completed",
+  "display_name": "Nano Banana Pro",
+  "job_set_type": "nano_banana_2",
+  "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/hf_20260606_034909_7e25ad69-18b5-4503-8277-b64905d77580.png",
+  "created_at": 1780717749.766462,
+  "params": {
+    "width": 3072,
+    "height": 5504,
+    "aspect_ratio": "9:16",
+    "resolution": "4k",
+    "batch_size": 1,
+    "input_images": [
+      {
+        "id": "c5da282f-ff15-4918-bb39-ad0eaa7943ae",
+        "url": "https://d2ol7oe51mr4n9.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/c5da282f-ff15-4918-bb39-ad0eaa7943ae.png",
+        "type": "media_input"
+      }
+    ],
+    "input_image": null,
+    "application": null,
+    "surface": null,
+    "prompt": "Use the uploaded smiling video frame as the exact identity, exact expression, exact mouth mechanics, exact angle, and exact facial geometry source. Create a premium cinematic AI avatar photoshoot portrait of the same real person, Sergio, optimized for future lipsync consistency. Preserve the same youthful Sergio face: same dark almond eyes, same natural asymmetry, same thick eyebrows, same nose, same lips, same jawline, same chin, same cheek movement, same smile width, same teeth identity, same skin tone, same hairline, same black Italian side-part hair. Teeth may be cleaned and made more even only subtly while keeping the natural dental pattern from the reference. Do not create fake veneers. Improve only production quality: reduce video compression, blur, temporary pimples, acne spots, harsh shine, small lighting wrinkles and under-eye fatigue. Keep realistic skin, pores, natural expression and human detail. Hair should be groomed, glossy, structured, and not falling forward. Wardrobe: black blazer over black shirt. Lighting: cinematic soft light, realistic catchlights, high facial clarity, premium commercial quality. Background: clean modern office or studio, softly blurred. Do not change face identity. Do not alter eye spacing, eye size, nose, mouth, teeth pattern, jaw, chin, face length, age, hairline, hairstyle, neck, or skin tone. Avoid plastic skin, generic handsome model drift, distorted teeth, weird mouth, old appearance, scars, neck scratches, and low detail. Additional mandatory cleanup and youth lock: keep Sergio looking young and natural. Remove visible forehead horizontal wrinkles, acne bumps, temporary pimples, hard flash texture, rough acne texture, under-eye fatigue, and any invented beard/mustache shadow. Keep fine human pores and realistic skin detail, but the final face should look clean, fresh, healthy, and polished. Do not over-smooth. Do not change identity, facial structure, eyes, nose, lips, teeth, jaw, chin, hairline, hairstyle, skin tone, age, or expression mechanics."
+  }
+}

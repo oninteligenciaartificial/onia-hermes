@@ -1,0 +1,19 @@
+Create one premium, realistic, slightly stylized AI avatar portrait of Sergio for personal branding, using the uploaded reference images as the identity lock.
+
+Reference priority:
+1. First image is the main identity source: exact frontal face, age, eyes, eyebrows, nose, lips, jaw, chin, skin tone and overall presence.
+2. Second image is only for smile, teeth identity, mouth width, cheek movement and friendly energy.
+3. Third and fourth images are only for profile geometry: nose bridge, nose tip, lips projection, chin, jawline, ear, neck, hairline and side-part hair.
+4. Contact sheet is only for cross-checking that the same person remains recognizable across angles.
+
+This must look like Sergio, not a similar handsome model. Preserve his real youthful face and natural asymmetry. Keep the same dark almond eyes, natural eye spacing, natural eyelid heaviness, same thick dark eyebrows, same straight nose, same lips with fuller lower lip, same long/slim natural face shape, same defined but not exaggerated jawline, same chin, same ears and same black Italian side-part hairstyle. Keep him young, fresh and natural.
+
+Improve only what is temporary or production-related: remove pimples, acne bumps, harsh flash marks, rough temporary skin texture, under-eye fatigue, visible forehead lines caused by lighting, neck scratch artifacts, excessive shine and video/photo noise. Keep realistic fine pores, real skin texture, natural facial asymmetry and a human face. Do not make the skin plastic.
+
+Body and wardrobe: make him slightly more robust/athletic in shoulders and upper torso than the very skinny references, but keep the same face, neck, head size and essence. Polished black blazer or clean black overshirt over a black crewneck shirt, founder/operator aesthetic, no logos.
+
+Expression: calm confident, intelligent, approachable, natural eyes, slight relaxed mouth or very subtle micro-smile. Not angry, not fake, not influencer-guru. The face should feel like a high-end version of the real Sergio, still believable as a real photo.
+
+Visual style: premium cinematic portrait, modern clean office/studio background, soft natural key light, realistic catchlights, crisp hair detail, balanced color, commercial quality, 9:16 portrait, chest and shoulders visible.
+
+Strict negative rules: do not change identity, do not use a generated avatar as the face, do not create a different person, do not enlarge or separate eyes, do not reshape the nose, do not change lips, teeth pattern, jaw, chin, face length, skin tone, hairline, hairstyle, age or expression mechanics. No exaggerated square jaw, no older face, no too-thin neck, no fake model face, no plastic skin, no anime, no cartoon, no CGI look, no distorted mouth, no fake veneers, no dead eyes, no scars, no neck scratches, no beard or mustache shadow beyond the real references, no extra anatomy, no hands in frame.

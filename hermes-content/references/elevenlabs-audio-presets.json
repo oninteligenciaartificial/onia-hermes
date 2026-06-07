@@ -1,0 +1,52 @@
+{
+  "version": 1,
+  "source": "Hermes Audio Lab",
+  "defaults": {
+    "language": "es-419",
+    "approval_required": true,
+    "voice_clone_allowed": false,
+    "negative_policy": "No fake testimonials. No unapproved voice cloning. No generated Sergio voice without explicit approval. No medical, financial, or legal claims without review."
+  },
+  "presets": [
+    {
+      "id": "sergio_founder_real",
+      "lane": "sergio",
+      "use_for": ["building in public", "founder updates", "behind the scenes"],
+      "voice_style": "Natural Spanish, direct, conversational, practical, founder-to-founder, warm, not announcer.",
+      "pace": "slightly fast but clear",
+      "approval_note": "Generated or cloned Sergio voice requires explicit approval before publishing."
+    },
+    {
+      "id": "onia_educator",
+      "lane": "onia",
+      "use_for": ["workflow demos", "automation explainers", "lead generation reels"],
+      "voice_style": "Neutral Latin American Spanish, clear, educational, consultative, low hype.",
+      "pace": "medium with short pauses after key ideas",
+      "approval_note": "Safe for ONIA drafts, still requires final publish approval."
+    },
+    {
+      "id": "ugc_friend",
+      "lane": "client",
+      "use_for": ["UGC ads", "local business offers", "product demos"],
+      "voice_style": "Casual, believable, friend-to-friend, native social media, natural pauses.",
+      "pace": "natural conversational",
+      "approval_note": "Do not imply real testimonial unless provided."
+    },
+    {
+      "id": "premium_client",
+      "lane": "client",
+      "use_for": ["clinics", "real estate", "high trust services", "consultants"],
+      "voice_style": "Calm, warm, trustworthy, premium, polished but human.",
+      "pace": "measured and confident",
+      "approval_note": "Avoid unverifiable claims."
+    },
+    {
+      "id": "bilingual_dubbing",
+      "lane": "onia",
+      "use_for": ["translated reels", "client localization", "repurposed content"],
+      "voice_style": "Preserve meaning, tone, timing, and CTA. Do not add claims.",
+      "pace": "match source video",
+      "approval_note": "Dubbing must be reviewed before publishing."
+    }
+  ]
+}

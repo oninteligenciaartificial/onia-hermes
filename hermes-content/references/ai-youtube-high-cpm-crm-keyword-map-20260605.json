@@ -1,0 +1,77 @@
+{
+  "system": "Atlas AI Media",
+  "created_at": "2026-06-05",
+  "strategy": "high_cpm_crm_saas_ai_automation",
+  "channels": {
+    "workflow_roi": {
+      "language": "en",
+      "market": "USA",
+      "keyword_clusters": [
+        {
+          "cluster": "ai_crm_automation",
+          "keywords": ["AI CRM automation", "CRM automation for small business", "AI follow up system", "lead follow up automation", "sales pipeline automation"],
+          "content_formats": ["build_with_me", "tutorial", "template_drop"],
+          "monetization": ["crm_affiliates", "automation_sponsors", "templates"]
+        },
+        {
+          "cluster": "n8n_ai_agents",
+          "keywords": ["n8n AI agent", "n8n CRM workflow", "AI agent for sales", "human approval AI agent", "n8n follow up automation"],
+          "content_formats": ["demo", "workflow_teardown", "shorts_series"],
+          "monetization": ["n8n_templates", "consulting_delegated", "newsletter"]
+        },
+        {
+          "cluster": "saas_stack",
+          "keywords": ["small business SaaS stack", "best CRM for small business", "Make vs Zapier vs n8n", "Airtable CRM automation", "HubSpot automation tutorial"],
+          "content_formats": ["comparison", "matrix", "tool_reality_check"],
+          "monetization": ["saas_affiliates", "sponsors"]
+        },
+        {
+          "cluster": "reporting_ops",
+          "keywords": ["sales reporting automation", "CRM dashboard", "weekly sales report automation", "AI business reporting", "ops dashboard small business"],
+          "content_formats": ["dashboard_build", "template_walkthrough"],
+          "monetization": ["templates", "analytics_tools", "newsletter"]
+        }
+      ]
+    },
+    "automatiza_pyme": {
+      "language": "es",
+      "market": "Hispanic",
+      "keyword_clusters": [
+        {
+          "cluster": "crm_pyme",
+          "keywords": ["CRM para pymes", "automatizacion CRM", "seguimiento de clientes", "CRM con Google Sheets", "IA para ventas"],
+          "content_formats": ["tutorial", "caso_pyme", "plantilla"],
+          "monetization": ["plantillas", "crm_affiliates", "newsletter"]
+        },
+        {
+          "cluster": "whatsapp_crm",
+          "keywords": ["WhatsApp CRM", "automatizar WhatsApp Business", "seguimiento por WhatsApp", "mensajes perdidos clientes", "n8n WhatsApp"],
+          "content_formats": ["caso_negocio", "demo_segura", "shorts"],
+          "monetization": ["templates", "automation_tools", "consultoria_delegada"]
+        },
+        {
+          "cluster": "reportes_pyme",
+          "keywords": ["reporte ventas pyme", "automatizar reportes", "dashboard ventas", "control de clientes", "seguimiento comercial"],
+          "content_formats": ["dashboard", "checklist", "newsletter"],
+          "monetization": ["templates", "mini_course"]
+        },
+        {
+          "cluster": "ia_sin_humo",
+          "keywords": ["IA para pymes", "automatizacion para negocios", "agentes IA negocios", "n8n espanol", "Make automatizacion"],
+          "content_formats": ["explicador", "errores", "framework"],
+          "monetization": ["newsletter", "templates", "sponsors"]
+        }
+      ]
+    }
+  },
+  "avoid_keywords": [
+    "kids songs",
+    "nursery rhymes",
+    "cartoons for kids",
+    "make money guaranteed",
+    "legal loophole",
+    "investment advice",
+    "medical claims"
+  ]
+}
+

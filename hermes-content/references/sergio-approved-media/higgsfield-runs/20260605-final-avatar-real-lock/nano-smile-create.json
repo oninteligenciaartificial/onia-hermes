@@ -1,0 +1,43 @@
+﻿[
+  {
+    "id": "d1336a6b-ba40-462c-b0ed-3446916bfb5a",
+    "status": "completed",
+    "display_name": "Nano Banana Pro",
+    "job_set_type": "nano_banana_2",
+    "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/hf_20260606_024619_d1336a6b-ba40-462c-b0ed-3446916bfb5a.png",
+    "created_at": 1780713979.627062,
+    "params": {
+      "width": 3072,
+      "height": 5504,
+      "aspect_ratio": "9:16",
+      "resolution": "4k",
+      "batch_size": 1,
+      "input_images": [
+        {
+          "id": "21097f0f-08a1-4761-b5a0-c37215018326",
+          "url": "https://d2ol7oe51mr4n9.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/21097f0f-08a1-4761-b5a0-c37215018326_resize.jpg",
+          "type": "media_input"
+        },
+        {
+          "id": "aa242901-029a-4b9b-bc6b-ce749d2142d8",
+          "url": "https://d2ol7oe51mr4n9.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/aa242901-029a-4b9b-bc6b-ce749d2142d8_resize.jpg",
+          "type": "media_input"
+        },
+        {
+          "id": "c43e7f75-b870-45e2-99f8-de242cfbb3a9",
+          "url": "https://d2ol7oe51mr4n9.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/c43e7f75-b870-45e2-99f8-de242cfbb3a9_resize.jpg",
+          "type": "media_input"
+        },
+        {
+          "id": "e8cf3c2b-fa65-4d70-8bec-643be95b492b",
+          "url": "https://d2ol7oe51mr4n9.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/e8cf3c2b-fa65-4d70-8bec-643be95b492b_resize.jpg",
+          "type": "media_input"
+        }
+      ],
+      "input_image": null,
+      "application": null,
+      "surface": null,
+      "prompt": "Create one ultra-realistic premium AI avatar portrait of Sergio using ONLY the uploaded real reference images as the identity source of truth. The person must remain recognizable as Sergio, not a similar attractive man. Preserve the same young face, same facial structure, same dark almond eyes, same thick eyebrows, same nose, same lips, same jawline, same chin, same ears, same neck length, same skin tone, same black side-part hair, same natural smile energy and same overall presence. Use the smiling front reference as the mouth and teeth lock. Preserve Sergio's real smile shape, dimples, lip curve and teeth proportions. Teeth should be clean, aligned and natural, no crooked front tooth, no broken tooth, no extra teeth, no fake oversized veneers. Use the neutral front reference to keep face geometry stable. Use profile references only for side geometry. Target image: vertical 9:16, chest-up to mid torso, looking at camera, friendly confident smile with visible teeth, not exaggerated. Outfit: black fitted crew neck shirt under a clean black blazer, no logos, no text. Body should look naturally athletic and slightly more robust, not skinny, not bulky. Hair must be a glossy black Italian side part, polished, lively, combed back and to the side, no hair falling forward. Style: realistic but slightly stylized premium AI character, cinematic clean lighting, high-end personal branding portrait, modern entrepreneur aesthetic, sharp realistic eyes, natural skin texture, premium but natural. Background: modern warm neutral office/studio with soft depth of field, no visible brand logos. Strict negative instructions: no identity drift, no different person, no older face, no generic male model, no plastic skin, no dead eyes, no anime, no cartoon, no overly white fake teeth, no warped mouth, no stretched neck, no over-marked jaw, no distorted ears, no logo, no text, no watermark, no hands, no extra people."
+    }
+  }
+]

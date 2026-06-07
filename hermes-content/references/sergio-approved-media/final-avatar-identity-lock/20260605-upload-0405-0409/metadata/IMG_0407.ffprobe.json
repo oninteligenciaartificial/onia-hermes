@@ -1,0 +1,1154 @@
+﻿{
+    "packets_and_frames": [
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame",
+            "side_data_list": [
+                {
+                    "rotation": -90
+                },
+                {
+
+                }
+            ]
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame",
+            "side_data_list": [
+                {
+                    "rotation": -90
+                },
+                {
+
+                }
+            ]
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame",
+            "side_data_list": [
+                {
+                    "rotation": -90
+                },
+                {
+
+                }
+            ]
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame",
+            "side_data_list": [
+                {
+                    "rotation": -90
+                },
+                {
+
+                }
+            ]
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame",
+            "side_data_list": [
+                {
+                    "rotation": -90
+                },
+                {
+
+                }
+            ]
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame",
+            "side_data_list": [
+                {
+                    "rotation": -90
+                },
+                {
+
+                }
+            ]
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame",
+            "side_data_list": [
+                {
+                    "rotation": -90
+                },
+                {
+
+                }
+            ]
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame",
+            "side_data_list": [
+                {
+                    "rotation": -90
+                },
+                {
+
+                }
+            ]
+        },
+        {
+            "type": "frame",
+            "side_data_list": [
+                {
+                    "rotation": -90
+                },
+                {
+
+                }
+            ]
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame",
+            "side_data_list": [
+                {
+                    "rotation": -90
+                },
+                {
+
+                }
+            ]
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame",
+            "side_data_list": [
+                {
+                    "rotation": -90
+                },
+                {
+
+                }
+            ]
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame",
+            "side_data_list": [
+                {
+                    "rotation": -90
+                },
+                {
+
+                }
+            ]
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame",
+            "side_data_list": [
+                {
+                    "rotation": -90
+                },
+                {
+
+                }
+            ]
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame",
+            "side_data_list": [
+                {
+                    "rotation": -90
+                },
+                {
+
+                }
+            ]
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame",
+            "side_data_list": [
+                {
+                    "rotation": -90
+                },
+                {
+
+                }
+            ]
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame",
+            "side_data_list": [
+                {
+                    "rotation": -90
+                },
+                {
+
+                }
+            ]
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame",
+            "side_data_list": [
+                {
+                    "rotation": -90
+                },
+                {
+
+                }
+            ]
+        },
+        {
+            "type": "frame",
+            "side_data_list": [
+                {
+                    "rotation": -90
+                },
+                {
+
+                }
+            ]
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame",
+            "side_data_list": [
+                {
+                    "rotation": -90
+                },
+                {
+
+                }
+            ]
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame",
+            "side_data_list": [
+                {
+                    "rotation": -90
+                },
+                {
+
+                }
+            ]
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame",
+            "side_data_list": [
+                {
+                    "rotation": -90
+                },
+                {
+
+                }
+            ]
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame",
+            "side_data_list": [
+                {
+                    "rotation": -90
+                },
+                {
+
+                }
+            ]
+        },
+        {
+            "type": "frame",
+            "side_data_list": [
+                {
+                    "rotation": -90
+                },
+                {
+
+                }
+            ]
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame",
+            "side_data_list": [
+                {
+                    "rotation": -90
+                },
+                {
+
+                }
+            ]
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame",
+            "side_data_list": [
+                {
+                    "rotation": -90
+                },
+                {
+
+                }
+            ]
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame",
+            "side_data_list": [
+                {
+                    "rotation": -90
+                },
+                {
+
+                }
+            ]
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame",
+            "side_data_list": [
+                {
+                    "rotation": -90
+                },
+                {
+
+                }
+            ]
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame",
+            "side_data_list": [
+                {
+                    "rotation": -90
+                },
+                {
+
+                }
+            ]
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame",
+            "side_data_list": [
+                {
+                    "rotation": -90
+                },
+                {
+
+                }
+            ]
+        },
+        {
+            "type": "packet"
+        },
+        {
+            "type": "frame",
+            "side_data_list": [
+                {
+                    "rotation": -90
+                },
+                {
+
+                }
+            ]
+        },
+        {
+            "type": "frame",
+            "side_data_list": [
+                {
+                    "rotation": -90
+                },
+                {
+
+                }
+            ]
+        },
+        {
+            "type": "frame",
+            "side_data_list": [
+                {
+                    "rotation": -90
+                },
+                {
+
+                }
+            ]
+        }
+    ],
+    "programs": [
+
+    ],
+    "stream_groups": [
+
+    ],
+    "streams": [
+        {
+            "index": 0,
+            "codec_name": "hevc",
+            "codec_type": "video",
+            "width": 1920,
+            "height": 1440,
+            "pix_fmt": "yuvj420p",
+            "avg_frame_rate": "19200/1139",
+            "tags": {
+
+            },
+            "side_data_list": [
+                {
+
+                },
+                {
+                    "rotation": -90
+                }
+            ]
+        },
+        {
+            "index": 1,
+            "codec_name": "pcm_s16le",
+            "codec_type": "audio",
+            "avg_frame_rate": "0/0",
+            "tags": {
+
+            }
+        },
+        {
+            "index": 2,
+            "codec_type": "data",
+            "avg_frame_rate": "0/0",
+            "tags": {
+
+            }
+        },
+        {
+            "index": 3,
+            "codec_type": "data",
+            "avg_frame_rate": "0/0",
+            "tags": {
+
+            }
+        },
+        {
+            "index": 4,
+            "codec_type": "data",
+            "avg_frame_rate": "0/0",
+            "tags": {
+
+            }
+        }
+    ],
+    "format": {
+        "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+        "duration": "1.896667",
+        "size": "3093126"
+    }
+}

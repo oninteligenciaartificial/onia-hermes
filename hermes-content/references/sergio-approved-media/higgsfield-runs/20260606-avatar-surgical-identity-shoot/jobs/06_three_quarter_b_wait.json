@@ -1,0 +1,26 @@
+﻿{
+  "id": "e8b2eecf-0dc1-4142-b44e-7f8a7170be96",
+  "status": "completed",
+  "display_name": "Nano Banana Pro",
+  "job_set_type": "nano_banana_2",
+  "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/hf_20260606_034853_e8b2eecf-0dc1-4142-b44e-7f8a7170be96.png",
+  "created_at": 1780717733.058387,
+  "params": {
+    "width": 3072,
+    "height": 5504,
+    "aspect_ratio": "9:16",
+    "resolution": "4k",
+    "batch_size": 1,
+    "input_images": [
+      {
+        "id": "14b634dc-487a-461a-88af-6bfbf5c98072",
+        "url": "https://d2ol7oe51mr4n9.cloudfront.net/user_38ZdeEBSxQlcwfO6cjFGGPpE3Kz/14b634dc-487a-461a-88af-6bfbf5c98072.png",
+        "type": "media_input"
+      }
+    ],
+    "input_image": null,
+    "application": null,
+    "surface": null,
+    "prompt": "Use the uploaded three-quarter reference frame as the exact identity, exact pose, exact angle, and exact facial geometry source. Create a premium cinematic AI avatar photoshoot three-quarter portrait of the same real person, Sergio. Preserve the same Sergio identity: same youthful face, same long natural face shape, same dark almond eyes, same natural eye asymmetry, same thick eyebrows, same nose shape, same lips, same cheek and jaw proportions, same chin, same skin tone, same hairline, same black Italian side-part hairstyle. This must remain recognizably the same person, not a better-looking stranger. Improve only image quality: reduce video blur and compression, clean temporary pimples/acne spots, reduce harsh shine, remove small lighting wrinkles and fatigue, add realistic crisp skin and hair detail. Keep pores, human texture, and natural asymmetry. Wardrobe: black blazer over black shirt, premium modern entrepreneur aesthetic. Lighting: cinematic soft light, clean catchlights, realistic eyes, high-end commercial quality. Background: modern office or studio, softly blurred. Do not redesign the face. Do not change the eyes, nose, lips, jaw, chin, hair, hairline, age, neck, or proportions. Avoid plastic skin, fake model look, exaggerated jaw, older face, distorted mouth, dead eyes, low detail, scars, and neck scratches. Additional mandatory cleanup and youth lock: keep Sergio looking young and natural. Remove visible forehead horizontal wrinkles, acne bumps, temporary pimples, hard flash texture, rough acne texture, under-eye fatigue, and any invented beard/mustache shadow. Keep fine human pores and realistic skin detail, but the final face should look clean, fresh, healthy, and polished. Do not over-smooth. Do not change identity, facial structure, eyes, nose, lips, teeth, jaw, chin, hairline, hairstyle, skin tone, age, or expression mechanics."
+  }
+}
