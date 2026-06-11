@@ -15,12 +15,26 @@ import re
 import subprocess
 import sys
 import time
+import urllib.request
+import urllib.error
+from datetime import datetime, timedelta
 from pathlib import Path
+
+try:
+    from zoneinfo import ZoneInfo
+    LAPAZ_TZ = ZoneInfo("America/La_Paz")
+except Exception:  # pragma: no cover - fallback if tzdata missing
+    LAPAZ_TZ = None
 
 
 SCRIPTS_DIR = Path(__file__).resolve().parent
 REPO_ROOT = SCRIPTS_DIR.parent
 PYTHON = sys.executable or "python3"
+
+AGENDAR_CREATE_URL = os.environ.get(
+    "AGENDAR_CREATE_URL",
+    "https://n8n-sergio-n8n.hqdqgh.easypanel.host/webhook/agendar-create",
+)
 
 VIDEO_PREFIXES = (
     "crea avatar sergio:",
@@ -537,6 +551,7 @@ def _content_factory_status() -> dict:
 def _help() -> dict:
     lines = [
         "Hermes Command Center - comandos:",
+        "/agendar Título | fecha hora-inicio-hora-fin | descripción",
         "Estado Semana",
         "Plan Semana",
         "Plan Hoy",
@@ -562,11 +577,147 @@ def _help() -> dict:
     return {"ok": True, "action": "help", "telegram_reply": "\n".join(lines)}
 
 
+_WEEKDAYS = {
+    "lunes": 0,
+    "martes": 1,
+    "miercoles": 2,
+    "miércoles": 2,
+    "jueves": 3,
+    "viernes": 4,
+    "sabado": 5,
+    "sábado": 5,
+    "domingo": 6,
+}
+
+
+def _now_lapaz() -> datetime:
+    if LAPAZ_TZ is not None:
+        return datetime.now(LAPAZ_TZ)
+    # Fallback: assume UTC-4 manually.
+    return datetime.utcnow() - timedelta(hours=4)
+
+
+def _parse_fecha(texto: str) -> datetime:
+    lower = texto.lower()
+    fecha = _now_lapaz()
+    if "mañana" in lower or "manana" in lower:
+        return fecha + timedelta(days=1)
+    for nombre, num in _WEEKDAYS.items():
+        if nombre in lower:
+            diff = num - fecha.weekday()
+            if diff <= 0:
+                diff += 7
+            return fecha + timedelta(days=diff)
+    match = re.search(r"(\d{1,2})/(\d{1,2})", texto)
+    if match:
+        day, month = int(match.group(1)), int(match.group(2))
+        try:
+            return fecha.replace(month=month, day=day)
+        except ValueError:
+            return fecha
+    return fecha
+
+
+def _parse_hora(texto: str) -> tuple[int, int]:
+    match = re.search(r"(\d{1,2})(?::(\d{2}))?\s*(am|pm)?", texto, re.IGNORECASE)
+    if not match:
+        return 9, 0
+    hour = int(match.group(1))
+    minute = int(match.group(2) or 0)
+    ampm = (match.group(3) or "").lower()
+    if ampm == "pm" and hour < 12:
+        hour += 12
+    if ampm == "am" and hour == 12:
+        hour = 0
+    return hour, minute
+
+
+def _post_agendar_create(payload: dict, timeout: int = 30) -> dict:
+    data = json.dumps(payload).encode("utf-8")
+    req = urllib.request.Request(
+        AGENDAR_CREATE_URL,
+        data=data,
+        headers={"Content-Type": "application/json"},
+        method="POST",
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=timeout) as resp:
+            body = resp.read().decode("utf-8")
+        return json.loads(body) if body else {"ok": False}
+    except urllib.error.HTTPError as exc:
+        detail = exc.read().decode("utf-8", "replace")[:400] if exc.fp else str(exc)
+        return {"ok": False, "error": f"HTTP {exc.code}: {detail}"}
+    except Exception as exc:  # noqa: BLE001 - report any transport failure to Telegram
+        return {"ok": False, "error": str(exc)}
+
+
+def _agendar(payload: str) -> dict:
+    partes = [part.strip() for part in payload.split("|")]
+    titulo = partes[0] if partes and partes[0] else "Sin título"
+    fecha_hora = partes[1] if len(partes) > 1 else ""
+    descripcion = partes[2] if len(partes) > 2 else ""
+
+    if not fecha_hora:
+        return {
+            "ok": False,
+            "action": "agendar",
+            "telegram_reply": (
+                "Formato: /agendar Título | fecha hora-inicio-hora-fin | descripción\n"
+                "Ejemplo: /agendar Reunión Epic | jueves 10am-11am | ver propuesta"
+            ),
+        }
+
+    fecha = _parse_fecha(fecha_hora)
+    rango = re.search(r"([\d:apm]+)\s*-\s*([\d:apm]+)", fecha_hora, re.IGNORECASE)
+    if rango:
+        start_h, start_m = _parse_hora(rango.group(1))
+        end_h, end_m = _parse_hora(rango.group(2))
+    else:
+        start_h, start_m = _parse_hora(fecha_hora)
+        end_h, end_m = (start_h + 1) % 24, start_m
+
+    start_dt = fecha.replace(hour=start_h, minute=start_m, second=0, microsecond=0)
+    end_dt = fecha.replace(hour=end_h, minute=end_m, second=0, microsecond=0)
+    if end_dt <= start_dt:
+        end_dt = start_dt + timedelta(hours=1)
+
+    resumen = f"{titulo} — {start_dt.strftime('%a %d %b %H:%M')}"
+    result = _post_agendar_create(
+        {
+            "titulo": titulo,
+            "descripcion": descripcion,
+            "startISO": start_dt.isoformat(),
+            "endISO": end_dt.isoformat(),
+        }
+    )
+
+    if result.get("ok"):
+        link = result.get("htmlLink", "")
+        reply = f"✅ Evento agendado:\n📅 {titulo}\n⏰ {resumen}"
+        if descripcion:
+            reply += f"\n📝 {descripcion}"
+        if link:
+            reply += f"\n🔗 {link}"
+        return {"ok": True, "action": "agendar", "telegram_reply": reply, "event": result}
+
+    return {
+        "ok": False,
+        "action": "agendar",
+        "telegram_reply": "No pude crear el evento en Google Calendar: "
+        + str(result.get("error", "error desconocido")),
+        "result": result,
+    }
+
+
 def handle_telegram(message: str) -> dict:
     normalized = _normalize(message)
     lower = normalized.lower()
     if not normalized:
         return _dispatch(_help())
+
+    if lower.startswith("/agendar") or lower.startswith("agendar "):
+        payload = re.sub(r"^/?agendar\s*", "", normalized, flags=re.IGNORECASE)
+        return _dispatch(_agendar(payload), {"message": normalized[:500]})
 
     if lower.startswith(VIDEO_PREFIXES):
         return _dispatch(_video_router(normalized), {"message": normalized[:500]})

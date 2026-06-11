@@ -12,14 +12,19 @@ Muestra todos los eventos del día actual desde Google Calendar.
 ### /agenda semana
 Muestra cronograma de los próximos 7 días.
 
-### /agendar <datos>
+### agendar <datos>
 Crea un evento. Datos mínimos requeridos:
 - Título
-- Fecha (ej: "jueves", "15 de junio", "mañana")
+- Fecha (ej: "jueves", "15/06", "mañana")
 - Hora inicio y fin
 - Descripción opcional
 
-Ejemplo: `/agendar Reunión Epic Motion | jueves 10am-11am | Ver propuesta web`
+Ejemplo: `agendar Reunión Epic Motion | jueves 10am-11am | Ver propuesta web`
+
+> **Importante (bot Alfredhq):** enviar **sin `/`** al inicio. El bot Hermes en el VPS
+> rechaza slash-commands desconocidos. `agendar ...` (sin slash) se enruta a
+> `hermes-command telegram` → `_agendar` → webhook n8n `agendar-create` → Google Calendar.
+> El router (`scripts/hermes_command_center.py`) acepta ambas formas; `/agendar` sirve al invocar el CLI directo.
 
 ### /cancelar <evento>
 Cancela o elimina evento existente. Requiere confirmación explícita.

@@ -570,6 +570,17 @@ def create_brief(args: argparse.Namespace) -> dict:
     else:
         audience = args.audience or defaults["audience"]
         creative = _script_for(lane, args.topic, args.objective, audience)
+    # Apply optional creative overrides so a cron/agent can store a real script.
+    if getattr(args, "hook", ""):
+        creative["hook"] = args.hook.strip()
+    if getattr(args, "script", ""):
+        creative["script"] = [s.strip() for s in args.script.split("|") if s.strip()]
+    if getattr(args, "shot_list", ""):
+        creative["shot_list"] = [s.strip() for s in args.shot_list.split("|") if s.strip()]
+    if getattr(args, "higgsfield_prompt", ""):
+        creative["higgsfield_prompt"] = args.higgsfield_prompt.strip()
+    if getattr(args, "caption", ""):
+        creative["caption"] = args.caption.strip()
     now = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
     job = {
         "ok": True,
@@ -1133,6 +1144,13 @@ def build_parser() -> argparse.ArgumentParser:
     create.add_argument("--offer", default="")
     create.add_argument("--style", default="")
     create.add_argument("--model", default="higgsfield")
+    # Optional creative overrides (pipe-separated for list fields). When provided
+    # they replace the templated defaults so an agent can store a real script.
+    create.add_argument("--hook", default="")
+    create.add_argument("--script", default="", help="Lineas de guion separadas por |")
+    create.add_argument("--shot-list", dest="shot_list", default="", help="Tomas separadas por |")
+    create.add_argument("--higgsfield-prompt", dest="higgsfield_prompt", default="")
+    create.add_argument("--caption", default="")
     create.set_defaults(func=create_brief)
 
     avatar = sub.add_parser("create_avatar")
