@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Propuesta ONIA — Lia Albertengo</title>
+<style>
+  :root{--ink:#101827;--muted:#526172;--line:#d8e0ea;--blue:#1e5bff;--blue-dark:#1239a8;
+    --green:#0f8b62;--amber:#a75b00;--bg:#f6f8fb;--white:#fff;--accent:#0f8b62;}
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:Arial,Helvetica,sans-serif;color:var(--ink);background:var(--bg);}
+  .page{max-width:900px;margin:0 auto;padding:40px 28px;}
+  .hero{background:linear-gradient(135deg,#16294a 0%,#0e3f32 60%,#0f8b62 100%);color:#fff;border-radius:18px;padding:44px 40px;margin-bottom:28px;}
+  .kicker{color:#cfe0ff;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;}
+  h1{font-size:clamp(34px,6vw,56px);line-height:1.02;margin:0 0 14px;}
+  h2{font-size:26px;margin:34px 0 14px;border-bottom:3px solid var(--accent);padding-bottom:8px;}
+  h3{font-size:18px;margin:0 0 8px;}
+  p{font-size:16px;line-height:1.5;color:var(--muted);margin:0 0 10px;}
+  .hero p{color:#e6eefb;font-size:18px;}
+  .card{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin-bottom:14px;}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  table{width:100%;border-collapse:collapse;background:var(--white);border-radius:12px;overflow:hidden;border:1px solid var(--line);}
+  th,td{padding:12px 14px;text-align:left;font-size:15px;border-bottom:1px solid var(--line);}
+  th{background:#eef3fb;color:var(--ink);font-weight:800;}
+  td.num,th.num{text-align:right;white-space:nowrap;}
+  .tag{display:inline-block;background:#eaf0ff;color:var(--blue-dark);font-size:12px;font-weight:800;padding:3px 10px;border-radius:999px;margin-bottom:8px;}
+  .tag.green{background:#e3f4ec;color:var(--green);}
+  .tag.amber{background:#fbeede;color:var(--amber);}
+  ul{margin:6px 0 0;padding-left:20px;}
+  li{font-size:15px;color:var(--muted);line-height:1.5;margin-bottom:5px;}
+  .foot{margin-top:30px;border-top:1px solid var(--line);padding-top:16px;font-size:13px;color:var(--muted);}
+  .big{font-size:20px;color:var(--ink);font-weight:800;}
+  .step{display:flex;gap:14px;align-items:flex-start;margin-bottom:12px;}
+  .step .n{background:var(--accent);color:#fff;font-weight:800;border-radius:50%;width:30px;height:30px;display:flex;align-items:center;justify-content:center;flex:0 0 30px;}
+  @media print{.page{max-width:100%;}body{background:#fff;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="hero">
+    <div class="kicker">Propuesta comercial · ONIA Inteligencia Artificial</div>
+    <h1>Lia Albertengo — Web profesional + libro de fisioterapia digital</h1>
+    <p>Una presencia online que transmite autoridad como fisioterapeuta, y tu libro convertido en un producto digital que se vende y entrega solo.</p>
+  </div>
+
+  <h2>Qué problema resolvemos</h2>
+  <div class="card"><p>Dos piezas que trabajan juntas: una <b>web general</b> que presenta quién eres, tus servicios y cómo agendar; y el <b>libro de fisioterapia</b> como producto digital con su propia página de venta y entrega automática tras el pago.</p></div>
+
+  <h2>Qué incluye</h2>
+  <div class="grid">
+    <div class="card">
+      <div class="tag ">Presencia</div>
+      <h3>Web Profesional</h3>
+      <ul><li>Sobre ti, servicios y especialidades</li><li>Agenda / contacto directo</li><li>Blog o recursos para pacientes</li><li>Diseño cálido y profesional, móvil primero</li></ul>
+    </div>
+    <div class="card">
+      <div class="tag green">Producto digital</div>
+      <h3>Libro de Fisioterapia</h3>
+      <ul><li>Página de venta del libro</li><li>Pago en línea</li><li>Entrega automática del libro tras el pago</li><li>Sin envíos manuales ni mensajes uno por uno</li></ul>
+    </div></div>
+
+  <h2>Cómo lo construimos</h2>
+  <div class="card">
+    <div class="step"><div class="n">1</div><div>
+      <h3>Página</h3><p>Landing o web con tu presentación, servicios y forma de agendar.</p>
+    </div></div>
+    <div class="step"><div class="n">2</div><div>
+      <h3>Página de venta del libro</h3><p>Portada, descripción y botón de compra del libro.</p>
+    </div></div>
+    <div class="step"><div class="n">3</div><div>
+      <h3>Pago en línea</h3><p>El paciente paga con tarjeta / QR por la pasarela.</p>
+    </div></div>
+    <div class="step"><div class="n">4</div><div>
+      <h3>Entrega automática</h3><p>Al confirmarse el pago, recibe el link de descarga del libro al instante. Sin enviar nada a mano.</p>
+    </div></div></div>
+
+  <h2>Paquetes — elegí el tuyo</h2>
+  <table>
+    <tr><th>Paquete</th><th>Qué incluye</th><th class="num">Precio (Bs)</th></tr>
+    <tr><td><b>Landing Libro</b> ⭐</td><td>Página única: presentación + venta del libro + entrega automática</td><td class="num">2,000</td></tr><tr><td><b>Web Pro</b></td><td>Web completa multipágina + sección del libro + entrega automática</td><td class="num">4,500</td></tr><tr><td><b>Web Pro + Marketing</b></td><td>Web Pro + maquetación del libro digital + 8 videos IA/mes + WhatsApp</td><td class="num">desde 5,900</td></tr><tr><td><b>Cuidado Web (mensual)</b></td><td>Respaldos, soporte y mejoras</td><td class="num">190/mes</td></tr>
+  </table>
+  <p style="margin-top:10px;">Recomendado: empezar con <b>Landing Libro</b> para lanzar rápido, escalar a Web Pro después. Pago sugerido: 50% anticipo, 50% contra entrega. El dominio lo compra Lia a su nombre.</p>
+
+  <h2>Add-ons (opcionales)</h2>
+  <table>
+    <tr><th>Add-on</th><th class="num">Setup (Bs)</th><th class="num">Mensual (Bs)</th></tr>
+    <tr><td>Pasarela de pago + entrega automática del libro</td><td class="num">1,900</td><td class="num">—</td></tr><tr><td>Diseño y maquetación del libro digital</td><td class="num">1,900</td><td class="num">—</td></tr><tr><td>WhatsApp — agendar pacientes y confirmar compra</td><td class="num">900</td><td class="num">80</td></tr><tr><td>Videos con IA para promocionar el libro y tu consulta</td><td class="num">—</td><td class="num">2,200 (8/mes)</td></tr><tr><td>Cuidado Web (respaldo, soporte, mejoras)</td><td class="num">—</td><td class="num">190</td></tr>
+  </table>
+
+  <div class="card" style="margin-top:16px;">
+    <div class="tag amber">Importante — costos de terceros</div>
+    <p>No incluidos: comisión de la pasarela de pago, dominio, hosting, créditos de IA y mensajería WhatsApp pagada. WhatsApp automático depende de verificación de Meta.</p>
+  </div>
+
+  <div class="foot">
+    <p class="big">Precio reservado hasta 30 días con confirmación de pago.</p>
+    <p>ONIA — Sistemas, automatización y contenido para negocios. business@onia.com.bo</p>
+  </div>
+
+</div>
+</body>
+</html>

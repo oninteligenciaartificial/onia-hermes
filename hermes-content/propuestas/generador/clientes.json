@@ -1,0 +1,118 @@
+[
+  {
+    "slug": "garabato",
+    "nombre": "Garabato",
+    "accent": "#1e5bff",
+    "titulo": "Garabato — Tienda online con cobro y orden automática",
+    "subtitulo": "Portal y catálogo de productos, pasarela de pago BCP integrada y confirmación de orden automática al cliente. Sin chatbot: el sistema responde solo cuando el pago se confirma.",
+    "problema": "Vender por mensajes sueltos cuesta tiempo y se pierden pedidos. Garabato tendrá un <b>catálogo propio</b> donde el cliente elige, paga en línea y recibe <b>su orden confirmada automáticamente</b> — sin que nadie tenga que escribir a mano cada venta.",
+    "incluye": [
+      {
+        "tag": "Base", "tagClass": "", "titulo": "Portal + Catálogo de productos",
+        "items": ["Catálogo con fotos, precios y categorías", "Carrito y checkout", "Diseño propio de marca (no plantilla genérica)", "Optimizado para celular"]
+      },
+      {
+        "tag": "Automatización", "tagClass": "green", "titulo": "Cobro + Orden automática",
+        "items": ["Pasarela de pago BCP integrada", "Al confirmar pago → genera la orden", "Mensaje automático al cliente con su pedido", "Sin chatbot, sin atención manual"]
+      }
+    ],
+    "pasos": [
+      {"titulo": "Catálogo", "detalle": "Cargamos productos con fotos, precios y categorías en un portal propio de marca."},
+      {"titulo": "Carrito + checkout BCP", "detalle": "El cliente arma su pedido y paga con el botón de pago BCP (tarjeta / QR)."},
+      {"titulo": "Confirmación BCP → orden", "detalle": "BCP avisa que el pago se aprobó; un flujo n8n genera la orden al instante."},
+      {"titulo": "Mensaje automático", "detalle": "El cliente recibe su orden confirmada (email y/o WhatsApp). Sin chatbot, sin tipeo manual."}
+    ],
+    "paquetes": [
+      {"nombre": "Catálogo Esencial", "incluye": "Portal + catálogo + carrito + pago BCP + confirmación por email automática", "precio": "4,500", "recomendado": false},
+      {"nombre": "Tienda Automática", "incluye": "Lo anterior + flujo n8n de orden + confirmación por WhatsApp", "precio": "6,900", "recomendado": true},
+      {"nombre": "Tienda Pro", "incluye": "Lo anterior + control de inventario, cupones, panel de ventas y 8 videos IA/mes", "precio": "desde 11,000", "recomendado": false},
+      {"nombre": "Cuidado Web (mensual)", "incluye": "Hosting administrado, respaldos, cambios y soporte", "precio": "250/mes", "recomendado": false}
+    ],
+    "notaPaquetes": "Recomendado: <b>Tienda Automática</b> — cobra y confirma solo. Pago sugerido: 50% anticipo, 50% contra entrega. El dominio lo compra Garabato a su nombre.",
+    "addons": [
+      {"nombre": "WhatsApp — orden confirmada al cliente por WhatsApp", "setup": "900", "mensual": "80"},
+      {"nombre": "Cuidado Web (actualizaciones, respaldo, soporte)", "setup": "—", "mensual": "190–390"},
+      {"nombre": "Videos con IA para promocionar productos", "setup": "—", "mensual": "2,200 (8/mes)"},
+      {"nombre": "Conexión Instagram / TikTok (publicación)", "setup": "900", "mensual": "150"}
+    ],
+    "terceros": "No incluidos en el proyecto (los cobra cada proveedor, no ONIA): comisión y afiliación de la pasarela BCP, dominio, hosting, créditos de IA y mensajería WhatsApp pagada. La cuenta/contrato de cobro BCP va a nombre de Garabato. WhatsApp automático depende de verificación de Meta."
+  },
+  {
+    "slug": "hsb-engineers",
+    "nombre": "HSB Engineers",
+    "accent": "#1e5bff",
+    "titulo": "HSB Engineers — Web renovada + sistema para captar clientes",
+    "subtitulo": "Una web a la altura de los proyectos de HSB (civil, industrial, oil & gas, minería) y un sistema que ordena cada prospecto, del primer contacto al proyecto firmado.",
+    "problema": "HSB Engineers maneja proyectos serios para clientes nacionales e internacionales — pero el sitio actual quedó atrás y no refleja ese nivel. En ingeniería el cliente compra <b>confianza y trayectoria</b>. Renovamos la web con autoridad técnica, ordenamos el portafolio de obras, y montamos un <b>sistema de captación</b> que registra y da seguimiento a cada consulta sin que se enfríe.",
+    "incluye": [
+      {
+        "tag": "Renovación", "tagClass": "", "titulo": "Web Profesional de HSB",
+        "items": ["Disciplinas: civil, industrial, oil & gas, minería, arquitectura", "Portafolio de obras con casos reales", "Diseño de autoridad técnica e internacional", "Bilingüe (ES/EN), móvil y Google"]
+      },
+      {
+        "tag": "Sistema", "tagClass": "green", "titulo": "Captación + Seguimiento (CRM)",
+        "items": ["Registro automático de cada consulta", "Estados del embudo (consulta → cotización → proyecto)", "Recordatorios de seguimiento", "Reportes de conversión"]
+      }
+    ],
+    "pasos": [
+      {"titulo": "Web de autoridad", "detalle": "Renovamos el sitio con disciplinas, portafolio de obras y formularios de contacto. Bilingüe ES/EN."},
+      {"titulo": "Consultoría de captación", "detalle": "Diagnóstico de cómo llegan hoy las consultas (web, referidos, licitaciones) + plan para atraer más."},
+      {"titulo": "CRM + embudo", "detalle": "Cada consulta (web o WhatsApp) entra automático al CRM con su estado: consulta, cotización, proyecto."},
+      {"titulo": "Seguimiento y reportes", "detalle": "Recordatorios para no perder ninguna consulta + reporte de qué oportunidad avanza."}
+    ],
+    "paquetes": [
+      {"nombre": "Presencia", "incluye": "Web renovada bilingüe + portafolio + formularios + WhatsApp de contacto", "precio": "4,500", "recomendado": false},
+      {"nombre": "Captación", "incluye": "Lo anterior + consultoría/plan de captación + CRM con embudo y seguimiento", "precio": "desde 8,900", "recomendado": true},
+      {"nombre": "Crecimiento", "incluye": "Lo anterior + gestión de pauta + 8 videos IA/mes + acompañamiento mensual", "precio": "desde 13,900", "recomendado": false}
+    ],
+    "notaPaquetes": "Recomendado: <b>Captación</b> — ordena todo el proceso comercial. Pago sugerido: 50% anticipo, 50% contra entrega. El dominio (hsbengineers.com) y hosting quedan a nombre de HSB.",
+    "addons": [
+      {"nombre": "WhatsApp — captación y respuesta a consultas", "setup": "900", "mensual": "80"},
+      {"nombre": "Operación mensual del CRM (GestiOS)", "setup": "—", "mensual": "desde 530"},
+      {"nombre": "Videos con IA para mostrar proyectos y servicios", "setup": "—", "mensual": "2,200 (8/mes)"},
+      {"nombre": "Gestión de pauta + consultoría continua", "setup": "4,900–6,500", "mensual": "a convenir"},
+      {"nombre": "Cuidado Web (soporte, respaldo, mejoras)", "setup": "—", "mensual": "190–690"}
+    ],
+    "terceros": "No incluidos: presupuesto de pauta publicitaria, dominio, hosting, créditos de IA y mensajería WhatsApp pagada. El CRM se opera con GestiOS (mensual, ver add-ons). No prometemos resultados garantizados; sí un sistema que ordena y mide el proceso comercial."
+  },
+  {
+    "slug": "lia-albertengo",
+    "nombre": "Lia Albertengo",
+    "accent": "#0f8b62",
+    "heroGrad": "linear-gradient(135deg,#16294a 0%,#0e3f32 60%,#0f8b62 100%)",
+    "titulo": "Lia Albertengo — Web profesional + libro de fisioterapia digital",
+    "subtitulo": "Una presencia online que transmite autoridad como fisioterapeuta, y tu libro convertido en un producto digital que se vende y entrega solo.",
+    "problema": "Dos piezas que trabajan juntas: una <b>web general</b> que presenta quién eres, tus servicios y cómo agendar; y el <b>libro de fisioterapia</b> como producto digital con su propia página de venta y entrega automática tras el pago.",
+    "incluye": [
+      {
+        "tag": "Presencia", "tagClass": "", "titulo": "Web Profesional",
+        "items": ["Sobre ti, servicios y especialidades", "Agenda / contacto directo", "Blog o recursos para pacientes", "Diseño cálido y profesional, móvil primero"]
+      },
+      {
+        "tag": "Producto digital", "tagClass": "green", "titulo": "Libro de Fisioterapia",
+        "items": ["Página de venta del libro", "Pago en línea", "Entrega automática del libro tras el pago", "Sin envíos manuales ni mensajes uno por uno"]
+      }
+    ],
+    "pasos": [
+      {"titulo": "Página", "detalle": "Landing o web con tu presentación, servicios y forma de agendar."},
+      {"titulo": "Página de venta del libro", "detalle": "Portada, descripción y botón de compra del libro."},
+      {"titulo": "Pago en línea", "detalle": "El paciente paga con tarjeta / QR por la pasarela."},
+      {"titulo": "Entrega automática", "detalle": "Al confirmarse el pago, recibe el link de descarga del libro al instante. Sin enviar nada a mano."}
+    ],
+    "paquetes": [
+      {"nombre": "Landing Libro", "incluye": "Página única: presentación + venta del libro + entrega automática", "precio": "2,000", "recomendado": true},
+      {"nombre": "Web Pro", "incluye": "Web completa multipágina + sección del libro + entrega automática", "precio": "4,500", "recomendado": false},
+      {"nombre": "Web Pro + Marketing", "incluye": "Web Pro + maquetación del libro digital + 8 videos IA/mes + WhatsApp", "precio": "desde 5,900", "recomendado": false},
+      {"nombre": "Cuidado Web (mensual)", "incluye": "Respaldos, soporte y mejoras", "precio": "190/mes", "recomendado": false}
+    ],
+    "notaPaquetes": "Recomendado: empezar con <b>Landing Libro</b> para lanzar rápido, escalar a Web Pro después. Pago sugerido: 50% anticipo, 50% contra entrega. El dominio lo compra Lia a su nombre.",
+    "addons": [
+      {"nombre": "Pasarela de pago + entrega automática del libro", "setup": "1,900", "mensual": "—"},
+      {"nombre": "Diseño y maquetación del libro digital", "setup": "1,900", "mensual": "—"},
+      {"nombre": "WhatsApp — agendar pacientes y confirmar compra", "setup": "900", "mensual": "80"},
+      {"nombre": "Videos con IA para promocionar el libro y tu consulta", "setup": "—", "mensual": "2,200 (8/mes)"},
+      {"nombre": "Cuidado Web (respaldo, soporte, mejoras)", "setup": "—", "mensual": "190"}
+    ],
+    "terceros": "No incluidos: comisión de la pasarela de pago, dominio, hosting, créditos de IA y mensajería WhatsApp pagada. WhatsApp automático depende de verificación de Meta."
+  }
+]

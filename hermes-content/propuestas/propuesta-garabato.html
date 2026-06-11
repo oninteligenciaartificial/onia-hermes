@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Propuesta ONIA — Garabato</title>
+<style>
+  :root{--ink:#101827;--muted:#526172;--line:#d8e0ea;--blue:#1e5bff;--blue-dark:#1239a8;
+    --green:#0f8b62;--amber:#a75b00;--bg:#f6f8fb;--white:#fff;--accent:#1e5bff;}
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:Arial,Helvetica,sans-serif;color:var(--ink);background:var(--bg);}
+  .page{max-width:900px;margin:0 auto;padding:40px 28px;}
+  .hero{background:linear-gradient(135deg,#0f1b2e 0%,#16294a 55%,#0e3f32 100%);color:#fff;border-radius:18px;padding:44px 40px;margin-bottom:28px;}
+  .kicker{color:#cfe0ff;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;}
+  h1{font-size:clamp(34px,6vw,56px);line-height:1.02;margin:0 0 14px;}
+  h2{font-size:26px;margin:34px 0 14px;border-bottom:3px solid var(--accent);padding-bottom:8px;}
+  h3{font-size:18px;margin:0 0 8px;}
+  p{font-size:16px;line-height:1.5;color:var(--muted);margin:0 0 10px;}
+  .hero p{color:#e6eefb;font-size:18px;}
+  .card{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin-bottom:14px;}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  table{width:100%;border-collapse:collapse;background:var(--white);border-radius:12px;overflow:hidden;border:1px solid var(--line);}
+  th,td{padding:12px 14px;text-align:left;font-size:15px;border-bottom:1px solid var(--line);}
+  th{background:#eef3fb;color:var(--ink);font-weight:800;}
+  td.num,th.num{text-align:right;white-space:nowrap;}
+  .tag{display:inline-block;background:#eaf0ff;color:var(--blue-dark);font-size:12px;font-weight:800;padding:3px 10px;border-radius:999px;margin-bottom:8px;}
+  .tag.green{background:#e3f4ec;color:var(--green);}
+  .tag.amber{background:#fbeede;color:var(--amber);}
+  ul{margin:6px 0 0;padding-left:20px;}
+  li{font-size:15px;color:var(--muted);line-height:1.5;margin-bottom:5px;}
+  .foot{margin-top:30px;border-top:1px solid var(--line);padding-top:16px;font-size:13px;color:var(--muted);}
+  .big{font-size:20px;color:var(--ink);font-weight:800;}
+  .step{display:flex;gap:14px;align-items:flex-start;margin-bottom:12px;}
+  .step .n{background:var(--accent);color:#fff;font-weight:800;border-radius:50%;width:30px;height:30px;display:flex;align-items:center;justify-content:center;flex:0 0 30px;}
+  @media print{.page{max-width:100%;}body{background:#fff;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="hero">
+    <div class="kicker">Propuesta comercial · ONIA Inteligencia Artificial</div>
+    <h1>Garabato — Tienda online con cobro y orden automática</h1>
+    <p>Portal y catálogo de productos, pasarela de pago BCP integrada y confirmación de orden automática al cliente. Sin chatbot: el sistema responde solo cuando el pago se confirma.</p>
+  </div>
+
+  <h2>Qué problema resolvemos</h2>
+  <div class="card"><p>Vender por mensajes sueltos cuesta tiempo y se pierden pedidos. Garabato tendrá un <b>catálogo propio</b> donde el cliente elige, paga en línea y recibe <b>su orden confirmada automáticamente</b> — sin que nadie tenga que escribir a mano cada venta.</p></div>
+
+  <h2>Qué incluye</h2>
+  <div class="grid">
+    <div class="card">
+      <div class="tag ">Base</div>
+      <h3>Portal + Catálogo de productos</h3>
+      <ul><li>Catálogo con fotos, precios y categorías</li><li>Carrito y checkout</li><li>Diseño propio de marca (no plantilla genérica)</li><li>Optimizado para celular</li></ul>
+    </div>
+    <div class="card">
+      <div class="tag green">Automatización</div>
+      <h3>Cobro + Orden automática</h3>
+      <ul><li>Pasarela de pago BCP integrada</li><li>Al confirmar pago → genera la orden</li><li>Mensaje automático al cliente con su pedido</li><li>Sin chatbot, sin atención manual</li></ul>
+    </div></div>
+
+  <h2>Cómo lo construimos</h2>
+  <div class="card">
+    <div class="step"><div class="n">1</div><div>
+      <h3>Catálogo</h3><p>Cargamos productos con fotos, precios y categorías en un portal propio de marca.</p>
+    </div></div>
+    <div class="step"><div class="n">2</div><div>
+      <h3>Carrito + checkout BCP</h3><p>El cliente arma su pedido y paga con el botón de pago BCP (tarjeta / QR).</p>
+    </div></div>
+    <div class="step"><div class="n">3</div><div>
+      <h3>Confirmación BCP → orden</h3><p>BCP avisa que el pago se aprobó; un flujo n8n genera la orden al instante.</p>
+    </div></div>
+    <div class="step"><div class="n">4</div><div>
+      <h3>Mensaje automático</h3><p>El cliente recibe su orden confirmada (email y/o WhatsApp). Sin chatbot, sin tipeo manual.</p>
+    </div></div></div>
+
+  <h2>Paquetes — elegí el tuyo</h2>
+  <table>
+    <tr><th>Paquete</th><th>Qué incluye</th><th class="num">Precio (Bs)</th></tr>
+    <tr><td><b>Catálogo Esencial</b></td><td>Portal + catálogo + carrito + pago BCP + confirmación por email automática</td><td class="num">4,500</td></tr><tr><td><b>Tienda Automática</b> ⭐</td><td>Lo anterior + flujo n8n de orden + confirmación por WhatsApp</td><td class="num">6,900</td></tr><tr><td><b>Tienda Pro</b></td><td>Lo anterior + control de inventario, cupones, panel de ventas y 8 videos IA/mes</td><td class="num">desde 11,000</td></tr><tr><td><b>Cuidado Web (mensual)</b></td><td>Hosting administrado, respaldos, cambios y soporte</td><td class="num">250/mes</td></tr>
+  </table>
+  <p style="margin-top:10px;">Recomendado: <b>Tienda Automática</b> — cobra y confirma solo. Pago sugerido: 50% anticipo, 50% contra entrega. El dominio lo compra Garabato a su nombre.</p>
+
+  <h2>Add-ons (opcionales)</h2>
+  <table>
+    <tr><th>Add-on</th><th class="num">Setup (Bs)</th><th class="num">Mensual (Bs)</th></tr>
+    <tr><td>WhatsApp — orden confirmada al cliente por WhatsApp</td><td class="num">900</td><td class="num">80</td></tr><tr><td>Cuidado Web (actualizaciones, respaldo, soporte)</td><td class="num">—</td><td class="num">190–390</td></tr><tr><td>Videos con IA para promocionar productos</td><td class="num">—</td><td class="num">2,200 (8/mes)</td></tr><tr><td>Conexión Instagram / TikTok (publicación)</td><td class="num">900</td><td class="num">150</td></tr>
+  </table>
+
+  <div class="card" style="margin-top:16px;">
+    <div class="tag amber">Importante — costos de terceros</div>
+    <p>No incluidos en el proyecto (los cobra cada proveedor, no ONIA): comisión y afiliación de la pasarela BCP, dominio, hosting, créditos de IA y mensajería WhatsApp pagada. La cuenta/contrato de cobro BCP va a nombre de Garabato. WhatsApp automático depende de verificación de Meta.</p>
+  </div>
+
+  <div class="foot">
+    <p class="big">Precio reservado hasta 30 días con confirmación de pago.</p>
+    <p>ONIA — Sistemas, automatización y contenido para negocios. business@onia.com.bo</p>
+  </div>
+
+</div>
+</body>
+</html>
