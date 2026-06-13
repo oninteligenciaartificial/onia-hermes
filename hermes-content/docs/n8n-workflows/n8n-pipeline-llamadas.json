@@ -1,0 +1,151 @@
+{
+  "name": "ONIA — Pipeline Llamada → Propuesta",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": ["message"],
+        "additionalFields": {}
+      },
+      "id": "a1b2c3d4-0001-0001-0001-000000000001",
+      "name": "Telegram Trigger",
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.1,
+      "position": [200, 300],
+      "webhookId": "hermes-llamadas-trigger"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": { "caseSensitive": true, "leftValue": "", "typeValidation": "strict" },
+          "conditions": [
+            {
+              "id": "cond-voice",
+              "leftValue": "={{ $json.message?.voice?.file_id ?? $json.message?.audio?.file_id ?? '' }}",
+              "rightValue": "",
+              "operator": { "type": "string", "operation": "notEmpty" }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "a1b2c3d4-0001-0001-0001-000000000002",
+      "name": "¿Es audio?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [420, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:3031/pipeline",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [{ "name": "Content-Type", "value": "application/json" }]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"file_id\": \"{{ $json.message?.voice?.file_id ?? $json.message?.audio?.file_id }}\",\n  \"chat_id\": \"{{ $json.message.chat.id }}\"\n}",
+        "options": { "timeout": 120000 }
+      },
+      "id": "a1b2c3d4-0001-0001-0001-000000000003",
+      "name": "Webhook — Pipeline",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [640, 180]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "={{ $json.resumen }}",
+        "additionalFields": { "parse_mode": "Markdown" }
+      },
+      "id": "a1b2c3d4-0001-0001-0001-000000000004",
+      "name": "Telegram — Resumen",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [860, 180],
+      "credentials": { "telegramApi": { "id": "", "name": "Alfred Bot" } }
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $('Webhook — Pipeline').item.json.html_url }}",
+        "options": { "response": { "response": { "responseFormat": "file" } } }
+      },
+      "id": "a1b2c3d4-0001-0001-0001-000000000005",
+      "name": "Descargar HTML",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1080, 180]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "binaryData": true,
+        "binaryPropertyName": "data",
+        "additionalFields": {
+          "caption": "={{ '📑 Propuesta para ' + $('Webhook — Pipeline').item.json.datos.empresa }}",
+          "fileName": "={{ 'propuesta-' + ($('Webhook — Pipeline').item.json.datos.empresa || 'cliente').toLowerCase().replace(/[^a-z0-9]+/g, '-') + '.html' }}"
+        }
+      },
+      "id": "a1b2c3d4-0001-0001-0001-000000000006",
+      "name": "Telegram — Propuesta HTML",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [1300, 180],
+      "credentials": { "telegramApi": { "id": "", "name": "Alfred Bot" } }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "⚠️ No detecté audio. Enviame una nota de voz con la grabación de la llamada.",
+        "additionalFields": {}
+      },
+      "id": "a1b2c3d4-0001-0001-0001-000000000007",
+      "name": "Telegram — No es audio",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [640, 420],
+      "credentials": { "telegramApi": { "id": "", "name": "Alfred Bot" } }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "={{ '❌ Error procesando la llamada:\\n' + $json.error }}",
+        "additionalFields": {}
+      },
+      "id": "a1b2c3d4-0001-0001-0001-000000000008",
+      "name": "Telegram — Error",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [860, 360],
+      "credentials": { "telegramApi": { "id": "", "name": "Alfred Bot" } }
+    }
+  ],
+  "connections": {
+    "Telegram Trigger": {
+      "main": [[{ "node": "¿Es audio?", "type": "main", "index": 0 }]]
+    },
+    "¿Es audio?": {
+      "main": [
+        [{ "node": "Webhook — Pipeline", "type": "main", "index": 0 }],
+        [{ "node": "Telegram — No es audio", "type": "main", "index": 0 }]
+      ]
+    },
+    "Webhook — Pipeline": {
+      "main": [[{ "node": "Telegram — Resumen", "type": "main", "index": 0 }]]
+    },
+    "Telegram — Resumen": {
+      "main": [[{ "node": "Descargar HTML", "type": "main", "index": 0 }]]
+    },
+    "Descargar HTML": {
+      "main": [[{ "node": "Telegram — Propuesta HTML", "type": "main", "index": 0 }]]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true
+  },
+  "active": false,
+  "tags": ["hermes", "ventas", "propuestas"]
+}

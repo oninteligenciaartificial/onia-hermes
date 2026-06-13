@@ -198,6 +198,28 @@ SIN DATOS COMPLETOS, NO HAY COMISION APROBADA.
 - `Prepara venta Web ONIA: <negocio>`
 - `Prepara marketing Higgsfield: <negocio> | <oferta>`
 
+### Propuestas personalizadas (HTML slide deck)
+- `Genera propuesta: <empresa> | <industria> | <necesidad>`
+- `Crea presentación para: <empresa>`
+- `Propuesta ONIA: <empresa> | <datos del cliente>`
+
+Skill: `hermes-content/skills/genera-propuesta.md`
+Script: `node scripts/genera-propuesta.js --empresa="X" --industria="Y" --necesidad="Z"`
+Output: `hermes-content/propuestas/propuesta-<slug>.html`
+
+Industrias reconocidas: dental, clinica, audiovisual, productora, arquitecto, constructora, retail, comercio, restaurant, pyme, servicio
+Para refinar: re-ejecutar con `--productos="id1,id2"` y/o `--notas="feedback del cliente"`
+
+### Análisis de llamadas (transcript → propuesta automática)
+- `Analiza llamada: [texto transcripción]`
+- `Transcripción llamada: [texto]`
+- Adjuntar .txt con transcript
+
+Skill: `hermes-content/skills/analiza-llamada.md`
+Script: `node scripts/analiza-transcripcion.js <archivo.txt>`
+Requiere: `ANTHROPIC_API_KEY`
+Flujo completo: audio Telegram → Whisper → Claude Haiku extracción → genera-propuesta → HTML + resumen + próximos pasos
+
 ## Flujo n8n - Prospeccion semanal
 1. Schedule Trigger semanal.
 2. Cargar industria y ubicacion objetivo.

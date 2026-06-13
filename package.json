@@ -10,6 +10,8 @@
     "setup:assets": "node scripts/vps_setup_assets.js",
     "upload:asset": "node scripts/vps_upload_asset.js",
     "rotate:notion": "node scripts/vps_update_notion_token.js",
-    "health:n8n-mcp": "node scripts/n8n_mcp_healthcheck.js"
+    "health:n8n-mcp": "node scripts/n8n_mcp_healthcheck.js",
+    "deploy:webhook-propuestas": "node scripts/vps-deploy-webhook-propuestas.js",
+    "health:propuestas": "node -e \"require('https').get||require('http').get('http://127.0.0.1:3031/health',r=>{let d='';r.on('data',c=>d+=c);r.on('end',()=>console.log(d))}).on('error',e=>console.error('Offline:',e.message))\""
   }
 }
