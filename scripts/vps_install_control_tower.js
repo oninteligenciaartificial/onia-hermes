@@ -113,8 +113,7 @@ async function main() {
       "systemctl daemon-reload",
       "systemctl enable --now hermes-control-tower.service",
       "systemctl restart hermes-control-tower.service",
-      "sleep 2",
-      `curl -fsS http://127.0.0.1:${port}/ >/dev/null`,
+      `for i in $(seq 1 30); do curl -fsS http://127.0.0.1:${port}/ >/dev/null && break; sleep 1; if [ "$i" -eq 30 ]; then curl -fsS http://127.0.0.1:${port}/ >/dev/null; fi; done`,
       "systemctl --no-pager --full status hermes-control-tower.service | sed -n '1,12p'",
     ];
 
