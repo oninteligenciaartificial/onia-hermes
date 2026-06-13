@@ -1,0 +1,6 @@
+name: onia-agendar
+version: 1.0.0
+description: "Intercepta mensajes 'agendar ...' en el gateway y crea el evento en Google Calendar de forma determinista vía hermes-command, sin pasar por el LLM."
+author: ONIA
+hooks:
+  - pre_gateway_dispatch
