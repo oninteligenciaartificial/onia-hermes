@@ -52,14 +52,43 @@ function renderPaquetes(paquetes) {
   return paquetes.map((p) => {
     const star = p.recomendado ? ' ⭐' : '';
     const nombre = `<b>${esc(p.nombre)}</b>${star}`;
-    return `<tr><td>${nombre}</td><td>${esc(p.incluye)}</td><td class="num">${esc(p.precio)}</td></tr>`;
+    const rowClass = p.recomendado ? ' class="rec"' : '';
+    const resultado = p.resultado
+      ? `<br><span class="res">→ ${esc(p.resultado)}</span>` : '';
+    return `<tr${rowClass}><td>${nombre}</td><td>${esc(p.incluye)}${resultado}</td><td class="num">${esc(p.precio)}</td></tr>`;
   }).join('');
+}
+
+function renderValor(valor) {
+  if (!valor || !valor.length) return '';
+  const items = valor.map((v) => `
+    <div class="vcard">
+      <h3>${esc(v.titulo)}</h3>
+      <p>${v.detalle}</p>
+    </div>`).join('');
+  return `
+  <h2>Por qué te conviene</h2>
+  <div class="grid vgrid">${items}</div>`;
 }
 
 function renderAddons(addons) {
   return addons.map((a) =>
     `<tr><td>${esc(a.nombre)}</td><td class="num">${esc(a.setup)}</td><td class="num">${esc(a.mensual)}</td></tr>`
   ).join('');
+}
+
+// --- Validación -------------------------------------------------------------
+
+const REQUIRED = ['slug', 'nombre', 'titulo', 'subtitulo', 'problema', 'incluye', 'pasos', 'paquetes', 'notaPaquetes', 'addons', 'terceros'];
+
+function validateCliente(c, i) {
+  const faltan = REQUIRED.filter((k) => !c[k] || (Array.isArray(c[k]) && !c[k].length));
+  if (faltan.length) {
+    throw new Error(`Cliente #${i} (${c.slug || 'sin slug'}): faltan campos requeridos: ${faltan.join(', ')}`);
+  }
+  if (!c.paquetes.some((p) => p.recomendado)) {
+    console.warn(`[ONIA] Aviso: ${c.slug} no tiene paquete recomendado (⭐).`);
+  }
 }
 
 // --- Plantilla única --------------------------------------------------------
@@ -101,6 +130,10 @@ function buildHtml(c) {
   .big{font-size:20px;color:var(--ink);font-weight:800;}
   .step{display:flex;gap:14px;align-items:flex-start;margin-bottom:12px;}
   .step .n{background:var(--accent);color:#fff;font-weight:800;border-radius:50%;width:30px;height:30px;display:flex;align-items:center;justify-content:center;flex:0 0 30px;}
+  tr.rec td{background:#fff7ed;}
+  .res{color:var(--accent);font-weight:700;font-size:13px;}
+  .vgrid .vcard{background:var(--white);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:12px;padding:16px 18px;}
+  .vcard h3{color:var(--ink);}
   @media print{.page{max-width:100%;}body{background:#fff;}}
 </style>
 </head>
@@ -121,13 +154,14 @@ function buildHtml(c) {
 
   <h2>Cómo lo construimos</h2>
   <div class="card">${renderSteps(c.pasos)}</div>
-
+${renderValor(c.valor)}
   <h2>Paquetes — elegí el tuyo</h2>
   <table>
     <tr><th>Paquete</th><th>Qué incluye</th><th class="num">Precio (Bs)</th></tr>
     ${renderPaquetes(c.paquetes)}
   </table>
   <p style="margin-top:10px;">${c.notaPaquetes}</p>
+  ${c.plazoEntrega ? `<p style="margin-top:6px;"><b>Plazo de entrega estimado:</b> ${esc(c.plazoEntrega)} desde el anticipo y la entrega de contenidos.</p>` : ''}
 
   <h2>Add-ons (opcionales)</h2>
   <table>
@@ -175,6 +209,8 @@ function main() {
   const browser = wantPdf ? findBrowser() : null;
   if (wantPdf && !browser) console.warn('[ONIA] No se encontró Edge/Chrome — solo genero HTML.');
 
+  clientes.forEach((c, i) => validateCliente(c, i));
+
   for (const c of clientes) {
     if (only.length && !only.includes(c.slug)) continue;
     const htmlPath = path.join(OUT, `propuesta-${c.slug}.html`);
@@ -194,4 +230,4 @@ function main() {
 }
 
 if (require.main === module) main();
-module.exports = { buildHtml };
+module.exports = { buildHtml, validateCliente };
