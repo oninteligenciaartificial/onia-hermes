@@ -1,5 +1,50 @@
 [
   {
+    "slug": "bench",
+    "nombre": "BENCH",
+    "accent": "#e30613",
+    "heroGrad": "linear-gradient(135deg,#0a0a0a 0%,#1a0306 55%,#e30613 150%)",
+    "titulo": "BENCH — Web de autoridad para agencia de marketing",
+    "subtitulo": "Pensamiento creativo y estratégico en acción. Una web que muestra el nivel real de BENCH: marcas líderes, números de impacto y el trabajo que hoy vive solo en Instagram.",
+    "problema": "BENCH genera <b>+40M de impactos, +250K seguidores y +15K leads calificados</b> y trabaja con marcas como Mercedes-Benz, BMW, Burger King, Amstel, Huari y Dismac. Pero toda esa autoridad vive en Instagram, donde se pierde en el feed. Una <b>web propia</b> ordena los servicios, muestra la cartera de clientes y los números, y convierte a la marca que te busca en cliente que escribe — sin depender del algoritmo.",
+    "incluye": [
+      {
+        "tag": "Autoridad", "tagClass": "", "titulo": "Web de Agencia",
+        "items": ["Hero con los números de impacto (+40M / +250K / +15K)", "Muro de marcas con las que trabajan", "Servicios completos: redes, estrategia, BTL, branding, AV, spots", "Diseño con peso visual de marca, móvil primero"]
+      },
+      {
+        "tag": "Conversión", "tagClass": "green", "titulo": "De vista a brief",
+        "items": ["Portafolio de campañas y producción audiovisual", "Formulario de brief + WhatsApp directo", "Enlace a Instagram y redes", "Optimizada para Google y carga rápida de video"]
+      }
+    ],
+    "pasos": [
+      {"titulo": "Identidad y estructura", "detalle": "Trasladamos la marca BENCH al sitio: hero de impacto, servicios, cartera de clientes, portafolio, contacto."},
+      {"titulo": "Servicios + autoridad", "detalle": "Página de servicios (redes, estrategia, BTL, branding, producción AV, spots) + muro de marcas + números."},
+      {"titulo": "Portafolio video-first", "detalle": "Cargamos campañas y reels con video optimizado (carga rápida, sin pesar) por categoría."},
+      {"titulo": "Contacto y publicación", "detalle": "Formulario de brief + WhatsApp, conectamos redes, optimizamos para Google y publicamos."}
+    ],
+    "valor": [
+      {"titulo": "Dejás de depender del algoritmo", "detalle": "Tu audiencia de Instagram entra a una web propia que muestra tu nivel y convierte 24/7, sin pelear con el feed."},
+      {"titulo": "Briefs ordenados, no DMs perdidos", "detalle": "Cada consulta llega completa y registrada en un solo lugar — no más mensajes sueltos que se enfrían."},
+      {"titulo": "Cerrás marcas más grandes", "detalle": "Una web de autoridad con tu cartera (Mercedes, BMW, Burger King…) y tus números da credibilidad para licitar cuentas premium."},
+      {"titulo": "Automatización que ahorra horas", "detalle": "Captación y seguimiento de prospectos sin trabajo manual: el sistema ordena, recuerda y reporta por vos."}
+    ],
+    "plazoEntrega": "2 a 3 semanas",
+    "paquetes": [
+      {"nombre": "Presencia", "incluye": "Landing de autoridad: hero de impacto + servicios + marcas + contacto + WhatsApp", "resultado": "Existís en Google y mandás todo a un solo lugar pro.", "precio": "2,000", "recomendado": false},
+      {"nombre": "Web de Agencia", "incluye": "Web multipágina + servicios completos + muro de marcas + portafolio por categoría + formulario de brief", "resultado": "Convertís tu audiencia de Instagram en briefs reales.", "precio": "4,500", "recomendado": true},
+      {"nombre": "Motor de Clientes", "incluye": "Lo anterior + automatización brief→CRM + seguimiento de prospectos + integración de redes + reportes", "resultado": "Sistema que capta y da seguimiento solo: más clientes sin más trabajo.", "precio": "desde 8,900", "recomendado": false}
+    ],
+    "notaPaquetes": "Diferencia clave: <b>Presencia</b> = estar online · <b>Web de Agencia</b> = convertir tu audiencia en briefs · <b>Motor de Clientes</b> = automatizar la captación y el seguimiento. Recomendado: <b>Web de Agencia</b> (o Motor de Clientes por el nivel de BENCH). Pago: 50% anticipo, 50% contra entrega. <b>Dominio y hosting a cargo de BENCH</b> (a su nombre).",
+    "addons": [
+      {"nombre": "Chatbot WhatsApp con IA — responde, califica y deriva briefs solo (el botón de WhatsApp ya viene incluido en la web)", "setup": "1,900", "mensual": "150"},
+      {"nombre": "Conexión Instagram / TikTok / YouTube (publicación)", "setup": "900", "mensual": "150"},
+      {"nombre": "Videos con IA para promo de la agencia", "setup": "—", "mensual": "2,200 (8/mes)"},
+      {"nombre": "Cuidado Web (hosting, respaldos, cambios, soporte)", "setup": "—", "mensual": "190–390"}
+    ],
+    "terceros": "No incluidos en el proyecto (a cargo de BENCH): dominio y hosting (a nombre de BENCH), créditos de IA y mensajería WhatsApp pagada. WhatsApp automático depende de verificación de Meta."
+  },
+  {
     "slug": "garabato",
     "nombre": "Garabato",
     "accent": "#1e5bff",
@@ -22,15 +67,22 @@
       {"titulo": "Confirmación BCP → orden", "detalle": "BCP avisa que el pago se aprobó; un flujo n8n genera la orden al instante."},
       {"titulo": "Mensaje automático", "detalle": "El cliente recibe su orden confirmada (email y/o WhatsApp). Sin chatbot, sin tipeo manual."}
     ],
+    "valor": [
+      {"titulo": "Vendés sin estar pegado al teléfono", "detalle": "El catálogo cobra y confirma pedidos 24/7, también cuando no estás atendiendo."},
+      {"titulo": "Cero pedidos perdidos", "detalle": "Cada pago aprobado genera la orden automática — nada se traspapela ni se olvida."},
+      {"titulo": "Cobrás en línea de verdad", "detalle": "Pago BCP integrado: el cliente paga al instante por QR o tarjeta, sin idas y vueltas."},
+      {"titulo": "Base para crecer", "detalle": "Con la tienda andando, sumás promos, videos y redes para vender más sin rehacer todo."}
+    ],
+    "plazoEntrega": "3 a 4 semanas",
     "paquetes": [
-      {"nombre": "Catálogo Esencial", "incluye": "Portal + catálogo + carrito + pago BCP + confirmación por email automática", "precio": "4,500", "recomendado": false},
-      {"nombre": "Tienda Automática", "incluye": "Lo anterior + flujo n8n de orden + confirmación por WhatsApp", "precio": "6,900", "recomendado": true},
-      {"nombre": "Tienda Pro", "incluye": "Lo anterior + control de inventario, cupones, panel de ventas y 8 videos IA/mes", "precio": "desde 11,000", "recomendado": false},
+      {"nombre": "Catálogo Esencial", "incluye": "Portal + catálogo + carrito + pago BCP + confirmación por email automática", "resultado": "Tu catálogo online cobrando por BCP.", "precio": "4,500", "recomendado": false},
+      {"nombre": "Tienda Automática", "incluye": "Lo anterior + flujo n8n de orden + confirmación por WhatsApp", "resultado": "Cobra y confirma cada pedido solo, 24/7.", "precio": "6,900", "recomendado": true},
+      {"nombre": "Tienda Pro", "incluye": "Lo anterior + control de inventario, cupones, panel de ventas y 8 videos IA/mes", "resultado": "Tienda completa con inventario y promoción.", "precio": "desde 11,000", "recomendado": false},
       {"nombre": "Cuidado Web (mensual)", "incluye": "Hosting administrado, respaldos, cambios y soporte", "precio": "250/mes", "recomendado": false}
     ],
-    "notaPaquetes": "Recomendado: <b>Tienda Automática</b> — cobra y confirma solo. Pago sugerido: 50% anticipo, 50% contra entrega. El dominio lo compra Garabato a su nombre.",
+    "notaPaquetes": "Diferencia clave: <b>Catálogo Esencial</b> = vender online · <b>Tienda Automática</b> = cobrar y confirmar solo · <b>Tienda Pro</b> = inventario y promoción. Recomendado: <b>Tienda Automática</b>. Pago sugerido: 50% anticipo, 50% contra entrega. El dominio lo compra Garabato a su nombre.",
     "addons": [
-      {"nombre": "WhatsApp — orden confirmada al cliente por WhatsApp", "setup": "900", "mensual": "80"},
+      {"nombre": "WhatsApp — notificación de orden al cliente (el botón de chat ya viene incluido en la web)", "setup": "900", "mensual": "80"},
       {"nombre": "Cuidado Web (actualizaciones, respaldo, soporte)", "setup": "—", "mensual": "190–390"},
       {"nombre": "Videos con IA para promocionar productos", "setup": "—", "mensual": "2,200 (8/mes)"},
       {"nombre": "Conexión Instagram / TikTok (publicación)", "setup": "900", "mensual": "150"}
@@ -60,14 +112,21 @@
       {"titulo": "CRM + embudo", "detalle": "Cada consulta (web o WhatsApp) entra automático al CRM con su estado: consulta, cotización, proyecto."},
       {"titulo": "Seguimiento y reportes", "detalle": "Recordatorios para no perder ninguna consulta + reporte de qué oportunidad avanza."}
     ],
-    "paquetes": [
-      {"nombre": "Presencia", "incluye": "Web renovada bilingüe + portafolio + formularios + WhatsApp de contacto", "precio": "4,500", "recomendado": false},
-      {"nombre": "Captación", "incluye": "Lo anterior + consultoría/plan de captación + CRM con embudo y seguimiento", "precio": "desde 8,900", "recomendado": true},
-      {"nombre": "Crecimiento", "incluye": "Lo anterior + gestión de pauta + 8 videos IA/mes + acompañamiento mensual", "precio": "desde 13,900", "recomendado": false}
+    "valor": [
+      {"titulo": "Una web a la altura de tus clientes", "detalle": "Proyectos serios (oil & gas, minería, industrial) merecen un sitio que dé confianza para competir en licitaciones nacionales e internacionales."},
+      {"titulo": "Ninguna consulta se enfría", "detalle": "Cada prospecto entra automático al CRM con su estado y recordatorios — dejás de perder oportunidades por falta de seguimiento."},
+      {"titulo": "Sabés qué oportunidad avanza", "detalle": "Reportes del embudo: cuántas consultas entran, en qué etapa están y dónde se traban."},
+      {"titulo": "Más cuentas grandes", "detalle": "Autoridad técnica online + portafolio de obras = credibilidad para cerrar proyectos de mayor tamaño."}
     ],
-    "notaPaquetes": "Recomendado: <b>Captación</b> — ordena todo el proceso comercial. Pago sugerido: 50% anticipo, 50% contra entrega. El dominio (hsbengineers.com) y hosting quedan a nombre de HSB.",
+    "plazoEntrega": "3 a 4 semanas",
+    "paquetes": [
+      {"nombre": "Presencia", "incluye": "Web renovada bilingüe + portafolio + formularios + WhatsApp de contacto", "resultado": "Web seria que da confianza desde el primer clic.", "precio": "4,500", "recomendado": false},
+      {"nombre": "Captación", "incluye": "Lo anterior + consultoría/plan de captación + CRM con embudo y seguimiento", "resultado": "Cada consulta ordenada y con seguimiento hasta cerrar.", "precio": "desde 8,900", "recomendado": true},
+      {"nombre": "Crecimiento", "incluye": "Lo anterior + gestión de pauta + 8 videos IA/mes + acompañamiento mensual", "resultado": "Motor que atrae y convierte consultas en proyectos.", "precio": "desde 13,900", "recomendado": false}
+    ],
+    "notaPaquetes": "Diferencia clave: <b>Presencia</b> = web seria online · <b>Captación</b> = ordenar y seguir cada consulta · <b>Crecimiento</b> = atraer más activamente. Recomendado: <b>Captación</b>. Pago sugerido: 50% anticipo, 50% contra entrega. El dominio (hsbengineers.com) y hosting quedan a nombre de HSB.",
     "addons": [
-      {"nombre": "WhatsApp — captación y respuesta a consultas", "setup": "900", "mensual": "80"},
+      {"nombre": "Chatbot WhatsApp con IA — responde y califica consultas solo (el botón de chat ya viene incluido en la web)", "setup": "1,900", "mensual": "150"},
       {"nombre": "Operación mensual del CRM (GestiOS)", "setup": "—", "mensual": "desde 530"},
       {"nombre": "Videos con IA para mostrar proyectos y servicios", "setup": "—", "mensual": "2,200 (8/mes)"},
       {"nombre": "Gestión de pauta + consultoría continua", "setup": "4,900–6,500", "mensual": "a convenir"},
@@ -99,17 +158,24 @@
       {"titulo": "Pago en línea", "detalle": "El paciente paga con tarjeta / QR por la pasarela."},
       {"titulo": "Entrega automática", "detalle": "Al confirmarse el pago, recibe el link de descarga del libro al instante. Sin enviar nada a mano."}
     ],
+    "valor": [
+      {"titulo": "Tu libro se vende solo", "detalle": "Pago en línea + entrega automática: el paciente compra y recibe el libro al instante, sin que muevas un dedo."},
+      {"titulo": "Autoridad profesional", "detalle": "Una web propia te posiciona como referente en fisioterapia, no solo un perfil más en redes."},
+      {"titulo": "Ingreso extra que no te quita tiempo", "detalle": "El libro genera ventas mientras atendés pacientes — trabaja por vos 24/7."},
+      {"titulo": "Pacientes te encuentran fácil", "detalle": "Presencia clara con agenda y contacto directo: menos fricción para llenar tu consulta."}
+    ],
+    "plazoEntrega": "1 a 2 semanas (Landing) · 2 a 3 semanas (Web Pro)",
     "paquetes": [
-      {"nombre": "Landing Libro", "incluye": "Página única: presentación + venta del libro + entrega automática", "precio": "2,000", "recomendado": true},
-      {"nombre": "Web Pro", "incluye": "Web completa multipágina + sección del libro + entrega automática", "precio": "4,500", "recomendado": false},
-      {"nombre": "Web Pro + Marketing", "incluye": "Web Pro + maquetación del libro digital + 8 videos IA/mes + WhatsApp", "precio": "desde 5,900", "recomendado": false},
+      {"nombre": "Landing Libro", "incluye": "Página única: presentación + venta del libro + entrega automática", "resultado": "Lanzás y vendés tu libro esta misma semana.", "precio": "2,000", "recomendado": true},
+      {"nombre": "Web Pro", "incluye": "Web completa multipágina + sección del libro + entrega automática", "resultado": "Tu presencia completa + el libro vendiendo solo.", "precio": "4,500", "recomendado": false},
+      {"nombre": "Web Pro + Marketing", "incluye": "Web Pro + maquetación del libro digital + 8 videos IA/mes + chatbot WhatsApp", "resultado": "Web + libro + contenido que atrae pacientes.", "precio": "desde 5,900", "recomendado": false},
       {"nombre": "Cuidado Web (mensual)", "incluye": "Respaldos, soporte y mejoras", "precio": "190/mes", "recomendado": false}
     ],
-    "notaPaquetes": "Recomendado: empezar con <b>Landing Libro</b> para lanzar rápido, escalar a Web Pro después. Pago sugerido: 50% anticipo, 50% contra entrega. El dominio lo compra Lia a su nombre.",
+    "notaPaquetes": "Diferencia clave: <b>Landing Libro</b> = lanzar y vender el libro ya · <b>Web Pro</b> = presencia completa + libro · <b>Web Pro + Marketing</b> = sumar contenido que atrae pacientes. Recomendado: empezar con <b>Landing Libro</b> y escalar después. Pago sugerido: 50% anticipo, 50% contra entrega. El dominio lo compra Lia a su nombre.",
     "addons": [
       {"nombre": "Pasarela de pago + entrega automática del libro", "setup": "1,900", "mensual": "—"},
       {"nombre": "Diseño y maquetación del libro digital", "setup": "1,900", "mensual": "—"},
-      {"nombre": "WhatsApp — agendar pacientes y confirmar compra", "setup": "900", "mensual": "80"},
+      {"nombre": "Chatbot WhatsApp con IA — agenda y responde pacientes solo (el botón de chat ya viene incluido en la web)", "setup": "1,900", "mensual": "150"},
       {"nombre": "Videos con IA para promocionar el libro y tu consulta", "setup": "—", "mensual": "2,200 (8/mes)"},
       {"nombre": "Cuidado Web (respaldo, soporte, mejoras)", "setup": "—", "mensual": "190"}
     ],

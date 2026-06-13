@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Propuesta ONIA — BENCH</title>
+<style>
+  :root{--ink:#101827;--muted:#526172;--line:#d8e0ea;--blue:#1e5bff;--blue-dark:#1239a8;
+    --green:#0f8b62;--amber:#a75b00;--bg:#f6f8fb;--white:#fff;--accent:#e30613;}
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:Arial,Helvetica,sans-serif;color:var(--ink);background:var(--bg);}
+  .page{max-width:900px;margin:0 auto;padding:40px 28px;}
+  .hero{background:linear-gradient(135deg,#0a0a0a 0%,#1a0306 55%,#e30613 150%);color:#fff;border-radius:18px;padding:44px 40px;margin-bottom:28px;}
+  .kicker{color:#cfe0ff;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;}
+  h1{font-size:clamp(34px,6vw,56px);line-height:1.02;margin:0 0 14px;}
+  h2{font-size:26px;margin:34px 0 14px;border-bottom:3px solid var(--accent);padding-bottom:8px;}
+  h3{font-size:18px;margin:0 0 8px;}
+  p{font-size:16px;line-height:1.5;color:var(--muted);margin:0 0 10px;}
+  .hero p{color:#e6eefb;font-size:18px;}
+  .card{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin-bottom:14px;}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  table{width:100%;border-collapse:collapse;background:var(--white);border-radius:12px;overflow:hidden;border:1px solid var(--line);}
+  th,td{padding:12px 14px;text-align:left;font-size:15px;border-bottom:1px solid var(--line);}
+  th{background:#eef3fb;color:var(--ink);font-weight:800;}
+  td.num,th.num{text-align:right;white-space:nowrap;}
+  .tag{display:inline-block;background:#eaf0ff;color:var(--blue-dark);font-size:12px;font-weight:800;padding:3px 10px;border-radius:999px;margin-bottom:8px;}
+  .tag.green{background:#e3f4ec;color:var(--green);}
+  .tag.amber{background:#fbeede;color:var(--amber);}
+  ul{margin:6px 0 0;padding-left:20px;}
+  li{font-size:15px;color:var(--muted);line-height:1.5;margin-bottom:5px;}
+  .foot{margin-top:30px;border-top:1px solid var(--line);padding-top:16px;font-size:13px;color:var(--muted);}
+  .big{font-size:20px;color:var(--ink);font-weight:800;}
+  .step{display:flex;gap:14px;align-items:flex-start;margin-bottom:12px;}
+  .step .n{background:var(--accent);color:#fff;font-weight:800;border-radius:50%;width:30px;height:30px;display:flex;align-items:center;justify-content:center;flex:0 0 30px;}
+  tr.rec td{background:#fff7ed;}
+  .res{color:var(--accent);font-weight:700;font-size:13px;}
+  .vgrid .vcard{background:var(--white);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:12px;padding:16px 18px;}
+  .vcard h3{color:var(--ink);}
+  @media print{.page{max-width:100%;}body{background:#fff;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="hero">
+    <div class="kicker">Propuesta comercial · ONIA Inteligencia Artificial</div>
+    <h1>BENCH — Web de autoridad para agencia de marketing</h1>
+    <p>Pensamiento creativo y estratégico en acción. Una web que muestra el nivel real de BENCH: marcas líderes, números de impacto y el trabajo que hoy vive solo en Instagram.</p>
+  </div>
+
+  <h2>Qué problema resolvemos</h2>
+  <div class="card"><p>BENCH genera <b>+40M de impactos, +250K seguidores y +15K leads calificados</b> y trabaja con marcas como Mercedes-Benz, BMW, Burger King, Amstel, Huari y Dismac. Pero toda esa autoridad vive en Instagram, donde se pierde en el feed. Una <b>web propia</b> ordena los servicios, muestra la cartera de clientes y los números, y convierte a la marca que te busca en cliente que escribe — sin depender del algoritmo.</p></div>
+
+  <h2>Qué incluye</h2>
+  <div class="grid">
+    <div class="card">
+      <div class="tag ">Autoridad</div>
+      <h3>Web de Agencia</h3>
+      <ul><li>Hero con los números de impacto (+40M / +250K / +15K)</li><li>Muro de marcas con las que trabajan</li><li>Servicios completos: redes, estrategia, BTL, branding, AV, spots</li><li>Diseño con peso visual de marca, móvil primero</li></ul>
+    </div>
+    <div class="card">
+      <div class="tag green">Conversión</div>
+      <h3>De vista a brief</h3>
+      <ul><li>Portafolio de campañas y producción audiovisual</li><li>Formulario de brief + WhatsApp directo</li><li>Enlace a Instagram y redes</li><li>Optimizada para Google y carga rápida de video</li></ul>
+    </div></div>
+
+  <h2>Cómo lo construimos</h2>
+  <div class="card">
+    <div class="step"><div class="n">1</div><div>
+      <h3>Identidad y estructura</h3><p>Trasladamos la marca BENCH al sitio: hero de impacto, servicios, cartera de clientes, portafolio, contacto.</p>
+    </div></div>
+    <div class="step"><div class="n">2</div><div>
+      <h3>Servicios + autoridad</h3><p>Página de servicios (redes, estrategia, BTL, branding, producción AV, spots) + muro de marcas + números.</p>
+    </div></div>
+    <div class="step"><div class="n">3</div><div>
+      <h3>Portafolio video-first</h3><p>Cargamos campañas y reels con video optimizado (carga rápida, sin pesar) por categoría.</p>
+    </div></div>
+    <div class="step"><div class="n">4</div><div>
+      <h3>Contacto y publicación</h3><p>Formulario de brief + WhatsApp, conectamos redes, optimizamos para Google y publicamos.</p>
+    </div></div></div>
+
+  <h2>Por qué te conviene</h2>
+  <div class="grid vgrid">
+    <div class="vcard">
+      <h3>Dejás de depender del algoritmo</h3>
+      <p>Tu audiencia de Instagram entra a una web propia que muestra tu nivel y convierte 24/7, sin pelear con el feed.</p>
+    </div>
+    <div class="vcard">
+      <h3>Briefs ordenados, no DMs perdidos</h3>
+      <p>Cada consulta llega completa y registrada en un solo lugar — no más mensajes sueltos que se enfrían.</p>
+    </div>
+    <div class="vcard">
+      <h3>Cerrás marcas más grandes</h3>
+      <p>Una web de autoridad con tu cartera (Mercedes, BMW, Burger King…) y tus números da credibilidad para licitar cuentas premium.</p>
+    </div>
+    <div class="vcard">
+      <h3>Automatización que ahorra horas</h3>
+      <p>Captación y seguimiento de prospectos sin trabajo manual: el sistema ordena, recuerda y reporta por vos.</p>
+    </div></div>
+  <h2>Paquetes — elegí el tuyo</h2>
+  <table>
+    <tr><th>Paquete</th><th>Qué incluye</th><th class="num">Precio (Bs)</th></tr>
+    <tr><td><b>Presencia</b></td><td>Landing de autoridad: hero de impacto + servicios + marcas + contacto + WhatsApp<br><span class="res">→ Existís en Google y mandás todo a un solo lugar pro.</span></td><td class="num">2,000</td></tr><tr class="rec"><td><b>Web de Agencia</b> ⭐</td><td>Web multipágina + servicios completos + muro de marcas + portafolio por categoría + formulario de brief<br><span class="res">→ Convertís tu audiencia de Instagram en briefs reales.</span></td><td class="num">4,500</td></tr><tr><td><b>Motor de Clientes</b></td><td>Lo anterior + automatización brief→CRM + seguimiento de prospectos + integración de redes + reportes<br><span class="res">→ Sistema que capta y da seguimiento solo: más clientes sin más trabajo.</span></td><td class="num">desde 8,900</td></tr>
+  </table>
+  <p style="margin-top:10px;">Diferencia clave: <b>Presencia</b> = estar online · <b>Web de Agencia</b> = convertir tu audiencia en briefs · <b>Motor de Clientes</b> = automatizar la captación y el seguimiento. Recomendado: <b>Web de Agencia</b> (o Motor de Clientes por el nivel de BENCH). Pago: 50% anticipo, 50% contra entrega. <b>Dominio y hosting a cargo de BENCH</b> (a su nombre).</p>
+  <p style="margin-top:6px;"><b>Plazo de entrega estimado:</b> 2 a 3 semanas desde el anticipo y la entrega de contenidos.</p>
+
+  <h2>Add-ons (opcionales)</h2>
+  <table>
+    <tr><th>Add-on</th><th class="num">Setup (Bs)</th><th class="num">Mensual (Bs)</th></tr>
+    <tr><td>Chatbot WhatsApp con IA — responde, califica y deriva briefs solo (el botón de WhatsApp ya viene incluido en la web)</td><td class="num">1,900</td><td class="num">150</td></tr><tr><td>Conexión Instagram / TikTok / YouTube (publicación)</td><td class="num">900</td><td class="num">150</td></tr><tr><td>Videos con IA para promo de la agencia</td><td class="num">—</td><td class="num">2,200 (8/mes)</td></tr><tr><td>Cuidado Web (hosting, respaldos, cambios, soporte)</td><td class="num">—</td><td class="num">190–390</td></tr>
+  </table>
+
+  <div class="card" style="margin-top:16px;">
+    <div class="tag amber">Importante — costos de terceros</div>
+    <p>No incluidos en el proyecto (a cargo de BENCH): dominio y hosting (a nombre de BENCH), créditos de IA y mensajería WhatsApp pagada. WhatsApp automático depende de verificación de Meta.</p>
+  </div>
+
+  <div class="foot">
+    <p class="big">Precio reservado hasta 30 días con confirmación de pago.</p>
+    <p>ONIA — Sistemas, automatización y contenido para negocios. business@onia.com.bo</p>
+  </div>
+
+</div>
+</body>
+</html>
