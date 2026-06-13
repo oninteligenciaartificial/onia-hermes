@@ -13,9 +13,7 @@ function connectSsh() {
   const username = process.env.VPS_USER || "root";
 
   const privateKeyPath = process.env.VPS_KEY_PATH;
-  const privateKey = privateKeyPath
-    ? fs.readFileSync(path.resolve(privateKeyPath))
-    : undefined;
+  const privateKey = privateKeyPath ? fs.readFileSync(path.resolve(privateKeyPath)) : undefined;
 
   const password = process.env.VPS_PASSWORD;
 
@@ -29,12 +27,17 @@ function connectSsh() {
   return new Promise((resolve, reject) => {
     conn
       .on("ready", () => resolve(conn))
+      .on("keyboard-interactive", (_name, _instructions, _lang, prompts, finish) => {
+        if (!password) return finish([]);
+        finish(prompts.map(() => password));
+      })
       .on("error", reject)
       .connect({
         host,
         username,
         privateKey,
         password,
+        tryKeyboard: Boolean(password),
         readyTimeout: 30000,
       });
   });

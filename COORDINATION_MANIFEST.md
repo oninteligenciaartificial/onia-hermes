@@ -33,6 +33,7 @@ Canonical files:
 - `scripts/carousel_generator.py`
 - `scripts/vps_install_instagram.js`
 - `scripts/vps_install_hermes_content.js`
+- `scripts/vps_install_control_tower.js`
 - `scripts/vps_setup_assets.js`
 - `scripts/vps_upload_asset.js`
 - `scripts/video_lab.py`

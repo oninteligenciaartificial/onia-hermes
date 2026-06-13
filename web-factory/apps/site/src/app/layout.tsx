@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "ONIA Web Factory",
-  description: "Tokenized client website factory for ONIA.",
+  title: "Hermes Control Tower",
+  description: "Operational dashboard for ONIA, Hermes, Video Lab, CRM and automation.",
 };
 
 export default function RootLayout({

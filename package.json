@@ -9,6 +9,7 @@
     "deploy:hermes-content": "node scripts/vps_install_hermes_content.js",
     "setup:assets": "node scripts/vps_setup_assets.js",
     "upload:asset": "node scripts/vps_upload_asset.js",
+    "deploy:control-tower": "node scripts/vps_install_control_tower.js",
     "rotate:notion": "node scripts/vps_update_notion_token.js",
     "health:n8n-mcp": "node scripts/n8n_mcp_healthcheck.js"
   }

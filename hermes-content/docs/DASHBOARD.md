@@ -13,10 +13,44 @@ Luego abrir:
 http://localhost:9119
 ```
 
+## Control Tower visual
+El nuevo dashboard visual de Hermes/ONIA se despliega como servicio separado en
+`localhost:3010` para no pisar el dashboard canonico de Hermes en `9119`.
+
+Deploy desde Windows, con `VPS_KEY_PATH` o `VPS_PASSWORD` configurado:
+
+```powershell
+$env:VPS_HOST="187.77.16.63"
+$env:VPS_USER="root"
+npm run deploy:control-tower
+```
+
+Abrirlo por tunel:
+
+```powershell
+ssh -L 3010:localhost:3010 root@187.77.16.63
+```
+
+Luego abrir:
+
+```text
+http://localhost:3010
+```
+
+Servicio en VPS:
+
+```bash
+systemctl status hermes-control-tower --no-pager
+journalctl -u hermes-control-tower -n 80 --no-pager
+curl -fsS http://127.0.0.1:3010/
+```
+
 ## Verificaciones utiles
 ```bash
 hermes dashboard --status
 hermes dashboard --host 127.0.0.1 --port 9119 --no-open --skip-build
+systemctl status hermes-control-tower --no-pager
+curl -fsS http://127.0.0.1:3010/
 hermes gateway status
 journalctl --user -u hermes-gateway -f
 ig-publish healthcheck
