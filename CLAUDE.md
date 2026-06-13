@@ -4,6 +4,10 @@ Instrucciones de proyecto para Claude. Override sobre defaults.
 
 ## Propuestas comerciales (REGLA)
 
+> Fuente de verdad: `hermes-content/skills/propuestas-comerciales-onia.md`
+> (skill que lee Hermes en el VPS). Lo de abajo es resumen — al cambiar reglas,
+> editar la skill primero.
+
 Toda propuesta a cliente se genera con el sistema en
 `hermes-content/propuestas/generador/` (`node generar-propuestas.js <slug> --pdf`).
 Nunca escribir HTML de propuesta a mano.
