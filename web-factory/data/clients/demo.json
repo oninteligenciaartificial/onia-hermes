@@ -1,0 +1,56 @@
+{
+  "nombre": "Clinica Aurora",
+  "slug": "demo",
+  "tagline": "Atencion dental premium sin friccion",
+  "descripcion": "Odontologia moderna con agenda directa, explicaciones claras y tratamientos pensados para que tomes decisiones con confianza.",
+  "logo": "CA",
+  "colores": {
+    "primary": "#0f766e",
+    "secondary": "#1d4ed8",
+    "accent": "#f59e0b",
+    "bg": "#f8fafc",
+    "fg": "#111827"
+  },
+  "tipografia": {
+    "heading": "Inter",
+    "body": "Inter"
+  },
+  "contacto": {
+    "email": "hola@clinicaaurora.test",
+    "tel": "+591 70000000",
+    "whatsapp": "https://wa.me/59170000000",
+    "direccion": "Santa Cruz, Bolivia"
+  },
+  "redes": {
+    "ig": "https://instagram.com/clinicaaurora",
+    "fb": "",
+    "linkedin": "",
+    "x": ""
+  },
+  "servicios": [
+    {
+      "titulo": "Implantes guiados",
+      "desc": "Planificacion digital para tratamientos mas precisos y pacientes mejor informados.",
+      "icono": "sparkles"
+    },
+    {
+      "titulo": "Ortodoncia estetica",
+      "desc": "Opciones discretas con seguimiento claro desde la primera consulta.",
+      "icono": "smile"
+    },
+    {
+      "titulo": "Urgencias dentales",
+      "desc": "Canales directos para resolver dolor, dudas y agenda con velocidad.",
+      "icono": "phone"
+    }
+  ],
+  "cta": {
+    "texto": "Agendar evaluacion",
+    "url": "https://wa.me/59170000000"
+  },
+  "seo": {
+    "title": "Clinica Aurora | Odontologia premium",
+    "description": "Landing demo generada por ONIA Web Factory para clinicas y servicios profesionales.",
+    "ogImage": ""
+  }
+}

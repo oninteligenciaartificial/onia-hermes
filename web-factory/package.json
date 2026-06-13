@@ -1,0 +1,32 @@
+{
+  "name": "web-factory",
+  "version": "1.0.0",
+  "description": "ONIA Web Factory for tokenized client sites.",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "pnpm --filter site dev",
+    "build": "pnpm --filter site build",
+    "generate": "tsx generate/index.ts",
+    "lint": "pnpm --filter site lint",
+    "test": "vitest run"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "UNLICENSED",
+  "packageManager": "pnpm@10.33.3",
+  "dependencies": {
+    "@onia/templates": "workspace:*",
+    "@tabler/icons-react": "^3.44.0",
+    "cheerio": "^1.2.0",
+    "commander": "^15.0.0",
+    "lucide-react": "^1.18.0",
+    "simple-git": "^3.36.0",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "^20.19.43",
+    "tsx": "^4.22.4",
+    "vitest": "^4.1.8"
+  }
+}
