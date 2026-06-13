@@ -48,6 +48,7 @@ En n8n, usar `telegram_reply` como respuesta al usuario.
 Estado Semana
 Plan Semana
 Plan Hoy
+Estado Hermesa
 Automatizaciones ONIA
 Mapa proyectos ONIA
 Fabrica contenido ONIA
@@ -60,6 +61,9 @@ Genera Reel ONIA: <tema> | <objetivo>
 Crea video cliente: <negocio> | <oferta> | <estilo>
 Siguiente Video Lab
 ```
+
+`Estado Hermesa` resume memoria local, outbox Notion, workflows conocidos,
+pendientes Video Lab, prioridad operativa y siguiente comando exacto.
 
 ## Respuesta requerida
 

@@ -58,6 +58,7 @@ Sergio.
 Estado Semana
 Plan Semana
 Plan Hoy
+Estado Hermesa
 Automatizaciones ONIA
 Mapa proyectos ONIA
 Fabrica contenido ONIA
@@ -220,6 +221,20 @@ Hermes no debe decirle a Higgsfield solo "crea un video". Debe enviar paquete:
 - Publicar requiere `Publicar video <job_id>`.
 - Cara o voz IA de Sergio requiere aprobacion por pieza.
 - Clientes requieren aprobacion antes de entregar o publicar.
+
+## Estado Hermesa
+
+`Estado Hermesa` es el resumen ejecutivo del sistema. Debe observar y priorizar,
+no ejecutar acciones sensibles.
+
+Debe incluir:
+
+- memoria local y outbox Notion;
+- proyectos ONIA conocidos;
+- workflows n8n activos conocidos;
+- pendientes accionables de Video Lab;
+- prioridad operativa inmediata;
+- siguiente comando exacto.
 
 ## Siguiente implementacion n8n
 

@@ -464,6 +464,78 @@ def _notion_outbox_status() -> dict:
     return {"ok": True, "action": "notion_outbox_status", "telegram_reply": "\n".join(lines)}
 
 
+def _hermesa_status() -> dict:
+    home = _hermes_home()
+    outbox = home / "notion-outbox" / "command-center-events.jsonl"
+    event_log = home / "logs" / "command-center-events.jsonl"
+    outbox_count = 0
+    event_count = 0
+    for path, key in ((outbox, "outbox"), (event_log, "events")):
+        try:
+            count = len(path.read_text("utf-8").splitlines()) if path.exists() else 0
+        except OSError:
+            count = 0
+        if key == "outbox":
+            outbox_count = count
+        else:
+            event_count = count
+
+    next_data = _video_next(limit=5)
+    next_jobs = next_data.get("jobs", []) if isinstance(next_data, dict) else []
+    reference = _load_reference("telegram-command-center.json")
+    active_workflows = reference.get("active_workflows", [])
+    projects = _all_projects()
+
+    lines = [
+        "Estado Hermesa:",
+        f"- Memoria local: {event_count} eventos; outbox Notion: {outbox_count} pendientes/apilados.",
+        f"- Proyectos ONIA conocidos: {len(projects)}.",
+        f"- Workflows n8n activos conocidos: {len(active_workflows)}.",
+        f"- Video Lab accionable: {len(next_jobs)} pendiente(s).",
+        "",
+        "Prioridad ahora:",
+    ]
+
+    if outbox_count:
+        lines.append("1. Sincronizar outbox local con Notion para que Hermesa tenga memoria consultable.")
+    else:
+        lines.append("1. Mantener el loop diario: radar, cola, CRM, Video Lab y registro.")
+
+    if next_jobs:
+        job = next_jobs[0]
+        command = job.get("command") or _command_for_video_job(job)
+        lines.append(f"2. Resolver Video Lab: {job.get('job_id')} | {job.get('state')} | {job.get('topic')}")
+        if command:
+            lines.append(f"   Siguiente comando: {command}")
+    else:
+        lines.append("2. Crear una pieza nueva o revisar CRM; no hay Video Lab urgente.")
+
+    lines.extend(
+        [
+            "3. Mejorar el router para aceptar lenguaje natural y devolver comandos exactos.",
+            "",
+            "Comandos utiles:",
+            "Registro Hermes",
+            "Siguiente Video Lab",
+            "Automatizaciones ONIA",
+            "Cola contenido diaria",
+        ]
+    )
+
+    return {
+        "ok": True,
+        "action": "hermesa_status",
+        "telegram_reply": "\n".join(lines),
+        "metrics": {
+            "events": event_count,
+            "notion_outbox": outbox_count,
+            "known_projects": len(projects),
+            "known_active_workflows": len(active_workflows),
+            "actionable_video_jobs": len(next_jobs),
+        },
+    }
+
+
 def _orchestrate_onia(payload: str) -> dict:
     parts = [part.strip() for part in payload.split("|") if part.strip()]
     subject = parts[0] if parts else payload.strip()
@@ -565,6 +637,7 @@ def _help() -> dict:
         "Platform Copy Queue",
         "Seguimientos ONIA hoy",
         "Registro Hermes",
+        "Estado Hermesa",
         "Orquesta ONIA: <empresa o rubro> | <objetivo>",
         "Prepara venta DentalGest: <clinica>",
         "Prepara venta Gestios: <empresa>",
@@ -724,6 +797,8 @@ def handle_telegram(message: str) -> dict:
 
     if lower in {"ayuda hermes", "help", "/help", "/start"}:
         return _dispatch(_help())
+    if lower.startswith("estado hermesa") or lower.startswith("prioridades hermesa") or lower.startswith("mejora hermesa"):
+        return _dispatch(_hermesa_status())
     if lower.startswith("estado semana") or lower.startswith("estado hermes"):
         return _dispatch(_weekly_status())
     if lower.startswith("plan semana") or lower.startswith("plan hoy") or lower.startswith("plan "):

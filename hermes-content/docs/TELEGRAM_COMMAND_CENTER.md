@@ -25,6 +25,7 @@ telegram_reply
 Estado Semana
 Plan Semana
 Plan Hoy
+Estado Hermesa
 Automatizaciones ONIA
 Mapa proyectos ONIA
 Fabrica contenido ONIA
@@ -122,6 +123,10 @@ Horarios programados:
 | 15:00 | `Platform Copy Queue` | adaptar descripciones |
 | 17:00 | `Watcher Higgsfield` | revisar renders/jobs |
 | 21:00 | `Registro Hermes` | revisar outbox/log |
+
+`Estado Hermesa` puede usarse en cualquier momento para ver memoria local,
+outbox Notion, workflows conocidos, pendientes Video Lab y la prioridad
+operativa inmediata.
 
 Registro local:
 
