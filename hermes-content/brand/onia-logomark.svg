@@ -1,0 +1,12 @@
+<svg width="240" height="240" viewBox="0 0 240 240" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="ONIA logomark">
+  <!-- ONIA logomark: an automation loop (the "O") with an AI node.
+       Pure vector, font-independent. Recolor via currentColor on the ring. -->
+  <title>ONIA</title>
+  <!-- outer loop -->
+  <circle cx="120" cy="120" r="86" stroke="#0A0F0D" stroke-width="26" fill="none"/>
+  <!-- the loop "opens" into a node: gap top-right -->
+  <path d="M120 34 A86 86 0 0 1 196 86" stroke="#10C26B" stroke-width="26" fill="none" stroke-linecap="round"/>
+  <!-- AI node -->
+  <circle cx="196" cy="86" r="22" fill="#10C26B"/>
+  <circle cx="196" cy="86" r="9" fill="#0A0F0D"/>
+</svg>

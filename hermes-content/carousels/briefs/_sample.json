@@ -1,0 +1,13 @@
+{
+  "title": "3 procesos que tu negocio ya no debería hacer a mano",
+  "caption": "La mayoría de PyMES pierde clientes por responder tarde. Acá los 3 procesos que automatizamos primero.",
+  "hashtags": ["#automatizacion", "#IA", "#bolivia", "#pymes"],
+  "slides": [
+    { "number": 1, "headline": "Perdés 4 de cada 10 clientes por responder tarde", "body": "Y ni te enterás." },
+    { "number": 2, "headline": "El problema no es vender. Es el seguimiento.", "body": "Cada lead sin responder en 5 minutos se enfría. Tu competencia ya lo automatizó." },
+    { "number": 3, "headline": "1. Responder el primer mensaje", "body": "Un bot IA califica y deriva en segundos, 24/7. Vos solo cerrás." },
+    { "number": 4, "headline": "El checklist de automatización", "body": "¿Respondés en <5 min? ¿Hacés seguimiento solo? ¿Sabés de dónde viene cada lead? Si fallás 1, perdés plata.", "save_worthy": true },
+    { "number": 5, "headline": "Empezá por el cuello de botella", "body": "Comentá AUTO y te mando el diagnóstico gratis de tu flujo." }
+  ],
+  "cta": "Comentá AUTO"
+}

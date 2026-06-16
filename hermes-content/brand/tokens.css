@@ -1,0 +1,27 @@
+/* ONIA design tokens — single source of truth for brand color/type.
+   Consumed by carousel render engine and any HTML deliverable.
+   Edit here; do not hardcode hex elsewhere. */
+:root {
+  /* --- Core palette --- */
+  --onia-green: #10C26B;        /* primary brand — electric emerald */
+  --onia-green-deep: #0B8F4F;   /* pressed / gradients */
+  --onia-green-soft: #D6F5E5;   /* tints, highlight fills on light */
+  --onia-ink: #0A0F0D;          /* near-black, warm green-black */
+  --onia-ink-2: #1C2622;        /* secondary dark surface */
+  --onia-surface: #F4F5F2;      /* off-white base */
+  --onia-white: #FFFFFF;
+  --onia-muted: #6B756F;        /* secondary text on light */
+  --onia-muted-dark: #9FB0A8;   /* secondary text on dark */
+
+  /* --- Typography --- */
+  --font-display: 'Space Grotesk','Archivo','Arial Black',Arial,sans-serif;
+  --font-body: 'Inter','Segoe UI',system-ui,Arial,sans-serif;
+
+  /* --- Carousel canvas (portrait, occupies more feed) --- */
+  --canvas-w: 1080px;
+  --canvas-h: 1350px;
+  --pad: 96px;
+
+  --r-lg: 40px;
+  --r-md: 24px;
+}

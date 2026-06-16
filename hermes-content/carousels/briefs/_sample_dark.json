@@ -1,0 +1,14 @@
+{
+  "title": "Automatizá tu captación de clientes",
+  "caption": "La mayoría de PyMES pierde plata por responder tarde.",
+  "hashtags": ["#automatizacion", "#IA", "#bolivia"],
+  "comment_trigger": "Comentá AUTO",
+  "slides": [
+    { "role": "cover", "pill": "Automatización", "headline": "Invertí en *captar* con IA", "body": "Sistemas para un negocio que vende solo." },
+    { "role": "stakes", "pill": "El problema", "headline": "Perdés *4 de 10* leads", "body": "Cada mensaje sin responder en 5 min se *enfría*.", "callout": "Tu competencia ya lo automatizó ↘" },
+    { "role": "point", "pill": "Solución", "headline": "Un bot que *califica* solo", "body": "Responde, califica y deriva 24/7. Vos solo *cerrás*." },
+    { "role": "save", "save_worthy": true, "pill": "Framework", "headline": "Checklist de *automatización*", "body": "¿Respondés en <5 min? ¿Seguimiento solo? ¿Sabés de dónde viene cada lead?" },
+    { "role": "cta", "pill": "Empezá hoy", "headline": "Pedí tu *diagnóstico* gratis", "body": "Comentá *AUTO* y te mando el análisis de tu flujo." }
+  ],
+  "cta": "Comentá AUTO"
+}

@@ -1,0 +1,177 @@
+{
+  "_meta": {
+    "purpose": "Extracción de patrones de 10 referencias enviadas por Sergio (2026-06-16) + galerías a minar. NO copiar: solo dirección de estilo. Complementa style-references.json.",
+    "canvas": "1080x1350 (4:5 portrait)",
+    "schema": "topic, hook_type, narrative_shape, slide_rhythm, visual_system, palette, fonts, layout, objects, accent_technique, cta, onia_fit"
+  },
+
+  "references": [
+    {
+      "id": "mobile-editing-club",
+      "topic": "Shoots/ads de producto con IA para marcas",
+      "hook_type": "promesa/capability ('Generate AI Product Shoots')",
+      "narrative_shape": "capability -> use case -> 'This is Branded AI'",
+      "slide_rhythm": "foto full-bleed dominante, 1 idea",
+      "visual_system": "editorial luxury, foto producto/persona a sangre",
+      "palette": ["#F2EFEA cream", "#1A1A1A ink"],
+      "fonts": ["serif display italic (acento 'AI')", "heavy grotesk Druk-like"],
+      "layout": "titular gigante centro, pill caption abajo, marca top-left",
+      "objects": ["producto fotografiado", "modelo"],
+      "accent_technique": "serif-italic + sans-condensada; pill de caption",
+      "cta": "pill 'GENERATE SHOOTS WITH AI'",
+      "onia_fit": "ALTO: portadas con foto Sergio/Arthur o producto; acento serif-italic en palabra clave"
+    },
+    {
+      "id": "asterisk-create",
+      "topic": "Crecer en redes / sistema de contenido",
+      "hook_type": "interrupción ('STOP', 'The algorithm does NOT hate you')",
+      "narrative_shape": "hook agresivo -> mito -> verdad -> framework",
+      "slide_rhythm": "alterna foto founder, objeto retro, tipografía pura",
+      "visual_system": "editorial bold con grano, objetos retro (CRT, cámara)",
+      "palette": ["#0F0F0F", "#E8E2D0 bone", "#F0531C orange", "#7A8B3D olive"],
+      "fonts": ["serif italic Fraunces/Playfair", "condensed sans pesada"],
+      "layout": "titular mixto serif+sans, barra 'save for later', flecha → bottom-right, @handle",
+      "objects": ["computadora vieja", "silla en pasto"],
+      "accent_technique": "naranja sobre oscuro, grano, palabra italic resaltada",
+      "cta": "barra 'save for later' + flecha continuación",
+      "onia_fit": "ALTO: regla 1 (interrupción) + barra-save (regla 4). Verde donde usan naranja"
+    },
+    {
+      "id": "ratchelle-moura",
+      "topic": "Marketing, scouting, posicionamiento (PT)",
+      "hook_type": "frase-tesis ('Marca forte não grita')",
+      "narrative_shape": "tesis emocional -> reframe -> aplicación",
+      "slide_rhythm": "alterna foto editorial + color sólido, caps justificadas",
+      "visual_system": "fashion-editorial con anotaciones a mano",
+      "palette": ["#0A0A0A", "#F0EEE9", "#2E6BE6 blue", "#FF3FA4 pink"],
+      "fonts": ["grotesk caps spread", "script handwritten resalte"],
+      "layout": "caps tracking ancho, palabra tachada/subrayada a mano en color, marca top",
+      "objects": ["silla", "semáforo", "teléfono retro", "laberinto"],
+      "accent_technique": "scribble manuscrito sobre palabra clave; 1 objeto simbólico/slide",
+      "cta": "posicionamiento (implícito)",
+      "onia_fit": "MEDIO-ALTO cuentas personales: anotación a mano en verde sobre palabra clave"
+    },
+    {
+      "id": "medi-go",
+      "topic": "Compra de equipo médico (e-commerce B2B, UA)",
+      "hook_type": "número/lista ('TOP-3', '10 errores')",
+      "narrative_shape": "lista -> beneficio -> mascota guía -> CTA",
+      "slide_rhythm": "denso, mascota 3D recurrente, números gigantes",
+      "visual_system": "brutalist duotono con mascota 3D y blobs",
+      "palette": ["#0033FF electric blue", "#D6FF00 acid yellow", "#FFF", "#0A0A0A"],
+      "fonts": ["heavy grotesk caps", "sans UI"],
+      "layout": "blobs orgánicos, cinta diagonal repetida, mascota recortada, badges",
+      "objects": ["mascota 3D esqueleto-doctor", "equipos médicos", "reloj 3D"],
+      "accent_technique": "duotono brutal, blobs, cinta repetida como patrón",
+      "cta": "mascota presenta, '@medigo'",
+      "onia_fit": "BAJO color (ácido), ALTO patrón: personaje/mascota 3D recurrente = reconocimiento de feed"
+    },
+    {
+      "id": "youth-pro",
+      "topic": "Hábitos / crecimiento + promo",
+      "hook_type": "imperativo ('Start Today', 'GRAB YOUR FAVS')",
+      "narrative_shape": "promesa -> oferta -> engagement question",
+      "slide_rhythm": "monocromo naranja, objetos cutout",
+      "visual_system": "retro-naranja con recortes y halftone",
+      "palette": ["#FF5A00 orange", "#FBF3E4 cream", "#111"],
+      "fonts": ["bold rounded sans", "condensed caps"],
+      "layout": "campo naranja, objeto cutout flotante con sombra, n° página '00'",
+      "objects": ["teléfono negro", "cuaderno+lapicero", "puño halftone"],
+      "accent_technique": "monocromo dominante + 1 cutout; halftone B/N",
+      "cta": "'SHOP NOW', 'Join us for QnA'",
+      "onia_fit": "MEDIO: patrón monocromo-marca + objeto cutout sirve con verde dominante"
+    },
+    {
+      "id": "insta-banner-swiss",
+      "topic": "Plantilla tipográfica genérica",
+      "hook_type": "palabra-statement ('fresh','new','cool')",
+      "narrative_shape": "poster tipográfico puro",
+      "slide_rhythm": "tipografía pura, palabra gigante sangrando borde inferior",
+      "visual_system": "Swiss/International type poster",
+      "palette": ["#4327E0", "#E8473F", "#F2A33C", "#16C0F0", "#FFF", "#000"],
+      "fonts": ["Helvetica/grotesk bold (1 familia)"],
+      "layout": "bloque texto chico arriba-izq, palabra ENORME abajo a sangre",
+      "objects": [],
+      "accent_technique": "campo de color plano + tipografía masiva bleed; cero adornos",
+      "cta": "minimal",
+      "onia_fit": "ALTO como pack 'swiss-type': solo tipo + color, sin assets (rapidísimo)"
+    },
+    {
+      "id": "boletinhos-fintech",
+      "topic": "Finanzas personales / impuestos (PT)",
+      "hook_type": "pregunta/utilidad ('Como sair do VERMELHO?')",
+      "narrative_shape": "gancho util -> dato -> screenshot prueba -> CTA comentar",
+      "slide_rhythm": "alterna azul sólido + nude, caps condensadas con warp",
+      "visual_system": "editorial fintech, mockups de chat/UI",
+      "palette": ["#2B4BFF blue", "#F2DCCF nude", "#FFF"],
+      "fonts": ["condensed sans caps (warp en 1 palabra)", "sans UI"],
+      "layout": "titular caps con palabra distorsionada, screenshots chat, badge carrusel, '↓' cue",
+      "objects": ["mockups tweet/chat", "tarjeta virtual", "planilla"],
+      "accent_technique": "warp/liquify de palabra clave; screenshots como prueba; comment-trigger",
+      "cta": "'diga nos comentários...'",
+      "onia_fit": "ALTO: screenshots WhatsApp/Chatwoot/n8n como prueba; comment trigger = regla 5"
+    },
+    {
+      "id": "instavisual",
+      "topic": "Diseño / Instagram para negocios (PT)",
+      "hook_type": "secreto/pregunta ('O segredo da bio perfeita')",
+      "narrative_shape": "gancho -> lección -> bonus -> CTA curso",
+      "slide_rhythm": "vibrante, objeto 3D/cutout + mockup ventana",
+      "visual_system": "vibrante feminino, gradientes magenta/violeta",
+      "palette": ["#C81CD6", "#7A1FE0", "#FF36C0", "#F2EFF5"],
+      "fonts": ["bold sans", "script italic acento"],
+      "layout": "objeto simbólico flotante, ventana browser/Canva mockup, badge carrusel",
+      "objects": ["llave", "paraguas", "regalo", "busto griego", "mockup browser"],
+      "accent_technique": "gradiente vibrante + objeto cutout brillante; mockup UI",
+      "cta": "'conheça o curso →'",
+      "onia_fit": "BAJO color; patrón objeto-simbólico-por-idea reutilizable"
+    },
+    {
+      "id": "perfluence-dark-neon",
+      "topic": "Monetizar perfil / influencer marketing (RU)",
+      "hook_type": "directo ('¿Listo para ganar?')",
+      "narrative_shape": "info -> oferta -> Q&A -> mascota",
+      "slide_rhythm": "negro dominante, halftone + mascota 3D + neón",
+      "visual_system": "dark neon con grid y glow",
+      "palette": ["#0A0A0A", "#39E66B neon green", "#FFF"],
+      "fonts": ["bold sans caps", "sans UI"],
+      "layout": "fondo negro, halftone B/N, glow verde, grid de fondo, mascota conejo 3D",
+      "objects": ["mascota conejo 3D", "TV retro 3D", "signo ? 3D", "halftone personas"],
+      "accent_technique": "verde neón sobre negro + glow; halftone B/N; mascota 3D",
+      "cta": "preguntas/respuestas",
+      "onia_fit": "MUY ALTO color (verde+negro = ONIA). Glow + halftone + grid = pack 'dark-neon'"
+    },
+    {
+      "id": "solaris-dark-product",
+      "topic": "Energía solar (venta consultiva B2B/B2C, PT)",
+      "hook_type": "imperativo/beneficio ('INVISTA EM ENERGIA SOLAR', '60X sem juros')",
+      "narrative_shape": "hook -> beneficios -> número/prueba -> objeción -> CTA direct",
+      "slide_rhythm": "negro/verde/blanco alternado, producto 3D + curva fluida continua",
+      "visual_system": "dark premium product con línea curva continua y pills/badges",
+      "palette": ["#0A0A0A", "#34E04A green", "#FFFFFF"],
+      "fonts": ["heavy condensed grotesk (Druk/Archivo Black)", "sans medium UI"],
+      "layout": "pills/badges arriba (categoría), titular condensado con palabra en verde, producto 3D centro, curva verde que conecta slides, callout-cards tipo chat, logo+redes abajo",
+      "objects": ["paneles solares 3D", "calculadora 3D", "bandera 3D", "técnico recortado"],
+      "accent_technique": "curva verde continua (peek/continuation entre slides), pills outline, palabra clave verde, callout-card flotante",
+      "cta": "'Chama no direct!' badge",
+      "onia_fit": "MÁXIMO. Verde+negro = ONIA. Producto 3D = mockups/automatización. PACK A CONSTRUIR PRIMERO: 'onia-dark-product'"
+    }
+  ],
+
+  "style_packs": [
+    { "id": "onia-typographic", "status": "implementado", "base": "render engine actual", "use": "rápido, sin assets, hooks fuertes" },
+    { "id": "onia-dark-product", "status": "propuesto-PRIORIDAD", "refs": ["solaris-dark-product", "perfluence-dark-neon"], "needs": "curva verde continua entre slides, pills/badges, callout-cards, objeto 3D (mockup/dashboard)" },
+    { "id": "onia-editorial-photo", "status": "propuesto", "refs": ["mobile-editing-club", "asterisk-create"], "needs": "foto a sangre (Sergio/Arthur), serif-italic de acento, grano" },
+    { "id": "onia-swiss-type", "status": "propuesto", "refs": ["insta-banner-swiss"], "needs": "solo tipo masiva + campo de color (cero assets)" },
+    { "id": "onia-proof-ui", "status": "propuesto", "refs": ["boletinhos-fintech"], "needs": "screenshots reales WhatsApp/Chatwoot/n8n + warp de palabra clave" }
+  ],
+
+  "galleries_to_mine": [
+    { "name": "Behance — instagram carousel", "url": "https://www.behance.net/search/projects/instagram%20carousel" },
+    { "name": "Swiper Studio — editorial & brutalist (fuentes: Archivo Black, Syne, Fraunces, Playfair, IBM Plex Mono)", "url": "https://studio.swiperjs.com/blog/10-editorial-brutalist-templates" },
+    { "name": "AdLibrary — carousel teardowns 2026 (Notion/Figma/Nike)", "url": "https://adlibrary.com/posts/carousel-ad-examples-2026" },
+    { "name": "Dribbble — instagram carousel", "url": "https://dribbble.com/search/instagram-carousel" },
+    { "name": "Savee.it — moodboards", "url": "https://savee.it" },
+    { "name": "Pinterest — carousel design (solo dirección)", "url": "https://www.pinterest.com/search/pins/?q=instagram%20carousel%20design" }
+  ]
+}
