@@ -1,0 +1,3234 @@
+{
+  "capturedAt": "2026-06-15T22:06:26.457Z",
+  "cacheRoot": "C:/Users/PC/.codex/design-stack/gallery-examples-full",
+  "policy": "Gallery screenshots and structure are reference artifacts. Copy/adapt code only when licenseStatus is compatible and the linked/local repo license has been reviewed.",
+  "configPath": "data/references/design-sources/gallery-reference-sources.json",
+  "results": [
+    {
+      "id": "lapa-ninja",
+      "name": "Lapa Ninja",
+      "url": "https://www.lapa.ninja/",
+      "mode": "landing-gallery",
+      "usage": "Landing-page structure, section ordering, visual hierarchy and copy patterns. Do not copy site code or proprietary assets.",
+      "licenseStatus": "inspiration-only",
+      "status": 200,
+      "failedRequestCount": 13,
+      "rawCandidateCount": 77,
+      "selectedCandidateCount": 40,
+      "detailedExampleCount": 10,
+      "candidates": [
+        {
+          "index": 148,
+          "url": "https://www.lapa.ninja/post/lama-lama/",
+          "text": "",
+          "heading": "Lama Lama",
+          "description": "WEBSITEAmsterdam based creative digital agency.Lama LamaAgencyWEBSITEOpen-source liquidity protocol.AaveAppWEBSITEPlay with AI, bring your ideas to lifeTinkerArtificial Intelligence NO-CODE More than a website builder Webflow WEBSITE BUILDER WEBSITEMùn Rooftop Cocktail Bar RomeMùn Rooftop RomeFood DrinksWEBSITEA global branding agency proudly based in London",
+          "imageSrc": "https://cdn.lapa.ninja/assets/images/1x/lamalama-thumb.jpg",
+          "imageAlt": "",
+          "buttonText": [
+            "Lama Lama",
+            "Aave",
+            "Tinker",
+            "Webflow",
+            "Mùn Rooftop Rome",
+            "Ragged Edge",
+            "Framer",
+            "Softlight"
+          ],
+          "tags": [],
+          "cardArea": 4755456,
+          "score": 10,
+          "sourceMode": "landing-gallery"
+        },
+        {
+          "index": 151,
+          "url": "https://www.lapa.ninja/post/aave-3/",
+          "text": "",
+          "heading": "Lama Lama",
+          "description": "WEBSITEAmsterdam based creative digital agency.Lama LamaAgencyWEBSITEOpen-source liquidity protocol.AaveAppWEBSITEPlay with AI, bring your ideas to lifeTinkerArtificial Intelligence NO-CODE More than a website builder Webflow WEBSITE BUILDER WEBSITEMùn Rooftop Cocktail Bar RomeMùn Rooftop RomeFood DrinksWEBSITEA global branding agency proudly based in London",
+          "imageSrc": "https://cdn.lapa.ninja/assets/images/1x/lamalama-thumb.jpg",
+          "imageAlt": "",
+          "buttonText": [
+            "Lama Lama",
+            "Aave",
+            "Tinker",
+            "Webflow",
+            "Mùn Rooftop Rome",
+            "Ragged Edge",
+            "Framer",
+            "Softlight"
+          ],
+          "tags": [],
+          "cardArea": 4755456,
+          "score": 10,
+          "sourceMode": "landing-gallery"
+        },
+        {
+          "index": 154,
+          "url": "https://www.lapa.ninja/post/tinker/",
+          "text": "",
+          "heading": "Lama Lama",
+          "description": "WEBSITEAmsterdam based creative digital agency.Lama LamaAgencyWEBSITEOpen-source liquidity protocol.AaveAppWEBSITEPlay with AI, bring your ideas to lifeTinkerArtificial Intelligence NO-CODE More than a website builder Webflow WEBSITE BUILDER WEBSITEMùn Rooftop Cocktail Bar RomeMùn Rooftop RomeFood DrinksWEBSITEA global branding agency proudly based in London",
+          "imageSrc": "https://cdn.lapa.ninja/assets/images/1x/lamalama-thumb.jpg",
+          "imageAlt": "",
+          "buttonText": [
+            "Lama Lama",
+            "Aave",
+            "Tinker",
+            "Webflow",
+            "Mùn Rooftop Rome",
+            "Ragged Edge",
+            "Framer",
+            "Softlight"
+          ],
+          "tags": [],
+          "cardArea": 4755456,
+          "score": 10,
+          "sourceMode": "landing-gallery"
+        },
+        {
+          "index": 160,
+          "url": "https://www.lapa.ninja/post/mun-rooftop-rome/",
+          "text": "",
+          "heading": "Lama Lama",
+          "description": "WEBSITEAmsterdam based creative digital agency.Lama LamaAgencyWEBSITEOpen-source liquidity protocol.AaveAppWEBSITEPlay with AI, bring your ideas to lifeTinkerArtificial Intelligence NO-CODE More than a website builder Webflow WEBSITE BUILDER WEBSITEMùn Rooftop Cocktail Bar RomeMùn Rooftop RomeFood DrinksWEBSITEA global branding agency proudly based in London",
+          "imageSrc": "https://cdn.lapa.ninja/assets/images/1x/lamalama-thumb.jpg",
+          "imageAlt": "",
+          "buttonText": [
+            "Lama Lama",
+            "Aave",
+            "Tinker",
+            "Webflow",
+            "Mùn Rooftop Rome",
+            "Ragged Edge",
+            "Framer",
+            "Softlight"
+          ],
+          "tags": [],
+          "cardArea": 4755456,
+          "score": 10,
+          "sourceMode": "landing-gallery"
+        },
+        {
+          "index": 163,
+          "url": "https://www.lapa.ninja/post/ragged-edge/",
+          "text": "",
+          "heading": "Lama Lama",
+          "description": "WEBSITEAmsterdam based creative digital agency.Lama LamaAgencyWEBSITEOpen-source liquidity protocol.AaveAppWEBSITEPlay with AI, bring your ideas to lifeTinkerArtificial Intelligence NO-CODE More than a website builder Webflow WEBSITE BUILDER WEBSITEMùn Rooftop Cocktail Bar RomeMùn Rooftop RomeFood DrinksWEBSITEA global branding agency proudly based in London",
+          "imageSrc": "https://cdn.lapa.ninja/assets/images/1x/lamalama-thumb.jpg",
+          "imageAlt": "",
+          "buttonText": [
+            "Lama Lama",
+            "Aave",
+            "Tinker",
+            "Webflow",
+            "Mùn Rooftop Rome",
+            "Ragged Edge",
+            "Framer",
+            "Softlight"
+          ],
+          "tags": [],
+          "cardArea": 4755456,
+          "score": 10,
+          "sourceMode": "landing-gallery"
+        },
+        {
+          "index": 169,
+          "url": "https://www.lapa.ninja/post/softlight/",
+          "text": "",
+          "heading": "Lama Lama",
+          "description": "WEBSITEAmsterdam based creative digital agency.Lama LamaAgencyWEBSITEOpen-source liquidity protocol.AaveAppWEBSITEPlay with AI, bring your ideas to lifeTinkerArtificial Intelligence NO-CODE More than a website builder Webflow WEBSITE BUILDER WEBSITEMùn Rooftop Cocktail Bar RomeMùn Rooftop RomeFood DrinksWEBSITEA global branding agency proudly based in London",
+          "imageSrc": "https://cdn.lapa.ninja/assets/images/1x/lamalama-thumb.jpg",
+          "imageAlt": "",
+          "buttonText": [
+            "Lama Lama",
+            "Aave",
+            "Tinker",
+            "Webflow",
+            "Mùn Rooftop Rome",
+            "Ragged Edge",
+            "Framer",
+            "Softlight"
+          ],
+          "tags": [],
+          "cardArea": 4755456,
+          "score": 10,
+          "sourceMode": "landing-gallery"
+        },
+        {
+          "index": 172,
+          "url": "https://www.lapa.ninja/post/stackbyte/",
+          "text": "",
+          "heading": "Lama Lama",
+          "description": "WEBSITEAmsterdam based creative digital agency.Lama LamaAgencyWEBSITEOpen-source liquidity protocol.AaveAppWEBSITEPlay with AI, bring your ideas to lifeTinkerArtificial Intelligence NO-CODE More than a website builder Webflow WEBSITE BUILDER WEBSITEMùn Rooftop Cocktail Bar RomeMùn Rooftop RomeFood DrinksWEBSITEA global branding agency proudly based in London",
+          "imageSrc": "https://cdn.lapa.ninja/assets/images/1x/lamalama-thumb.jpg",
+          "imageAlt": "",
+          "buttonText": [
+            "Lama Lama",
+            "Aave",
+            "Tinker",
+            "Webflow",
+            "Mùn Rooftop Rome",
+            "Ragged Edge",
+            "Framer",
+            "Softlight"
+          ],
+          "tags": [],
+          "cardArea": 4755456,
+          "score": 10,
+          "sourceMode": "landing-gallery"
+        },
+        {
+          "index": 175,
+          "url": "https://www.lapa.ninja/post/heyato/",
+          "text": "",
+          "heading": "Lama Lama",
+          "description": "WEBSITEAmsterdam based creative digital agency.Lama LamaAgencyWEBSITEOpen-source liquidity protocol.AaveAppWEBSITEPlay with AI, bring your ideas to lifeTinkerArtificial Intelligence NO-CODE More than a website builder Webflow WEBSITE BUILDER WEBSITEMùn Rooftop Cocktail Bar RomeMùn Rooftop RomeFood DrinksWEBSITEA global branding agency proudly based in London",
+          "imageSrc": "https://cdn.lapa.ninja/assets/images/1x/lamalama-thumb.jpg",
+          "imageAlt": "",
+          "buttonText": [
+            "Lama Lama",
+            "Aave",
+            "Tinker",
+            "Webflow",
+            "Mùn Rooftop Rome",
+            "Ragged Edge",
+            "Framer",
+            "Softlight"
+          ],
+          "tags": [],
+          "cardArea": 4755456,
+          "score": 10,
+          "sourceMode": "landing-gallery"
+        },
+        {
+          "index": 179,
+          "url": "https://www.lapa.ninja/post/juanmora/",
+          "text": "",
+          "heading": "Lama Lama",
+          "description": "WEBSITEAmsterdam based creative digital agency.Lama LamaAgencyWEBSITEOpen-source liquidity protocol.AaveAppWEBSITEPlay with AI, bring your ideas to lifeTinkerArtificial Intelligence NO-CODE More than a website builder Webflow WEBSITE BUILDER WEBSITEMùn Rooftop Cocktail Bar RomeMùn Rooftop RomeFood DrinksWEBSITEA global branding agency proudly based in London",
+          "imageSrc": "https://cdn.lapa.ninja/assets/images/1x/lamalama-thumb.jpg",
+          "imageAlt": "",
+          "buttonText": [
+            "Lama Lama",
+            "Aave",
+            "Tinker",
+            "Webflow",
+            "Mùn Rooftop Rome",
+            "Ragged Edge",
+            "Framer",
+            "Softlight"
+          ],
+          "tags": [],
+          "cardArea": 4755456,
+          "score": 10,
+          "sourceMode": "landing-gallery"
+        },
+        {
+          "index": 182,
+          "url": "https://www.lapa.ninja/post/lobbspadel/",
+          "text": "",
+          "heading": "Lama Lama",
+          "description": "WEBSITEAmsterdam based creative digital agency.Lama LamaAgencyWEBSITEOpen-source liquidity protocol.AaveAppWEBSITEPlay with AI, bring your ideas to lifeTinkerArtificial Intelligence NO-CODE More than a website builder Webflow WEBSITE BUILDER WEBSITEMùn Rooftop Cocktail Bar RomeMùn Rooftop RomeFood DrinksWEBSITEA global branding agency proudly based in London",
+          "imageSrc": "https://cdn.lapa.ninja/assets/images/1x/lamalama-thumb.jpg",
+          "imageAlt": "",
+          "buttonText": [
+            "Lama Lama",
+            "Aave",
+            "Tinker",
+            "Webflow",
+            "Mùn Rooftop Rome",
+            "Ragged Edge",
+            "Framer",
+            "Softlight"
+          ],
+          "tags": [],
+          "cardArea": 4755456,
+          "score": 10,
+          "sourceMode": "landing-gallery"
+        },
+        {
+          "index": 186,
+          "url": "https://www.lapa.ninja/post/altina/",
+          "text": "",
+          "heading": "Lama Lama",
+          "description": "WEBSITEAmsterdam based creative digital agency.Lama LamaAgencyWEBSITEOpen-source liquidity protocol.AaveAppWEBSITEPlay with AI, bring your ideas to lifeTinkerArtificial Intelligence NO-CODE More than a website builder Webflow WEBSITE BUILDER WEBSITEMùn Rooftop Cocktail Bar RomeMùn Rooftop RomeFood DrinksWEBSITEA global branding agency proudly based in London",
+          "imageSrc": "https://cdn.lapa.ninja/assets/images/1x/lamalama-thumb.jpg",
+          "imageAlt": "",
+          "buttonText": [
+            "Lama Lama",
+            "Aave",
+            "Tinker",
+            "Webflow",
+            "Mùn Rooftop Rome",
+            "Ragged Edge",
+            "Framer",
+            "Softlight"
+          ],
+          "tags": [],
+          "cardArea": 4755456,
+          "score": 10,
+          "sourceMode": "landing-gallery"
+        },
+        {
+          "index": 189,
+          "url": "https://www.lapa.ninja/post/getnudge/",
+          "text": "",
+          "heading": "Lama Lama",
+          "description": "WEBSITEAmsterdam based creative digital agency.Lama LamaAgencyWEBSITEOpen-source liquidity protocol.AaveAppWEBSITEPlay with AI, bring your ideas to lifeTinkerArtificial Intelligence NO-CODE More than a website builder Webflow WEBSITE BUILDER WEBSITEMùn Rooftop Cocktail Bar RomeMùn Rooftop RomeFood DrinksWEBSITEA global branding agency proudly based in London",
+          "imageSrc": "https://cdn.lapa.ninja/assets/images/1x/lamalama-thumb.jpg",
+          "imageAlt": "",
+          "buttonText": [
+            "Lama Lama",
+            "Aave",
+            "Tinker",
+            "Webflow",
+            "Mùn Rooftop Rome",
+            "Ragged Edge",
+            "Framer",
+            "Softlight"
+          ],
+          "tags": [],
+          "cardArea": 4755456,
+          "score": 10,
+          "sourceMode": "landing-gallery"
+        },
+        {
+          "index": 219,
+          "url": "https://www.lapa.ninja/templates/last-studio-framer-template/",
+          "text": "Last Studio",
+          "heading": "Last Studio",
+          "description": "TEMPLATELast Studio is a modern and playful design agency Framer template. Built to house everything you need: work, services, blog posts and more. Includes ten pages, near-perfect Lighthouse scores, and it's built in an easy-to-customise way.Website screenshot libraryLast Studioby Bryn Taylor$129FramerAgencyTEMPLATELucid is a simple and straightforward port",
+          "imageSrc": "https://cdn.lapa.ninja/assets/templates/last-studio-framer-template-thumb.jpg",
+          "imageAlt": "Last Studio template preview",
+          "buttonText": [
+            "Last Studio",
+            "Framer",
+            "Agency",
+            "Lucide",
+            "Webflow",
+            "Portfolio",
+            "Agency",
+            "e-commerce"
+          ],
+          "tags": [],
+          "cardArea": 1004480,
+          "score": 10,
+          "sourceMode": "landing-gallery"
+        },
+        {
+          "index": 221,
+          "url": "https://www.lapa.ninja/templates/framer/",
+          "text": "Framer",
+          "heading": "Last Studio",
+          "description": "TEMPLATELast Studio is a modern and playful design agency Framer template. Built to house everything you need: work, services, blog posts and more. Includes ten pages, near-perfect Lighthouse scores, and it's built in an easy-to-customise way.Website screenshot libraryLast Studioby Bryn Taylor$129FramerAgencyTEMPLATELucid is a simple and straightforward port",
+          "imageSrc": "https://cdn.lapa.ninja/assets/templates/last-studio-framer-template-thumb.jpg",
+          "imageAlt": "Last Studio template preview",
+          "buttonText": [
+            "Last Studio",
+            "Framer",
+            "Agency",
+            "Lucide",
+            "Webflow",
+            "Portfolio",
+            "Agency",
+            "e-commerce"
+          ],
+          "tags": [],
+          "cardArea": 1004480,
+          "score": 10,
+          "sourceMode": "landing-gallery"
+        },
+        {
+          "index": 224,
+          "url": "https://www.lapa.ninja/templates/lucide-website-template/",
+          "text": "Lucide",
+          "heading": "Last Studio",
+          "description": "TEMPLATELast Studio is a modern and playful design agency Framer template. Built to house everything you need: work, services, blog posts and more. Includes ten pages, near-perfect Lighthouse scores, and it's built in an easy-to-customise way.Website screenshot libraryLast Studioby Bryn Taylor$129FramerAgencyTEMPLATELucid is a simple and straightforward port",
+          "imageSrc": "https://cdn.lapa.ninja/assets/templates/last-studio-framer-template-thumb.jpg",
+          "imageAlt": "Last Studio template preview",
+          "buttonText": [
+            "Last Studio",
+            "Framer",
+            "Agency",
+            "Lucide",
+            "Webflow",
+            "Portfolio",
+            "Agency",
+            "e-commerce"
+          ],
+          "tags": [],
+          "cardArea": 1004480,
+          "score": 10,
+          "sourceMode": "landing-gallery"
+        },
+        {
+          "index": 226,
+          "url": "https://www.lapa.ninja/templates/webflow/",
+          "text": "Webflow",
+          "heading": "Last Studio",
+          "description": "TEMPLATELast Studio is a modern and playful design agency Framer template. Built to house everything you need: work, services, blog posts and more. Includes ten pages, near-perfect Lighthouse scores, and it's built in an easy-to-customise way.Website screenshot libraryLast Studioby Bryn Taylor$129FramerAgencyTEMPLATELucid is a simple and straightforward port",
+          "imageSrc": "https://cdn.lapa.ninja/assets/templates/last-studio-framer-template-thumb.jpg",
+          "imageAlt": "Last Studio template preview",
+          "buttonText": [
+            "Last Studio",
+            "Framer",
+            "Agency",
+            "Lucide",
+            "Webflow",
+            "Portfolio",
+            "Agency",
+            "e-commerce"
+          ],
+          "tags": [],
+          "cardArea": 1004480,
+          "score": 10,
+          "sourceMode": "landing-gallery"
+        },
+        {
+          "index": 231,
+          "url": "https://www.lapa.ninja/templates/venture-fz-website-template/",
+          "text": "Venture FZ",
+          "heading": "Last Studio",
+          "description": "TEMPLATELast Studio is a modern and playful design agency Framer template. Built to house everything you need: work, services, blog posts and more. Includes ten pages, near-perfect Lighthouse scores, and it's built in an easy-to-customise way.Website screenshot libraryLast Studioby Bryn Taylor$129FramerAgencyTEMPLATELucid is a simple and straightforward port",
+          "imageSrc": "https://cdn.lapa.ninja/assets/templates/last-studio-framer-template-thumb.jpg",
+          "imageAlt": "Last Studio template preview",
+          "buttonText": [
+            "Last Studio",
+            "Framer",
+            "Agency",
+            "Lucide",
+            "Webflow",
+            "Portfolio",
+            "Agency",
+            "e-commerce"
+          ],
+          "tags": [],
+          "cardArea": 1004480,
+          "score": 10,
+          "sourceMode": "landing-gallery"
+        },
+        {
+          "index": 237,
+          "url": "https://www.lapa.ninja/templates/johnmoore-portfolio-website-template/",
+          "text": "John Moore",
+          "heading": "Last Studio",
+          "description": "TEMPLATELast Studio is a modern and playful design agency Framer template. Built to house everything you need: work, services, blog posts and more. Includes ten pages, near-perfect Lighthouse scores, and it's built in an easy-to-customise way.Website screenshot libraryLast Studioby Bryn Taylor$129FramerAgencyTEMPLATELucid is a simple and straightforward port",
+          "imageSrc": "https://cdn.lapa.ninja/assets/templates/last-studio-framer-template-thumb.jpg",
+          "imageAlt": "Last Studio template preview",
+          "buttonText": [
+            "Last Studio",
+            "Framer",
+            "Agency",
+            "Lucide",
+            "Webflow",
+            "Portfolio",
+            "Agency",
+            "e-commerce"
+          ],
+          "tags": [],
+          "cardArea": 1004480,
+          "score": 10,
+          "sourceMode": "landing-gallery"
+        },
+        {
+          "index": 193,
+          "url": "https://www.lapa.ninja/post/mojostudio/",
+          "text": "",
+          "heading": "Mojo Studio",
+          "description": "WEBSITEContent creation agency in ParisMojo StudioStudioWEBSITEThe mixed media production companyFlesh and BonesStudioWEBSITEA billing platform for the intelligence eraPolarFinanceWEBSITESustainable Shoes Made From NatureMake Good eCommerceWEBSITEWebsites, Marketing and DesignIdyllic New PlymouthStudioWEBSITEInterior Design StudioHouse of HoneyStudioWEBSITEY",
+          "imageSrc": "https://cdn.lapa.ninja/assets/og-images/mojostudio.jpg",
+          "imageAlt": "",
+          "buttonText": [
+            "Mojo Studio",
+            "Flesh and Bones",
+            "Polar",
+            "Make Good",
+            "eCommerce",
+            "Idyllic New Plymouth",
+            "House of Honey",
+            "Cosmos"
+          ],
+          "tags": [],
+          "cardArea": 870707,
+          "score": 10,
+          "sourceMode": "landing-gallery"
+        },
+        {
+          "index": 196,
+          "url": "https://www.lapa.ninja/post/wearefleshandbones/",
+          "text": "",
+          "heading": "Mojo Studio",
+          "description": "WEBSITEContent creation agency in ParisMojo StudioStudioWEBSITEThe mixed media production companyFlesh and BonesStudioWEBSITEA billing platform for the intelligence eraPolarFinanceWEBSITESustainable Shoes Made From NatureMake Good eCommerceWEBSITEWebsites, Marketing and DesignIdyllic New PlymouthStudioWEBSITEInterior Design StudioHouse of HoneyStudioWEBSITEY",
+          "imageSrc": "https://cdn.lapa.ninja/assets/og-images/mojostudio.jpg",
+          "imageAlt": "",
+          "buttonText": [
+            "Mojo Studio",
+            "Flesh and Bones",
+            "Polar",
+            "Make Good",
+            "eCommerce",
+            "Idyllic New Plymouth",
+            "House of Honey",
+            "Cosmos"
+          ],
+          "tags": [],
+          "cardArea": 870707,
+          "score": 10,
+          "sourceMode": "landing-gallery"
+        },
+        {
+          "index": 199,
+          "url": "https://www.lapa.ninja/post/polar/",
+          "text": "",
+          "heading": "Mojo Studio",
+          "description": "WEBSITEContent creation agency in ParisMojo StudioStudioWEBSITEThe mixed media production companyFlesh and BonesStudioWEBSITEA billing platform for the intelligence eraPolarFinanceWEBSITESustainable Shoes Made From NatureMake Good eCommerceWEBSITEWebsites, Marketing and DesignIdyllic New PlymouthStudioWEBSITEInterior Design StudioHouse of HoneyStudioWEBSITEY",
+          "imageSrc": "https://cdn.lapa.ninja/assets/og-images/mojostudio.jpg",
+          "imageAlt": "",
+          "buttonText": [
+            "Mojo Studio",
+            "Flesh and Bones",
+            "Polar",
+            "Make Good",
+            "eCommerce",
+            "Idyllic New Plymouth",
+            "House of Honey",
+            "Cosmos"
+          ],
+          "tags": [],
+          "cardArea": 870707,
+          "score": 10,
+          "sourceMode": "landing-gallery"
+        },
+        {
+          "index": 202,
+          "url": "https://www.lapa.ninja/post/mk/",
+          "text": "",
+          "heading": "Mojo Studio",
+          "description": "WEBSITEContent creation agency in ParisMojo StudioStudioWEBSITEThe mixed media production companyFlesh and BonesStudioWEBSITEA billing platform for the intelligence eraPolarFinanceWEBSITESustainable Shoes Made From NatureMake Good eCommerceWEBSITEWebsites, Marketing and DesignIdyllic New PlymouthStudioWEBSITEInterior Design StudioHouse of HoneyStudioWEBSITEY",
+          "imageSrc": "https://cdn.lapa.ninja/assets/og-images/mojostudio.jpg",
+          "imageAlt": "",
+          "buttonText": [
+            "Mojo Studio",
+            "Flesh and Bones",
+            "Polar",
+            "Make Good",
+            "eCommerce",
+            "Idyllic New Plymouth",
+            "House of Honey",
+            "Cosmos"
+          ],
+          "tags": [],
+          "cardArea": 870707,
+          "score": 10,
+          "sourceMode": "landing-gallery"
+        },
+        {
+          "index": 206,
+          "url": "https://www.lapa.ninja/post/idyllic/",
+          "text": "",
+          "heading": "Mojo Studio",
+          "description": "WEBSITEContent creation agency in ParisMojo StudioStudioWEBSITEThe mixed media production companyFlesh and BonesStudioWEBSITEA billing platform for the intelligence eraPolarFinanceWEBSITESustainable Shoes Made From NatureMake Good eCommerceWEBSITEWebsites, Marketing and DesignIdyllic New PlymouthStudioWEBSITEInterior Design StudioHouse of HoneyStudioWEBSITEY",
+          "imageSrc": "https://cdn.lapa.ninja/assets/og-images/mojostudio.jpg",
+          "imageAlt": "",
+          "buttonText": [
+            "Mojo Studio",
+            "Flesh and Bones",
+            "Polar",
+            "Make Good",
+            "eCommerce",
+            "Idyllic New Plymouth",
+            "House of Honey",
+            "Cosmos"
+          ],
+          "tags": [],
+          "cardArea": 870707,
+          "score": 10,
+          "sourceMode": "landing-gallery"
+        },
+        {
+          "index": 209,
+          "url": "https://www.lapa.ninja/post/houseofhoney/",
+          "text": "",
+          "heading": "Mojo Studio",
+          "description": "WEBSITEContent creation agency in ParisMojo StudioStudioWEBSITEThe mixed media production companyFlesh and BonesStudioWEBSITEA billing platform for the intelligence eraPolarFinanceWEBSITESustainable Shoes Made From NatureMake Good eCommerceWEBSITEWebsites, Marketing and DesignIdyllic New PlymouthStudioWEBSITEInterior Design StudioHouse of HoneyStudioWEBSITEY",
+          "imageSrc": "https://cdn.lapa.ninja/assets/og-images/mojostudio.jpg",
+          "imageAlt": "",
+          "buttonText": [
+            "Mojo Studio",
+            "Flesh and Bones",
+            "Polar",
+            "Make Good",
+            "eCommerce",
+            "Idyllic New Plymouth",
+            "House of Honey",
+            "Cosmos"
+          ],
+          "tags": [],
+          "cardArea": 870707,
+          "score": 10,
+          "sourceMode": "landing-gallery"
+        },
+        {
+          "index": 212,
+          "url": "https://www.lapa.ninja/post/cosmos-2/",
+          "text": "",
+          "heading": "Mojo Studio",
+          "description": "WEBSITEContent creation agency in ParisMojo StudioStudioWEBSITEThe mixed media production companyFlesh and BonesStudioWEBSITEA billing platform for the intelligence eraPolarFinanceWEBSITESustainable Shoes Made From NatureMake Good eCommerceWEBSITEWebsites, Marketing and DesignIdyllic New PlymouthStudioWEBSITEInterior Design StudioHouse of HoneyStudioWEBSITEY",
+          "imageSrc": "https://cdn.lapa.ninja/assets/og-images/mojostudio.jpg",
+          "imageAlt": "",
+          "buttonText": [
+            "Mojo Studio",
+            "Flesh and Bones",
+            "Polar",
+            "Make Good",
+            "eCommerce",
+            "Idyllic New Plymouth",
+            "House of Honey",
+            "Cosmos"
+          ],
+          "tags": [],
+          "cardArea": 870707,
+          "score": 10,
+          "sourceMode": "landing-gallery"
+        },
+        {
+          "index": 215,
+          "url": "https://www.lapa.ninja/post/contralabs/",
+          "text": "",
+          "heading": "Mojo Studio",
+          "description": "WEBSITEContent creation agency in ParisMojo StudioStudioWEBSITEThe mixed media production companyFlesh and BonesStudioWEBSITEA billing platform for the intelligence eraPolarFinanceWEBSITESustainable Shoes Made From NatureMake Good eCommerceWEBSITEWebsites, Marketing and DesignIdyllic New PlymouthStudioWEBSITEInterior Design StudioHouse of HoneyStudioWEBSITEY",
+          "imageSrc": "https://cdn.lapa.ninja/assets/og-images/mojostudio.jpg",
+          "imageAlt": "",
+          "buttonText": [
+            "Mojo Studio",
+            "Flesh and Bones",
+            "Polar",
+            "Make Good",
+            "eCommerce",
+            "Idyllic New Plymouth",
+            "House of Honey",
+            "Cosmos"
+          ],
+          "tags": [],
+          "cardArea": 870707,
+          "score": 10,
+          "sourceMode": "landing-gallery"
+        },
+        {
+          "index": 248,
+          "url": "https://www.lapa.ninja/books/the-ultimate-ui-design-roadmap/",
+          "text": "The Ultimate UI Design Roadmap by Michael Filipiuk Interface Design Visual Design",
+          "heading": "The Ultimate UI Design Roadmap",
+          "description": "The Ultimate UI Design Roadmapby Michael FilipiukInterface DesignVisual DesignLaw By Designby Margaret HaganUser ExperienceUsabilityWhy Do We Interface?by Ehsan NoursalehiUser ExperienceUsabilityDesign Engineering Handbookby Natalya Shelburne, Adekunle Oduye, Kim Williams, Eddie LouCareerUser Experience",
+          "imageSrc": "https://cdn.lapa.ninja/assets/images/the-ultimate-ui-design-roadmap.jpg?v=1",
+          "imageAlt": "The Ultimate UI Design Roadmap book cover",
+          "buttonText": [
+            "The Ultimate UI Design Roadmapby Michael FilipiukInterface DesignVisual Design",
+            "Law By Designby Margaret HaganUser ExperienceUsability",
+            "Why Do We Interface?by Ehsan NoursalehiUser ExperienceUsability",
+            "Design Engineering Handbookby Natalya Shelburne, Adekunle Oduye, Kim Williams, Eddie LouCareerUser Experience"
+          ],
+          "tags": [],
+          "cardArea": 163056,
+          "score": 10,
+          "sourceMode": "landing-gallery"
+        },
+        {
+          "index": 249,
+          "url": "https://www.lapa.ninja/books/lawbydesign/",
+          "text": "Law By Design by Margaret Hagan User Experience Usability",
+          "heading": "The Ultimate UI Design Roadmap",
+          "description": "The Ultimate UI Design Roadmapby Michael FilipiukInterface DesignVisual DesignLaw By Designby Margaret HaganUser ExperienceUsabilityWhy Do We Interface?by Ehsan NoursalehiUser ExperienceUsabilityDesign Engineering Handbookby Natalya Shelburne, Adekunle Oduye, Kim Williams, Eddie LouCareerUser Experience",
+          "imageSrc": "https://cdn.lapa.ninja/assets/images/the-ultimate-ui-design-roadmap.jpg?v=1",
+          "imageAlt": "The Ultimate UI Design Roadmap book cover",
+          "buttonText": [
+            "The Ultimate UI Design Roadmapby Michael FilipiukInterface DesignVisual Design",
+            "Law By Designby Margaret HaganUser ExperienceUsability",
+            "Why Do We Interface?by Ehsan NoursalehiUser ExperienceUsability",
+            "Design Engineering Handbookby Natalya Shelburne, Adekunle Oduye, Kim Williams, Eddie LouCareerUser Experience"
+          ],
+          "tags": [],
+          "cardArea": 163056,
+          "score": 10,
+          "sourceMode": "landing-gallery"
+        },
+        {
+          "index": 250,
+          "url": "https://www.lapa.ninja/books/whydoweinterface/",
+          "text": "Why Do We Interface? by Ehsan Noursalehi User Experience Usability",
+          "heading": "The Ultimate UI Design Roadmap",
+          "description": "The Ultimate UI Design Roadmapby Michael FilipiukInterface DesignVisual DesignLaw By Designby Margaret HaganUser ExperienceUsabilityWhy Do We Interface?by Ehsan NoursalehiUser ExperienceUsabilityDesign Engineering Handbookby Natalya Shelburne, Adekunle Oduye, Kim Williams, Eddie LouCareerUser Experience",
+          "imageSrc": "https://cdn.lapa.ninja/assets/images/the-ultimate-ui-design-roadmap.jpg?v=1",
+          "imageAlt": "The Ultimate UI Design Roadmap book cover",
+          "buttonText": [
+            "The Ultimate UI Design Roadmapby Michael FilipiukInterface DesignVisual Design",
+            "Law By Designby Margaret HaganUser ExperienceUsability",
+            "Why Do We Interface?by Ehsan NoursalehiUser ExperienceUsability",
+            "Design Engineering Handbookby Natalya Shelburne, Adekunle Oduye, Kim Williams, Eddie LouCareerUser Experience"
+          ],
+          "tags": [],
+          "cardArea": 163056,
+          "score": 10,
+          "sourceMode": "landing-gallery"
+        },
+        {
+          "index": 251,
+          "url": "https://www.lapa.ninja/books/design-engineering-handbook/",
+          "text": "Design Engineering Handbookby Natalya Shelburne, Adekunle Oduye, Kim Williams, Eddie LouCareerUser Experience",
+          "heading": "The Ultimate UI Design Roadmap",
+          "description": "The Ultimate UI Design Roadmapby Michael FilipiukInterface DesignVisual DesignLaw By Designby Margaret HaganUser ExperienceUsabilityWhy Do We Interface?by Ehsan NoursalehiUser ExperienceUsabilityDesign Engineering Handbookby Natalya Shelburne, Adekunle Oduye, Kim Williams, Eddie LouCareerUser Experience",
+          "imageSrc": "https://cdn.lapa.ninja/assets/images/the-ultimate-ui-design-roadmap.jpg?v=1",
+          "imageAlt": "The Ultimate UI Design Roadmap book cover",
+          "buttonText": [
+            "The Ultimate UI Design Roadmapby Michael FilipiukInterface DesignVisual Design",
+            "Law By Designby Margaret HaganUser ExperienceUsability",
+            "Why Do We Interface?by Ehsan NoursalehiUser ExperienceUsability",
+            "Design Engineering Handbookby Natalya Shelburne, Adekunle Oduye, Kim Williams, Eddie LouCareerUser Experience"
+          ],
+          "tags": [],
+          "cardArea": 163056,
+          "score": 10,
+          "sourceMode": "landing-gallery"
+        },
+        {
+          "index": 122,
+          "url": "https://www.lapa.ninja/og-images/",
+          "text": "OG Images",
+          "heading": "Categories",
+          "description": "WebsitesCategoriesBrowse All ⭐7388SaaS ⭐687Business ⭐2450Minimal3049Agency ⭐961Portfolio ⭐1063Studio ⭐849Web3673D Websites ⭐156E-commerce ⭐953Technology1476Corporate1092Productivity992Product138AI ⭐199App775Software652Dev Tools235Design Tools460No-Code30Open Source12Finance375Fintech60Cryptocurrency138Blockchain92DeFi16Marketing67Ventures47Product Management",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [
+            "Websites",
+            "Browse All ⭐7388",
+            "SaaS ⭐687",
+            "Business ⭐2450",
+            "Minimal3049",
+            "Agency ⭐961",
+            "Portfolio ⭐1063",
+            "Studio ⭐849"
+          ],
+          "tags": [],
+          "cardArea": 16682,
+          "score": 8,
+          "sourceMode": "landing-gallery"
+        },
+        {
+          "index": 123,
+          "url": "https://www.lapa.ninja/typeface/",
+          "text": "Fonts",
+          "heading": "Categories",
+          "description": "WebsitesCategoriesBrowse All ⭐7388SaaS ⭐687Business ⭐2450Minimal3049Agency ⭐961Portfolio ⭐1063Studio ⭐849Web3673D Websites ⭐156E-commerce ⭐953Technology1476Corporate1092Productivity992Product138AI ⭐199App775Software652Dev Tools235Design Tools460No-Code30Open Source12Finance375Fintech60Cryptocurrency138Blockchain92DeFi16Marketing67Ventures47Product Management",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [
+            "Websites",
+            "Browse All ⭐7388",
+            "SaaS ⭐687",
+            "Business ⭐2450",
+            "Minimal3049",
+            "Agency ⭐961",
+            "Portfolio ⭐1063",
+            "Studio ⭐849"
+          ],
+          "tags": [],
+          "cardArea": 16682,
+          "score": 8,
+          "sourceMode": "landing-gallery"
+        },
+        {
+          "index": 124,
+          "url": "https://www.lapa.ninja/elements/",
+          "text": "Sections",
+          "heading": "Categories",
+          "description": "WebsitesCategoriesBrowse All ⭐7388SaaS ⭐687Business ⭐2450Minimal3049Agency ⭐961Portfolio ⭐1063Studio ⭐849Web3673D Websites ⭐156E-commerce ⭐953Technology1476Corporate1092Productivity992Product138AI ⭐199App775Software652Dev Tools235Design Tools460No-Code30Open Source12Finance375Fintech60Cryptocurrency138Blockchain92DeFi16Marketing67Ventures47Product Management",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [
+            "Websites",
+            "Browse All ⭐7388",
+            "SaaS ⭐687",
+            "Business ⭐2450",
+            "Minimal3049",
+            "Agency ⭐961",
+            "Portfolio ⭐1063",
+            "Studio ⭐849"
+          ],
+          "tags": [],
+          "cardArea": 16682,
+          "score": 8,
+          "sourceMode": "landing-gallery"
+        },
+        {
+          "index": 125,
+          "url": "https://www.lapa.ninja/templates/",
+          "text": "Templates",
+          "heading": "Categories",
+          "description": "WebsitesCategoriesBrowse All ⭐7388SaaS ⭐687Business ⭐2450Minimal3049Agency ⭐961Portfolio ⭐1063Studio ⭐849Web3673D Websites ⭐156E-commerce ⭐953Technology1476Corporate1092Productivity992Product138AI ⭐199App775Software652Dev Tools235Design Tools460No-Code30Open Source12Finance375Fintech60Cryptocurrency138Blockchain92DeFi16Marketing67Ventures47Product Management",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [
+            "Websites",
+            "Browse All ⭐7388",
+            "SaaS ⭐687",
+            "Business ⭐2450",
+            "Minimal3049",
+            "Agency ⭐961",
+            "Portfolio ⭐1063",
+            "Studio ⭐849"
+          ],
+          "tags": [],
+          "cardArea": 16682,
+          "score": 8,
+          "sourceMode": "landing-gallery"
+        },
+        {
+          "index": 129,
+          "url": "https://www.lapa.ninja/freebies",
+          "text": "Download 600+ Freebies",
+          "heading": "Categories",
+          "description": "WebsitesCategoriesBrowse All ⭐7388SaaS ⭐687Business ⭐2450Minimal3049Agency ⭐961Portfolio ⭐1063Studio ⭐849Web3673D Websites ⭐156E-commerce ⭐953Technology1476Corporate1092Productivity992Product138AI ⭐199App775Software652Dev Tools235Design Tools460No-Code30Open Source12Finance375Fintech60Cryptocurrency138Blockchain92DeFi16Marketing67Ventures47Product Management",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [
+            "Websites",
+            "Browse All ⭐7388",
+            "SaaS ⭐687",
+            "Business ⭐2450",
+            "Minimal3049",
+            "Agency ⭐961",
+            "Portfolio ⭐1063",
+            "Studio ⭐849"
+          ],
+          "tags": [],
+          "cardArea": 16682,
+          "score": 8,
+          "sourceMode": "landing-gallery"
+        },
+        {
+          "index": 130,
+          "url": "https://www.lapa.ninja/articles/free-illustrations-library-for-your-project/",
+          "text": "Free Illustrations",
+          "heading": "Categories",
+          "description": "WebsitesCategoriesBrowse All ⭐7388SaaS ⭐687Business ⭐2450Minimal3049Agency ⭐961Portfolio ⭐1063Studio ⭐849Web3673D Websites ⭐156E-commerce ⭐953Technology1476Corporate1092Productivity992Product138AI ⭐199App775Software652Dev Tools235Design Tools460No-Code30Open Source12Finance375Fintech60Cryptocurrency138Blockchain92DeFi16Marketing67Ventures47Product Management",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [
+            "Websites",
+            "Browse All ⭐7388",
+            "SaaS ⭐687",
+            "Business ⭐2450",
+            "Minimal3049",
+            "Agency ⭐961",
+            "Portfolio ⭐1063",
+            "Studio ⭐849"
+          ],
+          "tags": [],
+          "cardArea": 16682,
+          "score": 8,
+          "sourceMode": "landing-gallery"
+        },
+        {
+          "index": 131,
+          "url": "https://www.lapa.ninja/learn/",
+          "text": "Learn Design",
+          "heading": "Categories",
+          "description": "WebsitesCategoriesBrowse All ⭐7388SaaS ⭐687Business ⭐2450Minimal3049Agency ⭐961Portfolio ⭐1063Studio ⭐849Web3673D Websites ⭐156E-commerce ⭐953Technology1476Corporate1092Productivity992Product138AI ⭐199App775Software652Dev Tools235Design Tools460No-Code30Open Source12Finance375Fintech60Cryptocurrency138Blockchain92DeFi16Marketing67Ventures47Product Management",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [
+            "Websites",
+            "Browse All ⭐7388",
+            "SaaS ⭐687",
+            "Business ⭐2450",
+            "Minimal3049",
+            "Agency ⭐961",
+            "Portfolio ⭐1063",
+            "Studio ⭐849"
+          ],
+          "tags": [],
+          "cardArea": 16682,
+          "score": 8,
+          "sourceMode": "landing-gallery"
+        },
+        {
+          "index": 132,
+          "url": "https://www.lapa.ninja/books/",
+          "text": "Free Design Books",
+          "heading": "Categories",
+          "description": "WebsitesCategoriesBrowse All ⭐7388SaaS ⭐687Business ⭐2450Minimal3049Agency ⭐961Portfolio ⭐1063Studio ⭐849Web3673D Websites ⭐156E-commerce ⭐953Technology1476Corporate1092Productivity992Product138AI ⭐199App775Software652Dev Tools235Design Tools460No-Code30Open Source12Finance375Fintech60Cryptocurrency138Blockchain92DeFi16Marketing67Ventures47Product Management",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [
+            "Websites",
+            "Browse All ⭐7388",
+            "SaaS ⭐687",
+            "Business ⭐2450",
+            "Minimal3049",
+            "Agency ⭐961",
+            "Portfolio ⭐1063",
+            "Studio ⭐849"
+          ],
+          "tags": [],
+          "cardArea": 16682,
+          "score": 8,
+          "sourceMode": "landing-gallery"
+        },
+        {
+          "index": 133,
+          "url": "https://www.lapa.ninja/articles/",
+          "text": "Articles by Lapa",
+          "heading": "Categories",
+          "description": "WebsitesCategoriesBrowse All ⭐7388SaaS ⭐687Business ⭐2450Minimal3049Agency ⭐961Portfolio ⭐1063Studio ⭐849Web3673D Websites ⭐156E-commerce ⭐953Technology1476Corporate1092Productivity992Product138AI ⭐199App775Software652Dev Tools235Design Tools460No-Code30Open Source12Finance375Fintech60Cryptocurrency138Blockchain92DeFi16Marketing67Ventures47Product Management",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [
+            "Websites",
+            "Browse All ⭐7388",
+            "SaaS ⭐687",
+            "Business ⭐2450",
+            "Minimal3049",
+            "Agency ⭐961",
+            "Portfolio ⭐1063",
+            "Studio ⭐849"
+          ],
+          "tags": [],
+          "cardArea": 16682,
+          "score": 8,
+          "sourceMode": "landing-gallery"
+        },
+        {
+          "index": 134,
+          "url": "https://blog.lapa.ninja/",
+          "text": "Subscribe",
+          "heading": "Categories",
+          "description": "WebsitesCategoriesBrowse All ⭐7388SaaS ⭐687Business ⭐2450Minimal3049Agency ⭐961Portfolio ⭐1063Studio ⭐849Web3673D Websites ⭐156E-commerce ⭐953Technology1476Corporate1092Productivity992Product138AI ⭐199App775Software652Dev Tools235Design Tools460No-Code30Open Source12Finance375Fintech60Cryptocurrency138Blockchain92DeFi16Marketing67Ventures47Product Management",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [
+            "Websites",
+            "Browse All ⭐7388",
+            "SaaS ⭐687",
+            "Business ⭐2450",
+            "Minimal3049",
+            "Agency ⭐961",
+            "Portfolio ⭐1063",
+            "Studio ⭐849"
+          ],
+          "tags": [],
+          "cardArea": 16682,
+          "score": 8,
+          "sourceMode": "landing-gallery"
+        }
+      ],
+      "screenshot": {
+        "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/lapa-ninja/gallery.png",
+        "sha256": "0f56b0db2af487cc407d6544a363601122c2841f2d47a6311e569fbcc0e323b7",
+        "mode": "full-page"
+      },
+      "screenshotQuality": {
+        "viewport": {
+          "width": 1440,
+          "height": 1000
+        },
+        "textLength": 6575,
+        "mediaCount": 171,
+        "codeCount": 0,
+        "headingCount": 51,
+        "usefulElementCount": 53,
+        "visibleAreaRatio": 2.424,
+        "isLikelySparse": false,
+        "visibleSamples": [
+          "Websites",
+          "OG Images",
+          "Fonts",
+          "Sections",
+          "Templates",
+          "Pro",
+          "Build Websites",
+          "Learn Design"
+        ]
+      },
+      "examples": [
+        {
+          "sourceId": "lapa-ninja",
+          "url": "https://www.lapa.ninja/post/lama-lama/",
+          "status": 200,
+          "licenseStatus": "inspiration-only",
+          "reuseGuidance": "Landing-page structure, section ordering, visual hierarchy and copy patterns. Do not copy site code or proprietary assets.",
+          "candidate": {
+            "index": 148,
+            "url": "https://www.lapa.ninja/post/lama-lama/",
+            "text": "",
+            "heading": "Lama Lama",
+            "description": "WEBSITEAmsterdam based creative digital agency.Lama LamaAgencyWEBSITEOpen-source liquidity protocol.AaveAppWEBSITEPlay with AI, bring your ideas to lifeTinkerArtificial Intelligence NO-CODE More than a website builder Webflow WEBSITE BUILDER WEBSITEMùn Rooftop Cocktail Bar RomeMùn Rooftop RomeFood DrinksWEBSITEA global branding agency proudly based in London",
+            "imageSrc": "https://cdn.lapa.ninja/assets/images/1x/lamalama-thumb.jpg",
+            "imageAlt": "",
+            "buttonText": [
+              "Lama Lama",
+              "Aave",
+              "Tinker",
+              "Webflow",
+              "Mùn Rooftop Rome",
+              "Ragged Edge",
+              "Framer",
+              "Softlight"
+            ],
+            "tags": [],
+            "cardArea": 4755456,
+            "score": 10,
+            "sourceMode": "landing-gallery"
+          },
+          "screenshots": {
+            "desktop": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/lapa-ninja/148-lama-lama-51f417d6/desktop.png",
+              "sha256": "ab6545a40e3d532b099d0d930d7efd904a65965a3c544bd950a698330bf2f66f",
+              "mode": "viewport"
+            },
+            "mobile": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/lapa-ninja/148-lama-lama-51f417d6/mobile.png",
+              "sha256": "9256794edaac02586c2b0aff0b5441f5d311605f0f1aed38d472ffb2ffb33505",
+              "mode": "viewport"
+            }
+          },
+          "screenshotQuality": {
+            "desktop": {
+              "viewport": {
+                "width": 1440,
+                "height": 1000
+              },
+              "textLength": 1691,
+              "mediaCount": 57,
+              "codeCount": 0,
+              "headingCount": 14,
+              "usefulElementCount": 46,
+              "visibleAreaRatio": 1.942,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Websites",
+                "OG Images",
+                "Fonts",
+                "Sections",
+                "Templates",
+                "Pro",
+                "Build Websites",
+                "Learn Design"
+              ]
+            },
+            "mobile": {
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "textLength": 1300,
+              "mediaCount": 57,
+              "codeCount": 0,
+              "headingCount": 14,
+              "usefulElementCount": 17,
+              "visibleAreaRatio": 2.032,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Open main menu",
+                "{\"@context\":\"https://schema.org\",\"@type\":\"CreativeWork\",\"name\":\"Lama Lama\",\"description\":\"Discover Lama Lama, an Amsterd",
+                "Home",
+                "Agency Website Examples",
+                "Lama Lama Website DesignDiscover Lama Lama, an Amsterdam-based creative digital agency. Explore innovative solutions to ",
+                "Lama Lama Website Design",
+                "Discover Lama Lama, an Amsterdam-based creative digital agency. Explore innovative solutions to elevate your brand. Visi",
+                "Visit Website"
+              ]
+            }
+          },
+          "qualityWarnings": [],
+          "failedRequestCount": 5,
+          "title": "Lama Lama - Landing Page Design | Lapa Ninja",
+          "description": "Discover Lama Lama, an Amsterdam-based creative digital agency. Explore innovative solutions to elevate your brand. Visit us to learn more!",
+          "headings": [
+            {
+              "level": "h1",
+              "text": "Lama Lama Website Design"
+            },
+            {
+              "level": "h2",
+              "text": "Discover Lama Lama, an Amsterdam-based creative digital agency. Explore innovative solutions to elevate your brand. Visit us to learn more!"
+            },
+            {
+              "level": "h3",
+              "text": "Website Details"
+            },
+            {
+              "level": "h3",
+              "text": "Similar Websites"
+            },
+            {
+              "level": "h3",
+              "text": "Lama Lama"
+            },
+            {
+              "level": "h3",
+              "text": "Martin Briceno"
+            },
+            {
+              "level": "h3",
+              "text": "GABR!EL"
+            },
+            {
+              "level": "h3",
+              "text": "Luma AI"
+            },
+            {
+              "level": "h3",
+              "text": "Lâm Bảo"
+            },
+            {
+              "level": "h3",
+              "text": "LDMA"
+            },
+            {
+              "level": "h3",
+              "text": "Amy Lima"
+            },
+            {
+              "level": "h3",
+              "text": "Luma"
+            },
+            {
+              "level": "h3",
+              "text": "Explore"
+            },
+            {
+              "level": "h3",
+              "text": "Follow"
+            }
+          ],
+          "sections": [
+            {
+              "index": 0,
+              "heading": "Lama Lama Website Design",
+              "textSample": "Lama Lama Website DesignDiscover Lama Lama, an Amsterdam-based creative digital agency. Explore innovative solutions to elevate your brand. Visit us to learn more!Visit WebsiteSave lamalama.comFull website video recordingWebsite screenshot libraryHomeWorkBrandingAbout UsDownload HD Screenshot",
+              "imageCount": 7,
+              "buttonCount": 10
+            }
+          ],
+          "ctas": [
+            "Lapa Ninja - Go to homepage",
+            "Toggle dark mode",
+            "Open main menu",
+            "Websites",
+            "Browse All ⭐7388",
+            "SaaS ⭐687",
+            "Business ⭐2450",
+            "Minimal3049",
+            "Agency ⭐961",
+            "Portfolio ⭐1063",
+            "Studio ⭐849",
+            "Web367",
+            "3D Websites ⭐156",
+            "E-commerce ⭐953",
+            "Technology1476",
+            "Corporate1092",
+            "Productivity992",
+            "Product138",
+            "AI ⭐199",
+            "App775",
+            "Software652",
+            "Dev Tools235",
+            "Design Tools460",
+            "No-Code30",
+            "Open Source12",
+            "Finance375",
+            "Fintech60",
+            "Cryptocurrency138",
+            "Blockchain92",
+            "DeFi16",
+            "Marketing67",
+            "Ventures47",
+            "Product Management68",
+            "Creative4986",
+            "Design2",
+            "Illustration1450",
+            "Photography510",
+            "Art11",
+            "Typography711",
+            "Gradient462",
+            "Pattern67",
+            "Bento Grid75",
+            "Isometric146",
+            "Retro Style100",
+            "Blog74",
+            "News51",
+            "Magazine54",
+            "Entertainment416",
+            "Film12",
+            "Music43"
+          ],
+          "palette": [
+            "rgb(23, 23, 23)",
+            "rgb(255, 255, 255)",
+            "lab(98.2596 -0.247031 -0.706708)",
+            "lab(91.6229 -0.159115 -2.26791)",
+            "lab(47.7841 -0.393182 -10.0268)",
+            "lab(8.11897 0.811279 -12.254)",
+            "lab(27.1134 -0.956401 -12.3224)"
+          ],
+          "layoutSignals": {
+            "hasNav": true,
+            "hasHero": true,
+            "hasPricing": true,
+            "hasTestimonials": false,
+            "hasFAQ": false,
+            "hasVideo": true,
+            "cardLikeCount": 1,
+            "imageCount": 20,
+            "buttonCount": 211,
+            "formCount": 4
+          },
+          "codeBlocks": [],
+          "codeLinks": []
+        },
+        {
+          "sourceId": "lapa-ninja",
+          "url": "https://www.lapa.ninja/post/aave-3/",
+          "status": 200,
+          "licenseStatus": "inspiration-only",
+          "reuseGuidance": "Landing-page structure, section ordering, visual hierarchy and copy patterns. Do not copy site code or proprietary assets.",
+          "candidate": {
+            "index": 151,
+            "url": "https://www.lapa.ninja/post/aave-3/",
+            "text": "",
+            "heading": "Lama Lama",
+            "description": "WEBSITEAmsterdam based creative digital agency.Lama LamaAgencyWEBSITEOpen-source liquidity protocol.AaveAppWEBSITEPlay with AI, bring your ideas to lifeTinkerArtificial Intelligence NO-CODE More than a website builder Webflow WEBSITE BUILDER WEBSITEMùn Rooftop Cocktail Bar RomeMùn Rooftop RomeFood DrinksWEBSITEA global branding agency proudly based in London",
+            "imageSrc": "https://cdn.lapa.ninja/assets/images/1x/lamalama-thumb.jpg",
+            "imageAlt": "",
+            "buttonText": [
+              "Lama Lama",
+              "Aave",
+              "Tinker",
+              "Webflow",
+              "Mùn Rooftop Rome",
+              "Ragged Edge",
+              "Framer",
+              "Softlight"
+            ],
+            "tags": [],
+            "cardArea": 4755456,
+            "score": 10,
+            "sourceMode": "landing-gallery"
+          },
+          "screenshots": {
+            "desktop": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/lapa-ninja/151-lama-lama-b76745ca/desktop.png",
+              "sha256": "416ad2e493889049daf7b83ee18b36567ceca2b6cd0b69a18271e20f58ce6084",
+              "mode": "viewport"
+            },
+            "mobile": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/lapa-ninja/151-lama-lama-b76745ca/mobile.png",
+              "sha256": "ff3188f9b08014cb983e2b84aa492a10fbbe5184e1314b5e7590e705ae9456e6",
+              "mode": "viewport"
+            }
+          },
+          "screenshotQuality": {
+            "desktop": {
+              "viewport": {
+                "width": 1440,
+                "height": 1000
+              },
+              "textLength": 1776,
+              "mediaCount": 55,
+              "codeCount": 0,
+              "headingCount": 13,
+              "usefulElementCount": 47,
+              "visibleAreaRatio": 1.939,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Websites",
+                "OG Images",
+                "Fonts",
+                "Sections",
+                "Templates",
+                "Pro",
+                "Build Websites",
+                "Learn Design"
+              ]
+            },
+            "mobile": {
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "textLength": 1408,
+              "mediaCount": 55,
+              "codeCount": 0,
+              "headingCount": 13,
+              "usefulElementCount": 18,
+              "visibleAreaRatio": 2.045,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Open main menu",
+                "{\"@context\":\"https://schema.org\",\"@type\":\"CreativeWork\",\"name\":\"Aave\",\"description\":\"Aave is an Open Source Protocol to ",
+                "Home",
+                "App Website Examples",
+                "Aave Website DesignAave is an Open Source Protocol to create Non-Custodial Liquidity Markets to earn interest on supplyi",
+                "Aave Website Design",
+                "Aave is an Open Source Protocol to create Non-Custodial Liquidity Markets to earn interest on supplying and borrowing as",
+                "Visit Website"
+              ]
+            }
+          },
+          "qualityWarnings": [],
+          "failedRequestCount": 5,
+          "title": "Aave - Landing Page Design | Lapa Ninja",
+          "description": "Aave is an Open Source Protocol to create Non-Custodial Liquidity Markets to earn interest on supplying and borrowing assets with a variable interest rate. The protocol is designed for easy integration into your products and services.",
+          "headings": [
+            {
+              "level": "h1",
+              "text": "Aave Website Design"
+            },
+            {
+              "level": "h2",
+              "text": "Aave is an Open Source Protocol to create Non-Custodial Liquidity Markets to earn interest on supplying and borrowing assets with a variable interest rate. The protocol is designed"
+            },
+            {
+              "level": "h3",
+              "text": "Website Details"
+            },
+            {
+              "level": "h3",
+              "text": "Similar Websites"
+            },
+            {
+              "level": "h3",
+              "text": "Aave"
+            },
+            {
+              "level": "h3",
+              "text": "Aave"
+            },
+            {
+              "level": "h3",
+              "text": "Mezcal Rosaluna"
+            },
+            {
+              "level": "h3",
+              "text": "Drink Zuzu"
+            },
+            {
+              "level": "h3",
+              "text": "El Rayo Tequila"
+            },
+            {
+              "level": "h3",
+              "text": "Casa Malka"
+            },
+            {
+              "level": "h3",
+              "text": "LALO Tequila"
+            },
+            {
+              "level": "h3",
+              "text": "Explore"
+            },
+            {
+              "level": "h3",
+              "text": "Follow"
+            }
+          ],
+          "sections": [
+            {
+              "index": 0,
+              "heading": "Aave Website Design",
+              "textSample": "Aave Website DesignAave is an Open Source Protocol to create Non-Custodial Liquidity Markets to earn interest on supplying and borrowing assets with a variable interest rate. The protocol is designed for easy integration into your products and services.Visit WebsiteView All 3 Design VersionSave aave.comFull website vid",
+              "imageCount": 7,
+              "buttonCount": 10
+            }
+          ],
+          "ctas": [
+            "Lapa Ninja - Go to homepage",
+            "Toggle dark mode",
+            "Open main menu",
+            "Websites",
+            "Browse All ⭐7388",
+            "SaaS ⭐687",
+            "Business ⭐2450",
+            "Minimal3049",
+            "Agency ⭐961",
+            "Portfolio ⭐1063",
+            "Studio ⭐849",
+            "Web367",
+            "3D Websites ⭐156",
+            "E-commerce ⭐953",
+            "Technology1476",
+            "Corporate1092",
+            "Productivity992",
+            "Product138",
+            "AI ⭐199",
+            "App775",
+            "Software652",
+            "Dev Tools235",
+            "Design Tools460",
+            "No-Code30",
+            "Open Source12",
+            "Finance375",
+            "Fintech60",
+            "Cryptocurrency138",
+            "Blockchain92",
+            "DeFi16",
+            "Marketing67",
+            "Ventures47",
+            "Product Management68",
+            "Creative4986",
+            "Design2",
+            "Illustration1450",
+            "Photography510",
+            "Art11",
+            "Typography711",
+            "Gradient462",
+            "Pattern67",
+            "Bento Grid75",
+            "Isometric146",
+            "Retro Style100",
+            "Blog74",
+            "News51",
+            "Magazine54",
+            "Entertainment416",
+            "Film12",
+            "Music43"
+          ],
+          "palette": [
+            "rgb(23, 23, 23)",
+            "rgb(255, 255, 255)",
+            "lab(98.2596 -0.247031 -0.706708)",
+            "lab(91.6229 -0.159115 -2.26791)",
+            "lab(47.7841 -0.393182 -10.0268)",
+            "lab(8.11897 0.811279 -12.254)",
+            "lab(27.1134 -0.956401 -12.3224)"
+          ],
+          "layoutSignals": {
+            "hasNav": true,
+            "hasHero": true,
+            "hasPricing": true,
+            "hasTestimonials": false,
+            "hasFAQ": false,
+            "hasVideo": true,
+            "cardLikeCount": 1,
+            "imageCount": 20,
+            "buttonCount": 208,
+            "formCount": 4
+          },
+          "codeBlocks": [],
+          "codeLinks": []
+        },
+        {
+          "sourceId": "lapa-ninja",
+          "url": "https://www.lapa.ninja/post/tinker/",
+          "status": 200,
+          "licenseStatus": "inspiration-only",
+          "reuseGuidance": "Landing-page structure, section ordering, visual hierarchy and copy patterns. Do not copy site code or proprietary assets.",
+          "candidate": {
+            "index": 154,
+            "url": "https://www.lapa.ninja/post/tinker/",
+            "text": "",
+            "heading": "Lama Lama",
+            "description": "WEBSITEAmsterdam based creative digital agency.Lama LamaAgencyWEBSITEOpen-source liquidity protocol.AaveAppWEBSITEPlay with AI, bring your ideas to lifeTinkerArtificial Intelligence NO-CODE More than a website builder Webflow WEBSITE BUILDER WEBSITEMùn Rooftop Cocktail Bar RomeMùn Rooftop RomeFood DrinksWEBSITEA global branding agency proudly based in London",
+            "imageSrc": "https://cdn.lapa.ninja/assets/images/1x/lamalama-thumb.jpg",
+            "imageAlt": "",
+            "buttonText": [
+              "Lama Lama",
+              "Aave",
+              "Tinker",
+              "Webflow",
+              "Mùn Rooftop Rome",
+              "Ragged Edge",
+              "Framer",
+              "Softlight"
+            ],
+            "tags": [],
+            "cardArea": 4755456,
+            "score": 10,
+            "sourceMode": "landing-gallery"
+          },
+          "screenshots": {
+            "desktop": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/lapa-ninja/154-lama-lama-5f143520/desktop.png",
+              "sha256": "6a4e3296955c1bb93fbe90354dad02ccc645074a1e8589c41305bc71b41ae232",
+              "mode": "viewport"
+            },
+            "mobile": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/lapa-ninja/154-lama-lama-5f143520/mobile.png",
+              "sha256": "7930e982cc2aea36760284232db6f4cdbb28f6091d1b5695f4774efd3582f330",
+              "mode": "viewport"
+            }
+          },
+          "screenshotQuality": {
+            "desktop": {
+              "viewport": {
+                "width": 1440,
+                "height": 1000
+              },
+              "textLength": 1692,
+              "mediaCount": 47,
+              "codeCount": 0,
+              "headingCount": 11,
+              "usefulElementCount": 52,
+              "visibleAreaRatio": 1.919,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Websites",
+                "OG Images",
+                "Fonts",
+                "Sections",
+                "Templates",
+                "Pro",
+                "Build Websites",
+                "Learn Design"
+              ]
+            },
+            "mobile": {
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "textLength": 1223,
+              "mediaCount": 47,
+              "codeCount": 0,
+              "headingCount": 11,
+              "usefulElementCount": 17,
+              "visibleAreaRatio": 1.991,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Open main menu",
+                "{\"@context\":\"https://schema.org\",\"@type\":\"CreativeWork\",\"name\":\"Tinker\",\"description\":\"Make videos, images, 3D models, c",
+                "Home",
+                "Artificial Intelligence Website Examples",
+                "Tinker Website DesignMake videos, images, 3D models, comics, and more with AI. Free creative tools to learn by playing. ",
+                "Tinker Website Design",
+                "Make videos, images, 3D models, comics, and more with AI. Free creative tools to learn by playing. Download on iOS and A",
+                "Visit Website"
+              ]
+            }
+          },
+          "qualityWarnings": [],
+          "failedRequestCount": 7,
+          "title": "Tinker - Landing Page Design | Lapa Ninja",
+          "description": "Make videos, images, 3D models, comics, and more with AI. Free creative tools to learn by playing. Download on iOS and Android.",
+          "headings": [
+            {
+              "level": "h1",
+              "text": "Tinker Website Design"
+            },
+            {
+              "level": "h2",
+              "text": "Make videos, images, 3D models, comics, and more with AI. Free creative tools to learn by playing. Download on iOS and Android."
+            },
+            {
+              "level": "h3",
+              "text": "Website Details"
+            },
+            {
+              "level": "h3",
+              "text": "Similar Websites"
+            },
+            {
+              "level": "h3",
+              "text": "Tinker Watches"
+            },
+            {
+              "level": "h3",
+              "text": "Tobias Ahlin"
+            },
+            {
+              "level": "h3",
+              "text": "Kollegorna"
+            },
+            {
+              "level": "h3",
+              "text": "Amy Lima"
+            },
+            {
+              "level": "h3",
+              "text": "Stephan Friedli"
+            },
+            {
+              "level": "h3",
+              "text": "Explore"
+            },
+            {
+              "level": "h3",
+              "text": "Follow"
+            }
+          ],
+          "sections": [
+            {
+              "index": 0,
+              "heading": "Tinker Website Design",
+              "textSample": "Tinker Website DesignMake videos, images, 3D models, comics, and more with AI. Free creative tools to learn by playing. Download on iOS and Android.Visit WebsiteSave tinker.comFull website video recordingWebsite design categoriesHomeDownload HD Screenshot",
+              "imageCount": 7,
+              "buttonCount": 7
+            }
+          ],
+          "ctas": [
+            "Lapa Ninja - Go to homepage",
+            "Toggle dark mode",
+            "Open main menu",
+            "Websites",
+            "Browse All ⭐7388",
+            "SaaS ⭐687",
+            "Business ⭐2450",
+            "Minimal3049",
+            "Agency ⭐961",
+            "Portfolio ⭐1063",
+            "Studio ⭐849",
+            "Web367",
+            "3D Websites ⭐156",
+            "E-commerce ⭐953",
+            "Technology1476",
+            "Corporate1092",
+            "Productivity992",
+            "Product138",
+            "AI ⭐199",
+            "App775",
+            "Software652",
+            "Dev Tools235",
+            "Design Tools460",
+            "No-Code30",
+            "Open Source12",
+            "Finance375",
+            "Fintech60",
+            "Cryptocurrency138",
+            "Blockchain92",
+            "DeFi16",
+            "Marketing67",
+            "Ventures47",
+            "Product Management68",
+            "Creative4986",
+            "Design2",
+            "Illustration1450",
+            "Photography510",
+            "Art11",
+            "Typography711",
+            "Gradient462",
+            "Pattern67",
+            "Bento Grid75",
+            "Isometric146",
+            "Retro Style100",
+            "Blog74",
+            "News51",
+            "Magazine54",
+            "Entertainment416",
+            "Film12",
+            "Music43"
+          ],
+          "palette": [
+            "rgb(23, 23, 23)",
+            "rgb(255, 255, 255)",
+            "lab(98.2596 -0.247031 -0.706708)",
+            "lab(91.6229 -0.159115 -2.26791)",
+            "lab(47.7841 -0.393182 -10.0268)",
+            "lab(8.11897 0.811279 -12.254)",
+            "lab(27.1134 -0.956401 -12.3224)"
+          ],
+          "layoutSignals": {
+            "hasNav": true,
+            "hasHero": true,
+            "hasPricing": true,
+            "hasTestimonials": false,
+            "hasFAQ": false,
+            "hasVideo": true,
+            "cardLikeCount": 1,
+            "imageCount": 14,
+            "buttonCount": 203,
+            "formCount": 4
+          },
+          "codeBlocks": [],
+          "codeLinks": []
+        },
+        {
+          "sourceId": "lapa-ninja",
+          "url": "https://www.lapa.ninja/post/mun-rooftop-rome/",
+          "status": 200,
+          "licenseStatus": "inspiration-only",
+          "reuseGuidance": "Landing-page structure, section ordering, visual hierarchy and copy patterns. Do not copy site code or proprietary assets.",
+          "candidate": {
+            "index": 160,
+            "url": "https://www.lapa.ninja/post/mun-rooftop-rome/",
+            "text": "",
+            "heading": "Lama Lama",
+            "description": "WEBSITEAmsterdam based creative digital agency.Lama LamaAgencyWEBSITEOpen-source liquidity protocol.AaveAppWEBSITEPlay with AI, bring your ideas to lifeTinkerArtificial Intelligence NO-CODE More than a website builder Webflow WEBSITE BUILDER WEBSITEMùn Rooftop Cocktail Bar RomeMùn Rooftop RomeFood DrinksWEBSITEA global branding agency proudly based in London",
+            "imageSrc": "https://cdn.lapa.ninja/assets/images/1x/lamalama-thumb.jpg",
+            "imageAlt": "",
+            "buttonText": [
+              "Lama Lama",
+              "Aave",
+              "Tinker",
+              "Webflow",
+              "Mùn Rooftop Rome",
+              "Ragged Edge",
+              "Framer",
+              "Softlight"
+            ],
+            "tags": [],
+            "cardArea": 4755456,
+            "score": 10,
+            "sourceMode": "landing-gallery"
+          },
+          "screenshots": {
+            "desktop": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/lapa-ninja/160-lama-lama-e377dedc/desktop.png",
+              "sha256": "f26a7eb31c4cf26359ce39283d82b18774663e13de3dcc3f98658c117b29395b",
+              "mode": "viewport"
+            },
+            "mobile": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/lapa-ninja/160-lama-lama-e377dedc/mobile.png",
+              "sha256": "05609b20b3a3ae7664f3c82c5aad4efd0458530deda2d0b9c7a804f799552331",
+              "mode": "viewport"
+            }
+          },
+          "screenshotQuality": {
+            "desktop": {
+              "viewport": {
+                "width": 1440,
+                "height": 1000
+              },
+              "textLength": 1943,
+              "mediaCount": 61,
+              "codeCount": 0,
+              "headingCount": 14,
+              "usefulElementCount": 48,
+              "visibleAreaRatio": 1.933,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Websites",
+                "OG Images",
+                "Fonts",
+                "Sections",
+                "Templates",
+                "Pro",
+                "Build Websites",
+                "Learn Design"
+              ]
+            },
+            "mobile": {
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "textLength": 1516,
+              "mediaCount": 61,
+              "codeCount": 0,
+              "headingCount": 14,
+              "usefulElementCount": 17,
+              "visibleAreaRatio": 1.988,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Open main menu",
+                "{\"@context\":\"https://schema.org\",\"@type\":\"CreativeWork\",\"name\":\"Mùn Rooftop Rome\",\"description\":\"Experience Mùn, the roo",
+                "Home",
+                "Food Drinks Website Examples",
+                "Mùn Rooftop Rome Website DesignExperience Mùn, the rooftop cocktail bar with a panoramic terrace over Rome. The perfect ",
+                "Mùn Rooftop Rome Website Design",
+                "Experience Mùn, the rooftop cocktail bar with a panoramic terrace over Rome. The perfect venue for private events, gala ",
+                "Visit Website"
+              ]
+            }
+          },
+          "qualityWarnings": [],
+          "failedRequestCount": 4,
+          "title": "Mùn Rooftop Rome - Landing Page Design | Lapa Ninja",
+          "description": "Experience Mùn, the rooftop cocktail bar with a panoramic terrace over Rome. The perfect venue for private events, gala dinners, and exclusive parties in a refined, customizable setting.",
+          "headings": [
+            {
+              "level": "h1",
+              "text": "Mùn Rooftop Rome Website Design"
+            },
+            {
+              "level": "h2",
+              "text": "Experience Mùn, the rooftop cocktail bar with a panoramic terrace over Rome. The perfect venue for private events, gala dinners, and exclusive parties in a refined, customizable se"
+            },
+            {
+              "level": "h3",
+              "text": "Website Details"
+            },
+            {
+              "level": "h3",
+              "text": "Similar Websites"
+            },
+            {
+              "level": "h3",
+              "text": "Lama Lama"
+            },
+            {
+              "level": "h3",
+              "text": "Tinker"
+            },
+            {
+              "level": "h3",
+              "text": "Ragged Edge"
+            },
+            {
+              "level": "h3",
+              "text": "Stackbyte"
+            },
+            {
+              "level": "h3",
+              "text": "Juan Mora"
+            },
+            {
+              "level": "h3",
+              "text": "Synthesis"
+            },
+            {
+              "level": "h3",
+              "text": "Sebastiano Pierotti"
+            },
+            {
+              "level": "h3",
+              "text": "RRE"
+            },
+            {
+              "level": "h3",
+              "text": "Explore"
+            },
+            {
+              "level": "h3",
+              "text": "Follow"
+            }
+          ],
+          "sections": [
+            {
+              "index": 0,
+              "heading": "Mùn Rooftop Rome Website Design",
+              "textSample": "Mùn Rooftop Rome Website DesignExperience Mùn, the rooftop cocktail bar with a panoramic terrace over Rome. The perfect venue for private events, gala dinners, and exclusive parties in a refined, customizable setting.Visit WebsiteSave munrooftoprome.comFull website video recordingWebsite template downloadsHomeMenuSpace",
+              "imageCount": 7,
+              "buttonCount": 10
+            }
+          ],
+          "ctas": [
+            "Lapa Ninja - Go to homepage",
+            "Toggle dark mode",
+            "Open main menu",
+            "Websites",
+            "Browse All ⭐7388",
+            "SaaS ⭐687",
+            "Business ⭐2450",
+            "Minimal3049",
+            "Agency ⭐961",
+            "Portfolio ⭐1063",
+            "Studio ⭐849",
+            "Web367",
+            "3D Websites ⭐156",
+            "E-commerce ⭐953",
+            "Technology1476",
+            "Corporate1092",
+            "Productivity992",
+            "Product138",
+            "AI ⭐199",
+            "App775",
+            "Software652",
+            "Dev Tools235",
+            "Design Tools460",
+            "No-Code30",
+            "Open Source12",
+            "Finance375",
+            "Fintech60",
+            "Cryptocurrency138",
+            "Blockchain92",
+            "DeFi16",
+            "Marketing67",
+            "Ventures47",
+            "Product Management68",
+            "Creative4986",
+            "Design2",
+            "Illustration1450",
+            "Photography510",
+            "Art11",
+            "Typography711",
+            "Gradient462",
+            "Pattern67",
+            "Bento Grid75",
+            "Isometric146",
+            "Retro Style100",
+            "Blog74",
+            "News51",
+            "Magazine54",
+            "Entertainment416",
+            "Film12",
+            "Music43"
+          ],
+          "palette": [
+            "rgb(23, 23, 23)",
+            "rgb(255, 255, 255)",
+            "lab(98.2596 -0.247031 -0.706708)",
+            "lab(91.6229 -0.159115 -2.26791)",
+            "lab(47.7841 -0.393182 -10.0268)",
+            "lab(8.11897 0.811279 -12.254)",
+            "lab(27.1134 -0.956401 -12.3224)"
+          ],
+          "layoutSignals": {
+            "hasNav": true,
+            "hasHero": true,
+            "hasPricing": true,
+            "hasTestimonials": false,
+            "hasFAQ": false,
+            "hasVideo": true,
+            "cardLikeCount": 1,
+            "imageCount": 23,
+            "buttonCount": 214,
+            "formCount": 4
+          },
+          "codeBlocks": [],
+          "codeLinks": []
+        },
+        {
+          "sourceId": "lapa-ninja",
+          "url": "https://www.lapa.ninja/post/ragged-edge/",
+          "status": 200,
+          "licenseStatus": "inspiration-only",
+          "reuseGuidance": "Landing-page structure, section ordering, visual hierarchy and copy patterns. Do not copy site code or proprietary assets.",
+          "candidate": {
+            "index": 163,
+            "url": "https://www.lapa.ninja/post/ragged-edge/",
+            "text": "",
+            "heading": "Lama Lama",
+            "description": "WEBSITEAmsterdam based creative digital agency.Lama LamaAgencyWEBSITEOpen-source liquidity protocol.AaveAppWEBSITEPlay with AI, bring your ideas to lifeTinkerArtificial Intelligence NO-CODE More than a website builder Webflow WEBSITE BUILDER WEBSITEMùn Rooftop Cocktail Bar RomeMùn Rooftop RomeFood DrinksWEBSITEA global branding agency proudly based in London",
+            "imageSrc": "https://cdn.lapa.ninja/assets/images/1x/lamalama-thumb.jpg",
+            "imageAlt": "",
+            "buttonText": [
+              "Lama Lama",
+              "Aave",
+              "Tinker",
+              "Webflow",
+              "Mùn Rooftop Rome",
+              "Ragged Edge",
+              "Framer",
+              "Softlight"
+            ],
+            "tags": [],
+            "cardArea": 4755456,
+            "score": 10,
+            "sourceMode": "landing-gallery"
+          },
+          "screenshots": {
+            "desktop": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/lapa-ninja/163-lama-lama-d7d45883/desktop.png",
+              "sha256": "3ab0d83d2a1ed8701913d41584ea112e9f13ade89e63a0bccbdbe2ef28146fdc",
+              "mode": "viewport"
+            },
+            "mobile": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/lapa-ninja/163-lama-lama-d7d45883/mobile.png",
+              "sha256": "5f75d24fadaace0b626945c2987f9047a8c9bdc5f496d56f69238e965bd78b33",
+              "mode": "viewport"
+            }
+          },
+          "screenshotQuality": {
+            "desktop": {
+              "viewport": {
+                "width": 1440,
+                "height": 1000
+              },
+              "textLength": 1497,
+              "mediaCount": 39,
+              "codeCount": 0,
+              "headingCount": 9,
+              "usefulElementCount": 53,
+              "visibleAreaRatio": 1.931,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Websites",
+                "OG Images",
+                "Fonts",
+                "Sections",
+                "Templates",
+                "Pro",
+                "Build Websites",
+                "Learn Design"
+              ]
+            },
+            "mobile": {
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "textLength": 1043,
+              "mediaCount": 39,
+              "codeCount": 0,
+              "headingCount": 9,
+              "usefulElementCount": 17,
+              "visibleAreaRatio": 1.986,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Open main menu",
+                "{\"@context\":\"https://schema.org\",\"@type\":\"CreativeWork\",\"name\":\"Ragged Edge\",\"description\":\"Average is easy. We're not i",
+                "Home",
+                "Studio Website Examples",
+                "Ragged Edge Website DesignAverage is easy. We're not interested in average. Ragged Edge helps the world’s most ambitious",
+                "Ragged Edge Website Design",
+                "Average is easy. We're not interested in average. Ragged Edge helps the world’s most ambitious brands commit to a differ",
+                "Visit Website"
+              ]
+            }
+          },
+          "qualityWarnings": [],
+          "failedRequestCount": 5,
+          "title": "Ragged Edge - Landing Page Design | Lapa Ninja",
+          "description": "Average is easy. We're not interested in average. Ragged Edge helps the world’s most ambitious brands commit to a different reality.",
+          "headings": [
+            {
+              "level": "h1",
+              "text": "Ragged Edge Website Design"
+            },
+            {
+              "level": "h2",
+              "text": "Average is easy. We're not interested in average. Ragged Edge helps the world’s most ambitious brands commit to a different reality."
+            },
+            {
+              "level": "h3",
+              "text": "Website Details"
+            },
+            {
+              "level": "h3",
+              "text": "Similar Websites"
+            },
+            {
+              "level": "h3",
+              "text": "Ragged Edge"
+            },
+            {
+              "level": "h3",
+              "text": "Scout Motors"
+            },
+            {
+              "level": "h3",
+              "text": "kaper travel"
+            },
+            {
+              "level": "h3",
+              "text": "Explore"
+            },
+            {
+              "level": "h3",
+              "text": "Follow"
+            }
+          ],
+          "sections": [
+            {
+              "index": 0,
+              "heading": "Ragged Edge Website Design",
+              "textSample": "Ragged Edge Website DesignAverage is easy. We're not interested in average. Ragged Edge helps the world’s most ambitious brands commit to a different reality.Visit WebsiteSave raggededge.comFull website video recordingWebsite template downloadsHomePartnershipsApproachHappeningsOG ImageDownload HD Screenshot",
+              "imageCount": 7,
+              "buttonCount": 11
+            }
+          ],
+          "ctas": [
+            "Lapa Ninja - Go to homepage",
+            "Toggle dark mode",
+            "Open main menu",
+            "Websites",
+            "Browse All ⭐7388",
+            "SaaS ⭐687",
+            "Business ⭐2450",
+            "Minimal3049",
+            "Agency ⭐961",
+            "Portfolio ⭐1063",
+            "Studio ⭐849",
+            "Web367",
+            "3D Websites ⭐156",
+            "E-commerce ⭐953",
+            "Technology1476",
+            "Corporate1092",
+            "Productivity992",
+            "Product138",
+            "AI ⭐199",
+            "App775",
+            "Software652",
+            "Dev Tools235",
+            "Design Tools460",
+            "No-Code30",
+            "Open Source12",
+            "Finance375",
+            "Fintech60",
+            "Cryptocurrency138",
+            "Blockchain92",
+            "DeFi16",
+            "Marketing67",
+            "Ventures47",
+            "Product Management68",
+            "Creative4986",
+            "Design2",
+            "Illustration1450",
+            "Photography510",
+            "Art11",
+            "Typography711",
+            "Gradient462",
+            "Pattern67",
+            "Bento Grid75",
+            "Isometric146",
+            "Retro Style100",
+            "Blog74",
+            "News51",
+            "Magazine54",
+            "Entertainment416",
+            "Film12",
+            "Music43"
+          ],
+          "palette": [
+            "rgb(23, 23, 23)",
+            "rgb(255, 255, 255)",
+            "lab(98.2596 -0.247031 -0.706708)",
+            "lab(91.6229 -0.159115 -2.26791)",
+            "lab(47.7841 -0.393182 -10.0268)",
+            "lab(8.11897 0.811279 -12.254)",
+            "lab(27.1134 -0.956401 -12.3224)"
+          ],
+          "layoutSignals": {
+            "hasNav": true,
+            "hasHero": true,
+            "hasPricing": true,
+            "hasTestimonials": false,
+            "hasFAQ": false,
+            "hasVideo": true,
+            "cardLikeCount": 1,
+            "imageCount": 12,
+            "buttonCount": 199,
+            "formCount": 4
+          },
+          "codeBlocks": [],
+          "codeLinks": []
+        },
+        {
+          "sourceId": "lapa-ninja",
+          "url": "https://www.lapa.ninja/post/softlight/",
+          "status": 200,
+          "licenseStatus": "inspiration-only",
+          "reuseGuidance": "Landing-page structure, section ordering, visual hierarchy and copy patterns. Do not copy site code or proprietary assets.",
+          "candidate": {
+            "index": 169,
+            "url": "https://www.lapa.ninja/post/softlight/",
+            "text": "",
+            "heading": "Lama Lama",
+            "description": "WEBSITEAmsterdam based creative digital agency.Lama LamaAgencyWEBSITEOpen-source liquidity protocol.AaveAppWEBSITEPlay with AI, bring your ideas to lifeTinkerArtificial Intelligence NO-CODE More than a website builder Webflow WEBSITE BUILDER WEBSITEMùn Rooftop Cocktail Bar RomeMùn Rooftop RomeFood DrinksWEBSITEA global branding agency proudly based in London",
+            "imageSrc": "https://cdn.lapa.ninja/assets/images/1x/lamalama-thumb.jpg",
+            "imageAlt": "",
+            "buttonText": [
+              "Lama Lama",
+              "Aave",
+              "Tinker",
+              "Webflow",
+              "Mùn Rooftop Rome",
+              "Ragged Edge",
+              "Framer",
+              "Softlight"
+            ],
+            "tags": [],
+            "cardArea": 4755456,
+            "score": 10,
+            "sourceMode": "landing-gallery"
+          },
+          "screenshots": {
+            "desktop": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/lapa-ninja/169-lama-lama-c880c507/desktop.png",
+              "sha256": "1cd693e419b42a91c14ea764036516fdec98b8ac59dda0ff85e5e1eec0eb56b1",
+              "mode": "viewport"
+            },
+            "mobile": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/lapa-ninja/169-lama-lama-c880c507/mobile.png",
+              "sha256": "5d1d8f4a54b1f978bbee5e99f663dbdd7939865369180368519497b08f3224fc",
+              "mode": "viewport"
+            }
+          },
+          "screenshotQuality": {
+            "desktop": {
+              "viewport": {
+                "width": 1440,
+                "height": 1000
+              },
+              "textLength": 1512,
+              "mediaCount": 41,
+              "codeCount": 0,
+              "headingCount": 9,
+              "usefulElementCount": 50,
+              "visibleAreaRatio": 1.945,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Websites",
+                "OG Images",
+                "Fonts",
+                "Sections",
+                "Templates",
+                "Pro",
+                "Build Websites",
+                "Learn Design"
+              ]
+            },
+            "mobile": {
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "textLength": 1086,
+              "mediaCount": 41,
+              "codeCount": 0,
+              "headingCount": 9,
+              "usefulElementCount": 17,
+              "visibleAreaRatio": 2.033,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Open main menu",
+                "{\"@context\":\"https://schema.org\",\"@type\":\"CreativeWork\",\"name\":\"Softlight\",\"description\":\"Softlight is an AI product dis",
+                "Home",
+                "Illustration Website Examples",
+                "Softlight Website DesignSoftlight is an AI product discovery platform that learns your business, uncovers new product op",
+                "Softlight Website Design",
+                "Softlight is an AI product discovery platform that learns your business, uncovers new product opportunities, and helps t",
+                "Visit Website"
+              ]
+            }
+          },
+          "qualityWarnings": [],
+          "failedRequestCount": 30,
+          "title": "Softlight - Landing Page Design | Lapa Ninja",
+          "description": "Softlight is an AI product discovery platform that learns your business, uncovers new product opportunities, and helps teams identify what to build next.",
+          "headings": [
+            {
+              "level": "h1",
+              "text": "Softlight Website Design"
+            },
+            {
+              "level": "h2",
+              "text": "Softlight is an AI product discovery platform that learns your business, uncovers new product opportunities, and helps teams identify what to build next."
+            },
+            {
+              "level": "h3",
+              "text": "Website Details"
+            },
+            {
+              "level": "h3",
+              "text": "Similar Websites"
+            },
+            {
+              "level": "h3",
+              "text": "Goodfit"
+            },
+            {
+              "level": "h3",
+              "text": "Lovers Magazine"
+            },
+            {
+              "level": "h3",
+              "text": "Lovers Magazine"
+            },
+            {
+              "level": "h3",
+              "text": "Explore"
+            },
+            {
+              "level": "h3",
+              "text": "Follow"
+            }
+          ],
+          "sections": [
+            {
+              "index": 0,
+              "heading": "Softlight Website Design",
+              "textSample": "Softlight Website DesignSoftlight is an AI product discovery platform that learns your business, uncovers new product opportunities, and helps teams identify what to build next.Visit WebsiteSave softlight.comFull website video recordingWeb Design & DevelopmentHomeDownload HD Screenshot",
+              "imageCount": 7,
+              "buttonCount": 7
+            }
+          ],
+          "ctas": [
+            "Lapa Ninja - Go to homepage",
+            "Toggle dark mode",
+            "Open main menu",
+            "Websites",
+            "Browse All ⭐7388",
+            "SaaS ⭐687",
+            "Business ⭐2450",
+            "Minimal3049",
+            "Agency ⭐961",
+            "Portfolio ⭐1063",
+            "Studio ⭐849",
+            "Web367",
+            "3D Websites ⭐156",
+            "E-commerce ⭐953",
+            "Technology1476",
+            "Corporate1092",
+            "Productivity992",
+            "Product138",
+            "AI ⭐199",
+            "App775",
+            "Software652",
+            "Dev Tools235",
+            "Design Tools460",
+            "No-Code30",
+            "Open Source12",
+            "Finance375",
+            "Fintech60",
+            "Cryptocurrency138",
+            "Blockchain92",
+            "DeFi16",
+            "Marketing67",
+            "Ventures47",
+            "Product Management68",
+            "Creative4986",
+            "Design2",
+            "Illustration1450",
+            "Photography510",
+            "Art11",
+            "Typography711",
+            "Gradient462",
+            "Pattern67",
+            "Bento Grid75",
+            "Isometric146",
+            "Retro Style100",
+            "Blog74",
+            "News51",
+            "Magazine54",
+            "Entertainment416",
+            "Film12",
+            "Music43"
+          ],
+          "palette": [
+            "rgb(23, 23, 23)",
+            "rgb(255, 255, 255)",
+            "lab(98.2596 -0.247031 -0.706708)",
+            "lab(91.6229 -0.159115 -2.26791)",
+            "lab(47.7841 -0.393182 -10.0268)",
+            "lab(8.11897 0.811279 -12.254)",
+            "lab(27.1134 -0.956401 -12.3224)"
+          ],
+          "layoutSignals": {
+            "hasNav": true,
+            "hasHero": true,
+            "hasPricing": true,
+            "hasTestimonials": false,
+            "hasFAQ": false,
+            "hasVideo": true,
+            "cardLikeCount": 1,
+            "imageCount": 13,
+            "buttonCount": 193,
+            "formCount": 4
+          },
+          "codeBlocks": [],
+          "codeLinks": []
+        },
+        {
+          "sourceId": "lapa-ninja",
+          "url": "https://www.lapa.ninja/post/stackbyte/",
+          "status": 200,
+          "licenseStatus": "inspiration-only",
+          "reuseGuidance": "Landing-page structure, section ordering, visual hierarchy and copy patterns. Do not copy site code or proprietary assets.",
+          "candidate": {
+            "index": 172,
+            "url": "https://www.lapa.ninja/post/stackbyte/",
+            "text": "",
+            "heading": "Lama Lama",
+            "description": "WEBSITEAmsterdam based creative digital agency.Lama LamaAgencyWEBSITEOpen-source liquidity protocol.AaveAppWEBSITEPlay with AI, bring your ideas to lifeTinkerArtificial Intelligence NO-CODE More than a website builder Webflow WEBSITE BUILDER WEBSITEMùn Rooftop Cocktail Bar RomeMùn Rooftop RomeFood DrinksWEBSITEA global branding agency proudly based in London",
+            "imageSrc": "https://cdn.lapa.ninja/assets/images/1x/lamalama-thumb.jpg",
+            "imageAlt": "",
+            "buttonText": [
+              "Lama Lama",
+              "Aave",
+              "Tinker",
+              "Webflow",
+              "Mùn Rooftop Rome",
+              "Ragged Edge",
+              "Framer",
+              "Softlight"
+            ],
+            "tags": [],
+            "cardArea": 4755456,
+            "score": 10,
+            "sourceMode": "landing-gallery"
+          },
+          "screenshots": {
+            "desktop": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/lapa-ninja/172-lama-lama-f7dadd42/desktop.png",
+              "sha256": "16ea22ff5e924a6eeb58b2a03f71a8e06f6009fe7798cde95e5bacd49e0b2d74",
+              "mode": "viewport"
+            },
+            "mobile": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/lapa-ninja/172-lama-lama-f7dadd42/mobile.png",
+              "sha256": "0f2cd2b97934e1e5dd5fb972701933c5873c61c9bf44aad008d387551feafec8",
+              "mode": "viewport"
+            }
+          },
+          "screenshotQuality": {
+            "desktop": {
+              "viewport": {
+                "width": 1440,
+                "height": 1000
+              },
+              "textLength": 1825,
+              "mediaCount": 61,
+              "codeCount": 0,
+              "headingCount": 14,
+              "usefulElementCount": 47,
+              "visibleAreaRatio": 1.943,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Websites",
+                "OG Images",
+                "Fonts",
+                "Sections",
+                "Templates",
+                "Pro",
+                "Build Websites",
+                "Learn Design"
+              ]
+            },
+            "mobile": {
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "textLength": 1444,
+              "mediaCount": 61,
+              "codeCount": 0,
+              "headingCount": 14,
+              "usefulElementCount": 17,
+              "visibleAreaRatio": 2.032,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Open main menu",
+                "{\"@context\":\"https://schema.org\",\"@type\":\"CreativeWork\",\"name\":\"Stackbyte\",\"description\":\"Turning complex problems into ",
+                "Home",
+                "Portfolio Website Examples",
+                "Stackbyte Website DesignTurning complex problems into elegant, user-centric digital experiences. Expert in Websites, Bac",
+                "Stackbyte Website Design",
+                "Turning complex problems into elegant, user-centric digital experiences. Expert in Websites, Backend, DevOps, and Web3.",
+                "Visit Website"
+              ]
+            }
+          },
+          "qualityWarnings": [],
+          "failedRequestCount": 50,
+          "title": "Stackbyte - Landing Page Design | Lapa Ninja",
+          "description": "Turning complex problems into elegant, user-centric digital experiences. Expert in Websites, Backend, DevOps, and Web3.",
+          "headings": [
+            {
+              "level": "h1",
+              "text": "Stackbyte Website Design"
+            },
+            {
+              "level": "h2",
+              "text": "Turning complex problems into elegant, user-centric digital experiences. Expert in Websites, Backend, DevOps, and Web3."
+            },
+            {
+              "level": "h3",
+              "text": "Website Details"
+            },
+            {
+              "level": "h3",
+              "text": "Similar Websites"
+            },
+            {
+              "level": "h3",
+              "text": "Lama Lama"
+            },
+            {
+              "level": "h3",
+              "text": "Tinker"
+            },
+            {
+              "level": "h3",
+              "text": "Mùn Rooftop Rome"
+            },
+            {
+              "level": "h3",
+              "text": "Ragged Edge"
+            },
+            {
+              "level": "h3",
+              "text": "Juan Mora"
+            },
+            {
+              "level": "h3",
+              "text": "Synthesis"
+            },
+            {
+              "level": "h3",
+              "text": "Sebastiano Pierotti"
+            },
+            {
+              "level": "h3",
+              "text": "Good Secrets"
+            },
+            {
+              "level": "h3",
+              "text": "Explore"
+            },
+            {
+              "level": "h3",
+              "text": "Follow"
+            }
+          ],
+          "sections": [
+            {
+              "index": 0,
+              "heading": "Stackbyte Website Design",
+              "textSample": "Stackbyte Website DesignTurning complex problems into elegant, user-centric digital experiences. Expert in Websites, Backend, DevOps, and Web3.Visit WebsiteSave stackbyte.devFull website video recordingWeb Design & DevelopmentHomeOG ImageDownload HD Screenshot",
+              "imageCount": 7,
+              "buttonCount": 8
+            }
+          ],
+          "ctas": [
+            "Lapa Ninja - Go to homepage",
+            "Toggle dark mode",
+            "Open main menu",
+            "Websites",
+            "Browse All ⭐7388",
+            "SaaS ⭐687",
+            "Business ⭐2450",
+            "Minimal3049",
+            "Agency ⭐961",
+            "Portfolio ⭐1063",
+            "Studio ⭐849",
+            "Web367",
+            "3D Websites ⭐156",
+            "E-commerce ⭐953",
+            "Technology1476",
+            "Corporate1092",
+            "Productivity992",
+            "Product138",
+            "AI ⭐199",
+            "App775",
+            "Software652",
+            "Dev Tools235",
+            "Design Tools460",
+            "No-Code30",
+            "Open Source12",
+            "Finance375",
+            "Fintech60",
+            "Cryptocurrency138",
+            "Blockchain92",
+            "DeFi16",
+            "Marketing67",
+            "Ventures47",
+            "Product Management68",
+            "Creative4986",
+            "Design2",
+            "Illustration1450",
+            "Photography510",
+            "Art11",
+            "Typography711",
+            "Gradient462",
+            "Pattern67",
+            "Bento Grid75",
+            "Isometric146",
+            "Retro Style100",
+            "Blog74",
+            "News51",
+            "Magazine54",
+            "Entertainment416",
+            "Film12",
+            "Music43"
+          ],
+          "palette": [
+            "rgb(23, 23, 23)",
+            "rgb(255, 255, 255)",
+            "lab(98.2596 -0.247031 -0.706708)",
+            "lab(91.6229 -0.159115 -2.26791)",
+            "lab(47.7841 -0.393182 -10.0268)",
+            "lab(8.11897 0.811279 -12.254)",
+            "lab(27.1134 -0.956401 -12.3224)"
+          ],
+          "layoutSignals": {
+            "hasNav": true,
+            "hasHero": true,
+            "hasPricing": true,
+            "hasTestimonials": false,
+            "hasFAQ": false,
+            "hasVideo": true,
+            "cardLikeCount": 1,
+            "imageCount": 23,
+            "buttonCount": 210,
+            "formCount": 4
+          },
+          "codeBlocks": [],
+          "codeLinks": []
+        },
+        {
+          "sourceId": "lapa-ninja",
+          "url": "https://www.lapa.ninja/post/heyato/",
+          "status": 200,
+          "licenseStatus": "inspiration-only",
+          "reuseGuidance": "Landing-page structure, section ordering, visual hierarchy and copy patterns. Do not copy site code or proprietary assets.",
+          "candidate": {
+            "index": 175,
+            "url": "https://www.lapa.ninja/post/heyato/",
+            "text": "",
+            "heading": "Lama Lama",
+            "description": "WEBSITEAmsterdam based creative digital agency.Lama LamaAgencyWEBSITEOpen-source liquidity protocol.AaveAppWEBSITEPlay with AI, bring your ideas to lifeTinkerArtificial Intelligence NO-CODE More than a website builder Webflow WEBSITE BUILDER WEBSITEMùn Rooftop Cocktail Bar RomeMùn Rooftop RomeFood DrinksWEBSITEA global branding agency proudly based in London",
+            "imageSrc": "https://cdn.lapa.ninja/assets/images/1x/lamalama-thumb.jpg",
+            "imageAlt": "",
+            "buttonText": [
+              "Lama Lama",
+              "Aave",
+              "Tinker",
+              "Webflow",
+              "Mùn Rooftop Rome",
+              "Ragged Edge",
+              "Framer",
+              "Softlight"
+            ],
+            "tags": [],
+            "cardArea": 4755456,
+            "score": 10,
+            "sourceMode": "landing-gallery"
+          },
+          "screenshots": {
+            "desktop": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/lapa-ninja/175-lama-lama-b4cd9e8d/desktop.png",
+              "sha256": "a365041f60909e3210d8de0bac21412dc060743ddc75670114602d268a6ba5e0",
+              "mode": "viewport"
+            },
+            "mobile": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/lapa-ninja/175-lama-lama-b4cd9e8d/mobile.png",
+              "sha256": "82b38dc25b5fdc27541d375998a795fef738ee3bff16ca0934f48d75a6819e89",
+              "mode": "viewport"
+            }
+          },
+          "screenshotQuality": {
+            "desktop": {
+              "viewport": {
+                "width": 1440,
+                "height": 1000
+              },
+              "textLength": 1985,
+              "mediaCount": 61,
+              "codeCount": 0,
+              "headingCount": 14,
+              "usefulElementCount": 52,
+              "visibleAreaRatio": 1.93,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Websites",
+                "OG Images",
+                "Fonts",
+                "Sections",
+                "Templates",
+                "Pro",
+                "Build Websites",
+                "Learn Design"
+              ]
+            },
+            "mobile": {
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "textLength": 1544,
+              "mediaCount": 61,
+              "codeCount": 0,
+              "headingCount": 14,
+              "usefulElementCount": 17,
+              "visibleAreaRatio": 2.033,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Open main menu",
+                "{\"@context\":\"https://schema.org\",\"@type\":\"CreativeWork\",\"name\":\"Heyato\",\"description\":\"Ato is a voice-first AI companion",
+                "Home",
+                "Hardware Website Examples",
+                "Heyato Website DesignAto is a voice-first AI companion designed for seniors. No screens, no apps—just natural conversati",
+                "Heyato Website Design",
+                "Ato is a voice-first AI companion designed for seniors. No screens, no apps—just natural conversation to reduce loneline",
+                "Visit Website"
+              ]
+            }
+          },
+          "qualityWarnings": [],
+          "failedRequestCount": 16,
+          "title": "Heyato - Landing Page Design | Lapa Ninja",
+          "description": "Ato is a voice-first AI companion designed for seniors. No screens, no apps—just natural conversation to reduce loneliness, manage reminders, and give families peace of mind.",
+          "headings": [
+            {
+              "level": "h1",
+              "text": "Heyato Website Design"
+            },
+            {
+              "level": "h2",
+              "text": "Ato is a voice-first AI companion designed for seniors. No screens, no apps—just natural conversation to reduce loneliness, manage reminders, and give families peace of mind."
+            },
+            {
+              "level": "h3",
+              "text": "Website Details"
+            },
+            {
+              "level": "h3",
+              "text": "Similar Websites"
+            },
+            {
+              "level": "h3",
+              "text": "Tinker"
+            },
+            {
+              "level": "h3",
+              "text": "Lobb’s Padel"
+            },
+            {
+              "level": "h3",
+              "text": "Altina"
+            },
+            {
+              "level": "h3",
+              "text": "Nudge"
+            },
+            {
+              "level": "h3",
+              "text": "Cowboy Space"
+            },
+            {
+              "level": "h3",
+              "text": "/dev/notion"
+            },
+            {
+              "level": "h3",
+              "text": "Foundation Labs"
+            },
+            {
+              "level": "h3",
+              "text": "Antimetal"
+            },
+            {
+              "level": "h3",
+              "text": "Explore"
+            },
+            {
+              "level": "h3",
+              "text": "Follow"
+            }
+          ],
+          "sections": [
+            {
+              "index": 0,
+              "heading": "Heyato Website Design",
+              "textSample": "Heyato Website DesignAto is a voice-first AI companion designed for seniors. No screens, no apps—just natural conversation to reduce loneliness, manage reminders, and give families peace of mind.Visit WebsiteSave heyato.aiFull website video recordingWeb Design & DevelopmentHomeOG ImageDownload HD Screenshot",
+              "imageCount": 7,
+              "buttonCount": 8
+            }
+          ],
+          "ctas": [
+            "Lapa Ninja - Go to homepage",
+            "Toggle dark mode",
+            "Open main menu",
+            "Websites",
+            "Browse All ⭐7388",
+            "SaaS ⭐687",
+            "Business ⭐2450",
+            "Minimal3049",
+            "Agency ⭐961",
+            "Portfolio ⭐1063",
+            "Studio ⭐849",
+            "Web367",
+            "3D Websites ⭐156",
+            "E-commerce ⭐953",
+            "Technology1476",
+            "Corporate1092",
+            "Productivity992",
+            "Product138",
+            "AI ⭐199",
+            "App775",
+            "Software652",
+            "Dev Tools235",
+            "Design Tools460",
+            "No-Code30",
+            "Open Source12",
+            "Finance375",
+            "Fintech60",
+            "Cryptocurrency138",
+            "Blockchain92",
+            "DeFi16",
+            "Marketing67",
+            "Ventures47",
+            "Product Management68",
+            "Creative4986",
+            "Design2",
+            "Illustration1450",
+            "Photography510",
+            "Art11",
+            "Typography711",
+            "Gradient462",
+            "Pattern67",
+            "Bento Grid75",
+            "Isometric146",
+            "Retro Style100",
+            "Blog74",
+            "News51",
+            "Magazine54",
+            "Entertainment416",
+            "Film12",
+            "Music43"
+          ],
+          "palette": [
+            "rgb(23, 23, 23)",
+            "rgb(255, 255, 255)",
+            "lab(98.2596 -0.247031 -0.706708)",
+            "lab(91.6229 -0.159115 -2.26791)",
+            "lab(47.7841 -0.393182 -10.0268)",
+            "lab(8.11897 0.811279 -12.254)",
+            "lab(27.1134 -0.956401 -12.3224)"
+          ],
+          "layoutSignals": {
+            "hasNav": true,
+            "hasHero": true,
+            "hasPricing": true,
+            "hasTestimonials": false,
+            "hasFAQ": false,
+            "hasVideo": true,
+            "cardLikeCount": 1,
+            "imageCount": 23,
+            "buttonCount": 215,
+            "formCount": 4
+          },
+          "codeBlocks": [],
+          "codeLinks": []
+        },
+        {
+          "sourceId": "lapa-ninja",
+          "url": "https://www.lapa.ninja/post/juanmora/",
+          "status": 200,
+          "licenseStatus": "inspiration-only",
+          "reuseGuidance": "Landing-page structure, section ordering, visual hierarchy and copy patterns. Do not copy site code or proprietary assets.",
+          "candidate": {
+            "index": 179,
+            "url": "https://www.lapa.ninja/post/juanmora/",
+            "text": "",
+            "heading": "Lama Lama",
+            "description": "WEBSITEAmsterdam based creative digital agency.Lama LamaAgencyWEBSITEOpen-source liquidity protocol.AaveAppWEBSITEPlay with AI, bring your ideas to lifeTinkerArtificial Intelligence NO-CODE More than a website builder Webflow WEBSITE BUILDER WEBSITEMùn Rooftop Cocktail Bar RomeMùn Rooftop RomeFood DrinksWEBSITEA global branding agency proudly based in London",
+            "imageSrc": "https://cdn.lapa.ninja/assets/images/1x/lamalama-thumb.jpg",
+            "imageAlt": "",
+            "buttonText": [
+              "Lama Lama",
+              "Aave",
+              "Tinker",
+              "Webflow",
+              "Mùn Rooftop Rome",
+              "Ragged Edge",
+              "Framer",
+              "Softlight"
+            ],
+            "tags": [],
+            "cardArea": 4755456,
+            "score": 10,
+            "sourceMode": "landing-gallery"
+          },
+          "screenshots": {
+            "desktop": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/lapa-ninja/179-lama-lama-b6436438/desktop.png",
+              "sha256": "c19f71afda5acd4c026e7c6e6c82023a2d1fa3531d2e0adb42c1e0fec9eebbbf",
+              "mode": "viewport"
+            },
+            "mobile": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/lapa-ninja/179-lama-lama-b6436438/mobile.png",
+              "sha256": "ae3cfeab02e65a12c84d53eaf48eb658d15896d699247929e6c61692178b8905",
+              "mode": "viewport"
+            }
+          },
+          "screenshotQuality": {
+            "desktop": {
+              "viewport": {
+                "width": 1440,
+                "height": 1000
+              },
+              "textLength": 1772,
+              "mediaCount": 62,
+              "codeCount": 0,
+              "headingCount": 14,
+              "usefulElementCount": 48,
+              "visibleAreaRatio": 1.941,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Websites",
+                "OG Images",
+                "Fonts",
+                "Sections",
+                "Templates",
+                "Pro",
+                "Build Websites",
+                "Learn Design"
+              ]
+            },
+            "mobile": {
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "textLength": 1374,
+              "mediaCount": 62,
+              "codeCount": 0,
+              "headingCount": 14,
+              "usefulElementCount": 17,
+              "visibleAreaRatio": 2.032,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Open main menu",
+                "{\"@context\":\"https://schema.org\",\"@type\":\"CreativeWork\",\"name\":\"Juan Mora\",\"description\":\"Design Director who helps comp",
+                "Home",
+                "Portfolio Website Examples",
+                "Juan Mora Website DesignDesign Director who helps companies succeed on projects like Websites & landing pages, Visual Br",
+                "Juan Mora Website Design",
+                "Design Director who helps companies succeed on projects like Websites & landing pages, Visual Branding, Product Design E",
+                "Visit Website"
+              ]
+            }
+          },
+          "qualityWarnings": [],
+          "failedRequestCount": 5,
+          "title": "Juan Mora - Landing Page Design | Lapa Ninja",
+          "description": "Design Director who helps companies succeed on projects like Websites & landing pages, Visual Branding, Product Design Enhancement, and Webflow & Framer Development.",
+          "headings": [
+            {
+              "level": "h1",
+              "text": "Juan Mora Website Design"
+            },
+            {
+              "level": "h2",
+              "text": "Design Director who helps companies succeed on projects like Websites & landing pages, Visual Branding, Product Design Enhancement, and Webflow & Framer Development."
+            },
+            {
+              "level": "h3",
+              "text": "Website Details"
+            },
+            {
+              "level": "h3",
+              "text": "Similar Websites"
+            },
+            {
+              "level": "h3",
+              "text": "Jan AI"
+            },
+            {
+              "level": "h3",
+              "text": "Jun Ioneda"
+            },
+            {
+              "level": "h3",
+              "text": "Jean Paul Gaultier"
+            },
+            {
+              "level": "h3",
+              "text": "Jean Paul Gaultier x Lil Nas X"
+            },
+            {
+              "level": "h3",
+              "text": "Jean Xincong He"
+            },
+            {
+              "level": "h3",
+              "text": "Jean Dawson"
+            },
+            {
+              "level": "h3",
+              "text": "Jan Patawa"
+            },
+            {
+              "level": "h3",
+              "text": "Jan Losert"
+            },
+            {
+              "level": "h3",
+              "text": "Explore"
+            },
+            {
+              "level": "h3",
+              "text": "Follow"
+            }
+          ],
+          "sections": [
+            {
+              "index": 0,
+              "heading": "Juan Mora Website Design",
+              "textSample": "Juan Mora Website DesignDesign Director who helps companies succeed on projects like Websites & landing pages, Visual Branding, Product Design Enhancement, and Webflow & Framer Development.Visit WebsiteSave juanmora.coFull website video recordingWeb Design & DevelopmentHomeWorkAboutOG ImageDownload HD Screenshot",
+              "imageCount": 7,
+              "buttonCount": 10
+            }
+          ],
+          "ctas": [
+            "Lapa Ninja - Go to homepage",
+            "Toggle dark mode",
+            "Open main menu",
+            "Websites",
+            "Browse All ⭐7388",
+            "SaaS ⭐687",
+            "Business ⭐2450",
+            "Minimal3049",
+            "Agency ⭐961",
+            "Portfolio ⭐1063",
+            "Studio ⭐849",
+            "Web367",
+            "3D Websites ⭐156",
+            "E-commerce ⭐953",
+            "Technology1476",
+            "Corporate1092",
+            "Productivity992",
+            "Product138",
+            "AI ⭐199",
+            "App775",
+            "Software652",
+            "Dev Tools235",
+            "Design Tools460",
+            "No-Code30",
+            "Open Source12",
+            "Finance375",
+            "Fintech60",
+            "Cryptocurrency138",
+            "Blockchain92",
+            "DeFi16",
+            "Marketing67",
+            "Ventures47",
+            "Product Management68",
+            "Creative4986",
+            "Design2",
+            "Illustration1450",
+            "Photography510",
+            "Art11",
+            "Typography711",
+            "Gradient462",
+            "Pattern67",
+            "Bento Grid75",
+            "Isometric146",
+            "Retro Style100",
+            "Blog74",
+            "News51",
+            "Magazine54",
+            "Entertainment416",
+            "Film12",
+            "Music43"
+          ],
+          "palette": [
+            "rgb(23, 23, 23)",
+            "rgb(255, 255, 255)",
+            "lab(98.2596 -0.247031 -0.706708)",
+            "lab(91.6229 -0.159115 -2.26791)",
+            "lab(47.7841 -0.393182 -10.0268)",
+            "lab(8.11897 0.811279 -12.254)",
+            "lab(27.1134 -0.956401 -12.3224)"
+          ],
+          "layoutSignals": {
+            "hasNav": true,
+            "hasHero": true,
+            "hasPricing": true,
+            "hasTestimonials": false,
+            "hasFAQ": false,
+            "hasVideo": true,
+            "cardLikeCount": 1,
+            "imageCount": 23,
+            "buttonCount": 214,
+            "formCount": 4
+          },
+          "codeBlocks": [],
+          "codeLinks": []
+        },
+        {
+          "sourceId": "lapa-ninja",
+          "url": "https://www.lapa.ninja/post/lobbspadel/",
+          "status": 200,
+          "licenseStatus": "inspiration-only",
+          "reuseGuidance": "Landing-page structure, section ordering, visual hierarchy and copy patterns. Do not copy site code or proprietary assets.",
+          "candidate": {
+            "index": 182,
+            "url": "https://www.lapa.ninja/post/lobbspadel/",
+            "text": "",
+            "heading": "Lama Lama",
+            "description": "WEBSITEAmsterdam based creative digital agency.Lama LamaAgencyWEBSITEOpen-source liquidity protocol.AaveAppWEBSITEPlay with AI, bring your ideas to lifeTinkerArtificial Intelligence NO-CODE More than a website builder Webflow WEBSITE BUILDER WEBSITEMùn Rooftop Cocktail Bar RomeMùn Rooftop RomeFood DrinksWEBSITEA global branding agency proudly based in London",
+            "imageSrc": "https://cdn.lapa.ninja/assets/images/1x/lamalama-thumb.jpg",
+            "imageAlt": "",
+            "buttonText": [
+              "Lama Lama",
+              "Aave",
+              "Tinker",
+              "Webflow",
+              "Mùn Rooftop Rome",
+              "Ragged Edge",
+              "Framer",
+              "Softlight"
+            ],
+            "tags": [],
+            "cardArea": 4755456,
+            "score": 10,
+            "sourceMode": "landing-gallery"
+          },
+          "screenshots": {
+            "desktop": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/lapa-ninja/182-lama-lama-68370390/desktop.png",
+              "sha256": "a9a7d6ff1823899f309c86908c62c293d9a78b8cd9e1eb6e3f94bc930ddc5b15",
+              "mode": "viewport"
+            },
+            "mobile": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/lapa-ninja/182-lama-lama-68370390/mobile.png",
+              "sha256": "7232f974c8e9d77e8edb4c0638f8d3c5757ef793c26405ccc6fc6f7d5188fff2",
+              "mode": "viewport"
+            }
+          },
+          "screenshotQuality": {
+            "desktop": {
+              "viewport": {
+                "width": 1440,
+                "height": 1000
+              },
+              "textLength": 1440,
+              "mediaCount": 33,
+              "codeCount": 0,
+              "headingCount": 7,
+              "usefulElementCount": 56,
+              "visibleAreaRatio": 1.939,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Websites",
+                "OG Images",
+                "Fonts",
+                "Sections",
+                "Templates",
+                "Pro",
+                "Build Websites",
+                "Learn Design"
+              ]
+            },
+            "mobile": {
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "textLength": 960,
+              "mediaCount": 33,
+              "codeCount": 0,
+              "headingCount": 7,
+              "usefulElementCount": 17,
+              "visibleAreaRatio": 2.038,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Open main menu",
+                "{\"@context\":\"https://schema.org\",\"@type\":\"CreativeWork\",\"name\":\"Lobb’s Padel\",\"description\":\"Join the founding membershi",
+                "Home",
+                "Sports Website Examples",
+                "Lobb’s Padel Website DesignJoin the founding membership waitlist & get priority access. Skip the initiation fees. Score ",
+                "Lobb’s Padel Website Design",
+                "Join the founding membership waitlist & get priority access. Skip the initiation fees. Score exclusive perks. Limited to",
+                "Visit Website"
+              ]
+            }
+          },
+          "qualityWarnings": [],
+          "failedRequestCount": 4,
+          "title": "Lobb’s Padel - Landing Page Design | Lapa Ninja",
+          "description": "Join the founding membership waitlist & get priority access. Skip the initiation fees. Score exclusive perks. Limited to 100 spots. When they're gone, they're gone.",
+          "headings": [
+            {
+              "level": "h1",
+              "text": "Lobb’s Padel Website Design"
+            },
+            {
+              "level": "h2",
+              "text": "Join the founding membership waitlist & get priority access. Skip the initiation fees. Score exclusive perks. Limited to 100 spots. When they're gone, they're gone."
+            },
+            {
+              "level": "h3",
+              "text": "Website Details"
+            },
+            {
+              "level": "h3",
+              "text": "Similar Websites"
+            },
+            {
+              "level": "h3",
+              "text": "Lobe"
+            },
+            {
+              "level": "h3",
+              "text": "Explore"
+            },
+            {
+              "level": "h3",
+              "text": "Follow"
+            }
+          ],
+          "sections": [
+            {
+              "index": 0,
+              "heading": "Lobb’s Padel Website Design",
+              "textSample": "Lobb’s Padel Website DesignJoin the founding membership waitlist & get priority access. Skip the initiation fees. Score exclusive perks. Limited to 100 spots. When they're gone, they're gone.Visit WebsiteSave Discover moreSportsWebflow templatesWeb design trends lobbspadel.comFull website video recordingWeb Design & De",
+              "imageCount": 10,
+              "buttonCount": 8
+            }
+          ],
+          "ctas": [
+            "Lapa Ninja - Go to homepage",
+            "Toggle dark mode",
+            "Open main menu",
+            "Websites",
+            "Browse All ⭐7388",
+            "SaaS ⭐687",
+            "Business ⭐2450",
+            "Minimal3049",
+            "Agency ⭐961",
+            "Portfolio ⭐1063",
+            "Studio ⭐849",
+            "Web367",
+            "3D Websites ⭐156",
+            "E-commerce ⭐953",
+            "Technology1476",
+            "Corporate1092",
+            "Productivity992",
+            "Product138",
+            "AI ⭐199",
+            "App775",
+            "Software652",
+            "Dev Tools235",
+            "Design Tools460",
+            "No-Code30",
+            "Open Source12",
+            "Finance375",
+            "Fintech60",
+            "Cryptocurrency138",
+            "Blockchain92",
+            "DeFi16",
+            "Marketing67",
+            "Ventures47",
+            "Product Management68",
+            "Creative4986",
+            "Design2",
+            "Illustration1450",
+            "Photography510",
+            "Art11",
+            "Typography711",
+            "Gradient462",
+            "Pattern67",
+            "Bento Grid75",
+            "Isometric146",
+            "Retro Style100",
+            "Blog74",
+            "News51",
+            "Magazine54",
+            "Entertainment416",
+            "Film12",
+            "Music43"
+          ],
+          "palette": [
+            "rgb(23, 23, 23)",
+            "rgb(255, 255, 255)",
+            "lab(98.2596 -0.247031 -0.706708)",
+            "lab(91.6229 -0.159115 -2.26791)",
+            "lab(47.7841 -0.393182 -10.0268)",
+            "lab(8.11897 0.811279 -12.254)",
+            "lab(27.1134 -0.956401 -12.3224)"
+          ],
+          "layoutSignals": {
+            "hasNav": true,
+            "hasHero": true,
+            "hasPricing": true,
+            "hasTestimonials": false,
+            "hasFAQ": false,
+            "hasVideo": true,
+            "cardLikeCount": 1,
+            "imageCount": 8,
+            "buttonCount": 188,
+            "formCount": 4
+          },
+          "codeBlocks": [],
+          "codeLinks": []
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

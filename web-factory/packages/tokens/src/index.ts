@@ -59,7 +59,7 @@ export function clientTokenStyle(client: ClientTokenInput): Record<string, strin
 
 function fontStack(font: string): string {
   const clean = font.replace(/["'<>]/g, "").trim() || "Inter";
-  return `"${clean}", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif`;
+  return `"${clean}", "Inter", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif`;
 }
 
 function readableTextOn(hex: string): string {

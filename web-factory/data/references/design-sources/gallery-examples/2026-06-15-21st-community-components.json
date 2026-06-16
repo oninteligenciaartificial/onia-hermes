@@ -1,0 +1,761 @@
+{
+  "capturedAt": "2026-06-15T21:05:21.093Z",
+  "cacheRoot": "C:/Users/PC/.codex/design-stack/gallery-examples",
+  "policy": "Gallery screenshots and structure are reference artifacts. Copy/adapt code only when licenseStatus is compatible and the linked/local repo license has been reviewed.",
+  "configPath": "C:/dev/proyectos/onia-hermes/web-factory/data/references/design-sources/gallery-reference-sources.json",
+  "results": [
+    {
+      "id": "21st-community-components",
+      "name": "21st.dev Community Components",
+      "url": "https://21st.dev/community/components",
+      "mode": "component-gallery",
+      "usage": "Component discovery and UI pattern extraction. Verify each community component before copying code.",
+      "licenseStatus": "review-required",
+      "status": 200,
+      "failedRequestCount": 4,
+      "rawCandidateCount": 197,
+      "selectedCandidateCount": 30,
+      "detailedExampleCount": 2,
+      "candidates": [
+        {
+          "index": 64,
+          "url": "https://21st.dev/community/components/aayush-duhan/ink-reveal/default",
+          "text": "Ink Reveal",
+          "heading": "",
+          "description": "Ink Reveal72",
+          "imageSrc": "https://cdn.21st.dev/cdn-cgi/image/fit=scale-down,width=3840,quality=75,format=auto/https://cdn.21st.dev/aayush-duhan/ink-reveal/default/preview.1781465880612.png",
+          "imageAlt": "Ink Reveal",
+          "buttonText": [
+            "72"
+          ],
+          "tags": [],
+          "cardArea": 67448,
+          "score": 9,
+          "sourceMode": "component-gallery"
+        },
+        {
+          "index": 66,
+          "url": "https://21st.dev/community/components/easemize/pixel-perfect-hero/default",
+          "text": "Pixel perfect Hero",
+          "heading": "",
+          "description": "Pixel perfect Hero45",
+          "imageSrc": "https://cdn.21st.dev/cdn-cgi/image/fit=scale-down,width=3840,quality=75,format=auto/https://cdn.21st.dev/easemize/pixel-perfect-hero/default/preview.1781185553155.png",
+          "imageAlt": "Pixel perfect Hero",
+          "buttonText": [
+            "45"
+          ],
+          "tags": [],
+          "cardArea": 67448,
+          "score": 9,
+          "sourceMode": "component-gallery"
+        },
+        {
+          "index": 68,
+          "url": "https://21st.dev/community/components/smammar100/scroll-reel-testimonials/default",
+          "text": "Scroll Reel Testimonials",
+          "heading": "",
+          "description": "Scroll Reel Testimonials61",
+          "imageSrc": "https://cdn.21st.dev/cdn-cgi/image/fit=scale-down,width=3840,quality=75,format=auto/https://cdn.21st.dev/smammar100/scroll-reel-testimonials/default/preview.1780849871560.png",
+          "imageAlt": "Scroll Reel Testimonials",
+          "buttonText": [
+            "61"
+          ],
+          "tags": [],
+          "cardArea": 67448,
+          "score": 9,
+          "sourceMode": "component-gallery"
+        },
+        {
+          "index": 70,
+          "url": "https://21st.dev/community/components/edwinvakayil/one-toogle/default",
+          "text": "One Toogle",
+          "heading": "",
+          "description": "EVOne Toogle5",
+          "imageSrc": "https://cdn.21st.dev/cdn-cgi/image/fit=scale-down,width=3840,quality=75,format=auto/https://cdn.21st.dev/lyanchouss/one-toogle/default/preview.1780696681239.png",
+          "imageAlt": "One Toogle",
+          "buttonText": [
+            "EV",
+            "5"
+          ],
+          "tags": [],
+          "cardArea": 67448,
+          "score": 9,
+          "sourceMode": "component-gallery"
+        },
+        {
+          "index": 72,
+          "url": "https://21st.dev/community/components/edwinvakayil/toggle-group/default",
+          "text": "Toggle Group",
+          "heading": "",
+          "description": "EVToggle Group2",
+          "imageSrc": "https://cdn.21st.dev/cdn-cgi/image/fit=scale-down,width=3840,quality=75,format=auto/https://cdn.21st.dev/lyanchouss/toggle-group/default/preview.1780695938765.png",
+          "imageAlt": "Toggle Group",
+          "buttonText": [
+            "EV",
+            "2"
+          ],
+          "tags": [],
+          "cardArea": 67448,
+          "score": 9,
+          "sourceMode": "component-gallery"
+        },
+        {
+          "index": 76,
+          "url": "https://21st.dev/community/components/edwinvakayil/icon-bar/default",
+          "text": "Icon Bar",
+          "heading": "",
+          "description": "EVIcon Bar20",
+          "imageSrc": "https://cdn.21st.dev/cdn-cgi/image/fit=scale-down,width=3840,quality=75,format=auto/https://cdn.21st.dev/lyanchouss/icon-bar/default/preview.1780694376489.png",
+          "imageAlt": "Icon Bar",
+          "buttonText": [
+            "EV",
+            "20"
+          ],
+          "tags": [],
+          "cardArea": 67448,
+          "score": 9,
+          "sourceMode": "component-gallery"
+        },
+        {
+          "index": 78,
+          "url": "https://21st.dev/community/components/edwinvakayil/infinite-ribbon/default",
+          "text": "Infinite Ribbon",
+          "heading": "",
+          "description": "EVInfinite Ribbon26",
+          "imageSrc": "https://cdn.21st.dev/cdn-cgi/image/fit=scale-down,width=3840,quality=75,format=auto/https://cdn.21st.dev/lyanchouss/infinite-ribbon/default/preview.1780694157426.png",
+          "imageAlt": "Infinite Ribbon",
+          "buttonText": [
+            "EV",
+            "26"
+          ],
+          "tags": [],
+          "cardArea": 67448,
+          "score": 9,
+          "sourceMode": "component-gallery"
+        },
+        {
+          "index": 80,
+          "url": "https://21st.dev/community/components/edwinvakayil/origin-button/default",
+          "text": "Origin Button",
+          "heading": "",
+          "description": "EVOrigin Button25",
+          "imageSrc": "https://cdn.21st.dev/cdn-cgi/image/fit=scale-down,width=3840,quality=75,format=auto/https://cdn.21st.dev/lyanchouss/origin-button/default/preview.1780693767860.png",
+          "imageAlt": "Origin Button",
+          "buttonText": [
+            "EV",
+            "25"
+          ],
+          "tags": [],
+          "cardArea": 67448,
+          "score": 9,
+          "sourceMode": "component-gallery"
+        },
+        {
+          "index": 82,
+          "url": "https://21st.dev/community/components/edwinvakayil/faq-pro/default",
+          "text": "FAQ Pro",
+          "heading": "",
+          "description": "EVFAQ Pro15",
+          "imageSrc": "https://cdn.21st.dev/cdn-cgi/image/fit=scale-down,width=3840,quality=75,format=auto/https://cdn.21st.dev/lyanchouss/faq-pro/default/preview.1780693119279.png",
+          "imageAlt": "FAQ Pro",
+          "buttonText": [
+            "EV",
+            "15"
+          ],
+          "tags": [],
+          "cardArea": 67448,
+          "score": 9,
+          "sourceMode": "component-gallery"
+        },
+        {
+          "index": 84,
+          "url": "https://21st.dev/community/components/serafim/splite/default",
+          "text": "Spline Scene",
+          "heading": "",
+          "description": "Spline Scene942",
+          "imageSrc": "https://cdn.21st.dev/cdn-cgi/image/fit=scale-down,width=3840,quality=75,format=auto/https://cdn.21st.dev/user_2nElBLvklOKlAURm6W1PTu6yYFh/splite/default/preview.png",
+          "imageAlt": "Spline Scene",
+          "buttonText": [
+            "942"
+          ],
+          "tags": [],
+          "cardArea": 67448,
+          "score": 9,
+          "sourceMode": "component-gallery"
+        },
+        {
+          "index": 86,
+          "url": "https://21st.dev/community/components/Codehagen/display-cards/default",
+          "text": "Display Cards",
+          "heading": "",
+          "description": "Display Cards872",
+          "imageSrc": "https://cdn.21st.dev/cdn-cgi/image/fit=scale-down,width=3840,quality=75,format=auto/https://cdn.21st.dev/user_Codehagen/display-cards/892/preview.png",
+          "imageAlt": "Display Cards",
+          "buttonText": [
+            "872"
+          ],
+          "tags": [],
+          "cardArea": 67448,
+          "score": 9,
+          "sourceMode": "component-gallery"
+        },
+        {
+          "index": 88,
+          "url": "https://21st.dev/community/components/aceternity/container-scroll-animation/default",
+          "text": "Container Scroll Animation",
+          "heading": "",
+          "description": "Container Scroll Animation835",
+          "imageSrc": "https://cdn.21st.dev/cdn-cgi/image/fit=scale-down,width=3840,quality=75,format=auto/https://cdn.21st.dev/user_aceternity/container-scroll-animation/default/preview.png",
+          "imageAlt": "Container Scroll Animation",
+          "buttonText": [
+            "835"
+          ],
+          "tags": [],
+          "cardArea": 67448,
+          "score": 9,
+          "sourceMode": "component-gallery"
+        },
+        {
+          "index": 90,
+          "url": "https://21st.dev/community/components/victorwelander/expandable-tabs/default",
+          "text": "Expandable Tabs",
+          "heading": "",
+          "description": "Expandable Tabs827",
+          "imageSrc": "https://cdn.21st.dev/cdn-cgi/image/fit=scale-down,width=3840,quality=75,format=auto/https://cdn.21st.dev/user_victorwelander/expandable-tabs/default/preview.png",
+          "imageAlt": "Expandable Tabs",
+          "buttonText": [
+            "827"
+          ],
+          "tags": [],
+          "cardArea": 67448,
+          "score": 9,
+          "sourceMode": "component-gallery"
+        },
+        {
+          "index": 92,
+          "url": "https://21st.dev/community/components/tommyjepsen/animated-hero/default",
+          "text": "Animated hero",
+          "heading": "",
+          "description": "Animated hero824",
+          "imageSrc": "https://cdn.21st.dev/cdn-cgi/image/fit=scale-down,width=3840,quality=75,format=auto/https://cdn.21st.dev/user_2nElBLvklOKlAURm6W1PTu6yYFh/animated-hero/default/preview.png",
+          "imageAlt": "Animated hero",
+          "buttonText": [
+            "824"
+          ],
+          "tags": [],
+          "cardArea": 67448,
+          "score": 9,
+          "sourceMode": "component-gallery"
+        },
+        {
+          "index": 94,
+          "url": "https://21st.dev/community/components/ayushmxxn/tubelight-navbar/default",
+          "text": "Tubelight Navbar",
+          "heading": "",
+          "description": "Tubelight Navbar819",
+          "imageSrc": "https://cdn.21st.dev/cdn-cgi/image/fit=scale-down,width=3840,quality=75,format=auto/https://cdn.21st.dev/user_ayushmxxn/tubelight-navbar/default/preview.png",
+          "imageAlt": "Tubelight Navbar",
+          "buttonText": [
+            "819"
+          ],
+          "tags": [],
+          "cardArea": 67448,
+          "score": 9,
+          "sourceMode": "component-gallery"
+        },
+        {
+          "index": 96,
+          "url": "https://21st.dev/community/components/aceternity/aurora-background/default",
+          "text": "Aurora Background",
+          "heading": "",
+          "description": "Aurora Background781",
+          "imageSrc": "https://cdn.21st.dev/cdn-cgi/image/fit=scale-down,width=3840,quality=75,format=auto/https://cdn.21st.dev/user_aceternity/aurora-background/default/preview.png",
+          "imageAlt": "Aurora Background",
+          "buttonText": [
+            "781"
+          ],
+          "tags": [],
+          "cardArea": 67448,
+          "score": 9,
+          "sourceMode": "component-gallery"
+        },
+        {
+          "index": 98,
+          "url": "https://21st.dev/community/components/aceternity/sparkles/default",
+          "text": "Sparkles",
+          "heading": "",
+          "description": "Sparkles664",
+          "imageSrc": "https://cdn.21st.dev/cdn-cgi/image/fit=scale-down,width=3840,quality=75,format=auto/https://cdn.21st.dev/user_aceternity/sparkles/default/preview.png",
+          "imageAlt": "Sparkles",
+          "buttonText": [
+            "664"
+          ],
+          "tags": [],
+          "cardArea": 67448,
+          "score": 9,
+          "sourceMode": "component-gallery"
+        },
+        {
+          "index": 100,
+          "url": "https://21st.dev/community/components/kokonutd/background-paths/default",
+          "text": "Background Paths",
+          "heading": "",
+          "description": "Background Paths619",
+          "imageSrc": "https://cdn.21st.dev/cdn-cgi/image/fit=scale-down,width=3840,quality=75,format=auto/https://cdn.21st.dev/user_2rQ1QHrJyxpmWMHhqhANzWMc64n/background-paths/default/preview.png?v=1",
+          "imageAlt": "Background Paths",
+          "buttonText": [
+            "619"
+          ],
+          "tags": [],
+          "cardArea": 67448,
+          "score": 9,
+          "sourceMode": "component-gallery"
+        },
+        {
+          "index": 102,
+          "url": "https://21st.dev/community/components/kokonutd/shape-landing-hero/default",
+          "text": "Shape Landing Hero",
+          "heading": "",
+          "description": "Shape Landing Hero593",
+          "imageSrc": "https://cdn.21st.dev/cdn-cgi/image/fit=scale-down,width=3840,quality=75,format=auto/https://cdn.21st.dev/user_2rQ1QHrJyxpmWMHhqhANzWMc64n/shape-landing-hero/default/preview.1737988084934.png",
+          "imageAlt": "Shape Landing Hero",
+          "buttonText": [
+            "593"
+          ],
+          "tags": [],
+          "cardArea": 67448,
+          "score": 9,
+          "sourceMode": "component-gallery"
+        },
+        {
+          "index": 104,
+          "url": "https://21st.dev/community/components/aliimam/shader-animation/default",
+          "text": "Shader Animation",
+          "heading": "",
+          "description": "Shader Animation80",
+          "imageSrc": "https://cdn.21st.dev/cdn-cgi/image/fit=scale-down,width=3840,quality=75,format=auto/https://cdn.21st.dev/designali-in/shader-animation/default/preview.1755486352919.png",
+          "imageAlt": "Shader Animation",
+          "buttonText": [
+            "80"
+          ],
+          "tags": [],
+          "cardArea": 67448,
+          "score": 9,
+          "sourceMode": "component-gallery"
+        },
+        {
+          "index": 106,
+          "url": "https://21st.dev/community/components/thanh/animated-shader-background/default",
+          "text": "Animated Shader Background",
+          "heading": "",
+          "description": "Animated Shader Background52",
+          "imageSrc": "https://cdn.21st.dev/cdn-cgi/image/fit=scale-down,width=3840,quality=75,format=auto/https://cdn.21st.dev/minhxthanh/animated-shader-background/default/preview.1749003393329.png",
+          "imageAlt": "Animated Shader Background",
+          "buttonText": [
+            "52"
+          ],
+          "tags": [],
+          "cardArea": 67448,
+          "score": 9,
+          "sourceMode": "component-gallery"
+        },
+        {
+          "index": 108,
+          "url": "https://21st.dev/community/components/thanh/shader-background/default",
+          "text": "Shader Background",
+          "heading": "",
+          "description": "Shader Background44",
+          "imageSrc": "https://cdn.21st.dev/cdn-cgi/image/fit=scale-down,width=3840,quality=75,format=auto/https://cdn.21st.dev/minhxthanh/shader-background/default/preview.1748699860662.png",
+          "imageAlt": "Shader Background",
+          "buttonText": [
+            "44"
+          ],
+          "tags": [],
+          "cardArea": 67448,
+          "score": 9,
+          "sourceMode": "component-gallery"
+        },
+        {
+          "index": 110,
+          "url": "https://21st.dev/community/components/aliimam/web-gl-shader/default",
+          "text": "WebGL Shader",
+          "heading": "",
+          "description": "WebGL Shader27",
+          "imageSrc": "https://cdn.21st.dev/cdn-cgi/image/fit=scale-down,width=3840,quality=75,format=auto/https://cdn.21st.dev/designali-in/web-gl-shader/default/preview.1755664380314.png",
+          "imageAlt": "WebGL Shader",
+          "buttonText": [
+            "27"
+          ],
+          "tags": [],
+          "cardArea": 67448,
+          "score": 9,
+          "sourceMode": "component-gallery"
+        },
+        {
+          "index": 112,
+          "url": "https://21st.dev/community/components/aliimam/shader-lines/default",
+          "text": "Shader Lines",
+          "heading": "",
+          "description": "Shader Lines24",
+          "imageSrc": "https://cdn.21st.dev/cdn-cgi/image/fit=scale-down,width=3840,quality=75,format=auto/https://cdn.21st.dev/designali-in/shader-lines/default/preview.1755617050358.png",
+          "imageAlt": "Shader Lines",
+          "buttonText": [
+            "24"
+          ],
+          "tags": [],
+          "cardArea": 67448,
+          "score": 9,
+          "sourceMode": "component-gallery"
+        },
+        {
+          "index": 114,
+          "url": "https://21st.dev/community/components/ravikatiyar/animated-shader-hero/default",
+          "text": "Animated Shader Hero",
+          "heading": "",
+          "description": "Animated Shader Hero20",
+          "imageSrc": "https://cdn.21st.dev/cdn-cgi/image/fit=scale-down,width=3840,quality=75,format=auto/https://cdn.21st.dev/ravikatiyar162/animated-shader-hero/default/preview.1755360493434.png",
+          "imageAlt": "Animated Shader Hero",
+          "buttonText": [
+            "20"
+          ],
+          "tags": [],
+          "cardArea": 67448,
+          "score": 9,
+          "sourceMode": "component-gallery"
+        },
+        {
+          "index": 116,
+          "url": "https://21st.dev/community/components/easemize/spooky-smoke-animation/default",
+          "text": "Spooky Smoke Animation",
+          "heading": "",
+          "description": "Spooky Smoke Animation20",
+          "imageSrc": "https://cdn.21st.dev/cdn-cgi/image/fit=scale-down,width=3840,quality=75,format=auto/https://cdn.21st.dev/user_2xJxXqdwWohYrdd6fiMYrS9hbmO/spooky-smoke-animation/default/preview.1750811134292.png",
+          "imageAlt": "Spooky Smoke Animation",
+          "buttonText": [
+            "20"
+          ],
+          "tags": [],
+          "cardArea": 67448,
+          "score": 9,
+          "sourceMode": "component-gallery"
+        },
+        {
+          "index": 118,
+          "url": "https://21st.dev/community/components/reuno-ui/background-paper-shaders/default",
+          "text": "Background Paper Shaders",
+          "heading": "",
+          "description": "RBackground Paper Shaders18",
+          "imageSrc": "https://cdn.21st.dev/cdn-cgi/image/fit=scale-down,width=3840,quality=75,format=auto/https://cdn.21st.dev/muhammadnadeemmn9485134/background-paper-shaders/default/preview.1755685936905.png",
+          "imageAlt": "Background Paper Shaders",
+          "buttonText": [
+            "R",
+            "18"
+          ],
+          "tags": [],
+          "cardArea": 67448,
+          "score": 9,
+          "sourceMode": "component-gallery"
+        },
+        {
+          "index": 120,
+          "url": "https://21st.dev/community/components/Scottclayton3d/shader-animation/default",
+          "text": "Shader Animation",
+          "heading": "",
+          "description": "Shader Animation11",
+          "imageSrc": "https://cdn.21st.dev/cdn-cgi/image/fit=scale-down,width=3840,quality=75,format=auto/https://cdn.21st.dev/lovesickfromthe6ix/shader-animation/default/preview.1755805553789.png",
+          "imageAlt": "Shader Animation",
+          "buttonText": [
+            "11"
+          ],
+          "tags": [],
+          "cardArea": 67448,
+          "score": 9,
+          "sourceMode": "component-gallery"
+        },
+        {
+          "index": 122,
+          "url": "https://21st.dev/community/components/efferd/falling-pattern/default",
+          "text": "Falling Pattern",
+          "heading": "",
+          "description": "Falling Pattern8",
+          "imageSrc": "https://cdn.21st.dev/cdn-cgi/image/fit=scale-down,width=3840,quality=75,format=auto/https://cdn.21st.dev/sshahaider/falling-pattern/default/preview.1755170299566.png",
+          "imageAlt": "Falling Pattern",
+          "buttonText": [
+            "8"
+          ],
+          "tags": [],
+          "cardArea": 67448,
+          "score": 9,
+          "sourceMode": "component-gallery"
+        },
+        {
+          "index": 138,
+          "url": "https://21st.dev/community/components/arunachalam0606/scroll-expansion-hero/default",
+          "text": "Scroll media expansion hero",
+          "heading": "",
+          "description": "Scroll media expansion hero541",
+          "imageSrc": "https://cdn.21st.dev/cdn-cgi/image/fit=scale-down,width=3840,quality=75,format=auto/https://cdn.21st.dev/user_2wfnj4jcSPR8JWRk7tpzrihdDV8/scroll-expansion-hero/default/preview.1746632883284.png",
+          "imageAlt": "Scroll media expansion hero",
+          "buttonText": [
+            "541"
+          ],
+          "tags": [],
+          "cardArea": 67448,
+          "score": 9,
+          "sourceMode": "component-gallery"
+        }
+      ],
+      "screenshot": {
+        "path": "C:/Users/PC/.codex/design-stack/gallery-examples/21st-community-components/gallery.png",
+        "sha256": "14fa2ee3ffb964ba25ccd381d8265d0d7b3a2f04fca6db13a2d69f49189b9884"
+      },
+      "examples": [
+        {
+          "sourceId": "21st-community-components",
+          "url": "https://21st.dev/community/components/aayush-duhan/ink-reveal/default",
+          "status": 200,
+          "licenseStatus": "review-required",
+          "reuseGuidance": "Component discovery and UI pattern extraction. Verify each community component before copying code.",
+          "candidate": {
+            "index": 64,
+            "url": "https://21st.dev/community/components/aayush-duhan/ink-reveal/default",
+            "text": "Ink Reveal",
+            "heading": "",
+            "description": "Ink Reveal72",
+            "imageSrc": "https://cdn.21st.dev/cdn-cgi/image/fit=scale-down,width=3840,quality=75,format=auto/https://cdn.21st.dev/aayush-duhan/ink-reveal/default/preview.1781465880612.png",
+            "imageAlt": "Ink Reveal",
+            "buttonText": [
+              "72"
+            ],
+            "tags": [],
+            "cardArea": 67448,
+            "score": 9,
+            "sourceMode": "component-gallery"
+          },
+          "screenshots": {
+            "desktop": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples/21st-community-components/ink-reveal/desktop.png",
+              "sha256": "5992570ab25c0b48398341bb5b58aedd8135e93a08ea1b428237ea1ef3703071"
+            },
+            "mobile": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples/21st-community-components/ink-reveal/mobile.png",
+              "sha256": "d0e13d4557a8220dac2de49ddf7f479493f90acfc479445bf574266489187b6d"
+            }
+          },
+          "failedRequestCount": 2,
+          "title": "Ink Reveal | Community Components - 21st | 21st",
+          "description": "A canvas overlay that lets users brush away a colored mask to reveal content underneath. Mouse movement creates organic, wobbly ink stamps that expand and fade, producing a natural paint-stroke feel. Fully customizable — control brush size, mask color, lifetime, wobble, and more.",
+          "headings": [
+            {
+              "level": "h3",
+              "text": "Ink Reveal"
+            },
+            {
+              "level": "h3",
+              "text": "Created by"
+            },
+            {
+              "level": "h3",
+              "text": "Installation"
+            },
+            {
+              "level": "h3",
+              "text": "How to use"
+            },
+            {
+              "level": "h3",
+              "text": "Explore"
+            },
+            {
+              "level": "h3",
+              "text": "Build"
+            }
+          ],
+          "sections": [],
+          "ctas": [
+            "Open sidebar",
+            "Components",
+            "aayush-duhan",
+            "SearchK",
+            "Copy prompt",
+            "Copy code",
+            "View code",
+            "Components",
+            "aayush-duhan",
+            "AAYUSH duhan",
+            "Copy prompt",
+            "Copy code",
+            "View code",
+            "21st",
+            "Close sidebar",
+            "Home",
+            "Components",
+            "Templates",
+            "Agent Templates",
+            "MCP",
+            "Magic Chat",
+            "Read more",
+            "Dismiss",
+            "Read more",
+            "Dismiss",
+            "Toggle theme",
+            "Settings",
+            "Log in"
+          ],
+          "palette": [
+            "rgb(9, 9, 11)",
+            "rgb(255, 255, 255)",
+            "rgb(228, 228, 231)",
+            "rgb(115, 115, 115)",
+            "rgba(255, 255, 255, 0.8)",
+            "rgba(228, 228, 231, 0.4)",
+            "rgb(235, 235, 235)",
+            "rgb(63, 63, 70)"
+          ],
+          "layoutSignals": {
+            "hasNav": false,
+            "hasHero": false,
+            "hasPricing": false,
+            "hasTestimonials": false,
+            "hasFAQ": false,
+            "hasVideo": false,
+            "cardLikeCount": 2,
+            "imageCount": 1,
+            "buttonCount": 37,
+            "formCount": 2
+          },
+          "codeBlocks": [],
+          "codeLinks": []
+        },
+        {
+          "sourceId": "21st-community-components",
+          "url": "https://21st.dev/community/components/easemize/pixel-perfect-hero/default",
+          "status": 200,
+          "licenseStatus": "review-required",
+          "reuseGuidance": "Component discovery and UI pattern extraction. Verify each community component before copying code.",
+          "candidate": {
+            "index": 66,
+            "url": "https://21st.dev/community/components/easemize/pixel-perfect-hero/default",
+            "text": "Pixel perfect Hero",
+            "heading": "",
+            "description": "Pixel perfect Hero45",
+            "imageSrc": "https://cdn.21st.dev/cdn-cgi/image/fit=scale-down,width=3840,quality=75,format=auto/https://cdn.21st.dev/easemize/pixel-perfect-hero/default/preview.1781185553155.png",
+            "imageAlt": "Pixel perfect Hero",
+            "buttonText": [
+              "45"
+            ],
+            "tags": [],
+            "cardArea": 67448,
+            "score": 9,
+            "sourceMode": "component-gallery"
+          },
+          "screenshots": {
+            "desktop": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples/21st-community-components/pixel-perfect-hero/desktop.png",
+              "sha256": "09a5c1801f9e6ba5d538beefb9e02616733aa3b578132de867c7b9363036d415"
+            },
+            "mobile": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples/21st-community-components/pixel-perfect-hero/mobile.png",
+              "sha256": "53ec87a5d1e213ab2d6cd24d22e5a1199518ca71430c6da25d84973c1f8d3c1b"
+            }
+          },
+          "failedRequestCount": 2,
+          "title": "Pixel perfect Hero | Community Components - 21st | 21st",
+          "description": "Interactive hero section with a Canvas-based pixel ripple animation, shimmering glassmorphism header, and logo marquee. Features dynamic theme-color detection, responsive layout, and prefers-reduced-motion accessibility.",
+          "headings": [
+            {
+              "level": "h3",
+              "text": "Pixel perfect Hero"
+            },
+            {
+              "level": "h3",
+              "text": "Created by"
+            },
+            {
+              "level": "h3",
+              "text": "Installation"
+            },
+            {
+              "level": "h3",
+              "text": "How to use"
+            },
+            {
+              "level": "h3",
+              "text": "Dependencies"
+            },
+            {
+              "level": "h3",
+              "text": "Explore"
+            },
+            {
+              "level": "h3",
+              "text": "Build"
+            }
+          ],
+          "sections": [],
+          "ctas": [
+            "Open sidebar",
+            "Components",
+            "easemize",
+            "SearchK",
+            "Copy prompt",
+            "Copy code",
+            "View code",
+            "Components",
+            "easemize",
+            "Hossain Jahed",
+            "Copy prompt",
+            "Copy code",
+            "View code",
+            "lucide-react",
+            "21st",
+            "Close sidebar",
+            "Home",
+            "Components",
+            "Templates",
+            "Agent Templates",
+            "MCP",
+            "Magic Chat",
+            "Read more",
+            "Dismiss",
+            "Read more",
+            "Dismiss",
+            "Toggle theme",
+            "Settings",
+            "Log in"
+          ],
+          "palette": [
+            "rgb(9, 9, 11)",
+            "rgb(255, 255, 255)",
+            "rgb(228, 228, 231)",
+            "rgb(115, 115, 115)",
+            "rgba(255, 255, 255, 0.8)",
+            "rgba(228, 228, 231, 0.4)",
+            "rgb(235, 235, 235)",
+            "rgb(63, 63, 70)"
+          ],
+          "layoutSignals": {
+            "hasNav": false,
+            "hasHero": false,
+            "hasPricing": false,
+            "hasTestimonials": true,
+            "hasFAQ": false,
+            "hasVideo": false,
+            "cardLikeCount": 2,
+            "imageCount": 1,
+            "buttonCount": 38,
+            "formCount": 2
+          },
+          "codeBlocks": [],
+          "codeLinks": [
+            {
+              "url": "https://www.npmjs.com/package/lucide-react",
+              "text": "lucide-react"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

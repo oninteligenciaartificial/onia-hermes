@@ -1,12 +1,17 @@
-import { mkdir, writeFile } from "node:fs/promises";
+import { cp, mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
-import { renderLandingCss, renderLandingDocument } from "@onia/templates";
+import {
+  renderLandingCss,
+  renderLandingDocument,
+  renderStoreCss,
+  renderStoreDocument,
+} from "@onia/templates";
 import { loadClientProfile } from "../data/schema";
 
 export type GenerateOptions = {
   rootDir?: string;
   outDir?: string;
-  template?: "landing";
+  template?: "landing" | "store";
 };
 
 export type GenerateResult = {
@@ -26,23 +31,42 @@ export async function generateSite(
   const clientPath = path.join(rootDir, "data", "clients", `${safeSlug}.json`);
   const client = await loadClientProfile(clientPath);
 
-  if (options.template && options.template !== "landing") {
-    throw new Error(`Unsupported template "${options.template}". Available: landing.`);
+  const template = options.template ?? "landing";
+
+  if (!["landing", "store"].includes(template)) {
+    throw new Error(`Unsupported template "${template}". Available: landing, store.`);
   }
 
   await mkdir(outputDir, { recursive: true });
+  await copyClientAssets(rootDir, outputDir, safeSlug);
 
   const htmlPath = path.join(outputDir, "index.html");
   const cssPath = path.join(outputDir, "site.css");
 
-  await writeFile(htmlPath, renderLandingDocument(client), "utf8");
-  await writeFile(cssPath, renderLandingCss(client), "utf8");
+  const html = template === "store" ? renderStoreDocument(client) : renderLandingDocument(client);
+  const css = template === "store" ? renderStoreCss(client) : renderLandingCss(client);
+
+  await writeFile(htmlPath, html, "utf8");
+  await writeFile(cssPath, css, "utf8");
 
   return {
     slug: safeSlug,
     outputDir,
     files: [htmlPath, cssPath],
   };
+}
+
+async function copyClientAssets(rootDir: string, outputDir: string, slug: string): Promise<void> {
+  const sourceDir = path.join(rootDir, "data", "clients", `${slug}.assets`);
+  const targetDir = path.join(outputDir, "assets");
+
+  try {
+    await cp(sourceDir, targetDir, { recursive: true });
+  } catch (error) {
+    if (!(error instanceof Error) || !("code" in error) || error.code !== "ENOENT") {
+      throw error;
+    }
+  }
 }
 
 export function parseSlug(slug: string): string {

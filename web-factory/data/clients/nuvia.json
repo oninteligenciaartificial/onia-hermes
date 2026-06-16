@@ -1,0 +1,137 @@
+{
+  "nombre": "Nuvia",
+  "slug": "nuvia",
+  "tagline": "Protege limpia tu piel",
+  "descripcion": "Nuvia reune productos utiles para todos los dias y empieza con una rutina skincare simple: limpiar bien, proteger mejor y pedir asistencia sin vueltas.",
+  "logo": "NUVIA",
+  "logoIcon": "assets/nuvia-icon.png",
+  "logoWide": "assets/nuvia-logo-wide.png",
+  "heroVideo": "assets/nuvia-hero-video.mp4",
+  "colores": {
+    "primary": "#0F2D52",
+    "secondary": "#00A7A0",
+    "accent": "#F5B400",
+    "bg": "#FFFBF4",
+    "fg": "#0F2D52"
+  },
+  "tipografia": {
+    "heading": "SF Pro Display",
+    "body": "SF Pro Text"
+  },
+  "contacto": {
+    "email": "",
+    "tel": "",
+    "whatsapp": "",
+    "direccion": ""
+  },
+  "redes": {
+    "ig": "",
+    "fb": "",
+    "linkedin": "",
+    "x": ""
+  },
+  "servicios": [
+    {
+      "titulo": "Skincare real primero",
+      "desc": "ISDIN y SVR abren el catalogo con productos de cuidado diario claros y faciles de pedir.",
+      "icono": "sparkles"
+    },
+    {
+      "titulo": "Compra asistida",
+      "desc": "Cada boton queda preparado para enviar un mensaje prellenado cuando el WhatsApp este configurado.",
+      "icono": "message"
+    },
+    {
+      "titulo": "Multiproducto en crecimiento",
+      "desc": "La estructura queda lista para sumar tecnologia, hogar, moda, accesorios y regalos sin rehacer la web.",
+      "icono": "grid"
+    }
+  ],
+  "categorias": [
+    "Belleza",
+    "Proteccion solar",
+    "Limpieza facial",
+    "Tecnologia",
+    "Hogar",
+    "Moda",
+    "Accesorios",
+    "Regalos"
+  ],
+  "productos": [
+    {
+      "titulo": "ISDIN Fusion Water Magic SPF 50",
+      "categoria": "Proteccion solar",
+      "precio": "Consultar precio",
+      "desc": "Fotoprotector facial diario de textura ligera, acabado no graso y proteccion alta para acompanar la rutina urbana.",
+      "etiqueta": "SPF 50 diario",
+      "imagen": "assets/isdin-fusion-water.webp",
+      "imagenAlt": "ISDIN Fusion Water Magic SPF 50 en envase azul claro",
+      "marca": "ISDIN",
+      "tamano": "50 ml",
+      "uso": "Paso 2: proteger",
+      "beneficios": [
+        "Alta proteccion SPF 50",
+        "Textura ligera de uso diario",
+        "Acabado no graso",
+        "No comedogenico"
+      ],
+      "idealPara": [
+        "Uso diario",
+        "Rutina de manana",
+        "Proteccion urbana"
+      ],
+      "ingredientesClave": [
+        "Hyaluronic Acid",
+        "Vitamin E",
+        "Mediterranean Algae Extract"
+      ],
+      "modoUso": "Aplicar por la manana como ultimo paso de la rutina y reaplicar segun exposicion solar.",
+      "ordenRutina": 2
+    },
+    {
+      "titulo": "SVR Sebiaclear Gel Moussant",
+      "categoria": "Limpieza facial",
+      "precio": "Consultar precio",
+      "desc": "Gel limpiador para rostro y cuerpo, pensado para piel mixta, grasa, sensible o con tendencia acneica.",
+      "etiqueta": "Piel grasa",
+      "imagen": "assets/svr-sebiaclear-200ml.webp",
+      "imagenAlt": "SVR Sebiaclear Gel Moussant en tubo verde de 200 ml",
+      "marca": "SVR",
+      "tamano": "200 ml",
+      "uso": "Paso 1: limpiar",
+      "beneficios": [
+        "Sin jabon",
+        "Sin sulfatos",
+        "Ayuda a purificar poros",
+        "Limpieza sin resecar"
+      ],
+      "idealPara": [
+        "Piel mixta",
+        "Piel grasa",
+        "Piel sensible con tendencia acneica"
+      ],
+      "ingredientesClave": [
+        "Salicylic Acid",
+        "Gluconolactone",
+        "Glycerin"
+      ],
+      "modoUso": "Usar sobre piel humeda, masajear suavemente y enjuagar. Evitar contacto directo con los ojos.",
+      "ordenRutina": 1
+    }
+  ],
+  "beneficios": [
+    "Marcas dermocosmeticas",
+    "Rutina simple",
+    "Consulta rapida",
+    "Descuentos por suscripcion"
+  ],
+  "cta": {
+    "texto": "Comprar skincare",
+    "url": "#catalogo"
+  },
+  "seo": {
+    "title": "Nuvia | Skincare y tienda multiproducto",
+    "description": "Nuvia empieza con ISDIN y SVR: skincare diario, compra asistida y catalogo multiproducto en crecimiento.",
+    "ogImage": ""
+  }
+}

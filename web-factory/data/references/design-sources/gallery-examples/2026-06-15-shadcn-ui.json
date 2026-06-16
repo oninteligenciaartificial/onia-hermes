@@ -1,0 +1,525 @@
+{
+  "capturedAt": "2026-06-15T21:11:25.375Z",
+  "cacheRoot": "C:/Users/PC/.codex/design-stack/gallery-examples",
+  "policy": "Gallery screenshots and structure are reference artifacts. Copy/adapt code only when licenseStatus is compatible and the linked/local repo license has been reviewed.",
+  "configPath": "C:/dev/proyectos/onia-hermes/web-factory/data/references/design-sources/gallery-reference-sources.json",
+  "results": [
+    {
+      "id": "shadcn-ui",
+      "name": "shadcn/ui",
+      "url": "https://ui.shadcn.com/blocks",
+      "mode": "block-gallery",
+      "usage": "Base component architecture and accessible UI primitives. Prefer the locally cached MIT repository for code.",
+      "licenseStatus": "mit-repo-available",
+      "status": 200,
+      "failedRequestCount": 0,
+      "rawCandidateCount": 8,
+      "selectedCandidateCount": 3,
+      "detailedExampleCount": 3,
+      "candidates": [
+        {
+          "index": 32,
+          "url": "https://ui.shadcn.com/blocks/sidebar",
+          "text": "Browse more blocks",
+          "heading": "",
+          "description": "Browse more blocks",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [],
+          "tags": [],
+          "cardArea": 5993,
+          "score": 5,
+          "sourceMode": "block-gallery"
+        },
+        {
+          "index": 15,
+          "url": "https://ui.shadcn.com/blocks/signup",
+          "text": "Signup",
+          "heading": "",
+          "description": "Signup",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [],
+          "tags": [],
+          "cardArea": 2370,
+          "score": 5,
+          "sourceMode": "block-gallery"
+        },
+        {
+          "index": 14,
+          "url": "https://ui.shadcn.com/blocks/login",
+          "text": "Login",
+          "heading": "",
+          "description": "Login",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [],
+          "tags": [],
+          "cardArea": 2049,
+          "score": 4,
+          "sourceMode": "block-gallery"
+        }
+      ],
+      "screenshot": {
+        "path": "C:/Users/PC/.codex/design-stack/gallery-examples/shadcn-ui/gallery.png",
+        "sha256": "e9a38dadc3057c1c36eab6c1899f505ef8618b60f4721831c529bb6179ecdc7d"
+      },
+      "examples": [
+        {
+          "sourceId": "shadcn-ui",
+          "url": "https://ui.shadcn.com/blocks/sidebar",
+          "status": 200,
+          "licenseStatus": "mit-repo-available",
+          "reuseGuidance": "Base component architecture and accessible UI primitives. Prefer the locally cached MIT repository for code.",
+          "candidate": {
+            "index": 32,
+            "url": "https://ui.shadcn.com/blocks/sidebar",
+            "text": "Browse more blocks",
+            "heading": "",
+            "description": "Browse more blocks",
+            "imageSrc": "",
+            "imageAlt": "",
+            "buttonText": [],
+            "tags": [],
+            "cardArea": 5993,
+            "score": 5,
+            "sourceMode": "block-gallery"
+          },
+          "screenshots": {
+            "desktop": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples/shadcn-ui/browse-more-blocks/desktop.png",
+              "sha256": "5010e06f6eae8c7e51c59ba8985a905e0a912bce69765176de2a2e12cbe8ae7c"
+            },
+            "mobile": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples/shadcn-ui/browse-more-blocks/mobile.png",
+              "sha256": "f1fbacd299296640daf9dff80580aa674155505e29f8c8cc225b15d80f400832"
+            }
+          },
+          "failedRequestCount": 0,
+          "title": "Building Blocks for the Web - shadcn/ui",
+          "description": "Clean, modern building blocks. Copy and paste into your apps. Works with all React frameworks. Open Source. Free forever.",
+          "headings": [
+            {
+              "level": "h1",
+              "text": "Building Blocks for the Web"
+            }
+          ],
+          "sections": [
+            {
+              "index": 0,
+              "heading": "Building Blocks for the Web",
+              "textSample": "Introducing GitHub Registries Building Blocks for the WebClean, modern building blocks. Copy and paste into your apps. Works with all React frameworks. Open Source. Free forever.Browse BlocksView Components",
+              "imageCount": 1,
+              "buttonCount": 3
+            },
+            {
+              "index": 1,
+              "heading": "",
+              "textSample": "PreviewCodeA simple sidebar with navigation grouped by sectionOpen in New TabRefresh Previewnpx shadcn add sidebar-01Open in Filesappdashboardpage.tsxcomponentsapp-sidebar.tsxsearch-form.tsxversion-switcher.tsxapp/dashboard/page.tsximport { AppSidebar } from \"@/components/app-sidebar\" import { Breadcrumb, BreadcrumbIte",
+              "imageCount": 416,
+              "buttonCount": 296
+            },
+            {
+              "index": 2,
+              "heading": "",
+              "textSample": "Built by shadcn at Vercel. The source code is available on GitHub.",
+              "imageCount": 0,
+              "buttonCount": 3
+            }
+          ],
+          "ctas": [
+            "Toggle MenuMenu",
+            "Home",
+            "Docs",
+            "Components",
+            "Blocks",
+            "Charts",
+            "Directory",
+            "Create",
+            "Search documentation...Search...",
+            "117k",
+            "Toggle theme",
+            "Get Code",
+            "New",
+            "Introducing GitHub Registries",
+            "Browse Blocks",
+            "View Components",
+            "Featured",
+            "Sidebar",
+            "Login",
+            "Signup",
+            "Browse all blocks",
+            "Preview",
+            "Code",
+            "A simple sidebar with navigation grouped by section",
+            "Open in New Tab",
+            "Refresh Preview",
+            "npx shadcn add sidebar-01",
+            "Open in",
+            "app",
+            "dashboard",
+            "page.tsx",
+            "components",
+            "app-sidebar.tsx",
+            "search-form.tsx",
+            "version-switcher.tsx",
+            "Preview",
+            "Code",
+            "A sidebar with collapsible sections",
+            "Open in New Tab",
+            "Refresh Preview",
+            "npx shadcn add sidebar-02",
+            "Open in",
+            "app",
+            "dashboard",
+            "page.tsx",
+            "components",
+            "app-sidebar.tsx",
+            "search-form.tsx",
+            "version-switcher.tsx",
+            "Preview"
+          ],
+          "palette": [
+            "rgb(0, 0, 0)",
+            "lab(90.952 0 -0.0000119209)",
+            "lab(100 0 0)",
+            "lab(0 0 0)",
+            "lab(96.52 -0.0000298023 0.0000119209)",
+            "lab(98.26 0 0)",
+            "oklab(0.921998 -0.00000908971 0.0000215769 / 0.5)",
+            "lab(7.78201 -0.0000149012 0)",
+            "lab(48.496 0 0)",
+            "oklab(0 0 0 / 0.6)",
+            "oklab(0.555999 -0.00000530481 0.000012964 / 0.15)"
+          ],
+          "layoutSignals": {
+            "hasNav": true,
+            "hasHero": true,
+            "hasPricing": false,
+            "hasTestimonials": true,
+            "hasFAQ": false,
+            "hasVideo": false,
+            "cardLikeCount": 1,
+            "imageCount": 32,
+            "buttonCount": 320,
+            "formCount": 0
+          },
+          "codeBlocks": [],
+          "codeLinks": [
+            {
+              "url": "https://github.com/shadcn-ui/ui",
+              "text": "117k"
+            },
+            {
+              "url": "https://github.com/shadcn-ui/ui",
+              "text": "GitHub"
+            }
+          ]
+        },
+        {
+          "sourceId": "shadcn-ui",
+          "url": "https://ui.shadcn.com/blocks/signup",
+          "status": 200,
+          "licenseStatus": "mit-repo-available",
+          "reuseGuidance": "Base component architecture and accessible UI primitives. Prefer the locally cached MIT repository for code.",
+          "candidate": {
+            "index": 15,
+            "url": "https://ui.shadcn.com/blocks/signup",
+            "text": "Signup",
+            "heading": "",
+            "description": "Signup",
+            "imageSrc": "",
+            "imageAlt": "",
+            "buttonText": [],
+            "tags": [],
+            "cardArea": 2370,
+            "score": 5,
+            "sourceMode": "block-gallery"
+          },
+          "screenshots": {
+            "desktop": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples/shadcn-ui/signup/desktop.png",
+              "sha256": "6503e091526dcdc8b43b64ab74dae943b73534b855bb8b73d03c7e1ecb8e11a7"
+            },
+            "mobile": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples/shadcn-ui/signup/mobile.png",
+              "sha256": "6cf9030bcfdd675973de991c96e35c30575cf3e5ec9139a37fe084e83933ab7d"
+            }
+          },
+          "failedRequestCount": 0,
+          "title": "Building Blocks for the Web - shadcn/ui",
+          "description": "Clean, modern building blocks. Copy and paste into your apps. Works with all React frameworks. Open Source. Free forever.",
+          "headings": [
+            {
+              "level": "h1",
+              "text": "Building Blocks for the Web"
+            }
+          ],
+          "sections": [
+            {
+              "index": 0,
+              "heading": "Building Blocks for the Web",
+              "textSample": "Introducing GitHub Registries Building Blocks for the WebClean, modern building blocks. Copy and paste into your apps. Works with all React frameworks. Open Source. Free forever.Browse BlocksView Components",
+              "imageCount": 1,
+              "buttonCount": 3
+            },
+            {
+              "index": 1,
+              "heading": "",
+              "textSample": "PreviewCodeA simple signup formOpen in New TabRefresh Previewnpx shadcn add signup-01Open in Filesappsignuppage.tsxcomponentssignup-form.tsxapp/signup/page.tsximport { SignupForm } from \"@/components/signup-form\" export default function Page() { return ( <div className=\"flex min-h-svh w-full items-center justify-center",
+              "imageCount": 105,
+              "buttonCount": 80
+            },
+            {
+              "index": 2,
+              "heading": "",
+              "textSample": "Built by shadcn at Vercel. The source code is available on GitHub.",
+              "imageCount": 0,
+              "buttonCount": 3
+            }
+          ],
+          "ctas": [
+            "Toggle MenuMenu",
+            "Home",
+            "Docs",
+            "Components",
+            "Blocks",
+            "Charts",
+            "Directory",
+            "Create",
+            "Search documentation...Search...",
+            "117k",
+            "Toggle theme",
+            "Get Code",
+            "New",
+            "Introducing GitHub Registries",
+            "Browse Blocks",
+            "View Components",
+            "Featured",
+            "Sidebar",
+            "Login",
+            "Signup",
+            "Browse all blocks",
+            "Preview",
+            "Code",
+            "A simple signup form",
+            "Open in New Tab",
+            "Refresh Preview",
+            "npx shadcn add signup-01",
+            "Open in",
+            "app",
+            "signup",
+            "page.tsx",
+            "components",
+            "signup-form.tsx",
+            "Preview",
+            "Code",
+            "A two column signup page with a cover image",
+            "Open in New Tab",
+            "Refresh Preview",
+            "npx shadcn add signup-02",
+            "Open in",
+            "app",
+            "signup",
+            "page.tsx",
+            "components",
+            "signup-form.tsx",
+            "Preview",
+            "Code",
+            "A signup page with a muted background color",
+            "Open in New Tab",
+            "Refresh Preview"
+          ],
+          "palette": [
+            "rgb(0, 0, 0)",
+            "lab(90.952 0 -0.0000119209)",
+            "lab(100 0 0)",
+            "lab(0 0 0)",
+            "lab(96.52 -0.0000298023 0.0000119209)",
+            "lab(98.26 0 0)",
+            "oklab(0.921998 -0.00000908971 0.0000215769 / 0.5)",
+            "lab(7.78201 -0.0000149012 0)",
+            "lab(48.496 0 0)",
+            "oklab(0 0 0 / 0.6)",
+            "oklab(0.555999 -0.00000530481 0.000012964 / 0.15)"
+          ],
+          "layoutSignals": {
+            "hasNav": true,
+            "hasHero": true,
+            "hasPricing": false,
+            "hasTestimonials": true,
+            "hasFAQ": false,
+            "hasVideo": false,
+            "cardLikeCount": 1,
+            "imageCount": 10,
+            "buttonCount": 104,
+            "formCount": 0
+          },
+          "codeBlocks": [],
+          "codeLinks": [
+            {
+              "url": "https://github.com/shadcn-ui/ui",
+              "text": "117k"
+            },
+            {
+              "url": "https://github.com/shadcn-ui/ui",
+              "text": "GitHub"
+            }
+          ]
+        },
+        {
+          "sourceId": "shadcn-ui",
+          "url": "https://ui.shadcn.com/blocks/login",
+          "status": 200,
+          "licenseStatus": "mit-repo-available",
+          "reuseGuidance": "Base component architecture and accessible UI primitives. Prefer the locally cached MIT repository for code.",
+          "candidate": {
+            "index": 14,
+            "url": "https://ui.shadcn.com/blocks/login",
+            "text": "Login",
+            "heading": "",
+            "description": "Login",
+            "imageSrc": "",
+            "imageAlt": "",
+            "buttonText": [],
+            "tags": [],
+            "cardArea": 2049,
+            "score": 4,
+            "sourceMode": "block-gallery"
+          },
+          "screenshots": {
+            "desktop": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples/shadcn-ui/login/desktop.png",
+              "sha256": "69165b377e8c9d4a79dc621c81dd3e0505fd7378e06759dbc74eee9f88b56067"
+            },
+            "mobile": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples/shadcn-ui/login/mobile.png",
+              "sha256": "44b13c2162135c7d9692b8f487a8a8b0a5dcc3bea2466d31ef8c544f111594f4"
+            }
+          },
+          "failedRequestCount": 0,
+          "title": "Building Blocks for the Web - shadcn/ui",
+          "description": "Clean, modern building blocks. Copy and paste into your apps. Works with all React frameworks. Open Source. Free forever.",
+          "headings": [
+            {
+              "level": "h1",
+              "text": "Building Blocks for the Web"
+            }
+          ],
+          "sections": [
+            {
+              "index": 0,
+              "heading": "Building Blocks for the Web",
+              "textSample": "Introducing GitHub Registries Building Blocks for the WebClean, modern building blocks. Copy and paste into your apps. Works with all React frameworks. Open Source. Free forever.Browse BlocksView Components",
+              "imageCount": 1,
+              "buttonCount": 3
+            },
+            {
+              "index": 1,
+              "heading": "",
+              "textSample": "PreviewCodeA simple login formOpen in New TabRefresh Previewnpx shadcn add login-01Open in Filesapploginpage.tsxcomponentslogin-form.tsxapp/login/page.tsximport { LoginForm } from \"@/components/login-form\" export default function Page() { return ( <div className=\"flex min-h-svh w-full items-center justify-center p-6 md",
+              "imageCount": 105,
+              "buttonCount": 80
+            },
+            {
+              "index": 2,
+              "heading": "",
+              "textSample": "Built by shadcn at Vercel. The source code is available on GitHub.",
+              "imageCount": 0,
+              "buttonCount": 3
+            }
+          ],
+          "ctas": [
+            "Toggle MenuMenu",
+            "Home",
+            "Docs",
+            "Components",
+            "Blocks",
+            "Charts",
+            "Directory",
+            "Create",
+            "Search documentation...Search...",
+            "117k",
+            "Toggle theme",
+            "Get Code",
+            "New",
+            "Introducing GitHub Registries",
+            "Browse Blocks",
+            "View Components",
+            "Featured",
+            "Sidebar",
+            "Login",
+            "Signup",
+            "Browse all blocks",
+            "Preview",
+            "Code",
+            "A simple login form",
+            "Open in New Tab",
+            "Refresh Preview",
+            "npx shadcn add login-01",
+            "Open in",
+            "app",
+            "login",
+            "page.tsx",
+            "components",
+            "login-form.tsx",
+            "Preview",
+            "Code",
+            "A two column login page with a cover image",
+            "Open in New Tab",
+            "Refresh Preview",
+            "npx shadcn add login-02",
+            "Open in",
+            "app",
+            "login",
+            "page.tsx",
+            "components",
+            "login-form.tsx",
+            "Preview",
+            "Code",
+            "A login page with a muted background color",
+            "Open in New Tab",
+            "Refresh Preview"
+          ],
+          "palette": [
+            "rgb(0, 0, 0)",
+            "lab(90.952 0 -0.0000119209)",
+            "lab(100 0 0)",
+            "lab(0 0 0)",
+            "lab(96.52 -0.0000298023 0.0000119209)",
+            "lab(98.26 0 0)",
+            "oklab(0.921998 -0.00000908971 0.0000215769 / 0.5)",
+            "lab(7.78201 -0.0000149012 0)",
+            "lab(48.496 0 0)",
+            "oklab(0 0 0 / 0.6)",
+            "oklab(0.555999 -0.00000530481 0.000012964 / 0.15)"
+          ],
+          "layoutSignals": {
+            "hasNav": true,
+            "hasHero": true,
+            "hasPricing": false,
+            "hasTestimonials": true,
+            "hasFAQ": false,
+            "hasVideo": false,
+            "cardLikeCount": 1,
+            "imageCount": 10,
+            "buttonCount": 104,
+            "formCount": 0
+          },
+          "codeBlocks": [],
+          "codeLinks": [
+            {
+              "url": "https://github.com/shadcn-ui/ui",
+              "text": "117k"
+            },
+            {
+              "url": "https://github.com/shadcn-ui/ui",
+              "text": "GitHub"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

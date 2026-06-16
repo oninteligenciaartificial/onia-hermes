@@ -1,0 +1,288 @@
+{
+  "capturedAt": "2026-06-15",
+  "method": "Playwright DOM scrape of public pages plus conservative license/use classification. Summaries are structural; do not copy third-party code, full text, or brand identity.",
+  "browserRuntime": "Codex node_repl Playwright with local Chrome executable",
+  "sources": [
+    {
+      "url": "https://21st.dev/community/components",
+      "status": 200,
+      "role": "component-discovery",
+      "usePolicy": "reference-and-curated-import-after-license-review",
+      "observedSections": [
+        "Marketing Blocks",
+        "UI Components",
+        "Newest",
+        "Popular",
+        "Shaders",
+        "Heros",
+        "Features",
+        "AI Chat Components",
+        "Calls to Action",
+        "Buttons",
+        "Testimonials",
+        "Pricing Sections",
+        "Text Components"
+      ],
+      "designSignals": [
+        "component marketplace taxonomy",
+        "category-first navigation",
+        "neutral black/white palette",
+        "copy/remix workflow"
+      ],
+      "webFactoryUse": [
+        "Use taxonomy to classify future blocks.",
+        "Use as a discovery source for heroes, pricing, testimonials and CTAs.",
+        "Review each component license before client use."
+      ]
+    },
+    {
+      "url": "https://dribbble.com/shots/27129126-Axion-Futuristic-Electric-Car-Landing-Page-Website",
+      "status": 202,
+      "role": "visual-inspiration-only",
+      "usePolicy": "do-not-copy-layout-or-assets",
+      "observedSections": [
+        "Axion futuristic electric car landing page",
+        "creator/profile area",
+        "shot palette with dark, white, steel, coral-red and copper tones"
+      ],
+      "designSignals": [
+        "futuristic automotive mood",
+        "dark cinematic product hero",
+        "strong palette extraction",
+        "premium motion/product-story direction"
+      ],
+      "webFactoryUse": [
+        "Use only as structural/mood reference for high-end product hero composition.",
+        "Do not reuse imagery, exact layout, copy or brand identity."
+      ]
+    },
+    {
+      "url": "https://fontpair.co/",
+      "status": 200,
+      "role": "typography-and-brand-kit-reference",
+      "usePolicy": "reference-google-font-pairing-patterns-only",
+      "observedSections": [
+        "Hero: brand kit generation promise",
+        "Start with a brand kit",
+        "Logo design CTA",
+        "Explore font pairings",
+        "DESIGN.md design-system generation",
+        "Chrome extension inspiration capture",
+        "Pricing",
+        "Final account CTA"
+      ],
+      "designSignals": [
+        "font pairing as productized design system",
+        "palette/token cards",
+        "brand-kit previews",
+        "clear typographic contrast examples"
+      ],
+      "webFactoryUse": [
+        "Use for choosing heading/body pairings and documenting typography rationale.",
+        "Prefer Google Fonts or locally licensed fonts.",
+        "Add generated typography choices to client context files."
+      ]
+    },
+    {
+      "url": "https://motion.dev/docs/quick-start",
+      "status": 200,
+      "role": "motion-standards-reference",
+      "usePolicy": "official-docs-reference",
+      "observedSections": [
+        "Install",
+        "What can be animated?",
+        "Customising animations",
+        "Stagger animations",
+        "Development tools",
+        "Related topics"
+      ],
+      "designSignals": [
+        "documentation IA with anchor navigation",
+        "live examples",
+        "stagger and spring animation concepts",
+        "developer-friendly code path"
+      ],
+      "webFactoryUse": [
+        "Use to define motion patterns and constraints.",
+        "Keep client websites on opacity/transform, reduced-motion safe defaults unless a template explicitly needs richer motion."
+      ]
+    },
+    {
+      "url": "https://www.10x.app/",
+      "status": 200,
+      "role": "modern-product-landing-reference",
+      "usePolicy": "reference-structure-only",
+      "observedSections": [
+        "Hero: Shopify for mobile apps",
+        "Trusted by founders strip",
+        "Features",
+        "Fits right into your stack",
+        "Pricing",
+        "FAQs",
+        "Final CTA"
+      ],
+      "designSignals": [
+        "dark app-builder hero",
+        "short feature cards",
+        "pricing as conversion core",
+        "FAQ before final CTA",
+        "download-first CTA"
+      ],
+      "webFactoryUse": [
+        "Useful for SaaS/app landing templates.",
+        "For ecommerce, borrow compact feature/pricing/FAQ rhythm, not the brand visuals."
+      ]
+    },
+    {
+      "url": "https://motion-primitives.com/",
+      "status": 200,
+      "role": "motion-component-reference",
+      "usePolicy": "open-source-reference-with-repo-license-check",
+      "observedSections": [
+        "Hero: animated interfaces faster",
+        "Demo motion components",
+        "Scroll prompt",
+        "AI/demo component examples",
+        "Text scramble",
+        "Tabs/time ranges"
+      ],
+      "designSignals": [
+        "minimal hero with strong value prop",
+        "interactive motion demos as content",
+        "copy-paste/open-source positioning",
+        "neutral shadcn-like palette"
+      ],
+      "webFactoryUse": [
+        "Use for microinteraction inspiration and reusable motion taxonomy.",
+        "Prefer subtle reveal, tabs, disclosure and hover patterns for generated sites."
+      ]
+    },
+    {
+      "url": "https://ui.watermelon.sh/",
+      "status": 200,
+      "role": "component-and-block-taxonomy-reference",
+      "usePolicy": "reference-until-license-confirmed",
+      "observedSections": [
+        "Featured Components",
+        "Featured Blocks",
+        "Announcement blocks",
+        "Auth blocks",
+        "Blog blocks",
+        "Career blocks",
+        "Contact blocks",
+        "CTA blocks"
+      ],
+      "designSignals": [
+        "registry taxonomy",
+        "animated component categories",
+        "green accent over neutral shadcn-like base",
+        "search-first component browsing"
+      ],
+      "webFactoryUse": [
+        "Use category names and discovery workflow.",
+        "Do not import code until license is confirmed."
+      ]
+    },
+    {
+      "url": "https://www.lapa.ninja/",
+      "status": 200,
+      "role": "landing-page-inspiration-index",
+      "usePolicy": "inspiration-and-category-research-only",
+      "observedSections": [
+        "Hero: landing page inspiration",
+        "Latest Web Design Inspiration",
+        "Best OG Images",
+        "Responsive Website Templates",
+        "Learn Design From The Best",
+        "Free Design Books",
+        "Newsletter/inspiration"
+      ],
+      "designSignals": [
+        "large category taxonomy",
+        "real website reference library",
+        "SaaS/ecommerce/AI/category filters",
+        "template and learning resource mix"
+      ],
+      "webFactoryUse": [
+        "Use for trend/category scanning and mood boards.",
+        "Do not scrape or copy third-party landing pages; store only principles and links."
+      ]
+    },
+    {
+      "url": "https://www.componentry.fun/",
+      "status": 200,
+      "role": "animated-react-component-reference",
+      "usePolicy": "open-source-claimed-but-license-check-required",
+      "observedSections": [
+        "Hero: components with motion",
+        "Docs/MCP/GitHub navigation",
+        "Community proof/testimonials"
+      ],
+      "designSignals": [
+        "monochrome premium component-library aesthetic",
+        "motion as core product value",
+        "community-proof section",
+        "docs-first CTA"
+      ],
+      "webFactoryUse": [
+        "Use for motion language and docs/component library structure.",
+        "Check GitHub license before copying implementation."
+      ]
+    },
+    {
+      "url": "https://ui.shadcn.com/",
+      "status": 200,
+      "role": "canonical-component-system",
+      "usePolicy": "approved-base-source",
+      "observedSections": [
+        "Hero: foundation for design system",
+        "Docs",
+        "Components",
+        "Blocks",
+        "Charts",
+        "Directory",
+        "Create",
+        "Example dashboard/component composition"
+      ],
+      "designSignals": [
+        "copy-customize-own positioning",
+        "neutral token-first system",
+        "component examples embedded as hero proof",
+        "open-source/open-code message"
+      ],
+      "webFactoryUse": [
+        "Default component architecture reference.",
+        "Use accessible composition patterns and token discipline."
+      ]
+    },
+    {
+      "url": "https://efferd.com/blocks",
+      "status": 200,
+      "role": "shadcn-block-library",
+      "usePolicy": "curated-import-after-access-license-check",
+      "observedSections": [
+        "Explore beautiful shadcn blocks",
+        "Marketing: Auth, Blog, Contact, CTA, FAQ, Features, Footer, Header, Hero, Gallery, Integrations, Logo Cloud, Pricing, Testimonials",
+        "App/Dashboard: App Shell, Dashboard"
+      ],
+      "designSignals": [
+        "block taxonomy by business purpose",
+        "marketing/app split",
+        "count-based category cards",
+        "shadcn-compatible positioning"
+      ],
+      "webFactoryUse": [
+        "Use as approved discovery source already listed in SOURCES.md.",
+        "Retokenize all imported blocks and review responsive/accessibility before client use."
+      ]
+    }
+  ],
+  "globalDirectives": [
+    "Never copy full third-party pages; extract section logic, component taxonomy, typography and motion principles.",
+    "Store visual references as JSON plus concise client context notes.",
+    "For generated ecommerce pages, prefer fewer sections: video/product hero, product selection, trust/routine/decision support, subscription/contact, FAQ, final CTA.",
+    "Use shadcn/ui as the base implementation model; use 21st, Efferd, Watermelon and Componentry as discovery sources only after license review.",
+    "Use Motion and Motion Primitives for animation vocabulary; keep Web Factory defaults reduced-motion safe.",
+    "Use Fontpair for type pairing decisions, then record chosen fonts and rationale in client context."
+  ]
+}

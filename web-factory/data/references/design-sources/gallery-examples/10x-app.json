@@ -1,0 +1,312 @@
+{
+  "capturedAt": "2026-06-15T21:57:34.517Z",
+  "cacheRoot": "C:/Users/PC/.codex/design-stack/gallery-examples-full",
+  "policy": "Gallery screenshots and structure are reference artifacts. Copy/adapt code only when licenseStatus is compatible and the linked/local repo license has been reviewed.",
+  "configPath": "data/references/design-sources/gallery-reference-sources.json",
+  "results": [
+    {
+      "id": "10x-app",
+      "name": "10x App",
+      "url": "https://www.10x.app/",
+      "mode": "single-product-study",
+      "usage": "Product and interaction study. The cached repo uses PolyForm Noncommercial, so do not use its code in client/commercial work.",
+      "licenseStatus": "noncommercial-code-study-only",
+      "status": 200,
+      "failedRequestCount": 6,
+      "rawCandidateCount": 1,
+      "selectedCandidateCount": 1,
+      "detailedExampleCount": 1,
+      "candidates": [
+        {
+          "url": "https://www.10x.app/",
+          "text": "10x App",
+          "heading": "10x App",
+          "description": "Product and interaction study. The cached repo uses PolyForm Noncommercial, so do not use its code in client/commercial work.",
+          "score": 10,
+          "cardArea": 0
+        }
+      ],
+      "screenshot": {
+        "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/10x-app/gallery.png",
+        "sha256": "0e1427cdd1d85c451255eee76ca34657a89e185d93020ee08a047eb594e4794e",
+        "mode": "full-page"
+      },
+      "screenshotQuality": {
+        "viewport": {
+          "width": 1440,
+          "height": 1000
+        },
+        "textLength": 2799,
+        "mediaCount": 37,
+        "codeCount": 0,
+        "headingCount": 6,
+        "usefulElementCount": 31,
+        "visibleAreaRatio": 3.018,
+        "isLikelySparse": false,
+        "visibleSamples": [
+          "10x",
+          "PricingPricing",
+          "ApplyApply",
+          "TeamTeam",
+          "Download",
+          "ShopifyformobileappsBuild, launch and market with AI.Download macOSTrusted by the founders ofFeaturesEverything you need",
+          "ShopifyformobileappsBuild, launch and market with AI.Download macOS",
+          "Shopifyformobileapps"
+        ]
+      },
+      "examples": [
+        {
+          "sourceId": "10x-app",
+          "url": "https://www.10x.app/",
+          "status": 200,
+          "licenseStatus": "noncommercial-code-study-only",
+          "reuseGuidance": "Product and interaction study. The cached repo uses PolyForm Noncommercial, so do not use its code in client/commercial work.",
+          "candidate": {
+            "url": "https://www.10x.app/",
+            "text": "10x App",
+            "heading": "10x App",
+            "description": "Product and interaction study. The cached repo uses PolyForm Noncommercial, so do not use its code in client/commercial work.",
+            "score": 10,
+            "cardArea": 0
+          },
+          "screenshots": {
+            "desktop": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/10x-app/10x-app/desktop.png",
+              "sha256": "954866db6b09a65a62dd445a7264cb4acecbe97d131feb8fe4df1358689e08ac",
+              "mode": "viewport"
+            },
+            "mobile": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/10x-app/10x-app/mobile.png",
+              "sha256": "52fabf63a2f00a49a696bb61359afc9b0315e4d7e006822a5aec8b4ba76f5dbd",
+              "mode": "viewport"
+            }
+          },
+          "screenshotQuality": {
+            "desktop": {
+              "viewport": {
+                "width": 1440,
+                "height": 1000
+              },
+              "textLength": 2799,
+              "mediaCount": 37,
+              "codeCount": 0,
+              "headingCount": 6,
+              "usefulElementCount": 31,
+              "visibleAreaRatio": 3.018,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "10x",
+                "PricingPricing",
+                "ApplyApply",
+                "TeamTeam",
+                "Download",
+                "ShopifyformobileappsBuild, launch and market with AI.Download macOSTrusted by the founders ofFeaturesEverything you need",
+                "ShopifyformobileappsBuild, launch and market with AI.Download macOS",
+                "Shopifyformobileapps"
+              ]
+            },
+            "mobile": {
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "textLength": 2805,
+              "mediaCount": 37,
+              "codeCount": 0,
+              "headingCount": 6,
+              "usefulElementCount": 33,
+              "visibleAreaRatio": 3.332,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "10x",
+                "Pricing",
+                "Apply",
+                "Team",
+                "GitHub",
+                "Discord",
+                "Download macOS",
+                "ShopifyformobileappsBuild, launch and market with AI.Download macOSTrusted by the founders ofFeaturesEverything you need"
+              ]
+            }
+          },
+          "qualityWarnings": [],
+          "failedRequestCount": 6,
+          "title": "10x - App Builder",
+          "description": "10x is an AI-powered iOS app builder for macOS. Describe the app you want, and 10x generates SwiftUI code, an Xcode project, and a simulator preview.",
+          "headings": [
+            {
+              "level": "h1",
+              "text": "Shopifyformobileapps"
+            },
+            {
+              "level": "h2",
+              "text": "Features"
+            },
+            {
+              "level": "h2",
+              "text": "Fits right into your stack"
+            },
+            {
+              "level": "h2",
+              "text": "Pricing"
+            },
+            {
+              "level": "h2",
+              "text": "FAQs"
+            },
+            {
+              "level": "h2",
+              "text": "Build 10x better.Ship 10x faster."
+            }
+          ],
+          "sections": [
+            {
+              "index": 0,
+              "heading": "Shopifyformobileapps",
+              "textSample": "ShopifyformobileappsBuild, launch and market with AI.Download macOS",
+              "imageCount": 2,
+              "buttonCount": 1
+            },
+            {
+              "index": 1,
+              "heading": "",
+              "textSample": "Trusted by the founders of",
+              "imageCount": 6,
+              "buttonCount": 6
+            },
+            {
+              "index": 2,
+              "heading": "Features",
+              "textSample": "FeaturesEverything you need to go from idea to shipped app.One shot any appEvery app compiles to native Swift with screens that feel production-ready from the first pass.No webviews, no wrappers, no compromise on performance or platform feel.Ship to the App Store instantlyGo from idea to App Store submission in minutes",
+              "imageCount": 4,
+              "buttonCount": 3
+            },
+            {
+              "index": 3,
+              "heading": "Fits right into your stack",
+              "textSample": "Fits right into your stackConnect your stack and let AI handle the heavy lifting while you focus on building.",
+              "imageCount": 4,
+              "buttonCount": 3
+            },
+            {
+              "index": 4,
+              "heading": "Pricing",
+              "textSample": "PricingStart building for free — upgrade when you need more.Free$0/foreverGet started$5 in creditsPlusPopular$20/monthGet started30 intro credits, then 20/monthMax$200/monthGet started300 intro credits, then 200/monthUsage-based billing with monthly credits and a configurable spend cap.",
+              "imageCount": 6,
+              "buttonCount": 3
+            },
+            {
+              "index": 5,
+              "heading": "FAQs",
+              "textSample": "FAQsEverything you need to know about building with 10x.What is 10x?10x is an open-source AI app builder that lets you generate, edit, and ship real mobile apps using SwiftUI—directly on your device.How is 10x different from other app builders?Most app builders are closed-source and generate low-quality or hard-to-main",
+              "imageCount": 0,
+              "buttonCount": 7
+            },
+            {
+              "index": 6,
+              "heading": "Build 10x better.Ship 10x faster.",
+              "textSample": "Build 10x better.Ship 10x faster.Download macOS",
+              "imageCount": 1,
+              "buttonCount": 1
+            }
+          ],
+          "ctas": [
+            "10x",
+            "PricingPricing",
+            "ApplyApply",
+            "TeamTeam",
+            "GitHub",
+            "Discord",
+            "Download",
+            "Open menu",
+            "Pricing",
+            "Apply",
+            "Team",
+            "GitHub",
+            "Discord",
+            "Download macOS",
+            "Download macOS",
+            "QUITTR on the App Store",
+            "Cal AI on the App Store",
+            "Brainrot on the App Store",
+            "LOCKED on the App Store",
+            "RIZZ on the App Store",
+            "Umax on the App Store",
+            "One shot any app",
+            "Ship to the App Store instantly",
+            "Marketing on autopilot",
+            "Superwall",
+            "OpenAI",
+            "Supabase",
+            "Get started",
+            "Get started",
+            "Get started",
+            "What is 10x?",
+            "How is 10x different from other app builders?",
+            "What kind of apps can I build with 10x?",
+            "Does 10x integrate with other tools?",
+            "Does 10x help with App Store assets?",
+            "How much does 10x cost?",
+            "Do I need coding experience to use 10x?",
+            "Download macOS",
+            "Careers",
+            "Contact us",
+            "Features",
+            "Integrations",
+            "Pricing",
+            "FAQs",
+            "Blog",
+            "Changelog",
+            "X/Twitter",
+            "GitHub",
+            "Discord",
+            "Instagram"
+          ],
+          "palette": [
+            "rgb(255, 255, 255)",
+            "rgb(15, 15, 15)",
+            "rgba(15, 15, 15, 0.78)",
+            "rgba(255, 255, 255, 0.08)",
+            "rgba(255, 255, 255, 0.7)",
+            "rgb(0, 0, 0)",
+            "rgb(240, 240, 240)",
+            "rgba(255, 255, 255, 0.14)",
+            "rgba(255, 255, 255, 0.05)",
+            "rgb(10, 10, 10)",
+            "rgba(255, 255, 255, 0.55)",
+            "rgba(255, 255, 255, 0.72)",
+            "rgba(255, 255, 255, 0.48)"
+          ],
+          "layoutSignals": {
+            "hasNav": true,
+            "hasHero": true,
+            "hasPricing": true,
+            "hasTestimonials": true,
+            "hasFAQ": true,
+            "hasVideo": true,
+            "cardLikeCount": 15,
+            "imageCount": 15,
+            "buttonCount": 53,
+            "formCount": 0
+          },
+          "codeBlocks": [],
+          "codeLinks": [
+            {
+              "url": "https://github.com/10x-app-builder/10x",
+              "text": ""
+            },
+            {
+              "url": "https://github.com/10x-app-builder/10x",
+              "text": "GitHub"
+            },
+            {
+              "url": "https://github.com/10x-app-builder/10x",
+              "text": "GitHub"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

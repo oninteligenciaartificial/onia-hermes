@@ -1,0 +1,105 @@
+{
+  "clientSlug": "nuvia",
+  "referenceName": "exactly-ai-editorial-landing",
+  "sourcePath": "C:/Users/PC/Downloads/exactly-ai.jpg",
+  "sourceType": "screenshot",
+  "dateCaptured": "2026-06-15",
+  "userInstruction": "Use this lettering and design style to order the web, remove visual noise, and document it.",
+  "niche": "multiproduct ecommerce with skincare as the first active commerce front",
+  "summary": "Minimal editorial landing with oversized tight typography, light canvas, compact navigation, product/model preview cards, concise functional sections, FAQ, and restrained footer.",
+  "visibleContent": {
+    "headlineStyle": "large tight lowercase editorial headings with generous whitespace",
+    "sectionOrder": [
+      "hero with compact nav and visual product/interface preview",
+      "logo or press strip",
+      "selection grid",
+      "two-column product/training section",
+      "audience accordion",
+      "large legal/ownership statement",
+      "testimonials",
+      "secondary revenue CTA",
+      "brand/logos row",
+      "FAQ",
+      "story cards",
+      "final CTA",
+      "footer"
+    ],
+    "notableText": [
+      "bespoke ai models, built for your brand",
+      "select a model to create original images",
+      "belong to you!",
+      "faq"
+    ],
+    "ctas": [
+      "Try for free",
+      "Get started",
+      "Explore all models"
+    ]
+  },
+  "visualSystem": {
+    "palette": [
+      "#f4f4f2",
+      "#111111",
+      "#ff4d38",
+      "#ffffff",
+      "#d8d8d4"
+    ],
+    "typography": "Apple-like rounded grotesk with very large display type, tight tracking, low line-height, and small utilitarian labels.",
+    "layout": "Wide centered content, large vertical breathing room, asymmetric two-column sections, compact cards, and restrained borders.",
+    "components": [
+      "compact header",
+      "pill primary CTA",
+      "large display hero",
+      "interface preview card",
+      "horizontal selection cards",
+      "accordion rows",
+      "statement panel",
+      "FAQ list",
+      "quiet footer"
+    ],
+    "motion": "Subtle scroll reveal and small hover lifts only; no heavy decorative animation."
+  },
+  "commerceLogic": {
+    "primaryAction": "move the visitor quickly from promise to product/model selection",
+    "trustSignals": [
+      "logo row",
+      "testimonials",
+      "FAQ",
+      "clear ownership/legal message"
+    ],
+    "noiseToRemove": [
+      "duplicated benefit strips",
+      "decorative stats without purchase value",
+      "generic category sections before real inventory",
+      "long repeated ecommerce explanations"
+    ]
+  },
+  "webFactoryDirectives": {
+    "templateImpact": [
+      "simplify store template section order",
+      "make first viewport typography-led while preserving Nuvia's configured heroVideo",
+      "place product/interface preview over or alongside the video hero",
+      "keep only one product selection section",
+      "keep one short routine or decision-support section",
+      "use discount capture, FAQ and final CTA as the only lower-funnel blocks",
+      "use Nuvia colors as accents instead of changing the reference into a color-heavy page"
+    ],
+    "clientContextAppend": true,
+    "designStackAppend": true,
+    "assetsNeeded": [],
+    "validation": [
+      "desktop screenshot",
+      "mobile screenshot",
+      "no horizontal overflow",
+      "buttons usable",
+      "text not overlapping",
+      "old duplicate sections removed"
+    ]
+  },
+  "doNotCopy": [
+    "exactly.ai brand identity",
+    "exact copy",
+    "exact layout proportions if brand-specific",
+    "third-party product claims or visible copy"
+  ]
+}

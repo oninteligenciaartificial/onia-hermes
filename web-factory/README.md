@@ -13,6 +13,7 @@ properties and generate a ready static site.
 - zod for client data validation
 - commander for `pnpm generate <slug>`
 - simple-git and cheerio for curated harvesters
+- Playwright for standalone gallery/reference scraping
 
 ## Setup
 
@@ -61,7 +62,7 @@ out/demo/site.css
 
 `data/schema.ts` validates:
 
-- `nombre`, `slug`, `tagline`, `descripcion`, `logo`
+- `nombre`, `slug`, `tagline`, `descripcion`, `logo`, `heroVideo`
 - `colores.primary`, `secondary`, `accent`, `bg`, `fg`
 - `tipografia.heading`, `body`
 - `contacto.email`, `tel`, `whatsapp`, `direccion`
@@ -69,6 +70,7 @@ out/demo/site.css
 - `servicios[]` with `titulo`, `desc`, `icono`
 - `cta.texto`, `cta.url`
 - `seo.title`, `description`, `ogImage`
+- Optional client context notes can live next to the profile as `data/clients/<slug>.context.md`.
 
 Defaults are applied for missing optional fields.
 
@@ -99,6 +101,18 @@ The CLI and the Next app use the same template functions.
 ## Harvester
 
 Only sources listed in `SOURCES.md` are allowed.
+
+Design reference stack:
+
+- Global clone cache: `C:\Users\PC\.codex\design-stack`
+- Factory guide: `DESIGN_STACK.md`
+- Treat external code as reference until license, accessibility, responsiveness and token compatibility are reviewed.
+- Screenshot cache: `C:\Users\PC\.codex\design-stack\screenshots`
+- Gallery example cache: `C:\Users\PC\.codex\design-stack\gallery-examples-full`
+- Design/source indexes: `data/references/design-sources/`
+- Licensed code indexes: `data/references/code-sources/`
+- Deep gallery index: `data/references/design-sources/gallery-examples/latest-gallery-examples.json`
+- Component code examples: `data/references/code-sources/latest-component-code-examples.json`
 
 Registry wrapper:
 
@@ -137,6 +151,21 @@ HTML blocks:
 
 Vision:
 
-- `harvester/vision/` is intentionally a stub
-- stitch MCP / image-to-code runs from the Claude side
-- imported results must be reviewed and retokenized before client use
+- `harvester/vision/` contains screenshot, gallery and local-code reference tools.
+- `capture_reference_bank.mjs` captures top-level reference pages.
+- `scrape_gallery_examples.mjs` captures gallery candidates plus selected detailed examples with Playwright.
+- `merge_gallery_examples.mjs` merges per-source gallery runs.
+- `index_component_code_examples.mjs` indexes reusable component examples from local repos already marked `allowed-after-review`.
+- stitch MCP / image-to-code can still run from the Claude side for screenshot-to-code experiments.
+- imported results must be reviewed and retokenized before client use.
+
+Reference scripts:
+
+```powershell
+pnpm references:code-index
+pnpm references:code-examples
+pnpm references:gallery:merge
+pnpm references:gallery:21st
+pnpm references:gallery:all
+pnpm references:playwright:install
+```

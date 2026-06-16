@@ -1,0 +1,688 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Pollo Loco | Review operativa ONIA</title>
+    <style>
+      :root {
+        --blue: #1e5bff;
+        --blue-dark: #1238a8;
+        --blue-soft: #eef4ff;
+        --blue-softer: #f2f6ff;
+        --green: #0f8b62;
+        --green-soft: #e3f4ec;
+        --amber: #a75b00;
+        --amber-soft: #fbefde;
+        --ink: #101827;
+        --muted: #526172;
+        --line: #d8e0ea;
+        --page: #ffffff;
+        --canvas: #f3f6fb;
+        --radius: 12px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: var(--canvas);
+        color: var(--ink);
+        font-family:
+          Arial, Helvetica, ui-sans-serif, system-ui, -apple-system,
+          BlinkMacSystemFont, "Segoe UI", sans-serif;
+        line-height: 1.42;
+      }
+
+      .deck {
+        display: grid;
+        gap: 18px;
+        width: min(920px, 100%);
+        margin: 24px auto;
+      }
+
+      .page {
+        display: flex;
+        flex-direction: column;
+        min-height: 1056px;
+        padding: 52px;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        background: var(--page);
+        box-shadow: 0 18px 45px rgba(16, 24, 39, 0.08);
+      }
+
+      .top-rule,
+      .section-rule {
+        width: 100%;
+        height: 4px;
+        border-radius: 999px;
+        background: var(--blue);
+      }
+
+      .top-rule {
+        margin-bottom: 28px;
+      }
+
+      .eyebrow {
+        margin: 0 0 12px;
+        color: var(--blue);
+        font-size: 0.82rem;
+        font-weight: 800;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        margin: 0;
+      }
+
+      h1 {
+        max-width: 780px;
+        font-size: clamp(2.45rem, 5.6vw, 3.9rem);
+        line-height: 0.98;
+        letter-spacing: 0;
+      }
+
+      h2 {
+        margin-bottom: 14px;
+        font-size: 2rem;
+        line-height: 1.1;
+      }
+
+      h3 {
+        margin-bottom: 8px;
+        font-size: 1.18rem;
+      }
+
+      .subtitle {
+        max-width: 760px;
+        margin-top: 16px;
+        color: var(--muted);
+        font-size: 1.18rem;
+      }
+
+      .hero-card {
+        margin-top: 32px;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: linear-gradient(135deg, #f7faff 0%, #ffffff 64%);
+        padding: 24px;
+      }
+
+      .hero-card p {
+        color: var(--muted);
+        font-size: 1.04rem;
+      }
+
+      .section {
+        margin-top: 34px;
+      }
+
+      .section-rule {
+        margin-bottom: 22px;
+      }
+
+      .lead {
+        color: var(--muted);
+        font-size: 1.04rem;
+      }
+
+      .two-columns {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+        margin-top: 20px;
+      }
+
+      .card {
+        min-height: 182px;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: #fff;
+        padding: 20px;
+      }
+
+      .card.blue {
+        background: var(--blue-softer);
+      }
+
+      .card.green {
+        background: var(--green-soft);
+      }
+
+      .label {
+        display: inline-flex;
+        align-items: center;
+        margin-bottom: 14px;
+        border-radius: 999px;
+        background: var(--blue);
+        color: #fff;
+        font-size: 0.76rem;
+        font-weight: 800;
+        letter-spacing: 0.06em;
+        padding: 6px 10px;
+        text-transform: uppercase;
+      }
+
+      .label.green {
+        background: var(--green);
+      }
+
+      ul {
+        display: grid;
+        gap: 8px;
+        margin: 0;
+        padding-left: 20px;
+        color: var(--muted);
+      }
+
+      .steps {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+        margin-top: 20px;
+      }
+
+      .step {
+        display: grid;
+        grid-template-columns: 46px 1fr;
+        gap: 12px;
+        align-items: start;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: #fff;
+        padding: 14px;
+      }
+
+      .step-number {
+        display: grid;
+        width: 36px;
+        height: 36px;
+        place-items: center;
+        border-radius: 10px;
+        background: var(--blue);
+        color: #fff;
+        font-weight: 900;
+      }
+
+      .step p {
+        color: var(--muted);
+        font-size: 0.96rem;
+      }
+
+      .table-wrap {
+        margin-top: 18px;
+        overflow-x: auto;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: #fff;
+      }
+
+      table {
+        width: 100%;
+        min-width: 720px;
+        border-collapse: collapse;
+      }
+
+      th,
+      td {
+        border-bottom: 1px solid var(--line);
+        padding: 15px 16px;
+        text-align: left;
+        vertical-align: top;
+      }
+
+      th {
+        background: var(--blue-soft);
+        color: var(--ink);
+        font-size: 0.8rem;
+        font-weight: 900;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+      }
+
+      td {
+        color: var(--muted);
+      }
+
+      tr:last-child td {
+        border-bottom: 0;
+      }
+
+      .strong {
+        color: var(--ink);
+        font-weight: 800;
+      }
+
+      .status {
+        display: inline-flex;
+        align-items: center;
+        border-radius: 999px;
+        background: var(--green-soft);
+        color: var(--green);
+        font-size: 0.82rem;
+        font-weight: 900;
+        padding: 5px 10px;
+        white-space: nowrap;
+      }
+
+      .recommendation {
+        margin-top: 18px;
+        border-radius: var(--radius);
+        background: var(--blue);
+        color: #fff;
+        padding: 18px 20px;
+        font-weight: 800;
+      }
+
+      .note {
+        margin-top: 22px;
+        border: 1px solid #f2d7b6;
+        border-radius: var(--radius);
+        background: var(--amber-soft);
+        padding: 18px 20px;
+      }
+
+      .note .label {
+        background: var(--amber);
+      }
+
+      .note p {
+        color: #6b4b1d;
+      }
+
+      .footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+        margin-top: auto;
+        border-top: 1px solid var(--line);
+        padding-top: 16px;
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+
+      .footer strong {
+        color: var(--ink);
+      }
+
+      .print-action {
+        position: fixed;
+        right: 18px;
+        bottom: 18px;
+        z-index: 5;
+        border: 0;
+        border-radius: 999px;
+        background: var(--blue);
+        color: #fff;
+        cursor: pointer;
+        font: inherit;
+        font-weight: 800;
+        padding: 12px 16px;
+        box-shadow: 0 10px 30px rgba(30, 91, 255, 0.28);
+      }
+
+      .print-action:focus-visible {
+        outline: 3px solid rgba(30, 91, 255, 0.32);
+        outline-offset: 3px;
+      }
+
+      @media (max-width: 760px) {
+        .deck {
+          margin: 0;
+        }
+
+        .page {
+          min-height: auto;
+          padding: 34px 24px;
+          border-right: 0;
+          border-left: 0;
+          border-radius: 0;
+          box-shadow: none;
+        }
+
+        .two-columns,
+        .steps,
+        .step {
+          grid-template-columns: 1fr;
+        }
+
+        .footer {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .print-action {
+          right: 12px;
+          bottom: 12px;
+        }
+      }
+
+      @page {
+        size: Letter;
+        margin: 0;
+      }
+
+      @media print {
+        body {
+          background: #fff;
+        }
+
+        .deck {
+          display: block;
+          width: 100%;
+          margin: 0;
+        }
+
+        .page {
+          width: 8.5in;
+          height: 11in;
+          min-height: 11in;
+          margin: 0;
+          padding: 0.46in 0.52in;
+          border: 0;
+          border-radius: 0;
+          box-shadow: none;
+          break-after: page;
+        }
+
+        .page:last-child {
+          break-after: auto;
+        }
+
+        .top-rule {
+          height: 3px;
+          margin-bottom: 20px;
+        }
+
+        h1 {
+          font-size: 3.35rem;
+          line-height: 1;
+        }
+
+        h2 {
+          margin-bottom: 10px;
+          font-size: 1.75rem;
+        }
+
+        h3 {
+          margin-bottom: 6px;
+          font-size: 1.05rem;
+        }
+
+        .subtitle {
+          margin-top: 10px;
+          font-size: 1.02rem;
+          line-height: 1.35;
+        }
+
+        .hero-card {
+          margin-top: 22px;
+          padding: 18px;
+        }
+
+        .hero-card p,
+        .lead {
+          font-size: 0.98rem;
+          line-height: 1.35;
+        }
+
+        .section {
+          margin-top: 24px;
+        }
+
+        .section-rule {
+          margin-bottom: 16px;
+        }
+
+        .two-columns {
+          gap: 16px;
+          margin-top: 14px;
+        }
+
+        .card {
+          min-height: 0;
+          padding: 16px;
+          break-inside: avoid;
+        }
+
+        .label {
+          margin-bottom: 10px;
+          padding: 5px 9px;
+          font-size: 0.68rem;
+        }
+
+        ul {
+          gap: 5px;
+        }
+
+        .steps {
+          gap: 12px;
+          margin-top: 16px;
+        }
+
+        .step {
+          padding: 12px;
+          break-inside: avoid;
+        }
+
+        th,
+        td {
+          padding: 11px 12px;
+        }
+
+        .note {
+          padding: 14px 16px;
+        }
+
+        .footer {
+          padding-top: 12px;
+          font-size: 0.86rem;
+        }
+
+        .table-wrap {
+          overflow: visible;
+        }
+
+        table {
+          min-width: 0;
+        }
+
+        .print-action {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <button class="print-action" type="button" onclick="window.print()">
+      Guardar PDF
+    </button>
+
+    <main class="deck">
+      <section class="page" aria-label="Resumen">
+        <div class="top-rule"></div>
+        <p class="eyebrow">Review operativa &middot; ONIA Inteligencia Artificial</p>
+        <h1>Pollo Loco &mdash; recuperaci&oacute;n de cuentas y orden de accesos</h1>
+        <p class="subtitle">
+          Registro de la sesi&oacute;n realizada para recuperar Facebook, TikTok e
+          Instagram, crear un Gmail operativo y dejar una base organizada para
+          administrar contrase&ntilde;as sin exponer datos sensibles.
+        </p>
+
+        <div class="hero-card">
+          <h2>Qu&eacute; situaci&oacute;n resolvimos</h2>
+          <p>
+            Pollo Loco necesitaba recuperar control sobre sus redes principales.
+            La sesi&oacute;n se enfoc&oacute; en volver a tener acceso operativo y ordenar
+            la informaci&oacute;n m&iacute;nima para que el negocio pueda sostener esos
+            accesos sin depender de mensajes sueltos.
+          </p>
+        </div>
+
+        <section class="section">
+          <div class="section-rule"></div>
+          <h2>Qu&eacute; se complet&oacute;</h2>
+          <div class="two-columns">
+            <article class="card blue">
+              <span class="label">Cuentas</span>
+              <h3>Cuentas recuperadas</h3>
+              <ul>
+                <li>Cuenta de Facebook recuperada.</li>
+                <li>Cuenta de TikTok recuperada.</li>
+                <li>Cuenta de Instagram recuperada.</li>
+                <li>Gmail creado para centralizar accesos.</li>
+              </ul>
+            </article>
+            <article class="card green">
+              <span class="label green">Orden</span>
+              <h3>Plantilla de accesos</h3>
+              <ul>
+                <li>Base para organizar plataformas y responsables.</li>
+                <li>Campos para correo o tel&eacute;fono de recuperaci&oacute;n.</li>
+                <li>Referencia a ubicaci&oacute;n segura de contrase&ntilde;as.</li>
+              </ul>
+            </article>
+          </div>
+        </section>
+
+        <div class="footer">
+          <span><strong>ONIA</strong> &mdash; Sistemas, automatizaci&oacute;n y contenido para negocios.</span>
+          <span>13 de junio de 2026</span>
+        </div>
+      </section>
+
+      <section class="page" aria-label="Proceso y estado">
+        <div class="top-rule"></div>
+        <h2>C&oacute;mo lo trabajamos</h2>
+        <p class="lead">
+          La sesi&oacute;n se ejecut&oacute; por frentes: primero identificaci&oacute;n de accesos,
+          luego recuperaci&oacute;n cuenta por cuenta, creaci&oacute;n del Gmail y finalmente
+          orden de la plantilla.
+        </p>
+
+        <div class="steps">
+          <article class="step">
+            <div class="step-number">1</div>
+            <div>
+              <h3>Revisi&oacute;n de cuentas</h3>
+              <p>Se identificaron las plataformas prioritarias y el estado de acceso inicial.</p>
+            </div>
+          </article>
+          <article class="step">
+            <div class="step-number">2</div>
+            <div>
+              <h3>Recuperaci&oacute;n de redes</h3>
+              <p>Se recuperaron Facebook, TikTok e Instagram para volver a administrarlas.</p>
+            </div>
+          </article>
+          <article class="step">
+            <div class="step-number">3</div>
+            <div>
+              <h3>Creaci&oacute;n de Gmail</h3>
+              <p>Se cre&oacute; un Gmail operativo para ordenar recuperaci&oacute;n y administraci&oacute;n de accesos.</p>
+            </div>
+          </article>
+          <article class="step">
+            <div class="step-number">4</div>
+            <div>
+              <h3>Orden de credenciales</h3>
+              <p>Se arm&oacute; una plantilla para centralizar informaci&oacute;n de acceso sin publicar claves.</p>
+            </div>
+          </article>
+          <article class="step">
+            <div class="step-number">5</div>
+            <div>
+              <h3>Cierre de sesi&oacute;n</h3>
+              <p>Se dej&oacute; el estado documentado como review de lo realizado, no como propuesta de venta.</p>
+            </div>
+          </article>
+        </div>
+
+        <div class="recommendation">
+          Siguiente criterio operativo: mantener la plantilla como fuente de orden y revisar responsables antes de publicar o delegar accesos.
+        </div>
+
+        <div class="footer">
+          <span><strong>Pollo Loco</strong> &mdash; Review de trabajo realizado.</span>
+          <span>P&aacute;gina 2</span>
+        </div>
+      </section>
+
+      <section class="page" aria-label="Resultado y entregables">
+        <div class="top-rule"></div>
+        <h2>Resultado y entregables</h2>
+        <div class="table-wrap" role="region" aria-label="Resultado y entregables">
+          <table>
+            <thead>
+              <tr>
+                <th>Frente</th>
+                <th>Resultado</th>
+                <th>Estado</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="strong">Facebook</td>
+                <td>Acceso recuperado para administraci&oacute;n del negocio.</td>
+                <td><span class="status">Completado</span></td>
+              </tr>
+              <tr>
+                <td class="strong">TikTok</td>
+                <td>Acceso recuperado para gesti&oacute;n y contenido.</td>
+                <td><span class="status">Completado</span></td>
+              </tr>
+              <tr>
+                <td class="strong">Instagram</td>
+                <td>Acceso recuperado para perfil, mensajes y administraci&oacute;n.</td>
+                <td><span class="status">Completado</span></td>
+              </tr>
+              <tr>
+                <td class="strong">Gmail</td>
+                <td>Cuenta creada para centralizar recuperaci&oacute;n y gesti&oacute;n de accesos.</td>
+                <td><span class="status">Completado</span></td>
+              </tr>
+              <tr>
+                <td class="strong">Plantilla de contrase&ntilde;as</td>
+                <td>Estructura de control para plataformas, responsables, recuperaci&oacute;n y ubicaci&oacute;n segura.</td>
+                <td><span class="status">Completado</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="note">
+          <span class="label">Importante</span>
+          <p>
+            Este documento no contiene contrase&ntilde;as reales, tokens, c&oacute;digos
+            de respaldo ni datos sensibles completos. La plantilla debe usarse
+            como control de organizaci&oacute;n, no como documento p&uacute;blico de claves.
+          </p>
+        </div>
+
+        <section class="section">
+          <div class="section-rule"></div>
+          <h2>Cierre</h2>
+          <p class="lead">
+            Pollo Loco queda con sus tres canales sociales principales recuperados
+            y con una base inicial para mantener sus accesos ordenados. El trabajo
+            fue de recuperaci&oacute;n y orden operativo; no incluy&oacute; publicaci&oacute;n de
+            contenido, cambios client-facing ni automatizaciones.
+          </p>
+        </section>
+
+        <div class="footer">
+          <span><strong>ONIA</strong> &mdash; business@onia.com.bo</span>
+          <span>Precio / propuesta comercial: no aplica</span>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

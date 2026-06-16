@@ -1,0 +1,1332 @@
+{
+  "capturedAt": "2026-06-15T20:39:03.808Z",
+  "cacheRoot": "C:/Users/PC/.codex/design-stack/screenshots",
+  "policy": "Screenshots are local reference artifacts. Do not redistribute or copy proprietary layouts/assets; use for analysis and redesign only.",
+  "results": [
+    {
+      "url": "https://21st.dev/community/components",
+      "mode": "structure-and-component-discovery",
+      "status": 200,
+      "screenshotDir": "C:/Users/PC/.codex/design-stack/screenshots/21st-dev-community-components",
+      "screenshots": {
+        "desktop": "C:/Users/PC/.codex/design-stack/screenshots/21st-dev-community-components/desktop.png",
+        "mobile": "C:/Users/PC/.codex/design-stack/screenshots/21st-dev-community-components/mobile.png"
+      },
+      "hashes": {
+        "desktopSha256": "25ac30b359f809ea4ba2ff174b9a40511afb1f4b0399efd71e1954e3f687bf29",
+        "mobileSha256": "b9d116a3b62d16db9d893403cda18db02b4c2d453d80e75b508a4fb6d705c46c"
+      },
+      "failedRequestCount": 3,
+      "title": "Discover community-made UI components | 21st",
+      "description": "Explore, copy, and remix thousands of high-quality React components published to the 21st.dev Community by designers and developers.",
+      "headings": [
+        {
+          "level": "h3",
+          "text": "Marketing Blocks"
+        },
+        {
+          "level": "h3",
+          "text": "UI Components"
+        },
+        {
+          "level": "h2",
+          "text": "Newest"
+        },
+        {
+          "level": "h2",
+          "text": "Popular"
+        },
+        {
+          "level": "h2",
+          "text": "Shaders"
+        },
+        {
+          "level": "h2",
+          "text": "Heros"
+        },
+        {
+          "level": "h2",
+          "text": "Features"
+        },
+        {
+          "level": "h2",
+          "text": "AI Chat Components"
+        },
+        {
+          "level": "h2",
+          "text": "Calls to Action"
+        },
+        {
+          "level": "h2",
+          "text": "Buttons"
+        },
+        {
+          "level": "h2",
+          "text": "Testimonials"
+        },
+        {
+          "level": "h2",
+          "text": "Pricing Sections"
+        },
+        {
+          "level": "h2",
+          "text": "Text Components"
+        }
+      ],
+      "ctas": [
+        "Components",
+        "Pricing Sections17",
+        "Sign Ins4",
+        "Sign ups4",
+        "View all",
+        "View all",
+        "View all",
+        "View all",
+        "View all",
+        "View all",
+        "View all",
+        "View all",
+        "View all",
+        "View all",
+        "View all"
+      ],
+      "sections": [],
+      "palette": [
+        "rgb(9, 9, 11)",
+        "rgb(255, 255, 255)",
+        "rgb(228, 228, 231)",
+        "rgb(115, 115, 115)"
+      ]
+    },
+    {
+      "url": "https://dribbble.com/shots/27129126-Axion-Futuristic-Electric-Car-Landing-Page-Website",
+      "mode": "screenshot-and-mood-only",
+      "status": 202,
+      "screenshotDir": "C:/Users/PC/.codex/design-stack/screenshots/dribbble-com-shots-27129126-axion-futuristic-electric-car-landing-page-website",
+      "screenshots": {
+        "desktop": "C:/Users/PC/.codex/design-stack/screenshots/dribbble-com-shots-27129126-axion-futuristic-electric-car-landing-page-website/desktop.png",
+        "mobile": "C:/Users/PC/.codex/design-stack/screenshots/dribbble-com-shots-27129126-axion-futuristic-electric-car-landing-page-website/mobile.png"
+      },
+      "hashes": {
+        "desktopSha256": "41a95687f68b0f1f1f0621017554f1191015b8ac16cb20a600db8615b5f86d95",
+        "mobileSha256": "4c1e448317b0f2013e691053cc0a9469118ec434bc216e7072a23e27a2e66a72"
+      },
+      "failedRequestCount": 3,
+      "title": "Axion - Futuristic Electric Car Landing Page Website by Rylic Studio on Dribbble",
+      "description": "Axion - Futuristic Electric Car Landing Page Website designed by Rylic Studio. Connect with them on Dribbble; the global community for designers and creative professionals.",
+      "headings": [
+        {
+          "level": "h1",
+          "text": "Axion - Futuristic Electric Car Landing Page Website"
+        },
+        {
+          "level": "h2",
+          "text": "Axion – Futuristic Electric Car Landing Page Design"
+        }
+      ],
+      "ctas": [
+        "Get Started",
+        "Dribbble: the community for graphic design",
+        "Explore",
+        "Product Design",
+        "Web Design",
+        "Start Project Brief Get recommendations and proposals",
+        "Explore Services Hire quickly with pre-packaged services",
+        "Learn more about how hiring works on Dribbble →",
+        "Get Hired",
+        "Learn more about getting hired on Dribbble →",
+        "Blog Design inspiration, stories, and tips",
+        "Help Center Get quick answers and learn how to use Dribbble",
+        "Start Project Brief",
+        "Sign up",
+        "Get in touch",
+        "Download color palette",
+        "Get in touch",
+        "View profile",
+        "View all services",
+        "Pitch Desk Design $750",
+        "Dashboard Design (5 Main Pages) $2,500",
+        "Web Application Design $2,000",
+        "Website Design (10 Pages) $4,000",
+        "Web Design",
+        "Product Design",
+        "Web Design",
+        "Product Design",
+        "Dribbble: the community for graphic design Back to home page",
+        "For designers",
+        "Designers"
+      ],
+      "sections": [
+        {
+          "index": 0,
+          "heading": "",
+          "textSample": "Rylic Studio Available for work Follow Following"
+        },
+        {
+          "index": 1,
+          "heading": "",
+          "textSample": "#030304 #FDFCFC #3F4D58 #C7ACA9 #F81F05 #56403D #C0936C #D85522 Download color palette"
+        }
+      ],
+      "palette": [
+        "rgb(13, 12, 34)",
+        "rgb(255, 255, 255)",
+        "rgb(158, 158, 167)",
+        "rgb(61, 61, 78)",
+        "rgb(0, 0, 0)",
+        "rgb(6, 3, 24)",
+        "rgba(128, 126, 163, 0.6)",
+        "rgb(58, 53, 70)",
+        "rgb(234, 76, 137)",
+        "rgb(101, 92, 122)"
+      ]
+    },
+    {
+      "url": "https://fontpair.co/",
+      "mode": "typography-reference",
+      "status": 200,
+      "screenshotDir": "C:/Users/PC/.codex/design-stack/screenshots/fontpair-co",
+      "screenshots": {
+        "desktop": "C:/Users/PC/.codex/design-stack/screenshots/fontpair-co/desktop.png",
+        "mobile": "C:/Users/PC/.codex/design-stack/screenshots/fontpair-co/mobile.png"
+      },
+      "hashes": {
+        "desktopSha256": "68c96c828bc3c09f563b7964206456a1c01534b7be04bec2dddc6ac728c7b793",
+        "mobileSha256": "430c5013f27f633020b73a2c4f1575aea0ef463a25fc28989396cf921d850066"
+      },
+      "failedRequestCount": 4,
+      "title": "Fontpair — Free Google Font Combinations & Generator",
+      "description": "Discover and test free font pairings using Google Fonts. Browse 1,000+ curated combinations. Preview with your content and save favorites.",
+      "headings": [
+        {
+          "level": "h1",
+          "text": "A beautiful brand, in minutes."
+        },
+        {
+          "level": "h2",
+          "text": "Discover and test fonts, colors, and icons curated by professional designers. Your brand kit and design system, generated instantly."
+        },
+        {
+          "level": "h2",
+          "text": "Design that moves people."
+        },
+        {
+          "level": "h2",
+          "text": "Design that moves people."
+        },
+        {
+          "level": "h2",
+          "text": "Start with a brand kit"
+        },
+        {
+          "level": "h2",
+          "text": "Design your logo in minutes."
+        },
+        {
+          "level": "h2",
+          "text": "Explore font pairings"
+        },
+        {
+          "level": "h2",
+          "text": "Alumni Sans & DM Sans"
+        },
+        {
+          "level": "h2",
+          "text": "Ysabeau SC & Ysabeau"
+        },
+        {
+          "level": "h2",
+          "text": "Zen Maru Gothic (Bold) & Zen Maru Gothic (Regular)"
+        },
+        {
+          "level": "h2",
+          "text": "Work Sans & Bitter"
+        },
+        {
+          "level": "h2",
+          "text": "Zalando Sans & JetBrains Mono"
+        },
+        {
+          "level": "h2",
+          "text": "Zalando Sans (Bold) & Zalando Sans (Regular)"
+        },
+        {
+          "level": "h2",
+          "text": "PT Serif & Lato"
+        },
+        {
+          "level": "h2",
+          "text": "Gloock & Inter"
+        },
+        {
+          "level": "h2",
+          "text": "Zain & Nunito"
+        },
+        {
+          "level": "h2",
+          "text": "Special Gothic Condensed One & Special Gothic"
+        },
+        {
+          "level": "h2",
+          "text": "Zalando Sans Expanded & Zalando Sans"
+        },
+        {
+          "level": "h2",
+          "text": "Libre Franklin & Eczar"
+        },
+        {
+          "level": "h2",
+          "text": "Fonts. Colors. Icons.Your design system, one file."
+        },
+        {
+          "level": "h2",
+          "text": "All your design inspiration.Saved in one place."
+        },
+        {
+          "level": "h2",
+          "text": "Choose Your Pro Plan"
+        },
+        {
+          "level": "h3",
+          "text": "Pro Monthly"
+        },
+        {
+          "level": "h3",
+          "text": "Pro Yearly"
+        },
+        {
+          "level": "h3",
+          "text": "Pro Lifetime"
+        },
+        {
+          "level": "h2",
+          "text": "Join 25,000+ designers choosing fonts with confidence"
+        },
+        {
+          "level": "h3",
+          "text": "Fontpair"
+        }
+      ],
+      "ctas": [
+        "Login",
+        "Sign Up",
+        "Start designing",
+        "Design your logo now →",
+        "Generate your DESIGN.md →",
+        "Get Lifetime Access",
+        "Design your logo in minutes",
+        "Pricing",
+        "Sign up"
+      ],
+      "sections": [
+        {
+          "index": 0,
+          "heading": "A beautiful brand, in minutes.",
+          "textSample": "817 designers signed up last weekA beautiful brand, in minutes.Discover and test fonts, colors, and icons curated by professional designers. Your brand kit and design system, generated instantly.Join for freeStart designingnorthwindstudio.c"
+        },
+        {
+          "index": 1,
+          "heading": "Start with a brand kit",
+          "textSample": "Start with a brand kitHeadlineJetBrains MonoBodyInterBackground#0A0A0AText#FAFAF8Primary#1B1BFFAccent#00FF9CSurface#1A1A1AHeadlineFrauncesBodySoraBackground#F4F1E8Text#2D3A1FPrimary#2D3A1FAccent#B8A678Surface#E8E2D0HeadlineSpace GroteskBody"
+        },
+        {
+          "index": 2,
+          "heading": "Design your logo in minutes.",
+          "textSample": "Design your logo in minutes.Create a custom professional logo instantly. High-resolution downloads, complete vector formats, and fully customizable designs.Design your logo now →"
+        },
+        {
+          "index": 3,
+          "heading": "Explore font pairings",
+          "textSample": "Explore font pairingsAlumni Sans & DM SansPerfect for headlines and body copy that need to communicate with clarity and style. This pairing brings balance and visual harmony to any design project.Alumni SansDM Sans#ffffff#111827#0000eeYsabe"
+        },
+        {
+          "index": 4,
+          "heading": "Fonts. Colors. Icons.Your design system, one file.",
+          "textSample": "NEWFonts. Colors. Icons.Your design system, one file.Generate a DESIGN.md with curated fonts, colors, and tokens. Paste it into Cursor, Lovable, or Claude Code.Generate your DESIGN.md →"
+        },
+        {
+          "index": 5,
+          "heading": "All your design inspiration.Saved in one place.",
+          "textSample": "NEW IN V2All your design inspiration.Saved in one place.Fonts, colors, and a screenshot, saved to Fontpair the moment you see a site you love online. Then try the fonts and colors on your own content in our Playground to build your own bran"
+        },
+        {
+          "index": 6,
+          "heading": "Choose Your Pro Plan",
+          "textSample": "Choose Your Pro PlanUnlock the full potential of Fontpair with premium features tailored to your workflowPro MonthlyFull access, flexible billing$8/monthFull access to 500+ curated font pairingsUnlimited favorites on fonts, pairings, inspir"
+        },
+        {
+          "index": 7,
+          "heading": "Join 25,000+ designers choosing fonts with confidence",
+          "textSample": "Join 25,000+ designers choosing fonts with confidenceCreate free account"
+        }
+      ],
+      "palette": [
+        "rgb(2, 8, 23)",
+        "rgb(250, 250, 250)",
+        "rgb(226, 232, 240)",
+        "rgb(15, 23, 42)",
+        "rgba(255, 255, 255, 0.75)",
+        "rgba(2, 8, 23, 0.8)",
+        "rgb(248, 250, 252)",
+        "rgb(24, 24, 27)",
+        "rgb(52, 66, 86)",
+        "rgb(255, 255, 255)",
+        "rgba(255, 255, 255, 0.8)",
+        "rgba(255, 255, 255, 0.4)",
+        "rgba(226, 232, 240, 0.6)",
+        "rgba(250, 250, 250, 0.8)",
+        "rgba(226, 232, 240, 0.5)"
+      ]
+    },
+    {
+      "url": "https://motion.dev/docs/quick-start",
+      "mode": "official-motion-docs",
+      "status": 200,
+      "screenshotDir": "C:/Users/PC/.codex/design-stack/screenshots/motion-dev-docs-quick-start",
+      "screenshots": {
+        "desktop": "C:/Users/PC/.codex/design-stack/screenshots/motion-dev-docs-quick-start/desktop.png",
+        "mobile": "C:/Users/PC/.codex/design-stack/screenshots/motion-dev-docs-quick-start/mobile.png"
+      },
+      "hashes": {
+        "desktopSha256": "5253059ed1d68a3c1f54c249671624d3bebdf444ddf1c4ae9cc38dfe512f29ff",
+        "mobileSha256": "db0c0d5759a74185ab88c127c24e7720974ba7f1dc3d8631d80df9f9ff23a571"
+      },
+      "failedRequestCount": 0,
+      "title": "Get started with Motion | install, first animation | Motion JavaScript",
+      "description": "Learn Motion animation library: Install, animate HTML/SVG/WebGL elements with spring animations, staggering effects. Complete guide with examples.",
+      "headings": [
+        {
+          "level": "h1",
+          "text": "Get started with Motion"
+        },
+        {
+          "level": "h2",
+          "text": "Install"
+        },
+        {
+          "level": "h3",
+          "text": "Package manager"
+        },
+        {
+          "level": "h3",
+          "text": "script tag"
+        },
+        {
+          "level": "h3",
+          "text": "Create an animation"
+        },
+        {
+          "level": "h2",
+          "text": "What can be animated?"
+        },
+        {
+          "level": "h2",
+          "text": "Customising animations"
+        },
+        {
+          "level": "h2",
+          "text": "Stagger animations"
+        },
+        {
+          "level": "h2",
+          "text": "Development tools"
+        },
+        {
+          "level": "h3",
+          "text": "One click install for Cursor"
+        },
+        {
+          "level": "h3",
+          "text": "What's next?"
+        },
+        {
+          "level": "h2",
+          "text": "Related topics"
+        },
+        {
+          "level": "h2",
+          "text": "Level up your animations."
+        },
+        {
+          "level": "h3",
+          "text": "Sponsors"
+        },
+        {
+          "level": "h3",
+          "text": "Subscribe"
+        }
+      ],
+      "ctas": [
+        "Docs",
+        "Docs",
+        "Copy pageCopy page",
+        "DocsGet started with Motion",
+        "Get started",
+        "animateViewMotion+",
+        "inView",
+        "hover→hover() fires callbacks when a hover gesture starts and ends.",
+        "Motion+400+ examplesLifetime updatesMotion+Level up your animations.Unlock 400+ premium examples, premium APIs, private Discord and GitHub, and a transition editor for your IDE. One-time purchase, lifetime updates.PricingOne-time payment, lifetime updatesGet Motion+",
+        "Docs",
+        "Motion component",
+        "GitHub",
+        "Login"
+      ],
+      "sections": [
+        {
+          "index": 0,
+          "heading": "Get started with Motion",
+          "textSample": "{\"@context\":\"https://schema.org\",\"@type\":\"TechArticle\",\"headline\":\"Get started with Motion\",\"description\":\"Install Motion and animate HTML, SVG, or WebGL with springs.\",\"url\":\"https://motion.dev/docs\",\"mainEntityOfPage\":\"https://motion.dev/"
+        },
+        {
+          "index": 1,
+          "heading": "",
+          "textSample": ">Live exampleOpen"
+        },
+        {
+          "index": 2,
+          "heading": "",
+          "textSample": ">Live exampleOpen"
+        },
+        {
+          "index": 3,
+          "heading": "",
+          "textSample": ">Live exampleOpen"
+        },
+        {
+          "index": 4,
+          "heading": "",
+          "textSample": ">Live exampleOpen"
+        },
+        {
+          "index": 5,
+          "heading": "",
+          "textSample": ">Live exampleOpen"
+        },
+        {
+          "index": 6,
+          "heading": "Sponsors",
+          "textSample": "SponsorsMotion is supported by the best in the industry.Become a sponsor"
+        },
+        {
+          "index": 7,
+          "heading": "",
+          "textSample": "SiteAboutChangelogDocsExamplesMagazineSponsorTroubleshootingTutorials"
+        },
+        {
+          "index": 8,
+          "heading": "",
+          "textSample": "ProductsAI KitCSS StudioMotionMotion+MotionScore"
+        },
+        {
+          "index": 9,
+          "heading": "",
+          "textSample": "Most PopularReact animationLayout animationSVG animationMotion componentGSAP vs Motion"
+        },
+        {
+          "index": 10,
+          "heading": "",
+          "textSample": "DocsJavaScriptReactVueAI Kit"
+        },
+        {
+          "index": 11,
+          "heading": "",
+          "textSample": "SocialDiscordGitHubX/TwitterYouTube"
+        }
+      ],
+      "palette": [
+        "rgb(237, 237, 236)",
+        "rgb(14, 19, 18)",
+        "color(srgb 0.054902 0.0745098 0.0705882 / 0.8)",
+        "rgb(149, 141, 130)",
+        "rgb(30, 38, 35)",
+        "rgb(255, 219, 42)"
+      ]
+    },
+    {
+      "url": "https://www.10x.app/",
+      "mode": "landing-structure-only-noncommercial-code",
+      "status": 200,
+      "screenshotDir": "C:/Users/PC/.codex/design-stack/screenshots/www-10x-app",
+      "screenshots": {
+        "desktop": "C:/Users/PC/.codex/design-stack/screenshots/www-10x-app/desktop.png",
+        "mobile": "C:/Users/PC/.codex/design-stack/screenshots/www-10x-app/mobile.png"
+      },
+      "hashes": {
+        "desktopSha256": "79a772ab7a4b105bae5def2d6719459f51404d226d939bbf68abf96784280fd1",
+        "mobileSha256": "7e2d7bb786fc11eae15a145a16df2f0bb228bf9b61beeae969d7cf7347891bb9"
+      },
+      "failedRequestCount": 5,
+      "title": "10x - App Builder",
+      "description": "10x is an AI-powered iOS app builder for macOS. Describe the app you want, and 10x generates SwiftUI code, an Xcode project, and a simulator preview.",
+      "headings": [
+        {
+          "level": "h1",
+          "text": "Shopifyformobileapps"
+        },
+        {
+          "level": "h2",
+          "text": "Features"
+        },
+        {
+          "level": "h2",
+          "text": "Fits right into your stack"
+        },
+        {
+          "level": "h2",
+          "text": "Pricing"
+        },
+        {
+          "level": "h2",
+          "text": "FAQs"
+        },
+        {
+          "level": "h2",
+          "text": "Build 10x better.Ship 10x faster."
+        }
+      ],
+      "ctas": [
+        "PricingPricing",
+        "Download",
+        "Pricing",
+        "GitHub",
+        "Download macOS",
+        "Download macOS",
+        "Get started",
+        "Get started",
+        "Get started",
+        "Download macOS",
+        "Pricing",
+        "GitHub"
+      ],
+      "sections": [
+        {
+          "index": 0,
+          "heading": "Shopifyformobileapps",
+          "textSample": "ShopifyformobileappsBuild, launch and market with AI.Download macOS"
+        },
+        {
+          "index": 1,
+          "heading": "",
+          "textSample": "Trusted by the founders of"
+        },
+        {
+          "index": 2,
+          "heading": "Features",
+          "textSample": "FeaturesEverything you need to go from idea to shipped app.One shot any appEvery app compiles to native Swift with screens that feel production-ready from the first pass.No webviews, no wrappers, no compromise on performance or platform fee"
+        },
+        {
+          "index": 3,
+          "heading": "Fits right into your stack",
+          "textSample": "Fits right into your stackConnect your stack and let AI handle the heavy lifting while you focus on building."
+        },
+        {
+          "index": 4,
+          "heading": "Pricing",
+          "textSample": "PricingStart building for free — upgrade when you need more.Free$0/foreverGet started$5 in creditsPlusPopular$20/monthGet started30 intro credits, then 20/monthMax$200/monthGet started300 intro credits, then 200/monthUsage-based billing wit"
+        },
+        {
+          "index": 5,
+          "heading": "FAQs",
+          "textSample": "FAQsEverything you need to know about building with 10x.What is 10x?10x is an open-source AI app builder that lets you generate, edit, and ship real mobile apps using SwiftUI—directly on your device.How is 10x different from other app build"
+        },
+        {
+          "index": 6,
+          "heading": "Build 10x better.Ship 10x faster.",
+          "textSample": "Build 10x better.Ship 10x faster.Download macOS"
+        }
+      ],
+      "palette": [
+        "rgb(255, 255, 255)",
+        "rgb(15, 15, 15)",
+        "rgba(15, 15, 15, 0.78)",
+        "rgba(255, 255, 255, 0.08)",
+        "rgba(255, 255, 255, 0.7)",
+        "rgb(0, 0, 0)",
+        "rgb(240, 240, 240)",
+        "rgba(255, 255, 255, 0.14)"
+      ]
+    },
+    {
+      "url": "https://motion-primitives.com/",
+      "mode": "motion-component-reference",
+      "status": 200,
+      "screenshotDir": "C:/Users/PC/.codex/design-stack/screenshots/motion-primitives-com",
+      "screenshots": {
+        "desktop": "C:/Users/PC/.codex/design-stack/screenshots/motion-primitives-com/desktop.png",
+        "mobile": "C:/Users/PC/.codex/design-stack/screenshots/motion-primitives-com/mobile.png"
+      },
+      "hashes": {
+        "desktopSha256": "29ed1d80011e75926b8b09353ff7358b0a4f94b67631ff7bf350b87ff8b1e635",
+        "mobileSha256": "baad43702acc5cb96afe4a51bebf703dc006a532ff1949c306cab27d638c118a"
+      },
+      "failedRequestCount": 0,
+      "title": "Motion-Primitives - UI kit to make beautiful, animated interfaces, faster.",
+      "description": "Motion-Primitives is an open-source UI kit to make beautiful, animated interfaces, faster. Built for React, Next.js, and Tailwind CSS.",
+      "headings": [
+        {
+          "level": "h1",
+          "text": "UI kit to make beautiful, animated interfaces, faster."
+        }
+      ],
+      "ctas": [
+        "Components",
+        "GitHub",
+        "Explore Docs",
+        "Explore Docs",
+        "GitHubStar on GitHub",
+        "GitHubStar on GitHub"
+      ],
+      "sections": [
+        {
+          "index": 0,
+          "heading": "UI kit to make beautiful, animated interfaces, faster.",
+          "textSample": "UI kit to make beautiful, animated interfaces, faster.Beautifully designed motions components. Easy copy-paste. Customizable. Open Source. Built for engineers and designers.Explore DocsGitHubStar on GitHubFree updates and new components rel"
+        },
+        {
+          "index": 1,
+          "heading": "",
+          "textSample": "EB27Edouard Wilfrid Buquet"
+        },
+        {
+          "index": 3,
+          "heading": "",
+          "textSample": "Animate your ideas with motion-primitives.Animate your ideas with motion-primitives."
+        },
+        {
+          "index": 4,
+          "heading": "",
+          "textSample": "Scroll down"
+        },
+        {
+          "index": 7,
+          "heading": "",
+          "textSample": "How can I assist you today?Generate a logo"
+        },
+        {
+          "index": 8,
+          "heading": "",
+          "textSample": "Generating code..."
+        },
+        {
+          "index": 9,
+          "heading": "",
+          "textSample": "Text Scramble"
+        },
+        {
+          "index": 10,
+          "heading": "",
+          "textSample": "Add Note"
+        },
+        {
+          "index": 12,
+          "heading": "",
+          "textSample": "DayWeekMonthYear"
+        }
+      ],
+      "palette": [
+        "rgb(9, 9, 11)",
+        "rgb(255, 255, 255)",
+        "rgb(228, 228, 231)",
+        "oklch(0.37 0.013 285.805)",
+        "oklch(0.141 0.005 285.823)",
+        "oklch(0.985 0 0)",
+        "oklch(0.967 0.001 286.375)",
+        "oklch(0.21 0.006 285.885)",
+        "oklab(0.141 0.00136333 -0.00481054 / 0.1)",
+        "oklch(0.552 0.016 285.938)",
+        "oklch(0.274 0.006 286.033)"
+      ]
+    },
+    {
+      "url": "https://ui.watermelon.sh/",
+      "mode": "component-taxonomy-unverified-license",
+      "status": 200,
+      "screenshotDir": "C:/Users/PC/.codex/design-stack/screenshots/ui-watermelon-sh",
+      "screenshots": {
+        "desktop": "C:/Users/PC/.codex/design-stack/screenshots/ui-watermelon-sh/desktop.png",
+        "mobile": "C:/Users/PC/.codex/design-stack/screenshots/ui-watermelon-sh/mobile.png"
+      },
+      "hashes": {
+        "desktopSha256": "b425ab8658078362a3a178a5cdac03790456ceb75d092f90eaf7d49b84fea312",
+        "mobileSha256": "d2ba7639dd0010694714f7041782c326433c89190888a426c37a96c8dad9762d"
+      },
+      "failedRequestCount": 7,
+      "title": "React Components, Dashboards & Blocks | Watermelon UI",
+      "description": "A collection of high-quality React components, dashboards, and UI blocks. Copy and paste production-ready UI with ease.",
+      "headings": [
+        {
+          "level": "h1",
+          "text": "Watermelon UI - High-Quality React Components Registry"
+        },
+        {
+          "level": "h1",
+          "text": "Watermelon UI - High-Quality React Components Registry"
+        },
+        {
+          "level": "h2",
+          "text": "Featured Components"
+        },
+        {
+          "level": "h2",
+          "text": "Featured Blocks"
+        }
+      ],
+      "ctas": [
+        "Component",
+        "Component",
+        "Blocks",
+        "Blocks",
+        "Search components...K",
+        "Announcement9 blocks",
+        "Auth6 blocks",
+        "Blog4 blocks",
+        "Career4 blocks",
+        "Contact7 blocks",
+        "CTA4 blocks",
+        "View all (122)"
+      ],
+      "sections": [
+        {
+          "index": 1,
+          "heading": "Featured Components",
+          "textSample": "Featured ComponentsShuffle Pinned ListlistsAdaptive SliderslidersAdd Cash DisclosuredisclosureCard SwipeinteractionCarousel Navigatormicro-interactionCarousel SliderinteractionFeatured BlocksAnnouncement9 blocksAuth6 blocksBlog4 blocksCaree"
+        }
+      ],
+      "palette": [
+        "oklch(0.145 0 0)",
+        "oklch(1 0 0)",
+        "oklch(0.922 0 0)",
+        "oklch(0.556 0 0)",
+        "oklab(0.922 0 0 / 0.5)",
+        "oklch(0.967 0.003 264.542)",
+        "rgb(255, 255, 255)",
+        "oklch(0.648 0.2 131.684)"
+      ]
+    },
+    {
+      "url": "https://www.lapa.ninja/",
+      "mode": "inspiration-index-only",
+      "status": 200,
+      "screenshotDir": "C:/Users/PC/.codex/design-stack/screenshots/www-lapa-ninja",
+      "screenshots": {
+        "desktop": "C:/Users/PC/.codex/design-stack/screenshots/www-lapa-ninja/desktop.png",
+        "mobile": "C:/Users/PC/.codex/design-stack/screenshots/www-lapa-ninja/mobile.png"
+      },
+      "hashes": {
+        "desktopSha256": "7470654f620200a2187d1b0b18a477339e254641b9f82222136a0936f5b6a651",
+        "mobileSha256": "5371f471dbf99f670c25a113e5deaa18cafad80659f3c7886e263956e0dcaba2"
+      },
+      "failedRequestCount": 5,
+      "title": "Landing Page Design Examples: 7,300+ Best Landing Pages | Lapa Ninja",
+      "description": "Browse 7,300+ landing page designs from portfolios, agencies & startups. Find high-converting examples with screenshots & videos. SaaS, e-commerce & more.",
+      "headings": [
+        {
+          "level": "h1",
+          "text": "The Best Landing Page Design Inspiration, Learn Design and More"
+        },
+        {
+          "level": "h3",
+          "text": "Foundation Labs"
+        },
+        {
+          "level": "h3",
+          "text": "RRE"
+        },
+        {
+          "level": "h3",
+          "text": "Mobbin.com"
+        },
+        {
+          "level": "h3",
+          "text": "House of Honey"
+        },
+        {
+          "level": "h3",
+          "text": "Isa de Burgh"
+        },
+        {
+          "level": "h3",
+          "text": "Flim"
+        },
+        {
+          "level": "h2",
+          "text": "Latest Web Design Inspiration"
+        },
+        {
+          "level": "h3",
+          "text": "Lama Lama"
+        },
+        {
+          "level": "h3",
+          "text": "Aave"
+        },
+        {
+          "level": "h3",
+          "text": "Tinker"
+        },
+        {
+          "level": "h3",
+          "text": "Webflow"
+        },
+        {
+          "level": "h3",
+          "text": "Mùn Rooftop Rome"
+        },
+        {
+          "level": "h3",
+          "text": "Ragged Edge"
+        },
+        {
+          "level": "h3",
+          "text": "Framer"
+        },
+        {
+          "level": "h3",
+          "text": "Softlight"
+        },
+        {
+          "level": "h3",
+          "text": "Stackbyte"
+        },
+        {
+          "level": "h3",
+          "text": "Heyato"
+        },
+        {
+          "level": "h3",
+          "text": "Featured Partner"
+        },
+        {
+          "level": "h3",
+          "text": "Juan Mora"
+        },
+        {
+          "level": "h3",
+          "text": "Lobb’s Padel"
+        },
+        {
+          "level": "h3",
+          "text": "Featured Partner"
+        },
+        {
+          "level": "h3",
+          "text": "Altina"
+        },
+        {
+          "level": "h3",
+          "text": "Nudge"
+        },
+        {
+          "level": "h2",
+          "text": "Best OG Images For Social Media"
+        },
+        {
+          "level": "h3",
+          "text": "Mojo Studio"
+        },
+        {
+          "level": "h3",
+          "text": "Flesh and Bones"
+        },
+        {
+          "level": "h3",
+          "text": "Polar"
+        },
+        {
+          "level": "h3",
+          "text": "Make Good"
+        },
+        {
+          "level": "h3",
+          "text": "Idyllic New Plymouth"
+        },
+        {
+          "level": "h3",
+          "text": "House of Honey"
+        },
+        {
+          "level": "h3",
+          "text": "Cosmos"
+        },
+        {
+          "level": "h3",
+          "text": "Contra Labs"
+        },
+        {
+          "level": "h2",
+          "text": "Responsive Website Templates For Designers, Businesses, And Personal Use"
+        },
+        {
+          "level": "h3",
+          "text": "Last Studio"
+        },
+        {
+          "level": "h3",
+          "text": "Lucide"
+        },
+        {
+          "level": "h3",
+          "text": "Venture FZ"
+        },
+        {
+          "level": "h3",
+          "text": "John Moore"
+        },
+        {
+          "level": "h2",
+          "text": "Learn Design From The Best"
+        },
+        {
+          "level": "h3",
+          "text": "FIGMA 101: Learn Figma with Shift Nudge"
+        }
+      ],
+      "ctas": [
+        "Design Tools460",
+        "Blockchain92",
+        "Design2",
+        "Shopify55",
+        "Download 600+ Freebies",
+        "Learn Design",
+        "Learn Design",
+        "Free Design Books",
+        "Sign in",
+        "View All Websites",
+        "View All OG Images",
+        "View All Templates",
+        "FigmaPrototypeFIGMA 101: Learn Figma with Shift Nudgeby Shift Nudge",
+        "FramerInterface DesignComplete Beginner-Friendly Framer Courseby Design+Code",
+        "Interface DesignUX DesignOffscreen Canvasby Daniel Velasquez",
+        "BookInterface DesignDesign books for non-designersby Stripe Design Team",
+        "View All Articles",
+        "The Ultimate UI Design Roadmapby Michael FilipiukInterface DesignVisual Design",
+        "Law By Designby Margaret HaganUser ExperienceUsability",
+        "Design Engineering Handbookby Natalya Shelburne, Adekunle Oduye, Kim Williams, Eddie LouCareerUser Experience",
+        "View All Books",
+        "Learn"
+      ],
+      "sections": [
+        {
+          "index": 0,
+          "heading": "The Best Landing Page Design Inspiration, Learn Design and More",
+          "textSample": "The Best Landing Page Design Inspiration, Learn Design and MoreLapa Ninja offers over 7,300 landing page designs since 2015, along with 15,000+ full-page website screenshots. Discover inspiration from real examples, complete with full websi"
+        },
+        {
+          "index": 1,
+          "heading": "Latest Web Design Inspiration",
+          "textSample": "Latest Web Design Inspiration WEBSITEAmsterdam based creative digital agency.Design learning materialsLama LamaAgencyWEBSITEOpen-source liquidity protocol.AaveAppWEBSITEPlay with AI, bring your ideas to lifeTinkerArtificial Intelligence NO-"
+        },
+        {
+          "index": 2,
+          "heading": "Best OG Images For Social Media",
+          "textSample": "Best OG Images For Social MediaElevate your social media presence with stunning Open Graph images that capture attention and drive engagement. From eye-catching visuals to professional layouts, find the perfect OG images to make your conten"
+        },
+        {
+          "index": 3,
+          "heading": "Responsive Website Templates For Designers, Businesses, And Personal Use",
+          "textSample": "Responsive Website Templates For Designers, Businesses, And Personal UseDiscover professionally designed templates that work perfectly across all devices and platforms.E-Commerce ServicesTEMPLATELast Studio is a modern and playful design ag"
+        },
+        {
+          "index": 4,
+          "heading": "Learn Design From The Best",
+          "textSample": "Learn Design From The BestMaster the art of design with expert insights, practical tutorials, and proven techniques from industry professionals. From UI/UX fundamentals to advanced design systems, discover everything you need to create stun"
+        },
+        {
+          "index": 5,
+          "heading": "Free Design Books",
+          "textSample": "Free Design BooksMaster the art of design with expert insights, practical tutorials, and proven techniques from industry professionals. From UI/UX fundamentals to advanced design systems, discover everything you need to create stunning digi"
+        },
+        {
+          "index": 6,
+          "heading": "Lapa Inspiration",
+          "textSample": "Lapa InspirationGet the latest design inspiration, resources, and trends delivered to your inbox weekly.Interface design book"
+        }
+      ],
+      "palette": [
+        "rgb(23, 23, 23)",
+        "rgb(255, 255, 255)",
+        "lab(98.2596 -0.247031 -0.706708)",
+        "lab(91.6229 -0.159115 -2.26791)",
+        "lab(47.7841 -0.393182 -10.0268)",
+        "lab(8.11897 0.811279 -12.254)",
+        "lab(27.1134 -0.956401 -12.3224)"
+      ]
+    },
+    {
+      "url": "https://www.componentry.fun/",
+      "mode": "mit-component-code-reference",
+      "status": 200,
+      "screenshotDir": "C:/Users/PC/.codex/design-stack/screenshots/www-componentry-fun",
+      "screenshots": {
+        "desktop": "C:/Users/PC/.codex/design-stack/screenshots/www-componentry-fun/desktop.png",
+        "mobile": "C:/Users/PC/.codex/design-stack/screenshots/www-componentry-fun/mobile.png"
+      },
+      "hashes": {
+        "desktopSha256": "5d026ef56d572409f268ee705d37dee3aec572ad60501835533f30121ebc1cac",
+        "mobileSha256": "224338f9c3f471404b1ac5320da318e2e7d5ca86ca04467b824c57112660708a"
+      },
+      "failedRequestCount": 0,
+      "title": "Componentry - Premium React UI Component Library by Harsh Jadhav",
+      "description": "Componentry is a free, open-source React UI component library by Harsh Jadhav. Beautiful, animated, copy-paste components built with Tailwind CSS, TypeScript, and Framer Motion. The best UI components for modern web applications.",
+      "headings": [
+        {
+          "level": "h1",
+          "text": "Components with motion.Built for production."
+        },
+        {
+          "level": "h2",
+          "text": "Loved by the community"
+        }
+      ],
+      "ctas": [
+        "COMPONENTRY",
+        "Docs",
+        "GitHub",
+        "COMPONENTRY",
+        "Components",
+        "Quick Start",
+        "GitHub",
+        "GitHub"
+      ],
+      "sections": [
+        {
+          "index": 0,
+          "heading": "",
+          "textSample": "COMPONENTRYCOMPONENTRYCOMPONENTRYCOMPONENTRYCOMPONENTRYCOMPONENTRYCOMPONENTRYCOMPONENTRYCOMPONENTRYCOMPONENTRYCOMPONENTRYCOMPONENTRYCOMPONENTRYCOMPONENTRYCOMPONENTRYCOMPONENTRY"
+        },
+        {
+          "index": 1,
+          "heading": "Loved by the community",
+          "textSample": "What developers are sayingLoved by the community“very nice stuff!”PVPasquale Vitiello@pacovitiello · Design Engineer @ Cal.com“what is going on @shadcn? In just a few hours I've discovered a bunch of new shadcn libraries I had never seen be"
+        }
+      ],
+      "palette": [
+        "lab(98.26 0 0)",
+        "lab(2.75381 0 0)",
+        "oklab(0.999994 0.0000455678 0.0000200868 / 0.06)",
+        "lab(5.06335 -0.00000745058 -0.00000298023 / 0.6)",
+        "oklab(0.999994 0.0000455678 0.0000200868 / 0.024)",
+        "oklab(0.984998 -0.00000956654 0.0000230074 / 0.6)",
+        "color(srgb 0.50631 0.506393 0.506368)",
+        "oklab(0.999994 0.0000455678 0.0000200868 / 0.012)",
+        "oklab(0.999994 0.0000455678 0.0000200868 / 0.04)",
+        "rgb(255, 255, 255)",
+        "lab(65.6464 1.53497 -5.42429)",
+        "lab(8.30603 0.618205 -2.16572)",
+        "rgb(0, 0, 0)",
+        "lab(35.1166 1.78212 -6.1173)"
+      ]
+    },
+    {
+      "url": "https://ui.shadcn.com/",
+      "mode": "approved-base-component-system",
+      "status": 200,
+      "screenshotDir": "C:/Users/PC/.codex/design-stack/screenshots/ui-shadcn-com",
+      "screenshots": {
+        "desktop": "C:/Users/PC/.codex/design-stack/screenshots/ui-shadcn-com/desktop.png",
+        "mobile": "C:/Users/PC/.codex/design-stack/screenshots/ui-shadcn-com/mobile.png"
+      },
+      "hashes": {
+        "desktopSha256": "aff5fd4b24a1fb00aefe212d93a8ddddb8065a080a763a45b399824fcb4500aa",
+        "mobileSha256": "bde3c55b49a133425d293bbd6f2adc42c689dc6070d32d147299278a7fa557ac"
+      },
+      "failedRequestCount": 0,
+      "title": "The Foundation for your Design System - shadcn/ui",
+      "description": "A set of beautifully designed components that you can customize, extend, and build on. Start here then make it your own. Open Source. Open Code.",
+      "headings": [
+        {
+          "level": "h1",
+          "text": "The Foundation for your Design System"
+        }
+      ],
+      "ctas": [
+        "Docs",
+        "Components",
+        "Blocks",
+        "Get Code",
+        "Introducing GitHub Registries",
+        "Budget",
+        "Docs",
+        "View Full Report",
+        "View Analytics",
+        "GitHub"
+      ],
+      "sections": [
+        {
+          "index": 0,
+          "heading": "The Foundation for your Design System",
+          "textSample": "Introducing GitHub Registries The Foundation for your Design SystemA set of beautifully designed components that you can customize, extend, and build on. Start here then make it your own. Open Source. Open Code.Build Your Own"
+        },
+        {
+          "index": 2,
+          "heading": "",
+          "textSample": "Button SecondaryOutlineBadgeSecondaryOutlineAlert DialogDialogButton GroupGroupOverviewAnalyticsTransactionsInvestmentsAccountsSpendingPlanningDocumentsBudgetReportsGoalsCalendarSupportHelp CenterDocsContact UsStatusCommunityAccountProfileB"
+        }
+      ],
+      "palette": [
+        "rgb(0, 0, 0)",
+        "lab(90.952 0 -0.0000119209)",
+        "lab(100 0 0)",
+        "lab(0 0 0)",
+        "lab(96.52 -0.0000298023 0.0000119209)",
+        "lab(98.26 0 0)",
+        "oklab(0.921998 -0.00000908971 0.0000215769 / 0.5)",
+        "lab(7.78201 -0.0000149012 0)",
+        "lab(2.75381 0 0)"
+      ]
+    },
+    {
+      "url": "https://efferd.com/blocks",
+      "mode": "block-discovery-license-per-block",
+      "status": 200,
+      "screenshotDir": "C:/Users/PC/.codex/design-stack/screenshots/efferd-com-blocks",
+      "screenshots": {
+        "desktop": "C:/Users/PC/.codex/design-stack/screenshots/efferd-com-blocks/desktop.png",
+        "mobile": "C:/Users/PC/.codex/design-stack/screenshots/efferd-com-blocks/mobile.png"
+      },
+      "hashes": {
+        "desktopSha256": "f436a96910bedf04f198784eedeb02218d82c308777a6ccc5757145fbd66c509",
+        "mobileSha256": "a51f0eb829cd6925830823325b44098fd74a12e7ef2c8d036177316c0d229c64"
+      },
+      "failedRequestCount": 1,
+      "title": "Beautiful Shadcn Blocks - Efferd",
+      "description": "Discover beautifully crafted shadcn blocks — ready to copy, customize, and drop into your next shadcn project.",
+      "headings": [
+        {
+          "level": "h1",
+          "text": "Explore beautiful shadcn blocks"
+        },
+        {
+          "level": "h2",
+          "text": "Marketing"
+        },
+        {
+          "level": "h3",
+          "text": "Auth"
+        },
+        {
+          "level": "h3",
+          "text": "Blog Sections"
+        },
+        {
+          "level": "h3",
+          "text": "Contact"
+        },
+        {
+          "level": "h3",
+          "text": "Call to Action"
+        },
+        {
+          "level": "h3",
+          "text": "Faqs"
+        },
+        {
+          "level": "h3",
+          "text": "Features"
+        },
+        {
+          "level": "h3",
+          "text": "Footer"
+        },
+        {
+          "level": "h3",
+          "text": "Header"
+        },
+        {
+          "level": "h3",
+          "text": "Hero Sections"
+        },
+        {
+          "level": "h3",
+          "text": "Image Gallery"
+        },
+        {
+          "level": "h3",
+          "text": "Integrations"
+        },
+        {
+          "level": "h3",
+          "text": "Logo Cloud"
+        },
+        {
+          "level": "h3",
+          "text": "Not Found"
+        },
+        {
+          "level": "h3",
+          "text": "Pricing"
+        },
+        {
+          "level": "h3",
+          "text": "Testimonials"
+        },
+        {
+          "level": "h3",
+          "text": "More"
+        },
+        {
+          "level": "h2",
+          "text": "App / Dashboard"
+        },
+        {
+          "level": "h3",
+          "text": "App Shell"
+        },
+        {
+          "level": "h3",
+          "text": "Dashboard"
+        },
+        {
+          "level": "h3",
+          "text": "More"
+        }
+      ],
+      "ctas": [
+        "Blocks",
+        "Pricing",
+        "Docs",
+        "Get access",
+        "Auth14 blocks",
+        "Blog Sections5 blocks",
+        "Contact11 blocks",
+        "Call to Action20 blocks",
+        "Faqs8 blocks",
+        "Features10 blocks",
+        "Footer14 blocks",
+        "14 blocks Header",
+        "Hero Sections9 blocks (+ 3 Free)",
+        "Image Gallery1 Free block",
+        "Integrations12 blocks",
+        "Logo Cloud11 blocks",
+        "404Not Found2 Free blocks",
+        "Pricing7 blocks",
+        "Testimonials8 blocks",
+        "App Shell10 blocks",
+        "Dashboard10 blocks",
+        "Blocks",
+        "Pricing",
+        "Docs"
+      ],
+      "sections": [
+        {
+          "index": 1,
+          "heading": "Marketing",
+          "textSample": "MarketingAuth14 blocks Blog Sections5 blocks Contact11 blocks Call to Action20 blocks Faqs8 blocks Features10 blocks Footer14 blocks 14 blocks HeaderHero Sections9 blocks (+ 3 Free)Image Gallery1 Free block Integrations12 blocks Logo Cloud1"
+        },
+        {
+          "index": 2,
+          "heading": "App / Dashboard",
+          "textSample": "App / DashboardApp Shell10 blocks Dashboard10 blocks MoreComing Soon..."
+        }
+      ],
+      "palette": [
+        "lab(1.5609 0 0)",
+        "lab(98.26 0 0)",
+        "lab(88.4 0 0.0000119209)",
+        "lab(48.496 0 0)",
+        "lab(86.0279 1.77148 0.600767)",
+        "lab(7.78201 -0.0000149012 0)"
+      ]
+    }
+  ]
+}

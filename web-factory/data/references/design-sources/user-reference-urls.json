@@ -1,0 +1,52 @@
+{
+  "name": "sergio-web-design-reference-list",
+  "updatedAt": "2026-06-15",
+  "screenshotCacheRoot": "C:/Users/PC/.codex/design-stack/screenshots",
+  "codeCacheRoot": "C:/Users/PC/.codex/design-stack/repos",
+  "urls": [
+    {
+      "url": "https://21st.dev/community/components",
+      "mode": "structure-and-component-discovery"
+    },
+    {
+      "url": "https://dribbble.com/shots/27129126-Axion-Futuristic-Electric-Car-Landing-Page-Website",
+      "mode": "screenshot-and-mood-only"
+    },
+    {
+      "url": "https://fontpair.co/",
+      "mode": "typography-reference"
+    },
+    {
+      "url": "https://motion.dev/docs/quick-start",
+      "mode": "official-motion-docs"
+    },
+    {
+      "url": "https://www.10x.app/",
+      "mode": "landing-structure-only-noncommercial-code"
+    },
+    {
+      "url": "https://motion-primitives.com/",
+      "mode": "motion-component-reference"
+    },
+    {
+      "url": "https://ui.watermelon.sh/",
+      "mode": "component-taxonomy-unverified-license"
+    },
+    {
+      "url": "https://www.lapa.ninja/",
+      "mode": "inspiration-index-only"
+    },
+    {
+      "url": "https://www.componentry.fun/",
+      "mode": "mit-component-code-reference"
+    },
+    {
+      "url": "https://ui.shadcn.com/",
+      "mode": "approved-base-component-system"
+    },
+    {
+      "url": "https://efferd.com/blocks",
+      "mode": "block-discovery-license-per-block"
+    }
+  ]
+}

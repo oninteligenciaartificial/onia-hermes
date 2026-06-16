@@ -20,4 +20,37 @@ describe("clientSchema", () => {
       }),
     ).toThrow();
   });
+
+  it("accepts store data and local anchor CTAs", () => {
+    const client = clientSchema.parse({
+      nombre: "Store",
+      slug: "store",
+      cta: {
+        texto: "Ver catalogo",
+        url: "#catalogo",
+      },
+      productos: [
+        {
+          titulo: "Producto demo",
+          categoria: "Tecnologia",
+          precio: "Consultar",
+          desc: "Producto de prueba para tienda.",
+          imagen: "assets/producto-demo.webp",
+          marca: "Demo Labs",
+          beneficios: ["Compra asistida"],
+          ordenRutina: 1,
+        },
+      ],
+      heroVideo: "assets/store-hero.mp4",
+    });
+
+    expect(client.cta.url).toBe("#catalogo");
+    expect(client.heroVideo).toBe("assets/store-hero.mp4");
+    expect(client.productos).toHaveLength(1);
+    expect(client.productos[0].etiqueta).toBe("Nuevo");
+    expect(client.productos[0].imagen).toBe("assets/producto-demo.webp");
+    expect(client.productos[0].marca).toBe("Demo Labs");
+    expect(client.productos[0].beneficios).toEqual(["Compra asistida"]);
+    expect(client.productos[0].ordenRutina).toBe(1);
+  });
 });

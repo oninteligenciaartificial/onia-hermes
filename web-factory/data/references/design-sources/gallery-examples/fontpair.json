@@ -1,0 +1,2914 @@
+{
+  "capturedAt": "2026-06-15T22:02:34.487Z",
+  "cacheRoot": "C:/Users/PC/.codex/design-stack/gallery-examples-full",
+  "policy": "Gallery screenshots and structure are reference artifacts. Copy/adapt code only when licenseStatus is compatible and the linked/local repo license has been reviewed.",
+  "configPath": "data/references/design-sources/gallery-reference-sources.json",
+  "results": [
+    {
+      "id": "fontpair",
+      "name": "Fontpair",
+      "url": "https://fontpair.co/all",
+      "mode": "typography-gallery",
+      "usage": "Font-pair inspiration and typographic mood extraction. Check font licenses before use.",
+      "licenseStatus": "typography-reference",
+      "status": 200,
+      "failedRequestCount": 4,
+      "rawCandidateCount": 32,
+      "selectedCandidateCount": 28,
+      "detailedExampleCount": 8,
+      "candidates": [
+        {
+          "index": 87,
+          "url": "https://fontpair.co/fonts",
+          "text": "Browse fonts",
+          "heading": "Fontpair",
+          "description": "Fontpair2026, Fontpair © CopyrightProductAll pairingsBrowse fontsIconsColorsInspirationPricingResourcesTypography ToolsTypography BooksFont AlternativesBrand ExtractorFigma PluginChrome ExtensionCategoriesSans-SerifSerifSlabDisplayMonospaceHandwritingPlatformsFigmaCanvaAdobeWordPressWebflowFramerAccountLog inSign upLegalPrivacy PolicyTerms of ServiceFAQ",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [
+            "All pairings",
+            "Browse fonts",
+            "Icons",
+            "Colors",
+            "Inspiration",
+            "Pricing",
+            "Typography Tools",
+            "Typography Books"
+          ],
+          "tags": [],
+          "cardArea": 300960,
+          "score": 8,
+          "sourceMode": "typography-gallery"
+        },
+        {
+          "index": 88,
+          "url": "https://fontpair.co/icons",
+          "text": "Icons",
+          "heading": "Fontpair",
+          "description": "Fontpair2026, Fontpair © CopyrightProductAll pairingsBrowse fontsIconsColorsInspirationPricingResourcesTypography ToolsTypography BooksFont AlternativesBrand ExtractorFigma PluginChrome ExtensionCategoriesSans-SerifSerifSlabDisplayMonospaceHandwritingPlatformsFigmaCanvaAdobeWordPressWebflowFramerAccountLog inSign upLegalPrivacy PolicyTerms of ServiceFAQ",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [
+            "All pairings",
+            "Browse fonts",
+            "Icons",
+            "Colors",
+            "Inspiration",
+            "Pricing",
+            "Typography Tools",
+            "Typography Books"
+          ],
+          "tags": [],
+          "cardArea": 300960,
+          "score": 8,
+          "sourceMode": "typography-gallery"
+        },
+        {
+          "index": 89,
+          "url": "https://fontpair.co/colors",
+          "text": "Colors",
+          "heading": "Fontpair",
+          "description": "Fontpair2026, Fontpair © CopyrightProductAll pairingsBrowse fontsIconsColorsInspirationPricingResourcesTypography ToolsTypography BooksFont AlternativesBrand ExtractorFigma PluginChrome ExtensionCategoriesSans-SerifSerifSlabDisplayMonospaceHandwritingPlatformsFigmaCanvaAdobeWordPressWebflowFramerAccountLog inSign upLegalPrivacy PolicyTerms of ServiceFAQ",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [
+            "All pairings",
+            "Browse fonts",
+            "Icons",
+            "Colors",
+            "Inspiration",
+            "Pricing",
+            "Typography Tools",
+            "Typography Books"
+          ],
+          "tags": [],
+          "cardArea": 300960,
+          "score": 8,
+          "sourceMode": "typography-gallery"
+        },
+        {
+          "index": 90,
+          "url": "https://fontpair.co/inspiration",
+          "text": "Inspiration",
+          "heading": "Fontpair",
+          "description": "Fontpair2026, Fontpair © CopyrightProductAll pairingsBrowse fontsIconsColorsInspirationPricingResourcesTypography ToolsTypography BooksFont AlternativesBrand ExtractorFigma PluginChrome ExtensionCategoriesSans-SerifSerifSlabDisplayMonospaceHandwritingPlatformsFigmaCanvaAdobeWordPressWebflowFramerAccountLog inSign upLegalPrivacy PolicyTerms of ServiceFAQ",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [
+            "All pairings",
+            "Browse fonts",
+            "Icons",
+            "Colors",
+            "Inspiration",
+            "Pricing",
+            "Typography Tools",
+            "Typography Books"
+          ],
+          "tags": [],
+          "cardArea": 300960,
+          "score": 8,
+          "sourceMode": "typography-gallery"
+        },
+        {
+          "index": 92,
+          "url": "https://fontpair.co/typography-tools",
+          "text": "Typography Tools",
+          "heading": "Fontpair",
+          "description": "Fontpair2026, Fontpair © CopyrightProductAll pairingsBrowse fontsIconsColorsInspirationPricingResourcesTypography ToolsTypography BooksFont AlternativesBrand ExtractorFigma PluginChrome ExtensionCategoriesSans-SerifSerifSlabDisplayMonospaceHandwritingPlatformsFigmaCanvaAdobeWordPressWebflowFramerAccountLog inSign upLegalPrivacy PolicyTerms of ServiceFAQ",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [
+            "All pairings",
+            "Browse fonts",
+            "Icons",
+            "Colors",
+            "Inspiration",
+            "Pricing",
+            "Typography Tools",
+            "Typography Books"
+          ],
+          "tags": [],
+          "cardArea": 300960,
+          "score": 8,
+          "sourceMode": "typography-gallery"
+        },
+        {
+          "index": 93,
+          "url": "https://fontpair.co/typography-books",
+          "text": "Typography Books",
+          "heading": "Fontpair",
+          "description": "Fontpair2026, Fontpair © CopyrightProductAll pairingsBrowse fontsIconsColorsInspirationPricingResourcesTypography ToolsTypography BooksFont AlternativesBrand ExtractorFigma PluginChrome ExtensionCategoriesSans-SerifSerifSlabDisplayMonospaceHandwritingPlatformsFigmaCanvaAdobeWordPressWebflowFramerAccountLog inSign upLegalPrivacy PolicyTerms of ServiceFAQ",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [
+            "All pairings",
+            "Browse fonts",
+            "Icons",
+            "Colors",
+            "Inspiration",
+            "Pricing",
+            "Typography Tools",
+            "Typography Books"
+          ],
+          "tags": [],
+          "cardArea": 300960,
+          "score": 8,
+          "sourceMode": "typography-gallery"
+        },
+        {
+          "index": 94,
+          "url": "https://fontpair.co/fonts/alternatives",
+          "text": "Font Alternatives",
+          "heading": "Fontpair",
+          "description": "Fontpair2026, Fontpair © CopyrightProductAll pairingsBrowse fontsIconsColorsInspirationPricingResourcesTypography ToolsTypography BooksFont AlternativesBrand ExtractorFigma PluginChrome ExtensionCategoriesSans-SerifSerifSlabDisplayMonospaceHandwritingPlatformsFigmaCanvaAdobeWordPressWebflowFramerAccountLog inSign upLegalPrivacy PolicyTerms of ServiceFAQ",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [
+            "All pairings",
+            "Browse fonts",
+            "Icons",
+            "Colors",
+            "Inspiration",
+            "Pricing",
+            "Typography Tools",
+            "Typography Books"
+          ],
+          "tags": [],
+          "cardArea": 300960,
+          "score": 8,
+          "sourceMode": "typography-gallery"
+        },
+        {
+          "index": 95,
+          "url": "https://fontpair.co/brand-extractor",
+          "text": "Brand Extractor",
+          "heading": "Fontpair",
+          "description": "Fontpair2026, Fontpair © CopyrightProductAll pairingsBrowse fontsIconsColorsInspirationPricingResourcesTypography ToolsTypography BooksFont AlternativesBrand ExtractorFigma PluginChrome ExtensionCategoriesSans-SerifSerifSlabDisplayMonospaceHandwritingPlatformsFigmaCanvaAdobeWordPressWebflowFramerAccountLog inSign upLegalPrivacy PolicyTerms of ServiceFAQ",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [
+            "All pairings",
+            "Browse fonts",
+            "Icons",
+            "Colors",
+            "Inspiration",
+            "Pricing",
+            "Typography Tools",
+            "Typography Books"
+          ],
+          "tags": [],
+          "cardArea": 300960,
+          "score": 8,
+          "sourceMode": "typography-gallery"
+        },
+        {
+          "index": 96,
+          "url": "https://fontpair.co/figma-plugin",
+          "text": "Figma Plugin",
+          "heading": "Fontpair",
+          "description": "Fontpair2026, Fontpair © CopyrightProductAll pairingsBrowse fontsIconsColorsInspirationPricingResourcesTypography ToolsTypography BooksFont AlternativesBrand ExtractorFigma PluginChrome ExtensionCategoriesSans-SerifSerifSlabDisplayMonospaceHandwritingPlatformsFigmaCanvaAdobeWordPressWebflowFramerAccountLog inSign upLegalPrivacy PolicyTerms of ServiceFAQ",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [
+            "All pairings",
+            "Browse fonts",
+            "Icons",
+            "Colors",
+            "Inspiration",
+            "Pricing",
+            "Typography Tools",
+            "Typography Books"
+          ],
+          "tags": [],
+          "cardArea": 300960,
+          "score": 8,
+          "sourceMode": "typography-gallery"
+        },
+        {
+          "index": 97,
+          "url": "https://fontpair.co/extension",
+          "text": "Chrome Extension",
+          "heading": "Fontpair",
+          "description": "Fontpair2026, Fontpair © CopyrightProductAll pairingsBrowse fontsIconsColorsInspirationPricingResourcesTypography ToolsTypography BooksFont AlternativesBrand ExtractorFigma PluginChrome ExtensionCategoriesSans-SerifSerifSlabDisplayMonospaceHandwritingPlatformsFigmaCanvaAdobeWordPressWebflowFramerAccountLog inSign upLegalPrivacy PolicyTerms of ServiceFAQ",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [
+            "All pairings",
+            "Browse fonts",
+            "Icons",
+            "Colors",
+            "Inspiration",
+            "Pricing",
+            "Typography Tools",
+            "Typography Books"
+          ],
+          "tags": [],
+          "cardArea": 300960,
+          "score": 8,
+          "sourceMode": "typography-gallery"
+        },
+        {
+          "index": 98,
+          "url": "https://fontpair.co/category/sans-serif",
+          "text": "Sans-Serif",
+          "heading": "Fontpair",
+          "description": "Fontpair2026, Fontpair © CopyrightProductAll pairingsBrowse fontsIconsColorsInspirationPricingResourcesTypography ToolsTypography BooksFont AlternativesBrand ExtractorFigma PluginChrome ExtensionCategoriesSans-SerifSerifSlabDisplayMonospaceHandwritingPlatformsFigmaCanvaAdobeWordPressWebflowFramerAccountLog inSign upLegalPrivacy PolicyTerms of ServiceFAQ",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [
+            "All pairings",
+            "Browse fonts",
+            "Icons",
+            "Colors",
+            "Inspiration",
+            "Pricing",
+            "Typography Tools",
+            "Typography Books"
+          ],
+          "tags": [],
+          "cardArea": 300960,
+          "score": 8,
+          "sourceMode": "typography-gallery"
+        },
+        {
+          "index": 99,
+          "url": "https://fontpair.co/category/serif",
+          "text": "Serif",
+          "heading": "Fontpair",
+          "description": "Fontpair2026, Fontpair © CopyrightProductAll pairingsBrowse fontsIconsColorsInspirationPricingResourcesTypography ToolsTypography BooksFont AlternativesBrand ExtractorFigma PluginChrome ExtensionCategoriesSans-SerifSerifSlabDisplayMonospaceHandwritingPlatformsFigmaCanvaAdobeWordPressWebflowFramerAccountLog inSign upLegalPrivacy PolicyTerms of ServiceFAQ",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [
+            "All pairings",
+            "Browse fonts",
+            "Icons",
+            "Colors",
+            "Inspiration",
+            "Pricing",
+            "Typography Tools",
+            "Typography Books"
+          ],
+          "tags": [],
+          "cardArea": 300960,
+          "score": 8,
+          "sourceMode": "typography-gallery"
+        },
+        {
+          "index": 100,
+          "url": "https://fontpair.co/category/slab",
+          "text": "Slab",
+          "heading": "Fontpair",
+          "description": "Fontpair2026, Fontpair © CopyrightProductAll pairingsBrowse fontsIconsColorsInspirationPricingResourcesTypography ToolsTypography BooksFont AlternativesBrand ExtractorFigma PluginChrome ExtensionCategoriesSans-SerifSerifSlabDisplayMonospaceHandwritingPlatformsFigmaCanvaAdobeWordPressWebflowFramerAccountLog inSign upLegalPrivacy PolicyTerms of ServiceFAQ",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [
+            "All pairings",
+            "Browse fonts",
+            "Icons",
+            "Colors",
+            "Inspiration",
+            "Pricing",
+            "Typography Tools",
+            "Typography Books"
+          ],
+          "tags": [],
+          "cardArea": 300960,
+          "score": 8,
+          "sourceMode": "typography-gallery"
+        },
+        {
+          "index": 101,
+          "url": "https://fontpair.co/category/display",
+          "text": "Display",
+          "heading": "Fontpair",
+          "description": "Fontpair2026, Fontpair © CopyrightProductAll pairingsBrowse fontsIconsColorsInspirationPricingResourcesTypography ToolsTypography BooksFont AlternativesBrand ExtractorFigma PluginChrome ExtensionCategoriesSans-SerifSerifSlabDisplayMonospaceHandwritingPlatformsFigmaCanvaAdobeWordPressWebflowFramerAccountLog inSign upLegalPrivacy PolicyTerms of ServiceFAQ",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [
+            "All pairings",
+            "Browse fonts",
+            "Icons",
+            "Colors",
+            "Inspiration",
+            "Pricing",
+            "Typography Tools",
+            "Typography Books"
+          ],
+          "tags": [],
+          "cardArea": 300960,
+          "score": 8,
+          "sourceMode": "typography-gallery"
+        },
+        {
+          "index": 102,
+          "url": "https://fontpair.co/category/monospace",
+          "text": "Monospace",
+          "heading": "Fontpair",
+          "description": "Fontpair2026, Fontpair © CopyrightProductAll pairingsBrowse fontsIconsColorsInspirationPricingResourcesTypography ToolsTypography BooksFont AlternativesBrand ExtractorFigma PluginChrome ExtensionCategoriesSans-SerifSerifSlabDisplayMonospaceHandwritingPlatformsFigmaCanvaAdobeWordPressWebflowFramerAccountLog inSign upLegalPrivacy PolicyTerms of ServiceFAQ",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [
+            "All pairings",
+            "Browse fonts",
+            "Icons",
+            "Colors",
+            "Inspiration",
+            "Pricing",
+            "Typography Tools",
+            "Typography Books"
+          ],
+          "tags": [],
+          "cardArea": 300960,
+          "score": 8,
+          "sourceMode": "typography-gallery"
+        },
+        {
+          "index": 103,
+          "url": "https://fontpair.co/category/handwriting",
+          "text": "Handwriting",
+          "heading": "Fontpair",
+          "description": "Fontpair2026, Fontpair © CopyrightProductAll pairingsBrowse fontsIconsColorsInspirationPricingResourcesTypography ToolsTypography BooksFont AlternativesBrand ExtractorFigma PluginChrome ExtensionCategoriesSans-SerifSerifSlabDisplayMonospaceHandwritingPlatformsFigmaCanvaAdobeWordPressWebflowFramerAccountLog inSign upLegalPrivacy PolicyTerms of ServiceFAQ",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [
+            "All pairings",
+            "Browse fonts",
+            "Icons",
+            "Colors",
+            "Inspiration",
+            "Pricing",
+            "Typography Tools",
+            "Typography Books"
+          ],
+          "tags": [],
+          "cardArea": 300960,
+          "score": 8,
+          "sourceMode": "typography-gallery"
+        },
+        {
+          "index": 104,
+          "url": "https://fontpair.co/figma",
+          "text": "Figma",
+          "heading": "Fontpair",
+          "description": "Fontpair2026, Fontpair © CopyrightProductAll pairingsBrowse fontsIconsColorsInspirationPricingResourcesTypography ToolsTypography BooksFont AlternativesBrand ExtractorFigma PluginChrome ExtensionCategoriesSans-SerifSerifSlabDisplayMonospaceHandwritingPlatformsFigmaCanvaAdobeWordPressWebflowFramerAccountLog inSign upLegalPrivacy PolicyTerms of ServiceFAQ",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [
+            "All pairings",
+            "Browse fonts",
+            "Icons",
+            "Colors",
+            "Inspiration",
+            "Pricing",
+            "Typography Tools",
+            "Typography Books"
+          ],
+          "tags": [],
+          "cardArea": 300960,
+          "score": 8,
+          "sourceMode": "typography-gallery"
+        },
+        {
+          "index": 105,
+          "url": "https://fontpair.co/canva",
+          "text": "Canva",
+          "heading": "Fontpair",
+          "description": "Fontpair2026, Fontpair © CopyrightProductAll pairingsBrowse fontsIconsColorsInspirationPricingResourcesTypography ToolsTypography BooksFont AlternativesBrand ExtractorFigma PluginChrome ExtensionCategoriesSans-SerifSerifSlabDisplayMonospaceHandwritingPlatformsFigmaCanvaAdobeWordPressWebflowFramerAccountLog inSign upLegalPrivacy PolicyTerms of ServiceFAQ",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [
+            "All pairings",
+            "Browse fonts",
+            "Icons",
+            "Colors",
+            "Inspiration",
+            "Pricing",
+            "Typography Tools",
+            "Typography Books"
+          ],
+          "tags": [],
+          "cardArea": 300960,
+          "score": 8,
+          "sourceMode": "typography-gallery"
+        },
+        {
+          "index": 106,
+          "url": "https://fontpair.co/adobe",
+          "text": "Adobe",
+          "heading": "Fontpair",
+          "description": "Fontpair2026, Fontpair © CopyrightProductAll pairingsBrowse fontsIconsColorsInspirationPricingResourcesTypography ToolsTypography BooksFont AlternativesBrand ExtractorFigma PluginChrome ExtensionCategoriesSans-SerifSerifSlabDisplayMonospaceHandwritingPlatformsFigmaCanvaAdobeWordPressWebflowFramerAccountLog inSign upLegalPrivacy PolicyTerms of ServiceFAQ",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [
+            "All pairings",
+            "Browse fonts",
+            "Icons",
+            "Colors",
+            "Inspiration",
+            "Pricing",
+            "Typography Tools",
+            "Typography Books"
+          ],
+          "tags": [],
+          "cardArea": 300960,
+          "score": 8,
+          "sourceMode": "typography-gallery"
+        },
+        {
+          "index": 107,
+          "url": "https://fontpair.co/wordpress",
+          "text": "WordPress",
+          "heading": "Fontpair",
+          "description": "Fontpair2026, Fontpair © CopyrightProductAll pairingsBrowse fontsIconsColorsInspirationPricingResourcesTypography ToolsTypography BooksFont AlternativesBrand ExtractorFigma PluginChrome ExtensionCategoriesSans-SerifSerifSlabDisplayMonospaceHandwritingPlatformsFigmaCanvaAdobeWordPressWebflowFramerAccountLog inSign upLegalPrivacy PolicyTerms of ServiceFAQ",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [
+            "All pairings",
+            "Browse fonts",
+            "Icons",
+            "Colors",
+            "Inspiration",
+            "Pricing",
+            "Typography Tools",
+            "Typography Books"
+          ],
+          "tags": [],
+          "cardArea": 300960,
+          "score": 8,
+          "sourceMode": "typography-gallery"
+        },
+        {
+          "index": 108,
+          "url": "https://fontpair.co/webflow",
+          "text": "Webflow",
+          "heading": "Fontpair",
+          "description": "Fontpair2026, Fontpair © CopyrightProductAll pairingsBrowse fontsIconsColorsInspirationPricingResourcesTypography ToolsTypography BooksFont AlternativesBrand ExtractorFigma PluginChrome ExtensionCategoriesSans-SerifSerifSlabDisplayMonospaceHandwritingPlatformsFigmaCanvaAdobeWordPressWebflowFramerAccountLog inSign upLegalPrivacy PolicyTerms of ServiceFAQ",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [
+            "All pairings",
+            "Browse fonts",
+            "Icons",
+            "Colors",
+            "Inspiration",
+            "Pricing",
+            "Typography Tools",
+            "Typography Books"
+          ],
+          "tags": [],
+          "cardArea": 300960,
+          "score": 8,
+          "sourceMode": "typography-gallery"
+        },
+        {
+          "index": 109,
+          "url": "https://fontpair.co/framer",
+          "text": "Framer",
+          "heading": "Fontpair",
+          "description": "Fontpair2026, Fontpair © CopyrightProductAll pairingsBrowse fontsIconsColorsInspirationPricingResourcesTypography ToolsTypography BooksFont AlternativesBrand ExtractorFigma PluginChrome ExtensionCategoriesSans-SerifSerifSlabDisplayMonospaceHandwritingPlatformsFigmaCanvaAdobeWordPressWebflowFramerAccountLog inSign upLegalPrivacy PolicyTerms of ServiceFAQ",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [
+            "All pairings",
+            "Browse fonts",
+            "Icons",
+            "Colors",
+            "Inspiration",
+            "Pricing",
+            "Typography Tools",
+            "Typography Books"
+          ],
+          "tags": [],
+          "cardArea": 300960,
+          "score": 8,
+          "sourceMode": "typography-gallery"
+        },
+        {
+          "index": 110,
+          "url": "https://fontpair.co/privacy",
+          "text": "Privacy Policy",
+          "heading": "Fontpair",
+          "description": "Fontpair2026, Fontpair © CopyrightProductAll pairingsBrowse fontsIconsColorsInspirationPricingResourcesTypography ToolsTypography BooksFont AlternativesBrand ExtractorFigma PluginChrome ExtensionCategoriesSans-SerifSerifSlabDisplayMonospaceHandwritingPlatformsFigmaCanvaAdobeWordPressWebflowFramerAccountLog inSign upLegalPrivacy PolicyTerms of ServiceFAQ",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [
+            "All pairings",
+            "Browse fonts",
+            "Icons",
+            "Colors",
+            "Inspiration",
+            "Pricing",
+            "Typography Tools",
+            "Typography Books"
+          ],
+          "tags": [],
+          "cardArea": 300960,
+          "score": 8,
+          "sourceMode": "typography-gallery"
+        },
+        {
+          "index": 111,
+          "url": "https://fontpair.co/terms",
+          "text": "Terms of Service",
+          "heading": "Fontpair",
+          "description": "Fontpair2026, Fontpair © CopyrightProductAll pairingsBrowse fontsIconsColorsInspirationPricingResourcesTypography ToolsTypography BooksFont AlternativesBrand ExtractorFigma PluginChrome ExtensionCategoriesSans-SerifSerifSlabDisplayMonospaceHandwritingPlatformsFigmaCanvaAdobeWordPressWebflowFramerAccountLog inSign upLegalPrivacy PolicyTerms of ServiceFAQ",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [
+            "All pairings",
+            "Browse fonts",
+            "Icons",
+            "Colors",
+            "Inspiration",
+            "Pricing",
+            "Typography Tools",
+            "Typography Books"
+          ],
+          "tags": [],
+          "cardArea": 300960,
+          "score": 8,
+          "sourceMode": "typography-gallery"
+        },
+        {
+          "index": 112,
+          "url": "https://fontpair.co/faq",
+          "text": "FAQ",
+          "heading": "Fontpair",
+          "description": "Fontpair2026, Fontpair © CopyrightProductAll pairingsBrowse fontsIconsColorsInspirationPricingResourcesTypography ToolsTypography BooksFont AlternativesBrand ExtractorFigma PluginChrome ExtensionCategoriesSans-SerifSerifSlabDisplayMonospaceHandwritingPlatformsFigmaCanvaAdobeWordPressWebflowFramerAccountLog inSign upLegalPrivacy PolicyTerms of ServiceFAQ",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [
+            "All pairings",
+            "Browse fonts",
+            "Icons",
+            "Colors",
+            "Inspiration",
+            "Pricing",
+            "Typography Tools",
+            "Typography Books"
+          ],
+          "tags": [],
+          "cardArea": 300960,
+          "score": 8,
+          "sourceMode": "typography-gallery"
+        },
+        {
+          "index": 91,
+          "url": "https://fontpair.co/pricing",
+          "text": "Pricing",
+          "heading": "Fontpair",
+          "description": "Fontpair2026, Fontpair © CopyrightProductAll pairingsBrowse fontsIconsColorsInspirationPricingResourcesTypography ToolsTypography BooksFont AlternativesBrand ExtractorFigma PluginChrome ExtensionCategoriesSans-SerifSerifSlabDisplayMonospaceHandwritingPlatformsFigmaCanvaAdobeWordPressWebflowFramerAccountLog inSign upLegalPrivacy PolicyTerms of ServiceFAQ",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [
+            "All pairings",
+            "Browse fonts",
+            "Icons",
+            "Colors",
+            "Inspiration",
+            "Pricing",
+            "Typography Tools",
+            "Typography Books"
+          ],
+          "tags": [],
+          "cardArea": 300960,
+          "score": 7,
+          "sourceMode": "typography-gallery"
+        },
+        {
+          "index": 19,
+          "url": "https://fontpair.co/fonts/google/special-gothic-condensed-one",
+          "text": "Special Gothic Condensed One",
+          "heading": "",
+          "description": "Special Gothic Condensed One",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [],
+          "tags": [],
+          "cardArea": 8155,
+          "score": 5,
+          "sourceMode": "typography-gallery"
+        },
+        {
+          "index": 0,
+          "url": "https://fontpair.co/",
+          "text": "",
+          "heading": "",
+          "description": "",
+          "imageSrc": "https://fontpair.co/lovable-uploads/96dd6456-e3b8-44ec-96f3-6e16c1611ac2.png",
+          "imageAlt": "Font Fusion Logo",
+          "buttonText": [],
+          "tags": [],
+          "cardArea": 2987,
+          "score": 5,
+          "sourceMode": "typography-gallery"
+        }
+      ],
+      "screenshot": {
+        "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/fontpair/gallery.png",
+        "sha256": "e164b8ee4a49f4b2c1e0fc1d8740ccad5f8f444251fcfd8398dd4a17cb96603c",
+        "mode": "full-page"
+      },
+      "screenshotQuality": {
+        "viewport": {
+          "width": 1440,
+          "height": 1000
+        },
+        "textLength": 9072,
+        "mediaCount": 154,
+        "codeCount": 0,
+        "headingCount": 39,
+        "usefulElementCount": 80,
+        "visibleAreaRatio": 1.102,
+        "isLikelySparse": false,
+        "visibleSamples": [
+          "Playground",
+          "Pairings",
+          "Fonts",
+          "Inspiration",
+          "Resources",
+          "Login",
+          "Sign Up",
+          "Go Pro"
+        ]
+      },
+      "examples": [
+        {
+          "sourceId": "fontpair",
+          "url": "https://fontpair.co/fonts",
+          "status": 200,
+          "licenseStatus": "typography-reference",
+          "reuseGuidance": "Font-pair inspiration and typographic mood extraction. Check font licenses before use.",
+          "candidate": {
+            "index": 87,
+            "url": "https://fontpair.co/fonts",
+            "text": "Browse fonts",
+            "heading": "Fontpair",
+            "description": "Fontpair2026, Fontpair © CopyrightProductAll pairingsBrowse fontsIconsColorsInspirationPricingResourcesTypography ToolsTypography BooksFont AlternativesBrand ExtractorFigma PluginChrome ExtensionCategoriesSans-SerifSerifSlabDisplayMonospaceHandwritingPlatformsFigmaCanvaAdobeWordPressWebflowFramerAccountLog inSign upLegalPrivacy PolicyTerms of ServiceFAQ",
+            "imageSrc": "",
+            "imageAlt": "",
+            "buttonText": [
+              "All pairings",
+              "Browse fonts",
+              "Icons",
+              "Colors",
+              "Inspiration",
+              "Pricing",
+              "Typography Tools",
+              "Typography Books"
+            ],
+            "tags": [],
+            "cardArea": 300960,
+            "score": 8,
+            "sourceMode": "typography-gallery"
+          },
+          "screenshots": {
+            "desktop": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/fontpair/087-fontpair-43c62d22/desktop.png",
+              "sha256": "844e31963756e3dab64a66053bba7fec5e9dae91d95f8e9e74d4cea5352711af",
+              "mode": "viewport"
+            },
+            "mobile": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/fontpair/087-fontpair-43c62d22/mobile.png",
+              "sha256": "9ffcf9cf26657669789bb3759b9f1fac3c36c661472e497415c9e3254544e49c",
+              "mode": "viewport"
+            }
+          },
+          "screenshotQuality": {
+            "desktop": {
+              "viewport": {
+                "width": 1440,
+                "height": 1000
+              },
+              "textLength": 2094,
+              "mediaCount": 175,
+              "codeCount": 0,
+              "headingCount": 53,
+              "usefulElementCount": 73,
+              "visibleAreaRatio": 1.276,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Playground",
+                "Pairings",
+                "Fonts",
+                "Inspiration",
+                "Resources",
+                "Login",
+                "Sign Up",
+                "Go Pro"
+              ]
+            },
+            "mobile": {
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "textLength": 1598,
+              "mediaCount": 175,
+              "codeCount": 0,
+              "headingCount": 53,
+              "usefulElementCount": 38,
+              "visibleAreaRatio": 1.236,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "All FontsAll FontsSerifSans SerifDisplayMonospaceHandwritingBrowse our collection of beautiful fonts from Google Fonts a",
+                "All Fonts",
+                "All Fonts",
+                "Serif",
+                "Sans Serif",
+                "Display",
+                "Monospace",
+                "Handwriting"
+              ]
+            }
+          },
+          "qualityWarnings": [],
+          "failedRequestCount": 4,
+          "title": "All Free Fonts - Google Fonts & Fontshare Collection | Fontpair",
+          "description": "Browse 1,500+ free fonts with pairing suggestions, specimens, and usage examples.",
+          "headings": [
+            {
+              "level": "h1",
+              "text": "All Fonts"
+            },
+            {
+              "level": "h3",
+              "text": "ABeeZee"
+            },
+            {
+              "level": "h3",
+              "text": "Abel"
+            },
+            {
+              "level": "h3",
+              "text": "Abhaya Libre"
+            },
+            {
+              "level": "h3",
+              "text": "Abril Fatface"
+            },
+            {
+              "level": "h3",
+              "text": "Abyssinica SIL"
+            },
+            {
+              "level": "h3",
+              "text": "Aclonica"
+            },
+            {
+              "level": "h3",
+              "text": "Actor"
+            },
+            {
+              "level": "h3",
+              "text": "Adamina"
+            },
+            {
+              "level": "h3",
+              "text": "ADLaM Display"
+            },
+            {
+              "level": "h3",
+              "text": "Advent Pro"
+            },
+            {
+              "level": "h3",
+              "text": "Afacad"
+            },
+            {
+              "level": "h3",
+              "text": "Afacad Flux"
+            },
+            {
+              "level": "h3",
+              "text": "Agdasima"
+            },
+            {
+              "level": "h3",
+              "text": "Akatab"
+            },
+            {
+              "level": "h3",
+              "text": "Akaya Kanadaka"
+            },
+            {
+              "level": "h3",
+              "text": "Akshar"
+            },
+            {
+              "level": "h3",
+              "text": "Alan Sans"
+            },
+            {
+              "level": "h3",
+              "text": "Alata"
+            },
+            {
+              "level": "h3",
+              "text": "Alatsi"
+            },
+            {
+              "level": "h3",
+              "text": "Albert Sans"
+            },
+            {
+              "level": "h3",
+              "text": "Aldrich"
+            },
+            {
+              "level": "h3",
+              "text": "Alef"
+            },
+            {
+              "level": "h3",
+              "text": "Alegreya"
+            },
+            {
+              "level": "h3",
+              "text": "Alegreya Sans"
+            },
+            {
+              "level": "h3",
+              "text": "Alegreya Sans SC"
+            },
+            {
+              "level": "h3",
+              "text": "Alegreya SC"
+            },
+            {
+              "level": "h3",
+              "text": "Aleo"
+            },
+            {
+              "level": "h3",
+              "text": "Alexandria"
+            },
+            {
+              "level": "h3",
+              "text": "Alfa Slab One"
+            },
+            {
+              "level": "h3",
+              "text": "Alice"
+            },
+            {
+              "level": "h3",
+              "text": "Alike"
+            },
+            {
+              "level": "h3",
+              "text": "Alkalami"
+            },
+            {
+              "level": "h3",
+              "text": "Alkatra"
+            },
+            {
+              "level": "h3",
+              "text": "Allan"
+            },
+            {
+              "level": "h3",
+              "text": "Allerta"
+            },
+            {
+              "level": "h3",
+              "text": "Almarai"
+            },
+            {
+              "level": "h3",
+              "text": "Almendra"
+            },
+            {
+              "level": "h3",
+              "text": "Almendra SC"
+            },
+            {
+              "level": "h3",
+              "text": "Alpino"
+            }
+          ],
+          "sections": [
+            {
+              "index": 0,
+              "heading": "All Fonts",
+              "textSample": "All FontsAll FontsSerifSans SerifDisplayMonospaceHandwritingBrowse our collection of beautiful fonts from Google Fonts and Fontshare",
+              "imageCount": 0,
+              "buttonCount": 6
+            },
+            {
+              "index": 1,
+              "heading": "Join 25,000+ designers choosing fonts with confidence",
+              "textSample": "Join 25,000+ designers choosing fonts with confidenceCreate free account",
+              "imageCount": 0,
+              "buttonCount": 1
+            }
+          ],
+          "ctas": [
+            "Playground",
+            "Pairings",
+            "Fonts",
+            "Inspiration",
+            "Resources",
+            "Login",
+            "Sign Up",
+            "Go Pro",
+            "Settings",
+            "Toggle mobile menu",
+            "All Fonts",
+            "Serif",
+            "Sans Serif",
+            "Display",
+            "Monospace",
+            "Handwriting",
+            "All Categories",
+            "A-Z",
+            "Sans-serif",
+            "Sans-serif",
+            "Serif",
+            "Display",
+            "Serif",
+            "Sans-serif",
+            "Sans-serif",
+            "Serif",
+            "Display",
+            "Sans-serif",
+            "Sans-serif",
+            "Sans-serif",
+            "Sans-serif",
+            "Sans-serif",
+            "Display",
+            "Sans-serif",
+            "Sans-serif",
+            "Sans-serif",
+            "Sans-serif",
+            "Sans-serif",
+            "Sans-serif",
+            "Sans-serif",
+            "Serif",
+            "Sans-serif",
+            "Sans-serif",
+            "Serif",
+            "Serif",
+            "Sans-serif",
+            "Display",
+            "Serif",
+            "Serif",
+            "Serif"
+          ],
+          "palette": [
+            "rgb(2, 8, 23)",
+            "rgb(250, 250, 250)",
+            "rgb(226, 232, 240)",
+            "rgb(15, 23, 42)",
+            "rgba(255, 255, 255, 0.75)",
+            "rgba(2, 8, 23, 0.8)",
+            "rgb(249, 249, 249)",
+            "rgb(248, 250, 252)",
+            "rgb(24, 24, 27)",
+            "rgb(52, 66, 86)",
+            "rgb(255, 255, 255)",
+            "rgb(241, 245, 249)",
+            "rgba(250, 250, 250, 0.8)"
+          ],
+          "layoutSignals": {
+            "hasNav": true,
+            "hasHero": true,
+            "hasPricing": true,
+            "hasTestimonials": false,
+            "hasFAQ": true,
+            "hasVideo": false,
+            "cardLikeCount": 53,
+            "imageCount": 1,
+            "buttonCount": 265,
+            "formCount": 1
+          },
+          "codeBlocks": [],
+          "codeLinks": []
+        },
+        {
+          "sourceId": "fontpair",
+          "url": "https://fontpair.co/icons",
+          "status": 200,
+          "licenseStatus": "typography-reference",
+          "reuseGuidance": "Font-pair inspiration and typographic mood extraction. Check font licenses before use.",
+          "candidate": {
+            "index": 88,
+            "url": "https://fontpair.co/icons",
+            "text": "Icons",
+            "heading": "Fontpair",
+            "description": "Fontpair2026, Fontpair © CopyrightProductAll pairingsBrowse fontsIconsColorsInspirationPricingResourcesTypography ToolsTypography BooksFont AlternativesBrand ExtractorFigma PluginChrome ExtensionCategoriesSans-SerifSerifSlabDisplayMonospaceHandwritingPlatformsFigmaCanvaAdobeWordPressWebflowFramerAccountLog inSign upLegalPrivacy PolicyTerms of ServiceFAQ",
+            "imageSrc": "",
+            "imageAlt": "",
+            "buttonText": [
+              "All pairings",
+              "Browse fonts",
+              "Icons",
+              "Colors",
+              "Inspiration",
+              "Pricing",
+              "Typography Tools",
+              "Typography Books"
+            ],
+            "tags": [],
+            "cardArea": 300960,
+            "score": 8,
+            "sourceMode": "typography-gallery"
+          },
+          "screenshots": {
+            "desktop": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/fontpair/088-fontpair-8ba6d672/desktop.png",
+              "sha256": "49936ca7c22c00eb64863596f168e6072471b9eaac54b13a46d55fa399691da9",
+              "mode": "viewport"
+            },
+            "mobile": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/fontpair/088-fontpair-8ba6d672/mobile.png",
+              "sha256": "0ee831c9265cb4b60a2df4e94f7d878c2508ad2345d2845c4e0b0dc5f522f135",
+              "mode": "viewport"
+            }
+          },
+          "screenshotQuality": {
+            "desktop": {
+              "viewport": {
+                "width": 1440,
+                "height": 1000
+              },
+              "textLength": 2827,
+              "mediaCount": 595,
+              "codeCount": 0,
+              "headingCount": 24,
+              "usefulElementCount": 171,
+              "visibleAreaRatio": 1.024,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Playground",
+                "Pairings",
+                "Fonts",
+                "Inspiration",
+                "Resources",
+                "Login",
+                "Sign Up",
+                "Go Pro"
+              ]
+            },
+            "mobile": {
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "textLength": 2758,
+              "mediaCount": 595,
+              "codeCount": 0,
+              "headingCount": 24,
+              "usefulElementCount": 45,
+              "visibleAreaRatio": 0.955,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "IconsIconsColorsFontsBrowse open-source icon libraries and copy-ready embed code. Choose from thousands of high-quality ",
+                "Icons",
+                "Icons",
+                "Colors",
+                "Fonts",
+                "A-Z",
+                "21 icon librariesAkar IconsSVGMITPerfectly rounded icon library made for designers and developers.Browse iconsEva IconsS",
+                "Akar Icons"
+              ]
+            }
+          },
+          "qualityWarnings": [],
+          "failedRequestCount": 4,
+          "title": "Icons Library — Free Open-Source SVG Icon Sets | Fontpair",
+          "description": "Browse and search free open-source icon libraries. Copy SVG and React code for Feather, Eva, Iconoir, and more.",
+          "headings": [
+            {
+              "level": "h1",
+              "text": "Icons"
+            },
+            {
+              "level": "h3",
+              "text": "Akar Icons"
+            },
+            {
+              "level": "h3",
+              "text": "Eva Icons"
+            },
+            {
+              "level": "h3",
+              "text": "Feather Icons"
+            },
+            {
+              "level": "h3",
+              "text": "Flowbite Icons"
+            },
+            {
+              "level": "h3",
+              "text": "Glow Icons"
+            },
+            {
+              "level": "h3",
+              "text": "Google Icons (Material Symbols)"
+            },
+            {
+              "level": "h3",
+              "text": "Heroicons"
+            },
+            {
+              "level": "h3",
+              "text": "Humble Icons"
+            },
+            {
+              "level": "h3",
+              "text": "Iconoir"
+            },
+            {
+              "level": "h3",
+              "text": "Jam Icons"
+            },
+            {
+              "level": "h3",
+              "text": "Line Awesome"
+            },
+            {
+              "level": "h3",
+              "text": "Lucide Icons"
+            },
+            {
+              "level": "h3",
+              "text": "Majesticons"
+            },
+            {
+              "level": "h3",
+              "text": "Myna UI Icons"
+            },
+            {
+              "level": "h3",
+              "text": "Octicons"
+            },
+            {
+              "level": "h3",
+              "text": "Phosphor Icons"
+            },
+            {
+              "level": "h3",
+              "text": "Sargam Icons"
+            },
+            {
+              "level": "h3",
+              "text": "Supercons"
+            },
+            {
+              "level": "h3",
+              "text": "Tabler Icons"
+            },
+            {
+              "level": "h3",
+              "text": "TDesign Icons"
+            },
+            {
+              "level": "h3",
+              "text": "Uncover Icons"
+            },
+            {
+              "level": "h2",
+              "text": "Join 25,000+ designers choosing fonts with confidence"
+            },
+            {
+              "level": "h3",
+              "text": "Fontpair"
+            }
+          ],
+          "sections": [
+            {
+              "index": 0,
+              "heading": "Icons",
+              "textSample": "IconsIconsColorsFontsBrowse open-source icon libraries and copy-ready embed code. Choose from thousands of high-quality icons for your next project.",
+              "imageCount": 0,
+              "buttonCount": 3
+            },
+            {
+              "index": 1,
+              "heading": "Join 25,000+ designers choosing fonts with confidence",
+              "textSample": "Join 25,000+ designers choosing fonts with confidenceCreate free account",
+              "imageCount": 0,
+              "buttonCount": 1
+            }
+          ],
+          "ctas": [
+            "Playground",
+            "Pairings",
+            "Fonts",
+            "Inspiration",
+            "Resources",
+            "Login",
+            "Sign Up",
+            "Go Pro",
+            "Settings",
+            "Toggle mobile menu",
+            "Icons",
+            "Colors",
+            "Fonts",
+            "A-Z",
+            "Browse icons",
+            "Browse icons",
+            "Browse icons",
+            "Browse icons",
+            "Browse icons",
+            "Browse icons",
+            "Browse icons",
+            "Browse icons",
+            "Browse icons",
+            "Browse icons",
+            "Browse icons",
+            "Browse icons",
+            "Browse icons",
+            "Browse icons",
+            "Browse icons",
+            "Browse icons",
+            "Browse icons",
+            "Browse icons",
+            "Browse icons",
+            "Browse icons",
+            "Browse icons",
+            "Create free account",
+            "All pairings",
+            "Browse fonts",
+            "Icons",
+            "Colors",
+            "Inspiration",
+            "Pricing",
+            "Typography Tools",
+            "Typography Books",
+            "Font Alternatives",
+            "Brand Extractor",
+            "Figma Plugin",
+            "Chrome Extension",
+            "Sans-Serif",
+            "Serif"
+          ],
+          "palette": [
+            "rgb(2, 8, 23)",
+            "rgb(250, 250, 250)",
+            "rgb(226, 232, 240)",
+            "rgb(15, 23, 42)",
+            "rgba(255, 255, 255, 0.75)",
+            "rgba(2, 8, 23, 0.8)",
+            "rgb(249, 249, 249)",
+            "rgb(248, 250, 252)",
+            "rgb(24, 24, 27)",
+            "rgb(52, 66, 86)",
+            "rgb(255, 255, 255)",
+            "rgb(241, 245, 249)"
+          ],
+          "layoutSignals": {
+            "hasNav": true,
+            "hasHero": true,
+            "hasPricing": true,
+            "hasTestimonials": false,
+            "hasFAQ": true,
+            "hasVideo": false,
+            "cardLikeCount": 24,
+            "imageCount": 22,
+            "buttonCount": 110,
+            "formCount": 1
+          },
+          "codeBlocks": [],
+          "codeLinks": [
+            {
+              "url": "https://supercons.vercel.app/",
+              "text": ""
+            }
+          ]
+        },
+        {
+          "sourceId": "fontpair",
+          "url": "https://fontpair.co/colors",
+          "status": 200,
+          "licenseStatus": "typography-reference",
+          "reuseGuidance": "Font-pair inspiration and typographic mood extraction. Check font licenses before use.",
+          "candidate": {
+            "index": 89,
+            "url": "https://fontpair.co/colors",
+            "text": "Colors",
+            "heading": "Fontpair",
+            "description": "Fontpair2026, Fontpair © CopyrightProductAll pairingsBrowse fontsIconsColorsInspirationPricingResourcesTypography ToolsTypography BooksFont AlternativesBrand ExtractorFigma PluginChrome ExtensionCategoriesSans-SerifSerifSlabDisplayMonospaceHandwritingPlatformsFigmaCanvaAdobeWordPressWebflowFramerAccountLog inSign upLegalPrivacy PolicyTerms of ServiceFAQ",
+            "imageSrc": "",
+            "imageAlt": "",
+            "buttonText": [
+              "All pairings",
+              "Browse fonts",
+              "Icons",
+              "Colors",
+              "Inspiration",
+              "Pricing",
+              "Typography Tools",
+              "Typography Books"
+            ],
+            "tags": [],
+            "cardArea": 300960,
+            "score": 8,
+            "sourceMode": "typography-gallery"
+          },
+          "screenshots": {
+            "desktop": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/fontpair/089-fontpair-13737529/desktop.png",
+              "sha256": "33e854f1473bc4c4a437ff4a4cf0fced9285506e27b93ede55b7ddb037be0c58",
+              "mode": "viewport"
+            },
+            "mobile": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/fontpair/089-fontpair-13737529/mobile.png",
+              "sha256": "c588952723802ca92de987ce0659c654af43b315328534ba014e9ae0d65e2fd2",
+              "mode": "viewport"
+            }
+          },
+          "screenshotQuality": {
+            "desktop": {
+              "viewport": {
+                "width": 1440,
+                "height": 1000
+              },
+              "textLength": 2019,
+              "mediaCount": 72,
+              "codeCount": 0,
+              "headingCount": 4,
+              "usefulElementCount": 38,
+              "visibleAreaRatio": 0.952,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Playground",
+                "Pairings",
+                "Fonts",
+                "Inspiration",
+                "Resources",
+                "Login",
+                "Sign Up",
+                "Go Pro"
+              ]
+            },
+            "mobile": {
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "textLength": 1950,
+              "mediaCount": 72,
+              "codeCount": 0,
+              "headingCount": 4,
+              "usefulElementCount": 16,
+              "visibleAreaRatio": 0.965,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Color Systems for UI DesignColorsTypographyDiscover generated color systems with semantic tokens. Each system includes b",
+                "Color Systems for UI Design",
+                "Colors",
+                "Typography",
+                "Recently added",
+                "All Styles",
+                "64 color systemsOcean SaaSAzure BrandSoft SkyViolet SaaSPurple BoldLavender SoftEmerald SaaSForest BrandMint SoftAmber S"
+              ]
+            }
+          },
+          "qualityWarnings": [],
+          "failedRequestCount": 4,
+          "title": "Color Palettes for Designers — Accessible Color Schemes | Fontpair",
+          "description": "Browse curated color palettes with WCAG contrast ratings. Find accessible color combinations for your brand, website, or design project.",
+          "headings": [
+            {
+              "level": "h1",
+              "text": "Color Systems for UI Design"
+            },
+            {
+              "level": "h2",
+              "text": "OKLCH Gradients"
+            },
+            {
+              "level": "h2",
+              "text": "Join 25,000+ designers choosing fonts with confidence"
+            },
+            {
+              "level": "h3",
+              "text": "Fontpair"
+            }
+          ],
+          "sections": [
+            {
+              "index": 0,
+              "heading": "Color Systems for UI Design",
+              "textSample": "Color Systems for UI DesignColorsTypographyDiscover generated color systems with semantic tokens. Each system includes background, text, primary, and accent colors that work together beautifully. Click any system to open it in the Playground.",
+              "imageCount": 0,
+              "buttonCount": 2
+            },
+            {
+              "index": 1,
+              "heading": "OKLCH Gradients",
+              "textSample": "OKLCH GradientsSmooth, perceptually-uniform gradients interpolated in OKLCH space — no muddy mid-tones.Sunset#FF6B35 → #E84393Ocean Deep#0C2340 → #5CBDB9Aurora#4ADE80 → #A78BFACitrus#FDE047 → #F97316Mono Fade#0A0A0A → #737373Forest#064E3B → #A3E635Lavender#C4B5FD → #7C3AEDFlame#7F1D1D → #F59E0BIce#E0F2FE → #2563EBMango",
+              "imageCount": 0,
+              "buttonCount": 0
+            },
+            {
+              "index": 2,
+              "heading": "Join 25,000+ designers choosing fonts with confidence",
+              "textSample": "Join 25,000+ designers choosing fonts with confidenceCreate free account",
+              "imageCount": 0,
+              "buttonCount": 1
+            }
+          ],
+          "ctas": [
+            "Playground",
+            "Pairings",
+            "Fonts",
+            "Inspiration",
+            "Resources",
+            "Login",
+            "Sign Up",
+            "Go Pro",
+            "Settings",
+            "Toggle mobile menu",
+            "Colors",
+            "Typography",
+            "Recently added",
+            "All Styles",
+            "Add to favorites",
+            "Add to favorites",
+            "Add to favorites",
+            "Add to favorites",
+            "Add to favorites",
+            "Add to favorites",
+            "Add to favorites",
+            "Add to favorites",
+            "Add to favorites",
+            "Add to favorites",
+            "Add to favorites",
+            "Add to favorites",
+            "Add to favorites",
+            "Add to favorites",
+            "Add to favorites",
+            "Add to favorites",
+            "Add to favorites",
+            "Add to favorites",
+            "Add to favorites",
+            "Add to favorites",
+            "Add to favorites",
+            "Add to favorites",
+            "Add to favorites",
+            "Add to favorites",
+            "Add to favorites",
+            "Add to favorites",
+            "Add to favorites",
+            "Add to favorites",
+            "Add to favorites",
+            "Add to favorites",
+            "Add to favorites",
+            "Add to favorites",
+            "Add to favorites",
+            "Add to favorites",
+            "Add to favorites",
+            "Add to favorites"
+          ],
+          "palette": [
+            "rgb(2, 8, 23)",
+            "rgb(250, 250, 250)",
+            "rgb(226, 232, 240)",
+            "rgb(15, 23, 42)",
+            "rgba(255, 255, 255, 0.75)",
+            "rgba(2, 8, 23, 0.8)",
+            "rgb(249, 249, 249)",
+            "rgb(248, 250, 252)",
+            "rgb(24, 24, 27)",
+            "rgb(52, 66, 86)",
+            "rgb(255, 255, 255)",
+            "rgb(241, 245, 249)"
+          ],
+          "layoutSignals": {
+            "hasNav": true,
+            "hasHero": true,
+            "hasPricing": true,
+            "hasTestimonials": false,
+            "hasFAQ": true,
+            "hasVideo": false,
+            "cardLikeCount": 155,
+            "imageCount": 1,
+            "buttonCount": 111,
+            "formCount": 1
+          },
+          "codeBlocks": [],
+          "codeLinks": []
+        },
+        {
+          "sourceId": "fontpair",
+          "url": "https://fontpair.co/inspiration",
+          "status": 200,
+          "licenseStatus": "typography-reference",
+          "reuseGuidance": "Font-pair inspiration and typographic mood extraction. Check font licenses before use.",
+          "candidate": {
+            "index": 90,
+            "url": "https://fontpair.co/inspiration",
+            "text": "Inspiration",
+            "heading": "Fontpair",
+            "description": "Fontpair2026, Fontpair © CopyrightProductAll pairingsBrowse fontsIconsColorsInspirationPricingResourcesTypography ToolsTypography BooksFont AlternativesBrand ExtractorFigma PluginChrome ExtensionCategoriesSans-SerifSerifSlabDisplayMonospaceHandwritingPlatformsFigmaCanvaAdobeWordPressWebflowFramerAccountLog inSign upLegalPrivacy PolicyTerms of ServiceFAQ",
+            "imageSrc": "",
+            "imageAlt": "",
+            "buttonText": [
+              "All pairings",
+              "Browse fonts",
+              "Icons",
+              "Colors",
+              "Inspiration",
+              "Pricing",
+              "Typography Tools",
+              "Typography Books"
+            ],
+            "tags": [],
+            "cardArea": 300960,
+            "score": 8,
+            "sourceMode": "typography-gallery"
+          },
+          "screenshots": {
+            "desktop": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/fontpair/090-fontpair-a91e10f4/desktop.png",
+              "sha256": "e277065a0d6c2b2bb9ad535691f1dc0db480a459a708507363c3226839c894a6",
+              "mode": "viewport"
+            },
+            "mobile": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/fontpair/090-fontpair-a91e10f4/mobile.png",
+              "sha256": "b907da73d7ab23ab68a0e108ff1fa93f86bec43a9554e575c6168d94d611a8ae",
+              "mode": "viewport"
+            }
+          },
+          "screenshotQuality": {
+            "desktop": {
+              "viewport": {
+                "width": 1440,
+                "height": 1000
+              },
+              "textLength": 3187,
+              "mediaCount": 83,
+              "codeCount": 0,
+              "headingCount": 3,
+              "usefulElementCount": 61,
+              "visibleAreaRatio": 1.155,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Playground",
+                "Pairings",
+                "Fonts",
+                "Inspiration",
+                "Resources",
+                "Login",
+                "Sign Up",
+                "Go Pro"
+              ]
+            },
+            "mobile": {
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "textLength": 3118,
+              "mediaCount": 83,
+              "codeCount": 0,
+              "headingCount": 3,
+              "usefulElementCount": 29,
+              "visibleAreaRatio": 1.046,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Fonts In UseInspirationTypographyDiscover beautiful typography in real websites",
+                "Fonts In Use",
+                "Inspiration",
+                "Typography",
+                "Recently added",
+                "#4db5ff",
+                "#a7d3ec",
+                "#d9e2e8"
+              ]
+            }
+          },
+          "qualityWarnings": [],
+          "failedRequestCount": 4,
+          "title": "Typography Inspiration — Real-World Font Examples | Fontpair",
+          "description": "See real-world typography inspiration from top websites using curated font pairings.",
+          "headings": [
+            {
+              "level": "h1",
+              "text": "Fonts In Use"
+            },
+            {
+              "level": "h2",
+              "text": "Join 25,000+ designers choosing fonts with confidence"
+            },
+            {
+              "level": "h3",
+              "text": "Fontpair"
+            }
+          ],
+          "sections": [
+            {
+              "index": 0,
+              "heading": "Fonts In Use",
+              "textSample": "Fonts In UseInspirationTypographyDiscover beautiful typography in real websites",
+              "imageCount": 0,
+              "buttonCount": 2
+            },
+            {
+              "index": 1,
+              "heading": "Join 25,000+ designers choosing fonts with confidence",
+              "textSample": "Join 25,000+ designers choosing fonts with confidenceCreate free account",
+              "imageCount": 0,
+              "buttonCount": 1
+            }
+          ],
+          "ctas": [
+            "Playground",
+            "Pairings",
+            "Fonts",
+            "Inspiration",
+            "Resources",
+            "Login",
+            "Sign Up",
+            "Go Pro",
+            "Settings",
+            "Toggle mobile menu",
+            "Inspiration",
+            "Typography",
+            "Recently added",
+            "#4db5ff",
+            "#a7d3ec",
+            "#d9e2e8",
+            "#ffffa9",
+            "#ffffff",
+            "#000000",
+            "#efefef",
+            "#fffeae",
+            "#50619c",
+            "#0000ee",
+            "Epilogue",
+            "Baskervville",
+            "artsexperiments.withgoogle.com",
+            "Try in Playground",
+            "#faf6f3",
+            "#040a2c",
+            "#dffab1",
+            "#dddddd",
+            "#ffdede",
+            "#075bcc",
+            "#333333",
+            "#0082f3",
+            "#222222",
+            "#092347",
+            "#000000",
+            "Epilogue",
+            "calmfund.com",
+            "Try in Playground",
+            "#f7f2f0",
+            "#ffffff",
+            "#ff4612",
+            "#000000",
+            "#66bd15",
+            "#f9d0c4",
+            "#f2f2f2",
+            "#007aff",
+            "juicymarbles.com"
+          ],
+          "palette": [
+            "rgb(2, 8, 23)",
+            "rgb(250, 250, 250)",
+            "rgb(226, 232, 240)",
+            "rgb(15, 23, 42)",
+            "rgba(255, 255, 255, 0.75)",
+            "rgba(2, 8, 23, 0.8)",
+            "rgb(249, 249, 249)",
+            "rgb(248, 250, 252)",
+            "rgb(24, 24, 27)",
+            "rgb(52, 66, 86)",
+            "rgb(255, 255, 255)",
+            "rgb(241, 245, 249)",
+            "rgba(250, 250, 250, 0.8)",
+            "rgb(77, 181, 255)",
+            "rgb(167, 211, 236)",
+            "rgb(217, 226, 232)",
+            "rgb(255, 255, 169)",
+            "rgb(0, 0, 0)",
+            "rgb(239, 239, 239)",
+            "rgb(255, 254, 174)",
+            "rgb(80, 97, 156)",
+            "rgb(0, 0, 238)",
+            "rgba(52, 66, 86, 0.6)",
+            "rgb(250, 246, 243)",
+            "rgb(4, 10, 44)",
+            "rgb(223, 250, 177)",
+            "rgb(221, 221, 221)",
+            "rgb(255, 222, 222)"
+          ],
+          "layoutSignals": {
+            "hasNav": true,
+            "hasHero": true,
+            "hasPricing": true,
+            "hasTestimonials": false,
+            "hasFAQ": true,
+            "hasVideo": false,
+            "cardLikeCount": 23,
+            "imageCount": 41,
+            "buttonCount": 293,
+            "formCount": 1
+          },
+          "codeBlocks": [],
+          "codeLinks": []
+        },
+        {
+          "sourceId": "fontpair",
+          "url": "https://fontpair.co/typography-tools",
+          "status": 200,
+          "licenseStatus": "typography-reference",
+          "reuseGuidance": "Font-pair inspiration and typographic mood extraction. Check font licenses before use.",
+          "candidate": {
+            "index": 92,
+            "url": "https://fontpair.co/typography-tools",
+            "text": "Typography Tools",
+            "heading": "Fontpair",
+            "description": "Fontpair2026, Fontpair © CopyrightProductAll pairingsBrowse fontsIconsColorsInspirationPricingResourcesTypography ToolsTypography BooksFont AlternativesBrand ExtractorFigma PluginChrome ExtensionCategoriesSans-SerifSerifSlabDisplayMonospaceHandwritingPlatformsFigmaCanvaAdobeWordPressWebflowFramerAccountLog inSign upLegalPrivacy PolicyTerms of ServiceFAQ",
+            "imageSrc": "",
+            "imageAlt": "",
+            "buttonText": [
+              "All pairings",
+              "Browse fonts",
+              "Icons",
+              "Colors",
+              "Inspiration",
+              "Pricing",
+              "Typography Tools",
+              "Typography Books"
+            ],
+            "tags": [],
+            "cardArea": 300960,
+            "score": 8,
+            "sourceMode": "typography-gallery"
+          },
+          "screenshots": {
+            "desktop": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/fontpair/092-fontpair-cd48c897/desktop.png",
+              "sha256": "824509d6ab21228dbe9f249eeadc77c3feeb5025a83ec5c5291c598d09226101",
+              "mode": "viewport"
+            },
+            "mobile": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/fontpair/092-fontpair-cd48c897/mobile.png",
+              "sha256": "9380e8670276eb26eb6d1b96a80e8159a99c4927736aa942c03c2c53d5a19151",
+              "mode": "viewport"
+            }
+          },
+          "screenshotQuality": {
+            "desktop": {
+              "viewport": {
+                "width": 1440,
+                "height": 1000
+              },
+              "textLength": 17767,
+              "mediaCount": 87,
+              "codeCount": 0,
+              "headingCount": 212,
+              "usefulElementCount": 52,
+              "visibleAreaRatio": 1.977,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Playground",
+                "Pairings",
+                "Fonts",
+                "Inspiration",
+                "Resources",
+                "Login",
+                "Sign Up",
+                "Go Pro"
+              ]
+            },
+            "mobile": {
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "textLength": 17698,
+              "mediaCount": 87,
+              "codeCount": 0,
+              "headingCount": 212,
+              "usefulElementCount": 27,
+              "visibleAreaRatio": 1.72,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Typography Tools for DesignersAll FontsTypography BooksA curated collection of 199+ typography tools for font pairing, p",
+                "Typography Tools for Designers",
+                "All Fonts",
+                "Typography Books",
+                "Recently added",
+                "Font Library",
+                "Font PairingFontpairA typography site dedicated to helping creators use beautiful typography for their creative projects",
+                "Font PairingFontpairA typography site dedicated to helping creators use beautiful typography for their creative projects"
+              ]
+            }
+          },
+          "qualityWarnings": [],
+          "failedRequestCount": 4,
+          "title": "Fontpair — Curated Google Font Pairings",
+          "description": "Discover the best Google Fonts pairings and combinations for modern web design.",
+          "headings": [
+            {
+              "level": "h1",
+              "text": "Typography Tools for Designers"
+            },
+            {
+              "level": "h2",
+              "text": "Font Pairing"
+            },
+            {
+              "level": "h3",
+              "text": "Fontpair"
+            },
+            {
+              "level": "h3",
+              "text": "Fontjoy"
+            },
+            {
+              "level": "h3",
+              "text": "Typ.io"
+            },
+            {
+              "level": "h3",
+              "text": "Just My Type"
+            },
+            {
+              "level": "h3",
+              "text": "Inspotype"
+            },
+            {
+              "level": "h3",
+              "text": "Typespiration"
+            },
+            {
+              "level": "h3",
+              "text": "Type Anything"
+            },
+            {
+              "level": "h3",
+              "text": "Font Pairings By People"
+            },
+            {
+              "level": "h3",
+              "text": "Colors and Fonts"
+            },
+            {
+              "level": "h3",
+              "text": "UI Fonts"
+            },
+            {
+              "level": "h2",
+              "text": "Font Library"
+            },
+            {
+              "level": "h3",
+              "text": "Google Fonts"
+            },
+            {
+              "level": "h3",
+              "text": "Fontshare"
+            },
+            {
+              "level": "h3",
+              "text": "Adobe Fonts"
+            },
+            {
+              "level": "h3",
+              "text": "Font Squirrel"
+            },
+            {
+              "level": "h3",
+              "text": "DaFont"
+            },
+            {
+              "level": "h3",
+              "text": "1001 Fonts"
+            },
+            {
+              "level": "h3",
+              "text": "Font Space"
+            },
+            {
+              "level": "h3",
+              "text": "Unblast Fonts"
+            },
+            {
+              "level": "h3",
+              "text": "Fontfabric"
+            },
+            {
+              "level": "h3",
+              "text": "The League of Moveable Type"
+            },
+            {
+              "level": "h3",
+              "text": "Open Foundry"
+            },
+            {
+              "level": "h3",
+              "text": "Velvetyne"
+            },
+            {
+              "level": "h3",
+              "text": "Font Library"
+            },
+            {
+              "level": "h3",
+              "text": "Lost Type Co-op"
+            },
+            {
+              "level": "h3",
+              "text": "Supa Fonts"
+            },
+            {
+              "level": "h3",
+              "text": "Localfonts"
+            },
+            {
+              "level": "h3",
+              "text": "Fixel Font"
+            },
+            {
+              "level": "h3",
+              "text": "Font Reach"
+            },
+            {
+              "level": "h3",
+              "text": "Best Free Fonts"
+            },
+            {
+              "level": "h3",
+              "text": "Type Colony"
+            },
+            {
+              "level": "h3",
+              "text": "Uncut"
+            },
+            {
+              "level": "h3",
+              "text": "Studio Few"
+            },
+            {
+              "level": "h3",
+              "text": "Pangram Pangram"
+            },
+            {
+              "level": "h3",
+              "text": "Swiss Typefaces"
+            },
+            {
+              "level": "h3",
+              "text": "Colophon Foundry"
+            },
+            {
+              "level": "h3",
+              "text": "F37 Foundry"
+            },
+            {
+              "level": "h3",
+              "text": "Good Type Foundry"
+            }
+          ],
+          "sections": [
+            {
+              "index": 0,
+              "heading": "Typography Tools for Designers",
+              "textSample": "Typography Tools for DesignersAll FontsTypography BooksA curated collection of 199+ typography tools for font pairing, previews, generators, and type exploration.",
+              "imageCount": 0,
+              "buttonCount": 2
+            },
+            {
+              "index": 1,
+              "heading": "Font Pairing",
+              "textSample": "Font PairingFontpairA typography site dedicated to helping creators use beautiful typography for their creative projects.FontjoyGenerate font pairings using deep learning and machine learning algorithms.Typ.ioDiscover beautiful font combinations from real websites and designs.Just My TypeFont pairing inspiration featur",
+              "imageCount": 8,
+              "buttonCount": 10
+            },
+            {
+              "index": 2,
+              "heading": "Font Library",
+              "textSample": "Font LibraryGoogle FontsMaking the web more beautiful, fast, and open through great typography.FontshareA free fonts service from Indian Type Foundry with high-quality typefaces.Adobe FontsThousands of fonts from over 250 type foundries, included with Creative Cloud.Font SquirrelFree fonts that are licensed for commerc",
+              "imageCount": 40,
+              "buttonCount": 93
+            },
+            {
+              "index": 3,
+              "heading": "Font Identifier",
+              "textSample": "Font IdentifierFFonts NinjaBrowser extension to identify fonts on any website with one click.Fontface NinjaFree browser extension that lets you inspect, try, buy and bookmark fonts on any website.Font GuesserA fun game to test your ability to identify fonts by comparing typefaces.WWhatFontChrome extension to identify f",
+              "imageCount": 5,
+              "buttonCount": 11
+            },
+            {
+              "index": 4,
+              "heading": "Type Scale",
+              "textSample": "Type ScaleTType ScaleEasy type scale calculator to improve typography on the web.UUtopiaFluid type scale calculator for responsive typography with CSS clamp.Fluid Type ScaleGenerate font size variables for a fluid type scale with CSS clamp.ProportioVisual design system calculator for typography scales, spacing, and pro",
+              "imageCount": 2,
+              "buttonCount": 11
+            },
+            {
+              "index": 5,
+              "heading": "Variable Fonts",
+              "textSample": "Variable FontsAAxis-PraxisPlayground for exploring and experimenting with variable fonts in the browser.FFont PlaygroundPlay with variable fonts and explore their axes interactively.VVariable FontsA simple resource for finding and trying variable fonts.VVariable Font DebuggerDebug and explore variable font axes with th",
+              "imageCount": 0,
+              "buttonCount": 5
+            },
+            {
+              "index": 6,
+              "heading": "Learning",
+              "textSample": "LearningBBetter Web TypeA free web typography course for designers and web developers.PPractical TypographyButterick's comprehensive guide to making better typography decisions.WWeb TypographyA handbook for designing beautiful and effective responsive typography.TTypographic Style WebThe Elements of Typographic Style a",
+              "imageCount": 2,
+              "buttonCount": 25
+            },
+            {
+              "index": 7,
+              "heading": "Inspiration",
+              "textSample": "InspirationLLetterform ArchiveBrowse digitized objects of lettering, typography, and graphic design.FFonts In UseAn independent archive of typography in use across various media and designs.TTypographicaReviews and commentary on type books, typefaces, and related design topics.II Love TypographyBlog about fonts, typefa",
+              "imageCount": 0,
+              "buttonCount": 12
+            },
+            {
+              "index": 8,
+              "heading": "Generators & Tools",
+              "textSample": "Generators & ToolsWWebfont GeneratorConvert desktop fonts to web formats with Font Squirrel generator.TTransfonterModern online font converter with @font-face generator.FFontDropSimple web app to view details about fonts without installing them.Glyphr StudioFree, web-based font editor for designing and editing fonts.Fo",
+              "imageCount": 14,
+              "buttonCount": 25
+            },
+            {
+              "index": 9,
+              "heading": "Browser Extensions",
+              "textSample": "Browser ExtensionsfpFontpair ExtensionPreview and test Google Font pairings on any website.WWhatFontIdentify fonts used on any website by hovering over text.FFonts NinjaInspect fonts, try them live, and bookmark font discoveries.FFontanelloClick to inspect fonts, sizes, spacing, and colors.WWhatTheFontIdentify fonts fr",
+              "imageCount": 0,
+              "buttonCount": 7
+            },
+            {
+              "index": 10,
+              "heading": "Books",
+              "textSample": "BooksView all 27 booksThe Visual History of TypePaul McNeilThe Elements of Typographic StyleRobert BringhurstThe Anatomy of TypeStephen ColesOn Web TypographyJason Santa MariaFlexible TypesettingTim BrownWeb TypographyRichard RutterView all typography books",
+              "imageCount": 8,
+              "buttonCount": 8
+            },
+            {
+              "index": 11,
+              "heading": "Join 25,000+ designers choosing fonts with confidence",
+              "textSample": "Join 25,000+ designers choosing fonts with confidenceCreate free account",
+              "imageCount": 0,
+              "buttonCount": 1
+            }
+          ],
+          "ctas": [
+            "Playground",
+            "Pairings",
+            "Fonts",
+            "Inspiration",
+            "Resources",
+            "Login",
+            "Sign Up",
+            "Go Pro",
+            "Settings",
+            "Toggle mobile menu",
+            "All Fonts",
+            "Typography Books",
+            "Recently added",
+            "Font Library",
+            "Typ.ioDiscover beautiful font combinations from real websites and designs.",
+            "TTypespirationFree inspirational font and color combinations.",
+            "DaFontArchive of freely downloadable fonts with categorized browsing.",
+            "1001 FontsHuge collection of free fonts categorized by style and theme.",
+            "Open FoundryCurated collection of open-source fonts tested for web use.",
+            "VelvetyneFrench libre type foundry creating experimental and unique typefaces.",
+            "Font LibraryOpen Font Library with fonts released under free licenses.",
+            "LocalfontsA curated collection of free fonts for local use and web projects.",
+            "Fixel FontA free geometric sans-serif font family by MacPaw with 9 weights.",
+            "Font ReachSee how many of the most popular sites use a specific font.",
+            "Type ColonyFont resource for designers with curated free typefaces.",
+            "UncutFree typeface catalogue focusing on contemporary type designs.",
+            "Studio FewBrand & Type Design studio creating unique typefaces.",
+            "Klim Type FoundryIndependent typeface design studio from New Zealand.",
+            "The Designers FoundryCustom & retail typefaces since 2012.",
+            "Power TypeIndependent digital type foundry creating modern typefaces.",
+            "UUrban FontsDownload free fonts and free dingbats with a huge selection.",
+            "TThe Northern BlockAll fonts available as family packages for desktop use.",
+            "NNeo GreyVector and OpenType fonts, most free for personal use.",
+            "MMonotypeA trial made for typographic exploration from the legendary foundry.",
+            "MMeg Lewis FontsFun, novelty fonts with unique personality.",
+            "LLinotypeA trial made for typographic exploration from a legendary foundry.",
+            "HHoefler & Co.Long-lived typefaces marked by high performance and high style.",
+            "GGlue FontsFonts made by gluk, available for free use.",
+            "FFuture FontsLicense typefaces during their development at lower prices.",
+            "FFontzoneFontZone.net offering 1000's of free fonts.",
+            "FFontShopTry, buy and download professional fonts for desktop, web and apps.",
+            "FFontMFontM for free fonts available for download now.",
+            "FFont BundlesDownload free commercial use fonts for your designs.",
+            "FFont BriefA revolutionary font discovery tool for branding and editorial.",
+            "DDribbble Free FontsDiscover 2,500+ free font designs on Dribbble.",
+            "CCreative Market FontsOver 74,000 fonts to download and use in design projects.",
+            "11001 Free FontsDownload free fonts for Windows and Mac with vast selection.",
+            "Fonts.comHuge selection of fonts from Monotype with web font hosting.",
+            "2205TFFrench type foundry established in 2017 creating unique typefaces.",
+            "AA2-TypeType foundry set up by the London-based design studio A2/SW/HK in 2010."
+          ],
+          "palette": [
+            "rgb(2, 8, 23)",
+            "rgb(250, 250, 250)",
+            "rgb(226, 232, 240)",
+            "rgb(15, 23, 42)",
+            "rgba(255, 255, 255, 0.75)",
+            "rgba(2, 8, 23, 0.8)",
+            "rgb(249, 249, 249)",
+            "rgb(248, 250, 252)",
+            "rgb(24, 24, 27)",
+            "rgb(52, 66, 86)",
+            "rgb(255, 255, 255)",
+            "rgb(241, 245, 249)"
+          ],
+          "layoutSignals": {
+            "hasNav": true,
+            "hasHero": true,
+            "hasPricing": true,
+            "hasTestimonials": true,
+            "hasFAQ": true,
+            "hasVideo": false,
+            "cardLikeCount": 4,
+            "imageCount": 78,
+            "buttonCount": 254,
+            "formCount": 1
+          },
+          "codeBlocks": [],
+          "codeLinks": []
+        },
+        {
+          "sourceId": "fontpair",
+          "url": "https://fontpair.co/typography-books",
+          "status": 200,
+          "licenseStatus": "typography-reference",
+          "reuseGuidance": "Font-pair inspiration and typographic mood extraction. Check font licenses before use.",
+          "candidate": {
+            "index": 93,
+            "url": "https://fontpair.co/typography-books",
+            "text": "Typography Books",
+            "heading": "Fontpair",
+            "description": "Fontpair2026, Fontpair © CopyrightProductAll pairingsBrowse fontsIconsColorsInspirationPricingResourcesTypography ToolsTypography BooksFont AlternativesBrand ExtractorFigma PluginChrome ExtensionCategoriesSans-SerifSerifSlabDisplayMonospaceHandwritingPlatformsFigmaCanvaAdobeWordPressWebflowFramerAccountLog inSign upLegalPrivacy PolicyTerms of ServiceFAQ",
+            "imageSrc": "",
+            "imageAlt": "",
+            "buttonText": [
+              "All pairings",
+              "Browse fonts",
+              "Icons",
+              "Colors",
+              "Inspiration",
+              "Pricing",
+              "Typography Tools",
+              "Typography Books"
+            ],
+            "tags": [],
+            "cardArea": 300960,
+            "score": 8,
+            "sourceMode": "typography-gallery"
+          },
+          "screenshots": {
+            "desktop": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/fontpair/093-fontpair-1b09234a/desktop.png",
+              "sha256": "a6c2ac2905a3ea04e74a2845d19f462d4a2b6bd9102a8aadd691fe4f76e4638a",
+              "mode": "viewport"
+            },
+            "mobile": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/fontpair/093-fontpair-1b09234a/mobile.png",
+              "sha256": "f6b30bd383461b0408beb8e31170a5a0530e8930f8c761f8d147439671f9351b",
+              "mode": "viewport"
+            }
+          },
+          "screenshotQuality": {
+            "desktop": {
+              "viewport": {
+                "width": 1440,
+                "height": 1000
+              },
+              "textLength": 3663,
+              "mediaCount": 61,
+              "codeCount": 0,
+              "headingCount": 30,
+              "usefulElementCount": 50,
+              "visibleAreaRatio": 1.726,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Playground",
+                "Pairings",
+                "Fonts",
+                "Inspiration",
+                "Resources",
+                "Login",
+                "Sign Up",
+                "Go Pro"
+              ]
+            },
+            "mobile": {
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "textLength": 3594,
+              "mediaCount": 61,
+              "codeCount": 0,
+              "headingCount": 30,
+              "usefulElementCount": 18,
+              "visibleAreaRatio": 1.38,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Best Typography Books for DesignersAll ToolsTypography BooksA curated collection of 27 essential typography books for de",
+                "Best Typography Books for Designers",
+                "All Tools",
+                "Typography Books",
+                "Recently added",
+                "The Visual History of TypePaul McNeil · 2017A monumental 672-page work showcasing the evolution of type from Gutenberg t",
+                "The Visual History of TypePaul McNeil · 2017A monumental 672-page work showcasing the evolution of type from Gutenberg t",
+                "The Elements of Typographic StyleRobert Bringhurst · 1992The universally acclaimed typography bible that will instill a "
+              ]
+            }
+          },
+          "qualityWarnings": [],
+          "failedRequestCount": 4,
+          "title": "Best Typography Books for Designers (2024) | Fontpair",
+          "description": "Discover the best Google Fonts pairings and combinations for modern web design.",
+          "headings": [
+            {
+              "level": "h1",
+              "text": "Best Typography Books for Designers"
+            },
+            {
+              "level": "h2",
+              "text": "The Visual History of Type"
+            },
+            {
+              "level": "h2",
+              "text": "The Elements of Typographic Style"
+            },
+            {
+              "level": "h2",
+              "text": "The Anatomy of Type"
+            },
+            {
+              "level": "h2",
+              "text": "On Web Typography"
+            },
+            {
+              "level": "h2",
+              "text": "Flexible Typesetting"
+            },
+            {
+              "level": "h2",
+              "text": "Web Typography"
+            },
+            {
+              "level": "h2",
+              "text": "Thinking with Type"
+            },
+            {
+              "level": "h2",
+              "text": "Type on Screen"
+            },
+            {
+              "level": "h2",
+              "text": "Stop Stealing Sheep"
+            },
+            {
+              "level": "h2",
+              "text": "Designing with Type"
+            },
+            {
+              "level": "h2",
+              "text": "Twentieth-Century Type"
+            },
+            {
+              "level": "h2",
+              "text": "Just My Type"
+            },
+            {
+              "level": "h2",
+              "text": "Alan Kitching's A–Z of Letterpress"
+            },
+            {
+              "level": "h2",
+              "text": "Shaping Text"
+            },
+            {
+              "level": "h2",
+              "text": "An Essay on Typography"
+            },
+            {
+              "level": "h2",
+              "text": "The Designer's Dictionary of Type"
+            },
+            {
+              "level": "h2",
+              "text": "Better Web Typography for a Better Web"
+            },
+            {
+              "level": "h2",
+              "text": "Why Fonts Matter"
+            },
+            {
+              "level": "h2",
+              "text": "Typography Essentials"
+            },
+            {
+              "level": "h2",
+              "text": "The Evolution of Type"
+            },
+            {
+              "level": "h2",
+              "text": "Type: A Visual History of Typefaces"
+            },
+            {
+              "level": "h2",
+              "text": "A Type Primer"
+            },
+            {
+              "level": "h2",
+              "text": "The Complete Manual of Typography"
+            },
+            {
+              "level": "h2",
+              "text": "Encyclopaedia of Typefaces"
+            },
+            {
+              "level": "h2",
+              "text": "Typographie"
+            },
+            {
+              "level": "h2",
+              "text": "The New Typography"
+            },
+            {
+              "level": "h2",
+              "text": "Weingart: Typography"
+            },
+            {
+              "level": "h2",
+              "text": "Join 25,000+ designers choosing fonts with confidence"
+            },
+            {
+              "level": "h3",
+              "text": "Fontpair"
+            }
+          ],
+          "sections": [
+            {
+              "index": 0,
+              "heading": "Best Typography Books for Designers",
+              "textSample": "Best Typography Books for DesignersAll ToolsTypography BooksA curated collection of 27 essential typography books for designers, developers, and typography enthusiasts. Whether you're a beginner learning the basics or a professional deepening your expertise, these books will help you master the art of type.",
+              "imageCount": 0,
+              "buttonCount": 2
+            },
+            {
+              "index": 1,
+              "heading": "Join 25,000+ designers choosing fonts with confidence",
+              "textSample": "Join 25,000+ designers choosing fonts with confidenceCreate free account",
+              "imageCount": 0,
+              "buttonCount": 1
+            }
+          ],
+          "ctas": [
+            "Playground",
+            "Pairings",
+            "Fonts",
+            "Inspiration",
+            "Resources",
+            "Login",
+            "Sign Up",
+            "Go Pro",
+            "Settings",
+            "Toggle mobile menu",
+            "All Tools",
+            "Typography Books",
+            "Recently added",
+            "Shaping TextJan Middendorp · 2012A highly recommended guide to typography.",
+            "Why Fonts MatterSarah Hyndman · 2016An exploration of the psychology of type.",
+            "TypographieEmil Ruder · 1967A magnum opus on typography and Swiss grid systems.",
+            "Create free account",
+            "All pairings",
+            "Browse fonts",
+            "Icons",
+            "Colors",
+            "Inspiration",
+            "Pricing",
+            "Typography Tools",
+            "Typography Books",
+            "Font Alternatives",
+            "Brand Extractor",
+            "Figma Plugin",
+            "Chrome Extension",
+            "Sans-Serif",
+            "Serif",
+            "Slab",
+            "Display",
+            "Monospace",
+            "Handwriting",
+            "Figma",
+            "Canva",
+            "Adobe",
+            "WordPress",
+            "Webflow",
+            "Framer",
+            "Log in",
+            "Sign up",
+            "Privacy Policy",
+            "Terms of Service",
+            "FAQ"
+          ],
+          "palette": [
+            "rgb(2, 8, 23)",
+            "rgb(250, 250, 250)",
+            "rgb(226, 232, 240)",
+            "rgb(15, 23, 42)",
+            "rgba(255, 255, 255, 0.75)",
+            "rgba(2, 8, 23, 0.8)",
+            "rgb(249, 249, 249)",
+            "rgb(248, 250, 252)",
+            "rgb(24, 24, 27)",
+            "rgb(52, 66, 86)",
+            "rgb(255, 255, 255)",
+            "rgb(241, 245, 249)",
+            "rgb(2, 6, 23)",
+            "rgba(255, 255, 255, 0.7)"
+          ],
+          "layoutSignals": {
+            "hasNav": true,
+            "hasHero": true,
+            "hasPricing": true,
+            "hasTestimonials": false,
+            "hasFAQ": true,
+            "hasVideo": false,
+            "cardLikeCount": 30,
+            "imageCount": 28,
+            "buttonCount": 73,
+            "formCount": 1
+          },
+          "codeBlocks": [],
+          "codeLinks": []
+        },
+        {
+          "sourceId": "fontpair",
+          "url": "https://fontpair.co/fonts/alternatives",
+          "status": 200,
+          "licenseStatus": "typography-reference",
+          "reuseGuidance": "Font-pair inspiration and typographic mood extraction. Check font licenses before use.",
+          "candidate": {
+            "index": 94,
+            "url": "https://fontpair.co/fonts/alternatives",
+            "text": "Font Alternatives",
+            "heading": "Fontpair",
+            "description": "Fontpair2026, Fontpair © CopyrightProductAll pairingsBrowse fontsIconsColorsInspirationPricingResourcesTypography ToolsTypography BooksFont AlternativesBrand ExtractorFigma PluginChrome ExtensionCategoriesSans-SerifSerifSlabDisplayMonospaceHandwritingPlatformsFigmaCanvaAdobeWordPressWebflowFramerAccountLog inSign upLegalPrivacy PolicyTerms of ServiceFAQ",
+            "imageSrc": "",
+            "imageAlt": "",
+            "buttonText": [
+              "All pairings",
+              "Browse fonts",
+              "Icons",
+              "Colors",
+              "Inspiration",
+              "Pricing",
+              "Typography Tools",
+              "Typography Books"
+            ],
+            "tags": [],
+            "cardArea": 300960,
+            "score": 8,
+            "sourceMode": "typography-gallery"
+          },
+          "screenshots": {
+            "desktop": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/fontpair/094-fontpair-fb0e2ea3/desktop.png",
+              "sha256": "3586a27f5ca7cb2eab73dfd70b153d94cd973a4d7c2cb7f0cca60a237072e804",
+              "mode": "viewport"
+            },
+            "mobile": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/fontpair/094-fontpair-fb0e2ea3/mobile.png",
+              "sha256": "03a7a782a68af4ad88960e0bd58e87e723cd8ee377bf176e98a6d590d3a9b1a7",
+              "mode": "viewport"
+            }
+          },
+          "screenshotQuality": {
+            "desktop": {
+              "viewport": {
+                "width": 1440,
+                "height": 1000
+              },
+              "textLength": 915,
+              "mediaCount": 10,
+              "codeCount": 0,
+              "headingCount": 7,
+              "usefulElementCount": 31,
+              "visibleAreaRatio": 1.406,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Playground",
+                "Pairings",
+                "Fonts",
+                "Inspiration",
+                "Resources",
+                "Login",
+                "Sign Up",
+                "Go Pro"
+              ]
+            },
+            "mobile": {
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "textLength": 846,
+              "mediaCount": 10,
+              "codeCount": 0,
+              "headingCount": 7,
+              "usefulElementCount": 21,
+              "visibleAreaRatio": 1.974,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Free Font AlternativesFind free replacements for popular premium fonts. Each page features hand-picked alternatives avai",
+                "Free Font Alternatives",
+                "Free Alternatives to Helvetica6 free alternativesFree Alternatives to Avenir5 free alternativesFree Alternatives to Prox",
+                "Free Alternatives to Helvetica6 free alternativesFree Alternatives to Avenir5 free alternativesFree Alternatives to Prox",
+                "Free Alternatives to Helvetica6 free alternatives",
+                "Free Alternatives to Helvetica",
+                "Free Alternatives to Avenir5 free alternatives",
+                "Free Alternatives to Avenir"
+              ]
+            }
+          },
+          "qualityWarnings": [],
+          "failedRequestCount": 4,
+          "title": "Free Font Alternatives – Find Free Replacements for Premium Fonts | Fontpair",
+          "description": "Browse free fonts with pairing recommendations, specimens, and design inspiration.",
+          "headings": [
+            {
+              "level": "h1",
+              "text": "Free Font Alternatives"
+            },
+            {
+              "level": "h2",
+              "text": "Free Alternatives to Helvetica"
+            },
+            {
+              "level": "h2",
+              "text": "Free Alternatives to Avenir"
+            },
+            {
+              "level": "h2",
+              "text": "Free Alternatives to Proxima Nova"
+            },
+            {
+              "level": "h2",
+              "text": "Free Alternatives to Gotham"
+            },
+            {
+              "level": "h2",
+              "text": "Join 25,000+ designers choosing fonts with confidence"
+            },
+            {
+              "level": "h3",
+              "text": "Fontpair"
+            }
+          ],
+          "sections": [
+            {
+              "index": 0,
+              "heading": "Free Font Alternatives",
+              "textSample": "Free Font AlternativesFind free replacements for popular premium fonts. Each page features hand-picked alternatives available on Google Fonts and Fontshare.",
+              "imageCount": 0,
+              "buttonCount": 0
+            },
+            {
+              "index": 1,
+              "heading": "Free Alternatives to Helvetica",
+              "textSample": "Free Alternatives to Helvetica6 free alternativesFree Alternatives to Avenir5 free alternativesFree Alternatives to Proxima Nova6 free alternativesFree Alternatives to Gotham6 free alternatives",
+              "imageCount": 4,
+              "buttonCount": 4
+            },
+            {
+              "index": 2,
+              "heading": "",
+              "textSample": "Browse all free fonts",
+              "imageCount": 1,
+              "buttonCount": 1
+            },
+            {
+              "index": 3,
+              "heading": "Join 25,000+ designers choosing fonts with confidence",
+              "textSample": "Join 25,000+ designers choosing fonts with confidenceCreate free account",
+              "imageCount": 0,
+              "buttonCount": 1
+            }
+          ],
+          "ctas": [
+            "Playground",
+            "Pairings",
+            "Fonts",
+            "Inspiration",
+            "Resources",
+            "Login",
+            "Sign Up",
+            "Go Pro",
+            "Settings",
+            "Toggle mobile menu",
+            "Free Alternatives to Helvetica6 free alternatives",
+            "Free Alternatives to Avenir5 free alternatives",
+            "Free Alternatives to Proxima Nova6 free alternatives",
+            "Free Alternatives to Gotham6 free alternatives",
+            "Browse all free fonts",
+            "Create free account",
+            "All pairings",
+            "Browse fonts",
+            "Icons",
+            "Colors",
+            "Inspiration",
+            "Pricing",
+            "Typography Tools",
+            "Typography Books",
+            "Font Alternatives",
+            "Brand Extractor",
+            "Figma Plugin",
+            "Chrome Extension",
+            "Sans-Serif",
+            "Serif",
+            "Slab",
+            "Display",
+            "Monospace",
+            "Handwriting",
+            "Figma",
+            "Canva",
+            "Adobe",
+            "WordPress",
+            "Webflow",
+            "Framer",
+            "Log in",
+            "Sign up",
+            "Privacy Policy",
+            "Terms of Service",
+            "FAQ"
+          ],
+          "palette": [
+            "rgb(2, 8, 23)",
+            "rgb(250, 250, 250)",
+            "rgb(226, 232, 240)",
+            "rgb(15, 23, 42)",
+            "rgba(255, 255, 255, 0.75)",
+            "rgba(2, 8, 23, 0.8)",
+            "rgb(249, 249, 249)",
+            "rgb(248, 250, 252)",
+            "rgb(24, 24, 27)",
+            "rgb(52, 66, 86)",
+            "rgb(255, 255, 255)",
+            "rgb(2, 6, 23)",
+            "rgba(255, 255, 255, 0.7)"
+          ],
+          "layoutSignals": {
+            "hasNav": true,
+            "hasHero": true,
+            "hasPricing": true,
+            "hasTestimonials": false,
+            "hasFAQ": true,
+            "hasVideo": false,
+            "cardLikeCount": 5,
+            "imageCount": 1,
+            "buttonCount": 48,
+            "formCount": 0
+          },
+          "codeBlocks": [],
+          "codeLinks": []
+        },
+        {
+          "sourceId": "fontpair",
+          "url": "https://fontpair.co/brand-extractor",
+          "status": 200,
+          "licenseStatus": "typography-reference",
+          "reuseGuidance": "Font-pair inspiration and typographic mood extraction. Check font licenses before use.",
+          "candidate": {
+            "index": 95,
+            "url": "https://fontpair.co/brand-extractor",
+            "text": "Brand Extractor",
+            "heading": "Fontpair",
+            "description": "Fontpair2026, Fontpair © CopyrightProductAll pairingsBrowse fontsIconsColorsInspirationPricingResourcesTypography ToolsTypography BooksFont AlternativesBrand ExtractorFigma PluginChrome ExtensionCategoriesSans-SerifSerifSlabDisplayMonospaceHandwritingPlatformsFigmaCanvaAdobeWordPressWebflowFramerAccountLog inSign upLegalPrivacy PolicyTerms of ServiceFAQ",
+            "imageSrc": "",
+            "imageAlt": "",
+            "buttonText": [
+              "All pairings",
+              "Browse fonts",
+              "Icons",
+              "Colors",
+              "Inspiration",
+              "Pricing",
+              "Typography Tools",
+              "Typography Books"
+            ],
+            "tags": [],
+            "cardArea": 300960,
+            "score": 8,
+            "sourceMode": "typography-gallery"
+          },
+          "screenshots": {
+            "desktop": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/fontpair/095-fontpair-838e413d/desktop.png",
+              "sha256": "3cb27e2ead9ace4e4bdccbf5da848208ae6b073750ba6d726872ea27b68c7d68",
+              "mode": "viewport"
+            },
+            "mobile": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/fontpair/095-fontpair-838e413d/mobile.png",
+              "sha256": "bdee98e0ec76b12cb4c846982633e7af2f321d9b4f922161893880f5cebb1af1",
+              "mode": "viewport"
+            }
+          },
+          "screenshotQuality": {
+            "desktop": {
+              "viewport": {
+                "width": 1440,
+                "height": 1000
+              },
+              "textLength": 835,
+              "mediaCount": 7,
+              "codeCount": 0,
+              "headingCount": 3,
+              "usefulElementCount": 18,
+              "visibleAreaRatio": 0.81,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Playground",
+                "Pairings",
+                "Fonts",
+                "Inspiration",
+                "Resources",
+                "Login",
+                "Sign Up",
+                "Go Pro"
+              ]
+            },
+            "mobile": {
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "textLength": 766,
+              "mediaCount": 7,
+              "codeCount": 0,
+              "headingCount": 3,
+              "usefulElementCount": 12,
+              "visibleAreaRatio": 1.093,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Brand ExtractorEnter any website URL to extract its color palette and fonts. Discover the design choices behind your fav",
+                "Brand Extractor",
+                "Extract BrandEnter a website URL above to extract its brand colors and fontsWorks best with marketing sites and landing ",
+                "Extract Brand"
+              ]
+            }
+          },
+          "qualityWarnings": [],
+          "failedRequestCount": 4,
+          "title": "Brand Color & Font Extractor — Analyze Any Website | Fontpair",
+          "description": "Extract colors, fonts, and branding from any website URL. Identify typography and color palettes used by top brands.",
+          "headings": [
+            {
+              "level": "h1",
+              "text": "Brand Extractor"
+            },
+            {
+              "level": "h2",
+              "text": "Join 25,000+ designers choosing fonts with confidence"
+            },
+            {
+              "level": "h3",
+              "text": "Fontpair"
+            }
+          ],
+          "sections": [
+            {
+              "index": 0,
+              "heading": "Brand Extractor",
+              "textSample": "Brand ExtractorEnter any website URL to extract its color palette and fonts. Discover the design choices behind your favorite sites and find matching fonts in our library.",
+              "imageCount": 0,
+              "buttonCount": 0
+            },
+            {
+              "index": 1,
+              "heading": "Join 25,000+ designers choosing fonts with confidence",
+              "textSample": "Join 25,000+ designers choosing fonts with confidenceCreate free account",
+              "imageCount": 0,
+              "buttonCount": 1
+            }
+          ],
+          "ctas": [
+            "Playground",
+            "Pairings",
+            "Fonts",
+            "Inspiration",
+            "Resources",
+            "Login",
+            "Sign Up",
+            "Go Pro",
+            "Settings",
+            "Toggle mobile menu",
+            "Extract Brand",
+            "Create free account",
+            "All pairings",
+            "Browse fonts",
+            "Icons",
+            "Colors",
+            "Inspiration",
+            "Pricing",
+            "Typography Tools",
+            "Typography Books",
+            "Font Alternatives",
+            "Brand Extractor",
+            "Figma Plugin",
+            "Chrome Extension",
+            "Sans-Serif",
+            "Serif",
+            "Slab",
+            "Display",
+            "Monospace",
+            "Handwriting",
+            "Figma",
+            "Canva",
+            "Adobe",
+            "WordPress",
+            "Webflow",
+            "Framer",
+            "Log in",
+            "Sign up",
+            "Privacy Policy",
+            "Terms of Service",
+            "FAQ"
+          ],
+          "palette": [
+            "rgb(2, 8, 23)",
+            "rgb(250, 250, 250)",
+            "rgb(226, 232, 240)",
+            "rgb(15, 23, 42)",
+            "rgba(255, 255, 255, 0.75)",
+            "rgba(2, 8, 23, 0.8)",
+            "rgb(249, 249, 249)",
+            "rgb(248, 250, 252)",
+            "rgb(24, 24, 27)",
+            "rgb(52, 66, 86)",
+            "rgb(255, 255, 255)",
+            "rgb(2, 6, 23)",
+            "rgba(255, 255, 255, 0.7)"
+          ],
+          "layoutSignals": {
+            "hasNav": true,
+            "hasHero": true,
+            "hasPricing": true,
+            "hasTestimonials": false,
+            "hasFAQ": true,
+            "hasVideo": false,
+            "cardLikeCount": 2,
+            "imageCount": 1,
+            "buttonCount": 44,
+            "formCount": 1
+          },
+          "codeBlocks": [],
+          "codeLinks": []
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

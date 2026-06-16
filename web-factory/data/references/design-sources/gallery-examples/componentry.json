@@ -1,0 +1,1866 @@
+{
+  "capturedAt": "2026-06-15T21:55:51.572Z",
+  "cacheRoot": "C:/Users/PC/.codex/design-stack/gallery-examples-full",
+  "policy": "Gallery screenshots and structure are reference artifacts. Copy/adapt code only when licenseStatus is compatible and the linked/local repo license has been reviewed.",
+  "configPath": "data/references/design-sources/gallery-reference-sources.json",
+  "results": [
+    {
+      "id": "componentry",
+      "name": "Componentry",
+      "url": "https://www.componentry.fun/docs",
+      "mode": "component-docs",
+      "usage": "Reusable component inspiration. Prefer the locally cached MIT repository for code.",
+      "licenseStatus": "mit-repo-available",
+      "status": 200,
+      "failedRequestCount": 6,
+      "rawCandidateCount": 34,
+      "selectedCandidateCount": 24,
+      "detailedExampleCount": 8,
+      "candidates": [
+        {
+          "index": 11,
+          "url": "https://www.componentry.fun/docs/components/letter-cascade",
+          "text": "Letter Cascade Kinetic text animation where letters scatter outward with spring physics and blur, then elegantly reassemble.",
+          "heading": "Letter Cascade",
+          "description": "Letter CascadeKinetic text animation where letters scatter outward with spring physics and blur, then elegantly reassemble.",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [],
+          "tags": [],
+          "cardArea": 131923,
+          "score": 10,
+          "sourceMode": "component-docs"
+        },
+        {
+          "index": 14,
+          "url": "https://www.componentry.fun/docs/components/cursor-driven-particle-typography",
+          "text": "Particle Typography Renders dynamic typography constructed entirely from particles that elegantly disperse and reassemble upon cursor intera",
+          "heading": "Particle Typography",
+          "description": "Particle TypographyRenders dynamic typography constructed entirely from particles that elegantly disperse and reassemble upon cursor interaction using spring physics.",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [],
+          "tags": [],
+          "cardArea": 131923,
+          "score": 10,
+          "sourceMode": "component-docs"
+        },
+        {
+          "index": 16,
+          "url": "https://www.componentry.fun/docs/components/music-player",
+          "text": "Music Player A fun interactive vinyl record music player with swinging tonearm.",
+          "heading": "Music Player",
+          "description": "Music PlayerA fun interactive vinyl record music player with swinging tonearm.",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [],
+          "tags": [],
+          "cardArea": 131923,
+          "score": 10,
+          "sourceMode": "component-docs"
+        },
+        {
+          "index": 19,
+          "url": "https://www.componentry.fun/docs/components/circuit-board",
+          "text": "Circuit Board Animated circuit board visualization with nodes and connections.",
+          "heading": "Circuit Board",
+          "description": "Circuit BoardAnimated circuit board visualization with nodes and connections.",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [],
+          "tags": [],
+          "cardArea": 131923,
+          "score": 10,
+          "sourceMode": "component-docs"
+        },
+        {
+          "index": 22,
+          "url": "https://www.componentry.fun/docs/components/collection-surfer",
+          "text": "Collection Surfer Smooth surfing interaction for browsing collections.",
+          "heading": "Collection Surfer",
+          "description": "Collection SurferSmooth surfing interaction for browsing collections.",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [],
+          "tags": [],
+          "cardArea": 131923,
+          "score": 10,
+          "sourceMode": "component-docs"
+        },
+        {
+          "index": 25,
+          "url": "https://www.componentry.fun/docs/components/layered-stack",
+          "text": "Layered Stack A stack of layered cards that interact with mouse hover.",
+          "heading": "Layered Stack",
+          "description": "Layered StackA stack of layered cards that interact with mouse hover.",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [],
+          "tags": [],
+          "cardArea": 131923,
+          "score": 10,
+          "sourceMode": "component-docs"
+        },
+        {
+          "index": 28,
+          "url": "https://www.componentry.fun/docs/components/eye-tracking",
+          "text": "Eye Tracking Hyper-realistic eyes that follow your cursor with smooth spring physics, reactive pupils, blinking, and multiple stunning varia",
+          "heading": "Eye Tracking",
+          "description": "Eye TrackingHyper-realistic eyes that follow your cursor with smooth spring physics, reactive pupils, blinking, and multiple stunning variants.",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [],
+          "tags": [],
+          "cardArea": 131923,
+          "score": 10,
+          "sourceMode": "component-docs"
+        },
+        {
+          "index": 31,
+          "url": "https://www.componentry.fun/docs/components/dither-prism-hero",
+          "text": "Dither Prism Hero Stunning WebGL hero with advanced dithering, prismatic refraction, holographic iridescence, and center-focused energy.",
+          "heading": "Dither Prism Hero",
+          "description": "Dither Prism HeroStunning WebGL hero with advanced dithering, prismatic refraction, holographic iridescence, and center-focused energy.",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [],
+          "tags": [],
+          "cardArea": 131923,
+          "score": 10,
+          "sourceMode": "component-docs"
+        },
+        {
+          "index": 34,
+          "url": "https://www.componentry.fun/docs/components/closing-plasma",
+          "text": "Closing Plasma Plasma field tailored for footer and CTA sections with premium atmospheric motion.",
+          "heading": "Closing Plasma",
+          "description": "Closing PlasmaPlasma field tailored for footer and CTA sections with premium atmospheric motion.",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [],
+          "tags": [],
+          "cardArea": 131923,
+          "score": 10,
+          "sourceMode": "component-docs"
+        },
+        {
+          "index": 37,
+          "url": "https://www.componentry.fun/docs/components/image-ripple-effect",
+          "text": "Image Ripple Effect WebGL-powered cursor ripples that displace layered image cards in real time.",
+          "heading": "Image Ripple Effect",
+          "description": "Image Ripple EffectWebGL-powered cursor ripples that displace layered image cards in real time.",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [],
+          "tags": [],
+          "cardArea": 131923,
+          "score": 10,
+          "sourceMode": "component-docs"
+        },
+        {
+          "index": 40,
+          "url": "https://www.componentry.fun/docs/components/magnet-lines",
+          "text": "Magnet Lines Lines that react to cursor movement like a magnetic field.",
+          "heading": "Magnet Lines",
+          "description": "Magnet LinesLines that react to cursor movement like a magnetic field.",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [],
+          "tags": [],
+          "cardArea": 131923,
+          "score": 10,
+          "sourceMode": "component-docs"
+        },
+        {
+          "index": 10,
+          "url": "https://www.componentry.fun/docs/components/scroll-based-velocity",
+          "text": "Velocity Scroll Text that moves horizontally based on scroll speed.",
+          "heading": "Velocity Scroll",
+          "description": "Velocity ScrollText that moves horizontally based on scroll speed.",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [],
+          "tags": [],
+          "cardArea": 131918,
+          "score": 10,
+          "sourceMode": "component-docs"
+        },
+        {
+          "index": 12,
+          "url": "https://www.componentry.fun/docs/components/text-repel",
+          "text": "Text Repel Physics-based text where each letter reacts to cursor proximity with spring dynamics, creating an interactive magnetic force-fiel",
+          "heading": "Text Repel",
+          "description": "Text RepelPhysics-based text where each letter reacts to cursor proximity with spring dynamics, creating an interactive magnetic force-field effect.",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [],
+          "tags": [],
+          "cardArea": 131918,
+          "score": 10,
+          "sourceMode": "component-docs"
+        },
+        {
+          "index": 13,
+          "url": "https://www.componentry.fun/docs/components/kinetic-text-reveal",
+          "text": "Kinetic Text Reveal Directional text reveal with soft blur and configurable word, character, or line stagger timing.",
+          "heading": "Kinetic Text Reveal",
+          "description": "Kinetic Text RevealDirectional text reveal with soft blur and configurable word, character, or line stagger timing.",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [],
+          "tags": [],
+          "cardArea": 131918,
+          "score": 10,
+          "sourceMode": "component-docs"
+        },
+        {
+          "index": 15,
+          "url": "https://www.componentry.fun/docs/components/sticky-scroll-cards",
+          "text": "Sticky Scroll Cards A scroll-driven card stack where images pin and scale as you scroll, creating a layered depth effect.",
+          "heading": "Sticky Scroll Cards",
+          "description": "Sticky Scroll CardsA scroll-driven card stack where images pin and scale as you scroll, creating a layered depth effect.",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [],
+          "tags": [],
+          "cardArea": 131918,
+          "score": 10,
+          "sourceMode": "component-docs"
+        },
+        {
+          "index": 17,
+          "url": "https://www.componentry.fun/docs/components/scroll-split-card",
+          "text": "Scroll Split Card A scroll-driven interactive card that splits into three panels and flips.",
+          "heading": "Scroll Split Card",
+          "description": "Scroll Split CardA scroll-driven interactive card that splits into three panels and flips.",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [],
+          "tags": [],
+          "cardArea": 131918,
+          "score": 10,
+          "sourceMode": "component-docs"
+        },
+        {
+          "index": 18,
+          "url": "https://www.componentry.fun/docs/components/mac-keyboard",
+          "text": "Mac Keyboard A realistic Mac keyboard component with interactive keys and detailed styling.",
+          "heading": "Mac Keyboard",
+          "description": "Mac KeyboardA realistic Mac keyboard component with interactive keys and detailed styling.",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [],
+          "tags": [],
+          "cardArea": 131918,
+          "score": 10,
+          "sourceMode": "component-docs"
+        },
+        {
+          "index": 20,
+          "url": "https://www.componentry.fun/docs/components/flight-status-card",
+          "text": "Flight Status Card A detailed card showing flight information with animations.",
+          "heading": "Flight Status Card",
+          "description": "Flight Status CardA detailed card showing flight information with animations.",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [],
+          "tags": [],
+          "cardArea": 131918,
+          "score": 10,
+          "sourceMode": "component-docs"
+        },
+        {
+          "index": 21,
+          "url": "https://www.componentry.fun/docs/components/magnetic-dock",
+          "text": "Magnetic Dock MacOS style dock that scales items based on mouse proximity.",
+          "heading": "Magnetic Dock",
+          "description": "Magnetic DockMacOS style dock that scales items based on mouse proximity.",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [],
+          "tags": [],
+          "cardArea": 131918,
+          "score": 10,
+          "sourceMode": "component-docs"
+        },
+        {
+          "index": 24,
+          "url": "https://www.componentry.fun/docs/components/scroll-choreography",
+          "text": "Scroll Choreography A smooth, scroll-driven image choreography component using Framer Motion.",
+          "heading": "Scroll Choreography",
+          "description": "Scroll ChoreographyA smooth, scroll-driven image choreography component using Framer Motion.",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [],
+          "tags": [],
+          "cardArea": 131918,
+          "score": 10,
+          "sourceMode": "component-docs"
+        },
+        {
+          "index": 26,
+          "url": "https://www.componentry.fun/docs/components/orbit-card-stack",
+          "text": "Orbit Card Stack Premium hover card deck that fans outward and lifts the active card without changing its color or angle.",
+          "heading": "Orbit Card Stack",
+          "description": "Orbit Card StackPremium hover card deck that fans outward and lifts the active card without changing its color or angle.",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [],
+          "tags": [],
+          "cardArea": 131918,
+          "score": 10,
+          "sourceMode": "component-docs"
+        },
+        {
+          "index": 27,
+          "url": "https://www.componentry.fun/docs/components/split-flap-display",
+          "text": "Split Flap Display A premium split-flap display component inspired by vintage departure boards.",
+          "heading": "Split Flap Display",
+          "description": "Split Flap DisplayA premium split-flap display component inspired by vintage departure boards.",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [],
+          "tags": [],
+          "cardArea": 131918,
+          "score": 10,
+          "sourceMode": "component-docs"
+        },
+        {
+          "index": 29,
+          "url": "https://www.componentry.fun/docs/components/signature",
+          "text": "Signature An animated SVG signature effect that draws out text as if hand-written.",
+          "heading": "Signature",
+          "description": "SignatureAn animated SVG signature effect that draws out text as if hand-written.",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [],
+          "tags": [],
+          "cardArea": 131918,
+          "score": 10,
+          "sourceMode": "component-docs"
+        },
+        {
+          "index": 30,
+          "url": "https://www.componentry.fun/docs/components/hero-geometric",
+          "text": "Hero Geometric Geometric shapes and patterns for hero sections.",
+          "heading": "Hero Geometric",
+          "description": "Hero GeometricGeometric shapes and patterns for hero sections.",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [],
+          "tags": [],
+          "cardArea": 131918,
+          "score": 10,
+          "sourceMode": "component-docs"
+        }
+      ],
+      "screenshot": {
+        "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/componentry/gallery.png",
+        "sha256": "14d508fa305d403f0dc7bb6593cbcdf05736f1f7a7777438f196d06963e546f0",
+        "mode": "full-page"
+      },
+      "screenshotQuality": {
+        "viewport": {
+          "width": 1440,
+          "height": 1000
+        },
+        "textLength": 3459,
+        "mediaCount": 38,
+        "codeCount": 0,
+        "headingCount": 38,
+        "usefulElementCount": 37,
+        "visibleAreaRatio": 3.456,
+        "isLikelySparse": false,
+        "visibleSamples": [
+          "COMPONENTRYDocsMCPSponsorSearch...Search⌘KGitHubX (Twitter)Toggle themeText AnimationsComponentsHero BackgroundsVisual E",
+          "COMPONENTRY",
+          "Docs",
+          "MCP",
+          "Sponsor",
+          "Search...Search⌘K",
+          "GitHub",
+          "X (Twitter)"
+        ]
+      },
+      "examples": [
+        {
+          "sourceId": "componentry",
+          "url": "https://www.componentry.fun/docs/components/letter-cascade",
+          "status": 200,
+          "licenseStatus": "mit-repo-available",
+          "reuseGuidance": "Reusable component inspiration. Prefer the locally cached MIT repository for code.",
+          "candidate": {
+            "index": 11,
+            "url": "https://www.componentry.fun/docs/components/letter-cascade",
+            "text": "Letter Cascade Kinetic text animation where letters scatter outward with spring physics and blur, then elegantly reassemble.",
+            "heading": "Letter Cascade",
+            "description": "Letter CascadeKinetic text animation where letters scatter outward with spring physics and blur, then elegantly reassemble.",
+            "imageSrc": "",
+            "imageAlt": "",
+            "buttonText": [],
+            "tags": [],
+            "cardArea": 131923,
+            "score": 10,
+            "sourceMode": "component-docs"
+          },
+          "screenshots": {
+            "desktop": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/componentry/letter-cascade/desktop.png",
+              "sha256": "09bc6264a3485e38061db1c7697a3e69cb46fb268a5f19bc2883b1b2c36aaf42",
+              "mode": "viewport"
+            },
+            "mobile": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/componentry/letter-cascade/mobile.png",
+              "sha256": "2c42ef8885d2f35089635582c4ff1e798a66da93bf366955db3c1cfa79c54b2c",
+              "mode": "viewport"
+            }
+          },
+          "screenshotQuality": {
+            "desktop": {
+              "viewport": {
+                "width": 1440,
+                "height": 1000
+              },
+              "textLength": 1718,
+              "mediaCount": 18,
+              "codeCount": 29,
+              "headingCount": 4,
+              "usefulElementCount": 48,
+              "visibleAreaRatio": 1.13,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Docs·Letter CascadeLetter CascadeA 3D split-flap text animation where letters flip with perspective depth, motion blur, ",
+                "Docs",
+                "Letter Cascade",
+                "Copy as Markdown",
+                "Installation",
+                "bun",
+                "npm",
+                "pnpm"
+              ]
+            },
+            "mobile": {
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "textLength": 1718,
+              "mediaCount": 18,
+              "codeCount": 29,
+              "headingCount": 4,
+              "usefulElementCount": 25,
+              "visibleAreaRatio": 1.152,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Docs·Letter CascadeLetter CascadeA 3D split-flap text animation where letters flip with perspective depth, motion blur, ",
+                "Docs",
+                "Letter Cascade",
+                "Copy as Markdown",
+                "Toggle theme",
+                "Toggle theme",
+                "Default",
+                "Center Wave"
+              ]
+            }
+          },
+          "qualityWarnings": [],
+          "failedRequestCount": 0,
+          "title": "Letter Cascade Component",
+          "description": "Kinetic text animation where letters scatter outward with spring physics and blur, then elegantly reassemble.",
+          "headings": [
+            {
+              "level": "h1",
+              "text": "Letter Cascade"
+            },
+            {
+              "level": "h2",
+              "text": "Installation"
+            },
+            {
+              "level": "h2",
+              "text": "Usage"
+            },
+            {
+              "level": "h2",
+              "text": "API Reference"
+            }
+          ],
+          "sections": [
+            {
+              "index": 0,
+              "heading": "",
+              "textSample": "Toggle theme",
+              "imageCount": 5,
+              "buttonCount": 5
+            }
+          ],
+          "ctas": [
+            "Open Navigation",
+            "Docs",
+            "Copy as Markdown",
+            "More export options",
+            "bun",
+            "npm",
+            "pnpm",
+            "yarn",
+            "Copy code",
+            "Default",
+            "Center Wave",
+            "Extra Bouncy",
+            "Click Trigger",
+            "Snappy",
+            "Copy code",
+            "DM me on X",
+            "Search",
+            "View Source",
+            "Reload preview",
+            "Expand preview pane",
+            "Toggle theme",
+            "Default",
+            "Center Wave",
+            "Extra Bouncy",
+            "Click Trigger",
+            "Snappy"
+          ],
+          "palette": [
+            "lab(98.26 0 0)",
+            "lab(2.75381 0 0)",
+            "oklab(0.999994 0.0000455678 0.0000200868 / 0.06)",
+            "lab(65.6464 1.53497 -5.42429)",
+            "oklab(0.999994 0.0000455678 0.0000200868 / 0.45)",
+            "lab(96.1634 0.0993311 -0.364041)",
+            "lab(47.8878 1.65477 -5.77283)",
+            "lab(90.6853 0.399232 -1.45452)",
+            "color(srgb 0.50631 0.506393 0.506368)",
+            "oklab(0.273999 0.00165433 -0.00575992 / 0.8)",
+            "lab(2.51107 0.242703 -0.886115)",
+            "lab(5.46392 -0.00000745058 -0.00000298023 / 0.75)",
+            "oklab(0.984998 -0.00000956655 0.0000230074 / 0.65)"
+          ],
+          "layoutSignals": {
+            "hasNav": true,
+            "hasHero": true,
+            "hasPricing": false,
+            "hasTestimonials": true,
+            "hasFAQ": false,
+            "hasVideo": false,
+            "cardLikeCount": 1,
+            "imageCount": 0,
+            "buttonCount": 26,
+            "formCount": 0
+          },
+          "codeBlocks": [
+            {
+              "language": "ts",
+              "chars": 62,
+              "sample": "import { LetterCascade } from \"@/components/ui/letter-cascade\""
+            },
+            {
+              "language": "ts",
+              "chars": 62,
+              "sample": "import { LetterCascade } from \"@/components/ui/letter-cascade\""
+            },
+            {
+              "language": "tsx",
+              "chars": 64,
+              "sample": "<LetterCascade text=\"Hover Me\" className=\"text-4xl font-bold\" />"
+            },
+            {
+              "language": "tsx",
+              "chars": 64,
+              "sample": "<LetterCascade text=\"Hover Me\" className=\"text-4xl font-bold\" />"
+            }
+          ],
+          "codeLinks": []
+        },
+        {
+          "sourceId": "componentry",
+          "url": "https://www.componentry.fun/docs/components/cursor-driven-particle-typography",
+          "status": 200,
+          "licenseStatus": "mit-repo-available",
+          "reuseGuidance": "Reusable component inspiration. Prefer the locally cached MIT repository for code.",
+          "candidate": {
+            "index": 14,
+            "url": "https://www.componentry.fun/docs/components/cursor-driven-particle-typography",
+            "text": "Particle Typography Renders dynamic typography constructed entirely from particles that elegantly disperse and reassemble upon cursor intera",
+            "heading": "Particle Typography",
+            "description": "Particle TypographyRenders dynamic typography constructed entirely from particles that elegantly disperse and reassemble upon cursor interaction using spring physics.",
+            "imageSrc": "",
+            "imageAlt": "",
+            "buttonText": [],
+            "tags": [],
+            "cardArea": 131923,
+            "score": 10,
+            "sourceMode": "component-docs"
+          },
+          "screenshots": {
+            "desktop": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/componentry/particle-typography/desktop.png",
+              "sha256": "5094f205bbfdb6fcc479a3d7e0a7983ba412e5bb453030ef9921169715274c3e",
+              "mode": "viewport"
+            },
+            "mobile": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/componentry/particle-typography/mobile.png",
+              "sha256": "b779150b9f129742682aa54b9085e8776fa3328df40abd61b566a04e51396aec",
+              "mode": "viewport"
+            }
+          },
+          "screenshotQuality": {
+            "desktop": {
+              "viewport": {
+                "width": 1440,
+                "height": 1000
+              },
+              "textLength": 1900,
+              "mediaCount": 18,
+              "codeCount": 30,
+              "headingCount": 4,
+              "usefulElementCount": 43,
+              "visibleAreaRatio": 1.315,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Docs·Particle TypographyParticle TypographyRenders dynamic typography constructed entirely from particles that elegantly",
+                "Docs",
+                "Particle Typography",
+                "Copy as Markdown",
+                "Installation",
+                "bun",
+                "npm",
+                "pnpm"
+              ]
+            },
+            "mobile": {
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "textLength": 1900,
+              "mediaCount": 18,
+              "codeCount": 30,
+              "headingCount": 4,
+              "usefulElementCount": 24,
+              "visibleAreaRatio": 1.487,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Docs·Particle TypographyParticle TypographyRenders dynamic typography constructed entirely from particles that elegantly",
+                "Docs",
+                "Particle Typography",
+                "Copy as Markdown",
+                "Toggle theme",
+                "Toggle theme",
+                "Default",
+                "Custom Particle Color"
+              ]
+            }
+          },
+          "qualityWarnings": [],
+          "failedRequestCount": 0,
+          "title": "Particle Typography Component",
+          "description": "Renders dynamic typography constructed entirely from particles that elegantly disperse and reassemble upon cursor interaction using spring physics.",
+          "headings": [
+            {
+              "level": "h1",
+              "text": "Particle Typography"
+            },
+            {
+              "level": "h2",
+              "text": "Installation"
+            },
+            {
+              "level": "h2",
+              "text": "Usage"
+            },
+            {
+              "level": "h2",
+              "text": "API Reference"
+            }
+          ],
+          "sections": [
+            {
+              "index": 0,
+              "heading": "",
+              "textSample": "Toggle theme",
+              "imageCount": 5,
+              "buttonCount": 5
+            }
+          ],
+          "ctas": [
+            "Open Navigation",
+            "Docs",
+            "Copy as Markdown",
+            "More export options",
+            "bun",
+            "npm",
+            "pnpm",
+            "yarn",
+            "Copy code",
+            "Default",
+            "Custom Particle Color",
+            "Fine Particles (High Density)",
+            "Copy code",
+            "DM me on X",
+            "Search",
+            "View Source",
+            "Reload preview",
+            "Expand preview pane",
+            "Toggle theme",
+            "Default",
+            "Custom Particle Color",
+            "Fine Particles (High Density)"
+          ],
+          "palette": [
+            "lab(98.26 0 0)",
+            "lab(2.75381 0 0)",
+            "oklab(0.999994 0.0000455678 0.0000200868 / 0.06)",
+            "lab(65.6464 1.53497 -5.42429)",
+            "oklab(0.999994 0.0000455678 0.0000200868 / 0.45)",
+            "lab(96.1634 0.0993311 -0.364041)",
+            "lab(47.8878 1.65477 -5.77283)",
+            "lab(90.6853 0.399232 -1.45452)",
+            "color(srgb 0.50631 0.506393 0.506368)",
+            "oklab(0.273999 0.00165433 -0.00575992 / 0.8)",
+            "lab(2.51107 0.242703 -0.886115)",
+            "lab(5.46392 -0.00000745058 -0.00000298023 / 0.75)",
+            "oklab(0.984998 -0.00000956655 0.0000230074 / 0.65)"
+          ],
+          "layoutSignals": {
+            "hasNav": true,
+            "hasHero": true,
+            "hasPricing": false,
+            "hasTestimonials": true,
+            "hasFAQ": false,
+            "hasVideo": false,
+            "cardLikeCount": 1,
+            "imageCount": 1,
+            "buttonCount": 22,
+            "formCount": 0
+          },
+          "codeBlocks": [
+            {
+              "language": "ts",
+              "chars": 98,
+              "sample": "import { CursorDrivenParticleTypography } from \"@/components/ui/cursor-driven-particle-typography\""
+            },
+            {
+              "language": "ts",
+              "chars": 98,
+              "sample": "import { CursorDrivenParticleTypography } from \"@/components/ui/cursor-driven-particle-typography\""
+            },
+            {
+              "language": "tsx",
+              "chars": 170,
+              "sample": "export default function ParticleTypographyDefault() { return ( <div className=\"w-full min-h-[400px] relative\"> <CursorDrivenParticleTypography text=\"Design\" /> </div> ) }"
+            },
+            {
+              "language": "tsx",
+              "chars": 170,
+              "sample": "export default function ParticleTypographyDefault() { return ( <div className=\"w-full min-h-[400px] relative\"> <CursorDrivenParticleTypography text=\"Design\" /> </div> ) }"
+            }
+          ],
+          "codeLinks": []
+        },
+        {
+          "sourceId": "componentry",
+          "url": "https://www.componentry.fun/docs/components/music-player",
+          "status": 200,
+          "licenseStatus": "mit-repo-available",
+          "reuseGuidance": "Reusable component inspiration. Prefer the locally cached MIT repository for code.",
+          "candidate": {
+            "index": 16,
+            "url": "https://www.componentry.fun/docs/components/music-player",
+            "text": "Music Player A fun interactive vinyl record music player with swinging tonearm.",
+            "heading": "Music Player",
+            "description": "Music PlayerA fun interactive vinyl record music player with swinging tonearm.",
+            "imageSrc": "",
+            "imageAlt": "",
+            "buttonText": [],
+            "tags": [],
+            "cardArea": 131923,
+            "score": 10,
+            "sourceMode": "component-docs"
+          },
+          "screenshots": {
+            "desktop": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/componentry/music-player/desktop.png",
+              "sha256": "ce4605b4e7086108c4b6a7416ea9a6835a3b3395a76d87dde62530a12a9dae36",
+              "mode": "viewport"
+            },
+            "mobile": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/componentry/music-player/mobile.png",
+              "sha256": "41998910230bbfd21392f3614f1efc584c97947444f064344064253f428cb544",
+              "mode": "viewport"
+            }
+          },
+          "screenshotQuality": {
+            "desktop": {
+              "viewport": {
+                "width": 1440,
+                "height": 1000
+              },
+              "textLength": 1320,
+              "mediaCount": 17,
+              "codeCount": 15,
+              "headingCount": 5,
+              "usefulElementCount": 39,
+              "visibleAreaRatio": 1.137,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Docs·Music PlayerMusic PlayerA playful circular audio player built to look like a spinning vinyl record with a swinging ",
+                "Docs",
+                "Music Player",
+                "Copy as Markdown",
+                "Installation",
+                "bun",
+                "npm",
+                "pnpm"
+              ]
+            },
+            "mobile": {
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "textLength": 1320,
+              "mediaCount": 17,
+              "codeCount": 15,
+              "headingCount": 5,
+              "usefulElementCount": 22,
+              "visibleAreaRatio": 1.152,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Docs·Music PlayerMusic PlayerA playful circular audio player built to look like a spinning vinyl record with a swinging ",
+                "Docs",
+                "Music Player",
+                "Copy as Markdown",
+                "Installation",
+                "Toggle theme",
+                "Toggle theme",
+                "Click the Record to Play"
+              ]
+            }
+          },
+          "qualityWarnings": [],
+          "failedRequestCount": 1,
+          "title": "Music Player Component",
+          "description": "A fun interactive vinyl record music player with swinging tonearm.",
+          "headings": [
+            {
+              "level": "h1",
+              "text": "Music Player"
+            },
+            {
+              "level": "h2",
+              "text": "Installation"
+            },
+            {
+              "level": "h2",
+              "text": "Usage"
+            },
+            {
+              "level": "h2",
+              "text": "API Reference"
+            },
+            {
+              "level": "h3",
+              "text": "Click the Record to Play"
+            }
+          ],
+          "sections": [
+            {
+              "index": 0,
+              "heading": "",
+              "textSample": "Toggle theme",
+              "imageCount": 5,
+              "buttonCount": 5
+            }
+          ],
+          "ctas": [
+            "Open Navigation",
+            "Docs",
+            "Copy as Markdown",
+            "More export options",
+            "bun",
+            "npm",
+            "pnpm",
+            "yarn",
+            "Copy code",
+            "Copy code",
+            "DM me on X",
+            "Search",
+            "View Source",
+            "Reload preview",
+            "Expand preview pane",
+            "Toggle theme"
+          ],
+          "palette": [
+            "lab(98.26 0 0)",
+            "lab(2.75381 0 0)",
+            "oklab(0.999994 0.0000455678 0.0000200868 / 0.06)",
+            "lab(65.6464 1.53497 -5.42429)",
+            "oklab(0.999994 0.0000455678 0.0000200868 / 0.45)",
+            "lab(96.1634 0.0993311 -0.364041)",
+            "lab(47.8878 1.65477 -5.77283)",
+            "lab(90.6853 0.399232 -1.45452)",
+            "color(srgb 0.50631 0.506393 0.506368)",
+            "oklab(0.273999 0.00165433 -0.00575992 / 0.8)",
+            "lab(2.51107 0.242703 -0.886115)",
+            "lab(5.46392 -0.00000745058 -0.00000298023 / 0.75)",
+            "oklab(0.984998 -0.00000956655 0.0000230074 / 0.65)"
+          ],
+          "layoutSignals": {
+            "hasNav": true,
+            "hasHero": true,
+            "hasPricing": false,
+            "hasTestimonials": true,
+            "hasFAQ": false,
+            "hasVideo": false,
+            "cardLikeCount": 1,
+            "imageCount": 0,
+            "buttonCount": 16,
+            "formCount": 0
+          },
+          "codeBlocks": [
+            {
+              "language": "ts",
+              "chars": 59,
+              "sample": "import { MusicPlayer } from \"@/components/ui/music-player\";"
+            },
+            {
+              "language": "ts",
+              "chars": 59,
+              "sample": "import { MusicPlayer } from \"@/components/ui/music-player\";"
+            },
+            {
+              "language": "tsx",
+              "chars": 216,
+              "sample": "export default function Demo() { return ( <MusicPlayer src=\"https://www.youtube.com/watch?v=dQw4w9WgXcQ\" coverArt=\"https://i.scdn.co/image/ab67616d0000b27315ebbedaacef61af244262a8\" className=\"w-full max-w-sm\" /> ); }"
+            },
+            {
+              "language": "tsx",
+              "chars": 216,
+              "sample": "export default function Demo() { return ( <MusicPlayer src=\"https://www.youtube.com/watch?v=dQw4w9WgXcQ\" coverArt=\"https://i.scdn.co/image/ab67616d0000b27315ebbedaacef61af244262a8\" className=\"w-full max-w-sm\" /> ); }"
+            }
+          ],
+          "codeLinks": []
+        },
+        {
+          "sourceId": "componentry",
+          "url": "https://www.componentry.fun/docs/components/circuit-board",
+          "status": 200,
+          "licenseStatus": "mit-repo-available",
+          "reuseGuidance": "Reusable component inspiration. Prefer the locally cached MIT repository for code.",
+          "candidate": {
+            "index": 19,
+            "url": "https://www.componentry.fun/docs/components/circuit-board",
+            "text": "Circuit Board Animated circuit board visualization with nodes and connections.",
+            "heading": "Circuit Board",
+            "description": "Circuit BoardAnimated circuit board visualization with nodes and connections.",
+            "imageSrc": "",
+            "imageAlt": "",
+            "buttonText": [],
+            "tags": [],
+            "cardArea": 131923,
+            "score": 10,
+            "sourceMode": "component-docs"
+          },
+          "screenshots": {
+            "desktop": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/componentry/circuit-board/desktop.png",
+              "sha256": "5db15e1545f336d1ffbb43f1bfd5d478646d83dd7f930a31008f94eb4492f7ec",
+              "mode": "viewport"
+            },
+            "mobile": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/componentry/circuit-board/mobile.png",
+              "sha256": "f4eb93da8c36edb16614bc3290c0e83a29fba190618a2115aa1a5ea58eb8660c",
+              "mode": "viewport"
+            }
+          },
+          "screenshotQuality": {
+            "desktop": {
+              "viewport": {
+                "width": 1440,
+                "height": 1000
+              },
+              "textLength": 2087,
+              "mediaCount": 22,
+              "codeCount": 27,
+              "headingCount": 4,
+              "usefulElementCount": 52,
+              "visibleAreaRatio": 1.257,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Docs·Circuit BoardCircuit BoardAnimated circuit board visualization with nodes and connections. Perfect for tech diagram",
+                "Docs",
+                "Circuit Board",
+                "Copy as Markdown",
+                "Installation",
+                "bun",
+                "npm",
+                "pnpm"
+              ]
+            },
+            "mobile": {
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "textLength": 2087,
+              "mediaCount": 22,
+              "codeCount": 27,
+              "headingCount": 4,
+              "usefulElementCount": 29,
+              "visibleAreaRatio": 1.45,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Docs·Circuit BoardCircuit BoardAnimated circuit board visualization with nodes and connections. Perfect for tech diagram",
+                "Docs",
+                "Circuit Board",
+                "Copy as Markdown",
+                "Installation",
+                "Toggle theme",
+                "Toggle theme",
+                "Default"
+              ]
+            }
+          },
+          "qualityWarnings": [],
+          "failedRequestCount": 0,
+          "title": "Circuit Board Component",
+          "description": "Animated circuit board visualization with nodes and connections.",
+          "headings": [
+            {
+              "level": "h1",
+              "text": "Circuit Board"
+            },
+            {
+              "level": "h2",
+              "text": "Installation"
+            },
+            {
+              "level": "h2",
+              "text": "Usage"
+            },
+            {
+              "level": "h2",
+              "text": "API Reference"
+            }
+          ],
+          "sections": [
+            {
+              "index": 0,
+              "heading": "",
+              "textSample": "Toggle theme",
+              "imageCount": 5,
+              "buttonCount": 5
+            }
+          ],
+          "ctas": [
+            "Open Navigation",
+            "Docs",
+            "Copy as Markdown",
+            "More export options",
+            "bun",
+            "npm",
+            "pnpm",
+            "yarn",
+            "Copy code",
+            "Default",
+            "Simple Flow",
+            "Load Balancer",
+            "Bidirectional",
+            "Network Topology",
+            "Copy code",
+            "DM me on X",
+            "Search",
+            "View Source",
+            "Reload preview",
+            "Expand preview pane",
+            "Toggle theme",
+            "Default",
+            "Simple Flow",
+            "Load Balancer",
+            "Bidirectional",
+            "Network Topology"
+          ],
+          "palette": [
+            "lab(98.26 0 0)",
+            "lab(2.75381 0 0)",
+            "oklab(0.999994 0.0000455678 0.0000200868 / 0.06)",
+            "lab(65.6464 1.53497 -5.42429)",
+            "oklab(0.999994 0.0000455678 0.0000200868 / 0.45)",
+            "lab(96.1634 0.0993311 -0.364041)",
+            "lab(47.8878 1.65477 -5.77283)",
+            "lab(90.6853 0.399232 -1.45452)",
+            "color(srgb 0.50631 0.506393 0.506368)",
+            "oklab(0.273999 0.00165433 -0.00575992 / 0.8)",
+            "lab(2.51107 0.242703 -0.886115)",
+            "lab(5.46392 -0.00000745058 -0.00000298023 / 0.75)",
+            "oklab(0.984998 -0.00000956655 0.0000230074 / 0.65)"
+          ],
+          "layoutSignals": {
+            "hasNav": true,
+            "hasHero": true,
+            "hasPricing": false,
+            "hasTestimonials": true,
+            "hasFAQ": false,
+            "hasVideo": false,
+            "cardLikeCount": 1,
+            "imageCount": 0,
+            "buttonCount": 26,
+            "formCount": 0
+          },
+          "codeBlocks": [
+            {
+              "language": "ts",
+              "chars": 123,
+              "sample": "import { CircuitBoard } from \"@/components/ui/circuit-board\" import { Cloud, Server, Shield, Database } from \"lucide-react\""
+            },
+            {
+              "language": "ts",
+              "chars": 123,
+              "sample": "import { CircuitBoard } from \"@/components/ui/circuit-board\" import { Cloud, Server, Shield, Database } from \"lucide-react\""
+            },
+            {
+              "language": "tsx",
+              "chars": 626,
+              "sample": "<CircuitBoard nodes={[ { id: \"start\", x: 80, y: 150, label: \"Cloud\", icon: <Cloud className=\"w-4 h-4\" /> }, { id: \"process\", x: 250, y: 80, label: \"Server\", icon: <Server className=\"w-4 h-4\" /> }, { id: \"validate\", x: 250, y: 220, label: \"Validate\", icon: <Shield className=\"w-4 h-4\" /> }, { id: \"end\", x: 420, y: 150, label: \"Database\", icon: <Database className=\"w-4 h-4\" /> }, ]} connections={[ { from: \"start\", to: \"process\", animated: true }, { from: \"start\", to: \"validate\", animated: true }, { from: \"process\", to: \"end\", animated: true }, { from: \"validate\", to: \"end\", animated: true }, ]} width={500} height={300} />"
+            },
+            {
+              "language": "tsx",
+              "chars": 626,
+              "sample": "<CircuitBoard nodes={[ { id: \"start\", x: 80, y: 150, label: \"Cloud\", icon: <Cloud className=\"w-4 h-4\" /> }, { id: \"process\", x: 250, y: 80, label: \"Server\", icon: <Server className=\"w-4 h-4\" /> }, { id: \"validate\", x: 250, y: 220, label: \"Validate\", icon: <Shield className=\"w-4 h-4\" /> }, { id: \"end\", x: 420, y: 150, label: \"Database\", icon: <Database className=\"w-4 h-4\" /> }, ]} connections={[ { from: \"start\", to: \"process\", animated: true }, { from: \"start\", to: \"validate\", animated: true }, { from: \"process\", to: \"end\", animated: true }, { from: \"validate\", to: \"end\", animated: true }, ]} width={500} height={300} />"
+            }
+          ],
+          "codeLinks": []
+        },
+        {
+          "sourceId": "componentry",
+          "url": "https://www.componentry.fun/docs/components/collection-surfer",
+          "status": 200,
+          "licenseStatus": "mit-repo-available",
+          "reuseGuidance": "Reusable component inspiration. Prefer the locally cached MIT repository for code.",
+          "candidate": {
+            "index": 22,
+            "url": "https://www.componentry.fun/docs/components/collection-surfer",
+            "text": "Collection Surfer Smooth surfing interaction for browsing collections.",
+            "heading": "Collection Surfer",
+            "description": "Collection SurferSmooth surfing interaction for browsing collections.",
+            "imageSrc": "",
+            "imageAlt": "",
+            "buttonText": [],
+            "tags": [],
+            "cardArea": 131923,
+            "score": 10,
+            "sourceMode": "component-docs"
+          },
+          "screenshots": {
+            "desktop": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/componentry/collection-surfer/desktop.png",
+              "sha256": "cb966340524a02ebcbf30f094074b98f7c7385640ebca098e4011f0fa6c89484",
+              "mode": "viewport"
+            },
+            "mobile": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/componentry/collection-surfer/mobile.png",
+              "sha256": "e3b5001db71ae41608543efdd8b6069f64f41502b40f61307d0b207beead2431",
+              "mode": "viewport"
+            }
+          },
+          "screenshotQuality": {
+            "desktop": {
+              "viewport": {
+                "width": 1440,
+                "height": 1000
+              },
+              "textLength": 1180,
+              "mediaCount": 17,
+              "codeCount": 11,
+              "headingCount": 4,
+              "usefulElementCount": 43,
+              "visibleAreaRatio": 1.141,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Docs·Collection SurferCollection SurferA 3D scroll-driven collection viewer where items surf along a perspective track. ",
+                "Docs",
+                "Collection Surfer",
+                "Copy as Markdown",
+                "Installation",
+                "bun",
+                "npm",
+                "pnpm"
+              ]
+            },
+            "mobile": {
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "textLength": 1180,
+              "mediaCount": 17,
+              "codeCount": 11,
+              "headingCount": 4,
+              "usefulElementCount": 24,
+              "visibleAreaRatio": 1.145,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Docs·Collection SurferCollection SurferA 3D scroll-driven collection viewer where items surf along a perspective track. ",
+                "Docs",
+                "Collection Surfer",
+                "Copy as Markdown",
+                "Installation",
+                "Toggle theme",
+                "Toggle theme",
+                "Default"
+              ]
+            }
+          },
+          "qualityWarnings": [],
+          "failedRequestCount": 2,
+          "title": "Collection Surfer Component",
+          "description": "Smooth surfing interaction for browsing collections.",
+          "headings": [
+            {
+              "level": "h1",
+              "text": "Collection Surfer"
+            },
+            {
+              "level": "h2",
+              "text": "Installation"
+            },
+            {
+              "level": "h2",
+              "text": "Usage"
+            },
+            {
+              "level": "h2",
+              "text": "API Reference"
+            }
+          ],
+          "sections": [
+            {
+              "index": 0,
+              "heading": "",
+              "textSample": "Toggle theme",
+              "imageCount": 5,
+              "buttonCount": 5
+            }
+          ],
+          "ctas": [
+            "Open Navigation",
+            "Docs",
+            "Copy as Markdown",
+            "More export options",
+            "bun",
+            "npm",
+            "pnpm",
+            "yarn",
+            "Copy code",
+            "Default",
+            "Uplift",
+            "Simple",
+            "Copy code",
+            "DM me on X",
+            "Search",
+            "View Source",
+            "Reload preview",
+            "Expand preview pane",
+            "Toggle theme",
+            "Default",
+            "Uplift",
+            "Simple"
+          ],
+          "palette": [
+            "lab(98.26 0 0)",
+            "lab(2.75381 0 0)",
+            "oklab(0.999994 0.0000455678 0.0000200868 / 0.06)",
+            "lab(65.6464 1.53497 -5.42429)",
+            "oklab(0.999994 0.0000455678 0.0000200868 / 0.45)",
+            "lab(96.1634 0.0993311 -0.364041)",
+            "lab(47.8878 1.65477 -5.77283)",
+            "lab(90.6853 0.399232 -1.45452)",
+            "color(srgb 0.50631 0.506393 0.506368)",
+            "oklab(0.273999 0.00165433 -0.00575992 / 0.8)",
+            "lab(2.51107 0.242703 -0.886115)",
+            "lab(5.46392 -0.00000745058 -0.00000298023 / 0.75)",
+            "oklab(0.984998 -0.00000956655 0.0000230074 / 0.65)"
+          ],
+          "layoutSignals": {
+            "hasNav": true,
+            "hasHero": true,
+            "hasPricing": false,
+            "hasTestimonials": true,
+            "hasFAQ": false,
+            "hasVideo": false,
+            "cardLikeCount": 1,
+            "imageCount": 0,
+            "buttonCount": 22,
+            "formCount": 0
+          },
+          "codeBlocks": [
+            {
+              "language": "ts",
+              "chars": 84,
+              "sample": "import { CollectionSurfer, CollectionItem } from \"@/components/ui/collection-surfer\""
+            },
+            {
+              "language": "ts",
+              "chars": 84,
+              "sample": "import { CollectionSurfer, CollectionItem } from \"@/components/ui/collection-surfer\""
+            },
+            {
+              "language": "ts",
+              "chars": 84,
+              "sample": "import { CollectionSurfer, CollectionItem } from \"@/components/ui/collection-surfer\""
+            },
+            {
+              "language": "ts",
+              "chars": 84,
+              "sample": "import { CollectionSurfer, CollectionItem } from \"@/components/ui/collection-surfer\""
+            }
+          ],
+          "codeLinks": []
+        },
+        {
+          "sourceId": "componentry",
+          "url": "https://www.componentry.fun/docs/components/layered-stack",
+          "status": 200,
+          "licenseStatus": "mit-repo-available",
+          "reuseGuidance": "Reusable component inspiration. Prefer the locally cached MIT repository for code.",
+          "candidate": {
+            "index": 25,
+            "url": "https://www.componentry.fun/docs/components/layered-stack",
+            "text": "Layered Stack A stack of layered cards that interact with mouse hover.",
+            "heading": "Layered Stack",
+            "description": "Layered StackA stack of layered cards that interact with mouse hover.",
+            "imageSrc": "",
+            "imageAlt": "",
+            "buttonText": [],
+            "tags": [],
+            "cardArea": 131923,
+            "score": 10,
+            "sourceMode": "component-docs"
+          },
+          "screenshots": {
+            "desktop": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/componentry/layered-stack/desktop.png",
+              "sha256": "42b02f28a20209b8f955646f52c72258503a8a6affba5a5b93cc414f21f4f9b8",
+              "mode": "viewport"
+            },
+            "mobile": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/componentry/layered-stack/mobile.png",
+              "sha256": "d30432a8f14faeecf7df05725d1fa7258263b113d98af6f6fd22c6ca6902a83a",
+              "mode": "viewport"
+            }
+          },
+          "screenshotQuality": {
+            "desktop": {
+              "viewport": {
+                "width": 1440,
+                "height": 1000
+              },
+              "textLength": 1855,
+              "mediaCount": 25,
+              "codeCount": 10,
+              "headingCount": 4,
+              "usefulElementCount": 46,
+              "visibleAreaRatio": 1.234,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Docs·Layered StackLayered StackA stack of layered cards that reset and spring out on mouse interactions.Copy as Markdown",
+                "Docs",
+                "Layered Stack",
+                "Copy as Markdown",
+                "Installation",
+                "bun",
+                "npm",
+                "pnpm"
+              ]
+            },
+            "mobile": {
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "textLength": 1855,
+              "mediaCount": 25,
+              "codeCount": 10,
+              "headingCount": 4,
+              "usefulElementCount": 29,
+              "visibleAreaRatio": 1.157,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Docs·Layered StackLayered StackA stack of layered cards that reset and spring out on mouse interactions.Copy as Markdown",
+                "Docs",
+                "Layered Stack",
+                "Copy as Markdown",
+                "Installation",
+                "Toggle theme",
+                "Toggle theme"
+              ]
+            }
+          },
+          "qualityWarnings": [],
+          "failedRequestCount": 0,
+          "title": "Layered Stack Component",
+          "description": "A stack of layered cards that interact with mouse hover.",
+          "headings": [
+            {
+              "level": "h1",
+              "text": "Layered Stack"
+            },
+            {
+              "level": "h2",
+              "text": "Installation"
+            },
+            {
+              "level": "h2",
+              "text": "Usage"
+            },
+            {
+              "level": "h2",
+              "text": "API Reference"
+            }
+          ],
+          "sections": [
+            {
+              "index": 0,
+              "heading": "",
+              "textSample": "Toggle theme",
+              "imageCount": 5,
+              "buttonCount": 5
+            }
+          ],
+          "ctas": [
+            "Open Navigation",
+            "Docs",
+            "Copy as Markdown",
+            "More export options",
+            "bun",
+            "npm",
+            "pnpm",
+            "yarn",
+            "Copy code",
+            "Copy code",
+            "DM me on X",
+            "Search",
+            "View Source",
+            "Reload preview",
+            "Expand preview pane",
+            "Toggle theme"
+          ],
+          "palette": [
+            "lab(98.26 0 0)",
+            "lab(2.75381 0 0)",
+            "oklab(0.999994 0.0000455678 0.0000200868 / 0.06)",
+            "lab(65.6464 1.53497 -5.42429)",
+            "oklab(0.999994 0.0000455678 0.0000200868 / 0.45)",
+            "lab(96.1634 0.0993311 -0.364041)",
+            "lab(47.8878 1.65477 -5.77283)",
+            "lab(90.6853 0.399232 -1.45452)",
+            "color(srgb 0.50631 0.506393 0.506368)",
+            "oklab(0.273999 0.00165433 -0.00575992 / 0.8)",
+            "lab(2.51107 0.242703 -0.886115)",
+            "lab(5.46392 -0.00000745058 -0.00000298023 / 0.75)",
+            "oklab(0.984998 -0.00000956655 0.0000230074 / 0.65)"
+          ],
+          "layoutSignals": {
+            "hasNav": true,
+            "hasHero": true,
+            "hasPricing": false,
+            "hasTestimonials": true,
+            "hasFAQ": false,
+            "hasVideo": false,
+            "cardLikeCount": 1,
+            "imageCount": 8,
+            "buttonCount": 16,
+            "formCount": 0
+          },
+          "codeBlocks": [
+            {
+              "language": "ts",
+              "chars": 60,
+              "sample": "import { LayeredStack } from \"@/components/ui/layered-stack\""
+            },
+            {
+              "language": "ts",
+              "chars": 60,
+              "sample": "import { LayeredStack } from \"@/components/ui/layered-stack\""
+            },
+            {
+              "language": "tsx",
+              "chars": 1068,
+              "sample": "const images = [ \"https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&q=80&w=800\", \"https://images.unsplash.com/photo-1507413245164-6160d8298b31?auto=format&fit=crop&q=80&w=800\", \"https://images.unsplash.com/photo-1517976487492-5750f3195933?auto=format&fit=crop&q=80&w=800\", \"https://images.unsplash.com/photo-1581093450021-4a7360e9a6b5?auto=format&fit=crop&q=80&w=800\", \"https://images.unsplash.com/photo-1530026405186-ed1f139313f8?auto=format&fit=crop&q=80&w=800\", \"https://images.unsplash.com/photo-1507668077129-56e32842fceb?auto=format&fit=crop&q=80&w=800\", \"https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=800\", \"https://images.unsplash.com/photo-1633167606207-d840b5070fc2?auto=format&fit=crop&q=80&w=800\", ]; export const Demo = () => { return ( <LayeredStack className=\"w-full max-w-[920px] grid grid-cols-4 gap-4 p-8\"> {images.map((img, i) => ( <img key={i} src={img} alt={`Scientific element ${i}`} className=\"object-cover w-full aspect-[250/320] shadow-xl\" /> ))} </LayeredStack> ); };"
+            },
+            {
+              "language": "tsx",
+              "chars": 1068,
+              "sample": "const images = [ \"https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&q=80&w=800\", \"https://images.unsplash.com/photo-1507413245164-6160d8298b31?auto=format&fit=crop&q=80&w=800\", \"https://images.unsplash.com/photo-1517976487492-5750f3195933?auto=format&fit=crop&q=80&w=800\", \"https://images.unsplash.com/photo-1581093450021-4a7360e9a6b5?auto=format&fit=crop&q=80&w=800\", \"https://images.unsplash.com/photo-1530026405186-ed1f139313f8?auto=format&fit=crop&q=80&w=800\", \"https://images.unsplash.com/photo-1507668077129-56e32842fceb?auto=format&fit=crop&q=80&w=800\", \"https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=800\", \"https://images.unsplash.com/photo-1633167606207-d840b5070fc2?auto=format&fit=crop&q=80&w=800\", ]; export const Demo = () => { return ( <LayeredStack className=\"w-full max-w-[920px] grid grid-cols-4 gap-4 p-8\"> {images.map((img, i) => ( <img key={i} src={img} alt={`Scientific element ${i}`} className=\"object-cover w-full aspect-[250/320] shadow-xl\" /> ))} </LayeredStack> ); };"
+            }
+          ],
+          "codeLinks": []
+        },
+        {
+          "sourceId": "componentry",
+          "url": "https://www.componentry.fun/docs/components/eye-tracking",
+          "status": 200,
+          "licenseStatus": "mit-repo-available",
+          "reuseGuidance": "Reusable component inspiration. Prefer the locally cached MIT repository for code.",
+          "candidate": {
+            "index": 28,
+            "url": "https://www.componentry.fun/docs/components/eye-tracking",
+            "text": "Eye Tracking Hyper-realistic eyes that follow your cursor with smooth spring physics, reactive pupils, blinking, and multiple stunning varia",
+            "heading": "Eye Tracking",
+            "description": "Eye TrackingHyper-realistic eyes that follow your cursor with smooth spring physics, reactive pupils, blinking, and multiple stunning variants.",
+            "imageSrc": "",
+            "imageAlt": "",
+            "buttonText": [],
+            "tags": [],
+            "cardArea": 131923,
+            "score": 10,
+            "sourceMode": "component-docs"
+          },
+          "screenshots": {
+            "desktop": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/componentry/eye-tracking/desktop.png",
+              "sha256": "74210226f05199ca2e4d212c4c0151d44850d905777ede1dd0bcead4b6ac370d",
+              "mode": "viewport"
+            },
+            "mobile": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/componentry/eye-tracking/mobile.png",
+              "sha256": "837aae0291c569a0618862e6aab56c18385bf0548eaf4759b4070d33caa5401b",
+              "mode": "viewport"
+            }
+          },
+          "screenshotQuality": {
+            "desktop": {
+              "viewport": {
+                "width": 1440,
+                "height": 1000
+              },
+              "textLength": 1924,
+              "mediaCount": 17,
+              "codeCount": 53,
+              "headingCount": 4,
+              "usefulElementCount": 49,
+              "visibleAreaRatio": 1.136,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Docs·Eye TrackingEye TrackingHyper-realistic eyes that follow your cursor with smooth spring physics, reactive pupil dil",
+                "Docs",
+                "Eye Tracking",
+                "Copy as Markdown",
+                "Installation",
+                "bun",
+                "npm",
+                "pnpm"
+              ]
+            },
+            "mobile": {
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "textLength": 1924,
+              "mediaCount": 17,
+              "codeCount": 53,
+              "headingCount": 4,
+              "usefulElementCount": 24,
+              "visibleAreaRatio": 1.151,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Docs·Eye TrackingEye TrackingHyper-realistic eyes that follow your cursor with smooth spring physics, reactive pupil dil",
+                "Docs",
+                "Eye Tracking",
+                "Copy as Markdown",
+                "Toggle theme",
+                "Toggle theme",
+                "Default",
+                "Cartoon Variant"
+              ]
+            }
+          },
+          "qualityWarnings": [],
+          "failedRequestCount": 0,
+          "title": "Eye Tracking Component",
+          "description": "Hyper-realistic eyes that follow your cursor with smooth spring physics, reactive pupils, blinking, and multiple stunning variants.",
+          "headings": [
+            {
+              "level": "h1",
+              "text": "Eye Tracking"
+            },
+            {
+              "level": "h2",
+              "text": "Installation"
+            },
+            {
+              "level": "h2",
+              "text": "Usage"
+            },
+            {
+              "level": "h2",
+              "text": "API Reference"
+            }
+          ],
+          "sections": [
+            {
+              "index": 0,
+              "heading": "",
+              "textSample": "Toggle theme",
+              "imageCount": 5,
+              "buttonCount": 5
+            }
+          ],
+          "ctas": [
+            "Open Navigation",
+            "Docs",
+            "Copy as Markdown",
+            "More export options",
+            "bun",
+            "npm",
+            "pnpm",
+            "yarn",
+            "Copy code",
+            "Default",
+            "Cartoon Variant",
+            "Cyber Variant",
+            "Minimal Variant",
+            "Three Eyes",
+            "Brown Eyes",
+            "Copy code",
+            "DM me on X",
+            "Search",
+            "View Source",
+            "Reload preview",
+            "Expand preview pane",
+            "Toggle theme",
+            "Default",
+            "Cartoon Variant",
+            "Cyber Variant",
+            "Minimal Variant",
+            "Three Eyes",
+            "Brown Eyes"
+          ],
+          "palette": [
+            "lab(98.26 0 0)",
+            "lab(2.75381 0 0)",
+            "oklab(0.999994 0.0000455678 0.0000200868 / 0.06)",
+            "lab(65.6464 1.53497 -5.42429)",
+            "oklab(0.999994 0.0000455678 0.0000200868 / 0.45)",
+            "lab(96.1634 0.0993311 -0.364041)",
+            "lab(47.8878 1.65477 -5.77283)",
+            "lab(90.6853 0.399232 -1.45452)",
+            "color(srgb 0.50631 0.506393 0.506368)",
+            "oklab(0.273999 0.00165433 -0.00575992 / 0.8)",
+            "lab(2.51107 0.242703 -0.886115)",
+            "lab(5.46392 -0.00000745058 -0.00000298023 / 0.75)",
+            "oklab(0.984998 -0.00000956655 0.0000230074 / 0.65)"
+          ],
+          "layoutSignals": {
+            "hasNav": true,
+            "hasHero": true,
+            "hasPricing": false,
+            "hasTestimonials": true,
+            "hasFAQ": false,
+            "hasVideo": false,
+            "cardLikeCount": 1,
+            "imageCount": 0,
+            "buttonCount": 28,
+            "formCount": 0
+          },
+          "codeBlocks": [
+            {
+              "language": "ts",
+              "chars": 58,
+              "sample": "import { EyeTracking } from \"@/components/ui/eye-tracking\""
+            },
+            {
+              "language": "ts",
+              "chars": 58,
+              "sample": "import { EyeTracking } from \"@/components/ui/eye-tracking\""
+            }
+          ],
+          "codeLinks": []
+        },
+        {
+          "sourceId": "componentry",
+          "url": "https://www.componentry.fun/docs/components/dither-prism-hero",
+          "status": 200,
+          "licenseStatus": "mit-repo-available",
+          "reuseGuidance": "Reusable component inspiration. Prefer the locally cached MIT repository for code.",
+          "candidate": {
+            "index": 31,
+            "url": "https://www.componentry.fun/docs/components/dither-prism-hero",
+            "text": "Dither Prism Hero Stunning WebGL hero with advanced dithering, prismatic refraction, holographic iridescence, and center-focused energy.",
+            "heading": "Dither Prism Hero",
+            "description": "Dither Prism HeroStunning WebGL hero with advanced dithering, prismatic refraction, holographic iridescence, and center-focused energy.",
+            "imageSrc": "",
+            "imageAlt": "",
+            "buttonText": [],
+            "tags": [],
+            "cardArea": 131923,
+            "score": 10,
+            "sourceMode": "component-docs"
+          },
+          "screenshots": {
+            "desktop": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/componentry/dither-prism-hero/desktop.png",
+              "sha256": "84a774dd04600de9c0d797388ac7016894feb742dbb459a5c2d01824a65cab7b",
+              "mode": "viewport"
+            },
+            "mobile": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/componentry/dither-prism-hero/mobile.png",
+              "sha256": "852849889ff738ba8b659f114f890110162474290c3b6f6fc72e11022456e752",
+              "mode": "viewport"
+            }
+          },
+          "screenshotQuality": {
+            "desktop": {
+              "viewport": {
+                "width": 1440,
+                "height": 1000
+              },
+              "textLength": 1911,
+              "mediaCount": 18,
+              "codeCount": 39,
+              "headingCount": 6,
+              "usefulElementCount": 40,
+              "visibleAreaRatio": 1.657,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Docs·Dither Prism HeroDither Prism HeroA breathtaking WebGL hero background featuring advanced dithering, prismatic refr",
+                "Docs",
+                "Dither Prism Hero",
+                "Copy as Markdown",
+                "Installation",
+                "bun",
+                "npm",
+                "pnpm"
+              ]
+            },
+            "mobile": {
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "textLength": 1911,
+              "mediaCount": 18,
+              "codeCount": 39,
+              "headingCount": 6,
+              "usefulElementCount": 25,
+              "visibleAreaRatio": 1.65,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Docs·Dither Prism HeroDither Prism HeroA breathtaking WebGL hero background featuring advanced dithering, prismatic refr",
+                "Docs",
+                "Dither Prism Hero",
+                "Copy as Markdown",
+                "Toggle theme",
+                "Toggle theme",
+                "Experience",
+                "The Future"
+              ]
+            }
+          },
+          "qualityWarnings": [],
+          "failedRequestCount": 0,
+          "title": "Dither Prism Hero Component",
+          "description": "Stunning WebGL hero with advanced dithering, prismatic refraction, holographic iridescence, and center-focused energy.",
+          "headings": [
+            {
+              "level": "h1",
+              "text": "Dither Prism Hero"
+            },
+            {
+              "level": "h2",
+              "text": "Installation"
+            },
+            {
+              "level": "h2",
+              "text": "Usage"
+            },
+            {
+              "level": "h2",
+              "text": "API Reference"
+            },
+            {
+              "level": "h1",
+              "text": "Experience"
+            },
+            {
+              "level": "h1",
+              "text": "The Future"
+            }
+          ],
+          "sections": [
+            {
+              "index": 0,
+              "heading": "",
+              "textSample": "Toggle theme",
+              "imageCount": 6,
+              "buttonCount": 6
+            }
+          ],
+          "ctas": [
+            "Open Navigation",
+            "Docs",
+            "Copy as Markdown",
+            "More export options",
+            "bun",
+            "npm",
+            "pnpm",
+            "yarn",
+            "Copy code",
+            "Copy code",
+            "DM me on X",
+            "Search",
+            "View Source",
+            "Personalize",
+            "Reload preview",
+            "Expand preview pane",
+            "Toggle theme"
+          ],
+          "palette": [
+            "lab(98.26 0 0)",
+            "lab(2.75381 0 0)",
+            "oklab(0.999994 0.0000455678 0.0000200868 / 0.06)",
+            "lab(65.6464 1.53497 -5.42429)",
+            "oklab(0.999994 0.0000455678 0.0000200868 / 0.45)",
+            "lab(96.1634 0.0993311 -0.364041)",
+            "lab(47.8878 1.65477 -5.77283)",
+            "lab(90.6853 0.399232 -1.45452)",
+            "color(srgb 0.50631 0.506393 0.506368)",
+            "oklab(0.273999 0.00165433 -0.00575992 / 0.8)",
+            "lab(2.51107 0.242703 -0.886115)",
+            "lab(5.46392 -0.00000745058 -0.00000298023 / 0.75)",
+            "oklab(0.984998 -0.00000956655 0.0000230074 / 0.65)"
+          ],
+          "layoutSignals": {
+            "hasNav": true,
+            "hasHero": true,
+            "hasPricing": false,
+            "hasTestimonials": true,
+            "hasFAQ": false,
+            "hasVideo": false,
+            "cardLikeCount": 1,
+            "imageCount": 1,
+            "buttonCount": 17,
+            "formCount": 0
+          },
+          "codeBlocks": [
+            {
+              "language": "tsx",
+              "chars": 197,
+              "sample": "<DitherPrismHero title1=\"Experience\" title2=\"The Future\" color1=\"#0f0f23\" color2=\"#6366f1\" color3=\"#ec4899\" speed={1} ditherIntensity={0.15} prismIntensity={0.5} particleCount={50} showParticles />"
+            },
+            {
+              "language": "tsx",
+              "chars": 197,
+              "sample": "<DitherPrismHero title1=\"Experience\" title2=\"The Future\" color1=\"#0f0f23\" color2=\"#6366f1\" color3=\"#ec4899\" speed={1} ditherIntensity={0.15} prismIntensity={0.5} particleCount={50} showParticles />"
+            }
+          ],
+          "codeLinks": []
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

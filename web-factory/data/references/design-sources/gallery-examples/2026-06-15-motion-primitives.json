@@ -1,0 +1,28 @@
+{
+  "capturedAt": "2026-06-15T21:10:56.399Z",
+  "cacheRoot": "C:/Users/PC/.codex/design-stack/gallery-examples",
+  "policy": "Gallery screenshots and structure are reference artifacts. Copy/adapt code only when licenseStatus is compatible and the linked/local repo license has been reviewed.",
+  "configPath": "C:/dev/proyectos/onia-hermes/web-factory/data/references/design-sources/gallery-reference-sources.json",
+  "results": [
+    {
+      "id": "motion-primitives",
+      "name": "Motion Primitives",
+      "url": "https://motion-primitives.com/docs",
+      "mode": "motion-component-docs",
+      "usage": "Motion patterns and interaction primitives. Prefer the locally cached MIT repository for code.",
+      "licenseStatus": "mit-repo-available",
+      "status": 200,
+      "failedRequestCount": 0,
+      "rawCandidateCount": 2,
+      "selectedCandidateCount": 0,
+      "detailedExampleCount": 0,
+      "candidates": [],
+      "screenshot": {
+        "path": "C:/Users/PC/.codex/design-stack/gallery-examples/motion-primitives/gallery.png",
+        "sha256": "1566d99fa8c2a6548ce8d72d58f410af8b31bfceb793c3bce25d42a67b52cdae"
+      },
+      "examples": []
+    }
+  ],
+  "errors": []
+}

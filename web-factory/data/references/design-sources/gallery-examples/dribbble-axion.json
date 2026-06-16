@@ -1,0 +1,270 @@
+{
+  "capturedAt": "2026-06-15T21:57:08.003Z",
+  "cacheRoot": "C:/Users/PC/.codex/design-stack/gallery-examples-full",
+  "policy": "Gallery screenshots and structure are reference artifacts. Copy/adapt code only when licenseStatus is compatible and the linked/local repo license has been reviewed.",
+  "configPath": "data/references/design-sources/gallery-reference-sources.json",
+  "results": [
+    {
+      "id": "dribbble-axion",
+      "name": "Dribbble Axion Shot",
+      "url": "https://dribbble.com/shots/27129126-Axion-Futuristic-Electric-Car-Landing-Page-Website",
+      "mode": "single-shot",
+      "usage": "Mood reference only. Do not copy proprietary layout, assets or code.",
+      "licenseStatus": "screenshot-and-mood-only",
+      "status": 202,
+      "failedRequestCount": 7,
+      "rawCandidateCount": 1,
+      "selectedCandidateCount": 1,
+      "detailedExampleCount": 1,
+      "candidates": [
+        {
+          "url": "https://dribbble.com/shots/27129126-Axion-Futuristic-Electric-Car-Landing-Page-Website",
+          "text": "Dribbble Axion Shot",
+          "heading": "Dribbble Axion Shot",
+          "description": "Mood reference only. Do not copy proprietary layout, assets or code.",
+          "score": 10,
+          "cardArea": 0
+        }
+      ],
+      "screenshot": {
+        "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/dribbble-axion/gallery.png",
+        "sha256": "e240fec4e7a0565d1549206ef812766775bceaad0e3d86f5761490e71ec212b5",
+        "mode": "full-page"
+      },
+      "screenshotQuality": {
+        "viewport": {
+          "width": 1440,
+          "height": 1000
+        },
+        "textLength": 1970,
+        "mediaCount": 69,
+        "codeCount": 0,
+        "headingCount": 3,
+        "usefulElementCount": 45,
+        "visibleAreaRatio": 1.081,
+        "isLikelySparse": false,
+        "visibleSamples": [
+          "Get Started",
+          "Dribbble: the community for graphic design",
+          "Dribbble: the community for graphic design",
+          "Shots",
+          "Explore",
+          "Hire Talent",
+          "Get Hired",
+          "Community"
+        ]
+      },
+      "examples": [
+        {
+          "sourceId": "dribbble-axion",
+          "url": "https://dribbble.com/shots/27129126-Axion-Futuristic-Electric-Car-Landing-Page-Website",
+          "status": 202,
+          "licenseStatus": "screenshot-and-mood-only",
+          "reuseGuidance": "Mood reference only. Do not copy proprietary layout, assets or code.",
+          "candidate": {
+            "url": "https://dribbble.com/shots/27129126-Axion-Futuristic-Electric-Car-Landing-Page-Website",
+            "text": "Dribbble Axion Shot",
+            "heading": "Dribbble Axion Shot",
+            "description": "Mood reference only. Do not copy proprietary layout, assets or code.",
+            "score": 10,
+            "cardArea": 0
+          },
+          "screenshots": {
+            "desktop": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/dribbble-axion/dribbble-axion-shot/desktop.png",
+              "sha256": "4dd87019d460f1d38b9428b0301c34fcbe78f2f580ed233f38f3fefcf4b544a3",
+              "mode": "viewport"
+            },
+            "mobile": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/dribbble-axion/dribbble-axion-shot/mobile.png",
+              "sha256": "5ebf09824b3cd1cded32434730855832d676ffe21af530c55b05849ccd04e1a5",
+              "mode": "viewport"
+            }
+          },
+          "screenshotQuality": {
+            "desktop": {
+              "viewport": {
+                "width": 1440,
+                "height": 1000
+              },
+              "textLength": 1970,
+              "mediaCount": 69,
+              "codeCount": 0,
+              "headingCount": 3,
+              "usefulElementCount": 45,
+              "visibleAreaRatio": 1.081,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Get Started",
+                "Dribbble: the community for graphic design",
+                "Dribbble: the community for graphic design",
+                "Shots",
+                "Explore",
+                "Hire Talent",
+                "Get Hired",
+                "Community"
+              ]
+            },
+            "mobile": {
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "textLength": 1892,
+              "mediaCount": 69,
+              "codeCount": 0,
+              "headingCount": 3,
+              "usefulElementCount": 26,
+              "visibleAreaRatio": 0.968,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Get Started",
+                "Dribbble: the community for graphic design",
+                "Dribbble: the community for graphic design",
+                "What are you looking for?",
+                "Shots",
+                "Log in",
+                "Axion - Futuristic Electric Car Landing Page Website",
+                "Rylic Studio Available for work Follow Following"
+              ]
+            }
+          },
+          "qualityWarnings": [],
+          "failedRequestCount": 6,
+          "title": "Axion - Futuristic Electric Car Landing Page Website by Rylic Studio on Dribbble",
+          "description": "Axion - Futuristic Electric Car Landing Page Website designed by Rylic Studio. Connect with them on Dribbble; the global community for designers and creative professionals.",
+          "headings": [
+            {
+              "level": "h1",
+              "text": "Axion - Futuristic Electric Car Landing Page Website"
+            },
+            {
+              "level": "h2",
+              "text": "Axion – Futuristic Electric Car Landing Page Design"
+            }
+          ],
+          "sections": [
+            {
+              "index": 0,
+              "heading": "",
+              "textSample": "Rylic Studio Available for work Follow Following",
+              "imageCount": 1,
+              "buttonCount": 5
+            },
+            {
+              "index": 1,
+              "heading": "",
+              "textSample": "#030304 #FDFCFC #3F4D58 #C7ACA9 #F81F05 #56403D #C0936C #D85522 Download color palette",
+              "imageCount": 2,
+              "buttonCount": 9
+            },
+            {
+              "index": 2,
+              "heading": "",
+              "textSample": "Rylic Studio Stunning Websites Crafter by Hand Get in touch",
+              "imageCount": 1,
+              "buttonCount": 3
+            },
+            {
+              "index": 3,
+              "heading": "More by Rylic Studio",
+              "textSample": "More by Rylic Studio View profile",
+              "imageCount": 0,
+              "buttonCount": 1
+            }
+          ],
+          "ctas": [
+            "Get Started",
+            "Dribbble: the community for graphic design",
+            "What are you looking for?",
+            "Shots",
+            "Explore",
+            "Popular",
+            "New and Noteworthy",
+            "Product Design",
+            "Web Design",
+            "Animation",
+            "Branding",
+            "Illustration",
+            "Mobile",
+            "Typography",
+            "Print",
+            "Hire Talent",
+            "Start Project Brief Get recommendations and proposals",
+            "Browse Profiles Find and message talent directly",
+            "Explore Services Hire quickly with pre-packaged services",
+            "Post a Full-Time Job →",
+            "Learn more about how hiring works on Dribbble →",
+            "Get Hired",
+            "Browse Project Briefs Pitch clients ready to hire now",
+            "Add Service Let clients purchase your services",
+            "Full-Time Jobs →",
+            "Upgrade to Pro →",
+            "Advertise with Us →",
+            "Send Outbound Proposal New Send proposals to any client",
+            "Learn more about getting hired on Dribbble →",
+            "Community",
+            "Blog Design inspiration, stories, and tips",
+            "Playoffs Join creative challenges and show your skills",
+            "Help Center Get quick answers and learn how to use Dribbble",
+            "Instagram",
+            "X",
+            "Pinterest icon Pinterest",
+            "Youtube",
+            "TikTok",
+            "Threads",
+            "Start Project Brief",
+            "Sign up",
+            "Log in",
+            "Rylic Studio",
+            "Available for work",
+            "Follow",
+            "Following",
+            "Get in touch",
+            "#030304",
+            "#FDFCFC",
+            "#3F4D58"
+          ],
+          "palette": [
+            "rgb(13, 12, 34)",
+            "rgb(255, 255, 255)",
+            "rgb(158, 158, 167)",
+            "rgb(61, 61, 78)",
+            "rgb(0, 0, 0)",
+            "rgb(6, 3, 24)",
+            "rgb(58, 53, 70)",
+            "rgb(234, 76, 137)",
+            "rgb(101, 92, 122)",
+            "rgb(77, 170, 87)",
+            "rgb(110, 109, 122)",
+            "rgb(231, 231, 233)",
+            "rgb(3, 3, 4)",
+            "rgb(253, 252, 252)",
+            "rgb(63, 77, 88)",
+            "rgb(199, 172, 169)",
+            "rgb(248, 31, 5)",
+            "rgb(86, 64, 61)",
+            "rgb(192, 147, 108)",
+            "rgb(216, 85, 34)",
+            "rgb(243, 243, 244)"
+          ],
+          "layoutSignals": {
+            "hasNav": true,
+            "hasHero": true,
+            "hasPricing": false,
+            "hasTestimonials": false,
+            "hasFAQ": false,
+            "hasVideo": true,
+            "cardLikeCount": 4,
+            "imageCount": 27,
+            "buttonCount": 120,
+            "formCount": 0
+          },
+          "codeBlocks": [],
+          "codeLinks": []
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

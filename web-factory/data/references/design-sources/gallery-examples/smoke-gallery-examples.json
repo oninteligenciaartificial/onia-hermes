@@ -1,0 +1,655 @@
+{
+  "capturedAt": "2026-06-15T20:56:24.401Z",
+  "cacheRoot": "C:/Users/PC/.codex/design-stack/gallery-examples-smoke",
+  "policy": "Gallery screenshots and structure are reference artifacts. Copy/adapt code only when licenseStatus is compatible and the linked/local repo license has been reviewed.",
+  "configPath": "C:/dev/proyectos/onia-hermes/web-factory/data/references/design-sources/gallery-reference-sources.json",
+  "results": [
+    {
+      "id": "21st-community-components",
+      "name": "21st.dev Community Components",
+      "url": "https://21st.dev/community/components",
+      "mode": "component-gallery",
+      "usage": "Component discovery and UI pattern extraction. Verify each community component before copying code.",
+      "licenseStatus": "review-required",
+      "status": 200,
+      "failedRequestCount": 4,
+      "rawCandidateCount": 197,
+      "selectedCandidateCount": 2,
+      "screenshot": {
+        "path": "C:/Users/PC/.codex/design-stack/gallery-examples-smoke/21st-community-components/gallery.png",
+        "sha256": "a8c25240d936ee1147e60c9ed01c4375c18b6d0b54acf829fa38aab49cfedec3"
+      },
+      "examples": [
+        {
+          "sourceId": "21st-community-components",
+          "url": "https://21st.dev/community/components/aayush-duhan/ink-reveal/default",
+          "status": 200,
+          "licenseStatus": "review-required",
+          "reuseGuidance": "Component discovery and UI pattern extraction. Verify each community component before copying code.",
+          "candidate": {
+            "index": 64,
+            "url": "https://21st.dev/community/components/aayush-duhan/ink-reveal/default",
+            "text": "Ink Reveal",
+            "heading": "",
+            "description": "Ink Reveal69",
+            "imageSrc": "https://cdn.21st.dev/cdn-cgi/image/fit=scale-down,width=3840,quality=75,format=auto/https://cdn.21st.dev/aayush-duhan/ink-reveal/default/preview.1781465880612.png",
+            "imageAlt": "Ink Reveal",
+            "buttonText": [
+              "69"
+            ],
+            "tags": [],
+            "cardArea": 67448,
+            "score": 9,
+            "sourceMode": "component-gallery"
+          },
+          "screenshots": {
+            "desktop": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-smoke/21st-community-components/ink-reveal/desktop.png",
+              "sha256": "bc8a16b639085651323953f19ab81de7c7cb04dff73a05a59459800348b84202"
+            },
+            "mobile": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-smoke/21st-community-components/ink-reveal/mobile.png",
+              "sha256": "ff48de2a64f5ad73fee4481afef5b47f46f1066f0fcea7eae6c12267bade0942"
+            }
+          },
+          "failedRequestCount": 4,
+          "title": "Ink Reveal | Community Components - 21st | 21st",
+          "description": "A canvas overlay that lets users brush away a colored mask to reveal content underneath. Mouse movement creates organic, wobbly ink stamps that expand and fade, producing a natural paint-stroke feel. Fully customizable — control brush size, mask color, lifetime, wobble, and more.",
+          "headings": [
+            {
+              "level": "h3",
+              "text": "Ink Reveal"
+            },
+            {
+              "level": "h3",
+              "text": "Created by"
+            },
+            {
+              "level": "h3",
+              "text": "Installation"
+            },
+            {
+              "level": "h3",
+              "text": "How to use"
+            },
+            {
+              "level": "h3",
+              "text": "Explore"
+            },
+            {
+              "level": "h3",
+              "text": "Build"
+            }
+          ],
+          "sections": [],
+          "ctas": [
+            "Open sidebar",
+            "Components",
+            "aayush-duhan",
+            "SearchK",
+            "Copy prompt",
+            "Copy code",
+            "View code",
+            "Components",
+            "aayush-duhan",
+            "AAYUSH duhan",
+            "Copy prompt",
+            "Copy code",
+            "View code",
+            "21st",
+            "Close sidebar",
+            "Home",
+            "Components",
+            "Templates",
+            "Agent Templates",
+            "MCP",
+            "Magic Chat",
+            "Read more",
+            "Dismiss",
+            "Read more",
+            "Dismiss",
+            "Toggle theme",
+            "Settings",
+            "Log in"
+          ],
+          "palette": [
+            "rgb(9, 9, 11)",
+            "rgb(255, 255, 255)",
+            "rgb(228, 228, 231)",
+            "rgb(115, 115, 115)",
+            "rgba(255, 255, 255, 0.8)",
+            "rgba(228, 228, 231, 0.4)",
+            "rgb(235, 235, 235)",
+            "rgb(63, 63, 70)"
+          ],
+          "layoutSignals": {
+            "hasNav": false,
+            "hasHero": false,
+            "hasPricing": false,
+            "hasTestimonials": false,
+            "hasFAQ": false,
+            "hasVideo": false,
+            "cardLikeCount": 2,
+            "imageCount": 1,
+            "buttonCount": 37,
+            "formCount": 2
+          },
+          "codeBlocks": [],
+          "codeLinks": []
+        },
+        {
+          "sourceId": "21st-community-components",
+          "url": "https://21st.dev/community/components/easemize/pixel-perfect-hero/default",
+          "status": 200,
+          "licenseStatus": "review-required",
+          "reuseGuidance": "Component discovery and UI pattern extraction. Verify each community component before copying code.",
+          "candidate": {
+            "index": 66,
+            "url": "https://21st.dev/community/components/easemize/pixel-perfect-hero/default",
+            "text": "Pixel perfect Hero",
+            "heading": "",
+            "description": "Pixel perfect Hero44",
+            "imageSrc": "https://cdn.21st.dev/cdn-cgi/image/fit=scale-down,width=3840,quality=75,format=auto/https://cdn.21st.dev/easemize/pixel-perfect-hero/default/preview.1781185553155.png",
+            "imageAlt": "Pixel perfect Hero",
+            "buttonText": [
+              "44"
+            ],
+            "tags": [],
+            "cardArea": 67448,
+            "score": 9,
+            "sourceMode": "component-gallery"
+          },
+          "screenshots": {
+            "desktop": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-smoke/21st-community-components/pixel-perfect-hero/desktop.png",
+              "sha256": "e65127180a315060b66978d7e27acceae90a58a9ebf0781177f0d42090a2f748"
+            },
+            "mobile": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-smoke/21st-community-components/pixel-perfect-hero/mobile.png",
+              "sha256": "5ce1aa91bb1070fcb1368436c05a7064f89e49ef910f9d5d9d74f8a82bba1050"
+            }
+          },
+          "failedRequestCount": 2,
+          "title": "Pixel perfect Hero | Community Components - 21st | 21st",
+          "description": "Interactive hero section with a Canvas-based pixel ripple animation, shimmering glassmorphism header, and logo marquee. Features dynamic theme-color detection, responsive layout, and prefers-reduced-motion accessibility.",
+          "headings": [
+            {
+              "level": "h3",
+              "text": "Pixel perfect Hero"
+            },
+            {
+              "level": "h3",
+              "text": "Created by"
+            },
+            {
+              "level": "h3",
+              "text": "Installation"
+            },
+            {
+              "level": "h3",
+              "text": "How to use"
+            },
+            {
+              "level": "h3",
+              "text": "Dependencies"
+            },
+            {
+              "level": "h3",
+              "text": "Explore"
+            },
+            {
+              "level": "h3",
+              "text": "Build"
+            }
+          ],
+          "sections": [],
+          "ctas": [
+            "Open sidebar",
+            "Components",
+            "easemize",
+            "SearchK",
+            "Copy prompt",
+            "Copy code",
+            "View code",
+            "Components",
+            "easemize",
+            "Hossain Jahed",
+            "Copy prompt",
+            "Copy code",
+            "View code",
+            "lucide-react",
+            "21st",
+            "Close sidebar",
+            "Home",
+            "Components",
+            "Templates",
+            "Agent Templates",
+            "MCP",
+            "Magic Chat",
+            "Read more",
+            "Dismiss",
+            "Read more",
+            "Dismiss",
+            "Toggle theme",
+            "Settings",
+            "Log in"
+          ],
+          "palette": [
+            "rgb(9, 9, 11)",
+            "rgb(255, 255, 255)",
+            "rgb(228, 228, 231)",
+            "rgb(115, 115, 115)",
+            "rgba(255, 255, 255, 0.8)",
+            "rgba(228, 228, 231, 0.4)",
+            "rgb(235, 235, 235)",
+            "rgb(63, 63, 70)"
+          ],
+          "layoutSignals": {
+            "hasNav": false,
+            "hasHero": false,
+            "hasPricing": false,
+            "hasTestimonials": false,
+            "hasFAQ": false,
+            "hasVideo": false,
+            "cardLikeCount": 2,
+            "imageCount": 1,
+            "buttonCount": 38,
+            "formCount": 2
+          },
+          "codeBlocks": [],
+          "codeLinks": [
+            {
+              "url": "https://www.npmjs.com/package/lucide-react",
+              "text": "lucide-react"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lapa-ninja",
+      "name": "Lapa Ninja",
+      "url": "https://www.lapa.ninja/",
+      "mode": "landing-gallery",
+      "usage": "Landing-page structure, section ordering, visual hierarchy and copy patterns. Do not copy site code or proprietary assets.",
+      "licenseStatus": "inspiration-only",
+      "status": 200,
+      "failedRequestCount": 4,
+      "rawCandidateCount": 77,
+      "selectedCandidateCount": 2,
+      "screenshot": {
+        "path": "C:/Users/PC/.codex/design-stack/gallery-examples-smoke/lapa-ninja/gallery.png",
+        "sha256": "587222c5e4df86c4ddf37c357e1518a54439cecee625e93e2ec8d73ffd22f325"
+      },
+      "examples": [
+        {
+          "sourceId": "lapa-ninja",
+          "url": "https://www.lapa.ninja/post/lama-lama/",
+          "status": 200,
+          "licenseStatus": "inspiration-only",
+          "reuseGuidance": "Landing-page structure, section ordering, visual hierarchy and copy patterns. Do not copy site code or proprietary assets.",
+          "candidate": {
+            "index": 148,
+            "url": "https://www.lapa.ninja/post/lama-lama/",
+            "text": "",
+            "heading": "Lama Lama",
+            "description": "WEBSITEAmsterdam based creative digital agency.Lama LamaAgencyWEBSITEOpen-source liquidity protocol.AaveAppWEBSITEPlay with AI, bring your ideas to lifeTinkerArtificial Intelligence NO-CODE More than a website builder Webflow WEBSITE BUILDER WEBSITEMùn Rooftop Cocktail Bar RomeMùn Rooftop RomeFood DrinksWEBSITEA global branding agency proudly based in London",
+            "imageSrc": "https://cdn.lapa.ninja/assets/images/1x/lamalama-thumb.jpg",
+            "imageAlt": "",
+            "buttonText": [
+              "Lama Lama",
+              "Aave",
+              "Tinker",
+              "Webflow",
+              "Mùn Rooftop Rome",
+              "Ragged Edge",
+              "Framer",
+              "Softlight"
+            ],
+            "tags": [],
+            "cardArea": 4755456,
+            "score": 10,
+            "sourceMode": "landing-gallery"
+          },
+          "screenshots": {
+            "desktop": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-smoke/lapa-ninja/lama-lama/desktop.png",
+              "sha256": "0812c6ff0eea4dfc5304622d1503c43429da818ac8d3f03034ce7b0d9085faf5"
+            },
+            "mobile": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-smoke/lapa-ninja/lama-lama/mobile.png",
+              "sha256": "820389cab665dc7464604759471c2df54f86fc73a9067b6a4d1146cfb882dc86"
+            }
+          },
+          "failedRequestCount": 6,
+          "title": "Lama Lama - Landing Page Design | Lapa Ninja",
+          "description": "Discover Lama Lama, an Amsterdam-based creative digital agency. Explore innovative solutions to elevate your brand. Visit us to learn more!",
+          "headings": [
+            {
+              "level": "h1",
+              "text": "Lama Lama Website Design"
+            },
+            {
+              "level": "h2",
+              "text": "Discover Lama Lama, an Amsterdam-based creative digital agency. Explore innovative solutions to elevate your brand. Visit us to learn more!"
+            },
+            {
+              "level": "h3",
+              "text": "Website Details"
+            },
+            {
+              "level": "h3",
+              "text": "Similar Websites"
+            },
+            {
+              "level": "h3",
+              "text": "Lama Lama"
+            },
+            {
+              "level": "h3",
+              "text": "Martin Briceno"
+            },
+            {
+              "level": "h3",
+              "text": "GABR!EL"
+            },
+            {
+              "level": "h3",
+              "text": "Luma AI"
+            },
+            {
+              "level": "h3",
+              "text": "Lâm Bảo"
+            },
+            {
+              "level": "h3",
+              "text": "LDMA"
+            },
+            {
+              "level": "h3",
+              "text": "Amy Lima"
+            },
+            {
+              "level": "h3",
+              "text": "Luma"
+            },
+            {
+              "level": "h3",
+              "text": "Explore"
+            },
+            {
+              "level": "h3",
+              "text": "Follow"
+            }
+          ],
+          "sections": [
+            {
+              "index": 0,
+              "heading": "Lama Lama Website Design",
+              "textSample": "Lama Lama Website DesignDiscover Lama Lama, an Amsterdam-based creative digital agency. Explore innovative solutions to elevate your brand. Visit us to learn more!Visit WebsiteSave lamalama.comFull website video recordingWebsite template downloadsHomeWorkBrandingAbout UsDownload HD Screenshot",
+              "imageCount": 7,
+              "buttonCount": 10
+            }
+          ],
+          "ctas": [
+            "Lapa Ninja - Go to homepage",
+            "Toggle dark mode",
+            "Open main menu",
+            "Websites",
+            "Browse All ⭐7388",
+            "SaaS ⭐687",
+            "Business ⭐2450",
+            "Minimal3049",
+            "Agency ⭐961",
+            "Portfolio ⭐1063",
+            "Studio ⭐849",
+            "Web367",
+            "3D Websites ⭐156",
+            "E-commerce ⭐953",
+            "Technology1476",
+            "Corporate1092",
+            "Productivity992",
+            "Product138",
+            "AI ⭐199",
+            "App775",
+            "Software652",
+            "Dev Tools235",
+            "Design Tools460",
+            "No-Code30",
+            "Open Source12",
+            "Finance375",
+            "Fintech60",
+            "Cryptocurrency138",
+            "Blockchain92",
+            "DeFi16",
+            "Marketing67",
+            "Ventures47",
+            "Product Management68",
+            "Creative4986",
+            "Design2",
+            "Illustration1450",
+            "Photography510",
+            "Art11",
+            "Typography711",
+            "Gradient462",
+            "Pattern67",
+            "Bento Grid75",
+            "Isometric146",
+            "Retro Style100",
+            "Blog74",
+            "News51",
+            "Magazine54",
+            "Entertainment416",
+            "Film12",
+            "Music43"
+          ],
+          "palette": [
+            "rgb(23, 23, 23)",
+            "rgb(255, 255, 255)",
+            "lab(98.2596 -0.247031 -0.706708)",
+            "lab(91.6229 -0.159115 -2.26791)",
+            "lab(47.7841 -0.393182 -10.0268)",
+            "lab(8.11897 0.811279 -12.254)",
+            "lab(27.1134 -0.956401 -12.3224)"
+          ],
+          "layoutSignals": {
+            "hasNav": true,
+            "hasHero": true,
+            "hasPricing": true,
+            "hasTestimonials": false,
+            "hasFAQ": false,
+            "hasVideo": true,
+            "cardLikeCount": 1,
+            "imageCount": 20,
+            "buttonCount": 211,
+            "formCount": 4
+          },
+          "codeBlocks": [],
+          "codeLinks": []
+        },
+        {
+          "sourceId": "lapa-ninja",
+          "url": "https://www.lapa.ninja/post/aave-3/",
+          "status": 200,
+          "licenseStatus": "inspiration-only",
+          "reuseGuidance": "Landing-page structure, section ordering, visual hierarchy and copy patterns. Do not copy site code or proprietary assets.",
+          "candidate": {
+            "index": 151,
+            "url": "https://www.lapa.ninja/post/aave-3/",
+            "text": "",
+            "heading": "Lama Lama",
+            "description": "WEBSITEAmsterdam based creative digital agency.Lama LamaAgencyWEBSITEOpen-source liquidity protocol.AaveAppWEBSITEPlay with AI, bring your ideas to lifeTinkerArtificial Intelligence NO-CODE More than a website builder Webflow WEBSITE BUILDER WEBSITEMùn Rooftop Cocktail Bar RomeMùn Rooftop RomeFood DrinksWEBSITEA global branding agency proudly based in London",
+            "imageSrc": "https://cdn.lapa.ninja/assets/images/1x/lamalama-thumb.jpg",
+            "imageAlt": "",
+            "buttonText": [
+              "Lama Lama",
+              "Aave",
+              "Tinker",
+              "Webflow",
+              "Mùn Rooftop Rome",
+              "Ragged Edge",
+              "Framer",
+              "Softlight"
+            ],
+            "tags": [],
+            "cardArea": 4755456,
+            "score": 10,
+            "sourceMode": "landing-gallery"
+          },
+          "screenshots": {
+            "desktop": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-smoke/lapa-ninja/lama-lama/desktop.png",
+              "sha256": "41deb2bf64776d027ae1d575f6fa9e40abb308f4737ad4d00ca488f18acc1577"
+            },
+            "mobile": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-smoke/lapa-ninja/lama-lama/mobile.png",
+              "sha256": "9750a12390b507ce594fa1df212ab18dc6c911a678097ea9ef91a1dbf6bfd05e"
+            }
+          },
+          "failedRequestCount": 4,
+          "title": "Aave - Landing Page Design | Lapa Ninja",
+          "description": "Aave is an Open Source Protocol to create Non-Custodial Liquidity Markets to earn interest on supplying and borrowing assets with a variable interest rate. The protocol is designed for easy integration into your products and services.",
+          "headings": [
+            {
+              "level": "h1",
+              "text": "Aave Website Design"
+            },
+            {
+              "level": "h2",
+              "text": "Aave is an Open Source Protocol to create Non-Custodial Liquidity Markets to earn interest on supplying and borrowing assets with a variable interest rate. The protocol is designed"
+            },
+            {
+              "level": "h3",
+              "text": "Website Details"
+            },
+            {
+              "level": "h3",
+              "text": "Similar Websites"
+            },
+            {
+              "level": "h3",
+              "text": "Aave"
+            },
+            {
+              "level": "h3",
+              "text": "Aave"
+            },
+            {
+              "level": "h3",
+              "text": "Mezcal Rosaluna"
+            },
+            {
+              "level": "h3",
+              "text": "Drink Zuzu"
+            },
+            {
+              "level": "h3",
+              "text": "El Rayo Tequila"
+            },
+            {
+              "level": "h3",
+              "text": "Casa Malka"
+            },
+            {
+              "level": "h3",
+              "text": "LALO Tequila"
+            },
+            {
+              "level": "h3",
+              "text": "Explore"
+            },
+            {
+              "level": "h3",
+              "text": "Follow"
+            }
+          ],
+          "sections": [
+            {
+              "index": 0,
+              "heading": "Aave Website Design",
+              "textSample": "Aave Website DesignAave is an Open Source Protocol to create Non-Custodial Liquidity Markets to earn interest on supplying and borrowing assets with a variable interest rate. The protocol is designed for easy integration into your products and services.Visit WebsiteView All 3 Design VersionSave aave.comFull website vid",
+              "imageCount": 6,
+              "buttonCount": 10
+            }
+          ],
+          "ctas": [
+            "Lapa Ninja - Go to homepage",
+            "Toggle dark mode",
+            "Open main menu",
+            "Websites",
+            "Browse All ⭐7388",
+            "SaaS ⭐687",
+            "Business ⭐2450",
+            "Minimal3049",
+            "Agency ⭐961",
+            "Portfolio ⭐1063",
+            "Studio ⭐849",
+            "Web367",
+            "3D Websites ⭐156",
+            "E-commerce ⭐953",
+            "Technology1476",
+            "Corporate1092",
+            "Productivity992",
+            "Product138",
+            "AI ⭐199",
+            "App775",
+            "Software652",
+            "Dev Tools235",
+            "Design Tools460",
+            "No-Code30",
+            "Open Source12",
+            "Finance375",
+            "Fintech60",
+            "Cryptocurrency138",
+            "Blockchain92",
+            "DeFi16",
+            "Marketing67",
+            "Ventures47",
+            "Product Management68",
+            "Creative4986",
+            "Design2",
+            "Illustration1450",
+            "Photography510",
+            "Art11",
+            "Typography711",
+            "Gradient462",
+            "Pattern67",
+            "Bento Grid75",
+            "Isometric146",
+            "Retro Style100",
+            "Blog74",
+            "News51",
+            "Magazine54",
+            "Entertainment416",
+            "Film12",
+            "Music43"
+          ],
+          "palette": [
+            "rgb(23, 23, 23)",
+            "rgb(255, 255, 255)",
+            "lab(98.2596 -0.247031 -0.706708)",
+            "lab(91.6229 -0.159115 -2.26791)",
+            "lab(47.7841 -0.393182 -10.0268)",
+            "lab(8.11897 0.811279 -12.254)",
+            "lab(27.1134 -0.956401 -12.3224)"
+          ],
+          "layoutSignals": {
+            "hasNav": true,
+            "hasHero": true,
+            "hasPricing": true,
+            "hasTestimonials": false,
+            "hasFAQ": false,
+            "hasVideo": true,
+            "cardLikeCount": 1,
+            "imageCount": 20,
+            "buttonCount": 208,
+            "formCount": 4
+          },
+          "codeBlocks": [],
+          "codeLinks": []
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

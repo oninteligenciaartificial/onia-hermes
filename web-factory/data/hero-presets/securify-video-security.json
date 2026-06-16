@@ -1,0 +1,109 @@
+{
+  "id": "securify-video-security",
+  "name": "securify fullscreen video security hero",
+  "framework": "react-typescript-tailwind",
+  "component": "SecurifyHero",
+  "previewRoute": "/factory/securify",
+  "font": {
+    "provider": "google",
+    "family": "Readex Pro",
+    "weights": [300, 400, 500, 600, 700],
+    "bodyFamily": "'Readex Pro', system-ui, -apple-system, sans-serif"
+  },
+  "globalStyles": {
+    "bodyBackground": "#000000",
+    "bodyColor": "#ffffff",
+    "rootHeight": "100%",
+    "antialiased": true,
+    "heroTitle": {
+      "letterSpacing": "-0.04em",
+      "lineHeight": "0.95"
+    }
+  },
+  "palette": {
+    "background": "#000000",
+    "foreground": "#ffffff",
+    "navbar": "neutral-900/90",
+    "mutedText": "white/70",
+    "bodyText": "white/90",
+    "divider": "white/40"
+  },
+  "background": {
+    "type": "video",
+    "slot": "background.media.src",
+    "src": "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260418_063509_7d167302-4fd4-480b-8260-18ab572333d4.mp4",
+    "classes": "absolute inset-0 w-full h-full object-cover",
+    "attributes": ["autoPlay", "loop", "muted", "playsInline"]
+  },
+  "navbar": {
+    "position": "absolute top-0 left-0 right-0 z-20 px-6 md:px-10 pt-6",
+    "brand": "securify",
+    "links": ["platform", "solutions", "company", "support"],
+    "cta": "get started",
+    "shape": "floating pill",
+    "classes": {
+      "pill": "bg-neutral-900/90 backdrop-blur rounded-full",
+      "link": "text-neutral-300 hover:text-white transition-colors text-sm px-5 py-2 rounded-full",
+      "button": "bg-white text-black text-sm font-normal rounded-full px-6 py-3 hover:bg-neutral-200 transition-colors"
+    }
+  },
+  "headline": {
+    "classes": "hero-title absolute text-white font-medium text-[14vw] md:text-[13vw]",
+    "words": [
+      {
+        "text": "protect",
+        "position": "left-4 md:left-10 top-[18%]"
+      },
+      {
+        "text": "your",
+        "position": "right-4 md:right-10 top-[38%]"
+      },
+      {
+        "text": "data",
+        "position": "left-[18%] md:left-[28%] top-[58%]"
+      }
+    ]
+  },
+  "description": {
+    "text": "we can guarding your data with utmost care, empowering you with privacy everywhere",
+    "classes": "absolute left-6 md:left-10 top-[46%] max-w-[240px] text-[15px] leading-snug text-white/90"
+  },
+  "stats": [
+    {
+      "value": "+65k",
+      "label": "startups use",
+      "position": "absolute right-6 md:right-24 top-[14%]",
+      "alignment": "right",
+      "divider": "before rotate-[20deg]"
+    },
+    {
+      "value": "+1.5b",
+      "label": "gb data was protected",
+      "position": "absolute left-6 md:left-20 bottom-20 md:bottom-24",
+      "alignment": "left",
+      "divider": "after rotate-[-20deg]"
+    },
+    {
+      "value": "+300k",
+      "label": "downloads",
+      "position": "absolute right-6 md:right-20 bottom-16 md:bottom-20",
+      "alignment": "right",
+      "divider": "before rotate-[-20deg]"
+    }
+  ],
+  "generationSlots": [
+    "brand",
+    "background.media.src",
+    "navbar.links",
+    "navbar.cta",
+    "headline.words",
+    "description.text",
+    "stats"
+  ],
+  "constraints": {
+    "textCase": "lowercase",
+    "responsive": "hide nav links and diagonal dividers on mobile",
+    "allowedColors": ["#000000", "#ffffff", "neutral-900", "white/40", "white/70", "white/90"],
+    "forbiddenColors": ["purple", "indigo"]
+  }
+}

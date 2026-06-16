@@ -1,9 +1,17 @@
 import type { Metadata } from "next";
+import { Readex_Pro } from "next/font/google";
 import "./globals.css";
 
+const readexPro = Readex_Pro({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-readex-pro",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
-  title: "Hermes Control Tower",
-  description: "Operational dashboard for ONIA, Hermes, Video Lab, CRM and automation.",
+  title: "Hermes ONIA Automation",
+  description: "Panel web para la automatizacion n8n de ONIA, Telegram, Hermes y Video Lab.",
 };
 
 export default function RootLayout({
@@ -13,7 +21,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es">
-      <body>{children}</body>
+      <body className={readexPro.variable}>{children}</body>
     </html>
   );
 }

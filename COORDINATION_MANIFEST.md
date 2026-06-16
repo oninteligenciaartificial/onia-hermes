@@ -22,6 +22,8 @@ This session owns:
 
 Canonical files:
 - `AGENTS.md`
+- `PRODUCT.md`
+- `.agents/skills/impeccable/`
 - `docs/ORCHESTRATOR.md`
 - `README.md`
 - `HERMES_OPERATIONS.md`
@@ -261,6 +263,8 @@ Canonical files already visible for Session B:
 - `hermes-content/references/n8n-plan-semanal-onia.md`
 - `hermes-content/references/prospectos-clinicas-bolivia-2026.csv`
 - `hermes-content/references/n8n-prospeccion-clinicas-ig-telegram.md`
+- `hermes-content/docs/POLLO_LOCO_CLIENT_REVIEW_20260613.html`
+- `hermes-content/docs/POLLO_LOCO_CLIENT_REVIEW_20260613.pdf`
 
 Recommended new files for Session B:
 - `N8N_AUTOMATION_PLAN.md`
@@ -276,6 +280,9 @@ Recommended new files for Session B:
 Session B should not edit publishing scripts unless coordinating first.
 
 ## Naming rules
+- Web Factory client-site context for Nuvia lives in `web-factory/data/clients/nuvia.context.md`.
+- Nuvia web data/assets live in `web-factory/data/clients/nuvia.json` and `web-factory/data/clients/nuvia.assets/`.
+- Global Web Factory design stack lives in `C:\Users\PC\.codex\design-stack\DESIGN_STACK.md`; project usage notes live in `web-factory/DESIGN_STACK.md`.
 - Use Spanish names for Hermes skills.
 - Use English uppercase names for repo-level operational docs.
 - Put user-facing Hermes docs in `hermes-content/docs/`.
@@ -330,6 +337,16 @@ npm run setup:assets
 - Hermes daily crons are active for operational status, content/video planning, and Video Lab follow-up.
 - Hermes weekly crons are active for kickoff, prospecting, build sprint, content production, finance/ops, Sergio brand, and weekly review.
 - n8n is running on the VPS, but Hermes cron is currently the active scheduler for Hermes daily tasks.
+- As of 2026-06-15, only `n8n-sergio_n8n` should run in production on the VPS. Duplicate service `n8n_n8n` was backed up and scaled to `0/0`; its volume was not deleted.
+- As of 2026-06-15, a self-hosted Supabase Docker stack exists on the current VPS at `/opt/onia-supabase/supabase/docker`. It is intentionally private/local-only:
+  - Kong/API: `127.0.0.1:54321` and `127.0.0.1:54322`
+  - Supavisor/Postgres access: `127.0.0.1:54329` and `127.0.0.1:54320`
+  - No public DNS, SMTP, or client-facing exposure has been configured yet.
+- Supabase backups:
+  - Pre-change n8n backup: `/root/backups/onia-vps-20260615-195441-pre-supabase`
+  - Supabase daily local backup script: `/root/.hermes/scripts/supabase_backup.sh`
+  - Cron: `/etc/cron.d/onia-supabase-backup`
+  - Local backup target: `/root/backups/supabase`
 - Notion MCP is connected locally via OAuth (`https://mcp.notion.com/mcp`) as of 2026-06-01.
 - Confirmed Notion sources:
   - Finance: `Finanzas & Gastos`, page `ffc07959-c372-4ff7-aaf6-2d744d5bf81c`, data source `collection://0e6e404f-d329-4898-9861-64f8ce973ac5`.

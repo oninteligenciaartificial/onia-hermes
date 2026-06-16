@@ -1,0 +1,100 @@
+{
+  "capturedAt": "2026-06-15",
+  "cacheRoot": "C:/Users/PC/.codex/design-stack/repos",
+  "policy": {
+    "allowedForClientUseAfterReview": [
+      "MIT",
+      "Apache-2.0",
+      "ISC",
+      "BSD"
+    ],
+    "restricted": [
+      "PolyForm Noncommercial",
+      "GPL",
+      "AGPL",
+      "unknown",
+      "proprietary"
+    ],
+    "rules": [
+      "Do not copy code from closed websites or visual galleries.",
+      "Only adapt code from repositories with compatible licenses.",
+      "Retokenize colors, spacing, fonts and assets before client use.",
+      "Keep attribution/license notices when the license requires it.",
+      "Treat noncommercial code as study-only, never client/commercial implementation."
+    ]
+  },
+  "repositories": [
+    {
+      "name": "shadcn-ui/ui",
+      "localPath": "C:/Users/PC/.codex/design-stack/repos/shadcn-ui__ui",
+      "license": "MIT",
+      "status": "allowed-after-review",
+      "use": "canonical accessible React/Tailwind component architecture"
+    },
+    {
+      "name": "ibelick/motion-primitives",
+      "localPath": "C:/Users/PC/.codex/design-stack/repos/ibelick__motion-primitives",
+      "license": "MIT",
+      "status": "allowed-after-review",
+      "use": "motion primitives, transitions, text/tabs/disclosure ideas"
+    },
+    {
+      "name": "serafimcloud/21st",
+      "localPath": "C:/Users/PC/.codex/design-stack/repos/serafimcloud__21st",
+      "license": "MIT",
+      "status": "allowed-after-review",
+      "use": "component marketplace patterns and discovery taxonomy"
+    },
+    {
+      "name": "magicuidesign/magicui",
+      "localPath": "C:/Users/PC/.codex/design-stack/repos/magicuidesign__magicui",
+      "license": "MIT",
+      "status": "allowed-after-review",
+      "use": "marketing motion references and effects"
+    },
+    {
+      "name": "markmead/hyperui",
+      "localPath": "C:/Users/PC/.codex/design-stack/repos/markmead__hyperui",
+      "license": "MIT",
+      "status": "allowed-after-review",
+      "use": "Tailwind ecommerce and landing sections"
+    },
+    {
+      "name": "tailwindlabs/headlessui",
+      "localPath": "C:/Users/PC/.codex/design-stack/repos/tailwindlabs__headlessui",
+      "license": "MIT",
+      "status": "allowed-after-review",
+      "use": "accessible behavior primitives"
+    },
+    {
+      "name": "tremorlabs/tremor",
+      "localPath": "C:/Users/PC/.codex/design-stack/repos/tremorlabs__tremor",
+      "license": "Apache-2.0",
+      "status": "allowed-after-review",
+      "use": "dashboard, chart, table and KPI patterns"
+    },
+    {
+      "name": "launch-ui/launch-ui",
+      "localPath": "C:/Users/PC/.codex/design-stack/repos/launch-ui__launch-ui",
+      "license": "MIT",
+      "status": "allowed-after-review",
+      "use": "Next.js/shadcn/Tailwind landing sections"
+    },
+    {
+      "name": "harshjdhv/componentry",
+      "localPath": "C:/Users/PC/.codex/design-stack/repos/harshjdhv__componentry",
+      "license": "MIT",
+      "status": "allowed-after-review",
+      "commit": "aae472b",
+      "use": "animated React components and motion-heavy UI patterns"
+    },
+    {
+      "name": "10x-app-builder/10x",
+      "localPath": "C:/Users/PC/.codex/design-stack/repos/10x-app-builder__10x",
+      "license": "PolyForm Noncommercial 1.0.0",
+      "status": "study-only-do-not-use-for-client-code",
+      "commit": "7881ae1",
+      "use": "landing structure inspiration only; code is not allowed for commercial/client websites"
+    }
+  ]
+}

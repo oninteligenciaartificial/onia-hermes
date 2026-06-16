@@ -6,18 +6,43 @@ const hexColorSchema = z
   .regex(/^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/, "Use a hex color like #0f766e.");
 
 const optionalUrlSchema = z.union([z.string().url(), z.literal("")]).default("");
+const optionalAssetSchema = z
+  .union([
+    z.string().url(),
+    z.string().regex(/^assets\/[a-zA-Z0-9._/-]+$/, "Use a relative asset path like assets/logo.png."),
+    z.literal(""),
+  ])
+  .default("");
 
 const actionUrlSchema = z
   .string()
   .min(1)
-  .refine((value) => value.startsWith("/") || /^https?:\/\//.test(value), {
-    message: "Use an absolute URL or a local path that starts with /.",
+  .refine((value) => value.startsWith("/") || value.startsWith("#") || /^https?:\/\//.test(value), {
+    message: "Use an absolute URL, a local path that starts with /, or an anchor that starts with #.",
   });
 
 const serviceSchema = z.object({
   titulo: z.string().min(1),
   desc: z.string().min(1),
   icono: z.string().min(1).default("sparkles"),
+});
+
+const productSchema = z.object({
+  titulo: z.string().min(1),
+  categoria: z.string().min(1),
+  precio: z.string().min(1),
+  desc: z.string().min(1),
+  etiqueta: z.string().min(1).default("Nuevo"),
+  imagen: optionalAssetSchema,
+  imagenAlt: z.string().default(""),
+  marca: z.string().default(""),
+  tamano: z.string().default(""),
+  uso: z.string().default(""),
+  beneficios: z.array(z.string().min(1)).default([]),
+  idealPara: z.array(z.string().min(1)).default([]),
+  ingredientesClave: z.array(z.string().min(1)).default([]),
+  modoUso: z.string().default(""),
+  ordenRutina: z.number().int().positive().optional(),
 });
 
 export const clientSchema = z.object({
@@ -33,6 +58,9 @@ export const clientSchema = z.object({
     .min(1)
     .default("Una presencia web clara, rapida y lista para convertir visitantes en conversaciones."),
   logo: z.string().default(""),
+  logoIcon: optionalAssetSchema,
+  logoWide: optionalAssetSchema,
+  heroVideo: optionalAssetSchema,
   colores: z
     .object({
       primary: hexColorSchema.default("#0f766e"),
@@ -100,6 +128,9 @@ export const clientSchema = z.object({
       icono: "message",
     },
   ]),
+  categorias: z.array(z.string().min(1)).default([]),
+  productos: z.array(productSchema).default([]),
+  beneficios: z.array(z.string().min(1)).default([]),
   cta: z
     .object({
       texto: z.string().min(1).default("Agendar una llamada"),

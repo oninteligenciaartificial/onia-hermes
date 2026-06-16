@@ -1,0 +1,2376 @@
+{
+  "capturedAt": "2026-06-15T21:54:00.357Z",
+  "cacheRoot": "C:/Users/PC/.codex/design-stack/gallery-examples-full",
+  "policy": "Gallery screenshots and structure are reference artifacts. Copy/adapt code only when licenseStatus is compatible and the linked/local repo license has been reviewed.",
+  "configPath": "data/references/design-sources/gallery-reference-sources.json",
+  "results": [
+    {
+      "id": "21st-community-components",
+      "name": "21st.dev Community Components",
+      "url": "https://21st.dev/community/components",
+      "mode": "component-gallery",
+      "usage": "Component discovery and UI pattern extraction. Verify each community component before copying code.",
+      "licenseStatus": "review-required",
+      "status": 200,
+      "failedRequestCount": 5,
+      "rawCandidateCount": 197,
+      "selectedCandidateCount": 30,
+      "detailedExampleCount": 10,
+      "candidates": [
+        {
+          "index": 64,
+          "url": "https://21st.dev/community/components/aayush-duhan/ink-reveal/default",
+          "text": "Ink Reveal",
+          "heading": "",
+          "description": "Ink Reveal73",
+          "imageSrc": "https://cdn.21st.dev/cdn-cgi/image/fit=scale-down,width=3840,quality=75,format=auto/https://cdn.21st.dev/aayush-duhan/ink-reveal/default/preview.1781465880612.png",
+          "imageAlt": "Ink Reveal",
+          "buttonText": [
+            "73"
+          ],
+          "tags": [],
+          "cardArea": 67448,
+          "score": 9,
+          "sourceMode": "component-gallery"
+        },
+        {
+          "index": 66,
+          "url": "https://21st.dev/community/components/easemize/pixel-perfect-hero/default",
+          "text": "Pixel perfect Hero",
+          "heading": "",
+          "description": "Pixel perfect Hero47",
+          "imageSrc": "https://cdn.21st.dev/cdn-cgi/image/fit=scale-down,width=3840,quality=75,format=auto/https://cdn.21st.dev/easemize/pixel-perfect-hero/default/preview.1781185553155.png",
+          "imageAlt": "Pixel perfect Hero",
+          "buttonText": [
+            "47"
+          ],
+          "tags": [],
+          "cardArea": 67448,
+          "score": 9,
+          "sourceMode": "component-gallery"
+        },
+        {
+          "index": 68,
+          "url": "https://21st.dev/community/components/smammar100/scroll-reel-testimonials/default",
+          "text": "Scroll Reel Testimonials",
+          "heading": "",
+          "description": "Scroll Reel Testimonials65",
+          "imageSrc": "https://cdn.21st.dev/cdn-cgi/image/fit=scale-down,width=3840,quality=75,format=auto/https://cdn.21st.dev/smammar100/scroll-reel-testimonials/default/preview.1780849871560.png",
+          "imageAlt": "Scroll Reel Testimonials",
+          "buttonText": [
+            "65"
+          ],
+          "tags": [],
+          "cardArea": 67448,
+          "score": 9,
+          "sourceMode": "component-gallery"
+        },
+        {
+          "index": 70,
+          "url": "https://21st.dev/community/components/edwinvakayil/one-toogle/default",
+          "text": "One Toogle",
+          "heading": "",
+          "description": "EVOne Toogle5",
+          "imageSrc": "https://cdn.21st.dev/cdn-cgi/image/fit=scale-down,width=3840,quality=75,format=auto/https://cdn.21st.dev/lyanchouss/one-toogle/default/preview.1780696681239.png",
+          "imageAlt": "One Toogle",
+          "buttonText": [
+            "EV",
+            "5"
+          ],
+          "tags": [],
+          "cardArea": 67448,
+          "score": 9,
+          "sourceMode": "component-gallery"
+        },
+        {
+          "index": 72,
+          "url": "https://21st.dev/community/components/edwinvakayil/toggle-group/default",
+          "text": "Toggle Group",
+          "heading": "",
+          "description": "EVToggle Group2",
+          "imageSrc": "https://cdn.21st.dev/cdn-cgi/image/fit=scale-down,width=3840,quality=75,format=auto/https://cdn.21st.dev/lyanchouss/toggle-group/default/preview.1780695938765.png",
+          "imageAlt": "Toggle Group",
+          "buttonText": [
+            "EV",
+            "2"
+          ],
+          "tags": [],
+          "cardArea": 67448,
+          "score": 9,
+          "sourceMode": "component-gallery"
+        },
+        {
+          "index": 74,
+          "url": "https://21st.dev/community/components/edwinvakayil/tooltip/default",
+          "text": "Tooltip",
+          "heading": "",
+          "description": "EVTooltip1",
+          "imageSrc": "https://cdn.21st.dev/cdn-cgi/image/fit=scale-down,width=3840,quality=75,format=auto/https://cdn.21st.dev/lyanchouss/tooltip/default/preview.1780695705004.png",
+          "imageAlt": "Tooltip",
+          "buttonText": [
+            "EV",
+            "1"
+          ],
+          "tags": [],
+          "cardArea": 67448,
+          "score": 9,
+          "sourceMode": "component-gallery"
+        },
+        {
+          "index": 76,
+          "url": "https://21st.dev/community/components/edwinvakayil/icon-bar/default",
+          "text": "Icon Bar",
+          "heading": "",
+          "description": "EVIcon Bar20",
+          "imageSrc": "https://cdn.21st.dev/cdn-cgi/image/fit=scale-down,width=3840,quality=75,format=auto/https://cdn.21st.dev/lyanchouss/icon-bar/default/preview.1780694376489.png",
+          "imageAlt": "Icon Bar",
+          "buttonText": [
+            "EV",
+            "20"
+          ],
+          "tags": [],
+          "cardArea": 67448,
+          "score": 9,
+          "sourceMode": "component-gallery"
+        },
+        {
+          "index": 78,
+          "url": "https://21st.dev/community/components/edwinvakayil/infinite-ribbon/default",
+          "text": "Infinite Ribbon",
+          "heading": "",
+          "description": "EVInfinite Ribbon26",
+          "imageSrc": "https://cdn.21st.dev/cdn-cgi/image/fit=scale-down,width=3840,quality=75,format=auto/https://cdn.21st.dev/lyanchouss/infinite-ribbon/default/preview.1780694157426.png",
+          "imageAlt": "Infinite Ribbon",
+          "buttonText": [
+            "EV",
+            "26"
+          ],
+          "tags": [],
+          "cardArea": 67448,
+          "score": 9,
+          "sourceMode": "component-gallery"
+        },
+        {
+          "index": 80,
+          "url": "https://21st.dev/community/components/edwinvakayil/origin-button/default",
+          "text": "Origin Button",
+          "heading": "",
+          "description": "EVOrigin Button27",
+          "imageSrc": "https://cdn.21st.dev/cdn-cgi/image/fit=scale-down,width=3840,quality=75,format=auto/https://cdn.21st.dev/lyanchouss/origin-button/default/preview.1780693767860.png",
+          "imageAlt": "Origin Button",
+          "buttonText": [
+            "EV",
+            "27"
+          ],
+          "tags": [],
+          "cardArea": 67448,
+          "score": 9,
+          "sourceMode": "component-gallery"
+        },
+        {
+          "index": 82,
+          "url": "https://21st.dev/community/components/edwinvakayil/faq-pro/default",
+          "text": "FAQ Pro",
+          "heading": "",
+          "description": "EVFAQ Pro16",
+          "imageSrc": "https://cdn.21st.dev/cdn-cgi/image/fit=scale-down,width=3840,quality=75,format=auto/https://cdn.21st.dev/lyanchouss/faq-pro/default/preview.1780693119279.png",
+          "imageAlt": "FAQ Pro",
+          "buttonText": [
+            "EV",
+            "16"
+          ],
+          "tags": [],
+          "cardArea": 67448,
+          "score": 9,
+          "sourceMode": "component-gallery"
+        },
+        {
+          "index": 84,
+          "url": "https://21st.dev/community/components/serafim/splite/default",
+          "text": "Spline Scene",
+          "heading": "",
+          "description": "Spline Scene942",
+          "imageSrc": "https://cdn.21st.dev/cdn-cgi/image/fit=scale-down,width=3840,quality=75,format=auto/https://cdn.21st.dev/user_2nElBLvklOKlAURm6W1PTu6yYFh/splite/default/preview.png",
+          "imageAlt": "Spline Scene",
+          "buttonText": [
+            "942"
+          ],
+          "tags": [],
+          "cardArea": 67448,
+          "score": 9,
+          "sourceMode": "component-gallery"
+        },
+        {
+          "index": 86,
+          "url": "https://21st.dev/community/components/Codehagen/display-cards/default",
+          "text": "Display Cards",
+          "heading": "",
+          "description": "Display Cards872",
+          "imageSrc": "https://cdn.21st.dev/cdn-cgi/image/fit=scale-down,width=3840,quality=75,format=auto/https://cdn.21st.dev/user_Codehagen/display-cards/892/preview.png",
+          "imageAlt": "Display Cards",
+          "buttonText": [
+            "872"
+          ],
+          "tags": [],
+          "cardArea": 67448,
+          "score": 9,
+          "sourceMode": "component-gallery"
+        },
+        {
+          "index": 88,
+          "url": "https://21st.dev/community/components/aceternity/container-scroll-animation/default",
+          "text": "Container Scroll Animation",
+          "heading": "",
+          "description": "Container Scroll Animation835",
+          "imageSrc": "https://cdn.21st.dev/cdn-cgi/image/fit=scale-down,width=3840,quality=75,format=auto/https://cdn.21st.dev/user_aceternity/container-scroll-animation/default/preview.png",
+          "imageAlt": "Container Scroll Animation",
+          "buttonText": [
+            "835"
+          ],
+          "tags": [],
+          "cardArea": 67448,
+          "score": 9,
+          "sourceMode": "component-gallery"
+        },
+        {
+          "index": 90,
+          "url": "https://21st.dev/community/components/victorwelander/expandable-tabs/default",
+          "text": "Expandable Tabs",
+          "heading": "",
+          "description": "Expandable Tabs827",
+          "imageSrc": "https://cdn.21st.dev/cdn-cgi/image/fit=scale-down,width=3840,quality=75,format=auto/https://cdn.21st.dev/user_victorwelander/expandable-tabs/default/preview.png",
+          "imageAlt": "Expandable Tabs",
+          "buttonText": [
+            "827"
+          ],
+          "tags": [],
+          "cardArea": 67448,
+          "score": 9,
+          "sourceMode": "component-gallery"
+        },
+        {
+          "index": 92,
+          "url": "https://21st.dev/community/components/tommyjepsen/animated-hero/default",
+          "text": "Animated hero",
+          "heading": "",
+          "description": "Animated hero824",
+          "imageSrc": "https://cdn.21st.dev/cdn-cgi/image/fit=scale-down,width=3840,quality=75,format=auto/https://cdn.21st.dev/user_2nElBLvklOKlAURm6W1PTu6yYFh/animated-hero/default/preview.png",
+          "imageAlt": "Animated hero",
+          "buttonText": [
+            "824"
+          ],
+          "tags": [],
+          "cardArea": 67448,
+          "score": 9,
+          "sourceMode": "component-gallery"
+        },
+        {
+          "index": 94,
+          "url": "https://21st.dev/community/components/ayushmxxn/tubelight-navbar/default",
+          "text": "Tubelight Navbar",
+          "heading": "",
+          "description": "Tubelight Navbar819",
+          "imageSrc": "https://cdn.21st.dev/cdn-cgi/image/fit=scale-down,width=3840,quality=75,format=auto/https://cdn.21st.dev/user_ayushmxxn/tubelight-navbar/default/preview.png",
+          "imageAlt": "Tubelight Navbar",
+          "buttonText": [
+            "819"
+          ],
+          "tags": [],
+          "cardArea": 67448,
+          "score": 9,
+          "sourceMode": "component-gallery"
+        },
+        {
+          "index": 96,
+          "url": "https://21st.dev/community/components/aceternity/aurora-background/default",
+          "text": "Aurora Background",
+          "heading": "",
+          "description": "Aurora Background781",
+          "imageSrc": "https://cdn.21st.dev/cdn-cgi/image/fit=scale-down,width=3840,quality=75,format=auto/https://cdn.21st.dev/user_aceternity/aurora-background/default/preview.png",
+          "imageAlt": "Aurora Background",
+          "buttonText": [
+            "781"
+          ],
+          "tags": [],
+          "cardArea": 67448,
+          "score": 9,
+          "sourceMode": "component-gallery"
+        },
+        {
+          "index": 98,
+          "url": "https://21st.dev/community/components/aceternity/sparkles/default",
+          "text": "Sparkles",
+          "heading": "",
+          "description": "Sparkles664",
+          "imageSrc": "https://cdn.21st.dev/cdn-cgi/image/fit=scale-down,width=3840,quality=75,format=auto/https://cdn.21st.dev/user_aceternity/sparkles/default/preview.png",
+          "imageAlt": "Sparkles",
+          "buttonText": [
+            "664"
+          ],
+          "tags": [],
+          "cardArea": 67448,
+          "score": 9,
+          "sourceMode": "component-gallery"
+        },
+        {
+          "index": 100,
+          "url": "https://21st.dev/community/components/kokonutd/background-paths/default",
+          "text": "Background Paths",
+          "heading": "",
+          "description": "Background Paths619",
+          "imageSrc": "https://cdn.21st.dev/cdn-cgi/image/fit=scale-down,width=3840,quality=75,format=auto/https://cdn.21st.dev/user_2rQ1QHrJyxpmWMHhqhANzWMc64n/background-paths/default/preview.png?v=1",
+          "imageAlt": "Background Paths",
+          "buttonText": [
+            "619"
+          ],
+          "tags": [],
+          "cardArea": 67448,
+          "score": 9,
+          "sourceMode": "component-gallery"
+        },
+        {
+          "index": 102,
+          "url": "https://21st.dev/community/components/kokonutd/shape-landing-hero/default",
+          "text": "Shape Landing Hero",
+          "heading": "",
+          "description": "Shape Landing Hero593",
+          "imageSrc": "https://cdn.21st.dev/cdn-cgi/image/fit=scale-down,width=3840,quality=75,format=auto/https://cdn.21st.dev/user_2rQ1QHrJyxpmWMHhqhANzWMc64n/shape-landing-hero/default/preview.1737988084934.png",
+          "imageAlt": "Shape Landing Hero",
+          "buttonText": [
+            "593"
+          ],
+          "tags": [],
+          "cardArea": 67448,
+          "score": 9,
+          "sourceMode": "component-gallery"
+        },
+        {
+          "index": 104,
+          "url": "https://21st.dev/community/components/aliimam/shader-animation/default",
+          "text": "Shader Animation",
+          "heading": "",
+          "description": "Shader Animation80",
+          "imageSrc": "https://cdn.21st.dev/cdn-cgi/image/fit=scale-down,width=3840,quality=75,format=auto/https://cdn.21st.dev/designali-in/shader-animation/default/preview.1755486352919.png",
+          "imageAlt": "Shader Animation",
+          "buttonText": [
+            "80"
+          ],
+          "tags": [],
+          "cardArea": 67448,
+          "score": 9,
+          "sourceMode": "component-gallery"
+        },
+        {
+          "index": 106,
+          "url": "https://21st.dev/community/components/thanh/animated-shader-background/default",
+          "text": "Animated Shader Background",
+          "heading": "",
+          "description": "Animated Shader Background52",
+          "imageSrc": "https://cdn.21st.dev/cdn-cgi/image/fit=scale-down,width=3840,quality=75,format=auto/https://cdn.21st.dev/minhxthanh/animated-shader-background/default/preview.1749003393329.png",
+          "imageAlt": "Animated Shader Background",
+          "buttonText": [
+            "52"
+          ],
+          "tags": [],
+          "cardArea": 67448,
+          "score": 9,
+          "sourceMode": "component-gallery"
+        },
+        {
+          "index": 108,
+          "url": "https://21st.dev/community/components/thanh/shader-background/default",
+          "text": "Shader Background",
+          "heading": "",
+          "description": "Shader Background44",
+          "imageSrc": "https://cdn.21st.dev/cdn-cgi/image/fit=scale-down,width=3840,quality=75,format=auto/https://cdn.21st.dev/minhxthanh/shader-background/default/preview.1748699860662.png",
+          "imageAlt": "Shader Background",
+          "buttonText": [
+            "44"
+          ],
+          "tags": [],
+          "cardArea": 67448,
+          "score": 9,
+          "sourceMode": "component-gallery"
+        },
+        {
+          "index": 110,
+          "url": "https://21st.dev/community/components/aliimam/web-gl-shader/default",
+          "text": "WebGL Shader",
+          "heading": "",
+          "description": "WebGL Shader27",
+          "imageSrc": "https://cdn.21st.dev/cdn-cgi/image/fit=scale-down,width=3840,quality=75,format=auto/https://cdn.21st.dev/designali-in/web-gl-shader/default/preview.1755664380314.png",
+          "imageAlt": "WebGL Shader",
+          "buttonText": [
+            "27"
+          ],
+          "tags": [],
+          "cardArea": 67448,
+          "score": 9,
+          "sourceMode": "component-gallery"
+        },
+        {
+          "index": 112,
+          "url": "https://21st.dev/community/components/aliimam/shader-lines/default",
+          "text": "Shader Lines",
+          "heading": "",
+          "description": "Shader Lines24",
+          "imageSrc": "https://cdn.21st.dev/cdn-cgi/image/fit=scale-down,width=3840,quality=75,format=auto/https://cdn.21st.dev/designali-in/shader-lines/default/preview.1755617050358.png",
+          "imageAlt": "Shader Lines",
+          "buttonText": [
+            "24"
+          ],
+          "tags": [],
+          "cardArea": 67448,
+          "score": 9,
+          "sourceMode": "component-gallery"
+        },
+        {
+          "index": 114,
+          "url": "https://21st.dev/community/components/ravikatiyar/animated-shader-hero/default",
+          "text": "Animated Shader Hero",
+          "heading": "",
+          "description": "Animated Shader Hero20",
+          "imageSrc": "https://cdn.21st.dev/cdn-cgi/image/fit=scale-down,width=3840,quality=75,format=auto/https://cdn.21st.dev/ravikatiyar162/animated-shader-hero/default/preview.1755360493434.png",
+          "imageAlt": "Animated Shader Hero",
+          "buttonText": [
+            "20"
+          ],
+          "tags": [],
+          "cardArea": 67448,
+          "score": 9,
+          "sourceMode": "component-gallery"
+        },
+        {
+          "index": 116,
+          "url": "https://21st.dev/community/components/easemize/spooky-smoke-animation/default",
+          "text": "Spooky Smoke Animation",
+          "heading": "",
+          "description": "Spooky Smoke Animation20",
+          "imageSrc": "https://cdn.21st.dev/cdn-cgi/image/fit=scale-down,width=3840,quality=75,format=auto/https://cdn.21st.dev/user_2xJxXqdwWohYrdd6fiMYrS9hbmO/spooky-smoke-animation/default/preview.1750811134292.png",
+          "imageAlt": "Spooky Smoke Animation",
+          "buttonText": [
+            "20"
+          ],
+          "tags": [],
+          "cardArea": 67448,
+          "score": 9,
+          "sourceMode": "component-gallery"
+        },
+        {
+          "index": 118,
+          "url": "https://21st.dev/community/components/reuno-ui/background-paper-shaders/default",
+          "text": "Background Paper Shaders",
+          "heading": "",
+          "description": "RBackground Paper Shaders18",
+          "imageSrc": "https://cdn.21st.dev/cdn-cgi/image/fit=scale-down,width=3840,quality=75,format=auto/https://cdn.21st.dev/muhammadnadeemmn9485134/background-paper-shaders/default/preview.1755685936905.png",
+          "imageAlt": "Background Paper Shaders",
+          "buttonText": [
+            "R",
+            "18"
+          ],
+          "tags": [],
+          "cardArea": 67448,
+          "score": 9,
+          "sourceMode": "component-gallery"
+        },
+        {
+          "index": 120,
+          "url": "https://21st.dev/community/components/Scottclayton3d/shader-animation/default",
+          "text": "Shader Animation",
+          "heading": "",
+          "description": "Shader Animation11",
+          "imageSrc": "https://cdn.21st.dev/cdn-cgi/image/fit=scale-down,width=3840,quality=75,format=auto/https://cdn.21st.dev/lovesickfromthe6ix/shader-animation/default/preview.1755805553789.png",
+          "imageAlt": "Shader Animation",
+          "buttonText": [
+            "11"
+          ],
+          "tags": [],
+          "cardArea": 67448,
+          "score": 9,
+          "sourceMode": "component-gallery"
+        },
+        {
+          "index": 122,
+          "url": "https://21st.dev/community/components/efferd/falling-pattern/default",
+          "text": "Falling Pattern",
+          "heading": "",
+          "description": "Falling Pattern8",
+          "imageSrc": "https://cdn.21st.dev/cdn-cgi/image/fit=scale-down,width=3840,quality=75,format=auto/https://cdn.21st.dev/sshahaider/falling-pattern/default/preview.1755170299566.png",
+          "imageAlt": "Falling Pattern",
+          "buttonText": [
+            "8"
+          ],
+          "tags": [],
+          "cardArea": 67448,
+          "score": 9,
+          "sourceMode": "component-gallery"
+        }
+      ],
+      "screenshot": {
+        "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/21st-community-components/gallery.png",
+        "sha256": "3f9f65a2dc8c6a5c36ebbcfb96756fb7db8ffee3c830ae1bd954b2e5f18ab8ac",
+        "mode": "full-page"
+      },
+      "screenshotQuality": {
+        "viewport": {
+          "width": 1440,
+          "height": 1000
+        },
+        "textLength": 3366,
+        "mediaCount": 462,
+        "codeCount": 0,
+        "headingCount": 13,
+        "usefulElementCount": 131,
+        "visibleAreaRatio": 3.468,
+        "isLikelySparse": false,
+        "visibleSamples": [
+          "21stComponentsKFeaturedNewestBest of the WeekThemesTop AuthorsMarketing BlocksAnnouncements10Backgrounds33Borders12Calls",
+          "21stComponentsKFeaturedNewestBest of the WeekThemesTop AuthorsMarketing BlocksAnnouncements10Backgrounds33Borders12Calls",
+          "21st",
+          "Components",
+          "Featured",
+          "Newest",
+          "Best of the Week",
+          "Themes"
+        ]
+      },
+      "examples": [
+        {
+          "sourceId": "21st-community-components",
+          "url": "https://21st.dev/community/components/aayush-duhan/ink-reveal/default",
+          "status": 200,
+          "licenseStatus": "review-required",
+          "reuseGuidance": "Component discovery and UI pattern extraction. Verify each community component before copying code.",
+          "candidate": {
+            "index": 64,
+            "url": "https://21st.dev/community/components/aayush-duhan/ink-reveal/default",
+            "text": "Ink Reveal",
+            "heading": "",
+            "description": "Ink Reveal73",
+            "imageSrc": "https://cdn.21st.dev/cdn-cgi/image/fit=scale-down,width=3840,quality=75,format=auto/https://cdn.21st.dev/aayush-duhan/ink-reveal/default/preview.1781465880612.png",
+            "imageAlt": "Ink Reveal",
+            "buttonText": [
+              "73"
+            ],
+            "tags": [],
+            "cardArea": 67448,
+            "score": 9,
+            "sourceMode": "component-gallery"
+          },
+          "screenshots": {
+            "desktop": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/21st-community-components/ink-reveal/desktop.png",
+              "sha256": "5992570ab25c0b48398341bb5b58aedd8135e93a08ea1b428237ea1ef3703071",
+              "mode": "viewport"
+            },
+            "mobile": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/21st-community-components/ink-reveal/mobile.png",
+              "sha256": "d0e13d4557a8220dac2de49ddf7f479493f90acfc479445bf574266489187b6d",
+              "mode": "viewport"
+            }
+          },
+          "screenshotQuality": {
+            "desktop": {
+              "viewport": {
+                "width": 1440,
+                "height": 1000
+              },
+              "textLength": 1176,
+              "mediaCount": 37,
+              "codeCount": 4,
+              "headingCount": 6,
+              "usefulElementCount": 46,
+              "visibleAreaRatio": 2.35,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "{\"@context\":\"https://schema.org\",\"@type\":\"SoftwareSourceCode\",\"name\":\"Ink Reveal\",\"description\":\"A canvas overlay that l",
+                "{\"@context\":\"https://schema.org\",\"@type\":\"SoftwareSourceCode\",\"name\":\"Ink Reveal\",\"description\":\"A canvas overlay that l",
+                "Components",
+                "aayush-duhan",
+                "SearchK",
+                "Copy prompt",
+                "Copy code",
+                "View code"
+              ]
+            },
+            "mobile": {
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "textLength": 1010,
+              "mediaCount": 21,
+              "codeCount": 4,
+              "headingCount": 4,
+              "usefulElementCount": 38,
+              "visibleAreaRatio": 2.199,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "{\"@context\":\"https://schema.org\",\"@type\":\"SoftwareSourceCode\",\"name\":\"Ink Reveal\",\"description\":\"A canvas overlay that l",
+                "{\"@context\":\"https://schema.org\",\"@type\":\"SoftwareSourceCode\",\"name\":\"Ink Reveal\",\"description\":\"A canvas overlay that l",
+                "aayush-duhan",
+                "SearchK",
+                "Copy prompt",
+                "Copy code",
+                "View code",
+                "Components"
+              ]
+            }
+          },
+          "qualityWarnings": [],
+          "failedRequestCount": 3,
+          "title": "Ink Reveal | Community Components - 21st | 21st",
+          "description": "A canvas overlay that lets users brush away a colored mask to reveal content underneath. Mouse movement creates organic, wobbly ink stamps that expand and fade, producing a natural paint-stroke feel. Fully customizable — control brush size, mask color, lifetime, wobble, and more.",
+          "headings": [
+            {
+              "level": "h3",
+              "text": "Ink Reveal"
+            },
+            {
+              "level": "h3",
+              "text": "Created by"
+            },
+            {
+              "level": "h3",
+              "text": "Installation"
+            },
+            {
+              "level": "h3",
+              "text": "How to use"
+            },
+            {
+              "level": "h3",
+              "text": "Explore"
+            },
+            {
+              "level": "h3",
+              "text": "Build"
+            }
+          ],
+          "sections": [],
+          "ctas": [
+            "Open sidebar",
+            "Components",
+            "aayush-duhan",
+            "SearchK",
+            "Copy prompt",
+            "Copy code",
+            "View code",
+            "Components",
+            "aayush-duhan",
+            "AAYUSH duhan",
+            "Copy prompt",
+            "Copy code",
+            "View code",
+            "21st",
+            "Close sidebar",
+            "Home",
+            "Components",
+            "Templates",
+            "Agent Templates",
+            "MCP",
+            "Magic Chat",
+            "Read more",
+            "Dismiss",
+            "Read more",
+            "Dismiss",
+            "Toggle theme",
+            "Settings",
+            "Log in"
+          ],
+          "palette": [
+            "rgb(9, 9, 11)",
+            "rgb(255, 255, 255)",
+            "rgb(228, 228, 231)",
+            "rgb(115, 115, 115)",
+            "rgba(255, 255, 255, 0.8)",
+            "rgba(228, 228, 231, 0.4)",
+            "rgb(235, 235, 235)",
+            "rgb(63, 63, 70)"
+          ],
+          "layoutSignals": {
+            "hasNav": false,
+            "hasHero": false,
+            "hasPricing": false,
+            "hasTestimonials": false,
+            "hasFAQ": false,
+            "hasVideo": false,
+            "cardLikeCount": 2,
+            "imageCount": 1,
+            "buttonCount": 37,
+            "formCount": 2
+          },
+          "codeBlocks": [],
+          "codeLinks": []
+        },
+        {
+          "sourceId": "21st-community-components",
+          "url": "https://21st.dev/community/components/easemize/pixel-perfect-hero/default",
+          "status": 200,
+          "licenseStatus": "review-required",
+          "reuseGuidance": "Component discovery and UI pattern extraction. Verify each community component before copying code.",
+          "candidate": {
+            "index": 66,
+            "url": "https://21st.dev/community/components/easemize/pixel-perfect-hero/default",
+            "text": "Pixel perfect Hero",
+            "heading": "",
+            "description": "Pixel perfect Hero47",
+            "imageSrc": "https://cdn.21st.dev/cdn-cgi/image/fit=scale-down,width=3840,quality=75,format=auto/https://cdn.21st.dev/easemize/pixel-perfect-hero/default/preview.1781185553155.png",
+            "imageAlt": "Pixel perfect Hero",
+            "buttonText": [
+              "47"
+            ],
+            "tags": [],
+            "cardArea": 67448,
+            "score": 9,
+            "sourceMode": "component-gallery"
+          },
+          "screenshots": {
+            "desktop": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/21st-community-components/pixel-perfect-hero/desktop.png",
+              "sha256": "d8f5d4887522fbe146cb7abef7454cfdf86a73201e188256ba481b4539474d4c",
+              "mode": "viewport"
+            },
+            "mobile": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/21st-community-components/pixel-perfect-hero/mobile.png",
+              "sha256": "56c733843d8a6f453a4f74ba37270dbf5b47f4f006be9ffc8b4ef4f728e1a920",
+              "mode": "viewport"
+            }
+          },
+          "screenshotQuality": {
+            "desktop": {
+              "viewport": {
+                "width": 1440,
+                "height": 1000
+              },
+              "textLength": 1360,
+              "mediaCount": 38,
+              "codeCount": 4,
+              "headingCount": 7,
+              "usefulElementCount": 46,
+              "visibleAreaRatio": 2.443,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "{\"@context\":\"https://schema.org\",\"@type\":\"SoftwareSourceCode\",\"name\":\"Pixel perfect Hero\",\"description\":\"Interactive her",
+                "{\"@context\":\"https://schema.org\",\"@type\":\"SoftwareSourceCode\",\"name\":\"Pixel perfect Hero\",\"description\":\"Interactive her",
+                "Components",
+                "easemize",
+                "SearchK",
+                "Copy prompt",
+                "Copy code",
+                "View code"
+              ]
+            },
+            "mobile": {
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "textLength": 1198,
+              "mediaCount": 22,
+              "codeCount": 4,
+              "headingCount": 5,
+              "usefulElementCount": 39,
+              "visibleAreaRatio": 2.219,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "{\"@context\":\"https://schema.org\",\"@type\":\"SoftwareSourceCode\",\"name\":\"Pixel perfect Hero\",\"description\":\"Interactive her",
+                "{\"@context\":\"https://schema.org\",\"@type\":\"SoftwareSourceCode\",\"name\":\"Pixel perfect Hero\",\"description\":\"Interactive her",
+                "easemize",
+                "SearchK",
+                "Copy prompt",
+                "Copy code",
+                "View code",
+                "Components"
+              ]
+            }
+          },
+          "qualityWarnings": [],
+          "failedRequestCount": 5,
+          "title": "Pixel perfect Hero | Community Components - 21st | 21st",
+          "description": "Interactive hero section with a Canvas-based pixel ripple animation, shimmering glassmorphism header, and logo marquee. Features dynamic theme-color detection, responsive layout, and prefers-reduced-motion accessibility.",
+          "headings": [
+            {
+              "level": "h3",
+              "text": "Pixel perfect Hero"
+            },
+            {
+              "level": "h3",
+              "text": "Created by"
+            },
+            {
+              "level": "h3",
+              "text": "Installation"
+            },
+            {
+              "level": "h3",
+              "text": "How to use"
+            },
+            {
+              "level": "h3",
+              "text": "Dependencies"
+            },
+            {
+              "level": "h3",
+              "text": "Explore"
+            },
+            {
+              "level": "h3",
+              "text": "Build"
+            }
+          ],
+          "sections": [],
+          "ctas": [
+            "Open sidebar",
+            "Components",
+            "easemize",
+            "SearchK",
+            "Copy prompt",
+            "Copy code",
+            "View code",
+            "Components",
+            "easemize",
+            "Hossain Jahed",
+            "Copy prompt",
+            "Copy code",
+            "View code",
+            "lucide-react",
+            "21st",
+            "Close sidebar",
+            "Home",
+            "Components",
+            "Templates",
+            "Agent Templates",
+            "MCP",
+            "Magic Chat",
+            "Read more",
+            "Dismiss",
+            "Read more",
+            "Dismiss",
+            "Toggle theme",
+            "Settings",
+            "Log in"
+          ],
+          "palette": [
+            "rgb(9, 9, 11)",
+            "rgb(255, 255, 255)",
+            "rgb(228, 228, 231)",
+            "rgb(115, 115, 115)",
+            "rgba(255, 255, 255, 0.8)",
+            "rgba(228, 228, 231, 0.4)",
+            "rgb(235, 235, 235)",
+            "rgb(63, 63, 70)"
+          ],
+          "layoutSignals": {
+            "hasNav": false,
+            "hasHero": false,
+            "hasPricing": false,
+            "hasTestimonials": false,
+            "hasFAQ": false,
+            "hasVideo": false,
+            "cardLikeCount": 2,
+            "imageCount": 1,
+            "buttonCount": 38,
+            "formCount": 2
+          },
+          "codeBlocks": [],
+          "codeLinks": [
+            {
+              "url": "https://www.npmjs.com/package/lucide-react",
+              "text": "lucide-react"
+            }
+          ]
+        },
+        {
+          "sourceId": "21st-community-components",
+          "url": "https://21st.dev/community/components/smammar100/scroll-reel-testimonials/default",
+          "status": 200,
+          "licenseStatus": "review-required",
+          "reuseGuidance": "Component discovery and UI pattern extraction. Verify each community component before copying code.",
+          "candidate": {
+            "index": 68,
+            "url": "https://21st.dev/community/components/smammar100/scroll-reel-testimonials/default",
+            "text": "Scroll Reel Testimonials",
+            "heading": "",
+            "description": "Scroll Reel Testimonials65",
+            "imageSrc": "https://cdn.21st.dev/cdn-cgi/image/fit=scale-down,width=3840,quality=75,format=auto/https://cdn.21st.dev/smammar100/scroll-reel-testimonials/default/preview.1780849871560.png",
+            "imageAlt": "Scroll Reel Testimonials",
+            "buttonText": [
+              "65"
+            ],
+            "tags": [],
+            "cardArea": 67448,
+            "score": 9,
+            "sourceMode": "component-gallery"
+          },
+          "screenshots": {
+            "desktop": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/21st-community-components/scroll-reel-testimonials/desktop.png",
+              "sha256": "2eeee9ca0776e5d1fc094bfdbefc38c02ae18ae652b435cacba21b23a8de52e0",
+              "mode": "viewport"
+            },
+            "mobile": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/21st-community-components/scroll-reel-testimonials/mobile.png",
+              "sha256": "45a86e735c7943a100a6a31647e8561d4a362a9df8fea55021292dfe862128c3",
+              "mode": "viewport"
+            }
+          },
+          "screenshotQuality": {
+            "desktop": {
+              "viewport": {
+                "width": 1440,
+                "height": 1000
+              },
+              "textLength": 1706,
+              "mediaCount": 37,
+              "codeCount": 4,
+              "headingCount": 6,
+              "usefulElementCount": 46,
+              "visibleAreaRatio": 2.447,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "{\"@context\":\"https://schema.org\",\"@type\":\"SoftwareSourceCode\",\"name\":\"Scroll Reel Testimonials\",\"description\":\"Testimoni",
+                "{\"@context\":\"https://schema.org\",\"@type\":\"SoftwareSourceCode\",\"name\":\"Scroll Reel Testimonials\",\"description\":\"Testimoni",
+                "Components",
+                "smammar100",
+                "SearchK",
+                "Copy prompt",
+                "Copy code",
+                "View code"
+              ]
+            },
+            "mobile": {
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "textLength": 1552,
+              "mediaCount": 21,
+              "codeCount": 4,
+              "headingCount": 4,
+              "usefulElementCount": 39,
+              "visibleAreaRatio": 2.233,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "{\"@context\":\"https://schema.org\",\"@type\":\"SoftwareSourceCode\",\"name\":\"Scroll Reel Testimonials\",\"description\":\"Testimoni",
+                "{\"@context\":\"https://schema.org\",\"@type\":\"SoftwareSourceCode\",\"name\":\"Scroll Reel Testimonials\",\"description\":\"Testimoni",
+                "smammar100",
+                "SearchK",
+                "Copy prompt",
+                "Copy code",
+                "View code",
+                "Components"
+              ]
+            }
+          },
+          "qualityWarnings": [],
+          "failedRequestCount": 6,
+          "title": "Scroll Reel Testimonials | Community Components - 21st | 21st",
+          "description": "Testimonial carousel with a counter-rotating portrait reel and per-character rising text, the middle column scrolls one way while the outer columns slide the opposite direction.",
+          "headings": [
+            {
+              "level": "h3",
+              "text": "Scroll Reel Testimonials"
+            },
+            {
+              "level": "h3",
+              "text": "Created by"
+            },
+            {
+              "level": "h3",
+              "text": "Installation"
+            },
+            {
+              "level": "h3",
+              "text": "How to use"
+            },
+            {
+              "level": "h3",
+              "text": "Explore"
+            },
+            {
+              "level": "h3",
+              "text": "Build"
+            }
+          ],
+          "sections": [],
+          "ctas": [
+            "Open sidebar",
+            "Components",
+            "smammar100",
+            "SearchK",
+            "Copy prompt",
+            "Copy code",
+            "View code",
+            "Components",
+            "smammar100",
+            "Syed Mohammad Ammar",
+            "Copy prompt",
+            "Copy code",
+            "View code",
+            "21st",
+            "Close sidebar",
+            "Home",
+            "Components",
+            "Templates",
+            "Agent Templates",
+            "MCP",
+            "Magic Chat",
+            "Read more",
+            "Dismiss",
+            "Read more",
+            "Dismiss",
+            "Toggle theme",
+            "Settings",
+            "Log in"
+          ],
+          "palette": [
+            "rgb(9, 9, 11)",
+            "rgb(255, 255, 255)",
+            "rgb(228, 228, 231)",
+            "rgb(115, 115, 115)",
+            "rgba(255, 255, 255, 0.8)",
+            "rgba(228, 228, 231, 0.4)",
+            "rgb(235, 235, 235)",
+            "rgb(63, 63, 70)"
+          ],
+          "layoutSignals": {
+            "hasNav": false,
+            "hasHero": false,
+            "hasPricing": false,
+            "hasTestimonials": true,
+            "hasFAQ": false,
+            "hasVideo": false,
+            "cardLikeCount": 2,
+            "imageCount": 1,
+            "buttonCount": 37,
+            "formCount": 2
+          },
+          "codeBlocks": [],
+          "codeLinks": []
+        },
+        {
+          "sourceId": "21st-community-components",
+          "url": "https://21st.dev/community/components/edwinvakayil/one-toogle/default",
+          "status": 200,
+          "licenseStatus": "review-required",
+          "reuseGuidance": "Component discovery and UI pattern extraction. Verify each community component before copying code.",
+          "candidate": {
+            "index": 70,
+            "url": "https://21st.dev/community/components/edwinvakayil/one-toogle/default",
+            "text": "One Toogle",
+            "heading": "",
+            "description": "EVOne Toogle5",
+            "imageSrc": "https://cdn.21st.dev/cdn-cgi/image/fit=scale-down,width=3840,quality=75,format=auto/https://cdn.21st.dev/lyanchouss/one-toogle/default/preview.1780696681239.png",
+            "imageAlt": "One Toogle",
+            "buttonText": [
+              "EV",
+              "5"
+            ],
+            "tags": [],
+            "cardArea": 67448,
+            "score": 9,
+            "sourceMode": "component-gallery"
+          },
+          "screenshots": {
+            "desktop": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/21st-community-components/one-toogle/desktop.png",
+              "sha256": "64ec614c3483f7ab76ef1a974be2a173b44f2d544de6575aca0ef972e4a968db",
+              "mode": "viewport"
+            },
+            "mobile": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/21st-community-components/one-toogle/mobile.png",
+              "sha256": "9336c72aec4046a461bf5962265c5e96cd3840b54be113d31fa67ac0d799d4e7",
+              "mode": "viewport"
+            }
+          },
+          "screenshotQuality": {
+            "desktop": {
+              "viewport": {
+                "width": 1440,
+                "height": 1000
+              },
+              "textLength": 1077,
+              "mediaCount": 40,
+              "codeCount": 4,
+              "headingCount": 8,
+              "usefulElementCount": 46,
+              "visibleAreaRatio": 2.43,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "{\"@context\":\"https://schema.org\",\"@type\":\"SoftwareSourceCode\",\"name\":\"One Toogle\",\"description\":\"\",\"url\":\"https://21st.d",
+                "{\"@context\":\"https://schema.org\",\"@type\":\"SoftwareSourceCode\",\"name\":\"One Toogle\",\"description\":\"\",\"url\":\"https://21st.d",
+                "Components",
+                "edwinvakayil",
+                "SearchK",
+                "Copy prompt",
+                "Copy code",
+                "View code"
+              ]
+            },
+            "mobile": {
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "textLength": 911,
+              "mediaCount": 24,
+              "codeCount": 4,
+              "headingCount": 6,
+              "usefulElementCount": 47,
+              "visibleAreaRatio": 2.317,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "{\"@context\":\"https://schema.org\",\"@type\":\"SoftwareSourceCode\",\"name\":\"One Toogle\",\"description\":\"\",\"url\":\"https://21st.d",
+                "{\"@context\":\"https://schema.org\",\"@type\":\"SoftwareSourceCode\",\"name\":\"One Toogle\",\"description\":\"\",\"url\":\"https://21st.d",
+                "edwinvakayil",
+                "SearchK",
+                "Copy prompt",
+                "Copy code",
+                "View code",
+                "Components"
+              ]
+            }
+          },
+          "qualityWarnings": [],
+          "failedRequestCount": 5,
+          "title": "One Toogle | Community Components - 21st | 21st",
+          "description": "A React component by Edwin Vakayil. High-quality React component from the community.",
+          "headings": [
+            {
+              "level": "h3",
+              "text": "One Toogle"
+            },
+            {
+              "level": "h3",
+              "text": "Created by"
+            },
+            {
+              "level": "h3",
+              "text": "Installation"
+            },
+            {
+              "level": "h3",
+              "text": "How to use"
+            },
+            {
+              "level": "h3",
+              "text": "Dependencies"
+            },
+            {
+              "level": "h3",
+              "text": "Website"
+            },
+            {
+              "level": "h3",
+              "text": "Explore"
+            },
+            {
+              "level": "h3",
+              "text": "Build"
+            }
+          ],
+          "sections": [],
+          "ctas": [
+            "Open sidebar",
+            "Components",
+            "edwinvakayil",
+            "SearchK",
+            "Copy prompt",
+            "Copy code",
+            "View code",
+            "Components",
+            "edwinvakayil",
+            "EV",
+            "Edwin Vakayil",
+            "Copy prompt",
+            "Copy code",
+            "View code",
+            "motion",
+            "@radix-ui/react-toggle",
+            "class-variance-authority",
+            "iconiqui.com/components/toggle",
+            "21st",
+            "Close sidebar",
+            "Home",
+            "Components",
+            "Templates",
+            "Agent Templates",
+            "MCP",
+            "Magic Chat",
+            "Read more",
+            "Dismiss",
+            "Read more",
+            "Dismiss",
+            "Toggle theme",
+            "Settings",
+            "Log in"
+          ],
+          "palette": [
+            "rgb(9, 9, 11)",
+            "rgb(255, 255, 255)",
+            "rgb(228, 228, 231)",
+            "rgb(115, 115, 115)",
+            "rgba(255, 255, 255, 0.8)",
+            "rgba(228, 228, 231, 0.4)",
+            "rgb(235, 235, 235)",
+            "rgb(63, 63, 70)"
+          ],
+          "layoutSignals": {
+            "hasNav": false,
+            "hasHero": false,
+            "hasPricing": false,
+            "hasTestimonials": true,
+            "hasFAQ": false,
+            "hasVideo": false,
+            "cardLikeCount": 2,
+            "imageCount": 0,
+            "buttonCount": 41,
+            "formCount": 2
+          },
+          "codeBlocks": [],
+          "codeLinks": [
+            {
+              "url": "https://www.npmjs.com/package/motion",
+              "text": "motion"
+            },
+            {
+              "url": "https://www.npmjs.com/package/@radix-ui/react-toggle",
+              "text": "@radix-ui/react-toggle"
+            },
+            {
+              "url": "https://www.npmjs.com/package/class-variance-authority",
+              "text": "class-variance-authority"
+            }
+          ]
+        },
+        {
+          "sourceId": "21st-community-components",
+          "url": "https://21st.dev/community/components/edwinvakayil/toggle-group/default",
+          "status": 200,
+          "licenseStatus": "review-required",
+          "reuseGuidance": "Component discovery and UI pattern extraction. Verify each community component before copying code.",
+          "candidate": {
+            "index": 72,
+            "url": "https://21st.dev/community/components/edwinvakayil/toggle-group/default",
+            "text": "Toggle Group",
+            "heading": "",
+            "description": "EVToggle Group2",
+            "imageSrc": "https://cdn.21st.dev/cdn-cgi/image/fit=scale-down,width=3840,quality=75,format=auto/https://cdn.21st.dev/lyanchouss/toggle-group/default/preview.1780695938765.png",
+            "imageAlt": "Toggle Group",
+            "buttonText": [
+              "EV",
+              "2"
+            ],
+            "tags": [],
+            "cardArea": 67448,
+            "score": 9,
+            "sourceMode": "component-gallery"
+          },
+          "screenshots": {
+            "desktop": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/21st-community-components/toggle-group/desktop.png",
+              "sha256": "f28aba7535233e6c7260e04fe67e9d66eadd09bd2b035e902cac44b8c54b50a6",
+              "mode": "viewport"
+            },
+            "mobile": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/21st-community-components/toggle-group/mobile.png",
+              "sha256": "fdbddb43ff362a5a3ca2d3a8df9f2689aae373757d8957195158f132fc970955",
+              "mode": "viewport"
+            }
+          },
+          "screenshotQuality": {
+            "desktop": {
+              "viewport": {
+                "width": 1440,
+                "height": 1000
+              },
+              "textLength": 1313,
+              "mediaCount": 39,
+              "codeCount": 4,
+              "headingCount": 8,
+              "usefulElementCount": 45,
+              "visibleAreaRatio": 2.563,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "{\"@context\":\"https://schema.org\",\"@type\":\"SoftwareSourceCode\",\"name\":\"Toggle Group\",\"description\":\"\",\"url\":\"https://21st",
+                "{\"@context\":\"https://schema.org\",\"@type\":\"SoftwareSourceCode\",\"name\":\"Toggle Group\",\"description\":\"\",\"url\":\"https://21st",
+                "Components",
+                "edwinvakayil",
+                "SearchK",
+                "Copy prompt",
+                "Copy code",
+                "View code"
+              ]
+            },
+            "mobile": {
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "textLength": 1149,
+              "mediaCount": 23,
+              "codeCount": 4,
+              "headingCount": 6,
+              "usefulElementCount": 47,
+              "visibleAreaRatio": 2.317,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "{\"@context\":\"https://schema.org\",\"@type\":\"SoftwareSourceCode\",\"name\":\"Toggle Group\",\"description\":\"\",\"url\":\"https://21st",
+                "{\"@context\":\"https://schema.org\",\"@type\":\"SoftwareSourceCode\",\"name\":\"Toggle Group\",\"description\":\"\",\"url\":\"https://21st",
+                "edwinvakayil",
+                "SearchK",
+                "Copy prompt",
+                "Copy code",
+                "View code",
+                "Components"
+              ]
+            }
+          },
+          "qualityWarnings": [],
+          "failedRequestCount": 4,
+          "title": "Toggle Group | Community Components - 21st | 21st",
+          "description": "A React component by Edwin Vakayil. High-quality React component from the community.",
+          "headings": [
+            {
+              "level": "h3",
+              "text": "Toggle Group"
+            },
+            {
+              "level": "h3",
+              "text": "Created by"
+            },
+            {
+              "level": "h3",
+              "text": "Installation"
+            },
+            {
+              "level": "h3",
+              "text": "How to use"
+            },
+            {
+              "level": "h3",
+              "text": "Dependencies"
+            },
+            {
+              "level": "h3",
+              "text": "Website"
+            },
+            {
+              "level": "h3",
+              "text": "Explore"
+            },
+            {
+              "level": "h3",
+              "text": "Build"
+            }
+          ],
+          "sections": [],
+          "ctas": [
+            "Open sidebar",
+            "Components",
+            "edwinvakayil",
+            "SearchK",
+            "Copy prompt",
+            "Copy code",
+            "View code",
+            "Components",
+            "edwinvakayil",
+            "EV",
+            "Edwin Vakayil",
+            "Copy prompt",
+            "Copy code",
+            "View code",
+            "motion",
+            "@radix-ui/react-toggle-group",
+            "iconiqui.com/components/toggle-group",
+            "21st",
+            "Close sidebar",
+            "Home",
+            "Components",
+            "Templates",
+            "Agent Templates",
+            "MCP",
+            "Magic Chat",
+            "Read more",
+            "Dismiss",
+            "Read more",
+            "Dismiss",
+            "Toggle theme",
+            "Settings",
+            "Log in"
+          ],
+          "palette": [
+            "rgb(9, 9, 11)",
+            "rgb(255, 255, 255)",
+            "rgb(228, 228, 231)",
+            "rgb(115, 115, 115)",
+            "rgba(255, 255, 255, 0.8)",
+            "rgba(228, 228, 231, 0.4)",
+            "rgb(235, 235, 235)",
+            "rgb(63, 63, 70)"
+          ],
+          "layoutSignals": {
+            "hasNav": false,
+            "hasHero": false,
+            "hasPricing": false,
+            "hasTestimonials": true,
+            "hasFAQ": false,
+            "hasVideo": false,
+            "cardLikeCount": 2,
+            "imageCount": 0,
+            "buttonCount": 40,
+            "formCount": 2
+          },
+          "codeBlocks": [],
+          "codeLinks": [
+            {
+              "url": "https://www.npmjs.com/package/motion",
+              "text": "motion"
+            },
+            {
+              "url": "https://www.npmjs.com/package/@radix-ui/react-toggle-group",
+              "text": "@radix-ui/react-toggle-group"
+            }
+          ]
+        },
+        {
+          "sourceId": "21st-community-components",
+          "url": "https://21st.dev/community/components/edwinvakayil/tooltip/default",
+          "status": 200,
+          "licenseStatus": "review-required",
+          "reuseGuidance": "Component discovery and UI pattern extraction. Verify each community component before copying code.",
+          "candidate": {
+            "index": 74,
+            "url": "https://21st.dev/community/components/edwinvakayil/tooltip/default",
+            "text": "Tooltip",
+            "heading": "",
+            "description": "EVTooltip1",
+            "imageSrc": "https://cdn.21st.dev/cdn-cgi/image/fit=scale-down,width=3840,quality=75,format=auto/https://cdn.21st.dev/lyanchouss/tooltip/default/preview.1780695705004.png",
+            "imageAlt": "Tooltip",
+            "buttonText": [
+              "EV",
+              "1"
+            ],
+            "tags": [],
+            "cardArea": 67448,
+            "score": 9,
+            "sourceMode": "component-gallery"
+          },
+          "screenshots": {
+            "desktop": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/21st-community-components/tooltip/desktop.png",
+              "sha256": "435af912e5f3fcc7050017eb3b3789c13591e8c94151e6cde6e8ce6ec0533a13",
+              "mode": "viewport"
+            },
+            "mobile": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/21st-community-components/tooltip/mobile.png",
+              "sha256": "7a9ac2d50465339a032dec1abc6806a9c6ae950400e99cbfc09772f88a49e0a3",
+              "mode": "viewport"
+            }
+          },
+          "screenshotQuality": {
+            "desktop": {
+              "viewport": {
+                "width": 1440,
+                "height": 1000
+              },
+              "textLength": 1901,
+              "mediaCount": 40,
+              "codeCount": 4,
+              "headingCount": 8,
+              "usefulElementCount": 45,
+              "visibleAreaRatio": 2.559,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "{\"@context\":\"https://schema.org\",\"@type\":\"SoftwareSourceCode\",\"name\":\"Tooltip\",\"description\":\"\",\"url\":\"https://21st.dev/",
+                "{\"@context\":\"https://schema.org\",\"@type\":\"SoftwareSourceCode\",\"name\":\"Tooltip\",\"description\":\"\",\"url\":\"https://21st.dev/",
+                "Components",
+                "edwinvakayil",
+                "SearchK",
+                "Copy prompt",
+                "Copy code",
+                "View code"
+              ]
+            },
+            "mobile": {
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "textLength": 1732,
+              "mediaCount": 24,
+              "codeCount": 4,
+              "headingCount": 6,
+              "usefulElementCount": 47,
+              "visibleAreaRatio": 2.317,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "{\"@context\":\"https://schema.org\",\"@type\":\"SoftwareSourceCode\",\"name\":\"Tooltip\",\"description\":\"\",\"url\":\"https://21st.dev/",
+                "{\"@context\":\"https://schema.org\",\"@type\":\"SoftwareSourceCode\",\"name\":\"Tooltip\",\"description\":\"\",\"url\":\"https://21st.dev/",
+                "edwinvakayil",
+                "SearchK",
+                "Copy prompt",
+                "Copy code",
+                "View code",
+                "Components"
+              ]
+            }
+          },
+          "qualityWarnings": [],
+          "failedRequestCount": 5,
+          "title": "Tooltip | Community Components - 21st | 21st",
+          "description": "A React component by Edwin Vakayil. High-quality React component from the community.",
+          "headings": [
+            {
+              "level": "h3",
+              "text": "Tooltip"
+            },
+            {
+              "level": "h3",
+              "text": "Created by"
+            },
+            {
+              "level": "h3",
+              "text": "Installation"
+            },
+            {
+              "level": "h3",
+              "text": "How to use"
+            },
+            {
+              "level": "h3",
+              "text": "Dependencies"
+            },
+            {
+              "level": "h3",
+              "text": "Website"
+            },
+            {
+              "level": "h3",
+              "text": "Explore"
+            },
+            {
+              "level": "h3",
+              "text": "Build"
+            }
+          ],
+          "sections": [],
+          "ctas": [
+            "Open sidebar",
+            "Components",
+            "edwinvakayil",
+            "SearchK",
+            "Copy prompt",
+            "Copy code",
+            "View code",
+            "Components",
+            "edwinvakayil",
+            "EV",
+            "Edwin Vakayil",
+            "Copy prompt",
+            "Copy code",
+            "View code",
+            "motion",
+            "@radix-ui/react-slot",
+            "@radix-ui/react-tooltip",
+            "iconiqui.com/components/tooltip",
+            "21st",
+            "Close sidebar",
+            "Home",
+            "Components",
+            "Templates",
+            "Agent Templates",
+            "MCP",
+            "Magic Chat",
+            "Read more",
+            "Dismiss",
+            "Read more",
+            "Dismiss",
+            "Toggle theme",
+            "Settings",
+            "Log in"
+          ],
+          "palette": [
+            "rgb(9, 9, 11)",
+            "rgb(255, 255, 255)",
+            "rgb(228, 228, 231)",
+            "rgb(115, 115, 115)",
+            "rgba(255, 255, 255, 0.8)",
+            "rgba(228, 228, 231, 0.4)",
+            "rgb(235, 235, 235)",
+            "rgb(63, 63, 70)"
+          ],
+          "layoutSignals": {
+            "hasNav": false,
+            "hasHero": false,
+            "hasPricing": false,
+            "hasTestimonials": true,
+            "hasFAQ": false,
+            "hasVideo": false,
+            "cardLikeCount": 2,
+            "imageCount": 0,
+            "buttonCount": 41,
+            "formCount": 2
+          },
+          "codeBlocks": [],
+          "codeLinks": [
+            {
+              "url": "https://www.npmjs.com/package/motion",
+              "text": "motion"
+            },
+            {
+              "url": "https://www.npmjs.com/package/@radix-ui/react-slot",
+              "text": "@radix-ui/react-slot"
+            },
+            {
+              "url": "https://www.npmjs.com/package/@radix-ui/react-tooltip",
+              "text": "@radix-ui/react-tooltip"
+            }
+          ]
+        },
+        {
+          "sourceId": "21st-community-components",
+          "url": "https://21st.dev/community/components/edwinvakayil/icon-bar/default",
+          "status": 200,
+          "licenseStatus": "review-required",
+          "reuseGuidance": "Component discovery and UI pattern extraction. Verify each community component before copying code.",
+          "candidate": {
+            "index": 76,
+            "url": "https://21st.dev/community/components/edwinvakayil/icon-bar/default",
+            "text": "Icon Bar",
+            "heading": "",
+            "description": "EVIcon Bar20",
+            "imageSrc": "https://cdn.21st.dev/cdn-cgi/image/fit=scale-down,width=3840,quality=75,format=auto/https://cdn.21st.dev/lyanchouss/icon-bar/default/preview.1780694376489.png",
+            "imageAlt": "Icon Bar",
+            "buttonText": [
+              "EV",
+              "20"
+            ],
+            "tags": [],
+            "cardArea": 67448,
+            "score": 9,
+            "sourceMode": "component-gallery"
+          },
+          "screenshots": {
+            "desktop": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/21st-community-components/icon-bar/desktop.png",
+              "sha256": "3550357021d29d5d975038ef7867b3245d8a8dc85c69280c4081e7cb1d6d924b",
+              "mode": "viewport"
+            },
+            "mobile": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/21st-community-components/icon-bar/mobile.png",
+              "sha256": "d2f3efcf891193f674c9429982c3969bbc97f94c07fc178961577c5b95fcab1d",
+              "mode": "viewport"
+            }
+          },
+          "screenshotQuality": {
+            "desktop": {
+              "viewport": {
+                "width": 1440,
+                "height": 1000
+              },
+              "textLength": 963,
+              "mediaCount": 39,
+              "codeCount": 4,
+              "headingCount": 8,
+              "usefulElementCount": 53,
+              "visibleAreaRatio": 2.325,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "{\"@context\":\"https://schema.org\",\"@type\":\"SoftwareSourceCode\",\"name\":\"Icon Bar\",\"description\":\"\",\"url\":\"https://21st.dev",
+                "{\"@context\":\"https://schema.org\",\"@type\":\"SoftwareSourceCode\",\"name\":\"Icon Bar\",\"description\":\"\",\"url\":\"https://21st.dev",
+                "Components",
+                "edwinvakayil",
+                "SearchK",
+                "Copy prompt",
+                "Copy code",
+                "View code"
+              ]
+            },
+            "mobile": {
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "textLength": 795,
+              "mediaCount": 23,
+              "codeCount": 4,
+              "headingCount": 6,
+              "usefulElementCount": 47,
+              "visibleAreaRatio": 2.317,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "{\"@context\":\"https://schema.org\",\"@type\":\"SoftwareSourceCode\",\"name\":\"Icon Bar\",\"description\":\"\",\"url\":\"https://21st.dev",
+                "{\"@context\":\"https://schema.org\",\"@type\":\"SoftwareSourceCode\",\"name\":\"Icon Bar\",\"description\":\"\",\"url\":\"https://21st.dev",
+                "edwinvakayil",
+                "SearchK",
+                "Copy prompt",
+                "Copy code",
+                "View code",
+                "Components"
+              ]
+            }
+          },
+          "qualityWarnings": [],
+          "failedRequestCount": 5,
+          "title": "Icon Bar | Community Components - 21st | 21st",
+          "description": "A React component by Edwin Vakayil. High-quality React component from the community.",
+          "headings": [
+            {
+              "level": "h3",
+              "text": "Icon Bar"
+            },
+            {
+              "level": "h3",
+              "text": "Created by"
+            },
+            {
+              "level": "h3",
+              "text": "Installation"
+            },
+            {
+              "level": "h3",
+              "text": "How to use"
+            },
+            {
+              "level": "h3",
+              "text": "Dependencies"
+            },
+            {
+              "level": "h3",
+              "text": "Website"
+            },
+            {
+              "level": "h3",
+              "text": "Explore"
+            },
+            {
+              "level": "h3",
+              "text": "Build"
+            }
+          ],
+          "sections": [],
+          "ctas": [
+            "Open sidebar",
+            "Components",
+            "edwinvakayil",
+            "SearchK",
+            "Copy prompt",
+            "Copy code",
+            "View code",
+            "Components",
+            "edwinvakayil",
+            "EV",
+            "Edwin Vakayil",
+            "Copy prompt",
+            "Copy code",
+            "View code",
+            "motion",
+            "lucide-react",
+            "iconiqui.com/special-one/icon-bar",
+            "21st",
+            "Close sidebar",
+            "Home",
+            "Components",
+            "Templates",
+            "Agent Templates",
+            "MCP",
+            "Magic Chat",
+            "Read more",
+            "Dismiss",
+            "Read more",
+            "Dismiss",
+            "Toggle theme",
+            "Settings",
+            "Log in"
+          ],
+          "palette": [
+            "rgb(9, 9, 11)",
+            "rgb(255, 255, 255)",
+            "rgb(228, 228, 231)",
+            "rgb(115, 115, 115)",
+            "rgba(255, 255, 255, 0.8)",
+            "rgba(228, 228, 231, 0.4)",
+            "rgb(235, 235, 235)",
+            "rgb(63, 63, 70)"
+          ],
+          "layoutSignals": {
+            "hasNav": false,
+            "hasHero": false,
+            "hasPricing": false,
+            "hasTestimonials": true,
+            "hasFAQ": false,
+            "hasVideo": false,
+            "cardLikeCount": 2,
+            "imageCount": 0,
+            "buttonCount": 40,
+            "formCount": 2
+          },
+          "codeBlocks": [],
+          "codeLinks": [
+            {
+              "url": "https://www.npmjs.com/package/motion",
+              "text": "motion"
+            },
+            {
+              "url": "https://www.npmjs.com/package/lucide-react",
+              "text": "lucide-react"
+            }
+          ]
+        },
+        {
+          "sourceId": "21st-community-components",
+          "url": "https://21st.dev/community/components/edwinvakayil/infinite-ribbon/default",
+          "status": 200,
+          "licenseStatus": "review-required",
+          "reuseGuidance": "Component discovery and UI pattern extraction. Verify each community component before copying code.",
+          "candidate": {
+            "index": 78,
+            "url": "https://21st.dev/community/components/edwinvakayil/infinite-ribbon/default",
+            "text": "Infinite Ribbon",
+            "heading": "",
+            "description": "EVInfinite Ribbon26",
+            "imageSrc": "https://cdn.21st.dev/cdn-cgi/image/fit=scale-down,width=3840,quality=75,format=auto/https://cdn.21st.dev/lyanchouss/infinite-ribbon/default/preview.1780694157426.png",
+            "imageAlt": "Infinite Ribbon",
+            "buttonText": [
+              "EV",
+              "26"
+            ],
+            "tags": [],
+            "cardArea": 67448,
+            "score": 9,
+            "sourceMode": "component-gallery"
+          },
+          "screenshots": {
+            "desktop": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/21st-community-components/infinite-ribbon/desktop.png",
+              "sha256": "c044f951f1d98baefd9b1a86580f756c937727e5cbf11afbe44e7f1775ed1dbb",
+              "mode": "viewport"
+            },
+            "mobile": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/21st-community-components/infinite-ribbon/mobile.png",
+              "sha256": "c3fffe4471f43e5a36c09fecc82a0e5fbe27a020379c18c4c838c1866ba2a0b4",
+              "mode": "viewport"
+            }
+          },
+          "screenshotQuality": {
+            "desktop": {
+              "viewport": {
+                "width": 1440,
+                "height": 1000
+              },
+              "textLength": 1119,
+              "mediaCount": 37,
+              "codeCount": 4,
+              "headingCount": 7,
+              "usefulElementCount": 48,
+              "visibleAreaRatio": 2.387,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "{\"@context\":\"https://schema.org\",\"@type\":\"SoftwareSourceCode\",\"name\":\"Infinite Ribbon\",\"description\":\"\",\"url\":\"https://2",
+                "{\"@context\":\"https://schema.org\",\"@type\":\"SoftwareSourceCode\",\"name\":\"Infinite Ribbon\",\"description\":\"\",\"url\":\"https://2",
+                "Components",
+                "edwinvakayil",
+                "SearchK",
+                "Copy prompt",
+                "Copy code",
+                "View code"
+              ]
+            },
+            "mobile": {
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "textLength": 958,
+              "mediaCount": 21,
+              "codeCount": 4,
+              "headingCount": 5,
+              "usefulElementCount": 47,
+              "visibleAreaRatio": 2.317,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "{\"@context\":\"https://schema.org\",\"@type\":\"SoftwareSourceCode\",\"name\":\"Infinite Ribbon\",\"description\":\"\",\"url\":\"https://2",
+                "{\"@context\":\"https://schema.org\",\"@type\":\"SoftwareSourceCode\",\"name\":\"Infinite Ribbon\",\"description\":\"\",\"url\":\"https://2",
+                "edwinvakayil",
+                "SearchK",
+                "Copy prompt",
+                "Copy code",
+                "View code",
+                "Components"
+              ]
+            }
+          },
+          "qualityWarnings": [],
+          "failedRequestCount": 4,
+          "title": "Infinite Ribbon | Community Components - 21st | 21st",
+          "description": "A React component by Edwin Vakayil. High-quality React component from the community.",
+          "headings": [
+            {
+              "level": "h3",
+              "text": "Infinite Ribbon"
+            },
+            {
+              "level": "h3",
+              "text": "Created by"
+            },
+            {
+              "level": "h3",
+              "text": "Installation"
+            },
+            {
+              "level": "h3",
+              "text": "How to use"
+            },
+            {
+              "level": "h3",
+              "text": "Website"
+            },
+            {
+              "level": "h3",
+              "text": "Explore"
+            },
+            {
+              "level": "h3",
+              "text": "Build"
+            }
+          ],
+          "sections": [],
+          "ctas": [
+            "Open sidebar",
+            "Components",
+            "edwinvakayil",
+            "SearchK",
+            "Copy prompt",
+            "Copy code",
+            "View code",
+            "Components",
+            "edwinvakayil",
+            "EV",
+            "Edwin Vakayil",
+            "Copy prompt",
+            "Copy code",
+            "View code",
+            "iconiqui.com/special-one/infiniteribbon",
+            "21st",
+            "Close sidebar",
+            "Home",
+            "Components",
+            "Templates",
+            "Agent Templates",
+            "MCP",
+            "Magic Chat",
+            "Read more",
+            "Dismiss",
+            "Read more",
+            "Dismiss",
+            "Toggle theme",
+            "Settings",
+            "Log in"
+          ],
+          "palette": [
+            "rgb(9, 9, 11)",
+            "rgb(255, 255, 255)",
+            "rgb(228, 228, 231)",
+            "rgb(115, 115, 115)",
+            "rgba(255, 255, 255, 0.8)",
+            "rgba(228, 228, 231, 0.4)",
+            "rgb(235, 235, 235)",
+            "rgb(63, 63, 70)"
+          ],
+          "layoutSignals": {
+            "hasNav": false,
+            "hasHero": false,
+            "hasPricing": false,
+            "hasTestimonials": true,
+            "hasFAQ": false,
+            "hasVideo": false,
+            "cardLikeCount": 2,
+            "imageCount": 0,
+            "buttonCount": 38,
+            "formCount": 2
+          },
+          "codeBlocks": [],
+          "codeLinks": []
+        },
+        {
+          "sourceId": "21st-community-components",
+          "url": "https://21st.dev/community/components/edwinvakayil/origin-button/default",
+          "status": 200,
+          "licenseStatus": "review-required",
+          "reuseGuidance": "Component discovery and UI pattern extraction. Verify each community component before copying code.",
+          "candidate": {
+            "index": 80,
+            "url": "https://21st.dev/community/components/edwinvakayil/origin-button/default",
+            "text": "Origin Button",
+            "heading": "",
+            "description": "EVOrigin Button27",
+            "imageSrc": "https://cdn.21st.dev/cdn-cgi/image/fit=scale-down,width=3840,quality=75,format=auto/https://cdn.21st.dev/lyanchouss/origin-button/default/preview.1780693767860.png",
+            "imageAlt": "Origin Button",
+            "buttonText": [
+              "EV",
+              "27"
+            ],
+            "tags": [],
+            "cardArea": 67448,
+            "score": 9,
+            "sourceMode": "component-gallery"
+          },
+          "screenshots": {
+            "desktop": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/21st-community-components/origin-button/desktop.png",
+              "sha256": "49fe675cca74a3f57cc22be7f43258b9a6e96f4ae0b975c93fe40aa396e5a590",
+              "mode": "viewport"
+            },
+            "mobile": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/21st-community-components/origin-button/mobile.png",
+              "sha256": "6431f569086ca237bf8c6bbe8653cfd17271bcf001e6cbd5a4b12b6d981f463b",
+              "mode": "viewport"
+            }
+          },
+          "screenshotQuality": {
+            "desktop": {
+              "viewport": {
+                "width": 1440,
+                "height": 1000
+              },
+              "textLength": 741,
+              "mediaCount": 38,
+              "codeCount": 4,
+              "headingCount": 8,
+              "usefulElementCount": 51,
+              "visibleAreaRatio": 2.208,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "{\"@context\":\"https://schema.org\",\"@type\":\"SoftwareSourceCode\",\"name\":\"Origin Button\",\"description\":\"\",\"url\":\"https://21s",
+                "{\"@context\":\"https://schema.org\",\"@type\":\"SoftwareSourceCode\",\"name\":\"Origin Button\",\"description\":\"\",\"url\":\"https://21s",
+                "Components",
+                "edwinvakayil",
+                "SearchK",
+                "Copy prompt",
+                "Copy code",
+                "View code"
+              ]
+            },
+            "mobile": {
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "textLength": 578,
+              "mediaCount": 22,
+              "codeCount": 4,
+              "headingCount": 6,
+              "usefulElementCount": 47,
+              "visibleAreaRatio": 2.317,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "{\"@context\":\"https://schema.org\",\"@type\":\"SoftwareSourceCode\",\"name\":\"Origin Button\",\"description\":\"\",\"url\":\"https://21s",
+                "{\"@context\":\"https://schema.org\",\"@type\":\"SoftwareSourceCode\",\"name\":\"Origin Button\",\"description\":\"\",\"url\":\"https://21s",
+                "edwinvakayil",
+                "SearchK",
+                "Copy prompt",
+                "Copy code",
+                "View code",
+                "Components"
+              ]
+            }
+          },
+          "qualityWarnings": [],
+          "failedRequestCount": 5,
+          "title": "Origin Button | Community Components - 21st | 21st",
+          "description": "A React component by Edwin Vakayil. High-quality React component from the community.",
+          "headings": [
+            {
+              "level": "h3",
+              "text": "Origin Button"
+            },
+            {
+              "level": "h3",
+              "text": "Created by"
+            },
+            {
+              "level": "h3",
+              "text": "Installation"
+            },
+            {
+              "level": "h3",
+              "text": "How to use"
+            },
+            {
+              "level": "h3",
+              "text": "Dependencies"
+            },
+            {
+              "level": "h3",
+              "text": "Website"
+            },
+            {
+              "level": "h3",
+              "text": "Explore"
+            },
+            {
+              "level": "h3",
+              "text": "Build"
+            }
+          ],
+          "sections": [],
+          "ctas": [
+            "Open sidebar",
+            "Components",
+            "edwinvakayil",
+            "SearchK",
+            "Copy prompt",
+            "Copy code",
+            "View code",
+            "Components",
+            "edwinvakayil",
+            "EV",
+            "Edwin Vakayil",
+            "Copy prompt",
+            "Copy code",
+            "View code",
+            "motion",
+            "iconiqui.com/special-one/origin-button",
+            "21st",
+            "Close sidebar",
+            "Home",
+            "Components",
+            "Templates",
+            "Agent Templates",
+            "MCP",
+            "Magic Chat",
+            "Read more",
+            "Dismiss",
+            "Read more",
+            "Dismiss",
+            "Toggle theme",
+            "Settings",
+            "Log in"
+          ],
+          "palette": [
+            "rgb(9, 9, 11)",
+            "rgb(255, 255, 255)",
+            "rgb(228, 228, 231)",
+            "rgb(115, 115, 115)",
+            "rgba(255, 255, 255, 0.8)",
+            "rgba(228, 228, 231, 0.4)",
+            "rgb(235, 235, 235)",
+            "rgb(63, 63, 70)"
+          ],
+          "layoutSignals": {
+            "hasNav": false,
+            "hasHero": false,
+            "hasPricing": false,
+            "hasTestimonials": true,
+            "hasFAQ": false,
+            "hasVideo": false,
+            "cardLikeCount": 2,
+            "imageCount": 0,
+            "buttonCount": 39,
+            "formCount": 2
+          },
+          "codeBlocks": [],
+          "codeLinks": [
+            {
+              "url": "https://www.npmjs.com/package/motion",
+              "text": "motion"
+            }
+          ]
+        },
+        {
+          "sourceId": "21st-community-components",
+          "url": "https://21st.dev/community/components/edwinvakayil/faq-pro/default",
+          "status": 200,
+          "licenseStatus": "review-required",
+          "reuseGuidance": "Component discovery and UI pattern extraction. Verify each community component before copying code.",
+          "candidate": {
+            "index": 82,
+            "url": "https://21st.dev/community/components/edwinvakayil/faq-pro/default",
+            "text": "FAQ Pro",
+            "heading": "",
+            "description": "EVFAQ Pro16",
+            "imageSrc": "https://cdn.21st.dev/cdn-cgi/image/fit=scale-down,width=3840,quality=75,format=auto/https://cdn.21st.dev/lyanchouss/faq-pro/default/preview.1780693119279.png",
+            "imageAlt": "FAQ Pro",
+            "buttonText": [
+              "EV",
+              "16"
+            ],
+            "tags": [],
+            "cardArea": 67448,
+            "score": 9,
+            "sourceMode": "component-gallery"
+          },
+          "screenshots": {
+            "desktop": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/21st-community-components/faq-pro/desktop.png",
+              "sha256": "173552849c87e4515e761356f9de74a17b7679c9ab6fd8c696756bc7ea592b78",
+              "mode": "viewport"
+            },
+            "mobile": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/21st-community-components/faq-pro/mobile.png",
+              "sha256": "19d1193075ead45b5ab3346a375018d358d18af8ac82ee764bd1ac37cd9da084",
+              "mode": "viewport"
+            }
+          },
+          "screenshotQuality": {
+            "desktop": {
+              "viewport": {
+                "width": 1440,
+                "height": 1000
+              },
+              "textLength": 1448,
+              "mediaCount": 39,
+              "codeCount": 4,
+              "headingCount": 8,
+              "usefulElementCount": 45,
+              "visibleAreaRatio": 2.742,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "{\"@context\":\"https://schema.org\",\"@type\":\"SoftwareSourceCode\",\"name\":\"FAQ Pro\",\"description\":\"\",\"url\":\"https://21st.dev/",
+                "{\"@context\":\"https://schema.org\",\"@type\":\"SoftwareSourceCode\",\"name\":\"FAQ Pro\",\"description\":\"\",\"url\":\"https://21st.dev/",
+                "Components",
+                "edwinvakayil",
+                "SearchK",
+                "Copy prompt",
+                "Copy code",
+                "View code"
+              ]
+            },
+            "mobile": {
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "textLength": 1279,
+              "mediaCount": 23,
+              "codeCount": 4,
+              "headingCount": 6,
+              "usefulElementCount": 47,
+              "visibleAreaRatio": 2.317,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "{\"@context\":\"https://schema.org\",\"@type\":\"SoftwareSourceCode\",\"name\":\"FAQ Pro\",\"description\":\"\",\"url\":\"https://21st.dev/",
+                "{\"@context\":\"https://schema.org\",\"@type\":\"SoftwareSourceCode\",\"name\":\"FAQ Pro\",\"description\":\"\",\"url\":\"https://21st.dev/",
+                "edwinvakayil",
+                "SearchK",
+                "Copy prompt",
+                "Copy code",
+                "View code",
+                "Components"
+              ]
+            }
+          },
+          "qualityWarnings": [],
+          "failedRequestCount": 4,
+          "title": "FAQ Pro | Community Components - 21st | 21st",
+          "description": "A React component by Edwin Vakayil. High-quality React component from the community.",
+          "headings": [
+            {
+              "level": "h3",
+              "text": "FAQ Pro"
+            },
+            {
+              "level": "h3",
+              "text": "Created by"
+            },
+            {
+              "level": "h3",
+              "text": "Installation"
+            },
+            {
+              "level": "h3",
+              "text": "How to use"
+            },
+            {
+              "level": "h3",
+              "text": "Dependencies"
+            },
+            {
+              "level": "h3",
+              "text": "Website"
+            },
+            {
+              "level": "h3",
+              "text": "Explore"
+            },
+            {
+              "level": "h3",
+              "text": "Build"
+            }
+          ],
+          "sections": [],
+          "ctas": [
+            "Open sidebar",
+            "Components",
+            "edwinvakayil",
+            "SearchK",
+            "Copy prompt",
+            "Copy code",
+            "View code",
+            "Components",
+            "edwinvakayil",
+            "EV",
+            "Edwin Vakayil",
+            "Copy prompt",
+            "Copy code",
+            "View code",
+            "motion",
+            "lucide-react",
+            "iconiqui.com/special-one/faq-pro",
+            "21st",
+            "Close sidebar",
+            "Home",
+            "Components",
+            "Templates",
+            "Agent Templates",
+            "MCP",
+            "Magic Chat",
+            "Read more",
+            "Dismiss",
+            "Read more",
+            "Dismiss",
+            "Toggle theme",
+            "Settings",
+            "Log in"
+          ],
+          "palette": [
+            "rgb(9, 9, 11)",
+            "rgb(255, 255, 255)",
+            "rgb(228, 228, 231)",
+            "rgb(115, 115, 115)",
+            "rgba(255, 255, 255, 0.8)",
+            "rgba(228, 228, 231, 0.4)",
+            "rgb(235, 235, 235)",
+            "rgb(63, 63, 70)"
+          ],
+          "layoutSignals": {
+            "hasNav": false,
+            "hasHero": false,
+            "hasPricing": false,
+            "hasTestimonials": true,
+            "hasFAQ": true,
+            "hasVideo": false,
+            "cardLikeCount": 2,
+            "imageCount": 0,
+            "buttonCount": 40,
+            "formCount": 2
+          },
+          "codeBlocks": [],
+          "codeLinks": [
+            {
+              "url": "https://www.npmjs.com/package/motion",
+              "text": "motion"
+            },
+            {
+              "url": "https://www.npmjs.com/package/lucide-react",
+              "text": "lucide-react"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

@@ -1,0 +1,2918 @@
+{
+  "capturedAt": "2026-06-15T21:50:50.117Z",
+  "cacheRoot": "C:/Users/PC/.codex/design-stack/gallery-examples-full",
+  "policy": "Gallery screenshots and structure are reference artifacts. Copy/adapt code only when licenseStatus is compatible and the linked/local repo license has been reviewed.",
+  "configPath": "data/references/design-sources/gallery-reference-sources.json",
+  "results": [
+    {
+      "id": "watermelon-ui",
+      "name": "Watermelon UI",
+      "url": "https://ui.watermelon.sh/blocks",
+      "mode": "block-gallery",
+      "usage": "Component taxonomy and interaction reference. Verify license before copying code.",
+      "licenseStatus": "review-required",
+      "status": 200,
+      "failedRequestCount": 3,
+      "rawCandidateCount": 25,
+      "selectedCandidateCount": 24,
+      "detailedExampleCount": 8,
+      "candidates": [
+        {
+          "index": 31,
+          "url": "https://ui.watermelon.sh/blocks/Announcement",
+          "text": "Announcement 9 Blocks",
+          "heading": "",
+          "description": "Announcement9 blocksAuth6 blocksBlog4 blocksCareer4 blocksContact7 blocksCTA4 blocksError7 blocksFAQ5 blocksFeature5 blocksFile-upload5 blocksFooter22 blocksHero13 blocksIntegrations5 blocksNavigation7 blocksNewsletter5 blocksNotification4 blocksPricing5 blocksStats4 blocksTeam5 blocksTestimonials4 blocksWidget5 blocks",
+          "imageSrc": "https://assets.watermelon.sh/components/watermelonoriginalassets/announcement-1.webp",
+          "imageAlt": "Announcement preview",
+          "buttonText": [
+            "Announcement9 blocks",
+            "Auth6 blocks",
+            "Blog4 blocks",
+            "Career4 blocks",
+            "Contact7 blocks",
+            "CTA4 blocks",
+            "Error7 blocks",
+            "FAQ5 blocks"
+          ],
+          "tags": [],
+          "cardArea": 2712527,
+          "score": 10,
+          "sourceMode": "block-gallery"
+        },
+        {
+          "index": 32,
+          "url": "https://ui.watermelon.sh/blocks/auth",
+          "text": "Auth 6 Blocks",
+          "heading": "",
+          "description": "Announcement9 blocksAuth6 blocksBlog4 blocksCareer4 blocksContact7 blocksCTA4 blocksError7 blocksFAQ5 blocksFeature5 blocksFile-upload5 blocksFooter22 blocksHero13 blocksIntegrations5 blocksNavigation7 blocksNewsletter5 blocksNotification4 blocksPricing5 blocksStats4 blocksTeam5 blocksTestimonials4 blocksWidget5 blocks",
+          "imageSrc": "https://assets.watermelon.sh/components/watermelonoriginalassets/announcement-1.webp",
+          "imageAlt": "Announcement preview",
+          "buttonText": [
+            "Announcement9 blocks",
+            "Auth6 blocks",
+            "Blog4 blocks",
+            "Career4 blocks",
+            "Contact7 blocks",
+            "CTA4 blocks",
+            "Error7 blocks",
+            "FAQ5 blocks"
+          ],
+          "tags": [],
+          "cardArea": 2712527,
+          "score": 10,
+          "sourceMode": "block-gallery"
+        },
+        {
+          "index": 33,
+          "url": "https://ui.watermelon.sh/blocks/Blog",
+          "text": "Blog 4 Blocks",
+          "heading": "",
+          "description": "Announcement9 blocksAuth6 blocksBlog4 blocksCareer4 blocksContact7 blocksCTA4 blocksError7 blocksFAQ5 blocksFeature5 blocksFile-upload5 blocksFooter22 blocksHero13 blocksIntegrations5 blocksNavigation7 blocksNewsletter5 blocksNotification4 blocksPricing5 blocksStats4 blocksTeam5 blocksTestimonials4 blocksWidget5 blocks",
+          "imageSrc": "https://assets.watermelon.sh/components/watermelonoriginalassets/announcement-1.webp",
+          "imageAlt": "Announcement preview",
+          "buttonText": [
+            "Announcement9 blocks",
+            "Auth6 blocks",
+            "Blog4 blocks",
+            "Career4 blocks",
+            "Contact7 blocks",
+            "CTA4 blocks",
+            "Error7 blocks",
+            "FAQ5 blocks"
+          ],
+          "tags": [],
+          "cardArea": 2712527,
+          "score": 10,
+          "sourceMode": "block-gallery"
+        },
+        {
+          "index": 34,
+          "url": "https://ui.watermelon.sh/blocks/Career",
+          "text": "Career 4 Blocks",
+          "heading": "",
+          "description": "Announcement9 blocksAuth6 blocksBlog4 blocksCareer4 blocksContact7 blocksCTA4 blocksError7 blocksFAQ5 blocksFeature5 blocksFile-upload5 blocksFooter22 blocksHero13 blocksIntegrations5 blocksNavigation7 blocksNewsletter5 blocksNotification4 blocksPricing5 blocksStats4 blocksTeam5 blocksTestimonials4 blocksWidget5 blocks",
+          "imageSrc": "https://assets.watermelon.sh/components/watermelonoriginalassets/announcement-1.webp",
+          "imageAlt": "Announcement preview",
+          "buttonText": [
+            "Announcement9 blocks",
+            "Auth6 blocks",
+            "Blog4 blocks",
+            "Career4 blocks",
+            "Contact7 blocks",
+            "CTA4 blocks",
+            "Error7 blocks",
+            "FAQ5 blocks"
+          ],
+          "tags": [],
+          "cardArea": 2712527,
+          "score": 10,
+          "sourceMode": "block-gallery"
+        },
+        {
+          "index": 35,
+          "url": "https://ui.watermelon.sh/blocks/contact",
+          "text": "Contact 7 Blocks",
+          "heading": "",
+          "description": "Announcement9 blocksAuth6 blocksBlog4 blocksCareer4 blocksContact7 blocksCTA4 blocksError7 blocksFAQ5 blocksFeature5 blocksFile-upload5 blocksFooter22 blocksHero13 blocksIntegrations5 blocksNavigation7 blocksNewsletter5 blocksNotification4 blocksPricing5 blocksStats4 blocksTeam5 blocksTestimonials4 blocksWidget5 blocks",
+          "imageSrc": "https://assets.watermelon.sh/components/watermelonoriginalassets/announcement-1.webp",
+          "imageAlt": "Announcement preview",
+          "buttonText": [
+            "Announcement9 blocks",
+            "Auth6 blocks",
+            "Blog4 blocks",
+            "Career4 blocks",
+            "Contact7 blocks",
+            "CTA4 blocks",
+            "Error7 blocks",
+            "FAQ5 blocks"
+          ],
+          "tags": [],
+          "cardArea": 2712527,
+          "score": 10,
+          "sourceMode": "block-gallery"
+        },
+        {
+          "index": 36,
+          "url": "https://ui.watermelon.sh/blocks/CTA",
+          "text": "CTA 4 Blocks",
+          "heading": "",
+          "description": "Announcement9 blocksAuth6 blocksBlog4 blocksCareer4 blocksContact7 blocksCTA4 blocksError7 blocksFAQ5 blocksFeature5 blocksFile-upload5 blocksFooter22 blocksHero13 blocksIntegrations5 blocksNavigation7 blocksNewsletter5 blocksNotification4 blocksPricing5 blocksStats4 blocksTeam5 blocksTestimonials4 blocksWidget5 blocks",
+          "imageSrc": "https://assets.watermelon.sh/components/watermelonoriginalassets/announcement-1.webp",
+          "imageAlt": "Announcement preview",
+          "buttonText": [
+            "Announcement9 blocks",
+            "Auth6 blocks",
+            "Blog4 blocks",
+            "Career4 blocks",
+            "Contact7 blocks",
+            "CTA4 blocks",
+            "Error7 blocks",
+            "FAQ5 blocks"
+          ],
+          "tags": [],
+          "cardArea": 2712527,
+          "score": 10,
+          "sourceMode": "block-gallery"
+        },
+        {
+          "index": 37,
+          "url": "https://ui.watermelon.sh/blocks/Error",
+          "text": "Error 7 Blocks",
+          "heading": "",
+          "description": "Announcement9 blocksAuth6 blocksBlog4 blocksCareer4 blocksContact7 blocksCTA4 blocksError7 blocksFAQ5 blocksFeature5 blocksFile-upload5 blocksFooter22 blocksHero13 blocksIntegrations5 blocksNavigation7 blocksNewsletter5 blocksNotification4 blocksPricing5 blocksStats4 blocksTeam5 blocksTestimonials4 blocksWidget5 blocks",
+          "imageSrc": "https://assets.watermelon.sh/components/watermelonoriginalassets/announcement-1.webp",
+          "imageAlt": "Announcement preview",
+          "buttonText": [
+            "Announcement9 blocks",
+            "Auth6 blocks",
+            "Blog4 blocks",
+            "Career4 blocks",
+            "Contact7 blocks",
+            "CTA4 blocks",
+            "Error7 blocks",
+            "FAQ5 blocks"
+          ],
+          "tags": [],
+          "cardArea": 2712527,
+          "score": 10,
+          "sourceMode": "block-gallery"
+        },
+        {
+          "index": 38,
+          "url": "https://ui.watermelon.sh/blocks/FAQ",
+          "text": "FAQ 5 Blocks",
+          "heading": "",
+          "description": "Announcement9 blocksAuth6 blocksBlog4 blocksCareer4 blocksContact7 blocksCTA4 blocksError7 blocksFAQ5 blocksFeature5 blocksFile-upload5 blocksFooter22 blocksHero13 blocksIntegrations5 blocksNavigation7 blocksNewsletter5 blocksNotification4 blocksPricing5 blocksStats4 blocksTeam5 blocksTestimonials4 blocksWidget5 blocks",
+          "imageSrc": "https://assets.watermelon.sh/components/watermelonoriginalassets/announcement-1.webp",
+          "imageAlt": "Announcement preview",
+          "buttonText": [
+            "Announcement9 blocks",
+            "Auth6 blocks",
+            "Blog4 blocks",
+            "Career4 blocks",
+            "Contact7 blocks",
+            "CTA4 blocks",
+            "Error7 blocks",
+            "FAQ5 blocks"
+          ],
+          "tags": [],
+          "cardArea": 2712527,
+          "score": 10,
+          "sourceMode": "block-gallery"
+        },
+        {
+          "index": 39,
+          "url": "https://ui.watermelon.sh/blocks/Feature",
+          "text": "Feature 5 Blocks",
+          "heading": "",
+          "description": "Announcement9 blocksAuth6 blocksBlog4 blocksCareer4 blocksContact7 blocksCTA4 blocksError7 blocksFAQ5 blocksFeature5 blocksFile-upload5 blocksFooter22 blocksHero13 blocksIntegrations5 blocksNavigation7 blocksNewsletter5 blocksNotification4 blocksPricing5 blocksStats4 blocksTeam5 blocksTestimonials4 blocksWidget5 blocks",
+          "imageSrc": "https://assets.watermelon.sh/components/watermelonoriginalassets/announcement-1.webp",
+          "imageAlt": "Announcement preview",
+          "buttonText": [
+            "Announcement9 blocks",
+            "Auth6 blocks",
+            "Blog4 blocks",
+            "Career4 blocks",
+            "Contact7 blocks",
+            "CTA4 blocks",
+            "Error7 blocks",
+            "FAQ5 blocks"
+          ],
+          "tags": [],
+          "cardArea": 2712527,
+          "score": 10,
+          "sourceMode": "block-gallery"
+        },
+        {
+          "index": 40,
+          "url": "https://ui.watermelon.sh/blocks/file-upload",
+          "text": "File-upload 5 Blocks",
+          "heading": "",
+          "description": "Announcement9 blocksAuth6 blocksBlog4 blocksCareer4 blocksContact7 blocksCTA4 blocksError7 blocksFAQ5 blocksFeature5 blocksFile-upload5 blocksFooter22 blocksHero13 blocksIntegrations5 blocksNavigation7 blocksNewsletter5 blocksNotification4 blocksPricing5 blocksStats4 blocksTeam5 blocksTestimonials4 blocksWidget5 blocks",
+          "imageSrc": "https://assets.watermelon.sh/components/watermelonoriginalassets/announcement-1.webp",
+          "imageAlt": "Announcement preview",
+          "buttonText": [
+            "Announcement9 blocks",
+            "Auth6 blocks",
+            "Blog4 blocks",
+            "Career4 blocks",
+            "Contact7 blocks",
+            "CTA4 blocks",
+            "Error7 blocks",
+            "FAQ5 blocks"
+          ],
+          "tags": [],
+          "cardArea": 2712527,
+          "score": 10,
+          "sourceMode": "block-gallery"
+        },
+        {
+          "index": 41,
+          "url": "https://ui.watermelon.sh/blocks/footer",
+          "text": "Footer 22 Blocks",
+          "heading": "",
+          "description": "Announcement9 blocksAuth6 blocksBlog4 blocksCareer4 blocksContact7 blocksCTA4 blocksError7 blocksFAQ5 blocksFeature5 blocksFile-upload5 blocksFooter22 blocksHero13 blocksIntegrations5 blocksNavigation7 blocksNewsletter5 blocksNotification4 blocksPricing5 blocksStats4 blocksTeam5 blocksTestimonials4 blocksWidget5 blocks",
+          "imageSrc": "https://assets.watermelon.sh/components/watermelonoriginalassets/announcement-1.webp",
+          "imageAlt": "Announcement preview",
+          "buttonText": [
+            "Announcement9 blocks",
+            "Auth6 blocks",
+            "Blog4 blocks",
+            "Career4 blocks",
+            "Contact7 blocks",
+            "CTA4 blocks",
+            "Error7 blocks",
+            "FAQ5 blocks"
+          ],
+          "tags": [],
+          "cardArea": 2712527,
+          "score": 10,
+          "sourceMode": "block-gallery"
+        },
+        {
+          "index": 42,
+          "url": "https://ui.watermelon.sh/blocks/hero",
+          "text": "Hero 13 Blocks",
+          "heading": "",
+          "description": "Announcement9 blocksAuth6 blocksBlog4 blocksCareer4 blocksContact7 blocksCTA4 blocksError7 blocksFAQ5 blocksFeature5 blocksFile-upload5 blocksFooter22 blocksHero13 blocksIntegrations5 blocksNavigation7 blocksNewsletter5 blocksNotification4 blocksPricing5 blocksStats4 blocksTeam5 blocksTestimonials4 blocksWidget5 blocks",
+          "imageSrc": "https://assets.watermelon.sh/components/watermelonoriginalassets/announcement-1.webp",
+          "imageAlt": "Announcement preview",
+          "buttonText": [
+            "Announcement9 blocks",
+            "Auth6 blocks",
+            "Blog4 blocks",
+            "Career4 blocks",
+            "Contact7 blocks",
+            "CTA4 blocks",
+            "Error7 blocks",
+            "FAQ5 blocks"
+          ],
+          "tags": [],
+          "cardArea": 2712527,
+          "score": 10,
+          "sourceMode": "block-gallery"
+        },
+        {
+          "index": 43,
+          "url": "https://ui.watermelon.sh/blocks/integrations",
+          "text": "Integrations 5 Blocks",
+          "heading": "",
+          "description": "Announcement9 blocksAuth6 blocksBlog4 blocksCareer4 blocksContact7 blocksCTA4 blocksError7 blocksFAQ5 blocksFeature5 blocksFile-upload5 blocksFooter22 blocksHero13 blocksIntegrations5 blocksNavigation7 blocksNewsletter5 blocksNotification4 blocksPricing5 blocksStats4 blocksTeam5 blocksTestimonials4 blocksWidget5 blocks",
+          "imageSrc": "https://assets.watermelon.sh/components/watermelonoriginalassets/announcement-1.webp",
+          "imageAlt": "Announcement preview",
+          "buttonText": [
+            "Announcement9 blocks",
+            "Auth6 blocks",
+            "Blog4 blocks",
+            "Career4 blocks",
+            "Contact7 blocks",
+            "CTA4 blocks",
+            "Error7 blocks",
+            "FAQ5 blocks"
+          ],
+          "tags": [],
+          "cardArea": 2712527,
+          "score": 10,
+          "sourceMode": "block-gallery"
+        },
+        {
+          "index": 44,
+          "url": "https://ui.watermelon.sh/blocks/navigation",
+          "text": "Navigation 7 Blocks",
+          "heading": "",
+          "description": "Announcement9 blocksAuth6 blocksBlog4 blocksCareer4 blocksContact7 blocksCTA4 blocksError7 blocksFAQ5 blocksFeature5 blocksFile-upload5 blocksFooter22 blocksHero13 blocksIntegrations5 blocksNavigation7 blocksNewsletter5 blocksNotification4 blocksPricing5 blocksStats4 blocksTeam5 blocksTestimonials4 blocksWidget5 blocks",
+          "imageSrc": "https://assets.watermelon.sh/components/watermelonoriginalassets/announcement-1.webp",
+          "imageAlt": "Announcement preview",
+          "buttonText": [
+            "Announcement9 blocks",
+            "Auth6 blocks",
+            "Blog4 blocks",
+            "Career4 blocks",
+            "Contact7 blocks",
+            "CTA4 blocks",
+            "Error7 blocks",
+            "FAQ5 blocks"
+          ],
+          "tags": [],
+          "cardArea": 2712527,
+          "score": 10,
+          "sourceMode": "block-gallery"
+        },
+        {
+          "index": 45,
+          "url": "https://ui.watermelon.sh/blocks/newsletter",
+          "text": "Newsletter 5 Blocks",
+          "heading": "",
+          "description": "Announcement9 blocksAuth6 blocksBlog4 blocksCareer4 blocksContact7 blocksCTA4 blocksError7 blocksFAQ5 blocksFeature5 blocksFile-upload5 blocksFooter22 blocksHero13 blocksIntegrations5 blocksNavigation7 blocksNewsletter5 blocksNotification4 blocksPricing5 blocksStats4 blocksTeam5 blocksTestimonials4 blocksWidget5 blocks",
+          "imageSrc": "https://assets.watermelon.sh/components/watermelonoriginalassets/announcement-1.webp",
+          "imageAlt": "Announcement preview",
+          "buttonText": [
+            "Announcement9 blocks",
+            "Auth6 blocks",
+            "Blog4 blocks",
+            "Career4 blocks",
+            "Contact7 blocks",
+            "CTA4 blocks",
+            "Error7 blocks",
+            "FAQ5 blocks"
+          ],
+          "tags": [],
+          "cardArea": 2712527,
+          "score": 10,
+          "sourceMode": "block-gallery"
+        },
+        {
+          "index": 46,
+          "url": "https://ui.watermelon.sh/blocks/notification",
+          "text": "Notification 4 Blocks",
+          "heading": "",
+          "description": "Announcement9 blocksAuth6 blocksBlog4 blocksCareer4 blocksContact7 blocksCTA4 blocksError7 blocksFAQ5 blocksFeature5 blocksFile-upload5 blocksFooter22 blocksHero13 blocksIntegrations5 blocksNavigation7 blocksNewsletter5 blocksNotification4 blocksPricing5 blocksStats4 blocksTeam5 blocksTestimonials4 blocksWidget5 blocks",
+          "imageSrc": "https://assets.watermelon.sh/components/watermelonoriginalassets/announcement-1.webp",
+          "imageAlt": "Announcement preview",
+          "buttonText": [
+            "Announcement9 blocks",
+            "Auth6 blocks",
+            "Blog4 blocks",
+            "Career4 blocks",
+            "Contact7 blocks",
+            "CTA4 blocks",
+            "Error7 blocks",
+            "FAQ5 blocks"
+          ],
+          "tags": [],
+          "cardArea": 2712527,
+          "score": 10,
+          "sourceMode": "block-gallery"
+        },
+        {
+          "index": 48,
+          "url": "https://ui.watermelon.sh/blocks/Stats",
+          "text": "Stats 4 Blocks",
+          "heading": "",
+          "description": "Announcement9 blocksAuth6 blocksBlog4 blocksCareer4 blocksContact7 blocksCTA4 blocksError7 blocksFAQ5 blocksFeature5 blocksFile-upload5 blocksFooter22 blocksHero13 blocksIntegrations5 blocksNavigation7 blocksNewsletter5 blocksNotification4 blocksPricing5 blocksStats4 blocksTeam5 blocksTestimonials4 blocksWidget5 blocks",
+          "imageSrc": "https://assets.watermelon.sh/components/watermelonoriginalassets/announcement-1.webp",
+          "imageAlt": "Announcement preview",
+          "buttonText": [
+            "Announcement9 blocks",
+            "Auth6 blocks",
+            "Blog4 blocks",
+            "Career4 blocks",
+            "Contact7 blocks",
+            "CTA4 blocks",
+            "Error7 blocks",
+            "FAQ5 blocks"
+          ],
+          "tags": [],
+          "cardArea": 2712527,
+          "score": 10,
+          "sourceMode": "block-gallery"
+        },
+        {
+          "index": 49,
+          "url": "https://ui.watermelon.sh/blocks/Team",
+          "text": "Team 5 Blocks",
+          "heading": "",
+          "description": "Announcement9 blocksAuth6 blocksBlog4 blocksCareer4 blocksContact7 blocksCTA4 blocksError7 blocksFAQ5 blocksFeature5 blocksFile-upload5 blocksFooter22 blocksHero13 blocksIntegrations5 blocksNavigation7 blocksNewsletter5 blocksNotification4 blocksPricing5 blocksStats4 blocksTeam5 blocksTestimonials4 blocksWidget5 blocks",
+          "imageSrc": "https://assets.watermelon.sh/components/watermelonoriginalassets/announcement-1.webp",
+          "imageAlt": "Announcement preview",
+          "buttonText": [
+            "Announcement9 blocks",
+            "Auth6 blocks",
+            "Blog4 blocks",
+            "Career4 blocks",
+            "Contact7 blocks",
+            "CTA4 blocks",
+            "Error7 blocks",
+            "FAQ5 blocks"
+          ],
+          "tags": [],
+          "cardArea": 2712527,
+          "score": 10,
+          "sourceMode": "block-gallery"
+        },
+        {
+          "index": 50,
+          "url": "https://ui.watermelon.sh/blocks/testimonials",
+          "text": "Testimonials 4 Blocks",
+          "heading": "",
+          "description": "Announcement9 blocksAuth6 blocksBlog4 blocksCareer4 blocksContact7 blocksCTA4 blocksError7 blocksFAQ5 blocksFeature5 blocksFile-upload5 blocksFooter22 blocksHero13 blocksIntegrations5 blocksNavigation7 blocksNewsletter5 blocksNotification4 blocksPricing5 blocksStats4 blocksTeam5 blocksTestimonials4 blocksWidget5 blocks",
+          "imageSrc": "https://assets.watermelon.sh/components/watermelonoriginalassets/announcement-1.webp",
+          "imageAlt": "Announcement preview",
+          "buttonText": [
+            "Announcement9 blocks",
+            "Auth6 blocks",
+            "Blog4 blocks",
+            "Career4 blocks",
+            "Contact7 blocks",
+            "CTA4 blocks",
+            "Error7 blocks",
+            "FAQ5 blocks"
+          ],
+          "tags": [],
+          "cardArea": 2712527,
+          "score": 10,
+          "sourceMode": "block-gallery"
+        },
+        {
+          "index": 51,
+          "url": "https://ui.watermelon.sh/blocks/widget",
+          "text": "Widget 5 Blocks",
+          "heading": "",
+          "description": "Announcement9 blocksAuth6 blocksBlog4 blocksCareer4 blocksContact7 blocksCTA4 blocksError7 blocksFAQ5 blocksFeature5 blocksFile-upload5 blocksFooter22 blocksHero13 blocksIntegrations5 blocksNavigation7 blocksNewsletter5 blocksNotification4 blocksPricing5 blocksStats4 blocksTeam5 blocksTestimonials4 blocksWidget5 blocks",
+          "imageSrc": "https://assets.watermelon.sh/components/watermelonoriginalassets/announcement-1.webp",
+          "imageAlt": "Announcement preview",
+          "buttonText": [
+            "Announcement9 blocks",
+            "Auth6 blocks",
+            "Blog4 blocks",
+            "Career4 blocks",
+            "Contact7 blocks",
+            "CTA4 blocks",
+            "Error7 blocks",
+            "FAQ5 blocks"
+          ],
+          "tags": [],
+          "cardArea": 2712527,
+          "score": 10,
+          "sourceMode": "block-gallery"
+        },
+        {
+          "index": 1,
+          "url": "https://ui.watermelon.sh/installation",
+          "text": "Installation",
+          "heading": "",
+          "description": "Installation",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [],
+          "tags": [],
+          "cardArea": 9600,
+          "score": 5,
+          "sourceMode": "block-gallery"
+        },
+        {
+          "index": 2,
+          "url": "https://ui.watermelon.sh/framework-support",
+          "text": "Framework Support",
+          "heading": "",
+          "description": "Framework Support",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [],
+          "tags": [],
+          "cardArea": 9600,
+          "score": 5,
+          "sourceMode": "block-gallery"
+        },
+        {
+          "index": 3,
+          "url": "https://ui.watermelon.sh/changelog",
+          "text": "Changelog",
+          "heading": "",
+          "description": "Changelog",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [],
+          "tags": [],
+          "cardArea": 9600,
+          "score": 5,
+          "sourceMode": "block-gallery"
+        },
+        {
+          "index": 5,
+          "url": "https://ui.watermelon.sh/components",
+          "text": "Component",
+          "heading": "",
+          "description": "Component",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [
+            "Component"
+          ],
+          "tags": [],
+          "cardArea": 2023,
+          "score": 5,
+          "sourceMode": "block-gallery"
+        }
+      ],
+      "screenshot": {
+        "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/watermelon-ui/gallery.png",
+        "sha256": "79a3d1bbb4803eaf9666d3dd4a4110b1c6b594d3aea35d17c0ae164f5684cb48",
+        "mode": "full-page"
+      },
+      "screenshotQuality": {
+        "viewport": {
+          "width": 1440,
+          "height": 1000
+        },
+        "textLength": 951,
+        "mediaCount": 46,
+        "codeCount": 0,
+        "headingCount": 2,
+        "usefulElementCount": 83,
+        "visibleAreaRatio": 3.458,
+        "isLikelySparse": false,
+        "visibleSamples": [
+          "Watermelon UIbeta",
+          "Toggle Sidebar",
+          "Installation",
+          "Framework Support",
+          "Changelog",
+          "Animated",
+          "Animated",
+          "Component"
+        ]
+      },
+      "examples": [
+        {
+          "sourceId": "watermelon-ui",
+          "url": "https://ui.watermelon.sh/blocks/Announcement",
+          "status": 200,
+          "licenseStatus": "review-required",
+          "reuseGuidance": "Component taxonomy and interaction reference. Verify license before copying code.",
+          "candidate": {
+            "index": 31,
+            "url": "https://ui.watermelon.sh/blocks/Announcement",
+            "text": "Announcement 9 Blocks",
+            "heading": "",
+            "description": "Announcement9 blocksAuth6 blocksBlog4 blocksCareer4 blocksContact7 blocksCTA4 blocksError7 blocksFAQ5 blocksFeature5 blocksFile-upload5 blocksFooter22 blocksHero13 blocksIntegrations5 blocksNavigation7 blocksNewsletter5 blocksNotification4 blocksPricing5 blocksStats4 blocksTeam5 blocksTestimonials4 blocksWidget5 blocks",
+            "imageSrc": "https://assets.watermelon.sh/components/watermelonoriginalassets/announcement-1.webp",
+            "imageAlt": "Announcement preview",
+            "buttonText": [
+              "Announcement9 blocks",
+              "Auth6 blocks",
+              "Blog4 blocks",
+              "Career4 blocks",
+              "Contact7 blocks",
+              "CTA4 blocks",
+              "Error7 blocks",
+              "FAQ5 blocks"
+            ],
+            "tags": [],
+            "cardArea": 2712527,
+            "score": 10,
+            "sourceMode": "block-gallery"
+          },
+          "screenshots": {
+            "desktop": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/watermelon-ui/announcement-9-blocks/desktop.png",
+              "sha256": "21a719633f62d032ec43d88bacdd16bda1d972072547d844804d9bacb69da428",
+              "mode": "viewport"
+            },
+            "mobile": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/watermelon-ui/announcement-9-blocks/mobile.png",
+              "sha256": "d9305d2d710eea511cd58c24d3fb61e10e6bd5dd6074a103fcf0e426f5c727c5",
+              "mode": "viewport"
+            }
+          },
+          "screenshotQuality": {
+            "desktop": {
+              "viewport": {
+                "width": 1440,
+                "height": 1000
+              },
+              "textLength": 2721,
+              "mediaCount": 105,
+              "codeCount": 0,
+              "headingCount": 2,
+              "usefulElementCount": 105,
+              "visibleAreaRatio": 2.511,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Watermelon UIbeta",
+                "Toggle Sidebar",
+                "Installation",
+                "Framework Support",
+                "Changelog",
+                "Animated",
+                "Animated",
+                "Component"
+              ]
+            },
+            "mobile": {
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "textLength": 1587,
+              "mediaCount": 85,
+              "codeCount": 0,
+              "headingCount": 2,
+              "usefulElementCount": 20,
+              "visibleAreaRatio": 2.797,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Toggle SidebarSearch components...KAdd Custom ThemeAnnouncementAnnouncement block variants.9 blocksAnnouncement 1npmnpx ",
+                "Toggle Sidebar",
+                "Add Custom Theme",
+                "AnnouncementAnnouncement block variants.9 blocksAnnouncement 1npmnpx shadcn@latest add https://registry.watermelon.sh/r/",
+                "AnnouncementAnnouncement block variants.9 blocksAnnouncement 1npmnpx shadcn@latest add https://registry.watermelon.sh/r/",
+                "Announcement",
+                "Mobile",
+                "Tablet"
+              ]
+            }
+          },
+          "qualityWarnings": [],
+          "failedRequestCount": 3,
+          "title": "Announcement - UI Blocks | Watermelon UI",
+          "description": "A collection of high-quality React components, dashboards, and UI blocks. Copy and paste production-ready UI with ease.",
+          "headings": [
+            {
+              "level": "h1",
+              "text": "Watermelon UI - High-Quality React Components Registry"
+            },
+            {
+              "level": "h1",
+              "text": "Announcement"
+            }
+          ],
+          "sections": [
+            {
+              "index": 1,
+              "heading": "Announcement",
+              "textSample": "AnnouncementAnnouncement block variants.9 blocksAnnouncement 1npmnpx shadcn@latest add https://registry.watermelon.sh/r/announcement-1.jsonMobileTabletDesktopNEWNew dashboard experience is live with faster load times and smoother navigation.Explore nowAnnouncement 2npmnpx shadcn@latest add https://registry.watermelon.s",
+              "imageCount": 80,
+              "buttonCount": 106
+            }
+          ],
+          "ctas": [
+            "Watermelon UIbeta",
+            "Toggle Sidebar",
+            "searchK",
+            "Installation",
+            "Framework Support",
+            "Changelog",
+            "Animated",
+            "Animated",
+            "Component",
+            "Component",
+            "Blocks",
+            "Blocks",
+            "Announcement",
+            "Auth",
+            "Blog",
+            "Career",
+            "Contact",
+            "CTA",
+            "Error",
+            "FAQ",
+            "Feature",
+            "File-upload",
+            "Footer",
+            "Hero",
+            "Integrations",
+            "Navigation",
+            "Newsletter",
+            "Notification",
+            "Pricing",
+            "Stats",
+            "Team",
+            "Testimonials",
+            "Widget",
+            "DashboardsSoon",
+            "TemplatesSoon",
+            "Legal",
+            "Toggle dark/light mode",
+            "X",
+            "GitHub",
+            "LinkedIn",
+            "Toggle Sidebar",
+            "Blocks",
+            "Search components...K",
+            "Add Custom Theme",
+            "Switch to dark mode",
+            "Copy prompt for Lovable",
+            "Copy prompt for v0",
+            "Copy prompt for Bolt",
+            "npm",
+            "Copy install command for Announcement 1"
+          ],
+          "palette": [
+            "oklch(0.145 0 0)",
+            "oklch(1 0 0)",
+            "oklch(0.922 0 0)",
+            "oklch(0.556 0 0)",
+            "oklab(0.922 0 0 / 0.5)",
+            "oklch(0.205 0 0)",
+            "oklch(0.97 0 0)",
+            "oklch(0.967 0.003 264.542)",
+            "rgb(255, 255, 255)",
+            "oklch(0.648 0.2 131.684)",
+            "oklab(0.97 0 0 / 0.6)",
+            "oklab(0.922 0 0 / 0.3)",
+            "oklab(0.145 0 0 / 0.7)",
+            "oklch(0.768 0.233 130.85)",
+            "oklch(0.98 0.016 73.684)"
+          ],
+          "layoutSignals": {
+            "hasNav": true,
+            "hasHero": true,
+            "hasPricing": true,
+            "hasTestimonials": true,
+            "hasFAQ": true,
+            "hasVideo": false,
+            "cardLikeCount": 0,
+            "imageCount": 27,
+            "buttonCount": 151,
+            "formCount": 0
+          },
+          "codeBlocks": [],
+          "codeLinks": [
+            {
+              "url": "https://github.com/watermeloncorp",
+              "text": ""
+            }
+          ]
+        },
+        {
+          "sourceId": "watermelon-ui",
+          "url": "https://ui.watermelon.sh/blocks/auth",
+          "status": 200,
+          "licenseStatus": "review-required",
+          "reuseGuidance": "Component taxonomy and interaction reference. Verify license before copying code.",
+          "candidate": {
+            "index": 32,
+            "url": "https://ui.watermelon.sh/blocks/auth",
+            "text": "Auth 6 Blocks",
+            "heading": "",
+            "description": "Announcement9 blocksAuth6 blocksBlog4 blocksCareer4 blocksContact7 blocksCTA4 blocksError7 blocksFAQ5 blocksFeature5 blocksFile-upload5 blocksFooter22 blocksHero13 blocksIntegrations5 blocksNavigation7 blocksNewsletter5 blocksNotification4 blocksPricing5 blocksStats4 blocksTeam5 blocksTestimonials4 blocksWidget5 blocks",
+            "imageSrc": "https://assets.watermelon.sh/components/watermelonoriginalassets/announcement-1.webp",
+            "imageAlt": "Announcement preview",
+            "buttonText": [
+              "Announcement9 blocks",
+              "Auth6 blocks",
+              "Blog4 blocks",
+              "Career4 blocks",
+              "Contact7 blocks",
+              "CTA4 blocks",
+              "Error7 blocks",
+              "FAQ5 blocks"
+            ],
+            "tags": [],
+            "cardArea": 2712527,
+            "score": 10,
+            "sourceMode": "block-gallery"
+          },
+          "screenshots": {
+            "desktop": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/watermelon-ui/auth-6-blocks/desktop.png",
+              "sha256": "b57b49c55ceada40ae9f98d695d797f78432ea47f3b0e7bc8dc3457716ade341",
+              "mode": "viewport"
+            },
+            "mobile": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/watermelon-ui/auth-6-blocks/mobile.png",
+              "sha256": "a5e177c32969bea2e5b9a198ae2caedb643d374035eb0497245047788447e0c5",
+              "mode": "viewport"
+            }
+          },
+          "screenshotQuality": {
+            "desktop": {
+              "viewport": {
+                "width": 1440,
+                "height": 1000
+              },
+              "textLength": 2274,
+              "mediaCount": 101,
+              "codeCount": 0,
+              "headingCount": 6,
+              "usefulElementCount": 112,
+              "visibleAreaRatio": 2.53,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Watermelon UIbeta",
+                "Toggle Sidebar",
+                "Installation",
+                "Framework Support",
+                "Changelog",
+                "Animated",
+                "Animated",
+                "Component"
+              ]
+            },
+            "mobile": {
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "textLength": 1433,
+              "mediaCount": 81,
+              "codeCount": 0,
+              "headingCount": 6,
+              "usefulElementCount": 29,
+              "visibleAreaRatio": 2.849,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Toggle SidebarSearch components...KAdd Custom ThemeAuthAuth block variants.6 blocksauth 1npmnpx shadcn@latest add https:",
+                "Toggle Sidebar",
+                "Add Custom Theme",
+                "AuthAuth block variants.6 blocksauth 1npmnpx shadcn@latest add https://registry.watermelon.sh/r/auth-1.jsonMobileTabletD",
+                "AuthAuth block variants.6 blocksauth 1npmnpx shadcn@latest add https://registry.watermelon.sh/r/auth-1.jsonMobileTabletD",
+                "Auth",
+                "Mobile",
+                "Tablet"
+              ]
+            }
+          },
+          "qualityWarnings": [],
+          "failedRequestCount": 2,
+          "title": "Auth - UI Blocks | Watermelon UI",
+          "description": "A collection of high-quality React components, dashboards, and UI blocks. Copy and paste production-ready UI with ease.",
+          "headings": [
+            {
+              "level": "h1",
+              "text": "Watermelon UI - High-Quality React Components Registry"
+            },
+            {
+              "level": "h1",
+              "text": "Auth"
+            },
+            {
+              "level": "h1",
+              "text": "Create your free account"
+            },
+            {
+              "level": "h2",
+              "text": "Welcome back"
+            },
+            {
+              "level": "h1",
+              "text": "Welcome back"
+            },
+            {
+              "level": "h1",
+              "text": "Get started with Watermelon"
+            }
+          ],
+          "sections": [
+            {
+              "index": 1,
+              "heading": "Auth",
+              "textSample": "AuthAuth block variants.6 blocksauth 1npmnpx shadcn@latest add https://registry.watermelon.sh/r/auth-1.jsonMobileTabletDesktopWelcome back, teamAccess your projects and manage your deployments.Sign in to dashboardor sign in with your emailNeed access? Request an accountauth 2npmnpx shadcn@latest add https://registry.wa",
+              "imageCount": 76,
+              "buttonCount": 97
+            },
+            {
+              "index": 2,
+              "heading": "Welcome back",
+              "textSample": "WatermelonWelcome backSign in to continue to your workspace.GoogleGitHubor continue with emailEmail addressPasswordForgot password?Keep me signed inSign inDon't have an account? Create one for free",
+              "imageCount": 6,
+              "buttonCount": 6
+            }
+          ],
+          "ctas": [
+            "Watermelon UIbeta",
+            "Toggle Sidebar",
+            "searchK",
+            "Installation",
+            "Framework Support",
+            "Changelog",
+            "Animated",
+            "Animated",
+            "Component",
+            "Component",
+            "Blocks",
+            "Blocks",
+            "Announcement",
+            "Auth",
+            "Blog",
+            "Career",
+            "Contact",
+            "CTA",
+            "Error",
+            "FAQ",
+            "Feature",
+            "File-upload",
+            "Footer",
+            "Hero",
+            "Integrations",
+            "Navigation",
+            "Newsletter",
+            "Notification",
+            "Pricing",
+            "Stats",
+            "Team",
+            "Testimonials",
+            "Widget",
+            "DashboardsSoon",
+            "TemplatesSoon",
+            "Legal",
+            "Toggle dark/light mode",
+            "X",
+            "GitHub",
+            "LinkedIn",
+            "Toggle Sidebar",
+            "Blocks",
+            "Search components...K",
+            "Add Custom Theme",
+            "Switch to dark mode",
+            "Copy prompt for Lovable",
+            "Copy prompt for v0",
+            "Copy prompt for Bolt",
+            "npm",
+            "Copy install command for auth 1"
+          ],
+          "palette": [
+            "oklch(0.145 0 0)",
+            "oklch(1 0 0)",
+            "oklch(0.922 0 0)",
+            "oklch(0.556 0 0)",
+            "oklab(0.922 0 0 / 0.5)",
+            "oklch(0.205 0 0)",
+            "oklch(0.97 0 0)",
+            "oklch(0.967 0.003 264.542)",
+            "rgb(255, 255, 255)",
+            "oklch(0.648 0.2 131.684)",
+            "oklab(0.97 0 0 / 0.6)",
+            "oklab(0.922 0 0 / 0.3)",
+            "oklab(0.145 0 0 / 0.7)",
+            "oklch(0.98 0.016 73.684)",
+            "oklch(0.768 0.233 130.85)"
+          ],
+          "layoutSignals": {
+            "hasNav": true,
+            "hasHero": true,
+            "hasPricing": true,
+            "hasTestimonials": true,
+            "hasFAQ": true,
+            "hasVideo": false,
+            "cardLikeCount": 6,
+            "imageCount": 20,
+            "buttonCount": 142,
+            "formCount": 19
+          },
+          "codeBlocks": [],
+          "codeLinks": [
+            {
+              "url": "https://github.com/watermeloncorp",
+              "text": ""
+            }
+          ]
+        },
+        {
+          "sourceId": "watermelon-ui",
+          "url": "https://ui.watermelon.sh/blocks/Blog",
+          "status": 200,
+          "licenseStatus": "review-required",
+          "reuseGuidance": "Component taxonomy and interaction reference. Verify license before copying code.",
+          "candidate": {
+            "index": 33,
+            "url": "https://ui.watermelon.sh/blocks/Blog",
+            "text": "Blog 4 Blocks",
+            "heading": "",
+            "description": "Announcement9 blocksAuth6 blocksBlog4 blocksCareer4 blocksContact7 blocksCTA4 blocksError7 blocksFAQ5 blocksFeature5 blocksFile-upload5 blocksFooter22 blocksHero13 blocksIntegrations5 blocksNavigation7 blocksNewsletter5 blocksNotification4 blocksPricing5 blocksStats4 blocksTeam5 blocksTestimonials4 blocksWidget5 blocks",
+            "imageSrc": "https://assets.watermelon.sh/components/watermelonoriginalassets/announcement-1.webp",
+            "imageAlt": "Announcement preview",
+            "buttonText": [
+              "Announcement9 blocks",
+              "Auth6 blocks",
+              "Blog4 blocks",
+              "Career4 blocks",
+              "Contact7 blocks",
+              "CTA4 blocks",
+              "Error7 blocks",
+              "FAQ5 blocks"
+            ],
+            "tags": [],
+            "cardArea": 2712527,
+            "score": 10,
+            "sourceMode": "block-gallery"
+          },
+          "screenshots": {
+            "desktop": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/watermelon-ui/blog-4-blocks/desktop.png",
+              "sha256": "376dc0a916664b20b1dc11e744a2dbea717d3903cef15ead68ba04f6296042ed",
+              "mode": "viewport"
+            },
+            "mobile": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/watermelon-ui/blog-4-blocks/mobile.png",
+              "sha256": "c9d41917971881b5462bb402eb168f743c800e2fbb41d9c36f726f9fd43e4fb1",
+              "mode": "viewport"
+            }
+          },
+          "screenshotQuality": {
+            "desktop": {
+              "viewport": {
+                "width": 1440,
+                "height": 1000
+              },
+              "textLength": 3335,
+              "mediaCount": 93,
+              "codeCount": 0,
+              "headingCount": 21,
+              "usefulElementCount": 113,
+              "visibleAreaRatio": 3.099,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Watermelon UIbeta",
+                "Toggle Sidebar",
+                "Installation",
+                "Framework Support",
+                "Changelog",
+                "Animated",
+                "Animated",
+                "Component"
+              ]
+            },
+            "mobile": {
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "textLength": 2636,
+              "mediaCount": 73,
+              "codeCount": 0,
+              "headingCount": 21,
+              "usefulElementCount": 24,
+              "visibleAreaRatio": 3.566,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Toggle SidebarSearch components...KAdd Custom ThemeBlogBlog block variants.4 blocksBlog 1npmnpx shadcn@latest add https:",
+                "Toggle Sidebar",
+                "Add Custom Theme",
+                "BlogBlog block variants.4 blocksBlog 1npmnpx shadcn@latest add https://registry.watermelon.sh/r/blog-1.jsonMobileTabletD",
+                "BlogBlog block variants.4 blocksBlog 1npmnpx shadcn@latest add https://registry.watermelon.sh/r/blog-1.jsonMobileTabletD",
+                "Blog",
+                "Mobile",
+                "Tablet"
+              ]
+            }
+          },
+          "qualityWarnings": [],
+          "failedRequestCount": 2,
+          "title": "Blog - UI Blocks | Watermelon UI",
+          "description": "A collection of high-quality React components, dashboards, and UI blocks. Copy and paste production-ready UI with ease.",
+          "headings": [
+            {
+              "level": "h1",
+              "text": "Watermelon UI - High-Quality React Components Registry"
+            },
+            {
+              "level": "h1",
+              "text": "Blog"
+            },
+            {
+              "level": "h2",
+              "text": "Insights that sharpen your strategy"
+            },
+            {
+              "level": "h3",
+              "text": "Streamlining team onboarding with automated workflow pipelines."
+            },
+            {
+              "level": "h3",
+              "text": "Why collaborative dashboards are replacing static reports."
+            },
+            {
+              "level": "h3",
+              "text": "Scaling customer success through proactive, data-informed outreach."
+            },
+            {
+              "level": "h2",
+              "text": "Elevate your team with actionable insights"
+            },
+            {
+              "level": "h3",
+              "text": "How to give clear feedback that actually helps your team"
+            },
+            {
+              "level": "h3",
+              "text": "5 small changes to improve your team's daily wellbeing"
+            },
+            {
+              "level": "h3",
+              "text": "What new hires really need on their first day"
+            },
+            {
+              "level": "h3",
+              "text": "Mastering async communication across timezones"
+            },
+            {
+              "level": "h3",
+              "text": "The art of running effective 1-on-1 meetings"
+            },
+            {
+              "level": "h3",
+              "text": "Building a culture of continuous learning"
+            },
+            {
+              "level": "h2",
+              "text": "Practical thinking for modern builders"
+            },
+            {
+              "level": "h3",
+              "text": "Building async-first cultures that actually scale"
+            },
+            {
+              "level": "h3",
+              "text": "Rethinking feedback loops in product development"
+            },
+            {
+              "level": "h3",
+              "text": "The case for incremental architecture decisions"
+            },
+            {
+              "level": "h2",
+              "text": "Design systems and frontend engineering"
+            },
+            {
+              "level": "h3",
+              "text": "How semantic color tokens make large base-ui systems easier to scale"
+            },
+            {
+              "level": "h3",
+              "text": "Building cleaner dashboards with spacing, hierarchy, and motion"
+            },
+            {
+              "level": "h3",
+              "text": "Simple ways to improve perceived performance in React apps"
+            }
+          ],
+          "sections": [
+            {
+              "index": 1,
+              "heading": "Blog",
+              "textSample": "BlogBlog block variants.4 blocksBlog 1npmnpx shadcn@latest add https://registry.watermelon.sh/r/blog-1.jsonMobileTabletDesktopInsights that sharpen your strategyActionable perspectives on growth, tooling, and modern team culture.Browse all articlesMar 18Streamlining team onboarding with automated workflow pipelines.Ele",
+              "imageCount": 68,
+              "buttonCount": 62
+            },
+            {
+              "index": 2,
+              "heading": "Insights that sharpen your strategy",
+              "textSample": "Insights that sharpen your strategyActionable perspectives on growth, tooling, and modern team culture.Browse all articlesMar 18Streamlining team onboarding with automated workflow pipelines.Elena MarshHead of OperationsApr 2Why collaborative dashboards are replacing static reports.Daniel ReevesProduct Lead, HelixApr 1",
+              "imageCount": 4,
+              "buttonCount": 4
+            },
+            {
+              "index": 3,
+              "heading": "Elevate your team with actionable insights",
+              "textSample": "Elevate your team with actionable insightsPractical strategies to streamline operations, boost morale, and build a thriving workplace culture.See all guides5 min readHow to give clear feedback that actually helps your teamGuillermo RauchCEO @ VercelRead8 min read5 small changes to improve your team's daily wellbeingDan",
+              "imageCount": 19,
+              "buttonCount": 7
+            },
+            {
+              "index": 4,
+              "heading": "How to give clear feedback that actually helps your team",
+              "textSample": "5 min readHow to give clear feedback that actually helps your teamGuillermo RauchCEO @ VercelRead",
+              "imageCount": 3,
+              "buttonCount": 0
+            },
+            {
+              "index": 5,
+              "heading": "5 small changes to improve your team's daily wellbeing",
+              "textSample": "8 min read5 small changes to improve your team's daily wellbeingDan AbramovReact CoreRead",
+              "imageCount": 3,
+              "buttonCount": 0
+            },
+            {
+              "index": 6,
+              "heading": "What new hires really need on their first day",
+              "textSample": "3 min readWhat new hires really need on their first dayLee RobinsonVP of Product @ VercelRead",
+              "imageCount": 3,
+              "buttonCount": 0
+            },
+            {
+              "index": 7,
+              "heading": "Mastering async communication across timezones",
+              "textSample": "6 min readMastering async communication across timezonesRyan FlorenceRemix CreatorRead",
+              "imageCount": 3,
+              "buttonCount": 0
+            },
+            {
+              "index": 8,
+              "heading": "The art of running effective 1-on-1 meetings",
+              "textSample": "4 min readThe art of running effective 1-on-1 meetingsEvan YouVue.js CreatorRead",
+              "imageCount": 3,
+              "buttonCount": 0
+            },
+            {
+              "index": 9,
+              "heading": "Building a culture of continuous learning",
+              "textSample": "7 min readBuilding a culture of continuous learningRich HarrisSvelte CreatorRead",
+              "imageCount": 3,
+              "buttonCount": 0
+            },
+            {
+              "index": 10,
+              "heading": "Practical thinking for modern builders",
+              "textSample": "Practical thinking for modern buildersDeep dives into engineering culture, product strategy, and the workflows that keep high-output teams moving.3 min readBuilding async-first cultures that actually scaleExplore how distributed teams reduce meeting fatigue, document decisions better, and maintain velocity without cons",
+              "imageCount": 7,
+              "buttonCount": 4
+            },
+            {
+              "index": 11,
+              "heading": "Building async-first cultures that actually scale",
+              "textSample": "3 min readBuilding async-first cultures that actually scaleExplore how distributed teams reduce meeting fatigue, document decisions better, and maintain velocity without constant check-ins.Read more",
+              "imageCount": 2,
+              "buttonCount": 0
+            },
+            {
+              "index": 12,
+              "heading": "Rethinking feedback loops in product development",
+              "textSample": "5 min readRethinking feedback loops in product developmentWhy the best product teams treat user signals as system inputs — and how tighter loops accelerate iteration cycles.Read more",
+              "imageCount": 2,
+              "buttonCount": 0
+            },
+            {
+              "index": 13,
+              "heading": "The case for incremental architecture decisions",
+              "textSample": "4 min readThe case for incremental architecture decisionsDiscover why small, reversible technical bets outperform big-bang rewrites — and how to bake this mindset into your roadmap.Read more",
+              "imageCount": 2,
+              "buttonCount": 0
+            },
+            {
+              "index": 14,
+              "heading": "Design systems and frontend engineering",
+              "textSample": "Design systems and frontend engineeringGuides, patterns, and practical insights for building scalable modern interfaces.From people strategy to team wellbeing, we share what's working for teams like yours.Browse all postsDesign Systems7 min readHow semantic color tokens make large base-ui systems easier to scaleRead ar",
+              "imageCount": 10,
+              "buttonCount": 7
+            }
+          ],
+          "ctas": [
+            "Watermelon UIbeta",
+            "Toggle Sidebar",
+            "searchK",
+            "Installation",
+            "Framework Support",
+            "Changelog",
+            "Animated",
+            "Animated",
+            "Component",
+            "Component",
+            "Blocks",
+            "Blocks",
+            "Announcement",
+            "Auth",
+            "Blog",
+            "Career",
+            "Contact",
+            "CTA",
+            "Error",
+            "FAQ",
+            "Feature",
+            "File-upload",
+            "Footer",
+            "Hero",
+            "Integrations",
+            "Navigation",
+            "Newsletter",
+            "Notification",
+            "Pricing",
+            "Stats",
+            "Team",
+            "Testimonials",
+            "Widget",
+            "DashboardsSoon",
+            "TemplatesSoon",
+            "Legal",
+            "Toggle dark/light mode",
+            "X",
+            "GitHub",
+            "LinkedIn",
+            "Toggle Sidebar",
+            "Blocks",
+            "Search components...K",
+            "Add Custom Theme",
+            "Switch to dark mode",
+            "Copy prompt for Lovable",
+            "Copy prompt for v0",
+            "Copy prompt for Bolt",
+            "npm",
+            "Copy install command for Blog 1"
+          ],
+          "palette": [
+            "oklch(0.145 0 0)",
+            "oklch(1 0 0)",
+            "oklch(0.922 0 0)",
+            "oklch(0.556 0 0)",
+            "oklab(0.922 0 0 / 0.5)",
+            "oklch(0.205 0 0)",
+            "oklch(0.97 0 0)",
+            "oklch(0.967 0.003 264.542)",
+            "rgb(255, 255, 255)",
+            "oklch(0.648 0.2 131.684)",
+            "oklab(0.97 0 0 / 0.6)",
+            "oklab(0.922 0 0 / 0.3)",
+            "oklab(0.145 0 0 / 0.7)"
+          ],
+          "layoutSignals": {
+            "hasNav": true,
+            "hasHero": true,
+            "hasPricing": true,
+            "hasTestimonials": true,
+            "hasFAQ": true,
+            "hasVideo": false,
+            "cardLikeCount": 15,
+            "imageCount": 24,
+            "buttonCount": 107,
+            "formCount": 0
+          },
+          "codeBlocks": [],
+          "codeLinks": [
+            {
+              "url": "https://github.com/watermeloncorp",
+              "text": ""
+            },
+            {
+              "url": "https://github.com/rauchg",
+              "text": "5 min readHow to give clear feedback that actually helps your teamGuillermo RauchCEO @ VercelRead"
+            },
+            {
+              "url": "https://github.com/gaearon",
+              "text": "8 min read5 small changes to improve your team's daily wellbeingDan AbramovReact CoreRead"
+            },
+            {
+              "url": "https://github.com/leerob",
+              "text": "3 min readWhat new hires really need on their first dayLee RobinsonVP of Product @ VercelRead"
+            },
+            {
+              "url": "https://github.com/ryanflorence",
+              "text": "6 min readMastering async communication across timezonesRyan FlorenceRemix CreatorRead"
+            },
+            {
+              "url": "https://github.com/yyx990803",
+              "text": "4 min readThe art of running effective 1-on-1 meetingsEvan YouVue.js CreatorRead"
+            },
+            {
+              "url": "https://github.com/Rich-Harris",
+              "text": "7 min readBuilding a culture of continuous learningRich HarrisSvelte CreatorRead"
+            }
+          ]
+        },
+        {
+          "sourceId": "watermelon-ui",
+          "url": "https://ui.watermelon.sh/blocks/Career",
+          "status": 200,
+          "licenseStatus": "review-required",
+          "reuseGuidance": "Component taxonomy and interaction reference. Verify license before copying code.",
+          "candidate": {
+            "index": 34,
+            "url": "https://ui.watermelon.sh/blocks/Career",
+            "text": "Career 4 Blocks",
+            "heading": "",
+            "description": "Announcement9 blocksAuth6 blocksBlog4 blocksCareer4 blocksContact7 blocksCTA4 blocksError7 blocksFAQ5 blocksFeature5 blocksFile-upload5 blocksFooter22 blocksHero13 blocksIntegrations5 blocksNavigation7 blocksNewsletter5 blocksNotification4 blocksPricing5 blocksStats4 blocksTeam5 blocksTestimonials4 blocksWidget5 blocks",
+            "imageSrc": "https://assets.watermelon.sh/components/watermelonoriginalassets/announcement-1.webp",
+            "imageAlt": "Announcement preview",
+            "buttonText": [
+              "Announcement9 blocks",
+              "Auth6 blocks",
+              "Blog4 blocks",
+              "Career4 blocks",
+              "Contact7 blocks",
+              "CTA4 blocks",
+              "Error7 blocks",
+              "FAQ5 blocks"
+            ],
+            "tags": [],
+            "cardArea": 2712527,
+            "score": 10,
+            "sourceMode": "block-gallery"
+          },
+          "screenshots": {
+            "desktop": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/watermelon-ui/career-4-blocks/desktop.png",
+              "sha256": "f90c1817c4f8dc61fcbb3244acfe58cecfce2be46027b671944bd916ac507ccb",
+              "mode": "viewport"
+            },
+            "mobile": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/watermelon-ui/career-4-blocks/mobile.png",
+              "sha256": "8dfa2edb59356c8e8399af8e62a73cdd0026f8207420894e34e5a712ae43fcc3",
+              "mode": "viewport"
+            }
+          },
+          "screenshotQuality": {
+            "desktop": {
+              "viewport": {
+                "width": 1440,
+                "height": 1000
+              },
+              "textLength": 3764,
+              "mediaCount": 127,
+              "codeCount": 0,
+              "headingCount": 26,
+              "usefulElementCount": 114,
+              "visibleAreaRatio": 3.233,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Watermelon UIbeta",
+                "Toggle Sidebar",
+                "Installation",
+                "Framework Support",
+                "Changelog",
+                "Animated",
+                "Animated",
+                "Component"
+              ]
+            },
+            "mobile": {
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "textLength": 3055,
+              "mediaCount": 107,
+              "codeCount": 0,
+              "headingCount": 26,
+              "usefulElementCount": 31,
+              "visibleAreaRatio": 3.433,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Toggle SidebarSearch components...KAdd Custom ThemeCareerCareer block variants.4 blockscareer 1npmnpx shadcn@latest add ",
+                "Toggle Sidebar",
+                "Add Custom Theme",
+                "CareerCareer block variants.4 blockscareer 1npmnpx shadcn@latest add https://registry.watermelon.sh/r/career-1.jsonMobil",
+                "CareerCareer block variants.4 blockscareer 1npmnpx shadcn@latest add https://registry.watermelon.sh/r/career-1.jsonMobil",
+                "Career",
+                "Mobile",
+                "Tablet"
+              ]
+            }
+          },
+          "qualityWarnings": [],
+          "failedRequestCount": 2,
+          "title": "Career - UI Blocks | Watermelon UI",
+          "description": "A collection of high-quality React components, dashboards, and UI blocks. Copy and paste production-ready UI with ease.",
+          "headings": [
+            {
+              "level": "h1",
+              "text": "Watermelon UI - High-Quality React Components Registry"
+            },
+            {
+              "level": "h1",
+              "text": "Career"
+            },
+            {
+              "level": "h2",
+              "text": "Exciting careers for bright minds"
+            },
+            {
+              "level": "h3",
+              "text": "Engineering Manager"
+            },
+            {
+              "level": "h3",
+              "text": "Senior Frontend Engineer"
+            },
+            {
+              "level": "h3",
+              "text": "Product Designer"
+            },
+            {
+              "level": "h3",
+              "text": "Data Scientist"
+            },
+            {
+              "level": "h3",
+              "text": "Product Manager"
+            },
+            {
+              "level": "h3",
+              "text": "Growth Marketer"
+            },
+            {
+              "level": "h2",
+              "text": "Exciting roles in modern finance"
+            },
+            {
+              "level": "h3",
+              "text": "Engineering Manager"
+            },
+            {
+              "level": "h3",
+              "text": "Fintech base-ui/UX Designer"
+            },
+            {
+              "level": "h3",
+              "text": "Blockchain Solutions Engineer"
+            },
+            {
+              "level": "h1",
+              "text": "Exciting roles in modern work"
+            },
+            {
+              "level": "h3",
+              "text": "Product Manager"
+            },
+            {
+              "level": "h3",
+              "text": "Marketing Specialist"
+            },
+            {
+              "level": "h3",
+              "text": "base-ui/UX Designer"
+            },
+            {
+              "level": "h3",
+              "text": "Data Analyst"
+            },
+            {
+              "level": "h3",
+              "text": "Software Engineer"
+            },
+            {
+              "level": "h3",
+              "text": "Customer Success Manager"
+            },
+            {
+              "level": "h2",
+              "text": "Exciting roles in modern HR"
+            },
+            {
+              "level": "h3",
+              "text": "Talent Acquisition Specialist"
+            },
+            {
+              "level": "h3",
+              "text": "Employer Branding Manager"
+            },
+            {
+              "level": "h3",
+              "text": "HR Marketing Strategist"
+            },
+            {
+              "level": "h3",
+              "text": "People & Culture Coordinator"
+            },
+            {
+              "level": "h3",
+              "text": "Recruitment Marketing Lead"
+            }
+          ],
+          "sections": [
+            {
+              "index": 1,
+              "heading": "Career",
+              "textSample": "CareerCareer block variants.4 blockscareer 1npmnpx shadcn@latest add https://registry.watermelon.sh/r/career-1.jsonMobileTabletDesktopJoin our teamExciting careers for bright mindsWe hire curious, driven people who want to build things that matter. Explore open roles below.All RolesEngineering3Design1Product1Growth1Eng",
+              "imageCount": 102,
+              "buttonCount": 80
+            },
+            {
+              "index": 2,
+              "heading": "Exciting careers for bright minds",
+              "textSample": "Join our teamExciting careers for bright mindsWe hire curious, driven people who want to build things that matter. Explore open roles below.All RolesEngineering3Design1Product1Growth1Engineering ManagerHotLead cross-functional squads, set technical direction, and help engineers grow.RemoteFull-timeSenior Frontend Engin",
+              "imageCount": 23,
+              "buttonCount": 12
+            },
+            {
+              "index": 3,
+              "heading": "Exciting roles in modern finance",
+              "textSample": "Join our finance teamExciting roles in modern financeDrive innovation in secure banking and digital payments.BankingInvestmentsFintechEngineering ManagerLead a team of engineers and deliver great experiences.🇩🇪GermanyFull-time$100k – $120kApplyFintech base-ui/UX DesignerDesign intuitive banking apps for better user t",
+              "imageCount": 6,
+              "buttonCount": 9
+            },
+            {
+              "index": 4,
+              "heading": "Exciting roles in modern work",
+              "textSample": "Join our global teamExciting roles in modern workShape the future of digital tools and collaboration.ProductEngineeringDesignFull-timeProduct ManagerSenior levelGlobalProject work$100k – $120kUnited StatesDetailsFull-timeMarketing SpecialistSenior levelGlobalProject work$100k – $120kUnited StatesDetailsFull-timebase-ui",
+              "imageCount": 19,
+              "buttonCount": 10
+            },
+            {
+              "index": 5,
+              "heading": "Exciting roles in modern HR",
+              "textSample": "Join our HR teamExciting roles in modern HRShape the future of talent acquisition and people culture.All locationsAll typesSort byTalent Acquisition SpecialistUnited States•Full-time•$100 - $120ApplyEmployer Branding ManagerUnited States•Full-time•$100 - $120ApplyHR Marketing StrategistUnited States•Part-time•$100 - $1",
+              "imageCount": 26,
+              "buttonCount": 9
+            }
+          ],
+          "ctas": [
+            "Watermelon UIbeta",
+            "Toggle Sidebar",
+            "searchK",
+            "Installation",
+            "Framework Support",
+            "Changelog",
+            "Animated",
+            "Animated",
+            "Component",
+            "Component",
+            "Blocks",
+            "Blocks",
+            "Announcement",
+            "Auth",
+            "Blog",
+            "Career",
+            "Contact",
+            "CTA",
+            "Error",
+            "FAQ",
+            "Feature",
+            "File-upload",
+            "Footer",
+            "Hero",
+            "Integrations",
+            "Navigation",
+            "Newsletter",
+            "Notification",
+            "Pricing",
+            "Stats",
+            "Team",
+            "Testimonials",
+            "Widget",
+            "DashboardsSoon",
+            "TemplatesSoon",
+            "Legal",
+            "Toggle dark/light mode",
+            "X",
+            "GitHub",
+            "LinkedIn",
+            "Toggle Sidebar",
+            "Blocks",
+            "Search components...K",
+            "Add Custom Theme",
+            "Switch to dark mode",
+            "Copy prompt for Lovable",
+            "Copy prompt for v0",
+            "Copy prompt for Bolt",
+            "npm",
+            "Copy install command for career 1"
+          ],
+          "palette": [
+            "oklch(0.145 0 0)",
+            "oklch(1 0 0)",
+            "oklch(0.922 0 0)",
+            "oklch(0.556 0 0)",
+            "oklab(0.922 0 0 / 0.5)",
+            "oklch(0.205 0 0)",
+            "oklch(0.97 0 0)",
+            "oklch(0.967 0.003 264.542)",
+            "rgb(255, 255, 255)",
+            "oklch(0.648 0.2 131.684)",
+            "oklab(0.97 0 0 / 0.6)",
+            "oklab(0.922 0 0 / 0.3)",
+            "oklab(0.145 0 0 / 0.7)"
+          ],
+          "layoutSignals": {
+            "hasNav": true,
+            "hasHero": true,
+            "hasPricing": true,
+            "hasTestimonials": true,
+            "hasFAQ": true,
+            "hasVideo": false,
+            "cardLikeCount": 1,
+            "imageCount": 12,
+            "buttonCount": 125,
+            "formCount": 1
+          },
+          "codeBlocks": [],
+          "codeLinks": [
+            {
+              "url": "https://github.com/watermeloncorp",
+              "text": ""
+            }
+          ]
+        },
+        {
+          "sourceId": "watermelon-ui",
+          "url": "https://ui.watermelon.sh/blocks/contact",
+          "status": 200,
+          "licenseStatus": "review-required",
+          "reuseGuidance": "Component taxonomy and interaction reference. Verify license before copying code.",
+          "candidate": {
+            "index": 35,
+            "url": "https://ui.watermelon.sh/blocks/contact",
+            "text": "Contact 7 Blocks",
+            "heading": "",
+            "description": "Announcement9 blocksAuth6 blocksBlog4 blocksCareer4 blocksContact7 blocksCTA4 blocksError7 blocksFAQ5 blocksFeature5 blocksFile-upload5 blocksFooter22 blocksHero13 blocksIntegrations5 blocksNavigation7 blocksNewsletter5 blocksNotification4 blocksPricing5 blocksStats4 blocksTeam5 blocksTestimonials4 blocksWidget5 blocks",
+            "imageSrc": "https://assets.watermelon.sh/components/watermelonoriginalassets/announcement-1.webp",
+            "imageAlt": "Announcement preview",
+            "buttonText": [
+              "Announcement9 blocks",
+              "Auth6 blocks",
+              "Blog4 blocks",
+              "Career4 blocks",
+              "Contact7 blocks",
+              "CTA4 blocks",
+              "Error7 blocks",
+              "FAQ5 blocks"
+            ],
+            "tags": [],
+            "cardArea": 2712527,
+            "score": 10,
+            "sourceMode": "block-gallery"
+          },
+          "screenshots": {
+            "desktop": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/watermelon-ui/contact-7-blocks/desktop.png",
+              "sha256": "7fdc1cf8d5e5572e019157049d9670b0034425520decdd87943d8e878f5f7db5",
+              "mode": "viewport"
+            },
+            "mobile": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/watermelon-ui/contact-7-blocks/mobile.png",
+              "sha256": "a9db431bd95d7c5cb4ecf19a4447ed99f727c7c4cdd5d37cd53f994db1a0783c",
+              "mode": "viewport"
+            }
+          },
+          "screenshotQuality": {
+            "desktop": {
+              "viewport": {
+                "width": 1440,
+                "height": 1000
+              },
+              "textLength": 4077,
+              "mediaCount": 101,
+              "codeCount": 0,
+              "headingCount": 16,
+              "usefulElementCount": 97,
+              "visibleAreaRatio": 3.013,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Watermelon UIbeta",
+                "Toggle Sidebar",
+                "Installation",
+                "Framework Support",
+                "Changelog",
+                "Animated",
+                "Animated",
+                "Component"
+              ]
+            },
+            "mobile": {
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "textLength": 3141,
+              "mediaCount": 81,
+              "codeCount": 0,
+              "headingCount": 16,
+              "usefulElementCount": 21,
+              "visibleAreaRatio": 3.333,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Toggle SidebarSearch components...KAdd Custom ThemeContactContact block variants.7 blockscontact 1npmnpx shadcn@latest a",
+                "Toggle Sidebar",
+                "Add Custom Theme",
+                "ContactContact block variants.7 blockscontact 1npmnpx shadcn@latest add https://registry.watermelon.sh/r/contact-1.jsonM",
+                "ContactContact block variants.7 blockscontact 1npmnpx shadcn@latest add https://registry.watermelon.sh/r/contact-1.jsonM",
+                "Contact",
+                "Mobile",
+                "Tablet"
+              ]
+            }
+          },
+          "qualityWarnings": [],
+          "failedRequestCount": 2,
+          "title": "Contact - UI Blocks | Watermelon UI",
+          "description": "A collection of high-quality React components, dashboards, and UI blocks. Copy and paste production-ready UI with ease.",
+          "headings": [
+            {
+              "level": "h1",
+              "text": "Watermelon UI - High-Quality React Components Registry"
+            },
+            {
+              "level": "h1",
+              "text": "Contact"
+            },
+            {
+              "level": "h2",
+              "text": "How can we assist you today?"
+            },
+            {
+              "level": "h3",
+              "text": "Technical Support"
+            },
+            {
+              "level": "h3",
+              "text": "Sales & Enterprise"
+            },
+            {
+              "level": "h3",
+              "text": "Global Headquarters"
+            },
+            {
+              "level": "h3",
+              "text": "Media & Press"
+            },
+            {
+              "level": "h2",
+              "text": "Let's build something amazing"
+            },
+            {
+              "level": "h1",
+              "text": "Start Your Project"
+            },
+            {
+              "level": "h1",
+              "text": "Grow Your Green Business"
+            },
+            {
+              "level": "h2",
+              "text": "Let’s build something great together"
+            },
+            {
+              "level": "h3",
+              "text": "Email Us"
+            },
+            {
+              "level": "h3",
+              "text": "Live Support"
+            },
+            {
+              "level": "h3",
+              "text": "Studio Location"
+            },
+            {
+              "level": "h3",
+              "text": "Subscribe to Updates"
+            },
+            {
+              "level": "h2",
+              "text": "Let's Start a Conversation"
+            }
+          ],
+          "sections": [
+            {
+              "index": 1,
+              "heading": "Contact",
+              "textSample": "ContactContact block variants.7 blockscontact 1npmnpx shadcn@latest add https://registry.watermelon.sh/r/contact-1.jsonMobileTabletDesktopConnect With UsHow can we assist you today?Our dedicated teams are distributed globally to ensure you receive the right support, exactly when you need it.Technical SupportGet help wi",
+              "imageCount": 76,
+              "buttonCount": 85
+            },
+            {
+              "index": 2,
+              "heading": "How can we assist you today?",
+              "textSample": "Connect With UsHow can we assist you today?Our dedicated teams are distributed globally to ensure you receive the right support, exactly when you need it.Technical SupportGet help with platform issues and technical queries.support@example.comSales & EnterpriseDiscuss custom plans and enterprise solutions.Contact Sales ",
+              "imageCount": 4,
+              "buttonCount": 4
+            },
+            {
+              "index": 3,
+              "heading": "Let's build something amazing",
+              "textSample": "Get in TouchLet's build something amazingWe're here to help and answer any question you might have. We look forward to hearing from you.Your full nameWork email addressMessage detailsSend Inquiry",
+              "imageCount": 2,
+              "buttonCount": 1
+            },
+            {
+              "index": 4,
+              "heading": "Start Your Project",
+              "textSample": "Start Your ProjectTell us about your vision and we will craft a tailored solution for your business.Full NameEmail AddressCompanyProject TypeSelect a serviceWeb ApplicationMobile AppBrand DesignStrategy ConsultingBudget RangeSelect budget$10k – $25k$25k – $50k$50k – $100k$100k+Expected Start DateTeam Size RequiredSelec",
+              "imageCount": 9,
+              "buttonCount": 4
+            },
+            {
+              "index": 5,
+              "heading": "Grow Your Green Business",
+              "textSample": "Sustainable FuturesGrow Your Green BusinessWe partner with founders and enterprises to design eco-forward strategies that drive measurable impact.Emailhello@wm.studioPhone+91 98765 43210Full NameWork EmailArea of InterestChoose a service…MessageSend My Request",
+              "imageCount": 5,
+              "buttonCount": 2
+            },
+            {
+              "index": 6,
+              "heading": "Let’s build something great together",
+              "textSample": "Get in TouchLet’s build something great togetherHave questions about our platform, partnerships, or product features? Our team is here to support you every step of the way.Email UsSend us your questions and we’ll respond within 24 hours.hello@wateremelonui.devLive SupportTalk directly with our support specialists for q",
+              "imageCount": 3,
+              "buttonCount": 0
+            },
+            {
+              "index": 7,
+              "heading": "Subscribe to Updates",
+              "textSample": "Send MessageSubscribe to UpdatesGet the latest insights, product updates, and news delivered straight to your inbox.Subscribe+1 (555) 000-0000Available Mon-Fri, 9am - 6pm EST. Call us for immediate assistance.hello@example.comDrop us an email anytime. We typically reply within 24 hours.Headquarters123 Innovation Drive,",
+              "imageCount": 3,
+              "buttonCount": 2
+            },
+            {
+              "index": 8,
+              "heading": "Let's Start a Conversation",
+              "textSample": "CONNECT WITH USLet's Start a ConversationFull Name *Email Address *Phone Number *Message *I agree to the privacy policy and terms of service for this communication.Send Message",
+              "imageCount": 1,
+              "buttonCount": 2
+            }
+          ],
+          "ctas": [
+            "Watermelon UIbeta",
+            "Toggle Sidebar",
+            "searchK",
+            "Installation",
+            "Framework Support",
+            "Changelog",
+            "Animated",
+            "Animated",
+            "Component",
+            "Component",
+            "Blocks",
+            "Blocks",
+            "Announcement",
+            "Auth",
+            "Blog",
+            "Career",
+            "Contact",
+            "CTA",
+            "Error",
+            "FAQ",
+            "Feature",
+            "File-upload",
+            "Footer",
+            "Hero",
+            "Integrations",
+            "Navigation",
+            "Newsletter",
+            "Notification",
+            "Pricing",
+            "Stats",
+            "Team",
+            "Testimonials",
+            "Widget",
+            "DashboardsSoon",
+            "TemplatesSoon",
+            "Legal",
+            "Toggle dark/light mode",
+            "X",
+            "GitHub",
+            "LinkedIn",
+            "Toggle Sidebar",
+            "Blocks",
+            "Search components...K",
+            "Add Custom Theme",
+            "Switch to dark mode",
+            "Copy prompt for Lovable",
+            "Copy prompt for v0",
+            "Copy prompt for Bolt",
+            "npm",
+            "Copy install command for contact 1"
+          ],
+          "palette": [
+            "oklch(0.145 0 0)",
+            "oklch(1 0 0)",
+            "oklch(0.922 0 0)",
+            "oklch(0.556 0 0)",
+            "oklab(0.922 0 0 / 0.5)",
+            "oklch(0.205 0 0)",
+            "oklch(0.97 0 0)",
+            "oklch(0.967 0.003 264.542)",
+            "rgb(255, 255, 255)",
+            "oklch(0.648 0.2 131.684)",
+            "oklab(0.97 0 0 / 0.6)",
+            "oklab(0.922 0 0 / 0.3)",
+            "oklab(0.145 0 0 / 0.7)",
+            "oklch(0.98 0.016 73.684)",
+            "oklch(0.768 0.233 130.85)"
+          ],
+          "layoutSignals": {
+            "hasNav": true,
+            "hasHero": true,
+            "hasPricing": true,
+            "hasTestimonials": true,
+            "hasFAQ": true,
+            "hasVideo": false,
+            "cardLikeCount": 33,
+            "imageCount": 21,
+            "buttonCount": 130,
+            "formCount": 29
+          },
+          "codeBlocks": [],
+          "codeLinks": [
+            {
+              "url": "https://github.com/watermeloncorp",
+              "text": ""
+            }
+          ]
+        },
+        {
+          "sourceId": "watermelon-ui",
+          "url": "https://ui.watermelon.sh/blocks/CTA",
+          "status": 200,
+          "licenseStatus": "review-required",
+          "reuseGuidance": "Component taxonomy and interaction reference. Verify license before copying code.",
+          "candidate": {
+            "index": 36,
+            "url": "https://ui.watermelon.sh/blocks/CTA",
+            "text": "CTA 4 Blocks",
+            "heading": "",
+            "description": "Announcement9 blocksAuth6 blocksBlog4 blocksCareer4 blocksContact7 blocksCTA4 blocksError7 blocksFAQ5 blocksFeature5 blocksFile-upload5 blocksFooter22 blocksHero13 blocksIntegrations5 blocksNavigation7 blocksNewsletter5 blocksNotification4 blocksPricing5 blocksStats4 blocksTeam5 blocksTestimonials4 blocksWidget5 blocks",
+            "imageSrc": "https://assets.watermelon.sh/components/watermelonoriginalassets/announcement-1.webp",
+            "imageAlt": "Announcement preview",
+            "buttonText": [
+              "Announcement9 blocks",
+              "Auth6 blocks",
+              "Blog4 blocks",
+              "Career4 blocks",
+              "Contact7 blocks",
+              "CTA4 blocks",
+              "Error7 blocks",
+              "FAQ5 blocks"
+            ],
+            "tags": [],
+            "cardArea": 2712527,
+            "score": 10,
+            "sourceMode": "block-gallery"
+          },
+          "screenshots": {
+            "desktop": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/watermelon-ui/cta-4-blocks/desktop.png",
+              "sha256": "5432cdb1661369e5a8234d0dd6122b2273a3372a60d68b4a22416611b447e048",
+              "mode": "viewport"
+            },
+            "mobile": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/watermelon-ui/cta-4-blocks/mobile.png",
+              "sha256": "5901f327e118d209924059ec4c816708326307279814e8bfb83a6838ec4df3d3",
+              "mode": "viewport"
+            }
+          },
+          "screenshotQuality": {
+            "desktop": {
+              "viewport": {
+                "width": 1440,
+                "height": 1000
+              },
+              "textLength": 1789,
+              "mediaCount": 79,
+              "codeCount": 0,
+              "headingCount": 7,
+              "usefulElementCount": 104,
+              "visibleAreaRatio": 2.836,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Watermelon UIbeta",
+                "Toggle Sidebar",
+                "Installation",
+                "Framework Support",
+                "Changelog",
+                "Animated",
+                "Animated",
+                "Component"
+              ]
+            },
+            "mobile": {
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "textLength": 1095,
+              "mediaCount": 59,
+              "codeCount": 0,
+              "headingCount": 7,
+              "usefulElementCount": 21,
+              "visibleAreaRatio": 3.228,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Toggle SidebarSearch components...KAdd Custom ThemeCTACTA block variants.4 blockscta 1npmnpx shadcn@latest add https://r",
+                "Toggle Sidebar",
+                "Add Custom Theme",
+                "CTACTA block variants.4 blockscta 1npmnpx shadcn@latest add https://registry.watermelon.sh/r/cta-1.jsonMobileTabletDeskt",
+                "CTACTA block variants.4 blockscta 1npmnpx shadcn@latest add https://registry.watermelon.sh/r/cta-1.jsonMobileTabletDeskt",
+                "CTA",
+                "Mobile",
+                "Tablet"
+              ]
+            }
+          },
+          "qualityWarnings": [],
+          "failedRequestCount": 2,
+          "title": "CTA - UI Blocks | Watermelon UI",
+          "description": "A collection of high-quality React components, dashboards, and UI blocks. Copy and paste production-ready UI with ease.",
+          "headings": [
+            {
+              "level": "h1",
+              "text": "Watermelon UI - High-Quality React Components Registry"
+            },
+            {
+              "level": "h1",
+              "text": "CTA"
+            },
+            {
+              "level": "h2",
+              "text": "Supercharge your team's productivity"
+            },
+            {
+              "level": "h2",
+              "text": "Design better.Ship with ship faster."
+            },
+            {
+              "level": "h1",
+              "text": "Design systems that scale."
+            },
+            {
+              "level": "h2",
+              "text": "Elevate Your Business Intelligence"
+            },
+            {
+              "level": "h3",
+              "text": "Recent Activity"
+            }
+          ],
+          "sections": [
+            {
+              "index": 1,
+              "heading": "CTA",
+              "textSample": "CTACTA block variants.4 blockscta 1npmnpx shadcn@latest add https://registry.watermelon.sh/r/cta-1.jsonMobileTabletDesktopSupercharge your team's productivityUnlock all premium features today and take your workflow to the next level.Get Started Nowcta 2npmnpx shadcn@latest add https://registry.watermelon.sh/r/cta-2.jso",
+              "imageCount": 54,
+              "buttonCount": 49
+            },
+            {
+              "index": 2,
+              "heading": "Supercharge your team's productivity",
+              "textSample": "Supercharge your team's productivityUnlock all premium features today and take your workflow to the next level.Get Started Now",
+              "imageCount": 1,
+              "buttonCount": 1
+            },
+            {
+              "index": 3,
+              "heading": "Design better.Ship with ship faster.",
+              "textSample": "Trusted by modern teamsDesign better.Ship with ship faster.All your product workflows in one place — from idea to launch. Built for speed, clarity, and collaboration.Start buildingExplore featuresJKSRMLATLoved by 10k+ designers",
+              "imageCount": 7,
+              "buttonCount": 2
+            },
+            {
+              "index": 4,
+              "heading": "Design systems that scale.",
+              "textSample": "Design systems that scale.Ship faster with a unified toolkit built for modern product teams.Get startedView demoCanvasTeamDevToolsChatAnalyticsSecurity",
+              "imageCount": 8,
+              "buttonCount": 4
+            },
+            {
+              "index": 5,
+              "heading": "Elevate Your Business Intelligence",
+              "textSample": "Elevate Your Business IntelligenceUnlock real-time insights and make data-driven decisions with our unified analytics platform. Start optimizing your operations today.Start Free TrialRevenue$48,20012.5%Visitors8,4308.2%Orders1,2053.1%Growth24.8%4.6%Recent ActivityView AllEnterprise plan renewal2 hours agoRefund process",
+              "imageCount": 10,
+              "buttonCount": 2
+            }
+          ],
+          "ctas": [
+            "Watermelon UIbeta",
+            "Toggle Sidebar",
+            "searchK",
+            "Installation",
+            "Framework Support",
+            "Changelog",
+            "Animated",
+            "Animated",
+            "Component",
+            "Component",
+            "Blocks",
+            "Blocks",
+            "Announcement",
+            "Auth",
+            "Blog",
+            "Career",
+            "Contact",
+            "CTA",
+            "Error",
+            "FAQ",
+            "Feature",
+            "File-upload",
+            "Footer",
+            "Hero",
+            "Integrations",
+            "Navigation",
+            "Newsletter",
+            "Notification",
+            "Pricing",
+            "Stats",
+            "Team",
+            "Testimonials",
+            "Widget",
+            "DashboardsSoon",
+            "TemplatesSoon",
+            "Legal",
+            "Toggle dark/light mode",
+            "X",
+            "GitHub",
+            "LinkedIn",
+            "Toggle Sidebar",
+            "Blocks",
+            "Search components...K",
+            "Add Custom Theme",
+            "Switch to dark mode",
+            "Copy prompt for Lovable",
+            "Copy prompt for v0",
+            "Copy prompt for Bolt",
+            "npm",
+            "Copy install command for cta 1"
+          ],
+          "palette": [
+            "oklch(0.145 0 0)",
+            "oklch(1 0 0)",
+            "oklch(0.922 0 0)",
+            "oklch(0.556 0 0)",
+            "oklab(0.922 0 0 / 0.5)",
+            "oklch(0.205 0 0)",
+            "oklch(0.97 0 0)",
+            "oklch(0.967 0.003 264.542)",
+            "rgb(255, 255, 255)",
+            "oklch(0.648 0.2 131.684)",
+            "oklab(0.97 0 0 / 0.6)",
+            "oklab(0.922 0 0 / 0.3)",
+            "oklab(0.145 0 0 / 0.7)",
+            "oklch(0.98 0.016 73.684)",
+            "oklch(0.768 0.233 130.85)"
+          ],
+          "layoutSignals": {
+            "hasNav": true,
+            "hasHero": true,
+            "hasPricing": true,
+            "hasTestimonials": true,
+            "hasFAQ": true,
+            "hasVideo": false,
+            "cardLikeCount": 7,
+            "imageCount": 12,
+            "buttonCount": 94,
+            "formCount": 0
+          },
+          "codeBlocks": [],
+          "codeLinks": [
+            {
+              "url": "https://github.com/watermeloncorp",
+              "text": ""
+            }
+          ]
+        },
+        {
+          "sourceId": "watermelon-ui",
+          "url": "https://ui.watermelon.sh/blocks/Error",
+          "status": 200,
+          "licenseStatus": "review-required",
+          "reuseGuidance": "Component taxonomy and interaction reference. Verify license before copying code.",
+          "candidate": {
+            "index": 37,
+            "url": "https://ui.watermelon.sh/blocks/Error",
+            "text": "Error 7 Blocks",
+            "heading": "",
+            "description": "Announcement9 blocksAuth6 blocksBlog4 blocksCareer4 blocksContact7 blocksCTA4 blocksError7 blocksFAQ5 blocksFeature5 blocksFile-upload5 blocksFooter22 blocksHero13 blocksIntegrations5 blocksNavigation7 blocksNewsletter5 blocksNotification4 blocksPricing5 blocksStats4 blocksTeam5 blocksTestimonials4 blocksWidget5 blocks",
+            "imageSrc": "https://assets.watermelon.sh/components/watermelonoriginalassets/announcement-1.webp",
+            "imageAlt": "Announcement preview",
+            "buttonText": [
+              "Announcement9 blocks",
+              "Auth6 blocks",
+              "Blog4 blocks",
+              "Career4 blocks",
+              "Contact7 blocks",
+              "CTA4 blocks",
+              "Error7 blocks",
+              "FAQ5 blocks"
+            ],
+            "tags": [],
+            "cardArea": 2712527,
+            "score": 10,
+            "sourceMode": "block-gallery"
+          },
+          "screenshots": {
+            "desktop": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/watermelon-ui/error-7-blocks/desktop.png",
+              "sha256": "84bdc2dbce0397d3288c62142f6ad3467349a04d90d84cddf65d1a9166a76b4b",
+              "mode": "viewport"
+            },
+            "mobile": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/watermelon-ui/error-7-blocks/mobile.png",
+              "sha256": "73999897e8f8662be7fc900c3deed786936aa7b5d8d8ee90bdc0842b03f9942e",
+              "mode": "viewport"
+            }
+          },
+          "screenshotQuality": {
+            "desktop": {
+              "viewport": {
+                "width": 1440,
+                "height": 1000
+              },
+              "textLength": 2470,
+              "mediaCount": 88,
+              "codeCount": 0,
+              "headingCount": 16,
+              "usefulElementCount": 89,
+              "visibleAreaRatio": 3.16,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Watermelon UIbeta",
+                "Toggle Sidebar",
+                "Installation",
+                "Framework Support",
+                "Changelog",
+                "Animated",
+                "Animated",
+                "Component"
+              ]
+            },
+            "mobile": {
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "textLength": 1550,
+              "mediaCount": 68,
+              "codeCount": 0,
+              "headingCount": 16,
+              "usefulElementCount": 23,
+              "visibleAreaRatio": 3.491,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Toggle SidebarSearch components...KAdd Custom ThemeErrorError block variants.7 blockserror 1npmnpx shadcn@latest add htt",
+                "Toggle Sidebar",
+                "Add Custom Theme",
+                "ErrorError block variants.7 blockserror 1npmnpx shadcn@latest add https://registry.watermelon.sh/r/error-1.jsonMobileTab",
+                "ErrorError block variants.7 blockserror 1npmnpx shadcn@latest add https://registry.watermelon.sh/r/error-1.jsonMobileTab",
+                "Error",
+                "Mobile",
+                "Tablet"
+              ]
+            }
+          },
+          "qualityWarnings": [],
+          "failedRequestCount": 2,
+          "title": "Error - UI Blocks | Watermelon UI",
+          "description": "A collection of high-quality React components, dashboards, and UI blocks. Copy and paste production-ready UI with ease.",
+          "headings": [
+            {
+              "level": "h1",
+              "text": "Watermelon UI - High-Quality React Components Registry"
+            },
+            {
+              "level": "h1",
+              "text": "Error"
+            },
+            {
+              "level": "h1",
+              "text": "No, no, that's right."
+            },
+            {
+              "level": "h1",
+              "text": "Looks like this destination drifted away."
+            },
+            {
+              "level": "h3",
+              "text": "Explore collections"
+            },
+            {
+              "level": "h3",
+              "text": "Search everything"
+            },
+            {
+              "level": "h3",
+              "text": "Retry connection"
+            },
+            {
+              "level": "h1",
+              "text": "404"
+            },
+            {
+              "level": "h1",
+              "text": "404"
+            },
+            {
+              "level": "h1",
+              "text": "404"
+            },
+            {
+              "level": "h1",
+              "text": "404"
+            },
+            {
+              "level": "h2",
+              "text": "Connection Severed"
+            },
+            {
+              "level": "h1",
+              "text": "Route not found"
+            },
+            {
+              "level": "h1",
+              "text": "404"
+            },
+            {
+              "level": "h1",
+              "text": "This destination isn’t accessible."
+            },
+            {
+              "level": "h1",
+              "text": "Page not Found"
+            }
+          ],
+          "sections": [
+            {
+              "index": 1,
+              "heading": "Error",
+              "textSample": "ErrorError block variants.7 blockserror 1npmnpx shadcn@latest add https://registry.watermelon.sh/r/error-1.jsonMobileTabletDesktop404No, no, that's right.This is a 404 page. And this page exists, no matter what anyone says.Go Back Homeerror 2npmnpx shadcn@latest add https://registry.watermelon.sh/r/error-2.jsonMobileTa",
+              "imageCount": 63,
+              "buttonCount": 82
+            },
+            {
+              "index": 2,
+              "heading": "No, no, that's right.",
+              "textSample": "404No, no, that's right.This is a 404 page. And this page exists, no matter what anyone says.Go Back Home",
+              "imageCount": 2,
+              "buttonCount": 1
+            },
+            {
+              "index": 3,
+              "heading": "Looks like this destination drifted away.",
+              "textSample": "Looks like this destination drifted away.The page you attempted to open may have been archived, relocated, or is temporarily inaccessible.HomeGo backExplore collectionsBrowse curated sections and continue navigating without losing context.Search everythingUse intelligent search to instantly locate projects, files, and ",
+              "imageCount": 5,
+              "buttonCount": 2
+            }
+          ],
+          "ctas": [
+            "Watermelon UIbeta",
+            "Toggle Sidebar",
+            "searchK",
+            "Installation",
+            "Framework Support",
+            "Changelog",
+            "Animated",
+            "Animated",
+            "Component",
+            "Component",
+            "Blocks",
+            "Blocks",
+            "Announcement",
+            "Auth",
+            "Blog",
+            "Career",
+            "Contact",
+            "CTA",
+            "Error",
+            "FAQ",
+            "Feature",
+            "File-upload",
+            "Footer",
+            "Hero",
+            "Integrations",
+            "Navigation",
+            "Newsletter",
+            "Notification",
+            "Pricing",
+            "Stats",
+            "Team",
+            "Testimonials",
+            "Widget",
+            "DashboardsSoon",
+            "TemplatesSoon",
+            "Legal",
+            "Toggle dark/light mode",
+            "X",
+            "GitHub",
+            "LinkedIn",
+            "Toggle Sidebar",
+            "Blocks",
+            "Search components...K",
+            "Add Custom Theme",
+            "Switch to dark mode",
+            "Copy prompt for Lovable",
+            "Copy prompt for v0",
+            "Copy prompt for Bolt",
+            "npm",
+            "Copy install command for error 1"
+          ],
+          "palette": [
+            "oklch(0.145 0 0)",
+            "oklch(1 0 0)",
+            "oklch(0.922 0 0)",
+            "oklch(0.556 0 0)",
+            "oklab(0.922 0 0 / 0.5)",
+            "oklch(0.205 0 0)",
+            "oklch(0.97 0 0)",
+            "oklch(0.967 0.003 264.542)",
+            "rgb(255, 255, 255)",
+            "oklch(0.648 0.2 131.684)",
+            "oklab(0.97 0 0 / 0.6)",
+            "oklab(0.922 0 0 / 0.3)",
+            "oklab(0.145 0 0 / 0.7)",
+            "oklch(0.98 0.016 73.684)",
+            "oklch(0.768 0.233 130.85)"
+          ],
+          "layoutSignals": {
+            "hasNav": true,
+            "hasHero": true,
+            "hasPricing": true,
+            "hasTestimonials": true,
+            "hasFAQ": true,
+            "hasVideo": false,
+            "cardLikeCount": 4,
+            "imageCount": 23,
+            "buttonCount": 127,
+            "formCount": 0
+          },
+          "codeBlocks": [],
+          "codeLinks": [
+            {
+              "url": "https://github.com/watermeloncorp",
+              "text": ""
+            }
+          ]
+        },
+        {
+          "sourceId": "watermelon-ui",
+          "url": "https://ui.watermelon.sh/blocks/FAQ",
+          "status": 200,
+          "licenseStatus": "review-required",
+          "reuseGuidance": "Component taxonomy and interaction reference. Verify license before copying code.",
+          "candidate": {
+            "index": 38,
+            "url": "https://ui.watermelon.sh/blocks/FAQ",
+            "text": "FAQ 5 Blocks",
+            "heading": "",
+            "description": "Announcement9 blocksAuth6 blocksBlog4 blocksCareer4 blocksContact7 blocksCTA4 blocksError7 blocksFAQ5 blocksFeature5 blocksFile-upload5 blocksFooter22 blocksHero13 blocksIntegrations5 blocksNavigation7 blocksNewsletter5 blocksNotification4 blocksPricing5 blocksStats4 blocksTeam5 blocksTestimonials4 blocksWidget5 blocks",
+            "imageSrc": "https://assets.watermelon.sh/components/watermelonoriginalassets/announcement-1.webp",
+            "imageAlt": "Announcement preview",
+            "buttonText": [
+              "Announcement9 blocks",
+              "Auth6 blocks",
+              "Blog4 blocks",
+              "Career4 blocks",
+              "Contact7 blocks",
+              "CTA4 blocks",
+              "Error7 blocks",
+              "FAQ5 blocks"
+            ],
+            "tags": [],
+            "cardArea": 2712527,
+            "score": 10,
+            "sourceMode": "block-gallery"
+          },
+          "screenshots": {
+            "desktop": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/watermelon-ui/faq-5-blocks/desktop.png",
+              "sha256": "6f9b934f7a880068192057dd111d77584aa64da111bc83d5247c166555807918",
+              "mode": "viewport"
+            },
+            "mobile": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/watermelon-ui/faq-5-blocks/mobile.png",
+              "sha256": "fc68f6d206cd6a5aac2edcd102515e3727d6915e2e243588c9009cc54369aa0e",
+              "mode": "viewport"
+            }
+          },
+          "screenshotQuality": {
+            "desktop": {
+              "viewport": {
+                "width": 1440,
+                "height": 1000
+              },
+              "textLength": 3305,
+              "mediaCount": 164,
+              "codeCount": 0,
+              "headingCount": 39,
+              "usefulElementCount": 100,
+              "visibleAreaRatio": 3.366,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Watermelon UIbeta",
+                "Toggle Sidebar",
+                "Installation",
+                "Framework Support",
+                "Changelog",
+                "Animated",
+                "Animated",
+                "Component"
+              ]
+            },
+            "mobile": {
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "textLength": 2540,
+              "mediaCount": 144,
+              "codeCount": 0,
+              "headingCount": 39,
+              "usefulElementCount": 25,
+              "visibleAreaRatio": 3.602,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Toggle SidebarSearch components...KAdd Custom ThemeFAQFAQ block variants.5 blocksfaq 1npmnpx shadcn@latest add https://r",
+                "Toggle Sidebar",
+                "Add Custom Theme",
+                "FAQFAQ block variants.5 blocksfaq 1npmnpx shadcn@latest add https://registry.watermelon.sh/r/faq-1.jsonMobileTabletDeskt",
+                "FAQFAQ block variants.5 blocksfaq 1npmnpx shadcn@latest add https://registry.watermelon.sh/r/faq-1.jsonMobileTabletDeskt",
+                "FAQ",
+                "Mobile",
+                "Tablet"
+              ]
+            }
+          },
+          "qualityWarnings": [],
+          "failedRequestCount": 2,
+          "title": "FAQ - UI Blocks | Watermelon UI",
+          "description": "A collection of high-quality React components, dashboards, and UI blocks. Copy and paste production-ready UI with ease.",
+          "headings": [
+            {
+              "level": "h1",
+              "text": "Watermelon UI - High-Quality React Components Registry"
+            },
+            {
+              "level": "h1",
+              "text": "FAQ"
+            },
+            {
+              "level": "h2",
+              "text": "Got questions about Apex?We've got answers."
+            },
+            {
+              "level": "h3",
+              "text": "What technologies do you specialize in?"
+            },
+            {
+              "level": "h3",
+              "text": "Can you build fully custom base-ui components?"
+            },
+            {
+              "level": "h3",
+              "text": "Do you work with startups and early-stage products?"
+            },
+            {
+              "level": "h3",
+              "text": "How do you handle project communication?"
+            },
+            {
+              "level": "h3",
+              "text": "Can existing applications be redesigned or optimized?"
+            },
+            {
+              "level": "h3",
+              "text": "Do you provide ongoing maintenance and support?"
+            },
+            {
+              "level": "h1",
+              "text": "Frequently asked questions"
+            },
+            {
+              "level": "h3",
+              "text": "What technologies do you use for frontend development?"
+            },
+            {
+              "level": "h3",
+              "text": "Can you build real-time applications?"
+            },
+            {
+              "level": "h3",
+              "text": "Do you work with monorepos?"
+            },
+            {
+              "level": "h3",
+              "text": "Can you integrate authentication systems?"
+            },
+            {
+              "level": "h2",
+              "text": "Everything you need to know"
+            },
+            {
+              "level": "h3",
+              "text": "01Can you build fully custom dashboards and admin panels?"
+            },
+            {
+              "level": "h3",
+              "text": "02Do you support scalable component architecture?"
+            },
+            {
+              "level": "h3",
+              "text": "03Can existing React or Next.js projects be improved?"
+            },
+            {
+              "level": "h3",
+              "text": "04How quickly can a new project get started?"
+            },
+            {
+              "level": "h3",
+              "text": "05Do you build realtime experiences?"
+            },
+            {
+              "level": "h3",
+              "text": "06Is mobile responsiveness included by default?"
+            },
+            {
+              "level": "h3",
+              "text": "07Can you work with existing APIs and backend systems?"
+            },
+            {
+              "level": "h2",
+              "text": "Frequently asked question"
+            },
+            {
+              "level": "h3",
+              "text": "What technologies do you specialize in?"
+            },
+            {
+              "level": "h3",
+              "text": "Do you work with startups and early-stage products?"
+            },
+            {
+              "level": "h3",
+              "text": "Can existing applications be redesigned or optimized?"
+            },
+            {
+              "level": "h3",
+              "text": "Can you build fully custom base-ui components?"
+            },
+            {
+              "level": "h3",
+              "text": "How do you handle project communication?"
+            },
+            {
+              "level": "h3",
+              "text": "Do you provide ongoing maintenance and support?"
+            },
+            {
+              "level": "h2",
+              "text": "Frontend Development"
+            },
+            {
+              "level": "h3",
+              "text": "What frontend technologies do you specialize in?"
+            },
+            {
+              "level": "h3",
+              "text": "Can you create reusable design systems?"
+            },
+            {
+              "level": "h3",
+              "text": "Do you support responsive and mobile-first design?"
+            },
+            {
+              "level": "h3",
+              "text": "Can existing applications be redesigned?"
+            },
+            {
+              "level": "h2",
+              "text": "Backend & Infrastructure"
+            },
+            {
+              "level": "h3",
+              "text": "What backend technologies do you use?"
+            },
+            {
+              "level": "h3",
+              "text": "Can you build realtime applications?"
+            },
+            {
+              "level": "h3",
+              "text": "How do you handle authentication and security?"
+            },
+            {
+              "level": "h3",
+              "text": "Do you provide deployment and maintenance support?"
+            }
+          ],
+          "sections": [
+            {
+              "index": 1,
+              "heading": "FAQ",
+              "textSample": "FAQFAQ block variants.5 blocksfaq 1npmnpx shadcn@latest add https://registry.watermelon.sh/r/faq-1.jsonMobileTabletDesktopFrequently asked questionsGot questions about Apex?We've got answers.What technologies do you specialize in?Can you build fully custom base-ui components?Do you work with startups and early-stage pr",
+              "imageCount": 139,
+              "buttonCount": 86
+            },
+            {
+              "index": 2,
+              "heading": "Got questions about Apex?We've got answers.",
+              "textSample": "Frequently asked questionsGot questions about Apex?We've got answers.What technologies do you specialize in?Can you build fully custom base-ui components?Do you work with startups and early-stage products?How do you handle project communication?Can existing applications be redesigned or optimized?Do you provide ongoing",
+              "imageCount": 24,
+              "buttonCount": 6
+            },
+            {
+              "index": 3,
+              "heading": "Frequently asked questions",
+              "textSample": "Need help?Frequently asked questionsFind quick answers about our pricing, onboarding, and performance tracking tools.DevelopmentDesignWhat technologies do you use for frontend development?Can you build real-time applications?Do you work with monorepos?Can you integrate authentication systems?",
+              "imageCount": 18,
+              "buttonCount": 6
+            },
+            {
+              "index": 4,
+              "heading": "Everything you need to know",
+              "textSample": "Frequently asked questionsEverything you need to knowFind answers about plans, onboarding, roles, and how teams use our tool every day.01Can you build fully custom dashboards and admin panels?02Do you support scalable component architecture?03Can existing React or Next.js projects be improved?04How quickly can a new pr",
+              "imageCount": 28,
+              "buttonCount": 7
+            },
+            {
+              "index": 5,
+              "heading": "Frequently asked question",
+              "textSample": "/ FAQsFrequently asked questionhere's everything you need to know to get started, manage your account, and troubleshoot the most frequent issues.View allWhat technologies do you specialize in?Do you work with startups and early-stage products?Can existing applications be redesigned or optimized?Can you build fully cust",
+              "imageCount": 18,
+              "buttonCount": 7
+            },
+            {
+              "index": 6,
+              "heading": "Frontend Development",
+              "textSample": "Frontend DevelopmentLearn how we build scalable frontend applications, reusable component systems, and polished user experiences. Need help with a custom project? Talk to our team.What frontend technologies do you specialize in?Can you create reusable design systems?Do you support responsive and mobile-first design?Can",
+              "imageCount": 16,
+              "buttonCount": 10
+            }
+          ],
+          "ctas": [
+            "Watermelon UIbeta",
+            "Toggle Sidebar",
+            "searchK",
+            "Installation",
+            "Framework Support",
+            "Changelog",
+            "Animated",
+            "Animated",
+            "Component",
+            "Component",
+            "Blocks",
+            "Blocks",
+            "Announcement",
+            "Auth",
+            "Blog",
+            "Career",
+            "Contact",
+            "CTA",
+            "Error",
+            "FAQ",
+            "Feature",
+            "File-upload",
+            "Footer",
+            "Hero",
+            "Integrations",
+            "Navigation",
+            "Newsletter",
+            "Notification",
+            "Pricing",
+            "Stats",
+            "Team",
+            "Testimonials",
+            "Widget",
+            "DashboardsSoon",
+            "TemplatesSoon",
+            "Legal",
+            "Toggle dark/light mode",
+            "X",
+            "GitHub",
+            "LinkedIn",
+            "Toggle Sidebar",
+            "Blocks",
+            "Search components...K",
+            "Add Custom Theme",
+            "Switch to dark mode",
+            "Copy prompt for Lovable",
+            "Copy prompt for v0",
+            "Copy prompt for Bolt",
+            "npm",
+            "Copy install command for faq 1"
+          ],
+          "palette": [
+            "oklch(0.145 0 0)",
+            "oklch(1 0 0)",
+            "oklch(0.922 0 0)",
+            "oklch(0.556 0 0)",
+            "oklab(0.922 0 0 / 0.5)",
+            "oklch(0.205 0 0)",
+            "oklch(0.97 0 0)",
+            "oklch(0.967 0.003 264.542)",
+            "rgb(255, 255, 255)",
+            "oklch(0.648 0.2 131.684)",
+            "oklab(0.97 0 0 / 0.6)",
+            "oklab(0.922 0 0 / 0.3)",
+            "oklab(0.145 0 0 / 0.7)"
+          ],
+          "layoutSignals": {
+            "hasNav": true,
+            "hasHero": true,
+            "hasPricing": true,
+            "hasTestimonials": true,
+            "hasFAQ": true,
+            "hasVideo": false,
+            "cardLikeCount": 0,
+            "imageCount": 15,
+            "buttonCount": 131,
+            "formCount": 0
+          },
+          "codeBlocks": [],
+          "codeLinks": [
+            {
+              "url": "https://github.com/watermeloncorp",
+              "text": ""
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

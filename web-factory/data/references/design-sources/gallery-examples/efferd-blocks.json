@@ -1,0 +1,2024 @@
+{
+  "capturedAt": "2026-06-15T21:49:40.036Z",
+  "cacheRoot": "C:/Users/PC/.codex/design-stack/gallery-examples-full",
+  "policy": "Gallery screenshots and structure are reference artifacts. Copy/adapt code only when licenseStatus is compatible and the linked/local repo license has been reviewed.",
+  "configPath": "data/references/design-sources/gallery-reference-sources.json",
+  "results": [
+    {
+      "id": "efferd-blocks",
+      "name": "Efferd Blocks",
+      "url": "https://efferd.com/blocks",
+      "mode": "block-gallery",
+      "usage": "Block-level layout discovery. Verify each block license before reuse.",
+      "licenseStatus": "license-per-block",
+      "status": 200,
+      "failedRequestCount": 0,
+      "rawCandidateCount": 19,
+      "selectedCandidateCount": 17,
+      "detailedExampleCount": 8,
+      "candidates": [
+        {
+          "index": 7,
+          "url": "https://efferd.com/blocks/auth",
+          "text": "Auth 14 blocks",
+          "heading": "Auth",
+          "description": "Auth14 blocks",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [],
+          "tags": [],
+          "cardArea": 39204,
+          "score": 9,
+          "sourceMode": "block-gallery"
+        },
+        {
+          "index": 8,
+          "url": "https://efferd.com/blocks/blogs",
+          "text": "Blog Sections 5 blocks",
+          "heading": "Blog Sections",
+          "description": "Blog Sections5 blocks",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [],
+          "tags": [],
+          "cardArea": 39204,
+          "score": 9,
+          "sourceMode": "block-gallery"
+        },
+        {
+          "index": 9,
+          "url": "https://efferd.com/blocks/contact",
+          "text": "Contact 11 blocks",
+          "heading": "Contact",
+          "description": "Contact11 blocks",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [],
+          "tags": [],
+          "cardArea": 39204,
+          "score": 9,
+          "sourceMode": "block-gallery"
+        },
+        {
+          "index": 10,
+          "url": "https://efferd.com/blocks/cta",
+          "text": "Call to Action 20 blocks",
+          "heading": "Call to Action",
+          "description": "Call to Action20 blocks",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [],
+          "tags": [],
+          "cardArea": 39204,
+          "score": 9,
+          "sourceMode": "block-gallery"
+        },
+        {
+          "index": 11,
+          "url": "https://efferd.com/blocks/faqs",
+          "text": "Faqs 8 blocks",
+          "heading": "Faqs",
+          "description": "Faqs8 blocks",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [],
+          "tags": [],
+          "cardArea": 39204,
+          "score": 9,
+          "sourceMode": "block-gallery"
+        },
+        {
+          "index": 12,
+          "url": "https://efferd.com/blocks/features",
+          "text": "Features 10 blocks",
+          "heading": "Features",
+          "description": "Features10 blocks",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [],
+          "tags": [],
+          "cardArea": 39204,
+          "score": 9,
+          "sourceMode": "block-gallery"
+        },
+        {
+          "index": 13,
+          "url": "https://efferd.com/blocks/footer",
+          "text": "Footer 14 blocks",
+          "heading": "Footer",
+          "description": "Footer14 blocks",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [],
+          "tags": [],
+          "cardArea": 39204,
+          "score": 9,
+          "sourceMode": "block-gallery"
+        },
+        {
+          "index": 14,
+          "url": "https://efferd.com/blocks/header",
+          "text": "14 blocks Header",
+          "heading": "Header",
+          "description": "14 blocks Header",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [],
+          "tags": [],
+          "cardArea": 39204,
+          "score": 9,
+          "sourceMode": "block-gallery"
+        },
+        {
+          "index": 15,
+          "url": "https://efferd.com/blocks/hero",
+          "text": "Hero Sections 9 blocks (+ 3 Free)",
+          "heading": "Hero Sections",
+          "description": "Hero Sections9 blocks (+ 3 Free)",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [],
+          "tags": [],
+          "cardArea": 39204,
+          "score": 9,
+          "sourceMode": "block-gallery"
+        },
+        {
+          "index": 16,
+          "url": "https://efferd.com/blocks/image-gallery",
+          "text": "Image Gallery 1 Free block",
+          "heading": "Image Gallery",
+          "description": "Image Gallery1 Free block",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [],
+          "tags": [],
+          "cardArea": 39204,
+          "score": 9,
+          "sourceMode": "block-gallery"
+        },
+        {
+          "index": 17,
+          "url": "https://efferd.com/blocks/integrations",
+          "text": "Integrations 12 blocks",
+          "heading": "Integrations",
+          "description": "Integrations12 blocks",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [],
+          "tags": [],
+          "cardArea": 39204,
+          "score": 9,
+          "sourceMode": "block-gallery"
+        },
+        {
+          "index": 18,
+          "url": "https://efferd.com/blocks/logo-cloud",
+          "text": "Logo Cloud 11 blocks",
+          "heading": "Logo Cloud",
+          "description": "Logo Cloud11 blocks",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [],
+          "tags": [],
+          "cardArea": 39204,
+          "score": 9,
+          "sourceMode": "block-gallery"
+        },
+        {
+          "index": 19,
+          "url": "https://efferd.com/blocks/not-found",
+          "text": "404 Not Found 2 Free blocks",
+          "heading": "Not Found",
+          "description": "404Not Found2 Free blocks",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [],
+          "tags": [],
+          "cardArea": 39204,
+          "score": 9,
+          "sourceMode": "block-gallery"
+        },
+        {
+          "index": 21,
+          "url": "https://efferd.com/blocks/testimonials",
+          "text": "Testimonials 8 blocks",
+          "heading": "Testimonials",
+          "description": "Testimonials8 blocks",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [],
+          "tags": [],
+          "cardArea": 39204,
+          "score": 9,
+          "sourceMode": "block-gallery"
+        },
+        {
+          "index": 22,
+          "url": "https://efferd.com/blocks/app-shell",
+          "text": "App Shell 10 blocks",
+          "heading": "App Shell",
+          "description": "App Shell10 blocks",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [],
+          "tags": [],
+          "cardArea": 39204,
+          "score": 9,
+          "sourceMode": "block-gallery"
+        },
+        {
+          "index": 23,
+          "url": "https://efferd.com/blocks/dashboard",
+          "text": "Dashboard 10 blocks",
+          "heading": "Dashboard",
+          "description": "Dashboard10 blocks",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [],
+          "tags": [],
+          "cardArea": 39204,
+          "score": 9,
+          "sourceMode": "block-gallery"
+        },
+        {
+          "index": 24,
+          "url": "https://efferd.com/",
+          "text": "",
+          "heading": "Product",
+          "description": "Less effort. More effect.Toggle ThemeDProductBlocksPricingAffiliateHire UsResourcesDocsChangelogPartnersFAQs",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [
+            "Toggle ThemeD",
+            "Blocks",
+            "Pricing",
+            "Affiliate",
+            "Hire Us",
+            "Docs",
+            "Changelog",
+            "Partners"
+          ],
+          "tags": [],
+          "cardArea": 292864,
+          "score": 8,
+          "sourceMode": "block-gallery"
+        }
+      ],
+      "screenshot": {
+        "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/efferd-blocks/gallery.png",
+        "sha256": "f436a96910bedf04f198784eedeb02218d82c308777a6ccc5757145fbd66c509",
+        "mode": "full-page"
+      },
+      "screenshotQuality": {
+        "viewport": {
+          "width": 1440,
+          "height": 1000
+        },
+        "textLength": 775,
+        "mediaCount": 24,
+        "codeCount": 0,
+        "headingCount": 22,
+        "usefulElementCount": 54,
+        "visibleAreaRatio": 2.044,
+        "isLikelySparse": false,
+        "visibleSamples": [
+          "Efferd",
+          "Blocks",
+          "Pricing",
+          "Docs",
+          "Changelog",
+          "Log In",
+          "Get access",
+          "Explore beautiful shadcn blocksDiscover beautifully crafted shadcn blocks — ready to copy, customize, and drop into your"
+        ]
+      },
+      "examples": [
+        {
+          "sourceId": "efferd-blocks",
+          "url": "https://efferd.com/blocks/auth",
+          "status": 200,
+          "licenseStatus": "license-per-block",
+          "reuseGuidance": "Block-level layout discovery. Verify each block license before reuse.",
+          "candidate": {
+            "index": 7,
+            "url": "https://efferd.com/blocks/auth",
+            "text": "Auth 14 blocks",
+            "heading": "Auth",
+            "description": "Auth14 blocks",
+            "imageSrc": "",
+            "imageAlt": "",
+            "buttonText": [],
+            "tags": [],
+            "cardArea": 39204,
+            "score": 9,
+            "sourceMode": "block-gallery"
+          },
+          "screenshots": {
+            "desktop": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/efferd-blocks/auth/desktop.png",
+              "sha256": "8f4bec437fb53e6afb4b5cd0455e4cf44745fc37e59345a6016a4aa8b4ac86b6",
+              "mode": "viewport"
+            },
+            "mobile": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/efferd-blocks/auth/mobile.png",
+              "sha256": "844f6f298803fb2d77038779b22cef37c2b9727158add6472d6f4b26aa57ee89",
+              "mode": "viewport"
+            }
+          },
+          "screenshotQuality": {
+            "desktop": {
+              "viewport": {
+                "width": 1440,
+                "height": 1000
+              },
+              "textLength": 2044,
+              "mediaCount": 244,
+              "codeCount": 0,
+              "headingCount": 15,
+              "usefulElementCount": 40,
+              "visibleAreaRatio": 1.011,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Efferd",
+                "Blocks",
+                "Pricing",
+                "Docs",
+                "Changelog",
+                "Log In",
+                "Get access",
+                "Back to BlocksExplore Auth BlocksDiscover 14 beautifully crafted Auth blocks — ready to copy, customize, and drop into y"
+              ]
+            },
+            "mobile": {
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "textLength": 1449,
+              "mediaCount": 244,
+              "codeCount": 0,
+              "headingCount": 15,
+              "usefulElementCount": 32,
+              "visibleAreaRatio": 1.12,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Efferd",
+                "Log In",
+                "Get access",
+                "Back to BlocksExplore Auth BlocksDiscover 14 beautifully crafted Auth blocks — ready to copy, customize, and drop into y",
+                "Back to Blocks",
+                "Explore Auth Blocks",
+                "auth 1",
+                "preview"
+              ]
+            }
+          },
+          "qualityWarnings": [],
+          "failedRequestCount": 0,
+          "title": "Free & Pro Shadcn Auth Blocks - Efferd",
+          "description": "Discover Auth blocks — ready to copy, customize, and drop into your Shadcn/UI project.",
+          "headings": [
+            {
+              "level": "h1",
+              "text": "Explore Auth Blocks"
+            },
+            {
+              "level": "h2",
+              "text": "auth 1"
+            },
+            {
+              "level": "h2",
+              "text": "auth 2"
+            },
+            {
+              "level": "h2",
+              "text": "auth 3"
+            },
+            {
+              "level": "h2",
+              "text": "auth 4"
+            },
+            {
+              "level": "h2",
+              "text": "auth 5"
+            },
+            {
+              "level": "h2",
+              "text": "auth 6"
+            },
+            {
+              "level": "h2",
+              "text": "auth 7"
+            },
+            {
+              "level": "h2",
+              "text": "auth 8"
+            },
+            {
+              "level": "h2",
+              "text": "auth 9"
+            },
+            {
+              "level": "h2",
+              "text": "auth 10"
+            },
+            {
+              "level": "h2",
+              "text": "auth 11"
+            },
+            {
+              "level": "h2",
+              "text": "auth 12"
+            },
+            {
+              "level": "h2",
+              "text": "auth 13"
+            },
+            {
+              "level": "h2",
+              "text": "auth 14"
+            }
+          ],
+          "sections": [],
+          "ctas": [
+            "Efferd",
+            "Blocks",
+            "Pricing",
+            "Docs",
+            "Changelog",
+            "Log In",
+            "Get access",
+            "Toggle menu",
+            "Back to Blocks",
+            "#",
+            "preview",
+            "code",
+            "@efferd/auth-1",
+            "pnpm",
+            "Copy Prompt",
+            "Add to favorites",
+            "More block actions",
+            "#",
+            "preview",
+            "code",
+            "@efferd/auth-2",
+            "pnpm",
+            "Copy Prompt",
+            "Add to favorites",
+            "More block actions",
+            "#",
+            "preview",
+            "code",
+            "@efferd/auth-3",
+            "pnpm",
+            "Copy Prompt",
+            "Add to favorites",
+            "More block actions",
+            "#",
+            "preview",
+            "code",
+            "@efferd/auth-4",
+            "pnpm",
+            "Copy Prompt",
+            "Add to favorites",
+            "More block actions",
+            "#",
+            "preview",
+            "code",
+            "@efferd/auth-5",
+            "pnpm",
+            "Copy Prompt",
+            "Add to favorites",
+            "More block actions",
+            "#"
+          ],
+          "palette": [
+            "lab(1.5609 0 0)",
+            "lab(98.26 0 0)",
+            "lab(88.4 0 0.0000119209)",
+            "lab(48.496 0 0)",
+            "lab(86.0279 1.77148 0.600767)",
+            "lab(7.78201 -0.0000149012 0)",
+            "lab(90.72 0.0000298023 -0.0000119209)"
+          ],
+          "layoutSignals": {
+            "hasNav": true,
+            "hasHero": true,
+            "hasPricing": true,
+            "hasTestimonials": true,
+            "hasFAQ": true,
+            "hasVideo": false,
+            "cardLikeCount": 2,
+            "imageCount": 1,
+            "buttonCount": 150,
+            "formCount": 0
+          },
+          "codeBlocks": [],
+          "codeLinks": []
+        },
+        {
+          "sourceId": "efferd-blocks",
+          "url": "https://efferd.com/blocks/blogs",
+          "status": 200,
+          "licenseStatus": "license-per-block",
+          "reuseGuidance": "Block-level layout discovery. Verify each block license before reuse.",
+          "candidate": {
+            "index": 8,
+            "url": "https://efferd.com/blocks/blogs",
+            "text": "Blog Sections 5 blocks",
+            "heading": "Blog Sections",
+            "description": "Blog Sections5 blocks",
+            "imageSrc": "",
+            "imageAlt": "",
+            "buttonText": [],
+            "tags": [],
+            "cardArea": 39204,
+            "score": 9,
+            "sourceMode": "block-gallery"
+          },
+          "screenshots": {
+            "desktop": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/efferd-blocks/blog-sections/desktop.png",
+              "sha256": "6936a45ca2e9a22f1b90aebbf37628c67675e05543a5b4d2b6c1d141b7863677",
+              "mode": "viewport"
+            },
+            "mobile": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/efferd-blocks/blog-sections/mobile.png",
+              "sha256": "eba0374cf345c607ce30cc084c1f4f6a560858d06cf9a59a83690107bbc228ec",
+              "mode": "viewport"
+            }
+          },
+          "screenshotQuality": {
+            "desktop": {
+              "viewport": {
+                "width": 1440,
+                "height": 1000
+              },
+              "textLength": 884,
+              "mediaCount": 100,
+              "codeCount": 0,
+              "headingCount": 6,
+              "usefulElementCount": 40,
+              "visibleAreaRatio": 1.012,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Efferd",
+                "Blocks",
+                "Pricing",
+                "Docs",
+                "Changelog",
+                "Log In",
+                "Get access",
+                "Back to BlocksExplore Blogs BlocksDiscover 5 beautifully crafted Blogs blocks — ready to copy, customize, and drop into "
+              ]
+            },
+            "mobile": {
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "textLength": 649,
+              "mediaCount": 100,
+              "codeCount": 0,
+              "headingCount": 6,
+              "usefulElementCount": 32,
+              "visibleAreaRatio": 1.121,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Efferd",
+                "Log In",
+                "Get access",
+                "Back to BlocksExplore Blogs BlocksDiscover 5 beautifully crafted Blogs blocks — ready to copy, customize, and drop into ",
+                "Back to Blocks",
+                "Explore Blogs Blocks",
+                "blogs 1",
+                "preview"
+              ]
+            }
+          },
+          "qualityWarnings": [],
+          "failedRequestCount": 0,
+          "title": "Free & Pro Shadcn Blogs Blocks - Efferd",
+          "description": "Discover Blogs blocks — ready to copy, customize, and drop into your Shadcn/UI project.",
+          "headings": [
+            {
+              "level": "h1",
+              "text": "Explore Blogs Blocks"
+            },
+            {
+              "level": "h2",
+              "text": "blogs 1"
+            },
+            {
+              "level": "h2",
+              "text": "blogs 2"
+            },
+            {
+              "level": "h2",
+              "text": "blogs 3"
+            },
+            {
+              "level": "h2",
+              "text": "blogs 4"
+            },
+            {
+              "level": "h2",
+              "text": "blogs 5"
+            }
+          ],
+          "sections": [],
+          "ctas": [
+            "Efferd",
+            "Blocks",
+            "Pricing",
+            "Docs",
+            "Changelog",
+            "Log In",
+            "Get access",
+            "Toggle menu",
+            "Back to Blocks",
+            "#",
+            "preview",
+            "code",
+            "@efferd/blogs-1",
+            "pnpm",
+            "Copy Prompt",
+            "Add to favorites",
+            "More block actions",
+            "#",
+            "preview",
+            "code",
+            "@efferd/blogs-2",
+            "pnpm",
+            "Copy Prompt",
+            "Add to favorites",
+            "More block actions",
+            "#",
+            "preview",
+            "code",
+            "@efferd/blogs-3",
+            "pnpm",
+            "Copy Prompt",
+            "Add to favorites",
+            "More block actions",
+            "#",
+            "preview",
+            "code",
+            "@efferd/blogs-4",
+            "pnpm",
+            "Copy Prompt",
+            "Add to favorites",
+            "More block actions",
+            "#",
+            "preview",
+            "code",
+            "@efferd/blogs-5",
+            "pnpm",
+            "Copy Prompt",
+            "Add to favorites",
+            "More block actions",
+            "Customizerradix UI, lucide⌘."
+          ],
+          "palette": [
+            "lab(1.5609 0 0)",
+            "lab(98.26 0 0)",
+            "lab(88.4 0 0.0000119209)",
+            "lab(48.496 0 0)",
+            "lab(86.0279 1.77148 0.600767)",
+            "lab(7.78201 -0.0000149012 0)",
+            "lab(90.72 0.0000298023 -0.0000119209)",
+            "lab(100 0 0)",
+            "oklab(0.555999 -0.00000530481 0.000012964 / 0.8)",
+            "oklab(0.12 -0.00000116229 0.00000281632 / 0.8)"
+          ],
+          "layoutSignals": {
+            "hasNav": true,
+            "hasHero": true,
+            "hasPricing": true,
+            "hasTestimonials": true,
+            "hasFAQ": true,
+            "hasVideo": false,
+            "cardLikeCount": 2,
+            "imageCount": 1,
+            "buttonCount": 69,
+            "formCount": 0
+          },
+          "codeBlocks": [],
+          "codeLinks": []
+        },
+        {
+          "sourceId": "efferd-blocks",
+          "url": "https://efferd.com/blocks/contact",
+          "status": 200,
+          "licenseStatus": "license-per-block",
+          "reuseGuidance": "Block-level layout discovery. Verify each block license before reuse.",
+          "candidate": {
+            "index": 9,
+            "url": "https://efferd.com/blocks/contact",
+            "text": "Contact 11 blocks",
+            "heading": "Contact",
+            "description": "Contact11 blocks",
+            "imageSrc": "",
+            "imageAlt": "",
+            "buttonText": [],
+            "tags": [],
+            "cardArea": 39204,
+            "score": 9,
+            "sourceMode": "block-gallery"
+          },
+          "screenshots": {
+            "desktop": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/efferd-blocks/contact/desktop.png",
+              "sha256": "05d7fcb1523393d903189ecc952c02f74631c552481eb49fa57bc808d86ed3ed",
+              "mode": "viewport"
+            },
+            "mobile": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/efferd-blocks/contact/mobile.png",
+              "sha256": "f1535632214ea0f63f51af37707d939a40de88d4714a5023c42f2d1c13cef022",
+              "mode": "viewport"
+            }
+          },
+          "screenshotQuality": {
+            "desktop": {
+              "viewport": {
+                "width": 1440,
+                "height": 1000
+              },
+              "textLength": 1842,
+              "mediaCount": 196,
+              "codeCount": 0,
+              "headingCount": 12,
+              "usefulElementCount": 61,
+              "visibleAreaRatio": 1.069,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Efferd",
+                "Blocks",
+                "Pricing",
+                "Docs",
+                "Changelog",
+                "Log In",
+                "Get access",
+                "Back to BlocksExplore Contact BlocksDiscover 11 beautifully crafted Contact blocks — ready to copy, customize, and drop "
+              ]
+            },
+            "mobile": {
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "textLength": 1337,
+              "mediaCount": 196,
+              "codeCount": 0,
+              "headingCount": 12,
+              "usefulElementCount": 34,
+              "visibleAreaRatio": 1.178,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Efferd",
+                "Log In",
+                "Get access",
+                "Back to BlocksExplore Contact BlocksDiscover 11 beautifully crafted Contact blocks — ready to copy, customize, and drop ",
+                "Back to Blocks",
+                "Explore Contact Blocks",
+                "contact 1",
+                "preview"
+              ]
+            }
+          },
+          "qualityWarnings": [],
+          "failedRequestCount": 0,
+          "title": "Free & Pro Shadcn Contact Blocks - Efferd",
+          "description": "Discover Contact blocks — ready to copy, customize, and drop into your Shadcn/UI project.",
+          "headings": [
+            {
+              "level": "h1",
+              "text": "Explore Contact Blocks"
+            },
+            {
+              "level": "h2",
+              "text": "contact 1"
+            },
+            {
+              "level": "h2",
+              "text": "contact 2"
+            },
+            {
+              "level": "h2",
+              "text": "contact 3"
+            },
+            {
+              "level": "h2",
+              "text": "contact 4"
+            },
+            {
+              "level": "h2",
+              "text": "contact 5"
+            },
+            {
+              "level": "h2",
+              "text": "contact 6"
+            },
+            {
+              "level": "h2",
+              "text": "contact 7"
+            },
+            {
+              "level": "h2",
+              "text": "contact 8"
+            },
+            {
+              "level": "h2",
+              "text": "contact 9"
+            },
+            {
+              "level": "h2",
+              "text": "contact 10"
+            },
+            {
+              "level": "h2",
+              "text": "contact 11"
+            }
+          ],
+          "sections": [],
+          "ctas": [
+            "Efferd",
+            "Blocks",
+            "Pricing",
+            "Docs",
+            "Changelog",
+            "Log In",
+            "Get access",
+            "Toggle menu",
+            "Back to Blocks",
+            "#",
+            "preview",
+            "code",
+            "@efferd/contact-1",
+            "pnpm",
+            "Copy Prompt",
+            "Add to favorites",
+            "More block actions",
+            "#",
+            "preview",
+            "code",
+            "@efferd/contact-2",
+            "pnpm",
+            "Copy Prompt",
+            "Add to favorites",
+            "More block actions",
+            "#",
+            "preview",
+            "code",
+            "@efferd/contact-3",
+            "pnpm",
+            "Copy Prompt",
+            "Add to favorites",
+            "More block actions",
+            "#",
+            "preview",
+            "code",
+            "@efferd/contact-4",
+            "pnpm",
+            "Copy Prompt",
+            "Add to favorites",
+            "More block actions",
+            "#",
+            "preview",
+            "code",
+            "@efferd/contact-5",
+            "pnpm",
+            "Copy Prompt",
+            "Add to favorites",
+            "More block actions",
+            "#"
+          ],
+          "palette": [
+            "lab(1.5609 0 0)",
+            "lab(98.26 0 0)",
+            "lab(88.4 0 0.0000119209)",
+            "lab(48.496 0 0)",
+            "lab(86.0279 1.77148 0.600767)",
+            "lab(7.78201 -0.0000149012 0)",
+            "lab(90.72 0.0000298023 -0.0000119209)"
+          ],
+          "layoutSignals": {
+            "hasNav": true,
+            "hasHero": true,
+            "hasPricing": true,
+            "hasTestimonials": true,
+            "hasFAQ": true,
+            "hasVideo": false,
+            "cardLikeCount": 2,
+            "imageCount": 1,
+            "buttonCount": 123,
+            "formCount": 0
+          },
+          "codeBlocks": [],
+          "codeLinks": []
+        },
+        {
+          "sourceId": "efferd-blocks",
+          "url": "https://efferd.com/blocks/cta",
+          "status": 200,
+          "licenseStatus": "license-per-block",
+          "reuseGuidance": "Block-level layout discovery. Verify each block license before reuse.",
+          "candidate": {
+            "index": 10,
+            "url": "https://efferd.com/blocks/cta",
+            "text": "Call to Action 20 blocks",
+            "heading": "Call to Action",
+            "description": "Call to Action20 blocks",
+            "imageSrc": "",
+            "imageAlt": "",
+            "buttonText": [],
+            "tags": [],
+            "cardArea": 39204,
+            "score": 9,
+            "sourceMode": "block-gallery"
+          },
+          "screenshots": {
+            "desktop": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/efferd-blocks/call-to-action/desktop.png",
+              "sha256": "86a77bc7dcdd562cd1051616c6bf46d388c7cb2714747c5a1dec1e8047913194",
+              "mode": "viewport"
+            },
+            "mobile": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/efferd-blocks/call-to-action/mobile.png",
+              "sha256": "4386b20c016ce3fb006db5cfadfd651fbe0ca10e8a3b33bb0729ec7a160139ce",
+              "mode": "viewport"
+            }
+          },
+          "screenshotQuality": {
+            "desktop": {
+              "viewport": {
+                "width": 1440,
+                "height": 1000
+              },
+              "textLength": 3077,
+              "mediaCount": 340,
+              "codeCount": 0,
+              "headingCount": 21,
+              "usefulElementCount": 61,
+              "visibleAreaRatio": 1.065,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Efferd",
+                "Blocks",
+                "Pricing",
+                "Docs",
+                "Changelog",
+                "Log In",
+                "Get access",
+                "Back to BlocksExplore Cta BlocksDiscover 20 beautifully crafted Cta blocks — ready to copy, customize, and drop into you"
+              ]
+            },
+            "mobile": {
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "textLength": 2256,
+              "mediaCount": 340,
+              "codeCount": 0,
+              "headingCount": 21,
+              "usefulElementCount": 34,
+              "visibleAreaRatio": 1.171,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Efferd",
+                "Log In",
+                "Get access",
+                "Back to BlocksExplore Cta BlocksDiscover 20 beautifully crafted Cta blocks — ready to copy, customize, and drop into you",
+                "Back to Blocks",
+                "Explore Cta Blocks",
+                "cta 1",
+                "preview"
+              ]
+            }
+          },
+          "qualityWarnings": [],
+          "failedRequestCount": 1,
+          "title": "Free & Pro Shadcn Cta Blocks - Efferd",
+          "description": "Discover Cta blocks — ready to copy, customize, and drop into your Shadcn/UI project.",
+          "headings": [
+            {
+              "level": "h1",
+              "text": "Explore Cta Blocks"
+            },
+            {
+              "level": "h2",
+              "text": "cta 1"
+            },
+            {
+              "level": "h2",
+              "text": "cta 2"
+            },
+            {
+              "level": "h2",
+              "text": "cta 3"
+            },
+            {
+              "level": "h2",
+              "text": "cta 4"
+            },
+            {
+              "level": "h2",
+              "text": "cta 5"
+            },
+            {
+              "level": "h2",
+              "text": "cta 6"
+            },
+            {
+              "level": "h2",
+              "text": "cta 7"
+            },
+            {
+              "level": "h2",
+              "text": "cta 8"
+            },
+            {
+              "level": "h2",
+              "text": "cta 9"
+            },
+            {
+              "level": "h2",
+              "text": "cta 10"
+            },
+            {
+              "level": "h2",
+              "text": "cta 11"
+            },
+            {
+              "level": "h2",
+              "text": "cta 12"
+            },
+            {
+              "level": "h2",
+              "text": "cta 13"
+            },
+            {
+              "level": "h2",
+              "text": "cta 14"
+            },
+            {
+              "level": "h2",
+              "text": "cta 15"
+            },
+            {
+              "level": "h2",
+              "text": "cta 16"
+            },
+            {
+              "level": "h2",
+              "text": "cta 17"
+            },
+            {
+              "level": "h2",
+              "text": "cta 18"
+            },
+            {
+              "level": "h2",
+              "text": "cta 19"
+            },
+            {
+              "level": "h2",
+              "text": "cta 20"
+            }
+          ],
+          "sections": [],
+          "ctas": [
+            "Efferd",
+            "Blocks",
+            "Pricing",
+            "Docs",
+            "Changelog",
+            "Log In",
+            "Get access",
+            "Toggle menu",
+            "Back to Blocks",
+            "#",
+            "preview",
+            "code",
+            "@efferd/cta-1",
+            "pnpm",
+            "Copy Prompt",
+            "Add to favorites",
+            "More block actions",
+            "#",
+            "preview",
+            "code",
+            "@efferd/cta-2",
+            "pnpm",
+            "Copy Prompt",
+            "Add to favorites",
+            "More block actions",
+            "#",
+            "preview",
+            "code",
+            "@efferd/cta-3",
+            "pnpm",
+            "Copy Prompt",
+            "Add to favorites",
+            "More block actions",
+            "#",
+            "preview",
+            "code",
+            "@efferd/cta-4",
+            "pnpm",
+            "Copy Prompt",
+            "Add to favorites",
+            "More block actions",
+            "#",
+            "preview",
+            "code",
+            "@efferd/cta-5",
+            "pnpm",
+            "Copy Prompt",
+            "Add to favorites",
+            "More block actions",
+            "#"
+          ],
+          "palette": [
+            "lab(1.5609 0 0)",
+            "lab(98.26 0 0)",
+            "lab(88.4 0 0.0000119209)",
+            "lab(48.496 0 0)",
+            "lab(86.0279 1.77148 0.600767)",
+            "lab(7.78201 -0.0000149012 0)",
+            "lab(90.72 0.0000298023 -0.0000119209)"
+          ],
+          "layoutSignals": {
+            "hasNav": true,
+            "hasHero": true,
+            "hasPricing": true,
+            "hasTestimonials": true,
+            "hasFAQ": true,
+            "hasVideo": false,
+            "cardLikeCount": 2,
+            "imageCount": 1,
+            "buttonCount": 204,
+            "formCount": 0
+          },
+          "codeBlocks": [],
+          "codeLinks": []
+        },
+        {
+          "sourceId": "efferd-blocks",
+          "url": "https://efferd.com/blocks/faqs",
+          "status": 200,
+          "licenseStatus": "license-per-block",
+          "reuseGuidance": "Block-level layout discovery. Verify each block license before reuse.",
+          "candidate": {
+            "index": 11,
+            "url": "https://efferd.com/blocks/faqs",
+            "text": "Faqs 8 blocks",
+            "heading": "Faqs",
+            "description": "Faqs8 blocks",
+            "imageSrc": "",
+            "imageAlt": "",
+            "buttonText": [],
+            "tags": [],
+            "cardArea": 39204,
+            "score": 9,
+            "sourceMode": "block-gallery"
+          },
+          "screenshots": {
+            "desktop": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/efferd-blocks/faqs/desktop.png",
+              "sha256": "240ff65e2b6cb219560f0c0ebca1e45fb224eb0cf4fb495ca425cca275817b72",
+              "mode": "viewport"
+            },
+            "mobile": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/efferd-blocks/faqs/mobile.png",
+              "sha256": "b2b8e684fc9e219434a8244bedfdd0b12852cab037b9a1ca2ea917021163b0ba",
+              "mode": "viewport"
+            }
+          },
+          "screenshotQuality": {
+            "desktop": {
+              "viewport": {
+                "width": 1440,
+                "height": 1000
+              },
+              "textLength": 1641,
+              "mediaCount": 148,
+              "codeCount": 0,
+              "headingCount": 9,
+              "usefulElementCount": 40,
+              "visibleAreaRatio": 1.011,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Efferd",
+                "Blocks",
+                "Pricing",
+                "Docs",
+                "Changelog",
+                "Log In",
+                "Get access",
+                "Back to BlocksExplore Faqs BlocksDiscover 8 beautifully crafted Faqs blocks — ready to copy, customize, and drop into yo"
+              ]
+            },
+            "mobile": {
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "textLength": 1291,
+              "mediaCount": 148,
+              "codeCount": 0,
+              "headingCount": 9,
+              "usefulElementCount": 32,
+              "visibleAreaRatio": 1.119,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Efferd",
+                "Log In",
+                "Get access",
+                "Back to BlocksExplore Faqs BlocksDiscover 8 beautifully crafted Faqs blocks — ready to copy, customize, and drop into yo",
+                "Back to Blocks",
+                "Explore Faqs Blocks",
+                "faqs 1",
+                "preview"
+              ]
+            }
+          },
+          "qualityWarnings": [],
+          "failedRequestCount": 0,
+          "title": "Free & Pro Shadcn Faqs Blocks - Efferd",
+          "description": "Discover Faqs blocks — ready to copy, customize, and drop into your Shadcn/UI project.",
+          "headings": [
+            {
+              "level": "h1",
+              "text": "Explore Faqs Blocks"
+            },
+            {
+              "level": "h2",
+              "text": "faqs 1"
+            },
+            {
+              "level": "h2",
+              "text": "faqs 2"
+            },
+            {
+              "level": "h2",
+              "text": "faqs 3"
+            },
+            {
+              "level": "h2",
+              "text": "faqs 4"
+            },
+            {
+              "level": "h2",
+              "text": "faqs 5"
+            },
+            {
+              "level": "h2",
+              "text": "faqs 6"
+            },
+            {
+              "level": "h2",
+              "text": "faqs 7"
+            },
+            {
+              "level": "h2",
+              "text": "faqs 8"
+            }
+          ],
+          "sections": [],
+          "ctas": [
+            "Efferd",
+            "Blocks",
+            "Pricing",
+            "Docs",
+            "Changelog",
+            "Log In",
+            "Get access",
+            "Toggle menu",
+            "Back to Blocks",
+            "#",
+            "preview",
+            "code",
+            "@efferd/faqs-1",
+            "pnpm",
+            "Copy Prompt",
+            "Add to favorites",
+            "More block actions",
+            "#",
+            "preview",
+            "code",
+            "@efferd/faqs-2",
+            "pnpm",
+            "Copy Prompt",
+            "Add to favorites",
+            "More block actions",
+            "#",
+            "preview",
+            "code",
+            "@efferd/faqs-3",
+            "pnpm",
+            "Copy Prompt",
+            "Add to favorites",
+            "More block actions",
+            "#",
+            "preview",
+            "code",
+            "@efferd/faqs-4",
+            "pnpm",
+            "Copy Prompt",
+            "Add to favorites",
+            "More block actions",
+            "#",
+            "preview",
+            "code",
+            "@efferd/faqs-5",
+            "pnpm",
+            "Copy Prompt",
+            "Add to favorites",
+            "More block actions",
+            "#"
+          ],
+          "palette": [
+            "lab(1.5609 0 0)",
+            "lab(98.26 0 0)",
+            "lab(88.4 0 0.0000119209)",
+            "lab(48.496 0 0)",
+            "lab(86.0279 1.77148 0.600767)",
+            "lab(7.78201 -0.0000149012 0)",
+            "lab(90.72 0.0000298023 -0.0000119209)"
+          ],
+          "layoutSignals": {
+            "hasNav": true,
+            "hasHero": true,
+            "hasPricing": true,
+            "hasTestimonials": true,
+            "hasFAQ": true,
+            "hasVideo": false,
+            "cardLikeCount": 2,
+            "imageCount": 1,
+            "buttonCount": 96,
+            "formCount": 0
+          },
+          "codeBlocks": [],
+          "codeLinks": []
+        },
+        {
+          "sourceId": "efferd-blocks",
+          "url": "https://efferd.com/blocks/features",
+          "status": 200,
+          "licenseStatus": "license-per-block",
+          "reuseGuidance": "Block-level layout discovery. Verify each block license before reuse.",
+          "candidate": {
+            "index": 12,
+            "url": "https://efferd.com/blocks/features",
+            "text": "Features 10 blocks",
+            "heading": "Features",
+            "description": "Features10 blocks",
+            "imageSrc": "",
+            "imageAlt": "",
+            "buttonText": [],
+            "tags": [],
+            "cardArea": 39204,
+            "score": 9,
+            "sourceMode": "block-gallery"
+          },
+          "screenshots": {
+            "desktop": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/efferd-blocks/features/desktop.png",
+              "sha256": "ff0bad0fff1843fa5a144b5d86ca5fce8fc0fd36b805a956242a07c557e5196a",
+              "mode": "viewport"
+            },
+            "mobile": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/efferd-blocks/features/mobile.png",
+              "sha256": "15541fc8b8c0605caccbc138729e3c26618487f88adcbb5d14ef25780583a3de",
+              "mode": "viewport"
+            }
+          },
+          "screenshotQuality": {
+            "desktop": {
+              "viewport": {
+                "width": 1440,
+                "height": 1000
+              },
+              "textLength": 2037,
+              "mediaCount": 180,
+              "codeCount": 0,
+              "headingCount": 11,
+              "usefulElementCount": 61,
+              "visibleAreaRatio": 1.07,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Efferd",
+                "Blocks",
+                "Pricing",
+                "Docs",
+                "Changelog",
+                "Log In",
+                "Get access",
+                "Back to BlocksExplore Features BlocksDiscover 10 beautifully crafted Features blocks — ready to copy, customize, and dro"
+              ]
+            },
+            "mobile": {
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "textLength": 1566,
+              "mediaCount": 180,
+              "codeCount": 0,
+              "headingCount": 11,
+              "usefulElementCount": 51,
+              "visibleAreaRatio": 1.193,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Efferd",
+                "Log In",
+                "Get access",
+                "Back to BlocksExplore Features BlocksDiscover 10 beautifully crafted Features blocks — ready to copy, customize, and dro",
+                "Back to Blocks",
+                "Explore Features Blocks",
+                "features 1",
+                "preview"
+              ]
+            }
+          },
+          "qualityWarnings": [],
+          "failedRequestCount": 1,
+          "title": "Free & Pro Shadcn Features Blocks - Efferd",
+          "description": "Discover Features blocks — ready to copy, customize, and drop into your Shadcn/UI project.",
+          "headings": [
+            {
+              "level": "h1",
+              "text": "Explore Features Blocks"
+            },
+            {
+              "level": "h2",
+              "text": "features 1"
+            },
+            {
+              "level": "h2",
+              "text": "features 2"
+            },
+            {
+              "level": "h2",
+              "text": "features 3"
+            },
+            {
+              "level": "h2",
+              "text": "features 4"
+            },
+            {
+              "level": "h2",
+              "text": "features 5"
+            },
+            {
+              "level": "h2",
+              "text": "features 6"
+            },
+            {
+              "level": "h2",
+              "text": "features 7"
+            },
+            {
+              "level": "h2",
+              "text": "features 8"
+            },
+            {
+              "level": "h2",
+              "text": "features 9"
+            },
+            {
+              "level": "h2",
+              "text": "features 10"
+            }
+          ],
+          "sections": [],
+          "ctas": [
+            "Efferd",
+            "Blocks",
+            "Pricing",
+            "Docs",
+            "Changelog",
+            "Log In",
+            "Get access",
+            "Toggle menu",
+            "Back to Blocks",
+            "#",
+            "preview",
+            "code",
+            "@efferd/features-1",
+            "pnpm",
+            "Copy Prompt",
+            "Add to favorites",
+            "More block actions",
+            "#",
+            "preview",
+            "code",
+            "@efferd/features-2",
+            "pnpm",
+            "Copy Prompt",
+            "Add to favorites",
+            "More block actions",
+            "#",
+            "preview",
+            "code",
+            "@efferd/features-3",
+            "pnpm",
+            "Copy Prompt",
+            "Add to favorites",
+            "More block actions",
+            "#",
+            "preview",
+            "code",
+            "@efferd/features-4",
+            "pnpm",
+            "Copy Prompt",
+            "Add to favorites",
+            "More block actions",
+            "#",
+            "preview",
+            "code",
+            "@efferd/features-5",
+            "pnpm",
+            "Copy Prompt",
+            "Add to favorites",
+            "More block actions",
+            "#"
+          ],
+          "palette": [
+            "lab(1.5609 0 0)",
+            "lab(98.26 0 0)",
+            "lab(88.4 0 0.0000119209)",
+            "lab(48.496 0 0)",
+            "lab(86.0279 1.77148 0.600767)",
+            "lab(7.78201 -0.0000149012 0)",
+            "lab(90.72 0.0000298023 -0.0000119209)"
+          ],
+          "layoutSignals": {
+            "hasNav": true,
+            "hasHero": true,
+            "hasPricing": true,
+            "hasTestimonials": true,
+            "hasFAQ": true,
+            "hasVideo": false,
+            "cardLikeCount": 2,
+            "imageCount": 1,
+            "buttonCount": 114,
+            "formCount": 0
+          },
+          "codeBlocks": [],
+          "codeLinks": []
+        },
+        {
+          "sourceId": "efferd-blocks",
+          "url": "https://efferd.com/blocks/footer",
+          "status": 200,
+          "licenseStatus": "license-per-block",
+          "reuseGuidance": "Block-level layout discovery. Verify each block license before reuse.",
+          "candidate": {
+            "index": 13,
+            "url": "https://efferd.com/blocks/footer",
+            "text": "Footer 14 blocks",
+            "heading": "Footer",
+            "description": "Footer14 blocks",
+            "imageSrc": "",
+            "imageAlt": "",
+            "buttonText": [],
+            "tags": [],
+            "cardArea": 39204,
+            "score": 9,
+            "sourceMode": "block-gallery"
+          },
+          "screenshots": {
+            "desktop": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/efferd-blocks/footer/desktop.png",
+              "sha256": "ed016702cde4ba8b858c9775f4507a2c299f3aee7af9b5cf9b527c93d4ebb8df",
+              "mode": "viewport"
+            },
+            "mobile": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/efferd-blocks/footer/mobile.png",
+              "sha256": "7ce548c5e372a6887844bc0d45043249580c0ba4e733e2c7fe5cbb4a43c687f1",
+              "mode": "viewport"
+            }
+          },
+          "screenshotQuality": {
+            "desktop": {
+              "viewport": {
+                "width": 1440,
+                "height": 1000
+              },
+              "textLength": 2075,
+              "mediaCount": 244,
+              "codeCount": 0,
+              "headingCount": 15,
+              "usefulElementCount": 61,
+              "visibleAreaRatio": 1.068,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Efferd",
+                "Blocks",
+                "Pricing",
+                "Docs",
+                "Changelog",
+                "Log In",
+                "Get access",
+                "Back to BlocksExplore Footer BlocksDiscover 14 beautifully crafted Footer blocks — ready to copy, customize, and drop in"
+              ]
+            },
+            "mobile": {
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "textLength": 1452,
+              "mediaCount": 244,
+              "codeCount": 0,
+              "headingCount": 15,
+              "usefulElementCount": 51,
+              "visibleAreaRatio": 1.206,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Efferd",
+                "Log In",
+                "Get access",
+                "Back to BlocksExplore Footer BlocksDiscover 14 beautifully crafted Footer blocks — ready to copy, customize, and drop in",
+                "Back to Blocks",
+                "Explore Footer Blocks",
+                "footer 1",
+                "preview"
+              ]
+            }
+          },
+          "qualityWarnings": [],
+          "failedRequestCount": 1,
+          "title": "Free & Pro Shadcn Footer Blocks - Efferd",
+          "description": "Discover Footer blocks — ready to copy, customize, and drop into your Shadcn/UI project.",
+          "headings": [
+            {
+              "level": "h1",
+              "text": "Explore Footer Blocks"
+            },
+            {
+              "level": "h2",
+              "text": "footer 1"
+            },
+            {
+              "level": "h2",
+              "text": "footer 2"
+            },
+            {
+              "level": "h2",
+              "text": "footer 3"
+            },
+            {
+              "level": "h2",
+              "text": "footer 4"
+            },
+            {
+              "level": "h2",
+              "text": "footer 5"
+            },
+            {
+              "level": "h2",
+              "text": "footer 6"
+            },
+            {
+              "level": "h2",
+              "text": "footer 7"
+            },
+            {
+              "level": "h2",
+              "text": "footer 8"
+            },
+            {
+              "level": "h2",
+              "text": "footer 9"
+            },
+            {
+              "level": "h2",
+              "text": "footer 10"
+            },
+            {
+              "level": "h2",
+              "text": "footer 11"
+            },
+            {
+              "level": "h2",
+              "text": "footer 12"
+            },
+            {
+              "level": "h2",
+              "text": "footer 13"
+            },
+            {
+              "level": "h2",
+              "text": "footer 14"
+            }
+          ],
+          "sections": [],
+          "ctas": [
+            "Efferd",
+            "Blocks",
+            "Pricing",
+            "Docs",
+            "Changelog",
+            "Log In",
+            "Get access",
+            "Toggle menu",
+            "Back to Blocks",
+            "#",
+            "preview",
+            "code",
+            "@efferd/footer-1",
+            "pnpm",
+            "Copy Prompt",
+            "Add to favorites",
+            "More block actions",
+            "#",
+            "preview",
+            "code",
+            "@efferd/footer-2",
+            "pnpm",
+            "Copy Prompt",
+            "Add to favorites",
+            "More block actions",
+            "#",
+            "preview",
+            "code",
+            "@efferd/footer-3",
+            "pnpm",
+            "Copy Prompt",
+            "Add to favorites",
+            "More block actions",
+            "#",
+            "preview",
+            "code",
+            "@efferd/footer-4",
+            "pnpm",
+            "Copy Prompt",
+            "Add to favorites",
+            "More block actions",
+            "#",
+            "preview",
+            "code",
+            "@efferd/footer-5",
+            "pnpm",
+            "Copy Prompt",
+            "Add to favorites",
+            "More block actions",
+            "#"
+          ],
+          "palette": [
+            "lab(1.5609 0 0)",
+            "lab(98.26 0 0)",
+            "lab(88.4 0 0.0000119209)",
+            "lab(48.496 0 0)",
+            "lab(86.0279 1.77148 0.600767)",
+            "lab(7.78201 -0.0000149012 0)",
+            "lab(90.72 0.0000298023 -0.0000119209)"
+          ],
+          "layoutSignals": {
+            "hasNav": true,
+            "hasHero": true,
+            "hasPricing": true,
+            "hasTestimonials": true,
+            "hasFAQ": true,
+            "hasVideo": false,
+            "cardLikeCount": 2,
+            "imageCount": 1,
+            "buttonCount": 150,
+            "formCount": 0
+          },
+          "codeBlocks": [],
+          "codeLinks": []
+        },
+        {
+          "sourceId": "efferd-blocks",
+          "url": "https://efferd.com/blocks/header",
+          "status": 200,
+          "licenseStatus": "license-per-block",
+          "reuseGuidance": "Block-level layout discovery. Verify each block license before reuse.",
+          "candidate": {
+            "index": 14,
+            "url": "https://efferd.com/blocks/header",
+            "text": "14 blocks Header",
+            "heading": "Header",
+            "description": "14 blocks Header",
+            "imageSrc": "",
+            "imageAlt": "",
+            "buttonText": [],
+            "tags": [],
+            "cardArea": 39204,
+            "score": 9,
+            "sourceMode": "block-gallery"
+          },
+          "screenshots": {
+            "desktop": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/efferd-blocks/header/desktop.png",
+              "sha256": "f951ea3d661b05ae450128a17296a1cf00c98d4506fba106b9ac1bfda3fd7843",
+              "mode": "viewport"
+            },
+            "mobile": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/efferd-blocks/header/mobile.png",
+              "sha256": "26750578593a2cea59bb778ecc3ab01deda7f22143e9676405d0d0b884648c3f",
+              "mode": "viewport"
+            }
+          },
+          "screenshotQuality": {
+            "desktop": {
+              "viewport": {
+                "width": 1440,
+                "height": 1000
+              },
+              "textLength": 2590,
+              "mediaCount": 244,
+              "codeCount": 0,
+              "headingCount": 15,
+              "usefulElementCount": 42,
+              "visibleAreaRatio": 1.054,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Efferd",
+                "Blocks",
+                "Pricing",
+                "Docs",
+                "Changelog",
+                "Log In",
+                "Get access",
+                "Back to BlocksExplore Header BlocksDiscover 14 beautifully crafted Header blocks — ready to copy, customize, and drop in"
+              ]
+            },
+            "mobile": {
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "textLength": 1967,
+              "mediaCount": 244,
+              "codeCount": 0,
+              "headingCount": 15,
+              "usefulElementCount": 32,
+              "visibleAreaRatio": 1.123,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Efferd",
+                "Log In",
+                "Get access",
+                "Back to BlocksExplore Header BlocksDiscover 14 beautifully crafted Header blocks — ready to copy, customize, and drop in",
+                "Back to Blocks",
+                "Explore Header Blocks",
+                "header 1",
+                "preview"
+              ]
+            }
+          },
+          "qualityWarnings": [],
+          "failedRequestCount": 0,
+          "title": "Free & Pro Shadcn Header Blocks - Efferd",
+          "description": "Discover Header blocks — ready to copy, customize, and drop into your Shadcn/UI project.",
+          "headings": [
+            {
+              "level": "h1",
+              "text": "Explore Header Blocks"
+            },
+            {
+              "level": "h2",
+              "text": "header 1"
+            },
+            {
+              "level": "h2",
+              "text": "header 2"
+            },
+            {
+              "level": "h2",
+              "text": "header 3"
+            },
+            {
+              "level": "h2",
+              "text": "header 4"
+            },
+            {
+              "level": "h2",
+              "text": "header 5"
+            },
+            {
+              "level": "h2",
+              "text": "header 6"
+            },
+            {
+              "level": "h2",
+              "text": "header 7"
+            },
+            {
+              "level": "h2",
+              "text": "header 8"
+            },
+            {
+              "level": "h2",
+              "text": "header 9"
+            },
+            {
+              "level": "h2",
+              "text": "header 10"
+            },
+            {
+              "level": "h2",
+              "text": "header 11"
+            },
+            {
+              "level": "h2",
+              "text": "header 12"
+            },
+            {
+              "level": "h2",
+              "text": "header 13"
+            },
+            {
+              "level": "h2",
+              "text": "header 14"
+            }
+          ],
+          "sections": [],
+          "ctas": [
+            "Efferd",
+            "Blocks",
+            "Pricing",
+            "Docs",
+            "Changelog",
+            "Log In",
+            "Get access",
+            "Toggle menu",
+            "Back to Blocks",
+            "#",
+            "preview",
+            "code",
+            "@efferd/header-1",
+            "pnpm",
+            "Copy Prompt",
+            "Add to favorites",
+            "More block actions",
+            "#",
+            "preview",
+            "code",
+            "@efferd/header-2",
+            "pnpm",
+            "Copy Prompt",
+            "Add to favorites",
+            "More block actions",
+            "#",
+            "preview",
+            "code",
+            "@efferd/header-3",
+            "pnpm",
+            "Copy Prompt",
+            "Add to favorites",
+            "More block actions",
+            "#",
+            "preview",
+            "code",
+            "@efferd/header-4",
+            "pnpm",
+            "Copy Prompt",
+            "Add to favorites",
+            "More block actions",
+            "#",
+            "preview",
+            "code",
+            "@efferd/header-5",
+            "pnpm",
+            "Copy Prompt",
+            "Add to favorites",
+            "More block actions",
+            "#"
+          ],
+          "palette": [
+            "lab(1.5609 0 0)",
+            "lab(98.26 0 0)",
+            "lab(88.4 0 0.0000119209)",
+            "lab(48.496 0 0)",
+            "lab(86.0279 1.77148 0.600767)",
+            "lab(7.78201 -0.0000149012 0)",
+            "lab(90.72 0.0000298023 -0.0000119209)"
+          ],
+          "layoutSignals": {
+            "hasNav": true,
+            "hasHero": true,
+            "hasPricing": true,
+            "hasTestimonials": true,
+            "hasFAQ": true,
+            "hasVideo": false,
+            "cardLikeCount": 2,
+            "imageCount": 1,
+            "buttonCount": 150,
+            "formCount": 0
+          },
+          "codeBlocks": [],
+          "codeLinks": []
+        }
+      ]
+    }
+  ],
+  "errors": []
+}
