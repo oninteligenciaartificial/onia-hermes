@@ -41,7 +41,8 @@ el cliente si quiere tarjeta además de QR.
 ### Lo que el CLIENTE necesita tener antes
 - Cuenta **empresa/comercial** en BCP (cuenta corriente o ahorro comercial).
 - **NIT**.
-- **Registro de comercio** (FUNDEMPRESA).
+- **Matrícula de Comercio (SEPREC)** — antes FUNDEMPRESA. Ver
+  `REQUISITOS_LEGALES_BOLIVIA_INTERNO.md`.
 - Documento del representante legal.
 
 ### Proceso

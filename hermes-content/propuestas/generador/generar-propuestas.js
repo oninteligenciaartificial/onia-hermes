@@ -77,6 +77,20 @@ function renderAddons(addons) {
   ).join('');
 }
 
+// Bloque opcional: requisitos a cargo del cliente (cobros online en Bolivia).
+// Ver hermes-content/propuestas/REQUISITOS_LEGALES_BOLIVIA_INTERNO.md
+function renderRequisitos(req) {
+  if (!req || !req.length) return '';
+  const items = req.map((r) => `<li>${esc(r)}</li>`).join('');
+  return `
+  <h2>Requisitos a cargo del cliente</h2>
+  <div class="card">
+    <p>Para habilitar los pagos en línea, el negocio deberá contar con la
+    siguiente documentación a su nombre (lo acompañamos en cada paso):</p>
+    <ul>${items}</ul>
+  </div>`;
+}
+
 // --- Validación -------------------------------------------------------------
 
 const REQUIRED = ['slug', 'nombre', 'titulo', 'subtitulo', 'problema', 'incluye', 'pasos', 'paquetes', 'notaPaquetes', 'addons', 'terceros'];
@@ -173,6 +187,7 @@ ${renderValor(c.valor)}
     <div class="tag amber">Importante — costos de terceros</div>
     <p>${c.terceros}</p>
   </div>
+${renderRequisitos(c.requisitos)}
 
   <div class="foot">
     <p class="big">Precio reservado hasta 30 días con confirmación de pago.</p>
