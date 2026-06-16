@@ -111,6 +111,7 @@ Canonical files:
 - `hermes-content/docs/SERGIO_FACE_VOICE_ASSET_GUIDE.md`
 - `hermes-content/docs/SERGIO_ONIA_CONTENT_PRODUCTION_KIT_2026.md`
 - `hermes-content/docs/AI_ECOMMERCE_MODEL_SYSTEM_2026.md`
+- `hermes-content/docs/ONIA_OPEN_SOURCE_AI_VIDEO_LAB_2026.md`
 - `hermes-content/references/video-brief-template.json`
 - `hermes-content/references/telegram-command-center.json`
 - `hermes-content/references/sergio-onia-content-kit-20260602.json`

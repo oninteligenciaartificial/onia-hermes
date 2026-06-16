@@ -16,6 +16,14 @@ Keep these layers separate:
 - Asset server: public MP4 hosting.
 - Instagram publisher: final Reel publishing.
 
+Open-source generation is now treated as a separate lab layer:
+
+- Use `hermes-content/docs/ONIA_OPEN_SOURCE_AI_VIDEO_LAB_2026.md` to test
+  image/video prompts with ComfyUI, Wan2.2, Qwen-Image, FLUX, LTX-Video and
+  HunyuanVideo before spending Higgsfield credits.
+- The lab validates concept, camera, motion and prompt quality.
+- Higgsfield remains the premium render layer for final/publicable versions.
+
 ## Lanes
 
 ### Sergio

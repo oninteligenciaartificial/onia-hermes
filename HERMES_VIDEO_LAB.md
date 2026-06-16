@@ -111,6 +111,17 @@ messages to `video-lab telegram`, and also handles project, weekly plan and
 automation commands. The active n8n Telegram entrypoint is
 `ONIA - Telegram Command Center` (`vuicWsvh0hwqKhYs`).
 
+## Open-Source AI Video Lab
+
+For cheap experimentation before spending Higgsfield credits, use:
+
+- `hermes-content/docs/ONIA_OPEN_SOURCE_AI_VIDEO_LAB_2026.md`
+
+This lab uses RunPod by the hour plus ComfyUI, Qwen-Image, FLUX, Wan2.2,
+LTX-Video and HunyuanVideo to validate images, motion, prompts and scene
+direction. Higgsfield remains the final render layer when the concept is already
+approved or needs premium polish.
+
 ## Where Sergio Reviews and Responds
 
 Hermes must make every video job reviewable in three places:
