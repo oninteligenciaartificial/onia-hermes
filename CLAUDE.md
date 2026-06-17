@@ -69,5 +69,7 @@ Docs internos de referencia: `PRICING_RATIONALE_INTERNO.md`,
   esté ignorado antes de que el autosync corra.
 - Assets, fotos, briefs y outputs SÍ se sincronizan (para tenerlos en todos los
   dispositivos).
-- Merge/PR a `main`: eso sí, solo cuando el usuario lo pida (el autosync empuja a
-  la rama de trabajo, no mergea a `main`).
+- El autosync empuja la rama de trabajo y, además, hace **fast-forward de `main`**
+  cuando es seguro (avance lineal). Así `main` queda al día solo y todos los
+  dispositivos sincronizan con `git pull` en `main`. Si `main` divergió (no es
+  FF), no fuerza nada: queda merge manual.

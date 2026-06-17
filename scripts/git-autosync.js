@@ -65,6 +65,20 @@ function main() {
   } else {
     console.log('[autosync] rama al día, nada que pushear');
   }
+
+  // 5. Mantener main al día (sincronización entre dispositivos): si la rama
+  // actual no es main y origin/main es ancestro (avance lineal, sin conflictos),
+  // hacer fast-forward de main. Si no es FF, se omite (merge manual).
+  if (branch.out !== 'main') {
+    tryGit('fetch origin main');
+    const ff = tryGit(`merge-base --is-ancestor origin/main ${branch.out}`);
+    if (ff.ok) {
+      const toMain = tryGit(`push origin ${branch.out}:main`);
+      console.log(toMain.ok ? '[autosync] main al día (fast-forward)' : '[autosync] FF a main omitido: ' + toMain.out.slice(0, 200));
+    } else {
+      console.log('[autosync] main divergió de la rama; no es fast-forward, merge manual pendiente');
+    }
+  }
 }
 
 try {
