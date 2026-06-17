@@ -54,7 +54,20 @@ Docs internos de referencia: `PRICING_RATIONALE_INTERNO.md`,
 `PLAYBOOK_CONSTRUCCION_INTERNO.md`, `ESTRATEGIA_PLANTILLAS_WEB_INTERNO.md`,
 `BCP_PASARELA_CREDENCIALES_INTERNO.md`.
 
-## Git
+## Git — Auto-sync multi-dispositivo (REGLA)
 
-- Commits: conventional (`feat:`, `fix:`, `docs:`, etc.).
-- Push a `main` solo cuando el usuario lo pida.
+> Trabajamos desde varios dispositivos. Nada debe quedar como archivo local sin
+> subir. Todo cambio se sincroniza solo a GitHub.
+
+- Commits: conventional (`feat:`, `fix:`, `docs:`, `chore:`, etc.).
+- **Auto-sync activado.** Al terminar cualquier trabajo, commitear y pushear los
+  cambios a la rama actual sin que el usuario lo pida. Lo hace el hook `Stop`
+  (`.claude/settings.json` → `node scripts/git-autosync.js`); también se puede
+  correr a mano: `node scripts/git-autosync.js`.
+- El autosync respeta `.gitignore`: nunca sube `.env`, claves, `*.pem`,
+  `node_modules/` ni cachés. Si creás un archivo con secretos, asegurate de que
+  esté ignorado antes de que el autosync corra.
+- Assets, fotos, briefs y outputs SÍ se sincronizan (para tenerlos en todos los
+  dispositivos).
+- Merge/PR a `main`: eso sí, solo cuando el usuario lo pida (el autosync empuja a
+  la rama de trabajo, no mergea a `main`).

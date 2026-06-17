@@ -1,0 +1,26 @@
+# Secrets — NUNCA subir
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+*_token.txt
+**/credentials.json
+
+# Dependencias (se reinstalan con npm install; no se sincronizan)
+node_modules/
+
+# Caches / build (regenerables)
+.ruff_cache/
+__pycache__/
+*.pyc
+.cache/
+dist/
+build/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# NOTA: assets, fotos, briefs y outputs SÍ se suben (sincronización multi-dispositivo).
