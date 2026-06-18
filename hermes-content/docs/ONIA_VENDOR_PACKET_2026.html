@@ -1,0 +1,471 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>ONIA - Kit comercial para vendedor 2026</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 16mm 14mm;
+    }
+
+    :root {
+      --ink: #111827;
+      --muted: #526070;
+      --line: #d8dee8;
+      --blue: #1f5eff;
+      --green: #0f7b55;
+      --amber: #a15c07;
+      --soft: #f5f7fb;
+      --panel: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      color: var(--ink);
+      background: #fff;
+      font-family: Aptos, "Segoe UI", Helvetica, Arial, sans-serif;
+      font-size: 11.2pt;
+      line-height: 1.45;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    body {
+      max-width: 190mm;
+      margin: 0 auto;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin: 0;
+    }
+
+    h1 {
+      font-size: 28pt;
+      line-height: 1.04;
+      max-width: 145mm;
+      letter-spacing: 0;
+    }
+
+    h2 {
+      font-size: 16pt;
+      line-height: 1.15;
+      margin: 0 0 5mm;
+    }
+
+    h3 {
+      font-size: 11.5pt;
+      margin-bottom: 2mm;
+    }
+
+    p {
+      color: var(--muted);
+    }
+
+    .cover {
+      min-height: 245mm;
+      padding-top: 8mm;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .brand {
+      font-size: 10pt;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 15mm;
+    }
+
+    .subtitle {
+      max-width: 138mm;
+      margin-top: 7mm;
+      font-size: 13.5pt;
+      color: #334155;
+    }
+
+    .cover-band {
+      margin-top: 18mm;
+      padding: 8mm;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--soft);
+    }
+
+    .meta {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 4mm;
+      margin-top: 8mm;
+    }
+
+    .meta div,
+    .box {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      padding: 4mm;
+    }
+
+    .label {
+      display: block;
+      margin-bottom: 1mm;
+      font-size: 8pt;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .value {
+      font-size: 12pt;
+      font-weight: 800;
+      color: var(--ink);
+    }
+
+    section {
+      page-break-before: always;
+      padding-top: 2mm;
+    }
+
+    .lead {
+      max-width: 170mm;
+      margin-bottom: 6mm;
+      font-size: 12pt;
+      color: #334155;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 4mm;
+      margin: 4mm 0 7mm;
+    }
+
+    .grid.three {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .box strong {
+      display: block;
+      margin-bottom: 1.5mm;
+      color: var(--ink);
+    }
+
+    .box p {
+      font-size: 10pt;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 4mm 0 7mm;
+      page-break-inside: avoid;
+    }
+
+    th,
+    td {
+      border: 1px solid var(--line);
+      padding: 2.4mm 2.6mm;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #eef3ff;
+      color: #172554;
+      font-size: 9.5pt;
+    }
+
+    td.money {
+      white-space: nowrap;
+      font-weight: 800;
+      color: var(--green);
+    }
+
+    ul {
+      margin: 2mm 0 7mm 5mm;
+      padding: 0;
+    }
+
+    li {
+      margin-bottom: 1.8mm;
+    }
+
+    .note {
+      margin: 4mm 0 7mm;
+      padding: 4mm;
+      border: 1px solid #f4c57f;
+      border-radius: 8px;
+      background: #fff8ed;
+      color: #6f3f05;
+      page-break-inside: avoid;
+    }
+
+    .script {
+      padding: 4mm;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: #f8fafc;
+      color: #1f2937;
+      font-size: 10.4pt;
+      page-break-inside: avoid;
+      white-space: pre-line;
+    }
+
+    .footer {
+      margin-top: 8mm;
+      padding-top: 4mm;
+      border-top: 1px solid var(--line);
+      font-size: 9pt;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <article class="cover">
+      <div>
+        <div class="brand">ONIA / Kit comercial interno</div>
+        <h1>Guia para vender los servicios activos de ONIA</h1>
+        <p class="subtitle">
+          Documento para vendedores. Resume que ofrecemos, cuanto cuesta,
+          cuanto gana el vendedor y que debe prometerse con cuidado.
+        </p>
+        <div class="cover-band">
+          <p>
+            El objetivo no es vender tecnologia suelta. El objetivo es detectar
+            perdida de clientes, desorden operativo o baja captacion, y ofrecer
+            el siguiente paso mas simple que el cliente pueda pagar.
+          </p>
+          <div class="meta">
+            <div><span class="label">Vigencia</span><span class="value">Junio / Julio 2026</span></div>
+            <div><span class="label">Comision base</span><span class="value">Pago cobrado</span></div>
+            <div><span class="label">Regla</span><span class="value">No improvisar precios</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="footer">
+        Uso interno ONIA, reservado para vendedor y equipo. Actualizado con videos IA pausados y precios actuales de DentalGest/Gesti-OS.
+      </div>
+    </article>
+
+    <section>
+      <h2>Servicios activos y comisiones</h2>
+      <p class="lead">
+        La comision se calcula sobre dinero neto realmente cobrado. Los meses
+        futuros quedan fuera del calculo salvo aprobacion escrita de ONIA.
+      </p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Servicio</th>
+            <th>Precio cliente</th>
+            <th>Comision vendedor</th>
+            <th>Cuando ofrecerlo</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>DentalGest Basico</td><td>Bs. 320/mes</td><td class="money">Bs. 112</td><td>Consultorio pequeno que necesita ordenar pacientes y agenda.</td></tr>
+          <tr><td>DentalGest Profesional</td><td>Bs. 750/mes</td><td class="money">Bs. 262,50</td><td>Clinica con equipo, pagos, reportes y mas seguimiento.</td></tr>
+          <tr><td>DentalGest Clinica</td><td>Bs. 1.500/mes</td><td class="money">Bs. 525</td><td>Clinica con varias personas, sedes o soporte prioritario.</td></tr>
+          <tr><td>Gesti-OS Basico</td><td>Bs. 350/mes</td><td class="money">Bs. 122,50</td><td>Negocio pequeno con clientes, ventas o tareas desordenadas.</td></tr>
+          <tr><td>Gesti-OS Crecer</td><td>Bs. 530/mes</td><td class="money">Bs. 185,50</td><td>Pyme que ya maneja mas volumen y necesita visibilidad.</td></tr>
+          <tr><td>Gesti-OS Pro</td><td>Bs. 800/mes</td><td class="money">Bs. 280</td><td>Operaciones con mas staff, reportes y seguimiento.</td></tr>
+          <tr><td>Gesti-OS Empresarial</td><td>Bs. 1.250/mes</td><td class="money">Bs. 437,50</td><td>Negocios con multi-sucursal o mayor complejidad.</td></tr>
+        </tbody>
+      </table>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Servicio</th>
+            <th>Precio cliente</th>
+            <th>Comision vendedor</th>
+            <th>Alcance corto</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Landing de Captacion</td><td>Bs. 790</td><td class="money">Bs. 79</td><td>Una pagina enfocada en captar consultas.</td></tr>
+          <tr><td>Web Profesional</td><td>Bs. 1.500</td><td class="money">Bs. 180</td><td>Web de negocio con secciones clave y formulario.</td></tr>
+          <tr><td>Web Pro ONIA</td><td>Bs. 2.900</td><td class="money">Bs. 348</td><td>Web completa con copy, captacion y seguimiento basico.</td></tr>
+          <tr><td>Portal o mini sistema</td><td>Desde Bs. 6.500</td><td class="money">Desde Bs. 650</td><td>Login, dashboard, base de datos o MVP pequeno.</td></tr>
+          <tr><td>Auditoria Express</td><td>Bs. 250</td><td class="money">Bs. 25</td><td>Revision rapida para abrir confianza y detectar oportunidades.</td></tr>
+          <tr><td>Diagnostico + Plan</td><td>Bs. 690</td><td class="money">Bs. 69</td><td>Sesion profunda, mapa del proceso y presupuesto recomendado.</td></tr>
+          <tr><td>Automatizacion simple n8n</td><td>Bs. 790 setup</td><td class="money">Bs. 79</td><td>Formulario o lead hacia registro, aviso y tarea.</td></tr>
+          <tr><td>Flujo aprobacion n8n</td><td>Bs. 1.200 setup</td><td class="money">Bs. 120</td><td>Recibido, aprobado/rechazado, notificado y registrado.</td></tr>
+          <tr><td>Monitoreo n8n</td><td>Bs. 150/mes</td><td class="money">Bs. 15</td><td>Revision mensual basica del flujo vendido aparte.</td></tr>
+          <tr><td>Bot Telegram recordatorios</td><td>Bs. 690 setup</td><td class="money">Bs. 69</td><td>Recuerda tareas, cobros, citas, vencimientos o seguimientos.</td></tr>
+          <tr><td>Bot Telegram operativo</td><td>Bs. 790 setup</td><td class="money">Bs. 79</td><td>Registra leads, avisa responsables y consulta estados simples.</td></tr>
+          <tr><td>Bot Telegram avanzado</td><td>Bs. 1.200 setup</td><td class="money">Bs. 120</td><td>Comandos internos, aprobaciones, reportes y alertas por equipo.</td></tr>
+          <tr><td>Chatbot WhatsApp conversacional</td><td>Desde Bs. 990 setup</td><td class="money">Desde Bs. 99</td><td>Responde preguntas frecuentes, captura datos y deriva a una persona.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="note">
+        WhatsApp conversacional depende de cuenta Meta/WhatsApp Cloud API,
+        politicas de plantilla y costos de mensajeria. Se puede vender como
+        diagnostico o cotizacion, pero la activacion requiere validacion tecnica
+        de ONIA. Videos IA / Higgsfield siguen pausados como producto comercial.
+      </div>
+    </section>
+
+    <section>
+      <h2>Explicacion breve de cada oferta</h2>
+      <div class="grid">
+        <div class="box">
+          <strong>DentalGest</strong>
+          <p>Sistema para clinicas dentales: pacientes, citas, pagos, reportes y seguimiento.</p>
+        </div>
+        <div class="box">
+          <strong>Gesti-OS</strong>
+          <p>Sistema operativo para pymes: clientes, tareas, ventas, inventario y control diario.</p>
+        </div>
+        <div class="box">
+          <strong>Paginas web</strong>
+          <p>Landing o web profesional para explicar la oferta, captar consultas y verse confiable.</p>
+        </div>
+        <div class="box">
+          <strong>Auditoria Express</strong>
+          <p>Revision corta para detectar fallas y decirle al cliente que conviene arreglar primero.</p>
+        </div>
+        <div class="box">
+          <strong>n8n simple</strong>
+          <p>Automatizacion acotada: entra un dato, se registra, avisa a alguien y crea una tarea.</p>
+        </div>
+        <div class="box">
+          <strong>Bot de Telegram</strong>
+          <p>Asistente interno barato y rapido para recordatorios, alertas, tareas y reportes.</p>
+        </div>
+        <div class="box">
+          <strong>Chatbot WhatsApp</strong>
+          <p>Asistente conversacional para responder preguntas, pedir datos y derivar a ventas.</p>
+        </div>
+        <div class="box">
+          <strong>Portal o mini sistema</strong>
+          <p>Software a medida cuando el cliente necesita login, panel, base de datos o flujo propio.</p>
+        </div>
+      </div>
+
+      <h2>Como decidir que ofrecer</h2>
+      <div class="grid">
+        <div class="box">
+          <strong>Clinica dental</strong>
+          <p>Ofrecer DentalGest primero. Si la web es debil, agregar Landing o Web Profesional.</p>
+        </div>
+        <div class="box">
+          <strong>Negocio con Excel o WhatsApp suelto</strong>
+          <p>Ofrecer Gesti-OS o Diagnostico + Plan si todavia no esta claro el proceso.</p>
+        </div>
+        <div class="box">
+          <strong>Web debil o incompleta</strong>
+          <p>Ofrecer Landing si necesita captar rapido. Web Profesional si necesita presencia completa.</p>
+        </div>
+        <div class="box">
+          <strong>Necesita claridad antes de comprar</strong>
+          <p>Ofrecer Auditoria Express. Es barata, pagada y abre una venta mayor.</p>
+        </div>
+        <div class="box">
+          <strong>Quiere automatizar</strong>
+          <p>Ofrecer n8n solo si hay un flujo claro: entrada, regla, salida y responsable.</p>
+        </div>
+        <div class="box">
+          <strong>Olvida tareas o seguimientos</strong>
+          <p>Ofrecer bot de Telegram con recordatorios y alertas internas.</p>
+        </div>
+        <div class="box">
+          <strong>Recibe muchas preguntas repetidas</strong>
+          <p>Ofrecer chatbot WhatsApp conversacional sujeto a validacion Meta.</p>
+        </div>
+        <div class="box">
+          <strong>Pide algo grande</strong>
+          <p>Agendar diagnostico y pedir alcance antes de dar precio.</p>
+        </div>
+      </div>
+
+      <h2>Que incluye una auditoria</h2>
+      <ul>
+        <li>Revision de web, redes, oferta, formulario, WhatsApp y seguimiento.</li>
+        <li>Entrega de 3 problemas concretos y 3 acciones recomendadas.</li>
+        <li>Recomendacion de siguiente oferta ONIA: web, DentalGest, Gesti-OS, CRM o n8n.</li>
+        <li>La implementacion se cotiza aparte cuando el cliente quiere ejecutar.</li>
+      </ul>
+
+      <h2>Que incluye n8n, Telegram y WhatsApp</h2>
+      <ul>
+        <li>Entrada: formulario, lead, email, planilla o registro manual.</li>
+        <li>Logica: asignar estado, responsable, prioridad, tarea o aprobacion.</li>
+        <li>Salida: Telegram, email, Sheets, Notion o CRM interno.</li>
+        <li>Telegram puede recordar tareas, avisar vencimientos, pedir aprobaciones y enviar reportes diarios.</li>
+        <li>WhatsApp conversacional puede responder preguntas frecuentes, tomar datos basicos y derivar a una persona.</li>
+        <li>Scraping masivo, APIs pagadas, login de terceros y soporte continuo requieren cotizacion separada.</li>
+      </ul>
+
+      <h2>Ideas de bots que podemos vender</h2>
+      <ul>
+        <li>Bot de recordatorios: avisa citas, cobros, renovaciones, tareas y seguimientos pendientes.</li>
+        <li>Bot de leads: cuando entra un contacto, pregunta datos minimos y avisa al responsable.</li>
+        <li>Bot de aprobaciones: permite aprobar/rechazar propuestas, publicaciones o compras internas.</li>
+        <li>Bot de cobranza amable: recuerda pagos pendientes al equipo interno para hacer seguimiento humano.</li>
+        <li>Bot de agenda interna: muestra que toca hoy y que quedo atrasado.</li>
+        <li>Bot de reportes diarios: envia ventas, leads, tareas vencidas o incidencias al cierre del dia.</li>
+        <li>Bot de inventario/stock: alerta cuando un producto o insumo baja de minimo.</li>
+        <li>Bot de postventa: recuerda llamar al cliente despues de una compra, cita o servicio.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Reglas comerciales</h2>
+      <div class="grid">
+        <div class="box">
+          <strong>Comision</strong>
+          <p>Se paga sobre cobro neto real y comprobado del cliente.</p>
+        </div>
+        <div class="box">
+          <strong>Descuentos</strong>
+          <p>DentalGest y Gesti-OS mantienen precio actual; cualquier descuento requiere aprobacion.</p>
+        </div>
+        <div class="box">
+          <strong>Promesas</strong>
+          <p>Prometer solo alcance confirmado, tiempos razonables y funciones validadas.</p>
+        </div>
+        <div class="box">
+          <strong>WhatsApp conversacional</strong>
+          <p>Se cotiza sujeto a validacion Meta, costos de mensajeria y aprobacion tecnica.</p>
+        </div>
+      </div>
+
+      <h2>Datos que debe registrar el vendedor</h2>
+      <ul>
+        <li>Empresa, rubro, ciudad y contacto publico.</li>
+        <li>Canal principal: WhatsApp, Instagram, email, LinkedIn o llamada.</li>
+        <li>Dolor probable y producto sugerido.</li>
+        <li>Estado del pipeline, ultimo contacto y proximo seguimiento.</li>
+        <li>Monto cobrado y comprobante si la venta se cierra.</li>
+      </ul>
+
+      <h2>Mensajes base</h2>
+      <h3>Clinica dental</h3>
+      <div class="script">Hola, soy Sergio de ONIA. Vi que reciben consultas y probablemente manejan agenda, pacientes y seguimiento por varios canales. Estamos mostrando DentalGest, un sistema para ordenar pacientes, citas y seguimiento. Si les sirve, les muestro una demo corta y vemos si encaja con su flujo actual.</div>
+
+      <h3 style="margin-top:5mm">Negocio sin web clara</h3>
+      <div class="script">Hola, soy Sergio de ONIA. Vi su presencia digital y creo que hay una mejora simple: una pagina clara para captar consultas y un seguimiento basico para que no se pierdan oportunidades. Si quieres, te preparo una auditoria corta con 2 o 3 mejoras puntuales.</div>
+
+      <h3 style="margin-top:5mm">Negocio desordenado</h3>
+      <div class="script">Hola, soy Sergio de ONIA. Vi que su negocio maneja clientes, pedidos o tareas que facilmente se pueden perder entre chats y planillas. Podemos mostrarles Gesti-OS o revisar su proceso primero con un diagnostico corto para proponer algo concreto.</div>
+    </section>
+  </main>
+</body>
+</html>

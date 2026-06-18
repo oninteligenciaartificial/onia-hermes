@@ -118,6 +118,9 @@ The current direction is an editorial sales landing inspired by the user's exact
 - Images use `next/image`; keep packshots large, contained and visually clean.
 - Product pages should stay PDP-first: one large media area, concise product story, buybox, chips, accordions and cart action. Do not add landing-page sections to PDPs.
 - Header bug fixed: product header must override the hero header's absolute centering (`left: auto`, `margin: 0 auto`, `transform: none`) so the Nuvia logo remains visible.
+- Catalog portal update from 2026-06-17: `/nuvia#catalogo` is the canonical full-product portal. It has category filters, product-count context, one product grid, detail links and a compact checkout module on every card.
+- Product checkout pattern: each card has quantity controls and an `agregar al carrito` CTA; product detail pages add a sticky quick-checkout bar with thumbnail, title, quantity, price/cotizacion state, add action and cart access.
+- Reference boundary: the PDP structure can learn from ISDIN's ecommerce mechanics (sticky buy bar, quantity stepper, accordions), but Nuvia must not copy ISDIN visual identity, loyalty points, ratings, prices, claims or proprietary imagery.
 - Latest Next validation screenshots:
   - `C:\Users\PC\.codex\design-stack\screenshots\nuvia-next-desktop-20260617.png`
   - `C:\Users\PC\.codex\design-stack\screenshots\nuvia-next-mobile-20260617.png`

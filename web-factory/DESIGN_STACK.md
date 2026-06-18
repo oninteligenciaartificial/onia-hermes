@@ -28,6 +28,18 @@ Use it for ecommerce landing motion, product-card microinteractions, reveal safe
 
 Use it whenever Sergio sends screenshots, brand boards, ecommerce references, landing page captures or visual inspiration that should become reusable Web Factory context. The skill extracts layout, typography, section order, conversion logic, motion rules, no-copy boundaries and QA requirements, then stores the result in client context plus `web-factory/data/references/visual/<slug>/`.
 
+`taste-skill` is installed globally at `C:\Users\PC\.codex\skills\taste-skill` from `Leonxlnx/taste-skill`, path `skills/taste-skill`.
+
+Use it for anti-generic landing pages, portfolios and redesigns. Its internal skill name is `design-taste-frontend`; it is not the primary driver for dashboards or complex app flows.
+
+`web-factory-design-director` is installed globally at `C:\Users\PC\.codex\skills\web-factory-design-director`.
+
+Use it before substantial website design work to choose the right combination of design skills and avoid loading every design skill without a reason.
+
+`web-factory-commerce-storefront` is installed globally at `C:\Users\PC\.codex\skills\web-factory-commerce-storefront`.
+
+Use it for ecommerce storefronts, catalog portals, product cards, PDPs, carts, checkout/cotizacion, purchase flows and conversion-focused product UX.
+
 ## Repositories To Consult
 
 | Source | License | Local clone | Primary use in Web Factory |
@@ -150,6 +162,8 @@ Next.js Nuvia pattern:
 - Shared data helper: `web-factory/apps/site/src/lib/nuvia-data.ts`.
 - Public asset mirror: `web-factory/apps/site/public/nuvia/assets/`.
 - Commerce state: client-side cart with localStorage, quantity controls, remove/clear, cart count and checkout/cotizacion CTA.
+- Catalog portal pattern: the home route should contain one canonical product portal with filters/facets, not repeated product sections. Each product card can include quantity controls and an add-to-cart action when the store is commerce-oriented.
+- PDP checkout pattern: product routes should expose a sticky quick-checkout bar inspired by mature ecommerce references: product thumbnail/title, quantity stepper, price or cotizacion state, add-to-cart and cart access. Do not copy third-party pricing, claims, loyalty systems or visual identity.
 - Motion: IntersectionObserver reveal, product-stage tilt, hover microinteractions, smooth anchors and reduced-motion fallback.
 - PDP rule: keep product detail pages concise and purchase-focused; use one media hero, buybox, practical chips and accordions. Do not repeat landing sections on PDPs.
 - Validation URL: `http://localhost:4174/nuvia` when served with `next start -p 4174`.

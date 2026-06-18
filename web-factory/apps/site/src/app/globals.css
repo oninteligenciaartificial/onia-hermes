@@ -1529,7 +1529,7 @@ a.workflow-card:hover {
   padding-bottom: 4px;
 }
 
-.nuvia-portal-tabs a {
+.nuvia-portal-tabs button {
   display: grid;
   place-items: center;
   min-height: 36px;
@@ -1542,7 +1542,7 @@ a.workflow-card:hover {
   font-weight: 780;
 }
 
-.nuvia-portal-tabs a:first-child {
+.nuvia-portal-tabs button.is-active {
   color: #fffdfa;
   border-color: transparent;
   background: var(--nuvia-ink);
@@ -1550,7 +1550,7 @@ a.workflow-card:hover {
 
 .nuvia-product-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 310px), 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr));
   gap: 14px;
 }
 
@@ -1647,7 +1647,7 @@ a.workflow-card:hover {
 
 .nuvia-product-card footer {
   display: grid;
-  grid-template-columns: minmax(150px, 0.78fr) minmax(220px, 1.2fr);
+  grid-template-columns: 1fr;
   gap: 10px;
   align-items: stretch;
   margin-top: 8px;
@@ -1658,6 +1658,7 @@ a.workflow-card:hover {
 .nuvia-product-card footer > a {
   display: grid;
   place-items: center;
+  justify-self: start;
   min-height: 46px;
   padding: 0 14px;
   border-radius: 999px;
@@ -1665,6 +1666,15 @@ a.workflow-card:hover {
   background: rgba(17, 22, 21, 0.08);
   font-size: 0.8rem;
   font-weight: 760;
+}
+
+.nuvia-product-card .nuvia-product-checkout {
+  grid-template-columns: minmax(0, 1fr) auto minmax(154px, 0.56fr);
+}
+
+.nuvia-product-card .nuvia-product-checkout > button {
+  grid-column: auto;
+  min-height: 44px;
 }
 
 .nuvia-product-checkout {
@@ -2411,8 +2421,12 @@ a.workflow-card:hover {
   .nuvia-pdp-bar-actions > button:nth-of-type(2):hover,
   .nuvia-pdp-buybox > button:hover,
   .nuvia-product-card footer > a:hover,
-  .nuvia-portal-tabs a:hover {
+  .nuvia-portal-tabs button:hover {
     background: rgba(17, 22, 21, 0.1);
+  }
+
+  .nuvia-portal-tabs button.is-active:hover {
+    background: var(--nuvia-ink);
   }
 }
 
@@ -2531,6 +2545,14 @@ a.workflow-card:hover {
 
   .nuvia-product-card footer {
     grid-template-columns: 1fr;
+  }
+
+  .nuvia-product-card .nuvia-product-checkout {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .nuvia-product-card .nuvia-product-checkout > button {
+    grid-column: 1 / -1;
   }
 
   .nuvia-discount-section {

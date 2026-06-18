@@ -409,6 +409,8 @@ function ProductShelf({
   products: NuviaProduct[];
 }) {
   const categories = Array.from(new Set(products.map((product) => product.categoria).filter(Boolean)));
+  const [activeCategory, setActiveCategory] = useState("todos");
+  const visibleProducts = activeCategory === "todos" ? products : products.filter((product) => product.categoria === activeCategory);
 
   return (
     <section className="nuvia-next-section nuvia-catalog-portal" id="catalogo" data-nuvia-reveal>
@@ -429,16 +431,18 @@ function ProductShelf({
       </div>
 
       <div className="nuvia-portal-tabs" aria-label="Categorias del catalogo">
-        <a href="#catalogo">todos</a>
+        <button className={activeCategory === "todos" ? "is-active" : undefined} type="button" onClick={() => setActiveCategory("todos")}>
+          todos
+        </button>
         {categories.map((category) => (
-          <a href="#catalogo" key={category}>
+          <button className={activeCategory === category ? "is-active" : undefined} type="button" onClick={() => setActiveCategory(category)} key={category}>
             {category}
-          </a>
+          </button>
         ))}
       </div>
 
       <div className="nuvia-product-grid">
-        {products.map((product, index) => {
+        {visibleProducts.map((product, index) => {
           const slug = productSlug(product);
           return (
             <article className="nuvia-product-card" data-nuvia-reveal style={{ "--delay": `${index * 70}ms` } as CSSProperties} key={slug}>
