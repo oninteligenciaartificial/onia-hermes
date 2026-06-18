@@ -12,6 +12,32 @@ and ONIA consulting/implementations.
 
 ## Offers
 
+## Oferta de arranque comercial
+
+Usar estos precios para cerrar clientes reales rapido. Vigencia hasta
+2026-07-31 o primeros 20 clientes cobrados:
+
+- DentalGest: Bs. 290, Bs. 490 y Bs. 790/mes por los primeros 3 meses.
+- Gesti-OS: Bs. 290, Bs. 490, Bs. 790 y desde Bs. 1250/mes por los primeros 3
+  meses.
+- Landing: Bs. 990.
+- Web Negocio: Bs. 1900.
+- Web Pro IA: Bs. 3900.
+- Portal o sistema web mini: desde Bs. 7500.
+- Video individual: Bs. 290.
+- Pack 4 videos IA: Bs. 990.
+- Packs mensuales Higgsfield: Bs. 1800, Bs. 3200 y Bs. 5500/mes por los
+  primeros 3 meses.
+- Auditoria Express: Bs. 250.
+- Diagnostico + Plan: Bs. 690.
+- Instalacion simple: Bs. 1500.
+- Implementacion operativa: desde Bs. 3900.
+- Conexion de canal social: Bs. 690 setup.
+- Flujo n8n aprobaciones: Bs. 1400 setup.
+
+Regla: precio reservado solo con pago confirmado. Desde el mes 4 en servicios
+mensuales se puede pasar al precio vigente avisando antes.
+
 ### DentalGest
 
 For dental clinics.

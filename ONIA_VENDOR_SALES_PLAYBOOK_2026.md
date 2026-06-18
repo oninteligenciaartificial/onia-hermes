@@ -21,6 +21,53 @@ Politica comercial:
   descuenta de la siguiente liquidacion.
 - No contactar prospectos ni publicar contenido sin aprobacion explicita.
 
+## Oferta de arranque para vender ahora
+
+Usar esta tabla cuando el objetivo sea cerrar clientes reales rapido. Es una
+oferta limitada, no una rebaja permanente de ONIA.
+
+Condiciones:
+
+- Vigente hasta 2026-07-31 o hasta 20 clientes cobrados.
+- El precio se reserva solo con pago confirmado.
+- En SaaS y paquetes mensuales, el precio de arranque cubre los primeros 3
+  meses; desde el mes 4 se puede pasar al precio vigente avisando antes.
+- La comision se calcula sobre el monto neto realmente cobrado.
+- No incluye gastos externos ni promesas de resultado garantizado.
+
+| Producto | Precio de arranque | Premio vendedor |
+|---|---:|---:|
+| DentalGest Basico | Bs. 290/mes | Bs. 101,50 |
+| DentalGest Profesional | Bs. 490/mes | Bs. 171,50 |
+| DentalGest Clinica | Bs. 790/mes | Bs. 276,50 |
+| GestiOS Basico | Bs. 290/mes | Bs. 101,50 |
+| GestiOS Crecer | Bs. 490/mes | Bs. 171,50 |
+| GestiOS Pro | Bs. 790/mes | Bs. 276,50 |
+| GestiOS Empresarial | desde Bs. 1.250/mes | desde Bs. 437,50 |
+| Landing Express | Bs. 990 | Bs. 99 |
+| Web Negocio | Bs. 1.900 | Bs. 228 |
+| Web Pro IA | Bs. 3.900 | Bs. 468 |
+| Portal / sistema web mini | desde Bs. 7.500 | desde Bs. 750 |
+| Video individual | Bs. 290 | Bs. 29 |
+| Pack 4 videos IA | Bs. 990 | Bs. 148,50 |
+| 8 videos mensuales | Bs. 1.800/mes | Bs. 270 |
+| 16 videos mensuales | Bs. 3.200/mes | Bs. 480 |
+| 24 videos mensuales | Bs. 5.500/mes | Bs. 825 |
+| Auditoria Express ONIA | Bs. 250 | Bs. 25 |
+| Diagnostico + Plan de Accion | Bs. 690 | Bs. 69 |
+| Instalacion de Flujo Simple | Bs. 1.500 | Bs. 150 |
+| Implementacion Operativa | desde Bs. 3.900 | desde Bs. 390 |
+| Conexion de canal social | Bs. 690 setup | Bs. 69 |
+| n8n aprobaciones/publicacion | Bs. 1.400 setup | Bs. 140 |
+
+Frase de cierre:
+
+```text
+Tenemos cupos de arranque para implementar casos reales con ONIA. Si confirma
+con pago, se reserva este precio por el periodo indicado; despues aplica el
+precio vigente.
+```
+
 ## Premios por venta
 
 | Producto | Precio | Premio vendedor |

@@ -2,7 +2,7 @@
 
 Documento interno para vendedores nuevos. No compartir publicamente.
 
-Ultima actualizacion: 2026-06-02
+Ultima actualizacion: 2026-06-18
 
 ## 1. Que vende ONIA
 
@@ -18,6 +18,56 @@ y ofrece una solucion concreta:
 - si no publica contenido que venda, ofrecemos videos con IA;
 - si trabaja con Excel, WhatsApp y notas sueltas, ofrecemos sistema operativo;
 - si necesita algo propio, ofrecemos sistema personalizado.
+
+## Oferta de arranque para vender ahora
+
+ONIA esta abriendo precios de arranque para cerrar clientes reales rapido. Esto
+no significa vender barato para siempre ni prometer resultados imposibles.
+
+Reglas:
+
+- Vigencia hasta 2026-07-31 o hasta 20 clientes cobrados, lo que ocurra primero.
+- El precio se reserva solo con pago confirmado.
+- En SaaS y paquetes mensuales, el precio de arranque cubre los primeros 3
+  meses. Desde el mes 4 ONIA puede pasar al precio vigente avisando antes.
+- Si el cliente paga 3 meses adelantados, se respeta ese periodo completo.
+- La comision se calcula sobre el monto neto realmente cobrado.
+- No se incluyen impuestos, pauta, dominios, hosting, herramientas, APIs,
+  creditos IA, WhatsApp, SMS, servidores ni gastos externos.
+- No prometer ventas garantizadas, viralidad ni WhatsApp automatico.
+
+| Oferta | Precio de arranque | Gana vendedor |
+|---|---:|---:|
+| DentalGest Basico | Bs. 290/mes | Bs. 101.50 |
+| DentalGest Profesional | Bs. 490/mes | Bs. 171.50 |
+| DentalGest Clinica | Bs. 790/mes | Bs. 276.50 |
+| GestiOS Basico | Bs. 290/mes | Bs. 101.50 |
+| GestiOS Crecer | Bs. 490/mes | Bs. 171.50 |
+| GestiOS Pro | Bs. 790/mes | Bs. 276.50 |
+| GestiOS Empresarial | desde Bs. 1,250/mes | desde Bs. 437.50 |
+| Landing de Captacion | Bs. 990 | Bs. 99.00 |
+| Web Profesional | Bs. 1,900 | Bs. 228.00 |
+| Web Pro con IA | Bs. 3,900 | Bs. 468.00 |
+| Portal o Sistema Web mini | desde Bs. 7,500 | desde Bs. 750.00 |
+| Video individual | Bs. 290 | Bs. 29.00 |
+| Pack 4 videos IA | Bs. 990 | Bs. 148.50 |
+| 8 videos mensuales | Bs. 1,800/mes | Bs. 270.00 |
+| 16 videos mensuales | Bs. 3,200/mes | Bs. 480.00 |
+| 24 videos mensuales | Bs. 5,500/mes | Bs. 825.00 |
+| Auditoria Express | Bs. 250 | Bs. 25.00 |
+| Diagnostico + Plan de Accion | Bs. 690 | Bs. 69.00 |
+| Instalacion de Flujo Simple | Bs. 1,500 | Bs. 150.00 |
+| Implementacion Operativa | desde Bs. 3,900 | desde Bs. 390.00 |
+| Conexion de canal social | Bs. 690 setup | Bs. 69.00 |
+| Flujo de aprobacion n8n | Bs. 1,400 setup | Bs. 140.00 |
+
+Frase para cotizar:
+
+```text
+Estamos abriendo cupos de arranque para implementar casos reales con ONIA. Este
+precio queda reservado hasta [FECHA] solo con pago confirmado. Luego se aplica
+el precio vigente.
+```
 
 ## 2. Regla principal de comisiones
 

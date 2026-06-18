@@ -1,6 +1,44 @@
 {
   "version": "2026-06-01",
   "owner": "ONIA",
+  "current_sales_offer": {
+    "version": "2026-06-18",
+    "name": "Oferta de arranque comercial",
+    "valid_until": "2026-07-31",
+    "limit": "20 clientes cobrados",
+    "rules": [
+      "precio reservado solo con pago confirmado",
+      "en SaaS y paquetes mensuales el precio de arranque cubre los primeros 3 meses",
+      "desde el mes 4 se puede pasar al precio vigente avisando antes",
+      "la comision se calcula sobre el monto neto realmente cobrado",
+      "no incluye impuestos, pauta, dominios, hosting, pasarelas, herramientas, creditos IA, APIs, SMS, WhatsApp, servidores ni gastos de terceros",
+      "no prometer ventas garantizadas, viralidad ni WhatsApp automatico"
+    ],
+    "offers": {
+      "dentalgest_basico": {"price": "Bs. 290/mes", "vendor_commission": "Bs. 101.50"},
+      "dentalgest_profesional": {"price": "Bs. 490/mes", "vendor_commission": "Bs. 171.50"},
+      "dentalgest_clinica": {"price": "Bs. 790/mes", "vendor_commission": "Bs. 276.50"},
+      "gestios_basico": {"price": "Bs. 290/mes", "vendor_commission": "Bs. 101.50"},
+      "gestios_crecer": {"price": "Bs. 490/mes", "vendor_commission": "Bs. 171.50"},
+      "gestios_pro": {"price": "Bs. 790/mes", "vendor_commission": "Bs. 276.50"},
+      "gestios_empresarial": {"price": "desde Bs. 1250/mes", "vendor_commission": "desde Bs. 437.50"},
+      "landing_captacion": {"price": "Bs. 990", "vendor_commission": "Bs. 99.00"},
+      "web_profesional": {"price": "Bs. 1900", "vendor_commission": "Bs. 228.00"},
+      "web_pro_ia": {"price": "Bs. 3900", "vendor_commission": "Bs. 468.00"},
+      "portal_sistema_web_mini": {"price": "desde Bs. 7500", "vendor_commission": "desde Bs. 750.00"},
+      "video_individual": {"price": "Bs. 290", "vendor_commission": "Bs. 29.00"},
+      "pack_4_videos_ia": {"price": "Bs. 990", "vendor_commission": "Bs. 148.50"},
+      "higgsfield_8_videos": {"price": "Bs. 1800/mes", "vendor_commission": "Bs. 270.00"},
+      "higgsfield_16_videos": {"price": "Bs. 3200/mes", "vendor_commission": "Bs. 480.00"},
+      "higgsfield_24_videos": {"price": "Bs. 5500/mes", "vendor_commission": "Bs. 825.00"},
+      "auditoria_express": {"price": "Bs. 250", "vendor_commission": "Bs. 25.00"},
+      "diagnostico_plan": {"price": "Bs. 690", "vendor_commission": "Bs. 69.00"},
+      "instalacion_flujo_simple": {"price": "Bs. 1500", "vendor_commission": "Bs. 150.00"},
+      "implementacion_operativa": {"price": "desde Bs. 3900", "vendor_commission": "desde Bs. 390.00"},
+      "conexion_canal_social": {"price": "Bs. 690 setup", "vendor_commission": "Bs. 69.00"},
+      "flujo_aprobacion_n8n": {"price": "Bs. 1400 setup", "vendor_commission": "Bs. 140.00"}
+    }
+  },
   "approval_policy": {
     "research": "allowed",
     "draft_messages": "allowed",
