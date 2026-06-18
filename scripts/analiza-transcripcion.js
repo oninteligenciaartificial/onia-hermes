@@ -39,7 +39,7 @@ const EXTRACCION_USER = (transcript) => `Extraé estos campos:
   "nivel_interes": "alto | medio | bajo | no_definido",
   "proximo_paso_acordado": "qué quedó acordado",
   "fecha_proximo_paso": "fecha o null",
-  "productos_relevantes": ["IDs: dentalgest | gestios | web_landing | web_negocio | web_pro_ia | videos_ia | consultoria"],
+  "productos_relevantes": ["IDs: dentalgest | gestios | web_landing | web_negocio | web_pro | consultoria"],
   "notas_internas": "observaciones de tono, urgencia, contexto",
   "resumen_ejecutivo": "2-3 oraciones de la oportunidad"
 }

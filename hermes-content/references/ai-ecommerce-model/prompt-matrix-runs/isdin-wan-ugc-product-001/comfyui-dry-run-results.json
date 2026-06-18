@@ -1,0 +1,22 @@
+{
+  "ok": true,
+  "mode": "dry_run",
+  "endpoint": "http://127.0.0.1:8188",
+  "workflow": "hermes-content\\references\\ai-ecommerce-model\\comfyui\\wan22_ti2v_5b_api.json",
+  "mapping": "hermes-content\\references\\ai-ecommerce-model\\comfyui\\wan22_ti2v_5b.mapping.json",
+  "matrix": "hermes-content\\references\\ai-ecommerce-model\\prompt-matrix-runs\\isdin-wan-ugc-product-001\\prompt-matrix.jsonl",
+  "preview": "hermes-content\\references\\ai-ecommerce-model\\prompt-matrix-runs\\isdin-wan-ugc-product-001\\comfyui-request-preview.jsonl",
+  "result_count": 2,
+  "results": [
+    {
+      "id": "mara__00001__wan22_ti2v5b_product_medium__same_source_outfit__warm_friend__medium_product_demo__bright_bathroom__product_hold_low__no_fake_review__demo_safe_12s",
+      "status": "dry_run",
+      "seed": 1000
+    },
+    {
+      "id": "mara__00002__wan22_ti2v5b_product_medium__same_source_outfit__warm_friend__medium_product_demo__bright_bathroom__product_hold_low__no_fake_review__skincare_visual_15s",
+      "status": "dry_run",
+      "seed": 1001
+    }
+  ]
+}

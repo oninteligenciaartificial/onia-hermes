@@ -4,8 +4,8 @@
 Es el centro de mando para operar ONIA desde Telegram.
 
 Telegram manda el pedido. Hermes decide con contexto. n8n agenda y registra.
-Video Lab prepara videos. Higgsfield renderiza. Sergio aprueba antes de publicar
-o contactar.
+Video Lab queda como laboratorio interno. Sergio aprueba antes de publicar o
+contactar.
 
 ## Comando principal
 
@@ -39,7 +39,8 @@ Registro Hermes
 Orquesta ONIA: <empresa o rubro> | <objetivo>
 Prepara venta DentalGest: <clinica>
 Prepara venta Gestios: <empresa>
-Prepara marketing Higgsfield: <negocio> | <oferta>
+Prepara venta Web ONIA: <negocio>
+Prepara consultoria ONIA: <negocio> | <dolor o proceso>
 Genera video Sergio: <idea>
 Genera Reel ONIA: <tema> | <objetivo>
 Crea video cliente: <negocio> | <oferta> | <estilo>
@@ -73,7 +74,7 @@ Hermes debe usar:
 - DentalGest para clinicas dentales.
 - Gesti-OS para pymes con tareas, Excel, reportes o procesos.
 - Paginas web ONIA para captacion y presencia.
-- Marketing Higgsfield para videos, Reels y UGC.
+- Videos IA / Higgsfield no se ofrecen comercialmente por ahora.
 - Consultoria ONIA para diagnostico, roadmap e implementacion.
 
 Fuente:

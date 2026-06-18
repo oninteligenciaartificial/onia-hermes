@@ -154,7 +154,10 @@ async function main() {
     const remoteArchive = `/tmp/hermes_content_${Date.now()}.tgz`;
     try {
       copyFilesToStage(files, contentRoot, stageRoot);
-      childProcess.execFileSync("tar", ["-czf", archivePath, "-C", stageRoot, "."]);
+      const tarArgs = ["-czf", archivePath, "-C", stageRoot, "."];
+      // En Windows, GNU tar interpreta el "C:" de la ruta como host remoto; --force-local lo evita.
+      if (process.platform === "win32") tarArgs.unshift("--force-local");
+      childProcess.execFileSync("tar", tarArgs);
       process.stdout.write(
         `Uploading Hermes content archive: ${files.length} files\n`
       );
@@ -205,6 +208,12 @@ async function main() {
       sftpClient,
       path.join(repoRoot, "scripts", "hermes_command_center.py"),
       "/root/.hermes/scripts/hermes_command_center.py",
+      0o755
+    );
+    await putFile(
+      sftpClient,
+      path.join(repoRoot, "scripts", "acta_generator.py"),
+      "/root/.hermes/scripts/acta_generator.py",
       0o755
     );
 
@@ -286,6 +295,19 @@ async function main() {
     fs.writeFileSync(localHermesCommandWrapper, hermesCommandWrapper, "utf8");
     await putFile(sftpClient, localHermesCommandWrapper, "/usr/local/bin/hermes-command", 0o755);
 
+    const actaWrapper = [
+      "#!/usr/bin/env bash",
+      "set -euo pipefail",
+      "set -a",
+      "source /root/.hermes/.env",
+      "set +a",
+      'exec python3 /root/.hermes/scripts/acta_generator.py "$@"',
+      "",
+    ].join("\n");
+    const localActaWrapper = path.join(os.tmpdir(), `acta-generator-${Date.now()}`);
+    fs.writeFileSync(localActaWrapper, actaWrapper, "utf8");
+    await putFile(sftpClient, localActaWrapper, "/usr/local/bin/acta-generator", 0o755);
+
     const chmodWrapper = await exec(
       conn,
       [
@@ -297,6 +319,17 @@ async function main() {
     );
     if (chmodWrapper.code !== 0) {
       throw new Error(`Failed to set wrapper permissions: ${chmodWrapper.stderr}`);
+    }
+
+    const chmodActa = await exec(
+      conn,
+      [
+        "chown root:root /usr/local/bin/acta-generator /root/.hermes/scripts/acta_generator.py",
+        "chmod 755 /usr/local/bin/acta-generator /root/.hermes/scripts/acta_generator.py",
+      ].join(" && ")
+    );
+    if (chmodActa.code !== 0) {
+      throw new Error(`Failed to set acta permissions: ${chmodActa.stderr}`);
     }
 
     const updates = {};
@@ -318,6 +351,7 @@ async function main() {
         "  /usr/local/bin/hermes-week-plan",
         "  /usr/local/bin/social-publish",
         "  /usr/local/bin/hermes-command",
+        "  /usr/local/bin/acta-generator",
         "",
       ].join("\n")
     );

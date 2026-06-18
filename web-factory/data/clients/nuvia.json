@@ -1,7 +1,7 @@
 {
   "nombre": "Nuvia",
   "slug": "nuvia",
-  "tagline": "Protege limpia tu piel",
+  "tagline": "Everything for everyone",
   "descripcion": "Nuvia reune productos utiles para todos los dias y empieza con una rutina skincare simple: limpiar bien, proteger mejor y pedir asistencia sin vueltas.",
   "logo": "NUVIA",
   "logoIcon": "assets/nuvia-icon.png",
@@ -15,8 +15,8 @@
     "fg": "#0F2D52"
   },
   "tipografia": {
-    "heading": "SF Pro Display",
-    "body": "SF Pro Text"
+    "heading": "Onest",
+    "body": "Onest"
   },
   "contacto": {
     "email": "",
@@ -62,9 +62,11 @@
       "titulo": "ISDIN Fusion Water Magic SPF 50",
       "categoria": "Proteccion solar",
       "precio": "Consultar precio",
+      "precioValor": null,
+      "moneda": "BOB",
       "desc": "Fotoprotector facial diario de textura ligera, acabado no graso y proteccion alta para acompanar la rutina urbana.",
       "etiqueta": "SPF 50 diario",
-      "imagen": "assets/isdin-fusion-water.webp",
+      "imagen": "assets/isdin-fusion-water-normalized.png",
       "imagenAlt": "ISDIN Fusion Water Magic SPF 50 en envase azul claro",
       "marca": "ISDIN",
       "tamano": "50 ml",
@@ -86,15 +88,63 @@
         "Mediterranean Algae Extract"
       ],
       "modoUso": "Aplicar por la manana como ultimo paso de la rutina y reaplicar segun exposicion solar.",
+      "incluye": [
+        "1 fotoprotector facial ISDIN Fusion Water Magic SPF 50",
+        "Envase de 50 ml",
+        "Textura ligera para uso diario",
+        "Consulta de disponibilidad y precio final"
+      ],
+      "especificaciones": [
+        {
+          "label": "Marca",
+          "value": "ISDIN"
+        },
+        {
+          "label": "Tamano",
+          "value": "50 ml"
+        },
+        {
+          "label": "Categoria",
+          "value": "Proteccion solar"
+        },
+        {
+          "label": "Rutina",
+          "value": "Paso 2: proteger"
+        },
+        {
+          "label": "Precio",
+          "value": "Consultar precio"
+        }
+      ],
+      "detalleImagenes": [
+        {
+          "src": "assets/isdin-fusion-water-normalized.png",
+          "alt": "Envase ISDIN Fusion Water Magic SPF 50",
+          "label": "Envase 50 ml"
+        },
+        {
+          "src": "assets/nuvia-icon.png",
+          "alt": "Seleccion curada por Nuvia",
+          "label": "Seleccion Nuvia"
+        },
+        {
+          "src": "assets/svr-sebiaclear-200ml-normalized.png",
+          "alt": "SVR Sebiaclear Gel Moussant como paso previo de limpieza",
+          "label": "Combina con limpieza"
+        }
+      ],
+      "detalleNota": "Ideal para completar la rutina de manana despues de limpiar la piel. No reemplaza recomendacion dermatologica si existe una condicion activa.",
       "ordenRutina": 2
     },
     {
       "titulo": "SVR Sebiaclear Gel Moussant",
       "categoria": "Limpieza facial",
       "precio": "Consultar precio",
+      "precioValor": null,
+      "moneda": "BOB",
       "desc": "Gel limpiador para rostro y cuerpo, pensado para piel mixta, grasa, sensible o con tendencia acneica.",
       "etiqueta": "Piel grasa",
-      "imagen": "assets/svr-sebiaclear-200ml.webp",
+      "imagen": "assets/svr-sebiaclear-200ml-normalized.png",
       "imagenAlt": "SVR Sebiaclear Gel Moussant en tubo verde de 200 ml",
       "marca": "SVR",
       "tamano": "200 ml",
@@ -116,6 +166,52 @@
         "Glycerin"
       ],
       "modoUso": "Usar sobre piel humeda, masajear suavemente y enjuagar. Evitar contacto directo con los ojos.",
+      "incluye": [
+        "1 gel limpiador SVR Sebiaclear Gel Moussant",
+        "Envase de 200 ml",
+        "Limpieza facial y corporal segun rutina",
+        "Consulta de disponibilidad y precio final"
+      ],
+      "especificaciones": [
+        {
+          "label": "Marca",
+          "value": "SVR"
+        },
+        {
+          "label": "Tamano",
+          "value": "200 ml"
+        },
+        {
+          "label": "Categoria",
+          "value": "Limpieza facial"
+        },
+        {
+          "label": "Rutina",
+          "value": "Paso 1: limpiar"
+        },
+        {
+          "label": "Precio",
+          "value": "Consultar precio"
+        }
+      ],
+      "detalleImagenes": [
+        {
+          "src": "assets/svr-sebiaclear-200ml-normalized.png",
+          "alt": "Envase SVR Sebiaclear Gel Moussant 200 ml",
+          "label": "Envase 200 ml"
+        },
+        {
+          "src": "assets/nuvia-icon.png",
+          "alt": "Seleccion curada por Nuvia",
+          "label": "Seleccion Nuvia"
+        },
+        {
+          "src": "assets/isdin-fusion-water-normalized.png",
+          "alt": "ISDIN Fusion Water Magic SPF 50 como paso de proteccion",
+          "label": "Sigue con proteccion"
+        }
+      ],
+      "detalleNota": "Primer paso para retirar impurezas antes de hidratar o proteger. Si hay irritacion persistente, consulta con un profesional.",
       "ordenRutina": 1
     }
   ],

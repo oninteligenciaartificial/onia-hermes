@@ -15,70 +15,87 @@ aprueba acciones client-facing.
 | Gesti-OS | `C:\dev\Proyectos\Gestios` | Sistema operativo de gestion empresarial | Pymes con operaciones en Excel o WhatsApp | Tareas, clientes, estados, reportes y visibilidad |
 | Web ONIA | `C:\dev\Proyectos\Web-Onia` | Sitio y vitrina de ONIA | Prospectos que investigan antes de comprar | Autoridad, portfolio, landing y captacion |
 | Paginas web ONIA | por cliente | Servicio cash-flow | Negocios locales y profesionales | Landing/web + formulario + seguimiento |
-| Marketing Higgsfield | Hermes Video Lab | Servicio de contenido y ads | Negocios con baja produccion de contenido | Reels, UGC, videos de oferta, demos y contenido mensual |
+| Marketing Higgsfield | Hermes Video Lab | Pausado como oferta principal | Uso interno y muestras aprobadas | No vender videos IA por ahora |
 | Consultoria ONIA | `hermes-content/docs/ONIA_CONSULTING_SERVICES_2026.md` | Diagnostico, instalacion y acompanamiento | Negocios que necesitan ordenar procesos antes de comprar herramientas | Auditoria, roadmap, instalacion, capacitacion y soporte consultivo |
 | AlfredHQ | `C:\dev\Proyectos\AlfredHQ` | Sistema/experimento interno | Uso interno | Evaluar antes de vender |
 
 ## Escalera comercial
 
-1. Entrada rapida: auditoria gratis o video de diagnostico.
+1. Entrada rapida: auditoria express o diagnostico pagado.
 2. Servicio inicial: pagina web o landing de captacion.
 3. Sistema de seguimiento: CRM, Telegram, email, Chatwoot o n8n.
 4. Producto vertical: DentalGest o Gesti-OS.
 5. Consultoria/implementacion: instalar flujo, capacitar y documentar.
-6. Retainer: contenido mensual con Higgsfield + automatizacion + reporte.
+6. Retainer: cuidado web, soporte operativo o monitoreo de automatizaciones.
 
 ## Precios conocidos
 
+Oferta de arranque comercial vigente hasta 2026-07-31 o primeros 20 clientes
+cobrados:
+
+- DentalGest: Bs. 320, Bs. 750 y Bs. 1500/mes.
+- Gesti-OS: Bs. 350, Bs. 530, Bs. 800 y Bs. 1250/mes.
+- Landing: Bs. 790.
+- Web Negocio: Bs. 1500.
+- Web Pro ONIA: Bs. 2900.
+- Portal o sistema web mini: desde Bs. 6500.
+- Auditoria Express: Bs. 250.
+- Diagnostico + Plan: Bs. 690.
+- Instalacion simple: Bs. 1500.
+- Implementacion operativa: desde Bs. 3900.
+- Conexion de canal social: Bs. 690 setup.
+- Automatizacion simple n8n: Bs. 790 setup.
+- Flujo n8n aprobaciones: Bs. 1200 setup.
+
+Regla: DentalGest y Gesti-OS mantienen su precio actual. Videos IA/Higgsfield no
+se venden como producto independiente por ahora.
+
 DentalGest:
 
-- Starter: Bs. 349/mes, sin setup obligatorio.
-- Pro: Bs. 590/mes, sin setup obligatorio.
-- Clinic: Bs. 990/mes, sin setup obligatorio.
-- Fundadores primeros 10: Bs. 290, Bs. 490 y Bs. 790/mes.
+- Basico: Bs. 320/mes, sin setup obligatorio.
+- Profesional: Bs. 750/mes, sin setup obligatorio.
+- Clinica: Bs. 1500/mes, sin setup obligatorio.
 - Onboarding opcional: Bs. 290, Bs. 690 o Bs. 1490.
 - WhatsApp: bloqueado hasta verificacion Meta.
 
 Gesti-OS:
 
-- Starter: Bs. 490/mes, sin setup obligatorio.
-- Operativo: Bs. 790/mes, onboarding recomendado.
-- Pro: Bs. 1290/mes, onboarding recomendado.
-- Enterprise: desde Bs. 2490/mes, implementacion cotizada.
+- Basico: Bs. 350/mes, sin setup obligatorio.
+- Crecer: Bs. 530/mes, sin setup obligatorio.
+- Pro: Bs. 800/mes, onboarding recomendado.
+- Empresarial: Bs. 1250/mes, implementacion cotizada si hay alcance extra.
 - Add-ons: WhatsApp Business, SIAT, pagos QR, e-commerce y exportacion
   contable. WhatsApp queda bloqueado hasta verificacion Meta.
 
 Marketing Higgsfield:
 
-- Video unit: Bs. 450.
-- Sprint 8: Bs. 2200/mes.
-- Growth 16: Bs. 3900/mes.
-- Authority 24: Bs. 6500/mes.
-- Performance System: desde Bs. 9500/mes.
-- Intro primeros 5 clientes: Bs. 1800, Bs. 3200 y Bs. 5500/mes.
+- Pausado como producto comercial independiente.
+- No vender videos IA, packs Higgsfield ni promesas de contenido con IA.
+- Usar solo para muestras internas o propuestas aprobadas caso por caso.
 
 Paginas web:
 
-- Landing Express: Bs. 1490.
-- Web Negocio: Bs. 2900.
-- Web Pro IA: Bs. 5900.
-- SaaS / portal personalizado: desde Bs. 9500.
+- Landing Express: Bs. 790.
+- Web Negocio: Bs. 1500.
+- Web Pro ONIA: Bs. 2900.
+- SaaS / portal personalizado mini: desde Bs. 6500.
 - Care plan: Bs. 190, Bs. 390 o Bs. 690/mes.
 
 Conectores cross-platform:
 
-- TikTok API: Bs. 900 setup + Bs. 150/mes monitoreo.
-- YouTube Shorts API: Bs. 900 setup + Bs. 150/mes monitoreo.
-- LinkedIn API: Bs. 900 setup + Bs. 150/mes monitoreo.
-- n8n approval/publishing flow: Bs. 1800 setup + Bs. 350/mes monitoreo.
+- Conexion de canal social: Bs. 690 setup.
+- Automatizacion simple n8n: Bs. 790 setup para formulario/lead -> registro ->
+  aviso -> tarea.
+- Flujo n8n aprobaciones: Bs. 1200 setup para estados recibido, pendiente,
+  aprobado, rechazado y notificado.
+- Monitoreo opcional: Bs. 150/mes.
 
 Consultoria e implementaciones:
 
-- Auditoria Express: Bs. 250-450.
-- Diagnostico + Roadmap: Bs. 790-1200.
+- Auditoria Express: Bs. 250.
+- Diagnostico + Roadmap: Bs. 690.
 - Instalacion Starter: Bs. 1900.
 - Implementacion Operativa: Bs. 3900-6500.
-- Sprint IA y Video System: Bs. 4900-8500.
 - Acompanamiento Consultivo: Bs. 1200-2900/mes.
 - Transformacion ONIA: desde Bs. 9500.
 
@@ -92,7 +109,7 @@ Vender primero:
 
 - DentalGest demo.
 - Web/landing si no tiene presencia clara.
-- Higgsfield/Reels para educacion y confianza.
+- Auditoria Express si no sabemos donde se pierden consultas.
 
 Dolores:
 
@@ -131,7 +148,7 @@ Vender primero:
 - pagina web o landing.
 - formulario de lead;
 - CRM simple;
-- contenido con Higgsfield para campana.
+- automatizacion simple n8n si ya recibe consultas.
 
 Dolores:
 
@@ -143,25 +160,25 @@ CTA recomendado:
 
 - "Te hago una auditoria rapida de captacion."
 
-### Negocio que publica poco
+### Negocio con presencia debil
 
 Vender primero:
 
-- paquete Higgsfield de contenido.
-- reels UGC;
-- guiones para duenio/profesional;
-- campana conectada a landing o CRM.
+- Auditoria Express.
+- Web/landing.
+- Diagnostico si no se entiende el problema.
+- Automatizacion simple n8n si ya hay formulario o leads.
 
 Dolores:
 
-- no hay constancia;
-- no saben que decir;
-- la oferta no se entiende en video;
-- no hay CTA ni seguimiento.
+- publica, pero no convierte;
+- no explica bien su oferta;
+- no tiene CTA claro;
+- no hay seguimiento.
 
 CTA recomendado:
 
-- "Te preparo 3 ideas de videos para vender mejor tu servicio."
+- "Te hago una auditoria express y te digo que conviene corregir primero."
 
 ### Negocio con procesos confusos pero sin compra clara
 
@@ -202,7 +219,6 @@ Orquesta ONIA: <empresa o rubro> | <objetivo>
 Prepara venta DentalGest: <clinica>
 Prepara venta Gestios: <empresa>
 Prepara venta Web ONIA: <negocio>
-Prepara marketing Higgsfield: <negocio> | <oferta>
 Prepara consultoria ONIA: <negocio> | <dolor o proceso>
 Mapa proyectos ONIA
 Siguiente accion comercial ONIA
@@ -244,13 +260,12 @@ Workflow: `ONIA - Orquestador Comercial`
 1. DentalGest para 50 clinicas ya listadas.
 2. Web/landing para negocios sin presencia clara.
 3. Gesti-OS para pymes con operaciones repetitivas.
-4. Higgsfield para crear prueba visual y vender contenido mensual.
-5. Consultoria ONIA para convertir dudas en diagnosticos pagos e instalaciones.
+4. Auditoria Express para convertir dudas en diagnosticos pagos.
+5. Automatizacion simple n8n como upsell despues de web, formulario o CRM.
 
 Sprint inmediato:
 
 - Preparar 10 mensajes DentalGest para las clinicas de mayor prioridad.
 - Preparar 5 auditorias web para negocios con presencia debil.
 - Preparar 5 prospectos Gesti-OS para pymes con operacion visible.
-- Crear 4 videos muestra con Higgsfield: DentalGest, Gesti-OS, Web ONIA y
-  Pack contenido IA.
+- Preparar 5 auditorias express listas para enviar como oferta de entrada.

@@ -70,7 +70,7 @@ Ejemplos:
 - Notion/CRM simple de leads;
 - n8n de aprobaciones internas;
 - tablero de seguimiento comercial;
-- flujo de contenido con briefs, aprobacion y calendario.
+- flujo de aprobacion interna con registro y responsable.
 
 ### 4. Implementacion Operativa
 
@@ -85,24 +85,23 @@ Ejemplos:
 Usar para Gesti-OS, DentalGest con equipo, CRM, reportes o procesos con varios
 responsables.
 
-### 5. Sprint IA y Video System
+### 5. Sprint n8n y Seguimiento
 
 | Campo | Detalle |
 |---|---|
-| Precio | Bs. 4,900-8,500 |
+| Precio | Bs. 1,900-3,900 |
 | Duracion | 1-2 semanas |
-| Ideal para | Negocios que quieren producir videos con sistema |
-| Entrega | Estrategia, personajes, escenarios, prompts, 2-4 piezas muestra y flujo de aprobacion |
-| Regla | No incluye pauta ni publicaciones sin aprobacion |
+| Ideal para | Negocios con leads, tareas o aprobaciones que se pierden |
+| Entrega | Mapa del flujo, automatizacion n8n, tablero simple, alertas y capacitacion |
+| Regla | No incluye WhatsApp automatico, APIs pagadas ni soporte continuo |
 
 Componentes posibles:
 
-- libreria de personajes originales;
-- prompt guides para Higgsfield/Supercomputer/Agent One si aplica;
-- guiones tecnicos plano a plano;
-- storyboard frames;
-- captions y CTAs;
-- sistema de revision antes de publicar.
+- captura de leads desde formulario, planilla, email o carga manual;
+- registro en Notion, Google Sheets, CRM o tablero interno;
+- aviso por Telegram o email;
+- tarea con responsable y fecha;
+- flujo de aprobacion simple cuando corresponde.
 
 ### 6. Acompanamiento Consultivo
 
@@ -133,10 +132,9 @@ Componentes posibles:
 - formularios web y captura de contactos.
 - dashboards de ventas u operacion.
 - Google Workspace operativo: carpetas, permisos, formularios y docs.
-- flujo de contenido: brief, guion, aprobacion, publicacion y reporte.
-- sistema Higgsfield/Supercomputer: personajes, escenarios, prompts y QA.
-- conectores a Instagram, YouTube, TikTok o LinkedIn cuando las credenciales lo
-  permitan.
+- flujo de seguimiento: lead, responsable, tarea, aprobacion y reporte.
+- conectores internos a Telegram, email, Google Sheets, Notion o CRM cuando las
+  credenciales lo permitan.
 
 ## Comisiones para vendedores
 
@@ -146,7 +144,7 @@ Componentes posibles:
 | Diagnostico + Roadmap | 10% del pago neto |
 | Instalacion Starter | 10% del pago neto |
 | Implementacion Operativa | 8-10% del pago neto |
-| Sprint IA y Video System | 10% del pago neto |
+| Sprint n8n y Seguimiento | 10% del pago neto |
 | Acompanamiento Consultivo | 15% del primer mes neto |
 | Transformacion ONIA | 8% del primer pago neto |
 

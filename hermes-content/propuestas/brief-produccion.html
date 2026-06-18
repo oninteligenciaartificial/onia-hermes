@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Brief de Producción ONIA — Datos para construir tu proyecto</title>
+<style>
+  :root{
+    --ink:#0d1320;--muted:#5a6675;--soft:#8493a3;--line:#e3e9f1;--line2:#eef2f7;
+    --blue:#1e5bff;--blue-dark:#1239a8;--green:#0f8b62;--amber:#a75b00;
+    --bg:#f5f7fb;--white:#fff;--accent:#1e5bff;
+    --shadow:0 1px 2px rgba(13,19,32,.04),0 8px 24px rgba(13,19,32,.05);
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+    color:var(--ink);background:var(--bg);-webkit-font-smoothing:antialiased;letter-spacing:-.01em;}
+  .page{max-width:880px;margin:0 auto;padding:48px 28px 96px;}
+  .hero{position:relative;overflow:hidden;background:linear-gradient(135deg,#0a0f1a 0%,#11203b 55%,#0d3f30 150%);
+    color:#fff;border-radius:22px;padding:52px 46px;margin-bottom:14px;box-shadow:var(--shadow);}
+  .hero::after{content:"";position:absolute;top:-40%;right:-10%;width:380px;height:380px;
+    background:radial-gradient(circle,rgba(30,91,255,.35),transparent 65%);pointer-events:none;}
+  .kicker{position:relative;color:#9fc0ff;font-size:11.5px;font-weight:800;text-transform:uppercase;
+    letter-spacing:.16em;margin-bottom:16px;}
+  .hero h1{position:relative;font-size:clamp(30px,5.4vw,48px);line-height:1.05;margin:0 0 16px;
+    font-weight:800;letter-spacing:-.025em;}
+  .hero p{position:relative;color:#cdd9ec;font-size:17.5px;line-height:1.6;max-width:62ch;margin:0;}
+  .meta{position:relative;margin-top:24px;display:flex;gap:18px;flex-wrap:wrap;color:#7f93b0;font-size:13px;font-weight:600;}
+  .meta b{color:#cdd9ec;}
+  section{margin-top:34px;}
+  .shead{display:flex;align-items:center;gap:14px;margin:0 0 16px;}
+  .snum{flex:0 0 34px;width:34px;height:34px;border-radius:50%;background:var(--accent);color:#fff;
+    font-weight:800;font-size:15px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(30,91,255,.35);}
+  .shead h2{font-size:21px;font-weight:800;letter-spacing:-.02em;margin:0;line-height:1.2;}
+  .shead .sdesc{font-size:13px;color:var(--soft);font-weight:500;margin-top:2px;}
+  .card{background:var(--white);border:1px solid var(--line);border-radius:16px;padding:24px 26px;box-shadow:var(--shadow);}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:18px 20px;}
+  .field{display:flex;flex-direction:column;}
+  .field+.field,.grid+.field,.field+.grid,.grid+.grid{margin-top:18px;}
+  label.lbl{font-size:13.5px;font-weight:700;color:var(--ink);margin:0 0 7px;line-height:1.3;}
+  label.lbl .req{color:var(--blue);font-weight:800;}
+  .hint{display:block;font-size:12px;font-weight:500;color:var(--soft);margin:-3px 0 7px;line-height:1.4;}
+  input,select,textarea{width:100%;font-family:inherit;font-size:15px;color:var(--ink);background:#fafbfd;
+    border:1px solid var(--line);border-radius:11px;padding:12px 14px;line-height:1.4;transition:.14s;letter-spacing:-.01em;}
+  input::placeholder,textarea::placeholder{color:#aab6c4;}
+  input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);background:#fff;box-shadow:0 0 0 3.5px rgba(30,91,255,.13);}
+  textarea{min-height:84px;resize:vertical;}
+  select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%235a6675' d='M6 8 0 0h12z'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;background-position:right 15px center;padding-right:38px;}
+  .chips{display:flex;flex-wrap:wrap;gap:9px;}
+  .chip{position:relative;}
+  .chip input{position:absolute;opacity:0;inset:0;cursor:pointer;margin:0;}
+  .chip span{display:inline-block;padding:9px 16px;border:1px solid var(--line);border-radius:999px;
+    background:#fafbfd;font-size:14px;color:var(--muted);cursor:pointer;transition:.14s;font-weight:600;}
+  .chip input:checked+span{background:#eef3ff;border-color:var(--accent);color:var(--blue-dark);box-shadow:0 0 0 1px var(--accent) inset;}
+  .chip span:hover{border-color:#c3d0e2;}
+  .tipnote{background:#eef3ff;border:1px solid #cfdcff;border-radius:12px;padding:13px 16px;font-size:13px;color:var(--blue-dark);line-height:1.5;margin-bottom:16px;}
+  .err{display:none;align-items:center;gap:8px;background:#fff3e6;color:var(--amber);border:1px solid #f5d9b8;border-radius:12px;padding:13px 16px;font-size:14px;font-weight:700;margin-top:18px;}
+  .actions{position:sticky;bottom:0;z-index:5;margin-top:26px;padding:20px 0 6px;background:linear-gradient(180deg,rgba(245,247,251,0),var(--bg) 38%);display:flex;gap:12px;flex-wrap:wrap;}
+  .btn{flex:1;min-width:210px;border:none;border-radius:13px;padding:17px 22px;font-size:15.5px;font-weight:800;cursor:pointer;text-align:center;letter-spacing:-.01em;transition:.16s;box-shadow:var(--shadow);}
+  .btn-primary{background:var(--accent);color:#fff;}
+  .btn-primary:hover{background:#1748d6;}
+  .btn:hover{transform:translateY(-2px);}
+  .foot{margin-top:34px;border-top:1px solid var(--line);padding-top:20px;}
+  .foot .big{font-size:18px;color:var(--ink);font-weight:800;letter-spacing:-.02em;margin:0 0 6px;}
+  .foot p{font-size:13px;color:var(--soft);margin:0;line-height:1.6;}
+  @media(max-width:620px){.page{padding:32px 18px 90px;}.hero{padding:40px 26px;}.card{padding:20px;}.grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="hero">
+    <div class="kicker">Brief de Producción · ONIA Inteligencia Artificial</div>
+    <h1>Todo lo que necesitamos<br>para construir tu proyecto</h1>
+    <p>Ya cerramos el proyecto — ahora juntamos el material para empezar a construir. Mientras más completo, más rápido y fiel queda. Lo que no tengas a mano, mandalo después; las marcadas con <b style="color:#9fc0ff">*</b> son las mínimas para arrancar.</p>
+    <div class="meta"><span>🎨 <b>Marca</b></span><span>📝 <b>Contenido</b></span><span>⚙️ <b>Integraciones</b></span></div>
+  </div>
+
+  <form id="form">
+
+    <section>
+      <div class="shead"><div class="snum">1</div><div><h2>Proyecto</h2><div class="sdesc">Qué cerramos y para cuándo.</div></div></div>
+      <div class="card">
+        <div class="grid">
+          <div class="field"><label class="lbl">Empresa / negocio <span class="req">*</span></label><input name="empresa" required></div>
+          <div class="field"><label class="lbl">Persona de contacto <span class="req">*</span></label><input name="contacto" required></div>
+        </div>
+        <div class="grid">
+          <div class="field"><label class="lbl">WhatsApp <span class="req">*</span></label><input name="whatsapp" required></div>
+          <div class="field"><label class="lbl">Email</label><input name="email" type="email"></div>
+        </div>
+        <div class="grid">
+          <div class="field"><label class="lbl">Paquete contratado <span class="req">*</span></label><input name="paquete" required placeholder="ej. Web de Agencia, Tienda Automática…"></div>
+          <div class="field"><label class="lbl">Idiomas del sitio</label><input name="idiomas" placeholder="ej. Español / Español + Inglés"></div>
+        </div>
+        <div class="field"><label class="lbl">¿Qué tipo de proyecto es? <span class="req">*</span></label>
+          <div class="chips">
+            <label class="chip"><input type="checkbox" name="tipo_proyecto" value="Landing (1 página)"><span>Landing</span></label>
+            <label class="chip"><input type="checkbox" name="tipo_proyecto" value="Web multipagina"><span>Web multipágina</span></label>
+            <label class="chip"><input type="checkbox" name="tipo_proyecto" value="Tienda online"><span>Tienda online</span></label>
+            <label class="chip"><input type="checkbox" name="tipo_proyecto" value="Sistema / CRM"><span>Sistema / CRM</span></label>
+            <label class="chip"><input type="checkbox" name="tipo_proyecto" value="Automatización"><span>Automatización</span></label>
+          </div>
+        </div>
+        <div class="field"><label class="lbl">Fecha ideal de entrega</label><input name="plazo" placeholder="ej. antes del 30 de julio"></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="shead"><div class="snum">2</div><div><h2>Marca</h2><div class="sdesc">Identidad visual y dirección de diseño.</div></div></div>
+      <div class="card">
+        <div class="tipnote">📎 Subí logo, manual de marca y fotos a una carpeta de <b>Google Drive / Dropbox</b> y pegá el enlace acá. Activá "cualquiera con el enlace puede ver".</div>
+        <div class="field"><label class="lbl">Logo y manual de marca <span class="req">*</span></label><span class="hint">Link a la carpeta con tu logo (PNG/SVG) y manual si lo tenés. Si no tenés logo, escribí "no tengo".</span><input name="logo_url" required></div>
+        <div class="grid">
+          <div class="field"><label class="lbl">Colores de marca</label><span class="hint">Códigos hex si los sabés, ej. #1e5bff, #0f8b62</span><input name="colores"></div>
+          <div class="field"><label class="lbl">Tipografía preferida</label><span class="hint">Si tenés una, ej. Montserrat. Si no, lo elegimos.</span><input name="tipografia"></div>
+        </div>
+        <div class="field"><label class="lbl">Webs/marcas que te gustan (referencias)</label><span class="hint">1-3 enlaces de estilos que te encantan — define la dirección</span><textarea name="referencias"></textarea></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="shead"><div class="snum">3</div><div><h2>Dominio y hosting</h2><div class="sdesc">Dónde vivirá el sitio.</div></div></div>
+      <div class="card">
+        <div class="grid">
+          <div class="field"><label class="lbl">Dominio</label><span class="hint">¿Tenés? ¿Cuál? ¿A nombre de quién?</span><input name="dominio" placeholder="ej. tunegocio.com — ya lo tengo"></div>
+          <div class="field"><label class="lbl">Hosting</label><span class="hint">¿Tenés hosting actual o lo gestiona ONIA?</span><input name="hosting"></div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="shead"><div class="snum">4</div><div><h2>Estructura</h2><div class="sdesc">Qué páginas y secciones tendrá.</div></div></div>
+      <div class="card">
+        <div class="field"><label class="lbl">Páginas / secciones que querés</label><span class="hint">ej. Inicio, Servicios, Portafolio, Nosotros, Contacto, Blog…</span><textarea name="paginas"></textarea></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="shead"><div class="snum">5</div><div><h2>Contenido</h2><div class="sdesc">Los textos y pruebas reales de tu negocio.</div></div></div>
+      <div class="card">
+        <div class="field"><label class="lbl">Sobre tu negocio (texto) <span class="req">*</span></label><span class="hint">Quiénes son, qué hacen, qué los hace distintos. Lo pulimos nosotros.</span><textarea name="copy_sobre" required></textarea></div>
+        <div class="field"><label class="lbl">Servicios / productos con descripción</label><span class="hint">Lista cada servicio y una línea de qué incluye</span><textarea name="servicios_detalle"></textarea></div>
+        <div class="field"><label class="lbl">Beneficios / por qué elegirte</label><textarea name="beneficios"></textarea></div>
+        <div class="grid">
+          <div class="field"><label class="lbl">Logros / números</label><span class="hint">ej. +500 clientes, 10 años, premios…</span><textarea name="logros"></textarea></div>
+          <div class="field"><label class="lbl">Testimonios</label><span class="hint">Reseñas reales de clientes (con nombre si se puede)</span><textarea name="testimonios"></textarea></div>
+        </div>
+        <div class="field"><label class="lbl">Cartera de clientes / marcas con las que trabajaste</label><textarea name="cartera"></textarea></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="shead"><div class="snum">6</div><div><h2>Productos</h2><div class="sdesc">Solo si tu proyecto incluye tienda/catálogo.</div></div></div>
+      <div class="card">
+        <div class="field"><label class="lbl">Categorías de productos</label><input name="categorias" placeholder="ej. Ropa, Accesorios, Calzado"></div>
+        <div class="field"><label class="lbl">Lista de productos</label><span class="hint">Nombre, precio, categoría y link a fotos (Drive). O pegá un enlace a tu catálogo/planilla.</span><textarea name="productos"></textarea></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="shead"><div class="snum">7</div><div><h2>Media</h2><div class="sdesc">Imágenes y videos para el sitio.</div></div></div>
+      <div class="card">
+        <div class="field"><label class="lbl">Fotos, videos y portafolio</label><span class="hint">Link a carpeta Drive/Dropbox con tus imágenes, videos y trabajos</span><textarea name="media_url"></textarea></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="shead"><div class="snum">8</div><div><h2>Sistema e integraciones</h2><div class="sdesc">Lo que el sitio debe conectar o automatizar.</div></div></div>
+      <div class="card">
+        <div class="field"><label class="lbl">¿Qué necesitás integrar?</label>
+          <div class="chips">
+            <label class="chip"><input type="checkbox" name="integraciones" value="Pasarela de pago BCP"><span>Pago BCP</span></label>
+            <label class="chip"><input type="checkbox" name="integraciones" value="Otra pasarela de pago"><span>Otra pasarela</span></label>
+            <label class="chip"><input type="checkbox" name="integraciones" value="WhatsApp / Meta"><span>WhatsApp</span></label>
+            <label class="chip"><input type="checkbox" name="integraciones" value="Calendario / agenda"><span>Agenda</span></label>
+            <label class="chip"><input type="checkbox" name="integraciones" value="CRM"><span>CRM</span></label>
+            <label class="chip"><input type="checkbox" name="integraciones" value="Email marketing"><span>Email marketing</span></label>
+            <label class="chip"><input type="checkbox" name="integraciones" value="Instagram / TikTok"><span>Redes</span></label>
+          </div>
+        </div>
+        <div class="field"><label class="lbl">Detalle de integraciones</label><span class="hint">¿Ya tenés cuenta BCP afiliada? ¿WhatsApp verificado en Meta? ¿Qué calendario usás?</span><textarea name="integraciones_notas"></textarea></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="shead"><div class="snum">9</div><div><h2>SEO y redes</h2><div class="sdesc">Para que te encuentren en Google.</div></div></div>
+      <div class="card">
+        <div class="field"><label class="lbl">Tus redes (links)</label><span class="hint">Instagram, Facebook, LinkedIn, TikTok…</span><textarea name="redes"></textarea></div>
+        <div class="grid">
+          <div class="field"><label class="lbl">Descripción para Google</label><span class="hint">1-2 líneas de qué hacés y dónde</span><textarea name="seo_desc"></textarea></div>
+          <div class="field"><label class="lbl">Palabras clave</label><span class="hint">Por qué te buscarían, ej. "dentista Santa Cruz"</span><textarea name="keywords"></textarea></div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="shead"><div class="snum">10</div><div><h2>Cierre</h2><div class="sdesc">Últimos detalles.</div></div></div>
+      <div class="card">
+        <div class="field"><label class="lbl">¿Quién aprueba los contenidos?</label><input name="responsable" placeholder="nombre y rol"></div>
+        <div class="field"><label class="lbl">Notas extra / pedidos especiales</label><textarea name="notas"></textarea></div>
+      </div>
+    </section>
+
+    <div class="err" id="err">⚠ Faltan campos clave (marcados con *). Revisá arriba.</div>
+
+    <div class="actions">
+      <button type="button" class="btn btn-primary" id="btnEnviar" onclick="enviar()">✅ Enviar brief</button>
+    </div>
+  </form>
+
+  <div id="ok" style="display:none;text-align:center;padding:40px 20px;">
+    <div style="font-size:46px;margin-bottom:8px;">🚀</div>
+    <p class="big" style="font-size:22px;margin:0 0 6px;">¡Brief recibido! Manos a la obra.</p>
+    <p style="color:var(--soft);">Revisamos el material y arrancamos la construcción. Te avisamos si falta algo.</p>
+  </div>
+
+  <div class="foot">
+    <p class="big">Cuanto más completo el brief, más fiel y rápido tu proyecto.</p>
+    <p>ONIA — Sistemas, automatización y contenido para negocios · onia.com.bo · +591 75470140</p>
+  </div>
+
+</div>
+
+<script>
+  // ===== A dónde llega el brief =====
+  const WEBHOOK_URL = "https://n8n-sergio-n8n.hqdqgh.easypanel.host/webhook/brief-produccion";
+  // ==================================
+
+  const CAMPOS = ["empresa","contacto","whatsapp","email","paquete","idiomas","tipo_proyecto","plazo",
+    "logo_url","colores","tipografia","referencias","dominio","hosting","paginas",
+    "copy_sobre","servicios_detalle","beneficios","logros","testimonios","cartera",
+    "categorias","productos","media_url","integraciones","integraciones_notas",
+    "redes","seo_desc","keywords","responsable","notas"];
+  const MULTI = ["tipo_proyecto","integraciones"];
+
+  function recolectar(){
+    const fd = new FormData(document.getElementById('form'));
+    const out = {};
+    for(const k of CAMPOS){ out[k] = MULTI.includes(k) ? fd.getAll(k) : (fd.get(k)||'').trim(); }
+    return out;
+  }
+  function validar(d){
+    const req = ['empresa','contacto','whatsapp','paquete','logo_url','copy_sobre'];
+    if(req.some(k=>!d[k])) return false;
+    return d.tipo_proyecto.length>0;
+  }
+  function mostrarOk(){
+    document.getElementById('form').style.display='none';
+    document.getElementById('ok').style.display='block';
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+  async function enviar(){
+    const d = recolectar();
+    const err = document.getElementById('err');
+    if(!validar(d)){ err.style.display='flex'; window.scrollTo({top:0,behavior:'smooth'}); return; }
+    err.style.display='none';
+    const btn = document.getElementById('btnEnviar');
+    btn.disabled=true; btn.textContent='Enviando…';
+    try{
+      const r = await fetch(WEBHOOK_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(d)});
+      if(!r.ok) throw new Error('HTTP '+r.status);
+      mostrarOk();
+    }catch(e){
+      btn.disabled=false; btn.textContent='✅ Enviar brief';
+      err.textContent='No se pudo enviar. Probá de nuevo en un momento.';
+      err.style.display='flex';
+    }
+  }
+</script>
+</body>
+</html>

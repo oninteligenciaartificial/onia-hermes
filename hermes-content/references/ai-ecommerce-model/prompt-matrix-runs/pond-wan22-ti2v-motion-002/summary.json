@@ -1,0 +1,41 @@
+{
+  "ok": true,
+  "generated_at": "2026-06-16T20:35:39.173Z",
+  "config": "hermes-content\\references\\ai-ecommerce-model\\mara-pond-video-lab-config-20260616.json",
+  "output_dir": "hermes-content\\references\\ai-ecommerce-model\\prompt-matrix-runs\\pond-wan22-ti2v-motion-002",
+  "prompt_matrix_jsonl": "hermes-content\\references\\ai-ecommerce-model\\prompt-matrix-runs\\pond-wan22-ti2v-motion-002\\prompt-matrix.jsonl",
+  "prompt_matrix_csv": "hermes-content\\references\\ai-ecommerce-model\\prompt-matrix-runs\\pond-wan22-ti2v-motion-002\\prompt-matrix.csv",
+  "requested_limit": 3,
+  "written": 3,
+  "total_matching_matrix": 3,
+  "seed_start": 5301,
+  "filters": {
+    "routes": [
+      "comfy_wan22_ti2v5b"
+    ],
+    "outfits": [
+      "same_source_outfit"
+    ],
+    "tones": [
+      "warm_friend"
+    ],
+    "visual_styles": [
+      "closeup_selfie"
+    ],
+    "settings": [
+      "same_room"
+    ],
+    "motions": [
+      "lean_hook",
+      "walk_to_medium",
+      "hair_adjust"
+    ],
+    "hooks": [
+      "not_testimonial"
+    ],
+    "spoken_texts": [
+      "ugc_disclosure_15s"
+    ]
+  },
+  "next_step": "Review prompt-matrix.csv/jsonl, run ComfyUI dry-run with scripts/mara_comfyui_queue.js, then generate only a 12-video smoke batch."
+}

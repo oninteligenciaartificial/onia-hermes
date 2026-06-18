@@ -1,0 +1,660 @@
+{
+  "id": "mara-identity-20260616",
+  "status": "internal_identity_pack_not_published",
+  "model_name": "Mara Vale UGC brunette identity",
+  "created_from": [
+    {
+      "slug": "angles-contact-01",
+      "source": "C:\\Users\\PC\\Downloads\\ChatGPT Image 16 jun 2026, 14_02_22.png",
+      "stored": "hermes-content/references/ai-ecommerce-model/mara-identity-20260616/originals/angles-contact-01.png",
+      "width": 1536,
+      "height": 1024,
+      "grid": {
+        "cols": 5,
+        "rows": 2
+      }
+    },
+    {
+      "slug": "angles-contact-02-duplicate",
+      "source": "C:\\Users\\PC\\Downloads\\ChatGPT Image 16 jun 2026, 14_02_20.png",
+      "stored": "hermes-content/references/ai-ecommerce-model/mara-identity-20260616/originals/angles-contact-02-duplicate.png",
+      "width": 1536,
+      "height": 1024,
+      "grid": {
+        "cols": 5,
+        "rows": 2
+      }
+    },
+    {
+      "slug": "mouth-face-lock-01",
+      "source": "C:\\Users\\PC\\Downloads\\ChatGPT Image 16 jun 2026, 14_02_17.png",
+      "stored": "hermes-content/references/ai-ecommerce-model/mara-identity-20260616/originals/mouth-face-lock-01.png",
+      "width": 1086,
+      "height": 1448,
+      "grid": {
+        "cols": 4,
+        "rows": 4
+      }
+    },
+    {
+      "slug": "feature-lock-01",
+      "source": "C:\\Users\\PC\\Downloads\\ChatGPT Image 16 jun 2026, 14_02_10.png",
+      "stored": "hermes-content/references/ai-ecommerce-model/mara-identity-20260616/originals/feature-lock-01.png",
+      "width": 1086,
+      "height": 1448,
+      "grid": {
+        "cols": 4,
+        "rows": 4
+      }
+    },
+    {
+      "slug": "ugc-scenes-01",
+      "source": "C:\\Users\\PC\\Downloads\\ChatGPT Image 16 jun 2026, 14_02_06.png",
+      "stored": "hermes-content/references/ai-ecommerce-model/mara-identity-20260616/originals/ugc-scenes-01.png",
+      "width": 1086,
+      "height": 1448,
+      "grid": {
+        "cols": 4,
+        "rows": 3
+      }
+    }
+  ],
+  "identity_lock": {
+    "description": "Fictional adult brunette UGC model. Preserve the same oval face, warm light skin, natural freckles, brown eyes, thick dark eyebrows, straight natural nose, full pink lips, soft warm smile, shoulder-length wavy brown hair with subtle highlights, natural skin texture, white/cream outfit, clean bright room lighting.",
+    "do_not_change": [
+      "face shape",
+      "eyes",
+      "eyebrows",
+      "nose",
+      "lips",
+      "smile",
+      "hair color",
+      "hair length",
+      "skin tone",
+      "natural freckles",
+      "age appearance",
+      "soft UGC energy"
+    ],
+    "negative": "different person, red hair, changed face, changed eyes, changed eyebrows, changed nose, changed lips, changed smile, changed hair, changed age, plastic skin, beauty filter, warped mouth, distorted teeth, blurry face, face flicker, cartoon, anime, fake logo, text, watermark"
+  },
+  "assets": [
+    {
+      "file": "hermes-content/references/ai-ecommerce-model/mara-identity-20260616/crops/angles-contact-01_r01_c01.png",
+      "source_slug": "angles-contact-01",
+      "row": 1,
+      "col": 1,
+      "width": 307,
+      "height": 512,
+      "role": "angle_identity_reference"
+    },
+    {
+      "file": "hermes-content/references/ai-ecommerce-model/mara-identity-20260616/crops/angles-contact-01_r01_c02.png",
+      "source_slug": "angles-contact-01",
+      "row": 1,
+      "col": 2,
+      "width": 307,
+      "height": 512,
+      "role": "angle_identity_reference"
+    },
+    {
+      "file": "hermes-content/references/ai-ecommerce-model/mara-identity-20260616/crops/angles-contact-01_r01_c03.png",
+      "source_slug": "angles-contact-01",
+      "row": 1,
+      "col": 3,
+      "width": 308,
+      "height": 512,
+      "role": "angle_identity_reference"
+    },
+    {
+      "file": "hermes-content/references/ai-ecommerce-model/mara-identity-20260616/crops/angles-contact-01_r01_c04.png",
+      "source_slug": "angles-contact-01",
+      "row": 1,
+      "col": 4,
+      "width": 307,
+      "height": 512,
+      "role": "angle_identity_reference"
+    },
+    {
+      "file": "hermes-content/references/ai-ecommerce-model/mara-identity-20260616/crops/angles-contact-01_r01_c05.png",
+      "source_slug": "angles-contact-01",
+      "row": 1,
+      "col": 5,
+      "width": 307,
+      "height": 512,
+      "role": "angle_identity_reference"
+    },
+    {
+      "file": "hermes-content/references/ai-ecommerce-model/mara-identity-20260616/crops/angles-contact-01_r02_c01.png",
+      "source_slug": "angles-contact-01",
+      "row": 2,
+      "col": 1,
+      "width": 307,
+      "height": 512,
+      "role": "angle_identity_reference"
+    },
+    {
+      "file": "hermes-content/references/ai-ecommerce-model/mara-identity-20260616/crops/angles-contact-01_r02_c02.png",
+      "source_slug": "angles-contact-01",
+      "row": 2,
+      "col": 2,
+      "width": 307,
+      "height": 512,
+      "role": "angle_identity_reference"
+    },
+    {
+      "file": "hermes-content/references/ai-ecommerce-model/mara-identity-20260616/crops/angles-contact-01_r02_c03.png",
+      "source_slug": "angles-contact-01",
+      "row": 2,
+      "col": 3,
+      "width": 308,
+      "height": 512,
+      "role": "angle_identity_reference"
+    },
+    {
+      "file": "hermes-content/references/ai-ecommerce-model/mara-identity-20260616/crops/angles-contact-01_r02_c04.png",
+      "source_slug": "angles-contact-01",
+      "row": 2,
+      "col": 4,
+      "width": 307,
+      "height": 512,
+      "role": "angle_identity_reference"
+    },
+    {
+      "file": "hermes-content/references/ai-ecommerce-model/mara-identity-20260616/crops/angles-contact-01_r02_c05.png",
+      "source_slug": "angles-contact-01",
+      "row": 2,
+      "col": 5,
+      "width": 307,
+      "height": 512,
+      "role": "angle_identity_reference"
+    },
+    {
+      "file": "hermes-content/references/ai-ecommerce-model/mara-identity-20260616/crops/angles-contact-02-duplicate_r01_c01.png",
+      "source_slug": "angles-contact-02-duplicate",
+      "row": 1,
+      "col": 1,
+      "width": 307,
+      "height": 512,
+      "role": "reference"
+    },
+    {
+      "file": "hermes-content/references/ai-ecommerce-model/mara-identity-20260616/crops/angles-contact-02-duplicate_r01_c02.png",
+      "source_slug": "angles-contact-02-duplicate",
+      "row": 1,
+      "col": 2,
+      "width": 307,
+      "height": 512,
+      "role": "reference"
+    },
+    {
+      "file": "hermes-content/references/ai-ecommerce-model/mara-identity-20260616/crops/angles-contact-02-duplicate_r01_c03.png",
+      "source_slug": "angles-contact-02-duplicate",
+      "row": 1,
+      "col": 3,
+      "width": 308,
+      "height": 512,
+      "role": "reference"
+    },
+    {
+      "file": "hermes-content/references/ai-ecommerce-model/mara-identity-20260616/crops/angles-contact-02-duplicate_r01_c04.png",
+      "source_slug": "angles-contact-02-duplicate",
+      "row": 1,
+      "col": 4,
+      "width": 307,
+      "height": 512,
+      "role": "reference"
+    },
+    {
+      "file": "hermes-content/references/ai-ecommerce-model/mara-identity-20260616/crops/angles-contact-02-duplicate_r01_c05.png",
+      "source_slug": "angles-contact-02-duplicate",
+      "row": 1,
+      "col": 5,
+      "width": 307,
+      "height": 512,
+      "role": "reference"
+    },
+    {
+      "file": "hermes-content/references/ai-ecommerce-model/mara-identity-20260616/crops/angles-contact-02-duplicate_r02_c01.png",
+      "source_slug": "angles-contact-02-duplicate",
+      "row": 2,
+      "col": 1,
+      "width": 307,
+      "height": 512,
+      "role": "reference"
+    },
+    {
+      "file": "hermes-content/references/ai-ecommerce-model/mara-identity-20260616/crops/angles-contact-02-duplicate_r02_c02.png",
+      "source_slug": "angles-contact-02-duplicate",
+      "row": 2,
+      "col": 2,
+      "width": 307,
+      "height": 512,
+      "role": "reference"
+    },
+    {
+      "file": "hermes-content/references/ai-ecommerce-model/mara-identity-20260616/crops/angles-contact-02-duplicate_r02_c03.png",
+      "source_slug": "angles-contact-02-duplicate",
+      "row": 2,
+      "col": 3,
+      "width": 308,
+      "height": 512,
+      "role": "reference"
+    },
+    {
+      "file": "hermes-content/references/ai-ecommerce-model/mara-identity-20260616/crops/angles-contact-02-duplicate_r02_c04.png",
+      "source_slug": "angles-contact-02-duplicate",
+      "row": 2,
+      "col": 4,
+      "width": 307,
+      "height": 512,
+      "role": "reference"
+    },
+    {
+      "file": "hermes-content/references/ai-ecommerce-model/mara-identity-20260616/crops/angles-contact-02-duplicate_r02_c05.png",
+      "source_slug": "angles-contact-02-duplicate",
+      "row": 2,
+      "col": 5,
+      "width": 307,
+      "height": 512,
+      "role": "reference"
+    },
+    {
+      "file": "hermes-content/references/ai-ecommerce-model/mara-identity-20260616/crops/mouth-face-lock-01_r01_c01.png",
+      "source_slug": "mouth-face-lock-01",
+      "row": 1,
+      "col": 1,
+      "width": 272,
+      "height": 362,
+      "role": "front_face_expression"
+    },
+    {
+      "file": "hermes-content/references/ai-ecommerce-model/mara-identity-20260616/crops/mouth-face-lock-01_r01_c02.png",
+      "source_slug": "mouth-face-lock-01",
+      "row": 1,
+      "col": 2,
+      "width": 271,
+      "height": 362,
+      "role": "front_face_expression"
+    },
+    {
+      "file": "hermes-content/references/ai-ecommerce-model/mara-identity-20260616/crops/mouth-face-lock-01_r01_c03.png",
+      "source_slug": "mouth-face-lock-01",
+      "row": 1,
+      "col": 3,
+      "width": 271,
+      "height": 362,
+      "role": "front_face_expression"
+    },
+    {
+      "file": "hermes-content/references/ai-ecommerce-model/mara-identity-20260616/crops/mouth-face-lock-01_r01_c04.png",
+      "source_slug": "mouth-face-lock-01",
+      "row": 1,
+      "col": 4,
+      "width": 272,
+      "height": 362,
+      "role": "front_face_expression"
+    },
+    {
+      "file": "hermes-content/references/ai-ecommerce-model/mara-identity-20260616/crops/mouth-face-lock-01_r02_c01.png",
+      "source_slug": "mouth-face-lock-01",
+      "row": 2,
+      "col": 1,
+      "width": 272,
+      "height": 362,
+      "role": "reference"
+    },
+    {
+      "file": "hermes-content/references/ai-ecommerce-model/mara-identity-20260616/crops/mouth-face-lock-01_r02_c02.png",
+      "source_slug": "mouth-face-lock-01",
+      "row": 2,
+      "col": 2,
+      "width": 271,
+      "height": 362,
+      "role": "reference"
+    },
+    {
+      "file": "hermes-content/references/ai-ecommerce-model/mara-identity-20260616/crops/mouth-face-lock-01_r02_c03.png",
+      "source_slug": "mouth-face-lock-01",
+      "row": 2,
+      "col": 3,
+      "width": 271,
+      "height": 362,
+      "role": "reference"
+    },
+    {
+      "file": "hermes-content/references/ai-ecommerce-model/mara-identity-20260616/crops/mouth-face-lock-01_r02_c04.png",
+      "source_slug": "mouth-face-lock-01",
+      "row": 2,
+      "col": 4,
+      "width": 272,
+      "height": 362,
+      "role": "reference"
+    },
+    {
+      "file": "hermes-content/references/ai-ecommerce-model/mara-identity-20260616/crops/mouth-face-lock-01_r03_c01.png",
+      "source_slug": "mouth-face-lock-01",
+      "row": 3,
+      "col": 1,
+      "width": 272,
+      "height": 362,
+      "role": "mouth_teeth_lock"
+    },
+    {
+      "file": "hermes-content/references/ai-ecommerce-model/mara-identity-20260616/crops/mouth-face-lock-01_r03_c02.png",
+      "source_slug": "mouth-face-lock-01",
+      "row": 3,
+      "col": 2,
+      "width": 271,
+      "height": 362,
+      "role": "mouth_teeth_lock"
+    },
+    {
+      "file": "hermes-content/references/ai-ecommerce-model/mara-identity-20260616/crops/mouth-face-lock-01_r03_c03.png",
+      "source_slug": "mouth-face-lock-01",
+      "row": 3,
+      "col": 3,
+      "width": 271,
+      "height": 362,
+      "role": "mouth_teeth_lock"
+    },
+    {
+      "file": "hermes-content/references/ai-ecommerce-model/mara-identity-20260616/crops/mouth-face-lock-01_r03_c04.png",
+      "source_slug": "mouth-face-lock-01",
+      "row": 3,
+      "col": 4,
+      "width": 272,
+      "height": 362,
+      "role": "mouth_teeth_lock"
+    },
+    {
+      "file": "hermes-content/references/ai-ecommerce-model/mara-identity-20260616/crops/mouth-face-lock-01_r04_c01.png",
+      "source_slug": "mouth-face-lock-01",
+      "row": 4,
+      "col": 1,
+      "width": 272,
+      "height": 362,
+      "role": "mouth_teeth_lock"
+    },
+    {
+      "file": "hermes-content/references/ai-ecommerce-model/mara-identity-20260616/crops/mouth-face-lock-01_r04_c02.png",
+      "source_slug": "mouth-face-lock-01",
+      "row": 4,
+      "col": 2,
+      "width": 271,
+      "height": 362,
+      "role": "mouth_teeth_lock"
+    },
+    {
+      "file": "hermes-content/references/ai-ecommerce-model/mara-identity-20260616/crops/mouth-face-lock-01_r04_c03.png",
+      "source_slug": "mouth-face-lock-01",
+      "row": 4,
+      "col": 3,
+      "width": 271,
+      "height": 362,
+      "role": "mouth_teeth_lock"
+    },
+    {
+      "file": "hermes-content/references/ai-ecommerce-model/mara-identity-20260616/crops/mouth-face-lock-01_r04_c04.png",
+      "source_slug": "mouth-face-lock-01",
+      "row": 4,
+      "col": 4,
+      "width": 272,
+      "height": 362,
+      "role": "mouth_teeth_lock"
+    },
+    {
+      "file": "hermes-content/references/ai-ecommerce-model/mara-identity-20260616/crops/feature-lock-01_r01_c01.png",
+      "source_slug": "feature-lock-01",
+      "row": 1,
+      "col": 1,
+      "width": 272,
+      "height": 362,
+      "role": "angle_identity_reference"
+    },
+    {
+      "file": "hermes-content/references/ai-ecommerce-model/mara-identity-20260616/crops/feature-lock-01_r01_c02.png",
+      "source_slug": "feature-lock-01",
+      "row": 1,
+      "col": 2,
+      "width": 271,
+      "height": 362,
+      "role": "angle_identity_reference"
+    },
+    {
+      "file": "hermes-content/references/ai-ecommerce-model/mara-identity-20260616/crops/feature-lock-01_r01_c03.png",
+      "source_slug": "feature-lock-01",
+      "row": 1,
+      "col": 3,
+      "width": 271,
+      "height": 362,
+      "role": "angle_identity_reference"
+    },
+    {
+      "file": "hermes-content/references/ai-ecommerce-model/mara-identity-20260616/crops/feature-lock-01_r01_c04.png",
+      "source_slug": "feature-lock-01",
+      "row": 1,
+      "col": 4,
+      "width": 272,
+      "height": 362,
+      "role": "angle_identity_reference"
+    },
+    {
+      "file": "hermes-content/references/ai-ecommerce-model/mara-identity-20260616/crops/feature-lock-01_r02_c01.png",
+      "source_slug": "feature-lock-01",
+      "row": 2,
+      "col": 1,
+      "width": 272,
+      "height": 362,
+      "role": "angle_identity_reference"
+    },
+    {
+      "file": "hermes-content/references/ai-ecommerce-model/mara-identity-20260616/crops/feature-lock-01_r02_c02.png",
+      "source_slug": "feature-lock-01",
+      "row": 2,
+      "col": 2,
+      "width": 271,
+      "height": 362,
+      "role": "angle_identity_reference"
+    },
+    {
+      "file": "hermes-content/references/ai-ecommerce-model/mara-identity-20260616/crops/feature-lock-01_r02_c03.png",
+      "source_slug": "feature-lock-01",
+      "row": 2,
+      "col": 3,
+      "width": 271,
+      "height": 362,
+      "role": "angle_identity_reference"
+    },
+    {
+      "file": "hermes-content/references/ai-ecommerce-model/mara-identity-20260616/crops/feature-lock-01_r02_c04.png",
+      "source_slug": "feature-lock-01",
+      "row": 2,
+      "col": 4,
+      "width": 272,
+      "height": 362,
+      "role": "angle_identity_reference"
+    },
+    {
+      "file": "hermes-content/references/ai-ecommerce-model/mara-identity-20260616/crops/feature-lock-01_r03_c01.png",
+      "source_slug": "feature-lock-01",
+      "row": 3,
+      "col": 1,
+      "width": 272,
+      "height": 362,
+      "role": "angle_identity_reference"
+    },
+    {
+      "file": "hermes-content/references/ai-ecommerce-model/mara-identity-20260616/crops/feature-lock-01_r03_c02.png",
+      "source_slug": "feature-lock-01",
+      "row": 3,
+      "col": 2,
+      "width": 271,
+      "height": 362,
+      "role": "angle_identity_reference"
+    },
+    {
+      "file": "hermes-content/references/ai-ecommerce-model/mara-identity-20260616/crops/feature-lock-01_r03_c03.png",
+      "source_slug": "feature-lock-01",
+      "row": 3,
+      "col": 3,
+      "width": 271,
+      "height": 362,
+      "role": "angle_identity_reference"
+    },
+    {
+      "file": "hermes-content/references/ai-ecommerce-model/mara-identity-20260616/crops/feature-lock-01_r03_c04.png",
+      "source_slug": "feature-lock-01",
+      "row": 3,
+      "col": 4,
+      "width": 272,
+      "height": 362,
+      "role": "angle_identity_reference"
+    },
+    {
+      "file": "hermes-content/references/ai-ecommerce-model/mara-identity-20260616/crops/feature-lock-01_r04_c01.png",
+      "source_slug": "feature-lock-01",
+      "row": 4,
+      "col": 1,
+      "width": 272,
+      "height": 362,
+      "role": "angle_identity_reference"
+    },
+    {
+      "file": "hermes-content/references/ai-ecommerce-model/mara-identity-20260616/crops/feature-lock-01_r04_c02.png",
+      "source_slug": "feature-lock-01",
+      "row": 4,
+      "col": 2,
+      "width": 271,
+      "height": 362,
+      "role": "angle_identity_reference"
+    },
+    {
+      "file": "hermes-content/references/ai-ecommerce-model/mara-identity-20260616/crops/feature-lock-01_r04_c03.png",
+      "source_slug": "feature-lock-01",
+      "row": 4,
+      "col": 3,
+      "width": 271,
+      "height": 362,
+      "role": "angle_identity_reference"
+    },
+    {
+      "file": "hermes-content/references/ai-ecommerce-model/mara-identity-20260616/crops/feature-lock-01_r04_c04.png",
+      "source_slug": "feature-lock-01",
+      "row": 4,
+      "col": 4,
+      "width": 272,
+      "height": 362,
+      "role": "angle_identity_reference"
+    },
+    {
+      "file": "hermes-content/references/ai-ecommerce-model/mara-identity-20260616/crops/ugc-scenes-01_r01_c01.png",
+      "source_slug": "ugc-scenes-01",
+      "row": 1,
+      "col": 1,
+      "width": 272,
+      "height": 483,
+      "role": "primary_i2v_front_smile"
+    },
+    {
+      "file": "hermes-content/references/ai-ecommerce-model/mara-identity-20260616/crops/ugc-scenes-01_r01_c02.png",
+      "source_slug": "ugc-scenes-01",
+      "row": 1,
+      "col": 2,
+      "width": 271,
+      "height": 483,
+      "role": "reference"
+    },
+    {
+      "file": "hermes-content/references/ai-ecommerce-model/mara-identity-20260616/crops/ugc-scenes-01_r01_c03.png",
+      "source_slug": "ugc-scenes-01",
+      "row": 1,
+      "col": 3,
+      "width": 271,
+      "height": 483,
+      "role": "reference"
+    },
+    {
+      "file": "hermes-content/references/ai-ecommerce-model/mara-identity-20260616/crops/ugc-scenes-01_r01_c04.png",
+      "source_slug": "ugc-scenes-01",
+      "row": 1,
+      "col": 4,
+      "width": 272,
+      "height": 483,
+      "role": "reference"
+    },
+    {
+      "file": "hermes-content/references/ai-ecommerce-model/mara-identity-20260616/crops/ugc-scenes-01_r02_c01.png",
+      "source_slug": "ugc-scenes-01",
+      "row": 2,
+      "col": 1,
+      "width": 272,
+      "height": 482,
+      "role": "reference"
+    },
+    {
+      "file": "hermes-content/references/ai-ecommerce-model/mara-identity-20260616/crops/ugc-scenes-01_r02_c02.png",
+      "source_slug": "ugc-scenes-01",
+      "row": 2,
+      "col": 2,
+      "width": 271,
+      "height": 482,
+      "role": "reference"
+    },
+    {
+      "file": "hermes-content/references/ai-ecommerce-model/mara-identity-20260616/crops/ugc-scenes-01_r02_c03.png",
+      "source_slug": "ugc-scenes-01",
+      "row": 2,
+      "col": 3,
+      "width": 271,
+      "height": 482,
+      "role": "reference"
+    },
+    {
+      "file": "hermes-content/references/ai-ecommerce-model/mara-identity-20260616/crops/ugc-scenes-01_r02_c04.png",
+      "source_slug": "ugc-scenes-01",
+      "row": 2,
+      "col": 4,
+      "width": 272,
+      "height": 482,
+      "role": "reference"
+    },
+    {
+      "file": "hermes-content/references/ai-ecommerce-model/mara-identity-20260616/crops/ugc-scenes-01_r03_c01.png",
+      "source_slug": "ugc-scenes-01",
+      "row": 3,
+      "col": 1,
+      "width": 272,
+      "height": 483,
+      "role": "reference"
+    },
+    {
+      "file": "hermes-content/references/ai-ecommerce-model/mara-identity-20260616/crops/ugc-scenes-01_r03_c02.png",
+      "source_slug": "ugc-scenes-01",
+      "row": 3,
+      "col": 2,
+      "width": 271,
+      "height": 483,
+      "role": "reference"
+    },
+    {
+      "file": "hermes-content/references/ai-ecommerce-model/mara-identity-20260616/crops/ugc-scenes-01_r03_c03.png",
+      "source_slug": "ugc-scenes-01",
+      "row": 3,
+      "col": 3,
+      "width": 271,
+      "height": 483,
+      "role": "reference"
+    },
+    {
+      "file": "hermes-content/references/ai-ecommerce-model/mara-identity-20260616/crops/ugc-scenes-01_r03_c04.png",
+      "source_slug": "ugc-scenes-01",
+      "row": 3,
+      "col": 4,
+      "width": 272,
+      "height": 483,
+      "role": "reference"
+    }
+  ],
+  "primary_i2v_image": "hermes-content/references/ai-ecommerce-model/mara-identity-20260616/mara_20260616_primary_i2v_front_smile.png",
+  "primary_comfyui_filename": "mara_20260616_primary_i2v_front_smile.png"
+}

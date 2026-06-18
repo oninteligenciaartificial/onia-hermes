@@ -1,0 +1,1256 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mara / Lia Visual Review Board 2026</title>
+  <style>
+    :root {
+      --bg: #f3f2ef;
+      --panel: #ffffff;
+      --text: #202522;
+      --muted: #6f746f;
+      --line: #ddd8cf;
+      --accent: #14745f;
+      --ink: #1f2e36;
+      --warn: #a06031;
+      font-family: Aptos, "Segoe UI", ui-sans-serif, system-ui, sans-serif;
+      color: var(--text);
+      letter-spacing: 0;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); }
+    header {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 18px;
+      align-items: end;
+      padding: 22px 28px 18px;
+      border-bottom: 1px solid var(--line);
+      background: #fbfaf7;
+      position: sticky;
+      top: 0;
+      z-index: 5;
+    }
+    h1, h2 { margin: 0; font-family: Georgia, Cambria, "Times New Roman", serif; }
+    h1 { font-size: 25px; line-height: 1.1; }
+    h2 { font-size: 18px; line-height: 1.2; }
+    .sub { color: var(--muted); font-size: 13px; margin-top: 6px; max-width: 920px; }
+    .pill {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      border-radius: 999px;
+      padding: 7px 10px;
+      font-size: 12px;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+    main { padding: 22px 28px 38px; display: grid; gap: 22px; }
+    section {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .section-head {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+      background: #fbfaf7;
+    }
+    .section-head p { margin: 5px 0 0; color: var(--muted); font-size: 13px; line-height: 1.45; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 12px;
+      padding: 14px;
+    }
+    .asset {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+      background: #fff;
+      min-width: 0;
+    }
+    .media {
+      background: #111;
+      aspect-ratio: 9 / 14;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+    }
+    .asset.sheet .media,
+    .asset.crop .media,
+    .asset.product .media { aspect-ratio: 1 / 1; }
+    img, video {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      background: #111;
+    }
+    .meta { padding: 10px; display: grid; gap: 5px; }
+    .meta strong { font-size: 12px; line-height: 1.25; overflow-wrap: anywhere; }
+    .meta span { color: var(--muted); font-size: 11px; line-height: 1.35; overflow-wrap: anywhere; }
+    .priority { border-color: rgba(20, 116, 95, .45); box-shadow: 0 0 0 2px rgba(20, 116, 95, .08); }
+    .note {
+      border: 1px solid rgba(20, 116, 95, .28);
+      border-radius: 8px;
+      background: #f4fbf8;
+      padding: 12px 14px;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+    @media (max-width: 780px) {
+      header { grid-template-columns: 1fr; }
+      main { padding: 16px; }
+      .grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <h1>Mara / Lia Visual Review Board</h1>
+      <div class="sub">Tablero local para ver videos generados, contactos de frames, identidad, boca/cara/angulos y referencias visuales usadas en el pipeline Wan/UGC. Mara es la pelirroja; Lia es la brunette.</div>
+    </div>
+    <div class="pill">Actualizado: 2026-06-17T20:31:07.662Z</div>
+  </header>
+  <main>
+    <div class="note">Prioridad actual: Wan2.2 TI2V 5B para video silencioso con identidad estable, despues Wan2.2 S2V o InfiniteTalk para lipsync. El mejor baseline actual es el job <strong>ec8fd6e3</strong>. LTX queda como comparacion de lo que no debemos escalar.</div>
+    <section>
+    <div class="section-head">
+      <h2>Videos Wan generados</h2>
+      <p>Los MP4 que ya puedes reproducir. Estos son los que importan ahora para decidir movimiento e identidad.</p>
+    </div>
+    <div class="grid"><article class="asset priority">
+    <div class="media"><video src="../references/ai-ecommerce-model/comfyui/audits/pond-wan22-ti2v-motion-002/ec8fd6e3__mara__00003__comfy_wan22_ti2v5b__same_source_outfit__warm_friend.mp4" controls muted playsinline preload="metadata"></video></div>
+    <div class="meta">
+      <strong>ec8fd6e3 | mara | 00003 | comfy wan22 ti2v5b | same source outfit | warm friend</strong>
+      <span>Mejor baseline visual actual o ultimo Wan descargado</span>
+    </div>
+  </article>
+<article class="asset video">
+    <div class="media"><video src="../references/ai-ecommerce-model/comfyui/audits/pond-wan22-ti2v-motion-002/1baaf5f2__mara__00002__comfy_wan22_ti2v5b__same_source_outfit__warm_friend.mp4" controls muted playsinline preload="metadata"></video></div>
+    <div class="meta">
+      <strong>1baaf5f2 | mara | 00002 | comfy wan22 ti2v5b | same source outfit | warm friend</strong>
+      <span>Wan local descargado del pod</span>
+    </div>
+  </article>
+<article class="asset video">
+    <div class="media"><video src="../references/ai-ecommerce-model/comfyui/audits/pond-wan22-ti2v-motion-002/14b81ce5__mara__00001__comfy_wan22_ti2v5b__same_source_outfit__warm_friend.mp4" controls muted playsinline preload="metadata"></video></div>
+    <div class="meta">
+      <strong>14b81ce5 | mara | 00001 | comfy wan22 ti2v5b | same source outfit | warm friend</strong>
+      <span>Wan local descargado del pod</span>
+    </div>
+  </article>
+<article class="asset video">
+    <div class="media"><video src="../references/ai-ecommerce-model/comfyui/audits/pond-wan22-ti2v-smoke-001/dd523445__mara__00001__comfy_wan22_ti2v5b__same_source_outfit__warm_friend.mp4" controls muted playsinline preload="metadata"></video></div>
+    <div class="meta">
+      <strong>dd523445 | mara | 00001 | comfy wan22 ti2v5b | same source outfit | warm friend</strong>
+      <span>Wan local descargado del pod</span>
+    </div>
+  </article></div>
+  </section>
+    <section>
+    <div class="section-head">
+      <h2>Producto ISDIN</h2>
+      <p>Referencia de producto para evitar que el modelo invente el envase. El logo/packshot se debe conservar como overlay o plano separado si Wan deforma la etiqueta.</p>
+    </div>
+    <div class="grid"><article class="asset priority product">
+    <div class="media"><img src="../references/ai-ecommerce-model/products/isdin-fusion-water-magic-reference.png" alt="isdin-fusion-water-magic-reference"></div>
+    <div class="meta">
+      <strong>isdin-fusion-water-magic-reference</strong>
+      <span>Producto actual para el test UGC</span>
+    </div>
+  </article></div>
+  </section>
+    <section>
+    <div class="section-head">
+      <h2>Mara pelirroja cuerpo completo</h2>
+      <p>Banco de cuerpo/poses de Mara. No mezclar con Lia brunette como si fueran la misma identidad.</p>
+    </div>
+    <div class="grid"><article class="asset sheet">
+    <div class="media"><img src="../references/ai-ecommerce-model/identity-bank-50/20260605-mara-luxury-identity-bank-sheet-05-commerce-poses-4k.png" alt="20260605-mara-luxury-identity-bank-sheet-05-commerce-poses-4k"></div>
+    <div class="meta">
+      <strong>20260605-mara-luxury-identity-bank-sheet-05-commerce-poses-4k</strong>
+      <span>Sheet de pose/body</span>
+    </div>
+  </article>
+<article class="asset sheet">
+    <div class="media"><img src="../references/ai-ecommerce-model/identity-bank-50/20260605-mara-luxury-identity-bank-sheet-04-resort-lifestyle-4k.png" alt="20260605-mara-luxury-identity-bank-sheet-04-resort-lifestyle-4k"></div>
+    <div class="meta">
+      <strong>20260605-mara-luxury-identity-bank-sheet-04-resort-lifestyle-4k</strong>
+      <span>Sheet de pose/body</span>
+    </div>
+  </article>
+<article class="asset sheet">
+    <div class="media"><img src="../references/ai-ecommerce-model/identity-bank-50/20260605-mara-luxury-identity-bank-sheet-03-beauty-routine-4k.png" alt="20260605-mara-luxury-identity-bank-sheet-03-beauty-routine-4k"></div>
+    <div class="meta">
+      <strong>20260605-mara-luxury-identity-bank-sheet-03-beauty-routine-4k</strong>
+      <span>Sheet de pose/body</span>
+    </div>
+  </article>
+<article class="asset sheet">
+    <div class="media"><img src="../references/ai-ecommerce-model/identity-bank-50/20260605-mara-luxury-identity-bank-sheet-02-body-angles-4k.png" alt="20260605-mara-luxury-identity-bank-sheet-02-body-angles-4k"></div>
+    <div class="meta">
+      <strong>20260605-mara-luxury-identity-bank-sheet-02-body-angles-4k</strong>
+      <span>Sheet de pose/body</span>
+    </div>
+  </article>
+<article class="asset sheet">
+    <div class="media"><img src="../references/ai-ecommerce-model/identity-bank-50/20260605-mara-luxury-identity-bank-sheet-01-face-expressions-4k.png" alt="20260605-mara-luxury-identity-bank-sheet-01-face-expressions-4k"></div>
+    <div class="meta">
+      <strong>20260605-mara-luxury-identity-bank-sheet-01-face-expressions-4k</strong>
+      <span>Sheet de pose/body</span>
+    </div>
+  </article>
+<article class="asset video">
+    <div class="media"><img src="../references/ai-ecommerce-model/identity-bank-50/photos/mara_identity_01.jpg" alt="mara identity 01"></div>
+    <div class="meta">
+      <strong>mara identity 01</strong>
+      <span>Foto full-body o lifestyle</span>
+    </div>
+  </article>
+<article class="asset video">
+    <div class="media"><img src="../references/ai-ecommerce-model/identity-bank-50/photos/mara_identity_02.jpg" alt="mara identity 02"></div>
+    <div class="meta">
+      <strong>mara identity 02</strong>
+      <span>Foto full-body o lifestyle</span>
+    </div>
+  </article>
+<article class="asset video">
+    <div class="media"><img src="../references/ai-ecommerce-model/identity-bank-50/photos/mara_identity_03.jpg" alt="mara identity 03"></div>
+    <div class="meta">
+      <strong>mara identity 03</strong>
+      <span>Foto full-body o lifestyle</span>
+    </div>
+  </article>
+<article class="asset video">
+    <div class="media"><img src="../references/ai-ecommerce-model/identity-bank-50/photos/mara_identity_04.jpg" alt="mara identity 04"></div>
+    <div class="meta">
+      <strong>mara identity 04</strong>
+      <span>Foto full-body o lifestyle</span>
+    </div>
+  </article>
+<article class="asset video">
+    <div class="media"><img src="../references/ai-ecommerce-model/identity-bank-50/photos/mara_identity_05.jpg" alt="mara identity 05"></div>
+    <div class="meta">
+      <strong>mara identity 05</strong>
+      <span>Foto full-body o lifestyle</span>
+    </div>
+  </article>
+<article class="asset video">
+    <div class="media"><img src="../references/ai-ecommerce-model/identity-bank-50/photos/mara_identity_06.jpg" alt="mara identity 06"></div>
+    <div class="meta">
+      <strong>mara identity 06</strong>
+      <span>Foto full-body o lifestyle</span>
+    </div>
+  </article>
+<article class="asset video">
+    <div class="media"><img src="../references/ai-ecommerce-model/identity-bank-50/photos/mara_identity_07.jpg" alt="mara identity 07"></div>
+    <div class="meta">
+      <strong>mara identity 07</strong>
+      <span>Foto full-body o lifestyle</span>
+    </div>
+  </article>
+<article class="asset video">
+    <div class="media"><img src="../references/ai-ecommerce-model/identity-bank-50/photos/mara_identity_08.jpg" alt="mara identity 08"></div>
+    <div class="meta">
+      <strong>mara identity 08</strong>
+      <span>Foto full-body o lifestyle</span>
+    </div>
+  </article>
+<article class="asset video">
+    <div class="media"><img src="../references/ai-ecommerce-model/identity-bank-50/photos/mara_identity_09.jpg" alt="mara identity 09"></div>
+    <div class="meta">
+      <strong>mara identity 09</strong>
+      <span>Foto full-body o lifestyle</span>
+    </div>
+  </article>
+<article class="asset video">
+    <div class="media"><img src="../references/ai-ecommerce-model/identity-bank-50/photos/mara_identity_10.jpg" alt="mara identity 10"></div>
+    <div class="meta">
+      <strong>mara identity 10</strong>
+      <span>Foto full-body o lifestyle</span>
+    </div>
+  </article>
+<article class="asset video">
+    <div class="media"><img src="../references/ai-ecommerce-model/identity-bank-50/photos/mara_identity_11.jpg" alt="mara identity 11"></div>
+    <div class="meta">
+      <strong>mara identity 11</strong>
+      <span>Foto full-body o lifestyle</span>
+    </div>
+  </article>
+<article class="asset video">
+    <div class="media"><img src="../references/ai-ecommerce-model/identity-bank-50/photos/mara_identity_12.jpg" alt="mara identity 12"></div>
+    <div class="meta">
+      <strong>mara identity 12</strong>
+      <span>Foto full-body o lifestyle</span>
+    </div>
+  </article>
+<article class="asset video">
+    <div class="media"><img src="../references/ai-ecommerce-model/identity-bank-50/photos/mara_identity_13.jpg" alt="mara identity 13"></div>
+    <div class="meta">
+      <strong>mara identity 13</strong>
+      <span>Foto full-body o lifestyle</span>
+    </div>
+  </article>
+<article class="asset video">
+    <div class="media"><img src="../references/ai-ecommerce-model/identity-bank-50/photos/mara_identity_14.jpg" alt="mara identity 14"></div>
+    <div class="meta">
+      <strong>mara identity 14</strong>
+      <span>Foto full-body o lifestyle</span>
+    </div>
+  </article>
+<article class="asset video">
+    <div class="media"><img src="../references/ai-ecommerce-model/identity-bank-50/photos/mara_identity_15.jpg" alt="mara identity 15"></div>
+    <div class="meta">
+      <strong>mara identity 15</strong>
+      <span>Foto full-body o lifestyle</span>
+    </div>
+  </article>
+<article class="asset video">
+    <div class="media"><img src="../references/ai-ecommerce-model/identity-bank-50/photos/mara_identity_16.jpg" alt="mara identity 16"></div>
+    <div class="meta">
+      <strong>mara identity 16</strong>
+      <span>Foto full-body o lifestyle</span>
+    </div>
+  </article>
+<article class="asset video">
+    <div class="media"><img src="../references/ai-ecommerce-model/identity-bank-50/photos/mara_identity_17.jpg" alt="mara identity 17"></div>
+    <div class="meta">
+      <strong>mara identity 17</strong>
+      <span>Foto full-body o lifestyle</span>
+    </div>
+  </article>
+<article class="asset video">
+    <div class="media"><img src="../references/ai-ecommerce-model/identity-bank-50/photos/mara_identity_18.jpg" alt="mara identity 18"></div>
+    <div class="meta">
+      <strong>mara identity 18</strong>
+      <span>Foto full-body o lifestyle</span>
+    </div>
+  </article>
+<article class="asset video">
+    <div class="media"><img src="../references/ai-ecommerce-model/identity-bank-50/photos/mara_identity_19.jpg" alt="mara identity 19"></div>
+    <div class="meta">
+      <strong>mara identity 19</strong>
+      <span>Foto full-body o lifestyle</span>
+    </div>
+  </article>
+<article class="asset video">
+    <div class="media"><img src="../references/ai-ecommerce-model/identity-bank-50/photos/mara_identity_20.jpg" alt="mara identity 20"></div>
+    <div class="meta">
+      <strong>mara identity 20</strong>
+      <span>Foto full-body o lifestyle</span>
+    </div>
+  </article>
+<article class="asset video">
+    <div class="media"><img src="../references/ai-ecommerce-model/identity-bank-50/photos/mara_identity_21.jpg" alt="mara identity 21"></div>
+    <div class="meta">
+      <strong>mara identity 21</strong>
+      <span>Foto full-body o lifestyle</span>
+    </div>
+  </article>
+<article class="asset video">
+    <div class="media"><img src="../references/ai-ecommerce-model/identity-bank-50/photos/mara_identity_22.jpg" alt="mara identity 22"></div>
+    <div class="meta">
+      <strong>mara identity 22</strong>
+      <span>Foto full-body o lifestyle</span>
+    </div>
+  </article>
+<article class="asset video">
+    <div class="media"><img src="../references/ai-ecommerce-model/identity-bank-50/photos/mara_identity_23.jpg" alt="mara identity 23"></div>
+    <div class="meta">
+      <strong>mara identity 23</strong>
+      <span>Foto full-body o lifestyle</span>
+    </div>
+  </article>
+<article class="asset video">
+    <div class="media"><img src="../references/ai-ecommerce-model/identity-bank-50/photos/mara_identity_24.jpg" alt="mara identity 24"></div>
+    <div class="meta">
+      <strong>mara identity 24</strong>
+      <span>Foto full-body o lifestyle</span>
+    </div>
+  </article>
+<article class="asset video">
+    <div class="media"><img src="../references/ai-ecommerce-model/identity-bank-50/photos/mara_identity_25.jpg" alt="mara identity 25"></div>
+    <div class="meta">
+      <strong>mara identity 25</strong>
+      <span>Foto full-body o lifestyle</span>
+    </div>
+  </article>
+<article class="asset video">
+    <div class="media"><img src="../references/ai-ecommerce-model/identity-bank-50/photos/mara_identity_26.jpg" alt="mara identity 26"></div>
+    <div class="meta">
+      <strong>mara identity 26</strong>
+      <span>Foto full-body o lifestyle</span>
+    </div>
+  </article>
+<article class="asset video">
+    <div class="media"><img src="../references/ai-ecommerce-model/identity-bank-50/photos/mara_identity_27.jpg" alt="mara identity 27"></div>
+    <div class="meta">
+      <strong>mara identity 27</strong>
+      <span>Foto full-body o lifestyle</span>
+    </div>
+  </article>
+<article class="asset video">
+    <div class="media"><img src="../references/ai-ecommerce-model/identity-bank-50/photos/mara_identity_28.jpg" alt="mara identity 28"></div>
+    <div class="meta">
+      <strong>mara identity 28</strong>
+      <span>Foto full-body o lifestyle</span>
+    </div>
+  </article>
+<article class="asset video">
+    <div class="media"><img src="../references/ai-ecommerce-model/identity-bank-50/photos/mara_identity_29.jpg" alt="mara identity 29"></div>
+    <div class="meta">
+      <strong>mara identity 29</strong>
+      <span>Foto full-body o lifestyle</span>
+    </div>
+  </article>
+<article class="asset video">
+    <div class="media"><img src="../references/ai-ecommerce-model/identity-bank-50/photos/mara_identity_30.jpg" alt="mara identity 30"></div>
+    <div class="meta">
+      <strong>mara identity 30</strong>
+      <span>Foto full-body o lifestyle</span>
+    </div>
+  </article>
+<article class="asset video">
+    <div class="media"><img src="../references/ai-ecommerce-model/identity-bank-50/photos/mara_identity_31.jpg" alt="mara identity 31"></div>
+    <div class="meta">
+      <strong>mara identity 31</strong>
+      <span>Foto full-body o lifestyle</span>
+    </div>
+  </article>
+<article class="asset video">
+    <div class="media"><img src="../references/ai-ecommerce-model/identity-bank-50/photos/mara_identity_32.jpg" alt="mara identity 32"></div>
+    <div class="meta">
+      <strong>mara identity 32</strong>
+      <span>Foto full-body o lifestyle</span>
+    </div>
+  </article>
+<article class="asset video">
+    <div class="media"><img src="../references/ai-ecommerce-model/identity-bank-50/photos/mara_identity_33.jpg" alt="mara identity 33"></div>
+    <div class="meta">
+      <strong>mara identity 33</strong>
+      <span>Foto full-body o lifestyle</span>
+    </div>
+  </article>
+<article class="asset video">
+    <div class="media"><img src="../references/ai-ecommerce-model/identity-bank-50/photos/mara_identity_34.jpg" alt="mara identity 34"></div>
+    <div class="meta">
+      <strong>mara identity 34</strong>
+      <span>Foto full-body o lifestyle</span>
+    </div>
+  </article>
+<article class="asset video">
+    <div class="media"><img src="../references/ai-ecommerce-model/identity-bank-50/photos/mara_identity_35.jpg" alt="mara identity 35"></div>
+    <div class="meta">
+      <strong>mara identity 35</strong>
+      <span>Foto full-body o lifestyle</span>
+    </div>
+  </article>
+<article class="asset video">
+    <div class="media"><img src="../references/ai-ecommerce-model/identity-bank-50/photos/mara_identity_36.jpg" alt="mara identity 36"></div>
+    <div class="meta">
+      <strong>mara identity 36</strong>
+      <span>Foto full-body o lifestyle</span>
+    </div>
+  </article>
+<article class="asset video">
+    <div class="media"><img src="../references/ai-ecommerce-model/identity-bank-50/photos/mara_identity_37.jpg" alt="mara identity 37"></div>
+    <div class="meta">
+      <strong>mara identity 37</strong>
+      <span>Foto full-body o lifestyle</span>
+    </div>
+  </article>
+<article class="asset video">
+    <div class="media"><img src="../references/ai-ecommerce-model/identity-bank-50/photos/mara_identity_38.jpg" alt="mara identity 38"></div>
+    <div class="meta">
+      <strong>mara identity 38</strong>
+      <span>Foto full-body o lifestyle</span>
+    </div>
+  </article>
+<article class="asset video">
+    <div class="media"><img src="../references/ai-ecommerce-model/identity-bank-50/photos/mara_identity_39.jpg" alt="mara identity 39"></div>
+    <div class="meta">
+      <strong>mara identity 39</strong>
+      <span>Foto full-body o lifestyle</span>
+    </div>
+  </article>
+<article class="asset video">
+    <div class="media"><img src="../references/ai-ecommerce-model/identity-bank-50/photos/mara_identity_40.jpg" alt="mara identity 40"></div>
+    <div class="meta">
+      <strong>mara identity 40</strong>
+      <span>Foto full-body o lifestyle</span>
+    </div>
+  </article>
+<article class="asset video">
+    <div class="media"><img src="../references/ai-ecommerce-model/identity-bank-50/photos/mara_identity_41.jpg" alt="mara identity 41"></div>
+    <div class="meta">
+      <strong>mara identity 41</strong>
+      <span>Foto full-body o lifestyle</span>
+    </div>
+  </article>
+<article class="asset video">
+    <div class="media"><img src="../references/ai-ecommerce-model/identity-bank-50/photos/mara_identity_42.jpg" alt="mara identity 42"></div>
+    <div class="meta">
+      <strong>mara identity 42</strong>
+      <span>Foto full-body o lifestyle</span>
+    </div>
+  </article>
+<article class="asset video">
+    <div class="media"><img src="../references/ai-ecommerce-model/identity-bank-50/photos/mara_identity_43.jpg" alt="mara identity 43"></div>
+    <div class="meta">
+      <strong>mara identity 43</strong>
+      <span>Foto full-body o lifestyle</span>
+    </div>
+  </article>
+<article class="asset video">
+    <div class="media"><img src="../references/ai-ecommerce-model/identity-bank-50/photos/mara_identity_44.jpg" alt="mara identity 44"></div>
+    <div class="meta">
+      <strong>mara identity 44</strong>
+      <span>Foto full-body o lifestyle</span>
+    </div>
+  </article>
+<article class="asset video">
+    <div class="media"><img src="../references/ai-ecommerce-model/identity-bank-50/photos/mara_identity_45.jpg" alt="mara identity 45"></div>
+    <div class="meta">
+      <strong>mara identity 45</strong>
+      <span>Foto full-body o lifestyle</span>
+    </div>
+  </article>
+<article class="asset video">
+    <div class="media"><img src="../references/ai-ecommerce-model/identity-bank-50/photos/mara_identity_46.jpg" alt="mara identity 46"></div>
+    <div class="meta">
+      <strong>mara identity 46</strong>
+      <span>Foto full-body o lifestyle</span>
+    </div>
+  </article>
+<article class="asset video">
+    <div class="media"><img src="../references/ai-ecommerce-model/identity-bank-50/photos/mara_identity_47.jpg" alt="mara identity 47"></div>
+    <div class="meta">
+      <strong>mara identity 47</strong>
+      <span>Foto full-body o lifestyle</span>
+    </div>
+  </article>
+<article class="asset video">
+    <div class="media"><img src="../references/ai-ecommerce-model/identity-bank-50/photos/mara_identity_48.jpg" alt="mara identity 48"></div>
+    <div class="meta">
+      <strong>mara identity 48</strong>
+      <span>Foto full-body o lifestyle</span>
+    </div>
+  </article>
+<article class="asset video">
+    <div class="media"><img src="../references/ai-ecommerce-model/identity-bank-50/photos/mara_identity_49.jpg" alt="mara identity 49"></div>
+    <div class="meta">
+      <strong>mara identity 49</strong>
+      <span>Foto full-body o lifestyle</span>
+    </div>
+  </article>
+<article class="asset video">
+    <div class="media"><img src="../references/ai-ecommerce-model/identity-bank-50/photos/mara_identity_50.jpg" alt="mara identity 50"></div>
+    <div class="meta">
+      <strong>mara identity 50</strong>
+      <span>Foto full-body o lifestyle</span>
+    </div>
+  </article></div>
+  </section>
+    <section>
+    <div class="section-head">
+      <h2>Frames y contactos</h2>
+      <p>Vista rapida de cara, parpadeo, expresion y drift entre inicio/medio/final.</p>
+    </div>
+    <div class="grid"><article class="asset sheet">
+    <div class="media"><img src="../references/ai-ecommerce-model/comfyui/audits/pond-wan22-ti2v-motion-002/ec8fd6e3__mara__00003__comfy_wan22_ti2v5b__same_source_outfit__warm_friend__8frames.jpg" alt="ec8fd6e3 | mara | 00003 | comfy wan22 ti2v5b | same source outfit | warm friend | 8frames"></div>
+    <div class="meta">
+      <strong>ec8fd6e3 | mara | 00003 | comfy wan22 ti2v5b | same source outfit | warm friend | 8frames</strong>
+      <span>contact sheet / 8 frames</span>
+    </div>
+  </article>
+<article class="asset sheet">
+    <div class="media"><img src="../references/ai-ecommerce-model/comfyui/audits/pond-wan22-ti2v-motion-002/1baaf5f2__mara__00002__comfy_wan22_ti2v5b__same_source_outfit__warm_friend__8frames.jpg" alt="1baaf5f2 | mara | 00002 | comfy wan22 ti2v5b | same source outfit | warm friend | 8frames"></div>
+    <div class="meta">
+      <strong>1baaf5f2 | mara | 00002 | comfy wan22 ti2v5b | same source outfit | warm friend | 8frames</strong>
+      <span>contact sheet / 8 frames</span>
+    </div>
+  </article>
+<article class="asset sheet">
+    <div class="media"><img src="../references/ai-ecommerce-model/comfyui/audits/pond-wan22-ti2v-motion-002/14b81ce5__mara__00001__comfy_wan22_ti2v5b__same_source_outfit__warm_friend__8frames.jpg" alt="14b81ce5 | mara | 00001 | comfy wan22 ti2v5b | same source outfit | warm friend | 8frames"></div>
+    <div class="meta">
+      <strong>14b81ce5 | mara | 00001 | comfy wan22 ti2v5b | same source outfit | warm friend | 8frames</strong>
+      <span>contact sheet / 8 frames</span>
+    </div>
+  </article>
+<article class="asset sheet">
+    <div class="media"><img src="../references/ai-ecommerce-model/comfyui/audits/pond-wan22-ti2v-motion-002/ec8fd6e3__mara__00003__comfy_wan22_ti2v5b__same_source_outfit__warm_friend__frames.jpg" alt="ec8fd6e3 | mara | 00003 | comfy wan22 ti2v5b | same source outfit | warm friend | frames"></div>
+    <div class="meta">
+      <strong>ec8fd6e3 | mara | 00003 | comfy wan22 ti2v5b | same source outfit | warm friend | frames</strong>
+      <span>contact sheet / 8 frames</span>
+    </div>
+  </article>
+<article class="asset sheet">
+    <div class="media"><img src="../references/ai-ecommerce-model/comfyui/audits/pond-wan22-ti2v-motion-002/1baaf5f2__mara__00002__comfy_wan22_ti2v5b__same_source_outfit__warm_friend__frames.jpg" alt="1baaf5f2 | mara | 00002 | comfy wan22 ti2v5b | same source outfit | warm friend | frames"></div>
+    <div class="meta">
+      <strong>1baaf5f2 | mara | 00002 | comfy wan22 ti2v5b | same source outfit | warm friend | frames</strong>
+      <span>contact sheet / 8 frames</span>
+    </div>
+  </article>
+<article class="asset sheet">
+    <div class="media"><img src="../references/ai-ecommerce-model/comfyui/audits/pond-wan22-ti2v-motion-002/14b81ce5__mara__00001__comfy_wan22_ti2v5b__same_source_outfit__warm_friend__frames.jpg" alt="14b81ce5 | mara | 00001 | comfy wan22 ti2v5b | same source outfit | warm friend | frames"></div>
+    <div class="meta">
+      <strong>14b81ce5 | mara | 00001 | comfy wan22 ti2v5b | same source outfit | warm friend | frames</strong>
+      <span>contact sheet / 8 frames</span>
+    </div>
+  </article>
+<article class="asset sheet">
+    <div class="media"><img src="../references/ai-ecommerce-model/comfyui/audits/pond-wan22-ti2v-smoke-001/dd523445__8frames.jpg" alt="dd523445 | 8frames"></div>
+    <div class="meta">
+      <strong>dd523445 | 8frames</strong>
+      <span>contact sheet / 8 frames</span>
+    </div>
+  </article>
+<article class="asset sheet">
+    <div class="media"><img src="../references/ai-ecommerce-model/comfyui/audits/pond-wan22-ti2v-smoke-001/dd523445__mara__00001__comfy_wan22_ti2v5b__same_source_outfit__warm_friend__frames.jpg" alt="dd523445 | mara | 00001 | comfy wan22 ti2v5b | same source outfit | warm friend | frames"></div>
+    <div class="meta">
+      <strong>dd523445 | mara | 00001 | comfy wan22 ti2v5b | same source outfit | warm friend | frames</strong>
+      <span>contact sheet / 8 frames</span>
+    </div>
+  </article>
+<article class="asset sheet">
+    <div class="media"><img src="../references/ai-ecommerce-model/comfyui/audits/pond-ltx23-motion-calibration-001-short/48889bf2__mara__00005__comfy_ltx23__same_source_outfit__warm_friend__close__frames.jpg" alt="48889bf2 | mara | 00005 | comfy ltx23 | same source outfit | warm friend | close | frames"></div>
+    <div class="meta">
+      <strong>48889bf2 | mara | 00005 | comfy ltx23 | same source outfit | warm friend | close | frames</strong>
+      <span>contact sheet / 8 frames</span>
+    </div>
+  </article>
+<article class="asset sheet">
+    <div class="media"><img src="../references/ai-ecommerce-model/comfyui/audits/pond-ltx23-motion-calibration-001-short/63b7c62a__mara__00004__comfy_ltx23__same_source_outfit__warm_friend__close__frames.jpg" alt="63b7c62a | mara | 00004 | comfy ltx23 | same source outfit | warm friend | close | frames"></div>
+    <div class="meta">
+      <strong>63b7c62a | mara | 00004 | comfy ltx23 | same source outfit | warm friend | close | frames</strong>
+      <span>contact sheet / 8 frames</span>
+    </div>
+  </article>
+<article class="asset sheet">
+    <div class="media"><img src="../references/ai-ecommerce-model/comfyui/audits/pond-ltx23-motion-calibration-001-short/4f733f96__mara__00003__comfy_ltx23__same_source_outfit__warm_friend__close__frames.jpg" alt="4f733f96 | mara | 00003 | comfy ltx23 | same source outfit | warm friend | close | frames"></div>
+    <div class="meta">
+      <strong>4f733f96 | mara | 00003 | comfy ltx23 | same source outfit | warm friend | close | frames</strong>
+      <span>contact sheet / 8 frames</span>
+    </div>
+  </article>
+<article class="asset sheet">
+    <div class="media"><img src="../references/ai-ecommerce-model/comfyui/audits/pond-ltx23-motion-calibration-001-short/5a94d4a4__mara__00002__comfy_ltx23__same_source_outfit__warm_friend__close__frames.jpg" alt="5a94d4a4 | mara | 00002 | comfy ltx23 | same source outfit | warm friend | close | frames"></div>
+    <div class="meta">
+      <strong>5a94d4a4 | mara | 00002 | comfy ltx23 | same source outfit | warm friend | close | frames</strong>
+      <span>contact sheet / 8 frames</span>
+    </div>
+  </article>
+<article class="asset sheet">
+    <div class="media"><img src="../references/ai-ecommerce-model/comfyui/audits/pond-ltx23-motion-calibration-001-short/fdb3b711__mara__00001__comfy_ltx23__same_source_outfit__warm_friend__close__frames.jpg" alt="fdb3b711 | mara | 00001 | comfy ltx23 | same source outfit | warm friend | close | frames"></div>
+    <div class="meta">
+      <strong>fdb3b711 | mara | 00001 | comfy ltx23 | same source outfit | warm friend | close | frames</strong>
+      <span>contact sheet / 8 frames</span>
+    </div>
+  </article>
+<article class="asset sheet">
+    <div class="media"><img src="../references/ai-ecommerce-model/comfyui/audits/pond-ltx23-motion-calibration-001/48889bf2-a355-4c60-b7cd-7d0a8382fe8f__mara__00005__comfy_ltx23__same_source_outfit__warm_friend__closeup_selfie__same_room__walk_to_medium__not_testimonial__ugc_disclosure_15s_00001___frames.jpg" alt="48889bf2-a355-4c60-b7cd-7d0a8382fe8f | mara | 00005 | comfy ltx23 | same source outfit | warm friend | closeup selfie | same room | walk to "></div>
+    <div class="meta">
+      <strong>48889bf2-a355-4c60-b7cd-7d0a8382fe8f | mara | 00005 | comfy ltx23 | same source outfit | warm friend | closeup selfie | same room | walk to </strong>
+      <span>contact sheet / 8 frames</span>
+    </div>
+  </article>
+<article class="asset sheet">
+    <div class="media"><img src="../references/ai-ecommerce-model/comfyui/audits/pond-ltx23-motion-calibration-001/63b7c62a-c361-4abc-aca4-dc46b75205c6__mara__00004__comfy_ltx23__same_source_outfit__warm_friend__closeup_selfie__same_room__hair_adjust__not_testimonial__ugc_disclosure_15s_00001___frames.jpg" alt="63b7c62a-c361-4abc-aca4-dc46b75205c6 | mara | 00004 | comfy ltx23 | same source outfit | warm friend | closeup selfie | same room | hair adj"></div>
+    <div class="meta">
+      <strong>63b7c62a-c361-4abc-aca4-dc46b75205c6 | mara | 00004 | comfy ltx23 | same source outfit | warm friend | closeup selfie | same room | hair adj</strong>
+      <span>contact sheet / 8 frames</span>
+    </div>
+  </article>
+<article class="asset sheet">
+    <div class="media"><img src="../references/ai-ecommerce-model/comfyui/audits/pond-ltx23-motion-calibration-001/4f733f96-b1ee-438e-b423-79557736a51c__mara__00003__comfy_ltx23__same_source_outfit__warm_friend__closeup_selfie__same_room__product_pickup__not_testimonial__ugc_disclosure_15s_00001___frames.jpg" alt="4f733f96-b1ee-438e-b423-79557736a51c | mara | 00003 | comfy ltx23 | same source outfit | warm friend | closeup selfie | same room | product "></div>
+    <div class="meta">
+      <strong>4f733f96-b1ee-438e-b423-79557736a51c | mara | 00003 | comfy ltx23 | same source outfit | warm friend | closeup selfie | same room | product </strong>
+      <span>contact sheet / 8 frames</span>
+    </div>
+  </article>
+<article class="asset sheet">
+    <div class="media"><img src="../references/ai-ecommerce-model/comfyui/audits/pond-ltx23-motion-calibration-001/5a94d4a4-1806-4b45-8733-11d8637001ea__mara__00002__comfy_ltx23__same_source_outfit__warm_friend__closeup_selfie__same_room__lean_hook__not_testimonial__ugc_disclosure_15s_00001___frames.jpg" alt="5a94d4a4-1806-4b45-8733-11d8637001ea | mara | 00002 | comfy ltx23 | same source outfit | warm friend | closeup selfie | same room | lean hoo"></div>
+    <div class="meta">
+      <strong>5a94d4a4-1806-4b45-8733-11d8637001ea | mara | 00002 | comfy ltx23 | same source outfit | warm friend | closeup selfie | same room | lean hoo</strong>
+      <span>contact sheet / 8 frames</span>
+    </div>
+  </article>
+<article class="asset sheet">
+    <div class="media"><img src="../references/ai-ecommerce-model/comfyui/audits/pond-ltx23-motion-calibration-001/fdb3b711-48a2-447e-b4c3-ce115518ddd7__mara__00001__comfy_ltx23__same_source_outfit__warm_friend__closeup_selfie__same_room__low_mouth_nod__not_testimonial__ugc_disclosure_15s_00001___frames.jpg" alt="fdb3b711-48a2-447e-b4c3-ce115518ddd7 | mara | 00001 | comfy ltx23 | same source outfit | warm friend | closeup selfie | same room | low mout"></div>
+    <div class="meta">
+      <strong>fdb3b711-48a2-447e-b4c3-ce115518ddd7 | mara | 00001 | comfy ltx23 | same source outfit | warm friend | closeup selfie | same room | low mout</strong>
+      <span>contact sheet / 8 frames</span>
+    </div>
+  </article></div>
+  </section>
+    <section>
+    <div class="section-head">
+      <h2>Lia close-up brunette</h2>
+      <p>Sheets originales que definen la cara estable brunette antes de video.</p>
+    </div>
+    <div class="grid"><article class="asset priority sheet">
+    <div class="media"><img src="../references/ai-ecommerce-model/mara-identity-20260616/mara_20260616_primary_i2v_front_smile.png" alt="mara 20260616 primary i2v front smile"></div>
+    <div class="meta">
+      <strong>mara 20260616 primary i2v front smile</strong>
+      <span>Imagen primaria para image-to-video</span>
+    </div>
+  </article>
+<article class="asset sheet">
+    <div class="media"><img src="../references/ai-ecommerce-model/mara-identity-20260616/originals/ugc-scenes-01.png" alt="ugc-scenes-01"></div>
+    <div class="meta">
+      <strong>ugc-scenes-01</strong>
+      <span>Referencia visual original</span>
+    </div>
+  </article>
+<article class="asset sheet">
+    <div class="media"><img src="../references/ai-ecommerce-model/mara-identity-20260616/originals/feature-lock-01.png" alt="feature-lock-01"></div>
+    <div class="meta">
+      <strong>feature-lock-01</strong>
+      <span>Referencia visual original</span>
+    </div>
+  </article>
+<article class="asset sheet">
+    <div class="media"><img src="../references/ai-ecommerce-model/mara-identity-20260616/originals/mouth-face-lock-01.png" alt="mouth-face-lock-01"></div>
+    <div class="meta">
+      <strong>mouth-face-lock-01</strong>
+      <span>Referencia visual original</span>
+    </div>
+  </article>
+<article class="asset sheet">
+    <div class="media"><img src="../references/ai-ecommerce-model/mara-identity-20260616/originals/angles-contact-02-duplicate.png" alt="angles-contact-02-duplicate"></div>
+    <div class="meta">
+      <strong>angles-contact-02-duplicate</strong>
+      <span>Referencia visual original</span>
+    </div>
+  </article>
+<article class="asset sheet">
+    <div class="media"><img src="../references/ai-ecommerce-model/mara-identity-20260616/originals/angles-contact-01.png" alt="angles-contact-01"></div>
+    <div class="meta">
+      <strong>angles-contact-01</strong>
+      <span>Referencia visual original</span>
+    </div>
+  </article></div>
+  </section>
+    <section>
+    <div class="section-head">
+      <h2>Crops de control</h2>
+      <p>Banco de angulos, boca, ojos, piel y rasgos para bloquear identidad visual en prompts y QA.</p>
+    </div>
+    <div class="grid"><article class="asset crop">
+    <div class="media"><img src="../references/ai-ecommerce-model/mara-identity-20260616/crops/ugc-scenes-01_r03_c04.png" alt="ugc-scenes-01 r03 c04"></div>
+    <div class="meta">
+      <strong>ugc-scenes-01 r03 c04</strong>
+      <span>identity crop</span>
+    </div>
+  </article>
+<article class="asset crop">
+    <div class="media"><img src="../references/ai-ecommerce-model/mara-identity-20260616/crops/ugc-scenes-01_r03_c03.png" alt="ugc-scenes-01 r03 c03"></div>
+    <div class="meta">
+      <strong>ugc-scenes-01 r03 c03</strong>
+      <span>identity crop</span>
+    </div>
+  </article>
+<article class="asset crop">
+    <div class="media"><img src="../references/ai-ecommerce-model/mara-identity-20260616/crops/ugc-scenes-01_r03_c02.png" alt="ugc-scenes-01 r03 c02"></div>
+    <div class="meta">
+      <strong>ugc-scenes-01 r03 c02</strong>
+      <span>identity crop</span>
+    </div>
+  </article>
+<article class="asset crop">
+    <div class="media"><img src="../references/ai-ecommerce-model/mara-identity-20260616/crops/ugc-scenes-01_r03_c01.png" alt="ugc-scenes-01 r03 c01"></div>
+    <div class="meta">
+      <strong>ugc-scenes-01 r03 c01</strong>
+      <span>identity crop</span>
+    </div>
+  </article>
+<article class="asset crop">
+    <div class="media"><img src="../references/ai-ecommerce-model/mara-identity-20260616/crops/ugc-scenes-01_r02_c04.png" alt="ugc-scenes-01 r02 c04"></div>
+    <div class="meta">
+      <strong>ugc-scenes-01 r02 c04</strong>
+      <span>identity crop</span>
+    </div>
+  </article>
+<article class="asset crop">
+    <div class="media"><img src="../references/ai-ecommerce-model/mara-identity-20260616/crops/ugc-scenes-01_r02_c03.png" alt="ugc-scenes-01 r02 c03"></div>
+    <div class="meta">
+      <strong>ugc-scenes-01 r02 c03</strong>
+      <span>identity crop</span>
+    </div>
+  </article>
+<article class="asset crop">
+    <div class="media"><img src="../references/ai-ecommerce-model/mara-identity-20260616/crops/ugc-scenes-01_r02_c02.png" alt="ugc-scenes-01 r02 c02"></div>
+    <div class="meta">
+      <strong>ugc-scenes-01 r02 c02</strong>
+      <span>identity crop</span>
+    </div>
+  </article>
+<article class="asset crop">
+    <div class="media"><img src="../references/ai-ecommerce-model/mara-identity-20260616/crops/ugc-scenes-01_r02_c01.png" alt="ugc-scenes-01 r02 c01"></div>
+    <div class="meta">
+      <strong>ugc-scenes-01 r02 c01</strong>
+      <span>identity crop</span>
+    </div>
+  </article>
+<article class="asset crop">
+    <div class="media"><img src="../references/ai-ecommerce-model/mara-identity-20260616/crops/ugc-scenes-01_r01_c04.png" alt="ugc-scenes-01 r01 c04"></div>
+    <div class="meta">
+      <strong>ugc-scenes-01 r01 c04</strong>
+      <span>identity crop</span>
+    </div>
+  </article>
+<article class="asset crop">
+    <div class="media"><img src="../references/ai-ecommerce-model/mara-identity-20260616/crops/ugc-scenes-01_r01_c03.png" alt="ugc-scenes-01 r01 c03"></div>
+    <div class="meta">
+      <strong>ugc-scenes-01 r01 c03</strong>
+      <span>identity crop</span>
+    </div>
+  </article>
+<article class="asset crop">
+    <div class="media"><img src="../references/ai-ecommerce-model/mara-identity-20260616/crops/ugc-scenes-01_r01_c02.png" alt="ugc-scenes-01 r01 c02"></div>
+    <div class="meta">
+      <strong>ugc-scenes-01 r01 c02</strong>
+      <span>identity crop</span>
+    </div>
+  </article>
+<article class="asset crop">
+    <div class="media"><img src="../references/ai-ecommerce-model/mara-identity-20260616/crops/ugc-scenes-01_r01_c01.png" alt="ugc-scenes-01 r01 c01"></div>
+    <div class="meta">
+      <strong>ugc-scenes-01 r01 c01</strong>
+      <span>identity crop</span>
+    </div>
+  </article>
+<article class="asset crop">
+    <div class="media"><img src="../references/ai-ecommerce-model/mara-identity-20260616/crops/feature-lock-01_r04_c04.png" alt="feature-lock-01 r04 c04"></div>
+    <div class="meta">
+      <strong>feature-lock-01 r04 c04</strong>
+      <span>identity crop</span>
+    </div>
+  </article>
+<article class="asset crop">
+    <div class="media"><img src="../references/ai-ecommerce-model/mara-identity-20260616/crops/feature-lock-01_r04_c03.png" alt="feature-lock-01 r04 c03"></div>
+    <div class="meta">
+      <strong>feature-lock-01 r04 c03</strong>
+      <span>identity crop</span>
+    </div>
+  </article>
+<article class="asset crop">
+    <div class="media"><img src="../references/ai-ecommerce-model/mara-identity-20260616/crops/feature-lock-01_r04_c02.png" alt="feature-lock-01 r04 c02"></div>
+    <div class="meta">
+      <strong>feature-lock-01 r04 c02</strong>
+      <span>identity crop</span>
+    </div>
+  </article>
+<article class="asset crop">
+    <div class="media"><img src="../references/ai-ecommerce-model/mara-identity-20260616/crops/feature-lock-01_r04_c01.png" alt="feature-lock-01 r04 c01"></div>
+    <div class="meta">
+      <strong>feature-lock-01 r04 c01</strong>
+      <span>identity crop</span>
+    </div>
+  </article>
+<article class="asset crop">
+    <div class="media"><img src="../references/ai-ecommerce-model/mara-identity-20260616/crops/feature-lock-01_r03_c04.png" alt="feature-lock-01 r03 c04"></div>
+    <div class="meta">
+      <strong>feature-lock-01 r03 c04</strong>
+      <span>identity crop</span>
+    </div>
+  </article>
+<article class="asset crop">
+    <div class="media"><img src="../references/ai-ecommerce-model/mara-identity-20260616/crops/feature-lock-01_r03_c03.png" alt="feature-lock-01 r03 c03"></div>
+    <div class="meta">
+      <strong>feature-lock-01 r03 c03</strong>
+      <span>identity crop</span>
+    </div>
+  </article>
+<article class="asset crop">
+    <div class="media"><img src="../references/ai-ecommerce-model/mara-identity-20260616/crops/feature-lock-01_r03_c02.png" alt="feature-lock-01 r03 c02"></div>
+    <div class="meta">
+      <strong>feature-lock-01 r03 c02</strong>
+      <span>identity crop</span>
+    </div>
+  </article>
+<article class="asset crop">
+    <div class="media"><img src="../references/ai-ecommerce-model/mara-identity-20260616/crops/feature-lock-01_r03_c01.png" alt="feature-lock-01 r03 c01"></div>
+    <div class="meta">
+      <strong>feature-lock-01 r03 c01</strong>
+      <span>identity crop</span>
+    </div>
+  </article>
+<article class="asset crop">
+    <div class="media"><img src="../references/ai-ecommerce-model/mara-identity-20260616/crops/feature-lock-01_r02_c04.png" alt="feature-lock-01 r02 c04"></div>
+    <div class="meta">
+      <strong>feature-lock-01 r02 c04</strong>
+      <span>identity crop</span>
+    </div>
+  </article>
+<article class="asset crop">
+    <div class="media"><img src="../references/ai-ecommerce-model/mara-identity-20260616/crops/feature-lock-01_r02_c03.png" alt="feature-lock-01 r02 c03"></div>
+    <div class="meta">
+      <strong>feature-lock-01 r02 c03</strong>
+      <span>identity crop</span>
+    </div>
+  </article>
+<article class="asset crop">
+    <div class="media"><img src="../references/ai-ecommerce-model/mara-identity-20260616/crops/feature-lock-01_r02_c02.png" alt="feature-lock-01 r02 c02"></div>
+    <div class="meta">
+      <strong>feature-lock-01 r02 c02</strong>
+      <span>identity crop</span>
+    </div>
+  </article>
+<article class="asset crop">
+    <div class="media"><img src="../references/ai-ecommerce-model/mara-identity-20260616/crops/feature-lock-01_r02_c01.png" alt="feature-lock-01 r02 c01"></div>
+    <div class="meta">
+      <strong>feature-lock-01 r02 c01</strong>
+      <span>identity crop</span>
+    </div>
+  </article>
+<article class="asset crop">
+    <div class="media"><img src="../references/ai-ecommerce-model/mara-identity-20260616/crops/feature-lock-01_r01_c04.png" alt="feature-lock-01 r01 c04"></div>
+    <div class="meta">
+      <strong>feature-lock-01 r01 c04</strong>
+      <span>identity crop</span>
+    </div>
+  </article>
+<article class="asset crop">
+    <div class="media"><img src="../references/ai-ecommerce-model/mara-identity-20260616/crops/feature-lock-01_r01_c03.png" alt="feature-lock-01 r01 c03"></div>
+    <div class="meta">
+      <strong>feature-lock-01 r01 c03</strong>
+      <span>identity crop</span>
+    </div>
+  </article>
+<article class="asset crop">
+    <div class="media"><img src="../references/ai-ecommerce-model/mara-identity-20260616/crops/feature-lock-01_r01_c02.png" alt="feature-lock-01 r01 c02"></div>
+    <div class="meta">
+      <strong>feature-lock-01 r01 c02</strong>
+      <span>identity crop</span>
+    </div>
+  </article>
+<article class="asset crop">
+    <div class="media"><img src="../references/ai-ecommerce-model/mara-identity-20260616/crops/feature-lock-01_r01_c01.png" alt="feature-lock-01 r01 c01"></div>
+    <div class="meta">
+      <strong>feature-lock-01 r01 c01</strong>
+      <span>identity crop</span>
+    </div>
+  </article>
+<article class="asset crop">
+    <div class="media"><img src="../references/ai-ecommerce-model/mara-identity-20260616/crops/mouth-face-lock-01_r04_c04.png" alt="mouth-face-lock-01 r04 c04"></div>
+    <div class="meta">
+      <strong>mouth-face-lock-01 r04 c04</strong>
+      <span>identity crop</span>
+    </div>
+  </article>
+<article class="asset crop">
+    <div class="media"><img src="../references/ai-ecommerce-model/mara-identity-20260616/crops/mouth-face-lock-01_r04_c03.png" alt="mouth-face-lock-01 r04 c03"></div>
+    <div class="meta">
+      <strong>mouth-face-lock-01 r04 c03</strong>
+      <span>identity crop</span>
+    </div>
+  </article>
+<article class="asset crop">
+    <div class="media"><img src="../references/ai-ecommerce-model/mara-identity-20260616/crops/mouth-face-lock-01_r04_c02.png" alt="mouth-face-lock-01 r04 c02"></div>
+    <div class="meta">
+      <strong>mouth-face-lock-01 r04 c02</strong>
+      <span>identity crop</span>
+    </div>
+  </article>
+<article class="asset crop">
+    <div class="media"><img src="../references/ai-ecommerce-model/mara-identity-20260616/crops/mouth-face-lock-01_r04_c01.png" alt="mouth-face-lock-01 r04 c01"></div>
+    <div class="meta">
+      <strong>mouth-face-lock-01 r04 c01</strong>
+      <span>identity crop</span>
+    </div>
+  </article>
+<article class="asset crop">
+    <div class="media"><img src="../references/ai-ecommerce-model/mara-identity-20260616/crops/mouth-face-lock-01_r03_c04.png" alt="mouth-face-lock-01 r03 c04"></div>
+    <div class="meta">
+      <strong>mouth-face-lock-01 r03 c04</strong>
+      <span>identity crop</span>
+    </div>
+  </article>
+<article class="asset crop">
+    <div class="media"><img src="../references/ai-ecommerce-model/mara-identity-20260616/crops/mouth-face-lock-01_r03_c03.png" alt="mouth-face-lock-01 r03 c03"></div>
+    <div class="meta">
+      <strong>mouth-face-lock-01 r03 c03</strong>
+      <span>identity crop</span>
+    </div>
+  </article>
+<article class="asset crop">
+    <div class="media"><img src="../references/ai-ecommerce-model/mara-identity-20260616/crops/mouth-face-lock-01_r03_c02.png" alt="mouth-face-lock-01 r03 c02"></div>
+    <div class="meta">
+      <strong>mouth-face-lock-01 r03 c02</strong>
+      <span>identity crop</span>
+    </div>
+  </article>
+<article class="asset crop">
+    <div class="media"><img src="../references/ai-ecommerce-model/mara-identity-20260616/crops/mouth-face-lock-01_r03_c01.png" alt="mouth-face-lock-01 r03 c01"></div>
+    <div class="meta">
+      <strong>mouth-face-lock-01 r03 c01</strong>
+      <span>identity crop</span>
+    </div>
+  </article>
+<article class="asset crop">
+    <div class="media"><img src="../references/ai-ecommerce-model/mara-identity-20260616/crops/mouth-face-lock-01_r02_c04.png" alt="mouth-face-lock-01 r02 c04"></div>
+    <div class="meta">
+      <strong>mouth-face-lock-01 r02 c04</strong>
+      <span>identity crop</span>
+    </div>
+  </article>
+<article class="asset crop">
+    <div class="media"><img src="../references/ai-ecommerce-model/mara-identity-20260616/crops/mouth-face-lock-01_r02_c03.png" alt="mouth-face-lock-01 r02 c03"></div>
+    <div class="meta">
+      <strong>mouth-face-lock-01 r02 c03</strong>
+      <span>identity crop</span>
+    </div>
+  </article>
+<article class="asset crop">
+    <div class="media"><img src="../references/ai-ecommerce-model/mara-identity-20260616/crops/mouth-face-lock-01_r02_c02.png" alt="mouth-face-lock-01 r02 c02"></div>
+    <div class="meta">
+      <strong>mouth-face-lock-01 r02 c02</strong>
+      <span>identity crop</span>
+    </div>
+  </article>
+<article class="asset crop">
+    <div class="media"><img src="../references/ai-ecommerce-model/mara-identity-20260616/crops/mouth-face-lock-01_r02_c01.png" alt="mouth-face-lock-01 r02 c01"></div>
+    <div class="meta">
+      <strong>mouth-face-lock-01 r02 c01</strong>
+      <span>identity crop</span>
+    </div>
+  </article>
+<article class="asset crop">
+    <div class="media"><img src="../references/ai-ecommerce-model/mara-identity-20260616/crops/mouth-face-lock-01_r01_c04.png" alt="mouth-face-lock-01 r01 c04"></div>
+    <div class="meta">
+      <strong>mouth-face-lock-01 r01 c04</strong>
+      <span>identity crop</span>
+    </div>
+  </article>
+<article class="asset crop">
+    <div class="media"><img src="../references/ai-ecommerce-model/mara-identity-20260616/crops/mouth-face-lock-01_r01_c03.png" alt="mouth-face-lock-01 r01 c03"></div>
+    <div class="meta">
+      <strong>mouth-face-lock-01 r01 c03</strong>
+      <span>identity crop</span>
+    </div>
+  </article>
+<article class="asset crop">
+    <div class="media"><img src="../references/ai-ecommerce-model/mara-identity-20260616/crops/mouth-face-lock-01_r01_c02.png" alt="mouth-face-lock-01 r01 c02"></div>
+    <div class="meta">
+      <strong>mouth-face-lock-01 r01 c02</strong>
+      <span>identity crop</span>
+    </div>
+  </article>
+<article class="asset crop">
+    <div class="media"><img src="../references/ai-ecommerce-model/mara-identity-20260616/crops/mouth-face-lock-01_r01_c01.png" alt="mouth-face-lock-01 r01 c01"></div>
+    <div class="meta">
+      <strong>mouth-face-lock-01 r01 c01</strong>
+      <span>identity crop</span>
+    </div>
+  </article>
+<article class="asset crop">
+    <div class="media"><img src="../references/ai-ecommerce-model/mara-identity-20260616/crops/angles-contact-02-duplicate_r02_c05.png" alt="angles-contact-02-duplicate r02 c05"></div>
+    <div class="meta">
+      <strong>angles-contact-02-duplicate r02 c05</strong>
+      <span>identity crop</span>
+    </div>
+  </article>
+<article class="asset crop">
+    <div class="media"><img src="../references/ai-ecommerce-model/mara-identity-20260616/crops/angles-contact-02-duplicate_r02_c04.png" alt="angles-contact-02-duplicate r02 c04"></div>
+    <div class="meta">
+      <strong>angles-contact-02-duplicate r02 c04</strong>
+      <span>identity crop</span>
+    </div>
+  </article>
+<article class="asset crop">
+    <div class="media"><img src="../references/ai-ecommerce-model/mara-identity-20260616/crops/angles-contact-02-duplicate_r02_c03.png" alt="angles-contact-02-duplicate r02 c03"></div>
+    <div class="meta">
+      <strong>angles-contact-02-duplicate r02 c03</strong>
+      <span>identity crop</span>
+    </div>
+  </article>
+<article class="asset crop">
+    <div class="media"><img src="../references/ai-ecommerce-model/mara-identity-20260616/crops/angles-contact-02-duplicate_r02_c02.png" alt="angles-contact-02-duplicate r02 c02"></div>
+    <div class="meta">
+      <strong>angles-contact-02-duplicate r02 c02</strong>
+      <span>identity crop</span>
+    </div>
+  </article>
+<article class="asset crop">
+    <div class="media"><img src="../references/ai-ecommerce-model/mara-identity-20260616/crops/angles-contact-02-duplicate_r02_c01.png" alt="angles-contact-02-duplicate r02 c01"></div>
+    <div class="meta">
+      <strong>angles-contact-02-duplicate r02 c01</strong>
+      <span>identity crop</span>
+    </div>
+  </article>
+<article class="asset crop">
+    <div class="media"><img src="../references/ai-ecommerce-model/mara-identity-20260616/crops/angles-contact-02-duplicate_r01_c05.png" alt="angles-contact-02-duplicate r01 c05"></div>
+    <div class="meta">
+      <strong>angles-contact-02-duplicate r01 c05</strong>
+      <span>identity crop</span>
+    </div>
+  </article>
+<article class="asset crop">
+    <div class="media"><img src="../references/ai-ecommerce-model/mara-identity-20260616/crops/angles-contact-02-duplicate_r01_c04.png" alt="angles-contact-02-duplicate r01 c04"></div>
+    <div class="meta">
+      <strong>angles-contact-02-duplicate r01 c04</strong>
+      <span>identity crop</span>
+    </div>
+  </article>
+<article class="asset crop">
+    <div class="media"><img src="../references/ai-ecommerce-model/mara-identity-20260616/crops/angles-contact-02-duplicate_r01_c03.png" alt="angles-contact-02-duplicate r01 c03"></div>
+    <div class="meta">
+      <strong>angles-contact-02-duplicate r01 c03</strong>
+      <span>identity crop</span>
+    </div>
+  </article>
+<article class="asset crop">
+    <div class="media"><img src="../references/ai-ecommerce-model/mara-identity-20260616/crops/angles-contact-02-duplicate_r01_c02.png" alt="angles-contact-02-duplicate r01 c02"></div>
+    <div class="meta">
+      <strong>angles-contact-02-duplicate r01 c02</strong>
+      <span>identity crop</span>
+    </div>
+  </article>
+<article class="asset crop">
+    <div class="media"><img src="../references/ai-ecommerce-model/mara-identity-20260616/crops/angles-contact-02-duplicate_r01_c01.png" alt="angles-contact-02-duplicate r01 c01"></div>
+    <div class="meta">
+      <strong>angles-contact-02-duplicate r01 c01</strong>
+      <span>identity crop</span>
+    </div>
+  </article>
+<article class="asset crop">
+    <div class="media"><img src="../references/ai-ecommerce-model/mara-identity-20260616/crops/angles-contact-01_r02_c05.png" alt="angles-contact-01 r02 c05"></div>
+    <div class="meta">
+      <strong>angles-contact-01 r02 c05</strong>
+      <span>identity crop</span>
+    </div>
+  </article>
+<article class="asset crop">
+    <div class="media"><img src="../references/ai-ecommerce-model/mara-identity-20260616/crops/angles-contact-01_r02_c04.png" alt="angles-contact-01 r02 c04"></div>
+    <div class="meta">
+      <strong>angles-contact-01 r02 c04</strong>
+      <span>identity crop</span>
+    </div>
+  </article>
+<article class="asset crop">
+    <div class="media"><img src="../references/ai-ecommerce-model/mara-identity-20260616/crops/angles-contact-01_r02_c03.png" alt="angles-contact-01 r02 c03"></div>
+    <div class="meta">
+      <strong>angles-contact-01 r02 c03</strong>
+      <span>identity crop</span>
+    </div>
+  </article>
+<article class="asset crop">
+    <div class="media"><img src="../references/ai-ecommerce-model/mara-identity-20260616/crops/angles-contact-01_r02_c02.png" alt="angles-contact-01 r02 c02"></div>
+    <div class="meta">
+      <strong>angles-contact-01 r02 c02</strong>
+      <span>identity crop</span>
+    </div>
+  </article>
+<article class="asset crop">
+    <div class="media"><img src="../references/ai-ecommerce-model/mara-identity-20260616/crops/angles-contact-01_r02_c01.png" alt="angles-contact-01 r02 c01"></div>
+    <div class="meta">
+      <strong>angles-contact-01 r02 c01</strong>
+      <span>identity crop</span>
+    </div>
+  </article>
+<article class="asset crop">
+    <div class="media"><img src="../references/ai-ecommerce-model/mara-identity-20260616/crops/angles-contact-01_r01_c05.png" alt="angles-contact-01 r01 c05"></div>
+    <div class="meta">
+      <strong>angles-contact-01 r01 c05</strong>
+      <span>identity crop</span>
+    </div>
+  </article>
+<article class="asset crop">
+    <div class="media"><img src="../references/ai-ecommerce-model/mara-identity-20260616/crops/angles-contact-01_r01_c04.png" alt="angles-contact-01 r01 c04"></div>
+    <div class="meta">
+      <strong>angles-contact-01 r01 c04</strong>
+      <span>identity crop</span>
+    </div>
+  </article>
+<article class="asset crop">
+    <div class="media"><img src="../references/ai-ecommerce-model/mara-identity-20260616/crops/angles-contact-01_r01_c03.png" alt="angles-contact-01 r01 c03"></div>
+    <div class="meta">
+      <strong>angles-contact-01 r01 c03</strong>
+      <span>identity crop</span>
+    </div>
+  </article>
+<article class="asset crop">
+    <div class="media"><img src="../references/ai-ecommerce-model/mara-identity-20260616/crops/angles-contact-01_r01_c02.png" alt="angles-contact-01 r01 c02"></div>
+    <div class="meta">
+      <strong>angles-contact-01 r01 c02</strong>
+      <span>identity crop</span>
+    </div>
+  </article>
+<article class="asset crop">
+    <div class="media"><img src="../references/ai-ecommerce-model/mara-identity-20260616/crops/angles-contact-01_r01_c01.png" alt="angles-contact-01 r01 c01"></div>
+    <div class="meta">
+      <strong>angles-contact-01 r01 c01</strong>
+      <span>identity crop</span>
+    </div>
+  </article></div>
+  </section>
+    <section>
+    <div class="section-head">
+      <h2>Comparacion LTX</h2>
+      <p>Resultados anteriores para revisar por que no conviene escalar LTX como motor principal.</p>
+    </div>
+    <div class="grid"><article class="asset video">
+    <div class="media"><video src="../references/ai-ecommerce-model/comfyui/audits/pond-ltx23-motion-calibration-001-short/48889bf2__mara__00005__comfy_ltx23__same_source_outfit__warm_friend__close.mp4" controls muted playsinline preload="metadata"></video></div>
+    <div class="meta">
+      <strong>48889bf2 | mara | 00005 | comfy ltx23 | same source outfit | warm friend | close</strong>
+      <span>LTX comparativo</span>
+    </div>
+  </article>
+<article class="asset video">
+    <div class="media"><video src="../references/ai-ecommerce-model/comfyui/audits/pond-ltx23-motion-calibration-001-short/63b7c62a__mara__00004__comfy_ltx23__same_source_outfit__warm_friend__close.mp4" controls muted playsinline preload="metadata"></video></div>
+    <div class="meta">
+      <strong>63b7c62a | mara | 00004 | comfy ltx23 | same source outfit | warm friend | close</strong>
+      <span>LTX comparativo</span>
+    </div>
+  </article>
+<article class="asset video">
+    <div class="media"><video src="../references/ai-ecommerce-model/comfyui/audits/pond-ltx23-motion-calibration-001-short/4f733f96__mara__00003__comfy_ltx23__same_source_outfit__warm_friend__close.mp4" controls muted playsinline preload="metadata"></video></div>
+    <div class="meta">
+      <strong>4f733f96 | mara | 00003 | comfy ltx23 | same source outfit | warm friend | close</strong>
+      <span>LTX comparativo</span>
+    </div>
+  </article>
+<article class="asset video">
+    <div class="media"><video src="../references/ai-ecommerce-model/comfyui/audits/pond-ltx23-motion-calibration-001-short/5a94d4a4__mara__00002__comfy_ltx23__same_source_outfit__warm_friend__close.mp4" controls muted playsinline preload="metadata"></video></div>
+    <div class="meta">
+      <strong>5a94d4a4 | mara | 00002 | comfy ltx23 | same source outfit | warm friend | close</strong>
+      <span>LTX comparativo</span>
+    </div>
+  </article>
+<article class="asset video">
+    <div class="media"><video src="../references/ai-ecommerce-model/comfyui/audits/pond-ltx23-motion-calibration-001-short/fdb3b711__mara__00001__comfy_ltx23__same_source_outfit__warm_friend__close.mp4" controls muted playsinline preload="metadata"></video></div>
+    <div class="meta">
+      <strong>fdb3b711 | mara | 00001 | comfy ltx23 | same source outfit | warm friend | close</strong>
+      <span>LTX comparativo</span>
+    </div>
+  </article>
+<article class="asset video">
+    <div class="media"><video src="../references/ai-ecommerce-model/comfyui/audits/pond-ltx23-motion-calibration-001/48889bf2-a355-4c60-b7cd-7d0a8382fe8f__mara__00005__comfy_ltx23__same_source_outfit__warm_friend__closeup_selfie__same_room__walk_to_medium__not_testimonial__ugc_disclosure_15s_00001_.mp4" controls muted playsinline preload="metadata"></video></div>
+    <div class="meta">
+      <strong>48889bf2-a355-4c60-b7cd-7d0a8382fe8f | mara | 00005 | comfy ltx23 | same source outfit | warm friend | closeup selfie | same room | walk to </strong>
+      <span>LTX comparativo</span>
+    </div>
+  </article>
+<article class="asset video">
+    <div class="media"><video src="../references/ai-ecommerce-model/comfyui/audits/pond-ltx23-motion-calibration-001/63b7c62a-c361-4abc-aca4-dc46b75205c6__mara__00004__comfy_ltx23__same_source_outfit__warm_friend__closeup_selfie__same_room__hair_adjust__not_testimonial__ugc_disclosure_15s_00001_.mp4" controls muted playsinline preload="metadata"></video></div>
+    <div class="meta">
+      <strong>63b7c62a-c361-4abc-aca4-dc46b75205c6 | mara | 00004 | comfy ltx23 | same source outfit | warm friend | closeup selfie | same room | hair adj</strong>
+      <span>LTX comparativo</span>
+    </div>
+  </article>
+<article class="asset video">
+    <div class="media"><video src="../references/ai-ecommerce-model/comfyui/audits/pond-ltx23-motion-calibration-001/4f733f96-b1ee-438e-b423-79557736a51c__mara__00003__comfy_ltx23__same_source_outfit__warm_friend__closeup_selfie__same_room__product_pickup__not_testimonial__ugc_disclosure_15s_00001_.mp4" controls muted playsinline preload="metadata"></video></div>
+    <div class="meta">
+      <strong>4f733f96-b1ee-438e-b423-79557736a51c | mara | 00003 | comfy ltx23 | same source outfit | warm friend | closeup selfie | same room | product </strong>
+      <span>LTX comparativo</span>
+    </div>
+  </article></div>
+  </section>
+  </main>
+</body>
+</html>

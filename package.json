@@ -15,7 +15,14 @@
     "deploy:webhook-propuestas": "node scripts/vps-deploy-webhook-propuestas.js",
     "carousel": "node scripts/carousel_pipeline.js",
     "carousel:render": "node scripts/carousel_render.js",
+    "carousel:publish": "node scripts/carousel_publish.js",
+    "image:openai": "node scripts/openai_image.js",
     "test:carousel": "node scripts/carousel_render.test.js",
-    "health:propuestas": "node -e \"require('http').get('http://127.0.0.1:3031/health',r=>{let d='';r.on('data',c=>d+=c);r.on('end',()=>console.log(d))}).on('error',e=>{console.error('Offline:',e.message);process.exitCode=1})\""
+    "health:propuestas": "node -e \"require('http').get('http://127.0.0.1:3031/health',r=>{let d='';r.on('data',c=>d+=c);r.on('end',()=>console.log(d))}).on('error',e=>{console.error('Offline:',e.message);process.exitCode=1})\"",
+    "mara:prompt-matrix": "node scripts/mara_prompt_matrix.js --limit 12 --routes comfy_ltx23 --run-name pond-smoke-001",
+    "mara:comfyui:queue": "node scripts/mara_comfyui_queue.js --workflow C:\\Users\\PC\\Downloads\\video_ltx2_3_i2v.json --mapping hermes-content\\references\\ai-ecommerce-model\\comfyui\\video_ltx2_3_i2v.mapping.json",
+    "mara:comfyui:audit": "node scripts/comfyui_video_audit.js",
+    "mara:wan:readiness": "node scripts/comfyui_wan_readiness.js",
+    "mara:wan:queue": "node scripts/mara_comfyui_queue.js --workflow hermes-content\\references\\ai-ecommerce-model\\comfyui\\wan22_ti2v_5b_api.json --mapping hermes-content\\references\\ai-ecommerce-model\\comfyui\\wan22_ti2v_5b.mapping.json"
   }
 }

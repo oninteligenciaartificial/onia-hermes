@@ -1,0 +1,117 @@
+{
+  "id": "isdin-es-ecommerce-functions-20260617",
+  "source": "ISDIN Espana",
+  "sourceUrl": "https://www.isdin.com/es",
+  "capturedAt": "2026-06-17",
+  "captureMethod": "Playwright structural scrape plus manual visual review",
+  "rawScrapePath": "C:/Users/PC/.codex/design-stack/screenshots/isdin-20260617/raw-scrape.json",
+  "screenshots": [
+    "C:/Users/PC/.codex/design-stack/screenshots/isdin-20260617/home.png",
+    "C:/Users/PC/.codex/design-stack/screenshots/isdin-20260617/category-sun.png",
+    "C:/Users/PC/.codex/design-stack/screenshots/isdin-20260617/category-face-sun.png",
+    "C:/Users/PC/.codex/design-stack/screenshots/isdin-20260617/pdp-fusion-water.png"
+  ],
+  "reviewedPages": [
+    {
+      "type": "home",
+      "url": "https://www.isdin.com/es",
+      "observedFunctions": [
+        "country/location banner",
+        "shipping promotion bar",
+        "account/login entry",
+        "global search overlay",
+        "cart and cart preview entry",
+        "horizontal product-line navigation",
+        "campaign hero with product image and direct CTA",
+        "featured product carousel",
+        "newsletter capture",
+        "brand/community/loyalty content blocks"
+      ]
+    },
+    {
+      "type": "product-listing",
+      "url": "https://www.isdin.com/es/c/proteccion-solar/faciales",
+      "observedFunctions": [
+        "category hero with product group image",
+        "horizontal subcategory pills",
+        "product count",
+        "sort control",
+        "product cards with category label, badge, rating, reviews, loyalty points, price and detail CTA",
+        "stock/new-state labels",
+        "footer newsletter and support links"
+      ]
+    },
+    {
+      "type": "product-detail",
+      "url": "https://www.isdin.com/es/p/fusion-water-magic-spf-50/1349",
+      "observedFunctions": [
+        "large product gallery",
+        "product type label",
+        "product title",
+        "rating and review link",
+        "benefit/attribute chips",
+        "loyalty points",
+        "price",
+        "quantity stepper",
+        "add-to-bag CTA",
+        "choice between points and currency when adding",
+        "collapsible details, characteristics, indications, ingredients and precautions",
+        "scientific/proof content blocks",
+        "media carousels and video controls",
+        "review filtering/search controls",
+        "cross-sell/routine-style lower sections"
+      ]
+    }
+  ],
+  "patternsForWebFactory": [
+    {
+      "pattern": "commercial utility bar",
+      "description": "Small top band for shipping, country/location or current promotion. Useful only when the business can honor the promise.",
+      "applyToNuvia": "Later. Use for discount or delivery once rules are confirmed."
+    },
+    {
+      "pattern": "horizontal category pills",
+      "description": "PLP uses compact pills for product subfamilies, reducing filter complexity.",
+      "applyToNuvia": "Use when Nuvia has more than 6 active products or more than 3 subcategories."
+    },
+    {
+      "pattern": "product-card commerce density",
+      "description": "Cards combine product image, category, badge, rating, short descriptor, price/points and CTA.",
+      "applyToNuvia": "Keep image, brand/category, status badge and CTA now. Add ratings, points, stock and real price only when verified."
+    },
+    {
+      "pattern": "PDP purchase column",
+      "description": "Product detail page keeps title, proof, chips, quantity and primary CTA together above accordions.",
+      "applyToNuvia": "Current Nuvia PDP should keep a compact buybox. Add quantity only after real checkout or WhatsApp ordering is configured."
+    },
+    {
+      "pattern": "technical accordions",
+      "description": "PDP uses collapsed details for product facts and precautions to keep purchase area clean.",
+      "applyToNuvia": "Already aligned. Keep Detalles, Caracteristicas, Indicaciones, Ingredientes and Precauciones."
+    },
+    {
+      "pattern": "loyalty layer",
+      "description": "Account and rewards appear near header, product cards and PDP.",
+      "applyToNuvia": "Do not implement yet. Use discount subscription first; loyalty requires operations and CRM."
+    },
+    {
+      "pattern": "proof after purchase area",
+      "description": "Claims, scientific content and media sections appear after the buybox, not before the CTA.",
+      "applyToNuvia": "Use concise proof only when source-backed. Avoid medical overclaiming."
+    }
+  ],
+  "doNotCopy": [
+    "ISDIN brand identity",
+    "product imagery as assets",
+    "full product copy",
+    "review counts, ratings, prices, loyalty points or claims unless verified for Nuvia",
+    "checkout behavior without configured commerce operations"
+  ],
+  "recommendedNextTemplateRules": [
+    "Every ecommerce template should separate PLP and PDP behavior.",
+    "Landing pages should preview products but not duplicate the full catalog in multiple sections.",
+    "Product cards should be dense enough to sell, but should not invent price, stock, reviews or medical claims.",
+    "PDP accordions are mandatory for dermocosmetic products because ingredients and precautions matter.",
+    "Search, cart, loyalty and quantity controls should remain disabled or omitted until the client has the operational backend."
+  ]
+}

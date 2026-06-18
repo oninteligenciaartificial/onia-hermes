@@ -67,7 +67,7 @@ function findBrowser() {
 const esc = (s) => String(s == null ? '' : s)
   .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
-const PACKS = ['typographic', 'dark-product', 'editorial-photo', 'bright-retail'];
+const PACKS = ['typographic', 'dark-product', 'dark-neon', 'editorial-photo', 'bright-retail'];
 
 function parseArgs(argv) {
   const a = { out: './out', account: 'onia', bg: '', pack: 'typographic', object: '' };
@@ -242,13 +242,16 @@ function continuationCurve(idx, total) {
   const last = idx === total - 1;
   const first = idx === 0;
   const down = idx % 2 === 0;
+  // Curve stays in the UPPER band (y 300-640), the floating-object zone, and
+  // never dips into the headline/body area at the bottom — so it reads as a
+  // continuous panorama behind the 3D object without crossing the text.
   // enter from left (unless first), exit right (unless last)
   const enter = first ? '' : (down
-    ? 'M -60 320 C 200 320 240 620 520 620'
-    : 'M -60 980 C 200 980 240 700 520 700');
+    ? 'M -60 300 C 220 300 260 560 540 560'
+    : 'M -60 600 C 220 600 260 340 540 340');
   const exit = last ? '' : (down
-    ? 'M 560 620 C 900 620 980 980 1140 980'
-    : 'M 560 700 C 900 700 980 380 1140 380');
+    ? 'M 540 560 C 860 560 940 320 1140 320'
+    : 'M 540 340 C 860 340 940 600 1140 600');
   const paths = [enter, exit].filter(Boolean)
     .map((d) => `<path d="${d}" />`).join('');
   return `<svg class="curve" viewBox="0 0 1080 1350" xmlns="http://www.w3.org/2000/svg">${paths}</svg>`;
@@ -265,11 +268,11 @@ function darkProductHtml(slide, idx, total, account, args) {
     ? `<img class="object" src="file://${String(args.object).replace(/\\/g, '/')}" alt="">`
     : '';
 
-  const pills = `<div class="pills">
-    <span class="pill solid">${esc(acc.name)}</span>
-    ${slide.pill ? `<span class="pill">${esc(slide.pill)}</span>` : ''}
-    <span class="pageno">${pageNo(idx, total)}</span>
-  </div>`;
+  // On save slides the savetag already labels "FRAMEWORK", so drop the top pill
+  // to avoid the duplicate and keep the hierarchy clean.
+  const pills = (slide.pill && role !== 'save') ? `<div class="pills">
+    <span class="pill solid">${esc(slide.pill)}</span>
+  </div>` : '<div class="pills"></div>';
 
   const callout = slide.callout
     ? `<div class="callout">${emph(slide.callout)}</div>` : '';
@@ -317,14 +320,14 @@ html,body { width:1080px; height:1350px; }
   letter-spacing:2px; color:var(--onia-green); }
 .slide.cta .pageno { color:var(--onia-ink); }
 
-.object { display:block; max-width:760px; max-height:520px; margin:40px auto;
+.object { display:block; max-width:620px; max-height:420px; margin:24px auto;
   object-fit:contain; filter:drop-shadow(0 30px 60px rgba(0,0,0,.5)); }
 
-.dp-h { font-family:'Archivo'; font-weight:900; font-size:104px; line-height:.96;
+.dp-h { font-family:'Archivo'; font-weight:900; font-size:88px; line-height:.98;
   letter-spacing:-2px; text-transform:uppercase; margin-top:auto; }
-.dp-h.cta { font-size:92px; }
-.dp-body { font-family:'Inter'; font-weight:600; font-size:40px; line-height:1.4;
-  margin-top:32px; max-width:880px; color:var(--onia-muted-dark); }
+.dp-h.cta { font-size:80px; }
+.dp-body { font-family:'Inter'; font-weight:600; font-size:36px; line-height:1.38;
+  margin-top:28px; max-width:880px; color:var(--onia-muted-dark); }
 .slide.cta .dp-body { color:var(--onia-ink); opacity:.85; }
 
 .savetag { font-family:'Archivo'; font-weight:800; font-size:28px; letter-spacing:3px;
@@ -353,7 +356,95 @@ html,body { width:1080px; height:1350px; }
       <circle cx="98" cy="43" r="11" fill="var(--onia-green)"/>
       <circle cx="98" cy="43" r="4.5" fill="${role === 'cta' ? 'var(--onia-ink)' : 'var(--onia-white)'}"/>
     </svg>
-    <span class="handle">${esc(acc.handle)} · ACCESÁ NUESTRAS REDES</span>
+    <span class="handle">${esc(acc.handle)}</span>
+  </div>
+</div></body></html>`;
+}
+
+// Pack: dark-neon (Perfluence style). Black canvas, faint grid + radial green
+// glow + halftone dots, neon headline (green glow), floating 3D object with glow.
+function darkNeonHtml(slide, idx, total, account, args) {
+  const role = roleFor(slide, idx, total);
+  const acc = ACCOUNTS[account];
+  const tokens = fs.readFileSync(path.join(BRAND, 'tokens.css'), 'utf8');
+  const object = args && args.object
+    ? `<img class="object" src="file://${String(args.object).replace(/\\/g, '/')}" alt="">`
+    : '';
+
+  const pills = (slide.pill && role !== 'save') ? `<div class="pills">
+    <span class="pill solid">${esc(slide.pill)}</span>
+  </div>` : '<div class="pills"></div>';
+  const callout = slide.callout ? `<div class="callout">${emph(slide.callout)}</div>` : '';
+
+  let block;
+  if (role === 'save') {
+    block = `<div class="savetag">FRAMEWORK · Guardá esto ↗</div>
+      <h2 class="dn-h">${emph(slide.headline)}</h2>
+      ${slide.body ? `<p class="dn-body">${emph(slide.body)}</p>` : ''}`;
+  } else {
+    block = `<h2 class="dn-h${role === 'cta' ? ' cta' : ''}">${emph(slide.headline)}</h2>
+      ${slide.body ? `<p class="dn-body">${emph(slide.body)}</p>` : ''}`;
+  }
+
+  return `<!doctype html><html><head><meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;800;900&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+${tokens}
+* { margin:0; padding:0; box-sizing:border-box; }
+html,body { width:1080px; height:1350px; }
+.slide { position:relative; width:1080px; height:1350px; overflow:hidden;
+  padding:var(--pad); display:flex; flex-direction:column;
+  background:#05080A; color:var(--onia-white); font-family:'Inter',var(--font-body); }
+.grid { position:absolute; inset:0; z-index:0;
+  background-image:linear-gradient(rgba(52,224,74,.10) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(52,224,74,.10) 1px, transparent 1px);
+  background-size:60px 60px; -webkit-mask-image:radial-gradient(circle at 50% 38%, #000 0%, transparent 72%); }
+.glow { position:absolute; left:50%; top:34%; transform:translate(-50%,-50%);
+  width:900px; height:900px; z-index:0; border-radius:50%;
+  background:radial-gradient(circle, rgba(52,224,74,.28) 0%, rgba(52,224,74,0) 62%); }
+.halftone { position:absolute; right:-40px; bottom:240px; width:360px; height:360px; z-index:0; opacity:.5;
+  background-image:radial-gradient(rgba(52,224,74,.6) 30%, transparent 32%); background-size:20px 20px;
+  -webkit-mask-image:linear-gradient(135deg, #000, transparent 70%); }
+.slide > *:not(.grid):not(.glow):not(.halftone) { position:relative; z-index:2; }
+.g { color:var(--onia-green); }
+.pills { display:flex; align-items:center; gap:16px; }
+.pill { font-family:'Archivo'; font-weight:600; font-size:26px; color:var(--onia-white);
+  border:2px solid rgba(52,224,74,.45); border-radius:100px; padding:10px 22px; }
+.pill.solid { background:var(--onia-green); color:#05080A; border-color:var(--onia-green);
+  box-shadow:0 0 24px rgba(52,224,74,.5); }
+.pageno { margin-left:auto; font-family:'Archivo'; font-weight:600; font-size:26px; letter-spacing:2px; color:var(--onia-green); }
+.object { display:block; max-width:600px; max-height:410px; margin:20px auto;
+  object-fit:contain; filter:drop-shadow(0 0 50px rgba(52,224,74,.45)) drop-shadow(0 30px 50px rgba(0,0,0,.6)); }
+.dn-h { font-family:'Archivo'; font-weight:900; font-size:88px; line-height:.98;
+  letter-spacing:-2px; text-transform:uppercase; margin-top:auto; }
+.dn-h.cta { font-size:80px; }
+.dn-h .g { text-shadow:0 0 28px rgba(52,224,74,.75); }
+.dn-body { font-family:'Inter'; font-weight:600; font-size:36px; line-height:1.38;
+  margin-top:28px; max-width:880px; color:rgba(255,255,255,.78); }
+.savetag { font-family:'Archivo'; font-weight:800; font-size:28px; letter-spacing:3px;
+  color:var(--onia-green); margin-top:auto; margin-bottom:24px; }
+.callout { display:inline-flex; align-self:flex-start; gap:12px; margin-top:32px;
+  background:rgba(52,224,74,.12); border:2px solid rgba(52,224,74,.5);
+  color:var(--onia-white); font-weight:600; font-size:32px; border-radius:24px; padding:20px 28px; max-width:780px; }
+.footer { display:flex; align-items:center; gap:18px; margin-top:48px; }
+.footer .mark { width:60px; height:60px; }
+.footer .handle { font-family:'Archivo'; font-weight:600; font-size:30px; opacity:.75; }
+</style></head>
+<body><div class="slide ${role}">
+  <div class="grid"></div><div class="glow"></div><div class="halftone"></div>
+  ${pills}
+  ${object}
+  ${block}
+  ${callout}
+  <div class="footer">
+    <svg class="mark" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="60" cy="60" r="43" stroke="var(--onia-white)" stroke-width="13" fill="none"/>
+      <path d="M60 17 A43 43 0 0 1 98 43" stroke="var(--onia-green)" stroke-width="13" fill="none" stroke-linecap="round"/>
+      <circle cx="98" cy="43" r="11" fill="var(--onia-green)"/>
+      <circle cx="98" cy="43" r="4.5" fill="var(--onia-white)"/>
+    </svg>
+    <span class="handle">${esc(acc.handle)}</span>
   </div>
 </div></body></html>`;
 }
@@ -539,6 +630,7 @@ function render(args) {
   slides.forEach((slide, idx) => {
     let html;
     if (args.pack === 'dark-product') html = darkProductHtml(slide, idx, slides.length, args.account, args);
+    else if (args.pack === 'dark-neon') html = darkNeonHtml(slide, idx, slides.length, args.account, args);
     else if (args.pack === 'editorial-photo') html = editorialPhotoHtml(slide, idx, slides.length, args.account, args);
     else if (args.pack === 'bright-retail') html = brightRetailHtml(slide, idx, slides.length, args.account, args);
     else html = slideHtml(slide, idx, slides.length, args.account, args.bg);
@@ -581,4 +673,4 @@ if (require.main === module) {
   }
 }
 
-module.exports = { slideHtml, darkProductHtml, editorialPhotoHtml, brightRetailHtml, emph, roleFor, ACCOUNTS, BRANDS, PACKS };
+module.exports = { slideHtml, darkProductHtml, darkNeonHtml, editorialPhotoHtml, brightRetailHtml, emph, roleFor, ACCOUNTS, BRANDS, PACKS };

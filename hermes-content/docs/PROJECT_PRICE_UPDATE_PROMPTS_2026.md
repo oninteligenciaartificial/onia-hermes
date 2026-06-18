@@ -14,7 +14,7 @@ C:\dev\Proyectos\dental-saas
 Prompt:
 
 ```text
-Actualiza DentalGest con la nueva estrategia de precios ONIA 2026.
+Actualiza DentalGest con los precios actuales ONIA 2026.
 
 Contexto:
 - DentalGest es SaaS self-service para clinicas dentales.
@@ -22,15 +22,10 @@ Contexto:
 - Los clientes pueden crear su cuenta, subir/cargar sus datos y empezar solos.
 - El onboarding es opcional y se vende como acelerador.
 
-Precios:
-- Starter: Bs. 349/mes.
-- Pro: Bs. 590/mes.
-- Clinic: Bs. 990/mes.
-
-Oferta fundadores primeros 10 clientes:
-- Starter: Bs. 290/mes.
-- Pro: Bs. 490/mes.
-- Clinic: Bs. 790/mes.
+Precios actuales:
+- Basico: Bs. 320/mes.
+- Profesional: Bs. 750/mes.
+- Clinica: Bs. 1,500/mes.
 
 Onboarding opcional:
 - Carga guiada express: Bs. 290.
@@ -38,7 +33,7 @@ Onboarding opcional:
 - Migracion + capacitacion equipo: Bs. 1,490.
 
 Comisiones comerciales para mostrar solo en docs internos/admin, no en landing publica:
-- SaaS mensual: 50% de la primera mensualidad neta cobrada, una sola vez.
+- SaaS mensual: 35% de la primera mensualidad neta cobrada, una sola vez.
 - SaaS anual prepago: 8% del anual neto cobrado.
 - Onboarding: 10% del pago neto cobrado.
 
@@ -63,19 +58,19 @@ C:\dev\Proyectos\Gestios
 Prompt:
 
 ```text
-Actualiza Gesti-OS con la nueva estrategia de precios ONIA 2026.
+Actualiza Gesti-OS con los precios actuales ONIA 2026.
 
 Contexto:
 - Gesti-OS es SaaS de gestion operativa para pymes.
-- Starter debe poder ser self-service.
-- Operativo y Pro pueden recomendar onboarding, pero no bloquear la compra.
-- Enterprise se cotiza.
+- Basico debe poder ser self-service.
+- Crecer y Pro pueden recomendar onboarding, pero no bloquear la compra.
+- Empresarial se cotiza si requiere alcance especial.
 
-Precios:
-- Starter: Bs. 490/mes.
-- Operativo: Bs. 790/mes.
-- Pro: Bs. 1,290/mes.
-- Enterprise: desde Bs. 2,490/mes.
+Precios actuales:
+- Basico: Bs. 350/mes.
+- Crecer: Bs. 530/mes.
+- Pro: Bs. 800/mes.
+- Empresarial: Bs. 1,250/mes.
 
 Implementacion opcional:
 - Kickstart: Bs. 790.
@@ -90,15 +85,15 @@ Add-ons:
 - WhatsApp Business: pendiente hasta verificacion Meta.
 
 Comisiones comerciales para docs internos/admin, no landing publica:
-- Starter/Operativo/Pro mensual: 50% de la primera mensualidad neta cobrada, una sola vez.
+- Basico/Crecer/Pro/Empresarial mensual: 35% de la primera mensualidad neta cobrada, una sola vez.
 - Plan anual prepago: 8% del anual neto cobrado.
-- Enterprise: 8% del primer pago neto cobrado.
+- Empresarial: 35% del primer pago neto cobrado.
 - Implementacion: 10% del pago neto cobrado.
 
 Tareas:
 1. Buscar y reemplazar precios antiguos.
 2. Actualizar pricing cards, checkout, admin constants, docs y seed data.
-3. Aclarar que Starter no requiere setup.
+3. Aclarar que Basico no requiere setup.
 4. Mostrar implementacion como opcional/recomendada, no obligatoria.
 5. Mantener WhatsApp bloqueado hasta verificacion Meta.
 6. Validar tests/lint/build disponibles.
@@ -119,10 +114,10 @@ Prompt:
 Actualiza Web ONIA con la nueva tabla comercial 2026 para servicios web.
 
 Precios:
-- Landing Express: Bs. 1,490.
-- Web Negocio: Bs. 2,900.
-- Web Pro IA: Bs. 5,900.
-- SaaS / portal personalizado: desde Bs. 9,500.
+- Landing: Bs. 790.
+- Web Profesional: Bs. 1,500.
+- Web Pro ONIA: Bs. 2,900.
+- SaaS / portal personalizado / mini sistema: desde Bs. 6,500.
 
 Care plan:
 - Basico: Bs. 190/mes.
@@ -130,9 +125,9 @@ Care plan:
 - Pro: Bs. 690/mes.
 
 Comisiones internas:
-- Landing Express: 10% del pago neto cobrado.
-- Web Negocio / Web Pro IA: 12% del pago neto cobrado.
-- SaaS / portal personalizado: 8% del pago neto cobrado; 10% solo con margen aprobado.
+- Landing: 10% del pago neto cobrado.
+- Web Profesional / Web Pro ONIA: 12% del pago neto cobrado.
+- SaaS / portal personalizado / mini sistema: 10% solo con margen aprobado.
 - Care plan: 50% de la primera mensualidad neta cobrada, una sola vez.
 
 Reglas comerciales:
@@ -143,12 +138,12 @@ Reglas comerciales:
 Tareas:
 1. Actualizar secciones de servicios, pricing, propuestas y CTAs.
 2. Reposicionar la web como "captacion + seguimiento", no solo diseno.
-3. Agregar upsell hacia CRM, n8n y contenido Higgsfield.
+3. Agregar upsell hacia auditoria, CRM y n8n simple.
 4. Buscar precios viejos y reportar cualquier hallazgo.
 5. Validar tests/lint/build disponibles.
 ```
 
-## Hermes / Higgsfield Marketing
+## Hermes / Auditorias y n8n
 
 Target repo:
 
@@ -159,38 +154,35 @@ C:\dev\Expermimentos\Hermes
 Prompt:
 
 ```text
-Actualiza Hermes con la tabla comercial 2026 para Marketing con Higgsfield,
-conectores y materiales de vendedores.
+Actualiza Hermes con la tabla comercial 2026 para auditorias, n8n simple y
+materiales de vendedores. Videos IA / Higgsfield queda pausado como oferta
+comercial; no debe aparecer en tablas de precios ni propuestas de venta.
 
-Marketing con Higgsfield:
-- Video unit: Bs. 450.
-- Sprint 8: Bs. 2,200/mes.
-- Growth 16: Bs. 3,900/mes.
-- Authority 24: Bs. 6,500/mes.
-- Performance System: desde Bs. 9,500/mes.
+Auditorias:
+- Auditoria Express: Bs. 250.
+- Diagnostico + Plan: Bs. 690.
 
-Precio de entrada primeros 5 clientes:
-- Sprint 8: Bs. 1,800/mes.
-- Growth 16: Bs. 3,200/mes.
-- Authority 24: Bs. 5,500/mes.
+n8n simple:
+- Conexion canal social: Bs. 690 setup.
+- Automatizacion simple n8n: Bs. 790 setup.
+- Flujo aprobacion n8n: Bs. 1,200 setup.
+- Monitoreo n8n: Bs. 150/mes.
 
-Conectores:
-- Instagram: incluido si ya existe token Meta.
-- TikTok API: Bs. 900 setup + Bs. 150/mes monitoreo.
-- YouTube Shorts API: Bs. 900 setup + Bs. 150/mes monitoreo.
-- LinkedIn API: Bs. 900 setup + Bs. 150/mes monitoreo.
-- n8n aprobaciones/publicacion: Bs. 1,800 setup + Bs. 350/mes monitoreo.
+Alcance n8n:
+- Entrada: formulario, lead, email, planilla o registro manual.
+- Logica: asignar estado, responsable, prioridad, tarea o aprobacion.
+- Salida: Telegram, email, Sheets, Notion o CRM interno.
+- Excluye WhatsApp automatico, scraping masivo, APIs pagadas, login de terceros y soporte continuo no cotizado.
 
 Comisiones:
-- Video unit: 10% del pago neto cobrado.
-- Sprint/Growth/Authority: 15% del primer mes neto cobrado, una sola vez.
-- Performance: 10% del primer mes neto cobrado, una sola vez.
-- Conectores: 10% del setup neto cobrado. El monitoreo mensual no genera comision adicional.
+- Auditorias y n8n setup: 10% del pago neto cobrado.
+- Monitoreo n8n: 10% de la primera mensualidad neta cobrada.
 
 Tareas:
 1. Actualizar docs canonicos, referencias JSON, skills y decks.
 2. Mantener aprobaciones obligatorias antes de publicar/contactar.
-3. Validar que no haya secretos en docs.
-4. Validar JSON y comandos disponibles.
-5. Desplegar con npm run deploy:hermes-content solo si la validacion local pasa.
+3. Validar que videos IA / Higgsfield no aparezcan como oferta activa.
+4. Validar que no haya secretos en docs.
+5. Validar JSON y comandos disponibles.
+6. Desplegar con npm run deploy:hermes-content solo si la validacion local pasa.
 ```

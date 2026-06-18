@@ -235,7 +235,8 @@ def _project_map() -> dict:
             "Comandos utiles:",
             "Prepara venta DentalGest: <clinica>",
             "Prepara venta Gestios: <empresa>",
-            "Prepara marketing Higgsfield: <negocio> | <oferta>",
+            "Prepara venta Web ONIA: <negocio>",
+            "Prepara consultoria ONIA: <negocio> | <dolor o proceso>",
             "Orquesta ONIA: <empresa o rubro> | <objetivo>",
         ]
     )
@@ -375,7 +376,7 @@ def _creative_radar() -> dict:
         "1. Genera video Sergio: por que un sistema simple vende mas que responder a mano",
         "2. Genera Reel ONIA: DentalGest agenda y seguimiento | pedir demo corta",
         "3. Genera Reel ONIA: Gesti-OS convierte Excel en tablero operativo | ver tablero simple",
-        "4. Prepara marketing Higgsfield: clinica dental | demo de agenda sin datos privados",
+        "4. Prepara consultoria ONIA: clinica dental | agenda, seguimiento y captacion",
         "",
         "Nota: este radar es seguro/local. Para tendencias virales exactas, investigar fuentes actuales antes de usar claims.",
     ]
@@ -433,12 +434,13 @@ def _crm_followups_today() -> dict:
         "- Revisar CRM/Notion: prospectos con siguiente contacto vencido o caliente.",
         "- Preparar mensaje humano por canal; no enviar automatico.",
         "- Registrar vendedor_origen, responsable_actual, estado, proximo paso y fecha.",
-        "- Prioridad: DentalGest clinicas, Gesti-OS pymes con Excel, webs sin captacion, videos Higgsfield.",
+        "- Prioridad: DentalGest clinicas, Gesti-OS pymes con Excel, webs sin captacion, auditorias y n8n simple.",
         "",
         "Comandos utiles:",
         "Prepara venta DentalGest: <clinica>",
         "Prepara venta Gestios: <empresa>",
-        "Prepara marketing Higgsfield: <negocio> | <oferta>",
+        "Prepara venta Web ONIA: <negocio>",
+        "Prepara consultoria ONIA: <negocio> | <dolor o proceso>",
         "",
         "Pendiente tecnico: n8n no tiene credencial Notion conectada. Hermes deja outbox local para sincronizar cuando exista.",
     ]
@@ -603,7 +605,7 @@ def _automation_status() -> dict:
 
 def _content_factory_status() -> dict:
     lines = [
-        "Fabrica de contenido ONIA/Higgsfield:",
+        "Fabrica de contenido ONIA:",
         "1. Ideas: radar creativo + solicitudes por Telegram.",
         "2. Brief: Video Lab crea hook, guion, escenas, caption y prompt Higgsfield.",
         "3. Aprobacion: Sergio aprueba el brief antes de generar.",
@@ -641,7 +643,8 @@ def _help() -> dict:
         "Orquesta ONIA: <empresa o rubro> | <objetivo>",
         "Prepara venta DentalGest: <clinica>",
         "Prepara venta Gestios: <empresa>",
-        "Prepara marketing Higgsfield: <negocio> | <oferta>",
+        "Prepara venta Web ONIA: <negocio>",
+        "Prepara consultoria ONIA: <negocio> | <dolor o proceso>",
         "Genera video Sergio: <idea>",
         "Genera Reel ONIA: <tema> | <objetivo>",
         "Crea video cliente: <negocio> | <oferta> | <estilo>",

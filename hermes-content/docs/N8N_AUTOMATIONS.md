@@ -114,8 +114,8 @@ Seguimiento 2026-06-05:
 - `ONIA - Seguimientos CRM`: revisa tareas comerciales vencidas o de hoy.
 - `ONIA - Recordatorios fiscales`: envia alertas fiscales segun configuracion confirmada.
 - `ONIA - Finanzas semanal`: resume ingresos, gastos, facturas y pendientes.
-- `ONIA - Video Lab / Higgsfield`: recuerda aprobaciones, registra URLs y
-  coordina estados de videos.
+- `ONIA - Video Lab / Higgsfield`: laboratorio interno; recuerda aprobaciones,
+  registra URLs y coordina estados de videos, pero no se vende como paquete.
 - `ONIA - Higgsfield Reference Router`: arma paquetes de referencias, rubro,
   assets, guion, escenas, CTA y negative prompt para generar mejor.
 - `ONIA - Platform Copy Router`: crea descripcion/copy por canal antes de
@@ -150,7 +150,8 @@ Comandos iniciales:
 - `Orquesta ONIA: <empresa o rubro> | <objetivo>`
 - `Prepara venta DentalGest: <clinica>`
 - `Prepara venta Gestios: <empresa>`
-- `Prepara marketing Higgsfield: <negocio> | <oferta>`
+- `Prepara venta Web ONIA: <negocio>`
+- `Prepara consultoria ONIA: <negocio> | <dolor o proceso>`
 - comandos Video Lab.
 
 Estado:

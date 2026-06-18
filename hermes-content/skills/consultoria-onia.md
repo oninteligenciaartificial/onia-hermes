@@ -7,7 +7,6 @@ Usar esta skill cuando Sergio pida vender, preparar, cotizar o estructurar:
 - instalaciones;
 - implementaciones;
 - automatizaciones para clientes;
-- sistemas de contenido con IA;
 - acompanamiento consultivo;
 - decidir si algo va por ONIA o por Sergio.
 
@@ -64,9 +63,19 @@ Aprobacion necesaria:
 - Diagnostico + Roadmap: Bs. 790-1200.
 - Instalacion Starter: Bs. 1900.
 - Implementacion Operativa: Bs. 3900-6500.
-- Sprint IA y Video System: Bs. 4900-8500.
 - Acompanamiento Consultivo: Bs. 1200-2900/mes.
 - Transformacion ONIA: desde Bs. 9500.
+
+Oferta vigente:
+
+- Auditoria Express: Bs. 250.
+- Diagnostico + Plan: Bs. 690.
+- Automatizacion simple n8n: Bs. 790 setup para formulario/lead -> registro ->
+  aviso -> tarea.
+- Flujo n8n aprobaciones: Bs. 1200 setup para recibido, pendiente, aprobado,
+  rechazado y notificado.
+
+Videos IA/Higgsfield no se venden como producto independiente por ahora.
 
 ## Reglas
 

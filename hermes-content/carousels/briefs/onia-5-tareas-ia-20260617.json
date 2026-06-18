@@ -1,0 +1,75 @@
+{
+  "title": "5 tareas que una IA hace mejor que tu equipo (y más barato)",
+  "caption": "No es reemplazar a tu equipo: es sacarle de encima las 5 tareas repetitivas que le queman el día y se las das a una IA que no se cansa ni se olvida. Tu gente vende y atiende; el sistema hace el resto. Guardá la lista y comentá LISTA: te paso cuál de las 5 conviene automatizar primero en tu negocio.",
+  "hashtags": ["#automatizacion", "#IA", "#bolivia", "#productividad", "#pymes", "#whatsapp"],
+  "comment_trigger": "Comentá LISTA",
+  "cta": "Comentá LISTA",
+  "slides": [
+    {
+      "number": 1,
+      "role": "cover",
+      "pill": "Lista",
+      "headline": "5 tareas que la *IA* hace mejor",
+      "body": "Que tu equipo, y más barato.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "Ink, número 5 grande, acento verde en IA, objeto 3D hub.",
+      "alt_text": "5 tareas que la IA hace mejor"
+    },
+    {
+      "number": 2,
+      "role": "stakes",
+      "pill": "El problema",
+      "headline": "Tu equipo pierde el día en lo *repetitivo*",
+      "body": "Responder lo mismo, copiar datos, perseguir seguimientos. Horas que no venden.",
+      "callout": "Eso le cuesta sueldo a tu negocio ↘",
+      "save_worthy": false,
+      "visual_prompt": "Alto contraste, acento verde en repetitivo.",
+      "alt_text": "Tu equipo pierde el día en lo repetitivo"
+    },
+    {
+      "number": 3,
+      "role": "point",
+      "pill": "1 y 2",
+      "headline": "Responder y *calificar* leads",
+      "body": "La IA contesta al instante 24/7 y te separa al que compra del que solo pregunta.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "Objeto 3D hub, acento verde en calificar.",
+      "alt_text": "Responder y calificar leads"
+    },
+    {
+      "number": 4,
+      "role": "point",
+      "pill": "3 y 4",
+      "headline": "Seguir y *agendar* solo",
+      "body": "Reactiva al que no respondió y agenda la cita sin que nadie lo recuerde a mano.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "Objeto 3D hub, acento verde en agendar.",
+      "alt_text": "Seguir y agendar solo"
+    },
+    {
+      "number": 5,
+      "role": "save",
+      "pill": "Framework",
+      "headline": "La 5ª: *reportar* sin que pidas",
+      "body": "Cuántos leads, de dónde vienen y cuáles se enfriaron. La lista completa: responder, calificar, seguir, agendar, reportar. ¿Cuáles hacés a mano?",
+      "callout": "Guardá esto ↗",
+      "save_worthy": true,
+      "visual_prompt": "Tarjeta framework con las 5 tareas.",
+      "alt_text": "La quinta tarea: reportar"
+    },
+    {
+      "number": 6,
+      "role": "cta",
+      "pill": "Empezá hoy",
+      "headline": "Empezá por *una* tarea",
+      "body": "Comentá *LISTA* y te paso cuál de las 5 conviene automatizar primero en tu negocio.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "CTA fuerte verde, acento en una.",
+      "alt_text": "Comentá LISTA"
+    }
+  ]
+}

@@ -28,6 +28,18 @@ Use it for ecommerce landing motion, product-card microinteractions, reveal safe
 
 Use it whenever Sergio sends screenshots, brand boards, ecommerce references, landing page captures or visual inspiration that should become reusable Web Factory context. The skill extracts layout, typography, section order, conversion logic, motion rules, no-copy boundaries and QA requirements, then stores the result in client context plus `web-factory/data/references/visual/<slug>/`.
 
+`taste-skill` is installed globally at `C:\Users\PC\.codex\skills\taste-skill` from `Leonxlnx/taste-skill`, path `skills/taste-skill`.
+
+Use it for anti-generic landing pages, portfolios and redesigns. Its internal skill name is `design-taste-frontend`; it is not the primary driver for dashboards or complex app flows.
+
+`web-factory-design-director` is installed globally at `C:\Users\PC\.codex\skills\web-factory-design-director`.
+
+Use it before substantial website design work to choose the right combination of design skills and avoid loading every design skill without a reason.
+
+`web-factory-commerce-storefront` is installed globally at `C:\Users\PC\.codex\skills\web-factory-commerce-storefront`.
+
+Use it for ecommerce storefronts, catalog portals, product cards, PDPs, carts, checkout/cotizacion, purchase flows and conversion-focused product UX.
+
 ## Repositories To Consult
 
 | Source | License | Local clone | Primary use in Web Factory |
@@ -105,6 +117,23 @@ Latest gallery run summary:
 - 28 code blocks captured from docs where `captureCode` was enabled.
 - 240 local component/code examples indexed from compatible cached repos.
 
+## Ecommerce Purchase Reference Studies
+
+Use `ECOMMERCE_PURCHASE_REFERENCES.md` when Web Factory needs purchase-flow, product listing, PDP, card-density or checkout-readiness guidance.
+
+Latest ecommerce function scrape:
+
+- ISDIN Espana: `web-factory/data/references/design-sources/ecommerce-reference-studies/2026-06-17-isdin-es.json`
+- Human summary: `web-factory/ECOMMERCE_PURCHASE_REFERENCES.md`
+- Raw screenshots/data: `C:\Users\PC\.codex\design-stack\screenshots\isdin-20260617\`
+
+Policy:
+
+- Reuse ecommerce functions and section logic only.
+- Do not reuse third-party product imagery, copy, visual identity, prices, review counts, loyalty points or checkout behavior unless the client owns and supports them.
+- For Nuvia, use this reference mainly for future PLP/PDP expansion after more products are added.
+- For generated stores, implement a real cart interaction even when payment is not configured: add-to-cart, quantity changes, remove/clear, persisted cart state and a checkout/cotizacion CTA. If prices or payment/contact channels are missing, label the result as cotizacion and do not invent checkout completion.
+
 ## Motion Standard
 
 For generated websites:
@@ -118,18 +147,43 @@ For generated websites:
 
 ## Nuvia Implementation Notes
 
-The `store` template now follows the latest Nuvia visual intake direction while preserving the video hero:
+Nuvia now has two useful layers:
+
+1. Next.js implementation for the flagship/professional store experience.
+2. Static `store` template for export/generation tests.
+
+When Sergio asks for a serious client store or a reusable Web Factory quality benchmark, prefer the Next.js pattern first. Use static HTML only when the requested deliverable is explicitly a generated static site or export artifact.
+
+Next.js Nuvia pattern:
+
+- Route source: `web-factory/apps/site/src/app/nuvia/page.tsx`.
+- Product route source: `web-factory/apps/site/src/app/nuvia/productos/[slug]/page.tsx`.
+- Main React surface: `web-factory/apps/site/src/components/nuvia/nuvia-store.tsx`.
+- Shared data helper: `web-factory/apps/site/src/lib/nuvia-data.ts`.
+- Public asset mirror: `web-factory/apps/site/public/nuvia/assets/`.
+- Commerce state: client-side cart with localStorage, quantity controls, remove/clear, cart count and checkout/cotizacion CTA.
+- Catalog portal pattern: the home route should contain one canonical product portal with filters/facets, not repeated product sections. Each product card can include quantity controls and an add-to-cart action when the store is commerce-oriented.
+- PDP checkout pattern: product routes should expose a sticky quick-checkout bar inspired by mature ecommerce references: product thumbnail/title, quantity stepper, price or cotizacion state, add-to-cart and cart access. Do not copy third-party pricing, claims, loyalty systems or visual identity.
+- Motion: IntersectionObserver reveal, product-stage tilt, hover microinteractions, smooth anchors and reduced-motion fallback.
+- PDP rule: keep product detail pages concise and purchase-focused; use one media hero, buybox, practical chips and accordions. Do not repeat landing sections on PDPs.
+- Validation URL: `http://localhost:4174/nuvia` when served with `next start -p 4174`.
+- Latest Next screenshots:
+  - `C:\Users\PC\.codex\design-stack\screenshots\nuvia-next-desktop-20260617.png`
+  - `C:\Users\PC\.codex\design-stack\screenshots\nuvia-next-mobile-20260617.png`
+  - `C:\Users\PC\.codex\design-stack\screenshots\nuvia-next-pdp-isdin-20260617.png`
+
+The static `store` template still follows the latest Nuvia visual intake direction while preserving the video hero:
 
 - `data-reveal` attributes and a small inline `IntersectionObserver` script generated by `renderStoreRevealScript`.
 - Reveal content is visible by default, then enhanced by `.store-motion-ready`; a timeout fallback prevents blank sections in headless screenshots or missed observer events.
 - Reduced-motion fallback reveals content immediately and disables smooth scroll.
 - Full-bleed `heroVideo` remains the first visual signal when provided by client data.
-- Minimal ecommerce flow inspired by the user-provided exactly.ai reference and refined with Impeccable rules: header, video hero, product selection, two-step routine, discount subscription, FAQ, final CTA and footer.
+- Minimal ecommerce flow inspired by the user-provided exactly.ai reference and refined with Impeccable rules: header, video hero, product catalog, cart drawer, discount subscription, FAQ, final CTA and footer.
 - Large Apple-like typography, restrained color accents, compact navigation and product-first content.
-- Hero stage now behaves like a product vitrine: real ISDIN/SVR cards, routine step labels and Nuvia accent dots.
-- Product cards are horizontal on desktop, stacked on mobile, with product badge, brand/size, routine step, key ingredients, benefits and honest `Consultar precio` CTA.
-- Routine rows include product thumbnails and direct consult actions.
-- Apple-style typography direction with SF Pro token names, Google Inter fallback, then system UI fallback for the generated static store.
+- Hero stage now behaves like a product vitrine: real ISDIN/SVR cards, monthly discount copy and Nuvia accent dots.
+- Product cards are scalable catalog cards with product badge, brand/size, routine step, key ingredients, benefits, detail link and add-to-cart button.
+- Store pages include product detail pages plus a shared localStorage cart drawer. Prices can calculate only when `precioValor` exists; otherwise the cart remains in honest cotizacion mode.
+- Apple-style typography direction currently uses Onest with system UI fallback for the generated static store.
 
 When creating new templates, copy the pattern concept, not necessarily the exact Nuvia visuals. Brand, color, content density, and motion should come from the client data and context file.
 

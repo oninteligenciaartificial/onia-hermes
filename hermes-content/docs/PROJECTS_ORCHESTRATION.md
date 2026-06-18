@@ -1,188 +1,271 @@
-# Projects Orchestration
+# ONIA Projects Orchestration
 
-Hermes routes ONIA's commercial work across products and services.
+## Objetivo
+Convertir Hermes en el centro de mando comercial de ONIA para decidir que
+vender, a quien, con que contenido, por que canal y con que aprobacion.
 
-Canonical registry:
+Hermes coordina. n8n ejecuta flujos. Los proyectos entregan valor. Sergio
+aprueba acciones client-facing.
 
-- `hermes-content/references/onia-projects-registry.json`
+## Proyectos activos
 
-Use this doc when Sergio asks what to sell, who to contact, how to position a
-project, or how to connect DentalGest, Gesti-OS, websites, Higgsfield marketing
-and ONIA consulting/implementations.
+| Proyecto | Ruta local | Rol comercial | Cliente ideal | Oferta principal |
+|---|---|---|---|---|
+| DentalGest | `C:\dev\Proyectos\dental-saas` | SaaS vertical para clinicas dentales | Clinicas dentales de Bolivia | CRM, agenda, seguimiento, recordatorios y demo |
+| Gesti-OS | `C:\dev\Proyectos\Gestios` | Sistema operativo de gestion empresarial | Pymes con operaciones en Excel o WhatsApp | Tareas, clientes, estados, reportes y visibilidad |
+| Web ONIA | `C:\dev\Proyectos\Web-Onia` | Sitio y vitrina de ONIA | Prospectos que investigan antes de comprar | Autoridad, portfolio, landing y captacion |
+| Paginas web ONIA | por cliente | Servicio cash-flow | Negocios locales y profesionales | Landing/web + formulario + seguimiento |
+| Marketing Higgsfield | Hermes Video Lab | Pausado como oferta principal | Uso interno y muestras aprobadas | No vender videos IA por ahora |
+| Consultoria ONIA | `hermes-content/docs/ONIA_CONSULTING_SERVICES_2026.md` | Diagnostico, instalacion y acompanamiento | Negocios que necesitan ordenar procesos antes de comprar herramientas | Auditoria, roadmap, instalacion, capacitacion y soporte consultivo |
+| AlfredHQ | `C:\dev\Proyectos\AlfredHQ` | Sistema/experimento interno | Uso interno | Evaluar antes de vender |
 
-## Offers
+## Escalera comercial
 
-### DentalGest
+1. Entrada rapida: auditoria express o diagnostico pagado.
+2. Servicio inicial: pagina web o landing de captacion.
+3. Sistema de seguimiento: CRM, Telegram, email, Chatwoot o n8n.
+4. Producto vertical: DentalGest o Gesti-OS.
+5. Consultoria/implementacion: instalar flujo, capacitar y documentar.
+6. Retainer: cuidado web, soporte operativo o monitoreo de automatizaciones.
 
-For dental clinics.
+## Precios conocidos
 
-Primary promise:
+Oferta de arranque comercial vigente hasta 2026-07-31 o primeros 20 clientes
+cobrados:
 
-- organize leads, patients, follow-up, appointments and reminders.
+- DentalGest: Bs. 320, Bs. 750 y Bs. 1500/mes.
+- Gesti-OS: Bs. 350, Bs. 530, Bs. 800 y Bs. 1250/mes.
+- Landing: Bs. 790.
+- Web Negocio: Bs. 1500.
+- Web Pro ONIA: Bs. 2900.
+- Portal o sistema web mini: desde Bs. 6500.
+- Auditoria Express: Bs. 250.
+- Diagnostico + Plan: Bs. 690.
+- Instalacion simple: Bs. 1500.
+- Implementacion operativa: desde Bs. 3900.
+- Conexion de canal social: Bs. 690 setup.
+- Automatizacion simple n8n: Bs. 790 setup.
+- Flujo n8n aprobaciones: Bs. 1200 setup.
 
-Best channels:
+Regla: DentalGest y Gesti-OS mantienen su precio actual. Videos IA/Higgsfield no
+se venden como producto independiente por ahora.
 
-- Instagram/Facebook public profiles;
-- LinkedIn;
-- email or web form when public;
-- Telegram only for internal approval.
+DentalGest:
 
-Do not use WhatsApp automation until Meta business verification is ready.
-
-Pricing:
-
-- Starter: Bs. 349/mes, sin setup obligatorio.
-- Pro: Bs. 590/mes, sin setup obligatorio.
-- Clinic: Bs. 990/mes, sin setup obligatorio.
+- Basico: Bs. 320/mes, sin setup obligatorio.
+- Profesional: Bs. 750/mes, sin setup obligatorio.
+- Clinica: Bs. 1500/mes, sin setup obligatorio.
 - Onboarding opcional: Bs. 290, Bs. 690 o Bs. 1490.
-- Founder offer first 10 clinics: Bs. 290, Bs. 490 and Bs. 790/mes.
+- WhatsApp: bloqueado hasta verificacion Meta.
 
-### Gesti-OS
+Gesti-OS:
 
-For companies with operational disorder.
+- Basico: Bs. 350/mes, sin setup obligatorio.
+- Crecer: Bs. 530/mes, sin setup obligatorio.
+- Pro: Bs. 800/mes, onboarding recomendado.
+- Empresarial: Bs. 1250/mes, implementacion cotizada si hay alcance extra.
+- Add-ons: WhatsApp Business, SIAT, pagos QR, e-commerce y exportacion
+  contable. WhatsApp queda bloqueado hasta verificacion Meta.
 
-Primary promise:
+Marketing Higgsfield:
 
-- turn clients, tasks, states and reports into one operating dashboard.
+- Pausado como producto comercial independiente.
+- No vender videos IA, packs Higgsfield ni promesas de contenido con IA.
+- Usar solo para muestras internas o propuestas aprobadas caso por caso.
 
-Best channels:
+Paginas web:
 
-- LinkedIn;
-- email;
-- founder/director content;
-- demo video.
+- Landing Express: Bs. 790.
+- Web Negocio: Bs. 1500.
+- Web Pro ONIA: Bs. 2900.
+- SaaS / portal personalizado mini: desde Bs. 6500.
+- Care plan: Bs. 190, Bs. 390 o Bs. 690/mes.
 
-Pricing:
+Conectores cross-platform:
 
-- Starter: Bs. 490/mes, sin setup obligatorio.
-- Operativo: Bs. 790/mes, onboarding recomendado.
-- Pro: Bs. 1290/mes, onboarding recomendado.
-- Enterprise: desde Bs. 2490/mes, implementacion cotizada.
+- Conexion de canal social: Bs. 690 setup.
+- Automatizacion simple n8n: Bs. 790 setup para formulario/lead -> registro ->
+  aviso -> tarea.
+- Flujo n8n aprobaciones: Bs. 1200 setup para estados recibido, pendiente,
+  aprobado, rechazado y notificado.
+- Monitoreo opcional: Bs. 150/mes.
 
-### Websites
+Consultoria e implementaciones:
 
-For businesses without clear digital conversion.
-
-Primary promise:
-
-- web or landing page connected to lead capture and follow-up.
-
-Best channels:
-
-- audit message;
-- before/after content;
-- mini proposal with one clear improvement.
-
-Pricing:
-
-- Landing Express: Bs. 1490.
-- Web Negocio: Bs. 2900.
-- Web Pro IA: Bs. 5900.
-- SaaS / portal personalizado: desde Bs. 9500.
-- Care plan: Bs. 190, Bs. 390 or Bs. 690/mes.
-
-### Higgsfield Marketing
-
-For businesses that need content, ads or UGC.
-
-Primary promise:
-
-- videos that explain the offer and connect to a real CTA.
-
-Best channels:
-
-- sample video brief;
-- 3 hook ideas;
-- UGC or owner-led content package.
-
-Pricing:
-
-- Video unit: Bs. 450.
-- Sprint 8: Bs. 2200/mes.
-- Growth 16: Bs. 3900/mes.
-- Authority 24: Bs. 6500/mes.
-- Performance System: desde Bs. 9500/mes.
-- Intro primeros 5 clientes: Bs. 1800, Bs. 3200 y Bs. 5500/mes.
-
-Cross-platform connector setup:
-
-- TikTok API: Bs. 900 setup + Bs. 150/mes monitoring.
-- YouTube Shorts API: Bs. 900 setup + Bs. 150/mes monitoring.
-- LinkedIn API: Bs. 900 setup + Bs. 150/mes monitoring.
-- n8n approval/publishing flow: Bs. 1800 setup + Bs. 350/mes monitoring.
-
-### ONIA Consulting
-
-For businesses that need direction, installation or process improvement before
-buying a tool.
-
-Primary promise:
-
-- diagnose what is leaking, decide what to install first, and leave a working
-  flow with documentation.
-
-Best channels:
-
-- Sergio founder-led content;
-- LinkedIn consultative outreach;
-- public email;
-- audit-first sales message.
-
-Pricing:
-
-- Auditoria Express: Bs. 250-450.
-- Diagnostico + Roadmap: Bs. 790-1200.
+- Auditoria Express: Bs. 250.
+- Diagnostico + Roadmap: Bs. 690.
 - Instalacion Starter: Bs. 1900.
 - Implementacion Operativa: Bs. 3900-6500.
-- Sprint IA y Video System: Bs. 4900-8500.
 - Acompanamiento Consultivo: Bs. 1200-2900/mes.
 - Transformacion ONIA: desde Bs. 9500.
 
-Canonical consulting doc:
+Referencia canonica: `ONIA_PRICING_2026.md`.
 
-- `hermes-content/docs/ONIA_CONSULTING_SERVICES_2026.md`
+## Que vender segun senal
 
-Canonical pricing:
+### Clinica dental
 
-- `/root/.hermes/docs/ONIA_PRICING_2026.md`
+Vender primero:
 
-## Decision Rule
+- DentalGest demo.
+- Web/landing si no tiene presencia clara.
+- Auditoria Express si no sabemos donde se pierden consultas.
 
-Choose the offer by strongest pain signal:
+Dolores:
 
-- dental clinic -> DentalGest.
-- operations in Excel/WhatsApp -> Gesti-OS.
-- no site or weak site -> website/landing.
-- weak content -> Higgsfield marketing.
-- unclear process, tool chaos or "install it for me" -> ONIA consulting.
-- unclear -> audit first.
+- pacientes que escriben y no se registran;
+- presupuestos que quedan sin seguimiento;
+- citas olvidadas;
+- mensajes repartidos entre redes, web y llamadas.
 
-## Approval Boundary
+CTA recomendado:
 
-Hermes can research, draft, score, plan, prepare videos and prepare messages.
+- "Te puedo mostrar una demo corta de DentalGest."
 
-Hermes cannot contact, publish, deliver to client, use face/voice, or claim
-results without explicit approval.
+### Pyme con equipo, tareas o clientes
 
-## Telegram Command Center
+Vender primero:
 
-Use this entrypoint from n8n or VPS:
+- Gesti-OS.
+- Automatizacion n8n.
+- Dashboard simple de operacion.
 
-```bash
-hermes-command telegram --message "<mensaje>"
-```
+Dolores:
 
-Useful commands:
+- Excel infinito;
+- reportes manuales;
+- responsables poco claros;
+- clientes o tareas sin estado.
+
+CTA recomendado:
+
+- "Te muestro como quedaria tu operacion en un tablero simple."
+
+### Negocio sin web clara
+
+Vender primero:
+
+- pagina web o landing.
+- formulario de lead;
+- CRM simple;
+- automatizacion simple n8n si ya recibe consultas.
+
+Dolores:
+
+- redes no convierten;
+- no hay sitio que explique oferta;
+- todo depende de responder manualmente.
+
+CTA recomendado:
+
+- "Te hago una auditoria rapida de captacion."
+
+### Negocio con presencia debil
+
+Vender primero:
+
+- Auditoria Express.
+- Web/landing.
+- Diagnostico si no se entiende el problema.
+- Automatizacion simple n8n si ya hay formulario o leads.
+
+Dolores:
+
+- publica, pero no convierte;
+- no explica bien su oferta;
+- no tiene CTA claro;
+- no hay seguimiento.
+
+CTA recomendado:
+
+- "Te hago una auditoria express y te digo que conviene corregir primero."
+
+### Negocio con procesos confusos pero sin compra clara
+
+Vender primero:
+
+- auditoria express;
+- diagnostico + roadmap;
+- instalacion starter si ya hay dolor concreto;
+- implementacion operativa si hay equipo y responsables.
+
+Dolores:
+
+- "no se por donde empezar";
+- herramientas sueltas sin proceso;
+- equipo que usa WhatsApp, Excel y notas al mismo tiempo;
+- decision lenta porque no hay mapa claro.
+
+CTA recomendado:
+
+- "Hagamos una auditoria corta y te digo que conviene instalar primero."
+
+## Flujo operativo
+
+1. Hermes toma un prospecto, rubro o idea.
+2. Revisa `hermes-content/references/onia-projects-registry.json`.
+3. Elige oferta primaria y oferta secundaria.
+4. Crea diagnostico corto: senal, dolor, oferta, CTA.
+5. Prepara mensaje y pieza de contenido si aplica.
+6. Envia a Telegram para aprobacion.
+7. n8n registra decision en CRM.
+8. Solo despues de aprobacion se contacta o se publica.
+
+## Comandos Hermes
 
 ```text
-Mapa proyectos ONIA
+hermes-command telegram --message "<mensaje>"
 Orquesta ONIA: <empresa o rubro> | <objetivo>
 Prepara venta DentalGest: <clinica>
 Prepara venta Gestios: <empresa>
 Prepara venta Web ONIA: <negocio>
-Prepara marketing Higgsfield: <negocio> | <oferta>
 Prepara consultoria ONIA: <negocio> | <dolor o proceso>
+Mapa proyectos ONIA
+Siguiente accion comercial ONIA
 ```
 
-The response should return the primary offer, likely pain, CTA, recommended
-channel, required approval and next action.
+Para Telegram/n8n, usar siempre el entrypoint general:
+
+```bash
+hermes-command telegram --message "Prepara venta DentalGest: <clinica>"
+```
+
+El JSON debe responder con `telegram_reply`: oferta, dolor probable, CTA, canal
+recomendado, aprobacion necesaria y siguiente accion.
+
+## Reglas
+
+- No contactar prospectos sin aprobacion explicita.
+- No publicar videos, piezas o propuestas client-facing sin aprobacion.
+- No usar WhatsApp automatico hasta verificacion de negocio.
+- No inventar resultados, clientes, precios ni testimonios.
+- No pegar secretos en docs ni chat.
+- Usar datos publicos para prospeccion.
+
+## n8n recomendado
+
+Workflow: `ONIA - Orquestador Comercial`
+
+1. Trigger manual, Telegram o schedule.
+2. Input: empresa, rubro, ciudad, URL o proyecto.
+3. Cargar registro de proyectos.
+4. Clasificar oportunidad.
+5. Generar mensaje y siguiente accion.
+6. Enviar a Telegram con botones: aprobar, editar, investigar mas, descartar.
+7. Registrar en CRM.
+8. Si aprobado, ejecutar canal permitido.
+
+## Prioridad de ejecucion
+
+1. DentalGest para 50 clinicas ya listadas.
+2. Web/landing para negocios sin presencia clara.
+3. Gesti-OS para pymes con operaciones repetitivas.
+4. Auditoria Express para convertir dudas en diagnosticos pagos.
+5. Automatizacion simple n8n como upsell despues de web, formulario o CRM.
+
+Sprint inmediato:
+
+- Preparar 10 mensajes DentalGest para las clinicas de mayor prioridad.
+- Preparar 5 auditorias web para negocios con presencia debil.
+- Preparar 5 prospectos Gesti-OS para pymes con operacion visible.
+- Preparar 5 auditorias express listas para enviar como oferta de entrada.

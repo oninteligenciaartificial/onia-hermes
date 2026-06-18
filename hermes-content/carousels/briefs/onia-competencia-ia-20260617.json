@@ -1,0 +1,64 @@
+{
+  "title": "Tu competencia ya vende con IA mientras vos respondés a mano",
+  "caption": "No es que tu competencia sea mejor que vos. Es que dejó de hacer a mano lo que una IA hace sola: responder al instante, calificar al lead y hacer el seguimiento sin olvidarse de nadie. Mientras vos contestás cuando podés, ellos ya cerraron. Guardá la señal del slide 4 y comentá SISTEMA: te muestro cómo se ve montado para tu negocio.",
+  "hashtags": ["#automatizacion", "#IA", "#bolivia", "#ventas", "#whatsapp", "#pymes"],
+  "comment_trigger": "Comentá SISTEMA",
+  "cta": "Comentá SISTEMA",
+  "slides": [
+    {
+      "number": 1,
+      "role": "cover",
+      "pill": "Realidad",
+      "headline": "Tu competencia ya vende con *IA*",
+      "body": "Vos todavía respondés a mano.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "Ink, titular condensado, acento verde en IA, objeto 3D hub.",
+      "alt_text": "Tu competencia ya vende con IA"
+    },
+    {
+      "number": 2,
+      "role": "stakes",
+      "pill": "El problema",
+      "headline": "No son mejores. Tienen *sistema*",
+      "body": "Mientras vos contestás cuando podés, su IA ya respondió, calificó y agendó.",
+      "callout": "Cada hora sin responder vale leads ↘",
+      "save_worthy": false,
+      "visual_prompt": "Alto contraste, acento verde en sistema.",
+      "alt_text": "No son mejores, tienen sistema"
+    },
+    {
+      "number": 3,
+      "role": "point",
+      "pill": "Qué cambia",
+      "headline": "La IA no *duerme*",
+      "body": "Responde a las 11 de la noche, el domingo y cuando estás en una reunión. Vos no podés. Tu sistema sí.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "Objeto 3D hub centro, acento verde.",
+      "alt_text": "La IA no duerme"
+    },
+    {
+      "number": 4,
+      "role": "save",
+      "pill": "Framework",
+      "headline": "Las 3 señales de que vas *tarde*",
+      "body": "1) Respondés consultas vos mismo. 2) El seguimiento depende de tu memoria. 3) No sabés de dónde viene cada cliente. ¿Te suena?",
+      "callout": "Guardá esto ↗",
+      "save_worthy": true,
+      "visual_prompt": "Tarjeta framework 3 señales.",
+      "alt_text": "Las 3 señales de que vas tarde"
+    },
+    {
+      "number": 5,
+      "role": "cta",
+      "pill": "Empezá hoy",
+      "headline": "Pasá de hacerlo a mano a tener *sistema*",
+      "body": "Comentá *SISTEMA* y te muestro cómo se ve montado para tu negocio.",
+      "callout": "",
+      "save_worthy": false,
+      "visual_prompt": "CTA fuerte verde, acento en SISTEMA.",
+      "alt_text": "Comentá SISTEMA"
+    }
+  ]
+}

@@ -1,7 +1,7 @@
 # Skill: Orquestacion Proyectos ONIA
 
 Usar esta skill cuando Sergio pida coordinar DentalGest, Gesti-OS, paginas web,
-marketing con Higgsfield, consultoria/implementaciones, prospeccion, CRM o todos
+consultoria/implementaciones, automatizaciones simples, prospeccion, CRM o todos
 los proyectos de ONIA.
 
 ## Leer
@@ -32,7 +32,6 @@ Orquesta ONIA: <empresa o rubro> | <objetivo>
 Prepara venta DentalGest: <clinica>
 Prepara venta Gestios: <empresa>
 Prepara venta Web ONIA: <negocio>
-Prepara marketing Higgsfield: <negocio> | <oferta>
 Prepara consultoria ONIA: <negocio> | <dolor o proceso>
 Mapa proyectos ONIA
 Siguiente accion comercial ONIA
@@ -43,10 +42,13 @@ Siguiente accion comercial ONIA
 - Clinicas dentales -> DentalGest.
 - Pymes con Excel, reportes, tareas o operaciones desordenadas -> Gesti-OS.
 - Negocios sin web clara -> paginas web ONIA.
-- Negocios con poca presencia en video -> marketing Higgsfield.
+- Negocios con presencia debil -> auditoria express, web o diagnostico.
 - Negocios con procesos confusos, herramientas sueltas o dudas sobre que comprar
   -> consultoria ONIA.
 - ONIA como marca -> Web ONIA + contenido educativo + casos.
+
+Videos IA/Higgsfield esta pausado como producto comercial independiente. No
+ofrecer packs de video IA salvo aprobacion explicita de Sergio.
 
 ## Salida requerida
 

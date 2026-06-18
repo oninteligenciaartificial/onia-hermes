@@ -1,0 +1,37 @@
+{
+  "id": "mara-ltx23-mapping-example",
+  "status": "example_edit_before_submit",
+  "notes": [
+    "Export your ComfyUI workflow with Save (API Format).",
+    "Open the exported JSON and replace node ids below with your real node ids.",
+    "Run scripts/mara_comfyui_queue.js in dry-run first."
+  ],
+  "patches": {
+    "positive_prompt": {
+      "node": "6",
+      "input": "text",
+      "source": "prompt"
+    },
+    "negative_prompt": {
+      "node": "7",
+      "input": "text",
+      "source": "negative_prompt"
+    },
+    "seed": {
+      "node": "3",
+      "input": "seed",
+      "source": "seed"
+    },
+    "image": {
+      "node": "12",
+      "input": "image",
+      "source": "input_image",
+      "default": "mara_identity_02.jpg"
+    }
+  },
+  "defaults": {
+    "endpoint": "http://127.0.0.1:8188",
+    "client_id": "onia-mara-pond-video-lab",
+    "input_image": "mara_identity_02.jpg"
+  }
+}

@@ -20,12 +20,13 @@
 const fs = require('fs');
 const path = require('path');
 const { execFileSync } = require('child_process');
+require('./lib/env').loadEnv();
 
 const DIR = __dirname;
 const ROOT = path.join(DIR, '..');
 const BRIEFS = path.join(ROOT, 'hermes-content', 'carousels', 'briefs');
 const OUTROOT = path.join(ROOT, 'hermes-content', 'carousels', 'out');
-const ACCOUNTS = ['onia', 'arthur', 'sergio'];
+const ACCOUNTS = ['onia', 'arthur', 'sergio', 'nuvia'];
 
 function parseArgs(argv) {
   const a = { account: 'onia', slides: '6', audience: '', references: '', bg: '', pack: 'typographic', object: '', publish: false };

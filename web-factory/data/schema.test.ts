@@ -6,7 +6,7 @@ describe("clientSchema", () => {
     const client = clientSchema.parse({ nombre: "Demo", slug: "demo" });
 
     expect(client.colores.primary).toBe("#0f766e");
-    expect(client.tipografia.heading).toBe("Inter");
+    expect(client.tipografia.heading).toBe("Onest");
     expect(client.servicios).toHaveLength(3);
     expect(client.cta.url).toBe("/contacto");
   });
@@ -38,6 +38,9 @@ describe("clientSchema", () => {
           imagen: "assets/producto-demo.webp",
           marca: "Demo Labs",
           beneficios: ["Compra asistida"],
+          incluye: ["Producto unitario"],
+          especificaciones: [{ label: "Tamano", value: "1 unidad" }],
+          detalleImagenes: [{ src: "assets/producto-demo.webp", label: "Envase" }],
           ordenRutina: 1,
         },
       ],
@@ -51,6 +54,9 @@ describe("clientSchema", () => {
     expect(client.productos[0].imagen).toBe("assets/producto-demo.webp");
     expect(client.productos[0].marca).toBe("Demo Labs");
     expect(client.productos[0].beneficios).toEqual(["Compra asistida"]);
+    expect(client.productos[0].incluye).toEqual(["Producto unitario"]);
+    expect(client.productos[0].especificaciones[0]).toEqual({ label: "Tamano", value: "1 unidad" });
+    expect(client.productos[0].detalleImagenes[0].src).toBe("assets/producto-demo.webp");
     expect(client.productos[0].ordenRutina).toBe(1);
   });
 });

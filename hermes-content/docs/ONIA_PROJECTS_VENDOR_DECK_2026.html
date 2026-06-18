@@ -22,7 +22,7 @@
 
     body {
       margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
+      font-family: Aptos, "Segoe UI", Helvetica, sans-serif;
       color: var(--ink);
       background: var(--bg);
       overflow: hidden;
@@ -33,9 +33,12 @@
       top: 0;
       left: 0;
       height: 5px;
+      width: 100%;
       background: var(--blue);
       z-index: 20;
-      transition: width .18s ease;
+      transform: scaleX(0);
+      transform-origin: left center;
+      transition: transform .18s ease;
     }
 
     .deck {
@@ -197,7 +200,6 @@
     .callout {
       background: #eef5ff;
       border: 1px solid #cbdcff;
-      border-left: 7px solid var(--blue);
       border-radius: 8px;
       padding: 20px 24px;
       margin-top: 22px;
@@ -206,7 +208,6 @@
     }
 
     .warning {
-      border-left-color: var(--amber);
       background: #fff7ed;
       border-color: #fed7aa;
       color: #7c3e00;
@@ -347,7 +348,7 @@
         <div class="kicker">1 / 15</div>
         <h1>Que es ONIA</h1>
         <ul>
-          <li>ONIA vende sistemas, paginas web y contenido con IA.</li>
+          <li>ONIA vende sistemas, paginas web, auditorias y automatizaciones.</li>
           <li>Ayudamos a negocios a responder mejor y vender con mas orden.</li>
           <li>El vendedor no vende tecnologia: vende soluciones simples.</li>
           <li>El objetivo es conseguir reuniones, demos y cierres pagados.</li>
@@ -363,7 +364,7 @@
           <div class="box"><strong>Clientes perdidos</strong><span>Muchos negocios reciben mensajes y despues no hacen seguimiento.</span></div>
           <div class="box"><strong>Desorden</strong><span>Usan cuadernos, chats sueltos o Excel mal organizado.</span></div>
           <div class="box"><strong>Poca confianza</strong><span>La pagina o redes no muestran una empresa seria.</span></div>
-          <div class="box"><strong>Poco contenido</strong><span>No publican suficiente para que nuevos clientes los vean.</span></div>
+          <div class="box"><strong>Poca captacion</strong><span>La oferta no deja claro que hacer ni donde consultar.</span></div>
         </div>
       </div>
     </section>
@@ -376,8 +377,8 @@
           <div class="box"><strong>DentalGest</strong><span>SaaS para clinicas dentales.</span></div>
           <div class="box"><strong>Gesti-OS</strong><span>Sistema operativo para negocios.</span></div>
           <div class="box"><strong>Paginas web</strong><span>Landing, web negocio, web pro y portales.</span></div>
-          <div class="box"><strong>Videos con IA</strong><span>Contenido con Higgsfield para vender y posicionar.</span></div>
-          <div class="box"><strong>Conectores</strong><span>TikTok, YouTube, LinkedIn y flujos n8n.</span></div>
+          <div class="box"><strong>Auditorias</strong><span>Revision web, redes, oferta, WhatsApp y seguimiento.</span></div>
+          <div class="box"><strong>n8n simple</strong><span>Formularios, avisos, registros y aprobaciones internas.</span></div>
           <div class="box"><strong>Sistemas a medida</strong><span>Automatizaciones y software segun el negocio.</span></div>
         </div>
       </div>
@@ -390,8 +391,8 @@
         <ul>
           <li>Esta tabla es el plan inicial para vendedores nuevos.</li>
           <li>Una venta pagada = una comision.</li>
-          <li>DentalGest paga 40% del primer pago cobrado.</li>
-          <li>Gesti-OS tambien queda en 40% inicial.</li>
+          <li>DentalGest paga 35% del primer pago cobrado.</li>
+          <li>Gesti-OS tambien queda en 35% inicial.</li>
           <li>Los meses siguientes no generan comision automatica.</li>
         </ul>
         <div class="callout">Comision por conseguir ventas, no por mensualidad eterna.</div>
@@ -407,20 +408,20 @@
             <tr><th>Servicio</th><th>Precio base</th><th>Comision</th><th>Gana vendedor</th></tr>
           </thead>
           <tbody>
-            <tr><td>DentalGest Starter mensual</td><td>Bs. 349</td><td>40% primer pago</td><td class="money">Bs. 139.60</td></tr>
-            <tr><td>DentalGest Pro mensual</td><td>Bs. 590</td><td>40% primer pago</td><td class="money">Bs. 236</td></tr>
-            <tr><td>DentalGest Clinic mensual</td><td>Bs. 990</td><td>40% primer pago</td><td class="money">Bs. 396</td></tr>
-            <tr><td>Gesti-OS mensual</td><td>Bs. 490 a 1,290</td><td>40% primer pago</td><td class="money">Bs. 196 a 516</td></tr>
-            <tr><td>Pagina web</td><td>Bs. 1,490 a 5,900</td><td>10% a 12%</td><td class="money">Bs. 149 a 708</td></tr>
-            <tr><td>Portal o sistema</td><td>Desde Bs. 9,500</td><td>8%</td><td class="money">Desde Bs. 760</td></tr>
-            <tr><td>Videos IA mensual</td><td>Bs. 1,800 a 6,500</td><td>15% primer mes</td><td class="money">Bs. 270 a 975</td></tr>
-            <tr><td>Conector</td><td>Bs. 900 a 1,800</td><td>10% setup</td><td class="money">Bs. 90 a 180</td></tr>
+            <tr><td>DentalGest Basico mensual</td><td>Bs. 320</td><td>35% primer pago</td><td class="money">Bs. 112</td></tr>
+            <tr><td>DentalGest Profesional mensual</td><td>Bs. 750</td><td>35% primer pago</td><td class="money">Bs. 262.50</td></tr>
+            <tr><td>DentalGest Clinica mensual</td><td>Bs. 1,500</td><td>35% primer pago</td><td class="money">Bs. 525</td></tr>
+            <tr><td>Gesti-OS mensual</td><td>Bs. 350 a 1,250</td><td>35% primer pago</td><td class="money">Bs. 122.50 a 437.50</td></tr>
+            <tr><td>Pagina web</td><td>Bs. 790 a 2,900</td><td>10% a 12%</td><td class="money">Bs. 79 a 348</td></tr>
+            <tr><td>Portal o sistema</td><td>Desde Bs. 6,500</td><td>10% con margen aprobado</td><td class="money">Desde Bs. 650</td></tr>
+            <tr><td>Auditoria digital</td><td>Bs. 250 a 690</td><td>10%</td><td class="money">Bs. 25 a 69</td></tr>
+            <tr><td>n8n simple</td><td>Bs. 690 a 1,200</td><td>10% setup</td><td class="money">Bs. 69 a 120</td></tr>
           </tbody>
         </table>
         <div class="examples">
-          <div class="example"><b>Bs. 396</b>1 DentalGest Clinic mensual.</div>
-          <div class="example"><b>Bs. 708</b>1 Web Pro IA vendida.</div>
-          <div class="example"><b>Bs. 975</b>1 paquete Authority de videos IA.</div>
+          <div class="example"><b>Bs. 525</b>1 DentalGest Clinica mensual.</div>
+          <div class="example"><b>Bs. 180</b>1 Web Profesional vendida.</div>
+          <div class="example"><b>Bs. 79</b>1 automatizacion simple n8n.</div>
         </div>
       </div>
     </section>
@@ -434,7 +435,7 @@
           <li>Ayuda a ordenar pacientes, citas, pagos y seguimiento.</li>
           <li>Ofrecer cuando usan agenda manual, WhatsApp suelto o Excel.</li>
           <li>Pregunta clave: "Como controlan pacientes que escriben y no vuelven?"</li>
-          <li>Comision inicial: hasta Bs. 396 por venta mensual.</li>
+          <li>Comision inicial: hasta Bs. 525 por venta mensual.</li>
         </ul>
       </div>
     </section>
@@ -448,7 +449,7 @@
           <li>Ordena tareas, clientes, ventas y seguimiento.</li>
           <li>Sirve para esteticas, talleres, inmobiliarias, restaurantes y servicios.</li>
           <li>Pregunta clave: "Donde registran cada cliente y proximo paso?"</li>
-          <li>Comision inicial: Bs. 196 a Bs. 516 por mensualidad vendida.</li>
+          <li>Comision inicial: Bs. 122.50 a Bs. 437.50 por mensualidad vendida.</li>
         </ul>
       </div>
     </section>
@@ -460,23 +461,23 @@
         <ul>
           <li>Landing Express: para vender rapido una oferta.</li>
           <li>Web Negocio: para verse profesional y recibir consultas.</li>
-          <li>Web Pro IA: para empresas que quieren contenido, embudo y mas confianza.</li>
+          <li>Web Pro ONIA: para empresas que quieren captacion, embudo y mas confianza.</li>
           <li>Ofrecer cuando el negocio no tiene pagina o se ve viejo.</li>
-          <li>Comision: Bs. 149 a Bs. 708 por venta.</li>
+          <li>Comision: Bs. 79 a Bs. 348 por venta.</li>
         </ul>
       </div>
     </section>
 
-    <section class="slide" data-title="Videos IA">
+    <section class="slide" data-title="Auditorias">
       <div class="inner">
         <div class="kicker">9 / 15</div>
-        <h2>Videos con IA</h2>
+        <h2>Auditorias digitales</h2>
         <ul>
-          <li>Usamos Higgsfield para crear videos cortos de venta y marca.</li>
-          <li>Sirve para negocios que no publican o publican sin estrategia.</li>
-          <li>Se vende por unidad o por paquetes mensuales.</li>
-          <li>Pregunta clave: "Cuantos videos publican por semana?"</li>
-          <li>Comision: Bs. 45 por unidad o hasta Bs. 975 por paquete.</li>
+          <li>Revisamos web, redes, oferta, formulario, WhatsApp y seguimiento.</li>
+          <li>Entregamos problemas concretos, acciones recomendadas y proximo paso.</li>
+          <li>Auditoria Express: Bs. 250. Diagnostico + Plan: Bs. 690.</li>
+          <li>No incluye implementacion; sirve para abrir una venta mas grande.</li>
+          <li>Comision: Bs. 25 a Bs. 69.</li>
         </ul>
       </div>
     </section>
@@ -486,11 +487,11 @@
         <div class="kicker">10 / 15</div>
         <h2>Conectores</h2>
         <ul>
-          <li>Conectan contenido y procesos con TikTok, YouTube, LinkedIn o n8n.</li>
-          <li>Sirven para publicar, ordenar aprobaciones o mover datos.</li>
-          <li>WhatsApp ONIA puede ser chatbot de entrada y derivacion.</li>
-          <li>WhatsApp automatico para clientes queda fuera hasta verificacion.</li>
-          <li>Ofrecer solo si el cliente ya tiene contenido, equipo o proceso repetido.</li>
+          <li>n8n conecta formularios, registros, avisos y aprobaciones internas.</li>
+          <li>Conexiones simples: canal social a registro y aviso, desde Bs. 690.</li>
+          <li>Automatizacion simple: formulario o lead a tarea/notificacion, Bs. 790.</li>
+          <li>Flujo de aprobacion: recibido, aprobado/rechazado y notificado, Bs. 1,200.</li>
+          <li>No incluye APIs pagadas, scraping, WhatsApp automatico ni soporte continuo.</li>
         </ul>
       </div>
     </section>
@@ -504,7 +505,7 @@
           <li>Puede ser portal, CRM, panel, automatizacion o sistema interno.</li>
           <li>Primero se agenda diagnostico. No se promete precio exacto al instante.</li>
           <li>Pregunta clave: "Que tarea repiten todos los dias y les quita tiempo?"</li>
-          <li>Comision base: desde Bs. 760 por venta.</li>
+          <li>Comision base: desde Bs. 650 por venta.</li>
         </ul>
       </div>
     </section>
@@ -516,7 +517,7 @@
         <div class="grid">
           <div class="box"><strong>Es clinica dental</strong><span>Ofrece DentalGest primero.</span></div>
           <div class="box"><strong>No tiene buena web</strong><span>Ofrece pagina web.</span></div>
-          <div class="box"><strong>No publica videos</strong><span>Ofrece videos IA.</span></div>
+          <div class="box"><strong>No sabe que mejorar</strong><span>Ofrece auditoria digital.</span></div>
           <div class="box"><strong>Todo esta desordenado</strong><span>Ofrece Gesti-OS o diagnostico.</span></div>
           <div class="box"><strong>Quiere automatizar</strong><span>Ofrece conectores o n8n.</span></div>
           <div class="box"><strong>Pide algo grande</strong><span>Agenda reunion para sistema personalizado.</span></div>
@@ -588,7 +589,7 @@
     function show(nextIndex) {
       index = Math.max(0, Math.min(slides.length - 1, nextIndex));
       slides.forEach((slide, i) => slide.classList.toggle('active', i === index));
-      progress.style.width = `${((index + 1) / slides.length) * 100}%`;
+      progress.style.transform = `scaleX(${(index + 1) / slides.length})`;
       counter.textContent = `${index + 1} / ${slides.length}`;
       const title = slides[index].dataset.title || 'Slides';
       document.title = `ONIA - ${title}`;

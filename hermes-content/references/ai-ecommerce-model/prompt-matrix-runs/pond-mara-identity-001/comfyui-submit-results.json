@@ -1,0 +1,21 @@
+{
+  "ok": true,
+  "mode": "submit",
+  "endpoint": "http://127.0.0.1:8188",
+  "workflow": "..\\..\\..\\Users\\PC\\Downloads\\video_ltx2_3_i2v.json",
+  "mapping": "hermes-content\\references\\ai-ecommerce-model\\comfyui\\video_ltx2_3_i2v.mapping.json",
+  "matrix": "hermes-content\\references\\ai-ecommerce-model\\prompt-matrix-runs\\pond-mara-identity-001\\prompt-matrix.jsonl",
+  "preview": "hermes-content\\references\\ai-ecommerce-model\\prompt-matrix-runs\\pond-mara-identity-001\\comfyui-request-preview.jsonl",
+  "result_count": 1,
+  "results": [
+    {
+      "id": "pond_mara_identity_001_face_lock_silent",
+      "status": "submitted",
+      "response": {
+        "prompt_id": "7decf863-399d-4f84-8482-ead6fcec27cd",
+        "number": 1,
+        "node_errors": {}
+      }
+    }
+  ]
+}

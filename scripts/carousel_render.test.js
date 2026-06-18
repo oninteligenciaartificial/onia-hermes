@@ -64,8 +64,8 @@ test('accounts configured (onia/arthur/sergio/nuvia)', () => {
 test('emph turns *word* into green span, escaping first', () => {
   assert.strictEqual(emph('a *b* <c>'), 'a <span class="g">b</span> &lt;c&gt;');
 });
-test('packs list has all four packs', () => {
-  assert.deepStrictEqual(PACKS, ['typographic', 'dark-product', 'editorial-photo', 'bright-retail']);
+test('packs list includes all packs (incl. dark-neon + bright-retail)', () => {
+  assert.deepStrictEqual(PACKS, ['typographic', 'dark-product', 'dark-neon', 'editorial-photo', 'bright-retail']);
 });
 test('nuvia account + brand kit configured', () => {
   assert.strictEqual(ACCOUNTS.nuvia.handle, '@nuvia.bo');

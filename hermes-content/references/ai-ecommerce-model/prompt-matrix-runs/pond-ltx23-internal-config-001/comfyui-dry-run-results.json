@@ -1,0 +1,42 @@
+{
+  "ok": true,
+  "mode": "dry_run",
+  "endpoint": "https://d36cqn7umhexvx-8188.proxy.runpod.net",
+  "workflow": "..\\..\\..\\Users\\PC\\Downloads\\video_ltx2_3_i2v.json",
+  "mapping": "hermes-content\\references\\ai-ecommerce-model\\comfyui\\video_ltx2_3_i2v.mapping.json",
+  "matrix": "hermes-content\\references\\ai-ecommerce-model\\prompt-matrix-runs\\pond-ltx23-internal-config-001\\prompt-matrix.jsonl",
+  "preview": "hermes-content\\references\\ai-ecommerce-model\\prompt-matrix-runs\\pond-ltx23-internal-config-001\\comfyui-request-preview.jsonl",
+  "result_count": 6,
+  "results": [
+    {
+      "id": "ltx_cfg_001_base",
+      "status": "dry_run",
+      "seed": 5301
+    },
+    {
+      "id": "ltx_cfg_002_prompt_off",
+      "status": "dry_run",
+      "seed": 5302
+    },
+    {
+      "id": "ltx_cfg_003_low_compress",
+      "status": "dry_run",
+      "seed": 5303
+    },
+    {
+      "id": "ltx_cfg_004_vertical",
+      "status": "dry_run",
+      "seed": 5304
+    },
+    {
+      "id": "ltx_cfg_005_lock_strength",
+      "status": "dry_run",
+      "seed": 5305
+    },
+    {
+      "id": "ltx_cfg_006_cfg2",
+      "status": "dry_run",
+      "seed": 5306
+    }
+  ]
+}

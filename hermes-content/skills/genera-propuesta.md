@@ -53,24 +53,23 @@ node scripts/genera-propuesta.js datos-cliente.json
 | `gestios` | GestiOS | PYMEs, comercio, retail |
 | `web_landing` | Landing de Captación | Cualquiera sin web |
 | `web_negocio` | Web Profesional | Negocios medianos |
-| `web_pro_ia` | Web Pro con IA | Productoras, arquitectos, premium |
-| `videos_ia` | Videos con IA | Cualquiera que quiera contenido |
+| `web_pro` | Web Pro ONIA | Productoras, arquitectos, premium |
 | `consultoria` | Consultoría ONIA | Empresas con procesos complejos |
 
 ## Mapeo automático industria → productos
 
 El script detecta la industria y sugiere los 3 productos más relevantes automáticamente:
 
-- `dental/clinica/salud` → DentalGest + Web + Videos IA
-- `audiovisual/productora` → Web Pro IA + Videos IA + Consultoría
-- `arquitecto` → Web Pro IA + Web Profesional + Consultoría
-- `constructora` → Web Pro IA + GestiOS + Consultoría
-- `retail/comercio/restaurant` → GestiOS + Landing + Videos IA
+- `dental/clinica/salud` → DentalGest + Web + Consultoría
+- `audiovisual/productora` → Web Pro ONIA + Web Profesional + Consultoría
+- `arquitecto` → Web Pro ONIA + Web Profesional + Consultoría
+- `constructora` → Web Pro ONIA + GestiOS + Consultoría
+- `retail/comercio/restaurant` → GestiOS + Landing + Consultoría
 - `pyme/servicio` → Web Profesional + GestiOS + Consultoría
 
 Para forzar productos específicos:
 ```bash
-node scripts/genera-propuesta.js --empresa="X" --productos="web_pro_ia,videos_ia"
+node scripts/genera-propuesta.js --empresa="X" --productos="web_pro,consultoria"
 ```
 
 ## Flujo completo con cliente

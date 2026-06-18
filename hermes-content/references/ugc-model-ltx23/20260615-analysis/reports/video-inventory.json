@@ -1,0 +1,98 @@
+[
+  {
+    "batch": "batch001",
+    "file": "001_001_hook_direct_00001_.mp4",
+    "path": "/workspace/runpod-slim/ComfyUI/output/onia_ugc/sergio_model/batch001/001_001_hook_direct_00001_.mp4",
+    "size_bytes": 1178616,
+    "duration_sec": 6.125,
+    "width": 768,
+    "height": 768,
+    "fps": "8/1",
+    "frames": "49",
+    "aspect": "768:768"
+  },
+  {
+    "batch": "batch001",
+    "file": "002_002_problem_solution_00001_.mp4",
+    "path": "/workspace/runpod-slim/ComfyUI/output/onia_ugc/sergio_model/batch001/002_002_problem_solution_00001_.mp4",
+    "size_bytes": 941386,
+    "duration_sec": 6.125,
+    "width": 768,
+    "height": 768,
+    "fps": "8/1",
+    "frames": "49",
+    "aspect": "768:768"
+  },
+  {
+    "batch": "batch001",
+    "file": "003_003_testimonial_00001_.mp4",
+    "path": "/workspace/runpod-slim/ComfyUI/output/onia_ugc/sergio_model/batch001/003_003_testimonial_00001_.mp4",
+    "size_bytes": 1326080,
+    "duration_sec": 6.125,
+    "width": 768,
+    "height": 768,
+    "fps": "8/1",
+    "frames": "49",
+    "aspect": "768:768"
+  },
+  {
+    "batch": "batch001",
+    "file": "004_004_before_after_00001_.mp4",
+    "path": "/workspace/runpod-slim/ComfyUI/output/onia_ugc/sergio_model/batch001/004_004_before_after_00001_.mp4",
+    "size_bytes": 1088638,
+    "duration_sec": 6.125,
+    "width": 768,
+    "height": 768,
+    "fps": "8/1",
+    "frames": "49",
+    "aspect": "768:768"
+  },
+  {
+    "batch": "production_matrix_locations_001",
+    "file": "001_same_room_hook_direct_00001_.mp4",
+    "path": "/workspace/runpod-slim/ComfyUI/output/onia_ugc/sergio_model/production_matrix_locations_001/001_same_room_hook_direct_00001_.mp4",
+    "size_bytes": 1479064,
+    "duration_sec": 6.125,
+    "width": 768,
+    "height": 768,
+    "fps": "8/1",
+    "frames": "49",
+    "aspect": "768:768"
+  },
+  {
+    "batch": "production_matrix_locations_001",
+    "file": "008_home_office_problem_solution_00001_.mp4",
+    "path": "/workspace/runpod-slim/ComfyUI/output/onia_ugc/sergio_model/production_matrix_locations_001/008_home_office_problem_solution_00001_.mp4",
+    "size_bytes": 1141253,
+    "duration_sec": 6.125,
+    "width": 768,
+    "height": 768,
+    "fps": "8/1",
+    "frames": "49",
+    "aspect": "768:768"
+  },
+  {
+    "batch": "production_matrix_locations_001",
+    "file": "015_bedroom_testimonial_00001_.mp4",
+    "path": "/workspace/runpod-slim/ComfyUI/output/onia_ugc/sergio_model/production_matrix_locations_001/015_bedroom_testimonial_00001_.mp4",
+    "size_bytes": 1133374,
+    "duration_sec": 6.125,
+    "width": 768,
+    "height": 768,
+    "fps": "8/1",
+    "frames": "49",
+    "aspect": "768:768"
+  },
+  {
+    "batch": "production_matrix_locations_001",
+    "file": "022_kitchen_before_after_00001_.mp4",
+    "path": "/workspace/runpod-slim/ComfyUI/output/onia_ugc/sergio_model/production_matrix_locations_001/022_kitchen_before_after_00001_.mp4",
+    "size_bytes": 1006541,
+    "duration_sec": 6.125,
+    "width": 768,
+    "height": 768,
+    "fps": "8/1",
+    "frames": "49",
+    "aspect": "768:768"
+  }
+]

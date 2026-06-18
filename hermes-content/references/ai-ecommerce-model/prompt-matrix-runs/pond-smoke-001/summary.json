@@ -1,0 +1,25 @@
+{
+  "ok": true,
+  "generated_at": "2026-06-16T17:18:17.255Z",
+  "config": "hermes-content\\references\\ai-ecommerce-model\\mara-pond-video-lab-config-20260616.json",
+  "output_dir": "hermes-content\\references\\ai-ecommerce-model\\prompt-matrix-runs\\pond-smoke-001",
+  "prompt_matrix_jsonl": "hermes-content\\references\\ai-ecommerce-model\\prompt-matrix-runs\\pond-smoke-001\\prompt-matrix.jsonl",
+  "prompt_matrix_csv": "hermes-content\\references\\ai-ecommerce-model\\prompt-matrix-runs\\pond-smoke-001\\prompt-matrix.csv",
+  "requested_limit": 12,
+  "written": 12,
+  "total_matching_matrix": 93750,
+  "seed_start": 1000,
+  "filters": {
+    "routes": [
+      "comfy_ltx23"
+    ],
+    "outfits": "all",
+    "tones": "all",
+    "visual_styles": "all",
+    "settings": "all",
+    "motions": "all",
+    "hooks": "all",
+    "spoken_texts": "all"
+  },
+  "next_step": "Review prompt-matrix.csv/jsonl, run ComfyUI dry-run with scripts/mara_comfyui_queue.js, then generate only a 12-video smoke batch."
+}

@@ -1,0 +1,132 @@
+{
+  "id": "wan22-ti2v-5b-mapping",
+  "status": "ready_for_smoke_test",
+  "workflow_source": "hermes-content/references/ai-ecommerce-model/comfyui/wan22_ti2v_5b_api.json",
+  "notes": [
+    "This mapping targets the official ComfyUI Wan2.2 TI2V 5B node chain converted to API prompt format.",
+    "Use this route for fast Mara UGC identity/motion validation before trying heavier 14B I2V or lipsync.",
+    "ComfyUI LoadImage expects the approved Mara reference image in the Pod input folder."
+  ],
+  "patches": {
+    "positive_prompt": {
+      "node": "6",
+      "input": "text",
+      "source": "prompt"
+    },
+    "negative_prompt": {
+      "node": "7",
+      "input": "text",
+      "source": "negative_prompt"
+    },
+    "image": {
+      "node": "56",
+      "input": "image",
+      "source": "comfyui_image",
+      "default": "mara_20260616_primary_i2v_front_smile.png"
+    },
+    "seed": {
+      "node": "3",
+      "input": "seed",
+      "source": "seed"
+    },
+    "width": {
+      "node": "55",
+      "input": "width",
+      "source": "width",
+      "default": 576
+    },
+    "height": {
+      "node": "55",
+      "input": "height",
+      "source": "height",
+      "default": 1024
+    },
+    "frames": {
+      "node": "55",
+      "input": "length",
+      "source": "frames",
+      "default": 65
+    },
+    "fps": {
+      "node": "57",
+      "input": "fps",
+      "source": "fps",
+      "default": 16
+    },
+    "steps": {
+      "node": "3",
+      "input": "steps",
+      "source": "steps",
+      "default": 20
+    },
+    "cfg": {
+      "node": "3",
+      "input": "cfg",
+      "source": "cfg",
+      "default": 5
+    },
+    "sampler": {
+      "node": "3",
+      "input": "sampler_name",
+      "source": "sampler_name",
+      "default": "uni_pc"
+    },
+    "scheduler": {
+      "node": "3",
+      "input": "scheduler",
+      "source": "scheduler",
+      "default": "simple"
+    },
+    "shift": {
+      "node": "48",
+      "input": "shift",
+      "source": "shift",
+      "default": 8
+    },
+    "output_prefix": {
+      "node": "58",
+      "input": "filename_prefix",
+      "source": "id"
+    }
+  },
+  "defaults": {
+    "endpoint": "http://127.0.0.1:8188",
+    "client_id": "onia-mara-wan22-video-lab",
+    "comfyui_image": "mara_20260616_primary_i2v_front_smile.png",
+    "width": 576,
+    "height": 1024,
+    "frames": 65,
+    "fps": 16,
+    "steps": 20,
+    "cfg": 5,
+    "sampler_name": "uni_pc",
+    "scheduler": "simple",
+    "shift": 8
+  },
+  "required_models": {
+    "diffusion_models": [
+      "wan2.2_ti2v_5B_fp16.safetensors"
+    ],
+    "text_encoders": [
+      "umt5_xxl_fp8_e4m3fn_scaled.safetensors"
+    ],
+    "vae": [
+      "wan2.2_vae.safetensors"
+    ],
+    "input_images": [
+      "mara_20260616_primary_i2v_front_smile.png",
+      "mara_identity_31.jpg",
+      "isdin-fusion-water-magic-reference.png"
+    ]
+  },
+  "node_reference": {
+    "model": "37 UNETLoader.unet_name",
+    "text_encoder": "38 CLIPLoader.clip_name/type",
+    "vae": "39 VAELoader.vae_name",
+    "image": "56 LoadImage.image",
+    "latent": "55 Wan22ImageToVideoLatent",
+    "sampler": "3 KSampler",
+    "video": "57 CreateVideo",
+    "save": "58 SaveVideo"
+  }
+}

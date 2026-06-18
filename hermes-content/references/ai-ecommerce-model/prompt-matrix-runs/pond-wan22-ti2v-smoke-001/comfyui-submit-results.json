@@ -1,0 +1,21 @@
+{
+  "ok": true,
+  "mode": "submit",
+  "endpoint": "https://d36cqn7umhexvx-8188.proxy.runpod.net",
+  "workflow": "hermes-content\\references\\ai-ecommerce-model\\comfyui\\wan22_ti2v_5b_api.json",
+  "mapping": "hermes-content\\references\\ai-ecommerce-model\\comfyui\\wan22_ti2v_5b.mapping.json",
+  "matrix": "hermes-content\\references\\ai-ecommerce-model\\prompt-matrix-runs\\pond-wan22-ti2v-smoke-001\\prompt-matrix.jsonl",
+  "preview": "hermes-content\\references\\ai-ecommerce-model\\prompt-matrix-runs\\pond-wan22-ti2v-smoke-001\\comfyui-request-preview.jsonl",
+  "result_count": 1,
+  "results": [
+    {
+      "id": "mara__00001__comfy_wan22_ti2v5b__same_source_outfit__warm_friend__closeup_selfie__same_room__low_mouth_nod__not_testimonial__ugc_disclosure_15s",
+      "status": "submitted",
+      "response": {
+        "prompt_id": "dd523445-a376-480f-80cc-d7fa2d13cf26",
+        "number": 0,
+        "node_errors": {}
+      }
+    }
+  ]
+}

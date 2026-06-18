@@ -1,0 +1,57 @@
+{
+  "ok": true,
+  "mode": "submit",
+  "endpoint": "https://d36cqn7umhexvx-8188.proxy.runpod.net",
+  "workflow": "..\\..\\..\\Users\\PC\\Downloads\\video_ltx2_3_i2v.json",
+  "mapping": "hermes-content\\references\\ai-ecommerce-model\\comfyui\\video_ltx2_3_i2v.mapping.json",
+  "matrix": "hermes-content\\references\\ai-ecommerce-model\\prompt-matrix-runs\\pond-ltx23-motion-calibration-001\\prompt-matrix.jsonl",
+  "preview": "hermes-content\\references\\ai-ecommerce-model\\prompt-matrix-runs\\pond-ltx23-motion-calibration-001\\comfyui-request-preview.jsonl",
+  "result_count": 5,
+  "results": [
+    {
+      "id": "mara__00001__comfy_ltx23__same_source_outfit__warm_friend__closeup_selfie__same_room__low_mouth_nod__not_testimonial__ugc_disclosure_15s",
+      "status": "submitted",
+      "response": {
+        "prompt_id": "fdb3b711-48a2-447e-b4c3-ce115518ddd7",
+        "number": 3,
+        "node_errors": {}
+      }
+    },
+    {
+      "id": "mara__00002__comfy_ltx23__same_source_outfit__warm_friend__closeup_selfie__same_room__lean_hook__not_testimonial__ugc_disclosure_15s",
+      "status": "submitted",
+      "response": {
+        "prompt_id": "5a94d4a4-1806-4b45-8733-11d8637001ea",
+        "number": 4,
+        "node_errors": {}
+      }
+    },
+    {
+      "id": "mara__00003__comfy_ltx23__same_source_outfit__warm_friend__closeup_selfie__same_room__product_pickup__not_testimonial__ugc_disclosure_15s",
+      "status": "submitted",
+      "response": {
+        "prompt_id": "4f733f96-b1ee-438e-b423-79557736a51c",
+        "number": 5,
+        "node_errors": {}
+      }
+    },
+    {
+      "id": "mara__00004__comfy_ltx23__same_source_outfit__warm_friend__closeup_selfie__same_room__hair_adjust__not_testimonial__ugc_disclosure_15s",
+      "status": "submitted",
+      "response": {
+        "prompt_id": "63b7c62a-c361-4abc-aca4-dc46b75205c6",
+        "number": 6,
+        "node_errors": {}
+      }
+    },
+    {
+      "id": "mara__00005__comfy_ltx23__same_source_outfit__warm_friend__closeup_selfie__same_room__walk_to_medium__not_testimonial__ugc_disclosure_15s",
+      "status": "submitted",
+      "response": {
+        "prompt_id": "48889bf2-a355-4c60-b7cd-7d0a8382fe8f",
+        "number": 7,
+        "node_errors": {}
+      }
+    }
+  ]
+}

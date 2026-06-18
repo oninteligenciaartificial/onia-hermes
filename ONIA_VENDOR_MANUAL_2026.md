@@ -2,7 +2,7 @@
 
 Documento interno para vendedores nuevos. No compartir publicamente.
 
-Ultima actualizacion: 2026-06-02
+Ultima actualizacion: 2026-06-18
 
 ## 1. Que vende ONIA
 
@@ -15,9 +15,57 @@ y ofrece una solucion concreta:
 - si el negocio pierde consultas, ofrecemos seguimiento;
 - si responde tarde, ofrecemos CRM o automatizacion;
 - si no tiene presencia profesional, ofrecemos pagina web;
-- si no publica contenido que venda, ofrecemos videos con IA;
+- si no tiene una oferta clara en internet, ofrecemos web, auditoria o
+  automatizacion simple;
 - si trabaja con Excel, WhatsApp y notas sueltas, ofrecemos sistema operativo;
 - si necesita algo propio, ofrecemos sistema personalizado.
+
+## Oferta de arranque para vender ahora
+
+ONIA esta abriendo precios de arranque para cerrar clientes reales rapido. Esto
+no significa vender barato para siempre ni prometer resultados imposibles.
+
+Reglas:
+
+- Vigencia hasta 2026-07-31 o hasta 20 clientes cobrados, lo que ocurra primero.
+- El precio se reserva solo con pago confirmado.
+- DentalGest y GestiOS mantienen su precio actual. No se descuentan por ahora.
+- En servicios mensuales no SaaS, el precio de arranque cubre los primeros 3
+  meses. Desde el mes 4 ONIA puede pasar al precio vigente avisando antes.
+- Si el cliente paga 3 meses adelantados, se respeta ese periodo completo.
+- La comision se calcula sobre el monto neto realmente cobrado.
+- No se incluyen impuestos, pauta, dominios, hosting, herramientas, APIs,
+  creditos IA, WhatsApp, SMS, servidores ni gastos externos.
+- No prometer ventas garantizadas, viralidad ni WhatsApp automatico.
+
+| Oferta | Precio de arranque | Gana vendedor |
+|---|---:|---:|
+| DentalGest Basico | Bs. 320/mes | Bs. 112.00 |
+| DentalGest Profesional | Bs. 750/mes | Bs. 262.50 |
+| DentalGest Clinica | Bs. 1,500/mes | Bs. 525.00 |
+| GestiOS Basico | Bs. 350/mes | Bs. 122.50 |
+| GestiOS Crecer | Bs. 530/mes | Bs. 185.50 |
+| GestiOS Pro | Bs. 800/mes | Bs. 280.00 |
+| GestiOS Empresarial | Bs. 1,250/mes | Bs. 437.50 |
+| Landing de Captacion | Bs. 790 | Bs. 79.00 |
+| Web Profesional | Bs. 1,500 | Bs. 180.00 |
+| Web Pro ONIA | Bs. 2,900 | Bs. 348.00 |
+| Portal o Sistema Web mini | desde Bs. 6,500 | desde Bs. 650.00 |
+| Auditoria Express | Bs. 250 | Bs. 25.00 |
+| Diagnostico + Plan de Accion | Bs. 690 | Bs. 69.00 |
+| Instalacion de Flujo Simple | Bs. 1,500 | Bs. 150.00 |
+| Implementacion Operativa | desde Bs. 3,900 | desde Bs. 390.00 |
+| Conexion de canal social | Bs. 690 setup | Bs. 69.00 |
+| Automatizacion simple n8n | Bs. 790 setup | Bs. 79.00 |
+| Flujo de aprobacion n8n | Bs. 1,200 setup | Bs. 120.00 |
+
+Frase para cotizar:
+
+```text
+Estamos abriendo cupos de arranque para implementar casos reales con ONIA. Este
+precio queda reservado hasta [FECHA] solo con pago confirmado. Luego se aplica
+el precio vigente.
+```
 
 ## 2. Regla principal de comisiones
 
@@ -50,7 +98,6 @@ sube automaticamente.
 | GestiOS mensual | 35% | Solo sobre el primer pago neto |
 | Add-on mensual aprobado | 35% | Solo sobre el primer pago neto |
 | Paginas web | 10% a 12% | Sobre el pago neto cobrado |
-| Videos con IA | 10% a 15% | Sobre el primer pago neto |
 | Conectores y n8n | 10% | Sobre setup neto cobrado |
 | Sistemas personalizados | 10% | Sobre el primer pago neto |
 | Consultoria ONIA | 10% a 15% | Segun paquete y margen aprobado |
@@ -120,10 +167,10 @@ mejor.
 
 | Servicio | Precio cliente | Nombre claro | Gana vendedor |
 |---|---:|---|---:|
-| Landing de Captacion | Bs. 1,490 | una pagina para captar consultas | Bs. 149.00 |
-| Web Profesional | Bs. 2,900 | web de negocio con formulario y secciones clave | Bs. 348.00 |
-| Web Pro con IA | Bs. 5,900 | web + landing + copy + automatizacion basica | Bs. 708.00 |
-| Portal o Sistema Web | desde Bs. 9,500 | login, dashboard, base de datos o MVP | desde Bs. 950.00 |
+| Landing de Captacion | Bs. 790 | una pagina simple para captar consultas | Bs. 79.00 |
+| Web Profesional | Bs. 1,500 | web de negocio con formulario y secciones clave | Bs. 180.00 |
+| Web Pro ONIA | Bs. 2,900 | web completa + copy + formulario + seguimiento basico | Bs. 348.00 |
+| Portal o Sistema Web | desde Bs. 6,500 | login, dashboard, base de datos o MVP pequeno | desde Bs. 650.00 |
 | Cuidado Web Basico | Bs. 190/mes | mantenimiento simple vendido aparte | Bs. 19.00 |
 | Cuidado Web Crecimiento | Bs. 390/mes | cambios ligeros y revision mensual | Bs. 39.00 |
 | Cuidado Web Pro | Bs. 690/mes | soporte mas activo y mejoras pequenas | Bs. 69.00 |
@@ -136,60 +183,12 @@ Reglas:
 - no prometer que una web por si sola genera ventas sin oferta, contenido y
   seguimiento.
 
-### Videos con IA y Higgsfield
+### Oferta pausada: Videos IA / Higgsfield
 
-Para empresas que necesitan contenido constante, claro y con mejor produccion
-sin depender de grabaciones grandes todas las semanas.
-
-Cada video debe tener:
-
-- hook;
-- guion corto;
-- CTA;
-- escenas;
-- prompt Higgsfield;
-- descripcion para Instagram/TikTok/YouTube/LinkedIn segun canal;
-- formato de salida;
-- aprobacion antes de publicar.
-
-| Plan | Precio cliente | Entregables claros | Gana vendedor |
-|---|---:|---|---:|
-| Video individual | Bs. 450 | 1 video, hook, guion, escenas, prompt y caption | Bs. 45.00 |
-| 8 videos mensuales | Bs. 2,200/mes | 8 videos, 2 plataformas, captions y reporte simple | Bs. 330.00 |
-| 16 videos mensuales | Bs. 3,900/mes | 16 videos, 3 plataformas, variantes y reporte | Bs. 585.00 |
-| 24 videos mensuales | Bs. 6,500/mes | 24 videos, 4 plataformas, calendario y revision semanal | Bs. 975.00 |
-
-Que incluye cada plan de video:
-
-| Elemento | Video individual | 8 videos | 16 videos | 24 videos |
-|---|---|---|---|---|
-| Hooks | 1 | 8 | 16 | 24 |
-| Guiones | 1 | 8 | 16 | 24 |
-| Escenas | 1 video | 8 videos | 16 videos | 24 videos |
-| Prompts Higgsfield | 1 | 8 | 16 | 24 |
-| Descripciones | 1 canal | 2 canales | 3 canales | 4 canales |
-| Reporte | No | mensual simple | mensual | semanal/mensual |
-| Revision incluida | 1 ajuste | ajustes ligeros | ajustes ligeros | revision semanal |
-
-Como vender videos:
-
-- vender constancia, confianza y explicacion simple;
-- no prometer viralidad;
-- no copiar creadores, marcas, musicas ni estilos reconocibles;
-- pedir referencias solo para extraer estructura, ritmo y tipo de hook;
-- usar claims seguros: educacion, proceso, agenda, demo, confianza, caso
-  hipotetico.
-
-Ejemplos de oferta por rubro:
-
-| Rubro | Video que conviene | CTA |
-|---|---|---|
-| Dentistas | "Por que se pierden pacientes aunque haya buena atencion" | Pide demo DentalGest |
-| Estetica | "Lo que debe saber una persona antes de agendar" | Agenda valoracion |
-| Restaurantes | "Que pedir si vienes por primera vez" | Reserva o pide menu |
-| Inmobiliarias | recorrido corto + ficha del inmueble | Pide ficha |
-| Gimnasios | objecion: falta de tiempo o miedo a empezar | Agenda clase prueba |
-| Tiendas | producto en uso + problema/solucion | Pide catalogo |
+Pausado como producto comercial independiente. El vendedor no debe ofrecer
+videos IA, packs Higgsfield ni promesas de contenido con IA. Si un cliente pide
+contenido, llevarlo primero a una web, auditoria, diagnostico o automatizacion
+simple segun el dolor real.
 
 ### Conectores y automatizaciones
 
@@ -209,17 +208,18 @@ acordarte manualmente de cada paso.
 
 | Servicio | Precio cliente | Que hace | Gana vendedor |
 |---|---:|---|---:|
-| Conexion Instagram/Meta | Bs. 900 | conectar cuenta y dejar listo el flujo permitido por Meta | Bs. 90.00 |
-| Conexion TikTok | Bs. 900 | preparar canal y requisitos para publicacion asistida | Bs. 90.00 |
-| Conexion YouTube Shorts | Bs. 900 | preparar canal, formato y metadata para shorts | Bs. 90.00 |
-| Conexion LinkedIn | Bs. 900 | preparar publicacion para empresa o marca personal | Bs. 90.00 |
-| Flujo de aprobacion n8n | Bs. 1,800 | crear pasos: revisar, aprobar, registrar y publicar asistido | Bs. 180.00 |
+| Conexion Instagram/Meta | Bs. 690 | conectar cuenta y revisar requisitos de publicacion permitidos por Meta | Bs. 69.00 |
+| Conexion TikTok | Bs. 690 | preparar canal y requisitos para publicacion asistida | Bs. 69.00 |
+| Conexion YouTube Shorts | Bs. 690 | preparar canal, formato y metadata para shorts | Bs. 69.00 |
+| Conexion LinkedIn | Bs. 690 | preparar publicacion para empresa o marca personal | Bs. 69.00 |
+| Automatizacion simple n8n | Bs. 790 | formulario o lead -> registro -> aviso -> tarea de seguimiento | Bs. 79.00 |
+| Flujo de aprobacion n8n | Bs. 1,200 | pasos de recibido, pendiente, aprobado, rechazado y notificado | Bs. 120.00 |
 | Monitoreo de canal | Bs. 150/mes | revision basica mensual de un canal vendido aparte | Bs. 15.00 |
-| Monitoreo n8n | Bs. 350/mes | revision mensual del flujo vendido aparte | Bs. 35.00 |
+| Monitoreo n8n | Bs. 150/mes | revision mensual basica del flujo vendido aparte | Bs. 15.00 |
 
 Cuando ofrecerlo:
 
-- cuando el cliente ya compra videos y quiere publicar con orden;
+- cuando el cliente ya tiene web, formulario, CRM o contactos por ordenar;
 - cuando el cliente tiene varias personas aprobando contenido;
 - cuando quiere conectar formularios, CRM o calendario;
 - cuando ya hay web o sistema y necesita que los datos lleguen a un lugar;
@@ -229,16 +229,17 @@ Como venderlo:
 
 1. Preguntar que canal usa y quien aprueba.
 2. Confirmar si tiene acceso real a la cuenta.
-3. Ofrecer primero una conexion simple o un flujo n8n.
+3. Ofrecer primero una automatizacion simple n8n.
 4. Aclarar que algunas plataformas requieren permisos, revision o verificacion.
 5. No prometer automatizacion total sin revisar acceso.
 
 Mensaje para cliente:
 
 ```text
-Ademas del contenido, podemos dejarte un flujo de aprobacion para que nada salga
-sin revisar. ONIA conecta el canal, registra el contenido y deja pasos claros de
-revision antes de publicar.
+Podemos dejar un flujo simple: cuando alguien llena un formulario o llega un
+lead, se registra en una tabla/CRM y te llega aviso para hacer seguimiento. Si
+necesitas aprobaciones, tambien podemos armar pasos de revisar, aprobar y
+notificar.
 ```
 
 Notas importantes:
@@ -248,6 +249,8 @@ Notas importantes:
   y aprobacion;
 - no ofrecer envio automatico masivo sin revision legal, permisos y aprobacion;
 - publicaciones client-facing requieren aprobacion.
+- no incluye WhatsApp automatico, scraping masivo, APIs pagadas, login de
+  terceros ni mantenimiento continuo si no se cotiza aparte.
 
 ### Consultoria e implementaciones ONIA
 
@@ -263,8 +266,8 @@ ordenar primero: web, CRM, seguimiento, contenido, automatizacion o sistema.
 
 | Servicio | Precio cliente | Que entrega ONIA | Gana vendedor |
 |---|---:|---|---:|
-| Auditoria Express | Bs. 350 | revision rapida, dolor principal y 3 mejoras claras | Bs. 35.00 |
-| Diagnostico + Plan de Accion | Bs. 990 | sesion, mapa del problema y orden de prioridades | Bs. 99.00 |
+| Auditoria Express | Bs. 250 | revision de web/redes/oferta/seguimiento + 3 mejoras claras | Bs. 25.00 |
+| Diagnostico + Plan de Accion | Bs. 690 | sesion, mapa del problema, prioridades y propuesta recomendada | Bs. 69.00 |
 | Instalacion de Flujo Simple | Bs. 1,900 | dejar funcionando un flujo: CRM, formulario, Notion o dashboard | Bs. 190.00 |
 | Implementacion Operativa | Bs. 4,900 a 6,500 | ordenar proceso, responsables, automatizaciones basicas y guia de uso | Bs. 490 a 650 |
 
@@ -285,6 +288,29 @@ Como venderlo:
 4. Ofrecer diagnostico si necesita decidir prioridades.
 5. Ofrecer instalacion si ya hay un flujo especifico.
 6. Ofrecer implementacion si hay equipo, responsables y varios pasos.
+
+Que incluye la Auditoria Express:
+
+- revision de web, redes, oferta, formulario/WhatsApp y seguimiento;
+- detectar donde se pierden consultas o confianza;
+- 3 problemas concretos;
+- 3 acciones recomendadas;
+- una oferta sugerida de ONIA.
+
+Que no incluye:
+
+- implementacion;
+- diseno completo;
+- automatizaciones;
+- promesas de ventas.
+
+Que incluye el Diagnostico + Plan:
+
+- sesion mas profunda;
+- mapa simple del proceso actual;
+- prioridades;
+- presupuesto recomendado;
+- siguiente propuesta clara.
 
 Mensaje para cliente:
 
@@ -320,12 +346,12 @@ Como venderlo:
 
 | Senal del cliente | Oferta principal | Oferta secundaria |
 |---|---|---|
-| Clinica dental pierde consultas | DentalGest | landing dental o videos |
-| Pyme usa Excel para todo | GestiOS | pagina web o videos |
-| Negocio no tiene web clara | Web Profesional | videos o CRM |
-| Publica poco o se ve desordenado | Videos con IA | calendario y conectores |
+| Clinica dental pierde consultas | DentalGest | landing dental o auditoria |
+| Pyme usa Excel para todo | GestiOS | pagina web o automatizacion simple |
+| Negocio no tiene web clara | Web Profesional | auditoria o CRM |
+| Publica poco o se ve desordenado | Auditoria Express | web o diagnostico |
 | Tiene redes pero no seguimiento | DentalGest o GestiOS | n8n aprobaciones |
-| Quiere vender por anuncios | landing + CRM | videos y seguimiento |
+| Quiere vender por anuncios | landing + CRM | auditoria y seguimiento |
 | Pide algo muy especifico | Discovery Pagado | sistema personalizado |
 | No sabe que necesita | Auditoria Express | roadmap |
 
@@ -400,12 +426,13 @@ ayuda a ordenar tareas, responsables y estados para que el equipo no dependa de
 WhatsApp o Excel. Les puedo enviar una demo breve?
 ```
 
-Plantilla videos:
+Plantilla auditoria web:
 
 ```text
-Hola, soy [NOMBRE] de ONIA. Vi que su negocio tiene una oferta interesante, pero
-podria explicarse mejor con videos cortos. Armamos hooks, guiones, escenas,
-prompts IA y descripciones para publicar con aprobacion. Les muestro ejemplos?
+Hola, soy [NOMBRE] de ONIA. Vi su negocio en [FUENTE] y creo que podrian mejorar
+como captan consultas desde web/redes. Podemos hacer una auditoria express:
+revisamos oferta, canal de contacto y seguimiento, y les damos 3 mejoras claras.
+Les interesa?
 ```
 
 ## 7. Que nunca prometer

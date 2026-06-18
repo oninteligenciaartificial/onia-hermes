@@ -45,6 +45,30 @@ journalctl -u hermes-control-tower -n 80 --no-pager
 curl -fsS http://127.0.0.1:3010/
 ```
 
+## Mara Pond Video Lab
+
+Dashboard local para preparar lotes de prompts de Mara, revisar QA y exportar
+colas para ComfyUI:
+
+```text
+hermes-content/docs/MARA_POND_VIDEO_LAB_DASHBOARD_2026.html
+```
+
+Config canonica:
+
+```text
+hermes-content/references/ai-ecommerce-model/mara-pond-video-lab-config-20260616.json
+```
+
+Primer lote seguro:
+
+```powershell
+npm run mara:prompt-matrix
+```
+
+Regla: no generar miles de videos hasta que un lote de 12 pase identidad,
+artefactos y uso UGC con score minimo 4/5.
+
 ## Verificaciones utiles
 ```bash
 hermes dashboard --status

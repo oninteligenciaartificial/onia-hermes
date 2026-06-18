@@ -1,0 +1,19 @@
+# ComfyUI Video Audit
+
+- Endpoint: `https://d36cqn7umhexvx-8188.proxy.runpod.net`
+- Generated: `2026-06-16T19:11:34.971Z`
+
+| Prompt ID | Image | Frames | FPS | Video | Contact sheet | Notes |
+|---|---|---:|---:|---|---|---|
+|fdb3b711-48a2-447e-b4c3-ce115518ddd7|mara_20260616_primary_i2v_front_smile.png|49|8|hermes-content\references\ai-ecommerce-model\comfyui\audits\pond-ltx23-motion-calibration-001\fdb3b711-48a2-447e-b4c3-ce115518ddd7__mara__00001__comfy_ltx23__same_source_outfit__warm_friend__closeup_selfie__same_room__low_mouth_nod__not_testimonial__ugc_disclosure_15s_00001_.mp4|hermes-content\references\ai-ecommerce-model\comfyui\audits\pond-ltx23-motion-calibration-001\fdb3b711-48a2-447e-b4c3-ce115518ddd7__mara__00001__comfy_ltx23__same_source_outfit__warm_friend__closeup_selfie__same_room__low_mouth_nod__not_testimonial__ugc_disclosure_15s_00001___frames.jpg|manual QA pending|
+|5a94d4a4-1806-4b45-8733-11d8637001ea|mara_20260616_primary_i2v_front_smile.png|49|8|hermes-content\references\ai-ecommerce-model\comfyui\audits\pond-ltx23-motion-calibration-001\5a94d4a4-1806-4b45-8733-11d8637001ea__mara__00002__comfy_ltx23__same_source_outfit__warm_friend__closeup_selfie__same_room__lean_hook__not_testimonial__ugc_disclosure_15s_00001_.mp4|hermes-content\references\ai-ecommerce-model\comfyui\audits\pond-ltx23-motion-calibration-001\5a94d4a4-1806-4b45-8733-11d8637001ea__mara__00002__comfy_ltx23__same_source_outfit__warm_friend__closeup_selfie__same_room__lean_hook__not_testimonial__ugc_disclosure_15s_00001___frames.jpg|manual QA pending|
+|4f733f96-b1ee-438e-b423-79557736a51c|mara_20260616_primary_i2v_front_smile.png|49|8|hermes-content\references\ai-ecommerce-model\comfyui\audits\pond-ltx23-motion-calibration-001\4f733f96-b1ee-438e-b423-79557736a51c__mara__00003__comfy_ltx23__same_source_outfit__warm_friend__closeup_selfie__same_room__product_pickup__not_testimonial__ugc_disclosure_15s_00001_.mp4|hermes-content\references\ai-ecommerce-model\comfyui\audits\pond-ltx23-motion-calibration-001\4f733f96-b1ee-438e-b423-79557736a51c__mara__00003__comfy_ltx23__same_source_outfit__warm_friend__closeup_selfie__same_room__product_pickup__not_testimonial__ugc_disclosure_15s_00001___frames.jpg|manual QA pending|
+|63b7c62a-c361-4abc-aca4-dc46b75205c6|mara_20260616_primary_i2v_front_smile.png|49|8|hermes-content\references\ai-ecommerce-model\comfyui\audits\pond-ltx23-motion-calibration-001\63b7c62a-c361-4abc-aca4-dc46b75205c6__mara__00004__comfy_ltx23__same_source_outfit__warm_friend__closeup_selfie__same_room__hair_adjust__not_testimonial__ugc_disclosure_15s_00001_.mp4|hermes-content\references\ai-ecommerce-model\comfyui\audits\pond-ltx23-motion-calibration-001\63b7c62a-c361-4abc-aca4-dc46b75205c6__mara__00004__comfy_ltx23__same_source_outfit__warm_friend__closeup_selfie__same_room__hair_adjust__not_testimonial__ugc_disclosure_15s_00001___frames.jpg|manual QA pending|
+|48889bf2-a355-4c60-b7cd-7d0a8382fe8f|mara_20260616_primary_i2v_front_smile.png|49|8|hermes-content\references\ai-ecommerce-model\comfyui\audits\pond-ltx23-motion-calibration-001\48889bf2-a355-4c60-b7cd-7d0a8382fe8f__mara__00005__comfy_ltx23__same_source_outfit__warm_friend__closeup_selfie__same_room__walk_to_medium__not_testimonial__ugc_disclosure_15s_00001_.mp4|hermes-content\references\ai-ecommerce-model\comfyui\audits\pond-ltx23-motion-calibration-001\48889bf2-a355-4c60-b7cd-7d0a8382fe8f__mara__00005__comfy_ltx23__same_source_outfit__warm_friend__closeup_selfie__same_room__walk_to_medium__not_testimonial__ugc_disclosure_15s_00001___frames.jpg|manual QA pending|
+
+## QA rubric
+
+- identity: does the face remain the same person?
+- motion: enough movement to read as video, without drift?
+- artifacts: blur, flicker, mouth/teeth warp, hair smear?
+- route decision: keep LTX, retry with another prompt, or switch engine?

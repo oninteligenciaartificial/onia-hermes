@@ -11,8 +11,8 @@
     "Telegram is the operating inbox.",
     "Hermes decides using local docs, references, Notion and n8n context.",
     "n8n schedules, waits, logs and routes.",
-    "Video Lab creates briefs and states.",
-    "Higgsfield renders only after approval.",
+    "Video Lab is an internal lab for ONIA content only.",
+    "Higgsfield renders only after approval and is not an active commercial package.",
     "Publishing and client-facing actions require explicit approval."
   ],
   "approval_gates": {
@@ -58,7 +58,7 @@
         "Prepara venta DentalGest: <clinica>",
         "Prepara venta Gestios: <empresa>",
         "Prepara venta Web ONIA: <negocio>",
-        "Prepara marketing Higgsfield: <negocio> | <oferta>",
+        "Prepara consultoria ONIA: <negocio> | <dolor o proceso>",
         "Prepara consultoria ONIA: <negocio> | <dolor o proceso>"
       ]
     },
@@ -103,10 +103,10 @@
     },
     {
       "id": "higgsfield-marketing",
-      "lane": "content_service",
+      "lane": "internal_lab",
       "audience": "Negocios que necesitan video constante",
-      "content_use": "UGC, reels, product demos, offer videos",
-      "safe_cta": "Pedir 3 ideas de video"
+      "content_use": "Pausado como oferta comercial; usar solo para laboratorio interno aprobado",
+      "safe_cta": "No ofrecer por ahora"
     },
     {
       "id": "onia-consulting",
