@@ -137,6 +137,16 @@ SYSTEM_PROMPT = (
 )
 
 
+def strip_unfilled_placeholders(md):
+    """Reemplaza los marcadores <...> que el modelo dejo sin rellenar.
+
+    Modelos pequenos (p.ej. qwen2.5:3b) a veces copian literal '<punto>' o
+    '<nombre>' de la plantilla. Se sustituyen por 'No especificado' para que el
+    acta no muestre la sintaxis de la plantilla.
+    """
+    return re.sub(r"<[^<>\n]{1,40}>", "No especificado", md)
+
+
 def build_messages(notes, title, tipo, fecha):
     user = (
         f"Titulo de la reunion: {title}\n"
@@ -228,6 +238,7 @@ def main():
     if md.startswith("```"):
         md = re.sub(r"^```[a-zA-Z]*\n", "", md)
         md = re.sub(r"\n```$", "", md).strip()
+    md = strip_unfilled_placeholders(md)
 
     ts = dt.datetime.now().strftime("%Y%m%d-%H%M%S")
     slug = slugify(args.title)
