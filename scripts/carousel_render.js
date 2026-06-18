@@ -339,7 +339,7 @@ html,body { width:1080px; height:1350px; }
       <circle cx="98" cy="43" r="11" fill="var(--onia-green)"/>
       <circle cx="98" cy="43" r="4.5" fill="${role === 'cta' ? 'var(--onia-ink)' : 'var(--onia-white)'}"/>
     </svg>
-    <span class="handle">${esc(acc.handle)} · ACCESÁ NUESTRAS REDES</span>
+    <span class="handle">${esc(acc.handle)}</span>
   </div>
 </div></body></html>`;
 }
@@ -427,7 +427,7 @@ html,body { width:1080px; height:1350px; }
       <circle cx="98" cy="43" r="11" fill="var(--onia-green)"/>
       <circle cx="98" cy="43" r="4.5" fill="var(--onia-white)"/>
     </svg>
-    <span class="handle">${esc(acc.handle)} · ACCESÁ NUESTRAS REDES</span>
+    <span class="handle">${esc(acc.handle)}</span>
   </div>
 </div></body></html>`;
 }
