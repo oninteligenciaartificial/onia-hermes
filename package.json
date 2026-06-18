@@ -15,6 +15,8 @@
     "deploy:webhook-propuestas": "node scripts/vps-deploy-webhook-propuestas.js",
     "carousel": "node scripts/carousel_pipeline.js",
     "carousel:render": "node scripts/carousel_render.js",
+    "carousel:publish": "node scripts/carousel_publish.js",
+    "image:openai": "node scripts/openai_image.js",
     "test:carousel": "node scripts/carousel_render.test.js",
     "health:propuestas": "node -e \"require('http').get('http://127.0.0.1:3031/health',r=>{let d='';r.on('data',c=>d+=c);r.on('end',()=>console.log(d))}).on('error',e=>{console.error('Offline:',e.message);process.exitCode=1})\""
   }

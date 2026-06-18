@@ -20,6 +20,7 @@
 const fs = require('fs');
 const path = require('path');
 const { execFileSync } = require('child_process');
+require('./lib/env').loadEnv();
 
 const DIR = __dirname;
 const ROOT = path.join(DIR, '..');
