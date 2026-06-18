@@ -1,0 +1,22 @@
+{
+  "ok": true,
+  "mode": "dry_run",
+  "endpoint": "https://d36cqn7umhexx-8188.proxy.runpod.net",
+  "workflow": "..\\..\\..\\Users\\PC\\Downloads\\video_ltx2_3_i2v.json",
+  "mapping": "hermes-content\\references\\ai-ecommerce-model\\comfyui\\video_ltx2_3_i2v.mapping.json",
+  "matrix": "hermes-content\\references\\ai-ecommerce-model\\prompt-matrix-runs\\pond-smoke-001\\prompt-matrix.jsonl",
+  "preview": "hermes-content\\references\\ai-ecommerce-model\\prompt-matrix-runs\\pond-smoke-001\\comfyui-request-preview.jsonl",
+  "result_count": 2,
+  "results": [
+    {
+      "id": "mara__00001__comfy_ltx23__same_source_outfit__warm_friend__closeup_selfie__same_room__low_mouth_nod__skincare_steps__skincare_safe_15s",
+      "status": "dry_run",
+      "seed": 1000
+    },
+    {
+      "id": "mara__00002__comfy_ltx23__same_source_outfit__warm_friend__closeup_selfie__same_room__low_mouth_nod__skincare_steps__ugc_disclosure_15s",
+      "status": "dry_run",
+      "seed": 1001
+    }
+  ]
+}

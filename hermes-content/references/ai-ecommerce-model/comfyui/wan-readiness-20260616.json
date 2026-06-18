@@ -1,0 +1,207 @@
+{
+  "ok": true,
+  "generated_at": "2026-06-16T20:28:02.059Z",
+  "endpoint": "https://d36cqn7umhexvx-8188.proxy.runpod.net",
+  "comfyui_version": "0.18.2",
+  "gpu_devices": [
+    {
+      "name": "cuda:0 NVIDIA RTX A6000 : cudaMallocAsync",
+      "type": "cuda",
+      "index": 0,
+      "vram_total": 47705751552,
+      "vram_free": 47425650688,
+      "torch_vram_total": 0,
+      "torch_vram_free": 0
+    }
+  ],
+  "queue_running": 0,
+  "queue_pending": 0,
+  "ready_for_silent_ti2v": true,
+  "available": {
+    "node_count": 892,
+    "nodes": [
+      "UNETLoader",
+      "CLIPLoader",
+      "VAELoader",
+      "LoadImage",
+      "Wan22ImageToVideoLatent",
+      "CLIPTextEncode",
+      "ModelSamplingSD3",
+      "KSampler",
+      "VAEDecode",
+      "CreateVideo",
+      "SaveVideo"
+    ],
+    "wan_nodes": [
+      "ApplyRifleXRoPE_WanVideo",
+      "SkipLayerGuidanceWanVideo",
+      "TorchCompileModelWanVideo",
+      "TorchCompileModelWanVideoV2",
+      "Wan21BlockLoraSelect",
+      "Wan22FunControlToVideo",
+      "Wan22ImageToVideoLatent",
+      "WanAnimateToVideo",
+      "WanCameraEmbedding",
+      "WanCameraImageToVideo",
+      "WanChunkFeedForward",
+      "WanContextWindowsManual",
+      "WanFirstLastFrameToVideo",
+      "WanFunControlToVideo",
+      "WanFunInpaintToVideo",
+      "WanHuMoImageToVideo",
+      "WanImageToImageApi",
+      "WanImageToVideo",
+      "WanImageToVideoApi",
+      "WanImageToVideoSVIPro",
+      "WanInfiniteTalkToVideo",
+      "WanMoveConcatTrack",
+      "WanMoveTrackToVideo",
+      "WanMoveTracksFromCoords",
+      "WanMoveVisualizeTracks",
+      "WanPhantomSubjectToVideo",
+      "WanReferenceVideoApi",
+      "WanSCAILToVideo",
+      "WanSoundImageToVideo",
+      "WanSoundImageToVideoExtend",
+      "WanTextToImageApi",
+      "WanTextToVideoApi",
+      "WanTrackToVideo",
+      "WanVaceToVideo",
+      "WanVideoEnhanceAVideoKJ",
+      "WanVideoNAG",
+      "WanVideoTeaCacheKJ"
+    ],
+    "diffusion_models": [
+      "wan2.2_i2v_high_noise_14B_fp8_scaled.safetensors",
+      "wan2.2_i2v_low_noise_14B_fp8_scaled.safetensors",
+      "wan2.2_ti2v_5B_fp16.safetensors"
+    ],
+    "text_encoders": [
+      "gemma_3_12B_it_fp4_mixed.safetensors",
+      "umt5_xxl_fp8_e4m3fn_scaled.safetensors"
+    ],
+    "vae": [
+      "wan2.2_vae.safetensors",
+      "wan_2.1_vae.safetensors",
+      "pixel_space"
+    ],
+    "audio_encoders": [
+      "wav2vec2_large_english_fp16.safetensors"
+    ],
+    "model_patches": [
+      "Wan2_1-InfiniteTalk-Single_fp8_e4m3fn_scaled_KJ.safetensors"
+    ],
+    "input_images": [
+      "ChatGPT Image 13 jun 2026, 14_49_18 (2).png",
+      "example.png",
+      "hf_20260615_013217_e2d0df73-922d-4073-aaad-1a082f7e8d04.png",
+      "mara_20260616_primary_i2v_front_smile.png"
+    ]
+  },
+  "checks": {
+    "nodes": [
+      {
+        "name": "UNETLoader",
+        "ok": true
+      },
+      {
+        "name": "CLIPLoader",
+        "ok": true
+      },
+      {
+        "name": "VAELoader",
+        "ok": true
+      },
+      {
+        "name": "LoadImage",
+        "ok": true
+      },
+      {
+        "name": "Wan22ImageToVideoLatent",
+        "ok": true
+      },
+      {
+        "name": "CLIPTextEncode",
+        "ok": true
+      },
+      {
+        "name": "ModelSamplingSD3",
+        "ok": true
+      },
+      {
+        "name": "KSampler",
+        "ok": true
+      },
+      {
+        "name": "VAEDecode",
+        "ok": true
+      },
+      {
+        "name": "CreateVideo",
+        "ok": true
+      },
+      {
+        "name": "SaveVideo",
+        "ok": true
+      }
+    ],
+    "diffusion_models": [
+      {
+        "name": "wan2.2_ti2v_5B_fp16.safetensors",
+        "ok": true
+      },
+      {
+        "name": "wan2.2_i2v_high_noise_14B_fp8_scaled.safetensors",
+        "ok": true
+      },
+      {
+        "name": "wan2.2_i2v_low_noise_14B_fp8_scaled.safetensors",
+        "ok": true
+      }
+    ],
+    "text_encoders": [
+      {
+        "name": "umt5_xxl_fp8_e4m3fn_scaled.safetensors",
+        "ok": true
+      }
+    ],
+    "vae": [
+      {
+        "name": "wan2.2_vae.safetensors",
+        "ok": true
+      },
+      {
+        "name": "wan_2.1_vae.safetensors",
+        "ok": true
+      }
+    ],
+    "audio_encoders": [
+      {
+        "name": "wav2vec2_large_english_fp16.safetensors",
+        "ok": true
+      }
+    ],
+    "model_patches": [
+      {
+        "name": "Wan2_1-InfiniteTalk-Single_fp8_e4m3fn_scaled_KJ.safetensors",
+        "ok": true
+      }
+    ],
+    "input_images": [
+      {
+        "name": "mara_20260616_primary_i2v_front_smile.png",
+        "ok": true
+      }
+    ]
+  },
+  "missing": {
+    "nodes": [],
+    "diffusion_models": [],
+    "text_encoders": [],
+    "vae": [],
+    "audio_encoders": [],
+    "model_patches": [],
+    "input_images": []
+  },
+  "next_step": "Generate one Wan2.2 TI2V 5B smoke clip and audit identity before scaling."
+}

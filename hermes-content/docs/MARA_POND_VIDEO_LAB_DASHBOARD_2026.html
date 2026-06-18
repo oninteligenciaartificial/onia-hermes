@@ -1,0 +1,891 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mara Pond Video Lab</title>
+  <style>
+    :root {
+      --bg: #f5f7f4;
+      --panel: #ffffff;
+      --text: #13221d;
+      --muted: #5d6863;
+      --line: #d8ded8;
+      --green: #0f7a5f;
+      --green-dark: #0a5d49;
+      --coral: #c95b3f;
+      --ink: #1d2d35;
+      --warn: #8a5c10;
+      --bad: #9b2f28;
+      --radius: 8px;
+      --shadow: 0 10px 30px rgba(25, 34, 29, .08);
+      font-family: "Source Sans 3", Aptos, ui-sans-serif, system-ui, sans-serif;
+      color: var(--text);
+      letter-spacing: 0;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+    }
+    header {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 16px;
+      align-items: end;
+      padding: 22px 28px 16px;
+      border-bottom: 1px solid var(--line);
+      background: #fbfcfa;
+      position: sticky;
+      top: 0;
+      z-index: 5;
+    }
+    h1 {
+      margin: 0 0 6px;
+      font-size: 24px;
+      line-height: 1.1;
+      font-weight: 760;
+      font-family: Georgia, Cambria, "Times New Roman", serif;
+    }
+    .sub {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.4;
+      max-width: 920px;
+    }
+    main {
+      display: grid;
+      grid-template-columns: 360px minmax(0, 1fr);
+      gap: 18px;
+      padding: 18px 28px 32px;
+    }
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .controls {
+      padding: 16px;
+      align-self: start;
+      position: sticky;
+      top: 96px;
+      max-height: calc(100vh - 116px);
+      overflow: auto;
+    }
+    .content {
+      display: grid;
+      gap: 16px;
+    }
+    .row {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .field {
+      display: grid;
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+    label {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 680;
+    }
+    input, select, textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 10px 11px;
+      color: var(--text);
+      background: #fff;
+      font: inherit;
+      font-size: 13px;
+    }
+    textarea {
+      min-height: 96px;
+      resize: vertical;
+      line-height: 1.45;
+    }
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin-top: 8px;
+    }
+    button {
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--text);
+      border-radius: 6px;
+      padding: 9px 11px;
+      font: inherit;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      min-height: 36px;
+    }
+    button.primary {
+      background: var(--green);
+      color: #fff;
+      border-color: var(--green);
+    }
+    button.primary:hover { background: var(--green-dark); }
+    button.warn {
+      border-color: #e3c37a;
+      color: var(--warn);
+      background: #fff9ea;
+    }
+    .statbar {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 10px;
+      padding: 14px;
+    }
+    .stat {
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 10px;
+      background: #fbfcfa;
+      min-height: 72px;
+    }
+    .stat .k {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 720;
+      margin-bottom: 6px;
+    }
+    .stat .v {
+      font-size: 20px;
+      font-weight: 780;
+      line-height: 1.1;
+      overflow-wrap: anywhere;
+    }
+    .asset-strip {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1.2fr;
+      gap: 12px;
+      padding: 14px;
+      align-items: stretch;
+    }
+    .asset {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: #111;
+      min-height: 150px;
+      position: relative;
+    }
+    .asset img {
+      width: 100%;
+      height: 100%;
+      max-height: 260px;
+      object-fit: cover;
+      display: block;
+    }
+    .asset small {
+      position: absolute;
+      left: 8px;
+      bottom: 8px;
+      background: rgba(255, 255, 255, .88);
+      padding: 4px 6px;
+      border-radius: 4px;
+      font-size: 11px;
+      color: var(--ink);
+    }
+    .tabs {
+      display: flex;
+      gap: 6px;
+      padding: 10px 10px 0;
+      border-bottom: 1px solid var(--line);
+      background: #fbfcfa;
+      border-radius: var(--radius) var(--radius) 0 0;
+    }
+    .tab {
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+      border-bottom: 0;
+    }
+    .tab.active {
+      background: var(--ink);
+      color: #fff;
+      border-color: var(--ink);
+    }
+    .tabpage { display: none; padding: 14px; }
+    .tabpage.active { display: block; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+    th, td {
+      text-align: left;
+      border-bottom: 1px solid var(--line);
+      padding: 8px 7px;
+      vertical-align: top;
+    }
+    th {
+      color: var(--muted);
+      background: #fbfcfa;
+      position: sticky;
+      top: 94px;
+      z-index: 2;
+    }
+    tr.selected td {
+      background: #eaf6f1;
+    }
+    .scroll {
+      max-height: 430px;
+      overflow: auto;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+    }
+    .prompt-preview {
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      padding: 4px 8px;
+      font-size: 11px;
+      font-weight: 780;
+      white-space: nowrap;
+    }
+    .ok { color: var(--green-dark); background: #e7f4ee; }
+    .hold { color: var(--warn); background: #fff4d9; }
+    .reject { color: var(--bad); background: #f9e3e1; }
+    .mini {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+    .qa-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .file-input {
+      border: 1px dashed var(--line);
+      padding: 12px;
+      border-radius: 6px;
+      background: #fbfcfa;
+    }
+    .nowrap { white-space: nowrap; }
+    @media (max-width: 1080px) {
+      main { grid-template-columns: 1fr; }
+      .controls { position: static; max-height: none; }
+      .row, .statbar, .asset-strip, .prompt-preview, .qa-grid { grid-template-columns: 1fr; }
+      header { grid-template-columns: 1fr; }
+      th { top: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <h1>Mara Pond Video Lab</h1>
+      <div class="sub">Prompt matrix, ComfyUI queue prep, ElevenLabs script control and QA scoring for internal Mara Vale video experiments. No publishing path is connected here.</div>
+    </div>
+    <div class="actions">
+      <button id="loadConfigBtn">Load config</button>
+      <button id="generateBtn" class="primary">Generate matrix</button>
+    </div>
+  </header>
+
+  <main>
+    <aside class="panel controls">
+      <div class="field">
+        <label for="configFile">Config JSON</label>
+        <input id="configFile" type="file" accept=".json,application/json">
+      </div>
+      <div class="field">
+        <label for="route">Route</label>
+        <select id="route"></select>
+      </div>
+      <div class="field">
+        <label for="outfit">Outfit</label>
+        <select id="outfit"></select>
+      </div>
+      <div class="field">
+        <label for="tone">Tone</label>
+        <select id="tone"></select>
+      </div>
+      <div class="field">
+        <label for="visualStyle">Visual style</label>
+        <select id="visualStyle"></select>
+      </div>
+      <div class="field">
+        <label for="setting">Setting</label>
+        <select id="setting"></select>
+      </div>
+      <div class="field">
+        <label for="motion">Motion</label>
+        <select id="motion"></select>
+      </div>
+      <div class="field">
+        <label for="hook">Hook</label>
+        <select id="hook"></select>
+      </div>
+      <div class="field">
+        <label for="spoken">Spoken text</label>
+        <select id="spoken"></select>
+      </div>
+      <div class="field">
+        <label for="customHook">Hook override</label>
+        <input id="customHook" placeholder="Optional custom hook">
+      </div>
+      <div class="field">
+        <label for="customSpoken">Spoken override</label>
+        <textarea id="customSpoken" placeholder="Optional exact script for ElevenLabs/lipsync"></textarea>
+      </div>
+      <div class="row" style="grid-template-columns:1fr 1fr;">
+        <div class="field">
+          <label for="limit">Batch limit</label>
+          <input id="limit" type="number" min="1" max="5000" value="12">
+        </div>
+        <div class="field">
+          <label for="seedStart">Seed start</label>
+          <input id="seedStart" type="number" min="1" value="1000">
+        </div>
+      </div>
+      <div class="actions">
+        <button id="exportJsonl">Export JSONL</button>
+        <button id="exportCsv">Export CSV</button>
+        <button id="copyPrompt">Copy prompt</button>
+      </div>
+      <p class="mini">Scale only after a 12-video batch passes identity 4/5, artifacts 4/5 and UGC use 4/5.</p>
+    </aside>
+
+    <section class="content">
+      <section class="panel">
+        <div class="statbar">
+          <div class="stat"><div class="k">Matching matrix</div><div class="v" id="totalCount">0</div></div>
+          <div class="stat"><div class="k">Generated rows</div><div class="v" id="shownCount">0</div></div>
+          <div class="stat"><div class="k">Selected route</div><div class="v" id="routeStat">-</div></div>
+          <div class="stat"><div class="k">Gate</div><div class="v">12 first</div></div>
+          <div class="stat"><div class="k">Status</div><div class="v" id="statusText">Ready</div></div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="asset-strip">
+          <div class="asset">
+            <img src="../references/ai-ecommerce-model/20260605-higgsfield-luxury-identity-contact-sheet-4k-v1.png" alt="Mara identity sheet">
+            <small>Identity sheet</small>
+          </div>
+          <div class="asset">
+            <img src="../references/ai-ecommerce-model/identity-bank-50/photos/mara_identity_02.jpg" alt="Mara face reference">
+            <small>Face lock</small>
+          </div>
+          <div class="asset">
+            <img src="../references/ugc-model-ltx23/20260615-analysis/assets/master-ugc-video-review.jpg" alt="UGC review sheet">
+            <small>Last QA sheet</small>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="tabs">
+          <button class="tab active" data-tab="matrix">Matrix</button>
+          <button class="tab" data-tab="qa">QA</button>
+          <button class="tab" data-tab="queue">ComfyUI</button>
+        </div>
+
+        <div id="matrix" class="tabpage active">
+          <div class="scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Route</th>
+                  <th>Outfit</th>
+                  <th>Style</th>
+                  <th>Motion</th>
+                  <th>Hook</th>
+                </tr>
+              </thead>
+              <tbody id="matrixBody"></tbody>
+            </table>
+          </div>
+          <div class="prompt-preview">
+            <div class="field">
+              <label for="selectedPrompt">Selected prompt</label>
+              <textarea id="selectedPrompt" readonly></textarea>
+            </div>
+            <div class="field">
+              <label for="selectedNegative">Negative prompt + ElevenLabs</label>
+              <textarea id="selectedNegative" readonly></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div id="qa" class="tabpage">
+          <div class="qa-grid">
+            <div class="file-input">
+              <label for="inventoryFile">Load video-inventory.json</label>
+              <input id="inventoryFile" type="file" accept=".json,application/json">
+            </div>
+            <div class="field">
+              <label for="qaIdentity">Default identity</label>
+              <select id="qaIdentity"><option>4</option><option>5</option><option>3</option><option>2</option><option>1</option></select>
+            </div>
+            <div class="field">
+              <label for="qaArtifacts">Default artifacts</label>
+              <select id="qaArtifacts"><option>4</option><option>5</option><option>3</option><option>2</option><option>1</option></select>
+            </div>
+            <div class="field">
+              <label for="qaUgc">Default UGC use</label>
+              <select id="qaUgc"><option>4</option><option>5</option><option>3</option><option>2</option><option>1</option></select>
+            </div>
+          </div>
+          <div class="actions">
+            <button id="applyQaDefaults">Apply defaults</button>
+            <button id="exportQa">Export QA JSON</button>
+          </div>
+          <div class="scroll" style="margin-top:12px;">
+            <table>
+              <thead>
+                <tr>
+                  <th>File</th>
+                  <th>Batch</th>
+                  <th>Meta</th>
+                  <th>Identity</th>
+                  <th>Motion</th>
+                  <th>Artifacts</th>
+                  <th>UGC</th>
+                  <th>Decision</th>
+                </tr>
+              </thead>
+              <tbody id="qaBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div id="queue" class="tabpage">
+          <div class="row">
+            <div class="field">
+              <label>Prompt generator</label>
+              <textarea readonly>node scripts/mara_prompt_matrix.js --limit 12 --routes comfy_ltx23 --run-name pond-smoke-001</textarea>
+            </div>
+            <div class="field">
+              <label>ComfyUI dry-run</label>
+              <textarea readonly>node scripts/mara_comfyui_queue.js --workflow C:\path\to\workflow_api.json --mapping hermes-content\references\ai-ecommerce-model\comfyui\mara-ltx23-mapping.example.json --matrix hermes-content\references\ai-ecommerce-model\prompt-matrix-runs\pond-smoke-001\prompt-matrix.jsonl --limit 12</textarea>
+            </div>
+            <div class="field">
+              <label>ComfyUI submit</label>
+              <textarea readonly>node scripts/mara_comfyui_queue.js --workflow C:\path\to\workflow_api.json --mapping C:\path\to\edited-mapping.json --matrix C:\path\to\prompt-matrix.jsonl --limit 12 --endpoint http://127.0.0.1:8188 --submit</textarea>
+            </div>
+            <div class="field">
+              <label>Higgsfield gate</label>
+              <textarea readonly>Only send winners to Higgsfield. Preflight cost first. Keep audio/lipsync separate unless the run is explicitly an audio experiment.</textarea>
+            </div>
+          </div>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <script>
+    const FALLBACK_CONFIG = {
+      identity_lock: {
+        master_sheet: "hermes-content/references/ai-ecommerce-model/20260605-higgsfield-luxury-identity-contact-sheet-4k-v1.png",
+        primary_face_reference: "hermes-content/references/ai-ecommerce-model/identity-bank-50/photos/mara_identity_02.jpg",
+        fixed_prompt: "Same fictional adult red-haired woman from the Mara Vale identity sheet. Preserve the same face, freckles, green-hazel eyes, nose, lips, jawline, copper-red wavy hair, fair skin, body proportions and soft warm smile. Do not create a similar person. Keep the exact documented identity.",
+        negative_prompt: "different person, changed face, changed eyes, changed eyebrows, changed nose, changed lips, changed teeth, changed smile, changed hair, extra people, extra hands, extra fingers, distorted teeth, text, watermark, logo, subtitles, scene change, plastic skin, flicker"
+      },
+      batch_rules: { default_limit: 12 },
+      routes: [
+        { id: "comfy_ltx23", label: "ComfyUI LTX 2.3", stage: "cheap_lab", tool: "ComfyUI", model: "LTX-2.3", default_duration_seconds: 6 },
+        { id: "comfy_wan22", label: "ComfyUI Wan2.2", stage: "cheap_lab", tool: "ComfyUI", model: "Wan2.2", default_duration_seconds: 3 },
+        { id: "seedance_2_0", label: "Higgsfield Seedance 2.0", stage: "premium_test", tool: "Higgsfield", model: "seedance_2_0", default_duration_seconds: 5 },
+        { id: "kling3_0", label: "Higgsfield Kling 3.0", stage: "premium_final", tool: "Higgsfield", model: "kling3_0", default_duration_seconds: 5 },
+        { id: "veo3_1_lite", label: "Higgsfield Veo 3.1 Lite", stage: "premium_batch", tool: "Higgsfield", model: "veo3_1_lite", default_duration_seconds: 6 },
+        { id: "wan2_7", label: "Higgsfield Wan 2.7", stage: "audio_experiment", tool: "Higgsfield", model: "wan2_7", default_duration_seconds: 5 }
+      ],
+      options: {
+        outfits: [
+          { id: "same_source_outfit", label: "Same source outfit", prompt: "same outfit as the approved input still, no wardrobe change" },
+          { id: "apartment_luxury_ugc", label: "Apartment luxury UGC", prompt: "cream fitted ribbed top under a relaxed ivory linen shirt, high-waist tailored pants, small gold hoops, no logos, brand-safe" },
+          { id: "premium_beauty", label: "Premium beauty", prompt: "ivory silk blouse, subtle gold jewelry, polished natural hair, soft makeup, no logos" },
+          { id: "city_lifestyle", label: "City lifestyle", prompt: "white fitted tee, oversized beige blazer, straight-leg denim, neutral sneakers, no logos" }
+        ],
+        tones: [
+          { id: "warm_friend", label: "Warm friend", prompt: "warm, conversational, believable, friendly, no announcer voice" },
+          { id: "premium_calm", label: "Premium calm", prompt: "calm, polished, trustworthy, elegant, measured pacing" },
+          { id: "direct_sales", label: "Direct sales", prompt: "clear, practical, specific, benefit-led, one CTA" },
+          { id: "storytime_soft", label: "Storytime soft", prompt: "intimate storytime, emotional but not dramatic, natural pauses" }
+        ],
+        visual_styles: [
+          { id: "closeup_selfie", label: "Close-up selfie", prompt: "close-up vertical selfie, face large in frame, stable identity, subtle handheld realism" },
+          { id: "medium_talking_head", label: "Medium talking head", prompt: "medium close-up talking-head frame, shoulders visible, eye-level camera" },
+          { id: "premium_beauty_ad", label: "Premium beauty ad", prompt: "premium beauty commercial realism, soft clean lighting, natural skin texture" },
+          { id: "desk_review", label: "Desk review", prompt: "creator desk review style, product or note near camera, clean home office" }
+        ],
+        settings: [
+          { id: "same_room", label: "Same room", prompt: "same room and same lighting as the approved input still" },
+          { id: "warm_apartment", label: "Warm apartment", prompt: "warm modern apartment, curtains, sofa or bed, side table, lamp, plants" },
+          { id: "clean_bathroom", label: "Clean bathroom", prompt: "clean bright bathroom or vanity corner, skincare routine mood" },
+          { id: "home_office", label: "Home office", prompt: "home office desk, notebook, soft daylight, no readable screens" }
+        ],
+        motions: [
+          { id: "low_mouth_nod", label: "Low mouth + nod", prompt: "subtle natural mouth movement, one small nod, one blink, no scene change" },
+          { id: "lean_hook", label: "Lean on hook", prompt: "leans slightly toward camera on the hook, pauses, relaxes back" },
+          { id: "product_pickup", label: "Product pickup", prompt: "picks up one simple product and holds it near camera, minimal hand movement" },
+          { id: "hair_adjust", label: "Hair adjust", prompt: "briefly tucks hair behind ear, looks down for a beat, returns gaze to camera" }
+        ],
+        hooks: [
+          { id: "skincare_steps", label: "Skincare steps", text: "Tu rutina de 10 pasos no era skincare. Era marketing." },
+          { id: "product_seen", label: "Product seen", text: "Esto parece simple, pero cambia como se ve el producto en camara." },
+          { id: "not_testimonial", label: "Not testimonial", text: "No voy a fingir que esto es una review real. Te muestro como se usaria." },
+          { id: "one_detail", label: "One detail", text: "Antes de comprar algo asi, miraria este detalle." }
+        ],
+        spoken_texts: [
+          { id: "skincare_safe_15s", label: "Skincare safe 15s", text: "Tu rutina no necesita sonar complicada para verse bien. Mira la textura, la luz y como queda en piel. Menos pasos, mas claridad. Si quieres que tu producto se vea asi, pide una demo." },
+          { id: "ugc_disclosure_15s", label: "UGC disclosure 15s", text: "Esto es una demostracion visual, no un testimonio real. La idea es mostrar el producto con claridad, sin prometer resultados que nadie comprobo." },
+          { id: "client_offer_20s", label: "Client offer 20s", text: "Si tu tienda publica productos pero las fotos no venden la experiencia, puedes probar creativos con modelo IA. Primero validamos el estilo, despues hacemos las versiones finales." }
+        ]
+      },
+      prompt_templates: {
+        positive: "{identity_lock} Create a vertical 9:16 ultra-realistic UGC video test. Visual style: {visual_style}. Setting: {setting}. Outfit: {outfit}. Motion: {motion}. Tone: {tone}. Hook line for first two seconds: \"{hook}\". Spoken text to support later ElevenLabs and lipsync: \"{spoken_text}\". Keep the face large and stable, natural skin texture, realistic eyes, realistic mouth, stable teeth, controlled hands, no scene change unless explicitly requested. This is an internal test frame/video for ONIA; do not add text, subtitles, watermarks, logos or fake product labels.",
+        negative: "{negative_prompt}. Also avoid: wide shot before identity is stable, strong hand waving, product deformation, fake testimonial cues, medical claims, guaranteed results, visible third-party brands, copied creator performance.",
+        elevenlabs_direction: "Spanish LATAM, young adult woman, natural UGC delivery, {tone}. Pace should fit {duration_seconds}s. Do not sound like a TV announcer. Leave tiny pauses after the hook and before CTA."
+      }
+    };
+
+    let config = FALLBACK_CONFIG;
+    let matrixRows = [];
+    let selectedId = null;
+    let qaRows = [];
+
+    const el = (id) => document.getElementById(id);
+    const optionLabel = (item) => item.label || item.id;
+
+    function fill(template, values) {
+      return String(template).replace(/\{([A-Za-z0-9_]+)\}/g, (_, key) => values[key] == null ? "" : values[key]);
+    }
+
+    function safeId(value) {
+      return String(value || "").replace(/[^A-Za-z0-9._-]/g, "-").replace(/-+/g, "-").replace(/^-|-$/g, "");
+    }
+
+    function setStatus(text) { el("statusText").textContent = text; }
+
+    async function loadRelativeConfig() {
+      try {
+        const res = await fetch("../references/ai-ecommerce-model/mara-pond-video-lab-config-20260616.json", { cache: "no-store" });
+        if (!res.ok) throw new Error("config fetch failed");
+        config = await res.json();
+        setStatus("Config JSON");
+      } catch (_) {
+        config = FALLBACK_CONFIG;
+        setStatus("Embedded");
+      }
+      populateControls();
+      generateMatrix();
+    }
+
+    function populateSelect(id, items, allLabel) {
+      const node = el(id);
+      node.innerHTML = "";
+      const all = document.createElement("option");
+      all.value = "__all";
+      all.textContent = allLabel || "All";
+      node.appendChild(all);
+      items.forEach((item) => {
+        const opt = document.createElement("option");
+        opt.value = item.id;
+        opt.textContent = optionLabel(item);
+        node.appendChild(opt);
+      });
+    }
+
+    function populateControls() {
+      populateSelect("route", config.routes, "All routes");
+      populateSelect("outfit", config.options.outfits, "All outfits");
+      populateSelect("tone", config.options.tones, "All tones");
+      populateSelect("visualStyle", config.options.visual_styles, "All styles");
+      populateSelect("setting", config.options.settings, "All settings");
+      populateSelect("motion", config.options.motions, "All motions");
+      populateSelect("hook", config.options.hooks, "All hooks");
+      populateSelect("spoken", config.options.spoken_texts, "All spoken");
+      el("limit").value = config.batch_rules.default_limit || 12;
+    }
+
+    function filterItems(items, selectId) {
+      const value = el(selectId).value;
+      if (value === "__all") return items;
+      return items.filter((item) => item.id === value);
+    }
+
+    function comboCount() {
+      return filterItems(config.routes, "route").length *
+        filterItems(config.options.outfits, "outfit").length *
+        filterItems(config.options.tones, "tone").length *
+        filterItems(config.options.visual_styles, "visualStyle").length *
+        filterItems(config.options.settings, "setting").length *
+        filterItems(config.options.motions, "motion").length *
+        filterItems(config.options.hooks, "hook").length *
+        filterItems(config.options.spoken_texts, "spoken").length;
+    }
+
+    function buildRow(route, outfit, tone, visualStyle, setting, motion, hook, spoken, index) {
+      const customHook = el("customHook").value.trim();
+      const customSpoken = el("customSpoken").value.trim();
+      const hookText = customHook || hook.text;
+      const spokenText = customSpoken || spoken.text;
+      const duration = route.default_duration_seconds || 6;
+      const values = {
+        identity_lock: config.identity_lock.fixed_prompt,
+        negative_prompt: config.identity_lock.negative_prompt,
+        outfit: outfit.prompt,
+        tone: tone.prompt,
+        visual_style: visualStyle.prompt,
+        setting: setting.prompt,
+        motion: motion.prompt,
+        hook: hookText,
+        spoken_text: spokenText,
+        duration_seconds: duration
+      };
+      return {
+        id: ["mara", String(index).padStart(5, "0"), route.id, outfit.id, tone.id, visualStyle.id, setting.id, motion.id, hook.id, spoken.id].map(safeId).join("__"),
+        index,
+        seed: Number(el("seedStart").value || 1000) + index - 1,
+        route_id: route.id,
+        route_label: route.label,
+        route_stage: route.stage,
+        route_tool: route.tool,
+        model: route.model,
+        outfit_id: outfit.id,
+        outfit_label: outfit.label,
+        tone_id: tone.id,
+        tone_label: tone.label,
+        visual_style_id: visualStyle.id,
+        visual_style_label: visualStyle.label,
+        setting_id: setting.id,
+        setting_label: setting.label,
+        motion_id: motion.id,
+        motion_label: motion.label,
+        hook_id: hook.id,
+        hook: hookText,
+        spoken_text_id: spoken.id,
+        spoken_text: spokenText,
+        duration_seconds: duration,
+        input_image: config.identity_lock.primary_face_reference,
+        identity_master: config.identity_lock.master_sheet,
+        prompt: fill(config.prompt_templates.positive, values),
+        negative_prompt: fill(config.prompt_templates.negative, values),
+        elevenlabs_direction: fill(config.prompt_templates.elevenlabs_direction, values),
+        approval_state: "internal_prompt_only"
+      };
+    }
+
+    function generateMatrix() {
+      const limit = Math.max(1, Number(el("limit").value || 12));
+      const routes = filterItems(config.routes, "route");
+      const outfits = filterItems(config.options.outfits, "outfit");
+      const tones = filterItems(config.options.tones, "tone");
+      const styles = filterItems(config.options.visual_styles, "visualStyle");
+      const settings = filterItems(config.options.settings, "setting");
+      const motions = filterItems(config.options.motions, "motion");
+      const hooks = filterItems(config.options.hooks, "hook");
+      const spokenTexts = filterItems(config.options.spoken_texts, "spoken");
+      const rows = [];
+      let index = 0;
+      outer:
+      for (const route of routes) for (const outfit of outfits) for (const tone of tones) for (const style of styles) for (const setting of settings) for (const motion of motions) for (const hook of hooks) for (const spoken of spokenTexts) {
+        index += 1;
+        rows.push(buildRow(route, outfit, tone, style, setting, motion, hook, spoken, index));
+        if (rows.length >= limit) break outer;
+      }
+      matrixRows = rows;
+      selectedId = rows[0] ? rows[0].id : null;
+      renderMatrix();
+      el("totalCount").textContent = comboCount().toLocaleString("en-US");
+      el("shownCount").textContent = rows.length.toLocaleString("en-US");
+      el("routeStat").textContent = el("route").value === "__all" ? "Mixed" : el("route").value;
+      setStatus("Matrix ready");
+    }
+
+    function renderMatrix() {
+      const body = el("matrixBody");
+      body.innerHTML = "";
+      matrixRows.forEach((row) => {
+        const tr = document.createElement("tr");
+        tr.dataset.id = row.id;
+        if (row.id === selectedId) tr.classList.add("selected");
+        tr.innerHTML = `
+          <td>${row.index}<br><span class="mini">${row.id.slice(0, 56)}</span></td>
+          <td><span class="status-pill ${row.route_stage === "cheap_lab" ? "ok" : "hold"}">${row.route_id}</span></td>
+          <td>${row.outfit_label}</td>
+          <td>${row.visual_style_label}<br><span class="mini">${row.setting_label}</span></td>
+          <td>${row.motion_label}</td>
+          <td>${row.hook}</td>`;
+        tr.addEventListener("click", () => {
+          selectedId = row.id;
+          renderMatrix();
+        });
+        body.appendChild(tr);
+      });
+      renderSelectedPrompt();
+    }
+
+    function renderSelectedPrompt() {
+      const row = matrixRows.find((item) => item.id === selectedId);
+      el("selectedPrompt").value = row ? row.prompt : "";
+      el("selectedNegative").value = row ? row.negative_prompt + "\n\nElevenLabs: " + row.elevenlabs_direction : "";
+    }
+
+    function download(filename, content, mime) {
+      const blob = new Blob([content], { type: mime || "text/plain" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    function exportJsonl() {
+      download("mara-prompt-matrix.jsonl", matrixRows.map((row) => JSON.stringify(row)).join("\n") + "\n", "application/x-ndjson");
+    }
+
+    function csvCell(value) {
+      return `"${String(value == null ? "" : value).replace(/"/g, '""').replace(/\r?\n/g, " ")}"`;
+    }
+
+    function exportCsv() {
+      const headers = ["id", "seed", "route_id", "model", "outfit_id", "tone_id", "visual_style_id", "setting_id", "motion_id", "hook", "spoken_text", "prompt", "negative_prompt", "elevenlabs_direction"];
+      const lines = [headers.join(",")].concat(matrixRows.map((row) => headers.map((key) => csvCell(row[key])).join(",")));
+      download("mara-prompt-matrix.csv", lines.join("\n") + "\n", "text/csv");
+    }
+
+    function copyPrompt() {
+      const row = matrixRows.find((item) => item.id === selectedId);
+      if (!row) return;
+      navigator.clipboard.writeText(row.prompt + "\n\nNegative:\n" + row.negative_prompt + "\n\nElevenLabs:\n" + row.elevenlabs_direction);
+      setStatus("Copied");
+    }
+
+    function scoreSelect(value) {
+      const s = document.createElement("select");
+      for (const n of [5, 4, 3, 2, 1]) {
+        const opt = document.createElement("option");
+        opt.value = String(n);
+        opt.textContent = String(n);
+        if (String(n) === String(value)) opt.selected = true;
+        s.appendChild(opt);
+      }
+      return s;
+    }
+
+    function decision(row) {
+      const i = Number(row.identity || 0);
+      const a = Number(row.artifacts || 0);
+      const u = Number(row.ugc_use || 0);
+      if (i >= 4 && a >= 4 && u >= 4) return "candidate";
+      if (i <= 2 || a <= 2 || u <= 2) return "reject";
+      return "hold";
+    }
+
+    function renderQa() {
+      const body = el("qaBody");
+      body.innerHTML = "";
+      qaRows.forEach((row, idx) => {
+        const tr = document.createElement("tr");
+        const meta = `${row.width || "-"}x${row.height || "-"} ${row.duration_sec || "-"}s ${row.fps || "-"}fps`;
+        tr.innerHTML = `
+          <td>${row.file || row.id || idx}</td>
+          <td>${row.batch || "-"}</td>
+          <td>${meta}</td>
+          <td></td><td></td><td></td><td></td>
+          <td><span class="status-pill ${decision(row) === "candidate" ? "ok" : decision(row) === "reject" ? "reject" : "hold"}">${decision(row)}</span></td>`;
+        ["identity", "motion", "artifacts", "ugc_use"].forEach((key, n) => {
+          const cell = tr.children[3 + n];
+          const select = scoreSelect(row[key] || 4);
+          select.addEventListener("change", () => {
+            row[key] = Number(select.value);
+            renderQa();
+          });
+          cell.appendChild(select);
+        });
+        body.appendChild(tr);
+      });
+    }
+
+    function applyQaDefaults() {
+      qaRows.forEach((row) => {
+        row.identity = Number(el("qaIdentity").value);
+        row.artifacts = Number(el("qaArtifacts").value);
+        row.ugc_use = Number(el("qaUgc").value);
+        if (!row.motion) row.motion = 3;
+      });
+      renderQa();
+    }
+
+    function exportQa() {
+      download("mara-video-qa.json", JSON.stringify({
+        generated_at: new Date().toISOString(),
+        scale_rule: "Only scale candidate rows.",
+        rows: qaRows.map((row) => ({ ...row, decision: decision(row) }))
+      }, null, 2), "application/json");
+    }
+
+    function setupTabs() {
+      document.querySelectorAll(".tab").forEach((tab) => {
+        tab.addEventListener("click", () => {
+          document.querySelectorAll(".tab").forEach((item) => item.classList.remove("active"));
+          document.querySelectorAll(".tabpage").forEach((item) => item.classList.remove("active"));
+          tab.classList.add("active");
+          el(tab.dataset.tab).classList.add("active");
+        });
+      });
+    }
+
+    function setup() {
+      setupTabs();
+      ["route", "outfit", "tone", "visualStyle", "setting", "motion", "hook", "spoken", "limit", "seedStart", "customHook", "customSpoken"].forEach((id) => {
+        el(id).addEventListener(id === "customSpoken" ? "input" : "change", generateMatrix);
+      });
+      el("generateBtn").addEventListener("click", generateMatrix);
+      el("loadConfigBtn").addEventListener("click", loadRelativeConfig);
+      el("exportJsonl").addEventListener("click", exportJsonl);
+      el("exportCsv").addEventListener("click", exportCsv);
+      el("copyPrompt").addEventListener("click", copyPrompt);
+      el("applyQaDefaults").addEventListener("click", applyQaDefaults);
+      el("exportQa").addEventListener("click", exportQa);
+      el("configFile").addEventListener("change", async (event) => {
+        const file = event.target.files[0];
+        if (!file) return;
+        config = JSON.parse(await file.text());
+        populateControls();
+        generateMatrix();
+      });
+      el("inventoryFile").addEventListener("change", async (event) => {
+        const file = event.target.files[0];
+        if (!file) return;
+        qaRows = JSON.parse(await file.text()).map((row) => ({
+          ...row,
+          identity: row.identity || 4,
+          motion: row.motion || 3,
+          artifacts: row.artifacts || 4,
+          ugc_use: row.ugc_use || 4
+        }));
+        renderQa();
+      });
+      loadRelativeConfig();
+    }
+
+    setup();
+  </script>
+</body>
+</html>

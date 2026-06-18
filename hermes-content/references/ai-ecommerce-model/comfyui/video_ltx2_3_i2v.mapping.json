@@ -1,0 +1,164 @@
+{
+  "id": "video-ltx2-3-i2v-mapping",
+  "status": "ready_for_dry_run",
+  "workflow_source": "C:/Users/PC/Downloads/video_ltx2_3_i2v.json",
+  "notes": [
+    "This mapping targets the ComfyUI API workflow exported from video_ltx2_3_i2v.",
+    "ComfyUI LoadImage expects an image filename already available in the Pod input folder, not a local Windows path.",
+    "To use Mara, upload the approved Mara reference image through the LoadImage node or copy it into ComfyUI/input, then replace defaults.comfyui_image with the exact filename shown by ComfyUI."
+  ],
+  "patches": {
+    "positive_prompt": {
+      "node": "267:266",
+      "input": "value",
+      "source": "prompt"
+    },
+    "negative_prompt": {
+      "node": "267:247",
+      "input": "text",
+      "source": "negative_prompt"
+    },
+    "seed_prompt_generator": {
+      "node": "267:274",
+      "input": "sampling_mode.seed",
+      "source": "seed"
+    },
+    "prompt_sampling_mode": {
+      "node": "267:274",
+      "input": "sampling_mode",
+      "source": "prompt_sampling_mode",
+      "default": "on"
+    },
+    "prompt_max_length": {
+      "node": "267:274",
+      "input": "max_length",
+      "source": "prompt_max_length",
+      "default": 128
+    },
+    "prompt_temperature": {
+      "node": "267:274",
+      "input": "sampling_mode.temperature",
+      "source": "prompt_temperature",
+      "default": 0.2
+    },
+    "prompt_top_p": {
+      "node": "267:274",
+      "input": "sampling_mode.top_p",
+      "source": "prompt_top_p",
+      "default": 0.7
+    },
+    "prompt_top_k": {
+      "node": "267:274",
+      "input": "sampling_mode.top_k",
+      "source": "prompt_top_k",
+      "default": 16
+    },
+    "seed_noise_pass_1": {
+      "node": "267:216",
+      "input": "noise_seed",
+      "source": "seed"
+    },
+    "seed_noise_pass_2": {
+      "node": "267:237",
+      "input": "noise_seed",
+      "source": "seed"
+    },
+    "image": {
+      "node": "269",
+      "input": "image",
+      "source": "comfyui_image",
+      "default": "mara_20260616_primary_i2v_front_smile.png"
+    },
+    "output_prefix": {
+      "node": "75",
+      "input": "filename_prefix",
+      "source": "id"
+    },
+    "width": {
+      "node": "267:257",
+      "input": "value",
+      "source": "width",
+      "default": 768
+    },
+    "height": {
+      "node": "267:258",
+      "input": "value",
+      "source": "height",
+      "default": 768
+    },
+    "frames": {
+      "node": "267:225",
+      "input": "value",
+      "source": "frames",
+      "default": 49
+    },
+    "fps": {
+      "node": "267:260",
+      "input": "value",
+      "source": "fps",
+      "default": 8
+    },
+    "image_compression": {
+      "node": "267:248",
+      "input": "img_compression",
+      "source": "img_compression",
+      "default": 18
+    },
+    "image_strength_first": {
+      "node": "267:249",
+      "input": "strength",
+      "source": "image_strength_first",
+      "default": 0.7
+    },
+    "image_strength_second": {
+      "node": "267:230",
+      "input": "strength",
+      "source": "image_strength_second",
+      "default": 1.0
+    },
+    "cfg_first": {
+      "node": "267:231",
+      "input": "cfg",
+      "source": "cfg_first",
+      "default": 1.0
+    },
+    "cfg_second": {
+      "node": "267:213",
+      "input": "cfg",
+      "source": "cfg_second",
+      "default": 1.0
+    }
+  },
+  "defaults": {
+    "endpoint": "http://127.0.0.1:8188",
+    "client_id": "onia-mara-pond-video-lab",
+    "comfyui_image": "mara_20260616_primary_i2v_front_smile.png",
+    "width": 768,
+    "height": 768,
+    "frames": 49,
+    "fps": 8,
+    "prompt_sampling_mode": "on",
+    "prompt_max_length": 128,
+    "prompt_temperature": 0.2,
+    "prompt_top_p": 0.7,
+    "prompt_top_k": 16,
+    "img_compression": 18,
+    "image_strength_first": 0.7,
+    "image_strength_second": 1.0,
+    "cfg_first": 1.0,
+    "cfg_second": 1.0
+  },
+  "node_reference": {
+    "positive_prompt_base": "267:266 PrimitiveStringMultiline.value",
+    "ltx_prompt_generator": "267:274 TextGenerateLTX2Prompt",
+    "negative_prompt": "267:247 CLIPTextEncode.text",
+    "image": "269 LoadImage.image",
+    "save_video": "75 SaveVideo.filename_prefix",
+    "noise_seed_first_pass": "267:216 RandomNoise.noise_seed",
+    "noise_seed_second_pass": "267:237 RandomNoise.noise_seed",
+    "width": "267:257 PrimitiveInt.value",
+    "height": "267:258 PrimitiveInt.value",
+    "frames": "267:225 PrimitiveInt.value",
+    "fps": "267:260 PrimitiveInt.value"
+  }
+}

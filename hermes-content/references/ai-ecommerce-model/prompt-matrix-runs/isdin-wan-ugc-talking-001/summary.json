@@ -1,0 +1,33 @@
+{
+  "ok": true,
+  "generated_at": "2026-06-17T20:34:14.954Z",
+  "config": "hermes-content\\references\\ai-ecommerce-model\\mara-isdin-wan-ugc-config-20260617.json",
+  "output_dir": "hermes-content\\references\\ai-ecommerce-model\\prompt-matrix-runs\\isdin-wan-ugc-talking-001",
+  "prompt_matrix_jsonl": "hermes-content\\references\\ai-ecommerce-model\\prompt-matrix-runs\\isdin-wan-ugc-talking-001\\prompt-matrix.jsonl",
+  "prompt_matrix_csv": "hermes-content\\references\\ai-ecommerce-model\\prompt-matrix-runs\\isdin-wan-ugc-talking-001\\prompt-matrix.csv",
+  "requested_limit": 6,
+  "written": 6,
+  "total_matching_matrix": 720,
+  "seed_start": 1000,
+  "filters": {
+    "routes": [
+      "wan22_ti2v5b_talking_head"
+    ],
+    "outfits": "all",
+    "tones": "all",
+    "visual_styles": [
+      "talking_head_lipsync_source"
+    ],
+    "settings": [
+      "bright_bathroom",
+      "warm_apartment"
+    ],
+    "motions": [
+      "silent_micro_talk_ready",
+      "look_down_up"
+    ],
+    "hooks": "all",
+    "spoken_texts": "all"
+  },
+  "next_step": "Review prompt-matrix.csv/jsonl, run ComfyUI dry-run with scripts/mara_comfyui_queue.js, then generate only a 12-video smoke batch."
+}

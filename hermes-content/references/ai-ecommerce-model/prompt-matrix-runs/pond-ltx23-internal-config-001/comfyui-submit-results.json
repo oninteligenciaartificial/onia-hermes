@@ -1,0 +1,66 @@
+{
+  "ok": true,
+  "mode": "submit",
+  "endpoint": "https://d36cqn7umhexvx-8188.proxy.runpod.net",
+  "workflow": "..\\..\\..\\Users\\PC\\Downloads\\video_ltx2_3_i2v.json",
+  "mapping": "hermes-content\\references\\ai-ecommerce-model\\comfyui\\video_ltx2_3_i2v.mapping.json",
+  "matrix": "hermes-content\\references\\ai-ecommerce-model\\prompt-matrix-runs\\pond-ltx23-internal-config-001\\prompt-matrix.jsonl",
+  "preview": "hermes-content\\references\\ai-ecommerce-model\\prompt-matrix-runs\\pond-ltx23-internal-config-001\\comfyui-request-preview.jsonl",
+  "result_count": 6,
+  "results": [
+    {
+      "id": "ltx_cfg_001_base",
+      "status": "submitted",
+      "response": {
+        "prompt_id": "249fc1d4-1bc4-48a4-8fab-cb0ccba84588",
+        "number": 8,
+        "node_errors": {}
+      }
+    },
+    {
+      "id": "ltx_cfg_002_prompt_off",
+      "status": "submitted",
+      "response": {
+        "prompt_id": "a262b9b6-f174-49a4-bbd8-369923cae2d9",
+        "number": 9,
+        "node_errors": {}
+      }
+    },
+    {
+      "id": "ltx_cfg_003_low_compress",
+      "status": "submitted",
+      "response": {
+        "prompt_id": "bddbb9f5-56a5-436a-a49e-79d54233affe",
+        "number": 10,
+        "node_errors": {}
+      }
+    },
+    {
+      "id": "ltx_cfg_004_vertical",
+      "status": "submitted",
+      "response": {
+        "prompt_id": "843bb0ba-ac96-4731-9865-ffe90bdcf5b7",
+        "number": 11,
+        "node_errors": {}
+      }
+    },
+    {
+      "id": "ltx_cfg_005_lock_strength",
+      "status": "submitted",
+      "response": {
+        "prompt_id": "43677d6d-837c-45e9-a0be-27857e724322",
+        "number": 12,
+        "node_errors": {}
+      }
+    },
+    {
+      "id": "ltx_cfg_006_cfg2",
+      "status": "submitted",
+      "response": {
+        "prompt_id": "2a015495-81d2-4275-aa56-3e1615dccdd3",
+        "number": 13,
+        "node_errors": {}
+      }
+    }
+  ]
+}

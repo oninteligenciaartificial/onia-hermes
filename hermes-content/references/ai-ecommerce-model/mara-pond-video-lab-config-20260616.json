@@ -1,0 +1,391 @@
+{
+  "id": "mara-pond-video-lab-config-20260616",
+  "status": "internal_control_panel_not_published",
+  "owner": "Sergio / ONIA",
+  "purpose": "Controlled prompt matrix and QA system for Lia brunette video, ComfyUI lab tests, Higgsfield finals, ElevenLabs voice, and later lipsync. Mara is reserved for the red-haired model.",
+  "identity_lock": {
+    "id": "lia",
+    "prompt_id_prefix": "lia",
+    "model_name": "Lia UGC brunette identity",
+    "master_sheet": "hermes-content/references/ai-ecommerce-model/mara-identity-20260616/originals/ugc-scenes-01.png",
+    "primary_face_reference": "hermes-content/references/ai-ecommerce-model/mara-identity-20260616/mara_20260616_primary_i2v_front_smile.png",
+    "primary_comfyui_filename": "mara_20260616_primary_i2v_front_smile.png",
+    "identity_bank": "hermes-content/references/ai-ecommerce-model/mara-identity-20260616/",
+    "fixed_prompt": "Use the input image as the identity source. Preserve the same fictional adult brunette UGC model: oval face, warm light skin, natural freckles, brown eyes, thick dark eyebrows, straight natural nose, full pink lips, soft warm smile, shoulder-length wavy brown hair with subtle highlights, natural skin texture, white or cream outfit, clean bright room lighting.",
+    "negative_prompt": "different person, red hair, changed face, changed eyes, changed eyebrows, changed nose, changed lips, changed smile, changed hair, changed age, plastic skin, beauty filter, warped mouth, distorted teeth, blurry face, face flicker, cartoon, anime, fake logo, text, watermark, scene change, background transformation"
+  },
+  "batch_rules": {
+    "default_limit": 12,
+    "next_limit": 48,
+    "scale_limit": 240,
+    "full_matrix_allowed": true,
+    "do_not_generate_thousands_until": "At least one 12-video batch scores identity>=4, artifacts>=4, and ugc_use>=4 on the same route.",
+    "first_batch_recipe": "4 same-room closeups, 4 outfit-still variations, 4 location-still variations. No major location and wardrobe change inside the same video prompt."
+  },
+  "routes": [
+    {
+      "id": "comfy_ltx23",
+      "label": "ComfyUI LTX 2.3",
+      "stage": "cheap_lab",
+      "tool": "ComfyUI",
+      "model": "LTX-2.3 image-to-video",
+      "prompt_template": "ltx_i2v_motion_only",
+      "default_resolution": "768x768",
+      "default_frames": 49,
+      "default_fps": 8,
+      "use_for": "fast local identity and motion validation before paid final renders",
+      "avoid": "major location change, wide shots, extra objects, strong hand gestures"
+    },
+    {
+      "id": "comfy_wan22_ti2v5b",
+      "label": "ComfyUI Wan2.2 TI2V 5B",
+      "stage": "production_smoke",
+      "tool": "ComfyUI",
+      "model": "wan2.2_ti2v_5B_fp16.safetensors",
+      "prompt_template": "wan22_ti2v_identity_motion",
+      "default_resolution": "576x1024",
+      "default_frames": 65,
+      "default_fps": 16,
+      "default_duration_seconds": 4,
+      "use_for": "first serious Mara UGC image-to-video tests with identity locked and controllable cost/time",
+      "avoid": "wide shots, walking, new locations, visible speech, and large hand motion until identity scores 4/5"
+    },
+    {
+      "id": "comfy_wan22_i2v14b",
+      "label": "ComfyUI Wan2.2 I2V A14B FP8",
+      "stage": "final_identity_candidate",
+      "tool": "ComfyUI",
+      "model": "wan2.2_i2v_high_noise_14B_fp8_scaled.safetensors + wan2.2_i2v_low_noise_14B_fp8_scaled.safetensors",
+      "prompt_template": "wan22_ti2v_identity_motion",
+      "default_resolution": "640x640_or_vertical_after_smoke",
+      "default_duration_seconds": 4,
+      "use_for": "higher quality final identity/motion tests after Wan 5B proves the prompt direction",
+      "avoid": "running large batches before one 5B smoke clip passes QA"
+    },
+    {
+      "id": "seedance_2_0",
+      "label": "Higgsfield Seedance 2.0",
+      "stage": "premium_test",
+      "tool": "Higgsfield",
+      "model": "seedance_2_0",
+      "default_resolution": "720p",
+      "default_duration_seconds": 5,
+      "use_for": "identity-preserving reference-driven tests and motion reference route",
+      "avoid": "audio inside first render unless specifically testing audio behavior"
+    },
+    {
+      "id": "kling3_0",
+      "label": "Higgsfield Kling 3.0",
+      "stage": "premium_final",
+      "tool": "Higgsfield",
+      "model": "kling3_0",
+      "default_mode": "pro",
+      "default_duration_seconds": 5,
+      "use_for": "cinematic motion and premium shots after still approval",
+      "avoid": "word-perfect script generation"
+    },
+    {
+      "id": "veo3_1_lite",
+      "label": "Higgsfield Veo 3.1 Lite",
+      "stage": "premium_batch",
+      "tool": "Higgsfield",
+      "model": "veo3_1_lite",
+      "default_resolution": "720p",
+      "default_duration_seconds": 6,
+      "use_for": "budget batch clips after direction is clear",
+      "avoid": "using it to solve identity, wardrobe, scene, and script at once"
+    },
+    {
+      "id": "wan2_7",
+      "label": "Higgsfield Wan 2.7",
+      "stage": "audio_experiment",
+      "tool": "Higgsfield",
+      "model": "wan2_7",
+      "default_resolution": "720p",
+      "default_duration_seconds": 5,
+      "use_for": "controlled audio/lipsync experiments only after silent route works",
+      "avoid": "treating Wan as the default best model for all UGC"
+    }
+  ],
+  "options": {
+    "outfits": [
+      {
+        "id": "same_source_outfit",
+        "label": "Same source outfit",
+        "prompt": "same outfit as the approved input still, no wardrobe change"
+      },
+      {
+        "id": "apartment_luxury_ugc",
+        "label": "Apartment luxury UGC",
+        "prompt": "cream fitted ribbed top under a relaxed ivory linen shirt, high-waist tailored pants, small gold hoops, no logos, brand-safe"
+      },
+      {
+        "id": "premium_beauty",
+        "label": "Premium beauty",
+        "prompt": "ivory silk blouse, subtle gold jewelry, polished natural hair, soft makeup, no logos, modest premium styling"
+      },
+      {
+        "id": "city_lifestyle",
+        "label": "City lifestyle",
+        "prompt": "white fitted tee or bodysuit, oversized beige blazer, straight-leg denim, simple belt, neutral sneakers, no logos"
+      },
+      {
+        "id": "athleisure_safe",
+        "label": "Athleisure safe",
+        "prompt": "neutral fitted long-sleeve top, high-waist joggers or leggings, clean sneakers, non-sexualized and brand-safe"
+      }
+    ],
+    "tones": [
+      {
+        "id": "warm_friend",
+        "label": "Warm friend",
+        "prompt": "warm, conversational, believable, friendly, no announcer voice"
+      },
+      {
+        "id": "premium_calm",
+        "label": "Premium calm",
+        "prompt": "calm, polished, trustworthy, elegant, measured pacing"
+      },
+      {
+        "id": "direct_sales",
+        "label": "Direct sales",
+        "prompt": "clear, practical, specific, benefit-led, one CTA"
+      },
+      {
+        "id": "storytime_soft",
+        "label": "Storytime soft",
+        "prompt": "intimate storytime, emotional but not dramatic, natural pauses"
+      },
+      {
+        "id": "demo_operator",
+        "label": "Demo operator",
+        "prompt": "operator-style explanation, practical demonstration, confident and useful"
+      }
+    ],
+    "visual_styles": [
+      {
+        "id": "closeup_selfie",
+        "label": "Close-up selfie",
+        "prompt": "close-up vertical selfie, face large in frame, stable identity, subtle handheld realism"
+      },
+      {
+        "id": "medium_talking_head",
+        "label": "Medium talking head",
+        "prompt": "medium close-up talking-head frame, shoulders visible, eye-level camera, soft natural background"
+      },
+      {
+        "id": "premium_beauty_ad",
+        "label": "Premium beauty ad",
+        "prompt": "premium beauty commercial realism, soft clean lighting, product-ready composition, natural skin texture"
+      },
+      {
+        "id": "desk_review",
+        "label": "Desk review",
+        "prompt": "creator desk review style, product or note near camera, clean home office, social-native"
+      },
+      {
+        "id": "mirror_grwm",
+        "label": "Mirror GRWM",
+        "prompt": "mirror get-ready-with-me framing, tasteful outfit check, controlled motion, no brand logos"
+      }
+    ],
+    "settings": [
+      {
+        "id": "same_room",
+        "label": "Same room",
+        "prompt": "same room and same lighting as the approved input still"
+      },
+      {
+        "id": "warm_apartment",
+        "label": "Warm apartment",
+        "prompt": "warm modern apartment, curtains, sofa or bed, side table, lamp, plants, clean lived-in luxury"
+      },
+      {
+        "id": "clean_bathroom",
+        "label": "Clean bathroom",
+        "prompt": "clean bright bathroom or vanity corner, skincare routine mood, no medical claims"
+      },
+      {
+        "id": "home_office",
+        "label": "Home office",
+        "prompt": "home office desk, notebook, soft daylight, no readable screens or private data"
+      },
+      {
+        "id": "boutique_street",
+        "label": "Boutique street",
+        "prompt": "clean boutique street or cafe exterior, natural daylight, no readable brand signs"
+      }
+    ],
+    "motions": [
+      {
+        "id": "low_mouth_nod",
+        "label": "Blink + tiny nod",
+        "prompt": "one natural blink, a tiny head nod, subtle breathing, no mouth speech"
+      },
+      {
+        "id": "lean_hook",
+        "label": "Small lean",
+        "prompt": "leans a little toward the camera, pauses, relaxes back, eyes stay sharp"
+      },
+      {
+        "id": "product_pickup",
+        "label": "Product pickup",
+        "prompt": "keeps both hands mostly out of frame, slight shoulder movement, product not introduced yet"
+      },
+      {
+        "id": "hair_adjust",
+        "label": "Hair adjust",
+        "prompt": "very small hair movement from natural breathing, no hand touching the hair"
+      },
+      {
+        "id": "walk_to_medium",
+        "label": "Look down/up",
+        "prompt": "looks down for a beat and returns gaze to camera, very subtle expression change"
+      },
+      {
+        "id": "wan_micro_sway",
+        "label": "Wan micro camera sway",
+        "prompt": "very subtle handheld selfie camera sway, face remains centered, eyes sharp, no zoom"
+      },
+      {
+        "id": "wan_lean_in_out",
+        "label": "Wan lean in/out",
+        "prompt": "slow tiny lean toward the camera and back, shoulders move slightly, smile remains natural"
+      },
+      {
+        "id": "wan_eye_glance",
+        "label": "Wan eye glance",
+        "prompt": "brief eye glance slightly to the side, one blink, then returns gaze to camera"
+      },
+      {
+        "id": "wan_soft_expression",
+        "label": "Wan soft expression",
+        "prompt": "small smile softens and returns, one natural blink, subtle breathing, no speech mouth movement"
+      }
+    ],
+    "hooks": [
+      {
+        "id": "skincare_steps",
+        "label": "Skincare steps",
+        "text": "Tu rutina de 10 pasos no era skincare. Era marketing."
+      },
+      {
+        "id": "product_seen",
+        "label": "Product seen",
+        "text": "Esto parece simple, pero cambia como se ve el producto en camara."
+      },
+      {
+        "id": "not_testimonial",
+        "label": "Not testimonial",
+        "text": "No voy a fingir que esto es una review real. Te muestro como se usaria."
+      },
+      {
+        "id": "one_detail",
+        "label": "One detail",
+        "text": "Antes de comprar algo asi, miraria este detalle."
+      },
+      {
+        "id": "less_polished",
+        "label": "Less polished",
+        "text": "Lo raro es que mientras menos producido se ve, mas real se siente."
+      },
+      {
+        "id": "found_better",
+        "label": "Found better",
+        "text": "Creo que encontre una forma mas limpia de mostrar este producto."
+      }
+    ],
+    "spoken_texts": [
+      {
+        "id": "skincare_safe_15s",
+        "label": "Skincare safe 15s",
+        "text": "Tu rutina no necesita sonar complicada para verse bien. Mira la textura, la luz y como queda en piel. Menos pasos, mas claridad. Si quieres que tu producto se vea asi, pide una demo."
+      },
+      {
+        "id": "ugc_disclosure_15s",
+        "label": "UGC disclosure 15s",
+        "text": "Esto es una demostracion visual, no un testimonio real. La idea es mostrar el producto con claridad, sin prometer resultados que nadie comprobo. Asi se ve una pieza segura para redes."
+      },
+      {
+        "id": "fashion_lifestyle_15s",
+        "label": "Fashion lifestyle 15s",
+        "text": "A veces el producto no necesita una sesion enorme. Necesita una toma limpia, buen movimiento y una razon clara para mirarlo. Esta es una version simple para probar estilo."
+      },
+      {
+        "id": "client_offer_20s",
+        "label": "Client offer 20s",
+        "text": "Si tu tienda publica productos pero las fotos no venden la experiencia, puedes probar creativos con modelo IA. Primero validamos el estilo, despues hacemos las versiones finales para redes y anuncios."
+      },
+      {
+        "id": "storytime_soft_20s",
+        "label": "Storytime soft 20s",
+        "text": "Anoche casi borre este video. Me vi en la pantalla y pense que estaba intentando gustarle a todos. Respire, no corregi nada, y entendi algo: a veces encontrarte empieza cuando dejas de editarte."
+      }
+    ]
+  },
+  "prompt_templates": {
+    "ltx_i2v_motion_only": "{identity_lock} Animate the existing close-up selfie only. Keep the same room, same lighting, same outfit and same camera framing. Motion: {motion}. Face must remain sharp, recognizable and stable. Preserve eyes, nose, lips, smile, jawline, hair and skin texture. No talking, no walking, no beach, no location change, no new outfit, no hand gesture, no camera zoom.",
+    "wan22_ti2v_identity_motion": "{identity_lock} Use the start image as the exact first frame and identity source. Create a silent vertical 9:16 ultra-realistic UGC selfie video. Visual style: {visual_style}. Setting lock: {setting}. Outfit lock: {outfit}. Motion: {motion}. Delivery energy: {tone}. Keep the face large, sharp and recognizable for the whole clip. Preserve eyes, eyebrows, nose, lips, smile, jawline, hair, skin texture, outfit, room and lighting. No talking, no lip articulation, no hand gesture, no walking, no scene change, no new outfit, no text, no subtitles, no watermark, no logo.",
+    "positive": "{identity_lock} Create a vertical 9:16 ultra-realistic UGC video test. Visual style: {visual_style}. Setting: {setting}. Outfit: {outfit}. Motion: {motion}. Tone: {tone}. Hook line for first two seconds: \"{hook}\". Spoken text to support later ElevenLabs and lipsync: \"{spoken_text}\". Keep the face large and stable, natural skin texture, realistic eyes, realistic mouth, stable teeth, controlled hands, no scene change unless explicitly requested. This is an internal test frame/video for ONIA; do not add text, subtitles, watermarks, logos or fake product labels.",
+    "negative": "{negative_prompt}. Also avoid: wide shot before identity is stable, strong hand waving, product deformation, fake testimonial cues, medical claims, guaranteed results, visible third-party brands, copied creator performance.",
+    "elevenlabs_direction": "Spanish LATAM, young adult woman, natural UGC delivery, {tone}. Pace should fit {duration_seconds}s. Do not sound like a TV announcer. Leave tiny pauses after the hook and before CTA."
+  },
+  "qa": {
+    "score_scale": "1 bad, 5 production-ready",
+    "minimum_to_scale": {
+      "identity": 4,
+      "artifacts": 4,
+      "ugc_use": 4
+    },
+    "criteria": [
+      {
+        "id": "identity",
+        "label": "Identity",
+        "weight": 30,
+        "fail_if": "Mara looks like another person, age changes, mouth/teeth drift, or hair/face changes."
+      },
+      {
+        "id": "motion",
+        "label": "Motion",
+        "weight": 15,
+        "fail_if": "Motion is stiff, uncanny, broken walking, or hands dominate the shot."
+      },
+      {
+        "id": "artifacts",
+        "label": "Artifacts",
+        "weight": 20,
+        "fail_if": "Face flicker, warped mouth, extra fingers, text artifacts, logo artifacts, or scene glitch."
+      },
+      {
+        "id": "ugc_use",
+        "label": "UGC Use",
+        "weight": 20,
+        "fail_if": "It does not feel native, believable, useful, or product-ready."
+      },
+      {
+        "id": "claim_safety",
+        "label": "Claim Safety",
+        "weight": 10,
+        "fail_if": "It implies a fake testimonial, fake result, medical claim, guarantee, or unauthorized brand."
+      },
+      {
+        "id": "format",
+        "label": "Format",
+        "weight": 5,
+        "fail_if": "Wrong aspect, too low quality, unreadable visuals, or unusable framing."
+      }
+    ]
+  },
+  "lipsync_route": {
+    "preferred": "Generate silent visual first, generate exact ElevenLabs audio second, apply dedicated lipsync third, then STT diff against spoken_text.",
+    "tools": ["ElevenLabs", "Wan InfiniteTalk local pending visual QA", "Sync Labs or HeyGen fallback", "Whisper/STT", "ffmpeg"],
+    "do_not": "Do not trust a general video model to preserve a word-perfect script."
+  },
+  "approval_rules": {
+    "internal_prompt_matrix": "allowed",
+    "comfyui_lab_generation": "allowed after Pod is intentionally running and cost/time is accepted",
+    "higgsfield_generation": "batch approval required",
+    "client_delivery": "explicit approval required",
+    "public_publish": "explicit approval required"
+  }
+}

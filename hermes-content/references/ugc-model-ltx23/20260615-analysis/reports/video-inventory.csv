@@ -1,0 +1,9 @@
+batch,file,path,size_bytes,duration_sec,width,height,fps,frames,aspect
+batch001,001_001_hook_direct_00001_.mp4,/workspace/runpod-slim/ComfyUI/output/onia_ugc/sergio_model/batch001/001_001_hook_direct_00001_.mp4,1178616,6.125,768,768,8/1,49,768:768
+batch001,002_002_problem_solution_00001_.mp4,/workspace/runpod-slim/ComfyUI/output/onia_ugc/sergio_model/batch001/002_002_problem_solution_00001_.mp4,941386,6.125,768,768,8/1,49,768:768
+batch001,003_003_testimonial_00001_.mp4,/workspace/runpod-slim/ComfyUI/output/onia_ugc/sergio_model/batch001/003_003_testimonial_00001_.mp4,1326080,6.125,768,768,8/1,49,768:768
+batch001,004_004_before_after_00001_.mp4,/workspace/runpod-slim/ComfyUI/output/onia_ugc/sergio_model/batch001/004_004_before_after_00001_.mp4,1088638,6.125,768,768,8/1,49,768:768
+production_matrix_locations_001,001_same_room_hook_direct_00001_.mp4,/workspace/runpod-slim/ComfyUI/output/onia_ugc/sergio_model/production_matrix_locations_001/001_same_room_hook_direct_00001_.mp4,1479064,6.125,768,768,8/1,49,768:768
+production_matrix_locations_001,008_home_office_problem_solution_00001_.mp4,/workspace/runpod-slim/ComfyUI/output/onia_ugc/sergio_model/production_matrix_locations_001/008_home_office_problem_solution_00001_.mp4,1141253,6.125,768,768,8/1,49,768:768
+production_matrix_locations_001,015_bedroom_testimonial_00001_.mp4,/workspace/runpod-slim/ComfyUI/output/onia_ugc/sergio_model/production_matrix_locations_001/015_bedroom_testimonial_00001_.mp4,1133374,6.125,768,768,8/1,49,768:768
+production_matrix_locations_001,022_kitchen_before_after_00001_.mp4,/workspace/runpod-slim/ComfyUI/output/onia_ugc/sergio_model/production_matrix_locations_001/022_kitchen_before_after_00001_.mp4,1006541,6.125,768,768,8/1,49,768:768

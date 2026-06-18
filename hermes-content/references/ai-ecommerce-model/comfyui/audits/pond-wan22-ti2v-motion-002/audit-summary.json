@@ -1,0 +1,75 @@
+{
+  "ok": true,
+  "endpoint": "https://d36cqn7umhexvx-8188.proxy.runpod.net",
+  "generated_at": "2026-06-16T20:40:39.823Z",
+  "prompt_ids": [
+    "14b81ce5-a7ae-4b9e-a2c9-51abac6a5b77",
+    "1baaf5f2-112c-4f9d-9a6f-b6d27ba974d7",
+    "ec8fd6e3-1302-447a-b9ce-5d3f3820e0ec"
+  ],
+  "rows": [
+    {
+      "prompt_id": "14b81ce5-a7ae-4b9e-a2c9-51abac6a5b77",
+      "status": "downloaded",
+      "filename": "mara__00001__comfy_wan22_ti2v5b__same_source_outfit__warm_friend__closeup_selfie__same_room__lean_hook__not_testimonial__ugc_disclosure_15s_00001_.mp4",
+      "subfolder": "",
+      "bytes": 246728,
+      "local_video": "hermes-content\\references\\ai-ecommerce-model\\comfyui\\audits\\pond-wan22-ti2v-motion-002\\14b81ce5__mara__00001__comfy_wan22_ti2v5b__same_source_outfit__warm_friend.mp4",
+      "contact_sheet": "hermes-content\\references\\ai-ecommerce-model\\comfyui\\audits\\pond-wan22-ti2v-motion-002\\14b81ce5__mara__00001__comfy_wan22_ti2v5b__same_source_outfit__warm_friend__frames.jpg",
+      "media": {
+        "duration": "4.062500",
+        "size": "246728"
+      },
+      "positive": "",
+      "negative": "",
+      "image": "",
+      "prefix": "",
+      "frames": null,
+      "fps": null,
+      "seed1": null,
+      "seed2": null
+    },
+    {
+      "prompt_id": "1baaf5f2-112c-4f9d-9a6f-b6d27ba974d7",
+      "status": "downloaded",
+      "filename": "mara__00002__comfy_wan22_ti2v5b__same_source_outfit__warm_friend__closeup_selfie__same_room__hair_adjust__not_testimonial__ugc_disclosure_15s_00001_.mp4",
+      "subfolder": "",
+      "bytes": 220069,
+      "local_video": "hermes-content\\references\\ai-ecommerce-model\\comfyui\\audits\\pond-wan22-ti2v-motion-002\\1baaf5f2__mara__00002__comfy_wan22_ti2v5b__same_source_outfit__warm_friend.mp4",
+      "contact_sheet": "hermes-content\\references\\ai-ecommerce-model\\comfyui\\audits\\pond-wan22-ti2v-motion-002\\1baaf5f2__mara__00002__comfy_wan22_ti2v5b__same_source_outfit__warm_friend__frames.jpg",
+      "media": {
+        "duration": "4.062500",
+        "size": "220069"
+      },
+      "positive": "",
+      "negative": "",
+      "image": "",
+      "prefix": "",
+      "frames": null,
+      "fps": null,
+      "seed1": null,
+      "seed2": null
+    },
+    {
+      "prompt_id": "ec8fd6e3-1302-447a-b9ce-5d3f3820e0ec",
+      "status": "downloaded",
+      "filename": "mara__00003__comfy_wan22_ti2v5b__same_source_outfit__warm_friend__closeup_selfie__same_room__walk_to_medium__not_testimonial__ugc_disclosure_15s_00001_.mp4",
+      "subfolder": "",
+      "bytes": 237039,
+      "local_video": "hermes-content\\references\\ai-ecommerce-model\\comfyui\\audits\\pond-wan22-ti2v-motion-002\\ec8fd6e3__mara__00003__comfy_wan22_ti2v5b__same_source_outfit__warm_friend.mp4",
+      "contact_sheet": "hermes-content\\references\\ai-ecommerce-model\\comfyui\\audits\\pond-wan22-ti2v-motion-002\\ec8fd6e3__mara__00003__comfy_wan22_ti2v5b__same_source_outfit__warm_friend__frames.jpg",
+      "media": {
+        "duration": "4.062500",
+        "size": "237039"
+      },
+      "positive": "",
+      "negative": "",
+      "image": "",
+      "prefix": "",
+      "frames": null,
+      "fps": null,
+      "seed1": null,
+      "seed2": null
+    }
+  ]
+}

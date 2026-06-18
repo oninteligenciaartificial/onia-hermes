@@ -1,0 +1,119 @@
+{
+  "ok": true,
+  "endpoint": "https://d36cqn7umhexvx-8188.proxy.runpod.net",
+  "generated_at": "2026-06-16T19:14:33.225Z",
+  "prompt_ids": [
+    "fdb3b711-48a2-447e-b4c3-ce115518ddd7",
+    "5a94d4a4-1806-4b45-8733-11d8637001ea",
+    "4f733f96-b1ee-438e-b423-79557736a51c",
+    "63b7c62a-c361-4abc-aca4-dc46b75205c6",
+    "48889bf2-a355-4c60-b7cd-7d0a8382fe8f"
+  ],
+  "rows": [
+    {
+      "prompt_id": "fdb3b711-48a2-447e-b4c3-ce115518ddd7",
+      "status": "downloaded",
+      "filename": "mara__00001__comfy_ltx23__same_source_outfit__warm_friend__closeup_selfie__same_room__low_mouth_nod__not_testimonial__ugc_disclosure_15s_00001_.mp4",
+      "subfolder": "",
+      "bytes": 305618,
+      "local_video": "hermes-content\\references\\ai-ecommerce-model\\comfyui\\audits\\pond-ltx23-motion-calibration-001-short\\fdb3b711__mara__00001__comfy_ltx23__same_source_outfit__warm_friend__close.mp4",
+      "contact_sheet": "hermes-content\\references\\ai-ecommerce-model\\comfyui\\audits\\pond-ltx23-motion-calibration-001-short\\fdb3b711__mara__00001__comfy_ltx23__same_source_outfit__warm_friend__close__frames.jpg",
+      "media": {
+        "duration": "6.125000",
+        "size": "305618"
+      },
+      "positive": "Use the input image as the identity source. Preserve the same fictional adult brunette UGC model: oval face, warm light skin, natural freckles, brown eyes, thick dark eyebrows, straight natural nose, full pink lips, soft warm smile, shoulder-length wavy brown hair with subtle highlights, natural skin texture, white or cream outfit, clean bright room lighting. Animate the existing close-up selfie only. Keep the same room, same lighting, same outfit and same camera framing. Motion: one natural blink, a tiny head nod, subtle breathing, no mouth speech. Face must remain sharp, recognizable and stable. Preserve eyes, nose, lips, smile, jawline, hair and skin texture. No talking, no walking, no beach, no location change, no new outfit, no hand gesture, no camera zoom.",
+      "negative": "different person, red hair, changed face, changed eyes, changed eyebrows, changed nose, changed lips, changed smile, changed hair, changed age, plastic skin, beauty filter, warped mouth, distorted teeth, blurry face, face flicker, cartoon, anime, fake logo, text, watermark, scene change, background transformation. Also avoid: wide shot before identity is stable, strong hand waving, product deformation, fake testimonial cues, medical claims, guaranteed results, visible third-party brands, copied creator performance.",
+      "image": "mara_20260616_primary_i2v_front_smile.png",
+      "prefix": "mara__00001__comfy_ltx23__same_source_outfit__warm_friend__closeup_selfie__same_room__low_mouth_nod__not_testimonial__ugc_disclosure_15s",
+      "frames": 49,
+      "fps": 8,
+      "seed1": 4201,
+      "seed2": 4201
+    },
+    {
+      "prompt_id": "5a94d4a4-1806-4b45-8733-11d8637001ea",
+      "status": "downloaded",
+      "filename": "mara__00002__comfy_ltx23__same_source_outfit__warm_friend__closeup_selfie__same_room__lean_hook__not_testimonial__ugc_disclosure_15s_00001_.mp4",
+      "subfolder": "",
+      "bytes": 265727,
+      "local_video": "hermes-content\\references\\ai-ecommerce-model\\comfyui\\audits\\pond-ltx23-motion-calibration-001-short\\5a94d4a4__mara__00002__comfy_ltx23__same_source_outfit__warm_friend__close.mp4",
+      "contact_sheet": "hermes-content\\references\\ai-ecommerce-model\\comfyui\\audits\\pond-ltx23-motion-calibration-001-short\\5a94d4a4__mara__00002__comfy_ltx23__same_source_outfit__warm_friend__close__frames.jpg",
+      "media": {
+        "duration": "6.125000",
+        "size": "265727"
+      },
+      "positive": "Use the input image as the identity source. Preserve the same fictional adult brunette UGC model: oval face, warm light skin, natural freckles, brown eyes, thick dark eyebrows, straight natural nose, full pink lips, soft warm smile, shoulder-length wavy brown hair with subtle highlights, natural skin texture, white or cream outfit, clean bright room lighting. Animate the existing close-up selfie only. Keep the same room, same lighting, same outfit and same camera framing. Motion: leans a little toward the camera, pauses, relaxes back, eyes stay sharp. Face must remain sharp, recognizable and stable. Preserve eyes, nose, lips, smile, jawline, hair and skin texture. No talking, no walking, no beach, no location change, no new outfit, no hand gesture, no camera zoom.",
+      "negative": "different person, red hair, changed face, changed eyes, changed eyebrows, changed nose, changed lips, changed smile, changed hair, changed age, plastic skin, beauty filter, warped mouth, distorted teeth, blurry face, face flicker, cartoon, anime, fake logo, text, watermark, scene change, background transformation. Also avoid: wide shot before identity is stable, strong hand waving, product deformation, fake testimonial cues, medical claims, guaranteed results, visible third-party brands, copied creator performance.",
+      "image": "mara_20260616_primary_i2v_front_smile.png",
+      "prefix": "mara__00002__comfy_ltx23__same_source_outfit__warm_friend__closeup_selfie__same_room__lean_hook__not_testimonial__ugc_disclosure_15s",
+      "frames": 49,
+      "fps": 8,
+      "seed1": 4202,
+      "seed2": 4202
+    },
+    {
+      "prompt_id": "4f733f96-b1ee-438e-b423-79557736a51c",
+      "status": "downloaded",
+      "filename": "mara__00003__comfy_ltx23__same_source_outfit__warm_friend__closeup_selfie__same_room__product_pickup__not_testimonial__ugc_disclosure_15s_00001_.mp4",
+      "subfolder": "",
+      "bytes": 280882,
+      "local_video": "hermes-content\\references\\ai-ecommerce-model\\comfyui\\audits\\pond-ltx23-motion-calibration-001-short\\4f733f96__mara__00003__comfy_ltx23__same_source_outfit__warm_friend__close.mp4",
+      "contact_sheet": "hermes-content\\references\\ai-ecommerce-model\\comfyui\\audits\\pond-ltx23-motion-calibration-001-short\\4f733f96__mara__00003__comfy_ltx23__same_source_outfit__warm_friend__close__frames.jpg",
+      "media": {
+        "duration": "6.125000",
+        "size": "280882"
+      },
+      "positive": "Use the input image as the identity source. Preserve the same fictional adult brunette UGC model: oval face, warm light skin, natural freckles, brown eyes, thick dark eyebrows, straight natural nose, full pink lips, soft warm smile, shoulder-length wavy brown hair with subtle highlights, natural skin texture, white or cream outfit, clean bright room lighting. Animate the existing close-up selfie only. Keep the same room, same lighting, same outfit and same camera framing. Motion: keeps both hands mostly out of frame, slight shoulder movement, product not introduced yet. Face must remain sharp, recognizable and stable. Preserve eyes, nose, lips, smile, jawline, hair and skin texture. No talking, no walking, no beach, no location change, no new outfit, no hand gesture, no camera zoom.",
+      "negative": "different person, red hair, changed face, changed eyes, changed eyebrows, changed nose, changed lips, changed smile, changed hair, changed age, plastic skin, beauty filter, warped mouth, distorted teeth, blurry face, face flicker, cartoon, anime, fake logo, text, watermark, scene change, background transformation. Also avoid: wide shot before identity is stable, strong hand waving, product deformation, fake testimonial cues, medical claims, guaranteed results, visible third-party brands, copied creator performance.",
+      "image": "mara_20260616_primary_i2v_front_smile.png",
+      "prefix": "mara__00003__comfy_ltx23__same_source_outfit__warm_friend__closeup_selfie__same_room__product_pickup__not_testimonial__ugc_disclosure_15s",
+      "frames": 49,
+      "fps": 8,
+      "seed1": 4203,
+      "seed2": 4203
+    },
+    {
+      "prompt_id": "63b7c62a-c361-4abc-aca4-dc46b75205c6",
+      "status": "downloaded",
+      "filename": "mara__00004__comfy_ltx23__same_source_outfit__warm_friend__closeup_selfie__same_room__hair_adjust__not_testimonial__ugc_disclosure_15s_00001_.mp4",
+      "subfolder": "",
+      "bytes": 336045,
+      "local_video": "hermes-content\\references\\ai-ecommerce-model\\comfyui\\audits\\pond-ltx23-motion-calibration-001-short\\63b7c62a__mara__00004__comfy_ltx23__same_source_outfit__warm_friend__close.mp4",
+      "contact_sheet": "hermes-content\\references\\ai-ecommerce-model\\comfyui\\audits\\pond-ltx23-motion-calibration-001-short\\63b7c62a__mara__00004__comfy_ltx23__same_source_outfit__warm_friend__close__frames.jpg",
+      "media": {
+        "duration": "6.125000",
+        "size": "336045"
+      },
+      "positive": "Use the input image as the identity source. Preserve the same fictional adult brunette UGC model: oval face, warm light skin, natural freckles, brown eyes, thick dark eyebrows, straight natural nose, full pink lips, soft warm smile, shoulder-length wavy brown hair with subtle highlights, natural skin texture, white or cream outfit, clean bright room lighting. Animate the existing close-up selfie only. Keep the same room, same lighting, same outfit and same camera framing. Motion: very small hair movement from natural breathing, no hand touching the hair. Face must remain sharp, recognizable and stable. Preserve eyes, nose, lips, smile, jawline, hair and skin texture. No talking, no walking, no beach, no location change, no new outfit, no hand gesture, no camera zoom.",
+      "negative": "different person, red hair, changed face, changed eyes, changed eyebrows, changed nose, changed lips, changed smile, changed hair, changed age, plastic skin, beauty filter, warped mouth, distorted teeth, blurry face, face flicker, cartoon, anime, fake logo, text, watermark, scene change, background transformation. Also avoid: wide shot before identity is stable, strong hand waving, product deformation, fake testimonial cues, medical claims, guaranteed results, visible third-party brands, copied creator performance.",
+      "image": "mara_20260616_primary_i2v_front_smile.png",
+      "prefix": "mara__00004__comfy_ltx23__same_source_outfit__warm_friend__closeup_selfie__same_room__hair_adjust__not_testimonial__ugc_disclosure_15s",
+      "frames": 49,
+      "fps": 8,
+      "seed1": 4204,
+      "seed2": 4204
+    },
+    {
+      "prompt_id": "48889bf2-a355-4c60-b7cd-7d0a8382fe8f",
+      "status": "downloaded",
+      "filename": "mara__00005__comfy_ltx23__same_source_outfit__warm_friend__closeup_selfie__same_room__walk_to_medium__not_testimonial__ugc_disclosure_15s_00001_.mp4",
+      "subfolder": "",
+      "bytes": 3389571,
+      "local_video": "hermes-content\\references\\ai-ecommerce-model\\comfyui\\audits\\pond-ltx23-motion-calibration-001-short\\48889bf2__mara__00005__comfy_ltx23__same_source_outfit__warm_friend__close.mp4",
+      "contact_sheet": "hermes-content\\references\\ai-ecommerce-model\\comfyui\\audits\\pond-ltx23-motion-calibration-001-short\\48889bf2__mara__00005__comfy_ltx23__same_source_outfit__warm_friend__close__frames.jpg",
+      "media": {
+        "duration": "6.125000",
+        "size": "3389571"
+      },
+      "positive": "Use the input image as the identity source. Preserve the same fictional adult brunette UGC model: oval face, warm light skin, natural freckles, brown eyes, thick dark eyebrows, straight natural nose, full pink lips, soft warm smile, shoulder-length wavy brown hair with subtle highlights, natural skin texture, white or cream outfit, clean bright room lighting. Animate the existing close-up selfie only. Keep the same room, same lighting, same outfit and same camera framing. Motion: looks down for a beat and returns gaze to camera, very subtle expression change. Face must remain sharp, recognizable and stable. Preserve eyes, nose, lips, smile, jawline, hair and skin texture. No talking, no walking, no beach, no location change, no new outfit, no hand gesture, no camera zoom.",
+      "negative": "different person, red hair, changed face, changed eyes, changed eyebrows, changed nose, changed lips, changed smile, changed hair, changed age, plastic skin, beauty filter, warped mouth, distorted teeth, blurry face, face flicker, cartoon, anime, fake logo, text, watermark, scene change, background transformation. Also avoid: wide shot before identity is stable, strong hand waving, product deformation, fake testimonial cues, medical claims, guaranteed results, visible third-party brands, copied creator performance.",
+      "image": "mara_20260616_primary_i2v_front_smile.png",
+      "prefix": "mara__00005__comfy_ltx23__same_source_outfit__warm_friend__closeup_selfie__same_room__walk_to_medium__not_testimonial__ugc_disclosure_15s",
+      "frames": 49,
+      "fps": 8,
+      "seed1": 4205,
+      "seed2": 4205
+    }
+  ]
+}
