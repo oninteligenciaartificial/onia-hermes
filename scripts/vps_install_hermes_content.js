@@ -207,6 +207,12 @@ async function main() {
       "/root/.hermes/scripts/hermes_command_center.py",
       0o755
     );
+    await putFile(
+      sftpClient,
+      path.join(repoRoot, "scripts", "acta_generator.py"),
+      "/root/.hermes/scripts/acta_generator.py",
+      0o755
+    );
 
     const carouselWrapper = [
       "#!/usr/bin/env bash",
@@ -286,6 +292,19 @@ async function main() {
     fs.writeFileSync(localHermesCommandWrapper, hermesCommandWrapper, "utf8");
     await putFile(sftpClient, localHermesCommandWrapper, "/usr/local/bin/hermes-command", 0o755);
 
+    const actaWrapper = [
+      "#!/usr/bin/env bash",
+      "set -euo pipefail",
+      "set -a",
+      "source /root/.hermes/.env",
+      "set +a",
+      'exec python3 /root/.hermes/scripts/acta_generator.py "$@"',
+      "",
+    ].join("\n");
+    const localActaWrapper = path.join(os.tmpdir(), `acta-generator-${Date.now()}`);
+    fs.writeFileSync(localActaWrapper, actaWrapper, "utf8");
+    await putFile(sftpClient, localActaWrapper, "/usr/local/bin/acta-generator", 0o755);
+
     const chmodWrapper = await exec(
       conn,
       [
@@ -297,6 +316,17 @@ async function main() {
     );
     if (chmodWrapper.code !== 0) {
       throw new Error(`Failed to set wrapper permissions: ${chmodWrapper.stderr}`);
+    }
+
+    const chmodActa = await exec(
+      conn,
+      [
+        "chown root:root /usr/local/bin/acta-generator /root/.hermes/scripts/acta_generator.py",
+        "chmod 755 /usr/local/bin/acta-generator /root/.hermes/scripts/acta_generator.py",
+      ].join(" && ")
+    );
+    if (chmodActa.code !== 0) {
+      throw new Error(`Failed to set acta permissions: ${chmodActa.stderr}`);
     }
 
     const updates = {};
@@ -318,6 +348,7 @@ async function main() {
         "  /usr/local/bin/hermes-week-plan",
         "  /usr/local/bin/social-publish",
         "  /usr/local/bin/hermes-command",
+        "  /usr/local/bin/acta-generator",
         "",
       ].join("\n")
     );
