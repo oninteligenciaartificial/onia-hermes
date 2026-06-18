@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cuestionario ONIA — Conozcamos tu negocio</title>
+<style>
+  :root{
+    --ink:#0d1320;--muted:#5a6675;--soft:#8493a3;--line:#e3e9f1;--line2:#eef2f7;
+    --blue:#1e5bff;--blue-dark:#1239a8;--green:#0f8b62;--amber:#a75b00;
+    --bg:#f5f7fb;--white:#fff;--accent:#1e5bff;
+    --shadow:0 1px 2px rgba(13,19,32,.04),0 8px 24px rgba(13,19,32,.05);
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+    color:var(--ink);background:var(--bg);-webkit-font-smoothing:antialiased;letter-spacing:-.01em;}
+  .page{max-width:880px;margin:0 auto;padding:48px 28px 96px;}
+
+  /* HERO */
+  .hero{position:relative;overflow:hidden;background:linear-gradient(135deg,#0a0f1a 0%,#11203b 55%,#0d3f30 150%);
+    color:#fff;border-radius:22px;padding:52px 46px;margin-bottom:14px;box-shadow:var(--shadow);}
+  .hero::after{content:"";position:absolute;top:-40%;right:-10%;width:380px;height:380px;
+    background:radial-gradient(circle,rgba(30,91,255,.35),transparent 65%);pointer-events:none;}
+  .kicker{position:relative;color:#9fc0ff;font-size:11.5px;font-weight:800;text-transform:uppercase;
+    letter-spacing:.16em;margin-bottom:16px;}
+  .hero h1{position:relative;font-size:clamp(30px,5.4vw,50px);line-height:1.05;margin:0 0 16px;
+    font-weight:800;letter-spacing:-.025em;}
+  .hero p{position:relative;color:#cdd9ec;font-size:17.5px;line-height:1.6;max-width:60ch;margin:0;}
+  .meta{position:relative;margin-top:24px;display:flex;gap:18px;flex-wrap:wrap;
+    color:#7f93b0;font-size:13px;font-weight:600;}
+  .meta b{color:#cdd9ec;}
+
+  /* SECTIONS */
+  section{margin-top:34px;}
+  .shead{display:flex;align-items:center;gap:14px;margin:0 0 16px;}
+  .snum{flex:0 0 34px;width:34px;height:34px;border-radius:50%;background:var(--accent);color:#fff;
+    font-weight:800;font-size:15px;display:flex;align-items:center;justify-content:center;
+    box-shadow:0 4px 12px rgba(30,91,255,.35);}
+  .shead h2{font-size:21px;font-weight:800;letter-spacing:-.02em;margin:0;line-height:1.2;}
+  .shead .sdesc{font-size:13px;color:var(--soft);font-weight:500;margin-top:2px;}
+
+  .card{background:var(--white);border:1px solid var(--line);border-radius:16px;
+    padding:24px 26px;box-shadow:var(--shadow);}
+
+  /* FIELDS */
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:18px 20px;}
+  .field{display:flex;flex-direction:column;}
+  .field+.field,.grid+.field,.field+.grid,.grid+.grid{margin-top:18px;}
+  label.lbl{font-size:13.5px;font-weight:700;color:var(--ink);margin:0 0 7px;line-height:1.3;}
+  label.lbl .req{color:var(--blue);font-weight:800;}
+  .hint{display:block;font-size:12px;font-weight:500;color:var(--soft);margin:-3px 0 7px;line-height:1.4;}
+  input,select,textarea{width:100%;font-family:inherit;font-size:15px;color:var(--ink);background:#fafbfd;
+    border:1px solid var(--line);border-radius:11px;padding:12px 14px;line-height:1.4;transition:.14s;letter-spacing:-.01em;}
+  input::placeholder,textarea::placeholder{color:#aab6c4;}
+  input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);background:#fff;
+    box-shadow:0 0 0 3.5px rgba(30,91,255,.13);}
+  textarea{min-height:84px;resize:vertical;}
+  select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%235a6675' d='M6 8 0 0h12z'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;background-position:right 15px center;padding-right:38px;}
+
+  /* CHIPS */
+  .chips{display:flex;flex-wrap:wrap;gap:9px;}
+  .chip{position:relative;}
+  .chip input{position:absolute;opacity:0;inset:0;cursor:pointer;margin:0;}
+  .chip span{display:inline-block;padding:9px 16px;border:1px solid var(--line);border-radius:999px;
+    background:#fafbfd;font-size:14px;color:var(--muted);cursor:pointer;transition:.14s;font-weight:600;}
+  .chip input:checked+span{background:#eef3ff;border-color:var(--accent);color:var(--blue-dark);
+    box-shadow:0 0 0 1px var(--accent) inset;}
+  .chip span:hover{border-color:#c3d0e2;}
+
+  /* ACTIONS */
+  .err{display:none;align-items:center;gap:8px;background:#fff3e6;color:var(--amber);
+    border:1px solid #f5d9b8;border-radius:12px;padding:13px 16px;font-size:14px;font-weight:700;margin-top:18px;}
+  .actions{position:sticky;bottom:0;z-index:5;margin-top:26px;padding:20px 0 6px;
+    background:linear-gradient(180deg,rgba(245,247,251,0),var(--bg) 38%);display:flex;gap:12px;flex-wrap:wrap;}
+  .btn{flex:1;min-width:210px;border:none;border-radius:13px;padding:17px 22px;font-size:15.5px;
+    font-weight:800;cursor:pointer;text-decoration:none;text-align:center;letter-spacing:-.01em;
+    transition:.16s;box-shadow:var(--shadow);}
+  .btn-primary{background:var(--accent);color:#fff;}
+  .btn-primary:hover{background:#1748d6;}
+  .btn-ghost{background:var(--white);color:var(--blue-dark);border:1.5px solid var(--line);}
+  .btn-ghost:hover{border-color:var(--accent);}
+  .btn:hover{transform:translateY(-2px);}
+
+  .foot{margin-top:34px;border-top:1px solid var(--line);padding-top:20px;}
+  .foot .big{font-size:18px;color:var(--ink);font-weight:800;letter-spacing:-.02em;margin:0 0 6px;}
+  .foot p{font-size:13px;color:var(--soft);margin:0;line-height:1.6;}
+
+  @media(max-width:620px){
+    .page{padding:32px 18px 90px;}
+    .hero{padding:40px 26px;}
+    .card{padding:20px;}
+    .grid{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="hero">
+    <div class="kicker">Cuestionario · ONIA Inteligencia Artificial</div>
+    <h1>Contanos de tu negocio<br>en 3 minutos</h1>
+    <p>Mientras mejor te conozcamos, mejor armamos tu propuesta. Respondé lo que puedas — las marcadas con <b style="color:#9fc0ff">*</b> son las clave. Al terminar, un botón nos envía todo.</p>
+    <div class="meta"><span>⏱ <b>3 min</b></span><span>🔒 <b>Privado</b></span><span>↩ Respuesta en <b>24 h</b></span></div>
+  </div>
+
+  <form id="form">
+
+    <section>
+      <div class="shead"><div class="snum">1</div><div><h2>Quién sos</h2><div class="sdesc">Para saber con quién hablamos.</div></div></div>
+      <div class="card">
+        <div class="grid">
+          <div class="field"><label class="lbl">Nombre y apellido <span class="req">*</span></label><input name="nombre" required></div>
+          <div class="field"><label class="lbl">Empresa / negocio <span class="req">*</span></label><input name="empresa" required></div>
+        </div>
+        <div class="grid">
+          <div class="field"><label class="lbl">WhatsApp <span class="req">*</span></label><span class="hint">Con código de país, ej. +591…</span><input name="whatsapp" required></div>
+          <div class="field"><label class="lbl">Email</label><span class="hint">Por si te respondemos por correo</span><input name="email" type="email"></div>
+        </div>
+        <div class="grid">
+          <div class="field"><label class="lbl">Ciudad <span class="req">*</span></label><input name="ciudad" required></div>
+          <div class="field"><label class="lbl">Rubro / a qué te dedicás <span class="req">*</span></label><input name="rubro" required placeholder="ej. tienda de ropa, dentista, productora…"></div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="shead"><div class="snum">2</div><div><h2>Tu negocio hoy</h2><div class="sdesc">Lo esencial de cómo funcionás.</div></div></div>
+      <div class="card">
+        <div class="field"><label class="lbl">¿Qué vendés o qué servicio ofrecés? <span class="req">*</span></label><textarea name="que_vende" required></textarea></div>
+        <div class="grid">
+          <div class="field"><label class="lbl">¿Hace cuánto operás?</label><input name="antiguedad" placeholder="ej. 2 años"></div>
+          <div class="field"><label class="lbl">¿Cuántas personas trabajan?</label><input name="equipo" placeholder="ej. solo yo, 5, 20…"></div>
+        </div>
+        <div class="field"><label class="lbl">¿Quién es tu cliente típico?</label><span class="hint">Edad, zona, qué busca</span><textarea name="cliente_tipico"></textarea></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="shead"><div class="snum">3</div><div><h2>Cómo vendés y te encuentran</h2><div class="sdesc">Tu presencia y tu forma de cobrar actual.</div></div></div>
+      <div class="card">
+        <div class="field"><label class="lbl">¿Dónde estás presente hoy?</label>
+          <div class="chips">
+            <label class="chip"><input type="checkbox" name="canales" value="Web"><span>Web</span></label>
+            <label class="chip"><input type="checkbox" name="canales" value="Instagram"><span>Instagram</span></label>
+            <label class="chip"><input type="checkbox" name="canales" value="TikTok"><span>TikTok</span></label>
+            <label class="chip"><input type="checkbox" name="canales" value="Facebook"><span>Facebook</span></label>
+            <label class="chip"><input type="checkbox" name="canales" value="WhatsApp"><span>WhatsApp</span></label>
+            <label class="chip"><input type="checkbox" name="canales" value="Local físico"><span>Local físico</span></label>
+            <label class="chip"><input type="checkbox" name="canales" value="Marketplace"><span>Marketplace</span></label>
+            <label class="chip"><input type="checkbox" name="canales" value="Nada todavía"><span>Nada todavía</span></label>
+          </div>
+        </div>
+        <div class="field"><label class="lbl">¿Tu web o redes principales?</label><span class="hint">Pegá los enlaces que tengas</span><input name="links"></div>
+        <div class="grid">
+          <div class="field"><label class="lbl">¿Cómo llega hoy un cliente nuevo? <span class="req">*</span></label><span class="hint">Recomendados, redes, publicidad…</span><textarea name="como_llegan" required></textarea></div>
+          <div class="field"><label class="lbl">¿Cómo cobrás hoy?</label><span class="hint">Efectivo, QR, transferencia, tarjeta…</span><textarea name="como_cobra"></textarea></div>
+        </div>
+        <div class="field"><label class="lbl">¿Qué herramientas usás hoy?</label><span class="hint">Excel, cuaderno, algún sistema, CRM, ninguna…</span><input name="herramientas"></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="shead"><div class="snum">4</div><div><h2>El problema</h2><div class="sdesc">Lo que más te duele resolver.</div></div></div>
+      <div class="card">
+        <div class="field"><label class="lbl">¿Qué es lo que más te está frenando o quitando tiempo? <span class="req">*</span></label><textarea name="dolor" required></textarea></div>
+        <div class="field"><label class="lbl">¿Dónde sentís que perdés ventas o clientes?</label><textarea name="perdida"></textarea></div>
+        <div class="field"><label class="lbl">¿Probaste algo antes para resolverlo? ¿Qué pasó?</label><textarea name="intentos"></textarea></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="shead"><div class="snum">5</div><div><h2>Qué buscás</h2><div class="sdesc">Hacia dónde querés llevar el negocio.</div></div></div>
+      <div class="card">
+        <div class="field"><label class="lbl">¿Qué te interesa que armemos? <span class="req">*</span></label>
+          <div class="chips">
+            <label class="chip"><input type="checkbox" name="interes" value="Página web / catálogo"><span>Web / catálogo</span></label>
+            <label class="chip"><input type="checkbox" name="interes" value="Tienda online con cobro"><span>Tienda con cobro</span></label>
+            <label class="chip"><input type="checkbox" name="interes" value="Automatización / n8n"><span>Automatización</span></label>
+            <label class="chip"><input type="checkbox" name="interes" value="Chatbot / IA"><span>Chatbot / IA</span></label>
+            <label class="chip"><input type="checkbox" name="interes" value="Videos con IA"><span>Videos con IA</span></label>
+            <label class="chip"><input type="checkbox" name="interes" value="CRM / seguimiento"><span>CRM / seguimiento</span></label>
+            <label class="chip"><input type="checkbox" name="interes" value="Contenido / redes"><span>Contenido / redes</span></label>
+            <label class="chip"><input type="checkbox" name="interes" value="No sé, necesito asesoría"><span>No sé, asesórenme</span></label>
+          </div>
+        </div>
+        <div class="field"><label class="lbl">Si esto funciona perfecto en 3 meses, ¿qué cambió en tu negocio? <span class="req">*</span></label><textarea name="objetivo" required></textarea></div>
+        <div class="grid">
+          <div class="field"><label class="lbl">¿Qué tan urgente es?</label>
+            <select name="urgencia">
+              <option value="">Elegí una opción</option>
+              <option>Ya, lo necesito esta semana</option>
+              <option>Este mes</option>
+              <option>En 1-2 meses</option>
+              <option>Estoy explorando, sin apuro</option>
+            </select>
+          </div>
+          <div class="field"><label class="lbl">Presupuesto que tenés en mente</label>
+            <select name="presupuesto">
+              <option value="">Elegí un rango (Bs)</option>
+              <option>Menos de 2.000</option>
+              <option>2.000 – 5.000</option>
+              <option>5.000 – 10.000</option>
+              <option>Más de 10.000</option>
+              <option>Prefiero que me lo digan ustedes</option>
+            </select>
+          </div>
+        </div>
+        <div class="field"><label class="lbl">Webs o marcas que te gustan</label><span class="hint">Pegá 1-3 enlaces de sitios cuyo estilo te guste — nos da la dirección de diseño</span><textarea name="referencias"></textarea></div>
+        <div class="grid">
+          <div class="field"><label class="lbl">¿Tenés logo / manual de marca?</label>
+            <select name="tiene_logo">
+              <option value="">Elegí una opción</option>
+              <option>Sí, logo y colores definidos</option>
+              <option>Solo logo</option>
+              <option>No, necesito que lo creen</option>
+            </select>
+          </div>
+          <div class="field"><label class="lbl">¿Tenés dominio (tunombre.com)?</label>
+            <select name="tiene_dominio">
+              <option value="">Elegí una opción</option>
+              <option>Sí, ya lo tengo</option>
+              <option>No, pero quiero uno</option>
+              <option>No sé qué es</option>
+            </select>
+          </div>
+        </div>
+        <div class="field"><label class="lbl">¿Algo más que debamos saber?</label><textarea name="extra"></textarea></div>
+      </div>
+    </section>
+
+    <div class="err" id="err">⚠ Faltan campos clave (marcados con *). Revisá arriba.</div>
+
+    <div class="actions">
+      <button type="button" class="btn btn-primary" id="btnEnviar" onclick="enviar()">✅ Enviar respuestas</button>
+      <button type="button" class="btn btn-ghost" onclick="enviarWhatsApp()">📲 Mejor por WhatsApp</button>
+    </div>
+  </form>
+
+  <div id="ok" style="display:none;text-align:center;padding:40px 20px;">
+    <div style="font-size:46px;margin-bottom:8px;">✅</div>
+    <p class="big" style="font-size:22px;margin:0 0 6px;">¡Recibido! Gracias.</p>
+    <p style="color:var(--soft);">Te respondemos en menos de 24 horas con una propuesta hecha para vos.</p>
+  </div>
+
+  <div class="foot">
+    <p class="big">Te respondemos en menos de 24 horas con una propuesta hecha para vos.</p>
+    <p>ONIA — Sistemas, automatización y contenido para negocios · onia.com.bo · +591 75470140</p>
+  </div>
+
+</div>
+
+<script>
+  // ===== Configurá aquí a dónde llegan las respuestas =====
+  const WEBHOOK_URL      = "https://n8n-sergio-n8n.hqdqgh.easypanel.host/webhook/cuestionario-cliente";
+  const WHATSAPP_DESTINO = "59175470140"; // respaldo, sin + ni espacios
+  // ========================================================
+
+  const ETIQUETAS = {
+    nombre:"Nombre", empresa:"Empresa", whatsapp:"WhatsApp", email:"Email", ciudad:"Ciudad",
+    rubro:"Rubro", que_vende:"Qué vende", antiguedad:"Antigüedad", equipo:"Equipo",
+    cliente_tipico:"Cliente típico", canales:"Canales actuales", links:"Web/redes",
+    como_llegan:"Cómo llegan clientes", como_cobra:"Cómo cobra", herramientas:"Herramientas",
+    dolor:"Principal problema", perdida:"Dónde pierde ventas", intentos:"Qué intentó antes",
+    interes:"Le interesa", objetivo:"Objetivo a 3 meses", urgencia:"Urgencia",
+    presupuesto:"Presupuesto", referencias:"Webs/marcas que le gustan",
+    tiene_logo:"Tiene logo/marca", tiene_dominio:"Tiene dominio", extra:"Notas extra"
+  };
+  const ORDEN = Object.keys(ETIQUETAS);
+
+  function recolectar(){
+    const fd = new FormData(document.getElementById('form'));
+    const out = {};
+    for(const k of ORDEN){
+      out[k] = (k==='canales'||k==='interes') ? fd.getAll(k) : (fd.get(k)||'').trim();
+    }
+    return out;
+  }
+  function validar(d){
+    const req = ['nombre','empresa','whatsapp','ciudad','rubro','que_vende','como_llegan','dolor','objetivo'];
+    if(req.some(k=>!d[k])) return false;
+    return d.interes.length>0;
+  }
+  function armarTexto(d){
+    let t = "NUEVO CLIENTE — Cuestionario ONIA\n\n";
+    for(const k of ORDEN){
+      let v = Array.isArray(d[k]) ? d[k].join(", ") : d[k];
+      if(v) t += `• ${ETIQUETAS[k]}: ${v}\n`;
+    }
+    return t;
+  }
+  function mostrarOk(){
+    document.getElementById('form').style.display='none';
+    document.getElementById('ok').style.display='block';
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+
+  async function enviar(){
+    const d = recolectar();
+    const err = document.getElementById('err');
+    if(!validar(d)){ err.style.display='flex'; window.scrollTo({top:0,behavior:'smooth'}); return; }
+    err.style.display='none';
+    const btn = document.getElementById('btnEnviar');
+    btn.disabled = true; btn.textContent = 'Enviando…';
+    try{
+      const r = await fetch(WEBHOOK_URL, {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify(d)
+      });
+      if(!r.ok) throw new Error('HTTP '+r.status);
+      mostrarOk();
+    }catch(e){
+      btn.disabled=false; btn.textContent='✅ Enviar respuestas';
+      err.textContent='No se pudo enviar. Probá de nuevo o usá el botón de WhatsApp.';
+      err.style.display='flex';
+    }
+  }
+
+  function enviarWhatsApp(){
+    const d = recolectar();
+    const err = document.getElementById('err');
+    if(!validar(d)){ err.style.display='flex'; window.scrollTo({top:0,behavior:'smooth'}); return; }
+    err.style.display='none';
+    window.open(`https://wa.me/${WHATSAPP_DESTINO}?text=${encodeURIComponent(armarTexto(d))}`,'_blank');
+  }
+</script>
+</body>
+</html>
