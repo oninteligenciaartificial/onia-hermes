@@ -11,6 +11,7 @@
     "upload:asset": "node scripts/vps_upload_asset.js",
     "deploy:control-tower": "node scripts/vps_install_control_tower.js",
     "rotate:notion": "node scripts/vps_update_notion_token.js",
+    "account:ig": "node scripts/vps_set_account_ig.js",
     "health:n8n-mcp": "node scripts/n8n_mcp_healthcheck.js",
     "deploy:webhook-propuestas": "node scripts/vps-deploy-webhook-propuestas.js",
     "carousel": "node scripts/carousel_pipeline.js",

@@ -107,10 +107,22 @@ IG_BUSINESS_ACCOUNT_ID_ARTHUR / META_LONG_LIVED_TOKEN_ARTHUR    (pendiente: setu
 IG_BUSINESS_ACCOUNT_ID_SERGIO / META_LONG_LIVED_TOKEN_SERGIO    (pendiente: setup Meta de Sergio)
 ```
 
-Agregar esas vars a `/root/.hermes/.env` cuando Arthur y Sergio conecten sus
-cuentas IG Business a una página de Facebook (mismo flujo que ONIA en
-`ONIA_INSTAGRAM_PUBLISHING.md`). Hasta entonces, `--publish` solo funciona para
-`--account onia`; para las personales, genera/renderiza y publica manual.
+Agregar esas vars a `/root/.hermes/.env` cuando la cuenta conecte su IG Business
+a una página de Facebook (mismo flujo que ONIA en `ONIA_INSTAGRAM_PUBLISHING.md`).
+Hasta entonces, `--publish` solo funciona para `--account onia`; para las demás,
+genera/renderiza y publica manual.
+
+**Cargar credenciales de una cuenta (ej. Nuvia)** — una vez tengas el Page token
+e IG id, y acceso SSH válido:
+```powershell
+$env:VPS_HOST="187.77.16.63"; $env:VPS_USER="root"; $env:VPS_PASSWORD="..."
+$env:IG_ACCOUNT="nuvia"
+$env:IG_BUSINESS_ACCOUNT_ID="<instagram_business_account.id de Nuvia>"
+$env:META_LONG_LIVED_TOKEN="<Page Access Token de Nuvia>"
+npm run account:ig
+```
+Escribe `IG_BUSINESS_ACCOUNT_ID_NUVIA` / `META_LONG_LIVED_TOKEN_NUVIA` en el VPS
+(sin imprimir el token). Después: `npm run carousel -- ... --account nuvia --publish`.
 
 ## Notas
 
