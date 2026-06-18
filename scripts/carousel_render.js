@@ -24,6 +24,15 @@ const path = require('path');
 const { execFileSync } = require('child_process');
 
 const BRAND = path.join(__dirname, '..', 'hermes-content', 'brand');
+const ROOT = path.join(__dirname, '..');
+
+// Resuelve una ruta de asset (de un slide) a file:// absoluto. Acepta rutas
+// relativas al repo o absolutas. Devuelve '' si no existe.
+function assetUrl(p) {
+  if (!p) return '';
+  const abs = path.isAbsolute(p) ? p : path.join(ROOT, p);
+  return fs.existsSync(abs) ? `file://${abs.replace(/\\/g, '/')}` : '';
+}
 
 const BROWSER_CANDIDATES = [
   'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe',
@@ -53,6 +62,7 @@ const BRANDS = {
     ink: '#0F2D52',
     muted: '#5C6B82',
     accents: ['#00A7A0', '#FF6B6B', '#F5B400', '#7B4FB5'],
+    stripes: ['#0F2D52', '#00A7A0', '#F5B400', '#FF6B6B', '#7B4FB5'],
     logo: path.join(__dirname, '..', 'web-factory', 'data', 'clients', 'nuvia.assets', 'nuvia-icon.png'),
   },
 };
@@ -525,32 +535,53 @@ ${last ? '' : '.cue{position:absolute;right:44px;bottom:300px;z-index:3;font-siz
 </div></body></html>`;
 }
 
-// Pack: bright-retail (Nuvia-style). Marca clara/multicolor, amigable. Fondo
-// crema/blanco, titular tinta navy con keyword en color de acento rotativo,
-// pills suaves, slot de producto, footer con logo de la marca.
+// Ribbon multicolor continuo (eco de las franjas del logo Nuvia). Fluye de
+// borde a borde y cambia de fase por slide -> sensación de panorama/peek entre
+// slides, como la curva verde del pack dark-product de ONIA.
+function nuviaRibbon(idx, total, stripes, onAccent) {
+  const first = idx === 0;
+  const last = idx === total - 1;
+  // S-curve base que entra por izquierda y sale por derecha; alterna altura.
+  const up = idx % 2 === 0;
+  const yA = up ? 430 : 980;
+  const yB = up ? 980 : 430;
+  const base = `M -120 ${yA} C 260 ${yA} 320 ${yB} 560 ${yB} S 900 ${yA} 1200 ${yA}`;
+  const cols = onAccent
+    ? ['rgba(255,255,255,.9)', 'rgba(255,255,255,.6)', 'rgba(255,255,255,.35)', 'rgba(255,255,255,.2)', 'rgba(255,255,255,.12)']
+    : stripes;
+  const paths = cols.map((c, i) =>
+    `<path d="${base}" fill="none" stroke="${c}" stroke-width="22" stroke-linecap="round" transform="translate(0 ${(i - 2) * 30})"/>`
+  ).join('');
+  // En cover/cta el ribbon va más visible; en el resto, sutil al fondo.
+  const op = onAccent ? 0.9 : (first || last ? 0.5 : 0.28);
+  return `<svg class="ribbon" viewBox="0 0 1080 1350" xmlns="http://www.w3.org/2000/svg" style="opacity:${op}">${paths}</svg>`;
+}
+
+// Pack: bright-retail (Nuvia-style). Marca clara/multicolor, amigable, con
+// ribbon continuo, composición anclada y slot de producto por slide.
 function brightRetailHtml(slide, idx, total, account, args) {
   const role = roleFor(slide, idx, total);
   const last = idx === total - 1;
   const acc = ACCOUNTS[account] || ACCOUNTS.onia;
   const brand = BRANDS[account] || BRANDS.nuvia;
   const accent = brand.accents[idx % brand.accents.length];
+  const stripes = brand.stripes || brand.accents;
   const tokens = fs.readFileSync(path.join(BRAND, 'tokens.css'), 'utf8');
 
-  // cover y cta: superficie de acento suave; resto: crema/blanco
   const coverLike = role === 'cover' || role === 'cta';
-  const object = args && args.object
-    ? `<img class="object" src="file://${String(args.object).replace(/\\/g, '/')}" alt="">`
-    : '';
-  const logo = brand.logo && fs.existsSync(brand.logo)
-    ? `<img class="brandmark" src="file://${brand.logo.replace(/\\/g, '/')}" alt="">`
-    : '';
+  // objeto: por-slide (slide.object) o global (--object). Ruta relativa al repo.
+  const objUrl = assetUrl(slide.object) || (args && args.object ? assetUrl(args.object) : '');
+  const object = objUrl ? `<img class="object" src="${objUrl}" alt="">` : '';
+  const logoUrl = assetUrl(brand.logo);
+  const logo = logoUrl ? `<img class="brandmark" src="${logoUrl}" alt="">` : '';
 
   const pill = slide.pill ? `<span class="pill">${esc(slide.pill)}</span>` : '';
   const callout = slide.callout ? `<div class="callout">${emph(slide.callout)}</div>` : '';
   const headTag = role === 'cover' ? 'h1' : 'h2';
   const body = slide.body ? `<p class="br-body">${emph(slide.body)}</p>` : '';
-  const savetag = role === 'save'
-    ? `<div class="savetag">GUARDÁ ESTO ↗</div>` : '';
+  const savetag = role === 'save' ? `<div class="savetag">GUARDÁ ESTO ↗</div>` : '';
+  const hlen = (slide.headline || '').replace(/\*/g, '').length;
+  const hsize = hlen > 30 ? 86 : (hlen > 18 ? 100 : 116);
 
   return `<!doctype html><html><head><meta charset="utf-8">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -562,53 +593,56 @@ html,body { width:1080px; height:1350px; }
 .slide { position:relative; width:1080px; height:1350px; overflow:hidden;
   padding:var(--pad); display:flex; flex-direction:column;
   font-family:'Inter',system-ui,sans-serif;
-  --bg:${brand.bg}; --ink:${brand.ink}; --muted:${brand.muted}; --accent:${accent};
+  --accent:${accent};
   background:${coverLike ? accent : brand.bg};
-  color:${coverLike ? '#FFFFFF' : brand.ink};
-  justify-content:${role === 'cover' ? 'center' : 'flex-start'}; }
+  color:${coverLike ? '#FFFFFF' : brand.ink}; }
+.ribbon { position:absolute; inset:0; width:1080px; height:1350px; z-index:0; pointer-events:none; }
+.slide > *:not(.ribbon) { position:relative; z-index:2; }
 .g { color:var(--accent); }
-.slide.cover .g, .slide.cta .g { color:#FFFFFF; text-decoration:underline; text-decoration-thickness:8px; text-underline-offset:6px; }
+.slide.cover .g, .slide.cta .g { color:#fff; text-decoration:underline; text-decoration-thickness:9px; text-underline-offset:8px; }
 
 .topbar { display:flex; align-items:center; gap:16px; }
-.kicker { font-weight:900; font-size:30px; letter-spacing:1px; }
-.slide.cover .kicker, .slide.cta .kicker { color:#fff; }
-.pageno { margin-left:auto; font-weight:800; font-size:26px; opacity:.6; }
+.kicker { font-weight:900; font-size:30px; letter-spacing:.5px; color:${coverLike ? '#fff' : brand.ink}; }
+.pageno { margin-left:auto; font-weight:800; font-size:26px; opacity:.55; }
 
-.pill { display:inline-flex; align-self:flex-start; margin-top:24px; font-weight:800;
-  font-size:26px; padding:12px 26px; border-radius:100px;
-  background:${coverLike ? 'rgba(255,255,255,.18)' : accent}; color:#fff; }
+/* main: llena el alto y ancla el contenido abajo (cover/cta: centrado) */
+.main { flex:1; display:flex; flex-direction:column;
+  justify-content:${role === 'cover' ? 'center' : 'flex-end'}; min-height:0; }
+.object { display:block; max-width:560px; max-height:560px; margin:0 auto auto;
+  object-fit:contain; filter:drop-shadow(0 30px 55px rgba(15,45,82,.28)); }
+.spacer { margin-top:auto; }
 
-.br-h { font-weight:900; font-size:104px; line-height:1.0; letter-spacing:-3px;
-  margin-top:${role === 'cover' ? '20px' : 'auto'}; }
-.br-h.small { font-size:84px; }
-.br-body { font-weight:500; font-size:40px; line-height:1.4; margin-top:28px; max-width:860px;
-  color:${coverLike ? 'rgba(255,255,255,.92)' : brand.muted}; }
-.callout { align-self:flex-start; margin-top:28px; background:#fff; color:${brand.ink};
-  font-weight:600; font-size:32px; border-radius:20px; padding:20px 28px; max-width:780px;
-  box-shadow:0 14px 40px rgba(15,45,82,.12); }
-.savetag { align-self:flex-start; margin-top:auto; margin-bottom:20px; font-weight:900;
+.savetag { align-self:flex-start; margin-bottom:18px; font-weight:900;
   font-size:28px; letter-spacing:2px; color:${coverLike ? '#fff' : accent}; }
+.br-h { font-weight:900; font-size:${hsize}px; line-height:.98; letter-spacing:-3px; }
+.br-body { font-weight:500; font-size:40px; line-height:1.4; margin-top:26px; max-width:880px;
+  color:${coverLike ? 'rgba(255,255,255,.92)' : brand.muted}; }
+.pill { display:inline-flex; align-self:flex-start; margin-top:26px; font-weight:800;
+  font-size:26px; padding:13px 28px; border-radius:100px;
+  background:${coverLike ? 'rgba(255,255,255,.2)' : accent}; color:#fff; }
+.callout { display:inline-flex; align-self:flex-start; margin-top:24px; background:#fff; color:${brand.ink};
+  font-weight:600; font-size:32px; border-radius:20px; padding:20px 28px; max-width:800px;
+  box-shadow:0 16px 44px rgba(15,45,82,.16); }
 
-.object { display:block; max-width:680px; max-height:520px; margin:30px auto;
-  object-fit:contain; filter:drop-shadow(0 24px 50px rgba(15,45,82,.22)); border-radius:24px; }
-
-.footer { display:flex; align-items:center; gap:16px; margin-top:auto; padding-top:40px; }
-.footer .brandmark { width:64px; height:64px; border-radius:14px;
-  background:#fff; padding:6px; box-shadow:0 6px 18px rgba(15,45,82,.12); }
-.footer .handle { font-weight:800; font-size:30px;
-  color:${coverLike ? '#fff' : brand.ink}; }
-.footer .tag { margin-left:auto; font-weight:600; font-size:22px; letter-spacing:2px;
-  opacity:.6; }
-${last ? '' : `.cue{position:absolute;right:46px;bottom:300px;font-size:60px;font-weight:900;color:${coverLike ? '#fff' : accent}}`}
+.footer { display:flex; align-items:center; gap:16px; margin-top:36px; }
+.footer .brandmark { width:62px; height:62px; border-radius:14px;
+  background:#fff; padding:6px; box-shadow:0 6px 18px rgba(15,45,82,.14); }
+.footer .handle { font-weight:800; font-size:30px; color:${coverLike ? '#fff' : brand.ink}; }
+.footer .tag { margin-left:auto; font-weight:700; font-size:22px; letter-spacing:2px; opacity:.55; }
+${last ? '' : `.cue{position:absolute;right:46px;bottom:300px;z-index:3;font-size:58px;font-weight:900;color:${coverLike ? '#fff' : accent}}`}
 </style></head>
 <body><div class="slide ${role}">
+  ${nuviaRibbon(idx, total, stripes, coverLike)}
   <div class="topbar"><span class="kicker">${esc(acc.name)}</span><span class="pageno">${pageNo(idx, total)}</span></div>
-  ${savetag}
-  ${object}
-  <${headTag} class="br-h${(slide.headline || '').length > 26 ? ' small' : ''}">${emph(slide.headline)}</${headTag}>
-  ${body}
-  ${pill}
-  ${callout}
+  <div class="main">
+    ${object}
+    ${object ? '<div class="spacer"></div>' : ''}
+    ${savetag}
+    <${headTag} class="br-h">${emph(slide.headline)}</${headTag}>
+    ${body}
+    ${pill}
+    ${callout}
+  </div>
   ${last ? '' : '<div class="cue">→</div>'}
   <div class="footer">
     ${logo}<span class="handle">${esc(acc.handle)}</span><span class="tag">${esc(brand.tagline || '')}</span>
