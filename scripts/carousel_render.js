@@ -38,6 +38,23 @@ const ACCOUNTS = {
   onia: { handle: '@oniaagency', name: 'ONIA', personal: false },
   arthur: { handle: '@arthur', name: 'Arthur', personal: true },
   sergio: { handle: '@sergio', name: 'Sergio', personal: true },
+  nuvia: { handle: '@nuvia.bo', name: 'Nuvia', personal: false },
+};
+
+// Brand kits para packs no-ONIA. Cada marca define superficie, tinta, acentos
+// y logo. El pack bright-retail los consume.
+const BRANDS = {
+  nuvia: {
+    name: 'Nuvia',
+    handle: '@nuvia.bo',
+    tagline: 'EVERYTHING FOR EVERYONE',
+    bg: '#FFFBF4',
+    surface2: '#FFFFFF',
+    ink: '#0F2D52',
+    muted: '#5C6B82',
+    accents: ['#00A7A0', '#FF6B6B', '#F5B400', '#7B4FB5'],
+    logo: path.join(__dirname, '..', 'web-factory', 'data', 'clients', 'nuvia.assets', 'nuvia-icon.png'),
+  },
 };
 
 function findBrowser() {
@@ -50,7 +67,7 @@ function findBrowser() {
 const esc = (s) => String(s == null ? '' : s)
   .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
-const PACKS = ['typographic', 'dark-product', 'editorial-photo'];
+const PACKS = ['typographic', 'dark-product', 'editorial-photo', 'bright-retail'];
 
 function parseArgs(argv) {
   const a = { out: './out', account: 'onia', bg: '', pack: 'typographic', object: '' };
@@ -417,6 +434,97 @@ ${last ? '' : '.cue{position:absolute;right:44px;bottom:300px;z-index:3;font-siz
 </div></body></html>`;
 }
 
+// Pack: bright-retail (Nuvia-style). Marca clara/multicolor, amigable. Fondo
+// crema/blanco, titular tinta navy con keyword en color de acento rotativo,
+// pills suaves, slot de producto, footer con logo de la marca.
+function brightRetailHtml(slide, idx, total, account, args) {
+  const role = roleFor(slide, idx, total);
+  const last = idx === total - 1;
+  const acc = ACCOUNTS[account] || ACCOUNTS.onia;
+  const brand = BRANDS[account] || BRANDS.nuvia;
+  const accent = brand.accents[idx % brand.accents.length];
+  const tokens = fs.readFileSync(path.join(BRAND, 'tokens.css'), 'utf8');
+
+  // cover y cta: superficie de acento suave; resto: crema/blanco
+  const coverLike = role === 'cover' || role === 'cta';
+  const object = args && args.object
+    ? `<img class="object" src="file://${String(args.object).replace(/\\/g, '/')}" alt="">`
+    : '';
+  const logo = brand.logo && fs.existsSync(brand.logo)
+    ? `<img class="brandmark" src="file://${brand.logo.replace(/\\/g, '/')}" alt="">`
+    : '';
+
+  const pill = slide.pill ? `<span class="pill">${esc(slide.pill)}</span>` : '';
+  const callout = slide.callout ? `<div class="callout">${emph(slide.callout)}</div>` : '';
+  const headTag = role === 'cover' ? 'h1' : 'h2';
+  const body = slide.body ? `<p class="br-body">${emph(slide.body)}</p>` : '';
+  const savetag = role === 'save'
+    ? `<div class="savetag">GUARDÁ ESTO ↗</div>` : '';
+
+  return `<!doctype html><html><head><meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800;900&display=swap" rel="stylesheet">
+<style>
+${tokens}
+* { margin:0; padding:0; box-sizing:border-box; }
+html,body { width:1080px; height:1350px; }
+.slide { position:relative; width:1080px; height:1350px; overflow:hidden;
+  padding:var(--pad); display:flex; flex-direction:column;
+  font-family:'Inter',system-ui,sans-serif;
+  --bg:${brand.bg}; --ink:${brand.ink}; --muted:${brand.muted}; --accent:${accent};
+  background:${coverLike ? accent : brand.bg};
+  color:${coverLike ? '#FFFFFF' : brand.ink};
+  justify-content:${role === 'cover' ? 'center' : 'flex-start'}; }
+.g { color:var(--accent); }
+.slide.cover .g, .slide.cta .g { color:#FFFFFF; text-decoration:underline; text-decoration-thickness:8px; text-underline-offset:6px; }
+
+.topbar { display:flex; align-items:center; gap:16px; }
+.kicker { font-weight:900; font-size:30px; letter-spacing:1px; }
+.slide.cover .kicker, .slide.cta .kicker { color:#fff; }
+.pageno { margin-left:auto; font-weight:800; font-size:26px; opacity:.6; }
+
+.pill { display:inline-flex; align-self:flex-start; margin-top:24px; font-weight:800;
+  font-size:26px; padding:12px 26px; border-radius:100px;
+  background:${coverLike ? 'rgba(255,255,255,.18)' : accent}; color:#fff; }
+
+.br-h { font-weight:900; font-size:104px; line-height:1.0; letter-spacing:-3px;
+  margin-top:${role === 'cover' ? '20px' : 'auto'}; }
+.br-h.small { font-size:84px; }
+.br-body { font-weight:500; font-size:40px; line-height:1.4; margin-top:28px; max-width:860px;
+  color:${coverLike ? 'rgba(255,255,255,.92)' : brand.muted}; }
+.callout { align-self:flex-start; margin-top:28px; background:#fff; color:${brand.ink};
+  font-weight:600; font-size:32px; border-radius:20px; padding:20px 28px; max-width:780px;
+  box-shadow:0 14px 40px rgba(15,45,82,.12); }
+.savetag { align-self:flex-start; margin-top:auto; margin-bottom:20px; font-weight:900;
+  font-size:28px; letter-spacing:2px; color:${coverLike ? '#fff' : accent}; }
+
+.object { display:block; max-width:680px; max-height:520px; margin:30px auto;
+  object-fit:contain; filter:drop-shadow(0 24px 50px rgba(15,45,82,.22)); border-radius:24px; }
+
+.footer { display:flex; align-items:center; gap:16px; margin-top:auto; padding-top:40px; }
+.footer .brandmark { width:64px; height:64px; border-radius:14px;
+  background:#fff; padding:6px; box-shadow:0 6px 18px rgba(15,45,82,.12); }
+.footer .handle { font-weight:800; font-size:30px;
+  color:${coverLike ? '#fff' : brand.ink}; }
+.footer .tag { margin-left:auto; font-weight:600; font-size:22px; letter-spacing:2px;
+  opacity:.6; }
+${last ? '' : `.cue{position:absolute;right:46px;bottom:300px;font-size:60px;font-weight:900;color:${coverLike ? '#fff' : accent}}`}
+</style></head>
+<body><div class="slide ${role}">
+  <div class="topbar"><span class="kicker">${esc(acc.name)}</span><span class="pageno">${pageNo(idx, total)}</span></div>
+  ${savetag}
+  ${object}
+  <${headTag} class="br-h${(slide.headline || '').length > 26 ? ' small' : ''}">${emph(slide.headline)}</${headTag}>
+  ${body}
+  ${pill}
+  ${callout}
+  ${last ? '' : '<div class="cue">→</div>'}
+  <div class="footer">
+    ${logo}<span class="handle">${esc(acc.handle)}</span><span class="tag">${esc(brand.tagline || '')}</span>
+  </div>
+</div></body></html>`;
+}
+
 function render(args) {
   const brief = JSON.parse(fs.readFileSync(args.brief, 'utf8'));
   const slides = brief.slides || [];
@@ -432,6 +540,7 @@ function render(args) {
     let html;
     if (args.pack === 'dark-product') html = darkProductHtml(slide, idx, slides.length, args.account, args);
     else if (args.pack === 'editorial-photo') html = editorialPhotoHtml(slide, idx, slides.length, args.account, args);
+    else if (args.pack === 'bright-retail') html = brightRetailHtml(slide, idx, slides.length, args.account, args);
     else html = slideHtml(slide, idx, slides.length, args.account, args.bg);
     const htmlPath = path.join(tmp, `slide-${idx + 1}.html`);
     fs.writeFileSync(htmlPath, html, 'utf8');
@@ -472,4 +581,4 @@ if (require.main === module) {
   }
 }
 
-module.exports = { slideHtml, darkProductHtml, editorialPhotoHtml, emph, roleFor, ACCOUNTS, PACKS };
+module.exports = { slideHtml, darkProductHtml, editorialPhotoHtml, brightRetailHtml, emph, roleFor, ACCOUNTS, BRANDS, PACKS };

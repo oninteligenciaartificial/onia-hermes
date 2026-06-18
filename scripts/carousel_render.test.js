@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /* Tests for the carousel render engine. Run: node scripts/carousel_render.test.js */
 const assert = require('node:assert');
-const { roleFor, slideHtml, darkProductHtml, editorialPhotoHtml, emph, ACCOUNTS, PACKS } = require('./carousel_render');
+const { roleFor, slideHtml, darkProductHtml, editorialPhotoHtml, brightRetailHtml, emph, ACCOUNTS, BRANDS, PACKS } = require('./carousel_render');
 
 let passed = 0;
 function test(name, fn) {
@@ -56,16 +56,32 @@ test('last slide omits continuation cue', () => {
   const html = slideHtml({ headline: 'CTA', body: 'comentá AUTO' }, 2, 3, 'onia', '');
   assert.ok(!html.includes('class="cue"'));
 });
-test('all 3 accounts are configured', () => {
-  assert.deepStrictEqual(Object.keys(ACCOUNTS).sort(), ['arthur', 'onia', 'sergio']);
+test('accounts configured (onia/arthur/sergio/nuvia)', () => {
+  assert.deepStrictEqual(Object.keys(ACCOUNTS).sort(), ['arthur', 'nuvia', 'onia', 'sergio']);
 });
 
 // dark-product pack
 test('emph turns *word* into green span, escaping first', () => {
   assert.strictEqual(emph('a *b* <c>'), 'a <span class="g">b</span> &lt;c&gt;');
 });
-test('packs list has all three packs', () => {
-  assert.deepStrictEqual(PACKS, ['typographic', 'dark-product', 'editorial-photo']);
+test('packs list has all four packs', () => {
+  assert.deepStrictEqual(PACKS, ['typographic', 'dark-product', 'editorial-photo', 'bright-retail']);
+});
+test('nuvia account + brand kit configured', () => {
+  assert.strictEqual(ACCOUNTS.nuvia.handle, '@nuvia.bo');
+  assert.ok(BRANDS.nuvia.accents.length >= 3);
+});
+test('bright-retail cover uses brand accent + handle + green-keyword', () => {
+  const html = brightRetailHtml({ role: 'cover', pill: 'Ya llegó', headline: 'Todo para *todos*', body: '' }, 0, 5, 'nuvia', {});
+  assert.ok(html.includes('@nuvia.bo'));
+  assert.ok(html.includes('#00A7A0'));
+  assert.ok(html.includes('<span class="g">todos</span>'));
+});
+test('bright-retail rotates accent color by slide index', () => {
+  const s0 = brightRetailHtml({ role: 'cover', headline: 'A' }, 0, 4, 'nuvia', {});
+  const s1 = brightRetailHtml({ role: 'point', headline: 'B' }, 1, 4, 'nuvia', {});
+  assert.ok(s0.includes('--accent:#00A7A0'));
+  assert.ok(s1.includes('--accent:#FF6B6B'));
 });
 test('editorial-photo uses photo bg, serif-italic accent, pill caption', () => {
   const html = editorialPhotoHtml({ role: 'cover', pill: 'Generá con IA', headline: 'Create *Ads*', body: 'x' }, 0, 5, 'sergio', { bg: '/tmp/sergio.jpg' });

@@ -1,0 +1,14 @@
+{
+  "title": "Nuvia — Everything for everyone",
+  "caption": "Llegó Nuvia: arrancamos con skincare que sí funciona y, de a poco, todo lo que necesitás en un solo lugar. Bueno, accesible y para todos. Escribí NUVIA y te armamos tu rutina.",
+  "hashtags": ["#nuvia", "#skincare", "#bolivia", "#everythingforeveryone"],
+  "comment_trigger": "Escribí NUVIA en los comentarios",
+  "slides": [
+    { "role": "cover", "pill": "Ya llegó", "headline": "Todo para todos. *Sin pagar de más.*", "body": "" },
+    { "role": "stakes", "pill": "El problema", "headline": "Comprar *bueno y barato* no debería ser tan difícil", "body": "Calidad real a precio justo casi nunca van juntas. Nosotros las juntamos.", "callout": "Por eso existe Nuvia ↘" },
+    { "role": "point", "pill": "Empezamos por acá", "headline": "Arrancamos con *skincare* que sí funciona", "body": "Una rutina corta y confiable para empezar a cuidar tu piel hoy, sin vueltas." },
+    { "role": "save", "save_worthy": true, "pill": "Rutina en 2 pasos", "headline": "Rutina mínima: *limpiar + proteger*", "body": "Paso 1: gel limpiador que destapa poros. Paso 2: protector solar diario, ligero, sin grasa. Eso ya cambia tu piel." },
+    { "role": "cta", "pill": "Tu turno", "headline": "Te armamos tu *rutina* gratis", "body": "Escribí *NUVIA* en los comentarios y seguí a @nuvia.bo. Hoy skincare, mañana todo lo que necesites." }
+  ],
+  "cta": "Escribí NUVIA"
+}

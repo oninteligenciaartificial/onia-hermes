@@ -41,6 +41,17 @@ Briefs se guardan en `briefs/`, slides en `out/<account>-<slug>-<stamp>/`.
 | `typographic` (default) | tipográfico, off-white/ink, Space Grotesk | rápido, sin assets |
 | `dark-product` | negro+verde, Archivo Black, **curva verde continua entre slides**, pills/badges, callout-cards, slot de objeto 3D (`--object`) | feed premium estilo Solaris. **El recomendado para ONIA.** |
 | `editorial-photo` | foto a sangre + scrim + grano, Archivo Black con acento *serif italic* (Fraunces) verde, pill caption | cuentas personales (Sergio/Arthur) con foto propia (`--bg`). Estilo Mobile Editing Club / Asterisk. |
+| `bright-retail` | claro/multicolor, fondo crema/acento, Inter 900, keyword en color de acento rotativo, pills suaves, logo de marca | marcas retail/amigables (ej. **Nuvia** `@nuvia.bo`). Lee brand kit de `BRANDS` en el render. |
+
+Cuentas: `onia`, `arthur`, `sergio`, `nuvia`. Brand kits no-ONIA en `BRANDS`
+(scripts/carousel_render.js): paleta, logo y acentos por marca.
+
+```powershell
+# Carrusel Nuvia (marca propia, pack claro):
+npm run carousel -- --topic "..." --account nuvia --pack bright-retail
+# o render directo desde un brief escrito a mano:
+npm run carousel:render -- --brief hermes-content/carousels/briefs/nuvia-presentacion.json --out hermes-content/carousels/out/nuvia --account nuvia --pack bright-retail
+```
 
 Objeto 3D de ejemplo ya generado (Higgsfield): `../assets/onia/automation-node-3d.png`.
 
