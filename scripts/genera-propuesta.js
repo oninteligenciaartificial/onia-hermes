@@ -11,7 +11,7 @@ const PRODUCTOS = {
     id: 'dentalgest',
     nombre: 'DentalGest',
     tagline: 'Sistema de gestión para clínicas dentales',
-    descripcion: 'Pacientes, citas, tratamientos, facturación y chatbot WhatsApp — todo en un solo sistema.',
+    descripcion: 'Pacientes, citas, tratamientos, pagos y seguimiento operativo en un solo sistema.',
     industrias: ['dental', 'clinica', 'salud'],
     planes: [
       { nombre: 'Básico',       precio: 'Bs. 320/mes',   descripcion: 'Hasta 2 doctores, funciones esenciales' },
@@ -22,7 +22,7 @@ const PRODUCTOS = {
       'Agenda digital con recordatorios automáticos',
       'Odontograma SVG interactivo por paciente',
       'Facturación y seguimiento de pagos',
-      'Chatbot WhatsApp con IA para agendar citas',
+      'Seguimiento ordenado de consultas y citas',
       'Reportes de ingresos y ocupación por período',
     ],
   },
@@ -53,7 +53,7 @@ const PRODUCTOS = {
     descripcion: 'Una página profesional enfocada en generar contactos calificados para tu negocio.',
     industrias: ['*'],
     planes: [
-      { nombre: 'Landing de Captación', precio: 'Bs. 1.490', descripcion: 'Precio único, entrega en 7-10 días' },
+      { nombre: 'Landing de Captación', precio: 'Bs. 790', descripcion: 'Precio único, entrega en 7-10 días' },
     ],
     beneficios: [
       'Diseño profesional alineado a tu marca',
@@ -70,7 +70,7 @@ const PRODUCTOS = {
     descripcion: 'Web multi-sección, portafolio, servicios y contacto — lista para posicionar tu marca.',
     industrias: ['*'],
     planes: [
-      { nombre: 'Web Profesional', precio: 'Bs. 2.900', descripcion: 'Precio único, entrega en 15-20 días' },
+      { nombre: 'Web Profesional', precio: 'Bs. 1.500', descripcion: 'Precio único, entrega en 15-20 días' },
     ],
     beneficios: [
       'Diseño a medida sin plantillas genéricas',
@@ -80,41 +80,21 @@ const PRODUCTOS = {
       'Cuidado web básico incluido 1 mes',
     ],
   },
-  web_pro_ia: {
-    id: 'web_pro_ia',
-    nombre: 'Web Pro con IA',
-    tagline: 'Sitio web premium con inteligencia artificial integrada',
-    descripcion: 'Web de alto nivel con chatbot IA, automatizaciones y sistema de captación inteligente.',
+  web_pro: {
+    id: 'web_pro',
+    nombre: 'Web Pro ONIA',
+    tagline: 'Sitio web premium enfocado en captacion y seguimiento',
+    descripcion: 'Web de alto nivel con estructura comercial, formularios, seguimiento y automatizacion ligera.',
     industrias: ['premium', 'audiovisual', 'productora', 'arquitecto', 'constructora', 'corporativo'],
     planes: [
-      { nombre: 'Web Pro con IA', precio: 'Bs. 5.900', descripcion: 'Precio único, entrega en 20-30 días' },
+      { nombre: 'Web Pro ONIA', precio: 'Bs. 2.900', descripcion: 'Precio único, entrega en 20-30 días' },
     ],
     beneficios: [
       'Diseño editorial premium sin plantillas',
-      'Chatbot IA entrenado con tu negocio',
+      'Estructura comercial clara por servicio u oferta',
       'Portafolio multimedia con galerías avanzadas',
-      'Captación automática de leads calificados',
+      'Captación y seguimiento de leads calificados',
       'Integración con WhatsApp, CRM y calendarios',
-    ],
-  },
-  videos_ia: {
-    id: 'videos_ia',
-    nombre: 'Videos con IA',
-    tagline: 'Contenido audiovisual generado con inteligencia artificial',
-    descripcion: 'Videos cortos profesionales para redes sociales — sin cámara, sin set, sin actores.',
-    industrias: ['*'],
-    planes: [
-      { nombre: 'Video individual',  precio: 'Bs. 450',        descripcion: 'Un video entregado en 48h' },
-      { nombre: '8 videos/mes',      precio: 'Bs. 2.200/mes',  descripcion: 'Publicación consistente mensual' },
-      { nombre: '16 videos/mes',     precio: 'Bs. 3.900/mes',  descripcion: 'Presencia diaria en redes' },
-      { nombre: '24 videos/mes',     precio: 'Bs. 6.500/mes',  descripcion: 'Máxima producción y alcance' },
-    ],
-    beneficios: [
-      'Avatar IA o avatar real con lip sync',
-      'Guiones redactados por IA y revisados por ONIA',
-      'Formato vertical y horizontal por plataforma',
-      'Hook + desarrollo + CTA en cada video',
-      'Aprobación antes de publicar',
     ],
   },
   consultoria: {
@@ -124,8 +104,8 @@ const PRODUCTOS = {
     descripcion: 'Auditamos tu negocio, identificamos cuellos de botella y entregamos un plan concreto.',
     industrias: ['*'],
     planes: [
-      { nombre: 'Auditoría Express',         precio: 'Bs. 350',         descripcion: 'Diagnóstico rápido en 1-2 días' },
-      { nombre: 'Diagnóstico + Plan',         precio: 'Bs. 990',         descripcion: 'Análisis completo y hoja de ruta' },
+      { nombre: 'Auditoría Express',         precio: 'Bs. 250',         descripcion: 'Revisión puntual con 3 problemas y 3 acciones' },
+      { nombre: 'Diagnóstico + Plan',         precio: 'Bs. 690',         descripcion: 'Análisis completo y hoja de ruta' },
       { nombre: 'Implementación Operativa',   precio: 'desde Bs. 4.900', descripcion: 'Ejecución con acompañamiento' },
     ],
     beneficios: [
@@ -141,19 +121,19 @@ const PRODUCTOS = {
 // ─── Mapeo industria → productos ──────────────────────────────────────────────
 
 const INDUSTRIA_PRODUCTOS = {
-  dental:       ['dentalgest', 'web_landing', 'videos_ia'],
-  clinica:      ['dentalgest', 'web_negocio', 'videos_ia'],
-  salud:        ['dentalgest', 'web_negocio', 'videos_ia'],
-  audiovisual:  ['web_pro_ia', 'videos_ia',   'consultoria'],
-  productora:   ['web_pro_ia', 'videos_ia',   'consultoria'],
-  arquitecto:   ['web_pro_ia', 'web_negocio', 'consultoria'],
-  constructora: ['web_pro_ia', 'gestios',     'consultoria'],
-  retail:       ['gestios',    'web_landing', 'videos_ia'],
-  comercio:     ['gestios',    'web_landing', 'videos_ia'],
-  restaurant:   ['gestios',    'web_landing', 'videos_ia'],
+  dental:       ['dentalgest', 'web_landing', 'consultoria'],
+  clinica:      ['dentalgest', 'web_negocio', 'consultoria'],
+  salud:        ['dentalgest', 'web_negocio', 'consultoria'],
+  audiovisual:  ['web_pro',    'web_negocio', 'consultoria'],
+  productora:   ['web_pro',    'web_negocio', 'consultoria'],
+  arquitecto:   ['web_pro',    'web_negocio', 'consultoria'],
+  constructora: ['web_pro',    'gestios',     'consultoria'],
+  retail:       ['gestios',    'web_landing', 'consultoria'],
+  comercio:     ['gestios',    'web_landing', 'consultoria'],
+  restaurant:   ['gestios',    'web_landing', 'consultoria'],
   pyme:         ['gestios',    'web_negocio', 'consultoria'],
-  servicio:     ['web_negocio','gestios',     'videos_ia'],
-  default:      ['web_negocio','videos_ia',   'consultoria'],
+  servicio:     ['web_negocio','gestios',     'consultoria'],
+  default:      ['web_negocio','consultoria', 'web_landing'],
 };
 
 // ─── Dolores por industria ────────────────────────────────────────────────────
@@ -292,7 +272,7 @@ function generarHTML(datos) {
       <div class="o-pillar fragment fade-up">
         <span class="o-pillar-icon">🤖</span>
         <h3>IA Aplicada</h3>
-        <p>Videos, chatbots y sistemas inteligentes para tu negocio.</p>
+        <p>Automatizaciones simples, asistentes y sistemas inteligentes para tu negocio.</p>
       </div>
     </div>
     <div class="o-badge fragment fade-up">Empresa boliviana · Equipo local · Soporte real</div>
@@ -403,8 +383,6 @@ function generarHTML(datos) {
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ONIA × ${empresa}</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://unpkg.com/reveal.js@5.1.0/dist/reveal.css">
   <link rel="stylesheet" href="https://unpkg.com/reveal.js@5.1.0/dist/theme/black.css">
   <style>
@@ -420,10 +398,10 @@ function generarHTML(datos) {
     /* ── Base overrides ──────────────────────────────── */
     .reveal,
     .reveal-viewport       { background: #080e1a; }
-    .reveal                { font-family: 'Inter', -apple-system, sans-serif; }
+    .reveal                { font-family: Aptos, "Segoe UI", Arial, sans-serif; }
     .reveal h1, .reveal h2,
     .reveal h3, .reveal h4 {
-      font-family: 'Inter', -apple-system, sans-serif;
+      font-family: Aptos, "Segoe UI", Arial, sans-serif;
       text-transform: none;
       letter-spacing: -0.025em;
       color: #fff;
@@ -513,10 +491,10 @@ function generarHTML(datos) {
     .o-quote {
       font-size: .43em;
       background: rgba(59,130,246,.1);
-      border-left: 3px solid var(--blue);
+      border: 1px solid rgba(59,130,246,.24);
       padding: .6em 1em;
       color: rgba(255,255,255,.72);
-      border-radius: 0 8px 8px 0;
+      border-radius: 8px;
       margin: .35em 0 .6em;
       font-style: normal;
     }
@@ -662,7 +640,7 @@ function generarHTML(datos) {
       font-size: .47em;
       font-weight: 700;
       text-decoration: none;
-      font-family: 'Inter', sans-serif;
+      font-family: Aptos, "Segoe UI", Arial, sans-serif;
       transition: transform .15s, opacity .15s;
     }
     .o-btn:hover        { transform: translateY(-2px); opacity: .9; }
@@ -729,7 +707,7 @@ Opciones:
   --contacto="..."           Nombre del contacto principal
   --ciudad="..."             Ciudad del cliente
   --notas="..."              Notas adicionales
-  --productos="id1,id2"      Forzar productos (dentalgest|gestios|web_landing|web_negocio|web_pro_ia|videos_ia|consultoria)
+  --productos="id1,id2"      Forzar productos (dentalgest|gestios|web_landing|web_negocio|web_pro|consultoria)
   --output="ruta/archivo"    Ruta de salida personalizada
 
 Ejemplos:

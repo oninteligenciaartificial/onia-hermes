@@ -2,7 +2,7 @@
 
 Usar esta skill cuando Sergio pida operar Hermes/ONIA desde Telegram, crear un
 router general, coordinar n8n, consultar estado, preparar ventas, manejar Video
-Lab/Higgsfield o convertir Telegram en bandeja principal.
+Lab interno o convertir Telegram en bandeja principal.
 
 ## Leer
 
@@ -55,7 +55,8 @@ Fabrica contenido ONIA
 Orquesta ONIA: <empresa o rubro> | <objetivo>
 Prepara venta DentalGest: <clinica>
 Prepara venta Gestios: <empresa>
-Prepara marketing Higgsfield: <negocio> | <oferta>
+Prepara venta Web ONIA: <negocio>
+Prepara consultoria ONIA: <negocio> | <dolor o proceso>
 Genera video Sergio: <idea>
 Genera Reel ONIA: <tema> | <objetivo>
 Crea video cliente: <negocio> | <oferta> | <estilo>

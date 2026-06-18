@@ -7,7 +7,7 @@ Ultima actualizacion: 2026-06-18
 ## Veredicto contable
 
 ONIA no vende "posts" ni "software barato". ONIA vende sistemas, seguimiento,
-contenido y automatizacion para que los negocios tengan mas orden y mejores
+captacion y automatizacion para que los negocios tengan mas orden y mejores
 conversaciones comerciales.
 
 Reglas actuales:
@@ -16,8 +16,7 @@ Reglas actuales:
 - Onboarding: opcional y vendido como acelerador.
 - Webs y sistemas: precio cerrado, normalmente mitad de anticipo y mitad contra
   entrega.
-- Marketing con Higgsfield: vender como sistema mensual, no solo como pieza
-  aislada.
+- Videos IA / Higgsfield: pausado como oferta comercial independiente.
 - Consultoria: vender diagnostico, instalacion, capacitacion y acompanamiento
   como linea propia.
 - Comision: una venta cobrada, una comision.
@@ -34,7 +33,9 @@ Vigencia:
 
 - Valida hasta 2026-07-31 o hasta 20 clientes cobrados, lo que ocurra primero.
 - El precio se reserva solo con pago confirmado.
-- En SaaS y paquetes mensuales, el precio de arranque cubre los primeros 3
+- DentalGest y GestiOS mantienen su precio actual. No se descuentan por ahora
+  porque ya son el producto SaaS que debe sostener margen y soporte.
+- En servicios mensuales no SaaS, el precio de arranque cubre los primeros 3
   meses. Desde el mes 4 se puede pasar al precio vigente avisando antes.
 - Si el cliente paga 3 meses adelantados, se respeta ese periodo completo.
 - No incluye impuestos, pauta, dominios, hosting, pasarelas, herramientas,
@@ -47,28 +48,24 @@ Vigencia:
 
 | Oferta | Precio de arranque | Comision vendedor |
 |---|---:|---:|
-| DentalGest Basico | Bs. 290/mes | Bs. 101.50 |
-| DentalGest Profesional | Bs. 490/mes | Bs. 171.50 |
-| DentalGest Clinica | Bs. 790/mes | Bs. 276.50 |
-| GestiOS Basico | Bs. 290/mes | Bs. 101.50 |
-| GestiOS Crecer | Bs. 490/mes | Bs. 171.50 |
-| GestiOS Pro | Bs. 790/mes | Bs. 276.50 |
-| GestiOS Empresarial | desde Bs. 1,250/mes | desde Bs. 437.50 |
-| Landing de Captacion | Bs. 990 | Bs. 99.00 |
-| Web Profesional | Bs. 1,900 | Bs. 228.00 |
-| Web Pro con IA | Bs. 3,900 | Bs. 468.00 |
-| Portal o Sistema Web mini | desde Bs. 7,500 | desde Bs. 750.00 |
-| Video individual | Bs. 290 | Bs. 29.00 |
-| Pack 4 videos IA | Bs. 990 | Bs. 148.50 |
-| 8 videos mensuales | Bs. 1,800/mes | Bs. 270.00 |
-| 16 videos mensuales | Bs. 3,200/mes | Bs. 480.00 |
-| 24 videos mensuales | Bs. 5,500/mes | Bs. 825.00 |
+| DentalGest Basico | Bs. 320/mes | Bs. 112.00 |
+| DentalGest Profesional | Bs. 750/mes | Bs. 262.50 |
+| DentalGest Clinica | Bs. 1,500/mes | Bs. 525.00 |
+| GestiOS Basico | Bs. 350/mes | Bs. 122.50 |
+| GestiOS Crecer | Bs. 530/mes | Bs. 185.50 |
+| GestiOS Pro | Bs. 800/mes | Bs. 280.00 |
+| GestiOS Empresarial | Bs. 1,250/mes | Bs. 437.50 |
+| Landing de Captacion | Bs. 790 | Bs. 79.00 |
+| Web Profesional | Bs. 1,500 | Bs. 180.00 |
+| Web Pro ONIA | Bs. 2,900 | Bs. 348.00 |
+| Portal o Sistema Web mini | desde Bs. 6,500 | desde Bs. 650.00 |
 | Auditoria Express | Bs. 250 | Bs. 25.00 |
 | Diagnostico + Plan de Accion | Bs. 690 | Bs. 69.00 |
 | Instalacion de Flujo Simple | Bs. 1,500 | Bs. 150.00 |
 | Implementacion Operativa | desde Bs. 3,900 | desde Bs. 390.00 |
 | Conexion de canal social | Bs. 690 setup | Bs. 69.00 |
-| Flujo de aprobacion n8n | Bs. 1,400 setup | Bs. 140.00 |
+| Automatizacion simple n8n | Bs. 790 setup | Bs. 79.00 |
+| Flujo de aprobacion n8n | Bs. 1,200 setup | Bs. 120.00 |
 
 Frase comercial:
 
@@ -105,7 +102,6 @@ calidad de clientes, volumen y margen aprobado.
 | GestiOS mensual | 35% del primer pago neto |
 | Add-on mensual aprobado | 35% del primer pago neto |
 | Paginas web | 10% a 12% del pago neto |
-| Videos con IA | 10% a 15% del primer pago neto |
 | Conectores y n8n | 10% del setup neto |
 | Sistemas personalizados | 10% del primer pago neto |
 | Consultoria ONIA | 10% a 15% segun paquete |
@@ -143,48 +139,61 @@ responsables, estados y reportes.
 
 | Servicio | Precio | Comision vendedor |
 |---|---:|---:|
-| Landing de Captacion | Bs. 1,490 | Bs. 149.00 |
-| Web Profesional | Bs. 2,900 | Bs. 348.00 |
-| Web Pro con IA | Bs. 5,900 | Bs. 708.00 |
-| Portal o Sistema Web | desde Bs. 9,500 | desde Bs. 950.00 |
+| Landing de Captacion | Bs. 790 | Bs. 79.00 |
+| Web Profesional | Bs. 1,500 | Bs. 180.00 |
+| Web Pro ONIA | Bs. 2,900 | Bs. 348.00 |
+| Portal o Sistema Web | desde Bs. 6,500 | desde Bs. 650.00 |
 | Cuidado Web Basico | Bs. 190/mes | Bs. 19.00 |
 | Cuidado Web Crecimiento | Bs. 390/mes | Bs. 39.00 |
 | Cuidado Web Pro | Bs. 690/mes | Bs. 69.00 |
 
-## Videos con IA y Higgsfield
+## Oferta pausada: Videos IA / Higgsfield
 
-Cada video comercial debe salir con hook, guion, CTA, escenas, prompt
-Higgsfield, descripcion por canal y aprobacion antes de publicar.
-
-| Plan | Precio | Comision vendedor |
-|---|---:|---:|
-| Video individual | Bs. 450 | Bs. 45.00 |
-| 8 videos mensuales | Bs. 2,200/mes | Bs. 330.00 |
-| 16 videos mensuales | Bs. 3,900/mes | Bs. 585.00 |
-| 24 videos mensuales | Bs. 6,500/mes | Bs. 975.00 |
+Pausado como producto comercial independiente. Por ahora el vendedor no debe
+ofrecer videos IA, packs Higgsfield ni promesas de contenido con IA. Si un
+cliente pregunta por contenido, llevarlo primero a web, auditoria o diagnostico.
 
 ## Conectores Cross-Platform
 
 | Servicio | Precio | Comision vendedor |
 |---|---:|---:|
-| Conexion Instagram/Meta | Bs. 900 | Bs. 90.00 |
-| Conexion TikTok | Bs. 900 | Bs. 90.00 |
-| Conexion YouTube Shorts | Bs. 900 | Bs. 90.00 |
-| Conexion LinkedIn | Bs. 900 | Bs. 90.00 |
-| Flujo de aprobacion n8n | Bs. 1,800 | Bs. 180.00 |
+| Conexion Instagram/Meta | Bs. 690 | Bs. 69.00 |
+| Conexion TikTok | Bs. 690 | Bs. 69.00 |
+| Conexion YouTube Shorts | Bs. 690 | Bs. 69.00 |
+| Conexion LinkedIn | Bs. 690 | Bs. 69.00 |
+| Automatizacion simple n8n | Bs. 790 | Bs. 79.00 |
+| Flujo de aprobacion n8n | Bs. 1,200 | Bs. 120.00 |
 | Monitoreo de canal | Bs. 150/mes | Bs. 15.00 |
-| Monitoreo n8n | Bs. 350/mes | Bs. 35.00 |
+| Monitoreo n8n | Bs. 150/mes | Bs. 15.00 |
 
 WhatsApp automatico queda pendiente hasta verificacion Meta.
+
+Una automatizacion simple n8n incluye un flujo cerrado, por ejemplo: formulario
+web o Typeform -> registro en Notion/Google Sheets -> aviso por Telegram/email
+-> tarea de seguimiento. No incluye integraciones pagadas, WhatsApp automatico,
+publicacion automatica, scraping masivo ni mantenimiento mensual.
+
+Un flujo de aprobacion n8n incluye estados como recibido, pendiente, aprobado,
+rechazado y notificado, con registro simple de quien aprueba. Sirve para
+formularios, propuestas, contenido o leads. Si requiere APIs especiales,
+login de terceros o reglas complejas, se cotiza aparte.
 
 ## Consultoria e implementaciones ONIA
 
 | Servicio | Precio | Comision vendedor |
 |---|---:|---:|
-| Auditoria Express | Bs. 350 | Bs. 35.00 |
-| Diagnostico + Plan de Accion | Bs. 990 | Bs. 99.00 |
+| Auditoria Express | Bs. 250 | Bs. 25.00 |
+| Diagnostico + Plan de Accion | Bs. 690 | Bs. 69.00 |
 | Instalacion de Flujo Simple | Bs. 1,900 | Bs. 190.00 |
 | Implementacion Operativa | Bs. 4,900 a 6,500 | Bs. 490 a 650 |
+
+Auditoria Express incluye revision de presencia digital, oferta, web/redes,
+canal de contacto y seguimiento comercial. Entrega 3 problemas concretos, 3
+acciones recomendadas y una oferta sugerida de ONIA. No incluye implementacion.
+
+Diagnostico + Plan de Accion incluye una sesion mas profunda, mapa del proceso
+actual, prioridades, presupuesto recomendado y siguiente propuesta. Conviene
+cuando el cliente no sabe si necesita web, CRM, automatizacion o sistema.
 
 ## Sistemas personalizados
 

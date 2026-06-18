@@ -8,35 +8,33 @@
     "limit": "20 clientes cobrados",
     "rules": [
       "precio reservado solo con pago confirmado",
-      "en SaaS y paquetes mensuales el precio de arranque cubre los primeros 3 meses",
-      "desde el mes 4 se puede pasar al precio vigente avisando antes",
+      "DentalGest y GestiOS mantienen su precio actual",
+      "videos IA y Higgsfield no se venden como producto independiente por ahora",
+      "en servicios mensuales no SaaS el precio de arranque cubre los primeros 3 meses",
+      "desde el mes 4 se puede pasar al precio vigente avisando antes cuando aplique",
       "la comision se calcula sobre el monto neto realmente cobrado",
       "no incluye impuestos, pauta, dominios, hosting, pasarelas, herramientas, creditos IA, APIs, SMS, WhatsApp, servidores ni gastos de terceros",
       "no prometer ventas garantizadas, viralidad ni WhatsApp automatico"
     ],
     "offers": {
-      "dentalgest_basico": {"price": "Bs. 290/mes", "vendor_commission": "Bs. 101.50"},
-      "dentalgest_profesional": {"price": "Bs. 490/mes", "vendor_commission": "Bs. 171.50"},
-      "dentalgest_clinica": {"price": "Bs. 790/mes", "vendor_commission": "Bs. 276.50"},
-      "gestios_basico": {"price": "Bs. 290/mes", "vendor_commission": "Bs. 101.50"},
-      "gestios_crecer": {"price": "Bs. 490/mes", "vendor_commission": "Bs. 171.50"},
-      "gestios_pro": {"price": "Bs. 790/mes", "vendor_commission": "Bs. 276.50"},
-      "gestios_empresarial": {"price": "desde Bs. 1250/mes", "vendor_commission": "desde Bs. 437.50"},
-      "landing_captacion": {"price": "Bs. 990", "vendor_commission": "Bs. 99.00"},
-      "web_profesional": {"price": "Bs. 1900", "vendor_commission": "Bs. 228.00"},
-      "web_pro_ia": {"price": "Bs. 3900", "vendor_commission": "Bs. 468.00"},
-      "portal_sistema_web_mini": {"price": "desde Bs. 7500", "vendor_commission": "desde Bs. 750.00"},
-      "video_individual": {"price": "Bs. 290", "vendor_commission": "Bs. 29.00"},
-      "pack_4_videos_ia": {"price": "Bs. 990", "vendor_commission": "Bs. 148.50"},
-      "higgsfield_8_videos": {"price": "Bs. 1800/mes", "vendor_commission": "Bs. 270.00"},
-      "higgsfield_16_videos": {"price": "Bs. 3200/mes", "vendor_commission": "Bs. 480.00"},
-      "higgsfield_24_videos": {"price": "Bs. 5500/mes", "vendor_commission": "Bs. 825.00"},
+      "dentalgest_basico": {"price": "Bs. 320/mes", "vendor_commission": "Bs. 112.00"},
+      "dentalgest_profesional": {"price": "Bs. 750/mes", "vendor_commission": "Bs. 262.50"},
+      "dentalgest_clinica": {"price": "Bs. 1500/mes", "vendor_commission": "Bs. 525.00"},
+      "gestios_basico": {"price": "Bs. 350/mes", "vendor_commission": "Bs. 122.50"},
+      "gestios_crecer": {"price": "Bs. 530/mes", "vendor_commission": "Bs. 185.50"},
+      "gestios_pro": {"price": "Bs. 800/mes", "vendor_commission": "Bs. 280.00"},
+      "gestios_empresarial": {"price": "Bs. 1250/mes", "vendor_commission": "Bs. 437.50"},
+      "landing_captacion": {"price": "Bs. 790", "vendor_commission": "Bs. 79.00"},
+      "web_profesional": {"price": "Bs. 1500", "vendor_commission": "Bs. 180.00"},
+      "web_pro_onia": {"price": "Bs. 2900", "vendor_commission": "Bs. 348.00"},
+      "portal_sistema_web_mini": {"price": "desde Bs. 6500", "vendor_commission": "desde Bs. 650.00"},
       "auditoria_express": {"price": "Bs. 250", "vendor_commission": "Bs. 25.00"},
       "diagnostico_plan": {"price": "Bs. 690", "vendor_commission": "Bs. 69.00"},
       "instalacion_flujo_simple": {"price": "Bs. 1500", "vendor_commission": "Bs. 150.00"},
       "implementacion_operativa": {"price": "desde Bs. 3900", "vendor_commission": "desde Bs. 390.00"},
       "conexion_canal_social": {"price": "Bs. 690 setup", "vendor_commission": "Bs. 69.00"},
-      "flujo_aprobacion_n8n": {"price": "Bs. 1400 setup", "vendor_commission": "Bs. 140.00"}
+      "automatizacion_simple_n8n": {"price": "Bs. 790 setup", "vendor_commission": "Bs. 79.00", "scope": "formulario o lead -> registro -> aviso -> tarea"},
+      "flujo_aprobacion_n8n": {"price": "Bs. 1200 setup", "vendor_commission": "Bs. 120.00", "scope": "recibido -> pendiente -> aprobado/rechazado -> notificado"}
     }
   },
   "approval_policy": {
@@ -64,21 +62,20 @@
       ],
       "primary_offer": "CRM dental, agenda, seguimiento y recordatorios",
       "pricing": {
-        "starter": "Bs. 349/mes",
-        "pro": "Bs. 590/mes",
-        "clinic": "Bs. 990/mes",
+        "basico": "Bs. 320/mes",
+        "profesional": "Bs. 750/mes",
+        "clinica": "Bs. 1500/mes",
         "onboarding_optional": {
           "carga_guiada_express": "Bs. 290",
           "configuracion_asistida": "Bs. 690",
           "migracion_capacitacion_equipo": "Bs. 1490"
         },
-        "founder_offer_first_10": ["Bs. 290/mes", "Bs. 490/mes", "Bs. 790/mes"],
-        "commission": "SaaS mensual: 50% de la primera mensualidad neta cobrada una sola vez; anual prepago: 8% del anual neto; onboarding 10%",
+        "commission": "SaaS mensual: 35% de la primera mensualidad neta cobrada una sola vez; anual prepago: 8% del anual neto; onboarding 10%",
         "whatsapp_addon": "pendiente hasta verificacion Meta"
       },
       "secondary_offers": [
         "landing para captacion dental",
-        "contenido educativo con Higgsfield",
+        "auditoria de captacion",
         "auditoria de seguimiento de pacientes"
       ],
       "recommended_channels": ["Instagram/Facebook publico", "LinkedIn", "Email publico", "Web form"],
@@ -100,16 +97,16 @@
       ],
       "primary_offer": "Sistema operativo para tareas, clientes, estados y reportes",
       "pricing": {
-        "starter": "Bs. 490/mes",
-        "operativo": "Bs. 790/mes",
-        "pro": "Bs. 1290/mes",
-        "enterprise": "desde Bs. 2490/mes",
+        "basico": "Bs. 350/mes",
+        "crecer": "Bs. 530/mes",
+        "pro": "Bs. 800/mes",
+        "empresarial": "Bs. 1250/mes",
         "implementation_optional": {
           "kickstart": "Bs. 790",
           "implementacion_operativa": "Bs. 1900",
           "procesos_a_medida": "desde Bs. 5000"
         },
-        "commission": "SaaS mensual: 50% de la primera mensualidad neta cobrada una sola vez; anual prepago 8%; enterprise 8% del primer pago neto; implementacion 10%",
+        "commission": "SaaS mensual: 35% de la primera mensualidad neta cobrada una sola vez; anual prepago 8%; empresarial 8% del primer pago neto; implementacion 10%",
         "addons": {
           "whatsapp_business": "pendiente hasta verificacion Meta",
           "siat": "USD 25/mes",
@@ -162,16 +159,16 @@
       ],
       "primary_offer": "Landing o web conectada a formulario, CRM y seguimiento",
       "pricing": {
-        "landing_express": "Bs. 1490",
-        "web_negocio": "Bs. 2900",
-        "web_pro_ia": "Bs. 5900",
-        "saas_portal_personalizado": "desde Bs. 9500",
+        "landing_express": "Bs. 790",
+        "web_negocio": "Bs. 1500",
+        "web_pro_onia": "Bs. 2900",
+        "saas_portal_personalizado": "desde Bs. 6500",
         "care_plan": {
           "basico": "Bs. 190/mes",
           "crecimiento": "Bs. 390/mes",
           "pro": "Bs. 690/mes"
         },
-        "commission": "Landing 10%; Web Negocio/Web Pro IA 12%; SaaS/portal 8% o 10% con margen aprobado; care plan 50% de la primera mensualidad"
+        "commission": "Landing 10%; Web Negocio/Web Pro ONIA 12%; SaaS/portal 8% o 10% con margen aprobado; care plan 10% de la primera mensualidad"
       },
       "secondary_offers": [
         "SEO local",
@@ -184,8 +181,9 @@
     },
     {
       "id": "higgsfield-marketing",
-      "name": "Marketing con Higgsfield",
-      "type": "content_service",
+      "name": "Video Lab interno",
+      "type": "internal_lab",
+      "sales_status": "paused",
       "local_path": "C:\\dev\\Expermimentos\\Hermes",
       "primary_audience": "Negocios que necesitan contenido, ads o videos de oferta",
       "pain_signals": [
@@ -194,33 +192,23 @@
         "la oferta no se entiende",
         "no tiene CTA ni seguimiento"
       ],
-      "primary_offer": "Reels, UGC, videos de oferta y contenido mensual con IA",
+      "primary_offer": "Pausado como producto comercial independiente",
       "pricing": {
-        "video_unit": "Bs. 450",
-        "sprint_8": "Bs. 2200/mes",
-        "growth_16": "Bs. 3900/mes",
-        "authority_24": "Bs. 6500/mes",
-        "performance_system": "desde Bs. 9500/mes",
-        "intro_price_first_5": {
-          "sprint_8": "Bs. 1800/mes",
-          "growth_16": "Bs. 3200/mes",
-          "authority_24": "Bs. 5500/mes"
-        },
-        "commission": "Video unit 10%; Sprint/Growth/Authority 15% del primer mes neto cobrado una sola vez; Performance 10% del primer mes neto; conectores 10% del setup",
+        "status": "No vender videos IA ni packs Higgsfield por ahora",
+        "commission": "No aplica mientras este pausado",
         "connector_setup": {
-          "tiktok_api": "Bs. 900 setup + Bs. 150/mes monitoring",
-          "youtube_shorts_api": "Bs. 900 setup + Bs. 150/mes monitoring",
-          "linkedin_api": "Bs. 900 setup + Bs. 150/mes monitoring",
-          "n8n_approval_flow": "Bs. 1800 setup + Bs. 350/mes monitoring"
+          "social_channel_connection": "Bs. 690 setup",
+          "simple_n8n": "Bs. 790 setup",
+          "n8n_approval_flow": "Bs. 1200 setup + Bs. 150/mes optional monitoring"
         }
       },
       "secondary_offers": [
         "landing de campaña",
         "CRM de leads",
-        "reporte semanal"
+        "auditoria de oferta"
       ],
-      "recommended_channels": ["Instagram", "LinkedIn", "Demo visual", "Video de diagnostico"],
-      "default_cta": "Te preparo 3 ideas de videos para vender mejor tu servicio.",
+      "recommended_channels": ["Instagram", "LinkedIn", "Auditoria Express"],
+      "default_cta": "Te preparo una auditoria express para ver que conviene corregir primero.",
       "crm_tags": ["contenido", "higgsfield", "ugc"]
     },
     {
@@ -238,11 +226,10 @@
       ],
       "primary_offer": "Auditoria, roadmap, instalacion, capacitacion y acompanamiento consultivo",
       "pricing": {
-        "auditoria_express": "Bs. 250-450",
-        "diagnostico_roadmap": "Bs. 790-1200",
+        "auditoria_express": "Bs. 250",
+        "diagnostico_roadmap": "Bs. 690",
         "instalacion_starter": "Bs. 1900",
         "implementacion_operativa": "Bs. 3900-6500",
-        "sprint_ia_video_system": "Bs. 4900-8500",
         "acompanamiento_consultivo": "Bs. 1200-2900/mes",
         "transformacion_onia": "desde Bs. 9500",
         "commission": "Auditorias/instalaciones 10%; implementaciones 8-10%; acompanamiento 15% del primer mes; transformacion 8% del primer pago neto"
@@ -251,7 +238,7 @@
         "DentalGest",
         "Gesti-OS",
         "paginas web ONIA",
-        "Marketing con Higgsfield",
+        "automatizacion simple n8n",
         "conectores n8n"
       ],
       "recommended_channels": ["LinkedIn", "Email publico", "Demo privada", "Contenido Sergio", "Auditoria consultiva"],
@@ -274,7 +261,7 @@
     },
     {
       "if": "signal contains low content|needs videos|ads|ugc",
-      "primary_project": "higgsfield-marketing"
+      "primary_project": "websites"
     },
     {
       "if": "pain contains no sabe|herramientas sueltas|automatizacion|instalar|consultoria|diagnostico|roadmap",

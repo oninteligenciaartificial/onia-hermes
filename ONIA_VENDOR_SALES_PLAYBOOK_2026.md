@@ -30,35 +30,32 @@ Condiciones:
 
 - Vigente hasta 2026-07-31 o hasta 20 clientes cobrados.
 - El precio se reserva solo con pago confirmado.
-- En SaaS y paquetes mensuales, el precio de arranque cubre los primeros 3
+- DentalGest y GestiOS mantienen su precio actual. No se descuentan por ahora.
+- En servicios mensuales no SaaS, el precio de arranque cubre los primeros 3
   meses; desde el mes 4 se puede pasar al precio vigente avisando antes.
 - La comision se calcula sobre el monto neto realmente cobrado.
 - No incluye gastos externos ni promesas de resultado garantizado.
 
 | Producto | Precio de arranque | Premio vendedor |
 |---|---:|---:|
-| DentalGest Basico | Bs. 290/mes | Bs. 101,50 |
-| DentalGest Profesional | Bs. 490/mes | Bs. 171,50 |
-| DentalGest Clinica | Bs. 790/mes | Bs. 276,50 |
-| GestiOS Basico | Bs. 290/mes | Bs. 101,50 |
-| GestiOS Crecer | Bs. 490/mes | Bs. 171,50 |
-| GestiOS Pro | Bs. 790/mes | Bs. 276,50 |
-| GestiOS Empresarial | desde Bs. 1.250/mes | desde Bs. 437,50 |
-| Landing Express | Bs. 990 | Bs. 99 |
-| Web Negocio | Bs. 1.900 | Bs. 228 |
-| Web Pro IA | Bs. 3.900 | Bs. 468 |
-| Portal / sistema web mini | desde Bs. 7.500 | desde Bs. 750 |
-| Video individual | Bs. 290 | Bs. 29 |
-| Pack 4 videos IA | Bs. 990 | Bs. 148,50 |
-| 8 videos mensuales | Bs. 1.800/mes | Bs. 270 |
-| 16 videos mensuales | Bs. 3.200/mes | Bs. 480 |
-| 24 videos mensuales | Bs. 5.500/mes | Bs. 825 |
+| DentalGest Basico | Bs. 320/mes | Bs. 112 |
+| DentalGest Profesional | Bs. 750/mes | Bs. 262,50 |
+| DentalGest Clinica | Bs. 1.500/mes | Bs. 525 |
+| GestiOS Basico | Bs. 350/mes | Bs. 122,50 |
+| GestiOS Crecer | Bs. 530/mes | Bs. 185,50 |
+| GestiOS Pro | Bs. 800/mes | Bs. 280 |
+| GestiOS Empresarial | Bs. 1.250/mes | Bs. 437,50 |
+| Landing Express | Bs. 790 | Bs. 79 |
+| Web Negocio | Bs. 1.500 | Bs. 180 |
+| Web Pro ONIA | Bs. 2.900 | Bs. 348 |
+| Portal / sistema web mini | desde Bs. 6.500 | desde Bs. 650 |
 | Auditoria Express ONIA | Bs. 250 | Bs. 25 |
 | Diagnostico + Plan de Accion | Bs. 690 | Bs. 69 |
 | Instalacion de Flujo Simple | Bs. 1.500 | Bs. 150 |
 | Implementacion Operativa | desde Bs. 3.900 | desde Bs. 390 |
 | Conexion de canal social | Bs. 690 setup | Bs. 69 |
-| n8n aprobaciones/publicacion | Bs. 1.400 setup | Bs. 140 |
+| Automatizacion simple n8n | Bs. 790 setup | Bs. 79 |
+| n8n aprobaciones | Bs. 1.200 setup | Bs. 120 |
 
 Frase de cierre:
 
@@ -80,20 +77,17 @@ precio vigente.
 | GestiOS Crecer | Bs. 530/mes | Bs. 185,50 |
 | GestiOS Pro | Bs. 800/mes | Bs. 280 |
 | GestiOS Empresarial | Bs. 1.250/mes | Bs. 437,50 |
-| Landing Express | Bs. 1.490 | Bs. 149 |
-| Web Negocio | Bs. 2.900 | Bs. 348 |
-| Web Pro IA | Bs. 5.900 | Bs. 708 |
-| Portal / sistema web | desde Bs. 9.500 | desde Bs. 950 |
-| Video individual | Bs. 450 | Bs. 45 |
-| 8 videos mensuales | Bs. 2.200/mes | Bs. 330 |
-| 16 videos mensuales | Bs. 3.900/mes | Bs. 585 |
-| 24 videos mensuales | Bs. 6.500/mes | Bs. 975 |
-| Auditoria Express ONIA | Bs. 350 | Bs. 35 |
-| Diagnostico + Plan de Accion | Bs. 990 | Bs. 99 |
+| Landing Express | Bs. 790 | Bs. 79 |
+| Web Negocio | Bs. 1.500 | Bs. 180 |
+| Web Pro ONIA | Bs. 2.900 | Bs. 348 |
+| Portal / sistema web | desde Bs. 6.500 | desde Bs. 650 |
+| Auditoria Express ONIA | Bs. 250 | Bs. 25 |
+| Diagnostico + Plan de Accion | Bs. 690 | Bs. 69 |
 | Instalacion de Flujo Simple | Bs. 1.900 | Bs. 190 |
 | Implementacion Operativa | Bs. 4.900-6.500 | Bs. 490-650 |
-| Conexion de canal social | Bs. 900 setup | Bs. 90 |
-| n8n aprobaciones/publicacion | Bs. 1.800 setup | Bs. 180 |
+| Conexion de canal social | Bs. 690 setup | Bs. 69 |
+| Automatizacion simple n8n | Bs. 790 setup | Bs. 79 |
+| n8n aprobaciones | Bs. 1.200 setup | Bs. 120 |
 
 ## Crecimiento del vendedor
 
@@ -220,7 +214,7 @@ Oferta recomendada:
 
 - Landing Express para validar rapido.
 - Web Negocio para presencia seria.
-- Web Pro IA para campana + contenido + automatizacion.
+- Web Pro ONIA para presencia completa + copy + formulario + seguimiento basico.
 - Portal/SaaS para productos propios o procesos internos.
 
 Mensaje base:
@@ -233,60 +227,39 @@ seguimiento ordenado.
 Si quieres, te preparo una auditoria corta con 2 mejoras puntuales.
 ```
 
-## Como vender Marketing con Higgsfield
+## Oferta pausada: Videos IA / Higgsfield
 
-Cliente ideal:
-
-- Negocios que publican poco.
-- Marcas con producto visual o servicio explicable en video.
-- Empresas que necesitan autoridad, anuncios o reels educativos.
-
-Palabras clave para buscar:
-
-- contenido medico Bolivia
-- clinica estetica reels Bolivia
-- inmobiliaria videos Bolivia
-- restaurante reels Santa Cruz
-- marca personal Bolivia
-- videos para negocios Bolivia
-
-Oferta recomendada:
-
-- Video individual si quiere probar una pieza.
-- 8 videos mensuales si quiere publicar de forma constante.
-- 16 videos mensuales si tiene varias ofertas o varios canales.
-- 24 videos mensuales si necesita alto volumen de contenido.
-
-Mensaje base:
-
-```text
-Hola, soy Sergio de ONIA. Estamos creando videos de oferta con IA para negocios:
-guion, hook, visuales, caption y CTA. La idea no es hacer contenido bonito, sino
-contenido que explique mejor lo que vendes.
-
-Si quieres, te preparo 3 ideas de videos para tu negocio.
-```
+Pausado como producto comercial independiente. No ofrecer videos IA, packs
+Higgsfield ni promesas de contenido con IA. Si un prospecto pide contenido,
+llevarlo primero a auditoria, web, diagnostico o automatizacion simple.
 
 ## Como vender conectores y n8n
 
 Cliente ideal:
 
-- Clientes que ya producen contenido.
-- Equipos que quieren aprobacion antes de publicar.
-- Negocios que usan Instagram, LinkedIn, YouTube Shorts o TikTok.
+- Clientes que reciben leads por formulario, redes o WhatsApp y los pierden.
+- Equipos que necesitan avisos y seguimiento sin depender de memoria manual.
+- Negocios que quieren registrar solicitudes en Notion, Sheets o CRM.
+- Equipos que quieren aprobacion antes de publicar o enviar algo.
 
 Regla:
 
-- Se vende setup y monitoreo.
+- Se vende setup cerrado y monitoreo opcional.
 - No se promete aprobacion de plataforma.
 - WhatsApp queda fuera hasta verificacion de negocio Meta.
+- La automatizacion simple n8n cuesta Bs. 790 y cubre un flujo: entrada ->
+  registro -> aviso -> tarea.
+- El flujo n8n de aprobaciones cuesta Bs. 1.200 y cubre estados: recibido,
+  pendiente, aprobado, rechazado y notificado.
+- APIs pagadas, scraping masivo, WhatsApp, logins de terceros o reglas complejas
+  se cotizan aparte.
 
 Mensaje base:
 
 ```text
-Podemos dejar tu flujo preparado para crear, revisar y aprobar contenido antes
-de publicarlo. La idea es que nada salga sin control, pero que el equipo no
-tenga que hacer todo manualmente.
+Podemos dejar un flujo simple: cuando entra una consulta, se registra en una
+tabla/CRM y llega un aviso para hacer seguimiento. Si necesitan aprobacion,
+tambien podemos armar pasos de revisar, aprobar y notificar.
 ```
 
 ## Como vender Consultoria ONIA
@@ -315,6 +288,13 @@ instalar primero: CRM, web, seguimiento, automatizacion, contenido o reportes.
 La idea no es venderte una herramienta suelta, sino dejarte un flujo funcionando.
 Si quieres, empezamos con una auditoria express.
 ```
+
+La Auditoria Express cuesta Bs. 250 e incluye revision de web/redes/oferta,
+canal de contacto y seguimiento. Entrega 3 problemas concretos, 3 acciones
+recomendadas y una oferta sugerida de ONIA. No incluye implementacion.
+
+El Diagnostico + Plan cuesta Bs. 690 e incluye sesion, mapa simple del proceso,
+prioridades, presupuesto recomendado y siguiente propuesta.
 
 Regla para vendedores:
 
@@ -351,7 +331,7 @@ Regla para vendedores:
 
 1. DentalGest con clinicas de prioridad alta.
 2. Web + DentalGest para clinicas con web debil o solo Facebook.
-3. Higgsfield para clinicas/negocios que necesitan autoridad.
-4. Consultoria ONIA para negocios que todavia no saben que comprar.
+3. Web ONIA para negocios sin presencia clara.
+4. Auditoria Express para negocios que no saben por donde empezar.
 5. GestiOS para pymes fuera del rubro dental.
-6. Conectores/n8n como upsell despues de contenido o web.
+6. Automatizacion simple n8n como upsell despues de web, formulario o CRM.

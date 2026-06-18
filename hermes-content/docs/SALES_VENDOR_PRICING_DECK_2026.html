@@ -24,7 +24,7 @@
     * { box-sizing: border-box; }
     body {
       margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
+      font-family: Aptos, "Segoe UI", Helvetica, sans-serif;
       background: var(--bg);
       color: var(--ink);
       overflow: hidden;
@@ -42,10 +42,12 @@
       top: 0;
       left: 0;
       height: 4px;
-      width: 0;
+      width: 100%;
       background: var(--green);
       z-index: 20;
-      transition: width .25s ease;
+      transform: scaleX(0);
+      transform-origin: left center;
+      transition: transform .25s ease;
     }
 
     .slide {
@@ -190,7 +192,7 @@
     }
 
     .callout {
-      border-left: 6px solid var(--green);
+      border: 1px solid #bbf7d0;
       padding: 16px 20px;
       background: #ecfdf5;
       border-radius: 10px;
@@ -257,7 +259,7 @@
       <div class="slide-inner">
         <div class="topline">ONIA 2026 / Vendedores</div>
         <h1>Precios, comisiones y ofertas para vender sin improvisar</h1>
-        <p>Material interno para vender DentalGest, Gesti-OS, paginas web, Marketing con Higgsfield y conectores cross-platform.</p>
+        <p>Material interno para vender DentalGest, Gesti-OS, paginas web, auditorias y automatizaciones n8n simples.</p>
       </div>
     </section>
 
@@ -268,8 +270,8 @@
         <div class="grid cols-2">
           <div class="card"><h3>SaaS</h3><p>Self-service, sin setup obligatorio. Onboarding opcional como acelerador.</p></div>
           <div class="card"><h3>Servicios</h3><p>Precio cerrado, 50% anticipo y una comision simple sobre dinero cobrado.</p></div>
-          <div class="card"><h3>Contenido IA</h3><p>Vender sistema mensual: estrategia, videos, captions, canales y reporte.</p></div>
-          <div class="card"><h3>Conectores</h3><p>Upsell tecnico: TikTok, YouTube, LinkedIn y n8n se cobran aparte.</p></div>
+          <div class="card"><h3>Auditorias</h3><p>Entrada pagada para revisar web, redes, oferta, WhatsApp y seguimiento.</p></div>
+          <div class="card"><h3>n8n simple</h3><p>Upsell tecnico acotado: registro, aviso, tarea o aprobacion interna.</p></div>
         </div>
       </div>
     </section>
@@ -281,7 +283,7 @@
         <div class="grid cols-3">
           <div class="card"><h3>Landing Bolivia</h3><div class="price">Bs. 829-1.935</div><p class="small">Rango local 2026 para landing simple.</p></div>
           <div class="card"><h3>Web institucional</h3><div class="price">Bs. 1.935-6.910</div><p class="small">Rango local 2026 para web pyme.</p></div>
-          <div class="card"><h3>Social media</h3><div class="price">USD 300+</div><p class="small">Freelance basico internacional; sube con video y estrategia.</p></div>
+          <div class="card"><h3>Automatizacion simple</h3><div class="price">Bs. 690-1.200</div><p class="small">Rango ONIA para flujos n8n acotados.</p></div>
         </div>
         <p class="small">Lectura comercial: ONIA puede cobrar arriba del freelancer barato cuando combina sistema, contenido, CRM, automatizacion y seguimiento.</p>
         <p class="small">Fuentes revisadas: Avendano Design Bolivia, Conbersa, Feedbird, Carvd y Sales Cookie.</p>
@@ -295,12 +297,12 @@
         <table>
           <thead><tr><th>Plan</th><th>Precio</th><th>Para quien</th><th>Comision</th></tr></thead>
           <tbody>
-            <tr><td>Starter</td><td>Bs. 349/mes</td><td>Consultorio pequeno</td><td>50% primera mensualidad</td></tr>
-            <tr><td>Pro</td><td>Bs. 590/mes</td><td>Clinica en crecimiento</td><td>50% primera mensualidad</td></tr>
-            <tr><td>Clinic</td><td>Bs. 990/mes</td><td>Clinica con equipo</td><td>50% primera mensualidad</td></tr>
+            <tr><td>Basico</td><td>Bs. 320/mes</td><td>Consultorio pequeno</td><td>35% primera mensualidad</td></tr>
+            <tr><td>Profesional</td><td>Bs. 750/mes</td><td>Clinica en crecimiento</td><td>35% primera mensualidad</td></tr>
+            <tr><td>Clinica</td><td>Bs. 1.500/mes</td><td>Clinica con equipo</td><td>35% primera mensualidad</td></tr>
           </tbody>
         </table>
-        <div class="callout"><p><strong>Oferta fundadores:</strong> primeros 10 clientes a Bs. 290, Bs. 490 y Bs. 790/mes. Onboarding opcional: Bs. 290, Bs. 690 o Bs. 1.490.</p></div>
+        <div class="callout"><p><strong>Precios actuales:</strong> se mantienen DentalGest Basico, Profesional y Clinica. No vender descuentos nuevos sin aprobacion.</p></div>
       </div>
     </section>
 
@@ -311,13 +313,13 @@
         <table>
           <thead><tr><th>Plan</th><th>Precio</th><th>Implementacion</th><th>Comision</th></tr></thead>
           <tbody>
-            <tr><td>Starter</td><td>Bs. 490/mes</td><td>No obligatoria</td><td>50% primera mensualidad</td></tr>
-            <tr><td>Operativo</td><td>Bs. 790/mes</td><td>Recomendada</td><td>50% primera mensualidad</td></tr>
-            <tr><td>Pro</td><td>Bs. 1.290/mes</td><td>Recomendada</td><td>50% primera mensualidad</td></tr>
-            <tr><td>Enterprise</td><td>desde Bs. 2.490/mes</td><td>Cotizada</td><td>8% primer pago</td></tr>
+            <tr><td>Basico</td><td>Bs. 350/mes</td><td>No obligatoria</td><td>35% primera mensualidad</td></tr>
+            <tr><td>Crecer</td><td>Bs. 530/mes</td><td>Recomendada</td><td>35% primera mensualidad</td></tr>
+            <tr><td>Pro</td><td>Bs. 800/mes</td><td>Recomendada</td><td>35% primera mensualidad</td></tr>
+            <tr><td>Empresarial</td><td>Bs. 1.250/mes</td><td>Cotizada</td><td>35% primer pago</td></tr>
           </tbody>
         </table>
-        <p class="small">Implementacion opcional: Kickstart Bs. 790, Operativa Bs. 1.900, Procesos a medida desde Bs. 5.000.</p>
+        <p class="small">Implementacion opcional se cotiza segun alcance. No vender migraciones grandes sin diagnostico.</p>
       </div>
     </section>
 
@@ -326,43 +328,44 @@
         <div class="topline">Paginas web</div>
         <h2>La web se vende como captacion y seguimiento, no como brochure.</h2>
         <div class="grid cols-4">
-          <div class="card"><h3>Landing Express</h3><div class="price">Bs. 1.490</div><p class="small">1 pagina, copy, formulario, CTA.</p></div>
-          <div class="card"><h3>Web Negocio</h3><div class="price">Bs. 2.900</div><p class="small">5 secciones, SEO local, CRM simple.</p></div>
-          <div class="card"><h3>Web Pro IA</h3><div class="price">Bs. 5.900</div><p class="small">Web + campana + contenido inicial.</p></div>
-          <div class="card"><h3>Portal / SaaS</h3><div class="price">Bs. 9.500+</div><p class="small">MVP, auth, dashboard y base de datos.</p></div>
+          <div class="card"><h3>Landing</h3><div class="price">Bs. 790</div><p class="small">1 pagina, copy, formulario, CTA.</p></div>
+          <div class="card"><h3>Web Profesional</h3><div class="price">Bs. 1.500</div><p class="small">Secciones clave, SEO local, formulario.</p></div>
+          <div class="card"><h3>Web Pro ONIA</h3><div class="price">Bs. 2.900</div><p class="small">Captacion, estructura comercial y seguimiento.</p></div>
+          <div class="card"><h3>Portal / mini sistema</h3><div class="price">Bs. 6.500+</div><p class="small">MVP, auth, dashboard y base de datos.</p></div>
         </div>
-        <p class="small">Comision unica: Landing 10%; Web Negocio/Web Pro IA 12%; Portal/SaaS 8% o 10% con margen aprobado.</p>
+        <p class="small">Comision unica: Landing 10%; Web Profesional/Web Pro ONIA 12%; Portal o mini sistema 10% con margen aprobado.</p>
       </div>
     </section>
 
     <section class="slide">
       <div class="slide-inner">
-        <div class="topline">Marketing con Higgsfield</div>
-        <h2>Contenido mensual que trae conversaciones, no solo vistas.</h2>
+        <div class="topline">Auditorias y n8n</div>
+        <h2>Entrada pagada para diagnosticar y automatizar sin prometer de mas.</h2>
         <table>
-          <thead><tr><th>Paquete</th><th>Precio</th><th>Incluye</th><th>Comision</th></tr></thead>
+          <thead><tr><th>Oferta</th><th>Precio</th><th>Incluye</th><th>Comision</th></tr></thead>
           <tbody>
-            <tr><td>Video unit</td><td>Bs. 450</td><td>1 video completo</td><td>10%</td></tr>
-            <tr><td>Sprint 8</td><td>Bs. 2.200/mes</td><td>8 videos, 2 plataformas</td><td>15% primer mes</td></tr>
-            <tr><td>Growth 16</td><td>Bs. 3.900/mes</td><td>16 videos, 3 plataformas</td><td>15% primer mes</td></tr>
-            <tr><td>Authority 24</td><td>Bs. 6.500/mes</td><td>24 videos, 4 plataformas</td><td>15% primer mes</td></tr>
+            <tr><td>Auditoria Express</td><td>Bs. 250</td><td>3 problemas, 3 acciones y oferta recomendada</td><td>10%</td></tr>
+            <tr><td>Diagnostico + Plan</td><td>Bs. 690</td><td>Mapa de proceso, prioridades y presupuesto sugerido</td><td>10%</td></tr>
+            <tr><td>Conexion canal social</td><td>Bs. 690</td><td>Lead o formulario hacia registro y aviso interno</td><td>10%</td></tr>
+            <tr><td>Automatizacion simple n8n</td><td>Bs. 790</td><td>Formulario/lead a tarea, registro o notificacion</td><td>10%</td></tr>
+            <tr><td>Flujo aprobacion n8n</td><td>Bs. 1.200</td><td>Recibido, aprobado/rechazado y notificado</td><td>10%</td></tr>
           </tbody>
         </table>
-        <p class="small">Precio intro primeros 5 clientes: Sprint 8 Bs. 1.800, Growth 16 Bs. 3.200, Authority 24 Bs. 5.500.</p>
+        <p class="small">n8n no incluye APIs pagadas, scraping, WhatsApp automatico ni mantenimiento continuo salvo monitoreo cotizado aparte.</p>
       </div>
     </section>
 
     <section class="slide">
       <div class="slide-inner">
-        <div class="topline">Conectores</div>
-        <h2>Los conectores se venden como infraestructura de publicacion aprobada.</h2>
+        <div class="topline">Alcance n8n</div>
+        <h2>n8n se vende por flujo claro, no como automatizacion infinita.</h2>
         <div class="grid cols-4">
-          <div class="card"><h3>TikTok API</h3><div class="price">Bs. 900</div><p class="small">+ Bs. 150/mes monitoreo.</p></div>
-          <div class="card"><h3>YouTube Shorts</h3><div class="price">Bs. 900</div><p class="small">+ Bs. 150/mes monitoreo.</p></div>
-          <div class="card"><h3>LinkedIn API</h3><div class="price">Bs. 900</div><p class="small">+ Bs. 150/mes monitoreo.</p></div>
-          <div class="card"><h3>n8n flow</h3><div class="price">Bs. 1.800</div><p class="small">+ Bs. 350/mes monitoreo.</p></div>
+          <div class="card"><h3>Entrada</h3><div class="price">Lead</div><p class="small">Formulario, planilla, email o mensaje manual registrado.</p></div>
+          <div class="card"><h3>Logica</h3><div class="price">Regla</div><p class="small">Asignar estado, responsable, tarea o prioridad.</p></div>
+          <div class="card"><h3>Salida</h3><div class="price">Aviso</div><p class="small">Telegram, email, Sheets, Notion o CRM interno.</p></div>
+          <div class="card"><h3>Monitoreo</h3><div class="price">Bs. 150/mes</div><p class="small">Revision basica de ejecuciones y errores.</p></div>
         </div>
-        <p class="small">Importante: la aprobacion de TikTok, YouTube o LinkedIn no se garantiza. Se cobra configuracion y operacion, no la aprobacion de la plataforma.</p>
+        <p class="small">Importante: cualquier integracion con cuentas, APIs pagadas o datos sensibles se cotiza aparte.</p>
       </div>
     </section>
 
@@ -383,7 +386,7 @@
           <div class="card"><span class="pill">DentalGest</span><p>Si una clinica responde por redes pero no registra ni hace seguimiento, esta perdiendo pacientes.</p></div>
           <div class="card"><span class="pill">Gesti-OS</span><p>Si una empresa necesita preguntar por WhatsApp para saber que pasa, necesita un tablero.</p></div>
           <div class="card"><span class="pill">Web</span><p>Si el cliente revisa Instagram y no entiende la oferta, falta una pagina que venda.</p></div>
-          <div class="card"><span class="pill">Higgsfield</span><p>Si no saben que publicar, vendemos ideas, guion, video, caption y CTA.</p></div>
+          <div class="card"><span class="pill">Auditoria</span><p>Si el cliente no sabe por donde empezar, se vende revision pagada con acciones claras.</p></div>
         </div>
       </div>
     </section>
@@ -404,7 +407,7 @@
       <div class="slide-inner">
         <div class="topline">CTA interno</div>
         <h2>Primer objetivo: demos, no contratos gigantes.</h2>
-        <p>Usar DentalGest para clinicas, Gesti-OS para operaciones, Web ONIA para captacion y Higgsfield para prueba visual rapida.</p>
+        <p>Usar DentalGest para clinicas, Gesti-OS para operaciones, Web ONIA para captacion y auditoria/n8n para abrir mejoras concretas.</p>
         <div class="callout"><p><strong>Siguiente paso del vendedor:</strong> conseguir una demo calificada o pedir permiso para enviar auditoria corta.</p></div>
       </div>
     </section>
@@ -426,7 +429,7 @@
       current = Math.max(1, Math.min(total, n));
       slides.forEach((slide, index) => slide.classList.toggle('active', index === current - 1));
       document.getElementById('current').textContent = current;
-      document.getElementById('progress').style.width = (current / total * 100) + '%';
+      document.getElementById('progress').style.transform = `scaleX(${current / total})`;
     }
 
     function nextSlide() { showSlide(current + 1); }
@@ -447,10 +450,10 @@
     new Chart(ctx, {
       type: 'bar',
       data: {
-        labels: ['DentalGest Pro', 'Gesti-OS Pro', 'Landing', 'Growth 16'],
+        labels: ['DentalGest Profesional', 'Gesti-OS Pro', 'Landing', 'n8n simple'],
         datasets: [{
           label: 'Comision estimada primer cobro (Bs.)',
-          data: [295, 645, 149, 585],
+          data: [262.5, 280, 79, 79],
           backgroundColor: ['#2563eb', '#059669', '#d97706', '#7c3aed']
         }]
       },

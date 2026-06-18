@@ -17,37 +17,35 @@ Estado: cartera inicial investigada. No contactar sin aprobacion explicita.
 
 | Venta sugerida | Premio vendedor |
 |---|---:|
-| DentalGest Starter | Bs. 174,50 |
-| DentalGest Pro | Bs. 295 |
-| DentalGest Clinic | Bs. 495 |
-| DentalGest Pro anual | Bs. 566,40 |
-| DentalGest Clinic anual | Bs. 950,40 |
-| Landing Express | Bs. 149 |
-| Web Negocio | Bs. 348 |
-| Web Pro IA | Bs. 708 |
-| Sprint 8 Higgsfield | Bs. 330 |
-| Growth 16 Higgsfield | Bs. 585 |
-| Authority 24 Higgsfield | Bs. 975 |
+| DentalGest Basico | Bs. 112 |
+| DentalGest Profesional | Bs. 262,50 |
+| DentalGest Clinica | Bs. 525 |
+| Landing | Bs. 79 |
+| Web Profesional | Bs. 180 |
+| Web Pro ONIA | Bs. 348 |
+| Auditoria Express | Bs. 25 |
+| Diagnostico + Plan | Bs. 69 |
+| Automatizacion simple n8n | Bs. 79 |
 
 ## Top 15 leads para empezar
 
 | # | Lead | Ciudad | Senal | Dolor probable | Oferta inicial | Upsell | Premio probable |
 |---:|---|---|---|---|---|---|---:|
-| 1 | CRO - Clinica de Rehabilitacion Odontologica | Santa Cruz | Web, varias sedes y varios telefonos | Multi-sede necesita trazabilidad por sucursal | DentalGest Clinic | Web/landing + reportes | Bs. 495 + upsell |
-| 2 | Odontoking Clinica Dental | Santa Cruz | Web y marca clara | Puede mejorar embudo y seguimiento | DentalGest Pro | Web optimizada + CRM | Bs. 295 + upsell |
-| 3 | Odontolaser | Santa Cruz | Web, Facebook y tratamientos tecnologicos | Tratamientos especializados requieren seguimiento | DentalGest Pro | Videos educativos Higgsfield | Bs. 295 + upsell |
-| 4 | Paz Dental | Santa Cruz | Web, Facebook, zona Equipetrol | Alto valor por paciente | DentalGest Pro | Landing de tratamientos | Bs. 295 + upsell |
-| 5 | Estetic Dent Santa Cruz | Santa Cruz | Web estetica y autoridad profesional | Embudos por tratamiento estetico | DentalGest Pro | Growth 16 Higgsfield | Bs. 295 + Bs. 585 |
-| 6 | CEO Clinica de Odontologia Especializada | Santa Cruz | Web y especialidad | Ortodoncia/odontopediatria con consultas repetitivas | DentalGest Pro | Web + contenido educativo | Bs. 295 + upsell |
-| 7 | Clinica Dental Cortez | La Paz | Web y email publico | Captacion web y seguimiento de citas | DentalGest Pro | Landing Express | Bs. 295 + Bs. 149 |
-| 8 | Clinica Dental Love | La Paz | Marca clara y email con dominio | Integrar redes, agenda y seguimiento | DentalGest Pro | Higgsfield Sprint 8 | Bs. 295 + Bs. 330 |
-| 9 | ASISTA - Clinica Dental | Santa Cruz | Facebook y contacto publico, sin web clara | Leads dispersos por redes | DentalGest Starter | Landing Express | Bs. 174,50 + Bs. 149 |
-| 10 | Bio Odontologia | Santa Cruz | Perfil social como canal principal | Agenda y consultas por redes sin CRM | DentalGest Starter | Inbox + seguimiento | Bs. 174,50 |
-| 11 | Consultorio Dental Dr. Rodrigo Garcia | La Paz | Web en Blogspot | Presencia digital mejorable | Landing Express | DentalGest Starter | Bs. 149 + Bs. 174,50 |
-| 12 | Clinica Dental DuoDent | Santa Cruz | Canal social visible sin web | Mensajes de redes sin sistema | DentalGest Starter | Telegram oportunidades | Bs. 174,50 |
-| 13 | Clinica Dental Jauregui | Santa Cruz | Facebook/email y horario amplio | Citas o presupuestos olvidados | DentalGest Starter | Recordatorios internos | Bs. 174,50 |
-| 14 | Merdel Clinica Odontologica | Santa Cruz | Facebook y email publico | Consultas sociales sin seguimiento | DentalGest Starter | Agenda asistida | Bs. 174,50 |
-| 15 | Odontologia Morales | Santa Cruz | Perfil social como canal principal | Gestion manual de consultas | DentalGest Starter | Landing Express | Bs. 174,50 + Bs. 149 |
+| 1 | CRO - Clinica de Rehabilitacion Odontologica | Santa Cruz | Web, varias sedes y varios telefonos | Multi-sede necesita trazabilidad por sucursal | DentalGest Clinica | Web/landing + reportes | Bs. 525 + upsell |
+| 2 | Odontoking Clinica Dental | Santa Cruz | Web y marca clara | Puede mejorar embudo y seguimiento | DentalGest Profesional | Web optimizada + CRM | Bs. 262,50 + upsell |
+| 3 | Odontolaser | Santa Cruz | Web, Facebook y tratamientos tecnologicos | Tratamientos especializados requieren seguimiento | DentalGest Profesional | Diagnostico + Plan | Bs. 262,50 + Bs. 69 |
+| 4 | Paz Dental | Santa Cruz | Web, Facebook, zona Equipetrol | Alto valor por paciente | DentalGest Profesional | Landing de tratamientos | Bs. 262,50 + upsell |
+| 5 | Estetic Dent Santa Cruz | Santa Cruz | Web estetica y autoridad profesional | Embudos por tratamiento estetico | DentalGest Profesional | Web Pro ONIA | Bs. 262,50 + Bs. 348 |
+| 6 | CEO Clinica de Odontologia Especializada | Santa Cruz | Web y especialidad | Ortodoncia/odontopediatria con consultas repetitivas | DentalGest Profesional | Web + contenido educativo manual | Bs. 262,50 + upsell |
+| 7 | Clinica Dental Cortez | La Paz | Web y email publico | Captacion web y seguimiento de citas | DentalGest Profesional | Landing | Bs. 262,50 + Bs. 79 |
+| 8 | Clinica Dental Love | La Paz | Marca clara y email con dominio | Integrar redes, agenda y seguimiento | DentalGest Profesional | Diagnostico + Plan | Bs. 262,50 + Bs. 69 |
+| 9 | ASISTA - Clinica Dental | Santa Cruz | Facebook y contacto publico, sin web clara | Leads dispersos por redes | DentalGest Basico | Landing | Bs. 112 + Bs. 79 |
+| 10 | Bio Odontologia | Santa Cruz | Perfil social como canal principal | Agenda y consultas por redes sin CRM | DentalGest Basico | n8n simple interno | Bs. 112 + Bs. 79 |
+| 11 | Consultorio Dental Dr. Rodrigo Garcia | La Paz | Web en Blogspot | Presencia digital mejorable | Landing | DentalGest Basico | Bs. 79 + Bs. 112 |
+| 12 | Clinica Dental DuoDent | Santa Cruz | Canal social visible sin web | Mensajes de redes sin sistema | DentalGest Basico | Auditoria Express | Bs. 112 + Bs. 25 |
+| 13 | Clinica Dental Jauregui | Santa Cruz | Facebook/email y horario amplio | Citas o presupuestos olvidados | DentalGest Basico | Recordatorios internos | Bs. 112 |
+| 14 | Merdel Clinica Odontologica | Santa Cruz | Facebook y email publico | Consultas sociales sin seguimiento | DentalGest Basico | Agenda asistida | Bs. 112 |
+| 15 | Odontologia Morales | Santa Cruz | Perfil social como canal principal | Gestion manual de consultas | DentalGest Basico | Landing | Bs. 112 + Bs. 79 |
 
 ## Mensajes listos para aprobacion
 
@@ -110,7 +108,7 @@ Media prioridad:
 
 ## Siguiente lote
 
-Para Gesti-OS, paginas web e Higgsfield fuera del rubro dental, crear listas por
+Para Gesti-OS, paginas web, auditorias y n8n fuera del rubro dental, crear listas por
 rubro con estos filtros:
 
 - pymes que publican actividad operativa;

@@ -48,7 +48,7 @@ tener los campos minimos completos antes de pasar a demo, propuesta o comision.
 | Vendedor origen | People / Rich text | Si | Quien consiguio el lead |
 | Responsable actual | People / Rich text | Si | Quien debe hacer el siguiente paso |
 | Estado pipeline | Status | Si | Estado comercial |
-| Producto sugerido | Select | Si | DentalGest, Gesti-OS, Web, Videos IA, Conector, Sistema |
+| Producto sugerido | Select | Si | DentalGest, Gesti-OS, Web, Auditoria, n8n simple, Sistema |
 | Prioridad | Select | Si | Alta, media, baja |
 | Dolor probable | Rich text | Si | Problema detectado |
 | Ultimo contacto | Date | Si, si ya se contacto | Fecha del ultimo mensaje o llamada |
