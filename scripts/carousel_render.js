@@ -251,11 +251,9 @@ function darkProductHtml(slide, idx, total, account, args) {
     ? `<img class="object" src="file://${String(args.object).replace(/\\/g, '/')}" alt="">`
     : '';
 
-  const pills = `<div class="pills">
-    <span class="pill solid">${esc(acc.name)}</span>
-    ${slide.pill ? `<span class="pill">${esc(slide.pill)}</span>` : ''}
-    <span class="pageno">${pageNo(idx, total)}</span>
-  </div>`;
+  const pills = slide.pill ? `<div class="pills">
+    <span class="pill solid">${esc(slide.pill)}</span>
+  </div>` : '<div class="pills"></div>';
 
   const callout = slide.callout
     ? `<div class="callout">${emph(slide.callout)}</div>` : '';
@@ -303,14 +301,14 @@ html,body { width:1080px; height:1350px; }
   letter-spacing:2px; color:var(--onia-green); }
 .slide.cta .pageno { color:var(--onia-ink); }
 
-.object { display:block; max-width:760px; max-height:520px; margin:40px auto;
+.object { display:block; max-width:620px; max-height:420px; margin:24px auto;
   object-fit:contain; filter:drop-shadow(0 30px 60px rgba(0,0,0,.5)); }
 
-.dp-h { font-family:'Archivo'; font-weight:900; font-size:104px; line-height:.96;
+.dp-h { font-family:'Archivo'; font-weight:900; font-size:88px; line-height:.98;
   letter-spacing:-2px; text-transform:uppercase; margin-top:auto; }
-.dp-h.cta { font-size:92px; }
-.dp-body { font-family:'Inter'; font-weight:600; font-size:40px; line-height:1.4;
-  margin-top:32px; max-width:880px; color:var(--onia-muted-dark); }
+.dp-h.cta { font-size:80px; }
+.dp-body { font-family:'Inter'; font-weight:600; font-size:36px; line-height:1.38;
+  margin-top:28px; max-width:880px; color:var(--onia-muted-dark); }
 .slide.cta .dp-body { color:var(--onia-ink); opacity:.85; }
 
 .savetag { font-family:'Archivo'; font-weight:800; font-size:28px; letter-spacing:3px;
@@ -354,11 +352,9 @@ function darkNeonHtml(slide, idx, total, account, args) {
     ? `<img class="object" src="file://${String(args.object).replace(/\\/g, '/')}" alt="">`
     : '';
 
-  const pills = `<div class="pills">
-    <span class="pill solid">${esc(acc.name)}</span>
-    ${slide.pill ? `<span class="pill">${esc(slide.pill)}</span>` : ''}
-    <span class="pageno">${pageNo(idx, total)}</span>
-  </div>`;
+  const pills = slide.pill ? `<div class="pills">
+    <span class="pill solid">${esc(slide.pill)}</span>
+  </div>` : '<div class="pills"></div>';
   const callout = slide.callout ? `<div class="callout">${emph(slide.callout)}</div>` : '';
 
   let block;
@@ -399,14 +395,14 @@ html,body { width:1080px; height:1350px; }
 .pill.solid { background:var(--onia-green); color:#05080A; border-color:var(--onia-green);
   box-shadow:0 0 24px rgba(52,224,74,.5); }
 .pageno { margin-left:auto; font-family:'Archivo'; font-weight:600; font-size:26px; letter-spacing:2px; color:var(--onia-green); }
-.object { display:block; max-width:720px; max-height:500px; margin:30px auto;
+.object { display:block; max-width:600px; max-height:410px; margin:20px auto;
   object-fit:contain; filter:drop-shadow(0 0 50px rgba(52,224,74,.45)) drop-shadow(0 30px 50px rgba(0,0,0,.6)); }
-.dn-h { font-family:'Archivo'; font-weight:900; font-size:104px; line-height:.96;
+.dn-h { font-family:'Archivo'; font-weight:900; font-size:88px; line-height:.98;
   letter-spacing:-2px; text-transform:uppercase; margin-top:auto; }
-.dn-h.cta { font-size:92px; }
+.dn-h.cta { font-size:80px; }
 .dn-h .g { text-shadow:0 0 28px rgba(52,224,74,.75); }
-.dn-body { font-family:'Inter'; font-weight:600; font-size:40px; line-height:1.4;
-  margin-top:32px; max-width:880px; color:rgba(255,255,255,.78); }
+.dn-body { font-family:'Inter'; font-weight:600; font-size:36px; line-height:1.38;
+  margin-top:28px; max-width:880px; color:rgba(255,255,255,.78); }
 .savetag { font-family:'Archivo'; font-weight:800; font-size:28px; letter-spacing:3px;
   color:var(--onia-green); margin-top:auto; margin-bottom:24px; }
 .callout { display:inline-flex; align-self:flex-start; gap:12px; margin-top:32px;
