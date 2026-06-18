@@ -602,14 +602,16 @@ html,body { width:1080px; height:1350px; }
 .slide.cover .g, .slide.cta .g { color:#fff; text-decoration:underline; text-decoration-thickness:9px; text-underline-offset:8px; }
 
 .topbar { display:flex; align-items:center; gap:16px; }
-.kicker { font-weight:900; font-size:30px; letter-spacing:.5px; color:${coverLike ? '#fff' : brand.ink}; }
-.pageno { margin-left:auto; font-weight:800; font-size:26px; opacity:.55; }
+.kicker { font-weight:900; font-size:32px; letter-spacing:.5px; color:${coverLike ? '#fff' : brand.ink}; }
 
 /* main: llena el alto y ancla el contenido abajo (cover/cta: centrado) */
 .main { flex:1; display:flex; flex-direction:column;
   justify-content:${role === 'cover' ? 'center' : 'flex-end'}; min-height:0; }
-.object { display:block; max-width:560px; max-height:560px; margin:0 auto auto;
-  object-fit:contain; filter:drop-shadow(0 30px 55px rgba(15,45,82,.28)); }
+/* producto: alto FIJO -> escala consistente entre slides, ancho auto, centrado.
+   El alto se adapta a si hay headline largo o no (slide chico vs grande). */
+.object { display:block; height:${hlen > 30 ? 420 : 480}px; width:auto;
+  max-width:620px; margin:0 auto auto; object-fit:contain;
+  filter:drop-shadow(0 30px 55px rgba(15,45,82,.28)); }
 .spacer { margin-top:auto; }
 
 .savetag { align-self:flex-start; margin-bottom:18px; font-weight:900;
@@ -633,7 +635,7 @@ ${last ? '' : `.cue{position:absolute;right:46px;bottom:300px;z-index:3;font-siz
 </style></head>
 <body><div class="slide ${role}">
   ${nuviaRibbon(idx, total, stripes, coverLike)}
-  <div class="topbar"><span class="kicker">${esc(acc.name)}</span><span class="pageno">${pageNo(idx, total)}</span></div>
+  <div class="topbar"><span class="kicker">${esc(acc.name)}</span></div>
   <div class="main">
     ${object}
     ${object ? '<div class="spacer"></div>' : ''}

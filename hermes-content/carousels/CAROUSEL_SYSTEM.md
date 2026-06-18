@@ -4,6 +4,17 @@ Automatiza carruseles para 3 cuentas: **ONIA** (empresa), **Arthur** y **Sergio*
 (personales, con foto propia). Genera copy con las 5 reglas, renderiza slides
 con la marca ONIA, y publica vía `ig-publish` en el VPS.
 
+## Reglas de maquetación (OBLIGATORIAS)
+
+1. **Sin numeración de slide.** No mostrar "01/05" ni contadores. (Aplicado en
+   `bright-retail`; el resto de packs lo siguen al editarse.)
+2. **El título de marca siempre va.** El nombre de la cuenta/marca (ej. "Nuvia")
+   en el top de cada slide nunca se quita.
+3. **Imágenes consistentes.** Los productos/objetos se renderizan con alto fijo
+   (no estiran, no cambian de escala entre slides) y centrados; el tamaño se
+   adapta al espacio del slide (headline largo → imagen algo menor) sin perder
+   proporción. Cutouts con fondo transparente.
+
 ## Piezas
 
 | Pieza | Archivo | Qué hace |
