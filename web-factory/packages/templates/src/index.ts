@@ -8,6 +8,8 @@ export {
   renderStoreBody,
   renderStoreCss,
   renderStoreDocument,
+  renderStoreProductDocument,
+  storeProductSlug,
   type StoreClient,
   type StoreProduct,
 } from "./store";

@@ -5,6 +5,8 @@ import {
   renderLandingDocument,
   renderStoreCss,
   renderStoreDocument,
+  renderStoreProductDocument,
+  storeProductSlug,
 } from "@onia/templates";
 import { loadClientProfile } from "../data/schema";
 
@@ -49,10 +51,23 @@ export async function generateSite(
   await writeFile(htmlPath, html, "utf8");
   await writeFile(cssPath, css, "utf8");
 
+  const files = [htmlPath, cssPath];
+
+  if (template === "store") {
+    for (const product of client.productos) {
+      const productDir = path.join(outputDir, "productos", storeProductSlug(product));
+      const productPath = path.join(productDir, "index.html");
+
+      await mkdir(productDir, { recursive: true });
+      await writeFile(productPath, renderStoreProductDocument(client, product), "utf8");
+      files.push(productPath);
+    }
+  }
+
   return {
     slug: safeSlug,
     outputDir,
-    files: [htmlPath, cssPath],
+    files,
   };
 }
 

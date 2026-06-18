@@ -27,6 +27,17 @@ const serviceSchema = z.object({
   icono: z.string().min(1).default("sparkles"),
 });
 
+const productSpecSchema = z.object({
+  label: z.string().min(1),
+  value: z.string().min(1),
+});
+
+const productDetailImageSchema = z.object({
+  src: optionalAssetSchema,
+  alt: z.string().default(""),
+  label: z.string().min(1).default("Detalle"),
+});
+
 const productSchema = z.object({
   titulo: z.string().min(1),
   categoria: z.string().min(1),
@@ -42,6 +53,10 @@ const productSchema = z.object({
   idealPara: z.array(z.string().min(1)).default([]),
   ingredientesClave: z.array(z.string().min(1)).default([]),
   modoUso: z.string().default(""),
+  incluye: z.array(z.string().min(1)).default([]),
+  especificaciones: z.array(productSpecSchema).default([]),
+  detalleImagenes: z.array(productDetailImageSchema).default([]),
+  detalleNota: z.string().default(""),
   ordenRutina: z.number().int().positive().optional(),
 });
 
@@ -78,12 +93,12 @@ export const clientSchema = z.object({
     }),
   tipografia: z
     .object({
-      heading: z.string().min(1).default("Inter"),
-      body: z.string().min(1).default("Inter"),
+      heading: z.string().min(1).default("Onest"),
+      body: z.string().min(1).default("Onest"),
     })
     .default({
-      heading: "Inter",
-      body: "Inter",
+      heading: "Onest",
+      body: "Onest",
     }),
   contacto: z
     .object({
