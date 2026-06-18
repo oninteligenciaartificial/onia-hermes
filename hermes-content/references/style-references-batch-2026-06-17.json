@@ -1,0 +1,99 @@
+{
+  "_meta": {
+    "purpose": "Extracción de patrones de 5 referencias enviadas por Sergio (2026-06-17) para perfeccionar el armado de carruseles ONIA. NO copiar: solo dirección de estilo. Complementa style-references-batch-2026-06-16.json.",
+    "canvas": "1080x1350 (4:5) y 1080x1080 (1:1 feed)",
+    "schema": "topic, hook_type, narrative_shape, slide_rhythm, visual_system, palette, fonts, layout, objects, accent_technique, cta, onia_fit, learnings"
+  },
+
+  "references": [
+    {
+      "id": "grafikcook-build-a-brand",
+      "topic": "Construir una marca confiable (agencia de branding)",
+      "hook_type": "how-to / pregunta ('How to Build a Brand That People Trust', 'Why Brand Identity Matters')",
+      "narrative_shape": "promesa -> 3 pasos numerados -> por qué importa -> CTA 'share your thoughts'",
+      "slide_rhythm": "alterna campo de color sólido + collage de fotos B/N rotadas; números {1}{2}{3} en pills circulares",
+      "visual_system": "brutalist editorial, formas angulares recortadas, alto contraste",
+      "palette": ["#2D1FE6 royal/electric blue", "#000 ink", "#FFF", "#F0F0F0 light grey"],
+      "fonts": ["heavy grotesk condensada (titulares)", "sans UI body"],
+      "layout": "titular gigante esquina, formas geométricas cortadas en diagonal, marca/asterisco arriba, flecha circular dibujada a mano, pills numeradas para listas",
+      "objects": ["fotos B/N de equipo/oficina recortadas y rotadas", "asterisco/snowflake mark", "flecha curva en círculo"],
+      "accent_technique": "campo de color plano dominante + tipografía masiva + asterisco de marca + número en pill circular",
+      "cta": "'Ready to Build a Brand People Love?' / 'Share your thoughts below'",
+      "onia_fit": "ALTO patrón (cambiar azul por verde ONIA): listas con pills numeradas {1}{2}{3}, formas angulares, asterisco de marca, flecha circular dibujada. El azul→verde es casi 1:1 con la identidad ONIA.",
+      "learnings": "Las pills numeradas circulares {1}{2}{3} ordenan listas mejor que texto corrido. El asterisco/mark repetido da reconocimiento de feed. Flecha circular dibujada a mano = cue de swipe con personalidad."
+    },
+    {
+      "id": "wejustclick-website-fast",
+      "topic": "Por qué tu web debe ser rápida (5 razones, agencia web)",
+      "hook_type": "número/lista ('5 reasons', '01..05')",
+      "narrative_shape": "gancho -> 'here are five reasons' -> 1 razón por slide con número gigante -> CTA 'does your website load fast? DM me'",
+      "slide_rhythm": "fondo seda/tela blanca constante, MISMO personaje recortado en acción (corriendo) en cada slide, número gigante de color",
+      "visual_system": "monocromo claro + figura cutout en movimiento + keyword de color",
+      "palette": ["#F5F3F0 silk white", "#7A1FE0 / #9B30FF purple", "#111", "#FF3B2F red accent (cinta meta)"],
+      "fonts": ["condensed sans caps pesada", "sans body"],
+      "layout": "número 01-05 grande arriba-derecha en color, titular caps con keyword en color, body corto, @handle+logo abajo-izq",
+      "objects": ["empresario recortado corriendo/saltando (mismo personaje, distintas poses)", "cinta de meta roja"],
+      "accent_technique": "personaje recurrente en acción = metáfora de velocidad; keyword resaltada en el color de marca; número gigante",
+      "cta": "'Does your website load fast? Send me a direct message' (comment/DM trigger)",
+      "onia_fit": "ALTO: el patrón 'mismo personaje recortado en acción por slide' es oro para feed-recognition. Reemplazar morado por verde y usar foto recortada de Sergio/avatar en poses. Número gigante por slide = regla 3 clarísima.",
+      "learnings": "Un personaje recortado recurrente en distintas poses unifica el carrusel y da identidad. La metáfora visual (correr = velocidad) refuerza el mensaje sin explicarlo. Número gigante = jerarquía instantánea."
+    },
+    {
+      "id": "dmblitz-dm-automation",
+      "topic": "Automatización de DMs de Instagram (SaaS) — MUY cercano a ONIA",
+      "hook_type": "statement/beneficio ('This is what happens when you Automate your DMs', 'The Most Powerful IG DM Automation')",
+      "narrative_shape": "portada producto -> testimonio 5★ -> beneficio/objeción (safe) -> grid de features -> mockup prueba -> cierre marca",
+      "slide_rhythm": "negro premium dominante, alterna foto B/N, objeto 3D cromado, card glassmorphism, mockup UI",
+      "visual_system": "dark premium minimal con glassmorphism y 3D líquido cromado",
+      "palette": ["#0A0A0A near-black", "#1A1A1A", "#FFF", "grises B/N"],
+      "fonts": ["sans serif limpia (títulos)", "serif italic de acento (Automate, Daily, Limits, Powerful)", "sans body justificado"],
+      "layout": "logo chico centrado arriba, mucho aire negro, card de vidrio con borde sutil, body justificado en columnas, objeto 3D flotante, estrellas para review",
+      "objects": ["3D líquido cromado/mercurio", "avión de papel 3D", "mockup iMac", "fotos B/N de personas usando laptop/celular", "cards glassmorphism"],
+      "accent_technique": "serif italic SOLO en 1 palabra clave sobre sans; glassmorphism (vidrio con blur+borde); 3D cromado; testimonio con estrellas",
+      "cta": "marca + 'Smarter features, safer messaging, and better.'",
+      "onia_fit": "MÁXIMO. Es casi el mismo nicho (automatización IG/DMs). Dark premium = base perfecta para variar el actual dark-product de ONIA. Sumar: glassmorphism cards, serif-italic de acento, slide de testimonio 5★, mockup de producto.",
+      "learnings": "1) Serif-italic en UNA palabra sobre sans = elegancia instantánea (vs todo bold). 2) Glassmorphism (card de vidrio) para destacar un dato/quote. 3) Una slide de TESTIMONIO con 5★ sube credibilidad (falta en ONIA). 4) Body justificado en columnas se ve más 'producto serio'. 5) El negro con MUCHO aire = premium; no llenar."
+    },
+    {
+      "id": "smm-editorial-maroon",
+      "topic": "Social media manager / estrategia de contenido (marca personal)",
+      "hook_type": "intriga/robo ('Steal my Content Calendar', 'What I would do if I STARTED OVER', 'the #1 mistake killing your views')",
+      "narrative_shape": "gancho personal -> error/mito -> reframe -> recurso ('steal my...')",
+      "slide_rhythm": "alterna foto lifestyle, campo burdeos sólido, objeto retro; serif display dominante",
+      "visual_system": "editorial fashion-magazine, cálido y premium",
+      "palette": ["#6E1023 burgundy/maroon", "#F2EDE3 cream", "#8A8A8A grey", "#C0352B red phone accent"],
+      "fonts": ["serif display alta (Playfair/Fraunces) con italic de acento", "sans pequeña para labels"],
+      "layout": "titular serif grande, palabra clave en italic, pushpin 📌 arriba, flecha → bottom, anotación a mano, @handle chico",
+      "objects": ["fotos lifestyle (laptop, sillón, café)", "teléfono retro rojo", "cámara plateada retro", "pushpin"],
+      "accent_technique": "serif italic resaltando 1 palabra; objeto retro simbólico por slide; anotación manuscrita; pin como marca de feed",
+      "cta": "implícito / 'steal my...' (recurso gratis)",
+      "onia_fit": "MEDIO-ALTO para cuentas personales (Sergio/Arthur): el tono editorial-serif da autoridad. El verde ONIA reemplaza el burdeos en acentos. Ganchos 'robá mi...' / 'si empezara de nuevo' son muy fuertes.",
+      "learnings": "1) Ganchos de 'robá mi recurso' / 'si empezara de nuevo' = altísimo CTR. 2) Serif display + italic = autoridad/premium para marca personal. 3) Un objeto retro simbólico por slide cuenta la idea sin texto. 4) Anotación a mano humaniza."
+    },
+    {
+      "id": "agenciaartboss-brand-identity",
+      "topic": "Identidad visual / branding para negocios (agencia, PT) — feed completo",
+      "hook_type": "pregunta de objeción ('¿É caro investir em identidade visual?', '¿Você acha que precisa de um logo?', 'O custo invisível')",
+      "narrative_shape": "pregunta/objeción del cliente -> reframe de valor -> prueba (mockup) -> CTA suave",
+      "slide_rhythm": "feed cohesivo: navy + cream constante, fotografía de mockups premium (señalética, packaging, devices)",
+      "visual_system": "agencia premium minimal, mucha fotografía de producto/mockup real, negative space",
+      "palette": ["#1E2A4A navy blue", "#EFEAE0 cream", "#0E1626 dark navy", "#B89B5E gold accent sutil"],
+      "fonts": ["serif elegante (Cormorant/Didone) con italic de acento", "sans caps chica para marca/labels"],
+      "layout": "label de agencia chico arriba ('ARTBOSS AGÊNCIA'), titular serif con palabra en italic, foto mockup dominante, subtítulo chico, badge de carrusel",
+      "objects": ["mockups reales: señalética de local, packaging, tablet/laptop con la marca, papelería, fotos de la fundadora"],
+      "accent_technique": "consistencia de paleta navy+cream en TODO el feed = identidad de grilla; serif italic en la palabra clave; fotografía de mockup como prueba de calidad",
+      "cta": "'Quer vender mais? Começa pela base: o seu perfil'",
+      "onia_fit": "ALTO para ventas consultivas: ganchos de OBJECIÓN ('¿es caro invertir en...?', 'el costo invisible de hacerlo solo') son perfectos para vender automatización. La cohesión navy+cream → negro+verde ONIA en todo el feed.",
+      "learnings": "1) Pensar el FEED completo, no slides sueltas: paleta constante = identidad de grilla reconocible. 2) Ganchos de OBJECIÓN del cliente ('¿es caro?', 'el costo invisible') venden servicios mejor que 'tips'. 3) Fotografía de mockup real = prueba de calidad sin decir nada. 4) Label de agencia chico y constante arriba."
+    }
+  ],
+
+  "onia_action_items": [
+    "Pack nuevo candidato 'dark-premium' (de DMBlitz): negro + MUCHO aire, serif-italic de acento en 1 palabra, glassmorphism cards, slide de testimonio 5★, mockup de producto. Variar el dark-product actual.",
+    "Sumar al motor: pills numeradas circulares {1}{2}{3} para listas (de grafikcook).",
+    "Personaje recortado recurrente en poses (de wejustclick) usando avatar/foto de Sergio para cuentas personales.",
+    "Banco de ganchos: objeción ('¿es caro/vale la pena automatizar?', 'el costo invisible de hacerlo a mano'), 'robá mi sistema', 'si empezara de nuevo', número/lista con número gigante.",
+    "Pensar en FEED (paleta negro+verde constante) no solo en carruseles sueltos = identidad de grilla.",
+    "Acento serif-italic (Fraunces) en 1 palabra clave sobre Archivo Black = elegancia; ya existe en el pack editorial-photo, portarlo a dark."
+  ]
+}
