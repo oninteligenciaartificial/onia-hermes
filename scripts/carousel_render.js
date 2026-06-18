@@ -251,7 +251,9 @@ function darkProductHtml(slide, idx, total, account, args) {
     ? `<img class="object" src="file://${String(args.object).replace(/\\/g, '/')}" alt="">`
     : '';
 
-  const pills = slide.pill ? `<div class="pills">
+  // On save slides the savetag already labels "FRAMEWORK", so drop the top pill
+  // to avoid the duplicate and keep the hierarchy clean.
+  const pills = (slide.pill && role !== 'save') ? `<div class="pills">
     <span class="pill solid">${esc(slide.pill)}</span>
   </div>` : '<div class="pills"></div>';
 
@@ -352,7 +354,7 @@ function darkNeonHtml(slide, idx, total, account, args) {
     ? `<img class="object" src="file://${String(args.object).replace(/\\/g, '/')}" alt="">`
     : '';
 
-  const pills = slide.pill ? `<div class="pills">
+  const pills = (slide.pill && role !== 'save') ? `<div class="pills">
     <span class="pill solid">${esc(slide.pill)}</span>
   </div>` : '<div class="pills"></div>';
   const callout = slide.callout ? `<div class="callout">${emph(slide.callout)}</div>` : '';
