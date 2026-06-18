@@ -154,7 +154,10 @@ async function main() {
     const remoteArchive = `/tmp/hermes_content_${Date.now()}.tgz`;
     try {
       copyFilesToStage(files, contentRoot, stageRoot);
-      childProcess.execFileSync("tar", ["-czf", archivePath, "-C", stageRoot, "."]);
+      const tarArgs = ["-czf", archivePath, "-C", stageRoot, "."];
+      // En Windows, GNU tar interpreta el "C:" de la ruta como host remoto; --force-local lo evita.
+      if (process.platform === "win32") tarArgs.unshift("--force-local");
+      childProcess.execFileSync("tar", tarArgs);
       process.stdout.write(
         `Uploading Hermes content archive: ${files.length} files\n`
       );
