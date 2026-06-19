@@ -86,9 +86,10 @@ Esto significa:
 - si hay reembolso, chargeback o cancelacion antes de 30 dias, la comision puede
   descontarse de la siguiente liquidacion.
 
-Este plan es inicial. ONIA puede subir comisiones o rol cuando el vendedor
-demuestra buen trabajo, buen seguimiento, clientes sanos y datos completos. Nada
-sube automaticamente.
+Este plan es inicial. A medida que empecemos a vender, cobrar y validar que los
+clientes son sanos, ONIA puede subir comisiones, bonos o rol por tramos. La
+subida depende de ventas reales cobradas, buen seguimiento, datos completos,
+margen sano y bajo nivel de reclamos. Nada sube automaticamente.
 
 ## 3. Tabla rapida de comisiones
 
@@ -101,7 +102,7 @@ sube automaticamente.
 | Conectores y n8n | 10% | Sobre setup neto cobrado |
 | Sistemas personalizados | 10% | Sobre el primer pago neto |
 | Consultoria ONIA | 10% a 15% | Segun paquete y margen aprobado |
-| Monitoreo o cuidado mensual | 10% | Solo primer mes si se vende aparte |
+| Cuidado/soporte mensual aprobado | 10% | Solo primer mes si se vende aparte y con alcance escrito |
 
 Regla contable: Sergio y ONIA siempre deben quedar por delante porque ONIA paga
 entrega, soporte, herramientas, mantenimiento, riesgo de cancelacion, direccion y
@@ -123,7 +124,13 @@ ONIA lo apruebe.
 | DentalGest Basico | Bs. 320/mes | 300 pacientes, 2 usuarios, agenda y odontograma digital | Bs. 112.00 |
 | DentalGest Profesional | Bs. 750/mes | 1500 pacientes, 5 usuarios, pagos, reportes y agenda inteligente | Bs. 262.50 |
 | DentalGest Clinica | Bs. 1,500/mes | pacientes, usuarios y emails ilimitados, multi-sede y soporte prioritario | Bs. 525.00 |
-| WhatsApp chatbot add-on | Bs. 80/mes | add-on mensual disponible solo si ONIA lo habilita para el cliente | Bs. 28.00 |
+| Onboarding express DentalGest | Bs. 290 | configuracion inicial guiada | Bs. 29.00 |
+| Configuracion asistida DentalGest | Bs. 690 | configuracion + acompanamiento inicial | Bs. 69.00 |
+| Migracion + capacitacion DentalGest | Bs. 1,490 | carga/migracion ligera y entrenamiento del equipo | Bs. 149.00 |
+| Agenda publica en plan Basico | Bs. 150/mes | agenda publica si el cliente esta en Basico | Bs. 52.50 |
+| Usuario extra DentalGest | Bs. 70/usuario/mes | usuario adicional al limite del plan | Bs. 24.50 |
+| Insumos dentales en Basico | Bs. 80/mes | modulo de insumos si el cliente esta en Basico | Bs. 28.00 |
+| WhatsApp operativo DentalGest | Bs. 650 inst. + Bs. 350/mes + Meta | requiere aprobacion ONIA, numero, Meta y plantillas | segun aprobacion |
 
 Como vender DentalGest:
 
@@ -150,8 +157,12 @@ desordenados.
 |---|---:|---|---:|
 | GestiOS Basico | Bs. 350/mes | POS, inventario, pedidos, categorias y corte de caja | Bs. 122.50 |
 | GestiOS Crecer | Bs. 530/mes | mas productos, clientes, usuarios, reportes y proveedores | Bs. 185.50 |
-| GestiOS Pro | Bs. 800/mes | productos/clientes ilimitados, tienda online, pagos QR y emails avanzados | Bs. 280.00 |
-| GestiOS Empresarial | Bs. 1,250/mes | sucursales, usuarios ilimitados, SIAT, auditoria y soporte prioritario | Bs. 437.50 |
+| GestiOS Pro | Bs. 800/mes | productos/clientes ilimitados, tienda online y pagos QR segun disponibilidad de proveedor | Bs. 280.00 |
+| GestiOS Empresarial | Bs. 1,250/mes | sucursales, usuarios ilimitados, roles, auditoria y soporte prioritario | Bs. 437.50 |
+
+Importante: SIAT no se vende por ahora en GestiOS. QR, tienda online, WhatsApp
+y exportacion contable dependen de plan, proveedor y aprobacion tecnica antes de
+prometerse al cliente.
 
 Como vender GestiOS:
 
@@ -214,8 +225,7 @@ acordarte manualmente de cada paso.
 | Conexion LinkedIn | Bs. 690 | preparar publicacion para empresa o marca personal | Bs. 69.00 |
 | Automatizacion simple n8n | Bs. 790 | formulario o lead -> registro -> aviso -> tarea de seguimiento | Bs. 79.00 |
 | Flujo de aprobacion n8n | Bs. 1,200 | pasos de recibido, pendiente, aprobado, rechazado y notificado | Bs. 120.00 |
-| Monitoreo de canal | Bs. 150/mes | revision basica mensual de un canal vendido aparte | Bs. 15.00 |
-| Monitoreo n8n | Bs. 150/mes | revision mensual basica del flujo vendido aparte | Bs. 15.00 |
+| Soporte/cuidado de integracion | cotizado aparte | revision recurrente, cambios, logs o incidentes segun alcance | segun acuerdo |
 
 Cuando ofrecerlo:
 

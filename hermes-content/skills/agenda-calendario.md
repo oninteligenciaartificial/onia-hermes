@@ -74,6 +74,12 @@ Sin eventos: "Día libre ✓"
   - `demo-onia` — 45min, para prospectos
 - Cuando cliente agenda → webhook → GCal crea evento → Hermes notifica a Sergio por Telegram
 
+Nota ONIA 2026:
+- `cal.onia.ai` depende de DNS/deploy; si no resuelve, usar agenda manual por Telegram.
+- Agregar `auditoria-pagada` como tipo de evento de 60min solo si ya pago.
+- El webhook debe registrar booking en Google Calendar, Telegram y Supabase privado `onia_ops.*`.
+- No abrir todo el calendario a prospectos: usar bloques controlados y minimo 4 horas de anticipacion.
+
 ## Reglas
 - Timezone siempre America/La_Paz (UTC-4)
 - Confirmación requerida antes de cancelar eventos

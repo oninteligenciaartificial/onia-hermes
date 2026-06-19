@@ -1,0 +1,72 @@
+# ONIA Cal.com/Cal.diy deployment kit.
+# Review current Cal.com/Cal.diy licensing and image choice before public use.
+# Default image is pinned from DockerHub for repeatability; override CALCOM_IMAGE if needed.
+
+services:
+  calcom:
+    image: ${CALCOM_IMAGE:-calcom/cal.com:v6.2.0}
+    restart: unless-stopped
+    expose:
+      - "3000"
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@calcom-db:5432/${POSTGRES_DB}
+      DATABASE_DIRECT_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@calcom-db:5432/${POSTGRES_DB}
+      REDIS_URL: redis://calcom-redis:6379
+      NEXTAUTH_URL: ${NEXTAUTH_URL}
+      NEXT_PUBLIC_WEBAPP_URL: ${NEXT_PUBLIC_WEBAPP_URL}
+      NEXT_PUBLIC_WEBSITE_URL: ${NEXT_PUBLIC_WEBSITE_URL}
+      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
+      CALENDSO_ENCRYPTION_KEY: ${CALENDSO_ENCRYPTION_KEY}
+      EMAIL_FROM: ${EMAIL_FROM}
+      EMAIL_SERVER_HOST: ${EMAIL_SERVER_HOST}
+      EMAIL_SERVER_PORT: ${EMAIL_SERVER_PORT}
+      EMAIL_SERVER_USER: ${EMAIL_SERVER_USER}
+      EMAIL_SERVER_PASSWORD: ${EMAIL_SERVER_PASSWORD}
+      NEXT_PUBLIC_LICENSE_CONSENT: ${NEXT_PUBLIC_LICENSE_CONSENT:-agree}
+      CALCOM_TELEMETRY_DISABLED: ${CALCOM_TELEMETRY_DISABLED:-1}
+      NODE_ENV: production
+    depends_on:
+      calcom-db:
+        condition: service_healthy
+      calcom-redis:
+        condition: service_started
+    networks:
+      default:
+      easypanel:
+        aliases:
+          - onia-calcom
+
+  calcom-db:
+    image: ${CALCOM_POSTGRES_IMAGE:-postgres:15-alpine}
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - calcom_db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      default:
+
+  calcom-redis:
+    image: ${CALCOM_REDIS_IMAGE:-redis:7-alpine}
+    restart: unless-stopped
+    volumes:
+      - calcom_redis_data:/data
+    networks:
+      default:
+
+volumes:
+  calcom_db_data:
+  calcom_redis_data:
+
+networks:
+  easypanel:
+    external: true

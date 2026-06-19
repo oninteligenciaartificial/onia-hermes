@@ -95,6 +95,36 @@ Configurar webhook en Cal.com → Settings → Developer → Webhooks:
 - URL: `https://n8n-sergio-n8n.hqdqgh.easypanel.host/webhook/calcom-booking`
 - Evento: `BOOKING_CREATED`
 
+### 4. Aplicar migracion en Supabase privado compartido
+
+Schema preparado:
+
+```text
+supabase/migrations/20260618_onia_booking_ops.sql
+```
+
+Tablas:
+
+- `onia_ops.booking_sources`
+- `onia_ops.booking_events`
+- `onia_ops.booking_followups`
+
+RLS queda activo sin politicas publicas. n8n debe escribir con credencial server-side/service role, no desde navegador. Supabase es la base compartida de proyectos ONIA; Cal solo aporta eventos de booking a `onia_ops`.
+
+### 5. Cal.com / Cal.diy deploy kit
+
+Runbook:
+
+```text
+hermes-content/docs/ONIA_CALCOM_SELF_HOST_RUNBOOK_2026.md
+```
+
+Kit:
+
+```bash
+node scripts/vps_install_calcom.js --kit hermes-content/deploy/calcom
+```
+
 ---
 
 ## Skill asociada

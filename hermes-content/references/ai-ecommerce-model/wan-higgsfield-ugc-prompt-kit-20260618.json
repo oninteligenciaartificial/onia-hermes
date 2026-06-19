@@ -1,0 +1,95 @@
+{
+  "id": "wan-higgsfield-ugc-prompt-kit-20260618",
+  "status": "research_ready_not_generated",
+  "owner": "Sergio / ONIA",
+  "purpose": "Curated prompt kit for testing UGC AI model videos in Wan open source and transferring winners to Higgsfield.",
+  "decision": {
+    "open_source_role": "Use Wan as a short-scene laboratory for motion, product handling, identity stability and failure discovery.",
+    "premium_role": "Use Higgsfield after a shot, script and visual route already pass QA.",
+    "do_not_do": "Do not ask one model to generate identity, body movement, product label, exact speech and lipsync in one long clip."
+  },
+  "test_order": [
+    "wan_product_cutaway_packshot_001",
+    "wan_talking_head_neutral_001",
+    "wan_full_body_step_001",
+    "wan_hand_texture_demo_001",
+    "wan_desk_review_opener_001"
+  ],
+  "wan_prompts": [
+    {
+      "id": "wan_talking_head_neutral_001",
+      "input": "approved close-up identity still",
+      "use_for": "silent source for later ElevenLabs lipsync",
+      "prompt": "Use the input image as the exact identity source. Preserve the same fictional adult UGC model: same face shape, eyes, eyebrows, nose, lips, smile, hair, skin texture and age. Create a silent vertical 9:16 ultra-realistic talking-head source clip for later lipsync. Medium close-up framing, shoulders visible, eye-level phone camera, clean bright bathroom or warm apartment, soft daylight, natural skin texture, no beauty filter. Motion: subtle breathing, one natural blink, tiny head nod, very slight shoulder movement. Lips stay almost closed and neutral, no real speech yet. Friendly but calm UGC creator energy. Keep the face sharp and stable for the whole clip. No subtitles, no text overlays, no watermark, no fake testimonial, no medical claim, no exaggerated mouth movement."
+    },
+    {
+      "id": "wan_product_cutaway_packshot_001",
+      "input": "product packshot only",
+      "use_for": "safe product B-roll and label-preserving edit route",
+      "prompt": "Use the input image as the exact product source. Create a silent vertical 9:16 product cutaway for a skincare UGC edit. The same light blue sunscreen bottle is on a clean white bathroom vanity, soft daylight, realistic phone-camera look. A hand gently places the bottle on the surface, steadies it for one second, then the camera makes a tiny handheld push-in. Keep the bottle shape, color and cap recognizable. Do not invent new readable label text. The final edit can preserve the original label with overlay if needed. No person face in this shot, no extra brands, no subtitles, no watermark, no medical claims."
+    },
+    {
+      "id": "wan_full_body_step_001",
+      "input": "approved full-body still only",
+      "use_for": "body movement test",
+      "prompt": "Use the input image as the exact body, outfit and pose source. Create a silent vertical 9:16 full-body UGC movement test. The whole body is visible from head to shoes at the start. Clean warm apartment or bright bathroom, soft daylight, realistic phone camera, no cinematic overproduction. Motion: she starts standing full body, takes one small natural step toward the camera, stops, shifts weight from one leg to the other, lifts the product to chest level, looks briefly at the product, then looks back at the camera and smiles slightly. Movement must include legs, hips, shoulders, arms, head and natural weight shift. No speech mouth, no sudden zoom, no scene change, no warped legs, no broken fingers, no floating product, no fake label text."
+    },
+    {
+      "id": "wan_hand_texture_demo_001",
+      "input": "text or product-adjacent still",
+      "use_for": "texture B-roll without risky face/body",
+      "prompt": "Create a silent vertical 9:16 UGC skincare texture demo. Medium close-up of hands on a clean bathroom counter, soft daylight. A small amount of sunscreen is applied to the back of one hand and gently spread with two fingers. Natural slow movement, realistic skin texture, realistic fingers, clean product-demo feel. The bottle can appear blurred in the background, but do not try to recreate readable label text. No face required, no subtitles, no watermark, no medical claims, no before-after result."
+    },
+    {
+      "id": "wan_desk_review_opener_001",
+      "input": "product packshot or text",
+      "use_for": "short opener and B-roll for social edit",
+      "prompt": "Create a silent vertical 9:16 UGC product desk opener. A clean desk with soft daylight, notebook and phone out of focus. The creator's hand brings the skincare bottle into frame, places it beside the phone, then taps the cap once and rotates the bottle a few degrees. Realistic handheld phone camera, natural micro shake, product clear but label text does not need to be generated. No face, no fake review, no subtitles, no extra brand logos, no watermark, no unreadable generated text."
+    }
+  ],
+  "higgsfield_prompts": [
+    {
+      "id": "higgsfield_ugc_final_20s_001",
+      "use_for": "final UGC ad after Wan shot validation",
+      "prompt": "Create a vertical 9:16 UGC-style skincare product video for ONIA's AI model video lab. Use a fictional adult female UGC model with a consistent approved identity. Natural phone-first video, bright bathroom and warm apartment cutaways, soft daylight, believable creator energy, not overproduced. Scene flow: 0-2s hook, model looks at camera in medium close-up. 2-5s product appears clearly in hand, no fake label generation. 5-9s clean product cutaway on bathroom vanity. 9-14s texture demo on back of hand. 14-18s model returns to camera, calm natural delivery. 18-20s final product shot and CTA. Spoken Spanish line: \"No voy a fingir que esto es una resena real. La idea es mostrar el producto con luz natural, una toma limpia y movimiento que se sienta de redes.\" Style: realistic UGC ad, social-native, clean subtitles, quick readable cuts, no fake testimonial, no medical claim, no guaranteed result."
+    },
+    {
+      "id": "higgsfield_premium_product_demo_001",
+      "use_for": "premium skincare product demo",
+      "prompt": "Create a premium vertical 9:16 skincare product demo. Clean bathroom vanity, soft daylight, minimal ivory styling, realistic phone-camera elegance. The fictional adult model shows the product naturally without claiming personal results. Product is visible early, then a close product cutaway, then texture application on hand, then a calm CTA frame. Camera: handheld but stable, close-ups mixed with medium shots, clean natural skin texture, no AI beauty filter. Include Spanish captions only if they are clean and readable. Do not invent fake dermatology claims, fake before-after results, fake testimonials or unreadable label text."
+    },
+    {
+      "id": "higgsfield_onia_sales_demo_001",
+      "use_for": "ONIA sales content explaining the UGC system",
+      "prompt": "Create a vertical 9:16 founder/operator style video for ONIA showing how an ecommerce product can become UGC content with an AI model. Show a product reference, character board, prompt cards, a short generated UGC preview and a final edit timeline. Spanish captions, clean UI overlays, practical agency tone, fast cuts every 2-3 seconds, product and process visible. Message: \"Primero validamos estilo y movimiento. Despues generamos la version final para anuncio.\" No fake client results, no copied creator identity, no fake platform metrics, no unapproved brand claims."
+    }
+  ],
+  "global_negative_prompt": "different person, changed face, changed eyes, changed nose, changed lips, changed hair, changed age, face flicker, blurry face, plastic skin, beauty filter, warped mouth, distorted teeth, exaggerated speech mouth, static photo only, zoom-only motion, frozen body, broken walking, deformed legs, deformed hands, extra fingers, floating product, fake readable label text, text artifacts, watermark, scene change, fake testimonial, medical claim, guaranteed result, copied creator style, celebrity likeness, unauthorized logos",
+  "qa": {
+    "minimum_score_to_scale": {
+      "identity": 4,
+      "motion": 4,
+      "product_safety": 4,
+      "hands_body": 4,
+      "ugc_use": 4
+    },
+    "hard_fails": [
+      "face changes identity",
+      "mouth or teeth deform",
+      "product creates fake readable label text",
+      "hand or leg breaks",
+      "video is only a static photo with zoom",
+      "clip implies a real testimonial or medical claim"
+    ]
+  },
+  "sources": [
+    "https://github.com/Wan-Video/Wan2.2",
+    "https://docs.comfy.org/tutorials/video/wan/wan2_2",
+    "https://huggingface.co/Wan-AI/Wan2.2-S2V-14B",
+    "https://github.com/MeiGen-AI/InfiniteTalk",
+    "https://higgsfield.ai/mcp",
+    "https://higgsfield.ai/blog/Prompt-Guide-to-Cinematic-AI-Videos",
+    "https://ads.tiktok.com/business/creativecenter/",
+    "https://support.google.com/google-ads/answer/16041697"
+  ]
+}

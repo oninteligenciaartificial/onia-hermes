@@ -105,7 +105,7 @@ calidad de clientes, volumen y margen aprobado.
 | Conectores y n8n | 10% del setup neto |
 | Sistemas personalizados | 10% del primer pago neto |
 | Consultoria ONIA | 10% a 15% segun paquete |
-| Monitoreo/cuidado mensual | 10% del primer mes si se vende aparte |
+| Cuidado/soporte mensual aprobado | 10% del primer mes si se vende aparte |
 
 ## DentalGest
 
@@ -121,7 +121,19 @@ aprobacion de ONIA.
 | DentalGest Basico | Bs. 320/mes | Bs. 112.00 |
 | DentalGest Profesional | Bs. 750/mes | Bs. 262.50 |
 | DentalGest Clinica | Bs. 1,500/mes | Bs. 525.00 |
-| WhatsApp chatbot add-on | Bs. 80/mes | Bs. 28.00 |
+| Onboarding express | Bs. 290 | Bs. 29.00 |
+| Configuracion asistida | Bs. 690 | Bs. 69.00 |
+| Migracion + capacitacion equipo | Bs. 1,490 | Bs. 149.00 |
+| Agenda publica en Basico | Bs. 150/mes | Bs. 52.50 |
+| Usuario extra | Bs. 70/usuario/mes | Bs. 24.50 |
+| Insumos dentales en Basico | Bs. 80/mes | Bs. 28.00 |
+| WhatsApp operativo DentalGest | Bs. 650 inst. + Bs. 350/mes + consumo Meta | Requiere aprobacion |
+
+WhatsApp operativo DentalGest no se vende como add-on simple hasta validar Meta,
+numero, plantillas, webhooks y costos por consumo. La referencia tecnica actual
+del producto es: instalacion Bs. 650, mensualidad operativa Bs. 350 y tarifas
+Meta variables por mensaje. No usar el precio antiguo de Bs. 80/mes para
+WhatsApp.
 
 ## GestiOS
 
@@ -163,10 +175,12 @@ cliente pregunta por contenido, llevarlo primero a web, auditoria o diagnostico.
 | Conexion LinkedIn | Bs. 690 | Bs. 69.00 |
 | Automatizacion simple n8n | Bs. 790 | Bs. 79.00 |
 | Flujo de aprobacion n8n | Bs. 1,200 | Bs. 120.00 |
-| Monitoreo de canal | Bs. 150/mes | Bs. 15.00 |
-| Monitoreo n8n | Bs. 150/mes | Bs. 15.00 |
+| Soporte/cuidado de integracion | Cotizado aparte | Segun acuerdo |
 
-WhatsApp automatico queda pendiente hasta verificacion Meta.
+WhatsApp automatico queda pendiente hasta verificacion Meta. ONIA vende la
+implementacion del flujo, no acceso a n8n como producto independiente del
+cliente. Si el cliente necesita su propia instancia, editor, credenciales,
+retencion de logs o operacion 24/7, se cotiza infraestructura y soporte aparte.
 
 Una automatizacion simple n8n incluye un flujo cerrado, por ejemplo: formulario
 web o Typeform -> registro en Notion/Google Sheets -> aviso por Telegram/email

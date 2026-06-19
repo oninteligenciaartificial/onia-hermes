@@ -34,6 +34,15 @@ type ProductPageProps = StoreProps & {
 
 const STORAGE_KEY = "nuvia-next-cart-v1";
 
+function briefProductTitle(product: Pick<NuviaProduct, "titulo">) {
+  return product.titulo
+    .replace(/\bMagic\b/gi, "")
+    .replace(/\s+Gel\s+Moussant\b/gi, " Gel")
+    .replace(/\s+Moussant\b/gi, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
 function useRevealMotion() {
   useEffect(() => {
     const items = document.querySelectorAll<HTMLElement>("[data-nuvia-reveal]");
@@ -174,28 +183,31 @@ function NuviaHeader({
   cartCount,
   logoIcon,
   onCartOpen,
-  productPage = false,
   tagline,
+  variant = "landing",
 }: {
   cartCount: number;
   logoIcon: string;
   onCartOpen: () => void;
-  productPage?: boolean;
   tagline: string;
+  variant?: "landing" | "catalog" | "product";
 }) {
-  const nav = productPage
-    ? [
-        { href: "/nuvia", label: "inicio" },
-        { href: "/nuvia#catalogo", label: "productos" },
-      ]
-    : [
-        { href: "#catalogo", label: "productos" },
-        { href: "#guia", label: "guia" },
-        { href: "#descuentos", label: "descuentos" },
-      ];
+  const isSurfacePage = variant !== "landing";
+  const nav =
+    variant === "landing"
+      ? [
+          { href: "/nuvia/catalogo", label: "catalogo" },
+          { href: "#guia", label: "guia" },
+          { href: "#descuentos", label: "descuentos" },
+        ]
+      : [
+          { href: "/nuvia", label: "inicio" },
+          { href: "/nuvia/catalogo", label: "catalogo" },
+          { href: "/nuvia/catalogo#como-comprar", label: "como comprar" },
+        ];
 
   return (
-    <header className={`nuvia-next-header ${productPage ? "is-product" : ""}`}>
+    <header className={`nuvia-next-header ${isSurfacePage ? "is-product" : ""}`}>
       <Link className="nuvia-next-wordmark" href="/nuvia" aria-label="Nuvia">
         <span>
           <Image src={logoIcon} alt="" width={64} height={64} priority />
@@ -214,7 +226,13 @@ function NuviaHeader({
         ))}
       </nav>
 
-      <button className="nuvia-next-cart-trigger" type="button" onClick={onCartOpen}>
+      <button
+        className="nuvia-next-cart-trigger"
+        type="button"
+        onClick={onCartOpen}
+        aria-label={cartCount ? `Abrir carrito con ${cartCount} productos` : "Abrir carrito de compra"}
+        title={cartCount ? `Carrito: ${cartCount} productos` : "Abrir carrito"}
+      >
         <ShoppingBag size={17} />
         <span>comprar</span>
         {cartCount > 0 ? <strong>{cartCount}</strong> : null}
@@ -224,6 +242,7 @@ function NuviaHeader({
 }
 
 function CartDrawer({
+  add,
   cart,
   clear,
   decrease,
@@ -238,6 +257,16 @@ function CartDrawer({
 }: ReturnType<typeof useCart>) {
   const checkoutHref = buildNuviaCheckoutHref(cart);
   const firstCurrency = cart.length ? productMap.get(cart[0].id)?.currency : "BOB";
+  const productSections = useMemo(() => {
+    const groups = new Map<string, CartProduct[]>();
+
+    Array.from(productMap.values()).forEach((product) => {
+      const key = product.category || "productos";
+      groups.set(key, [...(groups.get(key) || []), product]);
+    });
+
+    return Array.from(groups.entries()).map(([label, products]) => ({ label, products }));
+  }, [productMap]);
 
   return (
     <div className="nuvia-cart-shell" data-open={open ? "true" : "false"} aria-hidden={!open}>
@@ -253,48 +282,78 @@ function CartDrawer({
           </button>
         </header>
 
-        {cart.length === 0 ? (
-          <div className="nuvia-cart-empty">
-            <strong>todavia no agregaste productos</strong>
-            <p>Agrega productos del catalogo para cotizar tu pedido.</p>
-          </div>
-        ) : (
-          <div className="nuvia-cart-list">
-            {cart.map((item) => {
-              const product = productMap.get(item.id);
-              if (!product) {
-                return null;
-              }
+        <div className="nuvia-cart-body">
+          {cart.length === 0 ? (
+            <div className="nuvia-cart-empty">
+              <strong>todavia no agregaste productos</strong>
+              <p>Agrega productos por categoria para cotizar tu pedido.</p>
+            </div>
+          ) : (
+            <div className="nuvia-cart-list">
+              {cart.map((item) => {
+                const product = productMap.get(item.id);
+                if (!product) {
+                  return null;
+                }
 
-              const itemTotal =
-                typeof product.priceValue === "number" ? money(product.priceValue * item.qty, product.currency) : product.priceLabel;
+                const itemTotal =
+                  typeof product.priceValue === "number" ? money(product.priceValue * item.qty, product.currency) : product.priceLabel;
 
-              return (
-                <article className="nuvia-cart-item" key={item.id}>
-                  <Image src={product.image} alt={product.imageAlt} width={148} height={172} />
-                  <div>
-                    <span>{[product.brand, product.size].filter(Boolean).join(" - ")}</span>
-                    <strong>{product.title}</strong>
-                    <small>{itemTotal}</small>
-                    <div className="nuvia-cart-qty">
-                      <button type="button" onClick={() => decrease(item.id)} aria-label={`Restar ${product.title}`}>
-                        <Minus size={14} />
-                      </button>
-                      <output>{item.qty}</output>
-                      <button type="button" onClick={() => increase(item.id)} aria-label={`Sumar ${product.title}`}>
+                return (
+                  <article className="nuvia-cart-item" key={item.id}>
+                    <Image src={product.image} alt={product.imageAlt} width={148} height={172} />
+                    <div>
+                      <span>{[product.brand, product.size].filter(Boolean).join(" - ")}</span>
+                      <strong>{product.title}</strong>
+                      <small>{itemTotal}</small>
+                      <div className="nuvia-cart-qty">
+                        <button type="button" onClick={() => decrease(item.id)} aria-label={`Restar ${product.title}`}>
+                          <Minus size={14} />
+                        </button>
+                        <output>{item.qty}</output>
+                        <button type="button" onClick={() => increase(item.id)} aria-label={`Sumar ${product.title}`}>
+                          <Plus size={14} />
+                        </button>
+                        <button type="button" onClick={() => remove(item.id)}>
+                          <Trash2 size={13} />
+                          quitar
+                        </button>
+                      </div>
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
+          )}
+
+          <div className="nuvia-cart-sections" aria-label="Secciones de productos">
+            <div className="nuvia-cart-sections-head">
+              <span>seguir comprando</span>
+              <Link href="/nuvia/catalogo" onClick={() => setOpen(false)}>
+                ver catalogo
+              </Link>
+            </div>
+            {productSections.map((section) => (
+              <section className="nuvia-cart-section" key={section.label}>
+                <h3>{section.label}</h3>
+                <div>
+                  {section.products.map((product) => (
+                    <article className="nuvia-cart-suggestion" key={product.id}>
+                      <Link href={product.href} onClick={() => setOpen(false)}>
+                        <Image src={product.image} alt={product.imageAlt} width={92} height={104} />
+                        <span>{product.brand}</span>
+                        <strong>{product.title}</strong>
+                      </Link>
+                      <button type="button" onClick={() => add(product.id)} aria-label={`Agregar ${product.title}`}>
                         <Plus size={14} />
                       </button>
-                      <button type="button" onClick={() => remove(item.id)}>
-                        <Trash2 size={13} />
-                        quitar
-                      </button>
-                    </div>
-                  </div>
-                </article>
-              );
-            })}
+                    </article>
+                  ))}
+                </div>
+              </section>
+            ))}
           </div>
-        )}
+        </div>
 
         <footer>
           <div className="nuvia-cart-total">
@@ -383,9 +442,9 @@ function ProductCheckoutBar({
 
   return (
     <aside className="nuvia-pdp-checkout-bar" aria-label={`Checkout rapido de ${product.titulo}`}>
-      <Link href="/nuvia#catalogo" className="nuvia-pdp-bar-product">
+      <Link href="/nuvia/catalogo" className="nuvia-pdp-bar-product">
         <Image src={product.imagen} alt="" width={58} height={58} />
-        <span>{product.titulo}</span>
+        <span>{briefProductTitle(product)}</span>
       </Link>
       <div className="nuvia-pdp-bar-actions">
         <QuantityPicker label={`Cantidad para ${product.titulo}`} value={qty} onChange={setQty} />
@@ -414,22 +473,6 @@ function ProductShelf({
 
   return (
     <section className="nuvia-next-section nuvia-catalog-portal" id="catalogo" data-nuvia-reveal>
-      <div className="nuvia-portal-top">
-        <div className="nuvia-section-heading">
-          <span>portal de productos</span>
-          <h2>todo el catalogo, listo para pedir</h2>
-          <p>Cada producto tiene ficha, cantidad y checkout propio. El portal escala cuando entren mas marcas y categorias.</p>
-        </div>
-        <div className="nuvia-portal-status">
-          <strong>{products.length}</strong>
-          <span>productos activos</span>
-          <strong>{categories.length}</strong>
-          <span>categorias</span>
-          <strong>1</strong>
-          <span>carrito compartido</span>
-        </div>
-      </div>
-
       <div className="nuvia-portal-tabs" aria-label="Categorias del catalogo">
         <button className={activeCategory === "todos" ? "is-active" : undefined} type="button" onClick={() => setActiveCategory("todos")}>
           todos
@@ -452,7 +495,7 @@ function ProductShelf({
               </figure>
               <div>
                 <small>{[product.marca, product.tamano].filter(Boolean).join(" - ")}</small>
-                <h3>{product.titulo}</h3>
+                <h3>{briefProductTitle(product)}</h3>
                 <p>{product.desc}</p>
                 <ul>
                   {[...product.idealPara, ...product.beneficios].slice(0, 3).map((item) => (
@@ -523,7 +566,7 @@ function HeroStage({
                   <Image src={product.imagen} alt={product.imagenAlt} width={520} height={520} />
                 </figure>
                 <span>{product.marca}</span>
-                <strong>{product.titulo}</strong>
+                <strong>{briefProductTitle(product)}</strong>
               </Link>
               <button type="button" onClick={() => onAdd(slug)}>
                 agregar
@@ -565,7 +608,7 @@ export function NuviaStorefront(props: StoreProps) {
               <span>cotizacion segura</span>
             </div>
             <div className="nuvia-actions">
-              <Link href="#catalogo">ver productos</Link>
+              <Link href="/nuvia/catalogo">ver catalogo</Link>
               <button type="button" onClick={() => cart.setOpen(true)}>
                 abrir carrito
               </button>
@@ -575,8 +618,6 @@ export function NuviaStorefront(props: StoreProps) {
           <HeroStage products={props.products} onAdd={cart.add} />
         </div>
       </section>
-
-      <ProductShelf products={props.products} onAdd={cart.add} />
 
       <section className="nuvia-routine-section" id="guia" data-nuvia-reveal>
         <div>
@@ -589,7 +630,7 @@ export function NuviaStorefront(props: StoreProps) {
             <Link href={productHref(product)} key={productSlug(product)}>
               <small>{product.uso}</small>
               <Image src={product.imagen} alt={product.imagenAlt} width={160} height={180} />
-              <strong>{product.titulo}</strong>
+              <strong>{briefProductTitle(product)}</strong>
             </Link>
           ))}
         </div>
@@ -629,6 +670,103 @@ export function NuviaStorefront(props: StoreProps) {
       <footer className="nuvia-next-footer" id="contacto">
         <strong>NUVIA</strong>
         <p>{props.description}</p>
+        <Link className="nuvia-footer-link" href="/nuvia/catalogo">
+          abrir catalogo
+        </Link>
+      </footer>
+
+      <CartDrawer {...cart} />
+    </main>
+  );
+}
+
+export function NuviaCatalogPage(props: StoreProps) {
+  useRevealMotion();
+  const cart = useCart(props.cartProducts);
+
+  return (
+    <main className="nuvia-next-page is-catalog">
+      <NuviaHeader
+        cartCount={cart.totalCount}
+        logoIcon={props.logoIcon}
+        onCartOpen={() => cart.setOpen(true)}
+        tagline={props.tagline}
+        variant="catalog"
+      />
+
+      <section className="nuvia-catalog-hero" data-nuvia-reveal>
+        <div>
+          <span>NUVIA | {props.tagline.toUpperCase()}</span>
+          <h1>catalogo de skincare con compra guiada</h1>
+          <p>
+            Elige crema, ajusta cantidad y abre carrito. El pago queda preparado como checkout/cotizacion hasta conectar precios,
+            entrega y canal de cobro.
+          </p>
+          <div className="nuvia-actions">
+            <button type="button" onClick={() => cart.setOpen(true)}>
+              abrir carrito
+            </button>
+            <Link href="#como-comprar">como comprar</Link>
+          </div>
+        </div>
+        <aside aria-label="Resumen del catalogo">
+          <div>
+            <strong>{props.products.length}</strong>
+            <span>productos activos</span>
+          </div>
+          <div>
+            <strong>{new Set(props.products.map((product) => product.marca).filter(Boolean)).size}</strong>
+            <span>marcas disponibles</span>
+          </div>
+          <div>
+            <strong>1</strong>
+            <span>carrito unico</span>
+          </div>
+        </aside>
+      </section>
+
+      <ProductShelf products={props.products} onAdd={cart.add} />
+
+      <section className="nuvia-catalog-buying-guide" id="como-comprar" data-nuvia-reveal>
+        <div>
+          <span>como comprar</span>
+          <h2>el flujo queda claro antes de pagar</h2>
+          <p>
+            Nuvia usa una compra asistida: el carrito prepara el pedido y evita mostrar precios, stock o pago real sin configuracion.
+          </p>
+        </div>
+        <div className="nuvia-buying-steps">
+          {[
+            ["01", "elige producto", "Filtra por categoria o marca y abre la ficha si necesitas indicaciones."],
+            ["02", "agrega cantidad", "Cada crema tiene su selector y se guarda en el carrito del navegador."],
+            ["03", "confirma checkout", "Cuando existan precio y canal de cobro, este mismo carrito enviara el pedido final."],
+          ].map(([number, title, body]) => (
+            <article key={number}>
+              <span>{number}</span>
+              <strong>{title}</strong>
+              <p>{body}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="nuvia-checkout-note" id="checkout-pendiente" data-nuvia-reveal>
+        <div>
+          <span>checkout</span>
+          <h2>pago real pendiente de configuracion</h2>
+          <p>
+            El carrito ya funciona. Para cobrar de verdad falta definir precios finales, stock, envio y conectar WhatsApp, email o
+            pasarela de pago.
+          </p>
+        </div>
+        <button type="button" onClick={() => cart.setOpen(true)}>
+          revisar carrito
+        </button>
+      </section>
+
+      <footer className="nuvia-next-footer" id="contacto">
+        <strong>NUVIA</strong>
+        <p>{props.description}</p>
         <button type="button" onClick={() => cart.setOpen(true)}>
           abrir carrito
         </button>
@@ -649,14 +787,14 @@ export function NuviaProductPage(props: ProductPageProps) {
         cartCount={cart.totalCount}
         logoIcon={props.logoIcon}
         onCartOpen={() => cart.setOpen(true)}
-        productPage
         tagline={props.tagline}
+        variant="product"
       />
       <ProductCheckoutBar product={props.product} onAdd={cart.add} onCartOpen={() => cart.setOpen(true)} />
 
       <section className="nuvia-pdp-hero" data-nuvia-reveal>
         <div className="nuvia-pdp-media">
-          <Link href="/nuvia#catalogo">
+          <Link href="/nuvia/catalogo">
             <ArrowLeft size={16} />
             volver al catalogo
           </Link>

@@ -95,6 +95,18 @@
       color: #334155;
     }
 
+    .update-banner {
+      display: inline-block;
+      margin: 8mm 0 0;
+      padding: 2.5mm 4mm;
+      border-radius: 8px;
+      background: #eef3ff;
+      border: 1px solid #b9c9ff;
+      color: #172554;
+      font-size: 10.5pt;
+      font-weight: 800;
+    }
+
     .cover-band {
       margin-top: 18mm;
       padding: 8mm;
@@ -188,10 +200,57 @@
       font-size: 9.5pt;
     }
 
+    .category-row td {
+      background: #f5f7fb;
+      color: #334155;
+      font-size: 9.5pt;
+      font-weight: 800;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+
     td.money {
       white-space: nowrap;
       font-weight: 800;
       color: var(--green);
+    }
+
+    .scope-table {
+      page-break-inside: auto;
+      font-size: 9.2pt;
+    }
+
+    .scope-table th,
+    .scope-table td {
+      padding: 2mm 2.2mm;
+    }
+
+    .scope-table tr {
+      page-break-inside: avoid;
+    }
+
+    .scope-table td:first-child {
+      font-weight: 800;
+      color: var(--ink);
+    }
+
+    .scope-yes,
+    .scope-no,
+    .scope-extra {
+      white-space: nowrap;
+      font-weight: 800;
+    }
+
+    .scope-yes {
+      color: var(--green);
+    }
+
+    .scope-extra {
+      color: var(--amber);
+    }
+
+    .scope-no {
+      color: #991b1b;
     }
 
     ul {
@@ -243,6 +302,12 @@
           Documento para vendedores. Resume que ofrecemos, cuanto cuesta,
           cuanto gana el vendedor y que debe prometerse con cuidado.
         </p>
+        <div class="update-banner">
+          ACTUALIZADO: la comision se paga solo sobre el primer pago del cliente.
+          Precios y limites revisados contra docs ONIA, DentalGest, Gesti-OS,
+          Meta, n8n y Telegram. La vendedora lidera llamadas; Sergio acompana
+          solo casos importantes.
+        </div>
         <div class="cover-band">
           <p>
             El objetivo no es vender tecnologia suelta. El objetivo es detectar
@@ -283,6 +348,8 @@
           <tr><td>DentalGest Basico</td><td>Bs. 320/mes</td><td class="money">Bs. 112</td><td>Consultorio pequeno que necesita ordenar pacientes y agenda.</td></tr>
           <tr><td>DentalGest Profesional</td><td>Bs. 750/mes</td><td class="money">Bs. 262,50</td><td>Clinica con equipo, pagos, reportes y mas seguimiento.</td></tr>
           <tr><td>DentalGest Clinica</td><td>Bs. 1.500/mes</td><td class="money">Bs. 525</td><td>Clinica con varias personas, sedes o soporte prioritario.</td></tr>
+          <tr><td>Onboarding DentalGest</td><td>Bs. 290 / 690 / 1.490</td><td class="money">10%</td><td>Configuracion, acompanamiento, migracion ligera o capacitacion segun alcance.</td></tr>
+          <tr><td>WhatsApp operativo DentalGest</td><td>Bs. 650 inst. + Bs. 350/mes + Meta</td><td class="money">Aprobar</td><td>Solo si ONIA valida numero, Meta, plantillas, webhook y costos por mensaje.</td></tr>
           <tr><td>Gesti-OS Basico</td><td>Bs. 350/mes</td><td class="money">Bs. 122,50</td><td>Negocio pequeno con clientes, ventas o tareas desordenadas.</td></tr>
           <tr><td>Gesti-OS Crecer</td><td>Bs. 530/mes</td><td class="money">Bs. 185,50</td><td>Pyme que ya maneja mas volumen y necesita visibilidad.</td></tr>
           <tr><td>Gesti-OS Pro</td><td>Bs. 800/mes</td><td class="money">Bs. 280</td><td>Operaciones con mas staff, reportes y seguimiento.</td></tr>
@@ -300,19 +367,26 @@
           </tr>
         </thead>
         <tbody>
+          <tr class="category-row"><td colspan="4">Paginas web y captacion</td></tr>
           <tr><td>Landing de Captacion</td><td>Bs. 790</td><td class="money">Bs. 79</td><td>Una pagina enfocada en captar consultas.</td></tr>
           <tr><td>Web Profesional</td><td>Bs. 1.500</td><td class="money">Bs. 180</td><td>Web de negocio con secciones clave y formulario.</td></tr>
           <tr><td>Web Pro ONIA</td><td>Bs. 2.900</td><td class="money">Bs. 348</td><td>Web completa con copy, captacion y seguimiento basico.</td></tr>
-          <tr><td>Portal o mini sistema</td><td>Desde Bs. 6.500</td><td class="money">Desde Bs. 650</td><td>Login, dashboard, base de datos o MVP pequeno.</td></tr>
+          <tr><td>Cuidado Web Basico</td><td>Bs. 190/mes</td><td class="money">Bs. 19</td><td>Mantenimiento simple vendido aparte.</td></tr>
+          <tr><td>Cuidado Web Crecimiento</td><td>Bs. 390/mes</td><td class="money">Bs. 39</td><td>Cambios ligeros y revision mensual.</td></tr>
+          <tr><td>Cuidado Web Pro</td><td>Bs. 690/mes</td><td class="money">Bs. 69</td><td>Soporte mas activo y mejoras pequenas.</td></tr>
+          <tr class="category-row"><td colspan="4">Auditorias y diagnostico</td></tr>
           <tr><td>Auditoria Express</td><td>Bs. 250</td><td class="money">Bs. 25</td><td>Revision rapida para abrir confianza y detectar oportunidades.</td></tr>
           <tr><td>Diagnostico + Plan</td><td>Bs. 690</td><td class="money">Bs. 69</td><td>Sesion profunda, mapa del proceso y presupuesto recomendado.</td></tr>
+          <tr class="category-row"><td colspan="4">Automatizaciones y bots</td></tr>
           <tr><td>Automatizacion simple n8n</td><td>Bs. 790 setup</td><td class="money">Bs. 79</td><td>Formulario o lead hacia registro, aviso y tarea.</td></tr>
           <tr><td>Flujo aprobacion n8n</td><td>Bs. 1.200 setup</td><td class="money">Bs. 120</td><td>Recibido, aprobado/rechazado, notificado y registrado.</td></tr>
-          <tr><td>Monitoreo n8n</td><td>Bs. 150/mes</td><td class="money">Bs. 15</td><td>Revision mensual basica del flujo vendido aparte.</td></tr>
           <tr><td>Bot Telegram recordatorios</td><td>Bs. 690 setup</td><td class="money">Bs. 69</td><td>Recuerda tareas, cobros, citas, vencimientos o seguimientos.</td></tr>
           <tr><td>Bot Telegram operativo</td><td>Bs. 790 setup</td><td class="money">Bs. 79</td><td>Registra leads, avisa responsables y consulta estados simples.</td></tr>
           <tr><td>Bot Telegram avanzado</td><td>Bs. 1.200 setup</td><td class="money">Bs. 120</td><td>Comandos internos, aprobaciones, reportes y alertas por equipo.</td></tr>
-          <tr><td>Chatbot WhatsApp conversacional</td><td>Desde Bs. 990 setup</td><td class="money">Desde Bs. 99</td><td>Responde preguntas frecuentes, captura datos y deriva a una persona.</td></tr>
+          <tr><td>Chatbot WhatsApp conversacional</td><td>Desde Bs. 990 setup + Meta</td><td class="money">Desde Bs. 99</td><td>Responde preguntas frecuentes, captura datos y deriva a una persona.</td></tr>
+          <tr class="category-row"><td colspan="4">Servicios a medida</td></tr>
+          <tr><td>Portal o mini sistema</td><td>Desde Bs. 6.500</td><td class="money">Desde Bs. 650</td><td>Login, dashboard, base de datos o MVP pequeno.</td></tr>
+          <tr><td>Soporte, ajustes o mantenimiento</td><td>Cotizado aparte</td><td class="money">Segun acuerdo</td><td>Solo si el cliente pide acompanamiento posterior.</td></tr>
         </tbody>
       </table>
 
@@ -321,7 +395,280 @@
         politicas de plantilla y costos de mensajeria. Se puede vender como
         diagnostico o cotizacion, pero la activacion requiere validacion tecnica
         de ONIA. Videos IA / Higgsfield siguen pausados como producto comercial.
+        Soporte, cambios y mantenimiento posterior se cotizan como servicio
+        general cuando el cliente los necesite.
       </div>
+    </section>
+
+    <section>
+      <h2>Alcance detallado por servicio</h2>
+      <p class="lead">
+        Usar esta parte para explicar que incluye cada oferta. Si el cliente pide
+        base de datos, CRM, chatbot, WhatsApp API, login, pagos, ecommerce,
+        integraciones o soporte posterior, debe estar escrito en la cotizacion.
+      </p>
+
+      <h3>Paginas web: secciones y alcance</h3>
+      <table class="scope-table">
+        <thead>
+          <tr>
+            <th>Servicio</th>
+            <th>Secciones incluidas</th>
+            <th>Captura de leads</th>
+            <th>CRM / BD / chatbot</th>
+            <th>No incluye sin cotizar</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Landing de Captacion</td>
+            <td>Hero con oferta, problema/beneficio, servicios u oferta, prueba o credibilidad, proceso, llamado a la accion, contacto/formulario y FAQ simple.</td>
+            <td>Boton a WhatsApp o formulario simple.</td>
+            <td><span class="scope-no">BD aparte.</span> <span class="scope-extra">CRM opcional.</span> <span class="scope-no">Chatbot aparte.</span></td>
+            <td>Login, dashboard, ecommerce, pagos, blog, automatizaciones, WhatsApp API, dominio, hosting, pauta, fotos profesionales o copy largo.</td>
+          </tr>
+          <tr>
+            <td>Web Profesional</td>
+            <td>Inicio, servicios, sobre/equipo, beneficios, proceso, testimonios o casos si el cliente entrega material, contacto/formulario y FAQ.</td>
+            <td>Formulario + WhatsApp. Puede registrar solicitudes si se acuerda.</td>
+            <td><span class="scope-no">BD aparte.</span> <span class="scope-extra">CRM simple opcional.</span> <span class="scope-no">Chatbot aparte.</span></td>
+            <td>Portal interno, login, tienda, pagos, reservas avanzadas, integraciones externas, chatbot y mantenimiento posterior.</td>
+          </tr>
+          <tr>
+            <td>Web Pro ONIA</td>
+            <td>Home mas completa, paginas o bloques de servicios, copy comercial mas trabajado, captacion, confianza, proceso, contacto y seguimiento basico.</td>
+            <td>Formulario + WhatsApp + orden basico de leads si queda escrito.</td>
+            <td><span class="scope-no">BD app aparte.</span> <span class="scope-extra">CRM simple puede incluirse.</span> <span class="scope-no">Chatbot aparte.</span></td>
+            <td>Sistema a medida, login, dashboard personalizado, WhatsApp Cloud API, automatizaciones complejas, ecommerce y soporte continuo.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>SaaS y sistemas</h3>
+      <table class="scope-table">
+        <thead>
+          <tr>
+            <th>Servicio</th>
+            <th>Que hace</th>
+            <th>Base de datos</th>
+            <th>CRM / chatbot</th>
+            <th>No incluye sin aprobacion</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>DentalGest</td>
+            <td>Ordena clinicas dentales: pacientes, citas, pagos, reportes, seguimiento y operacion diaria.</td>
+            <td><span class="scope-yes">Si.</span> Base de datos interna del sistema.</td>
+            <td><span class="scope-yes">CRM dental.</span> <span class="scope-no">Chatbot no incluido.</span></td>
+            <td>Migracion masiva, modulos personalizados, WhatsApp automatico, integraciones externas, capacitacion extensa o descuentos especiales.</td>
+          </tr>
+          <tr>
+            <td>Gesti-OS</td>
+            <td>Sistema operativo para pymes: clientes, tareas, ventas, inventario, responsables, estados y reportes.</td>
+            <td><span class="scope-yes">Si.</span> Base de datos interna del sistema.</td>
+            <td><span class="scope-yes">CRM operativo.</span> <span class="scope-no">Chatbot no incluido.</span></td>
+            <td>Modulos a medida, integraciones especiales, multi-sucursal compleja, migracion grande o entrenamiento prolongado.</td>
+          </tr>
+          <tr>
+            <td>Portal o mini sistema</td>
+            <td>Software a medida para un flujo propio: login, dashboard, panel admin, registros, estados, roles y reportes basicos.</td>
+            <td><span class="scope-yes">Si.</span> Se define segun el proyecto.</td>
+            <td><span class="scope-extra">CRM/chatbot si se cotiza.</span></td>
+            <td>Apps moviles, IA avanzada, pagos, facturacion, WhatsApp API, scraping, integraciones complejas o soporte ilimitado.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Auditorias, automatizaciones y bots</h3>
+      <table class="scope-table">
+        <thead>
+          <tr>
+            <th>Servicio</th>
+            <th>Que hace</th>
+            <th>Incluye</th>
+            <th>CRM / BD / chatbot</th>
+            <th>No incluye sin cotizar</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Auditoria Express</td>
+            <td>Revision corta de presencia digital, oferta, web/redes, contacto, WhatsApp y seguimiento.</td>
+            <td>3 problemas, 3 acciones recomendadas y siguiente oferta ONIA sugerida.</td>
+            <td><span class="scope-no">Solo revision.</span> CRM, BD y chatbot se cotizan aparte.</td>
+            <td>Diseno, desarrollo, configuracion tecnica, reuniones largas o estrategia completa.</td>
+          </tr>
+          <tr>
+            <td>Diagnostico + Plan</td>
+            <td>Sesion mas profunda para entender proceso, prioridad, costo y proxima propuesta.</td>
+            <td>Mapa del proceso, prioridades, herramientas sugeridas, presupuesto recomendado y plan de accion.</td>
+            <td><span class="scope-extra">Puede recomendar CRM, BD o chatbot.</span> La construccion queda aparte.</td>
+            <td>Implementacion tecnica, automatizaciones, documentacion extensa o soporte posterior.</td>
+          </tr>
+          <tr>
+            <td>n8n simple</td>
+            <td>Automatiza un flujo claro con entrada, regla, salida y responsable.</td>
+            <td>Ejemplo: formulario -> registro -> aviso por Telegram/email -> tarea de seguimiento.</td>
+            <td><span class="scope-extra">CRM/BD usa Sheets, Notion o CRM existente.</span> <span class="scope-no">Chatbot aparte.</span></td>
+            <td>Seguimiento recurrente, APIs pagadas, WhatsApp automatico, scraping masivo, login de terceros o flujos grandes.</td>
+          </tr>
+          <tr>
+            <td>Flujo aprobacion n8n</td>
+            <td>Controla solicitudes, contenido, compras o leads con estados de aprobado/rechazado.</td>
+            <td>Registro, responsable, estado, notificacion y trazabilidad simple.</td>
+            <td><span class="scope-extra">Usa tablero simple.</span> El sistema completo se cotiza aparte.</td>
+            <td>Reglas complejas, permisos avanzados, auditoria legal, integraciones pagadas o soporte continuo.</td>
+          </tr>
+          <tr>
+            <td>Bot Telegram</td>
+            <td>Asistente interno para recordatorios, tareas, aprobaciones, reportes, stock, cobros o seguimientos.</td>
+            <td>Bot configurado, comandos simples, alertas y prueba de funcionamiento.</td>
+            <td><span class="scope-extra">BD simple si hace falta.</span> Canal Telegram; WhatsApp va por otra oferta.</td>
+            <td>IA avanzada, pagos, permisos complejos, grandes bases de datos o operacion 24/7 sin soporte contratado.</td>
+          </tr>
+          <tr>
+            <td>Chatbot WhatsApp conversacional</td>
+            <td>Responde preguntas frecuentes, califica prospectos, toma datos basicos y deriva a una persona.</td>
+            <td>Flujo conversacional, preguntas frecuentes, captura de datos y handoff humano.</td>
+            <td><span class="scope-extra">CRM/BD solo si se integra.</span> Depende de Meta/WhatsApp Cloud API.</td>
+            <td>Garantia de aprobacion Meta, costos de mensajeria, plantillas pagadas, IA avanzada, ventas garantizadas o soporte mensual.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="grid three">
+        <div class="box">
+          <strong>Landing o web</strong>
+          <p>Sirve para explicar una oferta y captar consultas. La operacion interna se vende aparte.</p>
+        </div>
+        <div class="box">
+          <strong>CRM</strong>
+          <p>Sirve para ordenar leads, clientes, estado, responsable y proximo seguimiento.</p>
+        </div>
+        <div class="box">
+          <strong>Base de datos</strong>
+          <p>Guarda informacion estructurada y alimenta un sistema. Una web informativa normalmente funciona sin ella.</p>
+        </div>
+        <div class="box">
+          <strong>Chatbot</strong>
+          <p>Es la conversacion con el cliente. CRM y base de datos aparecen solo cuando se integran.</p>
+        </div>
+        <div class="box">
+          <strong>Automatizacion</strong>
+          <p>Conecta entrada, regla, salida y responsable. Debe tener proceso claro antes de venderse.</p>
+        </div>
+        <div class="box">
+          <strong>Soporte posterior</strong>
+          <p>Se cotiza aparte por servicio o proyecto. La supervision recurrente debe quedar escrita.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Que se usa, que necesita el cliente y add-ons</h2>
+      <p class="lead">
+        Esta tabla es para no vender a ciegas. Antes de cerrar, la vendedora debe
+        confirmar que el cliente puede entregar accesos, datos y responsables.
+        Los costos de terceros no forman parte del precio ONIA salvo que esten
+        escritos en la cotizacion.
+      </p>
+
+      <table class="scope-table">
+        <thead>
+          <tr>
+            <th>Oferta</th>
+            <th>ONIA usa</th>
+            <th>Cliente debe entregar</th>
+            <th>Costos externos</th>
+            <th>Add-ons posibles</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Landing / Web</td>
+            <td>Web Factory ONIA, componentes, formulario, click a WhatsApp y deploy.</td>
+            <td>Logo, colores si existen, oferta, textos base, fotos, contacto, redes, dominio/accesos si ya los tiene.</td>
+            <td>Dominio, hosting externo, correo, pauta, pasarela, fotos profesionales y herramientas pagadas.</td>
+            <td>Cuidado Web Bs. 190/390/690 mes, CRM/formulario a n8n Bs. 790, conexion canal social Bs. 690, agenda/Cal.com cotizada.</td>
+          </tr>
+          <tr>
+            <td>DentalGest</td>
+            <td>SaaS DentalGest, base de datos, agenda, pacientes, pagos, reportes y seguimiento dental.</td>
+            <td>Datos de clinica, usuarios, servicios, horarios, roles, logo y lista de pacientes si requiere migracion.</td>
+            <td>Dominio/correo si aplica, consumo Meta si usa WhatsApp, herramientas externas y carga masiva fuera de alcance.</td>
+            <td>
+              Onboarding Bs. 290/690/1.490, agenda publica Basico Bs. 150/mes,
+              usuario extra Bs. 70/mes e insumos Basico Bs. 80/mes.
+              WhatsApp operativo requiere aprobacion aparte.
+            </td>
+          </tr>
+          <tr>
+            <td>Gesti-OS</td>
+            <td>SaaS Gesti-OS, inventario/POS, clientes, pedidos, reportes, usuarios y operacion diaria.</td>
+            <td>Tipo de negocio, productos, clientes, usuarios, procesos, medios de pago, sucursales y responsables.</td>
+            <td>Proveedor QR/banco, WhatsApp/Meta, dominio/tienda, pasarela, migracion grande y cualquier API pagada.</td>
+            <td>WhatsApp Bs. 280/mes + excedentes si se valida, QR Bs. 105/mes con proveedor, ecommerce Bs. 140/mes PRO+, exportacion contable Bs. 126/mes Empresarial, inventario avanzado Bs. 120/mes.</td>
+          </tr>
+          <tr>
+            <td>n8n / automatizaciones</td>
+            <td>n8n self-hosted de ONIA, webhooks, Notion/Sheets/Telegram/email/CRM segun caso.</td>
+            <td>Proceso claro, disparador, destino, credenciales, responsable humano, regla de error y aprobacion.</td>
+            <td>APIs pagadas, cuentas premium, infraestructura dedicada, instancias propias, logs extendidos y soporte fuera de horario.</td>
+            <td>Flujo simple Bs. 790, aprobaciones Bs. 1.200, integracion adicional desde Bs. 1.900, soporte recurrente cotizado.</td>
+          </tr>
+          <tr>
+            <td>Bot Telegram</td>
+            <td>Telegram Bot API, servidor/automatizacion ONIA, comandos, alertas y registros simples.</td>
+            <td>Nombre del bot, chat o grupo, usuarios permitidos, reglas, horarios, responsables y datos a recordar.</td>
+            <td>Telegram Bot API no cobra por el API basico; hosting, IA, almacenamiento o APIs externas si pueden costar.</td>
+            <td>Recordatorios Bs. 690, bot operativo Bs. 790, aprobaciones/reportes Bs. 1.200, IA o CRM cotizado.</td>
+          </tr>
+          <tr>
+            <td>WhatsApp chatbot</td>
+            <td>Meta/WABA/Cloud API o integracion aprobada, flujos, plantillas, handoff humano y posible CRM.</td>
+            <td>Business Manager, numero disponible, permisos, NIT/datos de empresa si aplica, FAQs, horarios y responsable de atencion.</td>
+            <td>Meta cobra mensajes entregados segun pais/categoria; plantillas, proveedor, IA y soporte pueden tener costo.</td>
+            <td>Chatbot desde Bs. 990 setup + Meta, Chatwoot/inbox cotizado, CRM, resumen, follow-up y reportes cotizados.</td>
+          </tr>
+          <tr>
+            <td>Portal / mini sistema</td>
+            <td>App web con login, base de datos, dashboard, roles, registros, estados y reportes segun alcance.</td>
+            <td>Reglas del negocio, tipos de usuario, pantallas requeridas, datos, permisos, reportes y responsable de aprobacion.</td>
+            <td>Dominio, hosting dedicado, storage, emails, pagos, IA, APIs, migracion y soporte posterior.</td>
+            <td>Autenticacion avanzada, pagos, WhatsApp, reportes, panel admin, integraciones y soporte mensual.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="note">
+        Regla de precio: estos precios son de arranque para vender ahora, no
+        precios permanentes. Si el cliente pide base de datos, CRM, chatbot,
+        pasarela, QR, WhatsApp API, IA, integracion externa, migracion o soporte
+        recurrente, se cotiza por escrito antes de prometer.
+      </div>
+
+      <h2>Add-ons recomendados para despues del primer cierre</h2>
+      <table class="scope-table">
+        <thead>
+          <tr>
+            <th>Add-on</th>
+            <th>Precio guia</th>
+            <th>Cuando venderlo</th>
+            <th>Condicion</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Cuidado Web</td><td>Bs. 190 / 390 / 690 al mes</td><td>Cliente ya tiene web y quiere cambios, revision o mejoras.</td><td>Definir cantidad de cambios y tiempo de respuesta.</td></tr>
+          <tr><td>CRM/formulario a n8n</td><td>Bs. 790 setup</td><td>La web recibe consultas y nadie las sigue.</td><td>Debe existir formulario o canal de entrada claro.</td></tr>
+          <tr><td>Conexion canal social</td><td>Bs. 690 setup</td><td>Quiere preparar Instagram, TikTok, Shorts o LinkedIn para flujo asistido.</td><td>No prometer aprobacion ni publicacion automatica si la plataforma no lo permite.</td></tr>
+          <tr><td>DentalGest onboarding</td><td>Bs. 290 / 690 / 1.490</td><td>La clinica necesita ayuda inicial para configurar o capacitar.</td><td>Comision 10% sobre el primer cobro.</td></tr>
+          <tr><td>DentalGest WhatsApp operativo</td><td>Bs. 650 inst. + Bs. 350/mes + Meta</td><td>La clinica quiere recordatorios o seguimiento por WhatsApp.</td><td>Requiere aprobacion tecnica y costos Meta variables.</td></tr>
+          <tr><td>Gesti-OS WhatsApp/QR/ecommerce</td><td>Segun add-on y plan</td><td>El negocio ya usa Gesti-OS y necesita cobro, tienda o mensajes.</td><td>Validar plan, proveedor y estado tecnico antes de vender.</td></tr>
+          <tr><td>Integracion extra</td><td>Desde Bs. 1.900</td><td>Hay dos o mas sistemas a conectar o reglas especiales.</td><td>Requiere diagnostico y alcance escrito.</td></tr>
+          <tr><td>Soporte recurrente</td><td>Cotizado aparte</td><td>Cliente necesita supervision, cambios, logs, incidentes o SLA.</td><td>No vender como monitoreo barato mensual sin alcance.</td></tr>
+        </tbody>
+      </table>
     </section>
 
     <section>
@@ -343,6 +690,10 @@
           <strong>Cuando entra Sergio</strong>
           <p>Sergio entra solo para acompanarla en clientes importantes, objeciones tecnicas, cierres complejos o proyectos grandes.</p>
         </div>
+        <div class="box">
+          <strong>Las comisiones pueden subir</strong>
+          <p>A medida que empecemos a vender y cobrar clientes sanos, ONIA puede subir comisiones, bonos o rol por tramos. Depende de ventas reales, margen, seguimiento y bajo nivel de reclamos.</p>
+        </div>
       </div>
 
       <div class="note">
@@ -350,7 +701,9 @@
         de Bs. 750, la comision es Bs. 262,50 una sola vez. Si el cliente sigue
         pagando los siguientes meses, esos pagos son para ONIA. Si vende una web
         y el cliente paga anticipo, la comision se calcula sobre ese primer cobro
-        neto, salvo que ONIA indique otra regla por escrito.
+        neto, salvo que ONIA indique otra regla por escrito. Las comisiones
+        iniciales pueden mejorar despues de ventas cobradas y buen desempeno,
+        pero no suben automaticamente.
       </div>
 
       <h2>Explicacion breve de cada oferta</h2>
@@ -497,6 +850,14 @@
         <li>Tambien debe hacer seguimiento si el cliente pide pensarlo o queda pendiente.</li>
         <li>Sergio puede entrar como apoyo en cierres grandes, dudas tecnicas o clientes estrategicos.</li>
         <li>La llamada con Sergio no reemplaza el trabajo comercial de la vendedora; sirve para aumentar confianza y cerrar mejor.</li>
+      </ul>
+
+      <h2>Fuentes revisadas para estos precios</h2>
+      <ul>
+        <li>Pricing ONIA 2026, manual de vendedor, playbook comercial y registro de proyectos Hermes.</li>
+        <li>Repo DentalGest: planes, limites y add-ons reales de agenda, usuarios, insumos y WhatsApp operativo.</li>
+        <li>Repo Gesti-OS: planes, feature gates, add-ons, estado de SIAT, QR, e-commerce y WhatsApp.</li>
+        <li>Fuentes oficiales: precios de WhatsApp Business Platform, precios/licencia n8n y Telegram Bot API.</li>
       </ul>
 
       <h2>Mensajes base</h2>

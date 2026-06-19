@@ -162,9 +162,11 @@ Canonical files:
 - `scripts/comfyui_wan_readiness.js`
 - `hermes-content/docs/MARA_POND_VIDEO_LAB_DASHBOARD_2026.html`
 - `hermes-content/docs/MARA_ISDIN_WAN_UGC_WORKFLOW_20260617.md`
+- `hermes-content/docs/WAN_HIGGSFIELD_UGC_PROMPT_RESEARCH_20260618.md`
 - `hermes-content/docs/MARA_VIDEO_GENERATION_WORKFLOW_2026.md`
 - `hermes-content/references/ai-ecommerce-model/mara-pond-video-lab-config-20260616.json`
 - `hermes-content/references/ai-ecommerce-model/mara-isdin-wan-ugc-config-20260617.json`
+- `hermes-content/references/ai-ecommerce-model/wan-higgsfield-ugc-prompt-kit-20260618.json`
 - `hermes-content/references/ai-ecommerce-model/comfyui/mara-ltx23-mapping.example.json`
 - `hermes-content/references/ai-ecommerce-model/comfyui/video_ltx2_3_i2v.mapping.json`
 - `hermes-content/references/ai-ecommerce-model/comfyui/wan22_ti2v_5b_api.json`

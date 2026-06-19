@@ -1,166 +1,258 @@
 /**
- * Cal.com self-host installer para VPS/Easypanel
+ * Cal.com / Cal.diy deployment kit generator for ONIA.
  *
- * Genera docker-compose.yml y guia de configuracion para desplegar
- * Cal.com en el VPS existente (187.77.16.63 / Easypanel).
+ * This script does not deploy or print real secrets. It prepares a reviewable
+ * Docker Compose kit for the ONIA VPS/Easypanel flow.
  *
- * Uso:
+ * Usage:
  *   node scripts/vps_install_calcom.js
+ *   node scripts/vps_install_calcom.js --kit hermes-content/deploy/calcom
  *   node scripts/vps_install_calcom.js --output ./calcom-compose.yml
  */
 
-const fs = require('fs');
-const path = require('path');
-const crypto = require('crypto');
+const fs = require("fs");
+const path = require("path");
 
-function generateSecret(length = 32) {
-  return crypto.randomBytes(length).toString('hex');
+function argValue(name) {
+  const idx = process.argv.indexOf(name);
+  return idx === -1 ? null : process.argv[idx + 1] || null;
+}
+
+function ensureDir(dir) {
+  fs.mkdirSync(dir, { recursive: true });
+}
+
+function getConfig() {
+  const domain = process.env.CALCOM_DOMAIN || "cal.onia.ai";
+  const baseUrl = process.env.CALCOM_BASE_URL || `https://${domain}`;
+  return {
+    domain,
+    baseUrl,
+    port: process.env.CALCOM_PORT || "3050",
+    image: process.env.CALCOM_IMAGE || "calcom/cal.com:v6.2.0",
+    postgresImage: process.env.CALCOM_POSTGRES_IMAGE || "postgres:15-alpine",
+    redisImage: process.env.CALCOM_REDIS_IMAGE || "redis:7-alpine",
+    dbName: process.env.CALCOM_DB_NAME || "calcom",
+    dbUser: process.env.CALCOM_DB_USER || "calcom",
+    emailFrom: process.env.CALCOM_EMAIL_FROM || "agenda@onia.ai",
+    smtpHost: process.env.CALCOM_SMTP_HOST || "smtp.gmail.com",
+    smtpPort: process.env.CALCOM_SMTP_PORT || "587",
+    webhookUrl:
+      process.env.CALCOM_N8N_WEBHOOK_URL ||
+      "https://n8n-sergio-n8n.hqdqgh.easypanel.host/webhook/calcom-booking",
+  };
 }
 
 function buildDockerCompose(config) {
-  return `version: '3.8'
+  return `# ONIA Cal.com/Cal.diy deployment kit.
+# Review current Cal.com/Cal.diy licensing and image choice before public use.
+# Default image is pinned from DockerHub for repeatability; override CALCOM_IMAGE if needed.
 
 services:
   calcom:
-    image: calcom/cal.com:latest
-    restart: always
-    ports:
-      - "${config.port}:3000"
+    image: \${CALCOM_IMAGE:-${config.image}}
+    restart: unless-stopped
+    expose:
+      - "3000"
+    env_file:
+      - .env
     environment:
-      DATABASE_URL: postgresql://${config.dbUser}:${config.dbPassword}@calcom-db:5432/${config.dbName}
-      NEXTAUTH_SECRET: ${config.nextauthSecret}
-      NEXTAUTH_URL: ${config.baseUrl}
-      CALENDSO_ENCRYPTION_KEY: ${config.encryptionKey}
-      EMAIL_FROM: ${config.emailFrom}
-      EMAIL_SERVER_HOST: ${config.smtpHost}
-      EMAIL_SERVER_PORT: ${config.smtpPort}
-      EMAIL_SERVER_USER: ${config.smtpUser}
-      EMAIL_SERVER_PASSWORD: ${config.smtpPassword}
-      NEXT_PUBLIC_WEBAPP_URL: ${config.baseUrl}
+      DATABASE_URL: postgresql://\${POSTGRES_USER}:\${POSTGRES_PASSWORD}@calcom-db:5432/\${POSTGRES_DB}
+      DATABASE_DIRECT_URL: postgresql://\${POSTGRES_USER}:\${POSTGRES_PASSWORD}@calcom-db:5432/\${POSTGRES_DB}
+      REDIS_URL: redis://calcom-redis:6379
+      NEXTAUTH_URL: \${NEXTAUTH_URL}
+      NEXT_PUBLIC_WEBAPP_URL: \${NEXT_PUBLIC_WEBAPP_URL}
+      NEXT_PUBLIC_WEBSITE_URL: \${NEXT_PUBLIC_WEBSITE_URL}
+      NEXTAUTH_SECRET: \${NEXTAUTH_SECRET}
+      CALENDSO_ENCRYPTION_KEY: \${CALENDSO_ENCRYPTION_KEY}
+      EMAIL_FROM: \${EMAIL_FROM}
+      EMAIL_SERVER_HOST: \${EMAIL_SERVER_HOST}
+      EMAIL_SERVER_PORT: \${EMAIL_SERVER_PORT}
+      EMAIL_SERVER_USER: \${EMAIL_SERVER_USER}
+      EMAIL_SERVER_PASSWORD: \${EMAIL_SERVER_PASSWORD}
+      NEXT_PUBLIC_LICENSE_CONSENT: \${NEXT_PUBLIC_LICENSE_CONSENT:-agree}
+      CALCOM_TELEMETRY_DISABLED: \${CALCOM_TELEMETRY_DISABLED:-1}
       NODE_ENV: production
     depends_on:
       calcom-db:
         condition: service_healthy
+      calcom-redis:
+        condition: service_started
+    networks:
+      default:
+      easypanel:
+        aliases:
+          - onia-calcom
 
   calcom-db:
-    image: postgres:15-alpine
-    restart: always
+    image: \${CALCOM_POSTGRES_IMAGE:-${config.postgresImage}}
+    restart: unless-stopped
     environment:
-      POSTGRES_DB: ${config.dbName}
-      POSTGRES_USER: ${config.dbUser}
-      POSTGRES_PASSWORD: ${config.dbPassword}
+      POSTGRES_DB: \${POSTGRES_DB}
+      POSTGRES_USER: \${POSTGRES_USER}
+      POSTGRES_PASSWORD: \${POSTGRES_PASSWORD}
     volumes:
       - calcom_db_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${config.dbUser} -d ${config.dbName}"]
+      test: ["CMD-SHELL", "pg_isready -U \${POSTGRES_USER} -d \${POSTGRES_DB}"]
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      default:
+
+  calcom-redis:
+    image: \${CALCOM_REDIS_IMAGE:-${config.redisImage}}
+    restart: unless-stopped
+    volumes:
+      - calcom_redis_data:/data
+    networks:
+      default:
 
 volumes:
   calcom_db_data:
+  calcom_redis_data:
+
+networks:
+  easypanel:
+    external: true
 `;
 }
 
 function buildEnvExample(config) {
-  return `# Cal.com — Variables de entorno
-# Copiar a .env y completar valores reales
+  return `# ONIA Cal.com/Cal.diy environment example.
+# Copy to .env on the VPS and replace placeholders there. Do not commit real values.
 
-DATABASE_URL=postgresql://${config.dbUser}:CAMBIA_ESTO@calcom-db:5432/${config.dbName}
-NEXTAUTH_SECRET=${config.nextauthSecret}
+CALCOM_IMAGE=${config.image}
+POSTGRES_DB=${config.dbName}
+POSTGRES_USER=${config.dbUser}
+POSTGRES_PASSWORD=REPLACE_WITH_STRONG_PASSWORD
+
 NEXTAUTH_URL=${config.baseUrl}
-CALENDSO_ENCRYPTION_KEY=${config.encryptionKey}
-EMAIL_FROM=noreply@onia.ai
-EMAIL_SERVER_HOST=smtp.gmail.com
-EMAIL_SERVER_PORT=587
-EMAIL_SERVER_USER=tu_email@gmail.com
-EMAIL_SERVER_PASSWORD=tu_app_password
-
-# URL publica (dominio configurado en Easypanel/Nginx)
 NEXT_PUBLIC_WEBAPP_URL=${config.baseUrl}
+NEXT_PUBLIC_WEBSITE_URL=${config.baseUrl}
+NEXTAUTH_SECRET=REPLACE_WITH_OPENSSL_RAND_BASE64_32
+CALENDSO_ENCRYPTION_KEY=REPLACE_WITH_OPENSSL_RAND_BASE64_24
+NEXT_PUBLIC_LICENSE_CONSENT=agree
+CALCOM_TELEMETRY_DISABLED=1
+
+EMAIL_FROM=${config.emailFrom}
+EMAIL_SERVER_HOST=${config.smtpHost}
+EMAIL_SERVER_PORT=${config.smtpPort}
+EMAIL_SERVER_USER=REPLACE_WITH_SMTP_USER
+EMAIL_SERVER_PASSWORD=REPLACE_WITH_SMTP_APP_PASSWORD
+
+# Configure this webhook manually inside Cal after setup.
+CALCOM_N8N_WEBHOOK_URL=${config.webhookUrl}
 `;
 }
 
-const args = process.argv.slice(2);
-const outputArg = args.indexOf('--output');
-const outputFile = outputArg !== -1 ? args[outputArg + 1] : null;
+function buildReadme(config) {
+  return `# ONIA Cal.com / Cal.diy Deploy Kit
 
-const config = {
-  port: '3050',
-  dbName: 'calcom',
-  dbUser: 'calcom',
-  dbPassword: generateSecret(16),
-  nextauthSecret: generateSecret(32),
-  encryptionKey: generateSecret(16),
-  baseUrl: 'https://cal.onia.ai',
-  emailFrom: 'noreply@onia.ai',
-  smtpHost: 'smtp.gmail.com',
-  smtpPort: '587',
-  smtpUser: 'TU_EMAIL',
-  smtpPassword: 'TU_APP_PASSWORD',
-};
+Target: \`${config.baseUrl}\`
 
-const compose = buildDockerCompose(config);
-const envExample = buildEnvExample(config);
+## Purpose
 
-const guide = `
-=====================================
-CAL.COM SELF-HOST — GUIA INSTALACION
-=====================================
+Self-host booking pages for ONIA meetings and route bookings into:
 
-1. EASYPANEL (recomendado para tu VPS)
-   - Ir a Easypanel → New Service → Docker Compose
-   - Pegar el docker-compose.yml generado
-   - Configurar dominio: cal.onia.ai (o el que uses)
-   - Activar SSL automático
+1. Cal booking page.
+2. n8n webhook \`/webhook/calcom-booking\`.
+3. Google Calendar event.
+4. Telegram notification to Sergio.
+5. ONIA shared Supabase operations layer.
 
-2. ALTERNATIVA: SSH directo al VPS
-   scp calcom-compose.yml root@187.77.16.63:/opt/calcom/docker-compose.yml
-   ssh root@187.77.16.63 "cd /opt/calcom && docker-compose up -d"
+## Important Decision
 
-3. PRIMERA CONFIGURACION (solo una vez)
-   - Ir a https://cal.onia.ai/setup
-   - Crear cuenta de admin con email de ONIA
-   - Configurar tipos de evento:
-     * Consulta inicial (30min)
-     * Reunion de proyecto (60min)
-     * Demo ONIA (45min)
+ONIA already has a VPS and a private self-hosted Supabase stack. Supabase is the
+shared data layer for ONIA projects, not something created only for Cal.
 
-4. WEBHOOK PARA N8N
-   - En Cal.com → Settings → Developer → Webhooks
-   - URL: https://n8n-sergio-n8n.hqdqgh.easypanel.host/webhook/calcom-booking
-   - Eventos: BOOKING_CREATED
-   - Esto activa el workflow "ONIA - Agenda: Cal.com Booking" en n8n
+Cal should not own or expose the shared Supabase instance. Cal uses its own
+Postgres/Redis runtime, and n8n mirrors booking events into Supabase alongside
+other ONIA project data such as Web Factory, internal operations, automations,
+content systems and future project dashboards.
 
-5. CONFIGURAR VARIABLE EN N8N
-   - En n8n → Settings → Variables
-   - Crear variable: SERGIO_TELEGRAM_CHAT_ID = TU_CHAT_ID
-   - Para obtener tu chat ID: enviarle un mensaje a @get_id_bot en Telegram
+## Before Deploy
 
-6. ACTIVAR WORKFLOWS EN N8N
-   Activar los 4 workflows (aparecen inactivos por defecto):
-   - ONIA - Agenda: Briefing Diario
-   - ONIA - Agenda: Crear Evento
-   - ONIA - Agenda: Recordatorios
-   - ONIA - Agenda: Cal.com Booking
+- Point DNS \`cal.onia.ai\` to the ONIA VPS.
+- Confirm VPS/Easypanel access.
+- Generate real secrets on the VPS:
+  - \`openssl rand -base64 32\` for \`NEXTAUTH_SECRET\`
+  - \`openssl rand -base64 24\` for \`CALENDSO_ENCRYPTION_KEY\`
+  - strong hex password for \`POSTGRES_PASSWORD\`; avoid raw base64 in database URLs
+- Confirm SMTP credentials for \`agenda@onia.ai\` or the selected sender.
+- Review current Cal.com/Cal.diy licensing and image choice before public use.
 
-=====================================
-DOCKER COMPOSE GENERADO:
-=====================================
-${compose}
+## Event Types To Create
 
-=====================================
-.ENV EJEMPLO:
-=====================================
-${envExample}
+- \`consulta-inicial\`: 30 minutes, free, for new prospects.
+- \`demo-onia\`: 45 minutes, for DentalGest/Gesti-OS/Web demos.
+- \`reunion-proyecto\`: 60 minutes, for active clients.
+- \`auditoria-pagada\`: 60 minutes, only after payment.
+
+## Webhook
+
+Create a Cal webhook:
+
+- URL: \`${config.webhookUrl}\`
+- Event: \`BOOKING_CREATED\`
+
+Recommended follow-up events later:
+
+- \`BOOKING_RESCHEDULED\`
+- \`BOOKING_CANCELLED\`
+
+## Health Checks
+
+\`\`\`bash
+docker compose ps
+curl -I ${config.baseUrl}
+curl -I ${config.baseUrl}/api/auth/session
+\`\`\`
+
+## Rollback
+
+\`\`\`bash
+docker compose down
+docker compose logs --tail=200 calcom
+\`\`\`
+
+Do not delete volumes unless a backup exists.
 `;
-
-if (outputFile) {
-  fs.writeFileSync(outputFile, compose);
-  console.log('docker-compose.yml guardado en:', outputFile);
-  const envFile = outputFile.replace('.yml', '.env.example');
-  fs.writeFileSync(envFile, envExample);
-  console.log('.env.example guardado en:', envFile);
-} else {
-  console.log(guide);
 }
+
+function writeKit(dir, config) {
+  ensureDir(dir);
+  fs.writeFileSync(path.join(dir, "docker-compose.yml"), buildDockerCompose(config));
+  fs.writeFileSync(path.join(dir, ".env.example"), buildEnvExample(config));
+  fs.writeFileSync(path.join(dir, "README.md"), buildReadme(config));
+}
+
+function main() {
+  const config = getConfig();
+  const kitDir = argValue("--kit");
+  const outputFile = argValue("--output");
+
+  if (kitDir) {
+    writeKit(kitDir, config);
+    console.log(`Cal deploy kit written to: ${kitDir}`);
+    return;
+  }
+
+  if (outputFile) {
+    fs.writeFileSync(outputFile, buildDockerCompose(config));
+    const envFile = outputFile.replace(/\.ya?ml$/i, ".env.example");
+    fs.writeFileSync(envFile, buildEnvExample(config));
+    console.log(`docker-compose.yml written to: ${outputFile}`);
+    console.log(`.env.example written to: ${envFile}`);
+    return;
+  }
+
+  console.log(buildReadme(config));
+  console.log("\n--- docker-compose.yml ---\n");
+  console.log(buildDockerCompose(config));
+  console.log("\n--- .env.example ---\n");
+  console.log(buildEnvExample(config));
+}
+
+main();

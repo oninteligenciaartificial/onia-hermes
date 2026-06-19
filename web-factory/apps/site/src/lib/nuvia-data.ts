@@ -135,7 +135,7 @@ export function findNuviaProduct(slug: string): NuviaProduct | undefined {
 
 export function buildNuviaCheckoutHref(items: Array<{ id: string; qty: number }>): string {
   if (!items.length) {
-    return "/nuvia#catalogo";
+    return "/nuvia/catalogo";
   }
 
   const lines = items
@@ -166,5 +166,5 @@ export function buildNuviaCheckoutHref(items: Array<{ id: string; qty: number }>
     return `mailto:${nuvia.contacto.email}?subject=${encodeURIComponent("Pedido Nuvia")}&body=${encodeURIComponent(message)}`;
   }
 
-  return "/nuvia#contacto";
+  return "/nuvia/catalogo#checkout-pendiente";
 }

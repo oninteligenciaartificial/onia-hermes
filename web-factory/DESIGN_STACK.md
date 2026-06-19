@@ -162,7 +162,7 @@ Next.js Nuvia pattern:
 - Shared data helper: `web-factory/apps/site/src/lib/nuvia-data.ts`.
 - Public asset mirror: `web-factory/apps/site/public/nuvia/assets/`.
 - Commerce state: client-side cart with localStorage, quantity controls, remove/clear, cart count and checkout/cotizacion CTA.
-- Catalog portal pattern: the home route should contain one canonical product portal with filters/facets, not repeated product sections. Each product card can include quantity controls and an add-to-cart action when the store is commerce-oriented.
+- Catalog portal pattern: for serious stores, split campaign landing from catalog when products need room to browse. `/nuvia` is the landing; `/nuvia/catalogo` is the canonical PLP with filters/facets, product detail links, quantity controls and add-to-cart actions. Avoid repeated product grids on the landing.
 - PDP checkout pattern: product routes should expose a sticky quick-checkout bar inspired by mature ecommerce references: product thumbnail/title, quantity stepper, price or cotizacion state, add-to-cart and cart access. Do not copy third-party pricing, claims, loyalty systems or visual identity.
 - Motion: IntersectionObserver reveal, product-stage tilt, hover microinteractions, smooth anchors and reduced-motion fallback.
 - PDP rule: keep product detail pages concise and purchase-focused; use one media hero, buybox, practical chips and accordions. Do not repeat landing sections on PDPs.

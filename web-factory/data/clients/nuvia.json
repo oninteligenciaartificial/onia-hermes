@@ -66,7 +66,7 @@
       "moneda": "BOB",
       "desc": "Fotoprotector facial diario de textura ligera, acabado no graso y proteccion alta para acompanar la rutina urbana.",
       "etiqueta": "SPF 50 diario",
-      "imagen": "assets/isdin-fusion-water-normalized.png",
+      "imagen": "assets/isdin-fusion-water-display.png",
       "imagenAlt": "ISDIN Fusion Water Magic SPF 50 en envase azul claro",
       "marca": "ISDIN",
       "tamano": "50 ml",
@@ -118,7 +118,7 @@
       ],
       "detalleImagenes": [
         {
-          "src": "assets/isdin-fusion-water-normalized.png",
+          "src": "assets/isdin-fusion-water-display.png",
           "alt": "Envase ISDIN Fusion Water Magic SPF 50",
           "label": "Envase 50 ml"
         },
@@ -128,7 +128,7 @@
           "label": "Seleccion Nuvia"
         },
         {
-          "src": "assets/svr-sebiaclear-200ml-normalized.png",
+          "src": "assets/svr-sebiaclear-200ml-display.png",
           "alt": "SVR Sebiaclear Gel Moussant como paso previo de limpieza",
           "label": "Combina con limpieza"
         }
@@ -144,7 +144,7 @@
       "moneda": "BOB",
       "desc": "Gel limpiador para rostro y cuerpo, pensado para piel mixta, grasa, sensible o con tendencia acneica.",
       "etiqueta": "Piel grasa",
-      "imagen": "assets/svr-sebiaclear-200ml-normalized.png",
+      "imagen": "assets/svr-sebiaclear-200ml-display.png",
       "imagenAlt": "SVR Sebiaclear Gel Moussant en tubo verde de 200 ml",
       "marca": "SVR",
       "tamano": "200 ml",
@@ -196,7 +196,7 @@
       ],
       "detalleImagenes": [
         {
-          "src": "assets/svr-sebiaclear-200ml-normalized.png",
+          "src": "assets/svr-sebiaclear-200ml-display.png",
           "alt": "Envase SVR Sebiaclear Gel Moussant 200 ml",
           "label": "Envase 200 ml"
         },
@@ -206,7 +206,7 @@
           "label": "Seleccion Nuvia"
         },
         {
-          "src": "assets/isdin-fusion-water-normalized.png",
+          "src": "assets/isdin-fusion-water-display.png",
           "alt": "ISDIN Fusion Water Magic SPF 50 como paso de proteccion",
           "label": "Sigue con proteccion"
         }

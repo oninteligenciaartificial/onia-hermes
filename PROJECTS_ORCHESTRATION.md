@@ -64,8 +64,9 @@ Gesti-OS:
 - Crecer: Bs. 530/mes, sin setup obligatorio.
 - Pro: Bs. 800/mes, onboarding recomendado.
 - Empresarial: Bs. 1250/mes, implementacion cotizada si hay alcance extra.
-- Add-ons: WhatsApp Business, SIAT, pagos QR, e-commerce y exportacion
-  contable. WhatsApp queda bloqueado hasta verificacion Meta.
+- Add-ons: WhatsApp Business, pagos QR, e-commerce, inventario avanzado y
+  exportacion contable segun plan/proveedor. WhatsApp queda bloqueado hasta
+  verificacion Meta. SIAT no se vende por ahora.
 
 Marketing Higgsfield:
 
@@ -88,7 +89,8 @@ Conectores cross-platform:
   aviso -> tarea.
 - Flujo n8n aprobaciones: Bs. 1200 setup para estados recibido, pendiente,
   aprobado, rechazado y notificado.
-- Monitoreo opcional: Bs. 150/mes.
+- Soporte/cuidado recurrente: cotizado aparte segun criticidad, cambios,
+  logs, credenciales y tiempo de respuesta.
 
 Consultoria e implementaciones:
 

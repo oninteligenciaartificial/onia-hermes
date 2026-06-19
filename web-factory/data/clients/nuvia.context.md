@@ -233,6 +233,33 @@ ISDIN Spain ecommerce scrape impact:
 - Do not copy ISDIN's identity, imagery, full product copy, loyalty points, prices, stock states, ratings or checkout flow.
 - Do not copy ISDIN's loyalty points, prices, ratings or checkout identity. Nuvia may use its own cart pattern, but it must stay honest: cotizacion mode until WhatsApp/email/payment, prices, stock and delivery rules are operationally configured.
 
+2026-06-18 catalog split:
+
+- `/nuvia` is now the campaign landing: video hero, featured products of the month, short guide, discount capture and FAQ. It should not carry the full catalog grid.
+- `/nuvia/catalogo` is the canonical product/listing page for all active creams and skincare products. Header navigation must include `CATALOGO` and route to this page, not to a landing anchor.
+- Product cards in the catalog use short commercial names for scan speed, while product detail pages can keep the full official product names.
+- The catalog product shelf must not repeat the page hero title or summary metrics. After the catalog intro, go straight to category filters and the product grid so adding more products does not create visual duplication.
+- Catalog cards must expose product detail, quantity selector and add-to-cart action. The same localStorage cart is shared with landing and PDPs.
+- The catalog owns the `como comprar` explanation: choose product, add quantity, review cart, then complete checkout/cotizacion when prices, stock, delivery and payment/contact channel are configured.
+- Product detail pages and sticky checkout bars must link back to `/nuvia/catalogo`.
+- Checkout fallback without WhatsApp/email/payment must point to `/nuvia/catalogo#checkout-pendiente`, not pretend a real payment channel exists.
+- Use ISDIN ecommerce mechanics only as functional reference: quantity stepper, add-to-bag flow, sticky buy area and accordions. Do not copy ISDIN identity, loyalty points, prices, ratings, claims or checkout language.
+- Navigation fix: the Nuvia header is fixed across landing, catalog and PDP so the nav remains available while scrolling. The fixed header must own its own glass surface; do not leave it fully transparent over hero/product text because the logo and nav become unreadable during scroll. PDP pages need top padding and the quick-checkout bar must sit below the fixed header to avoid overlap.
+- Product image fix: product media used in hero/catalog/PDP should use display assets cropped to the alpha bounds (`*-display.png`) so the product fills its card cleanly. Keep original/normalized files available as source assets, but avoid using wide transparent canvases in ecommerce cards because they make images look broken or too small.
+
+2026-06-18 commerce/database foundation:
+
+- Real prices, stock, carts, quote requests, discount subscribers and future orders should live in a database, not only in `nuvia.json`. JSON remains the source for generated demos and static fallback.
+- A private Supabase schema was added on the ONIA VPS through `supabase/migrations/20260618_web_factory_nuvia_commerce.sql`.
+- Database schema namespace: `web_factory`.
+- Tables created: `stores`, `products`, `product_media`, `product_sections`, `product_section_items`, `cart_sessions`, `cart_items`, `checkout_quotes`, `discount_subscribers`.
+- Current seed keeps Nuvia in `draft` and quote-only mode: both products have `price_label = Consultar precio`, `price_value = null`, `stock_status = quote_only`, `featured = true` and `discount_percent = 10`.
+- RLS is enabled and no public policies are created yet. Public read/write must wait for a server-side API, controlled anon policy, service role boundary or deployment architecture decision. Do not expose the private VPS Supabase directly from browser code.
+- Frontend rule: the top `comprar` button is the cart entry point across landing, catalog and PDP. It must show cart count, open the drawer and expose category-based quick-add sections so users can continue shopping without duplicating the landing.
+- Cart drawer rule: cart content scrolls inside the drawer; footer remains checkout/cotizacion. When products are missing prices or payment is not configured, the CTA must stay in `cotizar pedido` mode.
+- Product section rule for future inventory: sections belong in `/nuvia/catalogo` and in the cart's `seguir comprando` module. The landing may preview a maximum of two featured products, but must not become a repeated catalog.
+- Backend next step: add Next.js server actions or API routes to read products from Supabase and write cart/quote/subscriber events. Keep this server-side until the local Supabase endpoint has an intentional public access model.
+
 ## Visual Reference Intake
 
 - Reference: `exactly-ai-editorial-landing`

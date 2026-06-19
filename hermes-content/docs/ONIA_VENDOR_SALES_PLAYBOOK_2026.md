@@ -72,7 +72,13 @@ precio vigente.
 | DentalGest Basico | Bs. 320/mes | Bs. 112 |
 | DentalGest Profesional | Bs. 750/mes | Bs. 262,50 |
 | DentalGest Clinica | Bs. 1.500/mes | Bs. 525 |
-| WhatsApp chatbot add-on | Bs. 80/mes | Bs. 28 |
+| Onboarding express DentalGest | Bs. 290 | Bs. 29 |
+| Configuracion asistida DentalGest | Bs. 690 | Bs. 69 |
+| Migracion + capacitacion DentalGest | Bs. 1.490 | Bs. 149 |
+| Agenda publica en DentalGest Basico | Bs. 150/mes | Bs. 52,50 |
+| Usuario extra DentalGest | Bs. 70/usuario/mes | Bs. 24,50 |
+| Insumos dentales en DentalGest Basico | Bs. 80/mes | Bs. 28 |
+| WhatsApp operativo DentalGest | Bs. 650 inst. + Bs. 350/mes + Meta | requiere aprobacion |
 | GestiOS Basico | Bs. 350/mes | Bs. 122,50 |
 | GestiOS Crecer | Bs. 530/mes | Bs. 185,50 |
 | GestiOS Pro | Bs. 800/mes | Bs. 280 |
@@ -91,8 +97,9 @@ precio vigente.
 
 ## Crecimiento del vendedor
 
-La tabla anterior es inicial. ONIA puede mejorar comisiones, bonos o rol cuando
-el vendedor demuestra:
+La tabla anterior es inicial. A medida que empecemos a vender, cobrar y validar
+clientes sanos, ONIA puede mejorar comisiones, bonos o rol por tramos cuando el
+vendedor demuestra:
 
 - datos completos en Notion;
 - seguimiento puntual;
@@ -102,8 +109,8 @@ el vendedor demuestra:
 - capacidad de vender upsells;
 - bajo nivel de cancelaciones o reclamos.
 
-La mejora no es automatica. Se aprueba segun margen, calidad del cliente y
-resultado real.
+La mejora no es automatica. Se aprueba segun ventas reales cobradas, margen,
+calidad del cliente, bajo nivel de reclamos y resultado real.
 
 ## Como vender DentalGest
 
@@ -135,7 +142,8 @@ Oferta recomendada:
 - Basico para consultorio pequeno.
 - Profesional para clinica en crecimiento.
 - Clinica para multiples sedes o equipo grande.
-- Add-on real: WhatsApp chatbot si ONIA lo habilita para el cliente.
+- Add-on real: WhatsApp operativo solo si ONIA valida Meta, numero, plantillas
+  y costos por mensaje.
 
 Mensaje base:
 
@@ -178,8 +186,9 @@ Oferta recomendada:
 
 - Basico para POS, inventario, pedidos y caja.
 - Crecer para mas productos, clientes, usuarios y reportes.
-- Pro para tienda online, pagos QR y emails avanzados.
-- Empresarial para sucursales, SIAT, auditoria y soporte prioritario.
+- Pro para tienda online y pagos QR solo cuando el proveedor este validado.
+- Empresarial para sucursales, roles, auditoria y soporte prioritario.
+- SIAT no se vende por ahora.
 
 Mensaje base:
 
@@ -244,7 +253,8 @@ Cliente ideal:
 
 Regla:
 
-- Se vende setup cerrado y monitoreo opcional.
+- Se vende setup cerrado; soporte recurrente se cotiza aparte segun alcance.
+- ONIA vende la implementacion del flujo, no acceso a n8n como plataforma.
 - No se promete aprobacion de plataforma.
 - WhatsApp queda fuera hasta verificacion de negocio Meta.
 - La automatizacion simple n8n cuesta Bs. 790 y cubre un flujo: entrada ->

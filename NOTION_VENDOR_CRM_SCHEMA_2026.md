@@ -48,7 +48,7 @@ tener los campos minimos completos antes de pasar a demo, propuesta o comision.
 | Vendedor origen | People / Rich text | Si | Quien consiguio el lead |
 | Responsable actual | People / Rich text | Si | Quien debe hacer el siguiente paso |
 | Estado pipeline | Status | Si | Estado comercial |
-| Producto sugerido | Select | Si | DentalGest, Gesti-OS, Web, Videos IA, Conector, Sistema |
+| Producto sugerido | Select | Si | DentalGest, Gesti-OS, Web, Chatbot, Automatizacion, Consultoria, Sistema |
 | Prioridad | Select | Si | Alta, media, baja |
 | Dolor probable | Rich text | Si | Problema detectado |
 | Ultimo contacto | Date | Si, si ya se contacto | Fecha del ultimo mensaje o llamada |
@@ -143,7 +143,7 @@ Checklist:
 
 ### SaaS mensual
 
-- Se paga 50% solo del primer pago mensual cobrado.
+- Se paga 35% solo del primer pago mensual cobrado.
 - Los meses siguientes quedan para ONIA.
 - No hay comision eterna por mensualidad.
 
@@ -154,7 +154,8 @@ El vendedor puede ganar otra comision si vende:
 - upgrade de plan;
 - anualidad;
 - web;
-- videos IA;
+- chatbot;
+- automatizacion;
 - conector;
 - implementacion;
 - sistema personalizado.
