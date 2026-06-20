@@ -157,7 +157,13 @@ async function main() {
       const tarArgs = ["-czf", archivePath, "-C", stageRoot, "."];
       // En Windows, GNU tar interpreta el "C:" de la ruta como host remoto; --force-local lo evita.
       if (process.platform === "win32") tarArgs.unshift("--force-local");
-      childProcess.execFileSync("tar", tarArgs);
+      try {
+        childProcess.execFileSync("tar", tarArgs);
+      } catch (error) {
+        if (process.platform !== "win32") throw error;
+        const fallbackArgs = tarArgs.filter((arg) => arg !== "--force-local");
+        childProcess.execFileSync("tar", fallbackArgs);
+      }
       process.stdout.write(
         `Uploading Hermes content archive: ${files.length} files\n`
       );

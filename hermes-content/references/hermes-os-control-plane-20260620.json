@@ -1,0 +1,209 @@
+{
+  "name": "hermes-os-control-plane",
+  "generated_at": "2026-06-20",
+  "principle": "Hermes is the ONIA operating system. Self-hosted tools are capabilities behind one control plane, not isolated panels.",
+  "current_vps": {
+    "host": "187.77.16.63",
+    "os": "Ubuntu 24.04 LTS",
+    "cpu": "2 vCPU",
+    "ram_gib": 7.8,
+    "disk_gib": 96,
+    "post_stack_snapshot": {
+      "available_ram_gib": 2.8,
+      "swap_used_gib": 3.7,
+      "root_disk_used_percent": 66,
+      "active_containers": 27
+    },
+    "decision": "Keep current VPS as core/control plane. Do not add Dify, Crawl4AI browser workers or mail delivery here."
+  },
+  "control_tower": {
+    "local_port": 3010,
+    "canonical_dashboard_port": 9119,
+    "role": "Executive and operations panel for status, migration, service ownership, requirements and next actions."
+  },
+  "capabilities": [
+    {
+      "id": "supabase",
+      "status": "live_private",
+      "role": "database, auth, storage and internal memory",
+      "access": "127.0.0.1:54321 / 54322 / 54329 / 54320",
+      "next_action": "Map apps and tables before exposing any public API."
+    },
+    {
+      "id": "n8n",
+      "status": "live",
+      "role": "process automation and scheduled operations",
+      "access": "Easypanel stack n8n-sergio",
+      "next_action": "Keep as execution engine; route approvals through Telegram/Hermes."
+    },
+    {
+      "id": "calcom",
+      "status": "live",
+      "role": "booking and auto-scheduling",
+      "access": "self-hosted existing service",
+      "next_action": "Connect public booking URL after domain and email notifications are stable."
+    },
+    {
+      "id": "chatwoot",
+      "status": "live",
+      "role": "client inbox and WhatsApp support layer",
+      "access": "Easypanel stack onia-chatbot",
+      "next_action": "Decide WhatsApp Cloud/BSP cost before scaling client offers."
+    },
+    {
+      "id": "uptime-kuma",
+      "status": "live_private",
+      "role": "service monitoring",
+      "access": "127.0.0.1:3101",
+      "next_action": "Create monitors for all private services and public domains."
+    },
+    {
+      "id": "litellm",
+      "status": "live_private",
+      "role": "AI gateway, model routing and future cost controls",
+      "access": "127.0.0.1:4000",
+      "next_action": "Add budgets/logging before opening to more users."
+    },
+    {
+      "id": "open-webui",
+      "status": "live_private",
+      "role": "internal AI cockpit",
+      "access": "127.0.0.1:3102",
+      "next_action": "Use through SSH tunnel until SSO/auth gateway exists."
+    },
+    {
+      "id": "stirling-pdf",
+      "status": "live_private",
+      "role": "PDF operations and document utility",
+      "access": "127.0.0.1:3103",
+      "next_action": "Keep behind login; do not expose without auth proxy."
+    },
+    {
+      "id": "searxng",
+      "status": "live_private",
+      "role": "private metasearch/research",
+      "access": "127.0.0.1:8080",
+      "next_action": "Wire research workflows into Hermes and n8n."
+    },
+    {
+      "id": "dify",
+      "status": "planned_separate_vps",
+      "role": "sellable AI apps, RAG and workflow builder",
+      "access": "not started",
+      "next_action": "Use larger VPS; review compose ports and license boundaries."
+    },
+    {
+      "id": "crawl4ai",
+      "status": "planned_worker_vps",
+      "role": "AI-ready crawling and research extraction",
+      "access": "not started",
+      "next_action": "Run as private worker with memory limits and domain allowlists."
+    },
+    {
+      "id": "mailpit",
+      "status": "prepared_profile",
+      "role": "email QA and local SMTP testing",
+      "access": "planned 127.0.0.1:3104 web / 127.0.0.1:3025 smtp",
+      "next_action": "Start only for testing forms, apps and templates."
+    },
+    {
+      "id": "listmonk",
+      "status": "prepared_profile",
+      "role": "newsletter, mailing lists and campaign UI",
+      "access": "planned 127.0.0.1:3105",
+      "next_action": "Configure SMTP only after domain, PTR, SPF, DKIM and DMARC are ready."
+    },
+    {
+      "id": "postal_or_mailu",
+      "status": "research_required",
+      "role": "actual mail delivery server if ONIA wants full self-hosting",
+      "access": "separate VPS/IP only",
+      "next_action": "Do not share the main VPS IP; reputation risk is too high."
+    }
+  ],
+  "migration_streams": [
+    {
+      "from": "External AI chats and prompt tools",
+      "to": "Open WebUI + LiteLLM",
+      "priority": "P1",
+      "condition": "SSO/auth gateway and model budgets"
+    },
+    {
+      "from": "External booking links",
+      "to": "Cal.com self-hosted",
+      "priority": "P1",
+      "condition": "domain, SMTP notifications and event templates"
+    },
+    {
+      "from": "Manual operations docs",
+      "to": "Hermes Control Tower + hermes-content docs",
+      "priority": "P1",
+      "condition": "status snapshots and action owners"
+    },
+    {
+      "from": "External PDF tools",
+      "to": "Stirling PDF",
+      "priority": "P2",
+      "condition": "private login and usage policy"
+    },
+    {
+      "from": "Mailchimp/Brevo-style newsletters",
+      "to": "Listmonk first, Mautic later if automation needs grow",
+      "priority": "P2",
+      "condition": "sending domain and deliverability setup"
+    },
+    {
+      "from": "AI app builders and RAG prototypes",
+      "to": "Dify on separate worker VPS",
+      "priority": "P1",
+      "condition": "minimum 8 vCPU / 24 GB RAM class VPS"
+    },
+    {
+      "from": "Scraping/research browser tasks",
+      "to": "Crawl4AI worker VPS",
+      "priority": "P2",
+      "condition": "sandboxing, rate limits and allowlist"
+    }
+  ],
+  "recommended_new_requirements": [
+    {
+      "id": "worker-vps-ai",
+      "label": "AI worker VPS",
+      "minimum": "8 vCPU / 24 GB RAM / 200 GB NVMe",
+      "use": "Dify, Crawl4AI, Browser Use/Maxun tests and future RAG workers",
+      "provider_candidate": "Contabo Cloud VPS 30 class or better"
+    },
+    {
+      "id": "mail-vps",
+      "label": "Mail delivery VPS/IP",
+      "minimum": "2-4 vCPU / 4-8 GB RAM / clean dedicated IPv4",
+      "use": "Postal, Mailu or docker-mailserver only if ONIA accepts deliverability maintenance",
+      "provider_candidate": "Separate Contabo/other VPS with editable rDNS/PTR"
+    },
+    {
+      "id": "auth-gateway",
+      "label": "SSO/auth gateway",
+      "minimum": "Authentik or Authelia behind Traefik/Easypanel",
+      "use": "Protect Open WebUI, Uptime Kuma, Listmonk, Dify and docs before public DNS"
+    },
+    {
+      "id": "dns-email",
+      "label": "DNS and email reputation",
+      "minimum": "A, MX, PTR/rDNS, SPF, DKIM, DMARC, bounce mailbox, unsubscribe policy",
+      "use": "Any production email sending"
+    },
+    {
+      "id": "backup-storage",
+      "label": "Offsite backups",
+      "minimum": "Object storage or second VPS backup target",
+      "use": "Supabase, n8n, Listmonk, Dify volumes and Hermes docs"
+    }
+  ],
+  "tool_decisions": {
+    "listmonk": "Recommended first for ONIA newsletters and simple campaigns because it is lightweight and self-hosted.",
+    "mautic": "Use later only if ONIA needs full lead scoring, landing pages, campaign journeys and CRM-like marketing automation.",
+    "postal": "Best fit when ONIA needs a self-hosted SendGrid/Mailgun-like delivery platform, but only on a separate IP with strict DNS/reputation work.",
+    "mailu_or_docker_mailserver": "Use for mailbox-style mail server needs, not as the first campaign sender.",
+    "mailpit": "Use immediately for safe email QA before real sending."
+  }
+}

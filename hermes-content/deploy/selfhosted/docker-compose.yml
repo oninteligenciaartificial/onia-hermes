@@ -1,0 +1,222 @@
+name: ${COMPOSE_PROJECT_NAME:-onia_selfhosted}
+
+services:
+  uptime-kuma:
+    profiles: ["monitor"]
+    image: ${UPTIME_KUMA_IMAGE:-louislam/uptime-kuma:2}
+    restart: unless-stopped
+    ports:
+      - "${UPTIME_KUMA_BIND:-127.0.0.1}:${UPTIME_KUMA_PORT:-3010}:3001"
+    volumes:
+      - uptime_kuma_data:/app/data
+    networks:
+      - onia_internal
+    mem_limit: 512m
+    security_opt:
+      - no-new-privileges:true
+
+  litellm-db:
+    profiles: ["ai"]
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${LITELLM_POSTGRES_DB:-litellm}
+      POSTGRES_USER: ${LITELLM_POSTGRES_USER:-litellm}
+      POSTGRES_PASSWORD: ${LITELLM_POSTGRES_PASSWORD:?set LITELLM_POSTGRES_PASSWORD}
+    volumes:
+      - litellm_pgdata:/var/lib/postgresql/data
+    networks:
+      - onia_internal
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${LITELLM_POSTGRES_USER:-litellm} -d ${LITELLM_POSTGRES_DB:-litellm}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    mem_limit: 768m
+    security_opt:
+      - no-new-privileges:true
+
+  litellm:
+    profiles: ["ai"]
+    image: ${LITELLM_IMAGE:-docker.litellm.ai/berriai/litellm:main-stable}
+    restart: unless-stopped
+    env_file:
+      - ./.env
+      - /root/.hermes/.env
+    environment:
+      DATABASE_URL: postgresql://${LITELLM_POSTGRES_USER:-litellm}:${LITELLM_POSTGRES_PASSWORD:?set LITELLM_POSTGRES_PASSWORD}@litellm-db:5432/${LITELLM_POSTGRES_DB:-litellm}
+      STORE_MODEL_IN_DB: "true"
+    command: ["--config", "/app/config.yaml", "--port", "4000", "--num_workers", "2"]
+    ports:
+      - "${LITELLM_BIND:-127.0.0.1}:${LITELLM_PORT:-4000}:4000"
+    volumes:
+      - ./litellm.config.yaml:/app/config.yaml:ro
+    depends_on:
+      litellm-db:
+        condition: service_healthy
+    networks:
+      - onia_internal
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://127.0.0.1:4000/health/liveliness', timeout=5)\""]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 120s
+    mem_limit: 1536m
+    security_opt:
+      - no-new-privileges:true
+
+  open-webui:
+    profiles: ["ai"]
+    image: ${OPEN_WEBUI_IMAGE:-ghcr.io/open-webui/open-webui:main}
+    restart: unless-stopped
+    environment:
+      WEBUI_SECRET_KEY: ${WEBUI_SECRET_KEY:?set WEBUI_SECRET_KEY}
+      WEBUI_AUTH: "true"
+      WEBUI_URL: ${WEBUI_URL:-}
+      OPENAI_API_BASE_URL: http://litellm:4000/v1
+      OPENAI_API_KEY: ${LITELLM_MASTER_KEY:?set LITELLM_MASTER_KEY}
+    ports:
+      - "${OPEN_WEBUI_BIND:-127.0.0.1}:${OPEN_WEBUI_PORT:-3011}:8080"
+    volumes:
+      - open_webui_data:/app/backend/data
+    depends_on:
+      - litellm
+    networks:
+      - onia_internal
+    mem_limit: 2048m
+    security_opt:
+      - no-new-privileges:true
+
+  stirling-pdf:
+    profiles: ["utility"]
+    image: ${STIRLING_IMAGE:-stirlingtools/stirling-pdf:latest}
+    restart: unless-stopped
+    environment:
+      SECURITY_ENABLELOGIN: "true"
+      SECURITY_INITIALLOGIN_USERNAME: ${STIRLING_INITIALLOGIN_USERNAME:-admin}
+      SECURITY_INITIALLOGIN_PASSWORD: ${STIRLING_INITIALLOGIN_PASSWORD:?set STIRLING_INITIALLOGIN_PASSWORD}
+      SYSTEM_DEFAULTLOCALE: es-ES
+      LANGS: es_ES,en_GB
+      SERVER_SERVLET_CONTEXT_PATH: /
+      APP_HOME_NAME: ONIA PDF
+      APP_HOME_DESCRIPTION: Herramientas PDF internas de ONIA
+      APP_NAVBAR_NAME: ONIA PDF
+    ports:
+      - "${STIRLING_BIND:-127.0.0.1}:${STIRLING_PORT:-3012}:8080"
+    volumes:
+      - stirling_configs:/configs
+      - stirling_logs:/logs
+      - stirling_pipeline:/pipeline
+    networks:
+      - onia_internal
+    mem_limit: 1536m
+    security_opt:
+      - no-new-privileges:true
+
+  crawl4ai:
+    profiles: ["research"]
+    image: ${CRAWL4AI_IMAGE:-unclecode/crawl4ai:latest}
+    restart: unless-stopped
+    env_file:
+      - /root/.hermes/.env
+    shm_size: 1gb
+    ports:
+      - "${CRAWL4AI_BIND:-127.0.0.1}:${CRAWL4AI_PORT:-11235}:11235"
+    volumes:
+      - crawl4ai_data:/app/data
+    networks:
+      - onia_internal
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://127.0.0.1:11235/health', timeout=5)\""]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 120s
+    mem_limit: 4096m
+    security_opt:
+      - no-new-privileges:true
+
+  mailpit:
+    profiles: ["mail"]
+    image: ${MAILPIT_IMAGE:-axllent/mailpit:v1.30.2}
+    restart: unless-stopped
+    ports:
+      - "${MAILPIT_BIND:-127.0.0.1}:${MAILPIT_WEB_PORT:-3104}:8025"
+      - "${MAILPIT_BIND:-127.0.0.1}:${MAILPIT_SMTP_PORT:-3025}:1025"
+    networks:
+      - onia_internal
+    mem_limit: 256m
+    security_opt:
+      - no-new-privileges:true
+
+  listmonk-db:
+    profiles: ["mail"]
+    image: ${LISTMONK_POSTGRES_IMAGE:-postgres:17-alpine}
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${LISTMONK_POSTGRES_DB:-listmonk}
+      POSTGRES_USER: ${LISTMONK_POSTGRES_USER:-listmonk}
+      POSTGRES_PASSWORD: ${LISTMONK_POSTGRES_PASSWORD:?set LISTMONK_POSTGRES_PASSWORD}
+    volumes:
+      - listmonk_pgdata:/var/lib/postgresql/data
+    networks:
+      - onia_internal
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${LISTMONK_POSTGRES_USER:-listmonk} -d ${LISTMONK_POSTGRES_DB:-listmonk}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    mem_limit: 512m
+    security_opt:
+      - no-new-privileges:true
+
+  listmonk:
+    profiles: ["mail"]
+    image: ${LISTMONK_IMAGE:-listmonk/listmonk:v6.1.0}
+    restart: unless-stopped
+    command:
+      - sh
+      - -c
+      - ./listmonk --install --idempotent --yes --config '' && ./listmonk --upgrade --yes --config '' && ./listmonk --config ''
+    environment:
+      LISTMONK_app__address: 0.0.0.0:9000
+      LISTMONK_db__host: listmonk-db
+      LISTMONK_db__port: 5432
+      LISTMONK_db__user: ${LISTMONK_POSTGRES_USER:-listmonk}
+      LISTMONK_db__password: ${LISTMONK_POSTGRES_PASSWORD:?set LISTMONK_POSTGRES_PASSWORD}
+      LISTMONK_db__database: ${LISTMONK_POSTGRES_DB:-listmonk}
+      LISTMONK_db__ssl_mode: disable
+      LISTMONK_db__max_open: 25
+      LISTMONK_db__max_idle: 25
+      LISTMONK_db__max_lifetime: 300s
+      LISTMONK_ADMIN_USER: ${LISTMONK_ADMIN_USER:-onia-admin}
+      LISTMONK_ADMIN_PASSWORD: ${LISTMONK_ADMIN_PASSWORD:?set LISTMONK_ADMIN_PASSWORD}
+      TZ: ${TZ:-America/La_Paz}
+    ports:
+      - "${LISTMONK_BIND:-127.0.0.1}:${LISTMONK_PORT:-3105}:9000"
+    volumes:
+      - listmonk_uploads:/listmonk/uploads
+    depends_on:
+      listmonk-db:
+        condition: service_healthy
+    networks:
+      - onia_internal
+    mem_limit: 512m
+    security_opt:
+      - no-new-privileges:true
+
+networks:
+  onia_internal:
+    driver: bridge
+
+volumes:
+  uptime_kuma_data:
+  litellm_pgdata:
+  open_webui_data:
+  stirling_configs:
+  stirling_logs:
+  stirling_pipeline:
+  crawl4ai_data:
+  listmonk_pgdata:
+  listmonk_uploads:

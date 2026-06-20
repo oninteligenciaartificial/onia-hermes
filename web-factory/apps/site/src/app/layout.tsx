@@ -10,8 +10,8 @@ const readexPro = Readex_Pro({
 });
 
 export const metadata: Metadata = {
-  title: "Hermes ONIA Automation",
-  description: "Panel web para la automatizacion n8n de ONIA, Telegram, Hermes y Video Lab.",
+  title: "Hermes OS Control Center",
+  description: "Panel operativo de ONIA para servicios self-hosted, migracion, requisitos y control de riesgos.",
 };
 
 export default function RootLayout({

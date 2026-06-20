@@ -19,6 +19,7 @@ This session owns:
 - Telegram Command Center routing for Hermes/ONIA operations.
 - Daily Hermes cron documentation for publishing/content operations.
 - Weekly operating system documentation and cadence.
+- ONIA Panel de Vendedores as the sales operating layer for leads, web diagnostics, notes, ideas, income and commissions.
 
 Canonical files:
 - `AGENTS.md`
@@ -46,6 +47,8 @@ Canonical files:
 - `scripts/social_publisher.py`
 - `scripts/hermes_week_status.py`
 - `scripts/hermes_week_plan.py`
+- `scripts/vps_audit_selfhosted.js`
+- `scripts/vps_install_selfhosted_stack.js`
 - `HERMES_VIDEO_LAB.md`
 - `HERMES_TELEGRAM_COMMAND_CENTER.md`
 - `HERMES_EXECUTION_PROTOCOL.md`
@@ -114,6 +117,11 @@ Canonical files:
 - `hermes-content/docs/SERGIO_ONIA_CONTENT_PRODUCTION_KIT_2026.md`
 - `hermes-content/docs/AI_ECOMMERCE_MODEL_SYSTEM_2026.md`
 - `hermes-content/docs/ONIA_OPEN_SOURCE_AI_VIDEO_LAB_2026.md`
+- `hermes-content/docs/ONIA_SELF_HOSTED_AI_TOOLS_2026.md`
+- `hermes-content/docs/ONIA_SELF_HOSTED_STACK_RUNBOOK_2026.md`
+- `hermes-content/docs/HERMES_OS_CONTROL_CENTER_2026.md`
+- `hermes-content/docs/ONIA_PANEL_VENDEDORES_2026.md`
+- `hermes-content/deploy/selfhosted/`
 - `hermes-content/references/video-brief-template.json`
 - `hermes-content/references/telegram-command-center.json`
 - `hermes-content/references/sergio-onia-content-kit-20260602.json`
@@ -122,6 +130,11 @@ Canonical files:
 - `hermes-content/references/onia-vendor-pipeline-template.csv`
 - `hermes-content/references/onia-commercial-campaigns.json`
 - `hermes-content/references/onia-best-opportunity-matrix-20260605.json`
+- `hermes-content/references/onia-selfhosted-stack-20260619.json`
+- `hermes-content/references/hermes-os-control-plane-20260620.json`
+- `hermes-content/references/onia-vendor-panel-20260620.json`
+- `supabase/migrations/20260620_onia_vendor_sales_panel.sql`
+- `web-factory/apps/site/src/app/vendedores/page.tsx`
 - `hermes-content/references/ai-ecommerce-model/README.md`
 - `hermes-content/references/ai-ecommerce-model/20260605-mara-vale-round-01.md`
 - `hermes-content/references/ai-ecommerce-model/20260605-mara-vale-contact-sheet-v1.png`
@@ -315,6 +328,17 @@ Session B should not edit publishing scripts unless coordinating first.
 npm run deploy:hermes-content
 ```
 
+- Audit and deploy ONIA self-hosted services by private profiles with:
+
+```powershell
+npm run audit:selfhosted
+npm run deploy:selfhosted -- --profile monitor
+npm run deploy:selfhosted -- --profile utility
+npm run deploy:selfhosted -- --profile ai
+npm run deploy:selfhosted -- --profile research
+npm run deploy:selfhosted -- --profile prepare-dify
+```
+
 - Video Lab Telegram commands route through:
 
 ```bash
@@ -371,6 +395,27 @@ npm run setup:assets
   - SaaS/tools: `SaaS & Herramientas`, page `dc6a6e27-453a-4d7c-800b-ef9c29c8d5ff`, data source `collection://5eaa8d12-823c-4b3b-96bb-e7aaeab1ff9c`.
   - CRM/contactos: `CRM & Contactos`, page `95acb20d-e7f5-4eaa-b185-7a7933ffdd1a`, data source `collection://9b4c77be-d02b-4840-8f91-827ec8007839`.
 - June 2026 base finance records in Notion include Codex Pro, Higgsfield Ultra, Google Workspace, VPS Hostinger, Google Photos and Claude Code Pro.
+- As of 2026-06-19, the ONIA self-hosted stack deploy kit exists at
+  `hermes-content/deploy/selfhosted/` and targets `/opt/onia-selfhosted` on the
+  VPS. It is private-first: Uptime Kuma, LiteLLM, Open WebUI, Stirling PDF and
+  Crawl4AI bind to `127.0.0.1` by default. Dify is prepared only and must not
+  be started from the official compose until VPS resources and 80/443 port
+  conflicts with Easypanel/Traefik are reviewed.
+- As of 2026-06-19 America/Caracas, `/opt/onia-selfhosted` is deployed with
+  healthy private services: Uptime Kuma on `127.0.0.1:3101`, Open WebUI on
+  `127.0.0.1:3102`, Stirling PDF on `127.0.0.1:3103`, LiteLLM on
+  `127.0.0.1:4000`, and LiteLLM Postgres on the internal Docker network.
+  `OPENAI_API_KEY` exists in `/root/.hermes/.env`; LiteLLM `/v1/models`
+  returned `gpt-4.1-mini`, `gpt-4o-mini`, and `o4-mini` with the remote master
+  key. Dify and Crawl4AI are intentionally not installed yet because post-deploy
+  resources are tight: about 2.8 GiB available RAM, 3.7 GiB swap used, and 27
+  active containers.
+- As of 2026-06-20, Hermes OS Control Center is the canonical Control Tower
+  direction for migrating ONIA apps into one self-hosted panel. The `mail`
+  self-hosted profile is prepared with Mailpit and Listmonk, but it must not be
+  treated as production sending until ONIA has a sending domain, PTR/rDNS, SPF,
+  DKIM, DMARC, bounce handling and an unsubscribe policy. Postal/Mailu/full
+  SMTP delivery should run on a separate VPS/IP if used.
 
 ## Security notes
 - VPS password and Meta token were pasted in chat and must be rotated.

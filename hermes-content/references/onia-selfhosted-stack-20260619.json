@@ -1,0 +1,72 @@
+{
+  "name": "onia-selfhosted-stack",
+  "generated_at": "2026-06-19",
+  "principle": "Hermes is the operating system; self-hosted services are capabilities behind private control, not public panels by default.",
+  "control_paths": {
+    "repo_kit": "hermes-content/deploy/selfhosted",
+    "remote_root": "/opt/onia-selfhosted",
+    "remote_secret_env": "/root/.hermes/.env",
+    "remote_generated_env": "/opt/onia-selfhosted/.env"
+  },
+  "profiles": [
+    {
+      "id": "monitor",
+      "priority": "P1",
+      "services": ["uptime-kuma"],
+      "default_port": "127.0.0.1:3101",
+      "decision": "installed",
+      "status": "healthy"
+    },
+    {
+      "id": "utility",
+      "priority": "P1",
+      "services": ["uptime-kuma", "stirling-pdf"],
+      "default_ports": ["127.0.0.1:3101", "127.0.0.1:3103"],
+      "decision": "installed",
+      "status": "healthy"
+    },
+    {
+      "id": "ai",
+      "priority": "P1",
+      "services": ["litellm", "open-webui"],
+      "default_ports": ["127.0.0.1:4000", "127.0.0.1:3102"],
+      "requires": ["OPENAI_API_KEY in /root/.hermes/.env", "about 8 GB RAM"],
+      "decision": "installed",
+      "status": "healthy"
+    },
+    {
+      "id": "research",
+      "priority": "P1/P2",
+      "services": ["crawl4ai"],
+      "default_port": "127.0.0.1:11235",
+      "requires": ["about 8 GB RAM", "private access only"],
+      "decision": "do not install on current VPS yet",
+      "status": "blocked_by_resources"
+    },
+    {
+      "id": "prepare-dify",
+      "priority": "P1",
+      "services": ["dify-source"],
+      "requires": ["about 8 GB RAM", "port patch behind Easypanel/Traefik"],
+      "decision": "do not install on current VPS yet",
+      "status": "blocked_by_resources_and_port_review"
+    },
+    {
+      "id": "mail",
+      "priority": "P2",
+      "services": ["mailpit", "listmonk", "listmonk-db"],
+      "default_ports": ["127.0.0.1:3104", "127.0.0.1:3025", "127.0.0.1:3105"],
+      "requires": [
+        "private access only for initial setup",
+        "sending domain, PTR/rDNS, SPF, DKIM, DMARC and bounce handling before production SMTP"
+      ],
+      "decision": "prepared only; do not use for production sending yet",
+      "status": "prepared"
+    }
+  ],
+  "public_domain_policy": {
+    "default": "no public domain",
+    "first_access": "SSH tunnel",
+    "public_allowed_after": ["auth", "healthcheck", "backup note", "rollback note", "Easypanel/Traefik route review"]
+  }
+}

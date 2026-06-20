@@ -37,6 +37,42 @@ Luego abrir:
 http://localhost:3010
 ```
 
+Ruta operativa principal para ventas:
+
+```text
+http://localhost:3010/vendedores
+```
+
+## ONIA Panel de Vendedores
+
+El Sales Desk vive dentro del Control Tower en `/vendedores`.
+
+Uso:
+
+- registrar leads y seguimiento diario;
+- evaluar si un cliente necesita landing, web, CRM, sistema o auditoria;
+- guardar notas importantes de llamadas;
+- capturar ideas, objeciones y oportunidades;
+- revisar ingresos y comisiones pendientes.
+
+Fuente oficial actual:
+
+```text
+Notion -> CRM Vendedores ONIA
+```
+
+Base preparada para migracion:
+
+```text
+Supabase -> schema onia_sales
+```
+
+Regla operativa:
+
+```text
+Sin datos completos, no hay comision aprobada.
+```
+
 Servicio en VPS:
 
 ```bash

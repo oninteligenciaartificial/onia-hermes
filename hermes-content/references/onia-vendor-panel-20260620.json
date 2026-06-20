@@ -1,0 +1,145 @@
+{
+  "name": "onia-panel-de-vendedores",
+  "generated_at": "2026-06-20",
+  "status": "mvp_design_ready",
+  "principle": "Notion remains the source of truth for vendor CRM until Supabase is connected; the panel is the daily operating layer for sellers and Sergio.",
+  "official_name": "ONIA Panel de Vendedores",
+  "route": "/vendedores",
+  "module": "Sales Desk",
+  "rules": [
+    "Una venta cobrada = una comision.",
+    "La comision se calcula sobre monto neto realmente cobrado.",
+    "Sin datos completos en CRM, no hay comision aprobada.",
+    "No contactar prospectos sin permiso cuando el lead es frio, sensible o asignado.",
+    "No prometer ventas garantizadas, viralidad, SEO garantizado ni WhatsApp automatico.",
+    "Videos IA/Higgsfield no se venden como producto independiente por ahora."
+  ],
+  "views": [
+    {
+      "id": "inicio",
+      "label": "Inicio",
+      "purpose": "Trabajo diario: leads de hoy, seguimientos, ventas calientes, comisiones e ingresos."
+    },
+    {
+      "id": "leads",
+      "label": "Leads",
+      "purpose": "Registrar prospectos, rubro, canal, dolor, servicio recomendado, estado y proximo seguimiento."
+    },
+    {
+      "id": "webs",
+      "label": "Venta de webs",
+      "purpose": "Diagnostico rapido para saber si conviene landing, web, auditoria, CRM o portal."
+    },
+    {
+      "id": "ideas",
+      "label": "Ideas",
+      "purpose": "Lluvia de ideas, nichos, objeciones, frases que funcionan y servicios que pide el mercado."
+    },
+    {
+      "id": "ingresos",
+      "label": "Ingresos",
+      "purpose": "Monto cobrado, servicio vendido, comision estimada, aprobada y pagada."
+    },
+    {
+      "id": "biblioteca",
+      "label": "Biblioteca",
+      "purpose": "Precios, scripts, objeciones, reglas de comision y que incluye cada servicio."
+    }
+  ],
+  "entities": {
+    "vendor_leads": {
+      "source": "Notion CRM Vendedores ONIA, later Supabase onia_sales.vendor_leads",
+      "required_fields": [
+        "lead_id",
+        "empresa",
+        "rubro",
+        "ciudad",
+        "contacto_publico",
+        "canal_principal",
+        "fuente",
+        "permiso_contacto",
+        "vendedor_origen",
+        "responsable_actual",
+        "estado_pipeline",
+        "producto_sugerido",
+        "prioridad",
+        "dolor_probable",
+        "proximo_seguimiento",
+        "datos_completos"
+      ]
+    },
+    "vendor_web_diagnostics": {
+      "purpose": "Checklist para vender webs sin improvisar.",
+      "checks": [
+        "Tiene web",
+        "Tiene Google Maps",
+        "Tiene WhatsApp visible",
+        "Tiene formulario",
+        "Oferta clara",
+        "Se ve profesional",
+        "Captura consultas",
+        "Tiene seguimiento despues del contacto"
+      ]
+    },
+    "vendor_notes": {
+      "purpose": "Notas de venta, objeciones, recomendaciones y tareas importantes."
+    },
+    "vendor_ideas": {
+      "purpose": "Lluvia de ideas comercial, nichos, paquetes y oportunidades."
+    },
+    "vendor_income": {
+      "purpose": "Ventas cobradas, montos netos, servicio vendido y estado de entrega."
+    },
+    "vendor_commissions": {
+      "purpose": "Comision estimada/aprobada/pagada con regla de datos completos."
+    }
+  },
+  "pipeline": [
+    "Nuevo",
+    "Investigado",
+    "Calificado",
+    "Mensaje preparado",
+    "Aprobado para contactar",
+    "Contactado",
+    "Respondio",
+    "Demo agendada",
+    "Demo realizada",
+    "Propuesta enviada",
+    "Ganado",
+    "Perdido",
+    "No apto",
+    "No contactar"
+  ],
+  "offer_routing": [
+    {
+      "signal": "Clinica dental pierde consultas o presupuestos",
+      "primary_offer": "DentalGest",
+      "secondary_offer": "Landing dental o auditoria"
+    },
+    {
+      "signal": "Pyme usa Excel, WhatsApp o tareas sueltas",
+      "primary_offer": "GestiOS",
+      "secondary_offer": "Automatizacion simple n8n"
+    },
+    {
+      "signal": "Negocio no tiene web clara",
+      "primary_offer": "Web Profesional",
+      "secondary_offer": "Auditoria Express o CRM simple"
+    },
+    {
+      "signal": "No sabe que necesita",
+      "primary_offer": "Auditoria Express",
+      "secondary_offer": "Diagnostico + Plan de Accion"
+    },
+    {
+      "signal": "Pide sistema propio, login o dashboard",
+      "primary_offer": "Discovery Pagado",
+      "secondary_offer": "Portal o sistema web"
+    }
+  ],
+  "mvp_decision": {
+    "phase_1": "Static/client-local panel with demo records and local capture to validate daily workflow.",
+    "phase_2": "Connect to Notion database or Supabase mirror through server-side routes.",
+    "phase_3": "n8n reminders, Telegram alerts, commission approval and seller-specific permissions."
+  }
+}

@@ -1,258 +1,370 @@
-import type { CSSProperties } from "react";
+import type { ReactNode } from "react";
+import Link from "next/link";
+import "./control-center.css";
 import {
   Activity,
   AlertTriangle,
-  ArrowUpRight,
-  Bell,
+  ArrowRight,
   Bot,
   CalendarClock,
   CheckCircle2,
   ChevronRight,
-  Clapperboard,
   Command,
   Database,
-  GitBranch,
+  FileText,
+  Globe2,
+  HardDrive,
   Inbox,
-  LayoutDashboard,
-  MessageCircle,
-  PlayCircle,
+  Layers3,
+  Lock,
+  Mail,
+  MonitorCheck,
+  Network,
   RadioTower,
-  Send,
+  Rocket,
+  Server,
   Settings,
   ShieldCheck,
   Sparkles,
   SquareTerminal,
-  Users,
-  WalletCards,
+  UsersRound,
   Workflow,
   Zap,
   type LucideIcon,
 } from "lucide-react";
 
+type Tone = "ok" | "warn" | "info" | "hold";
+
 type Metric = {
   label: string;
   value: string;
   detail: string;
-  tone: "ok" | "warn" | "info" | "hold";
+  tone: Tone;
   icon: LucideIcon;
 };
 
-type WorkflowItem = {
+type Service = {
   name: string;
-  id: string;
-  state: string;
-  route: string;
-  detail: string;
-  href?: string;
-  icon: LucideIcon;
-  tone: "ok" | "warn" | "info";
-};
-
-type ScheduleItem = {
-  time: string;
-  command: string;
-  output: string;
-  channel: string;
-  tone: "green" | "cyan" | "amber" | "rose";
-};
-
-type Guardrail = {
-  title: string;
-  detail: string;
+  role: string;
+  status: string;
+  access: string;
+  next: string;
+  tone: Tone;
   icon: LucideIcon;
 };
 
-type BacklogItem = {
+type Migration = {
+  from: string;
+  to: string;
+  priority: string;
+  condition: string;
+};
+
+type Requirement = {
   title: string;
-  owner: string;
-  state: string;
+  minimum: string;
+  use: string;
+  decision: string;
+  tone: Tone;
+  icon: LucideIcon;
+};
+
+type EmailOption = {
+  name: string;
+  fit: string;
+  decision: string;
+  risk: string;
+  tone: Tone;
   icon: LucideIcon;
 };
 
 const metrics: Metric[] = [
   {
-    label: "Workflows activos",
-    value: "2",
-    detail: "Command Center + Scheduled Pack",
+    label: "Core activo",
+    value: "9",
+    detail: "Supabase, n8n, Cal, Chatwoot, IA, PDF y monitoreo",
     tone: "ok",
-    icon: Workflow,
+    icon: CheckCircle2,
   },
   {
-    label: "Cadencias diarias",
-    value: "7",
-    detail: "Telegram interno, sin publicar",
+    label: "RAM disponible",
+    value: "2.8 GiB",
+    detail: "Post-stack; no meter cargas pesadas aqui",
+    tone: "warn",
+    icon: HardDrive,
+  },
+  {
+    label: "Correo preparado",
+    value: "mail",
+    detail: "Mailpit + Listmonk privados; sin SMTP productivo",
     tone: "info",
-    icon: CalendarClock,
+    icon: Mail,
   },
   {
-    label: "Acciones sensibles",
-    value: "0",
-    detail: "contactos, WhatsApp y publish bloqueados",
+    label: "Bloqueos reales",
+    value: "4",
+    detail: "auth, DNS, backups offsite y worker VPS",
     tone: "hold",
     icon: ShieldCheck,
-  },
-  {
-    label: "Pendientes tecnicos",
-    value: "3",
-    detail: "Notion n8n, Higgsfield polling, OAuth",
-    tone: "warn",
-    icon: AlertTriangle,
   },
 ];
 
 const navigation = [
-  { label: "Mapa", icon: LayoutDashboard, active: true },
-  { label: "Workflows", icon: Workflow },
-  { label: "Telegram", icon: MessageCircle },
-  { label: "Video Lab", icon: Clapperboard },
-  { label: "CRM", icon: Users },
-  { label: "Finanzas", icon: WalletCards },
-  { label: "Logs", icon: Inbox },
+  { label: "Control", icon: RadioTower, active: true },
+  { label: "Servicios", icon: Server },
+  { label: "Migracion", icon: ArrowRight },
+  { label: "Correo", icon: Mail },
+  { label: "Requisitos", icon: Layers3 },
+  { label: "Riesgos", icon: AlertTriangle },
 ];
 
-const workflows: WorkflowItem[] = [
+const services: Service[] = [
   {
-    name: "ONIA - Telegram Command Center",
-    id: "vuicWsvh0hwqKhYs",
-    state: "activo publicado",
-    route: "Telegram -> SSH -> hermes-command",
-    detail: "Router general para proyectos, Video Lab, plan semanal y estado operativo.",
-    href: "https://n8n-sergio-n8n.hqdqgh.easypanel.host/workflow/vuicWsvh0hwqKhYs",
-    icon: Command,
+    name: "ONIA Panel de Vendedores",
+    role: "Sales desk para leads, webs, notas, ideas, ingresos y comisiones",
+    status: "mvp",
+    access: "/vendedores",
+    next: "Conectar Notion/Supabase cuando el flujo diario este validado.",
+    tone: "info",
+    icon: UsersRound,
+  },
+  {
+    name: "Supabase",
+    role: "Base, auth, storage y memoria operativa",
+    status: "privado",
+    access: "127.0.0.1:54321 / 54322",
+    next: "Mapear apps/tablas antes de exponer APIs.",
     tone: "ok",
-  },
-  {
-    name: "ONIA - Scheduled Operations Pack",
-    id: "VeCHKr6wkK5Wet25",
-    state: "activo publicado",
-    route: "Schedule -> hermes-command -> Telegram",
-    detail: "Agenda interna diaria para radar, contenido, CRM, Video Lab, copy y registro.",
-    href: "https://n8n-sergio-n8n.hqdqgh.easypanel.host/workflow/VeCHKr6wkK5Wet25",
-    icon: CalendarClock,
-    tone: "ok",
-  },
-  {
-    name: "Hermes Radar Diario Creativo",
-    id: "lryabRhGQW4WIuJG",
-    state: "historico inactivo",
-    route: "cubierto por Scheduled Pack",
-    detail: "Queda como referencia; el radar local seguro ya opera en el pack diario.",
-    icon: Sparkles,
-    tone: "warn",
-  },
-];
-
-const schedule: ScheduleItem[] = [
-  {
-    time: "07:30",
-    command: "Radar creativo ONIA",
-    output: "ideas seguras y oportunidades",
-    channel: "Telegram",
-    tone: "green",
-  },
-  {
-    time: "08:00",
-    command: "Cola contenido diaria",
-    output: "piezas Sergio + ONIA",
-    channel: "Telegram",
-    tone: "cyan",
-  },
-  {
-    time: "08:30",
-    command: "Seguimientos ONIA hoy",
-    output: "CRM sin envio automatico",
-    channel: "Telegram",
-    tone: "amber",
-  },
-  {
-    time: "10:00",
-    command: "Recordatorios Video Lab",
-    output: "aprobaciones pendientes",
-    channel: "Telegram",
-    tone: "rose",
-  },
-  {
-    time: "15:00",
-    command: "Platform Copy Queue",
-    output: "copy por canal",
-    channel: "Telegram",
-    tone: "cyan",
-  },
-  {
-    time: "17:00",
-    command: "Watcher Higgsfield",
-    output: "jobs, renders y MP4",
-    channel: "Telegram",
-    tone: "green",
-  },
-  {
-    time: "21:00",
-    command: "Registro Hermes",
-    output: "log y outbox local",
-    channel: "Telegram",
-    tone: "amber",
-  },
-];
-
-const approvalCommands = [
-  "Apruebo plan semanal: <pieza>",
-  "Apruebo contactar: <empresa>",
-  "Confirmo impuesto: <obligacion> <fecha>",
-  "Aprobar video <job_id>",
-  "Publicar video <job_id>",
-];
-
-const guardrails: Guardrail[] = [
-  {
-    title: "No publica solo",
-    detail: "Instagram, TikTok, YouTube y LinkedIn esperan aprobacion exacta por pieza.",
-    icon: Send,
-  },
-  {
-    title: "No contacta prospectos",
-    detail: "Prospeccion y CRM preparan mensajes; el contacto queda en control humano.",
-    icon: Users,
-  },
-  {
-    title: "No expone secretos",
-    detail: "Tokens, chat IDs y claves viven fuera de Markdown y no se muestran en pantalla.",
-    icon: ShieldCheck,
-  },
-  {
-    title: "Cara y voz requieren revision",
-    detail: "Videos con Sergio pasan por Video Lab antes de generar o publicar.",
-    icon: PlayCircle,
-  },
-];
-
-const backlog: BacklogItem[] = [
-  {
-    title: "Credencial Notion dentro de n8n",
-    owner: "Automatizacion",
-    state: "pendiente",
     icon: Database,
   },
   {
-    title: "Polling estable de Higgsfield",
-    owner: "Video Lab",
-    state: "pendiente",
-    icon: Clapperboard,
+    name: "n8n",
+    role: "Motor de procesos y schedules",
+    status: "activo",
+    access: "Easypanel n8n-sergio",
+    next: "Mantener aprobaciones por Telegram/Hermes.",
+    tone: "ok",
+    icon: Workflow,
   },
   {
-    title: "OAuth TikTok / YouTube",
-    owner: "Publishing",
-    state: "bloqueado",
-    icon: GitBranch,
+    name: "Cal.com",
+    role: "Auto-booking y reuniones",
+    status: "activo",
+    access: "self-hosted existente",
+    next: "Publicar solo con dominio y email estable.",
+    tone: "ok",
+    icon: CalendarClock,
   },
   {
-    title: "Rotacion de claves pegadas en nodos HTTP",
-    owner: "Seguridad",
-    state: "prioridad",
-    icon: AlertTriangle,
+    name: "Chatwoot",
+    role: "Inbox clientes y WhatsApp",
+    status: "activo",
+    access: "stack onia-chatbot",
+    next: "Definir WhatsApp Cloud/BSP antes de vender mas.",
+    tone: "ok",
+    icon: Inbox,
+  },
+  {
+    name: "Uptime Kuma",
+    role: "Monitoreo interno",
+    status: "healthy",
+    access: "127.0.0.1:3101",
+    next: "Crear checks para cada panel y dominio.",
+    tone: "ok",
+    icon: MonitorCheck,
+  },
+  {
+    name: "LiteLLM",
+    role: "Gateway IA y costos",
+    status: "healthy",
+    access: "127.0.0.1:4000",
+    next: "Agregar presupuestos y logs antes de abrir usuarios.",
+    tone: "ok",
+    icon: Zap,
+  },
+  {
+    name: "Open WebUI",
+    role: "Cockpit IA interno",
+    status: "healthy",
+    access: "127.0.0.1:3102",
+    next: "Usar por tunel hasta tener auth gateway.",
+    tone: "ok",
+    icon: Bot,
+  },
+  {
+    name: "Stirling PDF",
+    role: "Herramientas PDF",
+    status: "healthy",
+    access: "127.0.0.1:3103",
+    next: "No exponer sin auth proxy.",
+    tone: "ok",
+    icon: FileText,
+  },
+  {
+    name: "SearXNG",
+    role: "Busqueda privada para research",
+    status: "local",
+    access: "127.0.0.1:8080",
+    next: "Conectarlo a workflows de investigacion.",
+    tone: "info",
+    icon: Globe2,
+  },
+  {
+    name: "Dify",
+    role: "Apps IA vendibles y RAG",
+    status: "separar",
+    access: "pendiente worker VPS",
+    next: "No correr aqui; necesita mas margen y revision de puertos.",
+    tone: "warn",
+    icon: Sparkles,
+  },
+  {
+    name: "Crawl4AI",
+    role: "Crawling AI-ready",
+    status: "separar",
+    access: "pendiente worker VPS",
+    next: "Ejecutar como worker privado con limites.",
+    tone: "warn",
+    icon: Network,
+  },
+  {
+    name: "Mailpit + Listmonk",
+    role: "QA de correo y campanas",
+    status: "preparado",
+    access: "3104 / 3025 / 3105",
+    next: "No configurar SMTP productivo sin DNS/reputacion.",
+    tone: "hold",
+    icon: Mail,
   },
 ];
 
-const signalBars = [52, 64, 71, 58, 83, 78, 92, 69, 86, 74, 88, 95, 81, 90];
+const migrations: Migration[] = [
+  {
+    from: "Chats IA y prompts sueltos",
+    to: "Open WebUI + LiteLLM",
+    priority: "P1",
+    condition: "auth gateway y presupuestos por modelo",
+  },
+  {
+    from: "Booking externo",
+    to: "Cal.com self-hosted",
+    priority: "P1",
+    condition: "dominio, SMTP y plantillas de reunion",
+  },
+  {
+    from: "Docs y decisiones dispersas",
+    to: "Control Tower + hermes-content",
+    priority: "P1",
+    condition: "snapshots de estado y dueños por accion",
+  },
+  {
+    from: "PDF tools externos",
+    to: "Stirling PDF",
+    priority: "P2",
+    condition: "login privado y politica de uso",
+  },
+  {
+    from: "Newsletters en SaaS",
+    to: "Listmonk primero, Mautic despues",
+    priority: "P2",
+    condition: "dominio de envio y reputacion",
+  },
+  {
+    from: "AI app builders / RAG",
+    to: "Dify en VPS worker",
+    priority: "P1",
+    condition: "8 vCPU / 24 GB RAM clase Contabo VPS 30+",
+  },
+];
+
+const requirements: Requirement[] = [
+  {
+    title: "VPS AI worker",
+    minimum: "8 vCPU / 24 GB RAM / 200 GB NVMe",
+    use: "Dify, Crawl4AI, Browser Use, Maxun y futuros RAG workers.",
+    decision: "Comprar o crear antes de instalar cargas pesadas.",
+    tone: "warn",
+    icon: Server,
+  },
+  {
+    title: "VPS/IP correo",
+    minimum: "2-4 vCPU / 4-8 GB RAM / IPv4 limpio",
+    use: "Postal, Mailu o docker-mailserver si queremos SMTP propio.",
+    decision: "Separado del VPS principal por riesgo de reputacion.",
+    tone: "hold",
+    icon: Mail,
+  },
+  {
+    title: "Auth gateway",
+    minimum: "Authentik o Authelia + Traefik/Easypanel",
+    use: "Proteger Open WebUI, Kuma, Listmonk y Dify antes de publicar DNS.",
+    decision: "Requisito antes de abrir paneles a internet.",
+    tone: "info",
+    icon: Lock,
+  },
+  {
+    title: "Backups offsite",
+    minimum: "Object storage o segundo VPS de respaldo",
+    use: "Supabase, n8n, Listmonk, Dify y Hermes docs.",
+    decision: "No migrar clientes sin restauracion probada.",
+    tone: "warn",
+    icon: HardDrive,
+  },
+];
+
+const emailOptions: EmailOption[] = [
+  {
+    name: "Mailpit",
+    fit: "Testing y QA de formularios/apps",
+    decision: "Usar ya para pruebas privadas.",
+    risk: "No entrega correos reales.",
+    tone: "ok",
+    icon: ShieldCheck,
+  },
+  {
+    name: "Listmonk",
+    fit: "Newsletters, listas y campanas simples",
+    decision: "Primera opcion ONIA para empezar.",
+    risk: "Necesita SMTP y reputacion bien configurados.",
+    tone: "info",
+    icon: Mail,
+  },
+  {
+    name: "Mautic",
+    fit: "Marketing automation completo",
+    decision: "Esperar hasta tener journeys y scoring reales.",
+    risk: "Mas mantenimiento que Listmonk.",
+    tone: "warn",
+    icon: Workflow,
+  },
+  {
+    name: "Postal",
+    fit: "SMTP tipo SendGrid/Mailgun self-hosted",
+    decision: "Solo con VPS/IP separado.",
+    risk: "PTR, SPF, DKIM, DMARC y calentamiento obligatorios.",
+    tone: "hold",
+    icon: Server,
+  },
+];
+
+const phases = [
+  {
+    title: "1. Consolidar control",
+    detail: "Panel, Uptime Kuma, docs canonicas y runbooks.",
+  },
+  {
+    title: "2. Migrar utilidades",
+    detail: "AI interna, PDF, booking, CRM e inbox bajo rutas privadas.",
+  },
+  {
+    title: "3. Preparar correo",
+    detail: "Mailpit, Listmonk, dominio de envio y DNS completo.",
+  },
+  {
+    title: "4. Separar workloads",
+    detail: "Dify/Crawl4AI/Browser workers en VPS dedicado.",
+  },
+];
 
 function MetricCard({ metric }: { metric: Metric }) {
   const Icon = metric.icon;
@@ -269,81 +381,77 @@ function MetricCard({ metric }: { metric: Metric }) {
   );
 }
 
-function WorkflowCard({ workflow }: { workflow: WorkflowItem }) {
-  const Icon = workflow.icon;
-  const content = (
-    <>
-      <span className="workflow-card__icon">
+function StatusPill({ tone, children }: { tone: Tone; children: ReactNode }) {
+  return <em className={`status-pill is-${tone}`}>{children}</em>;
+}
+
+function ServiceCard({ service }: { service: Service }) {
+  const Icon = service.icon;
+
+  return (
+    <article className={`service-card is-${service.tone}`}>
+      <span className="service-card__icon">
         <Icon size={18} />
       </span>
-      <div className="workflow-card__body">
-        <div className="workflow-card__topline">
-          <strong>{workflow.name}</strong>
-          <em className={`status-pill is-${workflow.tone}`}>{workflow.state}</em>
+      <div className="service-card__body">
+        <div className="service-card__topline">
+          <strong>{service.name}</strong>
+          <StatusPill tone={service.tone}>{service.status}</StatusPill>
         </div>
-        <span>{workflow.route}</span>
-        <p>{workflow.detail}</p>
-        <code>{workflow.id}</code>
+        <p>{service.role}</p>
+        <code>{service.access}</code>
+        <small>{service.next}</small>
       </div>
-      {workflow.href ? <ArrowUpRight size={16} className="workflow-card__arrow" /> : null}
-    </>
-  );
-
-  if (workflow.href) {
-    return (
-      <a className="workflow-card" href={workflow.href} rel="noreferrer" target="_blank">
-        {content}
-      </a>
-    );
-  }
-
-  return <article className="workflow-card">{content}</article>;
-}
-
-function ScheduleRow({ item, index }: { item: ScheduleItem; index: number }) {
-  return (
-    <article className={`schedule-row is-${item.tone}`}>
-      <div className="schedule-row__time">
-        <strong>{item.time}</strong>
-        <span>#{String(index + 1).padStart(2, "0")}</span>
-      </div>
-      <div className="schedule-row__line">
-        <i />
-      </div>
-      <div className="schedule-row__body">
-        <strong>{item.command}</strong>
-        <span>{item.output}</span>
-      </div>
-      <em>{item.channel}</em>
     </article>
   );
 }
 
-function GuardrailCard({ item }: { item: Guardrail }) {
-  const Icon = item.icon;
+function MigrationRow({ item }: { item: Migration }) {
+  return (
+    <article className="migration-row">
+      <div>
+        <span>Desde</span>
+        <strong>{item.from}</strong>
+      </div>
+      <ArrowRight size={16} />
+      <div>
+        <span>Hacia</span>
+        <strong>{item.to}</strong>
+      </div>
+      <StatusPill tone={item.priority === "P1" ? "ok" : "info"}>{item.priority}</StatusPill>
+      <small>{item.condition}</small>
+    </article>
+  );
+}
+
+function RequirementCard({ requirement }: { requirement: Requirement }) {
+  const Icon = requirement.icon;
 
   return (
-    <article className="guardrail-card">
+    <article className={`requirement-card is-${requirement.tone}`}>
+      <div className="requirement-card__top">
+        <Icon size={18} />
+        <StatusPill tone={requirement.tone}>{requirement.title}</StatusPill>
+      </div>
+      <strong>{requirement.minimum}</strong>
+      <p>{requirement.use}</p>
+      <small>{requirement.decision}</small>
+    </article>
+  );
+}
+
+function EmailOptionCard({ option }: { option: EmailOption }) {
+  const Icon = option.icon;
+
+  return (
+    <article className={`email-option is-${option.tone}`}>
       <Icon size={17} />
       <div>
-        <strong>{item.title}</strong>
-        <span>{item.detail}</span>
+        <strong>{option.name}</strong>
+        <span>{option.fit}</span>
+        <p>{option.decision}</p>
+        <small>{option.risk}</small>
       </div>
-    </article>
-  );
-}
-
-function BacklogRow({ item }: { item: BacklogItem }) {
-  const Icon = item.icon;
-
-  return (
-    <article className="backlog-row">
-      <Icon size={16} />
-      <div>
-        <strong>{item.title}</strong>
-        <span>{item.owner}</span>
-      </div>
-      <em>{item.state}</em>
     </article>
   );
 }
@@ -358,8 +466,8 @@ export default function Home() {
               <RadioTower size={18} />
             </span>
             <div>
-              <strong>Hermes</strong>
-              <small>Automatizacion ONIA</small>
+              <strong>Hermes OS</strong>
+              <small>Control Center</small>
             </div>
             <Settings size={15} />
           </div>
@@ -379,36 +487,41 @@ export default function Home() {
           <section className="operator-card">
             <span className="status-dot" />
             <div>
-              <strong>n8n_n8n</strong>
-              <small>instancia canonica</small>
+              <strong>Control Tower</strong>
+              <small>localhost:3010</small>
             </div>
             <ChevronRight size={15} />
           </section>
 
           <section className="sidebar-note">
-            <span>Ruta tecnica</span>
-            <code>hermes-command telegram</code>
-            <p>n8n agenda, Hermes razona, Telegram aprueba.</p>
+            <span>Regla operativa</span>
+            <code>private-first</code>
+            <p>Paneles por tunel SSH hasta tener auth, DNS y backups.</p>
           </section>
         </aside>
 
         <section className="automation-main">
-          <header className="automation-header">
+          <header className="automation-header control-center-header" id="control">
             <div>
-              <span className="eyebrow">Snapshot operativo / 13 Jun 2026</span>
-              <h1>Panel web para la automatizacion ONIA</h1>
+              <span className="eyebrow">Snapshot operativo / 20 Jun 2026</span>
+              <h1>Hermes OS Control Center</h1>
               <p>
-                Command Center, schedules diarios, aprobaciones por Telegram y estado de integraciones en un solo lugar.
+                Un solo mapa para migrar ONIA a infraestructura self-hosted: servicios activos, cargas que deben
+                separarse, correo, requisitos y proximas acciones.
               </p>
             </div>
             <div className="header-actions" aria-label="Acciones principales">
-              <a href="#workflows">
-                <Workflow size={16} />
-                Workflows
+              <a href="#servicios">
+                <Server size={16} />
+                Servicios
               </a>
-              <a href="#aprobaciones">
+              <Link href="/vendedores">
+                <UsersRound size={16} />
+                Vendedores
+              </Link>
+              <a href="#requisitos">
                 <ShieldCheck size={16} />
-                Aprobaciones
+                Requisitos
               </a>
             </div>
           </header>
@@ -423,16 +536,16 @@ export default function Home() {
             <article className="primary-panel command-panel">
               <div className="panel-heading">
                 <div>
-                  <span>Entrada principal</span>
-                  <h2>Telegram Command Center</h2>
+                  <span>Arquitectura recomendada</span>
+                  <h2>Hermes decide, n8n ejecuta, Supabase recuerda</h2>
                 </div>
-                <em className="status-pill is-ok">activo</em>
+                <StatusPill tone="ok">control plane</StatusPill>
               </div>
 
-              <div className="command-route" aria-label="Ruta de automatizacion">
+              <div className="stack-map" aria-label="Mapa de control">
                 <span>
-                  <MessageCircle size={17} />
-                  Telegram
+                  <Command size={17} />
+                  Hermes
                 </span>
                 <i />
                 <span>
@@ -441,100 +554,108 @@ export default function Home() {
                 </span>
                 <i />
                 <span>
-                  <SquareTerminal size={17} />
-                  Hermes
+                  <Database size={17} />
+                  Supabase
                 </span>
                 <i />
                 <span>
-                  <Bell size={17} />
-                  Respuesta
+                  <MonitorCheck size={17} />
+                  Uptime
                 </span>
               </div>
 
               <div className="terminal-preview">
-                <span>$ hermes-command telegram --message</span>
-                <strong>Automatizaciones ONIA</strong>
-                <small>stdout JSON to telegram_reply to outbox local</small>
-              </div>
-
-              <div className="command-chips">
-                {["Estado Semana", "Plan Hoy", "Mapa proyectos ONIA", "Watcher Higgsfield"].map((command) => (
-                  <code key={command}>{command}</code>
-                ))}
+                <span>$ npm run audit:selfhosted</span>
+                <strong>El VPS actual queda como nucleo, no como servidor para todo.</strong>
+                <small>Dify, crawlers pesados y SMTP propio van fuera para no romper operaciones.</small>
               </div>
             </article>
 
-            <article className="primary-panel signal-panel">
+            <article className="primary-panel decision-panel">
               <div className="panel-heading">
                 <div>
-                  <span>Actividad diaria</span>
-                  <h2>Cadencia segura</h2>
+                  <span>Decision de infraestructura</span>
+                  <h2>Comprar capacidad antes de migrar lo pesado</h2>
                 </div>
-                <Activity size={17} />
+                <AlertTriangle size={17} />
               </div>
-              <div className="signal-bars">
-                {signalBars.map((value, index) => (
-                  <i key={index} style={{ "--height": `${value}%` } as CSSProperties} />
-                ))}
-              </div>
-              <div className="signal-footer">
-                <span>7 disparos</span>
-                <span>0 envios automaticos</span>
+              <div className="decision-list">
+                <span>
+                  <Server size={16} />
+                  VPS AI worker: Contabo Cloud VPS 30 class o superior.
+                </span>
+                <span>
+                  <Mail size={16} />
+                  Correo productivo: IP separado con PTR/rDNS.
+                </span>
+                <span>
+                  <Lock size={16} />
+                  Publicar paneles: solo despues de auth gateway.
+                </span>
               </div>
             </article>
           </section>
 
           <section className="content-grid">
             <div className="left-column">
-              <section className="automation-panel" id="workflows">
+              <section className="automation-panel" id="servicios">
                 <div className="panel-heading">
                   <div>
-                    <span>Workflows n8n</span>
-                    <h2>Mapa de automatizacion</h2>
+                    <span>Servicios y capacidades</span>
+                    <h2>Inventario self-hosted ONIA</h2>
                   </div>
-                  <Zap size={17} />
+                  <Activity size={17} />
                 </div>
-                <div className="workflow-list">
-                  {workflows.map((workflow) => (
-                    <WorkflowCard key={workflow.name} workflow={workflow} />
+                <div className="service-grid">
+                  {services.map((service) => (
+                    <ServiceCard key={service.name} service={service} />
                   ))}
                 </div>
               </section>
 
-              <section className="automation-panel" id="aprobaciones">
+              <section className="automation-panel" id="migracion">
                 <div className="panel-heading">
                   <div>
-                    <span>Control humano</span>
-                    <h2>Aprobaciones validas</h2>
+                    <span>Ruta de mudanza</span>
+                    <h2>Que se trae al panel y en que orden</h2>
                   </div>
-                  <ShieldCheck size={17} />
+                  <Rocket size={17} />
                 </div>
-                <div className="approval-grid">
-                  {approvalCommands.map((command) => (
-                    <code key={command}>{command}</code>
+                <div className="migration-list">
+                  {migrations.map((item) => (
+                    <MigrationRow item={item} key={`${item.from}-${item.to}`} />
                   ))}
                 </div>
               </section>
 
-              <section className="guardrail-grid" aria-label="Guardrails">
-                {guardrails.map((guardrail) => (
-                  <GuardrailCard item={guardrail} key={guardrail.title} />
-                ))}
+              <section className="automation-panel" id="correo">
+                <div className="panel-heading">
+                  <div>
+                    <span>Correo open-source</span>
+                    <h2>Enviar no es lo mismo que tener un panel</h2>
+                  </div>
+                  <Mail size={17} />
+                </div>
+                <div className="email-option-grid">
+                  {emailOptions.map((option) => (
+                    <EmailOptionCard option={option} key={option.name} />
+                  ))}
+                </div>
               </section>
             </div>
 
             <aside className="right-column">
-              <section className="automation-panel schedule-panel">
+              <section className="automation-panel" id="requisitos">
                 <div className="panel-heading">
                   <div>
-                    <span>Scheduled Operations Pack</span>
-                    <h2>Hoy</h2>
+                    <span>Compras y requisitos</span>
+                    <h2>Lo nuevo que hace falta</h2>
                   </div>
-                  <CalendarClock size={17} />
+                  <Layers3 size={17} />
                 </div>
-                <div className="schedule-list">
-                  {schedule.map((item, index) => (
-                    <ScheduleRow item={item} index={index} key={item.command} />
+                <div className="requirement-list">
+                  {requirements.map((requirement) => (
+                    <RequirementCard requirement={requirement} key={requirement.title} />
                   ))}
                 </div>
               </section>
@@ -542,35 +663,43 @@ export default function Home() {
               <section className="automation-panel">
                 <div className="panel-heading">
                   <div>
-                    <span>Siguientes desbloqueos</span>
-                    <h2>Backlog operativo</h2>
+                    <span>Roadmap operativo</span>
+                    <h2>Orden sano</h2>
                   </div>
-                  <AlertTriangle size={17} />
+                  <SquareTerminal size={17} />
                 </div>
-                <div className="backlog-list">
-                  {backlog.map((item) => (
-                    <BacklogRow item={item} key={item.title} />
+                <div className="phase-list">
+                  {phases.map((phase) => (
+                    <article className="phase-card" key={phase.title}>
+                      <strong>{phase.title}</strong>
+                      <span>{phase.detail}</span>
+                    </article>
                   ))}
                 </div>
               </section>
 
-              <section className="automation-panel sources-panel">
+              <section className="automation-panel" id="riesgos">
                 <div className="panel-heading">
                   <div>
-                    <span>Fuentes usadas</span>
-                    <h2>Canon local</h2>
+                    <span>Riesgos activos</span>
+                    <h2>No cruzar estas lineas</h2>
                   </div>
-                  <Database size={17} />
+                  <AlertTriangle size={17} />
                 </div>
-                <span className="source-row">
-                  N8N_AUTOMATION_PLAN.md
-                </span>
-                <span className="source-row">
-                  hermes-content/docs/N8N_AUTOMATIONS.md
-                </span>
-                <span className="source-row">
-                  HERMES_EXECUTION_PROTOCOL.md
-                </span>
+                <div className="risk-list">
+                  <span>
+                    <AlertTriangle size={16} />
+                    No instalar otro orquestador tipo Coolify si Easypanel/Traefik ya controla 80/443.
+                  </span>
+                  <span>
+                    <ShieldCheck size={16} />
+                    No publicar Supabase ni paneles internos sin SSO/auth gateway.
+                  </span>
+                  <span>
+                    <Mail size={16} />
+                    No mandar campañas desde el IP principal de operaciones.
+                  </span>
+                </div>
               </section>
             </aside>
           </section>
@@ -578,11 +707,11 @@ export default function Home() {
           <footer className="automation-footer">
             <span>
               <CheckCircle2 size={16} />
-              Guardrail activo: ninguna publicacion, contacto o accion client-facing sin aprobacion exacta.
+              Fuente canonica: hermes-content/references/hermes-os-control-plane-20260620.json
             </span>
             <span>
               <Bot size={16} />
-              Hermes opera como capa de razonamiento; n8n agenda y registra.
+              Hermes opera como capa de decision; los servicios son capacidades.
             </span>
           </footer>
         </section>
