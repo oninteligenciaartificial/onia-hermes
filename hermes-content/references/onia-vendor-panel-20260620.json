@@ -276,6 +276,91 @@
     "monthly_net_target_bs": 9126,
     "healthy_60_day_net_target_bs": 32000,
     "capital_recovery_60_day_net_target_bs": 55800,
+    "internal_capital_allocation": {
+      "visibility": "sergio_only",
+      "source_doc": "hermes-content/docs/ONIA_INTERNAL_CAPITAL_ALLOCATION_2026.md",
+      "gross_capital_bs": 15000,
+      "debt_bs": 2414.49,
+      "cash_after_debt_bs": 12585.51,
+      "protected_two_month_operations_bs": 7301,
+      "controlled_growth_pool_bs": 5284.51,
+      "decision": "Primero ONIA vive, luego vende, luego mejora equipo.",
+      "do_not_show_to_collaborators": true,
+      "spend_buckets": [
+        {
+          "id": "debt",
+          "label": "Deuda operativa",
+          "amount_bs": 2414.49,
+          "visibility": "sergio_only"
+        },
+        {
+          "id": "tools_reserve",
+          "label": "Reserva herramientas ONIA 2 meses",
+          "amount_bs": 5901,
+          "visibility": "sergio_only"
+        },
+        {
+          "id": "petty_cash_logistics",
+          "label": "Caja chica/logistica 2 meses",
+          "amount_bs": 1400,
+          "visibility": "sergio_only"
+        },
+        {
+          "id": "onia_media_studio_minimum",
+          "label": "ONIA Media Studio minimo",
+          "amount_bs": 1500,
+          "visibility": "sergio_only"
+        },
+        {
+          "id": "nuvia_products_tests",
+          "label": "Nuvia productos/test comercial",
+          "amount_bs": 1200,
+          "visibility": "sergio_only"
+        },
+        {
+          "id": "meta_ads_controlled",
+          "label": "Meta Ads controlados",
+          "amount_bs": 900,
+          "visibility": "sergio_only"
+        },
+        {
+          "id": "home_lab_backups",
+          "label": "Home lab y backups",
+          "amount_bs": 800,
+          "visibility": "sergio_only"
+        },
+        {
+          "id": "pc_productivity_minimum",
+          "label": "PC/productividad minima",
+          "amount_bs": 500,
+          "visibility": "sergio_only"
+        },
+        {
+          "id": "contingency",
+          "label": "Contingencia",
+          "amount_bs": 384.51,
+          "visibility": "sergio_only"
+        }
+      ],
+      "blocked_purchases_until_revenue": [
+        "MacBook Pro",
+        "camara profesional",
+        "PC completa",
+        "GPU grande",
+        "servidor grande",
+        "suscripciones nuevas sin venta o ahorro probado"
+      ],
+      "private_system_modules_required": [
+        "internal_capital_allocations",
+        "purchase_approvals",
+        "asset_inventory",
+        "campaign_spend",
+        "nuvia_inventory_investments",
+        "home_lab_cost_savings",
+        "daily_ceo_improvements"
+      ],
+      "daily_ceo_rule": "Cada dia Sergio registra una accion de ventas, una mejora de sistema/producto, un insumo de contenido y una revision de caja o tarea critica."
+    },
     "centers": [
       "onia_services",
       "nuvia",
