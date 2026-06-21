@@ -5,7 +5,6 @@ import Image from "next/image";
 import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import { ArrowLeft, Minus, Plus, ShoppingBag, Trash2, X } from "lucide-react";
 import {
-  buildNuviaCheckoutHref,
   type CartProduct,
   type NuviaProduct,
   productHref,
@@ -30,6 +29,32 @@ type StoreProps = {
 
 type ProductPageProps = StoreProps & {
   product: NuviaProduct;
+};
+
+type CheckoutResult = {
+  ok: boolean;
+  mode: "payment" | "quote" | "configuration_pending" | "invalid_request";
+  message: string;
+  order?: {
+    id: string | null;
+    publicCode: string;
+    persisted: boolean;
+    subtotal: number;
+    discountTotal: number;
+    total: number;
+    currency: string;
+  };
+  payment?: {
+    id: string | null;
+    provider: string;
+    status: string;
+    qrImageUrl?: string | null;
+    qrPayload?: string | null;
+    expiresAt?: string | null;
+    requiredCredentials?: string[];
+    providerReference?: string | null;
+  } | null;
+  requiredConfiguration?: string[];
 };
 
 const STORAGE_KEY = "nuvia-next-cart-v1";
@@ -255,7 +280,9 @@ function CartDrawer({
   total,
   totalCount,
 }: ReturnType<typeof useCart>) {
-  const checkoutHref = buildNuviaCheckoutHref(cart);
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
+  const [checkoutResult, setCheckoutResult] = useState<CheckoutResult | null>(null);
+  const [checkoutError, setCheckoutError] = useState("");
   const firstCurrency = cart.length ? productMap.get(cart[0].id)?.currency : "BOB";
   const productSections = useMemo(() => {
     const groups = new Map<string, CartProduct[]>();
@@ -265,8 +292,49 @@ function CartDrawer({
       groups.set(key, [...(groups.get(key) || []), product]);
     });
 
-    return Array.from(groups.entries()).map(([label, products]) => ({ label, products }));
+    return Array.from(groups.entries())
+      .sort((a, b) => b[1].length - a[1].length)
+      .slice(0, 6)
+      .map(([label, products]) => ({ label, products: products.slice(0, 4) }));
   }, [productMap]);
+
+  const startCheckout = async () => {
+    if (!cart.length || checkoutLoading) {
+      return;
+    }
+
+    setCheckoutLoading(true);
+    setCheckoutError("");
+    setCheckoutResult(null);
+
+    try {
+      const response = await fetch("/api/nuvia/checkout", {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({
+          storeSlug: "nuvia",
+          provider: "bnb_qr_simple",
+          items: cart.map((item) => ({
+            id: item.id,
+            quantity: item.qty,
+          })),
+        }),
+      });
+      const result = (await response.json()) as CheckoutResult;
+
+      if (!response.ok || !result.ok) {
+        throw new Error(result.message || "No se pudo crear el checkout.");
+      }
+
+      setCheckoutResult(result);
+    } catch (error) {
+      setCheckoutError(error instanceof Error ? error.message : "No se pudo crear el checkout.");
+    } finally {
+      setCheckoutLoading(false);
+    }
+  };
 
   return (
     <div className="nuvia-cart-shell" data-open={open ? "true" : "false"} aria-hidden={!open}>
@@ -360,9 +428,30 @@ function CartDrawer({
             <span>{priced ? "subtotal" : "subtotal pendiente"}</span>
             <strong>{priced && totalCount ? money(total, firstCurrency) : "cotizacion"}</strong>
           </div>
-          <a className={totalCount ? "" : "is-disabled"} href={checkoutHref}>
-            {priced && totalCount ? "continuar compra" : "cotizar pedido"}
-          </a>
+          <button className="nuvia-cart-checkout-button" type="button" onClick={startCheckout} disabled={!totalCount || checkoutLoading}>
+            {checkoutLoading ? "creando orden..." : priced && totalCount ? "generar QR / orden" : "crear cotizacion"}
+          </button>
+          {checkoutResult ? (
+            <div className="nuvia-checkout-result" data-mode={checkoutResult.mode}>
+              <span>{checkoutResult.order?.publicCode ? `orden ${checkoutResult.order.publicCode}` : "checkout nuvia"}</span>
+              <strong>{checkoutResult.mode === "configuration_pending" ? "faltan credenciales" : checkoutResult.mode}</strong>
+              <p>{checkoutResult.message}</p>
+              {checkoutResult.order?.total ? (
+                <small>{money(checkoutResult.order.total, checkoutResult.order.currency)}</small>
+              ) : null}
+              {checkoutResult.payment?.qrImageUrl ? (
+                <Image src={checkoutResult.payment.qrImageUrl} alt="QR de pago Nuvia" width={220} height={220} unoptimized />
+              ) : null}
+              {checkoutResult.requiredConfiguration?.length ? (
+                <ul>
+                  {checkoutResult.requiredConfiguration.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+              ) : null}
+            </div>
+          ) : null}
+          {checkoutError ? <p className="nuvia-checkout-error">{checkoutError}</p> : null}
           <button type="button" onClick={clear} hidden={!cart.length}>
             vaciar carrito
           </button>
@@ -469,19 +558,63 @@ function ProductShelf({
 }) {
   const categories = Array.from(new Set(products.map((product) => product.categoria).filter(Boolean)));
   const [activeCategory, setActiveCategory] = useState("todos");
-  const visibleProducts = activeCategory === "todos" ? products : products.filter((product) => product.categoria === activeCategory);
+  const [query, setQuery] = useState("");
+  const [visibleLimit, setVisibleLimit] = useState(48);
+  const normalizedQuery = query.trim().toLowerCase();
+  const filteredProducts = useMemo(
+    () =>
+      products.filter((product) => {
+        const matchesCategory = activeCategory === "todos" || product.categoria === activeCategory;
+        if (!matchesCategory) {
+          return false;
+        }
+
+        if (!normalizedQuery) {
+          return true;
+        }
+
+        return [product.titulo, product.marca, product.categoria, product.uso]
+          .filter(Boolean)
+          .join(" ")
+          .toLowerCase()
+          .includes(normalizedQuery);
+      }),
+    [activeCategory, normalizedQuery, products],
+  );
+  const visibleProducts = filteredProducts.slice(0, visibleLimit);
+
+  useEffect(() => {
+    setVisibleLimit(48);
+  }, [activeCategory, normalizedQuery]);
 
   return (
     <section className="nuvia-next-section nuvia-catalog-portal" id="catalogo" data-nuvia-reveal>
-      <div className="nuvia-portal-tabs" aria-label="Categorias del catalogo">
-        <button className={activeCategory === "todos" ? "is-active" : undefined} type="button" onClick={() => setActiveCategory("todos")}>
-          todos
-        </button>
-        {categories.map((category) => (
-          <button className={activeCategory === category ? "is-active" : undefined} type="button" onClick={() => setActiveCategory(category)} key={category}>
-            {category}
+      <div className="nuvia-portal-controls">
+        <div className="nuvia-portal-tabs" aria-label="Categorias del catalogo">
+          <button className={activeCategory === "todos" ? "is-active" : undefined} type="button" onClick={() => setActiveCategory("todos")}>
+            todos
           </button>
-        ))}
+          {categories.map((category) => (
+            <button className={activeCategory === category ? "is-active" : undefined} type="button" onClick={() => setActiveCategory(category)} key={category}>
+              {category}
+            </button>
+          ))}
+        </div>
+
+        <label className="nuvia-catalog-search" htmlFor="nuvia-product-search">
+          <span>buscar</span>
+          <input
+            id="nuvia-product-search"
+            type="search"
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            placeholder="marca, producto o categoria"
+          />
+        </label>
+
+        <p className="nuvia-catalog-count">
+          {filteredProducts.length} productos encontrados
+        </p>
       </div>
 
       <div className="nuvia-product-grid">
@@ -511,6 +644,12 @@ function ProductShelf({
           );
         })}
       </div>
+
+      {visibleProducts.length < filteredProducts.length ? (
+        <button className="nuvia-load-more" type="button" onClick={() => setVisibleLimit((current) => current + 48)}>
+          mostrar mas productos
+        </button>
+      ) : null}
     </section>
   );
 }
@@ -801,6 +940,14 @@ export function NuviaProductPage(props: ProductPageProps) {
           <figure>
             <Image src={props.product.imagen} alt={props.product.imagenAlt} width={680} height={760} priority />
           </figure>
+          <div className="nuvia-pdp-gallery" aria-label="Imagenes y espacios multimedia del producto">
+            {props.product.detalleImagenes.slice(0, 3).map((image) => (
+              <figure key={`${image.src}-${image.label}`}>
+                <Image src={image.src} alt={image.alt} width={180} height={180} />
+                <figcaption>{image.label}</figcaption>
+              </figure>
+            ))}
+          </div>
         </div>
 
         <div className="nuvia-pdp-copy">

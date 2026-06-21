@@ -1,6 +1,7 @@
 # ONIA Panel de Vendedores 2026
 
-Estado: MVP principal definido y UI inicial implementada en `/vendedores`.
+Estado: MVP principal definido, UI inicial implementada en `/vendedores` y
+tablero de operacion 60 dias agregado en `/vendedores/operacion`.
 Actualizado: 2026-06-20.
 
 ## Veredicto
@@ -35,6 +36,35 @@ SIN DATOS COMPLETOS, NO HAY COMISION APROBADA.
 
 El panel debe repetir esta regla en todo lugar donde se hable de comisiones.
 
+Para el acuerdo Arthur Fuentes:
+
+```text
+SI NO ESTA EN ONIA CENTER O NOTION, NO CUENTA PARA COMISION NI REVISION SEMANAL.
+```
+
+## Requisitos semanales Arthur
+
+Estos requisitos viven en el acuerdo operativo de 60 dias y deben revisarse
+desde `/vendedores` todos los viernes.
+
+| Area | Minimo semanal |
+|---|---:|
+| Prospectos nuevos registrados completos | 35 |
+| Contactos, mensajes o llamadas reales | 25 |
+| Seguimientos realizados | 20 |
+| Llamadas o audios comerciales reales | 8 |
+| Reuniones o demos agendadas | 3 |
+| Propuestas, auditorias o diagnosticos enviados | 3 |
+| Videos grabados ONIA/Nuvia | 5 |
+| Piezas editadas o carruseles listos | 3 |
+| Publicaciones o piezas listas para aprobar | 3 |
+| CRM/ONIA Center actualizado | 100% viernes |
+| Mejora interna ONIA/Nuvia/ONIA Center | 2 |
+| Reporte semanal de lo hecho | 1 |
+
+Semana aprobada: minimo 80% del total, sin fallar CRM/ONIA Center,
+seguimientos ni reporte semanal.
+
 ## Que maneja el panel
 
 ### Inicio
@@ -42,9 +72,60 @@ El panel debe repetir esta regla en todo lugar donde se hable de comisiones.
 - Leads de hoy.
 - Seguimientos pendientes.
 - Ventas calientes.
-- Comisiones pendientes.
+- Caja, deuda y comisiones pendientes.
 - Ingresos del mes.
 - Acciones del vendedor para hoy.
+
+### Operacion 60 dias
+
+Esta pantalla orquesta el acuerdo Arthur/ONIA/Nuvia dentro del sistema.
+
+Debe mostrar:
+
+- deuda actual;
+- inversion Sergio/ONIA;
+- capital recuperable Sergio/ONIA;
+- caja operativa despues de deuda;
+- gasto mensual base;
+- caja chica ONIA/Nuvia;
+- meta mensual neta;
+- centros separados: ONIA Servicios, Nuvia, ONIA Media y Fondo/Caja;
+- ONIA Media como centro contable de ingresos/activos, usando apps ONIA base
+  sin duplicar gasto;
+- costos directos de ONIA Media solo cuando sean externos, incrementales o
+  premium prorrateados por uso real;
+- un solo Fondo ONIA para ONIA Servicios, Nuvia y ONIA Media, con origen
+  etiquetado por centro;
+- modo proteccion 60 dias para ONIA Servicios: 40% Fondo ONIA, Arthur hasta
+  50% sin capital ONIA solo si entrega todo aprobado sin rescate y
+  Sergio/riesgo minimo 10%;
+- escala de intervencion de Sergio: si Sergio corrige, reestructura, termina,
+  rescata o dirige demasiado una entrega que Arthur marco como casi hecha,
+  Arthur baja de categoria y Sergio sube segun evidencia;
+- clasificacion obligatoria de servicios nuevos o no listados antes de vender:
+  categoria, precio, alcance, costos, herramientas, responsable, riesgo y
+  porcentaje Arthur/Fondo ONIA/Sergio;
+- existencia mensual pagada por Fondo ONIA y cubierta temporalmente por Sergio
+  solo si el fondo no alcanza durante los 60 dias;
+- recuperacion de capital de Bs. 15.000 desde excedente de Fondo ONIA antes de
+  bonos o retiros extraordinarios;
+- reglas de reparto por participacion real;
+- evidencias obligatorias para que algo cuente;
+- obligaciones semanales de Arthur y Sergio;
+- reglas de rentabilidad y cierre quincenal de Nuvia;
+- calendario de calculo y pago;
+- adelantos quincenales hasta 20% sobre pago ganado/aprobable de Arthur;
+- cierre mensual final con saldo, descuentos o compensaciones.
+
+Regla: esta pantalla es el tablero de revision semanal y del dia 60. Si una
+venta, gasto, pieza, llamada, entrega o cierre no esta registrado aqui o en
+Notion, no debe usarse para discutir pagos o porcentajes.
+
+Regla de pago: el adelanto quincenal no se calcula sobre facturacion bruta. Se
+calcula sobre el pago ganado/aprobable de Arthur despues de cobro real,
+evidencia, CRM completo, costos y margen. El cierre mensual descuenta adelantos
+y completa el saldo o compensa diferencias si hubo reclamos, devoluciones,
+entregas no aprobadas o datos faltantes.
 
 ### Leads
 
@@ -222,6 +303,13 @@ Tablas:
 - `vendor_income`
 - `vendor_commissions`
 - `vendor_followups`
+- `operation_trials`
+- `operation_centers`
+- `operation_evidence`
+- `weekly_scorecards`
+- `petty_cash_entries`
+- `nuvia_closures`
+- `operation_payouts`
 
 RLS queda activo y cerrado por defecto. La escritura debe hacerse con rutas
 server-side o n8n usando credenciales privadas.

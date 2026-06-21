@@ -1,6 +1,6 @@
 # Nuvia Web Context
 
-Last update: 2026-06-17
+Last update: 2026-06-19
 
 ## Brand
 
@@ -41,7 +41,7 @@ Last update: 2026-06-17
 
 ## Active Product Data
 
-Nuvia currently has two real active products:
+Nuvia started with two real active products:
 
 - `ISDIN Fusion Water Magic SPF 50`
   - Brand: ISDIN
@@ -59,6 +59,31 @@ Nuvia currently has two real active products:
   - Source used: official SVR product page.
 
 Do not invent prices, stock, medical outcomes or cure claims. The site can sell dermocosmetics, but must not replace dermatology advice.
+
+2026-06-19 HBDERM import:
+
+- Source requested by user: `https://hbderm.com/`.
+- Public scrape method: `robots.txt` + Rank Math product sitemaps. WooCommerce Store API returned `401`, so the durable scraper reads `product-sitemap1.xml` and `product-sitemap2.xml`, then extracts product metadata from public product pages.
+- Scraper: `web-factory/harvester/product/scrape_hbderm_products.mjs`.
+- Raw scrape artifact: `web-factory/data/references/product-sources/hbderm-products-20260619.json`.
+- Result: 341 product URLs reviewed, 328 products with usable price metadata, 13 skipped because price/page data was missing.
+- Nuvia transformer: `web-factory/harvester/product/build_nuvia_hbderm_catalog.mjs`.
+- Normalized artifact: `web-factory/data/references/product-sources/nuvia-hbderm-normalized-20260619.json`.
+- Public Nuvia catalog now uses 316 products: the two original curated products plus 314 HBDERM consumer-facing products.
+- 14 professional/invasive products from HBDERM are kept as internal/professional-under-consultation records in the database migration, but are not published in `nuvia.json` storefront by default. This avoids presenting mesotherapy, fillers, cannulas or similar professional items as ordinary checkout products.
+- Product media policy: HBDERM remote images are reference/product imagery for the working catalog. The UI also includes placeholder slots for Nuvia-owned product photos and usage videos. Before launch, replace remote/reference imagery with owned/approved product media when rights or supplier permission are not explicit.
+
+HBDERM pricing rule from user:
+
+- `source_price`: public HBDERM product price in BOB.
+- `margin_rate`: `45%`.
+- `margin_amount`: `source_price * 0.45`.
+- `nuvia_sale_price`: `source_price - margin_amount`.
+- `seller_commission_rate`: `10%` of the calculated margin.
+- `seller_commission_amount`: `margin_amount * 0.10`.
+- `net_margin_after_seller`: `margin_amount - seller_commission_amount`.
+- Storefront display rounds the visible label to whole bolivianos (`Bs.`) while storing the numeric `precioValor` with two decimals.
+- Important business caveat: this is a configured commercial formula based on the user's instruction. It should be validated against real supplier cost/discount terms before treating it as true margin.
 
 ## Current Site Pattern
 
@@ -259,6 +284,36 @@ ISDIN Spain ecommerce scrape impact:
 - Cart drawer rule: cart content scrolls inside the drawer; footer remains checkout/cotizacion. When products are missing prices or payment is not configured, the CTA must stay in `cotizar pedido` mode.
 - Product section rule for future inventory: sections belong in `/nuvia/catalogo` and in the cart's `seguir comprando` module. The landing may preview a maximum of two featured products, but must not become a repeated catalog.
 - Backend next step: add Next.js server actions or API routes to read products from Supabase and write cart/quote/subscriber events. Keep this server-side until the local Supabase endpoint has an intentional public access model.
+
+2026-06-19 HBDERM database expansion:
+
+- Migration added: `supabase/migrations/20260619_web_factory_nuvia_hbderm_products.sql`.
+- Applied to private Supabase on the ONIA VPS.
+- Validation after apply:
+  - Nuvia products in DB: `330`
+  - Products with HBDERM metadata: `329`
+  - Professional/internal inactive products: `14`
+  - Product media rows: `659`
+- The DB stores all imported HBDERM products plus current curated Nuvia products. The public Next.js storefront reads the generated `nuvia.json` fallback for now, not the private Supabase directly.
+- Do not expose the private Supabase endpoint in browser code. Add Next.js server routes/actions before switching frontend reads/writes to DB.
+- Product sections generated for catalog scale: destacados, proteccion solar, limpieza facial, piel grasa/acne, hidratacion, antiedad, manchas, cabello/unas, bebe/ninos, dermocosmetica, professional consulta.
+- Internal raw JSON per product stores source URL, source categories, availability and the full pricing formula. Public cards should not expose source margin or seller commission.
+
+2026-06-20 payment/order foundation:
+
+- Payment runbook: `web-factory/NUVIA_PAYMENT_SYSTEM.md`.
+- Migration added: `supabase/migrations/20260620_web_factory_nuvia_payments.sql`.
+- New DB tables: `web_factory.orders`, `web_factory.order_items`, `web_factory.payment_providers`, `web_factory.payments`, `web_factory.payment_events`.
+- New DB view: `web_factory.pending_payment_checks` for future polling/automation workers.
+- Seeded providers: `bnb_qr_simple` as primary QR provider, plus `yape_manual` and `bank_transfer_manual` as fallback channels.
+- Next.js endpoints:
+  - `POST /api/nuvia/checkout`
+  - `GET /api/nuvia/payments/:paymentId/status`
+- Server adapter: `web-factory/apps/site/src/lib/nuvia-commerce.ts`.
+- Frontend rule update: the cart drawer must call the server checkout endpoint instead of linking directly to WhatsApp/email. The server recalculates totals from product data and returns `payment`, `quote`, `configuration_pending` or `invalid_request`.
+- Credential rule: until `WEB_FACTORY_SUPABASE_URL`, `WEB_FACTORY_SUPABASE_SERVICE_ROLE_KEY`, `BNB_ACCOUNT_ID`, `BNB_AUTHORIZATION_ID`, `BNB_AUTH_BASE_URL` and `BNB_QR_BASE_URL` exist server-side, the API must return `configuration_pending` and list the missing env vars.
+- Security rule: browser code never receives Supabase service keys or BNB credentials, never marks an order as paid, and never controls final totals.
+- Operational activation sequence: apply migrations, add Supabase server env, add BNB sandbox env, generate test QR, verify status behavior, then add webhook/polling before production payment claims.
 
 ## Visual Reference Intake
 

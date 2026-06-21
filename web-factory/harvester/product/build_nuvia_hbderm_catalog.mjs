@@ -118,7 +118,7 @@ function compactDescription(product, category) {
 }
 
 function normalizeCategory(product) {
-  const haystack = stripAccents([...product.categories, product.title, product.description].join(" ")).toLowerCase();
+  const haystack = stripAccents([...product.categories, product.title].join(" ")).toLowerCase();
 
   if (/(rellenos dermales|mesoterapia|canulas|art filler|fillmed|softfil|nanosoft)/.test(haystack)) {
     return "Profesional consulta";
@@ -321,14 +321,14 @@ function sqlString(value) {
 }
 
 function sqlJson(value) {
-  return sqlString(JSON.stringify(value));
+  return sqlString(JSON.stringify(value ?? {}));
 }
 
 function sqlArray(values) {
   return `array[${values.map((value) => `'${sqlString(value)}'`).join(",")}]::text[]`;
 }
 
-function generateMigration(products) {
+function generateMigration(products, meta) {
   const rows = products.map((product, index) => {
     const slug = productSlug(product);
     const active = product.tipoVenta !== "profesional_consulta";
@@ -387,7 +387,10 @@ store_update as (
   update web_factory.stores
   set raw = raw || '${sqlJson({
     hbderm_source: "https://hbderm.com/",
-    hbderm_products_scraped: rows.length,
+    hbderm_products_scraped: meta.source_product_count,
+    hbderm_products_imported: meta.imported_product_count,
+    hbderm_public_products: meta.public_product_count,
+    hbderm_professional_internal_products: meta.professional_internal_count,
     pricing_formula: {
       sale_price: "source_price - (source_price * 0.45)",
       seller_commission: "(source_price * 0.45) * 0.10",
@@ -572,7 +575,9 @@ async function main() {
   ]);
   const nuvia = JSON.parse(nuviaRaw);
   const scrape = JSON.parse(scrapeRaw);
-  const currentProducts = nuvia.productos.map((product, index) => {
+  const baseProductTitles = new Set(["ISDIN Fusion Water Magic SPF 50", "SVR Sebiaclear Gel Moussant"]);
+  const baseProducts = nuvia.productos.filter((product) => baseProductTitles.has(product.titulo));
+  const currentProducts = baseProducts.map((product, index) => {
     const enriched = { ...product };
 
     if (product.titulo === "ISDIN Fusion Water Magic SPF 50") {
@@ -659,7 +664,15 @@ async function main() {
   await mkdir(path.dirname(NORMALIZED_JSON), { recursive: true });
   await writeFile(NUVIA_JSON, `${JSON.stringify(nuvia, null, 2)}\n`);
   await writeFile(NORMALIZED_JSON, `${JSON.stringify(normalized, null, 2)}\n`);
-  await writeFile(MIGRATION, generateMigration([...currentProducts, ...importedProducts]));
+  await writeFile(
+    MIGRATION,
+    generateMigration([...currentProducts, ...importedProducts], {
+      source_product_count: scrape.product_count,
+      imported_product_count: importedProducts.length,
+      public_product_count: productsForJson.length,
+      professional_internal_count: importedProducts.length - publicImportedProducts.length,
+    }),
+  );
 
   console.log(
     JSON.stringify(

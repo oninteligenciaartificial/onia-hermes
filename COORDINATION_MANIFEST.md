@@ -67,6 +67,9 @@ Canonical files:
 - `ONIA_VENDOR_MANUAL_2026.md`
 - `output/pdf/ONIA_VENDOR_MANUAL_2026.pdf`
 - `ONIA_VENDOR_SALES_PLAYBOOK_2026.md`
+- `hermes-content/docs/ONIA_ACUERDO_ARTHUR_FUENTES_60_DIAS_2026.md`
+- `hermes-content/propuestas/acuerdo-colaborador-onia-nuvia.html`
+- `hermes-content/propuestas/acuerdo-colaborador-onia-nuvia.pdf`
 - `ONIA_LEADS_PRIORITY_2026.md`
 - `ONIA_BEST_MARKET_OPPORTUNITY_2026.md`
 - `ONIA_PROJECTS_VENDOR_DECK_2026.html`
@@ -112,6 +115,14 @@ Canonical files:
 - `hermes-content/docs/ONIA_CREATOR_VIDEO_STRATEGY_2026.md`
 - `hermes-content/docs/ONIA_ANIMATED_VIDEO_WORKFLOW.md`
 - `hermes-content/docs/ONIA_CONSULTING_SERVICES_2026.md`
+- `hermes-content/docs/ONIA_SYSTEM_PORTFOLIO_ARCHITECTURE_2026.md`
+- `hermes-content/docs/ONIA_SERGIO_BOLIVIAN_LONG_TERM_INCOME_STRATEGY_2026.md`
+- `hermes-content/docs/ONIA_HERMES_COLLABORATOR_ACCESS_MODEL_2026.md`
+- `hermes-content/docs/ONIA_HERMES_COLLABORATOR_SETUP_RUNBOOK_2026.md`
+- `hermes-content/docs/BOLIVIAN_ELECTRIC_AI_TRANSFORMATION_PLAN_2026.md`
+- `hermes-content/docs/BOLIVIAN_ELECTRIC_TUESDAY_AUDIT_QUESTIONS_2026.md`
+- `hermes-content/docs/BOLIVIAN_ELECTRIC_FIRST_BIG_PROJECT_INVESTMENT_PLAN_2026.md`
+- `hermes-content/docs/BOLIVIAN_ELECTRIC_PHASE1_LOW_TICKET_AI_OPERATIONS_OFFER_2026.md`
 - `hermes-content/docs/ONIA_WHATSAPP_CHATWOOT_META_SALES_AUDIT_2026.md`
 - `hermes-content/docs/SERGIO_FACE_VOICE_ASSET_GUIDE.md`
 - `hermes-content/docs/SERGIO_ONIA_CONTENT_PRODUCTION_KIT_2026.md`
@@ -119,6 +130,7 @@ Canonical files:
 - `hermes-content/docs/ONIA_OPEN_SOURCE_AI_VIDEO_LAB_2026.md`
 - `hermes-content/docs/ONIA_SELF_HOSTED_AI_TOOLS_2026.md`
 - `hermes-content/docs/ONIA_SELF_HOSTED_STACK_RUNBOOK_2026.md`
+- `hermes-content/docs/ONIA_7000_BOB_PRODUCTION_INFRA_INVESTMENT_PLAN_2026.md`
 - `hermes-content/docs/HERMES_OS_CONTROL_CENTER_2026.md`
 - `hermes-content/docs/ONIA_PANEL_VENDEDORES_2026.md`
 - `hermes-content/deploy/selfhosted/`
@@ -313,6 +325,7 @@ Session B should not edit publishing scripts unless coordinating first.
 ## Naming rules
 - Web Factory client-site context for Nuvia lives in `web-factory/data/clients/nuvia.context.md`.
 - Nuvia web data/assets live in `web-factory/data/clients/nuvia.json` and `web-factory/data/clients/nuvia.assets/`.
+- Nuvia payment/order system runbook lives in `web-factory/NUVIA_PAYMENT_SYSTEM.md`.
 - Global Web Factory design stack lives in `C:\Users\PC\.codex\design-stack\DESIGN_STACK.md`; project usage notes live in `web-factory/DESIGN_STACK.md`.
 - Use Spanish names for Hermes skills.
 - Use English uppercase names for repo-level operational docs.

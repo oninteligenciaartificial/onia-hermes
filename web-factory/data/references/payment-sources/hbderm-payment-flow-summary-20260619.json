@@ -1,0 +1,975 @@
+{
+  "title": "Pagina de Pago | HBDERM",
+  "scripts": [
+    "https://hbderm.com/wp-includes/js/jquery/jquery.min.js",
+    "https://hbderm.com/wp-content/plugins/woocommerce/assets/js/jquery-blockui/jquery.blockUI.min.js",
+    "https://hbderm.com/wp-content/plugins/woocommerce/assets/js/frontend/add-to-cart.min.js",
+    "https://hbderm.com/wp-content/plugins/woocommerce/assets/js/js-cookie/js.cookie.min.js",
+    "https://hbderm.com/wp-content/plugins/woocommerce/assets/js/frontend/woocommerce.min.js",
+    "https://hbderm.com/wp-content/plugins/js_composer/assets/js/vendors/woocommerce-add-to-cart.js",
+    "https://hbderm.com/wp-content/plugins/woocommerce-google-analytics-integration/assets/js/build/main.js",
+    "https://hbderm.com/wp-content/themes/shopkeeper/js/vendor/imagesloaded.pkgd.min.js",
+    "https://hbderm.com/wp-content/themes/shopkeeper/js/vendor/jquery.visible.js",
+    "https://hbderm.com/wp-content/themes/shopkeeper/js/public/global-header.js",
+    "https://hbderm.com/wp-content/themes/shopkeeper/js/public/global-wp-blocks.js",
+    "https://hbderm.com/wp-content/themes/shopkeeper/js/public/misc-product-card-animation.js",
+    "https://hbderm.com/wp-content/themes/shopkeeper/js/public/misc-minicart.js",
+    "https://hbderm.com/wp-content/plugins/perfect-woocommerce-brands/build/frontend/js/index.js",
+    "https://hbderm.com/wp-content/plugins/woocommerce/assets/js/sourcebuster/sourcebuster.min.js",
+    "https://hbderm.com/wp-content/plugins/woocommerce/assets/js/frontend/order-attribution.min.js",
+    "https://hbderm.com/wp-content/themes/shopkeeper/inc/notifications/custom/assets/js/custom-notifications.js",
+    "https://hbderm.com/wp-content/themes/shopkeeper/inc/search/assets/js/search.js",
+    "https://hbderm.com/wp-content/plugins/js_composer/assets/js/dist/js_composer_front.min.js",
+    "https://hbderm.com/wp-content/themes/shopkeeper/js/scripts.js",
+    "https://hbderm.com/wp-content/plugins/wordpress-whatsapp-support/assets/libraries/inputmask/jquery.inputmask.min.js",
+    "https://hbderm.com/wp-content/plugins/woocommerce/assets/js/frontend/cart-fragments.min.js",
+    "https://hbderm.com/wp-content/plugins/js_composer/assets/lib/vc/vc_accordion/vc-accordion.min.js",
+    "https://hbderm.com/wp-content/plugins/js_composer/assets/lib/vc/vc-tta-autoplay/vc-tta-autoplay.min.js"
+  ],
+  "forms": [
+    {
+      "index": 0,
+      "id": "wc-iframe-postform",
+      "action": "https://www.livees.net/Checkout/ApiWoo6.8",
+      "method": "POST",
+      "fields": [
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "order[id]",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "order[order_key]",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "order[status]",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "order[created_at]",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "order[currency]",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "order[prices_include_tax]",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "order[total]",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "order[subtotal]",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "order[discount_total]",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "order[discount_tax]",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "order[shipping_total]",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "order[shipping_tax]",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "order[cart_tax]",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "order[total_tax]",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "order[payment_method]",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "order[payment_method_title]",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "order[transaction_id]",
+          "id": "",
+          "value": "",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "order[customer_id]",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "order[customer_ip_address]",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "order[customer_user_agent]",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "order[customer_note]",
+          "id": "",
+          "value": "",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "order[return_url]",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "order[cancel_url]",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "billing[first_name]",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "billing[last_name]",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "billing[company]",
+          "id": "",
+          "value": "",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "billing[address_1]",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "billing[address_2]",
+          "id": "",
+          "value": "",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "billing[city]",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "billing[state]",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "billing[postcode]",
+          "id": "",
+          "value": "",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "billing[country]",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "billing[email]",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "billing[phone]",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "shipping[first_name]",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "shipping[last_name]",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "shipping[company]",
+          "id": "",
+          "value": "",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "shipping[address_1]",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "shipping[address_2]",
+          "id": "",
+          "value": "",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "shipping[city]",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "shipping[state]",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "shipping[postcode]",
+          "id": "",
+          "value": "",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "shipping[country]",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "shipping[phone]",
+          "id": "",
+          "value": "",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "_",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "__",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "amt2",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "currency",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "name",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "lastname",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "email",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "phone",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "estado_lbl",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "invno",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "posturl",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "pais",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "ciudad",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "estado",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "zip",
+          "id": "",
+          "value": "",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "direccion",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "tipo_de_cambio_bs_usd",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "items[0][item_id]",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "items[0][product_id]",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "items[0][variation_id]",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "items[0][name]",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "items[0][quantity]",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "items[0][subtotal]",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "items[0][subtotal_tax]",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "items[0][total]",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "items[0][total_tax]",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "items[0][sku]",
+          "id": "",
+          "value": "",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "items[0][permalink]",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "items[0][meta][_product_id][0]",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "items[0][meta][_variation_id][0]",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "items[0][meta][_qty][0]",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "items[0][meta][_tax_class][0]",
+          "id": "",
+          "value": "",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "items[0][meta][_line_subtotal][0]",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "items[0][meta][_line_subtotal_tax][0]",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "items[0][meta][_line_total][0]",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "items[0][meta][_line_tax][0]",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "items[0][meta][_line_tax_data][0]",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "shipping_lines[0][item_id]",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "shipping_lines[0][method_id]",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "shipping_lines[0][instance_id]",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "shipping_lines[0][name]",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "shipping_lines[0][total]",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "shipping_lines[0][total_tax]",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "shipping_lines[0][meta][method_id][0]",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "shipping_lines[0][meta][instance_id][0]",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "shipping_lines[0][meta][cost][0]",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "shipping_lines[0][meta][total_tax][0]",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "shipping_lines[0][meta][taxes][0]",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "shipping_lines[0][meta][artculos][0]",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "meta[_billing_numero_de_nit]",
+          "id": "",
+          "value": "",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "meta[_billing_razon_social]",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "meta[is_vat_exempt]",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "meta[_wc_order_attribution_source_type]",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "meta[_wc_order_attribution_referrer]",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "meta[_wc_order_attribution_utm_source]",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "meta[_wc_order_attribution_utm_medium]",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "meta[_wc_order_attribution_session_entry]",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "meta[_wc_order_attribution_session_start_time]",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "meta[_wc_order_attribution_session_pages]",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "meta[_wc_order_attribution_session_count]",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "meta[_wc_order_attribution_user_agent]",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "meta[_wc_order_attribution_device_type]",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "param2",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "merchant_token",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "resource_key",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "order_id",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "order_json",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        }
+      ]
+    },
+    {
+      "index": 1,
+      "id": "",
+      "action": "https://hbderm.com/",
+      "method": "get",
+      "fields": [
+        {
+          "tag": "input",
+          "type": "search",
+          "name": "s",
+          "id": "search-input",
+          "value": "",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "submit",
+          "name": "",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        },
+        {
+          "tag": "input",
+          "type": "hidden",
+          "name": "post_type",
+          "id": "",
+          "value": "[present-redacted]",
+          "buttonText": ""
+        }
+      ]
+    }
+  ],
+  "methodText": [],
+  "links": [],
+  "inlinePaymentSnippets": [
+    " /* <![CDATA[ */ var wc_add_to_cart_params = {\"ajax_url\":\"\\/wp-admin\\/admin-ajax.php\",\"wc_ajax_url\":\"\\/?wc-ajax=%%endpoint%%\",\"i18n_view_cart\":\"Ver carrito\",\"cart_url\":\"https:\\/\\/hbderm.com\\/mi-carrito\\/\",\"is_cart\":\"\",\"cart_redirect_after_add\":\"no\"}; /* ]]> */ ",
+    " /* <![CDATA[ */ var woocommerce_params = {\"ajax_url\":\"\\/wp-admin\\/admin-ajax.php\",\"wc_ajax_url\":\"\\/?wc-ajax=%%endpoint%%\",\"i18n_password_show\":\"Mostrar contrase\\u00f1a\",\"i18n_password_hide\":\"Ocultar contrase\\u00f1a\"}; /* ]]> */ ",
+    " window._tpt ??= {}; window.SR7 ??= {}; _tpt.R ??= {}; _tpt.R.fonts ??= {}; _tpt.R.fonts.customFonts??= {}; SR7.devMode = false; SR7.F ??= {}; SR7.G ??= {}; SR7.LIB ??= {}; SR7.E ??= {}; SR7.E.gAddons ??= {}; SR7.E.php ??= {}; SR7.E.nonce = 'd8ac9484b4'; SR7.E.ajaxurl = 'https://hbderm.com/wp-admin/admin-ajax.php'; SR7.E.resturl = 'https://hbderm.com/wp-json/'; SR7.E.slug_path = 'revslider/revslider.php'; SR7.E.slug = 'revslider'; SR7.E.plugin_url = 'https://hbderm.com/wp-content/plugins/revslider/'; SR7.E.wp_plugin_url = 'https://hbderm.com/wp-content/plugins/'; SR7.E.revision = '6.7.34'; SR7.E.fontBaseUrl = ''; SR7.G.breakPoints = [1240,1024,778,480]; SR7.E.modules = ['module','page','slide','layer','draw','animate','srtools','canvas','defaults','carousel','navigation','media','modifiers','migration']; SR7.E.libs = ['WEBGL']; SR7.E.css = ['csslp','cssbtns','cssfilters','cssnav','cssmedia']; SR7.E.resources = {}; SR7.E.ytnc = false; SR7.JSON ??= {}; /*! Slider Revolution 7.0 - Page Pr",
+    " (function() { document.addEventListener(\"DOMContentLoaded\", function () { const form = document.getElementById('wc-iframe-postform'); if (!form) return; // Insertar input oculto con font-family const fontInput = document.createElement('input'); fontInput.type = 'hidden'; fontInput.name = 'font_family'; fontInput.value = window.getComputedStyle(document.body).getPropertyValue('font-family'); form.appendChild(fontInput); // Enviar formulario automáticamente al iframe form.submit(); }); // Validar origen permitido function isAllowedOrigin(origin) { var allowed = [\"https:\\/\\/www.livees.net\",\"https:\\/\\/www.liveescheckout.net\"]; return allowed.indexOf(origin) !== -1; } // Escuchar mensajes desde el iframe window.addEventListener('message', function(event) { // Ajustar altura del iframe if (event && event.data && event.data.type === 'iframeHeight' && event.data.height) { var iframe = document.getElementById('iframe-final'); if (iframe) iframe.style.height = String(event.data.height) + 'px'; ",
+    " {\"prefetch\":[{\"source\":\"document\",\"where\":{\"and\":[{\"href_matches\":\"\\/*\"},{\"not\":{\"href_matches\":[\"\\/wp-*.php\",\"\\/wp-admin\\/*\",\"\\/wp-content\\/uploads\\/*\",\"\\/wp-content\\/*\",\"\\/wp-content\\/plugins\\/*\",\"\\/wp-content\\/themes\\/shopkeeper-child\\/*\",\"\\/wp-content\\/themes\\/shopkeeper\\/*\",\"\\/*\\\\?(.+)\"]}},{\"not\":{\"selector_matches\":\"a[rel~=\\\"nofollow\\\"]\"}},{\"not\":{\"selector_matches\":\".no-prefetch, .no-prefetch a\"}}]},\"eagerness\":\"conservative\"}]} ",
+    " var sbiajaxurl = \"https://hbderm.com/wp-admin/admin-ajax.php\"; ",
+    " /* <![CDATA[ */ var pwb_ajax_object = {\"carousel_prev\":\"<\",\"carousel_next\":\">\"}; /* ]]> */ ",
+    " /* <![CDATA[ */ var wc_order_attribution = {\"params\":{\"lifetime\":1.0e-5,\"session\":30,\"base64\":false,\"ajaxurl\":\"https:\\/\\/hbderm.com\\/wp-admin\\/admin-ajax.php\",\"prefix\":\"wc_order_attribution_\",\"allowTracking\":true},\"fields\":{\"source_type\":\"current.typ\",\"referrer\":\"current_add.rf\",\"utm_campaign\":\"current.cmp\",\"utm_source\":\"current.src\",\"utm_medium\":\"current.mdm\",\"utm_content\":\"current.cnt\",\"utm_id\":\"current.id\",\"utm_term\":\"current.trm\",\"utm_source_platform\":\"current.plt\",\"utm_creative_format\":\"current.fmt\",\"utm_marketing_tactic\":\"current.tct\",\"session_entry\":\"current_add.ep\",\"session_start_time\":\"current_add.fd\",\"session_pages\":\"session.pgs\",\"session_count\":\"udata.vst\",\"user_agent\":\"udata.uag\"}}; /* ]]> */ ",
+    " /* <![CDATA[ */ var search = {\"ajax_search_endpoint\":\"\\/?wc-ajax=search_ajax_search\",\"action_search\":\"search_ajax_search\",\"min_chars\":\"3\",\"show_preloader\":\"1\"}; /* ]]> */ ",
+    " /* <![CDATA[ */ var getbowtied_scripts_vars = {\"ajax_load_more_locale\":\"Load More Items\",\"ajax_loading_locale\":\"Cargando m\\u00e1s productos\",\"ajax_no_more_items_locale\":\"Fin del cat\\u00e1logo\",\"pagination_blog\":\"infinite_scroll\",\"layout_blog\":\"layout-2\",\"shop_pagination_type\":\"infinite_scroll\",\"option_minicart\":\"1\",\"option_minicart_open\":\"2\",\"catalog_mode\":\"\",\"product_lightbox\":\"\",\"product_gallery_zoom\":\"1\",\"mobile_product_columns\":\"2\",\"sticky_header\":\"1\",\"mobile_sticky_header\":\"1\",\"back_to_top_button\":\"\",\"ajax_url\":\"\\/wp-admin\\/admin-ajax.php\"}; /* ]]> */ ",
+    " /* <![CDATA[ */ var wwsObj = {\"support_number\":\"59162209701\",\"auto_popup\":\"no\",\"auto_popup_time\":\"5\",\"plugin_url\":\"https:\\/\\/hbderm.com\\/wp-content\\/plugins\\/wordpress-whatsapp-support\\/\",\"is_mobile\":\"0\",\"current_page_id\":\"23076\",\"current_page_url\":\"https:\\/\\/hbderm.com\\/iframe-confirmacion\\/\",\"popup_layout\":\"1\",\"group_invitation_id\":\"XYZ12345678\",\"admin_url\":\"https:\\/\\/hbderm.com\\/wp-admin\\/admin-ajax.php?ver=6a34bb8875cf7\",\"scroll_lenght\":\"\",\"pre_defined_text\":\"%0A\\r\\n\\r\\n*P\\u00e1gina:* Pagina de Pago%0A\\r\\n*Enlace:* https:\\/\\/hbderm.com\\/iframe-confirmacion\\/\",\"is_debug\":\"no\",\"fb_ga_click_tracking\":\"{\\\"fb_click_tracking_status\\\":\\\"no\\\",\\\"fb_click_tracking_event_name\\\":\\\"Chat started\\\",\\\"fb_click_tracking_event_label\\\":\\\"Support\\\",\\\"ga_click_tracking_status\\\":\\\"no\\\",\\\"ga_click_tracking_event_name\\\":\\\"Button Clicked\\\",\\\"ga_click_tracking_event_category\\\":\\\"WordPress WhatsApp Support\\\",\\\"ga_click_tracking_event_label\\\":\\\"Support\\\"}\",\"is_gdpr\":\"no\",\"numberMasking\":\"77777777\",\"whatsapp_",
+    " /* <![CDATA[ */ var wc_cart_fragments_params = {\"ajax_url\":\"\\/wp-admin\\/admin-ajax.php\",\"wc_ajax_url\":\"\\/?wc-ajax=%%endpoint%%\",\"cart_hash_key\":\"wc_cart_hash_ae9c290c48f8742cb111e95393a67aa3\",\"fragment_name\":\"wc_fragments_ae9c290c48f8742cb111e95393a67aa3\",\"request_timeout\":\"5000\"}; /* ]]> */ "
+  ]
+}

@@ -12,13 +12,20 @@
     "Sin datos completos en CRM, no hay comision aprobada.",
     "No contactar prospectos sin permiso cuando el lead es frio, sensible o asignado.",
     "No prometer ventas garantizadas, viralidad, SEO garantizado ni WhatsApp automatico.",
-    "Videos IA/Higgsfield no se venden como producto independiente por ahora."
+    "Videos IA/Higgsfield no se venden como producto independiente por ahora.",
+    "Si no esta en ONIA Center o Notion, no cuenta para comision, cierre, Nuvia ni revision semanal.",
+    "Todo ingreso o gasto debe pertenecer a un centro: ONIA Servicios, Nuvia, ONIA Media o Fondo/Caja."
   ],
   "views": [
     {
       "id": "inicio",
       "label": "Inicio",
       "purpose": "Trabajo diario: leads de hoy, seguimientos, ventas calientes, comisiones e ingresos."
+    },
+    {
+      "id": "operacion",
+      "label": "Operacion 60 dias",
+      "purpose": "Control del acuerdo Arthur/ONIA/Nuvia: caja, deuda, centros, evidencia, semana, Nuvia y pagos."
     },
     {
       "id": "leads",
@@ -92,6 +99,217 @@
     },
     "vendor_commissions": {
       "purpose": "Comision estimada/aprobada/pagada con regla de datos completos."
+    },
+    "operation_trials": {
+      "purpose": "Pruebas operativas como Arthur 60 dias, fechas, estado y regla de revision."
+    },
+    "operation_centers": {
+      "purpose": "Separar ONIA Servicios, Nuvia, ONIA Media y Fondo/Caja para no mezclar dinero."
+    },
+    "operation_evidence": {
+      "purpose": "Pruebas de llamadas, mensajes, pagos, entregas, costos, contenido, capacitaciones y aprobaciones."
+    },
+    "weekly_scorecards": {
+      "purpose": "Revision semanal de metas Arthur/Sergio, cumplimiento, aprobacion y bloqueos."
+    },
+    "petty_cash_entries": {
+      "purpose": "Caja chica ONIA/Nuvia con gasto, responsable, comprobante, motivo y estado."
+    },
+    "nuvia_closures": {
+      "purpose": "Cierre quincenal de Nuvia con ventas, costos, herramientas premium, margen, Fondo ONIA, reserva y reparto."
+    },
+    "operation_payouts": {
+      "purpose": "Pagos calculados, aprobados, retenidos, descontados o pagados por centro y actor."
+    }
+  },
+  "operation_60_days": {
+    "participant": "Arthur Fuentes",
+    "role": "Colaborador comercial y operativo ONIA en prueba",
+    "duration": "60 dias",
+    "contract_type": "Contrato privado operativo de colaboracion comercial y operativa por 60 dias.",
+    "payment_policy": {
+      "advance_name": "Adelanto quincenal",
+      "settlement_name": "Cierre mensual",
+      "biweekly_advance_percent": 20,
+      "advance_basis": "Pago ganado/aprobable de Arthur, no facturacion bruta.",
+      "cutoffs": [
+        "dias 1-15",
+        "dias 16-fin de mes"
+      ],
+      "approval_conditions": [
+        "cobro real",
+        "CRM/ONIA Center completo",
+        "evidencia aprobada",
+        "margen sano",
+        "entrega sin reclamo critico"
+      ],
+      "monthly_settlement": "Al fin de mes se calcula el pago final aprobado, se descuentan adelantos quincenales y se paga el saldo o se compensa diferencia en el siguiente cierre.",
+      "example": {
+        "arthur_earned_approved_bs": 10000,
+        "biweekly_advance_bs": 2000,
+        "monthly_final_approved_bs": 6000,
+        "month_end_balance_bs": 4000
+      }
+    },
+    "risk_protected_commission_policy": {
+      "active_days": 60,
+      "reason": "Sergio/ONIA corre capital, deuda, herramientas, marca, cobro, QA y responsabilidad final mientras Arthur no aporta capital a ONIA general.",
+      "onia_services_fund_percent": 40,
+      "arthur_max_percent_without_onia_capital": 50,
+      "sergio_min_risk_percent_when_arthur_delivers_all": 10,
+      "sergio_intervention_scale": [
+        {
+          "level": 0,
+          "classification": "entrega completa independiente",
+          "arthur": "50%",
+          "sergio": "10%"
+        },
+        {
+          "level": 1,
+          "classification": "correcciones menores o QA corto",
+          "arthur": "45%",
+          "sergio": "15%"
+        },
+        {
+          "level": 2,
+          "classification": "intervencion media",
+          "arthur": "35%-40%",
+          "sergio": "20%-25%"
+        },
+        {
+          "level": 3,
+          "classification": "rescate fuerte",
+          "arthur": "20%-30%",
+          "sergio": "30%-40%"
+        },
+        {
+          "level": 4,
+          "classification": "Sergio termina o asume riesgo central",
+          "arthur": "10%-15%",
+          "sergio": "45%-50%"
+        }
+      ],
+      "arthur_monthly_fixed_obligation_bs": 0,
+      "optional_project_capital_rule": "Si Arthur cofinancia un proyecto especifico aprobado por escrito, puede subir hasta 50% en ese proyecto; no crea propiedad sobre ONIA.",
+      "unlisted_service_rule": "Servicio nuevo no hereda porcentaje alto. Primero se clasifica en ONIA Center por riesgo, venta, entrega, costos y responsable.",
+      "unlisted_service_defaults": [
+        {
+          "type": "lead_simple",
+          "arthur": "3%-5%",
+          "onia_fund": "40% si se vende",
+          "sergio": "resto"
+        },
+        {
+          "type": "lead_con_llamada_crm",
+          "arthur": "12%-15%",
+          "onia_fund": "40%",
+          "sergio": "45%-48%"
+        },
+        {
+          "type": "soporte_comercial_brief_copy",
+          "arthur": "15%-20%",
+          "onia_fund": "40%",
+          "sergio": "40%-45%"
+        },
+        {
+          "type": "produccion_simple_no_tecnica",
+          "arthur": "15%-25% o pago por tarea",
+          "onia_fund": "40%",
+          "sergio": "resto"
+        },
+        {
+          "type": "ejecucion_simple_aprobada",
+          "arthur": "25%-35%",
+          "onia_fund": "40%",
+          "sergio": "25%-35%"
+        },
+        {
+          "type": "venta_y_entrega_total_sin_capital_onia",
+          "arthur": "maximo 50% si entrega todo aprobado sin rescate",
+          "onia_fund": "40%",
+          "sergio": "10% base; sube si Sergio interviene, corrige, termina o rescata"
+        },
+        {
+          "type": "tecnico_o_riesgoso",
+          "arthur": "5%-15% venta; 10%-25% apoyo",
+          "onia_fund": "40%",
+          "sergio": "resto"
+        },
+        {
+          "type": "recurrente_mensual",
+          "arthur": "10%-20% solo mientras gestione y reporte",
+          "onia_fund": "40%",
+          "sergio": "resto"
+        },
+        {
+          "type": "proyecto_cofinanciado_por_arthur",
+          "arthur": "hasta 50% solo ese proyecto",
+          "onia_fund": "35%-40%",
+          "sergio": "10%-15%"
+        }
+      ]
+    },
+    "current_liability_bs": 2414.49,
+    "debt_responsibility": "ONIA/Sergio paga el 100% de la deuda previa, apps, herramientas y gastos operativos ONIA.",
+    "arthur_debt_obligation_bs": 0,
+    "arthur_debt_retention_percent": 0,
+    "sergio_investment_bs": 15000,
+    "sergio_recoverable_capital_bs": 15000,
+    "monthly_existence_payer": "Fondo ONIA; si no alcanza durante los 60 dias, Sergio/ONIA cubre temporalmente con capital de arranque.",
+    "arthur_monthly_fixed_obligation_bs": 0,
+    "single_fund_policy": {
+      "fund_name": "Fondo ONIA",
+      "rule": "No existe Fondo ONIA Media separado; ONIA Media y Nuvia solo etiquetan origen contable.",
+      "uses_order": [
+        "herramientas, apps, IA, VPS y gastos criticos",
+        "caja chica aprobada",
+        "reserva minima para no caer en caja roja",
+        "recuperacion de capital Sergio/ONIA hasta Bs. 15.000",
+        "bonos, reinversiones no urgentes o retiros extraordinarios"
+      ],
+      "capital_recovery_rule": "La recuperacion del capital sale del Fondo ONIA y de utilidades de Sergio, no de descuentos a Arthur."
+    },
+    "cash_after_debt_bs": 12585.51,
+    "monthly_base_expense_bs": 2950.5,
+    "petty_cash_minimum_bs": 700,
+    "conservative_monthly_need_bs": 3650.5,
+    "monthly_net_target_bs": 9126,
+    "healthy_60_day_net_target_bs": 32000,
+    "capital_recovery_60_day_net_target_bs": 55800,
+    "centers": [
+      "onia_services",
+      "nuvia",
+      "onia_media",
+      "onia_fund_cash"
+    ],
+    "weekly_gate": "Minimo 80% de metas, CRM/ONIA Center viernes 100%, seguimientos y reporte semanal.",
+    "nuvia_gate": "Sin margen operativo positivo y cierre quincenal aprobado no hay reparto.",
+    "onia_media_policy": {
+      "definition": "ONIA Media es un centro contable y de activos, no una empresa separada ni un gasto externo que duplique todas las apps.",
+      "shared_onia_apps": [
+        "Notion/CRM",
+        "Drive",
+        "plantillas",
+        "IA general",
+        "prompts",
+        "edicion basica",
+        "web",
+        "automatizaciones",
+        "direccion"
+      ],
+      "shared_apps_rule": "El uso normal de apps ONIA queda cubierto por el Fondo ONIA unico y no se descuenta dos veces.",
+      "direct_media_costs": [
+        "pauta",
+        "editor externo",
+        "voz pagada",
+        "musica/licencias",
+        "dominios/marca",
+        "creditos comprados para el canal",
+        "produccion externa",
+        "uso premium medible"
+      ],
+      "premium_proration_rule": "Higgsfield, IA de video, voz o render se prorratean por uso real registrado al centro que los uso: Nuvia, ONIA Media o cliente.",
+      "liquidable_income_formula": "ingresos cobrados - impuestos/comisiones/plataformas - costos externos directos - uso premium prorrateado"
     }
   },
   "pipeline": [

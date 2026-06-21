@@ -30,10 +30,24 @@ No guardar datos de tarjeta, tokens, contrasenas ni comprobantes sensibles en es
 |---|---:|---:|
 | Base mensual registrada | 281.00 | 2950.50 |
 
+## Current liabilities
+
+| Date reported | Liability | Amount Bs | Source | Notes |
+|---|---|---:|---|---|
+| 2026-06-20 | Tarjeta / deuda operativa reportada | 2414.49 | Captura enviada por Sergio | Deuda asumida por ONIA/Sergio. Arthur no paga ni compensa esta deuda y no se le retiene comision por este concepto. |
+
+## Startup capital recovery
+
+| Date defined | Capital | Amount Bs | Source | Recovery rule |
+|---|---|---:|---|---|
+| 2026-06-21 | Capital de arranque Sergio/ONIA | 15000.00 | Aporte reportado por Sergio, con objetivo interno de devolver a fuente familiar | Se recupera desde excedente de Fondo ONIA despues de herramientas, apps, caja chica, reserva minima y gastos criticos. No es deuda de Arthur ni se descuenta de sus comisiones aprobadas. |
+
 ## Notes
 
 - Antes de preguntar por gastos, revisar Notion `Finanzas & Gastos` y `SaaS & Herramientas`.
 - Si un gasto se confirma en conversacion, registrarlo en Notion y reflejarlo aqui si afecta precios o margenes.
 - Asociar Codex Pro a produccion, automatizacion y desarrollo.
 - Asociar Higgsfield a Video Lab, UGC, ONIA y contenido de clientes.
+- Solo existe un Fondo ONIA. ONIA Media y Nuvia pueden aportar porcentajes a ese fondo, pero no crean fondos separados salvo decision escrita posterior.
+- Durante la prueba Arthur/ONIA de 60 dias, ONIA Servicios usa Fondo ONIA protegido de 40%; Arthur sin capital ONIA tiene techo de 50% solo si vende y entrega todo aprobado sin rescate. Sergio/riesgo base es 10% y sube si Sergio corrige, reestructura, termina o rescata.
 - Revisar pendientes posibles: ElevenLabs, Canva, dominios, Meta Ads, n8n/EasyPanel u otros.
