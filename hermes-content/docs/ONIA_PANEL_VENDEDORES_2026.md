@@ -72,23 +72,22 @@ seguimientos ni reporte semanal.
 - Leads de hoy.
 - Seguimientos pendientes.
 - Ventas calientes.
-- Caja, deuda y comisiones pendientes.
+- Caja operativa visible, estados de pago y comisiones pendientes.
 - Ingresos del mes.
 - Acciones del vendedor para hoy.
 
 ### Operacion 60 dias
 
-Esta pantalla orquesta el acuerdo Arthur/ONIA/Nuvia dentro del sistema.
+Esta pantalla orquesta el acuerdo Arthur/ONIA/Nuvia dentro del sistema sin
+mostrar capital interno de Sergio/ONIA a colaboradores.
 
 Debe mostrar:
 
-- deuda actual;
-- inversion Sergio/ONIA;
-- capital recuperable Sergio/ONIA;
-- caja operativa despues de deuda;
-- gasto mensual base;
-- caja chica ONIA/Nuvia;
-- meta mensual neta;
+- estado general de operacion sin montos sensibles;
+- deuda previa como responsabilidad Sergio/ONIA, sin monto visible;
+- capital interno como privado Sergio/ONIA;
+- caja chica por centro, sin monto visible para colaboradores;
+- meta operativa por ventas, evidencia y Fondo ONIA;
 - centros separados: ONIA Servicios, Nuvia, ONIA Media y Fondo/Caja;
 - ONIA Media como centro contable de ingresos/activos, usando apps ONIA base
   sin duplicar gasto;
@@ -107,8 +106,8 @@ Debe mostrar:
   porcentaje Arthur/Fondo ONIA/Sergio;
 - existencia mensual pagada por Fondo ONIA y cubierta temporalmente por Sergio
   solo si el fondo no alcanza durante los 60 dias;
-- recuperacion de capital de Bs. 15.000 desde excedente de Fondo ONIA antes de
-  bonos o retiros extraordinarios;
+- recuperacion interna de capital desde excedente de Fondo ONIA antes de bonos
+  o retiros extraordinarios, sin mostrar monto a colaboradores;
 - reglas de reparto por participacion real;
 - evidencias obligatorias para que algo cuente;
 - obligaciones semanales de Arthur y Sergio;
@@ -121,11 +120,39 @@ Regla: esta pantalla es el tablero de revision semanal y del dia 60. Si una
 venta, gasto, pieza, llamada, entrega o cierre no esta registrado aqui o en
 Notion, no debe usarse para discutir pagos o porcentajes.
 
+Regla de privacidad: inversion de Sergio/ONIA, caja real, deuda exacta, runway,
+plan de compras, estrategia de hardware y recuperacion de capital viven en el
+modulo privado `Capital Interno`. Arthur, vendedores y clientes no ven ese
+modulo.
+
 Regla de pago: el adelanto quincenal no se calcula sobre facturacion bruta. Se
 calcula sobre el pago ganado/aprobable de Arthur despues de cobro real,
 evidencia, CRM completo, costos y margen. El cierre mensual descuenta adelantos
 y completa el saldo o compensa diferencias si hubo reclamos, devoluciones,
 entregas no aprobadas o datos faltantes.
+
+### Capital Interno Sergio/ONIA
+
+Modulo privado. No debe aparecer en PDF de Arthur ni en vistas de colaborador.
+
+Fuente canonica:
+
+- `hermes-content/docs/ONIA_INTERNAL_CAPITAL_ALLOCATION_2026.md`
+- `hermes-content/references/onia-vendor-panel-20260620.json` en
+  `operation_60_days.internal_capital_allocation`.
+
+Debe manejar:
+
+- asignacion interna del capital;
+- deuda exacta;
+- reserva de herramientas y operacion;
+- compras aprobadas;
+- inventario y activos;
+- inversiones Nuvia por lote y propietario real del capital;
+- campanas Meta Ads;
+- home lab y ahorro de costos;
+- mejoras diarias de Sergio CEO;
+- compras bloqueadas hasta que haya ingresos nuevos.
 
 ### Leads
 
