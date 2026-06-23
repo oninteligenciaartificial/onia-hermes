@@ -138,6 +138,8 @@ Canonical files:
 - `hermes-content/docs/ONIA_7000_BOB_PRODUCTION_INFRA_INVESTMENT_PLAN_2026.md`
 - `hermes-content/docs/ONIA_INTERNAL_CAPITAL_ALLOCATION_2026.md`
 - `hermes-content/docs/ONIA_PROPUESTA_USO_CAPITAL_FAMILIAR_15000_2026.md`
+- `hermes-content/docs/ONIA_PROPUESTA_GASTOS_LOCAL_FIRST_15000_2026.md`
+- `hermes-content/docs/ONIA_PROPUESTA_GASTOS_LOCAL_FIRST_15000_2026.pdf`
 - `hermes-content/docs/ONIA_NUVIA_ACCOUNTING_MODEL_2026.md`
 - `hermes-content/docs/ONIA_SUSTAINABILITY_DASHBOARD_SPEC_2026.md`
 - `hermes-content/docs/ONIA_COMPANY_OPERATING_MODEL_2026.md`
