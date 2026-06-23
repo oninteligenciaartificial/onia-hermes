@@ -1623,6 +1623,10 @@ a.workflow-card:hover {
   color: rgba(16, 20, 21, 0.36);
 }
 
+.nuvia-catalog-search input::-webkit-search-cancel-button {
+  appearance: none;
+}
+
 .nuvia-catalog-search button {
   display: grid;
   place-items: center;
@@ -2940,6 +2944,12 @@ a.workflow-card:hover {
   opacity: 1;
   transform: translate3d(0, 0, 0);
   filter: blur(0);
+}
+
+.nuvia-motion-ready .nuvia-catalog-portal[data-nuvia-reveal] {
+  opacity: 1;
+  transform: none;
+  filter: none;
 }
 
 @keyframes nuviaProductFloat {
