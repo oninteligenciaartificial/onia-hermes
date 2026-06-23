@@ -39,8 +39,8 @@ Incluye:
 
 Precio modular:
 
-- **Setup CRM MVP:** Bs. 5.900
-- **Soporte/operacion mensual:** desde Bs. 690/mes
+- **Setup CRM MVP:** Bs. 3.900
+- **Soporte/operacion mensual:** desde Bs. 590/mes
 
 ### 2. Web de captacion comercial
 
@@ -60,7 +60,7 @@ Incluye:
 
 Precio modular:
 
-- **Web comercial ONIA:** Bs. 4.900
+- **Web comercial ONIA:** Bs. 3.500
 - **Cuidado web mensual:** Bs. 390 a Bs. 690/mes
 
 ### 3. Chatbot y base de conocimiento
@@ -82,8 +82,8 @@ Incluye:
 
 Precio modular:
 
-- **Chatbot inicial + base de conocimiento:** Bs. 4.500
-- **Mantenimiento/monitoreo:** desde Bs. 450/mes
+- **Chatbot inicial + base de conocimiento:** Bs. 2.900
+- **Mantenimiento/monitoreo:** desde Bs. 390/mes
 
 Nota: costos de Meta WhatsApp, IA, proveedor de chat o mensajeria se cotizan
 como costos externos si aplican.
@@ -107,8 +107,8 @@ Incluye:
 
 Precio modular:
 
-- **Catalogo funcional / compra asistida MVP:** Bs. 7.900
-- **Integracion de pagos QR o pasarela:** desde Bs. 2.900 adicionales
+- **Catalogo funcional / compra asistida MVP:** Bs. 4.900
+- **Integracion de pagos QR o pasarela:** desde Bs. 2.500 adicionales
 
 Nota: en fase 1 se recomienda compra asistida/cotizacion, no ecommerce 100%
 automatico, hasta validar stock, precios, sucursales y proceso interno.
@@ -130,8 +130,9 @@ Incluye:
 
 Precio recomendado:
 
-- **Implementacion:** Bs. 16.900
-- **Mensual de soporte y mejoras:** Bs. 1.200/mes desde el segundo mes
+- **Precio oportunidad portafolio:** Bs. 9.900
+- **Precio de lista despues del piloto:** Bs. 16.900
+- **Mensual de soporte y mejoras:** Bs. 900/mes desde el segundo mes
 
 Forma de pago sugerida:
 
@@ -142,6 +143,17 @@ Forma de pago sugerida:
 Este precio es de entrada por oportunidad estrategica. Si el alcance crece a
 mas sucursales, integraciones profundas, inventario avanzado o datos internos,
 se cotiza una fase 2.
+
+Condiciones para mantener el precio oportunidad:
+
+- Alcance cerrado a un piloto de 30 dias.
+- Hasta 5 usuarios internos iniciales.
+- Hasta 40 productos o categorias iniciales cargadas.
+- Sin integracion directa con sistemas internos en fase 1.
+- Sin pasarela de pago incluida.
+- Sin migracion historica masiva.
+- Contenido, logos y datos base entregados por Bolivian Electric.
+- ONIA puede usar el caso como portafolio interno o publico solo con aprobacion.
 
 ## Opcion mas completa
 
@@ -159,8 +171,8 @@ Incluye todo el piloto mas:
 
 Precio:
 
-- **Implementacion:** desde Bs. 29.900
-- **Acompanamiento mensual:** Bs. 2.500 a Bs. 3.900/mes
+- **Implementacion:** desde Bs. 22.900
+- **Acompanamiento mensual:** Bs. 1.900 a Bs. 3.500/mes
 
 ## Costos no incluidos
 
@@ -230,9 +242,10 @@ Empezariamos sin tocar sistemas sensibles. Primero armamos una capa externa:
 CRM, web, chatbot base y catalogo funcional. Cuando el equipo lo use y validemos
 el flujo, recien pasamos a integraciones mas profundas.
 
-La propuesta recomendada es el piloto de Bs. 16.900, con soporte mensual desde
-Bs. 1.200. Eso nos permite entregar algo real, medible y util sin pedirles una
-transformacion enorme desde el primer dia.
+La propuesta recomendada es el piloto de precio oportunidad de Bs. 9.900, con
+soporte mensual desde Bs. 900. Es un precio especial porque queremos demostrar
+valor rapido, armar portafolio y abrir una fase 2 mas grande si el piloto
+funciona. El precio de lista de este mismo alcance seria Bs. 16.900.
 
 ## Regla comercial para ONIA
 
@@ -248,3 +261,34 @@ Prometer:
 - piloto medible.
 
 La fase 2 se vende cuando Bolivian vea el valor del piloto.
+
+## Referencia interna de precios
+
+No mostrar como bloque principal al cliente. Usar solo para defender el rango si
+preguntan por que cuesta eso.
+
+Referencias revisadas:
+
+- BigRedes Bolivia 2026: landing Bs. 832 a Bs. 1.940, web institucional
+  Bs. 1.940 a Bs. 6.930, ecommerce basico Bs. 3.465 a Bs. 20.790.
+- iWeb Bolivia: landing Bs. 980, sitio inicial Bs. 2.080, empresa Bs. 3.100,
+  ecommerce Bs. 3.800.
+- Neothek Bolivia: web empresa USD 497, corporativa USD 697, e-catalogo
+  USD 997.
+- CRM cloud 2026: rangos frecuentes de USD 10 a USD 30 por usuario/mes en
+  planes iniciales, USD 40 a USD 100 por usuario/mes en planes profesionales.
+- CRM industrial: referencias de USD 15 por usuario/mes para basico y USD 40
+  a USD 100 por usuario/mes para especializado.
+- Chatbot WhatsApp: referencias de USD 20 a USD 50/mes en basicos, USD 100 a
+  USD 300/mes en intermedios, y mas en casos avanzados.
+- WhatsApp Business Platform/Meta: costos externos dependen de pais, categoria
+  de mensaje, volumen y proveedor.
+
+Lectura ONIA:
+
+- El precio de lista de Bs. 16.900 es defendible por incluir web, CRM, chatbot
+  y catalogo funcional.
+- Para ganar portafolio, relacion interna y oportunidad de fase 2, el precio
+  oportunidad de Bs. 9.900 es agresivo pero aceptable si el alcance queda
+  cerrado.
+- No bajar de Bs. 8.900 salvo que sea solo prototipo sin implementacion real.
