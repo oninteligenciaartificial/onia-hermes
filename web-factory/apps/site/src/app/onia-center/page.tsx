@@ -62,6 +62,8 @@ import {
   collabIngestionItems,
   collaborators,
   externalAdapters,
+  featureReadinessItems,
+  integrationConnectors,
   inventoryItems,
   operatingOrganizations,
   repoStrategy,
@@ -83,6 +85,10 @@ import {
   getAdapterSummary,
   getBolivianModuleSummary,
   getCollabSafetySummary,
+  getFeatureReadinessSummary,
+  getFeatureTone,
+  getIntegrationReadinessSummary,
+  getIntegrationTone,
   getMembershipSummary,
   getOperatingDashboardSummary,
   getTaskStatusTone,
@@ -108,6 +114,7 @@ const navItems: NavItem[] = [
   { id: "tareas", label: "Tareas", detail: "Revision", icon: ClipboardCheck },
   { id: "collab", label: "Collab", detail: "Ingestion", icon: Database },
   { id: "bolivian", label: "Bolivian", detail: "Modulo", icon: Building2 },
+  { id: "integraciones", label: "Integraciones", detail: "Pendientes", icon: Workflow },
   { id: "ceo", label: "CEO", detail: "Sergio privado", icon: Crown },
   { id: "servicios", label: "Servicios", detail: "Catalogo y bloqueo", icon: Layers3 },
   { id: "roles", label: "Roles", detail: "Permisos", icon: UsersRound },
@@ -347,9 +354,22 @@ export default function OniaCenterPage() {
   const visibleProjects = useMemo(() => getVisibleProjects(selectedRole), [selectedRole]);
   const visibleTasks = useMemo(() => getVisibleTasks(selectedRole), [selectedRole]);
   const visibleReviews = useMemo(() => getVisibleReviews(selectedRole), [selectedRole]);
+  const visibleIntegrationConnectors = useMemo(
+    () =>
+      privateVisible
+        ? integrationConnectors
+        : integrationConnectors.filter((connector) => connector.visibility !== "sergio_private"),
+    [privateVisible],
+  );
+  const visibleFeatureReadinessItems = useMemo(
+    () => (privateVisible ? featureReadinessItems : featureReadinessItems.filter((item) => !item.privateOnly)),
+    [privateVisible],
+  );
   const collabSummary = getCollabSafetySummary();
   const bolivianSummary = getBolivianModuleSummary();
   const adapterSummary = getAdapterSummary();
+  const integrationSummary = getIntegrationReadinessSummary();
+  const featureSummary = getFeatureReadinessSummary();
   const membershipSummary = getMembershipSummary(selectedRole);
   const projectNameById = useMemo(
     () => new Map(visibleProjects.map((project) => [project.id, project.name])),
@@ -723,6 +743,94 @@ export default function OniaCenterPage() {
               <span>{inventoryItems.length} item demo; el MVP real sera foto, codigo, cantidad, ubicacion y exportacion.</span>
             </div>
           </article>
+        </section>
+
+        <section className="onia-panel onia-integration-readiness" id="integraciones">
+          <SectionHeader
+            eyebrow="Preparado para conectar"
+            title="Integraciones y funciones pendientes"
+            description="La logica queda lista en ONIA Center, pero cada conector declara que falta antes de activarse. No se guardan secretos en pantalla ni en base visible."
+            icon={Workflow}
+          />
+          <div className="onia-collab-summary">
+            <div>
+              <span>Conectores</span>
+              <strong>{integrationSummary.total}</strong>
+            </div>
+            <div>
+              <span>Config pendiente</span>
+              <strong>{integrationSummary.configPending}</strong>
+            </div>
+            <div>
+              <span>Planeados</span>
+              <strong>{integrationSummary.planned}</strong>
+            </div>
+            <div>
+              <span>Funciones listas</span>
+              <strong>{featureSummary.readyToUse}</strong>
+            </div>
+          </div>
+
+          <div className="onia-readiness-grid">
+            {visibleIntegrationConnectors.map((connector) => (
+              <article key={connector.id}>
+                <div className="onia-readiness-card-head">
+                  <div>
+                    <span>{connector.category} / {connector.provider}</span>
+                    <strong>{connector.name}</strong>
+                  </div>
+                  <TonePill tone={getIntegrationTone(connector.status)}>{connector.status.replaceAll("_", " ")}</TonePill>
+                </div>
+                <p>{connector.currentState}</p>
+                <div className="onia-readiness-meta">
+                  <span>{connector.selfHosted ? "self-hosted" : "externo"}</span>
+                  <span>{connector.priority}</span>
+                  <span>{connector.requiredEnv.length} env</span>
+                </div>
+                <div className="onia-readiness-columns">
+                  <div>
+                    <strong>Preparado</strong>
+                    <ul>
+                      {connector.prepared.slice(0, 3).map((item) => (
+                        <li key={item}>{item}</li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div>
+                    <strong>Falta</strong>
+                    <ul>
+                      {connector.missing.slice(0, 3).map((item) => (
+                        <li key={item}>{item}</li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+                <small>{connector.nextAction}</small>
+              </article>
+            ))}
+          </div>
+
+          <div className="onia-feature-readiness">
+            {visibleFeatureReadinessItems.map((feature) => (
+              <article key={feature.id}>
+                <div>
+                  <span>{feature.module}</span>
+                  <strong>{feature.title}</strong>
+                  <p>{feature.nextAction}</p>
+                  <small>{feature.evidenceRule}</small>
+                </div>
+                <TonePill tone={getFeatureTone(feature.status)}>{feature.status.replaceAll("_", " ")}</TonePill>
+              </article>
+            ))}
+          </div>
+
+          <div className="onia-rule-strip">
+            <ShieldCheck size={17} />
+            <strong>Regla de conexion:</strong>
+            <span>
+              Primero Supabase real y Auth/RLS. Despues Cal/n8n. Luego IA local/LiteLLM. Remotion, Web Factory automatico y WhatsApp se activan por fases.
+            </span>
+          </div>
         </section>
 
         <section className="onia-panel onia-system-base" aria-label="Base operativa Fase 1">

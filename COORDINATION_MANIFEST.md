@@ -127,6 +127,7 @@ Canonical files:
 - `hermes-content/docs/BOLIVIAN_ELECTRIC_OWNER_STRATEGIC_PROPOSAL_2026.md`
 - `hermes-content/docs/ONIA_GIT_CHANGE_GROUPING_20260623.md`
 - `hermes-content/docs/ONIA_CIERRE_DIA_20260623.md`
+- `hermes-content/docs/ONIA_CENTER_INTEGRATION_READINESS_20260623.md`
 - `hermes-content/propuestas/bolivian-electric-transformacion-ia-2026.html`
 - `hermes-content/propuestas/assets/design-tokens.css`
 - `hermes-content/docs/ONIA_WHATSAPP_CHATWOOT_META_SALES_AUDIT_2026.md`
@@ -164,6 +165,8 @@ Canonical files:
 - `supabase/migrations/20260620_onia_vendor_sales_panel.sql`
 - `supabase/migrations/20260623_onia_center_sergio_calendar.sql`
 - `supabase/migrations/20260623_onia_center_sergio_calendar_seed.sql`
+- `supabase/migrations/20260623_onia_center_integration_readiness.sql`
+- `supabase/migrations/20260623_onia_center_integration_readiness_seed.sql`
 - `web-factory/apps/site/src/app/vendedores/page.tsx`
 - `hermes-content/references/ai-ecommerce-model/README.md`
 - `hermes-content/references/ai-ecommerce-model/20260605-mara-vale-round-01.md`

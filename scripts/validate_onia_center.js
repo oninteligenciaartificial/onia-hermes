@@ -37,6 +37,8 @@ const ideasAccessSchema = read("supabase/migrations/20260622_onia_center_ideas_a
 const ideasAccessSeed = read("supabase/migrations/20260622_onia_center_ideas_access_seed.sql");
 const sergioCalendarSchema = read("supabase/migrations/20260623_onia_center_sergio_calendar.sql");
 const sergioCalendarSeed = read("supabase/migrations/20260623_onia_center_sergio_calendar_seed.sql");
+const integrationReadinessSchema = read("supabase/migrations/20260623_onia_center_integration_readiness.sql");
+const integrationReadinessSeed = read("supabase/migrations/20260623_onia_center_integration_readiness_seed.sql");
 
 const requiredTables = [
   "roles",
@@ -116,6 +118,18 @@ for (const table of requiredSergioCalendarTables) {
   );
 }
 
+const requiredIntegrationReadinessTables = [
+  "integration_connectors",
+  "feature_readiness_items",
+];
+
+for (const table of requiredIntegrationReadinessTables) {
+  assert(
+    integrationReadinessSchema.includes(`create table if not exists onia_center.${table}`),
+    `Missing integration readiness table onia_center.${table}`,
+  );
+}
+
 const requiredSchemaRules = [
   "onia_center_services_price_setup_required",
   "onia_center_services_monthly_required_if_recurring",
@@ -160,6 +174,20 @@ const requiredSergioCalendarRules = [
 
 for (const rule of requiredSergioCalendarRules) {
   assert(sergioCalendarSchema.includes(rule) || sergioCalendarSeed.includes(rule), `Missing Sergio calendar rule: ${rule}`);
+}
+
+const requiredIntegrationRules = [
+  "onia_center_integration_no_secret_values",
+  "enable row level security",
+  "config_pending",
+  "manual_only",
+];
+
+for (const rule of requiredIntegrationRules) {
+  assert(
+    integrationReadinessSchema.includes(rule) || integrationReadinessSeed.includes(rule),
+    `Missing integration readiness rule: ${rule}`,
+  );
 }
 
 const requiredSeedMarkers = [
@@ -216,12 +244,32 @@ for (const marker of requiredSergioCalendarSeedMarkers) {
   assert(sergioCalendarSeed.includes(marker), `Missing Sergio calendar seed marker: ${marker}`);
 }
 
+const requiredIntegrationSeedMarkers = [
+  "supabase_onia_center",
+  "cal_booking",
+  "n8n_ops",
+  "litellm_gateway",
+  "local_models",
+  "dify_rag",
+  "remotion_video",
+  "web_factory_auto",
+  "higgsfield",
+  "whatsapp_chatbots",
+  "runtime_daily_ops",
+  "client_web_intake",
+];
+
+for (const marker of requiredIntegrationSeedMarkers) {
+  assert(integrationReadinessSeed.includes(marker), `Missing integration readiness seed marker: ${marker}`);
+}
+
 const appSource = read("web-factory/apps/site/src/app/onia-center/source.ts");
 const appEngine = read("web-factory/apps/site/src/app/onia-center/engine.ts");
 const appOperatingSource = read("web-factory/apps/site/src/app/onia-center/operating-source.ts");
 const appOperatingEngine = read("web-factory/apps/site/src/app/onia-center/operating-engine.ts");
 const appPage = read("web-factory/apps/site/src/app/onia-center/page.tsx");
 const appOperatingWorkspace = read("web-factory/apps/site/src/app/onia-center/operating-workspace.tsx");
+const appIntegrationsRoute = read("web-factory/apps/site/src/app/api/onia-center/integrations/route.ts");
 const telegramReference = JSON.parse(read("hermes-content/references/telegram-command-center.json"));
 const sergioCalendarReference = JSON.parse(read("hermes-content/references/sergio-strict-calendar-20260623.json"));
 
@@ -286,6 +334,28 @@ for (const marker of requiredSergioCalendarAppMarkers) {
   );
 }
 
+const requiredIntegrationAppMarkers = [
+  "integrationConnectors",
+  "featureReadinessItems",
+  "getIntegrationReadinessSummary",
+  "Integraciones y funciones pendientes",
+  "connector-remotion-video",
+  "connector-web-factory-auto",
+  "connector-local-models",
+  "RuntimeConnectorCheck",
+  "Secret values never leave the server",
+];
+
+for (const marker of requiredIntegrationAppMarkers) {
+  assert(
+    appOperatingSource.includes(marker) ||
+      appOperatingEngine.includes(marker) ||
+      appPage.includes(marker) ||
+      appIntegrationsRoute.includes(marker),
+    `Missing integration app marker: ${marker}`,
+  );
+}
+
 assert(
   telegramReference.command_groups.some((group) => group.name === "sergio_personal_os"),
   "Missing sergio_personal_os command group in Telegram reference",
@@ -304,14 +374,17 @@ console.log(
       operatingTables: requiredOperatingTables.length,
       ideasAccessTables: requiredIdeasAccessTables.length,
       sergioCalendarTables: requiredSergioCalendarTables.length,
+      integrationReadinessTables: requiredIntegrationReadinessTables.length,
       schemaRules: requiredSchemaRules.length,
       operatingSchemaRules: requiredOperatingRules.length,
       ideasAccessSchemaRules: requiredIdeasAccessRules.length,
       sergioCalendarRules: requiredSergioCalendarRules.length,
+      integrationReadinessRules: requiredIntegrationRules.length,
       seed: "20260622_onia_center_seed.sql",
       operatingSeed: "20260622_onia_center_operating_seed.sql",
       ideasAccessSeed: "20260622_onia_center_ideas_access_seed.sql",
       sergioCalendarSeed: "20260623_onia_center_sergio_calendar_seed.sql",
+      integrationReadinessSeed: "20260623_onia_center_integration_readiness_seed.sql",
       growth: vendorPanel.service_cash_engine.workhorse_offer,
     },
     null,

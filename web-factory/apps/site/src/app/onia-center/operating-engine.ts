@@ -4,6 +4,8 @@ import {
   collaborators,
   deliverables,
   externalAdapters,
+  featureReadinessItems,
+  integrationConnectors,
   operatingClients,
   operatingMemberships,
   operatingOrganizations,
@@ -103,6 +105,61 @@ export function getAdapterSummary() {
     auditRequired: externalAdapters.filter((adapter) => adapter.status === "audit_required").length,
     writable: externalAdapters.filter((adapter) => adapter.writeAllowed).length,
   };
+}
+
+export function getIntegrationReadinessSummary() {
+  return {
+    total: integrationConnectors.length,
+    connected: integrationConnectors.filter((connector) => connector.status === "connected").length,
+    ready: integrationConnectors.filter((connector) => connector.status === "ready").length,
+    configPending: integrationConnectors.filter((connector) => connector.status === "config_pending").length,
+    planned: integrationConnectors.filter((connector) => connector.status === "planned").length,
+    blocked: integrationConnectors.filter((connector) => connector.status === "blocked").length,
+    manualOnly: integrationConnectors.filter((connector) => connector.status === "manual_only").length,
+    highPriority: integrationConnectors.filter((connector) => connector.priority === "alta").length,
+  };
+}
+
+export function getFeatureReadinessSummary() {
+  return {
+    total: featureReadinessItems.length,
+    readyToUse: featureReadinessItems.filter((item) => item.status === "ready_to_use").length,
+    prepared: featureReadinessItems.filter((item) => item.status === "prepared_pending_connection").length,
+    planned: featureReadinessItems.filter((item) => item.status === "planned").length,
+    blocked: featureReadinessItems.filter((item) => item.status === "blocked").length,
+  };
+}
+
+export function getIntegrationTone(status: (typeof integrationConnectors)[number]["status"]): CenterTone {
+  if (status === "connected" || status === "ready") {
+    return "green";
+  }
+
+  if (status === "config_pending" || status === "manual_only") {
+    return "yellow";
+  }
+
+  if (status === "blocked") {
+    return "red";
+  }
+
+  return "blue";
+}
+
+export function getFeatureTone(status: (typeof featureReadinessItems)[number]["status"]): CenterTone {
+  if (status === "ready_to_use") {
+    return "green";
+  }
+
+  if (status === "prepared_pending_connection") {
+    return "yellow";
+  }
+
+  if (status === "blocked") {
+    return "red";
+  }
+
+  return "blue";
 }
 
 export function getMembershipSummary(role: RoleId) {

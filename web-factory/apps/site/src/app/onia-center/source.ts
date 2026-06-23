@@ -267,6 +267,20 @@ export const dataModelTables: DataModelTable[] = [
     implementedInApp: true,
   },
   {
+    name: "onia_center.integration_connectors",
+    purpose: "Conectores listos para Supabase, Cal, n8n, IA, modelos locales, Remotion, Web Factory, email, monitoreo y collab.",
+    requiredForPhase: 1,
+    implementedInSql: true,
+    implementedInApp: true,
+  },
+  {
+    name: "onia_center.feature_readiness_items",
+    purpose: "Funciones operativas marcadas como listas, pendientes de conexion, planeadas o bloqueadas.",
+    requiredForPhase: 1,
+    implementedInSql: true,
+    implementedInApp: true,
+  },
+  {
     name: "onia_center.adapter_events",
     purpose: "Eventos y cargas desde adaptadores sin mezclar credenciales ni core.",
     requiredForPhase: 2,

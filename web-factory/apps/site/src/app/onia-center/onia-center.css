@@ -1688,7 +1688,11 @@
 .onia-collab-list,
 .onia-module-list,
 .onia-security-grid,
-.onia-adapter-list {
+.onia-adapter-list,
+.onia-readiness-grid,
+.onia-feature-readiness,
+.onia-readiness-columns,
+.onia-readiness-meta {
   display: grid;
   gap: 10px;
 }
@@ -1711,7 +1715,9 @@
 .onia-collab-list article,
 .onia-module-list article,
 .onia-security-grid article,
-.onia-adapter-list article {
+.onia-adapter-list article,
+.onia-readiness-grid article,
+.onia-feature-readiness article {
   border: 1px solid var(--onia-line-soft);
   border-radius: var(--onia-radius);
   background: #fbfcfb;
@@ -1730,7 +1736,10 @@
 .onia-collab-list span,
 .onia-module-list span,
 .onia-security-grid span,
-.onia-adapter-list span {
+.onia-adapter-list span,
+.onia-readiness-card-head span,
+.onia-readiness-meta span,
+.onia-feature-readiness span {
   display: block;
   color: var(--onia-faint);
   font-size: 12px;
@@ -1745,7 +1754,9 @@
 .onia-collab-list strong,
 .onia-module-list strong,
 .onia-security-grid strong,
-.onia-adapter-list strong {
+.onia-adapter-list strong,
+.onia-readiness-card-head strong,
+.onia-feature-readiness strong {
   display: block;
   margin-top: 6px;
   color: var(--onia-ink);
@@ -1759,7 +1770,9 @@
 .onia-collab-list p,
 .onia-module-list p,
 .onia-security-grid p,
-.onia-adapter-list p {
+.onia-adapter-list p,
+.onia-readiness-grid p,
+.onia-feature-readiness p {
   margin: 8px 0 0;
   color: var(--onia-muted);
   font-size: 12px;
@@ -1837,6 +1850,101 @@
   padding: 12px;
 }
 
+.onia-integration-readiness {
+  margin-bottom: 16px;
+}
+
+.onia-readiness-grid {
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  margin-top: 12px;
+}
+
+.onia-readiness-grid article {
+  display: grid;
+  align-content: start;
+  gap: 11px;
+  min-height: 284px;
+  padding: 13px;
+}
+
+.onia-readiness-card-head,
+.onia-feature-readiness article {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.onia-readiness-card-head > div,
+.onia-feature-readiness article > div {
+  min-width: 0;
+}
+
+.onia-readiness-meta {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.onia-readiness-meta span {
+  min-height: 26px;
+  padding: 6px 7px;
+  border-radius: 999px;
+  color: #14543e;
+  background: var(--onia-green-soft);
+  font-size: 10px;
+  text-align: center;
+}
+
+.onia-readiness-columns {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.onia-readiness-columns div {
+  min-width: 0;
+  padding: 10px;
+  border: 1px solid var(--onia-line-soft);
+  border-radius: var(--onia-radius);
+  background: var(--onia-soft);
+}
+
+.onia-readiness-columns strong {
+  display: block;
+  color: var(--onia-ink);
+  font-size: 12px;
+}
+
+.onia-readiness-columns ul {
+  display: grid;
+  gap: 5px;
+  margin: 7px 0 0;
+  padding-left: 16px;
+  color: var(--onia-muted);
+  font-size: 11px;
+  line-height: 1.35;
+}
+
+.onia-readiness-grid article > small,
+.onia-feature-readiness small {
+  display: block;
+  color: var(--onia-blue);
+  font-size: 11px;
+  font-weight: 900;
+  line-height: 1.35;
+}
+
+.onia-feature-readiness {
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  margin-top: 12px;
+}
+
+.onia-feature-readiness article {
+  min-height: 128px;
+  padding: 12px;
+}
+
+.onia-feature-readiness small {
+  margin-top: 7px;
+}
+
 @media (max-width: 1240px) {
   .onia-metrics {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1850,11 +1958,13 @@
   .onia-operating-metrics,
   .onia-live-metrics,
   .onia-sergio-calendar,
-  .onia-live-grid,
-  .onia-ideas-board,
-  .onia-selfhosted-panel,
-  .onia-collab-summary,
-  .onia-security-grid {
+    .onia-live-grid,
+    .onia-ideas-board,
+    .onia-selfhosted-panel,
+    .onia-collab-summary,
+    .onia-security-grid,
+    .onia-readiness-columns,
+    .onia-readiness-meta {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
@@ -1950,6 +2060,10 @@
     .onia-selfhosted-panel,
   .onia-collab-summary,
   .onia-security-grid,
+  .onia-readiness-grid,
+  .onia-feature-readiness,
+  .onia-readiness-columns,
+  .onia-readiness-meta,
   .onia-metrics,
   .onia-price-grid,
   .onia-permission-box,

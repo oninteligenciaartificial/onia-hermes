@@ -540,6 +540,86 @@ export type ExternalAdapter = {
   rule: string;
 };
 
+export type IntegrationCategory =
+  | "data"
+  | "calendar"
+  | "automation"
+  | "ai"
+  | "media"
+  | "web_factory"
+  | "sales"
+  | "infra"
+  | "collab";
+
+export type IntegrationStatus =
+  | "connected"
+  | "ready"
+  | "config_pending"
+  | "planned"
+  | "blocked"
+  | "manual_only";
+
+export type IntegrationConnector = {
+  id: string;
+  name: string;
+  provider: string;
+  category: IntegrationCategory;
+  status: IntegrationStatus;
+  selfHosted: boolean;
+  projectId?: string;
+  adapterId?: string;
+  route?: string;
+  requiredEnv: string[];
+  optionalEnv: string[];
+  currentState: string;
+  prepared: string[];
+  missing: string[];
+  nextAction: string;
+  safetyRule: string;
+  docs: string[];
+  visibility: VisibilityScope;
+  priority: "alta" | "media" | "baja";
+};
+
+export type FeatureReadinessStatus =
+  | "ready_to_use"
+  | "prepared_pending_connection"
+  | "planned"
+  | "blocked";
+
+export type FeatureReadinessItem = {
+  id: string;
+  title: string;
+  module:
+    | "crm"
+    | "calendar"
+    | "ai_models"
+    | "video_editor"
+    | "web_generator"
+    | "automations"
+    | "collab"
+    | "stockcam"
+    | "sales"
+    | "knowledge";
+  status: FeatureReadinessStatus;
+  ownerRole: RoleId;
+  privateOnly: boolean;
+  dependsOn: string[];
+  prepared: string[];
+  missing: string[];
+  nextAction: string;
+  route?: string;
+  evidenceRule: string;
+};
+
+export type RuntimeConnectorCheck = {
+  connectorId: string;
+  status: IntegrationStatus;
+  configured: boolean;
+  missingEnv: string[];
+  checkedAt: string;
+};
+
 export type AuditLogEntry = {
   id: string;
   actorRole: RoleId;
