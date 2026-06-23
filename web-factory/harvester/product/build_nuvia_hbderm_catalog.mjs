@@ -352,7 +352,7 @@ function normalizeProduct(product, index) {
   const size = extractSize(title);
   const routine = routineForCategory(category);
   const active = category !== "Profesional consulta";
-  const etiqueta = active ? (category === "Proteccion solar" ? "SPF" : "HBDERM") : "consulta";
+  const etiqueta = active ? (category === "Proteccion solar" ? "SPF" : "Nuvia") : "consulta";
 
   return {
     titulo: title,
@@ -363,8 +363,8 @@ function normalizeProduct(product, index) {
     desc: compactDescription(product, category),
     etiqueta,
     imagen: product.image_url || "assets/hbderm-image-slot.svg",
-    imagenAlt: `${title} de ${product.brand || "HBDERM"}`,
-    marca: product.brand || "HBDERM",
+    imagenAlt: `${title} de ${product.brand || "Nuvia"}`,
+    marca: product.brand || "Nuvia",
     tamano: size,
     uso: routine.label,
     beneficios: categoryBenefits(category),
@@ -381,7 +381,7 @@ function normalizeProduct(product, index) {
       "Cotizacion/checkout preparado en Nuvia",
     ],
     especificaciones: [
-      { label: "Marca", value: product.brand || "HBDERM" },
+      { label: "Marca", value: product.brand || "Nuvia" },
       { label: "Proveedor", value: "HBDERM" },
       { label: "Categoria", value: category },
       { label: "Tamano", value: size || "Consultar" },
@@ -407,7 +407,7 @@ function normalizeProduct(product, index) {
     detalleNota:
       category === "Profesional consulta"
         ? "Producto cargado en base interna para revision comercial. No publicarlo como compra directa sin validar regulacion, stock y uso profesional."
-        : "Producto cargado desde HBDERM con precio calculado para Nuvia. La disponibilidad final se confirma antes del cobro.",
+        : "Producto cargado con precio calculado para Nuvia. La disponibilidad final se confirma antes del cobro.",
     ordenRutina: routine.order,
     proveedor: "HBDERM",
     sourceUrl: product.source_url,
@@ -431,6 +431,32 @@ function normalizeProduct(product, index) {
 
 function productSlug(product) {
   return slugify(product.titulo);
+}
+
+function applyFeaturedSource(enriched, product, source, index) {
+  const formula = productFormula(source.price);
+  enriched.precio = moneyLabel(formula.sale_price);
+  enriched.precioValor = formula.sale_price;
+  enriched.proveedor = "HBDERM";
+  enriched.sourceUrl = source.source_url;
+  enriched.sourceImageUrl = source.image_url;
+  enriched.precioProveedor = source.price;
+  enriched.margenObjetivo = MARGIN_RATE;
+  enriched.comisionVendedorRate = SELLER_COMMISSION_RATE;
+  enriched.comisionVendedor = formula.seller_commission_amount;
+  enriched.gananciaNeta = formula.net_margin_after_seller;
+  enriched.tipoVenta = "publico";
+  enriched.raw = {
+    source: "hbderm.com",
+    source_url: source.source_url,
+    source_categories: source.categories,
+    pricing_formula: formula,
+    source_index: `featured-${index}`,
+  };
+  enriched.especificaciones = (product.especificaciones || []).map((spec) =>
+    spec.label === "Precio" ? { ...spec, value: moneyLabel(formula.sale_price) } : spec,
+  );
+  return enriched;
 }
 
 function dedupeProducts(products) {
@@ -713,27 +739,16 @@ async function main() {
     if (product.titulo === "ISDIN Fusion Water Magic SPF 50") {
       const source = scrape.products.find((entry) => entry.title === "FUSION WATER MAGIC SPF50+");
       if (source) {
-        const formula = productFormula(source.price);
-        enriched.precio = moneyLabel(formula.sale_price);
-        enriched.precioValor = formula.sale_price;
-        enriched.proveedor = "HBDERM";
-        enriched.sourceUrl = source.source_url;
-        enriched.precioProveedor = source.price;
-        enriched.margenObjetivo = MARGIN_RATE;
-        enriched.comisionVendedorRate = SELLER_COMMISSION_RATE;
-        enriched.comisionVendedor = formula.seller_commission_amount;
-        enriched.gananciaNeta = formula.net_margin_after_seller;
-        enriched.tipoVenta = "publico";
-        enriched.raw = {
-          source: "hbderm.com",
-          source_url: source.source_url,
-          source_categories: source.categories,
-          pricing_formula: formula,
-          source_index: `featured-${index}`,
-        };
-        enriched.especificaciones = product.especificaciones.map((spec) =>
-          spec.label === "Precio" ? { ...spec, value: moneyLabel(formula.sale_price) } : spec,
-        );
+        applyFeaturedSource(enriched, product, source, index);
+      }
+    }
+
+    if (product.titulo === "SVR Sebiaclear Gel Moussant") {
+      const source = scrape.products.find((entry) =>
+        entry.source_url?.includes("/sebiaclear-gel-moussant-200ml/"),
+      );
+      if (source) {
+        applyFeaturedSource(enriched, product, source, index);
       }
     }
 
@@ -741,8 +756,10 @@ async function main() {
   });
 
   const currentSlugs = new Set(currentProducts.map(productSlug));
+  const currentSourceUrls = new Set(currentProducts.map((product) => product.sourceUrl).filter(Boolean));
   const importedProducts = dedupeProducts(scrape.products.map(normalizeProduct))
     .filter((product) => !currentSlugs.has(productSlug(product)))
+    .filter((product) => !currentSourceUrls.has(product.sourceUrl))
     .sort((a, b) => {
       const categoryOrder = [
         "Proteccion solar",

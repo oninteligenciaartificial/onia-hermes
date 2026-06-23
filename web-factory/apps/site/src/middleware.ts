@@ -5,6 +5,8 @@ type OniaCenterProfile = {
   status?: string | null;
 };
 
+const teamPath = "/onia-center/equipo";
+
 function oniaCenterAuthConfigured() {
   return Boolean(
     (process.env.ONIA_CENTER_SUPABASE_URL || process.env.WEB_FACTORY_SUPABASE_URL || process.env.SUPABASE_URL) &&
@@ -49,6 +51,14 @@ function redirectToLogin(request: NextRequest, reason: string) {
   loginUrl.searchParams.set("next", request.nextUrl.pathname);
   loginUrl.searchParams.set("reason", reason);
   return NextResponse.redirect(loginUrl);
+}
+
+function redirectToTeamView(request: NextRequest) {
+  const teamUrl = request.nextUrl.clone();
+  teamUrl.pathname = teamPath;
+  teamUrl.searchParams.set("from", request.nextUrl.pathname);
+  teamUrl.searchParams.set("reason", "team_view");
+  return NextResponse.redirect(teamUrl);
 }
 
 async function getOniaCenterSessionRole(accessToken: string) {
@@ -116,8 +126,16 @@ export async function middleware(request: NextRequest) {
   }
 
   const role = await getOniaCenterSessionRole(accessToken);
+  if (!role) {
+    return redirectToLogin(request, "auth_verify");
+  }
+
+  if (pathname === teamPath || pathname.startsWith(`${teamPath}/`)) {
+    return NextResponse.next();
+  }
+
   if (role !== "sergio") {
-    return redirectToLogin(request, role ? "sergio_only" : "auth_verify");
+    return redirectToTeamView(request);
   }
 
   return NextResponse.next();

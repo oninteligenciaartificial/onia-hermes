@@ -7,6 +7,9 @@ const SITEMAPS = [
   `${SOURCE}/product-sitemap1.xml`,
   `${SOURCE}/product-sitemap2.xml`,
 ];
+const EXTRA_PRODUCT_URLS = [
+  `${SOURCE}/hbderm-catalogo/pieles-con-grasas-o-con-acne/sebiaclear-gel-moussant-200ml/`,
+];
 const OUT = path.resolve("data/references/product-sources/hbderm-products-20260619.json");
 const USER_AGENT = "ONIA-WebFactory/1.0 product research (contact: Sergio via ONIA)";
 
@@ -187,7 +190,7 @@ async function main() {
     }
   }
 
-  const urls = [...new Set(sitemapXml.flatMap(productUrlsFromSitemap))].slice(0, max);
+  const urls = [...new Set([...sitemapXml.flatMap(productUrlsFromSitemap), ...EXTRA_PRODUCT_URLS])].slice(0, max);
   const products = [];
   const errors = [];
   let cursor = 0;

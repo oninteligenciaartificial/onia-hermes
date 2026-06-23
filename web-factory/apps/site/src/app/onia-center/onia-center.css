@@ -2396,6 +2396,120 @@
   margin-top: 4px;
 }
 
+.onia-team-session {
+  display: grid;
+  gap: 6px;
+  margin-top: auto;
+  padding: 12px;
+  border: 1px solid rgba(85, 215, 157, 0.2);
+  border-radius: var(--onia-radius);
+  background: #101821;
+}
+
+.onia-team-session span,
+.onia-team-session small {
+  color: #aeb9b7;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.onia-team-session strong {
+  color: #ffffff;
+  font-size: 14px;
+  line-height: 1.25;
+}
+
+.onia-team-session button,
+.onia-team-submit,
+.onia-team-link {
+  align-items: center;
+  display: inline-flex;
+  justify-content: center;
+}
+
+.onia-team-session button {
+  gap: 7px;
+  min-height: 34px;
+  margin-top: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--onia-radius);
+  color: #e7f4ef;
+  background: rgba(255, 255, 255, 0.06);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 850;
+}
+
+.onia-team-metrics,
+.onia-team-grid {
+  display: grid;
+  gap: 12px;
+}
+
+.onia-team-metrics {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin-bottom: 16px;
+}
+
+.onia-team-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: start;
+  margin-bottom: 16px;
+}
+
+.onia-team-grid.is-ideas {
+  grid-template-columns: minmax(320px, 0.9fr) minmax(0, 1.1fr);
+}
+
+.onia-team-helper {
+  margin: 0;
+  color: var(--onia-muted);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.onia-team-submit {
+  gap: 8px;
+  min-height: 40px;
+  border: 0;
+  border-radius: var(--onia-radius);
+  color: #ffffff;
+  background: #153f30;
+  cursor: pointer;
+  font-weight: 850;
+}
+
+.onia-team-submit:disabled {
+  cursor: wait;
+  opacity: 0.7;
+}
+
+.onia-team-list-card {
+  min-height: 100%;
+}
+
+.onia-team-link {
+  width: fit-content;
+  gap: 6px;
+  min-height: 28px;
+  padding: 0 8px;
+  border: 1px solid var(--onia-line);
+  border-radius: var(--onia-radius);
+  color: var(--onia-blue);
+  background: #ffffff;
+  font-size: 11px;
+  font-weight: 850;
+  text-decoration: none;
+}
+
+@media (max-width: 1240px) {
+  .onia-team-metrics,
+  .onia-team-grid,
+  .onia-team-grid.is-ideas {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
 @media (max-width: 640px) {
   .onia-login-page {
     background: #f4f7f2;
@@ -2404,5 +2518,11 @@
 
   .onia-login-panel {
     padding: 18px;
+  }
+
+  .onia-team-metrics,
+  .onia-team-grid,
+  .onia-team-grid.is-ideas {
+    grid-template-columns: 1fr;
   }
 }

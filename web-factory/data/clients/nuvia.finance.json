@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-06-23T21:29:56.027Z",
+  "generated_at": "2026-06-23T22:03:40.234Z",
   "source": "https://hbderm.com",
-  "source_products": 329,
-  "public_products": 316,
-  "internal_professional_products": 15,
+  "source_products": 327,
+  "public_products": 315,
+  "internal_professional_products": 12,
   "assumptions": {
     "precio_referencia_hbderm": "Precio publico de referencia del proveedor.",
     "precio_venta_nuvia": "precio_referencia_hbderm - 45% segun regla comercial indicada por Sergio.",
@@ -12,15 +12,15 @@
     "descuento_destacado": "10% aplicado solo a destacados del mes; reduce margen neto."
   },
   "totals": {
-    "productos": 331,
-    "precio_referencia_hbderm": 138028.57,
-    "ganancia_objetivo_45": 62112.85,
-    "precio_venta_nuvia": 75915.72,
-    "descuento_cliente": 227.35,
-    "precio_promocional": 75688.37,
-    "comision_vendedor_10_ganancia": 6211.67,
-    "ganancia_neta": 55901.18,
-    "ganancia_neta_con_descuento": 55673.83
+    "productos": 327,
+    "precio_referencia_hbderm": 138392.33,
+    "ganancia_objetivo_45": 62276.55,
+    "precio_venta_nuvia": 76115.78,
+    "descuento_cliente": 242.15,
+    "precio_promocional": 75873.63,
+    "comision_vendedor_10_ganancia": 6228.04,
+    "ganancia_neta": 56048.51,
+    "ganancia_neta_con_descuento": 55806.36
   },
   "rows": [
     {
@@ -50,16 +50,16 @@
       "categoria": "Limpieza facial",
       "tamano": "200 ml",
       "tipo_venta": "publico",
-      "precio_referencia_hbderm": 0,
-      "ganancia_objetivo_45": 0,
-      "precio_venta_nuvia": 0,
+      "precio_referencia_hbderm": 384,
+      "ganancia_objetivo_45": 172.8,
+      "precio_venta_nuvia": 211.2,
       "descuento_destacado_pct": 10,
-      "descuento_cliente": 0,
-      "precio_promocional": 0,
-      "comision_vendedor_10_ganancia": 0,
-      "ganancia_neta": 0,
-      "ganancia_neta_con_descuento": 0,
-      "source_url": ""
+      "descuento_cliente": 21.12,
+      "precio_promocional": 190.08,
+      "comision_vendedor_10_ganancia": 17.28,
+      "ganancia_neta": 155.52,
+      "ganancia_neta_con_descuento": 134.4,
+      "source_url": "https://hbderm.com/hbderm-catalogo/pieles-con-grasas-o-con-acne/sebiaclear-gel-moussant-200ml/"
     },
     {
       "index": 3,
@@ -183,15 +183,15 @@
       "categoria": "Proteccion solar",
       "tamano": "",
       "tipo_venta": "publico",
-      "precio_referencia_hbderm": 480,
-      "ganancia_objetivo_45": 216,
-      "precio_venta_nuvia": 264,
+      "precio_referencia_hbderm": 250,
+      "ganancia_objetivo_45": 112.5,
+      "precio_venta_nuvia": 137.5,
       "descuento_destacado_pct": 10,
-      "descuento_cliente": 26.4,
-      "precio_promocional": 237.6,
-      "comision_vendedor_10_ganancia": 21.6,
-      "ganancia_neta": 194.4,
-      "ganancia_neta_con_descuento": 168,
+      "descuento_cliente": 13.75,
+      "precio_promocional": 123.75,
+      "comision_vendedor_10_ganancia": 11.25,
+      "ganancia_neta": 101.25,
+      "ganancia_neta_con_descuento": 87.5,
       "source_url": "https://hbderm.com/hbderm-catalogo/fotoproteccion/clairial-crema-spf-50/"
     },
     {
@@ -240,15 +240,15 @@
       "categoria": "Proteccion solar",
       "tamano": "",
       "tipo_venta": "publico",
-      "precio_referencia_hbderm": 250,
-      "ganancia_objetivo_45": 112.5,
-      "precio_venta_nuvia": 137.5,
+      "precio_referencia_hbderm": 365,
+      "ganancia_objetivo_45": 164.25,
+      "precio_venta_nuvia": 200.75,
       "descuento_destacado_pct": 10,
-      "descuento_cliente": 13.75,
-      "precio_promocional": 123.75,
-      "comision_vendedor_10_ganancia": 11.25,
-      "ganancia_neta": 101.25,
-      "ganancia_neta_con_descuento": 87.5,
+      "descuento_cliente": 20.08,
+      "precio_promocional": 180.67,
+      "comision_vendedor_10_ganancia": 16.43,
+      "ganancia_neta": 147.82,
+      "ganancia_neta_con_descuento": 127.74,
       "source_url": "https://hbderm.com/hbderm-catalogo/cuidados-del-bebe/proteccion-solar-cuidados-del-bebe/compact-medium-spf-50/"
     },
     {
@@ -297,15 +297,15 @@
       "categoria": "Proteccion solar",
       "tamano": "",
       "tipo_venta": "publico",
-      "precio_referencia_hbderm": 343,
-      "ganancia_objetivo_45": 154.35,
-      "precio_venta_nuvia": 188.65,
+      "precio_referencia_hbderm": 250,
+      "ganancia_objetivo_45": 112.5,
+      "precio_venta_nuvia": 137.5,
       "descuento_destacado_pct": 0,
       "descuento_cliente": 0,
-      "precio_promocional": 188.65,
-      "comision_vendedor_10_ganancia": 15.44,
-      "ganancia_neta": 138.91,
-      "ganancia_neta_con_descuento": 138.91,
+      "precio_promocional": 137.5,
+      "comision_vendedor_10_ganancia": 11.25,
+      "ganancia_neta": 101.25,
+      "ganancia_neta_con_descuento": 101.25,
       "source_url": "https://hbderm.com/hbderm-catalogo/fotoproteccion/depiwhite-s-crema-spf-50/"
     },
     {
@@ -392,15 +392,15 @@
       "categoria": "Proteccion solar",
       "tamano": "",
       "tipo_venta": "publico",
-      "precio_referencia_hbderm": 250,
-      "ganancia_objetivo_45": 112.5,
-      "precio_venta_nuvia": 137.5,
+      "precio_referencia_hbderm": 454,
+      "ganancia_objetivo_45": 204.3,
+      "precio_venta_nuvia": 249.7,
       "descuento_destacado_pct": 0,
       "descuento_cliente": 0,
-      "precio_promocional": 137.5,
-      "comision_vendedor_10_ganancia": 11.25,
-      "ganancia_neta": 101.25,
-      "ganancia_neta_con_descuento": 101.25,
+      "precio_promocional": 249.7,
+      "comision_vendedor_10_ganancia": 20.43,
+      "ganancia_neta": 183.87,
+      "ganancia_neta_con_descuento": 183.87,
       "source_url": "https://hbderm.com/hbderm-catalogo/fotoproteccion/active-unify-fusion-fluid-color-spf50/"
     },
     {
@@ -506,15 +506,15 @@
       "categoria": "Proteccion solar",
       "tamano": "",
       "tipo_venta": "publico",
-      "precio_referencia_hbderm": 365,
-      "ganancia_objetivo_45": 164.25,
-      "precio_venta_nuvia": 200.75,
+      "precio_referencia_hbderm": 250,
+      "ganancia_objetivo_45": 112.5,
+      "precio_venta_nuvia": 137.5,
       "descuento_destacado_pct": 0,
       "descuento_cliente": 0,
-      "precio_promocional": 200.75,
-      "comision_vendedor_10_ganancia": 16.43,
-      "ganancia_neta": 147.82,
-      "ganancia_neta_con_descuento": 147.82,
+      "precio_promocional": 137.5,
+      "comision_vendedor_10_ganancia": 11.25,
+      "ganancia_neta": 101.25,
+      "ganancia_neta_con_descuento": 101.25,
       "source_url": "https://hbderm.com/hbderm-catalogo/fotoproteccion/fusion-water-color-bronze-spf50/"
     },
     {
@@ -525,15 +525,15 @@
       "categoria": "Proteccion solar",
       "tamano": "",
       "tipo_venta": "publico",
-      "precio_referencia_hbderm": 250,
-      "ganancia_objetivo_45": 112.5,
-      "precio_venta_nuvia": 137.5,
+      "precio_referencia_hbderm": 365,
+      "ganancia_objetivo_45": 164.25,
+      "precio_venta_nuvia": 200.75,
       "descuento_destacado_pct": 0,
       "descuento_cliente": 0,
-      "precio_promocional": 137.5,
-      "comision_vendedor_10_ganancia": 11.25,
-      "ganancia_neta": 101.25,
-      "ganancia_neta_con_descuento": 101.25,
+      "precio_promocional": 200.75,
+      "comision_vendedor_10_ganancia": 16.43,
+      "ganancia_neta": 147.82,
+      "ganancia_neta_con_descuento": 147.82,
       "source_url": "https://hbderm.com/hbderm-catalogo/fotoproteccion/fusion-water-color-light-spf50/"
     },
     {
@@ -614,25 +614,6 @@
     },
     {
       "index": 32,
-      "slug": "fusion-water-magic-spf50",
-      "titulo": "Fusion Water Magic SPF50+",
-      "marca": "ISDIN",
-      "categoria": "Proteccion solar",
-      "tamano": "",
-      "tipo_venta": "publico",
-      "precio_referencia_hbderm": 365,
-      "ganancia_objetivo_45": 164.25,
-      "precio_venta_nuvia": 200.75,
-      "descuento_destacado_pct": 0,
-      "descuento_cliente": 0,
-      "precio_promocional": 200.75,
-      "comision_vendedor_10_ganancia": 16.43,
-      "ganancia_neta": 147.82,
-      "ganancia_neta_con_descuento": 147.82,
-      "source_url": "https://hbderm.com/hbderm-catalogo/fotoproteccion/fusion-water-spf-50/"
-    },
-    {
-      "index": 33,
       "slug": "fusion-water-magic-urban-spf30",
       "titulo": "Fusion Water Magic Urban SPF30+",
       "marca": "ISDIN",
@@ -651,26 +632,26 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/fotoproteccion/fusion-water-urban/"
     },
     {
-      "index": 34,
+      "index": 33,
       "slug": "gel-cream-spf50-250ml",
       "titulo": "Gel Cream SPF50+ 250ML",
       "marca": "SENSILIS",
       "categoria": "Proteccion solar",
       "tamano": "250 ml",
       "tipo_venta": "publico",
-      "precio_referencia_hbderm": 250,
-      "ganancia_objetivo_45": 112.5,
-      "precio_venta_nuvia": 137.5,
+      "precio_referencia_hbderm": 432,
+      "ganancia_objetivo_45": 194.4,
+      "precio_venta_nuvia": 237.6,
       "descuento_destacado_pct": 0,
       "descuento_cliente": 0,
-      "precio_promocional": 137.5,
-      "comision_vendedor_10_ganancia": 11.25,
-      "ganancia_neta": 101.25,
-      "ganancia_neta_con_descuento": 101.25,
+      "precio_promocional": 237.6,
+      "comision_vendedor_10_ganancia": 19.44,
+      "ganancia_neta": 174.96,
+      "ganancia_neta_con_descuento": 174.96,
       "source_url": "https://hbderm.com/hbderm-catalogo/fotoproteccion/proteccion-cuerpo/gel-cream-50/"
     },
     {
-      "index": 35,
+      "index": 34,
       "slug": "hydro-oil-spf30",
       "titulo": "Hydro Oil SPF30+",
       "marca": "ISDIN",
@@ -689,7 +670,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/fotoproteccion/ydro-oil-spf-30-200ml/"
     },
     {
-      "index": 36,
+      "index": 35,
       "slug": "hydrolotion-spf50",
       "titulo": "Hydrolotion SPF50+",
       "marca": "ISDIN",
@@ -708,26 +689,26 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/fotoproteccion/hydrolotion-spf-50-200ml/"
     },
     {
-      "index": 37,
+      "index": 36,
       "slug": "hyseac-fluido-spf-50",
       "titulo": "Hyseac Fluido SPF 50",
       "marca": "URIAGE",
       "categoria": "Proteccion solar",
       "tamano": "",
       "tipo_venta": "publico",
-      "precio_referencia_hbderm": 286,
-      "ganancia_objetivo_45": 128.7,
-      "precio_venta_nuvia": 157.3,
+      "precio_referencia_hbderm": 250,
+      "ganancia_objetivo_45": 112.5,
+      "precio_venta_nuvia": 137.5,
       "descuento_destacado_pct": 0,
       "descuento_cliente": 0,
-      "precio_promocional": 157.3,
-      "comision_vendedor_10_ganancia": 12.87,
-      "ganancia_neta": 115.83,
-      "ganancia_neta_con_descuento": 115.83,
+      "precio_promocional": 137.5,
+      "comision_vendedor_10_ganancia": 11.25,
+      "ganancia_neta": 101.25,
+      "ganancia_neta_con_descuento": 101.25,
       "source_url": "https://hbderm.com/hbderm-catalogo/fotoproteccion/hyseac-fluido-spf-50/"
     },
     {
-      "index": 38,
+      "index": 37,
       "slug": "invisible-stick-spf50",
       "titulo": "Invisible Stick SPF50+",
       "marca": "ISDIN",
@@ -746,7 +727,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/fotoproteccion/invisible-stick-spf-50/"
     },
     {
-      "index": 39,
+      "index": 38,
       "slug": "nutratopic-pro-amp-locion-emoliente",
       "titulo": "Nutratopic Pro-amp Loción Emoliente",
       "marca": "ISDIN",
@@ -765,7 +746,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/fotoproteccion/proteccion-ninos/nutratopic-pro-amp-locion-emoliente-piel-atopica-400ml/"
     },
     {
-      "index": 40,
+      "index": 39,
       "slug": "oxygen-glow-cc-cream-spf30",
       "titulo": "Oxygen Glow CC Cream SPF30+",
       "marca": "FILORGA",
@@ -784,7 +765,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/oxygen-glow-cc-cream-spf30-40ml/"
     },
     {
-      "index": 41,
+      "index": 40,
       "slug": "pediatrics-fusion-water-magic-spf50",
       "titulo": "Pediatrics Fusion Water Magic SPF50+",
       "marca": "ISDIN",
@@ -803,7 +784,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/fotoproteccion/fusion-water-pediatrics-spf50/"
     },
     {
-      "index": 42,
+      "index": 41,
       "slug": "pediatrics-gel-crema-spf50",
       "titulo": "Pediatrics Gel Crema SPF50+",
       "marca": "ISDIN",
@@ -822,7 +803,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/fotoproteccion/8231/"
     },
     {
-      "index": 43,
+      "index": 42,
       "slug": "pediatrics-stick-spf-50",
       "titulo": "Pediatrics Stick SPF 50",
       "marca": "ISDIN",
@@ -841,7 +822,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/fotoproteccion-antiedad/pediatrics-stick/"
     },
     {
-      "index": 44,
+      "index": 43,
       "slug": "pediatrics-transparent-spray-spf50",
       "titulo": "Pediatrics Transparent Spray SPF50+",
       "marca": "ISDIN",
@@ -860,26 +841,26 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/fotoproteccion/transparent-spray-pediatrics-spf50/"
     },
     {
-      "index": 45,
+      "index": 44,
       "slug": "photocorrection-d-pigment-50-color",
       "titulo": "Photocorrection [d-pigment 50+] Color",
       "marca": "SENSILIS",
       "categoria": "Proteccion solar",
       "tamano": "",
       "tipo_venta": "publico",
-      "precio_referencia_hbderm": 250,
-      "ganancia_objetivo_45": 112.5,
-      "precio_venta_nuvia": 137.5,
+      "precio_referencia_hbderm": 389,
+      "ganancia_objetivo_45": 175.05,
+      "precio_venta_nuvia": 213.95,
       "descuento_destacado_pct": 0,
       "descuento_cliente": 0,
-      "precio_promocional": 137.5,
-      "comision_vendedor_10_ganancia": 11.25,
-      "ganancia_neta": 101.25,
-      "ganancia_neta_con_descuento": 101.25,
+      "precio_promocional": 213.95,
+      "comision_vendedor_10_ganancia": 17.51,
+      "ganancia_neta": 157.54,
+      "ganancia_neta_con_descuento": 157.54,
       "source_url": "https://hbderm.com/hbderm-catalogo/fotoproteccion/proteccion-rostro/photocorrection-d-pigment-50-color/"
     },
     {
-      "index": 46,
+      "index": 45,
       "slug": "protector-labial-spf30",
       "titulo": "Protector Labial SPF30+",
       "marca": "ISDIN",
@@ -898,7 +879,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-dia/protector-labial-spf30/"
     },
     {
-      "index": 47,
+      "index": 46,
       "slug": "protector-labial-spf50",
       "titulo": "Protector Labial SPF50+",
       "marca": "ISDIN",
@@ -917,7 +898,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/cuidados-del-bebe/proteccion-solar-cuidados-del-bebe/protector-labial-spf-50/"
     },
     {
-      "index": 48,
+      "index": 47,
       "slug": "proteos-screen-spf-50-color-fluid",
       "titulo": "Proteos Screen SPF 50+ Color Fluid",
       "marca": "MARTIDERM",
@@ -936,7 +917,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/proteos-screen-spf-50-color-fluid-cream-40-ml/"
     },
     {
-      "index": 49,
+      "index": 48,
       "slug": "proteos-screen-spf50",
       "titulo": "Proteos Screen SPF50+",
       "marca": "MARTIDERM",
@@ -955,7 +936,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/proteos-screen-spf-50-40ml/"
     },
     {
-      "index": 50,
+      "index": 49,
       "slug": "roseliane-spf-50-cc-cream",
       "titulo": "Roseliane SPF 50+ CC Cream",
       "marca": "URIAGE",
@@ -974,7 +955,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/fotoproteccion/roseliane-crema-anti-rojeces-spf-30/"
     },
     {
-      "index": 51,
+      "index": 50,
       "slug": "sebiaclear-crema-spf50",
       "titulo": "Sebiaclear Crema SPF50",
       "marca": "SVR",
@@ -993,7 +974,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/fotoproteccion/sebiaclear-crema-spf-50/"
     },
     {
-      "index": 52,
+      "index": 51,
       "slug": "sebionex-gel-matificante-spf50",
       "titulo": "Sebionex Gel Matificante SPF50+",
       "marca": "ACM",
@@ -1012,7 +993,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/pieles-con-grasas-o-con-acne/sebionex-gel-spf50/"
     },
     {
-      "index": 53,
+      "index": 52,
       "slug": "sensifine-ar-crema-spf50",
       "titulo": "Sensifine Ar Crema SPF50",
       "marca": "SVR",
@@ -1031,26 +1012,26 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/pieles-con-rojeces/sensifine-ar-spf50/"
     },
     {
-      "index": 54,
+      "index": 53,
       "slug": "sensifine-ar-creme-teintee",
       "titulo": "Sensifine Ar Creme Teintee",
       "marca": "SVR",
       "categoria": "Proteccion solar",
       "tamano": "",
       "tipo_venta": "publico",
-      "precio_referencia_hbderm": 420,
-      "ganancia_objetivo_45": 189,
-      "precio_venta_nuvia": 231,
+      "precio_referencia_hbderm": 250,
+      "ganancia_objetivo_45": 112.5,
+      "precio_venta_nuvia": 137.5,
       "descuento_destacado_pct": 0,
       "descuento_cliente": 0,
-      "precio_promocional": 231,
-      "comision_vendedor_10_ganancia": 18.9,
-      "ganancia_neta": 170.1,
-      "ganancia_neta_con_descuento": 170.1,
+      "precio_promocional": 137.5,
+      "comision_vendedor_10_ganancia": 11.25,
+      "ganancia_neta": 101.25,
+      "ganancia_neta_con_descuento": 101.25,
       "source_url": "https://hbderm.com/hbderm-catalogo/fotoproteccion/sensifine-ar-creme-teintee-40ml/"
     },
     {
-      "index": 55,
+      "index": 54,
       "slug": "spot-prevent-fusion-fluid-spf50",
       "titulo": "Spot Prevent Fusion Fluid SPF50+",
       "marca": "ISDIN",
@@ -1069,7 +1050,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/fotoproteccion/spot-prevent-fusion-fluid-spf-50/"
     },
     {
-      "index": 56,
+      "index": 55,
       "slug": "sun-secure-blur-spf50",
       "titulo": "Sun Secure Blur SPF50",
       "marca": "SVR",
@@ -1088,7 +1069,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/fotoproteccion/sun-secure-blur-spf-50/"
     },
     {
-      "index": 57,
+      "index": 56,
       "slug": "sun-secure-blur-teinte-spf50",
       "titulo": "Sun Secure Blur Teinte SPF50+",
       "marca": "SVR",
@@ -1107,26 +1088,26 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/fotoproteccion-antiedad/sun-secure-blur-teinte-spf50/"
     },
     {
-      "index": 58,
+      "index": 57,
       "slug": "sun-secure-brume-spf50",
       "titulo": "Sun Secure Brume SPF50",
       "marca": "SVR",
       "categoria": "Proteccion solar",
       "tamano": "",
       "tipo_venta": "publico",
-      "precio_referencia_hbderm": 250,
-      "ganancia_objetivo_45": 112.5,
-      "precio_venta_nuvia": 137.5,
+      "precio_referencia_hbderm": 449,
+      "ganancia_objetivo_45": 202.05,
+      "precio_venta_nuvia": 246.95,
       "descuento_destacado_pct": 0,
       "descuento_cliente": 0,
-      "precio_promocional": 137.5,
-      "comision_vendedor_10_ganancia": 11.25,
-      "ganancia_neta": 101.25,
-      "ganancia_neta_con_descuento": 101.25,
+      "precio_promocional": 246.95,
+      "comision_vendedor_10_ganancia": 20.21,
+      "ganancia_neta": 181.84,
+      "ganancia_neta_con_descuento": 181.84,
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/fotoproteccion-antiedad/sun-secure-brume-spf50/"
     },
     {
-      "index": 59,
+      "index": 58,
       "slug": "sun-secure-easy-stick-spf50",
       "titulo": "Sun Secure Easy Stick SPF50+",
       "marca": "SVR",
@@ -1145,26 +1126,26 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/cuidados-del-bebe/proteccion-solar-cuidados-del-bebe/sun-secure-easy-stick-spf50/"
     },
     {
-      "index": 60,
+      "index": 59,
       "slug": "sun-secure-fluide-photo-age-spf50",
       "titulo": "Sun Secure Fluide Photo-age SPF50+",
       "marca": "SVR",
       "categoria": "Proteccion solar",
       "tamano": "",
       "tipo_venta": "publico",
-      "precio_referencia_hbderm": 524,
-      "ganancia_objetivo_45": 235.8,
-      "precio_venta_nuvia": 288.2,
+      "precio_referencia_hbderm": 250,
+      "ganancia_objetivo_45": 112.5,
+      "precio_venta_nuvia": 137.5,
       "descuento_destacado_pct": 0,
       "descuento_cliente": 0,
-      "precio_promocional": 288.2,
-      "comision_vendedor_10_ganancia": 23.58,
-      "ganancia_neta": 212.22,
-      "ganancia_neta_con_descuento": 212.22,
+      "precio_promocional": 137.5,
+      "comision_vendedor_10_ganancia": 11.25,
+      "ganancia_neta": 101.25,
+      "ganancia_neta_con_descuento": 101.25,
       "source_url": "https://hbderm.com/hbderm-catalogo/fotoproteccion/sun-secure-fluide-photo-age-spf50/"
     },
     {
-      "index": 61,
+      "index": 60,
       "slug": "sun-secure-fluido-spf50",
       "titulo": "Sun Secure Fluido SPF50",
       "marca": "SVR",
@@ -1183,7 +1164,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/fotoproteccion/sun-secure-fluido-spf-50/"
     },
     {
-      "index": 62,
+      "index": 61,
       "slug": "sun-secure-lait-crepitant-spf50",
       "titulo": "Sun Secure Lait Crepitant SPF50+",
       "marca": "SVR",
@@ -1202,7 +1183,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/cuidados-del-bebe/proteccion-solar-cuidados-del-bebe/sun-secure-lait-crepitant-spf50/"
     },
     {
-      "index": 63,
+      "index": 62,
       "slug": "transparent-spray-spf50",
       "titulo": "Transparent Spray SPF50+",
       "marca": "ISDIN",
@@ -1221,7 +1202,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/fotoproteccion/proteccion-cuerpo/transparent-spray-wet-skin-spf50-250ml/"
     },
     {
-      "index": 64,
+      "index": 63,
       "slug": "uv-mineral-brush-spf50",
       "titulo": "UV Mineral Brush SPF50+",
       "marca": "ISDIN",
@@ -1240,7 +1221,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/fotoproteccion/uv-mineral-brush-spf-50/"
     },
     {
-      "index": 65,
+      "index": 64,
       "slug": "uveblock-spf50-dry-touch",
       "titulo": "Uveblock SPF50+ Dry Touch",
       "marca": "ISISPHARMA",
@@ -1259,7 +1240,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/fotoproteccion-antiedad/uveblock-spf50-dry-touch/"
     },
     {
-      "index": 66,
+      "index": 65,
       "slug": "uveblock-spf50-dry-touch-medium",
       "titulo": "Uveblock SPF50+ Dry Touch Medium",
       "marca": "ISISPHARMA",
@@ -1278,26 +1259,26 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/cuidados-del-bebe/proteccion-solar-cuidados-del-bebe/uveblock-spf50-dry-touch-medium/"
     },
     {
-      "index": 67,
+      "index": 66,
       "slug": "uveblock-sun-serum-spf50-28-ml",
       "titulo": "Uveblock Sun Serum SPF50 - 28 ml",
       "marca": "ISISPHARMA",
       "categoria": "Proteccion solar",
       "tamano": "28 ml",
       "tipo_venta": "publico",
-      "precio_referencia_hbderm": 390,
-      "ganancia_objetivo_45": 175.5,
-      "precio_venta_nuvia": 214.5,
+      "precio_referencia_hbderm": 250,
+      "ganancia_objetivo_45": 112.5,
+      "precio_venta_nuvia": 137.5,
       "descuento_destacado_pct": 0,
       "descuento_cliente": 0,
-      "precio_promocional": 214.5,
-      "comision_vendedor_10_ganancia": 17.55,
-      "ganancia_neta": 157.95,
-      "ganancia_neta_con_descuento": 157.95,
+      "precio_promocional": 137.5,
+      "comision_vendedor_10_ganancia": 11.25,
+      "ganancia_neta": 101.25,
+      "ganancia_neta_con_descuento": 101.25,
       "source_url": "https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/hidratantes-del-rostro/uveblock-sun-serum-spf50-28-ml/"
     },
     {
-      "index": 68,
+      "index": 67,
       "slug": "water-fluid-50",
       "titulo": "Water Fluid 50+",
       "marca": "SENSILIS",
@@ -1316,7 +1297,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/cuidados-del-bebe/proteccion-solar-cuidados-del-bebe/water-fluid-50/"
     },
     {
-      "index": 69,
+      "index": 68,
       "slug": "water-fluid-50-color",
       "titulo": "Water Fluid 50+ Color",
       "marca": "SENSILIS",
@@ -1335,7 +1316,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/fotoproteccion/proteccion-rostro/water-fluid-50-color/"
     },
     {
-      "index": 70,
+      "index": 69,
       "slug": "acniben-limpiador-matificante",
       "titulo": "Acniben Limpiador Matificante",
       "marca": "ISDIN",
@@ -1354,7 +1335,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/limpieza/gel-limpiador-matificante-acniben/"
     },
     {
-      "index": 71,
+      "index": 70,
       "slug": "age-purify-cleanser",
       "titulo": "Age Purify Cleanser",
       "marca": "FILORGA",
@@ -1373,7 +1354,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/age-purify-cleanser/"
     },
     {
-      "index": 72,
+      "index": 71,
       "slug": "agua-termal-300ml",
       "titulo": "Agua Termal - 300ML",
       "marca": "URIAGE",
@@ -1392,7 +1373,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/pieles-con-rojeces/limpiadores/agua-termal-de-uriage-300ml/"
     },
     {
-      "index": 73,
+      "index": 72,
       "slug": "agua-termal-50ml",
       "titulo": "Agua Termal - 50ML",
       "marca": "URIAGE",
@@ -1411,7 +1392,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/limpieza/agua-termal-de-uriage-50ml/"
     },
     {
-      "index": 74,
+      "index": 73,
       "slug": "bariederm-cica-gel-limpiador",
       "titulo": "Bariéderm Cica Gel Limpiador",
       "marca": "URIAGE",
@@ -1430,7 +1411,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/pieles-atopicas/limpieza-pieles-atopicas/bariederm-cica-gel-limpiador/"
     },
     {
-      "index": 75,
+      "index": 74,
       "slug": "bebe-crema-lavante-500ml",
       "titulo": "Bebé Crema Lavante 500ML",
       "marca": "URIAGE",
@@ -1449,7 +1430,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/cuidados-del-bebe/bebe-crema-lavante-500ml/"
     },
     {
-      "index": 76,
+      "index": 75,
       "slug": "depiderm-espuma-limpiadora-iluminadora",
       "titulo": "Dépiderm Espuma Limpiadora Iluminadora",
       "marca": "URIAGE",
@@ -1468,7 +1449,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/limpieza/depiderm-espuma-limpiadora-iluminadora/"
     },
     {
-      "index": 77,
+      "index": 76,
       "slug": "depiwhite-mousse-nettoyante",
       "titulo": "Dépiwhite Mousse Nettoyante",
       "marca": "ACM",
@@ -1487,7 +1468,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/acm-depiwhite-mousse-nettoyante-200ml/"
     },
     {
-      "index": 78,
+      "index": 77,
       "slug": "desodorante-antitranspirante-natural",
       "titulo": "Desodorante Antitranspirante Natural",
       "marca": "ACM",
@@ -1506,7 +1487,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/pieles-atopicas/limpieza-pieles-atopicas/desodorante-antitranspirante-natural/"
     },
     {
-      "index": 79,
+      "index": 78,
       "slug": "essentials-gel-micelar-limpiador",
       "titulo": "Essentials Gel Micelar Limpiador",
       "marca": "MARTIDERM",
@@ -1525,7 +1506,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/gel-micellar-limpiador-200ml/"
     },
     {
-      "index": 80,
+      "index": 79,
       "slug": "essentials-solucion-micelar-limpiadora-3-en-1",
       "titulo": "Essentials Solución Micelar Limpiadora 3 En 1",
       "marca": "MARTIDERM",
@@ -1544,7 +1525,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/martiderm-solucion-micellar-300ml/"
     },
     {
-      "index": 81,
+      "index": 80,
       "slug": "gel-surgras-dermatologico-500-ml",
       "titulo": "Gel Surgras Dermatológico 500 ml",
       "marca": "URIAGE",
@@ -1563,7 +1544,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/pieles-atopicas/limpieza-pieles-atopicas/gel-surgras-dermatologico-500-ml/"
     },
     {
-      "index": 82,
+      "index": 81,
       "slug": "hyseac-gel-limpiador-500ml",
       "titulo": "Hyseac Gel Limpiador 500ML",
       "marca": "URIAGE",
@@ -1582,7 +1563,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/pieles-con-grasas-o-con-acne/hyseac-gel-limpiador-500ml/"
     },
     {
-      "index": 83,
+      "index": 82,
       "slug": "hyseac-gel-nettoyant-150ml",
       "titulo": "Hyseac Gel Nettoyant 150ML",
       "marca": "URIAGE",
@@ -1601,7 +1582,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/pieles-con-grasas-o-con-acne/sensitelial-gel-solar-matificante-spf50/"
     },
     {
-      "index": 84,
+      "index": 83,
       "slug": "hyseac-hydra-crema-limpiadora",
       "titulo": "Hyséac Hydra - Crema Limpiadora",
       "marca": "URIAGE",
@@ -1620,7 +1601,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/limpieza/hyseac-hydra-crema-limpiadora/"
     },
     {
-      "index": 85,
+      "index": 84,
       "slug": "neotone-aqua-100ml",
       "titulo": "Neotone Aqua – 100ML",
       "marca": "ISISPHARMA",
@@ -1639,7 +1620,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/limpieza/neotone-aqua-100ml/"
     },
     {
-      "index": 86,
+      "index": 85,
       "slug": "nutratopic-pro-amp-gel-de-bano",
       "titulo": "Nutratopic Pro-amp Gel De Baño",
       "marca": "ISDIN",
@@ -1658,7 +1639,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/limpieza/nutratopic-gel-de-bano/"
     },
     {
-      "index": 87,
+      "index": 86,
       "slug": "rosakalm-agua-micelar",
       "titulo": "Rosakalm Agua Micelar",
       "marca": "ACM",
@@ -1677,7 +1658,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/sin-categorizar/rosakalm-agua-micelar-limpiadora/"
     },
     {
-      "index": 88,
+      "index": 87,
       "slug": "roseliane-fluido-dermo-limpiador",
       "titulo": "Roseliane - Fluido Dermo-limpiador",
       "marca": "URIAGE",
@@ -1696,7 +1677,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/pieles-con-rojeces/roseliane-fluido-dermo-limpiador/"
     },
     {
-      "index": 89,
+      "index": 88,
       "slug": "ruboril-cleansing-balm",
       "titulo": "Ruboril Cleansing Balm",
       "marca": "ISISPHARMA",
@@ -1715,7 +1696,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/limpieza/ruboril-cleansing-balm/"
     },
     {
-      "index": 90,
+      "index": 89,
       "slug": "sebiaclear-creme-lavante-200ml",
       "titulo": "Sebiaclear Creme Lavante 200ML",
       "marca": "SVR",
@@ -1734,7 +1715,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/limpieza/sebiaclear-creme-lavante-200ml-2/"
     },
     {
-      "index": 91,
+      "index": 90,
       "slug": "sebiaclear-creme-lavante-400ml",
       "titulo": "Sebiaclear Creme Lavante 400ML",
       "marca": "SVR",
@@ -1753,7 +1734,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/limpieza/sebiaclear-creme-lavante-200ml/"
     },
     {
-      "index": 92,
+      "index": 91,
       "slug": "sebiaclear-creme-lavante-400ml-refill",
       "titulo": "Sebiaclear Creme Lavante 400ML - Refill",
       "marca": "SVR",
@@ -1772,7 +1753,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/limpieza/refill-sebiaclear-creme-lavante-400ml/"
     },
     {
-      "index": 93,
+      "index": 92,
       "slug": "sebiaclear-gel-moussant-400ml",
       "titulo": "Sebiaclear Gel Moussant - 400ML",
       "marca": "SVR",
@@ -1791,7 +1772,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/pieles-con-grasas-o-con-acne/sebiaclear-gel-moussant-400ml/"
     },
     {
-      "index": 94,
+      "index": 93,
       "slug": "sebiaclear-gel-moussant-400ml-refill",
       "titulo": "Sebiaclear Gel Moussant 400ML - Refill",
       "marca": "SVR",
@@ -1810,7 +1791,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/limpieza/refill-sebiaclear-gel-moussant-400ml/"
     },
     {
-      "index": 95,
+      "index": 94,
       "slug": "sebionex-agua-micelar",
       "titulo": "Sebionex Agua Micelar",
       "marca": "ACM",
@@ -1829,7 +1810,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/sin-categorizar/sebionex-locion-micellar/"
     },
     {
-      "index": 96,
+      "index": 95,
       "slug": "sebionex-gel-nettoyant",
       "titulo": "Sebionex Gel Nettoyant",
       "marca": "ACM",
@@ -1848,7 +1829,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/pieles-con-grasas-o-con-acne/limpieza-pieles-con-grasas-o-con-acne/sebionex-gel-nettoyant/"
     },
     {
-      "index": 97,
+      "index": 96,
       "slug": "sensifine-ar-eau-micellar-200ml",
       "titulo": "Sensifine Ar Eau Micellar – 200ML",
       "marca": "SVR",
@@ -1867,7 +1848,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/limpieza/sensifine-ar-eau-micellar-200ml/"
     },
     {
-      "index": 98,
+      "index": 97,
       "slug": "skin-prep-gel-nettoyant",
       "titulo": "Skin Prep Gel Nettoyant",
       "marca": "FILORGA",
@@ -1886,7 +1867,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/sin-categorizar/skin-prep-gel-nettoyant/"
     },
     {
-      "index": 99,
+      "index": 98,
       "slug": "skin-prep-mousse",
       "titulo": "Skin Prep Mousse",
       "marca": "FILORGA",
@@ -1905,7 +1886,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/pieles-con-grasas-o-con-acne/limpieza-pieles-con-grasas-o-con-acne/skin-prep-mousse/"
     },
     {
-      "index": 100,
+      "index": 99,
       "slug": "skin-prep-solucion-micelar",
       "titulo": "Skin Prep Solucion Micelar",
       "marca": "FILORGA",
@@ -1924,7 +1905,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/limpieza/skin-prep-solucion-micelar/"
     },
     {
-      "index": 101,
+      "index": 100,
       "slug": "xemose-huile-lavante-1lt",
       "titulo": "Xemose Huile Lavante 1LT",
       "marca": "URIAGE",
@@ -1943,7 +1924,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/pieles-atopicas/limpieza-pieles-atopicas/xemose-huile-lavante-1-lt/"
     },
     {
-      "index": 102,
+      "index": 101,
       "slug": "xemose-huile-lavante-200-ml",
       "titulo": "Xemose Huile Lavante 200 ml",
       "marca": "URIAGE",
@@ -1962,7 +1943,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/xemose-huile-lavante-200-ml/"
     },
     {
-      "index": 103,
+      "index": 102,
       "slug": "xemose-huile-lavante-500-ml",
       "titulo": "Xemose Huile Lavante 500 ml",
       "marca": "URIAGE",
@@ -1981,7 +1962,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/pieles-atopicas/xemose-huile-lavante-500-ml/"
     },
     {
-      "index": 104,
+      "index": 103,
       "slug": "acniben-body-spray",
       "titulo": "Acniben Body Spray",
       "marca": "ISDIN",
@@ -2000,7 +1981,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/pieles-con-grasas-o-con-acne/oily-skin-body-acniben/"
     },
     {
-      "index": 105,
+      "index": 104,
       "slug": "acniben-night-concentrate",
       "titulo": "Acniben Night Concentrate",
       "marca": "ISDIN",
@@ -2019,7 +2000,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/pieles-con-grasas-o-con-acne/acniben-night-concentrate/"
     },
     {
-      "index": 106,
+      "index": 105,
       "slug": "acniben-on-the-spot",
       "titulo": "Acniben On The Spot",
       "marca": "ISDIN",
@@ -2038,7 +2019,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/pieles-con-grasas-o-con-acne/acniben-on-the-spot/"
     },
     {
-      "index": 107,
+      "index": 106,
       "slug": "acniben-repair-gel-crema",
       "titulo": "Acniben Repair Gel Crema",
       "marca": "ISDIN",
@@ -2057,7 +2038,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/pieles-con-grasas-o-con-acne/acniben-repair-gel-crema/"
     },
     {
-      "index": 108,
+      "index": 107,
       "slug": "acniover-cremigel-activo",
       "titulo": "Acniover Cremigel Activo",
       "marca": "MARTIDERM",
@@ -2076,7 +2057,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/pieles-con-grasas-o-con-acne/acniover-cremigel-activo-40ml/"
     },
     {
-      "index": 109,
+      "index": 108,
       "slug": "acniover-gel-purificante",
       "titulo": "Acniover Gel Purificante",
       "marca": "MARTIDERM",
@@ -2095,7 +2076,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/pieles-con-grasas-o-con-acne/acniover-gel-purificante-200ml/"
     },
     {
-      "index": 110,
+      "index": 109,
       "slug": "acniover-serum",
       "titulo": "Acniover Serum",
       "marca": "MARTIDERM",
@@ -2114,7 +2095,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/pieles-con-grasas-o-con-acne/acniover-serum-30ml/"
     },
     {
-      "index": 111,
+      "index": 110,
       "slug": "acniover-spray-corporal",
       "titulo": "Acniover Spray Corporal",
       "marca": "MARTIDERM",
@@ -2133,7 +2114,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/pieles-con-grasas-o-con-acne/acniover-spray-corporal/"
     },
     {
-      "index": 112,
+      "index": 111,
       "slug": "hyseac-3-regul",
       "titulo": "Hyseac 3-REGUL",
       "marca": "URIAGE",
@@ -2152,7 +2133,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/pieles-con-grasas-o-con-acne/hyseac-3-regul/"
     },
     {
-      "index": 113,
+      "index": 112,
       "slug": "hyseac-3regul-40ml-hyseac-gel-50ml",
       "titulo": "Hyséac 3REGUL+ 40ML + Hyseac Gel 50ML",
       "marca": "URIAGE",
@@ -2171,7 +2152,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/sin-categorizar/hyseac-3regul-40ml-hyseac-gel-50ml/"
     },
     {
-      "index": 114,
+      "index": 113,
       "slug": "hyseac-huile-purificante-100ml",
       "titulo": "Hyseac Huile Purificante 100ML",
       "marca": "URIAGE",
@@ -2190,7 +2171,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/pieles-con-grasas-o-con-acne/hyseac-huile-purificante-100ml/"
     },
     {
-      "index": 115,
+      "index": 114,
       "slug": "hyseac-serum-booster",
       "titulo": "Hyseac Serum Booster",
       "marca": "URIAGE",
@@ -2209,7 +2190,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/serums/hyseac-serum-booster/"
     },
     {
-      "index": 116,
+      "index": 115,
       "slug": "hyseac-tonico-purificante-250ml",
       "titulo": "Hyseac Tonico Purificante 250ML",
       "marca": "URIAGE",
@@ -2228,7 +2209,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/pieles-con-grasas-o-con-acne/hyseac-tonico-purificante-250ml/"
     },
     {
-      "index": 117,
+      "index": 116,
       "slug": "isdinceutics-essential-cleansing",
       "titulo": "Isdinceutics Essential Cleansing",
       "marca": "ISDIN",
@@ -2247,26 +2228,26 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/pieles-con-grasas-o-con-acne/isdin-essential-cleansing-200ml/"
     },
     {
-      "index": 118,
+      "index": 117,
       "slug": "ncef-reverse-eyes",
       "titulo": "Ncef Reverse Eyes",
       "marca": "FILORGA",
       "categoria": "Piel grasa y acne",
       "tamano": "",
       "tipo_venta": "publico",
-      "precio_referencia_hbderm": 269,
-      "ganancia_objetivo_45": 121.05,
-      "precio_venta_nuvia": 147.95,
+      "precio_referencia_hbderm": 439,
+      "ganancia_objetivo_45": 197.55,
+      "precio_venta_nuvia": 241.45,
       "descuento_destacado_pct": 0,
       "descuento_cliente": 0,
-      "precio_promocional": 147.95,
-      "comision_vendedor_10_ganancia": 12.11,
-      "ganancia_neta": 108.94,
-      "ganancia_neta_con_descuento": 108.94,
+      "precio_promocional": 241.45,
+      "comision_vendedor_10_ganancia": 19.76,
+      "ganancia_neta": 177.79,
+      "ganancia_neta_con_descuento": 177.79,
       "source_url": "https://hbderm.com/hbderm-catalogo/pieles-con-grasas-o-con-acne/anti-edad/ncef-reverse-eyes/"
     },
     {
-      "index": 119,
+      "index": 118,
       "slug": "sebiaclear-active-gel",
       "titulo": "Sebiaclear Active Gel",
       "marca": "SVR",
@@ -2285,7 +2266,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/pieles-con-grasas-o-con-acne/sebiaclear-active/"
     },
     {
-      "index": 120,
+      "index": 119,
       "slug": "sebiaclear-ampoule-flash-30-ml",
       "titulo": "Sebiaclear Ampoule Flash - 30 ml",
       "marca": "SVR",
@@ -2304,7 +2285,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/serums/sebiaclear-ampoule-flash-30-ml/"
     },
     {
-      "index": 121,
+      "index": 120,
       "slug": "sebiaclear-mat-pores",
       "titulo": "Sebiaclear Mat+pores",
       "marca": "SVR",
@@ -2323,7 +2304,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/pieles-con-grasas-o-con-acne/cremas-de-dia/sebiaclear-matpores/"
     },
     {
-      "index": 122,
+      "index": 121,
       "slug": "sebiaclear-micro-peel",
       "titulo": "Sebiaclear Micro-peel",
       "marca": "SVR",
@@ -2342,7 +2323,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/pieles-con-grasas-o-con-acne/sebiaclear-micro-peel-150ml/"
     },
     {
-      "index": 123,
+      "index": 122,
       "slug": "sebiaclear-serum",
       "titulo": "Sebiaclear Serum",
       "marca": "SVR",
@@ -2361,7 +2342,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/pieles-con-grasas-o-con-acne/8921/"
     },
     {
-      "index": 124,
+      "index": 123,
       "slug": "teen-derm-k",
       "titulo": "Teen Derm K",
       "marca": "ISISPHARMA",
@@ -2380,7 +2361,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/pieles-con-grasas-o-con-acne/teen-derm-k-concentrate-30ml/"
     },
     {
-      "index": 125,
+      "index": 124,
       "slug": "b3-masque-hydra-x-6-und",
       "titulo": "B3 Masque Hydra x 6 Und",
       "marca": "SVR",
@@ -2399,7 +2380,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/b3-masque-12ml-x6uni/"
     },
     {
-      "index": 126,
+      "index": 125,
       "slug": "balsamo-fundente-200-ml",
       "titulo": "Balsamo Fundente 200 ml",
       "marca": "URIAGE",
@@ -2418,7 +2399,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/eau-thermale-balsamo-fundente/"
     },
     {
-      "index": 127,
+      "index": 126,
       "slug": "bariederm-cica-daily-gel-crema-40ml",
       "titulo": "Bariéderm Cica Daily Gel Crema 40ML",
       "marca": "URIAGE",
@@ -2437,7 +2418,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/cuidados-del-bebe/cuidados-hidratantes/bariederm-cica-daily-crema/"
     },
     {
-      "index": 128,
+      "index": 127,
       "slug": "bariederm-cica-crema-con-cu-zn",
       "titulo": "Bariéderm Cica-crema Con Cu-zn",
       "marca": "URIAGE",
@@ -2456,7 +2437,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/pieles-atopicas/hidratantes/bariederm-cica-crema-con-cu-zn/"
     },
     {
-      "index": 129,
+      "index": 128,
       "slug": "bariederm-crema-de-manos",
       "titulo": "Bariéderm Crema De Manos",
       "marca": "URIAGE",
@@ -2475,7 +2456,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/hidratantes-de-manos-y-pies/bariederm-crema-de-manos-50ml/"
     },
     {
-      "index": 130,
+      "index": 129,
       "slug": "crema-de-agua-ligera",
       "titulo": "Crema De Agua Ligera",
       "marca": "URIAGE",
@@ -2494,7 +2475,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/eau-thermale-crema-de-agua-ligera/"
     },
     {
-      "index": 131,
+      "index": 130,
       "slug": "crema-gommante-corporal-200ml",
       "titulo": "Crema Gommante Corporal 200ML",
       "marca": "URIAGE",
@@ -2513,7 +2494,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/crema-gomante-corporal-200-ml/"
     },
     {
-      "index": 132,
+      "index": 131,
       "slug": "esencia-de-agua",
       "titulo": "Esencia De Agua",
       "marca": "URIAGE",
@@ -2532,7 +2513,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/pieles-atopicas/hidratantes/esencia-de-agua-iluminadora/"
     },
     {
-      "index": 133,
+      "index": 132,
       "slug": "kit-de-viaje-hidratacion-termal",
       "titulo": "Kit De Viaje Hidratacion Termal",
       "marca": "URIAGE",
@@ -2551,7 +2532,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/sin-categorizar/kit-de-viaje-hidratacion-termal/"
     },
     {
-      "index": 134,
+      "index": 133,
       "slug": "micellar-solution",
       "titulo": "Micellar Solution",
       "marca": "ISDIN",
@@ -2570,7 +2551,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/locion-micellar-solution/"
     },
     {
-      "index": 135,
+      "index": 134,
       "slug": "ncef-essence",
       "titulo": "Ncef Essence",
       "marca": "FILORGA",
@@ -2589,7 +2570,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/hidratantes-del-rostro/ncef-essence/"
     },
     {
-      "index": 136,
+      "index": 135,
       "slug": "novophane-ultra-nutritivo-shampoo",
       "titulo": "Novophane Ultra-nutritivo Shampoo",
       "marca": "ACM",
@@ -2608,7 +2589,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/sin-categorizar/novophane-champu-ultra-nutritivo-200ml/"
     },
     {
-      "index": 137,
+      "index": 136,
       "slug": "nutradeica",
       "titulo": "Nutradeica",
       "marca": "ISDIN",
@@ -2627,7 +2608,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/hidratantes-del-rostro/nutradeica-gel-crema-facial-piel-seborreica-50-ml/"
     },
     {
-      "index": 138,
+      "index": 137,
       "slug": "nutratopic-pro-amp-locion-facial",
       "titulo": "Nutratopic Pro-amp Loción Facial",
       "marca": "ISDIN",
@@ -2646,7 +2627,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/pieles-atopicas/hidratantes/nutratopic-pro-amp-crema-facial-50ml/"
     },
     {
-      "index": 139,
+      "index": 138,
       "slug": "sedacalm-crema",
       "titulo": "Sédacalm Crema",
       "marca": "ACM",
@@ -2665,7 +2646,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/sedacalm-crema/"
     },
     {
-      "index": 140,
+      "index": 139,
       "slug": "time-filler-shot-5xp",
       "titulo": "Time Filler Shot 5XP",
       "marca": "FILORGA",
@@ -2684,7 +2665,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/hidratantes-del-cuerpo/time-filler-shot-5xp/"
     },
     {
-      "index": 141,
+      "index": 140,
       "slug": "topialyse-baume-lavant-400ml",
       "titulo": "Topialyse Baume Lavant - 400ML",
       "marca": "SVR",
@@ -2703,7 +2684,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/topialyse-baume-lavant-400ml/"
     },
     {
-      "index": 142,
+      "index": 141,
       "slug": "topialyse-crema-400ml",
       "titulo": "Topialyse Crema - 400ML",
       "marca": "SVR",
@@ -2722,7 +2703,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/topialyse-creme-400ml/"
     },
     {
-      "index": 143,
+      "index": 142,
       "slug": "topialyse-gel-lavant-1l",
       "titulo": "Topialyse Gel Lavant - 1L",
       "marca": "SVR",
@@ -2741,7 +2722,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/topialyse-gel-lavant-1l/"
     },
     {
-      "index": 144,
+      "index": 143,
       "slug": "xemose-crema-relipidante-400ml-xemose-huile-200ml",
       "titulo": "Xémose – Crema Relipidante 400ML + Xemose Huile 200ML",
       "marca": "URIAGE",
@@ -2760,7 +2741,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/pieles-atopicas/xemose-crema-relipidante-400ml-xemose-huile-200ml/"
     },
     {
-      "index": 145,
+      "index": 144,
       "slug": "xemose-baume-oleo-500ml",
       "titulo": "Xemose Baume Oleo 500ML",
       "marca": "URIAGE",
@@ -2779,7 +2760,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/cuidados-del-bebe/novophane-baume-oleo-500ml/"
     },
     {
-      "index": 146,
+      "index": 145,
       "slug": "xemose-bruma-sos-200-ml",
       "titulo": "Xemose Bruma Sos 200 ml",
       "marca": "URIAGE",
@@ -2798,7 +2779,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/pieles-atopicas/hidratantes/xemose-bruma-sos-200-ml/"
     },
     {
-      "index": 147,
+      "index": 146,
       "slug": "xemose-c8-crema-relipidizante-anti-irritaciones-400ml",
       "titulo": "Xémose C8+ - Crema Relipidizante Anti-irritaciones 400ML",
       "marca": "URIAGE",
@@ -2817,7 +2798,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/pieles-atopicas/hidratantes/xemose-crema-relipidizante/"
     },
     {
-      "index": 148,
+      "index": 147,
       "slug": "xemose-c8-syndent-500ml",
       "titulo": "Xémose C8+ - Syndent 500ML",
       "marca": "URIAGE",
@@ -2836,7 +2817,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/cuidados-del-bebe/xemose-syndet-500ml-2/"
     },
     {
-      "index": 149,
+      "index": 148,
       "slug": "xemose-pso",
       "titulo": "Xemose Pso",
       "marca": "URIAGE",
@@ -2855,7 +2836,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/pieles-atopicas/xemose-pso-150ml/"
     },
     {
-      "index": 150,
+      "index": 149,
       "slug": "xerial-10-leche-corporal-200ml",
       "titulo": "Xerial 10 Leche Corporal - 200ML",
       "marca": "SVR",
@@ -2874,7 +2855,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/xerial-10-leche-corporal/"
     },
     {
-      "index": 151,
+      "index": 150,
       "slug": "xerial-30-crema-50ml",
       "titulo": "Xerial 30 Crema 50ML",
       "marca": "SVR",
@@ -2893,7 +2874,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/xerial-30-crema/"
     },
     {
-      "index": 152,
+      "index": 151,
       "slug": "xerial-50-extreme-crema-50ml",
       "titulo": "Xerial 50 Extreme Crema 50ML",
       "marca": "SVR",
@@ -2912,7 +2893,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/xerial-50-extreme-crema/"
     },
     {
-      "index": 153,
+      "index": 152,
       "slug": "c20-biotic",
       "titulo": "[C20] Biotic",
       "marca": "SVR",
@@ -2931,7 +2912,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/c20biotic/"
     },
     {
-      "index": 154,
+      "index": 153,
       "slug": "cera-biotic",
       "titulo": "[cera] Biotic",
       "marca": "SVR",
@@ -2950,7 +2931,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/cerabiotic/"
     },
     {
-      "index": 155,
+      "index": 154,
       "slug": "pepti-biotic",
       "titulo": "[pepti] Biotic",
       "marca": "SVR",
@@ -2969,7 +2950,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/9036/"
     },
     {
-      "index": 156,
+      "index": 155,
       "slug": "acniben-mascarilla-purificante",
       "titulo": "Acniben Mascarilla Purificante",
       "marca": "ISDIN",
@@ -2988,7 +2969,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/exfoliantes-y-mascarillas/mascarilla-facial-purificante-acniben/"
     },
     {
-      "index": 157,
+      "index": 156,
       "slug": "age-purify-fluide",
       "titulo": "Age Purify Fluide",
       "marca": "FILORGA",
@@ -3007,7 +2988,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/age-purify-fluide/"
     },
     {
-      "index": 158,
+      "index": 157,
       "slug": "age-purify-intensive",
       "titulo": "Age Purify Intensive",
       "marca": "FILORGA",
@@ -3026,7 +3007,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/age-purify-intensive-30ml/"
     },
     {
-      "index": 159,
+      "index": 158,
       "slug": "age-purify-mask",
       "titulo": "Age Purify Mask",
       "marca": "FILORGA",
@@ -3045,7 +3026,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-noche/age-purify-mask/"
     },
     {
-      "index": 160,
+      "index": 159,
       "slug": "amatist-day-cream",
       "titulo": "Amatist Day Cream",
       "marca": "MARTIDERM",
@@ -3064,7 +3045,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-dia/amatist-day-cream/"
     },
     {
-      "index": 161,
+      "index": 160,
       "slug": "amatist-serum",
       "titulo": "Amatist Serum",
       "marca": "MARTIDERM",
@@ -3083,7 +3064,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/amatist-serum/"
     },
     {
-      "index": 162,
+      "index": 161,
       "slug": "ampoule-a",
       "titulo": "Ampoule A",
       "marca": "SVR",
@@ -3102,7 +3083,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/ampoule-a-30ml/"
     },
     {
-      "index": 163,
+      "index": 162,
       "slug": "ampoule-a-30ml-blur-15-ml",
       "titulo": "Ampoule A 30ML + Blur 15 ml",
       "marca": "SVR",
@@ -3121,7 +3102,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/serums/ampoule-a-30ml-blur-15-ml/"
     },
     {
-      "index": 164,
+      "index": 163,
       "slug": "ampoule-b",
       "titulo": "Ampoule B",
       "marca": "SVR",
@@ -3140,7 +3121,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/ampoule-b-30ml/"
     },
     {
-      "index": 165,
+      "index": 164,
       "slug": "ampoule-c",
       "titulo": "Ampoule C",
       "marca": "SVR",
@@ -3159,7 +3140,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/ampoule-c-30ml/"
     },
     {
-      "index": 166,
+      "index": 165,
       "slug": "bariederm-cica-lip-balm-15ml",
       "titulo": "Bariéderm Cica Lip Balm - 15ML",
       "marca": "URIAGE",
@@ -3178,7 +3159,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/contorno-de-labios/bariederm-cica-lip-balm/"
     },
     {
-      "index": 167,
+      "index": 166,
       "slug": "boreade-m-emulsion-seborregulador-matificante",
       "titulo": "Boréade M Emulsion Seborregulador Matificante",
       "marca": "ACM",
@@ -3197,7 +3178,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-dia/boreade-m-emulsion-seborregulador-matificante/"
     },
     {
-      "index": 168,
+      "index": 167,
       "slug": "boreade-r-emulsion-reparadora-confort",
       "titulo": "Boréade R Emulsion Reparadora Confort",
       "marca": "ACM",
@@ -3216,7 +3197,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-dia/boreade-r-emulsion-reparadora-confort/"
     },
     {
-      "index": 169,
+      "index": 168,
       "slug": "densitium-contour-yeux",
       "titulo": "Densitium Contour Yeux",
       "marca": "SVR",
@@ -3235,7 +3216,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/8989/"
     },
     {
-      "index": 170,
+      "index": 169,
       "slug": "depiwhite-leche-corporal-500ml",
       "titulo": "Dépiwhite Leche Corporal - 500ML",
       "marca": "ACM",
@@ -3254,7 +3235,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-noche/depiwhite-leche-corporal-500ml/"
     },
     {
-      "index": 171,
+      "index": 170,
       "slug": "depiwhite-serum",
       "titulo": "Depiwhite Sérum",
       "marca": "ACM",
@@ -3273,7 +3254,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/sin-categorizar/depiwhite-serum/"
     },
     {
-      "index": 172,
+      "index": 171,
       "slug": "desodorante-antitranspirante-calmante",
       "titulo": "Desodorante Antitranspirante Calmante",
       "marca": "ACM",
@@ -3292,7 +3273,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-dia/desodorante-antitranspirante-calmante/"
     },
     {
-      "index": 173,
+      "index": 172,
       "slug": "dsp-cover",
       "titulo": "Dsp - Cover",
       "marca": "MARTIDERM",
@@ -3311,7 +3292,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-dia/dsp-cover-stick/"
     },
     {
-      "index": 174,
+      "index": 173,
       "slug": "dsp-crema-renovacion",
       "titulo": "Dsp - Crema Renovación",
       "marca": "MARTIDERM",
@@ -3330,7 +3311,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-noche/dsp-crema-renovacion-nocturna/"
     },
     {
-      "index": 175,
+      "index": 174,
       "slug": "dsp-mascarilla",
       "titulo": "Dsp - Mascarilla",
       "marca": "MARTIDERM",
@@ -3349,7 +3330,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-noche/dsp-mask/"
     },
     {
-      "index": 176,
+      "index": 175,
       "slug": "dsp-serum-iluminador",
       "titulo": "Dsp-serum Iluminador",
       "marca": "MARTIDERM",
@@ -3368,7 +3349,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/dsp-serum-iluminador/"
     },
     {
-      "index": 177,
+      "index": 176,
       "slug": "duolys-a",
       "titulo": "Duolys A",
       "marca": "ACM",
@@ -3387,7 +3368,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/serums/duolys-a-serum-retinol/"
     },
     {
-      "index": 178,
+      "index": 177,
       "slug": "duolys-ce-serum",
       "titulo": "Duolys Ce Serum",
       "marca": "ACM",
@@ -3406,7 +3387,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/duolys-ce-serum/"
     },
     {
-      "index": 179,
+      "index": 178,
       "slug": "duolys-contorno-de-ojos",
       "titulo": "Duolys Contorno De Ojos",
       "marca": "ACM",
@@ -3425,7 +3406,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-noche/duolys-contorno-de-ojos/"
     },
     {
-      "index": 180,
+      "index": 179,
       "slug": "duolys-hyal-serum",
       "titulo": "Duolys Hyal Serum",
       "marca": "ACM",
@@ -3444,7 +3425,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/duolys-hyal-serum/"
     },
     {
-      "index": 181,
+      "index": 180,
       "slug": "eau-thermale-serum-booster-ha",
       "titulo": "Eau Thermale Serum Booster Ha",
       "marca": "URIAGE",
@@ -3463,7 +3444,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/serums/serum-booster-ha-30ml/"
     },
     {
-      "index": 182,
+      "index": 181,
       "slug": "eternalist-age-day-cream",
       "titulo": "Eternalist Age Day Cream",
       "marca": "SENSILIS",
@@ -3482,7 +3463,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/eternalist-a-g-e-day-cream-50ml/"
     },
     {
-      "index": 183,
+      "index": 182,
       "slug": "eternalist-age-eyes",
       "titulo": "Eternalist Age Eyes",
       "marca": "SENSILIS",
@@ -3501,7 +3482,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/eternalist-age-eyes-20ml/"
     },
     {
-      "index": 184,
+      "index": 183,
       "slug": "eternalist-age-retinol",
       "titulo": "Eternalist Age Retinol",
       "marca": "SENSILIS",
@@ -3520,7 +3501,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-noche/eternalist-age-crema-retinol/"
     },
     {
-      "index": 185,
+      "index": 184,
       "slug": "eternalist-age-serum",
       "titulo": "Eternalist Age Serum",
       "marca": "SENSILIS",
@@ -3539,7 +3520,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/eternalist-a-g-e-serum-ai-30ml/"
     },
     {
-      "index": 186,
+      "index": 185,
       "slug": "global-repair-advance",
       "titulo": "Global Repair Advance",
       "marca": "FILORGA",
@@ -3558,7 +3539,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/global-repair-advance/"
     },
     {
-      "index": 187,
+      "index": 186,
       "slug": "global-repair-advance-elixir",
       "titulo": "Global Repair Advance Elixir",
       "marca": "FILORGA",
@@ -3577,7 +3558,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/global-repair-advance-elixir/"
     },
     {
-      "index": 188,
+      "index": 187,
       "slug": "global-repair-balm",
       "titulo": "Global Repair Balm",
       "marca": "FILORGA",
@@ -3596,7 +3577,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/global-repair-baume-50ml/"
     },
     {
-      "index": 189,
+      "index": 188,
       "slug": "global-repair-essence",
       "titulo": "Global Repair Essence",
       "marca": "FILORGA",
@@ -3615,7 +3596,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/global-repair-essence-150ml/"
     },
     {
-      "index": 190,
+      "index": 189,
       "slug": "global-repair-eyes-lips",
       "titulo": "Global Repair Eyes & Lips",
       "marca": "FILORGA",
@@ -3634,7 +3615,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/global-repair-eyes-lips-15ml/"
     },
     {
-      "index": 191,
+      "index": 190,
       "slug": "global-repair-intensive",
       "titulo": "Global Repair Intensive",
       "marca": "FILORGA",
@@ -3653,7 +3634,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/serums/global-repair-intensive/"
     },
     {
-      "index": 192,
+      "index": 191,
       "slug": "hydra-aox",
       "titulo": "Hydra - Aox",
       "marca": "FILORGA",
@@ -3672,7 +3653,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/serums/hydra-aox-flacon/"
     },
     {
-      "index": 193,
+      "index": 192,
       "slug": "hydra-hyal-crema-gel",
       "titulo": "Hydra - Hyal Crema Gel",
       "marca": "FILORGA",
@@ -3691,7 +3672,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/hydra-hyal-crema-gel-50ml/"
     },
     {
-      "index": 194,
+      "index": 193,
       "slug": "hydra-hyal-serum",
       "titulo": "Hydra - Hyal Sérum",
       "marca": "FILORGA",
@@ -3710,7 +3691,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/hydra-hyal-hidratante-rejuvenecedora/"
     },
     {
-      "index": 195,
+      "index": 194,
       "slug": "hydracid-c20",
       "titulo": "Hydracid C20",
       "marca": "SVR",
@@ -3729,7 +3710,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/hydracid-c20/"
     },
     {
-      "index": 196,
+      "index": 195,
       "slug": "isdinceutics-flavo-c-forte-3u",
       "titulo": "Isdinceutics Flavo C Forte 3U",
       "marca": "ISDIN",
@@ -3748,7 +3729,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/antioxidantes/flavo-c-forte-isdinceutics-3-unidades-53ml/"
     },
     {
-      "index": 197,
+      "index": 196,
       "slug": "isdinceutics-hyaluronic-concentrate",
       "titulo": "Isdinceutics Hyaluronic Concentrate",
       "marca": "ISDIN",
@@ -3767,7 +3748,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/7674/"
     },
     {
-      "index": 198,
+      "index": 197,
       "slug": "isdinceutics-hyaluronic-eyes",
       "titulo": "Isdinceutics Hyaluronic Eyes",
       "marca": "ISDIN",
@@ -3786,7 +3767,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/isdinceutics-hyaluronic-eyes/"
     },
     {
-      "index": 199,
+      "index": 198,
       "slug": "isdinceutics-hyaluronic-moisture-normal",
       "titulo": "Isdinceutics Hyaluronic Moisture Normal",
       "marca": "ISDIN",
@@ -3805,7 +3786,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-dia/hyaluronic-moisture-normal-isdinceutics/"
     },
     {
-      "index": 200,
+      "index": 199,
       "slug": "isdinceutics-hyaluronic-moisture-oily",
       "titulo": "Isdinceutics Hyaluronic Moisture Oily",
       "marca": "ISDIN",
@@ -3824,7 +3805,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/hyaluronic-moisture-oily-isdinceutics/"
     },
     {
-      "index": 201,
+      "index": 200,
       "slug": "isdinceutics-hyaluronic-moisture-sensitive",
       "titulo": "Isdinceutics Hyaluronic Moisture Sensitive",
       "marca": "ISDIN",
@@ -3843,7 +3824,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-dia/hyaluronic-moisture-sensitive/"
     },
     {
-      "index": 202,
+      "index": 201,
       "slug": "isdinceutics-k-ox-eyes",
       "titulo": "Isdinceutics K-ox Eyes",
       "marca": "ISDIN",
@@ -3862,7 +3843,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-dia/k-ox-eyes/"
     },
     {
-      "index": 203,
+      "index": 202,
       "slug": "isdinceutics-melaclear-advanced-30ml",
       "titulo": "Isdinceutics Melaclear Advanced - 30ML",
       "marca": "ISDIN",
@@ -3881,7 +3862,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/isdinceutics-melaclear-advanced-30ml/"
     },
     {
-      "index": 204,
+      "index": 203,
       "slug": "isdinceutics-retinal-intense",
       "titulo": "Isdinceutics Retinal Intense",
       "marca": "ISDIN",
@@ -3900,7 +3881,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/serums/retinal-intense-50-ml/"
     },
     {
-      "index": 205,
+      "index": 204,
       "slug": "isdinceutics-salicylic-renewal",
       "titulo": "Isdinceutics Salicylic Renewal",
       "marca": "ISDIN",
@@ -3919,7 +3900,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/sin-categorizar/isdinceutics-salicylic-renewal/"
     },
     {
-      "index": 206,
+      "index": 205,
       "slug": "isdinceutics-vital-eyes",
       "titulo": "Isdinceutics Vital Eyes",
       "marca": "ISDIN",
@@ -3938,7 +3919,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/contorno-de-ojos/vital-eyes-isdinceutics/"
     },
     {
-      "index": 207,
+      "index": 206,
       "slug": "lip-supreme-balm",
       "titulo": "Lip Supreme Balm",
       "marca": "MARTIDERM",
@@ -3957,7 +3938,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/lip-supreme-balm/"
     },
     {
-      "index": 208,
+      "index": 207,
       "slug": "masque-c-antiox",
       "titulo": "Masque C Antiox",
       "marca": "SVR",
@@ -3976,7 +3957,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-dia/masque-c-antiox/"
     },
     {
-      "index": 209,
+      "index": 208,
       "slug": "meso-mask",
       "titulo": "Meso - Mask",
       "marca": "FILORGA",
@@ -3995,7 +3976,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/meso-mask/"
     },
     {
-      "index": 210,
+      "index": 209,
       "slug": "ncef-intensive",
       "titulo": "Ncef Intensive",
       "marca": "FILORGA",
@@ -4014,7 +3995,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/serums/ncef-intensive/"
     },
     {
-      "index": 211,
+      "index": 210,
       "slug": "ncef-night-mask",
       "titulo": "Ncef Night Mask",
       "marca": "FILORGA",
@@ -4033,7 +4014,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-noche/ncef-night-mask/"
     },
     {
-      "index": 212,
+      "index": 211,
       "slug": "ncef-reverse-mat",
       "titulo": "Ncef Reverse Mat",
       "marca": "FILORGA",
@@ -4052,7 +4033,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/serums/ncef-reverse-mat/"
     },
     {
-      "index": 213,
+      "index": 212,
       "slug": "ncef-revitalize",
       "titulo": "Ncef Revitalize",
       "marca": "FILORGA",
@@ -4071,7 +4052,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/ncef-revitalize/"
     },
     {
-      "index": 214,
+      "index": 213,
       "slug": "ncef-revitalize-serum",
       "titulo": "Ncef Revitalize Sérum",
       "marca": "FILORGA",
@@ -4090,7 +4071,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/ncef-revitalize-serum/"
     },
     {
-      "index": 215,
+      "index": 214,
       "slug": "nutrifiller-lips",
       "titulo": "Nutrifiller Lips",
       "marca": "FILORGA",
@@ -4109,7 +4090,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/nutrifiller-lips-balsamo-nutritivo-para-labios/"
     },
     {
-      "index": 216,
+      "index": 215,
       "slug": "optim-eyes",
       "titulo": "Optim Eyes",
       "marca": "FILORGA",
@@ -4128,7 +4109,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/optim-eyes-tratamiento-contorno-de-ojos/"
     },
     {
-      "index": 217,
+      "index": 216,
       "slug": "oxygen-glow",
       "titulo": "Oxygen Glow",
       "marca": "FILORGA",
@@ -4147,7 +4128,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/oxygen-glow-crema/"
     },
     {
-      "index": 218,
+      "index": 217,
       "slug": "oxygen-glow-eyes",
       "titulo": "Oxygen Glow Eyes",
       "marca": "FILORGA",
@@ -4166,7 +4147,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-dia/oxygen-glow-eyes/"
     },
     {
-      "index": 219,
+      "index": 218,
       "slug": "oxygen-glow-mask",
       "titulo": "Oxygen Glow Mask",
       "marca": "FILORGA",
@@ -4185,7 +4166,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-dia/oxygen-glow-mask/"
     },
     {
-      "index": 220,
+      "index": 219,
       "slug": "oxygen-peel",
       "titulo": "Oxygen-peel",
       "marca": "FILORGA",
@@ -4204,7 +4185,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/exfoliantes-y-mascarillas/oxygen-peel/"
     },
     {
-      "index": 221,
+      "index": 220,
       "slug": "pack-bariederm-crema-de-manos",
       "titulo": "Pack Bariéderm Crema De Manos",
       "marca": "URIAGE",
@@ -4223,7 +4204,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-dia/pack-bariederm-crema-de-manos/"
     },
     {
-      "index": 222,
+      "index": 221,
       "slug": "palpebral-relief",
       "titulo": "Palpebral Relief",
       "marca": "SENSILIS",
@@ -4242,7 +4223,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-noche/hig-palpebral-relief/"
     },
     {
-      "index": 223,
+      "index": 222,
       "slug": "photo-age-ha-10-ampollas",
       "titulo": "Photo Age Ha+ - 10 Ampollas",
       "marca": "MARTIDERM",
@@ -4261,7 +4242,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/photo-age-ha-10-ampollas/"
     },
     {
-      "index": 224,
+      "index": 223,
       "slug": "proteos-hydra-plus-sp-10-ampollas",
       "titulo": "Proteos Hydra Plus Sp - 10 Ampollas",
       "marca": "MARTIDERM",
@@ -4280,7 +4261,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/proteos-hydra-plus-sp/"
     },
     {
-      "index": 225,
+      "index": 224,
       "slug": "roseliane-serum-neutralizador-de-rojeces-visibles",
       "titulo": "Roseliane – Sérum Neutralizador De Rojeces Visibles",
       "marca": "URIAGE",
@@ -4299,7 +4280,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/pieles-con-rojeces/roseliane-serum-neutralizador-de-rojeces-visibles/"
     },
     {
-      "index": 226,
+      "index": 225,
       "slug": "scrub-and-mask",
       "titulo": "Scrub And Mask",
       "marca": "FILORGA",
@@ -4318,7 +4299,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/scrub-and-masck-mascarilla-exfoliante-efervescente/"
     },
     {
-      "index": 227,
+      "index": 226,
       "slug": "shot-collagen-lift",
       "titulo": "Shot Collagen Lift",
       "marca": "MARTIDERM",
@@ -4337,7 +4318,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/shot-collagen-lift/"
     },
     {
-      "index": 228,
+      "index": 227,
       "slug": "shot-hyaluronic-firm",
       "titulo": "Shot Hyaluronic Firm",
       "marca": "MARTIDERM",
@@ -4356,7 +4337,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/serums/shot-hyaluronic-firm/"
     },
     {
-      "index": 229,
+      "index": 228,
       "slug": "shot-vitamin-c-antiox",
       "titulo": "Shot Vitamin C Antiox",
       "marca": "MARTIDERM",
@@ -4375,7 +4356,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/antioxidantes/shot-vitamin-c-antiox/"
     },
     {
-      "index": 230,
+      "index": 229,
       "slug": "skin-rescue-serum-s-o-s",
       "titulo": "Skin Rescue- Serum S.o.s",
       "marca": "SENSILIS",
@@ -4394,7 +4375,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/serums/skin-rescue-serum-s-o-s-30ml/"
     },
     {
-      "index": 231,
+      "index": 230,
       "slug": "skin-unify",
       "titulo": "Skin Unify",
       "marca": "FILORGA",
@@ -4413,7 +4394,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/skin-unify/"
     },
     {
-      "index": 232,
+      "index": 231,
       "slug": "skin-unify-intensive",
       "titulo": "Skin Unify Intensive",
       "marca": "FILORGA",
@@ -4432,7 +4413,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/serums/skin-unify-intensive-30ml/"
     },
     {
-      "index": 233,
+      "index": 232,
       "slug": "skin-unify-radiance",
       "titulo": "Skin Unify Radiance",
       "marca": "FILORGA",
@@ -4451,7 +4432,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/skin-unify-radiance-15ml/"
     },
     {
-      "index": 234,
+      "index": 233,
       "slug": "sleep-and-peel-4-5",
       "titulo": "Sleep And Peel 4.5",
       "marca": "FILORGA",
@@ -4470,7 +4451,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/sleep-and-peel-4-5/"
     },
     {
-      "index": 235,
+      "index": 234,
       "slug": "sun-secure-eau-solaire",
       "titulo": "Sun Secure Eau Solaire",
       "marca": "SVR",
@@ -4489,26 +4470,26 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-dia/sun-secure-eau-solaire-200-ml/"
     },
     {
-      "index": 236,
+      "index": 235,
       "slug": "sun-secure-extreme",
       "titulo": "Sun Secure Extreme",
       "marca": "SVR",
       "categoria": "Antiedad",
       "tamano": "",
       "tipo_venta": "publico",
-      "precio_referencia_hbderm": 250,
-      "ganancia_objetivo_45": 112.5,
-      "precio_venta_nuvia": 137.5,
+      "precio_referencia_hbderm": 449,
+      "ganancia_objetivo_45": 202.05,
+      "precio_venta_nuvia": 246.95,
       "descuento_destacado_pct": 0,
       "descuento_cliente": 0,
-      "precio_promocional": 137.5,
-      "comision_vendedor_10_ganancia": 11.25,
-      "ganancia_neta": 101.25,
-      "ganancia_neta_con_descuento": 101.25,
+      "precio_promocional": 246.95,
+      "comision_vendedor_10_ganancia": 20.21,
+      "ganancia_neta": 181.84,
+      "ganancia_neta_con_descuento": 181.84,
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-dia/sun-secure-extreme-50-ml/"
     },
     {
-      "index": 237,
+      "index": 236,
       "slug": "supreme-booster-fece",
       "titulo": "Supreme [booster Fece]",
       "marca": "SENSILIS",
@@ -4527,7 +4508,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/supreme-booster-fece-30ml/"
     },
     {
-      "index": 238,
+      "index": 237,
       "slug": "teen-derm-az",
       "titulo": "Teen Derm Az",
       "marca": "ISISPHARMA",
@@ -4546,7 +4527,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-dia/teen-derm-az-30ml/"
     },
     {
-      "index": 239,
+      "index": 238,
       "slug": "time-filler-5xp-crema",
       "titulo": "Time Filler 5XP - Crema",
       "marca": "FILORGA",
@@ -4565,7 +4546,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/time-filler-5xp-crema/"
     },
     {
-      "index": 240,
+      "index": 239,
       "slug": "time-filler-eyes-5xp",
       "titulo": "Time Filler Eyes 5XP",
       "marca": "FILORGA",
@@ -4584,7 +4565,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/time-filler-eyes-5xp/"
     },
     {
-      "index": 241,
+      "index": 240,
       "slug": "time-filler-intensive",
       "titulo": "Time Filler Intensive",
       "marca": "FILORGA",
@@ -4603,7 +4584,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/time-filler-intensive/"
     },
     {
-      "index": 242,
+      "index": 241,
       "slug": "time-filler-night",
       "titulo": "Time Filler Night",
       "marca": "FILORGA",
@@ -4622,7 +4603,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-noche/time-filler-night/"
     },
     {
-      "index": 243,
+      "index": 242,
       "slug": "time-filler-intensive-5xp",
       "titulo": "Time-filler Intensive 5XP",
       "marca": "FILORGA",
@@ -4641,7 +4622,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-dia/time-filler-intensive-5xp/"
     },
     {
-      "index": 244,
+      "index": 243,
       "slug": "upgrade-ar",
       "titulo": "Upgrade Ar",
       "marca": "SENSILIS",
@@ -4660,7 +4641,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/upgrade-ar/"
     },
     {
-      "index": 245,
+      "index": 244,
       "slug": "upgrade-eyes",
       "titulo": "Upgrade Eyes",
       "marca": "SENSILIS",
@@ -4679,7 +4660,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/10142/"
     },
     {
-      "index": 246,
+      "index": 245,
       "slug": "upgrade-fluide",
       "titulo": "Upgrade Fluide",
       "marca": "SENSILIS",
@@ -4698,7 +4679,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/upgrade-fluido-50ml/"
     },
     {
-      "index": 247,
+      "index": 246,
       "slug": "upgrade-make-up-miel-dore",
       "titulo": "Upgrade Make Up - Miel Doré",
       "marca": "SENSILIS",
@@ -4717,7 +4698,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/upgrade-make-up-efecto-lifting-tono-03-miel-dore-30ml/"
     },
     {
-      "index": 248,
+      "index": 247,
       "slug": "upgrade-make-up-miel-rose",
       "titulo": "Upgrade Make Up - Miel Rosé",
       "marca": "SENSILIS",
@@ -4736,7 +4717,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/upgrade-make-up-efecto-lifting-02-miel-rose-30ml/"
     },
     {
-      "index": 249,
+      "index": 248,
       "slug": "upgrade-make-up-beige",
       "titulo": "Upgrade Make Up – Beige",
       "marca": "SENSILIS",
@@ -4755,7 +4736,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/upgrade-make-up-base-de-maquillaje-tratamiento-lifting-30ml/"
     },
     {
-      "index": 250,
+      "index": 249,
       "slug": "upgrade-night-cream",
       "titulo": "Upgrade Night Cream",
       "marca": "SENSILIS",
@@ -4774,7 +4755,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-noche/upgrade-crema-noche-50ml/"
     },
     {
-      "index": 251,
+      "index": 250,
       "slug": "ampoule-clairial",
       "titulo": "Ampoule Clairial",
       "marca": "SVR",
@@ -4793,7 +4774,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/pieles-hiperpigmentadas/despigmentante-rostro/ampoule-clairial-30-ml/"
     },
     {
-      "index": 252,
+      "index": 251,
       "slug": "clairial-night-peel",
       "titulo": "Clairial Night Peel",
       "marca": "SVR",
@@ -4812,7 +4793,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/pieles-hiperpigmentadas/despigmentante-rostro/clairial-night-peel/"
     },
     {
-      "index": 253,
+      "index": 252,
       "slug": "clairial-serum",
       "titulo": "Clairial Serum",
       "marca": "SVR",
@@ -4831,7 +4812,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/pieles-hiperpigmentadas/clairial-serum/"
     },
     {
-      "index": 254,
+      "index": 253,
       "slug": "depiderm-serum-antimanchas",
       "titulo": "Dépiderm - Sérum Antimanchas",
       "marca": "URIAGE",
@@ -4850,7 +4831,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/pieles-hiperpigmentadas/depiderm-serum-antimanchas/"
     },
     {
-      "index": 255,
+      "index": 254,
       "slug": "depiwhite-advanced",
       "titulo": "Dépiwhite Advanced",
       "marca": "ACM",
@@ -4869,7 +4850,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/pieles-hiperpigmentadas/depiwhite-advanced-crema/"
     },
     {
-      "index": 256,
+      "index": 255,
       "slug": "depiwhite-anti-manchas-intimo",
       "titulo": "Dépiwhite Anti Manchas Intimo",
       "marca": "ACM",
@@ -4888,7 +4869,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/sin-categorizar/depiwhite-anti-manchas-intimo/"
     },
     {
-      "index": 257,
+      "index": 256,
       "slug": "depiwhite-gel-contorno-de-ojos",
       "titulo": "Dépiwhite Gel Contorno De Ojos",
       "marca": "ACM",
@@ -4907,7 +4888,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/pieles-hiperpigmentadas/depiwhite-gel-contorno-de-ojos/"
     },
     {
-      "index": 258,
+      "index": 257,
       "slug": "depiwhite-leche-corporal-200ml",
       "titulo": "Dépiwhite Leche Corporal - 200ML",
       "marca": "ACM",
@@ -4926,7 +4907,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/pieles-hiperpigmentadas/depiwhite-leche-corporal/"
     },
     {
-      "index": 259,
+      "index": 258,
       "slug": "viticolor-gel",
       "titulo": "Viticolor Gel",
       "marca": "ACM",
@@ -4945,7 +4926,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/pieles-despigmentadas/viticolor-gel-con-color-pieles-con-vitiligo/"
     },
     {
-      "index": 260,
+      "index": 259,
       "slug": "vitiskin-hidrogel",
       "titulo": "Vitiskin Hidrogel",
       "marca": "ISISPHARMA",
@@ -4964,7 +4945,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/pieles-despigmentadas/vitiskin-hidrogel-50ml/"
     },
     {
-      "index": 261,
+      "index": 260,
       "slug": "vitix-gel",
       "titulo": "Vitix Gel",
       "marca": "ACM",
@@ -4983,7 +4964,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/pieles-despigmentadas/vitix-gel/"
     },
     {
-      "index": 262,
+      "index": 261,
       "slug": "xerial-10-leche-corporal-400ml",
       "titulo": "Xerial 10 Leche Corporal - 400ML",
       "marca": "SVR",
@@ -5002,7 +4983,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/pieles-hiperpigmentadas/despigmentante-corporal/xerial-leche-corporal-400ml/"
     },
     {
-      "index": 263,
+      "index": 262,
       "slug": "novophane-capsulas-x-180",
       "titulo": "Novophane Capsulas x 180",
       "marca": "ACM",
@@ -5021,7 +5002,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-dia/novophane-capsulas-x-180/"
     },
     {
-      "index": 264,
+      "index": 263,
       "slug": "novophane-capsulas-x-60",
       "titulo": "Novophane Capsulas x 60",
       "marca": "ACM",
@@ -5040,7 +5021,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/cuidados-del-cabello-y-unas/novophane-capsulas-x60/"
     },
     {
-      "index": 265,
+      "index": 264,
       "slug": "novophane-ds-caspa-moderada-shampoo",
       "titulo": "Novophane Ds Caspa Moderada Shampoo",
       "marca": "ACM",
@@ -5059,7 +5040,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/sin-categorizar/novophane-ds-champu-caspa-moderada/"
     },
     {
-      "index": 266,
+      "index": 265,
       "slug": "novophane-energizante-shampoo-200ml",
       "titulo": "Novophane Energizante Shampoo - 200ML",
       "marca": "ACM",
@@ -5078,7 +5059,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/cuidados-del-cabello-y-unas/novophane-energizante-shampoo/"
     },
     {
-      "index": 267,
+      "index": 266,
       "slug": "novophane-energizante-shampoo-500ml",
       "titulo": "Novophane Energizante Shampoo - 500ML",
       "marca": "ACM",
@@ -5097,7 +5078,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/cuidados-del-cabello-y-unas/anticaida/novophane-energizante-shampoo-500ml/"
     },
     {
-      "index": 268,
+      "index": 267,
       "slug": "novophane-k-caspa-severa-shampoo",
       "titulo": "Novophane K Caspa Severa Shampoo",
       "marca": "ACM",
@@ -5116,7 +5097,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/cuidados-del-cabello-y-unas/novophane-k-shampoo-caspa-severa/"
     },
     {
-      "index": 269,
+      "index": 268,
       "slug": "novophane-locion-chronic",
       "titulo": "Novophane Loción Chronic",
       "marca": "ACM",
@@ -5135,7 +5116,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/cuidados-del-cabello-y-unas/novophane-chronic-100ml/"
     },
     {
-      "index": 270,
+      "index": 269,
       "slug": "novophane-locion-reactiva",
       "titulo": "Novophane Loción Reactiva",
       "marca": "ACM",
@@ -5154,7 +5135,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/sin-categorizar/novophane-locion-reactiva/"
     },
     {
-      "index": 271,
+      "index": 270,
       "slug": "novophane-seborregulador-shampoo",
       "titulo": "Novophane Seborregulador Shampoo",
       "marca": "ACM",
@@ -5173,7 +5154,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/sin-categorizar/novophane-seborregulador-shampoo-200-ml/"
     },
     {
-      "index": 272,
+      "index": 271,
       "slug": "pilopeptan-champu-anticaida",
       "titulo": "Pilopeptan Champú Anticaída",
       "marca": "GENOVÉ",
@@ -5192,28 +5173,9 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/cuidados-del-cabello-y-unas/pilopeptan-champu-anticaida-250ml/"
     },
     {
-      "index": 273,
+      "index": 272,
       "slug": "pilopeptan-intensive",
       "titulo": "Pilopeptan Intensive",
-      "marca": "GENOVÉ",
-      "categoria": "Cabello y unas",
-      "tamano": "",
-      "tipo_venta": "publico",
-      "precio_referencia_hbderm": 478,
-      "ganancia_objetivo_45": 215.1,
-      "precio_venta_nuvia": 262.9,
-      "descuento_destacado_pct": 0,
-      "descuento_cliente": 0,
-      "precio_promocional": 262.9,
-      "comision_vendedor_10_ganancia": 21.51,
-      "ganancia_neta": 193.59,
-      "ganancia_neta_con_descuento": 193.59,
-      "source_url": "https://hbderm.com/hbderm-catalogo/cuidados-del-cabello-y-unas/pilopeptan-intensive/"
-    },
-    {
-      "index": 274,
-      "slug": "pilopeptan-locion-anticaida",
-      "titulo": "Pilopeptan Loción Anticaída",
       "marca": "GENOVÉ",
       "categoria": "Cabello y unas",
       "tamano": "",
@@ -5227,10 +5189,29 @@
       "comision_vendedor_10_ganancia": 33.08,
       "ganancia_neta": 297.67,
       "ganancia_neta_con_descuento": 297.67,
+      "source_url": "https://hbderm.com/hbderm-catalogo/cuidados-del-cabello-y-unas/pilopeptan-intensive/"
+    },
+    {
+      "index": 273,
+      "slug": "pilopeptan-locion-anticaida",
+      "titulo": "Pilopeptan Loción Anticaída",
+      "marca": "GENOVÉ",
+      "categoria": "Cabello y unas",
+      "tamano": "",
+      "tipo_venta": "publico",
+      "precio_referencia_hbderm": 298,
+      "ganancia_objetivo_45": 134.1,
+      "precio_venta_nuvia": 163.9,
+      "descuento_destacado_pct": 0,
+      "descuento_cliente": 0,
+      "precio_promocional": 163.9,
+      "comision_vendedor_10_ganancia": 13.41,
+      "ganancia_neta": 120.69,
+      "ganancia_neta_con_descuento": 120.69,
       "source_url": "https://hbderm.com/hbderm-catalogo/cuidados-del-cabello-y-unas/pilopeptan-locion-anticaida-100ml/"
     },
     {
-      "index": 275,
+      "index": 274,
       "slug": "pilopeptan-womam-comprimidos",
       "titulo": "Pilopeptan Womam Comprimidos",
       "marca": "GENOVÉ",
@@ -5249,26 +5230,26 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/cuidados-del-cabello-y-unas/pilopeptan-womam-comprimidos/"
     },
     {
-      "index": 276,
+      "index": 275,
       "slug": "pilopeptan-woman-mascarilla-capilar-reparadora",
       "titulo": "Pilopeptan Woman Mascarilla Capilar Reparadora",
       "marca": "GENOVÉ",
       "categoria": "Cabello y unas",
       "tamano": "",
       "tipo_venta": "publico",
-      "precio_referencia_hbderm": 735,
-      "ganancia_objetivo_45": 330.75,
-      "precio_venta_nuvia": 404.25,
+      "precio_referencia_hbderm": 351,
+      "ganancia_objetivo_45": 157.95,
+      "precio_venta_nuvia": 193.05,
       "descuento_destacado_pct": 0,
       "descuento_cliente": 0,
-      "precio_promocional": 404.25,
-      "comision_vendedor_10_ganancia": 33.08,
-      "ganancia_neta": 297.67,
-      "ganancia_neta_con_descuento": 297.67,
+      "precio_promocional": 193.05,
+      "comision_vendedor_10_ganancia": 15.8,
+      "ganancia_neta": 142.15,
+      "ganancia_neta_con_descuento": 142.15,
       "source_url": "https://hbderm.com/hbderm-catalogo/cuidados-del-cabello-y-unas/pilopeptan-woman-mascarilla-capilar-reparadora-200ml/"
     },
     {
-      "index": 277,
+      "index": 276,
       "slug": "pilopeptan-woman-proteokel",
       "titulo": "Pilopeptan Woman Proteokel",
       "marca": "GENOVÉ",
@@ -5287,7 +5268,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/cuidados-del-cabello-y-unas/pilopeptan-woman-proteokel/"
     },
     {
-      "index": 278,
+      "index": 277,
       "slug": "pilopeptan-woman-reparador-de-unas",
       "titulo": "Pilopeptan Woman Reparador De Uñas",
       "marca": "GENOVÉ",
@@ -5306,7 +5287,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/sin-categorizar/pilopeptan-woman-reparador-de-unas/"
     },
     {
-      "index": 279,
+      "index": 278,
       "slug": "pilopeptan-woman-serum-potenciador-de-pestanas-y-cejas",
       "titulo": "Pilopeptan Woman Sérum Potenciador De Pestañas Y Cejas",
       "marca": "GENOVÉ",
@@ -5325,7 +5306,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/cuidado-de-pestanas/pilopeptan-woman-serum-potenciador-de-pestanas-y-cejas-6ml/"
     },
     {
-      "index": 280,
+      "index": 279,
       "slug": "pilopeptan-woman-serum-reparador-capilar",
       "titulo": "Pilopeptan Woman Sérum Reparador Capilar",
       "marca": "GENOVÉ",
@@ -5344,7 +5325,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/cuidados-del-cabello-y-unas/pilopeptan-woman-serum-reparador-capilar-30ml/"
     },
     {
-      "index": 281,
+      "index": 280,
       "slug": "sedacalm-shampoo",
       "titulo": "Sédacalm Shampoo",
       "marca": "ACM",
@@ -5363,7 +5344,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/cuidados-del-cabello-y-unas/sedacalm-shampoo-calmante-200ml/"
     },
     {
-      "index": 282,
+      "index": 281,
       "slug": "si-nails",
       "titulo": "Si - Nails",
       "marca": "ISDIN",
@@ -5382,7 +5363,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/cuidados-del-cabello-y-unas/unas/si-nails/"
     },
     {
-      "index": 283,
+      "index": 282,
       "slug": "topialyse-mascara-de-pestanas",
       "titulo": "Topialyse Máscara De Pestañas",
       "marca": "SVR",
@@ -5401,26 +5382,26 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/contorno-de-ojos/topialyse-mascara-de-pestanas-palpebral/"
     },
     {
-      "index": 284,
+      "index": 283,
       "slug": "xerial-40-ongles",
       "titulo": "Xerial 40 Ongles",
       "marca": "SVR",
       "categoria": "Cabello y unas",
       "tamano": "",
       "tipo_venta": "publico",
-      "precio_referencia_hbderm": 168,
-      "ganancia_objetivo_45": 75.6,
-      "precio_venta_nuvia": 92.4,
+      "precio_referencia_hbderm": 735,
+      "ganancia_objetivo_45": 330.75,
+      "precio_venta_nuvia": 404.25,
       "descuento_destacado_pct": 0,
       "descuento_cliente": 0,
-      "precio_promocional": 92.4,
-      "comision_vendedor_10_ganancia": 7.56,
-      "ganancia_neta": 68.04,
-      "ganancia_neta_con_descuento": 68.04,
+      "precio_promocional": 404.25,
+      "comision_vendedor_10_ganancia": 33.08,
+      "ganancia_neta": 297.67,
+      "ganancia_neta_con_descuento": 297.67,
       "source_url": "https://hbderm.com/hbderm-catalogo/cuidados-del-cabello-y-unas/xerial-40-ongles/"
     },
     {
-      "index": 285,
+      "index": 284,
       "slug": "agua-termal-150ml",
       "titulo": "Agua Termal - 150ML",
       "marca": "URIAGE",
@@ -5439,7 +5420,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/cuidados-del-bebe/agua-termal-de-uriage/"
     },
     {
-      "index": 286,
+      "index": 285,
       "slug": "bariederm-cica-daily-serum",
       "titulo": "Bariéderm Cica Daily Serum",
       "marca": "URIAGE",
@@ -5458,7 +5439,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/cuidados-del-bebe/bariederm-cica-daily-serum/"
     },
     {
-      "index": 287,
+      "index": 286,
       "slug": "bariesun-bruma-termal-bronceadora",
       "titulo": "Barièsun Bruma Termal Bronceadora",
       "marca": "URIAGE",
@@ -5477,7 +5458,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/cuidados-del-bebe/cuidados-especificos/bariesun-autobronzant/"
     },
     {
-      "index": 288,
+      "index": 287,
       "slug": "bebe-1er-cuidado-costra-lactea",
       "titulo": "Bebé - 1ER Cuidado Costra Láctea",
       "marca": "URIAGE",
@@ -5496,7 +5477,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/cuidados-del-bebe/bebe-1er-cuidado-costra-lactea/"
     },
     {
-      "index": 289,
+      "index": 288,
       "slug": "bebe-1er-agua-termal-150ml",
       "titulo": "Bebé 1ER Agua Termal - 150ML",
       "marca": "URIAGE",
@@ -5515,7 +5496,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/cuidados-del-bebe/bebe-agua-termal-150ml/"
     },
     {
-      "index": 290,
+      "index": 289,
       "slug": "boreade-r-stick-labios-reparador-calmante",
       "titulo": "Boréade R Stick Labios Reparador Calmante",
       "marca": "ACM",
@@ -5534,7 +5515,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/cuidados-del-bebe/cuidados-antirritaciones/boreade-r-srick-labios-reparador-calmante/"
     },
     {
-      "index": 291,
+      "index": 290,
       "slug": "desodorante-antitranspirante-frescor",
       "titulo": "Desodorante Antitranspirante Frescor",
       "marca": "ACM",
@@ -5553,7 +5534,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/cuidados-del-bebe/cuidados-especificos/desodorante-antitranspirante-frescor/"
     },
     {
-      "index": 292,
+      "index": 291,
       "slug": "desodorante-antitranspirante-intensivo",
       "titulo": "Desodorante Antitranspirante Intensivo",
       "marca": "ACM",
@@ -5572,7 +5553,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/cuidados-del-bebe/cuidados-especificos/desodorante-antitranspirante-intensivo/"
     },
     {
-      "index": 293,
+      "index": 292,
       "slug": "gel-surgras-dermatologico-1-lt",
       "titulo": "Gel Surgras Dermatológico 1 Lt",
       "marca": "URIAGE",
@@ -5591,7 +5572,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/cuidados-del-bebe/higiene-del-bebe/gel-surgras-dermatologico-1lt/"
     },
     {
-      "index": 294,
+      "index": 293,
       "slug": "topialyse-crema-200ml",
       "titulo": "Topialyse Crema – 200ML",
       "marca": "SVR",
@@ -5610,7 +5591,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/cuidados-del-bebe/cuidados-antirritaciones/topialyse-crema-200ml/"
     },
     {
-      "index": 295,
+      "index": 294,
       "slug": "c-eye-biotic-15-ml",
       "titulo": "[c] Eye Biotic 15 ml",
       "marca": "SVR",
@@ -5629,7 +5610,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/sin-categorizar/biotic-eyes/"
     },
     {
-      "index": 296,
+      "index": 295,
       "slug": "agua-termal-300-ml-pack-2x1",
       "titulo": "Agua Termal 300 ml - Pack 2X1",
       "marca": "URIAGE",
@@ -5648,7 +5629,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/sin-categorizar/agua-termal-300-ml-pack-2x1/"
     },
     {
-      "index": 297,
+      "index": 296,
       "slug": "amatist-night-cream",
       "titulo": "Amatist Night Cream",
       "marca": "MARTIDERM",
@@ -5667,7 +5648,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/sin-categorizar/amatist-night-cream/"
     },
     {
-      "index": 298,
+      "index": 297,
       "slug": "bariederm-cica-huile",
       "titulo": "Bariéderm Cica-huile",
       "marca": "URIAGE",
@@ -5686,7 +5667,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/sin-categorizar/bariederm-cica-oil/"
     },
     {
-      "index": 299,
+      "index": 298,
       "slug": "glisodin",
       "titulo": "Glisodin",
       "marca": "GLISODIN",
@@ -5705,7 +5686,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/sin-categorizar/glisodin-advanced-pure-x60-capsulas/"
     },
     {
-      "index": 300,
+      "index": 299,
       "slug": "pink",
       "titulo": "Pink",
       "marca": "AGF mesenchymal",
@@ -5724,7 +5705,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/sin-categorizar/pink/"
     },
     {
-      "index": 301,
+      "index": 300,
       "slug": "pruriced-gel-calmante-100-ml",
       "titulo": "Pruriced - Gel Calmante 100 ml",
       "marca": "URIAGE",
@@ -5743,7 +5724,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/sin-categorizar/pruriced-gel-calmante-100ml/"
     },
     {
-      "index": 302,
+      "index": 301,
       "slug": "pruriced-sos-15-ml",
       "titulo": "Pruriced - Sos 15 ml",
       "marca": "URIAGE",
@@ -5762,7 +5743,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/sin-categorizar/pruriced-sos-15-ml/"
     },
     {
-      "index": 303,
+      "index": 302,
       "slug": "recovery-kit-upgrade-ar-25ml-origin-pro-egf-5-ampollas",
       "titulo": "Recovery Kit (upgrade [ar] 25ML + Origin Pro EGF-5 Ampollas)",
       "marca": "SENSILIS",
@@ -5781,7 +5762,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/sin-categorizar/recovery-kit-upgrade-ar-25ml-origin-pro-egf-5-ampollas/"
     },
     {
-      "index": 304,
+      "index": 303,
       "slug": "rosakalm-crema-anti-rojeces",
       "titulo": "Rosakalm Crema Anti Rojeces",
       "marca": "ACM",
@@ -5800,7 +5781,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/pieles-con-rojeces/rosakalm-crema-anti-rojeces/"
     },
     {
-      "index": 305,
+      "index": 304,
       "slug": "roseliane-crema-antirojeces",
       "titulo": "Roseliane Crema Antirojeces",
       "marca": "URIAGE",
@@ -5819,7 +5800,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/pieles-con-rojeces/roseliane-crema-antirojeces/"
     },
     {
-      "index": 306,
+      "index": 305,
       "slug": "sebionex-actimat",
       "titulo": "Sebionex Actimat",
       "marca": "ACM",
@@ -5838,7 +5819,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/sin-categorizar/sebionex-actimat-base-cosmetica-color-claro/"
     },
     {
-      "index": 307,
+      "index": 306,
       "slug": "sebionex-k",
       "titulo": "Sebionex K",
       "marca": "ACM",
@@ -5857,7 +5838,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/sin-categorizar/sebionex-k-crema/"
     },
     {
-      "index": 308,
+      "index": 307,
       "slug": "sebionex-trio",
       "titulo": "Sebionex Trio",
       "marca": "ACM",
@@ -5876,7 +5857,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/sin-categorizar/sebionex-trio-crema/"
     },
     {
-      "index": 309,
+      "index": 308,
       "slug": "sensifine-ar-crema",
       "titulo": "Sensifine Ar Crema",
       "marca": "SVR",
@@ -5895,7 +5876,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/pieles-con-rojeces/sensifine-ar-crema/"
     },
     {
-      "index": 310,
+      "index": 309,
       "slug": "sensifine-ar-eau-micellar-400ml",
       "titulo": "Sensifine Ar Eau Micellar - 400ML",
       "marca": "SVR",
@@ -5914,26 +5895,26 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/pieles-con-rojeces/sensifine-ar-eau-micellar-400ml/"
     },
     {
-      "index": 311,
+      "index": 310,
       "slug": "skin-perfusion-gr-youth-mask-50ml",
       "titulo": "Skin Perfusion - GR Youth Mask - 50ML",
       "marca": "HBDERM",
       "categoria": "Dermocosmetica",
       "tamano": "50 ml",
       "tipo_venta": "publico",
-      "precio_referencia_hbderm": 154,
-      "ganancia_objetivo_45": 69.3,
-      "precio_venta_nuvia": 84.7,
+      "precio_referencia_hbderm": 534,
+      "ganancia_objetivo_45": 240.3,
+      "precio_venta_nuvia": 293.7,
       "descuento_destacado_pct": 0,
       "descuento_cliente": 0,
-      "precio_promocional": 84.7,
-      "comision_vendedor_10_ganancia": 6.93,
-      "ganancia_neta": 62.37,
-      "ganancia_neta_con_descuento": 62.37,
+      "precio_promocional": 293.7,
+      "comision_vendedor_10_ganancia": 24.03,
+      "ganancia_neta": 216.27,
+      "ganancia_neta_con_descuento": 216.27,
       "source_url": "https://hbderm.com/hbderm-catalogo/sin-categorizar/skin-perfusion-gr-youth-mask-50ml/"
     },
     {
-      "index": 312,
+      "index": 311,
       "slug": "skin-prep-creme-exfoliante",
       "titulo": "Skin Prep Créme Exfoliante",
       "marca": "FILORGA",
@@ -5952,7 +5933,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/sin-categorizar/skin-prep-creme-exfoliante/"
     },
     {
-      "index": 313,
+      "index": 312,
       "slug": "skin-prep-huile-150ml",
       "titulo": "Skin Prep Huile 150ML",
       "marca": "FILORGA",
@@ -5971,45 +5952,45 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/sin-categorizar/skin-prep-huile/"
     },
     {
-      "index": 314,
+      "index": 313,
       "slug": "skin-roller-0-2mm",
       "titulo": "Skin Roller 0,2MM",
       "marca": "SOFTFIL",
       "categoria": "Dermocosmetica",
       "tamano": "",
       "tipo_venta": "publico",
-      "precio_referencia_hbderm": 240,
-      "ganancia_objetivo_45": 108,
-      "precio_venta_nuvia": 132,
+      "precio_referencia_hbderm": 336,
+      "ganancia_objetivo_45": 151.2,
+      "precio_venta_nuvia": 184.8,
       "descuento_destacado_pct": 0,
       "descuento_cliente": 0,
-      "precio_promocional": 132,
-      "comision_vendedor_10_ganancia": 10.8,
-      "ganancia_neta": 97.2,
-      "ganancia_neta_con_descuento": 97.2,
+      "precio_promocional": 184.8,
+      "comision_vendedor_10_ganancia": 15.12,
+      "ganancia_neta": 136.08,
+      "ganancia_neta_con_descuento": 136.08,
       "source_url": "https://hbderm.com/hbderm-catalogo/sin-categorizar/skin-roller-02mm/"
     },
     {
-      "index": 315,
+      "index": 314,
       "slug": "skin-roller-0-5mm",
       "titulo": "Skin Roller 0,5MM",
       "marca": "SOFTFIL",
       "categoria": "Dermocosmetica",
       "tamano": "",
       "tipo_venta": "publico",
-      "precio_referencia_hbderm": 252,
-      "ganancia_objetivo_45": 113.4,
-      "precio_venta_nuvia": 138.6,
+      "precio_referencia_hbderm": 200,
+      "ganancia_objetivo_45": 90,
+      "precio_venta_nuvia": 110,
       "descuento_destacado_pct": 0,
       "descuento_cliente": 0,
-      "precio_promocional": 138.6,
-      "comision_vendedor_10_ganancia": 11.34,
-      "ganancia_neta": 102.06,
-      "ganancia_neta_con_descuento": 102.06,
+      "precio_promocional": 110,
+      "comision_vendedor_10_ganancia": 9,
+      "ganancia_neta": 81,
+      "ganancia_neta_con_descuento": 81,
       "source_url": "https://hbderm.com/hbderm-catalogo/sin-categorizar/skin-roller-05mm/"
     },
     {
-      "index": 316,
+      "index": 315,
       "slug": "xerial-30-gel-crema",
       "titulo": "Xerial 30 Gel - Crema",
       "marca": "SVR",
@@ -6028,83 +6009,45 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/sin-categorizar/xerial-30-gel-crema-50ml/"
     },
     {
-      "index": 317,
-      "slug": "art-fillers-universal",
-      "titulo": "Art Fillers Universal",
-      "marca": "FILLMED",
-      "categoria": "Profesional consulta",
-      "tamano": "",
-      "tipo_venta": "profesional_consulta",
-      "precio_referencia_hbderm": 446,
-      "ganancia_objetivo_45": 200.7,
-      "precio_venta_nuvia": 245.3,
-      "descuento_destacado_pct": 0,
-      "descuento_cliente": 0,
-      "precio_promocional": 245.3,
-      "comision_vendedor_10_ganancia": 20.07,
-      "ganancia_neta": 180.63,
-      "ganancia_neta_con_descuento": 180.63,
-      "source_url": "https://hbderm.com/hbderm-catalogo/rellenos-dermales/art-fillers-universal/"
-    },
-    {
-      "index": 318,
+      "index": 316,
       "slug": "biomask",
       "titulo": "Biomask",
       "marca": "AGF mesenchymal",
       "categoria": "Profesional consulta",
       "tamano": "",
       "tipo_venta": "profesional_consulta",
-      "precio_referencia_hbderm": 663,
-      "ganancia_objetivo_45": 298.35,
-      "precio_venta_nuvia": 364.65,
+      "precio_referencia_hbderm": 0.11,
+      "ganancia_objetivo_45": 0.05,
+      "precio_venta_nuvia": 0.06,
       "descuento_destacado_pct": 0,
       "descuento_cliente": 0,
-      "precio_promocional": 364.65,
-      "comision_vendedor_10_ganancia": 29.84,
-      "ganancia_neta": 268.51,
-      "ganancia_neta_con_descuento": 268.51,
+      "precio_promocional": 0.06,
+      "comision_vendedor_10_ganancia": 0.01,
+      "ganancia_neta": 0.04,
+      "ganancia_neta_con_descuento": 0.04,
       "source_url": "https://hbderm.com/hbderm-catalogo/mesoterapia/biomask/"
     },
     {
-      "index": 319,
-      "slug": "bionutrilift-cannulas",
-      "titulo": "Bionutrilift Cannulas",
-      "marca": "FILLMED",
+      "index": 317,
+      "slug": "capillary",
+      "titulo": "Capillary",
+      "marca": "AGF mesenchymal",
       "categoria": "Profesional consulta",
       "tamano": "",
       "tipo_venta": "profesional_consulta",
-      "precio_referencia_hbderm": 864,
-      "ganancia_objetivo_45": 388.8,
-      "precio_venta_nuvia": 475.2,
+      "precio_referencia_hbderm": 0.11,
+      "ganancia_objetivo_45": 0.05,
+      "precio_venta_nuvia": 0.06,
       "descuento_destacado_pct": 0,
       "descuento_cliente": 0,
-      "precio_promocional": 475.2,
-      "comision_vendedor_10_ganancia": 38.88,
-      "ganancia_neta": 349.92,
-      "ganancia_neta_con_descuento": 349.92,
-      "source_url": "https://hbderm.com/hbderm-catalogo/rellenos-dermales/bionutrilift-cannulas/"
+      "precio_promocional": 0.06,
+      "comision_vendedor_10_ganancia": 0.01,
+      "ganancia_neta": 0.04,
+      "ganancia_neta_con_descuento": 0.04,
+      "source_url": "https://hbderm.com/hbderm-catalogo/mesoterapia/capillary/"
     },
     {
-      "index": 320,
-      "slug": "cytosial-deep",
-      "titulo": "Cytosial Deep",
-      "marca": "BIOXIS",
-      "categoria": "Profesional consulta",
-      "tamano": "",
-      "tipo_venta": "profesional_consulta",
-      "precio_referencia_hbderm": 446,
-      "ganancia_objetivo_45": 200.7,
-      "precio_venta_nuvia": 245.3,
-      "descuento_destacado_pct": 0,
-      "descuento_cliente": 0,
-      "precio_promocional": 245.3,
-      "comision_vendedor_10_ganancia": 20.07,
-      "ganancia_neta": 180.63,
-      "ganancia_neta_con_descuento": 180.63,
-      "source_url": "https://hbderm.com/hbderm-catalogo/rellenos-dermales/cytosial-deep/"
-    },
-    {
-      "index": 321,
+      "index": 318,
       "slug": "dermal",
       "titulo": "Dermal",
       "marca": "AGF mesenchymal",
@@ -6123,7 +6066,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/mesoterapia/dermal/"
     },
     {
-      "index": 322,
+      "index": 319,
       "slug": "ncef-reverse",
       "titulo": "Ncef Reverse",
       "marca": "FILORGA",
@@ -6142,7 +6085,7 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/rellenos-dermales/arrugas-medias-y-profundas/ncef-reverse-crema-multicorreccion-suprema/"
     },
     {
-      "index": 323,
+      "index": 320,
       "slug": "ncef-shot",
       "titulo": "Ncef Shot",
       "marca": "FILORGA",
@@ -6161,7 +6104,26 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/mesoterapia/ncef-shot/"
     },
     {
-      "index": 324,
+      "index": 321,
+      "slug": "nctf-135ha",
+      "titulo": "Nctf 135HA",
+      "marca": "FILLMED",
+      "categoria": "Profesional consulta",
+      "tamano": "",
+      "tipo_venta": "profesional_consulta",
+      "precio_referencia_hbderm": 864,
+      "ganancia_objetivo_45": 388.8,
+      "precio_venta_nuvia": 475.2,
+      "descuento_destacado_pct": 0,
+      "descuento_cliente": 0,
+      "precio_promocional": 475.2,
+      "comision_vendedor_10_ganancia": 38.88,
+      "ganancia_neta": 349.92,
+      "ganancia_neta_con_descuento": 349.92,
+      "source_url": "https://hbderm.com/hbderm-catalogo/mesoterapia/nctf-135ha/"
+    },
+    {
+      "index": 322,
       "slug": "skin-perfusion-gr-youth-mask-500ml",
       "titulo": "Skin Perfusion - GR Youth Mask - 500ML",
       "marca": "FILLMED",
@@ -6180,45 +6142,26 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/mesoterapia/skin-perfusion-gr-youth-mask-500ml/"
     },
     {
-      "index": 325,
-      "slug": "skin-perfusion-hyaluronic-youth-mask-4x8ml",
-      "titulo": "Skin Perfusion - Hyaluronic Youth Mask - 4X8ML",
-      "marca": "FILLMED",
-      "categoria": "Profesional consulta",
-      "tamano": "",
-      "tipo_venta": "profesional_consulta",
-      "precio_referencia_hbderm": 0.11,
-      "ganancia_objetivo_45": 0.05,
-      "precio_venta_nuvia": 0.06,
-      "descuento_destacado_pct": 0,
-      "descuento_cliente": 0,
-      "precio_promocional": 0.06,
-      "comision_vendedor_10_ganancia": 0.01,
-      "ganancia_neta": 0.04,
-      "ganancia_neta_con_descuento": 0.04,
-      "source_url": "https://hbderm.com/hbderm-catalogo/mesoterapia/skin-perfusion-hyaluronic-youth-mask-4x8ml/"
-    },
-    {
-      "index": 326,
+      "index": 323,
       "slug": "skin-perfusion-time-booster-0-3-3x10ml",
       "titulo": "Skin Perfusion - Time Booster 0.3% - 3X10ML",
       "marca": "FILLMED",
       "categoria": "Profesional consulta",
       "tamano": "",
       "tipo_venta": "profesional_consulta",
-      "precio_referencia_hbderm": 0.12,
-      "ganancia_objetivo_45": 0.05,
-      "precio_venta_nuvia": 0.07,
+      "precio_referencia_hbderm": 864,
+      "ganancia_objetivo_45": 388.8,
+      "precio_venta_nuvia": 475.2,
       "descuento_destacado_pct": 0,
       "descuento_cliente": 0,
-      "precio_promocional": 0.07,
-      "comision_vendedor_10_ganancia": 0.01,
-      "ganancia_neta": 0.04,
-      "ganancia_neta_con_descuento": 0.04,
+      "precio_promocional": 475.2,
+      "comision_vendedor_10_ganancia": 38.88,
+      "ganancia_neta": 349.92,
+      "ganancia_neta_con_descuento": 349.92,
       "source_url": "https://hbderm.com/hbderm-catalogo/mesoterapia/skin-perfusion-time-booster-0-3-3x10ml/"
     },
     {
-      "index": 327,
+      "index": 324,
       "slug": "skin-perfusion-exfoliating-cream-250ml",
       "titulo": "Skin Perfusion Exfoliating Cream - 250ML",
       "marca": "FILLMED",
@@ -6237,50 +6180,31 @@
       "source_url": "https://hbderm.com/hbderm-catalogo/mesoterapia/revitalizador/skin-perfusion-exfoliating-cream-250ml/"
     },
     {
-      "index": 328,
+      "index": 325,
       "slug": "skin-perfusion-glycopeel-mask-50ml",
       "titulo": "Skin Perfusion Glycopeel Mask - 50ML",
       "marca": "FILLMED",
       "categoria": "Profesional consulta",
       "tamano": "50 ml",
       "tipo_venta": "profesional_consulta",
-      "precio_referencia_hbderm": 432,
-      "ganancia_objetivo_45": 194.4,
-      "precio_venta_nuvia": 237.6,
+      "precio_referencia_hbderm": 330,
+      "ganancia_objetivo_45": 148.5,
+      "precio_venta_nuvia": 181.5,
       "descuento_destacado_pct": 0,
       "descuento_cliente": 0,
-      "precio_promocional": 237.6,
-      "comision_vendedor_10_ganancia": 19.44,
-      "ganancia_neta": 174.96,
-      "ganancia_neta_con_descuento": 174.96,
+      "precio_promocional": 181.5,
+      "comision_vendedor_10_ganancia": 14.85,
+      "ganancia_neta": 133.65,
+      "ganancia_neta_con_descuento": 133.65,
       "source_url": "https://hbderm.com/hbderm-catalogo/mesoterapia/revitalizador/skin-perfusion-glycopeel-mask-50ml/"
     },
     {
-      "index": 329,
+      "index": 326,
       "slug": "skin-perfusion-hxr-eye-cream-15ml",
       "titulo": "Skin Perfusion HXR Eye Cream - 15ML",
       "marca": "FILLMED",
       "categoria": "Profesional consulta",
       "tamano": "15 ml",
-      "tipo_venta": "profesional_consulta",
-      "precio_referencia_hbderm": 0.11,
-      "ganancia_objetivo_45": 0.05,
-      "precio_venta_nuvia": 0.06,
-      "descuento_destacado_pct": 0,
-      "descuento_cliente": 0,
-      "precio_promocional": 0.06,
-      "comision_vendedor_10_ganancia": 0.01,
-      "ganancia_neta": 0.04,
-      "ganancia_neta_con_descuento": 0.04,
-      "source_url": "https://hbderm.com/hbderm-catalogo/mesoterapia/skin-perfusion-hxr-eye-crean/"
-    },
-    {
-      "index": 330,
-      "slug": "skin-perfusion-hxr-eye-cream-95ml",
-      "titulo": "Skin Perfusion HXR Eye Cream - 95ML",
-      "marca": "FILLMED",
-      "categoria": "Profesional consulta",
-      "tamano": "95 ml",
       "tipo_venta": "profesional_consulta",
       "precio_referencia_hbderm": 864,
       "ganancia_objetivo_45": 388.8,
@@ -6291,25 +6215,25 @@
       "comision_vendedor_10_ganancia": 38.88,
       "ganancia_neta": 349.92,
       "ganancia_neta_con_descuento": 349.92,
-      "source_url": "https://hbderm.com/hbderm-catalogo/mesoterapia/skin-perfusion-hxr-eye-cream-95ml/"
+      "source_url": "https://hbderm.com/hbderm-catalogo/mesoterapia/skin-perfusion-hxr-eye-crean/"
     },
     {
-      "index": 331,
+      "index": 327,
       "slug": "skin-perfusion-re-time-serum-30ml",
       "titulo": "Skin Perfusion Re Time Serum - 30ML",
       "marca": "FILLMED",
       "categoria": "Profesional consulta",
       "tamano": "30 ml",
       "tipo_venta": "profesional_consulta",
-      "precio_referencia_hbderm": 0.12,
-      "ganancia_objetivo_45": 0.05,
-      "precio_venta_nuvia": 0.07,
+      "precio_referencia_hbderm": 446,
+      "ganancia_objetivo_45": 200.7,
+      "precio_venta_nuvia": 245.3,
       "descuento_destacado_pct": 0,
       "descuento_cliente": 0,
-      "precio_promocional": 0.07,
-      "comision_vendedor_10_ganancia": 0.01,
-      "ganancia_neta": 0.04,
-      "ganancia_neta_con_descuento": 0.04,
+      "precio_promocional": 245.3,
+      "comision_vendedor_10_ganancia": 20.07,
+      "ganancia_neta": 180.63,
+      "ganancia_neta_con_descuento": 180.63,
       "source_url": "https://hbderm.com/hbderm-catalogo/mesoterapia/skin-perfusion-re-time-serum-30ml/"
     }
   ]

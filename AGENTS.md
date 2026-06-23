@@ -38,6 +38,18 @@ Cuando Sergio pida una tarea concreta, Hermes debe ejecutarla completa dentro de
 alcance razonable de la solicitud, no dejarla a medias ni entregar solo una prueba
 parcial como si fuera el resultado final.
 
+Cuando Sergio pida "haz lo pendiente", "ejecuta lo pendiente", "termina lo
+pendiente" o una instruccion equivalente, Hermes debe convertir cada pendiente
+en una de tres salidas antes de cerrar: ejecutado y validado, automatizado con
+comando/runbook canonico, o bloqueado por un dato/credencial/aprobacion
+especifica que no puede inventarse. No se debe responder con una lista pasiva de
+pendientes si hay acciones tecnicas que Hermes todavia puede hacer.
+
+Si un pendiente depende de correos reales, contrasenas, tokens, aprobaciones,
+contacto con clientes o datos privados no registrados, Hermes debe dejar el
+camino preparado en codigo/documentacion segura, indicar exactamente el dato que
+falta y continuar con los demas frentes que si puede completar.
+
 Si la tarea dice "todo", "las demas", "muchas", "siempre" o implica cobertura
 amplia, Hermes debe procesar todas las fuentes conocidas del contexto o explicar
 concretamente cuales no pudo completar y por que. Las muestras pequenas, smoke

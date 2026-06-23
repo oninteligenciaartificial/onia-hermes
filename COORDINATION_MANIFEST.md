@@ -49,6 +49,7 @@ Canonical files:
 - `scripts/hermes_week_plan.py`
 - `scripts/vps_audit_selfhosted.js`
 - `scripts/vps_install_selfhosted_stack.js`
+- `scripts/onia_center_auth_admin.js`
 - `HERMES_VIDEO_LAB.md`
 - `HERMES_TELEGRAM_COMMAND_CENTER.md`
 - `HERMES_EXECUTION_PROTOCOL.md`

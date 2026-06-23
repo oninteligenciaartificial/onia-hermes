@@ -23,7 +23,12 @@ export default function OniaCenterLoginPage() {
   useEffect(() => {
     const reason = searchParams.get("reason");
     if (reason === "sergio_only") {
-      setNotice("ONIA Center completo esta bloqueado para Sergio. Crea una vista colaborativa segura antes de dar acceso a Arthur o vendedores.");
+      setNotice("ONIA Center completo esta bloqueado para Sergio. Arthur y vendedores deben entrar por /onia-center/equipo.");
+      return;
+    }
+
+    if (reason === "team_view") {
+      setNotice("Tu usuario usa la vista segura del equipo. No carga capital, caja ni estrategia privada.");
       return;
     }
 
