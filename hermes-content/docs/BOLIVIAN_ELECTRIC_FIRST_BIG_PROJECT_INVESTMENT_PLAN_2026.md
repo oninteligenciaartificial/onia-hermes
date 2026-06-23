@@ -22,7 +22,7 @@ Decision recomendada:
 
 ```text
 Entrar con un programa de 90 dias: diagnostico, pilotos y sistema operativo de
-mejora continua. No intentar reemplazar TR4 ni construir un ERP completo.
+mejora continua. No intentar reemplazar sistema actual ni construir un ERP completo.
 ```
 
 ## Aclaracion de presupuesto
@@ -49,7 +49,7 @@ Riesgos:
 - que el equipo vea el cambio como critica;
 - depender solo de Sergio para construir, capacitar, documentar y mantener;
 - gastar en herramientas antes de saber que proceso duele mas;
-- prometer integraciones con TR4 sin confirmar acceso, API o exportaciones.
+- prometer integraciones con sistema actual sin confirmar acceso, API o reportes aprobados.
 
 ## Posicion que debe tomar Sergio
 
@@ -65,7 +65,7 @@ No posicionarse como:
 - community manager;
 - desarrollador del chatbot;
 - ayudante de marketing;
-- reemplazo de TR4;
+- reemplazo de sistema actual;
 - soporte de servidores.
 
 El rol debe tener estas facultades:
@@ -108,7 +108,7 @@ Se puede hacer solo:
 
 No conviene hacer solo:
 
-- integracion profunda con TR4;
+- integracion profunda con sistema actual;
 - mantenimiento de servidores locales;
 - migracion de datos critica;
 - ciberseguridad interna;
@@ -145,7 +145,7 @@ Regla de arquitectura:
 
 - pilotos sin datos sensibles pueden vivir en cloud o VPS controlado;
 - datos internos sensibles deben quedarse en infraestructura aprobada;
-- integraciones con TR4 deben empezar con exportaciones CSV/Excel antes de API;
+- integraciones con sistema actual deben empezar con reportes aprobados o cargas Excel controladas antes de API;
 - servidores locales no se tocan sin backup, inventario y responsable.
 
 Primer paso tecnico:
@@ -258,7 +258,7 @@ Por que primero:
 
 - toca ventas;
 - genera impacto visible;
-- no requiere reemplazar TR4;
+- no requiere reemplazar sistema actual;
 - permite medir oportunidades perdidas;
 - prepara el futuro chatbot.
 
@@ -379,7 +379,7 @@ Debe existir:
 
 - sponsor de gerencia;
 - permiso para entrevistar areas;
-- acceso a reportes no sensibles o exportaciones;
+- acceso a reportes no sensibles o cargas controladas;
 - responsable interno por piloto;
 - reunion semanal de avance;
 - presupuesto separado;
@@ -410,7 +410,7 @@ No prometer:
 - ahorro garantizado;
 - reemplazo de personal;
 - automatizacion total;
-- integracion completa con TR4 sin auditoria.
+- integracion completa con sistema actual sin auditoria.
 
 ## Siguiente paso recomendado
 

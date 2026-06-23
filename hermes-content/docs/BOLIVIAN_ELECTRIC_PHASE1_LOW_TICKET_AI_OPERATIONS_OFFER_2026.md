@@ -70,7 +70,7 @@ Ejemplos:
 - hardware interno de la empresa;
 - soporte tecnico externo especializado;
 - limpieza masiva de datos;
-- integraciones con TR4 u otros sistemas si requieren proveedor externo.
+- integraciones con sistema actual u otros sistemas si requieren proveedor externo.
 
 ONIA solo incluye trabajo intelectual, diagnostico, capacitacion, prototipos y
 documentacion dentro del alcance acordado.
@@ -103,7 +103,7 @@ Precio accesible, alcance cerrado y gastos externos separados.
 | App inventario con camara - discovery | Bs. 1.500 | flujo, stock, codigos, usuarios, almacenes, riesgo y alcance tecnico |
 | App inventario con camara - MVP | Bs. 6.900 a 9.500 | PWA/mobile simple para escanear, contar, fotografiar y exportar |
 | App inventario con camara - v1 operativa | Bs. 12.000 a 18.000 | usuarios, roles, historial, sucursales, alertas y sincronizacion |
-| Integracion TR4 o sistema actual | desde Bs. 4.900 | depende de API, exportaciones, permisos y proveedor |
+| Integracion con sistemas internos | desde Bs. 4.900 | depende de API, reportes aprobados, permisos y proveedor |
 | Acompanamiento IA/operaciones | Bs. 2.500/mes | 2 reuniones, mejoras pequenas, seguimiento y priorizacion |
 
 ## Paquetes recomendados para vender
@@ -136,7 +136,7 @@ Incluye:
 - 2 capacitaciones;
 - documento de procesos.
 
-No incluye app de inventario ni integracion TR4.
+No incluye app de inventario ni integracion con sistemas internos.
 
 ### Paquete 3 - Inventario con camara MVP
 
@@ -157,7 +157,7 @@ Incluye:
 Condiciones:
 
 - si no hay codigos de barra/QR, primero hay que definir sistema de etiquetado;
-- si se requiere TR4 en tiempo real, se cotiza integracion aparte;
+- si se requiere sistema actual en tiempo real, se cotiza integracion aparte;
 - si debe funcionar offline completo, sube el alcance;
 - si varias sucursales lo usan al mismo tiempo, se necesita v1 operativa.
 
@@ -209,7 +209,7 @@ formal de Bolivian Electric OS / GestiOS Empresas.
 
 | Idea | Objetivo | Primera version sugerida | Riesgo a controlar |
 |---|---|---|---|
-| CRM | ordenar clientes, cotizaciones, seguimiento y responsables | tablero simple de leads/cotizaciones con estados y proxima accion | duplicar TR4 o WhatsApp sin proceso claro |
+| CRM | ordenar clientes, cotizaciones, seguimiento y responsables | tablero simple de leads/cotizaciones con estados y proxima accion | duplicar sistema actual o WhatsApp sin proceso claro |
 | Web | mejorar experiencia del cliente y explicar mejor la oferta | landing o web provisional con CTA, categorias, contacto y formularios | hacer una web bonita que no capture ni mida consultas |
 | Chatbot Bolivian | responder preguntas frecuentes y derivar por area/sucursal | bot interno o demo sin WhatsApp productivo, usando FAQ y base de conocimiento | prometer WhatsApp/Meta antes de permisos reales |
 | Propuesta de tienda online | validar venta/catalogo digital sin construir ecommerce completo | propuesta navegable o mini catalogo con productos destacados y solicitud de cotizacion | vender online sin stock, precios, logistica y aprobacion interna claros |
@@ -265,7 +265,7 @@ Tienda online / catalogo:
 ### Decision de alcance
 
 Estos mini sistemas deben tratarse como prototipos de trabajo. No reemplazan
-TR4, no prometen automatizacion completa y no deben conectarse a datos sensibles
+sistema actual, no prometen automatizacion completa y no deben conectarse a datos sensibles
 sin una auditoria previa.
 
 ## Alcance de Fase 1 recomendada - Bs. 1.900
@@ -287,7 +287,7 @@ No incluye:
 
 - chatbot productivo conectado a WhatsApp;
 - cambios en servidores;
-- integracion directa con TR4;
+- integracion directa con sistema actual;
 - desarrollo de sistema completo;
 - migracion de datos;
 - administracion de anuncios;
@@ -420,7 +420,7 @@ de Meta Business, activos, cuentas de WhatsApp y acceso tecnico.
 - Quien aprueba publicaciones?
 - Que promociones se pueden lanzar sin afectar margen?
 
-### Sistemas / TR4
+### Sistemas internos / tecnologia
 
 - Que modulos usan todos los dias?
 - Que reportes exporta el sistema?
@@ -518,7 +518,7 @@ Rango sugerido: cotizar despues de datos reales.
 
 Posibles entregables:
 
-- integracion con TR4 o exportaciones;
+- integracion con sistemas internos o reportes aprobados;
 - WhatsApp Business API cuando Meta este listo;
 - automatizaciones con aprobacion humana;
 - dashboards por gerencia;

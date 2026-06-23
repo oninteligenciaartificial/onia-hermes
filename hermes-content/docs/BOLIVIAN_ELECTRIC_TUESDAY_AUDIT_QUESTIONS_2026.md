@@ -34,7 +34,7 @@ que vendamos y respondamos mejor.
 Evitar:
 
 - "Esto esta anticuado."
-- "TR4 no sirve."
+- "El sistema que usan no sirve."
 - "Yo lo arreglo todo con IA."
 - "Necesito acceso a todo."
 - "Esto es facil."
@@ -54,7 +54,7 @@ Usar:
 - No copiar datos sensibles sin permiso.
 - No sacar fotos de documentos privados sin autorizacion.
 - No prometer automatizaciones con WhatsApp hasta ordenar Meta Business.
-- No tocar TR4 ni datos reales sin autorizacion de gerencia.
+- No tocar sistema actual ni datos reales sin autorizacion de gerencia.
 - No exponer errores de una persona frente a otra.
 - No buscar culpables. Buscar procesos debiles.
 - Si alguien cuenta un problema sensible, anotarlo como proceso, no como culpa.
@@ -166,7 +166,7 @@ Prioridad:
 
 ### Sistemas y adopcion
 
-- TR4 puede tener funciones, pero el equipo puede no usarlas por complejidad.
+- sistema actual puede tener funciones, pero el equipo puede no usarlas por complejidad.
 - Falta de capacitacion diaria por rol.
 - Reportes disponibles pero poco accionables.
 - Procesos fuera del sistema por ser mas rapidos en WhatsApp o Excel.
@@ -584,14 +584,14 @@ Dashboard por sucursal: consultas, cotizaciones, ventas, stock critico,
 pendientes y tiempos de respuesta.
 ```
 
-## Sistemas / TR4 / tecnologia
+## Sistemas internos / tecnologia
 
 Objetivo: entender adopcion real del sistema sin atacar al proveedor.
 
 Preguntas:
 
-1. Que tareas se hacen bien en TR4?
-2. Que tareas se hacen fuera de TR4?
+1. Que tareas se hacen bien en sistema actual?
+2. Que tareas se hacen fuera de sistema actual?
 3. Que modulo usa cada area?
 4. Que reporte existe pero nadie consulta?
 5. Que reporte falta?
@@ -602,14 +602,14 @@ Preguntas:
 10. Hay forma de exportar reportes a Excel/CSV?
 11. Hay permisos por usuario bien definidos?
 12. Que datos se pueden consultar sin tocar base sensible?
-13. Que problemas se reportan al soporte de TR4?
+13. Que problemas se reportan al soporte del sistema actual?
 14. Que se podria resolver con manuales cortos por rol?
 15. Que se podria resolver con una capa externa de dashboard/automatizacion?
 
 Primer piloto recomendado:
 
 ```text
-Mapa de uso TR4 por rol: modulo usado, dolor, tarea fuera del sistema, reporte
+Mapa de uso del sistema actual por rol: modulo usado, dolor, tarea fuera del sistema, reporte
 necesario y oportunidad de capacitacion.
 ```
 

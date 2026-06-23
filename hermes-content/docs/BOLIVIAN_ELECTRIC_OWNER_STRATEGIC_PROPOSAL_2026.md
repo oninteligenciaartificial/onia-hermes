@@ -8,13 +8,13 @@ ver estrategia completa, riesgos, permisos, datos sensibles y plan de inversion.
 ## Resumen ejecutivo
 
 Bolivian Electric no necesita solo un chatbot. La oportunidad real es construir
-una capa operativa moderna sobre lo que ya existe: TR4, web, canales de
+una capa operativa moderna sobre lo que ya existe: sistema actual, web, canales de
 cotizacion, sucursales, equipo comercial, almacen, importaciones y gerencia.
 
 La estrategia recomendada:
 
 ```text
-No reemplazar TR4 de entrada.
+No reemplazar sistema actual de entrada.
 Crear una capa ONIA de IA, seguimiento, reportes, automatizacion y adopcion.
 ```
 
@@ -52,13 +52,13 @@ Por eso se recomienda separar el proyecto en dos niveles:
 Fuentes publicas revisadas:
 
 - `https://www.bolivianelectric.com.bo/`
-- `https://www.tr4bolivia.com/`
+- `https://www.sistema actualbolivia.com/`
 
 Senales:
 
 - Bolivian Electric tiene catalogo, cotizacion online, sucursales, lineas de
   producto, alquileres, manuales, workshops y presencia digital.
-- TR4 se presenta como ERP, facturacion, gestion en tiempo real, BI y soluciones
+- sistema actual se presenta como ERP, facturacion, gestion en tiempo real, BI y soluciones
   especializadas.
 - La oportunidad no es "tener otro sistema", sino hacer que los procesos diarios
   sean mas visibles, simples, medibles y asistidos por IA.
@@ -82,7 +82,7 @@ Concepto:
 
 ```text
 Sistema operativo interno para mejorar ventas, web, cotizaciones, inventario,
-importaciones, contenido, reportes y trabajo gerencial sin reemplazar TR4 al
+importaciones, contenido, reportes y trabajo gerencial sin reemplazar sistema actual al
 inicio.
 ```
 
@@ -90,8 +90,8 @@ Tecnica recomendada:
 
 - construir sobre una base modular reutilizable de ONIA/GestiOS Empresas;
 - personalizar flujos, nombres, roles, reportes y permisos para Bolivian;
-- conectar con TR4 solo cuando exista permiso, metodo seguro y valor claro;
-- iniciar con exportaciones manuales o CSV antes de integraciones profundas;
+- conectar con sistema actual solo cuando exista permiso, metodo seguro y valor claro;
+- iniciar con reportes aprobados o CSV controlado antes de integraciones profundas;
 - mantener aprobacion humana en procesos sensibles.
 
 ## Modulos urgentes
@@ -175,7 +175,7 @@ Etapas:
 1. discovery de almacen;
 2. MVP con escaneo/captura/foto/exportacion;
 3. v1 con usuarios, roles, sucursales, historial y alertas;
-4. integracion con TR4 si es tecnicamente viable.
+4. integracion con sistema actual si es tecnicamente viable.
 
 ### 6. Asistente de gerencia/importaciones
 
@@ -310,8 +310,8 @@ Modulos:
 - WhatsApp Business API;
 - ruteo de consultas;
 - automatizaciones con aprobacion humana;
-- importacion de reportes TR4;
-- adaptador TR4 por exportacion, scraping autorizado, API o base autorizada;
+- importacion de reportes sistema actual;
+- conector autorizado por reporte aprobado, API o base autorizada;
 - alertas por correo/Telegram/panel.
 
 ### Fase 5 - Sistema operativo interno avanzado
@@ -345,7 +345,7 @@ Estos rangos son referenciales y deben cerrarse despues del diagnostico.
 | Dashboard gastos/importaciones | Bs. 3.900 a Bs. 6.500 |
 | Contenido comercial mensual | Bs. 2.500 a Bs. 3.900/mes |
 | Acompanamiento IA/operaciones | Bs. 2.500 a Bs. 4.500/mes |
-| Integracion TR4 | Desde Bs. 4.900, sujeto a auditoria |
+| Integracion con sistemas internos | Desde Bs. 4.900, sujeto a auditoria |
 
 Gastos externos:
 
@@ -356,7 +356,7 @@ Gastos externos:
 - pauta;
 - dominios;
 - licencias;
-- soporte TR4;
+- soporte sistema actual;
 - hardware;
 - limpieza masiva de datos;
 - herramientas externas.
@@ -411,12 +411,12 @@ Solo duenos/gerencia autorizada:
 | Riesgo | Control |
 |---|---|
 | Prometer chatbot antes de permisos Meta | empezar con demo interna y base aprobada |
-| Criticar TR4 sin auditoria | posicionar ONIA como capa complementaria |
+| Criticar sistema actual sin auditoria | posicionar ONIA como capa complementaria |
 | Exponer datos sensibles en IA externa | politica de IA y niveles de informacion |
 | Equipo no adopta herramientas | capacitacion por rol y SOP cortos |
 | Proyecto demasiado grande | fases cortas con pilotos medibles |
 | Una sola persona carga todo | sponsor interno y responsables por area |
-| Integracion TR4 no viable | empezar con exportaciones o reportes manuales |
+| Integracion directa no viable | empezar con reportes aprobados o carga controlada |
 | Automatizacion causa errores | aprobacion humana y logs |
 
 ## Rol recomendado de ONIA
@@ -443,7 +443,7 @@ Lo que ONIA no debe ser:
 
 - community manager aislado;
 - soporte informal gratis;
-- reemplazo de TR4;
+- reemplazo de sistema actual;
 - administrador de credenciales sin autorizacion;
 - responsable unico de decisiones comerciales internas.
 
@@ -469,7 +469,7 @@ Fase 1: diagnostico + capacitacion IA + CRM/base de conocimiento como piloto.
 No empezar con:
 
 ```text
-WhatsApp productivo, reemplazo TR4, app grande de inventario o sistema completo.
+WhatsApp productivo, reemplazo sistema actual, app grande de inventario o sistema completo.
 ```
 
 La ruta correcta es construir confianza, datos y adopcion. Despues se escala a

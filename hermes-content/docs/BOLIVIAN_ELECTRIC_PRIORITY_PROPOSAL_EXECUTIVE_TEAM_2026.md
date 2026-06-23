@@ -7,7 +7,7 @@ con autoridad de ejecucion. No incluye informacion confidencial de duenos.
 
 ## Resumen
 
-La propuesta inicial no es reemplazar TR4 ni empezar con un chatbot conectado a
+La propuesta inicial no es reemplazar sistema actual ni empezar con un chatbot conectado a
 WhatsApp. La mejor entrada es una fase corta para ordenar los puntos mas
 urgentes:
 
@@ -26,7 +26,7 @@ operacion diaria.
 Fuentes publicas revisadas:
 
 - `https://www.bolivianelectric.com.bo/`
-- `https://www.tr4bolivia.com/`
+- `https://www.sistema actualbolivia.com/`
 
 Bolivian Electric ya tiene una base importante: catalogo, cotizacion online,
 sucursales, lineas de producto, alquileres, manuales, workshops, redes y un ERP
@@ -166,7 +166,7 @@ Primera entrega:
 - recorrido por almacen;
 - mapa de codigos, etiquetas y ubicaciones;
 - flujo de conteo desde celular;
-- riesgos de sincronizar con TR4;
+- riesgos de sincronizar con sistema actual;
 - alcance de MVP con camara.
 
 Valor:
@@ -213,7 +213,7 @@ Incluye:
 No incluye:
 
 - conexion productiva de WhatsApp;
-- integracion directa con TR4;
+- integracion directa con sistema actual;
 - automatizaciones con datos sensibles;
 - cambios en servidores;
 - migracion de datos;
@@ -249,7 +249,7 @@ Entregables recomendados:
 Nombre:
 
 ```text
-Capa operativa ONIA sobre TR4 y canales existentes
+Capa operativa ONIA sobre sistema actual y canales existentes
 ```
 
 Alcance posible:
@@ -260,7 +260,7 @@ Alcance posible:
 - tablero de gastos y alertas;
 - automatizaciones con aprobacion humana;
 - WhatsApp oficial cuando Meta este listo;
-- adaptador TR4 si hay exportaciones, API o permiso tecnico.
+- conector autorizado si hay reportes aprobados, API o permiso tecnico.
 
 Esta fase se cotiza despues de la Fase 1 porque depende de datos reales,
 permisos, procesos y riesgos tecnicos.
@@ -274,7 +274,7 @@ De Bolivian Electric:
 - responsable de marketing/canales;
 - responsable de administracion o contabilidad;
 - responsable de almacen;
-- responsable tecnico de TR4 o proveedor si se requiere integracion.
+- responsable tecnico de sistema actual o proveedor si se requiere integracion.
 
 De ONIA:
 
@@ -285,7 +285,7 @@ Responsable externo de IA, automatizacion y mejora operativa.
 ## Reglas de seguridad
 
 - No pedir contrasenas al inicio.
-- No tocar TR4 sin aprobacion.
+- No tocar sistema actual sin aprobacion.
 - No subir contratos, precios sensibles, costos, margenes o datos privados a IA
   externa.
 - No publicar contenido sin aprobacion.
@@ -302,7 +302,7 @@ Al cerrar el primer piloto, Bolivian deberia tener:
 - un tablero inicial de seguimiento;
 - una base de conocimiento inicial;
 - una demo de chatbot sin riesgo;
-- una ruta clara para inventario, web, TR4 y automatizaciones.
+- una ruta clara para inventario, web, sistema actual y automatizaciones.
 
 ## Mensaje recomendado para presentar
 
@@ -312,4 +312,3 @@ Primero ordenamos el flujo comercial, capacitamos al equipo y dejamos un piloto
 medible. Asi vemos donde la IA y los sistemas realmente ahorran tiempo, mejoran
 seguimiento y ayudan a vender mas sin interrumpir la operacion.
 ```
-

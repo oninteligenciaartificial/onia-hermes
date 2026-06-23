@@ -29,6 +29,31 @@ Responsable externo de IA y Automatizacion Operativa, liderado por Sergio/ONIA.
 Ese rol permite tener autoridad, entrar a procesos internos, cobrar por valor y
 no quedar atrapado como soporte informal sin pago claro.
 
+## Correccion narrativa sensible
+
+No hacer enfasis en sistema actual ni nombrarlo como problema en propuestas, presentaciones
+o conversaciones con equipos operativos. ONIA no sabe todavia quienes administran
+ese sistema, que relacion contractual existe ni que tensiones internas podria
+generar mencionarlo directamente.
+
+La forma correcta de comunicarlo es:
+
+```text
+Queremos mejorar el sistema y la forma de trabajo actual con funciones mas
+practicas: seguimiento, tableros, asistentes internos, automatizacion, inventario
+con camara, contenido tecnico y mejor experiencia para clientes.
+```
+
+Usar "sistema actual", "operacion actual" o "herramientas actuales" en lugar del
+nombre del proveedor. No criticar el sistema existente. No prometer reemplazo,
+scraping, API ni integracion profunda sin autorizacion formal.
+
+Los temas de compras internacionales, proveedores, costos, margenes, stock
+valorizado y reportes sensibles deben tratarse solo con dueno o gerencia general
+autorizada. Para vendedores, almacen, marketing y mandos operativos, mantener el
+enfoque en ventas, seguimiento, atencion al cliente, contenido, inventario
+operativo y reduccion de tareas repetitivas.
+
 ## Fuentes revisadas
 
 Fuentes publicas:
@@ -39,10 +64,8 @@ Fuentes publicas:
 - `https://www.bolivianelectric.com.bo/preguntas-frecuentes/`
 - `https://www.bolivianelectric.com.bo/manuales/`
 - `https://www.bolivianelectric.com.bo/workshops-gratuitos/`
-- `https://www.tr4bolivia.com/`
-- `https://www.tr4bolivia.com/tr4-erp`
-- `https://www.tr4bolivia.com/tr4-bi`
-- `https://www.tr4bolivia.com/soluciones-especializadas`
+- Sistema actual de la empresa: tratarlo solo como contexto interno; no citar
+  proveedor ni analizarlo frente al equipo sin autorizacion de dueno/gerencia.
 
 Fuentes internas ONIA:
 
@@ -72,12 +95,10 @@ El sitio muestra una operacion con varias lineas:
 - clientes industriales, cooperativas, mineras, petroleras, constructoras y
   obras civiles.
 
-TR4 se presenta como ERP con gestion de ventas y marketing, compras e
-inventarios, punto de venta, finanzas, RRHH, produccion, activos, archivo
-digital, BI y soluciones especializadas. Esto sugiere que Bolivian Electric ya
-tiene sistema base, pero el dolor probable esta en adopcion diaria, UX,
-seguimiento, reportes accionables, mensajeria y procesos que siguen viviendo en
-WhatsApp, planillas y trabajo manual.
+La empresa ya opera con sistemas y canales digitales. El dolor probable no debe
+presentarse como falla de un proveedor, sino como oportunidad de mejorar
+adopcion diaria, UX, seguimiento, reportes accionables, mensajeria y procesos
+que siguen viviendo en WhatsApp, planillas y trabajo manual.
 
 ## Diagnostico inicial
 
@@ -100,17 +121,17 @@ Dolores probables:
 - Sistema ERP util, pero probablemente dificil de explicar o usar para tareas
   rapidas.
 
-Hipotesis comercial: ONIA puede vender mas valor si no compite contra TR4, sino
-si se posiciona como la capa de adopcion, automatizacion, IA, capacitacion y
-seguimiento encima de lo que ya tienen.
+Hipotesis comercial: ONIA puede vender mas valor si se posiciona como la capa de
+adopcion, automatizacion, IA, capacitacion y seguimiento encima de lo que ya
+tienen, sin nombrar ni criticar proveedores.
 
 ## Que NO hacer
 
 - No venderles "un chatbot" como producto final.
 - No prometer automatizacion de WhatsApp hasta resolver Meta Business, numeros y
   permisos.
-- No decir que TR4 es malo sin auditoria interna. Mejor decir que puede faltar
-  una capa operativa mas simple para el equipo.
+- No decir que el sistema actual es malo sin auditoria interna. Mejor decir que
+  se puede sumar una capa operativa mas simple para el equipo.
 - No ofrecer reemplazar todo el sistema. Eso aumenta friccion politica y tecnica.
 - No entregar una estrategia completa gratis antes de cobrar diagnostico o
   aprobar un piloto.
@@ -226,7 +247,7 @@ Incluye:
 No incluye:
 
 - desarrollo de chatbot;
-- integracion con TR4;
+- integracion profunda con sistemas internos;
 - automatizaciones productivas;
 - publicacion en redes;
 - manejo de cuentas Meta;
@@ -269,7 +290,8 @@ Precio sugerido:
 - Bs. 2.900/mes para acompanamiento liviano;
 - Bs. 4.500-6.500/mes si Sergio/ONIA participa en reuniones, mejora procesos,
   gestiona automatizaciones, reportes y capacitacion continua;
-- desarrollo grande, APIs, integracion TR4 o sistemas a medida se cotizan aparte.
+- desarrollo grande, APIs, integraciones profundas o sistemas a medida se
+  cotizan aparte.
 
 Incluye:
 
@@ -411,7 +433,7 @@ Indicadores iniciales:
 4. Donde queda registrado el seguimiento de una cotizacion?
 5. Que planillas se llenan todos los dias o todas las semanas?
 6. Que reportes pide gerencia y cuanto tardan en armarlos?
-7. Que parte de TR4 usa cada area y que parte evita usar?
+7. Que tareas se hacen dentro del sistema actual y que tareas terminan fuera?
 8. Que preguntas se repiten mas por WhatsApp o llamadas?
 9. Que contenido tecnico ya tienen y no estan aprovechando?
 10. Que resultado seria valioso en 30 dias: menos pendientes, mas cotizaciones
@@ -468,7 +490,7 @@ Estructura recomendada:
 | Diagnostico + capacitacion inicial | Bs. 2.500-3.500 | Puede bajar a Bs. 1.500 solo como entrada relacional muy limitada |
 | Piloto operativo 30 dias | Bs. 4.900-9.500 | Segun cantidad de flujos y areas |
 | Acompanamiento mensual | Bs. 2.900-6.500/mes | Rol externo, mejoras, reuniones y soporte consultivo |
-| Desarrollo/integracion a medida | Cotizado aparte | TR4, APIs, WABA, dashboards avanzados o portal |
+| Desarrollo/integracion a medida | Cotizado aparte | sistemas internos, APIs, WABA, dashboards avanzados o portal |
 
 Regla comercial:
 
@@ -480,7 +502,8 @@ Regla comercial:
 
 - Accesos Meta incompletos para WhatsApp.
 - Resistencia interna si se percibe que ONIA llega a criticar el trabajo actual.
-- TR4 puede no tener APIs o acceso facil; no prometer integracion sin auditoria.
+- El sistema actual puede no tener APIs o acceso facil; no prometer integracion
+  sin auditoria y autorizacion.
 - Datos sensibles industriales/comerciales: se necesita politica de IA antes de
   cargar informacion en herramientas externas.
 - Si no hay sponsor interno, el proyecto queda delegado a una sola persona y se
@@ -515,7 +538,7 @@ Resultado esperado:
 - [ ] Preparar mensaje corto de posicionamiento.
 - [ ] Llevar 5 ejemplos concretos de IA diaria: resumen de mensajes, respuesta
       tecnica, contenido, planilla, seguimiento.
-- [ ] No prometer integracion con TR4.
+- [ ] No prometer integracion con sistemas internos.
 - [ ] No prometer WhatsApp automatico.
 - [ ] Pedir sponsor interno.
 - [ ] Pedir permiso para hacer diagnostico pagado.
