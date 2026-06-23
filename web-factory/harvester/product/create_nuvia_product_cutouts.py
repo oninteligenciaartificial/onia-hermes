@@ -22,6 +22,10 @@ TARGET_SIZE = 1200
 TARGET_PRODUCT_SIDE = 980
 PROCESS_MAX_SIDE = 720
 IMAGE_EXTENSIONS = {".png", ".jpg", ".jpeg", ".webp"}
+MANUAL_SOURCE_OVERRIDES = {
+    "ISDIN Fusion Water Magic SPF 50": "assets/product-media/isdin-fusion-water-magic-spf-50-packshot.webp",
+    "SVR Sebiaclear Gel Moussant": "assets/product-media/svr-sebiaclear-gel-moussant-packshot.webp",
+}
 
 
 def slugify(value: str, fallback: str) -> str:
@@ -55,6 +59,9 @@ def is_light_background(rgb: tuple[int, int, int], edge_rgb: tuple[int, int, int
         return True
 
     if brightness >= 232 and saturation <= 38 and distance_from_edge <= 28:
+        return True
+
+    if distance_from_edge <= 42 and brightness >= 80 and saturation <= 112:
         return True
 
     return distance_from_edge <= 18 and brightness >= 218 and saturation <= 46
@@ -189,6 +196,11 @@ def normalize_cutout(image: Image.Image) -> Image.Image:
 
 def product_source_candidates(product: dict, current_src: str) -> list[str]:
     candidates: list[str] = []
+    title = str(product.get("titulo") or "")
+
+    override = MANUAL_SOURCE_OVERRIDES.get(title)
+    if override:
+        candidates.append(override)
 
     if current_src.startswith("assets/") and "product-media-cutout/" not in current_src:
         candidates.append(current_src)
