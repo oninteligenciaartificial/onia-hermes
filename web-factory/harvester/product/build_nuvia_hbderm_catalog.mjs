@@ -4,6 +4,8 @@ import path from "node:path";
 const NUVIA_JSON = path.resolve("data/clients/nuvia.json");
 const SCRAPE_JSON = path.resolve("data/references/product-sources/hbderm-products-20260619.json");
 const NORMALIZED_JSON = path.resolve("data/references/product-sources/nuvia-hbderm-normalized-20260619.json");
+const FINANCE_JSON = path.resolve("data/clients/nuvia.finance.json");
+const FINANCE_CSV = path.resolve("data/clients/nuvia.finance.csv");
 const MIGRATION = path.resolve("../supabase/migrations/20260619_web_factory_nuvia_hbderm_products.sql");
 
 const MARGIN_RATE = 0.45;
@@ -31,6 +33,15 @@ function round2(value) {
 
 function moneyLabel(value) {
   return `Bs. ${Math.round(value)}`;
+}
+
+function csvCell(value) {
+  const raw = String(value ?? "");
+  return /[",\n;]/.test(raw) ? `"${raw.replace(/"/g, '""')}"` : raw;
+}
+
+function csvRow(values) {
+  return values.map(csvCell).join(",");
 }
 
 function titleWord(word) {
@@ -87,7 +98,7 @@ function extractSize(title) {
 }
 
 function compactDescription(product, category) {
-  const brand = product.brand || "HBDERM";
+  const brand = product.brand && product.brand !== "HBDERM" ? product.brand : "Nuvia";
 
   if (category === "Proteccion solar") {
     return `${brand} para proteccion solar diaria. Confirma disponibilidad antes de finalizar la compra.`;
@@ -114,7 +125,7 @@ function compactDescription(product, category) {
     return `${brand} de uso profesional o bajo consulta. No se publica como compra directa.`;
   }
 
-  return `${brand} seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.`;
+  return `${brand} seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.`;
 }
 
 function normalizeCategory(product) {
@@ -126,7 +137,7 @@ function normalizeCategory(product) {
   if (/(fotoproteccion|proteccion solar|spf|solar)/.test(haystack)) {
     return "Proteccion solar";
   }
-  if (/(limpieza|limpiador|limpiadores|moussant|gel\b|agua micelar)/.test(haystack)) {
+  if (/(limpieza|limpiador|limpiadores|moussant|nettoyant|cleanser|lavante|agua micelar|desmaquill)/.test(haystack)) {
     return "Limpieza facial";
   }
   if (/(acne|grasas|sebiaclear|hyseac|anti imperfecciones|piel grasa)/.test(haystack)) {
@@ -164,7 +175,7 @@ function categoryBenefits(category) {
     "Profesional consulta": ["Uso profesional", "Compra bajo consulta", "No autoadministrar"],
   };
 
-  return byCategory[category] || ["Seleccion HBDERM", "Compra asistida", "Disponibilidad a confirmar"];
+  return byCategory[category] || ["Seleccion Nuvia", "Compra asistida", "Disponibilidad a confirmar"];
 }
 
 function categoryIdealFor(category) {
@@ -212,6 +223,125 @@ function productFormula(sourcePrice) {
     seller_commission_rate: SELLER_COMMISSION_RATE,
     seller_commission_amount: sellerCommission,
     net_margin_after_seller: round2(marginAmount - sellerCommission),
+  };
+}
+
+function enrichCommercialFields(product, position) {
+  const featured = product.tipoVenta !== "profesional_consulta" && position < 12;
+  const discountPercent = featured ? DISCOUNT_PERCENT : 0;
+  const basePrice = typeof product.precioValor === "number" ? product.precioValor : null;
+  const customerDiscount = basePrice === null ? 0 : round2(basePrice * (discountPercent / 100));
+  const promoPrice = basePrice === null ? null : round2(basePrice - customerDiscount);
+  const netGainBeforeDiscount = typeof product.gananciaNeta === "number" ? product.gananciaNeta : 0;
+
+  return {
+    ...product,
+    destacadoMes: featured,
+    descuentoPorcentaje: discountPercent,
+    precioPromocional: featured && promoPrice !== null ? promoPrice : null,
+    gananciaNetaConDescuento:
+      featured && promoPrice !== null ? round2(netGainBeforeDiscount - customerDiscount) : netGainBeforeDiscount,
+  };
+}
+
+function buildFinanceSheet(products, meta) {
+  const rows = products.map((product, index) => {
+    const sourcePrice = Number(product.precioProveedor ?? product.raw?.pricing_formula?.source_price ?? 0);
+    const margin = Number(product.raw?.pricing_formula?.margin_amount ?? product.margenCalculado ?? sourcePrice * MARGIN_RATE);
+    const salePrice = Number(product.precioValor ?? product.raw?.pricing_formula?.sale_price ?? 0);
+    const sellerCommission = Number(product.comisionVendedor ?? product.raw?.pricing_formula?.seller_commission_amount ?? margin * SELLER_COMMISSION_RATE);
+    const netGain = Number(product.gananciaNeta ?? product.raw?.pricing_formula?.net_margin_after_seller ?? margin - sellerCommission);
+    const discountPercent = Number(product.descuentoPorcentaje || 0);
+    const customerDiscount = salePrice ? round2(salePrice * (discountPercent / 100)) : 0;
+    const promoPrice = salePrice ? round2(salePrice - customerDiscount) : 0;
+    const netGainAfterDiscount = round2(netGain - customerDiscount);
+
+    return {
+      index: index + 1,
+      slug: productSlug(product),
+      titulo: product.titulo,
+      marca: product.marca,
+      categoria: product.categoria,
+      tamano: product.tamano || "",
+      tipo_venta: product.tipoVenta || "publico",
+      precio_referencia_hbderm: round2(sourcePrice),
+      ganancia_objetivo_45: round2(margin),
+      precio_venta_nuvia: round2(salePrice),
+      descuento_destacado_pct: discountPercent,
+      descuento_cliente: customerDiscount,
+      precio_promocional: promoPrice,
+      comision_vendedor_10_ganancia: round2(sellerCommission),
+      ganancia_neta: round2(netGain),
+      ganancia_neta_con_descuento: netGainAfterDiscount,
+      source_url: product.sourceUrl || product.raw?.source_url || "",
+    };
+  });
+
+  const totals = rows.reduce(
+    (acc, row) => ({
+      productos: acc.productos + 1,
+      precio_referencia_hbderm: round2(acc.precio_referencia_hbderm + row.precio_referencia_hbderm),
+      ganancia_objetivo_45: round2(acc.ganancia_objetivo_45 + row.ganancia_objetivo_45),
+      precio_venta_nuvia: round2(acc.precio_venta_nuvia + row.precio_venta_nuvia),
+      descuento_cliente: round2(acc.descuento_cliente + row.descuento_cliente),
+      precio_promocional: round2(acc.precio_promocional + row.precio_promocional),
+      comision_vendedor_10_ganancia: round2(
+        acc.comision_vendedor_10_ganancia + row.comision_vendedor_10_ganancia,
+      ),
+      ganancia_neta: round2(acc.ganancia_neta + row.ganancia_neta),
+      ganancia_neta_con_descuento: round2(acc.ganancia_neta_con_descuento + row.ganancia_neta_con_descuento),
+    }),
+    {
+      productos: 0,
+      precio_referencia_hbderm: 0,
+      ganancia_objetivo_45: 0,
+      precio_venta_nuvia: 0,
+      descuento_cliente: 0,
+      precio_promocional: 0,
+      comision_vendedor_10_ganancia: 0,
+      ganancia_neta: 0,
+      ganancia_neta_con_descuento: 0,
+    },
+  );
+
+  const fields = [
+    "index",
+    "slug",
+    "titulo",
+    "marca",
+    "categoria",
+    "tamano",
+    "tipo_venta",
+    "precio_referencia_hbderm",
+    "ganancia_objetivo_45",
+    "precio_venta_nuvia",
+    "descuento_destacado_pct",
+    "descuento_cliente",
+    "precio_promocional",
+    "comision_vendedor_10_ganancia",
+    "ganancia_neta",
+    "ganancia_neta_con_descuento",
+    "source_url",
+  ];
+
+  return {
+    json: {
+      generated_at: new Date().toISOString(),
+      source: meta.source,
+      source_products: meta.sourceProductCount,
+      public_products: meta.publicProductCount,
+      internal_professional_products: meta.internalProfessionalCount,
+      assumptions: {
+        precio_referencia_hbderm: "Precio publico de referencia del proveedor.",
+        precio_venta_nuvia: "precio_referencia_hbderm - 45% segun regla comercial indicada por Sergio.",
+        ganancia_objetivo_45: "45% del precio de referencia.",
+        comision_vendedor: "10% de la ganancia objetivo.",
+        descuento_destacado: "10% aplicado solo a destacados del mes; reduce margen neto.",
+      },
+      totals,
+      rows,
+    },
+    csv: [csvRow(fields), ...rows.map((row) => csvRow(fields.map((field) => row[field])))].join("\n") + "\n",
   };
 }
 
@@ -630,17 +760,18 @@ async function main() {
     });
 
   const publicImportedProducts = importedProducts.filter((product) => product.tipoVenta !== "profesional_consulta");
-  const productsForJson = [...currentProducts, ...publicImportedProducts];
+  const productsForJson = [...currentProducts, ...publicImportedProducts].map(enrichCommercialFields);
+  const allProductsForFinance = [...currentProducts, ...importedProducts].map(enrichCommercialFields);
   const allCategories = [...new Set(productsForJson.map((product) => product.categoria).filter(Boolean))];
 
   nuvia.descripcion =
-    "Nuvia reune productos utiles para todos los dias con skincare y dermocosmetica HBDERM: elige producto, agrega al carrito y confirma compra asistida sin vueltas.";
+    "Nuvia reune skincare y dermocosmetica para todos los dias: elige productos por rutina, agrega al carrito y confirma tu compra asistida sin vueltas.";
   nuvia.categorias = allCategories;
   nuvia.productos = productsForJson;
   nuvia.seo = {
     ...nuvia.seo,
-    title: "Nuvia | Catalogo skincare HBDERM",
-    description: "Catalogo Nuvia con productos HBDERM, precios calculados, carrito y compra asistida.",
+    title: "Nuvia | Catalogo skincare y dermocosmetica",
+    description: "Catalogo Nuvia con skincare, dermocosmetica, precios calculados, carrito y compra asistida.",
   };
 
   const normalized = {
@@ -658,15 +789,24 @@ async function main() {
       seller_commission_rate: SELLER_COMMISSION_RATE,
     },
     products: productsForJson,
-    internal_professional_products: importedProducts.filter((product) => product.tipoVenta === "profesional_consulta"),
+    internal_professional_products: allProductsForFinance.filter((product) => product.tipoVenta === "profesional_consulta"),
   };
+  const finance = buildFinanceSheet(allProductsForFinance, {
+    source: scrape.source,
+    sourceProductCount: scrape.product_count,
+    publicProductCount: productsForJson.length,
+    internalProfessionalCount: allProductsForFinance.filter((product) => product.tipoVenta === "profesional_consulta").length,
+  });
 
   await mkdir(path.dirname(NORMALIZED_JSON), { recursive: true });
+  await mkdir(path.dirname(FINANCE_JSON), { recursive: true });
   await writeFile(NUVIA_JSON, `${JSON.stringify(nuvia, null, 2)}\n`);
   await writeFile(NORMALIZED_JSON, `${JSON.stringify(normalized, null, 2)}\n`);
+  await writeFile(FINANCE_JSON, `${JSON.stringify(finance.json, null, 2)}\n`);
+  await writeFile(FINANCE_CSV, finance.csv);
   await writeFile(
     MIGRATION,
-    generateMigration([...currentProducts, ...importedProducts], {
+    generateMigration(allProductsForFinance, {
       source_product_count: scrape.product_count,
       imported_product_count: importedProducts.length,
       public_product_count: productsForJson.length,
@@ -679,6 +819,8 @@ async function main() {
       {
         updated: NUVIA_JSON,
         normalized: NORMALIZED_JSON,
+        finance_json: FINANCE_JSON,
+        finance_csv: FINANCE_CSV,
         migration: MIGRATION,
         public_products: productsForJson.length,
         public_imported: publicImportedProducts.length,

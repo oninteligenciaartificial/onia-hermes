@@ -16,6 +16,13 @@ type CartLine = {
   qty: number;
 };
 
+type NuviaNotice = {
+  id: string;
+  tone: "promo" | "success" | "error";
+  title: string;
+  body: string;
+};
+
 type StoreProps = {
   name: string;
   tagline: string;
@@ -68,6 +75,7 @@ type CheckoutResult = {
 };
 
 const STORAGE_KEY = "nuvia-next-cart-v1";
+const PROMO_NOTICE_KEY = "nuvia-promo-notice-20260623";
 
 const ROUTINE_STEPS: RoutineStepDefinition[] = [
   {
@@ -193,6 +201,16 @@ function useCart(cartProducts: CartProduct[]) {
   const [cart, setCart] = useState<CartLine[]>([]);
   const [open, setOpen] = useState(false);
   const [ready, setReady] = useState(false);
+  const [notices, setNotices] = useState<NuviaNotice[]>([]);
+
+  const pushNotice = useCallback((notice: Omit<NuviaNotice, "id">) => {
+    const id = `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
+    setNotices((current) => [...current.slice(-2), { ...notice, id }]);
+  }, []);
+
+  const dismissNotice = useCallback((id: string) => {
+    setNotices((current) => current.filter((notice) => notice.id !== id));
+  }, []);
 
   useEffect(() => {
     try {
@@ -220,12 +238,34 @@ function useCart(cartProducts: CartProduct[]) {
   }, [cart, ready]);
 
   useEffect(() => {
+    if (!ready) {
+      return;
+    }
+
+    if (window.sessionStorage.getItem(PROMO_NOTICE_KEY)) {
+      return;
+    }
+
+    const timer = window.setTimeout(() => {
+      pushNotice({
+        tone: "promo",
+        title: "destacados del mes",
+        body: "10% de descuento en productos seleccionados. El carrito lo calcula automaticamente.",
+      });
+      window.sessionStorage.setItem(PROMO_NOTICE_KEY, "shown");
+    }, 900);
+
+    return () => window.clearTimeout(timer);
+  }, [pushNotice, ready]);
+
+  useEffect(() => {
     document.documentElement.classList.toggle("nuvia-cart-open", open);
     return () => document.documentElement.classList.remove("nuvia-cart-open");
   }, [open]);
 
   const add = useCallback((id: string, qty = 1) => {
     const amount = Math.max(1, Math.floor(Number(qty) || 1));
+    const product = productMap.get(id);
 
     setCart((current) => {
       const existing = current.find((item) => item.id === id);
@@ -235,8 +275,13 @@ function useCart(cartProducts: CartProduct[]) {
 
       return [...current, { id, qty: amount }];
     });
+    pushNotice({
+      tone: "success",
+      title: "agregado al carrito",
+      body: product ? `${briefProductTitle({ titulo: product.title })} x ${amount}` : "Producto agregado.",
+    });
     setOpen(true);
-  }, []);
+  }, [productMap, pushNotice]);
 
   const increase = useCallback((id: string) => {
     setCart((current) => current.map((item) => (item.id === id ? { ...item, qty: item.qty + 1 } : item)));
@@ -258,22 +303,36 @@ function useCart(cartProducts: CartProduct[]) {
 
   const totalCount = cart.reduce((sum, item) => sum + item.qty, 0);
   const priced = cart.length > 0 && cart.every((item) => typeof productMap.get(item.id)?.priceValue === "number");
-  const total = cart.reduce((sum, item) => {
+  const subtotal = cart.reduce((sum, item) => {
     const product = productMap.get(item.id);
     return sum + (typeof product?.priceValue === "number" ? product.priceValue * item.qty : 0);
   }, 0);
+  const discountTotal = cart.reduce((sum, item) => {
+    const product = productMap.get(item.id);
+    if (typeof product?.priceValue !== "number" || !product.discountPercent) {
+      return sum;
+    }
+
+    return sum + product.priceValue * item.qty * (product.discountPercent / 100);
+  }, 0);
+  const total = Math.max(0, subtotal - discountTotal);
 
   return {
     add,
     cart,
     clear,
     decrease,
+    dismissNotice,
+    discountTotal,
     increase,
+    notices,
     open,
     priced,
     productMap,
+    pushNotice,
     remove,
     setOpen,
+    subtotal,
     total,
     totalCount,
   };
@@ -285,6 +344,39 @@ function money(value: number, currency = "BOB") {
   }
 
   return new Intl.NumberFormat("es", { currency, style: "currency" }).format(value);
+}
+
+function NuviaToastStack({
+  notices,
+  onDismiss,
+}: {
+  notices: NuviaNotice[];
+  onDismiss: (id: string) => void;
+}) {
+  useEffect(() => {
+    if (!notices.length) {
+      return;
+    }
+
+    const timers = notices.map((notice) => window.setTimeout(() => onDismiss(notice.id), notice.tone === "error" ? 6500 : 4300));
+    return () => timers.forEach((timer) => window.clearTimeout(timer));
+  }, [notices, onDismiss]);
+
+  return (
+    <div className="nuvia-toast-stack" aria-live="polite" aria-label="Notificaciones Nuvia">
+      {notices.map((notice) => (
+        <article className={`nuvia-toast is-${notice.tone}`} key={notice.id}>
+          <div>
+            <span>{notice.title}</span>
+            <p>{notice.body}</p>
+          </div>
+          <button type="button" onClick={() => onDismiss(notice.id)} aria-label="Cerrar notificacion">
+            <X size={14} />
+          </button>
+        </article>
+      ))}
+    </div>
+  );
 }
 
 function NuviaHeader({
@@ -354,12 +446,15 @@ function CartDrawer({
   cart,
   clear,
   decrease,
+  discountTotal,
   increase,
   open,
   priced,
   productMap,
+  pushNotice,
   remove,
   setOpen,
+  subtotal,
   total,
   totalCount,
 }: ReturnType<typeof useCart>) {
@@ -412,8 +507,19 @@ function CartDrawer({
       }
 
       setCheckoutResult(result);
+      pushNotice({
+        tone: result.mode === "configuration_pending" ? "promo" : "success",
+        title: result.order?.publicCode ? `orden ${result.order.publicCode}` : "checkout preparado",
+        body: result.message,
+      });
     } catch (error) {
-      setCheckoutError(error instanceof Error ? error.message : "No se pudo crear el checkout.");
+      const message = error instanceof Error ? error.message : "No se pudo crear el checkout.";
+      setCheckoutError(message);
+      pushNotice({
+        tone: "error",
+        title: "checkout pendiente",
+        body: message,
+      });
     } finally {
       setCheckoutLoading(false);
     }
@@ -457,6 +563,7 @@ function CartDrawer({
                       <span>{[product.brand, product.size].filter(Boolean).join(" - ")}</span>
                       <strong>{product.title}</strong>
                       <small>{itemTotal}</small>
+                      {product.discountPercent ? <em>{product.discountPercent}% descuento destacado</em> : null}
                       <div className="nuvia-cart-qty">
                         <button type="button" onClick={() => decrease(item.id)} aria-label={`Restar ${product.title}`}>
                           <Minus size={14} />
@@ -509,6 +616,16 @@ function CartDrawer({
         <footer>
           <div className="nuvia-cart-total">
             <span>{priced ? "subtotal" : "subtotal pendiente"}</span>
+            <strong>{priced && totalCount ? money(subtotal, firstCurrency) : "cotizacion"}</strong>
+          </div>
+          {priced && discountTotal > 0 ? (
+            <div className="nuvia-cart-discount">
+              <span>descuento destacados</span>
+              <strong>-{money(discountTotal, firstCurrency)}</strong>
+            </div>
+          ) : null}
+          <div className="nuvia-cart-total is-final">
+            <span>{priced ? "total" : "total pendiente"}</span>
             <strong>{priced && totalCount ? money(total, firstCurrency) : "cotizacion"}</strong>
           </div>
           <button className="nuvia-cart-checkout-button" type="button" onClick={startCheckout} disabled={!totalCount || checkoutLoading}>
@@ -591,6 +708,12 @@ function ProductMiniCheckout({
       <div>
         <span>{mode === "buybox" ? "checkout" : "precio"}</span>
         <strong>{product.precio}</strong>
+        {product.descuentoPorcentaje ? (
+          <em>
+            {product.descuentoPorcentaje}% off
+            {typeof product.precioPromocional === "number" ? ` - ${money(product.precioPromocional, product.moneda)}` : ""}
+          </em>
+        ) : null}
       </div>
       <QuantityPicker label={`Cantidad para ${product.titulo}`} value={qty} onChange={setQty} />
       <button type="button" onClick={() => onAdd(slug, qty)}>
@@ -620,7 +743,9 @@ function ProductCheckoutBar({
       </Link>
       <div className="nuvia-pdp-bar-actions">
         <QuantityPicker label={`Cantidad para ${product.titulo}`} value={qty} onChange={setQty} />
-        <strong>{product.precio}</strong>
+        <strong>
+          {typeof product.precioPromocional === "number" ? money(product.precioPromocional, product.moneda) : product.precio}
+        </strong>
         <button type="button" onClick={() => onAdd(slug, qty)}>
           agregar al carrito
         </button>
@@ -640,6 +765,15 @@ function ProductShelf({
   products: NuviaProduct[];
 }) {
   const categories = Array.from(new Set(products.map((product) => product.categoria).filter(Boolean)));
+  const categoryStats = categories.map((category) => {
+    const items = products.filter((product) => product.categoria === category);
+    return {
+      category,
+      count: items.length,
+      brands: new Set(items.map((product) => product.marca).filter(Boolean)).size,
+      hero: items[0],
+    };
+  });
   const [activeCategory, setActiveCategory] = useState("todos");
   const [query, setQuery] = useState("");
   const [visibleLimit, setVisibleLimit] = useState(48);
@@ -681,6 +815,31 @@ function ProductShelf({
 
   return (
     <section className="nuvia-next-section nuvia-catalog-portal" id="catalogo" data-nuvia-reveal>
+      <div className="nuvia-category-overview" aria-label="Secciones del catalogo">
+        <button
+          className={activeCategory === "todos" ? "is-active" : undefined}
+          type="button"
+          onClick={() => setActiveCategory("todos")}
+        >
+          <span>{products.length}</span>
+          <strong>todos los productos</strong>
+          <small>catalogo completo</small>
+        </button>
+        {categoryStats.map((section) => (
+          <button
+            className={activeCategory === section.category ? "is-active" : undefined}
+            type="button"
+            onClick={() => setActiveCategory(section.category)}
+            key={section.category}
+          >
+            {section.hero ? <Image src={section.hero.imagen} alt="" width={96} height={96} /> : null}
+            <span>{section.count}</span>
+            <strong>{section.category}</strong>
+            <small>{section.brands} marcas</small>
+          </button>
+        ))}
+      </div>
+
       <div className="nuvia-portal-controls">
         <div className="nuvia-portal-tabs" aria-label="Categorias del catalogo">
           <button className={activeCategory === "todos" ? "is-active" : undefined} type="button" onClick={() => setActiveCategory("todos")}>
@@ -725,7 +884,8 @@ function ProductShelf({
             <article className="nuvia-product-card" data-nuvia-reveal style={{ "--delay": `${index * 70}ms` } as CSSProperties} key={slug}>
               <figure>
                 <span>{product.etiqueta}</span>
-                <Image src={product.imagen} alt={product.imagenAlt} width={460} height={460} priority />
+                {product.descuentoPorcentaje ? <b>{product.descuentoPorcentaje}% off</b> : null}
+                <Image src={product.imagen} alt={product.imagenAlt} width={460} height={460} priority={index < 6} />
               </figure>
               <div>
                 <small>{[product.marca, product.tamano].filter(Boolean).join(" - ")}</small>
@@ -907,7 +1067,7 @@ export function NuviaStorefront(props: StoreProps) {
           </details>
           <details>
             <summary>por que dice cotizacion?</summary>
-            <p>Porque todavia no cargamos precios finales ni pasarela. El sistema evita inventar datos comerciales.</p>
+            <p>Porque la compra sigue asistida hasta conectar la pasarela final y validar disponibilidad antes del cobro.</p>
           </details>
           <details>
             <summary>esto reemplaza una consulta dermatologica?</summary>
@@ -925,6 +1085,7 @@ export function NuviaStorefront(props: StoreProps) {
       </footer>
 
       <CartDrawer {...cart} />
+      <NuviaToastStack notices={cart.notices} onDismiss={cart.dismissNotice} />
     </main>
   );
 }
@@ -948,8 +1109,8 @@ export function NuviaCatalogPage(props: StoreProps) {
           <span>NUVIA | {props.tagline.toUpperCase()}</span>
           <h1>catalogo de skincare con compra guiada</h1>
           <p>
-            Elige crema, ajusta cantidad y abre carrito. El pago queda preparado como checkout/cotizacion hasta conectar precios,
-            entrega y canal de cobro.
+            Elige crema, ajusta cantidad y abre carrito. El sistema calcula descuento, total y deja la orden lista para pago
+            asistido.
           </p>
           <div className="nuvia-actions">
             <button type="button" onClick={() => cart.setOpen(true)}>
@@ -981,14 +1142,15 @@ export function NuviaCatalogPage(props: StoreProps) {
           <span>como comprar</span>
           <h2>el flujo queda claro antes de pagar</h2>
           <p>
-            Nuvia usa una compra asistida: el carrito prepara el pedido y evita mostrar precios, stock o pago real sin configuracion.
+            Nuvia usa compra asistida: eliges productos, revisas total y confirmas la orden. La pasarela real queda lista para
+            activar con credenciales.
           </p>
         </div>
         <div className="nuvia-buying-steps">
           {[
             ["01", "elige producto", "Filtra por categoria o marca y abre la ficha si necesitas indicaciones."],
             ["02", "agrega cantidad", "Cada crema tiene su selector y se guarda en el carrito del navegador."],
-            ["03", "confirma checkout", "Cuando existan precio y canal de cobro, este mismo carrito enviara el pedido final."],
+            ["03", "confirma checkout", "El carrito crea orden con subtotal, descuento y total para completar el pago."],
           ].map(([number, title, body]) => (
             <article key={number}>
               <span>{number}</span>
@@ -1002,10 +1164,10 @@ export function NuviaCatalogPage(props: StoreProps) {
       <section className="nuvia-checkout-note" id="checkout-pendiente" data-nuvia-reveal>
         <div>
           <span>checkout</span>
-          <h2>pago real pendiente de configuracion</h2>
+          <h2>orden lista, pago real por activar</h2>
           <p>
-            El carrito ya funciona. Para cobrar de verdad falta definir precios finales, stock, envio y conectar WhatsApp, email o
-            pasarela de pago.
+            El carrito ya funciona con precios y descuentos. Para cobrar en automatico falta cargar credenciales BNB QR Simple
+            y reglas finales de entrega.
           </p>
         </div>
         <button type="button" onClick={() => cart.setOpen(true)}>
@@ -1022,6 +1184,7 @@ export function NuviaCatalogPage(props: StoreProps) {
       </footer>
 
       <CartDrawer {...cart} />
+      <NuviaToastStack notices={cart.notices} onDismiss={cart.dismissNotice} />
     </main>
   );
 }
@@ -1107,6 +1270,7 @@ export function NuviaProductPage(props: ProductPageProps) {
       </section>
 
       <CartDrawer {...cart} />
+      <NuviaToastStack notices={cart.notices} onDismiss={cart.dismissNotice} />
     </main>
   );
 }

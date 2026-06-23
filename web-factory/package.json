@@ -10,6 +10,7 @@
     "generate": "tsx generate/index.ts",
     "lint": "pnpm --filter site lint",
     "preview:nuvia": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/start-nuvia-preview.ps1",
+    "nuvia:catalog": "node harvester/product/scrape_hbderm_products.mjs --concurrency=1 && node harvester/product/build_nuvia_hbderm_catalog.mjs && node harvester/product/sanitize_nuvia_public_catalog.mjs && python harvester/product/create_nuvia_product_cutouts.py",
     "nuvia:media": "node harvester/product/enrich_nuvia_product_media.mjs --concurrency=5",
     "nuvia:cutouts": "python harvester/product/create_nuvia_product_cutouts.py",
     "nuvia:sanitize-public": "node harvester/product/sanitize_nuvia_public_catalog.mjs",

@@ -80,7 +80,7 @@ type DbLead = {
   public_contact: string | null;
   channel: string;
   source: string | null;
-  owner_role_key: RoleId | null;
+  owner_role_key: string | null;
   pipeline_status: string;
   suggested_service_key: string | null;
   private_notes: string | null;
@@ -93,7 +93,7 @@ type DbTask = {
   title: string;
   status: string;
   priority: RuntimeTask["priority"];
-  assigned_role_key: RoleId;
+  assigned_role_key: string;
   evidence_required: boolean;
   created_at: string;
 };
@@ -109,7 +109,7 @@ type DbReview = {
 
 type DbNote = {
   audit_key: string;
-  actor_role_key: RoleId;
+  actor_role_key: string;
   summary: string;
   raw: Record<string, unknown> | null;
   created_at: string;
@@ -124,7 +124,7 @@ type DbIdea = {
   summary: string;
   why_useful: string;
   target_project_key: string | null;
-  owner_role_key: RoleId;
+  owner_role_key: string;
   visibility_scope: RuntimeIdea["visibility"];
   review_tool: RuntimeIdea["reviewTool"];
   status: RuntimeIdea["status"];
@@ -153,6 +153,22 @@ const projectIdToKey: Record<string, string> = {
 };
 
 const projectKeyToId = Object.fromEntries(Object.entries(projectIdToKey).map(([id, key]) => [key, id]));
+
+function roleToDb(role: RoleId) {
+  return role === "area" ? "area_responsible" : role;
+}
+
+function roleFromDb(role: string | null | undefined): RoleId {
+  if (role === "area_responsible" || role === "area") {
+    return "area";
+  }
+
+  if (role === "sergio" || role === "arthur" || role === "seller" || role === "freelancer") {
+    return role;
+  }
+
+  return "seller";
+}
 
 const leadStatusToDb: Record<RuntimeLead["status"], string> = {
   nuevo: "Nuevo",
@@ -306,7 +322,7 @@ function mapLead(row: DbLead): RuntimeLead {
     serviceId: serviceFromDb(row.suggested_service_key),
     status: dbStatusToLead[row.pipeline_status] ?? "nuevo",
     nextAction: row.private_notes ?? "",
-    owner: row.owner_role_key ?? "sergio",
+    owner: roleFromDb(row.owner_role_key ?? "sergio"),
     createdAt: row.created_at,
   };
 }
@@ -316,7 +332,7 @@ function mapTask(row: DbTask): RuntimeTask {
     id: row.task_key,
     projectId: projectFromDb(row.project_key),
     title: row.title,
-    assignedRole: row.assigned_role_key,
+    assignedRole: roleFromDb(row.assigned_role_key),
     status: dbStatusToTask[row.status] ?? "todo",
     priority: row.priority,
     evidence: row.evidence_required ? "pendiente" : "no requerida",
@@ -343,7 +359,7 @@ function mapNote(row: DbNote): RuntimeNote {
     title: typeof raw.title === "string" ? raw.title : row.summary,
     detail: typeof raw.detail === "string" ? raw.detail : "",
     linkedTo: typeof raw.linkedTo === "string" ? raw.linkedTo : "",
-    actorRole: row.actor_role_key,
+    actorRole: roleFromDb(row.actor_role_key),
     createdAt: typeof raw.createdAt === "string" ? raw.createdAt : row.created_at,
   };
 }
@@ -358,11 +374,37 @@ function mapIdea(row: DbIdea): RuntimeIdea {
     summary: row.summary,
     whyUseful: row.why_useful,
     targetProjectId: projectFromDb(row.target_project_key),
-    owner: row.owner_role_key,
+    owner: roleFromDb(row.owner_role_key),
     visibility: row.visibility_scope,
     reviewTool: row.review_tool,
     status: row.status,
     createdAt: row.created_at,
+  };
+}
+
+function canRoleViewIdea(idea: RuntimeIdea, role: RoleId) {
+  if (role === "sergio") {
+    return true;
+  }
+
+  if (idea.visibility === "team_safe") {
+    return true;
+  }
+
+  return idea.visibility === "assigned_only" && idea.owner === role;
+}
+
+export function filterOniaCenterRuntimeForRole(snapshot: RuntimeSnapshot, role: RoleId): RuntimeSnapshot {
+  if (role === "sergio") {
+    return snapshot;
+  }
+
+  return {
+    leads: snapshot.leads.filter((lead) => lead.owner === role),
+    tasks: snapshot.tasks.filter((task) => task.assignedRole === role),
+    reviews: snapshot.reviews.filter((review) => review.sensitivity === "public_safe"),
+    notes: snapshot.notes.filter((note) => note.actorRole === role),
+    ideas: snapshot.ideas.filter((idea) => canRoleViewIdea(idea, role)),
   };
 }
 
@@ -412,8 +454,8 @@ export async function createOniaCenterEntity(entity: RuntimeEntity, payload: unk
         channel: lead.source || "Manual",
         source: lead.source || null,
         contact_permission: "pending",
-        origin_role_key: lead.owner,
-        owner_role_key: lead.owner,
+        origin_role_key: roleToDb(lead.owner),
+        owner_role_key: roleToDb(lead.owner),
         pipeline_status: leadStatusToDb[lead.status] ?? "Nuevo",
         suggested_service_key: serviceToDb(lead.serviceId),
         priority: "media",
@@ -436,7 +478,7 @@ export async function createOniaCenterEntity(entity: RuntimeEntity, payload: unk
         task_type: "system",
         status: taskStatusToDb[task.status] ?? "todo",
         priority: task.priority,
-        assigned_role_key: task.assignedRole,
+        assigned_role_key: roleToDb(task.assignedRole),
         reviewer_role_key: "sergio",
         evidence_required: true,
         sensitive: task.assignedRole === "sergio",
@@ -455,7 +497,7 @@ export async function createOniaCenterEntity(entity: RuntimeEntity, payload: unk
       headers: { prefer: "return=representation" },
       body: JSON.stringify({
         audit_key: note.id || makeKey("note"),
-        actor_role_key: note.actorRole ?? "sergio",
+        actor_role_key: roleToDb(note.actorRole ?? "sergio"),
         action: "runtime_note",
         entity_table: "onia_center.runtime_notes",
         entity_key: note.linkedTo || note.id || "unlinked",
@@ -483,8 +525,8 @@ export async function createOniaCenterEntity(entity: RuntimeEntity, payload: unk
           summary: idea.summary,
           why_useful: idea.whyUseful,
           target_project_key: projectToDb(idea.targetProjectId),
-          created_by_role_key: idea.owner,
-          owner_role_key: idea.owner,
+          created_by_role_key: roleToDb(idea.owner),
+          owner_role_key: roleToDb(idea.owner),
           visibility_scope: idea.visibility,
           review_tool: idea.reviewTool,
           status: idea.status,
@@ -498,20 +540,27 @@ export async function createOniaCenterEntity(entity: RuntimeEntity, payload: unk
   throw new Error(`Entidad no soportada para crear: ${entity}`);
 }
 
-export async function updateOniaCenterEntityStatus(entity: RuntimeEntity, id: string, status: string) {
+export async function updateOniaCenterEntityStatus(entity: RuntimeEntity, id: string, status: string, actorRole?: RoleId) {
   if (entity === "task") {
+    const actorFilter = actorRole && actorRole !== "sergio" ? `&assigned_role_key=eq.${encodeURIComponent(roleToDb(actorRole))}` : "";
     const rows = await supabaseRequest<DbTask[]>(
-      `tasks?task_key=eq.${encodeURIComponent(id)}&select=task_key,project_key,title,status,priority,assigned_role_key,evidence_required,created_at`,
+      `tasks?task_key=eq.${encodeURIComponent(id)}${actorFilter}&select=task_key,project_key,title,status,priority,assigned_role_key,evidence_required,created_at`,
       {
         method: "PATCH",
         headers: { prefer: "return=representation" },
         body: JSON.stringify({ status: taskStatusToDb[status as RuntimeTask["status"]] ?? status }),
       },
     );
+    if (!rows[0]) {
+      throw new Error("Tarea no encontrada o no asignada al usuario actual.");
+    }
     return mapTask(rows[0]);
   }
 
   if (entity === "review") {
+    if (actorRole && actorRole !== "sergio") {
+      throw new Error("Solo Sergio puede actualizar revisiones.");
+    }
     const rows = await supabaseRequest<DbReview[]>(
       `review_queue?review_key=eq.${encodeURIComponent(id)}&select=review_key,source_type,source_key,title,status,sensitive`,
       {
@@ -520,22 +569,32 @@ export async function updateOniaCenterEntityStatus(entity: RuntimeEntity, id: st
         body: JSON.stringify({ status: reviewStatusToDb[status as RuntimeReview["status"]] ?? status }),
       },
     );
+    if (!rows[0]) {
+      throw new Error("Revision no encontrada.");
+    }
     return mapReview(rows[0]);
   }
 
   if (entity === "idea") {
+    if (actorRole && actorRole !== "sergio" && status === "approved") {
+      throw new Error("Solo Sergio puede aprobar ideas.");
+    }
     const body: Record<string, string> = { status };
     if (status === "approved") {
       body.reviewed_by_role_key = "sergio";
     }
+    const actorFilter = actorRole && actorRole !== "sergio" ? `&owner_role_key=eq.${encodeURIComponent(roleToDb(actorRole))}` : "";
     const rows = await supabaseRequest<DbIdea[]>(
-      `idea_inbox?idea_key=eq.${encodeURIComponent(id)}&select=idea_key,title,source_type,source_url,category,summary,why_useful,target_project_key,owner_role_key,visibility_scope,review_tool,status,created_at`,
+      `idea_inbox?idea_key=eq.${encodeURIComponent(id)}${actorFilter}&select=idea_key,title,source_type,source_url,category,summary,why_useful,target_project_key,owner_role_key,visibility_scope,review_tool,status,created_at`,
       {
         method: "PATCH",
         headers: { prefer: "return=representation" },
         body: JSON.stringify(body),
       },
     );
+    if (!rows[0]) {
+      throw new Error("Idea no encontrada o no asignada al usuario actual.");
+    }
     return mapIdea(rows[0]);
   }
 

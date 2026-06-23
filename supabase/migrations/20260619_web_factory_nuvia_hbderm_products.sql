@@ -9,7 +9,7 @@ with store_ref as (
 ),
 store_update as (
   update web_factory.stores
-  set raw = raw || '{"hbderm_source":"https://hbderm.com/","hbderm_products_scraped":328,"hbderm_products_imported":328,"hbderm_public_products":316,"hbderm_professional_internal_products":14,"pricing_formula":{"sale_price":"source_price - (source_price * 0.45)","seller_commission":"(source_price * 0.45) * 0.10"},"media_rule":"Remote HBDERM images are reference assets; replace with owned Nuvia media before launch when needed."}'::jsonb,
+  set raw = raw || '{"hbderm_source":"https://hbderm.com/","hbderm_products_scraped":329,"hbderm_products_imported":329,"hbderm_public_products":316,"hbderm_professional_internal_products":15,"pricing_formula":{"sale_price":"source_price - (source_price * 0.45)","seller_commission":"(source_price * 0.45) * 0.10"},"media_rule":"Remote HBDERM images are reference assets; replace with owned Nuvia media before launch when needed."}'::jsonb,
   updated_at = now()
   where slug = 'nuvia'
 )
@@ -57,22 +57,22 @@ cross join (
       '50 ml',
       2,
       'Paso 2: proteger',
-      'Bs. 138',
-      137.5,
+      'Bs. 201',
+      200.75,
       'BOB',
       'in_stock',
       true,
       true,
       10,
-      'Fotoprotector facial diario de textura ligera, acabado no graso y proteccion alta para acompanar la rutina urbana.',
+      'ISDIN para proteccion solar diaria. Confirma disponibilidad y recomendacion de uso antes de finalizar la compra.',
       'Aplicar por la manana como ultimo paso de la rutina y reaplicar segun exposicion solar.',
       array['Alta proteccion SPF 50','Textura ligera de uso diario','Acabado no graso','No comedogenico']::text[],
       array['Uso diario','Rutina de manana','Proteccion urbana']::text[],
       array['Hyaluronic Acid','Vitamin E','Mediterranean Algae Extract']::text[],
-      'assets/isdin-fusion-water-display.png',
+      'assets/product-media-cutout/001-isdin-fusion-water-magic-spf-50.png',
       'ISDIN Fusion Water Magic SPF 50 en envase azul claro',
       1000,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/fotoproteccion/fusion-water-spf-50/","source_categories":["Fotoproteccion"],"pricing_formula":{"source_price":250,"margin_rate":0.45,"margin_amount":112.5,"sale_price":137.5,"seller_commission_rate":0.1,"seller_commission_amount":11.25,"net_margin_after_seller":101.25},"source_index":"featured-0"}'::jsonb
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/fotoproteccion/fusion-water-spf-50/","source_categories":["Fotoproteccion"],"pricing_formula":{"source_price":365,"margin_rate":0.45,"margin_amount":164.25,"sale_price":200.75,"seller_commission_rate":0.1,"seller_commission_amount":16.43,"net_margin_after_seller":147.82},"source_index":"featured-0"}'::jsonb
     ),
     (
       'svr-sebiaclear-gel-moussant',
@@ -90,12 +90,12 @@ cross join (
       true,
       true,
       10,
-      'Gel limpiador para rostro y cuerpo, pensado para piel mixta, grasa, sensible o con tendencia acneica.',
+      'SVR para limpiar la piel y preparar la rutina diaria sin agregar pasos innecesarios.',
       'Usar sobre piel humeda, masajear suavemente y enjuagar. Evitar contacto directo con los ojos.',
       array['Sin jabon','Sin sulfatos','Ayuda a purificar poros','Limpieza sin resecar']::text[],
       array['Piel mixta','Piel grasa','Piel sensible con tendencia acneica']::text[],
       array['Salicylic Acid','Gluconolactone','Glycerin']::text[],
-      'assets/svr-sebiaclear-200ml-display.png',
+      'assets/product-media-cutout/002-svr-sebiaclear-gel-moussant.png',
       'SVR Sebiaclear Gel Moussant en tubo verde de 200 ml',
       1001,
       '{}'::jsonb
@@ -109,8 +109,8 @@ cross join (
       '',
       4,
       'Paso 4: proteger',
-      'Bs. 138',
-      137.5,
+      'Bs. 169',
+      168.85,
       'BOB',
       'in_stock',
       true,
@@ -124,7 +124,7 @@ cross join (
       'https://hbderm.com/wp-content/uploads/2024/04/Diseño-sin-título.png',
       'Barièsun 100 SPF50+ de URIAGE',
       1002,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-dia/bariesun-100/","source_categories":["Antiedad","Tratamientos Dia"],"source_availability":"instock","pricing_formula":{"source_price":250,"margin_rate":0.45,"margin_amount":112.5,"sale_price":137.5,"seller_commission_rate":0.1,"seller_commission_amount":11.25,"net_margin_after_seller":101.25},"source_index":94}'::jsonb
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-dia/bariesun-100/","source_categories":["Antiedad","Tratamientos Dia"],"source_availability":"instock","pricing_formula":{"source_price":307,"margin_rate":0.45,"margin_amount":138.15,"sale_price":168.85,"seller_commission_rate":0.1,"seller_commission_amount":13.82,"net_margin_after_seller":124.33},"source_index":94}'::jsonb
     ),
     (
       'bariesun-bruma-seca-spf50',
@@ -135,8 +135,8 @@ cross join (
       '',
       4,
       'Paso 4: proteger',
-      'Bs. 138',
-      137.5,
+      'Bs. 169',
+      168.85,
       'BOB',
       'in_stock',
       true,
@@ -150,7 +150,7 @@ cross join (
       'https://hbderm.com/wp-content/uploads/2024/04/Diseño-sin-título-2.png',
       'Barièsun Bruma Seca SPF50+ de URIAGE',
       1003,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/fotoproteccion-antiedad/bariesun-bruma-seca/","source_categories":["Antiedad","Fotoproteccion Antiedad"],"source_availability":"Agotado","pricing_formula":{"source_price":250,"margin_rate":0.45,"margin_amount":112.5,"sale_price":137.5,"seller_commission_rate":0.1,"seller_commission_amount":11.25,"net_margin_after_seller":101.25},"source_index":119}'::jsonb
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/fotoproteccion-antiedad/bariesun-bruma-seca/","source_categories":["Antiedad","Fotoproteccion Antiedad"],"source_availability":"Agotado","pricing_formula":{"source_price":307,"margin_rate":0.45,"margin_amount":138.15,"sale_price":168.85,"seller_commission_rate":0.1,"seller_commission_amount":13.82,"net_margin_after_seller":124.33},"source_index":117}'::jsonb
     ),
     (
       'bariesun-fluido-matificante-spf-50',
@@ -187,8 +187,8 @@ cross join (
       '',
       4,
       'Paso 4: proteger',
-      'Bs. 138',
-      137.5,
+      'Bs. 191',
+      191.4,
       'BOB',
       'in_stock',
       true,
@@ -202,7 +202,7 @@ cross join (
       'https://hbderm.com/wp-content/uploads/2024/04/Diseño-sin-título-2-2.png',
       'Bariésun Fluido Ultra-ligero SPF50+ de URIAGE',
       1005,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-dia/bariesun-fluido-ultra-ligero-spf50/","source_categories":["Antiedad","Tratamientos Dia"],"source_availability":"instock","pricing_formula":{"source_price":250,"margin_rate":0.45,"margin_amount":112.5,"sale_price":137.5,"seller_commission_rate":0.1,"seller_commission_amount":11.25,"net_margin_after_seller":101.25},"source_index":286}'::jsonb
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-dia/bariesun-fluido-ultra-ligero-spf50/","source_categories":["Antiedad","Tratamientos Dia"],"source_availability":"instock","pricing_formula":{"source_price":348,"margin_rate":0.45,"margin_amount":156.6,"sale_price":191.4,"seller_commission_rate":0.1,"seller_commission_amount":15.66,"net_margin_after_seller":140.94},"source_index":286}'::jsonb
     ),
     (
       'clairial-cc-cream-spf50-light',
@@ -228,7 +228,7 @@ cross join (
       'https://hbderm.com/wp-content/uploads/2021/08/CLAIRIAL-LIGHT.jpg',
       'Clairial CC Cream SPF50 - Light de SVR',
       1006,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-hiperpigmentadas/clairial-cc-cream-spf50-light/","source_categories":["Pieles Hiperpigmentadas"],"source_availability":"instock","pricing_formula":{"source_price":529,"margin_rate":0.45,"margin_amount":238.05,"sale_price":290.95,"seller_commission_rate":0.1,"seller_commission_amount":23.81,"net_margin_after_seller":214.24},"source_index":216}'::jsonb
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-hiperpigmentadas/clairial-cc-cream-spf50-light/","source_categories":["Pieles Hiperpigmentadas"],"source_availability":"instock","pricing_formula":{"source_price":529,"margin_rate":0.45,"margin_amount":238.05,"sale_price":290.95,"seller_commission_rate":0.1,"seller_commission_amount":23.81,"net_margin_after_seller":214.24},"source_index":215}'::jsonb
     ),
     (
       'clairial-cc-cream-spf50-medium',
@@ -239,8 +239,8 @@ cross join (
       '',
       4,
       'Paso 4: proteger',
-      'Bs. 166',
-      166.1,
+      'Bs. 291',
+      290.95,
       'BOB',
       'in_stock',
       true,
@@ -254,7 +254,7 @@ cross join (
       'https://hbderm.com/wp-content/uploads/2021/08/CLAIRIAL-MEDIUM.jpg',
       'Clairial CC Cream SPF50 - Medium de SVR',
       1007,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-hiperpigmentadas/clairial-cc-cream-spf50-medium/","source_categories":["Pieles Hiperpigmentadas"],"source_availability":"Agotado","pricing_formula":{"source_price":302,"margin_rate":0.45,"margin_amount":135.9,"sale_price":166.1,"seller_commission_rate":0.1,"seller_commission_amount":13.59,"net_margin_after_seller":122.31},"source_index":214}'::jsonb
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-hiperpigmentadas/clairial-cc-cream-spf50-medium/","source_categories":["Pieles Hiperpigmentadas"],"source_availability":"Agotado","pricing_formula":{"source_price":529,"margin_rate":0.45,"margin_amount":238.05,"sale_price":290.95,"seller_commission_rate":0.1,"seller_commission_amount":23.81,"net_margin_after_seller":214.24},"source_index":214}'::jsonb
     ),
     (
       'clairial-crema-spf50',
@@ -265,8 +265,8 @@ cross join (
       '',
       4,
       'Paso 4: proteger',
-      'Bs. 138',
-      137.5,
+      'Bs. 264',
+      264,
       'BOB',
       'in_stock',
       true,
@@ -280,7 +280,7 @@ cross join (
       'https://hbderm.com/wp-content/uploads/2020/06/PENSAMOS-EN-LOS-MÁS-PEQUEÑOS-DE-LA-CASA-2.png',
       'Clairial Crema SPF50 de SVR',
       1008,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/fotoproteccion/clairial-crema-spf-50/","source_categories":["Fotoproteccion"],"source_availability":"instock","pricing_formula":{"source_price":250,"margin_rate":0.45,"margin_amount":112.5,"sale_price":137.5,"seller_commission_rate":0.1,"seller_commission_amount":11.25,"net_margin_after_seller":101.25},"source_index":18}'::jsonb
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/fotoproteccion/clairial-crema-spf-50/","source_categories":["Fotoproteccion"],"source_availability":"instock","pricing_formula":{"source_price":480,"margin_rate":0.45,"margin_amount":216,"sale_price":264,"seller_commission_rate":0.1,"seller_commission_amount":21.6,"net_margin_after_seller":194.4},"source_index":32}'::jsonb
     ),
     (
       'compact-bronze-spf-50',
@@ -291,8 +291,8 @@ cross join (
       '',
       4,
       'Paso 4: proteger',
-      'Bs. 166',
-      166.1,
+      'Bs. 201',
+      200.75,
       'BOB',
       'in_stock',
       true,
@@ -306,7 +306,7 @@ cross join (
       'https://hbderm.com/wp-content/uploads/2026/04/COMPACT-BRONZE-1.jpg',
       'Compact Bronze SPF 50+ de ISDIN',
       1009,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/cuidados-del-bebe/proteccion-solar-cuidados-del-bebe/compact-bronze-spf-50/","source_categories":["Cuidados Del Bebe","Proteccion Solar Cuidados Del Bebe"],"source_availability":"instock","pricing_formula":{"source_price":302,"margin_rate":0.45,"margin_amount":135.9,"sale_price":166.1,"seller_commission_rate":0.1,"seller_commission_amount":13.59,"net_margin_after_seller":122.31},"source_index":35}'::jsonb
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/cuidados-del-bebe/proteccion-solar-cuidados-del-bebe/compact-bronze-spf-50/","source_categories":["Cuidados Del Bebe","Proteccion Solar Cuidados Del Bebe"],"source_availability":"instock","pricing_formula":{"source_price":365,"margin_rate":0.45,"margin_amount":164.25,"sale_price":200.75,"seller_commission_rate":0.1,"seller_commission_amount":16.43,"net_margin_after_seller":147.82},"source_index":50}'::jsonb
     ),
     (
       'compact-light-spf-50',
@@ -332,7 +332,7 @@ cross join (
       'https://hbderm.com/wp-content/uploads/2026/04/COMPACT-LIGHT-1-1.jpg',
       'Compact Light SPF 50+ de ISDIN',
       1010,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-dia/compact-light-spf-50/","source_categories":["Antiedad","Tratamientos Dia"],"source_availability":"instock","pricing_formula":{"source_price":365,"margin_rate":0.45,"margin_amount":164.25,"sale_price":200.75,"seller_commission_rate":0.1,"seller_commission_amount":16.43,"net_margin_after_seller":147.82},"source_index":33}'::jsonb
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-dia/compact-light-spf-50/","source_categories":["Antiedad","Tratamientos Dia"],"source_availability":"instock","pricing_formula":{"source_price":365,"margin_rate":0.45,"margin_amount":164.25,"sale_price":200.75,"seller_commission_rate":0.1,"seller_commission_amount":16.43,"net_margin_after_seller":147.82},"source_index":48}'::jsonb
     ),
     (
       'compact-medium-spf-50',
@@ -358,7 +358,7 @@ cross join (
       'https://hbderm.com/wp-content/uploads/2026/04/COMPACT-MEDIUM-1-1.jpg',
       'Compact Medium SPF 50+ de ISDIN',
       1011,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/cuidados-del-bebe/proteccion-solar-cuidados-del-bebe/compact-medium-spf-50/","source_categories":["Cuidados Del Bebe","Proteccion Solar Cuidados Del Bebe"],"source_availability":"instock","pricing_formula":{"source_price":250,"margin_rate":0.45,"margin_amount":112.5,"sale_price":137.5,"seller_commission_rate":0.1,"seller_commission_amount":11.25,"net_margin_after_seller":101.25},"source_index":34}'::jsonb
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/cuidados-del-bebe/proteccion-solar-cuidados-del-bebe/compact-medium-spf-50/","source_categories":["Cuidados Del Bebe","Proteccion Solar Cuidados Del Bebe"],"source_availability":"instock","pricing_formula":{"source_price":250,"margin_rate":0.45,"margin_amount":112.5,"sale_price":137.5,"seller_commission_rate":0.1,"seller_commission_amount":11.25,"net_margin_after_seller":101.25},"source_index":49}'::jsonb
     ),
     (
       'depiderm-cuidado-de-dia-antimanchas-spf50',
@@ -369,8 +369,8 @@ cross join (
       '',
       4,
       'Paso 4: proteger',
-      'Bs. 166',
-      166.1,
+      'Bs. 211',
+      211.2,
       'BOB',
       'in_stock',
       true,
@@ -384,7 +384,7 @@ cross join (
       'https://hbderm.com/wp-content/uploads/2025/04/URIAGE-7.jpg',
       'Dépiderm Cuidado De Día Antimanchas SPF50+ de URIAGE',
       1012,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/cuidados-del-bebe/proteccion-solar-cuidados-del-bebe/depiderm-cuidado-de-dia-antimanchas-spf50/","source_categories":["Cuidados Del Bebe","Proteccion Solar Cuidados Del Bebe"],"source_availability":"instock","pricing_formula":{"source_price":302,"margin_rate":0.45,"margin_amount":135.9,"sale_price":166.1,"seller_commission_rate":0.1,"seller_commission_amount":13.59,"net_margin_after_seller":122.31},"source_index":229}'::jsonb
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/cuidados-del-bebe/proteccion-solar-cuidados-del-bebe/depiderm-cuidado-de-dia-antimanchas-spf50/","source_categories":["Cuidados Del Bebe","Proteccion Solar Cuidados Del Bebe"],"source_availability":"instock","pricing_formula":{"source_price":384,"margin_rate":0.45,"margin_amount":172.8,"sale_price":211.2,"seller_commission_rate":0.1,"seller_commission_amount":17.28,"net_margin_after_seller":155.52},"source_index":231}'::jsonb
     ),
     (
       'depiwhite-m-spf50',
@@ -410,7 +410,7 @@ cross join (
       'https://hbderm.com/wp-content/uploads/2024/08/DEPIWHITE-M.jpg',
       'Dépiwhite M SPF50+ de ACM',
       1013,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-hiperpigmentadas/depiwhite-m-crema-spf-50/","source_categories":["Pieles Hiperpigmentadas"],"source_availability":"instock","pricing_formula":{"source_price":343,"margin_rate":0.45,"margin_amount":154.35,"sale_price":188.65,"seller_commission_rate":0.1,"seller_commission_amount":15.44,"net_margin_after_seller":138.91},"source_index":113}'::jsonb
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-hiperpigmentadas/depiwhite-m-crema-spf-50/","source_categories":["Pieles Hiperpigmentadas"],"source_availability":"instock","pricing_formula":{"source_price":343,"margin_rate":0.45,"margin_amount":154.35,"sale_price":188.65,"seller_commission_rate":0.1,"seller_commission_amount":15.44,"net_margin_after_seller":138.91},"source_index":112}'::jsonb
     ),
     (
       'depiwhite-s-spf50',
@@ -447,8 +447,8 @@ cross join (
       '',
       4,
       'Paso 4: proteger',
-      'Bs. 138',
-      137.5,
+      'Bs. 285',
+      284.9,
       'BOB',
       'in_stock',
       true,
@@ -462,7 +462,7 @@ cross join (
       'https://hbderm.com/wp-content/uploads/2025/05/DSP-SPF50.jpg',
       'Dsp - SPF50+ de MARTIDERM',
       1015,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-dia/dsp-crema-fps-50/","source_categories":["Antiedad","Tratamientos Dia"],"source_availability":"instock","pricing_formula":{"source_price":250,"margin_rate":0.45,"margin_amount":112.5,"sale_price":137.5,"seller_commission_rate":0.1,"seller_commission_amount":11.25,"net_margin_after_seller":101.25},"source_index":251}'::jsonb
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-dia/dsp-crema-fps-50/","source_categories":["Antiedad","Tratamientos Dia"],"source_availability":"instock","pricing_formula":{"source_price":518,"margin_rate":0.45,"margin_amount":233.1,"sale_price":284.9,"seller_commission_rate":0.1,"seller_commission_amount":23.31,"net_margin_after_seller":209.79},"source_index":248}'::jsonb
     ),
     (
       'duolys-solar-spf50',
@@ -514,7 +514,7 @@ cross join (
       'https://hbderm.com/wp-content/uploads/2024/11/ERYFOTONA.jpg',
       'Eryfotona Ak-nmsc SPF100+ de ISDIN',
       1017,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/sin-categorizar/eryfotona-ak-nmsc-fluid-spf100/","source_categories":["Sin Categorizar"],"source_availability":"instock","pricing_formula":{"source_price":473,"margin_rate":0.45,"margin_amount":212.85,"sale_price":260.15,"seller_commission_rate":0.1,"seller_commission_amount":21.29,"net_margin_after_seller":191.56},"source_index":273}'::jsonb
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/sin-categorizar/eryfotona-ak-nmsc-fluid-spf100/","source_categories":["Sin Categorizar"],"source_availability":"instock","pricing_formula":{"source_price":473,"margin_rate":0.45,"margin_amount":212.85,"sale_price":260.15,"seller_commission_rate":0.1,"seller_commission_amount":21.29,"net_margin_after_seller":191.56},"source_index":275}'::jsonb
     ),
     (
       'eryfotona-night-50ml',
@@ -551,8 +551,8 @@ cross join (
       '',
       4,
       'Paso 4: proteger',
-      'Bs. 166',
-      166.1,
+      'Bs. 138',
+      137.5,
       'BOB',
       'in_stock',
       true,
@@ -566,7 +566,7 @@ cross join (
       'https://hbderm.com/wp-content/uploads/2025/04/ISDIN-6.jpg',
       'Fotoultra Active Unify Color SPF50+ de ISDIN',
       1019,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/fotoproteccion/active-unify-fusion-fluid-color-spf50/","source_categories":["Fotoproteccion"],"source_availability":"instock","pricing_formula":{"source_price":302,"margin_rate":0.45,"margin_amount":135.9,"sale_price":166.1,"seller_commission_rate":0.1,"seller_commission_amount":13.59,"net_margin_after_seller":122.31},"source_index":75}'::jsonb
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/fotoproteccion/active-unify-fusion-fluid-color-spf50/","source_categories":["Fotoproteccion"],"source_availability":"instock","pricing_formula":{"source_price":250,"margin_rate":0.45,"margin_amount":112.5,"sale_price":137.5,"seller_commission_rate":0.1,"seller_commission_amount":11.25,"net_margin_after_seller":101.25},"source_index":6}'::jsonb
     ),
     (
       'fotoultra-active-unify-spf50',
@@ -577,8 +577,8 @@ cross join (
       '',
       4,
       'Paso 4: proteger',
-      'Bs. 166',
-      166.1,
+      'Bs. 138',
+      137.5,
       'BOB',
       'in_stock',
       true,
@@ -592,7 +592,7 @@ cross join (
       'https://hbderm.com/wp-content/uploads/2025/04/ISDIN-8.jpg',
       'Fotoultra Active Unify SPF50+ de ISDIN',
       1020,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/fotoproteccion-antiedad/active-unify-spf50-50ml/","source_categories":["Antiedad","Fotoproteccion Antiedad"],"source_availability":"instock","pricing_formula":{"source_price":302,"margin_rate":0.45,"margin_amount":135.9,"sale_price":166.1,"seller_commission_rate":0.1,"seller_commission_amount":13.59,"net_margin_after_seller":122.31},"source_index":76}'::jsonb
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/fotoproteccion-antiedad/active-unify-spf50-50ml/","source_categories":["Antiedad","Fotoproteccion Antiedad"],"source_availability":"instock","pricing_formula":{"source_price":250,"margin_rate":0.45,"margin_amount":112.5,"sale_price":137.5,"seller_commission_rate":0.1,"seller_commission_amount":11.25,"net_margin_after_seller":101.25},"source_index":5}'::jsonb
     ),
     (
       'fotoultra-redness-spf50',
@@ -603,8 +603,8 @@ cross join (
       '',
       4,
       'Paso 4: proteger',
-      'Bs. 138',
-      137.5,
+      'Bs. 237',
+      236.5,
       'BOB',
       'in_stock',
       true,
@@ -618,7 +618,7 @@ cross join (
       'https://hbderm.com/wp-content/uploads/2025/04/ISDIN-11.jpg',
       'Fotoultra Redness SPF50+ de ISDIN',
       1021,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/fotoproteccion/proteccion-solar-para-rosacea/fotoultra-redness-spf-50/","source_categories":["Fotoproteccion","Proteccion Solar Para Rosacea"],"source_availability":"instock","pricing_formula":{"source_price":250,"margin_rate":0.45,"margin_amount":112.5,"sale_price":137.5,"seller_commission_rate":0.1,"seller_commission_amount":11.25,"net_margin_after_seller":101.25},"source_index":265}'::jsonb
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/fotoproteccion/proteccion-solar-para-rosacea/fotoultra-redness-spf-50/","source_categories":["Fotoproteccion","Proteccion Solar Para Rosacea"],"source_availability":"instock","pricing_formula":{"source_price":430,"margin_rate":0.45,"margin_amount":193.5,"sale_price":236.5,"seller_commission_rate":0.1,"seller_commission_amount":19.35,"net_margin_after_seller":174.15},"source_index":264}'::jsonb
     ),
     (
       'fusion-gel-sport-spf50',
@@ -629,8 +629,8 @@ cross join (
       '',
       4,
       'Paso 4: proteger',
-      'Bs. 138',
-      137.5,
+      'Bs. 205',
+      204.6,
       'BOB',
       'in_stock',
       true,
@@ -644,7 +644,7 @@ cross join (
       'https://hbderm.com/wp-content/uploads/2024/09/GEL-SPORT.jpg',
       'Fusion Gel Sport SPF50+ de ISDIN',
       1022,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/fotoproteccion/10469/","source_categories":["Fotoproteccion"],"source_availability":"Agotado","pricing_formula":{"source_price":250,"margin_rate":0.45,"margin_amount":112.5,"sale_price":137.5,"seller_commission_rate":0.1,"seller_commission_amount":11.25,"net_margin_after_seller":101.25},"source_index":283}'::jsonb
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/fotoproteccion/10469/","source_categories":["Fotoproteccion"],"source_availability":"Agotado","pricing_formula":{"source_price":372,"margin_rate":0.45,"margin_amount":167.4,"sale_price":204.6,"seller_commission_rate":0.1,"seller_commission_amount":16.74,"net_margin_after_seller":150.66},"source_index":282}'::jsonb
     ),
     (
       'fusion-water-glow-body-spf-50',
@@ -670,7 +670,7 @@ cross join (
       'https://hbderm.com/wp-content/uploads/2026/04/BODY-GLOW-2.jpg',
       'Fusion Water Glow Body SPF 50 de ISDIN',
       1023,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/fotoproteccion/proteccion-solar-para-manchas/fusion-water-glow-body-spf-50/","source_categories":["Fotoproteccion","Proteccion Solar Para Manchas"],"source_availability":"instock","pricing_formula":{"source_price":250,"margin_rate":0.45,"margin_amount":112.5,"sale_price":137.5,"seller_commission_rate":0.1,"seller_commission_amount":11.25,"net_margin_after_seller":101.25},"source_index":46}'::jsonb
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/fotoproteccion/proteccion-solar-para-manchas/fusion-water-glow-body-spf-50/","source_categories":["Fotoproteccion","Proteccion Solar Para Manchas"],"source_availability":"instock","pricing_formula":{"source_price":250,"margin_rate":0.45,"margin_amount":112.5,"sale_price":137.5,"seller_commission_rate":0.1,"seller_commission_amount":11.25,"net_margin_after_seller":101.25},"source_index":44}'::jsonb
     ),
     (
       'fusion-water-magic-by-alcaraz-spf-50',
@@ -696,7 +696,7 @@ cross join (
       'https://hbderm.com/wp-content/uploads/2026/04/MAGIC-ALCA.jpg',
       'Fusion Water Magic By Alcaraz SPF 50 de ISDIN',
       1024,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/fotoproteccion-antiedad/fusion-water-magic-by-alcaraz-spf-50/","source_categories":["Antiedad","Fotoproteccion Antiedad"],"source_availability":"instock","pricing_formula":{"source_price":378,"margin_rate":0.45,"margin_amount":170.1,"sale_price":207.9,"seller_commission_rate":0.1,"seller_commission_amount":17.01,"net_margin_after_seller":153.09},"source_index":32}'::jsonb
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/fotoproteccion-antiedad/fusion-water-magic-by-alcaraz-spf-50/","source_categories":["Antiedad","Fotoproteccion Antiedad"],"source_availability":"instock","pricing_formula":{"source_price":378,"margin_rate":0.45,"margin_amount":170.1,"sale_price":207.9,"seller_commission_rate":0.1,"seller_commission_amount":17.01,"net_margin_after_seller":153.09},"source_index":47}'::jsonb
     ),
     (
       'fusion-water-magic-color-bronze-spf50',
@@ -707,8 +707,8 @@ cross join (
       '',
       4,
       'Paso 4: proteger',
-      'Bs. 138',
-      137.5,
+      'Bs. 201',
+      200.75,
       'BOB',
       'in_stock',
       true,
@@ -722,7 +722,7 @@ cross join (
       'https://hbderm.com/wp-content/uploads/2026/04/MAGIC-BRONZE-.jpg',
       'Fusion Water Magic Color "bronze" SPF50+ de ISDIN',
       1025,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/fotoproteccion/fusion-water-color-bronze-spf50/","source_categories":["Fotoproteccion"],"source_availability":"Agotado","pricing_formula":{"source_price":250,"margin_rate":0.45,"margin_amount":112.5,"sale_price":137.5,"seller_commission_rate":0.1,"seller_commission_amount":11.25,"net_margin_after_seller":101.25},"source_index":23}'::jsonb
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/fotoproteccion/fusion-water-color-bronze-spf50/","source_categories":["Fotoproteccion"],"source_availability":"Agotado","pricing_formula":{"source_price":365,"margin_rate":0.45,"margin_amount":164.25,"sale_price":200.75,"seller_commission_rate":0.1,"seller_commission_amount":16.43,"net_margin_after_seller":147.82},"source_index":12}'::jsonb
     ),
     (
       'fusion-water-magic-color-light-spf50',
@@ -748,7 +748,7 @@ cross join (
       'https://hbderm.com/wp-content/uploads/2025/02/ISDIN.jpg',
       'Fusion Water Magic Color "light" SPF50+ de ISDIN',
       1026,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/fotoproteccion/fusion-water-color-light-spf50/","source_categories":["Fotoproteccion"],"source_availability":"instock","pricing_formula":{"source_price":250,"margin_rate":0.45,"margin_amount":112.5,"sale_price":137.5,"seller_commission_rate":0.1,"seller_commission_amount":11.25,"net_margin_after_seller":101.25},"source_index":68}'::jsonb
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/fotoproteccion/fusion-water-color-light-spf50/","source_categories":["Fotoproteccion"],"source_availability":"instock","pricing_formula":{"source_price":250,"margin_rate":0.45,"margin_amount":112.5,"sale_price":137.5,"seller_commission_rate":0.1,"seller_commission_amount":11.25,"net_margin_after_seller":101.25},"source_index":11}'::jsonb
     ),
     (
       'fusion-water-magic-color-medium-spf-50',
@@ -759,8 +759,8 @@ cross join (
       '',
       4,
       'Paso 4: proteger',
-      'Bs. 138',
-      137.5,
+      'Bs. 201',
+      200.75,
       'BOB',
       'in_stock',
       true,
@@ -774,7 +774,7 @@ cross join (
       'https://hbderm.com/wp-content/uploads/2025/03/ISDIN-4.jpg',
       'Fusion Water Magic Color "medium" SPF 50+ de ISDIN',
       1027,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/fotoproteccion/fusion-water-color-spf-50/","source_categories":["Fotoproteccion"],"source_availability":"instock","pricing_formula":{"source_price":250,"margin_rate":0.45,"margin_amount":112.5,"sale_price":137.5,"seller_commission_rate":0.1,"seller_commission_amount":11.25,"net_margin_after_seller":101.25},"source_index":40}'::jsonb
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/fotoproteccion/fusion-water-color-spf-50/","source_categories":["Fotoproteccion"],"source_availability":"instock","pricing_formula":{"source_price":365,"margin_rate":0.45,"margin_amount":164.25,"sale_price":200.75,"seller_commission_rate":0.1,"seller_commission_amount":16.43,"net_margin_after_seller":147.82},"source_index":9}'::jsonb
     ),
     (
       'fusion-water-magic-glow-spf-50',
@@ -785,8 +785,8 @@ cross join (
       '',
       4,
       'Paso 4: proteger',
-      'Bs. 138',
-      137.5,
+      'Bs. 201',
+      200.75,
       'BOB',
       'in_stock',
       true,
@@ -800,7 +800,7 @@ cross join (
       'https://hbderm.com/wp-content/uploads/2026/04/MAGIC-GLOW-1.jpg',
       'Fusion Water Magic Glow SPF 50 de ISDIN',
       1028,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/proteccion-solar/proteccion-solar-para-manchas-proteccion-solar/fusion-water-magic-glow-spf-50/","source_categories":["Proteccion Solar","Proteccion Solar Para Manchas Proteccion Solar"],"source_availability":"instock","pricing_formula":{"source_price":250,"margin_rate":0.45,"margin_amount":112.5,"sale_price":137.5,"seller_commission_rate":0.1,"seller_commission_amount":11.25,"net_margin_after_seller":101.25},"source_index":10}'::jsonb
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/proteccion-solar/proteccion-solar-para-manchas-proteccion-solar/fusion-water-magic-glow-spf-50/","source_categories":["Proteccion Solar","Proteccion Solar Para Manchas Proteccion Solar"],"source_availability":"instock","pricing_formula":{"source_price":365,"margin_rate":0.45,"margin_amount":164.25,"sale_price":200.75,"seller_commission_rate":0.1,"seller_commission_amount":16.43,"net_margin_after_seller":147.82},"source_index":7}'::jsonb
     ),
     (
       'fusion-water-magic-repair-color-spf50',
@@ -826,7 +826,7 @@ cross join (
       'https://hbderm.com/wp-content/uploads/2026/04/MAGIC-REPAIR-COLOR-.jpg',
       'Fusion Water Magic Repair Color SPF50+ de ISDIN',
       1029,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/fotoproteccion/age-repair-color-spf-50/","source_categories":["Fotoproteccion"],"source_availability":"instock","pricing_formula":{"source_price":484,"margin_rate":0.45,"margin_amount":217.8,"sale_price":266.2,"seller_commission_rate":0.1,"seller_commission_amount":21.78,"net_margin_after_seller":196.02},"source_index":104}'::jsonb
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/fotoproteccion/age-repair-color-spf-50/","source_categories":["Fotoproteccion"],"source_availability":"instock","pricing_formula":{"source_price":484,"margin_rate":0.45,"margin_amount":217.8,"sale_price":266.2,"seller_commission_rate":0.1,"seller_commission_amount":21.78,"net_margin_after_seller":196.02},"source_index":105}'::jsonb
     ),
     (
       'fusion-water-magic-repair-spf50',
@@ -852,7 +852,7 @@ cross join (
       'https://hbderm.com/wp-content/uploads/2026/04/MAGIC-REPAIR-.jpg',
       'Fusion Water Magic Repair SPF50+ de ISDIN',
       1030,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/age-repair-fusion-water-spf50/","source_categories":["Antiedad"],"source_availability":"instock","pricing_formula":{"source_price":484,"margin_rate":0.45,"margin_amount":217.8,"sale_price":266.2,"seller_commission_rate":0.1,"seller_commission_amount":21.78,"net_margin_after_seller":196.02},"source_index":106}'::jsonb
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/age-repair-fusion-water-spf50/","source_categories":["Antiedad"],"source_availability":"instock","pricing_formula":{"source_price":484,"margin_rate":0.45,"margin_amount":217.8,"sale_price":266.2,"seller_commission_rate":0.1,"seller_commission_amount":21.78,"net_margin_after_seller":196.02},"source_index":104}'::jsonb
     ),
     (
       'fusion-water-magic-spf50',
@@ -863,8 +863,8 @@ cross join (
       '',
       4,
       'Paso 4: proteger',
-      'Bs. 138',
-      137.5,
+      'Bs. 201',
+      200.75,
       'BOB',
       'in_stock',
       true,
@@ -878,7 +878,7 @@ cross join (
       'https://hbderm.com/wp-content/uploads/2024/09/FW-MAGIC.jpg',
       'Fusion Water Magic SPF50+ de ISDIN',
       1031,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/fotoproteccion/fusion-water-spf-50/","source_categories":["Fotoproteccion"],"source_availability":"instock","pricing_formula":{"source_price":250,"margin_rate":0.45,"margin_amount":112.5,"sale_price":137.5,"seller_commission_rate":0.1,"seller_commission_amount":11.25,"net_margin_after_seller":101.25},"source_index":69}'::jsonb
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/fotoproteccion/fusion-water-spf-50/","source_categories":["Fotoproteccion"],"source_availability":"instock","pricing_formula":{"source_price":365,"margin_rate":0.45,"margin_amount":164.25,"sale_price":200.75,"seller_commission_rate":0.1,"seller_commission_amount":16.43,"net_margin_after_seller":147.82},"source_index":8}'::jsonb
     ),
     (
       'fusion-water-magic-urban-spf30',
@@ -889,8 +889,8 @@ cross join (
       '',
       4,
       'Paso 4: proteger',
-      'Bs. 138',
-      137.5,
+      'Bs. 201',
+      200.75,
       'BOB',
       'in_stock',
       true,
@@ -904,7 +904,7 @@ cross join (
       'https://hbderm.com/wp-content/uploads/2024/08/ISDIN.jpg',
       'Fusion Water Magic Urban SPF30+ de ISDIN',
       1032,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/fotoproteccion/fusion-water-urban/","source_categories":["Fotoproteccion"],"source_availability":"instock","pricing_formula":{"source_price":250,"margin_rate":0.45,"margin_amount":112.5,"sale_price":137.5,"seller_commission_rate":0.1,"seller_commission_amount":11.25,"net_margin_after_seller":101.25},"source_index":57}'::jsonb
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/fotoproteccion/fusion-water-urban/","source_categories":["Fotoproteccion"],"source_availability":"instock","pricing_formula":{"source_price":365,"margin_rate":0.45,"margin_amount":164.25,"sale_price":200.75,"seller_commission_rate":0.1,"seller_commission_amount":16.43,"net_margin_after_seller":147.82},"source_index":10}'::jsonb
     ),
     (
       'gel-cream-spf50-250ml',
@@ -930,7 +930,7 @@ cross join (
       'https://hbderm.com/wp-content/uploads/2026/05/PROTECTOR-GEL-CREMA-.jpg',
       'Gel Cream SPF50+ 250ML de SENSILIS',
       1033,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/fotoproteccion/proteccion-cuerpo/gel-cream-50/","source_categories":["Fotoproteccion","Proteccion Cuerpo"],"source_availability":"instock","pricing_formula":{"source_price":250,"margin_rate":0.45,"margin_amount":112.5,"sale_price":137.5,"seller_commission_rate":0.1,"seller_commission_amount":11.25,"net_margin_after_seller":101.25},"source_index":47}'::jsonb
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/fotoproteccion/proteccion-cuerpo/gel-cream-50/","source_categories":["Fotoproteccion","Proteccion Cuerpo"],"source_availability":"instock","pricing_formula":{"source_price":250,"margin_rate":0.45,"margin_amount":112.5,"sale_price":137.5,"seller_commission_rate":0.1,"seller_commission_amount":11.25,"net_margin_after_seller":101.25},"source_index":43}'::jsonb
     ),
     (
       'hydro-oil-spf30',
@@ -956,7 +956,7 @@ cross join (
       'https://hbderm.com/wp-content/uploads/2022/11/HYDRO-OIL.png',
       'Hydro Oil SPF30+ de ISDIN',
       1034,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/fotoproteccion/ydro-oil-spf-30-200ml/","source_categories":["Fotoproteccion"],"source_availability":"instock","pricing_formula":{"source_price":250,"margin_rate":0.45,"margin_amount":112.5,"sale_price":137.5,"seller_commission_rate":0.1,"seller_commission_amount":11.25,"net_margin_after_seller":101.25},"source_index":66}'::jsonb
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/fotoproteccion/ydro-oil-spf-30-200ml/","source_categories":["Fotoproteccion"],"source_availability":"Agotado","pricing_formula":{"source_price":250,"margin_rate":0.45,"margin_amount":112.5,"sale_price":137.5,"seller_commission_rate":0.1,"seller_commission_amount":11.25,"net_margin_after_seller":101.25},"source_index":13}'::jsonb
     ),
     (
       'hydrolotion-spf50',
@@ -982,7 +982,7 @@ cross join (
       'https://hbderm.com/wp-content/uploads/2022/11/HYDRO-LOTION.png',
       'Hydrolotion SPF50+ de ISDIN',
       1035,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/fotoproteccion/hydrolotion-spf-50-200ml/","source_categories":["Fotoproteccion"],"source_availability":"Agotado","pricing_formula":{"source_price":250,"margin_rate":0.45,"margin_amount":112.5,"sale_price":137.5,"seller_commission_rate":0.1,"seller_commission_amount":11.25,"net_margin_after_seller":101.25},"source_index":67}'::jsonb
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/fotoproteccion/hydrolotion-spf-50-200ml/","source_categories":["Fotoproteccion"],"source_availability":"Agotado","pricing_formula":{"source_price":250,"margin_rate":0.45,"margin_amount":112.5,"sale_price":137.5,"seller_commission_rate":0.1,"seller_commission_amount":11.25,"net_margin_after_seller":101.25},"source_index":76}'::jsonb
     ),
     (
       'hyseac-fluido-spf-50',
@@ -993,8 +993,8 @@ cross join (
       '',
       4,
       'Paso 4: proteger',
-      'Bs. 138',
-      137.5,
+      'Bs. 157',
+      157.3,
       'BOB',
       'in_stock',
       true,
@@ -1008,7 +1008,7 @@ cross join (
       'https://hbderm.com/wp-content/uploads/2026/06/HYSEAC-PROTECTOR-SOLAR-.jpg',
       'Hyseac Fluido SPF 50 de URIAGE',
       1036,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/fotoproteccion/hyseac-fluido-spf-50/","source_categories":["Fotoproteccion"],"source_availability":"instock","pricing_formula":{"source_price":250,"margin_rate":0.45,"margin_amount":112.5,"sale_price":137.5,"seller_commission_rate":0.1,"seller_commission_amount":11.25,"net_margin_after_seller":101.25},"source_index":3}'::jsonb
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/fotoproteccion/hyseac-fluido-spf-50/","source_categories":["Fotoproteccion"],"source_availability":"instock","pricing_formula":{"source_price":286,"margin_rate":0.45,"margin_amount":128.7,"sale_price":157.3,"seller_commission_rate":0.1,"seller_commission_amount":12.87,"net_margin_after_seller":115.83},"source_index":17}'::jsonb
     ),
     (
       'invisible-stick-spf50',
@@ -1019,8 +1019,8 @@ cross join (
       '',
       4,
       'Paso 4: proteger',
-      'Bs. 166',
-      166.1,
+      'Bs. 211',
+      211.2,
       'BOB',
       'in_stock',
       true,
@@ -1034,7 +1034,7 @@ cross join (
       'https://hbderm.com/wp-content/uploads/2025/07/INVISIBLE-STICK.jpg',
       'Invisible Stick SPF50+ de ISDIN',
       1037,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/fotoproteccion/invisible-stick-spf-50/","source_categories":["Fotoproteccion"],"source_availability":"instock","pricing_formula":{"source_price":302,"margin_rate":0.45,"margin_amount":135.9,"sale_price":166.1,"seller_commission_rate":0.1,"seller_commission_amount":13.59,"net_margin_after_seller":122.31},"source_index":294}'::jsonb
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/fotoproteccion/invisible-stick-spf-50/","source_categories":["Fotoproteccion"],"source_availability":"instock","pricing_formula":{"source_price":384,"margin_rate":0.45,"margin_amount":172.8,"sale_price":211.2,"seller_commission_rate":0.1,"seller_commission_amount":17.28,"net_margin_after_seller":155.52},"source_index":294}'::jsonb
     ),
     (
       'nutratopic-pro-amp-locion-emoliente',
@@ -1060,7 +1060,7 @@ cross join (
       'https://hbderm.com/wp-content/uploads/2024/09/NUTRATOPIC-CORPORAL.jpg',
       'Nutratopic Pro-amp Loción Emoliente de ISDIN',
       1038,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/fotoproteccion/proteccion-ninos/nutratopic-pro-amp-locion-emoliente-piel-atopica-400ml/","source_categories":["Fotoproteccion","Proteccion Ninos"],"source_availability":"Agotado","pricing_formula":{"source_price":366,"margin_rate":0.45,"margin_amount":164.7,"sale_price":201.3,"seller_commission_rate":0.1,"seller_commission_amount":16.47,"net_margin_after_seller":148.23},"source_index":98}'::jsonb
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/fotoproteccion/proteccion-ninos/nutratopic-pro-amp-locion-emoliente-piel-atopica-400ml/","source_categories":["Fotoproteccion","Proteccion Ninos"],"source_availability":"Agotado","pricing_formula":{"source_price":366,"margin_rate":0.45,"margin_amount":164.7,"sale_price":201.3,"seller_commission_rate":0.1,"seller_commission_amount":16.47,"net_margin_after_seller":148.23},"source_index":99}'::jsonb
     ),
     (
       'oxygen-glow-cc-cream-spf30',
@@ -1086,7 +1086,7 @@ cross join (
       'https://hbderm.com/wp-content/uploads/2024/12/OXYGEN-GLOW-SPF-30.jpg',
       'Oxygen Glow CC Cream SPF30+ de FILORGA',
       1039,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/oxygen-glow-cc-cream-spf30-40ml/","source_categories":["Antiedad"],"source_availability":"Agotado","pricing_formula":{"source_price":264,"margin_rate":0.45,"margin_amount":118.8,"sale_price":145.2,"seller_commission_rate":0.1,"seller_commission_amount":11.88,"net_margin_after_seller":106.92},"source_index":49}'::jsonb
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/oxygen-glow-cc-cream-spf30-40ml/","source_categories":["Antiedad"],"source_availability":"Agotado","pricing_formula":{"source_price":264,"margin_rate":0.45,"margin_amount":118.8,"sale_price":145.2,"seller_commission_rate":0.1,"seller_commission_amount":11.88,"net_margin_after_seller":106.92},"source_index":60}'::jsonb
     ),
     (
       'pediatrics-fusion-water-magic-spf50',
@@ -1112,7 +1112,7 @@ cross join (
       'https://hbderm.com/wp-content/uploads/2024/09/FW-PEDIATRICS.jpg',
       'Pediatrics Fusion Water Magic SPF50+ de ISDIN',
       1040,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/fotoproteccion/fusion-water-pediatrics-spf50/","source_categories":["Fotoproteccion"],"source_availability":"instock","pricing_formula":{"source_price":250,"margin_rate":0.45,"margin_amount":112.5,"sale_price":137.5,"seller_commission_rate":0.1,"seller_commission_amount":11.25,"net_margin_after_seller":101.25},"source_index":70}'::jsonb
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/fotoproteccion/fusion-water-pediatrics-spf50/","source_categories":["Fotoproteccion"],"source_availability":"instock","pricing_formula":{"source_price":250,"margin_rate":0.45,"margin_amount":112.5,"sale_price":137.5,"seller_commission_rate":0.1,"seller_commission_amount":11.25,"net_margin_after_seller":101.25},"source_index":77}'::jsonb
     ),
     (
       'pediatrics-gel-crema-spf50',
@@ -1123,8 +1123,8 @@ cross join (
       '',
       4,
       'Paso 4: proteger',
-      'Bs. 138',
-      137.5,
+      'Bs. 294',
+      293.7,
       'BOB',
       'in_stock',
       true,
@@ -1138,7 +1138,7 @@ cross join (
       'https://hbderm.com/wp-content/uploads/2024/09/PEDIATRICS-GEL-CREMA.jpg',
       'Pediatrics Gel Crema SPF50+ de ISDIN',
       1041,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/fotoproteccion/8231/","source_categories":["Fotoproteccion"],"source_availability":"instock","pricing_formula":{"source_price":250,"margin_rate":0.45,"margin_amount":112.5,"sale_price":137.5,"seller_commission_rate":0.1,"seller_commission_amount":11.25,"net_margin_after_seller":101.25},"source_index":268}'::jsonb
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/fotoproteccion/8231/","source_categories":["Fotoproteccion"],"source_availability":"instock","pricing_formula":{"source_price":534,"margin_rate":0.45,"margin_amount":240.3,"sale_price":293.7,"seller_commission_rate":0.1,"seller_commission_amount":24.03,"net_margin_after_seller":216.27},"source_index":268}'::jsonb
     ),
     (
       'pediatrics-stick-spf-50',
@@ -1164,7 +1164,7 @@ cross join (
       'https://hbderm.com/wp-content/uploads/2026/04/STICK-PEDIATRICS-1.jpg',
       'Pediatrics Stick SPF 50 de ISDIN',
       1042,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/fotoproteccion-antiedad/pediatrics-stick/","source_categories":["Antiedad","Fotoproteccion Antiedad"],"source_availability":"instock","pricing_formula":{"source_price":384,"margin_rate":0.45,"margin_amount":172.8,"sale_price":211.2,"seller_commission_rate":0.1,"seller_commission_amount":17.28,"net_margin_after_seller":155.52},"source_index":31}'::jsonb
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/fotoproteccion-antiedad/pediatrics-stick/","source_categories":["Antiedad","Fotoproteccion Antiedad"],"source_availability":"instock","pricing_formula":{"source_price":384,"margin_rate":0.45,"margin_amount":172.8,"sale_price":211.2,"seller_commission_rate":0.1,"seller_commission_amount":17.28,"net_margin_after_seller":155.52},"source_index":46}'::jsonb
     ),
     (
       'pediatrics-transparent-spray-spf50',
@@ -1201,8 +1201,8 @@ cross join (
       '',
       4,
       'Paso 4: proteger',
-      'Bs. 214',
-      213.95,
+      'Bs. 138',
+      137.5,
       'BOB',
       'in_stock',
       true,
@@ -1216,7 +1216,7 @@ cross join (
       'https://hbderm.com/wp-content/uploads/2025/02/SENSILIS-3.jpg',
       'Photocorrection [d-pigment 50+] Color de SENSILIS',
       1044,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/fotoproteccion/proteccion-rostro/photocorrection-d-pigment-50-color/","source_categories":["Fotoproteccion","Proteccion Rostro"],"source_availability":"instock","pricing_formula":{"source_price":389,"margin_rate":0.45,"margin_amount":175.05,"sale_price":213.95,"seller_commission_rate":0.1,"seller_commission_amount":17.51,"net_margin_after_seller":157.54},"source_index":77}'::jsonb
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/fotoproteccion/proteccion-rostro/photocorrection-d-pigment-50-color/","source_categories":["Fotoproteccion","Proteccion Rostro"],"source_availability":"instock","pricing_formula":{"source_price":250,"margin_rate":0.45,"margin_amount":112.5,"sale_price":137.5,"seller_commission_rate":0.1,"seller_commission_amount":11.25,"net_margin_after_seller":101.25},"source_index":81}'::jsonb
     ),
     (
       'protector-labial-spf30',
@@ -1294,7 +1294,7 @@ cross join (
       'https://hbderm.com/wp-content/uploads/2025/05/PROTEOS-CC.jpg',
       'Proteos Screen SPF 50+ Color Fluid de MARTIDERM',
       1047,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/proteos-screen-spf-50-color-fluid-cream-40-ml/","source_categories":["Antiedad"],"source_availability":"Agotado","pricing_formula":{"source_price":331,"margin_rate":0.45,"margin_amount":148.95,"sale_price":182.05,"seller_commission_rate":0.1,"seller_commission_amount":14.9,"net_margin_after_seller":134.05},"source_index":22}'::jsonb
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/proteos-screen-spf-50-color-fluid-cream-40-ml/","source_categories":["Antiedad"],"source_availability":"Agotado","pricing_formula":{"source_price":331,"margin_rate":0.45,"margin_amount":148.95,"sale_price":182.05,"seller_commission_rate":0.1,"seller_commission_amount":14.9,"net_margin_after_seller":134.05},"source_index":35}'::jsonb
     ),
     (
       'proteos-screen-spf50',
@@ -1320,7 +1320,7 @@ cross join (
       'https://hbderm.com/wp-content/uploads/2025/05/PROTEOS-SC.jpg',
       'Proteos Screen SPF50+ de MARTIDERM',
       1048,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/proteos-screen-spf-50-40ml/","source_categories":["Antiedad"],"source_availability":"Agotado","pricing_formula":{"source_price":331,"margin_rate":0.45,"margin_amount":148.95,"sale_price":182.05,"seller_commission_rate":0.1,"seller_commission_amount":14.9,"net_margin_after_seller":134.05},"source_index":59}'::jsonb
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/proteos-screen-spf-50-40ml/","source_categories":["Antiedad"],"source_availability":"Agotado","pricing_formula":{"source_price":331,"margin_rate":0.45,"margin_amount":148.95,"sale_price":182.05,"seller_commission_rate":0.1,"seller_commission_amount":14.9,"net_margin_after_seller":134.05},"source_index":70}'::jsonb
     ),
     (
       'roseliane-spf-50-cc-cream',
@@ -1346,7 +1346,7 @@ cross join (
       'https://hbderm.com/wp-content/uploads/2025/04/10.jpg',
       'Roseliane SPF 50+ CC Cream de URIAGE',
       1049,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/fotoproteccion/roseliane-crema-anti-rojeces-spf-30/","source_categories":["Fotoproteccion"],"source_availability":"instock","pricing_formula":{"source_price":355,"margin_rate":0.45,"margin_amount":159.75,"sale_price":195.25,"seller_commission_rate":0.1,"seller_commission_amount":15.98,"net_margin_after_seller":143.77},"source_index":0}'::jsonb
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/fotoproteccion/roseliane-crema-anti-rojeces-spf-30/","source_categories":["Fotoproteccion"],"source_availability":"instock","pricing_formula":{"source_price":355,"margin_rate":0.45,"margin_amount":159.75,"sale_price":195.25,"seller_commission_rate":0.1,"seller_commission_amount":15.98,"net_margin_after_seller":143.77},"source_index":14}'::jsonb
     ),
     (
       'sebiaclear-crema-spf50',
@@ -1372,7 +1372,7 @@ cross join (
       'https://hbderm.com/wp-content/uploads/2020/06/Sebiaclear-Creme-Spf50-Matificante-1-1024x1024.jpg',
       'Sebiaclear Crema SPF50 de SVR',
       1050,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/fotoproteccion/sebiaclear-crema-spf-50/","source_categories":["Fotoproteccion"],"source_availability":"Agotado","pricing_formula":{"source_price":288,"margin_rate":0.45,"margin_amount":129.6,"sale_price":158.4,"seller_commission_rate":0.1,"seller_commission_amount":12.96,"net_margin_after_seller":116.64},"source_index":128}'::jsonb
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/fotoproteccion/sebiaclear-crema-spf-50/","source_categories":["Fotoproteccion"],"source_availability":"Agotado","pricing_formula":{"source_price":288,"margin_rate":0.45,"margin_amount":129.6,"sale_price":158.4,"seller_commission_rate":0.1,"seller_commission_amount":12.96,"net_margin_after_seller":116.64},"source_index":130}'::jsonb
     ),
     (
       'sebionex-gel-matificante-spf50',
@@ -1383,8 +1383,8 @@ cross join (
       '',
       4,
       'Paso 4: proteger',
-      'Bs. 138',
-      137.5,
+      'Bs. 168',
+      168.3,
       'BOB',
       'in_stock',
       true,
@@ -1398,7 +1398,7 @@ cross join (
       'https://hbderm.com/wp-content/uploads/2024/09/SEBIONEX-SPF-50.jpg',
       'Sebionex Gel Matificante SPF50+ de ACM',
       1051,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-con-grasas-o-con-acne/sebionex-gel-spf50/","source_categories":["Pieles Con Grasas O Con Acne"],"source_availability":"instock","pricing_formula":{"source_price":250,"margin_rate":0.45,"margin_amount":112.5,"sale_price":137.5,"seller_commission_rate":0.1,"seller_commission_amount":11.25,"net_margin_after_seller":101.25},"source_index":168}'::jsonb
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-con-grasas-o-con-acne/sebionex-gel-spf50/","source_categories":["Pieles Con Grasas O Con Acne"],"source_availability":"instock","pricing_formula":{"source_price":306,"margin_rate":0.45,"margin_amount":137.7,"sale_price":168.3,"seller_commission_rate":0.1,"seller_commission_amount":13.77,"net_margin_after_seller":123.93},"source_index":166}'::jsonb
     ),
     (
       'sensifine-ar-crema-spf50',
@@ -1435,8 +1435,8 @@ cross join (
       '',
       4,
       'Paso 4: proteger',
-      'Bs. 138',
-      137.5,
+      'Bs. 231',
+      231,
       'BOB',
       'in_stock',
       true,
@@ -1450,7 +1450,7 @@ cross join (
       'https://hbderm.com/wp-content/uploads/2022/06/SENSIFINE-AR-CREME-TEINTEE-40ML.jpg',
       'Sensifine Ar Creme Teintee de SVR',
       1053,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/fotoproteccion/sensifine-ar-creme-teintee-40ml/","source_categories":["Fotoproteccion"],"source_availability":"Agotado","pricing_formula":{"source_price":250,"margin_rate":0.45,"margin_amount":112.5,"sale_price":137.5,"seller_commission_rate":0.1,"seller_commission_amount":11.25,"net_margin_after_seller":101.25},"source_index":202}'::jsonb
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/fotoproteccion/sensifine-ar-creme-teintee-40ml/","source_categories":["Fotoproteccion"],"source_availability":"Agotado","pricing_formula":{"source_price":420,"margin_rate":0.45,"margin_amount":189,"sale_price":231,"seller_commission_rate":0.1,"seller_commission_amount":18.9,"net_margin_after_seller":170.1},"source_index":202}'::jsonb
     ),
     (
       'spot-prevent-fusion-fluid-spf50',
@@ -1461,8 +1461,8 @@ cross join (
       '',
       4,
       'Paso 4: proteger',
-      'Bs. 166',
-      166.1,
+      'Bs. 138',
+      137.5,
       'BOB',
       'in_stock',
       true,
@@ -1476,7 +1476,7 @@ cross join (
       'https://hbderm.com/wp-content/uploads/2025/10/SPOT-PREVENT-8.jpg',
       'Spot Prevent Fusion Fluid SPF50+ de ISDIN',
       1054,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/fotoproteccion/spot-prevent-fusion-fluid-spf-50/","source_categories":["Fotoproteccion"],"source_availability":"instock","pricing_formula":{"source_price":302,"margin_rate":0.45,"margin_amount":135.9,"sale_price":166.1,"seller_commission_rate":0.1,"seller_commission_amount":13.59,"net_margin_after_seller":122.31},"source_index":74}'::jsonb
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/fotoproteccion/spot-prevent-fusion-fluid-spf-50/","source_categories":["Fotoproteccion"],"source_availability":"instock","pricing_formula":{"source_price":250,"margin_rate":0.45,"margin_amount":112.5,"sale_price":137.5,"seller_commission_rate":0.1,"seller_commission_amount":11.25,"net_margin_after_seller":101.25},"source_index":4}'::jsonb
     ),
     (
       'sun-secure-blur-spf50',
@@ -1528,7 +1528,7 @@ cross join (
       'https://hbderm.com/wp-content/uploads/2025/05/SVR-13.jpg',
       'Sun Secure Blur Teinte SPF50+ de SVR',
       1056,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/fotoproteccion-antiedad/sun-secure-blur-teinte-spf50/","source_categories":["Antiedad","Fotoproteccion Antiedad"],"source_availability":"instock","pricing_formula":{"source_price":475,"margin_rate":0.45,"margin_amount":213.75,"sale_price":261.25,"seller_commission_rate":0.1,"seller_commission_amount":21.38,"net_margin_after_seller":192.37},"source_index":205}'::jsonb
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/fotoproteccion-antiedad/sun-secure-blur-teinte-spf50/","source_categories":["Antiedad","Fotoproteccion Antiedad"],"source_availability":"instock","pricing_formula":{"source_price":475,"margin_rate":0.45,"margin_amount":213.75,"sale_price":261.25,"seller_commission_rate":0.1,"seller_commission_amount":21.38,"net_margin_after_seller":192.37},"source_index":204}'::jsonb
     ),
     (
       'sun-secure-brume-spf50',
@@ -1554,7 +1554,7 @@ cross join (
       'https://hbderm.com/wp-content/uploads/2025/04/SVR-7.jpg',
       'Sun Secure Brume SPF50 de SVR',
       1057,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/fotoproteccion-antiedad/sun-secure-brume-spf50/","source_categories":["Antiedad","Fotoproteccion Antiedad"],"source_availability":"instock","pricing_formula":{"source_price":250,"margin_rate":0.45,"margin_amount":112.5,"sale_price":137.5,"seller_commission_rate":0.1,"seller_commission_amount":11.25,"net_margin_after_seller":101.25},"source_index":209}'::jsonb
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/fotoproteccion-antiedad/sun-secure-brume-spf50/","source_categories":["Antiedad","Fotoproteccion Antiedad"],"source_availability":"instock","pricing_formula":{"source_price":250,"margin_rate":0.45,"margin_amount":112.5,"sale_price":137.5,"seller_commission_rate":0.1,"seller_commission_amount":11.25,"net_margin_after_seller":101.25},"source_index":208}'::jsonb
     ),
     (
       'sun-secure-easy-stick-spf50',
@@ -1580,7 +1580,7 @@ cross join (
       'https://hbderm.com/wp-content/uploads/2025/05/SVR-14.jpg',
       'Sun Secure Easy Stick SPF50+ de SVR',
       1058,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/cuidados-del-bebe/proteccion-solar-cuidados-del-bebe/sun-secure-easy-stick-spf50/","source_categories":["Cuidados Del Bebe","Proteccion Solar Cuidados Del Bebe"],"source_availability":"instock","pricing_formula":{"source_price":346,"margin_rate":0.45,"margin_amount":155.7,"sale_price":190.3,"seller_commission_rate":0.1,"seller_commission_amount":15.57,"net_margin_after_seller":140.13},"source_index":204}'::jsonb
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/cuidados-del-bebe/proteccion-solar-cuidados-del-bebe/sun-secure-easy-stick-spf50/","source_categories":["Cuidados Del Bebe","Proteccion Solar Cuidados Del Bebe"],"source_availability":"instock","pricing_formula":{"source_price":346,"margin_rate":0.45,"margin_amount":155.7,"sale_price":190.3,"seller_commission_rate":0.1,"seller_commission_amount":15.57,"net_margin_after_seller":140.13},"source_index":205}'::jsonb
     ),
     (
       'sun-secure-fluide-photo-age-spf50',
@@ -1591,8 +1591,8 @@ cross join (
       '',
       4,
       'Paso 4: proteger',
-      'Bs. 138',
-      137.5,
+      'Bs. 288',
+      288.2,
       'BOB',
       'in_stock',
       true,
@@ -1606,7 +1606,7 @@ cross join (
       'https://hbderm.com/wp-content/uploads/2025/05/SVR-15.jpg',
       'Sun Secure Fluide Photo-age SPF50+ de SVR',
       1059,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/fotoproteccion/sun-secure-fluide-photo-age-spf50/","source_categories":["Fotoproteccion"],"source_availability":"instock","pricing_formula":{"source_price":250,"margin_rate":0.45,"margin_amount":112.5,"sale_price":137.5,"seller_commission_rate":0.1,"seller_commission_amount":11.25,"net_margin_after_seller":101.25},"source_index":207}'::jsonb
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/fotoproteccion/sun-secure-fluide-photo-age-spf50/","source_categories":["Fotoproteccion"],"source_availability":"instock","pricing_formula":{"source_price":524,"margin_rate":0.45,"margin_amount":235.8,"sale_price":288.2,"seller_commission_rate":0.1,"seller_commission_amount":23.58,"net_margin_after_seller":212.22},"source_index":206}'::jsonb
     ),
     (
       'sun-secure-fluido-spf50',
@@ -1617,8 +1617,8 @@ cross join (
       '',
       4,
       'Paso 4: proteger',
-      'Bs. 138',
-      137.5,
+      'Bs. 214',
+      213.95,
       'BOB',
       'in_stock',
       true,
@@ -1632,7 +1632,7 @@ cross join (
       'https://hbderm.com/wp-content/uploads/2020/06/16497978875781482675608473347092.jpg',
       'Sun Secure Fluido SPF50 de SVR',
       1060,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/fotoproteccion/sun-secure-fluido-spf-50/","source_categories":["Fotoproteccion"],"source_availability":"instock","pricing_formula":{"source_price":250,"margin_rate":0.45,"margin_amount":112.5,"sale_price":137.5,"seller_commission_rate":0.1,"seller_commission_amount":11.25,"net_margin_after_seller":101.25},"source_index":208}'::jsonb
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/fotoproteccion/sun-secure-fluido-spf-50/","source_categories":["Fotoproteccion"],"source_availability":"instock","pricing_formula":{"source_price":389,"margin_rate":0.45,"margin_amount":175.05,"sale_price":213.95,"seller_commission_rate":0.1,"seller_commission_amount":17.51,"net_margin_after_seller":157.54},"source_index":210}'::jsonb
     ),
     (
       'sun-secure-lait-crepitant-spf50',
@@ -1643,8 +1643,8 @@ cross join (
       '',
       4,
       'Paso 4: proteger',
-      'Bs. 138',
-      137.5,
+      'Bs. 247',
+      246.95,
       'BOB',
       'in_stock',
       true,
@@ -1658,7 +1658,7 @@ cross join (
       'https://hbderm.com/wp-content/uploads/2025/04/SVR-10.jpg',
       'Sun Secure Lait Crepitant SPF50+ de SVR',
       1061,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/cuidados-del-bebe/proteccion-solar-cuidados-del-bebe/sun-secure-lait-crepitant-spf50/","source_categories":["Cuidados Del Bebe","Proteccion Solar Cuidados Del Bebe"],"source_availability":"instock","pricing_formula":{"source_price":250,"margin_rate":0.45,"margin_amount":112.5,"sale_price":137.5,"seller_commission_rate":0.1,"seller_commission_amount":11.25,"net_margin_after_seller":101.25},"source_index":206}'::jsonb
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/cuidados-del-bebe/proteccion-solar-cuidados-del-bebe/sun-secure-lait-crepitant-spf50/","source_categories":["Cuidados Del Bebe","Proteccion Solar Cuidados Del Bebe"],"source_availability":"instock","pricing_formula":{"source_price":449,"margin_rate":0.45,"margin_amount":202.05,"sale_price":246.95,"seller_commission_rate":0.1,"seller_commission_amount":20.21,"net_margin_after_seller":181.84},"source_index":207}'::jsonb
     ),
     (
       'transparent-spray-spf50',
@@ -1684,7 +1684,7 @@ cross join (
       'https://hbderm.com/wp-content/uploads/2025/07/TRANSPARENT.jpg',
       'Transparent Spray SPF50+ de ISDIN',
       1062,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/fotoproteccion/proteccion-cuerpo/transparent-spray-wet-skin-spf50-250ml/","source_categories":["Fotoproteccion","Proteccion Cuerpo"],"source_availability":"instock","pricing_formula":{"source_price":534,"margin_rate":0.45,"margin_amount":240.3,"sale_price":293.7,"seller_commission_rate":0.1,"seller_commission_amount":24.03,"net_margin_after_seller":216.27},"source_index":270}'::jsonb
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/fotoproteccion/proteccion-cuerpo/transparent-spray-wet-skin-spf50-250ml/","source_categories":["Fotoproteccion","Proteccion Cuerpo"],"source_availability":"instock","pricing_formula":{"source_price":534,"margin_rate":0.45,"margin_amount":240.3,"sale_price":293.7,"seller_commission_rate":0.1,"seller_commission_amount":24.03,"net_margin_after_seller":216.27},"source_index":269}'::jsonb
     ),
     (
       'uv-mineral-brush-spf50',
@@ -1695,8 +1695,8 @@ cross join (
       '',
       4,
       'Paso 4: proteger',
-      'Bs. 166',
-      166.1,
+      'Bs. 251',
+      250.8,
       'BOB',
       'in_stock',
       true,
@@ -1710,7 +1710,7 @@ cross join (
       'https://hbderm.com/wp-content/uploads/2025/07/MINERA-BRUSH.jpg',
       'UV Mineral Brush SPF50+ de ISDIN',
       1063,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/fotoproteccion/uv-mineral-brush-spf-50/","source_categories":["Fotoproteccion"],"source_availability":"Agotado","pricing_formula":{"source_price":302,"margin_rate":0.45,"margin_amount":135.9,"sale_price":166.1,"seller_commission_rate":0.1,"seller_commission_amount":13.59,"net_margin_after_seller":122.31},"source_index":146}'::jsonb
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/fotoproteccion/uv-mineral-brush-spf-50/","source_categories":["Fotoproteccion"],"source_availability":"Agotado","pricing_formula":{"source_price":456,"margin_rate":0.45,"margin_amount":205.2,"sale_price":250.8,"seller_commission_rate":0.1,"seller_commission_amount":20.52,"net_margin_after_seller":184.68},"source_index":145}'::jsonb
     ),
     (
       'uveblock-spf50-dry-touch',
@@ -1773,8 +1773,8 @@ cross join (
       '28 ml',
       4,
       'Paso 4: proteger',
-      'Bs. 138',
-      137.5,
+      'Bs. 215',
+      214.5,
       'BOB',
       'in_stock',
       true,
@@ -1788,7 +1788,7 @@ cross join (
       'https://hbderm.com/wp-content/uploads/2026/04/UVEBLOCK-SERUM-SPF50-1.jpg',
       'Uveblock Sun Serum SPF50 - 28 ml de ISISPHARMA',
       1066,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/hidratantes-del-rostro/uveblock-sun-serum-spf50-28-ml/","source_categories":["Hidratantes Y Nutritivos","Hidratantes Del Rostro"],"source_availability":"Agotado","pricing_formula":{"source_price":250,"margin_rate":0.45,"margin_amount":112.5,"sale_price":137.5,"seller_commission_rate":0.1,"seller_commission_amount":11.25,"net_margin_after_seller":101.25},"source_index":14}'::jsonb
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/hidratantes-del-rostro/uveblock-sun-serum-spf50-28-ml/","source_categories":["Hidratantes Y Nutritivos","Hidratantes Del Rostro"],"source_availability":"Agotado","pricing_formula":{"source_price":390,"margin_rate":0.45,"margin_amount":175.5,"sale_price":214.5,"seller_commission_rate":0.1,"seller_commission_amount":17.55,"net_margin_after_seller":157.95},"source_index":27}'::jsonb
     ),
     (
       'water-fluid-50',
@@ -1799,8 +1799,8 @@ cross join (
       '',
       4,
       'Paso 4: proteger',
-      'Bs. 138',
-      137.5,
+      'Bs. 196',
+      195.8,
       'BOB',
       'in_stock',
       true,
@@ -1814,7 +1814,7 @@ cross join (
       'https://hbderm.com/wp-content/uploads/2025/02/SENSILIS-4.jpg',
       'Water Fluid 50+ de SENSILIS',
       1067,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/cuidados-del-bebe/proteccion-solar-cuidados-del-bebe/water-fluid-50/","source_categories":["Cuidados Del Bebe","Proteccion Solar Cuidados Del Bebe"],"source_availability":"instock","pricing_formula":{"source_price":250,"margin_rate":0.45,"margin_amount":112.5,"sale_price":137.5,"seller_commission_rate":0.1,"seller_commission_amount":11.25,"net_margin_after_seller":101.25},"source_index":155}'::jsonb
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/cuidados-del-bebe/proteccion-solar-cuidados-del-bebe/water-fluid-50/","source_categories":["Cuidados Del Bebe","Proteccion Solar Cuidados Del Bebe"],"source_availability":"instock","pricing_formula":{"source_price":356,"margin_rate":0.45,"margin_amount":160.2,"sale_price":195.8,"seller_commission_rate":0.1,"seller_commission_amount":16.02,"net_margin_after_seller":144.18},"source_index":154}'::jsonb
     ),
     (
       'water-fluid-50-color',
@@ -1840,7 +1840,7 @@ cross join (
       'https://hbderm.com/wp-content/uploads/2025/02/SENSILIS-5.jpg',
       'Water Fluid 50+ Color de SENSILIS',
       1068,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/fotoproteccion/proteccion-rostro/water-fluid-50-color/","source_categories":["Fotoproteccion","Proteccion Rostro"],"source_availability":"instock","pricing_formula":{"source_price":356,"margin_rate":0.45,"margin_amount":160.2,"sale_price":195.8,"seller_commission_rate":0.1,"seller_commission_amount":16.02,"net_margin_after_seller":144.18},"source_index":79}'::jsonb
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/fotoproteccion/proteccion-rostro/water-fluid-50-color/","source_categories":["Fotoproteccion","Proteccion Rostro"],"source_availability":"instock","pricing_formula":{"source_price":356,"margin_rate":0.45,"margin_amount":160.2,"sale_price":195.8,"seller_commission_rate":0.1,"seller_commission_amount":16.02,"net_margin_after_seller":144.18},"source_index":82}'::jsonb
     ),
     (
       'acniben-limpiador-matificante',
@@ -1869,82 +1869,30 @@ cross join (
       '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/limpieza/gel-limpiador-matificante-acniben/","source_categories":["Hidratantes Y Nutritivos","Limpieza"],"source_availability":"instock","pricing_formula":{"source_price":300,"margin_rate":0.45,"margin_amount":135,"sale_price":165,"seller_commission_rate":0.1,"seller_commission_amount":13.5,"net_margin_after_seller":121.5},"source_index":298}'::jsonb
     ),
     (
-      'acniben-repair-gel-crema',
-      'Acniben Repair Gel Crema',
-      'Acniben Repair Gel Crema',
-      'ISDIN',
+      'age-purify-cleanser',
+      'Age Purify Cleanser',
+      'Age Purify Cleanser',
+      'FILORGA',
       'Limpieza facial',
       '',
       1,
       'Paso 1: limpiar',
-      'Bs. 165',
-      165,
+      'Bs. 238',
+      237.6,
       'BOB',
       'in_stock',
       true,
       false,
       10,
-      'ISDIN para limpieza de rostro y rutina diaria. Confirma disponibilidad antes de finalizar la compra.',
+      'FILORGA para limpieza de rostro y rutina diaria. Confirma disponibilidad antes de finalizar la compra.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina diaria','Limpieza de rostro','Confirmar tipo de piel']::text[],
       array['Primer paso','Rutina manana/noche','Preparar la piel']::text[],
       array['Ver envase','Confirmar composicion']::text[],
-      'https://hbderm.com/wp-content/uploads/2025/04/ISDIN-9.jpg',
-      'Acniben Repair Gel Crema de ISDIN',
+      'https://hbderm.com/wp-content/uploads/2024/09/AGE-PURIFY-CLENASER.jpg',
+      'Age Purify Cleanser de FILORGA',
       1070,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-con-grasas-o-con-acne/acniben-repair-gel-crema/","source_categories":["Pieles Con Grasas O Con Acne"],"source_availability":"Agotado","pricing_formula":{"source_price":300,"margin_rate":0.45,"margin_amount":135,"sale_price":165,"seller_commission_rate":0.1,"seller_commission_amount":13.5,"net_margin_after_seller":121.5},"source_index":263}'::jsonb
-    ),
-    (
-      'acniover-cremigel-activo',
-      'Acniover Cremigel Activo',
-      'Acniover Cremigel Activo',
-      'MARTIDERM',
-      'Limpieza facial',
-      '',
-      1,
-      'Paso 1: limpiar',
-      'Bs. 164',
-      163.9,
-      'BOB',
-      'in_stock',
-      true,
-      false,
-      10,
-      'MARTIDERM para limpieza de rostro y rutina diaria. Confirma disponibilidad antes de finalizar la compra.',
-      'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
-      array['Rutina diaria','Limpieza de rostro','Confirmar tipo de piel']::text[],
-      array['Primer paso','Rutina manana/noche','Preparar la piel']::text[],
-      array['Ver envase','Confirmar composicion']::text[],
-      'https://hbderm.com/wp-content/uploads/2025/05/ACNIOVER-CREMIGEL.jpg',
-      'Acniover Cremigel Activo de MARTIDERM',
-      1071,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-con-grasas-o-con-acne/acniover-cremigel-activo-40ml/","source_categories":["Pieles Con Grasas O Con Acne"],"source_availability":"Agotado","pricing_formula":{"source_price":298,"margin_rate":0.45,"margin_amount":134.1,"sale_price":163.9,"seller_commission_rate":0.1,"seller_commission_amount":13.41,"net_margin_after_seller":120.69},"source_index":136}'::jsonb
-    ),
-    (
-      'acniover-gel-purificante',
-      'Acniover Gel Purificante',
-      'Acniover Gel Purificante',
-      'MARTIDERM',
-      'Limpieza facial',
-      '',
-      1,
-      'Paso 1: limpiar',
-      'Bs. 194',
-      194.15,
-      'BOB',
-      'in_stock',
-      true,
-      false,
-      10,
-      'MARTIDERM para limpieza de rostro y rutina diaria. Confirma disponibilidad antes de finalizar la compra.',
-      'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
-      array['Rutina diaria','Limpieza de rostro','Confirmar tipo de piel']::text[],
-      array['Primer paso','Rutina manana/noche','Preparar la piel']::text[],
-      array['Ver envase','Confirmar composicion']::text[],
-      'https://hbderm.com/wp-content/uploads/2025/05/ACNIOVER-GEL.jpg',
-      'Acniover Gel Purificante de MARTIDERM',
-      1072,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-con-grasas-o-con-acne/acniover-gel-purificante-200ml/","source_categories":["Pieles Con Grasas O Con Acne"],"source_availability":"instock","pricing_formula":{"source_price":353,"margin_rate":0.45,"margin_amount":158.85,"sale_price":194.15,"seller_commission_rate":0.1,"seller_commission_amount":15.89,"net_margin_after_seller":142.96},"source_index":249}'::jsonb
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/age-purify-cleanser/","source_categories":["Antiedad"],"source_availability":"instock","pricing_formula":{"source_price":432,"margin_rate":0.45,"margin_amount":194.4,"sale_price":237.6,"seller_commission_rate":0.1,"seller_commission_amount":19.44,"net_margin_after_seller":174.96},"source_index":179}'::jsonb
     ),
     (
       'agua-termal-300ml',
@@ -1969,7 +1917,7 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2026/04/AGUA-TERMAL-300ML-1.jpg',
       'Agua Termal - 300ML de URIAGE',
-      1073,
+      1071,
       '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-con-rojeces/limpiadores/agua-termal-de-uriage-300ml/","source_categories":["Pieles Con Rojeces","Limpiadores"],"source_availability":"instock","pricing_formula":{"source_price":324,"margin_rate":0.45,"margin_amount":145.8,"sale_price":178.2,"seller_commission_rate":0.1,"seller_commission_amount":14.58,"net_margin_after_seller":131.22},"source_index":90}'::jsonb
     ),
     (
@@ -1995,34 +1943,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2026/05/AGUA-TERMAL-50-ML-.jpg',
       'Agua Termal - 50ML de URIAGE',
-      1074,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/limpieza/agua-termal-de-uriage-50ml/","source_categories":["Hidratantes Y Nutritivos","Limpieza"],"source_availability":"instock","pricing_formula":{"source_price":96,"margin_rate":0.45,"margin_amount":43.2,"sale_price":52.8,"seller_commission_rate":0.1,"seller_commission_amount":4.32,"net_margin_after_seller":38.88},"source_index":72}'::jsonb
-    ),
-    (
-      'bariederm-cica-daily-gel-crema-40ml',
-      'Bariéderm Cica Daily Gel Crema 40ML',
-      'Bariéderm Cica Daily Gel Crema 40ML',
-      'URIAGE',
-      'Limpieza facial',
-      '40 ml',
-      1,
-      'Paso 1: limpiar',
-      'Bs. 231',
-      231,
-      'BOB',
-      'in_stock',
-      true,
-      false,
-      10,
-      'URIAGE para limpieza de rostro y rutina diaria. Confirma disponibilidad antes de finalizar la compra.',
-      'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
-      array['Rutina diaria','Limpieza de rostro','Confirmar tipo de piel']::text[],
-      array['Primer paso','Rutina manana/noche','Preparar la piel']::text[],
-      array['Ver envase','Confirmar composicion']::text[],
-      'https://hbderm.com/wp-content/uploads/2024/08/BARIEDERM-GEL-CREMA.jpg',
-      'Bariéderm Cica Daily Gel Crema 40ML de URIAGE',
-      1075,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/cuidados-del-bebe/cuidados-hidratantes/bariederm-cica-daily-crema/","source_categories":["Cuidados Del Bebe","Cuidados Hidratantes"],"source_availability":"instock","pricing_formula":{"source_price":420,"margin_rate":0.45,"margin_amount":189,"sale_price":231,"seller_commission_rate":0.1,"seller_commission_amount":18.9,"net_margin_after_seller":170.1},"source_index":291}'::jsonb
+      1072,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/limpieza/agua-termal-de-uriage-50ml/","source_categories":["Hidratantes Y Nutritivos","Limpieza"],"source_availability":"instock","pricing_formula":{"source_price":96,"margin_rate":0.45,"margin_amount":43.2,"sale_price":52.8,"seller_commission_rate":0.1,"seller_commission_amount":4.32,"net_margin_after_seller":38.88},"source_index":79}'::jsonb
     ),
     (
       'bariederm-cica-gel-limpiador',
@@ -2047,8 +1969,34 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/08/Diseno-sin-titulo-23.jpg',
       'Bariéderm Cica Gel Limpiador de URIAGE',
-      1076,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-atopicas/limpieza-pieles-atopicas/bariederm-cica-gel-limpiador/","source_categories":["Pieles Atopicas","Limpieza Pieles Atopicas"],"source_availability":"Agotado","pricing_formula":{"source_price":210,"margin_rate":0.45,"margin_amount":94.5,"sale_price":115.5,"seller_commission_rate":0.1,"seller_commission_amount":9.45,"net_margin_after_seller":85.05},"source_index":54}'::jsonb
+      1073,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-atopicas/limpieza-pieles-atopicas/bariederm-cica-gel-limpiador/","source_categories":["Pieles Atopicas","Limpieza Pieles Atopicas"],"source_availability":"Agotado","pricing_formula":{"source_price":210,"margin_rate":0.45,"margin_amount":94.5,"sale_price":115.5,"seller_commission_rate":0.1,"seller_commission_amount":9.45,"net_margin_after_seller":85.05},"source_index":66}'::jsonb
+    ),
+    (
+      'bebe-crema-lavante-500ml',
+      'Bebé Crema Lavante 500ML',
+      'Bebé Crema Lavante 500ML',
+      'URIAGE',
+      'Limpieza facial',
+      '500 ml',
+      1,
+      'Paso 1: limpiar',
+      'Bs. 63',
+      62.7,
+      'BOB',
+      'in_stock',
+      true,
+      false,
+      10,
+      'URIAGE para limpieza de rostro y rutina diaria. Confirma disponibilidad antes de finalizar la compra.',
+      'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
+      array['Rutina diaria','Limpieza de rostro','Confirmar tipo de piel']::text[],
+      array['Primer paso','Rutina manana/noche','Preparar la piel']::text[],
+      array['Ver envase','Confirmar composicion']::text[],
+      'https://hbderm.com/wp-content/uploads/2022/02/BEBE-CREMA-LAVANTE-500ML.jpg',
+      'Bebé Crema Lavante 500ML de URIAGE',
+      1074,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/cuidados-del-bebe/bebe-crema-lavante-500ml/","source_categories":["Cuidados Del Bebe"],"source_availability":"Agotado","pricing_formula":{"source_price":114,"margin_rate":0.45,"margin_amount":51.3,"sale_price":62.7,"seller_commission_rate":0.1,"seller_commission_amount":5.13,"net_margin_after_seller":46.17},"source_index":134}'::jsonb
     ),
     (
       'depiderm-espuma-limpiadora-iluminadora',
@@ -2073,20 +2021,20 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2025/04/URIAGE-9.jpg',
       'Dépiderm Espuma Limpiadora Iluminadora de URIAGE',
-      1077,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/limpieza/depiderm-espuma-limpiadora-iluminadora/","source_categories":["Hidratantes Y Nutritivos","Limpieza"],"source_availability":"instock","pricing_formula":{"source_price":235,"margin_rate":0.45,"margin_amount":105.75,"sale_price":129.25,"seller_commission_rate":0.1,"seller_commission_amount":10.58,"net_margin_after_seller":95.17},"source_index":230}'::jsonb
+      1075,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/limpieza/depiderm-espuma-limpiadora-iluminadora/","source_categories":["Hidratantes Y Nutritivos","Limpieza"],"source_availability":"instock","pricing_formula":{"source_price":235,"margin_rate":0.45,"margin_amount":105.75,"sale_price":129.25,"seller_commission_rate":0.1,"seller_commission_amount":10.58,"net_margin_after_seller":95.17},"source_index":232}'::jsonb
     ),
     (
-      'depiwhite-gel-contorno-de-ojos',
-      'Dépiwhite Gel Contorno De Ojos',
-      'Dépiwhite Gel Contorno De Ojos',
+      'depiwhite-mousse-nettoyante',
+      'Dépiwhite Mousse Nettoyante',
+      'Dépiwhite Mousse Nettoyante',
       'ACM',
       'Limpieza facial',
       '',
       1,
       'Paso 1: limpiar',
-      'Bs. 152',
-      151.8,
+      'Bs. 154',
+      154,
       'BOB',
       'in_stock',
       true,
@@ -2097,10 +2045,10 @@ cross join (
       array['Rutina diaria','Limpieza de rostro','Confirmar tipo de piel']::text[],
       array['Primer paso','Rutina manana/noche','Preparar la piel']::text[],
       array['Ver envase','Confirmar composicion']::text[],
-      'https://hbderm.com/wp-content/uploads/2025/07/DEPIWHITE-CONTORNO.jpg',
-      'Dépiwhite Gel Contorno De Ojos de ACM',
-      1078,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-hiperpigmentadas/depiwhite-gel-contorno-de-ojos/","source_categories":["Pieles Hiperpigmentadas"],"source_availability":"Agotado","pricing_formula":{"source_price":276,"margin_rate":0.45,"margin_amount":124.2,"sale_price":151.8,"seller_commission_rate":0.1,"seller_commission_amount":12.42,"net_margin_after_seller":111.78},"source_index":295}'::jsonb
+      'https://hbderm.com/wp-content/uploads/2024/08/Diseno-sin-titulo-24.jpg',
+      'Dépiwhite Mousse Nettoyante de ACM',
+      1076,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/acm-depiwhite-mousse-nettoyante-200ml/","source_categories":["Hidratantes Y Nutritivos"],"source_availability":"instock","pricing_formula":{"source_price":280,"margin_rate":0.45,"margin_amount":126,"sale_price":154,"seller_commission_rate":0.1,"seller_commission_amount":12.6,"net_margin_after_seller":113.4},"source_index":236}'::jsonb
     ),
     (
       'desodorante-antitranspirante-natural',
@@ -2125,7 +2073,7 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2025/02/ACM-7.jpg',
       'Desodorante Antitranspirante Natural de ACM',
-      1079,
+      1077,
       '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-atopicas/limpieza-pieles-atopicas/desodorante-antitranspirante-natural/","source_categories":["Pieles Atopicas","Limpieza Pieles Atopicas"],"source_availability":"instock","pricing_formula":{"source_price":219,"margin_rate":0.45,"margin_amount":98.55,"sale_price":120.45,"seller_commission_rate":0.1,"seller_commission_amount":9.86,"net_margin_after_seller":88.69},"source_index":219}'::jsonb
     ),
     (
@@ -2151,7 +2099,7 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2025/05/GEL-MICELAR.jpg',
       'Essentials Gel Micelar Limpiador de MARTIDERM',
-      1080,
+      1078,
       '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/gel-micellar-limpiador-200ml/","source_categories":["Hidratantes Y Nutritivos"],"source_availability":"instock","pricing_formula":{"source_price":346,"margin_rate":0.45,"margin_amount":155.7,"sale_price":190.3,"seller_commission_rate":0.1,"seller_commission_amount":15.57,"net_margin_after_seller":140.13},"source_index":159}'::jsonb
     ),
     (
@@ -2177,34 +2125,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2025/05/SOLUCION-MICELLAR.jpg',
       'Essentials Solución Micelar Limpiadora 3 En 1 de MARTIDERM',
-      1081,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/martiderm-solucion-micellar-300ml/","source_categories":["Hidratantes Y Nutritivos"],"source_availability":"Agotado","pricing_formula":{"source_price":307,"margin_rate":0.45,"margin_amount":138.15,"sale_price":168.85,"seller_commission_rate":0.1,"seller_commission_amount":13.82,"net_margin_after_seller":124.33},"source_index":60}'::jsonb
-    ),
-    (
-      'gel-surgras-dermatologico-1-lt',
-      'Gel Surgras Dermatológico 1 Lt',
-      'Gel Surgras Dermatológico 1 Lt',
-      'URIAGE',
-      'Limpieza facial',
-      '',
-      1,
-      'Paso 1: limpiar',
-      'Bs. 220',
-      220,
-      'BOB',
-      'in_stock',
-      true,
-      false,
-      10,
-      'URIAGE para limpieza de rostro y rutina diaria. Confirma disponibilidad antes de finalizar la compra.',
-      'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
-      array['Rutina diaria','Limpieza de rostro','Confirmar tipo de piel']::text[],
-      array['Primer paso','Rutina manana/noche','Preparar la piel']::text[],
-      array['Ver envase','Confirmar composicion']::text[],
-      'https://hbderm.com/wp-content/uploads/2023/07/Diseño-sin-título-13.png',
-      'Gel Surgras Dermatológico 1 Lt de URIAGE',
-      1082,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/cuidados-del-bebe/higiene-del-bebe/gel-surgras-dermatologico-1lt/","source_categories":["Cuidados Del Bebe","Higiene Del Bebe"],"source_availability":"instock","pricing_formula":{"source_price":400,"margin_rate":0.45,"margin_amount":180,"sale_price":220,"seller_commission_rate":0.1,"seller_commission_amount":18,"net_margin_after_seller":162},"source_index":267}'::jsonb
+      1079,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/martiderm-solucion-micellar-300ml/","source_categories":["Hidratantes Y Nutritivos"],"source_availability":"Agotado","pricing_formula":{"source_price":307,"margin_rate":0.45,"margin_amount":138.15,"sale_price":168.85,"seller_commission_rate":0.1,"seller_commission_amount":13.82,"net_margin_after_seller":124.33},"source_index":71}'::jsonb
     ),
     (
       'gel-surgras-dermatologico-500-ml',
@@ -2229,60 +2151,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2023/12/Diseño-sin-título-19.png',
       'Gel Surgras Dermatológico 500 ml de URIAGE',
-      1083,
+      1080,
       '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-atopicas/limpieza-pieles-atopicas/gel-surgras-dermatologico-500-ml/","source_categories":["Pieles Atopicas","Limpieza Pieles Atopicas"],"source_availability":"instock","pricing_formula":{"source_price":252,"margin_rate":0.45,"margin_amount":113.4,"sale_price":138.6,"seller_commission_rate":0.1,"seller_commission_amount":11.34,"net_margin_after_seller":102.06},"source_index":93}'::jsonb
-    ),
-    (
-      'hydra-hyal-crema-gel',
-      'Hydra - Hyal Crema Gel',
-      'Hydra - Hyal Crema Gel',
-      'FILORGA',
-      'Limpieza facial',
-      '',
-      1,
-      'Paso 1: limpiar',
-      'Bs. 477',
-      476.85,
-      'BOB',
-      'in_stock',
-      true,
-      false,
-      10,
-      'FILORGA para limpieza de rostro y rutina diaria. Confirma disponibilidad antes de finalizar la compra.',
-      'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
-      array['Rutina diaria','Limpieza de rostro','Confirmar tipo de piel']::text[],
-      array['Primer paso','Rutina manana/noche','Preparar la piel']::text[],
-      array['Ver envase','Confirmar composicion']::text[],
-      'https://hbderm.com/wp-content/uploads/2024/09/HYDRA-HYAL-GEL-CREMA.jpg',
-      'Hydra - Hyal Crema Gel de FILORGA',
-      1084,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/hydra-hyal-crema-gel-50ml/","source_categories":["Antiedad"],"source_availability":"Agotado","pricing_formula":{"source_price":867,"margin_rate":0.45,"margin_amount":390.15,"sale_price":476.85,"seller_commission_rate":0.1,"seller_commission_amount":39.02,"net_margin_after_seller":351.13},"source_index":9}'::jsonb
-    ),
-    (
-      'hyseac-3regul-40ml-hyseac-gel-50ml',
-      'Hyséac 3REGUL+ 40ML + Hyseac Gel 50ML',
-      'Hyséac 3REGUL+ 40ML + Hyseac Gel 50ML',
-      'URIAGE',
-      'Limpieza facial',
-      '40 ml',
-      1,
-      'Paso 1: limpiar',
-      'Bs. 198',
-      198,
-      'BOB',
-      'in_stock',
-      true,
-      false,
-      10,
-      'URIAGE para limpieza de rostro y rutina diaria. Confirma disponibilidad antes de finalizar la compra.',
-      'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
-      array['Rutina diaria','Limpieza de rostro','Confirmar tipo de piel']::text[],
-      array['Primer paso','Rutina manana/noche','Preparar la piel']::text[],
-      array['Ver envase','Confirmar composicion']::text[],
-      'https://hbderm.com/wp-content/uploads/2026/06/PACK-HYSEAC-.jpg',
-      'Hyséac 3REGUL+ 40ML + Hyseac Gel 50ML de URIAGE',
-      1085,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/sin-categorizar/hyseac-3regul-40ml-hyseac-gel-50ml/","source_categories":["Sin Categorizar"],"source_availability":"instock","pricing_formula":{"source_price":360,"margin_rate":0.45,"margin_amount":162,"sale_price":198,"seller_commission_rate":0.1,"seller_commission_amount":16.2,"net_margin_after_seller":145.8},"source_index":1}'::jsonb
     ),
     (
       'hyseac-gel-limpiador-500ml',
@@ -2307,8 +2177,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2026/04/HYSEAC-GEL-500ML.jpg',
       'Hyseac Gel Limpiador 500ML de URIAGE',
-      1086,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-con-grasas-o-con-acne/hyseac-gel-limpiador-500ml/","source_categories":["Pieles Con Grasas O Con Acne"],"source_availability":"instock","pricing_formula":{"source_price":421,"margin_rate":0.45,"margin_amount":189.45,"sale_price":231.55,"seller_commission_rate":0.1,"seller_commission_amount":18.95,"net_margin_after_seller":170.5},"source_index":99}'::jsonb
+      1081,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-con-grasas-o-con-acne/hyseac-gel-limpiador-500ml/","source_categories":["Pieles Con Grasas O Con Acne"],"source_availability":"instock","pricing_formula":{"source_price":421,"margin_rate":0.45,"margin_amount":189.45,"sale_price":231.55,"seller_commission_rate":0.1,"seller_commission_amount":18.95,"net_margin_after_seller":170.5},"source_index":101}'::jsonb
     ),
     (
       'hyseac-gel-nettoyant-150ml',
@@ -2333,8 +2203,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2025/02/URIAGE-2.jpg',
       'Hyseac Gel Nettoyant 150ML de URIAGE',
-      1087,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-con-grasas-o-con-acne/sensitelial-gel-solar-matificante-spf50/","source_categories":["Pieles Con Grasas O Con Acne"],"source_availability":"instock","pricing_formula":{"source_price":280,"margin_rate":0.45,"margin_amount":126,"sale_price":154,"seller_commission_rate":0.1,"seller_commission_amount":12.6,"net_margin_after_seller":113.4},"source_index":248}'::jsonb
+      1082,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-con-grasas-o-con-acne/sensitelial-gel-solar-matificante-spf50/","source_categories":["Pieles Con Grasas O Con Acne"],"source_availability":"instock","pricing_formula":{"source_price":280,"margin_rate":0.45,"margin_amount":126,"sale_price":154,"seller_commission_rate":0.1,"seller_commission_amount":12.6,"net_margin_after_seller":113.4},"source_index":249}'::jsonb
     ),
     (
       'hyseac-hydra-crema-limpiadora',
@@ -2359,7 +2229,7 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2025/05/URIAGE-12.jpg',
       'Hyséac Hydra - Crema Limpiadora de URIAGE',
-      1088,
+      1083,
       '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/limpieza/hyseac-hydra-crema-limpiadora/","source_categories":["Hidratantes Y Nutritivos","Limpieza"],"source_availability":"instock","pricing_formula":{"source_price":277,"margin_rate":0.45,"margin_amount":124.65,"sale_price":152.35,"seller_commission_rate":0.1,"seller_commission_amount":12.47,"net_margin_after_seller":112.18},"source_index":250}'::jsonb
     ),
     (
@@ -2385,8 +2255,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2025/07/ISISPHARMA-6.jpg',
       'Neotone Aqua – 100ML de ISISPHARMA',
-      1089,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/limpieza/neotone-aqua-100ml/","source_categories":["Hidratantes Y Nutritivos","Limpieza"],"source_availability":"Agotado","pricing_formula":{"source_price":192,"margin_rate":0.45,"margin_amount":86.4,"sale_price":105.6,"seller_commission_rate":0.1,"seller_commission_amount":8.64,"net_margin_after_seller":77.76},"source_index":278}'::jsonb
+      1084,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/limpieza/neotone-aqua-100ml/","source_categories":["Hidratantes Y Nutritivos","Limpieza"],"source_availability":"Agotado","pricing_formula":{"source_price":192,"margin_rate":0.45,"margin_amount":86.4,"sale_price":105.6,"seller_commission_rate":0.1,"seller_commission_amount":8.64,"net_margin_after_seller":77.76},"source_index":279}'::jsonb
     ),
     (
       'nutratopic-pro-amp-gel-de-bano',
@@ -2411,34 +2281,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2025/07/NUTRATOPIC-GEL.jpg',
       'Nutratopic Pro-amp Gel De Baño de ISDIN',
-      1090,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/limpieza/nutratopic-gel-de-bano/","source_categories":["Hidratantes Y Nutritivos","Limpieza"],"source_availability":"instock","pricing_formula":{"source_price":300,"margin_rate":0.45,"margin_amount":135,"sale_price":165,"seller_commission_rate":0.1,"seller_commission_amount":13.5,"net_margin_after_seller":121.5},"source_index":264}'::jsonb
-    ),
-    (
-      'pruriced-gel-calmante-100-ml',
-      'Pruriced - Gel Calmante 100 ml',
-      'Pruriced - Gel Calmante 100 ml',
-      'URIAGE',
-      'Limpieza facial',
-      '100 ml',
-      1,
-      'Paso 1: limpiar',
-      'Bs. 125',
-      125.4,
-      'BOB',
-      'in_stock',
-      true,
-      false,
-      10,
-      'URIAGE para limpieza de rostro y rutina diaria. Confirma disponibilidad antes de finalizar la compra.',
-      'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
-      array['Rutina diaria','Limpieza de rostro','Confirmar tipo de piel']::text[],
-      array['Primer paso','Rutina manana/noche','Preparar la piel']::text[],
-      array['Ver envase','Confirmar composicion']::text[],
-      'https://hbderm.com/wp-content/uploads/2025/10/PRURICED.jpg',
-      'Pruriced - Gel Calmante 100 ml de URIAGE',
-      1091,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/sin-categorizar/pruriced-gel-calmante-100ml/","source_categories":["Sin Categorizar"],"source_availability":"instock","pricing_formula":{"source_price":228,"margin_rate":0.45,"margin_amount":102.6,"sale_price":125.4,"seller_commission_rate":0.1,"seller_commission_amount":10.26,"net_margin_after_seller":92.34},"source_index":226}'::jsonb
+      1085,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/limpieza/nutratopic-gel-de-bano/","source_categories":["Hidratantes Y Nutritivos","Limpieza"],"source_availability":"instock","pricing_formula":{"source_price":300,"margin_rate":0.45,"margin_amount":135,"sale_price":165,"seller_commission_rate":0.1,"seller_commission_amount":13.5,"net_margin_after_seller":121.5},"source_index":266}'::jsonb
     ),
     (
       'rosakalm-agua-micelar',
@@ -2463,8 +2307,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2025/07/ROSAKALM-MICELAR.jpg',
       'Rosakalm Agua Micelar de ACM',
-      1092,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/sin-categorizar/rosakalm-agua-micelar-limpiadora/","source_categories":["Sin Categorizar"],"source_availability":"instock","pricing_formula":{"source_price":200,"margin_rate":0.45,"margin_amount":90,"sale_price":110,"seller_commission_rate":0.1,"seller_commission_amount":9,"net_margin_after_seller":81},"source_index":227}'::jsonb
+      1086,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/sin-categorizar/rosakalm-agua-micelar-limpiadora/","source_categories":["Sin Categorizar"],"source_availability":"instock","pricing_formula":{"source_price":200,"margin_rate":0.45,"margin_amount":90,"sale_price":110,"seller_commission_rate":0.1,"seller_commission_amount":9,"net_margin_after_seller":81},"source_index":229}'::jsonb
     ),
     (
       'roseliane-fluido-dermo-limpiador',
@@ -2489,8 +2333,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2025/07/URIAGE-13.jpg',
       'Roseliane - Fluido Dermo-limpiador de URIAGE',
-      1093,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-con-rojeces/roseliane-fluido-dermo-limpiador/","source_categories":["Pieles Con Rojeces"],"source_availability":"instock","pricing_formula":{"source_price":324,"margin_rate":0.45,"margin_amount":145.8,"sale_price":178.2,"seller_commission_rate":0.1,"seller_commission_amount":14.58,"net_margin_after_seller":131.22},"source_index":240}'::jsonb
+      1087,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-con-rojeces/roseliane-fluido-dermo-limpiador/","source_categories":["Pieles Con Rojeces"],"source_availability":"instock","pricing_formula":{"source_price":324,"margin_rate":0.45,"margin_amount":145.8,"sale_price":178.2,"seller_commission_rate":0.1,"seller_commission_amount":14.58,"net_margin_after_seller":131.22},"source_index":241}'::jsonb
     ),
     (
       'ruboril-cleansing-balm',
@@ -2515,34 +2359,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2025/07/ISISPHARMA-4.jpg',
       'Ruboril Cleansing Balm de ISISPHARMA',
-      1094,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/limpieza/ruboril-cleansing-balm/","source_categories":["Hidratantes Y Nutritivos","Limpieza"],"source_availability":"instock","pricing_formula":{"source_price":264,"margin_rate":0.45,"margin_amount":118.8,"sale_price":145.2,"seller_commission_rate":0.1,"seller_commission_amount":11.88,"net_margin_after_seller":106.92},"source_index":26}'::jsonb
-    ),
-    (
-      'sebiaclear-active-gel',
-      'Sebiaclear Active Gel',
-      'Sebiaclear Active Gel',
-      'SVR',
-      'Limpieza facial',
-      '',
-      1,
-      'Paso 1: limpiar',
-      'Bs. 138',
-      137.5,
-      'BOB',
-      'in_stock',
-      true,
-      false,
-      10,
-      'SVR para limpieza de rostro y rutina diaria. Confirma disponibilidad antes de finalizar la compra.',
-      'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
-      array['Rutina diaria','Limpieza de rostro','Confirmar tipo de piel']::text[],
-      array['Primer paso','Rutina manana/noche','Preparar la piel']::text[],
-      array['Ver envase','Confirmar composicion']::text[],
-      'https://hbderm.com/wp-content/uploads/2020/06/SEBIACLEAR-ACTIVE.jpg',
-      'Sebiaclear Active Gel de SVR',
-      1095,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-con-grasas-o-con-acne/sebiaclear-active/","source_categories":["Pieles Con Grasas O Con Acne"],"source_availability":"instock","pricing_formula":{"source_price":250,"margin_rate":0.45,"margin_amount":112.5,"sale_price":137.5,"seller_commission_rate":0.1,"seller_commission_amount":11.25,"net_margin_after_seller":101.25},"source_index":201}'::jsonb
+      1088,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/limpieza/ruboril-cleansing-balm/","source_categories":["Hidratantes Y Nutritivos","Limpieza"],"source_availability":"instock","pricing_formula":{"source_price":264,"margin_rate":0.45,"margin_amount":118.8,"sale_price":145.2,"seller_commission_rate":0.1,"seller_commission_amount":11.88,"net_margin_after_seller":106.92},"source_index":39}'::jsonb
     ),
     (
       'sebiaclear-creme-lavante-200ml',
@@ -2567,7 +2385,7 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2025/07/SVR-17.jpg',
       'Sebiaclear Creme Lavante 200ML de SVR',
-      1096,
+      1089,
       '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/limpieza/sebiaclear-creme-lavante-200ml-2/","source_categories":["Hidratantes Y Nutritivos","Limpieza"],"source_availability":"instock","pricing_formula":{"source_price":384,"margin_rate":0.45,"margin_amount":172.8,"sale_price":211.2,"seller_commission_rate":0.1,"seller_commission_amount":17.28,"net_margin_after_seller":155.52},"source_index":301}'::jsonb
     ),
     (
@@ -2593,8 +2411,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2025/07/SVR-16.jpg',
       'Sebiaclear Creme Lavante 400ML de SVR',
-      1097,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/limpieza/sebiaclear-creme-lavante-200ml/","source_categories":["Hidratantes Y Nutritivos","Limpieza"],"source_availability":"instock","pricing_formula":{"source_price":552,"margin_rate":0.45,"margin_amount":248.4,"sale_price":303.6,"seller_commission_rate":0.1,"seller_commission_amount":24.84,"net_margin_after_seller":223.56},"source_index":284}'::jsonb
+      1090,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/limpieza/sebiaclear-creme-lavante-200ml/","source_categories":["Hidratantes Y Nutritivos","Limpieza"],"source_availability":"instock","pricing_formula":{"source_price":552,"margin_rate":0.45,"margin_amount":248.4,"sale_price":303.6,"seller_commission_rate":0.1,"seller_commission_amount":24.84,"net_margin_after_seller":223.56},"source_index":280}'::jsonb
     ),
     (
       'sebiaclear-creme-lavante-400ml-refill',
@@ -2619,8 +2437,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2025/07/SVR-18.jpg',
       'Sebiaclear Creme Lavante 400ML - Refill de SVR',
-      1098,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/limpieza/refill-sebiaclear-creme-lavante-400ml/","source_categories":["Hidratantes Y Nutritivos","Limpieza"],"source_availability":"instock","pricing_formula":{"source_price":420,"margin_rate":0.45,"margin_amount":189,"sale_price":231,"seller_commission_rate":0.1,"seller_commission_amount":18.9,"net_margin_after_seller":170.1},"source_index":100}'::jsonb
+      1091,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/limpieza/refill-sebiaclear-creme-lavante-400ml/","source_categories":["Hidratantes Y Nutritivos","Limpieza"],"source_availability":"instock","pricing_formula":{"source_price":420,"margin_rate":0.45,"margin_amount":189,"sale_price":231,"seller_commission_rate":0.1,"seller_commission_amount":18.9,"net_margin_after_seller":170.1},"source_index":98}'::jsonb
     ),
     (
       'sebiaclear-gel-moussant-400ml',
@@ -2645,8 +2463,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2022/06/SEBIACLEAR-GEL-MOUSSANT-400ML.jpg',
       'Sebiaclear Gel Moussant - 400ML de SVR',
-      1099,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-con-grasas-o-con-acne/sebiaclear-gel-moussant-400ml/","source_categories":["Pieles Con Grasas O Con Acne"],"source_availability":"instock","pricing_formula":{"source_price":552,"margin_rate":0.45,"margin_amount":248.4,"sale_price":303.6,"seller_commission_rate":0.1,"seller_commission_amount":24.84,"net_margin_after_seller":223.56},"source_index":312}'::jsonb
+      1092,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-con-grasas-o-con-acne/sebiaclear-gel-moussant-400ml/","source_categories":["Pieles Con Grasas O Con Acne"],"source_availability":"instock","pricing_formula":{"source_price":552,"margin_rate":0.45,"margin_amount":248.4,"sale_price":303.6,"seller_commission_rate":0.1,"seller_commission_amount":24.84,"net_margin_after_seller":223.56},"source_index":310}'::jsonb
     ),
     (
       'sebiaclear-gel-moussant-400ml-refill',
@@ -2671,7 +2489,7 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2025/05/SVR-12.jpg',
       'Sebiaclear Gel Moussant 400ML - Refill de SVR',
-      1100,
+      1093,
       '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/limpieza/refill-sebiaclear-gel-moussant-400ml/","source_categories":["Hidratantes Y Nutritivos","Limpieza"],"source_availability":"instock","pricing_formula":{"source_price":420,"margin_rate":0.45,"margin_amount":189,"sale_price":231,"seller_commission_rate":0.1,"seller_commission_amount":18.9,"net_margin_after_seller":170.1},"source_index":97}'::jsonb
     ),
     (
@@ -2697,8 +2515,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2025/07/SEBIONEX-MICELAR.jpg',
       'Sebionex Agua Micelar de ACM',
-      1101,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/sin-categorizar/sebionex-locion-micellar/","source_categories":["Sin Categorizar"],"source_availability":"instock","pricing_formula":{"source_price":173,"margin_rate":0.45,"margin_amount":77.85,"sale_price":95.15,"seller_commission_rate":0.1,"seller_commission_amount":7.79,"net_margin_after_seller":70.06},"source_index":171}'::jsonb
+      1094,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/sin-categorizar/sebionex-locion-micellar/","source_categories":["Sin Categorizar"],"source_availability":"instock","pricing_formula":{"source_price":173,"margin_rate":0.45,"margin_amount":77.85,"sale_price":95.15,"seller_commission_rate":0.1,"seller_commission_amount":7.79,"net_margin_after_seller":70.06},"source_index":170}'::jsonb
     ),
     (
       'sebionex-gel-nettoyant',
@@ -2723,8 +2541,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/08/Diseno-sin-titulo-26.jpg',
       'Sebionex Gel Nettoyant de ACM',
-      1102,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-con-grasas-o-con-acne/limpieza-pieles-con-grasas-o-con-acne/sebionex-gel-nettoyant/","source_categories":["Pieles Con Grasas O Con Acne","Limpieza Pieles Con Grasas O Con Acne"],"source_availability":"instock","pricing_formula":{"source_price":306,"margin_rate":0.45,"margin_amount":137.7,"sale_price":168.3,"seller_commission_rate":0.1,"seller_commission_amount":13.77,"net_margin_after_seller":123.93},"source_index":169}'::jsonb
+      1095,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-con-grasas-o-con-acne/limpieza-pieles-con-grasas-o-con-acne/sebionex-gel-nettoyant/","source_categories":["Pieles Con Grasas O Con Acne","Limpieza Pieles Con Grasas O Con Acne"],"source_availability":"instock","pricing_formula":{"source_price":306,"margin_rate":0.45,"margin_amount":137.7,"sale_price":168.3,"seller_commission_rate":0.1,"seller_commission_amount":13.77,"net_margin_after_seller":123.93},"source_index":167}'::jsonb
     ),
     (
       'sensifine-ar-eau-micellar-200ml',
@@ -2749,8 +2567,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2026/05/SENSIFINE-AGUA-.jpg',
       'Sensifine Ar Eau Micellar – 200ML de SVR',
-      1103,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/limpieza/sensifine-ar-eau-micellar-200ml/","source_categories":["Hidratantes Y Nutritivos","Limpieza"],"source_availability":"instock","pricing_formula":{"source_price":240,"margin_rate":0.45,"margin_amount":108,"sale_price":132,"seller_commission_rate":0.1,"seller_commission_amount":10.8,"net_margin_after_seller":97.2},"source_index":50}'::jsonb
+      1096,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/limpieza/sensifine-ar-eau-micellar-200ml/","source_categories":["Hidratantes Y Nutritivos","Limpieza"],"source_availability":"instock","pricing_formula":{"source_price":240,"margin_rate":0.45,"margin_amount":108,"sale_price":132,"seller_commission_rate":0.1,"seller_commission_amount":10.8,"net_margin_after_seller":97.2},"source_index":61}'::jsonb
     ),
     (
       'skin-prep-gel-nettoyant',
@@ -2775,7 +2593,7 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/12/SKIN-PREP-GEL-NETTOYANT.jpg',
       'Skin Prep Gel Nettoyant de FILORGA',
-      1104,
+      1097,
       '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/sin-categorizar/skin-prep-gel-nettoyant/","source_categories":["Sin Categorizar"],"source_availability":"instock","pricing_formula":{"source_price":403,"margin_rate":0.45,"margin_amount":181.35,"sale_price":221.65,"seller_commission_rate":0.1,"seller_commission_amount":18.14,"net_margin_after_seller":163.21},"source_index":173}'::jsonb
     ),
     (
@@ -2801,8 +2619,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/12/SKIN-PREP-MOUSSE.jpg',
       'Skin Prep Mousse de FILORGA',
-      1105,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-con-grasas-o-con-acne/limpieza-pieles-con-grasas-o-con-acne/skin-prep-mousse/","source_categories":["Pieles Con Grasas O Con Acne","Limpieza Pieles Con Grasas O Con Acne"],"source_availability":"instock","pricing_formula":{"source_price":408,"margin_rate":0.45,"margin_amount":183.6,"sale_price":224.4,"seller_commission_rate":0.1,"seller_commission_amount":18.36,"net_margin_after_seller":165.24},"source_index":170}'::jsonb
+      1098,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-con-grasas-o-con-acne/limpieza-pieles-con-grasas-o-con-acne/skin-prep-mousse/","source_categories":["Pieles Con Grasas O Con Acne","Limpieza Pieles Con Grasas O Con Acne"],"source_availability":"instock","pricing_formula":{"source_price":408,"margin_rate":0.45,"margin_amount":183.6,"sale_price":224.4,"seller_commission_rate":0.1,"seller_commission_amount":18.36,"net_margin_after_seller":165.24},"source_index":171}'::jsonb
     ),
     (
       'skin-prep-solucion-micelar',
@@ -2827,112 +2645,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2025/04/FILORGA.jpg',
       'Skin Prep Solucion Micelar de FILORGA',
-      1106,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/limpieza/skin-prep-solucion-micelar/","source_categories":["Hidratantes Y Nutritivos","Limpieza"],"source_availability":"instock","pricing_formula":{"source_price":367,"margin_rate":0.45,"margin_amount":165.15,"sale_price":201.85,"seller_commission_rate":0.1,"seller_commission_amount":16.52,"net_margin_after_seller":148.63},"source_index":166}'::jsonb
-    ),
-    (
-      'topialyse-gel-lavant-1l',
-      'Topialyse Gel Lavant - 1L',
-      'Topialyse Gel Lavant - 1L',
-      'SVR',
-      'Limpieza facial',
-      '',
-      1,
-      'Paso 1: limpiar',
-      'Bs. 226',
-      225.5,
-      'BOB',
-      'in_stock',
-      true,
-      false,
-      10,
-      'SVR para limpieza de rostro y rutina diaria. Confirma disponibilidad antes de finalizar la compra.',
-      'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
-      array['Rutina diaria','Limpieza de rostro','Confirmar tipo de piel']::text[],
-      array['Primer paso','Rutina manana/noche','Preparar la piel']::text[],
-      array['Ver envase','Confirmar composicion']::text[],
-      'https://hbderm.com/wp-content/uploads/2022/06/TOPIALYSE-GEL-LAVANTE-1-LITRO.jpg',
-      'Topialyse Gel Lavant - 1L de SVR',
-      1107,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/topialyse-gel-lavant-1l/","source_categories":["Hidratantes Y Nutritivos"],"source_availability":"Agotado","pricing_formula":{"source_price":410,"margin_rate":0.45,"margin_amount":184.5,"sale_price":225.5,"seller_commission_rate":0.1,"seller_commission_amount":18.45,"net_margin_after_seller":166.05},"source_index":117}'::jsonb
-    ),
-    (
-      'viticolor-gel',
-      'Viticolor Gel',
-      'Viticolor Gel',
-      'ACM',
-      'Limpieza facial',
-      '',
-      1,
-      'Paso 1: limpiar',
-      'Bs. 291',
-      290.95,
-      'BOB',
-      'in_stock',
-      true,
-      false,
-      10,
-      'ACM para limpieza de rostro y rutina diaria. Confirma disponibilidad antes de finalizar la compra.',
-      'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
-      array['Rutina diaria','Limpieza de rostro','Confirmar tipo de piel']::text[],
-      array['Primer paso','Rutina manana/noche','Preparar la piel']::text[],
-      array['Ver envase','Confirmar composicion']::text[],
-      'https://hbderm.com/wp-content/uploads/2024/09/VITICOLOR.jpg',
-      'Viticolor Gel de ACM',
-      1108,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-despigmentadas/viticolor-gel-con-color-pieles-con-vitiligo/","source_categories":["Pieles Despigmentadas"],"source_availability":"instock","pricing_formula":{"source_price":529,"margin_rate":0.45,"margin_amount":238.05,"sale_price":290.95,"seller_commission_rate":0.1,"seller_commission_amount":23.81,"net_margin_after_seller":214.24},"source_index":116}'::jsonb
-    ),
-    (
-      'vitiskin-hidrogel',
-      'Vitiskin Hidrogel',
-      'Vitiskin Hidrogel',
-      'ISISPHARMA',
-      'Limpieza facial',
-      '',
-      1,
-      'Paso 1: limpiar',
-      'Bs. 363',
-      363,
-      'BOB',
-      'in_stock',
-      true,
-      false,
-      10,
-      'ISISPHARMA para limpieza de rostro y rutina diaria. Confirma disponibilidad antes de finalizar la compra.',
-      'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
-      array['Rutina diaria','Limpieza de rostro','Confirmar tipo de piel']::text[],
-      array['Primer paso','Rutina manana/noche','Preparar la piel']::text[],
-      array['Ver envase','Confirmar composicion']::text[],
-      'https://hbderm.com/wp-content/uploads/2021/03/VITISKIN.png',
-      'Vitiskin Hidrogel de ISISPHARMA',
-      1109,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-despigmentadas/vitiskin-hidrogel-50ml/","source_categories":["Pieles Despigmentadas"],"source_availability":"instock","pricing_formula":{"source_price":660,"margin_rate":0.45,"margin_amount":297,"sale_price":363,"seller_commission_rate":0.1,"seller_commission_amount":29.7,"net_margin_after_seller":267.3},"source_index":310}'::jsonb
-    ),
-    (
-      'vitix-gel',
-      'Vitix Gel',
-      'Vitix Gel',
-      'ACM',
-      'Limpieza facial',
-      '',
-      1,
-      'Paso 1: limpiar',
-      'Bs. 317',
-      316.8,
-      'BOB',
-      'in_stock',
-      true,
-      false,
-      10,
-      'ACM para limpieza de rostro y rutina diaria. Confirma disponibilidad antes de finalizar la compra.',
-      'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
-      array['Rutina diaria','Limpieza de rostro','Confirmar tipo de piel']::text[],
-      array['Primer paso','Rutina manana/noche','Preparar la piel']::text[],
-      array['Ver envase','Confirmar composicion']::text[],
-      'https://hbderm.com/wp-content/uploads/2024/06/Diseno-sin-titulo-10.jpg',
-      'Vitix Gel de ACM',
-      1110,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-despigmentadas/vitix-gel/","source_categories":["Pieles Despigmentadas"],"source_availability":"instock","pricing_formula":{"source_price":576,"margin_rate":0.45,"margin_amount":259.2,"sale_price":316.8,"seller_commission_rate":0.1,"seller_commission_amount":25.92,"net_margin_after_seller":233.28},"source_index":238}'::jsonb
+      1099,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/limpieza/skin-prep-solucion-micelar/","source_categories":["Hidratantes Y Nutritivos","Limpieza"],"source_availability":"instock","pricing_formula":{"source_price":367,"margin_rate":0.45,"margin_amount":165.15,"sale_price":201.85,"seller_commission_rate":0.1,"seller_commission_amount":16.52,"net_margin_after_seller":148.63},"source_index":168}'::jsonb
     ),
     (
       'xemose-huile-lavante-1lt',
@@ -2941,6 +2655,32 @@ cross join (
       'URIAGE',
       'Limpieza facial',
       '',
+      1,
+      'Paso 1: limpiar',
+      'Bs. 224',
+      224.4,
+      'BOB',
+      'in_stock',
+      true,
+      false,
+      10,
+      'URIAGE para limpieza de rostro y rutina diaria. Confirma disponibilidad antes de finalizar la compra.',
+      'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
+      array['Rutina diaria','Limpieza de rostro','Confirmar tipo de piel']::text[],
+      array['Primer paso','Rutina manana/noche','Preparar la piel']::text[],
+      array['Ver envase','Confirmar composicion']::text[],
+      'https://hbderm.com/wp-content/uploads/2023/12/Diseño-sin-título-21.png',
+      'Xemose Huile Lavante 1LT de URIAGE',
+      1100,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-atopicas/limpieza-pieles-atopicas/xemose-huile-lavante-1-lt/","source_categories":["Pieles Atopicas","Limpieza Pieles Atopicas"],"source_availability":"Agotado","pricing_formula":{"source_price":408,"margin_rate":0.45,"margin_amount":183.6,"sale_price":224.4,"seller_commission_rate":0.1,"seller_commission_amount":18.36,"net_margin_after_seller":165.24},"source_index":155}'::jsonb
+    ),
+    (
+      'xemose-huile-lavante-200-ml',
+      'Xemose Huile Lavante 200 ml',
+      'Xemose Huile Lavante 200 ml',
+      'URIAGE',
+      'Limpieza facial',
+      '200 ml',
       1,
       'Paso 1: limpiar',
       'Bs. 185',
@@ -2955,36 +2695,36 @@ cross join (
       array['Rutina diaria','Limpieza de rostro','Confirmar tipo de piel']::text[],
       array['Primer paso','Rutina manana/noche','Preparar la piel']::text[],
       array['Ver envase','Confirmar composicion']::text[],
-      'https://hbderm.com/wp-content/uploads/2023/12/Diseño-sin-título-21.png',
-      'Xemose Huile Lavante 1LT de URIAGE',
-      1111,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-atopicas/limpieza-pieles-atopicas/xemose-huile-lavante-1-lt/","source_categories":["Pieles Atopicas","Limpieza Pieles Atopicas"],"source_availability":"Agotado","pricing_formula":{"source_price":336,"margin_rate":0.45,"margin_amount":151.2,"sale_price":184.8,"seller_commission_rate":0.1,"seller_commission_amount":15.12,"net_margin_after_seller":136.08},"source_index":156}'::jsonb
+      'https://hbderm.com/wp-content/uploads/2023/07/Diseño-sin-título-18.png',
+      'Xemose Huile Lavante 200 ml de URIAGE',
+      1101,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/xemose-huile-lavante-200-ml/","source_categories":["Hidratantes Y Nutritivos"],"source_availability":"Agotado","pricing_formula":{"source_price":336,"margin_rate":0.45,"margin_amount":151.2,"sale_price":184.8,"seller_commission_rate":0.1,"seller_commission_amount":15.12,"net_margin_after_seller":136.08},"source_index":283}'::jsonb
     ),
     (
-      'xerial-30-gel-crema',
-      'Xerial 30 Gel - Crema',
-      'Xerial 30 Gel - Crema',
-      'SVR',
+      'xemose-huile-lavante-500-ml',
+      'Xemose Huile Lavante 500 ml',
+      'Xemose Huile Lavante 500 ml',
+      'URIAGE',
       'Limpieza facial',
-      '',
+      '500 ml',
       1,
       'Paso 1: limpiar',
-      'Bs. 138',
-      137.5,
+      'Bs. 173',
+      172.7,
       'BOB',
       'in_stock',
       true,
       false,
       10,
-      'SVR para limpieza de rostro y rutina diaria. Confirma disponibilidad antes de finalizar la compra.',
+      'URIAGE para limpieza de rostro y rutina diaria. Confirma disponibilidad antes de finalizar la compra.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina diaria','Limpieza de rostro','Confirmar tipo de piel']::text[],
       array['Primer paso','Rutina manana/noche','Preparar la piel']::text[],
       array['Ver envase','Confirmar composicion']::text[],
-      'https://hbderm.com/wp-content/uploads/2023/12/Diseño-sin-título-1.png',
-      'Xerial 30 Gel - Crema de SVR',
-      1112,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/sin-categorizar/xerial-30-gel-crema-50ml/","source_categories":["Sin Categorizar"],"source_availability":"Agotado","pricing_formula":{"source_price":250,"margin_rate":0.45,"margin_amount":112.5,"sale_price":137.5,"seller_commission_rate":0.1,"seller_commission_amount":11.25,"net_margin_after_seller":101.25},"source_index":152}'::jsonb
+      'https://hbderm.com/wp-content/uploads/2023/12/Diseño-sin-título-20.png',
+      'Xemose Huile Lavante 500 ml de URIAGE',
+      1102,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-atopicas/xemose-huile-lavante-500-ml/","source_categories":["Pieles Atopicas"],"source_availability":"instock","pricing_formula":{"source_price":314,"margin_rate":0.45,"margin_amount":141.3,"sale_price":172.7,"seller_commission_rate":0.1,"seller_commission_amount":14.13,"net_margin_after_seller":127.17},"source_index":237}'::jsonb
     ),
     (
       'acniben-body-spray',
@@ -3009,8 +2749,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2025/07/ACNIBEN-BODY.jpg',
       'Acniben Body Spray de ISDIN',
-      1113,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-con-grasas-o-con-acne/oily-skin-body-acniben/","source_categories":["Pieles Con Grasas O Con Acne"],"source_availability":"Agotado","pricing_formula":{"source_price":300,"margin_rate":0.45,"margin_amount":135,"sale_price":165,"seller_commission_rate":0.1,"seller_commission_amount":13.5,"net_margin_after_seller":121.5},"source_index":71}'::jsonb
+      1103,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-con-grasas-o-con-acne/oily-skin-body-acniben/","source_categories":["Pieles Con Grasas O Con Acne"],"source_availability":"Agotado","pricing_formula":{"source_price":300,"margin_rate":0.45,"margin_amount":135,"sale_price":165,"seller_commission_rate":0.1,"seller_commission_amount":13.5,"net_margin_after_seller":121.5},"source_index":78}'::jsonb
     ),
     (
       'acniben-night-concentrate',
@@ -3021,8 +2761,8 @@ cross join (
       '',
       2,
       'Paso 2: tratar',
-      'Bs. 138',
-      137.5,
+      'Bs. 211',
+      211.2,
       'BOB',
       'in_stock',
       true,
@@ -3035,8 +2775,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2025/07/ACNIBEN-NIGHT-CONCENTRATE.jpg',
       'Acniben Night Concentrate de ISDIN',
-      1114,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-con-grasas-o-con-acne/acniben-night-concentrate/","source_categories":["Pieles Con Grasas O Con Acne"],"source_availability":"Agotado","pricing_formula":{"source_price":250,"margin_rate":0.45,"margin_amount":112.5,"sale_price":137.5,"seller_commission_rate":0.1,"seller_commission_amount":11.25,"net_margin_after_seller":101.25},"source_index":131}'::jsonb
+      1104,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-con-grasas-o-con-acne/acniben-night-concentrate/","source_categories":["Pieles Con Grasas O Con Acne"],"source_availability":"Agotado","pricing_formula":{"source_price":384,"margin_rate":0.45,"margin_amount":172.8,"sale_price":211.2,"seller_commission_rate":0.1,"seller_commission_amount":17.28,"net_margin_after_seller":155.52},"source_index":132}'::jsonb
     ),
     (
       'acniben-on-the-spot',
@@ -3061,8 +2801,86 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2025/07/ACNIBEN-ON-SPOT.jpg',
       'Acniben On The Spot de ISDIN',
-      1115,
+      1105,
       '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-con-grasas-o-con-acne/acniben-on-the-spot/","source_categories":["Pieles Con Grasas O Con Acne"],"source_availability":"instock","pricing_formula":{"source_price":300,"margin_rate":0.45,"margin_amount":135,"sale_price":165,"seller_commission_rate":0.1,"seller_commission_amount":13.5,"net_margin_after_seller":121.5},"source_index":277}'::jsonb
+    ),
+    (
+      'acniben-repair-gel-crema',
+      'Acniben Repair Gel Crema',
+      'Acniben Repair Gel Crema',
+      'ISDIN',
+      'Piel grasa y acne',
+      '',
+      2,
+      'Paso 2: tratar',
+      'Bs. 165',
+      165,
+      'BOB',
+      'in_stock',
+      true,
+      false,
+      10,
+      'ISDIN para rutinas de piel grasa o con tendencia acneica. No reemplaza una consulta dermatologica.',
+      'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
+      array['Piel grasa','Tendencia acneica','Rutina de control']::text[],
+      array['Piel grasa','Piel con imperfecciones','Rutina facial']::text[],
+      array['Ver envase','Confirmar composicion']::text[],
+      'https://hbderm.com/wp-content/uploads/2025/04/ISDIN-9.jpg',
+      'Acniben Repair Gel Crema de ISDIN',
+      1106,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-con-grasas-o-con-acne/acniben-repair-gel-crema/","source_categories":["Pieles Con Grasas O Con Acne"],"source_availability":"Agotado","pricing_formula":{"source_price":300,"margin_rate":0.45,"margin_amount":135,"sale_price":165,"seller_commission_rate":0.1,"seller_commission_amount":13.5,"net_margin_after_seller":121.5},"source_index":265}'::jsonb
+    ),
+    (
+      'acniover-cremigel-activo',
+      'Acniover Cremigel Activo',
+      'Acniover Cremigel Activo',
+      'MARTIDERM',
+      'Piel grasa y acne',
+      '',
+      2,
+      'Paso 2: tratar',
+      'Bs. 164',
+      163.9,
+      'BOB',
+      'in_stock',
+      true,
+      false,
+      10,
+      'MARTIDERM para rutinas de piel grasa o con tendencia acneica. No reemplaza una consulta dermatologica.',
+      'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
+      array['Piel grasa','Tendencia acneica','Rutina de control']::text[],
+      array['Piel grasa','Piel con imperfecciones','Rutina facial']::text[],
+      array['Ver envase','Confirmar composicion']::text[],
+      'https://hbderm.com/wp-content/uploads/2025/05/ACNIOVER-CREMIGEL.jpg',
+      'Acniover Cremigel Activo de MARTIDERM',
+      1107,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-con-grasas-o-con-acne/acniover-cremigel-activo-40ml/","source_categories":["Pieles Con Grasas O Con Acne"],"source_availability":"Agotado","pricing_formula":{"source_price":298,"margin_rate":0.45,"margin_amount":134.1,"sale_price":163.9,"seller_commission_rate":0.1,"seller_commission_amount":13.41,"net_margin_after_seller":120.69},"source_index":137}'::jsonb
+    ),
+    (
+      'acniover-gel-purificante',
+      'Acniover Gel Purificante',
+      'Acniover Gel Purificante',
+      'MARTIDERM',
+      'Piel grasa y acne',
+      '',
+      2,
+      'Paso 2: tratar',
+      'Bs. 194',
+      194.15,
+      'BOB',
+      'in_stock',
+      true,
+      false,
+      10,
+      'MARTIDERM para rutinas de piel grasa o con tendencia acneica. No reemplaza una consulta dermatologica.',
+      'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
+      array['Piel grasa','Tendencia acneica','Rutina de control']::text[],
+      array['Piel grasa','Piel con imperfecciones','Rutina facial']::text[],
+      array['Ver envase','Confirmar composicion']::text[],
+      'https://hbderm.com/wp-content/uploads/2025/05/ACNIOVER-GEL.jpg',
+      'Acniover Gel Purificante de MARTIDERM',
+      1108,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-con-grasas-o-con-acne/acniover-gel-purificante-200ml/","source_categories":["Pieles Con Grasas O Con Acne"],"source_availability":"instock","pricing_formula":{"source_price":353,"margin_rate":0.45,"margin_amount":158.85,"sale_price":194.15,"seller_commission_rate":0.1,"seller_commission_amount":15.89,"net_margin_after_seller":142.96},"source_index":252}'::jsonb
     ),
     (
       'acniover-serum',
@@ -3087,8 +2905,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2025/05/ACNIOVER-SERUM.jpg',
       'Acniover Serum de MARTIDERM',
-      1116,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-con-grasas-o-con-acne/acniover-serum-30ml/","source_categories":["Pieles Con Grasas O Con Acne"],"source_availability":"Agotado","pricing_formula":{"source_price":336,"margin_rate":0.45,"margin_amount":151.2,"sale_price":184.8,"seller_commission_rate":0.1,"seller_commission_amount":15.12,"net_margin_after_seller":136.08},"source_index":139}'::jsonb
+      1109,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-con-grasas-o-con-acne/acniover-serum-30ml/","source_categories":["Pieles Con Grasas O Con Acne"],"source_availability":"Agotado","pricing_formula":{"source_price":336,"margin_rate":0.45,"margin_amount":151.2,"sale_price":184.8,"seller_commission_rate":0.1,"seller_commission_amount":15.12,"net_margin_after_seller":136.08},"source_index":138}'::jsonb
     ),
     (
       'acniover-spray-corporal',
@@ -3113,7 +2931,7 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2025/05/ACNIOVER-CORPORAL.jpg',
       'Acniover Spray Corporal de MARTIDERM',
-      1117,
+      1110,
       '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-con-grasas-o-con-acne/acniover-spray-corporal/","source_categories":["Pieles Con Grasas O Con Acne"],"source_availability":"instock","pricing_formula":{"source_price":432,"margin_rate":0.45,"margin_amount":194.4,"sale_price":237.6,"seller_commission_rate":0.1,"seller_commission_amount":19.44,"net_margin_after_seller":174.96},"source_index":255}'::jsonb
     ),
     (
@@ -3139,8 +2957,34 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2026/06/HYSEAC-3-REGUL-1.jpg',
       'Hyseac 3-REGUL de URIAGE',
-      1118,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-con-grasas-o-con-acne/hyseac-3-regul/","source_categories":["Pieles Con Grasas O Con Acne"],"source_availability":"instock","pricing_formula":{"source_price":288,"margin_rate":0.45,"margin_amount":129.6,"sale_price":158.4,"seller_commission_rate":0.1,"seller_commission_amount":12.96,"net_margin_after_seller":116.64},"source_index":2}'::jsonb
+      1111,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-con-grasas-o-con-acne/hyseac-3-regul/","source_categories":["Pieles Con Grasas O Con Acne"],"source_availability":"instock","pricing_formula":{"source_price":288,"margin_rate":0.45,"margin_amount":129.6,"sale_price":158.4,"seller_commission_rate":0.1,"seller_commission_amount":12.96,"net_margin_after_seller":116.64},"source_index":16}'::jsonb
+    ),
+    (
+      'hyseac-3regul-40ml-hyseac-gel-50ml',
+      'Hyséac 3REGUL+ 40ML + Hyseac Gel 50ML',
+      'Hyséac 3REGUL+ 40ML + Hyseac Gel 50ML',
+      'URIAGE',
+      'Piel grasa y acne',
+      '40 ml',
+      2,
+      'Paso 2: tratar',
+      'Bs. 198',
+      198,
+      'BOB',
+      'in_stock',
+      true,
+      false,
+      10,
+      'URIAGE para rutinas de piel grasa o con tendencia acneica. No reemplaza una consulta dermatologica.',
+      'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
+      array['Piel grasa','Tendencia acneica','Rutina de control']::text[],
+      array['Piel grasa','Piel con imperfecciones','Rutina facial']::text[],
+      array['Ver envase','Confirmar composicion']::text[],
+      'https://hbderm.com/wp-content/uploads/2026/06/PACK-HYSEAC-.jpg',
+      'Hyséac 3REGUL+ 40ML + Hyseac Gel 50ML de URIAGE',
+      1112,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/sin-categorizar/hyseac-3regul-40ml-hyseac-gel-50ml/","source_categories":["Sin Categorizar"],"source_availability":"instock","pricing_formula":{"source_price":360,"margin_rate":0.45,"margin_amount":162,"sale_price":198,"seller_commission_rate":0.1,"seller_commission_amount":16.2,"net_margin_after_seller":145.8},"source_index":18}'::jsonb
     ),
     (
       'hyseac-huile-purificante-100ml',
@@ -3165,8 +3009,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2021/10/uriage-hyseac-purifying-oil-100ml.jpg',
       'Hyseac Huile Purificante 100ML de URIAGE',
-      1119,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-con-grasas-o-con-acne/hyseac-huile-purificante-100ml/","source_categories":["Pieles Con Grasas O Con Acne"],"source_availability":"Agotado","pricing_formula":{"source_price":260,"margin_rate":0.45,"margin_amount":117,"sale_price":143,"seller_commission_rate":0.1,"seller_commission_amount":11.7,"net_margin_after_seller":105.3},"source_index":315}'::jsonb
+      1113,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-con-grasas-o-con-acne/hyseac-huile-purificante-100ml/","source_categories":["Pieles Con Grasas O Con Acne"],"source_availability":"Agotado","pricing_formula":{"source_price":260,"margin_rate":0.45,"margin_amount":117,"sale_price":143,"seller_commission_rate":0.1,"seller_commission_amount":11.7,"net_margin_after_seller":105.3},"source_index":314}'::jsonb
     ),
     (
       'hyseac-serum-booster',
@@ -3191,8 +3035,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2025/05/URIAGE-11.jpg',
       'Hyseac Serum Booster de URIAGE',
-      1120,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/serums/hyseac-serum-booster/","source_categories":["Antiedad","Serums"],"source_availability":"instock","pricing_formula":{"source_price":410,"margin_rate":0.45,"margin_amount":184.5,"sale_price":225.5,"seller_commission_rate":0.1,"seller_commission_amount":18.45,"net_margin_after_seller":166.05},"source_index":246}'::jsonb
+      1114,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/serums/hyseac-serum-booster/","source_categories":["Antiedad","Serums"],"source_availability":"instock","pricing_formula":{"source_price":410,"margin_rate":0.45,"margin_amount":184.5,"sale_price":225.5,"seller_commission_rate":0.1,"seller_commission_amount":18.45,"net_margin_after_seller":166.05},"source_index":247}'::jsonb
     ),
     (
       'hyseac-tonico-purificante-250ml',
@@ -3217,8 +3061,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2025/02/URIAGE-3.jpg',
       'Hyseac Tonico Purificante 250ML de URIAGE',
-      1121,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-con-grasas-o-con-acne/hyseac-tonico-purificante-250ml/","source_categories":["Pieles Con Grasas O Con Acne"],"source_availability":"instock","pricing_formula":{"source_price":288,"margin_rate":0.45,"margin_amount":129.6,"sale_price":158.4,"seller_commission_rate":0.1,"seller_commission_amount":12.96,"net_margin_after_seller":116.64},"source_index":41}'::jsonb
+      1115,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-con-grasas-o-con-acne/hyseac-tonico-purificante-250ml/","source_categories":["Pieles Con Grasas O Con Acne"],"source_availability":"instock","pricing_formula":{"source_price":288,"margin_rate":0.45,"margin_amount":129.6,"sale_price":158.4,"seller_commission_rate":0.1,"seller_commission_amount":12.96,"net_margin_after_seller":116.64},"source_index":40}'::jsonb
     ),
     (
       'isdinceutics-essential-cleansing',
@@ -3243,8 +3087,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2023/03/Essential-Cleansing.jpg',
       'Isdinceutics Essential Cleansing de ISDIN',
-      1122,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-con-grasas-o-con-acne/isdin-essential-cleansing-200ml/","source_categories":["Pieles Con Grasas O Con Acne"],"source_availability":"instock","pricing_formula":{"source_price":405,"margin_rate":0.45,"margin_amount":182.25,"sale_price":222.75,"seller_commission_rate":0.1,"seller_commission_amount":18.23,"net_margin_after_seller":164.02},"source_index":274}'::jsonb
+      1116,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-con-grasas-o-con-acne/isdin-essential-cleansing-200ml/","source_categories":["Pieles Con Grasas O Con Acne"],"source_availability":"instock","pricing_formula":{"source_price":405,"margin_rate":0.45,"margin_amount":182.25,"sale_price":222.75,"seller_commission_rate":0.1,"seller_commission_amount":18.23,"net_margin_after_seller":164.02},"source_index":271}'::jsonb
     ),
     (
       'ncef-reverse-eyes',
@@ -3255,8 +3099,8 @@ cross join (
       '',
       2,
       'Paso 2: tratar',
-      'Bs. 185',
-      184.8,
+      'Bs. 148',
+      147.95,
       'BOB',
       'in_stock',
       true,
@@ -3269,8 +3113,34 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/12/NCEF-REVERSE-EYES-1.jpg',
       'Ncef Reverse Eyes de FILORGA',
-      1123,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-con-grasas-o-con-acne/anti-edad/ncef-reverse-eyes/","source_categories":["Pieles Con Grasas O Con Acne","Anti Edad"],"source_availability":"Agotado","pricing_formula":{"source_price":336,"margin_rate":0.45,"margin_amount":151.2,"sale_price":184.8,"seller_commission_rate":0.1,"seller_commission_amount":15.12,"net_margin_after_seller":136.08},"source_index":194}'::jsonb
+      1117,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-con-grasas-o-con-acne/anti-edad/ncef-reverse-eyes/","source_categories":["Pieles Con Grasas O Con Acne","Anti Edad"],"source_availability":"Agotado","pricing_formula":{"source_price":269,"margin_rate":0.45,"margin_amount":121.05,"sale_price":147.95,"seller_commission_rate":0.1,"seller_commission_amount":12.11,"net_margin_after_seller":108.94},"source_index":194}'::jsonb
+    ),
+    (
+      'sebiaclear-active-gel',
+      'Sebiaclear Active Gel',
+      'Sebiaclear Active Gel',
+      'SVR',
+      'Piel grasa y acne',
+      '',
+      2,
+      'Paso 2: tratar',
+      'Bs. 179',
+      179.3,
+      'BOB',
+      'in_stock',
+      true,
+      false,
+      10,
+      'SVR para rutinas de piel grasa o con tendencia acneica. No reemplaza una consulta dermatologica.',
+      'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
+      array['Piel grasa','Tendencia acneica','Rutina de control']::text[],
+      array['Piel grasa','Piel con imperfecciones','Rutina facial']::text[],
+      array['Ver envase','Confirmar composicion']::text[],
+      'https://hbderm.com/wp-content/uploads/2020/06/SEBIACLEAR-ACTIVE.jpg',
+      'Sebiaclear Active Gel de SVR',
+      1118,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-con-grasas-o-con-acne/sebiaclear-active/","source_categories":["Pieles Con Grasas O Con Acne"],"source_availability":"instock","pricing_formula":{"source_price":326,"margin_rate":0.45,"margin_amount":146.7,"sale_price":179.3,"seller_commission_rate":0.1,"seller_commission_amount":14.67,"net_margin_after_seller":132.03},"source_index":200}'::jsonb
     ),
     (
       'sebiaclear-ampoule-flash-30-ml',
@@ -3295,8 +3165,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2026/02/SEBIACLEAR-AMPOULE-FLASH.jpeg',
       'Sebiaclear Ampoule Flash - 30 ml de SVR',
-      1124,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/serums/sebiaclear-ampoule-flash-30-ml/","source_categories":["Antiedad","Serums"],"source_availability":"instock","pricing_formula":{"source_price":420,"margin_rate":0.45,"margin_amount":189,"sale_price":231,"seller_commission_rate":0.1,"seller_commission_amount":18.9,"net_margin_after_seller":170.1},"source_index":147}'::jsonb
+      1119,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/serums/sebiaclear-ampoule-flash-30-ml/","source_categories":["Antiedad","Serums"],"source_availability":"instock","pricing_formula":{"source_price":420,"margin_rate":0.45,"margin_amount":189,"sale_price":231,"seller_commission_rate":0.1,"seller_commission_amount":18.9,"net_margin_after_seller":170.1},"source_index":148}'::jsonb
     ),
     (
       'sebiaclear-mat-pores',
@@ -3321,8 +3191,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2026/05/SEBIACLEAR-MAT-PORES-1.jpg',
       'Sebiaclear Mat+pores de SVR',
-      1125,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-con-grasas-o-con-acne/cremas-de-dia/sebiaclear-matpores/","source_categories":["Pieles Con Grasas O Con Acne","Cremas De Dia"],"source_availability":"Agotado","pricing_formula":{"source_price":288,"margin_rate":0.45,"margin_amount":129.6,"sale_price":158.4,"seller_commission_rate":0.1,"seller_commission_amount":12.96,"net_margin_after_seller":116.64},"source_index":15}'::jsonb
+      1120,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-con-grasas-o-con-acne/cremas-de-dia/sebiaclear-matpores/","source_categories":["Pieles Con Grasas O Con Acne","Cremas De Dia"],"source_availability":"Agotado","pricing_formula":{"source_price":288,"margin_rate":0.45,"margin_amount":129.6,"sale_price":158.4,"seller_commission_rate":0.1,"seller_commission_amount":12.96,"net_margin_after_seller":116.64},"source_index":29}'::jsonb
     ),
     (
       'sebiaclear-micro-peel',
@@ -3333,8 +3203,8 @@ cross join (
       '',
       2,
       'Paso 2: tratar',
-      'Bs. 138',
-      137.5,
+      'Bs. 211',
+      211.2,
       'BOB',
       'in_stock',
       true,
@@ -3347,8 +3217,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2022/05/SEBIACLEAR-MICRO-PEEL-150ML.jpg',
       'Sebiaclear Micro-peel de SVR',
-      1126,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-con-grasas-o-con-acne/sebiaclear-micro-peel-150ml/","source_categories":["Pieles Con Grasas O Con Acne"],"source_availability":"instock","pricing_formula":{"source_price":250,"margin_rate":0.45,"margin_amount":112.5,"sale_price":137.5,"seller_commission_rate":0.1,"seller_commission_amount":11.25,"net_margin_after_seller":101.25},"source_index":17}'::jsonb
+      1121,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-con-grasas-o-con-acne/sebiaclear-micro-peel-150ml/","source_categories":["Pieles Con Grasas O Con Acne"],"source_availability":"instock","pricing_formula":{"source_price":384,"margin_rate":0.45,"margin_amount":172.8,"sale_price":211.2,"seller_commission_rate":0.1,"seller_commission_amount":17.28,"net_margin_after_seller":155.52},"source_index":31}'::jsonb
     ),
     (
       'sebiaclear-serum',
@@ -3373,8 +3243,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2026/06/SEBIACLEAR-SERUM-.jpg',
       'Sebiaclear Serum de SVR',
-      1127,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-con-grasas-o-con-acne/8921/","source_categories":["Pieles Con Grasas O Con Acne"],"source_availability":"Agotado","pricing_formula":{"source_price":469,"margin_rate":0.45,"margin_amount":211.05,"sale_price":257.95,"seller_commission_rate":0.1,"seller_commission_amount":21.11,"net_margin_after_seller":189.94},"source_index":8}'::jsonb
+      1122,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-con-grasas-o-con-acne/8921/","source_categories":["Pieles Con Grasas O Con Acne"],"source_availability":"Agotado","pricing_formula":{"source_price":469,"margin_rate":0.45,"margin_amount":211.05,"sale_price":257.95,"seller_commission_rate":0.1,"seller_commission_amount":21.11,"net_margin_after_seller":189.94},"source_index":22}'::jsonb
     ),
     (
       'teen-derm-k',
@@ -3385,8 +3255,8 @@ cross join (
       '',
       2,
       'Paso 2: tratar',
-      'Bs. 138',
-      137.5,
+      'Bs. 131',
+      130.9,
       'BOB',
       'in_stock',
       true,
@@ -3399,8 +3269,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2026/05/TEEN-DERM-K.jpg',
       'Teen Derm K de ISISPHARMA',
-      1128,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-con-grasas-o-con-acne/teen-derm-k-concentrate-30ml/","source_categories":["Pieles Con Grasas O Con Acne"],"source_availability":"instock","pricing_formula":{"source_price":250,"margin_rate":0.45,"margin_amount":112.5,"sale_price":137.5,"seller_commission_rate":0.1,"seller_commission_amount":11.25,"net_margin_after_seller":101.25},"source_index":42}'::jsonb
+      1123,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-con-grasas-o-con-acne/teen-derm-k-concentrate-30ml/","source_categories":["Pieles Con Grasas O Con Acne"],"source_availability":"instock","pricing_formula":{"source_price":238,"margin_rate":0.45,"margin_amount":107.1,"sale_price":130.9,"seller_commission_rate":0.1,"seller_commission_amount":10.71,"net_margin_after_seller":96.39},"source_index":55}'::jsonb
     ),
     (
       'b3-masque-hydra-x-6-und',
@@ -3425,8 +3295,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2022/05/AMPOULE-B-MASQUE.jpg',
       'B3 Masque Hydra x 6 Und de SVR',
-      1129,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/b3-masque-12ml-x6uni/","source_categories":["Hidratantes Y Nutritivos"],"source_availability":"Agotado","pricing_formula":{"source_price":420,"margin_rate":0.45,"margin_amount":189,"sale_price":231,"seller_commission_rate":0.1,"seller_commission_amount":18.9,"net_margin_after_seller":170.1},"source_index":130}'::jsonb
+      1124,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/b3-masque-12ml-x6uni/","source_categories":["Hidratantes Y Nutritivos"],"source_availability":"Agotado","pricing_formula":{"source_price":420,"margin_rate":0.45,"margin_amount":189,"sale_price":231,"seller_commission_rate":0.1,"seller_commission_amount":18.9,"net_margin_after_seller":170.1},"source_index":129}'::jsonb
     ),
     (
       'balsamo-fundente-200-ml',
@@ -3451,8 +3321,34 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/08/Diseno-sin-titulo-22.jpg',
       'Balsamo Fundente 200 ml de URIAGE',
-      1130,
+      1125,
       '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/eau-thermale-balsamo-fundente/","source_categories":["Hidratantes Y Nutritivos"],"source_availability":"instock","pricing_formula":{"source_price":294,"margin_rate":0.45,"margin_amount":132.3,"sale_price":161.7,"seller_commission_rate":0.1,"seller_commission_amount":13.23,"net_margin_after_seller":119.07},"source_index":256}'::jsonb
+    ),
+    (
+      'bariederm-cica-daily-gel-crema-40ml',
+      'Bariéderm Cica Daily Gel Crema 40ML',
+      'Bariéderm Cica Daily Gel Crema 40ML',
+      'URIAGE',
+      'Hidratacion',
+      '40 ml',
+      3,
+      'Paso 3: hidratar',
+      'Bs. 231',
+      231,
+      'BOB',
+      'in_stock',
+      true,
+      false,
+      10,
+      'URIAGE para hidratacion y soporte de barrera cutanea en rutina diaria.',
+      'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
+      array['Hidratacion','Barrera cutanea','Uso diario']::text[],
+      array['Piel seca','Barrera cutanea','Rutina diaria']::text[],
+      array['Ver envase','Confirmar composicion']::text[],
+      'https://hbderm.com/wp-content/uploads/2024/08/BARIEDERM-GEL-CREMA.jpg',
+      'Bariéderm Cica Daily Gel Crema 40ML de URIAGE',
+      1126,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/cuidados-del-bebe/cuidados-hidratantes/bariederm-cica-daily-crema/","source_categories":["Cuidados Del Bebe","Cuidados Hidratantes"],"source_availability":"instock","pricing_formula":{"source_price":420,"margin_rate":0.45,"margin_amount":189,"sale_price":231,"seller_commission_rate":0.1,"seller_commission_amount":18.9,"net_margin_after_seller":170.1},"source_index":292}'::jsonb
     ),
     (
       'bariederm-cica-crema-con-cu-zn',
@@ -3477,8 +3373,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/08/Diseno-sin-titulo-21.jpg',
       'Bariéderm Cica-crema Con Cu-zn de URIAGE',
-      1131,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-atopicas/hidratantes/bariederm-cica-crema-con-cu-zn/","source_categories":["Pieles Atopicas","Hidratantes"],"source_availability":"instock","pricing_formula":{"source_price":238,"margin_rate":0.45,"margin_amount":107.1,"sale_price":130.9,"seller_commission_rate":0.1,"seller_commission_amount":10.71,"net_margin_after_seller":96.39},"source_index":275}'::jsonb
+      1127,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-atopicas/hidratantes/bariederm-cica-crema-con-cu-zn/","source_categories":["Pieles Atopicas","Hidratantes"],"source_availability":"instock","pricing_formula":{"source_price":238,"margin_rate":0.45,"margin_amount":107.1,"sale_price":130.9,"seller_commission_rate":0.1,"seller_commission_amount":10.71,"net_margin_after_seller":96.39},"source_index":276}'::jsonb
     ),
     (
       'bariederm-crema-de-manos',
@@ -3503,8 +3399,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2023/07/Diseño-sin-título-16.png',
       'Bariéderm Crema De Manos de URIAGE',
-      1132,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/hidratantes-de-manos-y-pies/bariederm-crema-de-manos-50ml/","source_categories":["Hidratantes Y Nutritivos","Hidratantes De Manos Y Pies"],"source_availability":"Agotado","pricing_formula":{"source_price":144,"margin_rate":0.45,"margin_amount":64.8,"sale_price":79.2,"seller_commission_rate":0.1,"seller_commission_amount":6.48,"net_margin_after_seller":58.32},"source_index":115}'::jsonb
+      1128,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/hidratantes-de-manos-y-pies/bariederm-crema-de-manos-50ml/","source_categories":["Hidratantes Y Nutritivos","Hidratantes De Manos Y Pies"],"source_availability":"Agotado","pricing_formula":{"source_price":144,"margin_rate":0.45,"margin_amount":64.8,"sale_price":79.2,"seller_commission_rate":0.1,"seller_commission_amount":6.48,"net_margin_after_seller":58.32},"source_index":116}'::jsonb
     ),
     (
       'crema-de-agua-ligera',
@@ -3529,8 +3425,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/08/Diseno-sin-titulo-20.jpg',
       'Crema De Agua Ligera de URIAGE',
-      1133,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/eau-thermale-crema-de-agua-ligera/","source_categories":["Hidratantes Y Nutritivos"],"source_availability":"instock","pricing_formula":{"source_price":360,"margin_rate":0.45,"margin_amount":162,"sale_price":198,"seller_commission_rate":0.1,"seller_commission_amount":16.2,"net_margin_after_seller":145.8},"source_index":287}'::jsonb
+      1129,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/eau-thermale-crema-de-agua-ligera/","source_categories":["Hidratantes Y Nutritivos"],"source_availability":"instock","pricing_formula":{"source_price":360,"margin_rate":0.45,"margin_amount":162,"sale_price":198,"seller_commission_rate":0.1,"seller_commission_amount":16.2,"net_margin_after_seller":145.8},"source_index":288}'::jsonb
     ),
     (
       'crema-gommante-corporal-200ml',
@@ -3555,34 +3451,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2023/07/Diseño-sin-título-15.png',
       'Crema Gommante Corporal 200ML de URIAGE',
-      1134,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/crema-gomante-corporal-200-ml/","source_categories":["Hidratantes Y Nutritivos"],"source_availability":"instock","pricing_formula":{"source_price":360,"margin_rate":0.45,"margin_amount":162,"sale_price":198,"seller_commission_rate":0.1,"seller_commission_amount":16.2,"net_margin_after_seller":145.8},"source_index":288}'::jsonb
-    ),
-    (
-      'depiwhite-mousse-nettoyante',
-      'Dépiwhite Mousse Nettoyante',
-      'Dépiwhite Mousse Nettoyante',
-      'ACM',
-      'Hidratacion',
-      '',
-      3,
-      'Paso 3: hidratar',
-      'Bs. 154',
-      154,
-      'BOB',
-      'in_stock',
-      true,
-      false,
-      10,
-      'ACM para hidratacion y soporte de barrera cutanea en rutina diaria.',
-      'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
-      array['Hidratacion','Barrera cutanea','Uso diario']::text[],
-      array['Piel seca','Barrera cutanea','Rutina diaria']::text[],
-      array['Ver envase','Confirmar composicion']::text[],
-      'https://hbderm.com/wp-content/uploads/2024/08/Diseno-sin-titulo-24.jpg',
-      'Dépiwhite Mousse Nettoyante de ACM',
-      1135,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/acm-depiwhite-mousse-nettoyante-200ml/","source_categories":["Hidratantes Y Nutritivos"],"source_availability":"instock","pricing_formula":{"source_price":280,"margin_rate":0.45,"margin_amount":126,"sale_price":154,"seller_commission_rate":0.1,"seller_commission_amount":12.6,"net_margin_after_seller":113.4},"source_index":235}'::jsonb
+      1130,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/crema-gomante-corporal-200-ml/","source_categories":["Hidratantes Y Nutritivos"],"source_availability":"instock","pricing_formula":{"source_price":360,"margin_rate":0.45,"margin_amount":162,"sale_price":198,"seller_commission_rate":0.1,"seller_commission_amount":16.2,"net_margin_after_seller":145.8},"source_index":287}'::jsonb
     ),
     (
       'esencia-de-agua',
@@ -3607,8 +3477,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/08/Diseno-sin-titulo-15.jpg',
       'Esencia De Agua de URIAGE',
-      1136,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-atopicas/hidratantes/esencia-de-agua-iluminadora/","source_categories":["Pieles Atopicas","Hidratantes"],"source_availability":"instock","pricing_formula":{"source_price":396,"margin_rate":0.45,"margin_amount":178.2,"sale_price":217.8,"seller_commission_rate":0.1,"seller_commission_amount":17.82,"net_margin_after_seller":160.38},"source_index":308}'::jsonb
+      1131,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-atopicas/hidratantes/esencia-de-agua-iluminadora/","source_categories":["Pieles Atopicas","Hidratantes"],"source_availability":"instock","pricing_formula":{"source_price":396,"margin_rate":0.45,"margin_amount":178.2,"sale_price":217.8,"seller_commission_rate":0.1,"seller_commission_amount":17.82,"net_margin_after_seller":160.38},"source_index":309}'::jsonb
     ),
     (
       'kit-de-viaje-hidratacion-termal',
@@ -3633,8 +3503,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2025/10/KIT-DE-VIAJE.jpg',
       'Kit De Viaje Hidratacion Termal de URIAGE',
-      1137,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/sin-categorizar/kit-de-viaje-hidratacion-termal/","source_categories":["Sin Categorizar"],"source_availability":"instock","pricing_formula":{"source_price":195,"margin_rate":0.45,"margin_amount":87.75,"sale_price":107.25,"seller_commission_rate":0.1,"seller_commission_amount":8.78,"net_margin_after_seller":78.97},"source_index":11}'::jsonb
+      1132,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/sin-categorizar/kit-de-viaje-hidratacion-termal/","source_categories":["Sin Categorizar"],"source_availability":"instock","pricing_formula":{"source_price":195,"margin_rate":0.45,"margin_amount":87.75,"sale_price":107.25,"seller_commission_rate":0.1,"seller_commission_amount":8.78,"net_margin_after_seller":78.97},"source_index":24}'::jsonb
     ),
     (
       'micellar-solution',
@@ -3659,8 +3529,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/09/MICELLAR-400-ML.jpg',
       'Micellar Solution de ISDIN',
-      1138,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/locion-micellar-solution/","source_categories":["Hidratantes Y Nutritivos"],"source_availability":"instock","pricing_formula":{"source_price":257,"margin_rate":0.45,"margin_amount":115.65,"sale_price":141.35,"seller_commission_rate":0.1,"seller_commission_amount":11.57,"net_margin_after_seller":104.08},"source_index":65}'::jsonb
+      1133,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/locion-micellar-solution/","source_categories":["Hidratantes Y Nutritivos"],"source_availability":"instock","pricing_formula":{"source_price":257,"margin_rate":0.45,"margin_amount":115.65,"sale_price":141.35,"seller_commission_rate":0.1,"seller_commission_amount":11.57,"net_margin_after_seller":104.08},"source_index":75}'::jsonb
     ),
     (
       'ncef-essence',
@@ -3685,7 +3555,7 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/09/NCEF-ESSENCE-1.jpg',
       'Ncef Essence de FILORGA',
-      1139,
+      1134,
       '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/hidratantes-del-rostro/ncef-essence/","source_categories":["Hidratantes Y Nutritivos","Hidratantes Del Rostro"],"source_availability":"instock","pricing_formula":{"source_price":816,"margin_rate":0.45,"margin_amount":367.2,"sale_price":448.8,"seller_commission_rate":0.1,"seller_commission_amount":36.72,"net_margin_after_seller":330.48},"source_index":193}'::jsonb
     ),
     (
@@ -3711,8 +3581,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2025/07/NOVOPHAE-ULTRA.jpg',
       'Novophane Ultra-nutritivo Shampoo de ACM',
-      1140,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/sin-categorizar/novophane-champu-ultra-nutritivo-200ml/","source_categories":["Sin Categorizar"],"source_availability":"instock","pricing_formula":{"source_price":280,"margin_rate":0.45,"margin_amount":126,"sale_price":154,"seller_commission_rate":0.1,"seller_commission_amount":12.6,"net_margin_after_seller":113.4},"source_index":160}'::jsonb
+      1135,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/sin-categorizar/novophane-champu-ultra-nutritivo-200ml/","source_categories":["Sin Categorizar"],"source_availability":"instock","pricing_formula":{"source_price":280,"margin_rate":0.45,"margin_amount":126,"sale_price":154,"seller_commission_rate":0.1,"seller_commission_amount":12.6,"net_margin_after_seller":113.4},"source_index":162}'::jsonb
     ),
     (
       'nutradeica',
@@ -3737,8 +3607,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/09/NUTRADEICA.jpg',
       'Nutradeica de ISDIN',
-      1141,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/hidratantes-del-rostro/nutradeica-gel-crema-facial-piel-seborreica-50-ml/","source_categories":["Hidratantes Y Nutritivos","Hidratantes Del Rostro"],"source_availability":"Agotado","pricing_formula":{"source_price":252,"margin_rate":0.45,"margin_amount":113.4,"sale_price":138.6,"seller_commission_rate":0.1,"seller_commission_amount":11.34,"net_margin_after_seller":102.06},"source_index":127}'::jsonb
+      1136,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/hidratantes-del-rostro/nutradeica-gel-crema-facial-piel-seborreica-50-ml/","source_categories":["Hidratantes Y Nutritivos","Hidratantes Del Rostro"],"source_availability":"Agotado","pricing_formula":{"source_price":252,"margin_rate":0.45,"margin_amount":113.4,"sale_price":138.6,"seller_commission_rate":0.1,"seller_commission_amount":11.34,"net_margin_after_seller":102.06},"source_index":126}'::jsonb
     ),
     (
       'nutratopic-pro-amp-locion-facial',
@@ -3763,8 +3633,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/09/NUTRATOPIC-FACIAL.jpg',
       'Nutratopic Pro-amp Loción Facial de ISDIN',
-      1142,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-atopicas/hidratantes/nutratopic-pro-amp-crema-facial-50ml/","source_categories":["Pieles Atopicas","Hidratantes"],"source_availability":"Agotado","pricing_formula":{"source_price":336,"margin_rate":0.45,"margin_amount":151.2,"sale_price":184.8,"seller_commission_rate":0.1,"seller_commission_amount":15.12,"net_margin_after_seller":136.08},"source_index":145}'::jsonb
+      1137,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-atopicas/hidratantes/nutratopic-pro-amp-crema-facial-50ml/","source_categories":["Pieles Atopicas","Hidratantes"],"source_availability":"Agotado","pricing_formula":{"source_price":336,"margin_rate":0.45,"margin_amount":151.2,"sale_price":184.8,"seller_commission_rate":0.1,"seller_commission_amount":15.12,"net_margin_after_seller":136.08},"source_index":146}'::jsonb
     ),
     (
       'sedacalm-crema',
@@ -3789,8 +3659,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/09/SEDACALM-CREMA.jpg',
       'Sédacalm Crema de ACM',
-      1143,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/sedacalm-crema/","source_categories":["Hidratantes Y Nutritivos"],"source_availability":"instock","pricing_formula":{"source_price":264,"margin_rate":0.45,"margin_amount":118.8,"sale_price":145.2,"seller_commission_rate":0.1,"seller_commission_amount":11.88,"net_margin_after_seller":106.92},"source_index":112}'::jsonb
+      1138,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/sedacalm-crema/","source_categories":["Hidratantes Y Nutritivos"],"source_availability":"instock","pricing_formula":{"source_price":264,"margin_rate":0.45,"margin_amount":118.8,"sale_price":145.2,"seller_commission_rate":0.1,"seller_commission_amount":11.88,"net_margin_after_seller":106.92},"source_index":113}'::jsonb
     ),
     (
       'time-filler-shot-5xp',
@@ -3815,8 +3685,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/05/Diseno-sin-titulo-5.jpg',
       'Time Filler Shot 5XP de FILORGA',
-      1144,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/hidratantes-del-cuerpo/time-filler-shot-5xp/","source_categories":["Hidratantes Y Nutritivos","Hidratantes Del Cuerpo"],"source_availability":"Agotado","pricing_formula":{"source_price":864,"margin_rate":0.45,"margin_amount":388.8,"sale_price":475.2,"seller_commission_rate":0.1,"seller_commission_amount":38.88,"net_margin_after_seller":349.92},"source_index":45}'::jsonb
+      1139,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/hidratantes-del-cuerpo/time-filler-shot-5xp/","source_categories":["Hidratantes Y Nutritivos","Hidratantes Del Cuerpo"],"source_availability":"Agotado","pricing_formula":{"source_price":864,"margin_rate":0.45,"margin_amount":388.8,"sale_price":475.2,"seller_commission_rate":0.1,"seller_commission_amount":38.88,"net_margin_after_seller":349.92},"source_index":57}'::jsonb
     ),
     (
       'topialyse-baume-lavant-400ml',
@@ -3841,8 +3711,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2022/06/TOPIALYSE-BAUME-LAVANT-400ML.jpg',
       'Topialyse Baume Lavant - 400ML de SVR',
-      1145,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/topialyse-baume-lavant-400ml/","source_categories":["Hidratantes Y Nutritivos"],"source_availability":"Agotado","pricing_formula":{"source_price":456,"margin_rate":0.45,"margin_amount":205.2,"sale_price":250.8,"seller_commission_rate":0.1,"seller_commission_amount":20.52,"net_margin_after_seller":184.68},"source_index":149}'::jsonb
+      1140,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/topialyse-baume-lavant-400ml/","source_categories":["Hidratantes Y Nutritivos"],"source_availability":"Agotado","pricing_formula":{"source_price":456,"margin_rate":0.45,"margin_amount":205.2,"sale_price":250.8,"seller_commission_rate":0.1,"seller_commission_amount":20.52,"net_margin_after_seller":184.68},"source_index":150}'::jsonb
     ),
     (
       'topialyse-crema-400ml',
@@ -3867,8 +3737,34 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2025/05/SVR-11.jpg',
       'Topialyse Crema - 400ML de SVR',
-      1146,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/topialyse-creme-400ml/","source_categories":["Hidratantes Y Nutritivos"],"source_availability":"Agotado","pricing_formula":{"source_price":388,"margin_rate":0.45,"margin_amount":174.6,"sale_price":213.4,"seller_commission_rate":0.1,"seller_commission_amount":17.46,"net_margin_after_seller":157.14},"source_index":134}'::jsonb
+      1141,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/topialyse-creme-400ml/","source_categories":["Hidratantes Y Nutritivos"],"source_availability":"Agotado","pricing_formula":{"source_price":388,"margin_rate":0.45,"margin_amount":174.6,"sale_price":213.4,"seller_commission_rate":0.1,"seller_commission_amount":17.46,"net_margin_after_seller":157.14},"source_index":133}'::jsonb
+    ),
+    (
+      'topialyse-gel-lavant-1l',
+      'Topialyse Gel Lavant - 1L',
+      'Topialyse Gel Lavant - 1L',
+      'SVR',
+      'Hidratacion',
+      '',
+      3,
+      'Paso 3: hidratar',
+      'Bs. 226',
+      225.5,
+      'BOB',
+      'in_stock',
+      true,
+      false,
+      10,
+      'SVR para hidratacion y soporte de barrera cutanea en rutina diaria.',
+      'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
+      array['Hidratacion','Barrera cutanea','Uso diario']::text[],
+      array['Piel seca','Barrera cutanea','Rutina diaria']::text[],
+      array['Ver envase','Confirmar composicion']::text[],
+      'https://hbderm.com/wp-content/uploads/2022/06/TOPIALYSE-GEL-LAVANTE-1-LITRO.jpg',
+      'Topialyse Gel Lavant - 1L de SVR',
+      1142,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/topialyse-gel-lavant-1l/","source_categories":["Hidratantes Y Nutritivos"],"source_availability":"Agotado","pricing_formula":{"source_price":410,"margin_rate":0.45,"margin_amount":184.5,"sale_price":225.5,"seller_commission_rate":0.1,"seller_commission_amount":18.45,"net_margin_after_seller":166.05},"source_index":118}'::jsonb
     ),
     (
       'xemose-crema-relipidante-400ml-xemose-huile-200ml',
@@ -3893,7 +3789,7 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2025/10/6860C5B9-E0AE-488D-8C0E-DCAED08E8EC0_L0_001-9_14_2025-11_45_07-a.m.jpg',
       'Xémose – Crema Relipidante 400ML + Xemose Huile 200ML de URIAGE',
-      1147,
+      1143,
       '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-atopicas/xemose-crema-relipidante-400ml-xemose-huile-200ml/","source_categories":["Pieles Atopicas"],"source_availability":"Agotado","pricing_formula":{"source_price":516,"margin_rate":0.45,"margin_amount":232.2,"sale_price":283.8,"seller_commission_rate":0.1,"seller_commission_amount":23.22,"net_margin_after_seller":208.98},"source_index":91}'::jsonb
     ),
     (
@@ -3919,8 +3815,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2021/10/574593.jpg',
       'Xemose Baume Oleo 500ML de URIAGE',
-      1148,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/cuidados-del-bebe/novophane-baume-oleo-500ml/","source_categories":["Cuidados Del Bebe"],"source_availability":"instock","pricing_formula":{"source_price":486,"margin_rate":0.45,"margin_amount":218.7,"sale_price":267.3,"seller_commission_rate":0.1,"seller_commission_amount":21.87,"net_margin_after_seller":196.83},"source_index":232}'::jsonb
+      1144,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/cuidados-del-bebe/novophane-baume-oleo-500ml/","source_categories":["Cuidados Del Bebe"],"source_availability":"instock","pricing_formula":{"source_price":486,"margin_rate":0.45,"margin_amount":218.7,"sale_price":267.3,"seller_commission_rate":0.1,"seller_commission_amount":21.87,"net_margin_after_seller":196.83},"source_index":235}'::jsonb
     ),
     (
       'xemose-bruma-sos-200-ml',
@@ -3945,8 +3841,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2023/07/Diseño-sin-título-19.png',
       'Xemose Bruma Sos 200 ml de URIAGE',
-      1149,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-atopicas/hidratantes/xemose-bruma-sos-200-ml/","source_categories":["Pieles Atopicas","Hidratantes"],"source_availability":"instock","pricing_formula":{"source_price":228,"margin_rate":0.45,"margin_amount":102.6,"sale_price":125.4,"seller_commission_rate":0.1,"seller_commission_amount":10.26,"net_margin_after_seller":92.34},"source_index":231}'::jsonb
+      1145,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-atopicas/hidratantes/xemose-bruma-sos-200-ml/","source_categories":["Pieles Atopicas","Hidratantes"],"source_availability":"instock","pricing_formula":{"source_price":228,"margin_rate":0.45,"margin_amount":102.6,"sale_price":125.4,"seller_commission_rate":0.1,"seller_commission_amount":10.26,"net_margin_after_seller":92.34},"source_index":234}'::jsonb
     ),
     (
       'xemose-c8-crema-relipidizante-anti-irritaciones-400ml',
@@ -3971,8 +3867,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2021/02/XEMOSE-CREMA-.png',
       'Xémose C8+ - Crema Relipidizante Anti-irritaciones 400ML de URIAGE',
-      1150,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-atopicas/hidratantes/xemose-crema-relipidizante/","source_categories":["Pieles Atopicas","Hidratantes"],"source_availability":"instock","pricing_formula":{"source_price":480,"margin_rate":0.45,"margin_amount":216,"sale_price":264,"seller_commission_rate":0.1,"seller_commission_amount":21.6,"net_margin_after_seller":194.4},"source_index":6}'::jsonb
+      1146,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-atopicas/hidratantes/xemose-crema-relipidizante/","source_categories":["Pieles Atopicas","Hidratantes"],"source_availability":"instock","pricing_formula":{"source_price":480,"margin_rate":0.45,"margin_amount":216,"sale_price":264,"seller_commission_rate":0.1,"seller_commission_amount":21.6,"net_margin_after_seller":194.4},"source_index":15}'::jsonb
     ),
     (
       'xemose-c8-syndent-500ml',
@@ -3997,60 +3893,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2026/05/XEMOSE-SYDENT-C8.jpg',
       'Xémose C8+ - Syndent 500ML de URIAGE',
-      1151,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/cuidados-del-bebe/xemose-syndet-500ml-2/","source_categories":["Cuidados Del Bebe"],"source_availability":"instock","pricing_formula":{"source_price":389,"margin_rate":0.45,"margin_amount":175.05,"sale_price":213.95,"seller_commission_rate":0.1,"seller_commission_amount":17.51,"net_margin_after_seller":157.54},"source_index":56}'::jsonb
-    ),
-    (
-      'xemose-huile-lavante-200-ml',
-      'Xemose Huile Lavante 200 ml',
-      'Xemose Huile Lavante 200 ml',
-      'URIAGE',
-      'Hidratacion',
-      '200 ml',
-      3,
-      'Paso 3: hidratar',
-      'Bs. 185',
-      184.8,
-      'BOB',
-      'in_stock',
-      true,
-      false,
-      10,
-      'URIAGE para hidratacion y soporte de barrera cutanea en rutina diaria.',
-      'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
-      array['Hidratacion','Barrera cutanea','Uso diario']::text[],
-      array['Piel seca','Barrera cutanea','Rutina diaria']::text[],
-      array['Ver envase','Confirmar composicion']::text[],
-      'https://hbderm.com/wp-content/uploads/2023/07/Diseño-sin-título-18.png',
-      'Xemose Huile Lavante 200 ml de URIAGE',
-      1152,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/xemose-huile-lavante-200-ml/","source_categories":["Hidratantes Y Nutritivos"],"source_availability":"Agotado","pricing_formula":{"source_price":336,"margin_rate":0.45,"margin_amount":151.2,"sale_price":184.8,"seller_commission_rate":0.1,"seller_commission_amount":15.12,"net_margin_after_seller":136.08},"source_index":280}'::jsonb
-    ),
-    (
-      'xemose-huile-lavante-500-ml',
-      'Xemose Huile Lavante 500 ml',
-      'Xemose Huile Lavante 500 ml',
-      'URIAGE',
-      'Hidratacion',
-      '500 ml',
-      3,
-      'Paso 3: hidratar',
-      'Bs. 173',
-      172.7,
-      'BOB',
-      'in_stock',
-      true,
-      false,
-      10,
-      'URIAGE para hidratacion y soporte de barrera cutanea en rutina diaria.',
-      'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
-      array['Hidratacion','Barrera cutanea','Uso diario']::text[],
-      array['Piel seca','Barrera cutanea','Rutina diaria']::text[],
-      array['Ver envase','Confirmar composicion']::text[],
-      'https://hbderm.com/wp-content/uploads/2023/12/Diseño-sin-título-20.png',
-      'Xemose Huile Lavante 500 ml de URIAGE',
-      1153,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-atopicas/xemose-huile-lavante-500-ml/","source_categories":["Pieles Atopicas"],"source_availability":"instock","pricing_formula":{"source_price":314,"margin_rate":0.45,"margin_amount":141.3,"sale_price":172.7,"seller_commission_rate":0.1,"seller_commission_amount":14.13,"net_margin_after_seller":127.17},"source_index":236}'::jsonb
+      1147,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/cuidados-del-bebe/xemose-syndet-500ml-2/","source_categories":["Cuidados Del Bebe"],"source_availability":"instock","pricing_formula":{"source_price":389,"margin_rate":0.45,"margin_amount":175.05,"sale_price":213.95,"seller_commission_rate":0.1,"seller_commission_amount":17.51,"net_margin_after_seller":157.54},"source_index":67}'::jsonb
     ),
     (
       'xemose-pso',
@@ -4075,7 +3919,7 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2022/08/XEMOSE-PSO-1.jpg',
       'Xemose Pso de URIAGE',
-      1154,
+      1148,
       '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-atopicas/xemose-pso-150ml/","source_categories":["Pieles Atopicas"],"source_availability":"instock","pricing_formula":{"source_price":286,"margin_rate":0.45,"margin_amount":128.7,"sale_price":157.3,"seller_commission_rate":0.1,"seller_commission_amount":12.87,"net_margin_after_seller":115.83},"source_index":92}'::jsonb
     ),
     (
@@ -4101,8 +3945,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2020/06/XERIAL-10.png',
       'Xerial 10 Leche Corporal - 200ML de SVR',
-      1155,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/xerial-10-leche-corporal/","source_categories":["Hidratantes Y Nutritivos"],"source_availability":"Agotado","pricing_formula":{"source_price":278,"margin_rate":0.45,"margin_amount":125.1,"sale_price":152.9,"seller_commission_rate":0.1,"seller_commission_amount":12.51,"net_margin_after_seller":112.59},"source_index":52}'::jsonb
+      1149,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/xerial-10-leche-corporal/","source_categories":["Hidratantes Y Nutritivos"],"source_availability":"Agotado","pricing_formula":{"source_price":278,"margin_rate":0.45,"margin_amount":125.1,"sale_price":152.9,"seller_commission_rate":0.1,"seller_commission_amount":12.51,"net_margin_after_seller":112.59},"source_index":62}'::jsonb
     ),
     (
       'xerial-30-crema-50ml',
@@ -4127,7 +3971,7 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2020/06/XERIAL-30.png',
       'Xerial 30 Crema 50ML de SVR',
-      1156,
+      1150,
       '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/xerial-30-crema/","source_categories":["Hidratantes Y Nutritivos"],"source_availability":"Agotado","pricing_formula":{"source_price":255,"margin_rate":0.45,"margin_amount":114.75,"sale_price":140.25,"seller_commission_rate":0.1,"seller_commission_amount":11.48,"net_margin_after_seller":103.27},"source_index":213}'::jsonb
     ),
     (
@@ -4153,8 +3997,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2020/06/xerial-50.jpg',
       'Xerial 50 Extreme Crema 50ML de SVR',
-      1157,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/xerial-50-extreme-crema/","source_categories":["Hidratantes Y Nutritivos"],"source_availability":"Agotado","pricing_formula":{"source_price":302,"margin_rate":0.45,"margin_amount":135.9,"sale_price":166.1,"seller_commission_rate":0.1,"seller_commission_amount":13.59,"net_margin_after_seller":122.31},"source_index":132}'::jsonb
+      1151,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/xerial-50-extreme-crema/","source_categories":["Hidratantes Y Nutritivos"],"source_availability":"Agotado","pricing_formula":{"source_price":302,"margin_rate":0.45,"margin_amount":135.9,"sale_price":166.1,"seller_commission_rate":0.1,"seller_commission_amount":13.59,"net_margin_after_seller":122.31},"source_index":131}'::jsonb
     ),
     (
       'c20-biotic',
@@ -4172,15 +4016,15 @@ cross join (
       true,
       false,
       10,
-      'SVR seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'SVR seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2022/05/C20-BIOTIC.jpg',
       '[C20] Biotic de SVR',
-      1158,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/c20biotic/","source_categories":["Antiedad"],"source_availability":"Agotado","pricing_formula":{"source_price":816,"margin_rate":0.45,"margin_amount":367.2,"sale_price":448.8,"seller_commission_rate":0.1,"seller_commission_amount":36.72,"net_margin_after_seller":330.48},"source_index":122}'::jsonb
+      1152,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/c20biotic/","source_categories":["Antiedad"],"source_availability":"Agotado","pricing_formula":{"source_price":816,"margin_rate":0.45,"margin_amount":367.2,"sale_price":448.8,"seller_commission_rate":0.1,"seller_commission_amount":36.72,"net_margin_after_seller":330.48},"source_index":123}'::jsonb
     ),
     (
       'cera-biotic',
@@ -4198,15 +4042,15 @@ cross join (
       true,
       false,
       10,
-      'SVR seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'SVR seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2022/05/CERA-BIOTIC.jpg',
       '[cera] Biotic de SVR',
-      1159,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/cerabiotic/","source_categories":["Antiedad"],"source_availability":"Agotado","pricing_formula":{"source_price":816,"margin_rate":0.45,"margin_amount":367.2,"sale_price":448.8,"seller_commission_rate":0.1,"seller_commission_amount":36.72,"net_margin_after_seller":330.48},"source_index":123}'::jsonb
+      1153,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/cerabiotic/","source_categories":["Antiedad"],"source_availability":"Agotado","pricing_formula":{"source_price":816,"margin_rate":0.45,"margin_amount":367.2,"sale_price":448.8,"seller_commission_rate":0.1,"seller_commission_amount":36.72,"net_margin_after_seller":330.48},"source_index":122}'::jsonb
     ),
     (
       'pepti-biotic',
@@ -4224,15 +4068,15 @@ cross join (
       true,
       false,
       10,
-      'SVR seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'SVR seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2022/05/PEPTI-BIOTIC.jpg',
       '[pepti] Biotic de SVR',
-      1160,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/9036/","source_categories":["Antiedad"],"source_availability":"instock","pricing_formula":{"source_price":816,"margin_rate":0.45,"margin_amount":367.2,"sale_price":448.8,"seller_commission_rate":0.1,"seller_commission_amount":36.72,"net_margin_after_seller":330.48},"source_index":53}'::jsonb
+      1154,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/9036/","source_categories":["Antiedad"],"source_availability":"instock","pricing_formula":{"source_price":816,"margin_rate":0.45,"margin_amount":367.2,"sale_price":448.8,"seller_commission_rate":0.1,"seller_commission_amount":36.72,"net_margin_after_seller":330.48},"source_index":65}'::jsonb
     ),
     (
       'acniben-mascarilla-purificante',
@@ -4250,41 +4094,15 @@ cross join (
       true,
       false,
       10,
-      'ISDIN seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'ISDIN seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2025/07/ACNIBEN-MASCARILLA.jpg',
       'Acniben Mascarilla Purificante de ISDIN',
-      1161,
+      1155,
       '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/exfoliantes-y-mascarillas/mascarilla-facial-purificante-acniben/","source_categories":["Antiedad","Exfoliantes Y Mascarillas"],"source_availability":"instock","pricing_formula":{"source_price":294,"margin_rate":0.45,"margin_amount":132.3,"sale_price":161.7,"seller_commission_rate":0.1,"seller_commission_amount":13.23,"net_margin_after_seller":119.07},"source_index":297}'::jsonb
-    ),
-    (
-      'age-purify-cleanser',
-      'Age Purify Cleanser',
-      'Age Purify Cleanser',
-      'FILORGA',
-      'Antiedad',
-      '',
-      2,
-      'Paso 2: tratar',
-      'Bs. 238',
-      237.6,
-      'BOB',
-      'in_stock',
-      true,
-      false,
-      10,
-      'FILORGA seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
-      'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
-      array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
-      array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
-      array['Ver envase','Confirmar composicion']::text[],
-      'https://hbderm.com/wp-content/uploads/2024/09/AGE-PURIFY-CLENASER.jpg',
-      'Age Purify Cleanser de FILORGA',
-      1162,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/age-purify-cleanser/","source_categories":["Antiedad"],"source_availability":"instock","pricing_formula":{"source_price":432,"margin_rate":0.45,"margin_amount":194.4,"sale_price":237.6,"seller_commission_rate":0.1,"seller_commission_amount":19.44,"net_margin_after_seller":174.96},"source_index":178}'::jsonb
     ),
     (
       'age-purify-fluide',
@@ -4302,14 +4120,14 @@ cross join (
       true,
       false,
       10,
-      'FILORGA seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'FILORGA seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/09/AGE-PURIFY-FLUIDE.jpg',
       'Age Purify Fluide de FILORGA',
-      1163,
+      1156,
       '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/age-purify-fluide/","source_categories":["Antiedad"],"source_availability":"instock","pricing_formula":{"source_price":510,"margin_rate":0.45,"margin_amount":229.5,"sale_price":280.5,"seller_commission_rate":0.1,"seller_commission_amount":22.95,"net_margin_after_seller":206.55},"source_index":180}'::jsonb
     ),
     (
@@ -4328,15 +4146,15 @@ cross join (
       true,
       false,
       10,
-      'FILORGA seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'FILORGA seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/09/AGE-PURIFY-INTENSIVE.jpg',
       'Age Purify Intensive de FILORGA',
-      1164,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/age-purify-intensive-30ml/","source_categories":["Antiedad"],"source_availability":"instock","pricing_formula":{"source_price":510,"margin_rate":0.45,"margin_amount":229.5,"sale_price":280.5,"seller_commission_rate":0.1,"seller_commission_amount":22.95,"net_margin_after_seller":206.55},"source_index":179}'::jsonb
+      1157,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/age-purify-intensive-30ml/","source_categories":["Antiedad"],"source_availability":"instock","pricing_formula":{"source_price":510,"margin_rate":0.45,"margin_amount":229.5,"sale_price":280.5,"seller_commission_rate":0.1,"seller_commission_amount":22.95,"net_margin_after_seller":206.55},"source_index":177}'::jsonb
     ),
     (
       'age-purify-mask',
@@ -4347,22 +4165,22 @@ cross join (
       '',
       2,
       'Paso 2: tratar',
-      'Bs. 138',
-      137.5,
+      'Bs. 248',
+      247.5,
       'BOB',
       'in_stock',
       true,
       false,
       10,
-      'FILORGA seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'FILORGA seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/09/AGE-PURIFY-MASK.jpg',
       'Age Purify Mask de FILORGA',
-      1165,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-noche/age-purify-mask/","source_categories":["Antiedad","Tratamientos Noche"],"source_availability":"instock","pricing_formula":{"source_price":250,"margin_rate":0.45,"margin_amount":112.5,"sale_price":137.5,"seller_commission_rate":0.1,"seller_commission_amount":11.25,"net_margin_after_seller":101.25},"source_index":177}'::jsonb
+      1158,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-noche/age-purify-mask/","source_categories":["Antiedad","Tratamientos Noche"],"source_availability":"instock","pricing_formula":{"source_price":450,"margin_rate":0.45,"margin_amount":202.5,"sale_price":247.5,"seller_commission_rate":0.1,"seller_commission_amount":20.25,"net_margin_after_seller":182.25},"source_index":178}'::jsonb
     ),
     (
       'amatist-day-cream',
@@ -4373,22 +4191,22 @@ cross join (
       '',
       2,
       'Paso 2: tratar',
-      'Bs. 185',
-      184.8,
+      'Bs. 255',
+      255.2,
       'BOB',
       'in_stock',
       true,
       false,
       10,
-      'MARTIDERM seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'MARTIDERM seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/04/Diseno-sin-titulo-1.jpg',
       'Amatist Day Cream de MARTIDERM',
-      1166,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-dia/amatist-day-cream/","source_categories":["Antiedad","Tratamientos Dia"],"source_availability":"instock","pricing_formula":{"source_price":336,"margin_rate":0.45,"margin_amount":151.2,"sale_price":184.8,"seller_commission_rate":0.1,"seller_commission_amount":15.12,"net_margin_after_seller":136.08},"source_index":247}'::jsonb
+      1159,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-dia/amatist-day-cream/","source_categories":["Antiedad","Tratamientos Dia"],"source_availability":"instock","pricing_formula":{"source_price":464,"margin_rate":0.45,"margin_amount":208.8,"sale_price":255.2,"seller_commission_rate":0.1,"seller_commission_amount":20.88,"net_margin_after_seller":187.92},"source_index":246}'::jsonb
     ),
     (
       'amatist-serum',
@@ -4406,15 +4224,15 @@ cross join (
       true,
       false,
       10,
-      'MARTIDERM seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'MARTIDERM seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2025/05/AMATIST-SERUM.jpg',
       'Amatist Serum de MARTIDERM',
-      1167,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/amatist-serum/","source_categories":["Antiedad"],"source_availability":"instock","pricing_formula":{"source_price":486,"margin_rate":0.45,"margin_amount":218.7,"sale_price":267.3,"seller_commission_rate":0.1,"seller_commission_amount":21.87,"net_margin_after_seller":196.83},"source_index":243}'::jsonb
+      1160,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/amatist-serum/","source_categories":["Antiedad"],"source_availability":"instock","pricing_formula":{"source_price":486,"margin_rate":0.45,"margin_amount":218.7,"sale_price":267.3,"seller_commission_rate":0.1,"seller_commission_amount":21.87,"net_margin_after_seller":196.83},"source_index":244}'::jsonb
     ),
     (
       'ampoule-a',
@@ -4432,15 +4250,15 @@ cross join (
       true,
       false,
       10,
-      'SVR seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'SVR seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2026/05/AMPOULE-A.jpg',
       'Ampoule A de SVR',
-      1168,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/ampoule-a-30ml/","source_categories":["Antiedad"],"source_availability":"instock","pricing_formula":{"source_price":670,"margin_rate":0.45,"margin_amount":301.5,"sale_price":368.5,"seller_commission_rate":0.1,"seller_commission_amount":30.15,"net_margin_after_seller":271.35},"source_index":16}'::jsonb
+      1161,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/ampoule-a-30ml/","source_categories":["Antiedad"],"source_availability":"instock","pricing_formula":{"source_price":670,"margin_rate":0.45,"margin_amount":301.5,"sale_price":368.5,"seller_commission_rate":0.1,"seller_commission_amount":30.15,"net_margin_after_seller":271.35},"source_index":28}'::jsonb
     ),
     (
       'ampoule-a-30ml-blur-15-ml',
@@ -4458,15 +4276,15 @@ cross join (
       true,
       false,
       10,
-      'SVR seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'SVR seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2026/01/AMPOULE-A-BLUR.jpg',
       'Ampoule A 30ML + Blur 15 ml de SVR',
-      1169,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/serums/ampoule-a-30ml-blur-15-ml/","source_categories":["Antiedad","Serums"],"source_availability":"instock","pricing_formula":{"source_price":600,"margin_rate":0.45,"margin_amount":270,"sale_price":330,"seller_commission_rate":0.1,"seller_commission_amount":27,"net_margin_after_seller":243},"source_index":148}'::jsonb
+      1162,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/serums/ampoule-a-30ml-blur-15-ml/","source_categories":["Antiedad","Serums"],"source_availability":"instock","pricing_formula":{"source_price":600,"margin_rate":0.45,"margin_amount":270,"sale_price":330,"seller_commission_rate":0.1,"seller_commission_amount":27,"net_margin_after_seller":243},"source_index":149}'::jsonb
     ),
     (
       'ampoule-b',
@@ -4484,15 +4302,15 @@ cross join (
       true,
       false,
       10,
-      'SVR seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'SVR seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2022/05/AMPOULE-B-30ML.png',
       'Ampoule B de SVR',
-      1170,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/ampoule-b-30ml/","source_categories":["Antiedad"],"source_availability":"Agotado","pricing_formula":{"source_price":670,"margin_rate":0.45,"margin_amount":301.5,"sale_price":368.5,"seller_commission_rate":0.1,"seller_commission_amount":30.15,"net_margin_after_seller":271.35},"source_index":138}'::jsonb
+      1163,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/ampoule-b-30ml/","source_categories":["Antiedad"],"source_availability":"Agotado","pricing_formula":{"source_price":670,"margin_rate":0.45,"margin_amount":301.5,"sale_price":368.5,"seller_commission_rate":0.1,"seller_commission_amount":30.15,"net_margin_after_seller":271.35},"source_index":139}'::jsonb
     ),
     (
       'ampoule-c',
@@ -4510,15 +4328,15 @@ cross join (
       true,
       false,
       10,
-      'SVR seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'SVR seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2022/05/AMPOULE-C-30ML.jpg',
       'Ampoule C de SVR',
-      1171,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/ampoule-c-30ml/","source_categories":["Antiedad"],"source_availability":"Agotado","pricing_formula":{"source_price":670,"margin_rate":0.45,"margin_amount":301.5,"sale_price":368.5,"seller_commission_rate":0.1,"seller_commission_amount":30.15,"net_margin_after_seller":271.35},"source_index":51}'::jsonb
+      1164,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/ampoule-c-30ml/","source_categories":["Antiedad"],"source_availability":"Agotado","pricing_formula":{"source_price":670,"margin_rate":0.45,"margin_amount":301.5,"sale_price":368.5,"seller_commission_rate":0.1,"seller_commission_amount":30.15,"net_margin_after_seller":271.35},"source_index":64}'::jsonb
     ),
     (
       'bariederm-cica-lip-balm-15ml',
@@ -4536,15 +4354,15 @@ cross join (
       true,
       false,
       10,
-      'URIAGE seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'URIAGE seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/03/¿Existe-una-pareja-perfecta-1.png',
       'Bariéderm Cica Lip Balm - 15ML de URIAGE',
-      1172,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/contorno-de-labios/bariederm-cica-lip-balm/","source_categories":["Antiedad","Contorno De Labios"],"source_availability":"instock","pricing_formula":{"source_price":162,"margin_rate":0.45,"margin_amount":72.9,"sale_price":89.1,"seller_commission_rate":0.1,"seller_commission_amount":7.29,"net_margin_after_seller":65.61},"source_index":27}'::jsonb
+      1165,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/contorno-de-labios/bariederm-cica-lip-balm/","source_categories":["Antiedad","Contorno De Labios"],"source_availability":"instock","pricing_formula":{"source_price":162,"margin_rate":0.45,"margin_amount":72.9,"sale_price":89.1,"seller_commission_rate":0.1,"seller_commission_amount":7.29,"net_margin_after_seller":65.61},"source_index":41}'::jsonb
     ),
     (
       'boreade-m-emulsion-seborregulador-matificante',
@@ -4562,14 +4380,14 @@ cross join (
       true,
       false,
       10,
-      'ACM seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'ACM seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2025/01/ACM-3.jpg',
       'Boréade M Emulsion Seborregulador Matificante de ACM',
-      1173,
+      1166,
       '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-dia/boreade-m-emulsion-seborregulador-matificante/","source_categories":["Antiedad","Tratamientos Dia"],"source_availability":"Agotado","pricing_formula":{"source_price":235,"margin_rate":0.45,"margin_amount":105.75,"sale_price":129.25,"seller_commission_rate":0.1,"seller_commission_amount":10.58,"net_margin_after_seller":95.17},"source_index":172}'::jsonb
     ),
     (
@@ -4588,15 +4406,15 @@ cross join (
       true,
       false,
       10,
-      'ACM seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'ACM seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2025/01/ACM-4.jpg',
       'Boréade R Emulsion Reparadora Confort de ACM',
-      1174,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-dia/boreade-r-emulsion-reparadora-confort/","source_categories":["Antiedad","Tratamientos Dia"],"source_availability":"instock","pricing_formula":{"source_price":280,"margin_rate":0.45,"margin_amount":126,"sale_price":154,"seller_commission_rate":0.1,"seller_commission_amount":12.6,"net_margin_after_seller":113.4},"source_index":37}'::jsonb
+      1167,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-dia/boreade-r-emulsion-reparadora-confort/","source_categories":["Antiedad","Tratamientos Dia"],"source_availability":"instock","pricing_formula":{"source_price":280,"margin_rate":0.45,"margin_amount":126,"sale_price":154,"seller_commission_rate":0.1,"seller_commission_amount":12.6,"net_margin_after_seller":113.4},"source_index":52}'::jsonb
     ),
     (
       'densitium-contour-yeux',
@@ -4614,15 +4432,15 @@ cross join (
       true,
       false,
       10,
-      'SVR seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'SVR seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2022/05/DENSITIUM-CONTOUR-YEUX-15ML.jpg',
       'Densitium Contour Yeux de SVR',
-      1175,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/8989/","source_categories":["Antiedad"],"source_availability":"Agotado","pricing_formula":{"source_price":403,"margin_rate":0.45,"margin_amount":181.35,"sale_price":221.65,"seller_commission_rate":0.1,"seller_commission_amount":18.14,"net_margin_after_seller":163.21},"source_index":314}'::jsonb
+      1168,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/8989/","source_categories":["Antiedad"],"source_availability":"Agotado","pricing_formula":{"source_price":403,"margin_rate":0.45,"margin_amount":181.35,"sale_price":221.65,"seller_commission_rate":0.1,"seller_commission_amount":18.14,"net_margin_after_seller":163.21},"source_index":313}'::jsonb
     ),
     (
       'depiwhite-leche-corporal-500ml',
@@ -4640,15 +4458,15 @@ cross join (
       true,
       false,
       10,
-      'ACM seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'ACM seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/06/Diseno-sin-titulo-5-1.jpg',
       'Dépiwhite Leche Corporal - 500ML de ACM',
-      1176,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-noche/depiwhite-leche-corporal-500ml/","source_categories":["Antiedad","Tratamientos Noche"],"source_availability":"instock","pricing_formula":{"source_price":421,"margin_rate":0.45,"margin_amount":189.45,"sale_price":231.55,"seller_commission_rate":0.1,"seller_commission_amount":18.95,"net_margin_after_seller":170.5},"source_index":39}'::jsonb
+      1169,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-noche/depiwhite-leche-corporal-500ml/","source_categories":["Antiedad","Tratamientos Noche"],"source_availability":"instock","pricing_formula":{"source_price":421,"margin_rate":0.45,"margin_amount":189.45,"sale_price":231.55,"seller_commission_rate":0.1,"seller_commission_amount":18.95,"net_margin_after_seller":170.5},"source_index":54}'::jsonb
     ),
     (
       'depiwhite-serum',
@@ -4666,15 +4484,15 @@ cross join (
       true,
       false,
       10,
-      'ACM seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'ACM seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2025/07/DEPIWHITE-SERUM.jpg',
       'Depiwhite Sérum de ACM',
-      1177,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/sin-categorizar/depiwhite-serum/","source_categories":["Sin Categorizar"],"source_availability":"instock","pricing_formula":{"source_price":400,"margin_rate":0.45,"margin_amount":180,"sale_price":220,"seller_commission_rate":0.1,"seller_commission_amount":18,"net_margin_after_seller":162},"source_index":224}'::jsonb
+      1170,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/sin-categorizar/depiwhite-serum/","source_categories":["Sin Categorizar"],"source_availability":"instock","pricing_formula":{"source_price":400,"margin_rate":0.45,"margin_amount":180,"sale_price":220,"seller_commission_rate":0.1,"seller_commission_amount":18,"net_margin_after_seller":162},"source_index":225}'::jsonb
     ),
     (
       'desodorante-antitranspirante-calmante',
@@ -4692,14 +4510,14 @@ cross join (
       true,
       false,
       10,
-      'ACM seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'ACM seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/06/Diseno-sin-titulo-12.jpg',
       'Desodorante Antitranspirante Calmante de ACM',
-      1178,
+      1171,
       '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-dia/desodorante-antitranspirante-calmante/","source_categories":["Antiedad","Tratamientos Dia"],"source_availability":"instock","pricing_formula":{"source_price":219,"margin_rate":0.45,"margin_amount":98.55,"sale_price":120.45,"seller_commission_rate":0.1,"seller_commission_amount":9.86,"net_margin_after_seller":88.69},"source_index":220}'::jsonb
     ),
     (
@@ -4711,22 +4529,22 @@ cross join (
       '',
       2,
       'Paso 2: tratar',
-      'Bs. 138',
-      137.5,
+      'Bs. 139',
+      138.6,
       'BOB',
       'in_stock',
       true,
       false,
       10,
-      'MARTIDERM seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'MARTIDERM seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2025/05/DSP-COVER.jpg',
       'Dsp - Cover de MARTIDERM',
-      1179,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-dia/dsp-cover-stick/","source_categories":["Antiedad","Tratamientos Dia"],"source_availability":"Agotado","pricing_formula":{"source_price":250,"margin_rate":0.45,"margin_amount":112.5,"sale_price":137.5,"seller_commission_rate":0.1,"seller_commission_amount":11.25,"net_margin_after_seller":101.25},"source_index":62}'::jsonb
+      1172,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-dia/dsp-cover-stick/","source_categories":["Antiedad","Tratamientos Dia"],"source_availability":"Agotado","pricing_formula":{"source_price":252,"margin_rate":0.45,"margin_amount":113.4,"sale_price":138.6,"seller_commission_rate":0.1,"seller_commission_amount":11.34,"net_margin_after_seller":102.06},"source_index":73}'::jsonb
     ),
     (
       'dsp-crema-renovacion',
@@ -4737,22 +4555,22 @@ cross join (
       '',
       2,
       'Paso 2: tratar',
-      'Bs. 166',
-      166.1,
+      'Bs. 252',
+      252.45,
       'BOB',
       'in_stock',
       true,
       false,
       10,
-      'MARTIDERM seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'MARTIDERM seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2025/05/DSP-RENOVACION.jpg',
       'Dsp - Crema Renovación de MARTIDERM',
-      1180,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-noche/dsp-crema-renovacion-nocturna/","source_categories":["Antiedad","Tratamientos Noche"],"source_availability":"Agotado","pricing_formula":{"source_price":302,"margin_rate":0.45,"margin_amount":135.9,"sale_price":166.1,"seller_commission_rate":0.1,"seller_commission_amount":13.59,"net_margin_after_seller":122.31},"source_index":63}'::jsonb
+      1173,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-noche/dsp-crema-renovacion-nocturna/","source_categories":["Antiedad","Tratamientos Noche"],"source_availability":"Agotado","pricing_formula":{"source_price":459,"margin_rate":0.45,"margin_amount":206.55,"sale_price":252.45,"seller_commission_rate":0.1,"seller_commission_amount":20.66,"net_margin_after_seller":185.89},"source_index":72}'::jsonb
     ),
     (
       'dsp-mascarilla',
@@ -4770,14 +4588,14 @@ cross join (
       true,
       false,
       10,
-      'MARTIDERM seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'MARTIDERM seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2025/05/DSP-MASK.jpg',
       'Dsp - Mascarilla de MARTIDERM',
-      1181,
+      1174,
       '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-noche/dsp-mask/","source_categories":["Antiedad","Tratamientos Noche"],"source_availability":"Agotado","pricing_formula":{"source_price":612,"margin_rate":0.45,"margin_amount":275.4,"sale_price":336.6,"seller_commission_rate":0.1,"seller_commission_amount":27.54,"net_margin_after_seller":247.86},"source_index":285}'::jsonb
     ),
     (
@@ -4789,22 +4607,22 @@ cross join (
       '',
       2,
       'Paso 2: tratar',
-      'Bs. 166',
-      166.1,
+      'Bs. 396',
+      396,
       'BOB',
       'in_stock',
       true,
       false,
       10,
-      'MARTIDERM seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'MARTIDERM seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2025/05/DSP-ILUMINADOR.jpg',
       'Dsp-serum Iluminador de MARTIDERM',
-      1182,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/dsp-serum-iluminador/","source_categories":["Antiedad"],"source_availability":"Agotado","pricing_formula":{"source_price":302,"margin_rate":0.45,"margin_amount":135.9,"sale_price":166.1,"seller_commission_rate":0.1,"seller_commission_amount":13.59,"net_margin_after_seller":122.31},"source_index":64}'::jsonb
+      1175,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/dsp-serum-iluminador/","source_categories":["Antiedad"],"source_availability":"Agotado","pricing_formula":{"source_price":720,"margin_rate":0.45,"margin_amount":324,"sale_price":396,"seller_commission_rate":0.1,"seller_commission_amount":32.4,"net_margin_after_seller":291.6},"source_index":74}'::jsonb
     ),
     (
       'duolys-a',
@@ -4822,15 +4640,15 @@ cross join (
       true,
       false,
       10,
-      'ACM seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'ACM seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/08/DUOLYS-A.jpg',
       'Duolys A de ACM',
-      1183,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/serums/duolys-a-serum-retinol/","source_categories":["Antiedad","Serums"],"source_availability":"Agotado","pricing_formula":{"source_price":624,"margin_rate":0.45,"margin_amount":280.8,"sale_price":343.2,"seller_commission_rate":0.1,"seller_commission_amount":28.08,"net_margin_after_seller":252.72},"source_index":143}'::jsonb
+      1176,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/serums/duolys-a-serum-retinol/","source_categories":["Antiedad","Serums"],"source_availability":"Agotado","pricing_formula":{"source_price":624,"margin_rate":0.45,"margin_amount":280.8,"sale_price":343.2,"seller_commission_rate":0.1,"seller_commission_amount":28.08,"net_margin_after_seller":252.72},"source_index":144}'::jsonb
     ),
     (
       'duolys-ce-serum',
@@ -4848,15 +4666,15 @@ cross join (
       true,
       false,
       10,
-      'ACM seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'ACM seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2025/01/ACM.jpg',
       'Duolys Ce Serum de ACM',
-      1184,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/duolys-ce-serum/","source_categories":["Antiedad"],"source_availability":"Agotado","pricing_formula":{"source_price":504,"margin_rate":0.45,"margin_amount":226.8,"sale_price":277.2,"seller_commission_rate":0.1,"seller_commission_amount":22.68,"net_margin_after_seller":204.12},"source_index":290}'::jsonb
+      1177,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/duolys-ce-serum/","source_categories":["Antiedad"],"source_availability":"Agotado","pricing_formula":{"source_price":504,"margin_rate":0.45,"margin_amount":226.8,"sale_price":277.2,"seller_commission_rate":0.1,"seller_commission_amount":22.68,"net_margin_after_seller":204.12},"source_index":289}'::jsonb
     ),
     (
       'duolys-contorno-de-ojos',
@@ -4874,15 +4692,15 @@ cross join (
       true,
       false,
       10,
-      'ACM seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'ACM seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/09/DUOLYS-CONTORNO.jpg',
       'Duolys Contorno De Ojos de ACM',
-      1185,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-noche/duolys-contorno-de-ojos/","source_categories":["Antiedad","Tratamientos Noche"],"source_availability":"Agotado","pricing_formula":{"source_price":480,"margin_rate":0.45,"margin_amount":216,"sale_price":264,"seller_commission_rate":0.1,"seller_commission_amount":21.6,"net_margin_after_seller":194.4},"source_index":289}'::jsonb
+      1178,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-noche/duolys-contorno-de-ojos/","source_categories":["Antiedad","Tratamientos Noche"],"source_availability":"Agotado","pricing_formula":{"source_price":480,"margin_rate":0.45,"margin_amount":216,"sale_price":264,"seller_commission_rate":0.1,"seller_commission_amount":21.6,"net_margin_after_seller":194.4},"source_index":291}'::jsonb
     ),
     (
       'duolys-hyal-serum',
@@ -4900,15 +4718,15 @@ cross join (
       true,
       false,
       10,
-      'ACM seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'ACM seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/09/DUOLYS-HYAL.jpg',
       'Duolys Hyal Serum de ACM',
-      1186,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/duolys-hyal-serum/","source_categories":["Antiedad"],"source_availability":"Agotado","pricing_formula":{"source_price":504,"margin_rate":0.45,"margin_amount":226.8,"sale_price":277.2,"seller_commission_rate":0.1,"seller_commission_amount":22.68,"net_margin_after_seller":204.12},"source_index":293}'::jsonb
+      1179,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/duolys-hyal-serum/","source_categories":["Antiedad"],"source_availability":"Agotado","pricing_formula":{"source_price":504,"margin_rate":0.45,"margin_amount":226.8,"sale_price":277.2,"seller_commission_rate":0.1,"seller_commission_amount":22.68,"net_margin_after_seller":204.12},"source_index":290}'::jsonb
     ),
     (
       'eau-thermale-serum-booster-ha',
@@ -4926,15 +4744,15 @@ cross join (
       true,
       false,
       10,
-      'URIAGE seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'URIAGE seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2023/06/EAU-THERMAL-SERUM-BOOSTER-3.jpg',
       'Eau Thermale Serum Booster Ha de URIAGE',
-      1187,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/serums/serum-booster-ha-30ml/","source_categories":["Antiedad","Serums"],"source_availability":"instock","pricing_formula":{"source_price":388,"margin_rate":0.45,"margin_amount":174.6,"sale_price":213.4,"seller_commission_rate":0.1,"seller_commission_amount":17.46,"net_margin_after_seller":157.14},"source_index":29}'::jsonb
+      1180,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/serums/serum-booster-ha-30ml/","source_categories":["Antiedad","Serums"],"source_availability":"instock","pricing_formula":{"source_price":388,"margin_rate":0.45,"margin_amount":174.6,"sale_price":213.4,"seller_commission_rate":0.1,"seller_commission_amount":17.46,"net_margin_after_seller":157.14},"source_index":42}'::jsonb
     ),
     (
       'eternalist-age-day-cream',
@@ -4945,22 +4763,22 @@ cross join (
       '',
       2,
       'Paso 2: tratar',
-      'Bs. 185',
-      184.8,
+      'Bs. 231',
+      231,
       'BOB',
       'in_stock',
       true,
       false,
       10,
-      'SENSILIS seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'SENSILIS seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/08/Diseno-sin-titulo-6.jpg',
       'Eternalist Age Day Cream de SENSILIS',
-      1188,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/eternalist-a-g-e-day-cream-50ml/","source_categories":["Antiedad"],"source_availability":"instock","pricing_formula":{"source_price":336,"margin_rate":0.45,"margin_amount":151.2,"sale_price":184.8,"seller_commission_rate":0.1,"seller_commission_amount":15.12,"net_margin_after_seller":136.08},"source_index":85}'::jsonb
+      1181,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/eternalist-a-g-e-day-cream-50ml/","source_categories":["Antiedad"],"source_availability":"instock","pricing_formula":{"source_price":420,"margin_rate":0.45,"margin_amount":189,"sale_price":231,"seller_commission_rate":0.1,"seller_commission_amount":18.9,"net_margin_after_seller":170.1},"source_index":3}'::jsonb
     ),
     (
       'eternalist-age-eyes',
@@ -4971,22 +4789,22 @@ cross join (
       '',
       2,
       'Paso 2: tratar',
-      'Bs. 185',
-      184.8,
+      'Bs. 231',
+      231,
       'BOB',
       'in_stock',
       true,
       false,
       10,
-      'SENSILIS seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'SENSILIS seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/08/Diseno-sin-titulo-8.jpg',
       'Eternalist Age Eyes de SENSILIS',
-      1189,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/eternalist-age-eyes-20ml/","source_categories":["Antiedad"],"source_availability":"instock","pricing_formula":{"source_price":336,"margin_rate":0.45,"margin_amount":151.2,"sale_price":184.8,"seller_commission_rate":0.1,"seller_commission_amount":15.12,"net_margin_after_seller":136.08},"source_index":81}'::jsonb
+      1182,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/eternalist-age-eyes-20ml/","source_categories":["Antiedad"],"source_availability":"instock","pricing_formula":{"source_price":420,"margin_rate":0.45,"margin_amount":189,"sale_price":231,"seller_commission_rate":0.1,"seller_commission_amount":18.9,"net_margin_after_seller":170.1},"source_index":0}'::jsonb
     ),
     (
       'eternalist-age-retinol',
@@ -4997,22 +4815,22 @@ cross join (
       '',
       2,
       'Paso 2: tratar',
-      'Bs. 185',
-      184.8,
+      'Bs. 231',
+      231,
       'BOB',
       'in_stock',
       true,
       false,
       10,
-      'SENSILIS seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'SENSILIS seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/08/Diseno-sin-titulo-7.jpg',
       'Eternalist Age Retinol de SENSILIS',
-      1190,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-noche/eternalist-age-crema-retinol/","source_categories":["Antiedad","Tratamientos Noche"],"source_availability":"instock","pricing_formula":{"source_price":336,"margin_rate":0.45,"margin_amount":151.2,"sale_price":184.8,"seller_commission_rate":0.1,"seller_commission_amount":15.12,"net_margin_after_seller":136.08},"source_index":83}'::jsonb
+      1183,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-noche/eternalist-age-crema-retinol/","source_categories":["Antiedad","Tratamientos Noche"],"source_availability":"instock","pricing_formula":{"source_price":420,"margin_rate":0.45,"margin_amount":189,"sale_price":231,"seller_commission_rate":0.1,"seller_commission_amount":18.9,"net_margin_after_seller":170.1},"source_index":2}'::jsonb
     ),
     (
       'eternalist-age-serum',
@@ -5023,22 +4841,22 @@ cross join (
       '',
       2,
       'Paso 2: tratar',
-      'Bs. 185',
-      184.8,
+      'Bs. 231',
+      231,
       'BOB',
       'in_stock',
       true,
       false,
       10,
-      'SENSILIS seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'SENSILIS seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/08/Diseno-sin-titulo-9.jpg',
       'Eternalist Age Serum de SENSILIS',
-      1191,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/eternalist-a-g-e-serum-ai-30ml/","source_categories":["Antiedad"],"source_availability":"instock","pricing_formula":{"source_price":336,"margin_rate":0.45,"margin_amount":151.2,"sale_price":184.8,"seller_commission_rate":0.1,"seller_commission_amount":15.12,"net_margin_after_seller":136.08},"source_index":82}'::jsonb
+      1184,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/eternalist-a-g-e-serum-ai-30ml/","source_categories":["Antiedad"],"source_availability":"instock","pricing_formula":{"source_price":420,"margin_rate":0.45,"margin_amount":189,"sale_price":231,"seller_commission_rate":0.1,"seller_commission_amount":18.9,"net_margin_after_seller":170.1},"source_index":1}'::jsonb
     ),
     (
       'global-repair-advance',
@@ -5056,15 +4874,15 @@ cross join (
       true,
       false,
       10,
-      'FILORGA seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'FILORGA seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/09/GLOBAL-REPAIR-ADVANCE.jpg',
       'Global Repair Advance de FILORGA',
-      1192,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/global-repair-advance/","source_categories":["Antiedad"],"source_availability":"Agotado","pricing_formula":{"source_price":1215,"margin_rate":0.45,"margin_amount":546.75,"sale_price":668.25,"seller_commission_rate":0.1,"seller_commission_amount":54.68,"net_margin_after_seller":492.07},"source_index":188}'::jsonb
+      1185,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/global-repair-advance/","source_categories":["Antiedad"],"source_availability":"Agotado","pricing_formula":{"source_price":1215,"margin_rate":0.45,"margin_amount":546.75,"sale_price":668.25,"seller_commission_rate":0.1,"seller_commission_amount":54.68,"net_margin_after_seller":492.07},"source_index":186}'::jsonb
     ),
     (
       'global-repair-advance-elixir',
@@ -5082,14 +4900,14 @@ cross join (
       true,
       false,
       10,
-      'FILORGA seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'FILORGA seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/09/GLOBAL-REPAIR-ELIXIR.jpg',
       'Global Repair Advance Elixir de FILORGA',
-      1193,
+      1186,
       '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/global-repair-advance-elixir/","source_categories":["Antiedad"],"source_availability":"instock","pricing_formula":{"source_price":1260,"margin_rate":0.45,"margin_amount":567,"sale_price":693,"seller_commission_rate":0.1,"seller_commission_amount":56.7,"net_margin_after_seller":510.3},"source_index":185}'::jsonb
     ),
     (
@@ -5108,15 +4926,15 @@ cross join (
       true,
       false,
       10,
-      'FILORGA seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'FILORGA seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/09/GLOBAL-REPAIR-BAUME.jpg',
       'Global Repair Balm de FILORGA',
-      1194,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/global-repair-baume-50ml/","source_categories":["Antiedad"],"source_availability":"instock","pricing_formula":{"source_price":1215,"margin_rate":0.45,"margin_amount":546.75,"sale_price":668.25,"seller_commission_rate":0.1,"seller_commission_amount":54.68,"net_margin_after_seller":492.07},"source_index":186}'::jsonb
+      1187,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/global-repair-baume-50ml/","source_categories":["Antiedad"],"source_availability":"instock","pricing_formula":{"source_price":1215,"margin_rate":0.45,"margin_amount":546.75,"sale_price":668.25,"seller_commission_rate":0.1,"seller_commission_amount":54.68,"net_margin_after_seller":492.07},"source_index":187}'::jsonb
     ),
     (
       'global-repair-essence',
@@ -5134,14 +4952,14 @@ cross join (
       true,
       false,
       10,
-      'FILORGA seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'FILORGA seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/09/GLOBAL-REPAIR-ESSENCE-2-1.jpg',
       'Global Repair Essence de FILORGA',
-      1195,
+      1188,
       '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/global-repair-essence-150ml/","source_categories":["Antiedad"],"source_availability":"instock","pricing_formula":{"source_price":858,"margin_rate":0.45,"margin_amount":386.1,"sale_price":471.9,"seller_commission_rate":0.1,"seller_commission_amount":38.61,"net_margin_after_seller":347.49},"source_index":189}'::jsonb
     ),
     (
@@ -5160,15 +4978,15 @@ cross join (
       true,
       false,
       10,
-      'FILORGA seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'FILORGA seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/09/GLOBAL-REPAIR-EYES-AND-LIPS.jpg',
       'Global Repair Eyes & Lips de FILORGA',
-      1196,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/global-repair-eyes-lips-15ml/","source_categories":["Antiedad"],"source_availability":"instock","pricing_formula":{"source_price":924,"margin_rate":0.45,"margin_amount":415.8,"sale_price":508.2,"seller_commission_rate":0.1,"seller_commission_amount":41.58,"net_margin_after_seller":374.22},"source_index":187}'::jsonb
+      1189,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/global-repair-eyes-lips-15ml/","source_categories":["Antiedad"],"source_availability":"instock","pricing_formula":{"source_price":924,"margin_rate":0.45,"margin_amount":415.8,"sale_price":508.2,"seller_commission_rate":0.1,"seller_commission_amount":41.58,"net_margin_after_seller":374.22},"source_index":188}'::jsonb
     ),
     (
       'global-repair-intensive',
@@ -5186,14 +5004,14 @@ cross join (
       true,
       false,
       10,
-      'FILORGA seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'FILORGA seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/09/GLOBAL-REPAIR-INTENSIVE-1.jpg',
       'Global Repair Intensive de FILORGA',
-      1197,
+      1190,
       '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/serums/global-repair-intensive/","source_categories":["Antiedad","Serums"],"source_availability":"instock","pricing_formula":{"source_price":1134,"margin_rate":0.45,"margin_amount":510.3,"sale_price":623.7,"seller_commission_rate":0.1,"seller_commission_amount":51.03,"net_margin_after_seller":459.27},"source_index":190}'::jsonb
     ),
     (
@@ -5212,15 +5030,41 @@ cross join (
       true,
       false,
       10,
-      'FILORGA seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'FILORGA seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/09/HYDRA-A-OX.jpg',
       'Hydra - Aox de FILORGA',
-      1198,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/serums/hydra-aox-flacon/","source_categories":["Antiedad","Serums"],"source_availability":"instock","pricing_formula":{"source_price":867,"margin_rate":0.45,"margin_amount":390.15,"sale_price":476.85,"seller_commission_rate":0.1,"seller_commission_amount":39.02,"net_margin_after_seller":351.13},"source_index":196}'::jsonb
+      1191,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/serums/hydra-aox-flacon/","source_categories":["Antiedad","Serums"],"source_availability":"instock","pricing_formula":{"source_price":867,"margin_rate":0.45,"margin_amount":390.15,"sale_price":476.85,"seller_commission_rate":0.1,"seller_commission_amount":39.02,"net_margin_after_seller":351.13},"source_index":197}'::jsonb
+    ),
+    (
+      'hydra-hyal-crema-gel',
+      'Hydra - Hyal Crema Gel',
+      'Hydra - Hyal Crema Gel',
+      'FILORGA',
+      'Antiedad',
+      '',
+      2,
+      'Paso 2: tratar',
+      'Bs. 477',
+      476.85,
+      'BOB',
+      'in_stock',
+      true,
+      false,
+      10,
+      'FILORGA seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
+      'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
+      array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
+      array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
+      array['Ver envase','Confirmar composicion']::text[],
+      'https://hbderm.com/wp-content/uploads/2024/09/HYDRA-HYAL-GEL-CREMA.jpg',
+      'Hydra - Hyal Crema Gel de FILORGA',
+      1192,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/hydra-hyal-crema-gel-50ml/","source_categories":["Antiedad"],"source_availability":"Agotado","pricing_formula":{"source_price":867,"margin_rate":0.45,"margin_amount":390.15,"sale_price":476.85,"seller_commission_rate":0.1,"seller_commission_amount":39.02,"net_margin_after_seller":351.13},"source_index":23}'::jsonb
     ),
     (
       'hydra-hyal-serum',
@@ -5238,15 +5082,15 @@ cross join (
       true,
       false,
       10,
-      'FILORGA seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'FILORGA seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/09/HYDRA-HYAL-SERUM.jpg',
       'Hydra - Hyal Sérum de FILORGA',
-      1199,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/hydra-hyal-hidratante-rejuvenecedora/","source_categories":["Antiedad"],"source_availability":"instock","pricing_formula":{"source_price":867,"margin_rate":0.45,"margin_amount":390.15,"sale_price":476.85,"seller_commission_rate":0.1,"seller_commission_amount":39.02,"net_margin_after_seller":351.13},"source_index":195}'::jsonb
+      1193,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/hydra-hyal-hidratante-rejuvenecedora/","source_categories":["Antiedad"],"source_availability":"instock","pricing_formula":{"source_price":867,"margin_rate":0.45,"margin_amount":390.15,"sale_price":476.85,"seller_commission_rate":0.1,"seller_commission_amount":39.02,"net_margin_after_seller":351.13},"source_index":196}'::jsonb
     ),
     (
       'hydracid-c20',
@@ -5264,15 +5108,15 @@ cross join (
       true,
       false,
       10,
-      'SVR seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'SVR seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2020/06/HYDRACID-C20-CREME.png',
       'Hydracid C20 de SVR',
-      1200,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/hydracid-c20/","source_categories":["Antiedad"],"source_availability":"Agotado","pricing_formula":{"source_price":480,"margin_rate":0.45,"margin_amount":216,"sale_price":264,"seller_commission_rate":0.1,"seller_commission_amount":21.6,"net_margin_after_seller":194.4},"source_index":150}'::jsonb
+      1194,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/hydracid-c20/","source_categories":["Antiedad"],"source_availability":"Agotado","pricing_formula":{"source_price":480,"margin_rate":0.45,"margin_amount":216,"sale_price":264,"seller_commission_rate":0.1,"seller_commission_amount":21.6,"net_margin_after_seller":194.4},"source_index":147}'::jsonb
     ),
     (
       'isdinceutics-flavo-c-forte-3u',
@@ -5290,14 +5134,14 @@ cross join (
       true,
       false,
       10,
-      'ISDIN seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'ISDIN seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/09/FLACO-C-3U.jpg',
       'Isdinceutics Flavo C Forte 3U de ISDIN',
-      1201,
+      1195,
       '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/antioxidantes/flavo-c-forte-isdinceutics-3-unidades-53ml/","source_categories":["Antiedad","Antioxidantes"],"source_availability":"Agotado","pricing_formula":{"source_price":900,"margin_rate":0.45,"margin_amount":405,"sale_price":495,"seller_commission_rate":0.1,"seller_commission_amount":40.5,"net_margin_after_seller":364.5},"source_index":281}'::jsonb
     ),
     (
@@ -5316,14 +5160,14 @@ cross join (
       true,
       false,
       10,
-      'ISDIN seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'ISDIN seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/09/HYALURONIC-CONCENTRATE-12.jpg',
       'Isdinceutics Hyaluronic Concentrate de ISDIN',
-      1202,
+      1196,
       '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/7674/","source_categories":["Antiedad"],"source_availability":"instock","pricing_formula":{"source_price":496,"margin_rate":0.45,"margin_amount":223.2,"sale_price":272.8,"seller_commission_rate":0.1,"seller_commission_amount":22.32,"net_margin_after_seller":200.88},"source_index":253}'::jsonb
     ),
     (
@@ -5342,15 +5186,15 @@ cross join (
       true,
       false,
       10,
-      'ISDIN seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'ISDIN seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2026/04/HYALURONIC-EYES.jpg',
       'Isdinceutics Hyaluronic Eyes de ISDIN',
-      1203,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/isdinceutics-hyaluronic-eyes/","source_categories":["Antiedad"],"source_availability":"instock","pricing_formula":{"source_price":439,"margin_rate":0.45,"margin_amount":197.55,"sale_price":241.45,"seller_commission_rate":0.1,"seller_commission_amount":19.76,"net_margin_after_seller":177.79},"source_index":4}'::jsonb
+      1197,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/isdinceutics-hyaluronic-eyes/","source_categories":["Antiedad"],"source_availability":"instock","pricing_formula":{"source_price":439,"margin_rate":0.45,"margin_amount":197.55,"sale_price":241.45,"seller_commission_rate":0.1,"seller_commission_amount":19.76,"net_margin_after_seller":177.79},"source_index":19}'::jsonb
     ),
     (
       'isdinceutics-hyaluronic-moisture-normal',
@@ -5368,14 +5212,14 @@ cross join (
       true,
       false,
       10,
-      'ISDIN seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'ISDIN seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/10/HYALURONIC-NORMAL.jpg',
       'Isdinceutics Hyaluronic Moisture Normal de ISDIN',
-      1204,
+      1198,
       '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-dia/hyaluronic-moisture-normal-isdinceutics/","source_categories":["Antiedad","Tratamientos Dia"],"source_availability":"Agotado","pricing_formula":{"source_price":464,"margin_rate":0.45,"margin_amount":208.8,"sale_price":255.2,"seller_commission_rate":0.1,"seller_commission_amount":20.88,"net_margin_after_seller":187.92},"source_index":124}'::jsonb
     ),
     (
@@ -5394,15 +5238,15 @@ cross join (
       true,
       false,
       10,
-      'ISDIN seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'ISDIN seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/10/HYALURONIC-OILY.jpg',
       'Isdinceutics Hyaluronic Moisture Oily de ISDIN',
-      1205,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/hyaluronic-moisture-oily-isdinceutics/","source_categories":["Antiedad"],"source_availability":"Agotado","pricing_formula":{"source_price":464,"margin_rate":0.45,"margin_amount":208.8,"sale_price":255.2,"seller_commission_rate":0.1,"seller_commission_amount":20.88,"net_margin_after_seller":187.92},"source_index":276}'::jsonb
+      1199,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/hyaluronic-moisture-oily-isdinceutics/","source_categories":["Antiedad"],"source_availability":"Agotado","pricing_formula":{"source_price":464,"margin_rate":0.45,"margin_amount":208.8,"sale_price":255.2,"seller_commission_rate":0.1,"seller_commission_amount":20.88,"net_margin_after_seller":187.92},"source_index":274}'::jsonb
     ),
     (
       'isdinceutics-hyaluronic-moisture-sensitive',
@@ -5420,15 +5264,15 @@ cross join (
       true,
       false,
       10,
-      'ISDIN seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'ISDIN seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2025/07/HYALURONIC-SENSITIVE.jpg',
       'Isdinceutics Hyaluronic Moisture Sensitive de ISDIN',
-      1206,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-dia/hyaluronic-moisture-sensitive/","source_categories":["Antiedad","Tratamientos Dia"],"source_availability":"instock","pricing_formula":{"source_price":464,"margin_rate":0.45,"margin_amount":208.8,"sale_price":255.2,"seller_commission_rate":0.1,"seller_commission_amount":20.88,"net_margin_after_seller":187.92},"source_index":80}'::jsonb
+      1200,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-dia/hyaluronic-moisture-sensitive/","source_categories":["Antiedad","Tratamientos Dia"],"source_availability":"instock","pricing_formula":{"source_price":464,"margin_rate":0.45,"margin_amount":208.8,"sale_price":255.2,"seller_commission_rate":0.1,"seller_commission_amount":20.88,"net_margin_after_seller":187.92},"source_index":83}'::jsonb
     ),
     (
       'isdinceutics-k-ox-eyes',
@@ -5446,15 +5290,15 @@ cross join (
       true,
       false,
       10,
-      'ISDIN seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'ISDIN seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/09/K-OX.jpg',
       'Isdinceutics K-ox Eyes de ISDIN',
-      1207,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-dia/k-ox-eyes/","source_categories":["Antiedad","Tratamientos Dia"],"source_availability":"Agotado","pricing_formula":{"source_price":410,"margin_rate":0.45,"margin_amount":184.5,"sale_price":225.5,"seller_commission_rate":0.1,"seller_commission_amount":18.45,"net_margin_after_seller":166.05},"source_index":154}'::jsonb
+      1201,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-dia/k-ox-eyes/","source_categories":["Antiedad","Tratamientos Dia"],"source_availability":"Agotado","pricing_formula":{"source_price":410,"margin_rate":0.45,"margin_amount":184.5,"sale_price":225.5,"seller_commission_rate":0.1,"seller_commission_amount":18.45,"net_margin_after_seller":166.05},"source_index":156}'::jsonb
     ),
     (
       'isdinceutics-melaclear-advanced-30ml',
@@ -5472,15 +5316,15 @@ cross join (
       true,
       false,
       10,
-      'ISDIN seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'ISDIN seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2026/04/MELACLEAR.jpg',
       'Isdinceutics Melaclear Advanced - 30ML de ISDIN',
-      1208,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/isdinceutics-melaclear-advanced-30ml/","source_categories":["Antiedad"],"source_availability":"instock","pricing_formula":{"source_price":1020,"margin_rate":0.45,"margin_amount":459,"sale_price":561,"seller_commission_rate":0.1,"seller_commission_amount":45.9,"net_margin_after_seller":413.1},"source_index":101}'::jsonb
+      1202,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/isdinceutics-melaclear-advanced-30ml/","source_categories":["Antiedad"],"source_availability":"instock","pricing_formula":{"source_price":1020,"margin_rate":0.45,"margin_amount":459,"sale_price":561,"seller_commission_rate":0.1,"seller_commission_amount":45.9,"net_margin_after_seller":413.1},"source_index":103}'::jsonb
     ),
     (
       'isdinceutics-retinal-intense',
@@ -5498,15 +5342,15 @@ cross join (
       true,
       false,
       10,
-      'ISDIN seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'ISDIN seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/09/RETINAL.jpg',
       'Isdinceutics Retinal Intense de ISDIN',
-      1209,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/serums/retinal-intense-50-ml/","source_categories":["Antiedad","Serums"],"source_availability":"instock","pricing_formula":{"source_price":912,"margin_rate":0.45,"margin_amount":410.4,"sale_price":501.6,"seller_commission_rate":0.1,"seller_commission_amount":41.04,"net_margin_after_seller":369.36},"source_index":271}'::jsonb
+      1203,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/serums/retinal-intense-50-ml/","source_categories":["Antiedad","Serums"],"source_availability":"instock","pricing_formula":{"source_price":912,"margin_rate":0.45,"margin_amount":410.4,"sale_price":501.6,"seller_commission_rate":0.1,"seller_commission_amount":41.04,"net_margin_after_seller":369.36},"source_index":272}'::jsonb
     ),
     (
       'isdinceutics-salicylic-renewal',
@@ -5524,15 +5368,15 @@ cross join (
       true,
       false,
       10,
-      'ISDIN seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'ISDIN seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2025/08/SALICYLIC.jpg',
       'Isdinceutics Salicylic Renewal de ISDIN',
-      1210,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/sin-categorizar/isdinceutics-salicylic-renewal/","source_categories":["Sin Categorizar"],"source_availability":"instock","pricing_formula":{"source_price":587,"margin_rate":0.45,"margin_amount":264.15,"sale_price":322.85,"seller_commission_rate":0.1,"seller_commission_amount":26.42,"net_margin_after_seller":237.73},"source_index":5}'::jsonb
+      1204,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/sin-categorizar/isdinceutics-salicylic-renewal/","source_categories":["Sin Categorizar"],"source_availability":"instock","pricing_formula":{"source_price":587,"margin_rate":0.45,"margin_amount":264.15,"sale_price":322.85,"seller_commission_rate":0.1,"seller_commission_amount":26.42,"net_margin_after_seller":237.73},"source_index":20}'::jsonb
     ),
     (
       'isdinceutics-vital-eyes',
@@ -5550,15 +5394,15 @@ cross join (
       true,
       false,
       10,
-      'ISDIN seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'ISDIN seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/09/VITAL-EYES-1-1.jpg',
       'Isdinceutics Vital Eyes de ISDIN',
-      1211,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/contorno-de-ojos/vital-eyes-isdinceutics/","source_categories":["Antiedad","Contorno De Ojos"],"source_availability":"Agotado","pricing_formula":{"source_price":516,"margin_rate":0.45,"margin_amount":232.2,"sale_price":283.8,"seller_commission_rate":0.1,"seller_commission_amount":23.22,"net_margin_after_seller":208.98},"source_index":292}'::jsonb
+      1205,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/contorno-de-ojos/vital-eyes-isdinceutics/","source_categories":["Antiedad","Contorno De Ojos"],"source_availability":"Agotado","pricing_formula":{"source_price":516,"margin_rate":0.45,"margin_amount":232.2,"sale_price":283.8,"seller_commission_rate":0.1,"seller_commission_amount":23.22,"net_margin_after_seller":208.98},"source_index":293}'::jsonb
     ),
     (
       'lip-supreme-balm',
@@ -5576,15 +5420,15 @@ cross join (
       true,
       false,
       10,
-      'MARTIDERM seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'MARTIDERM seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2025/05/LIP-SUPREME.jpg',
       'Lip Supreme Balm de MARTIDERM',
-      1212,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/lip-supreme-balm/","source_categories":["Antiedad"],"source_availability":"instock","pricing_formula":{"source_price":365,"margin_rate":0.45,"margin_amount":164.25,"sale_price":200.75,"seller_commission_rate":0.1,"seller_commission_amount":16.43,"net_margin_after_seller":147.82},"source_index":252}'::jsonb
+      1206,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/lip-supreme-balm/","source_categories":["Antiedad"],"source_availability":"instock","pricing_formula":{"source_price":365,"margin_rate":0.45,"margin_amount":164.25,"sale_price":200.75,"seller_commission_rate":0.1,"seller_commission_amount":16.43,"net_margin_after_seller":147.82},"source_index":251}'::jsonb
     ),
     (
       'masque-c-antiox',
@@ -5602,15 +5446,15 @@ cross join (
       true,
       false,
       10,
-      'SVR seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'SVR seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2023/12/Diseño-sin-título-2.png',
       'Masque C Antiox de SVR',
-      1213,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-dia/masque-c-antiox/","source_categories":["Antiedad","Tratamientos Dia"],"source_availability":"Agotado","pricing_formula":{"source_price":538,"margin_rate":0.45,"margin_amount":242.1,"sale_price":295.9,"seller_commission_rate":0.1,"seller_commission_amount":24.21,"net_margin_after_seller":217.89},"source_index":118}'::jsonb
+      1207,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-dia/masque-c-antiox/","source_categories":["Antiedad","Tratamientos Dia"],"source_availability":"Agotado","pricing_formula":{"source_price":538,"margin_rate":0.45,"margin_amount":242.1,"sale_price":295.9,"seller_commission_rate":0.1,"seller_commission_amount":24.21,"net_margin_after_seller":217.89},"source_index":120}'::jsonb
     ),
     (
       'meso-mask',
@@ -5628,15 +5472,15 @@ cross join (
       true,
       false,
       10,
-      'FILORGA seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'FILORGA seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/09/MESO-MASK-5.jpg',
       'Meso - Mask de FILORGA',
-      1214,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/meso-mask/","source_categories":["Antiedad"],"source_availability":"Agotado","pricing_formula":{"source_price":282,"margin_rate":0.45,"margin_amount":126.9,"sale_price":155.1,"seller_commission_rate":0.1,"seller_commission_amount":12.69,"net_margin_after_seller":114.21},"source_index":183}'::jsonb
+      1208,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/meso-mask/","source_categories":["Antiedad"],"source_availability":"Agotado","pricing_formula":{"source_price":282,"margin_rate":0.45,"margin_amount":126.9,"sale_price":155.1,"seller_commission_rate":0.1,"seller_commission_amount":12.69,"net_margin_after_seller":114.21},"source_index":182}'::jsonb
     ),
     (
       'ncef-intensive',
@@ -5654,15 +5498,15 @@ cross join (
       true,
       false,
       10,
-      'FILORGA seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'FILORGA seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/12/NCEF-INTENSIVE-2.jpg',
       'Ncef Intensive de FILORGA',
-      1215,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/serums/ncef-intensive/","source_categories":["Antiedad","Serums"],"source_availability":"Agotado","pricing_formula":{"source_price":446,"margin_rate":0.45,"margin_amount":200.7,"sale_price":245.3,"seller_commission_rate":0.1,"seller_commission_amount":20.07,"net_margin_after_seller":180.63},"source_index":114}'::jsonb
+      1209,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/serums/ncef-intensive/","source_categories":["Antiedad","Serums"],"source_availability":"Agotado","pricing_formula":{"source_price":446,"margin_rate":0.45,"margin_amount":200.7,"sale_price":245.3,"seller_commission_rate":0.1,"seller_commission_amount":20.07,"net_margin_after_seller":180.63},"source_index":115}'::jsonb
     ),
     (
       'ncef-night-mask',
@@ -5680,14 +5524,14 @@ cross join (
       true,
       false,
       10,
-      'FILORGA seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'FILORGA seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/12/NCEF-NIGTH-MASK.jpg',
       'Ncef Night Mask de FILORGA',
-      1216,
+      1210,
       '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-noche/ncef-night-mask/","source_categories":["Antiedad","Tratamientos Noche"],"source_availability":"Agotado","pricing_formula":{"source_price":663,"margin_rate":0.45,"margin_amount":298.35,"sale_price":364.65,"seller_commission_rate":0.1,"seller_commission_amount":29.84,"net_margin_after_seller":268.51},"source_index":192}'::jsonb
     ),
     (
@@ -5706,15 +5550,15 @@ cross join (
       true,
       false,
       10,
-      'FILORGA seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'FILORGA seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/12/NCEF-REVERSE-MAT-2.jpg',
       'Ncef Reverse Mat de FILORGA',
-      1217,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/serums/ncef-reverse-mat/","source_categories":["Antiedad","Serums"],"source_availability":"Agotado","pricing_formula":{"source_price":446,"margin_rate":0.45,"margin_amount":200.7,"sale_price":245.3,"seller_commission_rate":0.1,"seller_commission_amount":20.07,"net_margin_after_seller":180.63},"source_index":12}'::jsonb
+      1211,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/serums/ncef-reverse-mat/","source_categories":["Antiedad","Serums"],"source_availability":"Agotado","pricing_formula":{"source_price":446,"margin_rate":0.45,"margin_amount":200.7,"sale_price":245.3,"seller_commission_rate":0.1,"seller_commission_amount":20.07,"net_margin_after_seller":180.63},"source_index":26}'::jsonb
     ),
     (
       'ncef-revitalize',
@@ -5732,14 +5576,14 @@ cross join (
       true,
       false,
       10,
-      'FILORGA seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'FILORGA seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/12/NCEF-REVITALIZE.jpg',
       'Ncef Revitalize de FILORGA',
-      1218,
+      1212,
       '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/ncef-revitalize/","source_categories":["Antiedad"],"source_availability":"instock","pricing_formula":{"source_price":1296,"margin_rate":0.45,"margin_amount":583.2,"sale_price":712.8,"seller_commission_rate":0.1,"seller_commission_amount":58.32,"net_margin_after_seller":524.88},"source_index":175}'::jsonb
     ),
     (
@@ -5758,14 +5602,14 @@ cross join (
       true,
       false,
       10,
-      'FILORGA seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'FILORGA seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/12/NCEF-REVITALIZE-SERUM.jpg',
       'Ncef Revitalize Sérum de FILORGA',
-      1219,
+      1213,
       '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/ncef-revitalize-serum/","source_categories":["Antiedad"],"source_availability":"instock","pricing_formula":{"source_price":1296,"margin_rate":0.45,"margin_amount":583.2,"sale_price":712.8,"seller_commission_rate":0.1,"seller_commission_amount":58.32,"net_margin_after_seller":524.88},"source_index":176}'::jsonb
     ),
     (
@@ -5784,15 +5628,15 @@ cross join (
       true,
       false,
       10,
-      'FILORGA seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'FILORGA seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/12/NUTRIFILLER-LIPS.jpg',
       'Nutrifiller Lips de FILORGA',
-      1220,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/nutrifiller-lips-balsamo-nutritivo-para-labios/","source_categories":["Antiedad"],"source_availability":"instock","pricing_formula":{"source_price":480,"margin_rate":0.45,"margin_amount":216,"sale_price":264,"seller_commission_rate":0.1,"seller_commission_amount":21.6,"net_margin_after_seller":194.4},"source_index":197}'::jsonb
+      1214,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/nutrifiller-lips-balsamo-nutritivo-para-labios/","source_categories":["Antiedad"],"source_availability":"instock","pricing_formula":{"source_price":480,"margin_rate":0.45,"margin_amount":216,"sale_price":264,"seller_commission_rate":0.1,"seller_commission_amount":21.6,"net_margin_after_seller":194.4},"source_index":195}'::jsonb
     ),
     (
       'optim-eyes',
@@ -5810,15 +5654,15 @@ cross join (
       true,
       false,
       10,
-      'FILORGA seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'FILORGA seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/12/OPTIM-EYES.jpg',
       'Optim Eyes de FILORGA',
-      1221,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/optim-eyes-tratamiento-contorno-de-ojos/","source_categories":["Antiedad"],"source_availability":"Agotado","pricing_formula":{"source_price":810,"margin_rate":0.45,"margin_amount":364.5,"sale_price":445.5,"seller_commission_rate":0.1,"seller_commission_amount":36.45,"net_margin_after_seller":328.05},"source_index":24}'::jsonb
+      1215,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/optim-eyes-tratamiento-contorno-de-ojos/","source_categories":["Antiedad"],"source_availability":"Agotado","pricing_formula":{"source_price":810,"margin_rate":0.45,"margin_amount":364.5,"sale_price":445.5,"seller_commission_rate":0.1,"seller_commission_amount":36.45,"net_margin_after_seller":328.05},"source_index":36}'::jsonb
     ),
     (
       'oxygen-glow',
@@ -5836,14 +5680,14 @@ cross join (
       true,
       false,
       10,
-      'FILORGA seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'FILORGA seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/12/OXYGEN-GLOW.jpg',
       'Oxygen Glow de FILORGA',
-      1222,
+      1216,
       '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/oxygen-glow-crema/","source_categories":["Antiedad"],"source_availability":"instock","pricing_formula":{"source_price":522,"margin_rate":0.45,"margin_amount":234.9,"sale_price":287.1,"seller_commission_rate":0.1,"seller_commission_amount":23.49,"net_margin_after_seller":211.41},"source_index":141}'::jsonb
     ),
     (
@@ -5862,15 +5706,15 @@ cross join (
       true,
       false,
       10,
-      'FILORGA seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'FILORGA seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/12/OXYGEN-GLOW-EYES-1.jpg',
       'Oxygen Glow Eyes de FILORGA',
-      1223,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-dia/oxygen-glow-eyes/","source_categories":["Antiedad","Tratamientos Dia"],"source_availability":"Agotado","pricing_formula":{"source_price":302,"margin_rate":0.45,"margin_amount":135.9,"sale_price":166.1,"seller_commission_rate":0.1,"seller_commission_amount":13.59,"net_margin_after_seller":122.31},"source_index":30}'::jsonb
+      1217,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-dia/oxygen-glow-eyes/","source_categories":["Antiedad","Tratamientos Dia"],"source_availability":"Agotado","pricing_formula":{"source_price":302,"margin_rate":0.45,"margin_amount":135.9,"sale_price":166.1,"seller_commission_rate":0.1,"seller_commission_amount":13.59,"net_margin_after_seller":122.31},"source_index":45}'::jsonb
     ),
     (
       'oxygen-glow-mask',
@@ -5888,14 +5732,14 @@ cross join (
       true,
       false,
       10,
-      'FILORGA seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'FILORGA seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/12/OXYGEN-GLOW-MASK-1.jpg',
       'Oxygen Glow Mask de FILORGA',
-      1224,
+      1218,
       '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-dia/oxygen-glow-mask/","source_categories":["Antiedad","Tratamientos Dia"],"source_availability":"instock","pricing_formula":{"source_price":270,"margin_rate":0.45,"margin_amount":121.5,"sale_price":148.5,"seller_commission_rate":0.1,"seller_commission_amount":12.15,"net_margin_after_seller":109.35},"source_index":184}'::jsonb
     ),
     (
@@ -5914,15 +5758,15 @@ cross join (
       true,
       false,
       10,
-      'FILORGA seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'FILORGA seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2025/04/FILORGA-1.jpg',
       'Oxygen-peel de FILORGA',
-      1225,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/exfoliantes-y-mascarillas/oxygen-peel/","source_categories":["Antiedad","Exfoliantes Y Mascarillas"],"source_availability":"instock","pricing_formula":{"source_price":420,"margin_rate":0.45,"margin_amount":189,"sale_price":231,"seller_commission_rate":0.1,"seller_commission_amount":18.9,"net_margin_after_seller":170.1},"source_index":182}'::jsonb
+      1219,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/exfoliantes-y-mascarillas/oxygen-peel/","source_categories":["Antiedad","Exfoliantes Y Mascarillas"],"source_availability":"instock","pricing_formula":{"source_price":420,"margin_rate":0.45,"margin_amount":189,"sale_price":231,"seller_commission_rate":0.1,"seller_commission_amount":18.9,"net_margin_after_seller":170.1},"source_index":183}'::jsonb
     ),
     (
       'pack-bariederm-crema-de-manos',
@@ -5940,15 +5784,15 @@ cross join (
       true,
       false,
       10,
-      'URIAGE seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'URIAGE seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/06/Diseno-sin-titulo-7.jpg',
       'Pack Bariéderm Crema De Manos de URIAGE',
-      1226,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-dia/pack-bariederm-crema-de-manos/","source_categories":["Antiedad","Tratamientos Dia"],"source_availability":"instock","pricing_formula":{"source_price":180,"margin_rate":0.45,"margin_amount":81,"sale_price":99,"seller_commission_rate":0.1,"seller_commission_amount":8.1,"net_margin_after_seller":72.9},"source_index":109}'::jsonb
+      1220,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-dia/pack-bariederm-crema-de-manos/","source_categories":["Antiedad","Tratamientos Dia"],"source_availability":"instock","pricing_formula":{"source_price":180,"margin_rate":0.45,"margin_amount":81,"sale_price":99,"seller_commission_rate":0.1,"seller_commission_amount":8.1,"net_margin_after_seller":72.9},"source_index":110}'::jsonb
     ),
     (
       'palpebral-relief',
@@ -5966,15 +5810,15 @@ cross join (
       true,
       false,
       10,
-      'SENSILIS seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'SENSILIS seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/08/Diseno-sin-titulo-11.jpg',
       'Palpebral Relief de SENSILIS',
-      1227,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-noche/hig-palpebral-relief/","source_categories":["Antiedad","Tratamientos Noche"],"source_availability":"instock","pricing_formula":{"source_price":154,"margin_rate":0.45,"margin_amount":69.3,"sale_price":84.7,"seller_commission_rate":0.1,"seller_commission_amount":6.93,"net_margin_after_seller":62.37},"source_index":161}'::jsonb
+      1221,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-noche/hig-palpebral-relief/","source_categories":["Antiedad","Tratamientos Noche"],"source_availability":"instock","pricing_formula":{"source_price":154,"margin_rate":0.45,"margin_amount":69.3,"sale_price":84.7,"seller_commission_rate":0.1,"seller_commission_amount":6.93,"net_margin_after_seller":62.37},"source_index":160}'::jsonb
     ),
     (
       'photo-age-ha-10-ampollas',
@@ -5992,15 +5836,15 @@ cross join (
       true,
       false,
       10,
-      'MARTIDERM seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'MARTIDERM seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2025/05/PHOTO-AGE.jpg',
       'Photo Age Ha+ - 10 Ampollas de MARTIDERM',
-      1228,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/photo-age-ha-10-ampollas/","source_categories":["Antiedad"],"source_availability":"Agotado","pricing_formula":{"source_price":208,"margin_rate":0.45,"margin_amount":93.6,"sale_price":114.4,"seller_commission_rate":0.1,"seller_commission_amount":9.36,"net_margin_after_seller":84.24},"source_index":105}'::jsonb
+      1222,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/photo-age-ha-10-ampollas/","source_categories":["Antiedad"],"source_availability":"Agotado","pricing_formula":{"source_price":208,"margin_rate":0.45,"margin_amount":93.6,"sale_price":114.4,"seller_commission_rate":0.1,"seller_commission_amount":9.36,"net_margin_after_seller":84.24},"source_index":106}'::jsonb
     ),
     (
       'proteos-hydra-plus-sp-10-ampollas',
@@ -6018,14 +5862,14 @@ cross join (
       true,
       false,
       10,
-      'MARTIDERM seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'MARTIDERM seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2025/05/HYDRA-PLUS.jpg',
       'Proteos Hydra Plus Sp - 10 Ampollas de MARTIDERM',
-      1229,
+      1223,
       '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/proteos-hydra-plus-sp/","source_categories":["Antiedad"],"source_availability":"Agotado","pricing_formula":{"source_price":230,"margin_rate":0.45,"margin_amount":103.5,"sale_price":126.5,"seller_commission_rate":0.1,"seller_commission_amount":10.35,"net_margin_after_seller":93.15},"source_index":140}'::jsonb
     ),
     (
@@ -6044,15 +5888,15 @@ cross join (
       true,
       false,
       10,
-      'URIAGE seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'URIAGE seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2025/07/URIAGE-15.jpg',
       'Roseliane – Sérum Neutralizador De Rojeces Visibles de URIAGE',
-      1230,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-con-rojeces/roseliane-serum-neutralizador-de-rojeces-visibles/","source_categories":["Pieles Con Rojeces"],"source_availability":"instock","pricing_formula":{"source_price":389,"margin_rate":0.45,"margin_amount":175.05,"sale_price":213.95,"seller_commission_rate":0.1,"seller_commission_amount":17.51,"net_margin_after_seller":157.54},"source_index":241}'::jsonb
+      1224,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-con-rojeces/roseliane-serum-neutralizador-de-rojeces-visibles/","source_categories":["Pieles Con Rojeces"],"source_availability":"instock","pricing_formula":{"source_price":389,"margin_rate":0.45,"margin_amount":175.05,"sale_price":213.95,"seller_commission_rate":0.1,"seller_commission_amount":17.51,"net_margin_after_seller":157.54},"source_index":242}'::jsonb
     ),
     (
       'scrub-and-mask',
@@ -6070,15 +5914,15 @@ cross join (
       true,
       false,
       10,
-      'FILORGA seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'FILORGA seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/12/SCRUB-AND-MASK.jpg',
       'Scrub And Mask de FILORGA',
-      1231,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/scrub-and-masck-mascarilla-exfoliante-efervescente/","source_categories":["Antiedad"],"source_availability":"Agotado","pricing_formula":{"source_price":528,"margin_rate":0.45,"margin_amount":237.6,"sale_price":290.4,"seller_commission_rate":0.1,"seller_commission_amount":23.76,"net_margin_after_seller":213.84},"source_index":110}'::jsonb
+      1225,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/scrub-and-masck-mascarilla-exfoliante-efervescente/","source_categories":["Antiedad"],"source_availability":"Agotado","pricing_formula":{"source_price":528,"margin_rate":0.45,"margin_amount":237.6,"sale_price":290.4,"seller_commission_rate":0.1,"seller_commission_amount":23.76,"net_margin_after_seller":213.84},"source_index":109}'::jsonb
     ),
     (
       'shot-collagen-lift',
@@ -6096,15 +5940,15 @@ cross join (
       true,
       false,
       10,
-      'MARTIDERM seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'MARTIDERM seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2025/02/2.jpg',
       'Shot Collagen Lift de MARTIDERM',
-      1232,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/shot-collagen-lift/","source_categories":["Antiedad"],"source_availability":"instock","pricing_formula":{"source_price":432,"margin_rate":0.45,"margin_amount":194.4,"sale_price":237.6,"seller_commission_rate":0.1,"seller_commission_amount":19.44,"net_margin_after_seller":174.96},"source_index":282}'::jsonb
+      1226,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/shot-collagen-lift/","source_categories":["Antiedad"],"source_availability":"instock","pricing_formula":{"source_price":432,"margin_rate":0.45,"margin_amount":194.4,"sale_price":237.6,"seller_commission_rate":0.1,"seller_commission_amount":19.44,"net_margin_after_seller":174.96},"source_index":284}'::jsonb
     ),
     (
       'shot-hyaluronic-firm',
@@ -6122,15 +5966,15 @@ cross join (
       true,
       false,
       10,
-      'MARTIDERM seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'MARTIDERM seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2025/02/1.jpg',
       'Shot Hyaluronic Firm de MARTIDERM',
-      1233,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/serums/shot-hyaluronic-firm/","source_categories":["Antiedad","Serums"],"source_availability":"instock","pricing_formula":{"source_price":432,"margin_rate":0.45,"margin_amount":194.4,"sale_price":237.6,"seller_commission_rate":0.1,"seller_commission_amount":19.44,"net_margin_after_seller":174.96},"source_index":313}'::jsonb
+      1227,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/serums/shot-hyaluronic-firm/","source_categories":["Antiedad","Serums"],"source_availability":"instock","pricing_formula":{"source_price":432,"margin_rate":0.45,"margin_amount":194.4,"sale_price":237.6,"seller_commission_rate":0.1,"seller_commission_amount":19.44,"net_margin_after_seller":174.96},"source_index":312}'::jsonb
     ),
     (
       'shot-vitamin-c-antiox',
@@ -6148,14 +5992,14 @@ cross join (
       true,
       false,
       10,
-      'MARTIDERM seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'MARTIDERM seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2025/02/3.jpg',
       'Shot Vitamin C Antiox de MARTIDERM',
-      1234,
+      1228,
       '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/antioxidantes/shot-vitamin-c-antiox/","source_categories":["Antiedad","Antioxidantes"],"source_availability":"instock","pricing_formula":{"source_price":432,"margin_rate":0.45,"margin_amount":194.4,"sale_price":237.6,"seller_commission_rate":0.1,"seller_commission_amount":19.44,"net_margin_after_seller":174.96},"source_index":311}'::jsonb
     ),
     (
@@ -6174,15 +6018,15 @@ cross join (
       true,
       false,
       10,
-      'SENSILIS seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'SENSILIS seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/08/Diseno-sin-titulo-5.jpg',
       'Skin Rescue- Serum S.o.s de SENSILIS',
-      1235,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/serums/skin-rescue-serum-s-o-s-30ml/","source_categories":["Antiedad","Serums"],"source_availability":"Agotado","pricing_formula":{"source_price":300,"margin_rate":0.45,"margin_amount":135,"sale_price":165,"seller_commission_rate":0.1,"seller_commission_amount":13.5,"net_margin_after_seller":121.5},"source_index":21}'::jsonb
+      1229,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/serums/skin-rescue-serum-s-o-s-30ml/","source_categories":["Antiedad","Serums"],"source_availability":"Agotado","pricing_formula":{"source_price":300,"margin_rate":0.45,"margin_amount":135,"sale_price":165,"seller_commission_rate":0.1,"seller_commission_amount":13.5,"net_margin_after_seller":121.5},"source_index":34}'::jsonb
     ),
     (
       'skin-unify',
@@ -6200,15 +6044,15 @@ cross join (
       true,
       false,
       10,
-      'FILORGA seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'FILORGA seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/12/SKIN-UNIFY.jpg',
       'Skin Unify de FILORGA',
-      1236,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/skin-unify/","source_categories":["Antiedad"],"source_availability":"Agotado","pricing_formula":{"source_price":390,"margin_rate":0.45,"margin_amount":175.5,"sale_price":214.5,"seller_commission_rate":0.1,"seller_commission_amount":17.55,"net_margin_after_seller":157.95},"source_index":48}'::jsonb
+      1230,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/skin-unify/","source_categories":["Antiedad"],"source_availability":"Agotado","pricing_formula":{"source_price":390,"margin_rate":0.45,"margin_amount":175.5,"sale_price":214.5,"seller_commission_rate":0.1,"seller_commission_amount":17.55,"net_margin_after_seller":157.95},"source_index":59}'::jsonb
     ),
     (
       'skin-unify-intensive',
@@ -6226,15 +6070,15 @@ cross join (
       true,
       false,
       10,
-      'FILORGA seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'FILORGA seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/12/SKIN-UNIFY-INTENSIVE-4.jpg',
       'Skin Unify Intensive de FILORGA',
-      1237,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/serums/skin-unify-intensive-30ml/","source_categories":["Antiedad","Serums"],"source_availability":"Agotado","pricing_formula":{"source_price":390,"margin_rate":0.45,"margin_amount":175.5,"sale_price":214.5,"seller_commission_rate":0.1,"seller_commission_amount":17.55,"net_margin_after_seller":157.95},"source_index":158}'::jsonb
+      1231,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/serums/skin-unify-intensive-30ml/","source_categories":["Antiedad","Serums"],"source_availability":"Agotado","pricing_formula":{"source_price":390,"margin_rate":0.45,"margin_amount":175.5,"sale_price":214.5,"seller_commission_rate":0.1,"seller_commission_amount":17.55,"net_margin_after_seller":157.95},"source_index":157}'::jsonb
     ),
     (
       'skin-unify-radiance',
@@ -6252,14 +6096,14 @@ cross join (
       true,
       false,
       10,
-      'FILORGA seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'FILORGA seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/12/SKIN-UNIFY-RADIANCE-4.jpg',
       'Skin Unify Radiance de FILORGA',
-      1238,
+      1232,
       '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/skin-unify-radiance-15ml/","source_categories":["Antiedad"],"source_availability":"instock","pricing_formula":{"source_price":300,"margin_rate":0.45,"margin_amount":135,"sale_price":165,"seller_commission_rate":0.1,"seller_commission_amount":13.5,"net_margin_after_seller":121.5},"source_index":181}'::jsonb
     ),
     (
@@ -6278,20 +6122,46 @@ cross join (
       true,
       false,
       10,
-      'FILORGA seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'FILORGA seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/12/SLEEP-AND-PEEL.jpg',
       'Sleep And Peel 4.5 de FILORGA',
-      1239,
+      1233,
       '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/sleep-and-peel-4-5/","source_categories":["Antiedad"],"source_availability":"instock","pricing_formula":{"source_price":390,"margin_rate":0.45,"margin_amount":175.5,"sale_price":214.5,"seller_commission_rate":0.1,"seller_commission_amount":17.55,"net_margin_after_seller":157.95},"source_index":198}'::jsonb
     ),
     (
       'sun-secure-eau-solaire',
       'Sun Secure Eau Solaire',
       'Sun Secure Eau Solaire',
+      'SVR',
+      'Antiedad',
+      '',
+      2,
+      'Paso 2: tratar',
+      'Bs. 253',
+      253,
+      'BOB',
+      'in_stock',
+      true,
+      false,
+      10,
+      'SVR seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
+      'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
+      array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
+      array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
+      array['Ver envase','Confirmar composicion']::text[],
+      'https://hbderm.com/wp-content/uploads/2023/08/Diseño-sin-título-3.png',
+      'Sun Secure Eau Solaire de SVR',
+      1234,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-dia/sun-secure-eau-solaire-200-ml/","source_categories":["Antiedad","Tratamientos Dia"],"source_availability":"instock","pricing_formula":{"source_price":460,"margin_rate":0.45,"margin_amount":207,"sale_price":253,"seller_commission_rate":0.1,"seller_commission_amount":20.7,"net_margin_after_seller":186.3},"source_index":121}'::jsonb
+    ),
+    (
+      'sun-secure-extreme',
+      'Sun Secure Extreme',
+      'Sun Secure Extreme',
       'SVR',
       'Antiedad',
       '',
@@ -6304,41 +6174,15 @@ cross join (
       true,
       false,
       10,
-      'SVR seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
-      'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
-      array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
-      array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
-      array['Ver envase','Confirmar composicion']::text[],
-      'https://hbderm.com/wp-content/uploads/2023/08/Diseño-sin-título-3.png',
-      'Sun Secure Eau Solaire de SVR',
-      1240,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-dia/sun-secure-eau-solaire-200-ml/","source_categories":["Antiedad","Tratamientos Dia"],"source_availability":"instock","pricing_formula":{"source_price":250,"margin_rate":0.45,"margin_amount":112.5,"sale_price":137.5,"seller_commission_rate":0.1,"seller_commission_amount":11.25,"net_margin_after_seller":101.25},"source_index":121}'::jsonb
-    ),
-    (
-      'sun-secure-extreme',
-      'Sun Secure Extreme',
-      'Sun Secure Extreme',
-      'SVR',
-      'Antiedad',
-      '',
-      2,
-      'Paso 2: tratar',
-      'Bs. 166',
-      166.1,
-      'BOB',
-      'in_stock',
-      true,
-      false,
-      10,
-      'SVR seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'SVR seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2023/08/Diseño-sin-título-2.png',
       'Sun Secure Extreme de SVR',
-      1241,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-dia/sun-secure-extreme-50-ml/","source_categories":["Antiedad","Tratamientos Dia"],"source_availability":"instock","pricing_formula":{"source_price":302,"margin_rate":0.45,"margin_amount":135.9,"sale_price":166.1,"seller_commission_rate":0.1,"seller_commission_amount":13.59,"net_margin_after_seller":122.31},"source_index":210}'::jsonb
+      1235,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-dia/sun-secure-extreme-50-ml/","source_categories":["Antiedad","Tratamientos Dia"],"source_availability":"instock","pricing_formula":{"source_price":250,"margin_rate":0.45,"margin_amount":112.5,"sale_price":137.5,"seller_commission_rate":0.1,"seller_commission_amount":11.25,"net_margin_after_seller":101.25},"source_index":209}'::jsonb
     ),
     (
       'supreme-booster-fece',
@@ -6356,15 +6200,15 @@ cross join (
       true,
       false,
       10,
-      'SENSILIS seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'SENSILIS seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/08/Copia-de-Sin-titulo.jpg',
       'Supreme [booster Fece] de SENSILIS',
-      1242,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/supreme-booster-fece-30ml/","source_categories":["Antiedad"],"source_availability":"Agotado","pricing_formula":{"source_price":420,"margin_rate":0.45,"margin_amount":189,"sale_price":231,"seller_commission_rate":0.1,"seller_commission_amount":18.9,"net_margin_after_seller":170.1},"source_index":20}'::jsonb
+      1236,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/supreme-booster-fece-30ml/","source_categories":["Antiedad"],"source_availability":"Agotado","pricing_formula":{"source_price":420,"margin_rate":0.45,"margin_amount":189,"sale_price":231,"seller_commission_rate":0.1,"seller_commission_amount":18.9,"net_margin_after_seller":170.1},"source_index":33}'::jsonb
     ),
     (
       'teen-derm-az',
@@ -6382,15 +6226,15 @@ cross join (
       true,
       false,
       10,
-      'ISISPHARMA seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'ISISPHARMA seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2023/07/Diseño-sin-título-20.png',
       'Teen Derm Az de ISISPHARMA',
-      1243,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-dia/teen-derm-az-30ml/","source_categories":["Antiedad","Tratamientos Dia"],"source_availability":"instock","pricing_formula":{"source_price":408,"margin_rate":0.45,"margin_amount":183.6,"sale_price":224.4,"seller_commission_rate":0.1,"seller_commission_amount":18.36,"net_margin_after_seller":165.24},"source_index":43}'::jsonb
+      1237,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-dia/teen-derm-az-30ml/","source_categories":["Antiedad","Tratamientos Dia"],"source_availability":"instock","pricing_formula":{"source_price":408,"margin_rate":0.45,"margin_amount":183.6,"sale_price":224.4,"seller_commission_rate":0.1,"seller_commission_amount":18.36,"net_margin_after_seller":165.24},"source_index":56}'::jsonb
     ),
     (
       'time-filler-5xp-crema',
@@ -6408,15 +6252,15 @@ cross join (
       true,
       false,
       10,
-      'FILORGA seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'FILORGA seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/12/TIME-FILLER-CREMA-5.jpg',
       'Time Filler 5XP - Crema de FILORGA',
-      1244,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/time-filler-5xp-crema/","source_categories":["Antiedad"],"source_availability":"Agotado","pricing_formula":{"source_price":966,"margin_rate":0.45,"margin_amount":434.7,"sale_price":531.3,"seller_commission_rate":0.1,"seller_commission_amount":43.47,"net_margin_after_seller":391.23},"source_index":44}'::jsonb
+      1238,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/time-filler-5xp-crema/","source_categories":["Antiedad"],"source_availability":"Agotado","pricing_formula":{"source_price":966,"margin_rate":0.45,"margin_amount":434.7,"sale_price":531.3,"seller_commission_rate":0.1,"seller_commission_amount":43.47,"net_margin_after_seller":391.23},"source_index":58}'::jsonb
     ),
     (
       'time-filler-eyes-5xp',
@@ -6434,15 +6278,15 @@ cross join (
       true,
       false,
       10,
-      'FILORGA seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'FILORGA seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/12/TIME-FILLER-EYES.jpg',
       'Time Filler Eyes 5XP de FILORGA',
-      1245,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/time-filler-eyes-5xp/","source_categories":["Antiedad"],"source_availability":"Agotado","pricing_formula":{"source_price":768,"margin_rate":0.45,"margin_amount":345.6,"sale_price":422.4,"seller_commission_rate":0.1,"seller_commission_amount":34.56,"net_margin_after_seller":311.04},"source_index":126}'::jsonb
+      1239,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/time-filler-eyes-5xp/","source_categories":["Antiedad"],"source_availability":"Agotado","pricing_formula":{"source_price":768,"margin_rate":0.45,"margin_amount":345.6,"sale_price":422.4,"seller_commission_rate":0.1,"seller_commission_amount":34.56,"net_margin_after_seller":311.04},"source_index":128}'::jsonb
     ),
     (
       'time-filler-intensive',
@@ -6460,15 +6304,15 @@ cross join (
       true,
       false,
       10,
-      'FILORGA seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'FILORGA seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/12/TIME-FILLER-INTENSIVE-5-1.jpg',
       'Time Filler Intensive de FILORGA',
-      1246,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/time-filler-intensive/","source_categories":["Antiedad"],"source_availability":"Agotado","pricing_formula":{"source_price":1200,"margin_rate":0.45,"margin_amount":540,"sale_price":660,"seller_commission_rate":0.1,"seller_commission_amount":54,"net_margin_after_seller":486},"source_index":279}'::jsonb
+      1240,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/time-filler-intensive/","source_categories":["Antiedad"],"source_availability":"Agotado","pricing_formula":{"source_price":1200,"margin_rate":0.45,"margin_amount":540,"sale_price":660,"seller_commission_rate":0.1,"seller_commission_amount":54,"net_margin_after_seller":486},"source_index":278}'::jsonb
     ),
     (
       'time-filler-night',
@@ -6486,14 +6330,14 @@ cross join (
       true,
       false,
       10,
-      'FILORGA seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'FILORGA seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/12/TIME-FILLER-NIGHT-1.jpg',
       'Time Filler Night de FILORGA',
-      1247,
+      1241,
       '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-noche/time-filler-night/","source_categories":["Antiedad","Tratamientos Noche"],"source_availability":"instock","pricing_formula":{"source_price":966,"margin_rate":0.45,"margin_amount":434.7,"sale_price":531.3,"seller_commission_rate":0.1,"seller_commission_amount":43.47,"net_margin_after_seller":391.23},"source_index":199}'::jsonb
     ),
     (
@@ -6512,15 +6356,15 @@ cross join (
       true,
       false,
       10,
-      'FILORGA seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'FILORGA seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2025/04/FILORGA-2.jpg',
       'Time-filler Intensive 5XP de FILORGA',
-      1248,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-dia/time-filler-intensive-5xp/","source_categories":["Antiedad","Tratamientos Dia"],"source_availability":"instock","pricing_formula":{"source_price":1173,"margin_rate":0.45,"margin_amount":527.85,"sale_price":645.15,"seller_commission_rate":0.1,"seller_commission_amount":52.79,"net_margin_after_seller":475.06},"source_index":13}'::jsonb
+      1242,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-dia/time-filler-intensive-5xp/","source_categories":["Antiedad","Tratamientos Dia"],"source_availability":"instock","pricing_formula":{"source_price":1173,"margin_rate":0.45,"margin_amount":527.85,"sale_price":645.15,"seller_commission_rate":0.1,"seller_commission_amount":52.79,"net_margin_after_seller":475.06},"source_index":25}'::jsonb
     ),
     (
       'upgrade-ar',
@@ -6538,15 +6382,15 @@ cross join (
       true,
       false,
       10,
-      'SENSILIS seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'SENSILIS seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/08/Copia-de-Sin-titulo-1.jpg',
       'Upgrade Ar de SENSILIS',
-      1249,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/upgrade-ar/","source_categories":["Antiedad"],"source_availability":"Agotado","pricing_formula":{"source_price":336,"margin_rate":0.45,"margin_amount":151.2,"sale_price":184.8,"seller_commission_rate":0.1,"seller_commission_amount":15.12,"net_margin_after_seller":136.08},"source_index":84}'::jsonb
+      1243,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/upgrade-ar/","source_categories":["Antiedad"],"source_availability":"Agotado","pricing_formula":{"source_price":336,"margin_rate":0.45,"margin_amount":151.2,"sale_price":184.8,"seller_commission_rate":0.1,"seller_commission_amount":15.12,"net_margin_after_seller":136.08},"source_index":85}'::jsonb
     ),
     (
       'upgrade-eyes',
@@ -6564,15 +6408,15 @@ cross join (
       true,
       false,
       10,
-      'SENSILIS seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'SENSILIS seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/08/Diseno-sin-titulo-2.jpg',
       'Upgrade Eyes de SENSILIS',
-      1250,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/10142/","source_categories":["Antiedad"],"source_availability":"instock","pricing_formula":{"source_price":269,"margin_rate":0.45,"margin_amount":121.05,"sale_price":147.95,"seller_commission_rate":0.1,"seller_commission_amount":12.11,"net_margin_after_seller":108.94},"source_index":87}'::jsonb
+      1244,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/10142/","source_categories":["Antiedad"],"source_availability":"instock","pricing_formula":{"source_price":269,"margin_rate":0.45,"margin_amount":121.05,"sale_price":147.95,"seller_commission_rate":0.1,"seller_commission_amount":12.11,"net_margin_after_seller":108.94},"source_index":88}'::jsonb
     ),
     (
       'upgrade-fluide',
@@ -6590,15 +6434,15 @@ cross join (
       true,
       false,
       10,
-      'SENSILIS seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'SENSILIS seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/08/Diseno-sin-titulo.jpg',
       'Upgrade Fluide de SENSILIS',
-      1251,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/upgrade-fluido-50ml/","source_categories":["Antiedad"],"source_availability":"instock","pricing_formula":{"source_price":336,"margin_rate":0.45,"margin_amount":151.2,"sale_price":184.8,"seller_commission_rate":0.1,"seller_commission_amount":15.12,"net_margin_after_seller":136.08},"source_index":86}'::jsonb
+      1245,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/upgrade-fluido-50ml/","source_categories":["Antiedad"],"source_availability":"instock","pricing_formula":{"source_price":336,"margin_rate":0.45,"margin_amount":151.2,"sale_price":184.8,"seller_commission_rate":0.1,"seller_commission_amount":15.12,"net_margin_after_seller":136.08},"source_index":87}'::jsonb
     ),
     (
       'upgrade-make-up-miel-dore',
@@ -6616,14 +6460,14 @@ cross join (
       true,
       false,
       10,
-      'SENSILIS seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'SENSILIS seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/08/Diseno-sin-titulo-4.jpg',
       'Upgrade Make Up - Miel Doré de SENSILIS',
-      1252,
+      1246,
       '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/upgrade-make-up-efecto-lifting-tono-03-miel-dore-30ml/","source_categories":["Antiedad"],"source_availability":"instock","pricing_formula":{"source_price":470,"margin_rate":0.45,"margin_amount":211.5,"sale_price":258.5,"seller_commission_rate":0.1,"seller_commission_amount":21.15,"net_margin_after_seller":190.35},"source_index":222}'::jsonb
     ),
     (
@@ -6642,14 +6486,14 @@ cross join (
       true,
       false,
       10,
-      'SENSILIS seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'SENSILIS seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/08/Diseno-sin-titulo-4.jpg',
       'Upgrade Make Up - Miel Rosé de SENSILIS',
-      1253,
+      1247,
       '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/upgrade-make-up-efecto-lifting-02-miel-rose-30ml/","source_categories":["Antiedad"],"source_availability":"instock","pricing_formula":{"source_price":470,"margin_rate":0.45,"margin_amount":211.5,"sale_price":258.5,"seller_commission_rate":0.1,"seller_commission_amount":21.15,"net_margin_after_seller":190.35},"source_index":221}'::jsonb
     ),
     (
@@ -6668,14 +6512,14 @@ cross join (
       true,
       false,
       10,
-      'SENSILIS seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'SENSILIS seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2025/01/SENSILIS-.jpg',
       'Upgrade Make Up – Beige de SENSILIS',
-      1254,
+      1248,
       '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/upgrade-make-up-base-de-maquillaje-tratamiento-lifting-30ml/","source_categories":["Antiedad"],"source_availability":"instock","pricing_formula":{"source_price":470,"margin_rate":0.45,"margin_amount":211.5,"sale_price":258.5,"seller_commission_rate":0.1,"seller_commission_amount":21.15,"net_margin_after_seller":190.35},"source_index":223}'::jsonb
     ),
     (
@@ -6694,15 +6538,15 @@ cross join (
       true,
       false,
       10,
-      'SENSILIS seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'SENSILIS seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
       array['Rutina antiedad','Cuidado diario','Uso indicado']::text[],
       array['Rutina antiedad','Textura y tono','Cuidado facial']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/08/UPGRADE-NIGHT-CREAM.jpg',
       'Upgrade Night Cream de SENSILIS',
-      1255,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-noche/upgrade-crema-noche-50ml/","source_categories":["Antiedad","Tratamientos Noche"],"source_availability":"instock","pricing_formula":{"source_price":336,"margin_rate":0.45,"margin_amount":151.2,"sale_price":184.8,"seller_commission_rate":0.1,"seller_commission_amount":15.12,"net_margin_after_seller":136.08},"source_index":88}'::jsonb
+      1249,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-noche/upgrade-crema-noche-50ml/","source_categories":["Antiedad","Tratamientos Noche"],"source_availability":"instock","pricing_formula":{"source_price":336,"margin_rate":0.45,"margin_amount":151.2,"sale_price":184.8,"seller_commission_rate":0.1,"seller_commission_amount":15.12,"net_margin_after_seller":136.08},"source_index":86}'::jsonb
     ),
     (
       'ampoule-clairial',
@@ -6727,8 +6571,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2023/06/Diseño-sin-título-13.png',
       'Ampoule Clairial de SVR',
-      1256,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-hiperpigmentadas/despigmentante-rostro/ampoule-clairial-30-ml/","source_categories":["Pieles Hiperpigmentadas","Despigmentante Rostro"],"source_availability":"Agotado","pricing_formula":{"source_price":626,"margin_rate":0.45,"margin_amount":281.7,"sale_price":344.3,"seller_commission_rate":0.1,"seller_commission_amount":28.17,"net_margin_after_seller":253.53},"source_index":55}'::jsonb
+      1250,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-hiperpigmentadas/despigmentante-rostro/ampoule-clairial-30-ml/","source_categories":["Pieles Hiperpigmentadas","Despigmentante Rostro"],"source_availability":"Agotado","pricing_formula":{"source_price":626,"margin_rate":0.45,"margin_amount":281.7,"sale_price":344.3,"seller_commission_rate":0.1,"seller_commission_amount":28.17,"net_margin_after_seller":253.53},"source_index":63}'::jsonb
     ),
     (
       'clairial-night-peel',
@@ -6753,7 +6597,7 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2021/02/clairial_night-peel.jpg',
       'Clairial Night Peel de SVR',
-      1257,
+      1251,
       '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-hiperpigmentadas/despigmentante-rostro/clairial-night-peel/","source_categories":["Pieles Hiperpigmentadas","Despigmentante Rostro"],"source_availability":"Agotado","pricing_formula":{"source_price":594,"margin_rate":0.45,"margin_amount":267.3,"sale_price":326.7,"seller_commission_rate":0.1,"seller_commission_amount":26.73,"net_margin_after_seller":240.57},"source_index":96}'::jsonb
     ),
     (
@@ -6779,8 +6623,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2026/01/CLAIRIAL-SERUM-.jpg',
       'Clairial Serum de SVR',
-      1258,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-hiperpigmentadas/clairial-serum/","source_categories":["Pieles Hiperpigmentadas"],"source_availability":"instock","pricing_formula":{"source_price":561,"margin_rate":0.45,"margin_amount":252.45,"sale_price":308.55,"seller_commission_rate":0.1,"seller_commission_amount":25.25,"net_margin_after_seller":227.2},"source_index":163}'::jsonb
+      1252,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-hiperpigmentadas/clairial-serum/","source_categories":["Pieles Hiperpigmentadas"],"source_availability":"instock","pricing_formula":{"source_price":561,"margin_rate":0.45,"margin_amount":252.45,"sale_price":308.55,"seller_commission_rate":0.1,"seller_commission_amount":25.25,"net_margin_after_seller":227.2},"source_index":161}'::jsonb
     ),
     (
       'depiderm-serum-antimanchas',
@@ -6805,8 +6649,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2025/04/URIAGE-8.jpg',
       'Dépiderm - Sérum Antimanchas de URIAGE',
-      1259,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-hiperpigmentadas/depiderm-serum-antimanchas/","source_categories":["Pieles Hiperpigmentadas"],"source_availability":"instock","pricing_formula":{"source_price":464,"margin_rate":0.45,"margin_amount":208.8,"sale_price":255.2,"seller_commission_rate":0.1,"seller_commission_amount":20.88,"net_margin_after_seller":187.92},"source_index":153}'::jsonb
+      1253,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-hiperpigmentadas/depiderm-serum-antimanchas/","source_categories":["Pieles Hiperpigmentadas"],"source_availability":"instock","pricing_formula":{"source_price":464,"margin_rate":0.45,"margin_amount":208.8,"sale_price":255.2,"seller_commission_rate":0.1,"seller_commission_amount":20.88,"net_margin_after_seller":187.92},"source_index":152}'::jsonb
     ),
     (
       'depiwhite-advanced',
@@ -6831,7 +6675,7 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/08/DEPIWHITE-ADVANCE.jpg',
       'Dépiwhite Advanced de ACM',
-      1260,
+      1254,
       '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-hiperpigmentadas/depiwhite-advanced-crema/","source_categories":["Pieles Hiperpigmentadas"],"source_availability":"instock","pricing_formula":{"source_price":322,"margin_rate":0.45,"margin_amount":144.9,"sale_price":177.1,"seller_commission_rate":0.1,"seller_commission_amount":14.49,"net_margin_after_seller":130.41},"source_index":111}'::jsonb
     ),
     (
@@ -6857,8 +6701,34 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2025/07/DEPIWHITE-ANTI-MANCHAS.jpg',
       'Dépiwhite Anti Manchas Intimo de ACM',
-      1261,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/sin-categorizar/depiwhite-anti-manchas-intimo/","source_categories":["Sin Categorizar"],"source_availability":"instock","pricing_formula":{"source_price":216,"margin_rate":0.45,"margin_amount":97.2,"sale_price":118.8,"seller_commission_rate":0.1,"seller_commission_amount":9.72,"net_margin_after_seller":87.48},"source_index":237}'::jsonb
+      1255,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/sin-categorizar/depiwhite-anti-manchas-intimo/","source_categories":["Sin Categorizar"],"source_availability":"instock","pricing_formula":{"source_price":216,"margin_rate":0.45,"margin_amount":97.2,"sale_price":118.8,"seller_commission_rate":0.1,"seller_commission_amount":9.72,"net_margin_after_seller":87.48},"source_index":238}'::jsonb
+    ),
+    (
+      'depiwhite-gel-contorno-de-ojos',
+      'Dépiwhite Gel Contorno De Ojos',
+      'Dépiwhite Gel Contorno De Ojos',
+      'ACM',
+      'Manchas',
+      '',
+      2,
+      'Paso 2: tratar',
+      'Bs. 152',
+      151.8,
+      'BOB',
+      'in_stock',
+      true,
+      false,
+      10,
+      'ACM para rutinas orientadas a tono y manchas. Usar segun indicacion del producto.',
+      'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
+      array['Tono de piel','Rutina antimanchas','Uso constante']::text[],
+      array['Piel con manchas','Rutina de tono','Uso constante']::text[],
+      array['Ver envase','Confirmar composicion']::text[],
+      'https://hbderm.com/wp-content/uploads/2025/07/DEPIWHITE-CONTORNO.jpg',
+      'Dépiwhite Gel Contorno De Ojos de ACM',
+      1256,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-hiperpigmentadas/depiwhite-gel-contorno-de-ojos/","source_categories":["Pieles Hiperpigmentadas"],"source_availability":"Agotado","pricing_formula":{"source_price":276,"margin_rate":0.45,"margin_amount":124.2,"sale_price":151.8,"seller_commission_rate":0.1,"seller_commission_amount":12.42,"net_margin_after_seller":111.78},"source_index":295}'::jsonb
     ),
     (
       'depiwhite-leche-corporal-200ml',
@@ -6869,8 +6739,8 @@ cross join (
       '200 ml',
       2,
       'Paso 2: tratar',
-      'Bs. 166',
-      166.1,
+      'Bs. 163',
+      163.35,
       'BOB',
       'in_stock',
       true,
@@ -6883,8 +6753,86 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/08/DEPIWHITE-CORPORAL.jpg',
       'Dépiwhite Leche Corporal - 200ML de ACM',
-      1262,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-hiperpigmentadas/depiwhite-leche-corporal/","source_categories":["Pieles Hiperpigmentadas"],"source_availability":"instock","pricing_formula":{"source_price":302,"margin_rate":0.45,"margin_amount":135.9,"sale_price":166.1,"seller_commission_rate":0.1,"seller_commission_amount":13.59,"net_margin_after_seller":122.31},"source_index":225}'::jsonb
+      1257,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-hiperpigmentadas/depiwhite-leche-corporal/","source_categories":["Pieles Hiperpigmentadas"],"source_availability":"instock","pricing_formula":{"source_price":297,"margin_rate":0.45,"margin_amount":133.65,"sale_price":163.35,"seller_commission_rate":0.1,"seller_commission_amount":13.37,"net_margin_after_seller":120.28},"source_index":226}'::jsonb
+    ),
+    (
+      'viticolor-gel',
+      'Viticolor Gel',
+      'Viticolor Gel',
+      'ACM',
+      'Manchas',
+      '',
+      2,
+      'Paso 2: tratar',
+      'Bs. 291',
+      290.95,
+      'BOB',
+      'in_stock',
+      true,
+      false,
+      10,
+      'ACM para rutinas orientadas a tono y manchas. Usar segun indicacion del producto.',
+      'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
+      array['Tono de piel','Rutina antimanchas','Uso constante']::text[],
+      array['Piel con manchas','Rutina de tono','Uso constante']::text[],
+      array['Ver envase','Confirmar composicion']::text[],
+      'https://hbderm.com/wp-content/uploads/2024/09/VITICOLOR.jpg',
+      'Viticolor Gel de ACM',
+      1258,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-despigmentadas/viticolor-gel-con-color-pieles-con-vitiligo/","source_categories":["Pieles Despigmentadas"],"source_availability":"instock","pricing_formula":{"source_price":529,"margin_rate":0.45,"margin_amount":238.05,"sale_price":290.95,"seller_commission_rate":0.1,"seller_commission_amount":23.81,"net_margin_after_seller":214.24},"source_index":114}'::jsonb
+    ),
+    (
+      'vitiskin-hidrogel',
+      'Vitiskin Hidrogel',
+      'Vitiskin Hidrogel',
+      'ISISPHARMA',
+      'Manchas',
+      '',
+      2,
+      'Paso 2: tratar',
+      'Bs. 363',
+      363,
+      'BOB',
+      'in_stock',
+      true,
+      false,
+      10,
+      'ISISPHARMA para rutinas orientadas a tono y manchas. Usar segun indicacion del producto.',
+      'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
+      array['Tono de piel','Rutina antimanchas','Uso constante']::text[],
+      array['Piel con manchas','Rutina de tono','Uso constante']::text[],
+      array['Ver envase','Confirmar composicion']::text[],
+      'https://hbderm.com/wp-content/uploads/2021/03/VITISKIN.png',
+      'Vitiskin Hidrogel de ISISPHARMA',
+      1259,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-despigmentadas/vitiskin-hidrogel-50ml/","source_categories":["Pieles Despigmentadas"],"source_availability":"instock","pricing_formula":{"source_price":660,"margin_rate":0.45,"margin_amount":297,"sale_price":363,"seller_commission_rate":0.1,"seller_commission_amount":29.7,"net_margin_after_seller":267.3},"source_index":308}'::jsonb
+    ),
+    (
+      'vitix-gel',
+      'Vitix Gel',
+      'Vitix Gel',
+      'ACM',
+      'Manchas',
+      '',
+      2,
+      'Paso 2: tratar',
+      'Bs. 317',
+      316.8,
+      'BOB',
+      'in_stock',
+      true,
+      false,
+      10,
+      'ACM para rutinas orientadas a tono y manchas. Usar segun indicacion del producto.',
+      'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
+      array['Tono de piel','Rutina antimanchas','Uso constante']::text[],
+      array['Piel con manchas','Rutina de tono','Uso constante']::text[],
+      array['Ver envase','Confirmar composicion']::text[],
+      'https://hbderm.com/wp-content/uploads/2024/06/Diseno-sin-titulo-10.jpg',
+      'Vitix Gel de ACM',
+      1260,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-despigmentadas/vitix-gel/","source_categories":["Pieles Despigmentadas"],"source_availability":"instock","pricing_formula":{"source_price":576,"margin_rate":0.45,"margin_amount":259.2,"sale_price":316.8,"seller_commission_rate":0.1,"seller_commission_amount":25.92,"net_margin_after_seller":233.28},"source_index":240}'::jsonb
     ),
     (
       'xerial-10-leche-corporal-400ml',
@@ -6909,7 +6857,7 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2023/12/Diseño-sin-título.png',
       'Xerial 10 Leche Corporal - 400ML de SVR',
-      1263,
+      1261,
       '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-hiperpigmentadas/despigmentante-corporal/xerial-leche-corporal-400ml/","source_categories":["Pieles Hiperpigmentadas","Despigmentante Corporal"],"source_availability":"Agotado","pricing_formula":{"source_price":367,"margin_rate":0.45,"margin_amount":165.15,"sale_price":201.85,"seller_commission_rate":0.1,"seller_commission_amount":16.52,"net_margin_after_seller":148.63},"source_index":125}'::jsonb
     ),
     (
@@ -6935,8 +6883,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2025/02/ACM-10.jpg',
       'Novophane Capsulas x 180 de ACM',
-      1264,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-dia/novophane-capsulas-x-180/","source_categories":["Antiedad","Tratamientos Dia"],"source_availability":"instock","pricing_formula":{"source_price":735,"margin_rate":0.45,"margin_amount":330.75,"sale_price":404.25,"seller_commission_rate":0.1,"seller_commission_amount":33.08,"net_margin_after_seller":297.67},"source_index":7}'::jsonb
+      1262,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-dia/novophane-capsulas-x-180/","source_categories":["Antiedad","Tratamientos Dia"],"source_availability":"instock","pricing_formula":{"source_price":735,"margin_rate":0.45,"margin_amount":330.75,"sale_price":404.25,"seller_commission_rate":0.1,"seller_commission_amount":33.08,"net_margin_after_seller":297.67},"source_index":21}'::jsonb
     ),
     (
       'novophane-capsulas-x-60',
@@ -6947,8 +6895,8 @@ cross join (
       '',
       null,
       'Compra asistida',
-      'Bs. 404',
-      404.25,
+      'Bs. 224',
+      224.4,
       'BOB',
       'in_stock',
       true,
@@ -6961,8 +6909,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2026/04/NOVOPHANE-CAPSULAS-.jpg',
       'Novophane Capsulas x 60 de ACM',
-      1265,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/cuidados-del-cabello-y-unas/novophane-capsulas-x60/","source_categories":["Cuidados Del Cabello Y Unas"],"source_availability":"instock","pricing_formula":{"source_price":735,"margin_rate":0.45,"margin_amount":330.75,"sale_price":404.25,"seller_commission_rate":0.1,"seller_commission_amount":33.08,"net_margin_after_seller":297.67},"source_index":108}'::jsonb
+      1263,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/cuidados-del-cabello-y-unas/novophane-capsulas-x60/","source_categories":["Cuidados Del Cabello Y Unas"],"source_availability":"instock","pricing_formula":{"source_price":408,"margin_rate":0.45,"margin_amount":183.6,"sale_price":224.4,"seller_commission_rate":0.1,"seller_commission_amount":18.36,"net_margin_after_seller":165.24},"source_index":108}'::jsonb
     ),
     (
       'novophane-ds-caspa-moderada-shampoo',
@@ -6987,8 +6935,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2025/07/NOVOPHANE-DS.jpg',
       'Novophane Ds Caspa Moderada Shampoo de ACM',
-      1266,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/sin-categorizar/novophane-ds-champu-caspa-moderada/","source_categories":["Sin Categorizar"],"source_availability":"instock","pricing_formula":{"source_price":330,"margin_rate":0.45,"margin_amount":148.5,"sale_price":181.5,"seller_commission_rate":0.1,"seller_commission_amount":14.85,"net_margin_after_seller":133.65},"source_index":165}'::jsonb
+      1264,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/sin-categorizar/novophane-ds-champu-caspa-moderada/","source_categories":["Sin Categorizar"],"source_availability":"instock","pricing_formula":{"source_price":330,"margin_rate":0.45,"margin_amount":148.5,"sale_price":181.5,"seller_commission_rate":0.1,"seller_commission_amount":14.85,"net_margin_after_seller":133.65},"source_index":164}'::jsonb
     ),
     (
       'novophane-energizante-shampoo-200ml',
@@ -6999,8 +6947,8 @@ cross join (
       '200 ml',
       null,
       'Compra asistida',
-      'Bs. 404',
-      404.25,
+      'Bs. 174',
+      173.8,
       'BOB',
       'in_stock',
       true,
@@ -7013,8 +6961,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/09/NOVOPHANE-ENERGIZANTE.jpg',
       'Novophane Energizante Shampoo - 200ML de ACM',
-      1267,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/cuidados-del-cabello-y-unas/novophane-energizante-shampoo/","source_categories":["Cuidados Del Cabello Y Unas"],"source_availability":"instock","pricing_formula":{"source_price":735,"margin_rate":0.45,"margin_amount":330.75,"sale_price":404.25,"seller_commission_rate":0.1,"seller_commission_amount":33.08,"net_margin_after_seller":297.67},"source_index":215}'::jsonb
+      1265,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/cuidados-del-cabello-y-unas/novophane-energizante-shampoo/","source_categories":["Cuidados Del Cabello Y Unas"],"source_availability":"instock","pricing_formula":{"source_price":316,"margin_rate":0.45,"margin_amount":142.2,"sale_price":173.8,"seller_commission_rate":0.1,"seller_commission_amount":14.22,"net_margin_after_seller":127.98},"source_index":216}'::jsonb
     ),
     (
       'novophane-energizante-shampoo-500ml',
@@ -7039,8 +6987,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2025/05/NOVOPHANE-ENERGIZANTE-500-ML.jpg',
       'Novophane Energizante Shampoo - 500ML de ACM',
-      1268,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/cuidados-del-cabello-y-unas/anticaida/novophane-energizante-shampoo-500ml/","source_categories":["Cuidados Del Cabello Y Unas","Anticaida"],"source_availability":"Agotado","pricing_formula":{"source_price":735,"margin_rate":0.45,"margin_amount":330.75,"sale_price":404.25,"seller_commission_rate":0.1,"seller_commission_amount":33.08,"net_margin_after_seller":297.67},"source_index":218}'::jsonb
+      1266,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/cuidados-del-cabello-y-unas/anticaida/novophane-energizante-shampoo-500ml/","source_categories":["Cuidados Del Cabello Y Unas","Anticaida"],"source_availability":"Agotado","pricing_formula":{"source_price":735,"margin_rate":0.45,"margin_amount":330.75,"sale_price":404.25,"seller_commission_rate":0.1,"seller_commission_amount":33.08,"net_margin_after_seller":297.67},"source_index":217}'::jsonb
     ),
     (
       'novophane-k-caspa-severa-shampoo',
@@ -7065,8 +7013,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/09/NOVOPHANE-K.jpg',
       'Novophane K Caspa Severa Shampoo de ACM',
-      1269,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/cuidados-del-cabello-y-unas/novophane-k-shampoo-caspa-severa/","source_categories":["Cuidados Del Cabello Y Unas"],"source_availability":"instock","pricing_formula":{"source_price":316,"margin_rate":0.45,"margin_amount":142.2,"sale_price":173.8,"seller_commission_rate":0.1,"seller_commission_amount":14.22,"net_margin_after_seller":127.98},"source_index":162}'::jsonb
+      1267,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/cuidados-del-cabello-y-unas/novophane-k-shampoo-caspa-severa/","source_categories":["Cuidados Del Cabello Y Unas"],"source_availability":"instock","pricing_formula":{"source_price":316,"margin_rate":0.45,"margin_amount":142.2,"sale_price":173.8,"seller_commission_rate":0.1,"seller_commission_amount":14.22,"net_margin_after_seller":127.98},"source_index":163}'::jsonb
     ),
     (
       'novophane-locion-chronic',
@@ -7091,8 +7039,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/09/NOVOPHANE-CHRONIC-1.jpg',
       'Novophane Loción Chronic de ACM',
-      1270,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/cuidados-del-cabello-y-unas/novophane-chronic-100ml/","source_categories":["Cuidados Del Cabello Y Unas"],"source_availability":"Agotado","pricing_formula":{"source_price":340,"margin_rate":0.45,"margin_amount":153,"sale_price":187,"seller_commission_rate":0.1,"seller_commission_amount":15.3,"net_margin_after_seller":137.7},"source_index":234}'::jsonb
+      1268,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/cuidados-del-cabello-y-unas/novophane-chronic-100ml/","source_categories":["Cuidados Del Cabello Y Unas"],"source_availability":"Agotado","pricing_formula":{"source_price":340,"margin_rate":0.45,"margin_amount":153,"sale_price":187,"seller_commission_rate":0.1,"seller_commission_amount":15.3,"net_margin_after_seller":137.7},"source_index":233}'::jsonb
     ),
     (
       'novophane-locion-reactiva',
@@ -7117,8 +7065,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2025/07/NOVOPHANE-LOCION-REACTIVA.jpg',
       'Novophane Loción Reactiva de ACM',
-      1271,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/sin-categorizar/novophane-locion-reactiva/","source_categories":["Sin Categorizar"],"source_availability":"instock","pricing_formula":{"source_price":321,"margin_rate":0.45,"margin_amount":144.45,"sale_price":176.55,"seller_commission_rate":0.1,"seller_commission_amount":14.45,"net_margin_after_seller":130},"source_index":217}'::jsonb
+      1269,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/sin-categorizar/novophane-locion-reactiva/","source_categories":["Sin Categorizar"],"source_availability":"instock","pricing_formula":{"source_price":321,"margin_rate":0.45,"margin_amount":144.45,"sale_price":176.55,"seller_commission_rate":0.1,"seller_commission_amount":14.45,"net_margin_after_seller":130},"source_index":218}'::jsonb
     ),
     (
       'novophane-seborregulador-shampoo',
@@ -7143,8 +7091,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2025/07/NOVOPHANE-SEBORREGULADOR.jpg',
       'Novophane Seborregulador Shampoo de ACM',
-      1272,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/sin-categorizar/novophane-seborregulador-shampoo-200-ml/","source_categories":["Sin Categorizar"],"source_availability":"instock","pricing_formula":{"source_price":316,"margin_rate":0.45,"margin_amount":142.2,"sale_price":173.8,"seller_commission_rate":0.1,"seller_commission_amount":14.22,"net_margin_after_seller":127.98},"source_index":25}'::jsonb
+      1270,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/sin-categorizar/novophane-seborregulador-shampoo-200-ml/","source_categories":["Sin Categorizar"],"source_availability":"instock","pricing_formula":{"source_price":316,"margin_rate":0.45,"margin_amount":142.2,"sale_price":173.8,"seller_commission_rate":0.1,"seller_commission_amount":14.22,"net_margin_after_seller":127.98},"source_index":38}'::jsonb
     ),
     (
       'pilopeptan-champu-anticaida',
@@ -7155,8 +7103,8 @@ cross join (
       '',
       null,
       'Compra asistida',
-      'Bs. 404',
-      404.25,
+      'Bs. 164',
+      163.9,
       'BOB',
       'in_stock',
       true,
@@ -7169,8 +7117,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/10/CHAMPU.jpg',
       'Pilopeptan Champú Anticaída de GENOVÉ',
-      1273,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/cuidados-del-cabello-y-unas/pilopeptan-champu-anticaida-250ml/","source_categories":["Cuidados Del Cabello Y Unas"],"source_availability":"instock","pricing_formula":{"source_price":735,"margin_rate":0.45,"margin_amount":330.75,"sale_price":404.25,"seller_commission_rate":0.1,"seller_commission_amount":33.08,"net_margin_after_seller":297.67},"source_index":257}'::jsonb
+      1271,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/cuidados-del-cabello-y-unas/pilopeptan-champu-anticaida-250ml/","source_categories":["Cuidados Del Cabello Y Unas"],"source_availability":"instock","pricing_formula":{"source_price":298,"margin_rate":0.45,"margin_amount":134.1,"sale_price":163.9,"seller_commission_rate":0.1,"seller_commission_amount":13.41,"net_margin_after_seller":120.69},"source_index":257}'::jsonb
     ),
     (
       'pilopeptan-intensive',
@@ -7195,8 +7143,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2025/03/GENOVE-1.jpg',
       'Pilopeptan Intensive de GENOVÉ',
-      1274,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/cuidados-del-cabello-y-unas/pilopeptan-intensive/","source_categories":["Cuidados Del Cabello Y Unas"],"source_availability":"instock","pricing_formula":{"source_price":478,"margin_rate":0.45,"margin_amount":215.1,"sale_price":262.9,"seller_commission_rate":0.1,"seller_commission_amount":21.51,"net_margin_after_seller":193.59},"source_index":266}'::jsonb
+      1272,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/cuidados-del-cabello-y-unas/pilopeptan-intensive/","source_categories":["Cuidados Del Cabello Y Unas"],"source_availability":"instock","pricing_formula":{"source_price":478,"margin_rate":0.45,"margin_amount":215.1,"sale_price":262.9,"seller_commission_rate":0.1,"seller_commission_amount":21.51,"net_margin_after_seller":193.59},"source_index":262}'::jsonb
     ),
     (
       'pilopeptan-locion-anticaida',
@@ -7221,13 +7169,39 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/10/LOCION-ANTICAIDA.jpg',
       'Pilopeptan Loción Anticaída de GENOVÉ',
-      1275,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/cuidados-del-cabello-y-unas/pilopeptan-locion-anticaida-100ml/","source_categories":["Cuidados Del Cabello Y Unas"],"source_availability":"instock","pricing_formula":{"source_price":735,"margin_rate":0.45,"margin_amount":330.75,"sale_price":404.25,"seller_commission_rate":0.1,"seller_commission_amount":33.08,"net_margin_after_seller":297.67},"source_index":259}'::jsonb
+      1273,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/cuidados-del-cabello-y-unas/pilopeptan-locion-anticaida-100ml/","source_categories":["Cuidados Del Cabello Y Unas"],"source_availability":"instock","pricing_formula":{"source_price":735,"margin_rate":0.45,"margin_amount":330.75,"sale_price":404.25,"seller_commission_rate":0.1,"seller_commission_amount":33.08,"net_margin_after_seller":297.67},"source_index":258}'::jsonb
     ),
     (
       'pilopeptan-womam-comprimidos',
       'Pilopeptan Womam Comprimidos',
       'Pilopeptan Womam Comprimidos',
+      'GENOVÉ',
+      'Cabello y unas',
+      '',
+      null,
+      'Compra asistida',
+      'Bs. 222',
+      221.65,
+      'BOB',
+      'in_stock',
+      true,
+      false,
+      10,
+      'GENOVÉ para cuidado de cabello o unas. Confirma modo de uso y disponibilidad.',
+      'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
+      array['Cabello y unas','Rutina de soporte','Uso indicado']::text[],
+      array['Cabello','Unas','Apoyo cosmetico']::text[],
+      array['Ver envase','Confirmar composicion']::text[],
+      'https://hbderm.com/wp-content/uploads/2025/05/GENOVE-4.jpg',
+      'Pilopeptan Womam Comprimidos de GENOVÉ',
+      1274,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/cuidados-del-cabello-y-unas/pilopeptan-womam-comprimidos/","source_categories":["Cuidados Del Cabello Y Unas"],"source_availability":"instock","pricing_formula":{"source_price":403,"margin_rate":0.45,"margin_amount":181.35,"sale_price":221.65,"seller_commission_rate":0.1,"seller_commission_amount":18.14,"net_margin_after_seller":163.21},"source_index":263}'::jsonb
+    ),
+    (
+      'pilopeptan-woman-mascarilla-capilar-reparadora',
+      'Pilopeptan Woman Mascarilla Capilar Reparadora',
+      'Pilopeptan Woman Mascarilla Capilar Reparadora',
       'GENOVÉ',
       'Cabello y unas',
       '',
@@ -7245,36 +7219,10 @@ cross join (
       array['Cabello y unas','Rutina de soporte','Uso indicado']::text[],
       array['Cabello','Unas','Apoyo cosmetico']::text[],
       array['Ver envase','Confirmar composicion']::text[],
-      'https://hbderm.com/wp-content/uploads/2025/05/GENOVE-4.jpg',
-      'Pilopeptan Womam Comprimidos de GENOVÉ',
-      1276,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/cuidados-del-cabello-y-unas/pilopeptan-womam-comprimidos/","source_categories":["Cuidados Del Cabello Y Unas"],"source_availability":"instock","pricing_formula":{"source_price":735,"margin_rate":0.45,"margin_amount":330.75,"sale_price":404.25,"seller_commission_rate":0.1,"seller_commission_amount":33.08,"net_margin_after_seller":297.67},"source_index":262}'::jsonb
-    ),
-    (
-      'pilopeptan-woman-mascarilla-capilar-reparadora',
-      'Pilopeptan Woman Mascarilla Capilar Reparadora',
-      'Pilopeptan Woman Mascarilla Capilar Reparadora',
-      'GENOVÉ',
-      'Cabello y unas',
-      '',
-      null,
-      'Compra asistida',
-      'Bs. 193',
-      193.05,
-      'BOB',
-      'in_stock',
-      true,
-      false,
-      10,
-      'GENOVÉ para cuidado de cabello o unas. Confirma modo de uso y disponibilidad.',
-      'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
-      array['Cabello y unas','Rutina de soporte','Uso indicado']::text[],
-      array['Cabello','Unas','Apoyo cosmetico']::text[],
-      array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/10/GENOVE-.jpg',
       'Pilopeptan Woman Mascarilla Capilar Reparadora de GENOVÉ',
-      1277,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/cuidados-del-cabello-y-unas/pilopeptan-woman-mascarilla-capilar-reparadora-200ml/","source_categories":["Cuidados Del Cabello Y Unas"],"source_availability":"Agotado","pricing_formula":{"source_price":351,"margin_rate":0.45,"margin_amount":157.95,"sale_price":193.05,"seller_commission_rate":0.1,"seller_commission_amount":15.8,"net_margin_after_seller":142.15},"source_index":157}'::jsonb
+      1275,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/cuidados-del-cabello-y-unas/pilopeptan-woman-mascarilla-capilar-reparadora-200ml/","source_categories":["Cuidados Del Cabello Y Unas"],"source_availability":"Agotado","pricing_formula":{"source_price":735,"margin_rate":0.45,"margin_amount":330.75,"sale_price":404.25,"seller_commission_rate":0.1,"seller_commission_amount":33.08,"net_margin_after_seller":297.67},"source_index":158}'::jsonb
     ),
     (
       'pilopeptan-woman-proteokel',
@@ -7299,7 +7247,7 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2025/03/GENOVE-.jpg',
       'Pilopeptan Woman Proteokel de GENOVÉ',
-      1278,
+      1276,
       '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/cuidados-del-cabello-y-unas/pilopeptan-woman-proteokel/","source_categories":["Cuidados Del Cabello Y Unas"],"source_availability":"instock","pricing_formula":{"source_price":918,"margin_rate":0.45,"margin_amount":413.1,"sale_price":504.9,"seller_commission_rate":0.1,"seller_commission_amount":41.31,"net_margin_after_seller":371.79},"source_index":261}'::jsonb
     ),
     (
@@ -7325,8 +7273,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2026/04/PILOPEPTAN-UNAS.jpg',
       'Pilopeptan Woman Reparador De Uñas de GENOVÉ',
-      1279,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/sin-categorizar/pilopeptan-woman-reparador-de-unas/","source_categories":["Sin Categorizar"],"source_availability":"instock","pricing_formula":{"source_price":234,"margin_rate":0.45,"margin_amount":105.3,"sale_price":128.7,"seller_commission_rate":0.1,"seller_commission_amount":10.53,"net_margin_after_seller":94.77},"source_index":103}'::jsonb
+      1277,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/sin-categorizar/pilopeptan-woman-reparador-de-unas/","source_categories":["Sin Categorizar"],"source_availability":"instock","pricing_formula":{"source_price":234,"margin_rate":0.45,"margin_amount":105.3,"sale_price":128.7,"seller_commission_rate":0.1,"seller_commission_amount":10.53,"net_margin_after_seller":94.77},"source_index":102}'::jsonb
     ),
     (
       'pilopeptan-woman-serum-potenciador-de-pestanas-y-cejas',
@@ -7351,8 +7299,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/10/CEJAS-Y-PESTANAS.jpg',
       'Pilopeptan Woman Sérum Potenciador De Pestañas Y Cejas de GENOVÉ',
-      1280,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/cuidado-de-pestanas/pilopeptan-woman-serum-potenciador-de-pestanas-y-cejas-6ml/","source_categories":["Cuidado De Pestanas"],"source_availability":"instock","pricing_formula":{"source_price":470,"margin_rate":0.45,"margin_amount":211.5,"sale_price":258.5,"seller_commission_rate":0.1,"seller_commission_amount":21.15,"net_margin_after_seller":190.35},"source_index":260}'::jsonb
+      1278,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/cuidado-de-pestanas/pilopeptan-woman-serum-potenciador-de-pestanas-y-cejas-6ml/","source_categories":["Cuidado De Pestanas"],"source_availability":"instock","pricing_formula":{"source_price":470,"margin_rate":0.45,"margin_amount":211.5,"sale_price":258.5,"seller_commission_rate":0.1,"seller_commission_amount":21.15,"net_margin_after_seller":190.35},"source_index":259}'::jsonb
     ),
     (
       'pilopeptan-woman-serum-reparador-capilar',
@@ -7377,8 +7325,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/10/SERUM-REPARADOR.jpg',
       'Pilopeptan Woman Sérum Reparador Capilar de GENOVÉ',
-      1281,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/cuidados-del-cabello-y-unas/pilopeptan-woman-serum-reparador-capilar-30ml/","source_categories":["Cuidados Del Cabello Y Unas"],"source_availability":"instock","pricing_formula":{"source_price":168,"margin_rate":0.45,"margin_amount":75.6,"sale_price":92.4,"seller_commission_rate":0.1,"seller_commission_amount":7.56,"net_margin_after_seller":68.04},"source_index":258}'::jsonb
+      1279,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/cuidados-del-cabello-y-unas/pilopeptan-woman-serum-reparador-capilar-30ml/","source_categories":["Cuidados Del Cabello Y Unas"],"source_availability":"instock","pricing_formula":{"source_price":168,"margin_rate":0.45,"margin_amount":75.6,"sale_price":92.4,"seller_commission_rate":0.1,"seller_commission_amount":7.56,"net_margin_after_seller":68.04},"source_index":260}'::jsonb
     ),
     (
       'sedacalm-shampoo',
@@ -7403,8 +7351,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/09/SEDACALM-SHAMPOO.jpg',
       'Sédacalm Shampoo de ACM',
-      1282,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/cuidados-del-cabello-y-unas/sedacalm-shampoo-calmante-200ml/","source_categories":["Cuidados Del Cabello Y Unas"],"source_availability":"Agotado","pricing_formula":{"source_price":264,"margin_rate":0.45,"margin_amount":118.8,"sale_price":145.2,"seller_commission_rate":0.1,"seller_commission_amount":11.88,"net_margin_after_seller":106.92},"source_index":61}'::jsonb
+      1280,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/cuidados-del-cabello-y-unas/sedacalm-shampoo-calmante-200ml/","source_categories":["Cuidados Del Cabello Y Unas"],"source_availability":"Agotado","pricing_formula":{"source_price":264,"margin_rate":0.45,"margin_amount":118.8,"sale_price":145.2,"seller_commission_rate":0.1,"seller_commission_amount":11.88,"net_margin_after_seller":106.92},"source_index":68}'::jsonb
     ),
     (
       'si-nails',
@@ -7429,8 +7377,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/09/SI-NAILS-5.jpg',
       'Si - Nails de ISDIN',
-      1283,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/cuidados-del-cabello-y-unas/unas/si-nails/","source_categories":["Cuidados Del Cabello Y Unas","Unas"],"source_availability":"Agotado","pricing_formula":{"source_price":286,"margin_rate":0.45,"margin_amount":128.7,"sale_price":157.3,"seller_commission_rate":0.1,"seller_commission_amount":12.87,"net_margin_after_seller":115.83},"source_index":144}'::jsonb
+      1281,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/cuidados-del-cabello-y-unas/unas/si-nails/","source_categories":["Cuidados Del Cabello Y Unas","Unas"],"source_availability":"Agotado","pricing_formula":{"source_price":286,"margin_rate":0.45,"margin_amount":128.7,"sale_price":157.3,"seller_commission_rate":0.1,"seller_commission_amount":12.87,"net_margin_after_seller":115.83},"source_index":143}'::jsonb
     ),
     (
       'topialyse-mascara-de-pestanas',
@@ -7455,8 +7403,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2023/08/Diseño-sin-título-1.png',
       'Topialyse Máscara De Pestañas de SVR',
-      1284,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/contorno-de-ojos/topialyse-mascara-de-pestanas-palpebral/","source_categories":["Antiedad","Contorno De Ojos"],"source_availability":"Agotado","pricing_formula":{"source_price":300,"margin_rate":0.45,"margin_amount":135,"sale_price":165,"seller_commission_rate":0.1,"seller_commission_amount":13.5,"net_margin_after_seller":121.5},"source_index":309}'::jsonb
+      1282,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/antiedad/contorno-de-ojos/topialyse-mascara-de-pestanas-palpebral/","source_categories":["Antiedad","Contorno De Ojos"],"source_availability":"Agotado","pricing_formula":{"source_price":300,"margin_rate":0.45,"margin_amount":135,"sale_price":165,"seller_commission_rate":0.1,"seller_commission_amount":13.5,"net_margin_after_seller":121.5},"source_index":307}'::jsonb
     ),
     (
       'xerial-40-ongles',
@@ -7467,8 +7415,8 @@ cross join (
       '',
       null,
       'Compra asistida',
-      'Bs. 404',
-      404.25,
+      'Bs. 92',
+      92.4,
       'BOB',
       'in_stock',
       true,
@@ -7481,8 +7429,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2020/06/XERIAL-40.png',
       'Xerial 40 Ongles de SVR',
-      1285,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/cuidados-del-cabello-y-unas/xerial-40-ongles/","source_categories":["Cuidados Del Cabello Y Unas"],"source_availability":"Agotado","pricing_formula":{"source_price":735,"margin_rate":0.45,"margin_amount":330.75,"sale_price":404.25,"seller_commission_rate":0.1,"seller_commission_amount":33.08,"net_margin_after_seller":297.67},"source_index":212}'::jsonb
+      1283,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/cuidados-del-cabello-y-unas/xerial-40-ongles/","source_categories":["Cuidados Del Cabello Y Unas"],"source_availability":"Agotado","pricing_formula":{"source_price":168,"margin_rate":0.45,"margin_amount":75.6,"sale_price":92.4,"seller_commission_rate":0.1,"seller_commission_amount":7.56,"net_margin_after_seller":68.04},"source_index":212}'::jsonb
     ),
     (
       'agua-termal-150ml',
@@ -7507,8 +7455,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2026/05/AGUA-TERMAL-150-ML-.jpg',
       'Agua Termal - 150ML de URIAGE',
-      1286,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/cuidados-del-bebe/agua-termal-de-uriage/","source_categories":["Cuidados Del Bebe"],"source_availability":"instock","pricing_formula":{"source_price":216,"margin_rate":0.45,"margin_amount":97.2,"sale_price":118.8,"seller_commission_rate":0.1,"seller_commission_amount":9.72,"net_margin_after_seller":87.48},"source_index":73}'::jsonb
+      1284,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/cuidados-del-bebe/agua-termal-de-uriage/","source_categories":["Cuidados Del Bebe"],"source_availability":"instock","pricing_formula":{"source_price":216,"margin_rate":0.45,"margin_amount":97.2,"sale_price":118.8,"seller_commission_rate":0.1,"seller_commission_amount":9.72,"net_margin_after_seller":87.48},"source_index":80}'::jsonb
     ),
     (
       'bariederm-cica-daily-serum',
@@ -7533,8 +7481,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/08/BARIEDERM-SERUM.jpg',
       'Bariéderm Cica Daily Serum de URIAGE',
-      1287,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/cuidados-del-bebe/bariederm-cica-daily-serum/","source_categories":["Cuidados Del Bebe"],"source_availability":"instock","pricing_formula":{"source_price":464,"margin_rate":0.45,"margin_amount":208.8,"sale_price":255.2,"seller_commission_rate":0.1,"seller_commission_amount":20.88,"net_margin_after_seller":187.92},"source_index":272}'::jsonb
+      1285,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/cuidados-del-bebe/bariederm-cica-daily-serum/","source_categories":["Cuidados Del Bebe"],"source_availability":"instock","pricing_formula":{"source_price":464,"margin_rate":0.45,"margin_amount":208.8,"sale_price":255.2,"seller_commission_rate":0.1,"seller_commission_amount":20.88,"net_margin_after_seller":187.92},"source_index":273}'::jsonb
     ),
     (
       'bariesun-bruma-termal-bronceadora',
@@ -7545,8 +7493,8 @@ cross join (
       '',
       null,
       'Compra asistida',
-      'Bs. 158',
-      158.4,
+      'Bs. 138',
+      137.5,
       'BOB',
       'in_stock',
       true,
@@ -7559,8 +7507,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/04/Diseño-sin-título-1.png',
       'Barièsun Bruma Termal Bronceadora de URIAGE',
-      1288,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/cuidados-del-bebe/cuidados-especificos/bariesun-autobronzant/","source_categories":["Cuidados Del Bebe","Cuidados Especificos"],"source_availability":"instock","pricing_formula":{"source_price":288,"margin_rate":0.45,"margin_amount":129.6,"sale_price":158.4,"seller_commission_rate":0.1,"seller_commission_amount":12.96,"net_margin_after_seller":116.64},"source_index":102}'::jsonb
+      1286,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/cuidados-del-bebe/cuidados-especificos/bariesun-autobronzant/","source_categories":["Cuidados Del Bebe","Cuidados Especificos"],"source_availability":"instock","pricing_formula":{"source_price":250,"margin_rate":0.45,"margin_amount":112.5,"sale_price":137.5,"seller_commission_rate":0.1,"seller_commission_amount":11.25,"net_margin_after_seller":101.25},"source_index":100}'::jsonb
     ),
     (
       'bebe-1er-cuidado-costra-lactea',
@@ -7585,8 +7533,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2023/06/Diseño-sin-título-8.png',
       'Bebé - 1ER Cuidado Costra Láctea de URIAGE',
-      1289,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/cuidados-del-bebe/bebe-1er-cuidado-costra-lactea/","source_categories":["Cuidados Del Bebe"],"source_availability":"Agotado","pricing_formula":{"source_price":84,"margin_rate":0.45,"margin_amount":37.8,"sale_price":46.2,"seller_commission_rate":0.1,"seller_commission_amount":3.78,"net_margin_after_seller":34.02},"source_index":137}'::jsonb
+      1287,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/cuidados-del-bebe/bebe-1er-cuidado-costra-lactea/","source_categories":["Cuidados Del Bebe"],"source_availability":"Agotado","pricing_formula":{"source_price":84,"margin_rate":0.45,"margin_amount":37.8,"sale_price":46.2,"seller_commission_rate":0.1,"seller_commission_amount":3.78,"net_margin_after_seller":34.02},"source_index":136}'::jsonb
     ),
     (
       'bebe-1er-agua-termal-150ml',
@@ -7611,34 +7559,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2022/10/Diseño-sin-título-3.png',
       'Bebé 1ER Agua Termal - 150ML de URIAGE',
-      1290,
+      1288,
       '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/cuidados-del-bebe/bebe-agua-termal-150ml/","source_categories":["Cuidados Del Bebe"],"source_availability":"Agotado","pricing_formula":{"source_price":120,"margin_rate":0.45,"margin_amount":54,"sale_price":66,"seller_commission_rate":0.1,"seller_commission_amount":5.4,"net_margin_after_seller":48.6},"source_index":135}'::jsonb
-    ),
-    (
-      'bebe-crema-lavante-500ml',
-      'Bebé Crema Lavante 500ML',
-      'Bebé Crema Lavante 500ML',
-      'URIAGE',
-      'Bebe y ninos',
-      '500 ml',
-      null,
-      'Compra asistida',
-      'Bs. 63',
-      62.7,
-      'BOB',
-      'in_stock',
-      true,
-      false,
-      10,
-      'URIAGE para cuidado familiar. Confirmar edad recomendada antes de usar.',
-      'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
-      array['Cuidado familiar','Uso delicado','Confirmar edad']::text[],
-      array['Familia','Ninos','Cuidado delicado']::text[],
-      array['Ver envase','Confirmar composicion']::text[],
-      'https://hbderm.com/wp-content/uploads/2022/02/BEBE-CREMA-LAVANTE-500ML.jpg',
-      'Bebé Crema Lavante 500ML de URIAGE',
-      1291,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/cuidados-del-bebe/bebe-crema-lavante-500ml/","source_categories":["Cuidados Del Bebe"],"source_availability":"Agotado","pricing_formula":{"source_price":114,"margin_rate":0.45,"margin_amount":51.3,"sale_price":62.7,"seller_commission_rate":0.1,"seller_commission_amount":5.13,"net_margin_after_seller":46.17},"source_index":133}'::jsonb
     ),
     (
       'boreade-r-stick-labios-reparador-calmante',
@@ -7663,8 +7585,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2025/01/ACM-5.jpg',
       'Boréade R Stick Labios Reparador Calmante de ACM',
-      1292,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/cuidados-del-bebe/cuidados-antirritaciones/boreade-r-srick-labios-reparador-calmante/","source_categories":["Cuidados Del Bebe","Cuidados Antirritaciones"],"source_availability":"instock","pricing_formula":{"source_price":204,"margin_rate":0.45,"margin_amount":91.8,"sale_price":112.2,"seller_commission_rate":0.1,"seller_commission_amount":9.18,"net_margin_after_seller":82.62},"source_index":38}'::jsonb
+      1289,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/cuidados-del-bebe/cuidados-antirritaciones/boreade-r-srick-labios-reparador-calmante/","source_categories":["Cuidados Del Bebe","Cuidados Antirritaciones"],"source_availability":"instock","pricing_formula":{"source_price":204,"margin_rate":0.45,"margin_amount":91.8,"sale_price":112.2,"seller_commission_rate":0.1,"seller_commission_amount":9.18,"net_margin_after_seller":82.62},"source_index":53}'::jsonb
     ),
     (
       'desodorante-antitranspirante-frescor',
@@ -7689,8 +7611,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/06/Diseno-sin-titulo-13.jpg',
       'Desodorante Antitranspirante Frescor de ACM',
-      1293,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/cuidados-del-bebe/cuidados-especificos/desodorante-antitranspirante-frescor/","source_categories":["Cuidados Del Bebe","Cuidados Especificos"],"source_availability":"instock","pricing_formula":{"source_price":219,"margin_rate":0.45,"margin_amount":98.55,"sale_price":120.45,"seller_commission_rate":0.1,"seller_commission_amount":9.86,"net_margin_after_seller":88.69},"source_index":233}'::jsonb
+      1290,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/cuidados-del-bebe/cuidados-especificos/desodorante-antitranspirante-frescor/","source_categories":["Cuidados Del Bebe","Cuidados Especificos"],"source_availability":"instock","pricing_formula":{"source_price":219,"margin_rate":0.45,"margin_amount":98.55,"sale_price":120.45,"seller_commission_rate":0.1,"seller_commission_amount":9.86,"net_margin_after_seller":88.69},"source_index":224}'::jsonb
     ),
     (
       'desodorante-antitranspirante-intensivo',
@@ -7715,8 +7637,34 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/06/Diseno-sin-titulo-11.jpg',
       'Desodorante Antitranspirante Intensivo de ACM',
-      1294,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/cuidados-del-bebe/cuidados-especificos/desodorante-antitranspirante-intensivo/","source_categories":["Cuidados Del Bebe","Cuidados Especificos"],"source_availability":"instock","pricing_formula":{"source_price":230,"margin_rate":0.45,"margin_amount":103.5,"sale_price":126.5,"seller_commission_rate":0.1,"seller_commission_amount":10.35,"net_margin_after_seller":93.15},"source_index":36}'::jsonb
+      1291,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/cuidados-del-bebe/cuidados-especificos/desodorante-antitranspirante-intensivo/","source_categories":["Cuidados Del Bebe","Cuidados Especificos"],"source_availability":"instock","pricing_formula":{"source_price":230,"margin_rate":0.45,"margin_amount":103.5,"sale_price":126.5,"seller_commission_rate":0.1,"seller_commission_amount":10.35,"net_margin_after_seller":93.15},"source_index":51}'::jsonb
+    ),
+    (
+      'gel-surgras-dermatologico-1-lt',
+      'Gel Surgras Dermatológico 1 Lt',
+      'Gel Surgras Dermatológico 1 Lt',
+      'URIAGE',
+      'Bebe y ninos',
+      '',
+      null,
+      'Compra asistida',
+      'Bs. 220',
+      220,
+      'BOB',
+      'in_stock',
+      true,
+      false,
+      10,
+      'URIAGE para cuidado familiar. Confirmar edad recomendada antes de usar.',
+      'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
+      array['Cuidado familiar','Uso delicado','Confirmar edad']::text[],
+      array['Familia','Ninos','Cuidado delicado']::text[],
+      array['Ver envase','Confirmar composicion']::text[],
+      'https://hbderm.com/wp-content/uploads/2023/07/Diseño-sin-título-13.png',
+      'Gel Surgras Dermatológico 1 Lt de URIAGE',
+      1292,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/cuidados-del-bebe/higiene-del-bebe/gel-surgras-dermatologico-1lt/","source_categories":["Cuidados Del Bebe","Higiene Del Bebe"],"source_availability":"instock","pricing_formula":{"source_price":400,"margin_rate":0.45,"margin_amount":180,"sale_price":220,"seller_commission_rate":0.1,"seller_commission_amount":18,"net_margin_after_seller":162},"source_index":267}'::jsonb
     ),
     (
       'topialyse-crema-200ml',
@@ -7741,8 +7689,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2025/05/SVR-5.jpg',
       'Topialyse Crema – 200ML de SVR',
-      1295,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/cuidados-del-bebe/cuidados-antirritaciones/topialyse-crema-200ml/","source_categories":["Cuidados Del Bebe","Cuidados Antirritaciones"],"source_availability":"instock","pricing_formula":{"source_price":336,"margin_rate":0.45,"margin_amount":151.2,"sale_price":184.8,"seller_commission_rate":0.1,"seller_commission_amount":15.12,"net_margin_after_seller":136.08},"source_index":19}'::jsonb
+      1293,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/cuidados-del-bebe/cuidados-antirritaciones/topialyse-crema-200ml/","source_categories":["Cuidados Del Bebe","Cuidados Antirritaciones"],"source_availability":"instock","pricing_formula":{"source_price":336,"margin_rate":0.45,"margin_amount":151.2,"sale_price":184.8,"seller_commission_rate":0.1,"seller_commission_amount":15.12,"net_margin_after_seller":136.08},"source_index":30}'::jsonb
     ),
     (
       'c-eye-biotic-15-ml',
@@ -7760,14 +7708,14 @@ cross join (
       true,
       false,
       10,
-      'SVR seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'SVR seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
-      array['Seleccion HBDERM','Compra asistida','Disponibilidad a confirmar']::text[],
+      array['Seleccion Nuvia','Compra asistida','Disponibilidad a confirmar']::text[],
       array['Compra asistida','Catalogo Nuvia','Disponibilidad a confirmar']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2026/01/BIOTIC.jpg',
       '[c] Eye Biotic 15 ml de SVR',
-      1296,
+      1294,
       '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/sin-categorizar/biotic-eyes/","source_categories":["Sin Categorizar"],"source_availability":"instock","pricing_formula":{"source_price":420,"margin_rate":0.45,"margin_amount":189,"sale_price":231,"seller_commission_rate":0.1,"seller_commission_amount":18.9,"net_margin_after_seller":170.1},"source_index":151}'::jsonb
     ),
     (
@@ -7786,15 +7734,15 @@ cross join (
       true,
       false,
       10,
-      'URIAGE seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'URIAGE seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
-      array['Seleccion HBDERM','Compra asistida','Disponibilidad a confirmar']::text[],
+      array['Seleccion Nuvia','Compra asistida','Disponibilidad a confirmar']::text[],
       array['Compra asistida','Catalogo Nuvia','Disponibilidad a confirmar']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2025/10/AGUA-TERMAL-X2.jpg',
       'Agua Termal 300 ml - Pack 2X1 de URIAGE',
-      1297,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/sin-categorizar/agua-termal-300-ml-pack-2x1/","source_categories":["Sin Categorizar"],"source_availability":"Agotado","pricing_formula":{"source_price":372,"margin_rate":0.45,"margin_amount":167.4,"sale_price":204.6,"seller_commission_rate":0.1,"seller_commission_amount":16.74,"net_margin_after_seller":150.66},"source_index":78}'::jsonb
+      1295,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/sin-categorizar/agua-termal-300-ml-pack-2x1/","source_categories":["Sin Categorizar"],"source_availability":"Agotado","pricing_formula":{"source_price":372,"margin_rate":0.45,"margin_amount":167.4,"sale_price":204.6,"seller_commission_rate":0.1,"seller_commission_amount":16.74,"net_margin_after_seller":150.66},"source_index":84}'::jsonb
     ),
     (
       'amatist-night-cream',
@@ -7805,22 +7753,22 @@ cross join (
       '',
       null,
       'Compra asistida',
-      'Bs. 185',
-      184.8,
+      'Bs. 255',
+      255.2,
       'BOB',
       'in_stock',
       true,
       false,
       10,
-      'MARTIDERM seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'MARTIDERM seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
-      array['Seleccion HBDERM','Compra asistida','Disponibilidad a confirmar']::text[],
+      array['Seleccion Nuvia','Compra asistida','Disponibilidad a confirmar']::text[],
       array['Compra asistida','Catalogo Nuvia','Disponibilidad a confirmar']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/04/Diseno-sin-titulo-2.jpg',
       'Amatist Night Cream de MARTIDERM',
-      1298,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/sin-categorizar/amatist-night-cream/","source_categories":["Sin Categorizar"],"source_availability":"instock","pricing_formula":{"source_price":336,"margin_rate":0.45,"margin_amount":151.2,"sale_price":184.8,"seller_commission_rate":0.1,"seller_commission_amount":15.12,"net_margin_after_seller":136.08},"source_index":245}'::jsonb
+      1296,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/sin-categorizar/amatist-night-cream/","source_categories":["Sin Categorizar"],"source_availability":"instock","pricing_formula":{"source_price":464,"margin_rate":0.45,"margin_amount":208.8,"sale_price":255.2,"seller_commission_rate":0.1,"seller_commission_amount":20.88,"net_margin_after_seller":187.92},"source_index":245}'::jsonb
     ),
     (
       'bariederm-cica-huile',
@@ -7838,14 +7786,14 @@ cross join (
       true,
       false,
       10,
-      'URIAGE seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'URIAGE seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
-      array['Seleccion HBDERM','Compra asistida','Disponibilidad a confirmar']::text[],
+      array['Seleccion Nuvia','Compra asistida','Disponibilidad a confirmar']::text[],
       array['Compra asistida','Catalogo Nuvia','Disponibilidad a confirmar']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2021/02/BARIÉDERM-CICA-OIL.jpg',
       'Bariéderm Cica-huile de URIAGE',
-      1299,
+      1297,
       '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/sin-categorizar/bariederm-cica-oil/","source_categories":["Sin Categorizar"],"source_availability":"instock","pricing_formula":{"source_price":336,"margin_rate":0.45,"margin_amount":151.2,"sale_price":184.8,"seller_commission_rate":0.1,"seller_commission_amount":15.12,"net_margin_after_seller":136.08},"source_index":95}'::jsonb
     ),
     (
@@ -7864,15 +7812,15 @@ cross join (
       true,
       false,
       10,
-      'GLISODIN seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'GLISODIN seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
-      array['Seleccion HBDERM','Compra asistida','Disponibilidad a confirmar']::text[],
+      array['Seleccion Nuvia','Compra asistida','Disponibilidad a confirmar']::text[],
       array['Compra asistida','Catalogo Nuvia','Disponibilidad a confirmar']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/10/GLISODIN.jpg',
       'Glisodin de GLISODIN',
-      1300,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/sin-categorizar/glisodin-advanced-pure-x60-capsulas/","source_categories":["Sin Categorizar"],"source_availability":"instock","pricing_formula":{"source_price":490,"margin_rate":0.45,"margin_amount":220.5,"sale_price":269.5,"seller_commission_rate":0.1,"seller_commission_amount":22.05,"net_margin_after_seller":198.45},"source_index":269}'::jsonb
+      1298,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/sin-categorizar/glisodin-advanced-pure-x60-capsulas/","source_categories":["Sin Categorizar"],"source_availability":"instock","pricing_formula":{"source_price":490,"margin_rate":0.45,"margin_amount":220.5,"sale_price":269.5,"seller_commission_rate":0.1,"seller_commission_amount":22.05,"net_margin_after_seller":198.45},"source_index":270}'::jsonb
     ),
     (
       'pink',
@@ -7883,22 +7831,48 @@ cross join (
       '',
       null,
       'Compra asistida',
-      'Bs. 132',
-      132,
+      'Bs. 138',
+      137.5,
       'BOB',
       'in_stock',
       true,
       false,
       10,
-      'AGF mesenchymal seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'AGF mesenchymal seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
-      array['Seleccion HBDERM','Compra asistida','Disponibilidad a confirmar']::text[],
+      array['Seleccion Nuvia','Compra asistida','Disponibilidad a confirmar']::text[],
       array['Compra asistida','Catalogo Nuvia','Disponibilidad a confirmar']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2025/05/PINK.jpg',
       'Pink de AGF mesenchymal',
-      1301,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/sin-categorizar/pink/","source_categories":["Sin Categorizar"],"source_availability":"instock","pricing_formula":{"source_price":240,"margin_rate":0.45,"margin_amount":108,"sale_price":132,"seller_commission_rate":0.1,"seller_commission_amount":10.8,"net_margin_after_seller":97.2},"source_index":305}'::jsonb
+      1299,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/sin-categorizar/pink/","source_categories":["Sin Categorizar"],"source_availability":"instock","pricing_formula":{"source_price":250,"margin_rate":0.45,"margin_amount":112.5,"sale_price":137.5,"seller_commission_rate":0.1,"seller_commission_amount":11.25,"net_margin_after_seller":101.25},"source_index":306}'::jsonb
+    ),
+    (
+      'pruriced-gel-calmante-100-ml',
+      'Pruriced - Gel Calmante 100 ml',
+      'Pruriced - Gel Calmante 100 ml',
+      'URIAGE',
+      'Dermocosmetica',
+      '100 ml',
+      null,
+      'Compra asistida',
+      'Bs. 125',
+      125.4,
+      'BOB',
+      'in_stock',
+      true,
+      false,
+      10,
+      'URIAGE seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
+      'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
+      array['Seleccion Nuvia','Compra asistida','Disponibilidad a confirmar']::text[],
+      array['Compra asistida','Catalogo Nuvia','Disponibilidad a confirmar']::text[],
+      array['Ver envase','Confirmar composicion']::text[],
+      'https://hbderm.com/wp-content/uploads/2025/10/PRURICED.jpg',
+      'Pruriced - Gel Calmante 100 ml de URIAGE',
+      1300,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/sin-categorizar/pruriced-gel-calmante-100ml/","source_categories":["Sin Categorizar"],"source_availability":"instock","pricing_formula":{"source_price":228,"margin_rate":0.45,"margin_amount":102.6,"sale_price":125.4,"seller_commission_rate":0.1,"seller_commission_amount":10.26,"net_margin_after_seller":92.34},"source_index":227}'::jsonb
     ),
     (
       'pruriced-sos-15-ml',
@@ -7916,15 +7890,15 @@ cross join (
       true,
       false,
       10,
-      'URIAGE seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'URIAGE seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
-      array['Seleccion HBDERM','Compra asistida','Disponibilidad a confirmar']::text[],
+      array['Seleccion Nuvia','Compra asistida','Disponibilidad a confirmar']::text[],
       array['Compra asistida','Catalogo Nuvia','Disponibilidad a confirmar']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2025/10/PRURICED-SOS.jpg',
       'Pruriced - Sos 15 ml de URIAGE',
-      1302,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/sin-categorizar/pruriced-sos-15-ml/","source_categories":["Sin Categorizar"],"source_availability":"instock","pricing_formula":{"source_price":228,"margin_rate":0.45,"margin_amount":102.6,"sale_price":125.4,"seller_commission_rate":0.1,"seller_commission_amount":10.26,"net_margin_after_seller":92.34},"source_index":242}'::jsonb
+      1301,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/sin-categorizar/pruriced-sos-15-ml/","source_categories":["Sin Categorizar"],"source_availability":"instock","pricing_formula":{"source_price":228,"margin_rate":0.45,"margin_amount":102.6,"sale_price":125.4,"seller_commission_rate":0.1,"seller_commission_amount":10.26,"net_margin_after_seller":92.34},"source_index":228}'::jsonb
     ),
     (
       'recovery-kit-upgrade-ar-25ml-origin-pro-egf-5-ampollas',
@@ -7942,14 +7916,14 @@ cross join (
       true,
       false,
       10,
-      'SENSILIS seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'SENSILIS seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
-      array['Seleccion HBDERM','Compra asistida','Disponibilidad a confirmar']::text[],
+      array['Seleccion Nuvia','Compra asistida','Disponibilidad a confirmar']::text[],
       array['Compra asistida','Catalogo Nuvia','Disponibilidad a confirmar']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2025/07/SENSILIS.jpg',
       'Recovery Kit (upgrade [ar] 25ML + Origin Pro EGF-5 Ampollas) de SENSILIS',
-      1303,
+      1302,
       '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/sin-categorizar/recovery-kit-upgrade-ar-25ml-origin-pro-egf-5-ampollas/","source_categories":["Sin Categorizar"],"source_availability":"instock","pricing_formula":{"source_price":403,"margin_rate":0.45,"margin_amount":181.35,"sale_price":221.65,"seller_commission_rate":0.1,"seller_commission_amount":18.14,"net_margin_after_seller":163.21},"source_index":142}'::jsonb
     ),
     (
@@ -7968,15 +7942,15 @@ cross join (
       true,
       false,
       10,
-      'ACM seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'ACM seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
-      array['Seleccion HBDERM','Compra asistida','Disponibilidad a confirmar']::text[],
+      array['Seleccion Nuvia','Compra asistida','Disponibilidad a confirmar']::text[],
       array['Compra asistida','Catalogo Nuvia','Disponibilidad a confirmar']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/09/ROSAKALM.jpg',
       'Rosakalm Crema Anti Rojeces de ACM',
-      1304,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-con-rojeces/rosakalm-crema-anti-rojeces/","source_categories":["Pieles Con Rojeces"],"source_availability":"instock","pricing_formula":{"source_price":302,"margin_rate":0.45,"margin_amount":135.9,"sale_price":166.1,"seller_commission_rate":0.1,"seller_commission_amount":13.59,"net_margin_after_seller":122.31},"source_index":228}'::jsonb
+      1303,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-con-rojeces/rosakalm-crema-anti-rojeces/","source_categories":["Pieles Con Rojeces"],"source_availability":"instock","pricing_formula":{"source_price":302,"margin_rate":0.45,"margin_amount":135.9,"sale_price":166.1,"seller_commission_rate":0.1,"seller_commission_amount":13.59,"net_margin_after_seller":122.31},"source_index":230}'::jsonb
     ),
     (
       'roseliane-crema-antirojeces',
@@ -7994,15 +7968,15 @@ cross join (
       true,
       false,
       10,
-      'URIAGE seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'URIAGE seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
-      array['Seleccion HBDERM','Compra asistida','Disponibilidad a confirmar']::text[],
+      array['Seleccion Nuvia','Compra asistida','Disponibilidad a confirmar']::text[],
       array['Compra asistida','Catalogo Nuvia','Disponibilidad a confirmar']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2025/04/9.jpg',
       'Roseliane Crema Antirojeces de URIAGE',
-      1305,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-con-rojeces/roseliane-crema-antirojeces/","source_categories":["Pieles Con Rojeces"],"source_availability":"instock","pricing_formula":{"source_price":367,"margin_rate":0.45,"margin_amount":165.15,"sale_price":201.85,"seller_commission_rate":0.1,"seller_commission_amount":16.52,"net_margin_after_seller":148.63},"source_index":244}'::jsonb
+      1304,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-con-rojeces/roseliane-crema-antirojeces/","source_categories":["Pieles Con Rojeces"],"source_availability":"instock","pricing_formula":{"source_price":367,"margin_rate":0.45,"margin_amount":165.15,"sale_price":201.85,"seller_commission_rate":0.1,"seller_commission_amount":16.52,"net_margin_after_seller":148.63},"source_index":243}'::jsonb
     ),
     (
       'sebionex-actimat',
@@ -8020,15 +7994,15 @@ cross join (
       true,
       false,
       10,
-      'ACM seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'ACM seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
-      array['Seleccion HBDERM','Compra asistida','Disponibilidad a confirmar']::text[],
+      array['Seleccion Nuvia','Compra asistida','Disponibilidad a confirmar']::text[],
       array['Compra asistida','Catalogo Nuvia','Disponibilidad a confirmar']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2025/07/SEBIONEX-ACTIMAT.jpg',
       'Sebionex Actimat de ACM',
-      1306,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/sin-categorizar/sebionex-actimat-base-cosmetica-color-claro/","source_categories":["Sin Categorizar"],"source_availability":"Agotado","pricing_formula":{"source_price":282,"margin_rate":0.45,"margin_amount":126.9,"sale_price":155.1,"seller_commission_rate":0.1,"seller_commission_amount":12.69,"net_margin_after_seller":114.21},"source_index":28}'::jsonb
+      1305,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/sin-categorizar/sebionex-actimat-base-cosmetica-color-claro/","source_categories":["Sin Categorizar"],"source_availability":"Agotado","pricing_formula":{"source_price":282,"margin_rate":0.45,"margin_amount":126.9,"sale_price":155.1,"seller_commission_rate":0.1,"seller_commission_amount":12.69,"net_margin_after_seller":114.21},"source_index":37}'::jsonb
     ),
     (
       'sebionex-k',
@@ -8046,15 +8020,15 @@ cross join (
       true,
       false,
       10,
-      'ACM seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'ACM seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
-      array['Seleccion HBDERM','Compra asistida','Disponibilidad a confirmar']::text[],
+      array['Seleccion Nuvia','Compra asistida','Disponibilidad a confirmar']::text[],
       array['Compra asistida','Catalogo Nuvia','Disponibilidad a confirmar']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2025/07/SEBIONEX-K.jpg',
       'Sebionex K de ACM',
-      1307,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/sin-categorizar/sebionex-k-crema/","source_categories":["Sin Categorizar"],"source_availability":"instock","pricing_formula":{"source_price":240,"margin_rate":0.45,"margin_amount":108,"sale_price":132,"seller_commission_rate":0.1,"seller_commission_amount":10.8,"net_margin_after_seller":97.2},"source_index":164}'::jsonb
+      1306,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/sin-categorizar/sebionex-k-crema/","source_categories":["Sin Categorizar"],"source_availability":"instock","pricing_formula":{"source_price":240,"margin_rate":0.45,"margin_amount":108,"sale_price":132,"seller_commission_rate":0.1,"seller_commission_amount":10.8,"net_margin_after_seller":97.2},"source_index":165}'::jsonb
     ),
     (
       'sebionex-trio',
@@ -8072,15 +8046,15 @@ cross join (
       true,
       false,
       10,
-      'ACM seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'ACM seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
-      array['Seleccion HBDERM','Compra asistida','Disponibilidad a confirmar']::text[],
+      array['Seleccion Nuvia','Compra asistida','Disponibilidad a confirmar']::text[],
       array['Compra asistida','Catalogo Nuvia','Disponibilidad a confirmar']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2025/07/SEBIONEXX-K.jpg',
       'Sebionex Trio de ACM',
-      1308,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/sin-categorizar/sebionex-trio-crema/","source_categories":["Sin Categorizar"],"source_availability":"Agotado","pricing_formula":{"source_price":240,"margin_rate":0.45,"margin_amount":108,"sale_price":132,"seller_commission_rate":0.1,"seller_commission_amount":10.8,"net_margin_after_seller":97.2},"source_index":58}'::jsonb
+      1307,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/sin-categorizar/sebionex-trio-crema/","source_categories":["Sin Categorizar"],"source_availability":"Agotado","pricing_formula":{"source_price":240,"margin_rate":0.45,"margin_amount":108,"sale_price":132,"seller_commission_rate":0.1,"seller_commission_amount":10.8,"net_margin_after_seller":97.2},"source_index":69}'::jsonb
     ),
     (
       'sensifine-ar-crema',
@@ -8098,15 +8072,15 @@ cross join (
       true,
       false,
       10,
-      'SVR seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'SVR seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
-      array['Seleccion HBDERM','Compra asistida','Disponibilidad a confirmar']::text[],
+      array['Seleccion Nuvia','Compra asistida','Disponibilidad a confirmar']::text[],
       array['Compra asistida','Catalogo Nuvia','Disponibilidad a confirmar']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2020/06/SENSIFINE-AR-CREME.png',
       'Sensifine Ar Crema de SVR',
-      1309,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-con-rojeces/sensifine-ar-crema/","source_categories":["Pieles Con Rojeces"],"source_availability":"Agotado","pricing_formula":{"source_price":475,"margin_rate":0.45,"margin_amount":213.75,"sale_price":261.25,"seller_commission_rate":0.1,"seller_commission_amount":21.38,"net_margin_after_seller":192.37},"source_index":200}'::jsonb
+      1308,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-con-rojeces/sensifine-ar-crema/","source_categories":["Pieles Con Rojeces"],"source_availability":"Agotado","pricing_formula":{"source_price":475,"margin_rate":0.45,"margin_amount":213.75,"sale_price":261.25,"seller_commission_rate":0.1,"seller_commission_amount":21.38,"net_margin_after_seller":192.37},"source_index":201}'::jsonb
     ),
     (
       'sensifine-ar-eau-micellar-400ml',
@@ -8124,15 +8098,15 @@ cross join (
       true,
       false,
       10,
-      'SVR seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'SVR seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
-      array['Seleccion HBDERM','Compra asistida','Disponibilidad a confirmar']::text[],
+      array['Seleccion Nuvia','Compra asistida','Disponibilidad a confirmar']::text[],
       array['Compra asistida','Catalogo Nuvia','Disponibilidad a confirmar']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2022/06/SENSIFINE-AR-EAU-MICELLAR-400ML.jpg',
       'Sensifine Ar Eau Micellar - 400ML de SVR',
-      1310,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-con-rojeces/sensifine-ar-eau-micellar-400ml/","source_categories":["Pieles Con Rojeces"],"source_availability":"instock","pricing_formula":{"source_price":288,"margin_rate":0.45,"margin_amount":129.6,"sale_price":158.4,"seller_commission_rate":0.1,"seller_commission_amount":12.96,"net_margin_after_seller":116.64},"source_index":120}'::jsonb
+      1309,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/pieles-con-rojeces/sensifine-ar-eau-micellar-400ml/","source_categories":["Pieles Con Rojeces"],"source_availability":"instock","pricing_formula":{"source_price":288,"margin_rate":0.45,"margin_amount":129.6,"sale_price":158.4,"seller_commission_rate":0.1,"seller_commission_amount":12.96,"net_margin_after_seller":116.64},"source_index":119}'::jsonb
     ),
     (
       'skin-perfusion-gr-youth-mask-50ml',
@@ -8143,22 +8117,22 @@ cross join (
       '50 ml',
       null,
       'Compra asistida',
-      'Bs. 155',
-      155.1,
+      'Bs. 85',
+      84.7,
       'BOB',
       'in_stock',
       true,
       false,
       10,
-      'HBDERM seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'Nuvia seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
-      array['Seleccion HBDERM','Compra asistida','Disponibilidad a confirmar']::text[],
+      array['Seleccion Nuvia','Compra asistida','Disponibilidad a confirmar']::text[],
       array['Compra asistida','Catalogo Nuvia','Disponibilidad a confirmar']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2023/01/SKIN-PERFUSION-GR-YOUTH-MASK-50ML.png',
       'Skin Perfusion - GR Youth Mask - 50ML de HBDERM',
-      1311,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/sin-categorizar/skin-perfusion-gr-youth-mask-50ml/","source_categories":["Sin Categorizar"],"source_availability":"instock","pricing_formula":{"source_price":282,"margin_rate":0.45,"margin_amount":126.9,"sale_price":155.1,"seller_commission_rate":0.1,"seller_commission_amount":12.69,"net_margin_after_seller":114.21},"source_index":322}'::jsonb
+      1310,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/sin-categorizar/skin-perfusion-gr-youth-mask-50ml/","source_categories":["Sin Categorizar"],"source_availability":"instock","pricing_formula":{"source_price":154,"margin_rate":0.45,"margin_amount":69.3,"sale_price":84.7,"seller_commission_rate":0.1,"seller_commission_amount":6.93,"net_margin_after_seller":62.37},"source_index":321}'::jsonb
     ),
     (
       'skin-prep-creme-exfoliante',
@@ -8176,15 +8150,15 @@ cross join (
       true,
       false,
       10,
-      'FILORGA seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'FILORGA seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
-      array['Seleccion HBDERM','Compra asistida','Disponibilidad a confirmar']::text[],
+      array['Seleccion Nuvia','Compra asistida','Disponibilidad a confirmar']::text[],
       array['Compra asistida','Catalogo Nuvia','Disponibilidad a confirmar']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/12/SKIN-PREP-CREME.jpg',
       'Skin Prep Créme Exfoliante de FILORGA',
-      1312,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/sin-categorizar/skin-prep-creme-exfoliante/","source_categories":["Sin Categorizar"],"source_availability":"instock","pricing_formula":{"source_price":408,"margin_rate":0.45,"margin_amount":183.6,"sale_price":224.4,"seller_commission_rate":0.1,"seller_commission_amount":18.36,"net_margin_after_seller":165.24},"source_index":167}'::jsonb
+      1311,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/sin-categorizar/skin-prep-creme-exfoliante/","source_categories":["Sin Categorizar"],"source_availability":"instock","pricing_formula":{"source_price":408,"margin_rate":0.45,"margin_amount":183.6,"sale_price":224.4,"seller_commission_rate":0.1,"seller_commission_amount":18.36,"net_margin_after_seller":165.24},"source_index":169}'::jsonb
     ),
     (
       'skin-prep-huile-150ml',
@@ -8202,14 +8176,14 @@ cross join (
       true,
       false,
       10,
-      'FILORGA seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'FILORGA seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
-      array['Seleccion HBDERM','Compra asistida','Disponibilidad a confirmar']::text[],
+      array['Seleccion Nuvia','Compra asistida','Disponibilidad a confirmar']::text[],
       array['Compra asistida','Catalogo Nuvia','Disponibilidad a confirmar']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/12/SKIN-PREP-HUILE.jpg',
       'Skin Prep Huile 150ML de FILORGA',
-      1313,
+      1312,
       '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/sin-categorizar/skin-prep-huile/","source_categories":["Sin Categorizar"],"source_availability":"instock","pricing_formula":{"source_price":428,"margin_rate":0.45,"margin_amount":192.6,"sale_price":235.4,"seller_commission_rate":0.1,"seller_commission_amount":19.26,"net_margin_after_seller":173.34},"source_index":174}'::jsonb
     ),
     (
@@ -8228,15 +8202,15 @@ cross join (
       true,
       false,
       10,
-      'SOFTFIL seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'SOFTFIL seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
-      array['Seleccion HBDERM','Compra asistida','Disponibilidad a confirmar']::text[],
+      array['Seleccion Nuvia','Compra asistida','Disponibilidad a confirmar']::text[],
       array['Compra asistida','Catalogo Nuvia','Disponibilidad a confirmar']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2023/10/Diseño-sin-título-12.png',
       'Skin Roller 0,2MM de SOFTFIL',
-      1314,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/sin-categorizar/skin-roller-02mm/","source_categories":["Sin Categorizar"],"source_availability":"instock","pricing_formula":{"source_price":240,"margin_rate":0.45,"margin_amount":108,"sale_price":132,"seller_commission_rate":0.1,"seller_commission_amount":10.8,"net_margin_after_seller":97.2},"source_index":318}'::jsonb
+      1313,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/sin-categorizar/skin-roller-02mm/","source_categories":["Sin Categorizar"],"source_availability":"instock","pricing_formula":{"source_price":240,"margin_rate":0.45,"margin_amount":108,"sale_price":132,"seller_commission_rate":0.1,"seller_commission_amount":10.8,"net_margin_after_seller":97.2},"source_index":316}'::jsonb
     ),
     (
       'skin-roller-0-5mm',
@@ -8247,22 +8221,74 @@ cross join (
       '',
       null,
       'Compra asistida',
-      'Bs. 95',
-      95.15,
+      'Bs. 139',
+      138.6,
       'BOB',
       'in_stock',
       true,
       false,
       10,
-      'SOFTFIL seleccionado desde HBDERM para el catalogo Nuvia. Confirma disponibilidad antes de comprar.',
+      'SOFTFIL seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
       'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
-      array['Seleccion HBDERM','Compra asistida','Disponibilidad a confirmar']::text[],
+      array['Seleccion Nuvia','Compra asistida','Disponibilidad a confirmar']::text[],
       array['Compra asistida','Catalogo Nuvia','Disponibilidad a confirmar']::text[],
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2023/10/Diseño-sin-título-13.png',
       'Skin Roller 0,5MM de SOFTFIL',
+      1314,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/sin-categorizar/skin-roller-05mm/","source_categories":["Sin Categorizar"],"source_availability":"instock","pricing_formula":{"source_price":252,"margin_rate":0.45,"margin_amount":113.4,"sale_price":138.6,"seller_commission_rate":0.1,"seller_commission_amount":11.34,"net_margin_after_seller":102.06},"source_index":315}'::jsonb
+    ),
+    (
+      'xerial-30-gel-crema',
+      'Xerial 30 Gel - Crema',
+      'Xerial 30 Gel - Crema',
+      'SVR',
+      'Dermocosmetica',
+      '',
+      null,
+      'Compra asistida',
+      'Bs. 138',
+      137.5,
+      'BOB',
+      'in_stock',
+      true,
+      false,
+      10,
+      'SVR seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.',
+      'Usar segun la indicacion del envase o recomendacion profesional. Suspender si existe irritacion persistente.',
+      array['Seleccion Nuvia','Compra asistida','Disponibilidad a confirmar']::text[],
+      array['Compra asistida','Catalogo Nuvia','Disponibilidad a confirmar']::text[],
+      array['Ver envase','Confirmar composicion']::text[],
+      'https://hbderm.com/wp-content/uploads/2023/12/Diseño-sin-título-1.png',
+      'Xerial 30 Gel - Crema de SVR',
       1315,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/sin-categorizar/skin-roller-05mm/","source_categories":["Sin Categorizar"],"source_availability":"instock","pricing_formula":{"source_price":173,"margin_rate":0.45,"margin_amount":77.85,"sale_price":95.15,"seller_commission_rate":0.1,"seller_commission_amount":7.79,"net_margin_after_seller":70.06},"source_index":316}'::jsonb
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/sin-categorizar/xerial-30-gel-crema-50ml/","source_categories":["Sin Categorizar"],"source_availability":"Agotado","pricing_formula":{"source_price":250,"margin_rate":0.45,"margin_amount":112.5,"sale_price":137.5,"seller_commission_rate":0.1,"seller_commission_amount":11.25,"net_margin_after_seller":101.25},"source_index":153}'::jsonb
+    ),
+    (
+      'art-fillers-universal',
+      'Art Fillers Universal',
+      'Art Fillers Universal',
+      'FILLMED',
+      'Profesional consulta',
+      '',
+      null,
+      'Compra asistida',
+      'Bajo consulta',
+      null,
+      'BOB',
+      'quote_only',
+      false,
+      false,
+      null,
+      'FILLMED de uso profesional o bajo consulta. No se publica como compra directa.',
+      'Producto de uso profesional o bajo consulta. No se debe comprar ni usar sin indicacion adecuada.',
+      array['Uso profesional','Compra bajo consulta','No autoadministrar']::text[],
+      array['Uso profesional','Consulta previa','Compra asistida']::text[],
+      array['Ver envase','Confirmar composicion']::text[],
+      'https://hbderm.com/wp-content/uploads/2020/06/ARTI-FILLER-LIPS-2.png',
+      'Art Fillers Universal de FILLMED',
+      1316,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/rellenos-dermales/art-fillers-universal/","source_categories":["Rellenos Dermales"],"source_availability":"instock","pricing_formula":{"source_price":446,"margin_rate":0.45,"margin_amount":200.7,"sale_price":245.3,"seller_commission_rate":0.1,"seller_commission_amount":20.07,"net_margin_after_seller":180.63},"source_index":327}'::jsonb
     ),
     (
       'biomask',
@@ -8287,8 +8313,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2025/05/BIOMASK.jpg',
       'Biomask de AGF mesenchymal',
-      1316,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/mesoterapia/biomask/","source_categories":["Mesoterapia"],"source_availability":"instock","pricing_formula":{"source_price":663,"margin_rate":0.45,"margin_amount":298.35,"sale_price":364.65,"seller_commission_rate":0.1,"seller_commission_amount":29.84,"net_margin_after_seller":268.51},"source_index":306}'::jsonb
+      1317,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/mesoterapia/biomask/","source_categories":["Mesoterapia"],"source_availability":"instock","pricing_formula":{"source_price":663,"margin_rate":0.45,"margin_amount":298.35,"sale_price":364.65,"seller_commission_rate":0.1,"seller_commission_amount":29.84,"net_margin_after_seller":268.51},"source_index":305}'::jsonb
     ),
     (
       'bionutrilift-cannulas',
@@ -8313,14 +8339,14 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2023/01/BIONUTRILIFT-CANNULAS.png',
       'Bionutrilift Cannulas de FILLMED',
-      1317,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/rellenos-dermales/bionutrilift-cannulas/","source_categories":["Rellenos Dermales"],"source_availability":"instock","pricing_formula":{"source_price":663,"margin_rate":0.45,"margin_amount":298.35,"sale_price":364.65,"seller_commission_rate":0.1,"seller_commission_amount":29.84,"net_margin_after_seller":268.51},"source_index":324}'::jsonb
+      1318,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/rellenos-dermales/bionutrilift-cannulas/","source_categories":["Rellenos Dermales"],"source_availability":"instock","pricing_formula":{"source_price":864,"margin_rate":0.45,"margin_amount":388.8,"sale_price":475.2,"seller_commission_rate":0.1,"seller_commission_amount":38.88,"net_margin_after_seller":349.92},"source_index":324}'::jsonb
     ),
     (
-      'capillary',
-      'Capillary',
-      'Capillary',
-      'AGF mesenchymal',
+      'cytosial-deep',
+      'Cytosial Deep',
+      'Cytosial Deep',
+      'BIOXIS',
       'Profesional consulta',
       '',
       null,
@@ -8332,15 +8358,15 @@ cross join (
       false,
       false,
       null,
-      'AGF mesenchymal de uso profesional o bajo consulta. No se publica como compra directa.',
+      'BIOXIS de uso profesional o bajo consulta. No se publica como compra directa.',
       'Producto de uso profesional o bajo consulta. No se debe comprar ni usar sin indicacion adecuada.',
       array['Uso profesional','Compra bajo consulta','No autoadministrar']::text[],
       array['Uso profesional','Consulta previa','Compra asistida']::text[],
       array['Ver envase','Confirmar composicion']::text[],
-      'https://hbderm.com/wp-content/uploads/2025/05/CAPILLARY.jpg',
-      'Capillary de AGF mesenchymal',
-      1318,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/mesoterapia/capillary/","source_categories":["Mesoterapia"],"source_availability":"instock","pricing_formula":{"source_price":0.1134,"margin_rate":0.45,"margin_amount":0.05,"sale_price":0.06,"seller_commission_rate":0.1,"seller_commission_amount":0.01,"net_margin_after_seller":0.04},"source_index":307}'::jsonb
+      'https://hbderm.com/wp-content/uploads/2020/06/CYTOSIAL-DEEP-WRINKLES.png',
+      'Cytosial Deep de BIOXIS',
+      1319,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/rellenos-dermales/cytosial-deep/","source_categories":["Rellenos Dermales"],"source_availability":"instock","pricing_formula":{"source_price":446,"margin_rate":0.45,"margin_amount":200.7,"sale_price":245.3,"seller_commission_rate":0.1,"seller_commission_amount":20.07,"net_margin_after_seller":180.63},"source_index":328}'::jsonb
     ),
     (
       'dermal',
@@ -8365,8 +8391,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2025/05/DERMAL.jpg',
       'Dermal de AGF mesenchymal',
-      1319,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/mesoterapia/dermal/","source_categories":["Mesoterapia"],"source_availability":"instock","pricing_formula":{"source_price":0.1134,"margin_rate":0.45,"margin_amount":0.05,"sale_price":0.06,"seller_commission_rate":0.1,"seller_commission_amount":0.01,"net_margin_after_seller":0.04},"source_index":304}'::jsonb
+      1320,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/mesoterapia/dermal/","source_categories":["Mesoterapia"],"source_availability":"instock","pricing_formula":{"source_price":864,"margin_rate":0.45,"margin_amount":388.8,"sale_price":475.2,"seller_commission_rate":0.1,"seller_commission_amount":38.88,"net_margin_after_seller":349.92},"source_index":304}'::jsonb
     ),
     (
       'ncef-reverse',
@@ -8391,8 +8417,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/12/NCEF-CREMA.jpg',
       'Ncef Reverse de FILORGA',
-      1320,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/rellenos-dermales/arrugas-medias-y-profundas/ncef-reverse-crema-multicorreccion-suprema/","source_categories":["Rellenos Dermales","Arrugas Medias Y Profundas"],"source_availability":"Agotado","pricing_formula":{"source_price":446,"margin_rate":0.45,"margin_amount":200.7,"sale_price":245.3,"seller_commission_rate":0.1,"seller_commission_amount":20.07,"net_margin_after_seller":180.63},"source_index":129}'::jsonb
+      1321,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/rellenos-dermales/arrugas-medias-y-profundas/ncef-reverse-crema-multicorreccion-suprema/","source_categories":["Rellenos Dermales","Arrugas Medias Y Profundas"],"source_availability":"Agotado","pricing_formula":{"source_price":446,"margin_rate":0.45,"margin_amount":200.7,"sale_price":245.3,"seller_commission_rate":0.1,"seller_commission_amount":20.07,"net_margin_after_seller":180.63},"source_index":127}'::jsonb
     ),
     (
       'ncef-shot',
@@ -8417,16 +8443,16 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2024/12/NCEF-SHOT-1.jpg',
       'Ncef Shot de FILORGA',
-      1321,
+      1322,
       '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/mesoterapia/ncef-shot/","source_categories":["Mesoterapia"],"source_availability":"instock","pricing_formula":{"source_price":1053,"margin_rate":0.45,"margin_amount":473.85,"sale_price":579.15,"seller_commission_rate":0.1,"seller_commission_amount":47.39,"net_margin_after_seller":426.46},"source_index":191}'::jsonb
     ),
     (
-      'nctf-135ha',
-      'Nctf 135HA',
-      'Nctf 135HA',
+      'skin-perfusion-gr-youth-mask-500ml',
+      'Skin Perfusion - GR Youth Mask - 500ML',
+      'Skin Perfusion - GR Youth Mask - 500ML',
       'FILLMED',
       'Profesional consulta',
-      '',
+      '500 ml',
       null,
       'Compra asistida',
       'Bajo consulta',
@@ -8441,10 +8467,10 @@ cross join (
       array['Uso profesional','Compra bajo consulta','No autoadministrar']::text[],
       array['Uso profesional','Consulta previa','Compra asistida']::text[],
       array['Ver envase','Confirmar composicion']::text[],
-      'https://hbderm.com/wp-content/uploads/2020/06/NCTF-135ha-1.png',
-      'Nctf 135HA de FILLMED',
-      1322,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/mesoterapia/nctf-135ha/","source_categories":["Mesoterapia"],"source_availability":"instock","pricing_formula":{"source_price":864,"margin_rate":0.45,"margin_amount":388.8,"sale_price":475.2,"seller_commission_rate":0.1,"seller_commission_amount":38.88,"net_margin_after_seller":349.92},"source_index":327}'::jsonb
+      'https://hbderm.com/wp-content/uploads/2023/01/SKIN-PERFUSION-GR-YOUTH-MASK-500ML.jpg',
+      'Skin Perfusion - GR Youth Mask - 500ML de FILLMED',
+      1323,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/mesoterapia/skin-perfusion-gr-youth-mask-500ml/","source_categories":["Mesoterapia"],"source_availability":"instock","pricing_formula":{"source_price":0.1134,"margin_rate":0.45,"margin_amount":0.05,"sale_price":0.06,"seller_commission_rate":0.1,"seller_commission_amount":0.01,"net_margin_after_seller":0.04},"source_index":320}'::jsonb
     ),
     (
       'skin-perfusion-hyaluronic-youth-mask-4x8ml',
@@ -8469,8 +8495,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2023/01/SKIN-PERFUSION-HYALURONIC-YOUTH-MASK-4X8ML-1.jpeg',
       'Skin Perfusion - Hyaluronic Youth Mask - 4X8ML de FILLMED',
-      1323,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/mesoterapia/skin-perfusion-hyaluronic-youth-mask-4x8ml/","source_categories":["Mesoterapia"],"source_availability":"instock","pricing_formula":{"source_price":864,"margin_rate":0.45,"margin_amount":388.8,"sale_price":475.2,"seller_commission_rate":0.1,"seller_commission_amount":38.88,"net_margin_after_seller":349.92},"source_index":317}'::jsonb
+      1324,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/mesoterapia/skin-perfusion-hyaluronic-youth-mask-4x8ml/","source_categories":["Mesoterapia"],"source_availability":"instock","pricing_formula":{"source_price":0.1053,"margin_rate":0.45,"margin_amount":0.05,"sale_price":0.06,"seller_commission_rate":0.1,"seller_commission_amount":0.01,"net_margin_after_seller":0.04},"source_index":319}'::jsonb
     ),
     (
       'skin-perfusion-time-booster-0-3-3x10ml',
@@ -8495,42 +8521,16 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2023/01/SKIN-PERFUSION-TIME-BOOSTER-0.3-3X10ML.png',
       'Skin Perfusion - Time Booster 0.3% - 3X10ML de FILLMED',
-      1324,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/mesoterapia/skin-perfusion-time-booster-0-3-3x10ml/","source_categories":["Mesoterapia"],"source_availability":"instock","pricing_formula":{"source_price":864,"margin_rate":0.45,"margin_amount":388.8,"sale_price":475.2,"seller_commission_rate":0.1,"seller_commission_amount":38.88,"net_margin_after_seller":349.92},"source_index":319}'::jsonb
-    ),
-    (
-      'skin-perfusion-eye-recover-mask-4x5g',
-      'Skin Perfusion Eye Recover Mask 4X5G',
-      'Skin Perfusion Eye Recover Mask 4X5G',
-      'FILLMED',
-      'Profesional consulta',
-      '',
-      null,
-      'Compra asistida',
-      'Bajo consulta',
-      null,
-      'BOB',
-      'quote_only',
-      false,
-      false,
-      null,
-      'FILLMED de uso profesional o bajo consulta. No se publica como compra directa.',
-      'Producto de uso profesional o bajo consulta. No se debe comprar ni usar sin indicacion adecuada.',
-      array['Uso profesional','Compra bajo consulta','No autoadministrar']::text[],
-      array['Uso profesional','Consulta previa','Compra asistida']::text[],
-      array['Ver envase','Confirmar composicion']::text[],
-      'https://hbderm.com/wp-content/uploads/2022/03/EYE-RECOVER-MASK-SKIN-PERFUSION.png',
-      'Skin Perfusion Eye Recover Mask 4X5G de FILLMED',
       1325,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/mesoterapia/skin-perfusion-eye-recover-mask/","source_categories":["Mesoterapia"],"source_availability":"instock","pricing_formula":{"source_price":864,"margin_rate":0.45,"margin_amount":388.8,"sale_price":475.2,"seller_commission_rate":0.1,"seller_commission_amount":38.88,"net_margin_after_seller":349.92},"source_index":325}'::jsonb
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/mesoterapia/skin-perfusion-time-booster-0-3-3x10ml/","source_categories":["Mesoterapia"],"source_availability":"instock","pricing_formula":{"source_price":0.1173,"margin_rate":0.45,"margin_amount":0.05,"sale_price":0.07,"seller_commission_rate":0.1,"seller_commission_amount":0.01,"net_margin_after_seller":0.04},"source_index":317}'::jsonb
     ),
     (
-      'skin-perfusion-glycopeel-mask-500ml',
-      'Skin Perfusion Glycopeel Mask - 500ML',
-      'Skin Perfusion Glycopeel Mask - 500ML',
+      'skin-perfusion-exfoliating-cream-250ml',
+      'Skin Perfusion Exfoliating Cream - 250ML',
+      'Skin Perfusion Exfoliating Cream - 250ML',
       'FILLMED',
       'Profesional consulta',
-      '500 ml',
+      '250 ml',
       null,
       'Compra asistida',
       'Bajo consulta',
@@ -8545,10 +8545,10 @@ cross join (
       array['Uso profesional','Compra bajo consulta','No autoadministrar']::text[],
       array['Uso profesional','Consulta previa','Compra asistida']::text[],
       array['Ver envase','Confirmar composicion']::text[],
-      'https://hbderm.com/wp-content/uploads/2023/01/SKIN-PERFUSION-GLYCOPEEL-MASK-500ML.jpg',
-      'Skin Perfusion Glycopeel Mask - 500ML de FILLMED',
+      'https://hbderm.com/wp-content/uploads/2023/01/Crema-Exfoliante-Skin-Perfusion-250ml.jpg',
+      'Skin Perfusion Exfoliating Cream - 250ML de FILLMED',
       1326,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/mesoterapia/skin-perfusion-glycopeel-mask-500ml/","source_categories":["Mesoterapia"],"source_availability":"instock","pricing_formula":{"source_price":663,"margin_rate":0.45,"margin_amount":298.35,"sale_price":364.65,"seller_commission_rate":0.1,"seller_commission_amount":29.84,"net_margin_after_seller":268.51},"source_index":321}'::jsonb
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/mesoterapia/revitalizador/skin-perfusion-exfoliating-cream-250ml/","source_categories":["Mesoterapia","Revitalizador"],"source_availability":"instock","pricing_formula":{"source_price":446,"margin_rate":0.45,"margin_amount":200.7,"sale_price":245.3,"seller_commission_rate":0.1,"seller_commission_amount":20.07,"net_margin_after_seller":180.63},"source_index":323}'::jsonb
     ),
     (
       'skin-perfusion-glycopeel-mask-50ml',
@@ -8574,7 +8574,33 @@ cross join (
       'https://hbderm.com/wp-content/uploads/2023/01/SKIN-PERFUSION-GLYCOPEEL-MASK-50ML-945x1024.png',
       'Skin Perfusion Glycopeel Mask - 50ML de FILLMED',
       1327,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/mesoterapia/revitalizador/skin-perfusion-glycopeel-mask-50ml/","source_categories":["Mesoterapia","Revitalizador"],"source_availability":"instock","pricing_formula":{"source_price":336,"margin_rate":0.45,"margin_amount":151.2,"sale_price":184.8,"seller_commission_rate":0.1,"seller_commission_amount":15.12,"net_margin_after_seller":136.08},"source_index":323}'::jsonb
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/mesoterapia/revitalizador/skin-perfusion-glycopeel-mask-50ml/","source_categories":["Mesoterapia","Revitalizador"],"source_availability":"instock","pricing_formula":{"source_price":432,"margin_rate":0.45,"margin_amount":194.4,"sale_price":237.6,"seller_commission_rate":0.1,"seller_commission_amount":19.44,"net_margin_after_seller":174.96},"source_index":322}'::jsonb
+    ),
+    (
+      'skin-perfusion-hxr-eye-cream-15ml',
+      'Skin Perfusion HXR Eye Cream - 15ML',
+      'Skin Perfusion HXR Eye Cream - 15ML',
+      'FILLMED',
+      'Profesional consulta',
+      '15 ml',
+      null,
+      'Compra asistida',
+      'Bajo consulta',
+      null,
+      'BOB',
+      'quote_only',
+      false,
+      false,
+      null,
+      'FILLMED de uso profesional o bajo consulta. No se publica como compra directa.',
+      'Producto de uso profesional o bajo consulta. No se debe comprar ni usar sin indicacion adecuada.',
+      array['Uso profesional','Compra bajo consulta','No autoadministrar']::text[],
+      array['Uso profesional','Consulta previa','Compra asistida']::text[],
+      array['Ver envase','Confirmar composicion']::text[],
+      'https://hbderm.com/wp-content/uploads/2021/09/SKIN-PERFUSION-EYE.jpg',
+      'Skin Perfusion HXR Eye Cream - 15ML de FILLMED',
+      1328,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/mesoterapia/skin-perfusion-hxr-eye-crean/","source_categories":["Mesoterapia"],"source_availability":"instock","pricing_formula":{"source_price":0.1053,"margin_rate":0.45,"margin_amount":0.05,"sale_price":0.06,"seller_commission_rate":0.1,"seller_commission_amount":0.01,"net_margin_after_seller":0.04},"source_index":326}'::jsonb
     ),
     (
       'skin-perfusion-hxr-eye-cream-95ml',
@@ -8599,8 +8625,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2023/01/SKIN-PERFUSION-HRX-EYE-CREAM-95ML.jpg',
       'Skin Perfusion HXR Eye Cream - 95ML de FILLMED',
-      1328,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/mesoterapia/skin-perfusion-hxr-eye-cream-95ml/","source_categories":["Mesoterapia"],"source_availability":"instock","pricing_formula":{"source_price":864,"margin_rate":0.45,"margin_amount":388.8,"sale_price":475.2,"seller_commission_rate":0.1,"seller_commission_amount":38.88,"net_margin_after_seller":349.92},"source_index":326}'::jsonb
+      1329,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/mesoterapia/skin-perfusion-hxr-eye-cream-95ml/","source_categories":["Mesoterapia"],"source_availability":"instock","pricing_formula":{"source_price":864,"margin_rate":0.45,"margin_amount":388.8,"sale_price":475.2,"seller_commission_rate":0.1,"seller_commission_amount":38.88,"net_margin_after_seller":349.92},"source_index":325}'::jsonb
     ),
     (
       'skin-perfusion-re-time-serum-30ml',
@@ -8625,8 +8651,8 @@ cross join (
       array['Ver envase','Confirmar composicion']::text[],
       'https://hbderm.com/wp-content/uploads/2023/01/SKIN-PERFUSION-RE-TIME-SERUM-30ML.jpeg',
       'Skin Perfusion Re Time Serum - 30ML de FILLMED',
-      1329,
-      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/mesoterapia/skin-perfusion-re-time-serum-30ml/","source_categories":["Mesoterapia"],"source_availability":"instock","pricing_formula":{"source_price":0.1173,"margin_rate":0.45,"margin_amount":0.05,"sale_price":0.07,"seller_commission_rate":0.1,"seller_commission_amount":0.01,"net_margin_after_seller":0.04},"source_index":320}'::jsonb
+      1330,
+      '{"source":"hbderm.com","source_url":"https://hbderm.com/hbderm-catalogo/mesoterapia/skin-perfusion-re-time-serum-30ml/","source_categories":["Mesoterapia"],"source_availability":"instock","pricing_formula":{"source_price":0.1173,"margin_rate":0.45,"margin_amount":0.05,"sale_price":0.07,"seller_commission_rate":0.1,"seller_commission_amount":0.01,"net_margin_after_seller":0.04},"source_index":318}'::jsonb
     )
 ) as product(
   slug, title, short_title, brand, category, size, routine_step, routine_label,

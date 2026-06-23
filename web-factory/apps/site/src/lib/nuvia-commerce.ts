@@ -31,6 +31,8 @@ export type NuviaCheckoutLine = {
   quantity: number;
   unitPrice: number | null;
   lineTotal: number | null;
+  discountPercent: number;
+  discountTotal: number;
   priceLabel: string;
 };
 
@@ -273,6 +275,8 @@ async function persistOrder({
         price_label: line.priceLabel,
         raw: {
           frontend_id: line.id,
+          discount_percent: line.discountPercent,
+          discount_total: line.discountTotal,
         },
       })),
     ),
@@ -507,6 +511,9 @@ export async function createNuviaCheckout(
 
       const quantity = getPositiveQuantity(item);
       const unitPrice = typeof product.priceValue === "number" ? product.priceValue : null;
+      const lineSubtotal = unitPrice === null ? null : Number((unitPrice * quantity).toFixed(2));
+      const discountPercent = product.discountPercent || 0;
+      const lineDiscount = lineSubtotal === null ? 0 : Number((lineSubtotal * (discountPercent / 100)).toFixed(2));
 
       return {
         id: product.id,
@@ -515,7 +522,9 @@ export async function createNuviaCheckout(
         category: product.category,
         quantity,
         unitPrice,
-        lineTotal: unitPrice === null ? null : Number((unitPrice * quantity).toFixed(2)),
+        lineTotal: lineSubtotal,
+        discountPercent,
+        discountTotal: lineDiscount,
         priceLabel: product.priceLabel,
       };
     })
@@ -545,7 +554,7 @@ export async function createNuviaCheckout(
 
   const allPriced = lines.every((line) => typeof line.unitPrice === "number");
   const subtotal = Number(lines.reduce((sum, line) => sum + (line.lineTotal || 0), 0).toFixed(2));
-  const discountTotal = 0;
+  const discountTotal = Number(lines.reduce((sum, line) => sum + line.discountTotal, 0).toFixed(2));
   const total = Number((subtotal - discountTotal).toFixed(2));
   const customer = input.customer || {};
 

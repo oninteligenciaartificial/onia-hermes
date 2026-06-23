@@ -106,7 +106,7 @@ type RuntimeData = {
 };
 type RuntimeApiResponse<T = RuntimeData> = {
   ok: boolean;
-  mode: "supabase" | "configuration_pending" | "supabase_error";
+  mode: "supabase" | "configuration_pending" | "supabase_error" | "auth_required" | "auth_error" | "forbidden";
   message: string;
   missingConfiguration?: string[];
   data: T | null;
@@ -389,6 +389,11 @@ export function OperatingWorkspace({ selectedRole }: { selectedRole: RoleId }) {
         }
 
         setStorageMode("local");
+        if (runtime.mode === "auth_required" || runtime.mode === "auth_error" || runtime.mode === "forbidden") {
+          setNotice(`${runtime.message} Entra desde /onia-center/login para usar Supabase multiusuario.`);
+          return;
+        }
+
         setNotice(
           runtime.missingConfiguration?.length
             ? `Modo local: falta ${runtime.missingConfiguration.join(", ")}.`

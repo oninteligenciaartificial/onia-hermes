@@ -2248,7 +2248,161 @@
     display: grid;
   }
 
-  .onia-workspace-actions {
+.onia-workspace-actions {
     justify-content: flex-start;
+  }
+}
+
+.onia-login-page {
+  align-items: center;
+  background: radial-gradient(circle at 20% 0%, rgba(25, 135, 84, 0.16), transparent 32%),
+    linear-gradient(135deg, #0c1117 0%, #121922 48%, #f4f7f2 48%, #f4f7f2 100%);
+  color: #101820;
+  display: flex;
+  min-height: 100vh;
+  padding: 24px;
+}
+
+.onia-login-panel {
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid rgba(20, 31, 43, 0.12);
+  border-radius: 8px;
+  box-shadow: 0 24px 80px rgba(8, 13, 20, 0.18);
+  display: grid;
+  gap: 22px;
+  margin: 0 auto;
+  max-width: 430px;
+  padding: 24px;
+  width: 100%;
+}
+
+.onia-login-back {
+  align-items: center;
+  color: #4b5563;
+  display: inline-flex;
+  font-size: 13px;
+  font-weight: 700;
+  gap: 8px;
+  text-decoration: none;
+}
+
+.onia-login-brand {
+  align-items: center;
+  display: flex;
+  gap: 14px;
+}
+
+.onia-login-brand > span {
+  align-items: center;
+  background: #11251c;
+  border-radius: 8px;
+  color: #89f0bc;
+  display: inline-flex;
+  height: 46px;
+  justify-content: center;
+  width: 46px;
+}
+
+.onia-login-brand p,
+.onia-login-brand h1 {
+  margin: 0;
+}
+
+.onia-login-brand p {
+  color: #64748b;
+  font-size: 13px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.onia-login-brand h1 {
+  font-size: 30px;
+  letter-spacing: 0;
+  line-height: 1.05;
+}
+
+.onia-login-form {
+  display: grid;
+  gap: 14px;
+}
+
+.onia-login-form label {
+  color: #334155;
+  display: grid;
+  font-size: 13px;
+  font-weight: 800;
+  gap: 7px;
+}
+
+.onia-login-form input {
+  background: #f8fafc;
+  border: 1px solid #d7dee8;
+  border-radius: 8px;
+  color: #101820;
+  font: inherit;
+  min-height: 46px;
+  padding: 0 12px;
+}
+
+.onia-login-form input:focus {
+  border-color: #12805c;
+  box-shadow: 0 0 0 3px rgba(18, 128, 92, 0.12);
+  outline: none;
+}
+
+.onia-login-form button {
+  align-items: center;
+  background: #11251c;
+  border: 0;
+  border-radius: 8px;
+  color: #ffffff;
+  cursor: pointer;
+  display: inline-flex;
+  font: inherit;
+  font-weight: 850;
+  gap: 9px;
+  justify-content: center;
+  min-height: 48px;
+}
+
+.onia-login-form button:disabled {
+  cursor: wait;
+  opacity: 0.72;
+}
+
+.onia-login-notice {
+  background: #eef6f1;
+  border: 1px solid #c8e7d5;
+  border-radius: 8px;
+  color: #24533b;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.45;
+  margin: 0;
+  padding: 12px;
+}
+
+.onia-role-switcher button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.onia-session-lock {
+  color: var(--onia-muted);
+  display: block;
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1.35;
+  margin-top: 4px;
+}
+
+@media (max-width: 640px) {
+  .onia-login-page {
+    background: #f4f7f2;
+    padding: 14px;
+  }
+
+  .onia-login-panel {
+    padding: 18px;
   }
 }

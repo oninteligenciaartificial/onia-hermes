@@ -317,6 +317,16 @@ ISDIN Spain ecommerce scrape impact:
 - Storefront rule: product cards, hero stage, PDP media, cart thumbnails and routine cards must treat product imagery as cutout packshots on translucent/radial surfaces. Do not put opaque white rectangles behind packshots.
 - Catalog UX rule: `/nuvia/catalogo` needs an explicit search/lupa control with customer language (`marca`, `producto`, `rutina`, `beneficio`) plus visible found-count, empty state and direct add-to-cart controls. Search is a buying tool, not a decorative filter.
 
+2026-06-23 product cutout repair:
+
+- Root cause: the first transparent-cutout algorithm removed light product interiors because it treated connected white/near-white pixels as background. This broke the ISDIN bottle label/cap and made hero cards look tinted or clipped.
+- Fix: `create_nuvia_product_cutouts.py` now uses conservative edge-background removal, a product-span mask to preserve the packshot body, and manual source overrides for the two Nuvia featured products:
+  - `ISDIN Fusion Water Magic SPF 50` -> `assets/product-media/isdin-fusion-water-magic-spf-50-packshot.webp`
+  - `SVR Sebiaclear Gel Moussant` -> `assets/product-media/svr-sebiaclear-gel-moussant-packshot.webp`
+- Source-selection rule: for ecommerce cards, prefer clean packshots or owned/local display assets over lifestyle/reference images. Lifestyle photos can live in PDP galleries, but should not feed `assets/product-media-cutout/*` unless the background is intentionally part of the design.
+- Operational rule: after regenerating cutouts, restart with `pnpm preview:nuvia` before browser QA. Next image optimization can cache old `_next/image` responses, so a stale optimized image can make a fixed PNG look broken.
+- Build hygiene: `pnpm nuvia:cutouts` is a media-preparation command, not a build-time command. Run it after imports/media sanitization, review the first featured products visually, then run lint/build/browser QA.
+
 2026-06-18 commerce/database foundation:
 
 - Real prices, stock, carts, quote requests, discount subscribers and future orders should live in a database, not only in `nuvia.json`. JSON remains the source for generated demos and static fallback.

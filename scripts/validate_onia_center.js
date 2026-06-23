@@ -41,6 +41,7 @@ const integrationReadinessSchema = read("supabase/migrations/20260623_onia_cente
 const integrationReadinessSeed = read("supabase/migrations/20260623_onia_center_integration_readiness_seed.sql");
 const operatingAgentsSchema = read("supabase/migrations/20260623_onia_center_operating_agents.sql");
 const operatingAgentsSeed = read("supabase/migrations/20260623_onia_center_operating_agents_seed.sql");
+const authRlsSchema = read("supabase/migrations/20260623_onia_center_auth_rls.sql");
 
 const requiredTables = [
   "roles",
@@ -218,6 +219,23 @@ for (const rule of requiredOperatingAgentRules) {
     operatingAgentsSchema.includes(rule) || operatingAgentsSeed.includes(rule),
     `Missing operating agent rule: ${rule}`,
   );
+}
+
+const requiredAuthRlsRules = [
+  "current_user_key",
+  "current_role_key",
+  "can_read_visibility",
+  "has_org_access",
+  "can_act_as_role",
+  "onia_center_tasks_update_assigned_or_sergio",
+  "onia_center_leads_read_owner_or_sergio",
+  "onia_center_ideas_update_owner_or_sergio",
+  "onia_center_nuvia_lots_sergio_only",
+  "onia_center_calendar_connectors_sergio_only",
+];
+
+for (const rule of requiredAuthRlsRules) {
+  assert(authRlsSchema.includes(rule), `Missing Auth/RLS rule: ${rule}`);
 }
 
 const requiredSeedMarkers = [
@@ -452,12 +470,14 @@ console.log(
       sergioCalendarRules: requiredSergioCalendarRules.length,
       integrationReadinessRules: requiredIntegrationRules.length,
       operatingAgentRules: requiredOperatingAgentRules.length,
+      authRlsRules: requiredAuthRlsRules.length,
       seed: "20260622_onia_center_seed.sql",
       operatingSeed: "20260622_onia_center_operating_seed.sql",
       ideasAccessSeed: "20260622_onia_center_ideas_access_seed.sql",
       sergioCalendarSeed: "20260623_onia_center_sergio_calendar_seed.sql",
       integrationReadinessSeed: "20260623_onia_center_integration_readiness_seed.sql",
       operatingAgentsSeed: "20260623_onia_center_operating_agents_seed.sql",
+      authRls: "20260623_onia_center_auth_rls.sql",
       growth: vendorPanel.service_cash_engine.workhorse_offer,
     },
     null,

@@ -34,6 +34,9 @@ export type NuviaProduct = {
   detalleNota: string;
   ordenRutina?: number;
   tipoVenta?: string;
+  destacadoMes?: boolean;
+  descuentoPorcentaje?: number;
+  precioPromocional?: number | null;
 };
 
 export type NuviaClient = {
@@ -68,6 +71,7 @@ export type CartProduct = {
   priceLabel: string;
   priceValue: number | null;
   currency: string;
+  discountPercent: number;
   image: string;
   imageAlt: string;
   href: string;
@@ -125,6 +129,7 @@ export const nuviaCartProducts: CartProduct[] = nuviaProducts.map((product) => (
   priceLabel: product.precio || "Consultar precio",
   priceValue: typeof product.precioValor === "number" ? product.precioValor : null,
   currency: product.moneda || "BOB",
+  discountPercent: typeof product.descuentoPorcentaje === "number" ? product.descuentoPorcentaje : 0,
   image: product.imagen,
   imageAlt: product.imagenAlt || product.titulo,
   href: productHref(product),

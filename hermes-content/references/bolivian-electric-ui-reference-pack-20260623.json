@@ -1,0 +1,145 @@
+{
+  "id": "bolivian-electric-ui-reference-pack-20260623",
+  "client": "Bolivian Electric",
+  "created_at": "2026-06-23",
+  "purpose": "Reference pack for redesigning Bolivian Electric OS MVP UI without copying third-party assets, code, copy or brand identity.",
+  "design_read": {
+    "surface": "B2B industrial CRM plus commercial quote funnel",
+    "audience": "Bolivian Electric management, commercial team and B2B buyers requesting electrical products",
+    "language": "serious industrial, operational, precise, high-trust",
+    "not_language": [
+      "generic SaaS gradient",
+      "decorative card-heavy landing",
+      "autonomous AI chatbot fantasy",
+      "full ecommerce promise before stock and pricing validation"
+    ],
+    "recommended_direction": "Industrial control-room UI for the app, with a product-led commercial quote page. Use restrained charcoal, porcelain, steel borders and one amber/electric accent."
+  },
+  "source_summary": [
+    {
+      "source": "21st.dev Community Components",
+      "url": "https://21st.dev/community/components",
+      "status": "checked_current_web_and_local_bank",
+      "use_policy": "component taxonomy and interaction discovery only; license review before code reuse",
+      "useful_for_bolivian_electric": [
+        "categorizing app shell, forms, inputs, tables, tabs and quote CTAs",
+        "avoiding generic all-purpose blocks by choosing components by job",
+        "compact interaction ideas for search, filters and status controls"
+      ]
+    },
+    {
+      "source": "shadcn/ui Blocks",
+      "url": "https://ui.shadcn.com/blocks",
+      "status": "checked_current_web_and_local_bank",
+      "use_policy": "MIT/open component architecture reference, retokenize before use",
+      "useful_for_bolivian_electric": [
+        "dashboard with sidebar, charts and data-table composition",
+        "app shell split into sidebar, site header, section cards and table",
+        "accessible component structure for future Supabase-backed app"
+      ]
+    },
+    {
+      "source": "Lapa Ninja",
+      "url": "https://www.lapa.ninja/",
+      "status": "checked_current_web_and_local_bank",
+      "use_policy": "landing structure and category research only",
+      "useful_for_bolivian_electric": [
+        "business, corporate, technology, ecommerce and hardware categories",
+        "reference density for real-world landing hierarchy",
+        "separate hero, proof, product/category and CTA sections"
+      ]
+    },
+    {
+      "source": "Motion Primitives",
+      "url": "https://motion-primitives.com/docs",
+      "status": "checked_current_web_and_local_bank",
+      "use_policy": "motion taxonomy and patterns only unless imported from licensed repo",
+      "useful_for_bolivian_electric": [
+        "subtle reveal, disclosure, transition panel, animated number and toolbar ideas",
+        "microinteractions only where they clarify state or feedback",
+        "avoid heavy motion in management dashboard"
+      ]
+    },
+    {
+      "source": "10x App",
+      "url": "https://www.10x.app/",
+      "status": "checked_current_web_and_local_bank",
+      "use_policy": "structure only; no code reuse for commercial client work",
+      "useful_for_bolivian_electric": [
+        "short feature rhythm",
+        "integration and FAQ ordering after hero",
+        "clear CTA hierarchy with one primary action"
+      ]
+    },
+    {
+      "source": "Fontpair",
+      "url": "https://fontpair.co/all",
+      "status": "checked_current_web_and_local_bank",
+      "use_policy": "typography reference; verify font licenses before production",
+      "useful_for_bolivian_electric": [
+        "avoid default Inter-only look",
+        "use clear sans hierarchy for industrial B2B",
+        "reserve mono only for operational numbers and codes"
+      ]
+    },
+    {
+      "source": "ONIA approved benchmarks",
+      "url": "local: web-factory/DESIGN_STACK.md",
+      "status": "local_verified",
+      "use_policy": "quality floor only, do not copy client identity",
+      "useful_for_bolivian_electric": [
+        "Bench, Garabato and HSB Engineers as internal standard for hierarchy and seriousness",
+        "content must help sell, decide, understand scope, understand risk or take the next step",
+        "no filler sections"
+      ]
+    }
+  ],
+  "local_reference_bank": {
+    "latest_gallery_examples": "web-factory/data/references/design-sources/gallery-examples/latest-gallery-examples.json",
+    "latest_gallery_summary": {
+      "sources": 10,
+      "candidates": 168,
+      "detailed_examples": 57,
+      "errors": 0,
+      "code_blocks": 28
+    },
+    "fresh_gallery_attempt": {
+      "command": "pnpm references:gallery:all",
+      "result": "aborted after prolonged no-output run; partial file should not be treated as canonical without QA",
+      "partial_output": "web-factory/data/references/design-sources/gallery-examples/full-gallery-run.json"
+    }
+  },
+  "bolivian_electric_ui_rules": [
+    "CRM is management-first for about 5 users, not company-wide ERP.",
+    "Use dashboard density for decisions: pipeline, responsibility, follow-up, import health and web requests.",
+    "Commercial page must generate quote requests, not promise direct checkout.",
+    "Chatbot UI must behave as knowledge base and human handoff.",
+    "Import UI must communicate approval, validation and errors before load.",
+    "No real customer data, secrets, prices, margins or supplier information in the repo.",
+    "No direct server integration in phase 1."
+  ],
+  "recommended_visual_tokens": {
+    "base": "porcelain and warm gray workspace",
+    "surface": "white panels with steel borders",
+    "sidebar": "charcoal green-black",
+    "primary_accent": "industrial amber",
+    "secondary_functional": "deep teal only for brand/system identity and links",
+    "radius": "8px for app surfaces, 999px only for compact pills",
+    "shadow": "low, tinted, never pure black"
+  },
+  "recommended_screens": [
+    "Dashboard: control-room overview with pipeline, SLA, import health and top follow-ups.",
+    "Clientes: scannable table with owner, branch, primary contact and account state.",
+    "Cotizaciones: pipeline table plus compact activity rail.",
+    "Productos: catalog cards as quote triggers, not ecommerce cards.",
+    "Solicitudes web: inbox-style cards with source and next action.",
+    "Base de conocimiento: approved answer cards with human-handoff flags.",
+    "Configuracion: roles and imports as governance, not generic settings.",
+    "Web comercial: industrial hero, quote form, category selection and safety rules."
+  ],
+  "asset_note": {
+    "needed_for_next_visual_step": true,
+    "recommended_generated_asset": "16:10 industrial electrical warehouse or control-room hero image with cables, panels, shelves and warm work light. No real logos, no people, no readable brands.",
+    "reason": "The commercial page will feel much more premium with a real generated bitmap instead of a CSS-only system visual."
+  }
+}

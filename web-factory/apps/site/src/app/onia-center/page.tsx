@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   AlertTriangle,
   BadgeCheck,
@@ -106,6 +106,16 @@ type NavItem = {
   label: string;
   detail: string;
   icon: LucideIcon;
+};
+
+type AuthStatusResponse = {
+  ok: boolean;
+  mode: string;
+  message?: string;
+  actor?: {
+    displayName: string;
+    role: RoleId;
+  } | null;
 };
 
 const navItems: NavItem[] = [
@@ -346,6 +356,9 @@ function PrivateCapitalPanel({ visible }: { visible: boolean }) {
 
 export default function OniaCenterPage() {
   const [selectedRole, setSelectedRole] = useState<RoleId>("sergio");
+  const [sessionRole, setSessionRole] = useState<RoleId | null>(null);
+  const [sessionLabel, setSessionLabel] = useState("Sesion local");
+  const roleLocked = sessionRole !== null && sessionRole !== "sergio";
   const role = roleDefinitions.find((item) => item.id === selectedRole) ?? roleDefinitions[0];
   const privateVisible = canSeePrivateCapital(selectedRole);
   const visibleCenters = useMemo(() => getVisibleCenters(selectedRole), [selectedRole]);
@@ -385,6 +398,46 @@ export default function OniaCenterPage() {
     [visibleProjects],
   );
 
+  useEffect(() => {
+    let active = true;
+
+    async function loadSessionRole() {
+      try {
+        const response = await fetch("/api/onia-center/auth/status", { cache: "no-store" });
+        const body = (await response.json()) as AuthStatusResponse;
+
+        if (!active) {
+          return;
+        }
+
+        if (!body.ok) {
+          if (body.mode !== "configuration_pending") {
+            window.location.href = "/onia-center/login";
+          }
+          return;
+        }
+
+        if (body.actor) {
+          setSessionRole(body.actor.role);
+          setSessionLabel(`${body.actor.displayName} / ${body.actor.role}`);
+          if (body.actor.role !== "sergio") {
+            setSelectedRole(body.actor.role);
+          }
+        }
+      } catch {
+        if (active) {
+          setSessionLabel("Sesion local");
+        }
+      }
+    }
+
+    loadSessionRole();
+
+    return () => {
+      active = false;
+    };
+  }, []);
+
   return (
     <main className="onia-center-page">
       <aside className="onia-center-sidebar" aria-label="Navegacion ONIA Center">
@@ -421,14 +474,20 @@ export default function OniaCenterPage() {
           {roleDefinitions.map((item) => (
             <button
               className={selectedRole === item.id ? "is-active" : ""}
+              disabled={roleLocked && item.id !== selectedRole}
               key={item.id}
               type="button"
-              onClick={() => setSelectedRole(item.id)}
+              onClick={() => {
+                if (!roleLocked) {
+                  setSelectedRole(item.id);
+                }
+              }}
             >
               <strong>{item.title.split(" / ")[0]}</strong>
               <small>Nivel {item.level}</small>
             </button>
           ))}
+          <small className="onia-session-lock">{roleLocked ? `Bloqueado por sesion: ${sessionLabel}` : `Sesion: ${sessionLabel}`}</small>
         </section>
       </aside>
 

@@ -18,6 +18,7 @@ const SENSITIVE_KEYS = [
   "comisionVendedorRate",
   "comisionVendedor",
   "gananciaNeta",
+  "gananciaNetaConDescuento",
   "raw",
   "mediaEnrichment",
 ];
