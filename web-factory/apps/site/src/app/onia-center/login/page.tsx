@@ -1,7 +1,8 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { ArrowLeft, LockKeyhole, ShieldCheck } from "lucide-react";
 import "../onia-center.css";
 
@@ -13,10 +14,28 @@ type LoginResult = {
 };
 
 export default function OniaCenterLoginPage() {
+  const searchParams = useSearchParams();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [notice, setNotice] = useState("Acceso interno. Usa el usuario creado en Supabase Auth.");
+
+  useEffect(() => {
+    const reason = searchParams.get("reason");
+    if (reason === "sergio_only") {
+      setNotice("ONIA Center completo esta bloqueado para Sergio. Crea una vista colaborativa segura antes de dar acceso a Arthur o vendedores.");
+      return;
+    }
+
+    if (reason === "auth_verify") {
+      setNotice("No pude verificar tu perfil activo en ONIA Center. Revisa el mapeo Auth -> user_profiles.");
+      return;
+    }
+
+    if (reason === "auth_required") {
+      setNotice("Inicia sesion para abrir ONIA Center.");
+    }
+  }, [searchParams]);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -37,8 +56,9 @@ export default function OniaCenterLoginPage() {
         return;
       }
 
+      const nextPath = searchParams.get("next") || "/onia-center";
       setNotice("Sesion iniciada. Abriendo ONIA Center...");
-      window.location.href = "/onia-center";
+      window.location.href = nextPath;
     } catch (error) {
       const message = error instanceof Error ? error.message : "Error desconocido.";
       setNotice(`No se pudo conectar con Auth. ${message}`);

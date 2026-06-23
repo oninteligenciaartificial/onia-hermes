@@ -106,6 +106,8 @@ insert into onia_center.organization_memberships (
 ## Reglas aplicadas
 
 - Sergio ve todo y aprueba pagos, gastos, descuentos, premium y cierres.
+- `/onia-center` completo queda Sergio-only cuando Supabase Auth esta activo,
+  porque aun importa fuentes privadas en el bundle cliente.
 - Arthur no ve capital Sergio, deuda exacta, caja completa ni utilidad interna.
 - Vendedor solo ve leads/tareas propias.
 - Freelancer solo ve entregables asignados.
@@ -132,5 +134,8 @@ insert into onia_center.organization_memberships (
 
 - Crear usuarios Auth reales.
 - Cargar `ONIA_CENTER_SUPABASE_ANON_KEY` en entorno seguro.
+- Crear una vista colaborativa server-filtered para Arthur/vendedores antes de
+  entregarles acceso visual a ONIA Center.
+- Mover `source.ts` y `operating-source.ts` privados a APIs server-only por rol.
 - Crear UI de administracion de miembros despues de validar RLS.
 - Agregar refresh token automatico si las sesiones largas lo requieren.

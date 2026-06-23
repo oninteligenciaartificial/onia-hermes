@@ -1,5 +1,10 @@
 import { NextResponse, type NextRequest } from "next/server";
 
+type OniaCenterProfile = {
+  primary_role_key?: string | null;
+  status?: string | null;
+};
+
 function oniaCenterAuthConfigured() {
   return Boolean(
     (process.env.ONIA_CENTER_SUPABASE_URL || process.env.WEB_FACTORY_SUPABASE_URL || process.env.SUPABASE_URL) &&
@@ -12,7 +17,87 @@ function oniaCenterAuthConfigured() {
   );
 }
 
-export function middleware(request: NextRequest) {
+function getSupabaseUrl() {
+  return process.env.ONIA_CENTER_SUPABASE_URL || process.env.WEB_FACTORY_SUPABASE_URL || process.env.SUPABASE_URL || "";
+}
+
+function getSupabaseServiceKey() {
+  return (
+    process.env.ONIA_CENTER_SUPABASE_SERVICE_ROLE_KEY ||
+    process.env.WEB_FACTORY_SUPABASE_SERVICE_ROLE_KEY ||
+    process.env.SUPABASE_SERVICE_ROLE_KEY ||
+    process.env.SUPABASE_SERVICE_KEY ||
+    ""
+  );
+}
+
+function getSupabaseSchema() {
+  return process.env.ONIA_CENTER_SUPABASE_SCHEMA || "onia_center";
+}
+
+function normalizeRoleKey(role: string | null | undefined) {
+  if (role === "area_responsible") {
+    return "area";
+  }
+
+  return role ?? "";
+}
+
+function redirectToLogin(request: NextRequest, reason: string) {
+  const loginUrl = request.nextUrl.clone();
+  loginUrl.pathname = "/onia-center/login";
+  loginUrl.searchParams.set("next", request.nextUrl.pathname);
+  loginUrl.searchParams.set("reason", reason);
+  return NextResponse.redirect(loginUrl);
+}
+
+async function getOniaCenterSessionRole(accessToken: string) {
+  const supabaseUrl = getSupabaseUrl().replace(/\/$/, "");
+  const serviceKey = getSupabaseServiceKey();
+  const schema = getSupabaseSchema();
+
+  if (!supabaseUrl || !serviceKey) {
+    return null;
+  }
+
+  const userResponse = await fetch(`${supabaseUrl}/auth/v1/user`, {
+    headers: {
+      apikey: serviceKey,
+      authorization: `Bearer ${accessToken}`,
+    },
+  });
+
+  if (!userResponse.ok) {
+    return null;
+  }
+
+  const user = (await userResponse.json()) as { id?: string };
+  if (!user.id) {
+    return null;
+  }
+
+  const profileResponse = await fetch(
+    `${supabaseUrl}/rest/v1/user_profiles?select=primary_role_key,status&auth_user_id=eq.${encodeURIComponent(user.id)}&limit=1`,
+    {
+      headers: {
+        accept: "application/json",
+        apikey: serviceKey,
+        authorization: `Bearer ${serviceKey}`,
+        "accept-profile": schema,
+      },
+    },
+  );
+
+  if (!profileResponse.ok) {
+    return null;
+  }
+
+  const profiles = (await profileResponse.json()) as OniaCenterProfile[];
+  const profile = profiles.find((item) => item.status === "active") ?? profiles[0];
+  return normalizeRoleKey(profile?.primary_role_key);
+}
+
+export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   if (!pathname.startsWith("/onia-center") || pathname.startsWith("/onia-center/login")) {
@@ -24,14 +109,18 @@ export function middleware(request: NextRequest) {
   }
 
   const hasSession = Boolean(request.cookies.get("onia_center_access_token")?.value);
-  if (hasSession) {
-    return NextResponse.next();
+  const accessToken = request.cookies.get("onia_center_access_token")?.value;
+
+  if (!hasSession || !accessToken) {
+    return redirectToLogin(request, "auth_required");
   }
 
-  const loginUrl = request.nextUrl.clone();
-  loginUrl.pathname = "/onia-center/login";
-  loginUrl.searchParams.set("next", pathname);
-  return NextResponse.redirect(loginUrl);
+  const role = await getOniaCenterSessionRole(accessToken);
+  if (role !== "sergio") {
+    return redirectToLogin(request, role ? "sergio_only" : "auth_verify");
+  }
+
+  return NextResponse.next();
 }
 
 export const config = {
