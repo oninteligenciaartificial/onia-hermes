@@ -4,6 +4,7 @@ import json
 import re
 import shutil
 import statistics
+import time
 import unicodedata
 from collections import deque
 from pathlib import Path
@@ -50,13 +51,55 @@ def is_light_background(rgb: tuple[int, int, int], edge_rgb: tuple[int, int, int
     saturation = max(rgb) - min(rgb)
     distance_from_edge = sum((channel - edge) ** 2 for channel, edge in zip(rgb, edge_rgb)) ** 0.5
 
-    if brightness >= 218 and saturation <= 68:
+    if brightness >= 248 and saturation <= 30:
         return True
 
-    if brightness >= 185 and saturation <= 54 and distance_from_edge <= 78:
+    if brightness >= 232 and saturation <= 38 and distance_from_edge <= 28:
         return True
 
-    return distance_from_edge <= 42 and brightness >= 142
+    return distance_from_edge <= 18 and brightness >= 218 and saturation <= 46
+
+
+def is_product_seed(rgb: tuple[int, int, int], edge_rgb: tuple[int, int, int]) -> bool:
+    r, g, b = rgb
+    brightness = (r + g + b) / 3
+    saturation = max(rgb) - min(rgb)
+    distance_from_edge = sum((channel - edge) ** 2 for channel, edge in zip(rgb, edge_rgb)) ** 0.5
+
+    if saturation >= 34 and brightness <= 252:
+        return True
+
+    if brightness <= 232:
+        return True
+
+    return distance_from_edge >= 48 and brightness <= 248
+
+
+def product_span_mask(rgba: Image.Image, edge_rgb: tuple[int, int, int]) -> Image.Image:
+    width, height = rgba.size
+    pixels = rgba.load()
+    mask = bytearray(width * height)
+    min_span = max(8, width // 80)
+
+    for y in range(height):
+        row_seeds: list[int] = []
+        for x in range(width):
+            r, g, b, a = pixels[x, y]
+            if a > 8 and is_product_seed((r, g, b), edge_rgb):
+                row_seeds.append(x)
+
+        if len(row_seeds) < 2:
+            continue
+
+        left = max(0, min(row_seeds) - 2)
+        right = min(width - 1, max(row_seeds) + 2)
+        if right - left < min_span:
+            continue
+
+        for x in range(left, right + 1):
+            mask[y * width + x] = 255
+
+    return Image.frombytes("L", (width, height), bytes(mask)).filter(ImageFilter.GaussianBlur(0.35))
 
 
 def remove_edge_background(image: Image.Image) -> Image.Image:
@@ -116,8 +159,9 @@ def remove_edge_background(image: Image.Image) -> Image.Image:
         if y < height - 1:
             push(x, y + 1)
 
-    background_mask = Image.frombytes("L", (width, height), bytes(mask)).filter(ImageFilter.GaussianBlur(0.9))
+    background_mask = Image.frombytes("L", (width, height), bytes(mask)).filter(ImageFilter.GaussianBlur(0.55))
     new_alpha = ImageChops.subtract(rgba.getchannel("A"), background_mask)
+    new_alpha = ImageChops.lighter(new_alpha, product_span_mask(rgba, edge_rgb))
     rgba.putalpha(new_alpha)
     return rgba
 
@@ -143,7 +187,40 @@ def normalize_cutout(image: Image.Image) -> Image.Image:
     return canvas
 
 
-def convert_image(src: str, index: int, title: str) -> str | None:
+def product_source_candidates(product: dict, current_src: str) -> list[str]:
+    candidates: list[str] = []
+
+    if current_src.startswith("assets/") and "product-media-cutout/" not in current_src:
+        candidates.append(current_src)
+
+    for image in product.get("detalleImagenes", []):
+        if not isinstance(image, dict):
+            continue
+        src = image.get("src", "")
+        if isinstance(src, str) and src.startswith("assets/product-media/"):
+            candidates.append(src)
+
+    if current_src.startswith("assets/product-media-cutout/"):
+        cutout_stem = Path(current_src).stem
+        original_stem = re.sub(r"^\d{3}-", "", cutout_stem)
+        media_dir = PUBLIC_ASSETS / "product-media"
+        if media_dir.exists():
+            for file_path in media_dir.glob(f"{original_stem}*"):
+                if file_path.suffix.lower() in IMAGE_EXTENSIONS:
+                    candidates.append(f"assets/product-media/{file_path.name}")
+
+    seen: set[str] = set()
+    unique_candidates: list[str] = []
+    for src in candidates:
+        if src in seen:
+            continue
+        seen.add(src)
+        unique_candidates.append(src)
+
+    return unique_candidates
+
+
+def convert_image(src: str, index: int, title: str, *, overwrite: bool = False) -> str | None:
     input_path = resolve_public_image(src)
     if not input_path or input_path.suffix.lower() not in IMAGE_EXTENSIONS:
         return None
@@ -154,12 +231,22 @@ def convert_image(src: str, index: int, title: str) -> str | None:
     public_output.parent.mkdir(parents=True, exist_ok=True)
     data_output.parent.mkdir(parents=True, exist_ok=True)
 
-    if not public_output.exists():
+    if overwrite or not public_output.exists():
         with Image.open(input_path) as source:
             cutout = normalize_cutout(remove_edge_background(source))
             cutout.save(public_output, "PNG", optimize=True)
 
-    shutil.copy2(public_output, data_output)
+    for attempt in range(4):
+        try:
+            shutil.copy2(public_output, data_output)
+            break
+        except OSError:
+            if attempt == 3 and data_output.exists():
+                break
+            if attempt == 3:
+                raise
+            time.sleep(0.35)
+
     return f"assets/{OUTPUT_REL_DIR.as_posix()}/{output_name}"
 
 
@@ -171,11 +258,16 @@ def main() -> None:
 
     for index, product in enumerate(products, start=1):
         src = product.get("imagen", "")
-        if not isinstance(src, str) or src.startswith("assets/product-media-cutout/"):
+        if not isinstance(src, str):
             skipped += 1
             continue
 
-        new_src = convert_image(src, index, str(product.get("titulo") or f"producto-{index}"))
+        new_src = None
+        for candidate in product_source_candidates(product, src):
+            new_src = convert_image(candidate, index, str(product.get("titulo") or f"producto-{index}"), overwrite=True)
+            if new_src:
+                break
+
         if not new_src:
             skipped += 1
             continue
