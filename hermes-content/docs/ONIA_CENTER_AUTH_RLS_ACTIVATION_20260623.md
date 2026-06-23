@@ -1,7 +1,8 @@
 # ONIA Center Auth and RLS Activation 2026-06-23
 
-Estado: implementado en repo, pendiente de aplicar en Supabase real y crear
-usuarios Auth.
+Estado: implementado en repo y aplicado en Supabase self-hosted del VPS.
+Pendiente: crear usuarios Auth reales, mapearlos a perfiles y cargar variables
+de entorno en el deploy web.
 
 ## Objetivo
 
@@ -45,6 +46,12 @@ Regla: `SERVICE_ROLE_KEY` nunca va al navegador. Solo server-side.
 7. Entrar por `/onia-center/login`.
 8. Probar `/api/onia-center/auth/status`.
 9. Probar `/api/onia-center/runtime`.
+
+Aplicado en VPS el 2026-06-23:
+
+- Backup previo: `/root/backups/supabase/onia-center-pre-auth-rls-20260623-212800.sql.gz`
+- Validacion Postgres: `onia_center` quedo con 44 tablas y 87 policies.
+- Funciones confirmadas: `onia_center.current_user_key()` y `onia_center.can_read_visibility(text)`.
 
 ## Mapeo de usuarios
 
@@ -124,7 +131,6 @@ insert into onia_center.organization_memberships (
 ## Pendiente
 
 - Crear usuarios Auth reales.
-- Aplicar migracion en VPS.
 - Cargar `ONIA_CENTER_SUPABASE_ANON_KEY` en entorno seguro.
 - Crear UI de administracion de miembros despues de validar RLS.
 - Agregar refresh token automatico si las sesiones largas lo requieren.
