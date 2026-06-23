@@ -57,7 +57,18 @@ Cliente nuevo = agregar un objeto a `clientes.json` y correr el generador.
 9. **Plantillas internas = confidencial.** Nunca decir al cliente que usamos
    plantillas. Maximizar producción.
 
-10. **No fabricar.** Si falta dato del cliente (brochure, sector), pedirlo o
+10. **Direccion visual aprobada.** Usar Bench, Garabato y HSB Engineers como
+    benchmark interno de diseno para propuestas, decks y webs. No copiarlos
+    literalmente: tomar su jerarquia, limpieza, ritmo, seriedad y foco comercial
+    como piso de calidad. Si el cliente exige otro estilo, crear una version
+    mejor o mas adecuada desde ese nivel.
+
+11. **Solo datos relevantes.** Cada bloque debe ayudar a vender, decidir,
+    entender alcance, entender valor, entender riesgo o avanzar al siguiente
+    paso. Eliminar secciones de relleno, promesas vagas, metricas inventadas,
+    listas repetidas y texto puesto solo para llenar espacio.
+
+12. **No fabricar.** Si falta dato del cliente (brochure, sector), pedirlo o
     marcarlo. Personalizar con datos reales (cartera, números, sector).
 
 ## Comandos

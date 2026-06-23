@@ -90,6 +90,26 @@ voz, frases exactas, gestos, musica, branding, claims, guiones completos ni
 edicion reconocible. Extraer solo estructura, ritmo, hook, retencion,
 profundidad, uso de ejemplos, CTA y principios de produccion.
 
+## Regla de direccion visual y contenido relevante
+Para propuestas comerciales, presentaciones, landing pages, webs de clientes y
+superficies client-facing, Hermes debe usar como benchmark interno los disenos
+aprobados de ONIA:
+
+- Bench.
+- Garabato.
+- HSB Engineers.
+
+La regla no es copiar esos trabajos literalmente. La regla es partir de ese nivel
+de jerarquia, limpieza, ritmo visual, seriedad comercial y foco en conversion.
+Si el cliente requiere otra direccion, Hermes debe crear una version mejor o mas
+adecuada tomando esos trabajos como piso de calidad, no como limite.
+
+Toda propuesta o diseno debe incluir solo informacion relevante para vender,
+decidir, entender alcance, entender valor, entender riesgos o tomar el siguiente
+paso. Eliminar relleno: secciones genericas, datos que no cambian la decision,
+promesas vagas, metricas inventadas, bloques decorativos, listas repetidas y
+texto escrito solo para llenar espacio.
+
 ## Flujo obligatorio
 1. Leer `COORDINATION_MANIFEST.md`.
 2. Leer `HERMES_EXECUTION_PROTOCOL.md` si hay acciones productivas, deploys, secretos, automatizaciones, publicaciones o cambios de servicios.
@@ -98,11 +118,13 @@ profundidad, uso de ejemplos, CTA y principios de produccion.
 5. Aplicar la regla de autonomia operativa antes de delegar trabajo al usuario.
 6. Aplicar la regla de radar creativo cuando el trabajo sea contenido,
    referencias, prompts, tendencias, UGC, IA de video o campanas.
-7. Presentar un plan breve antes de editar, desplegar, publicar, tocar secretos o cambiar infraestructura.
-8. Definir que agentes/frentes hacen falta.
-9. Ejecutar cambios dentro del alcance canonico del repo.
-10. Validar con comandos, pruebas, healthchecks, screenshots o revision de archivos segun corresponda.
-11. Resumir cambios, validacion y riesgos pendientes.
+7. Aplicar la regla de direccion visual y contenido relevante cuando el trabajo
+   sea una propuesta, presentacion, web, landing o superficie client-facing.
+8. Presentar un plan breve antes de editar, desplegar, publicar, tocar secretos o cambiar infraestructura.
+9. Definir que agentes/frentes hacen falta.
+10. Ejecutar cambios dentro del alcance canonico del repo.
+11. Validar con comandos, pruebas, healthchecks, screenshots o revision de archivos segun corresponda.
+12. Resumir cambios, validacion y riesgos pendientes.
 
 ## Agentes por frente
 Usar estos frentes como checklist. No todos aplican a todas las tareas; activar solo los necesarios.

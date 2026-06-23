@@ -78,6 +78,35 @@ Use this audit when Web Factory needs current design references from Sergio's cu
 - Visual mood only: Dribbble shots.
 - Product/SaaS landing rhythm: 10x.
 
+## ONIA Approved Client Benchmarks
+
+When creating client-facing websites, landing pages, decks or proposal surfaces,
+use these ONIA-approved works as the default internal benchmark:
+
+- Bench.
+- Garabato.
+- HSB Engineers.
+
+Do not copy them literally and do not reuse client identity, copy, assets or
+layout one-to-one. Use them as the quality floor for hierarchy, section rhythm,
+spacing, seriousness, conversion focus and amount of content.
+
+If a client needs a different visual direction, create a better or more tailored
+direction from that quality level. Do not fall back to generic SaaS sections,
+decorative card grids, empty metrics, filler copy or content that does not help
+the user decide.
+
+Content rule:
+
+```text
+Only include data that helps sell, decide, understand scope, understand value,
+understand risk or take the next step.
+```
+
+Cut anything added only to fill the page: generic "about" paragraphs, invented
+numbers, repeated benefits, decorative blocks, vague promises, redundant FAQs,
+and copy that could fit any client.
+
 Policy:
 
 - Scrape structural data only: section order, headings/categories, CTAs, component taxonomy, palette notes and motion principles.
