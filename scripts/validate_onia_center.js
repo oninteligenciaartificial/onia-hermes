@@ -39,6 +39,8 @@ const sergioCalendarSchema = read("supabase/migrations/20260623_onia_center_serg
 const sergioCalendarSeed = read("supabase/migrations/20260623_onia_center_sergio_calendar_seed.sql");
 const integrationReadinessSchema = read("supabase/migrations/20260623_onia_center_integration_readiness.sql");
 const integrationReadinessSeed = read("supabase/migrations/20260623_onia_center_integration_readiness_seed.sql");
+const operatingAgentsSchema = read("supabase/migrations/20260623_onia_center_operating_agents.sql");
+const operatingAgentsSeed = read("supabase/migrations/20260623_onia_center_operating_agents_seed.sql");
 
 const requiredTables = [
   "roles",
@@ -130,6 +132,19 @@ for (const table of requiredIntegrationReadinessTables) {
   );
 }
 
+const requiredOperatingAgentTables = [
+  "operating_agents",
+  "agent_monthly_plans",
+  "calendar_connector_plans",
+];
+
+for (const table of requiredOperatingAgentTables) {
+  assert(
+    operatingAgentsSchema.includes(`create table if not exists onia_center.${table}`),
+    `Missing operating agents table onia_center.${table}`,
+  );
+}
+
 const requiredSchemaRules = [
   "onia_center_services_price_setup_required",
   "onia_center_services_monthly_required_if_recurring",
@@ -181,12 +196,27 @@ const requiredIntegrationRules = [
   "enable row level security",
   "config_pending",
   "manual_only",
+  "agents",
 ];
 
 for (const rule of requiredIntegrationRules) {
   assert(
     integrationReadinessSchema.includes(rule) || integrationReadinessSeed.includes(rule),
     `Missing integration readiness rule: ${rule}`,
+  );
+}
+
+const requiredOperatingAgentRules = [
+  "onia_center_calendar_connector_no_secret_values",
+  "enable row level security",
+  "prepared_pending_connection",
+  "two_way_guarded",
+];
+
+for (const rule of requiredOperatingAgentRules) {
+  assert(
+    operatingAgentsSchema.includes(rule) || operatingAgentsSeed.includes(rule),
+    `Missing operating agent rule: ${rule}`,
   );
 }
 
@@ -247,6 +277,7 @@ for (const marker of requiredSergioCalendarSeedMarkers) {
 const requiredIntegrationSeedMarkers = [
   "supabase_onia_center",
   "cal_booking",
+  "google_calendar",
   "n8n_ops",
   "litellm_gateway",
   "local_models",
@@ -256,11 +287,28 @@ const requiredIntegrationSeedMarkers = [
   "higgsfield",
   "whatsapp_chatbots",
   "runtime_daily_ops",
+  "monthly_agents",
   "client_web_intake",
 ];
 
 for (const marker of requiredIntegrationSeedMarkers) {
   assert(integrationReadinessSeed.includes(marker), `Missing integration readiness seed marker: ${marker}`);
+}
+
+const requiredOperatingAgentSeedMarkers = [
+  "agent_ceo_monthly",
+  "agent_sales_crm",
+  "agent_calendar_energy",
+  "agent_finance_fund",
+  "agent_selfhosted_integrations",
+  "plan_calendar_202606",
+  "calendar_google_private",
+  "GOOGLE_CALENDAR_REFRESH_TOKEN",
+  "ONIA - Agenda: Briefing Diario",
+];
+
+for (const marker of requiredOperatingAgentSeedMarkers) {
+  assert(operatingAgentsSeed.includes(marker), `Missing operating agent seed marker: ${marker}`);
 }
 
 const appSource = read("web-factory/apps/site/src/app/onia-center/source.ts");
@@ -339,6 +387,7 @@ const requiredIntegrationAppMarkers = [
   "featureReadinessItems",
   "getIntegrationReadinessSummary",
   "Integraciones y funciones pendientes",
+  "connector-google-calendar",
   "connector-remotion-video",
   "connector-web-factory-auto",
   "connector-local-models",
@@ -353,6 +402,27 @@ for (const marker of requiredIntegrationAppMarkers) {
       appPage.includes(marker) ||
       appIntegrationsRoute.includes(marker),
     `Missing integration app marker: ${marker}`,
+  );
+}
+
+const requiredOperatingAgentAppMarkers = [
+  "operatingAgents",
+  "agentMonthlyPlans",
+  "calendarConnectorPlans",
+  "getOperatingAgentSummary",
+  "Agentes operativos",
+  "Plan mensual, agenda estricta y conexiones",
+  "Agente Calendario y Energia Sergio",
+  "Google Calendar privado Sergio",
+];
+
+for (const marker of requiredOperatingAgentAppMarkers) {
+  assert(
+    appOperatingSource.includes(marker) ||
+      appOperatingEngine.includes(marker) ||
+      appPage.includes(marker) ||
+      appSource.includes(marker),
+    `Missing operating agent app marker: ${marker}`,
   );
 }
 
@@ -375,16 +445,19 @@ console.log(
       ideasAccessTables: requiredIdeasAccessTables.length,
       sergioCalendarTables: requiredSergioCalendarTables.length,
       integrationReadinessTables: requiredIntegrationReadinessTables.length,
+      operatingAgentTables: requiredOperatingAgentTables.length,
       schemaRules: requiredSchemaRules.length,
       operatingSchemaRules: requiredOperatingRules.length,
       ideasAccessSchemaRules: requiredIdeasAccessRules.length,
       sergioCalendarRules: requiredSergioCalendarRules.length,
       integrationReadinessRules: requiredIntegrationRules.length,
+      operatingAgentRules: requiredOperatingAgentRules.length,
       seed: "20260622_onia_center_seed.sql",
       operatingSeed: "20260622_onia_center_operating_seed.sql",
       ideasAccessSeed: "20260622_onia_center_ideas_access_seed.sql",
       sergioCalendarSeed: "20260623_onia_center_sergio_calendar_seed.sql",
       integrationReadinessSeed: "20260623_onia_center_integration_readiness_seed.sql",
+      operatingAgentsSeed: "20260623_onia_center_operating_agents_seed.sql",
       growth: vendorPanel.service_cash_engine.workhorse_offer,
     },
     null,

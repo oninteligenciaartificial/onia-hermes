@@ -1945,6 +1945,135 @@
   margin-top: 7px;
 }
 
+.onia-agent-command-center {
+  margin-bottom: 16px;
+}
+
+.onia-agent-grid,
+.onia-agent-columns,
+.onia-agent-month-plan,
+.onia-calendar-sync-grid {
+  display: grid;
+  gap: 10px;
+}
+
+.onia-agent-grid {
+  grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+  margin-top: 12px;
+}
+
+.onia-agent-card,
+.onia-agent-month-plan,
+.onia-calendar-sync-grid article {
+  border: 1px solid var(--onia-line-soft);
+  border-radius: var(--onia-radius);
+  background: #fbfcfb;
+}
+
+.onia-agent-card {
+  display: grid;
+  gap: 12px;
+  min-height: 280px;
+  padding: 12px;
+}
+
+.onia-agent-card__head,
+.onia-agent-month-plan article {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.onia-agent-card__head > div,
+.onia-agent-month-plan article > div {
+  min-width: 0;
+}
+
+.onia-agent-card span,
+.onia-agent-columns strong,
+.onia-agent-month-plan span,
+.onia-calendar-sync-grid span,
+.onia-calendar-sync-grid strong {
+  display: block;
+  color: var(--onia-faint);
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.onia-agent-card strong,
+.onia-agent-month-plan strong {
+  display: block;
+  margin-top: 5px;
+  color: var(--onia-ink);
+  font-size: 15px;
+  line-height: 1.25;
+}
+
+.onia-agent-card p,
+.onia-agent-card small,
+.onia-agent-month-plan p,
+.onia-agent-month-plan small,
+.onia-calendar-sync-grid p,
+.onia-calendar-sync-grid small {
+  margin: 0;
+  color: var(--onia-muted);
+  font-size: 12px;
+  line-height: 1.42;
+}
+
+.onia-agent-columns {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.onia-agent-columns div {
+  min-height: 86px;
+  padding: 10px;
+  border: 1px solid var(--onia-line-soft);
+  border-radius: var(--onia-radius);
+  background: #ffffff;
+}
+
+.onia-agent-rule {
+  display: block;
+  margin-top: auto;
+  padding-top: 10px;
+  border-top: 1px solid var(--onia-line-soft);
+  color: var(--onia-blue) !important;
+  font-weight: 900;
+}
+
+.onia-agent-month-plan {
+  margin-top: 12px;
+  padding: 12px;
+}
+
+.onia-agent-month-plan article {
+  min-height: 96px;
+  padding: 10px 0;
+  border-top: 1px solid var(--onia-line-soft);
+}
+
+.onia-agent-month-plan article:first-of-type {
+  border-top: 0;
+}
+
+.onia-calendar-sync-grid {
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  margin-top: 12px;
+}
+
+.onia-calendar-sync-grid article {
+  display: grid;
+  gap: 10px;
+  min-height: 196px;
+  padding: 12px;
+}
+
+.onia-calendar-sync-grid strong {
+  color: var(--onia-ink);
+}
+
 @media (max-width: 1240px) {
   .onia-metrics {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1962,6 +2091,7 @@
     .onia-ideas-board,
     .onia-selfhosted-panel,
     .onia-collab-summary,
+    .onia-agent-columns,
     .onia-security-grid,
     .onia-readiness-columns,
     .onia-readiness-meta {
@@ -2055,6 +2185,9 @@
     .onia-live-metrics,
     .onia-sergio-calendar,
     .onia-calendar-summary,
+    .onia-agent-grid,
+    .onia-agent-columns,
+    .onia-calendar-sync-grid,
     .onia-live-grid,
     .onia-ideas-board,
     .onia-selfhosted-panel,

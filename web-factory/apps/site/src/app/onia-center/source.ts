@@ -281,6 +281,27 @@ export const dataModelTables: DataModelTable[] = [
     implementedInApp: true,
   },
   {
+    name: "onia_center.operating_agents",
+    purpose: "Agentes internos para plan mensual, ventas, entrega, finanzas, calendario y self-hosted.",
+    requiredForPhase: 1,
+    implementedInSql: true,
+    implementedInApp: true,
+  },
+  {
+    name: "onia_center.agent_monthly_plans",
+    purpose: "Tareas y objetivos mensuales generados o revisados por agentes, con evidencia y visibilidad.",
+    requiredForPhase: 1,
+    implementedInSql: true,
+    implementedInApp: true,
+  },
+  {
+    name: "onia_center.calendar_connector_plans",
+    purpose: "Plan de conexion Google Calendar, Cal.com, n8n y Telegram con bloques protegidos.",
+    requiredForPhase: 1,
+    implementedInSql: true,
+    implementedInApp: true,
+  },
+  {
     name: "onia_center.adapter_events",
     purpose: "Eventos y cargas desde adaptadores sin mezclar credenciales ni core.",
     requiredForPhase: 2,

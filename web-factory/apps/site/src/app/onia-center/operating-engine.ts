@@ -4,8 +4,10 @@ import {
   collaborators,
   deliverables,
   externalAdapters,
+  agentMonthlyPlans,
   featureReadinessItems,
   integrationConnectors,
+  operatingAgents,
   operatingClients,
   operatingMemberships,
   operatingOrganizations,
@@ -41,6 +43,56 @@ export function getOperatingDashboardSummary() {
     adapterRisks,
     alerts: pendingReviews + blockedTasks + adapterRisks,
   };
+}
+
+export function getVisibleOperatingAgents(role: RoleId) {
+  if (role === "sergio") {
+    return operatingAgents;
+  }
+
+  const allowedScopes = role === "arthur" || role === "area"
+    ? new Set(["internal_restricted", "collab_safe"])
+    : new Set(["seller_basic", "collab_safe"]);
+
+  return operatingAgents.filter((agent) => allowedScopes.has(agent.visibility));
+}
+
+export function getOperatingAgentSummary(role: RoleId) {
+  const visibleAgents = getVisibleOperatingAgents(role);
+  const visibleAgentIds = new Set(visibleAgents.map((agent) => agent.id));
+  const visiblePlans = role === "sergio"
+    ? agentMonthlyPlans
+    : agentMonthlyPlans.filter((plan) =>
+        plan.visibleTo.some((scope) => scope !== "sergio_private") && visibleAgentIds.has(plan.agentId),
+      );
+
+  return {
+    visibleAgents,
+    visiblePlans,
+    totalAgents: operatingAgents.length,
+    ready: visibleAgents.filter((agent) => agent.status === "ready").length,
+    prepared: visibleAgents.filter((agent) => agent.status === "prepared_pending_connection").length,
+    planned: visibleAgents.filter((agent) => agent.status === "planned").length,
+    blocked: visibleAgents.filter((agent) => agent.status === "blocked").length,
+    monthlyTasks: visiblePlans.length,
+    highPriorityPlans: visiblePlans.filter((plan) => plan.priority === "alta").length,
+  };
+}
+
+export function getAgentTone(status: (typeof operatingAgents)[number]["status"]): CenterTone {
+  if (status === "ready") {
+    return "green";
+  }
+
+  if (status === "prepared_pending_connection") {
+    return "yellow";
+  }
+
+  if (status === "blocked") {
+    return "red";
+  }
+
+  return "blue";
 }
 
 export function getVisibleProjects(role: RoleId) {

@@ -69,6 +69,28 @@ values
     '{}'::jsonb
   ),
   (
+    'google_calendar',
+    'Google Calendar privado Sergio',
+    'Google Calendar API',
+    'calendar',
+    'config_pending',
+    false,
+    'onia_center',
+    null,
+    null,
+    '["GOOGLE_CALENDAR_CLIENT_ID","GOOGLE_CALENDAR_CLIENT_SECRET","GOOGLE_CALENDAR_REFRESH_TOKEN","GOOGLE_CALENDAR_ID"]'::jsonb,
+    '["GOOGLE_CALENDAR_TIMEZONE","GOOGLE_CALENDAR_READONLY_ID"]'::jsonb,
+    'ONIA Center ya define bloques privados y ventanas. Falta OAuth Google para leer eventos reales y escribir solo eventos aprobados.',
+    '["Cronograma Sergio privado","Ventanas de reunion","Reglas de disponibilidad","Planes Cal/n8n"]'::jsonb,
+    '["OAuth Google Calendar","Refresh token server-side","Workflow n8n","Prueba sin exponer calendario"]'::jsonb,
+    'Crear credenciales OAuth, guardar refresh token en entorno seguro y probar lectura por n8n.',
+    'Google Calendar no se expone a vendedores, clientes ni navegador; solo ventanas permitidas.',
+    '["hermes-content/skills/agenda-calendario.md","hermes-content/docs/SERGIO_STRICT_CALENDAR_AND_ALFREDHQ_2026.md"]'::jsonb,
+    'sergio_private',
+    'alta',
+    '{}'::jsonb
+  ),
+  (
     'n8n_ops',
     'n8n automatizaciones ONIA',
     'n8n self-hosted',
@@ -350,7 +372,8 @@ insert into onia_center.feature_readiness_items (
 values
   ('runtime_daily_ops', 'Uso diario: leads, tareas, notas e ideas', 'crm', 'ready_to_use', 'sergio', false, '["supabase_onia_center"]'::jsonb, '["Formularios","Fallback local","Filtros por rol","Snapshot"]'::jsonb, '["Supabase real","Auth real"]'::jsonb, 'Usarlo hoy en modo local y conectar Supabase para multiusuario.', '/onia-center#uso-diario', 'Lo que no este en ONIA Center, Notion o evidencia aprobada no cuenta.', '{}'::jsonb),
   ('ideas_inbox', 'Ideas Inbox para reels, links y oportunidades', 'knowledge', 'ready_to_use', 'sergio', false, '["supabase_onia_center","litellm_gateway"]'::jsonb, '["Captura link","Categoria/proyecto","Prompt para IA"]'::jsonb, '["Analisis automatico","Importacion Telegram/IG"]'::jsonb, 'Guardar ideas manualmente y despues conectar analisis IA server-side.', '/onia-center#ideas', 'Ideas privadas Sergio no son visibles para Arthur, vendedores ni freelancers.', '{}'::jsonb),
-  ('calendar_booking', 'Calendario Sergio + booking cliente', 'calendar', 'prepared_pending_connection', 'sergio', true, '["cal_booking","n8n_ops"]'::jsonb, '["Bloques Sergio","Ventanas","Comandos AlfredHQ","Kit Cal"]'::jsonb, '["Cal desplegado","Google Calendar","Webhook n8n","DNS"]'::jsonb, 'Conectar Cal -> n8n -> Google Calendar -> Telegram -> Supabase.', '/onia-center#calendario-sergio', 'Reunion de cliente debe quedar registrada.', '{}'::jsonb),
+  ('monthly_agents', 'Agentes mensuales para tareas, agenda y decisiones', 'agents', 'prepared_pending_connection', 'sergio', true, '["supabase_onia_center","n8n_ops","google_calendar","litellm_gateway","local_models"]'::jsonb, '["Agentes por mision","Plan mensual","Reglas privacidad","Conectores calendario/IA"]'::jsonb, '["Runner mensual n8n","Endpoint IA","Google Calendar real","Supabase RLS"]'::jsonb, 'Usar la seccion Agentes para ordenar el mes; despues conectar briefing mensual por n8n.', '/onia-center#agentes', 'Un agente propone tareas; Sergio aprueba decisiones, pagos, reuniones fuera de ventana y contacto.', '{}'::jsonb),
+  ('calendar_booking', 'Calendario Sergio + booking cliente', 'calendar', 'prepared_pending_connection', 'sergio', true, '["google_calendar","cal_booking","n8n_ops"]'::jsonb, '["Bloques Sergio","Ventanas","Comandos AlfredHQ","Kit Cal"]'::jsonb, '["Google Calendar OAuth","Cal desplegado","Webhook n8n","DNS"]'::jsonb, 'Conectar Cal -> n8n -> Google Calendar -> Telegram -> Supabase.', '/onia-center#calendario-sergio', 'Reunion de cliente debe quedar registrada.', '{}'::jsonb),
   ('ai_review_agent', 'IA para revisar ideas, briefs, leads y tareas', 'ai_models', 'prepared_pending_connection', 'sergio', true, '["litellm_gateway","local_models","dify_rag"]'::jsonb, '["reviewTool","Prompt builder","Sensibilidad","Costos premium"]'::jsonb, '["Endpoint IA","Modelo default","Limites gasto","Logs por centro"]'::jsonb, 'Crear endpoint de review con LiteLLM primero; luego modelos locales.', '/onia-center#ideas', 'La IA propone; Sergio aprueba decisiones y contacto.', '{}'::jsonb),
   ('remotion_editor', 'Editor de video Remotion dentro de ONIA Center', 'video_editor', 'planned', 'sergio', true, '["remotion_video","litellm_gateway","higgsfield"]'::jsonb, '["Video Lab","Ideas Inbox","Quiet mode"]'::jsonb, '["Modulo media","Plantillas","Render worker","Storage","Revision"]'::jsonb, 'Construir Media Lab: brief -> script -> assets -> render -> revision.', '/onia-center#integraciones', 'Todo render tiene brief, centro contable y aprobacion.', '{}'::jsonb),
   ('client_web_intake', 'Formulario cliente para generar webs automaticamente', 'web_generator', 'planned', 'sergio', false, '["web_factory_auto","supabase_onia_center","litellm_gateway"]'::jsonb, '["Proyecto Webs","CRM/tareas","Web Factory","Reglas alcance"]'::jsonb, '["Formulario","Schema brief","Generador preview","Checklist precio"]'::jsonb, 'Crear intake web con preview interno y aprobacion antes de enviar al cliente.', '/onia-center#integraciones', 'Formulario crea lead/brief/tarea; no despliega sin aprobacion.', '{}'::jsonb),

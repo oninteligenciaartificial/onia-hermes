@@ -592,6 +592,7 @@ export type FeatureReadinessItem = {
   title: string;
   module:
     | "crm"
+    | "agents"
     | "calendar"
     | "ai_models"
     | "video_editor"
@@ -618,6 +619,62 @@ export type RuntimeConnectorCheck = {
   configured: boolean;
   missingEnv: string[];
   checkedAt: string;
+};
+
+export type OperatingAgentCadence = "daily" | "weekly" | "monthly" | "always_on";
+
+export type OperatingAgentStatus = "ready" | "prepared_pending_connection" | "planned" | "blocked";
+
+export type OperatingAgent = {
+  id: string;
+  name: string;
+  mission: string;
+  ownerRole: RoleId;
+  visibility: VisibilityScope;
+  cadence: OperatingAgentCadence;
+  status: OperatingAgentStatus;
+  monthlyOutcome: string;
+  inputs: string[];
+  outputs: string[];
+  actions: string[];
+  blockedBy: string[];
+  nextAction: string;
+  safetyRule: string;
+  connectorIds: string[];
+  toolPreference: ("codex" | "claude" | "local_model" | "n8n" | "manual")[];
+  route?: string;
+};
+
+export type AgentMonthlyPlan = {
+  id: string;
+  agentId: string;
+  monthLabel: string;
+  title: string;
+  projectId?: string;
+  priority: "alta" | "media" | "baja";
+  status: "planned" | "in_progress" | "waiting_connection" | "blocked" | "done";
+  responsibleRole: RoleId;
+  dueWindow: string;
+  expectedEvidence: string;
+  blockedUntil?: string;
+  visibleTo: VisibilityScope[];
+};
+
+export type CalendarConnectorPlan = {
+  id: string;
+  name: string;
+  connectorId: string;
+  provider: "google_calendar" | "calcom" | "n8n" | "telegram" | "onia_center";
+  status: "ready" | "config_pending" | "planned" | "blocked";
+  direction: "read" | "write" | "two_way_guarded";
+  requiredEnv: string[];
+  protectedBlocks: string[];
+  eventTypes: string[];
+  writePolicy: string;
+  n8nWorkflow?: string;
+  nextAction: string;
+  safetyRule: string;
+  visibility: VisibilityScope;
 };
 
 export type AuditLogEntry = {

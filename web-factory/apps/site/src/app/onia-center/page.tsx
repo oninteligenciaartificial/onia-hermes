@@ -59,6 +59,7 @@ import {
 } from "./source";
 import {
   auditLogSeed,
+  calendarConnectorPlans,
   collabIngestionItems,
   collaborators,
   externalAdapters,
@@ -83,6 +84,7 @@ import {
 } from "./engine";
 import {
   getAdapterSummary,
+  getAgentTone,
   getBolivianModuleSummary,
   getCollabSafetySummary,
   getFeatureReadinessSummary,
@@ -90,6 +92,7 @@ import {
   getIntegrationReadinessSummary,
   getIntegrationTone,
   getMembershipSummary,
+  getOperatingAgentSummary,
   getOperatingDashboardSummary,
   getTaskStatusTone,
   getVisibleProjects,
@@ -108,6 +111,7 @@ type NavItem = {
 const navItems: NavItem[] = [
   { id: "uso-diario", label: "Uso diario", detail: "Captura", icon: ClipboardCheck },
   { id: "calendario-sergio", label: "Calendario", detail: "Sergio", icon: CalendarDays },
+  { id: "agentes", label: "Agentes", detail: "Mes", icon: Sparkles },
   { id: "ideas", label: "Ideas", detail: "Reels e IA", icon: Lightbulb },
   { id: "dashboard", label: "Dashboard", detail: "Operacion", icon: BarChart3 },
   { id: "proyectos", label: "Proyectos", detail: "ONIA", icon: BriefcaseBusiness },
@@ -371,6 +375,11 @@ export default function OniaCenterPage() {
   const integrationSummary = getIntegrationReadinessSummary();
   const featureSummary = getFeatureReadinessSummary();
   const membershipSummary = getMembershipSummary(selectedRole);
+  const agentSummary = getOperatingAgentSummary(selectedRole);
+  const visibleCalendarConnectorPlans = useMemo(
+    () => (privateVisible ? calendarConnectorPlans : calendarConnectorPlans.filter((plan) => plan.visibility !== "sergio_private")),
+    [privateVisible],
+  );
   const projectNameById = useMemo(
     () => new Map(visibleProjects.map((project) => [project.id, project.name])),
     [visibleProjects],
@@ -456,6 +465,117 @@ export default function OniaCenterPage() {
         </section>
 
         <OperatingWorkspace selectedRole={selectedRole} />
+
+        <section className="onia-panel onia-agent-command-center" id="agentes">
+          <SectionHeader
+            eyebrow="Agentes operativos"
+            title="Plan mensual, agenda estricta y conexiones"
+            description="Los agentes proponen tareas del mes y protegen el cronograma. Las acciones sensibles siguen bloqueadas hasta aprobacion de Sergio y conectores reales."
+            icon={Sparkles}
+          />
+
+          <div className="onia-collab-summary">
+            <div>
+              <span>Agentes visibles</span>
+              <strong>{agentSummary.visibleAgents.length}</strong>
+            </div>
+            <div>
+              <span>Preparados</span>
+              <strong>{agentSummary.prepared}</strong>
+            </div>
+            <div>
+              <span>Tareas del mes</span>
+              <strong>{agentSummary.monthlyTasks}</strong>
+            </div>
+            <div>
+              <span>Alta prioridad</span>
+              <strong>{agentSummary.highPriorityPlans}</strong>
+            </div>
+          </div>
+
+          <div className="onia-agent-grid">
+            {agentSummary.visibleAgents.map((agent) => (
+              <article className="onia-agent-card" key={agent.id}>
+                <div className="onia-agent-card__head">
+                  <div>
+                    <span>{agent.cadence} / {agent.visibility}</span>
+                    <strong>{agent.name}</strong>
+                  </div>
+                  <TonePill tone={getAgentTone(agent.status)}>{agent.status.replaceAll("_", " ")}</TonePill>
+                </div>
+                <p>{agent.mission}</p>
+                <div className="onia-agent-columns">
+                  <div>
+                    <strong>Entrega mensual</strong>
+                    <small>{agent.monthlyOutcome}</small>
+                  </div>
+                  <div>
+                    <strong>Siguiente accion</strong>
+                    <small>{agent.nextAction}</small>
+                  </div>
+                </div>
+                <ul className="onia-compact-list">
+                  {agent.actions.slice(0, 4).map((action) => (
+                    <li key={action}>
+                      <CheckCircle2 size={14} />
+                      <span>{action}</span>
+                    </li>
+                  ))}
+                </ul>
+                <small className="onia-agent-rule">{agent.safetyRule}</small>
+              </article>
+            ))}
+          </div>
+
+          <div className="onia-agent-month-plan">
+            <div className="onia-live-title">
+              <ClipboardCheck size={16} />
+              <strong>Tareas que los agentes deben empujar este mes</strong>
+            </div>
+            {agentSummary.visiblePlans.map((plan) => (
+              <article key={plan.id}>
+                <div>
+                  <span>{plan.monthLabel} / {plan.dueWindow}</span>
+                  <strong>{plan.title}</strong>
+                  <p>{plan.expectedEvidence}</p>
+                  {plan.blockedUntil ? <small>Bloqueado hasta: {plan.blockedUntil}</small> : null}
+                </div>
+                <TonePill tone={plan.status === "done" ? "green" : plan.status === "blocked" ? "red" : plan.status === "waiting_connection" ? "yellow" : "blue"}>
+                  {plan.status.replaceAll("_", " ")}
+                </TonePill>
+              </article>
+            ))}
+          </div>
+
+          <div className="onia-calendar-sync-grid">
+            {visibleCalendarConnectorPlans.map((plan) => (
+              <article key={plan.id}>
+                <div>
+                  <span>{plan.provider} / {plan.direction}</span>
+                  <strong>{plan.name}</strong>
+                  <p>{plan.writePolicy}</p>
+                </div>
+                <div>
+                  <strong>Eventos</strong>
+                  <small>{plan.eventTypes.join(", ")}</small>
+                </div>
+                <div>
+                  <strong>Protege</strong>
+                  <small>{plan.protectedBlocks.join(", ")}</small>
+                </div>
+                <small>{plan.nextAction}</small>
+              </article>
+            ))}
+          </div>
+
+          <div className="onia-rule-strip">
+            <ShieldCheck size={17} />
+            <strong>Regla de agentes:</strong>
+            <span>
+              Proponen tareas y agenda; no contactan clientes, no publican, no aprueban pagos y no mueven reuniones fuera de ventana sin aprobacion Sergio.
+            </span>
+          </div>
+        </section>
 
         <section className="onia-panel onia-repo-strategy" id="dashboard" aria-label="Dashboard operativo ONIA">
           <SectionHeader

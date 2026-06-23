@@ -51,7 +51,7 @@ create table if not exists onia_center.feature_readiness_items (
   feature_key text not null unique,
   title text not null,
   module text not null check (
-    module in ('crm', 'calendar', 'ai_models', 'video_editor', 'web_generator', 'automations', 'collab', 'stockcam', 'sales', 'knowledge')
+    module in ('crm', 'agents', 'calendar', 'ai_models', 'video_editor', 'web_generator', 'automations', 'collab', 'stockcam', 'sales', 'knowledge')
   ),
   status text not null default 'planned' check (
     status in ('ready_to_use', 'prepared_pending_connection', 'planned', 'blocked')
