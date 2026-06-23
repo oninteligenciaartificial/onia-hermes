@@ -18,6 +18,7 @@ PUBLIC_NUVIA = ROOT / "apps" / "site" / "public" / "nuvia"
 PUBLIC_ASSETS = PUBLIC_NUVIA / "assets"
 DATA_ASSETS = ROOT / "data" / "clients" / "nuvia.assets"
 OUTPUT_REL_DIR = Path("product-media-cutout")
+ERROR_LOG = ROOT / "data" / "references" / "product-sources" / "nuvia-cutout-errors.json"
 TARGET_SIZE = 1200
 TARGET_PRODUCT_SIDE = 980
 PROCESS_MAX_SIDE = 720
@@ -267,6 +268,7 @@ def main() -> None:
     products = data.get("productos", [])
     converted = 0
     skipped = 0
+    errors: list[dict[str, str | int]] = []
 
     for index, product in enumerate(products, start=1):
         src = product.get("imagen", "")
@@ -276,7 +278,18 @@ def main() -> None:
 
         new_src = None
         for candidate in product_source_candidates(product, src):
-            new_src = convert_image(candidate, index, str(product.get("titulo") or f"producto-{index}"), overwrite=True)
+            try:
+                new_src = convert_image(candidate, index, str(product.get("titulo") or f"producto-{index}"), overwrite=True)
+            except Exception as error:  # noqa: BLE001 - keep catalog generation resilient.
+                errors.append(
+                    {
+                        "index": index,
+                        "title": str(product.get("titulo") or ""),
+                        "candidate": candidate,
+                        "error": str(error),
+                    }
+                )
+                new_src = None
             if new_src:
                 break
 
@@ -288,8 +301,12 @@ def main() -> None:
         converted += 1
 
     CLIENT_JSON.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    ERROR_LOG.parent.mkdir(parents=True, exist_ok=True)
+    ERROR_LOG.write_text(json.dumps(errors, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(f"Converted {converted} Nuvia product images to transparent cutouts.")
     print(f"Skipped {skipped} images that were already cutouts or unavailable.")
+    if errors:
+        print(f"Cutout errors logged: {ERROR_LOG}")
 
 
 if __name__ == "__main__":
