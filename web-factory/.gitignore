@@ -3,3 +3,7 @@ out/
 node_modules/
 .next/
 tmp/
+.vercel/
+/public/
+
+.vercel

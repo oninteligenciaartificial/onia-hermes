@@ -2,7 +2,7 @@
 
 Documento canonico de precios y comisiones comerciales. Uso interno.
 
-Ultima actualizacion: 2026-06-18
+Ultima actualizacion: 2026-06-22
 
 ## Veredicto contable
 
@@ -66,6 +66,9 @@ Vigencia:
 | Conexion de canal social | Bs. 690 setup | Bs. 69.00 |
 | Automatizacion simple n8n | Bs. 790 setup | Bs. 79.00 |
 | Flujo de aprobacion n8n | Bs. 1,200 setup | Bs. 120.00 |
+| ONIA Motor Local Starter | Bs. 1,500 setup + Bs. 790/mes | Bs. 150 setup + Bs. 79 primer mes |
+| ONIA Motor Local Growth | Bs. 2,900 setup + Bs. 1,900/mes | Bs. 290 setup + Bs. 190 primer mes |
+| ONIA Motor Local Pro | Bs. 4,900 setup + Bs. 3,900/mes | Requiere aprobacion |
 
 Frase comercial:
 
@@ -73,6 +76,32 @@ Frase comercial:
 Estamos abriendo cupos de arranque para implementar casos reales con ONIA. Este
 precio queda reservado hasta [FECHA] solo con pago confirmado. Luego se aplica
 el precio vigente.
+```
+
+## Caballito de batalla: ONIA Motor Local
+
+ONIA Motor Local es la oferta recurrente principal para sostener caja mensual.
+No se vende como "posts" ni como "IA"; se vende como captacion, presencia,
+CRM simple, seguimiento y mejora mensual para negocios locales.
+
+| Plan | Precio | Uso |
+|---|---:|---|
+| Starter | Bs. 1,500 setup + Bs. 790/mes | Entrada para negocios pequenos. |
+| Growth | Bs. 2,900 setup + Bs. 1,900/mes | Paquete principal que ONIA debe empujar. |
+| Pro | Bs. 4,900 setup + Bs. 3,900/mes | Solo con aprobacion y capacidad de entrega. |
+
+Growth es el paquete recomendado. Cinco clientes Growth activos producen
+Bs. 9.500/mes y aportan Bs. 3.800 al Fondo ONIA si se aplica 40%.
+
+Incluye segun plan: auditoria, Google Business Profile, landing o mejora de
+captacion, CRM simple, aviso/seguimiento n8n, reporte y mejora mensual. Pauta,
+dominios, hosting, WhatsApp, APIs, herramientas externas, produccion externa y
+gastos de terceros se cobran aparte.
+
+Fuente operativa completa:
+
+```text
+hermes-content/docs/ONIA_CASH_ENGINE_SERVICE_CATALOG_2026.md
 ```
 
 ## Costos excluidos de comision

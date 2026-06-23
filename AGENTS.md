@@ -48,6 +48,31 @@ uso comercial, el canal de publicacion o una decision de negocio, Hermes debe
 preguntar de forma concreta antes de asumir. Si no hay duda bloqueante, debe
 continuar y terminar.
 
+## Regla de preservacion del conocimiento
+Todo conocimiento operativo, decision, runbook, propuesta, prompt kit, migracion,
+script, configuracion no secreta, investigacion y avance de producto debe quedar
+guardado en el repo canonico y subirse al remoto en cuanto sea razonablemente
+seguro hacerlo.
+
+Objetivo: no perder memoria de ONIA/Hermes en chats, archivos locales sueltos o
+sesiones temporales.
+
+Reglas:
+
+- Preferir editar o crear archivos canonicos antes de dejar decisiones solo en
+  respuestas de chat.
+- Despues de cambios productivos, validar, hacer commit y push cuando el arbol
+  este en un estado coherente.
+- Si hay trabajo de varios frentes, agrupar commits por tema cuando sea posible;
+  si Sergio pide "commit all", revisar secretos y subir todo lo apto.
+- Nunca subir secretos, tokens, llaves SSH, contrasenas, `.env` reales,
+  credenciales, datos bancarios, dumps privados sin limpiar ni archivos
+  personales sensibles.
+- Si un dato sensible es necesario para operar, documentar solo el nombre de la
+  variable, ruta segura o procedimiento de carga, no el valor.
+- Si un archivo es demasiado grande o binario, subirlo solo si es un artefacto
+  canonico util; si no, registrar donde vive y como regenerarlo.
+
 ## Regla de radar creativo
 Antes de crear contenido importante, analizar referencias, escribir guiones,
 crear prompts para Higgsfield, disenar campanas o recomendar estrategia,

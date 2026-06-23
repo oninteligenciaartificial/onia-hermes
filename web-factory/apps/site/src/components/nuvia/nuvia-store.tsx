@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
-import { ArrowLeft, Minus, Plus, ShoppingBag, Trash2, X } from "lucide-react";
+import { ArrowLeft, Minus, Plus, Search, ShoppingBag, Trash2, X } from "lucide-react";
 import {
   type CartProduct,
   type NuviaProduct,
@@ -29,6 +29,16 @@ type StoreProps = {
 
 type ProductPageProps = StoreProps & {
   product: NuviaProduct;
+};
+
+type RoutineStepDefinition = {
+  id: string;
+  number: string;
+  action: string;
+  title: string;
+  body: string;
+  keywords: string[];
+  categories: string[];
 };
 
 type CheckoutResult = {
@@ -59,6 +69,45 @@ type CheckoutResult = {
 
 const STORAGE_KEY = "nuvia-next-cart-v1";
 
+const ROUTINE_STEPS: RoutineStepDefinition[] = [
+  {
+    id: "limpiar",
+    number: "01",
+    action: "limpiar",
+    title: "piel limpia sin resecar",
+    body: "Empieza retirando grasa, protector y suciedad para que el resto de la rutina trabaje mejor.",
+    keywords: ["sebiaclear gel moussant", "limpiador matificante", "gel moussant"],
+    categories: ["limpieza facial"],
+  },
+  {
+    id: "tratar",
+    number: "02",
+    action: "tratar",
+    title: "corrige una necesidad",
+    body: "Elige serum, ampolla o tratamiento segun piel grasa, manchas, textura o signos de edad.",
+    keywords: ["sebiaclear serum", "[c20] biotic", "serum", "ampoule"],
+    categories: ["piel grasa", "antiedad", "manchas"],
+  },
+  {
+    id: "hidratar",
+    number: "03",
+    action: "hidratar",
+    title: "repara la barrera",
+    body: "Sella la rutina con hidratacion o reparacion para mantener la piel comoda durante el dia.",
+    keywords: ["crema de agua ligera", "bariéderm cica", "b3 masque hydra", "hydrac"],
+    categories: ["hidratacion"],
+  },
+  {
+    id: "proteger",
+    number: "04",
+    action: "proteger",
+    title: "proteccion diaria",
+    body: "Cierra la rutina de manana con SPF. Es el paso que protege la inversion de los anteriores.",
+    keywords: ["fusion water magic spf 50", "fusion water magic spf50", "barièsun 100"],
+    categories: ["proteccion solar"],
+  },
+];
+
 function briefProductTitle(product: Pick<NuviaProduct, "titulo">) {
   return product.titulo
     .replace(/\bMagic\b/gi, "")
@@ -66,6 +115,40 @@ function briefProductTitle(product: Pick<NuviaProduct, "titulo">) {
     .replace(/\s+Moussant\b/gi, "")
     .replace(/\s+/g, " ")
     .trim();
+}
+
+function searchableProductText(product: NuviaProduct) {
+  return [
+    product.titulo,
+    product.marca,
+    product.categoria,
+    product.uso,
+    product.beneficios.join(" "),
+    product.idealPara.join(" "),
+  ]
+    .join(" ")
+    .toLowerCase();
+}
+
+function findRoutineProduct(products: NuviaProduct[], step: RoutineStepDefinition) {
+  const byKeyword = step.keywords
+    .map((keyword) => products.find((product) => searchableProductText(product).includes(keyword.toLowerCase())))
+    .find(Boolean);
+
+  if (byKeyword) {
+    return byKeyword;
+  }
+
+  return products.find((product) =>
+    step.categories.some((category) => searchableProductText(product).includes(category.toLowerCase())),
+  );
+}
+
+function buildRoutineSteps(products: NuviaProduct[]) {
+  return ROUTINE_STEPS.map((step) => ({
+    ...step,
+    product: findRoutineProduct(products, step),
+  })).filter((step): step is RoutineStepDefinition & { product: NuviaProduct } => Boolean(step.product));
 }
 
 function useRevealMotion() {
@@ -573,7 +656,16 @@ function ProductShelf({
           return true;
         }
 
-        return [product.titulo, product.marca, product.categoria, product.uso]
+        return [
+          product.titulo,
+          product.marca,
+          product.categoria,
+          product.uso,
+          product.desc,
+          ...product.beneficios,
+          ...product.idealPara,
+          ...product.ingredientesClave,
+        ]
           .filter(Boolean)
           .join(" ")
           .toLowerCase()
@@ -601,23 +693,32 @@ function ProductShelf({
           ))}
         </div>
 
-        <label className="nuvia-catalog-search" htmlFor="nuvia-product-search">
-          <span>buscar</span>
+        <div className="nuvia-catalog-search" role="search">
+          <label htmlFor="nuvia-product-search">
+            <Search size={17} strokeWidth={2.4} aria-hidden="true" />
+            <span>buscar y comprar</span>
+          </label>
           <input
             id="nuvia-product-search"
             type="search"
             value={query}
             onChange={(event) => setQuery(event.target.value)}
-            placeholder="marca, producto o categoria"
+            placeholder="lupa: marca, producto, rutina o beneficio"
           />
-        </label>
+          {query ? (
+            <button type="button" onClick={() => setQuery("")} aria-label="Limpiar busqueda">
+              <X size={14} strokeWidth={2.4} />
+            </button>
+          ) : null}
+        </div>
 
-        <p className="nuvia-catalog-count">
+        <p className="nuvia-catalog-count" aria-live="polite">
           {filteredProducts.length} productos encontrados
         </p>
       </div>
 
-      <div className="nuvia-product-grid">
+      {visibleProducts.length ? (
+        <div className="nuvia-product-grid">
         {visibleProducts.map((product, index) => {
           const slug = productSlug(product);
           return (
@@ -643,7 +744,16 @@ function ProductShelf({
             </article>
           );
         })}
-      </div>
+        </div>
+      ) : (
+        <div className="nuvia-empty-results" role="status">
+          <strong>no encontramos ese producto</strong>
+          <p>Prueba con marca, tipo de piel, rutina o beneficio. El catalogo puede crecer sin duplicar secciones.</p>
+          <button type="button" onClick={() => setQuery("")}>
+            limpiar busqueda
+          </button>
+        </div>
+      )}
 
       {visibleProducts.length < filteredProducts.length ? (
         <button className="nuvia-load-more" type="button" onClick={() => setVisibleLimit((current) => current + 48)}>
@@ -721,10 +831,7 @@ function HeroStage({
 export function NuviaStorefront(props: StoreProps) {
   useRevealMotion();
   const cart = useCart(props.cartProducts);
-  const routineProducts = useMemo(
-    () => [...props.products].filter((product) => product.ordenRutina).sort((a, b) => (a.ordenRutina ?? 99) - (b.ordenRutina ?? 99)),
-    [props.products],
-  );
+  const routineSteps = useMemo(() => buildRoutineSteps(props.products), [props.products]);
 
   return (
     <main className="nuvia-next-page">
@@ -761,15 +868,18 @@ export function NuviaStorefront(props: StoreProps) {
       <section className="nuvia-routine-section" id="guia" data-nuvia-reveal>
         <div>
           <span>guia rapida</span>
-          <h2>dos pasos claros, sin ruido</h2>
-          <p>La compra se ordena por rutina. Primero limpieza, luego proteccion. Los proximos productos entran al mismo sistema.</p>
+          <h2>rutina perfecta en 4 pasos</h2>
+          <p>Limpia, trata, hidrata y protege. La landing muestra solo la ruta; el catalogo queda para explorar todos los productos.</p>
         </div>
-        <div className="nuvia-routine-rail">
-          {routineProducts.map((product) => (
-            <Link href={productHref(product)} key={productSlug(product)}>
-              <small>{product.uso}</small>
-              <Image src={product.imagen} alt={product.imagenAlt} width={160} height={180} />
-              <strong>{briefProductTitle(product)}</strong>
+        <div className="nuvia-routine-rail" aria-label="Rutina skincare Nuvia en 4 pasos">
+          {routineSteps.map((step) => (
+            <Link href={productHref(step.product)} key={step.id}>
+              <b>{step.number}</b>
+              <Image src={step.product.imagen} alt={step.product.imagenAlt} width={160} height={180} />
+              <small>{step.action}</small>
+              <strong>{step.title}</strong>
+              <p>{step.body}</p>
+              <em>{briefProductTitle(step.product)}</em>
             </Link>
           ))}
         </div>

@@ -1,6 +1,6 @@
 {
   "name": "onia-panel-de-vendedores",
-  "generated_at": "2026-06-20",
+  "generated_at": "2026-06-22",
   "status": "mvp_design_ready",
   "principle": "Notion remains the source of truth for vendor CRM until Supabase is connected; the panel is the daily operating layer for sellers and Sergio.",
   "official_name": "ONIA Panel de Vendedores",
@@ -16,6 +16,193 @@
     "Si no esta en ONIA Center o Notion, no cuenta para comision, cierre, Nuvia ni revision semanal.",
     "Todo ingreso o gasto debe pertenecer a un centro: ONIA Servicios, Nuvia, ONIA Media o Fondo/Caja."
   ],
+  "service_cash_engine": {
+    "source_doc": "hermes-content/docs/ONIA_CASH_ENGINE_SERVICE_CATALOG_2026.md",
+    "workhorse_offer": {
+      "id": "onia_motor_local_growth",
+      "name": "ONIA Motor Local Growth",
+      "setup_price_bs": 2900,
+      "monthly_price_bs": 1900,
+      "fund_percent": 40,
+      "target_active_clients": 5,
+      "target_monthly_revenue_bs": 9500,
+      "target_monthly_fund_bs": 3800,
+      "why": "Cinco clientes activos cubren la existencia mensual conservadora de ONIA con Fondo ONIA 40%."
+    },
+    "required_service_fields": [
+      "service_id",
+      "nombre",
+      "categoria",
+      "estado",
+      "precio_setup",
+      "precio_mensual",
+      "tipo",
+      "centro_contable",
+      "fondo_onia_percent",
+      "costos_excluidos",
+      "herramientas_usadas",
+      "limite_higgsfield_o_ia",
+      "incluye",
+      "no_incluye",
+      "entregables",
+      "sla_entrega",
+      "responsable_entrega",
+      "requiere_aprobacion",
+      "evidencia_requerida",
+      "comision_vendedor",
+      "variable_arthur",
+      "margen_minimo",
+      "riesgo",
+      "facilidad",
+      "capacidad_semanal",
+      "plantilla_cotizacion",
+      "script_venta",
+      "checklist_cierre",
+      "checklist_entrega"
+    ],
+    "monthly_cash_math": {
+      "conservative_monthly_need_bs": 3650.5,
+      "fund_percent": 40,
+      "required_net_sales_bs": 9126.25,
+      "starter_clients_to_cover": 12,
+      "growth_clients_to_cover": 5,
+      "pro_clients_to_cover": 3,
+      "first_60_days_target": "2 Growth nuevos por mes hasta llegar a 5 activos; al dia 60 deberian existir 4 Growth activos y un cierre adicional o quinto cliente en pipeline."
+    },
+    "services": [
+      {
+        "id": "auditoria_express",
+        "name": "Auditoria Express",
+        "status": "vender_ahora",
+        "type": "entrada",
+        "price_bs": 250,
+        "center": "onia_services",
+        "fund_percent": 40,
+        "evidence": [
+          "diagnostico entregado",
+          "3 problemas",
+          "3 acciones",
+          "oferta ONIA sugerida"
+        ]
+      },
+      {
+        "id": "diagnostico_plan",
+        "name": "Diagnostico + Plan de Accion",
+        "status": "vender_ahora",
+        "type": "entrada_premium",
+        "price_bs": 690,
+        "center": "onia_services",
+        "fund_percent": 40,
+        "evidence": [
+          "sesion realizada",
+          "mapa proceso",
+          "prioridades",
+          "siguiente propuesta"
+        ]
+      },
+      {
+        "id": "landing_captacion",
+        "name": "Landing de Captacion",
+        "status": "vender_ahora",
+        "type": "cash_rapido",
+        "price_bs": 790,
+        "center": "onia_services",
+        "fund_percent": 40,
+        "scope": "1 pagina, 1 formulario o CTA, 1 ronda de cambios"
+      },
+      {
+        "id": "web_profesional",
+        "name": "Web Profesional",
+        "status": "vender_ahora",
+        "type": "cash_medio",
+        "price_bs": 1500,
+        "center": "onia_services",
+        "fund_percent": 40,
+        "scope": "3-5 secciones, formulario, WhatsApp y entrega cerrada"
+      },
+      {
+        "id": "web_pro_onia",
+        "name": "Web Pro ONIA",
+        "status": "vender_ahora",
+        "type": "cash_sano",
+        "price_bs": 2900,
+        "center": "onia_services",
+        "fund_percent": 40,
+        "scope": "web con copy, captacion y seguimiento basico; si hay login o dashboard pasa a portal"
+      },
+      {
+        "id": "n8n_simple",
+        "name": "Automatizacion simple n8n",
+        "status": "vender_ahora",
+        "type": "upsell",
+        "price_bs": 790,
+        "center": "onia_services",
+        "fund_percent": 40,
+        "scope": "entrada -> registro -> aviso -> tarea"
+      },
+      {
+        "id": "onia_motor_local_starter",
+        "name": "ONIA Motor Local Starter",
+        "status": "vender_ahora",
+        "type": "recurrente_feeder",
+        "setup_price_bs": 1500,
+        "monthly_price_bs": 790,
+        "center": "onia_services",
+        "fund_percent": 40,
+        "premium_ai_limit": "sin Higgsfield premium incluido",
+        "vendor_commission": "10% setup + 10% primer mes",
+        "arthur_variable": "3%-15% setup segun participacion; mensual solo si gestiona"
+      },
+      {
+        "id": "onia_motor_local_growth",
+        "name": "ONIA Motor Local Growth",
+        "status": "vender_ahora",
+        "type": "recurrente_principal",
+        "setup_price_bs": 2900,
+        "monthly_price_bs": 1900,
+        "center": "onia_services",
+        "fund_percent": 40,
+        "premium_ai_limit": "uso premium limitado y registrado",
+        "vendor_commission": "10% setup + 10% primer mes",
+        "arthur_variable": "12%-20% setup segun cierre/onboarding; 5%-10% mensual solo si gestiona con reporte aprobado"
+      },
+      {
+        "id": "onia_motor_local_pro",
+        "name": "ONIA Motor Local Pro",
+        "status": "aprobacion_sergio",
+        "type": "recurrente_upgrade",
+        "setup_price_bs": 4900,
+        "monthly_price_bs": 3900,
+        "center": "onia_services",
+        "fund_percent": 40,
+        "rule": "Solo si hay capacidad de produccion, aprobaciones y responsable mensual"
+      },
+      {
+        "id": "onia_media_studio",
+        "name": "ONIA Media Studio piloto",
+        "status": "aprobacion_sergio",
+        "type": "media_package",
+        "price_range_bs": "1200-4900",
+        "center": "onia_media",
+        "rule": "Paquete cerrado; no vender videos sueltos ni produccion ilimitada"
+      },
+      {
+        "id": "youtube_onia_media_channels",
+        "name": "YouTube / ONIA Media channels",
+        "status": "futuro_activo",
+        "type": "long_term_asset",
+        "rule": "Activo de 90-180 dias; no cuenta como caja de la semana"
+      }
+    ],
+    "gating_rules": [
+      "Si el servicio no tiene campos obligatorios, no se vende.",
+      "Meta Ads solo con landing, CRM y seguimiento en 24h.",
+      "WhatsApp automatico solo cuando Meta, numero, plantillas, webhooks y costos esten validados.",
+      "Higgsfield no se vende como producto independiente al inicio.",
+      "Todo servicio recurrente debe tener responsable, reporte y limite de cambios.",
+      "Pauta, dominios, hosting, APIs, herramientas externas y produccion de terceros se cobran aparte."
+    ]
+  },
   "views": [
     {
       "id": "inicio",
@@ -124,9 +311,75 @@
   },
   "operation_60_days": {
     "participant": "Arthur Fuentes",
-    "role": "Colaborador comercial y operativo ONIA en prueba",
+    "role": "Coordinador Comercial-Operativo ONIA en prueba",
+    "role_level": 2,
     "duration": "60 dias",
     "contract_type": "Contrato privado operativo de colaboracion comercial y operativa por 60 dias.",
+    "company_operating_model_source_doc": "hermes-content/docs/ONIA_COMPANY_OPERATING_MODEL_2026.md",
+    "role_hierarchy": [
+      {
+        "level": 0,
+        "name": "Prospectador o vendedor",
+        "scope": "Prospecta, registra leads, hace seguimiento y gana comision por venta cobrada con datos completos."
+      },
+      {
+        "level": 1,
+        "name": "Colaborador operativo",
+        "scope": "Apoya contenido, tareas, CRM o produccion simple por entregable aprobado."
+      },
+      {
+        "level": 2,
+        "name": "Coordinador Comercial-Operativo en prueba",
+        "scope": "Rol Arthur por 60 dias: comercial, seguimiento, contenido, capacitaciones y mejoras internas con permisos limitados."
+      },
+      {
+        "level": 3,
+        "name": "Responsable de area futuro",
+        "scope": "Lidera un frente con metas y presupuesto aprobado cuando ONIA tenga caja suficiente."
+      },
+      {
+        "level": 4,
+        "name": "Direccion ONIA",
+        "scope": "Sergio: capital, marca, precios, aprobaciones, calidad, caja, herramientas, activos y decisiones finales."
+      }
+    ],
+    "labor_risk_rule": "No marcar a Arthur, vendedores o colaboradores como empleados si ONIA no formalizo contrato laboral, presupuesto, obligaciones y ruta contable/laboral. El sistema debe usar colaborador/comisionista/freelancer salvo decision legal expresa.",
+    "decision_rights": {
+      "sergio_approves": [
+        "precios finales",
+        "descuentos",
+        "gastos",
+        "uso premium de herramientas",
+        "pagos y comisiones",
+        "repartos Nuvia",
+        "cliente sensible",
+        "publicaciones de marca",
+        "contratos",
+        "freelancers",
+        "retiros de dueno"
+      ],
+      "arthur_can_request_or_prepare": [
+        "leads",
+        "llamadas",
+        "seguimientos",
+        "briefs",
+        "contenido",
+        "capacitaciones",
+        "videos Higgsfield con aprobacion",
+        "mejoras internas",
+        "cierres dentro de precio y alcance aprobado"
+      ],
+      "arthur_cannot_approve": [
+        "su propio pago",
+        "descuentos no autorizados",
+        "gastos",
+        "uso intensivo de herramientas premium",
+        "promesas fuera de alcance",
+        "contacto sensible sin permiso",
+        "actuar como socio",
+        "retirar dinero o activos"
+      ]
+    },
     "payment_policy": {
       "advance_name": "Adelanto quincenal",
       "settlement_name": "Cierre mensual",
@@ -264,7 +517,7 @@
         "herramientas, apps, IA, VPS y gastos criticos",
         "caja chica aprobada",
         "reserva minima para no caer en caja roja",
-        "recuperacion de capital Sergio/ONIA hasta Bs. 15.000",
+        "recuperacion interna de capital Sergio/ONIA",
         "bonos, reinversiones no urgentes o retiros extraordinarios"
       ],
       "capital_recovery_rule": "La recuperacion del capital sale del Fondo ONIA y de utilidades de Sergio, no de descuentos a Arthur."
@@ -279,6 +532,9 @@
     "internal_capital_allocation": {
       "visibility": "sergio_only",
       "source_doc": "hermes-content/docs/ONIA_INTERNAL_CAPITAL_ALLOCATION_2026.md",
+      "accounting_source_doc": "hermes-content/docs/ONIA_NUVIA_ACCOUNTING_MODEL_2026.md",
+      "sustainability_dashboard_source_doc": "hermes-content/docs/ONIA_SUSTAINABILITY_DASHBOARD_SPEC_2026.md",
+      "company_operating_model_source_doc": "hermes-content/docs/ONIA_COMPANY_OPERATING_MODEL_2026.md",
       "gross_capital_bs": 15000,
       "debt_bs": 2414.49,
       "cash_after_debt_bs": 12585.51,
@@ -356,10 +612,265 @@
         "asset_inventory",
         "campaign_spend",
         "nuvia_inventory_investments",
+        "nuvia_campaign_closures",
+        "owner_draws_sergio",
+        "arthur_variable_payouts",
+        "break_even_simulator",
+        "premium_tool_usage",
+        "selfhosted_savings",
         "home_lab_cost_savings",
         "daily_ceo_improvements"
       ],
-      "daily_ceo_rule": "Cada dia Sergio registra una accion de ventas, una mejora de sistema/producto, un insumo de contenido y una revision de caja o tarea critica."
+      "daily_ceo_rule": "Cada dia Sergio registra una accion de ventas, una mejora de sistema/producto, un insumo de contenido y una revision de caja o tarea critica.",
+      "decision_order": [
+        "riesgo",
+        "inversion requerida",
+        "rentabilidad probable",
+        "facilidad de ejecutar esta semana"
+      ],
+      "priority_services_week_1": [
+        {
+          "id": "auditoria_express",
+          "price_bs": 250,
+          "priority": 1,
+          "risk": "bajo",
+          "investment": "baja",
+          "profitability": "alta por margen",
+          "ease": "facil"
+        },
+        {
+          "id": "diagnostico_plan",
+          "price_bs": 690,
+          "priority": 1,
+          "risk": "bajo/medio",
+          "investment": "baja",
+          "profitability": "alta",
+          "ease": "facil/media"
+        },
+        {
+          "id": "landing_captacion",
+          "price_bs": 790,
+          "priority": 1,
+          "risk": "medio",
+          "investment": "baja",
+          "profitability": "media/alta",
+          "ease": "media"
+        },
+        {
+          "id": "web_profesional",
+          "price_bs": 1500,
+          "priority": 1,
+          "risk": "medio",
+          "investment": "baja",
+          "profitability": "media/alta",
+          "ease": "media"
+        },
+        {
+          "id": "automatizacion_simple_n8n",
+          "price_bs": 790,
+          "priority": 2,
+          "risk": "medio",
+          "investment": "baja/media",
+          "profitability": "alta si es flujo cerrado",
+          "ease": "media"
+        },
+        {
+          "id": "implementacion_operativa",
+          "price_bs": "3900-6500",
+          "priority": 2,
+          "risk": "medio/alto",
+          "investment": "media",
+          "profitability": "alta",
+          "ease": "media/dificil"
+        },
+        {
+          "id": "onia_media_studio_piloto",
+          "price_bs": "1200-4900",
+          "priority": 3,
+          "risk": "medio/alto",
+          "investment": "media",
+          "profitability": "alta si se vende por paquete",
+          "ease": "media"
+        }
+      ],
+      "investment_risk_matrix": [
+        {
+          "front": "meta_ads",
+          "risk": "alto",
+          "rule": "Solo con landing, CRM y seguimiento en 24h."
+        },
+        {
+          "front": "nuvia_inventory",
+          "risk": "alto",
+          "rule": "Solo lotes pequenos, costo completo y margen bruto minimo 40%."
+        },
+        {
+          "front": "youtube_onia_media_channels",
+          "risk": "alto",
+          "rule": "Activo de 90-180 dias, no caja operativa de la semana."
+        },
+        {
+          "front": "home_lab_backups",
+          "risk": "bajo/medio",
+          "rule": "Solo si reduce riesgo, costo cloud o perdida de datos."
+        },
+        {
+          "front": "macbook_pc_gpu",
+          "risk": "alto",
+          "rule": "Bloqueado hasta ingresos nuevos o cliente que lo justifique."
+        }
+      ],
+      "week_1_operating_plan": {
+        "start_date": "2026-06-22",
+        "end_date": "2026-06-28",
+        "cash_goal_bs": "2500-3000",
+        "minimum_targets": {
+          "new_complete_prospects": 35,
+          "contacts_messages_calls": 25,
+          "followups": 20,
+          "meetings_or_demos": 3,
+          "proposals": "2-3",
+          "commercial_demos_or_assets": 3,
+          "ready_content_pieces": 5,
+          "daily_system_improvements": 7
+        },
+        "daily_blocks": [
+          "08:30 control CEO",
+          "09:30 ventas/prospeccion",
+          "12:00 produccion comercial",
+          "15:00 entrega/sistema",
+          "17:30 follow-up",
+          "20:00 cierre diario"
+        ]
+      },
+      "nuvia_accounting_rules": {
+        "visibility": "sergio_only",
+        "centers": [
+          "onia_services",
+          "onia_fund",
+          "sergio_capital",
+          "nuvia",
+          "nuvia_reserve",
+          "onia_media",
+          "sergio_owner_income",
+          "arthur_variable"
+        ],
+        "waterfall": [
+          "venta cobrada",
+          "menos comisiones/devoluciones",
+          "menos producto, empaque, transporte, ads, herramientas premium y produccion externa",
+          "margen operativo",
+          "menos 20% Fondo ONIA",
+          "menos 10% Reserva Nuvia",
+          "utilidad distribuible",
+          "variable Arthur si aplica",
+          "utilidad Sergio/ONIA"
+        ],
+        "nuvia_lot_001": {
+          "sergio_product_capital_bs": 300,
+          "arthur_product_capital_bs": 300,
+          "organic_split_after_funds": "50% Sergio / 50% Arthur",
+          "onia_funded_campaign_split_after_funds": "70% Sergio/ONIA / 30% Arthur salvo acuerdo escrito",
+          "future_lots_rule": "Si Sergio/ONIA paga 100% producto/campana, Arthur gana variable por trabajo aprobado, no 50% financiero."
+        },
+        "arthur_operator_variable_scale": [
+          {
+            "role": "apoyo_suelto",
+            "percent": "0-5",
+            "requires": "idea, grabacion simple o mensaje aislado; sin seguimiento"
+          },
+          {
+            "role": "contenido_aprobado",
+            "percent": "5-8",
+            "requires": "contenido util aprobado; sin responder leads ni cerrar"
+          },
+          {
+            "role": "mensajes_y_registro",
+            "percent": "8-10",
+            "requires": "responde mensajes y registra leads correctamente"
+          },
+          {
+            "role": "seguimiento_completo",
+            "percent": "10-12",
+            "requires": "seguimiento completo, CRM y coordinacion"
+          },
+          {
+            "role": "cierre_real",
+            "percent": "12-15",
+            "requires": "cierre por chat/llamada con evidencia y sin rescate fuerte"
+          },
+          {
+            "role": "operacion_completa",
+            "percent": "15-20",
+            "requires": "contenido, leads, seguimiento, cierre, entrega y CRM"
+          },
+          {
+            "role": "excepcional_preaprobado",
+            "percent": "20-25",
+            "requires": "aprobado antes de campana y sin rescate Sergio"
+          }
+        ],
+        "arthur_total_caps": {
+          "no_capital": "20% ordinario; 25% excepcional aprobado antes",
+          "capital_under_25_percent": "35% total",
+          "capital_25_to_49_percent": "45% total",
+          "capital_50_percent_with_direct_costs": "50% total"
+        },
+        "sergio_owner_draw_rule": {
+          "red": "Caja menor a 1 mes o herramientas en riesgo: sin retiro fijo.",
+          "yellow": "Caja cubre 1-2 meses: retiro limitado 10%-20% de utilidad neta.",
+          "green": "Caja cubre 2 meses y hay ventas nuevas: retiro 20%-30% de utilidad neta mas recuperacion de capital."
+        }
+      },
+      "sustainability_dashboard_rules": {
+        "monthly_conservative_need_bs": 3650.5,
+        "onia_fund_percent": 40,
+        "monthly_net_sales_required_bs": 9126.25,
+        "weekly_net_sales_target_bs": "2500-3000",
+        "nuvia_example_capital_mix": {
+          "sergio_capital_bs": 4000,
+          "arthur_capital_bs": 1000,
+          "sergio_financial_share_percent": 80,
+          "arthur_financial_share_percent": 20,
+          "arthur_operator_variable_percent_range": "0-20 ordinary; 20-25 exceptional preapproved",
+          "arthur_total_cap_without_50_50_capital": "35% when Arthur capital is under 25%; no 50/50 unless he funds 50% of product, ads and direct costs"
+        },
+        "higgsfield_usage_policy": {
+          "rule": "Nuvia no puede usar Higgsfield como gratis; todo uso se aprueba y se prorratea.",
+          "monthly_allocation": {
+            "onia_clients_demos": "60%",
+            "nuvia": "20%",
+            "onia_media_channels": "10%",
+            "research": "10%"
+          },
+          "alerts": [
+            "Nuvia supera 70% de su limite",
+            "pieza sin campana",
+            "pieza sin aprobacion Sergio",
+            "pieza rechazada",
+            "gasto premium sin ingreso asociado despues de 7 dias"
+          ]
+        },
+        "selfhosted_savings_stack": [
+          "Open WebUI para chat interno, prompts y SOPs",
+          "LiteLLM para budgets, llaves y control por centro",
+          "n8n self-hosted para automatizaciones",
+          "Supabase privado para CRM, datos y cierres",
+          "Stirling PDF para documentos",
+          "SearXNG/Crawl4AI para research privado",
+          "ComfyUI/Wan para pruebas visuales antes de Higgsfield",
+          "Home lab para backups y storage bruto"
+        ],
+        "dashboard_modules": [
+          "break_even_onia",
+          "service_mix_simulator",
+          "nuvia_capital",
+          "nuvia_campaign_closures",
+          "premium_tool_usage",
+          "selfhosted_savings",
+          "sergio_owner_draws"
+        ]
+      }
     },
     "centers": [
       "onia_services",

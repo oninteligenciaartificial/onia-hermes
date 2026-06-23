@@ -10,6 +10,7 @@ import {
   CheckCircle2,
   ChevronRight,
   Command,
+  Crown,
   Database,
   FileText,
   Globe2,
@@ -119,6 +120,15 @@ const navigation = [
 ];
 
 const services: Service[] = [
+  {
+    name: "ONIA Center",
+    role: "Sistema operativo de empresa: CEO, servicios, permisos, finanzas, Nuvia, pagos y evidencia",
+    status: "canonico",
+    access: "/onia-center",
+    next: "Conectar Notion/Supabase cuando el flujo y permisos queden validados.",
+    tone: "ok",
+    icon: Crown,
+  },
   {
     name: "ONIA Panel de Vendedores",
     role: "Sales desk para leads, webs, notas, ideas, ingresos y comisiones",
@@ -515,6 +525,10 @@ export default function Home() {
                 <Server size={16} />
                 Servicios
               </a>
+              <Link href="/onia-center">
+                <Crown size={16} />
+                ONIA Center
+              </Link>
               <Link href="/vendedores">
                 <UsersRound size={16} />
                 Vendedores

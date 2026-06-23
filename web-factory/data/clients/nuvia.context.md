@@ -203,6 +203,8 @@ Implemented in the `store` template:
 - Hero preview rule: if product images have white backgrounds, remove the white-block effect through transparent figure backgrounds, `mix-blend-mode`/drop-shadow treatment and smaller image framing. If the preview competes with the video, reduce size/opacity before changing the hero video.
 - Packshot normalization rule from 2026-06-17 feedback: product images used in catalog, hero preview and PDP should use normalized transparent canvases when original cutouts have uneven padding. Current normalized assets are `assets/isdin-fusion-water-normalized.png` and `assets/svr-sebiaclear-200ml-normalized.png`, both centered on a 1400x1400 transparent canvas with matched product height.
 - Header rule from 2026-06-16 feedback: keep the header visually transparent over the hero video, make the Nuvia mark larger, use uppercase nav labels and expose the official slogan `EVERYTHING FOR EVERYONE`.
+- Hero video visibility rule from 2026-06-22 feedback: keep the video visibly present. Avoid solving readability by covering the whole hero with heavy navy/black overlays. Prefer a lighter global shade, local text shadow and restrained gradients so the product/face motion remains readable as the main visual asset.
+- Routine section rule from 2026-06-22 feedback: the landing guide must stay capped at four editorial steps only: limpiar, tratar, hidratar/reparar and proteger. Do not map every product with `ordenRutina` into the landing. Full product exploration belongs in `/nuvia/catalogo`, and per-product image enrichment belongs in the catalog/PDP data pipeline.
 - Brand/category context should be summarized inside the catalog controls, not rendered as another product-looking section. With the current catalog, ISDIN and SVR appear once as product cards and once as text metadata only.
 - Font rule from 2026-06-16 feedback: use `Onest` for the current Apple-like clean product aesthetic and avoid falling back to overused Inter-style defaults in generated storefronts.
 - Motion remains transform/opacity/filter-based, respects `prefers-reduced-motion`, and cannot leave unrevealed blank sections.
@@ -271,6 +273,49 @@ ISDIN Spain ecommerce scrape impact:
 - Use ISDIN ecommerce mechanics only as functional reference: quantity stepper, add-to-bag flow, sticky buy area and accordions. Do not copy ISDIN identity, loyalty points, prices, ratings, claims or checkout language.
 - Navigation fix: the Nuvia header is fixed across landing, catalog and PDP so the nav remains available while scrolling. The fixed header must own its own glass surface; do not leave it fully transparent over hero/product text because the logo and nav become unreadable during scroll. PDP pages need top padding and the quick-checkout bar must sit below the fixed header to avoid overlap.
 - Product image fix: product media used in hero/catalog/PDP should use display assets cropped to the alpha bounds (`*-display.png`) so the product fills its card cleanly. Keep original/normalized files available as source assets, but avoid using wide transparent canvases in ecommerce cards because they make images look broken or too small.
+- Current image coverage check on 2026-06-22: `nuvia.json` has images for 316/316 products. Coverage source is 314 HBDERM remote product images plus 2 local curated Nuvia display assets. Next image-enrichment work should research/attach better official or owned images per product into catalog/PDP media, not expand the landing guide.
+
+2026-06-22 product media enrichment:
+
+- Script added: `web-factory/harvester/product/enrich_nuvia_product_media.mjs`.
+- Internal research command: from `web-factory`, run `pnpm nuvia:media`.
+- Public storefront sanitization command: from `web-factory`, run `pnpm nuvia:sanitize-public`.
+- Artifacts:
+  - `web-factory/data/references/product-sources/nuvia-product-media-enrichment-20260622.json`
+  - `web-factory/data/references/product-sources/nuvia-product-media-enrichment-latest.json`
+- Latest run researched all 316 public Nuvia products:
+  - Products with image candidates: `316/316`
+  - Products with video/embed candidates: `34`
+  - Total image candidates: `380`
+  - Total video/embed candidates: `35`
+  - Blocked products: `0`
+- `nuvia.json` now stores a compact `mediaEnrichment` object per product with source counts, candidate image/video URLs, rights note, and `needsOwnedMedia`.
+- `detalleImagenes` stays UI-safe and capped to three slots: current storefront image, supplier/reference image when the domain is allowed, and a Nuvia-owned media slot when a photo/video is still needed.
+- Rights rule: researched media is reference media only unless it is already an owned/local Nuvia asset or explicit supplier/brand permission exists. Do not silently download/rehost ISDIN, SVR, HBDERM or YouTube media for production.
+- Source behavior observed: HBDERM product pages are usable supplier sources; SVR official product page returned usable image metadata for the current SVR product; ISDIN Spain official product page returned `403 Forbidden`, so the ISDIN product currently relies on HBDERM plus local curated Nuvia assets.
+
+2026-06-22 supplier confidentiality correction:
+
+- Supplier names, supplier URLs, source URLs, wholesale cost, margin formula, seller commission and internal media-source metadata must never be rendered or serialized to the public Nuvia storefront.
+- Public `nuvia.json` must contain only customer-usable data: product title, customer category, public price, brand, size, routine step, benefits, usage, visible images, cart fields and Nuvia purchase notes.
+- All remote product images used by the storefront must be cached as local Nuvia assets under `assets/product-media/*` before preview/build. Do not load supplier domains from the browser.
+- Public placeholders are generic:
+  - `assets/product-image-pending.svg`
+  - `assets/product-video-pending.svg`
+- Latest public sanitization result:
+  - Products sanitized: `316`
+  - Local product images cached: `357`
+  - Products left without image: `0`
+  - Public grep check: no `HBDERM`/`hbderm` in `web-factory/data/clients/nuvia.json`, `web-factory/apps/site/src` or `web-factory/apps/site/public/nuvia`.
+- Required sequence after any catalog import or media research: run `pnpm nuvia:sanitize-public`, then run lint/build/browser QA. If this step is skipped, supplier/private metadata can leak back into the Next payload.
+
+2026-06-22 transparent catalog imagery and search:
+
+- Script added: `web-factory/harvester/product/create_nuvia_product_cutouts.py`.
+- Command: from `web-factory`, run `pnpm nuvia:cutouts` after media import/sanitization when product cards show white image boxes.
+- Current result: `316/316` public product images point to local transparent PNG cutouts under `assets/product-media-cutout/*`, mirrored into `data/clients/nuvia.assets/product-media-cutout/*`.
+- Storefront rule: product cards, hero stage, PDP media, cart thumbnails and routine cards must treat product imagery as cutout packshots on translucent/radial surfaces. Do not put opaque white rectangles behind packshots.
+- Catalog UX rule: `/nuvia/catalogo` needs an explicit search/lupa control with customer language (`marca`, `producto`, `rutina`, `beneficio`) plus visible found-count, empty state and direct add-to-cart controls. Search is a buying tool, not a decorative filter.
 
 2026-06-18 commerce/database foundation:
 
@@ -314,6 +359,14 @@ ISDIN Spain ecommerce scrape impact:
 - Credential rule: until `WEB_FACTORY_SUPABASE_URL`, `WEB_FACTORY_SUPABASE_SERVICE_ROLE_KEY`, `BNB_ACCOUNT_ID`, `BNB_AUTHORIZATION_ID`, `BNB_AUTH_BASE_URL` and `BNB_QR_BASE_URL` exist server-side, the API must return `configuration_pending` and list the missing env vars.
 - Security rule: browser code never receives Supabase service keys or BNB credentials, never marks an order as paid, and never controls final totals.
 - Operational activation sequence: apply migrations, add Supabase server env, add BNB sandbox env, generate test QR, verify status behavior, then add webhook/polling before production payment claims.
+
+2026-06-22 local Next preview stability:
+
+- Runbook added: `web-factory/NUVIA_LOCAL_PREVIEW_RUNBOOK.md`.
+- Canonical local preview command: from `web-factory`, run `pnpm preview:nuvia`.
+- Root cause of the broken design observed on `localhost:4174/nuvia`: `next start` was serving from `apps/site/.next` while another build/dev process mutated the same `.next` directory, producing missing SSR chunk errors and unstyled/default HTML.
+- Prevention rule: do not run `pnpm --filter site build` manually while a `next start` preview is active for the same `apps/site` directory. Do not keep sibling `next dev`/`next start` processes alive against the same `apps/site` while validating the production preview. Use `pnpm preview:nuvia`, which stops the target Web Factory preview port plus sibling Next processes that share `apps/site/.next`, safely removes `apps/site/.next`, rebuilds, restarts and verifies that `/nuvia` has Nuvia CSS loaded.
+- QA rule: a Nuvia preview is not considered fixed until `/nuvia` returns HTTP 200, at least one CSS chunk responds HTTP 200 and that CSS includes `.nuvia-next-page` rules.
 
 ## Visual Reference Intake
 

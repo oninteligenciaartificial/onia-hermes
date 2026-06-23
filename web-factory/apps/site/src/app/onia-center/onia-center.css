@@ -1,0 +1,1860 @@
+.onia-center-page {
+  --onia-bg: #f4f6f3;
+  --onia-surface: #ffffff;
+  --onia-soft: #f7f2e8;
+  --onia-line: #dce3e0;
+  --onia-line-soft: #e9eeee;
+  --onia-ink: #16202b;
+  --onia-muted: #5a6673;
+  --onia-faint: #7d8994;
+  --onia-green: #237b64;
+  --onia-green-soft: #dff4e8;
+  --onia-yellow: #9b6518;
+  --onia-yellow-soft: #ffe8bf;
+  --onia-red: #9b2941;
+  --onia-red-soft: #f8dde4;
+  --onia-blue: #2f6688;
+  --onia-blue-soft: #dceefa;
+  --onia-neutral-soft: #ece8df;
+  --onia-radius: 8px;
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr);
+  min-height: 100vh;
+  background:
+    linear-gradient(180deg, rgba(35, 123, 100, 0.08), rgba(244, 246, 243, 0) 300px),
+    var(--onia-bg);
+  color: var(--onia-ink);
+}
+
+.onia-center-page button,
+.onia-center-page input,
+.onia-center-page textarea,
+.onia-center-page select {
+  font: inherit;
+}
+
+.onia-center-sidebar {
+  position: sticky;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  height: 100vh;
+  overflow-y: auto;
+  padding: 18px 14px;
+  color: #eef5f2;
+  background: #15202b;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.onia-back-link,
+.onia-brand,
+.onia-nav a,
+.onia-role-switcher button,
+.onia-hero-actions,
+.onia-hero-actions a,
+.onia-role-banner,
+.onia-metric span,
+.onia-service-card__top,
+.onia-blocker,
+.onia-rule-strip,
+.onia-premium-list article,
+.onia-footer span {
+  display: flex;
+  align-items: center;
+}
+
+.onia-back-link {
+  gap: 7px;
+  min-height: 34px;
+  color: #b8c4c1;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.onia-back-link svg {
+  transform: rotate(180deg);
+}
+
+.onia-brand {
+  gap: 11px;
+  min-height: 58px;
+  padding: 8px;
+}
+
+.onia-brand > span,
+.onia-metric > span,
+.onia-service-card__top > span {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 38px;
+  height: 38px;
+  border-radius: var(--onia-radius);
+}
+
+.onia-brand > span {
+  color: #081c13;
+  background: #55d79d;
+}
+
+.onia-brand strong,
+.onia-brand small,
+.onia-nav span,
+.onia-nav small,
+.onia-role-switcher button strong,
+.onia-role-switcher button small {
+  display: block;
+}
+
+.onia-brand strong {
+  font-size: 16px;
+  line-height: 1.1;
+}
+
+.onia-brand small,
+.onia-nav small,
+.onia-role-switcher span,
+.onia-role-switcher button small {
+  color: #aeb9b7;
+  font-size: 11px;
+}
+
+.onia-nav,
+.onia-role-switcher,
+.onia-source-strip,
+.onia-service-grid,
+.onia-role-grid,
+.onia-scorecard-grid,
+.onia-center-table,
+.onia-accounting-grid,
+.onia-capital-grid,
+.onia-nuvia-ledger,
+.onia-payment-list,
+.onia-evidence-grid,
+.onia-premium-list {
+  display: grid;
+}
+
+.onia-nav {
+  gap: 5px;
+}
+
+.onia-nav a {
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr);
+  gap: 2px 9px;
+  min-height: 48px;
+  padding: 8px 10px;
+  border-radius: var(--onia-radius);
+  color: #c8d3d1;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.onia-nav a svg {
+  grid-row: span 2;
+  align-self: center;
+}
+
+.onia-nav a:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.onia-role-switcher {
+  gap: 8px;
+  margin-top: auto;
+  padding: 12px;
+  border: 1px solid rgba(85, 215, 157, 0.2);
+  border-radius: var(--onia-radius);
+  background: #101821;
+}
+
+.onia-role-switcher > span {
+  font-weight: 900;
+}
+
+.onia-role-switcher button {
+  justify-content: space-between;
+  gap: 10px;
+  min-height: 42px;
+  padding: 8px 9px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--onia-radius);
+  color: #dbe6e3;
+  background: rgba(255, 255, 255, 0.04);
+  cursor: pointer;
+  text-align: left;
+}
+
+.onia-role-switcher button.is-active,
+.onia-role-switcher button:hover {
+  color: #ffffff;
+  background: rgba(85, 215, 157, 0.16);
+  border-color: rgba(85, 215, 157, 0.34);
+}
+
+.onia-center-main {
+  width: 100%;
+  max-width: 1420px;
+  margin: 0 auto;
+  padding: 26px 28px 40px;
+}
+
+.onia-hero {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 16px;
+}
+
+.onia-hero h1,
+.onia-hero p,
+.onia-section-heading h2,
+.onia-section-heading p,
+.onia-growth-card p,
+.onia-service-card p,
+.onia-role-card p,
+.onia-private-panel p,
+.onia-accounting-grid p,
+.onia-payment-list p,
+.onia-evidence-grid p,
+.onia-premium-list p {
+  margin: 0;
+}
+
+.onia-hero h1 {
+  margin-top: 8px;
+  color: var(--onia-ink);
+  font-size: clamp(32px, 5vw, 56px);
+  line-height: 1;
+  letter-spacing: 0;
+}
+
+.onia-hero p {
+  max-width: 820px;
+  margin-top: 12px;
+  color: var(--onia-muted);
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+.onia-eyebrow,
+.onia-section-heading > div > span,
+.onia-metric p,
+.onia-growth-card span,
+.onia-price-grid span,
+.onia-role-card span,
+.onia-center-table span,
+.onia-ledger-row span,
+.onia-nuvia-ledger span,
+.onia-payment-list span,
+.onia-evidence-grid span,
+.onia-premium-list span,
+.onia-private-panel__summary span {
+  color: var(--onia-faint);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.onia-eyebrow {
+  display: inline-flex;
+  min-height: 28px;
+  align-items: center;
+  padding: 0 10px;
+  border: 1px solid var(--onia-line);
+  border-radius: 999px;
+  color: var(--onia-green);
+  background: rgba(255, 255, 255, 0.75);
+}
+
+.onia-hero-actions {
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+  min-width: 260px;
+}
+
+.onia-hero-actions a {
+  justify-content: center;
+  gap: 7px;
+  min-height: 38px;
+  padding: 0 12px;
+  border: 1px solid var(--onia-line);
+  border-radius: var(--onia-radius);
+  color: #283441;
+  background: var(--onia-surface);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.onia-source-strip {
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 7px;
+  margin-bottom: 16px;
+}
+
+.onia-source-strip code {
+  min-height: 32px;
+  padding: 9px 10px;
+  border: 1px solid var(--onia-line);
+  border-radius: var(--onia-radius);
+  color: #34404d;
+  background: rgba(255, 255, 255, 0.76);
+  font-size: 11px;
+  overflow-wrap: anywhere;
+}
+
+.onia-role-banner,
+.onia-panel,
+.onia-metric,
+.onia-status-card,
+.onia-service-card,
+.onia-private-panel {
+  border: 1px solid var(--onia-line);
+  border-radius: var(--onia-radius);
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: 0 16px 42px rgba(20, 31, 43, 0.06);
+}
+
+.onia-system-base {
+  margin-bottom: 16px;
+}
+
+.onia-seed-summary,
+.onia-model-table,
+.onia-rule-audit {
+  display: grid;
+  gap: 10px;
+}
+
+.onia-seed-summary {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin-bottom: 12px;
+}
+
+.onia-seed-summary article,
+.onia-model-table article,
+.onia-rule-audit article {
+  border: 1px solid var(--onia-line-soft);
+  border-radius: var(--onia-radius);
+  background: #fbfcfb;
+}
+
+.onia-seed-summary article {
+  min-height: 108px;
+  padding: 12px;
+}
+
+.onia-seed-summary span,
+.onia-model-table span {
+  color: var(--onia-faint);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.onia-seed-summary strong,
+.onia-model-table strong {
+  display: block;
+  margin-top: 7px;
+  color: var(--onia-ink);
+  font-size: 14px;
+  line-height: 1.28;
+  overflow-wrap: anywhere;
+}
+
+.onia-seed-summary small,
+.onia-model-table small {
+  display: block;
+  margin-top: 8px;
+  color: var(--onia-muted);
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.onia-model-table {
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+.onia-model-table article {
+  min-height: 98px;
+  padding: 12px;
+}
+
+.onia-rule-audit {
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+.onia-rule-audit article {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  padding: 12px;
+}
+
+.onia-rule-audit article.is-ok svg {
+  color: var(--onia-green);
+}
+
+.onia-rule-audit article.is-blocker svg {
+  color: var(--onia-red);
+}
+
+.onia-rule-audit article.is-warning svg {
+  color: var(--onia-yellow);
+}
+
+.onia-rule-audit strong {
+  display: block;
+  color: var(--onia-ink);
+  font-size: 13px;
+  line-height: 1.25;
+}
+
+.onia-rule-audit p {
+  margin: 6px 0 0;
+  color: var(--onia-muted);
+  font-size: 12px;
+  line-height: 1.38;
+}
+
+.onia-role-banner {
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 16px;
+  padding: 15px;
+}
+
+.onia-role-banner span {
+  color: var(--onia-green);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.onia-role-banner strong {
+  display: block;
+  margin-top: 4px;
+  font-size: 18px;
+}
+
+.onia-role-banner p {
+  max-width: 820px;
+  margin: 6px 0 0;
+  color: var(--onia-muted);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.onia-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.onia-metric {
+  min-width: 0;
+  min-height: 142px;
+  padding: 14px;
+}
+
+.onia-metric > span {
+  margin-bottom: 13px;
+  color: #153f30;
+  background: var(--onia-green-soft);
+}
+
+.onia-metric.is-yellow > span {
+  color: var(--onia-yellow);
+  background: var(--onia-yellow-soft);
+}
+
+.onia-metric.is-red > span {
+  color: var(--onia-red);
+  background: var(--onia-red-soft);
+}
+
+.onia-metric.is-blue > span {
+  color: var(--onia-blue);
+  background: var(--onia-blue-soft);
+}
+
+.onia-metric.is-neutral > span,
+.onia-metric.is-private > span {
+  color: #554b3a;
+  background: var(--onia-neutral-soft);
+}
+
+.onia-metric p {
+  margin: 0;
+}
+
+.onia-metric strong {
+  display: block;
+  margin-top: 8px;
+  color: var(--onia-ink);
+  font-size: 27px;
+  line-height: 1.06;
+  letter-spacing: 0;
+}
+
+.onia-metric small {
+  display: block;
+  margin-top: 9px;
+  color: var(--onia-muted);
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.onia-status-grid,
+.onia-two-column {
+  display: grid;
+  gap: 16px;
+}
+
+.onia-status-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-bottom: 16px;
+}
+
+.onia-two-column {
+  grid-template-columns: minmax(0, 1fr) minmax(380px, 0.82fr);
+  align-items: start;
+  margin-bottom: 16px;
+}
+
+.onia-status-card,
+.onia-panel {
+  min-width: 0;
+  padding: 18px;
+}
+
+.onia-status-card {
+  display: grid;
+  align-content: space-between;
+  min-height: 154px;
+  gap: 14px;
+}
+
+.onia-status-card span {
+  color: var(--onia-faint);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.onia-status-card strong {
+  display: block;
+  margin-top: 5px;
+  font-size: 30px;
+  line-height: 1;
+}
+
+.onia-status-card p {
+  max-width: 780px;
+  margin: 8px 0 0;
+  color: var(--onia-muted);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.onia-progress {
+  overflow: hidden;
+  height: 10px;
+  border-radius: 999px;
+  background: #e7eceb;
+}
+
+.onia-progress span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--onia-green);
+}
+
+.onia-progress.is-red span {
+  background: var(--onia-red);
+}
+
+.onia-progress.is-yellow span {
+  background: var(--onia-yellow);
+}
+
+.onia-progress.is-blue span {
+  background: var(--onia-blue);
+}
+
+.onia-section-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.onia-section-heading h2 {
+  margin-top: 5px;
+  color: var(--onia-ink);
+  font-size: 22px;
+  line-height: 1.15;
+  letter-spacing: 0;
+}
+
+.onia-section-heading p {
+  max-width: 760px;
+  margin-top: 7px;
+  color: var(--onia-muted);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.onia-section-heading > svg {
+  color: var(--onia-green);
+  flex: 0 0 auto;
+}
+
+.onia-growth-card {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 12px;
+  padding: 14px;
+  border: 1px solid rgba(35, 123, 100, 0.18);
+  border-radius: var(--onia-radius);
+  background: #eef9f2;
+}
+
+.onia-growth-card strong {
+  display: block;
+  margin-top: 5px;
+  font-size: 20px;
+}
+
+.onia-growth-card p {
+  max-width: 900px;
+  margin-top: 7px;
+  color: var(--onia-muted);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.onia-service-grid {
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 12px;
+}
+
+.onia-service-card {
+  display: grid;
+  gap: 12px;
+  padding: 14px;
+}
+
+.onia-service-card.is-priority {
+  border-color: rgba(35, 123, 100, 0.34);
+  background: #fbfffc;
+}
+
+.onia-service-card.is-blocked {
+  background: #fffdfb;
+}
+
+.onia-service-card__top {
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.onia-service-card__top > span {
+  color: #143d2d;
+  background: var(--onia-green-soft);
+}
+
+.onia-service-card__top div {
+  min-width: 0;
+  flex: 1;
+}
+
+.onia-service-card__top strong,
+.onia-role-card strong,
+.onia-accounting-grid strong,
+.onia-evidence-grid strong,
+.onia-premium-list strong {
+  display: block;
+  color: var(--onia-ink);
+  font-size: 15px;
+  line-height: 1.25;
+}
+
+.onia-service-card__top small,
+.onia-service-card p,
+.onia-role-card p,
+.onia-role-card small,
+.onia-accounting-grid p,
+.onia-payment-list p,
+.onia-evidence-grid p,
+.onia-evidence-grid small,
+.onia-premium-list p {
+  color: var(--onia-muted);
+  font-size: 12px;
+  line-height: 1.42;
+}
+
+.onia-price-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.onia-price-grid div {
+  min-height: 64px;
+  padding: 10px;
+  border: 1px solid var(--onia-line-soft);
+  border-radius: var(--onia-radius);
+  background: var(--onia-soft);
+}
+
+.onia-price-grid strong {
+  display: block;
+  margin-top: 5px;
+  font-size: 13px;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
+.onia-compact-list {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.onia-compact-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  color: #354352;
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.onia-compact-list svg {
+  flex: 0 0 auto;
+  margin-top: 1px;
+  color: var(--onia-green);
+}
+
+.onia-blocker {
+  align-items: flex-start;
+  gap: 8px;
+  padding: 10px;
+  border-radius: var(--onia-radius);
+  color: var(--onia-red);
+  background: var(--onia-red-soft);
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1.38;
+}
+
+.onia-blocker.is-ok {
+  color: #14543e;
+  background: var(--onia-green-soft);
+}
+
+.onia-blocker svg {
+  flex: 0 0 auto;
+  margin-top: 1px;
+}
+
+.onia-role-grid,
+.onia-accounting-grid,
+.onia-evidence-grid {
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 10px;
+}
+
+.onia-role-card,
+.onia-accounting-grid article,
+.onia-evidence-grid article,
+.onia-premium-list article,
+.onia-payment-list article {
+  border: 1px solid var(--onia-line-soft);
+  border-radius: var(--onia-radius);
+  background: #fbfcfb;
+}
+
+.onia-role-card {
+  padding: 12px;
+}
+
+.onia-role-card.is-active {
+  border-color: rgba(35, 123, 100, 0.34);
+  background: #eef9f2;
+}
+
+.onia-role-card strong {
+  margin-top: 5px;
+}
+
+.onia-role-card p {
+  margin-top: 7px;
+}
+
+.onia-role-card small {
+  display: block;
+  margin-top: 8px;
+  font-weight: 800;
+}
+
+.onia-permission-box {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.onia-permission-box > div {
+  padding: 12px;
+  border: 1px solid var(--onia-line-soft);
+  border-radius: var(--onia-radius);
+  background: var(--onia-soft);
+}
+
+.onia-permission-box svg {
+  color: var(--onia-green);
+}
+
+.onia-permission-box > div:nth-child(2) svg {
+  color: var(--onia-red);
+}
+
+.onia-permission-box strong {
+  display: block;
+  margin-top: 7px;
+}
+
+.onia-permission-box ul {
+  display: grid;
+  gap: 5px;
+  margin: 9px 0 0;
+  padding-left: 18px;
+  color: var(--onia-muted);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.onia-scorecard-grid {
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 10px;
+}
+
+.onia-scorecard-grid article {
+  min-height: 106px;
+  padding: 12px;
+  border: 1px solid var(--onia-line-soft);
+  border-radius: var(--onia-radius);
+  background: var(--onia-soft);
+}
+
+.onia-scorecard-grid span {
+  display: block;
+  color: var(--onia-muted);
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.onia-scorecard-grid strong {
+  display: block;
+  margin-top: 9px;
+  font-size: 28px;
+  line-height: 1;
+}
+
+.onia-scorecard-grid small {
+  display: block;
+  margin-top: 8px;
+  color: var(--onia-green);
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.onia-rule-strip {
+  gap: 9px;
+  margin-top: 12px;
+  padding: 12px;
+  border-radius: var(--onia-radius);
+  color: #132f25;
+  background: var(--onia-green-soft);
+}
+
+.onia-center-table {
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.onia-center-table article {
+  min-height: 88px;
+  padding: 11px;
+  border: 1px solid var(--onia-line-soft);
+  border-radius: var(--onia-radius);
+  background: var(--onia-soft);
+}
+
+.onia-center-table article.is-hidden {
+  background: #edf0f1;
+}
+
+.onia-center-table strong,
+.onia-ledger-row strong,
+.onia-nuvia-ledger strong {
+  display: block;
+  margin-top: 6px;
+  font-size: 18px;
+  line-height: 1.15;
+}
+
+.onia-center-table small,
+.onia-ledger-row small {
+  display: block;
+  margin-top: 7px;
+  color: var(--onia-muted);
+  font-size: 11px;
+  line-height: 1.35;
+}
+
+.onia-accounting-grid article,
+.onia-evidence-grid article {
+  padding: 12px;
+}
+
+.onia-accounting-grid strong {
+  margin-top: 9px;
+}
+
+.onia-accounting-grid p,
+.onia-evidence-grid p {
+  margin-top: 7px;
+}
+
+.onia-private-panel {
+  display: grid;
+  gap: 14px;
+  padding: 14px;
+}
+
+.onia-private-panel.is-hidden {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  color: #33414f;
+  background: #edf0f1;
+}
+
+.onia-private-panel.is-hidden svg {
+  flex: 0 0 auto;
+  margin-top: 2px;
+  color: var(--onia-blue);
+}
+
+.onia-private-panel__summary,
+.onia-capital-grid {
+  display: grid;
+  gap: 10px;
+}
+
+.onia-private-panel__summary {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.onia-private-panel__summary div {
+  padding: 11px;
+  border: 1px solid var(--onia-line-soft);
+  border-radius: var(--onia-radius);
+  background: var(--onia-soft);
+}
+
+.onia-private-panel__summary strong {
+  display: block;
+  margin-top: 5px;
+  font-size: 18px;
+}
+
+.onia-capital-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.onia-capital-grid section {
+  min-width: 0;
+}
+
+.onia-capital-grid h3 {
+  margin: 0 0 8px;
+  font-size: 14px;
+}
+
+.onia-ledger-row {
+  padding: 10px 0;
+  border-top: 1px solid var(--onia-line-soft);
+}
+
+.onia-ledger-row:first-of-type {
+  border-top: 0;
+}
+
+.onia-nuvia-ledger {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  overflow: hidden;
+  margin-bottom: 12px;
+  border: 1px solid var(--onia-line-soft);
+  border-radius: var(--onia-radius);
+}
+
+.onia-nuvia-ledger div {
+  min-height: 76px;
+  padding: 12px;
+  border-right: 1px solid var(--onia-line-soft);
+  border-bottom: 1px solid var(--onia-line-soft);
+  background: #fbfcfb;
+}
+
+.onia-nuvia-ledger div:nth-child(2n) {
+  border-right: 0;
+}
+
+.onia-nuvia-ledger div:nth-last-child(-n + 2) {
+  border-bottom: 0;
+}
+
+.onia-payment-list {
+  gap: 10px;
+}
+
+.onia-payment-list article {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px 12px;
+  padding: 12px;
+}
+
+.onia-payment-list article p {
+  grid-column: 1 / -1;
+}
+
+.onia-payment-list strong {
+  display: block;
+  margin-top: 5px;
+  font-size: 22px;
+}
+
+.onia-payment-list small {
+  color: var(--onia-muted);
+  font-size: 11px;
+}
+
+.onia-evidence-grid small {
+  display: block;
+  margin-top: 8px;
+  color: var(--onia-blue);
+  font-weight: 900;
+}
+
+.onia-premium-list {
+  gap: 10px;
+}
+
+.onia-premium-list article {
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px;
+}
+
+.onia-premium-list svg {
+  flex: 0 0 auto;
+  margin-top: 2px;
+  color: var(--onia-blue);
+}
+
+.onia-premium-list article > div {
+  min-width: 0;
+}
+
+.onia-premium-list span {
+  display: inline-flex;
+  margin-top: 4px;
+  color: var(--onia-green);
+}
+
+.onia-tone-pill {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  min-height: 24px;
+  padding: 0 8px;
+  border-radius: 999px;
+  color: #14543f;
+  background: var(--onia-green-soft);
+  font-size: 11px;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.onia-tone-pill.is-yellow {
+  color: var(--onia-yellow);
+  background: var(--onia-yellow-soft);
+}
+
+.onia-tone-pill.is-red {
+  color: var(--onia-red);
+  background: var(--onia-red-soft);
+}
+
+.onia-tone-pill.is-blue {
+  color: var(--onia-blue);
+  background: var(--onia-blue-soft);
+}
+
+.onia-tone-pill.is-neutral {
+  color: #554b3a;
+  background: var(--onia-neutral-soft);
+}
+
+.onia-footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.onia-footer span {
+  gap: 8px;
+  min-height: 38px;
+  padding: 0 11px;
+  border: 1px solid var(--onia-line);
+  border-radius: var(--onia-radius);
+  color: #34414e;
+  background: rgba(255, 255, 255, 0.72);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.onia-footer svg {
+  color: var(--onia-green);
+}
+
+.onia-live-workspace {
+  margin-bottom: 16px;
+  padding: 18px;
+  border: 1px solid rgba(35, 123, 100, 0.22);
+  border-radius: var(--onia-radius);
+  background: #f9fbf8;
+  box-shadow: 0 16px 42px rgba(20, 31, 43, 0.06);
+}
+
+.onia-workspace-head,
+.onia-workspace-actions,
+.onia-live-title,
+.onia-selfhosted-panel article,
+.onia-review-actions,
+.onia-review-actions a {
+  display: flex;
+  align-items: center;
+}
+
+.onia-workspace-head {
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 14px;
+}
+
+.onia-workspace-head span,
+.onia-live-metrics span,
+.onia-live-card label,
+.onia-selfhosted-panel span,
+.onia-runtime-export span {
+  color: var(--onia-faint);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.onia-workspace-head h2 {
+  margin: 5px 0 0;
+  color: var(--onia-ink);
+  font-size: 24px;
+  line-height: 1.1;
+  letter-spacing: 0;
+}
+
+.onia-workspace-head p {
+  max-width: 760px;
+  margin: 7px 0 0;
+  color: var(--onia-muted);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.onia-workspace-actions {
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.onia-workspace-actions button,
+.onia-review-actions button,
+.onia-review-actions a,
+.onia-primary-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 36px;
+  border: 1px solid var(--onia-line);
+  border-radius: var(--onia-radius);
+  color: #21313f;
+  background: #ffffff;
+  font-size: 12px;
+  font-weight: 900;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.onia-workspace-actions button {
+  padding: 0 11px;
+}
+
+.onia-workspace-actions button:active,
+.onia-review-actions button:active,
+.onia-review-actions a:active,
+.onia-primary-button:active {
+  transform: translateY(1px);
+}
+
+.onia-primary-button {
+  width: 100%;
+  padding: 0 12px;
+  color: #ffffff;
+  background: var(--onia-green);
+  border-color: var(--onia-green);
+}
+
+.onia-review-actions button:disabled {
+  cursor: not-allowed;
+  opacity: 0.48;
+}
+
+.onia-live-metrics,
+.onia-live-grid,
+.onia-ideas-board,
+.onia-selfhosted-panel {
+  display: grid;
+  gap: 10px;
+}
+
+.onia-live-metrics {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  margin-bottom: 12px;
+}
+
+.onia-live-metrics article,
+.onia-live-card,
+.onia-selfhosted-panel article,
+.onia-runtime-export {
+  border: 1px solid var(--onia-line-soft);
+  border-radius: var(--onia-radius);
+  background: #ffffff;
+}
+
+.onia-live-metrics article {
+  min-height: 94px;
+  padding: 12px;
+}
+
+.onia-live-metrics strong {
+  display: block;
+  margin-top: 5px;
+  color: var(--onia-ink);
+  font-size: 30px;
+  line-height: 1;
+  letter-spacing: 0;
+}
+
+.onia-live-metrics small {
+  display: block;
+  margin-top: 7px;
+  color: var(--onia-muted);
+  font-size: 11px;
+}
+
+.onia-live-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: start;
+}
+
+.onia-ideas-board {
+  grid-template-columns: minmax(320px, 0.9fr) minmax(0, 1.15fr) minmax(300px, 0.8fr);
+  align-items: start;
+  margin-top: 10px;
+}
+
+.onia-live-card {
+  display: grid;
+  gap: 10px;
+  padding: 13px;
+}
+
+.onia-live-title {
+  gap: 8px;
+  min-height: 32px;
+  color: var(--onia-green);
+}
+
+.onia-live-title strong {
+  color: var(--onia-ink);
+  font-size: 15px;
+}
+
+.onia-live-card label {
+  display: grid;
+  gap: 5px;
+}
+
+.onia-live-card input,
+.onia-live-card select,
+.onia-live-card textarea {
+  width: 100%;
+  min-width: 0;
+  min-height: 38px;
+  padding: 8px 9px;
+  border: 1px solid var(--onia-line);
+  border-radius: var(--onia-radius);
+  color: var(--onia-ink);
+  background: #fbfcfb;
+  font-size: 13px;
+  outline: none;
+}
+
+.onia-live-card textarea {
+  resize: vertical;
+  line-height: 1.4;
+}
+
+.onia-live-card input:focus,
+.onia-live-card select:focus,
+.onia-live-card textarea:focus {
+  border-color: rgba(35, 123, 100, 0.65);
+  box-shadow: 0 0 0 3px rgba(35, 123, 100, 0.12);
+}
+
+.onia-form-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.onia-live-list {
+  display: grid;
+  gap: 8px;
+  max-height: 360px;
+  overflow: auto;
+}
+
+.onia-live-list > div {
+  display: grid;
+  gap: 5px;
+  padding: 9px;
+  border: 1px solid var(--onia-line-soft);
+  border-radius: var(--onia-radius);
+  background: var(--onia-soft);
+}
+
+.onia-live-list span,
+.onia-live-list small {
+  color: var(--onia-muted);
+  font-size: 11px;
+  line-height: 1.35;
+}
+
+.onia-live-list strong {
+  color: var(--onia-ink);
+  font-size: 12px;
+  line-height: 1.3;
+}
+
+.onia-live-list select {
+  min-height: 34px;
+  background: #ffffff;
+}
+
+.onia-review-actions {
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.onia-review-actions button,
+.onia-review-actions a {
+  min-height: 30px;
+  padding: 0 8px;
+}
+
+.onia-review-actions select {
+  width: auto;
+  min-height: 30px;
+  padding: 4px 8px;
+  border: 1px solid var(--onia-line);
+  border-radius: var(--onia-radius);
+  color: #21313f;
+  background: #ffffff;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.onia-idea-review .onia-live-list,
+.onia-access-card .onia-live-list {
+  max-height: 640px;
+}
+
+.onia-idea-item {
+  background: #fbfcfb;
+}
+
+.onia-idea-meta,
+.onia-access-rules {
+  display: grid;
+  gap: 6px;
+}
+
+.onia-idea-meta {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.onia-idea-meta span {
+  min-height: 24px;
+  padding: 5px 7px;
+  border-radius: 999px;
+  color: #14543e;
+  background: var(--onia-green-soft);
+  font-size: 10px;
+  font-weight: 900;
+  text-align: center;
+}
+
+.onia-access-rules {
+  grid-template-columns: 1fr;
+}
+
+.onia-access-rules div {
+  padding: 10px;
+  border: 1px solid var(--onia-line-soft);
+  border-radius: var(--onia-radius);
+  background: var(--onia-soft);
+}
+
+.onia-access-rules span,
+.onia-access-rules small {
+  display: block;
+  color: var(--onia-muted);
+  font-size: 11px;
+  line-height: 1.35;
+}
+
+.onia-access-rules strong {
+  display: block;
+  margin-top: 5px;
+  color: var(--onia-ink);
+  font-size: 13px;
+  line-height: 1.25;
+}
+
+.onia-access-rules small {
+  margin-top: 5px;
+}
+
+.onia-selfhosted-panel {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: 12px;
+}
+
+.onia-selfhosted-panel article {
+  align-items: flex-start;
+  gap: 9px;
+  min-height: 112px;
+  padding: 12px;
+}
+
+.onia-selfhosted-panel svg {
+  flex: 0 0 auto;
+  margin-top: 2px;
+  color: var(--onia-blue);
+}
+
+.onia-selfhosted-panel strong {
+  display: block;
+  margin-top: 5px;
+  color: var(--onia-ink);
+  font-size: 14px;
+  line-height: 1.25;
+}
+
+.onia-selfhosted-panel p {
+  margin: 7px 0 0;
+  color: var(--onia-muted);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.onia-runtime-notice {
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: var(--onia-radius);
+  color: #103b2e;
+  background: var(--onia-green-soft);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.onia-runtime-export {
+  margin-top: 10px;
+  padding: 12px;
+}
+
+.onia-runtime-export pre {
+  max-height: 210px;
+  overflow: auto;
+  margin: 8px 0;
+  padding: 10px;
+  border-radius: var(--onia-radius);
+  color: #243240;
+  background: #edf0f1;
+  font-size: 11px;
+  line-height: 1.35;
+  white-space: pre-wrap;
+}
+
+.onia-runtime-export small {
+  color: var(--onia-muted);
+  font-size: 11px;
+}
+
+.onia-repo-grid,
+.onia-operating-metrics,
+.onia-project-list,
+.onia-task-list,
+.onia-review-strip,
+.onia-collab-summary,
+.onia-collab-list,
+.onia-module-list,
+.onia-security-grid,
+.onia-adapter-list {
+  display: grid;
+  gap: 10px;
+}
+
+.onia-repo-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-bottom: 12px;
+}
+
+.onia-operating-metrics {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin-bottom: 12px;
+}
+
+.onia-repo-grid article,
+.onia-project-list article,
+.onia-task-list article,
+.onia-review-strip article,
+.onia-collab-summary div,
+.onia-collab-list article,
+.onia-module-list article,
+.onia-security-grid article,
+.onia-adapter-list article {
+  border: 1px solid var(--onia-line-soft);
+  border-radius: var(--onia-radius);
+  background: #fbfcfb;
+}
+
+.onia-repo-grid article {
+  min-height: 118px;
+  padding: 13px;
+}
+
+.onia-repo-grid span,
+.onia-project-list span,
+.onia-task-list span,
+.onia-review-strip span,
+.onia-collab-summary span,
+.onia-collab-list span,
+.onia-module-list span,
+.onia-security-grid span,
+.onia-adapter-list span {
+  display: block;
+  color: var(--onia-faint);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.onia-repo-grid strong,
+.onia-project-list strong,
+.onia-task-list strong,
+.onia-review-strip strong,
+.onia-collab-summary strong,
+.onia-collab-list strong,
+.onia-module-list strong,
+.onia-security-grid strong,
+.onia-adapter-list strong {
+  display: block;
+  margin-top: 6px;
+  color: var(--onia-ink);
+  font-size: 15px;
+  line-height: 1.25;
+}
+
+.onia-repo-grid p,
+.onia-project-list p,
+.onia-task-list p,
+.onia-collab-list p,
+.onia-module-list p,
+.onia-security-grid p,
+.onia-adapter-list p {
+  margin: 8px 0 0;
+  color: var(--onia-muted);
+  font-size: 12px;
+  line-height: 1.42;
+}
+
+.onia-project-list,
+.onia-task-list,
+.onia-collab-list,
+.onia-module-list,
+.onia-adapter-list {
+  grid-template-columns: 1fr;
+}
+
+.onia-project-list article,
+.onia-task-list article,
+.onia-collab-list article,
+.onia-module-list article,
+.onia-adapter-list article {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px 12px;
+  padding: 12px;
+}
+
+.onia-project-list article small {
+  grid-column: 1 / -1;
+  color: var(--onia-muted);
+  font-size: 11px;
+  line-height: 1.35;
+}
+
+.onia-task-list article.is-empty {
+  background: #edf0f1;
+}
+
+.onia-review-strip {
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  margin-top: 10px;
+}
+
+.onia-review-strip article {
+  min-height: 86px;
+  padding: 10px;
+}
+
+.onia-review-strip small {
+  display: block;
+  margin-top: 6px;
+  color: var(--onia-blue);
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.onia-collab-summary {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin-bottom: 10px;
+}
+
+.onia-collab-summary div {
+  min-height: 74px;
+  padding: 11px;
+}
+
+.onia-collab-summary strong {
+  font-size: 24px;
+}
+
+.onia-security-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.onia-security-grid article {
+  min-height: 104px;
+  padding: 12px;
+}
+
+@media (max-width: 1240px) {
+  .onia-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .onia-seed-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .onia-repo-grid,
+  .onia-operating-metrics,
+  .onia-live-metrics,
+  .onia-live-grid,
+  .onia-ideas-board,
+  .onia-selfhosted-panel,
+  .onia-collab-summary,
+  .onia-security-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .onia-two-column,
+  .onia-status-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 920px) {
+  .onia-center-page {
+    grid-template-columns: 1fr;
+  }
+
+  .onia-center-sidebar {
+    position: static;
+    height: auto;
+    gap: 12px;
+  }
+
+  .onia-nav {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    scroll-snap-type: x proximity;
+  }
+
+  .onia-nav a {
+    min-width: 132px;
+    scroll-snap-align: start;
+  }
+
+  .onia-role-switcher {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding: 10px;
+  }
+
+  .onia-role-switcher > span {
+    align-self: center;
+    flex: 0 0 auto;
+  }
+
+  .onia-role-switcher button {
+    flex: 0 0 168px;
+  }
+
+  .onia-role-switcher {
+    margin-top: 0;
+  }
+
+  .onia-center-main {
+    max-width: 760px;
+    padding: 20px 14px 34px;
+  }
+
+  .onia-hero,
+  .onia-role-banner,
+  .onia-growth-card {
+    display: grid;
+  }
+
+  .onia-hero-actions {
+    justify-content: flex-start;
+    min-width: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .onia-source-strip {
+    display: flex;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    scroll-snap-type: x proximity;
+  }
+
+  .onia-source-strip code {
+    flex: 0 0 260px;
+    scroll-snap-align: start;
+  }
+
+  .onia-nav,
+  .onia-seed-summary,
+    .onia-repo-grid,
+    .onia-operating-metrics,
+    .onia-live-metrics,
+    .onia-live-grid,
+    .onia-ideas-board,
+    .onia-selfhosted-panel,
+  .onia-collab-summary,
+  .onia-security-grid,
+  .onia-metrics,
+  .onia-price-grid,
+  .onia-permission-box,
+  .onia-private-panel__summary,
+  .onia-capital-grid,
+  .onia-nuvia-ledger,
+  .onia-payment-list article {
+    grid-template-columns: 1fr;
+  }
+
+  .onia-hero h1 {
+    font-size: 34px;
+  }
+
+  .onia-panel,
+  .onia-status-card {
+    padding: 14px;
+  }
+
+  .onia-nuvia-ledger div,
+  .onia-nuvia-ledger div:nth-child(2n),
+  .onia-nuvia-ledger div:nth-last-child(-n + 2) {
+    border-right: 0;
+    border-bottom: 1px solid var(--onia-line-soft);
+  }
+
+  .onia-nuvia-ledger div:last-child {
+    border-bottom: 0;
+  }
+
+  .onia-payment-list article p {
+    grid-column: auto;
+  }
+
+  .onia-project-list article,
+  .onia-task-list article,
+  .onia-collab-list article,
+  .onia-module-list article,
+  .onia-adapter-list article {
+    grid-template-columns: 1fr;
+  }
+
+  .onia-workspace-head,
+  .onia-form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .onia-workspace-head {
+    display: grid;
+  }
+
+  .onia-workspace-actions {
+    justify-content: flex-start;
+  }
+}

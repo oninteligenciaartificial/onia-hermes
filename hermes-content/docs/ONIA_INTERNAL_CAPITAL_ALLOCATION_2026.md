@@ -138,6 +138,12 @@ No comprar todavia:
 Nuvia puede recibir capital, pero con reglas mas duras porque ya muestra riesgo
 de margen negativo.
 
+La contabilidad detallada de Nuvia, Lote 001, Meta Ads, pagos Arthur y retiros
+Sergio vive en `hermes-content/docs/ONIA_NUVIA_ACCOUNTING_MODEL_2026.md`.
+El simulador de sostenibilidad, ejemplos del 40%, Nuvia 80/20, control de
+Higgsfield y requisitos del dashboard viven en
+`hermes-content/docs/ONIA_SUSTAINABILITY_DASHBOARD_SPEC_2026.md`.
+
 Reglas:
 
 - Solo comprar productos con margen bruto estimado superior a 40%.
@@ -304,6 +310,271 @@ Cada gasto debe tener:
 6. comprobante;
 7. estado: solicitado, aprobado, comprado, usado, recuperado o perdido;
 8. fecha de revision.
+
+## Matriz ejecutiva de prioridad
+
+Orden para decidir cualquier servicio o inversion:
+
+```text
+1. Riesgo
+2. Inversion requerida
+3. Rentabilidad probable
+4. Facilidad de ejecutar esta semana
+```
+
+Si una idea es rentable pero tiene alto riesgo o requiere mucha caja, no entra
+primero. Si una idea es facil pero no genera ventas, solo entra si mejora ONIA,
+Nuvia o el sistema de forma medible.
+
+Escala:
+
+- Riesgo: bajo, medio, alto.
+- Inversion: baja, media, alta.
+- Rentabilidad: baja, media, alta.
+- Facilidad: facil, media, dificil.
+
+| Frente | Riesgo | Inversion | Rentabilidad | Facilidad | Decision |
+|---|---|---|---|---|---|
+| Auditoria Express | Bajo | Baja | Alta por margen | Facil | Prioridad 1. Vender esta semana. |
+| Diagnostico + Roadmap | Bajo/medio | Baja | Alta | Facil/media | Prioridad 1. Convierte clientes confusos en implementacion. |
+| Landing/Web simple | Medio | Baja | Media/alta | Media | Prioridad 1 si el alcance queda cerrado. |
+| Web + CRM simple + n8n | Medio | Baja/media | Alta | Media | Prioridad 2. Cobrar anticipo y limitar flujo. |
+| DentalGest | Medio | Baja | Alta por recurrencia | Media | Prioridad 2. Vender demo, no personalizar gratis. |
+| GestiOS | Medio | Baja | Alta por recurrencia | Media | Prioridad 2. Entrar por problema operativo claro. |
+| Implementacion Operativa | Medio/alto | Media | Alta | Media/dificil | Prioridad 2 solo con anticipo y alcance escrito. |
+| ONIA Media Studio | Medio/alto | Media | Alta si se vende por paquete | Media | Prioridad 3. No vender "videos sueltos"; vender publicidad + produccion + seguimiento. |
+| Meta Ads | Alto | Media | Media/alta si hay funnel | Media | Solo con landing, CRM y seguimiento en 24h. |
+| Nuvia inventario/productos | Alto | Media | Incierta hasta margen real | Media | Solo lotes pequenos, margen bruto >40% y costos completos. |
+| YouTube/ONIA Media channels | Alto | Baja/media en caja, alta en tiempo | Baja al inicio, alta a largo plazo | Dificil | Tratar como activo futuro, no como caja de la semana. |
+| Home lab/backups | Bajo/medio | Baja/media | Indirecta | Media | Hacer solo si reduce riesgo, costo cloud o perdida de datos. |
+| VPS AI/worker nuevo | Medio/alto | Media recurrente | Media/alta si hay ofertas IA | Media | Esperar a cliente, piloto o uso interno medido. |
+| MacBook Pro/PC/GPU grande | Alto | Alta | Indirecta | Dificil | Bloqueado hasta ingresos nuevos o cliente que lo justifique. |
+
+## Servicios que ONIA debe empujar primero
+
+La semana no debe depender de Nuvia, YouTube ni una venta grande. Debe depender
+de servicios que se pueden cobrar rapido, entregar con control y usar como
+puerta a tickets mayores.
+
+| Servicio | Precio base | Por que entra | Riesgo principal | Regla de alcance |
+|---|---:|---|---|---|
+| Auditoria Express | Bs. 250 | Baja friccion, abre conversaciones y cobra criterio. | Regalar demasiado diagnostico. | Entregar 3 problemas, 3 acciones y una recomendacion ONIA. |
+| Diagnostico + Plan | Bs. 690 | Ordena procesos antes de vender web, CRM, n8n o sistema. | Que el cliente pida implementacion dentro del diagnostico. | No incluye implementacion tecnica. |
+| Landing de Captacion | Bs. 790 | Cash-flow rapido y sirve para ads/CRM. | Scope creep y cambios infinitos. | 1 pagina, 1 formulario/CTA, 1 ronda de cambios. |
+| Web Profesional | Bs. 1.500 | Mejor ticket que landing y valor claro. | Mucho diseno sin cobrar. | 3-5 secciones, formulario, WhatsApp y entrega cerrada. |
+| Web Pro ONIA | Bs. 2.900 | Mayor margen si incluye copy y seguimiento basico. | Convertirse en portal sin cobrar. | Si hay login/base/dashboards, pasa a portal. |
+| Automatizacion simple n8n | Bs. 790 | Upsell natural despues de web/formulario. | Mantenimiento no cobrado. | 1 flujo cerrado: entrada -> registro -> aviso -> tarea. |
+| Flujo de aprobacion n8n | Bs. 1.200 | Bueno para contenido, solicitudes o procesos internos. | Reglas complejas no cotizadas. | Estados simples y soporte aparte. |
+| Instalacion Starter | Bs. 1.900 | Ticket sano con entrega concreta. | Credenciales, APIs o terceros bloquean. | 3-5 dias habiles, mini SOP y prueba. |
+| Implementacion Operativa | Bs. 3.900-6.500 | Mejor utilidad si se controla bien. | Alcance abierto y dependencia de Sergio. | 50% anticipo, fases, responsables y exclusiones. |
+| ONIA Motor Local Growth | Bs. 2.900 setup + Bs. 1.900/mes | Caballito recurrente para caja mensual. | Volverse contenido ilimitado o ads sin seguimiento. | Presencia + captacion + CRM + seguimiento + reporte mensual. |
+| ONIA Media Studio piloto | Bs. 1.200-4.900 | Diferenciador con IA + filmacion real. | Vender produccion ilimitada o prometer ventas. | Paquete cerrado, pauta aparte, 1-2 rondas de cambios. |
+
+Lectura contable:
+
+- Para cubrir el gasto conservador mensual de Bs. 3.650,50 usando solo 40% de
+  Fondo ONIA, ONIA necesita alrededor de Bs. 9.126 de ventas netas al mes.
+- Si Sergio ejecuta una venta sin comision externa alta, ONIA puede retener mas
+  y el punto de equilibrio baja.
+- Meta semanal inicial: Bs. 2.500-3.000 cobrados, 3 reuniones nuevas y 2
+  propuestas enviadas.
+
+Ejemplos sanos de semana:
+
+| Escenario | Ventas cobradas | Lectura |
+|---|---:|---|
+| Base | 1 Web Profesional + 1 n8n simple + 2 Auditorias | Bs. 2.790. Cubre avance semanal si no hay sobrecostos. |
+| Bueno | 1 Web Pro ONIA + 1 Diagnostico + 1 Landing | Bs. 4.380. Da margen para caja y reinversion. |
+| Recurrente | 1 ONIA Motor Local Growth | Bs. 4.800 primer mes y Bs. 1.900 mensual recurrente. Prioridad comercial. |
+| Fuerte | 1 Implementacion Operativa + 2 Auditorias | Bs. 4.400-7.000. Solo aceptar con alcance escrito. |
+
+Regla nueva:
+
+```text
+ONIA debe empujar Motor Local Growth como servicio recurrente principal.
+Las webs, auditorias, n8n, contenido y ads deben servir como entrada o upsell.
+```
+
+## Riesgos principales
+
+| Riesgo | Que puede pasar | Control obligatorio |
+|---|---|---|
+| Caja se consume en suscripciones | ONIA queda presionada y acepta malos precios. | Reserva de 2 meses y no nuevas suscripciones sin venta/ahorro. |
+| Nuvia opera con margen negativo | Se vende producto pero se pierde en bolsas, transporte, ads o herramientas. | Costo completo por lote y margen bruto minimo 40%. |
+| ONIA Media consume tiempo sin cobrar | Se graban videos bonitos pero no hay leads ni ventas. | Cada pieza debe tener oferta, CTA y registro en calendario. |
+| Meta Ads sin sistema | Se paga pauta y nadie da seguimiento. | Pausar si el lead no se responde en 24h. |
+| Arthur o equipo trabaja sin evidencia | Aparecen discusiones por comisiones o responsabilidades. | Si no esta en ONIA Center/CRM/checklist, no cuenta. |
+| Sergio rescata todo | ONIA se vuelve dependiente y no escala. | Clasificar intervencion y ajustar comisiones/roles semanalmente. |
+| Sobreingenieria tecnica | Se instala mas software pero no se vende. | Todo deploy debe tener caso de uso, responsable y metrica. |
+| Comprar hardware grande temprano | Se reduce runway y no aumenta ventas inmediatamente. | Mac/PC/GPU bloqueados hasta ingresos nuevos o cliente que lo pague. |
+| YouTube se trata como ingreso cercano | Se invierte tiempo esperando monetizacion incierta. | Tratarlo como activo de 90-180 dias, no caja operativa. |
+
+## Equipo minimo y personal
+
+### Equipo fisico permitido ahora
+
+Comprar solo si falta y si queda registrado:
+
+- microfono/lavalier decente;
+- luz principal pequena;
+- tripode/soporte de celular;
+- fondo simple o props reutilizables;
+- SSD/disco de backup;
+- UPS/regulador si protege laptop/router/discos.
+
+No comprar todavia:
+
+- MacBook Pro;
+- camara profesional;
+- gimbal caro;
+- PC completa;
+- GPU grande;
+- servidor grande para casa.
+
+### Personal
+
+| Rol | Quien | Que debe hacer | Como se mide |
+|---|---|---|---|
+| CEO/Director ONIA | Sergio | Caja, ofertas, cierre, arquitectura, QA, decisiones de inversion. | Caja viva, ventas, propuestas, entregas y mejoras diarias. |
+| Comercial/operativo en prueba | Arthur | Leads, llamadas, seguimiento, contenido, capacitaciones, tareas cerradas. | CRM completo, llamadas, cierres, piezas y evidencias. |
+| Editor externo puntual | Tercero por tarea | Convertir grabaciones en clips o piezas. | Entrega cerrada, precio cerrado, sin mensualidad abierta. |
+| DevOps puntual | Tercero por tarea | Auditar VPS, backups, seguridad o migracion. | Checklist y cambios aprobados, sin tocar produccion sin permiso. |
+| Vendedora/ventas | Segun acuerdo vigente | Prospectar, registrar y cerrar segun manual. | Ventas cobradas y datos completos. |
+
+Regla: no contratar "ayuda general". Solo tareas cerradas con entregable,
+fecha, precio y responsable.
+
+## ONIA Center: control privado necesario
+
+El sistema debe mostrar para Sergio:
+
+| Modulo | Semana 1 debe registrar |
+|---|---|
+| Capital Interno | Bolsas, usado, disponible, aprobado, bloqueado y ROI esperado. |
+| Servicios ONIA | Servicio, precio, margen esperado, responsable y estado de entrega. |
+| Riesgos | Riesgo por frente, decision, mitigacion y fecha de revision. |
+| Inversiones | Gasto solicitado, centro, motivo, retorno y aprobacion Sergio. |
+| Equipo/activos | Herramienta fisica o digital, costo, responsable y renovacion. |
+| Campanas | Presupuesto, oferta, pieza, lead, respuesta y venta. |
+| Nuvia | Lote, propietario del capital, costo completo, ventas, margen y reparto. |
+| ONIA Media | Proyecto, piezas, costo directo, uso premium, cliente/activo y retorno. |
+| Semana CEO | Acciones diarias de venta, producto, media, sistema y finanzas. |
+
+Regla:
+
+```text
+Si no puede verse en ONIA Center o en la fuente canonica, no se usa para decidir capital.
+```
+
+## Semana 1 estructurada
+
+Semana operativa: lunes 22 de junio de 2026 a domingo 28 de junio de 2026.
+
+Objetivo de la semana:
+
+```text
+Convertir el capital en control, ofertas vendibles, leads trabajados,
+demos/propuestas y primeras ventas cobradas; no en compras grandes.
+```
+
+### Metas no negociables
+
+| Area | Meta semanal |
+|---|---:|
+| Caja registrada | 100% de gastos e ingresos de la semana |
+| Prospectos nuevos completos | 35 |
+| Contactos/mensajes/llamadas | 25 |
+| Seguimientos realizados | 20 |
+| Reuniones o demos agendadas | 3 |
+| Propuestas enviadas | 2-3 |
+| Ventas cobradas objetivo | Bs. 2.500-3.000 |
+| Demos o piezas comerciales ONIA | 3 |
+| Piezas Sergio/ONIA/Nuvia listas | 5 |
+| Mejora ONIA Center/sistema | 1 diaria |
+| Revision de caja | diaria |
+
+### Bloques diarios
+
+| Hora | Bloque | Resultado esperado |
+|---|---|---|
+| 08:30 | Control CEO | caja, prioridades, bloqueos y agenda del dia. |
+| 09:30 | Ventas/prospeccion | leads, mensajes, llamadas o seguimientos. |
+| 12:00 | Produccion comercial | demo, deck, propuesta, web, n8n o contenido. |
+| 15:00 | Entrega/sistema | avance real de producto, ONIA Center o cliente. |
+| 17:30 | Follow-up | responder, agendar, cerrar siguiente paso. |
+| 20:00 | Cierre diario | registrar gastos, evidencia, aprendizajes y manana. |
+
+### Plan por dia
+
+| Dia | Prioridad | Entregable |
+|---|---|---|
+| Lunes 22/06 | Caja, tablero y ofertas | Bolsas cargadas, servicios priorizados, 20 leads iniciales y scripts listos. |
+| Martes 23/06 | Prospeccion y llamadas | 15 contactos, 8 seguimientos, 1 demo agendada, 1 auditoria ofrecida. |
+| Miercoles 24/06 | Construccion vendible | 1 landing/oferta, 1 demo sistema o n8n, mejoras ONIA Center. |
+| Jueves 25/06 | ONIA Media Studio | 3 muestras: Sergio/ONIA, Nuvia, negocio tipo cliente. |
+| Viernes 26/06 | Finanzas y cierre | caja actualizada, propuestas revisadas, Nuvia con costos reales, pagos/pendientes. |
+| Sabado 27/06 | Marca Sergio y contenido | 2-3 piezas de autoridad y 1 pieza comercial con CTA. |
+| Domingo 28/06 | Revision semanal | que vendio, que fallo, que se congela, que se invierte la semana 2. |
+
+## Reglas por tipo de inversion
+
+### ONIA primero
+
+Se mantiene antes que todo:
+
+- Codex;
+- Claude si sigue aportando mas que duplicando;
+- Higgsfield mientras produzca demos, anuncios o piezas vendibles;
+- VPS, Supabase, n8n, Uptime Kuma, LiteLLM, Open WebUI y Stirling PDF;
+- Google Workspace/Drive/fotos si organiza operacion y media.
+
+### Nuvia
+
+Invertir solo si:
+
+- hay margen bruto estimado superior a 40%;
+- existe costo completo del lote;
+- hay plan de contenido y venta;
+- se registra propietario del capital;
+- no se usa pauta si no hay stock, margen y seguimiento.
+
+### ONIA Media Studio
+
+Invertir solo si:
+
+- el equipo permite grabar clientes reales;
+- hay paquetes cerrados;
+- se cobra anticipo;
+- pauta y costos externos van aparte;
+- se registra uso premium de Higgsfield/voz/musica/render.
+
+### YouTube/ONIA Media channels
+
+Tratar como activo de largo plazo:
+
+- no pagar comisiones por monetizacion inexistente;
+- no consumir mas de 2-3 bloques semanales hasta que haya traccion;
+- usar contenido reciclable para ONIA, ventas y autoridad;
+- separar canal, tema, responsable, costo y propiedad desde el dia 1.
+
+### Home lab
+
+Usarlo para reducir costos y riesgo:
+
+- backups locales cifrados;
+- staging/dev;
+- pruebas IA locales pequenas;
+- storage de material bruto;
+- no alojar servicios publicos de clientes desde casa.
+
+### Hardware grande
+
+Compra permitida solo si:
+
+1. ONIA tiene 2 meses de operacion cubiertos;
+2. hay ingresos nuevos cobrados o contrato firmado;
+3. el equipo actual bloquea entrega real;
+4. la compra tiene retorno medible en tiempo, calidad o costo.
 
 ## Siguiente sprint de 14 dias
 

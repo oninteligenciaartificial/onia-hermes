@@ -1182,17 +1182,17 @@ a.workflow-card:hover {
   height: 100%;
   object-fit: cover;
   object-position: 66% center;
-  opacity: 0.78;
-  filter: saturate(0.9) contrast(0.92);
+  opacity: 0.96;
+  filter: saturate(1.04) contrast(1.02) brightness(1.04);
   transform: scale(1.04);
 }
 
 .nuvia-hero-shade {
   z-index: 1;
   background:
-    radial-gradient(circle at 77% 42%, rgba(15, 45, 82, 0.2), transparent 34%),
-    linear-gradient(90deg, rgba(5, 8, 10, 0.97) 0%, rgba(5, 8, 10, 0.9) 34%, rgba(5, 8, 10, 0.58) 62%, rgba(5, 8, 10, 0.74) 100%),
-    linear-gradient(180deg, rgba(5, 8, 10, 0.16) 0%, rgba(5, 8, 10, 0.9) 100%);
+    radial-gradient(circle at 75% 42%, rgba(15, 45, 82, 0.08), transparent 38%),
+    linear-gradient(90deg, rgba(5, 8, 10, 0.78) 0%, rgba(5, 8, 10, 0.56) 34%, rgba(5, 8, 10, 0.2) 62%, rgba(5, 8, 10, 0.36) 100%),
+    linear-gradient(180deg, rgba(5, 8, 10, 0.08) 0%, rgba(5, 8, 10, 0.58) 100%);
 }
 
 .nuvia-hero-layout {
@@ -1211,6 +1211,7 @@ a.workflow-card:hover {
 .nuvia-hero-copy {
   display: grid;
   gap: 18px;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.48);
 }
 
 .nuvia-hero-copy > span,
@@ -1390,8 +1391,8 @@ a.workflow-card:hover {
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 12px;
   background:
-    radial-gradient(circle at 50% 58%, rgba(0, 167, 160, 0.14), transparent 58%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(244, 248, 245, 0.82));
+    radial-gradient(circle at 50% 58%, rgba(255, 255, 255, 0.18), transparent 58%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
 }
 
 .nuvia-stage-card figure::after {
@@ -1412,7 +1413,7 @@ a.workflow-card:hover {
   height: 88%;
   max-height: 250px;
   object-fit: contain;
-  filter: saturate(1.03) contrast(1.01) drop-shadow(0 18px 20px rgba(15, 45, 82, 0.12));
+  filter: saturate(1.03) contrast(1.01) drop-shadow(0 18px 20px rgba(0, 0, 0, 0.22));
   animation: nuviaProductFloat 5.8s ease-in-out infinite;
 }
 
@@ -1490,6 +1491,10 @@ a.workflow-card:hover {
 .nuvia-catalog-portal {
   display: grid;
   gap: 24px;
+}
+
+.nuvia-next-page.is-catalog .nuvia-catalog-portal {
+  padding-top: 22px;
 }
 
 .nuvia-portal-top {
@@ -1575,7 +1580,7 @@ a.workflow-card:hover {
 
 .nuvia-catalog-search {
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-columns: auto minmax(0, 1fr) auto;
   gap: 10px;
   align-items: center;
   min-height: 48px;
@@ -1583,6 +1588,18 @@ a.workflow-card:hover {
   border: 1px solid var(--nuvia-line);
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.72);
+}
+
+.nuvia-catalog-search label {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-width: max-content;
+  color: rgba(16, 20, 21, 0.58);
+}
+
+.nuvia-catalog-search svg {
+  color: var(--nuvia-teal);
 }
 
 .nuvia-catalog-search span,
@@ -1604,6 +1621,17 @@ a.workflow-card:hover {
 
 .nuvia-catalog-search input::placeholder {
   color: rgba(16, 20, 21, 0.36);
+}
+
+.nuvia-catalog-search button {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border: 0;
+  border-radius: 999px;
+  color: rgba(16, 20, 21, 0.62);
+  background: rgba(16, 20, 21, 0.06);
 }
 
 .nuvia-catalog-count {
@@ -1633,8 +1661,8 @@ a.workflow-card:hover {
   min-height: 240px;
   margin: 0;
   background:
-    radial-gradient(circle at 50% 44%, rgba(0, 167, 160, 0.08), transparent 62%),
-    rgba(255, 255, 255, 0.6);
+    radial-gradient(circle at 50% 50%, rgba(0, 167, 160, 0.13), transparent 58%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0));
 }
 
 .nuvia-product-card figure span {
@@ -1655,7 +1683,8 @@ a.workflow-card:hover {
   width: 100%;
   height: 220px;
   object-fit: contain;
-  padding: 20px;
+  padding: 8px 18px 14px;
+  filter: drop-shadow(0 22px 22px rgba(15, 45, 82, 0.13));
   transition: transform 260ms var(--nuvia-ease);
 }
 
@@ -1705,6 +1734,42 @@ a.workflow-card:hover {
   color: var(--nuvia-teal);
   font-size: 0.76rem;
   font-weight: 700;
+}
+
+.nuvia-empty-results {
+  display: grid;
+  justify-items: center;
+  gap: 12px;
+  min-height: 220px;
+  padding: clamp(28px, 5vw, 54px);
+  border: 1px solid var(--nuvia-line);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.62);
+  text-align: center;
+}
+
+.nuvia-empty-results strong {
+  color: var(--nuvia-ink);
+  font-size: clamp(1.4rem, 2.8vw, 2.4rem);
+  font-weight: 620;
+  letter-spacing: -0.035em;
+}
+
+.nuvia-empty-results p {
+  max-width: 460px;
+  margin: 0;
+  color: var(--nuvia-muted);
+  line-height: 1.5;
+}
+
+.nuvia-empty-results button {
+  min-height: 42px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 999px;
+  color: #fffdfa;
+  background: var(--nuvia-ink);
+  font-weight: 820;
 }
 
 .nuvia-product-card footer {
@@ -1836,8 +1901,9 @@ a.workflow-card:hover {
 
 .nuvia-routine-section {
   display: grid;
-  grid-template-columns: minmax(0, 0.7fr) minmax(0, 1fr);
-  gap: clamp(28px, 6vw, 80px);
+  grid-template-columns: minmax(240px, 0.52fr) minmax(0, 1fr);
+  gap: clamp(24px, 4vw, 58px);
+  align-items: start;
 }
 
 .nuvia-routine-section > div:first-child,
@@ -1849,37 +1915,75 @@ a.workflow-card:hover {
 
 .nuvia-routine-rail {
   display: grid;
-  gap: 12px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
 }
 
 .nuvia-routine-rail a {
+  position: relative;
   display: grid;
-  grid-template-columns: 92px minmax(0, 1fr);
-  gap: 14px;
-  align-items: center;
-  min-height: 118px;
+  grid-template-columns: 1fr;
+  gap: 8px;
+  align-content: start;
+  min-height: 276px;
   padding: 12px;
+  overflow: hidden;
   border: 1px solid var(--nuvia-line);
   border-radius: 16px;
-  background: rgba(255, 255, 255, 0.7);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(255, 255, 255, 0.58)),
+    radial-gradient(circle at 60% 0%, rgba(0, 167, 160, 0.12), transparent 44%);
+  box-shadow: 0 16px 44px rgba(15, 45, 82, 0.07);
+}
+
+.nuvia-routine-rail b {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  color: rgba(15, 45, 82, 0.18);
+  font-size: 1.55rem;
+  line-height: 1;
 }
 
 .nuvia-routine-rail small {
-  grid-column: 2;
   color: var(--nuvia-teal);
+  font-size: 0.72rem;
   font-weight: 800;
+  text-transform: uppercase;
 }
 
 .nuvia-routine-rail img {
-  grid-row: 1 / span 2;
-  width: 92px;
-  height: 92px;
+  justify-self: center;
+  width: 100%;
+  height: 94px;
   object-fit: contain;
+  mix-blend-mode: normal;
+  filter: drop-shadow(0 16px 22px rgba(15, 45, 82, 0.16));
 }
 
 .nuvia-routine-rail strong {
   color: var(--nuvia-ink);
-  line-height: 1.16;
+  font-size: 0.98rem;
+  line-height: 1.08;
+}
+
+.nuvia-routine-rail p {
+  margin: 0;
+  color: rgba(15, 45, 82, 0.66);
+  font-size: 0.74rem;
+  line-height: 1.38;
+}
+
+.nuvia-routine-rail em {
+  align-self: end;
+  margin-top: 2px;
+  overflow: hidden;
+  color: var(--nuvia-ink);
+  font-size: 0.7rem;
+  font-style: normal;
+  font-weight: 780;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .nuvia-discount-section {
@@ -2017,10 +2121,10 @@ a.workflow-card:hover {
 .nuvia-catalog-hero {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(300px, 0.44fr);
-  gap: clamp(28px, 6vw, 78px);
-  align-items: end;
-  min-height: 540px;
-  padding: 142px 0 64px;
+  gap: clamp(24px, 5vw, 58px);
+  align-items: center;
+  min-height: auto;
+  padding: 118px 0 28px;
 }
 
 .nuvia-catalog-hero > div,
@@ -2042,13 +2146,13 @@ a.workflow-card:hover {
 .nuvia-catalog-hero h1,
 .nuvia-catalog-buying-guide h2,
 .nuvia-checkout-note h2 {
-  max-width: 830px;
+  max-width: 640px;
   margin: 0;
   color: var(--nuvia-ink);
-  font-size: clamp(3rem, 6.2vw, 6.4rem);
+  font-size: clamp(2.8rem, 5vw, 4.8rem);
   font-weight: 560;
   letter-spacing: -0.04em;
-  line-height: 0.88;
+  line-height: 0.9;
   text-wrap: balance;
 }
 
@@ -2323,7 +2427,8 @@ a.workflow-card:hover {
   border-radius: 10px;
   background:
     radial-gradient(circle at 50% 48%, rgba(0, 167, 160, 0.08), transparent 66%),
-    rgba(255, 255, 255, 0.58);
+    rgba(255, 255, 255, 0.18);
+  filter: drop-shadow(0 12px 16px rgba(15, 45, 82, 0.12));
 }
 
 .nuvia-cart-item span,
@@ -2435,7 +2540,8 @@ a.workflow-card:hover {
   border-radius: 10px;
   background:
     radial-gradient(circle at 50% 52%, rgba(0, 167, 160, 0.08), transparent 68%),
-    rgba(255, 255, 255, 0.62);
+    rgba(255, 255, 255, 0.18);
+  filter: drop-shadow(0 10px 14px rgba(15, 45, 82, 0.12));
 }
 
 .nuvia-cart-suggestion span {
@@ -2614,7 +2720,10 @@ a.workflow-card:hover {
   padding: 5px;
   border: 1px solid rgba(15, 45, 82, 0.08);
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.86);
+  background:
+    radial-gradient(circle at 50% 52%, rgba(0, 167, 160, 0.08), transparent 68%),
+    rgba(255, 255, 255, 0.22);
+  filter: drop-shadow(0 8px 12px rgba(15, 45, 82, 0.12));
 }
 
 .nuvia-pdp-bar-product span {
@@ -2683,7 +2792,7 @@ a.workflow-card:hover {
   border: 1px solid rgba(15, 45, 82, 0.06);
   border-radius: 18px;
   background:
-    radial-gradient(circle at 52% 42%, rgba(255, 255, 255, 0.9), rgba(219, 244, 252, 0.74) 56%, rgba(184, 229, 245, 0.62));
+    radial-gradient(circle at 52% 42%, rgba(255, 255, 255, 0.62), rgba(219, 244, 252, 0.5) 56%, rgba(184, 229, 245, 0.36));
   box-shadow: 0 28px 70px rgba(15, 45, 82, 0.08);
 }
 
@@ -2702,7 +2811,9 @@ a.workflow-card:hover {
   padding: 10px;
   border: 1px solid rgba(15, 45, 82, 0.08);
   border-radius: 14px;
-  background: rgba(255, 255, 255, 0.62);
+  background:
+    radial-gradient(circle at 50% 42%, rgba(0, 167, 160, 0.08), transparent 62%),
+    rgba(255, 255, 255, 0.32);
 }
 
 .nuvia-pdp-gallery img {
@@ -3064,6 +3175,15 @@ a.workflow-card:hover {
 
   .nuvia-product-card .nuvia-product-checkout > button {
     grid-column: 1 / -1;
+  }
+
+  .nuvia-catalog-search {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    padding: 0 10px;
+  }
+
+  .nuvia-catalog-search label span {
+    display: none;
   }
 
   .nuvia-discount-section {

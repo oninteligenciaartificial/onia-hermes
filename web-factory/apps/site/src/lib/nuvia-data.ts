@@ -33,14 +33,6 @@ export type NuviaProduct = {
   detalleImagenes: NuviaProductDetailImage[];
   detalleNota: string;
   ordenRutina?: number;
-  proveedor?: string;
-  sourceUrl?: string;
-  sourceImageUrl?: string;
-  precioProveedor?: number;
-  margenObjetivo?: number;
-  comisionVendedorRate?: number;
-  comisionVendedor?: number;
-  gananciaNeta?: number;
   tipoVenta?: string;
 };
 

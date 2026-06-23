@@ -51,4 +51,5 @@ No guardar datos de tarjeta, tokens, contrasenas ni comprobantes sensibles en es
 - Solo existe un Fondo ONIA. ONIA Media y Nuvia pueden aportar porcentajes a ese fondo, pero no crean fondos separados salvo decision escrita posterior.
 - Durante la prueba Arthur/ONIA de 60 dias, ONIA Servicios usa Fondo ONIA protegido de 40%; Arthur sin capital ONIA tiene techo de 50% solo si vende y entrega todo aprobado sin rescate. Sergio/riesgo base es 10% y sube si Sergio corrige, reestructura, termina o rescata.
 - El plan detallado de uso del capital vive en `hermes-content/docs/ONIA_INTERNAL_CAPITAL_ALLOCATION_2026.md` y es privado Sergio/ONIA. No debe aparecer en PDF de Arthur ni vistas de colaborador.
+- La contabilidad operativa ONIA/Nuvia/Sergio vive en `hermes-content/docs/ONIA_NUVIA_ACCOUNTING_MODEL_2026.md`. Regla base: costos primero, Fondo ONIA/Reserva Nuvia despues, variables aprobadas y finalmente utilidad/retiro Sergio.
 - Revisar pendientes posibles: ElevenLabs, Canva, dominios, Meta Ads, n8n/EasyPanel u otros.

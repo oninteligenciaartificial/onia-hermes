@@ -75,30 +75,19 @@ infraestructura de ONIA mientras ONIA las pague.
 
 Sergio/ONIA aporta capital operativo para sostener ONIA.
 
-| Concepto | Monto |
-|---|---:|
-| Inversion Sergio/ONIA | Bs. 15.000 |
-| Deuda exacta reportada por Sergio | Bs. 2.414,49 |
-| Caja operativa restante estimada | Bs. 12.585,51 |
-
 La caja operativa debe cubrir herramientas, apps, IA, VPS, contenido, soporte,
 pruebas, deuda y operacion mientras llegan ventas.
 
-Este capital se registra como capital recuperable de Sergio/ONIA. En la practica
-Sergio quiere recuperar ese dinero para devolverlo a su fuente familiar, aunque
-esa persona no sea parte de este contrato ni le exija devolucion a Arthur. Arthur
-no asume esa deuda, no aporta mensualidades fijas y no se le descuenta de sus
-comisiones aprobadas por este concepto.
+Los montos exactos de inversion, caja, deuda, runway, compras y recuperacion de
+capital son informacion interna Sergio/ONIA. No forman parte visible de este
+contrato para Arthur.
+
+Arthur no asume esa deuda, no aporta mensualidades fijas y no se le descuenta de
+sus comisiones aprobadas por este concepto.
 
 La forma correcta de recuperar el capital no es cobrarle a Arthur. La forma
 correcta es que ONIA genere Fondo ONIA suficiente, pague su operacion mensual y,
 con el excedente del Fondo ONIA, vaya recuperando el capital de arranque.
-
-Gastos base registrados en `FINANCE_LOG_2026.md`:
-
-| Concepto | Monto estimado |
-|---|---:|
-| Base mensual registrada | Bs. 2.950,50 |
 
 ### Regla principal
 
@@ -214,7 +203,7 @@ Al cierre de cada mes, el Fondo ONIA se usa en este orden:
    criticos de ONIA.
 2. Cubrir caja chica aprobada de ONIA/Nuvia.
 3. Mantener reserva minima de caja para no bajar de modo caja roja.
-4. Recuperar capital de arranque de Sergio/ONIA hasta llegar a Bs. 15.000.
+4. Recuperar capital de arranque de Sergio/ONIA segun control interno privado.
 5. Recién despues de cubrir lo anterior se pueden aprobar bonos, reinversiones
    no urgentes o retiros extraordinarios.
 
@@ -237,7 +226,7 @@ Nadie cobra comision si:
 
 El Fondo ONIA paga, en este orden:
 
-1. Deuda exacta reportada de Bs. 2.414,49.
+1. Deuda previa asumida por Sergio/ONIA.
 2. Apps, IA, VPS, Google Workspace, herramientas de desarrollo y herramientas
    usadas por ONIA/Nuvia.
 3. Produccion interna necesaria para vender.
@@ -249,7 +238,7 @@ infraestructura ONIA aunque tambien se usen para Nuvia.
 
 ### Deuda y gastos ONIA
 
-La deuda exacta reportada es Bs. 2.414,49. Esta deuda, junto con las apps,
+La deuda previa, junto con las apps,
 herramientas, IA, VPS, Google Workspace, pruebas y gastos operativos de ONIA,
 queda 100% a cargo de Sergio/ONIA.
 
@@ -270,58 +259,35 @@ gestion y aprobado para descuento.
 
 ## Plan para mantener ONIA viva
 
-Diagnostico financiero actual:
+Diagnostico operativo actual:
 
-| Indicador | Valor |
-|---|---:|
-| Caja operativa estimada despues de deuda | Bs. 12.585,51 |
-| Gasto base mensual registrado en herramientas | Bs. 2.950,50 |
-| Caja chica minima ONIA/Nuvia | Bs. 700/mes |
-| Gasto operativo real conservador | Bs. 3.650,50/mes |
-| Tiempo aproximado sin ventas nuevas | 3,4 meses |
-
-Esto significa que ONIA no puede vivir de reuniones, ideas o contenido sin
+ONIA no puede vivir de reuniones, ideas o contenido sin
 ventas. El contenido, los carruseles, las llamadas y las mejoras internas son
 obligatorias, pero deben empujar ventas reales.
 
 ### Meta minima de supervivencia
 
-Como el Fondo ONIA protegido es 40% durante la prueba, para cubrir Bs. 3.650,50
-de gasto mensual real conservador solo con Fondo ONIA, la facturacion neta
-necesaria es
-aproximadamente:
-
-```text
-Bs. 3.650,50 / 40% = Bs. 9.126 netos por mes
-```
+Como el Fondo ONIA protegido es 40% durante la prueba, ONIA debe cobrar ventas
+reales suficientes para cubrir herramientas, deuda, operacion y entregas sin
+depender solo del capital de Sergio.
 
 Objetivo para los 60 dias de prueba:
 
 | Meta | Minimo |
 |---|---:|
-| Ingreso neto cobrado total minimo | Bs. 18.500 |
-| Ingreso neto cobrado sano con recuperacion parcial de caja/reserva | Bs. 32.000 |
-| Ingreso neto cobrado para recuperar todo el capital de Bs. 15.000 | aprox. Bs. 55.800 |
-| Fondo ONIA generado minimo | Bs. 7.400 |
-| Fondo ONIA sano | Bs. 12.800 |
-| Fondo ONIA necesario para 2 meses de operacion + recuperar capital | aprox. Bs. 22.300 |
+| Ingreso neto cobrado total minimo | Suficiente para sostener operacion y Fondo ONIA |
+| Ingreso neto cobrado sano | Suficiente para sostener operacion, reserva y pipeline |
+| Fondo ONIA generado minimo | Suficiente para cubrir herramientas criticas |
 | Ventas web/automatizacion cobradas | 6 a 8 |
 | Clientes SaaS o recurrentes nuevos | 2 a 4 |
 | Leads calificados registrados | 200 |
 | Reuniones/demos realizadas | 12 a 16 |
 
-Bs. 18.500 netos en 60 dias es la meta minima de supervivencia con Fondo ONIA
-protegido al 40%. Bs. 32.000 netos es una meta sana para cubrir operacion,
-dejar reserva y empezar a recuperar capital sin depender tanto de Sergio.
+Las metas exactas de caja y recuperacion de capital se manejan en el plan
+interno de Sergio/ONIA. No significan deuda para Arthur ni se descuentan de sus
+comisiones aprobadas.
 
-Recuperar todo el capital de arranque de Bs. 15.000 dentro de los mismos 60 dias
-es una meta agresiva: requiere aproximadamente Bs. 55.800 netos cobrados, porque
-el Fondo ONIA tendria que cubrir cerca de Bs. 7.301 de operacion conservadora de
-dos meses y ademas recuperar Bs. 15.000 de capital. Si no se llega a esa meta,
-no significa que Arthur deba pagar la diferencia; significa que ONIA todavia no
-genero suficiente Fondo ONIA y se revisa la estrategia al dia 60.
-
-Si no se llega a Bs. 18.500 netos en 60 dias, igual puede continuar la
+Si no se llega a la meta minima interna en 60 dias, igual puede continuar la
 colaboracion solo si existe pipeline real, CRM ordenado, propuestas enviadas,
 seguimientos vivos y ventas cercanas. Si no hay ventas ni pipeline claro, se
 debe bajar el alcance o volver a pagos por tarea.
@@ -361,21 +327,21 @@ Prioridad 2: recurrencia.
 - Los gastos raros de cada mes, como bolsas, transporte, etiquetas, muestras,
   envios, impresiones, reuniones o material de contenido, no se ignoran: salen
   de caja chica y se registran como costo operativo.
-- Si caja disponible baja de Bs. 4.000, ONIA entra en modo caja roja: se
+- Si ONIA entra en modo caja roja, se
   congelan compras, bonos, pruebas pagadas y entregas no vendibles.
-- Si caja disponible esta entre Bs. 4.000 y Bs. 12.585,51, solo se financian tareas
+- Si caja disponible esta limitada, solo se financian tareas
   que ayuden a vender, entregar o cobrar.
-- Si caja disponible supera Bs. 15.000 despues de deuda y herramientas, se puede
+- Si caja disponible supera la reserva interna despues de deuda y herramientas, se puede
   reinvertir en pauta, contenido, mejores herramientas o formalizacion.
 
 ### Caja chica ONIA/Nuvia
 
-Se crea una caja chica mensual minima de Bs. 700:
+Se crea una caja chica mensual interna:
 
-| Caja chica | Monto inicial | Uso |
-|---|---:|---|
-| Nuvia | Bs. 400 | Bolsas, etiquetas, transporte, muestras, embalaje, fotos, productos pequenos, envios no cobrados. |
-| ONIA | Bs. 300 | Movilidad, reuniones, impresiones, compras pequenas, material de contenido, pruebas urgentes. |
+| Caja chica | Uso |
+|---|---|
+| Nuvia | Bolsas, etiquetas, transporte, muestras, embalaje, fotos, productos pequenos, envios no cobrados. |
+| ONIA | Movilidad, reuniones, impresiones, compras pequenas, material de contenido, pruebas urgentes. |
 
 Reglas:
 
@@ -687,7 +653,7 @@ Si un canal se usa para vender productos de Nuvia:
 
 ## Ejemplo exacto sin retencion de deuda
 
-Sergio/ONIA paga la deuda completa de Bs. 2.414,49 y sostiene las apps,
+Sergio/ONIA paga la deuda previa y sostiene las apps,
 herramientas y gastos operativos de ONIA. Arthur no compensa esta deuda y no se
 le retiene ningun porcentaje por deuda previa o apps de ONIA.
 
@@ -742,8 +708,8 @@ confundir utilidad, gestion, desarrollo y retorno de capital.
 | Direccion/gestion ONIA | Cuando Arthur vende y entrega todo aprobado sin rescate | 10% del ingreso neto ONIA durante la prueba sin capital de Arthur. |
 | Produccion/desarrollo | Cuando Sergio construye, corrige, rescata o entrega una parte central | Segun tabla de participacion real. |
 | Propiedad y riesgo | Siempre que se use marca, herramientas, cobro, infraestructura o clientes de ONIA | Incluido en el porcentaje Sergio/gestion o en Fondo ONIA, segun caso. |
-| Capital operativo | Porque Sergio pone Bs. 15.000 y sostiene deuda, apps y herramientas | Se protege con Fondo ONIA, prioridad de caja, propiedad ONIA y control de pagos. |
-| Recuperacion de capital | Cuando el Fondo ONIA ya cubrio gastos criticos y reserva minima | Excedente del Fondo ONIA hasta recuperar Bs. 15.000 de capital de arranque. |
+| Capital operativo | Porque Sergio/ONIA sostiene deuda, apps y herramientas | Se protege con Fondo ONIA, prioridad de caja, propiedad ONIA y control de pagos. |
+| Recuperacion de capital | Cuando el Fondo ONIA ya cubrio gastos criticos y reserva minima | Excedente del Fondo ONIA segun control interno Sergio/ONIA. |
 
 El 10% de Sergio cuando Arthur hace todo no es premio por no trabajar. Es el
 pago minimo por direccion, marca, estructura, cobro, revision final, QA basico,

@@ -2,7 +2,7 @@
 
 Estado: MVP principal definido, UI inicial implementada en `/vendedores` y
 tablero de operacion 60 dias agregado en `/vendedores/operacion`.
-Actualizado: 2026-06-20.
+Actualizado: 2026-06-22.
 
 ## Veredicto
 
@@ -131,6 +131,32 @@ evidencia, CRM completo, costos y margen. El cierre mensual descuenta adelantos
 y completa el saldo o compensa diferencias si hubo reclamos, devoluciones,
 entregas no aprobadas o datos faltantes.
 
+### Modelo operativo de empresa
+
+El panel debe separar nivel, permisos y dinero. No todos los colaboradores son
+vendedores, socios o empleados.
+
+Jerarquia operativa:
+
+```text
+Sergio / Direccion ONIA
+-> Responsable de area futuro
+-> Arthur / Coordinador Comercial-Operativo en prueba
+-> Vendedor o colaborador operativo
+-> Freelancer por entregable
+```
+
+Arthur queda por 60 dias como rol nivel 2: arriba de un vendedor normal porque
+puede hacer llamadas, seguimiento, contenido, carruseles, capacitaciones,
+Higgsfield y mejoras internas; pero abajo de direccion porque no aprueba
+precios, gastos, descuentos, pagos, uso premium de herramientas, contactos
+sensibles ni reparto de utilidades.
+
+Regla laboral: si ONIA formaliza a alguien como empleado, el sistema debe pasar
+ese perfil a ruta legal/laboral con contrato, presupuesto y obligaciones. Si no
+esta formalizado, usar las categorias colaborador comercial, comisionista o
+freelancer por entregable y pagar solo por resultado/evidencia aprobada.
+
 ### Capital Interno Sergio/ONIA
 
 Modulo privado. No debe aparecer en PDF de Arthur ni en vistas de colaborador.
@@ -138,6 +164,9 @@ Modulo privado. No debe aparecer en PDF de Arthur ni en vistas de colaborador.
 Fuente canonica:
 
 - `hermes-content/docs/ONIA_INTERNAL_CAPITAL_ALLOCATION_2026.md`
+- `hermes-content/docs/ONIA_NUVIA_ACCOUNTING_MODEL_2026.md`
+- `hermes-content/docs/ONIA_SUSTAINABILITY_DASHBOARD_SPEC_2026.md`
+- `hermes-content/docs/ONIA_COMPANY_OPERATING_MODEL_2026.md`
 - `hermes-content/references/onia-vendor-panel-20260620.json` en
   `operation_60_days.internal_capital_allocation`.
 
@@ -146,13 +175,41 @@ Debe manejar:
 - asignacion interna del capital;
 - deuda exacta;
 - reserva de herramientas y operacion;
+- matriz riesgo / inversion / rentabilidad / facilidad;
+- servicios priorizados por semana;
+- meta semanal de caja;
+- plan semanal privado de Sergio CEO;
 - compras aprobadas;
 - inventario y activos;
 - inversiones Nuvia por lote y propietario real del capital;
+- contabilidad Nuvia por lote/campana: costos, Fondo ONIA, Reserva Nuvia,
+  variable Arthur y utilidad Sergio/ONIA;
+- excepcion Lote Nuvia 001 con Bs. 300 Arthur y Bs. 300 Sergio;
 - campanas Meta Ads;
 - home lab y ahorro de costos;
 - mejoras diarias de Sergio CEO;
 - compras bloqueadas hasta que haya ingresos nuevos.
+
+Regla de decision interna:
+
+```text
+Riesgo -> inversion requerida -> rentabilidad probable -> facilidad semanal.
+```
+
+Para la semana del 22 al 28 de junio de 2026, el modulo privado debe priorizar:
+
+- auditorias express;
+- diagnosticos + plan;
+- landings/webs cerradas;
+- n8n simple como upsell;
+- ONIA Motor Local Growth como caballito de batalla recurrente;
+- implementaciones solo con anticipo y alcance escrito;
+- ONIA Media Studio solo como paquete cerrado, no videos sueltos;
+- Nuvia solo con costo completo y margen bruto minimo 40%;
+- YouTube/ONIA Media channels como activo de largo plazo, no caja inmediata;
+- home lab solo si reduce costo o riesgo;
+- MacBook Pro, PC completa, GPU grande y servidor grande bloqueados hasta
+  ingresos nuevos o cliente que los justifique.
 
 ### Leads
 
@@ -235,6 +292,38 @@ Registrar:
 
 Regla: la comision estimada no es pago aprobado. ONIA aprueba despues de validar
 cobro real, datos completos y margen sano.
+
+### Catalogo operativo y caballito de batalla
+
+Antes de vender un servicio desde ONIA Center, debe existir como registro del
+catalogo operativo. El servicio prioritario es `ONIA Motor Local Growth`:
+
+```text
+Setup Bs. 2.900 + mensualidad Bs. 1.900.
+```
+
+Objetivo:
+
+```text
+5 clientes Growth activos = Bs. 9.500/mes
+Fondo ONIA 40% = Bs. 3.800/mes
+```
+
+Eso cubre la existencia mensual conservadora de ONIA. Starter sirve como
+entrada, Pro sirve como upgrade, pero Growth es el paquete que el tablero debe
+empujar por defecto.
+
+El panel debe bloquear servicios que no tengan:
+
+- precio setup y precio mensual;
+- centro contable;
+- costos excluidos;
+- evidencia requerida;
+- responsable de entrega;
+- limite de herramientas premium;
+- comision/variable;
+- margen minimo;
+- checklist de cierre y entrega.
 
 ## Estados pipeline
 
@@ -348,5 +437,7 @@ server-side o n8n usando credenciales privadas.
 - `ONIA_VENDOR_MANUAL_2026.md`
 - `ONIA_VENDOR_SALES_PLAYBOOK_2026.md`
 - `ONIA_PRICING_2026.md`
+- `hermes-content/docs/ONIA_COMPANY_OPERATING_MODEL_2026.md`
+- `hermes-content/docs/ONIA_CASH_ENGINE_SERVICE_CATALOG_2026.md`
 - `hermes-content/references/onia-projects-registry.json`
 - `hermes-content/references/onia-vendor-panel-20260620.json`

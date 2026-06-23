@@ -193,6 +193,81 @@ Incluye:
 Este es el paquete mas razonable si quieren avanzar sin ir directo a un sistema
 grande.
 
+## Backlog de mini sistemas provisionales
+
+Estas ideas quedan anotadas como mini sistemas provisionales para Bolivian
+Electric. No son todavia alcance cerrado ni promesa comercial; sirven para
+validar necesidades reales, crear demos rapidas y decidir que entra despues al
+sistema interno mas grande.
+
+Regla:
+
+```text
+Primero mini sistema util y medible. Despues decidir si se convierte en modulo
+formal de Bolivian Electric OS / GestiOS Empresas.
+```
+
+| Idea | Objetivo | Primera version sugerida | Riesgo a controlar |
+|---|---|---|---|
+| CRM | ordenar clientes, cotizaciones, seguimiento y responsables | tablero simple de leads/cotizaciones con estados y proxima accion | duplicar TR4 o WhatsApp sin proceso claro |
+| Web | mejorar experiencia del cliente y explicar mejor la oferta | landing o web provisional con CTA, categorias, contacto y formularios | hacer una web bonita que no capture ni mida consultas |
+| Chatbot Bolivian | responder preguntas frecuentes y derivar por area/sucursal | bot interno o demo sin WhatsApp productivo, usando FAQ y base de conocimiento | prometer WhatsApp/Meta antes de permisos reales |
+| Propuesta de tienda online | validar venta/catalogo digital sin construir ecommerce completo | propuesta navegable o mini catalogo con productos destacados y solicitud de cotizacion | vender online sin stock, precios, logistica y aprobacion interna claros |
+
+### Criterio de prioridad
+
+Orden recomendado para explorar:
+
+1. CRM, porque mejora seguimiento comercial rapido.
+2. Web provisional, porque ayuda a convertir y explicar.
+3. Chatbot Bolivian como demo interna/base de conocimiento, no produccion.
+4. Propuesta de tienda online como prototipo comercial, no ecommerce completo.
+
+### Que debe responder cada mini sistema
+
+CRM:
+
+- que cliente entro;
+- que necesita;
+- quien responde;
+- en que estado esta;
+- cuando se debe hacer seguimiento;
+- que cotizaciones se estan perdiendo.
+
+Web:
+
+- que vende Bolivian;
+- para quien;
+- que productos/categorias son clave;
+- como contactar por area o ciudad;
+- que consulta se debe registrar;
+- que contenido ayuda a vender.
+
+Chatbot Bolivian:
+
+- preguntas frecuentes;
+- horarios;
+- sucursales;
+- categorias;
+- derivacion por area;
+- respuestas aprobadas;
+- que no debe responder sin humano.
+
+Tienda online / catalogo:
+
+- productos destacados;
+- categorias;
+- solicitud de cotizacion;
+- disponibilidad referencial;
+- contacto comercial;
+- reglas de precio, stock y aprobacion.
+
+### Decision de alcance
+
+Estos mini sistemas deben tratarse como prototipos de trabajo. No reemplazan
+TR4, no prometen automatizacion completa y no deben conectarse a datos sensibles
+sin una auditoria previa.
+
 ## Alcance de Fase 1 recomendada - Bs. 1.900
 
 Duracion: 7 a 10 dias habiles.
