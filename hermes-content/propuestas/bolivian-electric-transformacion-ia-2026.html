@@ -1,0 +1,606 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bolivian Electric | Propuesta ONIA IA Operativa 2026</title>
+  <link rel="stylesheet" href="assets/design-tokens.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      background: var(--deck-bg);
+      color: var(--deck-ink);
+      font-family: var(--deck-font);
+    }
+
+    body {
+      padding: var(--gap-5);
+    }
+
+    .deck {
+      display: grid;
+      gap: var(--gap-5);
+      max-width: var(--slide-w);
+      margin: 0 auto;
+    }
+
+    .slide {
+      position: relative;
+      width: min(100%, var(--slide-w));
+      min-height: var(--slide-h);
+      overflow: hidden;
+      background:
+        linear-gradient(135deg, rgba(0, 107, 131, 0.08), rgba(242, 184, 75, 0.08)),
+        var(--deck-card);
+      border: 1px solid var(--deck-line);
+      border-radius: var(--deck-radius);
+      box-shadow: var(--deck-shadow);
+      padding: var(--gap-6);
+    }
+
+    .slide::after {
+      content: attr(data-slide);
+      position: absolute;
+      right: var(--gap-4);
+      bottom: var(--gap-3);
+      color: var(--deck-muted);
+      font: 600 var(--text-xs) / 1 var(--deck-mono);
+    }
+
+    .kicker {
+      margin: 0 0 var(--gap-3);
+      color: var(--deck-primary-dark);
+      font-size: var(--text-sm);
+      font-weight: 800;
+      letter-spacing: 0;
+      text-transform: uppercase;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin-top: 0;
+    }
+
+    h1 {
+      max-width: 980px;
+      margin-bottom: var(--gap-4);
+      font-family: var(--deck-display);
+      font-size: var(--text-xxl);
+      line-height: 1.02;
+      letter-spacing: 0;
+      text-wrap: balance;
+    }
+
+    h2 {
+      max-width: 980px;
+      margin-bottom: var(--gap-4);
+      font-family: var(--deck-display);
+      font-size: var(--text-xl);
+      line-height: 1.12;
+      letter-spacing: 0;
+      text-wrap: balance;
+    }
+
+    h3 {
+      margin-bottom: var(--gap-2);
+      font-family: var(--deck-display);
+      font-size: var(--text-lg);
+      line-height: 1.18;
+    }
+
+    p,
+    li {
+      font-size: var(--text-md);
+      line-height: 1.42;
+    }
+
+    .lead {
+      max-width: 820px;
+      color: var(--deck-muted);
+      font-size: var(--text-lg);
+      line-height: 1.34;
+    }
+
+    .grid {
+      display: grid;
+      gap: var(--gap-3);
+    }
+
+    .grid.two {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .grid.three {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .grid.four {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .card {
+      min-height: 142px;
+      padding: var(--gap-4);
+      background: rgba(255, 255, 255, 0.82);
+      border: 1px solid var(--deck-line);
+      border-radius: var(--deck-radius);
+    }
+
+    .card.compact {
+      min-height: 104px;
+    }
+
+    .card strong {
+      display: block;
+      margin-bottom: var(--gap-2);
+      color: var(--deck-primary-dark);
+      font-size: var(--text-md);
+    }
+
+    .card p,
+    .card li {
+      color: var(--deck-muted);
+      font-size: var(--text-sm);
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--gap-2);
+      margin-top: var(--gap-4);
+    }
+
+    .pill {
+      padding: var(--gap-1) var(--gap-2);
+      color: var(--deck-primary-dark);
+      background: rgba(0, 107, 131, 0.1);
+      border: 1px solid rgba(0, 107, 131, 0.2);
+      border-radius: 999px;
+      font-size: var(--text-sm);
+      font-weight: 700;
+    }
+
+    .quote {
+      max-width: 900px;
+      margin-top: var(--gap-5);
+      padding: var(--gap-4);
+      background: rgba(242, 184, 75, 0.14);
+      border: 1px solid rgba(242, 184, 75, 0.36);
+      border-radius: var(--deck-radius);
+      color: var(--deck-primary-dark);
+      font-family: var(--deck-display);
+      font-size: 30px;
+      line-height: 1.18;
+      font-weight: 800;
+      text-wrap: balance;
+    }
+
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: var(--gap-3);
+      margin-top: var(--gap-5);
+    }
+
+    .step {
+      min-height: 150px;
+      padding: var(--gap-3);
+      background: var(--deck-card);
+      border: 1px solid var(--deck-line);
+      border-radius: var(--deck-radius);
+    }
+
+    .step span {
+      display: inline-grid;
+      width: 34px;
+      height: 34px;
+      margin-bottom: var(--gap-3);
+      place-items: center;
+      color: var(--deck-card);
+      background: var(--deck-primary);
+      border-radius: 50%;
+      font: 800 var(--text-sm) / 1 var(--deck-mono);
+    }
+
+    .step strong {
+      display: block;
+      margin-bottom: var(--gap-2);
+      font-size: var(--text-sm);
+    }
+
+    .step p {
+      color: var(--deck-muted);
+      font-size: var(--text-sm);
+    }
+
+    .metric {
+      display: grid;
+      gap: var(--gap-1);
+      align-content: start;
+      min-height: 132px;
+      padding: var(--gap-4);
+      background: var(--deck-primary-dark);
+      color: var(--deck-card);
+      border-radius: var(--deck-radius);
+    }
+
+    .metric b {
+      font-size: 34px;
+      line-height: 1;
+    }
+
+    .metric span {
+      color: rgba(255, 255, 255, 0.72);
+      font-size: var(--text-sm);
+    }
+
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+      overflow: hidden;
+      background: var(--deck-card);
+      border: 1px solid var(--deck-line);
+      border-radius: var(--deck-radius);
+      font-size: var(--text-sm);
+    }
+
+    .table th,
+    .table td {
+      padding: var(--gap-3);
+      border-bottom: 1px solid var(--deck-line);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    .table th {
+      color: var(--deck-primary-dark);
+      background: rgba(0, 107, 131, 0.08);
+      font-size: var(--text-sm);
+    }
+
+    .table td {
+      color: var(--deck-muted);
+    }
+
+    .confidential {
+      border-top: 8px solid var(--deck-warning);
+    }
+
+    .confidential .kicker {
+      color: var(--deck-warning);
+    }
+
+    .chart-wrap {
+      height: 360px;
+      padding: var(--gap-4);
+      background: var(--deck-card);
+      border: 1px solid var(--deck-line);
+      border-radius: var(--deck-radius);
+    }
+
+    .fallback-bars {
+      display: grid;
+      gap: var(--gap-2);
+      margin-top: var(--gap-4);
+    }
+
+    .bar {
+      display: grid;
+      grid-template-columns: 180px 1fr;
+      align-items: center;
+      gap: var(--gap-2);
+      font-size: var(--text-sm);
+      color: var(--deck-muted);
+    }
+
+    .bar span:last-child {
+      height: 16px;
+      width: var(--w);
+      background: linear-gradient(90deg, var(--deck-primary), var(--deck-secondary));
+      border-radius: 999px;
+    }
+
+    .footer-note {
+      position: absolute;
+      left: var(--gap-6);
+      bottom: var(--gap-3);
+      color: var(--deck-muted);
+      font-size: var(--text-xs);
+    }
+
+    @media print {
+      body {
+        padding: 0;
+        background: var(--deck-card);
+      }
+
+      .deck {
+        gap: 0;
+      }
+
+      .slide {
+        width: var(--slide-w);
+        height: var(--slide-h);
+        min-height: var(--slide-h);
+        page-break-after: always;
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="deck">
+    <section class="slide" data-slide="01">
+      <p class="kicker">ONIA x Bolivian Electric</p>
+      <h1>Programa de IA Operativa y Mejora Comercial</h1>
+      <p class="lead">Una entrada por fases para ordenar cotizaciones, capacitar al equipo, mejorar la web, preparar chatbot e inventario con camara sin reemplazar TR4 de golpe.</p>
+      <div class="pill-row">
+        <span class="pill">CRM</span>
+        <span class="pill">Web y cotizacion</span>
+        <span class="pill">Capacitacion IA</span>
+        <span class="pill">Chatbot interno</span>
+        <span class="pill">Inventario camara</span>
+        <span class="pill">TR4 como base existente</span>
+      </div>
+      <p class="footer-note">Version para reunion interna. Preparado por ONIA, junio 2026.</p>
+    </section>
+
+    <section class="slide" data-slide="02">
+      <p class="kicker">Diagnostico</p>
+      <h2>La empresa ya tiene herramientas. Falta una capa simple de adopcion y seguimiento.</h2>
+      <div class="grid three">
+        <div class="card">
+          <strong>Operacion grande</strong>
+          <p>Catalogo, cotizacion online, sucursales, marcas, alquileres, manuales, workshops y canales digitales.</p>
+        </div>
+        <div class="card">
+          <strong>TR4 ya existe</strong>
+          <p>No conviene vender reemplazo. Conviene mejorar la experiencia diaria sobre el sistema actual.</p>
+        </div>
+        <div class="card">
+          <strong>Dolor probable</strong>
+          <p>Seguimiento, tiempos de respuesta, reportes manuales, conocimiento disperso y procesos fuera del sistema.</p>
+        </div>
+      </div>
+      <p class="quote">No empezar con "un chatbot". Empezar con orden, capacitacion y un piloto medible.</p>
+    </section>
+
+    <section class="slide" data-slide="03">
+      <p class="kicker">Prioridad inicial</p>
+      <h2>Los primeros sistemas deben resolver lo urgente, no construir todo.</h2>
+      <div class="grid three">
+        <div class="metric"><b>1</b><span>CRM ligero de cotizaciones y seguimiento.</span></div>
+        <div class="metric"><b>2</b><span>Web y flujo de cotizacion medible.</span></div>
+        <div class="metric"><b>3</b><span>Base de conocimiento para ventas y marketing.</span></div>
+        <div class="metric"><b>4</b><span>Capacitacion IA por rol y reglas de uso.</span></div>
+        <div class="metric"><b>5</b><span>Chatbot interno antes de WhatsApp productivo.</span></div>
+        <div class="metric"><b>6</b><span>Discovery de inventario con camara.</span></div>
+      </div>
+    </section>
+
+    <section class="slide" data-slide="04">
+      <p class="kicker">Arquitectura recomendada</p>
+      <h2>ONIA debe complementar TR4, no pelear contra TR4.</h2>
+      <div class="flow">
+        <div class="step"><span>1</span><strong>TR4</strong><p>Sistema base actual para ERP, facturacion, inventario y datos.</p></div>
+        <div class="step"><span>2</span><strong>Exportaciones</strong><p>Primero CSV, reportes o carga manual controlada.</p></div>
+        <div class="step"><span>3</span><strong>Capa ONIA</strong><p>CRM, dashboard, tareas, base de conocimiento y alertas.</p></div>
+        <div class="step"><span>4</span><strong>IA segura</strong><p>Plantillas, resumenes, contenido y asistentes con aprobacion humana.</p></div>
+        <div class="step"><span>5</span><strong>Integracion</strong><p>APIs, WhatsApp o automatizaciones solo cuando haya permisos.</p></div>
+      </div>
+    </section>
+
+    <section class="slide" data-slide="05">
+      <p class="kicker">Fase 1</p>
+      <h2>Diagnostico operativo + capacitacion IA + piloto comercial inicial</h2>
+      <div class="grid two">
+        <div class="card">
+          <strong>Duracion</strong>
+          <p>7 a 10 dias habiles para levantar procesos, entrevistar areas y elegir el primer piloto.</p>
+        </div>
+        <div class="card">
+          <strong>Inversion referencial</strong>
+          <p>Bs. 1.900 a Bs. 2.900, segun profundidad de entrevistas y documento ejecutivo.</p>
+        </div>
+        <div class="card">
+          <strong>Incluye</strong>
+          <p>Reunion inicial, entrevistas, revision web/canales, mapa de numeros, capacitacion IA y propuesta Fase 2.</p>
+        </div>
+        <div class="card">
+          <strong>No incluye</strong>
+          <p>WhatsApp productivo, integracion TR4, servidores, migracion de datos ni automatizaciones sensibles.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-slide="06">
+      <p class="kicker">Piloto 30 dias</p>
+      <h2>Un piloto corto debe probar valor operativo, no prometer transformacion completa.</h2>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Modulo</th>
+            <th>Entrega</th>
+            <th>Valor para Bolivian</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>CRM</td>
+            <td>Estados, responsables, proxima accion y reporte semanal.</td>
+            <td>Menos cotizaciones olvidadas.</td>
+          </tr>
+          <tr>
+            <td>Web</td>
+            <td>Formulario mas claro y entrada a tablero.</td>
+            <td>Mejor experiencia y medicion.</td>
+          </tr>
+          <tr>
+            <td>Base de conocimiento</td>
+            <td>FAQ, plantillas y respuestas aprobadas.</td>
+            <td>Menos dependencia de expertos.</td>
+          </tr>
+          <tr>
+            <td>Chatbot interno</td>
+            <td>Demo con rutas y respuestas validadas.</td>
+            <td>Prepara WhatsApp sin riesgo.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="slide" data-slide="07">
+      <p class="kicker">Visual de prioridad</p>
+      <h2>Impacto inicial estimado por frente</h2>
+      <div class="chart-wrap">
+        <canvas id="priorityChart" aria-label="Impacto inicial por modulo"></canvas>
+        <div class="fallback-bars">
+          <div class="bar"><span>CRM</span><span style="--w: 92%"></span></div>
+          <div class="bar"><span>Web/cotizacion</span><span style="--w: 84%"></span></div>
+          <div class="bar"><span>Base conocimiento</span><span style="--w: 78%"></span></div>
+          <div class="bar"><span>Capacitacion IA</span><span style="--w: 74%"></span></div>
+          <div class="bar"><span>Inventario camara</span><span style="--w: 68%"></span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-slide="08">
+      <p class="kicker">Seguridad</p>
+      <h2>Reglas para avanzar sin exponer informacion sensible</h2>
+      <div class="grid three">
+        <div class="card compact"><strong>No contrasenas</strong><p>Al inicio no se piden claves ni accesos sensibles.</p></div>
+        <div class="card compact"><strong>No TR4 directo</strong><p>No se toca TR4 sin aprobacion y metodo seguro.</p></div>
+        <div class="card compact"><strong>No WhatsApp productivo</strong><p>Primero mapa de numeros, permisos Meta y respuestas aprobadas.</p></div>
+        <div class="card compact"><strong>IA con politica</strong><p>Costos, margenes, bancos y proveedores no se suben a IA externa sin permiso.</p></div>
+        <div class="card compact"><strong>Aprobacion humana</strong><p>Cada automatizacion sensible debe tener responsable.</p></div>
+        <div class="card compact"><strong>Roles por nivel</strong><p>Mandos ven operacion; duenos ven costos y estrategia.</p></div>
+      </div>
+    </section>
+
+    <section class="slide confidential" data-slide="09">
+      <p class="kicker">Seccion duenos</p>
+      <h2>La version completa debe separar informacion operativa de informacion confidencial.</h2>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Nivel</th>
+            <th>Quien ve</th>
+            <th>Informacion</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Operativo</td>
+            <td>Mandos y responsables por area</td>
+            <td>Tareas, cotizaciones, clientes asignados, contenido y respuestas aprobadas.</td>
+          </tr>
+          <tr>
+            <td>Duenos</td>
+            <td>Duenos y gerencia autorizada</td>
+            <td>Costos, margenes, proveedores, gastos, importaciones, stock valorizado y permisos.</td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="quote">La IA debe aumentar control, no abrir informacion sensible a todo el equipo.</p>
+    </section>
+
+    <section class="slide confidential" data-slide="10">
+      <p class="kicker">Vision duenos</p>
+      <h2>Bolivian Electric OS: capa operativa interna por fases</h2>
+      <div class="grid three">
+        <div class="card"><strong>Ventas</strong><p>CRM, seguimiento, trazabilidad, prioridades y reportes por sucursal.</p></div>
+        <div class="card"><strong>Importaciones</strong><p>Checklist, proveedores, documentos, fechas, pagos y costos estimados vs reales.</p></div>
+        <div class="card"><strong>Finanzas</strong><p>Dashboard de gastos, vencimientos, cuentas por cobrar/pagar y alertas.</p></div>
+        <div class="card"><strong>Inventario</strong><p>Camara, conteos, ubicacion, evidencia, diferencias y alertas.</p></div>
+        <div class="card"><strong>Marketing</strong><p>Contenido tecnico, workshops, campanas de cotizacion y medicion de consultas.</p></div>
+        <div class="card"><strong>Gerencia</strong><p>Resumen semanal, minutas, decisiones pendientes y datos por area.</p></div>
+      </div>
+    </section>
+
+    <section class="slide confidential" data-slide="11">
+      <p class="kicker">Roadmap</p>
+      <h2>Escalar solo despues de validar procesos y permisos</h2>
+      <div class="flow">
+        <div class="step"><span>0</span><strong>Aprobacion</strong><p>Sponsor interno, reglas, permisos y datos por nivel.</p></div>
+        <div class="step"><span>1</span><strong>Diagnostico</strong><p>Entrevistas, capacitacion IA y primer piloto.</p></div>
+        <div class="step"><span>2</span><strong>Piloto 30 dias</strong><p>CRM, web flow, base, chatbot interno y reporte semanal.</p></div>
+        <div class="step"><span>3</span><strong>Control interno</strong><p>Inventario, importaciones, gastos y dashboards.</p></div>
+        <div class="step"><span>4</span><strong>Integraciones</strong><p>WhatsApp, TR4, agentes y automatizaciones con aprobacion.</p></div>
+      </div>
+    </section>
+
+    <section class="slide" data-slide="12">
+      <p class="kicker">Decision propuesta</p>
+      <h2>Empezar pequeno, serio y medible.</h2>
+      <div class="grid two">
+        <div class="card">
+          <strong>Recomendacion</strong>
+          <p>Aprobar Fase 1 para diagnostico, capacitacion IA y seleccion de piloto inicial.</p>
+        </div>
+        <div class="card">
+          <strong>Primer piloto recomendado</strong>
+          <p>CRM de cotizaciones + base de conocimiento, porque ayuda a ventas, marketing y gerencia sin tocar datos sensibles.</p>
+        </div>
+        <div class="card">
+          <strong>Responsable ONIA</strong>
+          <p>Sergio / ONIA como responsable externo de IA, automatizacion y mejora operativa.</p>
+        </div>
+        <div class="card">
+          <strong>Siguiente paso</strong>
+          <p>Definir sponsor interno, areas incluidas y rango aprobado para Fase 1.</p>
+        </div>
+      </div>
+      <p class="quote">No vender tecnologia aislada. Vender claridad, control y mejora operativa.</p>
+    </section>
+  </main>
+
+  <script>
+    const priorityCanvas = document.getElementById("priorityChart");
+    if (window.Chart && priorityCanvas) {
+      new Chart(priorityCanvas, {
+        type: "bar",
+        data: {
+          labels: ["CRM", "Web", "Base", "IA", "Inventario"],
+          datasets: [{
+            label: "Impacto inicial",
+            data: [92, 84, 78, 74, 68],
+            backgroundColor: ["#006b83", "#2f8f5b", "#f2b84b", "#004f61", "#7f3f98"],
+            borderRadius: 8
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: { enabled: true }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              max: 100,
+              ticks: { color: "#5b6870" },
+              grid: { color: "#e7ecef" }
+            },
+            x: {
+              ticks: { color: "#5b6870" },
+              grid: { display: false }
+            }
+          }
+        }
+      });
+    }
+  </script>
+</body>
+</html>

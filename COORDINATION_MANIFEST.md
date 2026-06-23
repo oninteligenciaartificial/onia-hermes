@@ -126,6 +126,8 @@ Canonical files:
 - `hermes-content/docs/BOLIVIAN_ELECTRIC_PRIORITY_PROPOSAL_EXECUTIVE_TEAM_2026.md`
 - `hermes-content/docs/BOLIVIAN_ELECTRIC_OWNER_STRATEGIC_PROPOSAL_2026.md`
 - `hermes-content/docs/ONIA_GIT_CHANGE_GROUPING_20260623.md`
+- `hermes-content/propuestas/bolivian-electric-transformacion-ia-2026.html`
+- `hermes-content/propuestas/assets/design-tokens.css`
 - `hermes-content/docs/ONIA_WHATSAPP_CHATWOOT_META_SALES_AUDIT_2026.md`
 - `hermes-content/docs/SERGIO_FACE_VOICE_ASSET_GUIDE.md`
 - `hermes-content/docs/SERGIO_ONIA_CONTENT_PRODUCTION_KIT_2026.md`
