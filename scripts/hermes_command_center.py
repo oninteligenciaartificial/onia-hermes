@@ -17,7 +17,7 @@ import sys
 import time
 import urllib.request
 import urllib.error
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 try:
@@ -70,6 +70,99 @@ ACTIONABLE_VIDEO_STATES = {
     "approved_for_publish",
     "failed",
 }
+
+VIDEO_REMINDERS_MODE = os.environ.get("HERMES_VIDEO_REMINDERS_MODE", "quiet").strip().lower()
+HIGGSFIELD_WATCHER_MODE = os.environ.get("HERMES_HIGGSFIELD_WATCHER_MODE", "quiet").strip().lower()
+
+SERGIO_SCHEDULE_BLOCKS = [
+    {
+        "key": "wake",
+        "days": "Lunes a viernes",
+        "start": "06:30",
+        "end": "07:00",
+        "title": "Levantarse, agua, aseo, cero telefono",
+        "meeting_policy": "blocked",
+    },
+    {
+        "key": "ceo",
+        "days": "Lunes a viernes",
+        "start": "07:00",
+        "end": "07:30",
+        "title": "Plan CEO: caja, ventas, 3 prioridades",
+        "meeting_policy": "blocked",
+    },
+    {
+        "key": "sales",
+        "days": "Lunes a viernes",
+        "start": "08:30",
+        "end": "10:30",
+        "title": "Ventas, CRM y seguimientos",
+        "meeting_policy": "emergency_only",
+    },
+    {
+        "key": "meeting_am",
+        "days": "Lunes a viernes",
+        "start": "11:30",
+        "end": "12:30",
+        "title": "Ventana reuniones 1",
+        "meeting_policy": "available",
+    },
+    {
+        "key": "delivery",
+        "days": "Lunes a viernes",
+        "start": "13:15",
+        "end": "15:15",
+        "title": "Entrega, desarrollo y operaciones",
+        "meeting_policy": "blocked",
+    },
+    {
+        "key": "meeting_pm",
+        "days": "Lunes a jueves",
+        "start": "15:30",
+        "end": "16:30",
+        "title": "Ventana reuniones 2",
+        "meeting_policy": "available",
+    },
+    {
+        "key": "gym",
+        "days": "Lunes, miercoles y viernes",
+        "start": "17:30",
+        "end": "19:00",
+        "title": "Gym protegido",
+        "meeting_policy": "blocked",
+    },
+    {
+        "key": "girlfriend",
+        "days": "Martes, jueves y sabado",
+        "start": "20:00",
+        "end": "22:30",
+        "title": "Tiempo novia / vida personal",
+        "meeting_policy": "blocked",
+    },
+    {
+        "key": "shutdown",
+        "days": "Domingo a jueves",
+        "start": "22:15",
+        "end": "23:00",
+        "title": "Apagar trabajo, preparar manana",
+        "meeting_policy": "blocked",
+    },
+]
+
+SERGIO_MEETING_WINDOWS = [
+    {
+        "days": "Lunes a viernes",
+        "start": "11:30",
+        "end": "12:30",
+        "title": "Demos, diagnosticos y reuniones pagadas",
+    },
+    {
+        "days": "Lunes a jueves",
+        "start": "15:30",
+        "end": "16:30",
+        "title": "Cierres, seguimiento y revision",
+    },
+]
 
 
 def _normalize(message: str) -> str:
@@ -332,20 +425,149 @@ def _format_video_jobs(title: str, jobs: list[dict], empty: str) -> str:
     return "\n".join(lines)
 
 
+def _sergio_plan() -> dict:
+    now = _now_lapaz()
+    lines = [
+        f"Plan Sergio hoy ({now.strftime('%d/%m')}):",
+        "Regla: proteger energia primero; vender y entregar antes de contenido.",
+        "",
+        "Bloques:",
+    ]
+    for block in SERGIO_SCHEDULE_BLOCKS:
+        lines.append(
+            f"- {block['start']}-{block['end']} | {block['title']} | {block['meeting_policy']}"
+        )
+    lines.extend(
+        [
+            "",
+            "Prioridades:",
+            "1. Una accion de ventas/CRM.",
+            "2. Una accion de entrega o sistema ONIA Center.",
+            "3. Gym, novia o descanso protegido segun el dia.",
+            "",
+            "Reuniones permitidas: 11:30-12:30 y 15:30-16:30, con 15 min de buffer.",
+            "Higgsfield: quiet/manual. Usa `Siguiente Video Lab` solo si quieres trabajar videos.",
+        ]
+    )
+    return {"ok": True, "action": "sergio_plan", "telegram_reply": "\n".join(lines)}
+
+
+def _sergio_availability(message: str) -> dict:
+    lower = message.lower()
+    time_match = re.search(r"(\d{1,2})(?::(\d{2}))?\s*(am|pm)?", lower)
+    if not time_match:
+        lines = [
+            "Disponibilidad Sergio:",
+            "- Ventana 1: lunes a viernes 11:30-12:30.",
+            "- Ventana 2: lunes a jueves 15:30-16:30.",
+            "- Bloqueado: antes de 09:30, almuerzo, entrega 13:15-15:15, gym, novia, shutdown y dormir.",
+            "",
+            "Formato util: Puedo reunirme jueves 15:30?",
+        ]
+        return {"ok": True, "action": "sergio_availability", "telegram_reply": "\n".join(lines)}
+
+    hour = int(time_match.group(1))
+    minute = int(time_match.group(2) or 0)
+    ampm = (time_match.group(3) or "").lower()
+    if ampm == "pm" and hour < 12:
+        hour += 12
+    if ampm == "am" and hour == 12:
+        hour = 0
+    minutes = hour * 60 + minute
+
+    available = (11 * 60 + 30 <= minutes < 12 * 60 + 30) or (15 * 60 + 30 <= minutes < 16 * 60 + 30)
+    blocked_reason = "fuera de ventanas permitidas"
+    if 17 * 60 + 30 <= minutes < 19 * 60:
+        blocked_reason = "choca con gym protegido"
+    elif 20 * 60 <= minutes < 22 * 60 + 30:
+        blocked_reason = "choca con tiempo novia/personal"
+    elif minutes >= 22 * 60 + 15 or minutes < 6 * 60 + 30:
+        blocked_reason = "choca con shutdown o dormir"
+    elif 13 * 60 + 15 <= minutes < 15 * 60 + 15:
+        blocked_reason = "choca con entrega/trabajo profundo"
+
+    if available:
+        reply = (
+            "Disponibilidad Sergio: SI, entra en ventana permitida.\n"
+            "Regla: deja 15 min de buffer y agenda solo si es demo, cliente, cierre o diagnostico.\n"
+            "Siguiente: agendar <titulo> | <dia> <hora>-<hora fin> | <descripcion>"
+        )
+    else:
+        reply = (
+            f"Disponibilidad Sergio: NO, {blocked_reason}.\n"
+            "Alternativas: 11:30-12:30 o 15:30-16:30.\n"
+            "Si es emergencia real, Sergio debe aprobarlo manualmente."
+        )
+    return {"ok": True, "action": "sergio_availability", "telegram_reply": reply}
+
+
+def _sergio_mode(mode: str) -> dict:
+    messages = {
+        "enfoque": [
+            "Modo enfoque activo:",
+            "- 45-90 min en una sola tarea.",
+            "- No videos, no Higgsfield, no investigacion amplia.",
+            "- Siguiente accion: escribe la tarea exacta o usa `Plan Sergio hoy`.",
+        ],
+        "gym": [
+            "Modo gym activo:",
+            "- Bloque protegido 17:30-19:00.",
+            "- No reuniones ni mensajes largos.",
+            "- Pendientes se guardan para despues del bloque.",
+        ],
+        "novia": [
+            "Modo novia activo:",
+            "- Bloque personal protegido.",
+            "- No trabajo, no backlog, no Higgsfield.",
+            "- Si algo es urgente, debe decir `emergencia real` y el motivo.",
+        ],
+        "saturado": [
+            "Modo carga baja:",
+            "- Pausa 15 min o cierre del bloque actual.",
+            "- Haz solo la proxima accion minima.",
+            "- Mover para manana: contenido, investigacion amplia y Video Lab.",
+            "- Prioridad: salud, venta urgente o cliente pago.",
+        ],
+        "cierre": [
+            "Cierre Sergio:",
+            "- Registrar pagos, leads, tareas y bloqueos.",
+            "- Elegir 3 prioridades de manana.",
+            "- Apagar trabajo. No abrir Higgsfield ni nueva investigacion.",
+        ],
+    }
+    lines = messages.get(mode, messages["enfoque"])
+    return {"ok": True, "action": f"sergio_mode_{mode}", "telegram_reply": "\n".join(lines)}
+
+
+def _quiet_video_reply(kind: str) -> dict:
+    lines = [
+        f"{kind}: modo quiet activo.",
+        "No voy a empujar Higgsfield ni Video Lab por horario.",
+        "Esto evita quemar tokens/atencion sin decision activa de producir.",
+        "",
+        "Comandos manuales permitidos:",
+        "- Siguiente Video Lab",
+        "- Recordatorios Video Lab detalle",
+        "- Watcher Higgsfield detalle",
+        "- Genera video Sergio: <idea>",
+    ]
+    return {"ok": True, "action": f"{kind.lower().replace(' ', '_')}_quiet", "telegram_reply": "\n".join(lines)}
+
+
 def _daily_content_queue() -> dict:
     next_data = _video_next(limit=6)
     next_jobs = next_data.get("jobs", [])
     lines = [
         "Cola diaria de contenido ONIA:",
         "1. Sergio: pieza fundador/proceso. Prioridad: confianza y construccion real.",
-        "   Comando: Genera video Sergio: <idea concreta del dia>",
+        "   Accion segura: guardar idea en ONIA Center o escribir hook corto.",
         "2. ONIA: pieza demo/sistema. Prioridad: vender DentalGest, Gesti-OS o automatizacion.",
-        "   Comando: Genera Reel ONIA: <tema> | <objetivo comercial>",
+        "   Accion segura: preparar guion o carrusel, no generar video automaticamente.",
         "3. Cliente/servicio: si hay prospecto caliente, preparar UGC seguro.",
-        "   Comando: Crea video cliente: <negocio> | <oferta> | <estilo>",
+        "   Accion segura: brief interno con aprobacion antes de Video Lab.",
         "4. Reutilizacion: convertir una pieza aprobada en caption IG, TikTok, Shorts y LinkedIn.",
         "",
-        "Regla: esto propone y ordena. No genera, no publica y no contacta sin aprobacion.",
+        "Regla: Higgsfield queda manual/quiet. No genera, no publica y no contacta sin aprobacion.",
     ]
     if next_jobs:
         lines.append("")
@@ -372,18 +594,23 @@ def _creative_radar() -> dict:
         "- Angulos utiles: dolor visible, antes/despues operativo, pantalla limpia, costo de seguir en Excel/WhatsApp.",
         "- No copiar creadores: extraer hook, ritmo, escenas, retencion y CTA.",
         "",
-        "Ideas listas para pedir por Telegram:",
-        "1. Genera video Sergio: por que un sistema simple vende mas que responder a mano",
-        "2. Genera Reel ONIA: DentalGest agenda y seguimiento | pedir demo corta",
-        "3. Genera Reel ONIA: Gesti-OS convierte Excel en tablero operativo | ver tablero simple",
+        "Ideas seguras para guardar, no producir automatico:",
+        "1. Sergio: por que un sistema simple vende mas que responder a mano",
+        "2. ONIA: DentalGest agenda y seguimiento | pedir demo corta",
+        "3. ONIA: Gesti-OS convierte Excel en tablero operativo | ver tablero simple",
         "4. Prepara consultoria ONIA: clinica dental | agenda, seguimiento y captacion",
+        "",
+        "Si quieres producir video, pide manualmente: Siguiente Video Lab o Genera video Sergio: <idea>.",
         "",
         "Nota: este radar es seguro/local. Para tendencias virales exactas, investigar fuentes actuales antes de usar claims.",
     ]
     return {"ok": True, "action": "creative_radar", "telegram_reply": "\n".join(lines)}
 
 
-def _approval_reminders() -> dict:
+def _approval_reminders(detail: bool = False) -> dict:
+    if VIDEO_REMINDERS_MODE != "active" and not detail:
+        return _quiet_video_reply("Recordatorios Video Lab")
+
     jobs = _video_jobs_by_state({"waiting_approval", "generated", "needs_revision", "approved_for_publish", "avatar_review_pending"})
     reply = _format_video_jobs(
         "Recordatorios Video Lab:",
@@ -395,7 +622,10 @@ def _approval_reminders() -> dict:
     return {"ok": True, "action": "video_approval_reminders", "telegram_reply": reply, "jobs": jobs}
 
 
-def _higgsfield_watcher() -> dict:
+def _higgsfield_watcher(detail: bool = False) -> dict:
+    if HIGGSFIELD_WATCHER_MODE != "active" and not detail:
+        return _quiet_video_reply("Watcher Higgsfield")
+
     jobs = _video_jobs_by_state({"approved_for_generation", "generating", "avatar_review_pending", "generated", "failed"})
     reply = _format_video_jobs(
         "Watcher Higgsfield:",
@@ -571,7 +801,8 @@ def _automation_status() -> dict:
         "- Activo: ONIA - Telegram Command Center en n8n.",
         "- Activo: Video Lab queda enrutable dentro de hermes-command.",
         "- Activo: Captura de chat ID Telegram.",
-        "- Activo: ONIA - Scheduled Operations Pack para radar, cola diaria, CRM, recordatorios, watcher Higgsfield, copy y registro.",
+        "- Activo: ONIA - Scheduled Operations Pack para agenda Sergio, radar, CRM, copy y registro.",
+        "- Quiet: recordatorios Video Lab y watcher Higgsfield no deben empujar produccion por horario.",
         "- Regla: n8n agenda y registra; Hermes decide; Sergio aprueba.",
         "- Pendiente tecnico: sincronizacion Notion desde n8n hasta tener credencial Notion.",
     ]
@@ -618,6 +849,8 @@ def _content_factory_status() -> dict:
         "Genera Reel ONIA: <tema> | <objetivo>",
         "Crea video cliente: <negocio> | <oferta> | <estilo>",
         "Siguiente Video Lab",
+        "",
+        "Modo actual: Higgsfield manual/quiet. Usa Video Lab solo cuando quieras producir.",
     ]
     return {"ok": True, "action": "content_factory_status", "telegram_reply": "\n".join(lines)}
 
@@ -625,6 +858,13 @@ def _content_factory_status() -> dict:
 def _help() -> dict:
     lines = [
         "Hermes Command Center - comandos:",
+        "Plan Sergio hoy",
+        "Puedo reunirme <dia> <hora>?",
+        "Modo enfoque",
+        "Estoy saturado",
+        "Modo gym",
+        "Modo novia",
+        "Cierre Sergio",
         "/agendar Título | fecha hora-inicio-hora-fin | descripción",
         "Estado Semana",
         "Plan Semana",
@@ -634,8 +874,8 @@ def _help() -> dict:
         "Fabrica contenido ONIA",
         "Radar creativo ONIA",
         "Cola contenido diaria",
-        "Recordatorios Video Lab",
-        "Watcher Higgsfield",
+        "Recordatorios Video Lab detalle",
+        "Watcher Higgsfield detalle",
         "Platform Copy Queue",
         "Seguimientos ONIA hoy",
         "Registro Hermes",
@@ -670,7 +910,7 @@ def _now_lapaz() -> datetime:
     if LAPAZ_TZ is not None:
         return datetime.now(LAPAZ_TZ)
     # Fallback: assume UTC-4 manually.
-    return datetime.utcnow() - timedelta(hours=4)
+    return (datetime.now(timezone.utc) - timedelta(hours=4)).replace(tzinfo=None)
 
 
 def _parse_fecha(texto: str) -> datetime:
@@ -795,6 +1035,21 @@ def handle_telegram(message: str) -> dict:
         payload = re.sub(r"^/?agendar\s*", "", normalized, flags=re.IGNORECASE)
         return _dispatch(_agendar(payload), {"message": normalized[:500]})
 
+    if lower.startswith("plan sergio") or lower.startswith("agenda sergio") or lower.startswith("calendario sergio"):
+        return _dispatch(_sergio_plan(), {"message": normalized[:500]})
+    if lower.startswith("puedo reunirme") or lower.startswith("disponibilidad sergio"):
+        return _dispatch(_sergio_availability(normalized), {"message": normalized[:500]})
+    if lower.startswith("modo enfoque"):
+        return _dispatch(_sergio_mode("enfoque"), {"message": normalized[:500]})
+    if lower.startswith("modo gym"):
+        return _dispatch(_sergio_mode("gym"), {"message": normalized[:500]})
+    if lower.startswith("modo novia"):
+        return _dispatch(_sergio_mode("novia"), {"message": normalized[:500]})
+    if lower.startswith("estoy saturado") or lower.startswith("modo saturado"):
+        return _dispatch(_sergio_mode("saturado"), {"message": normalized[:500]})
+    if lower.startswith("cierre sergio"):
+        return _dispatch(_sergio_mode("cierre"), {"message": normalized[:500]})
+
     if lower.startswith(VIDEO_PREFIXES):
         return _dispatch(_video_router(normalized), {"message": normalized[:500]})
 
@@ -817,9 +1072,9 @@ def handle_telegram(message: str) -> dict:
     if lower.startswith("cola contenido diaria") or lower.startswith("cola diaria contenido") or lower.startswith("contenido diario onia"):
         return _dispatch(_daily_content_queue())
     if lower.startswith("recordatorios video lab") or lower.startswith("aprobaciones video lab"):
-        return _dispatch(_approval_reminders())
+        return _dispatch(_approval_reminders(detail="detalle" in lower), {"message": normalized[:500]})
     if lower.startswith("watcher higgsfield") or lower.startswith("estado higgsfield"):
-        return _dispatch(_higgsfield_watcher())
+        return _dispatch(_higgsfield_watcher(detail="detalle" in lower), {"message": normalized[:500]})
     if lower.startswith("platform copy queue") or lower.startswith("copy plataformas") or lower.startswith("descripciones plataformas"):
         return _dispatch(_platform_copy_queue())
     if lower.startswith("seguimientos onia hoy") or lower.startswith("crm follow-up") or lower.startswith("seguimiento crm"):

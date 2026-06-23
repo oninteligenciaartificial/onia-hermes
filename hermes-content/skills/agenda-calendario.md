@@ -6,6 +6,18 @@ Hermes interpreta intenciones de agenda, n8n ejecuta contra GCal API.
 
 ## Comandos
 
+### Plan Sergio hoy
+Muestra la agenda estricta del dia con bloques protegidos, ventanas de reunion,
+prioridades y recordatorio de que Higgsfield esta en modo manual.
+
+### Puedo reunirme <dia> <hora>?
+Valida si una reunion cabe dentro de las ventanas permitidas sin romper gym,
+descanso, novia, trabajo profundo o shutdown.
+
+### Modo enfoque / Modo gym / Modo novia / Estoy saturado / Cierre Sergio
+Comandos personales para AlfredHQ. Deben responder corto y proteger energia
+antes de proponer mas trabajo.
+
 ### /agenda hoy
 Muestra todos los eventos del día actual desde Google Calendar.
 
@@ -79,6 +91,10 @@ Nota ONIA 2026:
 - Agregar `auditoria-pagada` como tipo de evento de 60min solo si ya pago.
 - El webhook debe registrar booking en Google Calendar, Telegram y Supabase privado `onia_ops.*`.
 - No abrir todo el calendario a prospectos: usar bloques controlados y minimo 4 horas de anticipacion.
+- Ventanas base Sergio:
+  - Lunes a viernes 11:30-12:30.
+  - Lunes a jueves 15:30-16:30.
+- Bloquear gym, novia/vida personal, shutdown, dormir, almuerzo y trabajo profundo.
 
 ## Reglas
 - Timezone siempre America/La_Paz (UTC-4)

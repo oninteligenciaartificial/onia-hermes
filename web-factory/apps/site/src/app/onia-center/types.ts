@@ -230,6 +230,60 @@ export type PremiumToolUsage = {
   approvedBy?: RoleId;
 };
 
+export type SergioScheduleCategory =
+  | "wake"
+  | "planning"
+  | "deep_work"
+  | "sales"
+  | "meetings"
+  | "admin"
+  | "gym"
+  | "personal"
+  | "shutdown"
+  | "sleep";
+
+export type SergioScheduleBlock = {
+  id: string;
+  dayPattern: string;
+  start: string;
+  end: string;
+  title: string;
+  category: SergioScheduleCategory;
+  strictness: "fixed" | "preferred" | "flex";
+  meetingPolicy: "available" | "blocked" | "emergency_only";
+  command?: string;
+  note: string;
+  visibility: "sergio_private";
+};
+
+export type SergioMeetingWindow = {
+  id: string;
+  dayPattern: string;
+  start: string;
+  end: string;
+  title: string;
+  allowedFor: string[];
+  bufferMinutes: number;
+  bookingRule: string;
+};
+
+export type SergioAssistantCommand = {
+  id: string;
+  command: string;
+  purpose: string;
+  responseRule: string;
+  tokenPolicy: "short" | "normal" | "deep_only_if_requested";
+};
+
+export type HiggsfieldQuietRule = {
+  id: string;
+  status: "manual_only" | "scheduled_allowed";
+  problem: string;
+  newRule: string;
+  allowedCommands: string[];
+  blockedScheduledCommands: string[];
+};
+
 export type BusinessRuleResult = {
   id: string;
   label: string;

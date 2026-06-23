@@ -1285,6 +1285,150 @@
   font-size: 11px;
 }
 
+.onia-sergio-calendar,
+.onia-calendar-summary,
+.onia-calendar-timeline,
+.onia-private-calendar {
+  display: grid;
+  gap: 10px;
+}
+
+.onia-sergio-calendar {
+  grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.72fr) minmax(300px, 0.85fr);
+  align-items: start;
+  margin-bottom: 12px;
+}
+
+.onia-sergio-calendar-main,
+.onia-calendar-side {
+  min-height: 100%;
+}
+
+.onia-calendar-summary {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.onia-calendar-summary div,
+.onia-calendar-block,
+.onia-higgsfield-quiet,
+.onia-private-calendar {
+  border: 1px solid var(--onia-line-soft);
+  border-radius: var(--onia-radius);
+  background: #fbfcfb;
+}
+
+.onia-calendar-summary div {
+  min-height: 86px;
+  padding: 10px;
+}
+
+.onia-calendar-summary span,
+.onia-calendar-block span,
+.onia-calendar-block small,
+.onia-higgsfield-quiet span,
+.onia-private-calendar span {
+  color: var(--onia-faint);
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.onia-calendar-summary strong,
+.onia-calendar-block strong,
+.onia-higgsfield-quiet strong,
+.onia-private-calendar strong {
+  display: block;
+  margin-top: 6px;
+  color: var(--onia-ink);
+  font-size: 14px;
+  line-height: 1.24;
+}
+
+.onia-calendar-summary small,
+.onia-calendar-block small,
+.onia-calendar-block p,
+.onia-higgsfield-quiet p,
+.onia-private-calendar p {
+  display: block;
+  margin: 6px 0 0;
+  color: var(--onia-muted);
+  font-size: 11px;
+  line-height: 1.38;
+}
+
+.onia-calendar-timeline {
+  max-height: 640px;
+  overflow: auto;
+  padding-right: 2px;
+}
+
+.onia-calendar-block {
+  position: relative;
+  padding: 10px 10px 10px 13px;
+  overflow: hidden;
+}
+
+.onia-calendar-block::before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: var(--onia-green);
+  content: "";
+}
+
+.onia-calendar-block.is-meetings::before {
+  background: var(--onia-blue);
+}
+
+.onia-calendar-block.is-gym::before,
+.onia-calendar-block.is-personal::before {
+  background: var(--onia-yellow);
+}
+
+.onia-calendar-block.is-shutdown::before,
+.onia-calendar-block.is-sleep::before {
+  background: #66717d;
+}
+
+.onia-calendar-block span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 22px;
+}
+
+.onia-calendar-block em {
+  display: inline-flex;
+  width: fit-content;
+  margin-top: 8px;
+  padding: 5px 7px;
+  border-radius: 999px;
+  color: #143d2d;
+  background: var(--onia-green-soft);
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 900;
+}
+
+.onia-higgsfield-quiet {
+  padding: 10px;
+  background: #fffaf0;
+}
+
+.onia-private-calendar {
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: flex-start;
+  margin-bottom: 12px;
+  padding: 12px;
+  background: #edf0f1;
+}
+
+.onia-private-calendar svg {
+  margin-top: 2px;
+  color: var(--onia-blue);
+}
+
 .onia-live-grid {
   grid-template-columns: repeat(4, minmax(0, 1fr));
   align-items: start;
@@ -1705,6 +1849,7 @@
   .onia-repo-grid,
   .onia-operating-metrics,
   .onia-live-metrics,
+  .onia-sergio-calendar,
   .onia-live-grid,
   .onia-ideas-board,
   .onia-selfhosted-panel,
@@ -1798,6 +1943,8 @@
     .onia-repo-grid,
     .onia-operating-metrics,
     .onia-live-metrics,
+    .onia-sergio-calendar,
+    .onia-calendar-summary,
     .onia-live-grid,
     .onia-ideas-board,
     .onia-selfhosted-panel,

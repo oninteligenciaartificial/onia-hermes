@@ -45,6 +45,13 @@ En n8n, usar `telegram_reply` como respuesta al usuario.
 ## Comandos cubiertos
 
 ```text
+Plan Sergio hoy
+Puedo reunirme <dia> <hora>?
+Modo enfoque
+Estoy saturado
+Modo gym
+Modo novia
+Cierre Sergio
 Estado Semana
 Plan Semana
 Plan Hoy
@@ -61,6 +68,8 @@ Genera video Sergio: <idea>
 Genera Reel ONIA: <tema> | <objetivo>
 Crea video cliente: <negocio> | <oferta> | <estilo>
 Siguiente Video Lab
+Recordatorios Video Lab detalle
+Watcher Higgsfield detalle
 ```
 
 `Estado Hermesa` resume memoria local, outbox Notion, workflows conocidos,

@@ -3,13 +3,19 @@
 import { useEffect, useMemo, useState } from "react";
 import {
   Bot,
+  CalendarDays,
   ClipboardCheck,
+  Clock,
   Copy,
   Database,
+  Dumbbell,
   ExternalLink,
   FileCheck2,
   HardDrive,
+  Heart,
   Lightbulb,
+  MessageSquareOff,
+  Moon,
   Plus,
   RotateCcw,
   ShieldCheck,
@@ -18,8 +24,12 @@ import { formatBs } from "./engine";
 import {
   collabIngestionItems,
   externalAdapters,
+  higgsfieldQuietRule,
   operatingProjects,
   operatingTasks,
+  sergioAssistantCommands,
+  sergioMeetingWindows,
+  sergioStrictScheduleBlocks,
 } from "./operating-source";
 import { operationalServices } from "./source";
 import type { RoleId } from "./types";
@@ -118,6 +128,32 @@ const reviewToolLabels: Record<RuntimeIdea["reviewTool"], string> = {
   claude: "Claude",
   self_hosted: "Modelo self-hosted",
   manual: "Revision manual",
+};
+
+const scheduleCategoryLabels: Record<string, string> = {
+  wake: "Arranque",
+  planning: "Direccion",
+  deep_work: "Trabajo profundo",
+  sales: "Ventas",
+  meetings: "Reuniones",
+  admin: "Admin",
+  gym: "Gym",
+  personal: "Personal",
+  shutdown: "Cierre",
+  sleep: "Dormir",
+};
+
+const scheduleCategoryIcons: Record<string, typeof Clock> = {
+  wake: Clock,
+  planning: ClipboardCheck,
+  deep_work: HardDrive,
+  sales: Bot,
+  meetings: CalendarDays,
+  admin: FileCheck2,
+  gym: Dumbbell,
+  personal: Heart,
+  shutdown: Moon,
+  sleep: Moon,
 };
 
 const starterReviews: RuntimeReview[] = collabIngestionItems.map((item) => ({
@@ -781,6 +817,101 @@ export function OperatingWorkspace({ selectedRole }: { selectedRole: RoleId }) {
           <small>No aprueban comision solos</small>
         </article>
       </div>
+
+      {selectedRole === "sergio" ? (
+        <div className="onia-sergio-calendar" id="calendario-sergio">
+          <article className="onia-live-card onia-sergio-calendar-main">
+            <div className="onia-live-title">
+              <CalendarDays size={16} />
+              <strong>Calendario estricto Sergio</strong>
+            </div>
+            <div className="onia-calendar-summary">
+              <div>
+                <span>Hora de levantarse</span>
+                <strong>06:30</strong>
+                <small>Sin telefono hasta terminar plan CEO.</small>
+              </div>
+              <div>
+                <span>Reuniones permitidas</span>
+                <strong>11:30 / 15:30</strong>
+                <small>Con buffer minimo de 15 min.</small>
+              </div>
+              <div>
+                <span>Bloques protegidos</span>
+                <strong>Gym + novia + dormir</strong>
+                <small>No vender, no reuniones, no Higgsfield.</small>
+              </div>
+            </div>
+            <div className="onia-calendar-timeline">
+              {sergioStrictScheduleBlocks.map((block) => {
+                const CategoryIcon = scheduleCategoryIcons[block.category] ?? Clock;
+                return (
+                  <div className={`onia-calendar-block is-${block.category}`} key={block.id}>
+                    <span>
+                      <CategoryIcon size={14} />
+                      {block.start} - {block.end}
+                    </span>
+                    <strong>{block.title}</strong>
+                    <small>
+                      {block.dayPattern} / {scheduleCategoryLabels[block.category]} / {block.meetingPolicy === "available" ? "reuniones permitidas" : "bloqueado"}
+                    </small>
+                    <p>{block.note}</p>
+                    {block.command ? <em>Telegram: {block.command}</em> : null}
+                  </div>
+                );
+              })}
+            </div>
+          </article>
+
+          <article className="onia-live-card onia-calendar-side">
+            <div className="onia-live-title">
+              <Clock size={16} />
+              <strong>Ventanas de reunion</strong>
+            </div>
+            <div className="onia-live-list">
+              {sergioMeetingWindows.map((window) => (
+                <div key={window.id}>
+                  <span>{window.dayPattern} / {window.start} - {window.end}</span>
+                  <strong>{window.title}</strong>
+                  <small>{window.bookingRule}</small>
+                  <small>Permitido: {window.allowedFor.join(", ")}</small>
+                </div>
+              ))}
+            </div>
+          </article>
+
+          <article className="onia-live-card onia-calendar-side">
+            <div className="onia-live-title">
+              <MessageSquareOff size={16} />
+              <strong>AlfredHQ personal + quiet Higgsfield</strong>
+            </div>
+            <div className="onia-higgsfield-quiet">
+              <span>Estado</span>
+              <strong>{higgsfieldQuietRule.status === "manual_only" ? "Manual por defecto" : "Programado permitido"}</strong>
+              <p>{higgsfieldQuietRule.problem}</p>
+              <p>{higgsfieldQuietRule.newRule}</p>
+            </div>
+            <div className="onia-live-list">
+              {sergioAssistantCommands.map((item) => (
+                <div key={item.id}>
+                  <span>{item.tokenPolicy}</span>
+                  <strong>{item.command}</strong>
+                  <small>{item.purpose}</small>
+                </div>
+              ))}
+            </div>
+          </article>
+        </div>
+      ) : (
+        <div className="onia-private-calendar">
+          <ShieldCheck size={17} />
+          <div>
+            <span>Calendario privado Sergio</span>
+            <strong>Oculto para este rol</strong>
+            <p>Arthur, vendedores y freelancers no ven horarios personales, bloques de descanso ni reglas privadas de disponibilidad.</p>
+          </div>
+        </div>
+      )}
 
       <div className="onia-live-grid">
         <article className="onia-live-card">

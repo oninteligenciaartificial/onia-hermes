@@ -1,0 +1,132 @@
+{
+  "version": "2026-06-23",
+  "owner": "Sergio / ONIA",
+  "visibility": "sergio_private",
+  "objective": "Protect Sergio's energy, meeting availability and execution blocks inside ONIA Center and AlfredHQ.",
+  "bot_decision": {
+    "recommendation": "Use AlfredHQ as the same bot with a Sergio personal mode first.",
+    "why": [
+      "One bot keeps the operating inbox simple.",
+      "The problem is command scheduling, not bot identity.",
+      "A second bot adds credentials, routing and monitoring before the process is stable."
+    ],
+    "create_new_bot_when": [
+      "A separate personal phone/channel is required.",
+      "Other team members start using AlfredHQ and the private Sergio commands need isolation.",
+      "The current Telegram routing cannot enforce quiet mode per command."
+    ]
+  },
+  "default_day": [
+    {
+      "id": "sergio-wake-reset",
+      "days": "Lunes a viernes",
+      "start": "06:30",
+      "end": "07:00",
+      "title": "Levantarse, agua, aseo, cero telefono",
+      "meeting_policy": "blocked"
+    },
+    {
+      "id": "sergio-ceo-plan",
+      "days": "Lunes a viernes",
+      "start": "07:00",
+      "end": "07:30",
+      "title": "Plan CEO: caja, ventas, 3 prioridades",
+      "meeting_policy": "blocked"
+    },
+    {
+      "id": "sergio-sales-block",
+      "days": "Lunes a viernes",
+      "start": "08:30",
+      "end": "10:30",
+      "title": "Ventas, CRM y seguimientos",
+      "meeting_policy": "emergency_only"
+    },
+    {
+      "id": "sergio-meeting-window-am",
+      "days": "Lunes a viernes",
+      "start": "11:30",
+      "end": "12:30",
+      "title": "Ventana reuniones 1",
+      "meeting_policy": "available"
+    },
+    {
+      "id": "sergio-delivery-block",
+      "days": "Lunes a viernes",
+      "start": "13:15",
+      "end": "15:15",
+      "title": "Entrega, desarrollo y operaciones",
+      "meeting_policy": "blocked"
+    },
+    {
+      "id": "sergio-meeting-window-pm",
+      "days": "Lunes a jueves",
+      "start": "15:30",
+      "end": "16:30",
+      "title": "Ventana reuniones 2",
+      "meeting_policy": "available"
+    },
+    {
+      "id": "sergio-gym",
+      "days": "Lunes, miercoles y viernes",
+      "start": "17:30",
+      "end": "19:00",
+      "title": "Gym protegido",
+      "meeting_policy": "blocked"
+    },
+    {
+      "id": "sergio-girlfriend",
+      "days": "Martes, jueves y sabado",
+      "start": "20:00",
+      "end": "22:30",
+      "title": "Tiempo novia / vida personal",
+      "meeting_policy": "blocked"
+    },
+    {
+      "id": "sergio-shutdown",
+      "days": "Domingo a jueves",
+      "start": "22:15",
+      "end": "23:00",
+      "title": "Apagar trabajo, preparar manana",
+      "meeting_policy": "blocked"
+    }
+  ],
+  "meeting_windows": [
+    {
+      "days": "Lunes a viernes",
+      "start": "11:30",
+      "end": "12:30",
+      "buffer_minutes": 15,
+      "booking_rule": "Cal.com only opens this with 4h minimum notice."
+    },
+    {
+      "days": "Lunes a jueves",
+      "start": "15:30",
+      "end": "16:30",
+      "buffer_minutes": 15,
+      "booking_rule": "No meetings after 16:30 if they collide with close, gym or personal life."
+    }
+  ],
+  "alfred_commands": [
+    "Plan Sergio hoy",
+    "Puedo reunirme <dia> <hora>?",
+    "Modo enfoque",
+    "Estoy saturado",
+    "Modo gym",
+    "Modo novia",
+    "Cierre Sergio"
+  ],
+  "higgsfield_quiet_rule": {
+    "status": "manual_only",
+    "cause": "The active scheduled operations pack included daily Video Lab and Higgsfield reminder commands.",
+    "allowed_manual_commands": [
+      "Siguiente Video Lab",
+      "Recordatorios Video Lab detalle",
+      "Watcher Higgsfield detalle",
+      "Genera video Sergio: <idea>"
+    ],
+    "scheduled_commands_to_remove_or_replace": [
+      "Recordatorios Video Lab",
+      "Watcher Higgsfield"
+    ]
+  }
+}

@@ -1,7 +1,7 @@
 {
-  "version": "2026-06-06",
+  "version": "2026-06-23",
   "owner": "ONIA",
-  "objective": "Operate Hermes, ONIA projects, content production and approvals from Telegram with Hermes as the brain and n8n as scheduler/logger.",
+  "objective": "Operate Hermes, ONIA projects, Sergio's strict calendar, content production and approvals from Telegram with Hermes as the brain and n8n as scheduler/logger.",
   "entrypoint": {
     "cli": "hermes-command telegram --message \"<mensaje>\"",
     "response_field": "telegram_reply",
@@ -11,8 +11,9 @@
     "Telegram is the operating inbox.",
     "Hermes decides using local docs, references, Notion and n8n context.",
     "n8n schedules, waits, logs and routes.",
+    "Sergio's health, sleep, gym and personal blocks are protected before content production.",
     "Video Lab is an internal lab for ONIA content only.",
-    "Higgsfield renders only after approval and is not an active commercial package.",
+    "Higgsfield renders only after approval and is manual-only by default.",
     "Publishing and client-facing actions require explicit approval."
   ],
   "approval_gates": {
@@ -29,6 +30,18 @@
   },
   "command_groups": [
     {
+      "name": "sergio_personal_os",
+      "commands": [
+        "Plan Sergio hoy",
+        "Puedo reunirme <dia> <hora>?",
+        "Modo enfoque",
+        "Estoy saturado",
+        "Modo gym",
+        "Modo novia",
+        "Cierre Sergio"
+      ]
+    },
+    {
       "name": "status_planning",
       "commands": [
         "Estado Semana",
@@ -42,12 +55,12 @@
     {
       "name": "scheduled_operations",
       "commands": [
-        "Radar creativo ONIA",
-        "Cola contenido diaria",
+        "Plan Sergio hoy",
         "Seguimientos ONIA hoy",
-        "Recordatorios Video Lab",
+        "Disponibilidad Sergio hoy",
+        "Modo gym",
         "Platform Copy Queue",
-        "Watcher Higgsfield",
+        "Cierre Sergio",
         "Registro Hermes"
       ]
     },
@@ -75,7 +88,9 @@
         "Rehacer video <job_id>: <cambio>",
         "Video generado <job_id>: <url_video>",
         "Publicar video <job_id>",
-        "Archivar video <job_id>"
+        "Archivar video <job_id>",
+        "Recordatorios Video Lab detalle",
+        "Watcher Higgsfield detalle"
       ]
     }
   ],
@@ -166,30 +181,30 @@
       "id": "VeCHKr6wkK5Wet25",
       "status": "active",
       "active_version_id": "63d699bb-6814-44dc-a2c2-d3f8d6c9ed4d",
-      "role": "Scheduled internal Telegram reminders for radar, content queue, CRM, Video Lab approvals, Higgsfield watcher, platform copy and Hermes registry."
+      "role": "Scheduled internal Telegram reminders for Sergio calendar, CRM, safe content planning, platform copy and Hermes registry. Video Lab and Higgsfield are quiet/manual by default."
     }
   ],
   "planned_workflows": [
     {
       "name": "ONIA - Daily Content Queue",
       "trigger": "Daily 08:00 America/La_Paz",
-      "output": "1 Sergio idea, 1 ONIA idea, client opportunities",
+      "output": "Safe ideas and ONIA tasks without pushing automatic video generation",
       "approval_required": true,
       "implemented_by": "ONIA - Scheduled Operations Pack"
     },
     {
       "name": "ONIA - Video Approval Reminders",
-      "trigger": "Daily 10:00 and 17:00 America/La_Paz",
-      "output": "Pending briefs, generated videos and next exact commands",
+      "trigger": "Manual command or explicit detail request",
+      "output": "Pending briefs, generated videos and next exact commands only when Sergio asks",
       "approval_required": true,
-      "implemented_by": "ONIA - Scheduled Operations Pack"
+      "implemented_by": "hermes-command quiet/manual mode"
     },
     {
       "name": "ONIA - Higgsfield Generation Watcher",
-      "trigger": "Polling or webhook when available",
+      "trigger": "Manual command, approved job or future webhook when stable",
       "output": "Generated URL, costs, model, status",
       "approval_required": true,
-      "implemented_by": "ONIA - Scheduled Operations Pack as local Video Lab watcher until Higgsfield API/MCP polling is stable"
+      "implemented_by": "manual-only until Higgsfield API/MCP polling is stable"
     },
     {
       "name": "ONIA - Platform Copy Router",
@@ -213,28 +228,36 @@
   },
   "daily_cadence": [
     {
-      "time": "07:30",
-      "activity": "creative radar and opportunities"
+      "time": "06:30",
+      "activity": "wake reset, no phone"
     },
     {
-      "time": "08:00",
-      "activity": "daily content queue for Sergio and ONIA"
+      "time": "07:00",
+      "activity": "Sergio CEO plan, cash, sales and 3 priorities"
     },
     {
-      "time": "10:00",
-      "activity": "approval reminders"
+      "time": "08:30",
+      "activity": "sales, CRM and followups"
     },
     {
-      "time": "15:00",
-      "activity": "platform copy and reuse package"
+      "time": "11:30",
+      "activity": "meeting window 1"
     },
     {
-      "time": "17:00",
-      "activity": "generated video review"
+      "time": "15:30",
+      "activity": "meeting window 2"
     },
     {
-      "time": "21:00",
-      "activity": "summary and blockers"
+      "time": "17:30",
+      "activity": "gym protected block on training days"
+    },
+    {
+      "time": "20:00",
+      "activity": "girlfriend/personal protected block on selected nights"
+    },
+    {
+      "time": "22:15",
+      "activity": "shutdown, no Higgsfield or large new tasks"
     }
   ],
   "data_sources": [
@@ -244,6 +267,7 @@
     "HERMES_CONTENT_WORKFLOW.md",
     "N8N_AUTOMATION_PLAN.md",
     "hermes-content/references/onia-projects-registry.json",
+    "hermes-content/references/sergio-strict-calendar-20260623.json",
     "hermes-content/references/video-brief-template.json",
     "hermes-content/references/higgsfield-content-use-cases.json",
     "Notion CRM, Finance, SaaS/tools and Tasks when connected",

@@ -12,6 +12,7 @@ import {
   BriefcaseBusiness,
   Building2,
   Calculator,
+  CalendarDays,
   CheckCircle2,
   ChevronRight,
   ClipboardCheck,
@@ -100,6 +101,7 @@ type NavItem = {
 
 const navItems: NavItem[] = [
   { id: "uso-diario", label: "Uso diario", detail: "Captura", icon: ClipboardCheck },
+  { id: "calendario-sergio", label: "Calendario", detail: "Sergio", icon: CalendarDays },
   { id: "ideas", label: "Ideas", detail: "Reels e IA", icon: Lightbulb },
   { id: "dashboard", label: "Dashboard", detail: "Operacion", icon: BarChart3 },
   { id: "proyectos", label: "Proyectos", detail: "ONIA", icon: BriefcaseBusiness },

@@ -35,6 +35,8 @@ const operatingSchema = read("supabase/migrations/20260622_onia_center_operating
 const operatingSeed = read("supabase/migrations/20260622_onia_center_operating_seed.sql");
 const ideasAccessSchema = read("supabase/migrations/20260622_onia_center_ideas_access.sql");
 const ideasAccessSeed = read("supabase/migrations/20260622_onia_center_ideas_access_seed.sql");
+const sergioCalendarSchema = read("supabase/migrations/20260623_onia_center_sergio_calendar.sql");
+const sergioCalendarSeed = read("supabase/migrations/20260623_onia_center_sergio_calendar_seed.sql");
 
 const requiredTables = [
   "roles",
@@ -100,6 +102,20 @@ for (const table of requiredIdeasAccessTables) {
   );
 }
 
+const requiredSergioCalendarTables = [
+  "sergio_schedule_blocks",
+  "sergio_meeting_windows",
+  "sergio_assistant_commands",
+  "personal_automation_rules",
+];
+
+for (const table of requiredSergioCalendarTables) {
+  assert(
+    sergioCalendarSchema.includes(`create table if not exists onia_center.${table}`),
+    `Missing Sergio calendar table onia_center.${table}`,
+  );
+}
+
 const requiredSchemaRules = [
   "onia_center_services_price_setup_required",
   "onia_center_services_monthly_required_if_recurring",
@@ -134,6 +150,16 @@ const requiredIdeasAccessRules = [
 
 for (const rule of requiredIdeasAccessRules) {
   assert(ideasAccessSchema.includes(rule), `Missing ideas/access schema rule: ${rule}`);
+}
+
+const requiredSergioCalendarRules = [
+  "visibility_scope = 'sergio_private'",
+  "enable row level security",
+  "manual_only",
+];
+
+for (const rule of requiredSergioCalendarRules) {
+  assert(sergioCalendarSchema.includes(rule) || sergioCalendarSeed.includes(rule), `Missing Sergio calendar rule: ${rule}`);
 }
 
 const requiredSeedMarkers = [
@@ -177,12 +203,27 @@ for (const marker of requiredIdeasAccessSeedMarkers) {
   assert(ideasAccessSeed.includes(marker), `Missing ideas/access seed marker: ${marker}`);
 }
 
+const requiredSergioCalendarSeedMarkers = [
+  "sergio-wake-reset",
+  "sergio-gym",
+  "sergio-girlfriend",
+  "higgsfield-quiet-default-20260623",
+  "Recordatorios Video Lab",
+  "Watcher Higgsfield",
+];
+
+for (const marker of requiredSergioCalendarSeedMarkers) {
+  assert(sergioCalendarSeed.includes(marker), `Missing Sergio calendar seed marker: ${marker}`);
+}
+
 const appSource = read("web-factory/apps/site/src/app/onia-center/source.ts");
 const appEngine = read("web-factory/apps/site/src/app/onia-center/engine.ts");
 const appOperatingSource = read("web-factory/apps/site/src/app/onia-center/operating-source.ts");
 const appOperatingEngine = read("web-factory/apps/site/src/app/onia-center/operating-engine.ts");
 const appPage = read("web-factory/apps/site/src/app/onia-center/page.tsx");
 const appOperatingWorkspace = read("web-factory/apps/site/src/app/onia-center/operating-workspace.tsx");
+const telegramReference = JSON.parse(read("hermes-content/references/telegram-command-center.json"));
+const sergioCalendarReference = JSON.parse(read("hermes-content/references/sergio-strict-calendar-20260623.json"));
 
 const requiredAppMarkers = [
   "setupPriceBs: 2900",
@@ -230,6 +271,30 @@ for (const marker of requiredIdeaAppMarkers) {
   assert(appOperatingWorkspace.includes(marker) || appPage.includes(marker), `Missing idea app marker: ${marker}`);
 }
 
+const requiredSergioCalendarAppMarkers = [
+  "Calendario estricto Sergio",
+  "sergioStrictScheduleBlocks",
+  "higgsfieldQuietRule",
+  "AlfredHQ personal + quiet Higgsfield",
+  "Puedo reunirme <dia> <hora>?",
+];
+
+for (const marker of requiredSergioCalendarAppMarkers) {
+  assert(
+    appOperatingWorkspace.includes(marker) || appOperatingSource.includes(marker),
+    `Missing Sergio calendar app marker: ${marker}`,
+  );
+}
+
+assert(
+  telegramReference.command_groups.some((group) => group.name === "sergio_personal_os"),
+  "Missing sergio_personal_os command group in Telegram reference",
+);
+assert(
+  sergioCalendarReference.higgsfield_quiet_rule.status === "manual_only",
+  "Sergio calendar reference must keep Higgsfield manual_only",
+);
+
 console.log(
   JSON.stringify(
     {
@@ -238,12 +303,15 @@ console.log(
       tables: requiredTables.length,
       operatingTables: requiredOperatingTables.length,
       ideasAccessTables: requiredIdeasAccessTables.length,
+      sergioCalendarTables: requiredSergioCalendarTables.length,
       schemaRules: requiredSchemaRules.length,
       operatingSchemaRules: requiredOperatingRules.length,
       ideasAccessSchemaRules: requiredIdeasAccessRules.length,
+      sergioCalendarRules: requiredSergioCalendarRules.length,
       seed: "20260622_onia_center_seed.sql",
       operatingSeed: "20260622_onia_center_operating_seed.sql",
       ideasAccessSeed: "20260622_onia_center_ideas_access_seed.sql",
+      sergioCalendarSeed: "20260623_onia_center_sergio_calendar_seed.sql",
       growth: vendorPanel.service_cash_engine.workhorse_offer,
     },
     null,

@@ -52,6 +52,22 @@ Sergio.
 
 ## Comandos base
 
+### Sergio OS personal
+
+```text
+Plan Sergio hoy
+Puedo reunirme <dia> <hora>?
+Modo enfoque
+Estoy saturado
+Modo gym
+Modo novia
+Cierre Sergio
+```
+
+Regla: AlfredHQ puede ser el bot personal por ahora. No crear un segundo bot
+hasta que haya usuarios externos usando el mismo canal o hasta que la separacion
+de privacidad lo exija. El problema actual era el scheduling, no el bot.
+
 ### Estado y plan
 
 ```text
@@ -133,12 +149,14 @@ idea
 
 | Hora Bolivia | Accion |
 |---|---|
-| 07:30 | radar creativo y oportunidades |
-| 08:00 | elegir 1 pieza Sergio y 1 pieza ONIA |
-| 10:00 | revisar aprobaciones Video Lab |
-| 15:00 | crear captions y versiones por canal |
-| 17:00 | revisar MP4 generados |
-| 21:00 | resumen: publicado, pendiente, bloqueado |
+| 06:30 | levantarse, agua, aseo, cero telefono |
+| 07:00 | Plan Sergio hoy: caja, ventas, 3 prioridades |
+| 08:30 | ventas, CRM y seguimientos |
+| 11:30 | ventana de reuniones 1 |
+| 15:30 | ventana de reuniones 2 |
+| 17:30 | gym protegido en dias de entrenamiento |
+| 20:00 | novia/vida personal en bloques protegidos |
+| 22:15 | cierre Sergio, sin Higgsfield ni tareas grandes |
 
 ## n8n
 
@@ -161,8 +179,10 @@ Workflows activos conocidos:
 - `Hermes Telegram Chat ID Capture`: activo para capturar chat ID.
 - `ONIA - Scheduled Operations Pack`: activo en n8n, ID `VeCHKr6wkK5Wet25`,
   version activa `63d699bb-6814-44dc-a2c2-d3f8d6c9ed4d`.
-  Agenda recordatorios internos por Telegram para radar, cola diaria, CRM,
-  aprobaciones Video Lab, Higgsfield, copy por plataforma y registro Hermes.
+  Version anterior agenda recordatorios internos por Telegram para radar, cola
+  diaria, CRM, aprobaciones Video Lab, Higgsfield, copy por plataforma y registro
+  Hermes. La fuente actual del repo cambia ese paquete a agenda Sergio, CRM,
+  copy, gym y cierre; Video Lab/Higgsfield quedan quiet/manual.
 - `Hermes Radar Diario Creativo y Clientes`: queda como flujo historico
   pendiente; el radar local seguro ya lo cubre `ONIA - Scheduled Operations Pack`.
 
@@ -170,13 +190,13 @@ Comandos programados:
 
 | Hora | Comando Hermes | Funcion |
 |---|---|---|
-| 07:30 | `Radar creativo ONIA` | ideas seguras para Sergio, ONIA y clientes |
+| 07:00 | `Plan Sergio hoy` | agenda estricta, prioridades y bloques protegidos |
 | 08:00 | `Cola contenido diaria` | decidir piezas del dia |
 | 08:30 | `Seguimientos ONIA hoy` | preparar seguimiento CRM sin enviar |
-| 10:00 | `Recordatorios Video Lab` | revisar briefs/MP4 pendientes |
+| 10:00 | `Disponibilidad Sergio hoy` | recordar ventanas de reunion y bloqueos |
 | 15:00 | `Platform Copy Queue` | adaptar descripciones por canal |
-| 17:00 | `Watcher Higgsfield` | revisar renders y jobs aprobados |
-| 21:00 | `Registro Hermes` | resumen de outbox/log local |
+| 17:20 | `Modo gym` | bloquear reuniones y mensajes largos |
+| 22:15 | `Cierre Sergio` | apagar trabajo y preparar manana |
 
 Registro:
 
@@ -203,6 +223,22 @@ Hermes no debe decirle a Higgsfield solo "crea un video". Debe enviar paquete:
 - negative prompt;
 - caption por plataforma;
 - aprobacion requerida.
+
+### Modo quiet
+
+AlfredHQ estaba enviando mensajes relacionados a Higgsfield porque el Scheduled
+Operations Pack tenia comandos diarios `Recordatorios Video Lab` y
+`Watcher Higgsfield`. Eso no significa que Higgsfield renderizaba solo, pero si
+quema atencion y puede quemar tokens si cada recordatorio pasa por LLM.
+
+Nueva regla:
+
+- Video Lab/Higgsfield no se empujan por horario.
+- `Recordatorios Video Lab` y `Watcher Higgsfield` responden quiet por defecto.
+- Para detalle manual usar:
+  - `Recordatorios Video Lab detalle`
+  - `Watcher Higgsfield detalle`
+  - `Siguiente Video Lab`
 
 ## Canales
 

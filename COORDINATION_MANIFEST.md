@@ -140,6 +140,7 @@ Canonical files:
 - `hermes-content/docs/ONIA_PROPUESTA_USO_CAPITAL_FAMILIAR_15000_2026.md`
 - `hermes-content/docs/ONIA_PROPUESTA_GASTOS_LOCAL_FIRST_15000_2026.md`
 - `hermes-content/docs/ONIA_PROPUESTA_GASTOS_LOCAL_FIRST_15000_2026.pdf`
+- `hermes-content/docs/SERGIO_STRICT_CALENDAR_AND_ALFREDHQ_2026.md`
 - `hermes-content/docs/ONIA_NUVIA_ACCOUNTING_MODEL_2026.md`
 - `hermes-content/docs/ONIA_SUSTAINABILITY_DASHBOARD_SPEC_2026.md`
 - `hermes-content/docs/ONIA_COMPANY_OPERATING_MODEL_2026.md`
@@ -149,6 +150,7 @@ Canonical files:
 - `hermes-content/deploy/selfhosted/`
 - `hermes-content/references/video-brief-template.json`
 - `hermes-content/references/telegram-command-center.json`
+- `hermes-content/references/sergio-strict-calendar-20260623.json`
 - `hermes-content/references/sergio-onia-content-kit-20260602.json`
 - `hermes-content/references/sergio-ai-influencer-identity-system-20260606.json`
 - `hermes-content/references/onia-projects-registry.json`
@@ -159,6 +161,8 @@ Canonical files:
 - `hermes-content/references/hermes-os-control-plane-20260620.json`
 - `hermes-content/references/onia-vendor-panel-20260620.json`
 - `supabase/migrations/20260620_onia_vendor_sales_panel.sql`
+- `supabase/migrations/20260623_onia_center_sergio_calendar.sql`
+- `supabase/migrations/20260623_onia_center_sergio_calendar_seed.sql`
 - `web-factory/apps/site/src/app/vendedores/page.tsx`
 - `hermes-content/references/ai-ecommerce-model/README.md`
 - `hermes-content/references/ai-ecommerce-model/20260605-mara-vale-round-01.md`

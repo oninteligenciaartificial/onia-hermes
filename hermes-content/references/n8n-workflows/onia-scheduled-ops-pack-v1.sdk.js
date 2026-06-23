@@ -4,7 +4,7 @@ const radarTrigger = trigger({
   type: 'n8n-nodes-base.scheduleTrigger',
   version: 1.3,
   config: {
-    name: '07:30 Radar creativo',
+    name: '07:00 Plan Sergio',
     parameters: {
       rule: {
         interval: [
@@ -12,34 +12,34 @@ const radarTrigger = trigger({
             field: 'days',
             daysInterval: 1,
             triggerAtHour: 7,
-            triggerAtMinute: 30
+            triggerAtMinute: 0
           }
         ]
       }
     },
     position: [180, 120]
   },
-  output: [{ scheduled: true, command: 'Radar creativo ONIA' }]
+  output: [{ scheduled: true, command: 'Plan Sergio hoy' }]
 });
 
 const radarInput = node({
   type: 'n8n-nodes-base.set',
   version: 3.4,
   config: {
-    name: 'Set Radar creativo',
+    name: 'Set Plan Sergio',
     parameters: {
       mode: 'manual',
       includeOtherFields: false,
       assignments: {
         assignments: [
           { id: 'chat-id-radar', name: 'chatId', value: '6830070978', type: 'string' },
-          { id: 'command-radar', name: 'command', value: 'Radar creativo ONIA', type: 'string' }
+          { id: 'command-radar', name: 'command', value: 'Plan Sergio hoy', type: 'string' }
         ]
       }
     },
     position: [480, 120]
   },
-  output: [{ chatId: '6830070978', command: 'Radar creativo ONIA' }]
+  output: [{ chatId: '6830070978', command: 'Plan Sergio hoy' }]
 });
 
 const queueTrigger = trigger({
@@ -130,7 +130,7 @@ const approvalsTrigger = trigger({
   type: 'n8n-nodes-base.scheduleTrigger',
   version: 1.3,
   config: {
-    name: '10:00 Recordatorios Video Lab',
+    name: '10:00 Disponibilidad Sergio',
     parameters: {
       rule: {
         interval: [
@@ -145,27 +145,27 @@ const approvalsTrigger = trigger({
     },
     position: [180, 660]
   },
-  output: [{ scheduled: true, command: 'Recordatorios Video Lab' }]
+  output: [{ scheduled: true, command: 'Disponibilidad Sergio hoy' }]
 });
 
 const approvalsInput = node({
   type: 'n8n-nodes-base.set',
   version: 3.4,
   config: {
-    name: 'Set Recordatorios Video Lab',
+    name: 'Set Disponibilidad Sergio',
     parameters: {
       mode: 'manual',
       includeOtherFields: false,
       assignments: {
         assignments: [
           { id: 'chat-id-approvals', name: 'chatId', value: '6830070978', type: 'string' },
-          { id: 'command-approvals', name: 'command', value: 'Recordatorios Video Lab', type: 'string' }
+          { id: 'command-approvals', name: 'command', value: 'Disponibilidad Sergio hoy', type: 'string' }
         ]
       }
     },
     position: [480, 660]
   },
-  output: [{ chatId: '6830070978', command: 'Recordatorios Video Lab' }]
+  output: [{ chatId: '6830070978', command: 'Disponibilidad Sergio hoy' }]
 });
 
 const copyTrigger = trigger({
@@ -214,7 +214,7 @@ const higgsfieldTrigger = trigger({
   type: 'n8n-nodes-base.scheduleTrigger',
   version: 1.3,
   config: {
-    name: '17:00 Watcher Higgsfield',
+    name: '17:20 Modo gym',
     parameters: {
       rule: {
         interval: [
@@ -222,76 +222,76 @@ const higgsfieldTrigger = trigger({
             field: 'days',
             daysInterval: 1,
             triggerAtHour: 17,
-            triggerAtMinute: 0
+            triggerAtMinute: 20
           }
         ]
       }
     },
     position: [180, 1020]
   },
-  output: [{ scheduled: true, command: 'Watcher Higgsfield' }]
+  output: [{ scheduled: true, command: 'Modo gym' }]
 });
 
 const higgsfieldInput = node({
   type: 'n8n-nodes-base.set',
   version: 3.4,
   config: {
-    name: 'Set Watcher Higgsfield',
+    name: 'Set Modo gym',
     parameters: {
       mode: 'manual',
       includeOtherFields: false,
       assignments: {
         assignments: [
           { id: 'chat-id-higgsfield', name: 'chatId', value: '6830070978', type: 'string' },
-          { id: 'command-higgsfield', name: 'command', value: 'Watcher Higgsfield', type: 'string' }
+          { id: 'command-higgsfield', name: 'command', value: 'Modo gym', type: 'string' }
         ]
       }
     },
     position: [480, 1020]
   },
-  output: [{ chatId: '6830070978', command: 'Watcher Higgsfield' }]
+  output: [{ chatId: '6830070978', command: 'Modo gym' }]
 });
 
 const logTrigger = trigger({
   type: 'n8n-nodes-base.scheduleTrigger',
   version: 1.3,
   config: {
-    name: '21:00 Registro Hermes',
+    name: '22:15 Cierre Sergio',
     parameters: {
       rule: {
         interval: [
           {
             field: 'days',
             daysInterval: 1,
-            triggerAtHour: 21,
-            triggerAtMinute: 0
+            triggerAtHour: 22,
+            triggerAtMinute: 15
           }
         ]
       }
     },
     position: [180, 1200]
   },
-  output: [{ scheduled: true, command: 'Registro Hermes' }]
+  output: [{ scheduled: true, command: 'Cierre Sergio' }]
 });
 
 const logInput = node({
   type: 'n8n-nodes-base.set',
   version: 3.4,
   config: {
-    name: 'Set Registro Hermes',
+    name: 'Set Cierre Sergio',
     parameters: {
       mode: 'manual',
       includeOtherFields: false,
       assignments: {
         assignments: [
           { id: 'chat-id-log', name: 'chatId', value: '6830070978', type: 'string' },
-          { id: 'command-log', name: 'command', value: 'Registro Hermes', type: 'string' }
+          { id: 'command-log', name: 'command', value: 'Cierre Sergio', type: 'string' }
         ]
       }
     },
     position: [480, 1200]
   },
-  output: [{ chatId: '6830070978', command: 'Registro Hermes' }]
+  output: [{ chatId: '6830070978', command: 'Cierre Sergio' }]
 });
 
 const runHermes = node({
@@ -374,7 +374,7 @@ const sendReply = node({
 });
 
 const safetyNote = sticky(
-  '## ONIA Scheduled Operations Pack\nInternal Telegram reminders only. This workflow never contacts prospects, never publishes content and never sends WhatsApp messages. Notion sync uses Hermes local outbox until a Notion credential exists in n8n.',
+  '## ONIA Scheduled Operations Pack\nInternal Telegram reminders only. This workflow protects Sergio calendar, sales followups and operating records. Video Lab and Higgsfield are manual-only by default. This workflow never contacts prospects, never publishes content and never sends WhatsApp messages. Notion sync uses Hermes local outbox until a Notion credential exists in n8n.',
   [radarTrigger, queueTrigger, crmTrigger, approvalsTrigger, copyTrigger, higgsfieldTrigger, logTrigger],
   { color: 5 }
 );

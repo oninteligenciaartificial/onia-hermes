@@ -181,6 +181,13 @@ state and content-factory requests. The command delegates Video Lab messages to
 
 Supported general intents:
 
+- `Plan Sergio hoy`
+- `Puedo reunirme <dia> <hora>?`
+- `Modo enfoque`
+- `Estoy saturado`
+- `Modo gym`
+- `Modo novia`
+- `Cierre Sergio`
 - `Estado Semana`
 - `Plan Semana`
 - `Plan Hoy`
@@ -190,9 +197,9 @@ Supported general intents:
 - `Radar creativo ONIA`
 - `Cola contenido diaria`
 - `Seguimientos ONIA hoy`
-- `Recordatorios Video Lab`
+- `Recordatorios Video Lab detalle`
 - `Platform Copy Queue`
-- `Watcher Higgsfield`
+- `Watcher Higgsfield detalle`
 - `Registro Hermes`
 - `Orquesta ONIA: <empresa o rubro> | <objetivo>`
 - `Prepara venta DentalGest: <clinica>`
