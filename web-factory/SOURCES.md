@@ -153,6 +153,31 @@ Resumen del banco de galerias del 2026-06-15:
 | shadcn/ui | Fuente base aprobada | Canonica para componentes y patrones accesibles. |
 | Efferd blocks | Discovery de bloques shadcn | Revisar acceso/licencia por bloque antes de importar. |
 
+### Fuentes externas agregadas al pattern bank 2026-06-24
+
+Estas fuentes amplian la investigacion por rubro. No son fuentes de codigo
+aprobado por defecto. Usarlas para estructura, ritmo, taxonomia, secciones,
+motion principles, flujos y criterios visuales.
+
+| Fuente | Uso permitido | Nota |
+|---|---|---|
+| Lapa Ninja | Landing research por categoria | Galeria amplia con categorias SaaS, business, ecommerce, AI, health, food, real estate y mas. Inspiracion solamente. |
+| Landbook | Web inspiration actual | Buena para landing, portfolio, ecommerce, pricing, case study, product listing y product page. Inspiracion manual solamente: smoke Playwright 2026-06-24 recibio 403/Cloudflare. |
+| Landingfolio | Landing examples y componentes | Usar para patrones de secciones y composicion. No copiar templates. |
+| SaaSFrame | SaaS CRO y mobile-first landing patterns | Usar para SaaS/AI/App: hero, proof, pricing, social proof y CTA. Inspiracion solamente. |
+| SaaS Landing Page | SaaS section taxonomy | Usar para estudiar landing, pricing, about, features, testimonials, FAQ y contacto. Inspiracion solamente. |
+| Awwwards | Art direction, motion, tipografia y alto nivel visual | Alto riesgo de overdesign. Extraer 1 idea fuerte, no copiar experiencia completa. |
+| Recent | Referencias recientes de websites, OG images, app screenshots y skills | Radar de actualidad visual. Inspiracion solamente. |
+| Mobbin | Flujos reales, copy de producto y UX patterns | Usar para app/dashboard/checkout/onboarding flows, no para copiar pantallas. |
+
+Artefactos nuevos:
+
+```text
+web-factory/WEB_FACTORY_PATTERN_BANK_2026.md
+web-factory/data/references/design-sources/web-factory-pattern-bank-20260624.json
+web-factory/data/references/design-sources/gallery-examples/2026-06-24-new-sources-smoke.json
+```
+
 Playwright esta instalado como dev dependency de `web-factory` para que los scrapers
 corran por terminal. Codex desktop tambien puede usar su runtime `node_repl` para
 capturas ad-hoc. Instalar Chromium con `pnpm references:playwright:install` solo si

@@ -140,6 +140,84 @@
       "include": ["10x.app"],
       "exclude": ["#"],
       "captureCode": false
+    },
+    {
+      "id": "landingfolio",
+      "name": "Landingfolio",
+      "url": "https://www.landingfolio.com/",
+      "mode": "landing-gallery",
+      "licenseStatus": "inspiration-only",
+      "usage": "Landing page examples, templates and component inspiration. Do not copy templates or proprietary assets.",
+      "maxItems": 30,
+      "maxDetailItems": 6,
+      "include": ["landingfolio.com"],
+      "exclude": ["/pricing", "/login", "/sign", "#"],
+      "captureCode": false
+    },
+    {
+      "id": "saasframe-landing-pages",
+      "name": "SaaSFrame Landing Pages",
+      "url": "https://www.saasframe.io/categories/landing-page",
+      "mode": "saas-gallery",
+      "licenseStatus": "inspiration-only",
+      "usage": "SaaS landing page hero, value proposition, social proof, pricing and mobile-first CRO patterns.",
+      "maxItems": 30,
+      "maxDetailItems": 6,
+      "include": ["saasframe.io"],
+      "exclude": ["/pricing", "/login", "/sign", "#"],
+      "captureCode": false
+    },
+    {
+      "id": "saaslandingpage",
+      "name": "SaaS Landing Page",
+      "url": "https://saaslandingpage.com/",
+      "mode": "saas-gallery",
+      "licenseStatus": "inspiration-only",
+      "usage": "SaaS page section taxonomy: landing, pricing, about, features, testimonials, FAQ and contact.",
+      "maxItems": 30,
+      "maxDetailItems": 6,
+      "include": ["saaslandingpage.com"],
+      "exclude": ["/pricing", "/login", "/sign", "#"],
+      "captureCode": false
+    },
+    {
+      "id": "awwwards-winning-websites",
+      "name": "Awwwards Winning Websites",
+      "url": "https://www.awwwards.com/websites/",
+      "mode": "award-gallery",
+      "licenseStatus": "inspiration-only-high-overdesign-risk",
+      "usage": "Art direction, typography, motion and experimental interaction reference. Translate into one usable design move for ONIA client work.",
+      "maxItems": 24,
+      "maxDetailItems": 4,
+      "include": ["awwwards.com"],
+      "exclude": ["/academy", "/jobs", "/submit", "/pricing", "/login", "/sign", "#"],
+      "captureCode": false
+    },
+    {
+      "id": "recent-design",
+      "name": "Recent Design",
+      "url": "https://recent.design/",
+      "mode": "daily-design-curation",
+      "licenseStatus": "inspiration-only",
+      "usage": "Daily recent design references across websites, OG images, app screenshots and design skills.",
+      "maxItems": 30,
+      "maxDetailItems": 6,
+      "include": ["recent.design"],
+      "exclude": ["/info", "#"],
+      "captureCode": false
+    },
+    {
+      "id": "mobbin-web",
+      "name": "Mobbin Web",
+      "url": "https://mobbin.com/explore/web",
+      "mode": "product-flow-library",
+      "licenseStatus": "flow-reference-only",
+      "usage": "Real app/web UI flows, copywriting and interaction patterns. Use for UX flow study, not visual copying.",
+      "maxItems": 24,
+      "maxDetailItems": 4,
+      "include": ["mobbin.com"],
+      "exclude": ["/pricing", "/login", "/join", "#"],
+      "captureCode": false
     }
   ]
 }

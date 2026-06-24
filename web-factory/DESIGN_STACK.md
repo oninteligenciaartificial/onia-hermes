@@ -62,6 +62,8 @@ Latest screenshot bank: `web-factory/data/references/design-sources/2026-06-15-r
 Latest gallery examples: `web-factory/data/references/design-sources/gallery-examples/latest-gallery-examples.json`.
 Latest licensed-code index: `web-factory/data/references/code-sources/latest-code-cache-index.json`.
 Latest reusable code examples: `web-factory/data/references/code-sources/latest-component-code-examples.json`.
+Latest Web Factory pattern bank: `web-factory/WEB_FACTORY_PATTERN_BANK_2026.md`.
+Latest machine-readable pattern bank: `web-factory/data/references/design-sources/web-factory-pattern-bank-20260624.json`.
 
 Heavy local artifacts live outside the repo:
 
@@ -145,6 +147,60 @@ Latest gallery run summary:
 - 124 indexed screenshots, 0 missing files, 0 duplicate paths, 0 strictly blank screenshots in QA.
 - 28 code blocks captured from docs where `captureCode` was enabled.
 - 240 local component/code examples indexed from compatible cached repos.
+
+## Web Factory Pattern Bank 2026
+
+Use `WEB_FACTORY_PATTERN_BANK_2026.md` before designing a new client website.
+It converts current web/design research into ONIA-specific playbooks by rubro:
+
+- Agency / portfolio / creative service.
+- Ecommerce / catalog / storefront.
+- Engineering / construction / industrial.
+- Clinic / health / professional care.
+- Local service / repair / installation.
+- Restaurant / food / cafe.
+- Real estate / property / architecture.
+- Education / course / event.
+- SaaS / AI / app.
+- Legal / finance / consulting.
+
+The pattern bank is the preferred bridge between inspiration and execution:
+
+1. Pick the rubro and page recipe.
+2. Confirm the primary CTA and proof required.
+3. Decide which real or generated visual assets are needed.
+4. Route the work through the relevant skills.
+5. Use external references only for structure, section logic, typography,
+   motion principles and conversion flow.
+
+Current external research sources added to the bank:
+
+- Lapa Ninja, Landbook, Landingfolio, SaaSFrame, SaaS Landing Page,
+  Awwwards, Recent, Mobbin.
+- Official technical anchors: shadcn/ui, Tailwind CSS, Motion and web.dev
+  Web Vitals.
+
+Policy:
+
+- Lapa/Landbook/Landingfolio/SaaSFrame/SaaS Landing Page/Awwwards/Recent/Mobbin
+  are reference-only unless a specific asset or code license is separately
+  reviewed.
+- Awwwards is useful for art direction and motion, but high risk for overdesign
+  in ONIA client work. Translate it into one strong design move, not a whole
+  experimental site.
+- Mobbin is for product flows and UI copy/UX patterns, not for marketing-page
+  visuals.
+- If a client site needs images or video to feel real, ask for assets or generate
+  placeholders only within the asset rules in the pattern bank.
+
+New source smoke test:
+
+- Artifact: `web-factory/data/references/design-sources/gallery-examples/2026-06-24-new-sources-smoke.json`.
+- Passed automated harvest: Landingfolio, SaaSFrame, SaaS Landing Page,
+  Awwwards, Recent and Mobbin.
+- Manual-only for now: Landbook returned 403/Cloudflare in the Playwright
+  harvester, so it stays in research docs but is not listed in automated
+  `gallery-reference-sources.json`.
 
 ## Ecommerce Purchase Reference Studies
 

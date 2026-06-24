@@ -1,0 +1,2885 @@
+{
+  "capturedAt": "2026-06-24T19:33:05.599Z",
+  "cacheRoot": "C:/Users/PC/.codex/design-stack/gallery-examples-full",
+  "policy": "Gallery screenshots and structure are reference artifacts. Copy/adapt code only when licenseStatus is compatible and the linked/local repo license has been reviewed.",
+  "configPath": "web-factory/data/references/design-sources/gallery-reference-sources.json",
+  "results": [
+    {
+      "id": "landbook",
+      "name": "Landbook",
+      "url": "https://land-book.com/",
+      "mode": "website-gallery",
+      "usage": "Current hand-picked website inspiration. Use structure, categories and section rhythm only.",
+      "licenseStatus": "inspiration-only",
+      "status": 403,
+      "failedRequestCount": 0,
+      "rawCandidateCount": 0,
+      "selectedCandidateCount": 0,
+      "detailedExampleCount": 0,
+      "candidates": [],
+      "screenshot": {
+        "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/landbook/gallery.png",
+        "sha256": "874c9187e6e664b53a9076b23f572ba1fd0331bb3c8ab332f34501f76b39a6b2",
+        "mode": "full-page"
+      },
+      "screenshotQuality": {
+        "viewport": {
+          "width": 1440,
+          "height": 1000
+        },
+        "textLength": 288,
+        "mediaCount": 1,
+        "codeCount": 1,
+        "headingCount": 3,
+        "usefulElementCount": 6,
+        "visibleAreaRatio": 0.031,
+        "isLikelySparse": false,
+        "visibleSamples": [
+          "land-book.com",
+          "Verificación de seguridad en curso",
+          "a10e29886a0d4c58",
+          "Cloudflare",
+          "Privacidad"
+        ]
+      },
+      "examples": []
+    },
+    {
+      "id": "landingfolio",
+      "name": "Landingfolio",
+      "url": "https://www.landingfolio.com/",
+      "mode": "landing-gallery",
+      "usage": "Landing page examples, templates and component inspiration. Do not copy templates or proprietary assets.",
+      "licenseStatus": "inspiration-only",
+      "status": 200,
+      "failedRequestCount": 2,
+      "rawCandidateCount": 106,
+      "selectedCandidateCount": 8,
+      "detailedExampleCount": 1,
+      "candidates": [
+        {
+          "index": 91,
+          "url": "https://www.landingfolio.com/inspiration/post/headshotpro-1",
+          "text": "HeadshotPro inspiration",
+          "heading": "HeadshotPro",
+          "description": "Marketing HeadshotPro June 14, 2026 Make beautiful websites, without designing them. Give every page a stunning, professional look — with hundreds of components to choose from. Browse library Bugster June 14, 2026 Jack McDade June 13, 2026 Saas 37136 Headroom July 30, 2025 32813 Breyta February 21, 2025 40027 Riley - Parenting with Superpowers. - Riley Febru",
+          "imageSrc": "https://landingfoliocom.imgix.net/inspiration/1781410880859HeadshotProdesktop2487bad5da4540cabf857ae271d81098png?&q=75&auto=format&crop=top,left&fit=crop&auto=format&w=300&h=400",
+          "imageAlt": "",
+          "buttonText": [
+            "Marketing",
+            "HeadshotPro June 14, 2026",
+            "Browse library",
+            "Browse library",
+            "Bugster June 14, 2026",
+            "Jack McDade June 13, 2026",
+            "Saas",
+            "Headroom July 30, 2025"
+          ],
+          "tags": [],
+          "cardArea": 7878851,
+          "score": 10,
+          "sourceMode": "landing-gallery"
+        },
+        {
+          "index": 96,
+          "url": "https://www.landingfolio.com/inspiration/post/bugster",
+          "text": "Bugster inspiration",
+          "heading": "HeadshotPro",
+          "description": "Marketing HeadshotPro June 14, 2026 Make beautiful websites, without designing them. Give every page a stunning, professional look — with hundreds of components to choose from. Browse library Bugster June 14, 2026 Jack McDade June 13, 2026 Saas 37136 Headroom July 30, 2025 32813 Breyta February 21, 2025 40027 Riley - Parenting with Superpowers. - Riley Febru",
+          "imageSrc": "https://landingfoliocom.imgix.net/inspiration/1781410880859HeadshotProdesktop2487bad5da4540cabf857ae271d81098png?&q=75&auto=format&crop=top,left&fit=crop&auto=format&w=300&h=400",
+          "imageAlt": "",
+          "buttonText": [
+            "Marketing",
+            "HeadshotPro June 14, 2026",
+            "Browse library",
+            "Browse library",
+            "Bugster June 14, 2026",
+            "Jack McDade June 13, 2026",
+            "Saas",
+            "Headroom July 30, 2025"
+          ],
+          "tags": [],
+          "cardArea": 7878851,
+          "score": 10,
+          "sourceMode": "landing-gallery"
+        },
+        {
+          "index": 100,
+          "url": "https://www.landingfolio.com/inspiration/post/jack-mcdade",
+          "text": "Jack McDade inspiration",
+          "heading": "HeadshotPro",
+          "description": "Marketing HeadshotPro June 14, 2026 Make beautiful websites, without designing them. Give every page a stunning, professional look — with hundreds of components to choose from. Browse library Bugster June 14, 2026 Jack McDade June 13, 2026 Saas 37136 Headroom July 30, 2025 32813 Breyta February 21, 2025 40027 Riley - Parenting with Superpowers. - Riley Febru",
+          "imageSrc": "https://landingfoliocom.imgix.net/inspiration/1781410880859HeadshotProdesktop2487bad5da4540cabf857ae271d81098png?&q=75&auto=format&crop=top,left&fit=crop&auto=format&w=300&h=400",
+          "imageAlt": "",
+          "buttonText": [
+            "Marketing",
+            "HeadshotPro June 14, 2026",
+            "Browse library",
+            "Browse library",
+            "Bugster June 14, 2026",
+            "Jack McDade June 13, 2026",
+            "Saas",
+            "Headroom July 30, 2025"
+          ],
+          "tags": [],
+          "cardArea": 7878851,
+          "score": 10,
+          "sourceMode": "landing-gallery"
+        },
+        {
+          "index": 104,
+          "url": "https://www.landingfolio.com/inspiration/post/headroom",
+          "text": "Headroom inspiration",
+          "heading": "HeadshotPro",
+          "description": "Marketing HeadshotPro June 14, 2026 Make beautiful websites, without designing them. Give every page a stunning, professional look — with hundreds of components to choose from. Browse library Bugster June 14, 2026 Jack McDade June 13, 2026 Saas 37136 Headroom July 30, 2025 32813 Breyta February 21, 2025 40027 Riley - Parenting with Superpowers. - Riley Febru",
+          "imageSrc": "https://landingfoliocom.imgix.net/inspiration/1781410880859HeadshotProdesktop2487bad5da4540cabf857ae271d81098png?&q=75&auto=format&crop=top,left&fit=crop&auto=format&w=300&h=400",
+          "imageAlt": "",
+          "buttonText": [
+            "Marketing",
+            "HeadshotPro June 14, 2026",
+            "Browse library",
+            "Browse library",
+            "Bugster June 14, 2026",
+            "Jack McDade June 13, 2026",
+            "Saas",
+            "Headroom July 30, 2025"
+          ],
+          "tags": [],
+          "cardArea": 7878851,
+          "score": 10,
+          "sourceMode": "landing-gallery"
+        },
+        {
+          "index": 108,
+          "url": "https://www.landingfolio.com/inspiration/post/breyta",
+          "text": "Breyta inspiration",
+          "heading": "HeadshotPro",
+          "description": "Marketing HeadshotPro June 14, 2026 Make beautiful websites, without designing them. Give every page a stunning, professional look — with hundreds of components to choose from. Browse library Bugster June 14, 2026 Jack McDade June 13, 2026 Saas 37136 Headroom July 30, 2025 32813 Breyta February 21, 2025 40027 Riley - Parenting with Superpowers. - Riley Febru",
+          "imageSrc": "https://landingfoliocom.imgix.net/inspiration/1781410880859HeadshotProdesktop2487bad5da4540cabf857ae271d81098png?&q=75&auto=format&crop=top,left&fit=crop&auto=format&w=300&h=400",
+          "imageAlt": "",
+          "buttonText": [
+            "Marketing",
+            "HeadshotPro June 14, 2026",
+            "Browse library",
+            "Browse library",
+            "Bugster June 14, 2026",
+            "Jack McDade June 13, 2026",
+            "Saas",
+            "Headroom July 30, 2025"
+          ],
+          "tags": [],
+          "cardArea": 7878851,
+          "score": 10,
+          "sourceMode": "landing-gallery"
+        },
+        {
+          "index": 112,
+          "url": "https://www.landingfolio.com/inspiration/post/riley-parenting-with-superpowers-riley",
+          "text": "Riley - Parenting with Superpowers. - Riley inspiration",
+          "heading": "HeadshotPro",
+          "description": "Marketing HeadshotPro June 14, 2026 Make beautiful websites, without designing them. Give every page a stunning, professional look — with hundreds of components to choose from. Browse library Bugster June 14, 2026 Jack McDade June 13, 2026 Saas 37136 Headroom July 30, 2025 32813 Breyta February 21, 2025 40027 Riley - Parenting with Superpowers. - Riley Febru",
+          "imageSrc": "https://landingfoliocom.imgix.net/inspiration/1781410880859HeadshotProdesktop2487bad5da4540cabf857ae271d81098png?&q=75&auto=format&crop=top,left&fit=crop&auto=format&w=300&h=400",
+          "imageAlt": "",
+          "buttonText": [
+            "Marketing",
+            "HeadshotPro June 14, 2026",
+            "Browse library",
+            "Browse library",
+            "Bugster June 14, 2026",
+            "Jack McDade June 13, 2026",
+            "Saas",
+            "Headroom July 30, 2025"
+          ],
+          "tags": [],
+          "cardArea": 7878851,
+          "score": 10,
+          "sourceMode": "landing-gallery"
+        },
+        {
+          "index": 116,
+          "url": "https://www.landingfolio.com/inspiration/post/seo-course-by-danny",
+          "text": "SEO Course by Danny inspiration",
+          "heading": "HeadshotPro",
+          "description": "Marketing HeadshotPro June 14, 2026 Make beautiful websites, without designing them. Give every page a stunning, professional look — with hundreds of components to choose from. Browse library Bugster June 14, 2026 Jack McDade June 13, 2026 Saas 37136 Headroom July 30, 2025 32813 Breyta February 21, 2025 40027 Riley - Parenting with Superpowers. - Riley Febru",
+          "imageSrc": "https://landingfoliocom.imgix.net/inspiration/1781410880859HeadshotProdesktop2487bad5da4540cabf857ae271d81098png?&q=75&auto=format&crop=top,left&fit=crop&auto=format&w=300&h=400",
+          "imageAlt": "",
+          "buttonText": [
+            "Marketing",
+            "HeadshotPro June 14, 2026",
+            "Browse library",
+            "Browse library",
+            "Bugster June 14, 2026",
+            "Jack McDade June 13, 2026",
+            "Saas",
+            "Headroom July 30, 2025"
+          ],
+          "tags": [],
+          "cardArea": 7878851,
+          "score": 10,
+          "sourceMode": "landing-gallery"
+        },
+        {
+          "index": 120,
+          "url": "https://www.landingfolio.com/inspiration/post/busy-bar",
+          "text": "Busy Bar inspiration",
+          "heading": "HeadshotPro",
+          "description": "Marketing HeadshotPro June 14, 2026 Make beautiful websites, without designing them. Give every page a stunning, professional look — with hundreds of components to choose from. Browse library Bugster June 14, 2026 Jack McDade June 13, 2026 Saas 37136 Headroom July 30, 2025 32813 Breyta February 21, 2025 40027 Riley - Parenting with Superpowers. - Riley Febru",
+          "imageSrc": "https://landingfoliocom.imgix.net/inspiration/1781410880859HeadshotProdesktop2487bad5da4540cabf857ae271d81098png?&q=75&auto=format&crop=top,left&fit=crop&auto=format&w=300&h=400",
+          "imageAlt": "",
+          "buttonText": [
+            "Marketing",
+            "HeadshotPro June 14, 2026",
+            "Browse library",
+            "Browse library",
+            "Bugster June 14, 2026",
+            "Jack McDade June 13, 2026",
+            "Saas",
+            "Headroom July 30, 2025"
+          ],
+          "tags": [],
+          "cardArea": 7878851,
+          "score": 10,
+          "sourceMode": "landing-gallery"
+        }
+      ],
+      "screenshot": {
+        "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/landingfolio/gallery.png",
+        "sha256": "abf059eba602fbd91e0bee20feee9d853b7af029d53c4d16e72589aa2b545df1",
+        "mode": "full-page"
+      },
+      "screenshotQuality": {
+        "viewport": {
+          "width": 1440,
+          "height": 1000
+        },
+        "textLength": 4905,
+        "mediaCount": 472,
+        "codeCount": 0,
+        "headingCount": 91,
+        "usefulElementCount": 101,
+        "visibleAreaRatio": 0.673,
+        "isLikelySparse": false,
+        "visibleSamples": [
+          "Webflow Components",
+          "Figma Components",
+          "Tailwind Components",
+          "AI Professional headshots",
+          "AI Profile Picture",
+          "AI-powered stock photos",
+          "Landingfolio",
+          "Inspiration"
+        ]
+      },
+      "examples": [
+        {
+          "sourceId": "landingfolio",
+          "url": "https://www.landingfolio.com/inspiration/post/headshotpro-1",
+          "status": 404,
+          "licenseStatus": "inspiration-only",
+          "reuseGuidance": "Landing page examples, templates and component inspiration. Do not copy templates or proprietary assets.",
+          "candidate": {
+            "index": 91,
+            "url": "https://www.landingfolio.com/inspiration/post/headshotpro-1",
+            "text": "HeadshotPro inspiration",
+            "heading": "HeadshotPro",
+            "description": "Marketing HeadshotPro June 14, 2026 Make beautiful websites, without designing them. Give every page a stunning, professional look — with hundreds of components to choose from. Browse library Bugster June 14, 2026 Jack McDade June 13, 2026 Saas 37136 Headroom July 30, 2025 32813 Breyta February 21, 2025 40027 Riley - Parenting with Superpowers. - Riley Febru",
+            "imageSrc": "https://landingfoliocom.imgix.net/inspiration/1781410880859HeadshotProdesktop2487bad5da4540cabf857ae271d81098png?&q=75&auto=format&crop=top,left&fit=crop&auto=format&w=300&h=400",
+            "imageAlt": "",
+            "buttonText": [
+              "Marketing",
+              "HeadshotPro June 14, 2026",
+              "Browse library",
+              "Browse library",
+              "Bugster June 14, 2026",
+              "Jack McDade June 13, 2026",
+              "Saas",
+              "Headroom July 30, 2025"
+            ],
+            "tags": [],
+            "cardArea": 7878851,
+            "score": 10,
+            "sourceMode": "landing-gallery"
+          },
+          "screenshots": {
+            "desktop": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/landingfolio/091-headshotpro-a3943c9a/desktop.png",
+              "sha256": "c69479b2d3b13d59149719a80ebdbb74396cef85ec2cebbced0e70f207fd42bf",
+              "mode": "viewport"
+            },
+            "mobile": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/landingfolio/091-headshotpro-a3943c9a/mobile.png",
+              "sha256": "22b22dc04c27cfd0dcee70f2d544ebed477457b9a846c807aa68d35ede88f4c6",
+              "mode": "viewport"
+            }
+          },
+          "screenshotQuality": {
+            "desktop": {
+              "viewport": {
+                "width": 1440,
+                "height": 1000
+              },
+              "textLength": 896,
+              "mediaCount": 31,
+              "codeCount": 0,
+              "headingCount": 10,
+              "usefulElementCount": 36,
+              "visibleAreaRatio": 0.366,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Landingfolio",
+                "Inspiration",
+                "Component Library",
+                "Templates",
+                "Learn",
+                "Tools",
+                "Pricing",
+                "Login"
+              ]
+            },
+            "mobile": {
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "textLength": 586,
+              "mediaCount": 31,
+              "codeCount": 0,
+              "headingCount": 10,
+              "usefulElementCount": 15,
+              "visibleAreaRatio": 0.714,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Landingfolio",
+                "HeadshotPro",
+                "Saas",
+                "Marketing",
+                "Technology",
+                "Business",
+                "Artificial Intelligence",
+                "Device: Desktop"
+              ]
+            }
+          },
+          "qualityWarnings": [],
+          "failedRequestCount": 2,
+          "title": "HeadshotPro Landing Page Inspiration and More | Landingfolio",
+          "description": "Get inspired by HeadshotPro their landing page design. An example of a well designed landing page.",
+          "headings": [
+            {
+              "level": "h3",
+              "text": "Site & Landing Page Inspiration"
+            },
+            {
+              "level": "h3",
+              "text": "Section & Component Examples"
+            },
+            {
+              "level": "h3",
+              "text": "Landing Page Templates"
+            },
+            {
+              "level": "h3",
+              "text": "Pro Templates"
+            },
+            {
+              "level": "h3",
+              "text": "Blog"
+            },
+            {
+              "level": "h3",
+              "text": "Optimization Tips"
+            },
+            {
+              "level": "h3",
+              "text": "Tool Reviews"
+            },
+            {
+              "level": "h3",
+              "text": "Free Logos"
+            },
+            {
+              "level": "h3",
+              "text": "Mockup Generator"
+            },
+            {
+              "level": "h2",
+              "text": "HeadshotPro"
+            }
+          ],
+          "sections": [],
+          "ctas": [
+            "Landingfolio",
+            "Inspiration",
+            "Component Library",
+            "Templates",
+            "Learn",
+            "Optimization Tips Actional design tips to improve your landing page design",
+            "Tool Reviews The Best Landing Page Builder Software: The Definitive Guide.",
+            "Tools",
+            "Free Logos The perfect logo for your project is just a click away.",
+            "Pricing",
+            "Login",
+            "Login",
+            "White button",
+            "Saas",
+            "Marketing",
+            "Technology",
+            "Business",
+            "Artificial Intelligence",
+            "Device: Desktop",
+            "Visit site",
+            "Visit site",
+            "Browse library",
+            "Browse library",
+            "Premium Components for Tailwind & Webflow. Instantly Copied. Browse collection",
+            "Browse collection",
+            "Inspiration",
+            "Component Library",
+            "Templates",
+            "Learn",
+            "Tools",
+            "Pricing",
+            "Submit a design",
+            "Cookie Policy",
+            "Licensing Agreement",
+            "Partner Terms",
+            "Privacy Policy",
+            "Terms & Conditions",
+            "Free Logos",
+            "Mockup Generator",
+            "Figma Component Library",
+            "Webflow Cloneables"
+          ],
+          "palette": [
+            "rgb(0, 0, 0)",
+            "rgb(229, 231, 235)",
+            "rgb(55, 65, 81)",
+            "rgb(249, 250, 251)",
+            "rgb(255, 255, 255)",
+            "rgb(209, 213, 219)",
+            "rgb(17, 24, 39)",
+            "rgb(31, 41, 55)"
+          ],
+          "layoutSignals": {
+            "hasNav": false,
+            "hasHero": false,
+            "hasPricing": true,
+            "hasTestimonials": false,
+            "hasFAQ": false,
+            "hasVideo": false,
+            "cardLikeCount": 0,
+            "imageCount": 14,
+            "buttonCount": 52,
+            "formCount": 0
+          },
+          "codeBlocks": [],
+          "codeLinks": [
+            {
+              "url": "https://www.landingfolio.com/library",
+              "text": "Component Library (0+) Discover instant copy+paste Tailwind, Webflow & Figma components. Explore our huge library."
+            },
+            {
+              "url": "https://www.landingfolio.com/blog",
+              "text": "Blog Get expert advice on landing page design, copywriting, conversion optimization and more."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "saasframe-landing-pages",
+      "name": "SaaSFrame Landing Pages",
+      "url": "https://www.saasframe.io/categories/landing-page",
+      "mode": "saas-gallery",
+      "usage": "SaaS landing page hero, value proposition, social proof, pricing and mobile-first CRO patterns.",
+      "licenseStatus": "inspiration-only",
+      "status": 200,
+      "failedRequestCount": 2,
+      "rawCandidateCount": 97,
+      "selectedCandidateCount": 8,
+      "detailedExampleCount": 1,
+      "candidates": [
+        {
+          "index": 285,
+          "url": "https://www.saasframe.io/saas/slite",
+          "text": "Landing Page Slite",
+          "heading": "Landing Page",
+          "description": "Figma file availableLanding PageSliteSliteLightLanding PageCollaborationOpen * { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; font-smoothing: antialiased; text-rendering: optimizeLegibility; } .glowing-wrapper-button-2:after { background: radial-gradient(85% 120% at 50% 120%, rgba(255, 255, 255, .24) 0%, rgba(255, 255, 255, 0) 100",
+          "imageSrc": "https://cdn.prod.website-files.com/5e9dc792e1210c2d5df7eba4/63effc2904343594a541cd67_Figma-1-logo.webp",
+          "imageAlt": "Abstract geometric logo composed of four colorful rounded shapes in red, pink, purple, blue, and green arranged in a stylized 'F'.",
+          "buttonText": [
+            "Landing PageSliteSliteLightLanding Page",
+            "Open",
+            "SliteLanding Page",
+            "Open frame"
+          ],
+          "tags": [],
+          "cardArea": 119355,
+          "score": 10,
+          "sourceMode": "saas-gallery"
+        },
+        {
+          "index": 286,
+          "url": "https://www.saasframe.io/examples/slite-landing-page",
+          "text": "Open",
+          "heading": "Landing Page",
+          "description": "Figma file availableLanding PageSliteSliteLightLanding PageCollaborationOpen * { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; font-smoothing: antialiased; text-rendering: optimizeLegibility; } .glowing-wrapper-button-2:after { background: radial-gradient(85% 120% at 50% 120%, rgba(255, 255, 255, .24) 0%, rgba(255, 255, 255, 0) 100",
+          "imageSrc": "https://cdn.prod.website-files.com/5e9dc792e1210c2d5df7eba4/63effc2904343594a541cd67_Figma-1-logo.webp",
+          "imageAlt": "Abstract geometric logo composed of four colorful rounded shapes in red, pink, purple, blue, and green arranged in a stylized 'F'.",
+          "buttonText": [
+            "Landing PageSliteSliteLightLanding Page",
+            "Open",
+            "SliteLanding Page",
+            "Open frame"
+          ],
+          "tags": [],
+          "cardArea": 119355,
+          "score": 10,
+          "sourceMode": "saas-gallery"
+        },
+        {
+          "index": 289,
+          "url": "https://www.saasframe.io/",
+          "text": "",
+          "heading": "Landing Page",
+          "description": "Figma file availableLanding PageSliteSliteLightLanding PageCollaborationOpen * { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; font-smoothing: antialiased; text-rendering: optimizeLegibility; } .glowing-wrapper-button-2:after { background: radial-gradient(85% 120% at 50% 120%, rgba(255, 255, 255, .24) 0%, rgba(255, 255, 255, 0) 100",
+          "imageSrc": "https://cdn.prod.website-files.com/5e9dc792e1210c2d5df7eba4/63effc2904343594a541cd67_Figma-1-logo.webp",
+          "imageAlt": "Abstract geometric logo composed of four colorful rounded shapes in red, pink, purple, blue, and green arranged in a stylized 'F'.",
+          "buttonText": [
+            "Landing PageSliteSliteLightLanding Page",
+            "Open",
+            "SliteLanding Page",
+            "Open frame"
+          ],
+          "tags": [],
+          "cardArea": 119355,
+          "score": 10,
+          "sourceMode": "saas-gallery"
+        },
+        {
+          "index": 291,
+          "url": "https://www.saasframe.io/saas/weglot",
+          "text": "Landing Page Weglot",
+          "heading": "Landing Page",
+          "description": "Figma file availableLanding PageWeglotWeglotLightLanding PageIntegrationOpen * { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; font-smoothing: antialiased; text-rendering: optimizeLegibility; } .glowing-wrapper-button-2:after { background: radial-gradient(85% 120% at 50% 120%, rgba(255, 255, 255, .24) 0%, rgba(255, 255, 255, 0) 100",
+          "imageSrc": "https://cdn.prod.website-files.com/5e9dc792e1210c2d5df7eba4/63effc2904343594a541cd67_Figma-1-logo.webp",
+          "imageAlt": "Abstract geometric logo composed of four colorful rounded shapes in red, pink, purple, blue, and green arranged in a stylized 'F'.",
+          "buttonText": [
+            "Landing PageWeglotWeglotLightLanding Page",
+            "Open",
+            "WeglotLanding Page",
+            "Open frame"
+          ],
+          "tags": [],
+          "cardArea": 119355,
+          "score": 10,
+          "sourceMode": "saas-gallery"
+        },
+        {
+          "index": 292,
+          "url": "https://www.saasframe.io/examples/weglot-landing-page",
+          "text": "Open",
+          "heading": "Landing Page",
+          "description": "Figma file availableLanding PageWeglotWeglotLightLanding PageIntegrationOpen * { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; font-smoothing: antialiased; text-rendering: optimizeLegibility; } .glowing-wrapper-button-2:after { background: radial-gradient(85% 120% at 50% 120%, rgba(255, 255, 255, .24) 0%, rgba(255, 255, 255, 0) 100",
+          "imageSrc": "https://cdn.prod.website-files.com/5e9dc792e1210c2d5df7eba4/63effc2904343594a541cd67_Figma-1-logo.webp",
+          "imageAlt": "Abstract geometric logo composed of four colorful rounded shapes in red, pink, purple, blue, and green arranged in a stylized 'F'.",
+          "buttonText": [
+            "Landing PageWeglotWeglotLightLanding Page",
+            "Open",
+            "WeglotLanding Page",
+            "Open frame"
+          ],
+          "tags": [],
+          "cardArea": 119355,
+          "score": 10,
+          "sourceMode": "saas-gallery"
+        },
+        {
+          "index": 297,
+          "url": "https://www.saasframe.io/saas/contractbook",
+          "text": "Landing Page Contractbook",
+          "heading": "Landing Page",
+          "description": "Figma file availableLanding PageContractbookContractbookLightLanding PageOpen * { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; font-smoothing: antialiased; text-rendering: optimizeLegibility; } .glowing-wrapper-button-2:after { background: radial-gradient(85% 120% at 50% 120%, rgba(255, 255, 255, .24) 0%, rgba(255, 255, 255, 0) 10",
+          "imageSrc": "https://cdn.prod.website-files.com/5e9dc792e1210c2d5df7eba4/63effc2904343594a541cd67_Figma-1-logo.webp",
+          "imageAlt": "Abstract geometric logo composed of four colorful rounded shapes in red, pink, purple, blue, and green arranged in a stylized 'F'.",
+          "buttonText": [
+            "Landing PageContractbookContractbookLightLanding Page",
+            "Open",
+            "ContractbookLanding Page",
+            "Open frame"
+          ],
+          "tags": [],
+          "cardArea": 119355,
+          "score": 10,
+          "sourceMode": "saas-gallery"
+        },
+        {
+          "index": 298,
+          "url": "https://www.saasframe.io/examples/contractbook-landing-page",
+          "text": "Open",
+          "heading": "Landing Page",
+          "description": "Figma file availableLanding PageContractbookContractbookLightLanding PageOpen * { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; font-smoothing: antialiased; text-rendering: optimizeLegibility; } .glowing-wrapper-button-2:after { background: radial-gradient(85% 120% at 50% 120%, rgba(255, 255, 255, .24) 0%, rgba(255, 255, 255, 0) 10",
+          "imageSrc": "https://cdn.prod.website-files.com/5e9dc792e1210c2d5df7eba4/63effc2904343594a541cd67_Figma-1-logo.webp",
+          "imageAlt": "Abstract geometric logo composed of four colorful rounded shapes in red, pink, purple, blue, and green arranged in a stylized 'F'.",
+          "buttonText": [
+            "Landing PageContractbookContractbookLightLanding Page",
+            "Open",
+            "ContractbookLanding Page",
+            "Open frame"
+          ],
+          "tags": [],
+          "cardArea": 119355,
+          "score": 10,
+          "sourceMode": "saas-gallery"
+        },
+        {
+          "index": 306,
+          "url": "https://www.saasframe.io/get-a-quote",
+          "text": "Get A Quote",
+          "heading": "Ask For A Quote",
+          "description": "Ask For A QuoteFor teams with specific billing and compliance needsGet A QuotePay by invoiceMulti-annual billingCompliance processNo automatic renewal",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [
+            "Get A Quote"
+          ],
+          "tags": [],
+          "cardArea": 322560,
+          "score": 8,
+          "sourceMode": "saas-gallery"
+        }
+      ],
+      "screenshot": {
+        "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/saasframe-landing-pages/gallery.png",
+        "sha256": "d6a989ed3bbb784b488baf2b299b55754763e0c3518ff5a916f1768f0300c551",
+        "mode": "full-page"
+      },
+      "screenshotQuality": {
+        "viewport": {
+          "width": 1440,
+          "height": 1000
+        },
+        "textLength": 4583,
+        "mediaCount": 414,
+        "codeCount": 0,
+        "headingCount": 50,
+        "usefulElementCount": 31,
+        "visibleAreaRatio": 0.389,
+        "isLikelySparse": false,
+        "visibleSamples": [
+          "SaaS",
+          "Pricing",
+          "Log in",
+          "Get started",
+          "284 SaaS Landing Page examplesDrive more signups with a library of high-converting SaaS landing page designs. From hero ",
+          "284 SaaS Landing Page examples",
+          "Landing PageSliteSliteLightLanding Page",
+          "Slite"
+        ]
+      },
+      "examples": [
+        {
+          "sourceId": "saasframe-landing-pages",
+          "url": "https://www.saasframe.io/saas/slite",
+          "status": 200,
+          "licenseStatus": "inspiration-only",
+          "reuseGuidance": "SaaS landing page hero, value proposition, social proof, pricing and mobile-first CRO patterns.",
+          "candidate": {
+            "index": 285,
+            "url": "https://www.saasframe.io/saas/slite",
+            "text": "Landing Page Slite",
+            "heading": "Landing Page",
+            "description": "Figma file availableLanding PageSliteSliteLightLanding PageCollaborationOpen * { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; font-smoothing: antialiased; text-rendering: optimizeLegibility; } .glowing-wrapper-button-2:after { background: radial-gradient(85% 120% at 50% 120%, rgba(255, 255, 255, .24) 0%, rgba(255, 255, 255, 0) 100",
+            "imageSrc": "https://cdn.prod.website-files.com/5e9dc792e1210c2d5df7eba4/63effc2904343594a541cd67_Figma-1-logo.webp",
+            "imageAlt": "Abstract geometric logo composed of four colorful rounded shapes in red, pink, purple, blue, and green arranged in a stylized 'F'.",
+            "buttonText": [
+              "Landing PageSliteSliteLightLanding Page",
+              "Open",
+              "SliteLanding Page",
+              "Open frame"
+            ],
+            "tags": [],
+            "cardArea": 119355,
+            "score": 10,
+            "sourceMode": "saas-gallery"
+          },
+          "screenshots": {
+            "desktop": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/saasframe-landing-pages/285-landing-page-4197935a/desktop.png",
+              "sha256": "d7d01958541b74f12f362ae8f135fd6cb9e29f21a1d9acd379cfd9c06982dee1",
+              "mode": "viewport"
+            },
+            "mobile": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/saasframe-landing-pages/285-landing-page-4197935a/mobile.png",
+              "sha256": "5d450d5a4bada75722f0b059a5439047c434832db6ef2c1c42afa5f96c9591bf",
+              "mode": "viewport"
+            }
+          },
+          "screenshotQuality": {
+            "desktop": {
+              "viewport": {
+                "width": 1440,
+                "height": 1000
+              },
+              "textLength": 2996,
+              "mediaCount": 184,
+              "codeCount": 0,
+              "headingCount": 27,
+              "usefulElementCount": 26,
+              "visibleAreaRatio": 0.345,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "SaaS",
+                "Pricing",
+                "Log in",
+                "Get started",
+                "Slite",
+                "VisitSlite",
+                "Screens",
+                "Flows"
+              ]
+            },
+            "mobile": {
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "textLength": 2939,
+              "mediaCount": 184,
+              "codeCount": 0,
+              "headingCount": 27,
+              "usefulElementCount": 13,
+              "visibleAreaRatio": 0.518,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Log in",
+                "Get started",
+                "Slite",
+                "Screens",
+                "Flows",
+                "Marketing Pages",
+                "Figma file available",
+                "Slite Funding AnnouncementSliteFunding Announcement"
+              ]
+            }
+          },
+          "qualityWarnings": [],
+          "failedRequestCount": 1,
+          "title": "Slite UX/UI Design and Copywrinting Examples - SaaSFrame",
+          "description": "Browse Slite UX / UI design and copywrinting. Our collection includes 34 screens, ranging from marketing pages, emails flows and product interfaces on SaaSFrame",
+          "headings": [
+            {
+              "level": "h1",
+              "text": "Slite"
+            },
+            {
+              "level": "h3",
+              "text": "Marketing Pages"
+            },
+            {
+              "level": "h3",
+              "text": "Product Interfaces"
+            },
+            {
+              "level": "h3",
+              "text": "Emails"
+            },
+            {
+              "level": "h3",
+              "text": "Slite"
+            },
+            {
+              "level": "h3",
+              "text": "Sign Up Flow"
+            },
+            {
+              "level": "h3",
+              "text": "Slite"
+            },
+            {
+              "level": "h3",
+              "text": "Onboarding Emails"
+            },
+            {
+              "level": "h2",
+              "text": "Monthly"
+            },
+            {
+              "level": "h1",
+              "text": "$14 /month"
+            },
+            {
+              "level": "h2",
+              "text": "Quarterly"
+            },
+            {
+              "level": "h1",
+              "text": "$12 /month"
+            },
+            {
+              "level": "h2",
+              "text": "Yearly"
+            },
+            {
+              "level": "h1",
+              "text": "$10 /month"
+            },
+            {
+              "level": "h2",
+              "text": "Ask For A Quote"
+            },
+            {
+              "level": "h3",
+              "text": "Biggest SaaS library."
+            },
+            {
+              "level": "h3",
+              "text": "Desktop & mobile versions."
+            },
+            {
+              "level": "h3",
+              "text": "Access the Figma files."
+            },
+            {
+              "level": "h3",
+              "text": "Advanced filtering."
+            },
+            {
+              "level": "h3",
+              "text": "Let it flow."
+            },
+            {
+              "level": "h3",
+              "text": "Save design inspirations."
+            },
+            {
+              "level": "h3",
+              "text": "How do you process payment?"
+            },
+            {
+              "level": "h3",
+              "text": "What about future updates and versions?"
+            },
+            {
+              "level": "h3",
+              "text": "Can you send me an invoice?"
+            },
+            {
+              "level": "h3",
+              "text": "How can I cancel my membership subscription?"
+            },
+            {
+              "level": "h3",
+              "text": "Can I get a refund?"
+            },
+            {
+              "level": "h3",
+              "text": "I have another question."
+            }
+          ],
+          "sections": [
+            {
+              "index": 0,
+              "heading": "Slite",
+              "textSample": "SliteNote toolVisitSlite",
+              "imageCount": 2,
+              "buttonCount": 1
+            },
+            {
+              "index": 1,
+              "heading": "Marketing Pages",
+              "textSample": "Marketing Pages13Figma file availableSlite Funding AnnouncementSliteFunding AnnouncementPreview * { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; font-smoothing: antialiased; text-rendering: optimizeLegibility; } .glowing-wrapper-button-2:after { background: radial-gradient(85% 120% at 50% 12",
+              "imageCount": 15,
+              "buttonCount": 10
+            },
+            {
+              "index": 2,
+              "heading": "Product Interfaces",
+              "textSample": "Product Interfaces10Figma file availableSlite DashboardSliteDashboardPreview * { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; font-smoothing: antialiased; text-rendering: optimizeLegibility; } .glowing-wrapper-button-2:after { background: radial-gradient(85% 120% at 50% 120%, rgba(255, 255, ",
+              "imageCount": 15,
+              "buttonCount": 10
+            },
+            {
+              "index": 3,
+              "heading": "Emails",
+              "textSample": "Emails11Slite Webinar Invite EmailSliteWebinars EmailsPreview * { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; font-smoothing: antialiased; text-rendering: optimizeLegibility; } .glowing-wrapper-button-2:after { background: radial-gradient(85% 120% at 50% 120%, rgba(255, 255, 255, .24) 0%, r",
+              "imageCount": 12,
+              "buttonCount": 10
+            }
+          ],
+          "ctas": [
+            "All screens",
+            "👽 404 Page45",
+            "👨‍👩‍👧‍👦 About Page125",
+            "🎓 Academy25",
+            "🤑 Affiliate Page39",
+            "🪄 AI Page15",
+            "✍️ Blog Feed97",
+            "📝 Blog Template59",
+            "💼 Careers Page92",
+            "🆕 Changelog15",
+            "🥊 Comparison Page54",
+            "💌 Contact Page37",
+            "🤝 Customers Page44",
+            "👌 Customer Stories71",
+            "📺 Demo Request42",
+            "👩‍💻 Developers Page6",
+            "📚 Documentation36",
+            "☁️ Download Page27",
+            "🔜 Early Access Page13",
+            "📙 eBook Page14",
+            "🏢 Enterprise Page18",
+            "🎉 Events Page18",
+            "❓ FAQ9",
+            "⛏ Features Page71",
+            "👩‍🎓 For Education Page4",
+            "🌱 Impact Page9",
+            "🧰 Integrations Library60",
+            "🤝 Integrations Page32",
+            "✈️ Landing Page284",
+            "💌 Newsletter Page8",
+            "🎙 Podcast Pages17",
+            "📰 Press Page35",
+            "💵 Pricing Page211",
+            "🔐 GDPR Compliance5",
+            "🚶‍♀️ Product Video16",
+            "🛡 Security Page26",
+            "📝 Templates Library29",
+            "🙏 Thank You Page12",
+            "🎯 Use Cases34",
+            "📺 Webinars Page22",
+            "All sections",
+            "API8sections",
+            "Awards15sections",
+            "Bento Grid43sections",
+            "Blog Cards16sections",
+            "Calculator15sections",
+            "Call To Action44sections",
+            "Call To Download6sections",
+            "Clients Logo27sections",
+            "Code snippet4sections"
+          ],
+          "palette": [
+            "rgb(51, 51, 51)",
+            "rgb(255, 255, 255)",
+            "rgb(0, 0, 238)",
+            "rgb(37, 37, 37)",
+            "rgb(14, 12, 34)",
+            "rgb(246, 249, 249)",
+            "rgb(233, 233, 233)",
+            "rgb(0, 0, 0)",
+            "rgb(34, 34, 34)"
+          ],
+          "layoutSignals": {
+            "hasNav": true,
+            "hasHero": true,
+            "hasPricing": true,
+            "hasTestimonials": true,
+            "hasFAQ": true,
+            "hasVideo": false,
+            "cardLikeCount": 120,
+            "imageCount": 138,
+            "buttonCount": 239,
+            "formCount": 46
+          },
+          "codeBlocks": [],
+          "codeLinks": [
+            {
+              "url": "https://www.saasframe.io/patterns/copy-to-clipboard",
+              "text": "Copy to clipboard78screens"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "saaslandingpage",
+      "name": "SaaS Landing Page",
+      "url": "https://saaslandingpage.com/",
+      "mode": "saas-gallery",
+      "usage": "SaaS page section taxonomy: landing, pricing, about, features, testimonials, FAQ and contact.",
+      "licenseStatus": "inspiration-only",
+      "status": 200,
+      "failedRequestCount": 1,
+      "rawCandidateCount": 19,
+      "selectedCandidateCount": 8,
+      "detailedExampleCount": 1,
+      "candidates": [
+        {
+          "index": 23,
+          "url": "https://saaslandingpage.com/mobbin/",
+          "text": "",
+          "heading": "Mobbin",
+          "description": ">Visit Website MobbinSponsoredThis is a sponsored post. Are you interested in promoting your product? Contact us.",
+          "imageSrc": "https://saaslandingpage.com/wp-content/uploads/2025/12/mobbin-380x475.png",
+          "imageAlt": "mobbin",
+          "buttonText": [
+            ">Visit Website",
+            "Mobbin"
+          ],
+          "tags": [],
+          "cardArea": 221810,
+          "score": 10,
+          "sourceMode": "saas-gallery"
+        },
+        {
+          "index": 44,
+          "url": "https://saaslandingpage.com/handhold/",
+          "text": "",
+          "heading": "Handhold",
+          "description": ">Visit Website HandholdSponsoredThis is a sponsored post. Are you interested in promoting your product? Contact us.",
+          "imageSrc": "https://saaslandingpage.com/wp-content/uploads/2026/05/handhold-380x475.png",
+          "imageAlt": "handhold",
+          "buttonText": [
+            ">Visit Website",
+            "Handhold"
+          ],
+          "tags": [],
+          "cardArea": 221810,
+          "score": 10,
+          "sourceMode": "saas-gallery"
+        },
+        {
+          "index": 50,
+          "url": "https://saaslandingpage.com/crafted/",
+          "text": "",
+          "heading": "Crafted",
+          "description": ">Visit Website CraftedSponsoredThis is a sponsored post. Are you interested in promoting your product? Contact us.",
+          "imageSrc": "https://saaslandingpage.com/wp-content/uploads/2026/05/crafted-new-380x475.png",
+          "imageAlt": "crafted-new",
+          "buttonText": [
+            ">Visit Website",
+            "Crafted"
+          ],
+          "tags": [],
+          "cardArea": 221810,
+          "score": 10,
+          "sourceMode": "saas-gallery"
+        },
+        {
+          "index": 14,
+          "url": "https://saaslandingpage.com/branch/",
+          "text": "",
+          "heading": "Branch",
+          "description": ">Visit Website Branch",
+          "imageSrc": "https://saaslandingpage.com/wp-content/uploads/2026/06/branch-380x475.png",
+          "imageAlt": "branch",
+          "buttonText": [
+            ">Visit Website",
+            "Branch"
+          ],
+          "tags": [],
+          "cardArea": 221810,
+          "score": 9,
+          "sourceMode": "saas-gallery"
+        },
+        {
+          "index": 17,
+          "url": "https://saaslandingpage.com/anam/",
+          "text": "",
+          "heading": "Anam",
+          "description": ">Visit Website Anam",
+          "imageSrc": "https://saaslandingpage.com/wp-content/uploads/2026/06/anam-1-380x475.jpg",
+          "imageAlt": "anam",
+          "buttonText": [
+            ">Visit Website",
+            "Anam"
+          ],
+          "tags": [],
+          "cardArea": 221810,
+          "score": 9,
+          "sourceMode": "saas-gallery"
+        },
+        {
+          "index": 20,
+          "url": "https://saaslandingpage.com/framer/",
+          "text": "",
+          "heading": "Framer",
+          "description": ">Visit Website Framer",
+          "imageSrc": "https://saaslandingpage.com/wp-content/uploads/2026/05/framer-380x475.png",
+          "imageAlt": "framer",
+          "buttonText": [
+            ">Visit Website",
+            "Framer"
+          ],
+          "tags": [],
+          "cardArea": 221810,
+          "score": 9,
+          "sourceMode": "saas-gallery"
+        },
+        {
+          "index": 26,
+          "url": "https://saaslandingpage.com/aria-networks/",
+          "text": "",
+          "heading": "Aria",
+          "description": ">Visit Website Aria",
+          "imageSrc": "https://saaslandingpage.com/wp-content/uploads/2026/06/arianetworks-380x475.png",
+          "imageAlt": "aria",
+          "buttonText": [
+            ">Visit Website",
+            "Aria"
+          ],
+          "tags": [],
+          "cardArea": 221810,
+          "score": 9,
+          "sourceMode": "saas-gallery"
+        },
+        {
+          "index": 29,
+          "url": "https://saaslandingpage.com/tempo/",
+          "text": "",
+          "heading": "Tempo",
+          "description": ">Visit Website Tempo",
+          "imageSrc": "https://saaslandingpage.com/wp-content/uploads/2026/06/tempo-380x475.png",
+          "imageAlt": "tempo",
+          "buttonText": [
+            ">Visit Website",
+            "Tempo"
+          ],
+          "tags": [],
+          "cardArea": 221810,
+          "score": 9,
+          "sourceMode": "saas-gallery"
+        }
+      ],
+      "screenshot": {
+        "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/saaslandingpage/gallery.png",
+        "sha256": "8ae8e889d6e0b6b43c3fa22e389e9430f449bb47344c761ca95f2be94f1a5c83",
+        "mode": "full-page"
+      },
+      "screenshotQuality": {
+        "viewport": {
+          "width": 1440,
+          "height": 1000
+        },
+        "textLength": 1300,
+        "mediaCount": 37,
+        "codeCount": 0,
+        "headingCount": 22,
+        "usefulElementCount": 33,
+        "visibleAreaRatio": 3.025,
+        "isLikelySparse": false,
+        "visibleSamples": [
+          "✨ Looking for app inspiration? Check out SaaS Interface ✨",
+          "Saaslandingpage",
+          "Saaslandingpage",
+          "Saaslandingpage",
+          "Inspiration",
+          "App Inspiration",
+          "Templates",
+          "SaaS landing page examples Discover the best 940 landing page examples created by top-class SaaS companies and startups,"
+        ]
+      },
+      "examples": [
+        {
+          "sourceId": "saaslandingpage",
+          "url": "https://saaslandingpage.com/mobbin/",
+          "status": 200,
+          "licenseStatus": "inspiration-only",
+          "reuseGuidance": "SaaS page section taxonomy: landing, pricing, about, features, testimonials, FAQ and contact.",
+          "candidate": {
+            "index": 23,
+            "url": "https://saaslandingpage.com/mobbin/",
+            "text": "",
+            "heading": "Mobbin",
+            "description": ">Visit Website MobbinSponsoredThis is a sponsored post. Are you interested in promoting your product? Contact us.",
+            "imageSrc": "https://saaslandingpage.com/wp-content/uploads/2025/12/mobbin-380x475.png",
+            "imageAlt": "mobbin",
+            "buttonText": [
+              ">Visit Website",
+              "Mobbin"
+            ],
+            "tags": [],
+            "cardArea": 221810,
+            "score": 10,
+            "sourceMode": "saas-gallery"
+          },
+          "screenshots": {
+            "desktop": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/saaslandingpage/023-mobbin-041ae462/desktop.png",
+              "sha256": "bd7e1c728c29041989532f9bf3fd47bfa1fd4150168dd495dc5b8d8969a9dab8",
+              "mode": "viewport"
+            },
+            "mobile": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/saaslandingpage/023-mobbin-041ae462/mobile.png",
+              "sha256": "22018251078006fff0737e6eb01dd5e118ef4dde006ae26c8e59ee1009abd31e",
+              "mode": "viewport"
+            }
+          },
+          "screenshotQuality": {
+            "desktop": {
+              "viewport": {
+                "width": 1440,
+                "height": 1000
+              },
+              "textLength": 1106,
+              "mediaCount": 11,
+              "codeCount": 0,
+              "headingCount": 9,
+              "usefulElementCount": 25,
+              "visibleAreaRatio": 3.013,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "✨ Looking for app inspiration? Check out SaaS Interface ✨",
+                "Saaslandingpage",
+                "Saaslandingpage",
+                "Saaslandingpage",
+                "Inspiration",
+                "App Inspiration",
+                "Templates",
+                "Visit Website MobbinMobbin is a curated library of digital-product design patterns, showcasing real-world user interface"
+              ]
+            },
+            "mobile": {
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "textLength": 1111,
+              "mediaCount": 11,
+              "codeCount": 0,
+              "headingCount": 9,
+              "usefulElementCount": 15,
+              "visibleAreaRatio": 3.078,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "✨ Looking for app inspiration? Check out SaaS Interface ✨",
+                "Saaslandingpage",
+                "Saaslandingpage",
+                "Saaslandingpage",
+                "Menu",
+                "Inspiration",
+                "App Inspiration",
+                "Templates"
+              ]
+            }
+          },
+          "qualityWarnings": [],
+          "failedRequestCount": 1,
+          "title": "Mobbin page - SaaS Landing Page",
+          "description": "Mobbin is a curated library of digital-product design patterns, showcasing real-world user interfaces from top companies. The site lets designers explore",
+          "headings": [
+            {
+              "level": "h1",
+              "text": "Saaslandingpage"
+            },
+            {
+              "level": "h1",
+              "text": "Mobbin"
+            },
+            {
+              "level": "h3",
+              "text": "Post navigation"
+            },
+            {
+              "level": "h3",
+              "text": "Inspiration"
+            },
+            {
+              "level": "h3",
+              "text": "Templates"
+            },
+            {
+              "level": "h3",
+              "text": "Resources"
+            },
+            {
+              "level": "h3",
+              "text": "Popular stacks"
+            },
+            {
+              "level": "h3",
+              "text": "Popular tags"
+            },
+            {
+              "level": "h3",
+              "text": "Popular fonts"
+            }
+          ],
+          "sections": [
+            {
+              "index": 0,
+              "heading": "Mobbin",
+              "textSample": "Visit Website MobbinMobbin is a curated library of digital-product design patterns, showcasing real-world user interfaces from top companies. The site lets designers explore a wide variety of layouts, components, and flows — from sign-up modals to mobile menus and checkout screens — all extracted from live apps.FontsSa",
+              "imageCount": 5,
+              "buttonCount": 11
+            },
+            {
+              "index": 1,
+              "heading": "Mobbin",
+              "textSample": "Visit Website MobbinMobbin is a curated library of digital-product design patterns, showcasing real-world user interfaces from top companies. The site lets designers explore a wide variety of layouts, components, and flows — from sign-up modals to mobile menus and checkout screens — all extracted from live apps.FontsSa",
+              "imageCount": 5,
+              "buttonCount": 11
+            }
+          ],
+          "ctas": [
+            "✨ Looking for app inspiration? Check out SaaS Interface ✨",
+            "Saaslandingpage",
+            "Menu",
+            "Inspiration",
+            "App Inspiration",
+            "Templates",
+            "Visit Website",
+            "Saans",
+            "141414",
+            "Next.js",
+            "React",
+            "Tailwind CSS",
+            "Design Tool",
+            "Landing page",
+            "Framer",
+            "Aria",
+            "Landing pages",
+            "Pricing pages",
+            "About us pages",
+            "Features pages",
+            "Blog pages",
+            "Testimonials pages",
+            "FAQ pages",
+            "Contact us pages",
+            "Framer",
+            "Webflow",
+            "React",
+            "HTML",
+            "Next.js",
+            "Tailwind CSS",
+            "Vue",
+            "View all",
+            "Blog",
+            "Resources & Tools",
+            "React",
+            "Next.js",
+            "Webflow",
+            "Tailwind CSS",
+            "GSAP",
+            "WordPress",
+            "Framer",
+            "View all",
+            "Productivity",
+            "Finance",
+            "Design Tool",
+            "B2B",
+            "Code Tool",
+            "AI",
+            "FinTech",
+            "View all"
+          ],
+          "palette": [
+            "rgb(113, 113, 122)",
+            "rgb(250, 250, 250)",
+            "rgb(229, 231, 235)",
+            "rgb(255, 255, 255)",
+            "rgb(39, 39, 42)",
+            "rgb(63, 63, 70)",
+            "rgb(20, 20, 20)",
+            "rgb(161, 161, 170)"
+          ],
+          "layoutSignals": {
+            "hasNav": true,
+            "hasHero": true,
+            "hasPricing": true,
+            "hasTestimonials": true,
+            "hasFAQ": true,
+            "hasVideo": false,
+            "cardLikeCount": 1,
+            "imageCount": 2,
+            "buttonCount": 64,
+            "formCount": 3
+          },
+          "codeBlocks": [],
+          "codeLinks": []
+        }
+      ]
+    },
+    {
+      "id": "awwwards-winning-websites",
+      "name": "Awwwards Winning Websites",
+      "url": "https://www.awwwards.com/websites/",
+      "mode": "award-gallery",
+      "usage": "Art direction, typography, motion and experimental interaction reference. Translate into one usable design move for ONIA client work.",
+      "licenseStatus": "inspiration-only-high-overdesign-risk",
+      "status": 200,
+      "failedRequestCount": 6,
+      "rawCandidateCount": 579,
+      "selectedCandidateCount": 8,
+      "detailedExampleCount": 1,
+      "candidates": [
+        {
+          "index": 476,
+          "url": "https://www.awwwards.com/sites/wolverine-worldwide",
+          "text": "Wolverine Worldwide",
+          "heading": "Locomotive",
+          "description": "WEBSITE Wolverine Worldwide Locomotive PRO DEV Developer Award SOTD Site Of The Day Jun 24, 2026",
+          "imageSrc": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAMCAQAAADB7vUKAAAAEUlEQVR42mNkIAAYRxXQSwEAC5oADbo22BYAAAAASUVORK5CYII=",
+          "imageAlt": "Wolverine Worldwide",
+          "buttonText": [
+            "Locomotive PRO"
+          ],
+          "tags": [
+            "DEV",
+            "SOTD"
+          ],
+          "cardArea": 158976,
+          "score": 10,
+          "sourceMode": "award-gallery"
+        },
+        {
+          "index": 479,
+          "url": "https://www.awwwards.com/sites/sui",
+          "text": "Sui",
+          "heading": "HOLOGRAPHIK",
+          "description": "WEBSITE Sui HOLOGRAPHIK PRO DEV Developer Award SOTD Site Of The Day Jun 23, 2026",
+          "imageSrc": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAMCAQAAADB7vUKAAAAEUlEQVR42mNkIAAYRxXQSwEAC5oADbo22BYAAAAASUVORK5CYII=",
+          "imageAlt": "Sui",
+          "buttonText": [
+            "HOLOGRAPHIK PRO"
+          ],
+          "tags": [
+            "DEV",
+            "SOTD"
+          ],
+          "cardArea": 158976,
+          "score": 10,
+          "sourceMode": "award-gallery"
+        },
+        {
+          "index": 482,
+          "url": "https://www.awwwards.com/sites/everswap",
+          "text": "EverSwap",
+          "heading": "Lusion",
+          "description": "WEBSITE EverSwap Lusion PRO DEV Developer Award SOTD Site Of The Day Jun 22, 2026",
+          "imageSrc": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAMCAQAAADB7vUKAAAAEUlEQVR42mNkIAAYRxXQSwEAC5oADbo22BYAAAAASUVORK5CYII=",
+          "imageAlt": "EverSwap",
+          "buttonText": [
+            "Lusion PRO"
+          ],
+          "tags": [
+            "DEV",
+            "SOTD"
+          ],
+          "cardArea": 158976,
+          "score": 10,
+          "sourceMode": "award-gallery"
+        },
+        {
+          "index": 485,
+          "url": "https://www.awwwards.com/sites/digitalists-1",
+          "text": "digitalists",
+          "heading": "digitalists",
+          "description": "WEBSITE digitalists digitalists PRO DEV Developer Award SOTD Site Of The Day Jun 21, 2026",
+          "imageSrc": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAMCAQAAADB7vUKAAAAEUlEQVR42mNkIAAYRxXQSwEAC5oADbo22BYAAAAASUVORK5CYII=",
+          "imageAlt": "digitalists",
+          "buttonText": [
+            "digitalists PRO"
+          ],
+          "tags": [
+            "DEV",
+            "SOTD"
+          ],
+          "cardArea": 158976,
+          "score": 10,
+          "sourceMode": "award-gallery"
+        },
+        {
+          "index": 488,
+          "url": "https://www.awwwards.com/sites/rpa-comunicacion",
+          "text": "RPA COMUNICACIÓN",
+          "heading": "LaNegrita",
+          "description": "WEBSITE RPA COMUNICACIÓN LaNegrita PRO SOTD Site Of The Day Jun 20, 2026",
+          "imageSrc": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAMCAQAAADB7vUKAAAAEUlEQVR42mNkIAAYRxXQSwEAC5oADbo22BYAAAAASUVORK5CYII=",
+          "imageAlt": "RPA COMUNICACIÓN",
+          "buttonText": [
+            "LaNegrita PRO"
+          ],
+          "tags": [
+            "SOTD"
+          ],
+          "cardArea": 158976,
+          "score": 10,
+          "sourceMode": "award-gallery"
+        },
+        {
+          "index": 492,
+          "url": "https://www.awwwards.com/sites/balmoral",
+          "text": "Balmoral",
+          "heading": "MILL3",
+          "description": "WEBSITE Balmoral MILL3 PRO DEV Developer Award SOTD Site Of The Day Jun 19, 2026",
+          "imageSrc": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAMCAQAAADB7vUKAAAAEUlEQVR42mNkIAAYRxXQSwEAC5oADbo22BYAAAAASUVORK5CYII=",
+          "imageAlt": "Balmoral",
+          "buttonText": [
+            "MILL3 PRO"
+          ],
+          "tags": [
+            "DEV",
+            "SOTD"
+          ],
+          "cardArea": 158976,
+          "score": 10,
+          "sourceMode": "award-gallery"
+        },
+        {
+          "index": 495,
+          "url": "https://www.awwwards.com/sites/indigo-laboratory",
+          "text": "Indigo Laboratory",
+          "heading": "FPTP Studio",
+          "description": "WEBSITE Indigo Laboratory FPTP Studio PRO DEV Developer Award SOTD Site Of The Day Jun 18, 2026",
+          "imageSrc": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAMCAQAAADB7vUKAAAAEUlEQVR42mNkIAAYRxXQSwEAC5oADbo22BYAAAAASUVORK5CYII=",
+          "imageAlt": "Indigo Laboratory",
+          "buttonText": [
+            "FPTP Studio PRO"
+          ],
+          "tags": [
+            "DEV",
+            "SOTD"
+          ],
+          "cardArea": 158976,
+          "score": 10,
+          "sourceMode": "award-gallery"
+        },
+        {
+          "index": 498,
+          "url": "https://www.awwwards.com/sites/gucci-mystery-unfolds",
+          "text": "Gucci: Mystery Unfolds",
+          "heading": "MONOGRID",
+          "description": "WEBSITE Gucci: Mystery Unfolds MONOGRID PRO SOTD Site Of The Day Jun 17, 2026",
+          "imageSrc": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAMCAQAAADB7vUKAAAAEUlEQVR42mNkIAAYRxXQSwEAC5oADbo22BYAAAAASUVORK5CYII=",
+          "imageAlt": "Gucci: Mystery Unfolds",
+          "buttonText": [
+            "MONOGRID PRO"
+          ],
+          "tags": [
+            "SOTD"
+          ],
+          "cardArea": 158976,
+          "score": 10,
+          "sourceMode": "award-gallery"
+        }
+      ],
+      "screenshot": {
+        "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/awwwards-winning-websites/gallery.png",
+        "sha256": "29a98212a05142d528e0a62f123df0b53bc6b97634ee2e50c36518df6906cf26",
+        "mode": "full-page"
+      },
+      "screenshotQuality": {
+        "viewport": {
+          "width": 1440,
+          "height": 1000
+        },
+        "textLength": 2578,
+        "mediaCount": 302,
+        "codeCount": 0,
+        "headingCount": 63,
+        "usefulElementCount": 52,
+        "visibleAreaRatio": 2.123,
+        "isLikelySparse": false,
+        "visibleSamples": [
+          "Directory",
+          "Academy New",
+          "Jobs",
+          "Market",
+          "Be Pro",
+          "Submit Website",
+          "Awards Sites of the Day Sites of the Month Sites of the Year Developer Honorable Mention Nominees Typography Honors No-c",
+          "Reset filters"
+        ]
+      },
+      "examples": [
+        {
+          "sourceId": "awwwards-winning-websites",
+          "url": "https://www.awwwards.com/sites/wolverine-worldwide",
+          "status": 200,
+          "licenseStatus": "inspiration-only-high-overdesign-risk",
+          "reuseGuidance": "Art direction, typography, motion and experimental interaction reference. Translate into one usable design move for ONIA client work.",
+          "candidate": {
+            "index": 476,
+            "url": "https://www.awwwards.com/sites/wolverine-worldwide",
+            "text": "Wolverine Worldwide",
+            "heading": "Locomotive",
+            "description": "WEBSITE Wolverine Worldwide Locomotive PRO DEV Developer Award SOTD Site Of The Day Jun 24, 2026",
+            "imageSrc": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAMCAQAAADB7vUKAAAAEUlEQVR42mNkIAAYRxXQSwEAC5oADbo22BYAAAAASUVORK5CYII=",
+            "imageAlt": "Wolverine Worldwide",
+            "buttonText": [
+              "Locomotive PRO"
+            ],
+            "tags": [
+              "DEV",
+              "SOTD"
+            ],
+            "cardArea": 158976,
+            "score": 10,
+            "sourceMode": "award-gallery"
+          },
+          "screenshots": {
+            "desktop": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/awwwards-winning-websites/476-locomotive-040978f6/desktop.png",
+              "sha256": "439960fc838993585ce53e11e867563b685beb4510075fb005b3b2157baad0ed",
+              "mode": "viewport"
+            },
+            "mobile": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/awwwards-winning-websites/476-locomotive-040978f6/mobile.png",
+              "sha256": "47647451921caf9ac4d76706bf8aa55bdf1b8356daf5f2e964f2b35848475744",
+              "mode": "viewport"
+            }
+          },
+          "screenshotQuality": {
+            "desktop": {
+              "viewport": {
+                "width": 1440,
+                "height": 1000
+              },
+              "textLength": 3386,
+              "mediaCount": 132,
+              "codeCount": 0,
+              "headingCount": 38,
+              "usefulElementCount": 34,
+              "visibleAreaRatio": 1.65,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Directory",
+                "Academy New",
+                "Jobs",
+                "Market",
+                "Be Pro",
+                "Submit Website",
+                ":root { --ch-bg: #E9E9E9; --bg-box-figure: #222; } Wolverine Worldwide by Locomotive PRO SOTD 7.45 /10 Site of the Day -",
+                "Site of the Day - Jun 24, 2026"
+              ]
+            },
+            "mobile": {
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "textLength": 2488,
+              "mediaCount": 132,
+              "codeCount": 0,
+              "headingCount": 38,
+              "usefulElementCount": 22,
+              "visibleAreaRatio": 1.492,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                ":root { --ch-bg: #E9E9E9; --bg-box-figure: #222; } Wolverine Worldwide by Locomotive PRO SOTD 7.45 /10 Site of the Day -",
+                "Site of the Day - Jun 24, 2026",
+                "Wolverine Worldwide",
+                "Wolverine Worldwide",
+                "Locomotive PRO",
+                "Elements",
+                "See the highlights of this website.",
+                "Cookies Policy"
+              ]
+            }
+          },
+          "qualityWarnings": [],
+          "failedRequestCount": 6,
+          "title": "Wolverine Worldwide - Awwwards SOTD",
+          "description": "Wolverine Worldwide is the company behind Merrell, Saucony, Sperry, and Hush Puppies, with one mission: Make. Every Day. Better.",
+          "headings": [
+            {
+              "level": "h2",
+              "text": "Site of the Day - Jun 24, 2026"
+            },
+            {
+              "level": "h1",
+              "text": "Wolverine Worldwide"
+            },
+            {
+              "level": "h2",
+              "text": "Elements"
+            },
+            {
+              "level": "h3",
+              "text": "See the highlights of this website."
+            },
+            {
+              "level": "h3",
+              "text": "Fullscreen Masked Parallax"
+            },
+            {
+              "level": "h3",
+              "text": "Fullscreen Masked Parallax"
+            },
+            {
+              "level": "h3",
+              "text": "Drop-down Menu"
+            },
+            {
+              "level": "h3",
+              "text": "Drop-down Menu"
+            },
+            {
+              "level": "h3",
+              "text": "Mobile Layout"
+            },
+            {
+              "level": "h3",
+              "text": "Mobile Layout"
+            },
+            {
+              "level": "h3",
+              "text": "Video Background Header"
+            },
+            {
+              "level": "h3",
+              "text": "Video Background Header"
+            },
+            {
+              "level": "h3",
+              "text": "Footer"
+            },
+            {
+              "level": "h3",
+              "text": "Footer"
+            },
+            {
+              "level": "h2",
+              "text": "Color Palette"
+            },
+            {
+              "level": "h2",
+              "text": "Technologies & Tools"
+            },
+            {
+              "level": "h2",
+              "text": "Description"
+            },
+            {
+              "level": "h3",
+              "text": "Wolverine Worldwide is the company behind Merrell, Saucony, Sperry, and Hush Puppies, with one mission: Make. Every Day. Better."
+            },
+            {
+              "level": "h2",
+              "text": "Inside look"
+            },
+            {
+              "level": "h3",
+              "text": "Discover more details of this SOTD."
+            },
+            {
+              "level": "h3",
+              "text": "Great element"
+            },
+            {
+              "level": "h3",
+              "text": "Great element"
+            },
+            {
+              "level": "h2",
+              "text": "SOTD / SCORE → 7.45/ 10"
+            },
+            {
+              "level": "h2",
+              "text": "Votes"
+            },
+            {
+              "level": "h2",
+              "text": "DEV AWARD → 7.58/ 10"
+            },
+            {
+              "level": "h2",
+              "text": "Votes"
+            },
+            {
+              "level": "h2",
+              "text": "Collections"
+            },
+            {
+              "level": "h3",
+              "text": "Explore more great collections."
+            },
+            {
+              "level": "h3",
+              "text": "Handy Tools and Apps for De..."
+            },
+            {
+              "level": "h3",
+              "text": "Text Marquee animation"
+            },
+            {
+              "level": "h3",
+              "text": "Typography in Web Design"
+            },
+            {
+              "level": "h3",
+              "text": "Horizontal Layout Websites"
+            },
+            {
+              "level": "h3",
+              "text": "Photography Portfolio"
+            },
+            {
+              "level": "h3",
+              "text": "Movie Landing Page Design"
+            },
+            {
+              "level": "h3",
+              "text": "Video and Audio Players"
+            },
+            {
+              "level": "h3",
+              "text": "NonProfit Websites"
+            }
+          ],
+          "sections": [
+            {
+              "index": 0,
+              "heading": "",
+              "textSample": "Awards",
+              "imageCount": 2,
+              "buttonCount": 0
+            },
+            {
+              "index": 1,
+              "heading": "",
+              "textSample": "Trending",
+              "imageCount": 2,
+              "buttonCount": 0
+            },
+            {
+              "index": 2,
+              "heading": "",
+              "textSample": "By Category",
+              "imageCount": 2,
+              "buttonCount": 0
+            },
+            {
+              "index": 3,
+              "heading": "",
+              "textSample": "By Technology",
+              "imageCount": 2,
+              "buttonCount": 0
+            },
+            {
+              "index": 4,
+              "heading": "",
+              "textSample": "Collections",
+              "imageCount": 2,
+              "buttonCount": 0
+            },
+            {
+              "index": 5,
+              "heading": "",
+              "textSample": "Blog",
+              "imageCount": 1,
+              "buttonCount": 0
+            },
+            {
+              "index": 6,
+              "heading": "Site of the Day - Jun 24, 2026",
+              "textSample": ":root { --ch-bg: #E9E9E9; --bg-box-figure: #222; } Wolverine Worldwide by Locomotive PRO SOTD 7.45 /10 Site of the Day - Jun 24, 2026 Wolverine Worldwide Locomotive PRO Elements See the highlights of this website. ELEMENT Fullscreen Masked Parallax Fullscreen Masked Parallax from Header ELEMENT Drop-down Menu Drop-down",
+              "imageCount": 98,
+              "buttonCount": 136
+            },
+            {
+              "index": 7,
+              "heading": "Site of the Day - Jun 24, 2026",
+              "textSample": "SOTD 7.45 /10 Site of the Day - Jun 24, 2026 Wolverine Worldwide Locomotive PRO Elements See the highlights of this website. ELEMENT Fullscreen Masked Parallax Fullscreen Masked Parallax from Header ELEMENT Drop-down Menu Drop-down Menu from Navigation ELEMENT Mobile Layout Mobile Layout from Layout ELEMENT Video Backg",
+              "imageCount": 24,
+              "buttonCount": 26
+            },
+            {
+              "index": 8,
+              "heading": "Color Palette",
+              "textSample": "Color Palette This website uses a colorpalette of 2 colors HEX #010101 Aa HEX #FFFFFF Aa",
+              "imageCount": 2,
+              "buttonCount": 2
+            },
+            {
+              "index": 9,
+              "heading": "Color Palette",
+              "textSample": "Color Palette",
+              "imageCount": 0,
+              "buttonCount": 0
+            },
+            {
+              "index": 10,
+              "heading": "Color Palette",
+              "textSample": "Color Palette",
+              "imageCount": 0,
+              "buttonCount": 0
+            },
+            {
+              "index": 11,
+              "heading": "",
+              "textSample": "Color Palette",
+              "imageCount": 0,
+              "buttonCount": 0
+            },
+            {
+              "index": 12,
+              "heading": "Technologies & Tools",
+              "textSample": "Technologies & Tools Business & Corporate Fashion Sports Big Background Images Clean Photo & Video UI design GSAP Craft CMS Locomotive Scroll Description Wolverine Worldwide is the company behind Merrell, Saucony, Sperry, and Hush Puppies, with one mission: Make. Every Day. Better. Inside look Discover more details of ",
+              "imageCount": 4,
+              "buttonCount": 16
+            },
+            {
+              "index": 13,
+              "heading": "Technologies & Tools",
+              "textSample": "Technologies & Tools",
+              "imageCount": 0,
+              "buttonCount": 0
+            },
+            {
+              "index": 14,
+              "heading": "Technologies & Tools",
+              "textSample": "Technologies & Tools",
+              "imageCount": 0,
+              "buttonCount": 0
+            },
+            {
+              "index": 15,
+              "heading": "",
+              "textSample": "Technologies & Tools",
+              "imageCount": 0,
+              "buttonCount": 0
+            },
+            {
+              "index": 16,
+              "heading": "SOTD / SCORE → 7.45/ 10",
+              "textSample": "SOTD / SCORE → 7.45/ 10 Evaluation System Design40% Usability30% Creativity20% Content10% 7.66 / 10 7.31 / 10 7.11 / 10 7.68 / 10 Votes Jury Community Members Design Usability Creativity Content Overall Eugene Sokolovski from Belarus web designer 8 7 7 8 7.50 Burak Canpolat from Turkey Independent Art Director 7 7 7 7 ",
+              "imageCount": 58,
+              "buttonCount": 65
+            },
+            {
+              "index": 17,
+              "heading": "Votes",
+              "textSample": "Votes Jury Community Members",
+              "imageCount": 0,
+              "buttonCount": 0
+            }
+          ],
+          "ctas": [
+            "Courses",
+            "Honor Mentions",
+            "Nominees",
+            "Sites of the Day",
+            "Sites of the Month",
+            "Sites of the Year",
+            "Honors New",
+            "Most Awarded Profiles",
+            "Jury 2026",
+            "Annual Awards",
+            "Portfolio Websites",
+            "Free fonts",
+            "Animated websites",
+            "Sites of the Day",
+            "Scrolling",
+            "One page design",
+            "UI design",
+            "E-commerce layouts",
+            "Architecture websites",
+            "Photography websites",
+            "E-commerce",
+            "Architecture",
+            "Restaurant & Hotel",
+            "Design Agencies",
+            "Business & Corporate",
+            "Fashion",
+            "Mobile & Apps",
+            "Interaction Design",
+            "Illustration",
+            "Header Design",
+            "CSS animations",
+            "Wordpress",
+            "Shopify",
+            "WebGL sites",
+            "React Websites",
+            "3D websites",
+            "Figma",
+            "Gsap",
+            "Framer",
+            "Webflow",
+            "Collections",
+            "Blog",
+            "Directory",
+            "Academy New",
+            "Jobs",
+            "Market",
+            "Be Pro",
+            "Submit Website",
+            "Locomotive PRO",
+            "Wolverine Worldwide"
+          ],
+          "palette": [
+            "rgb(34, 34, 34)",
+            "rgb(248, 248, 248)",
+            "rgba(0, 0, 0, 0.13)",
+            "rgb(0, 0, 0)",
+            "rgb(255, 255, 255)",
+            "rgb(233, 233, 233)"
+          ],
+          "layoutSignals": {
+            "hasNav": true,
+            "hasHero": true,
+            "hasPricing": false,
+            "hasTestimonials": false,
+            "hasFAQ": true,
+            "hasVideo": true,
+            "cardLikeCount": 83,
+            "imageCount": 66,
+            "buttonCount": 214,
+            "formCount": 2
+          },
+          "codeBlocks": [],
+          "codeLinks": []
+        }
+      ]
+    },
+    {
+      "id": "recent-design",
+      "name": "Recent Design",
+      "url": "https://recent.design/",
+      "mode": "daily-design-curation",
+      "usage": "Daily recent design references across websites, OG images, app screenshots and design skills.",
+      "licenseStatus": "inspiration-only",
+      "status": 200,
+      "failedRequestCount": 40,
+      "rawCandidateCount": 91,
+      "selectedCandidateCount": 6,
+      "detailedExampleCount": 1,
+      "candidates": [
+        {
+          "index": 2,
+          "url": "https://recent.design/x",
+          "text": "Best of X",
+          "heading": "",
+          "description": "AllBest of XWebsitesOG ImagesApp ScreenshotsApp IconsSkillsInfo",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [
+            "All",
+            "Best of X",
+            "Websites",
+            "OG Images",
+            "App Screenshots",
+            "App Icons",
+            "Skills",
+            "Info"
+          ],
+          "tags": [],
+          "cardArea": 39325,
+          "score": 6,
+          "sourceMode": "daily-design-curation"
+        },
+        {
+          "index": 3,
+          "url": "https://recent.design/websites",
+          "text": "Websites",
+          "heading": "",
+          "description": "AllBest of XWebsitesOG ImagesApp ScreenshotsApp IconsSkillsInfo",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [
+            "All",
+            "Best of X",
+            "Websites",
+            "OG Images",
+            "App Screenshots",
+            "App Icons",
+            "Skills",
+            "Info"
+          ],
+          "tags": [],
+          "cardArea": 39325,
+          "score": 6,
+          "sourceMode": "daily-design-curation"
+        },
+        {
+          "index": 4,
+          "url": "https://recent.design/og-images",
+          "text": "OG Images",
+          "heading": "",
+          "description": "AllBest of XWebsitesOG ImagesApp ScreenshotsApp IconsSkillsInfo",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [
+            "All",
+            "Best of X",
+            "Websites",
+            "OG Images",
+            "App Screenshots",
+            "App Icons",
+            "Skills",
+            "Info"
+          ],
+          "tags": [],
+          "cardArea": 39325,
+          "score": 6,
+          "sourceMode": "daily-design-curation"
+        },
+        {
+          "index": 5,
+          "url": "https://recent.design/app-store-screenshots",
+          "text": "App Screenshots",
+          "heading": "",
+          "description": "AllBest of XWebsitesOG ImagesApp ScreenshotsApp IconsSkillsInfo",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [
+            "All",
+            "Best of X",
+            "Websites",
+            "OG Images",
+            "App Screenshots",
+            "App Icons",
+            "Skills",
+            "Info"
+          ],
+          "tags": [],
+          "cardArea": 39325,
+          "score": 6,
+          "sourceMode": "daily-design-curation"
+        },
+        {
+          "index": 6,
+          "url": "https://recent.design/app-icons",
+          "text": "App Icons",
+          "heading": "",
+          "description": "AllBest of XWebsitesOG ImagesApp ScreenshotsApp IconsSkillsInfo",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [
+            "All",
+            "Best of X",
+            "Websites",
+            "OG Images",
+            "App Screenshots",
+            "App Icons",
+            "Skills",
+            "Info"
+          ],
+          "tags": [],
+          "cardArea": 39325,
+          "score": 6,
+          "sourceMode": "daily-design-curation"
+        },
+        {
+          "index": 7,
+          "url": "https://recent.design/skills",
+          "text": "Skills",
+          "heading": "",
+          "description": "AllBest of XWebsitesOG ImagesApp ScreenshotsApp IconsSkillsInfo",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [
+            "All",
+            "Best of X",
+            "Websites",
+            "OG Images",
+            "App Screenshots",
+            "App Icons",
+            "Skills",
+            "Info"
+          ],
+          "tags": [],
+          "cardArea": 39325,
+          "score": 6,
+          "sourceMode": "daily-design-curation"
+        }
+      ],
+      "screenshot": {
+        "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/recent-design/gallery.png",
+        "sha256": "fb8fb39cc720a223173188dcaf758459daef76059321aa39c3bfa7d6baee2d9f",
+        "mode": "full-page"
+      },
+      "screenshotQuality": {
+        "viewport": {
+          "width": 1440,
+          "height": 1000
+        },
+        "textLength": 1597,
+        "mediaCount": 380,
+        "codeCount": 0,
+        "headingCount": 2,
+        "usefulElementCount": 137,
+        "visibleAreaRatio": 4.002,
+        "isLikelySparse": false,
+        "visibleSamples": [
+          "30 onlineAllBest of XWebsitesOG ImagesApp ScreenshotsApp IconsSkillsInfoThe best of recent design found on the Internet ",
+          "All",
+          "Best of X",
+          "Websites",
+          "OG Images",
+          "App Screenshots",
+          "App Icons",
+          "Skills"
+        ]
+      },
+      "examples": [
+        {
+          "sourceId": "recent-design",
+          "url": "https://recent.design/x",
+          "status": 200,
+          "licenseStatus": "inspiration-only",
+          "reuseGuidance": "Daily recent design references across websites, OG images, app screenshots and design skills.",
+          "candidate": {
+            "index": 2,
+            "url": "https://recent.design/x",
+            "text": "Best of X",
+            "heading": "",
+            "description": "AllBest of XWebsitesOG ImagesApp ScreenshotsApp IconsSkillsInfo",
+            "imageSrc": "",
+            "imageAlt": "",
+            "buttonText": [
+              "All",
+              "Best of X",
+              "Websites",
+              "OG Images",
+              "App Screenshots",
+              "App Icons",
+              "Skills",
+              "Info"
+            ],
+            "tags": [],
+            "cardArea": 39325,
+            "score": 6,
+            "sourceMode": "daily-design-curation"
+          },
+          "screenshots": {
+            "desktop": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/recent-design/002-best-of-x-a4051cce/desktop.png",
+              "sha256": "ed02637ca71f7f6a2f0e826774ec53a08193c70d0b0aeda602aa42116651616e",
+              "mode": "viewport"
+            },
+            "mobile": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/recent-design/002-best-of-x-a4051cce/mobile.png",
+              "sha256": "a9f909f71994061b1198cc8c2d04ddc5376cd30fad0503bb9fb5d0c15e0d4f78",
+              "mode": "viewport"
+            }
+          },
+          "screenshotQuality": {
+            "desktop": {
+              "viewport": {
+                "width": 1440,
+                "height": 1000
+              },
+              "textLength": 1054,
+              "mediaCount": 186,
+              "codeCount": 0,
+              "headingCount": 2,
+              "usefulElementCount": 136,
+              "visibleAreaRatio": 3.999,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "28 onlineAllBest of XWebsitesOG ImagesApp ScreenshotsApp IconsSkillsInfoThe best of recent design found on the Internet ",
+                "All",
+                "Best of X",
+                "Websites",
+                "OG Images",
+                "App Screenshots",
+                "App Icons",
+                "Skills"
+              ]
+            },
+            "mobile": {
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "textLength": 1030,
+              "mediaCount": 187,
+              "codeCount": 0,
+              "headingCount": 2,
+              "usefulElementCount": 35,
+              "visibleAreaRatio": 2.988,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "AllBest of XWebsitesOG ImagesApp ScreenshotsApp IconsSkillsInfoThe best of recent design found on the Internet updated d",
+                "All",
+                "Best of X",
+                "Websites",
+                "OG Images",
+                "App Screenshots",
+                "App Icons",
+                "Skills"
+              ]
+            }
+          },
+          "qualityWarnings": [],
+          "failedRequestCount": 23,
+          "title": "Best Designs on X — Recent",
+          "description": "The best of recent design found on X updated daily.",
+          "headings": [
+            {
+              "level": "h2",
+              "text": "Subscribe to the Recent digest"
+            },
+            {
+              "level": "h2",
+              "text": "Stay ahead of trends"
+            }
+          ],
+          "sections": [
+            {
+              "index": 0,
+              "heading": "",
+              "textSample": "amoamoamo",
+              "imageCount": 3,
+              "buttonCount": 3
+            },
+            {
+              "index": 1,
+              "heading": "",
+              "textSample": "Jake Dow-Smith",
+              "imageCount": 3,
+              "buttonCount": 3
+            },
+            {
+              "index": 2,
+              "heading": "",
+              "textSample": "Martin Strba",
+              "imageCount": 3,
+              "buttonCount": 3
+            },
+            {
+              "index": 3,
+              "heading": "",
+              "textSample": "yui540",
+              "imageCount": 3,
+              "buttonCount": 3
+            },
+            {
+              "index": 4,
+              "heading": "",
+              "textSample": "Moğuz Bülbül",
+              "imageCount": 3,
+              "buttonCount": 3
+            },
+            {
+              "index": 5,
+              "heading": "",
+              "textSample": "Alyx",
+              "imageCount": 3,
+              "buttonCount": 3
+            },
+            {
+              "index": 6,
+              "heading": "",
+              "textSample": "3Lorenzo",
+              "imageCount": 3,
+              "buttonCount": 3
+            },
+            {
+              "index": 7,
+              "heading": "",
+              "textSample": "Minsang Choi",
+              "imageCount": 3,
+              "buttonCount": 3
+            },
+            {
+              "index": 8,
+              "heading": "",
+              "textSample": "Rauno Freiberg",
+              "imageCount": 3,
+              "buttonCount": 3
+            },
+            {
+              "index": 9,
+              "heading": "",
+              "textSample": "Siddhant Jaokar",
+              "imageCount": 3,
+              "buttonCount": 3
+            },
+            {
+              "index": 10,
+              "heading": "",
+              "textSample": "joshpuckett",
+              "imageCount": 3,
+              "buttonCount": 3
+            },
+            {
+              "index": 11,
+              "heading": "",
+              "textSample": "4Lance",
+              "imageCount": 3,
+              "buttonCount": 3
+            },
+            {
+              "index": 12,
+              "heading": "",
+              "textSample": "Hieu Dinh",
+              "imageCount": 3,
+              "buttonCount": 3
+            },
+            {
+              "index": 13,
+              "heading": "",
+              "textSample": "perfectloop",
+              "imageCount": 3,
+              "buttonCount": 3
+            },
+            {
+              "index": 14,
+              "heading": "",
+              "textSample": "Reijo",
+              "imageCount": 3,
+              "buttonCount": 3
+            },
+            {
+              "index": 15,
+              "heading": "",
+              "textSample": "Matthew Skiles",
+              "imageCount": 3,
+              "buttonCount": 3
+            },
+            {
+              "index": 16,
+              "heading": "",
+              "textSample": "Benji Taylor",
+              "imageCount": 3,
+              "buttonCount": 3
+            },
+            {
+              "index": 17,
+              "heading": "",
+              "textSample": "Oliver ೫",
+              "imageCount": 3,
+              "buttonCount": 3
+            }
+          ],
+          "ctas": [
+            "Recent",
+            "All",
+            "Best of X",
+            "Websites",
+            "OG Images",
+            "App Screenshots",
+            "App Icons",
+            "Skills",
+            "Info",
+            "Subscribe",
+            "All",
+            "Web",
+            "Branding",
+            "Product",
+            "Motion",
+            "Illustration",
+            "3D",
+            "Print",
+            "Recent",
+            "Map Discovery App",
+            "amoamoamo",
+            "View post",
+            "Trestle Inc.",
+            "Jake Dow-Smith",
+            "View post",
+            "Topographic Lines",
+            "Martin Strba",
+            "View post",
+            "CSS Count Up Animations",
+            "yui540",
+            "View post",
+            "TurboClaim",
+            "Moğuz Bülbül",
+            "View post",
+            "Corgi Times",
+            "Alyx",
+            "View post",
+            "Tatra House",
+            "Lorenzo",
+            "View post",
+            "Flame in a Glass",
+            "Minsang Choi",
+            "View post",
+            "Button Pile",
+            "Rauno Freiberg",
+            "View post",
+            "Fragments in Motion",
+            "Siddhant Jaokar",
+            "View post",
+            "Leading and Measure"
+          ],
+          "palette": [
+            "oklch(0.205 0 0)",
+            "rgb(255, 255, 255)",
+            "oklch(0.922 0 0)",
+            "rgb(0, 0, 0)",
+            "oklch(0.556 0 0)",
+            "oklch(0.439 0 0)",
+            "oklch(0.97 0 0)",
+            "oklab(0 0 0 / 0.02)",
+            "rgba(90, 90, 90, 0.4)"
+          ],
+          "layoutSignals": {
+            "hasNav": true,
+            "hasHero": false,
+            "hasPricing": false,
+            "hasTestimonials": false,
+            "hasFAQ": false,
+            "hasVideo": true,
+            "cardLikeCount": 60,
+            "imageCount": 125,
+            "buttonCount": 200,
+            "formCount": 3
+          },
+          "codeBlocks": [],
+          "codeLinks": []
+        }
+      ]
+    },
+    {
+      "id": "mobbin-web",
+      "name": "Mobbin Web",
+      "url": "https://mobbin.com/explore/web",
+      "mode": "product-flow-library",
+      "usage": "Real app/web UI flows, copywriting and interaction patterns. Use for UX flow study, not visual copying.",
+      "licenseStatus": "flow-reference-only",
+      "status": 200,
+      "failedRequestCount": 1,
+      "rawCandidateCount": 186,
+      "selectedCandidateCount": 8,
+      "detailedExampleCount": 1,
+      "candidates": [
+        {
+          "index": 21,
+          "url": "https://mobbin.com/collections/e9ede7f5-31ff-4ca1-acda-771fee465ed9/web/screens",
+          "text": "View collection Beautiful SaaS Dashboards",
+          "heading": "View collection Beautiful SaaS Dashboards",
+          "description": "View collection Beautiful SaaS DashboardsABeautiful SaaS DashboardsAlex Barreto",
+          "imageSrc": "https://bytescale.mobbin.com/FW25bBB/image/mobbin.com/prod/content/app_screens/37077d9f-6387-4ae9-8487-a1d1430e2307.png?f=webp&w=1920&q=85&fit=shrink-cover&extend-bottom=120&image=%2Fmobbin.com%2Fprod%2Fwatermark%2F1.0%2Fdb95a7a3-3f61-4a2e-bf40-27d6d52e9a48&gravity=bottom&v=1.0",
+          "imageAlt": "preview screen 1",
+          "buttonText": [
+            "View collection Beautiful SaaS Dashboards",
+            "A",
+            "Alex Barreto"
+          ],
+          "tags": [],
+          "cardArea": 165308,
+          "score": 10,
+          "sourceMode": "product-flow-library"
+        },
+        {
+          "index": 27,
+          "url": "https://mobbin.com/collections/b3ee62ba-67bd-48c2-94d4-571525c8122e/web/screens",
+          "text": "View collection stepper/wizard",
+          "heading": "View collection stepper/wizard",
+          "description": "View collection stepper/wizardNstepper/wizardNatalia",
+          "imageSrc": "https://bytescale.mobbin.com/FW25bBB/image/mobbin.com/prod/content/app_screens/38d51bc8-6224-42be-9783-10f76166165c.png?f=webp&w=1920&q=85&fit=shrink-cover",
+          "imageAlt": "preview screen 1",
+          "buttonText": [
+            "View collection stepper/wizard"
+          ],
+          "tags": [],
+          "cardArea": 165308,
+          "score": 10,
+          "sourceMode": "product-flow-library"
+        },
+        {
+          "index": 28,
+          "url": "https://mobbin.com/collections/67632229-3e0d-4ca8-8458-c860411fd328/web/screens",
+          "text": "View collection Scalability",
+          "heading": "View collection Scalability",
+          "description": "View collection ScalabilityAScalabilityAndrzej Miałszygrosz",
+          "imageSrc": "https://bytescale.mobbin.com/FW25bBB/image/mobbin.com/prod/content/app_screens/33f58f90-3771-47a7-af20-e2bef2a1e3a9.png?f=webp&w=1920&q=85&fit=shrink-cover",
+          "imageAlt": "preview screen 1",
+          "buttonText": [
+            "View collection Scalability"
+          ],
+          "tags": [],
+          "cardArea": 165308,
+          "score": 10,
+          "sourceMode": "product-flow-library"
+        },
+        {
+          "index": 29,
+          "url": "https://mobbin.com/collections/f13158bd-57ae-4adf-9370-b9671d2d373a/web/screens",
+          "text": "View collection calendars",
+          "heading": "View collection calendars",
+          "description": "View collection calendarsAcalendarsAndrej Radisic",
+          "imageSrc": "https://bytescale.mobbin.com/FW25bBB/image/mobbin.com/prod/content/app_screens/453ff55e-b30b-4460-aa76-fff50aec34cf.png?f=webp&w=1920&q=85&fit=shrink-cover&extend-bottom=120&image=%2Fmobbin.com%2Fprod%2Fwatermark%2F1.0%2F2bd710ff-3fe9-4ba5-a346-5f07ae08e3d7&gravity=bottom&v=1.0",
+          "imageAlt": "preview screen 1",
+          "buttonText": [
+            "View collection calendars"
+          ],
+          "tags": [],
+          "cardArea": 165308,
+          "score": 10,
+          "sourceMode": "product-flow-library"
+        },
+        {
+          "index": 30,
+          "url": "https://mobbin.com/collections/a65dff94-2e0c-4fce-9034-6cd61df2a507/web/screens",
+          "text": "View collection Timeline and Activity feeds",
+          "heading": "View collection Timeline and Activity feeds",
+          "description": "View collection Timeline and Activity feedsBTimeline and Activity feedsBiwei Tan Tan",
+          "imageSrc": "https://bytescale.mobbin.com/FW25bBB/image/mobbin.com/prod/content/app_screens/92aa4699-14f4-4d85-83d9-ccf3299f81e5.png?f=webp&w=1920&q=85&fit=shrink-cover&extend-bottom=120&image=%2Fmobbin.com%2Fprod%2Fwatermark%2F1.0%2F67f0577f-cf4d-4d5d-9aab-6c24f0d2833d&gravity=bottom&v=1.0",
+          "imageAlt": "preview screen 1",
+          "buttonText": [
+            "View collection Timeline and Activity feeds",
+            "B",
+            "Biwei Tan Tan"
+          ],
+          "tags": [],
+          "cardArea": 165308,
+          "score": 10,
+          "sourceMode": "product-flow-library"
+        },
+        {
+          "index": 24,
+          "url": "https://mobbin.com/collections/d4124414-8ebc-4c25-b26e-5a4f53b77142/web/screens",
+          "text": "View collection [B2B] Home",
+          "heading": "View collection [B2B] Home",
+          "description": "View collection [B2B] HomeM[B2B] HomeMax",
+          "imageSrc": "https://bytescale.mobbin.com/FW25bBB/image/mobbin.com/prod/content/app_screens/9f3b6bf0-890d-41fa-8dec-010b02cca3ba.png?f=webp&w=1920&q=85&fit=shrink-cover&extend-bottom=120&image=%2Fmobbin.com%2Fprod%2Fwatermark%2F1.0%2F0e44c709-f3ad-4d72-82a9-b00ce7e4ecff&gravity=bottom&v=1.0",
+          "imageAlt": "preview screen 1",
+          "buttonText": [
+            "View collection [B2B] Home",
+            "M",
+            "Max"
+          ],
+          "tags": [],
+          "cardArea": 165308,
+          "score": 9,
+          "sourceMode": "product-flow-library"
+        },
+        {
+          "index": 33,
+          "url": "https://mobbin.com/explore/screens/260683ec-edbd-4a0e-a500-9a0e80b48847",
+          "text": "Chat Start",
+          "heading": "",
+          "description": "Chat StartOpenSaveCopyLogoTop Navigation BarSide NavigationHomeAdding & CreatingSelecting & ChoosingRecording Audio & VideoChatting & Sending MessagesShowing & HidingCreating AccountOnboardingStarting & CompletingMindtrip",
+          "imageSrc": "https://bytescale.mobbin.com/FW25bBB/image/mobbin.com/prod/file.webp?enc=1.BQnbdJK6.GeY05ZceUIkZ7BTK.KURf5yzL1KbJoVd2fkDDCKvXoxhqalROgpw5oo5eHZpmpOBy1ibtwaeVuSIUa_ZHSWDJSO9ajGB4IMl_FWgdV04Zap3AvL-u5Wrbkd3JBeAmEKQuRkowmT0Cll2T9KJpfvO20q2YDuRJ4tJSj5KMwIDfj2rYuUeZ2S6LX7moCjHEs-a6aqXKyElzDPZmhsNQlSZWWVA6WkuLDwI4NkxvAZN048NC38LOyf2Esa2YTB8jVUr3_uSYzrwFZWbDub9nigX3DxvSSYuId_E187sns94IPbPT6Kb3kAMwZr9mp2TRCzjqRcacOS1IvFlWSoX8de4igp8K78p0HTzisxLPCo4AtElR7SWV86AGAaNEfivWLUrmvMB-MX--",
+          "imageAlt": "Mindtrip Web screen",
+          "buttonText": [
+            "Chat Start",
+            "Save",
+            "Copy",
+            "Logo",
+            "Top Navigation Bar",
+            "Side Navigation",
+            "Home",
+            "Adding & Creating"
+          ],
+          "tags": [],
+          "cardArea": 346830,
+          "score": 8,
+          "sourceMode": "product-flow-library"
+        },
+        {
+          "index": 49,
+          "url": "https://mobbin.com/explore/screens/3e29dd35-0c1d-4f71-831b-af35c13bf1ec",
+          "text": "Inbox Email Thread",
+          "heading": "",
+          "description": "Inbox Email ThreadOpenSaveCopyTop Navigation BarTreeTabSide NavigationStatus DotChat DetailMulti-Column LayoutHomeEditing & UpdatingSearching & FindingFront",
+          "imageSrc": "https://bytescale.mobbin.com/FW25bBB/image/mobbin.com/prod/file.webp?enc=1.BQnbdJK6.oDIeBZ0vfAMvzgWc.CRhOpysCXBrh9qOEPScSdTqwc0lc-aib8Uk38BNbQ9Gfs-OqSKEGb4kBiMyRIZlOLxWRMYgXuwMwakJz3j8-ecPwLBDSYJoF1WZR_lytthJST4nPSb67JNuaqxR4uaCFCwTlHSv19CjoQY5ajqIWNy_uYv_M858NurCAz5zMRCOG4UANlvScBt69KVgl8Hq-oEIEuLzyCWZTBTex_M4Bk7PAbveFyu148R1n3h_ClEAytOMlgelPcyNzhZERLiOYtH8LZefkcJpktdNDz3D3TDdTNFb4YVf0xrmRMP4fXQGH8SG5O55RVOK3BVcOwcXRtgwnD-MA_FxOp_myLWm04SKmhy8ppgZlzH_dABQf7-cLH5WV0wRgJI6g",
+          "imageAlt": "Front Web screen",
+          "buttonText": [
+            "Inbox Email Thread",
+            "Save",
+            "Copy",
+            "Top Navigation Bar",
+            "Tree",
+            "Tab",
+            "Side Navigation",
+            "Status Dot"
+          ],
+          "tags": [],
+          "cardArea": 346830,
+          "score": 8,
+          "sourceMode": "product-flow-library"
+        }
+      ],
+      "screenshot": {
+        "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/mobbin-web/gallery.png",
+        "sha256": "fad158e2164c77423eb67aef082370bdfec872521e32355e1add217056ba6d94",
+        "mode": "full-page"
+      },
+      "screenshotQuality": {
+        "viewport": {
+          "width": 1440,
+          "height": 1000
+        },
+        "textLength": 4126,
+        "mediaCount": 277,
+        "codeCount": 0,
+        "headingCount": 11,
+        "usefulElementCount": 53,
+        "visibleAreaRatio": 2.677,
+        "isLikelySparse": false,
+        "visibleSamples": [
+          "Pricing",
+          "Awards",
+          "Log in",
+          "Join for free",
+          "Explore web app designsDiscover web app UI & UX design ideas & examples from the world’s best apps on MobbinMobileWebSit",
+          "Explore web app designsDiscover web app UI & UX design ideas & examples from the world’s best apps on MobbinMobileWebSit",
+          "Explore web app designs",
+          "Mobile"
+        ]
+      },
+      "examples": [
+        {
+          "sourceId": "mobbin-web",
+          "url": "https://mobbin.com/collections/e9ede7f5-31ff-4ca1-acda-771fee465ed9/web/screens",
+          "status": 200,
+          "licenseStatus": "flow-reference-only",
+          "reuseGuidance": "Real app/web UI flows, copywriting and interaction patterns. Use for UX flow study, not visual copying.",
+          "candidate": {
+            "index": 21,
+            "url": "https://mobbin.com/collections/e9ede7f5-31ff-4ca1-acda-771fee465ed9/web/screens",
+            "text": "View collection Beautiful SaaS Dashboards",
+            "heading": "View collection Beautiful SaaS Dashboards",
+            "description": "View collection Beautiful SaaS DashboardsABeautiful SaaS DashboardsAlex Barreto",
+            "imageSrc": "https://bytescale.mobbin.com/FW25bBB/image/mobbin.com/prod/content/app_screens/37077d9f-6387-4ae9-8487-a1d1430e2307.png?f=webp&w=1920&q=85&fit=shrink-cover&extend-bottom=120&image=%2Fmobbin.com%2Fprod%2Fwatermark%2F1.0%2Fdb95a7a3-3f61-4a2e-bf40-27d6d52e9a48&gravity=bottom&v=1.0",
+            "imageAlt": "preview screen 1",
+            "buttonText": [
+              "View collection Beautiful SaaS Dashboards",
+              "A",
+              "Alex Barreto"
+            ],
+            "tags": [],
+            "cardArea": 165308,
+            "score": 10,
+            "sourceMode": "product-flow-library"
+          },
+          "screenshots": {
+            "desktop": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/mobbin-web/021-view-collection-beautiful-saas-dashboards-44e47f62/desktop.png",
+              "sha256": "d34bfd67566eb2deda975e9ae9d98ae93e17afe676d60c83953d56f85a8c84c4",
+              "mode": "viewport"
+            },
+            "mobile": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/mobbin-web/021-view-collection-beautiful-saas-dashboards-44e47f62/mobile.png",
+              "sha256": "b71600ba50cfbca45083ddc708472519e57b433bb81744d004a06ab46a74c619",
+              "mode": "viewport"
+            }
+          },
+          "screenshotQuality": {
+            "desktop": {
+              "viewport": {
+                "width": 1440,
+                "height": 1000
+              },
+              "textLength": 243,
+              "mediaCount": 31,
+              "codeCount": 0,
+              "headingCount": 2,
+              "usefulElementCount": 44,
+              "visibleAreaRatio": 3.141,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Pricing",
+                "Awards",
+                "Log in",
+                "Join for free",
+                "Beautiful SaaS DashboardsBeautiful SaaS DashboardsMobileWebSitesASaveCopyOkuSaveCopyAsanaSaveCopyHotjarSaveCopyRevolut B",
+                "Beautiful SaaS DashboardsBeautiful SaaS DashboardsMobileWebSitesASaveCopyOkuSaveCopyAsanaSaveCopyHotjarSaveCopyRevolut B",
+                "Beautiful SaaS Dashboards",
+                "Mobile"
+              ]
+            },
+            "mobile": {
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "textLength": 203,
+              "mediaCount": 23,
+              "codeCount": 0,
+              "headingCount": 2,
+              "usefulElementCount": 36,
+              "visibleAreaRatio": 3.169,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Mobbin",
+                "Mobbin",
+                "Changelog",
+                "Pricing",
+                "Awards",
+                "Careers",
+                "Merch",
+                "Support"
+              ]
+            }
+          },
+          "qualityWarnings": [],
+          "failedRequestCount": 3,
+          "title": "Beautiful SaaS Dashboards Collection by @alexbarreto",
+          "description": "Save hours of UI & UX research with our library of 600,000+ fully searchable mobile & web app screenshots.",
+          "headings": [
+            {
+              "level": "h1",
+              "text": "Beautiful SaaS Dashboards"
+            },
+            {
+              "level": "h2",
+              "text": "0 selected"
+            }
+          ],
+          "sections": [
+            {
+              "index": 0,
+              "heading": "Beautiful SaaS Dashboards",
+              "textSample": "Beautiful SaaS DashboardsBeautiful SaaS DashboardsMobileWebSitesASaveCopyOkuSaveCopyAsanaSaveCopyHotjarSaveCopyRevolut BusinessDots loading indicator",
+              "imageCount": 18,
+              "buttonCount": 33
+            }
+          ],
+          "ctas": [
+            "Pricing",
+            "Awards",
+            "Log in",
+            "Join for free",
+            "Mobbin",
+            "Changelog",
+            "Pricing",
+            "Awards",
+            "Careers",
+            "Merch",
+            "Support",
+            "Log in",
+            "Join for free",
+            "Mobile",
+            "Web",
+            "Sites",
+            "A",
+            "More actions",
+            "Save",
+            "Save",
+            "Copy",
+            "Oku",
+            "Save",
+            "Save",
+            "Copy",
+            "Asana",
+            "Save",
+            "Save",
+            "Copy",
+            "Hotjar",
+            "Save",
+            "Save",
+            "Copy",
+            "Revolut Business",
+            "Clear",
+            "PRO",
+            "Copy",
+            "Save",
+            "Save"
+          ],
+          "palette": [
+            "rgb(20, 20, 20)",
+            "rgb(255, 255, 255)",
+            "rgb(173, 173, 173)",
+            "rgba(117, 117, 117, 0.48)",
+            "rgba(237, 237, 237, 0.08)",
+            "rgba(255, 255, 255, 0.96)"
+          ],
+          "layoutSignals": {
+            "hasNav": true,
+            "hasHero": true,
+            "hasPricing": true,
+            "hasTestimonials": false,
+            "hasFAQ": false,
+            "hasVideo": false,
+            "cardLikeCount": 1,
+            "imageCount": 8,
+            "buttonCount": 53,
+            "formCount": 0
+          },
+          "codeBlocks": [],
+          "codeLinks": []
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

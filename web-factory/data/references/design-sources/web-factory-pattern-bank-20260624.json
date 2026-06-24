@@ -1,0 +1,271 @@
+{
+  "capturedAt": "2026-06-24",
+  "purpose": "ONIA Web Factory design pattern bank for choosing sections, sources, skills, visual assets and risk controls by business type.",
+  "policy": "Reference structure, section logic, motion principles and taxonomy only. Do not copy third-party code, full copy, screenshots, brand identity or proprietary assets without license and client-rights review.",
+  "automationSmokeTest": {
+    "artifact": "web-factory/data/references/design-sources/gallery-examples/2026-06-24-new-sources-smoke.json",
+    "passedAutomatedHarvest": [
+      "landingfolio",
+      "saasframe-landing-pages",
+      "saaslandingpage",
+      "awwwards-winning-websites",
+      "recent-design",
+      "mobbin-web"
+    ],
+    "manualOnly": [
+      {
+        "id": "landbook",
+        "reason": "Playwright smoke test returned 403/Cloudflare on 2026-06-24."
+      }
+    ]
+  },
+  "researchInputs": {
+    "localDocs": [
+      "web-factory/DESIGN_STACK.md",
+      "web-factory/SOURCES.md",
+      "web-factory/ECOMMERCE_PURCHASE_REFERENCES.md",
+      "web-factory/data/references/design-sources/gallery-examples/latest-gallery-examples.json",
+      "hermes-content/propuestas/ESTRATEGIA_PLANTILLAS_WEB_INTERNO.md",
+      "hermes-content/propuestas/PLAYBOOK_CONSTRUCCION_INTERNO.md",
+      "hermes-content/propuestas/generador/clientes.json",
+      "hermes-content/brand/ONIA_BRAND_IDENTITY.md"
+    ],
+    "externalSources": [
+      {
+        "name": "Lapa Ninja",
+        "url": "https://www.lapa.ninja/",
+        "sourceType": "landing-gallery",
+        "use": "Broad category scanning, full-page rhythm and section ordering.",
+        "reusePolicy": "inspiration-only"
+      },
+      {
+        "name": "Landbook",
+        "url": "https://land-book.com/",
+        "sourceType": "website-gallery",
+        "use": "Hand-picked current websites, ecommerce, portfolio, pricing, case study and product pages.",
+        "reusePolicy": "inspiration-only"
+      },
+      {
+        "name": "Landingfolio",
+        "url": "https://www.landingfolio.com/",
+        "sourceType": "landing-gallery",
+        "use": "Landing examples, components and template direction.",
+        "reusePolicy": "inspiration-only"
+      },
+      {
+        "name": "SaaSFrame",
+        "url": "https://www.saasframe.io/categories/landing-page",
+        "sourceType": "saas-gallery",
+        "use": "SaaS hero, value proposition, social proof, pricing and CRO patterns.",
+        "reusePolicy": "inspiration-only"
+      },
+      {
+        "name": "SaaS Landing Page",
+        "url": "https://saaslandingpage.com/",
+        "sourceType": "saas-gallery",
+        "use": "SaaS sections by page type: landing, pricing, features, testimonials, FAQ and contact.",
+        "reusePolicy": "inspiration-only"
+      },
+      {
+        "name": "Awwwards",
+        "url": "https://www.awwwards.com/websites/",
+        "sourceType": "award-gallery",
+        "use": "High-end art direction, motion, typography and experimental interaction.",
+        "reusePolicy": "inspiration-only-high-overdesign-risk"
+      },
+      {
+        "name": "Recent",
+        "url": "https://recent.design/",
+        "sourceType": "daily-design-curation",
+        "use": "Recent websites, OG images, app screenshots and skill references.",
+        "reusePolicy": "inspiration-only"
+      },
+      {
+        "name": "Mobbin",
+        "url": "https://mobbin.com/",
+        "sourceType": "product-flow-library",
+        "use": "Real product flows, copywriting and UX patterns.",
+        "reusePolicy": "flow-reference-only"
+      },
+      {
+        "name": "shadcn/ui",
+        "url": "https://ui.shadcn.com/",
+        "sourceType": "component-system",
+        "use": "Base component ownership model and accessible composition.",
+        "reusePolicy": "approved-after-local-review"
+      },
+      {
+        "name": "Tailwind CSS",
+        "url": "https://tailwindcss.com/",
+        "sourceType": "technical-docs",
+        "use": "Theme variables, responsive utilities and dark-mode implementation.",
+        "reusePolicy": "approved-technical-source"
+      },
+      {
+        "name": "Motion",
+        "url": "https://motion.dev/",
+        "sourceType": "technical-docs",
+        "use": "Scroll animation, motion values and reduced-motion accessibility.",
+        "reusePolicy": "approved-technical-source"
+      },
+      {
+        "name": "web.dev Web Vitals",
+        "url": "https://web.dev/articles/vitals",
+        "sourceType": "performance-docs",
+        "use": "LCP, INP and CLS validation targets.",
+        "reusePolicy": "approved-technical-source"
+      }
+    ]
+  },
+  "skillRouting": [
+    {
+      "situation": "landing_portfolio_redesign",
+      "route": [
+        "web-factory-design-director",
+        "design-taste-frontend",
+        "ui-ux-pro-max",
+        "impeccable",
+        "browser-qa"
+      ]
+    },
+    {
+      "situation": "ecommerce_catalog_pdp_cart",
+      "route": [
+        "web-factory-design-director",
+        "web-factory-visual-intake",
+        "web-factory-commerce-storefront",
+        "ecommerce-motion-retention",
+        "impeccable",
+        "browser-qa"
+      ]
+    },
+    {
+      "situation": "dashboard_crm_internal_app",
+      "route": [
+        "frontend-ui-engineering",
+        "ui-ux-pro-max",
+        "impeccable",
+        "browser-qa"
+      ]
+    }
+  ],
+  "verticalPlaybooks": [
+    {
+      "id": "agency_portfolio",
+      "oniaExamples": ["bench"],
+      "designRead": "Authority, taste, campaign proof, serious but visually alive.",
+      "recommendedSections": ["hero", "client_logo_wall", "services_by_intent", "selected_work", "verified_numbers", "process", "brief_cta"],
+      "assetsNeeded": ["campaign_visuals", "client_logos_with_permission", "case_videos", "team_or_studio_photo"],
+      "avoid": ["vague_craft_copy", "fake_awards", "unlicensed_client_logos", "generic_three_card_services"]
+    },
+    {
+      "id": "ecommerce_catalog",
+      "oniaExamples": ["nuvia", "garabato"],
+      "designRead": "Product-first, fast decision, honest purchase or quote flow.",
+      "recommendedSections": ["media_hero", "featured_products", "category_or_routine_guide", "catalog_portal", "pdp_buybox", "cart_drawer", "checkout_or_quote", "support_faq"],
+      "assetsNeeded": ["packshots", "lifestyle_photos", "category_images", "product_video", "legal_product_claims"],
+      "avoid": ["full_catalog_inside_landing", "repeated_product_grids", "checkout_claims_without_payment_integration", "copied_product_media"]
+    },
+    {
+      "id": "engineering_industrial",
+      "oniaExamples": ["hsb-engineers"],
+      "designRead": "Technical authority, trust, project proof and lead capture.",
+      "recommendedSections": ["discipline_hero", "authority_proof", "services_by_problem", "case_gallery", "safety_compliance", "team_equipment", "crm_contact_form"],
+      "assetsNeeded": ["project_photos", "site_photos", "plans", "machinery", "certifications", "approved_case_data"],
+      "avoid": ["glossy_startup_style", "fake_3d_renders", "invented_project_stats", "experimental_motion"]
+    },
+    {
+      "id": "clinic_health",
+      "oniaExamples": ["dentalgest", "lia-albertengo"],
+      "designRead": "Calm trust, credentials, appointment conversion and patient clarity.",
+      "recommendedSections": ["practitioner_hero", "credentials", "services_by_patient_problem", "treatment_process", "patient_resources", "approved_reviews", "booking_form", "disclaimer_faq"],
+      "assetsNeeded": ["real_portrait", "clinic_photos", "treatment_context", "credentials", "legal_disclaimers"],
+      "avoid": ["fake_medical_claims", "fake_before_after", "generated_doctor_portraits_as_real", "visual_clutter"]
+    },
+    {
+      "id": "local_service",
+      "oniaExamples": ["aw-climatizacion"],
+      "designRead": "Fast trust, local availability and clear service request.",
+      "recommendedSections": ["service_city_hero", "official_partner_proof_if_real", "services_by_problem", "coverage_map", "quote_visit_process", "seasonal_offer_if_real", "qualifying_whatsapp_or_form", "warranty_faq"],
+      "assetsNeeded": ["technician_photos", "equipment_photos", "vehicle_or_team", "brand_permission", "service_video"],
+      "avoid": ["generic_stock_technicians", "unverified_official_claims", "hidden_contact", "overloaded_service_lists"]
+    },
+    {
+      "id": "restaurant_food",
+      "oniaExamples": [],
+      "designRead": "Sensory, simple and mobile ordering first.",
+      "recommendedSections": ["food_hero", "top_menu_items", "order_path", "hours_location", "reviews", "menu_categories", "current_promos"],
+      "assetsNeeded": ["real_dish_photos", "menu_item_photos", "service_video", "storefront_photo"],
+      "avoid": ["fake_food_photos", "hidden_hours", "overdesigned_menu", "promos_that_will_not_be_maintained"]
+    },
+    {
+      "id": "real_estate_property",
+      "oniaExamples": [],
+      "designRead": "Visual proof, location, availability and qualified inquiry.",
+      "recommendedSections": ["property_hero", "location_value", "gallery", "units_or_plans", "availability_or_quote", "neighborhood_map", "reservation_process", "qualified_lead_form"],
+      "assetsNeeded": ["property_photos", "renders", "drone_video", "floorplans", "map"],
+      "avoid": ["fake_availability", "generic_luxury_copy", "roi_promises_without_basis"]
+    },
+    {
+      "id": "education_event",
+      "oniaExamples": [],
+      "designRead": "Outcome, date, credibility and sign-up flow.",
+      "recommendedSections": ["outcome_date_hero", "audience_fit", "curriculum_or_agenda", "speaker_proof", "pricing_or_application", "testimonials", "registration_faq"],
+      "assetsNeeded": ["instructor_photos", "venue_or_course_visuals", "short_invitation_video"],
+      "avoid": ["inflated_income_promises", "unclear_date", "too_much_syllabus_before_cta"]
+    },
+    {
+      "id": "saas_ai_app",
+      "oniaExamples": [],
+      "designRead": "Product proof, clarity, interactive demo and security trust.",
+      "recommendedSections": ["job_to_be_done_hero", "real_ui_or_demo_video", "use_cases_by_role", "integrations", "security_trust", "feature_narrative", "pricing_or_demo", "faq"],
+      "assetsNeeded": ["real_screenshots", "demo_video", "integration_logos", "security_notes"],
+      "avoid": ["abstract_ai_glow", "fake_dashboards", "vague_automation_claims", "div_based_fake_screenshots"]
+    },
+    {
+      "id": "legal_finance_consulting",
+      "oniaExamples": [],
+      "designRead": "Restraint, clarity, authority and low-risk conversion.",
+      "recommendedSections": ["problem_credibility_hero", "practice_or_service_areas", "process", "team_credentials", "anonymized_cases", "privacy_notes", "qualified_booking"],
+      "assetsNeeded": ["professional_portraits", "office_photo", "credential_proof", "approved_case_summaries"],
+      "avoid": ["aggressive_sales_tone", "fake_guarantees", "flashy_motion", "weak_privacy_language"]
+    }
+  ],
+  "pageRecipes": [
+    {
+      "id": "fast_landing",
+      "sections": ["hero", "trust_or_proof", "offer", "process", "faq", "cta"],
+      "bestFor": ["health_professional", "course", "service_promo", "product_launch", "audit_offer"]
+    },
+    {
+      "id": "web_pro",
+      "sections": ["hero", "trust", "services", "cases", "process", "team_or_about", "faq", "contact"],
+      "bestFor": ["engineering", "agency", "consulting", "clinic", "local_service"]
+    },
+    {
+      "id": "catalog_store",
+      "sections": ["campaign_landing", "catalog_plp", "pdp", "cart", "checkout_or_quote", "support_faq"],
+      "bestFor": ["cosmetics", "food_products", "merch", "tools", "retail"]
+    },
+    {
+      "id": "crm_capture_site",
+      "sections": ["hero", "qualification_cta", "services", "proof", "form", "crm_states", "follow_up_expectations", "faq"],
+      "bestFor": ["engineering", "clinics", "b2b_service", "high_ticket_local_service"]
+    }
+  ],
+  "assetRequestRules": {
+    "askWhen": ["trust_depends_on_real_people", "product_must_be_inspected", "portfolio_or_project_proof_is_required", "video_would_explain_service_better_than_text"],
+    "generateWhen": ["client_has_no_assets", "asset_is_conceptual_or_placeholder", "no_real_identity_or_regulated_claim_is_fabricated", "asset_can_be_replaced_later"],
+    "neverGenerateAsProof": ["testimonials", "medical_before_after", "engineering_projects", "food_menu_items", "official_partner_proof", "customer_logos"]
+  },
+  "qualityBar": [
+    "first_viewport_shows_business_offer_action",
+    "one_primary_cta_intent",
+    "real_or_generated_asset_plan",
+    "no_copied_third_party_identity",
+    "mobile_nav_cta_form_media_tested",
+    "reduced_motion_fallback",
+    "core_web_vitals_considered",
+    "client_risks_visible"
+  ]
+}
