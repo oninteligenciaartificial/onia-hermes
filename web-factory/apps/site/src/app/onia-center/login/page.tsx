@@ -15,7 +15,7 @@ type LoginResult = {
 
 export default function OniaCenterLoginPage() {
   const searchParams = useSearchParams();
-  const [email, setEmail] = useState("");
+  const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [notice, setNotice] = useState("Acceso interno. Usa el usuario creado en Supabase Auth.");
@@ -51,7 +51,7 @@ export default function OniaCenterLoginPage() {
       const response = await fetch("/api/onia-center/auth/login", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email: login, password }),
       });
       const body = (await response.json()) as LoginResult;
 
@@ -92,15 +92,15 @@ export default function OniaCenterLoginPage() {
 
         <form onSubmit={handleSubmit} className="onia-login-form">
           <label>
-            Email
+            Email o usuario
             <input
-              autoComplete="email"
-              inputMode="email"
-              onChange={(event) => setEmail(event.target.value)}
-              placeholder="sergio@onia..."
+              autoComplete="username"
+              inputMode="text"
+              onChange={(event) => setLogin(event.target.value)}
+              placeholder="sergio.urcullo.m"
               required
-              type="email"
-              value={email}
+              type="text"
+              value={login}
             />
           </label>
 

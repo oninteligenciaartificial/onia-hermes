@@ -71,6 +71,22 @@ $env:ONIA_CENTER_SERGIO_PASSWORD="<password-seguro-no-commitear>"
 npm run onia-center:auth-user -- --email "sergio@dominio.com" --password-env ONIA_CENTER_SERGIO_PASSWORD --user-key sergio --display-name "Sergio" --role sergio
 ```
 
+Si Sergio quiere entrar con usuario sin `@`, usar email tecnico interno y alias:
+
+```powershell
+$env:ONIA_CENTER_SERGIO_PASSWORD="<password-seguro-no-commitear>"
+
+npm run onia-center:auth-user -- --email "sergio.urcullo.m@onia.local" --password-env ONIA_CENTER_SERGIO_PASSWORD --user-key sergio --display-name "Sergio" --role sergio --login-alias "sergio.urcullo.m"
+```
+
+Usuario Sergio activado en VPS el 2026-06-24:
+
+- `sergio` creado en Supabase Auth con email tecnico `sergio.urcullo.m@onia.local`.
+- Alias de login: `sergio.urcullo.m`.
+- `onia_center.user_profiles.auth_user_id` enlazado.
+- Membresia `onia / sergio / sergio_private` activa.
+- Password no se registra en repo ni runbook.
+
 Arthur queda como colaborador operativo, arriba de vendedor y debajo de Sergio:
 
 ```powershell

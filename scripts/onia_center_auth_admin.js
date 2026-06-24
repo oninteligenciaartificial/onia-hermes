@@ -160,8 +160,23 @@ async function createAuthUser(config, { email, password, userKey, displayName, r
   return { user, created: true };
 }
 
-async function upsertProfile(config, { authUserId, userKey, displayName, role }) {
+async function getProfileRaw(config, userKey) {
+  const rows = await requestJson(
+    `${config.url}/rest/v1/user_profiles?user_key=eq.${encodeURIComponent(userKey)}&select=raw&limit=1`,
+    { headers: restHeaders(config) },
+    "leer user_profiles.raw",
+  );
+  return rows?.[0]?.raw && typeof rows[0].raw === "object" ? rows[0].raw : {};
+}
+
+async function upsertProfile(config, { authUserId, userKey, displayName, role, email, loginAlias }) {
   const dbRole = normalizeRole(role);
+  const currentRaw = await getProfileRaw(config, userKey);
+  const raw = {
+    ...currentRaw,
+    auth_email: email,
+    ...(loginAlias ? { login_alias: loginAlias } : {}),
+  };
   const rows = await requestJson(
     `${config.url}/rest/v1/user_profiles?on_conflict=user_key&select=user_key,display_name,primary_role_key,status,auth_user_id`,
     {
@@ -174,6 +189,7 @@ async function upsertProfile(config, { authUserId, userKey, displayName, role })
         primary_role_key: dbRole,
         status: "active",
         access_note: `ONIA Center Auth activo para ${displayName}.`,
+        raw,
       }),
     },
     "upsert user_profiles",
@@ -208,6 +224,7 @@ async function main() {
   if (args.help) {
     console.log(`Uso:
 node scripts/onia_center_auth_admin.js --email <email> --password-env <ENV_VAR> --user-key <sergio|arthur|seller_001> --display-name <nombre> --role <sergio|arthur|seller|freelancer|area> [--organization onia]
+Opcional: --login-alias <usuario-sin-email>
 
 El password se lee desde la variable indicada en --password-env y nunca se imprime.`);
     return;
@@ -227,10 +244,11 @@ El password se lee desde la variable indicada en --password-env y nunca se impri
   const displayName = required(args, "display-name");
   const role = required(args, "role");
   const organizationKey = args.organization || "onia";
+  const loginAlias = args["login-alias"] || "";
   const config = getConfig();
 
   const { user, created } = await createAuthUser(config, { email, password, userKey, displayName, role });
-  const profile = await upsertProfile(config, { authUserId: user.id, userKey, displayName, role });
+  const profile = await upsertProfile(config, { authUserId: user.id, userKey, displayName, role, email, loginAlias });
   const membership = await upsertMembership(config, { userKey, role, organizationKey });
 
   console.log(
@@ -238,6 +256,7 @@ El password se lee desde la variable indicada en --password-env y nunca se impri
       {
         ok: true,
         email,
+        login_alias: loginAlias || null,
         auth_user_created: created,
         user_key: profile?.user_key || userKey,
         role: profile?.primary_role_key || normalizeRole(role),

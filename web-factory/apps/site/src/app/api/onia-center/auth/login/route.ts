@@ -14,6 +14,14 @@ type LoginResponse = {
   };
 };
 
+type ProfileAliasRow = {
+  user_key?: string | null;
+  raw?: {
+    auth_email?: string;
+    login_alias?: string;
+  } | null;
+};
+
 function cookieOptions(maxAge: number) {
   return {
     httpOnly: true,
@@ -22,6 +30,35 @@ function cookieOptions(maxAge: number) {
     path: "/",
     maxAge,
   };
+}
+
+async function resolveAuthEmail(identifier: string, config: NonNullable<ReturnType<typeof getOniaCenterAuthConfig>>) {
+  const login = identifier.trim().toLowerCase();
+  if (login.includes("@")) {
+    return login;
+  }
+
+  const response = await fetch(`${config.url}/rest/v1/user_profiles?select=user_key,raw&status=eq.active&limit=200`, {
+    headers: {
+      apikey: config.serviceRoleKey,
+      authorization: `Bearer ${config.serviceRoleKey}`,
+      "accept-profile": config.schema,
+    },
+    cache: "no-store",
+  });
+
+  if (!response.ok) {
+    return login;
+  }
+
+  const rows = (await response.json()) as ProfileAliasRow[];
+  const profile = rows.find((row) => {
+    const userKey = row.user_key?.toLowerCase();
+    const loginAlias = row.raw?.login_alias?.toLowerCase();
+    return userKey === login || loginAlias === login;
+  });
+
+  return profile?.raw?.auth_email || login;
 }
 
 export async function POST(request: Request) {
@@ -47,12 +84,14 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false, message: "El cuerpo debe ser JSON valido." }, { status: 400 });
   }
 
-  const email = payload.email?.trim();
+  const login = payload.email?.trim();
   const password = payload.password ?? "";
 
-  if (!email || !password) {
-    return NextResponse.json({ ok: false, message: "Email y password son requeridos." }, { status: 400 });
+  if (!login || !password) {
+    return NextResponse.json({ ok: false, message: "Usuario/email y password son requeridos." }, { status: 400 });
   }
+
+  const email = await resolveAuthEmail(login, config);
 
   const authResponse = await fetch(`${config.url}/auth/v1/token?grant_type=password`, {
     method: "POST",
