@@ -64,6 +64,9 @@ Latest licensed-code index: `web-factory/data/references/code-sources/latest-cod
 Latest reusable code examples: `web-factory/data/references/code-sources/latest-component-code-examples.json`.
 Latest Web Factory pattern bank: `web-factory/WEB_FACTORY_PATTERN_BANK_2026.md`.
 Latest machine-readable pattern bank: `web-factory/data/references/design-sources/web-factory-pattern-bank-20260624.json`.
+Latest deep resource reference pack: `web-factory/data/references/design-sources/gallery-examples/2026-06-24-resource-reference-pack.json`.
+Latest deep code reference pack: `web-factory/data/references/code-sources/2026-06-24-component-code-reference-pack.json`.
+Deep reference runbook: `web-factory/WEB_FACTORY_REFERENCE_CAPTURE_RUNBOOK.md`.
 
 Heavy local artifacts live outside the repo:
 
@@ -128,9 +131,9 @@ pnpm references:gallery:21st
 pnpm references:gallery:all
 pnpm references:playwright:install
 
-node web-factory\harvester\vision\index_licensed_code.mjs --repos-root C:\Users\PC\.codex\design-stack\repos --out web-factory\data\references\code-sources\latest-code-cache-index.json
-node web-factory\harvester\vision\index_component_code_examples.mjs --max-files-per-repo 24
-node web-factory\harvester\vision\merge_gallery_examples.mjs
+node harvester\vision\index_licensed_code.mjs --repos-root C:\Users\PC\.codex\design-stack\repos --out data\references\code-sources\latest-code-cache-index.json
+node harvester\vision\index_component_code_examples.mjs --code-index data\references\code-sources\latest-code-cache-index.json --out data\references\code-sources\latest-component-code-examples.json --max-files-per-repo 24
+node harvester\vision\merge_gallery_examples.mjs --input-dir data\references\design-sources\gallery-examples --out data\references\design-sources\gallery-examples\latest-gallery-examples.json
 ```
 
 Use `pnpm references:playwright:install` only when the local machine or CI does not have a usable Chrome/Chromium browser. On Sergio's Windows machine, the scripts default to the installed Chrome path.
@@ -201,6 +204,48 @@ New source smoke test:
 - Manual-only for now: Landbook returned 403/Cloudflare in the Playwright
   harvester, so it stays in research docs but is not listed in automated
   `gallery-reference-sources.json`.
+
+## Deep Reference Pack 2026-06-24
+
+Use `WEB_FACTORY_REFERENCE_CAPTURE_RUNBOOK.md` when Sergio asks for exact
+references, screenshots, URLs, HTML structure, fonts, images, videos or code
+reference for Web Factory.
+
+Current deep visual/resource artifact:
+
+```text
+web-factory/data/references/design-sources/gallery-examples/2026-06-24-resource-reference-pack.json
+```
+
+It contains:
+
+- 16 configured sources.
+- 143 selected candidates.
+- 28 detailed examples.
+- 56 desktop/mobile screenshots with SHA-256 hashes.
+- 574 image resource URLs.
+- 37 video resource URLs.
+- HTML outline, semantic landmarks, nav/forms, CTAs, palettes, font signals,
+  resource links and technology signals.
+
+Current deep code artifacts:
+
+```text
+web-factory/data/references/code-sources/2026-06-24-code-cache-index.json
+web-factory/data/references/code-sources/2026-06-24-component-code-reference-pack.json
+```
+
+They contain 12 reviewed cached repos and 471 bounded code samples. Only repos
+marked `allowed-after-review` may inform commercial client code, and still must
+be reviewed, retokenized and validated inside the target project.
+
+Boundary:
+
+- Store exact URLs, screenshots, resource inventories and HTML outline.
+- Do not store or reuse full proprietary HTML/CSS/JS, images, videos, logos or
+  copy from closed sites.
+- Treat Awwwards, Dribbble, Lapa, Mobbin, Landingfolio, SaaSFrame and similar
+  galleries as inspiration and structure, not client assets.
 
 ## Ecommerce Purchase Reference Studies
 

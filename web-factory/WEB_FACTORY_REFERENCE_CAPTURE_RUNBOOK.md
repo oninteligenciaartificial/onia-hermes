@@ -1,0 +1,194 @@
+# Web Factory Reference Capture Runbook
+
+Last capture: 2026-06-24
+
+Purpose: keep exact, evidence-backed website references for ONIA Web Factory
+without turning third-party inspiration into copied client work.
+
+## Canonical Artifacts
+
+| Artifact | Path | Use |
+|---|---|---|
+| Deep visual/resource pack | `web-factory/data/references/design-sources/gallery-examples/2026-06-24-resource-reference-pack.json` | Exact source URLs, candidates, opened examples, screenshots, headings, CTAs, sections, palettes, HTML outline, image/video/font/style URLs and technology signals. |
+| Smoke capture | `web-factory/data/references/design-sources/gallery-examples/2026-06-24-resource-capture-smoke.json` | Small validation run for the resource-aware scraper. |
+| Code cache index | `web-factory/data/references/code-sources/2026-06-24-code-cache-index.json` | Local repo license/status map for code references. |
+| Component code pack | `web-factory/data/references/code-sources/2026-06-24-component-code-reference-pack.json` | Reusable code samples from compatible cached repos, gated as `allowed-after-review`. |
+| Human pattern bank | `web-factory/WEB_FACTORY_PATTERN_BANK_2026.md` | ONIA playbooks by rubro, section recipes and asset needs. |
+| Machine pattern bank | `web-factory/data/references/design-sources/web-factory-pattern-bank-20260624.json` | Structured pattern bank for future automation. |
+
+Heavy screenshots stay outside git:
+
+```text
+C:\Users\PC\.codex\design-stack\gallery-examples-full
+```
+
+The JSON stores screenshot paths and SHA-256 hashes so a future run can verify
+the files without committing binaries.
+
+## Current Capture Summary
+
+Visual/resource pack:
+
+- 16 configured sources processed.
+- 143 selected gallery candidates.
+- 28 detailed examples opened.
+- 56 desktop/mobile screenshots captured.
+- 574 image resources indexed.
+- 37 video resources indexed.
+- 0 source-level errors.
+
+Code reference pack:
+
+- 12 cached repositories reviewed.
+- 11 repositories marked `allowed-after-review`.
+- 1 repository marked `study-only`: `10x-app-builder__10x` under PolyForm Noncommercial.
+- 471 component/code examples indexed from compatible repos.
+
+## What The Visual Pack Contains
+
+Each `results[]` entry represents a source such as Lapa, Landingfolio,
+SaaSFrame, Awwwards, Recent, Mobbin, shadcn/ui or component galleries.
+
+Important fields:
+
+- `candidates[]`: lightweight gallery cards with exact URL, title/text, image
+  preview, tags and score.
+- `examples[]`: opened reference pages with detailed metadata.
+- `examples[].url`: exact page URL.
+- `examples[].screenshots.desktop.path` and `examples[].screenshots.mobile.path`:
+  local screenshot files.
+- `examples[].screenshots.*.sha256`: screenshot integrity hash.
+- `examples[].headings`, `sections`, `ctas`, `palette`, `layoutSignals`:
+  structure and conversion cues.
+- `examples[].htmlOutline`: language, body classes, semantic landmarks, nav
+  links and forms. This is the safe replacement for storing full proprietary
+  HTML.
+- `examples[].resources.images`: exact image URLs, alt text, dimensions,
+  srcset/currentSrc and nearby section heading.
+- `examples[].resources.videos`: exact video URLs, posters, sources and playback
+  flags.
+- `examples[].resources.stylesheets`, `fontLinks`, `ogImages`,
+  `downloadableAssets`: resource inventory for later inspection.
+- `examples[].fontSignals`: computed font families and weights found on the
+  page.
+- `examples[].technologySignals`: Next.js, Nuxt, Vite, Webflow, Framer,
+  Shopify, WordPress and script signals.
+- `examples[].codeBlocks` and `codeLinks`: captured only where the source page
+  exposes code as documentation or reference material.
+
+## What The Code Pack Contains
+
+Each `repositories[]` entry represents a cached repo under:
+
+```text
+C:\Users\PC\.codex\design-stack\repos
+```
+
+Important fields:
+
+- `name`, `localPath`, `license`, `licensePath`, `status`.
+- `status = allowed-after-review`: code may inform implementation after manual
+  review, retokenization, dependency check, accessibility check and responsive
+  validation.
+- `status = study-only`: study structure only. Do not copy implementation.
+- `examples[].relativePath`: exact file inside the repo.
+- `examples[].sha256`: file sample hash.
+- `examples[].sample`: bounded code sample.
+- `examples[].signals`: React/Tailwind/Motion/shadcn/import signals.
+
+## Usage Workflow For New Client Sites
+
+1. Pick the rubro in `WEB_FACTORY_PATTERN_BANK_2026.md`.
+2. Query the resource pack for matching sources, CTAs, section order, visual
+   assets, fonts and technology signals.
+3. Select 3 to 6 references: one for structure, one for typography, one for
+   motion, one for proof/CTA, and optional assets.
+4. Decide which assets are needed for the client: product photos, hero image,
+   store media, founder/team photos, video, icons or generated placeholders.
+5. Use code only from `allowed-after-review` repos, then retokenize into the
+   target Web Factory design system.
+6. Run the design-taste frontend preflight before shipping: no generic AI
+   sections, real visual assets, strong hierarchy, responsive collapse and
+   accessibility checks.
+
+## Legal And Professional Boundary
+
+Allowed:
+
+- Exact URLs.
+- Screenshots for internal analysis.
+- Resource inventories.
+- HTML outline and semantic structure.
+- Section taxonomy, CTAs, layout signals, typography signals and tech signals.
+- Code samples from compatible local repos after review.
+
+Not allowed:
+
+- Copying full proprietary HTML/CSS/JS from closed sites.
+- Reusing third-party images, videos, logos, copy, brand identity or screenshots
+  as client assets.
+- Copying Dribbble, Awwwards, Lapa, Mobbin or marketplace work into a client
+  site without explicit license review.
+- Using PolyForm Noncommercial code in commercial client work.
+
+If Sergio asks for "HTML exacto" of a closed inspiration page, the safe answer is:
+capture outline, screenshots and resource inventory first; store full HTML only
+for owned sites, open docs, or sources with permission and compatible license.
+
+## Refresh Commands
+
+Run from repo root:
+
+```powershell
+cd C:\dev\proyectos\onia-hermes
+
+node web-factory\harvester\vision\scrape_gallery_examples.mjs `
+  --config web-factory\data\references\design-sources\gallery-reference-sources.json `
+  --cache-root C:\Users\PC\.codex\design-stack\gallery-examples-full `
+  --out web-factory\data\references\design-sources\gallery-examples\YYYY-MM-DD-resource-reference-pack.json `
+  --max-items 12 `
+  --detail-items 2
+
+node web-factory\harvester\vision\index_licensed_code.mjs `
+  --repos-root C:\Users\PC\.codex\design-stack\repos `
+  --out web-factory\data\references\code-sources\YYYY-MM-DD-code-cache-index.json
+
+node web-factory\harvester\vision\index_component_code_examples.mjs `
+  --code-index web-factory\data\references\code-sources\YYYY-MM-DD-code-cache-index.json `
+  --out web-factory\data\references\code-sources\YYYY-MM-DD-component-code-reference-pack.json `
+  --max-files-per-repo 48
+```
+
+Run from `web-factory` with package scripts:
+
+```powershell
+cd C:\dev\proyectos\onia-hermes\web-factory
+pnpm references:code-index
+pnpm references:code-examples
+pnpm references:gallery:all
+pnpm references:gallery:merge
+```
+
+## Quick Inspection Commands
+
+```powershell
+cd C:\dev\proyectos\onia-hermes
+
+node -e "const d=require('./web-factory/data/references/design-sources/gallery-examples/2026-06-24-resource-reference-pack.json'); console.log(d.results.map(r=>({id:r.id,candidates:r.selectedCandidateCount,examples:r.detailedExampleCount,status:r.status})))"
+
+node -e "const d=require('./web-factory/data/references/code-sources/2026-06-24-component-code-reference-pack.json'); console.log(d.repositories.map(r=>({name:r.name,status:r.status,license:r.license,examples:(r.examples||[]).length})))"
+```
+
+## Known Limits
+
+- Landbook is documented as a useful research source, but automated capture is
+  manual-only for now because the Playwright harvester hit 403/Cloudflare on
+  2026-06-24.
+- `motion-primitives` returned 0 selected gallery candidates in the current
+  gallery scraper. Use the local repo/code pack for Motion Primitives instead.
+- Screenshots are local files outside git; the repo stores paths and hashes.
+- Videos/images are indexed as URLs. Do not download or reuse them as client
+  assets unless license and ownership are confirmed.
+- Failed subrequests inside a page are not automatically fatal. Use
+  `failedRequestCount` and `qualityWarnings` to decide whether a page needs a
+  manual recapture.

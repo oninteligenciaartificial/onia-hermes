@@ -235,6 +235,25 @@ async function extractGalleryCandidates(page, source) {
 async function extractExampleDetail(page, source) {
   return page.evaluate((sourceConfig) => {
     const clean = (value) => (value || "").replace(/\s+/g, " ").trim();
+    const unique = (values, limit = 40) => [...new Set(values.filter(Boolean))].slice(0, limit);
+    const absoluteUrl = (value) => {
+      if (!value) return "";
+      try {
+        return new URL(value, location.href).href;
+      } catch {
+        return "";
+      }
+    };
+    const classTokens = (node) =>
+      unique(
+        String(node.getAttribute("class") || "")
+          .split(/\s+/)
+          .map((item) => item.trim())
+          .filter(Boolean),
+        12,
+      );
+    const nearestSectionHeading = (node) =>
+      clean(node.closest("section,article,main,header,footer")?.querySelector("h1,h2,h3,h4")?.textContent || "");
     const meta = (selector) => document.querySelector(selector)?.getAttribute("content") || "";
     const headings = [...document.querySelectorAll("h1,h2,h3")]
       .map((node) => ({
@@ -318,6 +337,166 @@ async function extractExampleDetail(page, source) {
       formCount: document.querySelectorAll("form,input,textarea,select").length,
     };
 
+    const resources = {
+      images: [...document.querySelectorAll("img")]
+        .map((node) => ({
+          src: absoluteUrl(node.getAttribute("src") || node.currentSrc || ""),
+          currentSrc: absoluteUrl(node.currentSrc || ""),
+          srcset: clean(node.getAttribute("srcset") || "").slice(0, 500),
+          alt: clean(node.getAttribute("alt") || "").slice(0, 180),
+          width: Number(node.getAttribute("width") || node.naturalWidth || 0),
+          height: Number(node.getAttribute("height") || node.naturalHeight || 0),
+          loading: node.getAttribute("loading") || "",
+          sectionHeading: nearestSectionHeading(node).slice(0, 120),
+        }))
+        .filter((item) => item.src || item.currentSrc || item.srcset)
+        .slice(0, 60),
+      videos: [...document.querySelectorAll("video")]
+        .map((node) => ({
+          src: absoluteUrl(node.getAttribute("src") || node.currentSrc || ""),
+          poster: absoluteUrl(node.getAttribute("poster") || ""),
+          sources: [...node.querySelectorAll("source")]
+            .map((sourceNode) => ({
+              src: absoluteUrl(sourceNode.getAttribute("src") || ""),
+              type: sourceNode.getAttribute("type") || "",
+            }))
+            .filter((item) => item.src)
+            .slice(0, 8),
+          autoplay: node.autoplay,
+          muted: node.muted,
+          loop: node.loop,
+          playsInline: node.playsInline,
+          width: Number(node.getAttribute("width") || node.videoWidth || 0),
+          height: Number(node.getAttribute("height") || node.videoHeight || 0),
+          sectionHeading: nearestSectionHeading(node).slice(0, 120),
+        }))
+        .filter((item) => item.src || item.poster || item.sources.length)
+        .slice(0, 20),
+      canvasCount: document.querySelectorAll("canvas").length,
+      svgCount: document.querySelectorAll("svg").length,
+      stylesheets: [...document.querySelectorAll("link[rel='stylesheet'][href]")]
+        .map((node) => absoluteUrl(node.getAttribute("href") || ""))
+        .filter(Boolean)
+        .slice(0, 40),
+      fontLinks: [...document.querySelectorAll("link[href], style")]
+        .map((node) => node.getAttribute?.("href") || node.textContent || "")
+        .filter((value) => /font|fonts|typekit|use\.typekit|woff|woff2|ttf|otf/i.test(value))
+        .map((value) => (value.startsWith("http") || value.startsWith("/") ? absoluteUrl(value) : clean(value).slice(0, 300)))
+        .slice(0, 40),
+      ogImages: unique(
+        [
+          meta('meta[property="og:image"]'),
+          meta('meta[name="twitter:image"]'),
+          meta('meta[property="twitter:image"]'),
+        ].map(absoluteUrl),
+        8,
+      ),
+      downloadableAssets: [...document.querySelectorAll("a[href]")]
+        .map((node) => absoluteUrl(node.getAttribute("href") || ""))
+        .filter((url) => /\.(png|jpe?g|webp|gif|svg|mp4|webm|mov|pdf)(\?|$)/i.test(url))
+        .slice(0, 40),
+    };
+
+    const fontSignals = {
+      computedFamilies: unique(
+        [...document.querySelectorAll("body, h1, h2, h3, p, a, button, input, textarea, [class*='font']")]
+          .slice(0, 140)
+          .map((node) => getComputedStyle(node).fontFamily),
+        24,
+      ),
+      computedWeights: unique(
+        [...document.querySelectorAll("h1,h2,h3,p,a,button")]
+          .slice(0, 80)
+          .map((node) => getComputedStyle(node).fontWeight),
+        20,
+      ),
+    };
+
+    const htmlOutline = {
+      language: document.documentElement.getAttribute("lang") || "",
+      bodyClasses: classTokens(document.body),
+      semanticLandmarks: [...document.querySelectorAll("header, nav, main, section, article, aside, footer")]
+        .slice(0, 40)
+        .map((node, index) => ({
+          index,
+          tag: node.tagName.toLowerCase(),
+          id: node.id || "",
+          classes: classTokens(node),
+          heading: clean(node.querySelector("h1,h2,h3,h4")?.textContent || "").slice(0, 160),
+          textSample: clean(node.textContent || "").slice(0, 220),
+          linkCount: node.querySelectorAll("a[href]").length,
+          buttonCount: node.querySelectorAll("button").length,
+          formControlCount: node.querySelectorAll("input,textarea,select").length,
+          mediaCount: node.querySelectorAll("img,picture,video,canvas,svg").length,
+        })),
+      navLinks: [...document.querySelectorAll("nav a[href], header a[href]")]
+        .map((node) => ({
+          text: clean(node.textContent || node.getAttribute("aria-label") || "").slice(0, 80),
+          href: absoluteUrl(node.getAttribute("href") || ""),
+        }))
+        .filter((item) => item.href)
+        .slice(0, 40),
+      forms: [...document.querySelectorAll("form")]
+        .map((node, index) => ({
+          index,
+          action: absoluteUrl(node.getAttribute("action") || ""),
+          method: (node.getAttribute("method") || "get").toLowerCase(),
+          controls: [...node.querySelectorAll("input,textarea,select,button")]
+            .map((control) => {
+              const controlId = control.getAttribute("id") || "";
+              const labelNode =
+                controlId && globalThis.CSS?.escape
+                  ? document.querySelector(`label[for="${globalThis.CSS.escape(controlId)}"]`)
+                  : null;
+
+              return {
+                tag: control.tagName.toLowerCase(),
+                type: control.getAttribute("type") || "",
+                name: control.getAttribute("name") || "",
+                label: clean(
+                  labelNode?.textContent ||
+                    control.getAttribute("aria-label") ||
+                    control.getAttribute("placeholder") ||
+                    "",
+                ).slice(0, 100),
+              };
+            })
+            .slice(0, 24),
+        }))
+        .slice(0, 12),
+    };
+
+    const resourceUrls = [
+      ...[...document.querySelectorAll("script[src]")].map((node) => node.getAttribute("src") || ""),
+      ...[...document.querySelectorAll("link[href]")].map((node) => node.getAttribute("href") || ""),
+      ...resources.images.map((item) => item.src || item.currentSrc),
+      ...resources.videos.flatMap((item) => [item.src, item.poster, ...item.sources.map((sourceItem) => sourceItem.src)]),
+    ]
+      .map(absoluteUrl)
+      .filter(Boolean)
+      .join("\n");
+
+    const technologySignals = {
+      hasNextData: Boolean(document.querySelector("script#__NEXT_DATA__")),
+      hasNextAssets: /\/_next\//i.test(resourceUrls),
+      hasNuxtAssets: /\/_nuxt\//i.test(resourceUrls),
+      hasViteAssets: /\/assets\/.*\.(js|css)/i.test(resourceUrls),
+      hasWebflow: /webflow\.(?:js|css)|uploads-ssl\.webflow|data-wf-page|data-wf-site/i.test(
+        resourceUrls + document.documentElement.outerHTML.slice(0, 2000),
+      ),
+      hasFramer: /framerusercontent|framer\.site|data-framer/i.test(
+        resourceUrls + document.documentElement.outerHTML.slice(0, 2000),
+      ),
+      hasShopify: /cdn\.shopify|myshopify|shopify-section|Shopify\.theme/i.test(
+        resourceUrls + document.documentElement.outerHTML.slice(0, 2000),
+      ),
+      hasWordPress: /wp-content|wp-includes/i.test(resourceUrls),
+      scriptSrcs: [...document.querySelectorAll("script[src]")]
+        .map((node) => absoluteUrl(node.getAttribute("src") || ""))
+        .filter(Boolean)
+        .slice(0, 40),
+    };
+
     return {
       title: document.title,
       description: meta('meta[name="description"]') || meta('meta[property="og:description"]'),
@@ -326,6 +505,10 @@ async function extractExampleDetail(page, source) {
       ctas,
       palette,
       layoutSignals,
+      htmlOutline,
+      resources,
+      fontSignals,
+      technologySignals,
       codeBlocks,
       codeLinks,
     };

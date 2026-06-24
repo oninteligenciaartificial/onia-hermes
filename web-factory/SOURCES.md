@@ -121,6 +121,10 @@ web-factory/data/references/design-sources/2026-06-15-reference-bank-screenshots
 web-factory/data/references/design-sources/gallery-examples/latest-gallery-examples.json
 web-factory/data/references/code-sources/latest-code-cache-index.json
 web-factory/data/references/code-sources/latest-component-code-examples.json
+web-factory/data/references/design-sources/gallery-examples/2026-06-24-resource-reference-pack.json
+web-factory/data/references/code-sources/2026-06-24-code-cache-index.json
+web-factory/data/references/code-sources/2026-06-24-component-code-reference-pack.json
+web-factory/WEB_FACTORY_REFERENCE_CAPTURE_RUNBOOK.md
 ```
 
 Artefactos pesados locales:
@@ -176,7 +180,45 @@ Artefactos nuevos:
 web-factory/WEB_FACTORY_PATTERN_BANK_2026.md
 web-factory/data/references/design-sources/web-factory-pattern-bank-20260624.json
 web-factory/data/references/design-sources/gallery-examples/2026-06-24-new-sources-smoke.json
+web-factory/data/references/design-sources/gallery-examples/2026-06-24-resource-reference-pack.json
+web-factory/data/references/code-sources/2026-06-24-code-cache-index.json
+web-factory/data/references/code-sources/2026-06-24-component-code-reference-pack.json
+web-factory/WEB_FACTORY_REFERENCE_CAPTURE_RUNBOOK.md
 ```
+
+### Deep reference pack 2026-06-24
+
+El pack profundo conserva referencias exactas sin copiar activos propietarios.
+
+Incluye:
+
+- URLs exactas de paginas y candidatos.
+- Capturas desktop/mobile con ruta local y hash SHA-256.
+- `htmlOutline`: landmarks, clases principales, navegacion, formularios y
+  estructura semantica sin guardar HTML propietario completo.
+- Recursos detectados: imagenes, videos, posters, stylesheets, fonts,
+  `og:image` y assets descargables.
+- Senales de fuente tipografica, tecnologia, CTAs, secciones, paleta y layout.
+- Codigo referencial solo desde repos cacheados con licencia revisada.
+
+Resumen actual:
+
+- 16 fuentes configuradas.
+- 143 candidatos seleccionados.
+- 28 ejemplos profundos.
+- 56 screenshots desktop/mobile.
+- 574 URLs de imagenes.
+- 37 URLs de videos.
+- 471 muestras de codigo desde repos compatibles o de estudio controlado.
+
+Limite comercial:
+
+- `allowed-after-review`: puede inspirar implementacion despues de revisar,
+  retokenizar, adaptar dependencias, validar accesibilidad y responsive.
+- `study-only`: usar solo para estudiar estructura. No copiar codigo en trabajo
+  comercial.
+- Sitios cerrados y galerias visuales: no copiar HTML/CSS/JS completo, copy,
+  imagenes, videos, logos, marca ni screenshots como assets de cliente.
 
 Playwright esta instalado como dev dependency de `web-factory` para que los scrapers
 corran por terminal. Codex desktop tambien puede usar su runtime `node_repl` para
@@ -198,9 +240,21 @@ pnpm references:gallery:21st
 pnpm references:gallery:all
 pnpm references:playwright:install
 
-node web-factory\harvester\vision\index_licensed_code.mjs --repos-root C:\Users\PC\.codex\design-stack\repos --out web-factory\data\references\code-sources\latest-code-cache-index.json
-node web-factory\harvester\vision\index_component_code_examples.mjs --max-files-per-repo 24
-node web-factory\harvester\vision\merge_gallery_examples.mjs
+node harvester\vision\index_licensed_code.mjs --repos-root C:\Users\PC\.codex\design-stack\repos --out data\references\code-sources\latest-code-cache-index.json
+node harvester\vision\index_component_code_examples.mjs --code-index data\references\code-sources\latest-code-cache-index.json --out data\references\code-sources\latest-component-code-examples.json --max-files-per-repo 24
+node harvester\vision\merge_gallery_examples.mjs --input-dir data\references\design-sources\gallery-examples --out data\references\design-sources\gallery-examples\latest-gallery-examples.json
+```
+
+Comandos del pack profundo desde la raiz del repo:
+
+```powershell
+cd C:\dev\proyectos\onia-hermes
+
+node web-factory\harvester\vision\scrape_gallery_examples.mjs --config web-factory\data\references\design-sources\gallery-reference-sources.json --cache-root C:\Users\PC\.codex\design-stack\gallery-examples-full --out web-factory\data\references\design-sources\gallery-examples\YYYY-MM-DD-resource-reference-pack.json --max-items 12 --detail-items 2
+
+node web-factory\harvester\vision\index_licensed_code.mjs --repos-root C:\Users\PC\.codex\design-stack\repos --out web-factory\data\references\code-sources\YYYY-MM-DD-code-cache-index.json
+
+node web-factory\harvester\vision\index_component_code_examples.mjs --code-index web-factory\data\references\code-sources\YYYY-MM-DD-code-cache-index.json --out web-factory\data\references\code-sources\YYYY-MM-DD-component-code-reference-pack.json --max-files-per-repo 48
 ```
 
 `scrape_gallery_examples.mjs` es el scraper profundo de galerias. En terminal usa la
