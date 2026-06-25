@@ -19,15 +19,29 @@ describe("generateSite", () => {
       }),
       "utf8",
     );
+    await writeFile(
+      path.join(rootDir, "data", "clients", "demo.design.json"),
+      JSON.stringify({ schemaVersion: "web-factory-auto-design-v1" }),
+      "utf8",
+    );
+    await writeFile(
+      path.join(rootDir, "data", "clients", "demo.design.md"),
+      "# Demo design\n",
+      "utf8",
+    );
 
     const result = await generateSite("demo", { rootDir });
     const html = await readFile(path.join(result.outputDir, "index.html"), "utf8");
     const css = await readFile(path.join(result.outputDir, "site.css"), "utf8");
+    const design = await readFile(path.join(result.outputDir, "demo.design.md"), "utf8");
 
     expect(html).toContain("Demo tagline");
     expect(html).toContain("./site.css");
     expect(css).toContain("--color-primary");
     expect(css).toContain(".wf-hero");
+    expect(design).toContain("Demo design");
+    expect(result.files).toContain(path.join(result.outputDir, "demo.design.json"));
+    expect(result.files).toContain(path.join(result.outputDir, "demo.design.md"));
   });
 
   it("rejects unsafe slugs", () => {

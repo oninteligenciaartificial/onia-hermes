@@ -52,6 +52,7 @@ data and exact references, then generate the client profile:
 
 ```powershell
 pnpm client:new -- --input data/intakes/<slug>.json
+pnpm design:auto -- <slug> --template landing
 pnpm generate <slug> --template landing
 ```
 
@@ -59,6 +60,7 @@ For ecommerce:
 
 ```powershell
 pnpm client:new -- --input data/intakes/<slug>.json
+pnpm design:auto -- <slug> --template store
 pnpm generate <slug> --template store
 ```
 
@@ -67,12 +69,31 @@ This writes:
 ```text
 data/clients/<slug>.json
 data/clients/<slug>.context.md
+data/clients/<slug>.design.json
+data/clients/<slug>.design.md
 out/<slug>/index.html
 out/<slug>/site.css
+out/<slug>/<slug>.design.json
+out/<slug>/<slug>.design.md
 ```
 
 The context file preserves references, media permissions, operating notes and
 missing inputs before delivery.
+The design recipe preserves the reasoning layer: inferred rubro, selected
+references, screenshot paths/hashes, fonts, CTAs, motion signals, safe code
+references, section plan, asset requests, guardrails and QA checklist.
+
+One-command flow:
+
+```powershell
+pnpm factory:build -- --input data/intakes/<slug>.json --force
+```
+
+Or for an existing client profile:
+
+```powershell
+pnpm factory:build -- <slug> --template landing --force
+```
 
 ## Generate A Site
 
@@ -224,3 +245,21 @@ screenshots/resources from curated galleries, indexes licensed local code,
 merges `latest-gallery-examples.json` and writes
 `data/references/design-sources/latest-design-intelligence.json` plus the
 reader-facing `docs/WEB_FACTORY_DESIGN_INTELLIGENCE_LATEST.md`.
+
+Auto design:
+
+```powershell
+pnpm design:auto -- <slug> --template landing
+pnpm design:auto -- <slug> --template store --force
+```
+
+`design:auto` reads:
+
+- `data/clients/<slug>.json`
+- optional `data/clients/<slug>.context.md`
+- `data/references/design-sources/latest-design-intelligence.json`
+- `data/references/code-sources/latest-component-code-examples.json`
+
+It does not copy third-party work. It selects exact URLs, screenshots, hashes,
+font/CTA/motion signals and compatible code references, then writes a recipe for
+the designer/generator to follow.

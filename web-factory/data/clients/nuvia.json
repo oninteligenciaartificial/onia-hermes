@@ -23965,6 +23965,36 @@
     "Consulta rapida",
     "Descuentos por suscripcion"
   ],
+  "referencias": [
+    {
+      "title": "Glossier",
+      "url": "https://www.glossier.com/",
+      "type": "visual",
+      "use": "claridad de producto, aire visual, jerarquia de catalogo y CTA directo",
+      "avoid": "copiar identidad, tono, claims, fotos o branding"
+    },
+    {
+      "title": "The Ordinary",
+      "url": "https://theordinary.com/",
+      "type": "product",
+      "use": "explicacion funcional de producto, beneficios y categorias por necesidad",
+      "avoid": "volver la experiencia demasiado clinica o copiar nomenclatura"
+    },
+    {
+      "title": "ISDIN",
+      "url": "https://www.isdin.com/",
+      "type": "product",
+      "use": "confianza dermocosmetica, estructura de producto y educacion de uso",
+      "avoid": "usar claims medicos, imagenes de marca o copy propietario"
+    },
+    {
+      "title": "Sephora",
+      "url": "https://www.sephora.com/",
+      "type": "layout",
+      "use": "catalogo, filtros, descubrimiento de productos y acciones de compra",
+      "avoid": "copiar estilo retail global, promociones o assets"
+    }
+  ],
   "cta": {
     "texto": "Comprar skincare",
     "url": "#catalogo"

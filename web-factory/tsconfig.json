@@ -12,6 +12,7 @@
   },
   "include": [
     "data/**/*.ts",
+    "design/**/*.ts",
     "generate/**/*.ts",
     "harvester/**/*.ts",
     "packages/**/*.ts"

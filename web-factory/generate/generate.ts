@@ -52,6 +52,7 @@ export async function generateSite(
   await writeFile(cssPath, css, "utf8");
 
   const files = [htmlPath, cssPath];
+  files.push(...(await copyDesignArtifacts(rootDir, outputDir, safeSlug)));
 
   if (template === "store") {
     for (const product of client.productos) {
@@ -69,6 +70,27 @@ export async function generateSite(
     outputDir,
     files,
   };
+}
+
+async function copyDesignArtifacts(rootDir: string, outputDir: string, slug: string): Promise<string[]> {
+  const files: string[] = [];
+  const sourceDir = path.join(rootDir, "data", "clients");
+
+  for (const fileName of [`${slug}.design.json`, `${slug}.design.md`]) {
+    const sourcePath = path.join(sourceDir, fileName);
+    const targetPath = path.join(outputDir, fileName);
+
+    try {
+      await cp(sourcePath, targetPath);
+      files.push(targetPath);
+    } catch (error) {
+      if (!(error instanceof Error) || !("code" in error) || error.code !== "ENOENT") {
+        throw error;
+      }
+    }
+  }
+
+  return files;
 }
 
 async function copyClientAssets(rootDir: string, outputDir: string, slug: string): Promise<void> {

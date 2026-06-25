@@ -1,0 +1,1121 @@
+{
+  "schemaVersion": "web-factory-auto-design-v1",
+  "generatedAt": "2026-06-25T20:31:23.711Z",
+  "client": {
+    "slug": "skincare-demo",
+    "name": "Luma Skin Demo",
+    "template": "store",
+    "inferredVertical": "skincare-ecommerce",
+    "verticalLabel": "Ecommerce skincare / beauty",
+    "verticalConfidence": 1,
+    "matchedKeywords": [
+      "skincare",
+      "skin",
+      "piel",
+      "rutina",
+      "producto",
+      "tienda",
+      "crema",
+      "limpieza",
+      "hidratacion",
+      "proteccion"
+    ]
+  },
+  "sourcePaths": {
+    "clientProfile": "C:\\dev\\proyectos\\onia-hermes\\web-factory\\data\\clients\\skincare-demo.json",
+    "clientContext": "C:\\dev\\proyectos\\onia-hermes\\web-factory\\data\\clients\\skincare-demo.context.md",
+    "designIntelligence": "C:\\dev\\proyectos\\onia-hermes\\web-factory\\data\\references\\design-sources\\latest-design-intelligence.json",
+    "codeExamples": "C:\\dev\\proyectos\\onia-hermes\\web-factory\\data\\references\\code-sources\\latest-component-code-examples.json"
+  },
+  "designRead": {
+    "objective": "Vender productos con claridad, confianza y asistencia antes de compra.",
+    "visualDirection": "Editorial de producto, superficies limpias, packshots grandes, comparacion simple y CTA comercial persistente.",
+    "conversionThesis": "La persona no compra por decorar la pagina; compra cuando entiende producto, uso, precio y canal de asistencia.",
+    "genericRisk": "Caer en una tienda beige generica con tres cards iguales, fotos rotas y claims cosmeticos vagos."
+  },
+  "dials": {
+    "conversionDensity": "high",
+    "visualDensity": "medium",
+    "motionIntensity": "medium",
+    "trustTone": "comercial claro con cuidado experto, sin prometer resultados medicos"
+  },
+  "selectedReferences": [
+    {
+      "role": "client-reference",
+      "sourceName": "Glossier",
+      "title": "Glossier",
+      "url": "https://www.glossier.com",
+      "licenseStatus": "client-provided-reference-review-required",
+      "reuseGuidance": "Use: claridad de producto, aire visual y CTA directo | Avoid: copiar identidad, tono o claims",
+      "screenshots": {},
+      "headings": [],
+      "ctas": [],
+      "topFonts": [],
+      "motionSignals": [],
+      "codeLinks": [],
+      "qualityWarnings": [],
+      "whySelected": [
+        "referencia exacta entregada en el brief",
+        "usar: claridad de producto, aire visual y CTA directo",
+        "evitar: copiar identidad, tono o claims"
+      ],
+      "score": 100
+    },
+    {
+      "role": "client-reference",
+      "sourceName": "The Ordinary",
+      "title": "The Ordinary",
+      "url": "https://theordinary.com",
+      "licenseStatus": "client-provided-reference-review-required",
+      "reuseGuidance": "Use: jerarquia de producto y explicacion funcional | Avoid: estetica demasiado clinica",
+      "screenshots": {},
+      "headings": [],
+      "ctas": [],
+      "topFonts": [],
+      "motionSignals": [],
+      "codeLinks": [],
+      "qualityWarnings": [],
+      "whySelected": [
+        "referencia exacta entregada en el brief",
+        "usar: jerarquia de producto y explicacion funcional",
+        "evitar: estetica demasiado clinica"
+      ],
+      "score": 99
+    },
+    {
+      "role": "motion",
+      "sourceName": "Lapa Ninja",
+      "title": "Hero Studios - Landing Page Design | Lapa Ninja",
+      "url": "https://www.lapa.ninja/post/hero-studios/",
+      "licenseStatus": "inspiration-only",
+      "reuseGuidance": "Landing-page structure, section ordering, visual hierarchy and copy patterns. Do not copy site code or proprietary assets.",
+      "screenshots": {
+        "desktop": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/lapa-ninja/149-hero-studios-572d5ecf/desktop.png",
+          "sha256": "cb23250aa27395c49865097d571734ab4a8eae9f6be1a94393ad3c5bf21b05ed",
+          "mode": "viewport"
+        },
+        "mobile": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/lapa-ninja/149-hero-studios-572d5ecf/mobile.png",
+          "sha256": "f7a36322efc1d0b44def49ce8bfede16c3963c9436e3f526e45d2a7ac2c36995",
+          "mode": "viewport"
+        }
+      },
+      "headings": [
+        {
+          "level": "h1",
+          "text": "Hero Studios Website Design"
+        },
+        {
+          "level": "h2",
+          "text": "A motion design and animation studio creating systems, stories, and solutions for global brands."
+        },
+        {
+          "level": "h3",
+          "text": "Website Details"
+        },
+        {
+          "level": "h3",
+          "text": "Similar Websites"
+        },
+        {
+          "level": "h3",
+          "text": "Lee Jameson"
+        },
+        {
+          "level": "h3",
+          "text": "Roberta Ungaro"
+        }
+      ],
+      "ctas": [
+        "Lapa Ninja - Go to homepage",
+        "Toggle dark mode",
+        "Open main menu",
+        "Websites",
+        "Browse All ⭐7410",
+        "SaaS ⭐691",
+        "Business ⭐2453",
+        "Minimal3051",
+        "Agency ⭐971",
+        "Portfolio ⭐1067",
+        "Studio ⭐862",
+        "Web368"
+      ],
+      "topFonts": [
+        "Inter, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif"
+      ],
+      "motionSignals": {
+        "libraries": {},
+        "animatedElementCount": 0,
+        "keyframes": []
+      },
+      "codeLinks": [],
+      "qualityWarnings": [],
+      "whySelected": [
+        "tiene screenshot desktop",
+        "tiene screenshot mobile",
+        "aporta senales de fuente",
+        "aporta CTAs reales",
+        "fuente fuerte para patrones web"
+      ],
+      "score": 35
+    },
+    {
+      "role": "conversion",
+      "sourceName": "SaaSFrame Landing Pages",
+      "title": "Slite UX/UI Design and Copywrinting Examples - SaaSFrame",
+      "url": "https://www.saasframe.io/saas/slite",
+      "licenseStatus": "inspiration-only",
+      "reuseGuidance": "SaaS landing page hero, value proposition, social proof, pricing and mobile-first CRO patterns.",
+      "screenshots": {
+        "desktop": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/saasframe-landing-pages/285-landing-page-4197935a/desktop.png",
+          "sha256": "8918024c37fa24430e27a7c95ad9a18e8329969c588d962b85825af0829a8ed7",
+          "mode": "viewport"
+        },
+        "mobile": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/saasframe-landing-pages/285-landing-page-4197935a/mobile.png",
+          "sha256": "db87bda5ffc9a682c91275058a290075929bc8a6ebd35547f5d425a4791dd8e9",
+          "mode": "viewport"
+        }
+      },
+      "headings": [
+        {
+          "level": "h1",
+          "text": "Slite"
+        },
+        {
+          "level": "h3",
+          "text": "Marketing Pages"
+        },
+        {
+          "level": "h3",
+          "text": "Product Interfaces"
+        },
+        {
+          "level": "h3",
+          "text": "Emails"
+        },
+        {
+          "level": "h3",
+          "text": "Slite"
+        },
+        {
+          "level": "h3",
+          "text": "Sign Up Flow"
+        }
+      ],
+      "ctas": [
+        "All screens",
+        "👽 404 Page45",
+        "👨‍👩‍👧‍👦 About Page125",
+        "🎓 Academy25",
+        "🤑 Affiliate Page39",
+        "🪄 AI Page15",
+        "✍️ Blog Feed97",
+        "📝 Blog Template59",
+        "💼 Careers Page92",
+        "🆕 Changelog15",
+        "🥊 Comparison Page54",
+        "💌 Contact Page37"
+      ],
+      "topFonts": [
+        "system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Oxygen, Ubuntu, Cantarell, \"Fira Sans\", \"Droid Sans\", \"Helvetica Neue\", sans-serif",
+        "Montserrat, sans-serif"
+      ],
+      "motionSignals": {
+        "libraries": {},
+        "animatedElementCount": 0,
+        "keyframes": []
+      },
+      "codeLinks": [
+        {
+          "url": "https://www.saasframe.io/patterns/copy-to-clipboard",
+          "text": "Copy to clipboard78screens"
+        }
+      ],
+      "qualityWarnings": [],
+      "whySelected": [
+        "tiene screenshot desktop",
+        "tiene screenshot mobile",
+        "aporta senales de fuente",
+        "aporta CTAs reales",
+        "aporta links o bloques de codigo para estudiar",
+        "fuente fuerte para patrones web"
+      ],
+      "score": 39
+    },
+    {
+      "role": "conversion",
+      "sourceName": "SaaS Landing Page",
+      "title": "Mobbin page - SaaS Landing Page",
+      "url": "https://saaslandingpage.com/mobbin/",
+      "licenseStatus": "inspiration-only",
+      "reuseGuidance": "SaaS page section taxonomy: landing, pricing, about, features, testimonials, FAQ and contact.",
+      "screenshots": {
+        "desktop": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/saaslandingpage/023-mobbin-041ae462/desktop.png",
+          "sha256": "bd7e1c728c29041989532f9bf3fd47bfa1fd4150168dd495dc5b8d8969a9dab8",
+          "mode": "viewport"
+        },
+        "mobile": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/saaslandingpage/023-mobbin-041ae462/mobile.png",
+          "sha256": "22018251078006fff0737e6eb01dd5e118ef4dde006ae26c8e59ee1009abd31e",
+          "mode": "viewport"
+        }
+      },
+      "headings": [
+        {
+          "level": "h1",
+          "text": "Saaslandingpage"
+        },
+        {
+          "level": "h1",
+          "text": "Mobbin"
+        },
+        {
+          "level": "h3",
+          "text": "Post navigation"
+        },
+        {
+          "level": "h3",
+          "text": "Inspiration"
+        },
+        {
+          "level": "h3",
+          "text": "Templates"
+        },
+        {
+          "level": "h3",
+          "text": "Resources"
+        }
+      ],
+      "ctas": [
+        "✨ Looking for app inspiration? Check out SaaS Interface ✨",
+        "Saaslandingpage",
+        "Menu",
+        "Inspiration",
+        "App Inspiration",
+        "Templates",
+        "Visit Website",
+        "Saans",
+        "141414",
+        "Next.js",
+        "React",
+        "Tailwind CSS"
+      ],
+      "topFonts": [
+        "Inter, Inter_Fallback",
+        "Outfit, Outfit_Fallback"
+      ],
+      "motionSignals": {
+        "libraries": {},
+        "animatedElementCount": 0,
+        "keyframes": []
+      },
+      "codeLinks": [],
+      "qualityWarnings": [],
+      "whySelected": [
+        "tiene screenshot desktop",
+        "tiene screenshot mobile",
+        "aporta senales de fuente",
+        "aporta CTAs reales",
+        "fuente fuerte para patrones web"
+      ],
+      "score": 35
+    },
+    {
+      "role": "structure",
+      "sourceName": "Landingfolio",
+      "title": "HeadshotPro Landing Page Inspiration and More | Landingfolio",
+      "url": "https://www.landingfolio.com/inspiration/post/headshotpro-1",
+      "licenseStatus": "inspiration-only",
+      "reuseGuidance": "Landing page examples, templates and component inspiration. Do not copy templates or proprietary assets.",
+      "screenshots": {
+        "desktop": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/landingfolio/091-headshotpro-a3943c9a/desktop.png",
+          "sha256": "c69479b2d3b13d59149719a80ebdbb74396cef85ec2cebbced0e70f207fd42bf",
+          "mode": "viewport"
+        },
+        "mobile": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/landingfolio/091-headshotpro-a3943c9a/mobile.png",
+          "sha256": "22b22dc04c27cfd0dcee70f2d544ebed477457b9a846c807aa68d35ede88f4c6",
+          "mode": "viewport"
+        }
+      },
+      "headings": [
+        {
+          "level": "h3",
+          "text": "Site & Landing Page Inspiration"
+        },
+        {
+          "level": "h3",
+          "text": "Section & Component Examples"
+        },
+        {
+          "level": "h3",
+          "text": "Landing Page Templates"
+        },
+        {
+          "level": "h3",
+          "text": "Pro Templates"
+        },
+        {
+          "level": "h3",
+          "text": "Blog"
+        },
+        {
+          "level": "h3",
+          "text": "Optimization Tips"
+        }
+      ],
+      "ctas": [
+        "Landingfolio",
+        "Inspiration",
+        "Component Library",
+        "Templates",
+        "Learn",
+        "Optimization Tips Actional design tips to improve your landing page design",
+        "Tool Reviews The Best Landing Page Builder Software: The Definitive Guide.",
+        "Tools",
+        "Free Logos The perfect logo for your project is just a click away.",
+        "Pricing",
+        "Login",
+        "Login"
+      ],
+      "topFonts": [
+        "\"Plus Jakarta Sans\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", Roboto, Ubuntu, Cantarell, \"Noto Sans\", sans-serif, BlinkMacSystemFont, \"Segoe UI\", \"Helvetica Neue\", Arial, \"Noto Sans\", \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+      ],
+      "motionSignals": {
+        "libraries": {},
+        "animatedElementCount": 0,
+        "keyframes": []
+      },
+      "codeLinks": [
+        {
+          "url": "https://www.landingfolio.com/library",
+          "text": "Component Library (0+) Discover instant copy+paste Tailwind, Webflow & Figma components. Explore our huge library."
+        },
+        {
+          "url": "https://www.landingfolio.com/blog",
+          "text": "Blog Get expert advice on landing page design, copywriting, conversion optimization and more."
+        }
+      ],
+      "qualityWarnings": [],
+      "whySelected": [
+        "tiene screenshot desktop",
+        "tiene screenshot mobile",
+        "aporta senales de fuente",
+        "aporta CTAs reales",
+        "aporta links o bloques de codigo para estudiar",
+        "fuente fuerte para patrones web"
+      ],
+      "score": 39
+    },
+    {
+      "role": "typography",
+      "sourceName": "Fontpair",
+      "title": "Icons Library — Free Open-Source SVG Icon Sets | Fontpair",
+      "url": "https://fontpair.co/icons",
+      "licenseStatus": "typography-reference",
+      "reuseGuidance": "Font-pair inspiration and typographic mood extraction. Check font licenses before use.",
+      "screenshots": {
+        "desktop": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/fontpair/088-fontpair-8ba6d672/desktop.png",
+          "sha256": "49936ca7c22c00eb64863596f168e6072471b9eaac54b13a46d55fa399691da9",
+          "mode": "viewport"
+        },
+        "mobile": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/fontpair/088-fontpair-8ba6d672/mobile.png",
+          "sha256": "0ee831c9265cb4b60a2df4e94f7d878c2508ad2345d2845c4e0b0dc5f522f135",
+          "mode": "viewport"
+        }
+      },
+      "headings": [
+        {
+          "level": "h1",
+          "text": "Icons"
+        },
+        {
+          "level": "h3",
+          "text": "Akar Icons"
+        },
+        {
+          "level": "h3",
+          "text": "Eva Icons"
+        },
+        {
+          "level": "h3",
+          "text": "Feather Icons"
+        },
+        {
+          "level": "h3",
+          "text": "Flowbite Icons"
+        },
+        {
+          "level": "h3",
+          "text": "Glow Icons"
+        }
+      ],
+      "ctas": [
+        "Playground",
+        "Pairings",
+        "Fonts",
+        "Inspiration",
+        "Resources",
+        "Login",
+        "Sign Up",
+        "Go Pro",
+        "Settings",
+        "Toggle mobile menu",
+        "Icons",
+        "Colors"
+      ],
+      "topFonts": [
+        "Geist, sans-serif",
+        "Geist, system-ui, -apple-system, sans-serif",
+        "\"Geist Mono\", ui-monospace, monospace"
+      ],
+      "motionSignals": {
+        "libraries": {},
+        "animatedElementCount": 0,
+        "keyframes": []
+      },
+      "codeLinks": [
+        {
+          "url": "https://supercons.vercel.app/",
+          "text": ""
+        }
+      ],
+      "qualityWarnings": [],
+      "whySelected": [
+        "tiene screenshot desktop",
+        "tiene screenshot mobile",
+        "aporta senales de fuente",
+        "aporta CTAs reales",
+        "aporta links o bloques de codigo para estudiar"
+      ],
+      "score": 33
+    },
+    {
+      "role": "component",
+      "sourceName": "Magic UI",
+      "title": "Magic UI",
+      "url": "http://magicui.design/",
+      "licenseStatus": "mit-open-source-reference",
+      "reuseGuidance": "Animated marketing components, effects and motion patterns for landing pages. Prefer local MIT repo or registry install commands for implementation.",
+      "screenshots": {
+        "desktop": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/magic-ui/242-magicui-design-6edb6ee7/desktop.png",
+          "sha256": "c80e920bde1e4ffa6cfc409525f32e1784871e873bafede4e48ce02b78dd2428",
+          "mode": "viewport"
+        },
+        "mobile": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/magic-ui/242-magicui-design-6edb6ee7/mobile.png",
+          "sha256": "1da0b1aa0d7936c55b609e7b3fcc9882ce37eda8553d107cd26f6f66f47221a6",
+          "mode": "viewport"
+        }
+      },
+      "headings": [
+        {
+          "level": "h2",
+          "text": "Command Palette"
+        },
+        {
+          "level": "h1",
+          "text": "UI library for Design Engineers"
+        },
+        {
+          "level": "h2",
+          "text": "Showcase"
+        },
+        {
+          "level": "h3",
+          "text": "Companies choose Magic UI to build their landing pages."
+        },
+        {
+          "level": "h2",
+          "text": "What People Are Saying on Twitter"
+        },
+        {
+          "level": "h2",
+          "text": "Featured on YouTube"
+        }
+      ],
+      "ctas": [
+        "Toggle Menu",
+        "Magic UI",
+        "Components",
+        "Templates",
+        "Showcase",
+        "Search documentation...Search...⌘K",
+        "21,35421.4k",
+        "205",
+        "Toggle theme",
+        "🎉 Introducing Kinetic Text",
+        "Browse Components",
+        "Browse Templates"
+      ],
+      "topFonts": [
+        "Geist, sans-serif",
+        "\"Geist Mono\", monospace"
+      ],
+      "motionSignals": {
+        "libraries": {
+          "framerMotion": false,
+          "gsap": false,
+          "three": false,
+          "lottie": false,
+          "locomotiveScroll": false
+        },
+        "animatedElementCount": 96,
+        "keyframes": [
+          "spin",
+          "ping",
+          "pulse",
+          "enter",
+          "exit",
+          "accordion-down",
+          "accordion-up",
+          "blink-cursor",
+          "aurora",
+          "background-position-spin",
+          "gradient",
+          "meteor"
+        ]
+      },
+      "codeLinks": [
+        {
+          "url": "https://github.com/magicuidesign/magicui",
+          "text": "21,35421.4k"
+        },
+        {
+          "url": "https://elhussary.vercel.app/",
+          "text": "elhussaryPersonal Portfolio"
+        },
+        {
+          "url": "https://robot-toast.vercel.app/",
+          "text": "robot-toastOpen-source library"
+        },
+        {
+          "url": "https://elhussary.vercel.app/",
+          "text": "elhussaryPersonal Portfolio"
+        },
+        {
+          "url": "https://robot-toast.vercel.app/",
+          "text": "robot-toastOpen-source library"
+        },
+        {
+          "url": "https://elhussary.vercel.app/",
+          "text": "elhussaryPersonal Portfolio"
+        },
+        {
+          "url": "https://robot-toast.vercel.app/",
+          "text": "robot-toastOpen-source library"
+        },
+        {
+          "url": "https://elhussary.vercel.app/",
+          "text": "elhussaryPersonal Portfolio"
+        }
+      ],
+      "qualityWarnings": [],
+      "whySelected": [
+        "tiene screenshot desktop",
+        "tiene screenshot mobile",
+        "aporta senales de fuente",
+        "aporta CTAs reales",
+        "aporta links o bloques de codigo para estudiar",
+        "fuente fuerte para patrones web",
+        "tiene pista de codigo reusable con review"
+      ],
+      "score": 43
+    }
+  ],
+  "codeReferences": [
+    {
+      "repo": "ibelick__motion-primitives",
+      "license": "MIT",
+      "status": "allowed-after-review",
+      "localPath": "C:/Users/PC/.codex/design-stack/repos/ibelick__motion-primitives",
+      "file": "components/core/accordion.tsx",
+      "sha256": "12c5bb95afbb65c3c91334aade4d2aa0ae3b3c1e23db7b1e2ee75d3539354a80",
+      "signals": {
+        "type": "react-component",
+        "hasTailwind": false,
+        "hasMotion": true,
+        "hasShadcn": true,
+        "imports": [
+          "motion/react",
+          "@/lib/utils",
+          "react"
+        ],
+        "exports": []
+      },
+      "samplePreview": "'use client';\nimport {\n  motion,\n  AnimatePresence,\n  Transition,\n  Variants,\n  Variant,\n  MotionConfig,\n} from 'motion/react';\nimport { cn } from '@/lib/utils';\nimport React, { createContext, useContext, useState, ReactNode } from 'react';\n\nexport type AccordionContextType = {\n  expandedValue: React.Key | null;\n  toggleItem: (value: React.Key) => void;\n  variants?: { expanded: Variant; collapsed: Variant };\n};\n\nconst AccordionContext = createContext<AccordionContextType | undefined>(\n  undefined\n);\n\nfunction useAccordion() {\n  const context = useContext(AccordionContext);\n  if (!context) {\n    throw new Error('useAccordion must be used within an AccordionProvider');\n  }\n  return context;\n}\n\nexport type AccordionProviderProps = {\n  children: ReactNode;\n  variants?: { expanded: Variant; collapsed: Variant };\n  expandedValue?: React.Key | null;\n  onValueChange?: (value: React.Key | null) =\n/* sample truncated in recipe */",
+      "whySelected": [
+        "licencia MIT",
+        "patron shadcn revisable",
+        "motion reusable con reduced-motion check",
+        "match de componente: accordion"
+      ],
+      "reuseRule": "Allowed only after manual code review, retokenization, dependency check, accessibility check and responsive QA.",
+      "score": 33
+    },
+    {
+      "repo": "shadcn-ui__ui",
+      "license": "MIT",
+      "status": "allowed-after-review",
+      "localPath": "C:/Users/PC/.codex/design-stack/repos/shadcn-ui__ui",
+      "file": "apps/v4/registry/bases/base/blocks/dashboard-01/components/section-cards.tsx",
+      "sha256": "4b1bc0ea633e504840063dcc505c1b01ce0f6f5d150e3f3fc1429f145ead2111",
+      "signals": {
+        "type": "react-component",
+        "hasTailwind": true,
+        "hasMotion": false,
+        "hasShadcn": true,
+        "imports": [
+          "@/registry/bases/base/ui/badge",
+          "@/registry/bases/base/ui/card",
+          "@/app/(create)/components/icon-placeholder"
+        ],
+        "exports": [
+          "SectionCards"
+        ]
+      },
+      "samplePreview": "\"use client\"\n\nimport { Badge } from \"@/registry/bases/base/ui/badge\"\nimport {\n  Card,\n  CardAction,\n  CardDescription,\n  CardFooter,\n  CardHeader,\n  CardTitle,\n} from \"@/registry/bases/base/ui/card\"\nimport { IconPlaceholder } from \"@/app/(create)/components/icon-placeholder\"\n\nexport function SectionCards() {\n  return (\n    <div className=\"grid grid-cols-1 gap-4 px-4 *:data-[slot=card]:bg-linear-to-t *:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card *:data-[slot=card]:shadow-xs lg:px-6 @xl/main:grid-cols-2 @5xl/main:grid-cols-4 dark:*:data-[slot=card]:bg-card\">\n      <Card className=\"@container/card\">\n        <CardHeader>\n          <CardDescription>Total Revenue</CardDescription>\n          <CardTitle className=\"text-2xl font-semibold tabular-nums @[250px]/card:text-3xl\">\n            $1,250.00\n          </CardTitle>\n          <CardAction>\n            <Badge variant=\"outline\">\n  \n/* sample truncated in recipe */",
+      "whySelected": [
+        "licencia MIT",
+        "compatible con Tailwind/tokenizacion",
+        "patron shadcn revisable",
+        "match de componente: card"
+      ],
+      "reuseRule": "Allowed only after manual code review, retokenization, dependency check, accessibility check and responsive QA.",
+      "score": 31
+    },
+    {
+      "repo": "tremorlabs__tremor",
+      "license": "MIT",
+      "status": "allowed-after-review",
+      "localPath": "C:/Users/PC/.codex/design-stack/repos/tremorlabs__tremor",
+      "file": "src/components/Accordion/accordion.stories.tsx",
+      "sha256": "8c56c52c54d2061766117c3f4c704a0779415aae66e3771fd668352a52e6f790",
+      "signals": {
+        "type": "react-component",
+        "hasTailwind": true,
+        "hasMotion": false,
+        "hasShadcn": true,
+        "imports": [
+          "react",
+          "@remixicon/react",
+          "@storybook/react",
+          "../Badge/Badge",
+          "../Button/Button",
+          "./Accordion"
+        ],
+        "exports": [
+          "Default",
+          "WithIcons",
+          "OneItem",
+          "DefaultValueAndCollapsibleDisabled",
+          "TypeMultiple",
+          "DisabledAccordion",
+          "DisabledAccordionItem",
+          "Controlled"
+        ]
+      },
+      "samplePreview": "import React from \"react\"\nimport {\n  RiAddCircleFill,\n  RiArrowLeftRightLine,\n  RiCheckboxMultipleFill,\n  RiCoupon3Fill,\n} from \"@remixicon/react\"\nimport type { Meta, StoryObj } from \"@storybook/react\"\n\nimport { Badge } from \"../Badge/Badge\"\nimport { Button } from \"../Button/Button\"\nimport {\n  Accordion,\n  AccordionContent,\n  AccordionItem,\n  AccordionTrigger,\n} from \"./Accordion\"\n\nconst meta: Meta<typeof Accordion> = {\n  title: \"ui/Accordion\",\n  component: Accordion,\n}\n\nexport default meta\ntype Story = StoryObj<typeof Accordion>\n\nexport const Default: Story = {\n  render: () => (\n    <Accordion type=\"single\" className=\"mx-auto mt-3 max-w-sm\" collapsible>\n      <AccordionItem value=\"item-1\">\n        <AccordionTrigger>In the app</AccordionTrigger>\n        <AccordionContent>\n          <ol className=\"flex flex-col gap-2\">\n            <li>\n              <span className=\"font-semibold text-gra\n/* sample truncated in recipe */",
+      "whySelected": [
+        "licencia MIT",
+        "compatible con Tailwind/tokenizacion",
+        "patron shadcn revisable",
+        "match de componente: accordion"
+      ],
+      "reuseRule": "Allowed only after manual code review, retokenization, dependency check, accessibility check and responsive QA.",
+      "score": 31
+    },
+    {
+      "repo": "ibelick__motion-primitives",
+      "license": "MIT",
+      "status": "allowed-after-review",
+      "localPath": "C:/Users/PC/.codex/design-stack/repos/ibelick__motion-primitives",
+      "file": "components/core/carousel.tsx",
+      "sha256": "8d4648c85575d0f777050c41c0ec691d6b407be3e33a35f5b1bb246cf2cc6e75",
+      "signals": {
+        "type": "react-component",
+        "hasTailwind": true,
+        "hasMotion": true,
+        "hasShadcn": false,
+        "imports": [
+          "react",
+          "motion/react",
+          "@/lib/utils",
+          "lucide-react"
+        ],
+        "exports": []
+      },
+      "samplePreview": "'use client';\nimport {\n  Children,\n  ReactNode,\n  createContext,\n  useContext,\n  useEffect,\n  useRef,\n  useState,\n} from 'react';\nimport { motion, Transition, useMotionValue } from 'motion/react';\nimport { cn } from '@/lib/utils';\nimport { ChevronLeft, ChevronRight } from 'lucide-react';\n\nexport type CarouselContextType = {\n  index: number;\n  setIndex: (newIndex: number) => void;\n  itemsCount: number;\n  setItemsCount: (newItemsCount: number) => void;\n  disableDrag: boolean;\n};\n\nconst CarouselContext = createContext<CarouselContextType | undefined>(\n  undefined\n);\n\nfunction useCarousel() {\n  const context = useContext(CarouselContext);\n  if (!context) {\n    throw new Error('useCarousel must be used within an CarouselProvider');\n  }\n  return context;\n}\n\nexport type CarouselProviderProps = {\n  children: ReactNode;\n  initialIndex?: number;\n  onIndexChange?: (newIndex: number) => void;\n  disa\n/* sample truncated in recipe */",
+      "whySelected": [
+        "licencia MIT",
+        "compatible con Tailwind/tokenizacion",
+        "motion reusable con reduced-motion check",
+        "match de componente: carousel"
+      ],
+      "reuseRule": "Allowed only after manual code review, retokenization, dependency check, accessibility check and responsive QA.",
+      "score": 30
+    },
+    {
+      "repo": "harshjdhv__componentry",
+      "license": "MIT",
+      "status": "allowed-after-review",
+      "localPath": "C:/Users/PC/.codex/design-stack/repos/harshjdhv__componentry",
+      "file": "packages/ui/src/components/circuit-board.tsx",
+      "sha256": "54df38cef57658a6f467618f3f6a73b30b99ec4620f09424ce8f46c972847026",
+      "signals": {
+        "type": "react-component",
+        "hasTailwind": true,
+        "hasMotion": true,
+        "hasShadcn": true,
+        "imports": [
+          "react",
+          "framer-motion",
+          "@workspace/ui/lib/utils"
+        ],
+        "exports": []
+      },
+      "samplePreview": "\"use client\"\n\nimport * as React from \"react\"\nimport { motion } from \"framer-motion\"\nimport { cn } from \"@workspace/ui/lib/utils\"\n\ninterface CircuitNode {\n  id: string\n  x: number\n  y: number\n  label?: string\n  icon?: React.ReactNode\n  status?: \"active\" | \"inactive\" | \"processing\" | \"error\"\n  size?: \"sm\" | \"md\" | \"lg\"\n}\n\ninterface CircuitConnection {\n  from: string\n  to: string\n  animated?: boolean\n  bidirectional?: boolean\n  color?: string\n  pulseColor?: string\n}\n\ninterface CircuitBoardProps extends React.HTMLAttributes<HTMLDivElement> {\n  nodes: CircuitNode[]\n  connections: CircuitConnection[]\n  width?: number\n  height?: number\n  gridSize?: number\n  showGrid?: boolean\n  gridColor?: string\n  traceColor?: string\n  pulseColor?: string\n  nodeColor?: string\n  pulseSpeed?: number\n  traceWidth?: number\n  /** Force a specific theme variant. Defaults to auto-detect from system. */\n  variant?: \"l\n/* sample truncated in recipe */",
+      "whySelected": [
+        "licencia MIT",
+        "compatible con Tailwind/tokenizacion",
+        "patron shadcn revisable",
+        "motion reusable con reduced-motion check"
+      ],
+      "reuseRule": "Allowed only after manual code review, retokenization, dependency check, accessibility check and responsive QA.",
+      "score": 29
+    },
+    {
+      "repo": "harshjdhv__componentry",
+      "license": "MIT",
+      "status": "allowed-after-review",
+      "localPath": "C:/Users/PC/.codex/design-stack/repos/harshjdhv__componentry",
+      "file": "packages/ui/src/components/collection-surfer.tsx",
+      "sha256": "6c2dc398b31f9168a7e824cc9da13dc9a7d1c37d283920970055d8a418d4b134",
+      "signals": {
+        "type": "react-component",
+        "hasTailwind": true,
+        "hasMotion": true,
+        "hasShadcn": true,
+        "imports": [
+          "framer-motion",
+          "react"
+        ],
+        "exports": [
+          "CollectionSurfer"
+        ]
+      },
+      "samplePreview": "import { motion, useScroll, useTransform, useSpring, useMotionValue, MotionValue } from \"framer-motion\";\nimport React from \"react\";\n\nexport interface CollectionItem {\n    id: number;\n    image: string;\n    title: string;\n}\n\nexport type CollectionSurferVariant = \"magnetic\" | \"uplift\" | \"simple\";\n\ninterface CollectionSurferProps {\n    items: CollectionItem[];\n    variant?: CollectionSurferVariant;\n}\n\nexport function CollectionSurfer({ items, variant = \"magnetic\" }: CollectionSurferProps) {\n    // 1. Loop Setup: Duplicate items to create a buffer\n    // We render the list twice: [Original Set, Duplicate Set]\n    // When we scroll past the Original Set, we snap back to the start.\n    const duplicatedItems = [...items, ...items];\n\n    // Scroll sensitivity\n    const scrollPerItem = 600;\n\n    // The exact scroll distance to complete one full loop of the ORIGINAL items\n    const loopDistance = \n/* sample truncated in recipe */",
+      "whySelected": [
+        "licencia MIT",
+        "compatible con Tailwind/tokenizacion",
+        "patron shadcn revisable",
+        "motion reusable con reduced-motion check"
+      ],
+      "reuseRule": "Allowed only after manual code review, retokenization, dependency check, accessibility check and responsive QA.",
+      "score": 29
+    },
+    {
+      "repo": "markmead__hyperui",
+      "license": "MIT",
+      "status": "allowed-after-review",
+      "localPath": "C:/Users/PC/.codex/design-stack/repos/markmead__hyperui",
+      "file": ".agents/skills/building-components/references/polymorphism.mdx",
+      "sha256": "90f2d39d31c9591a7c393e8f06bc4b0293ab5823d27f26767136fa1c808bd2d7",
+      "signals": {
+        "type": "react-component",
+        "hasTailwind": true,
+        "hasMotion": true,
+        "hasShadcn": true,
+        "imports": [
+          "@radix-ui/react-slot",
+          "class-variance-authority"
+        ],
+        "exports": []
+      },
+      "samplePreview": "---\ntitle: Polymorphism\ndescription: How to use the `as` prop to change the rendered HTML element while preserving component functionality.\ntype: reference\nsummary: The as prop pattern for polymorphic components, compared with Radix UI's Slot-based asChild approach with TypeScript best practices.\nprerequisites:\n  - /composition\n  - /types\nrelated:\n  - /as-child\n  - /accessibility\n---\n\nThe `as` prop is a fundamental pattern in modern React component libraries that allows you to change the underlying HTML element or component that gets rendered.\n\nPopularized by libraries like [Styled Components](https://styled-components.com/), [Emotion](https://emotion.sh/), and [Chakra UI](https://chakra-ui.com/), this pattern provides flexibility in choosing semantic HTML while maintaining component styling and behavior.\n\nThe `as` prop enables polymorphic components - components that can render as diffe\n/* sample truncated in recipe */",
+      "whySelected": [
+        "licencia MIT",
+        "compatible con Tailwind/tokenizacion",
+        "patron shadcn revisable",
+        "motion reusable con reduced-motion check"
+      ],
+      "reuseRule": "Allowed only after manual code review, retokenization, dependency check, accessibility check and responsive QA.",
+      "score": 29
+    },
+    {
+      "repo": "nolly-studio__cult-ui",
+      "license": "MIT",
+      "status": "allowed-after-review",
+      "localPath": "C:/Users/PC/.codex/design-stack/repos/nolly-studio__cult-ui",
+      "file": "apps/www/components/cli-registry-snippet.tsx",
+      "sha256": "ea1a3beb3c7d64074b8bcc28ec2907b7aa8d22a345edaf0c299d36370b06301a",
+      "signals": {
+        "type": "react-component",
+        "hasTailwind": true,
+        "hasMotion": true,
+        "hasShadcn": true,
+        "imports": [
+          "react",
+          "react",
+          "lucide-react",
+          "motion/react",
+          "@/lib/utils",
+          "@/components/ui/button",
+          "@/components/ui/collapsible"
+        ],
+        "exports": [
+          "CliRegistrySnippet"
+        ]
+      },
+      "samplePreview": "\"use client\"\n\nimport * as React from \"react\"\nimport { useState } from \"react\"\nimport {\n  CheckIcon,\n  ChevronDownIcon,\n  ChevronRightIcon,\n  CopyIcon,\n} from \"lucide-react\"\nimport { AnimatePresence, motion } from \"motion/react\"\n\nimport { cn } from \"@/lib/utils\"\nimport { Button } from \"@/components/ui/button\"\nimport {\n  Collapsible,\n  CollapsibleContent,\n  CollapsibleTrigger,\n} from \"@/components/ui/collapsible\"\n\ninterface CliRegistrySnippetProps {\n  className?: string\n}\n\nexport function CliRegistrySnippet({ className }: CliRegistrySnippetProps) {\n  const [isOpen, setIsOpen] = useState(false)\n  const [isCopied, setIsCopied] = useState(false)\n\n  const registrySnippet = `{\n  \"registries\": {\n    \"@cult-ui\": \"https://cult-ui.com/r/{name}.json\"\n  }\n}`\n\n  const onCopy = async () => {\n    try {\n      await navigator.clipboard.writeText(registrySnippet)\n      setIsCopied(true)\n      setTimeout(()\n/* sample truncated in recipe */",
+      "whySelected": [
+        "licencia MIT",
+        "compatible con Tailwind/tokenizacion",
+        "patron shadcn revisable",
+        "motion reusable con reduced-motion check"
+      ],
+      "reuseRule": "Allowed only after manual code review, retokenization, dependency check, accessibility check and responsive QA.",
+      "score": 29
+    },
+    {
+      "repo": "serafimcloud__21st",
+      "license": "MIT",
+      "status": "allowed-after-review",
+      "localPath": "C:/Users/PC/.codex/design-stack/repos/serafimcloud__21st",
+      "file": "apps/web/components/features/studio/ui/studio-header.tsx",
+      "sha256": "f4b3ba71d34ec5211c154da5390564dccedd53cb7deea9adfc4ea809471a938d",
+      "signals": {
+        "type": "react-component",
+        "hasTailwind": true,
+        "hasMotion": true,
+        "hasShadcn": true,
+        "imports": [
+          "next/navigation",
+          "motion/react",
+          "@clerk/nextjs",
+          "@/types/global",
+          "@/components/ui/sidebar",
+          "@/components/icons",
+          "@/components/ui/logo",
+          "@/components/ui/user-avatar",
+          "@/components/ui/dropdown-menu",
+          "@/components/ui/button",
+          "lucide-react",
+          "@/lib/utils",
+          "jotai",
+          "@/lib/store/user-store",
+          "@/app/studio/[username]/analytics/page.client"
+        ],
+        "exports": [
+          "StudioHeader"
+        ]
+      },
+      "samplePreview": "\"use client\"\n\nimport { useRouter, usePathname } from \"next/navigation\"\nimport { useAnimation } from \"motion/react\"\nimport { useClerk } from \"@clerk/nextjs\"\nimport { User } from \"@/types/global\"\nimport { useSidebar } from \"@/components/ui/sidebar\"\nimport { Icons } from \"@/components/icons\"\nimport { Logo } from \"@/components/ui/logo\"\nimport { UserAvatar } from \"@/components/ui/user-avatar\"\nimport {\n  DropdownMenu,\n  DropdownMenuContent,\n  DropdownMenuItem,\n  DropdownMenuTrigger,\n  DropdownMenuSeparator,\n} from \"@/components/ui/dropdown-menu\"\nimport { Button } from \"@/components/ui/button\"\nimport {\n  Menu,\n  Layers,\n  BarChartBig,\n  CreditCard,\n  ChevronDown,\n} from \"lucide-react\"\nimport { cn } from \"@/lib/utils\"\nimport { useAtom } from \"jotai\"\nimport { userStateAtom } from \"@/lib/store/user-store\"\nimport { partnerModalOpenAtom } from \"@/app/studio/[username]/analytics/page.client\"\n\ninterfa\n/* sample truncated in recipe */",
+      "whySelected": [
+        "licencia MIT",
+        "compatible con Tailwind/tokenizacion",
+        "patron shadcn revisable",
+        "motion reusable con reduced-motion check"
+      ],
+      "reuseRule": "Allowed only after manual code review, retokenization, dependency check, accessibility check and responsive QA.",
+      "score": 29
+    },
+    {
+      "repo": "ibelick__motion-primitives",
+      "license": "MIT",
+      "status": "allowed-after-review",
+      "localPath": "C:/Users/PC/.codex/design-stack/repos/ibelick__motion-primitives",
+      "file": "components/website/card-example-landing.tsx",
+      "sha256": "6c44fb3c1335bf70a25685276e8ebe626d307a85f2d11e9105f8e79af37c486e",
+      "signals": {
+        "type": "react-component",
+        "hasTailwind": true,
+        "hasMotion": false,
+        "hasShadcn": false,
+        "imports": [
+          "@/lib/utils",
+          "react",
+          "lucide-react"
+        ],
+        "exports": [
+          "CardExampleLanding"
+        ]
+      },
+      "samplePreview": "'use client';\nimport { cn } from '@/lib/utils';\nimport { cloneElement, useState } from 'react';\nimport { RotateCw } from 'lucide-react';\n\nexport function CardExampleLanding({\n  children,\n  className,\n  hasReTrigger,\n}: {\n  children: React.ReactElement;\n  className?: string;\n  hasReTrigger?: boolean;\n}) {\n  const [reTriggerKey, setReTriggerKey] = useState<number>(Date.now());\n\n  const reTrigger = () => {\n    setReTriggerKey(Date.now());\n  };\n\n  return (\n    <div className='relative -mx-6 sm:mx-0'>\n      <div className='pointer-events-none absolute left-0 top-[-100px] z-[-1] h-full w-full bg-[radial-gradient(100%_100%_at_50%_50%,hsl(0deg_0%_100%/8%)_0,hsl(0deg_0%_100%/2%)_50%)] blur-2xl md:left-[-100px] md:h-[calc(100%+200px)] md:w-[calc(100%+200px)]' />\n      <div\n        className={cn(\n          'relative w-full overflow-hidden rounded-xl bg-zinc-50 p-4 shadow-[0px_0px_0px_1px_var(--colo\n/* sample truncated in recipe */",
+      "whySelected": [
+        "licencia MIT",
+        "compatible con Tailwind/tokenizacion",
+        "match de componente: card"
+      ],
+      "reuseRule": "Allowed only after manual code review, retokenization, dependency check, accessibility check and responsive QA.",
+      "score": 27
+    }
+  ],
+  "sectionPlan": [
+    {
+      "id": "hero-product",
+      "label": "Hero de producto",
+      "objective": "Mostrar oferta, categoria principal y CTA antes del primer scroll.",
+      "pattern": "Hero split con producto real o poster ligero, bullets de compra y CTA a catalogo/WhatsApp.",
+      "dataNeeded": [
+        "heroPoster o heroImage",
+        "CTA",
+        "categorias",
+        "2 productos destacados"
+      ],
+      "referenceCue": "Usar screenshots ecommerce para decidir escala de packshot y aire visual."
+    },
+    {
+      "id": "catalog",
+      "label": "Catalogo escaneable",
+      "objective": "Permitir comparar productos sin repetir informacion en secciones secundarias.",
+      "pattern": "Grid con filtros simples, imagen estable, precio, categoria, beneficios y accion.",
+      "dataNeeded": [
+        "productos",
+        "imagenes",
+        "precios",
+        "categorias"
+      ],
+      "referenceCue": "Revisar cards de producto y densidad en referencias de ecommerce."
+    },
+    {
+      "id": "routine-guide",
+      "label": "Guia de rutina",
+      "objective": "Ayudar a elegir segun necesidad sin convertir la pagina en blog.",
+      "pattern": "Tres pasos maximo: elegir, consultar, comprar. Si hay rutina real, ordenar por paso.",
+      "dataNeeded": [
+        "beneficios",
+        "uso",
+        "ordenRutina"
+      ],
+      "referenceCue": "Tomar ritmo de landing clara, no copiar claims de marcas."
+    },
+    {
+      "id": "trust-faq",
+      "label": "Confianza y FAQ",
+      "objective": "Reducir dudas comerciales y legales antes de escribir.",
+      "pattern": "Preguntas compactas sobre disponibilidad, precios, envio, asistencia y limites.",
+      "dataNeeded": [
+        "politicas",
+        "metodos de pago",
+        "contacto"
+      ],
+      "referenceCue": "Usar acordiones de repos MIT si pasan revision."
+    },
+    {
+      "id": "final-cta",
+      "label": "CTA final",
+      "objective": "Cerrar con accion directa y sin repetir todo el catalogo.",
+      "pattern": "Bloque corto con carrito/cotizacion o WhatsApp.",
+      "dataNeeded": [
+        "canal de conversion"
+      ],
+      "referenceCue": "CTA simple, visible y no decorativo."
+    }
+  ],
+  "tokenDirection": {
+    "fonts": {
+      "heading": "Onest",
+      "body": "Onest",
+      "referenceSignals": [
+        "Inter, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+        "system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Oxygen, Ubuntu, Cantarell, \"Fira Sans\", \"Droid Sans\", \"Helvetica Neue\", sans-serif",
+        "Montserrat, sans-serif",
+        "Inter, Inter_Fallback",
+        "Outfit, Outfit_Fallback",
+        "\"Plus Jakarta Sans\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", Roboto, Ubuntu, Cantarell, \"Noto Sans\", sans-serif, BlinkMacSystemFont, \"Segoe UI\", \"Helvetica Neue\", Arial, \"Noto Sans\", \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+        "Geist, sans-serif",
+        "Geist, system-ui, -apple-system, sans-serif"
+      ]
+    },
+    "palette": {
+      "primary": "#0f766e",
+      "secondary": "#263238",
+      "accent": "#e2a86b",
+      "bg": "#fbfaf7",
+      "fg": "#151716",
+      "usage": [
+        "Primary para CTA principal y estados activos.",
+        "Secondary para texto fuerte, nav o superficies de confianza.",
+        "Accent solo para una familia de accion o senal comercial; evitar que todo sea del mismo tono.",
+        "Fondos limpios con contraste suficiente para packshots."
+      ]
+    },
+    "layout": [
+      "Primer viewport con producto real, no una ilustracion abstracta.",
+      "Catalogo con espacios de imagen estables para evitar saltos.",
+      "Densidad media: suficiente informacion para comprar sin saturar."
+    ],
+    "componentBehavior": [
+      "Carrito o cotizacion asistida debe funcionar sin precio inventado.",
+      "Filtros y detalles no deben esconder el CTA principal."
+    ],
+    "motion": [
+      "Reveals sutiles con IntersectionObserver.",
+      "Video diferido con poster y `prefers-reduced-motion`."
+    ]
+  },
+  "mediaPlan": {
+    "required": [
+      "Hero poster liviano o imagen principal con permiso de uso.",
+      "Imagen por producto o placeholder aprobado para cada producto publicado.",
+      "2 producto(s) sin imagen en catalogo."
+    ],
+    "optional": [
+      "Micro video de uso del producto con poster",
+      "Fotos de textura o detalle"
+    ],
+    "generationRequests": [
+      "Pedir o generar asset hero para Luma Skin Demo: visual real del rubro, limpio, con espacio para copy y sin logos de terceros.",
+      "Pedir fotos o generar placeholders aprobados para: Gel limpiador suave, Crema barrera hidratante."
+    ]
+  },
+  "implementationPlan": [
+    "Abrir screenshots desktop y mobile seleccionados antes de tocar layout.",
+    "Elegir una referencia para estructura, una para tipografia/densidad, una para motion o componentes.",
+    "Reconstruir patrones con tokens de ONIA; no pegar HTML/CSS cerrado de referencias inspiration-only.",
+    "Usar solo codigo de repos `allowed-after-review` y registrar archivo exacto usado.",
+    "Mapear cada seccion del plan a datos reales del cliente; eliminar secciones sin dato util.",
+    "Validar catalogo, carrito/cotizacion, productos sin imagen, precios y CTA de WhatsApp.",
+    "Aplicar direccion del rubro: Editorial de producto, superficies limpias, packshots grandes, comparacion simple y CTA comercial persistente."
+  ],
+  "antiGenericGuardrails": [
+    "No copiar identidad, copy, imagenes, videos, logos, claims ni estructura reconocible de terceros.",
+    "No usar tres cards iguales si no cambian la decision del cliente.",
+    "No usar gradientes genericos ni paletas de un solo tono como solucion visual principal.",
+    "Primer viewport debe tener una senal real del negocio: producto, lugar, equipo, dashboard, proyecto o resultado.",
+    "Todo video debe tener poster, carga diferida y respeto a `prefers-reduced-motion`.",
+    "Cada bloque debe justificar venta, confianza, entendimiento de alcance o siguiente paso.",
+    "No publicar producto sin imagen o precio/estado comercial claro salvo que sea cotizacion asistida.",
+    "Riesgo especifico: Caer en una tienda beige generica con tres cards iguales, fotos rotas y claims cosmeticos vagos."
+  ],
+  "qaChecklist": [
+    "Correr `pnpm test`.",
+    "Generar preview con `pnpm generate <slug> --template <landing|store>` o `pnpm factory:build`.",
+    "Revisar desktop y mobile con screenshot antes de enviar a cliente.",
+    "Confirmar que no hay imagenes rotas ni videos con carga inmediata pesada.",
+    "Confirmar contraste, foco visible, labels en forms y CTA accesible.",
+    "Confirmar que cada URL externa abre y que WhatsApp/email funcionan.",
+    "Probar agregar producto, abrir carrito, quitar producto y checkout/cotizacion."
+  ],
+  "warnings": [
+    "Faltan assets visuales; pedirlos o generarlos antes de entrega profesional."
+  ],
+  "confidence": {
+    "score": 95,
+    "reasons": [
+      "8 referencias seleccionadas",
+      "6 referencias con screenshot",
+      "10 archivos de codigo permitidos como referencia",
+      "2 pedidos de media pendientes"
+    ]
+  }
+}

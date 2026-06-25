@@ -28,7 +28,32 @@ cd C:\dev\proyectos\onia-hermes\web-factory
 pnpm client:new -- --input data/intakes/<slug>.json
 ```
 
-5. Generar preview:
+5. Generar receta de diseno razonada:
+
+```powershell
+pnpm design:auto -- <slug> --template landing
+```
+
+Para ecommerce:
+
+```powershell
+pnpm design:auto -- <slug> --template store
+```
+
+La receta lee `latest-design-intelligence.json`,
+`latest-component-code-examples.json`, referencias exactas del cliente y
+contexto operativo. Escribe:
+
+```text
+data/clients/<slug>.design.json
+data/clients/<slug>.design.md
+```
+
+Debe incluir rubro inferido, referencias seleccionadas, URLs, screenshots,
+hashes, fuentes, CTAs, motion, codigo permitido, plan de secciones, media
+faltante, guardrails y QA.
+
+6. Generar preview:
 
 ```powershell
 pnpm generate <slug> --template landing
@@ -40,13 +65,29 @@ Para ecommerce:
 pnpm generate <slug> --template store
 ```
 
-6. Revisar salida:
+7. Revisar salida:
 
 ```text
 data/clients/<slug>.json
 data/clients/<slug>.context.md
+data/clients/<slug>.design.json
+data/clients/<slug>.design.md
 out/<slug>/index.html
 out/<slug>/site.css
+out/<slug>/<slug>.design.json
+out/<slug>/<slug>.design.md
+```
+
+Flujo directo si ya hay intake:
+
+```powershell
+pnpm factory:build -- --input data/intakes/<slug>.json --force
+```
+
+Flujo directo si ya existe el perfil:
+
+```powershell
+pnpm factory:build -- <slug> --template landing --force
 ```
 
 ## Contrato de referencias
@@ -96,11 +137,17 @@ Cada uno genera su perfil en `data/clients/` y su contexto `.context.md`.
 
 ```powershell
 pnpm factory:smoke
+pnpm design:auto -- skincare-demo --template store --force
+pnpm factory:build -- skincare-demo --template store --force
 pnpm --filter site lint
 pnpm --filter site build
 ```
 
 `factory:smoke` corre tests y genera previews para los cinco rubros demo.
+
+`design:auto` valida que la fabrica pueda razonar sobre rubro, referencias,
+capturas, codigo permitido y media faltante. `factory:build` valida el flujo
+completo sin pedir informacion al usuario si el intake ya tiene datos clave.
 
 ## Politica de media
 
@@ -115,6 +162,8 @@ pnpm --filter site build
 Una web esta lista para entregar cuando:
 
 - `pnpm client:new` no reporta pendientes criticos;
+- `pnpm design:auto` genera receta con referencias y screenshots suficientes o
+  deja warnings concretos;
 - `pnpm generate <slug>` termina sin errores;
 - no hay imagenes rotas conocidas;
 - CTA apunta a un canal real;
