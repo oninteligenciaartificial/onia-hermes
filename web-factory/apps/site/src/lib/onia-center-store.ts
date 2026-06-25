@@ -34,11 +34,12 @@ export type RuntimeReview = {
 
 export type RuntimeNote = {
   id: string;
-  kind: "llamada" | "nota" | "cobro" | "bloqueo" | "idea" | "evidencia";
+  kind: "llamada" | "nota" | "cobro" | "bloqueo" | "idea" | "evidencia" | "actualizacion_servicio";
   title: string;
   detail: string;
   linkedTo: string;
   actorRole?: RoleId;
+  visibility?: "sergio_private" | "assigned_only" | "team_safe" | "seller_safe";
   createdAt: string;
 };
 
@@ -360,6 +361,7 @@ function mapNote(row: DbNote): RuntimeNote {
     detail: typeof raw.detail === "string" ? raw.detail : "",
     linkedTo: typeof raw.linkedTo === "string" ? raw.linkedTo : "",
     actorRole: roleFromDb(row.actor_role_key),
+    visibility: typeof raw.visibility === "string" ? (raw.visibility as RuntimeNote["visibility"]) : undefined,
     createdAt: typeof raw.createdAt === "string" ? raw.createdAt : row.created_at,
   };
 }
@@ -394,6 +396,26 @@ function canRoleViewIdea(idea: RuntimeIdea, role: RoleId) {
   return idea.visibility === "assigned_only" && idea.owner === role;
 }
 
+function canRoleViewNote(note: RuntimeNote, role: RoleId) {
+  if (role === "sergio") {
+    return true;
+  }
+
+  if (note.visibility === "team_safe") {
+    return true;
+  }
+
+  if (note.visibility === "seller_safe") {
+    return role === "area" || role === "arthur" || role === "seller";
+  }
+
+  if (note.visibility === "assigned_only") {
+    return note.actorRole === role;
+  }
+
+  return note.actorRole === role;
+}
+
 export function filterOniaCenterRuntimeForRole(snapshot: RuntimeSnapshot, role: RoleId): RuntimeSnapshot {
   if (role === "sergio") {
     return snapshot;
@@ -403,7 +425,7 @@ export function filterOniaCenterRuntimeForRole(snapshot: RuntimeSnapshot, role: 
     leads: snapshot.leads.filter((lead) => lead.owner === role),
     tasks: snapshot.tasks.filter((task) => task.assignedRole === role),
     reviews: snapshot.reviews.filter((review) => review.sensitivity === "public_safe"),
-    notes: snapshot.notes.filter((note) => note.actorRole === role),
+    notes: snapshot.notes.filter((note) => canRoleViewNote(note, role)),
     ideas: snapshot.ideas.filter((idea) => canRoleViewIdea(idea, role)),
   };
 }
@@ -492,6 +514,12 @@ export async function createOniaCenterEntity(entity: RuntimeEntity, payload: unk
   if (entity === "note") {
     const note = payload as RuntimeNote & { author?: string; body?: string };
     const summary = note.title || note.body || note.detail || "Nota ONIA Center";
+    const sensitivityScope =
+      note.visibility === "team_safe" || note.visibility === "seller_safe"
+        ? "internal"
+        : note.actorRole === "sergio"
+          ? "sergio_private"
+          : "internal_restricted";
     const rows = await supabaseRequest<DbNote[]>("audit_logs?select=audit_key,actor_role_key,summary,raw,created_at", {
       method: "POST",
       headers: { prefer: "return=representation" },
@@ -501,7 +529,7 @@ export async function createOniaCenterEntity(entity: RuntimeEntity, payload: unk
         action: "runtime_note",
         entity_table: "onia_center.runtime_notes",
         entity_key: note.linkedTo || note.id || "unlinked",
-        sensitivity_scope: note.actorRole === "sergio" ? "sergio_private" : "internal_restricted",
+        sensitivity_scope: sensitivityScope,
         summary,
         raw: note,
       }),

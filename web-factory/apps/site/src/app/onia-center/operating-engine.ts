@@ -198,6 +198,7 @@ export function getIntegrationReadinessSummary() {
     total: integrationConnectors.length,
     connected: integrationConnectors.filter((connector) => connector.status === "connected").length,
     ready: integrationConnectors.filter((connector) => connector.status === "ready").length,
+    prepared: integrationConnectors.filter((connector) => connector.status === "prepared_pending_connection").length,
     configPending: integrationConnectors.filter((connector) => connector.status === "config_pending").length,
     planned: integrationConnectors.filter((connector) => connector.status === "planned").length,
     blocked: integrationConnectors.filter((connector) => connector.status === "blocked").length,
@@ -221,7 +222,7 @@ export function getIntegrationTone(status: (typeof integrationConnectors)[number
     return "green";
   }
 
-  if (status === "config_pending" || status === "manual_only") {
+  if (status === "prepared_pending_connection" || status === "config_pending" || status === "manual_only") {
     return "yellow";
   }
 

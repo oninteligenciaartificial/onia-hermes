@@ -31,7 +31,7 @@ import {
   sergioMeetingWindows,
   sergioStrictScheduleBlocks,
 } from "./operating-source";
-import { operationalServices } from "./source";
+import { operationalServices, vendorCommissionRules } from "./source";
 import type { RoleId } from "./types";
 
 type RuntimeLead = {
@@ -68,11 +68,12 @@ type RuntimeReview = {
 
 type RuntimeNote = {
   id: string;
-  kind: "llamada" | "nota" | "cobro" | "bloqueo" | "idea" | "evidencia";
+  kind: "llamada" | "nota" | "cobro" | "bloqueo" | "idea" | "evidencia" | "actualizacion_servicio";
   title: string;
   detail: string;
   linkedTo: string;
   actorRole?: RoleId;
+  visibility?: "sergio_private" | "assigned_only" | "team_safe" | "seller_safe";
   createdAt: string;
 };
 
@@ -96,6 +97,12 @@ type LeadForm = Omit<RuntimeLead, "id" | "createdAt" | "status">;
 type TaskForm = Omit<RuntimeTask, "id" | "createdAt" | "status" | "evidence">;
 type NoteForm = Omit<RuntimeNote, "id" | "createdAt" | "actorRole">;
 type IdeaForm = Omit<RuntimeIdea, "id" | "createdAt" | "status">;
+type ServiceUpdateForm = {
+  serviceId: string;
+  title: string;
+  detail: string;
+  visibility: "team_safe" | "seller_safe" | "sergio_private";
+};
 type StorageMode = "checking" | "supabase" | "local";
 type RuntimeData = {
   leads: RuntimeLead[];
@@ -111,7 +118,7 @@ type RuntimeApiResponse<T = RuntimeData> = {
   missingConfiguration?: string[];
   data: T | null;
 };
-export type WorkspaceView = "daily" | "capture" | "calendar" | "ideas" | "connections";
+export type WorkspaceView = "daily" | "capture" | "calendar" | "ideas" | "connections" | "seller-services" | "assistant";
 
 const storageKey = "onia-center-runtime-v2";
 const legacyStorageKey = "onia-center-runtime-v1";
@@ -157,6 +164,16 @@ const workspaceCopy: Record<WorkspaceView, { label: string; title: string; descr
     title: "Estado self-hosted y runtime",
     description: "Verifica Supabase, requisitos multiusuario, adaptadores y snapshot filtrado por rol.",
   },
+  "seller-services": {
+    label: "Servicios",
+    title: "Resumenes comerciales y cambios de precio",
+    description: "Catalogo explicable para vendedores: que vender, precio, comision propia, limites y ultimas actualizaciones aprobadas.",
+  },
+  assistant: {
+    label: "Asistente",
+    title: "ONIA Bot interno",
+    description: "Consulta servicios, leads y notas visibles para tu rol. No responde sobre datos privados que no esten en tu vista.",
+  },
 };
 
 const scheduleCategoryLabels: Record<string, string> = {
@@ -194,6 +211,29 @@ const starterReviews: RuntimeReview[] = collabIngestionItems.map((item) => ({
   status: "pendiente",
 }));
 
+const starterServiceUpdates: RuntimeNote[] = [
+  {
+    id: "update-motor-local-growth-priority",
+    kind: "actualizacion_servicio",
+    title: "Empujar ONIA Motor Local Growth primero",
+    detail: "Oferta prioritaria: setup Bs. 2.900 + mensualidad Bs. 1.900. Sirve para negocios locales que necesitan presencia, captacion, CRM simple y seguimiento.",
+    linkedTo: "onia-motor-local-growth",
+    actorRole: "sergio",
+    visibility: "seller_safe",
+    createdAt: "seed",
+  },
+  {
+    id: "update-web-pro-scope-lock",
+    kind: "actualizacion_servicio",
+    title: "Web Pro ONIA no se promete como sistema",
+    detail: "Web Pro ONIA cubre web/captacion. Login, base de datos, dashboard, portal o app interna se cotiza como sistema y requiere aprobacion Sergio.",
+    linkedTo: "vendor-web-pro-onia",
+    actorRole: "sergio",
+    visibility: "seller_safe",
+    createdAt: "seed",
+  },
+];
+
 const starterTasks: RuntimeTask[] = operatingTasks.map((task) => ({
   id: task.id,
   projectId: task.projectId,
@@ -226,6 +266,7 @@ const emptyNoteForm: NoteForm = {
   title: "",
   detail: "",
   linkedTo: "",
+  visibility: "assigned_only",
 };
 
 const emptyIdeaForm: IdeaForm = {
@@ -239,6 +280,13 @@ const emptyIdeaForm: IdeaForm = {
   owner: "sergio",
   visibility: "sergio_private",
   reviewTool: "codex",
+};
+
+const emptyServiceUpdateForm: ServiceUpdateForm = {
+  serviceId: "onia-motor-local-growth",
+  title: "",
+  detail: "",
+  visibility: "seller_safe",
 };
 
 function makeId(prefix: string) {

@@ -1152,6 +1152,80 @@
   border-bottom: 0;
 }
 
+.onia-commission-policy {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.onia-commission-policy article {
+  padding: 12px;
+  border: 1px solid var(--onia-line-soft);
+  border-radius: var(--onia-radius);
+  background: #fbfcfb;
+}
+
+.onia-commission-policy span,
+.onia-commission-table small {
+  color: var(--onia-muted);
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.onia-commission-policy strong {
+  display: block;
+  margin: 5px 0;
+  color: var(--onia-ink);
+}
+
+.onia-commission-policy p,
+.onia-commission-table p {
+  color: var(--onia-muted);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.onia-commission-table {
+  overflow: hidden;
+  margin-bottom: 12px;
+  border: 1px solid var(--onia-line-soft);
+  border-radius: var(--onia-radius);
+}
+
+.onia-commission-table__head,
+.onia-commission-table article {
+  display: grid;
+  grid-template-columns: minmax(170px, 1.2fr) minmax(120px, 0.7fr) minmax(110px, 0.6fr) minmax(220px, 1.4fr);
+  gap: 12px;
+  align-items: start;
+  padding: 10px 12px;
+}
+
+.onia-commission-table__head {
+  background: #f4f7f6;
+  color: var(--onia-muted);
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.onia-commission-table article {
+  border-top: 1px solid var(--onia-line-soft);
+}
+
+.onia-commission-table article > span,
+.onia-commission-table strong {
+  color: var(--onia-ink);
+  font-weight: 900;
+}
+
+.onia-commission-table small {
+  display: block;
+  margin-top: 5px;
+}
+
 .onia-payment-list {
   gap: 10px;
 }
@@ -2388,8 +2462,15 @@
   .onia-private-panel__summary,
   .onia-capital-grid,
   .onia-nuvia-ledger,
+  .onia-commission-policy,
+  .onia-commission-table__head,
+  .onia-commission-table article,
   .onia-payment-list article {
     grid-template-columns: 1fr;
+  }
+
+  .onia-commission-table__head {
+    display: none;
   }
 
   .onia-daily-command {
@@ -2717,5 +2798,404 @@
   .onia-team-grid,
   .onia-team-grid.is-ideas {
     grid-template-columns: 1fr;
+  }
+}
+
+.onia-webfactory-page {
+  background:
+    linear-gradient(180deg, rgba(18, 128, 92, 0.09), rgba(244, 246, 243, 0) 340px),
+    var(--onia-bg);
+}
+
+.onia-webfactory-hero p {
+  max-width: 760px;
+}
+
+.onia-webfactory-command-center {
+  display: grid;
+  gap: 18px;
+}
+
+.onia-webfactory-command-grid,
+.onia-webfactory-grid,
+.onia-webfactory-two-column,
+.onia-webfactory-recipe__stats,
+.onia-webfactory-artifacts,
+.onia-webfactory-intel-stats,
+.onia-webfactory-source-list,
+.onia-webfactory-action-list,
+.onia-webfactory-docs,
+.onia-webfactory-missing {
+  display: grid;
+  gap: 12px;
+}
+
+.onia-webfactory-command-grid {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.onia-webfactory-command-grid article,
+.onia-webfactory-source-list article,
+.onia-webfactory-action-list article,
+.onia-webfactory-missing div {
+  border: 1px solid var(--onia-line-soft);
+  border-radius: var(--onia-radius);
+  background: #fbfcfa;
+}
+
+.onia-webfactory-command-grid article {
+  display: grid;
+  align-content: start;
+  gap: 9px;
+  min-height: 154px;
+  padding: 13px;
+}
+
+.onia-webfactory-command-grid span,
+.onia-webfactory-source-list span,
+.onia-webfactory-action-list span,
+.onia-webfactory-docs strong,
+.onia-webfactory-missing strong,
+.onia-webfactory-missing span {
+  color: var(--onia-faint);
+  font-size: 11px;
+  font-weight: 850;
+  text-transform: uppercase;
+}
+
+.onia-webfactory-command-grid code,
+.onia-webfactory-next-command code,
+.onia-webfactory-docs code,
+.onia-webfactory-missing code,
+.onia-webfactory-code code,
+.onia-webfactory-artifacts code {
+  color: #18362c;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  font-size: 11px;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+.onia-webfactory-command-grid code,
+.onia-webfactory-docs code,
+.onia-webfactory-missing code,
+.onia-webfactory-code code,
+.onia-webfactory-artifacts code {
+  border-radius: 7px;
+  background: #eef6f1;
+  padding: 7px;
+}
+
+.onia-webfactory-command-grid p,
+.onia-webfactory-source-list p,
+.onia-webfactory-action-list p,
+.onia-webfactory-recipe p,
+.onia-webfactory-read p,
+.onia-webfactory-media p,
+.onia-webfactory-warnings p {
+  color: var(--onia-muted);
+  font-size: 13px;
+  line-height: 1.45;
+  margin: 0;
+}
+
+.onia-webfactory-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.onia-webfactory-recipe {
+  display: grid;
+  gap: 16px;
+  align-content: start;
+}
+
+.onia-webfactory-recipe__head {
+  display: flex;
+  gap: 14px;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.onia-webfactory-recipe__head span,
+.onia-webfactory-references h3,
+.onia-webfactory-code h3 {
+  color: var(--onia-faint);
+  font-size: 11px;
+  font-weight: 850;
+  text-transform: uppercase;
+}
+
+.onia-webfactory-recipe__head h2 {
+  font-size: 26px;
+  line-height: 1.08;
+  margin: 6px 0 8px;
+}
+
+.onia-webfactory-status {
+  border: 1px solid var(--onia-line);
+  border-radius: 999px;
+  color: #24332e;
+  flex: 0 0 auto;
+  font-size: 11px;
+  font-weight: 850;
+  line-height: 1;
+  padding: 8px 10px;
+  text-transform: uppercase;
+}
+
+.onia-webfactory-status.is-ready {
+  border-color: #b8e3ca;
+  background: var(--onia-green-soft);
+  color: #1c624f;
+}
+
+.onia-webfactory-status.is-review,
+.onia-webfactory-status.is-needs_references {
+  border-color: #d9ca9a;
+  background: var(--onia-yellow-soft);
+  color: #7a4c12;
+}
+
+.onia-webfactory-status.is-needs_assets,
+.onia-webfactory-status.is-draft {
+  border-color: #ebbac4;
+  background: var(--onia-red-soft);
+  color: #842238;
+}
+
+.onia-webfactory-recipe__stats {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.onia-webfactory-recipe__stats span,
+.onia-webfactory-intel-stats span {
+  border: 1px solid var(--onia-line-soft);
+  border-radius: var(--onia-radius);
+  background: #f7faf8;
+  color: var(--onia-faint);
+  display: grid;
+  gap: 2px;
+  min-height: 74px;
+  padding: 12px;
+  text-transform: uppercase;
+  font-size: 11px;
+  font-weight: 850;
+}
+
+.onia-webfactory-recipe__stats strong,
+.onia-webfactory-intel-stats strong {
+  color: var(--onia-ink);
+  font-size: 24px;
+  line-height: 1;
+}
+
+.onia-webfactory-artifacts {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.onia-webfactory-artifacts div {
+  border: 1px solid var(--onia-line-soft);
+  border-radius: var(--onia-radius);
+  display: grid;
+  gap: 7px;
+  padding: 11px;
+}
+
+.onia-webfactory-artifacts span,
+.onia-webfactory-media,
+.onia-webfactory-warnings,
+.onia-webfactory-next-command {
+  align-items: flex-start;
+  display: flex;
+  gap: 9px;
+}
+
+.onia-webfactory-artifacts span {
+  color: var(--onia-ink);
+  font-size: 12px;
+  font-weight: 850;
+}
+
+.onia-webfactory-artifacts small {
+  color: var(--onia-faint);
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.onia-webfactory-artifacts .is-ready {
+  background: #f3fbf6;
+}
+
+.onia-webfactory-artifacts .is-missing {
+  background: #fff6f7;
+}
+
+.onia-webfactory-read {
+  border-top: 1px solid var(--onia-line-soft);
+  display: grid;
+  gap: 8px;
+  padding-top: 14px;
+}
+
+.onia-webfactory-references,
+.onia-webfactory-code {
+  border-top: 1px solid var(--onia-line-soft);
+  display: grid;
+  gap: 10px;
+  padding-top: 14px;
+}
+
+.onia-webfactory-references article,
+.onia-webfactory-code article {
+  border-left: 3px solid #cfe0db;
+  display: grid;
+  gap: 7px;
+  padding-left: 10px;
+}
+
+.onia-webfactory-references article > div,
+.onia-webfactory-code article > div,
+.onia-webfactory-source-list article > div {
+  display: flex;
+  gap: 8px;
+  justify-content: space-between;
+}
+
+.onia-webfactory-references strong,
+.onia-webfactory-code strong,
+.onia-webfactory-source-list strong,
+.onia-webfactory-action-list strong {
+  color: var(--onia-ink);
+  font-size: 14px;
+}
+
+.onia-webfactory-references a,
+.onia-webfactory-source-list a {
+  align-items: center;
+  color: var(--onia-blue);
+  display: inline-flex;
+  font-size: 12px;
+  font-weight: 850;
+  gap: 5px;
+  text-decoration: none;
+}
+
+.onia-webfactory-media,
+.onia-webfactory-warnings,
+.onia-webfactory-next-command {
+  border-radius: var(--onia-radius);
+  padding: 12px;
+}
+
+.onia-webfactory-media {
+  background: #edf5f8;
+  color: var(--onia-blue);
+}
+
+.onia-webfactory-warnings {
+  background: #fff5e5;
+  color: var(--onia-yellow);
+}
+
+.onia-webfactory-next-command {
+  background: #f4f7f2;
+  border: 1px dashed #bfd5cb;
+  color: var(--onia-green);
+}
+
+.onia-webfactory-two-column {
+  grid-template-columns: minmax(0, 1.25fr) minmax(320px, 0.75fr);
+  align-items: start;
+}
+
+.onia-webfactory-intelligence,
+.onia-webfactory-pending {
+  display: grid;
+  gap: 16px;
+}
+
+.onia-webfactory-intel-stats {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.onia-webfactory-source-list article {
+  display: grid;
+  gap: 8px;
+  padding: 12px;
+}
+
+.onia-webfactory-source-list small,
+.onia-webfactory-docs small {
+  color: var(--onia-faint);
+  font-size: 12px;
+  font-weight: 750;
+}
+
+.onia-webfactory-action-list article {
+  align-items: flex-start;
+  display: flex;
+  gap: 10px;
+  padding: 12px;
+}
+
+.onia-webfactory-priority {
+  border-radius: 999px;
+  flex: 0 0 auto;
+  line-height: 1;
+  padding: 7px 8px;
+}
+
+.onia-webfactory-priority.is-alta {
+  background: var(--onia-red-soft);
+  color: var(--onia-red);
+}
+
+.onia-webfactory-priority.is-media {
+  background: var(--onia-yellow-soft);
+  color: var(--onia-yellow);
+}
+
+.onia-webfactory-missing {
+  border-top: 1px solid var(--onia-line-soft);
+  padding-top: 14px;
+}
+
+.onia-webfactory-missing div {
+  display: grid;
+  gap: 6px;
+  padding: 10px;
+}
+
+.onia-webfactory-docs {
+  border-top: 1px solid var(--onia-line-soft);
+  padding-top: 14px;
+}
+
+@media (max-width: 1240px) {
+  .onia-webfactory-command-grid,
+  .onia-webfactory-grid,
+  .onia-webfactory-two-column {
+    grid-template-columns: 1fr;
+  }
+
+  .onia-webfactory-command-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .onia-webfactory-command-grid,
+  .onia-webfactory-recipe__stats,
+  .onia-webfactory-artifacts,
+  .onia-webfactory-intel-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .onia-webfactory-recipe__head,
+  .onia-webfactory-references article > div,
+  .onia-webfactory-code article > div,
+  .onia-webfactory-source-list article > div {
+    display: grid;
   }
 }

@@ -23,6 +23,7 @@ import {
   EyeOff,
   FileCheck2,
   Gauge,
+  Globe2,
   HandCoins,
   Layers3,
   Lightbulb,
@@ -80,6 +81,7 @@ import {
   formatPercent,
   getServiceValidation,
   getVisibleCenters,
+  getVisibleVendorCommissionRules,
   growthTarget,
   serviceValidations,
 } from "./engine";
@@ -109,6 +111,7 @@ type NavItem = {
   detail: string;
   group: string;
   icon: LucideIcon;
+  href?: string;
 };
 
 type AuthStatusResponse = {
@@ -161,6 +164,7 @@ const navItems: NavItem[] = [
   { id: "bolivian", label: "Bolivian", detail: "Modulo", group: "Entrega", icon: Building2 },
   { id: "agentes", label: "Agentes", detail: "Mes", group: "IA y automatizacion", icon: Sparkles },
   { id: "integraciones", label: "Integraciones", detail: "Pendientes", group: "IA y automatizacion", icon: Workflow },
+  { id: "web-factory", label: "Web Factory", detail: "Modulo", group: "IA y automatizacion", icon: Globe2, href: "/onia-center/web-factory" },
   { id: "premium", label: "Premium", detail: "Herramientas", group: "IA y automatizacion", icon: Zap },
   { id: "finanzas", label: "Finanzas", detail: "Centros", group: "Dinero", icon: WalletCards },
   { id: "nuvia", label: "Nuvia", detail: "Lotes", group: "Dinero", icon: Boxes },
@@ -230,6 +234,11 @@ const moduleCopy: Record<string, { title: string; description: string; content: 
     description: "Estado de Cal, n8n, modelos locales, Remotion, Web Factory automatico y self-hosted.",
     content: ["Supabase", "Cal", "n8n", "IA local", "Remotion"],
   },
+  "web-factory": {
+    title: "Web Factory",
+    description: "Modulo operativo para recetas, referencias, capturas, codigo revisable y previews internos.",
+    content: ["Brief", "Referencias", "Receta", "Preview", "QA"],
+  },
   seguridad: {
     title: "Seguridad y permisos",
     description: "Separacion entre privado, operativo y colaborativo por rol y organizacion.",
@@ -247,7 +256,7 @@ const moduleCopy: Record<string, { title: string; description: string; content: 
   },
   arthur: {
     title: "Operacion Arthur 60 dias",
-    description: "Scorecard semanal, evidencia, variable estimada y aprobacion final de Sergio.",
+    description: "Scorecard semanal, evidencia, pago estimado y aprobacion final de Sergio.",
     content: ["Leads", "Llamadas", "Contenido", "Mejoras internas"],
   },
   servicios: {
@@ -301,10 +310,10 @@ const centerBalances = [
     privateOnly: false,
   },
   { center: "Nuvia", amountBs: 0, detail: "Sin lotes reales cargados todavia", privateOnly: false },
-  { center: "Reserva Nuvia", amountBs: 0, detail: "10% solo cuando existan lotes cerrados", privateOnly: false },
+  { center: "Reserva Nuvia", amountBs: 0, detail: "20% bootstrap; 10% solo cuando Nuvia viva sola", privateOnly: false },
   { center: "ONIA Media", amountBs: 0, detail: "Sin ingresos cobrados registrados", privateOnly: false },
   { center: "Sergio owner income", amountBs: 0, detail: "Retiro privado no aprobado", privateOnly: true },
-  { center: "Arthur variable", amountBs: 0, detail: "No hay variables aprobadas sin evidencia", privateOnly: false },
+  { center: "Pagos Arthur aprobados", amountBs: 0, detail: "No hay pagos aprobados sin evidencia", privateOnly: false },
 ];
 
 const serviceIconById: Record<string, LucideIcon> = {
@@ -433,7 +442,7 @@ function ServiceCard({ service }: { service: OperationalService }) {
       ) : (
         <div className="onia-blocker is-ok">
           <BadgeCheck size={15} />
-          <span>Checklist, evidencia, centro y comision/variable definidos.</span>
+          <span>Checklist, evidencia, centro y comision/pago definidos.</span>
         </div>
       )}
     </article>
@@ -542,9 +551,12 @@ export default function OniaCenterPage() {
   const privateVisible = canSeePrivateCapital(selectedRole);
   const visibleCenters = useMemo(() => getVisibleCenters(selectedRole), [selectedRole]);
   const visiblePremium = premiumToolPolicies.filter((policy) => policy.visibility.includes(selectedRole));
+  const visibleVendorCommissionRules = useMemo(() => getVisibleVendorCommissionRules(selectedRole), [selectedRole]);
   const blockedServices = serviceValidations.filter((validation) => !validation.canSell).length;
   const nuvia = calculateNuviaLot(nuviaExample);
-  const payments = paymentExamples.map((payment) => ({ input: payment, result: calculatePayment(payment) }));
+  const payments = paymentExamples
+    .filter((payment) => selectedRole === "sergio" || selectedRole === "area" || payment.role === selectedRole)
+    .map((payment) => ({ input: payment, result: calculatePayment(payment) }));
   const salesTone = centerSnapshot.salesStatus === "green" ? "green" : centerSnapshot.salesStatus === "yellow" ? "yellow" : "red";
   const operatingSummary = getOperatingDashboardSummary();
   const visibleProjects = useMemo(() => getVisibleProjects(selectedRole), [selectedRole]);
@@ -701,7 +713,7 @@ export default function OniaCenterPage() {
                   <Link
                     aria-current={active ? "page" : undefined}
                     className={active ? "is-active" : ""}
-                    href={`/onia-center?view=${item.id}`}
+                    href={item.href ?? `/onia-center?view=${item.id}`}
                     key={item.id}
                   >
                     <Icon size={15} />
@@ -1669,7 +1681,7 @@ export default function OniaCenterPage() {
             <SectionHeader
               eyebrow="Nuvia"
               title="Lotes con costo completo"
-              description="Primero se recupera capital y costos. Despues 20% Fondo ONIA, 10% Reserva Nuvia y solo luego variables."
+              description="Primero se recupera capital y costos. Despues 20% Fondo ONIA, caja chica, 20% Reserva Nuvia bootstrap y solo luego utilidad por capital real."
               icon={Boxes}
             />
             <div className="onia-nuvia-ledger">
@@ -1679,10 +1691,11 @@ export default function OniaCenterPage() {
               <div><span>Ganancia bruta real</span><strong>{formatBs(nuvia.realGrossProfitBs)}</strong></div>
               <div><span>Margen bruto</span><strong>{formatPercent(nuvia.grossMarginPercent)}</strong></div>
               <div><span>Fondo ONIA 20%</span><strong>-{formatBs(nuvia.oniaFundBs)}</strong></div>
-              <div><span>Reserva Nuvia 10%</span><strong>-{formatBs(nuvia.nuviaReserveBs)}</strong></div>
-              <div><span>Utilidad antes variable</span><strong>{formatBs(nuvia.distributableBeforeVariableBs)}</strong></div>
-              <div><span>Arthur cierre 12%</span><strong>-{formatBs(nuvia.arthurVariableBs)}</strong></div>
-              <div><span>Ganancia Sergio/ONIA</span><strong>{formatBs(nuvia.investorUtilityBs)}</strong></div>
+              <div><span>Caja chica Nuvia</span><strong>-{formatBs(nuvia.nuviaPettyCashBs)}</strong></div>
+              <div><span>Reserva Nuvia {formatPercent(nuvia.nuviaReservePercent)}</span><strong>-{formatBs(nuvia.nuviaReserveBs)}</strong></div>
+              <div><span>Pago operativo Arthur</span><strong>-{formatBs(nuvia.arthurOperatingPaymentBs)}</strong></div>
+              <div><span>Utilidad distribuible</span><strong>{formatBs(nuvia.distributableUtilityBs)}</strong></div>
+              <div><span>Ganancia por capital real</span><strong>{formatBs(nuvia.investorUtilityBs)}</strong></div>
             </div>
             <div className={`onia-blocker ${nuvia.canApproveDistribution ? "is-ok" : ""}`}>
               {nuvia.canApproveDistribution ? <BadgeCheck size={15} /> : <Ban size={15} />}
@@ -1698,17 +1711,55 @@ export default function OniaCenterPage() {
             <SectionHeader
               eyebrow="Pagos y comisiones"
               title="Motor bloquea pagos sin evidencia"
-              description="Gastos externos, reclamos y devoluciones se descuentan antes de aprobar."
+              description="La vendedora cobra solo sobre el primer cobro neto real y comprobado. Sergio aprueba el pago final."
               icon={HandCoins}
             />
+            <div className="onia-commission-policy">
+              <article>
+                <span>Regla base vendedora</span>
+                <strong>Primer cobro neto</strong>
+                <p>No hay comision recurrente por mensualidades futuras, renovaciones o mantenimiento posterior salvo acuerdo escrito.</p>
+              </article>
+              <article>
+                <span>Bloqueos</span>
+                <strong>Datos + comprobante</strong>
+                <p>Sin lead completo, servicio vendido, monto neto, comprobante y aprobacion de Sergio, queda pendiente.</p>
+              </article>
+              <article>
+                <span>Visibilidad actual</span>
+                <strong>{selectedRole === "seller" ? "Solo sus reglas y pagos" : "Vista de direccion"}</strong>
+                <p>{selectedRole === "seller" ? "No ve caja privada, capital, deuda ni comisiones de otros." : "Sergio/area pueden auditar reglas y ejemplos."}</p>
+              </article>
+            </div>
+            <div className="onia-commission-table" aria-label="Reglas de comision vendedora">
+              <div className="onia-commission-table__head">
+                <span>Servicio</span>
+                <span>Precio</span>
+                <span>Comision</span>
+                <span>Cuando ofrecerlo</span>
+              </div>
+              {visibleVendorCommissionRules.map((rule) => (
+                <article key={rule.id}>
+                  <div>
+                    <strong>{rule.serviceName}</strong>
+                    <small>{rule.firstPaymentOnly ? "Solo primer cobro" : "Segun acuerdo"}</small>
+                  </div>
+                  <span>{rule.clientPriceLabel}</span>
+                  <span>{rule.commissionLabel}</span>
+                  <p>{rule.offerWhen}</p>
+                </article>
+              ))}
+            </div>
             <div className="onia-payment-list">
               {payments.map(({ input, result }, index) => (
                 <article className={`is-${result.status}`} key={`${input.role}-${index}`}>
                   <div>
-                    <span>{input.role === "seller" ? "Vendedor normal" : "Arthur"}</span>
+                    <span>{input.role === "seller" ? result.sellerRule?.serviceName ?? "Vendedor normal" : "Arthur"}</span>
                     <strong>{formatBs(result.payableBeforeApprovalBs)}</strong>
                     <small>
-                      Setup {formatPercent(result.setupRate)} / primer mes {formatPercent(result.firstMonthRate)}
+                      {input.role === "seller"
+                        ? `Primer cobro ${formatBs(result.firstPaymentNetCollectedBs)} x ${formatPercent(result.setupRate)}`
+                        : `Setup ${formatPercent(result.setupRate)} / primer mes ${formatPercent(result.firstMonthRate)}`}
                     </small>
                   </div>
                   <TonePill tone={result.approved ? "green" : result.status === "pendiente_sergio" ? "yellow" : "red"}>

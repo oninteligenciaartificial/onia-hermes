@@ -89,6 +89,32 @@ export type OperationalService = {
   deliveryChecklist?: string[];
 };
 
+export type VendorCommissionRule = {
+  id: string;
+  category:
+    | "dentagest"
+    | "gestios"
+    | "web"
+    | "audit"
+    | "automation"
+    | "bot"
+    | "whatsapp"
+    | "custom"
+    | "support";
+  serviceName: string;
+  clientPriceLabel: string;
+  commissionType: "percent" | "fixed" | "approval" | "custom";
+  commissionRatePercent?: number;
+  fixedCommissionBs?: number;
+  commissionLabel: string;
+  offerWhen: string;
+  firstPaymentOnly: boolean;
+  requiresSergioApproval?: boolean;
+  conditions: string[];
+  visibility: RoleId[];
+  source: string;
+};
+
 export type ServiceValidation = {
   serviceId: string;
   canSell: boolean;
@@ -186,7 +212,10 @@ export type NuviaLotInput = {
   premiumToolsBs: number;
   externalProductionBs: number;
   refundsAndFeesBs: number;
-  arthurVariableRate: number;
+  nuviaPettyCashBs?: number;
+  nuviaReservePercent?: number;
+  arthurOperatingPaymentBs?: number;
+  arthurVariableRate?: number;
   evidenceComplete: boolean;
   sergioApproved: boolean;
 };
@@ -201,6 +230,9 @@ export type NuviaLotRecord = NuviaLotInput & {
 
 export type PaymentInput = {
   role: "seller" | "arthur";
+  sellerCommissionRuleId?: string;
+  firstPaymentNetCollectedBs?: number;
+  sellerCommissionRate?: number;
   setupNetCollectedBs: number;
   firstMonthNetCollectedBs: number;
   evidenceComplete: boolean;
@@ -563,6 +595,7 @@ export type IntegrationCategory =
 export type IntegrationStatus =
   | "connected"
   | "ready"
+  | "prepared_pending_connection"
   | "config_pending"
   | "planned"
   | "blocked"

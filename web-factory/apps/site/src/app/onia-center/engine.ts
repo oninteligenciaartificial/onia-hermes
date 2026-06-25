@@ -23,6 +23,7 @@ import {
   privateCapital,
   rolePermissions,
   sustainabilityTargets,
+  vendorCommissionRules,
 } from "./source";
 
 export const serviceRequiredFields = [
@@ -33,7 +34,7 @@ export const serviceRequiredFields = [
   { key: "evidenceRequired", label: "evidencia requerida" },
   { key: "deliveryOwner", label: "responsable de entrega" },
   { key: "premiumToolLimit", label: "limite herramientas premium" },
-  { key: "commissionOrVariable", label: "comision o variable" },
+  { key: "commissionOrVariable", label: "comision o pago aprobado" },
   { key: "minimumMargin", label: "margen minimo" },
   { key: "closeChecklist", label: "checklist de cierre" },
   { key: "deliveryChecklist", label: "checklist de entrega" },
@@ -147,6 +148,10 @@ export function calculateGrowthTarget() {
 
 export function getVisibleCenters(role: RoleId): AccountingCenter[] {
   return accountingCenters.filter((center) => center.visibility.includes(role));
+}
+
+export function getVisibleVendorCommissionRules(role: RoleId) {
+  return vendorCommissionRules.filter((rule) => rule.visibility.includes(role));
 }
 
 export function canSeePrivateCapital(role: RoleId) {
@@ -273,11 +278,25 @@ export function validatePremiumUsage(input: PremiumToolUsage): BusinessRuleResul
 }
 
 export function calculatePayment(input: PaymentInput) {
-  const setupRate = input.role === "seller" ? 10 : input.arthurSetupRate ?? 0;
-  const firstMonthRate = input.role === "seller" ? 10 : input.arthurFirstMonthRate ?? 0;
+  const sellerRule = input.sellerCommissionRuleId
+    ? vendorCommissionRules.find((rule) => rule.id === input.sellerCommissionRuleId)
+    : undefined;
+  const sellerRate = input.sellerCommissionRate ?? sellerRule?.commissionRatePercent ?? 10;
+  const setupRate = input.role === "seller" ? sellerRate : input.arthurSetupRate ?? 0;
+  const firstMonthRate = input.role === "seller" ? sellerRate : input.arthurFirstMonthRate ?? 0;
+  const firstPaymentNetCollectedBs =
+    input.firstPaymentNetCollectedBs ?? input.setupNetCollectedBs + input.firstMonthNetCollectedBs;
+  const sellerCommissionEnabled =
+    input.role === "seller" && (!sellerRule || sellerRule.commissionType === "percent" || sellerRule.commissionType === "fixed");
   const grossEarnedBs =
-    input.setupNetCollectedBs * (setupRate / 100) + input.firstMonthNetCollectedBs * (firstMonthRate / 100);
-  const averageRate = (setupRate + firstMonthRate) / 2 / 100;
+    input.role === "seller"
+      ? sellerRule?.commissionType === "fixed" && sellerRule.fixedCommissionBs !== undefined
+        ? sellerRule.fixedCommissionBs
+        : sellerCommissionEnabled
+          ? firstPaymentNetCollectedBs * (sellerRate / 100)
+          : 0
+      : input.setupNetCollectedBs * (setupRate / 100) + input.firstMonthNetCollectedBs * (firstMonthRate / 100);
+  const averageRate = input.role === "seller" ? sellerRate / 100 : (setupRate + firstMonthRate) / 2 / 100;
   const claimDeductionBs = input.claimsOrRefundsBs * averageRate;
   const payableBeforeApprovalBs = Math.max(0, grossEarnedBs - claimDeductionBs);
   const approved = input.evidenceComplete && input.sergioApproved && payableBeforeApprovalBs > 0;
@@ -293,6 +312,8 @@ export function calculatePayment(input: PaymentInput) {
 
   return {
     role: input.role,
+    sellerRule,
+    firstPaymentNetCollectedBs,
     setupRate,
     firstMonthRate,
     grossEarnedBs,
@@ -306,6 +327,7 @@ export function calculatePayment(input: PaymentInput) {
 }
 
 export function calculateNuviaLot(input = nuviaExample) {
+  const arthurOperatingPaymentBs = input.arthurOperatingPaymentBs ?? 0;
   const directCostsBs =
     input.productCapitalRecoveryBs +
     input.packagingLogisticsBs +
@@ -313,19 +335,21 @@ export function calculateNuviaLot(input = nuviaExample) {
     input.adsBs +
     input.premiumToolsBs +
     input.externalProductionBs +
-    input.refundsAndFeesBs;
+    input.refundsAndFeesBs +
+    arthurOperatingPaymentBs;
   const realGrossProfitBs = input.salesCollectedBs - directCostsBs;
   const grossMarginPercent = input.salesCollectedBs > 0 ? (realGrossProfitBs / input.salesCollectedBs) * 100 : 0;
   const marginOk = grossMarginPercent >= 40;
   const costsRecovered = realGrossProfitBs > 0;
   const oniaFundBs = costsRecovered ? realGrossProfitBs * 0.2 : 0;
-  const nuviaReserveBs = costsRecovered ? realGrossProfitBs * 0.1 : 0;
-  const distributableBeforeVariableBs = costsRecovered ? realGrossProfitBs - oniaFundBs - nuviaReserveBs : 0;
-  const canApproveVariable = marginOk && input.evidenceComplete && input.sergioApproved;
-  const arthurVariableBs = canApproveVariable
-    ? distributableBeforeVariableBs * (input.arthurVariableRate / 100)
+  const nuviaReservePercent = input.nuviaReservePercent ?? 20;
+  const nuviaReserveBs = costsRecovered ? realGrossProfitBs * (nuviaReservePercent / 100) : 0;
+  const nuviaPettyCashBs = costsRecovered ? input.nuviaPettyCashBs ?? 0 : 0;
+  const distributableUtilityBs = costsRecovered
+    ? Math.max(0, realGrossProfitBs - oniaFundBs - nuviaPettyCashBs - nuviaReserveBs)
     : 0;
-  const investorUtilityBs = distributableBeforeVariableBs - arthurVariableBs;
+  const arthurVariableBs = 0;
+  const investorUtilityBs = distributableUtilityBs;
 
   return {
     directCostsBs,
@@ -334,8 +358,12 @@ export function calculateNuviaLot(input = nuviaExample) {
     marginOk,
     costsRecovered,
     oniaFundBs,
+    nuviaPettyCashBs,
+    nuviaReservePercent,
     nuviaReserveBs,
-    distributableBeforeVariableBs,
+    distributableBeforeVariableBs: distributableUtilityBs,
+    distributableUtilityBs,
+    arthurOperatingPaymentBs,
     arthurVariableBs,
     investorUtilityBs,
     canApproveDistribution: costsRecovered && marginOk && input.evidenceComplete && input.sergioApproved,
