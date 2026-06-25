@@ -118,6 +118,76 @@ Decision operativa: no instalar Dify ni Crawl4AI en este VPS todavia. El VPS ya
 esta en uso real con Supabase, n8n, Cal, Chatwoot, SearXNG y la nueva capa IA.
 Dify y Crawl4AI deben ir en VPS separado o despues de optimizar recursos.
 
+Snapshot despues de upgrade Hostinger KVM 4, validado por SSH el 2026-06-24:
+
+```text
+CPU: 4 vCPU
+RAM total: 15 GiB
+RAM usada: 3.6 GiB
+RAM disponible: 12 GiB
+Swap total: 4.0 GiB
+Swap usada: 0 B
+Disco /: 193 GiB total, 69 GiB usado, 125 GiB libre, 36% usado
+Supabase: healthy en docker compose
+EasyPanel: 1/1
+Traefik: 1/1, puertos 80/443
+n8n-sergio: 1/1, HTTPS 200
+Chatwoot: 1/1, HTTPS 200
+```
+
+## Recuperacion despues de upgrade/reinicio de VPS
+
+Incidente observado el 2026-06-24 despues de pasar de KVM 2 a KVM 4:
+
+- `nginx` default estaba ocupando el puerto 80 y bloqueaba
+  `easypanel-traefik`.
+- `onia-chatbot_chatwoot` reiniciaba porque `POSTGRES_HOST` y `REDIS_URL`
+  resolvian por la red overlay general `easypanel`, cuyas VIP estaban rotas.
+- Traefik devolvia `502` para n8n/Chatwoot porque no podia llegar a las VIP de
+  Swarm hasta reiniciar Docker.
+
+Procedimiento aplicado y validado:
+
+```bash
+# 1. Liberar puerto 80 para Traefik. El nginx era la pagina default.
+systemctl stop nginx
+systemctl disable nginx
+
+# 2. Hacer que Chatwoot use aliases de su red propia.
+docker service update \
+  --env-add POSTGRES_HOST=chatwoot-db \
+  --env-add REDIS_URL="<REDIS_URL_EXISTENTE_CON_HOST_chatwoot-redis>" \
+  --force onia-chatbot_chatwoot
+
+docker service update \
+  --env-add POSTGRES_HOST=chatwoot-db \
+  --env-add REDIS_URL="<REDIS_URL_EXISTENTE_CON_HOST_chatwoot-redis>" \
+  --force onia-chatbot_chatwoot-sidekiq
+
+# 3. Reconstruir overlay/IPVS si Traefik sigue con Host is unreachable.
+systemctl restart docker
+```
+
+Validacion minima despues de este procedimiento:
+
+```bash
+docker service ls
+cd /opt/onia-supabase/supabase/docker && docker compose ps
+curl -k -I https://n8n-sergio-n8n.hqdqgh.easypanel.host
+curl -k -I https://onia-chatbot-chatwoot.hqdqgh.easypanel.host
+curl -sS http://127.0.0.1:54321/auth/v1/health || true
+docker stats --no-stream
+```
+
+Resultado esperado:
+
+- `easypanel-traefik`, `n8n-sergio_n8n`, `onia-chatbot_chatwoot`,
+  `onia-chatbot_chatwoot-db`, `onia-chatbot_chatwoot-redis` y
+  `onia-chatbot_chatwoot-sidekiq` en `1/1`.
+- Traefik debe poder llegar desde dentro del contenedor a
+  `http://onia-chatbot_chatwoot:3000/`, `http://n8n-sergio_n8n:5678/` y
+  `http://easypanel:3000/`.
+
 ## Reglas de seguridad
 
 - No publicar ningun panel directo a internet al inicio.
