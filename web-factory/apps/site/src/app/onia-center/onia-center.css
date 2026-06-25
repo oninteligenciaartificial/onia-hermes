@@ -3172,10 +3172,250 @@
   padding-top: 14px;
 }
 
+.onia-seller-services,
+.onia-assistant-workspace,
+.onia-seller-service-section {
+  display: grid;
+  gap: 16px;
+}
+
+.onia-service-update-panel {
+  border-color: #b9d7c9;
+  box-shadow: 0 18px 50px rgb(15 49 35 / 0.08);
+}
+
+.onia-service-update-form,
+.onia-service-update-list,
+.onia-seller-service-grid,
+.onia-seller-rule-grid,
+.onia-assistant-panel,
+.onia-assistant-answer,
+.onia-assistant-scope {
+  display: grid;
+  gap: 12px;
+}
+
+.onia-service-update-list div,
+.onia-seller-service-card,
+.onia-seller-rule-card,
+.onia-service-rule-grid div {
+  background: #ffffff;
+  border: 1px solid var(--onia-line-soft);
+  border-radius: var(--onia-radius);
+}
+
+.onia-service-update-list div {
+  display: grid;
+  gap: 6px;
+  padding: 12px;
+}
+
+.onia-service-update-list span,
+.onia-seller-service-card span,
+.onia-seller-rule-card span,
+.onia-service-rule-grid span {
+  color: var(--onia-faint);
+  font-size: 11px;
+  font-weight: 850;
+  text-transform: uppercase;
+}
+
+.onia-service-update-list strong,
+.onia-seller-service-card strong,
+.onia-seller-rule-card strong,
+.onia-service-rule-grid strong {
+  color: var(--onia-ink);
+  font-size: 15px;
+  line-height: 1.25;
+}
+
+.onia-service-update-list small,
+.onia-seller-rule-card small,
+.onia-service-rule-grid small,
+.onia-muted-note {
+  color: var(--onia-muted);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.onia-service-priority-card {
+  background: #f5fbf7;
+}
+
+.onia-service-rule-grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.onia-service-rule-grid div {
+  display: grid;
+  gap: 7px;
+  padding: 13px;
+}
+
+.onia-section-strip {
+  align-items: end;
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+}
+
+.onia-section-strip strong {
+  color: var(--onia-ink);
+  font-size: 17px;
+}
+
+.onia-section-strip span {
+  color: var(--onia-muted);
+  font-size: 12px;
+  font-weight: 750;
+  text-align: right;
+}
+
+.onia-seller-service-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.onia-seller-service-card {
+  display: grid;
+  gap: 14px;
+  padding: 16px;
+}
+
+.onia-seller-service-card p,
+.onia-seller-rule-card p {
+  color: var(--onia-muted);
+  font-size: 13px;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.onia-seller-service-card dl,
+.onia-seller-rule-card dl {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+}
+
+.onia-seller-service-card dl div,
+.onia-seller-rule-card dl div {
+  border-top: 1px solid var(--onia-line-soft);
+  display: grid;
+  gap: 3px;
+  padding-top: 8px;
+}
+
+.onia-seller-service-card dt,
+.onia-seller-rule-card dt {
+  color: var(--onia-faint);
+  font-size: 11px;
+  font-weight: 850;
+}
+
+.onia-seller-service-card dd,
+.onia-seller-rule-card dd {
+  color: var(--onia-ink);
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.onia-service-dos-donts {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.onia-service-dos-donts div {
+  background: #f8faf7;
+  border-radius: calc(var(--onia-radius) - 2px);
+  display: grid;
+  gap: 5px;
+  padding: 10px;
+}
+
+.onia-service-dos-donts small {
+  color: var(--onia-muted);
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.onia-seller-rule-group {
+  display: grid;
+  gap: 10px;
+}
+
+.onia-seller-rule-group h3 {
+  color: var(--onia-ink);
+  font-size: 13px;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.onia-seller-rule-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.onia-seller-rule-card {
+  display: grid;
+  gap: 10px;
+  padding: 13px;
+}
+
+.onia-assistant-workspace {
+  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+}
+
+.onia-assistant-scope {
+  grid-column: 1 / -1;
+}
+
+.onia-assistant-input {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+.onia-assistant-suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.onia-assistant-suggestions button {
+  background: #f4f8f4;
+  border: 1px solid var(--onia-line-soft);
+  border-radius: 999px;
+  color: var(--onia-green);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 850;
+  padding: 8px 10px;
+}
+
+.onia-assistant-answer pre {
+  background: #101a16;
+  border-radius: var(--onia-radius);
+  color: #eff8f1;
+  font-family: var(--font-mono), "SFMono-Regular", Consolas, monospace;
+  font-size: 12px;
+  line-height: 1.6;
+  margin: 0;
+  min-height: 240px;
+  overflow: auto;
+  padding: 16px;
+  white-space: pre-wrap;
+}
+
 @media (max-width: 1240px) {
   .onia-webfactory-command-grid,
   .onia-webfactory-grid,
-  .onia-webfactory-two-column {
+  .onia-webfactory-two-column,
+  .onia-seller-service-grid,
+  .onia-seller-rule-grid,
+  .onia-assistant-workspace {
     grid-template-columns: 1fr;
   }
 
@@ -3188,14 +3428,22 @@
   .onia-webfactory-command-grid,
   .onia-webfactory-recipe__stats,
   .onia-webfactory-artifacts,
-  .onia-webfactory-intel-stats {
+  .onia-webfactory-intel-stats,
+  .onia-service-rule-grid,
+  .onia-service-dos-donts {
     grid-template-columns: 1fr;
   }
 
   .onia-webfactory-recipe__head,
   .onia-webfactory-references article > div,
   .onia-webfactory-code article > div,
-  .onia-webfactory-source-list article > div {
+  .onia-webfactory-source-list article > div,
+  .onia-section-strip,
+  .onia-assistant-input {
     display: grid;
+  }
+
+  .onia-section-strip span {
+    text-align: left;
   }
 }

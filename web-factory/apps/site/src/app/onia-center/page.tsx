@@ -10,6 +10,7 @@ import {
   Banknote,
   Ban,
   BarChart3,
+  Bot,
   Boxes,
   BriefcaseBusiness,
   Building2,
@@ -154,6 +155,7 @@ const navItems: NavItem[] = [
   { id: "dashboard", label: "Hoy", detail: "Tareas y agenda", group: "Trabajo", icon: CalendarDays },
   { id: "uso-diario", label: "Captura", detail: "Notas y evidencia", group: "Trabajo", icon: FileCheck2 },
   { id: "calendario-sergio", label: "Calendario", detail: "Sergio", group: "Trabajo", icon: CalendarDays },
+  { id: "asistente", label: "Asistente", detail: "ONIA Bot", group: "Trabajo", icon: Bot },
   { id: "ideas", label: "Ideas", detail: "Reels e IA", group: "Trabajo", icon: Lightbulb },
   { id: "servicios", label: "Servicios", detail: "Catalogo", group: "Ventas", icon: Layers3 },
   { id: "pagos", label: "Comisiones", detail: "Propias", group: "Ventas", icon: HandCoins },
@@ -198,6 +200,11 @@ const moduleCopy: Record<string, { title: string; description: string; content: 
     title: "Calendario estricto Sergio",
     description: "Agenda personal protegida, ventanas de reunion y reglas para evitar saturacion.",
     content: ["Horario", "Reuniones", "Gym y descanso", "Telegram"],
+  },
+  asistente: {
+    title: "ONIA Bot interno",
+    description: "Asistente filtrado por rol para consultar servicios, precios, leads visibles, tareas y actualizaciones comerciales.",
+    content: ["Servicios", "Clientes visibles", "Tareas", "Actualizaciones"],
   },
   agentes: {
     title: "Agentes operativos",
@@ -807,7 +814,7 @@ export default function OniaCenterPage() {
           </article>
         </section>
 
-        {["dashboard", "uso-diario", "calendario-sergio", "ideas", "integraciones"].includes(activeView) ? (
+        {["dashboard", "uso-diario", "calendario-sergio", "asistente", "ideas", "integraciones", "servicios"].includes(activeView) ? (
           <OperatingWorkspace
             selectedRole={selectedRole}
             workspaceView={
@@ -815,8 +822,12 @@ export default function OniaCenterPage() {
                 ? "daily"
                 : activeView === "calendario-sergio"
                   ? "calendar"
+                  : activeView === "asistente"
+                    ? "assistant"
                   : activeView === "ideas"
                     ? "ideas"
+                    : activeView === "servicios"
+                      ? "seller-services"
                     : activeView === "integraciones"
                       ? "connections"
                       : "capture"

@@ -386,9 +386,194 @@ function canViewIdea(idea: RuntimeIdea, role: RoleId) {
   return false;
 }
 
+function canViewNote(note: RuntimeNote, role: RoleId) {
+  if (role === "sergio") {
+    return true;
+  }
+
+  if (note.visibility === "team_safe") {
+    return true;
+  }
+
+  if (note.visibility === "seller_safe") {
+    return role === "area" || role === "arthur" || role === "seller";
+  }
+
+  if (note.visibility === "assigned_only") {
+    return note.actorRole === role;
+  }
+
+  return note.actorRole === role;
+}
+
 function timeRank(value: string) {
   const parsed = Date.parse(value);
   return Number.isFinite(parsed) ? parsed : 0;
+}
+
+function normalizeText(value: string) {
+  return value
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function servicePriceLabel(serviceId: string) {
+  const service = operationalServices.find((item) => item.id === serviceId);
+  if (service) {
+    const setup = typeof service.setupPriceBs === "number" ? `setup ${formatBs(service.setupPriceBs, { compact: true })}` : "setup pendiente";
+    const monthly =
+      service.isRecurring && typeof service.monthlyPriceBs === "number"
+        ? `mensual ${formatBs(service.monthlyPriceBs, { compact: true })}`
+        : "sin mensualidad fija";
+    return `${setup} / ${monthly}`;
+  }
+
+  return vendorCommissionRules.find((rule) => rule.id === serviceId)?.clientPriceLabel ?? "Precio no encontrado";
+}
+
+function serviceNameById(serviceId: string) {
+  return (
+    operationalServices.find((item) => item.id === serviceId)?.name ??
+    vendorCommissionRules.find((rule) => rule.id === serviceId)?.serviceName ??
+    serviceId
+  );
+}
+
+function findServiceForQuestion(question: string) {
+  const normalizedQuestion = normalizeText(question);
+  const tokens = normalizedQuestion.split(" ").filter((token) => token.length > 3);
+
+  const candidates = [
+    ...operationalServices.map((service) => ({
+      id: service.id,
+      name: service.name,
+      text: [service.name, service.plan, service.salesScript, service.quoteTemplate, service.risk].filter(Boolean).join(" "),
+      kind: "operational" as const,
+    })),
+    ...vendorCommissionRules.map((rule) => ({
+      id: rule.id,
+      name: rule.serviceName,
+      text: [rule.serviceName, rule.category, rule.clientPriceLabel, rule.offerWhen, rule.commissionLabel].join(" "),
+      kind: "seller" as const,
+    })),
+  ];
+
+  const scored = candidates
+    .map((candidate) => {
+      const searchable = normalizeText(candidate.text);
+      const score = tokens.reduce((total, token) => total + (searchable.includes(token) ? 1 : 0), 0);
+      return { ...candidate, score };
+    })
+    .filter((candidate) => candidate.score > 0)
+    .sort((a, b) => b.score - a.score || a.name.localeCompare(b.name));
+
+  return scored[0] ?? null;
+}
+
+function buildAssistantAnswer({
+  question,
+  role,
+  leads,
+  tasks,
+  notes,
+}: {
+  question: string;
+  role: RoleId;
+  leads: RuntimeLead[];
+  tasks: RuntimeTask[];
+  notes: RuntimeNote[];
+}) {
+  const normalizedQuestion = normalizeText(question);
+  if (!normalizedQuestion) {
+    return "Escribe una pregunta concreta: precio de un servicio, estado de un cliente, proximas tareas o actualizaciones comerciales.";
+  }
+
+  if (role !== "sergio" && /\b(capital|deuda|caja|runway|utilidad|fondo privado|estrategia interna)\b/.test(normalizedQuestion)) {
+    return "No puedo responder sobre capital, deuda, caja real, utilidad personal o estrategia privada desde esta vista. Pide a Sergio una respuesta filtrada si hace falta.";
+  }
+
+  const serviceMatch = findServiceForQuestion(question);
+  const asksService =
+    /\b(servicio|precio|cuanto|comision|vendo|vender|incluye|growth|web|dentagest|gesti|bot|whatsapp|n8n|auditoria)\b/.test(
+      normalizedQuestion,
+    );
+
+  if (asksService && serviceMatch) {
+    const operational = operationalServices.find((service) => service.id === serviceMatch.id);
+    const sellerRule = vendorCommissionRules.find((rule) => rule.id === serviceMatch.id);
+    const updates = notes
+      .filter((note) => note.kind === "actualizacion_servicio" && note.linkedTo === serviceMatch.id)
+      .slice(0, 3);
+
+    if (operational) {
+      return [
+        `${operational.name}: ${operational.salesScript ?? "Servicio operativo ONIA."}`,
+        `Precio: ${servicePriceLabel(operational.id)}.`,
+        `Incluye: ${(operational.includes ?? operational.deliverables ?? []).slice(0, 4).join(", ") || "revisar checklist"}.`,
+        `No prometas: ${(operational.notIncluded ?? []).slice(0, 4).join(", ") || operational.risk || "alcance fuera de catalogo"}.`,
+        `Comision: ${operational.sellerCommission ?? "requiere aprobacion"}.`,
+        updates.length ? `Ultimas actualizaciones: ${updates.map((item) => item.title).join(" / ")}.` : "No hay actualizaciones nuevas para este servicio.",
+      ].join("\n");
+    }
+
+    if (sellerRule) {
+      return [
+        `${sellerRule.serviceName}: ${sellerRule.offerWhen}`,
+        `Precio visible: ${sellerRule.clientPriceLabel}.`,
+        `Comision propia: ${sellerRule.commissionLabel} solo primer pago${sellerRule.requiresSergioApproval ? " y requiere aprobacion Sergio" : ""}.`,
+        `Condiciones: ${sellerRule.conditions.slice(0, 3).join(" / ")}.`,
+        updates.length ? `Ultimas actualizaciones: ${updates.map((item) => item.title).join(" / ")}.` : "No hay actualizaciones nuevas para este servicio.",
+      ].join("\n");
+    }
+  }
+
+  const asksClient = /\b(cliente|lead|prospecto|empresa|contacto|seguimiento|paso|estado)\b/.test(normalizedQuestion);
+  if (asksClient) {
+    const tokens = normalizedQuestion.split(" ").filter((token) => token.length > 3);
+    const matchedLeads = leads.filter((lead) => {
+      const searchable = normalizeText([lead.company, lead.contact, lead.source, lead.nextAction, lead.serviceId].join(" "));
+      return tokens.length === 0 || tokens.some((token) => searchable.includes(token));
+    });
+    const leadList = (matchedLeads.length ? matchedLeads : leads).slice(0, 5);
+
+    if (!leadList.length) {
+      return "No encontre leads visibles para tu rol. Registra el cliente en Captura o pide a Sergio revisar permisos.";
+    }
+
+    return [
+      "Clientes visibles:",
+      ...leadList.map((lead) => {
+        const relatedNotes = notes
+          .filter((note) => normalizeText([note.linkedTo, note.title, note.detail].join(" ")).includes(normalizeText(lead.company)))
+          .slice(0, 2);
+        return `- ${lead.company}: ${lead.status}, responsable ${roleLabel(lead.owner)}, servicio ${serviceNameById(lead.serviceId)}, proxima accion: ${lead.nextAction || "sin accion"}. ${
+          relatedNotes.length ? `Notas: ${relatedNotes.map((note) => note.title).join(" / ")}` : "Sin notas visibles."
+        }`;
+      }),
+    ].join("\n");
+  }
+
+  if (/\b(tarea|pendiente|hacer|hoy|mes)\b/.test(normalizedQuestion)) {
+    const pending = tasks.filter((task) => !["done", "blocked"].includes(task.status)).slice(0, 6);
+    if (!pending.length) {
+      return "No hay tareas pendientes visibles para tu rol.";
+    }
+
+    return ["Tareas visibles pendientes:", ...pending.map((task) => `- ${task.title} (${task.priority}, ${task.status}) en ${projectLabel(task.projectId)}.`)].join("\n");
+  }
+
+  const updates = notes.filter((note) => note.kind === "actualizacion_servicio").slice(0, 5);
+  if (/\b(actualizacion|actualizaciones|cambio|precio nuevo|precios)\b/.test(normalizedQuestion)) {
+    return updates.length
+      ? ["Actualizaciones comerciales visibles:", ...updates.map((item) => `- ${serviceNameById(item.linkedTo)}: ${item.title}. ${item.detail}`)].join("\n")
+      : "No hay actualizaciones comerciales visibles todavia.";
+  }
+
+  return "Puedo responder sobre servicios, precios visibles, comisiones propias, leads visibles, tareas y actualizaciones comerciales. No invento informacion que no este en ONIA Center.";
 }
 
 function buildIdeaPrompt(idea: RuntimeIdea) {
@@ -423,6 +608,11 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
   const [taskForm, setTaskForm] = useState<TaskForm>(emptyTaskForm);
   const [noteForm, setNoteForm] = useState<NoteForm>(emptyNoteForm);
   const [ideaForm, setIdeaForm] = useState<IdeaForm>(emptyIdeaForm);
+  const [serviceUpdateForm, setServiceUpdateForm] = useState<ServiceUpdateForm>(emptyServiceUpdateForm);
+  const [assistantQuestion, setAssistantQuestion] = useState("");
+  const [assistantAnswer, setAssistantAnswer] = useState(
+    "Pregunta por un servicio, un precio, una comision propia, un cliente visible o una tarea pendiente.",
+  );
   const [notice, setNotice] = useState("Modo local listo. Conecta Supabase self-hosted para multiusuario.");
   const [hydrated, setHydrated] = useState(false);
   const [storageMode, setStorageMode] = useState<StorageMode>("checking");
@@ -519,13 +709,30 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
     [reviews, selectedRole],
   );
   const visibleNotes = useMemo(
-    () => (selectedRole === "sergio" ? notes : notes.filter((note) => note.actorRole === selectedRole)),
+    () => [...starterServiceUpdates, ...notes].filter((note) => canViewNote(note, selectedRole)),
     [notes, selectedRole],
   );
   const visibleIdeas = useMemo(
     () => ideas.filter((idea) => canViewIdea(idea, selectedRole)),
     [ideas, selectedRole],
   );
+  const visibleServiceUpdates = useMemo(
+    () =>
+      visibleNotes
+        .filter((note) => note.kind === "actualizacion_servicio")
+        .sort((a, b) => timeRank(b.createdAt) - timeRank(a.createdAt)),
+    [visibleNotes],
+  );
+  const visibleSellerRules = useMemo(
+    () => vendorCommissionRules.filter((rule) => rule.visibility.includes(selectedRole)),
+    [selectedRole],
+  );
+  const sellerRulesByCategory = useMemo(() => {
+    return visibleSellerRules.reduce<Record<string, typeof visibleSellerRules>>((groups, rule) => {
+      const current = groups[rule.category] ?? [];
+      return { ...groups, [rule.category]: [...current, rule] };
+    }, {});
+  }, [visibleSellerRules]);
 
   const summary = useMemo(() => {
     const hotLeads = visibleLeads.filter((lead) => ["nuevo", "contactado", "reunion", "propuesta"].includes(lead.status)).length;
@@ -714,6 +921,51 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
     setNotice("Registro guardado con actor visible para Sergio.");
   }
 
+  async function addServiceUpdate() {
+    if (!canApprove) {
+      setNotice("Solo Sergio puede publicar actualizaciones comerciales para vendedores.");
+      return;
+    }
+
+    if (!serviceUpdateForm.title.trim() || !serviceUpdateForm.detail.trim()) {
+      setNotice("Falta titulo y detalle para publicar la actualizacion.");
+      return;
+    }
+
+    const note: RuntimeNote = {
+      id: makeId("service-update"),
+      kind: "actualizacion_servicio",
+      title: serviceUpdateForm.title,
+      detail: serviceUpdateForm.detail,
+      linkedTo: serviceUpdateForm.serviceId,
+      actorRole: "sergio",
+      visibility: serviceUpdateForm.visibility,
+      createdAt: nowIso(),
+    };
+
+    if (storageMode === "supabase") {
+      setIsSyncing(true);
+      try {
+        const saved = await createRuntimeEntity<RuntimeNote>("note", note);
+        if (saved) {
+          setNotes((current) => [saved, ...current]);
+          setServiceUpdateForm(emptyServiceUpdateForm);
+          setNotice("Actualizacion comercial publicada en Supabase con visibilidad filtrada.");
+          return;
+        }
+      } catch (error) {
+        const message = error instanceof Error ? error.message : "Error desconocido.";
+        setNotice(`Supabase fallo al publicar; se guardo localmente. ${message}`);
+      } finally {
+        setIsSyncing(false);
+      }
+    }
+
+    setNotes((current) => [note, ...current]);
+    setServiceUpdateForm(emptyServiceUpdateForm);
+    setNotice("Actualizacion comercial publicada en modo local para las vistas permitidas.");
+  }
+
   async function addIdea() {
     if (!ideaForm.title.trim() && !ideaForm.url.trim()) {
       setNotice("Falta titulo o link para guardar la idea.");
@@ -842,6 +1094,18 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
     setNotice("Snapshot filtrado por rol copiado. Sergio exporta todo; otros roles solo su vista permitida.");
   }
 
+  function askAssistant(question = assistantQuestion) {
+    const answer = buildAssistantAnswer({
+      question,
+      role: selectedRole,
+      leads: visibleLeads,
+      tasks: visibleTasks,
+      notes: visibleNotes,
+    });
+    setAssistantQuestion(question);
+    setAssistantAnswer(answer);
+  }
+
   function resetRuntime() {
     if (storageMode === "supabase") {
       setNotice("Con Supabase activo no se borran datos desde este boton. Usa estados o acciones auditadas.");
@@ -917,6 +1181,261 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
           <small>No aprueban comision solos</small>
         </article>
       </div>
+
+      {workspaceView === "seller-services" ? (
+        <div className="onia-seller-services">
+          <article className="onia-live-card onia-service-update-panel">
+            <div className="onia-live-title">
+              <Bot size={16} />
+              <strong>Actualizaciones comerciales</strong>
+            </div>
+            {canApprove ? (
+              <div className="onia-service-update-form">
+                <div className="onia-form-row">
+                  <label>
+                    Servicio
+                    <select
+                      value={serviceUpdateForm.serviceId}
+                      onChange={(event) => setServiceUpdateForm({ ...serviceUpdateForm, serviceId: event.target.value })}
+                    >
+                      {operationalServices.map((service) => (
+                        <option key={service.id} value={service.id}>
+                          {service.name}
+                        </option>
+                      ))}
+                      {vendorCommissionRules.map((rule) => (
+                        <option key={rule.id} value={rule.id}>
+                          {rule.serviceName}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  <label>
+                    Visibilidad
+                    <select
+                      value={serviceUpdateForm.visibility}
+                      onChange={(event) => setServiceUpdateForm({ ...serviceUpdateForm, visibility: event.target.value as ServiceUpdateForm["visibility"] })}
+                    >
+                      <option value="seller_safe">Vendedores + Arthur</option>
+                      <option value="team_safe">Equipo seguro</option>
+                      <option value="sergio_private">Solo Sergio</option>
+                    </select>
+                  </label>
+                </div>
+                <label>
+                  Titulo de actualizacion
+                  <input
+                    value={serviceUpdateForm.title}
+                    onChange={(event) => setServiceUpdateForm({ ...serviceUpdateForm, title: event.target.value })}
+                    placeholder="Ej. Nuevo precio, alcance bloqueado, oferta prioritaria"
+                  />
+                </label>
+                <label>
+                  Resumen para vendedores
+                  <textarea
+                    value={serviceUpdateForm.detail}
+                    onChange={(event) => setServiceUpdateForm({ ...serviceUpdateForm, detail: event.target.value })}
+                    placeholder="Escribe que cambio, como explicarlo y que no deben prometer."
+                    rows={3}
+                  />
+                </label>
+                <button className="onia-primary-button" type="button" onClick={addServiceUpdate}>
+                  {isSyncing ? "Publicando..." : "Publicar actualizacion"}
+                </button>
+              </div>
+            ) : (
+              <p className="onia-muted-note">Solo Sergio publica cambios de precio, alcance o comisiones. Tu vista muestra lo aprobado para vender.</p>
+            )}
+
+            <div className="onia-service-update-list">
+              {visibleServiceUpdates.map((update) => (
+                <div key={update.id}>
+                  <span>{serviceNameById(update.linkedTo)} / {update.visibility ?? "asignado"}</span>
+                  <strong>{update.title}</strong>
+                  <small>{update.detail}</small>
+                </div>
+              ))}
+            </div>
+          </article>
+
+          <article className="onia-live-card onia-service-priority-card">
+            <div className="onia-live-title">
+              <ShieldCheck size={16} />
+              <strong>Reglas para vender sin romper alcance</strong>
+            </div>
+            <div className="onia-service-rule-grid">
+              <div>
+                <span>Primero</span>
+                <strong>ONIA Motor Local Growth</strong>
+                <small>Setup Bs. 2.900 + mensual Bs. 1.900. Es el servicio que alimenta caja recurrente.</small>
+              </div>
+              <div>
+                <span>Comision</span>
+                <strong>Primer cobro real</strong>
+                <small>No hay comision sin comprobante, lead registrado, servicio y seguimiento.</small>
+              </div>
+              <div>
+                <span>Bloqueo</span>
+                <strong>No prometer sistemas</strong>
+                <small>Login, dashboard, base de datos o portal requieren diagnostico y aprobacion Sergio.</small>
+              </div>
+            </div>
+          </article>
+
+          <div className="onia-seller-service-section">
+            <div className="onia-section-strip">
+              <strong>Servicios operativos ONIA</strong>
+              <span>Resumen, precio, incluye, limites y evidencia.</span>
+            </div>
+            <div className="onia-seller-service-grid">
+              {operationalServices.map((service) => (
+                <article className="onia-seller-service-card" key={service.id}>
+                  <div>
+                    <span>{service.plan} / prioridad {service.priority}</span>
+                    <strong>{service.name}</strong>
+                    <p>{service.salesScript ?? service.risk ?? "Servicio operativo ONIA."}</p>
+                  </div>
+                  <dl>
+                    <div>
+                      <dt>Precio</dt>
+                      <dd>{servicePriceLabel(service.id)}</dd>
+                    </div>
+                    <div>
+                      <dt>Comision</dt>
+                      <dd>{service.sellerCommission ?? "Requiere aprobacion"}</dd>
+                    </div>
+                    <div>
+                      <dt>Evidencia</dt>
+                      <dd>{(service.evidenceRequired ?? []).slice(0, 3).join(", ") || "Sin evidencia definida"}</dd>
+                    </div>
+                  </dl>
+                  <div className="onia-service-dos-donts">
+                    <div>
+                      <span>Incluye</span>
+                      <small>{(service.includes ?? service.deliverables ?? []).slice(0, 4).join(" / ") || "Revisar checklist"}</small>
+                    </div>
+                    <div>
+                      <span>No prometer</span>
+                      <small>{(service.notIncluded ?? [service.risk ?? "Alcance fuera de catalogo"]).slice(0, 4).join(" / ")}</small>
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
+
+          <div className="onia-seller-service-section">
+            <div className="onia-section-strip">
+              <strong>Catalogo vendedor</strong>
+              <span>Precios y comisiones visibles. Arthur coordina, Sergio aprueba cambios.</span>
+            </div>
+            {Object.entries(sellerRulesByCategory).map(([category, rules]) => (
+              <section className="onia-seller-rule-group" key={category}>
+                <h3>{category}</h3>
+                <div className="onia-seller-rule-grid">
+                  {rules.map((rule) => (
+                    <article className="onia-seller-rule-card" key={rule.id}>
+                      <span>{rule.requiresSergioApproval ? "requiere aprobacion" : "vendible"}</span>
+                      <strong>{rule.serviceName}</strong>
+                      <p>{rule.offerWhen}</p>
+                      <dl>
+                        <div>
+                          <dt>Precio</dt>
+                          <dd>{rule.clientPriceLabel}</dd>
+                        </div>
+                        <div>
+                          <dt>Comision</dt>
+                          <dd>{rule.commissionLabel}{rule.firstPaymentOnly ? " / primer pago" : ""}</dd>
+                        </div>
+                      </dl>
+                      <small>{rule.conditions[0]}</small>
+                    </article>
+                  ))}
+                </div>
+              </section>
+            ))}
+          </div>
+        </div>
+      ) : null}
+
+      {workspaceView === "assistant" ? (
+        <div className="onia-assistant-workspace">
+          <article className="onia-live-card onia-assistant-panel">
+            <div className="onia-live-title">
+              <Bot size={16} />
+              <strong>ONIA Bot por rol</strong>
+            </div>
+            <p>
+              Responde solo con servicios, leads, tareas, notas y actualizaciones visibles para {roleLabel(selectedRole)}. No usa capital privado ni datos de otros roles.
+            </p>
+            <div className="onia-assistant-input">
+              <input
+                value={assistantQuestion}
+                onChange={(event) => setAssistantQuestion(event.target.value)}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter") {
+                    askAssistant();
+                  }
+                }}
+                placeholder="Ej. Que paso con el cliente X, cuanto cuesta Web Pro, que vendo primero"
+              />
+              <button className="onia-primary-button" type="button" onClick={() => askAssistant()}>
+                Preguntar
+              </button>
+            </div>
+            <div className="onia-assistant-suggestions">
+              {[
+                "Que vendo primero?",
+                "Precio de ONIA Motor Local Growth",
+                "Actualizaciones de precios",
+                "Clientes pendientes",
+                "Tareas pendientes",
+              ].map((question) => (
+                <button key={question} type="button" onClick={() => askAssistant(question)}>
+                  {question}
+                </button>
+              ))}
+            </div>
+          </article>
+
+          <article className="onia-live-card onia-assistant-answer">
+            <div className="onia-live-title">
+              <MessageSquareOff size={16} />
+              <strong>Respuesta</strong>
+            </div>
+            <pre>{assistantAnswer}</pre>
+          </article>
+
+          <article className="onia-live-card onia-assistant-scope">
+            <div className="onia-live-title">
+              <Database size={16} />
+              <strong>Fuentes que puede leer</strong>
+            </div>
+            <div className="onia-service-rule-grid">
+              <div>
+                <span>Leads</span>
+                <strong>{visibleLeads.length}</strong>
+                <small>Solo responsables visibles para el rol.</small>
+              </div>
+              <div>
+                <span>Tareas</span>
+                <strong>{visibleTasks.length}</strong>
+                <small>Asignadas o vista Sergio.</small>
+              </div>
+              <div>
+                <span>Notas</span>
+                <strong>{visibleNotes.length}</strong>
+                <small>Incluye actualizaciones comerciales permitidas.</small>
+              </div>
+              <div>
+                <span>Servicios</span>
+                <strong>{operationalServices.length + visibleSellerRules.length}</strong>
+                <small>Catalogo operativo y reglas vendedor visibles.</small>
+              </div>
+            </div>
+          </article>
+        </div>
+      ) : null}
 
       {workspaceView === "daily" ? (
         <div className="onia-daily-command">
