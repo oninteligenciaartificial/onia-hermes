@@ -38,10 +38,22 @@ const productDetailImageSchema = z.object({
   label: z.string().min(1).default("Detalle"),
 });
 
+const referenceSchema = z.object({
+  title: z.string().default(""),
+  url: z.string().url(),
+  type: z
+    .enum(["visual", "layout", "copy", "product", "competitor", "anti-reference"])
+    .default("visual"),
+  use: z.string().default(""),
+  avoid: z.string().default(""),
+});
+
 const productSchema = z.object({
   titulo: z.string().min(1),
   categoria: z.string().min(1),
   precio: z.string().min(1),
+  precioValor: z.number().positive().nullable().optional(),
+  moneda: z.string().min(1).default("BOB"),
   desc: z.string().min(1),
   etiqueta: z.string().min(1).default("Nuevo"),
   imagen: optionalAssetSchema,
@@ -76,6 +88,7 @@ export const clientSchema = z.object({
   logoIcon: optionalAssetSchema,
   logoWide: optionalAssetSchema,
   heroVideo: optionalAssetSchema,
+  heroPoster: optionalAssetSchema,
   colores: z
     .object({
       primary: hexColorSchema.default("#0f766e"),
@@ -146,6 +159,7 @@ export const clientSchema = z.object({
   categorias: z.array(z.string().min(1)).default([]),
   productos: z.array(productSchema).default([]),
   beneficios: z.array(z.string().min(1)).default([]),
+  referencias: z.array(referenceSchema).default([]),
   cta: z
     .object({
       texto: z.string().min(1).default("Agendar una llamada"),

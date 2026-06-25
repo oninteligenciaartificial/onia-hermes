@@ -1,0 +1,83 @@
+{
+  "nombre": "Altura Engineers Demo",
+  "slug": "engineering-demo",
+  "tagline": "Ingenieria clara para proyectos serios",
+  "descripcion": "Web institucional para una firma de ingenieria que necesita mostrar servicios, proyectos y contacto comercial.",
+  "logo": "AE",
+  "logoIcon": "",
+  "logoWide": "",
+  "heroVideo": "",
+  "heroPoster": "",
+  "colores": {
+    "primary": "#334155",
+    "secondary": "#111827",
+    "accent": "#eab308",
+    "bg": "#f8fafc",
+    "fg": "#111827"
+  },
+  "tipografia": {
+    "heading": "Onest",
+    "body": "Onest"
+  },
+  "contacto": {
+    "email": "",
+    "tel": "",
+    "whatsapp": "+59170000000",
+    "direccion": "Bolivia"
+  },
+  "redes": {
+    "ig": "",
+    "fb": "",
+    "linkedin": "",
+    "x": ""
+  },
+  "servicios": [
+    {
+      "titulo": "Diseno tecnico",
+      "desc": "Planificacion y criterios tecnicos para proyectos.",
+      "icono": "drafting"
+    },
+    {
+      "titulo": "Supervision",
+      "desc": "Seguimiento de obra con reportes claros.",
+      "icono": "shield"
+    },
+    {
+      "titulo": "Consultoria",
+      "desc": "Diagnosticos tecnicos para decisiones de inversion.",
+      "icono": "search"
+    }
+  ],
+  "categorias": [],
+  "productos": [],
+  "beneficios": [
+    "Proyectos claros",
+    "Autoridad tecnica",
+    "Contacto B2B"
+  ],
+  "referencias": [
+    {
+      "title": "Arup",
+      "url": "https://www.arup.com",
+      "type": "visual",
+      "use": "seriedad institucional y jerarquia de proyectos",
+      "avoid": "densidad excesiva"
+    },
+    {
+      "title": "WSP",
+      "url": "https://www.wsp.com",
+      "type": "competitor",
+      "use": "presentacion de capacidades y sectores",
+      "avoid": "copiar estructura corporativa completa"
+    }
+  ],
+  "cta": {
+    "texto": "Solicitar diagnostico",
+    "url": "https://wa.me/59170000000?text=Hola%2C%20quiero%20consultar%20por%20un%20proyecto%20tecnico."
+  },
+  "seo": {
+    "title": "Altura Engineers Demo | proyectos tecnicos y supervision de obra",
+    "description": "Web institucional para una firma de ingenieria que necesita mostrar servicios, proyectos y contacto comercial.",
+    "ogImage": ""
+  }
+}

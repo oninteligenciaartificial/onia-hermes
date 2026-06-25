@@ -34,6 +34,8 @@ describe("clientSchema", () => {
           titulo: "Producto demo",
           categoria: "Tecnologia",
           precio: "Consultar",
+          precioValor: 120,
+          moneda: "BOB",
           desc: "Producto de prueba para tienda.",
           imagen: "assets/producto-demo.webp",
           marca: "Demo Labs",
@@ -45,12 +47,18 @@ describe("clientSchema", () => {
         },
       ],
       heroVideo: "assets/store-hero.mp4",
+      heroPoster: "assets/store-hero.webp",
+      referencias: [{ title: "Referencia demo", url: "https://example.com", type: "visual" }],
     });
 
     expect(client.cta.url).toBe("#catalogo");
     expect(client.heroVideo).toBe("assets/store-hero.mp4");
+    expect(client.heroPoster).toBe("assets/store-hero.webp");
+    expect(client.referencias[0].url).toBe("https://example.com");
     expect(client.productos).toHaveLength(1);
     expect(client.productos[0].etiqueta).toBe("Nuevo");
+    expect(client.productos[0].precioValor).toBe(120);
+    expect(client.productos[0].moneda).toBe("BOB");
     expect(client.productos[0].imagen).toBe("assets/producto-demo.webp");
     expect(client.productos[0].marca).toBe("Demo Labs");
     expect(client.productos[0].beneficios).toEqual(["Compra asistida"]);

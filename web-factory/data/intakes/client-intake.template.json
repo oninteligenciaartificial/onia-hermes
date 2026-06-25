@@ -1,0 +1,96 @@
+{
+  "project": {
+    "slug": "cliente-demo",
+    "template": "landing",
+    "package": "web",
+    "owner": "ONIA"
+  },
+  "business": {
+    "name": "Nombre Comercial",
+    "industry": "rubro",
+    "offer": "oferta principal en una frase",
+    "tagline": "",
+    "description": "",
+    "location": "",
+    "hours": "",
+    "trustProofs": []
+  },
+  "brand": {
+    "logoText": "",
+    "logoIcon": "",
+    "logoWide": "",
+    "colors": {
+      "primary": "#0f766e",
+      "secondary": "#1d4ed8",
+      "accent": "#f59e0b",
+      "bg": "#f8fafc",
+      "fg": "#111827"
+    },
+    "typography": {
+      "heading": "Onest",
+      "body": "Onest"
+    },
+    "styleKeywords": ["claro", "profesional", "conversion"],
+    "references": [
+      {
+        "title": "Referencia principal",
+        "url": "https://example.com",
+        "type": "visual",
+        "use": "que tomar de la referencia",
+        "avoid": "que no copiar"
+      }
+    ],
+    "antiReferences": []
+  },
+  "media": {
+    "heroVideo": "",
+    "heroPoster": "",
+    "heroImage": "",
+    "assetPermission": "pending",
+    "notes": "Indicar si el cliente entrega fotos, si ONIA puede generar imagenes o si se usaran assets licenciados."
+  },
+  "content": {
+    "services": [
+      {
+        "title": "Servicio principal",
+        "description": "Descripcion concreta orientada a venta.",
+        "icon": "sparkles"
+      }
+    ],
+    "benefits": [],
+    "categories": [],
+    "products": []
+  },
+  "conversion": {
+    "primaryCtaText": "Solicitar informacion",
+    "primaryCtaUrl": "",
+    "whatsappMessage": ""
+  },
+  "contact": {
+    "email": "",
+    "phone": "",
+    "whatsapp": "",
+    "address": ""
+  },
+  "social": {
+    "instagram": "",
+    "facebook": "",
+    "linkedin": "",
+    "x": "",
+    "tiktok": ""
+  },
+  "seo": {
+    "title": "",
+    "description": "",
+    "keywords": [],
+    "ogImage": ""
+  },
+  "operations": {
+    "domain": "",
+    "hosting": "",
+    "paymentMethods": [],
+    "legalName": "",
+    "taxId": "",
+    "missing": []
+  }
+}

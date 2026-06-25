@@ -40,6 +40,7 @@ export type StoreClient = LandingClient & {
   logoIcon?: string;
   logoWide?: string;
   heroVideo?: string;
+  heroPoster?: string;
   categorias: string[];
   productos: StoreProduct[];
   beneficios: string[];
@@ -61,18 +62,14 @@ export function renderStoreBody(client: StoreClient): string {
   const brandNames = getUniqueValues(products.map((product) => product.marca || product.categoria));
   const categoryNames = getUniqueValues(products.map((product) => product.categoria));
   const slogan = client.tagline || "Everything for everyone";
+  const heroVideo = renderStoreHeroVideo(client, rootRenderContext);
 
   return `
     <main class="store-page" id="top">
       ${renderStoreHeader(client, slogan, rootRenderContext)}
 
       <section class="store-hero${client.heroVideo ? " has-video" : ""}" aria-labelledby="nuvia-hero-title">
-        ${
-          client.heroVideo
-            ? `<video class="store-hero-video" src="${escapeAttribute(resolveAssetPath(client.heroVideo, rootRenderContext))}" autoplay loop muted playsinline aria-hidden="true"></video>
-        <div class="store-hero-overlay" aria-hidden="true"></div>`
-            : ""
-        }
+        ${heroVideo}
         <div class="store-hero-inner">
           <div class="store-hero-copy store-reveal" data-reveal>
             <p class="store-kicker">NUVIA | ${escapeHtml(slogan.toUpperCase())}</p>
@@ -324,8 +321,76 @@ function renderStoreProductBody(client: StoreClient, product: StoreProduct): str
 
 function renderStoreScripts(client: StoreClient, products: StoreProduct[], context: StoreRenderContext): string {
   return `${renderStoreCartDataScript(products, context)}
+${renderStoreHeroVideoScript()}
 ${renderStoreRevealScript()}
 ${renderStoreCartScript(client)}`;
+}
+
+function renderStoreHeroVideo(client: StoreClient, context: StoreRenderContext): string {
+  if (!client.heroVideo) {
+    return "";
+  }
+
+  const src = resolveAssetPath(client.heroVideo, context);
+  const poster = client.heroPoster ? ` poster="${escapeAttribute(resolveAssetPath(client.heroPoster, context))}"` : "";
+
+  return `<video class="store-hero-video" data-store-hero-video data-src="${escapeAttribute(src)}"${poster} preload="none" loop muted playsinline aria-hidden="true"></video>
+        <div class="store-hero-overlay" aria-hidden="true"></div>`;
+}
+
+function renderStoreHeroVideoScript(): string {
+  return `<script>
+(() => {
+  const videos = document.querySelectorAll("[data-store-hero-video]");
+
+  if (!videos.length || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    return;
+  }
+
+  const schedule = (task) => {
+    if ("requestIdleCallback" in window) {
+      window.requestIdleCallback(task, { timeout: 1800 });
+      return;
+    }
+
+    window.setTimeout(task, 700);
+  };
+
+  const load = (video) => {
+    if (video.dataset.loaded === "true") {
+      return;
+    }
+
+    const src = video.getAttribute("data-src");
+    if (!src) {
+      return;
+    }
+
+    video.dataset.loaded = "true";
+    video.src = src;
+    video.load();
+    video.play?.().catch(() => {});
+  };
+
+  if (!("IntersectionObserver" in window)) {
+    window.addEventListener("load", () => schedule(() => videos.forEach(load)), { once: true });
+    return;
+  }
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) {
+        return;
+      }
+
+      observer.unobserve(entry.target);
+      schedule(() => load(entry.target));
+    });
+  }, { threshold: 0.01, rootMargin: "140px 0px" });
+
+  videos.forEach((video) => observer.observe(video));
+})();
+</script>`;
 }
 
 function renderStoreCart(client: StoreClient, products: StoreProduct[], context: StoreRenderContext): string {

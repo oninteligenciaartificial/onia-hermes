@@ -1,0 +1,83 @@
+{
+  "nombre": "PulseOps Demo",
+  "slug": "saas-demo",
+  "tagline": "Un panel claro para vender y operar mejor",
+  "descripcion": "Landing SaaS enfocada en problema, demo, prueba de valor y CTA a reunion.",
+  "logo": "PO",
+  "logoIcon": "",
+  "logoWide": "",
+  "heroVideo": "",
+  "heroPoster": "",
+  "colores": {
+    "primary": "#2563eb",
+    "secondary": "#111827",
+    "accent": "#22c55e",
+    "bg": "#f9fafb",
+    "fg": "#111827"
+  },
+  "tipografia": {
+    "heading": "Onest",
+    "body": "Onest"
+  },
+  "contacto": {
+    "email": "",
+    "tel": "",
+    "whatsapp": "+59170000000",
+    "direccion": ""
+  },
+  "redes": {
+    "ig": "",
+    "fb": "",
+    "linkedin": "",
+    "x": ""
+  },
+  "servicios": [
+    {
+      "titulo": "Panel operativo",
+      "desc": "Muestra leads, tareas y seguimiento en una vista.",
+      "icono": "layout"
+    },
+    {
+      "titulo": "Reportes",
+      "desc": "Resume actividad comercial y oportunidades.",
+      "icono": "chart"
+    },
+    {
+      "titulo": "Automatizacion",
+      "desc": "Reduce pasos repetitivos con reglas simples.",
+      "icono": "sparkles"
+    }
+  ],
+  "categorias": [],
+  "productos": [],
+  "beneficios": [
+    "Demo clara",
+    "Valor rapido",
+    "CTA a reunion"
+  ],
+  "referencias": [
+    {
+      "title": "Stripe",
+      "url": "https://stripe.com",
+      "type": "layout",
+      "use": "claridad de producto y CTA",
+      "avoid": "copiar gradientes o identidad"
+    },
+    {
+      "title": "Linear",
+      "url": "https://linear.app",
+      "type": "visual",
+      "use": "sensacion de software pulido y foco en workflow",
+      "avoid": "oscurecer demasiado la UI"
+    }
+  ],
+  "cta": {
+    "texto": "Agendar demo",
+    "url": "https://wa.me/59170000000?text=Hola%2C%20quiero%20ver%20una%20demo%20de%20PulseOps."
+  },
+  "seo": {
+    "title": "PulseOps Demo | dashboard operativo para equipos comerciales",
+    "description": "Landing SaaS enfocada en problema, demo, prueba de valor y CTA a reunion.",
+    "ogImage": ""
+  }
+}

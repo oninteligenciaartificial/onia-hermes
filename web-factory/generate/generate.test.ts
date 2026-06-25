@@ -61,6 +61,8 @@ describe("generateSite", () => {
             detalleImagenes: [{ src: "assets/audifonos-demo.webp", label: "Packshot" }],
           },
         ],
+        heroVideo: "assets/store-hero.mp4",
+        heroPoster: "assets/store-hero.webp",
       }),
       "utf8",
     );
@@ -77,6 +79,11 @@ describe("generateSite", () => {
     expect(html).toContain("productos destacados del mes");
     expect(html).toContain("10% de descuento");
     expect(html).toContain("store-cart-data");
+    expect(html).toContain("data-store-hero-video");
+    expect(html).toContain('preload="none"');
+    expect(html).toContain('poster="assets/store-hero.webp"');
+    expect(html).toContain('data-src="assets/store-hero.mp4"');
+    expect(html).not.toContain('class="store-hero-video" src="assets/store-hero.mp4"');
     expect(html).toContain("data-cart-open");
     expect(html).toContain("data-cart-add=\"audifonos-demo\"");
     expect(html).toContain("tu carrito");

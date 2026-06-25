@@ -1,0 +1,73 @@
+{
+  "project": {
+    "slug": "clinic-demo",
+    "template": "landing",
+    "package": "web",
+    "owner": "ONIA"
+  },
+  "business": {
+    "name": "Vital Clinic Demo",
+    "industry": "clinica",
+    "offer": "agenda medica y servicios de salud claros",
+    "tagline": "Agenda tu atencion con informacion clara",
+    "description": "Web para clinica con especialidades, confianza profesional y canal directo de reserva.",
+    "location": "La Paz, Bolivia",
+    "trustProofs": ["Equipo profesional", "Atencion con reserva previa"]
+  },
+  "brand": {
+    "logoText": "VC",
+    "colors": {
+      "primary": "#2563eb",
+      "secondary": "#0f172a",
+      "accent": "#14b8a6",
+      "bg": "#f8fafc",
+      "fg": "#0f172a"
+    },
+    "styleKeywords": ["clinico", "humano", "confiable"],
+    "references": [
+      {
+        "title": "Zocdoc",
+        "url": "https://www.zocdoc.com",
+        "type": "layout",
+        "use": "claridad de agenda y confianza antes del CTA",
+        "avoid": "parecer marketplace"
+      }
+    ]
+  },
+  "media": {
+    "assetPermission": "client-owned",
+    "notes": "Usar fotos reales de consultorio y equipo; evitar claims medicos no aprobados."
+  },
+  "content": {
+    "services": [
+      {
+        "title": "Consulta general",
+        "description": "Primera evaluacion y orientacion medica.",
+        "icon": "heart"
+      },
+      {
+        "title": "Especialidades",
+        "description": "Bloques claros por area de atencion.",
+        "icon": "stethoscope"
+      },
+      {
+        "title": "Reservas",
+        "description": "Agenda por WhatsApp o formulario.",
+        "icon": "calendar"
+      }
+    ],
+    "benefits": ["Confianza profesional", "Reserva directa", "Informacion clara"]
+  },
+  "conversion": {
+    "primaryCtaText": "Agendar consulta",
+    "whatsappMessage": "Hola, quiero agendar una consulta."
+  },
+  "contact": {
+    "whatsapp": "+59170000000",
+    "address": "La Paz, Bolivia"
+  },
+  "operations": {
+    "hosting": "ONIA Web Factory",
+    "missing": ["matricula o credenciales visibles", "politica de datos personales"]
+  }
+}

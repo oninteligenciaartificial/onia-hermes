@@ -1,0 +1,76 @@
+{
+  "nombre": "Vital Clinic Demo",
+  "slug": "clinic-demo",
+  "tagline": "Agenda tu atencion con informacion clara",
+  "descripcion": "Web para clinica con especialidades, confianza profesional y canal directo de reserva.",
+  "logo": "VC",
+  "logoIcon": "",
+  "logoWide": "",
+  "heroVideo": "",
+  "heroPoster": "",
+  "colores": {
+    "primary": "#2563eb",
+    "secondary": "#0f172a",
+    "accent": "#14b8a6",
+    "bg": "#f8fafc",
+    "fg": "#0f172a"
+  },
+  "tipografia": {
+    "heading": "Onest",
+    "body": "Onest"
+  },
+  "contacto": {
+    "email": "",
+    "tel": "",
+    "whatsapp": "+59170000000",
+    "direccion": "La Paz, Bolivia"
+  },
+  "redes": {
+    "ig": "",
+    "fb": "",
+    "linkedin": "",
+    "x": ""
+  },
+  "servicios": [
+    {
+      "titulo": "Consulta general",
+      "desc": "Primera evaluacion y orientacion medica.",
+      "icono": "heart"
+    },
+    {
+      "titulo": "Especialidades",
+      "desc": "Bloques claros por area de atencion.",
+      "icono": "stethoscope"
+    },
+    {
+      "titulo": "Reservas",
+      "desc": "Agenda por WhatsApp o formulario.",
+      "icono": "calendar"
+    }
+  ],
+  "categorias": [],
+  "productos": [],
+  "beneficios": [
+    "Confianza profesional",
+    "Reserva directa",
+    "Informacion clara"
+  ],
+  "referencias": [
+    {
+      "title": "Zocdoc",
+      "url": "https://www.zocdoc.com",
+      "type": "layout",
+      "use": "claridad de agenda y confianza antes del CTA",
+      "avoid": "parecer marketplace"
+    }
+  ],
+  "cta": {
+    "texto": "Agendar consulta",
+    "url": "https://wa.me/59170000000?text=Hola%2C%20quiero%20agendar%20una%20consulta."
+  },
+  "seo": {
+    "title": "Vital Clinic Demo | agenda medica y servicios de salud claros",
+    "description": "Web para clinica con especialidades, confianza profesional y canal directo de reserva.",
+    "ogImage": ""
+  }
+}

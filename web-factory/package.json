@@ -8,6 +8,8 @@
     "dev": "pnpm --filter site dev",
     "build": "pnpm --filter site build",
     "generate": "tsx generate/index.ts",
+    "client:new": "tsx generate/create-client.ts",
+    "factory:smoke": "pnpm test && pnpm generate demo && pnpm generate skincare-demo --template store && pnpm generate restaurant-demo && pnpm generate clinic-demo && pnpm generate engineering-demo && pnpm generate saas-demo",
     "lint": "pnpm --filter site lint",
     "preview:nuvia": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/start-nuvia-preview.ps1",
     "nuvia:catalog": "node harvester/product/scrape_hbderm_products.mjs --concurrency=1 && node harvester/product/build_nuvia_hbderm_catalog.mjs && node harvester/product/sanitize_nuvia_public_catalog.mjs && node harvester/product/apply_existing_nuvia_cutouts.mjs",

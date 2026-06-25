@@ -10,8 +10,8 @@ properties and generate a ready static site.
 - Tailwind CSS v4
 - shadcn/ui
 - pnpm workspaces
-- zod for client data validation
-- commander for `pnpm generate <slug>`
+- zod for intake and client data validation
+- commander for `pnpm client:new` and `pnpm generate <slug>`
 - simple-git and cheerio for curated harvesters
 - Playwright for standalone gallery/reference scraping
 
@@ -41,6 +41,38 @@ pnpm build
 ```
 
 The demo app renders `data/clients/demo.json` with the `landing` template.
+Use `pnpm factory:smoke` to validate the intake generator plus the demo
+vertical profiles.
+
+## Create A Client From Key Data
+
+The official Web Factory flow starts with an intake, not a hand-written client
+profile. Copy `data/intakes/client-intake.template.json`, fill the key business
+data and exact references, then generate the client profile:
+
+```powershell
+pnpm client:new -- --input data/intakes/<slug>.json
+pnpm generate <slug> --template landing
+```
+
+For ecommerce:
+
+```powershell
+pnpm client:new -- --input data/intakes/<slug>.json
+pnpm generate <slug> --template store
+```
+
+This writes:
+
+```text
+data/clients/<slug>.json
+data/clients/<slug>.context.md
+out/<slug>/index.html
+out/<slug>/site.css
+```
+
+The context file preserves references, media permissions, operating notes and
+missing inputs before delivery.
 
 ## Generate A Site
 
@@ -58,16 +90,29 @@ out/demo/index.html
 out/demo/site.css
 ```
 
-## Client Schema
+## Intake And Client Schema
+
+`data/intake-schema.ts` validates the data ONIA should request from a client:
+
+- project slug, template, package and owner
+- business name, rubro, offer, description, location, hours and trust proof
+- brand colors, typography, references and anti-references
+- media inputs: hero video, hero poster, hero image and asset permission
+- services, benefits, categories and products
+- conversion CTA and contact channels
+- SEO and operating notes: domain, hosting, payment methods and legal fields
+
+`pnpm client:new` converts that intake into the renderable client schema.
 
 `data/schema.ts` validates:
 
-- `nombre`, `slug`, `tagline`, `descripcion`, `logo`, `heroVideo`
+- `nombre`, `slug`, `tagline`, `descripcion`, `logo`, `heroVideo`, `heroPoster`
 - `colores.primary`, `secondary`, `accent`, `bg`, `fg`
 - `tipografia.heading`, `body`
 - `contacto.email`, `tel`, `whatsapp`, `direccion`
 - `redes.ig`, `fb`, `linkedin`, `x`
 - `servicios[]` with `titulo`, `desc`, `icono`
+- `referencias[]` with exact source URL and usage notes
 - `cta.texto`, `cta.url`
 - `seo.title`, `description`, `ogImage`
 - Optional client context notes can live next to the profile as `data/clients/<slug>.context.md`.

@@ -1,0 +1,74 @@
+{
+  "project": {
+    "slug": "restaurant-demo",
+    "template": "landing",
+    "package": "web",
+    "owner": "ONIA"
+  },
+  "business": {
+    "name": "Mesa Norte Demo",
+    "industry": "restaurante",
+    "offer": "reservas y pedidos para cocina urbana",
+    "tagline": "Cocina urbana con reserva directa",
+    "description": "Landing para restaurante con menu claro, ubicacion, horarios y CTA de reserva/pedido.",
+    "location": "Santa Cruz, Bolivia",
+    "hours": "Lun a Sab, 12:00 a 22:00",
+    "trustProofs": ["Menu corto y fotografico", "Reserva directa por WhatsApp"]
+  },
+  "brand": {
+    "logoText": "MN",
+    "colors": {
+      "primary": "#b42318",
+      "secondary": "#1f2937",
+      "accent": "#f5a524",
+      "bg": "#fffaf2",
+      "fg": "#18181b"
+    },
+    "styleKeywords": ["calido", "directo", "apetitoso"],
+    "references": [
+      {
+        "title": "Sweetgreen",
+        "url": "https://www.sweetgreen.com",
+        "type": "layout",
+        "use": "menu visual, ritmo limpio y CTA visible",
+        "avoid": "look corporativo frio"
+      }
+    ]
+  },
+  "media": {
+    "assetPermission": "generate-ai",
+    "notes": "Necesita fotos reales de platos antes de publicar."
+  },
+  "content": {
+    "services": [
+      {
+        "title": "Menu del dia",
+        "description": "Platos principales explicados con precio y foto.",
+        "icon": "utensils"
+      },
+      {
+        "title": "Reserva directa",
+        "description": "CTA claro para reservar mesa sin friccion.",
+        "icon": "calendar"
+      },
+      {
+        "title": "Pedidos",
+        "description": "Canal directo para pedidos o delivery si aplica.",
+        "icon": "message"
+      }
+    ],
+    "benefits": ["Menu escaneable", "Ubicacion visible", "Reserva simple"]
+  },
+  "conversion": {
+    "primaryCtaText": "Reservar mesa",
+    "whatsappMessage": "Hola, quiero reservar mesa."
+  },
+  "contact": {
+    "whatsapp": "+59170000000",
+    "address": "Santa Cruz, Bolivia"
+  },
+  "operations": {
+    "hosting": "ONIA Web Factory",
+    "missing": ["fotos reales de platos", "menu final"]
+  }
+}

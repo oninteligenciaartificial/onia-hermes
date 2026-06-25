@@ -1,0 +1,78 @@
+{
+  "project": {
+    "slug": "saas-demo",
+    "template": "landing",
+    "package": "web",
+    "owner": "ONIA"
+  },
+  "business": {
+    "name": "PulseOps Demo",
+    "industry": "SaaS B2B",
+    "offer": "dashboard operativo para equipos comerciales",
+    "tagline": "Un panel claro para vender y operar mejor",
+    "description": "Landing SaaS enfocada en problema, demo, prueba de valor y CTA a reunion.",
+    "trustProofs": ["Vista de dashboard", "Flujo comercial claro", "Demo guiada"]
+  },
+  "brand": {
+    "logoText": "PO",
+    "colors": {
+      "primary": "#2563eb",
+      "secondary": "#111827",
+      "accent": "#22c55e",
+      "bg": "#f9fafb",
+      "fg": "#111827"
+    },
+    "styleKeywords": ["producto", "utilitario", "moderno"],
+    "references": [
+      {
+        "title": "Stripe",
+        "url": "https://stripe.com",
+        "type": "layout",
+        "use": "claridad de producto y CTA",
+        "avoid": "copiar gradientes o identidad"
+      },
+      {
+        "title": "Linear",
+        "url": "https://linear.app",
+        "type": "visual",
+        "use": "sensacion de software pulido y foco en workflow",
+        "avoid": "oscurecer demasiado la UI"
+      }
+    ]
+  },
+  "media": {
+    "assetPermission": "generate-ai",
+    "notes": "Usar screenshots mock del producto, no ilustraciones genericas."
+  },
+  "content": {
+    "services": [
+      {
+        "title": "Panel operativo",
+        "description": "Muestra leads, tareas y seguimiento en una vista.",
+        "icon": "layout"
+      },
+      {
+        "title": "Reportes",
+        "description": "Resume actividad comercial y oportunidades.",
+        "icon": "chart"
+      },
+      {
+        "title": "Automatizacion",
+        "description": "Reduce pasos repetitivos con reglas simples.",
+        "icon": "sparkles"
+      }
+    ],
+    "benefits": ["Demo clara", "Valor rapido", "CTA a reunion"]
+  },
+  "conversion": {
+    "primaryCtaText": "Agendar demo",
+    "whatsappMessage": "Hola, quiero ver una demo de PulseOps."
+  },
+  "contact": {
+    "whatsapp": "+59170000000"
+  },
+  "operations": {
+    "hosting": "ONIA Web Factory",
+    "missing": ["screenshots reales o mockups aprobados", "pricing"]
+  }
+}

@@ -1,0 +1,79 @@
+{
+  "project": {
+    "slug": "engineering-demo",
+    "template": "landing",
+    "package": "web",
+    "owner": "ONIA"
+  },
+  "business": {
+    "name": "Altura Engineers Demo",
+    "industry": "ingenieria",
+    "offer": "proyectos tecnicos y supervision de obra",
+    "tagline": "Ingenieria clara para proyectos serios",
+    "description": "Web institucional para una firma de ingenieria que necesita mostrar servicios, proyectos y contacto comercial.",
+    "location": "Bolivia",
+    "trustProofs": ["Proyectos documentados", "Equipo tecnico", "Procesos de supervision"]
+  },
+  "brand": {
+    "logoText": "AE",
+    "colors": {
+      "primary": "#334155",
+      "secondary": "#111827",
+      "accent": "#eab308",
+      "bg": "#f8fafc",
+      "fg": "#111827"
+    },
+    "styleKeywords": ["sobrio", "tecnico", "corporativo"],
+    "references": [
+      {
+        "title": "Arup",
+        "url": "https://www.arup.com",
+        "type": "visual",
+        "use": "seriedad institucional y jerarquia de proyectos",
+        "avoid": "densidad excesiva"
+      },
+      {
+        "title": "WSP",
+        "url": "https://www.wsp.com",
+        "type": "competitor",
+        "use": "presentacion de capacidades y sectores",
+        "avoid": "copiar estructura corporativa completa"
+      }
+    ]
+  },
+  "media": {
+    "assetPermission": "client-owned",
+    "notes": "Necesita fotos reales de proyectos, planos o equipo en obra."
+  },
+  "content": {
+    "services": [
+      {
+        "title": "Diseno tecnico",
+        "description": "Planificacion y criterios tecnicos para proyectos.",
+        "icon": "drafting"
+      },
+      {
+        "title": "Supervision",
+        "description": "Seguimiento de obra con reportes claros.",
+        "icon": "shield"
+      },
+      {
+        "title": "Consultoria",
+        "description": "Diagnosticos tecnicos para decisiones de inversion.",
+        "icon": "search"
+      }
+    ],
+    "benefits": ["Proyectos claros", "Autoridad tecnica", "Contacto B2B"]
+  },
+  "conversion": {
+    "primaryCtaText": "Solicitar diagnostico",
+    "whatsappMessage": "Hola, quiero consultar por un proyecto tecnico."
+  },
+  "contact": {
+    "whatsapp": "+59170000000"
+  },
+  "operations": {
+    "hosting": "ONIA Web Factory",
+    "missing": ["fotos de proyectos", "certificaciones", "casos aprobados"]
+  }
+}

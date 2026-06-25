@@ -1,0 +1,152 @@
+{
+  "nombre": "Luma Skin Demo",
+  "slug": "skincare-demo",
+  "tagline": "Skincare simple para comprar mejor",
+  "descripcion": "Una tienda de cuidado de piel enfocada en productos claros, rutinas cortas y consulta directa antes de comprar.",
+  "logo": "LS",
+  "logoIcon": "",
+  "logoWide": "",
+  "heroVideo": "",
+  "heroPoster": "",
+  "colores": {
+    "primary": "#0f766e",
+    "secondary": "#263238",
+    "accent": "#e2a86b",
+    "bg": "#fbfaf7",
+    "fg": "#151716"
+  },
+  "tipografia": {
+    "heading": "Onest",
+    "body": "Onest"
+  },
+  "contacto": {
+    "email": "",
+    "tel": "",
+    "whatsapp": "+59170000000",
+    "direccion": "Bolivia"
+  },
+  "redes": {
+    "ig": "",
+    "fb": "",
+    "linkedin": "",
+    "x": ""
+  },
+  "servicios": [
+    {
+      "titulo": "Propuesta clara",
+      "desc": "Explica rutinas simples de skincare con compra asistida sin hacer que el visitante adivine el valor.",
+      "icono": "layout"
+    },
+    {
+      "titulo": "Confianza rapida",
+      "desc": "Compra asistida por WhatsApp",
+      "icono": "shield"
+    },
+    {
+      "titulo": "Contacto directo",
+      "desc": "Lleva al visitante al canal correcto para cotizar, reservar o comprar.",
+      "icono": "message"
+    }
+  ],
+  "categorias": [
+    "Limpieza",
+    "Hidratacion",
+    "Proteccion"
+  ],
+  "productos": [
+    {
+      "titulo": "Gel limpiador suave",
+      "categoria": "Limpieza",
+      "precio": "Desde Bs. 120",
+      "precioValor": 120,
+      "moneda": "BOB",
+      "desc": "Limpieza diaria para piel normal a mixta sin sensacion tirante.",
+      "etiqueta": "Nuevo",
+      "imagen": "",
+      "imagenAlt": "",
+      "marca": "Luma Skin",
+      "tamano": "150 ml",
+      "uso": "",
+      "beneficios": [
+        "Limpieza diaria",
+        "Textura ligera"
+      ],
+      "idealPara": [],
+      "ingredientesClave": [],
+      "modoUso": "",
+      "incluye": [
+        "Producto unitario"
+      ],
+      "especificaciones": [
+        {
+          "label": "Uso",
+          "value": "Manana y noche"
+        }
+      ],
+      "detalleImagenes": [],
+      "detalleNota": ""
+    },
+    {
+      "titulo": "Crema barrera hidratante",
+      "categoria": "Hidratacion",
+      "precio": "Desde Bs. 150",
+      "precioValor": 150,
+      "moneda": "BOB",
+      "desc": "Hidratacion simple para reforzar la barrera cutanea.",
+      "etiqueta": "Nuevo",
+      "imagen": "",
+      "imagenAlt": "",
+      "marca": "Luma Skin",
+      "tamano": "50 ml",
+      "uso": "",
+      "beneficios": [
+        "Barrera cutanea",
+        "Uso diario"
+      ],
+      "idealPara": [],
+      "ingredientesClave": [],
+      "modoUso": "",
+      "incluye": [
+        "Producto unitario"
+      ],
+      "especificaciones": [
+        {
+          "label": "Textura",
+          "value": "Crema ligera"
+        }
+      ],
+      "detalleImagenes": [],
+      "detalleNota": ""
+    }
+  ],
+  "beneficios": [
+    "Rutinas cortas",
+    "Consulta antes de comprar",
+    "Productos por necesidad"
+  ],
+  "referencias": [
+    {
+      "title": "Glossier",
+      "url": "https://www.glossier.com",
+      "type": "visual",
+      "use": "claridad de producto, aire visual y CTA directo",
+      "avoid": "copiar identidad, tono o claims"
+    },
+    {
+      "title": "The Ordinary",
+      "url": "https://theordinary.com",
+      "type": "product",
+      "use": "jerarquia de producto y explicacion funcional",
+      "avoid": "estetica demasiado clinica"
+    }
+  ],
+  "cta": {
+    "texto": "Cotizar rutina",
+    "url": "https://wa.me/59170000000?text=Hola%2C%20quiero%20cotizar%20una%20rutina%20de%20skincare."
+  },
+  "seo": {
+    "title": "Luma Skin Demo | rutinas simples de skincare con compra asistida",
+    "description": "Una tienda de cuidado de piel enfocada en productos claros, rutinas cortas y consulta directa antes de comprar.",
+    "ogImage": ""
+  }
+}
