@@ -16,6 +16,7 @@ export default function NuviaPage() {
       logoIcon={publicAsset(nuvia.logoIcon)}
       logoWide={publicAsset(nuvia.logoWide)}
       heroVideo={publicAsset(nuvia.heroVideo)}
+      heroPoster={publicAsset(nuvia.heroPoster)}
       products={nuviaProducts}
       cartProducts={nuviaCartProducts}
     />

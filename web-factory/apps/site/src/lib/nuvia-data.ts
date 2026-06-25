@@ -47,6 +47,7 @@ export type NuviaClient = {
   logoIcon: string;
   logoWide: string;
   heroVideo: string;
+  heroPoster: string;
   contacto: {
     email: string;
     tel: string;

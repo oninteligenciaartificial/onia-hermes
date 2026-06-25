@@ -10,6 +10,13 @@ Last update: 2026-06-25
 - Image placement rule: category thumbnails, catalog cards, hero preview, sticky checkout thumbnails, PDP main media and PDP gallery use explicit `sizes` and contained image frames. Keep packshots centered with `object-fit: contain`; do not use hover zoom that can crop bottles or tubes.
 - PDP media selectors must target the main product image specifically, not every descendant image, so gallery thumbnails keep their own compact dimensions.
 
+2026-06-25 hero video performance pass:
+
+- The original hero MP4 is 1920x1080, 7.04s and roughly 11.0 MB. Do not use it as the first-render hero source.
+- Public `heroVideo` now points to `assets/nuvia-hero-video-light.mp4`, an audio-free 1280x720 derivative around 443 KB. Keep the original only as source material.
+- Hero first paint should use `assets/nuvia-hero-poster.webp` around 43 KB. The React hero mounts the MP4 after the initial page load/idle window and skips video loading for `prefers-reduced-motion` or browser data-saver.
+- Avoid CSS filters on the hero video. Use the existing overlay gradients for readability so playback/compositing stays light.
+
 2026-06-25 price watcher validation:
 
 - Latest committed supplier refresh has 330 source products, 12 scrape errors, 315 public storefront products and 15 internal professional-only products.
@@ -58,6 +65,8 @@ Last update: 2026-06-25
 - Wide logo: `data/clients/nuvia.assets/nuvia-logo-wide.png`
 - Icon logo: `data/clients/nuvia.assets/nuvia-icon.png`
 - Hero video: `data/clients/nuvia.assets/nuvia-hero-video.mp4`
+- Optimized hero video: `data/clients/nuvia.assets/nuvia-hero-video-light.mp4`
+- Hero poster: `data/clients/nuvia.assets/nuvia-hero-poster.webp`
 - ISDIN product image: `data/clients/nuvia.assets/isdin-fusion-water.webp`
 - ISDIN cutout product image: `data/clients/nuvia.assets/isdin-fusion-water-cutout.png`
 - SVR product image: `data/clients/nuvia.assets/svr-sebiaclear-200ml.webp`
@@ -66,6 +75,8 @@ Last update: 2026-06-25
   - `assets/nuvia-logo-wide.png`
   - `assets/nuvia-icon.png`
   - `assets/nuvia-hero-video.mp4`
+  - `assets/nuvia-hero-video-light.mp4`
+  - `assets/nuvia-hero-poster.webp`
   - `assets/isdin-fusion-water-cutout.png`
   - `assets/svr-sebiaclear-200ml-cutout.png`
 

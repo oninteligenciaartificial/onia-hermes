@@ -30,6 +30,7 @@ type StoreProps = {
   logoIcon: string;
   logoWide: string;
   heroVideo: string;
+  heroPoster: string;
   products: NuviaProduct[];
   cartProducts: CartProduct[];
 };
@@ -158,6 +159,43 @@ function buildRoutineSteps(products: NuviaProduct[]) {
     ...step,
     product: findRoutineProduct(products, step),
   })).filter((step): step is RoutineStepDefinition & { product: NuviaProduct } => Boolean(step.product));
+}
+
+function useDeferredHeroVideo() {
+  const [shouldLoad, setShouldLoad] = useState(false);
+
+  useEffect(() => {
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const connection = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection;
+
+    if (reducedMotion || connection?.saveData) {
+      return;
+    }
+
+    const idleWindow = window as typeof window & {
+      requestIdleCallback?: (callback: () => void, options?: { timeout?: number }) => number;
+      cancelIdleCallback?: (handle: number) => void;
+    };
+    let idleId: number | null = null;
+
+    const timerId = window.setTimeout(() => {
+      if (idleWindow.requestIdleCallback) {
+        idleId = idleWindow.requestIdleCallback(() => setShouldLoad(true), { timeout: 1800 });
+        return;
+      }
+
+      setShouldLoad(true);
+    }, 1200);
+
+    return () => {
+      window.clearTimeout(timerId);
+      if (idleId !== null) {
+        idleWindow.cancelIdleCallback?.(idleId);
+      }
+    };
+  }, []);
+
+  return shouldLoad;
 }
 
 function useRevealMotion() {
@@ -1009,13 +1047,26 @@ export function NuviaStorefront(props: StoreProps) {
   useRevealMotion();
   const cart = useCart(props.cartProducts);
   const routineSteps = useMemo(() => buildRoutineSteps(props.products), [props.products]);
+  const shouldLoadHeroVideo = useDeferredHeroVideo();
+  const [heroVideoReady, setHeroVideoReady] = useState(false);
 
   return (
     <main className="nuvia-next-page">
       <NuviaHeader cartCount={cart.totalCount} logoIcon={props.logoIcon} onCartOpen={() => cart.setOpen(true)} tagline={props.tagline} />
 
       <section className="nuvia-next-hero" id="top">
-        <video src={props.heroVideo} autoPlay loop muted playsInline aria-hidden="true" />
+        <video
+          className={heroVideoReady ? "is-ready" : "is-poster"}
+          src={shouldLoadHeroVideo ? props.heroVideo : undefined}
+          poster={props.heroPoster}
+          preload={shouldLoadHeroVideo ? "metadata" : "none"}
+          autoPlay={shouldLoadHeroVideo}
+          loop
+          muted
+          playsInline
+          aria-hidden="true"
+          onCanPlay={() => setHeroVideoReady(true)}
+        />
         <div className="nuvia-hero-shade" />
         <div className="nuvia-hero-layout">
           <div className="nuvia-hero-copy" data-nuvia-reveal>

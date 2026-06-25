@@ -6,7 +6,8 @@
   "logo": "NUVIA",
   "logoIcon": "assets/nuvia-icon.png",
   "logoWide": "assets/nuvia-logo-wide.png",
-  "heroVideo": "assets/nuvia-hero-video.mp4",
+  "heroVideo": "assets/nuvia-hero-video-light.mp4",
+  "heroPoster": "assets/nuvia-hero-poster.webp",
   "colores": {
     "primary": "#0F2D52",
     "secondary": "#00A7A0",

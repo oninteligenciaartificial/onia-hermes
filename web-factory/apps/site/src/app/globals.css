@@ -1180,11 +1180,16 @@ a.workflow-card:hover {
   z-index: 0;
   width: 100%;
   height: 100%;
+  background: #0b161b;
   object-fit: cover;
   object-position: 66% center;
   opacity: 0.96;
-  filter: saturate(1.04) contrast(1.02) brightness(1.04);
-  transform: scale(1.04);
+  transform: scale(1.02);
+  transition: opacity 420ms ease;
+}
+
+.nuvia-next-hero > video.is-ready {
+  opacity: 1;
 }
 
 .nuvia-hero-shade {
