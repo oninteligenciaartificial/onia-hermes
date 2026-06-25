@@ -1328,7 +1328,8 @@
 .onia-workspace-actions button,
 .onia-review-actions button,
 .onia-review-actions a,
-.onia-primary-button {
+.onia-primary-button,
+.onia-secondary-button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -1351,7 +1352,8 @@
 .onia-workspace-actions button:active,
 .onia-review-actions button:active,
 .onia-review-actions a:active,
-.onia-primary-button:active {
+.onia-primary-button:active,
+.onia-secondary-button:active {
   transform: translateY(1px);
 }
 
@@ -1363,12 +1365,21 @@
   border-color: var(--onia-green);
 }
 
+.onia-secondary-button {
+  width: 100%;
+  padding: 0 12px;
+  color: #153f30;
+  background: var(--onia-green-soft);
+  border-color: rgba(35, 123, 100, 0.24);
+}
+
 .onia-review-actions button:disabled {
   cursor: not-allowed;
   opacity: 0.48;
 }
 
 .onia-live-metrics,
+.onia-daily-command,
 .onia-live-grid,
 .onia-ideas-board,
 .onia-selfhosted-panel {
@@ -1409,6 +1420,43 @@
   margin-top: 7px;
   color: var(--onia-muted);
   font-size: 11px;
+}
+
+.onia-daily-command {
+  grid-template-columns: minmax(360px, 1.25fr) minmax(300px, 0.95fr) minmax(300px, 0.95fr);
+  grid-template-areas:
+    "agenda tasks capture"
+    "agenda evidence capture";
+  align-items: start;
+  margin-bottom: 12px;
+}
+
+.onia-daily-agenda {
+  grid-area: agenda;
+}
+
+.onia-daily-tasks {
+  grid-area: tasks;
+}
+
+.onia-daily-capture {
+  grid-area: capture;
+}
+
+.onia-daily-evidence {
+  grid-area: evidence;
+}
+
+.onia-calendar-timeline.is-compact {
+  max-height: 440px;
+  overflow: auto;
+}
+
+.onia-quick-note {
+  display: grid;
+  gap: 9px;
+  padding-top: 10px;
+  border-top: 1px solid var(--onia-line-soft);
 }
 
 .onia-sergio-calendar,
@@ -2212,6 +2260,7 @@
   .onia-repo-grid,
   .onia-operating-metrics,
   .onia-live-metrics,
+  .onia-daily-command,
   .onia-sergio-calendar,
   .onia-live-grid,
   .onia-ideas-board,
@@ -2223,6 +2272,13 @@
   .onia-readiness-columns,
   .onia-readiness-meta {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .onia-daily-command {
+    grid-template-areas:
+      "agenda agenda"
+      "tasks capture"
+      "evidence capture";
   }
 
   .onia-two-column,
@@ -2310,6 +2366,7 @@
   .onia-repo-grid,
   .onia-operating-metrics,
   .onia-live-metrics,
+  .onia-daily-command,
   .onia-sergio-calendar,
   .onia-calendar-summary,
   .onia-agent-grid,
@@ -2333,6 +2390,14 @@
   .onia-nuvia-ledger,
   .onia-payment-list article {
     grid-template-columns: 1fr;
+  }
+
+  .onia-daily-command {
+    grid-template-areas:
+      "agenda"
+      "tasks"
+      "capture"
+      "evidence";
   }
 
   .onia-hero h1 {

@@ -41,7 +41,7 @@ type RuntimeTask = {
 
 type RuntimeNote = {
   id: string;
-  kind: "llamada" | "nota" | "cobro" | "bloqueo" | "idea";
+  kind: "llamada" | "nota" | "cobro" | "bloqueo" | "idea" | "evidencia";
   title: string;
   detail: string;
   linkedTo: string;
@@ -500,6 +500,7 @@ export default function OniaCenterTeamPage() {
                   <option value="cobro">Cobro</option>
                   <option value="bloqueo">Bloqueo</option>
                   <option value="idea">Idea</option>
+                  <option value="evidencia">Evidencia/info</option>
                 </select>
               </label>
               <label>

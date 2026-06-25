@@ -34,7 +34,7 @@ export type RuntimeReview = {
 
 export type RuntimeNote = {
   id: string;
-  kind: "llamada" | "nota" | "cobro" | "bloqueo" | "idea";
+  kind: "llamada" | "nota" | "cobro" | "bloqueo" | "idea" | "evidencia";
   title: string;
   detail: string;
   linkedTo: string;

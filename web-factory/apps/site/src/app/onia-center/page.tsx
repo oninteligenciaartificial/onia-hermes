@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import {
   AlertTriangle,
+  Archive,
   BadgeCheck,
   Banknote,
   Ban,
@@ -147,46 +148,47 @@ type RuntimeConnection = {
 };
 
 const navItems: NavItem[] = [
-  { id: "dashboard", label: "Inicio", detail: "Estado real", group: "Control", icon: BarChart3 },
-  { id: "uso-diario", label: "Captura", detail: "Leads y tareas", group: "Operacion", icon: ClipboardCheck },
-  { id: "calendario-sergio", label: "Calendario", detail: "Sergio", group: "Operacion", icon: CalendarDays },
-  { id: "agentes", label: "Agentes", detail: "Mes", group: "Operacion", icon: Sparkles },
-  { id: "ideas", label: "Ideas", detail: "Reels e IA", group: "Operacion", icon: Lightbulb },
-  { id: "proyectos", label: "Proyectos", detail: "ONIA", group: "Ejecucion", icon: BriefcaseBusiness },
-  { id: "tareas", label: "Tareas", detail: "Revision", group: "Ejecucion", icon: ClipboardCheck },
-  { id: "collab", label: "Collab", detail: "Ingestion", group: "Ejecucion", icon: Database },
-  { id: "bolivian", label: "Bolivian", detail: "Modulo", group: "Ejecucion", icon: Building2 },
-  { id: "integraciones", label: "Integraciones", detail: "Pendientes", group: "Infra", icon: Workflow },
-  { id: "seguridad", label: "Seguridad", detail: "Privacidad", group: "Infra", icon: ShieldCheck },
-  { id: "ceo", label: "CEO", detail: "Sergio privado", group: "Direccion", icon: Crown },
-  { id: "roles", label: "Roles", detail: "Permisos", group: "Direccion", icon: UsersRound },
-  { id: "arthur", label: "Arthur", detail: "60 dias", group: "Direccion", icon: UserCheck },
-  { id: "servicios", label: "Servicios", detail: "Catalogo", group: "Comercial", icon: Layers3 },
-  { id: "evidencias", label: "Evidencias", detail: "Gates", group: "Comercial", icon: FileCheck2 },
-  { id: "premium", label: "Premium", detail: "Herramientas", group: "Comercial", icon: Zap },
+  { id: "dashboard", label: "Hoy", detail: "Tareas y agenda", group: "Trabajo", icon: CalendarDays },
+  { id: "uso-diario", label: "Captura", detail: "Notas y evidencia", group: "Trabajo", icon: FileCheck2 },
+  { id: "calendario-sergio", label: "Calendario", detail: "Sergio", group: "Trabajo", icon: CalendarDays },
+  { id: "ideas", label: "Ideas", detail: "Reels e IA", group: "Trabajo", icon: Lightbulb },
+  { id: "servicios", label: "Servicios", detail: "Catalogo", group: "Ventas", icon: Layers3 },
+  { id: "pagos", label: "Comisiones", detail: "Propias", group: "Ventas", icon: HandCoins },
+  { id: "evidencias", label: "Evidencias", detail: "Gates", group: "Ventas", icon: FileCheck2 },
+  { id: "proyectos", label: "Proyectos", detail: "ONIA", group: "Entrega", icon: BriefcaseBusiness },
+  { id: "tareas", label: "Tareas", detail: "Revision", group: "Entrega", icon: ClipboardCheck },
+  { id: "collab", label: "Collab", detail: "Ingestion", group: "Entrega", icon: Database },
+  { id: "bolivian", label: "Bolivian", detail: "Modulo", group: "Entrega", icon: Building2 },
+  { id: "agentes", label: "Agentes", detail: "Mes", group: "IA y automatizacion", icon: Sparkles },
+  { id: "integraciones", label: "Integraciones", detail: "Pendientes", group: "IA y automatizacion", icon: Workflow },
+  { id: "premium", label: "Premium", detail: "Herramientas", group: "IA y automatizacion", icon: Zap },
   { id: "finanzas", label: "Finanzas", detail: "Centros", group: "Dinero", icon: WalletCards },
   { id: "nuvia", label: "Nuvia", detail: "Lotes", group: "Dinero", icon: Boxes },
-  { id: "pagos", label: "Pagos", detail: "Comisiones", group: "Dinero", icon: HandCoins },
+  { id: "ceo", label: "CEO", detail: "Privado", group: "Direccion", icon: Crown },
+  { id: "roles", label: "Roles", detail: "Permisos", group: "Direccion", icon: UsersRound },
+  { id: "arthur", label: "Arthur", detail: "60 dias", group: "Direccion", icon: UserCheck },
+  { id: "seguridad", label: "Seguridad", detail: "Privacidad", group: "Archivo", icon: ShieldCheck },
+  { id: "archivo", label: "Archivo", detail: "Fuentes y reglas", group: "Archivo", icon: Archive },
 ];
 
-const navGroups = ["Control", "Operacion", "Ejecucion", "Infra", "Direccion", "Comercial", "Dinero"];
+const navGroups = ["Trabajo", "Ventas", "Entrega", "IA y automatizacion", "Dinero", "Direccion", "Archivo"];
 
 const heroActionItems = [
-  { id: "servicios", label: "Servicios", icon: Layers3 },
-  { id: "pagos", label: "Pagos", icon: HandCoins },
+  { id: "uso-diario", label: "Captura rapida", icon: FileCheck2 },
+  { id: "ideas", label: "Ideas", icon: Lightbulb },
   { id: "evidencias", label: "Evidencias", icon: ShieldCheck },
 ] as const;
 
 const moduleCopy: Record<string, { title: string; description: string; content: string[] }> = {
   dashboard: {
-    title: "Estado operativo de ONIA",
-    description: "Resumen ejecutivo, fuentes canonicas, reglas activas y base de datos conectada.",
-    content: ["Conexion real", "Modelo de datos", "Reglas de bloqueo", "Repos y privacidad"],
+    title: "Hoy en ONIA",
+    description: "Tareas del dia, calendario de tiempos, captura rapida y alertas operativas filtradas por rol.",
+    content: ["Agenda", "Tareas", "Notas rapidas", "Evidencia"],
   },
   "uso-diario": {
-    title: "Captura diaria",
-    description: "Registro de leads, tareas, revision collab y notas operativas sin mezclar finanzas privadas.",
-    content: ["Leads", "Tareas", "Revision", "Notas"],
+    title: "Captura rapida",
+    description: "Notas, tareas rapidas, evidencia e informacion valiosa para que nada quede perdido en chats.",
+    content: ["Leads", "Tareas", "Notas", "Evidencia"],
   },
   "calendario-sergio": {
     title: "Calendario estricto Sergio",
@@ -235,7 +237,7 @@ const moduleCopy: Record<string, { title: string; description: string; content: 
   },
   ceo: {
     title: "Dashboard CEO Sergio",
-    description: "Caja, runway, deuda, capital y recuperacion. Oculto para cualquier rol que no sea Sergio.",
+    description: "Caja, runway, deuda, capital y recuperacion. Arthur solo ve senales filtradas, nunca capital privado.",
     content: ["Ventas netas", "Fondo ONIA", "Runway", "Capital privado"],
   },
   roles: {
@@ -277,6 +279,11 @@ const moduleCopy: Record<string, { title: string; description: string; content: 
     title: "Pagos y comisiones",
     description: "Motor de calculo con evidencia, descuentos, adelantos y aprobacion Sergio.",
     content: ["Vendedor", "Arthur", "Adelanto", "Cierre mensual"],
+  },
+  archivo: {
+    title: "Archivo y sistema",
+    description: "Fuentes canonicas, modelo de datos, reglas de bloqueo y detalles tecnicos que no se usan en produccion diaria.",
+    content: ["Fuentes", "Modelo", "Reglas", "Auditoria"],
   },
 };
 
@@ -788,23 +795,19 @@ export default function OniaCenterPage() {
           </article>
         </section>
 
-        <section className="onia-source-strip" aria-label="Fuentes canonicas" hidden={activeView !== "dashboard"}>
-          {sourceDocuments.map((source) => (
-            <code key={source}>{source}</code>
-          ))}
-        </section>
-
-        {["uso-diario", "calendario-sergio", "ideas", "integraciones"].includes(activeView) ? (
+        {["dashboard", "uso-diario", "calendario-sergio", "ideas", "integraciones"].includes(activeView) ? (
           <OperatingWorkspace
             selectedRole={selectedRole}
             workspaceView={
-              activeView === "calendario-sergio"
-                ? "calendar"
-                : activeView === "ideas"
-                  ? "ideas"
-                  : activeView === "integraciones"
-                    ? "connections"
-                    : "capture"
+              activeView === "dashboard"
+                ? "daily"
+                : activeView === "calendario-sergio"
+                  ? "calendar"
+                  : activeView === "ideas"
+                    ? "ideas"
+                    : activeView === "integraciones"
+                      ? "connections"
+                      : "capture"
             }
           />
         ) : null}
@@ -920,11 +923,11 @@ export default function OniaCenterPage() {
           </div>
         </section>
 
-        <section className="onia-panel onia-repo-strategy" id="dashboard" aria-label="Dashboard operativo ONIA" hidden={activeView !== "dashboard"}>
+        <section className="onia-panel onia-repo-strategy" id="repo-strategy" aria-label="Arquitectura operativa ONIA" hidden={activeView !== "archivo"}>
           <SectionHeader
-            eyebrow="Decision operativa"
+            eyebrow="Archivo / arquitectura"
             title="onia-center ejecuta; Hermes piensa; collab aporta"
-            description="No abrimos otro repo todavia. Primero consolidamos el sistema operativo aqui, con limites claros entre privado y colaborativo."
+            description="Referencia de arquitectura y limites entre privado, operativo y colaborativo. No hace falta verla en produccion diaria."
             icon={BarChart3}
           />
           <div className="onia-repo-grid">
@@ -1333,13 +1336,18 @@ export default function OniaCenterPage() {
           </div>
         </section>
 
-        <section className="onia-panel onia-system-base" aria-label="Base operativa Fase 1" hidden={activeView !== "dashboard"}>
+        <section className="onia-panel onia-system-base" aria-label="Base operativa Fase 1" hidden={activeView !== "archivo"}>
           <SectionHeader
-            eyebrow="Fase 1 - Base operativa"
-            title="Modelo, seed y datos reales"
-            description="El seed inicial sale del JSON vendor panel. Leads, ingresos y gastos reales quedan en cero hasta conectarlos a Notion/Supabase."
-            icon={Database}
+            eyebrow="Archivo / sistema"
+            title="Fuentes, modelo y reglas de soporte"
+            description="Esto queda fuera del inicio porque no se usa cada hora. Sirve para auditoria, debug, validacion y preservacion de conocimiento."
+            icon={Archive}
           />
+          <section className="onia-source-strip" aria-label="Fuentes canonicas">
+            {sourceDocuments.map((source) => (
+              <code key={source}>{source}</code>
+            ))}
+          </section>
           <div className="onia-seed-summary">
             <article>
               <span>Seed fuente</span>
@@ -1384,9 +1392,9 @@ export default function OniaCenterPage() {
           <TonePill tone={privateVisible ? "green" : "blue"}>{privateVisible ? "acceso completo" : "vista filtrada"}</TonePill>
         </section>
 
-        <section className="onia-panel" aria-label="Reglas de negocio implementadas" hidden={activeView !== "dashboard"}>
+        <section className="onia-panel" aria-label="Reglas de negocio implementadas" hidden={activeView !== "archivo"}>
           <SectionHeader
-            eyebrow="Fase 2 - Reglas de negocio"
+            eyebrow="Archivo / reglas"
             title="Bloqueos ejecutables"
             description="Estas reglas son calculadas por el motor, no solo texto en pantalla."
             icon={ShieldCheck}

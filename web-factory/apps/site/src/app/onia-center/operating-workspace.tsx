@@ -68,7 +68,7 @@ type RuntimeReview = {
 
 type RuntimeNote = {
   id: string;
-  kind: "llamada" | "nota" | "cobro" | "bloqueo" | "idea";
+  kind: "llamada" | "nota" | "cobro" | "bloqueo" | "idea" | "evidencia";
   title: string;
   detail: string;
   linkedTo: string;
@@ -111,7 +111,7 @@ type RuntimeApiResponse<T = RuntimeData> = {
   missingConfiguration?: string[];
   data: T | null;
 };
-export type WorkspaceView = "capture" | "calendar" | "ideas" | "connections";
+export type WorkspaceView = "daily" | "capture" | "calendar" | "ideas" | "connections";
 
 const storageKey = "onia-center-runtime-v2";
 const legacyStorageKey = "onia-center-runtime-v1";
@@ -132,6 +132,11 @@ const reviewToolLabels: Record<RuntimeIdea["reviewTool"], string> = {
 };
 
 const workspaceCopy: Record<WorkspaceView, { label: string; title: string; description: string }> = {
+  daily: {
+    label: "Hoy",
+    title: "Tareas del dia y calendario",
+    description: "Primero agenda, tareas, captura rapida y evidencia. Lo tecnico queda fuera del inicio.",
+  },
   capture: {
     label: "Captura operativa",
     title: "Captura diaria funcional",
@@ -479,10 +484,27 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
     const pendingTasks = visibleTasks.filter((task) => !["done", "blocked"].includes(task.status)).length;
     const pendingReviews = visibleReviews.filter((review) => review.status === "pendiente").length;
     const recordedPayments = visibleNotes.filter((note) => note.kind === "cobro").length;
+    const evidenceRecords = visibleNotes.filter((note) => note.kind === "evidencia").length;
     const ideasInbox = visibleIdeas.filter((idea) => ["inbox", "queued"].includes(idea.status)).length;
 
-    return { hotLeads, pendingTasks, pendingReviews, recordedPayments, ideasInbox };
+    return { hotLeads, pendingTasks, pendingReviews, recordedPayments, evidenceRecords, ideasInbox };
   }, [visibleIdeas, visibleLeads, visibleNotes, visibleReviews, visibleTasks]);
+
+  const pendingTodayTasks = useMemo(
+    () =>
+      visibleTasks
+        .filter((task) => !["done", "blocked"].includes(task.status))
+        .sort((a, b) => {
+          const priorityRank = { alta: 0, media: 1, baja: 2 };
+          return priorityRank[a.priority] - priorityRank[b.priority] || timeRank(b.createdAt) - timeRank(a.createdAt);
+        })
+        .slice(0, 8),
+    [visibleTasks],
+  );
+  const recentEvidence = useMemo(
+    () => visibleNotes.filter((note) => ["evidencia", "bloqueo", "nota"].includes(note.kind)).slice(0, 6),
+    [visibleNotes],
+  );
 
   const teamActivity = useMemo(() => {
     return [
@@ -832,14 +854,14 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
           <small>Filtradas por rol</small>
         </article>
         <article>
+          <span>Evidencia/info</span>
+          <strong>{summary.evidenceRecords}</strong>
+          <small>Pruebas o datos valiosos</small>
+        </article>
+        <article>
           <span>Ideas inbox</span>
           <strong>{summary.ideasInbox}</strong>
           <small>Reels, links y notas para IA</small>
-        </article>
-        <article>
-          <span>Revision collab</span>
-          <strong>{summary.pendingReviews}</strong>
-          <small>Solo Sergio aprueba</small>
         </article>
         <article>
           <span>Cobros anotados</span>
@@ -847,6 +869,163 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
           <small>No aprueban comision solos</small>
         </article>
       </div>
+
+      {workspaceView === "daily" ? (
+        <div className="onia-daily-command">
+          <article className="onia-live-card onia-daily-agenda">
+            <div className="onia-live-title">
+              <CalendarDays size={16} />
+              <strong>{selectedRole === "sergio" ? "Calendario estricto de hoy" : "Agenda privada protegida"}</strong>
+            </div>
+            {selectedRole === "sergio" ? (
+              <>
+                <div className="onia-calendar-summary">
+                  <div>
+                    <span>Arranque</span>
+                    <strong>06:30</strong>
+                    <small>Plan CEO antes de telefono.</small>
+                  </div>
+                  <div>
+                    <span>Reuniones</span>
+                    <strong>11:30 / 15:30</strong>
+                    <small>Solo ventanas aprobadas.</small>
+                  </div>
+                  <div>
+                    <span>Protegido</span>
+                    <strong>Gym + personal</strong>
+                    <small>No reuniones ni Higgsfield.</small>
+                  </div>
+                </div>
+                <div className="onia-calendar-timeline is-compact">
+                  {sergioStrictScheduleBlocks.slice(0, 7).map((block) => {
+                    const CategoryIcon = scheduleCategoryIcons[block.category] ?? Clock;
+                    return (
+                      <div className={`onia-calendar-block is-${block.category}`} key={block.id}>
+                        <span>
+                          <CategoryIcon size={14} />
+                          {block.start} - {block.end}
+                        </span>
+                        <strong>{block.title}</strong>
+                        <small>{block.meetingPolicy === "available" ? "reuniones permitidas" : "bloqueado"}</small>
+                      </div>
+                    );
+                  })}
+                </div>
+              </>
+            ) : (
+              <div className="onia-private-calendar">
+                <ShieldCheck size={17} />
+                <div>
+                  <span>Privacidad Sergio</span>
+                  <strong>No visible para este rol</strong>
+                  <p>Tu inicio se limita a tus tareas, notas, evidencias y registros asignados.</p>
+                </div>
+              </div>
+            )}
+          </article>
+
+          <article className="onia-live-card onia-daily-tasks">
+            <div className="onia-live-title">
+              <ClipboardCheck size={16} />
+              <strong>Tareas del dia</strong>
+            </div>
+            <div className="onia-live-list">
+              {pendingTodayTasks.length ? (
+                pendingTodayTasks.map((task) => (
+                  <div key={task.id}>
+                    <span>{roleLabel(task.assignedRole)} / {task.priority} / {projectLabel(task.projectId)}</span>
+                    <strong>{task.title}</strong>
+                    <select value={task.status} onChange={(event) => updateTaskStatus(task.id, event.target.value as RuntimeTask["status"])}>
+                      <option value="todo">Por hacer</option>
+                      <option value="doing">En proceso</option>
+                      <option value="review">Revision</option>
+                      <option value="done">Listo</option>
+                      <option value="blocked">Bloqueado</option>
+                    </select>
+                  </div>
+                ))
+              ) : (
+                <div>
+                  <span>Sin tareas pendientes visibles</span>
+                  <strong>Crea una tarea rapida o revisa captura.</strong>
+                  <small>Los filtros respetan el rol actual.</small>
+                </div>
+              )}
+            </div>
+          </article>
+
+          <article className="onia-live-card onia-daily-capture">
+            <div className="onia-live-title">
+              <Plus size={16} />
+              <strong>Captura rapida</strong>
+            </div>
+            <label>
+              Tarea rapida
+              <input value={taskForm.title} onChange={(event) => setTaskForm({ ...taskForm, title: event.target.value })} placeholder="Que hay que hacer hoy" />
+            </label>
+            <div className="onia-form-row">
+              <label>
+                Proyecto
+                <select value={taskForm.projectId} onChange={(event) => setTaskForm({ ...taskForm, projectId: event.target.value })}>
+                  {operatingProjects.map((project) => (
+                    <option key={project.id} value={project.id}>
+                      {project.name}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <label>
+                Prioridad
+                <select value={taskForm.priority} onChange={(event) => setTaskForm({ ...taskForm, priority: event.target.value as RuntimeTask["priority"] })}>
+                  <option value="alta">Alta</option>
+                  <option value="media">Media</option>
+                  <option value="baja">Baja</option>
+                </select>
+              </label>
+            </div>
+            <button className="onia-primary-button" type="button" onClick={addTask}>
+              {isSyncing ? "Guardando..." : "Crear tarea"}
+            </button>
+            <div className="onia-quick-note">
+              <label>
+                Nota, evidencia o dato valioso
+                <input value={noteForm.title} onChange={(event) => setNoteForm({ ...noteForm, title: event.target.value, kind: noteForm.kind === "nota" ? "evidencia" : noteForm.kind })} placeholder="Ej. Captura enviada, cliente pidio demo, link importante" />
+              </label>
+              <label>
+                Detalle o link
+                <textarea value={noteForm.detail} onChange={(event) => setNoteForm({ ...noteForm, detail: event.target.value })} placeholder="Pega link, acuerdo, evidencia o contexto" rows={3} />
+              </label>
+              <button className="onia-secondary-button" type="button" onClick={addNote}>
+                Guardar informacion
+              </button>
+            </div>
+          </article>
+
+          <article className="onia-live-card onia-daily-evidence">
+            <div className="onia-live-title">
+              <FileCheck2 size={16} />
+              <strong>Evidencia e informacion reciente</strong>
+            </div>
+            <div className="onia-live-list">
+              {recentEvidence.length ? (
+                recentEvidence.map((note) => (
+                  <div key={note.id}>
+                    <span>{note.kind} / {roleLabel(note.actorRole ?? "sergio")}</span>
+                    <strong>{note.title}</strong>
+                    <small>{note.linkedTo || note.detail || "Sin relacion"}</small>
+                  </div>
+                ))
+              ) : (
+                <div>
+                  <span>Sin evidencia visible</span>
+                  <strong>Guarda capturas, links o datos valiosos desde captura rapida.</strong>
+                  <small>Esto no aprueba pagos; solo deja trazabilidad.</small>
+                </div>
+              )}
+            </div>
+          </article>
+        </div>
+      ) : null}
 
       {workspaceView === "calendar" && selectedRole === "sergio" ? (
         <div className="onia-sergio-calendar" id="calendario-sergio">
@@ -1103,6 +1282,7 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
                 <option value="cobro">Cobro</option>
                 <option value="bloqueo">Bloqueo</option>
                 <option value="idea">Idea corta</option>
+                <option value="evidencia">Evidencia/info</option>
               </select>
             </label>
             <label>
