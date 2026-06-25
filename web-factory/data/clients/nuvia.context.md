@@ -2,6 +2,14 @@
 
 Last update: 2026-06-25
 
+2026-06-25 catalog performance and image placement pass:
+
+- Reference pattern applied: Sephora/Dermstore-style catalog controls, Glossier/The Ordinary-style clean product cards and Ulta-style compact grid with direct price/CTA mechanics. Use the pattern, not their identity, copy, assets or claims.
+- The catalog must not render all 315 public products at once. Start with 48 visible products and reveal the rest progressively so the page feels lighter while the full catalog remains accessible.
+- Product cards should stay compact and ecommerce-first: contained packshot, concise title/description, up to three chips, detail link and add-to-cart. Avoid returning to oversized cards or repeated product-looking category sections.
+- Image placement rule: category thumbnails, catalog cards, hero preview, sticky checkout thumbnails, PDP main media and PDP gallery use explicit `sizes` and contained image frames. Keep packshots centered with `object-fit: contain`; do not use hover zoom that can crop bottles or tubes.
+- PDP media selectors must target the main product image specifically, not every descendant image, so gallery thumbnails keep their own compact dimensions.
+
 2026-06-25 price watcher validation:
 
 - Latest committed supplier refresh has 330 source products, 12 scrape errors, 315 public storefront products and 15 internal professional-only products.

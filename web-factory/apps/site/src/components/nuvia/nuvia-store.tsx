@@ -76,6 +76,7 @@ type CheckoutResult = {
 
 const STORAGE_KEY = "nuvia-next-cart-v1";
 const PROMO_NOTICE_KEY = "nuvia-promo-notice-20260623";
+const CATALOG_PAGE_SIZE = 48;
 
 const ROUTINE_STEPS: RoutineStepDefinition[] = [
   {
@@ -738,7 +739,7 @@ function ProductCheckoutBar({
   return (
     <aside className="nuvia-pdp-checkout-bar" aria-label={`Checkout rapido de ${product.titulo}`}>
       <Link href="/nuvia/catalogo" className="nuvia-pdp-bar-product">
-        <Image src={product.imagen} alt="" width={58} height={58} />
+        <Image src={product.imagen} alt="" width={58} height={58} sizes="50px" />
         <span>{briefProductTitle(product)}</span>
       </Link>
       <div className="nuvia-pdp-bar-actions">
@@ -776,6 +777,7 @@ function ProductShelf({
   });
   const [activeCategory, setActiveCategory] = useState("todos");
   const [query, setQuery] = useState("");
+  const [visibleCount, setVisibleCount] = useState(CATALOG_PAGE_SIZE);
   const normalizedQuery = query.trim().toLowerCase();
   const filteredProducts = useMemo(
     () =>
@@ -806,6 +808,12 @@ function ProductShelf({
       }),
     [activeCategory, normalizedQuery, products],
   );
+  const visibleProducts = useMemo(() => filteredProducts.slice(0, visibleCount), [filteredProducts, visibleCount]);
+  const remainingProducts = filteredProducts.length - visibleProducts.length;
+
+  useEffect(() => {
+    setVisibleCount(CATALOG_PAGE_SIZE);
+  }, [activeCategory, normalizedQuery]);
 
   return (
     <section className="nuvia-next-section nuvia-catalog-portal" id="catalogo" data-nuvia-reveal>
@@ -826,7 +834,7 @@ function ProductShelf({
             onClick={() => setActiveCategory(section.category)}
             key={section.category}
           >
-            {section.hero ? <Image src={section.hero.imagen} alt="" width={96} height={96} /> : null}
+            {section.hero ? <Image src={section.hero.imagen} alt="" width={96} height={96} sizes="76px" /> : null}
             <span>{section.count}</span>
             <strong>{section.category}</strong>
             <small>{section.brands} marcas</small>
@@ -866,41 +874,59 @@ function ProductShelf({
         </div>
 
         <p className="nuvia-catalog-count" aria-live="polite">
-          {filteredProducts.length} productos encontrados
+          {filteredProducts.length ? `${visibleProducts.length} de ${filteredProducts.length} productos visibles` : "0 productos encontrados"}
         </p>
       </div>
 
       {filteredProducts.length ? (
-        <div className="nuvia-product-grid">
-          {filteredProducts.map((product, index) => {
-            const slug = productSlug(product);
-            const revealDelay = `${(index % 12) * 45}ms`;
+        <>
+          <div className="nuvia-product-grid">
+            {visibleProducts.map((product, index) => {
+              const slug = productSlug(product);
+              const revealDelay = `${(index % 12) * 45}ms`;
 
-            return (
-              <article className="nuvia-product-card" data-nuvia-reveal style={{ "--delay": revealDelay } as CSSProperties} key={slug}>
-                <figure>
-                  <span>{product.etiqueta}</span>
-                  {product.descuentoPorcentaje ? <b>{product.descuentoPorcentaje}% off</b> : null}
-                  <Image src={product.imagen} alt={product.imagenAlt} width={460} height={460} priority={index < 6} />
-                </figure>
-                <div>
-                  <small>{[product.marca, product.tamano].filter(Boolean).join(" - ")}</small>
-                  <h3>{briefProductTitle(product)}</h3>
-                  <p>{product.desc}</p>
-                  <ul>
-                    {[...product.idealPara, ...product.beneficios].slice(0, 3).map((item) => (
-                      <li key={item}>{item}</li>
-                    ))}
-                  </ul>
-                  <footer>
-                    <Link href={productHref(product)}>ver ficha completa</Link>
-                    <ProductMiniCheckout product={product} onAdd={onAdd} />
-                  </footer>
-                </div>
-              </article>
-            );
-          })}
-        </div>
+              return (
+                <article className="nuvia-product-card" data-nuvia-reveal style={{ "--delay": revealDelay } as CSSProperties} key={slug}>
+                  <figure>
+                    <span>{product.etiqueta}</span>
+                    {product.descuentoPorcentaje ? <b>{product.descuentoPorcentaje}% off</b> : null}
+                    <Image
+                      src={product.imagen}
+                      alt={product.imagenAlt}
+                      width={460}
+                      height={460}
+                      sizes="(max-width: 680px) 44vw, (max-width: 1100px) 30vw, 220px"
+                      priority={index < 4}
+                    />
+                  </figure>
+                  <div>
+                    <small>{[product.marca, product.tamano].filter(Boolean).join(" - ")}</small>
+                    <h3>{briefProductTitle(product)}</h3>
+                    <p>{product.desc}</p>
+                    <ul>
+                      {[...product.idealPara, ...product.beneficios].slice(0, 3).map((item) => (
+                        <li key={item}>{item}</li>
+                      ))}
+                    </ul>
+                    <footer>
+                      <Link href={productHref(product)}>ver ficha completa</Link>
+                      <ProductMiniCheckout product={product} onAdd={onAdd} />
+                    </footer>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+          {remainingProducts > 0 ? (
+            <button
+              className="nuvia-load-more"
+              type="button"
+              onClick={() => setVisibleCount((current) => Math.min(current + CATALOG_PAGE_SIZE, filteredProducts.length))}
+            >
+              mostrar {Math.min(CATALOG_PAGE_SIZE, remainingProducts)} productos mas
+            </button>
+          ) : null}
+        </>
       ) : (
         <div className="nuvia-empty-results" role="status">
           <strong>no encontramos ese producto</strong>
@@ -963,7 +989,7 @@ function HeroStage({
             <article className="nuvia-stage-card" key={slug}>
               <Link href={productHref(product)}>
                 <figure>
-                  <Image src={product.imagen} alt={product.imagenAlt} width={520} height={520} />
+                  <Image src={product.imagen} alt={product.imagenAlt} width={520} height={520} sizes="(max-width: 680px) 42vw, 260px" />
                 </figure>
                 <span>{product.marca}</span>
                 <strong>{briefProductTitle(product)}</strong>
@@ -1026,7 +1052,7 @@ export function NuviaStorefront(props: StoreProps) {
           {routineSteps.map((step) => (
             <Link href={productHref(step.product)} key={step.id}>
               <b>{step.number}</b>
-              <Image src={step.product.imagen} alt={step.product.imagenAlt} width={160} height={180} />
+              <Image src={step.product.imagen} alt={step.product.imagenAlt} width={160} height={180} sizes="(max-width: 680px) 45vw, 160px" />
               <small>{step.action}</small>
               <strong>{step.title}</strong>
               <p>{step.body}</p>
@@ -1202,12 +1228,19 @@ export function NuviaProductPage(props: ProductPageProps) {
             volver al catalogo
           </Link>
           <figure>
-            <Image src={props.product.imagen} alt={props.product.imagenAlt} width={680} height={760} priority />
+            <Image
+              src={props.product.imagen}
+              alt={props.product.imagenAlt}
+              width={680}
+              height={760}
+              sizes="(max-width: 980px) 92vw, 54vw"
+              priority
+            />
           </figure>
           <div className="nuvia-pdp-gallery" aria-label="Imagenes y espacios multimedia del producto">
             {props.product.detalleImagenes.slice(0, 3).map((image) => (
               <figure key={`${image.src}-${image.label}`}>
-                <Image src={image.src} alt={image.alt} width={180} height={180} />
+                <Image src={image.src} alt={image.alt} width={180} height={180} sizes="(max-width: 680px) 30vw, 180px" />
                 <figcaption>{image.label}</figcaption>
               </figure>
             ))}
