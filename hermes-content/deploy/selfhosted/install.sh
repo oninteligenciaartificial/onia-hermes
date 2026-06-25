@@ -20,19 +20,21 @@ require_command() {
 
 env_value() {
   local key="$1"
-  if [ ! -f .env ]; then
+  local env_file="${ROOT_DIR}/.env"
+  if [ ! -f "$env_file" ]; then
     return 0
   fi
-  grep -E "^${key}=" .env | tail -n 1 | cut -d= -f2- || true
+  grep -E "^${key}=" "$env_file" | tail -n 1 | cut -d= -f2- || true
 }
 
 set_env_value() {
   local key="$1"
   local value="$2"
-  if grep -qE "^${key}=" .env; then
-    sed -i "s|^${key}=.*|${key}=${value}|" .env
+  local env_file="${ROOT_DIR}/.env"
+  if grep -qE "^${key}=" "$env_file"; then
+    sed -i "s|^${key}=.*|${key}=${value}|" "$env_file"
   else
-    printf '%s=%s\n' "$key" "$value" >> .env
+    printf '%s=%s\n' "$key" "$value" >> "$env_file"
   fi
 }
 
@@ -60,8 +62,13 @@ ensure_env() {
   ensure_secret "LITELLM_POSTGRES_PASSWORD"
   ensure_secret "WEBUI_SECRET_KEY"
   ensure_secret "STIRLING_INITIALLOGIN_PASSWORD"
+  ensure_secret "CRAWL4AI_API_TOKEN"
+  ensure_secret "CRAWL4AI_SECRET_KEY"
+  ensure_secret "CRAWL4AI_REDIS_PASSWORD"
   ensure_secret "LISTMONK_POSTGRES_PASSWORD"
   ensure_secret "LISTMONK_ADMIN_PASSWORD"
+  ensure_secret "FIRECRAWL_POSTGRES_PASSWORD"
+  ensure_secret "FIRECRAWL_BULL_AUTH_KEY"
 }
 
 audit() {
@@ -204,6 +211,71 @@ prepare_dify() {
   log "Do not run its compose until ports 80/443 are patched behind Easypanel/Traefik."
 }
 
+prepare_firecrawl() {
+  ensure_env
+  check_docker
+  require_command git
+  require_command curl
+  require_command python3
+
+  if [ "$(total_mem_mb)" -lt 14000 ]; then
+    fail "Firecrawl is a heavy Playwright workload. Prepare it only on KVM 4+ or a worker VPS with at least 14 GB RAM."
+  fi
+
+  mkdir -p /opt/onia-selfhosted/firecrawl
+  cd /opt/onia-selfhosted/firecrawl
+
+  if [ ! -d src/.git ]; then
+    local tag
+    tag="$(curl -fsSL https://api.github.com/repos/firecrawl/firecrawl/releases/latest | python3 -c 'import json,sys; data=json.load(sys.stdin); print(data.get("tag_name",""))' 2>/dev/null || true)"
+    if [ -n "$tag" ]; then
+      git clone --depth 1 --branch "$tag" https://github.com/firecrawl/firecrawl.git src
+    else
+      git clone --depth 1 https://github.com/firecrawl/firecrawl.git src
+    fi
+  fi
+
+  local pg_user pg_pass pg_db bull_key fc_bind fc_port concurrency max_jobs pool_size max_cpu max_ram
+  pg_user="$(env_value FIRECRAWL_POSTGRES_USER)"
+  pg_pass="$(env_value FIRECRAWL_POSTGRES_PASSWORD)"
+  pg_db="$(env_value FIRECRAWL_POSTGRES_DB)"
+  bull_key="$(env_value FIRECRAWL_BULL_AUTH_KEY)"
+  fc_bind="$(env_value FIRECRAWL_BIND)"
+  fc_port="$(env_value FIRECRAWL_PORT)"
+  concurrency="$(env_value FIRECRAWL_CRAWL_CONCURRENT_REQUESTS)"
+  max_jobs="$(env_value FIRECRAWL_MAX_CONCURRENT_JOBS)"
+  pool_size="$(env_value FIRECRAWL_BROWSER_POOL_SIZE)"
+  max_cpu="$(env_value FIRECRAWL_MAX_CPU)"
+  max_ram="$(env_value FIRECRAWL_MAX_RAM)"
+
+  cat > /opt/onia-selfhosted/firecrawl/src/.env <<EOF
+# ONIA generated Firecrawl config. Private research capability only.
+PORT=${fc_bind:-127.0.0.1}:${fc_port:-3106}
+INTERNAL_PORT=3002
+HOST=0.0.0.0
+USE_DB_AUTHENTICATION=false
+POSTGRES_USER=${pg_user:-firecrawl}
+POSTGRES_PASSWORD=${pg_pass}
+POSTGRES_DB=${pg_db:-firecrawl}
+BULL_AUTH_KEY=${bull_key}
+SEARXNG_ENDPOINT=http://host.docker.internal:8080
+NUM_WORKERS_PER_QUEUE=1
+CRAWL_CONCURRENT_REQUESTS=${concurrency:-2}
+MAX_CONCURRENT_JOBS=${max_jobs:-1}
+BROWSER_POOL_SIZE=${pool_size:-1}
+MAX_CPU=${max_cpu:-0.70}
+MAX_RAM=${max_ram:-0.70}
+BLOCK_MEDIA=true
+LOGGING_LEVEL=info
+EOF
+  chmod 600 /opt/onia-selfhosted/firecrawl/src/.env
+
+  log "Firecrawl is prepared at /opt/onia-selfhosted/firecrawl/src but NOT started."
+  log "It is intentionally bound for localhost via PORT=${fc_bind:-127.0.0.1}:${fc_port:-3106}."
+  log "Before starting, review upstream compose resource limits: API defaults near 8G and Playwright near 4G."
+  log "Start manually only during a maintenance window: cd /opt/onia-selfhosted/firecrawl/src && docker compose up -d"
+}
+
 case "$PROFILE" in
   audit)
     audit
@@ -229,7 +301,10 @@ case "$PROFILE" in
   prepare-dify)
     prepare_dify
     ;;
+  prepare-firecrawl)
+    prepare_firecrawl
+    ;;
   *)
-    fail "Unknown profile '$PROFILE'. Use: audit, monitor, utility, ai, research, mail, all-safe, prepare-dify."
+    fail "Unknown profile '$PROFILE'. Use: audit, monitor, utility, ai, research, mail, all-safe, prepare-dify, prepare-firecrawl."
     ;;
 esac

@@ -16,6 +16,7 @@ auth and rollback are confirmed.
 | `mail` | Mailpit + Listmonk | Prepare only | Email QA and campaign UI; no production SMTP until DNS/reputation are ready. |
 | `all-safe` | Monitor + utility + conditional AI/research | Conditional | Skips heavy profiles if env/resources are missing. |
 | `prepare-dify` | Downloads Dify only | Later | Does not start Dify because official compose can bind 80/443. |
+| `prepare-firecrawl` | Downloads Firecrawl only | Later/maintenance window | Does not start Firecrawl; browser/API defaults are heavy and must stay private. |
 
 ## Local commands
 
@@ -67,6 +68,7 @@ docker compose --profile monitor ps
 curl -fsS http://127.0.0.1:3101 || true
 curl -fsS http://127.0.0.1:4000/health/liveliness || true
 curl -fsS http://127.0.0.1:11235/health || true
+curl -fsS http://127.0.0.1:3106/serverHealthCheck || true
 ```
 
 ## Mail rule
@@ -88,3 +90,28 @@ Dify is P1 commercially, but it is not safe to run the official compose on the
 current VPS without checking resources and patching public ports. Its docs start
 5 core services plus 6 dependencies. Use `prepare-dify` only after audit says
 the VPS has enough RAM and disk.
+
+## Firecrawl rule
+
+Firecrawl is useful for ONIA research, web audits, lead enrichment and feeding
+agents with clean site data. It must stay private because it includes crawling,
+queue admin and browser automation.
+
+Use:
+
+```bash
+cd /opt/onia-selfhosted
+./install.sh prepare-firecrawl
+```
+
+The prepared instance is written to:
+
+```text
+/opt/onia-selfhosted/firecrawl/src
+```
+
+It is not started automatically. The generated `.env` binds the API to
+`127.0.0.1:3106`, connects search to the existing SearXNG container through
+`host.docker.internal:8080`, and limits concurrency. Start it only in a
+maintenance window after checking `docker stats`, because upstream defaults are
+heavy for both API and Playwright workers.

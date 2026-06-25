@@ -108,6 +108,7 @@ La mejor estrategia actualizada es:
 | Herramienta | Rol | Estado recomendado |
 |---|---|---|
 | Crawl4AI | Crawler API/MCP para fuentes, RAG y auditorias | P1 |
+| Firecrawl | Search/scrape/crawl/interact/agent para research web | P1 gated |
 | SearXNG | Busqueda privada/metasearch | P2 |
 | Maxun | Robots visuales de scraping | P3 laboratorio |
 | Docmost/Outline | Wiki interno si Notion deja de ser suficiente | P3, no urgente |
@@ -602,6 +603,7 @@ Supabase/n8n.
 | Open WebUI | `chat.onia.ai` | No al inicio | Solo ONIA interno. |
 | Dify | `dify.onia.ai` | No al inicio | Interno/single-workspace para demos y apps IA. |
 | Crawl4AI | `crawl.onia.ai` | No | API interna/MCP. |
+| Firecrawl | `firecrawl.onia.ai` | No | Solo interno/tunel; queue admin protegido. |
 | Stirling PDF | `pdf.onia.ai` | No al inicio | Login obligatorio si se expone. |
 | Uptime Kuma | `status.onia.ai` | Parcial | Status publico limitado; admin privado. |
 | SearXNG | `search.onia.ai` | No | Busqueda interna para research/agentes. |
@@ -639,6 +641,7 @@ Supabase/n8n.
 | Inbox/CRM conversacional | Chatwoot + n8n + Supabase | Si, con setup claro | WhatsApp oficial requiere costos/cuenta Meta/BSP. |
 | Kit PDF seguro | Stirling PDF | Si | Con login y alcance claro. |
 | Auditoria web con datos | Crawl4AI + SearXNG + n8n + Supabase | Si | Como proceso de consultoria, no scraping agresivo. |
+| Research web con agente | Firecrawl + SearXNG + n8n + Supabase | Si, interno | Solo fuentes permitidas; no scraping agresivo ni cuentas privadas. |
 | Observabilidad IA | Langfuse + LiteLLM/Dify | Todavia no | Vender cuando ya tengamos apps IA con trafico real. |
 | Scraping no-code | Maxun | Con cautela | Solo datos permitidos/publicos y acuerdo de uso. |
 | Agente de navegador | Browser Use | Con cautela | Siempre con supervision humana. |
@@ -678,6 +681,8 @@ Supabase/n8n.
 - Coolify install docs: https://coolify.io/docs/get-started/installation
 - Crawl4AI docs: https://docs.crawl4ai.com/
 - Crawl4AI self-host docs: https://docs.crawl4ai.com/core/self-hosting/
+- Firecrawl GitHub: https://github.com/firecrawl/firecrawl
+- Firecrawl self-host docs: https://github.com/firecrawl/firecrawl/blob/main/SELF_HOST.md
 - OpenHands GitHub/docs: https://github.com/OpenHands/OpenHands
 - OpenHands Docker sandbox docs: https://docs.openhands.dev/openhands/usage/sandboxes/docker
 - Maxun self-host docs: https://docs.maxun.dev/category/self-host

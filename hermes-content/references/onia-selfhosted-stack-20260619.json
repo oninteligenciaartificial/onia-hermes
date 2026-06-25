@@ -52,6 +52,20 @@
       "status": "blocked_by_resources_and_port_review"
     },
     {
+      "id": "prepare-firecrawl",
+      "priority": "P1 gated",
+      "services": ["firecrawl-source"],
+      "default_port_if_started": "127.0.0.1:3106",
+      "requires": [
+        "KVM 4+ or worker VPS",
+        "private access only",
+        "BULL_AUTH_KEY",
+        "maintenance window before starting browser/API workers"
+      ],
+      "decision": "prepare source and env only; do not run as always-on workload on main VPS",
+      "status": "prepared_gated"
+    },
+    {
       "id": "mail",
       "priority": "P2",
       "services": ["mailpit", "listmonk", "listmonk-db"],

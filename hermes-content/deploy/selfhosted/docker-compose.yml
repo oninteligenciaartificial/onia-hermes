@@ -62,7 +62,7 @@ services:
       timeout: 10s
       retries: 5
       start_period: 120s
-    mem_limit: 1536m
+    mem_limit: 3072m
     security_opt:
       - no-new-privileges:true
 
@@ -110,7 +110,7 @@ services:
       - stirling_pipeline:/pipeline
     networks:
       - onia_internal
-    mem_limit: 1536m
+    mem_limit: 2048m
     security_opt:
       - no-new-privileges:true
 
@@ -120,6 +120,10 @@ services:
     restart: unless-stopped
     env_file:
       - /root/.hermes/.env
+    environment:
+      CRAWL4AI_API_TOKEN: ${CRAWL4AI_API_TOKEN:-}
+      SECRET_KEY: ${CRAWL4AI_SECRET_KEY:-}
+      REDIS_PASSWORD: ${CRAWL4AI_REDIS_PASSWORD:-}
     shm_size: 1gb
     ports:
       - "${CRAWL4AI_BIND:-127.0.0.1}:${CRAWL4AI_PORT:-11235}:11235"
@@ -157,7 +161,7 @@ services:
     environment:
       POSTGRES_DB: ${LISTMONK_POSTGRES_DB:-listmonk}
       POSTGRES_USER: ${LISTMONK_POSTGRES_USER:-listmonk}
-      POSTGRES_PASSWORD: ${LISTMONK_POSTGRES_PASSWORD:?set LISTMONK_POSTGRES_PASSWORD}
+      POSTGRES_PASSWORD: ${LISTMONK_POSTGRES_PASSWORD:-}
     volumes:
       - listmonk_pgdata:/var/lib/postgresql/data
     networks:
@@ -184,14 +188,14 @@ services:
       LISTMONK_db__host: listmonk-db
       LISTMONK_db__port: 5432
       LISTMONK_db__user: ${LISTMONK_POSTGRES_USER:-listmonk}
-      LISTMONK_db__password: ${LISTMONK_POSTGRES_PASSWORD:?set LISTMONK_POSTGRES_PASSWORD}
+      LISTMONK_db__password: ${LISTMONK_POSTGRES_PASSWORD:-}
       LISTMONK_db__database: ${LISTMONK_POSTGRES_DB:-listmonk}
       LISTMONK_db__ssl_mode: disable
       LISTMONK_db__max_open: 25
       LISTMONK_db__max_idle: 25
       LISTMONK_db__max_lifetime: 300s
       LISTMONK_ADMIN_USER: ${LISTMONK_ADMIN_USER:-onia-admin}
-      LISTMONK_ADMIN_PASSWORD: ${LISTMONK_ADMIN_PASSWORD:?set LISTMONK_ADMIN_PASSWORD}
+      LISTMONK_ADMIN_PASSWORD: ${LISTMONK_ADMIN_PASSWORD:-}
       TZ: ${TZ:-America/La_Paz}
     ports:
       - "${LISTMONK_BIND:-127.0.0.1}:${LISTMONK_PORT:-3105}:9000"

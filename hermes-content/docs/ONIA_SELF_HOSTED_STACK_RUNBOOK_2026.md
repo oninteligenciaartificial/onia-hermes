@@ -17,6 +17,7 @@ sueltos; cada una debe entrar como capacidad controlada:
 - Uptime Kuma: monitoreo simple.
 - Stirling PDF: documentos.
 - Crawl4AI: research/crawling privado.
+- Firecrawl: research, auditorias web y extraccion limpia para agentes.
 - Mailpit: QA de correos y formularios.
 - Listmonk: listas, newsletters y campanas simples, sin SMTP productivo hasta
   tener DNS/reputacion.
@@ -55,6 +56,7 @@ npm run deploy:selfhosted -- --profile utility
 npm run deploy:selfhosted -- --profile ai
 npm run deploy:selfhosted -- --profile research
 npm run deploy:selfhosted -- --profile prepare-dify
+npm run deploy:selfhosted -- --profile prepare-firecrawl
 ```
 
 ## Orden recomendado
@@ -69,6 +71,8 @@ npm run deploy:selfhosted -- --profile prepare-dify
    para produccion.
 7. `prepare-dify`: descarga Dify, pero no lo arranca hasta revisar puertos y
    recursos. Estado: pendiente.
+8. `prepare-firecrawl`: descarga Firecrawl y genera `.env` privado, pero no lo
+   arranca. Estado: preparado solo cuando se necesite ventana de mantenimiento.
 
 ## Estado desplegado
 
@@ -79,8 +83,10 @@ npm run deploy:selfhosted -- --profile prepare-dify
 | Stirling PDF | Healthy | `127.0.0.1:3103` | Responde `401`; login activo. |
 | LiteLLM | Healthy | `127.0.0.1:4000` | `/health/liveliness` responde `200`; `/v1/models` responde `200`. |
 | LiteLLM Postgres | Healthy | red Docker interna | Persistente en volumen Docker. |
+| Crawl4AI | Healthy private | `127.0.0.1:11235` | Activado en KVM 4; token/secret persistentes en `.env` remoto. |
 | Mailpit | Prepared | `127.0.0.1:3104` web / `127.0.0.1:3025` SMTP | Solo QA, no entrega productiva. |
 | Listmonk | Prepared | `127.0.0.1:3105` | Campanas/listas; SMTP pendiente de DNS/reputacion. |
+| Firecrawl | Prepared gated | `127.0.0.1:3106` si se arranca | No iniciado por defecto; workload pesado de navegador/API. |
 
 Modelos expuestos por LiteLLM:
 
@@ -197,6 +203,7 @@ Uptime Kuma: healthy, local VPS 127.0.0.1:3101, HTTP 302
 Open WebUI: healthy, local VPS 127.0.0.1:3102, HTTP 200
 Stirling PDF: healthy, local VPS 127.0.0.1:3103, HTTP 401 esperado por login
 LiteLLM: healthy, local VPS 127.0.0.1:4000, /health/liveliness HTTP 200
+Crawl4AI: healthy privado, local VPS 127.0.0.1:11235, activado despues de KVM 4
 SearXNG: running, local VPS 127.0.0.1:8080, HTTP 200
 Cal.com: healthy, publico https://onia-calcom.hqdqgh.easypanel.host, HTTP 307 a /auth/login
 n8n: publico https://n8n-sergio-n8n.hqdqgh.easypanel.host, HTTP 200
@@ -207,13 +214,15 @@ Comando usado para reactivar perfiles no-mail del kit:
 
 ```bash
 cd /opt/onia-selfhosted
-export LISTMONK_POSTGRES_PASSWORD=not-started
-export LISTMONK_ADMIN_PASSWORD=not-started
 docker compose --profile monitor --profile utility --profile ai up -d
 ```
 
-Los placeholders de Listmonk solo evitan que Docker Compose bloquee el parseo del
-archivo; no arrancan el perfil `mail`. Listmonk sigue preparado, no productivo.
+El compose canonico ya no exige placeholders de Listmonk para perfiles no-mail.
+Listmonk sigue preparado, no productivo.
+
+Crawl4AI debe correr con `CRAWL4AI_API_TOKEN`, `CRAWL4AI_SECRET_KEY` y
+`CRAWL4AI_REDIS_PASSWORD` generados en `/opt/onia-selfhosted/.env`. No imprimir
+esos valores en chat ni logs compartidos.
 
 Cal.com se reactivo con:
 
@@ -258,8 +267,12 @@ Vigilancia:
 
 - LiteLLM quedo cerca de su limite configurado: aprox. `1.47 GiB / 1.5 GiB`.
 - Stirling PDF quedo alto pero healthy: aprox. `1.18 GiB / 1.5 GiB`.
-- No instalar Dify, Crawl4AI, OpenHands ni workers de navegador en este mismo
+- LiteLLM fue subido a `3 GiB` y Stirling PDF a `2 GiB` de limite despues del
+  KVM 4.
+- No instalar Dify, OpenHands ni workers de navegador adicionales en este mismo
   VPS hasta estabilizar memoria o separar workloads.
+- Firecrawl queda como capacidad preparada/gated: no arrancarlo como servicio
+  permanente en este VPS sin revisar memoria y colas.
 
 ## Reglas de seguridad
 
@@ -275,6 +288,8 @@ Vigilancia:
   operar servidor de correo propio.
 - Crawl4AI, Browser Use, Maxun y OpenHands se tratan como workloads riesgosos:
   privados, auditados y con limites.
+- Firecrawl se trata igual: privado, con queue admin protegido por
+  `BULL_AUTH_KEY`, sin puerto publico y con limites de concurrencia.
 
 ## Validacion post-deploy
 
@@ -306,6 +321,8 @@ ssh -L 3101:127.0.0.1:3101 root@187.77.16.63
 - Langfuse: instalar despues de tener trafico real de Dify/Open WebUI.
 - Qdrant: instalar solo si Supabase/pgvector no alcanza.
 - Dify: preparar VPS o instancia separada si el VPS actual no tiene margen.
+- Firecrawl: preparar fuente y `.env`; arrancar solo con objetivo concreto de
+  auditoria/research y ventana de mantenimiento.
 - Correo: decidir si Listmonk usara SMTP externo o si ONIA operara Postal en
   un VPS/IP separado.
 - Auth gateway: definir Authentik o Authelia antes de abrir paneles por DNS.
@@ -318,6 +335,7 @@ ssh -L 3101:127.0.0.1:3101 root@187.77.16.63
 - Dify Docker Compose: https://docs.dify.ai/en/self-host/quick-start/docker-compose
 - Stirling PDF config: https://docs.stirlingpdf.com/Configuration/
 - Crawl4AI self-hosting: https://docs.crawl4ai.com/core/self-hosting/
+- Firecrawl self-hosting: https://github.com/firecrawl/firecrawl/blob/main/SELF_HOST.md
 - Listmonk: https://listmonk.app/
 - Mailpit: https://mailpit.axllent.org/
 - Postal: https://docs.postalserver.io/
