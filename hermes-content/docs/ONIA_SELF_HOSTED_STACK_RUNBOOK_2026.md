@@ -188,6 +188,79 @@ Resultado esperado:
   `http://onia-chatbot_chatwoot:3000/`, `http://n8n-sergio_n8n:5678/` y
   `http://easypanel:3000/`.
 
+## Activacion extendida despues de KVM 4
+
+Estado validado el 2026-06-24 despues de reactivar perfiles y rutas:
+
+```text
+Uptime Kuma: healthy, local VPS 127.0.0.1:3101, HTTP 302
+Open WebUI: healthy, local VPS 127.0.0.1:3102, HTTP 200
+Stirling PDF: healthy, local VPS 127.0.0.1:3103, HTTP 401 esperado por login
+LiteLLM: healthy, local VPS 127.0.0.1:4000, /health/liveliness HTTP 200
+SearXNG: running, local VPS 127.0.0.1:8080, HTTP 200
+Cal.com: healthy, publico https://onia-calcom.hqdqgh.easypanel.host, HTTP 307 a /auth/login
+n8n: publico https://n8n-sergio-n8n.hqdqgh.easypanel.host, HTTP 200
+Chatwoot: publico https://onia-chatbot-chatwoot.hqdqgh.easypanel.host, HTTP 200
+```
+
+Comando usado para reactivar perfiles no-mail del kit:
+
+```bash
+cd /opt/onia-selfhosted
+export LISTMONK_POSTGRES_PASSWORD=not-started
+export LISTMONK_ADMIN_PASSWORD=not-started
+docker compose --profile monitor --profile utility --profile ai up -d
+```
+
+Los placeholders de Listmonk solo evitan que Docker Compose bloquee el parseo del
+archivo; no arrancan el perfil `mail`. Listmonk sigue preparado, no productivo.
+
+Cal.com se reactivo con:
+
+```bash
+cd /opt/onia-calcom
+docker compose up -d
+```
+
+SearXNG se reactivo con:
+
+```bash
+docker start searxng
+```
+
+Ruta publica Cal.com agregada manualmente al archivo dinamico de Traefik:
+
+```text
+/etc/easypanel/traefik/config/main.yaml
+```
+
+Backup creado antes del cambio:
+
+```text
+/etc/easypanel/traefik/config/main.yaml.bak-onia-calcom-route-20260625012301
+```
+
+La ruta agregada apunta `onia-calcom.hqdqgh.easypanel.host` a
+`http://onia-calcom:3000/` en la red externa `easypanel`. El contenedor Cal.com
+ya declara alias `onia-calcom` en esa red.
+
+Recursos despues de activar todo:
+
+```text
+RAM total: 15 GiB
+RAM usada: 7.5 GiB
+RAM disponible: 8.1 GiB
+Swap usada: 396 MiB / 4.0 GiB
+Disco /: 193 GiB total, 69 GiB usado, 125 GiB libre, 36% usado
+```
+
+Vigilancia:
+
+- LiteLLM quedo cerca de su limite configurado: aprox. `1.47 GiB / 1.5 GiB`.
+- Stirling PDF quedo alto pero healthy: aprox. `1.18 GiB / 1.5 GiB`.
+- No instalar Dify, Crawl4AI, OpenHands ni workers de navegador en este mismo
+  VPS hasta estabilizar memoria o separar workloads.
+
 ## Reglas de seguridad
 
 - No publicar ningun panel directo a internet al inicio.
