@@ -776,7 +776,6 @@ function ProductShelf({
   });
   const [activeCategory, setActiveCategory] = useState("todos");
   const [query, setQuery] = useState("");
-  const [visibleLimit, setVisibleLimit] = useState(48);
   const normalizedQuery = query.trim().toLowerCase();
   const filteredProducts = useMemo(
     () =>
@@ -807,11 +806,6 @@ function ProductShelf({
       }),
     [activeCategory, normalizedQuery, products],
   );
-  const visibleProducts = filteredProducts.slice(0, visibleLimit);
-
-  useEffect(() => {
-    setVisibleLimit(48);
-  }, [activeCategory, normalizedQuery]);
 
   return (
     <section className="nuvia-next-section nuvia-catalog-portal" id="catalogo" data-nuvia-reveal>
@@ -876,34 +870,36 @@ function ProductShelf({
         </p>
       </div>
 
-      {visibleProducts.length ? (
+      {filteredProducts.length ? (
         <div className="nuvia-product-grid">
-        {visibleProducts.map((product, index) => {
-          const slug = productSlug(product);
-          return (
-            <article className="nuvia-product-card" data-nuvia-reveal style={{ "--delay": `${index * 70}ms` } as CSSProperties} key={slug}>
-              <figure>
-                <span>{product.etiqueta}</span>
-                {product.descuentoPorcentaje ? <b>{product.descuentoPorcentaje}% off</b> : null}
-                <Image src={product.imagen} alt={product.imagenAlt} width={460} height={460} priority={index < 6} />
-              </figure>
-              <div>
-                <small>{[product.marca, product.tamano].filter(Boolean).join(" - ")}</small>
-                <h3>{briefProductTitle(product)}</h3>
-                <p>{product.desc}</p>
-                <ul>
-                  {[...product.idealPara, ...product.beneficios].slice(0, 3).map((item) => (
-                    <li key={item}>{item}</li>
-                  ))}
-                </ul>
-                <footer>
-                  <Link href={productHref(product)}>ver ficha completa</Link>
-                  <ProductMiniCheckout product={product} onAdd={onAdd} />
-                </footer>
-              </div>
-            </article>
-          );
-        })}
+          {filteredProducts.map((product, index) => {
+            const slug = productSlug(product);
+            const revealDelay = `${(index % 12) * 45}ms`;
+
+            return (
+              <article className="nuvia-product-card" data-nuvia-reveal style={{ "--delay": revealDelay } as CSSProperties} key={slug}>
+                <figure>
+                  <span>{product.etiqueta}</span>
+                  {product.descuentoPorcentaje ? <b>{product.descuentoPorcentaje}% off</b> : null}
+                  <Image src={product.imagen} alt={product.imagenAlt} width={460} height={460} priority={index < 6} />
+                </figure>
+                <div>
+                  <small>{[product.marca, product.tamano].filter(Boolean).join(" - ")}</small>
+                  <h3>{briefProductTitle(product)}</h3>
+                  <p>{product.desc}</p>
+                  <ul>
+                    {[...product.idealPara, ...product.beneficios].slice(0, 3).map((item) => (
+                      <li key={item}>{item}</li>
+                    ))}
+                  </ul>
+                  <footer>
+                    <Link href={productHref(product)}>ver ficha completa</Link>
+                    <ProductMiniCheckout product={product} onAdd={onAdd} />
+                  </footer>
+                </div>
+              </article>
+            );
+          })}
         </div>
       ) : (
         <div className="nuvia-empty-results" role="status">
@@ -915,11 +911,6 @@ function ProductShelf({
         </div>
       )}
 
-      {visibleProducts.length < filteredProducts.length ? (
-        <button className="nuvia-load-more" type="button" onClick={() => setVisibleLimit((current) => current + 48)}>
-          mostrar mas productos
-        </button>
-      ) : null}
     </section>
   );
 }

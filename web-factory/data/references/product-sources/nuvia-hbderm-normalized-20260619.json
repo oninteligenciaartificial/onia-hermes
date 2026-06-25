@@ -1,11 +1,11 @@
 {
   "source": "https://hbderm.com",
-  "fetched_at": "2026-06-23T22:01:18.098Z",
-  "generated_at": "2026-06-23T22:03:40.231Z",
-  "source_product_count": 327,
+  "fetched_at": "2026-06-25T01:27:30.159Z",
+  "generated_at": "2026-06-25T01:27:30.313Z",
+  "source_product_count": 330,
   "public_product_count": 315,
   "imported_public_count": 313,
-  "professional_internal_count": 12,
+  "professional_internal_count": 15,
   "pricing_formula": {
     "sale_price": "source_price - (source_price * 0.45)",
     "seller_commission": "(source_price * 0.45) * 0.10",
@@ -201,6 +201,7 @@
       "destacadoMes": true,
       "descuentoPorcentaje": 10,
       "precioPromocional": 190.08,
+      "tipoVenta": "publico",
       "proveedor": "HBDERM",
       "sourceUrl": "https://hbderm.com/hbderm-catalogo/pieles-con-grasas-o-con-acne/sebiaclear-gel-moussant-200ml/",
       "sourceImageUrl": "https://hbderm.com/wp-content/uploads/2024/08/SEBIACLEAR-GEL-200ML.jpg",
@@ -209,7 +210,6 @@
       "comisionVendedorRate": 0.1,
       "comisionVendedor": 17.28,
       "gananciaNeta": 155.52,
-      "tipoVenta": "publico",
       "raw": {
         "source": "hbderm.com",
         "source_url": "https://hbderm.com/hbderm-catalogo/pieles-con-grasas-o-con-acne/sebiaclear-gel-moussant-200ml/",
@@ -330,7 +330,7 @@
           "seller_commission_amount": 13.82,
           "net_margin_after_seller": 124.33
         },
-        "source_index": 94
+        "source_index": 100
       },
       "destacadoMes": true,
       "descuentoPorcentaje": 10,
@@ -438,7 +438,7 @@
           "seller_commission_amount": 13.82,
           "net_margin_after_seller": 124.33
         },
-        "source_index": 117
+        "source_index": 123
       },
       "destacadoMes": true,
       "descuentoPorcentaje": 10,
@@ -878,8 +878,8 @@
     {
       "titulo": "Clairial Crema SPF50",
       "categoria": "Proteccion solar",
-      "precio": "Bs. 138",
-      "precioValor": 137.5,
+      "precio": "Bs. 264",
+      "precioValor": 264,
       "moneda": "BOB",
       "desc": "SVR para proteccion solar diaria. Confirma disponibilidad antes de finalizar la compra.",
       "etiqueta": "SPF",
@@ -928,7 +928,7 @@
         },
         {
           "label": "Precio Nuvia",
-          "value": "Bs. 138"
+          "value": "Bs. 264"
         }
       ],
       "detalleImagenes": [
@@ -953,11 +953,11 @@
       "proveedor": "HBDERM",
       "sourceUrl": "https://hbderm.com/hbderm-catalogo/fotoproteccion/clairial-crema-spf-50/",
       "sourceImageUrl": "https://hbderm.com/wp-content/uploads/2020/06/PENSAMOS-EN-LOS-MÁS-PEQUEÑOS-DE-LA-CASA-2.png",
-      "precioProveedor": 250,
+      "precioProveedor": 480,
       "margenObjetivo": 0.45,
       "comisionVendedorRate": 0.1,
-      "comisionVendedor": 11.25,
-      "gananciaNeta": 101.25,
+      "comisionVendedor": 21.6,
+      "gananciaNeta": 194.4,
       "tipoVenta": "publico",
       "raw": {
         "source": "hbderm.com",
@@ -967,26 +967,26 @@
         ],
         "source_availability": "instock",
         "pricing_formula": {
-          "source_price": 250,
+          "source_price": 480,
           "margin_rate": 0.45,
-          "margin_amount": 112.5,
-          "sale_price": 137.5,
+          "margin_amount": 216,
+          "sale_price": 264,
           "seller_commission_rate": 0.1,
-          "seller_commission_amount": 11.25,
-          "net_margin_after_seller": 101.25
+          "seller_commission_amount": 21.6,
+          "net_margin_after_seller": 194.4
         },
-        "source_index": 32
+        "source_index": 44
       },
       "destacadoMes": true,
       "descuentoPorcentaje": 10,
-      "precioPromocional": 123.75,
-      "gananciaNetaConDescuento": 87.5
+      "precioPromocional": 237.6,
+      "gananciaNetaConDescuento": 168
     },
     {
       "titulo": "Compact Bronze SPF 50+",
       "categoria": "Proteccion solar",
-      "precio": "Bs. 201",
-      "precioValor": 200.75,
+      "precio": "Bs. 138",
+      "precioValor": 137.5,
       "moneda": "BOB",
       "desc": "ISDIN para proteccion solar diaria. Confirma disponibilidad antes de finalizar la compra.",
       "etiqueta": "SPF",
@@ -1035,7 +1035,7 @@
         },
         {
           "label": "Precio Nuvia",
-          "value": "Bs. 201"
+          "value": "Bs. 138"
         }
       ],
       "detalleImagenes": [
@@ -1060,11 +1060,11 @@
       "proveedor": "HBDERM",
       "sourceUrl": "https://hbderm.com/hbderm-catalogo/cuidados-del-bebe/proteccion-solar-cuidados-del-bebe/compact-bronze-spf-50/",
       "sourceImageUrl": "https://hbderm.com/wp-content/uploads/2026/04/COMPACT-BRONZE-1.jpg",
-      "precioProveedor": 365,
+      "precioProveedor": 250,
       "margenObjetivo": 0.45,
       "comisionVendedorRate": 0.1,
-      "comisionVendedor": 16.43,
-      "gananciaNeta": 147.82,
+      "comisionVendedor": 11.25,
+      "gananciaNeta": 101.25,
       "tipoVenta": "publico",
       "raw": {
         "source": "hbderm.com",
@@ -1075,20 +1075,20 @@
         ],
         "source_availability": "instock",
         "pricing_formula": {
-          "source_price": 365,
+          "source_price": 250,
           "margin_rate": 0.45,
-          "margin_amount": 164.25,
-          "sale_price": 200.75,
+          "margin_amount": 112.5,
+          "sale_price": 137.5,
           "seller_commission_rate": 0.1,
-          "seller_commission_amount": 16.43,
-          "net_margin_after_seller": 147.82
+          "seller_commission_amount": 11.25,
+          "net_margin_after_seller": 101.25
         },
-        "source_index": 50
+        "source_index": 62
       },
       "destacadoMes": true,
       "descuentoPorcentaje": 10,
-      "precioPromocional": 180.67,
-      "gananciaNetaConDescuento": 127.74
+      "precioPromocional": 123.75,
+      "gananciaNetaConDescuento": 87.5
     },
     {
       "titulo": "Compact Light SPF 50+",
@@ -1191,7 +1191,7 @@
           "seller_commission_amount": 16.43,
           "net_margin_after_seller": 147.82
         },
-        "source_index": 48
+        "source_index": 60
       },
       "destacadoMes": true,
       "descuentoPorcentaje": 10,
@@ -1201,8 +1201,8 @@
     {
       "titulo": "Compact Medium SPF 50+",
       "categoria": "Proteccion solar",
-      "precio": "Bs. 201",
-      "precioValor": 200.75,
+      "precio": "Bs. 138",
+      "precioValor": 137.5,
       "moneda": "BOB",
       "desc": "ISDIN para proteccion solar diaria. Confirma disponibilidad antes de finalizar la compra.",
       "etiqueta": "SPF",
@@ -1251,7 +1251,7 @@
         },
         {
           "label": "Precio Nuvia",
-          "value": "Bs. 201"
+          "value": "Bs. 138"
         }
       ],
       "detalleImagenes": [
@@ -1276,11 +1276,11 @@
       "proveedor": "HBDERM",
       "sourceUrl": "https://hbderm.com/hbderm-catalogo/cuidados-del-bebe/proteccion-solar-cuidados-del-bebe/compact-medium-spf-50/",
       "sourceImageUrl": "https://hbderm.com/wp-content/uploads/2026/04/COMPACT-MEDIUM-1-1.jpg",
-      "precioProveedor": 365,
+      "precioProveedor": 250,
       "margenObjetivo": 0.45,
       "comisionVendedorRate": 0.1,
-      "comisionVendedor": 16.43,
-      "gananciaNeta": 147.82,
+      "comisionVendedor": 11.25,
+      "gananciaNeta": 101.25,
       "tipoVenta": "publico",
       "raw": {
         "source": "hbderm.com",
@@ -1291,20 +1291,20 @@
         ],
         "source_availability": "instock",
         "pricing_formula": {
-          "source_price": 365,
+          "source_price": 250,
           "margin_rate": 0.45,
-          "margin_amount": 164.25,
-          "sale_price": 200.75,
+          "margin_amount": 112.5,
+          "sale_price": 137.5,
           "seller_commission_rate": 0.1,
-          "seller_commission_amount": 16.43,
-          "net_margin_after_seller": 147.82
+          "seller_commission_amount": 11.25,
+          "net_margin_after_seller": 101.25
         },
-        "source_index": 49
+        "source_index": 61
       },
       "destacadoMes": true,
       "descuentoPorcentaje": 10,
-      "precioPromocional": 180.67,
-      "gananciaNetaConDescuento": 127.74
+      "precioPromocional": 123.75,
+      "gananciaNetaConDescuento": 87.5
     },
     {
       "titulo": "Dépiderm Cuidado De Día Antimanchas SPF50+",
@@ -1514,7 +1514,7 @@
           "seller_commission_amount": 15.44,
           "net_margin_after_seller": 138.91
         },
-        "source_index": 112
+        "source_index": 118
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -2051,7 +2051,7 @@
           "seller_commission_amount": 21.29,
           "net_margin_after_seller": 191.56
         },
-        "source_index": 107
+        "source_index": 113
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -2158,7 +2158,7 @@
           "seller_commission_amount": 20.43,
           "net_margin_after_seller": 183.87
         },
-        "source_index": 6
+        "source_index": 20
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -2168,8 +2168,8 @@
     {
       "titulo": "Fotoultra Active Unify SPF50+",
       "categoria": "Proteccion solar",
-      "precio": "Bs. 138",
-      "precioValor": 137.5,
+      "precio": "Bs. 250",
+      "precioValor": 249.7,
       "moneda": "BOB",
       "desc": "ISDIN para proteccion solar diaria. Confirma disponibilidad antes de finalizar la compra.",
       "etiqueta": "SPF",
@@ -2218,7 +2218,7 @@
         },
         {
           "label": "Precio Nuvia",
-          "value": "Bs. 138"
+          "value": "Bs. 250"
         }
       ],
       "detalleImagenes": [
@@ -2243,11 +2243,11 @@
       "proveedor": "HBDERM",
       "sourceUrl": "https://hbderm.com/hbderm-catalogo/antiedad/fotoproteccion-antiedad/active-unify-spf50-50ml/",
       "sourceImageUrl": "https://hbderm.com/wp-content/uploads/2025/04/ISDIN-8.jpg",
-      "precioProveedor": 250,
+      "precioProveedor": 454,
       "margenObjetivo": 0.45,
       "comisionVendedorRate": 0.1,
-      "comisionVendedor": 11.25,
-      "gananciaNeta": 101.25,
+      "comisionVendedor": 20.43,
+      "gananciaNeta": 183.87,
       "tipoVenta": "publico",
       "raw": {
         "source": "hbderm.com",
@@ -2258,20 +2258,20 @@
         ],
         "source_availability": "instock",
         "pricing_formula": {
-          "source_price": 250,
+          "source_price": 454,
           "margin_rate": 0.45,
-          "margin_amount": 112.5,
-          "sale_price": 137.5,
+          "margin_amount": 204.3,
+          "sale_price": 249.7,
           "seller_commission_rate": 0.1,
-          "seller_commission_amount": 11.25,
-          "net_margin_after_seller": 101.25
+          "seller_commission_amount": 20.43,
+          "net_margin_after_seller": 183.87
         },
-        "source_index": 5
+        "source_index": 19
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
       "precioPromocional": null,
-      "gananciaNetaConDescuento": 101.25
+      "gananciaNetaConDescuento": 183.87
     },
     {
       "titulo": "Fotoultra Redness SPF50+",
@@ -2589,7 +2589,7 @@
           "seller_commission_amount": 11.25,
           "net_margin_after_seller": 101.25
         },
-        "source_index": 44
+        "source_index": 56
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -2697,7 +2697,7 @@
           "seller_commission_amount": 17.01,
           "net_margin_after_seller": 153.09
         },
-        "source_index": 47
+        "source_index": 59
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -2707,8 +2707,8 @@
     {
       "titulo": "Fusion Water Magic Color \"bronze\" SPF50+",
       "categoria": "Proteccion solar",
-      "precio": "Bs. 138",
-      "precioValor": 137.5,
+      "precio": "Bs. 201",
+      "precioValor": 200.75,
       "moneda": "BOB",
       "desc": "ISDIN para proteccion solar diaria. Confirma disponibilidad antes de finalizar la compra.",
       "etiqueta": "SPF",
@@ -2757,7 +2757,7 @@
         },
         {
           "label": "Precio Nuvia",
-          "value": "Bs. 138"
+          "value": "Bs. 201"
         }
       ],
       "detalleImagenes": [
@@ -2782,11 +2782,11 @@
       "proveedor": "HBDERM",
       "sourceUrl": "https://hbderm.com/hbderm-catalogo/fotoproteccion/fusion-water-color-bronze-spf50/",
       "sourceImageUrl": "https://hbderm.com/wp-content/uploads/2026/04/MAGIC-BRONZE-.jpg",
-      "precioProveedor": 250,
+      "precioProveedor": 365,
       "margenObjetivo": 0.45,
       "comisionVendedorRate": 0.1,
-      "comisionVendedor": 11.25,
-      "gananciaNeta": 101.25,
+      "comisionVendedor": 16.43,
+      "gananciaNeta": 147.82,
       "tipoVenta": "publico",
       "raw": {
         "source": "hbderm.com",
@@ -2796,20 +2796,20 @@
         ],
         "source_availability": "Agotado",
         "pricing_formula": {
-          "source_price": 250,
+          "source_price": 365,
           "margin_rate": 0.45,
-          "margin_amount": 112.5,
-          "sale_price": 137.5,
+          "margin_amount": 164.25,
+          "sale_price": 200.75,
           "seller_commission_rate": 0.1,
-          "seller_commission_amount": 11.25,
-          "net_margin_after_seller": 101.25
+          "seller_commission_amount": 16.43,
+          "net_margin_after_seller": 147.82
         },
-        "source_index": 12
+        "source_index": 26
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
       "precioPromocional": null,
-      "gananciaNetaConDescuento": 101.25
+      "gananciaNetaConDescuento": 147.82
     },
     {
       "titulo": "Fusion Water Magic Color \"light\" SPF50+",
@@ -2911,7 +2911,7 @@
           "seller_commission_amount": 16.43,
           "net_margin_after_seller": 147.82
         },
-        "source_index": 11
+        "source_index": 25
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -3018,7 +3018,7 @@
           "seller_commission_amount": 16.43,
           "net_margin_after_seller": 147.82
         },
-        "source_index": 9
+        "source_index": 23
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -3126,7 +3126,7 @@
           "seller_commission_amount": 16.43,
           "net_margin_after_seller": 147.82
         },
-        "source_index": 7
+        "source_index": 21
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -3233,7 +3233,7 @@
           "seller_commission_amount": 21.78,
           "net_margin_after_seller": 196.02
         },
-        "source_index": 105
+        "source_index": 111
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -3340,7 +3340,7 @@
           "seller_commission_amount": 21.78,
           "net_margin_after_seller": 196.02
         },
-        "source_index": 104
+        "source_index": 110
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -3350,8 +3350,8 @@
     {
       "titulo": "Fusion Water Magic Urban SPF30+",
       "categoria": "Proteccion solar",
-      "precio": "Bs. 201",
-      "precioValor": 200.75,
+      "precio": "Bs. 138",
+      "precioValor": 137.5,
       "moneda": "BOB",
       "desc": "ISDIN para proteccion solar diaria. Confirma disponibilidad antes de finalizar la compra.",
       "etiqueta": "SPF",
@@ -3400,7 +3400,7 @@
         },
         {
           "label": "Precio Nuvia",
-          "value": "Bs. 201"
+          "value": "Bs. 138"
         }
       ],
       "detalleImagenes": [
@@ -3425,11 +3425,11 @@
       "proveedor": "HBDERM",
       "sourceUrl": "https://hbderm.com/hbderm-catalogo/fotoproteccion/fusion-water-urban/",
       "sourceImageUrl": "https://hbderm.com/wp-content/uploads/2024/08/ISDIN.jpg",
-      "precioProveedor": 365,
+      "precioProveedor": 250,
       "margenObjetivo": 0.45,
       "comisionVendedorRate": 0.1,
-      "comisionVendedor": 16.43,
-      "gananciaNeta": 147.82,
+      "comisionVendedor": 11.25,
+      "gananciaNeta": 101.25,
       "tipoVenta": "publico",
       "raw": {
         "source": "hbderm.com",
@@ -3439,26 +3439,26 @@
         ],
         "source_availability": "instock",
         "pricing_formula": {
-          "source_price": 365,
+          "source_price": 250,
           "margin_rate": 0.45,
-          "margin_amount": 164.25,
-          "sale_price": 200.75,
+          "margin_amount": 112.5,
+          "sale_price": 137.5,
           "seller_commission_rate": 0.1,
-          "seller_commission_amount": 16.43,
-          "net_margin_after_seller": 147.82
+          "seller_commission_amount": 11.25,
+          "net_margin_after_seller": 101.25
         },
-        "source_index": 10
+        "source_index": 24
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
       "precioPromocional": null,
-      "gananciaNetaConDescuento": 147.82
+      "gananciaNetaConDescuento": 101.25
     },
     {
       "titulo": "Gel Cream SPF50+ 250ML",
       "categoria": "Proteccion solar",
-      "precio": "Bs. 238",
-      "precioValor": 237.6,
+      "precio": "Bs. 138",
+      "precioValor": 137.5,
       "moneda": "BOB",
       "desc": "SENSILIS para proteccion solar diaria. Confirma disponibilidad antes de finalizar la compra.",
       "etiqueta": "SPF",
@@ -3507,7 +3507,7 @@
         },
         {
           "label": "Precio Nuvia",
-          "value": "Bs. 238"
+          "value": "Bs. 138"
         }
       ],
       "detalleImagenes": [
@@ -3532,11 +3532,11 @@
       "proveedor": "HBDERM",
       "sourceUrl": "https://hbderm.com/hbderm-catalogo/fotoproteccion/proteccion-cuerpo/gel-cream-50/",
       "sourceImageUrl": "https://hbderm.com/wp-content/uploads/2026/05/PROTECTOR-GEL-CREMA-.jpg",
-      "precioProveedor": 432,
+      "precioProveedor": 250,
       "margenObjetivo": 0.45,
       "comisionVendedorRate": 0.1,
-      "comisionVendedor": 19.44,
-      "gananciaNeta": 174.96,
+      "comisionVendedor": 11.25,
+      "gananciaNeta": 101.25,
       "tipoVenta": "publico",
       "raw": {
         "source": "hbderm.com",
@@ -3547,20 +3547,20 @@
         ],
         "source_availability": "instock",
         "pricing_formula": {
-          "source_price": 432,
+          "source_price": 250,
           "margin_rate": 0.45,
-          "margin_amount": 194.4,
-          "sale_price": 237.6,
+          "margin_amount": 112.5,
+          "sale_price": 137.5,
           "seller_commission_rate": 0.1,
-          "seller_commission_amount": 19.44,
-          "net_margin_after_seller": 174.96
+          "seller_commission_amount": 11.25,
+          "net_margin_after_seller": 101.25
         },
-        "source_index": 43
+        "source_index": 55
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
       "precioPromocional": null,
-      "gananciaNetaConDescuento": 174.96
+      "gananciaNetaConDescuento": 101.25
     },
     {
       "titulo": "Hydro Oil SPF30+",
@@ -3662,7 +3662,7 @@
           "seller_commission_amount": 11.25,
           "net_margin_after_seller": 101.25
         },
-        "source_index": 13
+        "source_index": 27
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -3672,8 +3672,8 @@
     {
       "titulo": "Hydrolotion SPF50+",
       "categoria": "Proteccion solar",
-      "precio": "Bs. 138",
-      "precioValor": 137.5,
+      "precio": "Bs. 184",
+      "precioValor": 184.25,
       "moneda": "BOB",
       "desc": "ISDIN para proteccion solar diaria. Confirma disponibilidad antes de finalizar la compra.",
       "etiqueta": "SPF",
@@ -3722,7 +3722,7 @@
         },
         {
           "label": "Precio Nuvia",
-          "value": "Bs. 138"
+          "value": "Bs. 184"
         }
       ],
       "detalleImagenes": [
@@ -3747,11 +3747,11 @@
       "proveedor": "HBDERM",
       "sourceUrl": "https://hbderm.com/hbderm-catalogo/fotoproteccion/hydrolotion-spf-50-200ml/",
       "sourceImageUrl": "https://hbderm.com/wp-content/uploads/2022/11/HYDRO-LOTION.png",
-      "precioProveedor": 250,
+      "precioProveedor": 335,
       "margenObjetivo": 0.45,
       "comisionVendedorRate": 0.1,
-      "comisionVendedor": 11.25,
-      "gananciaNeta": 101.25,
+      "comisionVendedor": 15.08,
+      "gananciaNeta": 135.67,
       "tipoVenta": "publico",
       "raw": {
         "source": "hbderm.com",
@@ -3761,26 +3761,26 @@
         ],
         "source_availability": "Agotado",
         "pricing_formula": {
-          "source_price": 250,
+          "source_price": 335,
           "margin_rate": 0.45,
-          "margin_amount": 112.5,
-          "sale_price": 137.5,
+          "margin_amount": 150.75,
+          "sale_price": 184.25,
           "seller_commission_rate": 0.1,
-          "seller_commission_amount": 11.25,
-          "net_margin_after_seller": 101.25
+          "seller_commission_amount": 15.08,
+          "net_margin_after_seller": 135.67
         },
-        "source_index": 76
+        "source_index": 86
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
       "precioPromocional": null,
-      "gananciaNetaConDescuento": 101.25
+      "gananciaNetaConDescuento": 135.67
     },
     {
       "titulo": "Hyseac Fluido SPF 50",
       "categoria": "Proteccion solar",
-      "precio": "Bs. 138",
-      "precioValor": 137.5,
+      "precio": "Bs. 157",
+      "precioValor": 157.3,
       "moneda": "BOB",
       "desc": "URIAGE para proteccion solar diaria. Confirma disponibilidad antes de finalizar la compra.",
       "etiqueta": "SPF",
@@ -3829,7 +3829,7 @@
         },
         {
           "label": "Precio Nuvia",
-          "value": "Bs. 138"
+          "value": "Bs. 157"
         }
       ],
       "detalleImagenes": [
@@ -3854,11 +3854,11 @@
       "proveedor": "HBDERM",
       "sourceUrl": "https://hbderm.com/hbderm-catalogo/fotoproteccion/hyseac-fluido-spf-50/",
       "sourceImageUrl": "https://hbderm.com/wp-content/uploads/2026/06/HYSEAC-PROTECTOR-SOLAR-.jpg",
-      "precioProveedor": 250,
+      "precioProveedor": 286,
       "margenObjetivo": 0.45,
       "comisionVendedorRate": 0.1,
-      "comisionVendedor": 11.25,
-      "gananciaNeta": 101.25,
+      "comisionVendedor": 12.87,
+      "gananciaNeta": 115.83,
       "tipoVenta": "publico",
       "raw": {
         "source": "hbderm.com",
@@ -3868,26 +3868,26 @@
         ],
         "source_availability": "instock",
         "pricing_formula": {
-          "source_price": 250,
+          "source_price": 286,
           "margin_rate": 0.45,
-          "margin_amount": 112.5,
-          "sale_price": 137.5,
+          "margin_amount": 128.7,
+          "sale_price": 157.3,
           "seller_commission_rate": 0.1,
-          "seller_commission_amount": 11.25,
-          "net_margin_after_seller": 101.25
+          "seller_commission_amount": 12.87,
+          "net_margin_after_seller": 115.83
         },
-        "source_index": 17
+        "source_index": 31
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
       "precioPromocional": null,
-      "gananciaNetaConDescuento": 101.25
+      "gananciaNetaConDescuento": 115.83
     },
     {
       "titulo": "Invisible Stick SPF50+",
       "categoria": "Proteccion solar",
-      "precio": "Bs. 211",
-      "precioValor": 211.2,
+      "precio": "Bs. 138",
+      "precioValor": 137.5,
       "moneda": "BOB",
       "desc": "ISDIN para proteccion solar diaria. Confirma disponibilidad antes de finalizar la compra.",
       "etiqueta": "SPF",
@@ -3936,7 +3936,7 @@
         },
         {
           "label": "Precio Nuvia",
-          "value": "Bs. 211"
+          "value": "Bs. 138"
         }
       ],
       "detalleImagenes": [
@@ -3961,11 +3961,11 @@
       "proveedor": "HBDERM",
       "sourceUrl": "https://hbderm.com/hbderm-catalogo/fotoproteccion/invisible-stick-spf-50/",
       "sourceImageUrl": "https://hbderm.com/wp-content/uploads/2025/07/INVISIBLE-STICK.jpg",
-      "precioProveedor": 384,
+      "precioProveedor": 250,
       "margenObjetivo": 0.45,
       "comisionVendedorRate": 0.1,
-      "comisionVendedor": 17.28,
-      "gananciaNeta": 155.52,
+      "comisionVendedor": 11.25,
+      "gananciaNeta": 101.25,
       "tipoVenta": "publico",
       "raw": {
         "source": "hbderm.com",
@@ -3975,20 +3975,20 @@
         ],
         "source_availability": "instock",
         "pricing_formula": {
-          "source_price": 384,
+          "source_price": 250,
           "margin_rate": 0.45,
-          "margin_amount": 172.8,
-          "sale_price": 211.2,
+          "margin_amount": 112.5,
+          "sale_price": 137.5,
           "seller_commission_rate": 0.1,
-          "seller_commission_amount": 17.28,
-          "net_margin_after_seller": 155.52
+          "seller_commission_amount": 11.25,
+          "net_margin_after_seller": 101.25
         },
         "source_index": 294
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
       "precioPromocional": null,
-      "gananciaNetaConDescuento": 155.52
+      "gananciaNetaConDescuento": 101.25
     },
     {
       "titulo": "Nutratopic Pro-amp Loción Emoliente",
@@ -4091,7 +4091,7 @@
           "seller_commission_amount": 16.47,
           "net_margin_after_seller": 148.23
         },
-        "source_index": 99
+        "source_index": 105
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -4198,7 +4198,7 @@
           "seller_commission_amount": 11.88,
           "net_margin_after_seller": 106.92
         },
-        "source_index": 60
+        "source_index": 72
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -4305,7 +4305,7 @@
           "seller_commission_amount": 11.25,
           "net_margin_after_seller": 101.25
         },
-        "source_index": 77
+        "source_index": 87
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -4315,8 +4315,8 @@
     {
       "titulo": "Pediatrics Gel Crema SPF50+",
       "categoria": "Proteccion solar",
-      "precio": "Bs. 294",
-      "precioValor": 293.7,
+      "precio": "Bs. 138",
+      "precioValor": 137.5,
       "moneda": "BOB",
       "desc": "ISDIN para proteccion solar diaria. Confirma disponibilidad antes de finalizar la compra.",
       "etiqueta": "SPF",
@@ -4365,7 +4365,7 @@
         },
         {
           "label": "Precio Nuvia",
-          "value": "Bs. 294"
+          "value": "Bs. 138"
         }
       ],
       "detalleImagenes": [
@@ -4390,11 +4390,11 @@
       "proveedor": "HBDERM",
       "sourceUrl": "https://hbderm.com/hbderm-catalogo/fotoproteccion/8231/",
       "sourceImageUrl": "https://hbderm.com/wp-content/uploads/2024/09/PEDIATRICS-GEL-CREMA.jpg",
-      "precioProveedor": 534,
+      "precioProveedor": 250,
       "margenObjetivo": 0.45,
       "comisionVendedorRate": 0.1,
-      "comisionVendedor": 24.03,
-      "gananciaNeta": 216.27,
+      "comisionVendedor": 11.25,
+      "gananciaNeta": 101.25,
       "tipoVenta": "publico",
       "raw": {
         "source": "hbderm.com",
@@ -4404,20 +4404,20 @@
         ],
         "source_availability": "instock",
         "pricing_formula": {
-          "source_price": 534,
+          "source_price": 250,
           "margin_rate": 0.45,
-          "margin_amount": 240.3,
-          "sale_price": 293.7,
+          "margin_amount": 112.5,
+          "sale_price": 137.5,
           "seller_commission_rate": 0.1,
-          "seller_commission_amount": 24.03,
-          "net_margin_after_seller": 216.27
+          "seller_commission_amount": 11.25,
+          "net_margin_after_seller": 101.25
         },
         "source_index": 268
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
       "precioPromocional": null,
-      "gananciaNetaConDescuento": 216.27
+      "gananciaNetaConDescuento": 101.25
     },
     {
       "titulo": "Pediatrics Stick SPF 50",
@@ -4520,7 +4520,7 @@
           "seller_commission_amount": 17.28,
           "net_margin_after_seller": 155.52
         },
-        "source_index": 46
+        "source_index": 58
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -4530,8 +4530,8 @@
     {
       "titulo": "Pediatrics Transparent Spray SPF50+",
       "categoria": "Proteccion solar",
-      "precio": "Bs. 138",
-      "precioValor": 137.5,
+      "precio": "Bs. 294",
+      "precioValor": 293.7,
       "moneda": "BOB",
       "desc": "ISDIN para proteccion solar diaria. Confirma disponibilidad antes de finalizar la compra.",
       "etiqueta": "SPF",
@@ -4580,7 +4580,7 @@
         },
         {
           "label": "Precio Nuvia",
-          "value": "Bs. 138"
+          "value": "Bs. 294"
         }
       ],
       "detalleImagenes": [
@@ -4605,11 +4605,11 @@
       "proveedor": "HBDERM",
       "sourceUrl": "https://hbderm.com/hbderm-catalogo/fotoproteccion/transparent-spray-pediatrics-spf50/",
       "sourceImageUrl": "https://hbderm.com/wp-content/uploads/2025/07/TRANSPARENT-PEDIATRICS.jpg",
-      "precioProveedor": 250,
+      "precioProveedor": 534,
       "margenObjetivo": 0.45,
       "comisionVendedorRate": 0.1,
-      "comisionVendedor": 11.25,
-      "gananciaNeta": 101.25,
+      "comisionVendedor": 24.03,
+      "gananciaNeta": 216.27,
       "tipoVenta": "publico",
       "raw": {
         "source": "hbderm.com",
@@ -4619,20 +4619,20 @@
         ],
         "source_availability": "Agotado",
         "pricing_formula": {
-          "source_price": 250,
+          "source_price": 534,
           "margin_rate": 0.45,
-          "margin_amount": 112.5,
-          "sale_price": 137.5,
+          "margin_amount": 240.3,
+          "sale_price": 293.7,
           "seller_commission_rate": 0.1,
-          "seller_commission_amount": 11.25,
-          "net_margin_after_seller": 101.25
+          "seller_commission_amount": 24.03,
+          "net_margin_after_seller": 216.27
         },
-        "source_index": 89
+        "source_index": 95
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
       "precioPromocional": null,
-      "gananciaNetaConDescuento": 101.25
+      "gananciaNetaConDescuento": 216.27
     },
     {
       "titulo": "Photocorrection [d-pigment 50+] Color",
@@ -4735,7 +4735,7 @@
           "seller_commission_amount": 17.51,
           "net_margin_after_seller": 157.54
         },
-        "source_index": 81
+        "source_index": 91
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -5058,7 +5058,7 @@
           "seller_commission_amount": 14.9,
           "net_margin_after_seller": 134.05
         },
-        "source_index": 35
+        "source_index": 47
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -5165,7 +5165,7 @@
           "seller_commission_amount": 14.9,
           "net_margin_after_seller": 134.05
         },
-        "source_index": 70
+        "source_index": 80
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -5272,7 +5272,7 @@
           "seller_commission_amount": 15.98,
           "net_margin_after_seller": 143.77
         },
-        "source_index": 14
+        "source_index": 28
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -5369,7 +5369,7 @@
         "source_categories": [
           "Fotoproteccion"
         ],
-        "source_availability": "Agotado",
+        "source_availability": "instock",
         "pricing_formula": {
           "source_price": 288,
           "margin_rate": 0.45,
@@ -5379,7 +5379,7 @@
           "seller_commission_amount": 12.96,
           "net_margin_after_seller": 116.64
         },
-        "source_index": 130
+        "source_index": 8
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -5807,7 +5807,7 @@
           "seller_commission_amount": 11.25,
           "net_margin_after_seller": 101.25
         },
-        "source_index": 4
+        "source_index": 18
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -6248,8 +6248,8 @@
     {
       "titulo": "Sun Secure Fluide Photo-age SPF50+",
       "categoria": "Proteccion solar",
-      "precio": "Bs. 138",
-      "precioValor": 137.5,
+      "precio": "Bs. 288",
+      "precioValor": 288.2,
       "moneda": "BOB",
       "desc": "SVR para proteccion solar diaria. Confirma disponibilidad antes de finalizar la compra.",
       "etiqueta": "SPF",
@@ -6298,7 +6298,7 @@
         },
         {
           "label": "Precio Nuvia",
-          "value": "Bs. 138"
+          "value": "Bs. 288"
         }
       ],
       "detalleImagenes": [
@@ -6323,11 +6323,11 @@
       "proveedor": "HBDERM",
       "sourceUrl": "https://hbderm.com/hbderm-catalogo/fotoproteccion/sun-secure-fluide-photo-age-spf50/",
       "sourceImageUrl": "https://hbderm.com/wp-content/uploads/2025/05/SVR-15.jpg",
-      "precioProveedor": 250,
+      "precioProveedor": 524,
       "margenObjetivo": 0.45,
       "comisionVendedorRate": 0.1,
-      "comisionVendedor": 11.25,
-      "gananciaNeta": 101.25,
+      "comisionVendedor": 23.58,
+      "gananciaNeta": 212.22,
       "tipoVenta": "publico",
       "raw": {
         "source": "hbderm.com",
@@ -6337,26 +6337,26 @@
         ],
         "source_availability": "instock",
         "pricing_formula": {
-          "source_price": 250,
+          "source_price": 524,
           "margin_rate": 0.45,
-          "margin_amount": 112.5,
-          "sale_price": 137.5,
+          "margin_amount": 235.8,
+          "sale_price": 288.2,
           "seller_commission_rate": 0.1,
-          "seller_commission_amount": 11.25,
-          "net_margin_after_seller": 101.25
+          "seller_commission_amount": 23.58,
+          "net_margin_after_seller": 212.22
         },
         "source_index": 206
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
       "precioPromocional": null,
-      "gananciaNetaConDescuento": 101.25
+      "gananciaNetaConDescuento": 212.22
     },
     {
       "titulo": "Sun Secure Fluido SPF50",
       "categoria": "Proteccion solar",
-      "precio": "Bs. 214",
-      "precioValor": 213.95,
+      "precio": "Bs. 138",
+      "precioValor": 137.5,
       "moneda": "BOB",
       "desc": "SVR para proteccion solar diaria. Confirma disponibilidad antes de finalizar la compra.",
       "etiqueta": "SPF",
@@ -6405,7 +6405,7 @@
         },
         {
           "label": "Precio Nuvia",
-          "value": "Bs. 214"
+          "value": "Bs. 138"
         }
       ],
       "detalleImagenes": [
@@ -6430,11 +6430,11 @@
       "proveedor": "HBDERM",
       "sourceUrl": "https://hbderm.com/hbderm-catalogo/fotoproteccion/sun-secure-fluido-spf-50/",
       "sourceImageUrl": "https://hbderm.com/wp-content/uploads/2020/06/16497978875781482675608473347092.jpg",
-      "precioProveedor": 389,
+      "precioProveedor": 250,
       "margenObjetivo": 0.45,
       "comisionVendedorRate": 0.1,
-      "comisionVendedor": 17.51,
-      "gananciaNeta": 157.54,
+      "comisionVendedor": 11.25,
+      "gananciaNeta": 101.25,
       "tipoVenta": "publico",
       "raw": {
         "source": "hbderm.com",
@@ -6444,20 +6444,20 @@
         ],
         "source_availability": "instock",
         "pricing_formula": {
-          "source_price": 389,
+          "source_price": 250,
           "margin_rate": 0.45,
-          "margin_amount": 175.05,
-          "sale_price": 213.95,
+          "margin_amount": 112.5,
+          "sale_price": 137.5,
           "seller_commission_rate": 0.1,
-          "seller_commission_amount": 17.51,
-          "net_margin_after_seller": 157.54
+          "seller_commission_amount": 11.25,
+          "net_margin_after_seller": 101.25
         },
         "source_index": 210
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
       "precioPromocional": null,
-      "gananciaNetaConDescuento": 157.54
+      "gananciaNetaConDescuento": 101.25
     },
     {
       "titulo": "Sun Secure Lait Crepitant SPF50+",
@@ -6775,7 +6775,7 @@
           "seller_commission_amount": 20.52,
           "net_margin_after_seller": 184.68
         },
-        "source_index": 145
+        "source_index": 147
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -7001,8 +7001,8 @@
     {
       "titulo": "Uveblock Sun Serum SPF50 - 28 ml",
       "categoria": "Proteccion solar",
-      "precio": "Bs. 138",
-      "precioValor": 137.5,
+      "precio": "Bs. 215",
+      "precioValor": 214.5,
       "moneda": "BOB",
       "desc": "ISISPHARMA para proteccion solar diaria. Confirma disponibilidad antes de finalizar la compra.",
       "etiqueta": "SPF",
@@ -7051,7 +7051,7 @@
         },
         {
           "label": "Precio Nuvia",
-          "value": "Bs. 138"
+          "value": "Bs. 215"
         }
       ],
       "detalleImagenes": [
@@ -7076,11 +7076,11 @@
       "proveedor": "HBDERM",
       "sourceUrl": "https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/hidratantes-del-rostro/uveblock-sun-serum-spf50-28-ml/",
       "sourceImageUrl": "https://hbderm.com/wp-content/uploads/2026/04/UVEBLOCK-SERUM-SPF50-1.jpg",
-      "precioProveedor": 250,
+      "precioProveedor": 390,
       "margenObjetivo": 0.45,
       "comisionVendedorRate": 0.1,
-      "comisionVendedor": 11.25,
-      "gananciaNeta": 101.25,
+      "comisionVendedor": 17.55,
+      "gananciaNeta": 157.95,
       "tipoVenta": "publico",
       "raw": {
         "source": "hbderm.com",
@@ -7091,20 +7091,20 @@
         ],
         "source_availability": "Agotado",
         "pricing_formula": {
-          "source_price": 250,
+          "source_price": 390,
           "margin_rate": 0.45,
-          "margin_amount": 112.5,
-          "sale_price": 137.5,
+          "margin_amount": 175.5,
+          "sale_price": 214.5,
           "seller_commission_rate": 0.1,
-          "seller_commission_amount": 11.25,
-          "net_margin_after_seller": 101.25
+          "seller_commission_amount": 17.55,
+          "net_margin_after_seller": 157.95
         },
-        "source_index": 27
+        "source_index": 40
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
       "precioPromocional": null,
-      "gananciaNetaConDescuento": 101.25
+      "gananciaNetaConDescuento": 157.95
     },
     {
       "titulo": "Water Fluid 50+",
@@ -7315,7 +7315,7 @@
           "seller_commission_amount": 16.02,
           "net_margin_after_seller": 144.18
         },
-        "source_index": 82
+        "source_index": 92
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -7638,7 +7638,7 @@
           "seller_commission_amount": 14.58,
           "net_margin_after_seller": 131.22
         },
-        "source_index": 90
+        "source_index": 96
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -7746,7 +7746,7 @@
           "seller_commission_amount": 4.32,
           "net_margin_after_seller": 38.88
         },
-        "source_index": 79
+        "source_index": 89
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -7854,7 +7854,7 @@
           "seller_commission_amount": 9.45,
           "net_margin_after_seller": 85.05
         },
-        "source_index": 66
+        "source_index": 76
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -7961,7 +7961,7 @@
           "seller_commission_amount": 5.13,
           "net_margin_after_seller": 46.17
         },
-        "source_index": 134
+        "source_index": 137
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -8498,7 +8498,7 @@
           "seller_commission_amount": 13.82,
           "net_margin_after_seller": 124.33
         },
-        "source_index": 71
+        "source_index": 81
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -8606,7 +8606,7 @@
           "seller_commission_amount": 11.34,
           "net_margin_after_seller": 102.06
         },
-        "source_index": 93
+        "source_index": 99
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -8713,7 +8713,7 @@
           "seller_commission_amount": 18.95,
           "net_margin_after_seller": 170.5
         },
-        "source_index": 101
+        "source_index": 107
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -9466,7 +9466,7 @@
           "seller_commission_amount": 11.88,
           "net_margin_after_seller": 106.92
         },
-        "source_index": 39
+        "source_index": 51
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -9790,7 +9790,7 @@
           "seller_commission_amount": 18.9,
           "net_margin_after_seller": 170.1
         },
-        "source_index": 98
+        "source_index": 104
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -9897,7 +9897,7 @@
           "seller_commission_amount": 24.84,
           "net_margin_after_seller": 223.56
         },
-        "source_index": 311
+        "source_index": 310
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -10005,7 +10005,7 @@
           "seller_commission_amount": 18.9,
           "net_margin_after_seller": 170.1
         },
-        "source_index": 97
+        "source_index": 103
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -10328,7 +10328,7 @@
           "seller_commission_amount": 10.8,
           "net_margin_after_seller": 97.2
         },
-        "source_index": 61
+        "source_index": 73
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -11080,7 +11080,7 @@
           "seller_commission_amount": 13.5,
           "net_margin_after_seller": 121.5
         },
-        "source_index": 78
+        "source_index": 88
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -11187,7 +11187,7 @@
           "seller_commission_amount": 17.28,
           "net_margin_after_seller": 155.52
         },
-        "source_index": 132
+        "source_index": 136
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -11508,7 +11508,7 @@
           "seller_commission_amount": 13.41,
           "net_margin_after_seller": 120.69
         },
-        "source_index": 137
+        "source_index": 140
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -11722,7 +11722,7 @@
           "seller_commission_amount": 15.12,
           "net_margin_after_seller": 136.08
         },
-        "source_index": 138
+        "source_index": 141
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -11936,7 +11936,7 @@
           "seller_commission_amount": 12.96,
           "net_margin_after_seller": 116.64
         },
-        "source_index": 16
+        "source_index": 30
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -12043,7 +12043,7 @@
           "seller_commission_amount": 16.2,
           "net_margin_after_seller": 145.8
         },
-        "source_index": 18
+        "source_index": 32
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -12150,7 +12150,7 @@
           "seller_commission_amount": 11.7,
           "net_margin_after_seller": 105.3
         },
-        "source_index": 315
+        "source_index": 314
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -12365,7 +12365,7 @@
           "seller_commission_amount": 12.96,
           "net_margin_after_seller": 116.64
         },
-        "source_index": 40
+        "source_index": 52
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -12482,8 +12482,8 @@
     {
       "titulo": "Ncef Reverse Eyes",
       "categoria": "Piel grasa y acne",
-      "precio": "Bs. 241",
-      "precioValor": 241.45,
+      "precio": "Bs. 356",
+      "precioValor": 356.4,
       "moneda": "BOB",
       "desc": "FILORGA para rutinas de piel grasa o con tendencia acneica. No reemplaza una consulta dermatologica.",
       "etiqueta": "Nuvia",
@@ -12532,7 +12532,7 @@
         },
         {
           "label": "Precio Nuvia",
-          "value": "Bs. 241"
+          "value": "Bs. 356"
         }
       ],
       "detalleImagenes": [
@@ -12557,11 +12557,11 @@
       "proveedor": "HBDERM",
       "sourceUrl": "https://hbderm.com/hbderm-catalogo/pieles-con-grasas-o-con-acne/anti-edad/ncef-reverse-eyes/",
       "sourceImageUrl": "https://hbderm.com/wp-content/uploads/2024/12/NCEF-REVERSE-EYES-1.jpg",
-      "precioProveedor": 439,
+      "precioProveedor": 648,
       "margenObjetivo": 0.45,
       "comisionVendedorRate": 0.1,
-      "comisionVendedor": 19.76,
-      "gananciaNeta": 177.79,
+      "comisionVendedor": 29.16,
+      "gananciaNeta": 262.44,
       "tipoVenta": "publico",
       "raw": {
         "source": "hbderm.com",
@@ -12572,20 +12572,20 @@
         ],
         "source_availability": "Agotado",
         "pricing_formula": {
-          "source_price": 439,
+          "source_price": 648,
           "margin_rate": 0.45,
-          "margin_amount": 197.55,
-          "sale_price": 241.45,
+          "margin_amount": 291.6,
+          "sale_price": 356.4,
           "seller_commission_rate": 0.1,
-          "seller_commission_amount": 19.76,
-          "net_margin_after_seller": 177.79
+          "seller_commission_amount": 29.16,
+          "net_margin_after_seller": 262.44
         },
         "source_index": 194
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
       "precioPromocional": null,
-      "gananciaNetaConDescuento": 177.79
+      "gananciaNetaConDescuento": 262.44
     },
     {
       "titulo": "Sebiaclear Active Gel",
@@ -12785,7 +12785,7 @@
           "Antiedad",
           "Serums"
         ],
-        "source_availability": "instock",
+        "source_availability": "Agotado",
         "pricing_formula": {
           "source_price": 420,
           "margin_rate": 0.45,
@@ -12795,7 +12795,7 @@
           "seller_commission_amount": 18.9,
           "net_margin_after_seller": 170.1
         },
-        "source_index": 148
+        "source_index": 3
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -12903,7 +12903,7 @@
           "seller_commission_amount": 12.96,
           "net_margin_after_seller": 116.64
         },
-        "source_index": 29
+        "source_index": 41
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -13010,7 +13010,7 @@
           "seller_commission_amount": 17.28,
           "net_margin_after_seller": 155.52
         },
-        "source_index": 31
+        "source_index": 43
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -13107,7 +13107,7 @@
         "source_categories": [
           "Pieles Con Grasas O Con Acne"
         ],
-        "source_availability": "Agotado",
+        "source_availability": "instock",
         "pricing_formula": {
           "source_price": 469,
           "margin_rate": 0.45,
@@ -13117,7 +13117,7 @@
           "seller_commission_amount": 21.11,
           "net_margin_after_seller": 189.94
         },
-        "source_index": 22
+        "source_index": 9
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -13224,7 +13224,7 @@
           "seller_commission_amount": 10.71,
           "net_margin_after_seller": 96.39
         },
-        "source_index": 55
+        "source_index": 67
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -13331,7 +13331,7 @@
           "seller_commission_amount": 18.9,
           "net_margin_after_seller": 170.1
         },
-        "source_index": 129
+        "source_index": 134
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -13762,7 +13762,7 @@
           "seller_commission_amount": 6.48,
           "net_margin_after_seller": 58.32
         },
-        "source_index": 116
+        "source_index": 122
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -14084,7 +14084,7 @@
           "seller_commission_amount": 17.82,
           "net_margin_after_seller": 160.38
         },
-        "source_index": 310
+        "source_index": 309
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -14191,7 +14191,7 @@
           "seller_commission_amount": 8.78,
           "net_margin_after_seller": 78.97
         },
-        "source_index": 24
+        "source_index": 37
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -14298,7 +14298,7 @@
           "seller_commission_amount": 11.57,
           "net_margin_after_seller": 104.08
         },
-        "source_index": 75
+        "source_index": 85
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -14621,7 +14621,7 @@
           "seller_commission_amount": 11.34,
           "net_margin_after_seller": 102.06
         },
-        "source_index": 126
+        "source_index": 131
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -14729,7 +14729,7 @@
           "seller_commission_amount": 15.12,
           "net_margin_after_seller": 136.08
         },
-        "source_index": 146
+        "source_index": 148
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -14836,7 +14836,7 @@
           "seller_commission_amount": 11.88,
           "net_margin_after_seller": 106.92
         },
-        "source_index": 113
+        "source_index": 119
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -14944,7 +14944,7 @@
           "seller_commission_amount": 38.88,
           "net_margin_after_seller": 349.92
         },
-        "source_index": 57
+        "source_index": 69
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -15051,7 +15051,7 @@
           "seller_commission_amount": 20.52,
           "net_margin_after_seller": 184.68
         },
-        "source_index": 150
+        "source_index": 151
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -15148,7 +15148,7 @@
         "source_categories": [
           "Hidratantes Y Nutritivos"
         ],
-        "source_availability": "Agotado",
+        "source_availability": "instock",
         "pricing_formula": {
           "source_price": 388,
           "margin_rate": 0.45,
@@ -15158,7 +15158,7 @@
           "seller_commission_amount": 17.46,
           "net_margin_after_seller": 157.14
         },
-        "source_index": 133
+        "source_index": 2
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -15265,7 +15265,7 @@
           "seller_commission_amount": 18.45,
           "net_margin_after_seller": 166.05
         },
-        "source_index": 118
+        "source_index": 124
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -15372,7 +15372,7 @@
           "seller_commission_amount": 23.22,
           "net_margin_after_seller": 208.98
         },
-        "source_index": 91
+        "source_index": 97
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -15695,7 +15695,7 @@
           "seller_commission_amount": 21.6,
           "net_margin_after_seller": 194.4
         },
-        "source_index": 15
+        "source_index": 29
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -15802,7 +15802,7 @@
           "seller_commission_amount": 17.51,
           "net_margin_after_seller": 157.54
         },
-        "source_index": 67
+        "source_index": 77
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -15909,7 +15909,7 @@
           "seller_commission_amount": 12.87,
           "net_margin_after_seller": 115.83
         },
-        "source_index": 92
+        "source_index": 98
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -16016,7 +16016,7 @@
           "seller_commission_amount": 12.51,
           "net_margin_after_seller": 112.59
         },
-        "source_index": 62
+        "source_index": 74
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -16230,7 +16230,7 @@
           "seller_commission_amount": 13.59,
           "net_margin_after_seller": 122.31
         },
-        "source_index": 131
+        "source_index": 135
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -16337,7 +16337,7 @@
           "seller_commission_amount": 36.72,
           "net_margin_after_seller": 330.48
         },
-        "source_index": 123
+        "source_index": 129
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -16444,7 +16444,7 @@
           "seller_commission_amount": 36.72,
           "net_margin_after_seller": 330.48
         },
-        "source_index": 122
+        "source_index": 128
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -16551,7 +16551,7 @@
           "seller_commission_amount": 36.72,
           "net_margin_after_seller": 330.48
         },
-        "source_index": 65
+        "source_index": 75
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -17303,7 +17303,7 @@
           "seller_commission_amount": 30.15,
           "net_margin_after_seller": 271.35
         },
-        "source_index": 28
+        "source_index": 4
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -17411,7 +17411,7 @@
           "seller_commission_amount": 27,
           "net_margin_after_seller": 243
         },
-        "source_index": 149
+        "source_index": 150
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -17508,7 +17508,7 @@
         "source_categories": [
           "Antiedad"
         ],
-        "source_availability": "Agotado",
+        "source_availability": "instock",
         "pricing_formula": {
           "source_price": 670,
           "margin_rate": 0.45,
@@ -17518,7 +17518,7 @@
           "seller_commission_amount": 30.15,
           "net_margin_after_seller": 271.35
         },
-        "source_index": 139
+        "source_index": 6
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -17615,7 +17615,7 @@
         "source_categories": [
           "Antiedad"
         ],
-        "source_availability": "Agotado",
+        "source_availability": "instock",
         "pricing_formula": {
           "source_price": 670,
           "margin_rate": 0.45,
@@ -17625,7 +17625,7 @@
           "seller_commission_amount": 30.15,
           "net_margin_after_seller": 271.35
         },
-        "source_index": 64
+        "source_index": 5
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -17733,7 +17733,7 @@
           "seller_commission_amount": 7.29,
           "net_margin_after_seller": 65.61
         },
-        "source_index": 41
+        "source_index": 53
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -17949,7 +17949,7 @@
           "seller_commission_amount": 12.6,
           "net_margin_after_seller": 113.4
         },
-        "source_index": 52
+        "source_index": 64
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -18056,7 +18056,7 @@
           "seller_commission_amount": 18.14,
           "net_margin_after_seller": 163.21
         },
-        "source_index": 314
+        "source_index": 313
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -18164,7 +18164,7 @@
           "seller_commission_amount": 18.95,
           "net_margin_after_seller": 170.5
         },
-        "source_index": 54
+        "source_index": 66
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -18487,7 +18487,7 @@
           "seller_commission_amount": 11.34,
           "net_margin_after_seller": 102.06
         },
-        "source_index": 73
+        "source_index": 83
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -18595,7 +18595,7 @@
           "seller_commission_amount": 20.66,
           "net_margin_after_seller": 185.89
         },
-        "source_index": 72
+        "source_index": 82
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -18810,7 +18810,7 @@
           "seller_commission_amount": 32.4,
           "net_margin_after_seller": 291.6
         },
-        "source_index": 74
+        "source_index": 84
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -18918,7 +18918,7 @@
           "seller_commission_amount": 28.08,
           "net_margin_after_seller": 252.72
         },
-        "source_index": 144
+        "source_index": 146
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -19348,7 +19348,7 @@
           "seller_commission_amount": 17.46,
           "net_margin_after_seller": 157.14
         },
-        "source_index": 42
+        "source_index": 54
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -19455,7 +19455,7 @@
           "seller_commission_amount": 18.9,
           "net_margin_after_seller": 170.1
         },
-        "source_index": 3
+        "source_index": 17
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -19562,7 +19562,7 @@
           "seller_commission_amount": 18.9,
           "net_margin_after_seller": 170.1
         },
-        "source_index": 0
+        "source_index": 14
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -19670,7 +19670,7 @@
           "seller_commission_amount": 18.9,
           "net_margin_after_seller": 170.1
         },
-        "source_index": 2
+        "source_index": 16
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -19777,7 +19777,7 @@
           "seller_commission_amount": 18.9,
           "net_margin_after_seller": 170.1
         },
-        "source_index": 1
+        "source_index": 15
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -20635,7 +20635,7 @@
           "seller_commission_amount": 39.02,
           "net_margin_after_seller": 351.13
         },
-        "source_index": 23
+        "source_index": 36
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -20849,7 +20849,7 @@
           "seller_commission_amount": 21.6,
           "net_margin_after_seller": 194.4
         },
-        "source_index": 147
+        "source_index": 149
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -21171,7 +21171,7 @@
           "seller_commission_amount": 19.76,
           "net_margin_after_seller": 177.79
         },
-        "source_index": 19
+        "source_index": 33
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -21279,7 +21279,7 @@
           "seller_commission_amount": 20.88,
           "net_margin_after_seller": 187.92
         },
-        "source_index": 124
+        "source_index": 130
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -21494,7 +21494,7 @@
           "seller_commission_amount": 20.88,
           "net_margin_after_seller": 187.92
         },
-        "source_index": 83
+        "source_index": 93
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -21709,7 +21709,7 @@
           "seller_commission_amount": 45.9,
           "net_margin_after_seller": 413.1
         },
-        "source_index": 103
+        "source_index": 109
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -21924,7 +21924,7 @@
           "seller_commission_amount": 26.42,
           "net_margin_after_seller": 237.73
         },
-        "source_index": 20
+        "source_index": 34
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -22247,7 +22247,7 @@
           "seller_commission_amount": 24.21,
           "net_margin_after_seller": 217.89
         },
-        "source_index": 120
+        "source_index": 126
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -22462,7 +22462,7 @@
           "seller_commission_amount": 20.07,
           "net_margin_after_seller": 180.63
         },
-        "source_index": 115
+        "source_index": 121
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -22678,7 +22678,7 @@
           "seller_commission_amount": 20.07,
           "net_margin_after_seller": 180.63
         },
-        "source_index": 26
+        "source_index": 39
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -23106,7 +23106,7 @@
           "seller_commission_amount": 36.45,
           "net_margin_after_seller": 328.05
         },
-        "source_index": 36
+        "source_index": 48
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -23213,7 +23213,7 @@
           "seller_commission_amount": 23.49,
           "net_margin_after_seller": 211.41
         },
-        "source_index": 141
+        "source_index": 143
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -23321,7 +23321,7 @@
           "seller_commission_amount": 13.59,
           "net_margin_after_seller": 122.31
         },
-        "source_index": 45
+        "source_index": 57
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -23645,7 +23645,7 @@
           "seller_commission_amount": 8.1,
           "net_margin_after_seller": 72.9
         },
-        "source_index": 110
+        "source_index": 116
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -23860,7 +23860,7 @@
           "seller_commission_amount": 9.36,
           "net_margin_after_seller": 84.24
         },
-        "source_index": 106
+        "source_index": 112
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -23967,7 +23967,7 @@
           "seller_commission_amount": 10.35,
           "net_margin_after_seller": 93.15
         },
-        "source_index": 140
+        "source_index": 142
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -24181,7 +24181,7 @@
           "seller_commission_amount": 23.76,
           "net_margin_after_seller": 213.84
         },
-        "source_index": 109
+        "source_index": 115
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -24396,7 +24396,7 @@
           "seller_commission_amount": 19.44,
           "net_margin_after_seller": 174.96
         },
-        "source_index": 313
+        "source_index": 312
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -24504,7 +24504,7 @@
           "seller_commission_amount": 19.44,
           "net_margin_after_seller": 174.96
         },
-        "source_index": 312
+        "source_index": 311
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -24612,7 +24612,7 @@
           "seller_commission_amount": 13.5,
           "net_margin_after_seller": 121.5
         },
-        "source_index": 34
+        "source_index": 46
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -24719,7 +24719,7 @@
           "seller_commission_amount": 17.55,
           "net_margin_after_seller": 157.95
         },
-        "source_index": 59
+        "source_index": 71
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -25149,7 +25149,7 @@
           "seller_commission_amount": 20.7,
           "net_margin_after_seller": 186.3
         },
-        "source_index": 121
+        "source_index": 127
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -25364,7 +25364,7 @@
           "seller_commission_amount": 18.9,
           "net_margin_after_seller": 170.1
         },
-        "source_index": 33
+        "source_index": 45
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -25472,7 +25472,7 @@
           "seller_commission_amount": 18.36,
           "net_margin_after_seller": 165.24
         },
-        "source_index": 56
+        "source_index": 68
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -25579,7 +25579,7 @@
           "seller_commission_amount": 43.47,
           "net_margin_after_seller": 391.23
         },
-        "source_index": 58
+        "source_index": 70
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -25686,7 +25686,7 @@
           "seller_commission_amount": 34.56,
           "net_margin_after_seller": 311.04
         },
-        "source_index": 128
+        "source_index": 133
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -26009,7 +26009,7 @@
           "seller_commission_amount": 52.79,
           "net_margin_after_seller": 475.06
         },
-        "source_index": 25
+        "source_index": 38
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -26019,8 +26019,8 @@
     {
       "titulo": "Upgrade Ar",
       "categoria": "Antiedad",
-      "precio": "Bs. 185",
-      "precioValor": 184.8,
+      "precio": "Bs. 231",
+      "precioValor": 231,
       "moneda": "BOB",
       "desc": "SENSILIS seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.",
       "etiqueta": "Nuvia",
@@ -26069,7 +26069,7 @@
         },
         {
           "label": "Precio Nuvia",
-          "value": "Bs. 185"
+          "value": "Bs. 231"
         }
       ],
       "detalleImagenes": [
@@ -26094,11 +26094,11 @@
       "proveedor": "HBDERM",
       "sourceUrl": "https://hbderm.com/hbderm-catalogo/antiedad/upgrade-ar/",
       "sourceImageUrl": "https://hbderm.com/wp-content/uploads/2024/08/Copia-de-Sin-titulo-1.jpg",
-      "precioProveedor": 336,
+      "precioProveedor": 420,
       "margenObjetivo": 0.45,
       "comisionVendedorRate": 0.1,
-      "comisionVendedor": 15.12,
-      "gananciaNeta": 136.08,
+      "comisionVendedor": 18.9,
+      "gananciaNeta": 170.1,
       "tipoVenta": "publico",
       "raw": {
         "source": "hbderm.com",
@@ -26108,26 +26108,26 @@
         ],
         "source_availability": "Agotado",
         "pricing_formula": {
-          "source_price": 336,
+          "source_price": 420,
           "margin_rate": 0.45,
-          "margin_amount": 151.2,
-          "sale_price": 184.8,
+          "margin_amount": 189,
+          "sale_price": 231,
           "seller_commission_rate": 0.1,
-          "seller_commission_amount": 15.12,
-          "net_margin_after_seller": 136.08
+          "seller_commission_amount": 18.9,
+          "net_margin_after_seller": 170.1
         },
-        "source_index": 85
+        "source_index": 12
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
       "precioPromocional": null,
-      "gananciaNetaConDescuento": 136.08
+      "gananciaNetaConDescuento": 170.1
     },
     {
       "titulo": "Upgrade Eyes",
       "categoria": "Antiedad",
-      "precio": "Bs. 148",
-      "precioValor": 147.95,
+      "precio": "Bs. 185",
+      "precioValor": 184.8,
       "moneda": "BOB",
       "desc": "SENSILIS seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.",
       "etiqueta": "Nuvia",
@@ -26176,7 +26176,7 @@
         },
         {
           "label": "Precio Nuvia",
-          "value": "Bs. 148"
+          "value": "Bs. 185"
         }
       ],
       "detalleImagenes": [
@@ -26201,11 +26201,11 @@
       "proveedor": "HBDERM",
       "sourceUrl": "https://hbderm.com/hbderm-catalogo/antiedad/10142/",
       "sourceImageUrl": "https://hbderm.com/wp-content/uploads/2024/08/Diseno-sin-titulo-2.jpg",
-      "precioProveedor": 269,
+      "precioProveedor": 336,
       "margenObjetivo": 0.45,
       "comisionVendedorRate": 0.1,
-      "comisionVendedor": 12.11,
-      "gananciaNeta": 108.94,
+      "comisionVendedor": 15.12,
+      "gananciaNeta": 136.08,
       "tipoVenta": "publico",
       "raw": {
         "source": "hbderm.com",
@@ -26215,26 +26215,26 @@
         ],
         "source_availability": "instock",
         "pricing_formula": {
-          "source_price": 269,
+          "source_price": 336,
           "margin_rate": 0.45,
-          "margin_amount": 121.05,
-          "sale_price": 147.95,
+          "margin_amount": 151.2,
+          "sale_price": 184.8,
           "seller_commission_rate": 0.1,
-          "seller_commission_amount": 12.11,
-          "net_margin_after_seller": 108.94
+          "seller_commission_amount": 15.12,
+          "net_margin_after_seller": 136.08
         },
-        "source_index": 88
+        "source_index": 13
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
       "precioPromocional": null,
-      "gananciaNetaConDescuento": 108.94
+      "gananciaNetaConDescuento": 136.08
     },
     {
       "titulo": "Upgrade Fluide",
       "categoria": "Antiedad",
-      "precio": "Bs. 185",
-      "precioValor": 184.8,
+      "precio": "Bs. 231",
+      "precioValor": 231,
       "moneda": "BOB",
       "desc": "SENSILIS seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.",
       "etiqueta": "Nuvia",
@@ -26283,7 +26283,7 @@
         },
         {
           "label": "Precio Nuvia",
-          "value": "Bs. 185"
+          "value": "Bs. 231"
         }
       ],
       "detalleImagenes": [
@@ -26308,11 +26308,11 @@
       "proveedor": "HBDERM",
       "sourceUrl": "https://hbderm.com/hbderm-catalogo/antiedad/upgrade-fluido-50ml/",
       "sourceImageUrl": "https://hbderm.com/wp-content/uploads/2024/08/Diseno-sin-titulo.jpg",
-      "precioProveedor": 336,
+      "precioProveedor": 420,
       "margenObjetivo": 0.45,
       "comisionVendedorRate": 0.1,
-      "comisionVendedor": 15.12,
-      "gananciaNeta": 136.08,
+      "comisionVendedor": 18.9,
+      "gananciaNeta": 170.1,
       "tipoVenta": "publico",
       "raw": {
         "source": "hbderm.com",
@@ -26322,20 +26322,20 @@
         ],
         "source_availability": "instock",
         "pricing_formula": {
-          "source_price": 336,
+          "source_price": 420,
           "margin_rate": 0.45,
-          "margin_amount": 151.2,
-          "sale_price": 184.8,
+          "margin_amount": 189,
+          "sale_price": 231,
           "seller_commission_rate": 0.1,
-          "seller_commission_amount": 15.12,
-          "net_margin_after_seller": 136.08
+          "seller_commission_amount": 18.9,
+          "net_margin_after_seller": 170.1
         },
-        "source_index": 87
+        "source_index": 11
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
       "precioPromocional": null,
-      "gananciaNetaConDescuento": 136.08
+      "gananciaNetaConDescuento": 170.1
     },
     {
       "titulo": "Upgrade Make Up - Miel Doré",
@@ -26661,8 +26661,8 @@
     {
       "titulo": "Upgrade Night Cream",
       "categoria": "Antiedad",
-      "precio": "Bs. 185",
-      "precioValor": 184.8,
+      "precio": "Bs. 231",
+      "precioValor": 231,
       "moneda": "BOB",
       "desc": "SENSILIS seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.",
       "etiqueta": "Nuvia",
@@ -26711,7 +26711,7 @@
         },
         {
           "label": "Precio Nuvia",
-          "value": "Bs. 185"
+          "value": "Bs. 231"
         }
       ],
       "detalleImagenes": [
@@ -26736,11 +26736,11 @@
       "proveedor": "HBDERM",
       "sourceUrl": "https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-noche/upgrade-crema-noche-50ml/",
       "sourceImageUrl": "https://hbderm.com/wp-content/uploads/2024/08/UPGRADE-NIGHT-CREAM.jpg",
-      "precioProveedor": 336,
+      "precioProveedor": 420,
       "margenObjetivo": 0.45,
       "comisionVendedorRate": 0.1,
-      "comisionVendedor": 15.12,
-      "gananciaNeta": 136.08,
+      "comisionVendedor": 18.9,
+      "gananciaNeta": 170.1,
       "tipoVenta": "publico",
       "raw": {
         "source": "hbderm.com",
@@ -26751,20 +26751,20 @@
         ],
         "source_availability": "instock",
         "pricing_formula": {
-          "source_price": 336,
+          "source_price": 420,
           "margin_rate": 0.45,
-          "margin_amount": 151.2,
-          "sale_price": 184.8,
+          "margin_amount": 189,
+          "sale_price": 231,
           "seller_commission_rate": 0.1,
-          "seller_commission_amount": 15.12,
-          "net_margin_after_seller": 136.08
+          "seller_commission_amount": 18.9,
+          "net_margin_after_seller": 170.1
         },
-        "source_index": 86
+        "source_index": 10
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
       "precioPromocional": null,
-      "gananciaNetaConDescuento": 136.08
+      "gananciaNetaConDescuento": 170.1
     },
     {
       "titulo": "Ampoule Clairial",
@@ -26857,7 +26857,7 @@
           "Pieles Hiperpigmentadas",
           "Despigmentante Rostro"
         ],
-        "source_availability": "Agotado",
+        "source_availability": "instock",
         "pricing_formula": {
           "source_price": 626,
           "margin_rate": 0.45,
@@ -26867,7 +26867,7 @@
           "seller_commission_amount": 28.17,
           "net_margin_after_seller": 253.53
         },
-        "source_index": 63
+        "source_index": 7
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -26975,7 +26975,7 @@
           "seller_commission_amount": 26.73,
           "net_margin_after_seller": 240.57
         },
-        "source_index": 96
+        "source_index": 102
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -27189,7 +27189,7 @@
           "seller_commission_amount": 20.88,
           "net_margin_after_seller": 187.92
         },
-        "source_index": 152
+        "source_index": 153
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -27296,7 +27296,7 @@
           "seller_commission_amount": 14.49,
           "net_margin_after_seller": 130.41
         },
-        "source_index": 111
+        "source_index": 117
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -27724,7 +27724,7 @@
           "seller_commission_amount": 23.81,
           "net_margin_after_seller": 214.24
         },
-        "source_index": 114
+        "source_index": 120
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -27831,7 +27831,7 @@
           "seller_commission_amount": 29.7,
           "net_margin_after_seller": 267.3
         },
-        "source_index": 309
+        "source_index": 308
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -28036,7 +28036,7 @@
           "Pieles Hiperpigmentadas",
           "Despigmentante Corporal"
         ],
-        "source_availability": "Agotado",
+        "source_availability": "instock",
         "pricing_formula": {
           "source_price": 367,
           "margin_rate": 0.45,
@@ -28046,7 +28046,7 @@
           "seller_commission_amount": 16.52,
           "net_margin_after_seller": 148.63
         },
-        "source_index": 125
+        "source_index": 0
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -28153,7 +28153,7 @@
           "seller_commission_amount": 33.08,
           "net_margin_after_seller": 297.67
         },
-        "source_index": 21
+        "source_index": 35
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -28259,7 +28259,7 @@
           "seller_commission_amount": 18.36,
           "net_margin_after_seller": 165.24
         },
-        "source_index": 108
+        "source_index": 114
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -28588,8 +28588,8 @@
     {
       "titulo": "Novophane K Caspa Severa Shampoo",
       "categoria": "Cabello y unas",
-      "precio": "Bs. 174",
-      "precioValor": 173.8,
+      "precio": "Bs. 404",
+      "precioValor": 404.25,
       "moneda": "BOB",
       "desc": "ACM para cuidado de cabello o unas. Confirma modo de uso y disponibilidad.",
       "etiqueta": "Nuvia",
@@ -28638,7 +28638,7 @@
         },
         {
           "label": "Precio Nuvia",
-          "value": "Bs. 174"
+          "value": "Bs. 404"
         }
       ],
       "detalleImagenes": [
@@ -28662,11 +28662,11 @@
       "proveedor": "HBDERM",
       "sourceUrl": "https://hbderm.com/hbderm-catalogo/cuidados-del-cabello-y-unas/novophane-k-shampoo-caspa-severa/",
       "sourceImageUrl": "https://hbderm.com/wp-content/uploads/2024/09/NOVOPHANE-K.jpg",
-      "precioProveedor": 316,
+      "precioProveedor": 735,
       "margenObjetivo": 0.45,
       "comisionVendedorRate": 0.1,
-      "comisionVendedor": 14.22,
-      "gananciaNeta": 127.98,
+      "comisionVendedor": 33.08,
+      "gananciaNeta": 297.67,
       "tipoVenta": "publico",
       "raw": {
         "source": "hbderm.com",
@@ -28676,26 +28676,26 @@
         ],
         "source_availability": "instock",
         "pricing_formula": {
-          "source_price": 316,
+          "source_price": 735,
           "margin_rate": 0.45,
-          "margin_amount": 142.2,
-          "sale_price": 173.8,
+          "margin_amount": 330.75,
+          "sale_price": 404.25,
           "seller_commission_rate": 0.1,
-          "seller_commission_amount": 14.22,
-          "net_margin_after_seller": 127.98
+          "seller_commission_amount": 33.08,
+          "net_margin_after_seller": 297.67
         },
         "source_index": 163
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
       "precioPromocional": null,
-      "gananciaNetaConDescuento": 127.98
+      "gananciaNetaConDescuento": 297.67
     },
     {
       "titulo": "Novophane Loción Chronic",
       "categoria": "Cabello y unas",
-      "precio": "Bs. 187",
-      "precioValor": 187,
+      "precio": "Bs. 404",
+      "precioValor": 404.25,
       "moneda": "BOB",
       "desc": "ACM para cuidado de cabello o unas. Confirma modo de uso y disponibilidad.",
       "etiqueta": "Nuvia",
@@ -28744,7 +28744,7 @@
         },
         {
           "label": "Precio Nuvia",
-          "value": "Bs. 187"
+          "value": "Bs. 404"
         }
       ],
       "detalleImagenes": [
@@ -28768,11 +28768,11 @@
       "proveedor": "HBDERM",
       "sourceUrl": "https://hbderm.com/hbderm-catalogo/cuidados-del-cabello-y-unas/novophane-chronic-100ml/",
       "sourceImageUrl": "https://hbderm.com/wp-content/uploads/2024/09/NOVOPHANE-CHRONIC-1.jpg",
-      "precioProveedor": 340,
+      "precioProveedor": 735,
       "margenObjetivo": 0.45,
       "comisionVendedorRate": 0.1,
-      "comisionVendedor": 15.3,
-      "gananciaNeta": 137.7,
+      "comisionVendedor": 33.08,
+      "gananciaNeta": 297.67,
       "tipoVenta": "publico",
       "raw": {
         "source": "hbderm.com",
@@ -28782,20 +28782,20 @@
         ],
         "source_availability": "Agotado",
         "pricing_formula": {
-          "source_price": 340,
+          "source_price": 735,
           "margin_rate": 0.45,
-          "margin_amount": 153,
-          "sale_price": 187,
+          "margin_amount": 330.75,
+          "sale_price": 404.25,
           "seller_commission_rate": 0.1,
-          "seller_commission_amount": 15.3,
-          "net_margin_after_seller": 137.7
+          "seller_commission_amount": 33.08,
+          "net_margin_after_seller": 297.67
         },
         "source_index": 233
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
       "precioPromocional": null,
-      "gananciaNetaConDescuento": 137.7
+      "gananciaNetaConDescuento": 297.67
     },
     {
       "titulo": "Novophane Loción Reactiva",
@@ -29002,7 +29002,7 @@
           "seller_commission_amount": 14.22,
           "net_margin_after_seller": 127.98
         },
-        "source_index": 38
+        "source_index": 50
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -29224,8 +29224,8 @@
     {
       "titulo": "Pilopeptan Loción Anticaída",
       "categoria": "Cabello y unas",
-      "precio": "Bs. 164",
-      "precioValor": 163.9,
+      "precio": "Bs. 404",
+      "precioValor": 404.25,
       "moneda": "BOB",
       "desc": "GENOVÉ para cuidado de cabello o unas. Confirma modo de uso y disponibilidad.",
       "etiqueta": "Nuvia",
@@ -29274,7 +29274,7 @@
         },
         {
           "label": "Precio Nuvia",
-          "value": "Bs. 164"
+          "value": "Bs. 404"
         }
       ],
       "detalleImagenes": [
@@ -29298,11 +29298,11 @@
       "proveedor": "HBDERM",
       "sourceUrl": "https://hbderm.com/hbderm-catalogo/cuidados-del-cabello-y-unas/pilopeptan-locion-anticaida-100ml/",
       "sourceImageUrl": "https://hbderm.com/wp-content/uploads/2024/10/LOCION-ANTICAIDA.jpg",
-      "precioProveedor": 298,
+      "precioProveedor": 735,
       "margenObjetivo": 0.45,
       "comisionVendedorRate": 0.1,
-      "comisionVendedor": 13.41,
-      "gananciaNeta": 120.69,
+      "comisionVendedor": 33.08,
+      "gananciaNeta": 297.67,
       "tipoVenta": "publico",
       "raw": {
         "source": "hbderm.com",
@@ -29312,20 +29312,20 @@
         ],
         "source_availability": "instock",
         "pricing_formula": {
-          "source_price": 298,
+          "source_price": 735,
           "margin_rate": 0.45,
-          "margin_amount": 134.1,
-          "sale_price": 163.9,
+          "margin_amount": 330.75,
+          "sale_price": 404.25,
           "seller_commission_rate": 0.1,
-          "seller_commission_amount": 13.41,
-          "net_margin_after_seller": 120.69
+          "seller_commission_amount": 33.08,
+          "net_margin_after_seller": 297.67
         },
         "source_index": 258
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
       "precioPromocional": null,
-      "gananciaNetaConDescuento": 120.69
+      "gananciaNetaConDescuento": 297.67
     },
     {
       "titulo": "Pilopeptan Womam Comprimidos",
@@ -29744,7 +29744,7 @@
           "seller_commission_amount": 10.53,
           "net_margin_after_seller": 94.77
         },
-        "source_index": 102
+        "source_index": 108
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -29966,8 +29966,8 @@
     {
       "titulo": "Sédacalm Shampoo",
       "categoria": "Cabello y unas",
-      "precio": "Bs. 145",
-      "precioValor": 145.2,
+      "precio": "Bs. 404",
+      "precioValor": 404.25,
       "moneda": "BOB",
       "desc": "ACM para cuidado de cabello o unas. Confirma modo de uso y disponibilidad.",
       "etiqueta": "Nuvia",
@@ -30016,7 +30016,7 @@
         },
         {
           "label": "Precio Nuvia",
-          "value": "Bs. 145"
+          "value": "Bs. 404"
         }
       ],
       "detalleImagenes": [
@@ -30040,11 +30040,11 @@
       "proveedor": "HBDERM",
       "sourceUrl": "https://hbderm.com/hbderm-catalogo/cuidados-del-cabello-y-unas/sedacalm-shampoo-calmante-200ml/",
       "sourceImageUrl": "https://hbderm.com/wp-content/uploads/2024/09/SEDACALM-SHAMPOO.jpg",
-      "precioProveedor": 264,
+      "precioProveedor": 735,
       "margenObjetivo": 0.45,
       "comisionVendedorRate": 0.1,
-      "comisionVendedor": 11.88,
-      "gananciaNeta": 106.92,
+      "comisionVendedor": 33.08,
+      "gananciaNeta": 297.67,
       "tipoVenta": "publico",
       "raw": {
         "source": "hbderm.com",
@@ -30054,20 +30054,20 @@
         ],
         "source_availability": "Agotado",
         "pricing_formula": {
-          "source_price": 264,
+          "source_price": 735,
           "margin_rate": 0.45,
-          "margin_amount": 118.8,
-          "sale_price": 145.2,
+          "margin_amount": 330.75,
+          "sale_price": 404.25,
           "seller_commission_rate": 0.1,
-          "seller_commission_amount": 11.88,
-          "net_margin_after_seller": 106.92
+          "seller_commission_amount": 33.08,
+          "net_margin_after_seller": 297.67
         },
-        "source_index": 68
+        "source_index": 78
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
       "precioPromocional": null,
-      "gananciaNetaConDescuento": 106.92
+      "gananciaNetaConDescuento": 297.67
     },
     {
       "titulo": "Si - Nails",
@@ -30169,7 +30169,7 @@
           "seller_commission_amount": 12.87,
           "net_margin_after_seller": 115.83
         },
-        "source_index": 143
+        "source_index": 145
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -30276,7 +30276,7 @@
           "seller_commission_amount": 13.5,
           "net_margin_after_seller": 121.5
         },
-        "source_index": 308
+        "source_index": 307
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -30488,7 +30488,7 @@
           "seller_commission_amount": 9.72,
           "net_margin_after_seller": 87.48
         },
-        "source_index": 80
+        "source_index": 90
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -30604,8 +30604,8 @@
     {
       "titulo": "Barièsun Bruma Termal Bronceadora",
       "categoria": "Bebe y ninos",
-      "precio": "Bs. 138",
-      "precioValor": 137.5,
+      "precio": "Bs. 158",
+      "precioValor": 158.4,
       "moneda": "BOB",
       "desc": "URIAGE para cuidado familiar. Confirmar edad recomendada antes de usar.",
       "etiqueta": "Nuvia",
@@ -30654,7 +30654,7 @@
         },
         {
           "label": "Precio Nuvia",
-          "value": "Bs. 138"
+          "value": "Bs. 158"
         }
       ],
       "detalleImagenes": [
@@ -30678,11 +30678,11 @@
       "proveedor": "HBDERM",
       "sourceUrl": "https://hbderm.com/hbderm-catalogo/cuidados-del-bebe/cuidados-especificos/bariesun-autobronzant/",
       "sourceImageUrl": "https://hbderm.com/wp-content/uploads/2024/04/Diseño-sin-título-1.png",
-      "precioProveedor": 250,
+      "precioProveedor": 288,
       "margenObjetivo": 0.45,
       "comisionVendedorRate": 0.1,
-      "comisionVendedor": 11.25,
-      "gananciaNeta": 101.25,
+      "comisionVendedor": 12.96,
+      "gananciaNeta": 116.64,
       "tipoVenta": "publico",
       "raw": {
         "source": "hbderm.com",
@@ -30693,20 +30693,20 @@
         ],
         "source_availability": "instock",
         "pricing_formula": {
-          "source_price": 250,
+          "source_price": 288,
           "margin_rate": 0.45,
-          "margin_amount": 112.5,
-          "sale_price": 137.5,
+          "margin_amount": 129.6,
+          "sale_price": 158.4,
           "seller_commission_rate": 0.1,
-          "seller_commission_amount": 11.25,
-          "net_margin_after_seller": 101.25
+          "seller_commission_amount": 12.96,
+          "net_margin_after_seller": 116.64
         },
-        "source_index": 100
+        "source_index": 106
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
       "precioPromocional": null,
-      "gananciaNetaConDescuento": 101.25
+      "gananciaNetaConDescuento": 116.64
     },
     {
       "titulo": "Bebé - 1ER Cuidado Costra Láctea",
@@ -30807,7 +30807,7 @@
           "seller_commission_amount": 3.78,
           "net_margin_after_seller": 34.02
         },
-        "source_index": 136
+        "source_index": 139
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -30913,7 +30913,7 @@
           "seller_commission_amount": 5.4,
           "net_margin_after_seller": 48.6
         },
-        "source_index": 135
+        "source_index": 138
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -31020,7 +31020,7 @@
           "seller_commission_amount": 9.18,
           "net_margin_after_seller": 82.62
         },
-        "source_index": 53
+        "source_index": 65
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -31234,7 +31234,7 @@
           "seller_commission_amount": 10.35,
           "net_margin_after_seller": 93.15
         },
-        "source_index": 51
+        "source_index": 63
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -31448,7 +31448,7 @@
           "seller_commission_amount": 15.12,
           "net_margin_after_seller": 136.08
         },
-        "source_index": 30
+        "source_index": 42
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -31554,7 +31554,7 @@
           "seller_commission_amount": 18.9,
           "net_margin_after_seller": 170.1
         },
-        "source_index": 151
+        "source_index": 152
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -31660,7 +31660,7 @@
           "seller_commission_amount": 16.74,
           "net_margin_after_seller": 150.66
         },
-        "source_index": 84
+        "source_index": 94
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -31872,7 +31872,7 @@
           "seller_commission_amount": 15.12,
           "net_margin_after_seller": 136.08
         },
-        "source_index": 95
+        "source_index": 101
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -32084,7 +32084,7 @@
           "seller_commission_amount": 11.25,
           "net_margin_after_seller": 101.25
         },
-        "source_index": 306
+        "source_index": 305
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -32402,7 +32402,7 @@
           "seller_commission_amount": 18.14,
           "net_margin_after_seller": 163.21
         },
-        "source_index": 142
+        "source_index": 144
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -32720,7 +32720,7 @@
           "seller_commission_amount": 12.69,
           "net_margin_after_seller": 114.21
         },
-        "source_index": 37
+        "source_index": 49
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -32932,7 +32932,7 @@
           "seller_commission_amount": 10.8,
           "net_margin_after_seller": 97.2
         },
-        "source_index": 69
+        "source_index": 79
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -33144,7 +33144,7 @@
           "seller_commission_amount": 12.96,
           "net_margin_after_seller": 116.64
         },
-        "source_index": 119
+        "source_index": 125
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -33154,8 +33154,8 @@
     {
       "titulo": "Skin Perfusion - GR Youth Mask - 50ML",
       "categoria": "Dermocosmetica",
-      "precio": "Bs. 294",
-      "precioValor": 293.7,
+      "precio": "Bs. 110",
+      "precioValor": 110,
       "moneda": "BOB",
       "desc": "Nuvia seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.",
       "etiqueta": "Nuvia",
@@ -33204,7 +33204,7 @@
         },
         {
           "label": "Precio Nuvia",
-          "value": "Bs. 294"
+          "value": "Bs. 110"
         }
       ],
       "detalleImagenes": [
@@ -33228,11 +33228,11 @@
       "proveedor": "HBDERM",
       "sourceUrl": "https://hbderm.com/hbderm-catalogo/sin-categorizar/skin-perfusion-gr-youth-mask-50ml/",
       "sourceImageUrl": "https://hbderm.com/wp-content/uploads/2023/01/SKIN-PERFUSION-GR-YOUTH-MASK-50ML.png",
-      "precioProveedor": 534,
+      "precioProveedor": 200,
       "margenObjetivo": 0.45,
       "comisionVendedorRate": 0.1,
-      "comisionVendedor": 24.03,
-      "gananciaNeta": 216.27,
+      "comisionVendedor": 9,
+      "gananciaNeta": 81,
       "tipoVenta": "publico",
       "raw": {
         "source": "hbderm.com",
@@ -33242,20 +33242,20 @@
         ],
         "source_availability": "instock",
         "pricing_formula": {
-          "source_price": 534,
+          "source_price": 200,
           "margin_rate": 0.45,
-          "margin_amount": 240.3,
-          "sale_price": 293.7,
+          "margin_amount": 90,
+          "sale_price": 110,
           "seller_commission_rate": 0.1,
-          "seller_commission_amount": 24.03,
-          "net_margin_after_seller": 216.27
+          "seller_commission_amount": 9,
+          "net_margin_after_seller": 81
         },
-        "source_index": 321
+        "source_index": 320
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
       "precioPromocional": null,
-      "gananciaNetaConDescuento": 216.27
+      "gananciaNetaConDescuento": 81
     },
     {
       "titulo": "Skin Prep Créme Exfoliante",
@@ -33472,8 +33472,8 @@
     {
       "titulo": "Skin Roller 0,2MM",
       "categoria": "Dermocosmetica",
-      "precio": "Bs. 185",
-      "precioValor": 184.8,
+      "precio": "Bs. 502",
+      "precioValor": 501.6,
       "moneda": "BOB",
       "desc": "SOFTFIL seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.",
       "etiqueta": "Nuvia",
@@ -33522,7 +33522,7 @@
         },
         {
           "label": "Precio Nuvia",
-          "value": "Bs. 185"
+          "value": "Bs. 502"
         }
       ],
       "detalleImagenes": [
@@ -33546,11 +33546,11 @@
       "proveedor": "HBDERM",
       "sourceUrl": "https://hbderm.com/hbderm-catalogo/sin-categorizar/skin-roller-02mm/",
       "sourceImageUrl": "https://hbderm.com/wp-content/uploads/2023/10/Diseño-sin-título-12.png",
-      "precioProveedor": 336,
+      "precioProveedor": 912,
       "margenObjetivo": 0.45,
       "comisionVendedorRate": 0.1,
-      "comisionVendedor": 15.12,
-      "gananciaNeta": 136.08,
+      "comisionVendedor": 41.04,
+      "gananciaNeta": 369.36,
       "tipoVenta": "publico",
       "raw": {
         "source": "hbderm.com",
@@ -33560,26 +33560,26 @@
         ],
         "source_availability": "instock",
         "pricing_formula": {
-          "source_price": 336,
+          "source_price": 912,
           "margin_rate": 0.45,
-          "margin_amount": 151.2,
-          "sale_price": 184.8,
+          "margin_amount": 410.4,
+          "sale_price": 501.6,
           "seller_commission_rate": 0.1,
-          "seller_commission_amount": 15.12,
-          "net_margin_after_seller": 136.08
+          "seller_commission_amount": 41.04,
+          "net_margin_after_seller": 369.36
         },
-        "source_index": 317
+        "source_index": 316
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
       "precioPromocional": null,
-      "gananciaNetaConDescuento": 136.08
+      "gananciaNetaConDescuento": 369.36
     },
     {
       "titulo": "Skin Roller 0,5MM",
       "categoria": "Dermocosmetica",
-      "precio": "Bs. 110",
-      "precioValor": 110,
+      "precio": "Bs. 185",
+      "precioValor": 184.8,
       "moneda": "BOB",
       "desc": "SOFTFIL seleccionado para compra asistida Nuvia. Confirma disponibilidad antes de comprar.",
       "etiqueta": "Nuvia",
@@ -33628,7 +33628,7 @@
         },
         {
           "label": "Precio Nuvia",
-          "value": "Bs. 110"
+          "value": "Bs. 185"
         }
       ],
       "detalleImagenes": [
@@ -33652,11 +33652,11 @@
       "proveedor": "HBDERM",
       "sourceUrl": "https://hbderm.com/hbderm-catalogo/sin-categorizar/skin-roller-05mm/",
       "sourceImageUrl": "https://hbderm.com/wp-content/uploads/2023/10/Diseño-sin-título-13.png",
-      "precioProveedor": 200,
+      "precioProveedor": 336,
       "margenObjetivo": 0.45,
       "comisionVendedorRate": 0.1,
-      "comisionVendedor": 9,
-      "gananciaNeta": 81,
+      "comisionVendedor": 15.12,
+      "gananciaNeta": 136.08,
       "tipoVenta": "publico",
       "raw": {
         "source": "hbderm.com",
@@ -33666,20 +33666,20 @@
         ],
         "source_availability": "instock",
         "pricing_formula": {
-          "source_price": 200,
+          "source_price": 336,
           "margin_rate": 0.45,
-          "margin_amount": 90,
-          "sale_price": 110,
+          "margin_amount": 151.2,
+          "sale_price": 184.8,
           "seller_commission_rate": 0.1,
-          "seller_commission_amount": 9,
-          "net_margin_after_seller": 81
+          "seller_commission_amount": 15.12,
+          "net_margin_after_seller": 136.08
         },
-        "source_index": 316
+        "source_index": 315
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
       "precioPromocional": null,
-      "gananciaNetaConDescuento": 81
+      "gananciaNetaConDescuento": 136.08
     },
     {
       "titulo": "Xerial 30 Gel - Crema",
@@ -33770,7 +33770,7 @@
         "source_categories": [
           "Sin Categorizar"
         ],
-        "source_availability": "Agotado",
+        "source_availability": "instock",
         "pricing_formula": {
           "source_price": 250,
           "margin_rate": 0.45,
@@ -33780,7 +33780,7 @@
           "seller_commission_amount": 11.25,
           "net_margin_after_seller": 101.25
         },
-        "source_index": 153
+        "source_index": 1
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -33790,16 +33790,16 @@
   ],
   "internal_professional_products": [
     {
-      "titulo": "Biomask",
+      "titulo": "Bionutrilift Cannulas",
       "categoria": "Profesional consulta",
       "precio": "Bajo consulta",
       "precioValor": null,
       "moneda": "BOB",
-      "desc": "AGF mesenchymal de uso profesional o bajo consulta. No se publica como compra directa.",
+      "desc": "FILLMED de uso profesional o bajo consulta. No se publica como compra directa.",
       "etiqueta": "consulta",
-      "imagen": "https://hbderm.com/wp-content/uploads/2025/05/BIOMASK.jpg",
-      "imagenAlt": "Biomask de AGF mesenchymal",
-      "marca": "AGF mesenchymal",
+      "imagen": "https://hbderm.com/wp-content/uploads/2023/01/BIONUTRILIFT-CANNULAS.png",
+      "imagenAlt": "Bionutrilift Cannulas de FILLMED",
+      "marca": "FILLMED",
       "tamano": "",
       "uso": "Compra asistida",
       "beneficios": [
@@ -33818,7 +33818,7 @@
       ],
       "modoUso": "Producto de uso profesional o bajo consulta. No se debe comprar ni usar sin indicacion adecuada.",
       "incluye": [
-        "1 producto Biomask",
+        "1 producto Bionutrilift Cannulas",
         "Presentacion segun disponibilidad",
         "Confirmacion de disponibilidad antes de entregar",
         "Cotizacion/checkout preparado en Nuvia"
@@ -33826,7 +33826,7 @@
       "especificaciones": [
         {
           "label": "Marca",
-          "value": "AGF mesenchymal"
+          "value": "FILLMED"
         },
         {
           "label": "Proveedor",
@@ -33847,8 +33847,8 @@
       ],
       "detalleImagenes": [
         {
-          "src": "https://hbderm.com/wp-content/uploads/2025/05/BIOMASK.jpg",
-          "alt": "Biomask imagen de referencia",
+          "src": "https://hbderm.com/wp-content/uploads/2023/01/BIONUTRILIFT-CANNULAS.png",
+          "alt": "Bionutrilift Cannulas imagen de referencia",
           "label": "Imagen referencia"
         },
         {
@@ -33864,36 +33864,36 @@
       ],
       "detalleNota": "Producto cargado en base interna para revision comercial. No publicarlo como compra directa sin validar regulacion, stock y uso profesional.",
       "proveedor": "HBDERM",
-      "sourceUrl": "https://hbderm.com/hbderm-catalogo/mesoterapia/biomask/",
-      "sourceImageUrl": "https://hbderm.com/wp-content/uploads/2025/05/BIOMASK.jpg",
-      "precioProveedor": 0.1053,
+      "sourceUrl": "https://hbderm.com/hbderm-catalogo/rellenos-dermales/bionutrilift-cannulas/",
+      "sourceImageUrl": "https://hbderm.com/wp-content/uploads/2023/01/BIONUTRILIFT-CANNULAS.png",
+      "precioProveedor": 864,
       "margenObjetivo": 0.45,
       "comisionVendedorRate": 0.1,
-      "comisionVendedor": 0.01,
-      "gananciaNeta": 0.04,
+      "comisionVendedor": 38.88,
+      "gananciaNeta": 349.92,
       "tipoVenta": "profesional_consulta",
       "raw": {
         "source": "hbderm.com",
-        "source_url": "https://hbderm.com/hbderm-catalogo/mesoterapia/biomask/",
+        "source_url": "https://hbderm.com/hbderm-catalogo/rellenos-dermales/bionutrilift-cannulas/",
         "source_categories": [
-          "Mesoterapia"
+          "Rellenos Dermales"
         ],
         "source_availability": "instock",
         "pricing_formula": {
-          "source_price": 0.1053,
+          "source_price": 864,
           "margin_rate": 0.45,
-          "margin_amount": 0.05,
-          "sale_price": 0.06,
+          "margin_amount": 388.8,
+          "sale_price": 475.2,
           "seller_commission_rate": 0.1,
-          "seller_commission_amount": 0.01,
-          "net_margin_after_seller": 0.04
+          "seller_commission_amount": 38.88,
+          "net_margin_after_seller": 349.92
         },
-        "source_index": 305
+        "source_index": 324
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
       "precioPromocional": null,
-      "gananciaNetaConDescuento": 0.04
+      "gananciaNetaConDescuento": 349.92
     },
     {
       "titulo": "Capillary",
@@ -33972,7 +33972,7 @@
       "proveedor": "HBDERM",
       "sourceUrl": "https://hbderm.com/hbderm-catalogo/mesoterapia/capillary/",
       "sourceImageUrl": "https://hbderm.com/wp-content/uploads/2025/05/CAPILLARY.jpg",
-      "precioProveedor": 0.1134,
+      "precioProveedor": 0.1053,
       "margenObjetivo": 0.45,
       "comisionVendedorRate": 0.1,
       "comisionVendedor": 0.01,
@@ -33986,7 +33986,7 @@
         ],
         "source_availability": "instock",
         "pricing_formula": {
-          "source_price": 0.1134,
+          "source_price": 0.1053,
           "margin_rate": 0.45,
           "margin_amount": 0.05,
           "sale_price": 0.06,
@@ -33994,12 +33994,118 @@
           "seller_commission_amount": 0.01,
           "net_margin_after_seller": 0.04
         },
-        "source_index": 307
+        "source_index": 306
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
       "precioPromocional": null,
       "gananciaNetaConDescuento": 0.04
+    },
+    {
+      "titulo": "Cytosial Deep",
+      "categoria": "Profesional consulta",
+      "precio": "Bajo consulta",
+      "precioValor": null,
+      "moneda": "BOB",
+      "desc": "BIOXIS de uso profesional o bajo consulta. No se publica como compra directa.",
+      "etiqueta": "consulta",
+      "imagen": "https://hbderm.com/wp-content/uploads/2020/06/CYTOSIAL-DEEP-WRINKLES.png",
+      "imagenAlt": "Cytosial Deep de BIOXIS",
+      "marca": "BIOXIS",
+      "tamano": "",
+      "uso": "Compra asistida",
+      "beneficios": [
+        "Uso profesional",
+        "Compra bajo consulta",
+        "No autoadministrar"
+      ],
+      "idealPara": [
+        "Uso profesional",
+        "Consulta previa",
+        "Compra asistida"
+      ],
+      "ingredientesClave": [
+        "Ver envase",
+        "Confirmar composicion"
+      ],
+      "modoUso": "Producto de uso profesional o bajo consulta. No se debe comprar ni usar sin indicacion adecuada.",
+      "incluye": [
+        "1 producto Cytosial Deep",
+        "Presentacion segun disponibilidad",
+        "Confirmacion de disponibilidad antes de entregar",
+        "Cotizacion/checkout preparado en Nuvia"
+      ],
+      "especificaciones": [
+        {
+          "label": "Marca",
+          "value": "BIOXIS"
+        },
+        {
+          "label": "Proveedor",
+          "value": "HBDERM"
+        },
+        {
+          "label": "Categoria",
+          "value": "Profesional consulta"
+        },
+        {
+          "label": "Tamano",
+          "value": "Consultar"
+        },
+        {
+          "label": "Precio Nuvia",
+          "value": "Bajo consulta"
+        }
+      ],
+      "detalleImagenes": [
+        {
+          "src": "https://hbderm.com/wp-content/uploads/2020/06/CYTOSIAL-DEEP-WRINKLES.png",
+          "alt": "Cytosial Deep imagen de referencia",
+          "label": "Imagen referencia"
+        },
+        {
+          "src": "assets/hbderm-image-slot.svg",
+          "alt": "Espacio para foto propia Nuvia",
+          "label": "Foto propia pendiente"
+        },
+        {
+          "src": "assets/hbderm-video-slot.svg",
+          "alt": "Espacio para video de uso Nuvia",
+          "label": "Video pendiente"
+        }
+      ],
+      "detalleNota": "Producto cargado en base interna para revision comercial. No publicarlo como compra directa sin validar regulacion, stock y uso profesional.",
+      "proveedor": "HBDERM",
+      "sourceUrl": "https://hbderm.com/hbderm-catalogo/rellenos-dermales/cytosial-deep/",
+      "sourceImageUrl": "https://hbderm.com/wp-content/uploads/2020/06/CYTOSIAL-DEEP-WRINKLES.png",
+      "precioProveedor": 446,
+      "margenObjetivo": 0.45,
+      "comisionVendedorRate": 0.1,
+      "comisionVendedor": 20.07,
+      "gananciaNeta": 180.63,
+      "tipoVenta": "profesional_consulta",
+      "raw": {
+        "source": "hbderm.com",
+        "source_url": "https://hbderm.com/hbderm-catalogo/rellenos-dermales/cytosial-deep/",
+        "source_categories": [
+          "Rellenos Dermales"
+        ],
+        "source_availability": "instock",
+        "pricing_formula": {
+          "source_price": 446,
+          "margin_rate": 0.45,
+          "margin_amount": 200.7,
+          "sale_price": 245.3,
+          "seller_commission_rate": 0.1,
+          "seller_commission_amount": 20.07,
+          "net_margin_after_seller": 180.63
+        },
+        "source_index": 328
+      },
+      "destacadoMes": false,
+      "descuentoPorcentaje": 0,
+      "precioPromocional": null,
+      "gananciaNetaConDescuento": 180.63
     },
     {
       "titulo": "Dermal",
@@ -34078,11 +34184,11 @@
       "proveedor": "HBDERM",
       "sourceUrl": "https://hbderm.com/hbderm-catalogo/mesoterapia/dermal/",
       "sourceImageUrl": "https://hbderm.com/wp-content/uploads/2025/05/DERMAL.jpg",
-      "precioProveedor": 864,
+      "precioProveedor": 663,
       "margenObjetivo": 0.45,
       "comisionVendedorRate": 0.1,
-      "comisionVendedor": 38.88,
-      "gananciaNeta": 349.92,
+      "comisionVendedor": 29.84,
+      "gananciaNeta": 268.51,
       "tipoVenta": "profesional_consulta",
       "raw": {
         "source": "hbderm.com",
@@ -34092,20 +34198,20 @@
         ],
         "source_availability": "instock",
         "pricing_formula": {
-          "source_price": 864,
+          "source_price": 663,
           "margin_rate": 0.45,
-          "margin_amount": 388.8,
-          "sale_price": 475.2,
+          "margin_amount": 298.35,
+          "sale_price": 364.65,
           "seller_commission_rate": 0.1,
-          "seller_commission_amount": 38.88,
-          "net_margin_after_seller": 349.92
+          "seller_commission_amount": 29.84,
+          "net_margin_after_seller": 268.51
         },
         "source_index": 304
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
       "precioPromocional": null,
-      "gananciaNetaConDescuento": 349.92
+      "gananciaNetaConDescuento": 268.51
     },
     {
       "titulo": "Ncef Reverse",
@@ -34207,7 +34313,7 @@
           "seller_commission_amount": 20.07,
           "net_margin_after_seller": 180.63
         },
-        "source_index": 127
+        "source_index": 132
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -34321,15 +34427,15 @@
       "gananciaNetaConDescuento": 426.46
     },
     {
-      "titulo": "Nctf 135HA",
+      "titulo": "Skin Perfusion - Hyaluronic Youth Mask - 4X8ML",
       "categoria": "Profesional consulta",
       "precio": "Bajo consulta",
       "precioValor": null,
       "moneda": "BOB",
       "desc": "FILLMED de uso profesional o bajo consulta. No se publica como compra directa.",
       "etiqueta": "consulta",
-      "imagen": "https://hbderm.com/wp-content/uploads/2020/06/NCTF-135ha-1.png",
-      "imagenAlt": "Nctf 135HA de FILLMED",
+      "imagen": "https://hbderm.com/wp-content/uploads/2023/01/SKIN-PERFUSION-HYALURONIC-YOUTH-MASK-4X8ML-1.jpeg",
+      "imagenAlt": "Skin Perfusion - Hyaluronic Youth Mask - 4X8ML de FILLMED",
       "marca": "FILLMED",
       "tamano": "",
       "uso": "Compra asistida",
@@ -34349,7 +34455,7 @@
       ],
       "modoUso": "Producto de uso profesional o bajo consulta. No se debe comprar ni usar sin indicacion adecuada.",
       "incluye": [
-        "1 producto Nctf 135HA",
+        "1 producto Skin Perfusion - Hyaluronic Youth Mask - 4X8ML",
         "Presentacion segun disponibilidad",
         "Confirmacion de disponibilidad antes de entregar",
         "Cotizacion/checkout preparado en Nuvia"
@@ -34378,8 +34484,8 @@
       ],
       "detalleImagenes": [
         {
-          "src": "https://hbderm.com/wp-content/uploads/2020/06/NCTF-135ha-1.png",
-          "alt": "Nctf 135HA imagen de referencia",
+          "src": "https://hbderm.com/wp-content/uploads/2023/01/SKIN-PERFUSION-HYALURONIC-YOUTH-MASK-4X8ML-1.jpeg",
+          "alt": "Skin Perfusion - Hyaluronic Youth Mask - 4X8ML imagen de referencia",
           "label": "Imagen referencia"
         },
         {
@@ -34395,115 +34501,9 @@
       ],
       "detalleNota": "Producto cargado en base interna para revision comercial. No publicarlo como compra directa sin validar regulacion, stock y uso profesional.",
       "proveedor": "HBDERM",
-      "sourceUrl": "https://hbderm.com/hbderm-catalogo/mesoterapia/nctf-135ha/",
-      "sourceImageUrl": "https://hbderm.com/wp-content/uploads/2020/06/NCTF-135ha-1.png",
-      "precioProveedor": 864,
-      "margenObjetivo": 0.45,
-      "comisionVendedorRate": 0.1,
-      "comisionVendedor": 38.88,
-      "gananciaNeta": 349.92,
-      "tipoVenta": "profesional_consulta",
-      "raw": {
-        "source": "hbderm.com",
-        "source_url": "https://hbderm.com/hbderm-catalogo/mesoterapia/nctf-135ha/",
-        "source_categories": [
-          "Mesoterapia"
-        ],
-        "source_availability": "instock",
-        "pricing_formula": {
-          "source_price": 864,
-          "margin_rate": 0.45,
-          "margin_amount": 388.8,
-          "sale_price": 475.2,
-          "seller_commission_rate": 0.1,
-          "seller_commission_amount": 38.88,
-          "net_margin_after_seller": 349.92
-        },
-        "source_index": 325
-      },
-      "destacadoMes": false,
-      "descuentoPorcentaje": 0,
-      "precioPromocional": null,
-      "gananciaNetaConDescuento": 349.92
-    },
-    {
-      "titulo": "Skin Perfusion - GR Youth Mask - 500ML",
-      "categoria": "Profesional consulta",
-      "precio": "Bajo consulta",
-      "precioValor": null,
-      "moneda": "BOB",
-      "desc": "FILLMED de uso profesional o bajo consulta. No se publica como compra directa.",
-      "etiqueta": "consulta",
-      "imagen": "https://hbderm.com/wp-content/uploads/2023/01/SKIN-PERFUSION-GR-YOUTH-MASK-500ML.jpg",
-      "imagenAlt": "Skin Perfusion - GR Youth Mask - 500ML de FILLMED",
-      "marca": "FILLMED",
-      "tamano": "500 ml",
-      "uso": "Compra asistida",
-      "beneficios": [
-        "Uso profesional",
-        "Compra bajo consulta",
-        "No autoadministrar"
-      ],
-      "idealPara": [
-        "Uso profesional",
-        "Consulta previa",
-        "Compra asistida"
-      ],
-      "ingredientesClave": [
-        "Ver envase",
-        "Confirmar composicion"
-      ],
-      "modoUso": "Producto de uso profesional o bajo consulta. No se debe comprar ni usar sin indicacion adecuada.",
-      "incluye": [
-        "1 producto Skin Perfusion - GR Youth Mask - 500ML",
-        "Presentacion 500 ml",
-        "Confirmacion de disponibilidad antes de entregar",
-        "Cotizacion/checkout preparado en Nuvia"
-      ],
-      "especificaciones": [
-        {
-          "label": "Marca",
-          "value": "FILLMED"
-        },
-        {
-          "label": "Proveedor",
-          "value": "HBDERM"
-        },
-        {
-          "label": "Categoria",
-          "value": "Profesional consulta"
-        },
-        {
-          "label": "Tamano",
-          "value": "500 ml"
-        },
-        {
-          "label": "Precio Nuvia",
-          "value": "Bajo consulta"
-        }
-      ],
-      "detalleImagenes": [
-        {
-          "src": "https://hbderm.com/wp-content/uploads/2023/01/SKIN-PERFUSION-GR-YOUTH-MASK-500ML.jpg",
-          "alt": "Skin Perfusion - GR Youth Mask - 500ML imagen de referencia",
-          "label": "Imagen referencia"
-        },
-        {
-          "src": "assets/hbderm-image-slot.svg",
-          "alt": "Espacio para foto propia Nuvia",
-          "label": "Foto propia pendiente"
-        },
-        {
-          "src": "assets/hbderm-video-slot.svg",
-          "alt": "Espacio para video de uso Nuvia",
-          "label": "Video pendiente"
-        }
-      ],
-      "detalleNota": "Producto cargado en base interna para revision comercial. No publicarlo como compra directa sin validar regulacion, stock y uso profesional.",
-      "proveedor": "HBDERM",
-      "sourceUrl": "https://hbderm.com/hbderm-catalogo/mesoterapia/skin-perfusion-gr-youth-mask-500ml/",
-      "sourceImageUrl": "https://hbderm.com/wp-content/uploads/2023/01/SKIN-PERFUSION-GR-YOUTH-MASK-500ML.jpg",
-      "precioProveedor": 0.1134,
+      "sourceUrl": "https://hbderm.com/hbderm-catalogo/mesoterapia/skin-perfusion-hyaluronic-youth-mask-4x8ml/",
+      "sourceImageUrl": "https://hbderm.com/wp-content/uploads/2023/01/SKIN-PERFUSION-HYALURONIC-YOUTH-MASK-4X8ML-1.jpeg",
+      "precioProveedor": 0.1173,
       "margenObjetivo": 0.45,
       "comisionVendedorRate": 0.1,
       "comisionVendedor": 0.01,
@@ -34511,21 +34511,21 @@
       "tipoVenta": "profesional_consulta",
       "raw": {
         "source": "hbderm.com",
-        "source_url": "https://hbderm.com/hbderm-catalogo/mesoterapia/skin-perfusion-gr-youth-mask-500ml/",
+        "source_url": "https://hbderm.com/hbderm-catalogo/mesoterapia/skin-perfusion-hyaluronic-youth-mask-4x8ml/",
         "source_categories": [
           "Mesoterapia"
         ],
         "source_availability": "instock",
         "pricing_formula": {
-          "source_price": 0.1134,
+          "source_price": 0.1173,
           "margin_rate": 0.45,
           "margin_amount": 0.05,
-          "sale_price": 0.06,
+          "sale_price": 0.07,
           "seller_commission_rate": 0.1,
           "seller_commission_amount": 0.01,
           "net_margin_after_seller": 0.04
         },
-        "source_index": 320
+        "source_index": 319
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -34631,7 +34631,7 @@
           "seller_commission_amount": 38.88,
           "net_margin_after_seller": 349.92
         },
-        "source_index": 318
+        "source_index": 317
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -34715,11 +34715,11 @@
       "proveedor": "HBDERM",
       "sourceUrl": "https://hbderm.com/hbderm-catalogo/mesoterapia/revitalizador/skin-perfusion-exfoliating-cream-250ml/",
       "sourceImageUrl": "https://hbderm.com/wp-content/uploads/2023/01/Crema-Exfoliante-Skin-Perfusion-250ml.jpg",
-      "precioProveedor": 446,
+      "precioProveedor": 0.1053,
       "margenObjetivo": 0.45,
       "comisionVendedorRate": 0.1,
-      "comisionVendedor": 20.07,
-      "gananciaNeta": 180.63,
+      "comisionVendedor": 0.01,
+      "gananciaNeta": 0.04,
       "tipoVenta": "profesional_consulta",
       "raw": {
         "source": "hbderm.com",
@@ -34730,20 +34730,232 @@
         ],
         "source_availability": "instock",
         "pricing_formula": {
-          "source_price": 446,
+          "source_price": 0.1053,
           "margin_rate": 0.45,
-          "margin_amount": 200.7,
-          "sale_price": 245.3,
+          "margin_amount": 0.05,
+          "sale_price": 0.06,
           "seller_commission_rate": 0.1,
-          "seller_commission_amount": 20.07,
-          "net_margin_after_seller": 180.63
+          "seller_commission_amount": 0.01,
+          "net_margin_after_seller": 0.04
         },
         "source_index": 323
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
       "precioPromocional": null,
-      "gananciaNetaConDescuento": 180.63
+      "gananciaNetaConDescuento": 0.04
+    },
+    {
+      "titulo": "Skin Perfusion Eye Recover Mask 4X5G",
+      "categoria": "Profesional consulta",
+      "precio": "Bajo consulta",
+      "precioValor": null,
+      "moneda": "BOB",
+      "desc": "FILLMED de uso profesional o bajo consulta. No se publica como compra directa.",
+      "etiqueta": "consulta",
+      "imagen": "https://hbderm.com/wp-content/uploads/2022/03/EYE-RECOVER-MASK-SKIN-PERFUSION.png",
+      "imagenAlt": "Skin Perfusion Eye Recover Mask 4X5G de FILLMED",
+      "marca": "FILLMED",
+      "tamano": "",
+      "uso": "Compra asistida",
+      "beneficios": [
+        "Uso profesional",
+        "Compra bajo consulta",
+        "No autoadministrar"
+      ],
+      "idealPara": [
+        "Uso profesional",
+        "Consulta previa",
+        "Compra asistida"
+      ],
+      "ingredientesClave": [
+        "Ver envase",
+        "Confirmar composicion"
+      ],
+      "modoUso": "Producto de uso profesional o bajo consulta. No se debe comprar ni usar sin indicacion adecuada.",
+      "incluye": [
+        "1 producto Skin Perfusion Eye Recover Mask 4X5G",
+        "Presentacion segun disponibilidad",
+        "Confirmacion de disponibilidad antes de entregar",
+        "Cotizacion/checkout preparado en Nuvia"
+      ],
+      "especificaciones": [
+        {
+          "label": "Marca",
+          "value": "FILLMED"
+        },
+        {
+          "label": "Proveedor",
+          "value": "HBDERM"
+        },
+        {
+          "label": "Categoria",
+          "value": "Profesional consulta"
+        },
+        {
+          "label": "Tamano",
+          "value": "Consultar"
+        },
+        {
+          "label": "Precio Nuvia",
+          "value": "Bajo consulta"
+        }
+      ],
+      "detalleImagenes": [
+        {
+          "src": "https://hbderm.com/wp-content/uploads/2022/03/EYE-RECOVER-MASK-SKIN-PERFUSION.png",
+          "alt": "Skin Perfusion Eye Recover Mask 4X5G imagen de referencia",
+          "label": "Imagen referencia"
+        },
+        {
+          "src": "assets/hbderm-image-slot.svg",
+          "alt": "Espacio para foto propia Nuvia",
+          "label": "Foto propia pendiente"
+        },
+        {
+          "src": "assets/hbderm-video-slot.svg",
+          "alt": "Espacio para video de uso Nuvia",
+          "label": "Video pendiente"
+        }
+      ],
+      "detalleNota": "Producto cargado en base interna para revision comercial. No publicarlo como compra directa sin validar regulacion, stock y uso profesional.",
+      "proveedor": "HBDERM",
+      "sourceUrl": "https://hbderm.com/hbderm-catalogo/mesoterapia/skin-perfusion-eye-recover-mask/",
+      "sourceImageUrl": "https://hbderm.com/wp-content/uploads/2022/03/EYE-RECOVER-MASK-SKIN-PERFUSION.png",
+      "precioProveedor": 0.1053,
+      "margenObjetivo": 0.45,
+      "comisionVendedorRate": 0.1,
+      "comisionVendedor": 0.01,
+      "gananciaNeta": 0.04,
+      "tipoVenta": "profesional_consulta",
+      "raw": {
+        "source": "hbderm.com",
+        "source_url": "https://hbderm.com/hbderm-catalogo/mesoterapia/skin-perfusion-eye-recover-mask/",
+        "source_categories": [
+          "Mesoterapia"
+        ],
+        "source_availability": "instock",
+        "pricing_formula": {
+          "source_price": 0.1053,
+          "margin_rate": 0.45,
+          "margin_amount": 0.05,
+          "sale_price": 0.06,
+          "seller_commission_rate": 0.1,
+          "seller_commission_amount": 0.01,
+          "net_margin_after_seller": 0.04
+        },
+        "source_index": 325
+      },
+      "destacadoMes": false,
+      "descuentoPorcentaje": 0,
+      "precioPromocional": null,
+      "gananciaNetaConDescuento": 0.04
+    },
+    {
+      "titulo": "Skin Perfusion Glycopeel Mask - 500ML",
+      "categoria": "Profesional consulta",
+      "precio": "Bajo consulta",
+      "precioValor": null,
+      "moneda": "BOB",
+      "desc": "FILLMED de uso profesional o bajo consulta. No se publica como compra directa.",
+      "etiqueta": "consulta",
+      "imagen": "https://hbderm.com/wp-content/uploads/2023/01/SKIN-PERFUSION-GLYCOPEEL-MASK-500ML.jpg",
+      "imagenAlt": "Skin Perfusion Glycopeel Mask - 500ML de FILLMED",
+      "marca": "FILLMED",
+      "tamano": "500 ml",
+      "uso": "Compra asistida",
+      "beneficios": [
+        "Uso profesional",
+        "Compra bajo consulta",
+        "No autoadministrar"
+      ],
+      "idealPara": [
+        "Uso profesional",
+        "Consulta previa",
+        "Compra asistida"
+      ],
+      "ingredientesClave": [
+        "Ver envase",
+        "Confirmar composicion"
+      ],
+      "modoUso": "Producto de uso profesional o bajo consulta. No se debe comprar ni usar sin indicacion adecuada.",
+      "incluye": [
+        "1 producto Skin Perfusion Glycopeel Mask - 500ML",
+        "Presentacion 500 ml",
+        "Confirmacion de disponibilidad antes de entregar",
+        "Cotizacion/checkout preparado en Nuvia"
+      ],
+      "especificaciones": [
+        {
+          "label": "Marca",
+          "value": "FILLMED"
+        },
+        {
+          "label": "Proveedor",
+          "value": "HBDERM"
+        },
+        {
+          "label": "Categoria",
+          "value": "Profesional consulta"
+        },
+        {
+          "label": "Tamano",
+          "value": "500 ml"
+        },
+        {
+          "label": "Precio Nuvia",
+          "value": "Bajo consulta"
+        }
+      ],
+      "detalleImagenes": [
+        {
+          "src": "https://hbderm.com/wp-content/uploads/2023/01/SKIN-PERFUSION-GLYCOPEEL-MASK-500ML.jpg",
+          "alt": "Skin Perfusion Glycopeel Mask - 500ML imagen de referencia",
+          "label": "Imagen referencia"
+        },
+        {
+          "src": "assets/hbderm-image-slot.svg",
+          "alt": "Espacio para foto propia Nuvia",
+          "label": "Foto propia pendiente"
+        },
+        {
+          "src": "assets/hbderm-video-slot.svg",
+          "alt": "Espacio para video de uso Nuvia",
+          "label": "Video pendiente"
+        }
+      ],
+      "detalleNota": "Producto cargado en base interna para revision comercial. No publicarlo como compra directa sin validar regulacion, stock y uso profesional.",
+      "proveedor": "HBDERM",
+      "sourceUrl": "https://hbderm.com/hbderm-catalogo/mesoterapia/skin-perfusion-glycopeel-mask-500ml/",
+      "sourceImageUrl": "https://hbderm.com/wp-content/uploads/2023/01/SKIN-PERFUSION-GLYCOPEEL-MASK-500ML.jpg",
+      "precioProveedor": 0.1134,
+      "margenObjetivo": 0.45,
+      "comisionVendedorRate": 0.1,
+      "comisionVendedor": 0.01,
+      "gananciaNeta": 0.04,
+      "tipoVenta": "profesional_consulta",
+      "raw": {
+        "source": "hbderm.com",
+        "source_url": "https://hbderm.com/hbderm-catalogo/mesoterapia/skin-perfusion-glycopeel-mask-500ml/",
+        "source_categories": [
+          "Mesoterapia"
+        ],
+        "source_availability": "instock",
+        "pricing_formula": {
+          "source_price": 0.1134,
+          "margin_rate": 0.45,
+          "margin_amount": 0.05,
+          "sale_price": 0.06,
+          "seller_commission_rate": 0.1,
+          "seller_commission_amount": 0.01,
+          "net_margin_after_seller": 0.04
+        },
+        "source_index": 321
+      },
+      "destacadoMes": false,
+      "descuentoPorcentaje": 0,
+      "precioPromocional": null,
+      "gananciaNetaConDescuento": 0.04
     },
     {
       "titulo": "Skin Perfusion Glycopeel Mask - 50ML",
@@ -34822,11 +35034,11 @@
       "proveedor": "HBDERM",
       "sourceUrl": "https://hbderm.com/hbderm-catalogo/mesoterapia/revitalizador/skin-perfusion-glycopeel-mask-50ml/",
       "sourceImageUrl": "https://hbderm.com/wp-content/uploads/2023/01/SKIN-PERFUSION-GLYCOPEEL-MASK-50ML-945x1024.png",
-      "precioProveedor": 330,
+      "precioProveedor": 420,
       "margenObjetivo": 0.45,
       "comisionVendedorRate": 0.1,
-      "comisionVendedor": 14.85,
-      "gananciaNeta": 133.65,
+      "comisionVendedor": 18.9,
+      "gananciaNeta": 170.1,
       "tipoVenta": "profesional_consulta",
       "raw": {
         "source": "hbderm.com",
@@ -34837,20 +35049,20 @@
         ],
         "source_availability": "instock",
         "pricing_formula": {
-          "source_price": 330,
+          "source_price": 420,
           "margin_rate": 0.45,
-          "margin_amount": 148.5,
-          "sale_price": 181.5,
+          "margin_amount": 189,
+          "sale_price": 231,
           "seller_commission_rate": 0.1,
-          "seller_commission_amount": 14.85,
-          "net_margin_after_seller": 133.65
+          "seller_commission_amount": 18.9,
+          "net_margin_after_seller": 170.1
         },
         "source_index": 322
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
       "precioPromocional": null,
-      "gananciaNetaConDescuento": 133.65
+      "gananciaNetaConDescuento": 170.1
     },
     {
       "titulo": "Skin Perfusion HXR Eye Cream - 15ML",
@@ -34929,6 +35141,112 @@
       "proveedor": "HBDERM",
       "sourceUrl": "https://hbderm.com/hbderm-catalogo/mesoterapia/skin-perfusion-hxr-eye-crean/",
       "sourceImageUrl": "https://hbderm.com/wp-content/uploads/2021/09/SKIN-PERFUSION-EYE.jpg",
+      "precioProveedor": 0.1134,
+      "margenObjetivo": 0.45,
+      "comisionVendedorRate": 0.1,
+      "comisionVendedor": 0.01,
+      "gananciaNeta": 0.04,
+      "tipoVenta": "profesional_consulta",
+      "raw": {
+        "source": "hbderm.com",
+        "source_url": "https://hbderm.com/hbderm-catalogo/mesoterapia/skin-perfusion-hxr-eye-crean/",
+        "source_categories": [
+          "Mesoterapia"
+        ],
+        "source_availability": "instock",
+        "pricing_formula": {
+          "source_price": 0.1134,
+          "margin_rate": 0.45,
+          "margin_amount": 0.05,
+          "sale_price": 0.06,
+          "seller_commission_rate": 0.1,
+          "seller_commission_amount": 0.01,
+          "net_margin_after_seller": 0.04
+        },
+        "source_index": 327
+      },
+      "destacadoMes": false,
+      "descuentoPorcentaje": 0,
+      "precioPromocional": null,
+      "gananciaNetaConDescuento": 0.04
+    },
+    {
+      "titulo": "Skin Perfusion HXR Eye Cream - 95ML",
+      "categoria": "Profesional consulta",
+      "precio": "Bajo consulta",
+      "precioValor": null,
+      "moneda": "BOB",
+      "desc": "FILLMED de uso profesional o bajo consulta. No se publica como compra directa.",
+      "etiqueta": "consulta",
+      "imagen": "https://hbderm.com/wp-content/uploads/2023/01/SKIN-PERFUSION-HRX-EYE-CREAM-95ML.jpg",
+      "imagenAlt": "Skin Perfusion HXR Eye Cream - 95ML de FILLMED",
+      "marca": "FILLMED",
+      "tamano": "95 ml",
+      "uso": "Compra asistida",
+      "beneficios": [
+        "Uso profesional",
+        "Compra bajo consulta",
+        "No autoadministrar"
+      ],
+      "idealPara": [
+        "Uso profesional",
+        "Consulta previa",
+        "Compra asistida"
+      ],
+      "ingredientesClave": [
+        "Ver envase",
+        "Confirmar composicion"
+      ],
+      "modoUso": "Producto de uso profesional o bajo consulta. No se debe comprar ni usar sin indicacion adecuada.",
+      "incluye": [
+        "1 producto Skin Perfusion HXR Eye Cream - 95ML",
+        "Presentacion 95 ml",
+        "Confirmacion de disponibilidad antes de entregar",
+        "Cotizacion/checkout preparado en Nuvia"
+      ],
+      "especificaciones": [
+        {
+          "label": "Marca",
+          "value": "FILLMED"
+        },
+        {
+          "label": "Proveedor",
+          "value": "HBDERM"
+        },
+        {
+          "label": "Categoria",
+          "value": "Profesional consulta"
+        },
+        {
+          "label": "Tamano",
+          "value": "95 ml"
+        },
+        {
+          "label": "Precio Nuvia",
+          "value": "Bajo consulta"
+        }
+      ],
+      "detalleImagenes": [
+        {
+          "src": "https://hbderm.com/wp-content/uploads/2023/01/SKIN-PERFUSION-HRX-EYE-CREAM-95ML.jpg",
+          "alt": "Skin Perfusion HXR Eye Cream - 95ML imagen de referencia",
+          "label": "Imagen referencia"
+        },
+        {
+          "src": "assets/hbderm-image-slot.svg",
+          "alt": "Espacio para foto propia Nuvia",
+          "label": "Foto propia pendiente"
+        },
+        {
+          "src": "assets/hbderm-video-slot.svg",
+          "alt": "Espacio para video de uso Nuvia",
+          "label": "Video pendiente"
+        }
+      ],
+      "detalleNota": "Producto cargado en base interna para revision comercial. No publicarlo como compra directa sin validar regulacion, stock y uso profesional.",
+      "proveedor": "HBDERM",
+      "sourceUrl": "https://hbderm.com/hbderm-catalogo/mesoterapia/skin-perfusion-hxr-eye-cream-95ml/",
+      "sourceImageUrl": "https://hbderm.com/wp-content/uploads/2023/01/SKIN-PERFUSION-HRX-EYE-CREAM-95ML.jpg",
       "precioProveedor": 864,
       "margenObjetivo": 0.45,
       "comisionVendedorRate": 0.1,
@@ -34937,7 +35255,7 @@
       "tipoVenta": "profesional_consulta",
       "raw": {
         "source": "hbderm.com",
-        "source_url": "https://hbderm.com/hbderm-catalogo/mesoterapia/skin-perfusion-hxr-eye-crean/",
+        "source_url": "https://hbderm.com/hbderm-catalogo/mesoterapia/skin-perfusion-hxr-eye-cream-95ml/",
         "source_categories": [
           "Mesoterapia"
         ],
@@ -34951,7 +35269,7 @@
           "seller_commission_amount": 38.88,
           "net_margin_after_seller": 349.92
         },
-        "source_index": 324
+        "source_index": 326
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
@@ -35035,11 +35353,11 @@
       "proveedor": "HBDERM",
       "sourceUrl": "https://hbderm.com/hbderm-catalogo/mesoterapia/skin-perfusion-re-time-serum-30ml/",
       "sourceImageUrl": "https://hbderm.com/wp-content/uploads/2023/01/SKIN-PERFUSION-RE-TIME-SERUM-30ML.jpeg",
-      "precioProveedor": 446,
+      "precioProveedor": 0.1134,
       "margenObjetivo": 0.45,
       "comisionVendedorRate": 0.1,
-      "comisionVendedor": 20.07,
-      "gananciaNeta": 180.63,
+      "comisionVendedor": 0.01,
+      "gananciaNeta": 0.04,
       "tipoVenta": "profesional_consulta",
       "raw": {
         "source": "hbderm.com",
@@ -35049,20 +35367,20 @@
         ],
         "source_availability": "instock",
         "pricing_formula": {
-          "source_price": 446,
+          "source_price": 0.1134,
           "margin_rate": 0.45,
-          "margin_amount": 200.7,
-          "sale_price": 245.3,
+          "margin_amount": 0.05,
+          "sale_price": 0.06,
           "seller_commission_rate": 0.1,
-          "seller_commission_amount": 20.07,
-          "net_margin_after_seller": 180.63
+          "seller_commission_amount": 0.01,
+          "net_margin_after_seller": 0.04
         },
-        "source_index": 319
+        "source_index": 318
       },
       "destacadoMes": false,
       "descuentoPorcentaje": 0,
       "precioPromocional": null,
-      "gananciaNetaConDescuento": 180.63
+      "gananciaNetaConDescuento": 0.04
     }
   ]
 }

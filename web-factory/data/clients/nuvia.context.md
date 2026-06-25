@@ -1,6 +1,28 @@
 # Nuvia Web Context
 
-Last update: 2026-06-19
+Last update: 2026-06-25
+
+2026-06-25 price watcher validation:
+
+- Latest committed supplier refresh has 330 source products, 12 scrape errors, 315 public storefront products and 15 internal professional-only products.
+- The watcher check detected material supplier changes before refresh. The public storefront remains constrained to sellable skincare/dermocosmetic products and excludes professional-only additions.
+- Do not force-apply new supplier additions automatically: some detected additions are professional/mesotherapy or filler products, and at least one added item uses a suspicious `0.11 BOB` reference price. Review commercially before allowing new public products.
+
+2026-06-24 operational update:
+
+- Nuvia public storefront must never show the supplier name. Supplier/source references are internal only for finance, scraping and migration artifacts.
+- Current public catalog: 315 products, all with `precioValor`, category assignment and transparent cutout imagery.
+- Current category counts: Proteccion solar 67, Limpieza facial 35, Piel grasa y acne 21, Hidratacion 28, Antiedad 98, Manchas 12, Cabello y unas 22, Bebe y ninos 10, Dermocosmetica 22.
+- Current finance sheet paths:
+  - `web-factory/data/clients/nuvia.finance.json`
+  - `web-factory/data/clients/nuvia.finance.csv`
+- Finance sheet now stores one row per sellable/internal product with reference price, Nuvia sale price, 45% target gain, 10% seller commission over gain, featured discount and net gain after discount.
+- Featured-month merchandising rule: first 12 public products receive `destacadoMes: true`, `descuentoPorcentaje: 10` and `precioPromocional`.
+- SVR Sebiaclear Gel Moussant 200 ml is included through a direct known product URL because it was not reliably present in the public product sitemap. Keep this URL in `EXTRA_PRODUCT_URLS` inside `scrape_hbderm_products.mjs`.
+- Normal storefront pipeline:
+  - `pnpm nuvia:catalog` refreshes supplier reference data, rebuilds Nuvia catalog, sanitizes public data and maps existing transparent cutouts.
+  - `pnpm nuvia:cutouts` is a slower media-maintenance task; do not make normal catalog generation depend on full image recutting.
+- Public UX requirements now active: category portal, search/lupa, add-to-cart per product, cart drawer, quantity controls, 10% featured discount calculation, toast notifications and checkout/cotizacion fallback.
 
 ## Brand
 
@@ -84,6 +106,23 @@ HBDERM pricing rule from user:
 - `net_margin_after_seller`: `margin_amount - seller_commission_amount`.
 - Storefront display rounds the visible label to whole bolivianos (`Bs.`) while storing the numeric `precioValor` with two decimals.
 - Important business caveat: this is a configured commercial formula based on the user's instruction. It should be validated against real supplier cost/discount terms before treating it as true margin.
+
+2026-06-24 price automation:
+
+- Supplier discounts can change periodically, so Nuvia now has a guarded price watcher instead of manual price edits.
+- Watcher script: `web-factory/harvester/product/watch_nuvia_price_changes.mjs`.
+- Package commands:
+  - `pnpm nuvia:prices:check` scrapes current supplier prices and writes a report only.
+  - `pnpm nuvia:prices:watch` applies catalog/price updates only when price changes or new products are detected and the scrape is safe.
+  - `pnpm nuvia:prices:force` forces a refresh after a confirmed promo change.
+- Report paths:
+  - latest: `web-factory/data/references/product-sources/nuvia-price-watch-latest.json`
+  - history: `web-factory/data/references/product-sources/price-watch/nuvia-price-watch-*.json`
+  - latest raw check: `web-factory/data/references/product-sources/hbderm-products-latest-check.json`
+- Safety guards: block apply when scrape errors exceed 25, product count drops below 90% of the last known source, or no products are found.
+- Apply safety: before replacing the canonical supplier source, the watcher creates a backup and restores it if rebuild/sanitize/cutout mapping fails.
+- Recommended cadence: daily at 07:30 Bolivia time, plus manual check before campaigns or large quotes. Do not run multiple schedulers against the same production repo without a git/deploy ownership rule.
+- Public rule remains strict: the Nuvia storefront, product copy and checkout must not mention the supplier. Supplier identity and source URLs stay internal to scrape artifacts, finance files and operational docs only.
 
 ## Current Site Pattern
 

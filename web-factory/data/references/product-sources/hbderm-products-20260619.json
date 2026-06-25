@@ -1,14 +1,276 @@
 {
   "source": "https://hbderm.com",
-  "fetched_at": "2026-06-23T22:01:18.098Z",
+  "fetched_at": "2026-06-25T01:27:30.159Z",
   "sitemaps": [
     "https://hbderm.com/product-sitemap1.xml",
     "https://hbderm.com/product-sitemap2.xml"
   ],
   "url_count": 342,
-  "product_count": 327,
-  "error_count": 15,
+  "product_count": 330,
+  "error_count": 12,
   "products": [
+    {
+      "source": "hbderm.com",
+      "source_url": "https://hbderm.com/hbderm-catalogo/pieles-hiperpigmentadas/despigmentante-corporal/xerial-leche-corporal-400ml/",
+      "title": "XERIAL 10 LECHE CORPORAL - 400ML",
+      "brand": "SVR",
+      "categories": [
+        "Pieles Hiperpigmentadas",
+        "Despigmentante Corporal"
+      ],
+      "slug": "xerial-leche-corporal-400ml",
+      "description": "Loción hidratante 48h, calmante y anti-descamación Leche corporal anti-escamas, también recomendada después de haber efectuado tratamientos dermatológicos resecantes. Gracias a la Tecnología Úrea Pura (patente registrada) concentrada al 10%, Protéasa y Aminoácidos, la Leche Corporal Xérial 10 elimina eficazmente las células muertas e hidrata intensamente durante 48 horas. Enriquecida con manteca de Karité y Alantoína, la Leche Corporal Xérial 10 nutre, protege y alivia las sensaciones de tirantez. La piel es más lisa y suave. Su textura agradable y no grasa se extiende con facilidad, penetra rápidamente y aporta una sensación de confort intenso. Formulada para una tolerancia máxima.",
+      "image_url": "https://hbderm.com/wp-content/uploads/2023/12/Diseño-sin-título.png",
+      "sitemap_image_urls": [],
+      "price": 367,
+      "regular_price": 367,
+      "currency": "BOB",
+      "availability": "instock",
+      "scraped_at": "2026-06-25T01:24:57.802Z"
+    },
+    {
+      "source": "hbderm.com",
+      "source_url": "https://hbderm.com/hbderm-catalogo/sin-categorizar/xerial-30-gel-crema-50ml/",
+      "title": "XERIAL 30 GEL - CREMA",
+      "brand": "SVR",
+      "categories": [
+        "Sin Categorizar"
+      ],
+      "slug": "xerial-30-gel-crema-50ml",
+      "description": "Xerial 30 para zonas muy secas, ásperas, engrosadas y descamativas: codos, rodillas, manos, brazos. Pelos encarnados y tendencia a la queratosis pilaris. Elimina las áreas con engrosamiento cutáneo, descamación y ásperas mientras hidrata intensamente durante 48 horas gracias a su tecnología patentada de urea pura. Día tras día, reduce la textura desigual e irregular de la piel y los pelos enquistados. La piel queda más suave al tacto y a la vista. Su textura fundente se desliza sobre la piel y se absorbe rápidamente para que uno pueda vestirse de inmediato.",
+      "image_url": "https://hbderm.com/wp-content/uploads/2023/12/Diseño-sin-título-1.png",
+      "sitemap_image_urls": [],
+      "price": 250,
+      "regular_price": 250,
+      "currency": "BOB",
+      "availability": "instock",
+      "scraped_at": "2026-06-25T01:24:58.216Z"
+    },
+    {
+      "source": "hbderm.com",
+      "source_url": "https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/topialyse-creme-400ml/",
+      "title": "TOPIALYSE CREMA - 400ML",
+      "brand": "SVR",
+      "categories": [
+        "Hidratantes Y Nutritivos"
+      ],
+      "slug": "topialyse-creme-400ml",
+      "description": "Cuidado nutritivo y antidesecamiento en la piel. Para todo tipo de pieles sensibles y secas. Desde el nacimiento. Cuerpo y rostro. Hidratación 48 h. Placentera textura fresca, ligera y no pegajosa que se funde instantáneamente en la piel para su absorción inmediata. EFICACIA CLÍNICAMENTE PROBADA 40%: tirantez 48 h después de la aplicación. 65%: tirantez y picores tras 21 días de uso. MUY EFICAZ, ¡DICHO POR LOS VOLUNTARIOS! 100%: Piel intensamente hidratada, calmada, reducción de la tirantez. 90%: Piel suave y flexible desde la primera aplicación. Fórmula superconcentrada en principios activos dermatológicos y de muy alta tolerancia. 27% de ingredientes activos hidratantes y nutritivos: alivian, suavizan y restauran la barrera de la piel. Aceite de algodón y aceite de coco: fuentes de omega 3, 6 y 9: nutren y reparan intensamente la piel. Mantequilla de Babasú: se funde en la piel y favorece el fácil esparcimiento al mismo tiempo que nutre y proporciona confort. Azúcares hidrófilos: refuerzan la barrera cutánea y atrapan el agua en la piel para un confort y una hidratación de larga duración. 2% Niacinamida: alivia intensamente la sensación de tirantez, hidrata y reestructura la barrera cutánea. Probado en pieles sensibles bajo control dermatológico y pediátrico. Hipoalergénico.",
+      "image_url": "https://hbderm.com/wp-content/uploads/2025/05/SVR-11.jpg",
+      "sitemap_image_urls": [],
+      "price": 388,
+      "regular_price": 388,
+      "currency": "BOB",
+      "availability": "instock",
+      "scraped_at": "2026-06-25T01:24:58.620Z"
+    },
+    {
+      "source": "hbderm.com",
+      "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/serums/sebiaclear-ampoule-flash-30-ml/",
+      "title": "SEBIACLEAR AMPOULE FLASH - 30 ML",
+      "brand": "SVR",
+      "categories": [
+        "Antiedad",
+        "Serums"
+      ],
+      "slug": "sebiaclear-ampoule-flash-30-ml",
+      "description": "Concentrado contra las imperfecciones y el enrojecimiento formulado para pieles sensibles con tendencia al acné. Enriquecida con un 15 % de ácido azelaico, la ampoule SEBIACLEAR Flash calma instantáneamente la piel mientras reduce visiblemente las imperfecciones en tan solo 8 horas1. Combate eficazmente los puntos negros, las espinillas, los poros dilatados, el enrojecimiento y las marcas para una piel visiblemente aliviada.",
+      "image_url": "https://hbderm.com/wp-content/uploads/2026/02/SEBIACLEAR-AMPOULE-FLASH.jpeg",
+      "sitemap_image_urls": [
+        "https://hbderm.com/wp-content/uploads/2026/02/SEBIACLEAR-AMPOULE-FLASH.jpeg"
+      ],
+      "price": 420,
+      "regular_price": 420,
+      "currency": "BOB",
+      "availability": "Agotado",
+      "scraped_at": "2026-06-25T01:24:59.025Z"
+    },
+    {
+      "source": "hbderm.com",
+      "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/ampoule-a-30ml/",
+      "title": "AMPOULE A",
+      "brand": "SVR",
+      "categories": [
+        "Antiedad"
+      ],
+      "slug": "ampoule-a-30ml",
+      "description": "Pieles irregulares, defectos de la piel, poros dilatados y arrugas. Este serum, altamente concentrado en vitamina A, retexturiza el tejido cutáneo para alisar la piel. Día tras día, la textura de la piel se refina, la calidad de la piel mejora y la piel se ve más joven. La vitamina A / Retinol es un ingrediente activo anti-edad líder que retexturiza la piel y corrige las arrugas profundas. Potente, el 0,3% es suficiente para renovar tu piel. SVR ha seleccionado dos formas de vitamina A, incluyendo una forma encapsulada para la eficacia en todos los niveles de la epidermis y una tolerancia óptima para las pieles sensibles. La combinación suaviza la superficie de la piel y regenera la epidermis. Concentrado de Retinol Puro al 0.1% El Retinol Puro encapsulado al 0.2% por liposomas en la membrana fosfolipídica - similar a los de las células de la piel – se libera continuamente dentro de la epidermis. ¿Algún otro beneficio? Contiene 92% de ingredientes de origen natural conservados en una botella de vidrio reciclable. No Comedogénico. Testado en pieles 50% sensibles bajo control dermatológico.",
+      "image_url": "https://hbderm.com/wp-content/uploads/2026/05/AMPOULE-A.jpg",
+      "sitemap_image_urls": [
+        "https://hbderm.com/wp-content/uploads/2026/05/AMPOULE-A.jpg"
+      ],
+      "price": 670,
+      "regular_price": 670,
+      "currency": "BOB",
+      "availability": "instock",
+      "scraped_at": "2026-06-25T01:24:59.440Z"
+    },
+    {
+      "source": "hbderm.com",
+      "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/ampoule-c-30ml/",
+      "title": "AMPOULE C",
+      "brand": "SVR",
+      "categories": [
+        "Antiedad"
+      ],
+      "slug": "ampoule-c-30ml",
+      "description": "Piel opaca, cansada, irregularidades, arrugas. Concentrado de luminosidad. Regenerador, antiarrugas Vitamina C optimizada al 20% para una piel radiante! Este serum altamente concentrado en vitamina C recarga inmediatamente la piel para revelar una tez radiante y reducir los signos de la fatiga. Día tras día, la piel goza de una excelente salud: tonificada, luminosa y uniforme. ¡Y eso es bueno para tu estado de ánimo! +17% de luminosidad en la tez +18% de uniformidad en la tez Revive el 90% de la piel cansada El 97% de la piel opaca tiene energía El 20% de esta vitamina C optimizada equivale al 17% de vitamina C pura. Su estructura es similar a la vitamina C y ofrece las mismas propiedades que la vitamina C pura, pero es estable y eficaz en el tiempo. Resultado: Ampoule C recarga las baterías de la piel, proporcionando un impulso eficaz y, lo que es más, puede conservarse durante 9 meses después de su apertura. ¡Nos encanta! No comedogénico. Testado en pieles 50% sensibles bajo control dermatológico.",
+      "image_url": "https://hbderm.com/wp-content/uploads/2022/05/AMPOULE-C-30ML.jpg",
+      "sitemap_image_urls": [],
+      "price": 670,
+      "regular_price": 670,
+      "currency": "BOB",
+      "availability": "instock",
+      "scraped_at": "2026-06-25T01:24:59.855Z"
+    },
+    {
+      "source": "hbderm.com",
+      "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/ampoule-b-30ml/",
+      "title": "AMPOULE B",
+      "brand": "SVR",
+      "categories": [
+        "Antiedad"
+      ],
+      "slug": "ampoule-b-30ml",
+      "description": "Pieles sensibles, deshidratadas, y con arrugas. Concentrado reparador. Rellenador, antiarrugas Este serum, altamente concentrado en vitamina B3, calma y fortalece la piel. La combinación de 3 ácidos hialurónicos restaura de forma duradera las reservas de humedad de la piel. La tensión y la incomodidad se reducen inmediatamente. Día tras día, la piel está más rellena y los signos de envejecimiento disminuyen. 3 horas después de la aplicación: +50% de hidratación +37% piel calmada +33% piel rellena +28% piel más elástica Se repara el 82% de las imperfecciones de la piel 82% de las pieles sensibles ven una mejora de la calidad de la piel. La Vitamina B3, también llamada niacinamida, es un ingrediente activo multicorrectivo líder que fortalece y restaura la barrera cutánea. Contiene un 5% para reparar la piel dañada. En combinación con 3 ácidos hialurónicos con diferentes pesos moleculares (pequeño, mediano y alto), la vitamina B3 hidrata intensamente, refuerza y rellena la piel deshidratada. Su fórmula minimalista, que contiene sólo 12 ingredientes y sin fragancia, está específicamente diseñada para pieles sensibles. ¿Algún otro beneficio? Contiene el 91% de ingredientes de origen natural en una botella de cristal reciclable. No comedogénico. Testado en pieles 100% sensibles bajo control dermatológico.",
+      "image_url": "https://hbderm.com/wp-content/uploads/2022/05/AMPOULE-B-30ML.png",
+      "sitemap_image_urls": [],
+      "price": 670,
+      "regular_price": 670,
+      "currency": "BOB",
+      "availability": "instock",
+      "scraped_at": "2026-06-25T01:25:00.258Z"
+    },
+    {
+      "source": "hbderm.com",
+      "source_url": "https://hbderm.com/hbderm-catalogo/pieles-hiperpigmentadas/despigmentante-rostro/ampoule-clairial-30-ml/",
+      "title": "AMPOULE CLAIRIAL",
+      "brand": "SVR",
+      "categories": [
+        "Pieles Hiperpigmentadas",
+        "Despigmentante Rostro"
+      ],
+      "slug": "ampoule-clairial-30-ml",
+      "description": "Para todas las pieles sensibles. Para todo tipo de manchas oscuras relacionadas con el sol, envejecimiento embarazo, marcas de imperfecciones, tez desigual. Rostro, cuello, escote, manos. Adultos. No comedogénico. Corrige y reduce visiblemente las manchas oscuras existentes a partir de las 2 semanas, previniendo y limitando su reaparición gracias a su triple acción: anti manchas, anti polución y anti recaída unifica e ilumina la tez. ¡Su textura ligera e hidratante penetra rápidamente! Acabado sedoso. Antimanchas A partir de los 14 días, reducción de las manchas oscuras en un -19,6% y 90% mejora de la uniformidad de la tez Después de 28 días, 85% manchas atenuadas y menos visibles. Anti recaída 94% previene la aparición de nuevas manchas y mantiene su eficacia anti manchas incluso un mes después de discontinuar su uso. Adaptado a pieles sensibles.90% ingredientes de origen natural",
+      "image_url": "https://hbderm.com/wp-content/uploads/2023/06/Diseño-sin-título-13.png",
+      "sitemap_image_urls": [],
+      "price": 626,
+      "regular_price": 626,
+      "currency": "BOB",
+      "availability": "instock",
+      "scraped_at": "2026-06-25T01:25:01.078Z"
+    },
+    {
+      "source": "hbderm.com",
+      "source_url": "https://hbderm.com/hbderm-catalogo/fotoproteccion/sebiaclear-crema-spf-50/",
+      "title": "SEBIACLEAR CREMA SPF50",
+      "brand": "SVR",
+      "categories": [
+        "Fotoproteccion"
+      ],
+      "slug": "sebiaclear-crema-spf-50",
+      "description": "SEBIACLEAR SPF50 es el tratamiento de alta protección solar para pieles mixtas a grasas con imperfecciones. Hidrata y matifica durante todo el día, mientras previene las marcas y el efecto rebote asociado a los UV. Textura ligera, oil-free, emulsión tacto seco. SEBIACLEAR es la nueva gama revolucionaria* que ayuda a eliminar granos, puntos negros y el exceso de sebo. Eficacia excelente, tolerancia óptima e increíble placer de uso. Eficacia probada después de 7 días. Porque hay diferentes tipos de piel con tendencia acneica, los laboratorios SVR han innovado con una combinación única de ingredientes activos para una acción eficaz en todos estos tipos de piel: Las nuevas fórmulas SEBIACLEAR contienen un poderoso dúo de ingredientes activos anti-imperfecciones: – GLUCONOLACTONA para una acción anti-inflamatoria y un increíble poder queratolítico. Tan eficaz como los Alfahidroxiácidos (AHA) con una tolerancia extra. – NIACINAMIDA para una eficacia antibacteriana y seboreguladora. En concentraciones óptimas para actuar en todos los tipos de acné respetando la piel #SVRBOLIVIA #HBDERM #SEBIACLEARSPF50BOLIVIA",
+      "image_url": "https://hbderm.com/wp-content/uploads/2020/06/Sebiaclear-Creme-Spf50-Matificante-1-1024x1024.jpg",
+      "sitemap_image_urls": [],
+      "price": 288,
+      "regular_price": 288,
+      "currency": "BOB",
+      "availability": "instock",
+      "scraped_at": "2026-06-25T01:25:02.053Z"
+    },
+    {
+      "source": "hbderm.com",
+      "source_url": "https://hbderm.com/hbderm-catalogo/pieles-con-grasas-o-con-acne/8921/",
+      "title": "SEBIACLEAR SERUM",
+      "brand": "SVR",
+      "categories": [
+        "Pieles Con Grasas O Con Acne"
+      ],
+      "slug": "8921",
+      "description": "SEBIACLEAR Serum es milagroso contra el acné de la piel adulta. Eficacia visible en solo 7 días gracias a una fórmula ultra concentrada de principios activos dermatológicos. Elimina los granos, puntos negros, poros dilatados y marcas residuales, la piel queda limpia y lisa. Además, un antioxidante anti-polución protege la piel permanentemente para evitar recaídas. Su textura hidratante fresca y ultrafluida se fusiona instantáneamente con la piel para un acabado mate. Perfecta base de maquillaje. EFICACIA TESTADA EN PIELES ADULTAS CON TENDENCIA ACNEICA: • Disminución de las marcas oscuras y rojas en 7 días • Disminución de poros: 84% • La piel se matifica al instante: 80% • Las irregularidades de la piel se alisan: 75% • Hidratación 8 horas",
+      "image_url": "https://hbderm.com/wp-content/uploads/2026/06/SEBIACLEAR-SERUM-.jpg",
+      "sitemap_image_urls": [
+        "https://hbderm.com/wp-content/uploads/2026/06/SEBIACLEAR-SERUM-.jpg"
+      ],
+      "price": 469,
+      "regular_price": 469,
+      "currency": "BOB",
+      "availability": "instock",
+      "scraped_at": "2026-06-25T01:25:02.641Z"
+    },
+    {
+      "source": "hbderm.com",
+      "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-noche/upgrade-crema-noche-50ml/",
+      "title": "UPGRADE NIGHT CREAM",
+      "brand": "SENSILIS",
+      "categories": [
+        "Antiedad",
+        "Tratamientos Noche"
+      ],
+      "slug": "upgrade-crema-noche-50ml",
+      "description": "Una crema rica pero no grasa con una textura fácil de extender que reafirma, remodela, reduce las arrugas y estimula la renovación de la piel durante la noche. esta crema redensifica y renueva la piel gracias a la tecnología crono cosmética. Contiene Lespedeza Capitata que aporta propiedades resincronizantes del ritmo circadiano de la piel y Bakuchiol, que aporta acción antiaging y antioxidante. Sentirás tu piel renovada y rejuvenecida al despertar. Resincroniza el ritmo circadiano de la piel renovando la piel durante la noche y proporcionando firmeza al despertar. Alisa las arrugas y las líneas de expresión Redefine / Reafirma / Corrige arrugas. Bálsamo Piel seca / normal. Aplicar de noche después del sérum. Tipo de Piel: Normal / Sensible / Reactivas",
+      "image_url": "https://hbderm.com/wp-content/uploads/2024/08/UPGRADE-NIGHT-CREAM.jpg",
+      "sitemap_image_urls": [],
+      "price": 420,
+      "regular_price": 420,
+      "currency": "BOB",
+      "availability": "instock",
+      "scraped_at": "2026-06-25T01:25:03.097Z"
+    },
+    {
+      "source": "hbderm.com",
+      "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/upgrade-fluido-50ml/",
+      "title": "UPGRADE FLUIDE",
+      "brand": "SENSILIS",
+      "categories": [
+        "Antiedad"
+      ],
+      "slug": "upgrade-fluido-50ml",
+      "description": "Este fluido te ayudará a lucir tu mejor piel gracias a tecnología genómica que protege el ADN celular: alisará tus arrugas y líneas de expresión y, desde la primera aplicación, elevará tus rasgos y redefinirá tu óvalo facial. Crea un efecto reafirmante inmediato y duradero y tiene un acabado mate. Reafirma, redefine y corrige arrugas. Con DNA Reverse Complex. Hecho en España. Tipo de Piel: Mixta / Grasa Necesidades: Control de la piel grasa / Matificante / Líneas de expresión y arrugas",
+      "image_url": "https://hbderm.com/wp-content/uploads/2024/08/Diseno-sin-titulo.jpg",
+      "sitemap_image_urls": [],
+      "price": 420,
+      "regular_price": 420,
+      "currency": "BOB",
+      "availability": "instock",
+      "scraped_at": "2026-06-25T01:25:03.511Z"
+    },
+    {
+      "source": "hbderm.com",
+      "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/upgrade-ar/",
+      "title": "UPGRADE AR",
+      "brand": "SENSILIS",
+      "categories": [
+        "Antiedad"
+      ],
+      "slug": "upgrade-ar",
+      "description": "Reafirma la piel sensible y alivia las rojeces gracias a un tensor vegetal y a un polifenol antirojeces que consigue calmar las pieles más reactivas por su efecto termorregulador. Reduce arrugas, recobra la firmeza y elasticidad, calma rojeces. Reafirma, corrige arrugas y calma rojeces. Con Tensor vegetal y Polifenol. Hecho en España. Tipo de Piel: Sensible y normal Necesidades: Deshidratación / Líneas y Arrugas / Rojeces",
+      "image_url": "https://hbderm.com/wp-content/uploads/2024/08/Copia-de-Sin-titulo-1.jpg",
+      "sitemap_image_urls": [],
+      "price": 420,
+      "regular_price": 420,
+      "currency": "BOB",
+      "availability": "Agotado",
+      "scraped_at": "2026-06-25T01:25:03.913Z"
+    },
+    {
+      "source": "hbderm.com",
+      "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/10142/",
+      "title": "UPGRADE EYES",
+      "brand": "SENSILIS",
+      "categories": [
+        "Antiedad"
+      ],
+      "slug": "10142",
+      "description": "El contorno Upgrade Ojos es ideal para el contorno ocular: alisará las arrugas y líneas de expresión, reafirmará tus párpados y reducirá extraordinariamente tus ojeras y bolsas. Restaura y corrige arrugas, bolsas y ojeras. Con Péptidos y Cafeína. Hecho en España. Tipo de Piel: Todo tipo de piel Necesidades: Líneas de expresión y arrugas",
+      "image_url": "https://hbderm.com/wp-content/uploads/2024/08/Diseno-sin-titulo-2.jpg",
+      "sitemap_image_urls": [],
+      "price": 336,
+      "regular_price": 336,
+      "currency": "BOB",
+      "availability": "instock",
+      "scraped_at": "2026-06-25T01:25:04.308Z"
+    },
     {
       "source": "hbderm.com",
       "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/eternalist-age-eyes-20ml/",
@@ -25,7 +287,7 @@
       "regular_price": 420,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T21:58:58.086Z"
+      "scraped_at": "2026-06-25T01:25:04.696Z"
     },
     {
       "source": "hbderm.com",
@@ -43,7 +305,7 @@
       "regular_price": 420,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T21:58:58.485Z"
+      "scraped_at": "2026-06-25T01:25:05.081Z"
     },
     {
       "source": "hbderm.com",
@@ -62,7 +324,7 @@
       "regular_price": 420,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T21:58:58.875Z"
+      "scraped_at": "2026-06-25T01:25:05.468Z"
     },
     {
       "source": "hbderm.com",
@@ -80,7 +342,7 @@
       "regular_price": 420,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T21:58:59.274Z"
+      "scraped_at": "2026-06-25T01:25:05.875Z"
     },
     {
       "source": "hbderm.com",
@@ -100,7 +362,7 @@
       "regular_price": 365,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T21:58:59.690Z"
+      "scraped_at": "2026-06-25T01:25:06.273Z"
     },
     {
       "source": "hbderm.com",
@@ -115,11 +377,11 @@
       "description": "Ayuda a corregir las manchas ocasionadas por la radiación UVB/UVA y la luz solar azul con el fotoprotector de uso diario Active Unify SPF 50+. Proporciona triple acción despigmentante y una muy alta protección, unificando el tono de la piel y reduciendo la intensidad de las manchas en un 22%¹ . 50 ml SPF 50+ Sin perfume, no comedogénico, textura ligera, absorción inmediata, no irrita los ojos, resistente al agua, testado dermatológica y oftalomológicamente, hipoalergénico: formulado para minimizar el riesgo de alergia. Manchas solares en la piel. DP-Complex (niacinamida, esclareolida, Pisum sativum), vitamina E",
       "image_url": "https://hbderm.com/wp-content/uploads/2025/04/ISDIN-8.jpg",
       "sitemap_image_urls": [],
-      "price": 250,
-      "regular_price": 335,
+      "price": 454,
+      "regular_price": 454,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T21:59:00.116Z"
+      "scraped_at": "2026-06-25T01:25:06.654Z"
     },
     {
       "source": "hbderm.com",
@@ -137,7 +399,7 @@
       "regular_price": 454,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T21:59:00.535Z"
+      "scraped_at": "2026-06-25T01:25:07.022Z"
     },
     {
       "source": "hbderm.com",
@@ -158,7 +420,7 @@
       "regular_price": 365,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T21:59:00.935Z"
+      "scraped_at": "2026-06-25T01:25:07.420Z"
     },
     {
       "source": "hbderm.com",
@@ -176,7 +438,7 @@
       "regular_price": 365,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T21:59:01.342Z"
+      "scraped_at": "2026-06-25T01:25:07.784Z"
     },
     {
       "source": "hbderm.com",
@@ -194,7 +456,7 @@
       "regular_price": 365,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T21:59:02.240Z"
+      "scraped_at": "2026-06-25T01:25:08.152Z"
     },
     {
       "source": "hbderm.com",
@@ -208,11 +470,11 @@
       "description": "Combate el fotoenvejecimiento con Fusion Water MAGIC Urban SPF 30, el protector solar facial con textura ultraligera de uso diario para entornos urbanos. Su fórmula protectora mejora la apariencia de los signos de fatiga de la piel, aportándole luminosidad y un aspecto saludable. 50 ml",
       "image_url": "https://hbderm.com/wp-content/uploads/2024/08/ISDIN.jpg",
       "sitemap_image_urls": [],
-      "price": 365,
-      "regular_price": 365,
+      "price": 250,
+      "regular_price": 335,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T21:59:02.980Z"
+      "scraped_at": "2026-06-25T01:25:08.537Z"
     },
     {
       "source": "hbderm.com",
@@ -230,7 +492,7 @@
       "regular_price": 365,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T21:59:03.461Z"
+      "scraped_at": "2026-06-25T01:25:08.976Z"
     },
     {
       "source": "hbderm.com",
@@ -246,11 +508,11 @@
       "sitemap_image_urls": [
         "https://hbderm.com/wp-content/uploads/2026/04/MAGIC-BRONZE-.jpg"
       ],
-      "price": 250,
+      "price": 365,
       "regular_price": 365,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T21:59:03.864Z"
+      "scraped_at": "2026-06-25T01:25:09.354Z"
     },
     {
       "source": "hbderm.com",
@@ -277,7 +539,7 @@
       "regular_price": 335,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T21:59:04.253Z"
+      "scraped_at": "2026-06-25T01:25:09.756Z"
     },
     {
       "source": "hbderm.com",
@@ -295,7 +557,7 @@
       "regular_price": 355,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T21:59:04.633Z"
+      "scraped_at": "2026-06-25T01:25:10.708Z"
     },
     {
       "source": "hbderm.com",
@@ -317,7 +579,7 @@
       "regular_price": 480,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T21:59:05.038Z"
+      "scraped_at": "2026-06-25T01:25:14.114Z"
     },
     {
       "source": "hbderm.com",
@@ -335,7 +597,7 @@
       "regular_price": 288,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T21:59:05.415Z"
+      "scraped_at": "2026-06-25T01:25:14.607Z"
     },
     {
       "source": "hbderm.com",
@@ -351,11 +613,11 @@
       "sitemap_image_urls": [
         "https://hbderm.com/wp-content/uploads/2026/06/HYSEAC-PROTECTOR-SOLAR-.jpg"
       ],
-      "price": 250,
-      "regular_price": 335,
+      "price": 286,
+      "regular_price": 286,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T21:59:05.803Z"
+      "scraped_at": "2026-06-25T01:25:15.028Z"
     },
     {
       "source": "hbderm.com",
@@ -375,7 +637,7 @@
       "regular_price": 360,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T21:59:06.202Z"
+      "scraped_at": "2026-06-25T01:25:15.424Z"
     },
     {
       "source": "hbderm.com",
@@ -395,7 +657,7 @@
       "regular_price": 516,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T21:59:06.593Z"
+      "scraped_at": "2026-06-25T01:25:15.821Z"
     },
     {
       "source": "hbderm.com",
@@ -413,7 +675,7 @@
       "regular_price": 734,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T21:59:07.013Z"
+      "scraped_at": "2026-06-25T01:25:16.213Z"
     },
     {
       "source": "hbderm.com",
@@ -434,27 +696,7 @@
       "regular_price": 918,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T21:59:07.416Z"
-    },
-    {
-      "source": "hbderm.com",
-      "source_url": "https://hbderm.com/hbderm-catalogo/pieles-con-grasas-o-con-acne/8921/",
-      "title": "SEBIACLEAR SERUM",
-      "brand": "SVR",
-      "categories": [
-        "Pieles Con Grasas O Con Acne"
-      ],
-      "slug": "8921",
-      "description": "SEBIACLEAR Serum es milagroso contra el acné de la piel adulta. Eficacia visible en solo 7 días gracias a una fórmula ultra concentrada de principios activos dermatológicos. Elimina los granos, puntos negros, poros dilatados y marcas residuales, la piel queda limpia y lisa. Además, un antioxidante anti-polución protege la piel permanentemente para evitar recaídas. Su textura hidratante fresca y ultrafluida se fusiona instantáneamente con la piel para un acabado mate. Perfecta base de maquillaje. EFICACIA TESTADA EN PIELES ADULTAS CON TENDENCIA ACNEICA: • Disminución de las marcas oscuras y rojas en 7 días • Disminución de poros: 84% • La piel se matifica al instante: 80% • Las irregularidades de la piel se alisan: 75% • Hidratación 8 horas",
-      "image_url": "https://hbderm.com/wp-content/uploads/2026/06/SEBIACLEAR-SERUM-.jpg",
-      "sitemap_image_urls": [
-        "https://hbderm.com/wp-content/uploads/2026/06/SEBIACLEAR-SERUM-.jpg"
-      ],
-      "price": 469,
-      "regular_price": 469,
-      "currency": "BOB",
-      "availability": "Agotado",
-      "scraped_at": "2026-06-23T21:59:07.793Z"
+      "scraped_at": "2026-06-25T01:25:16.590Z"
     },
     {
       "source": "hbderm.com",
@@ -472,7 +714,7 @@
       "regular_price": 867,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T21:59:08.176Z"
+      "scraped_at": "2026-06-25T01:25:16.979Z"
     },
     {
       "source": "hbderm.com",
@@ -492,7 +734,7 @@
       "regular_price": 324,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T21:59:08.573Z"
+      "scraped_at": "2026-06-25T01:25:17.355Z"
     },
     {
       "source": "hbderm.com",
@@ -511,7 +753,7 @@
       "regular_price": 1173,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T21:59:08.973Z"
+      "scraped_at": "2026-06-25T01:25:17.743Z"
     },
     {
       "source": "hbderm.com",
@@ -530,7 +772,7 @@
       "regular_price": 446,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T21:59:09.377Z"
+      "scraped_at": "2026-06-25T01:25:18.116Z"
     },
     {
       "source": "hbderm.com",
@@ -547,31 +789,11 @@
       "sitemap_image_urls": [
         "https://hbderm.com/wp-content/uploads/2026/04/UVEBLOCK-SERUM-SPF50-1.jpg"
       ],
-      "price": 250,
-      "regular_price": 335,
+      "price": 390,
+      "regular_price": 390,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T21:59:09.780Z"
-    },
-    {
-      "source": "hbderm.com",
-      "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/ampoule-a-30ml/",
-      "title": "AMPOULE A",
-      "brand": "SVR",
-      "categories": [
-        "Antiedad"
-      ],
-      "slug": "ampoule-a-30ml",
-      "description": "Pieles irregulares, defectos de la piel, poros dilatados y arrugas. Este serum, altamente concentrado en vitamina A, retexturiza el tejido cutáneo para alisar la piel. Día tras día, la textura de la piel se refina, la calidad de la piel mejora y la piel se ve más joven. La vitamina A / Retinol es un ingrediente activo anti-edad líder que retexturiza la piel y corrige las arrugas profundas. Potente, el 0,3% es suficiente para renovar tu piel. SVR ha seleccionado dos formas de vitamina A, incluyendo una forma encapsulada para la eficacia en todos los niveles de la epidermis y una tolerancia óptima para las pieles sensibles. La combinación suaviza la superficie de la piel y regenera la epidermis. Concentrado de Retinol Puro al 0.1% El Retinol Puro encapsulado al 0.2% por liposomas en la membrana fosfolipídica - similar a los de las células de la piel – se libera continuamente dentro de la epidermis. ¿Algún otro beneficio? Contiene 92% de ingredientes de origen natural conservados en una botella de vidrio reciclable. No Comedogénico. Testado en pieles 50% sensibles bajo control dermatológico.",
-      "image_url": "https://hbderm.com/wp-content/uploads/2026/05/AMPOULE-A.jpg",
-      "sitemap_image_urls": [
-        "https://hbderm.com/wp-content/uploads/2026/05/AMPOULE-A.jpg"
-      ],
-      "price": 670,
-      "regular_price": 670,
-      "currency": "BOB",
-      "availability": "instock",
-      "scraped_at": "2026-06-23T21:59:10.164Z"
+      "scraped_at": "2026-06-25T01:25:18.485Z"
     },
     {
       "source": "hbderm.com",
@@ -592,7 +814,7 @@
       "regular_price": 288,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T21:59:10.558Z"
+      "scraped_at": "2026-06-25T01:25:18.873Z"
     },
     {
       "source": "hbderm.com",
@@ -611,7 +833,7 @@
       "regular_price": 336,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T21:59:10.935Z"
+      "scraped_at": "2026-06-25T01:25:19.253Z"
     },
     {
       "source": "hbderm.com",
@@ -629,7 +851,7 @@
       "regular_price": 384,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T21:59:11.325Z"
+      "scraped_at": "2026-06-25T01:25:19.625Z"
     },
     {
       "source": "hbderm.com",
@@ -643,11 +865,11 @@
       "description": "Svr Clairial Crema Spf50+ 50 ml. Alta protección contra los rayos UVA y UVB asociada a un activo contra luz visible. Corrección antimanchas integral y protección solar para evitar recurrencias. - Para contrarrestar este fenómeno, SVR crea Clairial Crème SPF50 +, el tratamiento 2 en 1 contra las manchas: 1. Prevención: El 1 er despigmentación SPF50 cuidado de proteger contra los rayos UVA y UVB, asociado con un color azul en ejecución anti-luz. 2. Corrección: Una concentración muy alta de complejo despigmentante exclusivo para una intensa corrección antimanchas y acción preventiva para prevenir la reaparición. * Todo en una textura no pegajosa con un acabado mate, que se propaga y penetra fácilmente para una aplicación diaria. * Inmediatamente protegido, la piel queda unificada. Día tras día, las manchas se desvanecen. Activos Dermatologicos: - Complejo despigmentante 5.6%: difumina y reduce las manchas, limita su apariencia. - Beta-caroteno: Protección contra la luz visible. - Filtros solares SPF50 +: anti-UVA / UVB, previene el fotoenvejecimiento y la recurrencia de pigmentos. INDICACIONES Svr Clairial Crema Spf50+ 50 ml. Protección anti-UVA antiUVB + mejorada contra la luz visible. Corrección intensa de la mancha. Textura suave con acabado mate para el uso diario. Indicado para todo tipo de manchas oscuras: sol, envejecimiento, cloasma, tono de piel irregular. Dermatológicamente probado en pieles sensibles. No comedogénico. No fotosensibilizante. Hipoalergénico. 0% parabeno, octocrileno. #SVRBOLIVIA #HBDERM #CLAIRIALSPF50BOLIVIA",
       "image_url": "https://hbderm.com/wp-content/uploads/2020/06/PENSAMOS-EN-LOS-MÁS-PEQUEÑOS-DE-LA-CASA-2.png",
       "sitemap_image_urls": [],
-      "price": 250,
-      "regular_price": 365,
+      "price": 480,
+      "regular_price": 480,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T21:59:11.725Z"
+      "scraped_at": "2026-06-25T01:25:19.993Z"
     },
     {
       "source": "hbderm.com",
@@ -665,7 +887,7 @@
       "regular_price": 420,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T21:59:12.119Z"
+      "scraped_at": "2026-06-25T01:25:20.369Z"
     },
     {
       "source": "hbderm.com",
@@ -684,7 +906,7 @@
       "regular_price": 300,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T21:59:12.519Z"
+      "scraped_at": "2026-06-25T01:25:20.782Z"
     },
     {
       "source": "hbderm.com",
@@ -702,7 +924,7 @@
       "regular_price": 331,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T21:59:12.899Z"
+      "scraped_at": "2026-06-25T01:25:21.176Z"
     },
     {
       "source": "hbderm.com",
@@ -720,7 +942,7 @@
       "regular_price": 810,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T21:59:13.276Z"
+      "scraped_at": "2026-06-25T01:25:21.559Z"
     },
     {
       "source": "hbderm.com",
@@ -738,7 +960,7 @@
       "regular_price": 282,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T21:59:13.659Z"
+      "scraped_at": "2026-06-25T01:25:21.974Z"
     },
     {
       "source": "hbderm.com",
@@ -756,7 +978,7 @@
       "regular_price": 316,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T21:59:14.062Z"
+      "scraped_at": "2026-06-25T01:25:22.374Z"
     },
     {
       "source": "hbderm.com",
@@ -775,7 +997,7 @@
       "regular_price": 264,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T21:59:14.453Z"
+      "scraped_at": "2026-06-25T01:25:22.821Z"
     },
     {
       "source": "hbderm.com",
@@ -793,7 +1015,7 @@
       "regular_price": 288,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T21:59:14.862Z"
+      "scraped_at": "2026-06-25T01:25:23.614Z"
     },
     {
       "source": "hbderm.com",
@@ -812,7 +1034,7 @@
       "regular_price": 162,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T21:59:15.253Z"
+      "scraped_at": "2026-06-25T01:25:24.013Z"
     },
     {
       "source": "hbderm.com",
@@ -831,7 +1053,7 @@
       "regular_price": 388,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T21:59:15.641Z"
+      "scraped_at": "2026-06-25T01:25:24.393Z"
     },
     {
       "source": "hbderm.com",
@@ -848,11 +1070,11 @@
       "sitemap_image_urls": [
         "https://hbderm.com/wp-content/uploads/2026/05/PROTECTOR-GEL-CREMA-.jpg"
       ],
-      "price": 432,
-      "regular_price": 432,
+      "price": 250,
+      "regular_price": 365,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T21:59:16.054Z"
+      "scraped_at": "2026-06-25T01:25:24.763Z"
     },
     {
       "source": "hbderm.com",
@@ -871,10 +1093,10 @@
         "https://hbderm.com/wp-content/uploads/2026/04/BODY-GLOW-2.jpg"
       ],
       "price": 250,
-      "regular_price": 365,
+      "regular_price": 335,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T21:59:16.436Z"
+      "scraped_at": "2026-06-25T01:25:25.153Z"
     },
     {
       "source": "hbderm.com",
@@ -893,7 +1115,7 @@
       "regular_price": 302,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T21:59:16.821Z"
+      "scraped_at": "2026-06-25T01:25:25.575Z"
     },
     {
       "source": "hbderm.com",
@@ -914,7 +1136,7 @@
       "regular_price": 384,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T21:59:17.213Z"
+      "scraped_at": "2026-06-25T01:25:26.005Z"
     },
     {
       "source": "hbderm.com",
@@ -935,7 +1157,7 @@
       "regular_price": 378,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T21:59:17.611Z"
+      "scraped_at": "2026-06-25T01:25:26.391Z"
     },
     {
       "source": "hbderm.com",
@@ -956,7 +1178,7 @@
       "regular_price": 365,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T21:59:18.027Z"
+      "scraped_at": "2026-06-25T01:25:26.787Z"
     },
     {
       "source": "hbderm.com",
@@ -973,11 +1195,11 @@
       "sitemap_image_urls": [
         "https://hbderm.com/wp-content/uploads/2026/04/COMPACT-MEDIUM-1-1.jpg"
       ],
-      "price": 365,
+      "price": 250,
       "regular_price": 365,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T21:59:18.434Z"
+      "scraped_at": "2026-06-25T01:25:27.171Z"
     },
     {
       "source": "hbderm.com",
@@ -994,11 +1216,11 @@
       "sitemap_image_urls": [
         "https://hbderm.com/wp-content/uploads/2026/04/COMPACT-BRONZE-1.jpg"
       ],
-      "price": 365,
-      "regular_price": 365,
+      "price": 250,
+      "regular_price": 335,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T21:59:18.810Z"
+      "scraped_at": "2026-06-25T01:25:27.563Z"
     },
     {
       "source": "hbderm.com",
@@ -1017,7 +1239,7 @@
       "regular_price": 230,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T21:59:19.228Z"
+      "scraped_at": "2026-06-25T01:25:28.089Z"
     },
     {
       "source": "hbderm.com",
@@ -1036,7 +1258,7 @@
       "regular_price": 280,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T21:59:19.626Z"
+      "scraped_at": "2026-06-25T01:25:28.484Z"
     },
     {
       "source": "hbderm.com",
@@ -1055,7 +1277,7 @@
       "regular_price": 204,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T21:59:20.043Z"
+      "scraped_at": "2026-06-25T01:25:28.883Z"
     },
     {
       "source": "hbderm.com",
@@ -1074,7 +1296,7 @@
       "regular_price": 421,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T21:59:20.437Z"
+      "scraped_at": "2026-06-25T01:25:29.273Z"
     },
     {
       "source": "hbderm.com",
@@ -1094,7 +1316,7 @@
       "regular_price": 238,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T21:59:20.815Z"
+      "scraped_at": "2026-06-25T01:25:29.704Z"
     },
     {
       "source": "hbderm.com",
@@ -1113,7 +1335,7 @@
       "regular_price": 408,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T21:59:21.212Z"
+      "scraped_at": "2026-06-25T01:25:30.100Z"
     },
     {
       "source": "hbderm.com",
@@ -1132,7 +1354,7 @@
       "regular_price": 864,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T21:59:21.604Z"
+      "scraped_at": "2026-06-25T01:25:30.516Z"
     },
     {
       "source": "hbderm.com",
@@ -1150,7 +1372,7 @@
       "regular_price": 966,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T21:59:22.010Z"
+      "scraped_at": "2026-06-25T01:25:30.949Z"
     },
     {
       "source": "hbderm.com",
@@ -1168,7 +1390,7 @@
       "regular_price": 390,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T21:59:22.409Z"
+      "scraped_at": "2026-06-25T01:25:31.356Z"
     },
     {
       "source": "hbderm.com",
@@ -1186,7 +1408,7 @@
       "regular_price": 264,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T21:59:22.803Z"
+      "scraped_at": "2026-06-25T01:25:31.773Z"
     },
     {
       "source": "hbderm.com",
@@ -1207,7 +1429,7 @@
       "regular_price": 240,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T21:59:23.182Z"
+      "scraped_at": "2026-06-25T01:25:32.189Z"
     },
     {
       "source": "hbderm.com",
@@ -1225,44 +1447,7 @@
       "regular_price": 278,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T21:59:23.563Z"
-    },
-    {
-      "source": "hbderm.com",
-      "source_url": "https://hbderm.com/hbderm-catalogo/pieles-hiperpigmentadas/despigmentante-rostro/ampoule-clairial-30-ml/",
-      "title": "AMPOULE CLAIRIAL",
-      "brand": "SVR",
-      "categories": [
-        "Pieles Hiperpigmentadas",
-        "Despigmentante Rostro"
-      ],
-      "slug": "ampoule-clairial-30-ml",
-      "description": "Para todas las pieles sensibles. Para todo tipo de manchas oscuras relacionadas con el sol, envejecimiento embarazo, marcas de imperfecciones, tez desigual. Rostro, cuello, escote, manos. Adultos. No comedogénico. Corrige y reduce visiblemente las manchas oscuras existentes a partir de las 2 semanas, previniendo y limitando su reaparición gracias a su triple acción: anti manchas, anti polución y anti recaída unifica e ilumina la tez. ¡Su textura ligera e hidratante penetra rápidamente! Acabado sedoso. Antimanchas A partir de los 14 días, reducción de las manchas oscuras en un -19,6% y 90% mejora de la uniformidad de la tez Después de 28 días, 85% manchas atenuadas y menos visibles. Anti recaída 94% previene la aparición de nuevas manchas y mantiene su eficacia anti manchas incluso un mes después de discontinuar su uso. Adaptado a pieles sensibles.90% ingredientes de origen natural",
-      "image_url": "https://hbderm.com/wp-content/uploads/2023/06/Diseño-sin-título-13.png",
-      "sitemap_image_urls": [],
-      "price": 626,
-      "regular_price": 626,
-      "currency": "BOB",
-      "availability": "Agotado",
-      "scraped_at": "2026-06-23T21:59:23.953Z"
-    },
-    {
-      "source": "hbderm.com",
-      "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/ampoule-c-30ml/",
-      "title": "AMPOULE C",
-      "brand": "SVR",
-      "categories": [
-        "Antiedad"
-      ],
-      "slug": "ampoule-c-30ml",
-      "description": "Piel opaca, cansada, irregularidades, arrugas. Concentrado de luminosidad. Regenerador, antiarrugas Vitamina C optimizada al 20% para una piel radiante! Este serum altamente concentrado en vitamina C recarga inmediatamente la piel para revelar una tez radiante y reducir los signos de la fatiga. Día tras día, la piel goza de una excelente salud: tonificada, luminosa y uniforme. ¡Y eso es bueno para tu estado de ánimo! +17% de luminosidad en la tez +18% de uniformidad en la tez Revive el 90% de la piel cansada El 97% de la piel opaca tiene energía El 20% de esta vitamina C optimizada equivale al 17% de vitamina C pura. Su estructura es similar a la vitamina C y ofrece las mismas propiedades que la vitamina C pura, pero es estable y eficaz en el tiempo. Resultado: Ampoule C recarga las baterías de la piel, proporcionando un impulso eficaz y, lo que es más, puede conservarse durante 9 meses después de su apertura. ¡Nos encanta! No comedogénico. Testado en pieles 50% sensibles bajo control dermatológico.",
-      "image_url": "https://hbderm.com/wp-content/uploads/2022/05/AMPOULE-C-30ML.jpg",
-      "sitemap_image_urls": [],
-      "price": 670,
-      "regular_price": 670,
-      "currency": "BOB",
-      "availability": "Agotado",
-      "scraped_at": "2026-06-23T21:59:24.346Z"
+      "scraped_at": "2026-06-25T01:25:32.614Z"
     },
     {
       "source": "hbderm.com",
@@ -1280,7 +1465,7 @@
       "regular_price": 816,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T21:59:24.727Z"
+      "scraped_at": "2026-06-25T01:25:33.053Z"
     },
     {
       "source": "hbderm.com",
@@ -1301,7 +1486,7 @@
       "regular_price": 210,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T21:59:25.109Z"
+      "scraped_at": "2026-06-25T01:25:33.471Z"
     },
     {
       "source": "hbderm.com",
@@ -1319,7 +1504,7 @@
       "regular_price": 389,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T21:59:25.492Z"
+      "scraped_at": "2026-06-25T01:25:33.910Z"
     },
     {
       "source": "hbderm.com",
@@ -1333,11 +1518,11 @@
       "description": "Este champú suave limpia, hidrata y calma el cuero cabelludo sensible o debilitado por los picores. Alivia los picores del cuero cabelludo Ideal para :Cuero cabelludo sensible o debilitado, con picores Textura :Gel nacarado ¿Cuándo? :Uso diario Limpia con suavidad, alivia inmediatamente y de forma duradera Botella de 200 ml",
       "image_url": "https://hbderm.com/wp-content/uploads/2024/09/SEDACALM-SHAMPOO.jpg",
       "sitemap_image_urls": [],
-      "price": 264,
-      "regular_price": 264,
+      "price": 735,
+      "regular_price": 918,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T21:59:25.862Z"
+      "scraped_at": "2026-06-25T01:25:34.370Z"
     },
     {
       "source": "hbderm.com",
@@ -1355,7 +1540,7 @@
       "regular_price": 240,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T21:59:26.244Z"
+      "scraped_at": "2026-06-25T01:25:34.788Z"
     },
     {
       "source": "hbderm.com",
@@ -1373,7 +1558,7 @@
       "regular_price": 331,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T21:59:26.620Z"
+      "scraped_at": "2026-06-25T01:25:35.210Z"
     },
     {
       "source": "hbderm.com",
@@ -1391,7 +1576,7 @@
       "regular_price": 307,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T21:59:27.016Z"
+      "scraped_at": "2026-06-25T01:25:35.630Z"
     },
     {
       "source": "hbderm.com",
@@ -1410,7 +1595,7 @@
       "regular_price": 459,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T21:59:27.409Z"
+      "scraped_at": "2026-06-25T01:25:36.062Z"
     },
     {
       "source": "hbderm.com",
@@ -1429,7 +1614,7 @@
       "regular_price": 252,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T21:59:27.785Z"
+      "scraped_at": "2026-06-25T01:25:36.477Z"
     },
     {
       "source": "hbderm.com",
@@ -1447,7 +1632,7 @@
       "regular_price": 720,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T21:59:28.191Z"
+      "scraped_at": "2026-06-25T01:25:36.934Z"
     },
     {
       "source": "hbderm.com",
@@ -1465,7 +1650,7 @@
       "regular_price": 257,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T21:59:28.596Z"
+      "scraped_at": "2026-06-25T01:25:37.345Z"
     },
     {
       "source": "hbderm.com",
@@ -1488,11 +1673,11 @@
         "https://hbderm.com/wp-content/uploads/2022/11/HYDRO-LOTION-7.jpg",
         "https://hbderm.com/wp-content/uploads/2022/11/HYDRO-LOTION-8.jpg"
       ],
-      "price": 250,
+      "price": 335,
       "regular_price": 335,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T21:59:28.988Z"
+      "scraped_at": "2026-06-25T01:25:37.767Z"
     },
     {
       "source": "hbderm.com",
@@ -1510,7 +1695,7 @@
       "regular_price": 365,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T21:59:29.367Z"
+      "scraped_at": "2026-06-25T01:25:38.164Z"
     },
     {
       "source": "hbderm.com",
@@ -1528,7 +1713,7 @@
       "regular_price": 300,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T21:59:29.753Z"
+      "scraped_at": "2026-06-25T01:25:38.569Z"
     },
     {
       "source": "hbderm.com",
@@ -1549,7 +1734,7 @@
       "regular_price": 96,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T21:59:30.135Z"
+      "scraped_at": "2026-06-25T01:25:38.990Z"
     },
     {
       "source": "hbderm.com",
@@ -1567,7 +1752,7 @@
       "regular_price": 216,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T21:59:30.546Z"
+      "scraped_at": "2026-06-25T01:25:39.409Z"
     },
     {
       "source": "hbderm.com",
@@ -1586,7 +1771,7 @@
       "regular_price": 389,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T21:59:30.918Z"
+      "scraped_at": "2026-06-25T01:25:39.797Z"
     },
     {
       "source": "hbderm.com",
@@ -1605,7 +1790,7 @@
       "regular_price": 356,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T21:59:31.318Z"
+      "scraped_at": "2026-06-25T01:25:40.188Z"
     },
     {
       "source": "hbderm.com",
@@ -1624,7 +1809,7 @@
       "regular_price": 464,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T21:59:31.700Z"
+      "scraped_at": "2026-06-25T01:25:40.572Z"
     },
     {
       "source": "hbderm.com",
@@ -1644,80 +1829,7 @@
       "regular_price": 372,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T21:59:32.112Z"
-    },
-    {
-      "source": "hbderm.com",
-      "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/upgrade-ar/",
-      "title": "UPGRADE AR",
-      "brand": "SENSILIS",
-      "categories": [
-        "Antiedad"
-      ],
-      "slug": "upgrade-ar",
-      "description": "Reafirma la piel sensible y alivia las rojeces gracias a un tensor vegetal y a un polifenol antirojeces que consigue calmar las pieles más reactivas por su efecto termorregulador. Reduce arrugas, recobra la firmeza y elasticidad, calma rojeces. Reafirma, corrige arrugas y calma rojeces. Con Tensor vegetal y Polifenol. Hecho en España. Tipo de Piel: Sensible y normal Necesidades: Deshidratación / Líneas y Arrugas / Rojeces",
-      "image_url": "https://hbderm.com/wp-content/uploads/2024/08/Copia-de-Sin-titulo-1.jpg",
-      "sitemap_image_urls": [],
-      "price": 336,
-      "regular_price": 420,
-      "currency": "BOB",
-      "availability": "Agotado",
-      "scraped_at": "2026-06-23T21:59:32.501Z"
-    },
-    {
-      "source": "hbderm.com",
-      "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-noche/upgrade-crema-noche-50ml/",
-      "title": "UPGRADE NIGHT CREAM",
-      "brand": "SENSILIS",
-      "categories": [
-        "Antiedad",
-        "Tratamientos Noche"
-      ],
-      "slug": "upgrade-crema-noche-50ml",
-      "description": "Una crema rica pero no grasa con una textura fácil de extender que reafirma, remodela, reduce las arrugas y estimula la renovación de la piel durante la noche. esta crema redensifica y renueva la piel gracias a la tecnología crono cosmética. Contiene Lespedeza Capitata que aporta propiedades resincronizantes del ritmo circadiano de la piel y Bakuchiol, que aporta acción antiaging y antioxidante. Sentirás tu piel renovada y rejuvenecida al despertar. Resincroniza el ritmo circadiano de la piel renovando la piel durante la noche y proporcionando firmeza al despertar. Alisa las arrugas y las líneas de expresión Redefine / Reafirma / Corrige arrugas. Bálsamo Piel seca / normal. Aplicar de noche después del sérum. Tipo de Piel: Normal / Sensible / Reactivas",
-      "image_url": "https://hbderm.com/wp-content/uploads/2024/08/UPGRADE-NIGHT-CREAM.jpg",
-      "sitemap_image_urls": [],
-      "price": 336,
-      "regular_price": 420,
-      "currency": "BOB",
-      "availability": "instock",
-      "scraped_at": "2026-06-23T21:59:32.881Z"
-    },
-    {
-      "source": "hbderm.com",
-      "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/upgrade-fluido-50ml/",
-      "title": "UPGRADE FLUIDE",
-      "brand": "SENSILIS",
-      "categories": [
-        "Antiedad"
-      ],
-      "slug": "upgrade-fluido-50ml",
-      "description": "Este fluido te ayudará a lucir tu mejor piel gracias a tecnología genómica que protege el ADN celular: alisará tus arrugas y líneas de expresión y, desde la primera aplicación, elevará tus rasgos y redefinirá tu óvalo facial. Crea un efecto reafirmante inmediato y duradero y tiene un acabado mate. Reafirma, redefine y corrige arrugas. Con DNA Reverse Complex. Hecho en España. Tipo de Piel: Mixta / Grasa Necesidades: Control de la piel grasa / Matificante / Líneas de expresión y arrugas",
-      "image_url": "https://hbderm.com/wp-content/uploads/2024/08/Diseno-sin-titulo.jpg",
-      "sitemap_image_urls": [],
-      "price": 336,
-      "regular_price": 420,
-      "currency": "BOB",
-      "availability": "instock",
-      "scraped_at": "2026-06-23T21:59:33.289Z"
-    },
-    {
-      "source": "hbderm.com",
-      "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/10142/",
-      "title": "UPGRADE EYES",
-      "brand": "SENSILIS",
-      "categories": [
-        "Antiedad"
-      ],
-      "slug": "10142",
-      "description": "El contorno Upgrade Ojos es ideal para el contorno ocular: alisará las arrugas y líneas de expresión, reafirmará tus párpados y reducirá extraordinariamente tus ojeras y bolsas. Restaura y corrige arrugas, bolsas y ojeras. Con Péptidos y Cafeína. Hecho en España. Tipo de Piel: Todo tipo de piel Necesidades: Líneas de expresión y arrugas",
-      "image_url": "https://hbderm.com/wp-content/uploads/2024/08/Diseno-sin-titulo-2.jpg",
-      "sitemap_image_urls": [],
-      "price": 269,
-      "regular_price": 336,
-      "currency": "BOB",
-      "availability": "instock",
-      "scraped_at": "2026-06-23T21:59:33.674Z"
+      "scraped_at": "2026-06-25T01:25:41.313Z"
     },
     {
       "source": "hbderm.com",
@@ -1731,11 +1843,11 @@
       "description": "Protege su piel con Transparent Spray Wet Skin Pediatrics, el fotoprotector corporal transparente, fresco y de secado inmediato para niños y bebés a partir de 6 meses. Su fórmula contiene extracto de siempreviva, que ayuda a reforzar la barrera cutánea. 250 ml Todo tipo de piel, incluso piel sensible y piel atópica. Apto para niños y bebés a partir de 6 meses de edad. SPF 50 Protección solar. Extracto de siempreviva, vitamina E, dexpantenol.",
       "image_url": "https://hbderm.com/wp-content/uploads/2025/07/TRANSPARENT-PEDIATRICS.jpg",
       "sitemap_image_urls": [],
-      "price": 250,
-      "regular_price": 365,
+      "price": 534,
+      "regular_price": 534,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T21:59:34.077Z"
+      "scraped_at": "2026-06-25T01:25:41.767Z"
     },
     {
       "source": "hbderm.com",
@@ -1756,7 +1868,7 @@
       "regular_price": 324,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T21:59:34.458Z"
+      "scraped_at": "2026-06-25T01:25:42.157Z"
     },
     {
       "source": "hbderm.com",
@@ -1776,7 +1888,7 @@
       "regular_price": 516,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T21:59:34.843Z"
+      "scraped_at": "2026-06-25T01:25:42.550Z"
     },
     {
       "source": "hbderm.com",
@@ -1794,7 +1906,7 @@
       "regular_price": 286,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T21:59:35.247Z"
+      "scraped_at": "2026-06-25T01:25:42.980Z"
     },
     {
       "source": "hbderm.com",
@@ -1813,7 +1925,7 @@
       "regular_price": 252,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T21:59:35.666Z"
+      "scraped_at": "2026-06-25T01:25:43.370Z"
     },
     {
       "source": "hbderm.com",
@@ -1832,7 +1944,7 @@
       "regular_price": 307,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T21:59:36.073Z"
+      "scraped_at": "2026-06-25T01:25:43.756Z"
     },
     {
       "source": "hbderm.com",
@@ -1855,7 +1967,7 @@
       "regular_price": 336,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T21:59:36.476Z"
+      "scraped_at": "2026-06-25T01:25:44.140Z"
     },
     {
       "source": "hbderm.com",
@@ -1877,7 +1989,7 @@
       "regular_price": 594,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T21:59:36.865Z"
+      "scraped_at": "2026-06-25T01:25:44.532Z"
     },
     {
       "source": "hbderm.com",
@@ -1896,7 +2008,7 @@
       "regular_price": 420,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T21:59:37.249Z"
+      "scraped_at": "2026-06-25T01:25:44.925Z"
     },
     {
       "source": "hbderm.com",
@@ -1915,7 +2027,7 @@
       "regular_price": 420,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T21:59:37.640Z"
+      "scraped_at": "2026-06-25T01:25:45.329Z"
     },
     {
       "source": "hbderm.com",
@@ -1934,7 +2046,7 @@
       "regular_price": 366,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T21:59:38.045Z"
+      "scraped_at": "2026-06-25T01:25:45.745Z"
     },
     {
       "source": "hbderm.com",
@@ -1949,11 +2061,11 @@
       "description": "Esta Bruma ilumina la piel y proporciona un bronceado natural y uniforme después de sólo una hora. Este práctico frasco pulverizador multiposición permite una difusión óptima. Su textura fluida, no grasa y agradablemente perfumada garantiza un renovado placer de uso cada vez que se aplica. Realza el brillo dorado de la tez. Gracias a la combinación única de dos activos autobronceadores (DHA y Eritrulosa), la piel resplandece con un tono dorado uniforme y realzado después de sólo una hora Ilumina la tez La eficacia del autobronceador se ve reforzada por un ingrediente activo que prolonga el bronceado para realzar un bronceado natural o prolongar la acción autobronceadora del producto",
       "image_url": "https://hbderm.com/wp-content/uploads/2024/04/Diseño-sin-título-1.png",
       "sitemap_image_urls": [],
-      "price": 250,
-      "regular_price": 335,
+      "price": 288,
+      "regular_price": 288,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T21:59:38.443Z"
+      "scraped_at": "2026-06-25T01:25:46.140Z"
     },
     {
       "source": "hbderm.com",
@@ -1974,7 +2086,7 @@
       "regular_price": 421,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T21:59:38.839Z"
+      "scraped_at": "2026-06-25T01:25:46.530Z"
     },
     {
       "source": "hbderm.com",
@@ -1994,7 +2106,7 @@
       "regular_price": 234,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T21:59:39.233Z"
+      "scraped_at": "2026-06-25T01:25:46.926Z"
     },
     {
       "source": "hbderm.com",
@@ -2014,7 +2126,7 @@
       "regular_price": 1020,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T21:59:39.621Z"
+      "scraped_at": "2026-06-25T01:25:47.336Z"
     },
     {
       "source": "hbderm.com",
@@ -2034,7 +2146,7 @@
       "regular_price": 484,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T21:59:40.019Z"
+      "scraped_at": "2026-06-25T01:25:48.042Z"
     },
     {
       "source": "hbderm.com",
@@ -2054,7 +2166,7 @@
       "regular_price": 484,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T21:59:40.395Z"
+      "scraped_at": "2026-06-25T01:25:48.454Z"
     },
     {
       "source": "hbderm.com",
@@ -2072,7 +2184,7 @@
       "regular_price": 208,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T21:59:40.787Z"
+      "scraped_at": "2026-06-25T01:25:48.860Z"
     },
     {
       "source": "hbderm.com",
@@ -2093,7 +2205,7 @@
       "regular_price": 473,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T21:59:41.170Z"
+      "scraped_at": "2026-06-25T01:25:49.237Z"
     },
     {
       "source": "hbderm.com",
@@ -2115,7 +2227,7 @@
       "regular_price": 408,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T21:59:41.562Z"
+      "scraped_at": "2026-06-25T01:25:49.608Z"
     },
     {
       "source": "hbderm.com",
@@ -2133,7 +2245,7 @@
       "regular_price": 528,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T21:59:41.942Z"
+      "scraped_at": "2026-06-25T01:25:50.020Z"
     },
     {
       "source": "hbderm.com",
@@ -2152,7 +2264,7 @@
       "regular_price": 180,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T21:59:42.329Z"
+      "scraped_at": "2026-06-25T01:25:50.396Z"
     },
     {
       "source": "hbderm.com",
@@ -2170,7 +2282,7 @@
       "regular_price": 322,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T21:59:42.711Z"
+      "scraped_at": "2026-06-25T01:25:50.788Z"
     },
     {
       "source": "hbderm.com",
@@ -2188,7 +2300,7 @@
       "regular_price": 343,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T21:59:43.140Z"
+      "scraped_at": "2026-06-25T01:25:51.164Z"
     },
     {
       "source": "hbderm.com",
@@ -2206,7 +2318,7 @@
       "regular_price": 264,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T21:59:43.521Z"
+      "scraped_at": "2026-06-25T01:25:51.543Z"
     },
     {
       "source": "hbderm.com",
@@ -2224,7 +2336,7 @@
       "regular_price": 529,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T21:59:43.908Z"
+      "scraped_at": "2026-06-25T01:25:51.948Z"
     },
     {
       "source": "hbderm.com",
@@ -2243,7 +2355,7 @@
       "regular_price": 446,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T21:59:44.292Z"
+      "scraped_at": "2026-06-25T01:25:52.344Z"
     },
     {
       "source": "hbderm.com",
@@ -2262,7 +2374,7 @@
       "regular_price": 144,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T21:59:44.680Z"
+      "scraped_at": "2026-06-25T01:25:52.819Z"
     },
     {
       "source": "hbderm.com",
@@ -2281,7 +2393,7 @@
       "regular_price": 307,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T21:59:45.079Z"
+      "scraped_at": "2026-06-25T01:25:53.559Z"
     },
     {
       "source": "hbderm.com",
@@ -2299,7 +2411,7 @@
       "regular_price": 410,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T21:59:45.472Z"
+      "scraped_at": "2026-06-25T01:25:54.243Z"
     },
     {
       "source": "hbderm.com",
@@ -2317,7 +2429,7 @@
       "regular_price": 288,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T21:59:45.855Z"
+      "scraped_at": "2026-06-25T01:25:54.670Z"
     },
     {
       "source": "hbderm.com",
@@ -2336,7 +2448,7 @@
       "regular_price": 538,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T21:59:46.242Z"
+      "scraped_at": "2026-06-25T01:25:55.094Z"
     },
     {
       "source": "hbderm.com",
@@ -2355,7 +2467,7 @@
       "regular_price": 460,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T21:59:46.632Z"
+      "scraped_at": "2026-06-25T01:25:55.516Z"
     },
     {
       "source": "hbderm.com",
@@ -2373,7 +2485,7 @@
       "regular_price": 816,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T21:59:47.043Z"
+      "scraped_at": "2026-06-25T01:25:55.901Z"
     },
     {
       "source": "hbderm.com",
@@ -2391,7 +2503,7 @@
       "regular_price": 816,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T21:59:47.435Z"
+      "scraped_at": "2026-06-25T01:25:56.294Z"
     },
     {
       "source": "hbderm.com",
@@ -2410,26 +2522,7 @@
       "regular_price": 464,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T21:59:47.834Z"
-    },
-    {
-      "source": "hbderm.com",
-      "source_url": "https://hbderm.com/hbderm-catalogo/pieles-hiperpigmentadas/despigmentante-corporal/xerial-leche-corporal-400ml/",
-      "title": "XERIAL 10 LECHE CORPORAL - 400ML",
-      "brand": "SVR",
-      "categories": [
-        "Pieles Hiperpigmentadas",
-        "Despigmentante Corporal"
-      ],
-      "slug": "xerial-leche-corporal-400ml",
-      "description": "Loción hidratante 48h, calmante y anti-descamación Leche corporal anti-escamas, también recomendada después de haber efectuado tratamientos dermatológicos resecantes. Gracias a la Tecnología Úrea Pura (patente registrada) concentrada al 10%, Protéasa y Aminoácidos, la Leche Corporal Xérial 10 elimina eficazmente las células muertas e hidrata intensamente durante 48 horas. Enriquecida con manteca de Karité y Alantoína, la Leche Corporal Xérial 10 nutre, protege y alivia las sensaciones de tirantez. La piel es más lisa y suave. Su textura agradable y no grasa se extiende con facilidad, penetra rápidamente y aporta una sensación de confort intenso. Formulada para una tolerancia máxima.",
-      "image_url": "https://hbderm.com/wp-content/uploads/2023/12/Diseño-sin-título.png",
-      "sitemap_image_urls": [],
-      "price": 367,
-      "regular_price": 367,
-      "currency": "BOB",
-      "availability": "Agotado",
-      "scraped_at": "2026-06-23T21:59:48.222Z"
+      "scraped_at": "2026-06-25T01:25:56.737Z"
     },
     {
       "source": "hbderm.com",
@@ -2448,7 +2541,7 @@
       "regular_price": 252,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T21:59:48.617Z"
+      "scraped_at": "2026-06-25T01:25:57.401Z"
     },
     {
       "source": "hbderm.com",
@@ -2467,7 +2560,7 @@
       "regular_price": 446,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T21:59:49.015Z"
+      "scraped_at": "2026-06-25T01:25:58.137Z"
     },
     {
       "source": "hbderm.com",
@@ -2485,7 +2578,7 @@
       "regular_price": 768,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T21:59:49.408Z"
+      "scraped_at": "2026-06-25T01:25:58.516Z"
     },
     {
       "source": "hbderm.com",
@@ -2503,25 +2596,7 @@
       "regular_price": 420,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T21:59:50.134Z"
-    },
-    {
-      "source": "hbderm.com",
-      "source_url": "https://hbderm.com/hbderm-catalogo/fotoproteccion/sebiaclear-crema-spf-50/",
-      "title": "SEBIACLEAR CREMA SPF50",
-      "brand": "SVR",
-      "categories": [
-        "Fotoproteccion"
-      ],
-      "slug": "sebiaclear-crema-spf-50",
-      "description": "SEBIACLEAR SPF50 es el tratamiento de alta protección solar para pieles mixtas a grasas con imperfecciones. Hidrata y matifica durante todo el día, mientras previene las marcas y el efecto rebote asociado a los UV. Textura ligera, oil-free, emulsión tacto seco. SEBIACLEAR es la nueva gama revolucionaria* que ayuda a eliminar granos, puntos negros y el exceso de sebo. Eficacia excelente, tolerancia óptima e increíble placer de uso. Eficacia probada después de 7 días. Porque hay diferentes tipos de piel con tendencia acneica, los laboratorios SVR han innovado con una combinación única de ingredientes activos para una acción eficaz en todos estos tipos de piel: Las nuevas fórmulas SEBIACLEAR contienen un poderoso dúo de ingredientes activos anti-imperfecciones: – GLUCONOLACTONA para una acción anti-inflamatoria y un increíble poder queratolítico. Tan eficaz como los Alfahidroxiácidos (AHA) con una tolerancia extra. – NIACINAMIDA para una eficacia antibacteriana y seboreguladora. En concentraciones óptimas para actuar en todos los tipos de acné respetando la piel #SVRBOLIVIA #HBDERM #SEBIACLEARSPF50BOLIVIA",
-      "image_url": "https://hbderm.com/wp-content/uploads/2020/06/Sebiaclear-Creme-Spf50-Matificante-1-1024x1024.jpg",
-      "sitemap_image_urls": [],
-      "price": 288,
-      "regular_price": 288,
-      "currency": "BOB",
-      "availability": "Agotado",
-      "scraped_at": "2026-06-23T21:59:50.521Z"
+      "scraped_at": "2026-06-25T01:25:58.892Z"
     },
     {
       "source": "hbderm.com",
@@ -2539,7 +2614,7 @@
       "regular_price": 302,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T21:59:50.908Z"
+      "scraped_at": "2026-06-25T01:25:59.291Z"
     },
     {
       "source": "hbderm.com",
@@ -2557,25 +2632,7 @@
       "regular_price": 384,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T21:59:51.319Z"
-    },
-    {
-      "source": "hbderm.com",
-      "source_url": "https://hbderm.com/hbderm-catalogo/hidratantes-y-nutritivos/topialyse-creme-400ml/",
-      "title": "TOPIALYSE CREMA - 400ML",
-      "brand": "SVR",
-      "categories": [
-        "Hidratantes Y Nutritivos"
-      ],
-      "slug": "topialyse-creme-400ml",
-      "description": "Cuidado nutritivo y antidesecamiento en la piel. Para todo tipo de pieles sensibles y secas. Desde el nacimiento. Cuerpo y rostro. Hidratación 48 h. Placentera textura fresca, ligera y no pegajosa que se funde instantáneamente en la piel para su absorción inmediata. EFICACIA CLÍNICAMENTE PROBADA 40%: tirantez 48 h después de la aplicación. 65%: tirantez y picores tras 21 días de uso. MUY EFICAZ, ¡DICHO POR LOS VOLUNTARIOS! 100%: Piel intensamente hidratada, calmada, reducción de la tirantez. 90%: Piel suave y flexible desde la primera aplicación. Fórmula superconcentrada en principios activos dermatológicos y de muy alta tolerancia. 27% de ingredientes activos hidratantes y nutritivos: alivian, suavizan y restauran la barrera de la piel. Aceite de algodón y aceite de coco: fuentes de omega 3, 6 y 9: nutren y reparan intensamente la piel. Mantequilla de Babasú: se funde en la piel y favorece el fácil esparcimiento al mismo tiempo que nutre y proporciona confort. Azúcares hidrófilos: refuerzan la barrera cutánea y atrapan el agua en la piel para un confort y una hidratación de larga duración. 2% Niacinamida: alivia intensamente la sensación de tirantez, hidrata y reestructura la barrera cutánea. Probado en pieles sensibles bajo control dermatológico y pediátrico. Hipoalergénico.",
-      "image_url": "https://hbderm.com/wp-content/uploads/2025/05/SVR-11.jpg",
-      "sitemap_image_urls": [],
-      "price": 388,
-      "regular_price": 388,
-      "currency": "BOB",
-      "availability": "Agotado",
-      "scraped_at": "2026-06-23T21:59:51.718Z"
+      "scraped_at": "2026-06-25T01:25:59.676Z"
     },
     {
       "source": "hbderm.com",
@@ -2595,7 +2652,7 @@
       "regular_price": 114,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T21:59:52.143Z"
+      "scraped_at": "2026-06-25T01:26:00.063Z"
     },
     {
       "source": "hbderm.com",
@@ -2613,7 +2670,7 @@
       "regular_price": 120,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T21:59:52.538Z"
+      "scraped_at": "2026-06-25T01:26:00.456Z"
     },
     {
       "source": "hbderm.com",
@@ -2631,7 +2688,7 @@
       "regular_price": 84,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T21:59:52.917Z"
+      "scraped_at": "2026-06-25T01:26:00.834Z"
     },
     {
       "source": "hbderm.com",
@@ -2649,7 +2706,7 @@
       "regular_price": 298,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T21:59:53.299Z"
+      "scraped_at": "2026-06-25T01:26:01.230Z"
     },
     {
       "source": "hbderm.com",
@@ -2667,25 +2724,7 @@
       "regular_price": 336,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T21:59:53.684Z"
-    },
-    {
-      "source": "hbderm.com",
-      "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/ampoule-b-30ml/",
-      "title": "AMPOULE B",
-      "brand": "SVR",
-      "categories": [
-        "Antiedad"
-      ],
-      "slug": "ampoule-b-30ml",
-      "description": "Pieles sensibles, deshidratadas, y con arrugas. Concentrado reparador. Rellenador, antiarrugas Este serum, altamente concentrado en vitamina B3, calma y fortalece la piel. La combinación de 3 ácidos hialurónicos restaura de forma duradera las reservas de humedad de la piel. La tensión y la incomodidad se reducen inmediatamente. Día tras día, la piel está más rellena y los signos de envejecimiento disminuyen. 3 horas después de la aplicación: +50% de hidratación +37% piel calmada +33% piel rellena +28% piel más elástica Se repara el 82% de las imperfecciones de la piel 82% de las pieles sensibles ven una mejora de la calidad de la piel. La Vitamina B3, también llamada niacinamida, es un ingrediente activo multicorrectivo líder que fortalece y restaura la barrera cutánea. Contiene un 5% para reparar la piel dañada. En combinación con 3 ácidos hialurónicos con diferentes pesos moleculares (pequeño, mediano y alto), la vitamina B3 hidrata intensamente, refuerza y rellena la piel deshidratada. Su fórmula minimalista, que contiene sólo 12 ingredientes y sin fragancia, está específicamente diseñada para pieles sensibles. ¿Algún otro beneficio? Contiene el 91% de ingredientes de origen natural en una botella de cristal reciclable. No comedogénico. Testado en pieles 100% sensibles bajo control dermatológico.",
-      "image_url": "https://hbderm.com/wp-content/uploads/2022/05/AMPOULE-B-30ML.png",
-      "sitemap_image_urls": [],
-      "price": 670,
-      "regular_price": 670,
-      "currency": "BOB",
-      "availability": "Agotado",
-      "scraped_at": "2026-06-23T21:59:54.085Z"
+      "scraped_at": "2026-06-25T01:26:02.295Z"
     },
     {
       "source": "hbderm.com",
@@ -2703,7 +2742,7 @@
       "regular_price": 230,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T21:59:54.485Z"
+      "scraped_at": "2026-06-25T01:26:03.072Z"
     },
     {
       "source": "hbderm.com",
@@ -2721,7 +2760,7 @@
       "regular_price": 522,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T21:59:54.859Z"
+      "scraped_at": "2026-06-25T01:26:03.500Z"
     },
     {
       "source": "hbderm.com",
@@ -2739,7 +2778,7 @@
       "regular_price": 403,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T21:59:55.252Z"
+      "scraped_at": "2026-06-25T01:26:03.901Z"
     },
     {
       "source": "hbderm.com",
@@ -2758,7 +2797,7 @@
       "regular_price": 286,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T21:59:55.632Z"
+      "scraped_at": "2026-06-25T01:26:04.308Z"
     },
     {
       "source": "hbderm.com",
@@ -2777,7 +2816,7 @@
       "regular_price": 624,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T21:59:56.021Z"
+      "scraped_at": "2026-06-25T01:26:04.696Z"
     },
     {
       "source": "hbderm.com",
@@ -2795,7 +2834,7 @@
       "regular_price": 456,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T21:59:56.406Z"
+      "scraped_at": "2026-06-25T01:26:05.074Z"
     },
     {
       "source": "hbderm.com",
@@ -2814,7 +2853,7 @@
       "regular_price": 336,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T21:59:56.785Z"
+      "scraped_at": "2026-06-25T01:26:05.477Z"
     },
     {
       "source": "hbderm.com",
@@ -2832,28 +2871,7 @@
       "regular_price": 480,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T21:59:57.164Z"
-    },
-    {
-      "source": "hbderm.com",
-      "source_url": "https://hbderm.com/hbderm-catalogo/antiedad/serums/sebiaclear-ampoule-flash-30-ml/",
-      "title": "SEBIACLEAR AMPOULE FLASH - 30 ML",
-      "brand": "SVR",
-      "categories": [
-        "Antiedad",
-        "Serums"
-      ],
-      "slug": "sebiaclear-ampoule-flash-30-ml",
-      "description": "Concentrado contra las imperfecciones y el enrojecimiento formulado para pieles sensibles con tendencia al acné. Enriquecida con un 15 % de ácido azelaico, la ampoule SEBIACLEAR Flash calma instantáneamente la piel mientras reduce visiblemente las imperfecciones en tan solo 8 horas1. Combate eficazmente los puntos negros, las espinillas, los poros dilatados, el enrojecimiento y las marcas para una piel visiblemente aliviada.",
-      "image_url": "https://hbderm.com/wp-content/uploads/2026/02/SEBIACLEAR-AMPOULE-FLASH.jpeg",
-      "sitemap_image_urls": [
-        "https://hbderm.com/wp-content/uploads/2026/02/SEBIACLEAR-AMPOULE-FLASH.jpeg"
-      ],
-      "price": 420,
-      "regular_price": 420,
-      "currency": "BOB",
-      "availability": "instock",
-      "scraped_at": "2026-06-23T21:59:57.561Z"
+      "scraped_at": "2026-06-25T01:26:05.898Z"
     },
     {
       "source": "hbderm.com",
@@ -2874,7 +2892,7 @@
       "regular_price": 600,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T21:59:57.936Z"
+      "scraped_at": "2026-06-25T01:26:06.301Z"
     },
     {
       "source": "hbderm.com",
@@ -2892,7 +2910,7 @@
       "regular_price": 456,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T21:59:58.317Z"
+      "scraped_at": "2026-06-25T01:26:06.730Z"
     },
     {
       "source": "hbderm.com",
@@ -2912,7 +2930,7 @@
       "regular_price": 420,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T21:59:58.716Z"
+      "scraped_at": "2026-06-25T01:26:07.143Z"
     },
     {
       "source": "hbderm.com",
@@ -2930,25 +2948,7 @@
       "regular_price": 464,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T21:59:59.133Z"
-    },
-    {
-      "source": "hbderm.com",
-      "source_url": "https://hbderm.com/hbderm-catalogo/sin-categorizar/xerial-30-gel-crema-50ml/",
-      "title": "XERIAL 30 GEL - CREMA",
-      "brand": "SVR",
-      "categories": [
-        "Sin Categorizar"
-      ],
-      "slug": "xerial-30-gel-crema-50ml",
-      "description": "Xerial 30 para zonas muy secas, ásperas, engrosadas y descamativas: codos, rodillas, manos, brazos. Pelos encarnados y tendencia a la queratosis pilaris. Elimina las áreas con engrosamiento cutáneo, descamación y ásperas mientras hidrata intensamente durante 48 horas gracias a su tecnología patentada de urea pura. Día tras día, reduce la textura desigual e irregular de la piel y los pelos enquistados. La piel queda más suave al tacto y a la vista. Su textura fundente se desliza sobre la piel y se absorbe rápidamente para que uno pueda vestirse de inmediato.",
-      "image_url": "https://hbderm.com/wp-content/uploads/2023/12/Diseño-sin-título-1.png",
-      "sitemap_image_urls": [],
-      "price": 250,
-      "regular_price": 250,
-      "currency": "BOB",
-      "availability": "Agotado",
-      "scraped_at": "2026-06-23T21:59:59.500Z"
+      "scraped_at": "2026-06-25T01:26:07.904Z"
     },
     {
       "source": "hbderm.com",
@@ -2967,7 +2967,7 @@
       "regular_price": 356,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T21:59:59.885Z"
+      "scraped_at": "2026-06-25T01:26:08.317Z"
     },
     {
       "source": "hbderm.com",
@@ -2986,7 +2986,7 @@
       "regular_price": 408,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T22:00:00.266Z"
+      "scraped_at": "2026-06-25T01:26:08.783Z"
     },
     {
       "source": "hbderm.com",
@@ -3005,7 +3005,7 @@
       "regular_price": 410,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T22:00:00.650Z"
+      "scraped_at": "2026-06-25T01:26:09.196Z"
     },
     {
       "source": "hbderm.com",
@@ -3024,7 +3024,7 @@
       "regular_price": 390,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T22:00:01.030Z"
+      "scraped_at": "2026-06-25T01:26:09.609Z"
     },
     {
       "source": "hbderm.com",
@@ -3042,7 +3042,7 @@
       "regular_price": 351,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T22:00:01.847Z"
+      "scraped_at": "2026-06-25T01:26:10.406Z"
     },
     {
       "source": "hbderm.com",
@@ -3060,7 +3060,7 @@
       "regular_price": 346,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:02.588Z"
+      "scraped_at": "2026-06-25T01:26:10.832Z"
     },
     {
       "source": "hbderm.com",
@@ -3079,7 +3079,7 @@
       "regular_price": 154,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:03.109Z"
+      "scraped_at": "2026-06-25T01:26:11.219Z"
     },
     {
       "source": "hbderm.com",
@@ -3099,7 +3099,7 @@
       "regular_price": 561,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:03.524Z"
+      "scraped_at": "2026-06-25T01:26:11.610Z"
     },
     {
       "source": "hbderm.com",
@@ -3117,7 +3117,7 @@
       "regular_price": 280,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:03.922Z"
+      "scraped_at": "2026-06-25T01:26:12.020Z"
     },
     {
       "source": "hbderm.com",
@@ -3131,11 +3131,11 @@
       "description": "Escamas, picores, irritación Ideal para : Caspa severa (escamas, picores, irritación) Textura : Gel ¿Cuándo? : Tratamiento de ataque : 2 a 3 veces/semana Luego como mantenimiento: 1 y 2 veces/ semana Elimina la caspa rebeldes, calma los picores y las rojeces Botella de 125 ml",
       "image_url": "https://hbderm.com/wp-content/uploads/2024/09/NOVOPHANE-K.jpg",
       "sitemap_image_urls": [],
-      "price": 316,
-      "regular_price": 316,
+      "price": 735,
+      "regular_price": 918,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:04.318Z"
+      "scraped_at": "2026-06-25T01:26:12.396Z"
     },
     {
       "source": "hbderm.com",
@@ -3153,7 +3153,7 @@
       "regular_price": 330,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:04.709Z"
+      "scraped_at": "2026-06-25T01:26:12.767Z"
     },
     {
       "source": "hbderm.com",
@@ -3171,7 +3171,7 @@
       "regular_price": 240,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:05.111Z"
+      "scraped_at": "2026-06-25T01:26:13.139Z"
     },
     {
       "source": "hbderm.com",
@@ -3189,7 +3189,7 @@
       "regular_price": 306,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:05.488Z"
+      "scraped_at": "2026-06-25T01:26:13.514Z"
     },
     {
       "source": "hbderm.com",
@@ -3208,7 +3208,7 @@
       "regular_price": 306,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:05.868Z"
+      "scraped_at": "2026-06-25T01:26:13.899Z"
     },
     {
       "source": "hbderm.com",
@@ -3227,7 +3227,7 @@
       "regular_price": 367,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:06.275Z"
+      "scraped_at": "2026-06-25T01:26:14.284Z"
     },
     {
       "source": "hbderm.com",
@@ -3245,7 +3245,7 @@
       "regular_price": 408,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:06.653Z"
+      "scraped_at": "2026-06-25T01:26:14.675Z"
     },
     {
       "source": "hbderm.com",
@@ -3263,7 +3263,7 @@
       "regular_price": 173,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:07.040Z"
+      "scraped_at": "2026-06-25T01:26:15.098Z"
     },
     {
       "source": "hbderm.com",
@@ -3282,7 +3282,7 @@
       "regular_price": 408,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:07.444Z"
+      "scraped_at": "2026-06-25T01:26:15.530Z"
     },
     {
       "source": "hbderm.com",
@@ -3301,7 +3301,7 @@
       "regular_price": 235,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T22:00:07.837Z"
+      "scraped_at": "2026-06-25T01:26:16.222Z"
     },
     {
       "source": "hbderm.com",
@@ -3319,7 +3319,7 @@
       "regular_price": 403,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:08.257Z"
+      "scraped_at": "2026-06-25T01:26:16.606Z"
     },
     {
       "source": "hbderm.com",
@@ -3337,7 +3337,7 @@
       "regular_price": 428,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:08.629Z"
+      "scraped_at": "2026-06-25T01:26:17.005Z"
     },
     {
       "source": "hbderm.com",
@@ -3355,7 +3355,7 @@
       "regular_price": 1296,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:09.013Z"
+      "scraped_at": "2026-06-25T01:26:17.378Z"
     },
     {
       "source": "hbderm.com",
@@ -3373,7 +3373,7 @@
       "regular_price": 1296,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:09.403Z"
+      "scraped_at": "2026-06-25T01:26:17.769Z"
     },
     {
       "source": "hbderm.com",
@@ -3391,7 +3391,7 @@
       "regular_price": 510,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:09.810Z"
+      "scraped_at": "2026-06-25T01:26:18.159Z"
     },
     {
       "source": "hbderm.com",
@@ -3410,7 +3410,7 @@
       "regular_price": 450,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:10.203Z"
+      "scraped_at": "2026-06-25T01:26:18.534Z"
     },
     {
       "source": "hbderm.com",
@@ -3428,7 +3428,7 @@
       "regular_price": 432,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:10.576Z"
+      "scraped_at": "2026-06-25T01:26:18.923Z"
     },
     {
       "source": "hbderm.com",
@@ -3446,7 +3446,7 @@
       "regular_price": 510,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:10.952Z"
+      "scraped_at": "2026-06-25T01:26:19.313Z"
     },
     {
       "source": "hbderm.com",
@@ -3464,7 +3464,7 @@
       "regular_price": 300,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:11.339Z"
+      "scraped_at": "2026-06-25T01:26:19.706Z"
     },
     {
       "source": "hbderm.com",
@@ -3482,7 +3482,7 @@
       "regular_price": 282,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T22:00:11.712Z"
+      "scraped_at": "2026-06-25T01:26:20.131Z"
     },
     {
       "source": "hbderm.com",
@@ -3501,7 +3501,7 @@
       "regular_price": 420,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:12.126Z"
+      "scraped_at": "2026-06-25T01:26:20.551Z"
     },
     {
       "source": "hbderm.com",
@@ -3520,7 +3520,7 @@
       "regular_price": 270,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:12.498Z"
+      "scraped_at": "2026-06-25T01:26:20.954Z"
     },
     {
       "source": "hbderm.com",
@@ -3538,7 +3538,7 @@
       "regular_price": 1260,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:12.941Z"
+      "scraped_at": "2026-06-25T01:26:21.381Z"
     },
     {
       "source": "hbderm.com",
@@ -3556,7 +3556,7 @@
       "regular_price": 1215,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T22:00:13.348Z"
+      "scraped_at": "2026-06-25T01:26:21.796Z"
     },
     {
       "source": "hbderm.com",
@@ -3574,7 +3574,7 @@
       "regular_price": 1215,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:13.722Z"
+      "scraped_at": "2026-06-25T01:26:22.190Z"
     },
     {
       "source": "hbderm.com",
@@ -3592,7 +3592,7 @@
       "regular_price": 924,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:14.121Z"
+      "scraped_at": "2026-06-25T01:26:22.581Z"
     },
     {
       "source": "hbderm.com",
@@ -3610,7 +3610,7 @@
       "regular_price": 858,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:14.506Z"
+      "scraped_at": "2026-06-25T01:26:22.978Z"
     },
     {
       "source": "hbderm.com",
@@ -3629,7 +3629,7 @@
       "regular_price": 1134,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:14.888Z"
+      "scraped_at": "2026-06-25T01:26:23.371Z"
     },
     {
       "source": "hbderm.com",
@@ -3647,7 +3647,7 @@
       "regular_price": 1053,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:15.275Z"
+      "scraped_at": "2026-06-25T01:26:23.774Z"
     },
     {
       "source": "hbderm.com",
@@ -3666,7 +3666,7 @@
       "regular_price": 663,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T22:00:15.664Z"
+      "scraped_at": "2026-06-25T01:26:24.156Z"
     },
     {
       "source": "hbderm.com",
@@ -3685,7 +3685,7 @@
       "regular_price": 816,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:16.040Z"
+      "scraped_at": "2026-06-25T01:26:24.522Z"
     },
     {
       "source": "hbderm.com",
@@ -3700,11 +3700,11 @@
       "description": "NCEF-REVERSE EYES, un tratamiento para el contorno de ojos de eficacia multicorrectora inspirado en las meso-inyecciones [Arrugas – Firmeza – Luminosidad – Ojeras – Bolsas]. Un tratamiento multicorrector para los ojos concentrado en NCEF de acción rejuvenecedora y antifatiga intensiva. / Una mirada completamente renovada [Regeneración activa] Una fórmula con NCEF, un complejo polirrevitalizante único desarrollado por Laboratorios FILORGA cuyos 50 ingredientes se integran por primera vez en un contorno de ojos con concentraciones similares a las que se utilizan en las meso-inyecciones*. / Corrección sobreactivada [Arrugas – Firmeza – Luminosidad – Ojeras – Bolsas] Una fórmula enriquecida con una combinación de 5 activos [ácido hialurónico + colágeno + vitamina C + escina + cafeína] que actúa en el corazón de la piel gracias a la tecnología GENIUS-VECTOR TECHNOLOGY** y corrige intensamente todos los signos del envejecimiento del contorno de los ojos. Textura cómoda de alta penetración. Tarro – 15 ml.",
       "image_url": "https://hbderm.com/wp-content/uploads/2024/12/NCEF-REVERSE-EYES-1.jpg",
       "sitemap_image_urls": [],
-      "price": 439,
-      "regular_price": 516,
+      "price": 648,
+      "regular_price": 648,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T22:00:16.421Z"
+      "scraped_at": "2026-06-25T01:26:24.894Z"
     },
     {
       "source": "hbderm.com",
@@ -3722,7 +3722,7 @@
       "regular_price": 480,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:16.804Z"
+      "scraped_at": "2026-06-25T01:26:25.267Z"
     },
     {
       "source": "hbderm.com",
@@ -3740,7 +3740,7 @@
       "regular_price": 867,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:17.192Z"
+      "scraped_at": "2026-06-25T01:26:25.636Z"
     },
     {
       "source": "hbderm.com",
@@ -3759,7 +3759,7 @@
       "regular_price": 867,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:17.572Z"
+      "scraped_at": "2026-06-25T01:26:26.028Z"
     },
     {
       "source": "hbderm.com",
@@ -3777,7 +3777,7 @@
       "regular_price": 390,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:17.957Z"
+      "scraped_at": "2026-06-25T01:26:26.397Z"
     },
     {
       "source": "hbderm.com",
@@ -3796,7 +3796,7 @@
       "regular_price": 966,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:18.350Z"
+      "scraped_at": "2026-06-25T01:26:26.794Z"
     },
     {
       "source": "hbderm.com",
@@ -3814,7 +3814,7 @@
       "regular_price": 326,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:18.724Z"
+      "scraped_at": "2026-06-25T01:26:27.180Z"
     },
     {
       "source": "hbderm.com",
@@ -3832,7 +3832,7 @@
       "regular_price": 475,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T22:00:19.137Z"
+      "scraped_at": "2026-06-25T01:26:27.564Z"
     },
     {
       "source": "hbderm.com",
@@ -3850,7 +3850,7 @@
       "regular_price": 335,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T22:00:19.528Z"
+      "scraped_at": "2026-06-25T01:26:27.942Z"
     },
     {
       "source": "hbderm.com",
@@ -3868,7 +3868,7 @@
       "regular_price": 475,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:19.914Z"
+      "scraped_at": "2026-06-25T01:26:28.323Z"
     },
     {
       "source": "hbderm.com",
@@ -3887,7 +3887,7 @@
       "regular_price": 475,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:20.312Z"
+      "scraped_at": "2026-06-25T01:26:28.726Z"
     },
     {
       "source": "hbderm.com",
@@ -3906,7 +3906,7 @@
       "regular_price": 346,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:20.707Z"
+      "scraped_at": "2026-06-25T01:26:29.123Z"
     },
     {
       "source": "hbderm.com",
@@ -3920,11 +3920,11 @@
       "description": "combina una protección dermatológica de amplio espectro y UVA* reforzada con ingredientes antienvejecimiento para suavizar las finas líneas y las arrugas, corregir las manchas oscuras y reafirmar la piel. Sin Perfume. FORMULADO PARA Todas las pieles sensibles y las pieles hipersensibles al sol. Rostro. Eficacia probada bajo control dermatológico sin comprometer las cualidades sensoriales del cuidado de la piel. No comedogénico. ADULTOS Apto para mujeres embarazadas y en período de lactancia. MUY RESISTENTE AL AGUA Resistente al sudor, resistente al roce. COMBINACIÓN DE FILTROS SUN SECURE Se necesitaron años de investigación para crear la combinación de filtros ideal que brinde una protección solar muy alta y un mayor respeto por la piel sensible y el medio ambiente marino. Las fórmulas de SVR no contienen filtros sospechosos de ser disruptores endocrinos o irritantes, ni filtros que sean perjudiciales para los ecosistemas marinos. SIN PERFUME Para fomentar el uso diario.",
       "image_url": "https://hbderm.com/wp-content/uploads/2025/05/SVR-15.jpg",
       "sitemap_image_urls": [],
-      "price": 250,
-      "regular_price": 335,
+      "price": 524,
+      "regular_price": 524,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:21.101Z"
+      "scraped_at": "2026-06-25T01:26:29.499Z"
     },
     {
       "source": "hbderm.com",
@@ -3943,7 +3943,7 @@
       "regular_price": 449,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:21.497Z"
+      "scraped_at": "2026-06-25T01:26:29.875Z"
     },
     {
       "source": "hbderm.com",
@@ -3962,7 +3962,7 @@
       "regular_price": 449,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:21.899Z"
+      "scraped_at": "2026-06-25T01:26:30.250Z"
     },
     {
       "source": "hbderm.com",
@@ -3981,7 +3981,7 @@
       "regular_price": 449,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:22.285Z"
+      "scraped_at": "2026-06-25T01:26:30.644Z"
     },
     {
       "source": "hbderm.com",
@@ -3995,11 +3995,11 @@
       "description": "Para todo tipo de pieles sensibles. Desde el nacimiento (salvo prematuros). Rostro. Nuestra crema SUN SECURE Fluide SPF50+ ofrece una protección solar muy alta en una textura súper fluida y seca al tacto. Su textura ligera, especialmente indicada para pieles normales a mixtas, penetra instantáneamente dejando la piel mate, no grasa y no pegajosa. Su delicado aroma estival invita a aplicarla una y otra vez. Es resistente al agua, a la transpiración y al roce para una protección óptima. ¿Cómo funciona? Estricta carta de formulación adaptada a las pieles hipersensibles al sol: Hipoalergénico. Eficacia probada bajo control dermatológico. Integral Secure Technology(1), protege de todos los tipos de rayos solares: • Anti-UVA y UVB, gracias a una combinación de filtros solares orgánicos fotoestables de alto rendimiento que forman una barrera física en la superficie de la piel. • Luz visible e infrarroja, gracias a un complejo liposomal antioxidante [β-caroteno + Detoxophane®] que forma un escudo celular. • La niacinamida repara el daño celular tras la exposición solar #SVRBOLIVIA #HBDERM #SUNSECUREFLUIDOBOLIVIA",
       "image_url": "https://hbderm.com/wp-content/uploads/2020/06/16497978875781482675608473347092.jpg",
       "sitemap_image_urls": [],
-      "price": 389,
-      "regular_price": 389,
+      "price": 250,
+      "regular_price": 335,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:22.666Z"
+      "scraped_at": "2026-06-25T01:26:31.061Z"
     },
     {
       "source": "hbderm.com",
@@ -4014,10 +4014,10 @@
       "image_url": "https://hbderm.com/wp-content/uploads/2020/06/16497978649786758736853897254917.jpg",
       "sitemap_image_urls": [],
       "price": 250,
-      "regular_price": 335,
+      "regular_price": 365,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:23.040Z"
+      "scraped_at": "2026-06-25T01:26:31.440Z"
     },
     {
       "source": "hbderm.com",
@@ -4035,7 +4035,7 @@
       "regular_price": 918,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T22:00:23.417Z"
+      "scraped_at": "2026-06-25T01:26:31.831Z"
     },
     {
       "source": "hbderm.com",
@@ -4053,7 +4053,7 @@
       "regular_price": 255,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T22:00:23.812Z"
+      "scraped_at": "2026-06-25T01:26:32.222Z"
     },
     {
       "source": "hbderm.com",
@@ -4071,7 +4071,7 @@
       "regular_price": 529,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T22:00:24.201Z"
+      "scraped_at": "2026-06-25T01:26:32.622Z"
     },
     {
       "source": "hbderm.com",
@@ -4089,7 +4089,7 @@
       "regular_price": 529,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:24.587Z"
+      "scraped_at": "2026-06-25T01:26:33.043Z"
     },
     {
       "source": "hbderm.com",
@@ -4107,7 +4107,7 @@
       "regular_price": 316,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:24.992Z"
+      "scraped_at": "2026-06-25T01:26:33.430Z"
     },
     {
       "source": "hbderm.com",
@@ -4126,7 +4126,7 @@
       "regular_price": 918,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T22:00:25.379Z"
+      "scraped_at": "2026-06-25T01:26:33.805Z"
     },
     {
       "source": "hbderm.com",
@@ -4144,7 +4144,7 @@
       "regular_price": 321,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:27.830Z"
+      "scraped_at": "2026-06-25T01:26:34.190Z"
     },
     {
       "source": "hbderm.com",
@@ -4163,7 +4163,7 @@
       "regular_price": 219,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:28.261Z"
+      "scraped_at": "2026-06-25T01:26:34.562Z"
     },
     {
       "source": "hbderm.com",
@@ -4182,7 +4182,7 @@
       "regular_price": 219,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:28.664Z"
+      "scraped_at": "2026-06-25T01:26:35.092Z"
     },
     {
       "source": "hbderm.com",
@@ -4200,7 +4200,7 @@
       "regular_price": 470,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:29.057Z"
+      "scraped_at": "2026-06-25T01:26:35.776Z"
     },
     {
       "source": "hbderm.com",
@@ -4218,7 +4218,7 @@
       "regular_price": 470,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:29.455Z"
+      "scraped_at": "2026-06-25T01:26:36.569Z"
     },
     {
       "source": "hbderm.com",
@@ -4236,7 +4236,7 @@
       "regular_price": 470,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:29.857Z"
+      "scraped_at": "2026-06-25T01:26:37.369Z"
     },
     {
       "source": "hbderm.com",
@@ -4255,7 +4255,7 @@
       "regular_price": 219,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:30.267Z"
+      "scraped_at": "2026-06-25T01:26:38.198Z"
     },
     {
       "source": "hbderm.com",
@@ -4273,7 +4273,7 @@
       "regular_price": 400,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:30.686Z"
+      "scraped_at": "2026-06-25T01:26:39.026Z"
     },
     {
       "source": "hbderm.com",
@@ -4291,7 +4291,7 @@
       "regular_price": 297,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:31.098Z"
+      "scraped_at": "2026-06-25T01:26:39.838Z"
     },
     {
       "source": "hbderm.com",
@@ -4309,7 +4309,7 @@
       "regular_price": 228,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:31.552Z"
+      "scraped_at": "2026-06-25T01:26:40.650Z"
     },
     {
       "source": "hbderm.com",
@@ -4330,7 +4330,7 @@
       "regular_price": 228,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:31.960Z"
+      "scraped_at": "2026-06-25T01:26:41.518Z"
     },
     {
       "source": "hbderm.com",
@@ -4348,7 +4348,7 @@
       "regular_price": 200,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:32.362Z"
+      "scraped_at": "2026-06-25T01:26:42.416Z"
     },
     {
       "source": "hbderm.com",
@@ -4366,7 +4366,7 @@
       "regular_price": 302,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:32.783Z"
+      "scraped_at": "2026-06-25T01:26:43.305Z"
     },
     {
       "source": "hbderm.com",
@@ -4385,7 +4385,7 @@
       "regular_price": 384,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:33.180Z"
+      "scraped_at": "2026-06-25T01:26:43.693Z"
     },
     {
       "source": "hbderm.com",
@@ -4404,7 +4404,7 @@
       "regular_price": 235,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:33.579Z"
+      "scraped_at": "2026-06-25T01:26:44.097Z"
     },
     {
       "source": "hbderm.com",
@@ -4418,11 +4418,11 @@
       "description": "Actúa sobre los factores de la caída crónica del cabello para frenar su caída y estimular su crecimiento* Loción Anti-Caída Ideal para :Caída crónica del cabello. Hormonal, hereditaria. Hombres y mujeres. Textura :Loción ¿Cuándo? :De 5 a 6 pulverizaciones, una vez al día durante 3 meses \"Aumenta la densidad capilar Acelera el crecimiento* Devuelve la resistencia al cabello debilitado y escaso\" Frasco 100ml - Tratamiento de 3 meses",
       "image_url": "https://hbderm.com/wp-content/uploads/2024/09/NOVOPHANE-CHRONIC-1.jpg",
       "sitemap_image_urls": [],
-      "price": 340,
-      "regular_price": 340,
+      "price": 735,
+      "regular_price": 918,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T22:00:33.979Z"
+      "scraped_at": "2026-06-25T01:26:44.478Z"
     },
     {
       "source": "hbderm.com",
@@ -4441,7 +4441,7 @@
       "regular_price": 228,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:34.380Z"
+      "scraped_at": "2026-06-25T01:26:44.872Z"
     },
     {
       "source": "hbderm.com",
@@ -4459,7 +4459,7 @@
       "regular_price": 486,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:34.781Z"
+      "scraped_at": "2026-06-25T01:26:45.254Z"
     },
     {
       "source": "hbderm.com",
@@ -4477,7 +4477,7 @@
       "regular_price": 280,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:35.183Z"
+      "scraped_at": "2026-06-25T01:26:45.633Z"
     },
     {
       "source": "hbderm.com",
@@ -4495,7 +4495,7 @@
       "regular_price": 314,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:35.562Z"
+      "scraped_at": "2026-06-25T01:26:46.023Z"
     },
     {
       "source": "hbderm.com",
@@ -4513,7 +4513,7 @@
       "regular_price": 216,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:35.950Z"
+      "scraped_at": "2026-06-25T01:26:46.398Z"
     },
     {
       "source": "hbderm.com",
@@ -4531,7 +4531,7 @@
       "regular_price": 335,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:36.332Z"
+      "scraped_at": "2026-06-25T01:26:46.767Z"
     },
     {
       "source": "hbderm.com",
@@ -4549,7 +4549,7 @@
       "regular_price": 576,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:36.791Z"
+      "scraped_at": "2026-06-25T01:26:47.148Z"
     },
     {
       "source": "hbderm.com",
@@ -4567,7 +4567,7 @@
       "regular_price": 324,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:37.192Z"
+      "scraped_at": "2026-06-25T01:26:47.540Z"
     },
     {
       "source": "hbderm.com",
@@ -4585,7 +4585,7 @@
       "regular_price": 389,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:37.572Z"
+      "scraped_at": "2026-06-25T01:26:47.936Z"
     },
     {
       "source": "hbderm.com",
@@ -4603,7 +4603,7 @@
       "regular_price": 367,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:37.945Z"
+      "scraped_at": "2026-06-25T01:26:48.318Z"
     },
     {
       "source": "hbderm.com",
@@ -4621,7 +4621,7 @@
       "regular_price": 486,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:38.346Z"
+      "scraped_at": "2026-06-25T01:26:48.714Z"
     },
     {
       "source": "hbderm.com",
@@ -4639,7 +4639,7 @@
       "regular_price": 464,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:38.743Z"
+      "scraped_at": "2026-06-25T01:26:49.147Z"
     },
     {
       "source": "hbderm.com",
@@ -4658,7 +4658,7 @@
       "regular_price": 464,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:39.158Z"
+      "scraped_at": "2026-06-25T01:26:49.570Z"
     },
     {
       "source": "hbderm.com",
@@ -4677,7 +4677,7 @@
       "regular_price": 410,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:39.537Z"
+      "scraped_at": "2026-06-25T01:26:49.981Z"
     },
     {
       "source": "hbderm.com",
@@ -4696,7 +4696,7 @@
       "regular_price": 518,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:39.925Z"
+      "scraped_at": "2026-06-25T01:26:50.454Z"
     },
     {
       "source": "hbderm.com",
@@ -4714,7 +4714,7 @@
       "regular_price": 280,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:40.323Z"
+      "scraped_at": "2026-06-25T01:26:51.170Z"
     },
     {
       "source": "hbderm.com",
@@ -4733,7 +4733,7 @@
       "regular_price": 277,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:40.711Z"
+      "scraped_at": "2026-06-25T01:26:51.986Z"
     },
     {
       "source": "hbderm.com",
@@ -4751,7 +4751,7 @@
       "regular_price": 365,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:41.119Z"
+      "scraped_at": "2026-06-25T01:26:52.445Z"
     },
     {
       "source": "hbderm.com",
@@ -4769,7 +4769,7 @@
       "regular_price": 353,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:41.495Z"
+      "scraped_at": "2026-06-25T01:26:52.944Z"
     },
     {
       "source": "hbderm.com",
@@ -4787,7 +4787,7 @@
       "regular_price": 496,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:41.873Z"
+      "scraped_at": "2026-06-25T01:26:53.380Z"
     },
     {
       "source": "hbderm.com",
@@ -4806,7 +4806,7 @@
       "regular_price": 288,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:42.261Z"
+      "scraped_at": "2026-06-25T01:26:53.776Z"
     },
     {
       "source": "hbderm.com",
@@ -4824,7 +4824,7 @@
       "regular_price": 432,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:42.667Z"
+      "scraped_at": "2026-06-25T01:26:54.175Z"
     },
     {
       "source": "hbderm.com",
@@ -4842,7 +4842,7 @@
       "regular_price": 294,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:43.050Z"
+      "scraped_at": "2026-06-25T01:26:54.553Z"
     },
     {
       "source": "hbderm.com",
@@ -4860,7 +4860,7 @@
       "regular_price": 298,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:44.665Z"
+      "scraped_at": "2026-06-25T01:26:56.096Z"
     },
     {
       "source": "hbderm.com",
@@ -4874,11 +4874,11 @@
       "description": "Solución capilar de fácil absorción formulada a base de un innovador complejo bioactivo que ayuda a frenar la miniaturización del FP y la caída del cabello, favorece el crecimiento capilar e hidrata y fortalece el cuero cabelludo. Los extractos de caléndula y manzanilla proporcionan un efecto calmante y reconfortante para la piel del cuero cabelludo. El Ginseng activa la microcirculación y junto al Trébol rojo son inhibidores de la 5α-reductasa. El Acetyl-tetrapeptide-3 es un activador de las señales de estimuladoras del folículo piloso de manera que contribuye a prolongar la fase anágena del cabello. La combinación de todos ellos aporta un alto poder antioxidante. CONTIENE 100 ML",
       "image_url": "https://hbderm.com/wp-content/uploads/2024/10/LOCION-ANTICAIDA.jpg",
       "sitemap_image_urls": [],
-      "price": 298,
-      "regular_price": 298,
+      "price": 735,
+      "regular_price": 918,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:45.285Z"
+      "scraped_at": "2026-06-25T01:26:56.837Z"
     },
     {
       "source": "hbderm.com",
@@ -4896,7 +4896,7 @@
       "regular_price": 470,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:45.650Z"
+      "scraped_at": "2026-06-25T01:26:57.246Z"
     },
     {
       "source": "hbderm.com",
@@ -4914,7 +4914,7 @@
       "regular_price": 168,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:46.035Z"
+      "scraped_at": "2026-06-25T01:26:57.641Z"
     },
     {
       "source": "hbderm.com",
@@ -4932,7 +4932,7 @@
       "regular_price": 918,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:46.427Z"
+      "scraped_at": "2026-06-25T01:26:58.021Z"
     },
     {
       "source": "hbderm.com",
@@ -4950,7 +4950,7 @@
       "regular_price": 918,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:46.810Z"
+      "scraped_at": "2026-06-25T01:26:58.465Z"
     },
     {
       "source": "hbderm.com",
@@ -4968,7 +4968,7 @@
       "regular_price": 403,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:47.220Z"
+      "scraped_at": "2026-06-25T01:26:58.858Z"
     },
     {
       "source": "hbderm.com",
@@ -4987,7 +4987,7 @@
       "regular_price": 430,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:47.619Z"
+      "scraped_at": "2026-06-25T01:26:59.252Z"
     },
     {
       "source": "hbderm.com",
@@ -5005,7 +5005,7 @@
       "regular_price": 300,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T22:00:48.002Z"
+      "scraped_at": "2026-06-25T01:26:59.672Z"
     },
     {
       "source": "hbderm.com",
@@ -5024,7 +5024,7 @@
       "regular_price": 300,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:48.385Z"
+      "scraped_at": "2026-06-25T01:27:00.086Z"
     },
     {
       "source": "hbderm.com",
@@ -5043,7 +5043,7 @@
       "regular_price": 400,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:48.781Z"
+      "scraped_at": "2026-06-25T01:27:00.484Z"
     },
     {
       "source": "hbderm.com",
@@ -5057,11 +5057,11 @@
       "description": "Protege la piel del niño con Gel Cream Pediatrics SPF 50, el fotoprotector con efecto calmante que hidrata como una crema y refresca como un gel. Con Wet Skin, facilita la aplicación en piel húmeda sin dejar residuo blanco. 250 ml Todo tipo de piel, incluso piel sensible y piel atópica. Apto para niños y bebés a partir de 6 meses de edad. SPF 50 Muy resistente al agua y resistente a la fricción, testado pediátrica y dermatológicamente. Protección solar.",
       "image_url": "https://hbderm.com/wp-content/uploads/2024/09/PEDIATRICS-GEL-CREMA.jpg",
       "sitemap_image_urls": [],
-      "price": 534,
-      "regular_price": 534,
+      "price": 250,
+      "regular_price": 335,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:49.188Z"
+      "scraped_at": "2026-06-25T01:27:01.241Z"
     },
     {
       "source": "hbderm.com",
@@ -5080,7 +5080,7 @@
       "regular_price": 534,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:49.578Z"
+      "scraped_at": "2026-06-25T01:27:02.077Z"
     },
     {
       "source": "hbderm.com",
@@ -5098,7 +5098,7 @@
       "regular_price": 490,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:49.953Z"
+      "scraped_at": "2026-06-25T01:27:02.520Z"
     },
     {
       "source": "hbderm.com",
@@ -5116,7 +5116,7 @@
       "regular_price": 405,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:50.327Z"
+      "scraped_at": "2026-06-25T01:27:02.980Z"
     },
     {
       "source": "hbderm.com",
@@ -5135,7 +5135,7 @@
       "regular_price": 912,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:50.713Z"
+      "scraped_at": "2026-06-25T01:27:03.379Z"
     },
     {
       "source": "hbderm.com",
@@ -5153,7 +5153,7 @@
       "regular_price": 464,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:51.105Z"
+      "scraped_at": "2026-06-25T01:27:03.782Z"
     },
     {
       "source": "hbderm.com",
@@ -5171,7 +5171,7 @@
       "regular_price": 464,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T22:00:51.492Z"
+      "scraped_at": "2026-06-25T01:27:04.182Z"
     },
     {
       "source": "hbderm.com",
@@ -5189,7 +5189,7 @@
       "regular_price": 473,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:51.878Z"
+      "scraped_at": "2026-06-25T01:27:04.564Z"
     },
     {
       "source": "hbderm.com",
@@ -5211,7 +5211,7 @@
       "regular_price": 238,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:52.272Z"
+      "scraped_at": "2026-06-25T01:27:04.962Z"
     },
     {
       "source": "hbderm.com",
@@ -5229,7 +5229,7 @@
       "regular_price": 300,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:52.656Z"
+      "scraped_at": "2026-06-25T01:27:05.359Z"
     },
     {
       "source": "hbderm.com",
@@ -5247,7 +5247,7 @@
       "regular_price": 1200,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T22:00:53.044Z"
+      "scraped_at": "2026-06-25T01:27:05.755Z"
     },
     {
       "source": "hbderm.com",
@@ -5266,7 +5266,7 @@
       "regular_price": 192,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T22:00:53.421Z"
+      "scraped_at": "2026-06-25T01:27:06.158Z"
     },
     {
       "source": "hbderm.com",
@@ -5285,7 +5285,7 @@
       "regular_price": 552,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:53.861Z"
+      "scraped_at": "2026-06-25T01:27:06.538Z"
     },
     {
       "source": "hbderm.com",
@@ -5304,7 +5304,7 @@
       "regular_price": 900,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T22:00:54.313Z"
+      "scraped_at": "2026-06-25T01:27:06.925Z"
     },
     {
       "source": "hbderm.com",
@@ -5322,7 +5322,7 @@
       "regular_price": 372,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T22:00:54.687Z"
+      "scraped_at": "2026-06-25T01:27:07.321Z"
     },
     {
       "source": "hbderm.com",
@@ -5340,7 +5340,7 @@
       "regular_price": 336,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T22:00:55.068Z"
+      "scraped_at": "2026-06-25T01:27:07.706Z"
     },
     {
       "source": "hbderm.com",
@@ -5358,7 +5358,7 @@
       "regular_price": 432,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:55.459Z"
+      "scraped_at": "2026-06-25T01:27:08.127Z"
     },
     {
       "source": "hbderm.com",
@@ -5377,7 +5377,7 @@
       "regular_price": 612,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T22:00:55.835Z"
+      "scraped_at": "2026-06-25T01:27:08.554Z"
     },
     {
       "source": "hbderm.com",
@@ -5396,7 +5396,7 @@
       "regular_price": 348,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:56.210Z"
+      "scraped_at": "2026-06-25T01:27:08.946Z"
     },
     {
       "source": "hbderm.com",
@@ -5414,7 +5414,7 @@
       "regular_price": 360,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:56.582Z"
+      "scraped_at": "2026-06-25T01:27:09.327Z"
     },
     {
       "source": "hbderm.com",
@@ -5432,7 +5432,7 @@
       "regular_price": 360,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:56.954Z"
+      "scraped_at": "2026-06-25T01:27:09.718Z"
     },
     {
       "source": "hbderm.com",
@@ -5450,7 +5450,7 @@
       "regular_price": 504,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T22:00:57.340Z"
+      "scraped_at": "2026-06-25T01:27:10.149Z"
     },
     {
       "source": "hbderm.com",
@@ -5468,7 +5468,7 @@
       "regular_price": 504,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T22:00:57.730Z"
+      "scraped_at": "2026-06-25T01:27:10.532Z"
     },
     {
       "source": "hbderm.com",
@@ -5487,7 +5487,7 @@
       "regular_price": 480,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T22:00:58.142Z"
+      "scraped_at": "2026-06-25T01:27:10.917Z"
     },
     {
       "source": "hbderm.com",
@@ -5506,7 +5506,7 @@
       "regular_price": 420,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:58.522Z"
+      "scraped_at": "2026-06-25T01:27:11.314Z"
     },
     {
       "source": "hbderm.com",
@@ -5525,7 +5525,7 @@
       "regular_price": 516,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T22:00:58.903Z"
+      "scraped_at": "2026-06-25T01:27:11.704Z"
     },
     {
       "source": "hbderm.com",
@@ -5539,11 +5539,11 @@
       "description": "Protege las zonas más sensibles y expuestas de tu piel con Invisible Stick SPF 50, el protector solar invisible en stick que se aplica cómodamente. Es resistente al agua y al sudor y no deja brillos ni sensación de piel pegajosa. 10 g SPF 50 No comedogénico, testado dermatológicamente, hipoalergénico: formulado para minimizar el riesgo de alergia. Protección solar Phaeodactylum tricornutum Extract, Brassica campestris Sterols, vitamina E, manteca de karité, pantenol.",
       "image_url": "https://hbderm.com/wp-content/uploads/2025/07/INVISIBLE-STICK.jpg",
       "sitemap_image_urls": [],
-      "price": 384,
-      "regular_price": 384,
+      "price": 250,
+      "regular_price": 335,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:00:59.283Z"
+      "scraped_at": "2026-06-25T01:27:12.104Z"
     },
     {
       "source": "hbderm.com",
@@ -5561,7 +5561,7 @@
       "regular_price": 276,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T22:00:59.662Z"
+      "scraped_at": "2026-06-25T01:27:12.470Z"
     },
     {
       "source": "hbderm.com",
@@ -5579,7 +5579,7 @@
       "regular_price": 504,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T22:01:00.049Z"
+      "scraped_at": "2026-06-25T01:27:12.848Z"
     },
     {
       "source": "hbderm.com",
@@ -5598,7 +5598,7 @@
       "regular_price": 294,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:01:00.441Z"
+      "scraped_at": "2026-06-25T01:27:13.237Z"
     },
     {
       "source": "hbderm.com",
@@ -5617,7 +5617,7 @@
       "regular_price": 300,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:01:00.832Z"
+      "scraped_at": "2026-06-25T01:27:13.620Z"
     },
     {
       "source": "hbderm.com",
@@ -5636,7 +5636,7 @@
       "regular_price": 156,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:01:01.718Z"
+      "scraped_at": "2026-06-25T01:27:14.002Z"
     },
     {
       "source": "hbderm.com",
@@ -5655,7 +5655,7 @@
       "regular_price": 156,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:01:02.332Z"
+      "scraped_at": "2026-06-25T01:27:14.382Z"
     },
     {
       "source": "hbderm.com",
@@ -5674,7 +5674,7 @@
       "regular_price": 384,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:01:02.752Z"
+      "scraped_at": "2026-06-25T01:27:14.768Z"
     },
     {
       "source": "hbderm.com",
@@ -5693,7 +5693,7 @@
       "regular_price": 300,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:01:03.169Z"
+      "scraped_at": "2026-06-25T01:27:15.170Z"
     },
     {
       "source": "hbderm.com",
@@ -5712,7 +5712,7 @@
       "regular_price": 300,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:01:03.562Z"
+      "scraped_at": "2026-06-25T01:27:15.558Z"
     },
     {
       "source": "hbderm.com",
@@ -5726,29 +5726,11 @@
       "description": "AGF Mesenchymal Dermal, un producto de vanguardia para el cuidado de la piel, se distingue por su excepcional capacidad para mejorar la regeneración de la piel. Favorece el metabolismo celular, desencadenando la activación de la producción natural de colágeno y elastina. Bioestimulación y Regeneración Celular La presencia de factores de crecimiento y exosomas estimulan la actividad celular, promoviendo la regeneración de la piel y mejorando su salud general. Aumenta la Producción de Colágeno y Elastina de Forma Natural El producto trabaja para aumentar la producción de colágeno y elastina de manera natural, contribuyendo así a mejorar la firmeza y elasticidad de la piel. Mejora Notablemente las Secuelas de Acné Su capacidad para regenerar la piel y estimular la producción de colágeno puede ayudar significativamente a reducir las secuelas y cicatrices dejadas por el acné. Antiarrugas La acción combinada de los factores de crecimiento y exosomas ayuda a reducir la apariencia de las arrugas, disminuyendo tanto su longitud como su profundidad.",
       "image_url": "https://hbderm.com/wp-content/uploads/2025/05/DERMAL.jpg",
       "sitemap_image_urls": [],
-      "price": 864,
-      "regular_price": 864,
+      "price": 663,
+      "regular_price": 663,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:01:03.973Z"
-    },
-    {
-      "source": "hbderm.com",
-      "source_url": "https://hbderm.com/hbderm-catalogo/mesoterapia/biomask/",
-      "title": "BIOMASK",
-      "brand": "AGF mesenchymal",
-      "categories": [
-        "Mesoterapia"
-      ],
-      "slug": "biomask",
-      "description": "AGF Mesenchymal BIOMASK es una mascarilla de hidrogel biotecnológico coadyuvante en la regeneración dérmica durante tratamientos dermoabrasivos. Genera un efecto antiinflamatorio y angiogénico, favoreciendo una rápida reepitelización de los tejidos lesionados y manteniendo la homeostasis e hidratación de la zona dañada. REGENERACIÓN DÉRMICA La mascarilla está diseñada para coadyuvar en la regeneración dérmica, lo que significa que ayuda en el proceso de curación y renovación de los tejidos de la piel dañada. FORMULACIÓN INNOVADORA Contiene exosomas y factores de crecimiento derivados de cultivos de células madre mesenquimales. Estos componentes son conocidos por sus propiedades regenerativas y pueden favorecer la reparación celular. EFECTO ANTI-INFLAMATORIO Y ANGIOGÉNICO La combinación de exosomas y factores de crecimiento contribuye a un efecto anti-inflamatorio y angiogénico. Esto puede ayudar a reducir la inflamación y promover la formación de nuevos vasos sanguíneos, facilitando así la recuperación de los tejidos lesionados. RÁPIDA RE-EPITELIZACIÓN Facilita una rápida re-epitelización de los tejidos lesionados, lo que implica una cicatrización más rápida y una mejora en la integridad de la piel.",
-      "image_url": "https://hbderm.com/wp-content/uploads/2025/05/BIOMASK.jpg",
-      "sitemap_image_urls": [],
-      "price": 0.1053,
-      "regular_price": 0.1053,
-      "currency": "BOB",
-      "availability": "instock",
-      "scraped_at": "2026-06-23T22:01:04.378Z"
+      "scraped_at": "2026-06-25T01:27:15.935Z"
     },
     {
       "source": "hbderm.com",
@@ -5766,7 +5748,7 @@
       "regular_price": 250,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:01:04.781Z"
+      "scraped_at": "2026-06-25T01:27:16.721Z"
     },
     {
       "source": "hbderm.com",
@@ -5780,11 +5762,11 @@
       "description": "AGF Mesenchymal Capillary es un producto diseñado para contrarrestar la caída del cabello y estimular el crecimiento de nuevo cabello. Como tratamiento capilar avanzado, ha demostrado ser efectivo en contrarrestar la caída del cabello y estimular el crecimiento de nuevas hebras. Reducción de la Caída del Cabello Los factores de crecimiento y los exosomas trabajan en conjunto para fortalecer los folículos pilosos y reducir la pérdida de cabello. Recuperación del Cuerpo del Cabello Estimula el crecimiento de nuevo cabello, proporcionando volumen y densidad al cabello existente. Nutrición del Folículo Los ingredientes nutren el folículo piloso, mejorando la salud y la vitalidad del cabello desde la raíz. Cabello más Resistente y Menos Quebradizo La combinación de ingredientes fortalece la estructura capilar, haciendo que el cabello sea más resistente y menos propenso a la rotura.",
       "image_url": "https://hbderm.com/wp-content/uploads/2025/05/CAPILLARY.jpg",
       "sitemap_image_urls": [],
-      "price": 0.1134,
-      "regular_price": 0.1134,
+      "price": 0.1053,
+      "regular_price": 0.1053,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:01:05.184Z"
+      "scraped_at": "2026-06-25T01:27:17.127Z"
     },
     {
       "source": "hbderm.com",
@@ -5803,7 +5785,7 @@
       "regular_price": 300,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T22:01:05.571Z"
+      "scraped_at": "2026-06-25T01:27:17.527Z"
     },
     {
       "source": "hbderm.com",
@@ -5821,7 +5803,7 @@
       "regular_price": 660,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:01:05.951Z"
+      "scraped_at": "2026-06-25T01:27:17.921Z"
     },
     {
       "source": "hbderm.com",
@@ -5840,7 +5822,7 @@
       "regular_price": 396,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:01:06.335Z"
+      "scraped_at": "2026-06-25T01:27:18.306Z"
     },
     {
       "source": "hbderm.com",
@@ -5858,7 +5840,7 @@
       "regular_price": 552,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:01:06.720Z"
+      "scraped_at": "2026-06-25T01:27:18.692Z"
     },
     {
       "source": "hbderm.com",
@@ -5877,7 +5859,7 @@
       "regular_price": 432,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:01:07.116Z"
+      "scraped_at": "2026-06-25T01:27:19.079Z"
     },
     {
       "source": "hbderm.com",
@@ -5896,7 +5878,7 @@
       "regular_price": 432,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:01:07.518Z"
+      "scraped_at": "2026-06-25T01:27:19.453Z"
     },
     {
       "source": "hbderm.com",
@@ -5914,7 +5896,7 @@
       "regular_price": 403,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T22:01:07.906Z"
+      "scraped_at": "2026-06-25T01:27:19.835Z"
     },
     {
       "source": "hbderm.com",
@@ -5932,7 +5914,7 @@
       "regular_price": 260,
       "currency": "BOB",
       "availability": "Agotado",
-      "scraped_at": "2026-06-23T22:01:08.299Z"
+      "scraped_at": "2026-06-25T01:27:20.208Z"
     },
     {
       "source": "hbderm.com",
@@ -5946,11 +5928,11 @@
       "description": "Para ser utilizado después de la aplicación de un tratamiento cosmético. Producto de un solo uso. Hecho de agujas de acero inoxidable fino y de alta calidad, es una herramienta indispensable para potenciar la efectividad de los tratamientos cosméticos. Combina la comprobada eficacia de las micro-agujas con la experiencia de Softfil para un cuidado de belleza optimizado. El diseño ergonómico ha sido estudiado para garantizar la comodidad y seguridad de uso. Sus micro-agujas crean pequeños canales en las capas superiores de la epidermis. Utilizado en combinación con un tratamiento cosmético, el SoftFil Skin Roller abre los microporos de la piel para asegurar una mejor penetración de los ingredientes activos (cremas, sueros) y maximizar sus efectos en la piel. Esta tecnología facilita la exfoliación de la piel, ideal para mejorar la apariencia de los poros dilatados y ayudar a eliminar impurezas. El SoftFil® Skin Roller Face está compuesto por 540 micro-agujas de 0.50 mm de longitud. Ideal para todo el rostro, evitando áreas sensibles de la piel, este rodillo dérmico combinado con un tratamiento cosmético deja la piel visiblemente más firme, suave y radiante.",
       "image_url": "https://hbderm.com/wp-content/uploads/2023/10/Diseño-sin-título-13.png",
       "sitemap_image_urls": [],
-      "price": 200,
-      "regular_price": 200,
+      "price": 336,
+      "regular_price": 336,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:01:08.683Z"
+      "scraped_at": "2026-06-25T01:27:20.611Z"
     },
     {
       "source": "hbderm.com",
@@ -5964,11 +5946,11 @@
       "description": "Para ser utilizado después de la aplicación de un tratamiento cosmético. Producto de un solo uso. Hecho de agujas de acero inoxidable fino y de alta calidad, es una herramienta indispensable para potenciar la efectividad de los tratamientos cosméticos. Combina la comprobada eficacia de las micro-agujas con la experiencia de Softfil para un cuidado de belleza optimizado. El diseño ergonómico ha sido estudiado para garantizar la comodidad y seguridad de uso. Sus micro-agujas crean pequeños canales en las capas superiores de la epidermis. Utilizado en combinación con un tratamiento cosmético, el SoftFil Skin Roller abre los microporos de la piel para asegurar una mejor penetración de los ingredientes activos (cremas, sueros) y maximizar sus efectos en la piel. Esta tecnología facilita la exfoliación de la piel, ideal para mejorar la apariencia de los poros dilatados y ayudar a eliminar impurezas.",
       "image_url": "https://hbderm.com/wp-content/uploads/2023/10/Diseño-sin-título-12.png",
       "sitemap_image_urls": [],
-      "price": 336,
-      "regular_price": 336,
+      "price": 912,
+      "regular_price": 912,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:01:09.055Z"
+      "scraped_at": "2026-06-25T01:27:20.996Z"
     },
     {
       "source": "hbderm.com",
@@ -5986,7 +5968,7 @@
       "regular_price": 864,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:01:09.427Z"
+      "scraped_at": "2026-06-25T01:27:21.370Z"
     },
     {
       "source": "hbderm.com",
@@ -6000,29 +5982,29 @@
       "description": "Elaborado por laboratorios FILLMED by Filorga, es el sérum de efecto retinol con el que podrás reducir y rellenar todo los tipos de arrugas y rejuvenecer tu rostro dándole un aspecto radiante, joven y luminoso. Re-Time Serum es ampliamente conocido como uno de los antiarrugas por excelencia en las clínicas dermatológicas que actúa, reduce y rellena todos los tipos de arrugas, con un efecto potentísimo regenerador e hidratante. Principios Activos: 0.1% de vitamina A o retinol – 0.5% de ácido hialurónico – Péptidos Arg – Lis – Efecto tipo “botox” Wakame 14G NOTA: Este producto no está disponible para la venta al público, el fin de su descripción es informativa. Si desea obtener el producto, llámanos o envíanos un mensaje a nuestro WhatsApp: +591 62209701 COMPARTE: [addtoany]",
       "image_url": "https://hbderm.com/wp-content/uploads/2023/01/SKIN-PERFUSION-RE-TIME-SERUM-30ML.jpeg",
       "sitemap_image_urls": [],
-      "price": 446,
-      "regular_price": 446,
-      "currency": "BOB",
-      "availability": "instock",
-      "scraped_at": "2026-06-23T22:01:09.817Z"
-    },
-    {
-      "source": "hbderm.com",
-      "source_url": "https://hbderm.com/hbderm-catalogo/mesoterapia/skin-perfusion-gr-youth-mask-500ml/",
-      "title": "SKIN PERFUSION - GR YOUTH MASK - 500ML",
-      "brand": "FILLMED",
-      "categories": [
-        "Mesoterapia"
-      ],
-      "slug": "skin-perfusion-gr-youth-mask-500ml",
-      "description": "GR-Youth Mask – Suaviza – Rellena – Hidrata Esta mascarilla rellenadora es ideal para pieles cansadas y deshidratadas, con falta de luminosidad. Repone la barrera de humedad de la piel y la rellena visiblemente. Enriquecida con manteca de karité y aceite de babasú, esta mascarilla súper cremosa suaviza la apariencia de la superficie de la piel y mejora su luminosidad. Ingredientes clave: polisacáridos Gal-Rha de manteca de karité y aceite de babasú NOTA: Este producto no está disponible para la venta al público, el fin de su descripción es informativa. Si desea obtener el producto, llámanos o envíanos un mensaje a nuestro WhatsApp: +591 62209701 COMPARTE: [addtoany]",
-      "image_url": "https://hbderm.com/wp-content/uploads/2023/01/SKIN-PERFUSION-GR-YOUTH-MASK-500ML.jpg",
-      "sitemap_image_urls": [],
       "price": 0.1134,
       "regular_price": 0.1134,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:01:10.609Z"
+      "scraped_at": "2026-06-25T01:27:21.746Z"
+    },
+    {
+      "source": "hbderm.com",
+      "source_url": "https://hbderm.com/hbderm-catalogo/mesoterapia/skin-perfusion-hyaluronic-youth-mask-4x8ml/",
+      "title": "SKIN PERFUSION - HYALURONIC YOUTH MASK - 4x8ML",
+      "brand": "FILLMED",
+      "categories": [
+        "Mesoterapia"
+      ],
+      "slug": "skin-perfusion-hyaluronic-youth-mask-4x8ml",
+      "description": "FILLMED Hyaluronic Youth Mask está indicado para pieles maduras y deshidratadas. La mascarilla hidrata y rejuvenece la piel. FILLMED Hyaluronic Youth Mask alivia la irritación, nutre y reduce visiblemente las arrugas y tensa la piel. La mascarilla contiene ácido hialurónico, colágeno y aloe vera. El ácido hialurónico es un potente hidratante que rellena las arrugas desde dentro hacia fuera, haciendo desaparecer las líneas de expresión. El colágeno mantiene la piel firme y reduce las arrugas. El aloe vera nutre y calma la piel. NOTA: Este producto no está disponible para la venta al público, el fin de su descripción es informativa. Si desea obtener el producto, llámanos o envíanos un mensaje a nuestro WhatsApp: +591 62209701 COMPARTE: [addtoany]",
+      "image_url": "https://hbderm.com/wp-content/uploads/2023/01/SKIN-PERFUSION-HYALURONIC-YOUTH-MASK-4X8ML-1.jpeg",
+      "sitemap_image_urls": [],
+      "price": 0.1173,
+      "regular_price": 0.1173,
+      "currency": "BOB",
+      "availability": "instock",
+      "scraped_at": "2026-06-25T01:27:22.148Z"
     },
     {
       "source": "hbderm.com",
@@ -6036,11 +6018,29 @@
       "description": "GR-Youth Mask – Suaviza – Rellena – Hidrata Esta mascarilla rellenadora es ideal para pieles cansadas y deshidratadas, con falta de luminosidad. Repone la barrera de humedad de la piel y la rellena visiblemente. Enriquecida con manteca de karité y aceite de babasú, esta mascarilla súper cremosa suaviza la apariencia de la superficie de la piel y mejora su luminosidad. Ingredientes clave: polisacáridos Gal-Rha de manteca de karité y aceite de babasú NOTA: Este producto no está disponible para la venta al público, el fin de su descripción es informativa. Si desea obtener el producto, llámanos o envíanos un mensaje a nuestro WhatsApp: +591 62209701 COMPARTE: [addtoany]",
       "image_url": "https://hbderm.com/wp-content/uploads/2023/01/SKIN-PERFUSION-GR-YOUTH-MASK-50ML.png",
       "sitemap_image_urls": [],
-      "price": 534,
-      "regular_price": 534,
+      "price": 200,
+      "regular_price": 200,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:01:10.994Z"
+      "scraped_at": "2026-06-25T01:27:22.962Z"
+    },
+    {
+      "source": "hbderm.com",
+      "source_url": "https://hbderm.com/hbderm-catalogo/mesoterapia/skin-perfusion-glycopeel-mask-500ml/",
+      "title": "SKIN PERFUSION GLYCOPEEL MASK - 500ML",
+      "brand": "FILLMED",
+      "categories": [
+        "Mesoterapia"
+      ],
+      "slug": "skin-perfusion-glycopeel-mask-500ml",
+      "description": "Diseñada para combatir la tez apagada, las líneas finas y las imperfecciones, esta revolucionaria mascarilla rejuvenecedora restaura el tono y la luminosidad para revelar una piel de aspecto más joven. Combina ácido glicólico altamente concentrado (15 %), que ofrece una potente exfoliación, con ácido fítico (2 %) para una tez impecablemente uniforme. Un complejo calmante suave también asegura comodidad para pieles sensibles. Mascarilla exfoliante resurfacing 15% Ácido glicólico + 2% Ácido fítico Tez apagada – líneas finas – imperfecciones. Resplandor instantáneo, tez renovada. NOTA: Este producto no está disponible para la venta al público, el fin de su descripción es informativa. Si desea obtener el producto, llámanos o envíanos un mensaje a nuestro WhatsApp: +591 62209701 COMPARTE: [addtoany]",
+      "image_url": "https://hbderm.com/wp-content/uploads/2023/01/SKIN-PERFUSION-GLYCOPEEL-MASK-500ML.jpg",
+      "sitemap_image_urls": [],
+      "price": 0.1134,
+      "regular_price": 0.1134,
+      "currency": "BOB",
+      "availability": "instock",
+      "scraped_at": "2026-06-25T01:27:23.351Z"
     },
     {
       "source": "hbderm.com",
@@ -6055,11 +6055,11 @@
       "description": "Diseñada para combatir la tez apagada, las líneas finas y las imperfecciones, esta revolucionaria mascarilla rejuvenecedora restaura el tono y la luminosidad para revelar una piel de aspecto más joven. Combina ácido glicólico altamente concentrado (15 %), que ofrece una potente exfoliación, con ácido fítico (2 %) para una tez impecablemente uniforme. Un complejo calmante suave también asegura comodidad para pieles sensibles. Mascarilla exfoliante resurfacing 15% Ácido glicólico + 2% Ácido fítico Tez apagada – líneas finas – imperfecciones. Resplandor instantáneo, tez renovada. NOTA: Este producto no está disponible para la venta al público, el fin de su descripción es informativa. Si desea obtener el producto, llámanos o envíanos un mensaje a nuestro WhatsApp: +591 62209701 COMPARTE: [addtoany]",
       "image_url": "https://hbderm.com/wp-content/uploads/2023/01/SKIN-PERFUSION-GLYCOPEEL-MASK-50ML-945x1024.png",
       "sitemap_image_urls": [],
-      "price": 330,
-      "regular_price": 330,
+      "price": 420,
+      "regular_price": 420,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:01:11.765Z"
+      "scraped_at": "2026-06-25T01:27:23.750Z"
     },
     {
       "source": "hbderm.com",
@@ -6074,11 +6074,65 @@
       "description": "La crema exfoliante FILLMED es la crema exfoliante perfecta. La crema exfoliante FILLMED estimula la renovación de la piel y mejora su estructura. Para un cuidado óptimo de la piel, aplicar la Crema Exfoliante FILLMED en el rostro una o dos veces por semana, sobre la piel húmeda, y luego aclarar. Ingredientes principales: Microesferas minerales: conocidas por eliminar las células muertas sin agresión. Complejo tensioactivo suave: para una limpieza intensiva que respeta la piel NOTA: Este producto no está disponible para la venta al público, el fin de su descripción es informativa. Si desea obtener el producto, llámanos o envíanos un mensaje a nuestro WhatsApp: +591 62209701 COMPARTE: [addtoany]",
       "image_url": "https://hbderm.com/wp-content/uploads/2023/01/Crema-Exfoliante-Skin-Perfusion-250ml.jpg",
       "sitemap_image_urls": [],
-      "price": 446,
-      "regular_price": 446,
+      "price": 0.1053,
+      "regular_price": 0.1053,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:01:12.219Z"
+      "scraped_at": "2026-06-25T01:27:24.192Z"
+    },
+    {
+      "source": "hbderm.com",
+      "source_url": "https://hbderm.com/hbderm-catalogo/rellenos-dermales/bionutrilift-cannulas/",
+      "title": "BIONUTRILIFT CANNULAS",
+      "brand": "FILLMED",
+      "categories": [
+        "Rellenos Dermales"
+      ],
+      "slug": "bionutrilift-cannulas",
+      "description": "Cánula SoftFil en asociación con FILLMED, específica para técnicas Bio Nutri Lift 1 Microcánula 25g – 55mm Longitud ideal para tratar toda la mejilla con técnica de abanico 1 Pre - Hole Needle Preorificio de mayor tamaño para facilitar la introducción de la cánula de 25g NOTA: Este producto no está disponible para la venta al público, el fin de su descripción es informativa. Si desea obtener el producto, llámanos o envíanos un mensaje a nuestro WhatsApp: +591 62209701 COMPARTE: [addtoany]",
+      "image_url": "https://hbderm.com/wp-content/uploads/2023/01/BIONUTRILIFT-CANNULAS.png",
+      "sitemap_image_urls": [],
+      "price": 864,
+      "regular_price": 864,
+      "currency": "BOB",
+      "availability": "instock",
+      "scraped_at": "2026-06-25T01:27:24.613Z"
+    },
+    {
+      "source": "hbderm.com",
+      "source_url": "https://hbderm.com/hbderm-catalogo/mesoterapia/skin-perfusion-eye-recover-mask/",
+      "title": "SKIN PERFUSION EYE RECOVER MASK 4x5g",
+      "brand": "FILLMED",
+      "categories": [
+        "Mesoterapia"
+      ],
+      "slug": "skin-perfusion-eye-recover-mask",
+      "description": "Eye-Recover Mask – Parche ocular de rejuvenecimiento global La MASCARILLA EYE RECOVER MASK combate todos los signos del envejecimiento. Gracias a su innovador y exclusivo diseño de parche desarrollado específicamente para cubrir toda la zona del contorno, incluso el párpado superior. Retire del embalaje de aluminio. Aplicar en el contorno del ojo y párpado. Dejar durante al menos 20 minutos. Indicaciones: ojeras, bolsas, arrugas, párpados caídos. NOTA: Este producto no está disponible para la venta al público, el fin de su descripción es informativa. Si desea obtener el producto, llámanos o envíanos un mensaje a nuestro WhatsApp: +591 62209701 COMPARTE: [addtoany]",
+      "image_url": "https://hbderm.com/wp-content/uploads/2022/03/EYE-RECOVER-MASK-SKIN-PERFUSION.png",
+      "sitemap_image_urls": [],
+      "price": 0.1053,
+      "regular_price": 0.1053,
+      "currency": "BOB",
+      "availability": "instock",
+      "scraped_at": "2026-06-25T01:27:25.435Z"
+    },
+    {
+      "source": "hbderm.com",
+      "source_url": "https://hbderm.com/hbderm-catalogo/mesoterapia/skin-perfusion-hxr-eye-cream-95ml/",
+      "title": "SKIN PERFUSION HXR EYE CREAM - 95ml",
+      "brand": "FILLMED",
+      "categories": [
+        "Mesoterapia"
+      ],
+      "slug": "skin-perfusion-hxr-eye-cream-95ml",
+      "description": "Contorno de ojos global antienvejecimiento con ingredientes clave que abordan todos los signos del envejecimiento. El hexileresorcinol disminuye la apariencia de las ojeras mientras que la escina ayuda a reducir la hinchazón y las bolsas. Para completar la poderosa acción de estos agentes, el péptido Arg-lys suaviza la apariencia de las arrugas de los ojos. NOTA: Este producto no está disponible para la venta al público, el fin de su descripción es informativa. Si desea obtener el producto, llámanos o envíanos un mensaje a nuestro WhatsApp: +591 62209701",
+      "image_url": "https://hbderm.com/wp-content/uploads/2023/01/SKIN-PERFUSION-HRX-EYE-CREAM-95ML.jpg",
+      "sitemap_image_urls": [],
+      "price": 864,
+      "regular_price": 864,
+      "currency": "BOB",
+      "availability": "instock",
+      "scraped_at": "2026-06-25T01:27:25.834Z"
     },
     {
       "source": "hbderm.com",
@@ -6092,31 +6146,29 @@
       "description": "Contorno de ojos global antienvejecimiento con ingredientes clave que abordan todos los signos del envejecimiento. El hexileresorcinol disminuye la apariencia de las ojeras mientras que la escina ayuda a reducir la hinchazón y las bolsas. Para completar la poderosa acción de estos agentes, el péptido Arg-lys suaviza la apariencia de las arrugas de los ojos. NOTA: Este producto no está disponible para la venta al público, el fin de su descripción es informativa. Si desea obtener el producto, llámanos o envíanos un mensaje a nuestro WhatsApp: +591 62209701 COMPARTE: [addtoany]",
       "image_url": "https://hbderm.com/wp-content/uploads/2021/09/SKIN-PERFUSION-EYE.jpg",
       "sitemap_image_urls": [],
-      "price": 864,
-      "regular_price": 864,
+      "price": 0.1134,
+      "regular_price": 0.1134,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:01:14.221Z"
+      "scraped_at": "2026-06-25T01:27:26.230Z"
     },
     {
       "source": "hbderm.com",
-      "source_url": "https://hbderm.com/hbderm-catalogo/mesoterapia/nctf-135ha/",
-      "title": "NCTF 135HA",
-      "brand": "FILLMED",
+      "source_url": "https://hbderm.com/hbderm-catalogo/rellenos-dermales/cytosial-deep/",
+      "title": "CYTOSIAL DEEP",
+      "brand": "BIOXIS",
       "categories": [
-        "Mesoterapia"
+        "Rellenos Dermales"
       ],
-      "slug": "nctf-135ha",
-      "description": "NCTF 135HA, es una fórmula única que permanece inigualable para mejorar la calidad de la piel. HA libre, 12 VITAMINAS + 24 AMINOÁCIDOS + 6 CO-ENZIMAS + ÁCIDOS NUCLEICOS + 6 MINERALES + 6 otros NOTA: Este producto no está disponible para la venta al público, el fin de su descripción es informativa. Si desea obtener el producto, llámanos o envíanos un mensaje a nuestro WhatsApp: +591 62209701 COMPARTE: [addtoany]",
-      "image_url": "https://hbderm.com/wp-content/uploads/2020/06/NCTF-135ha-1.png",
-      "sitemap_image_urls": [
-        "https://hbderm.com/wp-content/uploads/2020/06/NCTF-135ha.png"
-      ],
-      "price": 864,
-      "regular_price": 864,
+      "slug": "cytosial-deep",
+      "description": "Bioxis se especializa en el descubrimiento de soluciones innovadoras, desarrollamos productos que ayudan a los médicos a mejorar la calidad de la atención de sus pacientes en los campos de la dermatología y la estética médica. Cytosial es un Ácido Hialurónico Monofásico usado para Reducir los Signos de Envejecimiento Con una organización molecular de doble nivel que proporciona un rendimiento reológico elevado, un efecto duradero y seguridad Con tecnologia VELVET, CYTOSIAL es exclusivo para uso de profesionales de la salud. #CYTOSIALDEEPBOLIVIA #CYTOSIALBOLIVIA #HBDERM NOTA: Este producto no está disponible para la venta al público, el fin de su descripción es informativa. Si desea obtener el producto, llámanos o envíanos un mensaje a nuestro WhatsApp: +591 62209701 COMPARTE: [addtoany]",
+      "image_url": "https://hbderm.com/wp-content/uploads/2020/06/CYTOSIAL-DEEP-WRINKLES.png",
+      "sitemap_image_urls": [],
+      "price": 446,
+      "regular_price": 446,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:01:14.601Z"
+      "scraped_at": "2026-06-25T01:27:29.760Z"
     },
     {
       "source": "hbderm.com",
@@ -6134,7 +6186,7 @@
       "regular_price": 384,
       "currency": "BOB",
       "availability": "instock",
-      "scraped_at": "2026-06-23T22:01:18.098Z"
+      "scraped_at": "2026-06-25T01:27:30.158Z"
     }
   ],
   "errors": [
@@ -6143,21 +6195,15 @@
       "reason": "404 Not Found for https://hbderm.com/hbderm-catalogo/antiedad/tratamientos-dia/pack-serum-booster-duo-hidratacion-2/"
     },
     {
-      "url": "https://hbderm.com/hbderm-catalogo/mesoterapia/skin-perfusion-hyaluronic-youth-mask-4x8ml/",
+      "url": "https://hbderm.com/hbderm-catalogo/mesoterapia/biomask/",
       "reason": "missing title or price",
-      "title": "SKIN PERFUSION - HYALURONIC YOUTH MASK - 4x8ML",
+      "title": "BIOMASK",
       "price": null
     },
     {
-      "url": "https://hbderm.com/hbderm-catalogo/mesoterapia/skin-perfusion-glycopeel-mask-500ml/",
+      "url": "https://hbderm.com/hbderm-catalogo/mesoterapia/skin-perfusion-gr-youth-mask-500ml/",
       "reason": "missing title or price",
-      "title": "SKIN PERFUSION GLYCOPEEL MASK - 500ML",
-      "price": null
-    },
-    {
-      "url": "https://hbderm.com/hbderm-catalogo/rellenos-dermales/bionutrilift-cannulas/",
-      "reason": "missing title or price",
-      "title": "BIONUTRILIFT CANNULAS",
+      "title": "SKIN PERFUSION - GR YOUTH MASK - 500ML",
       "price": null
     },
     {
@@ -6167,15 +6213,9 @@
       "price": null
     },
     {
-      "url": "https://hbderm.com/hbderm-catalogo/mesoterapia/skin-perfusion-eye-recover-mask/",
+      "url": "https://hbderm.com/hbderm-catalogo/mesoterapia/nctf-135ha/",
       "reason": "missing title or price",
-      "title": "SKIN PERFUSION EYE RECOVER MASK 4x5g",
-      "price": null
-    },
-    {
-      "url": "https://hbderm.com/hbderm-catalogo/mesoterapia/skin-perfusion-hxr-eye-cream-95ml/",
-      "reason": "missing title or price",
-      "title": "SKIN PERFUSION HXR EYE CREAM - 95ml",
+      "title": "NCTF 135HA",
       "price": null
     },
     {
@@ -6218,12 +6258,6 @@
       "url": "https://hbderm.com/hbderm-catalogo/rellenos-dermales/cytosial-medium/",
       "reason": "missing title or price",
       "title": "CYTOSIAL MEDIUM",
-      "price": null
-    },
-    {
-      "url": "https://hbderm.com/hbderm-catalogo/rellenos-dermales/cytosial-deep/",
-      "reason": "missing title or price",
-      "title": "CYTOSIAL DEEP",
       "price": null
     }
   ]

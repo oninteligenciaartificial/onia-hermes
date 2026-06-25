@@ -5,5 +5,9 @@ node_modules/
 tmp/
 .vercel/
 /public/
+data/references/product-sources/hbderm-products-latest-check.json
+data/references/product-sources/nuvia-price-watch-latest.json
+data/references/product-sources/price-watch/
+data/references/product-sources/*.backup-*
 
 .vercel

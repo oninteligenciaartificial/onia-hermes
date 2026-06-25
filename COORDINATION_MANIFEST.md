@@ -147,6 +147,7 @@ Canonical files:
 - `hermes-content/docs/ONIA_PROPUESTA_GASTOS_LOCAL_FIRST_15000_2026.pdf`
 - `hermes-content/docs/SERGIO_STRICT_CALENDAR_AND_ALFREDHQ_2026.md`
 - `hermes-content/docs/ONIA_NUVIA_ACCOUNTING_MODEL_2026.md`
+- `hermes-content/docs/BOLIVIAN_TR4_LOCAL_STATIC_AUDIT_20260624.md`
 - `hermes-content/docs/ONIA_SUSTAINABILITY_DASHBOARD_SPEC_2026.md`
 - `hermes-content/docs/ONIA_COMPANY_OPERATING_MODEL_2026.md`
 - `hermes-content/docs/ONIA_CASH_ENGINE_SERVICE_CATALOG_2026.md`
@@ -360,6 +361,8 @@ Session B should not edit publishing scripts unless coordinating first.
 - Nuvia web data/assets live in `web-factory/data/clients/nuvia.json` and `web-factory/data/clients/nuvia.assets/`.
 - Nuvia payment/order system runbook lives in `web-factory/NUVIA_PAYMENT_SYSTEM.md`.
 - Nuvia local preview stability runbook lives in `web-factory/NUVIA_LOCAL_PREVIEW_RUNBOOK.md`.
+- Nuvia price automation runbook lives in `web-factory/docs/NUVIA_PRICE_AUTOMATION.md`.
+- Nuvia product harvester scripts live in `web-factory/harvester/product/`.
 - Global Web Factory design stack lives in `C:\Users\PC\.codex\design-stack\DESIGN_STACK.md`; project usage notes live in `web-factory/DESIGN_STACK.md`.
 - Use Spanish names for Hermes skills.
 - Use English uppercase names for repo-level operational docs.
