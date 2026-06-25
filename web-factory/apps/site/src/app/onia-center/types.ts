@@ -14,8 +14,12 @@ export type AccountingCenterId =
 export type RoleDefinition = {
   id: RoleId;
   level: number;
+  accessRank: "owner" | "area_lead" | "operator_lead" | "seller" | "freelancer";
   title: string;
   description: string;
+  scopeLabel: string;
+  visibleModules: string[];
+  dataAccess: string[];
   can: string[];
   cannot: string[];
   privateAccess: boolean;
@@ -24,6 +28,11 @@ export type RoleDefinition = {
 export type PermissionKey =
   | "view_private_capital"
   | "view_internal_profit"
+  | "view_team_operations"
+  | "view_assigned_work"
+  | "create_leads"
+  | "submit_evidence"
+  | "review_team_deliverables"
   | "approve_payments"
   | "approve_discounts"
   | "approve_expenses"

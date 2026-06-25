@@ -19,6 +19,8 @@ type ProfileAliasRow = {
   raw?: {
     auth_email?: string;
     login_alias?: string;
+    login_aliases?: string[];
+    email_aliases?: string[];
   } | null;
 };
 
@@ -34,9 +36,6 @@ function cookieOptions(maxAge: number) {
 
 async function resolveAuthEmail(identifier: string, config: NonNullable<ReturnType<typeof getOniaCenterAuthConfig>>) {
   const login = identifier.trim().toLowerCase();
-  if (login.includes("@")) {
-    return login;
-  }
 
   const response = await fetch(`${config.url}/rest/v1/user_profiles?select=user_key,raw&status=eq.active&limit=200`, {
     headers: {
@@ -54,8 +53,11 @@ async function resolveAuthEmail(identifier: string, config: NonNullable<ReturnTy
   const rows = (await response.json()) as ProfileAliasRow[];
   const profile = rows.find((row) => {
     const userKey = row.user_key?.toLowerCase();
+    const authEmail = row.raw?.auth_email?.toLowerCase();
     const loginAlias = row.raw?.login_alias?.toLowerCase();
-    return userKey === login || loginAlias === login;
+    const loginAliases = Array.isArray(row.raw?.login_aliases) ? row.raw.login_aliases.map((alias) => alias.toLowerCase()) : [];
+    const emailAliases = Array.isArray(row.raw?.email_aliases) ? row.raw.email_aliases.map((alias) => alias.toLowerCase()) : [];
+    return userKey === login || authEmail === login || loginAlias === login || loginAliases.includes(login) || emailAliases.includes(login);
   });
 
   return profile?.raw?.auth_email || login;
@@ -91,17 +93,41 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false, message: "Usuario/email y password son requeridos." }, { status: 400 });
   }
 
-  const email = await resolveAuthEmail(login, config);
+  let email: string;
+  try {
+    email = await resolveAuthEmail(login, config);
+  } catch {
+    return NextResponse.json(
+      {
+        ok: false,
+        mode: "auth_unavailable",
+        message: "No pude consultar los usuarios de ONIA Center. Revisa que el tunel local a Supabase este activo.",
+      },
+      { status: 503 },
+    );
+  }
 
-  const authResponse = await fetch(`${config.url}/auth/v1/token?grant_type=password`, {
-    method: "POST",
-    headers: {
-      apikey: config.anonKey,
-      "content-type": "application/json",
-    },
-    body: JSON.stringify({ email, password }),
-    cache: "no-store",
-  });
+  let authResponse: Response;
+  try {
+    authResponse = await fetch(`${config.url}/auth/v1/token?grant_type=password`, {
+      method: "POST",
+      headers: {
+        apikey: config.anonKey,
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+      cache: "no-store",
+    });
+  } catch {
+    return NextResponse.json(
+      {
+        ok: false,
+        mode: "auth_unavailable",
+        message: "No pude conectar con Supabase Auth. Revisa que el tunel local a Supabase este activo.",
+      },
+      { status: 503 },
+    );
+  }
 
   if (!authResponse.ok) {
     return NextResponse.json(

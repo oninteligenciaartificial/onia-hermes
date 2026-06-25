@@ -100,7 +100,23 @@ export function getVisibleProjects(role: RoleId) {
     return operatingProjects;
   }
 
-  return operatingProjects.filter((project) => !project.privateStrategy && !privateProjectLines.has(project.productLine));
+  const visibleTaskProjectIds = new Set(
+    operatingTasks
+      .filter((task) => !task.sensitive && task.assignedRole === role)
+      .map((task) => task.projectId),
+  );
+
+  return operatingProjects.filter((project) => {
+    if (project.privateStrategy || privateProjectLines.has(project.productLine)) {
+      return false;
+    }
+
+    if (project.ownerRole === role || visibleTaskProjectIds.has(project.id)) {
+      return true;
+    }
+
+    return role === "arthur" && project.modules.some((module) => ["crm", "tasks", "briefs", "content", "delivery"].includes(module));
+  });
 }
 
 export function getVisibleTasks(role: RoleId) {
@@ -134,6 +150,24 @@ export function getCollabSafetySummary() {
     rule:
       "Todo aporte de onia-hermes-collab entra como cola: clasificar, redactorizar, aprobar o rechazar antes de importar.",
   };
+}
+
+export function getVisibleCollabIngestionItems(role: RoleId) {
+  if (role === "sergio") {
+    return collabIngestionItems;
+  }
+
+  if (role === "arthur") {
+    return collabIngestionItems.filter(
+      (item) => item.authorUserId === "user-arthur" && item.sensitivity !== "sensitive" && item.sensitivity !== "rejected",
+    );
+  }
+
+  if (role === "seller") {
+    return collabIngestionItems.filter((item) => item.classification === "lead" && item.sensitivity === "public_safe");
+  }
+
+  return [];
 }
 
 export function getBolivianModuleSummary() {

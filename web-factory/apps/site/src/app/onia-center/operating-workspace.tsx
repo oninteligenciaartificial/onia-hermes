@@ -111,6 +111,7 @@ type RuntimeApiResponse<T = RuntimeData> = {
   missingConfiguration?: string[];
   data: T | null;
 };
+export type WorkspaceView = "capture" | "calendar" | "ideas" | "connections";
 
 const storageKey = "onia-center-runtime-v2";
 const legacyStorageKey = "onia-center-runtime-v1";
@@ -128,6 +129,29 @@ const reviewToolLabels: Record<RuntimeIdea["reviewTool"], string> = {
   claude: "Claude",
   self_hosted: "Modelo self-hosted",
   manual: "Revision manual",
+};
+
+const workspaceCopy: Record<WorkspaceView, { label: string; title: string; description: string }> = {
+  capture: {
+    label: "Captura operativa",
+    title: "Captura diaria funcional",
+    description: "Registra leads, tareas, revisiones collab y notas. Todo queda filtrado por rol y sincronizado si Supabase esta activo.",
+  },
+  calendar: {
+    label: "Agenda Sergio",
+    title: "Calendario estricto Sergio",
+    description: "Controla horas de enfoque, reuniones, gym, descanso y reglas personales sin exponerlo al equipo.",
+  },
+  ideas: {
+    label: "Ideas y referencias",
+    title: "Inbox de reels, links e ideas",
+    description: "Guarda referencias para revisar despues con Codex, Claude o modelos self-hosted sin mezclarlo con CRM.",
+  },
+  connections: {
+    label: "Conexiones",
+    title: "Estado self-hosted y runtime",
+    description: "Verifica Supabase, requisitos multiusuario, adaptadores y snapshot filtrado por rol.",
+  },
 };
 
 const scheduleCategoryLabels: Record<string, string> = {
@@ -336,7 +360,7 @@ function buildIdeaPrompt(idea: RuntimeIdea) {
   ].join("\n");
 }
 
-export function OperatingWorkspace({ selectedRole }: { selectedRole: RoleId }) {
+export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: { selectedRole: RoleId; workspaceView?: WorkspaceView }) {
   const [leads, setLeads] = useState<RuntimeLead[]>([]);
   const [tasks, setTasks] = useState<RuntimeTask[]>(starterTasks);
   const [reviews, setReviews] = useState<RuntimeReview[]>(starterReviews);
@@ -769,15 +793,16 @@ export function OperatingWorkspace({ selectedRole }: { selectedRole: RoleId }) {
     : ideaForm.visibility === "sergio_private"
       ? "assigned_only"
       : ideaForm.visibility;
+  const copy = workspaceCopy[workspaceView];
 
   return (
     <section className="onia-live-workspace" id="uso-diario" aria-label="Uso diario ONIA Center">
       <div className="onia-workspace-head">
         <div>
-          <span>Uso inmediato</span>
-          <h2>Operacion diaria funcional</h2>
+          <span>{copy.label}</span>
+          <h2>{copy.title}</h2>
           <p>
-            Captura leads, crea tareas, revisa aportes, guarda ideas de reels/links y deja notas.
+            {copy.description}
             {storageMode === "supabase"
               ? " Los cambios se sincronizan con Supabase self-hosted."
               : " Todo persiste en este navegador mientras falta configuracion server-side."}
@@ -823,7 +848,7 @@ export function OperatingWorkspace({ selectedRole }: { selectedRole: RoleId }) {
         </article>
       </div>
 
-      {selectedRole === "sergio" ? (
+      {workspaceView === "calendar" && selectedRole === "sergio" ? (
         <div className="onia-sergio-calendar" id="calendario-sergio">
           <article className="onia-live-card onia-sergio-calendar-main">
             <div className="onia-live-title">
@@ -907,7 +932,9 @@ export function OperatingWorkspace({ selectedRole }: { selectedRole: RoleId }) {
             </div>
           </article>
         </div>
-      ) : (
+      ) : null}
+
+      {workspaceView === "calendar" && selectedRole !== "sergio" ? (
         <div className="onia-private-calendar">
           <ShieldCheck size={17} />
           <div>
@@ -916,8 +943,9 @@ export function OperatingWorkspace({ selectedRole }: { selectedRole: RoleId }) {
             <p>Arthur, vendedores y freelancers no ven horarios personales, bloques de descanso ni reglas privadas de disponibilidad.</p>
           </div>
         </div>
-      )}
+      ) : null}
 
+      {workspaceView === "capture" ? (
       <div className="onia-live-grid">
         <article className="onia-live-card">
           <div className="onia-live-title">
@@ -1104,7 +1132,9 @@ export function OperatingWorkspace({ selectedRole }: { selectedRole: RoleId }) {
           </div>
         </article>
       </div>
+      ) : null}
 
+      {workspaceView === "ideas" ? (
       <div className="onia-ideas-board" id="ideas">
         <article className="onia-live-card">
           <div className="onia-live-title">
@@ -1286,7 +1316,9 @@ export function OperatingWorkspace({ selectedRole }: { selectedRole: RoleId }) {
           </div>
         </article>
       </div>
+      ) : null}
 
+      {workspaceView === "connections" ? (
       <div className="onia-selfhosted-panel">
         <article>
           <Database size={17} />
@@ -1323,13 +1355,16 @@ export function OperatingWorkspace({ selectedRole }: { selectedRole: RoleId }) {
           </div>
         </article>
       </div>
+      ) : null}
 
       <div className="onia-runtime-notice">{notice}</div>
+      {workspaceView === "connections" ? (
       <div className="onia-runtime-export">
         <span>Snapshot actual filtrado por rol</span>
         <pre>{JSON.stringify(snapshot, null, 2)}</pre>
         <small>{formatBs(0)} registrados como cobro real hasta integrar conciliacion. Las notas de cobro no aprueban comisiones.</small>
       </div>
+      ) : null}
     </section>
   );
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import {
   AlertTriangle,
@@ -60,7 +61,6 @@ import {
 import {
   auditLogSeed,
   calendarConnectorPlans,
-  collabIngestionItems,
   collaborators,
   externalAdapters,
   featureReadinessItems,
@@ -95,6 +95,7 @@ import {
   getOperatingAgentSummary,
   getOperatingDashboardSummary,
   getTaskStatusTone,
+  getVisibleCollabIngestionItems,
   getVisibleProjects,
   getVisibleReviews,
   getVisibleTasks,
@@ -105,6 +106,7 @@ type NavItem = {
   id: string;
   label: string;
   detail: string;
+  group: string;
   icon: LucideIcon;
 };
 
@@ -118,28 +120,165 @@ type AuthStatusResponse = {
   } | null;
 };
 
+type RuntimeStatusResponse = {
+  ok: boolean;
+  mode: string;
+  message?: string;
+  data?: {
+    leads?: unknown[];
+    tasks?: unknown[];
+    reviews?: unknown[];
+    notes?: unknown[];
+    ideas?: unknown[];
+  } | null;
+};
+
+type RuntimeConnection = {
+  state: "checking" | "connected" | "blocked" | "error";
+  mode: string;
+  detail: string;
+  counts: {
+    leads: number;
+    tasks: number;
+    reviews: number;
+    notes: number;
+    ideas: number;
+  };
+};
+
 const navItems: NavItem[] = [
-  { id: "uso-diario", label: "Uso diario", detail: "Captura", icon: ClipboardCheck },
-  { id: "calendario-sergio", label: "Calendario", detail: "Sergio", icon: CalendarDays },
-  { id: "agentes", label: "Agentes", detail: "Mes", icon: Sparkles },
-  { id: "ideas", label: "Ideas", detail: "Reels e IA", icon: Lightbulb },
-  { id: "dashboard", label: "Dashboard", detail: "Operacion", icon: BarChart3 },
-  { id: "proyectos", label: "Proyectos", detail: "ONIA", icon: BriefcaseBusiness },
-  { id: "tareas", label: "Tareas", detail: "Revision", icon: ClipboardCheck },
-  { id: "collab", label: "Collab", detail: "Ingestion", icon: Database },
-  { id: "bolivian", label: "Bolivian", detail: "Modulo", icon: Building2 },
-  { id: "integraciones", label: "Integraciones", detail: "Pendientes", icon: Workflow },
-  { id: "ceo", label: "CEO", detail: "Sergio privado", icon: Crown },
-  { id: "servicios", label: "Servicios", detail: "Catalogo y bloqueo", icon: Layers3 },
-  { id: "roles", label: "Roles", detail: "Permisos", icon: UsersRound },
-  { id: "arthur", label: "Arthur", detail: "60 dias", icon: UserCheck },
-  { id: "finanzas", label: "Finanzas", detail: "Centros", icon: WalletCards },
-  { id: "nuvia", label: "Nuvia", detail: "Lotes", icon: Boxes },
-  { id: "pagos", label: "Pagos", detail: "Comisiones", icon: HandCoins },
-  { id: "evidencias", label: "Evidencias", detail: "Gates", icon: FileCheck2 },
-  { id: "premium", label: "Premium", detail: "Herramientas", icon: Zap },
-  { id: "seguridad", label: "Seguridad", detail: "Privacidad", icon: ShieldCheck },
+  { id: "dashboard", label: "Inicio", detail: "Estado real", group: "Control", icon: BarChart3 },
+  { id: "uso-diario", label: "Captura", detail: "Leads y tareas", group: "Operacion", icon: ClipboardCheck },
+  { id: "calendario-sergio", label: "Calendario", detail: "Sergio", group: "Operacion", icon: CalendarDays },
+  { id: "agentes", label: "Agentes", detail: "Mes", group: "Operacion", icon: Sparkles },
+  { id: "ideas", label: "Ideas", detail: "Reels e IA", group: "Operacion", icon: Lightbulb },
+  { id: "proyectos", label: "Proyectos", detail: "ONIA", group: "Ejecucion", icon: BriefcaseBusiness },
+  { id: "tareas", label: "Tareas", detail: "Revision", group: "Ejecucion", icon: ClipboardCheck },
+  { id: "collab", label: "Collab", detail: "Ingestion", group: "Ejecucion", icon: Database },
+  { id: "bolivian", label: "Bolivian", detail: "Modulo", group: "Ejecucion", icon: Building2 },
+  { id: "integraciones", label: "Integraciones", detail: "Pendientes", group: "Infra", icon: Workflow },
+  { id: "seguridad", label: "Seguridad", detail: "Privacidad", group: "Infra", icon: ShieldCheck },
+  { id: "ceo", label: "CEO", detail: "Sergio privado", group: "Direccion", icon: Crown },
+  { id: "roles", label: "Roles", detail: "Permisos", group: "Direccion", icon: UsersRound },
+  { id: "arthur", label: "Arthur", detail: "60 dias", group: "Direccion", icon: UserCheck },
+  { id: "servicios", label: "Servicios", detail: "Catalogo", group: "Comercial", icon: Layers3 },
+  { id: "evidencias", label: "Evidencias", detail: "Gates", group: "Comercial", icon: FileCheck2 },
+  { id: "premium", label: "Premium", detail: "Herramientas", group: "Comercial", icon: Zap },
+  { id: "finanzas", label: "Finanzas", detail: "Centros", group: "Dinero", icon: WalletCards },
+  { id: "nuvia", label: "Nuvia", detail: "Lotes", group: "Dinero", icon: Boxes },
+  { id: "pagos", label: "Pagos", detail: "Comisiones", group: "Dinero", icon: HandCoins },
 ];
+
+const navGroups = ["Control", "Operacion", "Ejecucion", "Infra", "Direccion", "Comercial", "Dinero"];
+
+const heroActionItems = [
+  { id: "servicios", label: "Servicios", icon: Layers3 },
+  { id: "pagos", label: "Pagos", icon: HandCoins },
+  { id: "evidencias", label: "Evidencias", icon: ShieldCheck },
+] as const;
+
+const moduleCopy: Record<string, { title: string; description: string; content: string[] }> = {
+  dashboard: {
+    title: "Estado operativo de ONIA",
+    description: "Resumen ejecutivo, fuentes canonicas, reglas activas y base de datos conectada.",
+    content: ["Conexion real", "Modelo de datos", "Reglas de bloqueo", "Repos y privacidad"],
+  },
+  "uso-diario": {
+    title: "Captura diaria",
+    description: "Registro de leads, tareas, revision collab y notas operativas sin mezclar finanzas privadas.",
+    content: ["Leads", "Tareas", "Revision", "Notas"],
+  },
+  "calendario-sergio": {
+    title: "Calendario estricto Sergio",
+    description: "Agenda personal protegida, ventanas de reunion y reglas para evitar saturacion.",
+    content: ["Horario", "Reuniones", "Gym y descanso", "Telegram"],
+  },
+  agentes: {
+    title: "Agentes operativos",
+    description: "Tareas mensuales, automatizaciones y limites de aprobacion para cada agente.",
+    content: ["Plan mensual", "Cadencias", "Evidencia", "Bloqueos"],
+  },
+  ideas: {
+    title: "Bandeja de ideas",
+    description: "Reels, links y referencias para revisar despues con Codex, Claude o modelo self-hosted.",
+    content: ["Ideas inbox", "Prompts", "Visibilidad", "Revision IA"],
+  },
+  proyectos: {
+    title: "Proyectos ONIA",
+    description: "Portafolio operativo separado de la logica profunda de cada producto.",
+    content: ["DentalGest", "GestiOS", "Webs", "Chatbots", "Bolivian", "StockCam"],
+  },
+  tareas: {
+    title: "Tareas y revision",
+    description: "Trabajo asignado por rol, evidencia requerida y estado de revision.",
+    content: ["Responsables", "Prioridad", "Evidencia", "Revision Sergio"],
+  },
+  collab: {
+    title: "Ingestion colaborativa",
+    description: "Aportes de onia-hermes-collab saneados antes de importar a Hermes privado.",
+    content: ["Clasificacion", "Sensibilidad", "Aprobar", "Importar"],
+  },
+  bolivian: {
+    title: "Bolivian Electric",
+    description: "Modulo propio sobre base reutilizable. TR4 se trata como adaptador externo.",
+    content: ["Procesos", "Inventario", "Contenido", "Roadmap"],
+  },
+  integraciones: {
+    title: "Integraciones pendientes",
+    description: "Estado de Cal, n8n, modelos locales, Remotion, Web Factory automatico y self-hosted.",
+    content: ["Supabase", "Cal", "n8n", "IA local", "Remotion"],
+  },
+  seguridad: {
+    title: "Seguridad y permisos",
+    description: "Separacion entre privado, operativo y colaborativo por rol y organizacion.",
+    content: ["Roles", "RLS", "Auditoria", "Adaptadores"],
+  },
+  ceo: {
+    title: "Dashboard CEO Sergio",
+    description: "Caja, runway, deuda, capital y recuperacion. Oculto para cualquier rol que no sea Sergio.",
+    content: ["Ventas netas", "Fondo ONIA", "Runway", "Capital privado"],
+  },
+  roles: {
+    title: "Roles y permisos",
+    description: "Jerarquia operativa: Sergio, responsables, Arthur, vendedores y freelancers.",
+    content: ["Puede", "No puede", "Scope", "Privacidad"],
+  },
+  arthur: {
+    title: "Operacion Arthur 60 dias",
+    description: "Scorecard semanal, evidencia, variable estimada y aprobacion final de Sergio.",
+    content: ["Leads", "Llamadas", "Contenido", "Mejoras internas"],
+  },
+  servicios: {
+    title: "Catalogo operativo",
+    description: "Servicios vendibles, bloqueo por campos obligatorios y prioridad ONIA Motor Local Growth.",
+    content: ["Setup", "Mensualidad", "Margen", "Checklist"],
+  },
+  evidencias: {
+    title: "Evidencias",
+    description: "Pruebas requeridas para pagos, entregas, semanas Arthur y comisiones.",
+    content: ["Prueba", "Responsable", "Bloquea", "Aprobacion"],
+  },
+  premium: {
+    title: "Herramientas premium",
+    description: "Higgsfield, IA, pauta y herramientas asignadas por centro contable.",
+    content: ["Centro", "Limite", "Brief", "Aprobacion"],
+  },
+  finanzas: {
+    title: "Finanzas y centros",
+    description: "Caja por centro, Fondo ONIA, reglas de gastos y capital privado filtrado.",
+    content: ["ONIA Servicios", "Fondo ONIA", "Nuvia", "Owner income"],
+  },
+  nuvia: {
+    title: "Nuvia por lote",
+    description: "Costos completos, margen bruto minimo, recuperacion de capital y reparto posterior.",
+    content: ["Lote", "Costos", "Reserva", "Reparto"],
+  },
+  pagos: {
+    title: "Pagos y comisiones",
+    description: "Motor de calculo con evidencia, descuentos, adelantos y aprobacion Sergio.",
+    content: ["Vendedor", "Arthur", "Adelanto", "Cierre mensual"],
+  },
+};
 
 const centerBalances = [
   {
@@ -355,11 +494,44 @@ function PrivateCapitalPanel({ visible }: { visible: boolean }) {
 }
 
 export default function OniaCenterPage() {
+  const searchParams = useSearchParams();
+  const requestedView = searchParams.get("view") || "dashboard";
   const [selectedRole, setSelectedRole] = useState<RoleId>("sergio");
   const [sessionRole, setSessionRole] = useState<RoleId | null>(null);
   const [sessionLabel, setSessionLabel] = useState("Sesion local");
+  const [runtimeConnection, setRuntimeConnection] = useState<RuntimeConnection>({
+    state: "checking",
+    mode: "checking",
+    detail: "Verificando Auth y Supabase.",
+    counts: { leads: 0, tasks: 0, reviews: 0, notes: 0, ideas: 0 },
+  });
   const roleLocked = sessionRole !== null && sessionRole !== "sergio";
   const role = roleDefinitions.find((item) => item.id === selectedRole) ?? roleDefinitions[0];
+  const allowedNavItems = useMemo(
+    () => navItems.filter((item) => role.visibleModules.includes(item.id)),
+    [role.visibleModules],
+  );
+  const activeView = allowedNavItems.some((item) => item.id === requestedView)
+    ? requestedView
+    : allowedNavItems[0]?.id ?? "dashboard";
+  const activeModule = moduleCopy[activeView] ?? moduleCopy.dashboard;
+  const activeNavItem = allowedNavItems.find((item) => item.id === activeView) ?? allowedNavItems[0] ?? navItems[0];
+  const ActiveModuleIcon = activeNavItem.icon;
+  const groupedNavItems = useMemo(
+    () =>
+      navGroups
+        .map((group) => ({ group, items: allowedNavItems.filter((item) => item.group === group) }))
+        .filter(({ items }) => items.length > 0),
+    [allowedNavItems],
+  );
+  const visibleHeroActions = useMemo(
+    () => heroActionItems.filter((item) => role.visibleModules.includes(item.id)),
+    [role.visibleModules],
+  );
+  const switcherRoles = useMemo(
+    () => (roleLocked ? roleDefinitions.filter((item) => item.id === selectedRole) : roleDefinitions),
+    [roleLocked, selectedRole],
+  );
   const privateVisible = canSeePrivateCapital(selectedRole);
   const visibleCenters = useMemo(() => getVisibleCenters(selectedRole), [selectedRole]);
   const visiblePremium = premiumToolPolicies.filter((policy) => policy.visibility.includes(selectedRole));
@@ -383,6 +555,16 @@ export default function OniaCenterPage() {
     [privateVisible],
   );
   const collabSummary = getCollabSafetySummary();
+  const visibleCollabItems = useMemo(() => getVisibleCollabIngestionItems(selectedRole), [selectedRole]);
+  const visibleCollabSummary = useMemo(
+    () => ({
+      queued: visibleCollabItems.filter((item) => item.status === "queued").length,
+      sensitive: visibleCollabItems.filter((item) => item.sensitivity === "sensitive").length,
+      importable: visibleCollabItems.filter((item) => item.status === "approved" || item.status === "imported").length,
+      rejected: visibleCollabItems.filter((item) => item.status === "rejected").length,
+    }),
+    [visibleCollabItems],
+  );
   const bolivianSummary = getBolivianModuleSummary();
   const adapterSummary = getAdapterSummary();
   const integrationSummary = getIntegrationReadinessSummary();
@@ -431,7 +613,52 @@ export default function OniaCenterPage() {
       }
     }
 
+    async function loadRuntimeConnection() {
+      try {
+        const response = await fetch("/api/onia-center/runtime", { cache: "no-store" });
+        const body = (await response.json()) as RuntimeStatusResponse;
+
+        if (!active) {
+          return;
+        }
+
+        if (!body.ok) {
+          setRuntimeConnection({
+            state: body.mode === "auth_required" || body.mode === "auth_error" ? "blocked" : "error",
+            mode: body.mode,
+            detail: body.message ?? "No se pudo leer el runtime de ONIA Center.",
+            counts: { leads: 0, tasks: 0, reviews: 0, notes: 0, ideas: 0 },
+          });
+          return;
+        }
+
+        const data = body.data;
+        setRuntimeConnection({
+          state: "connected",
+          mode: body.mode,
+          detail: "Supabase self-hosted responde con datos reales del schema onia_center.",
+          counts: {
+            leads: data?.leads?.length ?? 0,
+            tasks: data?.tasks?.length ?? 0,
+            reviews: data?.reviews?.length ?? 0,
+            notes: data?.notes?.length ?? 0,
+            ideas: data?.ideas?.length ?? 0,
+          },
+        });
+      } catch {
+        if (active) {
+          setRuntimeConnection({
+            state: "error",
+            mode: "network_error",
+            detail: "No se pudo conectar al runtime. Revisa el tunel local a Supabase.",
+            counts: { leads: 0, tasks: 0, reviews: 0, notes: 0, ideas: 0 },
+          });
+        }
+      }
+    }
+
     loadSessionRole();
+    loadRuntimeConnection();
 
     return () => {
       active = false;
@@ -456,22 +683,33 @@ export default function OniaCenterPage() {
           </div>
         </div>
 
-        <nav className="onia-nav">
-          {navItems.map((item) => {
-            const Icon = item.icon;
-            return (
-              <a href={`#${item.id}`} key={item.id}>
-                <Icon size={15} />
-                <span>{item.label}</span>
-                <small>{item.detail}</small>
-              </a>
-            );
-          })}
+        <nav className="onia-nav" aria-label="Modulos ONIA Center">
+          {groupedNavItems.map(({ group, items }) => (
+            <div className="onia-nav-group" key={group}>
+              <span>{group}</span>
+              {items.map((item) => {
+                const Icon = item.icon;
+                const active = activeView === item.id;
+                return (
+                  <Link
+                    aria-current={active ? "page" : undefined}
+                    className={active ? "is-active" : ""}
+                    href={`/onia-center?view=${item.id}`}
+                    key={item.id}
+                  >
+                    <Icon size={15} />
+                    <span>{item.label}</span>
+                    <small>{item.detail}</small>
+                  </Link>
+                );
+              })}
+            </div>
+          ))}
         </nav>
 
         <section className="onia-role-switcher" aria-label="Selector de rol">
           <span>Vista activa</span>
-          {roleDefinitions.map((item) => (
+          {switcherRoles.map((item) => (
             <button
               className={selectedRole === item.id ? "is-active" : ""}
               disabled={roleLocked && item.id !== selectedRole}
@@ -494,38 +732,84 @@ export default function OniaCenterPage() {
       <section className="onia-center-main">
         <header className="onia-hero">
           <div>
-            <span className="onia-eyebrow">Fuentes reales / reglas 2026</span>
-            <h1>ONIA Center</h1>
-            <p>
-              Sistema operativo para ventas, servicios, finanzas, Nuvia, pagos, evidencia y herramientas premium.
-              No aprueba comisiones sin evidencia ni vende servicios incompletos.
-            </p>
+            <span className="onia-eyebrow">ONIA Center / {activeNavItem.group}</span>
+            <h1>{activeModule.title}</h1>
+            <p>{activeModule.description}</p>
           </div>
           <div className="onia-hero-actions">
-            <a href="#servicios">
-              <Layers3 size={16} />
-              Servicios
-            </a>
-            <a href="#pagos">
-              <HandCoins size={16} />
-              Pagos
-            </a>
-            <a href="#evidencias">
-              <ShieldCheck size={16} />
-              Evidencias
-            </a>
+            {visibleHeroActions.map((item) => {
+              const Icon = item.icon;
+              return (
+                <Link href={`/onia-center?view=${item.id}`} key={item.id}>
+                  <Icon size={16} />
+                  {item.label}
+                </Link>
+              );
+            })}
           </div>
         </header>
 
-        <section className="onia-source-strip" aria-label="Fuentes canonicas">
+        <section className="onia-active-module" aria-label="Pantalla activa y conexion">
+          <article>
+            <span>
+              <ActiveModuleIcon size={17} />
+              Pantalla activa
+            </span>
+            <strong>{activeNavItem.label}</strong>
+            <p>{activeModule.content.join(" / ")}</p>
+          </article>
+          <article className={`is-${runtimeConnection.state}`}>
+            <span>
+              <Database size={17} />
+              Runtime
+            </span>
+            <strong>{runtimeConnection.state === "connected" ? "Supabase conectado" : runtimeConnection.mode}</strong>
+            <p>{runtimeConnection.detail}</p>
+          </article>
+          <article>
+            <span>
+              <ShieldCheck size={17} />
+              Sesion y rol
+            </span>
+            <strong>{sessionRole ? sessionLabel : "Verificando sesion"}</strong>
+            <p>{privateVisible ? "Vista Sergio completa." : "Vista filtrada por permisos."}</p>
+          </article>
+          <article>
+            <span>
+              <BarChart3 size={17} />
+              Datos vivos
+            </span>
+            <strong>
+              {runtimeConnection.counts.tasks} tareas / {runtimeConnection.counts.reviews} revisiones
+            </strong>
+            <p>
+              Leads {runtimeConnection.counts.leads}, ideas {runtimeConnection.counts.ideas}, notas {runtimeConnection.counts.notes}.
+            </p>
+          </article>
+        </section>
+
+        <section className="onia-source-strip" aria-label="Fuentes canonicas" hidden={activeView !== "dashboard"}>
           {sourceDocuments.map((source) => (
             <code key={source}>{source}</code>
           ))}
         </section>
 
-        <OperatingWorkspace selectedRole={selectedRole} />
+        {["uso-diario", "calendario-sergio", "ideas", "integraciones"].includes(activeView) ? (
+          <OperatingWorkspace
+            selectedRole={selectedRole}
+            workspaceView={
+              activeView === "calendario-sergio"
+                ? "calendar"
+                : activeView === "ideas"
+                  ? "ideas"
+                  : activeView === "integraciones"
+                    ? "connections"
+                    : "capture"
+            }
+          />
+        ) : null}
 
-        <section className="onia-panel onia-agent-command-center" id="agentes">
+        <section className="onia-panel onia-agent-command-center" id="agentes" hidden={activeView !== "agentes"}>
           <SectionHeader
             eyebrow="Agentes operativos"
             title="Plan mensual, agenda estricta y conexiones"
@@ -636,7 +920,7 @@ export default function OniaCenterPage() {
           </div>
         </section>
 
-        <section className="onia-panel onia-repo-strategy" id="dashboard" aria-label="Dashboard operativo ONIA">
+        <section className="onia-panel onia-repo-strategy" id="dashboard" aria-label="Dashboard operativo ONIA" hidden={activeView !== "dashboard"}>
           <SectionHeader
             eyebrow="Decision operativa"
             title="onia-center ejecuta; Hermes piensa; collab aporta"
@@ -697,8 +981,8 @@ export default function OniaCenterPage() {
           </div>
         </section>
 
-        <section className="onia-two-column">
-          <article className="onia-panel" id="proyectos">
+        <section className="onia-two-column" hidden={!["proyectos", "tareas"].includes(activeView)}>
+          <article className="onia-panel" id="proyectos" hidden={activeView !== "proyectos"}>
             <SectionHeader
               eyebrow="Proyectos ONIA"
               title="Portafolio operativo filtrado por rol"
@@ -722,7 +1006,7 @@ export default function OniaCenterPage() {
             </div>
           </article>
 
-          <article className="onia-panel" id="tareas">
+          <article className="onia-panel" id="tareas" hidden={activeView !== "tareas"}>
             <SectionHeader
               eyebrow="Tareas y revision"
               title="Operacion diaria con evidencia"
@@ -766,8 +1050,8 @@ export default function OniaCenterPage() {
           </article>
         </section>
 
-        <section className="onia-two-column">
-          <article className="onia-panel" id="collab">
+        <section className="onia-two-column" hidden={!["collab", "bolivian"].includes(activeView)}>
+          <article className="onia-panel" id="collab" hidden={activeView !== "collab"}>
             <SectionHeader
               eyebrow="Ingestion desde onia-hermes-collab"
               title="Bandeja de aportes revisables"
@@ -777,23 +1061,24 @@ export default function OniaCenterPage() {
             <div className="onia-collab-summary">
               <div>
                 <span>En cola</span>
-                <strong>{collabSummary.queued}</strong>
+                <strong>{visibleCollabSummary.queued}</strong>
               </div>
               <div>
                 <span>Sensibles</span>
-                <strong>{collabSummary.sensitive}</strong>
+                <strong>{visibleCollabSummary.sensitive}</strong>
               </div>
               <div>
                 <span>Importables</span>
-                <strong>{collabSummary.importable}</strong>
+                <strong>{visibleCollabSummary.importable}</strong>
               </div>
               <div>
                 <span>Rechazados</span>
-                <strong>{collabSummary.rejected}</strong>
+                <strong>{visibleCollabSummary.rejected}</strong>
               </div>
             </div>
             <div className="onia-collab-list">
-              {collabIngestionItems.map((item) => (
+              {visibleCollabItems.length ? (
+                visibleCollabItems.map((item) => (
                 <article key={item.id}>
                   <div>
                     <span>{item.classification}</span>
@@ -804,7 +1089,17 @@ export default function OniaCenterPage() {
                     {item.sensitivity}
                   </TonePill>
                 </article>
-              ))}
+                ))
+              ) : (
+                <article>
+                  <div>
+                    <span>sin acceso</span>
+                    <strong>No hay aportes visibles para este rango</strong>
+                    <p>Freelancers y vendedores no ven la cola colaborativa salvo elementos publicos o asignados.</p>
+                  </div>
+                  <TonePill tone="blue">filtrado</TonePill>
+                </article>
+              )}
             </div>
             <div className="onia-rule-strip">
               <ShieldCheck size={17} />
@@ -813,7 +1108,7 @@ export default function OniaCenterPage() {
             </div>
           </article>
 
-          <article className="onia-panel" id="bolivian">
+          <article className="onia-panel" id="bolivian" hidden={activeView !== "bolivian"}>
             <SectionHeader
               eyebrow="Bolivian Electric"
               title="Modulo propio sobre base reusable"
@@ -835,6 +1130,32 @@ export default function OniaCenterPage() {
                   </article>
                 ))}
               </div>
+            ) : selectedRole === "arthur" ? (
+              <div className="onia-module-list">
+                {visibleTasks.filter((task) => task.projectId === "project-bolivian-os").length ? (
+                  visibleTasks
+                    .filter((task) => task.projectId === "project-bolivian-os")
+                    .map((task) => (
+                      <article key={task.id}>
+                        <div>
+                          <span>{task.type} / {task.priority}</span>
+                          <strong>{task.title}</strong>
+                          <p>{task.dueLabel ?? "Tarea Bolivian asignada; sin TR4 ni datos sensibles."}</p>
+                        </div>
+                        <TonePill tone={getTaskStatusTone(task.status)}>{task.status}</TonePill>
+                      </article>
+                    ))
+                ) : (
+                  <article>
+                    <div>
+                      <span>Arthur / propio</span>
+                      <strong>Sin tareas Bolivian visibles</strong>
+                      <p>Arthur solo ve Bolivian cuando tiene tarea asignada, brief saneado o entregable revisable.</p>
+                    </div>
+                    <TonePill tone="blue">filtrado</TonePill>
+                  </article>
+                )}
+              </div>
             ) : (
               <PrivateCapitalPanel visible={false} />
             )}
@@ -845,7 +1166,7 @@ export default function OniaCenterPage() {
           </article>
         </section>
 
-        <section className="onia-two-column">
+        <section className="onia-two-column" hidden={activeView !== "seguridad"}>
           <article className="onia-panel" id="seguridad">
             <SectionHeader
               eyebrow="Seguridad y privacidad"
@@ -924,7 +1245,7 @@ export default function OniaCenterPage() {
           </article>
         </section>
 
-        <section className="onia-panel onia-integration-readiness" id="integraciones">
+        <section className="onia-panel onia-integration-readiness" id="integraciones" hidden={activeView !== "integraciones"}>
           <SectionHeader
             eyebrow="Preparado para conectar"
             title="Integraciones y funciones pendientes"
@@ -1012,7 +1333,7 @@ export default function OniaCenterPage() {
           </div>
         </section>
 
-        <section className="onia-panel onia-system-base" aria-label="Base operativa Fase 1">
+        <section className="onia-panel onia-system-base" aria-label="Base operativa Fase 1" hidden={activeView !== "dashboard"}>
           <SectionHeader
             eyebrow="Fase 1 - Base operativa"
             title="Modelo, seed y datos reales"
@@ -1054,7 +1375,7 @@ export default function OniaCenterPage() {
           </div>
         </section>
 
-        <section className="onia-role-banner">
+        <section className="onia-role-banner" hidden={activeView !== "roles"}>
           <div>
             <span>Rol actual</span>
             <strong>{role.title}</strong>
@@ -1063,7 +1384,7 @@ export default function OniaCenterPage() {
           <TonePill tone={privateVisible ? "green" : "blue"}>{privateVisible ? "acceso completo" : "vista filtrada"}</TonePill>
         </section>
 
-        <section className="onia-panel" aria-label="Reglas de negocio implementadas">
+        <section className="onia-panel" aria-label="Reglas de negocio implementadas" hidden={activeView !== "dashboard"}>
           <SectionHeader
             eyebrow="Fase 2 - Reglas de negocio"
             title="Bloqueos ejecutables"
@@ -1083,7 +1404,7 @@ export default function OniaCenterPage() {
           </div>
         </section>
 
-        <section className="onia-metrics" id="ceo" aria-label="Dashboard CEO Sergio">
+        <section className="onia-metrics" id="ceo" aria-label="Dashboard CEO Sergio" hidden={activeView !== "ceo"}>
           <MetricCard
             label="Ventas netas del mes"
             value={formatBs(centerSnapshot.monthlyNetSalesBs)}
@@ -1149,7 +1470,7 @@ export default function OniaCenterPage() {
           />
         </section>
 
-        <section className="onia-status-grid">
+        <section className="onia-status-grid" hidden={activeView !== "ceo"}>
           <article className={`onia-status-card is-${salesTone}`}>
             <div>
               <span>Semaforo motor de ventas</span>
@@ -1176,8 +1497,8 @@ export default function OniaCenterPage() {
           </article>
         </section>
 
-        <section className="onia-two-column">
-          <article className="onia-panel" id="servicios">
+        <section className="onia-two-column" hidden={!["servicios", "roles"].includes(activeView)}>
+          <article className="onia-panel" id="servicios" hidden={activeView !== "servicios"}>
             <SectionHeader
               eyebrow="Catalogo Operativo de Servicios"
               title="El sistema empuja ONIA Motor Local Growth"
@@ -1203,7 +1524,7 @@ export default function OniaCenterPage() {
             </div>
           </article>
 
-          <article className="onia-panel" id="roles">
+          <article className="onia-panel" id="roles" hidden={activeView !== "roles"}>
             <SectionHeader
               eyebrow="Roles y permisos"
               title="Arthur coordina, Sergio aprueba"
@@ -1213,12 +1534,37 @@ export default function OniaCenterPage() {
             <div className="onia-role-grid">
               {roleDefinitions.map((item) => (
                 <article className={`onia-role-card ${item.id === selectedRole ? "is-active" : ""}`} key={item.id}>
-                  <span>Nivel {item.level}</span>
+                  <span>Nivel {item.level} / {item.accessRank.replaceAll("_", " ")}</span>
                   <strong>{item.title}</strong>
                   <p>{item.description}</p>
-                  <small>{item.privateAccess ? "Puede ver modulo privado Sergio." : "Vista sin capital privado."}</small>
+                  <small>{item.scopeLabel}</small>
                 </article>
               ))}
+            </div>
+
+            <div className="onia-role-scope-panel">
+              <article>
+                <span>Alcance actual</span>
+                <strong>{role.scopeLabel}</strong>
+                <p>
+                  {role.privateAccess
+                    ? "Acceso completo de direccion. Puede simular otros rangos para revisar seguridad antes de crear usuarios."
+                    : "Acceso filtrado. El sistema debe mostrar solo registros propios, asignados o seguros para ese rol."}
+                </p>
+              </article>
+              <article>
+                <span>Datos visibles</span>
+                <ul>
+                  {role.dataAccess.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+              </article>
+              <article>
+                <span>Modulos habilitados</span>
+                <strong>{role.visibleModules.length}</strong>
+                <p>{role.visibleModules.map((moduleId) => moduleCopy[moduleId]?.title ?? moduleId).join(", ")}</p>
+              </article>
             </div>
 
             <div className="onia-permission-box">
@@ -1244,7 +1590,7 @@ export default function OniaCenterPage() {
           </article>
         </section>
 
-        <section className="onia-panel" id="arthur">
+        <section className="onia-panel" id="arthur" hidden={activeView !== "arthur"}>
           <SectionHeader
             eyebrow="Operacion Arthur 60 dias"
             title="Scorecard semanal con evidencia"
@@ -1267,7 +1613,7 @@ export default function OniaCenterPage() {
           </div>
         </section>
 
-        <section className="onia-two-column">
+        <section className="onia-two-column" hidden={activeView !== "finanzas"}>
           <article className="onia-panel" id="finanzas">
             <SectionHeader
               eyebrow="Finanzas y centros contables"
@@ -1310,8 +1656,8 @@ export default function OniaCenterPage() {
           </article>
         </section>
 
-        <section className="onia-two-column">
-          <article className="onia-panel" id="nuvia">
+        <section className="onia-two-column" hidden={!["nuvia", "pagos"].includes(activeView)}>
+          <article className="onia-panel" id="nuvia" hidden={activeView !== "nuvia"}>
             <SectionHeader
               eyebrow="Nuvia"
               title="Lotes con costo completo"
@@ -1340,7 +1686,7 @@ export default function OniaCenterPage() {
             </div>
           </article>
 
-          <article className="onia-panel" id="pagos">
+          <article className="onia-panel" id="pagos" hidden={activeView !== "pagos"}>
             <SectionHeader
               eyebrow="Pagos y comisiones"
               title="Motor bloquea pagos sin evidencia"
@@ -1369,8 +1715,8 @@ export default function OniaCenterPage() {
           </article>
         </section>
 
-        <section className="onia-two-column">
-          <article className="onia-panel" id="evidencias">
+        <section className="onia-two-column" hidden={!["evidencias", "premium"].includes(activeView)}>
+          <article className="onia-panel" id="evidencias" hidden={activeView !== "evidencias"}>
             <SectionHeader
               eyebrow="Evidencias"
               title="Lo que bloquea pagos y semanas"
@@ -1389,7 +1735,7 @@ export default function OniaCenterPage() {
             </div>
           </article>
 
-          <article className="onia-panel" id="premium">
+          <article className="onia-panel" id="premium" hidden={activeView !== "premium"}>
             <SectionHeader
               eyebrow="Herramientas premium"
               title="Higgsfield, IA y pauta por centro"
