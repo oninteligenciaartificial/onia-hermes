@@ -223,6 +223,17 @@ export type WebFactoryCenterSnapshot = {
     command: string;
     purpose: string;
   }>;
+  workflowSteps: Array<{
+    step: number;
+    title: string;
+    owner: "Arthur" | "Sergio" | "ONIA";
+    visibleTo: Array<"arthur" | "sergio" | "area">;
+    input: string;
+    action: string;
+    output: string;
+    approval: string;
+    command?: string;
+  }>;
   canonicalDocs: Array<{
     label: string;
     path: string;
@@ -315,6 +326,72 @@ export async function getWebFactoryCenterSnapshot(): Promise<WebFactoryCenterSna
         label: "Validacion rapida",
         command: "pnpm factory:smoke",
         purpose: "Recompila demos principales y evita romper el flujo base de Web Factory.",
+      },
+    ],
+    workflowSteps: [
+      {
+        step: 1,
+        title: "Registrar datos clave del cliente",
+        owner: "Arthur",
+        visibleTo: ["arthur", "sergio", "area"],
+        input: "Nombre del negocio, rubro, oferta principal, ciudad, WhatsApp, redes, productos/servicios y referencias que el cliente envie.",
+        action: "Cargar o preparar el perfil en Web Factory y dejar clara la diferencia entre web, tienda, sistema o automatizacion.",
+        output: "Perfil de cliente listo para receta.",
+        approval: "Si el alcance parece sistema, automatizacion o app, Arthur no cotiza: escala a Sergio.",
+      },
+      {
+        step: 2,
+        title: "Buscar y seleccionar referencias",
+        owner: "Arthur",
+        visibleTo: ["arthur", "sergio", "area"],
+        input: "URLs del cliente, galerias internas, screenshots, fuentes, CTAs, secciones y patrones por rubro.",
+        action: "Usar referencias como inspiracion estructural. No copiar marca, fotos, copy, claims ni codigo cerrado.",
+        output: "Referencias exactas vinculadas al brief.",
+        approval: "Sergio revisa si una referencia implica riesgo legal, promesa sensible o identidad demasiado parecida.",
+        command: "pnpm references:harvest:daily",
+      },
+      {
+        step: 3,
+        title: "Generar receta de diseno",
+        owner: "ONIA",
+        visibleTo: ["arthur", "sergio", "area"],
+        input: "Perfil del cliente + contexto + referencias + inteligencia actual del banco de patrones.",
+        action: "Crear una receta con tesis de conversion, riesgo generico, secciones, assets requeridos, codigo referencial y warnings.",
+        output: ".design.json y .design.md revisables.",
+        approval: "Arthur puede preparar; Sergio aprueba si se usa para propuesta o entrega al cliente.",
+        command: "pnpm design:auto -- <slug> --template <landing|store> --force",
+      },
+      {
+        step: 4,
+        title: "Pedir imagenes y materiales faltantes",
+        owner: "Arthur",
+        visibleTo: ["arthur", "sergio", "area"],
+        input: "Warnings de la receta, mediaPlan y assets rotos o ausentes.",
+        action: "Pedir fotos reales, logo, videos, catalogo, precios o autorizacion para usar placeholders temporales.",
+        output: "Lista concreta de assets faltantes o aprobacion de placeholders.",
+        approval: "No se promete entrega final si faltan fotos, productos, precios, permisos o textos criticos.",
+      },
+      {
+        step: 5,
+        title: "Construir preview interno",
+        owner: "ONIA",
+        visibleTo: ["arthur", "sergio", "area"],
+        input: "Receta aprobable y assets disponibles.",
+        action: "Generar preview local para revision de estructura, copy, responsive, performance e imagenes.",
+        output: "Preview en out/<slug>/index.html.",
+        approval: "Arthur puede revisar internamente; no envia al cliente sin aprobacion Sergio.",
+        command: "pnpm factory:build -- <slug> --template <landing|store> --force",
+      },
+      {
+        step: 6,
+        title: "QA, precio y entrega controlada",
+        owner: "Sergio",
+        visibleTo: ["arthur", "sergio", "area"],
+        input: "Preview, checklist de alcance, precio, soporte, dominio, hosting y evidencia.",
+        action: "Validar que no haya imagenes rotas, promesas vagas, alcance sin cobrar o copias de referencias.",
+        output: "Decision: enviar propuesta, pedir datos, cobrar extra o bloquear entrega.",
+        approval: "Solo Sergio aprueba precio final, descuentos, deploy, cobro, entrega y cambios client-facing.",
+        command: "pnpm factory:smoke",
       },
     ],
     canonicalDocs: [

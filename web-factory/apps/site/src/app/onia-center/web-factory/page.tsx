@@ -109,6 +109,53 @@ export default async function WebFactoryCenterPage() {
           <MetricCard icon={Code2} label="Codigo" value={String(snapshot.counts.codeReferences)} detail="Referencias permitidas tras review" />
         </section>
 
+        <section className="onia-panel onia-webfactory-playbook">
+          <SectionHeader
+            icon={Workflow}
+            eyebrow="Paso a paso"
+            title="Como Arthur y Sergio usan la Web Factory"
+            description="Arthur puede preparar datos, referencias, assets y revision interna. Sergio mantiene aprobacion sobre precio, alcance, entrega y deploy."
+          />
+
+          <div className="onia-webfactory-step-grid">
+            {snapshot.workflowSteps.map((step) => (
+              <article key={step.step}>
+                <div className="onia-webfactory-step-number">{step.step}</div>
+                <div className="onia-webfactory-step-body">
+                  <div className="onia-webfactory-step-head">
+                    <span>{step.owner}</span>
+                    <strong>{step.title}</strong>
+                    <small>Visible para {step.visibleTo.map(formatRoleLabel).join(", ")}</small>
+                  </div>
+                  <dl>
+                    <div>
+                      <dt>Entrada</dt>
+                      <dd>{step.input}</dd>
+                    </div>
+                    <div>
+                      <dt>Accion</dt>
+                      <dd>{step.action}</dd>
+                    </div>
+                    <div>
+                      <dt>Salida</dt>
+                      <dd>{step.output}</dd>
+                    </div>
+                    <div>
+                      <dt>Aprobacion</dt>
+                      <dd>{step.approval}</dd>
+                    </div>
+                  </dl>
+                  {step.command ? (
+                    <code>
+                      {step.command}
+                    </code>
+                  ) : null}
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+
         <section className="onia-panel onia-webfactory-command-center">
           <SectionHeader
             icon={Terminal}
@@ -426,4 +473,14 @@ function formatDate(value: string) {
     dateStyle: "medium",
     timeStyle: "short",
   }).format(date);
+}
+
+function formatRoleLabel(role: "arthur" | "sergio" | "area") {
+  const labels = {
+    arthur: "Arthur",
+    sergio: "Sergio",
+    area: "responsable de area",
+  };
+
+  return labels[role];
 }

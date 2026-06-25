@@ -176,6 +176,14 @@ const workspaceCopy: Record<WorkspaceView, { label: string; title: string; descr
   },
 };
 
+const sellerNotebookChecklist = [
+  "Lead con fuente y servicio recomendado",
+  "Resultado de llamada o WhatsApp",
+  "Proxima accion con fecha o responsable",
+  "Evidencia del cobro neto si se gano",
+  "Bloqueo o duda que necesita Sergio",
+];
+
 const scheduleCategoryLabels: Record<string, string> = {
   wake: "Arranque",
   planning: "Direccion",
@@ -727,12 +735,39 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
     () => vendorCommissionRules.filter((rule) => rule.visibility.includes(selectedRole)),
     [selectedRole],
   );
+  const leadServiceOptions = useMemo(
+    () => [
+      ...operationalServices.map((service) => ({
+        id: service.id,
+        name: service.name,
+        helper: service.setupPriceBs
+          ? `${service.plan} / setup ${formatBs(service.setupPriceBs)}`
+          : service.monthlyPriceBs
+            ? `${service.plan} / mensual ${formatBs(service.monthlyPriceBs)}`
+            : service.plan || "Servicio ONIA",
+      })),
+      ...visibleSellerRules.map((rule) => ({
+        id: rule.id,
+        name: rule.serviceName,
+        helper: `${rule.clientPriceLabel} / comision ${rule.commissionLabel}`,
+      })),
+    ],
+    [visibleSellerRules],
+  );
   const sellerRulesByCategory = useMemo(() => {
     return visibleSellerRules.reduce<Record<string, typeof visibleSellerRules>>((groups, rule) => {
       const current = groups[rule.category] ?? [];
       return { ...groups, [rule.category]: [...current, rule] };
     }, {});
   }, [visibleSellerRules]);
+  const workspaceNotes = useMemo(
+    () => visibleNotes.filter((note) => note.kind !== "actualizacion_servicio"),
+    [visibleNotes],
+  );
+  const sellerNotebookNotes = useMemo(
+    () => workspaceNotes.slice(0, 8),
+    [workspaceNotes],
+  );
 
   const summary = useMemo(() => {
     const hotLeads = visibleLeads.filter((lead) => ["nuevo", "contactado", "reunion", "propuesta"].includes(lead.status)).length;
@@ -757,8 +792,8 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
     [visibleTasks],
   );
   const recentEvidence = useMemo(
-    () => visibleNotes.filter((note) => ["evidencia", "bloqueo", "nota"].includes(note.kind)).slice(0, 6),
-    [visibleNotes],
+    () => workspaceNotes.filter((note) => ["evidencia", "bloqueo", "nota"].includes(note.kind)).slice(0, 6),
+    [workspaceNotes],
   );
 
   const teamActivity = useMemo(() => {
@@ -1693,6 +1728,55 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
 
       {workspaceView === "capture" ? (
       <div className="onia-live-grid">
+        <article className="onia-live-card onia-seller-notebook-card">
+          <div className="onia-live-title">
+            <ClipboardCheck size={16} />
+            <strong>{selectedRole === "seller" ? "Mi espacio comercial" : "Cuaderno comercial filtrado"}</strong>
+          </div>
+          <p className="onia-muted-note">
+            Registra llamadas, mensajes, cobros, bloqueos, evidencias y proximos pasos. Sergio puede auditarlo; este rol no ve caja, capital, deuda ni utilidad privada.
+          </p>
+          <div className="onia-seller-notebook-metrics">
+            <div>
+              <span>Leads</span>
+              <strong>{visibleLeads.length}</strong>
+              <small>Propios o visibles</small>
+            </div>
+            <div>
+              <span>Tareas</span>
+              <strong>{visibleTasks.length}</strong>
+              <small>Pendientes y seguimiento</small>
+            </div>
+            <div>
+              <span>Registros</span>
+              <strong>{workspaceNotes.length}</strong>
+              <small>Llamadas, cobros y evidencia</small>
+            </div>
+          </div>
+          <div className="onia-seller-checklist">
+            {sellerNotebookChecklist.map((item) => (
+              <span key={item}>{item}</span>
+            ))}
+          </div>
+          <div className="onia-live-list">
+            {sellerNotebookNotes.length ? (
+              sellerNotebookNotes.map((note) => (
+                <div key={note.id}>
+                  <span>{note.kind} / {roleLabel(note.actorRole ?? "sergio")}</span>
+                  <strong>{note.title}</strong>
+                  <small>{note.linkedTo || note.detail || "Sin relacion"}</small>
+                </div>
+              ))
+            ) : (
+              <div>
+                <span>Sin registros visibles</span>
+                <strong>Guarda aqui la primera llamada, seguimiento o evidencia.</strong>
+                <small>Lo minimo: que paso, con quien, siguiente accion y si hay cobro.</small>
+              </div>
+            )}
+          </div>
+        </article>
+
         <article className="onia-live-card">
           <div className="onia-live-title">
             <Plus size={16} />
@@ -1729,9 +1813,9 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
           <label>
             Servicio recomendado
             <select value={leadForm.serviceId} onChange={(event) => setLeadForm({ ...leadForm, serviceId: event.target.value })}>
-              {operationalServices.map((service) => (
+              {leadServiceOptions.map((service) => (
                 <option key={service.id} value={service.id}>
-                  {service.name}
+                  {service.name} - {service.helper}
                 </option>
               ))}
             </select>
@@ -1869,7 +1953,7 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
             {isSyncing ? "Guardando..." : "Guardar registro"}
           </button>
           <div className="onia-live-list">
-            {visibleNotes.slice(0, 4).map((note) => (
+            {workspaceNotes.slice(0, 4).map((note) => (
               <div key={note.id}>
                 <span>{note.kind} / {roleLabel(note.actorRole ?? "sergio")}</span>
                 <strong>{note.title}</strong>
