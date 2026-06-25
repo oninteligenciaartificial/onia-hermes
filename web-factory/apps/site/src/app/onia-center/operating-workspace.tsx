@@ -445,7 +445,7 @@ function serviceNameById(serviceId: string) {
 
 function findServiceForQuestion(question: string) {
   const normalizedQuestion = normalizeText(question);
-  const tokens = normalizedQuestion.split(" ").filter((token) => token.length > 3);
+  const queryTerms = normalizedQuestion.split(" ").filter((term) => term.length > 3);
 
   const candidates = [
     ...operationalServices.map((service) => ({
@@ -465,7 +465,7 @@ function findServiceForQuestion(question: string) {
   const scored = candidates
     .map((candidate) => {
       const searchable = normalizeText(candidate.text);
-      const score = tokens.reduce((total, token) => total + (searchable.includes(token) ? 1 : 0), 0);
+      const score = queryTerms.reduce((total, term) => total + (searchable.includes(term) ? 1 : 0), 0);
       return { ...candidate, score };
     })
     .filter((candidate) => candidate.score > 0)
@@ -533,10 +533,10 @@ function buildAssistantAnswer({
 
   const asksClient = /\b(cliente|lead|prospecto|empresa|contacto|seguimiento|paso|estado)\b/.test(normalizedQuestion);
   if (asksClient) {
-    const tokens = normalizedQuestion.split(" ").filter((token) => token.length > 3);
+    const queryTerms = normalizedQuestion.split(" ").filter((term) => term.length > 3);
     const matchedLeads = leads.filter((lead) => {
       const searchable = normalizeText([lead.company, lead.contact, lead.source, lead.nextAction, lead.serviceId].join(" "));
-      return tokens.length === 0 || tokens.some((token) => searchable.includes(token));
+      return queryTerms.length === 0 || queryTerms.some((term) => searchable.includes(term));
     });
     const leadList = (matchedLeads.length ? matchedLeads : leads).slice(0, 5);
 
