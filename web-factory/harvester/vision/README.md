@@ -46,6 +46,8 @@ Rules:
 - Use `scrape_gallery_examples.mjs` for deep gallery capture. It stores many lightweight `candidates` and a smaller set of opened `examples` with desktop/mobile screenshots, section extraction, CTAs, palette, layout signals, code links and optional code blocks.
 - Use `merge_gallery_examples.mjs` to merge per-source gallery runs into `web-factory/data/references/design-sources/gallery-examples/latest-gallery-examples.json`.
 - Use `index_component_code_examples.mjs` to create `web-factory/data/references/code-sources/latest-component-code-examples.json` from local repos already marked `allowed-after-review`.
+- Use `build_design_intelligence.mjs` to compile gallery screenshots, fonts, motion signals, CTAs and reusable code repositories into `latest-design-intelligence.json`.
+- Use `watch_design_references.mjs` for the full recurring pipeline: gallery capture, licensed-code index, component examples, merge and intelligence output.
 
 Current stable indexes:
 
@@ -54,6 +56,7 @@ web-factory/data/references/design-sources/gallery-reference-sources.json
 web-factory/data/references/design-sources/gallery-examples/latest-gallery-examples.json
 web-factory/data/references/code-sources/latest-code-cache-index.json
 web-factory/data/references/code-sources/latest-component-code-examples.json
+web-factory/data/references/design-sources/latest-design-intelligence.json
 ```
 
 Standalone commands from `C:\dev\proyectos\onia-hermes\web-factory`:
@@ -61,6 +64,10 @@ Standalone commands from `C:\dev\proyectos\onia-hermes\web-factory`:
 ```powershell
 pnpm references:code-index
 pnpm references:code-examples
+pnpm references:intelligence
+pnpm references:harvest:smoke
+pnpm references:harvest:daily
+pnpm references:harvest:watch
 pnpm references:gallery:merge
 pnpm references:gallery:21st
 pnpm references:gallery:all
@@ -76,6 +83,23 @@ Deep gallery capture command:
 
 ```powershell
 node harvester\vision\scrape_gallery_examples.mjs --config data\references\design-sources\gallery-reference-sources.json --source-ids 21st-community-components --max-items 30 --detail-items 2
+```
+
+Full recurring capture command:
+
+```powershell
+pnpm references:harvest:watch
+```
+
+This loops every 24 hours by default and writes:
+
+```text
+data/references/design-sources/gallery-examples/<timestamp>-design-harvest.json
+data/references/code-sources/<timestamp>-code-cache-index.json
+data/references/code-sources/<timestamp>-component-code-reference-pack.json
+data/references/design-sources/gallery-examples/latest-gallery-examples.json
+data/references/design-sources/latest-design-intelligence.json
+docs/WEB_FACTORY_DESIGN_INTELLIGENCE_LATEST.md
 ```
 
 In Codex desktop, `node_repl` is still useful for ad-hoc captures:

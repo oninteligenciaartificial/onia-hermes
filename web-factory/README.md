@@ -209,8 +209,18 @@ Reference scripts:
 ```powershell
 pnpm references:code-index
 pnpm references:code-examples
+pnpm references:intelligence
+pnpm references:harvest:smoke
+pnpm references:harvest:daily
+pnpm references:harvest:watch
 pnpm references:gallery:merge
 pnpm references:gallery:21st
 pnpm references:gallery:all
 pnpm references:playwright:install
 ```
+
+`references:harvest:*` is the production reference pipeline: it captures
+screenshots/resources from curated galleries, indexes licensed local code,
+merges `latest-gallery-examples.json` and writes
+`data/references/design-sources/latest-design-intelligence.json` plus the
+reader-facing `docs/WEB_FACTORY_DESIGN_INTELLIGENCE_LATEST.md`.

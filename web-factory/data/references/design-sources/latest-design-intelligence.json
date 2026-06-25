@@ -1,0 +1,3864 @@
+{
+  "generatedAt": "2026-06-25T18:07:35.894Z",
+  "policy": "Use this as design intelligence, not as a copy source. Screenshots and closed-site structures are inspiration only. Reuse code only from allowed-after-review repositories after retokenization and QA.",
+  "inputs": {
+    "gallery": "data/references/design-sources/gallery-examples/latest-gallery-examples.json",
+    "code": "data/references/code-sources/latest-component-code-examples.json"
+  },
+  "summary": {
+    "sources": 19,
+    "examples": 31,
+    "screenshots": 62,
+    "codeBlocksFromDocs": 8,
+    "reusableCodeRepositories": 11
+  },
+  "sourceSummaries": [
+    {
+      "id": "10x-app",
+      "name": "10x App",
+      "url": "https://www.10x.app/",
+      "mode": "single-product-study",
+      "licenseStatus": "noncommercial-code-study-only",
+      "usage": "Product and interaction study. The cached repo uses PolyForm Noncommercial, so do not use its code in client/commercial work.",
+      "candidates": 1,
+      "examples": 1,
+      "codeBlocks": 0,
+      "screenshots": 2,
+      "topFonts": [
+        {
+          "value": "Arial",
+          "count": 1
+        },
+        {
+          "value": "Geist, \"Geist Fallback\"",
+          "count": 1
+        }
+      ],
+      "animationLibraries": [],
+      "topCtas": [
+        {
+          "value": "github",
+          "count": 2
+        },
+        {
+          "value": "10x",
+          "count": 1
+        },
+        {
+          "value": "apply",
+          "count": 1
+        },
+        {
+          "value": "applyapply",
+          "count": 1
+        },
+        {
+          "value": "discord",
+          "count": 1
+        },
+        {
+          "value": "download",
+          "count": 1
+        },
+        {
+          "value": "open menu",
+          "count": 1
+        },
+        {
+          "value": "pricing",
+          "count": 1
+        },
+        {
+          "value": "pricingpricing",
+          "count": 1
+        },
+        {
+          "value": "team",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "21st-community-components",
+      "name": "21st.dev Community Components",
+      "url": "https://21st.dev/community/components",
+      "mode": "component-gallery",
+      "licenseStatus": "review-required",
+      "usage": "Component discovery and UI pattern extraction. Verify each community component before copying code.",
+      "candidates": 12,
+      "examples": 2,
+      "codeBlocks": 0,
+      "screenshots": 4,
+      "topFonts": [
+        {
+          "value": "\"ABC Diatype\", system-ui, -apple-system, sans-serif",
+          "count": 2
+        },
+        {
+          "value": "GeistMono, ui-monospace, SFMono-Regular, \"Roboto Mono\", Menlo, Monaco, \"Liberation Mono\", \"DejaVu Sans Mono\", \"Courier New\", monospace",
+          "count": 2
+        },
+        {
+          "value": "GeistSans, \"GeistSans Fallback\", Geist, \"Geist Fallback\", Arial, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\"",
+          "count": 2
+        }
+      ],
+      "animationLibraries": [],
+      "topCtas": [
+        {
+          "value": "components",
+          "count": 4
+        },
+        {
+          "value": "reapollo",
+          "count": 4
+        },
+        {
+          "value": "copy code",
+          "count": 2
+        },
+        {
+          "value": "copy prompt",
+          "count": 2
+        },
+        {
+          "value": "david hakobyan",
+          "count": 2
+        },
+        {
+          "value": "default",
+          "count": 2
+        },
+        {
+          "value": "open sidebar",
+          "count": 2
+        },
+        {
+          "value": "reveal the install command",
+          "count": 2
+        },
+        {
+          "value": "searchk",
+          "count": 2
+        },
+        {
+          "value": "view code",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "id": "21st-landing-page-components",
+      "name": "21st.dev Landing Page Components",
+      "url": "https://21st.dev/community/components/s/landing-page",
+      "mode": "landing-component-gallery",
+      "licenseStatus": "review-required-per-component",
+      "usage": "High-density landing-page component discovery: heroes, features, CTAs, pricing, testimonials and animated sections. Verify each component license before code reuse.",
+      "candidates": 6,
+      "examples": 1,
+      "codeBlocks": 0,
+      "screenshots": 2,
+      "topFonts": [
+        {
+          "value": "\"ABC Diatype\", system-ui, -apple-system, sans-serif",
+          "count": 1
+        },
+        {
+          "value": "GeistMono, ui-monospace, SFMono-Regular, \"Roboto Mono\", Menlo, Monaco, \"Liberation Mono\", \"DejaVu Sans Mono\", \"Courier New\", monospace",
+          "count": 1
+        },
+        {
+          "value": "GeistSans, \"GeistSans Fallback\", Geist, \"Geist Fallback\", Arial, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\"",
+          "count": 1
+        }
+      ],
+      "animationLibraries": [],
+      "topCtas": [
+        {
+          "value": "copy prompt",
+          "count": 2
+        },
+        {
+          "value": "thanh",
+          "count": 2
+        },
+        {
+          "value": "components",
+          "count": 1
+        },
+        {
+          "value": "copy code",
+          "count": 1
+        },
+        {
+          "value": "le thanh",
+          "count": 1
+        },
+        {
+          "value": "open sidebar",
+          "count": 1
+        },
+        {
+          "value": "remix in magic chat",
+          "count": 1
+        },
+        {
+          "value": "reveal the install command",
+          "count": 1
+        },
+        {
+          "value": "searchk",
+          "count": 1
+        },
+        {
+          "value": "view code",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "awwwards-winning-websites",
+      "name": "Awwwards Winning Websites",
+      "url": "https://www.awwwards.com/websites/",
+      "mode": "award-gallery",
+      "licenseStatus": "inspiration-only-high-overdesign-risk",
+      "usage": "Art direction, typography, motion and experimental interaction reference. Translate into one usable design move for ONIA client work.",
+      "candidates": 12,
+      "examples": 2,
+      "codeBlocks": 0,
+      "screenshots": 4,
+      "topFonts": [
+        {
+          "value": "\"Inter Tight\"",
+          "count": 2
+        }
+      ],
+      "animationLibraries": [],
+      "topCtas": [
+        {
+          "value": "annual awards",
+          "count": 2
+        },
+        {
+          "value": "courses",
+          "count": 2
+        },
+        {
+          "value": "free fonts",
+          "count": 2
+        },
+        {
+          "value": "honor mentions",
+          "count": 2
+        },
+        {
+          "value": "honors new",
+          "count": 2
+        },
+        {
+          "value": "jury 2026",
+          "count": 2
+        },
+        {
+          "value": "most awarded profiles",
+          "count": 2
+        },
+        {
+          "value": "nominees",
+          "count": 2
+        },
+        {
+          "value": "portfolio websites",
+          "count": 2
+        },
+        {
+          "value": "sites of the day",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "id": "componentry",
+      "name": "Componentry",
+      "url": "https://www.componentry.fun/docs",
+      "mode": "component-docs",
+      "licenseStatus": "mit-repo-available",
+      "usage": "Reusable component inspiration. Prefer the locally cached MIT repository for code.",
+      "candidates": 12,
+      "examples": 2,
+      "codeBlocks": 8,
+      "screenshots": 4,
+      "topFonts": [
+        {
+          "value": "\"Albert Sans\", \"Albert Sans Fallback\"",
+          "count": 2
+        },
+        {
+          "value": "\"JetBrains Mono\", \"JetBrains Mono Fallback\"",
+          "count": 2
+        },
+        {
+          "value": "Inter, \"Inter Fallback\"",
+          "count": 2
+        }
+      ],
+      "animationLibraries": [],
+      "topCtas": [
+        {
+          "value": "copy code",
+          "count": 3
+        },
+        {
+          "value": "bun",
+          "count": 2
+        },
+        {
+          "value": "copy as markdown",
+          "count": 2
+        },
+        {
+          "value": "docs",
+          "count": 2
+        },
+        {
+          "value": "more export options",
+          "count": 2
+        },
+        {
+          "value": "npm",
+          "count": 2
+        },
+        {
+          "value": "open navigation",
+          "count": 2
+        },
+        {
+          "value": "pnpm",
+          "count": 2
+        },
+        {
+          "value": "yarn",
+          "count": 2
+        },
+        {
+          "value": "center wave",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "dribbble-axion",
+      "name": "Dribbble Axion Shot",
+      "url": "https://dribbble.com/shots/27129126-Axion-Futuristic-Electric-Car-Landing-Page-Website",
+      "mode": "single-shot",
+      "licenseStatus": "screenshot-and-mood-only",
+      "usage": "Mood reference only. Do not copy proprietary layout, assets or code.",
+      "candidates": 1,
+      "examples": 1,
+      "codeBlocks": 0,
+      "screenshots": 2,
+      "topFonts": [
+        {
+          "value": "\"Mona Sans\", \"Helvetica Neue\", Helvetica, Arial, sans-serif",
+          "count": 1
+        },
+        {
+          "value": "Arial",
+          "count": 1
+        }
+      ],
+      "animationLibraries": [],
+      "topCtas": [
+        {
+          "value": "animation",
+          "count": 1
+        },
+        {
+          "value": "branding",
+          "count": 1
+        },
+        {
+          "value": "dribbble: the community for graphic design",
+          "count": 1
+        },
+        {
+          "value": "explore",
+          "count": 1
+        },
+        {
+          "value": "illustration",
+          "count": 1
+        },
+        {
+          "value": "mobile",
+          "count": 1
+        },
+        {
+          "value": "new and noteworthy",
+          "count": 1
+        },
+        {
+          "value": "popular",
+          "count": 1
+        },
+        {
+          "value": "product design",
+          "count": 1
+        },
+        {
+          "value": "shots",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "efferd-blocks",
+      "name": "Efferd Blocks",
+      "url": "https://efferd.com/blocks",
+      "mode": "block-gallery",
+      "licenseStatus": "license-per-block",
+      "usage": "Block-level layout discovery. Verify each block license before reuse.",
+      "candidates": 12,
+      "examples": 2,
+      "codeBlocks": 0,
+      "screenshots": 4,
+      "topFonts": [
+        {
+          "value": "\"Geist Mono\", \"Geist Mono Fallback\"",
+          "count": 2
+        },
+        {
+          "value": "Geist, \"Geist Fallback\"",
+          "count": 2
+        },
+        {
+          "value": "Outfit, \"Outfit Fallback\"",
+          "count": 2
+        }
+      ],
+      "animationLibraries": [],
+      "topCtas": [
+        {
+          "value": "#",
+          "count": 2
+        },
+        {
+          "value": "back to blocks",
+          "count": 2
+        },
+        {
+          "value": "blocks",
+          "count": 2
+        },
+        {
+          "value": "changelog",
+          "count": 2
+        },
+        {
+          "value": "code",
+          "count": 2
+        },
+        {
+          "value": "docs",
+          "count": 2
+        },
+        {
+          "value": "efferd",
+          "count": 2
+        },
+        {
+          "value": "get access",
+          "count": 2
+        },
+        {
+          "value": "log in",
+          "count": 2
+        },
+        {
+          "value": "preview",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "id": "fontpair",
+      "name": "Fontpair",
+      "url": "https://fontpair.co/all",
+      "mode": "typography-gallery",
+      "licenseStatus": "typography-reference",
+      "usage": "Font-pair inspiration and typographic mood extraction. Check font licenses before use.",
+      "candidates": 12,
+      "examples": 2,
+      "codeBlocks": 0,
+      "screenshots": 4,
+      "topFonts": [
+        {
+          "value": "\"Geist Mono\", ui-monospace, monospace",
+          "count": 2
+        },
+        {
+          "value": "Geist, sans-serif",
+          "count": 2
+        },
+        {
+          "value": "Geist, system-ui, -apple-system, sans-serif",
+          "count": 2
+        },
+        {
+          "value": "\"Abhaya Libre\", sans-serif",
+          "count": 1
+        },
+        {
+          "value": "\"Abril Fatface\", sans-serif",
+          "count": 1
+        },
+        {
+          "value": "\"Abyssinica SIL\", sans-serif",
+          "count": 1
+        },
+        {
+          "value": "ABeeZee, sans-serif",
+          "count": 1
+        },
+        {
+          "value": "Abel, sans-serif",
+          "count": 1
+        }
+      ],
+      "animationLibraries": [],
+      "topCtas": [
+        {
+          "value": "fonts",
+          "count": 2
+        },
+        {
+          "value": "go pro",
+          "count": 2
+        },
+        {
+          "value": "inspiration",
+          "count": 2
+        },
+        {
+          "value": "login",
+          "count": 2
+        },
+        {
+          "value": "pairings",
+          "count": 2
+        },
+        {
+          "value": "playground",
+          "count": 2
+        },
+        {
+          "value": "resources",
+          "count": 2
+        },
+        {
+          "value": "settings",
+          "count": 2
+        },
+        {
+          "value": "sign up",
+          "count": 2
+        },
+        {
+          "value": "toggle mobile menu",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "id": "landingfolio",
+      "name": "Landingfolio",
+      "url": "https://www.landingfolio.com/",
+      "mode": "landing-gallery",
+      "licenseStatus": "inspiration-only",
+      "usage": "Landing page examples, templates and component inspiration. Do not copy templates or proprietary assets.",
+      "candidates": 12,
+      "examples": 2,
+      "codeBlocks": 0,
+      "screenshots": 4,
+      "topFonts": [
+        {
+          "value": "\"Plus Jakarta Sans\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", Roboto, Ubuntu, Cantarell, \"Noto Sans\", sans-serif, BlinkMacSystemFont, \"Segoe UI\", \"Helvetica Neue\", Arial, \"Noto Sans\", \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+          "count": 2
+        }
+      ],
+      "animationLibraries": [],
+      "topCtas": [
+        {
+          "value": "login",
+          "count": 4
+        },
+        {
+          "value": "component library",
+          "count": 2
+        },
+        {
+          "value": "free logos the perfect logo for your project is just a click away.",
+          "count": 2
+        },
+        {
+          "value": "inspiration",
+          "count": 2
+        },
+        {
+          "value": "landingfolio",
+          "count": 2
+        },
+        {
+          "value": "learn",
+          "count": 2
+        },
+        {
+          "value": "optimization tips actional design tips to improve your landing page design",
+          "count": 2
+        },
+        {
+          "value": "pricing",
+          "count": 2
+        },
+        {
+          "value": "templates",
+          "count": 2
+        },
+        {
+          "value": "tool reviews the best landing page builder software: the definitive guide.",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "id": "lapa-ninja",
+      "name": "Lapa Ninja",
+      "url": "https://www.lapa.ninja/",
+      "mode": "landing-gallery",
+      "licenseStatus": "inspiration-only",
+      "usage": "Landing-page structure, section ordering, visual hierarchy and copy patterns. Do not copy site code or proprietary assets.",
+      "candidates": 12,
+      "examples": 2,
+      "codeBlocks": 0,
+      "screenshots": 4,
+      "topFonts": [
+        {
+          "value": "Inter, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+          "count": 2
+        }
+      ],
+      "animationLibraries": [],
+      "topCtas": [
+        {
+          "value": "agency ⭐971",
+          "count": 2
+        },
+        {
+          "value": "browse all ⭐7410",
+          "count": 2
+        },
+        {
+          "value": "business ⭐2453",
+          "count": 2
+        },
+        {
+          "value": "lapa ninja - go to homepage",
+          "count": 2
+        },
+        {
+          "value": "minimal3051",
+          "count": 2
+        },
+        {
+          "value": "open main menu",
+          "count": 2
+        },
+        {
+          "value": "portfolio ⭐1067",
+          "count": 2
+        },
+        {
+          "value": "saas ⭐691",
+          "count": 2
+        },
+        {
+          "value": "studio ⭐862",
+          "count": 2
+        },
+        {
+          "value": "toggle dark mode",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "id": "magic-ui",
+      "name": "Magic UI",
+      "url": "https://magicui.design/",
+      "mode": "animated-component-library",
+      "licenseStatus": "mit-open-source-reference",
+      "usage": "Animated marketing components, effects and motion patterns for landing pages. Prefer local MIT repo or registry install commands for implementation.",
+      "candidates": 4,
+      "examples": 1,
+      "codeBlocks": 0,
+      "screenshots": 2,
+      "topFonts": [
+        {
+          "value": "\"Geist Mono\", monospace",
+          "count": 1
+        },
+        {
+          "value": "Geist, sans-serif",
+          "count": 1
+        }
+      ],
+      "animationLibraries": [],
+      "topCtas": [
+        {
+          "value": "🎉 introducing kinetic text",
+          "count": 1
+        },
+        {
+          "value": "205",
+          "count": 1
+        },
+        {
+          "value": "21,35421.4k",
+          "count": 1
+        },
+        {
+          "value": "browse components",
+          "count": 1
+        },
+        {
+          "value": "browse templates",
+          "count": 1
+        },
+        {
+          "value": "components",
+          "count": 1
+        },
+        {
+          "value": "magic ui",
+          "count": 1
+        },
+        {
+          "value": "search documentation...search...⌘k",
+          "count": 1
+        },
+        {
+          "value": "showcase",
+          "count": 1
+        },
+        {
+          "value": "templates",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "mobbin-web",
+      "name": "Mobbin Web",
+      "url": "https://mobbin.com/explore/web",
+      "mode": "product-flow-library",
+      "licenseStatus": "flow-reference-only",
+      "usage": "Real app/web UI flows, copywriting and interaction patterns. Use for UX flow study, not visual copying.",
+      "candidates": 12,
+      "examples": 2,
+      "codeBlocks": 0,
+      "screenshots": 4,
+      "topFonts": [
+        {
+          "value": "saans, \"saans Fallback\", sans-serif",
+          "count": 2
+        }
+      ],
+      "animationLibraries": [],
+      "topCtas": [
+        {
+          "value": "awards",
+          "count": 4
+        },
+        {
+          "value": "log in",
+          "count": 4
+        },
+        {
+          "value": "pricing",
+          "count": 4
+        },
+        {
+          "value": "careers",
+          "count": 2
+        },
+        {
+          "value": "changelog",
+          "count": 2
+        },
+        {
+          "value": "join for free",
+          "count": 2
+        },
+        {
+          "value": "merch",
+          "count": 2
+        },
+        {
+          "value": "mobbin",
+          "count": 2
+        },
+        {
+          "value": "support",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "id": "motion-primitives",
+      "name": "Motion Primitives",
+      "url": "https://motion-primitives.com/docs",
+      "mode": "motion-component-docs",
+      "licenseStatus": "mit-repo-available",
+      "usage": "Motion patterns and interaction primitives. Prefer the locally cached MIT repository for code.",
+      "candidates": 0,
+      "examples": 0,
+      "codeBlocks": 0,
+      "screenshots": 0,
+      "topFonts": [],
+      "animationLibraries": [],
+      "topCtas": []
+    },
+    {
+      "id": "recent-design",
+      "name": "Recent Design",
+      "url": "https://recent.design/",
+      "mode": "daily-design-curation",
+      "licenseStatus": "inspiration-only",
+      "usage": "Daily recent design references across websites, OG images, app screenshots and design skills.",
+      "candidates": 6,
+      "examples": 2,
+      "codeBlocks": 0,
+      "screenshots": 4,
+      "topFonts": [
+        {
+          "value": "ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+          "count": 2
+        }
+      ],
+      "animationLibraries": [],
+      "topCtas": [
+        {
+          "value": "all",
+          "count": 4
+        },
+        {
+          "value": "app icons",
+          "count": 2
+        },
+        {
+          "value": "app screenshots",
+          "count": 2
+        },
+        {
+          "value": "best of x",
+          "count": 2
+        },
+        {
+          "value": "info",
+          "count": 2
+        },
+        {
+          "value": "og images",
+          "count": 2
+        },
+        {
+          "value": "recent",
+          "count": 2
+        },
+        {
+          "value": "skills",
+          "count": 2
+        },
+        {
+          "value": "subscribe",
+          "count": 2
+        },
+        {
+          "value": "websites",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "id": "registry-directory",
+      "name": "Registry Directory",
+      "url": "https://registry.directory/",
+      "mode": "shadcn-registry-index",
+      "licenseStatus": "registry-review-required",
+      "usage": "Find current shadcn-compatible registries, install commands, authors, freshness and component counts. Use as discovery; verify registry license before code reuse.",
+      "candidates": 6,
+      "examples": 1,
+      "codeBlocks": 0,
+      "screenshots": 2,
+      "topFonts": [
+        {
+          "value": "\"DM Sans\", \"DM Sans Fallback\"",
+          "count": 1
+        },
+        {
+          "value": "\"Geist Mono\", \"Geist Mono Fallback\"",
+          "count": 1
+        }
+      ],
+      "animationLibraries": [],
+      "topCtas": [
+        {
+          "value": "← back to directory",
+          "count": 1
+        },
+        {
+          "value": "send feedback (cmd+.)",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "saasframe-landing-pages",
+      "name": "SaaSFrame Landing Pages",
+      "url": "https://www.saasframe.io/categories/landing-page",
+      "mode": "saas-gallery",
+      "licenseStatus": "inspiration-only",
+      "usage": "SaaS landing page hero, value proposition, social proof, pricing and mobile-first CRO patterns.",
+      "candidates": 12,
+      "examples": 2,
+      "codeBlocks": 0,
+      "screenshots": 4,
+      "topFonts": [
+        {
+          "value": "Montserrat, sans-serif",
+          "count": 2
+        },
+        {
+          "value": "system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Oxygen, Ubuntu, Cantarell, \"Fira Sans\", \"Droid Sans\", \"Helvetica Neue\", sans-serif",
+          "count": 2
+        }
+      ],
+      "animationLibraries": [],
+      "topCtas": [
+        {
+          "value": "✍️ blog feed97",
+          "count": 2
+        },
+        {
+          "value": "🎓 academy25",
+          "count": 2
+        },
+        {
+          "value": "👨‍👩‍👧‍👦 about page125",
+          "count": 2
+        },
+        {
+          "value": "👽 404 page45",
+          "count": 2
+        },
+        {
+          "value": "💌 contact page37",
+          "count": 2
+        },
+        {
+          "value": "💼 careers page92",
+          "count": 2
+        },
+        {
+          "value": "📝 blog template59",
+          "count": 2
+        },
+        {
+          "value": "🤑 affiliate page39",
+          "count": 2
+        },
+        {
+          "value": "🥊 comparison page54",
+          "count": 2
+        },
+        {
+          "value": "🪄 ai page15",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "id": "saaslandingpage",
+      "name": "SaaS Landing Page",
+      "url": "https://saaslandingpage.com/",
+      "mode": "saas-gallery",
+      "licenseStatus": "inspiration-only",
+      "usage": "SaaS page section taxonomy: landing, pricing, about, features, testimonials, FAQ and contact.",
+      "candidates": 12,
+      "examples": 2,
+      "codeBlocks": 0,
+      "screenshots": 4,
+      "topFonts": [
+        {
+          "value": "Inter, Inter_Fallback",
+          "count": 2
+        },
+        {
+          "value": "Outfit, Outfit_Fallback",
+          "count": 2
+        }
+      ],
+      "animationLibraries": [],
+      "topCtas": [
+        {
+          "value": "✨ looking for app inspiration? check out saas interface ✨",
+          "count": 2
+        },
+        {
+          "value": "app inspiration",
+          "count": 2
+        },
+        {
+          "value": "inspiration",
+          "count": 2
+        },
+        {
+          "value": "menu",
+          "count": 2
+        },
+        {
+          "value": "saaslandingpage",
+          "count": 2
+        },
+        {
+          "value": "templates",
+          "count": 2
+        },
+        {
+          "value": "visit website",
+          "count": 2
+        },
+        {
+          "value": "000000",
+          "count": 1
+        },
+        {
+          "value": "141414",
+          "count": 1
+        },
+        {
+          "value": "3b97ff",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "shadcn-ui",
+      "name": "shadcn/ui",
+      "url": "https://ui.shadcn.com/blocks",
+      "mode": "block-gallery",
+      "licenseStatus": "mit-repo-available",
+      "usage": "Base component architecture and accessible UI primitives. Prefer the locally cached MIT repository for code.",
+      "candidates": 3,
+      "examples": 2,
+      "codeBlocks": 0,
+      "screenshots": 4,
+      "topFonts": [
+        {
+          "value": "\"Geist Mono\", \"Geist Mono Fallback\"",
+          "count": 2
+        },
+        {
+          "value": "Geist, \"Geist Fallback\"",
+          "count": 2
+        }
+      ],
+      "animationLibraries": [],
+      "topCtas": [
+        {
+          "value": "117k",
+          "count": 2
+        },
+        {
+          "value": "blocks",
+          "count": 2
+        },
+        {
+          "value": "charts",
+          "count": 2
+        },
+        {
+          "value": "components",
+          "count": 2
+        },
+        {
+          "value": "create",
+          "count": 2
+        },
+        {
+          "value": "directory",
+          "count": 2
+        },
+        {
+          "value": "docs",
+          "count": 2
+        },
+        {
+          "value": "home",
+          "count": 2
+        },
+        {
+          "value": "open in",
+          "count": 2
+        },
+        {
+          "value": "search documentation...search...",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "id": "watermelon-ui",
+      "name": "Watermelon UI",
+      "url": "https://ui.watermelon.sh/blocks",
+      "mode": "block-gallery",
+      "licenseStatus": "review-required",
+      "usage": "Component taxonomy and interaction reference. Verify license before copying code.",
+      "candidates": 12,
+      "examples": 2,
+      "codeBlocks": 0,
+      "screenshots": 4,
+      "topFonts": [
+        {
+          "value": "\"Inter Variable\", sans-serif",
+          "count": 2
+        },
+        {
+          "value": "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", \"Courier New\", monospace",
+          "count": 2
+        }
+      ],
+      "animationLibraries": [],
+      "topCtas": [
+        {
+          "value": "animated",
+          "count": 4
+        },
+        {
+          "value": "blocks",
+          "count": 4
+        },
+        {
+          "value": "component",
+          "count": 4
+        },
+        {
+          "value": "changelog",
+          "count": 2
+        },
+        {
+          "value": "framework support",
+          "count": 2
+        },
+        {
+          "value": "installation",
+          "count": 2
+        },
+        {
+          "value": "searchk",
+          "count": 2
+        },
+        {
+          "value": "toggle sidebar",
+          "count": 2
+        },
+        {
+          "value": "watermelon uibeta",
+          "count": 2
+        }
+      ]
+    }
+  ],
+  "globalSignals": {
+    "fonts": [
+      {
+        "value": "\"Geist Mono\", \"Geist Mono Fallback\"",
+        "count": 5
+      },
+      {
+        "value": "Geist, \"Geist Fallback\"",
+        "count": 5
+      },
+      {
+        "value": "\"ABC Diatype\", system-ui, -apple-system, sans-serif",
+        "count": 3
+      },
+      {
+        "value": "Geist, sans-serif",
+        "count": 3
+      },
+      {
+        "value": "GeistMono, ui-monospace, SFMono-Regular, \"Roboto Mono\", Menlo, Monaco, \"Liberation Mono\", \"DejaVu Sans Mono\", \"Courier New\", monospace",
+        "count": 3
+      },
+      {
+        "value": "GeistSans, \"GeistSans Fallback\", Geist, \"Geist Fallback\", Arial, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\"",
+        "count": 3
+      },
+      {
+        "value": "\"Albert Sans\", \"Albert Sans Fallback\"",
+        "count": 2
+      },
+      {
+        "value": "\"Geist Mono\", ui-monospace, monospace",
+        "count": 2
+      },
+      {
+        "value": "\"Inter Tight\"",
+        "count": 2
+      },
+      {
+        "value": "\"Inter Variable\", sans-serif",
+        "count": 2
+      },
+      {
+        "value": "\"JetBrains Mono\", \"JetBrains Mono Fallback\"",
+        "count": 2
+      },
+      {
+        "value": "\"Plus Jakarta Sans\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", Roboto, Ubuntu, Cantarell, \"Noto Sans\", sans-serif, BlinkMacSystemFont, \"Segoe UI\", \"Helvetica Neue\", Arial, \"Noto Sans\", \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+        "count": 2
+      },
+      {
+        "value": "Arial",
+        "count": 2
+      },
+      {
+        "value": "Geist, system-ui, -apple-system, sans-serif",
+        "count": 2
+      },
+      {
+        "value": "Inter, \"Inter Fallback\"",
+        "count": 2
+      },
+      {
+        "value": "Inter, Inter_Fallback",
+        "count": 2
+      },
+      {
+        "value": "Inter, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+        "count": 2
+      },
+      {
+        "value": "Montserrat, sans-serif",
+        "count": 2
+      },
+      {
+        "value": "Outfit, \"Outfit Fallback\"",
+        "count": 2
+      },
+      {
+        "value": "Outfit, Outfit_Fallback",
+        "count": 2
+      },
+      {
+        "value": "saans, \"saans Fallback\", sans-serif",
+        "count": 2
+      },
+      {
+        "value": "system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Oxygen, Ubuntu, Cantarell, \"Fira Sans\", \"Droid Sans\", \"Helvetica Neue\", sans-serif",
+        "count": 2
+      },
+      {
+        "value": "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", \"Courier New\", monospace",
+        "count": 2
+      },
+      {
+        "value": "ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+        "count": 2
+      }
+    ],
+    "ctas": [
+      {
+        "value": "pricing",
+        "count": 9
+      },
+      {
+        "value": "blocks",
+        "count": 8
+      },
+      {
+        "value": "components",
+        "count": 8
+      },
+      {
+        "value": "changelog",
+        "count": 6
+      },
+      {
+        "value": "copy code",
+        "count": 6
+      },
+      {
+        "value": "docs",
+        "count": 6
+      },
+      {
+        "value": "inspiration",
+        "count": 6
+      },
+      {
+        "value": "log in",
+        "count": 6
+      },
+      {
+        "value": "login",
+        "count": 6
+      },
+      {
+        "value": "searchk",
+        "count": 5
+      },
+      {
+        "value": "templates",
+        "count": 5
+      },
+      {
+        "value": "all",
+        "count": 4
+      },
+      {
+        "value": "animated",
+        "count": 4
+      },
+      {
+        "value": "awards",
+        "count": 4
+      },
+      {
+        "value": "component",
+        "count": 4
+      },
+      {
+        "value": "copy prompt",
+        "count": 4
+      },
+      {
+        "value": "reapollo",
+        "count": 4
+      },
+      {
+        "value": "websites",
+        "count": 4
+      },
+      {
+        "value": "default",
+        "count": 3
+      },
+      {
+        "value": "open sidebar",
+        "count": 3
+      },
+      {
+        "value": "reveal the install command",
+        "count": 3
+      },
+      {
+        "value": "toggle menu",
+        "count": 3
+      },
+      {
+        "value": "toggle theme",
+        "count": 3
+      },
+      {
+        "value": "view code",
+        "count": 3
+      }
+    ],
+    "animationLibraries": [],
+    "technologies": [
+      {
+        "value": "hasNextAssets",
+        "count": 16
+      },
+      {
+        "value": "hasViteAssets",
+        "count": 9
+      },
+      {
+        "value": "hasNuxtAssets",
+        "count": 2
+      },
+      {
+        "value": "hasWebflow",
+        "count": 2
+      },
+      {
+        "value": "hasWordPress",
+        "count": 2
+      }
+    ],
+    "sectionHeadings": [
+      {
+        "value": "Color Palette",
+        "count": 8
+      },
+      {
+        "value": "Awards",
+        "count": 2
+      },
+      {
+        "value": "Blog",
+        "count": 2
+      },
+      {
+        "value": "Building Blocks for the Web",
+        "count": 2
+      },
+      {
+        "value": "Built by shadcn at Vercel. The source code is available on GitHub.",
+        "count": 2
+      },
+      {
+        "value": "By Category",
+        "count": 2
+      },
+      {
+        "value": "By Technology",
+        "count": 2
+      },
+      {
+        "value": "Collections",
+        "count": 2
+      },
+      {
+        "value": "Handhold",
+        "count": 2
+      },
+      {
+        "value": "Join 25,000+ designers choosing fonts with confidence",
+        "count": 2
+      },
+      {
+        "value": "Mobbin",
+        "count": 2
+      },
+      {
+        "value": "Site of the Day - Jun 23, 2026",
+        "count": 2
+      },
+      {
+        "value": "Site of the Day - Jun 24, 2026",
+        "count": 2
+      },
+      {
+        "value": "Slite Landing Page Structure",
+        "count": 2
+      },
+      {
+        "value": "Toggle theme",
+        "count": 2
+      },
+      {
+        "value": "Trending",
+        "count": 2
+      },
+      {
+        "value": "#030304 #FDFCFC #3F4D58 #C7ACA9 #F81F05 #56403D #C0936C #D85522 Download color palette",
+        "count": 1
+      },
+      {
+        "value": "3Lorenzo",
+        "count": 1
+      },
+      {
+        "value": "4Lance",
+        "count": 1
+      },
+      {
+        "value": "All Fonts",
+        "count": 1
+      },
+      {
+        "value": "Alyx",
+        "count": 1
+      },
+      {
+        "value": "amoamoamo",
+        "count": 1
+      },
+      {
+        "value": "Announcement",
+        "count": 1
+      },
+      {
+        "value": "Auth",
+        "count": 1
+      }
+    ]
+  },
+  "recommendedWorkflow": [
+    "Select 3-6 exact references per client: one structure, one typography, one motion, one CTA/proof, one asset direction.",
+    "Use screenshot paths and URLs to study visual hierarchy; never reuse screenshots, copy or closed-site assets as client media.",
+    "Use animationSignals to choose one or two motion patterns, then rebuild them with ONIA tokens.",
+    "Use reusableCodeRepositories only when status is allowed-after-review and after license, dependency, accessibility and responsive checks.",
+    "Write final selected references into data/intakes/<slug>.json before generating the client profile."
+  ],
+  "topExamples": [
+    {
+      "sourceId": "magic-ui",
+      "sourceName": "Magic UI",
+      "licenseStatus": "mit-open-source-reference",
+      "url": "http://magicui.design/",
+      "title": "Magic UI",
+      "description": "Beautiful UI components and templates to make your landing page look stunning.",
+      "reuseGuidance": "Animated marketing components, effects and motion patterns for landing pages. Prefer local MIT repo or registry install commands for implementation.",
+      "screenshots": {
+        "desktop": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/magic-ui/242-magicui-design-6edb6ee7/desktop.png",
+          "sha256": "c80e920bde1e4ffa6cfc409525f32e1784871e873bafede4e48ce02b78dd2428",
+          "mode": "viewport"
+        },
+        "mobile": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/magic-ui/242-magicui-design-6edb6ee7/mobile.png",
+          "sha256": "1da0b1aa0d7936c55b609e7b3fcc9882ce37eda8553d107cd26f6f66f47221a6",
+          "mode": "viewport"
+        }
+      },
+      "headings": [
+        {
+          "level": "h2",
+          "text": "Command Palette"
+        },
+        {
+          "level": "h1",
+          "text": "UI library for Design Engineers"
+        },
+        {
+          "level": "h2",
+          "text": "Showcase"
+        },
+        {
+          "level": "h3",
+          "text": "Companies choose Magic UI to build their landing pages."
+        },
+        {
+          "level": "h2",
+          "text": "What People Are Saying on Twitter"
+        },
+        {
+          "level": "h2",
+          "text": "Featured on YouTube"
+        }
+      ],
+      "ctas": [
+        "Toggle Menu",
+        "Magic UI",
+        "Components",
+        "Templates",
+        "Showcase",
+        "Search documentation...Search...⌘K",
+        "21,35421.4k",
+        "205",
+        "Toggle theme",
+        "🎉 Introducing Kinetic Text",
+        "Browse Components",
+        "Browse Templates"
+      ],
+      "topFonts": [
+        "Geist, sans-serif",
+        "\"Geist Mono\", monospace"
+      ],
+      "animationSignals": {
+        "libraries": {
+          "framerMotion": false,
+          "gsap": false,
+          "three": false,
+          "lottie": false,
+          "locomotiveScroll": false
+        },
+        "animatedElementCount": 96,
+        "keyframes": [
+          "spin",
+          "ping",
+          "pulse",
+          "enter",
+          "exit",
+          "accordion-down",
+          "accordion-up",
+          "blink-cursor",
+          "aurora",
+          "background-position-spin",
+          "gradient",
+          "meteor"
+        ]
+      },
+      "codeLinks": [
+        {
+          "url": "https://github.com/magicuidesign/magicui",
+          "text": "21,35421.4k"
+        },
+        {
+          "url": "https://elhussary.vercel.app/",
+          "text": "elhussaryPersonal Portfolio"
+        },
+        {
+          "url": "https://robot-toast.vercel.app/",
+          "text": "robot-toastOpen-source library"
+        },
+        {
+          "url": "https://elhussary.vercel.app/",
+          "text": "elhussaryPersonal Portfolio"
+        },
+        {
+          "url": "https://robot-toast.vercel.app/",
+          "text": "robot-toastOpen-source library"
+        },
+        {
+          "url": "https://elhussary.vercel.app/",
+          "text": "elhussaryPersonal Portfolio"
+        },
+        {
+          "url": "https://robot-toast.vercel.app/",
+          "text": "robot-toastOpen-source library"
+        },
+        {
+          "url": "https://elhussary.vercel.app/",
+          "text": "elhussaryPersonal Portfolio"
+        }
+      ],
+      "codeBlockCount": 0,
+      "qualityWarnings": []
+    },
+    {
+      "sourceId": "21st-landing-page-components",
+      "sourceName": "21st.dev Landing Page Components",
+      "licenseStatus": "review-required-per-component",
+      "url": "https://21st.dev/community/components/thanh/animated-section-with-gradient-and-dynamic-lines/default",
+      "title": "Animated Section with Gradient and Dynamic Lines | Community Components - 21st | 21st",
+      "description": "Animated Dark‐Mode Section with Gradient Heading and Dynamic SVG Lines",
+      "reuseGuidance": "High-density landing-page component discovery: heroes, features, CTAs, pricing, testimonials and animated sections. Verify each component license before code reuse.",
+      "screenshots": {
+        "desktop": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/21st-landing-page-components/1766-animated-section-with-gradient-and-dynamic-lines-9e7dde56/desktop.png",
+          "sha256": "b2c0155bd79b56dd09bb091e61a35ff2ca752d0865e0312e8fd5b1370e991250",
+          "mode": "viewport"
+        },
+        "mobile": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/21st-landing-page-components/1766-animated-section-with-gradient-and-dynamic-lines-9e7dde56/mobile.png",
+          "sha256": "46af50ac3ef42bc04412c6de651d9fe2a6f5db1e2390919a5c70208a7f0ad138",
+          "mode": "viewport"
+        }
+      },
+      "headings": [
+        {
+          "level": "h3",
+          "text": "Animated Section with Gradient and Dynamic Lines"
+        },
+        {
+          "level": "h3",
+          "text": "Created by"
+        },
+        {
+          "level": "h3",
+          "text": "Installation"
+        },
+        {
+          "level": "h3",
+          "text": "How to use"
+        }
+      ],
+      "ctas": [
+        "Open sidebar",
+        "thanh",
+        "SearchK",
+        "Copy prompt",
+        "Copy code",
+        "View code",
+        "Components",
+        "thanh",
+        "Le Thanh",
+        "Reveal the install command",
+        "Remix in Magic Chat",
+        "Copy prompt"
+      ],
+      "topFonts": [
+        "GeistSans, \"GeistSans Fallback\", Geist, \"Geist Fallback\", Arial, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\"",
+        "\"ABC Diatype\", system-ui, -apple-system, sans-serif",
+        "GeistMono, ui-monospace, SFMono-Regular, \"Roboto Mono\", Menlo, Monaco, \"Liberation Mono\", \"DejaVu Sans Mono\", \"Courier New\", monospace"
+      ],
+      "animationSignals": {
+        "libraries": {
+          "framerMotion": false,
+          "gsap": false,
+          "three": false,
+          "lottie": false,
+          "locomotiveScroll": false
+        },
+        "animatedElementCount": 35,
+        "keyframes": [
+          "bounce",
+          "ping-slow",
+          "pulse",
+          "shimmer-slide",
+          "spin",
+          "spin-around",
+          "star-movement-bottom",
+          "star-movement-top",
+          "text-shimmer",
+          "enter",
+          "exit",
+          "shimmer"
+        ]
+      },
+      "codeLinks": [],
+      "codeBlockCount": 0,
+      "qualityWarnings": []
+    },
+    {
+      "sourceId": "registry-directory",
+      "sourceName": "Registry Directory",
+      "licenseStatus": "registry-review-required",
+      "url": "https://registry.directory/disclosure",
+      "title": "Affiliate Disclosure | registry.directory",
+      "description": "registry.directory affiliate disclosure. Some links on this site are affiliate links.",
+      "reuseGuidance": "Find current shadcn-compatible registries, install commands, authors, freshness and component counts. Use as discovery; verify registry license before code reuse.",
+      "screenshots": {
+        "desktop": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/registry-directory/153-registry-directoryregistry-directory-beta-5487b35f/desktop.png",
+          "sha256": "bb2717e9eff1a08a93e8c08fa3d4de6107af2d1685a1dec74e6c47128d552dc6",
+          "mode": "viewport"
+        },
+        "mobile": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/registry-directory/153-registry-directoryregistry-directory-beta-5487b35f/mobile.png",
+          "sha256": "0ba58e11ce5702c477b2a3a001c93ae52081c8e01c91368c5614e924caa129d9",
+          "mode": "viewport"
+        }
+      },
+      "headings": [
+        {
+          "level": "h1",
+          "text": "Affiliate Disclosure"
+        }
+      ],
+      "ctas": [
+        "← Back to directory",
+        "Send feedback (Cmd+.)"
+      ],
+      "topFonts": [
+        "\"DM Sans\", \"DM Sans Fallback\"",
+        "\"Geist Mono\", \"Geist Mono Fallback\""
+      ],
+      "animationSignals": {
+        "libraries": {
+          "framerMotion": false,
+          "gsap": false,
+          "three": false,
+          "lottie": false,
+          "locomotiveScroll": false
+        },
+        "animatedElementCount": 2,
+        "keyframes": [
+          "enter",
+          "exit"
+        ]
+      },
+      "codeLinks": [],
+      "codeBlockCount": 0,
+      "qualityWarnings": []
+    },
+    {
+      "sourceId": "componentry",
+      "sourceName": "Componentry",
+      "licenseStatus": "mit-repo-available",
+      "url": "https://www.componentry.fun/docs/components/bouncy-accordion",
+      "title": "Bouncy Accordion Component",
+      "description": "An animated accordion with a playful spring bounce on expand and collapse.",
+      "reuseGuidance": "Reusable component inspiration. Prefer the locally cached MIT repository for code.",
+      "screenshots": {
+        "desktop": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/componentry/020-bouncy-accordion-48a560b7/desktop.png",
+          "sha256": "466789f552f0cf5a62e20b87f970093d878820eda062fdb943fe0f3c316e7f97",
+          "mode": "viewport"
+        },
+        "mobile": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/componentry/020-bouncy-accordion-48a560b7/mobile.png",
+          "sha256": "50358d72f2c1128c895a6f100d118d852811f9f7ecb25a03e199eeb3aff0eaff",
+          "mode": "viewport"
+        }
+      },
+      "headings": [
+        {
+          "level": "h1",
+          "text": "Bouncy Accordion"
+        },
+        {
+          "level": "h2",
+          "text": "Installation"
+        },
+        {
+          "level": "h2",
+          "text": "Usage"
+        },
+        {
+          "level": "h2",
+          "text": "API Reference"
+        }
+      ],
+      "ctas": [
+        "Open Navigation",
+        "Docs",
+        "Copy as Markdown",
+        "More export options",
+        "bun",
+        "npm",
+        "pnpm",
+        "yarn",
+        "Copy code",
+        "Copy code",
+        "DM me on X",
+        "Search"
+      ],
+      "topFonts": [
+        "\"Albert Sans\", \"Albert Sans Fallback\"",
+        "Inter, \"Inter Fallback\"",
+        "\"JetBrains Mono\", \"JetBrains Mono Fallback\""
+      ],
+      "animationSignals": {
+        "libraries": {},
+        "animatedElementCount": 0,
+        "keyframes": []
+      },
+      "codeLinks": [],
+      "codeBlockCount": 4,
+      "qualityWarnings": []
+    },
+    {
+      "sourceId": "componentry",
+      "sourceName": "Componentry",
+      "licenseStatus": "mit-repo-available",
+      "url": "https://www.componentry.fun/docs/components/letter-cascade",
+      "title": "Letter Cascade Component",
+      "description": "Kinetic text animation where letters scatter outward with spring physics and blur, then elegantly reassemble.",
+      "reuseGuidance": "Reusable component inspiration. Prefer the locally cached MIT repository for code.",
+      "screenshots": {
+        "desktop": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/componentry/012-letter-cascade-905e3367/desktop.png",
+          "sha256": "09bc6264a3485e38061db1c7697a3e69cb46fb268a5f19bc2883b1b2c36aaf42",
+          "mode": "viewport"
+        },
+        "mobile": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/componentry/012-letter-cascade-905e3367/mobile.png",
+          "sha256": "2c42ef8885d2f35089635582c4ff1e798a66da93bf366955db3c1cfa79c54b2c",
+          "mode": "viewport"
+        }
+      },
+      "headings": [
+        {
+          "level": "h1",
+          "text": "Letter Cascade"
+        },
+        {
+          "level": "h2",
+          "text": "Installation"
+        },
+        {
+          "level": "h2",
+          "text": "Usage"
+        },
+        {
+          "level": "h2",
+          "text": "API Reference"
+        }
+      ],
+      "ctas": [
+        "Open Navigation",
+        "Docs",
+        "Copy as Markdown",
+        "More export options",
+        "bun",
+        "npm",
+        "pnpm",
+        "yarn",
+        "Copy code",
+        "Default",
+        "Center Wave",
+        "Extra Bouncy"
+      ],
+      "topFonts": [
+        "\"Albert Sans\", \"Albert Sans Fallback\"",
+        "Inter, \"Inter Fallback\"",
+        "\"JetBrains Mono\", \"JetBrains Mono Fallback\""
+      ],
+      "animationSignals": {
+        "libraries": {},
+        "animatedElementCount": 0,
+        "keyframes": []
+      },
+      "codeLinks": [],
+      "codeBlockCount": 4,
+      "qualityWarnings": []
+    },
+    {
+      "sourceId": "10x-app",
+      "sourceName": "10x App",
+      "licenseStatus": "noncommercial-code-study-only",
+      "url": "https://www.10x.app/",
+      "title": "10x - App Builder",
+      "description": "10x is an AI-powered iOS app builder for macOS. Describe the app you want, and 10x generates SwiftUI code, an Xcode project, and a simulator preview.",
+      "reuseGuidance": "Product and interaction study. The cached repo uses PolyForm Noncommercial, so do not use its code in client/commercial work.",
+      "screenshots": {
+        "desktop": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/10x-app/000-10x-app-27d996e9/desktop.png",
+          "sha256": "0ec7c83b863535cf4234fb3c7f38bb9022363e950b28a05f4912158c88b703b8",
+          "mode": "viewport"
+        },
+        "mobile": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/10x-app/000-10x-app-27d996e9/mobile.png",
+          "sha256": "ee843c473115bbe86469229fb2c50e7a6b0e028ebb68eece7cdc0e0f4da93af1",
+          "mode": "viewport"
+        }
+      },
+      "headings": [
+        {
+          "level": "h1",
+          "text": "Shopifyformobileapps"
+        },
+        {
+          "level": "h2",
+          "text": "Features"
+        },
+        {
+          "level": "h2",
+          "text": "Fits right into your stack"
+        },
+        {
+          "level": "h2",
+          "text": "Pricing"
+        },
+        {
+          "level": "h2",
+          "text": "FAQs"
+        },
+        {
+          "level": "h2",
+          "text": "Build 10x better.Ship 10x faster."
+        }
+      ],
+      "ctas": [
+        "10x",
+        "PricingPricing",
+        "ApplyApply",
+        "TeamTeam",
+        "GitHub",
+        "Discord",
+        "Download",
+        "Open menu",
+        "Pricing",
+        "Apply",
+        "Team",
+        "GitHub"
+      ],
+      "topFonts": [
+        "Geist, \"Geist Fallback\"",
+        "Arial"
+      ],
+      "animationSignals": {
+        "libraries": {},
+        "animatedElementCount": 0,
+        "keyframes": []
+      },
+      "codeLinks": [
+        {
+          "url": "https://github.com/10x-app-builder/10x",
+          "text": ""
+        },
+        {
+          "url": "https://github.com/10x-app-builder/10x",
+          "text": "GitHub"
+        },
+        {
+          "url": "https://github.com/10x-app-builder/10x",
+          "text": "GitHub"
+        }
+      ],
+      "codeBlockCount": 0,
+      "qualityWarnings": []
+    },
+    {
+      "sourceId": "21st-community-components",
+      "sourceName": "21st.dev Community Components",
+      "licenseStatus": "review-required",
+      "url": "https://21st.dev/community/components/reapollo/heroui-modal/default",
+      "title": "HeroUI Modal | Community Components - 21st | 21st",
+      "description": "HeroUI v3 Modal — compound dialog/overlay with placements, backdrops, sizes, dismiss behavior, scroll behavior, controlled state and forms.",
+      "reuseGuidance": "Component discovery and UI pattern extraction. Verify each community component before copying code.",
+      "screenshots": {
+        "desktop": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/21st-community-components/074-heroui-modal-3aa230b0/desktop.png",
+          "sha256": "0b4cfe9d3abd5b7f292b22a27992be322dad282b5e8d55b5d19e4f9ed2037f81",
+          "mode": "viewport"
+        },
+        "mobile": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/21st-community-components/074-heroui-modal-3aa230b0/mobile.png",
+          "sha256": "e55f2a41ef700cfb95ee3cf0e8d7523f79747912ef569d282b30a148bdd579b9",
+          "mode": "viewport"
+        }
+      },
+      "headings": [
+        {
+          "level": "h3",
+          "text": "HeroUI Modal"
+        },
+        {
+          "level": "h3",
+          "text": "Created by"
+        },
+        {
+          "level": "h3",
+          "text": "Installation"
+        },
+        {
+          "level": "h3",
+          "text": "How to use"
+        },
+        {
+          "level": "h3",
+          "text": "Dependencies"
+        },
+        {
+          "level": "h3",
+          "text": "Website"
+        }
+      ],
+      "ctas": [
+        "Open sidebar",
+        "Components",
+        "reapollo",
+        "Default",
+        "SearchK",
+        "Copy prompt",
+        "Copy code",
+        "View code",
+        "Components",
+        "reapollo",
+        "David Hakobyan",
+        "Reveal the install command"
+      ],
+      "topFonts": [
+        "GeistSans, \"GeistSans Fallback\", Geist, \"Geist Fallback\", Arial, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\"",
+        "\"ABC Diatype\", system-ui, -apple-system, sans-serif",
+        "GeistMono, ui-monospace, SFMono-Regular, \"Roboto Mono\", Menlo, Monaco, \"Liberation Mono\", \"DejaVu Sans Mono\", \"Courier New\", monospace"
+      ],
+      "animationSignals": {
+        "libraries": {},
+        "animatedElementCount": 0,
+        "keyframes": []
+      },
+      "codeLinks": [
+        {
+          "url": "https://www.npmjs.com/package/@heroui/react",
+          "text": "@heroui/react"
+        },
+        {
+          "url": "https://www.npmjs.com/package/@heroui/styles",
+          "text": "@heroui/styles"
+        },
+        {
+          "url": "https://www.npmjs.com/package/lucide-react",
+          "text": "lucide-react"
+        }
+      ],
+      "codeBlockCount": 0,
+      "qualityWarnings": []
+    },
+    {
+      "sourceId": "21st-community-components",
+      "sourceName": "21st.dev Community Components",
+      "licenseStatus": "review-required",
+      "url": "https://21st.dev/community/components/reapollo/heroui-tabs/default",
+      "title": "HeroUI Tabs | Community Components - 21st | 21st",
+      "description": "Accessible tabs built on React Aria, from HeroUI v3. Primary (filled blue indicator) and secondary (blue underline) variants, horizontal and vertical orientation, disabled tabs, optional separators, and fully custom Tailwind styling. Compound API: Tabs / Tabs.ListContainer / Tabs.List / Tabs.Tab / Tabs.Indicator / Tabs.Separator / Tabs.Panel.",
+      "reuseGuidance": "Component discovery and UI pattern extraction. Verify each community component before copying code.",
+      "screenshots": {
+        "desktop": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/21st-community-components/076-heroui-tabs-fb158cc8/desktop.png",
+          "sha256": "6d4d2555d172ee8b8672091974a01c01998ebac49c4edf36e40127d6ce5704eb",
+          "mode": "viewport"
+        },
+        "mobile": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/21st-community-components/076-heroui-tabs-fb158cc8/mobile.png",
+          "sha256": "39035e2e2149678c5cc1471c858b0722244557218bbe1105d843a844b203335d",
+          "mode": "viewport"
+        }
+      },
+      "headings": [
+        {
+          "level": "h3",
+          "text": "HeroUI Tabs"
+        },
+        {
+          "level": "h3",
+          "text": "Created by"
+        },
+        {
+          "level": "h3",
+          "text": "Installation"
+        },
+        {
+          "level": "h3",
+          "text": "How to use"
+        },
+        {
+          "level": "h3",
+          "text": "Dependencies"
+        },
+        {
+          "level": "h3",
+          "text": "Website"
+        }
+      ],
+      "ctas": [
+        "Open sidebar",
+        "Components",
+        "reapollo",
+        "Default",
+        "SearchK",
+        "Copy prompt",
+        "Copy code",
+        "View code",
+        "Components",
+        "reapollo",
+        "David Hakobyan",
+        "Reveal the install command"
+      ],
+      "topFonts": [
+        "GeistSans, \"GeistSans Fallback\", Geist, \"Geist Fallback\", Arial, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\"",
+        "\"ABC Diatype\", system-ui, -apple-system, sans-serif",
+        "GeistMono, ui-monospace, SFMono-Regular, \"Roboto Mono\", Menlo, Monaco, \"Liberation Mono\", \"DejaVu Sans Mono\", \"Courier New\", monospace"
+      ],
+      "animationSignals": {
+        "libraries": {},
+        "animatedElementCount": 0,
+        "keyframes": []
+      },
+      "codeLinks": [
+        {
+          "url": "https://www.npmjs.com/package/@heroui/react",
+          "text": "@heroui/react"
+        },
+        {
+          "url": "https://www.npmjs.com/package/@heroui/styles",
+          "text": "@heroui/styles"
+        }
+      ],
+      "codeBlockCount": 0,
+      "qualityWarnings": []
+    },
+    {
+      "sourceId": "awwwards-winning-websites",
+      "sourceName": "Awwwards Winning Websites",
+      "licenseStatus": "inspiration-only-high-overdesign-risk",
+      "url": "https://www.awwwards.com/sites/wolverine-worldwide",
+      "title": "Wolverine Worldwide - Awwwards SOTD",
+      "description": "Wolverine Worldwide is the company behind Merrell, Saucony, Sperry, and Hush Puppies, with one mission: Make. Every Day. Better.",
+      "reuseGuidance": "Art direction, typography, motion and experimental interaction reference. Translate into one usable design move for ONIA client work.",
+      "screenshots": {
+        "desktop": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/awwwards-winning-websites/476-locomotive-040978f6/desktop.png",
+          "sha256": "099dc91e686c465a98093a9588dd8e94b59ebda3de5d4540822cafcad0d26e9a",
+          "mode": "viewport"
+        },
+        "mobile": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/awwwards-winning-websites/476-locomotive-040978f6/mobile.png",
+          "sha256": "9c7d78c2b629a2b438fbfd3d9f02fc9a20f21419e20f0317ea9586b103292ef3",
+          "mode": "viewport"
+        }
+      },
+      "headings": [
+        {
+          "level": "h2",
+          "text": "Site of the Day - Jun 24, 2026"
+        },
+        {
+          "level": "h1",
+          "text": "Wolverine Worldwide"
+        },
+        {
+          "level": "h2",
+          "text": "Elements"
+        },
+        {
+          "level": "h3",
+          "text": "See the highlights of this website."
+        },
+        {
+          "level": "h3",
+          "text": "Fullscreen Masked Parallax"
+        },
+        {
+          "level": "h3",
+          "text": "Fullscreen Masked Parallax"
+        }
+      ],
+      "ctas": [
+        "Courses",
+        "Honor Mentions",
+        "Nominees",
+        "Sites of the Day",
+        "Sites of the Month",
+        "Sites of the Year",
+        "Honors New",
+        "Most Awarded Profiles",
+        "Jury 2026",
+        "Annual Awards",
+        "Portfolio Websites",
+        "Free fonts"
+      ],
+      "topFonts": [
+        "\"Inter Tight\""
+      ],
+      "animationSignals": {
+        "libraries": {},
+        "animatedElementCount": 0,
+        "keyframes": []
+      },
+      "codeLinks": [],
+      "codeBlockCount": 0,
+      "qualityWarnings": []
+    },
+    {
+      "sourceId": "awwwards-winning-websites",
+      "sourceName": "Awwwards Winning Websites",
+      "licenseStatus": "inspiration-only-high-overdesign-risk",
+      "url": "https://www.awwwards.com/sites/sui",
+      "title": "Sui - Awwwards SOTD",
+      "description": "Sui is a Layer 1 blockchain platform for scalable Web3 applications and decentralized infrastructure. The new brand and website were created to reflect...",
+      "reuseGuidance": "Art direction, typography, motion and experimental interaction reference. Translate into one usable design move for ONIA client work.",
+      "screenshots": {
+        "desktop": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/awwwards-winning-websites/479-holographik-99c60348/desktop.png",
+          "sha256": "8c8559516ff65e95bd585e66a48c2b46530ebe1870cf125128494bc0606e4530",
+          "mode": "viewport"
+        },
+        "mobile": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/awwwards-winning-websites/479-holographik-99c60348/mobile.png",
+          "sha256": "ff098bff00900dd53311bf43373e33070f7ce35b21f323e39d58bcbb27b8f246",
+          "mode": "viewport"
+        }
+      },
+      "headings": [
+        {
+          "level": "h2",
+          "text": "Site of the Day - Jun 23, 2026"
+        },
+        {
+          "level": "h1",
+          "text": "Sui"
+        },
+        {
+          "level": "h2",
+          "text": "Elements"
+        },
+        {
+          "level": "h3",
+          "text": "See the highlights of this website."
+        },
+        {
+          "level": "h3",
+          "text": "Homepage header"
+        },
+        {
+          "level": "h3",
+          "text": "Homepage header"
+        }
+      ],
+      "ctas": [
+        "Courses",
+        "Honor Mentions",
+        "Nominees",
+        "Sites of the Day",
+        "Sites of the Month",
+        "Sites of the Year",
+        "Honors New",
+        "Most Awarded Profiles",
+        "Jury 2026",
+        "Annual Awards",
+        "Portfolio Websites",
+        "Free fonts"
+      ],
+      "topFonts": [
+        "\"Inter Tight\""
+      ],
+      "animationSignals": {
+        "libraries": {},
+        "animatedElementCount": 0,
+        "keyframes": []
+      },
+      "codeLinks": [],
+      "codeBlockCount": 0,
+      "qualityWarnings": []
+    },
+    {
+      "sourceId": "dribbble-axion",
+      "sourceName": "Dribbble Axion Shot",
+      "licenseStatus": "screenshot-and-mood-only",
+      "url": "https://dribbble.com/shots/27129126-Axion-Futuristic-Electric-Car-Landing-Page-Website",
+      "title": "Axion - Futuristic Electric Car Landing Page Website by Rylic Studio on Dribbble",
+      "description": "Axion - Futuristic Electric Car Landing Page Website designed by Rylic Studio. Connect with them on Dribbble; the global community for designers and creative professionals.",
+      "reuseGuidance": "Mood reference only. Do not copy proprietary layout, assets or code.",
+      "screenshots": {
+        "desktop": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/dribbble-axion/000-dribbble-axion-shot-29dd330d/desktop.png",
+          "sha256": "332a3726bbd45b3a968560a6e2b5ad811c27ab06831565bbd2c4e9baa4b7a534",
+          "mode": "viewport"
+        },
+        "mobile": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/dribbble-axion/000-dribbble-axion-shot-29dd330d/mobile.png",
+          "sha256": "f0b23ef2879fd6083e26c469d250dc8e2c00ef78a0a8e85c8900508ddb05569b",
+          "mode": "viewport"
+        }
+      },
+      "headings": [
+        {
+          "level": "h1",
+          "text": "Axion - Futuristic Electric Car Landing Page Website"
+        },
+        {
+          "level": "h2",
+          "text": "Axion – Futuristic Electric Car Landing Page Design"
+        }
+      ],
+      "ctas": [
+        "Dribbble: the community for graphic design",
+        "What are you looking for?",
+        "Shots",
+        "Explore",
+        "Popular",
+        "New and Noteworthy",
+        "Product Design",
+        "Web Design",
+        "Animation",
+        "Branding",
+        "Illustration",
+        "Mobile"
+      ],
+      "topFonts": [
+        "\"Mona Sans\", \"Helvetica Neue\", Helvetica, Arial, sans-serif",
+        "Arial"
+      ],
+      "animationSignals": {
+        "libraries": {},
+        "animatedElementCount": 0,
+        "keyframes": []
+      },
+      "codeLinks": [],
+      "codeBlockCount": 0,
+      "qualityWarnings": []
+    },
+    {
+      "sourceId": "efferd-blocks",
+      "sourceName": "Efferd Blocks",
+      "licenseStatus": "license-per-block",
+      "url": "https://efferd.com/blocks/auth",
+      "title": "Free & Pro Shadcn Auth Blocks - Efferd",
+      "description": "Discover Auth blocks — ready to copy, customize, and drop into your Shadcn/UI project.",
+      "reuseGuidance": "Block-level layout discovery. Verify each block license before reuse.",
+      "screenshots": {
+        "desktop": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/efferd-blocks/007-auth-fa3aac25/desktop.png",
+          "sha256": "b39d0866fb4d6246abe7317e3c3c15b1ada3af66f66d074e3352aa0ed9962113",
+          "mode": "viewport"
+        },
+        "mobile": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/efferd-blocks/007-auth-fa3aac25/mobile.png",
+          "sha256": "6d97a25eafeb95bce986c5d95371bbabd9a7be10b6a471741722d620b564c124",
+          "mode": "viewport"
+        }
+      },
+      "headings": [
+        {
+          "level": "h1",
+          "text": "Explore Auth Blocks"
+        },
+        {
+          "level": "h2",
+          "text": "auth 1"
+        },
+        {
+          "level": "h2",
+          "text": "auth 2"
+        },
+        {
+          "level": "h2",
+          "text": "auth 3"
+        },
+        {
+          "level": "h2",
+          "text": "auth 4"
+        },
+        {
+          "level": "h2",
+          "text": "auth 5"
+        }
+      ],
+      "ctas": [
+        "Efferd",
+        "Blocks",
+        "Pricing",
+        "Docs",
+        "Changelog",
+        "Log In",
+        "Get access",
+        "Toggle menu",
+        "Back to Blocks",
+        "#",
+        "preview",
+        "code"
+      ],
+      "topFonts": [
+        "Geist, \"Geist Fallback\"",
+        "Outfit, \"Outfit Fallback\"",
+        "\"Geist Mono\", \"Geist Mono Fallback\""
+      ],
+      "animationSignals": {
+        "libraries": {},
+        "animatedElementCount": 0,
+        "keyframes": []
+      },
+      "codeLinks": [],
+      "codeBlockCount": 0,
+      "qualityWarnings": []
+    },
+    {
+      "sourceId": "efferd-blocks",
+      "sourceName": "Efferd Blocks",
+      "licenseStatus": "license-per-block",
+      "url": "https://efferd.com/blocks/blogs",
+      "title": "Free & Pro Shadcn Blogs Blocks - Efferd",
+      "description": "Discover Blogs blocks — ready to copy, customize, and drop into your Shadcn/UI project.",
+      "reuseGuidance": "Block-level layout discovery. Verify each block license before reuse.",
+      "screenshots": {
+        "desktop": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/efferd-blocks/008-blog-sections-1e45b68c/desktop.png",
+          "sha256": "6936a45ca2e9a22f1b90aebbf37628c67675e05543a5b4d2b6c1d141b7863677",
+          "mode": "viewport"
+        },
+        "mobile": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/efferd-blocks/008-blog-sections-1e45b68c/mobile.png",
+          "sha256": "eba0374cf345c607ce30cc084c1f4f6a560858d06cf9a59a83690107bbc228ec",
+          "mode": "viewport"
+        }
+      },
+      "headings": [
+        {
+          "level": "h1",
+          "text": "Explore Blogs Blocks"
+        },
+        {
+          "level": "h2",
+          "text": "blogs 1"
+        },
+        {
+          "level": "h2",
+          "text": "blogs 2"
+        },
+        {
+          "level": "h2",
+          "text": "blogs 3"
+        },
+        {
+          "level": "h2",
+          "text": "blogs 4"
+        },
+        {
+          "level": "h2",
+          "text": "blogs 5"
+        }
+      ],
+      "ctas": [
+        "Efferd",
+        "Blocks",
+        "Pricing",
+        "Docs",
+        "Changelog",
+        "Log In",
+        "Get access",
+        "Toggle menu",
+        "Back to Blocks",
+        "#",
+        "preview",
+        "code"
+      ],
+      "topFonts": [
+        "Geist, \"Geist Fallback\"",
+        "Outfit, \"Outfit Fallback\"",
+        "\"Geist Mono\", \"Geist Mono Fallback\""
+      ],
+      "animationSignals": {
+        "libraries": {},
+        "animatedElementCount": 0,
+        "keyframes": []
+      },
+      "codeLinks": [],
+      "codeBlockCount": 0,
+      "qualityWarnings": []
+    },
+    {
+      "sourceId": "fontpair",
+      "sourceName": "Fontpair",
+      "licenseStatus": "typography-reference",
+      "url": "https://fontpair.co/fonts",
+      "title": "All Free Fonts - Google Fonts & Fontshare Collection | Fontpair",
+      "description": "Browse 1,500+ free fonts with pairing suggestions, specimens, and usage examples.",
+      "reuseGuidance": "Font-pair inspiration and typographic mood extraction. Check font licenses before use.",
+      "screenshots": {
+        "desktop": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/fontpair/087-fontpair-43c62d22/desktop.png",
+          "sha256": "844e31963756e3dab64a66053bba7fec5e9dae91d95f8e9e74d4cea5352711af",
+          "mode": "viewport"
+        },
+        "mobile": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/fontpair/087-fontpair-43c62d22/mobile.png",
+          "sha256": "9ffcf9cf26657669789bb3759b9f1fac3c36c661472e497415c9e3254544e49c",
+          "mode": "viewport"
+        }
+      },
+      "headings": [
+        {
+          "level": "h1",
+          "text": "All Fonts"
+        },
+        {
+          "level": "h3",
+          "text": "ABeeZee"
+        },
+        {
+          "level": "h3",
+          "text": "Abel"
+        },
+        {
+          "level": "h3",
+          "text": "Abhaya Libre"
+        },
+        {
+          "level": "h3",
+          "text": "Abril Fatface"
+        },
+        {
+          "level": "h3",
+          "text": "Abyssinica SIL"
+        }
+      ],
+      "ctas": [
+        "Playground",
+        "Pairings",
+        "Fonts",
+        "Inspiration",
+        "Resources",
+        "Login",
+        "Sign Up",
+        "Go Pro",
+        "Settings",
+        "Toggle mobile menu",
+        "All Fonts",
+        "Serif"
+      ],
+      "topFonts": [
+        "Geist, sans-serif",
+        "Geist, system-ui, -apple-system, sans-serif",
+        "\"Geist Mono\", ui-monospace, monospace",
+        "ABeeZee, sans-serif",
+        "Abel, sans-serif",
+        "\"Abhaya Libre\", sans-serif",
+        "\"Abril Fatface\", sans-serif",
+        "\"Abyssinica SIL\", sans-serif"
+      ],
+      "animationSignals": {
+        "libraries": {},
+        "animatedElementCount": 0,
+        "keyframes": []
+      },
+      "codeLinks": [],
+      "codeBlockCount": 0,
+      "qualityWarnings": []
+    },
+    {
+      "sourceId": "fontpair",
+      "sourceName": "Fontpair",
+      "licenseStatus": "typography-reference",
+      "url": "https://fontpair.co/icons",
+      "title": "Icons Library — Free Open-Source SVG Icon Sets | Fontpair",
+      "description": "Browse and search free open-source icon libraries. Copy SVG and React code for Feather, Eva, Iconoir, and more.",
+      "reuseGuidance": "Font-pair inspiration and typographic mood extraction. Check font licenses before use.",
+      "screenshots": {
+        "desktop": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/fontpair/088-fontpair-8ba6d672/desktop.png",
+          "sha256": "49936ca7c22c00eb64863596f168e6072471b9eaac54b13a46d55fa399691da9",
+          "mode": "viewport"
+        },
+        "mobile": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/fontpair/088-fontpair-8ba6d672/mobile.png",
+          "sha256": "0ee831c9265cb4b60a2df4e94f7d878c2508ad2345d2845c4e0b0dc5f522f135",
+          "mode": "viewport"
+        }
+      },
+      "headings": [
+        {
+          "level": "h1",
+          "text": "Icons"
+        },
+        {
+          "level": "h3",
+          "text": "Akar Icons"
+        },
+        {
+          "level": "h3",
+          "text": "Eva Icons"
+        },
+        {
+          "level": "h3",
+          "text": "Feather Icons"
+        },
+        {
+          "level": "h3",
+          "text": "Flowbite Icons"
+        },
+        {
+          "level": "h3",
+          "text": "Glow Icons"
+        }
+      ],
+      "ctas": [
+        "Playground",
+        "Pairings",
+        "Fonts",
+        "Inspiration",
+        "Resources",
+        "Login",
+        "Sign Up",
+        "Go Pro",
+        "Settings",
+        "Toggle mobile menu",
+        "Icons",
+        "Colors"
+      ],
+      "topFonts": [
+        "Geist, sans-serif",
+        "Geist, system-ui, -apple-system, sans-serif",
+        "\"Geist Mono\", ui-monospace, monospace"
+      ],
+      "animationSignals": {
+        "libraries": {},
+        "animatedElementCount": 0,
+        "keyframes": []
+      },
+      "codeLinks": [
+        {
+          "url": "https://supercons.vercel.app/",
+          "text": ""
+        }
+      ],
+      "codeBlockCount": 0,
+      "qualityWarnings": []
+    },
+    {
+      "sourceId": "landingfolio",
+      "sourceName": "Landingfolio",
+      "licenseStatus": "inspiration-only",
+      "url": "https://www.landingfolio.com/inspiration/post/headshotpro-1",
+      "title": "HeadshotPro Landing Page Inspiration and More | Landingfolio",
+      "description": "Get inspired by HeadshotPro their landing page design. An example of a well designed landing page.",
+      "reuseGuidance": "Landing page examples, templates and component inspiration. Do not copy templates or proprietary assets.",
+      "screenshots": {
+        "desktop": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/landingfolio/091-headshotpro-a3943c9a/desktop.png",
+          "sha256": "c69479b2d3b13d59149719a80ebdbb74396cef85ec2cebbced0e70f207fd42bf",
+          "mode": "viewport"
+        },
+        "mobile": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/landingfolio/091-headshotpro-a3943c9a/mobile.png",
+          "sha256": "22b22dc04c27cfd0dcee70f2d544ebed477457b9a846c807aa68d35ede88f4c6",
+          "mode": "viewport"
+        }
+      },
+      "headings": [
+        {
+          "level": "h3",
+          "text": "Site & Landing Page Inspiration"
+        },
+        {
+          "level": "h3",
+          "text": "Section & Component Examples"
+        },
+        {
+          "level": "h3",
+          "text": "Landing Page Templates"
+        },
+        {
+          "level": "h3",
+          "text": "Pro Templates"
+        },
+        {
+          "level": "h3",
+          "text": "Blog"
+        },
+        {
+          "level": "h3",
+          "text": "Optimization Tips"
+        }
+      ],
+      "ctas": [
+        "Landingfolio",
+        "Inspiration",
+        "Component Library",
+        "Templates",
+        "Learn",
+        "Optimization Tips Actional design tips to improve your landing page design",
+        "Tool Reviews The Best Landing Page Builder Software: The Definitive Guide.",
+        "Tools",
+        "Free Logos The perfect logo for your project is just a click away.",
+        "Pricing",
+        "Login",
+        "Login"
+      ],
+      "topFonts": [
+        "\"Plus Jakarta Sans\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", Roboto, Ubuntu, Cantarell, \"Noto Sans\", sans-serif, BlinkMacSystemFont, \"Segoe UI\", \"Helvetica Neue\", Arial, \"Noto Sans\", \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+      ],
+      "animationSignals": {
+        "libraries": {},
+        "animatedElementCount": 0,
+        "keyframes": []
+      },
+      "codeLinks": [
+        {
+          "url": "https://www.landingfolio.com/library",
+          "text": "Component Library (0+) Discover instant copy+paste Tailwind, Webflow & Figma components. Explore our huge library."
+        },
+        {
+          "url": "https://www.landingfolio.com/blog",
+          "text": "Blog Get expert advice on landing page design, copywriting, conversion optimization and more."
+        }
+      ],
+      "codeBlockCount": 0,
+      "qualityWarnings": []
+    },
+    {
+      "sourceId": "landingfolio",
+      "sourceName": "Landingfolio",
+      "licenseStatus": "inspiration-only",
+      "url": "https://www.landingfolio.com/inspiration/post/bugster",
+      "title": "Bugster Landing Page Inspiration and More | Landingfolio",
+      "description": "Get inspired by Bugster their landing page design. An example of a well designed landing page.",
+      "reuseGuidance": "Landing page examples, templates and component inspiration. Do not copy templates or proprietary assets.",
+      "screenshots": {
+        "desktop": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/landingfolio/096-headshotpro-deeb183d/desktop.png",
+          "sha256": "68a7bedb42ce14f1594f5c4e1233424324d5da35d2be832b6dba376e49330111",
+          "mode": "viewport"
+        },
+        "mobile": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/landingfolio/096-headshotpro-deeb183d/mobile.png",
+          "sha256": "c998543dd5f7a2e603527969a73a4d72f64b771dac604191232899f7ae885154",
+          "mode": "viewport"
+        }
+      },
+      "headings": [
+        {
+          "level": "h3",
+          "text": "Site & Landing Page Inspiration"
+        },
+        {
+          "level": "h3",
+          "text": "Section & Component Examples"
+        },
+        {
+          "level": "h3",
+          "text": "Landing Page Templates"
+        },
+        {
+          "level": "h3",
+          "text": "Pro Templates"
+        },
+        {
+          "level": "h3",
+          "text": "Blog"
+        },
+        {
+          "level": "h3",
+          "text": "Optimization Tips"
+        }
+      ],
+      "ctas": [
+        "Landingfolio",
+        "Inspiration",
+        "Component Library",
+        "Templates",
+        "Learn",
+        "Optimization Tips Actional design tips to improve your landing page design",
+        "Tool Reviews The Best Landing Page Builder Software: The Definitive Guide.",
+        "Tools",
+        "Free Logos The perfect logo for your project is just a click away.",
+        "Pricing",
+        "Login",
+        "Login"
+      ],
+      "topFonts": [
+        "\"Plus Jakarta Sans\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", Roboto, Ubuntu, Cantarell, \"Noto Sans\", sans-serif, BlinkMacSystemFont, \"Segoe UI\", \"Helvetica Neue\", Arial, \"Noto Sans\", \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+      ],
+      "animationSignals": {
+        "libraries": {},
+        "animatedElementCount": 0,
+        "keyframes": []
+      },
+      "codeLinks": [
+        {
+          "url": "https://www.landingfolio.com/library",
+          "text": "Component Library (0+) Discover instant copy+paste Tailwind, Webflow & Figma components. Explore our huge library."
+        },
+        {
+          "url": "https://www.landingfolio.com/blog",
+          "text": "Blog Get expert advice on landing page design, copywriting, conversion optimization and more."
+        }
+      ],
+      "codeBlockCount": 0,
+      "qualityWarnings": []
+    },
+    {
+      "sourceId": "lapa-ninja",
+      "sourceName": "Lapa Ninja",
+      "licenseStatus": "inspiration-only",
+      "url": "https://www.lapa.ninja/post/hero-studios/",
+      "title": "Hero Studios - Landing Page Design | Lapa Ninja",
+      "description": "A motion design and animation studio creating systems, stories, and solutions for global brands.",
+      "reuseGuidance": "Landing-page structure, section ordering, visual hierarchy and copy patterns. Do not copy site code or proprietary assets.",
+      "screenshots": {
+        "desktop": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/lapa-ninja/149-hero-studios-572d5ecf/desktop.png",
+          "sha256": "cb23250aa27395c49865097d571734ab4a8eae9f6be1a94393ad3c5bf21b05ed",
+          "mode": "viewport"
+        },
+        "mobile": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/lapa-ninja/149-hero-studios-572d5ecf/mobile.png",
+          "sha256": "f7a36322efc1d0b44def49ce8bfede16c3963c9436e3f526e45d2a7ac2c36995",
+          "mode": "viewport"
+        }
+      },
+      "headings": [
+        {
+          "level": "h1",
+          "text": "Hero Studios Website Design"
+        },
+        {
+          "level": "h2",
+          "text": "A motion design and animation studio creating systems, stories, and solutions for global brands."
+        },
+        {
+          "level": "h3",
+          "text": "Website Details"
+        },
+        {
+          "level": "h3",
+          "text": "Similar Websites"
+        },
+        {
+          "level": "h3",
+          "text": "Lee Jameson"
+        },
+        {
+          "level": "h3",
+          "text": "Roberta Ungaro"
+        }
+      ],
+      "ctas": [
+        "Lapa Ninja - Go to homepage",
+        "Toggle dark mode",
+        "Open main menu",
+        "Websites",
+        "Browse All ⭐7410",
+        "SaaS ⭐691",
+        "Business ⭐2453",
+        "Minimal3051",
+        "Agency ⭐971",
+        "Portfolio ⭐1067",
+        "Studio ⭐862",
+        "Web368"
+      ],
+      "topFonts": [
+        "Inter, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif"
+      ],
+      "animationSignals": {
+        "libraries": {},
+        "animatedElementCount": 0,
+        "keyframes": []
+      },
+      "codeLinks": [],
+      "codeBlockCount": 0,
+      "qualityWarnings": []
+    },
+    {
+      "sourceId": "lapa-ninja",
+      "sourceName": "Lapa Ninja",
+      "licenseStatus": "inspiration-only",
+      "url": "https://www.lapa.ninja/post/gianluca-patti/",
+      "title": "Gianluca Patti - Landing Page Design | Lapa Ninja",
+      "description": "Illustration, character design and frame-by-frame animation by Gianluca Patti. Explore visual storytelling, commercial work and experimental projects.",
+      "reuseGuidance": "Landing-page structure, section ordering, visual hierarchy and copy patterns. Do not copy site code or proprietary assets.",
+      "screenshots": {
+        "desktop": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/lapa-ninja/155-hero-studios-c5d6cb9c/desktop.png",
+          "sha256": "094f4ce3d38e46a3248a09f177b24e43edb59266b4301e29eeb19a88f6a301bf",
+          "mode": "viewport"
+        },
+        "mobile": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/lapa-ninja/155-hero-studios-c5d6cb9c/mobile.png",
+          "sha256": "cb3cbbc4d50cace9b62952b46311dbacb13de4780d263721e926a69fd45c088b",
+          "mode": "viewport"
+        }
+      },
+      "headings": [
+        {
+          "level": "h1",
+          "text": "Gianluca Patti Website Design"
+        },
+        {
+          "level": "h2",
+          "text": "Illustration, character design and frame-by-frame animation by Gianluca Patti. Explore visual storytelling, commercial work and experimental projects."
+        },
+        {
+          "level": "h3",
+          "text": "Website Details"
+        },
+        {
+          "level": "h3",
+          "text": "Similar Websites"
+        },
+        {
+          "level": "h3",
+          "text": "Gianluca Armenio"
+        },
+        {
+          "level": "h3",
+          "text": "Explore"
+        }
+      ],
+      "ctas": [
+        "Lapa Ninja - Go to homepage",
+        "Toggle dark mode",
+        "Open main menu",
+        "Websites",
+        "Browse All ⭐7410",
+        "SaaS ⭐691",
+        "Business ⭐2453",
+        "Minimal3051",
+        "Agency ⭐971",
+        "Portfolio ⭐1067",
+        "Studio ⭐862",
+        "Web368"
+      ],
+      "topFonts": [
+        "Inter, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif"
+      ],
+      "animationSignals": {
+        "libraries": {},
+        "animatedElementCount": 0,
+        "keyframes": []
+      },
+      "codeLinks": [],
+      "codeBlockCount": 0,
+      "qualityWarnings": []
+    },
+    {
+      "sourceId": "mobbin-web",
+      "sourceName": "Mobbin Web",
+      "licenseStatus": "flow-reference-only",
+      "url": "https://mobbin.com/collections/e9ede7f5-31ff-4ca1-acda-771fee465ed9/web/screens",
+      "title": "Beautiful SaaS Dashboards Collection by @alexbarreto",
+      "description": "Save hours of UI & UX research with our library of 600,000+ fully searchable mobile & web app screenshots.",
+      "reuseGuidance": "Real app/web UI flows, copywriting and interaction patterns. Use for UX flow study, not visual copying.",
+      "screenshots": {
+        "desktop": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/mobbin-web/021-view-collection-beautiful-saas-dashboards-44e47f62/desktop.png",
+          "sha256": "d34bfd67566eb2deda975e9ae9d98ae93e17afe676d60c83953d56f85a8c84c4",
+          "mode": "viewport"
+        },
+        "mobile": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/mobbin-web/021-view-collection-beautiful-saas-dashboards-44e47f62/mobile.png",
+          "sha256": "b71600ba50cfbca45083ddc708472519e57b433bb81744d004a06ab46a74c619",
+          "mode": "viewport"
+        }
+      },
+      "headings": [
+        {
+          "level": "h1",
+          "text": "Beautiful SaaS Dashboards"
+        },
+        {
+          "level": "h2",
+          "text": "0 selected"
+        }
+      ],
+      "ctas": [
+        "Pricing",
+        "Awards",
+        "Log in",
+        "Join for free",
+        "Mobbin",
+        "Changelog",
+        "Pricing",
+        "Awards",
+        "Careers",
+        "Merch",
+        "Support",
+        "Log in"
+      ],
+      "topFonts": [
+        "saans, \"saans Fallback\", sans-serif"
+      ],
+      "animationSignals": {
+        "libraries": {},
+        "animatedElementCount": 0,
+        "keyframes": []
+      },
+      "codeLinks": [],
+      "codeBlockCount": 0,
+      "qualityWarnings": []
+    },
+    {
+      "sourceId": "mobbin-web",
+      "sourceName": "Mobbin Web",
+      "licenseStatus": "flow-reference-only",
+      "url": "https://mobbin.com/collections/b3ee62ba-67bd-48c2-94d4-571525c8122e/web/screens",
+      "title": "stepper/wizard Collection by Natalia",
+      "description": "Save hours of UI & UX research with our library of 600,000+ fully searchable mobile & web app screenshots.",
+      "reuseGuidance": "Real app/web UI flows, copywriting and interaction patterns. Use for UX flow study, not visual copying.",
+      "screenshots": {
+        "desktop": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/mobbin-web/027-view-collection-stepper-wizard-dd965aaf/desktop.png",
+          "sha256": "2f0352cd9084998177567d92af58b2082a16e4d1cc739d52eaacb3880324cdc6",
+          "mode": "viewport"
+        },
+        "mobile": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/mobbin-web/027-view-collection-stepper-wizard-dd965aaf/mobile.png",
+          "sha256": "3d1d733c2c473a8b587dd5f74c3b671bc6fb62a30ff5be4844766b990f035134",
+          "mode": "viewport"
+        }
+      },
+      "headings": [
+        {
+          "level": "h1",
+          "text": "stepper/wizard"
+        },
+        {
+          "level": "h2",
+          "text": "0 selected"
+        }
+      ],
+      "ctas": [
+        "Pricing",
+        "Awards",
+        "Log in",
+        "Join for free",
+        "Mobbin",
+        "Changelog",
+        "Pricing",
+        "Awards",
+        "Careers",
+        "Merch",
+        "Support",
+        "Log in"
+      ],
+      "topFonts": [
+        "saans, \"saans Fallback\", sans-serif"
+      ],
+      "animationSignals": {
+        "libraries": {},
+        "animatedElementCount": 0,
+        "keyframes": []
+      },
+      "codeLinks": [],
+      "codeBlockCount": 0,
+      "qualityWarnings": []
+    },
+    {
+      "sourceId": "recent-design",
+      "sourceName": "Recent Design",
+      "licenseStatus": "inspiration-only",
+      "url": "https://recent.design/x",
+      "title": "Best Designs on X — Recent",
+      "description": "The best of recent design found on X updated daily.",
+      "reuseGuidance": "Daily recent design references across websites, OG images, app screenshots and design skills.",
+      "screenshots": {
+        "desktop": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/recent-design/002-best-of-x-a4051cce/desktop.png",
+          "sha256": "f65f241d32d5b083488cacb6695e61c940bbdb445c0c1cd2466e3572e4b355fe",
+          "mode": "viewport"
+        },
+        "mobile": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/recent-design/002-best-of-x-a4051cce/mobile.png",
+          "sha256": "69eae0ddea84aca6bb250dbf651f8745ecd6aefe5a396cc0c7767b0d363e4cd4",
+          "mode": "viewport"
+        }
+      },
+      "headings": [
+        {
+          "level": "h2",
+          "text": "Subscribe to the Recent digest"
+        },
+        {
+          "level": "h2",
+          "text": "Stay ahead of trends"
+        }
+      ],
+      "ctas": [
+        "Recent",
+        "All",
+        "Best of X",
+        "Websites",
+        "OG Images",
+        "App Screenshots",
+        "App Icons",
+        "Skills",
+        "Info",
+        "Subscribe",
+        "All",
+        "Web"
+      ],
+      "topFonts": [
+        "ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+      ],
+      "animationSignals": {
+        "libraries": {},
+        "animatedElementCount": 0,
+        "keyframes": []
+      },
+      "codeLinks": [],
+      "codeBlockCount": 0,
+      "qualityWarnings": []
+    },
+    {
+      "sourceId": "recent-design",
+      "sourceName": "Recent Design",
+      "licenseStatus": "inspiration-only",
+      "url": "https://recent.design/websites",
+      "title": "Web Design Inspiration — Recent",
+      "description": "The best of recent website design found on the Internet updated daily.",
+      "reuseGuidance": "Daily recent design references across websites, OG images, app screenshots and design skills.",
+      "screenshots": {
+        "desktop": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/recent-design/003-websites-cd2e1db3/desktop.png",
+          "sha256": "e9f8aef3932846efaef5c829ab679543ad240637fb3cf8d15f43ff685293dafe",
+          "mode": "viewport"
+        },
+        "mobile": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/recent-design/003-websites-cd2e1db3/mobile.png",
+          "sha256": "a00ca4a0a55813aca89a65019f6986c6980f72c6bd654c2e6baf8e0f0a23e897",
+          "mode": "viewport"
+        }
+      },
+      "headings": [
+        {
+          "level": "h2",
+          "text": "Subscribe to the Recent digest"
+        },
+        {
+          "level": "h2",
+          "text": "Stay ahead of trends"
+        }
+      ],
+      "ctas": [
+        "Recent",
+        "All",
+        "Best of X",
+        "Websites",
+        "OG Images",
+        "App Screenshots",
+        "App Icons",
+        "Skills",
+        "Info",
+        "Subscribe",
+        "All",
+        "Portfolio"
+      ],
+      "topFonts": [
+        "ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+      ],
+      "animationSignals": {
+        "libraries": {},
+        "animatedElementCount": 0,
+        "keyframes": []
+      },
+      "codeLinks": [],
+      "codeBlockCount": 0,
+      "qualityWarnings": []
+    },
+    {
+      "sourceId": "saaslandingpage",
+      "sourceName": "SaaS Landing Page",
+      "licenseStatus": "inspiration-only",
+      "url": "https://saaslandingpage.com/mobbin/",
+      "title": "Mobbin page - SaaS Landing Page",
+      "description": "Mobbin is a curated library of digital-product design patterns, showcasing real-world user interfaces from top companies. The site lets designers explore",
+      "reuseGuidance": "SaaS page section taxonomy: landing, pricing, about, features, testimonials, FAQ and contact.",
+      "screenshots": {
+        "desktop": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/saaslandingpage/023-mobbin-041ae462/desktop.png",
+          "sha256": "bd7e1c728c29041989532f9bf3fd47bfa1fd4150168dd495dc5b8d8969a9dab8",
+          "mode": "viewport"
+        },
+        "mobile": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/saaslandingpage/023-mobbin-041ae462/mobile.png",
+          "sha256": "22018251078006fff0737e6eb01dd5e118ef4dde006ae26c8e59ee1009abd31e",
+          "mode": "viewport"
+        }
+      },
+      "headings": [
+        {
+          "level": "h1",
+          "text": "Saaslandingpage"
+        },
+        {
+          "level": "h1",
+          "text": "Mobbin"
+        },
+        {
+          "level": "h3",
+          "text": "Post navigation"
+        },
+        {
+          "level": "h3",
+          "text": "Inspiration"
+        },
+        {
+          "level": "h3",
+          "text": "Templates"
+        },
+        {
+          "level": "h3",
+          "text": "Resources"
+        }
+      ],
+      "ctas": [
+        "✨ Looking for app inspiration? Check out SaaS Interface ✨",
+        "Saaslandingpage",
+        "Menu",
+        "Inspiration",
+        "App Inspiration",
+        "Templates",
+        "Visit Website",
+        "Saans",
+        "141414",
+        "Next.js",
+        "React",
+        "Tailwind CSS"
+      ],
+      "topFonts": [
+        "Inter, Inter_Fallback",
+        "Outfit, Outfit_Fallback"
+      ],
+      "animationSignals": {
+        "libraries": {},
+        "animatedElementCount": 0,
+        "keyframes": []
+      },
+      "codeLinks": [],
+      "codeBlockCount": 0,
+      "qualityWarnings": []
+    },
+    {
+      "sourceId": "saaslandingpage",
+      "sourceName": "SaaS Landing Page",
+      "licenseStatus": "inspiration-only",
+      "url": "https://saaslandingpage.com/handhold/",
+      "title": "Handhold page - SaaS Landing Page",
+      "description": "Handhold is an AI platform that provides an automated, end-to-end service for obtaining US federal apostilles, specifically for documents like FBI",
+      "reuseGuidance": "SaaS page section taxonomy: landing, pricing, about, features, testimonials, FAQ and contact.",
+      "screenshots": {
+        "desktop": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/saaslandingpage/044-handhold-0e00a2c1/desktop.png",
+          "sha256": "75b4551e1211583439e1bf5cced5ca412df9f2c024198837e372bba9ae4204d6",
+          "mode": "viewport"
+        },
+        "mobile": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/saaslandingpage/044-handhold-0e00a2c1/mobile.png",
+          "sha256": "1ce938dc687a63202955dc5d49451d6dc0b25f279cf8499e0642111ba6b9b8a7",
+          "mode": "viewport"
+        }
+      },
+      "headings": [
+        {
+          "level": "h1",
+          "text": "Saaslandingpage"
+        },
+        {
+          "level": "h1",
+          "text": "Handhold"
+        },
+        {
+          "level": "h3",
+          "text": "Post navigation"
+        },
+        {
+          "level": "h3",
+          "text": "Inspiration"
+        },
+        {
+          "level": "h3",
+          "text": "Templates"
+        },
+        {
+          "level": "h3",
+          "text": "Resources"
+        }
+      ],
+      "ctas": [
+        "✨ Looking for app inspiration? Check out SaaS Interface ✨",
+        "Saaslandingpage",
+        "Menu",
+        "Inspiration",
+        "App Inspiration",
+        "Templates",
+        "Visit Website",
+        "Inter",
+        "STK Bureau Serif",
+        "000000",
+        "3b97ff",
+        "f8d48a"
+      ],
+      "topFonts": [
+        "Inter, Inter_Fallback",
+        "Outfit, Outfit_Fallback"
+      ],
+      "animationSignals": {
+        "libraries": {},
+        "animatedElementCount": 0,
+        "keyframes": []
+      },
+      "codeLinks": [],
+      "codeBlockCount": 0,
+      "qualityWarnings": []
+    },
+    {
+      "sourceId": "saasframe-landing-pages",
+      "sourceName": "SaaSFrame Landing Pages",
+      "licenseStatus": "inspiration-only",
+      "url": "https://www.saasframe.io/saas/slite",
+      "title": "Slite UX/UI Design and Copywrinting Examples - SaaSFrame",
+      "description": "Browse Slite UX / UI design and copywrinting. Our collection includes 34 screens, ranging from marketing pages, emails flows and product interfaces on SaaSFrame",
+      "reuseGuidance": "SaaS landing page hero, value proposition, social proof, pricing and mobile-first CRO patterns.",
+      "screenshots": {
+        "desktop": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/saasframe-landing-pages/285-landing-page-4197935a/desktop.png",
+          "sha256": "8918024c37fa24430e27a7c95ad9a18e8329969c588d962b85825af0829a8ed7",
+          "mode": "viewport"
+        },
+        "mobile": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/saasframe-landing-pages/285-landing-page-4197935a/mobile.png",
+          "sha256": "db87bda5ffc9a682c91275058a290075929bc8a6ebd35547f5d425a4791dd8e9",
+          "mode": "viewport"
+        }
+      },
+      "headings": [
+        {
+          "level": "h1",
+          "text": "Slite"
+        },
+        {
+          "level": "h3",
+          "text": "Marketing Pages"
+        },
+        {
+          "level": "h3",
+          "text": "Product Interfaces"
+        },
+        {
+          "level": "h3",
+          "text": "Emails"
+        },
+        {
+          "level": "h3",
+          "text": "Slite"
+        },
+        {
+          "level": "h3",
+          "text": "Sign Up Flow"
+        }
+      ],
+      "ctas": [
+        "All screens",
+        "👽 404 Page45",
+        "👨‍👩‍👧‍👦 About Page125",
+        "🎓 Academy25",
+        "🤑 Affiliate Page39",
+        "🪄 AI Page15",
+        "✍️ Blog Feed97",
+        "📝 Blog Template59",
+        "💼 Careers Page92",
+        "🆕 Changelog15",
+        "🥊 Comparison Page54",
+        "💌 Contact Page37"
+      ],
+      "topFonts": [
+        "system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Oxygen, Ubuntu, Cantarell, \"Fira Sans\", \"Droid Sans\", \"Helvetica Neue\", sans-serif",
+        "Montserrat, sans-serif"
+      ],
+      "animationSignals": {
+        "libraries": {},
+        "animatedElementCount": 0,
+        "keyframes": []
+      },
+      "codeLinks": [
+        {
+          "url": "https://www.saasframe.io/patterns/copy-to-clipboard",
+          "text": "Copy to clipboard78screens"
+        }
+      ],
+      "codeBlockCount": 0,
+      "qualityWarnings": []
+    },
+    {
+      "sourceId": "saasframe-landing-pages",
+      "sourceName": "SaaSFrame Landing Pages",
+      "licenseStatus": "inspiration-only",
+      "url": "https://www.saasframe.io/examples/slite-landing-page",
+      "title": "Slite Landing Page UI Design - SaaSFrame",
+      "description": "Discover Slite Landing Page and thousands more SaaS  Landing Page examples on SaaSFrame. Save hours of UI & UX research with our library of screenshots.",
+      "reuseGuidance": "SaaS landing page hero, value proposition, social proof, pricing and mobile-first CRO patterns.",
+      "screenshots": {
+        "desktop": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/saasframe-landing-pages/286-landing-page-423b1fd6/desktop.png",
+          "sha256": "aaaa912456f670e05b863f2e9fbc15d5594727ad6cadcf9770188770817d4908",
+          "mode": "viewport"
+        },
+        "mobile": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/saasframe-landing-pages/286-landing-page-423b1fd6/mobile.png",
+          "sha256": "1a2fb0515055dce5feb2fb136dc8225559cc3170b75f6356e236ef9a91d83253",
+          "mode": "viewport"
+        }
+      },
+      "headings": [
+        {
+          "level": "h1",
+          "text": "Slite Landing Page"
+        },
+        {
+          "level": "h2",
+          "text": "Slite"
+        },
+        {
+          "level": "h2",
+          "text": "Slite Landing Page Structure"
+        },
+        {
+          "level": "h3",
+          "text": "1. Header:"
+        },
+        {
+          "level": "h3",
+          "text": "2. Hero section:"
+        },
+        {
+          "level": "h3",
+          "text": "3. Testimonials:"
+        }
+      ],
+      "ctas": [
+        "All screens",
+        "👽 404 Page45",
+        "👨‍👩‍👧‍👦 About Page125",
+        "🎓 Academy25",
+        "🤑 Affiliate Page39",
+        "🪄 AI Page15",
+        "✍️ Blog Feed97",
+        "📝 Blog Template59",
+        "💼 Careers Page92",
+        "🆕 Changelog15",
+        "🥊 Comparison Page54",
+        "💌 Contact Page37"
+      ],
+      "topFonts": [
+        "system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Oxygen, Ubuntu, Cantarell, \"Fira Sans\", \"Droid Sans\", \"Helvetica Neue\", sans-serif",
+        "Montserrat, sans-serif"
+      ],
+      "animationSignals": {
+        "libraries": {},
+        "animatedElementCount": 0,
+        "keyframes": []
+      },
+      "codeLinks": [
+        {
+          "url": "https://www.saasframe.io/patterns/copy-to-clipboard",
+          "text": "Copy to clipboard78screens"
+        }
+      ],
+      "codeBlockCount": 0,
+      "qualityWarnings": []
+    },
+    {
+      "sourceId": "shadcn-ui",
+      "sourceName": "shadcn/ui",
+      "licenseStatus": "mit-repo-available",
+      "url": "https://ui.shadcn.com/blocks/sidebar",
+      "title": "Building Blocks for the Web - shadcn/ui",
+      "description": "Clean, modern building blocks. Copy and paste into your apps. Works with all React frameworks. Open Source. Free forever.",
+      "reuseGuidance": "Base component architecture and accessible UI primitives. Prefer the locally cached MIT repository for code.",
+      "screenshots": {
+        "desktop": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/shadcn-ui/034-browse-more-blocks-11813c15/desktop.png",
+          "sha256": "a7ea6ca5bf3fe1a65875154c5abaa6bcab16d1a566bf352c3ef65e4051b4d8fd",
+          "mode": "viewport"
+        },
+        "mobile": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/shadcn-ui/034-browse-more-blocks-11813c15/mobile.png",
+          "sha256": "07eb3b7dba1512cdfb8627d1b0efc4577aaf784054e40be587b119b38db941fa",
+          "mode": "viewport"
+        }
+      },
+      "headings": [
+        {
+          "level": "h1",
+          "text": "Building Blocks for the Web"
+        }
+      ],
+      "ctas": [
+        "Toggle MenuMenu",
+        "Home",
+        "Docs",
+        "Components",
+        "Blocks",
+        "Charts",
+        "Directory",
+        "Create",
+        "Search documentation...Search...",
+        "117k",
+        "Toggle theme",
+        "Open in"
+      ],
+      "topFonts": [
+        "Geist, \"Geist Fallback\"",
+        "\"Geist Mono\", \"Geist Mono Fallback\""
+      ],
+      "animationSignals": {
+        "libraries": {},
+        "animatedElementCount": 0,
+        "keyframes": []
+      },
+      "codeLinks": [
+        {
+          "url": "https://github.com/shadcn-ui/ui",
+          "text": "117k"
+        },
+        {
+          "url": "https://github.com/shadcn-ui/ui",
+          "text": "GitHub"
+        }
+      ],
+      "codeBlockCount": 0,
+      "qualityWarnings": []
+    },
+    {
+      "sourceId": "shadcn-ui",
+      "sourceName": "shadcn/ui",
+      "licenseStatus": "mit-repo-available",
+      "url": "https://ui.shadcn.com/blocks/signup",
+      "title": "Building Blocks for the Web - shadcn/ui",
+      "description": "Clean, modern building blocks. Copy and paste into your apps. Works with all React frameworks. Open Source. Free forever.",
+      "reuseGuidance": "Base component architecture and accessible UI primitives. Prefer the locally cached MIT repository for code.",
+      "screenshots": {
+        "desktop": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/shadcn-ui/017-signup-0ff19f64/desktop.png",
+          "sha256": "4da52a0e3073379c5b5e346a447f24c36c0e2f7f9313f5b98f3a74189706b2b7",
+          "mode": "viewport"
+        },
+        "mobile": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/shadcn-ui/017-signup-0ff19f64/mobile.png",
+          "sha256": "1e7d34cdf8cd20cddcfe8211f3b099408cf514304d1390672cbb79586f6e94c9",
+          "mode": "viewport"
+        }
+      },
+      "headings": [
+        {
+          "level": "h1",
+          "text": "Building Blocks for the Web"
+        }
+      ],
+      "ctas": [
+        "Toggle MenuMenu",
+        "Home",
+        "Docs",
+        "Components",
+        "Blocks",
+        "Charts",
+        "Directory",
+        "Create",
+        "Search documentation...Search...",
+        "117k",
+        "Toggle theme",
+        "Open in"
+      ],
+      "topFonts": [
+        "Geist, \"Geist Fallback\"",
+        "\"Geist Mono\", \"Geist Mono Fallback\""
+      ],
+      "animationSignals": {
+        "libraries": {},
+        "animatedElementCount": 0,
+        "keyframes": []
+      },
+      "codeLinks": [
+        {
+          "url": "https://github.com/shadcn-ui/ui",
+          "text": "117k"
+        },
+        {
+          "url": "https://github.com/shadcn-ui/ui",
+          "text": "GitHub"
+        }
+      ],
+      "codeBlockCount": 0,
+      "qualityWarnings": []
+    },
+    {
+      "sourceId": "watermelon-ui",
+      "sourceName": "Watermelon UI",
+      "licenseStatus": "review-required",
+      "url": "https://ui.watermelon.sh/blocks/Announcement",
+      "title": "Announcement - UI Blocks | Watermelon UI",
+      "description": "A collection of high-quality React components, dashboards, and UI blocks. Copy and paste production-ready UI with ease.",
+      "reuseGuidance": "Component taxonomy and interaction reference. Verify license before copying code.",
+      "screenshots": {
+        "desktop": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/watermelon-ui/032-announcement-9-blocks-3a4686a4/desktop.png",
+          "sha256": "ae01ffce1449c91815e6e9165591e08eb3105a0a2b43e1a2404f8c5dfd08499d",
+          "mode": "viewport"
+        },
+        "mobile": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/watermelon-ui/032-announcement-9-blocks-3a4686a4/mobile.png",
+          "sha256": "a57954a3e02922e54c630b8f817b356a5c8c1a9a8edeaefcf2b9f99763e02ee5",
+          "mode": "viewport"
+        }
+      },
+      "headings": [
+        {
+          "level": "h1",
+          "text": "Watermelon UI - High-Quality React Components Registry"
+        },
+        {
+          "level": "h1",
+          "text": "Announcement"
+        }
+      ],
+      "ctas": [
+        "Watermelon UIbeta",
+        "Toggle Sidebar",
+        "searchK",
+        "Installation",
+        "Framework Support",
+        "Changelog",
+        "Animated",
+        "Animated",
+        "Component",
+        "Component",
+        "Blocks",
+        "Blocks"
+      ],
+      "topFonts": [
+        "\"Inter Variable\", sans-serif",
+        "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", \"Courier New\", monospace"
+      ],
+      "animationSignals": {
+        "libraries": {},
+        "animatedElementCount": 0,
+        "keyframes": []
+      },
+      "codeLinks": [
+        {
+          "url": "https://github.com/watermeloncorp",
+          "text": ""
+        }
+      ],
+      "codeBlockCount": 0,
+      "qualityWarnings": []
+    },
+    {
+      "sourceId": "watermelon-ui",
+      "sourceName": "Watermelon UI",
+      "licenseStatus": "review-required",
+      "url": "https://ui.watermelon.sh/blocks/auth",
+      "title": "Auth - UI Blocks | Watermelon UI",
+      "description": "A collection of high-quality React components, dashboards, and UI blocks. Copy and paste production-ready UI with ease.",
+      "reuseGuidance": "Component taxonomy and interaction reference. Verify license before copying code.",
+      "screenshots": {
+        "desktop": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/watermelon-ui/033-auth-13-blocks-71e02600/desktop.png",
+          "sha256": "a351f4717fe71a7f47f339c6ce2796661523f52c0f7152a273c0937f4649c4ca",
+          "mode": "viewport"
+        },
+        "mobile": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/watermelon-ui/033-auth-13-blocks-71e02600/mobile.png",
+          "sha256": "1ce6938ba08316c73f66efa12653b037a813c6d353fba1c345faee37b45adc17",
+          "mode": "viewport"
+        }
+      },
+      "headings": [
+        {
+          "level": "h1",
+          "text": "Watermelon UI - High-Quality React Components Registry"
+        },
+        {
+          "level": "h1",
+          "text": "Auth"
+        },
+        {
+          "level": "h1",
+          "text": "Create your free account"
+        },
+        {
+          "level": "h2",
+          "text": "Welcome back"
+        },
+        {
+          "level": "h1",
+          "text": "Welcome back"
+        },
+        {
+          "level": "h1",
+          "text": "Get started with Watermelon"
+        }
+      ],
+      "ctas": [
+        "Watermelon UIbeta",
+        "Toggle Sidebar",
+        "searchK",
+        "Installation",
+        "Framework Support",
+        "Changelog",
+        "Animated",
+        "Animated",
+        "Component",
+        "Component",
+        "Blocks",
+        "Blocks"
+      ],
+      "topFonts": [
+        "\"Inter Variable\", sans-serif",
+        "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", \"Courier New\", monospace"
+      ],
+      "animationSignals": {
+        "libraries": {},
+        "animatedElementCount": 0,
+        "keyframes": []
+      },
+      "codeLinks": [
+        {
+          "url": "https://github.com/watermeloncorp",
+          "text": ""
+        }
+      ],
+      "codeBlockCount": 0,
+      "qualityWarnings": []
+    }
+  ],
+  "reusableCodeRepositories": [
+    {
+      "name": "harshjdhv__componentry",
+      "license": "MIT",
+      "localPath": "C:/Users/PC/.codex/design-stack/repos/harshjdhv__componentry",
+      "selectedExamples": 12,
+      "motionExamples": 2,
+      "shadcnExamples": 4,
+      "tailwindExamples": 8
+    },
+    {
+      "name": "ibelick__motion-primitives",
+      "license": "MIT",
+      "localPath": "C:/Users/PC/.codex/design-stack/repos/ibelick__motion-primitives",
+      "selectedExamples": 12,
+      "motionExamples": 6,
+      "shadcnExamples": 4,
+      "tailwindExamples": 4
+    },
+    {
+      "name": "launch-ui__launch-ui",
+      "license": "MIT",
+      "localPath": "C:/Users/PC/.codex/design-stack/repos/launch-ui__launch-ui",
+      "selectedExamples": 12,
+      "motionExamples": 0,
+      "shadcnExamples": 6,
+      "tailwindExamples": 4
+    },
+    {
+      "name": "magicuidesign__magicui",
+      "license": "MIT",
+      "localPath": "C:/Users/PC/.codex/design-stack/repos/magicuidesign__magicui",
+      "selectedExamples": 12,
+      "motionExamples": 0,
+      "shadcnExamples": 7,
+      "tailwindExamples": 6
+    },
+    {
+      "name": "markmead__hyperui",
+      "license": "MIT",
+      "localPath": "C:/Users/PC/.codex/design-stack/repos/markmead__hyperui",
+      "selectedExamples": 12,
+      "motionExamples": 2,
+      "shadcnExamples": 7,
+      "tailwindExamples": 5
+    },
+    {
+      "name": "nolly-studio__cult-ui",
+      "license": "MIT",
+      "localPath": "C:/Users/PC/.codex/design-stack/repos/nolly-studio__cult-ui",
+      "selectedExamples": 12,
+      "motionExamples": 5,
+      "shadcnExamples": 7,
+      "tailwindExamples": 11
+    },
+    {
+      "name": "serafimcloud__21st",
+      "license": "MIT",
+      "localPath": "C:/Users/PC/.codex/design-stack/repos/serafimcloud__21st",
+      "selectedExamples": 12,
+      "motionExamples": 1,
+      "shadcnExamples": 9,
+      "tailwindExamples": 8
+    },
+    {
+      "name": "shadcn-ui__ui",
+      "license": "MIT",
+      "localPath": "C:/Users/PC/.codex/design-stack/repos/shadcn-ui__ui",
+      "selectedExamples": 12,
+      "motionExamples": 0,
+      "shadcnExamples": 8,
+      "tailwindExamples": 11
+    },
+    {
+      "name": "tailwindlabs__headlessui",
+      "license": "MIT",
+      "localPath": "C:/Users/PC/.codex/design-stack/repos/tailwindlabs__headlessui",
+      "selectedExamples": 12,
+      "motionExamples": 0,
+      "shadcnExamples": 0,
+      "tailwindExamples": 0
+    },
+    {
+      "name": "tremorlabs__tremor",
+      "license": "MIT",
+      "localPath": "C:/Users/PC/.codex/design-stack/repos/tremorlabs__tremor",
+      "selectedExamples": 12,
+      "motionExamples": 0,
+      "shadcnExamples": 5,
+      "tailwindExamples": 11
+    },
+    {
+      "name": "nextlevelbuilder__ui-ux-pro-max-skill",
+      "license": "MIT",
+      "localPath": "C:/Users/PC/.codex/design-stack/repos/nextlevelbuilder__ui-ux-pro-max-skill",
+      "selectedExamples": 0,
+      "motionExamples": 0,
+      "shadcnExamples": 0,
+      "tailwindExamples": 0
+    }
+  ]
+}

@@ -31,6 +31,9 @@ https://registry.directory o en las docs del registry. No inventar endpoints.
 | Aceternity UI | heroes / efectos wow | MIT (free) | `npx shadcn@latest add "https://ui.aceternity.com/registry/<comp>.json"` |
 | Origin UI | forms, dialogs, timeline (serios) | MIT | `npx shadcn@latest add "https://originui.com/r/<comp>.json"` |
 | Cult UI | toques premium (dock, cards Apple-style) | MIT | `npx shadcn@latest add "https://cult-ui.com/r/<comp>.json"` |
+| Registry Directory | descubrimiento de registries shadcn | review por registry | `https://registry.directory/` |
+| 21st.dev | marketplace de componentes shadcn/Tailwind | review por componente | `https://21st.dev/community/components` |
+| Kibo UI | componentes shadcn open source | review por repo/registry | `https://www.kibo-ui.com/` |
 
 Descartados por ahora (redundan): Kibo UI, Neobrutalism, Origin extras no usados.
 
@@ -156,6 +159,12 @@ Resumen del banco de galerias del 2026-06-15:
 | Componentry | Componentes animados React | Revisar licencia del repo antes de copiar implementacion. |
 | shadcn/ui | Fuente base aprobada | Canonica para componentes y patrones accesibles. |
 | Efferd blocks | Discovery de bloques shadcn | Revisar acceso/licencia por bloque antes de importar. |
+| Registry Directory | Discovery de registries shadcn actuales | No copiar codigo desde el indice; usarlo para encontrar fuente/licencia/install. |
+| 21st.dev Landing Page Components | Discovery de heroes, CTAs, pricing, features y motion | Revisar licencia por componente antes de copiar codigo. |
+| Magic UI | Motion, efectos, componentes animados y recursos shadcn | Preferir repo local MIT o registry oficial; retokenizar antes de usar. |
+| Aceternity UI | Motion premium, heroes, bento, canvas y parallax | Fuente mixta free/premium; captura visual por defecto, codigo solo con licencia clara. |
+| Shadcnblocks | Bloques shadcn, layouts y secciones | Fuente free/pro; no copiar pro sin licencia. |
+| Kibo UI | Componentes accesibles shadcn-compatible | Verificar repo/licencia antes de copiar. |
 
 ### Fuentes externas agregadas al pattern bank 2026-06-24
 
@@ -256,6 +265,18 @@ node web-factory\harvester\vision\index_licensed_code.mjs --repos-root C:\Users\
 
 node web-factory\harvester\vision\index_component_code_examples.mjs --code-index web-factory\data\references\code-sources\YYYY-MM-DD-code-cache-index.json --out web-factory\data\references\code-sources\YYYY-MM-DD-component-code-reference-pack.json --max-files-per-repo 48
 ```
+
+Pipeline recurrente:
+
+```powershell
+cd C:\dev\proyectos\onia-hermes\web-factory
+pnpm references:harvest:smoke
+pnpm references:harvest:daily
+pnpm references:harvest:watch
+```
+
+El pipeline extrae screenshots, recursos, fuentes, senales de animacion, CTAs,
+html outline, code links y codigo solo desde docs/repos con licencia revisable.
 
 `scrape_gallery_examples.mjs` es el scraper profundo de galerias. En terminal usa la
 dependencia `playwright`; dentro de Codex tambien puede ejecutarse con `node_repl`.

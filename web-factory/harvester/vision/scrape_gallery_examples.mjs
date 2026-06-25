@@ -410,6 +410,18 @@ async function extractExampleDetail(page, source) {
           .map((node) => getComputedStyle(node).fontWeight),
         20,
       ),
+      fontFaceNames: unique(
+        [...document.styleSheets].flatMap((sheet) => {
+          try {
+            return [...sheet.cssRules]
+              .filter((rule) => rule.constructor?.name === "CSSFontFaceRule")
+              .map((rule) => clean(rule.cssText.match(/font-family:\s*([^;]+)/i)?.[1] || ""));
+          } catch {
+            return [];
+          }
+        }),
+        24,
+      ),
     };
 
     const htmlOutline = {
@@ -476,6 +488,72 @@ async function extractExampleDetail(page, source) {
       .filter(Boolean)
       .join("\n");
 
+    const animationSignals = (() => {
+      const animatedElements = [...document.querySelectorAll("body, main, section, article, div, a, button, img, video, canvas, svg")]
+        .slice(0, 260)
+        .map((node) => {
+          const style = getComputedStyle(node);
+          const rect = node.getBoundingClientRect();
+          const animationName = style.animationName || "";
+          const transitionDuration = style.transitionDuration || "";
+          const transform = style.transform || "";
+          const transitionProperty = style.transitionProperty || "";
+          const hasAnimation = animationName && animationName !== "none";
+          const hasTransition = transitionDuration && !/^0s(?:,\s*0s)*$/.test(transitionDuration);
+          const hasTransform = transform && transform !== "none";
+
+          if (!hasAnimation && !hasTransition && !hasTransform) {
+            return null;
+          }
+
+          return {
+            tag: node.tagName.toLowerCase(),
+            id: node.id || "",
+            classes: classTokens(node),
+            area: Math.round(Math.max(0, rect.width * rect.height)),
+            animationName,
+            animationDuration: style.animationDuration || "",
+            animationTimingFunction: style.animationTimingFunction || "",
+            transitionProperty,
+            transitionDuration,
+            transform: hasTransform ? transform.slice(0, 120) : "",
+            sectionHeading: nearestSectionHeading(node).slice(0, 120),
+          };
+        })
+        .filter(Boolean);
+
+      const keyframes = unique(
+        [...document.styleSheets].flatMap((sheet) => {
+          try {
+            return [...sheet.cssRules]
+              .filter((rule) => /keyframes/i.test(rule.constructor?.name || "") || /^@(?:-\w+-)?keyframes/i.test(rule.cssText || ""))
+              .map((rule) => rule.name || clean((rule.cssText || "").match(/^@(?:-\w+-)?keyframes\s+([^{\s]+)/i)?.[1] || ""));
+          } catch {
+            return [];
+          }
+        }),
+        40,
+      );
+
+      const pageSourceSample = `${resourceUrls}\n${document.documentElement.innerHTML.slice(0, 8000)}`;
+
+      return {
+        animatedElementCount: animatedElements.length,
+        keyframes,
+        samples: animatedElements
+          .sort((a, b) => b.area - a.area)
+          .slice(0, 40),
+        libraries: {
+          framerMotion: /framer-motion|motion\/react|motion\./i.test(pageSourceSample),
+          gsap: /gsap|greensock/i.test(pageSourceSample),
+          three: /three(?:\.module)?\.js|three\/|@react-three/i.test(pageSourceSample),
+          lottie: /lottie|bodymovin/i.test(pageSourceSample),
+          locomotiveScroll: /locomotive/i.test(pageSourceSample),
+        },
+        hasReducedMotionCss: /prefers-reduced-motion/i.test(pageSourceSample),
+      };
+    })();
+
     const technologySignals = {
       hasNextData: Boolean(document.querySelector("script#__NEXT_DATA__")),
       hasNextAssets: /\/_next\//i.test(resourceUrls),
@@ -508,6 +586,7 @@ async function extractExampleDetail(page, source) {
       htmlOutline,
       resources,
       fontSignals,
+      animationSignals,
       technologySignals,
       codeBlocks,
       codeLinks,

@@ -1,0 +1,4141 @@
+{
+  "capturedAt": "2026-06-25T18:05:50.355Z",
+  "cacheRoot": "C:/Users/PC/.codex/design-stack/gallery-examples-full",
+  "policy": "Gallery screenshots and structure are reference artifacts. Copy/adapt code only when licenseStatus is compatible and the linked/local repo license has been reviewed.",
+  "configPath": "data/references/design-sources/gallery-reference-sources.json",
+  "results": [
+    {
+      "id": "21st-landing-page-components",
+      "name": "21st.dev Landing Page Components",
+      "url": "https://21st.dev/community/components/s/landing-page",
+      "mode": "landing-component-gallery",
+      "usage": "High-density landing-page component discovery: heroes, features, CTAs, pricing, testimonials and animated sections. Verify each component license before code reuse.",
+      "licenseStatus": "review-required-per-component",
+      "status": 200,
+      "failedRequestCount": 7,
+      "rawCandidateCount": 1251,
+      "selectedCandidateCount": 6,
+      "detailedExampleCount": 1,
+      "candidates": [
+        {
+          "index": 1766,
+          "url": "https://21st.dev/community/components/thanh/animated-section-with-gradient-and-dynamic-lines/default",
+          "text": "Animated Section with Gradient and Dynamic Lines",
+          "heading": "",
+          "description": "Animated Section with Gradient and Dynamic Lines7",
+          "imageSrc": "https://cdn.21st.dev/cdn-cgi/image/fit=scale-down,width=3840,quality=75,format=auto/https://cdn.21st.dev/minhxthanh/animated-section-with-gradient-and-dynamic-lines/default/preview.1748845152350.png",
+          "imageAlt": "Animated Section with Gradient and Dynamic Lines",
+          "buttonText": [
+            "7"
+          ],
+          "tags": [],
+          "cardArea": 100668,
+          "score": 10,
+          "sourceMode": "landing-component-gallery"
+        },
+        {
+          "index": 228,
+          "url": "https://21st.dev/community/components/thanh/digital-serenity-animated-landing-page/default",
+          "text": "Digital Serenity Animated Landing Page",
+          "heading": "",
+          "description": "Digital Serenity Animated Landing Page113",
+          "imageSrc": "https://cdn.21st.dev/cdn-cgi/image/fit=scale-down,width=3840,quality=75,format=auto/https://cdn.21st.dev/minhxthanh/digital-serenity-animated-landing-page/default/preview.1748705926625.png",
+          "imageAlt": "Digital Serenity Animated Landing Page",
+          "buttonText": [
+            "113"
+          ],
+          "tags": [],
+          "cardArea": 100658,
+          "score": 10,
+          "sourceMode": "landing-component-gallery"
+        },
+        {
+          "index": 1366,
+          "url": "https://21st.dev/community/components/thanh/dynamic-animated-hero-section-with-gradient/default",
+          "text": "Dynamic Animated Hero Section with Gradient",
+          "heading": "",
+          "description": "Dynamic Animated Hero Section with Gradient12",
+          "imageSrc": "https://cdn.21st.dev/cdn-cgi/image/fit=scale-down,width=3840,quality=75,format=auto/https://cdn.21st.dev/minhxthanh/dynamic-animated-hero-section-with-gradient/default/preview.1749609235449.png",
+          "imageAlt": "Dynamic Animated Hero Section with Gradient",
+          "buttonText": [
+            "12"
+          ],
+          "tags": [],
+          "cardArea": 100658,
+          "score": 10,
+          "sourceMode": "landing-component-gallery"
+        },
+        {
+          "index": 242,
+          "url": "https://21st.dev/community/components/muhammad-binsalman/waitlist-landing-page-with-countdown-timer/default",
+          "text": "Waitlist Landing Page with Countdown Timer",
+          "heading": "",
+          "description": "Waitlist Landing Page with Countdown Timer",
+          "imageSrc": "https://cdn.21st.dev/cdn-cgi/image/fit=scale-down,width=3840,quality=75,format=auto/https://cdn.21st.dev/muhammad-binsalman/waitlist-landing-page-with-countdown-timer/default/preview.1757590476421.png",
+          "imageAlt": "Waitlist Landing Page with Countdown Timer",
+          "buttonText": [],
+          "tags": [],
+          "cardArea": 99804,
+          "score": 10,
+          "sourceMode": "landing-component-gallery"
+        },
+        {
+          "index": 248,
+          "url": "https://21st.dev/community/components/muhammad-binsalman/light-theme-waitlist-landing-page-with-countdown/default",
+          "text": "Light Theme Waitlist Landing Page with Countdown",
+          "heading": "",
+          "description": "Light Theme Waitlist Landing Page with Countdown",
+          "imageSrc": "https://cdn.21st.dev/cdn-cgi/image/fit=scale-down,width=3840,quality=75,format=auto/https://cdn.21st.dev/muhammad-binsalman/light-theme-waitlist-landing-page-with-countdown/default/preview.1757970957679.png",
+          "imageAlt": "Light Theme Waitlist Landing Page with Countdown",
+          "buttonText": [],
+          "tags": [],
+          "cardArea": 99804,
+          "score": 10,
+          "sourceMode": "landing-component-gallery"
+        },
+        {
+          "index": 268,
+          "url": "https://21st.dev/community/components/uniquesonu/hero-section-enterprise-ready-landing-page-hero-with-dual-ctas/default",
+          "text": "HeroSection – Enterprise Ready Landing Page Hero with Dual CTAs",
+          "heading": "",
+          "description": "HeroSection – Enterprise Ready Landing Page Hero with Dual CTAs",
+          "imageSrc": "https://cdn.21st.dev/cdn-cgi/image/fit=scale-down,width=3840,quality=75,format=auto/https://cdn.21st.dev/uniquesonu/hero-section-enterprise-ready-landing-page-hero-with-dual-ctas/default/preview.1758876408462.png",
+          "imageAlt": "HeroSection – Enterprise Ready Landing Page Hero with Dual CTAs",
+          "buttonText": [],
+          "tags": [],
+          "cardArea": 99794,
+          "score": 10,
+          "sourceMode": "landing-component-gallery"
+        }
+      ],
+      "screenshot": {
+        "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/21st-landing-page-components/gallery.png",
+        "sha256": "e66e68b698ae650361716c9630912660402e6c2d9cf3485a497e2c0e4a0d1303",
+        "mode": "full-page"
+      },
+      "screenshotQuality": {
+        "viewport": {
+          "width": 1440,
+          "height": 1000
+        },
+        "textLength": 17524,
+        "mediaCount": 3603,
+        "codeCount": 0,
+        "headingCount": 3,
+        "usefulElementCount": 104,
+        "visibleAreaRatio": 3.786,
+        "isLikelySparse": false,
+        "visibleSamples": [
+          "21stComponentsKFeaturedNewestBest of the WeekThemesTop AuthorsMarketing BlocksAnnouncements10Backgrounds33Borders12Calls",
+          "21stComponentsKFeaturedNewestBest of the WeekThemesTop AuthorsMarketing BlocksAnnouncements10Backgrounds33Borders12Calls",
+          "21st",
+          "Components",
+          "Featured",
+          "Newest",
+          "Best of the Week",
+          "Themes"
+        ]
+      },
+      "examples": [
+        {
+          "sourceId": "21st-landing-page-components",
+          "url": "https://21st.dev/community/components/thanh/animated-section-with-gradient-and-dynamic-lines/default",
+          "status": 200,
+          "licenseStatus": "review-required-per-component",
+          "reuseGuidance": "High-density landing-page component discovery: heroes, features, CTAs, pricing, testimonials and animated sections. Verify each component license before code reuse.",
+          "candidate": {
+            "index": 1766,
+            "url": "https://21st.dev/community/components/thanh/animated-section-with-gradient-and-dynamic-lines/default",
+            "text": "Animated Section with Gradient and Dynamic Lines",
+            "heading": "",
+            "description": "Animated Section with Gradient and Dynamic Lines7",
+            "imageSrc": "https://cdn.21st.dev/cdn-cgi/image/fit=scale-down,width=3840,quality=75,format=auto/https://cdn.21st.dev/minhxthanh/animated-section-with-gradient-and-dynamic-lines/default/preview.1748845152350.png",
+            "imageAlt": "Animated Section with Gradient and Dynamic Lines",
+            "buttonText": [
+              "7"
+            ],
+            "tags": [],
+            "cardArea": 100668,
+            "score": 10,
+            "sourceMode": "landing-component-gallery"
+          },
+          "screenshots": {
+            "desktop": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/21st-landing-page-components/1766-animated-section-with-gradient-and-dynamic-lines-9e7dde56/desktop.png",
+              "sha256": "b2c0155bd79b56dd09bb091e61a35ff2ca752d0865e0312e8fd5b1370e991250",
+              "mode": "viewport"
+            },
+            "mobile": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/21st-landing-page-components/1766-animated-section-with-gradient-and-dynamic-lines-9e7dde56/mobile.png",
+              "sha256": "46af50ac3ef42bc04412c6de651d9fe2a6f5db1e2390919a5c70208a7f0ad138",
+              "mode": "viewport"
+            }
+          },
+          "screenshotQuality": {
+            "desktop": {
+              "viewport": {
+                "width": 1440,
+                "height": 1000
+              },
+              "textLength": 829,
+              "mediaCount": 39,
+              "codeCount": 2,
+              "headingCount": 6,
+              "usefulElementCount": 47,
+              "visibleAreaRatio": 2.2,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "{\"@context\":\"https://schema.org\",\"@type\":\"SoftwareSourceCode\",\"name\":\"Animated Section with Gradient and Dynamic Lines\",",
+                "{\"@context\":\"https://schema.org\",\"@type\":\"SoftwareSourceCode\",\"name\":\"Animated Section with Gradient and Dynamic Lines\",",
+                "Components",
+                "thanh",
+                "SearchK",
+                "Copy prompt",
+                "Copy code",
+                "View code"
+              ]
+            },
+            "mobile": {
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "textLength": 604,
+              "mediaCount": 22,
+              "codeCount": 2,
+              "headingCount": 4,
+              "usefulElementCount": 40,
+              "visibleAreaRatio": 2.253,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "{\"@context\":\"https://schema.org\",\"@type\":\"SoftwareSourceCode\",\"name\":\"Animated Section with Gradient and Dynamic Lines\",",
+                "{\"@context\":\"https://schema.org\",\"@type\":\"SoftwareSourceCode\",\"name\":\"Animated Section with Gradient and Dynamic Lines\",",
+                "thanh",
+                "SearchK",
+                "Copy prompt",
+                "Copy code",
+                "View code",
+                "Components"
+              ]
+            }
+          },
+          "qualityWarnings": [],
+          "failedRequestCount": 4,
+          "title": "Animated Section with Gradient and Dynamic Lines | Community Components - 21st | 21st",
+          "description": "Animated Dark‐Mode Section with Gradient Heading and Dynamic SVG Lines",
+          "headings": [
+            {
+              "level": "h3",
+              "text": "Animated Section with Gradient and Dynamic Lines"
+            },
+            {
+              "level": "h3",
+              "text": "Created by"
+            },
+            {
+              "level": "h3",
+              "text": "Installation"
+            },
+            {
+              "level": "h3",
+              "text": "How to use"
+            }
+          ],
+          "sections": [],
+          "ctas": [
+            "Open sidebar",
+            "thanh",
+            "SearchK",
+            "Copy prompt",
+            "Copy code",
+            "View code",
+            "Components",
+            "thanh",
+            "Le Thanh",
+            "Reveal the install command",
+            "Remix in Magic Chat",
+            "Copy prompt",
+            "Copy code",
+            "View code",
+            "Share",
+            "Copy prompt"
+          ],
+          "palette": [
+            "rgb(9, 9, 11)",
+            "rgb(255, 255, 255)",
+            "rgb(228, 228, 231)",
+            "rgb(115, 115, 115)",
+            "rgba(255, 255, 255, 0.8)",
+            "rgba(228, 228, 231, 0.4)",
+            "rgb(235, 235, 235)"
+          ],
+          "layoutSignals": {
+            "hasNav": false,
+            "hasHero": false,
+            "hasPricing": false,
+            "hasTestimonials": false,
+            "hasFAQ": false,
+            "hasVideo": false,
+            "cardLikeCount": 0,
+            "imageCount": 1,
+            "buttonCount": 23,
+            "formCount": 0
+          },
+          "htmlOutline": {
+            "language": "en",
+            "bodyClasses": [
+              "__variable_245d8d",
+              "__variable_97c177",
+              "__variable_bc4999",
+              "__variable_158bdc",
+              "__variable_48650e",
+              "font-sans",
+              "[scrollbar-gutter:stable]",
+              "antialiased"
+            ],
+            "semanticLandmarks": [
+              {
+                "index": 0,
+                "tag": "main",
+                "id": "",
+                "classes": [
+                  "relative",
+                  "flex",
+                  "min-h-svh",
+                  "flex-1",
+                  "flex-col",
+                  "bg-background",
+                  "peer-data-[variant=inset]:min-h-[calc(100svh-theme(spacing.4))]",
+                  "md:peer-data-[variant=inset]:m-2",
+                  "md:peer-data-[state=collapsed]:peer-data-[variant=inset]:ml-2",
+                  "md:peer-data-[variant=inset]:ml-0",
+                  "md:peer-data-[variant=inset]:rounded-xl",
+                  "md:peer-data-[variant=inset]:shadow"
+                ],
+                "heading": "Animated Section with Gradient and Dynamic Lines",
+                "textSample": "{\"@context\":\"https://schema.org\",\"@type\":\"SoftwareSourceCode\",\"name\":\"Animated Section with Gradient and Dynamic Lines\",\"description\":\"Animated Dark‐Mode Section with Gradient Heading and Dynamic SVG Lines\",\"url\":\"https:",
+                "linkCount": 4,
+                "buttonCount": 19,
+                "formControlCount": 0,
+                "mediaCount": 22
+              },
+              {
+                "index": 1,
+                "tag": "main",
+                "id": "",
+                "classes": [
+                  "min-h-screen",
+                  "w-full"
+                ],
+                "heading": "Animated Section with Gradient and Dynamic Lines",
+                "textSample": "{\"@context\":\"https://schema.org\",\"@type\":\"SoftwareSourceCode\",\"name\":\"Animated Section with Gradient and Dynamic Lines\",\"description\":\"Animated Dark‐Mode Section with Gradient Heading and Dynamic SVG Lines\",\"url\":\"https:",
+                "linkCount": 4,
+                "buttonCount": 19,
+                "formControlCount": 0,
+                "mediaCount": 22
+              },
+              {
+                "index": 2,
+                "tag": "section",
+                "id": "",
+                "classes": [
+                  "absolute",
+                  "left-2",
+                  "top-2",
+                  "lg:left-4",
+                  "lg:top-4",
+                  "z-[101]",
+                  "select-none",
+                  "gap-px",
+                  "rounded-[4px]",
+                  "border-[0.5px]",
+                  "border-border/40",
+                  "p-1"
+                ],
+                "heading": "",
+                "textSample": "",
+                "linkCount": 0,
+                "buttonCount": 3,
+                "formControlCount": 0,
+                "mediaCount": 4
+              },
+              {
+                "index": 3,
+                "tag": "section",
+                "id": "",
+                "classes": [
+                  "absolute",
+                  "right-2",
+                  "top-2",
+                  "lg:right-4",
+                  "lg:top-4",
+                  "z-[101]",
+                  "select-none",
+                  "gap-px",
+                  "rounded-[4px]",
+                  "border-[0.5px]",
+                  "border-border/40",
+                  "p-1"
+                ],
+                "heading": "",
+                "textSample": "",
+                "linkCount": 0,
+                "buttonCount": 3,
+                "formControlCount": 0,
+                "mediaCount": 3
+              },
+              {
+                "index": 4,
+                "tag": "section",
+                "id": "",
+                "classes": [],
+                "heading": "",
+                "textSample": "",
+                "linkCount": 0,
+                "buttonCount": 0,
+                "formControlCount": 0,
+                "mediaCount": 0
+              }
+            ],
+            "navLinks": [],
+            "forms": []
+          },
+          "resources": {
+            "images": [
+              {
+                "src": "https://img.clerk.com/eyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvb2F1dGhfZ2l0aHViL2ltZ18ydVpQWjBaTmttUzJ4eWlubElPM0VQQk1VMXIifQ",
+                "currentSrc": "https://img.clerk.com/eyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvb2F1dGhfZ2l0aHViL2ltZ18ydVpQWjBaTmttUzJ4eWlubElPM0VQQk1VMXIifQ",
+                "srcset": "",
+                "alt": "Le Thanh",
+                "width": 460,
+                "height": 460,
+                "loading": "",
+                "sectionHeading": "Animated Section with Gradient and Dynamic Lines"
+              }
+            ],
+            "videos": [],
+            "canvasCount": 0,
+            "svgCount": 21,
+            "stylesheets": [
+              "https://21st.dev/_next/static/css/9da37e8c0112f621.css",
+              "https://21st.dev/_next/static/css/ca40e3e64c9dbb78.css",
+              "https://21st.dev/_next/static/css/bbb18f21d09c62dc.css"
+            ],
+            "fontLinks": [
+              "https://21st.dev/_next/static/media/1005bd875009f524.p.woff2",
+              "https://21st.dev/_next/static/media/12dfa0104b317c6e-s.p.woff2",
+              "https://21st.dev/_next/static/media/27834908180db20f-s.p.woff2",
+              "https://21st.dev/_next/static/media/4c9022eda93cbc91-s.p.woff2",
+              "https://21st.dev/_next/static/media/4fafff4a0a9a6a75-s.p.woff2",
+              "https://21st.dev/_next/static/media/72309d8f79298cda.p.woff2",
+              "https://21st.dev/_next/static/media/78fec81b34c4a365.p.woff2",
+              "https://21st.dev/_next/static/media/7e0029dff07248dd-s.p.woff2",
+              "https://21st.dev/_next/static/media/b269f2652091576b.p.woff2",
+              "https://21st.dev/_next/static/media/d62eeeefdf00efec-s.p.woff2",
+              "https://21st.dev/_next/static/media/de0e48ef74e52fe6-s.p.woff2",
+              "https://21st.dev/_next/static/media/eda1bea3c0704595.p.woff2",
+              "https://21st.dev/_next/static/media/f361b893d795d088.p.woff2",
+              ":where(html[dir=\"ltr\"]),:where([data-sonner-toaster][dir=\"ltr\"]){--toast-icon-margin-start: -3px;--toast-icon-margin-end: 4px;--toast-svg-margin-start: -1px;--toast-svg-margin-end: 0px;--toast-button-margin-start: auto;--toast-button-margin-end: 0;--toast-close-button-start: 0;--toast-close-button-e",
+              ".code-wrapper-vesper .shiki, .code-wrapper-vesper .shiki pre { background-color: transparent !important; margin: 0 !important; padding: 0 !important; font-family: 'Consolas', 'Courier New', monospace !important; line-height: 1.55 !important; } .code-wrapper-vesper .shiki code { display: inline-block"
+            ],
+            "ogImages": [
+              "https://21st.dev/thanh/animated-section-with-gradient-and-dynamic-lines/opengraph-image"
+            ],
+            "downloadableAssets": []
+          },
+          "fontSignals": {
+            "computedFamilies": [
+              "GeistSans, \"GeistSans Fallback\", Geist, \"Geist Fallback\", Arial, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\"",
+              "\"ABC Diatype\", system-ui, -apple-system, sans-serif",
+              "GeistMono, ui-monospace, SFMono-Regular, \"Roboto Mono\", Menlo, Monaco, \"Liberation Mono\", \"DejaVu Sans Mono\", \"Courier New\", monospace"
+            ],
+            "computedWeights": [
+              "500",
+              "400",
+              "600"
+            ],
+            "fontFaceNames": [
+              "GeistMono",
+              "GeistPixelSquare",
+              "GeistPixelGrid",
+              "GeistPixelCircle",
+              "GeistPixelTriangle",
+              "GeistPixelLine",
+              "GeistSans",
+              "\"GeistSans Fallback\"",
+              "\"Averia Serif Libre\"",
+              "\"Averia Serif Libre Fallback\"",
+              "\"ABC Diatype\""
+            ]
+          },
+          "animationSignals": {
+            "animatedElementCount": 35,
+            "keyframes": [
+              "bounce",
+              "ping-slow",
+              "pulse",
+              "shimmer-slide",
+              "spin",
+              "spin-around",
+              "star-movement-bottom",
+              "star-movement-top",
+              "text-shimmer",
+              "enter",
+              "exit",
+              "shimmer",
+              "appear",
+              "slide-up-fade",
+              "fade-in",
+              "sidebar-separate",
+              "sidebar-combine",
+              "chroma-slide",
+              "icon-swap-in",
+              "icon-swap-out",
+              "copy-success",
+              "scale-pulse",
+              "accordion-up",
+              "accordion-down",
+              "toast-spin",
+              "toast-apple-in",
+              "toast-apple-out",
+              "diff-toolbar-enter",
+              "diff-text-enter",
+              "diff-preview-enter",
+              "diff-preview-content-enter",
+              "swipe-out-left",
+              "swipe-out-right",
+              "swipe-out-up",
+              "swipe-out-down",
+              "sonner-fade-in",
+              "sonner-fade-out",
+              "sonner-spin",
+              "fadeIn",
+              "fadeOut"
+            ],
+            "samples": [
+              {
+                "tag": "div",
+                "id": "",
+                "classes": [
+                  "relative",
+                  "mx-auto",
+                  "w-full",
+                  "transition-all",
+                  "duration-200"
+                ],
+                "area": 780000,
+                "animationName": "none",
+                "animationDuration": "0.2s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.2s",
+                "transform": "",
+                "sectionHeading": "Animated Section with Gradient and Dynamic Lines"
+              },
+              {
+                "tag": "div",
+                "id": "",
+                "classes": [
+                  "flex-1",
+                  "flex",
+                  "flex-col",
+                  "bg-background",
+                  "transition-transform",
+                  "duration-300",
+                  "ease-in-out",
+                  "overflow-auto"
+                ],
+                "area": 390000,
+                "animationName": "none",
+                "animationDuration": "0.3s",
+                "animationTimingFunction": "cubic-bezier(0.4, 0, 0.2, 1)",
+                "transitionProperty": "transform",
+                "transitionDuration": "0.3s",
+                "transform": "matrix(1, 0, 0, 1, 0, 0)",
+                "sectionHeading": "Animated Section with Gradient and Dynamic Lines"
+              },
+              {
+                "tag": "div",
+                "id": "",
+                "classes": [
+                  "order-2",
+                  "lg:order-1",
+                  "z-1",
+                  "flex",
+                  "flex-col",
+                  "justify-start",
+                  "lg:justify-end",
+                  "px-4",
+                  "transition-all",
+                  "duration-300",
+                  "ease-in-out",
+                  "w-full"
+                ],
+                "area": 350610,
+                "animationName": "none",
+                "animationDuration": "0.3s",
+                "animationTimingFunction": "cubic-bezier(0.4, 0, 0.2, 1)",
+                "transitionProperty": "all",
+                "transitionDuration": "0.3s",
+                "transform": "",
+                "sectionHeading": "Animated Section with Gradient and Dynamic Lines"
+              },
+              {
+                "tag": "div",
+                "id": "",
+                "classes": [
+                  "code-wrapper-vesper",
+                  "font-mono",
+                  "rounded-md",
+                  "cursor-pointer",
+                  "overflow-auto",
+                  "transition-all",
+                  "duration-200",
+                  "block",
+                  "bg-muted",
+                  "p-2",
+                  "mt-2",
+                  "mb-4"
+                ],
+                "area": 51351,
+                "animationName": "none",
+                "animationDuration": "0.2s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.2s",
+                "transform": "",
+                "sectionHeading": "Animated Section with Gradient and Dynamic Lines"
+              },
+              {
+                "tag": "div",
+                "id": "preview",
+                "classes": [
+                  "order-1",
+                  "lg:order-2",
+                  "z-12",
+                  "relative",
+                  "flex",
+                  "flex-col",
+                  "items-center",
+                  "justify-center",
+                  "p-2",
+                  "transition-all",
+                  "duration-300",
+                  "ease-in-out"
+                ],
+                "area": 14384,
+                "animationName": "none",
+                "animationDuration": "0.3s",
+                "animationTimingFunction": "cubic-bezier(0.4, 0, 0.2, 1)",
+                "transitionProperty": "all",
+                "transitionDuration": "0.3s",
+                "transform": "",
+                "sectionHeading": "Animated Section with Gradient and Dynamic Lines"
+              },
+              {
+                "tag": "button",
+                "id": "",
+                "classes": [
+                  "w-full",
+                  "rounded-lg",
+                  "border",
+                  "border-border",
+                  "bg-muted",
+                  "px-4",
+                  "py-3",
+                  "text-left",
+                  "text-sm",
+                  "text-muted-foreground",
+                  "transition-colors",
+                  "hover:bg-muted/80"
+                ],
+                "area": 14076,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "color, background-color, border-color, text-decoration-color, fill, stroke",
+                "transitionDuration": "0.15s",
+                "transform": "",
+                "sectionHeading": "Animated Section with Gradient and Dynamic Lines"
+              },
+              {
+                "tag": "button",
+                "id": "",
+                "classes": [
+                  "flex-[2]",
+                  "flex",
+                  "items-center",
+                  "justify-center",
+                  "gap-1.5",
+                  "h-9",
+                  "rounded-md",
+                  "bg-foreground",
+                  "text-background",
+                  "text-sm",
+                  "font-medium",
+                  "transition-all"
+                ],
+                "area": 8544,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.15s",
+                "transform": "",
+                "sectionHeading": "Animated Section with Gradient and Dynamic Lines"
+              },
+              {
+                "tag": "button",
+                "id": "",
+                "classes": [
+                  "bg-foreground",
+                  "text-background",
+                  "hover:bg-foreground/90",
+                  "active:scale-95",
+                  "flex",
+                  "h-8",
+                  "w-fit",
+                  "cursor-pointer",
+                  "items-center",
+                  "gap-2",
+                  "rounded-xl",
+                  "px-3"
+                ],
+                "area": 5018,
+                "animationName": "none",
+                "animationDuration": "0.3s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.3s",
+                "transform": "",
+                "sectionHeading": "Animated Section with Gradient and Dynamic Lines"
+              },
+              {
+                "tag": "button",
+                "id": "",
+                "classes": [
+                  "flex-1",
+                  "flex",
+                  "items-center",
+                  "justify-center",
+                  "gap-1.5",
+                  "h-9",
+                  "rounded-md",
+                  "border",
+                  "border-border",
+                  "text-sm",
+                  "text-muted-foreground",
+                  "hover:text-foreground"
+                ],
+                "area": 4344,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.15s",
+                "transform": "",
+                "sectionHeading": "Animated Section with Gradient and Dynamic Lines"
+              },
+              {
+                "tag": "button",
+                "id": "",
+                "classes": [
+                  "bg-muted",
+                  "hover:bg-muted3",
+                  "active:scale-95",
+                  "flex",
+                  "h-8",
+                  "w-fit",
+                  "cursor-pointer",
+                  "items-center",
+                  "gap-2",
+                  "rounded-xl",
+                  "px-3",
+                  "text-xs"
+                ],
+                "area": 3698,
+                "animationName": "none",
+                "animationDuration": "0.3s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.3s",
+                "transform": "",
+                "sectionHeading": "Animated Section with Gradient and Dynamic Lines"
+              },
+              {
+                "tag": "div",
+                "id": "",
+                "classes": [
+                  "transition-opacity",
+                  "duration-300",
+                  "opacity-100"
+                ],
+                "area": 3329,
+                "animationName": "none",
+                "animationDuration": "0.3s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "opacity",
+                "transitionDuration": "0.3s",
+                "transform": "",
+                "sectionHeading": "Animated Section with Gradient and Dynamic Lines"
+              },
+              {
+                "tag": "button",
+                "id": "",
+                "classes": [
+                  "flex",
+                  "items-center",
+                  "gap-2",
+                  "h-7",
+                  "px-3",
+                  "rounded-[10px]",
+                  "border-[0.5px]",
+                  "border-border/40",
+                  "bg-background/80",
+                  "text-xs",
+                  "text-muted-foreground",
+                  "hover:bg-foreground/5"
+                ],
+                "area": 3329,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "color, background-color, border-color, text-decoration-color, fill, stroke",
+                "transitionDuration": "0.15s",
+                "transform": "",
+                "sectionHeading": "Animated Section with Gradient and Dynamic Lines"
+              },
+              {
+                "tag": "button",
+                "id": "",
+                "classes": [
+                  "bg-muted",
+                  "hover:bg-muted3",
+                  "active:scale-95",
+                  "flex",
+                  "h-8",
+                  "w-fit",
+                  "cursor-pointer",
+                  "items-center",
+                  "gap-2",
+                  "rounded-xl",
+                  "px-3",
+                  "text-xs"
+                ],
+                "area": 3308,
+                "animationName": "none",
+                "animationDuration": "0.3s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.3s",
+                "transform": "",
+                "sectionHeading": "Animated Section with Gradient and Dynamic Lines"
+              },
+              {
+                "tag": "button",
+                "id": "",
+                "classes": [
+                  "bg-muted",
+                  "hover:bg-muted3",
+                  "active:scale-95",
+                  "flex",
+                  "h-8",
+                  "w-fit",
+                  "cursor-pointer",
+                  "items-center",
+                  "gap-2",
+                  "rounded-xl",
+                  "px-3",
+                  "text-xs"
+                ],
+                "area": 3256,
+                "animationName": "none",
+                "animationDuration": "0.3s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.3s",
+                "transform": "",
+                "sectionHeading": "Animated Section with Gradient and Dynamic Lines"
+              },
+              {
+                "tag": "button",
+                "id": "",
+                "classes": [
+                  "flex",
+                  "h-7",
+                  "items-center",
+                  "gap-1.5",
+                  "rounded-md",
+                  "px-2",
+                  "text-xs",
+                  "text-muted-foreground",
+                  "hover:text-foreground",
+                  "hover:bg-foreground/10",
+                  "transition-colors"
+                ],
+                "area": 2095,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "color, background-color, border-color, text-decoration-color, fill, stroke",
+                "transitionDuration": "0.15s",
+                "transform": "",
+                "sectionHeading": "Animated Section with Gradient and Dynamic Lines"
+              },
+              {
+                "tag": "button",
+                "id": "",
+                "classes": [
+                  "flex",
+                  "h-7",
+                  "items-center",
+                  "gap-1.5",
+                  "rounded-md",
+                  "px-2",
+                  "text-xs",
+                  "text-muted-foreground",
+                  "hover:text-foreground",
+                  "hover:bg-foreground/10",
+                  "transition-colors"
+                ],
+                "area": 1811,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "color, background-color, border-color, text-decoration-color, fill, stroke",
+                "transitionDuration": "0.15s",
+                "transform": "",
+                "sectionHeading": "Animated Section with Gradient and Dynamic Lines"
+              },
+              {
+                "tag": "button",
+                "id": "",
+                "classes": [
+                  "flex",
+                  "h-7",
+                  "items-center",
+                  "gap-1.5",
+                  "rounded-md",
+                  "px-2",
+                  "text-xs",
+                  "text-muted-foreground",
+                  "hover:text-foreground",
+                  "hover:bg-foreground/10",
+                  "transition-colors"
+                ],
+                "area": 1782,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "color, background-color, border-color, text-decoration-color, fill, stroke",
+                "transitionDuration": "0.15s",
+                "transform": "",
+                "sectionHeading": "Animated Section with Gradient and Dynamic Lines"
+              },
+              {
+                "tag": "div",
+                "id": "",
+                "classes": [
+                  "overflow-hidden",
+                  "transition-[width]",
+                  "duration-500",
+                  "ease-[cubic-bezier(0.25,0.1,0.25,1)]",
+                  "max-md:!w-9"
+                ],
+                "area": 900,
+                "animationName": "none",
+                "animationDuration": "0.5s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "width",
+                "transitionDuration": "0.5s",
+                "transform": "",
+                "sectionHeading": "Animated Section with Gradient and Dynamic Lines"
+              },
+              {
+                "tag": "div",
+                "id": "",
+                "classes": [
+                  "animate-in",
+                  "fade-in-0",
+                  "duration-500",
+                  "ease-out",
+                  "max-md:animate-none"
+                ],
+                "area": 900,
+                "animationName": "enter",
+                "animationDuration": "0.5s",
+                "animationTimingFunction": "cubic-bezier(0, 0, 0.2, 1)",
+                "transitionProperty": "all",
+                "transitionDuration": "0.5s",
+                "transform": "matrix(1, 0, 0, 1, 0, 0)",
+                "sectionHeading": "Animated Section with Gradient and Dynamic Lines"
+              },
+              {
+                "tag": "button",
+                "id": "",
+                "classes": [
+                  "inline-flex",
+                  "items-center",
+                  "justify-center",
+                  "whitespace-nowrap",
+                  "text-sm",
+                  "font-medium",
+                  "outline-offset-2",
+                  "focus-visible:outline",
+                  "focus-visible:outline-2",
+                  "focus-visible:outline-primary/70",
+                  "disabled:opacity-50",
+                  "disabled:pointer-events-none"
+                ],
+                "area": 896,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "color, background-color, border-color, text-decoration-color, fill, stroke",
+                "transitionDuration": "0.15s",
+                "transform": "",
+                "sectionHeading": ""
+              },
+              {
+                "tag": "button",
+                "id": "",
+                "classes": [
+                  "inline-flex",
+                  "items-center",
+                  "justify-center",
+                  "whitespace-nowrap",
+                  "text-sm",
+                  "font-medium",
+                  "outline-offset-2",
+                  "focus-visible:outline",
+                  "focus-visible:outline-2",
+                  "focus-visible:outline-primary/70",
+                  "disabled:opacity-50",
+                  "disabled:pointer-events-none"
+                ],
+                "area": 896,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "color, background-color, border-color, text-decoration-color, fill, stroke",
+                "transitionDuration": "0.15s",
+                "transform": "",
+                "sectionHeading": ""
+              },
+              {
+                "tag": "button",
+                "id": "",
+                "classes": [
+                  "inline-flex",
+                  "items-center",
+                  "justify-center",
+                  "whitespace-nowrap",
+                  "text-sm",
+                  "font-medium",
+                  "outline-offset-2",
+                  "focus-visible:outline",
+                  "focus-visible:outline-2",
+                  "focus-visible:outline-primary/70",
+                  "disabled:opacity-50",
+                  "disabled:pointer-events-none"
+                ],
+                "area": 896,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "color, background-color, border-color, text-decoration-color, fill, stroke",
+                "transitionDuration": "0.15s",
+                "transform": "",
+                "sectionHeading": ""
+              },
+              {
+                "tag": "button",
+                "id": "",
+                "classes": [
+                  "inline-flex",
+                  "items-center",
+                  "justify-center",
+                  "whitespace-nowrap",
+                  "text-sm",
+                  "font-medium",
+                  "outline-offset-2",
+                  "focus-visible:outline",
+                  "focus-visible:outline-2",
+                  "focus-visible:outline-primary/70",
+                  "disabled:opacity-50",
+                  "disabled:pointer-events-none"
+                ],
+                "area": 896,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "color, background-color, border-color, text-decoration-color, fill, stroke",
+                "transitionDuration": "0.15s",
+                "transform": "",
+                "sectionHeading": ""
+              },
+              {
+                "tag": "button",
+                "id": "",
+                "classes": [
+                  "inline-flex",
+                  "items-center",
+                  "justify-center",
+                  "whitespace-nowrap",
+                  "text-sm",
+                  "font-medium",
+                  "outline-offset-2",
+                  "focus-visible:outline",
+                  "focus-visible:outline-2",
+                  "focus-visible:outline-primary/70",
+                  "disabled:opacity-50",
+                  "disabled:pointer-events-none"
+                ],
+                "area": 896,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "color, background-color, border-color, text-decoration-color, fill, stroke",
+                "transitionDuration": "0.15s",
+                "transform": "",
+                "sectionHeading": ""
+              },
+              {
+                "tag": "button",
+                "id": "radix-_r_13_",
+                "classes": [
+                  "inline-flex",
+                  "items-center",
+                  "justify-center",
+                  "whitespace-nowrap",
+                  "text-sm",
+                  "font-medium",
+                  "outline-offset-2",
+                  "focus-visible:outline",
+                  "focus-visible:outline-2",
+                  "focus-visible:outline-primary/70",
+                  "disabled:opacity-50",
+                  "disabled:pointer-events-none"
+                ],
+                "area": 896,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "color, background-color, border-color, text-decoration-color, fill, stroke",
+                "transitionDuration": "0.15s",
+                "transform": "",
+                "sectionHeading": ""
+              },
+              {
+                "tag": "button",
+                "id": "",
+                "classes": [
+                  "text-[13px]",
+                  "font-medium",
+                  "text-muted-foreground",
+                  "hover:text-foreground",
+                  "transition-colors"
+                ],
+                "area": 665,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "color, background-color, border-color, text-decoration-color, fill, stroke",
+                "transitionDuration": "0.15s",
+                "transform": "",
+                "sectionHeading": "Animated Section with Gradient and Dynamic Lines"
+              },
+              {
+                "tag": "button",
+                "id": "",
+                "classes": [
+                  "inline-flex",
+                  "items-center",
+                  "justify-center",
+                  "whitespace-nowrap",
+                  "text-sm",
+                  "font-medium",
+                  "outline-offset-2",
+                  "focus-visible:outline",
+                  "focus-visible:outline-2",
+                  "focus-visible:outline-primary/70",
+                  "disabled:opacity-50",
+                  "disabled:pointer-events-none"
+                ],
+                "area": 576,
+                "animationName": "none",
+                "animationDuration": "0.15s",
+                "animationTimingFunction": "cubic-bezier(0, 0, 0.2, 1)",
+                "transitionProperty": "background-color, transform",
+                "transitionDuration": "0.15s",
+                "transform": "",
+                "sectionHeading": "Animated Section with Gradient and Dynamic Lines"
+              },
+              {
+                "tag": "div",
+                "id": "",
+                "classes": [
+                  "absolute",
+                  "inset-0",
+                  "transition-all",
+                  "duration-300",
+                  "ease-in-out",
+                  "scale-100",
+                  "opacity-100"
+                ],
+                "area": 256,
+                "animationName": "none",
+                "animationDuration": "0.3s",
+                "animationTimingFunction": "cubic-bezier(0.4, 0, 0.2, 1)",
+                "transitionProperty": "all",
+                "transitionDuration": "0.3s",
+                "transform": "matrix(1, 0, 0, 1, 0, 0)",
+                "sectionHeading": ""
+              },
+              {
+                "tag": "svg",
+                "id": "",
+                "classes": [
+                  "lucide",
+                  "lucide-rotate-cw",
+                  "h-4",
+                  "w-4",
+                  "will-change-transform",
+                  "transition-transform",
+                  "duration-300",
+                  "ease-[cubic-bezier(0.12,0,0.39,0)]",
+                  "rotate-0"
+                ],
+                "area": 256,
+                "animationName": "none",
+                "animationDuration": "0.3s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "transform",
+                "transitionDuration": "0.3s",
+                "transform": "matrix(1, 0, 0, 1, 0, 0)",
+                "sectionHeading": ""
+              },
+              {
+                "tag": "div",
+                "id": "",
+                "classes": [
+                  "absolute",
+                  "inset-0",
+                  "transition-all",
+                  "duration-300",
+                  "scale-100",
+                  "opacity-100"
+                ],
+                "area": 196,
+                "animationName": "none",
+                "animationDuration": "0.3s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.3s",
+                "transform": "matrix(1, 0, 0, 1, 0, 0)",
+                "sectionHeading": "Animated Section with Gradient and Dynamic Lines"
+              },
+              {
+                "tag": "div",
+                "id": "",
+                "classes": [
+                  "absolute",
+                  "inset-0",
+                  "transition-all",
+                  "duration-300",
+                  "ease-in-out",
+                  "scale-100",
+                  "opacity-100"
+                ],
+                "area": 196,
+                "animationName": "none",
+                "animationDuration": "0.3s",
+                "animationTimingFunction": "cubic-bezier(0.4, 0, 0.2, 1)",
+                "transitionProperty": "all",
+                "transitionDuration": "0.3s",
+                "transform": "matrix(1, 0, 0, 1, 0, 0)",
+                "sectionHeading": "Animated Section with Gradient and Dynamic Lines"
+              },
+              {
+                "tag": "div",
+                "id": "",
+                "classes": [
+                  "transition-all",
+                  "duration-300",
+                  "scale-0",
+                  "opacity-0"
+                ],
+                "area": 0,
+                "animationName": "none",
+                "animationDuration": "0.3s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.3s",
+                "transform": "matrix(0, 0, 0, 0, 0, 0)",
+                "sectionHeading": "Animated Section with Gradient and Dynamic Lines"
+              },
+              {
+                "tag": "div",
+                "id": "",
+                "classes": [
+                  "transition-all",
+                  "duration-300",
+                  "ease-in-out",
+                  "scale-0",
+                  "opacity-0"
+                ],
+                "area": 0,
+                "animationName": "none",
+                "animationDuration": "0.3s",
+                "animationTimingFunction": "cubic-bezier(0.4, 0, 0.2, 1)",
+                "transitionProperty": "all",
+                "transitionDuration": "0.3s",
+                "transform": "matrix(0, 0, 0, 0, 0, 0)",
+                "sectionHeading": ""
+              },
+              {
+                "tag": "div",
+                "id": "",
+                "classes": [
+                  "z-2",
+                  "sticky",
+                  "top-full",
+                  "w-full",
+                  "-translate-y-full",
+                  "pointer-events-none"
+                ],
+                "area": 0,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0s",
+                "transform": "matrix(1, 0, 0, 1, 0, 0)",
+                "sectionHeading": "Animated Section with Gradient and Dynamic Lines"
+              },
+              {
+                "tag": "div",
+                "id": "",
+                "classes": [
+                  "transition-all",
+                  "duration-300",
+                  "ease-in-out",
+                  "scale-0",
+                  "opacity-0"
+                ],
+                "area": 0,
+                "animationName": "none",
+                "animationDuration": "0.3s",
+                "animationTimingFunction": "cubic-bezier(0.4, 0, 0.2, 1)",
+                "transitionProperty": "all",
+                "transitionDuration": "0.3s",
+                "transform": "matrix(0, 0, 0, 0, 0, 0)",
+                "sectionHeading": "Animated Section with Gradient and Dynamic Lines"
+              }
+            ],
+            "libraries": {
+              "framerMotion": false,
+              "gsap": false,
+              "three": false,
+              "lottie": false,
+              "locomotiveScroll": false
+            },
+            "hasReducedMotionCss": false
+          },
+          "technologySignals": {
+            "hasNextData": false,
+            "hasNextAssets": true,
+            "hasNuxtAssets": false,
+            "hasViteAssets": false,
+            "hasWebflow": false,
+            "hasFramer": false,
+            "hasShopify": false,
+            "hasWordPress": false,
+            "scriptSrcs": [
+              "https://www.googletagmanager.com/gtag/js?id=G-X7C2K3V7GX&cx=c&gtm=4e66o0h1",
+              "https://www.googletagmanager.com/gtm.js?id=GTM-T76WQSTW",
+              "https://21st.dev/_next/static/chunks/478f1f74-998c95e64b731fed.js",
+              "https://21st.dev/_next/static/chunks/64058-dff5bfbedf4d7d7f.js",
+              "https://21st.dev/_next/static/chunks/main-app-3942c6518210f6be.js",
+              "https://21st.dev/_next/static/chunks/3dbc7fab-ddbe4a9ecc46a20d.js",
+              "https://21st.dev/_next/static/chunks/2d2d3c67-534fff7c09ab1dc6.js",
+              "https://21st.dev/_next/static/chunks/c15208c6-06beb165a35ff174.js",
+              "https://21st.dev/_next/static/chunks/2c423691-50d896c2efee64c7.js",
+              "https://21st.dev/_next/static/chunks/238edd4e-2f8984f42beec25c.js",
+              "https://21st.dev/_next/static/chunks/4bb1dc3e-6e70fbaaa464adf5.js",
+              "https://21st.dev/_next/static/chunks/64323-bb5d7e7724fb0e30.js",
+              "https://21st.dev/_next/static/chunks/83262-360322397a519fb0.js",
+              "https://21st.dev/_next/static/chunks/24037-09d5fba18cfdd89a.js",
+              "https://www.googletagmanager.com/gtag/js?id=G-X7C2K3V7GX",
+              "https://clerk.21st.dev/npm/@clerk/clerk-js@5/dist/clerk.browser.js",
+              "https://21st.dev/_next/static/chunks/polyfills-42372ed130431b0a.js",
+              "https://cdn.tolt.io/tolt.js",
+              "https://cdn.jsdelivr.net/npm/psl/dist/psl.min.js",
+              "https://21st.dev/_next/static/chunks/79534-6ef9d880d5b0554e.js",
+              "https://21st.dev/_next/static/chunks/77969-4d8ce8947e648ebe.js",
+              "https://21st.dev/_next/static/chunks/84228-c47be5640bef59e5.js",
+              "https://21st.dev/_next/static/chunks/22386-6ca1054da8259f3d.js",
+              "https://21st.dev/_next/static/chunks/app/(public)/community/components/page-328b9ca2d95e1e3f.js",
+              "https://us-assets.i.posthog.com/static/surveys.js?v=1.356.1",
+              "https://us-assets.i.posthog.com/array/phc_mpiMragfXyiYps3JYUGZ1vbAyaIyawDzlrDdxwR7six/config.js",
+              "https://21st.dev/_next/static/chunks/webpack-eb779c6b747c75be.js",
+              "https://21st.dev/_next/static/chunks/46d8dd05-c371e99ad5e51627.js",
+              "https://21st.dev/_next/static/chunks/d7af8c32-e9d754aa81a93926.js",
+              "https://21st.dev/_next/static/chunks/76037-995c7f531edeed2e.js",
+              "https://21st.dev/_next/static/chunks/97364-2bbdb3725fe93c7e.js",
+              "https://21st.dev/_next/static/chunks/84689-e369117cffcf7edb.js",
+              "https://21st.dev/_next/static/chunks/33164-4990917abc4a0bfb.js",
+              "https://21st.dev/_next/static/chunks/16451-465f8e6f5b71bc19.js",
+              "https://21st.dev/_next/static/chunks/1439-ea5f23235d1b6597.js",
+              "https://21st.dev/_next/static/chunks/38255-1c1813000791e1b2.js",
+              "https://21st.dev/_next/static/chunks/82370-db6612fc1b7af029.js",
+              "https://21st.dev/_next/static/chunks/85785-50095bcaa9183072.js",
+              "https://21st.dev/_next/static/chunks/app/(public)/community/components/%5Busername%5D/%5Bcomponent_slug%5D/%5Bdemo_slug%5D/page-f32e6201f5bec5c4.js"
+            ]
+          },
+          "codeBlocks": [],
+          "codeLinks": []
+        }
+      ]
+    },
+    {
+      "id": "registry-directory",
+      "name": "Registry Directory",
+      "url": "https://registry.directory/",
+      "mode": "shadcn-registry-index",
+      "usage": "Find current shadcn-compatible registries, install commands, authors, freshness and component counts. Use as discovery; verify registry license before code reuse.",
+      "licenseStatus": "registry-review-required",
+      "status": 200,
+      "failedRequestCount": 2,
+      "rawCandidateCount": 53,
+      "selectedCandidateCount": 6,
+      "detailedExampleCount": 1,
+      "candidates": [
+        {
+          "index": 153,
+          "url": "https://registry.directory/disclosure",
+          "text": "Learn more",
+          "heading": "registry.directoryregistry.directory beta",
+          "description": "registry.directoryregistry.directory betaThe explorer for shadcn/ui registries.RegistriesToolsAdd your RegistryShare your registry with the communityshadcn/uiThe official registry for shadcn/ui components.117.4k·414 itemsupdated todayExploreSponsoredshadcn/studioAccelerate your project development with ready-to-use, and fully customizable shadcn ui Component",
+          "imageSrc": "https://github.com/shadcn.png",
+          "imageAlt": "",
+          "buttonText": [
+            "Registries",
+            "Tools",
+            "Add your RegistryShare your registry with the community",
+            "Explore",
+            "Explore",
+            "Explore",
+            "Explore",
+            "Explore"
+          ],
+          "tags": [],
+          "cardArea": 7111440,
+          "score": 10,
+          "sourceMode": "shadcn-registry-index"
+        },
+        {
+          "index": 0,
+          "url": "https://github.com/rbadillap/registry.directory",
+          "text": "Add your Registry Share your registry with the community",
+          "heading": "",
+          "description": "Add your RegistryShare your registry with the communityshadcn/uiThe official registry for shadcn/ui components.117.4k·414 itemsupdated todayExploreSponsoredshadcn/studioAccelerate your project development with ready-to-use, and fully customizable shadcn ui Components, Blocks, UI Kits, Boilerplates, Templates and Themes with AI Tools1.6kupdated 4mo agoExplore",
+          "imageSrc": "https://github.com/shadcn.png",
+          "imageAlt": "",
+          "buttonText": [
+            "Add your RegistryShare your registry with the community",
+            "Explore",
+            "Explore",
+            "Explore",
+            "Explore",
+            "Explore",
+            "Explore",
+            "Explore"
+          ],
+          "tags": [],
+          "cardArea": 5531136,
+          "score": 8,
+          "sourceMode": "shadcn-registry-index"
+        },
+        {
+          "index": 12,
+          "url": "https://registry.directory/tailark/blocks",
+          "text": "Explore",
+          "heading": "",
+          "description": "Explore",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [],
+          "tags": [],
+          "cardArea": 8544,
+          "score": 7,
+          "sourceMode": "shadcn-registry-index"
+        },
+        {
+          "index": 3,
+          "url": "https://registry.directory/shadcn-ui/ui",
+          "text": "Explore",
+          "heading": "",
+          "description": "Explore",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [],
+          "tags": [],
+          "cardArea": 8544,
+          "score": 5,
+          "sourceMode": "shadcn-registry-index"
+        },
+        {
+          "index": 6,
+          "url": "https://registry.directory/shadcnstudio/shadcn-studio",
+          "text": "Explore",
+          "heading": "",
+          "description": "Explore",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [],
+          "tags": [],
+          "cardArea": 8544,
+          "score": 5,
+          "sourceMode": "shadcn-registry-index"
+        },
+        {
+          "index": 9,
+          "url": "https://registry.directory/sadmann7/diceui",
+          "text": "Explore",
+          "heading": "",
+          "description": "Explore",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [],
+          "tags": [],
+          "cardArea": 8544,
+          "score": 5,
+          "sourceMode": "shadcn-registry-index"
+        }
+      ],
+      "screenshot": {
+        "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/registry-directory/gallery.png",
+        "sha256": "3a012eeab66b9062a9ea1e55559e49713ebb4ae6d99ef36d5c7dad61395e6ae4",
+        "mode": "full-page"
+      },
+      "screenshotQuality": {
+        "viewport": {
+          "width": 1440,
+          "height": 1000
+        },
+        "textLength": 8171,
+        "mediaCount": 208,
+        "codeCount": 0,
+        "headingCount": 1,
+        "usefulElementCount": 61,
+        "visibleAreaRatio": 1.122,
+        "isLikelySparse": false,
+        "visibleSamples": [
+          "registry.directoryregistry.directory betaThe explorer for shadcn/ui registries.RegistriesToolsAdd your RegistryShare you",
+          "registry.directoryregistry.directory beta",
+          "Registries",
+          "Tools",
+          "Add your RegistryShare your registry with the community",
+          "Explore",
+          "Explore",
+          "Explore"
+        ]
+      },
+      "examples": [
+        {
+          "sourceId": "registry-directory",
+          "url": "https://registry.directory/disclosure",
+          "status": 200,
+          "licenseStatus": "registry-review-required",
+          "reuseGuidance": "Find current shadcn-compatible registries, install commands, authors, freshness and component counts. Use as discovery; verify registry license before code reuse.",
+          "candidate": {
+            "index": 153,
+            "url": "https://registry.directory/disclosure",
+            "text": "Learn more",
+            "heading": "registry.directoryregistry.directory beta",
+            "description": "registry.directoryregistry.directory betaThe explorer for shadcn/ui registries.RegistriesToolsAdd your RegistryShare your registry with the communityshadcn/uiThe official registry for shadcn/ui components.117.4k·414 itemsupdated todayExploreSponsoredshadcn/studioAccelerate your project development with ready-to-use, and fully customizable shadcn ui Component",
+            "imageSrc": "https://github.com/shadcn.png",
+            "imageAlt": "",
+            "buttonText": [
+              "Registries",
+              "Tools",
+              "Add your RegistryShare your registry with the community",
+              "Explore",
+              "Explore",
+              "Explore",
+              "Explore",
+              "Explore"
+            ],
+            "tags": [],
+            "cardArea": 7111440,
+            "score": 10,
+            "sourceMode": "shadcn-registry-index"
+          },
+          "screenshots": {
+            "desktop": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/registry-directory/153-registry-directoryregistry-directory-beta-5487b35f/desktop.png",
+              "sha256": "bb2717e9eff1a08a93e8c08fa3d4de6107af2d1685a1dec74e6c47128d552dc6",
+              "mode": "viewport"
+            },
+            "mobile": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/registry-directory/153-registry-directoryregistry-directory-beta-5487b35f/mobile.png",
+              "sha256": "0ba58e11ce5702c477b2a3a001c93ae52081c8e01c91368c5614e924caa129d9",
+              "mode": "viewport"
+            }
+          },
+          "screenshotQuality": {
+            "desktop": {
+              "viewport": {
+                "width": 1440,
+                "height": 1000
+              },
+              "textLength": 595,
+              "mediaCount": 1,
+              "codeCount": 0,
+              "headingCount": 1,
+              "usefulElementCount": 5,
+              "visibleAreaRatio": 0.241,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "← Back to directoryAffiliate DisclosureSome links on registry.directory are affiliate links. This means we may earn a co",
+                "← Back to directory",
+                "Affiliate Disclosure"
+              ]
+            },
+            "mobile": {
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "textLength": 595,
+              "mediaCount": 1,
+              "codeCount": 0,
+              "headingCount": 1,
+              "usefulElementCount": 5,
+              "visibleAreaRatio": 0.703,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "← Back to directoryAffiliate DisclosureSome links on registry.directory are affiliate links. This means we may earn a co",
+                "← Back to directory",
+                "Affiliate Disclosure"
+              ]
+            }
+          },
+          "qualityWarnings": [],
+          "failedRequestCount": 0,
+          "title": "Affiliate Disclosure | registry.directory",
+          "description": "registry.directory affiliate disclosure. Some links on this site are affiliate links.",
+          "headings": [
+            {
+              "level": "h1",
+              "text": "Affiliate Disclosure"
+            }
+          ],
+          "sections": [],
+          "ctas": [
+            "← Back to directory",
+            "Send feedback (Cmd+.)"
+          ],
+          "palette": [
+            "oklch(0.145 0 0)",
+            "oklch(0.985 0.005 80)",
+            "oklch(0.88 0.005 80)",
+            "oklch(0.45 0 0)"
+          ],
+          "layoutSignals": {
+            "hasNav": false,
+            "hasHero": true,
+            "hasPricing": false,
+            "hasTestimonials": false,
+            "hasFAQ": false,
+            "hasVideo": false,
+            "cardLikeCount": 0,
+            "imageCount": 0,
+            "buttonCount": 2,
+            "formCount": 0
+          },
+          "htmlOutline": {
+            "language": "en",
+            "bodyClasses": [
+              "__variable_0d7163",
+              "__variable_5eb07c",
+              "font-sans",
+              "antialiased"
+            ],
+            "semanticLandmarks": [
+              {
+                "index": 0,
+                "tag": "main",
+                "id": "",
+                "classes": [
+                  "max-w-2xl",
+                  "mx-auto",
+                  "px-4",
+                  "py-16",
+                  "md:py-24"
+                ],
+                "heading": "Affiliate Disclosure",
+                "textSample": "← Back to directoryAffiliate DisclosureSome links on registry.directory are affiliate links. This means we may earn a commission if you make a purchase through those links, at no additional cost to you.Affiliate links ar",
+                "linkCount": 1,
+                "buttonCount": 0,
+                "formControlCount": 0,
+                "mediaCount": 0
+              }
+            ],
+            "navLinks": [],
+            "forms": []
+          },
+          "resources": {
+            "images": [],
+            "videos": [],
+            "canvasCount": 0,
+            "svgCount": 1,
+            "stylesheets": [
+              "https://registry.directory/_next/static/css/1ed17ea7d6dec85e.css"
+            ],
+            "fontLinks": [
+              "https://registry.directory/_next/static/media/13971731025ec697-s.p.woff2",
+              "https://registry.directory/_next/static/media/7d4881bb7e1bf84d-s.p.woff2"
+            ],
+            "ogImages": [
+              "https://registry.directory/opengraph-image?2eb47b19bfa074cf"
+            ],
+            "downloadableAssets": []
+          },
+          "fontSignals": {
+            "computedFamilies": [
+              "\"DM Sans\", \"DM Sans Fallback\"",
+              "\"Geist Mono\", \"Geist Mono Fallback\""
+            ],
+            "computedWeights": [
+              "400",
+              "600"
+            ],
+            "fontFaceNames": [
+              "\"DM Sans\"",
+              "\"DM Sans Fallback\"",
+              "\"Geist Mono\"",
+              "\"Geist Mono Fallback\""
+            ]
+          },
+          "animationSignals": {
+            "animatedElementCount": 2,
+            "keyframes": [
+              "enter",
+              "exit"
+            ],
+            "samples": [
+              {
+                "tag": "a",
+                "id": "",
+                "classes": [
+                  "text-xs",
+                  "font-mono",
+                  "text-muted-foreground",
+                  "hover:text-foreground",
+                  "transition-colors"
+                ],
+                "area": 2332,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to",
+                "transitionDuration": "0.15s",
+                "transform": "",
+                "sectionHeading": "Affiliate Disclosure"
+              },
+              {
+                "tag": "button",
+                "id": "",
+                "classes": [
+                  "fixed",
+                  "bottom-4",
+                  "right-4",
+                  "z-50",
+                  "flex",
+                  "h-10",
+                  "w-10",
+                  "items-center",
+                  "justify-center",
+                  "rounded-full",
+                  "border",
+                  "border-border"
+                ],
+                "area": 1600,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to",
+                "transitionDuration": "0.15s",
+                "transform": "",
+                "sectionHeading": ""
+              }
+            ],
+            "libraries": {
+              "framerMotion": false,
+              "gsap": false,
+              "three": false,
+              "lottie": false,
+              "locomotiveScroll": false
+            },
+            "hasReducedMotionCss": false
+          },
+          "technologySignals": {
+            "hasNextData": false,
+            "hasNextAssets": true,
+            "hasNuxtAssets": false,
+            "hasViteAssets": false,
+            "hasWebflow": false,
+            "hasFramer": false,
+            "hasShopify": false,
+            "hasWordPress": false,
+            "scriptSrcs": [
+              "https://registry.directory/_next/static/chunks/699e18dd-c78b834cf7b2a066.js",
+              "https://registry.directory/_next/static/chunks/984-9de3e53ce6d85650.js",
+              "https://registry.directory/_next/static/chunks/main-app-a71f077e379e2db6.js",
+              "https://registry.directory/_next/static/chunks/1738-c7fe5b7a3caae320.js",
+              "https://registry.directory/_next/static/chunks/app/layout-7dcc9b082b3d0916.js",
+              "https://registry.directory/_next/static/chunks/8282-2e27a5ac02fbf720.js",
+              "https://registry.directory/_next/static/chunks/app/disclosure/page-fec5f76a127b3ded.js",
+              "https://registry.directory/_next/static/chunks/polyfills-42372ed130431b0a.js",
+              "https://registry.directory/_vercel/insights/script.js",
+              "https://registry.directory/_next/static/chunks/webpack-c8730793c0e8253b.js"
+            ]
+          },
+          "codeBlocks": [],
+          "codeLinks": []
+        }
+      ]
+    },
+    {
+      "id": "magic-ui",
+      "name": "Magic UI",
+      "url": "https://magicui.design/",
+      "mode": "animated-component-library",
+      "usage": "Animated marketing components, effects and motion patterns for landing pages. Prefer local MIT repo or registry install commands for implementation.",
+      "licenseStatus": "mit-open-source-reference",
+      "status": 200,
+      "failedRequestCount": 1,
+      "rawCandidateCount": 115,
+      "selectedCandidateCount": 4,
+      "detailedExampleCount": 1,
+      "candidates": [
+        {
+          "index": 242,
+          "url": "http://magicui.design/",
+          "text": "magicui.design",
+          "heading": "",
+          "description": "Marc Klingen@marcklingenLink to tweetmagicui.design was a godsend when building the current langfuse.com x.com/marcklingen/st…",
+          "imageSrc": "https://pbs.twimg.com/profile_images/2013040658370396160/sjTsUKR8_normal.jpg",
+          "imageAlt": "marcklingen",
+          "buttonText": [
+            "Marc Klingen",
+            "@marcklingen",
+            "Link to tweet",
+            "magicui.design",
+            "langfuse.com",
+            "x.com/marcklingen/st…"
+          ],
+          "tags": [],
+          "cardArea": 57678,
+          "score": 8,
+          "sourceMode": "animated-component-library"
+        },
+        {
+          "index": 8,
+          "url": "https://magicui.design/components",
+          "text": "Browse Components",
+          "heading": "",
+          "description": "Browse Components",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [],
+          "tags": [],
+          "cardArea": 12800,
+          "score": 7,
+          "sourceMode": "animated-component-library"
+        },
+        {
+          "index": 7,
+          "url": "https://magicui.design/docs/components/kinetic-text",
+          "text": "🎉 Introducing Kinetic Text",
+          "heading": "",
+          "description": "🎉 Introducing Kinetic Text",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [],
+          "tags": [],
+          "cardArea": 8031,
+          "score": 7,
+          "sourceMode": "animated-component-library"
+        },
+        {
+          "index": 0,
+          "url": "https://pro.magicui.design/",
+          "text": "✨ Introducing Magic UI Pro - 50+ blocks and templates to build beautiful landing pages in minutes",
+          "heading": "",
+          "description": "✨ Introducing Magic UI Pro - 50+ blocks and templates to build beautiful landing pages in minutes",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [
+            "✨ Introducing Magic UI Pro - 50+ blocks and templates to build beautiful landing pages in minutes"
+          ],
+          "tags": [],
+          "cardArea": 67200,
+          "score": 6,
+          "sourceMode": "animated-component-library"
+        }
+      ],
+      "screenshot": {
+        "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/magic-ui/gallery.png",
+        "sha256": "071a7bca6a14d4fa897086193dfa9866646bf1693e04e9c31200012696ab8a61",
+        "mode": "full-page"
+      },
+      "screenshotQuality": {
+        "viewport": {
+          "width": 1440,
+          "height": 1000
+        },
+        "textLength": 7782,
+        "mediaCount": 326,
+        "codeCount": 0,
+        "headingCount": 6,
+        "usefulElementCount": 44,
+        "visibleAreaRatio": 2.123,
+        "isLikelySparse": false,
+        "visibleSamples": [
+          "✨ Introducing Magic UI Pro - 50+ blocks and templates to build beautiful landing pages in minutes",
+          "Magic UI",
+          "Components",
+          "Templates",
+          "Showcase",
+          "Search documentation...Search...⌘K",
+          "21,35421.4k",
+          "205"
+        ]
+      },
+      "examples": [
+        {
+          "sourceId": "magic-ui",
+          "url": "http://magicui.design/",
+          "status": 200,
+          "licenseStatus": "mit-open-source-reference",
+          "reuseGuidance": "Animated marketing components, effects and motion patterns for landing pages. Prefer local MIT repo or registry install commands for implementation.",
+          "candidate": {
+            "index": 242,
+            "url": "http://magicui.design/",
+            "text": "magicui.design",
+            "heading": "",
+            "description": "Marc Klingen@marcklingenLink to tweetmagicui.design was a godsend when building the current langfuse.com x.com/marcklingen/st…",
+            "imageSrc": "https://pbs.twimg.com/profile_images/2013040658370396160/sjTsUKR8_normal.jpg",
+            "imageAlt": "marcklingen",
+            "buttonText": [
+              "Marc Klingen",
+              "@marcklingen",
+              "Link to tweet",
+              "magicui.design",
+              "langfuse.com",
+              "x.com/marcklingen/st…"
+            ],
+            "tags": [],
+            "cardArea": 57678,
+            "score": 8,
+            "sourceMode": "animated-component-library"
+          },
+          "screenshots": {
+            "desktop": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/magic-ui/242-magicui-design-6edb6ee7/desktop.png",
+              "sha256": "c80e920bde1e4ffa6cfc409525f32e1784871e873bafede4e48ce02b78dd2428",
+              "mode": "viewport"
+            },
+            "mobile": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/magic-ui/242-magicui-design-6edb6ee7/mobile.png",
+              "sha256": "1da0b1aa0d7936c55b609e7b3fcc9882ce37eda8553d107cd26f6f66f47221a6",
+              "mode": "viewport"
+            }
+          },
+          "screenshotQuality": {
+            "desktop": {
+              "viewport": {
+                "width": 1440,
+                "height": 1000
+              },
+              "textLength": 7782,
+              "mediaCount": 326,
+              "codeCount": 0,
+              "headingCount": 6,
+              "usefulElementCount": 46,
+              "visibleAreaRatio": 2.122,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "✨ Introducing Magic UI Pro - 50+ blocks and templates to build beautiful landing pages in minutes",
+                "Magic UI",
+                "Components",
+                "Templates",
+                "Showcase",
+                "Search documentation...Search...⌘K",
+                "21,35421.4k",
+                "205"
+              ]
+            },
+            "mobile": {
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "textLength": 4158,
+              "mediaCount": 208,
+              "codeCount": 0,
+              "headingCount": 6,
+              "usefulElementCount": 32,
+              "visibleAreaRatio": 2.19,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "✨ Introducing Magic UI Pro - 50+ blocks and templates to build beautiful landing pages in minutes",
+                "Toggle Menu",
+                "Magic UI",
+                "21,35421.4k",
+                "205",
+                "Toggle theme",
+                "🎉 Introducing Kinetic TextUI library for Design Engineers150+ free and open-source animated components and effects buil",
+                "🎉 Introducing Kinetic TextUI library for Design Engineers150+ free and open-source animated components and effects buil"
+              ]
+            }
+          },
+          "qualityWarnings": [],
+          "failedRequestCount": 1,
+          "title": "Magic UI",
+          "description": "Beautiful UI components and templates to make your landing page look stunning.",
+          "headings": [
+            {
+              "level": "h2",
+              "text": "Command Palette"
+            },
+            {
+              "level": "h1",
+              "text": "UI library for Design Engineers"
+            },
+            {
+              "level": "h2",
+              "text": "Showcase"
+            },
+            {
+              "level": "h3",
+              "text": "Companies choose Magic UI to build their landing pages."
+            },
+            {
+              "level": "h2",
+              "text": "What People Are Saying on Twitter"
+            },
+            {
+              "level": "h2",
+              "text": "Featured on YouTube"
+            }
+          ],
+          "sections": [
+            {
+              "index": 0,
+              "heading": "UI library for Design Engineers",
+              "textSample": "🎉 Introducing Kinetic TextUI library for Design Engineers150+ free and open-source animated components and effects built with React, Typescript, Tailwind CSS, and Motion.Perfect companion for shadcn/ui.Browse ComponentsBrowse TemplatesReactTailwind CSSMotion",
+              "imageCount": 8,
+              "buttonCount": 8
+            },
+            {
+              "index": 1,
+              "heading": "Showcase",
+              "textSample": "ShowcaseCompanies choose Magic UI to build their landing pages.anara.comYC S24aomni.comRaised seed round from notable investors.Aryan KarmaPersonal Portfoliocognosys.aiBacked by Google Ventures, raised $2MDarshan PacchaPersonal PortfolioelhussaryPersonal Portfolioguarahooks.comOpen Source Projectinfisical.comYC W23, ra",
+              "imageCount": 152,
+              "buttonCount": 76
+            },
+            {
+              "index": 2,
+              "heading": "What People Are Saying on Twitter",
+              "textSample": "What People Are Saying on TwitterAiden Bai@aidenybaiLink to tweetwe use magicui.design for million.dev 🫶View TweetRay Fernando@RayFernando1337Link to tweetI'm loving this Portfolio Site and I'm going to use it as the starting point for my Notion blog. Template by: @dillionverma UI: @magicuidesign Shoutout to @hqasmei ",
+              "imageCount": 33,
+              "buttonCount": 48
+            },
+            {
+              "index": 3,
+              "heading": "Featured on YouTube",
+              "textSample": "Featured on YouTubePlayPlayPlayPlayPlay",
+              "imageCount": 10,
+              "buttonCount": 5
+            },
+            {
+              "index": 4,
+              "heading": "",
+              "textSample": "Built by dillion. The source code is available on GitHub.",
+              "imageCount": 0,
+              "buttonCount": 2
+            }
+          ],
+          "ctas": [
+            "Toggle Menu",
+            "Magic UI",
+            "Components",
+            "Templates",
+            "Showcase",
+            "Search documentation...Search...⌘K",
+            "21,35421.4k",
+            "205",
+            "Toggle theme",
+            "🎉 Introducing Kinetic Text",
+            "Browse Components",
+            "Browse Templates",
+            "React",
+            "Tailwind CSS",
+            "Motion",
+            "anara.comYC S24",
+            "aomni.comRaised seed round from notable investors.",
+            "Aryan KarmaPersonal Portfolio",
+            "cognosys.aiBacked by Google Ventures, raised $2M",
+            "Darshan PacchaPersonal Portfolio",
+            "elhussaryPersonal Portfolio",
+            "guarahooks.comOpen Source Project",
+            "infisical.comYC W23, raised $2.8M",
+            "langfuse.comYC W23, raised $4M",
+            "llm.reportVercel AI Accelerator 2023, won $120k",
+            "lyra.marqraft.comBootstrapped",
+            "million.devYC W24",
+            "PulpSense.comn8n Expert Partner",
+            "querylab.aiBootstrapped",
+            "robot-toastOpen-source library",
+            "trysherpa.botBootstrapped",
+            "undrstnd.devStartUp Act Tunisia",
+            "writora.xyzOpen Source Project",
+            "shawnPortfolio site",
+            "anara.comYC S24",
+            "aomni.comRaised seed round from notable investors.",
+            "Aryan KarmaPersonal Portfolio",
+            "cognosys.aiBacked by Google Ventures, raised $2M",
+            "Darshan PacchaPersonal Portfolio",
+            "elhussaryPersonal Portfolio",
+            "guarahooks.comOpen Source Project",
+            "infisical.comYC W23, raised $2.8M",
+            "langfuse.comYC W23, raised $4M",
+            "llm.reportVercel AI Accelerator 2023, won $120k",
+            "lyra.marqraft.comBootstrapped",
+            "million.devYC W24",
+            "PulpSense.comn8n Expert Partner",
+            "querylab.aiBootstrapped",
+            "robot-toastOpen-source library",
+            "trysherpa.botBootstrapped"
+          ],
+          "palette": [
+            "oklch(0.145 0 0)",
+            "oklch(1 0 0)",
+            "oklch(0.922 0 0)",
+            "rgb(255, 255, 255)",
+            "oklch(0.556 0 0)",
+            "oklab(0.97 0 0 / 0.5)",
+            "rgb(0, 0, 0)",
+            "oklch(0.985 0 0)"
+          ],
+          "layoutSignals": {
+            "hasNav": true,
+            "hasHero": true,
+            "hasPricing": false,
+            "hasTestimonials": false,
+            "hasFAQ": false,
+            "hasVideo": true,
+            "cardLikeCount": 18,
+            "imageCount": 90,
+            "buttonCount": 149,
+            "formCount": 0
+          },
+          "htmlOutline": {
+            "language": "en",
+            "bodyClasses": [
+              "text-foreground",
+              "group/body",
+              "overscroll-none",
+              "font-sans",
+              "antialiased",
+              "[--footer-height:calc(var(--spacing)*14)]",
+              "[--header-height:calc(var(--spacing)*14)]",
+              "xl:[--footer-height:calc(var(--spacing)*24)]",
+              "__variable_246ccd",
+              "__variable_4ed0bd",
+              "__variable_f367f3"
+            ],
+            "semanticLandmarks": [
+              {
+                "index": 0,
+                "tag": "header",
+                "id": "",
+                "classes": [
+                  "bg-background",
+                  "sticky",
+                  "top-0",
+                  "z-50",
+                  "w-full"
+                ],
+                "heading": "Command Palette",
+                "textSample": "Toggle MenuMagic UIComponentsTemplatesShowcaseSearch documentation...Search...⌘KCommand PaletteSearch for a command to run...21,35421.4k205Toggle theme",
+                "linkCount": 6,
+                "buttonCount": 3,
+                "formControlCount": 0,
+                "mediaCount": 4
+              },
+              {
+                "index": 1,
+                "tag": "nav",
+                "id": "",
+                "classes": [
+                  "items-center",
+                  "gap-0.5",
+                  "hidden",
+                  "lg:flex"
+                ],
+                "heading": "",
+                "textSample": "ComponentsTemplatesShowcase",
+                "linkCount": 3,
+                "buttonCount": 0,
+                "formControlCount": 0,
+                "mediaCount": 0
+              },
+              {
+                "index": 2,
+                "tag": "main",
+                "id": "",
+                "classes": [
+                  "flex-1"
+                ],
+                "heading": "UI library for Design Engineers",
+                "textSample": "🎉 Introducing Kinetic TextUI library for Design Engineers150+ free and open-source animated components and effects built with React, Typescript, Tailwind CSS, and Motion.Perfect companion for shadcn/ui.Browse Components",
+                "linkCount": 126,
+                "buttonCount": 11,
+                "formControlCount": 0,
+                "mediaCount": 203
+              },
+              {
+                "index": 3,
+                "tag": "section",
+                "id": "hero",
+                "classes": [],
+                "heading": "UI library for Design Engineers",
+                "textSample": "🎉 Introducing Kinetic TextUI library for Design Engineers150+ free and open-source animated components and effects built with React, Typescript, Tailwind CSS, and Motion.Perfect companion for shadcn/ui.Browse Components",
+                "linkCount": 3,
+                "buttonCount": 5,
+                "formControlCount": 0,
+                "mediaCount": 8
+              },
+              {
+                "index": 4,
+                "tag": "section",
+                "id": "showcase",
+                "classes": [
+                  "container",
+                  "py-10",
+                  "md:py-14"
+                ],
+                "heading": "Showcase",
+                "textSample": "ShowcaseCompanies choose Magic UI to build their landing pages.anara.comYC S24aomni.comRaised seed round from notable investors.Aryan KarmaPersonal Portfoliocognosys.aiBacked by Google Ventures, raised $2MDarshan PacchaP",
+                "linkCount": 76,
+                "buttonCount": 0,
+                "formControlCount": 0,
+                "mediaCount": 152
+              },
+              {
+                "index": 5,
+                "tag": "section",
+                "id": "testimonials",
+                "classes": [
+                  "container",
+                  "mx-auto",
+                  "py-10",
+                  "md:py-14"
+                ],
+                "heading": "What People Are Saying on Twitter",
+                "textSample": "What People Are Saying on TwitterAiden Bai@aidenybaiLink to tweetwe use magicui.design for million.dev 🫶View TweetRay Fernando@RayFernando1337Link to tweetI'm loving this Portfolio Site and I'm going to use it as the st",
+                "linkCount": 47,
+                "buttonCount": 1,
+                "formControlCount": 0,
+                "mediaCount": 33
+              },
+              {
+                "index": 6,
+                "tag": "section",
+                "id": "video-testimonials",
+                "classes": [
+                  "container",
+                  "mx-auto",
+                  "py-10",
+                  "md:py-14"
+                ],
+                "heading": "Featured on YouTube",
+                "textSample": "Featured on YouTubePlayPlayPlayPlayPlay",
+                "linkCount": 0,
+                "buttonCount": 5,
+                "formControlCount": 0,
+                "mediaCount": 10
+              },
+              {
+                "index": 7,
+                "tag": "footer",
+                "id": "",
+                "classes": [
+                  "group-has-[.section-soft]/body:bg-surface/40",
+                  "3xl:fixed:bg-transparent",
+                  "group-has-[.docs-nav]/body:pb-20",
+                  "group-has-[.docs-nav]/body:sm:pb-0",
+                  "dark:bg-transparent"
+                ],
+                "heading": "",
+                "textSample": "Built by dillion. The source code is available on GitHub.",
+                "linkCount": 2,
+                "buttonCount": 0,
+                "formControlCount": 0,
+                "mediaCount": 0
+              },
+              {
+                "index": 8,
+                "tag": "section",
+                "id": "",
+                "classes": [],
+                "heading": "",
+                "textSample": "",
+                "linkCount": 0,
+                "buttonCount": 0,
+                "formControlCount": 0,
+                "mediaCount": 0
+              }
+            ],
+            "navLinks": [
+              {
+                "text": "Magic UI",
+                "href": "https://magicui.design/"
+              },
+              {
+                "text": "Components",
+                "href": "https://magicui.design/components"
+              },
+              {
+                "text": "Templates",
+                "href": "https://pro.magicui.design/"
+              },
+              {
+                "text": "Showcase",
+                "href": "https://magicui.design/showcase"
+              },
+              {
+                "text": "21,35421.4k",
+                "href": "https://github.com/magicuidesign/magicui"
+              },
+              {
+                "text": "205",
+                "href": "https://discord.gg/87p2vpsat5"
+              }
+            ],
+            "forms": []
+          },
+          "resources": {
+            "images": [
+              {
+                "src": "https://magicui.design/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fanara.png&w=1080&q=75",
+                "currentSrc": "https://magicui.design/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fanara.png&w=640&q=75",
+                "srcset": "/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fanara.png&w=640&q=75 1x, /_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fanara.png&w=1080&q=75 2x",
+                "alt": "anara.com",
+                "width": 500,
+                "height": 300,
+                "loading": "lazy",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "src": "https://magicui.design/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Faomni.png&w=1080&q=75",
+                "currentSrc": "https://magicui.design/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Faomni.png&w=640&q=75",
+                "srcset": "/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Faomni.png&w=640&q=75 1x, /_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Faomni.png&w=1080&q=75 2x",
+                "alt": "aomni.com",
+                "width": 500,
+                "height": 300,
+                "loading": "lazy",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "src": "https://magicui.design/_next/image?url=%2Fshowcase%2Faryankarma.png&w=1080&q=75",
+                "currentSrc": "https://magicui.design/_next/image?url=%2Fshowcase%2Faryankarma.png&w=640&q=75",
+                "srcset": "/_next/image?url=%2Fshowcase%2Faryankarma.png&w=640&q=75 1x, /_next/image?url=%2Fshowcase%2Faryankarma.png&w=1080&q=75 2x",
+                "alt": "Aryan Karma",
+                "width": 500,
+                "height": 300,
+                "loading": "lazy",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "src": "https://magicui.design/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fcognosys.png&w=1080&q=75",
+                "currentSrc": "https://magicui.design/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fcognosys.png&w=640&q=75",
+                "srcset": "/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fcognosys.png&w=640&q=75 1x, /_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fcognosys.png&w=1080&q=75 2x",
+                "alt": "cognosys.ai",
+                "width": 500,
+                "height": 300,
+                "loading": "lazy",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "src": "https://magicui.design/_next/image?url=%2Fshowcase%2Fd1rshan.png&w=1080&q=75",
+                "currentSrc": "https://magicui.design/_next/image?url=%2Fshowcase%2Fd1rshan.png&w=640&q=75",
+                "srcset": "/_next/image?url=%2Fshowcase%2Fd1rshan.png&w=640&q=75 1x, /_next/image?url=%2Fshowcase%2Fd1rshan.png&w=1080&q=75 2x",
+                "alt": "Darshan Paccha",
+                "width": 500,
+                "height": 300,
+                "loading": "lazy",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "src": "https://magicui.design/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Felhussary.png&w=1080&q=75",
+                "currentSrc": "https://magicui.design/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Felhussary.png&w=640&q=75",
+                "srcset": "/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Felhussary.png&w=640&q=75 1x, /_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Felhussary.png&w=1080&q=75 2x",
+                "alt": "elhussary",
+                "width": 500,
+                "height": 300,
+                "loading": "lazy",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "src": "https://magicui.design/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fguarahooks.png&w=1080&q=75",
+                "currentSrc": "",
+                "srcset": "/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fguarahooks.png&w=640&q=75 1x, /_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fguarahooks.png&w=1080&q=75 2x",
+                "alt": "guarahooks.com",
+                "width": 500,
+                "height": 300,
+                "loading": "lazy",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "src": "https://magicui.design/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Finfisical.png&w=1080&q=75",
+                "currentSrc": "",
+                "srcset": "/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Finfisical.png&w=640&q=75 1x, /_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Finfisical.png&w=1080&q=75 2x",
+                "alt": "infisical.com",
+                "width": 500,
+                "height": 300,
+                "loading": "lazy",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "src": "https://magicui.design/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Flangfuse.png&w=1080&q=75",
+                "currentSrc": "",
+                "srcset": "/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Flangfuse.png&w=640&q=75 1x, /_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Flangfuse.png&w=1080&q=75 2x",
+                "alt": "langfuse.com",
+                "width": 500,
+                "height": 300,
+                "loading": "lazy",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "src": "https://magicui.design/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fllmreport.png&w=1080&q=75",
+                "currentSrc": "",
+                "srcset": "/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fllmreport.png&w=640&q=75 1x, /_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fllmreport.png&w=1080&q=75 2x",
+                "alt": "llm.report",
+                "width": 500,
+                "height": 300,
+                "loading": "lazy",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "src": "https://magicui.design/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Flyra.png&w=1080&q=75",
+                "currentSrc": "",
+                "srcset": "/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Flyra.png&w=640&q=75 1x, /_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Flyra.png&w=1080&q=75 2x",
+                "alt": "lyra.marqraft.com",
+                "width": 500,
+                "height": 300,
+                "loading": "lazy",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "src": "https://magicui.design/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fmillion.png&w=1080&q=75",
+                "currentSrc": "",
+                "srcset": "/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fmillion.png&w=640&q=75 1x, /_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fmillion.png&w=1080&q=75 2x",
+                "alt": "million.dev",
+                "width": 500,
+                "height": 300,
+                "loading": "lazy",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "src": "https://magicui.design/_next/image?url=%2Fshowcase%2Fpulpsense.png&w=1080&q=75",
+                "currentSrc": "",
+                "srcset": "/_next/image?url=%2Fshowcase%2Fpulpsense.png&w=640&q=75 1x, /_next/image?url=%2Fshowcase%2Fpulpsense.png&w=1080&q=75 2x",
+                "alt": "PulpSense.com",
+                "width": 500,
+                "height": 300,
+                "loading": "lazy",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "src": "https://magicui.design/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fquerylab.png&w=1080&q=75",
+                "currentSrc": "",
+                "srcset": "/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fquerylab.png&w=640&q=75 1x, /_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fquerylab.png&w=1080&q=75 2x",
+                "alt": "querylab.ai",
+                "width": 500,
+                "height": 300,
+                "loading": "lazy",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "src": "https://magicui.design/_next/image?url=%2Fshowcase%2Frobot-toast.png&w=1080&q=75",
+                "currentSrc": "",
+                "srcset": "/_next/image?url=%2Fshowcase%2Frobot-toast.png&w=640&q=75 1x, /_next/image?url=%2Fshowcase%2Frobot-toast.png&w=1080&q=75 2x",
+                "alt": "robot-toast",
+                "width": 500,
+                "height": 300,
+                "loading": "lazy",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "src": "https://magicui.design/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fsherpa.jpeg&w=1080&q=75",
+                "currentSrc": "",
+                "srcset": "/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fsherpa.jpeg&w=640&q=75 1x, /_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fsherpa.jpeg&w=1080&q=75 2x",
+                "alt": "trysherpa.bot",
+                "width": 500,
+                "height": 300,
+                "loading": "lazy",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "src": "https://magicui.design/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fundrstnd.png&w=1080&q=75",
+                "currentSrc": "",
+                "srcset": "/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fundrstnd.png&w=640&q=75 1x, /_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fundrstnd.png&w=1080&q=75 2x",
+                "alt": "undrstnd.dev",
+                "width": 500,
+                "height": 300,
+                "loading": "lazy",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "src": "https://magicui.design/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fwritora.png&w=1080&q=75",
+                "currentSrc": "",
+                "srcset": "/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fwritora.png&w=640&q=75 1x, /_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fwritora.png&w=1080&q=75 2x",
+                "alt": "writora.xyz",
+                "width": 500,
+                "height": 300,
+                "loading": "lazy",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "src": "https://magicui.design/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fshawn.png&w=1080&q=75",
+                "currentSrc": "",
+                "srcset": "/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fshawn.png&w=640&q=75 1x, /_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fshawn.png&w=1080&q=75 2x",
+                "alt": "shawn",
+                "width": 500,
+                "height": 300,
+                "loading": "lazy",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "src": "https://magicui.design/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fanara.png&w=1080&q=75",
+                "currentSrc": "https://magicui.design/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fanara.png&w=640&q=75",
+                "srcset": "/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fanara.png&w=640&q=75 1x, /_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fanara.png&w=1080&q=75 2x",
+                "alt": "anara.com",
+                "width": 500,
+                "height": 300,
+                "loading": "lazy",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "src": "https://magicui.design/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Faomni.png&w=1080&q=75",
+                "currentSrc": "https://magicui.design/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Faomni.png&w=640&q=75",
+                "srcset": "/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Faomni.png&w=640&q=75 1x, /_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Faomni.png&w=1080&q=75 2x",
+                "alt": "aomni.com",
+                "width": 500,
+                "height": 300,
+                "loading": "lazy",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "src": "https://magicui.design/_next/image?url=%2Fshowcase%2Faryankarma.png&w=1080&q=75",
+                "currentSrc": "https://magicui.design/_next/image?url=%2Fshowcase%2Faryankarma.png&w=640&q=75",
+                "srcset": "/_next/image?url=%2Fshowcase%2Faryankarma.png&w=640&q=75 1x, /_next/image?url=%2Fshowcase%2Faryankarma.png&w=1080&q=75 2x",
+                "alt": "Aryan Karma",
+                "width": 500,
+                "height": 300,
+                "loading": "lazy",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "src": "https://magicui.design/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fcognosys.png&w=1080&q=75",
+                "currentSrc": "https://magicui.design/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fcognosys.png&w=640&q=75",
+                "srcset": "/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fcognosys.png&w=640&q=75 1x, /_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fcognosys.png&w=1080&q=75 2x",
+                "alt": "cognosys.ai",
+                "width": 500,
+                "height": 300,
+                "loading": "lazy",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "src": "https://magicui.design/_next/image?url=%2Fshowcase%2Fd1rshan.png&w=1080&q=75",
+                "currentSrc": "https://magicui.design/_next/image?url=%2Fshowcase%2Fd1rshan.png&w=640&q=75",
+                "srcset": "/_next/image?url=%2Fshowcase%2Fd1rshan.png&w=640&q=75 1x, /_next/image?url=%2Fshowcase%2Fd1rshan.png&w=1080&q=75 2x",
+                "alt": "Darshan Paccha",
+                "width": 500,
+                "height": 300,
+                "loading": "lazy",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "src": "https://magicui.design/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Felhussary.png&w=1080&q=75",
+                "currentSrc": "https://magicui.design/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Felhussary.png&w=640&q=75",
+                "srcset": "/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Felhussary.png&w=640&q=75 1x, /_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Felhussary.png&w=1080&q=75 2x",
+                "alt": "elhussary",
+                "width": 500,
+                "height": 300,
+                "loading": "lazy",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "src": "https://magicui.design/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fguarahooks.png&w=1080&q=75",
+                "currentSrc": "",
+                "srcset": "/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fguarahooks.png&w=640&q=75 1x, /_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fguarahooks.png&w=1080&q=75 2x",
+                "alt": "guarahooks.com",
+                "width": 500,
+                "height": 300,
+                "loading": "lazy",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "src": "https://magicui.design/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Finfisical.png&w=1080&q=75",
+                "currentSrc": "",
+                "srcset": "/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Finfisical.png&w=640&q=75 1x, /_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Finfisical.png&w=1080&q=75 2x",
+                "alt": "infisical.com",
+                "width": 500,
+                "height": 300,
+                "loading": "lazy",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "src": "https://magicui.design/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Flangfuse.png&w=1080&q=75",
+                "currentSrc": "",
+                "srcset": "/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Flangfuse.png&w=640&q=75 1x, /_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Flangfuse.png&w=1080&q=75 2x",
+                "alt": "langfuse.com",
+                "width": 500,
+                "height": 300,
+                "loading": "lazy",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "src": "https://magicui.design/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fllmreport.png&w=1080&q=75",
+                "currentSrc": "",
+                "srcset": "/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fllmreport.png&w=640&q=75 1x, /_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fllmreport.png&w=1080&q=75 2x",
+                "alt": "llm.report",
+                "width": 500,
+                "height": 300,
+                "loading": "lazy",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "src": "https://magicui.design/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Flyra.png&w=1080&q=75",
+                "currentSrc": "",
+                "srcset": "/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Flyra.png&w=640&q=75 1x, /_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Flyra.png&w=1080&q=75 2x",
+                "alt": "lyra.marqraft.com",
+                "width": 500,
+                "height": 300,
+                "loading": "lazy",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "src": "https://magicui.design/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fmillion.png&w=1080&q=75",
+                "currentSrc": "",
+                "srcset": "/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fmillion.png&w=640&q=75 1x, /_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fmillion.png&w=1080&q=75 2x",
+                "alt": "million.dev",
+                "width": 500,
+                "height": 300,
+                "loading": "lazy",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "src": "https://magicui.design/_next/image?url=%2Fshowcase%2Fpulpsense.png&w=1080&q=75",
+                "currentSrc": "",
+                "srcset": "/_next/image?url=%2Fshowcase%2Fpulpsense.png&w=640&q=75 1x, /_next/image?url=%2Fshowcase%2Fpulpsense.png&w=1080&q=75 2x",
+                "alt": "PulpSense.com",
+                "width": 500,
+                "height": 300,
+                "loading": "lazy",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "src": "https://magicui.design/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fquerylab.png&w=1080&q=75",
+                "currentSrc": "",
+                "srcset": "/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fquerylab.png&w=640&q=75 1x, /_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fquerylab.png&w=1080&q=75 2x",
+                "alt": "querylab.ai",
+                "width": 500,
+                "height": 300,
+                "loading": "lazy",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "src": "https://magicui.design/_next/image?url=%2Fshowcase%2Frobot-toast.png&w=1080&q=75",
+                "currentSrc": "",
+                "srcset": "/_next/image?url=%2Fshowcase%2Frobot-toast.png&w=640&q=75 1x, /_next/image?url=%2Fshowcase%2Frobot-toast.png&w=1080&q=75 2x",
+                "alt": "robot-toast",
+                "width": 500,
+                "height": 300,
+                "loading": "lazy",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "src": "https://magicui.design/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fsherpa.jpeg&w=1080&q=75",
+                "currentSrc": "",
+                "srcset": "/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fsherpa.jpeg&w=640&q=75 1x, /_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fsherpa.jpeg&w=1080&q=75 2x",
+                "alt": "trysherpa.bot",
+                "width": 500,
+                "height": 300,
+                "loading": "lazy",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "src": "https://magicui.design/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fundrstnd.png&w=1080&q=75",
+                "currentSrc": "",
+                "srcset": "/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fundrstnd.png&w=640&q=75 1x, /_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fundrstnd.png&w=1080&q=75 2x",
+                "alt": "undrstnd.dev",
+                "width": 500,
+                "height": 300,
+                "loading": "lazy",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "src": "https://magicui.design/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fwritora.png&w=1080&q=75",
+                "currentSrc": "",
+                "srcset": "/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fwritora.png&w=640&q=75 1x, /_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fwritora.png&w=1080&q=75 2x",
+                "alt": "writora.xyz",
+                "width": 500,
+                "height": 300,
+                "loading": "lazy",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "src": "https://magicui.design/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fshawn.png&w=1080&q=75",
+                "currentSrc": "",
+                "srcset": "/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fshawn.png&w=640&q=75 1x, /_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fshawn.png&w=1080&q=75 2x",
+                "alt": "shawn",
+                "width": 500,
+                "height": 300,
+                "loading": "lazy",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "src": "https://magicui.design/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fanara.png&w=1080&q=75",
+                "currentSrc": "https://magicui.design/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fanara.png&w=640&q=75",
+                "srcset": "/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fanara.png&w=640&q=75 1x, /_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fanara.png&w=1080&q=75 2x",
+                "alt": "anara.com",
+                "width": 500,
+                "height": 300,
+                "loading": "lazy",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "src": "https://magicui.design/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Faomni.png&w=1080&q=75",
+                "currentSrc": "https://magicui.design/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Faomni.png&w=640&q=75",
+                "srcset": "/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Faomni.png&w=640&q=75 1x, /_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Faomni.png&w=1080&q=75 2x",
+                "alt": "aomni.com",
+                "width": 500,
+                "height": 300,
+                "loading": "lazy",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "src": "https://magicui.design/_next/image?url=%2Fshowcase%2Faryankarma.png&w=1080&q=75",
+                "currentSrc": "https://magicui.design/_next/image?url=%2Fshowcase%2Faryankarma.png&w=640&q=75",
+                "srcset": "/_next/image?url=%2Fshowcase%2Faryankarma.png&w=640&q=75 1x, /_next/image?url=%2Fshowcase%2Faryankarma.png&w=1080&q=75 2x",
+                "alt": "Aryan Karma",
+                "width": 500,
+                "height": 300,
+                "loading": "lazy",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "src": "https://magicui.design/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fcognosys.png&w=1080&q=75",
+                "currentSrc": "https://magicui.design/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fcognosys.png&w=640&q=75",
+                "srcset": "/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fcognosys.png&w=640&q=75 1x, /_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fcognosys.png&w=1080&q=75 2x",
+                "alt": "cognosys.ai",
+                "width": 500,
+                "height": 300,
+                "loading": "lazy",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "src": "https://magicui.design/_next/image?url=%2Fshowcase%2Fd1rshan.png&w=1080&q=75",
+                "currentSrc": "https://magicui.design/_next/image?url=%2Fshowcase%2Fd1rshan.png&w=640&q=75",
+                "srcset": "/_next/image?url=%2Fshowcase%2Fd1rshan.png&w=640&q=75 1x, /_next/image?url=%2Fshowcase%2Fd1rshan.png&w=1080&q=75 2x",
+                "alt": "Darshan Paccha",
+                "width": 500,
+                "height": 300,
+                "loading": "lazy",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "src": "https://magicui.design/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Felhussary.png&w=1080&q=75",
+                "currentSrc": "https://magicui.design/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Felhussary.png&w=640&q=75",
+                "srcset": "/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Felhussary.png&w=640&q=75 1x, /_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Felhussary.png&w=1080&q=75 2x",
+                "alt": "elhussary",
+                "width": 500,
+                "height": 300,
+                "loading": "lazy",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "src": "https://magicui.design/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fguarahooks.png&w=1080&q=75",
+                "currentSrc": "",
+                "srcset": "/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fguarahooks.png&w=640&q=75 1x, /_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fguarahooks.png&w=1080&q=75 2x",
+                "alt": "guarahooks.com",
+                "width": 500,
+                "height": 300,
+                "loading": "lazy",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "src": "https://magicui.design/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Finfisical.png&w=1080&q=75",
+                "currentSrc": "",
+                "srcset": "/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Finfisical.png&w=640&q=75 1x, /_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Finfisical.png&w=1080&q=75 2x",
+                "alt": "infisical.com",
+                "width": 500,
+                "height": 300,
+                "loading": "lazy",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "src": "https://magicui.design/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Flangfuse.png&w=1080&q=75",
+                "currentSrc": "",
+                "srcset": "/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Flangfuse.png&w=640&q=75 1x, /_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Flangfuse.png&w=1080&q=75 2x",
+                "alt": "langfuse.com",
+                "width": 500,
+                "height": 300,
+                "loading": "lazy",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "src": "https://magicui.design/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fllmreport.png&w=1080&q=75",
+                "currentSrc": "",
+                "srcset": "/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fllmreport.png&w=640&q=75 1x, /_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fllmreport.png&w=1080&q=75 2x",
+                "alt": "llm.report",
+                "width": 500,
+                "height": 300,
+                "loading": "lazy",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "src": "https://magicui.design/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Flyra.png&w=1080&q=75",
+                "currentSrc": "",
+                "srcset": "/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Flyra.png&w=640&q=75 1x, /_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Flyra.png&w=1080&q=75 2x",
+                "alt": "lyra.marqraft.com",
+                "width": 500,
+                "height": 300,
+                "loading": "lazy",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "src": "https://magicui.design/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fmillion.png&w=1080&q=75",
+                "currentSrc": "",
+                "srcset": "/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fmillion.png&w=640&q=75 1x, /_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fmillion.png&w=1080&q=75 2x",
+                "alt": "million.dev",
+                "width": 500,
+                "height": 300,
+                "loading": "lazy",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "src": "https://magicui.design/_next/image?url=%2Fshowcase%2Fpulpsense.png&w=1080&q=75",
+                "currentSrc": "",
+                "srcset": "/_next/image?url=%2Fshowcase%2Fpulpsense.png&w=640&q=75 1x, /_next/image?url=%2Fshowcase%2Fpulpsense.png&w=1080&q=75 2x",
+                "alt": "PulpSense.com",
+                "width": 500,
+                "height": 300,
+                "loading": "lazy",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "src": "https://magicui.design/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fquerylab.png&w=1080&q=75",
+                "currentSrc": "",
+                "srcset": "/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fquerylab.png&w=640&q=75 1x, /_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fquerylab.png&w=1080&q=75 2x",
+                "alt": "querylab.ai",
+                "width": 500,
+                "height": 300,
+                "loading": "lazy",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "src": "https://magicui.design/_next/image?url=%2Fshowcase%2Frobot-toast.png&w=1080&q=75",
+                "currentSrc": "",
+                "srcset": "/_next/image?url=%2Fshowcase%2Frobot-toast.png&w=640&q=75 1x, /_next/image?url=%2Fshowcase%2Frobot-toast.png&w=1080&q=75 2x",
+                "alt": "robot-toast",
+                "width": 500,
+                "height": 300,
+                "loading": "lazy",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "src": "https://magicui.design/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fsherpa.jpeg&w=1080&q=75",
+                "currentSrc": "",
+                "srcset": "/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fsherpa.jpeg&w=640&q=75 1x, /_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fsherpa.jpeg&w=1080&q=75 2x",
+                "alt": "trysherpa.bot",
+                "width": 500,
+                "height": 300,
+                "loading": "lazy",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "src": "https://magicui.design/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fundrstnd.png&w=1080&q=75",
+                "currentSrc": "",
+                "srcset": "/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fundrstnd.png&w=640&q=75 1x, /_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fundrstnd.png&w=1080&q=75 2x",
+                "alt": "undrstnd.dev",
+                "width": 500,
+                "height": 300,
+                "loading": "lazy",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "src": "https://magicui.design/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fwritora.png&w=1080&q=75",
+                "currentSrc": "",
+                "srcset": "/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fwritora.png&w=640&q=75 1x, /_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fwritora.png&w=1080&q=75 2x",
+                "alt": "writora.xyz",
+                "width": 500,
+                "height": 300,
+                "loading": "lazy",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "src": "https://magicui.design/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fshawn.png&w=1080&q=75",
+                "currentSrc": "",
+                "srcset": "/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fshawn.png&w=640&q=75 1x, /_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fshawn.png&w=1080&q=75 2x",
+                "alt": "shawn",
+                "width": 500,
+                "height": 300,
+                "loading": "lazy",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "src": "https://magicui.design/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fanara.png&w=1080&q=75",
+                "currentSrc": "https://magicui.design/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fanara.png&w=640&q=75",
+                "srcset": "/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fanara.png&w=640&q=75 1x, /_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Fanara.png&w=1080&q=75 2x",
+                "alt": "anara.com",
+                "width": 500,
+                "height": 300,
+                "loading": "lazy",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "src": "https://magicui.design/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Faomni.png&w=1080&q=75",
+                "currentSrc": "https://magicui.design/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Faomni.png&w=640&q=75",
+                "srcset": "/_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Faomni.png&w=640&q=75 1x, /_next/image?url=https%3A%2F%2Fcdn.magicui.design%2Fshowcase%2Faomni.png&w=1080&q=75 2x",
+                "alt": "aomni.com",
+                "width": 500,
+                "height": 300,
+                "loading": "lazy",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "src": "https://magicui.design/_next/image?url=%2Fshowcase%2Faryankarma.png&w=1080&q=75",
+                "currentSrc": "https://magicui.design/_next/image?url=%2Fshowcase%2Faryankarma.png&w=640&q=75",
+                "srcset": "/_next/image?url=%2Fshowcase%2Faryankarma.png&w=640&q=75 1x, /_next/image?url=%2Fshowcase%2Faryankarma.png&w=1080&q=75 2x",
+                "alt": "Aryan Karma",
+                "width": 500,
+                "height": 300,
+                "loading": "lazy",
+                "sectionHeading": "Showcase"
+              }
+            ],
+            "videos": [
+              {
+                "src": "https://video.twimg.com/amplify_video/1831097977156616192/pl/vjSUYt0F-wbPz445.m3u8?tag=16&v=f6a",
+                "poster": "https://pbs.twimg.com/amplify_video_thumb/1831097977156616192/img/0k-oml5MxjZ-_mOO.jpg",
+                "sources": [
+                  {
+                    "src": "https://video.twimg.com/amplify_video/1831097977156616192/pl/vjSUYt0F-wbPz445.m3u8?tag=16&v=f6a",
+                    "type": "video/mp4"
+                  }
+                ],
+                "autoplay": true,
+                "muted": true,
+                "loop": true,
+                "playsInline": true,
+                "width": 0,
+                "height": 0,
+                "sectionHeading": "What People Are Saying on Twitter"
+              }
+            ],
+            "canvasCount": 0,
+            "svgCount": 118,
+            "stylesheets": [],
+            "fontLinks": [
+              "https://magicui.design/_next/static/media/22a5144ee8d83bca-s.p.woff2",
+              "https://magicui.design/_next/static/media/7e9c775ccc9ea1ee-s.p.woff2",
+              "https://magicui.design/_next/static/media/e4af272ccee01ff0-s.p.woff2",
+              "@font-face{font-family:Geist;font-style:normal;font-weight:100 900;font-display:swap;src:url(/_next/static/media/f639721981034f88-s.woff2) format(\"woff2\");unicode-range:u+0460-052f,u+1c80-1c8a,u+20b4,u+2de0-2dff,u+a640-a69f,u+fe2e-fe2f}@font-face{font-family:Geist;font-style:normal;font-weight:100 9",
+              ":where(html[dir=\"ltr\"]),:where([data-sonner-toaster][dir=\"ltr\"]){--toast-icon-margin-start: -3px;--toast-icon-margin-end: 4px;--toast-svg-margin-start: -1px;--toast-svg-margin-end: 0px;--toast-button-margin-start: auto;--toast-button-margin-end: 0;--toast-close-button-start: 0;--toast-close-button-e"
+            ],
+            "ogImages": [
+              "https://magicui.design/og"
+            ],
+            "downloadableAssets": []
+          },
+          "fontSignals": {
+            "computedFamilies": [
+              "Geist, sans-serif",
+              "\"Geist Mono\", monospace"
+            ],
+            "computedWeights": [
+              "400",
+              "500",
+              "600"
+            ],
+            "fontFaceNames": [
+              "Geist",
+              "\"Geist Fallback\"",
+              "\"Geist Mono\"",
+              "\"Geist Mono Fallback\"",
+              "Inter",
+              "\"Inter Fallback\""
+            ]
+          },
+          "animationSignals": {
+            "animatedElementCount": 96,
+            "keyframes": [
+              "spin",
+              "ping",
+              "pulse",
+              "enter",
+              "exit",
+              "accordion-down",
+              "accordion-up",
+              "blink-cursor",
+              "aurora",
+              "background-position-spin",
+              "gradient",
+              "meteor",
+              "marquee",
+              "marquee-vertical",
+              "spin-around",
+              "ripple",
+              "rippling",
+              "shimmer-slide",
+              "shiny-text",
+              "orbit",
+              "shine",
+              "pulse-ripple",
+              "rainbow",
+              "line-shadow",
+              "skeleton_loading__bwcJ2",
+              "swipe-out-left",
+              "swipe-out-right",
+              "swipe-out-up",
+              "swipe-out-down",
+              "sonner-fade-in",
+              "sonner-fade-out",
+              "sonner-spin"
+            ],
+            "samples": [
+              {
+                "tag": "div",
+                "id": "",
+                "classes": [
+                  "flex",
+                  "shrink-0",
+                  "justify-around",
+                  "gap-(--gap)",
+                  "animate-marquee",
+                  "flex-row"
+                ],
+                "area": 3311212,
+                "animationName": "marquee",
+                "animationDuration": "90s",
+                "animationTimingFunction": "linear",
+                "transitionProperty": "all",
+                "transitionDuration": "0s",
+                "transform": "matrix(1, 0, 0, 1, -491.731, 0)",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "tag": "div",
+                "id": "",
+                "classes": [
+                  "flex",
+                  "shrink-0",
+                  "justify-around",
+                  "gap-(--gap)",
+                  "animate-marquee",
+                  "flex-row"
+                ],
+                "area": 3311212,
+                "animationName": "marquee",
+                "animationDuration": "90s",
+                "animationTimingFunction": "linear",
+                "transitionProperty": "all",
+                "transitionDuration": "0s",
+                "transform": "matrix(1, 0, 0, 1, -491.731, 0)",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "tag": "div",
+                "id": "",
+                "classes": [
+                  "flex",
+                  "shrink-0",
+                  "justify-around",
+                  "gap-(--gap)",
+                  "animate-marquee",
+                  "flex-row"
+                ],
+                "area": 3311212,
+                "animationName": "marquee",
+                "animationDuration": "90s",
+                "animationTimingFunction": "linear",
+                "transitionProperty": "all",
+                "transitionDuration": "0s",
+                "transform": "matrix(1, 0, 0, 1, -491.731, 0)",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "tag": "div",
+                "id": "",
+                "classes": [
+                  "group",
+                  "relative",
+                  "top-0",
+                  "bg-indigo-600",
+                  "py-3",
+                  "text-white",
+                  "transition-all",
+                  "duration-300",
+                  "md:py-0"
+                ],
+                "area": 103680,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.3s",
+                "transform": "",
+                "sectionHeading": ""
+              },
+              {
+                "tag": "div",
+                "id": "",
+                "classes": [
+                  "group",
+                  "inline-flex",
+                  "cursor-pointer",
+                  "items-center",
+                  "justify-start",
+                  "gap-1",
+                  "text-xl",
+                  "font-semibold",
+                  "text-neutral-700",
+                  "duration-200",
+                  "hover:text-neutral-700",
+                  "dark:text-neutral-300"
+                ],
+                "area": 14000,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.2s",
+                "transform": "",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "tag": "div",
+                "id": "",
+                "classes": [
+                  "group",
+                  "inline-flex",
+                  "cursor-pointer",
+                  "items-center",
+                  "justify-start",
+                  "gap-1",
+                  "text-xl",
+                  "font-semibold",
+                  "text-neutral-700",
+                  "duration-200",
+                  "hover:text-neutral-700",
+                  "dark:text-neutral-300"
+                ],
+                "area": 14000,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.2s",
+                "transform": "",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "tag": "div",
+                "id": "",
+                "classes": [
+                  "group",
+                  "inline-flex",
+                  "cursor-pointer",
+                  "items-center",
+                  "justify-start",
+                  "gap-1",
+                  "text-xl",
+                  "font-semibold",
+                  "text-neutral-700",
+                  "duration-200",
+                  "hover:text-neutral-700",
+                  "dark:text-neutral-300"
+                ],
+                "area": 14000,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.2s",
+                "transform": "",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "tag": "div",
+                "id": "",
+                "classes": [
+                  "group",
+                  "inline-flex",
+                  "cursor-pointer",
+                  "items-center",
+                  "justify-start",
+                  "gap-1",
+                  "text-xl",
+                  "font-semibold",
+                  "text-neutral-700",
+                  "duration-200",
+                  "hover:text-neutral-700",
+                  "dark:text-neutral-300"
+                ],
+                "area": 14000,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.2s",
+                "transform": "",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "tag": "div",
+                "id": "",
+                "classes": [
+                  "group",
+                  "inline-flex",
+                  "cursor-pointer",
+                  "items-center",
+                  "justify-start",
+                  "gap-1",
+                  "text-xl",
+                  "font-semibold",
+                  "text-neutral-700",
+                  "duration-200",
+                  "hover:text-neutral-700",
+                  "dark:text-neutral-300"
+                ],
+                "area": 14000,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.2s",
+                "transform": "",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "tag": "div",
+                "id": "",
+                "classes": [
+                  "group",
+                  "inline-flex",
+                  "cursor-pointer",
+                  "items-center",
+                  "justify-start",
+                  "gap-1",
+                  "text-xl",
+                  "font-semibold",
+                  "text-neutral-700",
+                  "duration-200",
+                  "hover:text-neutral-700",
+                  "dark:text-neutral-300"
+                ],
+                "area": 14000,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.2s",
+                "transform": "",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "tag": "div",
+                "id": "",
+                "classes": [
+                  "group",
+                  "inline-flex",
+                  "cursor-pointer",
+                  "items-center",
+                  "justify-start",
+                  "gap-1",
+                  "text-xl",
+                  "font-semibold",
+                  "text-neutral-700",
+                  "duration-200",
+                  "hover:text-neutral-700",
+                  "dark:text-neutral-300"
+                ],
+                "area": 14000,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.2s",
+                "transform": "",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "tag": "div",
+                "id": "",
+                "classes": [
+                  "group",
+                  "inline-flex",
+                  "cursor-pointer",
+                  "items-center",
+                  "justify-start",
+                  "gap-1",
+                  "text-xl",
+                  "font-semibold",
+                  "text-neutral-700",
+                  "duration-200",
+                  "hover:text-neutral-700",
+                  "dark:text-neutral-300"
+                ],
+                "area": 14000,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.2s",
+                "transform": "",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "tag": "div",
+                "id": "",
+                "classes": [
+                  "group",
+                  "inline-flex",
+                  "cursor-pointer",
+                  "items-center",
+                  "justify-start",
+                  "gap-1",
+                  "text-xl",
+                  "font-semibold",
+                  "text-neutral-700",
+                  "duration-200",
+                  "hover:text-neutral-700",
+                  "dark:text-neutral-300"
+                ],
+                "area": 14000,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.2s",
+                "transform": "",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "tag": "div",
+                "id": "",
+                "classes": [
+                  "group",
+                  "inline-flex",
+                  "cursor-pointer",
+                  "items-center",
+                  "justify-start",
+                  "gap-1",
+                  "text-xl",
+                  "font-semibold",
+                  "text-neutral-700",
+                  "duration-200",
+                  "hover:text-neutral-700",
+                  "dark:text-neutral-300"
+                ],
+                "area": 14000,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.2s",
+                "transform": "",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "tag": "div",
+                "id": "",
+                "classes": [
+                  "group",
+                  "inline-flex",
+                  "cursor-pointer",
+                  "items-center",
+                  "justify-start",
+                  "gap-1",
+                  "text-xl",
+                  "font-semibold",
+                  "text-neutral-700",
+                  "duration-200",
+                  "hover:text-neutral-700",
+                  "dark:text-neutral-300"
+                ],
+                "area": 14000,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.2s",
+                "transform": "",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "tag": "div",
+                "id": "",
+                "classes": [
+                  "group",
+                  "inline-flex",
+                  "cursor-pointer",
+                  "items-center",
+                  "justify-start",
+                  "gap-1",
+                  "text-xl",
+                  "font-semibold",
+                  "text-neutral-700",
+                  "duration-200",
+                  "hover:text-neutral-700",
+                  "dark:text-neutral-300"
+                ],
+                "area": 14000,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.2s",
+                "transform": "",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "tag": "div",
+                "id": "",
+                "classes": [
+                  "group",
+                  "inline-flex",
+                  "cursor-pointer",
+                  "items-center",
+                  "justify-start",
+                  "gap-1",
+                  "text-xl",
+                  "font-semibold",
+                  "text-neutral-700",
+                  "duration-200",
+                  "hover:text-neutral-700",
+                  "dark:text-neutral-300"
+                ],
+                "area": 14000,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.2s",
+                "transform": "",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "tag": "div",
+                "id": "",
+                "classes": [
+                  "group",
+                  "inline-flex",
+                  "cursor-pointer",
+                  "items-center",
+                  "justify-start",
+                  "gap-1",
+                  "text-xl",
+                  "font-semibold",
+                  "text-neutral-700",
+                  "duration-200",
+                  "hover:text-neutral-700",
+                  "dark:text-neutral-300"
+                ],
+                "area": 14000,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.2s",
+                "transform": "",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "tag": "div",
+                "id": "",
+                "classes": [
+                  "group",
+                  "inline-flex",
+                  "cursor-pointer",
+                  "items-center",
+                  "justify-start",
+                  "gap-1",
+                  "text-xl",
+                  "font-semibold",
+                  "text-neutral-700",
+                  "duration-200",
+                  "hover:text-neutral-700",
+                  "dark:text-neutral-300"
+                ],
+                "area": 14000,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.2s",
+                "transform": "",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "tag": "div",
+                "id": "",
+                "classes": [
+                  "group",
+                  "inline-flex",
+                  "cursor-pointer",
+                  "items-center",
+                  "justify-start",
+                  "gap-1",
+                  "text-xl",
+                  "font-semibold",
+                  "text-neutral-700",
+                  "duration-200",
+                  "hover:text-neutral-700",
+                  "dark:text-neutral-300"
+                ],
+                "area": 14000,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.2s",
+                "transform": "",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "tag": "div",
+                "id": "",
+                "classes": [
+                  "group",
+                  "inline-flex",
+                  "cursor-pointer",
+                  "items-center",
+                  "justify-start",
+                  "gap-1",
+                  "text-xl",
+                  "font-semibold",
+                  "text-neutral-700",
+                  "duration-200",
+                  "hover:text-neutral-700",
+                  "dark:text-neutral-300"
+                ],
+                "area": 14000,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.2s",
+                "transform": "",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "tag": "div",
+                "id": "",
+                "classes": [
+                  "group",
+                  "inline-flex",
+                  "cursor-pointer",
+                  "items-center",
+                  "justify-start",
+                  "gap-1",
+                  "text-xl",
+                  "font-semibold",
+                  "text-neutral-700",
+                  "duration-200",
+                  "hover:text-neutral-700",
+                  "dark:text-neutral-300"
+                ],
+                "area": 14000,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.2s",
+                "transform": "",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "tag": "div",
+                "id": "",
+                "classes": [
+                  "group",
+                  "inline-flex",
+                  "cursor-pointer",
+                  "items-center",
+                  "justify-start",
+                  "gap-1",
+                  "text-xl",
+                  "font-semibold",
+                  "text-neutral-700",
+                  "duration-200",
+                  "hover:text-neutral-700",
+                  "dark:text-neutral-300"
+                ],
+                "area": 14000,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.2s",
+                "transform": "",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "tag": "div",
+                "id": "",
+                "classes": [
+                  "group",
+                  "inline-flex",
+                  "cursor-pointer",
+                  "items-center",
+                  "justify-start",
+                  "gap-1",
+                  "text-xl",
+                  "font-semibold",
+                  "text-neutral-700",
+                  "duration-200",
+                  "hover:text-neutral-700",
+                  "dark:text-neutral-300"
+                ],
+                "area": 14000,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.2s",
+                "transform": "",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "tag": "div",
+                "id": "",
+                "classes": [
+                  "group",
+                  "inline-flex",
+                  "cursor-pointer",
+                  "items-center",
+                  "justify-start",
+                  "gap-1",
+                  "text-xl",
+                  "font-semibold",
+                  "text-neutral-700",
+                  "duration-200",
+                  "hover:text-neutral-700",
+                  "dark:text-neutral-300"
+                ],
+                "area": 14000,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.2s",
+                "transform": "",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "tag": "div",
+                "id": "",
+                "classes": [
+                  "group",
+                  "inline-flex",
+                  "cursor-pointer",
+                  "items-center",
+                  "justify-start",
+                  "gap-1",
+                  "text-xl",
+                  "font-semibold",
+                  "text-neutral-700",
+                  "duration-200",
+                  "hover:text-neutral-700",
+                  "dark:text-neutral-300"
+                ],
+                "area": 14000,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.2s",
+                "transform": "",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "tag": "div",
+                "id": "",
+                "classes": [
+                  "group",
+                  "inline-flex",
+                  "cursor-pointer",
+                  "items-center",
+                  "justify-start",
+                  "gap-1",
+                  "text-xl",
+                  "font-semibold",
+                  "text-neutral-700",
+                  "duration-200",
+                  "hover:text-neutral-700",
+                  "dark:text-neutral-300"
+                ],
+                "area": 14000,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.2s",
+                "transform": "",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "tag": "div",
+                "id": "",
+                "classes": [
+                  "group",
+                  "inline-flex",
+                  "cursor-pointer",
+                  "items-center",
+                  "justify-start",
+                  "gap-1",
+                  "text-xl",
+                  "font-semibold",
+                  "text-neutral-700",
+                  "duration-200",
+                  "hover:text-neutral-700",
+                  "dark:text-neutral-300"
+                ],
+                "area": 14000,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.2s",
+                "transform": "",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "tag": "div",
+                "id": "",
+                "classes": [
+                  "group",
+                  "inline-flex",
+                  "cursor-pointer",
+                  "items-center",
+                  "justify-start",
+                  "gap-1",
+                  "text-xl",
+                  "font-semibold",
+                  "text-neutral-700",
+                  "duration-200",
+                  "hover:text-neutral-700",
+                  "dark:text-neutral-300"
+                ],
+                "area": 14000,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.2s",
+                "transform": "",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "tag": "div",
+                "id": "",
+                "classes": [
+                  "group",
+                  "inline-flex",
+                  "cursor-pointer",
+                  "items-center",
+                  "justify-start",
+                  "gap-1",
+                  "text-xl",
+                  "font-semibold",
+                  "text-neutral-700",
+                  "duration-200",
+                  "hover:text-neutral-700",
+                  "dark:text-neutral-300"
+                ],
+                "area": 14000,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.2s",
+                "transform": "",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "tag": "div",
+                "id": "",
+                "classes": [
+                  "group",
+                  "inline-flex",
+                  "cursor-pointer",
+                  "items-center",
+                  "justify-start",
+                  "gap-1",
+                  "text-xl",
+                  "font-semibold",
+                  "text-neutral-700",
+                  "duration-200",
+                  "hover:text-neutral-700",
+                  "dark:text-neutral-300"
+                ],
+                "area": 13440,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.2s",
+                "transform": "",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "tag": "div",
+                "id": "",
+                "classes": [
+                  "group",
+                  "inline-flex",
+                  "cursor-pointer",
+                  "items-center",
+                  "justify-start",
+                  "gap-1",
+                  "text-xl",
+                  "font-semibold",
+                  "text-neutral-700",
+                  "duration-200",
+                  "hover:text-neutral-700",
+                  "dark:text-neutral-300"
+                ],
+                "area": 13440,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.2s",
+                "transform": "",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "tag": "a",
+                "id": "",
+                "classes": [
+                  "inline-flex",
+                  "items-center",
+                  "justify-center",
+                  "whitespace-nowrap",
+                  "text-sm",
+                  "font-medium",
+                  "transition-all",
+                  "disabled:pointer-events-none",
+                  "disabled:opacity-50",
+                  "[&_svg]:pointer-events-none",
+                  "[&_svg:not([class*='size-'])]:size-4",
+                  "shrink-0"
+                ],
+                "area": 12800,
+                "animationName": "rainbow",
+                "animationDuration": "2s",
+                "animationTimingFunction": "linear",
+                "transitionProperty": "all",
+                "transitionDuration": "0.15s",
+                "transform": "",
+                "sectionHeading": "UI library for Design Engineers"
+              },
+              {
+                "tag": "a",
+                "id": "",
+                "classes": [
+                  "inline-flex",
+                  "items-center",
+                  "justify-center",
+                  "whitespace-nowrap",
+                  "text-sm",
+                  "font-medium",
+                  "transition-all",
+                  "disabled:pointer-events-none",
+                  "disabled:opacity-50",
+                  "[&_svg]:pointer-events-none",
+                  "[&_svg:not([class*='size-'])]:size-4",
+                  "shrink-0"
+                ],
+                "area": 12800,
+                "animationName": "rainbow",
+                "animationDuration": "2s",
+                "animationTimingFunction": "linear",
+                "transitionProperty": "all",
+                "transitionDuration": "0.15s",
+                "transform": "",
+                "sectionHeading": "UI library for Design Engineers"
+              },
+              {
+                "tag": "div",
+                "id": "",
+                "classes": [
+                  "group",
+                  "inline-flex",
+                  "cursor-pointer",
+                  "items-center",
+                  "justify-start",
+                  "gap-1",
+                  "text-xl",
+                  "font-semibold",
+                  "text-neutral-700",
+                  "duration-200",
+                  "hover:text-neutral-700",
+                  "dark:text-neutral-300"
+                ],
+                "area": 11841,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.2s",
+                "transform": "",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "tag": "div",
+                "id": "",
+                "classes": [
+                  "group",
+                  "inline-flex",
+                  "cursor-pointer",
+                  "items-center",
+                  "justify-start",
+                  "gap-1",
+                  "text-xl",
+                  "font-semibold",
+                  "text-neutral-700",
+                  "duration-200",
+                  "hover:text-neutral-700",
+                  "dark:text-neutral-300"
+                ],
+                "area": 11841,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.2s",
+                "transform": "",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "tag": "div",
+                "id": "",
+                "classes": [
+                  "group",
+                  "inline-flex",
+                  "cursor-pointer",
+                  "items-center",
+                  "justify-start",
+                  "gap-1",
+                  "text-xl",
+                  "font-semibold",
+                  "text-neutral-700",
+                  "duration-200",
+                  "hover:text-neutral-700",
+                  "dark:text-neutral-300"
+                ],
+                "area": 11487,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.2s",
+                "transform": "",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "tag": "div",
+                "id": "",
+                "classes": [
+                  "group",
+                  "inline-flex",
+                  "cursor-pointer",
+                  "items-center",
+                  "justify-start",
+                  "gap-1",
+                  "text-xl",
+                  "font-semibold",
+                  "text-neutral-700",
+                  "duration-200",
+                  "hover:text-neutral-700",
+                  "dark:text-neutral-300"
+                ],
+                "area": 11487,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.2s",
+                "transform": "",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "tag": "div",
+                "id": "",
+                "classes": [
+                  "group",
+                  "inline-flex",
+                  "cursor-pointer",
+                  "items-center",
+                  "justify-start",
+                  "gap-1",
+                  "text-xl",
+                  "font-semibold",
+                  "text-neutral-700",
+                  "duration-200",
+                  "hover:text-neutral-700",
+                  "dark:text-neutral-300"
+                ],
+                "area": 11200,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.2s",
+                "transform": "",
+                "sectionHeading": "Showcase"
+              },
+              {
+                "tag": "div",
+                "id": "",
+                "classes": [
+                  "group",
+                  "inline-flex",
+                  "cursor-pointer",
+                  "items-center",
+                  "justify-start",
+                  "gap-1",
+                  "text-xl",
+                  "font-semibold",
+                  "text-neutral-700",
+                  "duration-200",
+                  "hover:text-neutral-700",
+                  "dark:text-neutral-300"
+                ],
+                "area": 11200,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.2s",
+                "transform": "",
+                "sectionHeading": "Showcase"
+              }
+            ],
+            "libraries": {
+              "framerMotion": false,
+              "gsap": false,
+              "three": false,
+              "lottie": false,
+              "locomotiveScroll": false
+            },
+            "hasReducedMotionCss": false
+          },
+          "technologySignals": {
+            "hasNextData": false,
+            "hasNextAssets": true,
+            "hasNuxtAssets": false,
+            "hasViteAssets": false,
+            "hasWebflow": false,
+            "hasFramer": false,
+            "hasShopify": false,
+            "hasWordPress": false,
+            "scriptSrcs": [
+              "https://magicui.design/_next/static/chunks/6fca9910-f5a5b727407b4e31.js",
+              "https://magicui.design/_next/static/chunks/5293-4befe13a12bf6517.js",
+              "https://magicui.design/_next/static/chunks/main-app-aeb3523cdb234f57.js",
+              "https://magicui.design/_next/static/chunks/231e94c8-ee2e852d5b7311d7.js",
+              "https://magicui.design/_next/static/chunks/2863-bec63f0aa2eaa818.js",
+              "https://magicui.design/_next/static/chunks/8288-07447a3b806b388c.js",
+              "https://magicui.design/_next/static/chunks/9333-8027c2136480542c.js",
+              "https://magicui.design/_next/static/chunks/app/layout-6e9563c81f9fb7cb.js",
+              "https://magicui.design/_next/static/chunks/5e77e626-b2d1c0f85e9e449e.js",
+              "https://magicui.design/_next/static/chunks/2429-9d59256ce0803739.js",
+              "https://magicui.design/_next/static/chunks/5069-8a99353e6327c137.js",
+              "https://magicui.design/_next/static/chunks/7437-072b1b9bf0b378dc.js",
+              "https://magicui.design/_next/static/chunks/5911-48f3d62a122e36b9.js",
+              "https://magicui.design/_next/static/chunks/app/not-found-531eaebc089f5c96.js",
+              "https://magicui.design/_next/static/chunks/1714-918e67f807874006.js",
+              "https://magicui.design/_next/static/chunks/7729-4a12f47fbe08bbd2.js",
+              "https://magicui.design/_next/static/chunks/polyfills-42372ed130431b0a.js",
+              "https://us-assets.i.posthog.com/static/exception-autocapture.js?v=1.363.1",
+              "https://us-assets.i.posthog.com/static/surveys.js?v=1.363.1",
+              "https://us-assets.i.posthog.com/array/phc_V9PbWROlKNwg2EOg0hrpQJq8LcDKp9lLW4T2TrcdnrZ/config.js",
+              "https://magicui.design/_next/static/chunks/webpack-a89a035599eedb69.js",
+              "https://www.googletagmanager.com/gtag/js?id=G-4CVHZX68BT"
+            ]
+          },
+          "codeBlocks": [],
+          "codeLinks": [
+            {
+              "url": "https://github.com/magicuidesign/magicui",
+              "text": "21,35421.4k"
+            },
+            {
+              "url": "https://elhussary.vercel.app/",
+              "text": "elhussaryPersonal Portfolio"
+            },
+            {
+              "url": "https://robot-toast.vercel.app/",
+              "text": "robot-toastOpen-source library"
+            },
+            {
+              "url": "https://elhussary.vercel.app/",
+              "text": "elhussaryPersonal Portfolio"
+            },
+            {
+              "url": "https://robot-toast.vercel.app/",
+              "text": "robot-toastOpen-source library"
+            },
+            {
+              "url": "https://elhussary.vercel.app/",
+              "text": "elhussaryPersonal Portfolio"
+            },
+            {
+              "url": "https://robot-toast.vercel.app/",
+              "text": "robot-toastOpen-source library"
+            },
+            {
+              "url": "https://elhussary.vercel.app/",
+              "text": "elhussaryPersonal Portfolio"
+            },
+            {
+              "url": "https://robot-toast.vercel.app/",
+              "text": "robot-toastOpen-source library"
+            },
+            {
+              "url": "https://github.com/dillionverma/portfolio",
+              "text": "github.com/dillionverma/p…"
+            },
+            {
+              "url": "https://github.com/magicuidesign/magicui",
+              "text": "GitHub"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

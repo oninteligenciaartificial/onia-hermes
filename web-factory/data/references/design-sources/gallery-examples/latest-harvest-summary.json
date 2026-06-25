@@ -1,0 +1,44 @@
+{
+  "id": "2026-06-25T18-05-49-876Z",
+  "startedAt": "2026-06-25T18:05:49.877Z",
+  "finishedAt": "2026-06-25T18:06:43.029Z",
+  "policy": "Automated design reference harvest. Screenshots and closed-site structures are reference-only. Code reuse is limited to allowed-after-review repositories and compatible registry/docs code after review.",
+  "steps": [
+    {
+      "name": "gallery",
+      "out": "data/references/design-sources/gallery-examples/2026-06-25T18-05-49-876Z-design-harvest.json",
+      "sourceIds": [
+        "21st-landing-page-components",
+        "registry-directory",
+        "magic-ui"
+      ],
+      "maxItems": 6,
+      "detailItems": 1
+    },
+    {
+      "name": "code",
+      "codeIndexOut": "data/references/code-sources/2026-06-25T18-05-49-876Z-code-cache-index.json",
+      "codeExamplesOut": "data/references/code-sources/2026-06-25T18-05-49-876Z-component-code-reference-pack.json",
+      "maxFilesPerRepo": 12
+    },
+    {
+      "name": "merge",
+      "out": "data/references/design-sources/gallery-examples/latest-gallery-examples.json"
+    },
+    {
+      "name": "intelligence",
+      "out": "data/references/design-sources/latest-design-intelligence.json",
+      "markdown": "docs/WEB_FACTORY_DESIGN_INTELLIGENCE_LATEST.md"
+    }
+  ],
+  "latestGallery": "data/references/design-sources/gallery-examples/latest-gallery-examples.json",
+  "latestDesignIntelligence": "data/references/design-sources/latest-design-intelligence.json",
+  "counts": {
+    "sources": 19,
+    "candidates": 159,
+    "detailedExamples": 31,
+    "errors": 0,
+    "intelligenceExamples": 31,
+    "reusableCodeRepositories": 11
+  }
+}

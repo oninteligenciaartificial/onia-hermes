@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { readdir, readFile, writeFile, mkdir } from "node:fs/promises";
+import { readdir, readFile, writeFile, mkdir, stat } from "node:fs/promises";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 
@@ -19,20 +19,25 @@ function toPublicPath(value) {
 export async function mergeGalleryExamples(options = {}) {
   const inputDir = options.inputDir || DEFAULT_INPUT_DIR;
   const outPath = options.outPath || DEFAULT_OUT;
-  const files = (await readdir(inputDir))
+  const files = await Promise.all(
+    (await readdir(inputDir))
     .filter((file) => file.endsWith(".json"))
     .filter((file) => !file.startsWith("latest-") && !file.startsWith("smoke-"))
     .filter((file) => !file.includes("smoke"))
     .filter((file) => !file.includes("playwright"))
-    .filter((file) => !file.startsWith("2026-"))
-    .sort();
+    .map(async (file) => ({
+      file,
+      mtimeMs: (await stat(path.join(inputDir, file))).mtimeMs,
+    })),
+  );
+  files.sort((a, b) => a.mtimeMs - b.mtimeMs || a.file.localeCompare(b.file));
 
   const bySource = new Map();
   const errors = [];
   const inputs = [];
 
-  for (const file of files) {
-    const filePath = path.join(inputDir, file);
+  for (const entry of files) {
+    const filePath = path.join(inputDir, entry.file);
     const json = JSON.parse(await readFile(filePath, "utf8"));
     inputs.push(toPublicPath(filePath));
     for (const result of json.results || []) {
