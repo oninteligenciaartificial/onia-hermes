@@ -144,6 +144,11 @@ El simulador de sostenibilidad, ejemplos del 40%, Nuvia 80/20, control de
 Higgsfield y requisitos del dashboard viven en
 `hermes-content/docs/ONIA_SUSTAINABILITY_DASHBOARD_SPEC_2026.md`.
 
+La politica canonica para recuperar el capital Sergio/ONIA, registrar aportes
+operativos Arthur a apps/gastos mensuales y calcular el excedente recuperable
+del Fondo ONIA vive en
+`hermes-content/docs/ONIA_CAPITAL_RECOVERY_AND_ARTHUR_INVESTMENT_POLICY_2026.md`.
+
 Reglas:
 
 - Solo comprar productos con margen bruto estimado superior a 40%.
@@ -258,6 +263,7 @@ Tablas o vistas necesarias:
 | `internal_capital_allocations` | Presupuesto por bolsa, monto aprobado, usado, disponible y ROI esperado. |
 | `purchase_approvals` | Compras solicitadas, motivo, centro, aprobado por Sergio y estado. |
 | `asset_inventory` | Equipo, herramienta, cuenta, licencia, responsable y renovacion. |
+| `capital_recovery_ledger` | Capital Sergio/ONIA, aportes operativos Arthur, recuperado, saldo y prioridad. |
 | `campaign_spend` | Meta Ads, objetivo, presupuesto, leads, ventas y aprendizaje. |
 | `nuvia_inventory_investments` | Capital por lote, propietario, costo, ventas, margen y reparto. |
 | `home_lab_cost_savings` | Que costo reduce el home lab y cuanto se ahorro. |

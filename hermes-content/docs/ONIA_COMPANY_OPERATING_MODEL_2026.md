@@ -126,7 +126,8 @@ Duracion:
 
 Por que no llamarlo socio:
 
-- no aporta capital a ONIA general;
+- si aporta a apps o gastos de ONIA, ese aporte es operativo recuperable y no
+  participacion societaria;
 - no desarrollo DentalGest, GestiOS ni Hermes;
 - no paga herramientas, deuda ni existencia mensual de ONIA;
 - todavia esta aprendiendo desarrollo/programacion;
@@ -156,9 +157,10 @@ Puede:
 - preparar carruseles;
 - apoyar capacitaciones;
 - proponer mejoras del bot/automatizaciones;
+- solicitar aportes a apps/gastos ONIA si Sergio los aprueba y registra;
 - operar tareas asignadas en ONIA Center;
 - cerrar ventas dentro de precios y alcances aprobados;
-- ganar variable por trabajo real.
+- ganar comisiones o pagos aprobados por trabajo real.
 
 No puede:
 
@@ -338,13 +340,13 @@ todo aprobado, sin capital ONIA y sin rescate.
 Regla principal:
 
 ```text
-Capital recuperado primero. Ganancia despues. Variable solo por trabajo real.
+Capital recuperado primero. Caja chica y reserva despues. Ganancia al final.
 ```
 
 Arthur puede ganar por:
 
 1. capital real aportado a ese lote/campana;
-2. variable operativa por rol cumplido.
+2. pago operativo fijo aprobado antes de vender, si el margen lo permite.
 
 No gana 50/50 si:
 
@@ -355,36 +357,43 @@ No gana 50/50 si:
 - Arthur no registro evidencia;
 - Arthur no puso 50% de costos directos.
 
-Escala sin capital nuevo:
+Regla sin capital nuevo:
 
-| Rol Arthur | Variable sobre utilidad distribuible |
+```text
+En Nuvia bootstrap no hay bono porcentual por trabajo.
+```
+
+Si Arthur no pone capital nuevo, puede apoyar contenido, mensajes, cierre,
+entrega o CRM, pero solo se le paga un monto fijo si:
+
+- fue aprobado antes de lanzar la campana;
+- esta registrado como costo directo;
+- existe margen real despues de producto, pauta, herramientas, caja chica,
+  Fondo ONIA y Reserva Nuvia;
+- no rompe la supervivencia de ONIA ni de Nuvia.
+
+Techos por capital:
+
+| Capital Arthur | Derecho financiero Arthur |
 |---|---:|
-| Apoyo suelto | 0%-5% |
-| Contenido aprobado | 5%-8% |
-| Mensajes + registro | 8%-10% |
-| Seguimiento completo | 10%-12% |
-| Cierre real | 12%-15% |
-| Operacion completa | 15%-20% |
-| Excepcional preaprobado | 20%-25% maximo |
-
-Techos:
-
-| Capital Arthur | Techo total Arthur |
-|---|---:|
-| 0% | 20% ordinario; 25% excepcional preaprobado |
-| 1%-24% | 35% total |
-| 25%-49% | 45% total |
-| 50% producto + pauta + costos directos | 50% total |
+| 0% | 0% de utilidad Nuvia; solo pago fijo aprobado si aplica |
+| 1%-24% | Igual a su porcentaje real de capital |
+| 25%-49% | Igual a su porcentaje real de capital |
+| 50% producto + pauta + costos directos | Hasta 50% de utilidad distribuible |
 
 ## Finanzas por centro
 
 | Centro | Fondo/reserva | Regla |
 |---|---:|---|
 | ONIA Servicios | 40% Fondo ONIA | Sostiene herramientas, IA, VPS, deuda, caja y capital. |
-| Nuvia | 20% Fondo ONIA + 10% Reserva Nuvia | Antes de repartir utilidad. |
+| Nuvia | 20% Fondo ONIA + caja chica + 20% Reserva Nuvia bootstrap | Antes de repartir utilidad. Cuando Nuvia viva sola, la reserva puede bajar a 10%. |
 | ONIA Media | Fondo ONIA segun origen + costos directos | No crea fondo separado salvo decision escrita. |
 | Cliente/proyecto | Costos directos primero | Dominio, hosting, pauta, APIs y herramientas se cobran aparte. |
 | Sergio dueno | Retiro por semaforo | No retirar si ONIA queda en rojo. |
+
+La recuperacion de capital y los posibles aportes Arthur a apps/gastos ONIA se
+calculan segun
+`hermes-content/docs/ONIA_CAPITAL_RECOVERY_AND_ARTHUR_INVESTMENT_POLICY_2026.md`.
 
 ## Sergio como dueno
 
@@ -443,6 +452,7 @@ ONIA Center debe tener:
 - scorecard vendedores;
 - Nuvia capital por lote;
 - Nuvia cierre por campana;
+- capital Sergio/Arthur recuperable;
 - Higgsfield/premium tool usage;
 - self-hosted savings;
 - activos/equipos;
@@ -481,7 +491,7 @@ Control:
 
 - rol Nivel 2 claro;
 - scorecard semanal;
-- escala de variable por rol;
+- reglas separadas para comision ONIA Servicios y pago fijo Nuvia;
 - camino de crecimiento si cumple.
 
 ### Vendedores
@@ -530,7 +540,8 @@ Control:
 
 - costo completo por lote;
 - Fondo ONIA 20%;
-- Reserva Nuvia 10%;
+- caja chica Nuvia;
+- Reserva Nuvia 20% en bootstrap y 10% cuando viva sola;
 - capital recuperado primero;
 - cierres por campana.
 
@@ -558,7 +569,7 @@ Para Arthur:
 - rol: coordinador comercial-operativo en prueba;
 - no socio ONIA;
 - no empleado formal salvo contrato laboral posterior;
-- pagos variables por evidencia;
+- pagos por evidencia y aprobacion previa;
 - Nuvia por lote/campana;
 - herramientas ONIA no son propiedad ni aporte de Arthur;
 - confidencialidad;
@@ -598,7 +609,7 @@ Para empleados formales:
 3. Cargar en ONIA Center:
    - rol Arthur Nivel 2;
    - scorecard semanal;
-   - escala de variable;
+   - reglas de comision ONIA Servicios;
    - permisos;
    - Nuvia por lote/campana;
    - Higgsfield usage.

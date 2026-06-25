@@ -107,12 +107,14 @@ Si Arthur pone Bs. 1.000 y Sergio pone Bs. 4.000, el capital de lote queda:
 Regla:
 
 ```text
-Arthur no va 50/50 si pone 20% del capital. Va 20% financiero, y puede ganar
-variable adicional si trabaja y hay evidencia.
+Arthur no va 50/50 si pone 20% del capital. Va 20% financiero. En Nuvia
+bootstrap no gana bono porcentual por trabajo; cualquier trabajo se paga como
+costo fijo preaprobado si el margen lo permite.
 ```
 
-La variable operativa no es automatica. El dashboard debe obligar a elegir rol,
-evidencia y aprobacion de Sergio antes de calcularla.
+El dashboard debe bloquear bonos porcentuales de Nuvia bootstrap. Solo debe
+permitir pago operativo fijo si fue aprobado antes de vender y si no rompe caja,
+Fondo ONIA ni Reserva Nuvia.
 
 ## Cierre Nuvia 80/20
 
@@ -130,7 +132,8 @@ Venta cobrada
 
 Margen operativo
 - 20% Fondo ONIA
-- 10% Reserva Nuvia
+- caja chica Nuvia
+- 20% Reserva Nuvia bootstrap, o 10% cuando Nuvia viva sola
 = utilidad distribuible
 ```
 
@@ -138,31 +141,20 @@ Luego:
 
 1. Si Arthur no trabajo: utilidad distribuible se reparte 80% Sergio/ONIA y
    20% Arthur.
-2. Si Arthur trabajo y hay evidencia: se puede pagar variable operativa segun
-   escala, y el resto se reparte 80/20.
-3. Si Arthur trabajo todo el cierre: su total puede acercarse a 30%-35%, pero
-   no a 50% salvo que ponga 50% de producto, pauta y costos directos.
-
-Escala operativa Arthur:
-
-| Rol operativo | Variable |
-|---|---:|
-| Apoyo suelto, idea, grabacion simple o mensaje aislado | 0%-5% |
-| Contenido aprobado sin responder leads | 5%-8% |
-| Responde mensajes y registra leads | 8%-10% |
-| Seguimiento completo y coordinacion | 10%-12% |
-| Cierre real con evidencia | 12%-15% |
-| Contenido + leads + seguimiento + cierre + entrega | 15%-20% |
-| Excepcional aprobado antes, sin rescate Sergio | 20%-25% maximo |
+2. Si Arthur trabajo: solo puede recibir pago fijo operativo si estaba
+   presupuestado antes como costo directo.
+3. Si Arthur quiere acercarse a 50%, debe poner 50% de producto, pauta y costos
+   directos. Trabajo sin capital no cambia el reparto financiero.
 
 Base:
 
 ```text
-La variable se calcula sobre utilidad distribuible despues de Fondo ONIA y
-Reserva Nuvia, no sobre ventas ni capital recuperado.
+Nuvia bootstrap no calcula pago porcentual por trabajo. Primero se paga
+producto, costos, Fondo ONIA, caja chica y Reserva Nuvia; luego se reparte por
+capital real.
 ```
 
-## Ejemplo Nuvia 80/20 sin variable operativa
+## Ejemplo Nuvia 80/20 sin pago operativo
 
 | Concepto | Monto |
 |---|---:|
@@ -171,10 +163,11 @@ Reserva Nuvia, no sobre ventas ni capital recuperado.
 | Bolsas/transporte | -Bs. 400 |
 | Margen operativo | Bs. 2.600 |
 | Fondo ONIA 20% | -Bs. 520 |
-| Reserva Nuvia 10% | -Bs. 260 |
-| Utilidad distribuible | Bs. 1.820 |
-| Sergio/ONIA 80% | Bs. 1.456 |
-| Arthur 20% | Bs. 364 |
+| Caja chica Nuvia | -Bs. 200 |
+| Reserva Nuvia bootstrap 20% | -Bs. 520 |
+| Utilidad distribuible | Bs. 1.360 |
+| Sergio/ONIA 80% | Bs. 1.088 |
+| Arthur 20% | Bs. 272 |
 
 Ademas, el capital de producto recuperado debe mantenerse como inventario o
 devolverse segun cierre acordado:
@@ -185,35 +178,35 @@ devolverse segun cierre acordado:
 
 ## Ejemplo Nuvia 80/20 con Arthur operando
 
-Supongamos la misma utilidad distribuible: Bs. 1.820.
+Supongamos la misma venta, pero Arthur tenia un pago fijo aprobado de Bs. 150
+por operar mensajes, cierre y entrega. Ese pago entra antes del margen.
 
-Arthur hizo seguimiento, respondio mensajes, cerro ventas y registro todo. Se
-aprueba 12% variable operativa. Si tambien entrega, produce contenido y no
-requiere rescate, podria subir a 15%-20%.
+Arthur no cobra porcentaje adicional. Cobra el pago fijo si se cumple la tarea y
+si la campana mantiene margen positivo.
 
 | Concepto | Monto |
 |---|---:|
-| Utilidad distribuible | Bs. 1.820 |
-| Variable Arthur 12% | -Bs. 218,40 |
-| Base restante para capital | Bs. 1.601,60 |
-| Sergio/ONIA 80% | Bs. 1.281,28 |
-| Arthur capital 20% | Bs. 320,32 |
-| Arthur total | Bs. 538,72 |
+| Ventas cobradas | Bs. 8.000 |
+| Producto vendido | -Bs. 5.000 |
+| Bolsas/transporte | -Bs. 400 |
+| Pago fijo Arthur aprobado | -Bs. 150 |
+| Margen operativo | Bs. 2.450 |
+| Fondo ONIA 20% | -Bs. 490 |
+| Caja chica Nuvia | -Bs. 200 |
+| Reserva Nuvia bootstrap 20% | -Bs. 490 |
+| Utilidad distribuible | Bs. 1.270 |
+| Sergio/ONIA 80% | Bs. 1.016 |
+| Arthur capital 20% | Bs. 254 |
+| Arthur total | Bs. 404 |
 
 Lectura:
 
 - Sergio sigue ganando mas porque puso 80% del capital y asume ONIA.
-- Arthur gana mejor si trabaja, pero no cobra como 50/50 financiero.
-- ONIA ya recibio Fondo ONIA y Nuvia ya recibio reserva antes del reparto.
+- Arthur recupera por capital y cobra el trabajo solo porque se presupuesto antes.
+- ONIA ya recibio Fondo ONIA, Nuvia ya guardo caja chica y reserva antes del
+  reparto.
 
-El dashboard debe mostrar advertencia si Arthur total supera:
-
-| Capital Arthur | Techo total Arthur |
-|---|---:|
-| 0% | 20% ordinario; 25% excepcional aprobado antes |
-| 1%-24% | 35% total |
-| 25%-49% | 45% total |
-| 50% de producto, pauta y costos directos | 50% total |
+El dashboard debe bloquear bono porcentual en Nuvia bootstrap.
 
 ## Si Sergio/ONIA paga Meta Ads de Nuvia
 
@@ -230,18 +223,19 @@ Ejemplo:
 | Higgsfield prorrateado Nuvia | -Bs. 250 |
 | Margen operativo | Bs. 1.750 |
 | Fondo ONIA 20% | -Bs. 350 |
-| Reserva Nuvia 10% | -Bs. 175 |
-| Utilidad distribuible | Bs. 1.225 |
+| Caja chica Nuvia | -Bs. 150 |
+| Reserva Nuvia bootstrap 20% | -Bs. 350 |
+| Utilidad distribuible | Bs. 900 |
 
 Si Arthur no cofinancio la pauta/herramientas:
 
 | Persona | Regla | Monto |
 |---|---|---:|
-| Sergio/ONIA | 80% financiero + recupero de pauta/costos antes del margen | Bs. 980 |
-| Arthur | 20% financiero, o variable si trabajo | Bs. 245 |
+| Sergio/ONIA | 80% financiero + recupero de pauta/costos antes del margen | Bs. 720 |
+| Arthur | 20% financiero si puso 20% de capital | Bs. 180 |
 
-Si Arthur ademas trabajo, se puede aprobar variable operativa, pero su total
-debe tener techo de 35% salvo acuerdo escrito.
+Si Arthur ademas trabajo, no se aprueba bono porcentual. Solo puede cobrar pago
+fijo si estaba presupuestado antes de la campana.
 
 ## Regla de Higgsfield para Nuvia
 
@@ -412,6 +406,8 @@ Campos:
 
 - ventas cobradas;
 - costo producto vendido;
+- costo real unitario;
+- precio cobrado unitario;
 - empaque;
 - transporte;
 - comisiones;
@@ -419,15 +415,29 @@ Campos:
 - Higgsfield prorrateado;
 - produccion externa;
 - margen operativo;
+- margen real unitario;
+- margen real porcentaje;
 - Fondo ONIA 20%;
-- Reserva Nuvia 10%;
+- Reserva Nuvia porcentaje aplicable;
+- Reserva Nuvia monto;
 - utilidad distribuible;
-- variable Arthur;
-- rol Arthur;
+- pago operativo fijo Arthur aprobado;
+- rol/tarea Arthur;
 - evidencia Arthur;
-- techo Arthur aplicable;
+- bloqueo bono porcentual Nuvia bootstrap;
+- puerta de margen: bloqueado / debil / operativo / fuerte;
 - utilidad Sergio/ONIA;
 - estado: abierto / en revision / cerrado / bloqueado.
+
+Reglas de bloqueo:
+
+- si margen real unitario es menor o igual a 0, no hay reparto;
+- si margen real unitario es menor a Bs. 40, no hay pago operativo Arthur;
+- si margen real porcentaje es menor a 25%, no se permite pauta ni descuento;
+- si el pago operativo Arthur no fue aprobado antes, no se paga;
+- durante bootstrap, no se permite bono porcentual por trabajo en Nuvia;
+- durante bootstrap, Reserva Nuvia debe ser 20% del margen real;
+- cuando Nuvia viva sola, Reserva Nuvia puede bajar a 10%.
 
 ### 5. Higgsfield y herramientas premium
 
@@ -495,16 +505,61 @@ Verde: 20%-30% utilidad neta.
 Fuerte: hasta 40% si hay 3 meses de reserva.
 ```
 
+### 8. Recuperacion de capital ONIA
+
+Objetivo: que el sistema calcule cuanto puede recuperar Sergio y cuanto puede
+recuperar Arthur sin matar el Fondo ONIA.
+
+Campos:
+
+- capital Sergio pendiente;
+- capital Arthur operativo pendiente;
+- Fondo ONIA del periodo;
+- gastos fijos del periodo;
+- caja chica;
+- reserva minima pendiente;
+- excedente recuperable;
+- recuperacion Sergio calculada;
+- recuperacion Arthur calculada;
+- saldo pendiente Sergio;
+- saldo pendiente Arthur;
+- estado: borrador / revision / aprobado / pagado / bloqueado.
+
+Formula:
+
+```text
+excedente_recuperable = Fondo ONIA - gastos_fijos - caja_chica - reserva_pendiente
+```
+
+Durante los 60 dias:
+
+```text
+Sergio recupera 70% del excedente recuperable.
+Arthur recupera 30% del excedente recuperable si tiene aportes operativos
+aprobados pendientes.
+```
+
+Si Arthur no tiene saldo pendiente, el 100% del excedente recuperable va a
+recuperar capital Sergio/ONIA.
+
+Referencia canonica:
+
+```text
+hermes-content/docs/ONIA_CAPITAL_RECOVERY_AND_ARTHUR_INVESTMENT_POLICY_2026.md
+```
+
 ## Decisiones para llevar al dashboard
 
 1. El dashboard debe mostrar primero supervivencia ONIA, no ventas brutas.
 2. Cada servicio debe mostrar cuanto aporta al 40%.
 3. Nuvia debe cerrar por lote y campana, no por sensacion.
 4. Arthur debe verse como capitalista proporcional cuando pone dinero, y como
-   variable operativo cuando trabaja.
+   pago operativo fijo aprobado cuando trabaja sin capital.
 5. Higgsfield debe tener limite por centro y aprobacion Sergio.
 6. Self-hosted debe medirse por ahorro real, no por instalar herramientas.
 7. Sergio debe tener modulo de retiro/dueno con semaforo.
+8. La recuperacion de capital debe salir solo del excedente del Fondo ONIA,
+   despues de gastos, caja chica y reserva.
 
 ## Fuentes tecnicas revisadas
 

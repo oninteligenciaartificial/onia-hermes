@@ -147,6 +147,7 @@ Canonical files:
 - `hermes-content/docs/ONIA_PROPUESTA_GASTOS_LOCAL_FIRST_15000_2026.pdf`
 - `hermes-content/docs/SERGIO_STRICT_CALENDAR_AND_ALFREDHQ_2026.md`
 - `hermes-content/docs/ONIA_NUVIA_ACCOUNTING_MODEL_2026.md`
+- `hermes-content/docs/ONIA_CAPITAL_RECOVERY_AND_ARTHUR_INVESTMENT_POLICY_2026.md`
 - `hermes-content/docs/BOLIVIAN_TR4_LOCAL_STATIC_AUDIT_20260624.md`
 - `hermes-content/docs/ONIA_SUSTAINABILITY_DASHBOARD_SPEC_2026.md`
 - `hermes-content/docs/ONIA_COMPANY_OPERATING_MODEL_2026.md`
