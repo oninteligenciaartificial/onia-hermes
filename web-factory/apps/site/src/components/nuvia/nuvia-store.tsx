@@ -6,6 +6,8 @@ import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties }
 import { ArrowLeft, Minus, Plus, Search, ShoppingBag, Trash2, X } from "lucide-react";
 import {
   type CartProduct,
+  type NuviaMerchandising,
+  type NuviaPack,
   type NuviaProduct,
   productHref,
   productSlug,
@@ -33,6 +35,7 @@ type StoreProps = {
   heroPoster: string;
   products: NuviaProduct[];
   cartProducts: CartProduct[];
+  merchandising: NuviaMerchandising;
 };
 
 type ProductPageProps = StoreProps & {
@@ -159,6 +162,143 @@ function buildRoutineSteps(products: NuviaProduct[]) {
     ...step,
     product: findRoutineProduct(products, step),
   })).filter((step): step is RoutineStepDefinition & { product: NuviaProduct } => Boolean(step.product));
+}
+
+function packItems(pack: NuviaPack) {
+  return pack.productSlugs.map((id) => ({ id, qty: 1 }));
+}
+
+function packPriceLabel(pack: NuviaPack) {
+  if (!pack.precioPromocional) {
+    return "precio a confirmar";
+  }
+  return pack.ahorroVisible > 0
+    ? `${money(pack.precioPromocional)} con ahorro visible`
+    : `${money(pack.precioPromocional)} estimado`;
+}
+
+function NuviaUseCases({ merchandising }: { merchandising: NuviaMerchandising }) {
+  const useCases = merchandising.casosUso.slice(0, 4);
+
+  if (!useCases.length) {
+    return null;
+  }
+
+  return (
+    <section className="nuvia-usecase-section" data-nuvia-reveal>
+      <div className="nuvia-section-heading">
+        <span>casos de uso</span>
+        <h2>compra por necesidad, no por lista infinita</h2>
+        <p>La tienda recomienda rutas simples para que el cliente agregue productos con criterio y llegue al carrito mas rapido.</p>
+      </div>
+      <div className="nuvia-usecase-grid">
+        {useCases.map((item) => (
+          <Link href={`/nuvia/catalogo#${item.packId}`} key={item.id}>
+            <small>{item.productSlugs.length} productos sugeridos</small>
+            <strong>{item.titulo}</strong>
+            <p>{item.problema}</p>
+            <span>{item.recomendacion}</span>
+          </Link>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function PackShowcase({
+  description,
+  limit = 3,
+  merchandising,
+  onAddMany,
+  title,
+  variant = "landing",
+}: {
+  description: string;
+  limit?: number;
+  merchandising: NuviaMerchandising;
+  onAddMany: (items: Array<{ id: string; qty?: number }>, label?: string) => void;
+  title: string;
+  variant?: "landing" | "catalog";
+}) {
+  const packs = merchandising.packs.slice(0, limit);
+
+  if (!packs.length) {
+    return null;
+  }
+
+  return (
+    <section className={`nuvia-pack-section is-${variant}`} id="packs" data-nuvia-reveal>
+      <div className="nuvia-section-heading">
+        <span>packs y combos</span>
+        <h2>{title}</h2>
+        <p>{description}</p>
+      </div>
+      <div className="nuvia-pack-grid">
+        {packs.map((pack) => (
+          <article className="nuvia-pack-card" id={pack.id} key={pack.id}>
+            <div className="nuvia-pack-media" aria-hidden="true">
+              {pack.productos.slice(0, 3).map((product) => (
+                <Image src={product.imagen} alt="" width={180} height={180} sizes="110px" key={product.slug} />
+              ))}
+            </div>
+            <div className="nuvia-pack-copy">
+              <small>{pack.etiqueta}</small>
+              <h3>{pack.titulo}</h3>
+              <p>{pack.descripcion}</p>
+              <ul>
+                {pack.productos.slice(0, 3).map((product) => (
+                  <li key={product.slug}>
+                    <span>{product.marca}</span>
+                    <strong>{briefProductTitle({ titulo: product.titulo })}</strong>
+                  </li>
+                ))}
+              </ul>
+              <footer>
+                <span>{packPriceLabel(pack)}</span>
+                <button type="button" onClick={() => onAddMany(packItems(pack), pack.titulo)}>
+                  {pack.cta}
+                </button>
+              </footer>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function ProductRelatedPacks({
+  merchandising,
+  onAddMany,
+  product,
+}: {
+  merchandising: NuviaMerchandising;
+  onAddMany: (items: Array<{ id: string; qty?: number }>, label?: string) => void;
+  product: NuviaProduct;
+}) {
+  const currentSlug = productSlug(product);
+  const packs = merchandising.packs.filter((pack) => pack.productSlugs.includes(currentSlug)).slice(0, 2);
+
+  if (!packs.length) {
+    return null;
+  }
+
+  return (
+    <div className="nuvia-pdp-related-packs">
+      <span>tambien se compra en pack</span>
+      {packs.map((pack) => (
+        <article key={pack.id}>
+          <div>
+            <strong>{pack.titulo}</strong>
+            <p>{pack.subtitulo}</p>
+          </div>
+          <button type="button" onClick={() => onAddMany(packItems(pack), pack.titulo)}>
+            agregar pack
+          </button>
+        </article>
+      ))}
+    </div>
+  );
 }
 
 function useDeferredHeroVideo() {
@@ -322,6 +462,36 @@ function useCart(cartProducts: CartProduct[]) {
     setOpen(true);
   }, [productMap, pushNotice]);
 
+  const addMany = useCallback((items: Array<{ id: string; qty?: number }>, label = "pack") => {
+    const normalized = items
+      .map((item) => ({ id: item.id, qty: Math.max(1, Math.floor(Number(item.qty) || 1)) }))
+      .filter((item) => productMap.has(item.id));
+
+    if (!normalized.length) {
+      pushNotice({
+        tone: "error",
+        title: "pack no disponible",
+        body: "No encontramos productos activos para este pack.",
+      });
+      return;
+    }
+
+    setCart((current) => {
+      const next = new Map(current.map((item) => [item.id, item.qty]));
+      normalized.forEach((item) => {
+        next.set(item.id, (next.get(item.id) || 0) + item.qty);
+      });
+      return Array.from(next.entries()).map(([id, qty]) => ({ id, qty }));
+    });
+
+    pushNotice({
+      tone: "success",
+      title: `${label} agregado`,
+      body: `${normalized.length} productos agregados al carrito.`,
+    });
+    setOpen(true);
+  }, [productMap, pushNotice]);
+
   const increase = useCallback((id: string) => {
     setCart((current) => current.map((item) => (item.id === id ? { ...item, qty: item.qty + 1 } : item)));
   }, []);
@@ -358,6 +528,7 @@ function useCart(cartProducts: CartProduct[]) {
 
   return {
     add,
+    addMany,
     cart,
     clear,
     decrease,
@@ -1093,6 +1264,8 @@ export function NuviaStorefront(props: StoreProps) {
         </div>
       </section>
 
+      <NuviaUseCases merchandising={props.merchandising} />
+
       <section className="nuvia-routine-section" id="guia" data-nuvia-reveal>
         <div>
           <span>guia rapida</span>
@@ -1112,6 +1285,13 @@ export function NuviaStorefront(props: StoreProps) {
           ))}
         </div>
       </section>
+
+      <PackShowcase
+        merchandising={props.merchandising}
+        onAddMany={cart.addMany}
+        title="packs listos para agregar"
+        description="Agrupa productos complementarios en un clic. La tienda mantiene compra individual, pero acelera decisiones repetidas."
+      />
 
       <section className="nuvia-discount-section" id="descuentos" data-nuvia-reveal>
         <div>
@@ -1202,6 +1382,14 @@ export function NuviaCatalogPage(props: StoreProps) {
           </div>
         </aside>
       </section>
+
+      <PackShowcase
+        merchandising={props.merchandising}
+        onAddMany={cart.addMany}
+        title="elige por pack o compra producto suelto"
+        description="Los packs son rutas rapidas para casos frecuentes. La grilla completa queda debajo para comprar cualquier producto individual."
+        variant="catalog"
+      />
 
       <ProductShelf products={props.products} onAdd={cart.add} />
 
@@ -1314,6 +1502,8 @@ export function NuviaProductPage(props: ProductPageProps) {
             </button>
             <p>El carrito guarda tu seleccion. Si no hay precio final, Nuvia lo toma como cotizacion.</p>
           </div>
+
+          <ProductRelatedPacks product={props.product} merchandising={props.merchandising} onAddMany={cart.addMany} />
 
           <div className="nuvia-pdp-accordions">
             <details open>

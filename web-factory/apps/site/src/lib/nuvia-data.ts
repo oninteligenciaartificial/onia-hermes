@@ -11,6 +11,84 @@ export type NuviaProductDetailImage = {
   label: string;
 };
 
+export type NuviaMerchandisingProduct = {
+  slug: string;
+  titulo: string;
+  marca: string;
+  categoria: string;
+  imagen: string;
+  precio: string;
+  precioValor?: number | null;
+  descuentoPorcentaje?: number;
+};
+
+export type NuviaUseCase = {
+  id: string;
+  titulo: string;
+  problema: string;
+  recomendacion: string;
+  packId: string;
+  productSlugs: string[];
+};
+
+export type NuviaPromotion = {
+  id: string;
+  titulo: string;
+  badge: string;
+  descripcion: string;
+  productSlugs: string[];
+  discountPercent: number;
+  tipo: string;
+};
+
+export type NuviaPack = {
+  id: string;
+  tipo: string;
+  etiqueta: string;
+  titulo: string;
+  subtitulo: string;
+  descripcion: string;
+  productSlugs: string[];
+  productos: NuviaMerchandisingProduct[];
+  precioRegular: number;
+  precioPromocional: number;
+  ahorroVisible: number;
+  cta: string;
+};
+
+export type NuviaCombo = {
+  id: string;
+  titulo: string;
+  subtitulo: string;
+  descripcion: string;
+  productSlugs: string[];
+  pasos: Array<{
+    numero: string;
+    slug: string;
+  }>;
+  precioRegular: number;
+  precioPromocional: number;
+  ahorroVisible: number;
+};
+
+export type NuviaQuickSection = {
+  id: string;
+  titulo: string;
+  productSlugs: string[];
+  productos: NuviaMerchandisingProduct[];
+};
+
+export type NuviaMerchandising = {
+  version: string;
+  generatedAt: string;
+  sourcePrinciples: string[];
+  casosUso: NuviaUseCase[];
+  promociones: NuviaPromotion[];
+  packs: NuviaPack[];
+  combos: NuviaCombo[];
+  seccionesRapidas: NuviaQuickSection[];
+};
+
 export type NuviaProduct = {
   titulo: string;
   categoria: string;
@@ -55,6 +133,7 @@ export type NuviaClient = {
     direccion: string;
   };
   productos: NuviaProduct[];
+  merchandising?: NuviaMerchandising;
   seo: {
     title: string;
     description: string;
@@ -119,6 +198,29 @@ export const nuviaProducts = nuvia.productos.map((product) => ({
     src: publicAsset(image.src),
   })),
 }));
+
+export const nuviaMerchandising: NuviaMerchandising = {
+  version: nuvia.merchandising?.version || "",
+  generatedAt: nuvia.merchandising?.generatedAt || "",
+  sourcePrinciples: nuvia.merchandising?.sourcePrinciples || [],
+  casosUso: nuvia.merchandising?.casosUso || [],
+  promociones: nuvia.merchandising?.promociones || [],
+  packs: (nuvia.merchandising?.packs || []).map((pack) => ({
+    ...pack,
+    productos: pack.productos.map((product) => ({
+      ...product,
+      imagen: publicAsset(product.imagen),
+    })),
+  })),
+  combos: nuvia.merchandising?.combos || [],
+  seccionesRapidas: (nuvia.merchandising?.seccionesRapidas || []).map((section) => ({
+    ...section,
+    productos: section.productos.map((product) => ({
+      ...product,
+      imagen: publicAsset(product.imagen),
+    })),
+  })),
+};
 
 export const nuviaCartProducts: CartProduct[] = nuviaProducts.map((product) => ({
   id: productSlug(product),

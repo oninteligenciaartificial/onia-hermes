@@ -24,18 +24,26 @@ Use this mode first when the supplier catalog may include new professional produ
 pnpm nuvia:prices:watch
 ```
 
-Checks prices and updates Nuvia only when there are price changes or new products and the scrape passes safety guards. It also regenerates:
+Checks prices and updates Nuvia only when there are price changes, the catalog membership is stable and the scrape passes safety guards. It also regenerates:
 
 - `data/clients/nuvia.json`
 - `data/clients/nuvia.finance.json`
 - `data/clients/nuvia.finance.csv`
 - `data/references/product-sources/nuvia-hbderm-normalized-20260619.json`
+- `data/clients/nuvia.json` merchandising block: use cases, promos, packs and combos
+- `data/references/design-sources/ecommerce-shopify-patterns-20260625.json`
+
+```powershell
+pnpm nuvia:merchandising
+```
+
+Regenerates only the commercial merchandising layer from the current public catalog. Use it after editing product categories, benefits, featured products or public prices when a full supplier scrape is not needed.
 
 ```powershell
 pnpm nuvia:prices:force
 ```
 
-Forces a catalog refresh even if no price changes are detected. Use it only after a human review confirms that new products, removed products and suspicious prices are acceptable for the public Nuvia catalog.
+Forces a catalog refresh even if no price changes are detected or when the check reports added/removed supplier products. Use it only after a human review confirms that new products, removed products and suspicious prices are acceptable for the public Nuvia catalog.
 
 ## Reports
 
@@ -64,8 +72,11 @@ The automation does not apply updates when:
 - scrape errors exceed `25`
 - current product count is below `90%` of the previous known count
 - the supplier site returns no usable products
+- the supplier catalog has added or removed products and the run is not explicitly forced after review
 
 This prevents publishing bad prices if the supplier site blocks requests, has downtime, changes markup, or returns a partial sitemap.
+
+The normal watcher can auto-apply supplier price/discount changes only when the catalog membership is stable. New products and removed products are treated as a commercial review gate because professional items, bad reference prices or category changes can enter the source catalog without being valid for the public Nuvia store.
 
 Before replacing the canonical supplier source, the watcher creates a timestamped backup of the previous source file. If catalog rebuild, public sanitization, cutout mapping or optional site build fails, the watcher restores that backup and exits with an error instead of leaving a half-updated catalog.
 
@@ -81,6 +92,20 @@ The automation keeps the current Nuvia commercial formula:
 
 This is a business rule configured by Sergio and should be reviewed if supplier conditions change.
 
+## Merchandising Formula
+
+After every safe price/catalog refresh, the watcher runs `harvester/product/build_nuvia_merchandising.mjs`.
+
+That script derives:
+
+- use cases: customer needs such as first routine, oily skin, tone/spots and simple anti-aging
+- promotions: featured-month products and guided routine pack
+- packs: one-click groups that add complementary products to the cart
+- combos: machine-readable pack steps for future Web Factory templates
+- quick sections: compact catalog sections such as sun protection, facial cleansing and anti-aging
+
+Important: pack discounts are not applied as an extra checkout discount yet. Product-level discounts are real in the cart, but pack-level discounts must wait until the backend checkout and database support bundle discount rules. Showing a pack discount before backend support would create a mismatch between UI and payment total.
+
 ## Recommended Schedule
 
 Start with one run per day, not hourly. Supplier discounts change periodically, but aggressive scraping increases failure risk.
@@ -90,6 +115,13 @@ Recommended cadence:
 - daily at `07:30` Bolivia time
 - manual run before sending a large quote or campaign
 - manual `force` after confirmed supplier promo changes
+
+Codex automation created:
+
+- id: `nuvia-price-and-merchandising-watcher`
+- schedule: daily at `07:30`
+- behavior: run `pnpm nuvia:prices:check`; auto-apply with `pnpm nuvia:prices:watch` only when the scrape is safe and there are price/discount changes without added/removed products; then run lint, tests and build.
+- blocked behavior: when added/removed products or unsafe scrape are detected, report the review gate and do not publish, deploy or push.
 
 ## n8n / VPS Integration
 
@@ -103,10 +135,11 @@ cd /path/to/onia-hermes/web-factory && pnpm nuvia:prices:watch
 ```
 
 3. Read `data/references/product-sources/nuvia-price-watch-latest.json`.
-4. If `summary.applied = true`, trigger:
+4. If `summary.applied = true`, the job has already refreshed public catalog, finance files, public sanitization, cutout mapping and merchandising.
+5. Then trigger:
    - build/deploy step for the storefront
    - Telegram/Discord notification to Sergio with changed product count
-5. If `summary.unsafe_scrape = true`, notify Sergio and do not deploy.
+6. If `summary.unsafe_scrape = true`, notify Sergio and do not deploy.
 
 ## Windows Task Scheduler Command
 

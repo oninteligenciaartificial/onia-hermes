@@ -24003,5 +24003,715 @@
     "title": "Nuvia | Catalogo skincare y dermocosmetica",
     "description": "Catalogo Nuvia con skincare, dermocosmetica, carrito y compra asistida.",
     "ogImage": ""
+  },
+  "merchandising": {
+    "version": "2026-06-25",
+    "generatedAt": "2026-06-26T01:22:54.146Z",
+    "sourcePrinciples": [
+      "bundles must simplify a decision, not hide random inventory",
+      "discounts shown in UI must match cart/checkout calculation",
+      "recommendations should be complementary and close to purchase actions",
+      "standalone product purchase remains available even when packs exist"
+    ],
+    "casosUso": [
+      {
+        "id": "primera-rutina",
+        "titulo": "quiero empezar una rutina",
+        "problema": "No se por donde empezar y no quiero comprar de mas.",
+        "recomendacion": "Empieza con limpieza, hidratacion y proteccion solar.",
+        "packId": "rutina-manana-esencial",
+        "productSlugs": [
+          "svr-sebiaclear-gel-moussant",
+          "b3-masque-hydra-x-6-und",
+          "isdin-fusion-water-magic-spf-50"
+        ]
+      },
+      {
+        "id": "piel-grasa",
+        "titulo": "piel grasa o brotes",
+        "problema": "Necesito controlar brillo, grasa o imperfecciones sin resecar.",
+        "recomendacion": "Prioriza limpiador, tratamiento puntual y SPF ligero.",
+        "packId": "control-piel-grasa",
+        "productSlugs": [
+          "svr-sebiaclear-gel-moussant",
+          "acniover-serum",
+          "isdin-fusion-water-magic-spf-50"
+        ]
+      },
+      {
+        "id": "manchas-tono",
+        "titulo": "manchas o tono irregular",
+        "problema": "Quiero tratar manchas y cuidar el resultado todos los dias.",
+        "recomendacion": "Une tratamiento de tono con hidratacion y protector solar.",
+        "packId": "tono-y-manchas",
+        "productSlugs": [
+          "ampoule-clairial",
+          "b3-masque-hydra-x-6-und",
+          "isdin-fusion-water-magic-spf-50"
+        ]
+      },
+      {
+        "id": "antiedad",
+        "titulo": "rutina antiedad simple",
+        "problema": "Quiero tratamiento diario sin armar una rutina complicada.",
+        "recomendacion": "Compra por sistema: limpiar, tratar y proteger.",
+        "packId": "antiedad-diario",
+        "productSlugs": [
+          "svr-sebiaclear-gel-moussant",
+          "age-purify-fluide",
+          "isdin-fusion-water-magic-spf-50"
+        ]
+      }
+    ],
+    "promociones": [
+      {
+        "id": "destacados-del-mes",
+        "titulo": "destacados del mes",
+        "badge": "10% de descuento",
+        "descripcion": "Productos seleccionados con descuento visible y calculado en carrito.",
+        "productSlugs": [
+          "isdin-fusion-water-magic-spf-50",
+          "svr-sebiaclear-gel-moussant",
+          "bariesun-100-spf50",
+          "bariesun-bruma-seca-spf50",
+          "bariesun-fluido-matificante-spf-50",
+          "bariesun-fluido-ultra-ligero-spf50",
+          "clairial-cc-cream-spf50-light",
+          "clairial-cc-cream-spf50-medium",
+          "clairial-crema-spf50",
+          "compact-bronze-spf-50",
+          "compact-light-spf-50",
+          "compact-medium-spf-50"
+        ],
+        "discountPercent": 10,
+        "tipo": "automatico por producto"
+      },
+      {
+        "id": "rutina-completa",
+        "titulo": "compra rutina completa",
+        "badge": "pack guiado",
+        "descripcion": "Agrega un pack completo en un clic. Descuento adicional se activa solo cuando checkout backend lo soporte.",
+        "productSlugs": [
+          "svr-sebiaclear-gel-moussant",
+          "b3-masque-hydra-x-6-und",
+          "isdin-fusion-water-magic-spf-50"
+        ],
+        "discountPercent": 0,
+        "tipo": "agregador funcional"
+      }
+    ],
+    "packs": [
+      {
+        "id": "rutina-manana-esencial",
+        "tipo": "pack",
+        "etiqueta": "pack recomendado",
+        "titulo": "rutina manana esencial",
+        "subtitulo": "limpiar, hidratar y proteger",
+        "descripcion": "Para compradores que quieren una rutina diaria clara sin elegir producto por producto.",
+        "productSlugs": [
+          "svr-sebiaclear-gel-moussant",
+          "b3-masque-hydra-x-6-und",
+          "isdin-fusion-water-magic-spf-50"
+        ],
+        "productos": [
+          {
+            "slug": "svr-sebiaclear-gel-moussant",
+            "titulo": "SVR Sebiaclear Gel Moussant",
+            "marca": "SVR",
+            "categoria": "Limpieza facial",
+            "imagen": "assets/product-media-cutout/002-svr-sebiaclear-gel-moussant.png",
+            "precio": "Bs. 211",
+            "precioValor": 211.2,
+            "descuentoPorcentaje": 10
+          },
+          {
+            "slug": "b3-masque-hydra-x-6-und",
+            "titulo": "B3 Masque Hydra x 6 Und",
+            "marca": "SVR",
+            "categoria": "Hidratacion",
+            "imagen": "assets/product-media-cutout/124-b3-masque-hydra-x-6-und.png",
+            "precio": "Bs. 231",
+            "precioValor": 231,
+            "descuentoPorcentaje": 0
+          },
+          {
+            "slug": "isdin-fusion-water-magic-spf-50",
+            "titulo": "ISDIN Fusion Water Magic SPF 50",
+            "marca": "ISDIN",
+            "categoria": "Proteccion solar",
+            "imagen": "assets/product-media-cutout/001-isdin-fusion-water-magic-spf-50.png",
+            "precio": "Bs. 201",
+            "precioValor": 200.75,
+            "descuentoPorcentaje": 10
+          }
+        ],
+        "precioRegular": 642.95,
+        "precioPromocional": 601.75,
+        "ahorroVisible": 41.2,
+        "cta": "agregar pack"
+      },
+      {
+        "id": "control-piel-grasa",
+        "tipo": "pack",
+        "etiqueta": "combo piel grasa",
+        "titulo": "control piel grasa",
+        "subtitulo": "limpieza, tratamiento y SPF",
+        "descripcion": "Para piel grasa o con tendencia acneica. Ordena la compra por necesidad, no por marca.",
+        "productSlugs": [
+          "svr-sebiaclear-gel-moussant",
+          "acniover-serum",
+          "isdin-fusion-water-magic-spf-50"
+        ],
+        "productos": [
+          {
+            "slug": "svr-sebiaclear-gel-moussant",
+            "titulo": "SVR Sebiaclear Gel Moussant",
+            "marca": "SVR",
+            "categoria": "Limpieza facial",
+            "imagen": "assets/product-media-cutout/002-svr-sebiaclear-gel-moussant.png",
+            "precio": "Bs. 211",
+            "precioValor": 211.2,
+            "descuentoPorcentaje": 10
+          },
+          {
+            "slug": "acniover-serum",
+            "titulo": "Acniover Serum",
+            "marca": "MARTIDERM",
+            "categoria": "Piel grasa y acne",
+            "imagen": "assets/product-media-cutout/109-acniover-serum.png",
+            "precio": "Bs. 185",
+            "precioValor": 184.8,
+            "descuentoPorcentaje": 0
+          },
+          {
+            "slug": "isdin-fusion-water-magic-spf-50",
+            "titulo": "ISDIN Fusion Water Magic SPF 50",
+            "marca": "ISDIN",
+            "categoria": "Proteccion solar",
+            "imagen": "assets/product-media-cutout/001-isdin-fusion-water-magic-spf-50.png",
+            "precio": "Bs. 201",
+            "precioValor": 200.75,
+            "descuentoPorcentaje": 10
+          }
+        ],
+        "precioRegular": 596.75,
+        "precioPromocional": 555.55,
+        "ahorroVisible": 41.2,
+        "cta": "agregar pack"
+      },
+      {
+        "id": "tono-y-manchas",
+        "tipo": "pack",
+        "etiqueta": "combo tono",
+        "titulo": "tono y manchas",
+        "subtitulo": "tratar, sellar y proteger",
+        "descripcion": "Para rutinas enfocadas en manchas: el protector solar evita perder el avance del tratamiento.",
+        "productSlugs": [
+          "ampoule-clairial",
+          "b3-masque-hydra-x-6-und",
+          "isdin-fusion-water-magic-spf-50"
+        ],
+        "productos": [
+          {
+            "slug": "ampoule-clairial",
+            "titulo": "Ampoule Clairial",
+            "marca": "SVR",
+            "categoria": "Manchas",
+            "imagen": "assets/product-media-cutout/250-ampoule-clairial.png",
+            "precio": "Bs. 344",
+            "precioValor": 344.3,
+            "descuentoPorcentaje": 0
+          },
+          {
+            "slug": "b3-masque-hydra-x-6-und",
+            "titulo": "B3 Masque Hydra x 6 Und",
+            "marca": "SVR",
+            "categoria": "Hidratacion",
+            "imagen": "assets/product-media-cutout/124-b3-masque-hydra-x-6-und.png",
+            "precio": "Bs. 231",
+            "precioValor": 231,
+            "descuentoPorcentaje": 0
+          },
+          {
+            "slug": "isdin-fusion-water-magic-spf-50",
+            "titulo": "ISDIN Fusion Water Magic SPF 50",
+            "marca": "ISDIN",
+            "categoria": "Proteccion solar",
+            "imagen": "assets/product-media-cutout/001-isdin-fusion-water-magic-spf-50.png",
+            "precio": "Bs. 201",
+            "precioValor": 200.75,
+            "descuentoPorcentaje": 10
+          }
+        ],
+        "precioRegular": 776.05,
+        "precioPromocional": 755.97,
+        "ahorroVisible": 20.08,
+        "cta": "agregar pack"
+      },
+      {
+        "id": "antiedad-diario",
+        "tipo": "pack",
+        "etiqueta": "combo antiedad",
+        "titulo": "antiedad diario",
+        "subtitulo": "tratamiento con rutina completa",
+        "descripcion": "Para clientes que buscan textura, cuidado diario y compra guiada sin llenar el carrito al azar.",
+        "productSlugs": [
+          "svr-sebiaclear-gel-moussant",
+          "age-purify-fluide",
+          "isdin-fusion-water-magic-spf-50"
+        ],
+        "productos": [
+          {
+            "slug": "svr-sebiaclear-gel-moussant",
+            "titulo": "SVR Sebiaclear Gel Moussant",
+            "marca": "SVR",
+            "categoria": "Limpieza facial",
+            "imagen": "assets/product-media-cutout/002-svr-sebiaclear-gel-moussant.png",
+            "precio": "Bs. 211",
+            "precioValor": 211.2,
+            "descuentoPorcentaje": 10
+          },
+          {
+            "slug": "age-purify-fluide",
+            "titulo": "Age Purify Fluide",
+            "marca": "FILORGA",
+            "categoria": "Antiedad",
+            "imagen": "assets/product-media-cutout/156-age-purify-fluide.png",
+            "precio": "Bs. 281",
+            "precioValor": 280.5,
+            "descuentoPorcentaje": 0
+          },
+          {
+            "slug": "isdin-fusion-water-magic-spf-50",
+            "titulo": "ISDIN Fusion Water Magic SPF 50",
+            "marca": "ISDIN",
+            "categoria": "Proteccion solar",
+            "imagen": "assets/product-media-cutout/001-isdin-fusion-water-magic-spf-50.png",
+            "precio": "Bs. 201",
+            "precioValor": 200.75,
+            "descuentoPorcentaje": 10
+          }
+        ],
+        "precioRegular": 692.45,
+        "precioPromocional": 651.25,
+        "ahorroVisible": 41.2,
+        "cta": "agregar pack"
+      },
+      {
+        "id": "cuidado-familiar",
+        "tipo": "pack",
+        "etiqueta": "pack familiar",
+        "titulo": "cuidado familiar",
+        "subtitulo": "productos simples para casa",
+        "descripcion": "Para compras de reposicion familiar con productos de uso recurrente.",
+        "productSlugs": [
+          "agua-termal-150ml",
+          "isdin-fusion-water-magic-spf-50",
+          "svr-sebiaclear-gel-moussant"
+        ],
+        "productos": [
+          {
+            "slug": "agua-termal-150ml",
+            "titulo": "Agua Termal - 150ML",
+            "marca": "URIAGE",
+            "categoria": "Bebe y ninos",
+            "imagen": "assets/product-media-cutout/284-agua-termal-150ml.png",
+            "precio": "Bs. 119",
+            "precioValor": 118.8,
+            "descuentoPorcentaje": 0
+          },
+          {
+            "slug": "isdin-fusion-water-magic-spf-50",
+            "titulo": "ISDIN Fusion Water Magic SPF 50",
+            "marca": "ISDIN",
+            "categoria": "Proteccion solar",
+            "imagen": "assets/product-media-cutout/001-isdin-fusion-water-magic-spf-50.png",
+            "precio": "Bs. 201",
+            "precioValor": 200.75,
+            "descuentoPorcentaje": 10
+          },
+          {
+            "slug": "svr-sebiaclear-gel-moussant",
+            "titulo": "SVR Sebiaclear Gel Moussant",
+            "marca": "SVR",
+            "categoria": "Limpieza facial",
+            "imagen": "assets/product-media-cutout/002-svr-sebiaclear-gel-moussant.png",
+            "precio": "Bs. 211",
+            "precioValor": 211.2,
+            "descuentoPorcentaje": 10
+          }
+        ],
+        "precioRegular": 530.75,
+        "precioPromocional": 489.55,
+        "ahorroVisible": 41.2,
+        "cta": "agregar pack"
+      }
+    ],
+    "combos": [
+      {
+        "id": "rutina-manana-esencial",
+        "titulo": "rutina manana esencial",
+        "subtitulo": "limpiar, hidratar y proteger",
+        "descripcion": "Para compradores que quieren una rutina diaria clara sin elegir producto por producto.",
+        "productSlugs": [
+          "svr-sebiaclear-gel-moussant",
+          "b3-masque-hydra-x-6-und",
+          "isdin-fusion-water-magic-spf-50"
+        ],
+        "pasos": [
+          {
+            "numero": "01",
+            "slug": "svr-sebiaclear-gel-moussant"
+          },
+          {
+            "numero": "02",
+            "slug": "b3-masque-hydra-x-6-und"
+          },
+          {
+            "numero": "03",
+            "slug": "isdin-fusion-water-magic-spf-50"
+          }
+        ],
+        "precioRegular": 642.95,
+        "precioPromocional": 601.75,
+        "ahorroVisible": 41.2
+      },
+      {
+        "id": "control-piel-grasa",
+        "titulo": "control piel grasa",
+        "subtitulo": "limpieza, tratamiento y SPF",
+        "descripcion": "Para piel grasa o con tendencia acneica. Ordena la compra por necesidad, no por marca.",
+        "productSlugs": [
+          "svr-sebiaclear-gel-moussant",
+          "acniover-serum",
+          "isdin-fusion-water-magic-spf-50"
+        ],
+        "pasos": [
+          {
+            "numero": "01",
+            "slug": "svr-sebiaclear-gel-moussant"
+          },
+          {
+            "numero": "02",
+            "slug": "acniover-serum"
+          },
+          {
+            "numero": "03",
+            "slug": "isdin-fusion-water-magic-spf-50"
+          }
+        ],
+        "precioRegular": 596.75,
+        "precioPromocional": 555.55,
+        "ahorroVisible": 41.2
+      },
+      {
+        "id": "tono-y-manchas",
+        "titulo": "tono y manchas",
+        "subtitulo": "tratar, sellar y proteger",
+        "descripcion": "Para rutinas enfocadas en manchas: el protector solar evita perder el avance del tratamiento.",
+        "productSlugs": [
+          "ampoule-clairial",
+          "b3-masque-hydra-x-6-und",
+          "isdin-fusion-water-magic-spf-50"
+        ],
+        "pasos": [
+          {
+            "numero": "01",
+            "slug": "ampoule-clairial"
+          },
+          {
+            "numero": "02",
+            "slug": "b3-masque-hydra-x-6-und"
+          },
+          {
+            "numero": "03",
+            "slug": "isdin-fusion-water-magic-spf-50"
+          }
+        ],
+        "precioRegular": 776.05,
+        "precioPromocional": 755.97,
+        "ahorroVisible": 20.08
+      },
+      {
+        "id": "antiedad-diario",
+        "titulo": "antiedad diario",
+        "subtitulo": "tratamiento con rutina completa",
+        "descripcion": "Para clientes que buscan textura, cuidado diario y compra guiada sin llenar el carrito al azar.",
+        "productSlugs": [
+          "svr-sebiaclear-gel-moussant",
+          "age-purify-fluide",
+          "isdin-fusion-water-magic-spf-50"
+        ],
+        "pasos": [
+          {
+            "numero": "01",
+            "slug": "svr-sebiaclear-gel-moussant"
+          },
+          {
+            "numero": "02",
+            "slug": "age-purify-fluide"
+          },
+          {
+            "numero": "03",
+            "slug": "isdin-fusion-water-magic-spf-50"
+          }
+        ],
+        "precioRegular": 692.45,
+        "precioPromocional": 651.25,
+        "ahorroVisible": 41.2
+      },
+      {
+        "id": "cuidado-familiar",
+        "titulo": "cuidado familiar",
+        "subtitulo": "productos simples para casa",
+        "descripcion": "Para compras de reposicion familiar con productos de uso recurrente.",
+        "productSlugs": [
+          "agua-termal-150ml",
+          "isdin-fusion-water-magic-spf-50",
+          "svr-sebiaclear-gel-moussant"
+        ],
+        "pasos": [
+          {
+            "numero": "01",
+            "slug": "agua-termal-150ml"
+          },
+          {
+            "numero": "02",
+            "slug": "isdin-fusion-water-magic-spf-50"
+          },
+          {
+            "numero": "03",
+            "slug": "svr-sebiaclear-gel-moussant"
+          }
+        ],
+        "precioRegular": 530.75,
+        "precioPromocional": 489.55,
+        "ahorroVisible": 41.2
+      }
+    ],
+    "seccionesRapidas": [
+      {
+        "id": "proteccion-solar",
+        "titulo": "protectores solares",
+        "productos": [
+          {
+            "slug": "compact-bronze-spf-50",
+            "titulo": "Compact Bronze SPF 50+",
+            "marca": "ISDIN",
+            "categoria": "Proteccion solar",
+            "imagen": "assets/product-media-cutout/010-compact-bronze-spf-50.png",
+            "precio": "Bs. 138",
+            "precioValor": 137.5,
+            "descuentoPorcentaje": 10
+          },
+          {
+            "slug": "compact-medium-spf-50",
+            "titulo": "Compact Medium SPF 50+",
+            "marca": "ISDIN",
+            "categoria": "Proteccion solar",
+            "imagen": "assets/product-media-cutout/012-compact-medium-spf-50.png",
+            "precio": "Bs. 138",
+            "precioValor": 137.5,
+            "descuentoPorcentaje": 10
+          },
+          {
+            "slug": "bariesun-fluido-matificante-spf-50",
+            "titulo": "Barièsun Fluido Matificante SPF 50+",
+            "marca": "URIAGE",
+            "categoria": "Proteccion solar",
+            "imagen": "assets/product-media-cutout/005-bariesun-fluido-matificante-spf-50.png",
+            "precio": "Bs. 158",
+            "precioValor": 158.4,
+            "descuentoPorcentaje": 10
+          },
+          {
+            "slug": "bariesun-100-spf50",
+            "titulo": "Barièsun 100 SPF50+",
+            "marca": "URIAGE",
+            "categoria": "Proteccion solar",
+            "imagen": "assets/product-media-cutout/003-bariesun-100-spf50.png",
+            "precio": "Bs. 169",
+            "precioValor": 168.85,
+            "descuentoPorcentaje": 10
+          },
+          {
+            "slug": "bariesun-bruma-seca-spf50",
+            "titulo": "Barièsun Bruma Seca SPF50+",
+            "marca": "URIAGE",
+            "categoria": "Proteccion solar",
+            "imagen": "assets/product-media-cutout/004-bariesun-bruma-seca-spf50.png",
+            "precio": "Bs. 169",
+            "precioValor": 168.85,
+            "descuentoPorcentaje": 10
+          },
+          {
+            "slug": "bariesun-fluido-ultra-ligero-spf50",
+            "titulo": "Bariésun Fluido Ultra-ligero SPF50+",
+            "marca": "URIAGE",
+            "categoria": "Proteccion solar",
+            "imagen": "assets/product-media-cutout/006-bariesun-fluido-ultra-ligero-spf50.png",
+            "precio": "Bs. 191",
+            "precioValor": 191.4,
+            "descuentoPorcentaje": 10
+          }
+        ],
+        "productSlugs": [
+          "compact-bronze-spf-50",
+          "compact-medium-spf-50",
+          "bariesun-fluido-matificante-spf-50",
+          "bariesun-100-spf50",
+          "bariesun-bruma-seca-spf50",
+          "bariesun-fluido-ultra-ligero-spf50"
+        ]
+      },
+      {
+        "id": "limpieza-facial",
+        "titulo": "limpieza facial",
+        "productos": [
+          {
+            "slug": "agua-termal-50ml",
+            "titulo": "Agua Termal - 50ML",
+            "marca": "URIAGE",
+            "categoria": "Limpieza facial",
+            "imagen": "assets/product-media-cutout/072-agua-termal-50ml.png",
+            "precio": "Bs. 53",
+            "precioValor": 52.8,
+            "descuentoPorcentaje": 0
+          },
+          {
+            "slug": "bebe-crema-lavante-500ml",
+            "titulo": "Bebé Crema Lavante 500ML",
+            "marca": "URIAGE",
+            "categoria": "Limpieza facial",
+            "imagen": "assets/product-media-cutout/074-bebe-crema-lavante-500ml.png",
+            "precio": "Bs. 63",
+            "precioValor": 62.7,
+            "descuentoPorcentaje": 0
+          },
+          {
+            "slug": "sebionex-agua-micelar",
+            "titulo": "Sebionex Agua Micelar",
+            "marca": "ACM",
+            "categoria": "Limpieza facial",
+            "imagen": "assets/product-media-cutout/094-sebionex-agua-micelar.png",
+            "precio": "Bs. 95",
+            "precioValor": 95.15,
+            "descuentoPorcentaje": 0
+          },
+          {
+            "slug": "neotone-aqua-100ml",
+            "titulo": "Neotone Aqua – 100ML",
+            "marca": "ISISPHARMA",
+            "categoria": "Limpieza facial",
+            "imagen": "assets/product-media-cutout/084-neotone-aqua-100ml.png",
+            "precio": "Bs. 106",
+            "precioValor": 105.6,
+            "descuentoPorcentaje": 0
+          },
+          {
+            "slug": "rosakalm-agua-micelar",
+            "titulo": "Rosakalm Agua Micelar",
+            "marca": "ACM",
+            "categoria": "Limpieza facial",
+            "imagen": "assets/product-media-cutout/086-rosakalm-agua-micelar.png",
+            "precio": "Bs. 110",
+            "precioValor": 110,
+            "descuentoPorcentaje": 0
+          },
+          {
+            "slug": "bariederm-cica-gel-limpiador",
+            "titulo": "Bariéderm Cica Gel Limpiador",
+            "marca": "URIAGE",
+            "categoria": "Limpieza facial",
+            "imagen": "assets/product-media-cutout/073-bariederm-cica-gel-limpiador.png",
+            "precio": "Bs. 116",
+            "precioValor": 115.5,
+            "descuentoPorcentaje": 0
+          }
+        ],
+        "productSlugs": [
+          "agua-termal-50ml",
+          "bebe-crema-lavante-500ml",
+          "sebionex-agua-micelar",
+          "neotone-aqua-100ml",
+          "rosakalm-agua-micelar",
+          "bariederm-cica-gel-limpiador"
+        ]
+      },
+      {
+        "id": "antiedad",
+        "titulo": "antiedad",
+        "productos": [
+          {
+            "slug": "palpebral-relief",
+            "titulo": "Palpebral Relief",
+            "marca": "SENSILIS",
+            "categoria": "Antiedad",
+            "imagen": "assets/product-media-cutout/221-palpebral-relief.png",
+            "precio": "Bs. 85",
+            "precioValor": 84.7,
+            "descuentoPorcentaje": 0
+          },
+          {
+            "slug": "bariederm-cica-lip-balm-15ml",
+            "titulo": "Bariéderm Cica Lip Balm - 15ML",
+            "marca": "URIAGE",
+            "categoria": "Antiedad",
+            "imagen": "assets/product-media-cutout/165-bariederm-cica-lip-balm-15ml.png",
+            "precio": "Bs. 89",
+            "precioValor": 89.1,
+            "descuentoPorcentaje": 0
+          },
+          {
+            "slug": "pack-bariederm-crema-de-manos",
+            "titulo": "Pack Bariéderm Crema De Manos",
+            "marca": "URIAGE",
+            "categoria": "Antiedad",
+            "imagen": "assets/product-media-cutout/220-pack-bariederm-crema-de-manos.png",
+            "precio": "Bs. 99",
+            "precioValor": 99,
+            "descuentoPorcentaje": 0
+          },
+          {
+            "slug": "photo-age-ha-10-ampollas",
+            "titulo": "Photo Age Ha+ - 10 Ampollas",
+            "marca": "MARTIDERM",
+            "categoria": "Antiedad",
+            "imagen": "assets/product-media-cutout/222-photo-age-ha-10-ampollas.png",
+            "precio": "Bs. 114",
+            "precioValor": 114.4,
+            "descuentoPorcentaje": 0
+          },
+          {
+            "slug": "desodorante-antitranspirante-calmante",
+            "titulo": "Desodorante Antitranspirante Calmante",
+            "marca": "ACM",
+            "categoria": "Antiedad",
+            "imagen": "assets/product-media-cutout/171-desodorante-antitranspirante-calmante.png",
+            "precio": "Bs. 120",
+            "precioValor": 120.45,
+            "descuentoPorcentaje": 0
+          },
+          {
+            "slug": "proteos-hydra-plus-sp-10-ampollas",
+            "titulo": "Proteos Hydra Plus Sp - 10 Ampollas",
+            "marca": "MARTIDERM",
+            "categoria": "Antiedad",
+            "imagen": "assets/product-media-cutout/223-proteos-hydra-plus-sp-10-ampollas.png",
+            "precio": "Bs. 127",
+            "precioValor": 126.5,
+            "descuentoPorcentaje": 0
+          }
+        ],
+        "productSlugs": [
+          "palpebral-relief",
+          "bariederm-cica-lip-balm-15ml",
+          "pack-bariederm-crema-de-manos",
+          "photo-age-ha-10-ampollas",
+          "desodorante-antitranspirante-calmante",
+          "proteos-hydra-plus-sp-10-ampollas"
+        ]
+      }
+    ]
   }
 }

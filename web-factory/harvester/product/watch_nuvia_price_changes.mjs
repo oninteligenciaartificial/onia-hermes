@@ -134,6 +134,7 @@ async function applyCatalogRefresh() {
     await run("node", ["harvester/product/build_nuvia_hbderm_catalog.mjs"]);
     await run("node", ["harvester/product/sanitize_nuvia_public_catalog.mjs"]);
     await run("node", ["harvester/product/apply_existing_nuvia_cutouts.mjs"]);
+    await run("node", ["harvester/product/build_nuvia_merchandising.mjs"]);
     return { backup_path: backupPath, rolled_back: false };
   } catch (error) {
     await copyFile(backupPath, CANONICAL_SOURCE);
@@ -170,7 +171,8 @@ async function main() {
     current.product_count < 1 ||
     (previous.product_count > 0 && productRatio < minProductRatio);
   const hasCatalogChanges = changedCount > 0 || addedCount > 0 || removedCount > 0;
-  const shouldApply = force || (!checkOnly && !hasUnsafeScrape && (changedCount > 0 || addedCount > 0));
+  const hasStructuralCatalogChanges = addedCount > 0 || removedCount > 0;
+  const shouldApply = force || (!checkOnly && !hasUnsafeScrape && changedCount > 0 && !hasStructuralCatalogChanges);
 
   const report = {
     generated_at: new Date().toISOString(),
@@ -197,9 +199,12 @@ async function main() {
       added: addedCount,
       removed: removedCount,
       unsafe_scrape: hasUnsafeScrape,
+      structural_catalog_changes: hasStructuralCatalogChanges,
       applied: shouldApply,
       reason: hasUnsafeScrape
         ? "Scrape guard blocked apply; review errors before updating public prices."
+        : !force && hasStructuralCatalogChanges
+          ? "Detected added/removed supplier products; manual review required before updating public catalog."
         : shouldApply
           ? "Detected price/catalog changes and refreshed Nuvia catalog artifacts."
           : checkOnly && hasCatalogChanges

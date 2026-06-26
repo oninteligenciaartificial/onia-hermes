@@ -22,6 +22,23 @@ Last update: 2026-06-25
 - Latest committed supplier refresh has 330 source products, 12 scrape errors, 315 public storefront products and 15 internal professional-only products.
 - The watcher check detected material supplier changes before refresh. The public storefront remains constrained to sellable skincare/dermocosmetic products and excludes professional-only additions.
 - Do not force-apply new supplier additions automatically: some detected additions are professional/mesotherapy or filler products, and at least one added item uses a suspicious `0.11 BOB` reference price. Review commercially before allowing new public products.
+- 2026-06-25 guard update: `pnpm nuvia:prices:watch` can auto-apply price/discount changes only when the supplier catalog membership is stable. Added or removed supplier products now block auto-apply and require manual review or explicit `pnpm nuvia:prices:force`.
+
+2026-06-25 merchandising automation:
+
+- Script added: `web-factory/harvester/product/build_nuvia_merchandising.mjs`.
+- Command: from `web-factory`, run `pnpm nuvia:merchandising`.
+- `pnpm nuvia:catalog` and guarded `pnpm nuvia:prices:watch` now regenerate merchandising after public sanitization and cutout mapping.
+- Generated public data lives in `client.merchandising` inside `web-factory/data/clients/nuvia.json`.
+- Generated reference file: `web-factory/data/references/design-sources/ecommerce-shopify-patterns-20260625.json`.
+- Current generated output: 4 use cases, 2 promotions, 5 packs, 5 combos and 3 quick catalog sections.
+- Public UI behavior:
+  - landing shows use cases, 4-step routine and a compact pack showcase
+  - catalog owns the full product portal and shows packs before the grid
+  - PDP shows related packs only when the product belongs to a pack
+  - pack buttons add multiple products to the existing real cart and trigger toast notifications
+- Pack discount rule: do not show or calculate extra bundle discounts until the backend checkout supports bundle-discount rules. Product-level featured discounts remain valid.
+- Web Factory rule: for ecommerce clients, generate cases of use, promos, packs and combos from catalog metadata; avoid repeated manual product sections.
 
 2026-06-24 operational update:
 

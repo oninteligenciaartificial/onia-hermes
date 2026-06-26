@@ -1,0 +1,50 @@
+{
+  "generatedAt": "2026-06-26T01:22:54.153Z",
+  "purpose": "Reusable ecommerce purchase patterns for Web Factory stores. Do not copy brand identity or exact page layouts.",
+  "sources": [
+    {
+      "name": "Shopify Help - Product bundles",
+      "url": "https://help.shopify.com/en/manual/products/bundles",
+      "extractedPrinciples": [
+        "A bundle is two or more related products, commonly sold with a discount.",
+        "Bundles can increase average order value, curate products for customers and improve product visibility.",
+        "A real bundle system needs an app or backend support when discounting is automatic."
+      ]
+    },
+    {
+      "name": "Shopify Help - Automatic discounts",
+      "url": "https://help.shopify.com/en/manual/discounts/discount-methods/automatic-discounts",
+      "extractedPrinciples": [
+        "Automatic discounts apply in cart and checkout when eligibility conditions are met.",
+        "Common uses: site-wide sales, collection promos and bulk purchases.",
+        "Customers must add eligible items to cart for discount eligibility."
+      ]
+    },
+    {
+      "name": "Shopify Ajax Product Recommendations API",
+      "url": "https://shopify.dev/docs/api/ajax/reference/product-recommendations",
+      "extractedPrinciples": [
+        "Recommendations can be related or complementary.",
+        "Keep recommendations close to product pages and buying actions.",
+        "Limit recommendation lists to small useful groups instead of generic grids."
+      ]
+    },
+    {
+      "name": "Shopify Blog - Price bundling",
+      "url": "https://www.shopify.com/blog/price-bundling",
+      "extractedPrinciples": [
+        "Bundles can reduce decision fatigue and increase average order value.",
+        "Use complementary products, same-category packs or value packs.",
+        "Discounted bundles reduce margin, so price them with finance checks.",
+        "Keep standalone purchase available when possible."
+      ]
+    }
+  ],
+  "webFactoryRules": [
+    "Generate use cases, packs and combos from product metadata, not hand-written repeated sections.",
+    "Never display supplier names in public copy.",
+    "Do not show a discount unless cart/checkout can calculate it or the copy clearly says it is pending.",
+    "For skincare, route use cases through routine logic: limpiar, tratar, hidratar, proteger.",
+    "Keep packs as conversion helpers above catalog and product recommendations near PDP actions."
+  ]
+}

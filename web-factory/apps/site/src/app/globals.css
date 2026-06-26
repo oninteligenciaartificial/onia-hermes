@@ -1445,7 +1445,9 @@ a.workflow-card:hover {
 }
 
 .nuvia-next-section,
+.nuvia-usecase-section,
 .nuvia-routine-section,
+.nuvia-pack-section,
 .nuvia-discount-section,
 .nuvia-faq-section,
 .nuvia-next-footer,
@@ -1455,7 +1457,9 @@ a.workflow-card:hover {
 }
 
 .nuvia-next-section,
+.nuvia-usecase-section,
 .nuvia-routine-section,
+.nuvia-pack-section,
 .nuvia-faq-section {
   padding: clamp(74px, 9vw, 118px) 0 0;
 }
@@ -1468,14 +1472,18 @@ a.workflow-card:hover {
 }
 
 .nuvia-section-heading span,
+.nuvia-usecase-section span,
 .nuvia-routine-section span,
+.nuvia-pack-section span,
 .nuvia-discount-section span,
 .nuvia-pdp-copy > span {
   color: var(--nuvia-teal);
 }
 
 .nuvia-section-heading h2,
+.nuvia-usecase-section h2,
 .nuvia-routine-section h2,
+.nuvia-pack-section h2,
 .nuvia-discount-section h2,
 .nuvia-faq-section h2 {
   color: var(--nuvia-ink);
@@ -1483,7 +1491,9 @@ a.workflow-card:hover {
 }
 
 .nuvia-section-heading p,
+.nuvia-usecase-section p,
 .nuvia-routine-section p,
+.nuvia-pack-section p,
 .nuvia-discount-section p,
 .nuvia-faq-section p,
 .nuvia-next-footer p {
@@ -1713,6 +1723,179 @@ a.workflow-card:hover {
 
 .nuvia-catalog-count {
   margin: 0;
+}
+
+.nuvia-usecase-section {
+  display: grid;
+  gap: 22px;
+}
+
+.nuvia-usecase-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.nuvia-usecase-grid a {
+  display: grid;
+  min-height: 246px;
+  align-content: start;
+  gap: 12px;
+  padding: 18px;
+  border: 1px solid var(--nuvia-line);
+  border-radius: 16px;
+  color: var(--nuvia-ink);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.86), rgba(255, 255, 255, 0.58)),
+    radial-gradient(circle at 88% 12%, rgba(245, 180, 0, 0.14), transparent 34%);
+  box-shadow: 0 18px 44px rgba(17, 22, 21, 0.055);
+}
+
+.nuvia-usecase-grid small,
+.nuvia-pack-card small,
+.nuvia-pdp-related-packs > span {
+  color: var(--nuvia-teal);
+  font-size: 0.72rem;
+  font-weight: 820;
+  text-transform: uppercase;
+}
+
+.nuvia-usecase-grid strong {
+  max-width: 14ch;
+  font-size: clamp(1.45rem, 2.2vw, 2rem);
+  letter-spacing: -0.045em;
+  line-height: 0.92;
+}
+
+.nuvia-usecase-grid p {
+  color: rgba(15, 45, 82, 0.68);
+  font-size: 0.86rem;
+  line-height: 1.42;
+}
+
+.nuvia-usecase-grid span {
+  align-self: end;
+  color: var(--nuvia-ink);
+  font-size: 0.82rem;
+  font-weight: 760;
+  line-height: 1.22;
+}
+
+.nuvia-pack-section {
+  display: grid;
+  gap: 22px;
+}
+
+.nuvia-pack-section.is-catalog {
+  padding-top: 36px;
+}
+
+.nuvia-pack-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.nuvia-pack-card {
+  display: grid;
+  overflow: hidden;
+  border: 1px solid var(--nuvia-line);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow: 0 20px 52px rgba(17, 22, 21, 0.06);
+}
+
+.nuvia-pack-media {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: end;
+  min-height: 178px;
+  padding: 18px 18px 10px;
+  background:
+    radial-gradient(circle at 24% 18%, rgba(0, 167, 160, 0.16), transparent 34%),
+    radial-gradient(circle at 86% 22%, rgba(245, 180, 0, 0.16), transparent 34%),
+    rgba(15, 45, 82, 0.045);
+}
+
+.nuvia-pack-media img {
+  justify-self: center;
+  width: min(100%, 132px);
+  height: 136px;
+  object-fit: contain;
+  filter: drop-shadow(0 18px 18px rgba(15, 45, 82, 0.18));
+}
+
+.nuvia-pack-copy {
+  display: grid;
+  gap: 12px;
+  padding: 18px;
+}
+
+.nuvia-pack-copy h3 {
+  max-width: 16ch;
+  color: var(--nuvia-ink);
+  font-size: clamp(1.65rem, 2.7vw, 2.5rem);
+  letter-spacing: -0.05em;
+  line-height: 0.92;
+}
+
+.nuvia-pack-copy p {
+  color: rgba(15, 45, 82, 0.68);
+  font-size: 0.9rem;
+}
+
+.nuvia-pack-copy ul {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.nuvia-pack-copy li {
+  display: grid;
+  gap: 2px;
+  padding: 9px 0;
+  border-top: 1px solid rgba(15, 45, 82, 0.1);
+}
+
+.nuvia-pack-copy li span {
+  color: rgba(15, 45, 82, 0.52);
+  font-size: 0.68rem;
+  font-weight: 820;
+  text-transform: uppercase;
+}
+
+.nuvia-pack-copy li strong {
+  color: var(--nuvia-ink);
+  font-size: 0.86rem;
+  line-height: 1.16;
+}
+
+.nuvia-pack-copy footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding-top: 4px;
+}
+
+.nuvia-pack-copy footer span {
+  color: var(--nuvia-ink);
+  font-size: 0.82rem;
+  font-weight: 820;
+}
+
+.nuvia-pack-copy footer button,
+.nuvia-pdp-related-packs button {
+  min-height: 42px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 999px;
+  color: #fffdfa;
+  background: var(--nuvia-coral);
+  font-size: 0.78rem;
+  font-weight: 820;
 }
 
 .nuvia-product-grid {
@@ -3087,6 +3270,39 @@ a.workflow-card:hover {
   font-size: 0.9rem;
 }
 
+.nuvia-pdp-related-packs {
+  display: grid;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.nuvia-pdp-related-packs article {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 14px;
+  align-items: center;
+  padding: 14px;
+  border: 1px solid rgba(15, 45, 82, 0.1);
+  border-radius: 16px;
+  background:
+    radial-gradient(circle at 92% 18%, rgba(245, 180, 0, 0.12), transparent 34%),
+    rgba(255, 255, 255, 0.56);
+}
+
+.nuvia-pdp-related-packs strong {
+  display: block;
+  color: var(--nuvia-ink);
+  font-size: 0.98rem;
+  letter-spacing: -0.02em;
+}
+
+.nuvia-pdp-related-packs p {
+  margin-top: 4px;
+  color: rgba(15, 45, 82, 0.62);
+  font-size: 0.84rem;
+  line-height: 1.34;
+}
+
 .nuvia-pdp-accordions {
   display: grid;
   margin-top: 14px;
@@ -3180,11 +3396,15 @@ a.workflow-card:hover {
   .nuvia-next-cart-trigger,
   .nuvia-actions a,
   .nuvia-actions button,
+  .nuvia-usecase-grid a,
+  .nuvia-pack-card,
   .nuvia-product-card,
   .nuvia-stage-card,
   .nuvia-stage-card button,
   .nuvia-product-card footer > a,
   .nuvia-product-checkout > button,
+  .nuvia-pack-copy footer button,
+  .nuvia-pdp-related-packs button,
   .nuvia-footer-link,
   .nuvia-checkout-note button,
   .nuvia-pdp-buybox > button,
@@ -3213,6 +3433,8 @@ a.workflow-card:hover {
   }
 
   .nuvia-product-card:hover,
+  .nuvia-usecase-grid a:hover,
+  .nuvia-pack-card:hover,
   .nuvia-stage-card:hover {
     transform: translateY(-3px);
     border-color: rgba(0, 167, 160, 0.24);
@@ -3249,6 +3471,8 @@ a.workflow-card:hover {
   .nuvia-catalog-hero,
   .nuvia-catalog-buying-guide,
   .nuvia-checkout-note,
+  .nuvia-usecase-grid,
+  .nuvia-pack-grid,
   .nuvia-routine-section,
   .nuvia-discount-section,
   .nuvia-faq-section,
@@ -3270,6 +3494,15 @@ a.workflow-card:hover {
 
   .nuvia-checkout-note {
     justify-items: start;
+  }
+
+  .nuvia-pack-copy footer {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .nuvia-pack-copy footer button {
+    width: 100%;
   }
 
   .nuvia-pdp-media {
@@ -3298,6 +3531,8 @@ a.workflow-card:hover {
   .nuvia-catalog-hero,
   .nuvia-catalog-buying-guide,
   .nuvia-checkout-note,
+  .nuvia-usecase-section,
+  .nuvia-pack-section,
   .nuvia-next-section,
   .nuvia-routine-section,
   .nuvia-discount-section,
@@ -3379,6 +3614,19 @@ a.workflow-card:hover {
   .nuvia-category-overview,
   .nuvia-product-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .nuvia-usecase-grid,
+  .nuvia-pack-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .nuvia-usecase-grid a {
+    min-height: auto;
+  }
+
+  .nuvia-pack-media {
+    min-height: 150px;
   }
 
   .nuvia-category-overview button {
@@ -3466,6 +3714,7 @@ a.workflow-card:hover {
   .nuvia-discount-section input,
   .nuvia-actions a,
   .nuvia-actions button,
+  .nuvia-pdp-related-packs button,
   .nuvia-next-footer button,
   .nuvia-footer-link,
   .nuvia-product-card footer > a,
@@ -3476,6 +3725,10 @@ a.workflow-card:hover {
 
   .nuvia-pdp-hero {
     padding-top: 28px;
+  }
+
+  .nuvia-pdp-related-packs article {
+    grid-template-columns: 1fr;
   }
 
   .nuvia-pdp-copy h1 {

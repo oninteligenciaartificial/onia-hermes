@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { NuviaStorefront } from "@/components/nuvia/nuvia-store";
-import { nuvia, nuviaCartProducts, nuviaProducts, publicAsset } from "@/lib/nuvia-data";
+import { nuvia, nuviaCartProducts, nuviaMerchandising, nuviaProducts, publicAsset } from "@/lib/nuvia-data";
 
 export const metadata: Metadata = {
   title: nuvia.seo.title,
@@ -19,6 +19,7 @@ export default function NuviaPage() {
       heroPoster={publicAsset(nuvia.heroPoster)}
       products={nuviaProducts}
       cartProducts={nuviaCartProducts}
+      merchandising={nuviaMerchandising}
     />
   );
 }

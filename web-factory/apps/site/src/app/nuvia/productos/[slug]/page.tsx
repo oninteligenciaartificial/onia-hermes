@@ -5,6 +5,7 @@ import {
   findNuviaProduct,
   nuvia,
   nuviaCartProducts,
+  nuviaMerchandising,
   nuviaProducts,
   productSlug,
   publicAsset,
@@ -59,6 +60,7 @@ export default async function ProductPage({ params }: ProductRouteProps) {
       products={nuviaProducts}
       cartProducts={nuviaCartProducts}
       product={product}
+      merchandising={nuviaMerchandising}
     />
   );
 }
