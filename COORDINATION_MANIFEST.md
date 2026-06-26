@@ -132,6 +132,7 @@ Canonical files:
 - `hermes-content/docs/ONIA_CENTER_INTEGRATION_READINESS_20260623.md`
 - `hermes-content/docs/ONIA_CENTER_MONTHLY_AGENTS_CALENDAR_20260623.md`
 - `hermes-content/docs/ONIA_CENTER_AUTH_RLS_ACTIVATION_20260623.md`
+- `hermes-content/docs/ONIA_VENDOR_ACCESS_AND_CALENDAR_RUNBOOK_2026.md`
 - `hermes-content/propuestas/bolivian-electric-transformacion-ia-2026.html`
 - `hermes-content/propuestas/assets/design-tokens.css`
 - `hermes-content/docs/ONIA_WHATSAPP_CHATWOOT_META_SALES_AUDIT_2026.md`
@@ -143,6 +144,7 @@ Canonical files:
 - `hermes-content/docs/ONIA_SELF_HOSTED_AI_TOOLS_2026.md`
 - `hermes-content/docs/ONIA_SELF_HOSTED_STACK_RUNBOOK_2026.md`
 - `hermes-content/docs/ONIA_CENTER_DIFY_ASSISTANT_RUNBOOK_2026.md`
+- `hermes-content/docs/ONIA_CENTER_CODEX_INTEGRATION_RUNBOOK_2026.md`
 - `hermes-content/docs/ONIA_MEETING_INTELLIGENCE_SYSTEM_2026.md`
 - `hermes-content/docs/ONIA_7000_BOB_PRODUCTION_INFRA_INVESTMENT_PLAN_2026.md`
 - `hermes-content/docs/ONIA_INTERNAL_CAPITAL_ALLOCATION_2026.md`
