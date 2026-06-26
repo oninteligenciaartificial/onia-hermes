@@ -200,6 +200,7 @@ install_meeting_lite() {
   ensure_env
   check_docker
   copy_secret_from_combined_if_missing "TEXT_MODEL_API_KEY" "OPENAI_API_KEY"
+  set_env_value "SPEAKR_ADMIN_EMAIL" "admin@onia.com.bo"
   set_env_value "SPEAKR_ASR_BASE_URL" ""
   set_env_value "SPEAKR_TRANSCRIPTION_BASE_URL" "http://speaches:8000/v1"
 
@@ -219,6 +220,7 @@ install_meeting_gpu() {
   ensure_env
   check_docker
   copy_secret_from_combined_if_missing "TEXT_MODEL_API_KEY" "OPENAI_API_KEY"
+  set_env_value "SPEAKR_ADMIN_EMAIL" "admin@onia.com.bo"
   set_env_value "SPEAKR_ASR_BASE_URL" "http://whisperx-asr:9000"
   set_env_value "SPEAKR_TRANSCRIPTION_BASE_URL" ""
 

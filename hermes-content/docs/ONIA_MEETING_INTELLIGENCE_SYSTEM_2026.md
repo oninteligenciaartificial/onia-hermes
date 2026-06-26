@@ -13,6 +13,23 @@ Decision inicial de Sergio:
 - Mantener la transcripcion inicial lo mas open source posible con Speaches.
 - Migrar resumen/LLM a local despues, cuando el flujo ya venda o ahorre tiempo.
 
+Deploy inicial ejecutado:
+
+- Fecha: 2026-06-26.
+- VPS: `187.77.16.63`.
+- Perfil: `meeting-lite`.
+- Servicios: `onia_selfhosted-speakr-1` y `onia_selfhosted-speaches-1`.
+- Estado validado: ambos contenedores `healthy`.
+- Puertos privados:
+  - Speakr: `127.0.0.1:3107`
+  - Speaches: `127.0.0.1:3108`
+- Acceso: solo por SSH tunnel; no hay publicacion web/DNS.
+- Admin Speakr: usuario `admin`, email `admin@onia.com.bo`.
+- Password: variable remota `SPEAKR_ADMIN_PASSWORD` en
+  `/opt/onia-selfhosted/.env`; no guardar en docs ni chat.
+- Nota: `/v1/models` de Speaches devuelve lista vacia antes de la primera
+  transcripcion porque los modelos se cargan bajo demanda.
+
 ## Decision
 
 La mejor opcion para ONIA no es instalar solo Whisper ni una app aislada.
