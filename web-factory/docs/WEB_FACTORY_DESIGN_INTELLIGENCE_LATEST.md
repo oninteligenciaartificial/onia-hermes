@@ -1,56 +1,56 @@
 # Web Factory Design Intelligence
 
-Generated: 2026-06-25T18:07:35.894Z
+Generated: 2026-06-26T18:24:02.466Z
 
 ## Summary
 
-- Sources: 19
-- Opened examples: 31
-- Screenshots indexed: 62
-- Doc code blocks indexed: 8
+- Sources: 23
+- Opened examples: 93
+- Screenshots indexed: 186
+- Doc code blocks indexed: 32
 - Reusable code repositories: 11
 
 ## Strongest Sources
 
-- 21st.dev Community Components: 2 examples, 4 screenshots, license: review-required
-- Awwwards Winning Websites: 2 examples, 4 screenshots, license: inspiration-only-high-overdesign-risk
-- Componentry: 2 examples, 4 screenshots, license: mit-repo-available
-- Efferd Blocks: 2 examples, 4 screenshots, license: license-per-block
-- Fontpair: 2 examples, 4 screenshots, license: typography-reference
-- Landingfolio: 2 examples, 4 screenshots, license: inspiration-only
-- Lapa Ninja: 2 examples, 4 screenshots, license: inspiration-only
-- Mobbin Web: 2 examples, 4 screenshots, license: flow-reference-only
-- Recent Design: 2 examples, 4 screenshots, license: inspiration-only
-- SaaSFrame Landing Pages: 2 examples, 4 screenshots, license: inspiration-only
-- SaaS Landing Page: 2 examples, 4 screenshots, license: inspiration-only
-- shadcn/ui: 2 examples, 4 screenshots, license: mit-repo-available
+- 21st.dev Community Components: 10 examples, 20 screenshots, license: review-required
+- Lapa Ninja: 10 examples, 20 screenshots, license: inspiration-only
+- Componentry: 8 examples, 16 screenshots, license: mit-repo-available
+- Efferd Blocks: 8 examples, 16 screenshots, license: license-per-block
+- Fontpair: 8 examples, 16 screenshots, license: typography-reference
+- Watermelon UI: 8 examples, 16 screenshots, license: review-required
+- 21st.dev Landing Page Components: 3 examples, 6 screenshots, license: review-required-per-component
+- Aceternity shadcn Blocks: 3 examples, 6 screenshots, license: free-and-premium-review-required
+- Aceternity UI: 3 examples, 6 screenshots, license: free-and-premium-review-required
+- Kibo UI: 3 examples, 6 screenshots, license: open-source-review-required
+- Landingfolio: 3 examples, 6 screenshots, license: inspiration-only
+- Magic UI: 3 examples, 6 screenshots, license: mit-open-source-reference
 
 ## Motion Signals
 
-- No motion library signals captured yet.
+- gsap: 1
 
 ## Motion Code Repositories
 
-- harshjdhv__componentry: 2 motion examples, license: MIT
-- ibelick__motion-primitives: 6 motion examples, license: MIT
+- harshjdhv__componentry: 16 motion examples, license: MIT
+- ibelick__motion-primitives: 30 motion examples, license: MIT
 - markmead__hyperui: 2 motion examples, license: MIT
 - nolly-studio__cult-ui: 5 motion examples, license: MIT
-- serafimcloud__21st: 1 motion examples, license: MIT
+- serafimcloud__21st: 2 motion examples, license: MIT
 
 ## Font Signals
 
+- ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji": 11
+- Inter, "Inter Fallback": 6
+- ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace: 6
 - "Geist Mono", "Geist Mono Fallback": 5
 - Geist, "Geist Fallback": 5
 - "ABC Diatype", system-ui, -apple-system, sans-serif: 3
+- "Geist Mono", monospace: 3
+- "IBM Plex Mono", ui-monospace, monospace: 3
+- "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, Cantarell, "Noto Sans", sans-serif, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji": 3
 - Geist, sans-serif: 3
 - GeistMono, ui-monospace, SFMono-Regular, "Roboto Mono", Menlo, Monaco, "Liberation Mono", "DejaVu Sans Mono", "Courier New", monospace: 3
 - GeistSans, "GeistSans Fallback", Geist, "Geist Fallback", Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol": 3
-- "Albert Sans", "Albert Sans Fallback": 2
-- "Geist Mono", ui-monospace, monospace: 2
-- "Inter Tight": 2
-- "Inter Variable", sans-serif: 2
-- "JetBrains Mono", "JetBrains Mono Fallback": 2
-- "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, Cantarell, "Noto Sans", sans-serif, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji": 2
 
 ## Use Rule
 

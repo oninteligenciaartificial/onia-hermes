@@ -1,25 +1,33 @@
 {
-  "id": "2026-06-25T18-05-49-876Z",
-  "startedAt": "2026-06-25T18:05:49.877Z",
-  "finishedAt": "2026-06-25T18:06:43.029Z",
+  "id": "2026-06-26T18-17-07-136Z",
+  "startedAt": "2026-06-26T18:17:07.137Z",
+  "finishedAt": "2026-06-26T18:23:59.316Z",
   "policy": "Automated design reference harvest. Screenshots and closed-site structures are reference-only. Code reuse is limited to allowed-after-review repositories and compatible registry/docs code after review.",
   "steps": [
     {
       "name": "gallery",
-      "out": "data/references/design-sources/gallery-examples/2026-06-25T18-05-49-876Z-design-harvest.json",
+      "out": "data/references/design-sources/gallery-examples/2026-06-26T18-17-07-136Z-design-harvest.json",
       "sourceIds": [
         "21st-landing-page-components",
         "registry-directory",
-        "magic-ui"
+        "magic-ui",
+        "aceternity-ui",
+        "aceternity-shadcn-blocks",
+        "shadcnblocks-blocks",
+        "kibo-ui",
+        "shadcn-ui",
+        "landingfolio",
+        "saasframe-landing-pages",
+        "recent-design"
       ],
-      "maxItems": 6,
-      "detailItems": 1
+      "maxItems": 24,
+      "detailItems": 3
     },
     {
       "name": "code",
-      "codeIndexOut": "data/references/code-sources/2026-06-25T18-05-49-876Z-code-cache-index.json",
-      "codeExamplesOut": "data/references/code-sources/2026-06-25T18-05-49-876Z-component-code-reference-pack.json",
-      "maxFilesPerRepo": 12
+      "codeIndexOut": "data/references/code-sources/2026-06-26T18-17-07-136Z-code-cache-index.json",
+      "codeExamplesOut": "data/references/code-sources/2026-06-26T18-17-07-136Z-component-code-reference-pack.json",
+      "maxFilesPerRepo": 36
     },
     {
       "name": "merge",
@@ -34,11 +42,11 @@
   "latestGallery": "data/references/design-sources/gallery-examples/latest-gallery-examples.json",
   "latestDesignIntelligence": "data/references/design-sources/latest-design-intelligence.json",
   "counts": {
-    "sources": 19,
-    "candidates": 159,
-    "detailedExamples": 31,
+    "sources": 23,
+    "candidates": 406,
+    "detailedExamples": 93,
     "errors": 0,
-    "intelligenceExamples": 31,
+    "intelligenceExamples": 93,
     "reusableCodeRepositories": 11
   }
 }
