@@ -15,10 +15,12 @@ import {
   Heart,
   Lightbulb,
   MessageSquareOff,
+  Mic,
   Moon,
   Plus,
   RotateCcw,
   ShieldCheck,
+  Upload,
 } from "lucide-react";
 import { formatBs } from "./engine";
 import {
@@ -138,7 +140,44 @@ type AssistantApiResponse = {
   answer: string | null;
   model?: string;
 };
-export type WorkspaceView = "daily" | "capture" | "calendar" | "ideas" | "connections" | "seller-services" | "assistant";
+type AudioObjective = "propuesta" | "acta" | "seguimiento";
+type AudioProposalDraft = Record<string, unknown>;
+type AudioAnalysis = Record<string, unknown> & {
+  propuesta_borrador?: AudioProposalDraft | null;
+  crm_note?: string | null;
+};
+type AudioApiResponse = {
+  ok: boolean;
+  mode:
+    | "audio_intelligence"
+    | "openai_not_configured"
+    | "openai_error"
+    | "stt_error"
+    | "configuration_pending"
+    | "auth_required"
+    | "auth_error"
+    | "forbidden"
+    | "bad_request";
+  message?: string;
+  missingConfiguration?: string[];
+  transcript: string | null;
+  analysis: AudioAnalysis | null;
+  source?: {
+    stt?: string;
+    sttModel?: string | null;
+    analysisProvider?: string;
+    analysisModel?: string;
+  };
+};
+export type WorkspaceView =
+  | "daily"
+  | "capture"
+  | "calendar"
+  | "ideas"
+  | "connections"
+  | "seller-services"
+  | "assistant"
+  | "audio-intelligence";
 
 const storageKey = "onia-center-runtime-v2";
 const legacyStorageKey = "onia-center-runtime-v1";
@@ -193,6 +232,11 @@ const workspaceCopy: Record<WorkspaceView, { label: string; title: string; descr
     label: "Asistente",
     title: "ONIA Bot interno",
     description: "Consulta servicios, leads y notas visibles para tu rol. No responde sobre datos privados que no esten en tu vista.",
+  },
+  "audio-intelligence": {
+    label: "Audio IA",
+    title: "Inteligencia de reuniones y propuestas",
+    description: "Convierte audios, reuniones o transcripts en diagnostico comercial, datos faltantes, nota CRM y borrador de propuesta.",
   },
 };
 
@@ -626,6 +670,70 @@ function buildIdeaPrompt(idea: RuntimeIdea) {
   ].join("\n");
 }
 
+function audioText(value: unknown, fallback = "por verificar") {
+  return typeof value === "string" && value.trim() ? value.trim() : fallback;
+}
+
+function audioList(value: unknown) {
+  if (Array.isArray(value)) {
+    return value.map((item) => audioText(item, "")).filter(Boolean);
+  }
+
+  const single = audioText(value, "");
+  return single ? [single] : [];
+}
+
+function proposalDraft(analysis: AudioAnalysis | null | undefined) {
+  const draft = analysis?.propuesta_borrador;
+  return draft && typeof draft === "object" ? draft : null;
+}
+
+function formatAudioProposal(analysis: AudioAnalysis | null | undefined) {
+  const draft = proposalDraft(analysis);
+  if (!draft) {
+    return "Sin propuesta generada todavia.";
+  }
+
+  return [
+    audioText(draft.titulo, "Propuesta ONIA"),
+    "",
+    "Diagnostico:",
+    audioText(draft.diagnostico),
+    "",
+    "Alcance recomendado:",
+    ...audioList(draft.alcance_recomendado).map((item) => `- ${item}`),
+    "",
+    "Entregables:",
+    ...audioList(draft.entregables).map((item) => `- ${item}`),
+    "",
+    "Fuera de alcance:",
+    ...audioList(draft.fuera_de_alcance).map((item) => `- ${item}`),
+    "",
+    `Precio sugerido: ${audioText(draft.precio_sugerido)}`,
+    "",
+    "Condiciones:",
+    ...audioList(draft.condiciones).map((item) => `- ${item}`),
+    "",
+    `Siguiente paso: ${audioText(draft.siguiente_paso)}`,
+  ].join("\n");
+}
+
+function formatAudioCrmNote(analysis: AudioAnalysis | null | undefined) {
+  if (!analysis) {
+    return "Sin nota CRM generada todavia.";
+  }
+
+  return audioText(
+    analysis.crm_note,
+    [
+      `Empresa: ${audioText(analysis.empresa)}`,
+      `Necesidad: ${audioText(analysis.necesidad_principal)}`,
+      `Interes: ${audioText(analysis.nivel_interes)}`,
+      `Proximo paso: ${audioText(analysis.proximo_paso_acordado)}`,
+    ].join("\n"),
+  );
+}
+
 export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: { selectedRole: RoleId; workspaceView?: WorkspaceView }) {
   const [leads, setLeads] = useState<RuntimeLead[]>([]);
   const [tasks, setTasks] = useState<RuntimeTask[]>(starterTasks);
@@ -642,6 +750,13 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
     "Pregunta por un servicio, un precio, una comision propia, un cliente visible o una tarea pendiente.",
   );
   const [assistantLoading, setAssistantLoading] = useState(false);
+  const [audioFile, setAudioFile] = useState<File | null>(null);
+  const [audioClientName, setAudioClientName] = useState("");
+  const [audioContext, setAudioContext] = useState("");
+  const [audioObjective, setAudioObjective] = useState<AudioObjective>("propuesta");
+  const [audioTranscript, setAudioTranscript] = useState("");
+  const [audioResult, setAudioResult] = useState<AudioApiResponse | null>(null);
+  const [audioLoading, setAudioLoading] = useState(false);
   const [notice, setNotice] = useState("Modo local listo. Conecta Supabase self-hosted para multiusuario.");
   const [hydrated, setHydrated] = useState(false);
   const [storageMode, setStorageMode] = useState<StorageMode>("checking");
@@ -1192,6 +1307,60 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
     }
   }
 
+  async function analyzeAudioIntelligence() {
+    if (!audioFile && !audioTranscript.trim()) {
+      setNotice("Sube un audio o pega un transcript antes de preparar la propuesta.");
+      return;
+    }
+
+    setAudioLoading(true);
+    setAudioResult(null);
+
+    try {
+      const formData = new FormData();
+      if (audioFile) {
+        formData.append("audio", audioFile);
+      }
+      formData.append("transcript", audioFile ? "" : audioTranscript.trim());
+      formData.append("clientName", audioClientName.trim());
+      formData.append("context", audioContext.trim());
+      formData.append("objective", audioObjective);
+
+      const response = await fetch("/api/onia-center/audio-intelligence", {
+        method: "POST",
+        body: formData,
+      });
+      const body = (await response.json()) as AudioApiResponse;
+      setAudioResult(body);
+
+      if (body.transcript && !audioTranscript.trim()) {
+        setAudioTranscript(body.transcript);
+      }
+
+      if (response.ok && body.ok) {
+        setNotice("Audio analizado. Revisa datos faltantes y propuesta antes de enviar algo al cliente.");
+        return;
+      }
+
+      setNotice(body.message ?? "No se pudo completar el analisis del audio.");
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Error desconocido.";
+      setNotice(`No se pudo procesar Audio IA: ${message}`);
+    } finally {
+      setAudioLoading(false);
+    }
+  }
+
+  async function copyAudioProposal() {
+    await navigator.clipboard.writeText(formatAudioProposal(audioResult?.analysis));
+    setNotice("Borrador de propuesta copiado para revision interna.");
+  }
+
+  async function copyAudioCrmNote() {
+    await navigator.clipboard.writeText(formatAudioCrmNote(audioResult?.analysis));
+    setNotice("Nota CRM copiada. No actualiza fuentes externas automaticamente.");
+  }
+
   function resetRuntime() {
     if (storageMode === "supabase") {
       setNotice("Con Supabase activo no se borran datos desde este boton. Usa estados o acciones auditadas.");
@@ -1214,6 +1383,9 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
       ? "assigned_only"
       : ideaForm.visibility;
   const copy = workspaceCopy[workspaceView];
+  const audioAnalysis = audioResult?.analysis ?? null;
+  const audioProposal = proposalDraft(audioAnalysis);
+  const audioTranscriptPreview = audioResult?.transcript || audioTranscript;
 
   return (
     <section className="onia-live-workspace" id="uso-diario" aria-label="Uso diario ONIA Center">
@@ -1519,6 +1691,193 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
                 <small>Catalogo operativo y reglas vendedor visibles.</small>
               </div>
             </div>
+          </article>
+        </div>
+      ) : null}
+
+      {workspaceView === "audio-intelligence" ? (
+        <div className="onia-audio-workspace">
+          <article className="onia-live-card onia-audio-input-panel">
+            <div className="onia-live-title">
+              <Mic size={16} />
+              <strong>Entrada de reunion</strong>
+            </div>
+            <div className="onia-form-row">
+              <label>
+                Cliente o empresa
+                <input
+                  value={audioClientName}
+                  onChange={(event) => setAudioClientName(event.target.value)}
+                  placeholder="Ej. Clinica Norte, restaurante, constructora"
+                />
+              </label>
+              <label>
+                Objetivo
+                <select value={audioObjective} onChange={(event) => setAudioObjective(event.target.value as AudioObjective)}>
+                  <option value="propuesta">Preparar propuesta</option>
+                  <option value="seguimiento">Seguimiento CRM</option>
+                  <option value="acta">Acta/resumen</option>
+                </select>
+              </label>
+            </div>
+            <label className="onia-audio-upload">
+              <span>
+                <Upload size={15} />
+                Audio de reunion o WhatsApp
+              </span>
+              <input
+                type="file"
+                accept="audio/*,.ogg,.m4a,.mp3,.wav,.webm"
+                onChange={(event) => setAudioFile(event.target.files?.[0] ?? null)}
+              />
+              <small>{audioFile ? `${audioFile.name} / ${Math.max(1, Math.round(audioFile.size / 1024 / 1024))} MB` : "Opcional si ya tienes transcript."}</small>
+            </label>
+            <label>
+              Transcript pegado
+              <textarea
+                value={audioTranscript}
+                onChange={(event) => setAudioTranscript(event.target.value)}
+                placeholder="Pega aqui el transcript si ya existe. Si subes audio, Speaches genera este texto."
+                rows={8}
+              />
+            </label>
+            <label>
+              Contexto interno
+              <textarea
+                value={audioContext}
+                onChange={(event) => setAudioContext(event.target.value)}
+                placeholder="Que sabemos del cliente, canal, urgencia, restricciones o servicio que pidio."
+                rows={3}
+              />
+            </label>
+            <button className="onia-primary-button" type="button" disabled={audioLoading} onClick={() => void analyzeAudioIntelligence()}>
+              <Mic size={15} />
+              {audioLoading ? "Procesando..." : "Analizar para propuesta"}
+            </button>
+            <p className="onia-muted-note">
+              Usar solo con consentimiento o permiso operativo. El audio crudo se envia al endpoint para procesar y no se guarda desde esta pantalla.
+            </p>
+          </article>
+
+          <article className="onia-live-card onia-audio-result-panel">
+            <div className="onia-live-title">
+              <FileCheck2 size={16} />
+              <strong>Diagnostico comercial</strong>
+            </div>
+            {audioAnalysis ? (
+              <>
+                <div className="onia-audio-summary-grid">
+                  <div>
+                    <span>Empresa</span>
+                    <strong>{audioText(audioAnalysis.empresa)}</strong>
+                  </div>
+                  <div>
+                    <span>Interes</span>
+                    <strong>{audioText(audioAnalysis.nivel_interes)}</strong>
+                  </div>
+                  <div>
+                    <span>Presupuesto</span>
+                    <strong>{audioText(audioAnalysis.presupuesto_mencionado)}</strong>
+                  </div>
+                  <div>
+                    <span>Proximo paso</span>
+                    <strong>{audioText(audioAnalysis.proximo_paso_acordado)}</strong>
+                  </div>
+                </div>
+                <div className="onia-audio-facts">
+                  <div>
+                    <span>Necesidad principal</span>
+                    <p>{audioText(audioAnalysis.necesidad_principal)}</p>
+                  </div>
+                  <div>
+                    <span>Objeciones</span>
+                    <p>{audioList(audioAnalysis.objeciones).join(" / ") || "por verificar"}</p>
+                  </div>
+                  <div>
+                    <span>Informacion faltante</span>
+                    <p>{audioList(audioAnalysis.informacion_faltante).join(" / ") || "por verificar"}</p>
+                  </div>
+                  <div>
+                    <span>Riesgos</span>
+                    <p>{audioList(audioAnalysis.riesgos).join(" / ") || "sin riesgos detectados"}</p>
+                  </div>
+                </div>
+              </>
+            ) : (
+              <p className="onia-muted-note">
+                {audioResult?.message ?? "Procesa un audio o transcript para extraer necesidad, objeciones, faltantes y siguiente paso."}
+              </p>
+            )}
+          </article>
+
+          <article className="onia-live-card onia-audio-proposal-panel">
+            <div className="onia-live-title">
+              <Bot size={16} />
+              <strong>Borrador de propuesta</strong>
+            </div>
+            {audioProposal ? (
+              <>
+                <strong className="onia-audio-proposal-title">{audioText(audioProposal.titulo, "Propuesta ONIA")}</strong>
+                <p>{audioText(audioProposal.diagnostico)}</p>
+                <div className="onia-audio-proposal-grid">
+                  <div>
+                    <span>Alcance</span>
+                    <ul>
+                      {audioList(audioProposal.alcance_recomendado).map((item) => (
+                        <li key={item}>{item}</li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div>
+                    <span>Entregables</span>
+                    <ul>
+                      {audioList(audioProposal.entregables).map((item) => (
+                        <li key={item}>{item}</li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div>
+                    <span>Fuera de alcance</span>
+                    <ul>
+                      {audioList(audioProposal.fuera_de_alcance).map((item) => (
+                        <li key={item}>{item}</li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div>
+                    <span>Precio y condiciones</span>
+                    <p>{audioText(audioProposal.precio_sugerido)}</p>
+                    <small>{audioList(audioProposal.condiciones).join(" / ") || "por verificar"}</small>
+                  </div>
+                </div>
+                <div className="onia-audio-actions">
+                  <button type="button" onClick={() => void copyAudioProposal()}>
+                    <Copy size={15} />
+                    Copiar propuesta
+                  </button>
+                  <button type="button" onClick={() => void copyAudioCrmNote()}>
+                    <ClipboardCheck size={15} />
+                    Copiar nota CRM
+                  </button>
+                </div>
+              </>
+            ) : (
+              <p className="onia-muted-note">El borrador aparece despues del analisis con OpenAI. Si solo hay transcript, revisa la configuracion de API.</p>
+            )}
+          </article>
+
+          <article className="onia-live-card onia-audio-transcript-panel">
+            <div className="onia-live-title">
+              <Database size={16} />
+              <strong>Transcript</strong>
+            </div>
+            <pre>{audioTranscriptPreview || "Sin transcript todavia."}</pre>
+            <small>
+              {audioResult?.source?.stt === "speaches"
+                ? `STT: Speaches / ${audioResult.source.sttModel ?? "modelo local"}`
+                : "STT: transcript manual o pendiente"}
+              {audioResult?.source?.analysisModel ? ` / Analisis: ${audioResult.source.analysisModel}` : ""}
+            </small>
           </article>
         </div>
       ) : null}

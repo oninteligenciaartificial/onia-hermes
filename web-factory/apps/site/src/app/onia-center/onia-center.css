@@ -2806,6 +2806,28 @@
   line-height: 1.4;
 }
 
+.onia-assignee-rules {
+  display: grid;
+  gap: 7px;
+}
+
+.onia-assignee-rules span {
+  display: grid;
+  gap: 3px;
+  padding: 8px;
+  border: 1px solid var(--onia-line-soft);
+  border-radius: var(--onia-radius);
+  color: var(--onia-muted);
+  background: #fbfcfb;
+  font-size: 11px;
+  line-height: 1.35;
+}
+
+.onia-assignee-rules strong {
+  color: var(--onia-ink);
+  font-size: 12px;
+}
+
 .onia-team-submit {
   gap: 8px;
   min-height: 40px;
@@ -3767,6 +3789,142 @@
   white-space: pre-wrap;
 }
 
+.onia-audio-workspace {
+  grid-template-columns: minmax(320px, 0.9fr) minmax(0, 1.1fr);
+}
+
+.onia-audio-input-panel {
+  grid-row: span 3;
+}
+
+.onia-audio-upload {
+  background: #f8faf7;
+  border: 1px dashed var(--onia-line);
+  border-radius: var(--onia-radius);
+  cursor: pointer;
+  padding: 12px;
+}
+
+.onia-audio-upload span,
+.onia-audio-summary-grid span,
+.onia-audio-facts span,
+.onia-audio-proposal-grid span {
+  align-items: center;
+  color: var(--onia-faint);
+  display: flex;
+  font-size: 11px;
+  font-weight: 850;
+  gap: 6px;
+  text-transform: uppercase;
+}
+
+.onia-audio-upload input {
+  margin-top: 8px;
+}
+
+.onia-audio-upload small,
+.onia-audio-transcript-panel small,
+.onia-audio-proposal-grid small {
+  color: var(--onia-muted);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.onia-audio-summary-grid,
+.onia-audio-proposal-grid {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.onia-audio-summary-grid div,
+.onia-audio-proposal-grid div {
+  background: #f8faf7;
+  border: 1px solid var(--onia-line-soft);
+  border-radius: var(--onia-radius);
+  display: grid;
+  gap: 6px;
+  padding: 12px;
+}
+
+.onia-audio-summary-grid strong,
+.onia-audio-proposal-title {
+  color: var(--onia-ink);
+  font-size: 15px;
+  line-height: 1.3;
+}
+
+.onia-audio-facts {
+  display: grid;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.onia-audio-facts div {
+  border-top: 1px solid var(--onia-line-soft);
+  display: grid;
+  gap: 5px;
+  padding-top: 10px;
+}
+
+.onia-audio-facts p,
+.onia-audio-proposal-panel p,
+.onia-audio-proposal-grid p {
+  color: var(--onia-muted);
+  font-size: 13px;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.onia-audio-proposal-panel {
+  gap: 14px;
+}
+
+.onia-audio-proposal-grid ul {
+  color: var(--onia-muted);
+  display: grid;
+  font-size: 12px;
+  gap: 5px;
+  line-height: 1.45;
+  margin: 0;
+  padding-left: 16px;
+}
+
+.onia-audio-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.onia-audio-actions button {
+  align-items: center;
+  background: #f4f8f4;
+  border: 1px solid var(--onia-line-soft);
+  border-radius: var(--onia-radius);
+  color: var(--onia-green);
+  cursor: pointer;
+  display: inline-flex;
+  font-size: 12px;
+  font-weight: 850;
+  gap: 7px;
+  padding: 9px 10px;
+}
+
+.onia-audio-transcript-panel pre {
+  background: #101a16;
+  border-radius: var(--onia-radius);
+  color: #eff8f1;
+  font-family: var(--font-mono), "SFMono-Regular", Consolas, monospace;
+  font-size: 12px;
+  line-height: 1.6;
+  margin: 0;
+  max-height: 360px;
+  min-height: 220px;
+  overflow: auto;
+  padding: 16px;
+  white-space: pre-wrap;
+}
+
 @media (max-width: 1240px) {
   .onia-webfactory-command-grid,
   .onia-webfactory-step-grid,
@@ -3777,8 +3935,13 @@
   .onia-webfactory-github-grid,
   .onia-seller-service-grid,
   .onia-seller-rule-grid,
-  .onia-assistant-workspace {
+  .onia-assistant-workspace,
+  .onia-audio-workspace {
     grid-template-columns: 1fr;
+  }
+
+  .onia-audio-input-panel {
+    grid-row: auto;
   }
 
   .onia-webfactory-command-grid {
@@ -3795,7 +3958,9 @@
   .onia-webfactory-inline-fields,
   .onia-webfactory-intake-actions,
   .onia-service-rule-grid,
-  .onia-service-dos-donts {
+  .onia-service-dos-donts,
+  .onia-audio-summary-grid,
+  .onia-audio-proposal-grid {
     grid-template-columns: 1fr;
   }
 

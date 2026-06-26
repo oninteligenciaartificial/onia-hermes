@@ -29,6 +29,7 @@ import {
   Layers3,
   Lightbulb,
   LockKeyhole,
+  Mic,
   Percent,
   PiggyBank,
   ReceiptText,
@@ -156,6 +157,7 @@ const navItems: NavItem[] = [
   { id: "uso-diario", label: "Captura", detail: "Notas y evidencia", group: "Trabajo", icon: FileCheck2 },
   { id: "calendario-sergio", label: "Calendario", detail: "Agenda", group: "Trabajo", icon: CalendarDays },
   { id: "asistente", label: "Asistente", detail: "ONIA Bot", group: "Trabajo", icon: Bot },
+  { id: "audio-intelligence", label: "Audio IA", detail: "Propuestas", group: "Trabajo", icon: Mic },
   { id: "ideas", label: "Ideas", detail: "Reels e IA", group: "Trabajo", icon: Lightbulb },
   { id: "servicios", label: "Servicios", detail: "Catalogo", group: "Ventas", icon: Layers3 },
   { id: "pagos", label: "Comisiones", detail: "Propias", group: "Ventas", icon: HandCoins },
@@ -205,6 +207,11 @@ const moduleCopy: Record<string, { title: string; description: string; content: 
     title: "ONIA Bot interno",
     description: "Asistente filtrado por rol para consultar servicios, precios, leads visibles, tareas y actualizaciones comerciales.",
     content: ["Servicios", "Clientes visibles", "Tareas", "Actualizaciones"],
+  },
+  "audio-intelligence": {
+    title: "Audio IA comercial",
+    description: "Procesa reuniones, audios de WhatsApp o transcripts para extraer necesidad, objeciones, faltantes y borrador de propuesta.",
+    content: ["Audio", "Transcript", "Diagnostico", "Propuesta"],
   },
   agentes: {
     title: "Agentes operativos",
@@ -814,7 +821,7 @@ export default function OniaCenterPage() {
           </article>
         </section>
 
-        {["dashboard", "uso-diario", "calendario-sergio", "asistente", "ideas", "integraciones", "servicios"].includes(activeView) ? (
+        {["dashboard", "uso-diario", "calendario-sergio", "asistente", "audio-intelligence", "ideas", "integraciones", "servicios"].includes(activeView) ? (
           <OperatingWorkspace
             selectedRole={selectedRole}
             workspaceView={
@@ -824,13 +831,15 @@ export default function OniaCenterPage() {
                   ? "calendar"
                   : activeView === "asistente"
                     ? "assistant"
-                  : activeView === "ideas"
-                    ? "ideas"
-                    : activeView === "servicios"
-                      ? "seller-services"
-                    : activeView === "integraciones"
-                      ? "connections"
-                      : "capture"
+                    : activeView === "audio-intelligence"
+                      ? "audio-intelligence"
+                      : activeView === "ideas"
+                        ? "ideas"
+                        : activeView === "servicios"
+                          ? "seller-services"
+                          : activeView === "integraciones"
+                            ? "connections"
+                            : "capture"
             }
           />
         ) : null}

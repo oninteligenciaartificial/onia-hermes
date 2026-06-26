@@ -114,10 +114,26 @@ Google Meet / Zoom / llamada / WhatsApp audio / Telegram audio
   -> propuesta HTML + resumen interno + follow-up CRM
 ```
 
+Modulo ONIA Center implementado:
+
+- UI: `/onia-center`, modulo `Audio IA`.
+- API: `web-factory/apps/site/src/app/api/onia-center/audio-intelligence/route.ts`.
+- Entrada: archivo de audio, audio de WhatsApp descargado o transcript pegado.
+- Salida: diagnostico comercial, objeciones, datos faltantes, nota CRM,
+  transcript y borrador de propuesta.
+- Uso diario: ONIA Center es la pantalla principal. Speakr queda como backend
+  privado/biblioteca para uploads, busqueda o revision manual.
+- Login: no hace falta iniciar sesion en Speakr para preparar propuestas desde
+  ONIA Center. En produccion, ONIA Center debe exigir sesion porque procesa
+  audios y datos sensibles de clientes.
+- Seguridad: la pantalla no guarda audio crudo por si sola; procesa y devuelve
+  transcript/analisis para revision humana.
+
 Flujo minimo rentable:
 
 1. Sergio graba una reunion con consentimiento o guarda el audio.
-2. Sube el audio a Speakr o ejecuta `scripts/procesa-audio-cliente.js`.
+2. Sube el audio a ONIA Center Audio IA, a Speakr o ejecuta
+   `scripts/procesa-audio-cliente.js`.
 3. Hermes genera transcript.
 4. Hermes analiza oportunidad y prepara propuesta.
 5. Sergio revisa antes de enviar al cliente.
@@ -207,6 +223,24 @@ El deploy remoto genera secretos de Speakr en `/opt/onia-selfhosted/.env`:
 
 No pegar valores reales en docs ni en chat.
 
+En `web-factory/apps/site/.env.local` o variables del deploy de ONIA Center:
+
+```bash
+# Transcripcion open source por Speaches, con default local si el servicio corre
+# en el mismo host o hay SSH tunnel activo.
+ONIA_AUDIO_STT_BASE_URL=http://127.0.0.1:3108/v1
+ONIA_AUDIO_STT_MODEL=Systran/faster-distil-whisper-large-v3
+ONIA_AUDIO_STT_API_KEY=
+ONIA_AUDIO_MAX_MB=50
+
+# Analisis/propuesta por OpenAI mientras ONIA no migre el LLM a local.
+OPENAI_ONIA_CENTER_API_KEY=...
+ONIA_AUDIO_ANALYSIS_MODEL=gpt-4.1-mini
+
+# Solo para entornos controlados sin Supabase; no recomendado en produccion.
+ONIA_AUDIO_INTELLIGENCE_ALLOW_LOCAL=false
+```
+
 ## Reglas de uso
 
 - Avisar al inicio de la reunion: "Voy a grabar esta llamada solo para tomar
@@ -221,9 +255,9 @@ No pegar valores reales en docs ni en chat.
 
 ## Lo que falta decidir
 
-1. Credenciales de acceso al VPS actual para ejecutar audit/deploy.
-2. Si el canal inicial sera upload manual, Telegram o WhatsApp Business API.
-3. Politica de retencion: por defecto sugerido, borrar audio crudo a los 90
+1. Si el canal inicial sera upload manual en ONIA Center, Telegram o WhatsApp
+   Business API.
+2. Politica de retencion: por defecto sugerido, borrar audio crudo a los 90
    dias y conservar transcript/resumen solo si es necesario para CRM.
-4. Worker GPU + `HF_TOKEN` para pasar a `meeting-gpu` cuando ONIA quiera
+3. Worker GPU + `HF_TOKEN` para pasar a `meeting-gpu` cuando ONIA quiera
    diarizacion open source de mejor calidad.
