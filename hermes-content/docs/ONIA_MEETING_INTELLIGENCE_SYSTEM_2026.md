@@ -5,6 +5,14 @@ transcripcion y analisis de reuniones/audios comerciales en ONIA.
 
 Fecha de investigacion: 2026-06-26.
 
+Decision inicial de Sergio:
+
+- Deploy inicial en el VPS actual.
+- No usar `meeting-gpu` todavia porque no hay GPU/HF token confirmado.
+- Usar OpenAI por ahora para resumen, chat y propuestas.
+- Mantener la transcripcion inicial lo mas open source posible con Speaches.
+- Migrar resumen/LLM a local despues, cuando el flujo ya venda o ahorre tiempo.
+
 ## Decision
 
 La mejor opcion para ONIA no es instalar solo Whisper ni una app aislada.
@@ -196,9 +204,9 @@ No pegar valores reales en docs ni en chat.
 
 ## Lo que falta decidir
 
-1. Si se instala primero en el VPS actual o en un worker separado.
-2. Si ONIA quiere maxima privacidad local o aceptamos OpenAI/OpenRouter para
-   resumen y chat interno.
-3. Si el canal inicial sera upload manual, Telegram o WhatsApp Business API.
-4. Politica de retencion: por defecto sugerido, borrar audio crudo a los 90
+1. Credenciales de acceso al VPS actual para ejecutar audit/deploy.
+2. Si el canal inicial sera upload manual, Telegram o WhatsApp Business API.
+3. Politica de retencion: por defecto sugerido, borrar audio crudo a los 90
    dias y conservar transcript/resumen solo si es necesario para CRM.
+4. Worker GPU + `HF_TOKEN` para pasar a `meeting-gpu` cuando ONIA quiera
+   diarizacion open source de mejor calidad.

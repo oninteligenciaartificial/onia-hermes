@@ -135,6 +135,7 @@ Canonical files:
 - `hermes-content/propuestas/bolivian-electric-transformacion-ia-2026.html`
 - `hermes-content/propuestas/assets/design-tokens.css`
 - `hermes-content/docs/ONIA_WHATSAPP_CHATWOOT_META_SALES_AUDIT_2026.md`
+- `hermes-content/docs/assets/meta-whatsapp-access/`
 - `hermes-content/docs/SERGIO_FACE_VOICE_ASSET_GUIDE.md`
 - `hermes-content/docs/SERGIO_ONIA_CONTENT_PRODUCTION_KIT_2026.md`
 - `hermes-content/docs/AI_ECOMMERCE_MODEL_SYSTEM_2026.md`

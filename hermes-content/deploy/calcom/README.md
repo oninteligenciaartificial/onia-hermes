@@ -18,12 +18,14 @@ As of 2026-06-25, ONIA should start with a free hosted Cal.com link before
 moving public booking to this self-host kit. The hosted MVP uses:
 
 - Google Calendar: `oninteligenciaartificial@gmail.com`.
+- Cal account/public identity: `business@onia.com.bo` as `ONIA | Agenda Comercial`.
 - Base availability: Monday-Saturday, 14:00-20:00 America/La_Paz.
 - Sunday closed.
 - 15 minute buffer.
 - Minimum 4 hours notice.
 - Notifications: Google Calendar + Telegram.
 - ONIA Center lead creation for every booking, pending accept/cancel/reassign.
+- Final client confirmation email only after ONIA accepts the booking by Telegram.
 
 Keep this self-host kit for the next phase after the hosted flow proves bookings,
 Telegram notifications, ONIA Center lead creation and owner assignment.

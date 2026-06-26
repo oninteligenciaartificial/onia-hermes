@@ -374,10 +374,160 @@ Regla de uso:
 SIN DATOS COMPLETOS, NO HAY COMISION APROBADA.
 ```
 
+## Runbook rapido - Acceso Meta WhatsApp API
+
+Fecha: 2026-06-26
+
+Objetivo: guiar una llamada en vivo para que la duena del Business Portfolio de
+Meta otorgue acceso a Sergio/ONIA sin compartir contrasenas, codigos 2FA ni
+tokens por chat.
+
+Estado verificado en esta sesion:
+
+- Brave abrio Meta Business Suite con la cuenta ONIA activa.
+- La URL directa a settings redirigio a Inicio, por lo que el flujo mas seguro
+  para la llamada es navegar por la UI: `Settings` / `Administrador` / menu
+  lateral.
+- Se conservaron capturas neutralizadas, no capturas reales de cuenta, para no
+  guardar IDs ni datos privados.
+
+Capturas de referencia:
+
+![Invitar persona](assets/meta-whatsapp-access/01-invitar-persona.png)
+
+![Asignar WhatsApp account](assets/meta-whatsapp-access/02-asignar-whatsapp-account.png)
+
+![System user y token](assets/meta-whatsapp-access/03-system-user-token.png)
+
+### Opcion recomendada
+
+Si ONIA ya tiene Business Portfolio propio, pedir acceso como partner. Es mas
+profesional y reversible que agregar el perfil personal de Sergio a todo el
+negocio.
+
+Flujo:
+
+1. La duena entra a `Meta Business Suite`.
+2. Selecciona el Business Portfolio correcto.
+3. Abre `Settings` o `Administrador`.
+4. Va a `Users` > `Partners`.
+5. Click `Add` > `Give a partner access to your assets`.
+6. Ingresa el Business ID de ONIA.
+7. Asigna solo los activos necesarios:
+   - WhatsApp Business Account.
+   - Meta app asociada, si ya existe.
+   - Page/Instagram solo si el proyecto lo requiere.
+8. Da permisos de administracion sobre el WhatsApp Business Account mientras se
+   hace el setup tecnico.
+9. Al terminar el setup, reducir permisos si ya no se necesita control total.
+
+### Opcion rapida si no hay Business ID ONIA
+
+Agregar a Sergio como persona.
+
+Flujo:
+
+1. `Settings` > `Users` > `People`.
+2. Click `Invite people` o `Add people`.
+3. Ingresar el email de Sergio usado en Facebook/Meta.
+4. Dar acceso temporal suficiente para configurar WhatsApp API.
+5. En el paso `Assign assets`, seleccionar el WhatsApp Business Account.
+6. Activar permisos para administrar cuenta, templates y phone numbers.
+7. Confirmar la invitacion.
+
+No cerrar el flujo despues de solo dar `Basic access`. Si no se asigna el
+WhatsApp Business Account, Sergio podra entrar al portfolio pero no operar la
+API.
+
+### Permisos del WhatsApp Business Account
+
+Ruta esperada:
+
+```text
+Settings > Accounts > WhatsApp accounts > [WABA] > People / Assign people
+```
+
+Asignar a Sergio u ONIA:
+
+- control para administrar el WhatsApp Business Account;
+- acceso a phone numbers;
+- acceso a message templates;
+- acceso a la app de Meta Developers si se va a generar token o configurar
+  webhooks.
+
+### System user para integracion API
+
+Crear system user solo cuando ya toque integrar API. Para la llamada inicial,
+puede bastar con dejar a Sergio/ONIA con permisos para crearlo despues.
+
+Ruta esperada:
+
+```text
+Settings > Users > System users
+```
+
+Pasos:
+
+1. Crear system user con nombre claro: `onia-whatsapp-automation`.
+2. Asignarle assets:
+   - WhatsApp Business Account.
+   - Meta app usada por la integracion.
+3. Generar token solo si la integracion se hara en ese momento.
+4. Usar permisos minimos:
+   - `whatsapp_business_management`;
+   - `whatsapp_business_messaging`;
+   - `business_management` solo si el caso lo exige.
+5. Guardar el token en gestor seguro o entorno secreto. No pegarlo en chat,
+   docs, capturas ni repositorio.
+
+### Guion para la reunion
+
+Texto recomendado:
+
+```text
+Tia, no necesito tu contrasena ni tu codigo. Solo necesito que desde tu cuenta
+me agregues permisos al Business Portfolio y al WhatsApp Business Account. Si
+sale la opcion Partner, usamos el Business ID de ONIA. Si no, me invitas por mi
+correo de Meta. Despues revisamos juntos que tenga acceso al WhatsApp account,
+phone numbers, templates y system users. El token no lo vamos a compartir por
+WhatsApp ni por chat.
+```
+
+### Checklist de cierre
+
+- Sergio/ONIA aparece en `People` o `Partners`.
+- El WhatsApp Business Account correcto esta asignado.
+- Se ven phone numbers dentro de WhatsApp Manager.
+- Se ven message templates o permisos para crearlas.
+- `System users` esta disponible o existe `onia-whatsapp-automation`.
+- No se compartio contrasena, codigo 2FA ni token.
+- Si se dio full control temporal, dejar una tarea para reducir permisos despues
+  del setup.
+
+### URLs utiles
+
+Estas rutas pueden redirigir segun version de Meta o permisos. Si redirigen a
+Inicio, navegar por el menu lateral:
+
+- Business settings: https://business.facebook.com/latest/settings/
+- People: https://business.facebook.com/latest/settings/people
+- Partners: https://business.facebook.com/latest/settings/partners
+- WhatsApp accounts: https://business.facebook.com/latest/settings/whatsapp_account
+- System users: https://business.facebook.com/latest/settings/system_users
+- WhatsApp Manager: https://business.facebook.com/latest/whatsapp_manager
+- Meta Developers apps: https://developers.facebook.com/apps/
+
 ## Fuentes externas revisadas
 
 - Meta/WhatsApp Cloud API overview: https://developers.facebook.com/docs/whatsapp/cloud-api/
 - Meta/WhatsApp Embedded Signup: https://developers.facebook.com/docs/whatsapp/embedded-signup/
+- Meta Business Help - add people and assign assets: https://www.facebook.com/business/help/2169003770027706
+- Meta Business Help - assign business assets to people: https://www.facebook.com/business/help/325571851329683
+- Meta Business Help - give partner access to assets: https://www.facebook.com/business/help/1717412048538897
+- Meta Business Help - add system users: https://www.facebook.com/business/help/503306463479099
+- Meta for Developers - WhatsApp Cloud API get started: https://developers.facebook.com/documentation/business-messaging/whatsapp/get-started
+- Meta for Developers - WhatsApp permissions: https://developers.facebook.com/documentation/business-messaging/whatsapp/permissions/
+- Meta for Developers - WhatsApp access tokens: https://developers.facebook.com/documentation/business-messaging/whatsapp/access-tokens
 - Meta/WhatsApp Business app onboarding/coexistence mirror de documentacion: https://support2.chatarchitect.com/books/meta-whatsapp/page/onboarding-whatsapp-business-app-users-aka-coexistence-developer-documentation
 - Chatwoot WhatsApp Embedded Signup: https://www.chatwoot.com/hc/user-guide/articles/1752129193-how-to-use-whatsapp-embedded-signup
 - Chatwoot Agent Bots: https://www.chatwoot.com/hc/user-guide/articles/1677497472-how-to-use-agent-bots

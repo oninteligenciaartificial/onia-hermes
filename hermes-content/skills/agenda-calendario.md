@@ -80,24 +80,40 @@ Sin eventos: "Dia libre"
 
 ## Cal.com - links de booking para clientes
 - Modo inicial: link gratis de Cal.com hosted.
+- Cuenta/identidad publica Cal: `business@onia.com.bo`.
+- Nombre publico: `ONIA | Agenda Comercial`.
 - URL base: pendiente de crear en Cal.com gratis; no usar todavia `cal.onia.ai`
   como link publico.
 - Calendario Google conectado: `oninteligenciaartificial@gmail.com`.
+- Correo formal al cliente despues de aceptar: `business@onia.com.bo`.
 - Tipos de evento disponibles:
   - `consulta-inicial`: 30min, gratis.
+    - Anticipo minimo: 4 horas.
+    - Se puede reservar hasta 14 dias hacia adelante.
   - `demo-onia`: 45min, para DentalGest, GestiOS, Web ONIA y automatizaciones.
+    - Anticipo minimo: 8 horas.
+    - Se puede reservar hasta 21 dias hacia adelante.
   - `reunion-proyecto`: 60min, para clientes activos.
+    - Anticipo minimo: 24 horas.
+    - Se puede reservar hasta 30 dias hacia adelante.
   - `auditoria-pagada`: 60min, desactivada por ahora porque ONIA aun no cobrara
     asesorias pagadas en fase inicial.
 - Cuando cliente agenda: Cal webhook -> Google Calendar -> Telegram -> ONIA Center.
 - Toda reserva debe crear lead en ONIA Center como `reunion_agendada_pendiente`
   y Telegram debe permitir aceptar, cancelar o reasignar.
+- Si Cal gratis no permite aprobacion manual en la UI, ONIA tratara el booking
+  como solicitud hasta que Telegram lo acepte.
+- El correo final de confirmacion se envia solo despues de aceptar por Telegram.
 
 Nota ONIA 2026:
 - `cal.onia.ai` queda como camino futuro self-host; para vender rapido se usa
   Cal.com gratis hasta validar flujo.
 - La vendedora puede agendar para Sergio, Arthur o para ella, pero su
   disponibilidad propia se configura separada.
+- Arthur no usa la misma cuenta de `oninteligenciaartificial@gmail.com`; se le
+  asignan reservas por Telegram/ONIA Center.
+- La vendedora puede usar correo personal internamente, pero publicamente debe
+  verse como ONIA Comercial.
 - La vendedora atiende por ahora webs, DentalGest, GestiOS, automatizaciones y
   asesorias que Sergio no pueda tomar.
 - Sergio/Arthur toman reuniones tecnicas, cierres de propuesta, clientes activos
@@ -128,6 +144,9 @@ Campos requeridos:
 - Web, Instagram o Facebook actual.
 - Quien debe tomar la reunion: Sergio, Arthur, vendedora o cualquiera disponible.
 - Urgencia: esta semana, este mes o exploratorio.
+- Eres dueno, socio, encargado o solo estas consultando.
+- Como conociste a ONIA.
+- Aceptas que ONIA te contacte por WhatsApp para seguimiento.
 
 ## Reglas
 - Timezone siempre `America/La_Paz` UTC-4.

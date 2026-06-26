@@ -145,8 +145,14 @@ Reglas base:
 - Disponibilidad comercial base: lunes a sabado 14:00-20:00.
 - Domingo cerrado.
 - Calendario operativo: `oninteligenciaartificial@gmail.com`.
+- Cuenta/identidad publica Cal en MVP hosted: `business@onia.com.bo` como
+  `ONIA | Agenda Comercial`.
+- El correo formal al cliente se envia desde `business@onia.com.bo` despues de
+  aceptar por Telegram.
 - La vendedora puede agendar para Sergio, Arthur o para ella, con disponibilidad
   propia separada.
+- Arthur no comparte acceso a `oninteligenciaartificial@gmail.com`; se le asignan
+  reservas por Telegram/ONIA Center.
 - Consultas iniciales solo en bloques definidos; no abrir todo el calendario
   privado.
 

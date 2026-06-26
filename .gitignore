@@ -26,3 +26,4 @@ Thumbs.db
 desktop.ini
 
 # NOTA: assets, fotos, briefs y outputs SÍ se suben (sincronización multi-dispositivo).
+.gstack/

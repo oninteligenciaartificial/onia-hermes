@@ -1754,6 +1754,11 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
                 <small>{commercialBookingPolicy.publicLinkStatus}</small>
               </div>
               <div>
+                <span>Identidad publica</span>
+                <strong>{commercialBookingPolicy.publicDisplayName}</strong>
+                <small>{commercialBookingPolicy.calAccountEmail}</small>
+              </div>
+              <div>
                 <span>Calendario</span>
                 <strong>{commercialBookingPolicy.googleCalendarId}</strong>
                 <small>{commercialBookingPolicy.timezone}</small>
@@ -1769,6 +1774,7 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
                 <div key={eventType.id}>
                   <span>{eventType.durationMinutes} min / {eventType.enabled ? "activo" : "desactivado"}</span>
                   <strong>{eventType.label}</strong>
+                  <small>Anticipo: {eventType.minimumNotice} / Agenda: {eventType.bookingWindow}</small>
                   <small>{eventType.ownerRule}</small>
                 </div>
               ))}
@@ -1816,6 +1822,11 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
                 <small>Sergio y Arthur, configurable por dia.</small>
               </div>
               <div>
+                <span>Identidad publica</span>
+                <strong>{commercialBookingPolicy.publicDisplayName}</strong>
+                <small>{commercialBookingPolicy.calAccountEmail}</small>
+              </div>
+              <div>
                 <span>Vendedora</span>
                 <strong>Horario propio</strong>
                 <small>Puede configurar sus horas disponibles en Cal.</small>
@@ -1848,6 +1859,7 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
                 <div key={eventType.id}>
                   <span>{eventType.durationMinutes} min / {eventType.enabled ? "activo" : "desactivado"}</span>
                   <strong>{eventType.label}</strong>
+                  <small>Anticipo: {eventType.minimumNotice} / Agenda: {eventType.bookingWindow}</small>
                   <small>{eventType.ownerRule}</small>
                 </div>
               ))}
