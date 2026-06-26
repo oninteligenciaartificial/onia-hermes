@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" role="img" aria-labelledby="title desc">
+  <title id="title">Engineering demo hero</title>
+  <desc id="desc">Technical project scene for engineering services demo.</desc>
+  <rect width="1200" height="900" fill="#f8fafc"/>
+  <rect x="86" y="88" width="1028" height="724" rx="24" fill="#ffffff" stroke="#cbd5e1" stroke-width="5"/>
+  <path d="M160 680h880M220 680V300m180 380V240m180 440V360m180 320V210m180 470V330" stroke="#334155" stroke-width="10" stroke-linecap="round" opacity=".68"/>
+  <path d="M190 380h740M190 480h740M190 580h740" stroke="#94a3b8" stroke-width="4" opacity=".55"/>
+  <path d="M220 300l180-60 180 120 180-150 180 120" fill="none" stroke="#eab308" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="160" y="140" width="360" height="64" rx="14" fill="#334155"/>
+  <text x="340" y="181" text-anchor="middle" font-family="Onest, Arial, sans-serif" font-size="28" font-weight="700" fill="#ffffff">Proyecto tecnico</text>
+  <rect x="690" y="140" width="340" height="64" rx="14" fill="#fef3c7"/>
+  <text x="860" y="181" text-anchor="middle" font-family="Onest, Arial, sans-serif" font-size="26" font-weight="700" fill="#334155">Revision y control</text>
+</svg>

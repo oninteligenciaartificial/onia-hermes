@@ -1,6 +1,6 @@
 # Auto Design Recipe - Altura Engineers Demo
 
-Generated: 2026-06-25T20:30:20.246Z
+Generated: 2026-06-26T21:50:12.502Z
 
 ## Decision
 
@@ -26,27 +26,27 @@ Generated: 2026-06-25T20:30:20.246Z
 |---|---|---|---|---|---|---|
 | client-reference | Arup | Arup | https://www.arup.com | client-provided-reference-review-required | referencia exacta entregada en el brief; usar: seriedad institucional y jerarquia de proyectos; evitar: densidad excesiva | sin screenshot |
 | client-reference | WSP | WSP | https://www.wsp.com | client-provided-reference-review-required | referencia exacta entregada en el brief; usar: presentacion de capacidades y sectores; evitar: copiar estructura corporativa completa | sin screenshot |
-| motion | Lapa Ninja | Hero Studios - Landing Page Design \| Lapa Ninja | https://www.lapa.ninja/post/hero-studios/ | inspiration-only | tiene screenshot desktop; tiene screenshot mobile; aporta senales de fuente; aporta CTAs reales; fuente fuerte para patrones web | desktop: C:/Users/PC/.codex/design-stack/gallery-examples-full/lapa-ninja/149-hero-studios-572d5ecf/desktop.png<br>mobile: C:/Users/PC/.codex/design-stack/gallery-examples-full/lapa-ninja/149-hero-studios-572d5ecf/mobile.png |
 | structure | SaaSFrame Landing Pages | Slite UX/UI Design and Copywrinting Examples - SaaSFrame | https://www.saasframe.io/saas/slite | inspiration-only | tiene screenshot desktop; tiene screenshot mobile; aporta senales de fuente; aporta CTAs reales; aporta links o bloques de codigo para estudiar; fuente fuerte para patrones web | desktop: C:/Users/PC/.codex/design-stack/gallery-examples-full/saasframe-landing-pages/285-landing-page-4197935a/desktop.png<br>mobile: C:/Users/PC/.codex/design-stack/gallery-examples-full/saasframe-landing-pages/285-landing-page-4197935a/mobile.png |
-| structure | SaaS Landing Page | Mobbin page - SaaS Landing Page | https://saaslandingpage.com/mobbin/ | inspiration-only | tiene screenshot desktop; tiene screenshot mobile; aporta senales de fuente; aporta CTAs reales; fuente fuerte para patrones web | desktop: C:/Users/PC/.codex/design-stack/gallery-examples-full/saaslandingpage/023-mobbin-041ae462/desktop.png<br>mobile: C:/Users/PC/.codex/design-stack/gallery-examples-full/saaslandingpage/023-mobbin-041ae462/mobile.png |
 | structure | Landingfolio | HeadshotPro Landing Page Inspiration and More \| Landingfolio | https://www.landingfolio.com/inspiration/post/headshotpro-1 | inspiration-only | tiene screenshot desktop; tiene screenshot mobile; aporta senales de fuente; aporta CTAs reales; aporta links o bloques de codigo para estudiar; fuente fuerte para patrones web | desktop: C:/Users/PC/.codex/design-stack/gallery-examples-full/landingfolio/091-headshotpro-a3943c9a/desktop.png<br>mobile: C:/Users/PC/.codex/design-stack/gallery-examples-full/landingfolio/091-headshotpro-a3943c9a/mobile.png |
-| typography | Fontpair | Icons Library — Free Open-Source SVG Icon Sets \| Fontpair | https://fontpair.co/icons | typography-reference | tiene screenshot desktop; tiene screenshot mobile; aporta senales de fuente; aporta CTAs reales; aporta links o bloques de codigo para estudiar | desktop: C:/Users/PC/.codex/design-stack/gallery-examples-full/fontpair/088-fontpair-8ba6d672/desktop.png<br>mobile: C:/Users/PC/.codex/design-stack/gallery-examples-full/fontpair/088-fontpair-8ba6d672/mobile.png |
-| component | Magic UI | Magic UI | http://magicui.design/ | mit-open-source-reference | tiene screenshot desktop; tiene screenshot mobile; aporta senales de fuente; aporta CTAs reales; aporta links o bloques de codigo para estudiar; fuente fuerte para patrones web; tiene pista de codigo reusable con review | desktop: C:/Users/PC/.codex/design-stack/gallery-examples-full/magic-ui/242-magicui-design-6edb6ee7/desktop.png<br>mobile: C:/Users/PC/.codex/design-stack/gallery-examples-full/magic-ui/242-magicui-design-6edb6ee7/mobile.png |
+| structure | Recent Design | Web Design Inspiration — Recent | https://recent.design/websites | inspiration-only | tiene screenshot desktop; tiene screenshot mobile; aporta senales de fuente; aporta CTAs reales; fuente fuerte para patrones web | desktop: C:/Users/PC/.codex/design-stack/gallery-examples-full/recent-design/003-websites-cd2e1db3/desktop.png<br>mobile: C:/Users/PC/.codex/design-stack/gallery-examples-full/recent-design/003-websites-cd2e1db3/mobile.png |
+| component | Kibo UI | Gantt | https://www.kibo-ui.com/components/gantt | open-source-review-required | tiene screenshot desktop; tiene screenshot mobile; aporta senales de fuente; aporta CTAs reales; aporta links o bloques de codigo para estudiar | desktop: C:/Users/PC/.codex/design-stack/gallery-examples-full/kibo-ui/098-kibo-ui-com-components-gan-8008b377/desktop.png<br>mobile: C:/Users/PC/.codex/design-stack/gallery-examples-full/kibo-ui/098-kibo-ui-com-components-gan-8008b377/mobile.png |
+| typography | Magic UI | Kinetic Text \| React Components & Templates | https://magicui.design/docs/components/kinetic-text | mit-open-source-reference | tiene screenshot desktop; tiene screenshot mobile; aporta senales de fuente; aporta CTAs reales; aporta links o bloques de codigo para estudiar; fuente fuerte para patrones web; tiene pista de codigo reusable con review | desktop: C:/Users/PC/.codex/design-stack/gallery-examples-full/magic-ui/007-introducing-kinetic-text-fbd94463/desktop.png<br>mobile: C:/Users/PC/.codex/design-stack/gallery-examples-full/magic-ui/007-introducing-kinetic-text-fbd94463/mobile.png |
+| component | shadcn/ui | Building Blocks for the Web - shadcn/ui | https://ui.shadcn.com/blocks/sidebar | mit-repo-available | tiene screenshot desktop; tiene screenshot mobile; aporta senales de fuente; aporta CTAs reales; aporta links o bloques de codigo para estudiar; fuente fuerte para patrones web; tiene pista de codigo reusable con review | desktop: C:/Users/PC/.codex/design-stack/gallery-examples-full/shadcn-ui/034-browse-more-blocks-11813c15/desktop.png<br>mobile: C:/Users/PC/.codex/design-stack/gallery-examples-full/shadcn-ui/034-browse-more-blocks-11813c15/mobile.png |
 
 ## Codigo Referencial Permitido
 
 | Repo | Archivo | Licencia | Senales | Por que |
 |---|---|---|---|---|
+| harshjdhv__componentry | packages/ui/src/components/flight-status-card.tsx | MIT | react-component, tailwind, motion, shadcn | licencia MIT; compatible con Tailwind/tokenizacion; patron shadcn revisable; match de componente: card |
 | shadcn-ui__ui | apps/v4/registry/bases/base/blocks/dashboard-01/components/section-cards.tsx | MIT | react-component, tailwind, shadcn | licencia MIT; compatible con Tailwind/tokenizacion; patron shadcn revisable; match de componente: card |
 | tremorlabs__tremor | src/components/Accordion/accordion.stories.tsx | MIT | react-component, tailwind, shadcn | licencia MIT; compatible con Tailwind/tokenizacion; patron shadcn revisable; match de componente: accordion |
+| tremorlabs__tremor | src/components/Card/card.stories.tsx | MIT | react-component, tailwind, shadcn | licencia MIT; compatible con Tailwind/tokenizacion; patron shadcn revisable; match de componente: card |
+| harshjdhv__componentry | packages/ui/src/components/orbit-card-stack.tsx | MIT | react-component, tailwind, motion | licencia MIT; compatible con Tailwind/tokenizacion; match de componente: card |
+| harshjdhv__componentry | packages/ui/src/components/scroll-split-card.tsx | MIT | react-component, tailwind, motion | licencia MIT; compatible con Tailwind/tokenizacion; match de componente: card |
 | ibelick__motion-primitives | components/website/card-example-landing.tsx | MIT | react-component, tailwind | licencia MIT; compatible con Tailwind/tokenizacion; match de componente: card |
 | launch-ui__launch-ui | components/ui/accordion.tsx | MIT | react-component, tailwind | licencia MIT; compatible con Tailwind/tokenizacion; match de componente: accordion |
 | magicuidesign__magicui | apps/www/components/ui/accordion.tsx | MIT | react-component, tailwind | licencia MIT; compatible con Tailwind/tokenizacion; match de componente: accordion |
-| serafimcloud__21st | apps/web/components/ui/accordion.tsx | MIT | react-component, tailwind | licencia MIT; compatible con Tailwind/tokenizacion; match de componente: accordion |
-| tremorlabs__tremor | src/components/Accordion/Accordion.tsx | MIT | react-component, tailwind | licencia MIT; compatible con Tailwind/tokenizacion; match de componente: accordion |
-| ibelick__motion-primitives | components/core/accordion.tsx | MIT | react-component, motion, shadcn | licencia MIT; patron shadcn revisable; match de componente: accordion |
-| nolly-studio__cult-ui | apps/www/components/block-copy-button.tsx | MIT | react-component, tailwind, shadcn | licencia MIT; compatible con Tailwind/tokenizacion; patron shadcn revisable |
-| tremorlabs__tremor | src/components/Button/button.stories.tsx | MIT | react-component, tailwind, shadcn | licencia MIT; compatible con Tailwind/tokenizacion; patron shadcn revisable |
+| nolly-studio__cult-ui | apps/www/components/ui/accordion.tsx | MIT | react-component, tailwind | licencia MIT; compatible con Tailwind/tokenizacion; match de componente: accordion |
 
 Regla: usar estos archivos solo como referencia compatible despues de review, retokenizacion, accessibility check y responsive QA.
 
@@ -62,7 +62,7 @@ Regla: usar estos archivos solo como referencia compatible despues de review, re
 
 - Heading: Onest
 - Body: Onest
-- Senales de fuentes: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif, Montserrat, sans-serif, Inter, Inter_Fallback, Outfit, Outfit_Fallback, "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, Cantarell, "Noto Sans", sans-serif, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji", Geist, sans-serif, Geist, system-ui, -apple-system, sans-serif
+- Senales de fuentes: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif, Montserrat, sans-serif, "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, Cantarell, "Noto Sans", sans-serif, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji", Geist, "Geist Fallback", Geist, sans-serif, "Geist Mono", monospace, "Geist Mono", "Geist Mono Fallback"
 - Paleta: primary #334155, secondary #111827, accent #eab308, bg #f8fafc, fg #111827
 
 ## Media
@@ -75,7 +75,7 @@ Regla: usar estos archivos solo como referencia compatible despues de review, re
 - Certificaciones
 
 ### Pedidos De Generacion
-- Pedir o generar asset hero para Altura Engineers Demo: visual real del rubro, limpio, con espacio para copy y sin logos de terceros.
+- No hace falta pedir generacion ahora.
 
 ## Implementacion
 - Abrir screenshots desktop y mobile seleccionados antes de tocar layout.
@@ -106,4 +106,4 @@ Regla: usar estos archivos solo como referencia compatible despues de review, re
 - Probar nav, CTA primario y secciones de servicio/contacto.
 
 ## Warnings
-- Faltan assets visuales; pedirlos o generarlos antes de entrega profesional.
+- Sin warnings.

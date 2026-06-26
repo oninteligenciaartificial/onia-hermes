@@ -1,6 +1,6 @@
 {
   "schemaVersion": "web-factory-auto-design-v1",
-  "generatedAt": "2026-06-25T20:30:20.947Z",
+  "generatedAt": "2026-06-26T21:50:14.502Z",
   "client": {
     "slug": "saas-demo",
     "name": "PulseOps Demo",
@@ -80,85 +80,6 @@
       "score": 99
     },
     {
-      "role": "motion",
-      "sourceName": "Lapa Ninja",
-      "title": "Hero Studios - Landing Page Design | Lapa Ninja",
-      "url": "https://www.lapa.ninja/post/hero-studios/",
-      "licenseStatus": "inspiration-only",
-      "reuseGuidance": "Landing-page structure, section ordering, visual hierarchy and copy patterns. Do not copy site code or proprietary assets.",
-      "screenshots": {
-        "desktop": {
-          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/lapa-ninja/149-hero-studios-572d5ecf/desktop.png",
-          "sha256": "cb23250aa27395c49865097d571734ab4a8eae9f6be1a94393ad3c5bf21b05ed",
-          "mode": "viewport"
-        },
-        "mobile": {
-          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/lapa-ninja/149-hero-studios-572d5ecf/mobile.png",
-          "sha256": "f7a36322efc1d0b44def49ce8bfede16c3963c9436e3f526e45d2a7ac2c36995",
-          "mode": "viewport"
-        }
-      },
-      "headings": [
-        {
-          "level": "h1",
-          "text": "Hero Studios Website Design"
-        },
-        {
-          "level": "h2",
-          "text": "A motion design and animation studio creating systems, stories, and solutions for global brands."
-        },
-        {
-          "level": "h3",
-          "text": "Website Details"
-        },
-        {
-          "level": "h3",
-          "text": "Similar Websites"
-        },
-        {
-          "level": "h3",
-          "text": "Lee Jameson"
-        },
-        {
-          "level": "h3",
-          "text": "Roberta Ungaro"
-        }
-      ],
-      "ctas": [
-        "Lapa Ninja - Go to homepage",
-        "Toggle dark mode",
-        "Open main menu",
-        "Websites",
-        "Browse All ⭐7410",
-        "SaaS ⭐691",
-        "Business ⭐2453",
-        "Minimal3051",
-        "Agency ⭐971",
-        "Portfolio ⭐1067",
-        "Studio ⭐862",
-        "Web368"
-      ],
-      "topFonts": [
-        "Inter, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif"
-      ],
-      "motionSignals": {
-        "libraries": {},
-        "animatedElementCount": 0,
-        "keyframes": []
-      },
-      "codeLinks": [],
-      "qualityWarnings": [],
-      "whySelected": [
-        "coincide con rubro: saas",
-        "tiene screenshot desktop",
-        "tiene screenshot mobile",
-        "aporta senales de fuente",
-        "aporta CTAs reales",
-        "fuente fuerte para patrones web"
-      ],
-      "score": 40
-    },
-    {
       "role": "structure",
       "sourceName": "SaaSFrame Landing Pages",
       "title": "Slite UX/UI Design and Copywrinting Examples - SaaSFrame",
@@ -168,12 +89,12 @@
       "screenshots": {
         "desktop": {
           "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/saasframe-landing-pages/285-landing-page-4197935a/desktop.png",
-          "sha256": "8918024c37fa24430e27a7c95ad9a18e8329969c588d962b85825af0829a8ed7",
+          "sha256": "4045631a7e8a794e8aa44245ebe855756b8e50d3cc56698fc96bcadfbb2557a7",
           "mode": "viewport"
         },
         "mobile": {
           "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/saasframe-landing-pages/285-landing-page-4197935a/mobile.png",
-          "sha256": "db87bda5ffc9a682c91275058a290075929bc8a6ebd35547f5d425a4791dd8e9",
+          "sha256": "a56dfbee361795cd3edfef745ea6fd578e3f54e55e6f0bbbf313e92bf85362d4",
           "mode": "viewport"
         }
       },
@@ -222,9 +143,20 @@
         "Montserrat, sans-serif"
       ],
       "motionSignals": {
-        "libraries": {},
-        "animatedElementCount": 0,
-        "keyframes": []
+        "libraries": {
+          "framerMotion": false,
+          "gsap": false,
+          "three": false,
+          "lottie": false,
+          "locomotiveScroll": false
+        },
+        "animatedElementCount": 43,
+        "keyframes": [
+          "spin",
+          "borderTurn",
+          "borderTurnWithTranslate",
+          "scroll"
+        ]
       },
       "codeLinks": [
         {
@@ -246,220 +178,375 @@
     },
     {
       "role": "structure",
-      "sourceName": "SaaS Landing Page",
-      "title": "Mobbin page - SaaS Landing Page",
-      "url": "https://saaslandingpage.com/mobbin/",
+      "sourceName": "Landingfolio",
+      "title": "HeadshotPro Landing Page Inspiration and More | Landingfolio",
+      "url": "https://www.landingfolio.com/inspiration/post/headshotpro-1",
       "licenseStatus": "inspiration-only",
-      "reuseGuidance": "SaaS page section taxonomy: landing, pricing, about, features, testimonials, FAQ and contact.",
+      "reuseGuidance": "Landing page examples, templates and component inspiration. Do not copy templates or proprietary assets.",
       "screenshots": {
         "desktop": {
-          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/saaslandingpage/023-mobbin-041ae462/desktop.png",
-          "sha256": "bd7e1c728c29041989532f9bf3fd47bfa1fd4150168dd495dc5b8d8969a9dab8",
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/landingfolio/091-headshotpro-a3943c9a/desktop.png",
+          "sha256": "db4eec9b71cbc035c4f0d465650e013db3157b15469cc36b7c6487f204a61b9d",
           "mode": "viewport"
         },
         "mobile": {
-          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/saaslandingpage/023-mobbin-041ae462/mobile.png",
-          "sha256": "22018251078006fff0737e6eb01dd5e118ef4dde006ae26c8e59ee1009abd31e",
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/landingfolio/091-headshotpro-a3943c9a/mobile.png",
+          "sha256": "4ebaad8617fb2483574338e53f5b594e97c08ec6a3509b4480445e47d272cfc8",
           "mode": "viewport"
         }
       },
       "headings": [
         {
-          "level": "h1",
-          "text": "Saaslandingpage"
-        },
-        {
-          "level": "h1",
-          "text": "Mobbin"
+          "level": "h3",
+          "text": "Site & Landing Page Inspiration"
         },
         {
           "level": "h3",
-          "text": "Post navigation"
+          "text": "Section & Component Examples"
         },
         {
           "level": "h3",
-          "text": "Inspiration"
+          "text": "Landing Page Templates"
         },
         {
           "level": "h3",
-          "text": "Templates"
+          "text": "Pro Templates"
         },
         {
           "level": "h3",
-          "text": "Resources"
+          "text": "Blog"
+        },
+        {
+          "level": "h3",
+          "text": "Optimization Tips"
         }
       ],
       "ctas": [
-        "✨ Looking for app inspiration? Check out SaaS Interface ✨",
-        "Saaslandingpage",
-        "Menu",
+        "Landingfolio",
         "Inspiration",
-        "App Inspiration",
+        "Component Library",
         "Templates",
-        "Visit Website",
-        "Saans",
-        "141414",
-        "Next.js",
-        "React",
-        "Tailwind CSS"
-      ],
-      "topFonts": [
-        "Inter, Inter_Fallback",
-        "Outfit, Outfit_Fallback"
-      ],
-      "motionSignals": {
-        "libraries": {},
-        "animatedElementCount": 0,
-        "keyframes": []
-      },
-      "codeLinks": [],
-      "qualityWarnings": [],
-      "whySelected": [
-        "coincide con rubro: saas, app",
-        "tiene screenshot desktop",
-        "tiene screenshot mobile",
-        "aporta senales de fuente",
-        "aporta CTAs reales",
-        "fuente fuerte para patrones web"
-      ],
-      "score": 45
-    },
-    {
-      "role": "structure",
-      "sourceName": "Mobbin Web",
-      "title": "Beautiful SaaS Dashboards Collection by @alexbarreto",
-      "url": "https://mobbin.com/collections/e9ede7f5-31ff-4ca1-acda-771fee465ed9/web/screens",
-      "licenseStatus": "flow-reference-only",
-      "reuseGuidance": "Real app/web UI flows, copywriting and interaction patterns. Use for UX flow study, not visual copying.",
-      "screenshots": {
-        "desktop": {
-          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/mobbin-web/021-view-collection-beautiful-saas-dashboards-44e47f62/desktop.png",
-          "sha256": "d34bfd67566eb2deda975e9ae9d98ae93e17afe676d60c83953d56f85a8c84c4",
-          "mode": "viewport"
-        },
-        "mobile": {
-          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/mobbin-web/021-view-collection-beautiful-saas-dashboards-44e47f62/mobile.png",
-          "sha256": "b71600ba50cfbca45083ddc708472519e57b433bb81744d004a06ab46a74c619",
-          "mode": "viewport"
-        }
-      },
-      "headings": [
-        {
-          "level": "h1",
-          "text": "Beautiful SaaS Dashboards"
-        },
-        {
-          "level": "h2",
-          "text": "0 selected"
-        }
-      ],
-      "ctas": [
+        "Learn",
+        "Optimization Tips Actional design tips to improve your landing page design",
+        "Tool Reviews The Best Landing Page Builder Software: The Definitive Guide.",
+        "Tools",
+        "Free Logos The perfect logo for your project is just a click away.",
         "Pricing",
-        "Awards",
-        "Log in",
-        "Join for free",
-        "Mobbin",
-        "Changelog",
-        "Pricing",
-        "Awards",
-        "Careers",
-        "Merch",
-        "Support",
-        "Log in"
-      ],
-      "topFonts": [
-        "saans, \"saans Fallback\", sans-serif"
-      ],
-      "motionSignals": {
-        "libraries": {},
-        "animatedElementCount": 0,
-        "keyframes": []
-      },
-      "codeLinks": [],
-      "qualityWarnings": [],
-      "whySelected": [
-        "coincide con rubro: saas, dashboard, app",
-        "tiene screenshot desktop",
-        "tiene screenshot mobile",
-        "aporta senales de fuente",
-        "aporta CTAs reales",
-        "fuente fuerte para patrones web"
-      ],
-      "score": 50
-    },
-    {
-      "role": "typography",
-      "sourceName": "Fontpair",
-      "title": "Icons Library — Free Open-Source SVG Icon Sets | Fontpair",
-      "url": "https://fontpair.co/icons",
-      "licenseStatus": "typography-reference",
-      "reuseGuidance": "Font-pair inspiration and typographic mood extraction. Check font licenses before use.",
-      "screenshots": {
-        "desktop": {
-          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/fontpair/088-fontpair-8ba6d672/desktop.png",
-          "sha256": "49936ca7c22c00eb64863596f168e6072471b9eaac54b13a46d55fa399691da9",
-          "mode": "viewport"
-        },
-        "mobile": {
-          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/fontpair/088-fontpair-8ba6d672/mobile.png",
-          "sha256": "0ee831c9265cb4b60a2df4e94f7d878c2508ad2345d2845c4e0b0dc5f522f135",
-          "mode": "viewport"
-        }
-      },
-      "headings": [
-        {
-          "level": "h1",
-          "text": "Icons"
-        },
-        {
-          "level": "h3",
-          "text": "Akar Icons"
-        },
-        {
-          "level": "h3",
-          "text": "Eva Icons"
-        },
-        {
-          "level": "h3",
-          "text": "Feather Icons"
-        },
-        {
-          "level": "h3",
-          "text": "Flowbite Icons"
-        },
-        {
-          "level": "h3",
-          "text": "Glow Icons"
-        }
-      ],
-      "ctas": [
-        "Playground",
-        "Pairings",
-        "Fonts",
-        "Inspiration",
-        "Resources",
         "Login",
-        "Sign Up",
-        "Go Pro",
-        "Settings",
-        "Toggle mobile menu",
-        "Icons",
-        "Colors"
+        "Login"
       ],
       "topFonts": [
-        "Geist, sans-serif",
-        "Geist, system-ui, -apple-system, sans-serif",
-        "\"Geist Mono\", ui-monospace, monospace"
+        "\"Plus Jakarta Sans\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", Roboto, Ubuntu, Cantarell, \"Noto Sans\", sans-serif, BlinkMacSystemFont, \"Segoe UI\", \"Helvetica Neue\", Arial, \"Noto Sans\", \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
       ],
       "motionSignals": {
-        "libraries": {},
-        "animatedElementCount": 0,
-        "keyframes": []
+        "libraries": {
+          "framerMotion": false,
+          "gsap": false,
+          "three": false,
+          "lottie": false,
+          "locomotiveScroll": false
+        },
+        "animatedElementCount": 39,
+        "keyframes": [
+          "pulse",
+          "spin",
+          "sk-chase-01e585e4",
+          "sk-chase-dot-01e585e4",
+          "sk-chase-dot-before-01e585e4",
+          "animatedgradient-4e4b04ca",
+          "animatedgradient",
+          "animatedgradient-06789daf",
+          "animatedgradient-fac1f164",
+          "fadeOut",
+          "fadeInDown",
+          "fadeInUp"
+        ]
       },
       "codeLinks": [
         {
-          "url": "https://supercons.vercel.app/",
-          "text": ""
+          "url": "https://www.landingfolio.com/library",
+          "text": "Component Library (0+) Discover instant copy+paste Tailwind, Webflow & Figma components. Explore our huge library."
+        },
+        {
+          "url": "https://www.landingfolio.com/blog",
+          "text": "Blog Get expert advice on landing page design, copywriting, conversion optimization and more."
+        }
+      ],
+      "qualityWarnings": [],
+      "whySelected": [
+        "coincide con rubro: software",
+        "tiene screenshot desktop",
+        "tiene screenshot mobile",
+        "aporta senales de fuente",
+        "aporta CTAs reales",
+        "aporta links o bloques de codigo para estudiar",
+        "fuente fuerte para patrones web"
+      ],
+      "score": 44
+    },
+    {
+      "role": "structure",
+      "sourceName": "Recent Design",
+      "title": "Web Design Inspiration — Recent",
+      "url": "https://recent.design/websites",
+      "licenseStatus": "inspiration-only",
+      "reuseGuidance": "Daily recent design references across websites, OG images, app screenshots and design skills.",
+      "screenshots": {
+        "desktop": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/recent-design/003-websites-cd2e1db3/desktop.png",
+          "sha256": "cbcac84dd3dbd849d20f15fc8cc844deb369bf9af8163cf333725cfc33b23270",
+          "mode": "viewport"
+        },
+        "mobile": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/recent-design/003-websites-cd2e1db3/mobile.png",
+          "sha256": "b4a59bd1ac6583c9e1c38bf63b6900f3d3df31b8a3a87160aaaf9e730468f96c",
+          "mode": "viewport"
+        }
+      },
+      "headings": [
+        {
+          "level": "h2",
+          "text": "Subscribe to the Recent digest"
+        },
+        {
+          "level": "h2",
+          "text": "Stay ahead of trends"
+        }
+      ],
+      "ctas": [
+        "Recent",
+        "All",
+        "Best of X",
+        "Websites",
+        "OG Images",
+        "App Screenshots",
+        "App Icons",
+        "Skills",
+        "Info",
+        "Subscribe",
+        "All",
+        "Portfolio"
+      ],
+      "topFonts": [
+        "ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+      ],
+      "motionSignals": {
+        "libraries": {
+          "framerMotion": false,
+          "gsap": false,
+          "three": false,
+          "lottie": false,
+          "locomotiveScroll": false
+        },
+        "animatedElementCount": 48,
+        "keyframes": [
+          "ping",
+          "pulse"
+        ]
+      },
+      "codeLinks": [],
+      "qualityWarnings": [],
+      "whySelected": [
+        "coincide con rubro: app",
+        "tiene screenshot desktop",
+        "tiene screenshot mobile",
+        "aporta senales de fuente",
+        "aporta CTAs reales",
+        "fuente fuerte para patrones web"
+      ],
+      "score": 40
+    },
+    {
+      "role": "structure",
+      "sourceName": "Awwwards Winning Websites",
+      "title": "Sui - Awwwards SOTD",
+      "url": "https://www.awwwards.com/sites/sui",
+      "licenseStatus": "inspiration-only-high-overdesign-risk",
+      "reuseGuidance": "Art direction, typography, motion and experimental interaction reference. Translate into one usable design move for ONIA client work.",
+      "screenshots": {
+        "desktop": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/awwwards-winning-websites/479-holographik-99c60348/desktop.png",
+          "sha256": "8c8559516ff65e95bd585e66a48c2b46530ebe1870cf125128494bc0606e4530",
+          "mode": "viewport"
+        },
+        "mobile": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/awwwards-winning-websites/479-holographik-99c60348/mobile.png",
+          "sha256": "ff098bff00900dd53311bf43373e33070f7ce35b21f323e39d58bcbb27b8f246",
+          "mode": "viewport"
+        }
+      },
+      "headings": [
+        {
+          "level": "h2",
+          "text": "Site of the Day - Jun 23, 2026"
+        },
+        {
+          "level": "h1",
+          "text": "Sui"
+        },
+        {
+          "level": "h2",
+          "text": "Elements"
+        },
+        {
+          "level": "h3",
+          "text": "See the highlights of this website."
+        },
+        {
+          "level": "h3",
+          "text": "Homepage header"
+        },
+        {
+          "level": "h3",
+          "text": "Homepage header"
+        }
+      ],
+      "ctas": [
+        "Courses",
+        "Honor Mentions",
+        "Nominees",
+        "Sites of the Day",
+        "Sites of the Month",
+        "Sites of the Year",
+        "Honors New",
+        "Most Awarded Profiles",
+        "Jury 2026",
+        "Annual Awards",
+        "Portfolio Websites",
+        "Free fonts"
+      ],
+      "topFonts": [
+        "\"Inter Tight\""
+      ],
+      "motionSignals": {
+        "libraries": {},
+        "animatedElementCount": 0,
+        "keyframes": []
+      },
+      "codeLinks": [],
+      "qualityWarnings": [],
+      "whySelected": [
+        "coincide con rubro: app",
+        "tiene screenshot desktop",
+        "tiene screenshot mobile",
+        "aporta senales de fuente",
+        "aporta CTAs reales",
+        "fuente fuerte para patrones web",
+        "requiere simplificar para ONIA"
+      ],
+      "score": 36
+    },
+    {
+      "role": "typography",
+      "sourceName": "Magic UI",
+      "title": "Kinetic Text | React Components & Templates",
+      "url": "https://magicui.design/docs/components/kinetic-text",
+      "licenseStatus": "mit-open-source-reference",
+      "reuseGuidance": "Animated marketing components, effects and motion patterns for landing pages. Prefer local MIT repo or registry install commands for implementation.",
+      "screenshots": {
+        "desktop": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/magic-ui/007-introducing-kinetic-text-fbd94463/desktop.png",
+          "sha256": "5d1be9ce1cefe74cbba3d6ce9065f18b0c93c1914a19d7b312d6db04433d624b",
+          "mode": "viewport"
+        },
+        "mobile": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/magic-ui/007-introducing-kinetic-text-fbd94463/mobile.png",
+          "sha256": "2b0e9e5307d001dc3ff968221d8c05b0c717bb43e1af7798cea0cc31a33b3227",
+          "mode": "viewport"
+        }
+      },
+      "headings": [
+        {
+          "level": "h2",
+          "text": "Command Palette"
+        },
+        {
+          "level": "h1",
+          "text": "Kinetic Text"
+        },
+        {
+          "level": "h1",
+          "text": "NostalgiaNostalgia"
+        },
+        {
+          "level": "h2",
+          "text": "Installation"
+        },
+        {
+          "level": "h2",
+          "text": "Usage"
+        },
+        {
+          "level": "h2",
+          "text": "Props"
+        }
+      ],
+      "ctas": [
+        "Toggle Menu",
+        "Magic UI",
+        "Components",
+        "Templates",
+        "Showcase",
+        "Search documentation...Search...⌘K",
+        "21,36621.4k",
+        "215",
+        "Toggle theme",
+        "Introduction",
+        "Installation",
+        "MCP"
+      ],
+      "topFonts": [
+        "Geist, sans-serif",
+        "\"Geist Mono\", monospace"
+      ],
+      "motionSignals": {
+        "libraries": {
+          "framerMotion": false,
+          "gsap": false,
+          "three": false,
+          "lottie": false,
+          "locomotiveScroll": false
+        },
+        "animatedElementCount": 113,
+        "keyframes": [
+          "spin",
+          "ping",
+          "pulse",
+          "enter",
+          "exit",
+          "accordion-down",
+          "accordion-up",
+          "blink-cursor",
+          "aurora",
+          "background-position-spin",
+          "gradient",
+          "meteor"
+        ]
+      },
+      "codeLinks": [
+        {
+          "url": "https://github.com/magicuidesign/magicui",
+          "text": "21,36621.4k"
+        },
+        {
+          "url": "https://github.com/abdmjd1",
+          "text": "@abdmjd1"
+        },
+        {
+          "url": "https://github.com/magicuidesign/magicui/issues/new?title=%5Bbug%5D%3A+%2Fdocs%2Fcomponents%2Fkinetic-text&labels=bug&labels=documentation&template=bug_report.yml",
+          "text": "Report an issue"
+        },
+        {
+          "url": "https://github.com/magicuidesign/magicui/issues/new?title=%5Bfeat%5D%3A+%2Fdocs%2Fcomponents%2Fkinetic-text&labels=enhancement&template=feature_request.yml",
+          "text": "Request a feature"
+        },
+        {
+          "url": "https://github.com/magicuidesign/magicui/edit/main/apps/www/content/docs/components/kinetic-text.mdx",
+          "text": "Edit this page"
+        },
+        {
+          "url": "https://github.com/magicuidesign/magicui",
+          "text": "GitHub"
         }
       ],
       "qualityWarnings": [],
@@ -468,9 +555,11 @@
         "tiene screenshot mobile",
         "aporta senales de fuente",
         "aporta CTAs reales",
-        "aporta links o bloques de codigo para estudiar"
+        "aporta links o bloques de codigo para estudiar",
+        "fuente fuerte para patrones web",
+        "tiene pista de codigo reusable con review"
       ],
-      "score": 33
+      "score": 43
     },
     {
       "role": "component",
@@ -482,12 +571,12 @@
       "screenshots": {
         "desktop": {
           "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/shadcn-ui/034-browse-more-blocks-11813c15/desktop.png",
-          "sha256": "a7ea6ca5bf3fe1a65875154c5abaa6bcab16d1a566bf352c3ef65e4051b4d8fd",
+          "sha256": "78ff29691212bb539569f5981aa5cd69b94b2428e93ad09483963ef9da78882a",
           "mode": "viewport"
         },
         "mobile": {
           "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/shadcn-ui/034-browse-more-blocks-11813c15/mobile.png",
-          "sha256": "07eb3b7dba1512cdfb8627d1b0efc4577aaf784054e40be587b119b38db941fa",
+          "sha256": "744cce335ea6e9e3e2f2d48aa5311e654bc179b6ac0373ccbe6a0729a3cf4177",
           "mode": "viewport"
         }
       },
@@ -516,9 +605,28 @@
         "\"Geist Mono\", \"Geist Mono Fallback\""
       ],
       "motionSignals": {
-        "libraries": {},
-        "animatedElementCount": 0,
-        "keyframes": []
+        "libraries": {
+          "framerMotion": false,
+          "gsap": false,
+          "three": false,
+          "lottie": false,
+          "locomotiveScroll": false
+        },
+        "animatedElementCount": 75,
+        "keyframes": [
+          "spin",
+          "pulse",
+          "enter",
+          "exit",
+          "accordion-down",
+          "accordion-up",
+          "caret-blink",
+          "scroll-fade-reveal-t",
+          "scroll-fade-reveal-b",
+          "scroll-fade-reveal-s",
+          "scroll-fade-reveal-e",
+          "tw-shimmer"
+        ]
       },
       "codeLinks": [
         {
@@ -590,6 +698,35 @@
       "score": 34
     },
     {
+      "repo": "harshjdhv__componentry",
+      "license": "MIT",
+      "status": "allowed-after-review",
+      "localPath": "C:/Users/PC/.codex/design-stack/repos/harshjdhv__componentry",
+      "file": "packages/ui/src/components/flight-status-card.tsx",
+      "sha256": "cdacb853efe2fd29d42ad5a7bfb426327798cdc80f6d4d78458468c452b789c8",
+      "signals": {
+        "type": "react-component",
+        "hasTailwind": true,
+        "hasMotion": true,
+        "hasShadcn": true,
+        "imports": [
+          "react",
+          "@workspace/ui/lib/utils",
+          "framer-motion"
+        ],
+        "exports": []
+      },
+      "samplePreview": "\"use client\"\n\nimport * as React from \"react\"\nimport { cn } from \"@workspace/ui/lib/utils\"\nimport { motion } from \"framer-motion\"\n\n// Dot matrix patterns for each character (5x7 grid)\nconst DOT_MATRIX: Record<string, number[][]> = {\n  Y: [\n    [1, 0, 0, 0, 1],\n    [0, 1, 0, 1, 0],\n    [0, 0, 1, 0, 0],\n    [0, 0, 1, 0, 0],\n    [0, 0, 1, 0, 0],\n    [0, 0, 1, 0, 0],\n    [0, 0, 1, 0, 0],\n  ],\n  Z: [\n    [1, 1, 1, 1, 1],\n    [0, 0, 0, 1, 0],\n    [0, 0, 1, 0, 0],\n    [0, 1, 0, 0, 0],\n    [1, 0, 0, 0, 0],\n    [1, 0, 0, 0, 0],\n    [1, 1, 1, 1, 1],\n  ],\n  H: [\n    [1, 0, 0, 0, 1],\n    [1, 0, 0, 0, 1],\n    [1, 0, 0, 0, 1],\n    [1, 1, 1, 1, 1],\n    [1, 0, 0, 0, 1],\n    [1, 0, 0, 0, 1],\n    [1, 0, 0, 0, 1],\n  ],\n  N: [\n    [1, 0, 0, 0, 1],\n    [1, 1, 0, 0, 1],\n    [1, 0, 1, 0, 1],\n    [1, 0, 0, 1, 1],\n    [1, 0, 0, 0, 1],\n    [1, 0, 0, 0, 1],\n    [1, 0, 0, 0, 1],\n  ],\n  D: [\n    [1, 1, 1, 1, 0],\n    \n/* sample truncated in recipe */",
+      "whySelected": [
+        "licencia MIT",
+        "compatible con Tailwind/tokenizacion",
+        "patron shadcn revisable",
+        "motion reusable con reduced-motion check"
+      ],
+      "reuseRule": "Allowed only after manual code review, retokenization, dependency check, accessibility check and responsive QA.",
+      "score": 33
+    },
+    {
       "repo": "ibelick__motion-primitives",
       "license": "MIT",
       "status": "allowed-after-review",
@@ -642,6 +779,44 @@
         ]
       },
       "samplePreview": "\"use client\"\n\nimport * as React from \"react\"\nimport { CheckIcon, ClipboardIcon } from \"lucide-react\"\n\nimport { Event, trackEvent } from \"@/lib/events\"\nimport { Button, ButtonProps } from \"@/components/ui/button\"\nimport {\n  Tooltip,\n  TooltipContent,\n  TooltipTrigger,\n} from \"@/components/ui/tooltip\"\n\nexport function BlockCopyButton({\n  event,\n  name,\n  code,\n  ...props\n}: {\n  event: Event[\"name\"]\n  name: string\n  code: string\n} & ButtonProps) {\n  const [hasCopied, setHasCopied] = React.useState(false)\n\n  React.useEffect(() => {\n    setTimeout(() => {\n      setHasCopied(false)\n    }, 2000)\n  }, [hasCopied])\n\n  return (\n    <Tooltip>\n      <TooltipTrigger asChild>\n        <Button\n          size=\"icon\"\n          variant=\"outline\"\n          className=\"size-7 rounded-[6px] [&_svg]:size-3.5\"\n          onClick={() => {\n            navigator.clipboard.writeText(code)\n            trackEvent({\n   \n/* sample truncated in recipe */",
+      "whySelected": [
+        "licencia MIT",
+        "compatible con Tailwind/tokenizacion",
+        "patron shadcn revisable",
+        "match de componente: button"
+      ],
+      "reuseRule": "Allowed only after manual code review, retokenization, dependency check, accessibility check and responsive QA.",
+      "score": 31
+    },
+    {
+      "repo": "serafimcloud__21st",
+      "license": "MIT",
+      "status": "allowed-after-review",
+      "localPath": "C:/Users/PC/.codex/design-stack/repos/serafimcloud__21st",
+      "file": "apps/web/components/ui/bookmark-button.tsx",
+      "sha256": "796b63abd2e934f45315bddd6d760531abadcbbaa1099278b51d4b1945b1b92b",
+      "signals": {
+        "type": "react-component",
+        "hasTailwind": true,
+        "hasMotion": false,
+        "hasShadcn": true,
+        "imports": [
+          "react",
+          "@clerk/nextjs",
+          "lucide-react",
+          "sonner",
+          "@/components/ui/button",
+          "@/components/ui/tooltip",
+          "@/lib/amplitude",
+          "@/lib/clerk",
+          "@/lib/queries",
+          "@/lib/utils"
+        ],
+        "exports": [
+          "BookmarkButton"
+        ]
+      },
+      "samplePreview": "\"use client\"\n\nimport React, { useEffect, useState } from \"react\"\n\nimport { useUser } from \"@clerk/nextjs\"\nimport { Bookmark } from \"lucide-react\"\nimport { toast } from \"sonner\"\n\nimport { Button } from \"@/components/ui/button\"\nimport {\n  Tooltip,\n  TooltipContent,\n  TooltipTrigger,\n} from \"@/components/ui/tooltip\"\n\nimport { AMPLITUDE_EVENTS, trackEvent } from \"@/lib/amplitude\"\nimport { useClerkSupabaseClient } from \"@/lib/clerk\"\nimport { useBookmarkMutation } from \"@/lib/queries\"\nimport { cn } from \"@/lib/utils\"\n\ninterface BookmarkButtonProps {\n  demoId: number\n  bookmarksCount?: number\n  size?: number\n  showTooltip?: boolean\n  bookmarked: boolean\n  onClick?: () => void\n}\n\nexport function BookmarkButton({\n  demoId,\n  bookmarksCount = 0,\n  size = 18,\n  showTooltip = false,\n  bookmarked,\n  onClick,\n}: BookmarkButtonProps) {\n  const { user } = useUser()\n  const supabase = useClerkSupabaseCli\n/* sample truncated in recipe */",
       "whySelected": [
         "licencia MIT",
         "compatible con Tailwind/tokenizacion",
@@ -800,87 +975,34 @@
       "license": "MIT",
       "status": "allowed-after-review",
       "localPath": "C:/Users/PC/.codex/design-stack/repos/harshjdhv__componentry",
-      "file": "packages/ui/src/components/circuit-board.tsx",
-      "sha256": "54df38cef57658a6f467618f3f6a73b30b99ec4620f09424ce8f46c972847026",
+      "file": "packages/ui/src/components/dither-prism-hero.tsx",
+      "sha256": "fefe2ee56288c1b46c14b21d746c59ba73b1969eec81e644ff2c3d0b003cf780",
       "signals": {
         "type": "react-component",
         "hasTailwind": true,
         "hasMotion": true,
-        "hasShadcn": true,
+        "hasShadcn": false,
         "imports": [
           "react",
+          "@react-three/fiber",
+          "three",
           "framer-motion",
-          "@workspace/ui/lib/utils"
-        ],
-        "exports": []
-      },
-      "samplePreview": "\"use client\"\n\nimport * as React from \"react\"\nimport { motion } from \"framer-motion\"\nimport { cn } from \"@workspace/ui/lib/utils\"\n\ninterface CircuitNode {\n  id: string\n  x: number\n  y: number\n  label?: string\n  icon?: React.ReactNode\n  status?: \"active\" | \"inactive\" | \"processing\" | \"error\"\n  size?: \"sm\" | \"md\" | \"lg\"\n}\n\ninterface CircuitConnection {\n  from: string\n  to: string\n  animated?: boolean\n  bidirectional?: boolean\n  color?: string\n  pulseColor?: string\n}\n\ninterface CircuitBoardProps extends React.HTMLAttributes<HTMLDivElement> {\n  nodes: CircuitNode[]\n  connections: CircuitConnection[]\n  width?: number\n  height?: number\n  gridSize?: number\n  showGrid?: boolean\n  gridColor?: string\n  traceColor?: string\n  pulseColor?: string\n  nodeColor?: string\n  pulseSpeed?: number\n  traceWidth?: number\n  /** Force a specific theme variant. Defaults to auto-detect from system. */\n  variant?: \"l\n/* sample truncated in recipe */",
-      "whySelected": [
-        "licencia MIT",
-        "compatible con Tailwind/tokenizacion",
-        "patron shadcn revisable",
-        "motion reusable con reduced-motion check"
-      ],
-      "reuseRule": "Allowed only after manual code review, retokenization, dependency check, accessibility check and responsive QA.",
-      "score": 29
-    },
-    {
-      "repo": "harshjdhv__componentry",
-      "license": "MIT",
-      "status": "allowed-after-review",
-      "localPath": "C:/Users/PC/.codex/design-stack/repos/harshjdhv__componentry",
-      "file": "packages/ui/src/components/collection-surfer.tsx",
-      "sha256": "6c2dc398b31f9168a7e824cc9da13dc9a7d1c37d283920970055d8a418d4b134",
-      "signals": {
-        "type": "react-component",
-        "hasTailwind": true,
-        "hasMotion": true,
-        "hasShadcn": true,
-        "imports": [
-          "framer-motion",
-          "react"
+          "@workspace/ui/lib/utils",
+          "@workspace/ui/components/webgl-error-boundary"
         ],
         "exports": [
-          "CollectionSurfer"
+          "DitherPrismHero"
         ]
       },
-      "samplePreview": "import { motion, useScroll, useTransform, useSpring, useMotionValue, MotionValue } from \"framer-motion\";\nimport React from \"react\";\n\nexport interface CollectionItem {\n    id: number;\n    image: string;\n    title: string;\n}\n\nexport type CollectionSurferVariant = \"magnetic\" | \"uplift\" | \"simple\";\n\ninterface CollectionSurferProps {\n    items: CollectionItem[];\n    variant?: CollectionSurferVariant;\n}\n\nexport function CollectionSurfer({ items, variant = \"magnetic\" }: CollectionSurferProps) {\n    // 1. Loop Setup: Duplicate items to create a buffer\n    // We render the list twice: [Original Set, Duplicate Set]\n    // When we scroll past the Original Set, we snap back to the start.\n    const duplicatedItems = [...items, ...items];\n\n    // Scroll sensitivity\n    const scrollPerItem = 600;\n\n    // The exact scroll distance to complete one full loop of the ORIGINAL items\n    const loopDistance = \n/* sample truncated in recipe */",
+      "samplePreview": "\"use client\";\n\n/* eslint-disable react/no-unknown-property */\nimport { useRef, useMemo, useEffect, useState } from \"react\";\nimport { Canvas, useFrame, ThreeElements, useThree } from \"@react-three/fiber\";\nimport * as THREE from \"three\";\nimport { motion } from \"framer-motion\";\n\nimport { cn } from \"@workspace/ui/lib/utils\";\nimport { WebGLErrorBoundary, WebGLFallback } from \"@workspace/ui/components/webgl-error-boundary\";\n\n// Type augmentation for R3F\ndeclare global {\n    // eslint-disable-next-line @typescript-eslint/no-namespace\n    namespace JSX {\n        type IntrinsicElements = ThreeElements;\n    }\n}\n\n// ═══════════════════════════════════════════════════════════════════════════════\n// VERTEX SHADER\n// ═══════════════════════════════════════════════════════════════════════════════\nconst vertexShader = `\nvarying vec2 vUv;\nvarying vec3 vPosition;\n\nvoid main() {\n  vUv = uv;\n  vPosition = p\n/* sample truncated in recipe */",
       "whySelected": [
         "licencia MIT",
         "compatible con Tailwind/tokenizacion",
-        "patron shadcn revisable",
-        "motion reusable con reduced-motion check"
+        "motion reusable con reduced-motion check",
+        "match de componente: hero"
       ],
       "reuseRule": "Allowed only after manual code review, retokenization, dependency check, accessibility check and responsive QA.",
-      "score": 29
-    },
-    {
-      "repo": "markmead__hyperui",
-      "license": "MIT",
-      "status": "allowed-after-review",
-      "localPath": "C:/Users/PC/.codex/design-stack/repos/markmead__hyperui",
-      "file": ".agents/skills/building-components/references/polymorphism.mdx",
-      "sha256": "90f2d39d31c9591a7c393e8f06bc4b0293ab5823d27f26767136fa1c808bd2d7",
-      "signals": {
-        "type": "react-component",
-        "hasTailwind": true,
-        "hasMotion": true,
-        "hasShadcn": true,
-        "imports": [
-          "@radix-ui/react-slot",
-          "class-variance-authority"
-        ],
-        "exports": []
-      },
-      "samplePreview": "---\ntitle: Polymorphism\ndescription: How to use the `as` prop to change the rendered HTML element while preserving component functionality.\ntype: reference\nsummary: The as prop pattern for polymorphic components, compared with Radix UI's Slot-based asChild approach with TypeScript best practices.\nprerequisites:\n  - /composition\n  - /types\nrelated:\n  - /as-child\n  - /accessibility\n---\n\nThe `as` prop is a fundamental pattern in modern React component libraries that allows you to change the underlying HTML element or component that gets rendered.\n\nPopularized by libraries like [Styled Components](https://styled-components.com/), [Emotion](https://emotion.sh/), and [Chakra UI](https://chakra-ui.com/), this pattern provides flexibility in choosing semantic HTML while maintaining component styling and behavior.\n\nThe `as` prop enables polymorphic components - components that can render as diffe\n/* sample truncated in recipe */",
-      "whySelected": [
-        "licencia MIT",
-        "compatible con Tailwind/tokenizacion",
-        "patron shadcn revisable",
-        "motion reusable con reduced-motion check"
-      ],
-      "reuseRule": "Allowed only after manual code review, retokenization, dependency check, accessibility check and responsive QA.",
-      "score": 29
+      "score": 30
     }
   ],
   "sectionPlan": [
@@ -926,14 +1048,14 @@
       "heading": "Onest",
       "body": "Onest",
       "referenceSignals": [
-        "Inter, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
         "system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Oxygen, Ubuntu, Cantarell, \"Fira Sans\", \"Droid Sans\", \"Helvetica Neue\", sans-serif",
         "Montserrat, sans-serif",
-        "Inter, Inter_Fallback",
-        "Outfit, Outfit_Fallback",
-        "saans, \"saans Fallback\", sans-serif",
+        "\"Plus Jakarta Sans\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", Roboto, Ubuntu, Cantarell, \"Noto Sans\", sans-serif, BlinkMacSystemFont, \"Segoe UI\", \"Helvetica Neue\", Arial, \"Noto Sans\", \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+        "ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+        "\"Inter Tight\"",
         "Geist, sans-serif",
-        "Geist, system-ui, -apple-system, sans-serif"
+        "\"Geist Mono\", monospace",
+        "Geist, \"Geist Fallback\""
       ]
     },
     "palette": {
@@ -970,9 +1092,7 @@
       "Logos/testimonios con permiso",
       "Animacion de flujo"
     ],
-    "generationRequests": [
-      "Pedir o generar asset hero para PulseOps Demo: visual real del rubro, limpio, con espacio para copy y sin logos de terceros."
-    ]
+    "generationRequests": []
   },
   "implementationPlan": [
     "Abrir screenshots desktop y mobile seleccionados antes de tocar layout.",
@@ -1002,16 +1122,14 @@
     "Confirmar que cada URL externa abre y que WhatsApp/email funcionan.",
     "Probar nav, CTA primario y secciones de servicio/contacto."
   ],
-  "warnings": [
-    "Faltan assets visuales; pedirlos o generarlos antes de entrega profesional."
-  ],
+  "warnings": [],
   "confidence": {
     "score": 95,
     "reasons": [
       "8 referencias seleccionadas",
       "6 referencias con screenshot",
       "10 archivos de codigo permitidos como referencia",
-      "1 pedidos de media pendientes"
+      "0 pedidos de media pendientes"
     ]
   }
 }

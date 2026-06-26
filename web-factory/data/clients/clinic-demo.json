@@ -7,7 +7,7 @@
   "logoIcon": "",
   "logoWide": "",
   "heroVideo": "",
-  "heroPoster": "",
+  "heroPoster": "assets/clinic-hero.svg",
   "colores": {
     "primary": "#2563eb",
     "secondary": "#0f172a",

@@ -15,6 +15,7 @@ export type SiteClient = {
     linkedin: string;
     x: string;
   };
+  heroPoster?: string;
   servicios: Array<{
     titulo: string;
     desc: string;

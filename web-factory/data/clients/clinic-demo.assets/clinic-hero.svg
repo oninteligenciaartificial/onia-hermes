@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" role="img" aria-labelledby="title desc">
+  <title id="title">Clinic demo hero</title>
+  <desc id="desc">Professional health clinic hero image for a demo landing page.</desc>
+  <rect width="1200" height="900" fill="#f8fafc"/>
+  <rect x="88" y="98" width="1024" height="704" rx="36" fill="#ffffff" stroke="#dbeafe" stroke-width="6"/>
+  <rect x="152" y="160" width="350" height="88" rx="18" fill="#dbeafe"/>
+  <rect x="152" y="292" width="460" height="30" rx="15" fill="#2563eb" opacity=".24"/>
+  <rect x="152" y="350" width="330" height="24" rx="12" fill="#14b8a6" opacity=".28"/>
+  <rect x="150" y="430" width="285" height="230" rx="26" fill="#eff6ff"/>
+  <circle cx="292" cy="512" r="62" fill="#2563eb" opacity=".18"/>
+  <path d="M292 462v100M242 512h100" stroke="#2563eb" stroke-width="24" stroke-linecap="round"/>
+  <rect x="500" y="430" width="548" height="230" rx="26" fill="#f1f5f9"/>
+  <rect x="552" y="486" width="320" height="24" rx="12" fill="#0f172a" opacity=".22"/>
+  <rect x="552" y="542" width="420" height="24" rx="12" fill="#2563eb" opacity=".22"/>
+  <rect x="552" y="598" width="260" height="24" rx="12" fill="#14b8a6" opacity=".34"/>
+  <rect x="748" y="700" width="300" height="62" rx="18" fill="#2563eb"/>
+  <text x="898" y="739" text-anchor="middle" font-family="Onest, Arial, sans-serif" font-size="28" font-weight="700" fill="#ffffff">Reservar consulta</text>
+</svg>

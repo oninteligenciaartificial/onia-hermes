@@ -42,9 +42,9 @@
     ]
   },
   "media": {
-    "heroPoster": "",
+    "heroPoster": "assets/skincare-hero.svg",
     "assetPermission": "generate-ai",
-    "notes": "Generar packshots y lifestyle si el cliente no entrega fotos."
+    "notes": "Demo interna con packshots sinteticos. Para cliente real, reemplazar por fotos propias o generadas/aprobadas."
   },
   "content": {
     "benefits": ["Rutinas cortas", "Consulta antes de comprar", "Productos por necesidad"],
@@ -56,6 +56,8 @@
         "price": "Desde Bs. 120",
         "priceValue": 120,
         "description": "Limpieza diaria para piel normal a mixta sin sensacion tirante.",
+        "image": "assets/gel-cleanser.svg",
+        "imageAlt": "Packshot demo de gel limpiador suave",
         "brand": "Luma Skin",
         "size": "150 ml",
         "benefits": ["Limpieza diaria", "Textura ligera"],
@@ -68,6 +70,8 @@
         "price": "Desde Bs. 150",
         "priceValue": 150,
         "description": "Hidratacion simple para reforzar la barrera cutanea.",
+        "image": "assets/barrier-cream.svg",
+        "imageAlt": "Packshot demo de crema barrera hidratante",
         "brand": "Luma Skin",
         "size": "50 ml",
         "benefits": ["Barrera cutanea", "Uso diario"],

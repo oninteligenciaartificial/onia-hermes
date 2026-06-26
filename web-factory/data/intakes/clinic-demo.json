@@ -35,8 +35,9 @@
     ]
   },
   "media": {
-    "assetPermission": "client-owned",
-    "notes": "Usar fotos reales de consultorio y equipo; evitar claims medicos no aprobados."
+    "heroPoster": "assets/clinic-hero.svg",
+    "assetPermission": "generate-ai",
+    "notes": "Demo interna con asset sintetico. Para cliente real, reemplazar por fotos de consultorio/equipo y evitar claims medicos no aprobados."
   },
   "content": {
     "services": [

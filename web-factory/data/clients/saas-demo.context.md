@@ -18,8 +18,8 @@
 
 - Permiso de assets: generate-ai
 - Hero video: pendiente
-- Hero poster/imagen: pendiente
-- Notas: Usar screenshots mock del producto, no ilustraciones genericas.
+- Hero poster/imagen: assets/dashboard-hero.svg
+- Notas: Demo interna con mock sintetico. Para cliente real, reemplazar por screenshots aprobados del producto.
 
 ## Operacion
 
@@ -32,5 +32,4 @@
 
 - screenshots reales o mockups aprobados
 - pricing
-- asset principal del hero pendiente de producir
 - dominio o decision de hosting

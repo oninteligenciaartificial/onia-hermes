@@ -41,8 +41,9 @@
     ]
   },
   "media": {
+    "heroPoster": "assets/dashboard-hero.svg",
     "assetPermission": "generate-ai",
-    "notes": "Usar screenshots mock del producto, no ilustraciones genericas."
+    "notes": "Demo interna con mock sintetico. Para cliente real, reemplazar por screenshots aprobados del producto."
   },
   "content": {
     "services": [

@@ -16,10 +16,10 @@
 
 ## Media
 
-- Permiso de assets: client-owned
+- Permiso de assets: generate-ai
 - Hero video: pendiente
-- Hero poster/imagen: pendiente
-- Notas: Necesita fotos reales de proyectos, planos o equipo en obra.
+- Hero poster/imagen: assets/project-hero.svg
+- Notas: Demo interna con asset sintetico. Para cliente real, reemplazar por fotos de proyectos, planos o equipo en obra.
 
 ## Operacion
 
@@ -33,5 +33,4 @@
 - fotos de proyectos
 - certificaciones
 - casos aprobados
-- asset principal del hero pendiente de producir
 - dominio o decision de hosting

@@ -7,7 +7,7 @@
   "logoIcon": "",
   "logoWide": "",
   "heroVideo": "",
-  "heroPoster": "",
+  "heroPoster": "assets/dashboard-hero.svg",
   "colores": {
     "primary": "#2563eb",
     "secondary": "#111827",

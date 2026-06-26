@@ -18,8 +18,8 @@
 
 - Permiso de assets: generate-ai
 - Hero video: pendiente
-- Hero poster/imagen: pendiente
-- Notas: Generar packshots y lifestyle si el cliente no entrega fotos.
+- Hero poster/imagen: assets/skincare-hero.svg
+- Notas: Demo interna con packshots sinteticos. Para cliente real, reemplazar por fotos propias o generadas/aprobadas.
 
 ## Operacion
 
@@ -30,5 +30,4 @@
 
 ## Pendientes antes de entrega
 
-- asset principal del hero pendiente de producir
 - dominio o decision de hosting

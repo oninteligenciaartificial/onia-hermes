@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 900" role="img" aria-labelledby="title desc">
+  <title id="title">Crema barrera demo</title>
+  <desc id="desc">Simple jar illustration for moisturizer demo product.</desc>
+  <rect width="900" height="900" fill="#fbfaf7"/>
+  <ellipse cx="450" cy="690" rx="260" ry="70" fill="#263238" opacity=".08"/>
+  <rect x="230" y="330" width="440" height="300" rx="80" fill="#ffffff" stroke="#e2a86b" stroke-width="16"/>
+  <rect x="276" y="250" width="348" height="130" rx="44" fill="#0f766e" opacity=".2" stroke="#0f766e" stroke-width="12"/>
+  <rect x="340" y="456" width="220" height="44" rx="22" fill="#0f766e" opacity=".72"/>
+  <rect x="374" y="536" width="152" height="26" rx="13" fill="#263238" opacity=".24"/>
+</svg>

@@ -4,6 +4,7 @@ import type { SiteClient } from "./types";
 export function renderHero(client: SiteClient): string {
   const logo = client.logo.trim() || client.nombre.slice(0, 2).toUpperCase();
   const kicker = client.contacto.direccion || "Servicios profesionales";
+  const heroPoster = client.heroPoster?.trim();
 
   return `
     <section class="wf-hero">
@@ -26,11 +27,22 @@ export function renderHero(client: SiteClient): string {
           </div>
         </div>
         <div class="wf-proof-panel" aria-label="Resumen de propuesta">
-          <span class="wf-proof-label">Agenda clara</span>
-          <strong>Servicios explicados sin vueltas y contacto directo.</strong>
-          <p>Una primera impresion ordenada para que cada visita se convierta en conversacion.</p>
+          ${heroPoster ? renderHeroPoster(heroPoster, client.nombre) : ""}
+          <div class="wf-proof-copy">
+            <span class="wf-proof-label">Agenda clara</span>
+            <strong>Servicios explicados sin vueltas y contacto directo.</strong>
+            <p>Una primera impresion ordenada para que cada visita se convierta en conversacion.</p>
+          </div>
         </div>
       </div>
     </section>
+  `;
+}
+
+function renderHeroPoster(src: string, clientName: string): string {
+  return `
+    <figure class="wf-hero-media">
+      <img src="${escapeAttribute(src)}" alt="${escapeAttribute(`Visual principal de ${clientName}`)}" loading="eager" decoding="async">
+    </figure>
   `;
 }

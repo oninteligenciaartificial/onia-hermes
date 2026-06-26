@@ -1,6 +1,6 @@
 # Auto Design Recipe - Luma Skin Demo
 
-Generated: 2026-06-25T20:31:23.711Z
+Generated: 2026-06-26T21:50:15.303Z
 
 ## Decision
 
@@ -26,27 +26,27 @@ Generated: 2026-06-25T20:31:23.711Z
 |---|---|---|---|---|---|---|
 | client-reference | Glossier | Glossier | https://www.glossier.com | client-provided-reference-review-required | referencia exacta entregada en el brief; usar: claridad de producto, aire visual y CTA directo; evitar: copiar identidad, tono o claims | sin screenshot |
 | client-reference | The Ordinary | The Ordinary | https://theordinary.com | client-provided-reference-review-required | referencia exacta entregada en el brief; usar: jerarquia de producto y explicacion funcional; evitar: estetica demasiado clinica | sin screenshot |
-| motion | Lapa Ninja | Hero Studios - Landing Page Design \| Lapa Ninja | https://www.lapa.ninja/post/hero-studios/ | inspiration-only | tiene screenshot desktop; tiene screenshot mobile; aporta senales de fuente; aporta CTAs reales; fuente fuerte para patrones web | desktop: C:/Users/PC/.codex/design-stack/gallery-examples-full/lapa-ninja/149-hero-studios-572d5ecf/desktop.png<br>mobile: C:/Users/PC/.codex/design-stack/gallery-examples-full/lapa-ninja/149-hero-studios-572d5ecf/mobile.png |
 | conversion | SaaSFrame Landing Pages | Slite UX/UI Design and Copywrinting Examples - SaaSFrame | https://www.saasframe.io/saas/slite | inspiration-only | tiene screenshot desktop; tiene screenshot mobile; aporta senales de fuente; aporta CTAs reales; aporta links o bloques de codigo para estudiar; fuente fuerte para patrones web | desktop: C:/Users/PC/.codex/design-stack/gallery-examples-full/saasframe-landing-pages/285-landing-page-4197935a/desktop.png<br>mobile: C:/Users/PC/.codex/design-stack/gallery-examples-full/saasframe-landing-pages/285-landing-page-4197935a/mobile.png |
-| conversion | SaaS Landing Page | Mobbin page - SaaS Landing Page | https://saaslandingpage.com/mobbin/ | inspiration-only | tiene screenshot desktop; tiene screenshot mobile; aporta senales de fuente; aporta CTAs reales; fuente fuerte para patrones web | desktop: C:/Users/PC/.codex/design-stack/gallery-examples-full/saaslandingpage/023-mobbin-041ae462/desktop.png<br>mobile: C:/Users/PC/.codex/design-stack/gallery-examples-full/saaslandingpage/023-mobbin-041ae462/mobile.png |
 | structure | Landingfolio | HeadshotPro Landing Page Inspiration and More \| Landingfolio | https://www.landingfolio.com/inspiration/post/headshotpro-1 | inspiration-only | tiene screenshot desktop; tiene screenshot mobile; aporta senales de fuente; aporta CTAs reales; aporta links o bloques de codigo para estudiar; fuente fuerte para patrones web | desktop: C:/Users/PC/.codex/design-stack/gallery-examples-full/landingfolio/091-headshotpro-a3943c9a/desktop.png<br>mobile: C:/Users/PC/.codex/design-stack/gallery-examples-full/landingfolio/091-headshotpro-a3943c9a/mobile.png |
-| typography | Fontpair | Icons Library — Free Open-Source SVG Icon Sets \| Fontpair | https://fontpair.co/icons | typography-reference | tiene screenshot desktop; tiene screenshot mobile; aporta senales de fuente; aporta CTAs reales; aporta links o bloques de codigo para estudiar | desktop: C:/Users/PC/.codex/design-stack/gallery-examples-full/fontpair/088-fontpair-8ba6d672/desktop.png<br>mobile: C:/Users/PC/.codex/design-stack/gallery-examples-full/fontpair/088-fontpair-8ba6d672/mobile.png |
-| component | Magic UI | Magic UI | http://magicui.design/ | mit-open-source-reference | tiene screenshot desktop; tiene screenshot mobile; aporta senales de fuente; aporta CTAs reales; aporta links o bloques de codigo para estudiar; fuente fuerte para patrones web; tiene pista de codigo reusable con review | desktop: C:/Users/PC/.codex/design-stack/gallery-examples-full/magic-ui/242-magicui-design-6edb6ee7/desktop.png<br>mobile: C:/Users/PC/.codex/design-stack/gallery-examples-full/magic-ui/242-magicui-design-6edb6ee7/mobile.png |
+| structure | Recent Design | Web Design Inspiration — Recent | https://recent.design/websites | inspiration-only | tiene screenshot desktop; tiene screenshot mobile; aporta senales de fuente; aporta CTAs reales; fuente fuerte para patrones web | desktop: C:/Users/PC/.codex/design-stack/gallery-examples-full/recent-design/003-websites-cd2e1db3/desktop.png<br>mobile: C:/Users/PC/.codex/design-stack/gallery-examples-full/recent-design/003-websites-cd2e1db3/mobile.png |
+| component | Kibo UI | Gantt | https://www.kibo-ui.com/components/gantt | open-source-review-required | tiene screenshot desktop; tiene screenshot mobile; aporta senales de fuente; aporta CTAs reales; aporta links o bloques de codigo para estudiar | desktop: C:/Users/PC/.codex/design-stack/gallery-examples-full/kibo-ui/098-kibo-ui-com-components-gan-8008b377/desktop.png<br>mobile: C:/Users/PC/.codex/design-stack/gallery-examples-full/kibo-ui/098-kibo-ui-com-components-gan-8008b377/mobile.png |
+| typography | Magic UI | Kinetic Text \| React Components & Templates | https://magicui.design/docs/components/kinetic-text | mit-open-source-reference | tiene screenshot desktop; tiene screenshot mobile; aporta senales de fuente; aporta CTAs reales; aporta links o bloques de codigo para estudiar; fuente fuerte para patrones web; tiene pista de codigo reusable con review | desktop: C:/Users/PC/.codex/design-stack/gallery-examples-full/magic-ui/007-introducing-kinetic-text-fbd94463/desktop.png<br>mobile: C:/Users/PC/.codex/design-stack/gallery-examples-full/magic-ui/007-introducing-kinetic-text-fbd94463/mobile.png |
+| component | shadcn/ui | Building Blocks for the Web - shadcn/ui | https://ui.shadcn.com/blocks/sidebar | mit-repo-available | tiene screenshot desktop; tiene screenshot mobile; aporta senales de fuente; aporta CTAs reales; aporta links o bloques de codigo para estudiar; fuente fuerte para patrones web; tiene pista de codigo reusable con review | desktop: C:/Users/PC/.codex/design-stack/gallery-examples-full/shadcn-ui/034-browse-more-blocks-11813c15/desktop.png<br>mobile: C:/Users/PC/.codex/design-stack/gallery-examples-full/shadcn-ui/034-browse-more-blocks-11813c15/mobile.png |
 
 ## Codigo Referencial Permitido
 
 | Repo | Archivo | Licencia | Senales | Por que |
 |---|---|---|---|---|
+| harshjdhv__componentry | packages/ui/src/components/flight-status-card.tsx | MIT | react-component, tailwind, motion, shadcn | licencia MIT; compatible con Tailwind/tokenizacion; patron shadcn revisable; motion reusable con reduced-motion check; match de componente: card |
+| harshjdhv__componentry | packages/ui/src/components/orbit-card-stack.tsx | MIT | react-component, tailwind, motion | licencia MIT; compatible con Tailwind/tokenizacion; motion reusable con reduced-motion check; match de componente: card |
+| harshjdhv__componentry | packages/ui/src/components/scroll-split-card.tsx | MIT | react-component, tailwind, motion | licencia MIT; compatible con Tailwind/tokenizacion; motion reusable con reduced-motion check; match de componente: card |
 | ibelick__motion-primitives | components/core/accordion.tsx | MIT | react-component, motion, shadcn | licencia MIT; patron shadcn revisable; motion reusable con reduced-motion check; match de componente: accordion |
 | shadcn-ui__ui | apps/v4/registry/bases/base/blocks/dashboard-01/components/section-cards.tsx | MIT | react-component, tailwind, shadcn | licencia MIT; compatible con Tailwind/tokenizacion; patron shadcn revisable; match de componente: card |
 | tremorlabs__tremor | src/components/Accordion/accordion.stories.tsx | MIT | react-component, tailwind, shadcn | licencia MIT; compatible con Tailwind/tokenizacion; patron shadcn revisable; match de componente: accordion |
+| tremorlabs__tremor | src/components/Card/card.stories.tsx | MIT | react-component, tailwind, shadcn | licencia MIT; compatible con Tailwind/tokenizacion; patron shadcn revisable; match de componente: card |
 | ibelick__motion-primitives | components/core/carousel.tsx | MIT | react-component, tailwind, motion | licencia MIT; compatible con Tailwind/tokenizacion; motion reusable con reduced-motion check; match de componente: carousel |
 | harshjdhv__componentry | packages/ui/src/components/circuit-board.tsx | MIT | react-component, tailwind, motion, shadcn | licencia MIT; compatible con Tailwind/tokenizacion; patron shadcn revisable; motion reusable con reduced-motion check |
 | harshjdhv__componentry | packages/ui/src/components/collection-surfer.tsx | MIT | react-component, tailwind, motion, shadcn | licencia MIT; compatible con Tailwind/tokenizacion; patron shadcn revisable; motion reusable con reduced-motion check |
-| markmead__hyperui | .agents/skills/building-components/references/polymorphism.mdx | MIT | react-component, tailwind, motion, shadcn | licencia MIT; compatible con Tailwind/tokenizacion; patron shadcn revisable; motion reusable con reduced-motion check |
-| nolly-studio__cult-ui | apps/www/components/cli-registry-snippet.tsx | MIT | react-component, tailwind, motion, shadcn | licencia MIT; compatible con Tailwind/tokenizacion; patron shadcn revisable; motion reusable con reduced-motion check |
-| serafimcloud__21st | apps/web/components/features/studio/ui/studio-header.tsx | MIT | react-component, tailwind, motion, shadcn | licencia MIT; compatible con Tailwind/tokenizacion; patron shadcn revisable; motion reusable con reduced-motion check |
-| ibelick__motion-primitives | components/website/card-example-landing.tsx | MIT | react-component, tailwind | licencia MIT; compatible con Tailwind/tokenizacion; match de componente: card |
 
 Regla: usar estos archivos solo como referencia compatible despues de review, retokenizacion, accessibility check y responsive QA.
 
@@ -64,7 +64,7 @@ Regla: usar estos archivos solo como referencia compatible despues de review, re
 
 - Heading: Onest
 - Body: Onest
-- Senales de fuentes: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif, Montserrat, sans-serif, Inter, Inter_Fallback, Outfit, Outfit_Fallback, "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, Cantarell, "Noto Sans", sans-serif, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji", Geist, sans-serif, Geist, system-ui, -apple-system, sans-serif
+- Senales de fuentes: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif, Montserrat, sans-serif, "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, Cantarell, "Noto Sans", sans-serif, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji", Geist, "Geist Fallback", Geist, sans-serif, "Geist Mono", monospace, "Geist Mono", "Geist Mono Fallback"
 - Paleta: primary #0f766e, secondary #263238, accent #e2a86b, bg #fbfaf7, fg #151716
 
 ## Media
@@ -72,15 +72,13 @@ Regla: usar estos archivos solo como referencia compatible despues de review, re
 ### Requerida
 - Hero poster liviano o imagen principal con permiso de uso.
 - Imagen por producto o placeholder aprobado para cada producto publicado.
-- 2 producto(s) sin imagen en catalogo.
 
 ### Opcional
 - Micro video de uso del producto con poster
 - Fotos de textura o detalle
 
 ### Pedidos De Generacion
-- Pedir o generar asset hero para Luma Skin Demo: visual real del rubro, limpio, con espacio para copy y sin logos de terceros.
-- Pedir fotos o generar placeholders aprobados para: Gel limpiador suave, Crema barrera hidratante.
+- No hace falta pedir generacion ahora.
 
 ## Implementacion
 - Abrir screenshots desktop y mobile seleccionados antes de tocar layout.
@@ -111,4 +109,4 @@ Regla: usar estos archivos solo como referencia compatible despues de review, re
 - Probar agregar producto, abrir carrito, quitar producto y checkout/cotizacion.
 
 ## Warnings
-- Faltan assets visuales; pedirlos o generarlos antes de entrega profesional.
+- Sin warnings.

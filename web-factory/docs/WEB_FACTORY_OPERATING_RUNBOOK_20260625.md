@@ -90,6 +90,19 @@ Flujo directo si ya existe el perfil:
 pnpm factory:build -- <slug> --template landing --force
 ```
 
+Si el build de Next falla con manifests incompletos como `Cannot find module
+for page` o falta `.next/server/edge-runtime-webpack.js`, primero cerrar
+previews locales y compilar con limpieza controlada:
+
+```powershell
+pnpm preview:stop
+pnpm build:stable
+```
+
+`build:stable` detiene procesos locales de `next`/`pnpm`/`postcss` que esten
+apuntando a `apps/site`, borra solo `.next` dentro de ese sitio y reintenta una
+vez si Next deja un manifest parcial.
+
 ## Contrato de referencias
 
 Cada referencia debe explicar el uso permitido:
@@ -125,13 +138,17 @@ CTA, uso de producto, confianza y flujo de conversion.
 
 Estos intakes validan rubros y estructura:
 
+- `data/intakes/demo.json` -> clinica dental base.
 - `data/intakes/skincare-demo.json` -> ecommerce skincare.
 - `data/intakes/restaurant-demo.json` -> restaurante.
 - `data/intakes/clinic-demo.json` -> clinica.
 - `data/intakes/engineering-demo.json` -> ingenieria.
 - `data/intakes/saas-demo.json` -> SaaS B2B.
 
-Cada uno genera su perfil en `data/clients/` y su contexto `.context.md`.
+Cada uno genera su perfil en `data/clients/` y su contexto `.context.md`. Las
+demos incluyen assets SVG sinteticos y livianos en
+`data/clients/<slug>.assets/`; sirven para preview interno y deben reemplazarse
+por fotos, screenshots o packshots aprobados cuando el cliente real lo requiera.
 
 ## Validacion de fabrica
 
@@ -140,10 +157,10 @@ pnpm factory:smoke
 pnpm design:auto -- skincare-demo --template store --force
 pnpm factory:build -- skincare-demo --template store --force
 pnpm --filter site lint
-pnpm --filter site build
+pnpm build:stable
 ```
 
-`factory:smoke` corre tests y genera previews para los cinco rubros demo.
+`factory:smoke` corre tests y genera previews para los rubros demo canonicos.
 
 `design:auto` valida que la fabrica pueda razonar sobre rubro, referencias,
 capturas, codigo permitido y media faltante. `factory:build` valida el flujo
@@ -156,6 +173,9 @@ completo sin pedir informacion al usuario si el intake ya tiene datos clave.
   `preload="none"` y carga diferida para no afectar el inicio.
 - Si el cliente no entrega assets, usar `media.assetPermission=generate-ai` y
   registrar en contexto que el asset queda pendiente de producir.
+- Para demos internas se permiten SVGs sinteticos versionados; para entrega
+  profesional se reemplazan por assets propios, generados/aprobados o
+  licenciados.
 
 ## Criterio de "listo para cliente"
 

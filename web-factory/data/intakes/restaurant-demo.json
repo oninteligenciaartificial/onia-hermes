@@ -36,8 +36,9 @@
     ]
   },
   "media": {
+    "heroPoster": "assets/restaurant-hero.svg",
     "assetPermission": "generate-ai",
-    "notes": "Necesita fotos reales de platos antes de publicar."
+    "notes": "Demo interna con asset sintetico. Para cliente real, reemplazar por fotos reales de platos antes de publicar."
   },
   "content": {
     "services": [

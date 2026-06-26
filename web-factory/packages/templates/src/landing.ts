@@ -240,6 +240,26 @@ h1 {
 
 .wf-proof-panel {
   padding: clamp(24px, 4vw, 42px);
+  overflow: hidden;
+}
+
+.wf-hero-media {
+  margin: -18px -18px 24px;
+  aspect-ratio: 4 / 3;
+  border-radius: 8px;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--color-primary) 9%, var(--color-bg));
+}
+
+.wf-hero-media img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.wf-proof-copy {
+  display: block;
 }
 
 .wf-proof-panel strong {

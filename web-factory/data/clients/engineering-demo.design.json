@@ -1,6 +1,6 @@
 {
   "schemaVersion": "web-factory-auto-design-v1",
-  "generatedAt": "2026-06-25T20:30:20.246Z",
+  "generatedAt": "2026-06-26T21:50:12.502Z",
   "client": {
     "slug": "engineering-demo",
     "name": "Altura Engineers Demo",
@@ -80,84 +80,6 @@
       "score": 99
     },
     {
-      "role": "motion",
-      "sourceName": "Lapa Ninja",
-      "title": "Hero Studios - Landing Page Design | Lapa Ninja",
-      "url": "https://www.lapa.ninja/post/hero-studios/",
-      "licenseStatus": "inspiration-only",
-      "reuseGuidance": "Landing-page structure, section ordering, visual hierarchy and copy patterns. Do not copy site code or proprietary assets.",
-      "screenshots": {
-        "desktop": {
-          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/lapa-ninja/149-hero-studios-572d5ecf/desktop.png",
-          "sha256": "cb23250aa27395c49865097d571734ab4a8eae9f6be1a94393ad3c5bf21b05ed",
-          "mode": "viewport"
-        },
-        "mobile": {
-          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/lapa-ninja/149-hero-studios-572d5ecf/mobile.png",
-          "sha256": "f7a36322efc1d0b44def49ce8bfede16c3963c9436e3f526e45d2a7ac2c36995",
-          "mode": "viewport"
-        }
-      },
-      "headings": [
-        {
-          "level": "h1",
-          "text": "Hero Studios Website Design"
-        },
-        {
-          "level": "h2",
-          "text": "A motion design and animation studio creating systems, stories, and solutions for global brands."
-        },
-        {
-          "level": "h3",
-          "text": "Website Details"
-        },
-        {
-          "level": "h3",
-          "text": "Similar Websites"
-        },
-        {
-          "level": "h3",
-          "text": "Lee Jameson"
-        },
-        {
-          "level": "h3",
-          "text": "Roberta Ungaro"
-        }
-      ],
-      "ctas": [
-        "Lapa Ninja - Go to homepage",
-        "Toggle dark mode",
-        "Open main menu",
-        "Websites",
-        "Browse All ⭐7410",
-        "SaaS ⭐691",
-        "Business ⭐2453",
-        "Minimal3051",
-        "Agency ⭐971",
-        "Portfolio ⭐1067",
-        "Studio ⭐862",
-        "Web368"
-      ],
-      "topFonts": [
-        "Inter, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif"
-      ],
-      "motionSignals": {
-        "libraries": {},
-        "animatedElementCount": 0,
-        "keyframes": []
-      },
-      "codeLinks": [],
-      "qualityWarnings": [],
-      "whySelected": [
-        "tiene screenshot desktop",
-        "tiene screenshot mobile",
-        "aporta senales de fuente",
-        "aporta CTAs reales",
-        "fuente fuerte para patrones web"
-      ],
-      "score": 35
-    },
-    {
       "role": "structure",
       "sourceName": "SaaSFrame Landing Pages",
       "title": "Slite UX/UI Design and Copywrinting Examples - SaaSFrame",
@@ -167,12 +89,12 @@
       "screenshots": {
         "desktop": {
           "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/saasframe-landing-pages/285-landing-page-4197935a/desktop.png",
-          "sha256": "8918024c37fa24430e27a7c95ad9a18e8329969c588d962b85825af0829a8ed7",
+          "sha256": "4045631a7e8a794e8aa44245ebe855756b8e50d3cc56698fc96bcadfbb2557a7",
           "mode": "viewport"
         },
         "mobile": {
           "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/saasframe-landing-pages/285-landing-page-4197935a/mobile.png",
-          "sha256": "db87bda5ffc9a682c91275058a290075929bc8a6ebd35547f5d425a4791dd8e9",
+          "sha256": "a56dfbee361795cd3edfef745ea6fd578e3f54e55e6f0bbbf313e92bf85362d4",
           "mode": "viewport"
         }
       },
@@ -221,9 +143,20 @@
         "Montserrat, sans-serif"
       ],
       "motionSignals": {
-        "libraries": {},
-        "animatedElementCount": 0,
-        "keyframes": []
+        "libraries": {
+          "framerMotion": false,
+          "gsap": false,
+          "three": false,
+          "lottie": false,
+          "locomotiveScroll": false
+        },
+        "animatedElementCount": 43,
+        "keyframes": [
+          "spin",
+          "borderTurn",
+          "borderTurnWithTranslate",
+          "scroll"
+        ]
       },
       "codeLinks": [
         {
@@ -244,85 +177,6 @@
     },
     {
       "role": "structure",
-      "sourceName": "SaaS Landing Page",
-      "title": "Mobbin page - SaaS Landing Page",
-      "url": "https://saaslandingpage.com/mobbin/",
-      "licenseStatus": "inspiration-only",
-      "reuseGuidance": "SaaS page section taxonomy: landing, pricing, about, features, testimonials, FAQ and contact.",
-      "screenshots": {
-        "desktop": {
-          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/saaslandingpage/023-mobbin-041ae462/desktop.png",
-          "sha256": "bd7e1c728c29041989532f9bf3fd47bfa1fd4150168dd495dc5b8d8969a9dab8",
-          "mode": "viewport"
-        },
-        "mobile": {
-          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/saaslandingpage/023-mobbin-041ae462/mobile.png",
-          "sha256": "22018251078006fff0737e6eb01dd5e118ef4dde006ae26c8e59ee1009abd31e",
-          "mode": "viewport"
-        }
-      },
-      "headings": [
-        {
-          "level": "h1",
-          "text": "Saaslandingpage"
-        },
-        {
-          "level": "h1",
-          "text": "Mobbin"
-        },
-        {
-          "level": "h3",
-          "text": "Post navigation"
-        },
-        {
-          "level": "h3",
-          "text": "Inspiration"
-        },
-        {
-          "level": "h3",
-          "text": "Templates"
-        },
-        {
-          "level": "h3",
-          "text": "Resources"
-        }
-      ],
-      "ctas": [
-        "✨ Looking for app inspiration? Check out SaaS Interface ✨",
-        "Saaslandingpage",
-        "Menu",
-        "Inspiration",
-        "App Inspiration",
-        "Templates",
-        "Visit Website",
-        "Saans",
-        "141414",
-        "Next.js",
-        "React",
-        "Tailwind CSS"
-      ],
-      "topFonts": [
-        "Inter, Inter_Fallback",
-        "Outfit, Outfit_Fallback"
-      ],
-      "motionSignals": {
-        "libraries": {},
-        "animatedElementCount": 0,
-        "keyframes": []
-      },
-      "codeLinks": [],
-      "qualityWarnings": [],
-      "whySelected": [
-        "tiene screenshot desktop",
-        "tiene screenshot mobile",
-        "aporta senales de fuente",
-        "aporta CTAs reales",
-        "fuente fuerte para patrones web"
-      ],
-      "score": 35
-    },
-    {
-      "role": "structure",
       "sourceName": "Landingfolio",
       "title": "HeadshotPro Landing Page Inspiration and More | Landingfolio",
       "url": "https://www.landingfolio.com/inspiration/post/headshotpro-1",
@@ -331,12 +185,12 @@
       "screenshots": {
         "desktop": {
           "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/landingfolio/091-headshotpro-a3943c9a/desktop.png",
-          "sha256": "c69479b2d3b13d59149719a80ebdbb74396cef85ec2cebbced0e70f207fd42bf",
+          "sha256": "db4eec9b71cbc035c4f0d465650e013db3157b15469cc36b7c6487f204a61b9d",
           "mode": "viewport"
         },
         "mobile": {
           "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/landingfolio/091-headshotpro-a3943c9a/mobile.png",
-          "sha256": "22b22dc04c27cfd0dcee70f2d544ebed477457b9a846c807aa68d35ede88f4c6",
+          "sha256": "4ebaad8617fb2483574338e53f5b594e97c08ec6a3509b4480445e47d272cfc8",
           "mode": "viewport"
         }
       },
@@ -384,9 +238,28 @@
         "\"Plus Jakarta Sans\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", Roboto, Ubuntu, Cantarell, \"Noto Sans\", sans-serif, BlinkMacSystemFont, \"Segoe UI\", \"Helvetica Neue\", Arial, \"Noto Sans\", \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
       ],
       "motionSignals": {
-        "libraries": {},
-        "animatedElementCount": 0,
-        "keyframes": []
+        "libraries": {
+          "framerMotion": false,
+          "gsap": false,
+          "three": false,
+          "lottie": false,
+          "locomotiveScroll": false
+        },
+        "animatedElementCount": 39,
+        "keyframes": [
+          "pulse",
+          "spin",
+          "sk-chase-01e585e4",
+          "sk-chase-dot-01e585e4",
+          "sk-chase-dot-before-01e585e4",
+          "animatedgradient-4e4b04ca",
+          "animatedgradient",
+          "animatedgradient-06789daf",
+          "animatedgradient-fac1f164",
+          "fadeOut",
+          "fadeInDown",
+          "fadeInUp"
+        ]
       },
       "codeLinks": [
         {
@@ -410,78 +283,166 @@
       "score": 39
     },
     {
-      "role": "typography",
-      "sourceName": "Fontpair",
-      "title": "Icons Library — Free Open-Source SVG Icon Sets | Fontpair",
-      "url": "https://fontpair.co/icons",
-      "licenseStatus": "typography-reference",
-      "reuseGuidance": "Font-pair inspiration and typographic mood extraction. Check font licenses before use.",
+      "role": "structure",
+      "sourceName": "Recent Design",
+      "title": "Web Design Inspiration — Recent",
+      "url": "https://recent.design/websites",
+      "licenseStatus": "inspiration-only",
+      "reuseGuidance": "Daily recent design references across websites, OG images, app screenshots and design skills.",
       "screenshots": {
         "desktop": {
-          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/fontpair/088-fontpair-8ba6d672/desktop.png",
-          "sha256": "49936ca7c22c00eb64863596f168e6072471b9eaac54b13a46d55fa399691da9",
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/recent-design/003-websites-cd2e1db3/desktop.png",
+          "sha256": "cbcac84dd3dbd849d20f15fc8cc844deb369bf9af8163cf333725cfc33b23270",
           "mode": "viewport"
         },
         "mobile": {
-          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/fontpair/088-fontpair-8ba6d672/mobile.png",
-          "sha256": "0ee831c9265cb4b60a2df4e94f7d878c2508ad2345d2845c4e0b0dc5f522f135",
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/recent-design/003-websites-cd2e1db3/mobile.png",
+          "sha256": "b4a59bd1ac6583c9e1c38bf63b6900f3d3df31b8a3a87160aaaf9e730468f96c",
+          "mode": "viewport"
+        }
+      },
+      "headings": [
+        {
+          "level": "h2",
+          "text": "Subscribe to the Recent digest"
+        },
+        {
+          "level": "h2",
+          "text": "Stay ahead of trends"
+        }
+      ],
+      "ctas": [
+        "Recent",
+        "All",
+        "Best of X",
+        "Websites",
+        "OG Images",
+        "App Screenshots",
+        "App Icons",
+        "Skills",
+        "Info",
+        "Subscribe",
+        "All",
+        "Portfolio"
+      ],
+      "topFonts": [
+        "ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+      ],
+      "motionSignals": {
+        "libraries": {
+          "framerMotion": false,
+          "gsap": false,
+          "three": false,
+          "lottie": false,
+          "locomotiveScroll": false
+        },
+        "animatedElementCount": 48,
+        "keyframes": [
+          "ping",
+          "pulse"
+        ]
+      },
+      "codeLinks": [],
+      "qualityWarnings": [],
+      "whySelected": [
+        "tiene screenshot desktop",
+        "tiene screenshot mobile",
+        "aporta senales de fuente",
+        "aporta CTAs reales",
+        "fuente fuerte para patrones web"
+      ],
+      "score": 35
+    },
+    {
+      "role": "component",
+      "sourceName": "Kibo UI",
+      "title": "Gantt",
+      "url": "https://www.kibo-ui.com/components/gantt",
+      "licenseStatus": "open-source-review-required",
+      "reuseGuidance": "Accessible shadcn-compatible component ideas and registry signals. Verify repository/license before copying code.",
+      "screenshots": {
+        "desktop": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/kibo-ui/098-kibo-ui-com-components-gan-8008b377/desktop.png",
+          "sha256": "7bd6f0290c385f9370d07262582f73b7ef8fb661a5dde8e52ca8ca85a359c5a8",
+          "mode": "viewport"
+        },
+        "mobile": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/kibo-ui/098-kibo-ui-com-components-gan-8008b377/mobile.png",
+          "sha256": "2a06f2000efe46447e650bd24ab821eb913b23b142255d7ee50fcaec81bf0a40",
           "mode": "viewport"
         }
       },
       "headings": [
         {
           "level": "h1",
-          "text": "Icons"
+          "text": "Gantt"
+        },
+        {
+          "level": "h2",
+          "text": "Installation"
+        },
+        {
+          "level": "h2",
+          "text": "Features"
+        },
+        {
+          "level": "h2",
+          "text": "Examples"
         },
         {
           "level": "h3",
-          "text": "Akar Icons"
+          "text": "Multiple items on one row"
         },
         {
           "level": "h3",
-          "text": "Eva Icons"
-        },
-        {
-          "level": "h3",
-          "text": "Feather Icons"
-        },
-        {
-          "level": "h3",
-          "text": "Flowbite Icons"
-        },
-        {
-          "level": "h3",
-          "text": "Glow Icons"
+          "text": "Without a sidebar"
         }
       ],
       "ctas": [
-        "Playground",
-        "Pairings",
-        "Fonts",
-        "Inspiration",
-        "Resources",
-        "Login",
-        "Sign Up",
-        "Go Pro",
-        "Settings",
-        "Toggle mobile menu",
-        "Icons",
-        "Colors"
+        "Kibo UIKibo UI",
+        "Docs",
+        "Components41",
+        "Blocks28",
+        "Patterns1101",
+        "Search...⌘K",
+        "Shadcn UI Blocks",
+        "GitHub3.8K",
+        "Avatar Stack",
+        "Cursor",
+        "Calendar",
+        "Gantt"
       ],
       "topFonts": [
-        "Geist, sans-serif",
-        "Geist, system-ui, -apple-system, sans-serif",
-        "\"Geist Mono\", ui-monospace, monospace"
+        "Geist, \"Geist Fallback\""
       ],
       "motionSignals": {
-        "libraries": {},
-        "animatedElementCount": 0,
-        "keyframes": []
+        "libraries": {
+          "framerMotion": false,
+          "gsap": false,
+          "three": false,
+          "lottie": false,
+          "locomotiveScroll": false
+        },
+        "animatedElementCount": 61,
+        "keyframes": [
+          "spin",
+          "ping",
+          "pulse",
+          "fd-sidebar-in",
+          "fd-sidebar-out",
+          "fd-dialog-in",
+          "fd-dialog-out",
+          "fd-popover-in",
+          "fd-popover-out",
+          "fd-fade-in",
+          "fd-fade-out",
+          "fd-enterFromRight"
+        ]
       },
       "codeLinks": [
         {
-          "url": "https://supercons.vercel.app/",
-          "text": ""
+          "url": "https://github.com/shadcnblocks/kibo",
+          "text": "GitHub3.8K"
         }
       ],
       "qualityWarnings": [],
@@ -495,21 +456,21 @@
       "score": 33
     },
     {
-      "role": "component",
+      "role": "typography",
       "sourceName": "Magic UI",
-      "title": "Magic UI",
-      "url": "http://magicui.design/",
+      "title": "Kinetic Text | React Components & Templates",
+      "url": "https://magicui.design/docs/components/kinetic-text",
       "licenseStatus": "mit-open-source-reference",
       "reuseGuidance": "Animated marketing components, effects and motion patterns for landing pages. Prefer local MIT repo or registry install commands for implementation.",
       "screenshots": {
         "desktop": {
-          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/magic-ui/242-magicui-design-6edb6ee7/desktop.png",
-          "sha256": "c80e920bde1e4ffa6cfc409525f32e1784871e873bafede4e48ce02b78dd2428",
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/magic-ui/007-introducing-kinetic-text-fbd94463/desktop.png",
+          "sha256": "5d1be9ce1cefe74cbba3d6ce9065f18b0c93c1914a19d7b312d6db04433d624b",
           "mode": "viewport"
         },
         "mobile": {
-          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/magic-ui/242-magicui-design-6edb6ee7/mobile.png",
-          "sha256": "1da0b1aa0d7936c55b609e7b3fcc9882ce37eda8553d107cd26f6f66f47221a6",
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/magic-ui/007-introducing-kinetic-text-fbd94463/mobile.png",
+          "sha256": "2b0e9e5307d001dc3ff968221d8c05b0c717bb43e1af7798cea0cc31a33b3227",
           "mode": "viewport"
         }
       },
@@ -520,23 +481,23 @@
         },
         {
           "level": "h1",
-          "text": "UI library for Design Engineers"
+          "text": "Kinetic Text"
+        },
+        {
+          "level": "h1",
+          "text": "NostalgiaNostalgia"
         },
         {
           "level": "h2",
-          "text": "Showcase"
-        },
-        {
-          "level": "h3",
-          "text": "Companies choose Magic UI to build their landing pages."
+          "text": "Installation"
         },
         {
           "level": "h2",
-          "text": "What People Are Saying on Twitter"
+          "text": "Usage"
         },
         {
           "level": "h2",
-          "text": "Featured on YouTube"
+          "text": "Props"
         }
       ],
       "ctas": [
@@ -546,12 +507,12 @@
         "Templates",
         "Showcase",
         "Search documentation...Search...⌘K",
-        "21,35421.4k",
-        "205",
+        "21,36621.4k",
+        "215",
         "Toggle theme",
-        "🎉 Introducing Kinetic Text",
-        "Browse Components",
-        "Browse Templates"
+        "Introduction",
+        "Installation",
+        "MCP"
       ],
       "topFonts": [
         "Geist, sans-serif",
@@ -565,7 +526,7 @@
           "lottie": false,
           "locomotiveScroll": false
         },
-        "animatedElementCount": 96,
+        "animatedElementCount": 113,
         "keyframes": [
           "spin",
           "ping",
@@ -584,35 +545,116 @@
       "codeLinks": [
         {
           "url": "https://github.com/magicuidesign/magicui",
-          "text": "21,35421.4k"
+          "text": "21,36621.4k"
         },
         {
-          "url": "https://elhussary.vercel.app/",
-          "text": "elhussaryPersonal Portfolio"
+          "url": "https://github.com/abdmjd1",
+          "text": "@abdmjd1"
         },
         {
-          "url": "https://robot-toast.vercel.app/",
-          "text": "robot-toastOpen-source library"
+          "url": "https://github.com/magicuidesign/magicui/issues/new?title=%5Bbug%5D%3A+%2Fdocs%2Fcomponents%2Fkinetic-text&labels=bug&labels=documentation&template=bug_report.yml",
+          "text": "Report an issue"
         },
         {
-          "url": "https://elhussary.vercel.app/",
-          "text": "elhussaryPersonal Portfolio"
+          "url": "https://github.com/magicuidesign/magicui/issues/new?title=%5Bfeat%5D%3A+%2Fdocs%2Fcomponents%2Fkinetic-text&labels=enhancement&template=feature_request.yml",
+          "text": "Request a feature"
         },
         {
-          "url": "https://robot-toast.vercel.app/",
-          "text": "robot-toastOpen-source library"
+          "url": "https://github.com/magicuidesign/magicui/edit/main/apps/www/content/docs/components/kinetic-text.mdx",
+          "text": "Edit this page"
         },
         {
-          "url": "https://elhussary.vercel.app/",
-          "text": "elhussaryPersonal Portfolio"
+          "url": "https://github.com/magicuidesign/magicui",
+          "text": "GitHub"
+        }
+      ],
+      "qualityWarnings": [],
+      "whySelected": [
+        "tiene screenshot desktop",
+        "tiene screenshot mobile",
+        "aporta senales de fuente",
+        "aporta CTAs reales",
+        "aporta links o bloques de codigo para estudiar",
+        "fuente fuerte para patrones web",
+        "tiene pista de codigo reusable con review"
+      ],
+      "score": 43
+    },
+    {
+      "role": "component",
+      "sourceName": "shadcn/ui",
+      "title": "Building Blocks for the Web - shadcn/ui",
+      "url": "https://ui.shadcn.com/blocks/sidebar",
+      "licenseStatus": "mit-repo-available",
+      "reuseGuidance": "Base component architecture and accessible UI primitives. Prefer the locally cached MIT repository for code.",
+      "screenshots": {
+        "desktop": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/shadcn-ui/034-browse-more-blocks-11813c15/desktop.png",
+          "sha256": "78ff29691212bb539569f5981aa5cd69b94b2428e93ad09483963ef9da78882a",
+          "mode": "viewport"
+        },
+        "mobile": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/shadcn-ui/034-browse-more-blocks-11813c15/mobile.png",
+          "sha256": "744cce335ea6e9e3e2f2d48aa5311e654bc179b6ac0373ccbe6a0729a3cf4177",
+          "mode": "viewport"
+        }
+      },
+      "headings": [
+        {
+          "level": "h1",
+          "text": "Building Blocks for the Web"
+        }
+      ],
+      "ctas": [
+        "Toggle MenuMenu",
+        "Home",
+        "Docs",
+        "Components",
+        "Blocks",
+        "Charts",
+        "Directory",
+        "Create",
+        "Search documentation...Search...",
+        "117k",
+        "Toggle theme",
+        "Open in"
+      ],
+      "topFonts": [
+        "Geist, \"Geist Fallback\"",
+        "\"Geist Mono\", \"Geist Mono Fallback\""
+      ],
+      "motionSignals": {
+        "libraries": {
+          "framerMotion": false,
+          "gsap": false,
+          "three": false,
+          "lottie": false,
+          "locomotiveScroll": false
+        },
+        "animatedElementCount": 75,
+        "keyframes": [
+          "spin",
+          "pulse",
+          "enter",
+          "exit",
+          "accordion-down",
+          "accordion-up",
+          "caret-blink",
+          "scroll-fade-reveal-t",
+          "scroll-fade-reveal-b",
+          "scroll-fade-reveal-s",
+          "scroll-fade-reveal-e",
+          "tw-shimmer"
+        ]
+      },
+      "codeLinks": [
+        {
+          "url": "https://github.com/shadcn-ui/ui",
+          "text": "117k"
         },
         {
-          "url": "https://robot-toast.vercel.app/",
-          "text": "robot-toastOpen-source library"
-        },
-        {
-          "url": "https://elhussary.vercel.app/",
-          "text": "elhussaryPersonal Portfolio"
+          "url": "https://github.com/shadcn-ui/ui",
+          "text": "GitHub"
         }
       ],
       "qualityWarnings": [],
@@ -629,6 +671,35 @@
     }
   ],
   "codeReferences": [
+    {
+      "repo": "harshjdhv__componentry",
+      "license": "MIT",
+      "status": "allowed-after-review",
+      "localPath": "C:/Users/PC/.codex/design-stack/repos/harshjdhv__componentry",
+      "file": "packages/ui/src/components/flight-status-card.tsx",
+      "sha256": "cdacb853efe2fd29d42ad5a7bfb426327798cdc80f6d4d78458468c452b789c8",
+      "signals": {
+        "type": "react-component",
+        "hasTailwind": true,
+        "hasMotion": true,
+        "hasShadcn": true,
+        "imports": [
+          "react",
+          "@workspace/ui/lib/utils",
+          "framer-motion"
+        ],
+        "exports": []
+      },
+      "samplePreview": "\"use client\"\n\nimport * as React from \"react\"\nimport { cn } from \"@workspace/ui/lib/utils\"\nimport { motion } from \"framer-motion\"\n\n// Dot matrix patterns for each character (5x7 grid)\nconst DOT_MATRIX: Record<string, number[][]> = {\n  Y: [\n    [1, 0, 0, 0, 1],\n    [0, 1, 0, 1, 0],\n    [0, 0, 1, 0, 0],\n    [0, 0, 1, 0, 0],\n    [0, 0, 1, 0, 0],\n    [0, 0, 1, 0, 0],\n    [0, 0, 1, 0, 0],\n  ],\n  Z: [\n    [1, 1, 1, 1, 1],\n    [0, 0, 0, 1, 0],\n    [0, 0, 1, 0, 0],\n    [0, 1, 0, 0, 0],\n    [1, 0, 0, 0, 0],\n    [1, 0, 0, 0, 0],\n    [1, 1, 1, 1, 1],\n  ],\n  H: [\n    [1, 0, 0, 0, 1],\n    [1, 0, 0, 0, 1],\n    [1, 0, 0, 0, 1],\n    [1, 1, 1, 1, 1],\n    [1, 0, 0, 0, 1],\n    [1, 0, 0, 0, 1],\n    [1, 0, 0, 0, 1],\n  ],\n  N: [\n    [1, 0, 0, 0, 1],\n    [1, 1, 0, 0, 1],\n    [1, 0, 1, 0, 1],\n    [1, 0, 0, 1, 1],\n    [1, 0, 0, 0, 1],\n    [1, 0, 0, 0, 1],\n    [1, 0, 0, 0, 1],\n  ],\n  D: [\n    [1, 1, 1, 1, 0],\n    \n/* sample truncated in recipe */",
+      "whySelected": [
+        "licencia MIT",
+        "compatible con Tailwind/tokenizacion",
+        "patron shadcn revisable",
+        "match de componente: card"
+      ],
+      "reuseRule": "Allowed only after manual code review, retokenization, dependency check, accessibility check and responsive QA.",
+      "score": 31
+    },
     {
       "repo": "shadcn-ui__ui",
       "license": "MIT",
@@ -700,6 +771,113 @@
       ],
       "reuseRule": "Allowed only after manual code review, retokenization, dependency check, accessibility check and responsive QA.",
       "score": 31
+    },
+    {
+      "repo": "tremorlabs__tremor",
+      "license": "MIT",
+      "status": "allowed-after-review",
+      "localPath": "C:/Users/PC/.codex/design-stack/repos/tremorlabs__tremor",
+      "file": "src/components/Card/card.stories.tsx",
+      "sha256": "93dbd367d1e585479cc0d2ad00753e4833f7dc49d89c9db5a65435bafff5e3c0",
+      "signals": {
+        "type": "react-component",
+        "hasTailwind": true,
+        "hasMotion": false,
+        "hasShadcn": true,
+        "imports": [
+          "@storybook/react",
+          "../Button/Button",
+          "../Checkbox/Checkbox",
+          "../Divider/Divider",
+          "../Input/Input",
+          "../Label/Label",
+          "../RadioGroup/RadioGroup",
+          "../Select/Select",
+          "../SelectNative/SelectNative",
+          "../Switch/Switch",
+          "../Tabs/Tabs",
+          "../Textarea/Textarea",
+          "../Tooltip/Tooltip",
+          "./Card"
+        ],
+        "exports": [
+          "Default",
+          "WithText",
+          "WithFullDivider",
+          "AsChildList",
+          "WithInputs"
+        ]
+      },
+      "samplePreview": "import type { Meta, StoryObj } from \"@storybook/react\"\n\nimport { Button } from \"../Button/Button\"\nimport { Checkbox } from \"../Checkbox/Checkbox\"\nimport { Divider } from \"../Divider/Divider\"\nimport { Input } from \"../Input/Input\"\nimport { Label } from \"../Label/Label\"\nimport { RadioGroup, RadioGroupItem } from \"../RadioGroup/RadioGroup\"\nimport {\n  Select,\n  SelectContent,\n  SelectItem,\n  SelectTrigger,\n  SelectValue,\n} from \"../Select/Select\"\nimport { SelectNative } from \"../SelectNative/SelectNative\"\nimport { Switch } from \"../Switch/Switch\"\nimport { Tabs, TabsContent, TabsList, TabsTrigger } from \"../Tabs/Tabs\"\nimport { Textarea } from \"../Textarea/Textarea\"\nimport { Tooltip } from \"../Tooltip/Tooltip\"\nimport { Card } from \"./Card\"\n\nconst meta: Meta<typeof Card> = {\n  title: \"ui/Card\",\n  component: Card,\n}\n\nexport default meta\ntype Story = StoryObj<typeof Card>\n\nexport const Default: S\n/* sample truncated in recipe */",
+      "whySelected": [
+        "licencia MIT",
+        "compatible con Tailwind/tokenizacion",
+        "patron shadcn revisable",
+        "match de componente: card"
+      ],
+      "reuseRule": "Allowed only after manual code review, retokenization, dependency check, accessibility check and responsive QA.",
+      "score": 31
+    },
+    {
+      "repo": "harshjdhv__componentry",
+      "license": "MIT",
+      "status": "allowed-after-review",
+      "localPath": "C:/Users/PC/.codex/design-stack/repos/harshjdhv__componentry",
+      "file": "packages/ui/src/components/orbit-card-stack.tsx",
+      "sha256": "2035496757bef888494bf85656da4cad00d775db6452e88637e32a8f5e806e6f",
+      "signals": {
+        "type": "react-component",
+        "hasTailwind": true,
+        "hasMotion": true,
+        "hasShadcn": false,
+        "imports": [
+          "@workspace/ui/lib/utils",
+          "lucide-react",
+          "framer-motion",
+          "react"
+        ],
+        "exports": [
+          "OrbitCardStack"
+        ]
+      },
+      "samplePreview": "\"use client\";\n\nimport { cn } from \"@workspace/ui/lib/utils\";\nimport { ArrowUpRight } from \"lucide-react\";\nimport { motion, useReducedMotion, type Transition } from \"framer-motion\";\nimport { useEffect, useMemo, useRef, useState, type CSSProperties } from \"react\";\n\nexport interface OrbitStackItem {\n  name: string;\n  role: string;\n  description: string;\n  accent?: string;\n  initials?: string;\n  stat?: string;\n  image?: string;\n}\n\ninterface OrbitCardStackProps {\n  /** Cards shown in the stack. */\n  items?: OrbitStackItem[];\n  /** Additional CSS classes for the outer stage. */\n  className?: string;\n  /** Additional CSS classes for each card. */\n  cardClassName?: string;\n  /** Card that sits at the front when the stack is collapsed. */\n  defaultActiveIndex?: number;\n  /** Horizontal fan distance in pixels. */\n  spread?: number;\n  /** Vertical lift for hovered cards in pixels. */\n  lift?: numbe\n/* sample truncated in recipe */",
+      "whySelected": [
+        "licencia MIT",
+        "compatible con Tailwind/tokenizacion",
+        "match de componente: card"
+      ],
+      "reuseRule": "Allowed only after manual code review, retokenization, dependency check, accessibility check and responsive QA.",
+      "score": 27
+    },
+    {
+      "repo": "harshjdhv__componentry",
+      "license": "MIT",
+      "status": "allowed-after-review",
+      "localPath": "C:/Users/PC/.codex/design-stack/repos/harshjdhv__componentry",
+      "file": "packages/ui/src/components/scroll-split-card.tsx",
+      "sha256": "691e925dcb253e14726509de2bee78c547699f380483d4c7ef805a4b8d352d8d",
+      "signals": {
+        "type": "react-component",
+        "hasTailwind": true,
+        "hasMotion": true,
+        "hasShadcn": false,
+        "imports": [
+          "@workspace/ui/lib/utils",
+          "framer-motion",
+          "react"
+        ],
+        "exports": [
+          "ScrollSplitCard"
+        ]
+      },
+      "samplePreview": "\"use client\";\n\nimport { cn } from \"@workspace/ui/lib/utils\";\nimport { motion, useScroll, useTransform, useMotionTemplate } from \"framer-motion\";\nimport { useRef, useState, useEffect } from \"react\";\n\ninterface ScrollSplitCardItem {\n  title: string;\n  description: string;\n  bgColor: string;\n  textColor: string;\n  icon?: React.ReactNode;\n}\n\ninterface ScrollSplitCardProps {\n  className?: string;\n  imageSrc: string;\n  cards: ScrollSplitCardItem[];\n  containerRef?: React.RefObject<HTMLElement | null>;\n}\n\nexport function ScrollSplitCard({\n  className,\n  imageSrc,\n  cards,\n  containerRef: externalContainerRef,\n}: ScrollSplitCardProps) {\n  const containerRef = useRef<HTMLDivElement>(null);\n  const [scrollContainer, setScrollContainer] = useState<React.RefObject<HTMLElement | null> | undefined>();\n\n  useEffect(() => {\n    if (externalContainerRef?.current) {\n      setScrollContainer(externalContai\n/* sample truncated in recipe */",
+      "whySelected": [
+        "licencia MIT",
+        "compatible con Tailwind/tokenizacion",
+        "match de componente: card"
+      ],
+      "reuseRule": "Allowed only after manual code review, retokenization, dependency check, accessibility check and responsive QA.",
+      "score": 27
     },
     {
       "repo": "ibelick__motion-primitives",
@@ -790,161 +968,33 @@
       "score": 27
     },
     {
-      "repo": "serafimcloud__21st",
-      "license": "MIT",
-      "status": "allowed-after-review",
-      "localPath": "C:/Users/PC/.codex/design-stack/repos/serafimcloud__21st",
-      "file": "apps/web/components/ui/accordion.tsx",
-      "sha256": "3587cd341e12e8b12552a9d3986e5d71130b26dbb21bd9a26413fb00ebafc931",
-      "signals": {
-        "type": "react-component",
-        "hasTailwind": true,
-        "hasMotion": false,
-        "hasShadcn": false,
-        "imports": [
-          "react",
-          "@radix-ui/react-accordion",
-          "@/lib/utils",
-          "@radix-ui/react-icons"
-        ],
-        "exports": []
-      },
-      "samplePreview": "\"use client\"\n\nimport * as React from \"react\"\nimport * as AccordionPrimitive from \"@radix-ui/react-accordion\"\nimport { cn } from \"@/lib/utils\"\nimport { ChevronDownIcon } from \"@radix-ui/react-icons\"\n\nconst Accordion = AccordionPrimitive.Root\n\nconst AccordionItem = React.forwardRef<\n  React.ElementRef<typeof AccordionPrimitive.Item>,\n  React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Item>\n>(({ className, ...props }, ref) => (\n  <AccordionPrimitive.Item\n    ref={ref}\n    className={cn(\"border-b\", className)}\n    {...props}\n  />\n))\nAccordionItem.displayName = \"AccordionItem\"\n\nconst AccordionTrigger = React.forwardRef<\n  React.ElementRef<typeof AccordionPrimitive.Trigger>,\n  React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Trigger>\n>(({ className, children, ...props }, ref) => (\n  <AccordionPrimitive.Header className=\"flex\">\n    <AccordionPrimitive.Trigger\n      ref={ref}\n   \n/* sample truncated in recipe */",
-      "whySelected": [
-        "licencia MIT",
-        "compatible con Tailwind/tokenizacion",
-        "match de componente: accordion"
-      ],
-      "reuseRule": "Allowed only after manual code review, retokenization, dependency check, accessibility check and responsive QA.",
-      "score": 27
-    },
-    {
-      "repo": "tremorlabs__tremor",
-      "license": "MIT",
-      "status": "allowed-after-review",
-      "localPath": "C:/Users/PC/.codex/design-stack/repos/tremorlabs__tremor",
-      "file": "src/components/Accordion/Accordion.tsx",
-      "sha256": "fb83c45c0189d2af57304c4b97221eb215bd721c9c5ca955ee2812de25166d20",
-      "signals": {
-        "type": "react-component",
-        "hasTailwind": true,
-        "hasMotion": false,
-        "hasShadcn": false,
-        "imports": [
-          "react",
-          "@radix-ui/react-accordion",
-          "@remixicon/react",
-          "../../utils/cx"
-        ],
-        "exports": []
-      },
-      "samplePreview": "// Tremor Accordion [v1.0.0]\n\nimport React from \"react\"\nimport * as AccordionPrimitives from \"@radix-ui/react-accordion\"\nimport { RiAddLine } from \"@remixicon/react\"\n\nimport { cx } from \"../../utils/cx\"\n\nconst Accordion = AccordionPrimitives.Root\n\nAccordion.displayName = \"AccordionItem\"\n\nconst AccordionTrigger = React.forwardRef<\n  React.ElementRef<typeof AccordionPrimitives.Trigger>,\n  React.ComponentPropsWithoutRef<typeof AccordionPrimitives.Trigger>\n>(({ className, children, ...props }, forwardedRef) => (\n  <AccordionPrimitives.Header className=\"flex\">\n    <AccordionPrimitives.Trigger\n      className={cx(\n        // base\n        \"group flex flex-1 cursor-pointer items-center justify-between py-3 text-left text-sm leading-none font-medium\",\n        // text color\n        \"text-gray-900 dark:text-gray-50\",\n        // disabled\n        \"data-disabled:cursor-default data-disabled:text-gray-\n/* sample truncated in recipe */",
-      "whySelected": [
-        "licencia MIT",
-        "compatible con Tailwind/tokenizacion",
-        "match de componente: accordion"
-      ],
-      "reuseRule": "Allowed only after manual code review, retokenization, dependency check, accessibility check and responsive QA.",
-      "score": 27
-    },
-    {
-      "repo": "ibelick__motion-primitives",
-      "license": "MIT",
-      "status": "allowed-after-review",
-      "localPath": "C:/Users/PC/.codex/design-stack/repos/ibelick__motion-primitives",
-      "file": "components/core/accordion.tsx",
-      "sha256": "12c5bb95afbb65c3c91334aade4d2aa0ae3b3c1e23db7b1e2ee75d3539354a80",
-      "signals": {
-        "type": "react-component",
-        "hasTailwind": false,
-        "hasMotion": true,
-        "hasShadcn": true,
-        "imports": [
-          "motion/react",
-          "@/lib/utils",
-          "react"
-        ],
-        "exports": []
-      },
-      "samplePreview": "'use client';\nimport {\n  motion,\n  AnimatePresence,\n  Transition,\n  Variants,\n  Variant,\n  MotionConfig,\n} from 'motion/react';\nimport { cn } from '@/lib/utils';\nimport React, { createContext, useContext, useState, ReactNode } from 'react';\n\nexport type AccordionContextType = {\n  expandedValue: React.Key | null;\n  toggleItem: (value: React.Key) => void;\n  variants?: { expanded: Variant; collapsed: Variant };\n};\n\nconst AccordionContext = createContext<AccordionContextType | undefined>(\n  undefined\n);\n\nfunction useAccordion() {\n  const context = useContext(AccordionContext);\n  if (!context) {\n    throw new Error('useAccordion must be used within an AccordionProvider');\n  }\n  return context;\n}\n\nexport type AccordionProviderProps = {\n  children: ReactNode;\n  variants?: { expanded: Variant; collapsed: Variant };\n  expandedValue?: React.Key | null;\n  onValueChange?: (value: React.Key | null) =\n/* sample truncated in recipe */",
-      "whySelected": [
-        "licencia MIT",
-        "patron shadcn revisable",
-        "match de componente: accordion"
-      ],
-      "reuseRule": "Allowed only after manual code review, retokenization, dependency check, accessibility check and responsive QA.",
-      "score": 26
-    },
-    {
       "repo": "nolly-studio__cult-ui",
       "license": "MIT",
       "status": "allowed-after-review",
       "localPath": "C:/Users/PC/.codex/design-stack/repos/nolly-studio__cult-ui",
-      "file": "apps/www/components/block-copy-button.tsx",
-      "sha256": "3a5fc8c0ab993a5b4e6ad40b9df506866441f940c4b6d193496bd9dc54a18768",
+      "file": "apps/www/components/ui/accordion.tsx",
+      "sha256": "f7174c63bb4fb9146343abd2e10dc5c1be0ec3742eab649f5ec114c4466971d8",
       "signals": {
         "type": "react-component",
         "hasTailwind": true,
         "hasMotion": false,
-        "hasShadcn": true,
+        "hasShadcn": false,
         "imports": [
           "react",
+          "@radix-ui/react-accordion",
           "lucide-react",
-          "@/lib/events",
-          "@/components/ui/button",
-          "@/components/ui/tooltip"
+          "@/lib/utils"
         ],
-        "exports": [
-          "BlockCopyButton"
-        ]
+        "exports": []
       },
-      "samplePreview": "\"use client\"\n\nimport * as React from \"react\"\nimport { CheckIcon, ClipboardIcon } from \"lucide-react\"\n\nimport { Event, trackEvent } from \"@/lib/events\"\nimport { Button, ButtonProps } from \"@/components/ui/button\"\nimport {\n  Tooltip,\n  TooltipContent,\n  TooltipTrigger,\n} from \"@/components/ui/tooltip\"\n\nexport function BlockCopyButton({\n  event,\n  name,\n  code,\n  ...props\n}: {\n  event: Event[\"name\"]\n  name: string\n  code: string\n} & ButtonProps) {\n  const [hasCopied, setHasCopied] = React.useState(false)\n\n  React.useEffect(() => {\n    setTimeout(() => {\n      setHasCopied(false)\n    }, 2000)\n  }, [hasCopied])\n\n  return (\n    <Tooltip>\n      <TooltipTrigger asChild>\n        <Button\n          size=\"icon\"\n          variant=\"outline\"\n          className=\"size-7 rounded-[6px] [&_svg]:size-3.5\"\n          onClick={() => {\n            navigator.clipboard.writeText(code)\n            trackEvent({\n   \n/* sample truncated in recipe */",
+      "samplePreview": "\"use client\"\n\nimport * as React from \"react\"\nimport * as AccordionPrimitive from \"@radix-ui/react-accordion\"\nimport { ChevronDown } from \"lucide-react\"\n\nimport { cn } from \"@/lib/utils\"\n\nconst Accordion = AccordionPrimitive.Root\n\nconst AccordionItem = React.forwardRef<\n  React.ElementRef<typeof AccordionPrimitive.Item>,\n  React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Item>\n>(({ className, ...props }, ref) => (\n  <AccordionPrimitive.Item\n    ref={ref}\n    className={cn(\"border-b\", className)}\n    {...props}\n  />\n))\nAccordionItem.displayName = \"AccordionItem\"\n\nconst AccordionTrigger = React.forwardRef<\n  React.ElementRef<typeof AccordionPrimitive.Trigger>,\n  React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Trigger>\n>(({ className, children, ...props }, ref) => (\n  <AccordionPrimitive.Header className=\"flex\">\n    <AccordionPrimitive.Trigger\n      ref={ref}\n      className\n/* sample truncated in recipe */",
       "whySelected": [
         "licencia MIT",
         "compatible con Tailwind/tokenizacion",
-        "patron shadcn revisable"
+        "match de componente: accordion"
       ],
       "reuseRule": "Allowed only after manual code review, retokenization, dependency check, accessibility check and responsive QA.",
-      "score": 26
-    },
-    {
-      "repo": "tremorlabs__tremor",
-      "license": "MIT",
-      "status": "allowed-after-review",
-      "localPath": "C:/Users/PC/.codex/design-stack/repos/tremorlabs__tremor",
-      "file": "src/components/Button/button.stories.tsx",
-      "sha256": "957d34b1bfd11a6f10cca355392206d5cba378a697ddfb36854cd5e2cdcb693b",
-      "signals": {
-        "type": "react-component",
-        "hasTailwind": true,
-        "hasMotion": false,
-        "hasShadcn": true,
-        "imports": [
-          "@storybook/react",
-          "../../utils/cx",
-          "./Button"
-        ],
-        "exports": [
-          "Primary",
-          "Secondary",
-          "Light",
-          "Ghost",
-          "Destructive",
-          "WithDisabled",
-          "IsLoading",
-          "IsLoadingWithChildren",
-          "IsLoadingWithLoadingText",
-          "AsChildAnchor"
-        ]
-      },
-      "samplePreview": "import type { Meta, StoryObj } from \"@storybook/react\"\n\nimport { cx } from \"../../utils/cx\"\nimport { Button, buttonVariants } from \"./Button\"\n\nconst meta: Meta<typeof Button> = {\n  title: \"ui/Button\",\n  component: Button,\n  argTypes: {\n    variant: {\n      control: \"radio\",\n      options: [...Object.keys(buttonVariants.variants.variant)],\n    },\n  },\n}\n\nexport default meta\ntype Story = StoryObj<typeof Button>\n\nexport const Primary: Story = {\n  args: {\n    variant: \"primary\",\n    children: \"Primary\",\n  },\n}\n\nexport const Secondary: Story = {\n  args: {\n    variant: \"secondary\",\n    children: \"Secondary\",\n  },\n}\n\nexport const Light: Story = {\n  args: {\n    variant: \"light\",\n    children: \"Light\",\n  },\n}\n\nexport const Ghost: Story = {\n  args: {\n    variant: \"ghost\",\n    children: \"Ghost\",\n  },\n}\n\nexport const Destructive: Story = {\n  args: {\n    variant: \"destructive\",\n    children: \"Destruc\n/* sample truncated in recipe */",
-      "whySelected": [
-        "licencia MIT",
-        "compatible con Tailwind/tokenizacion",
-        "patron shadcn revisable"
-      ],
-      "reuseRule": "Allowed only after manual code review, retokenization, dependency check, accessibility check and responsive QA.",
-      "score": 26
+      "score": 27
     }
   ],
   "sectionPlan": [
@@ -990,14 +1040,14 @@
       "heading": "Onest",
       "body": "Onest",
       "referenceSignals": [
-        "Inter, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
         "system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Oxygen, Ubuntu, Cantarell, \"Fira Sans\", \"Droid Sans\", \"Helvetica Neue\", sans-serif",
         "Montserrat, sans-serif",
-        "Inter, Inter_Fallback",
-        "Outfit, Outfit_Fallback",
         "\"Plus Jakarta Sans\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", Roboto, Ubuntu, Cantarell, \"Noto Sans\", sans-serif, BlinkMacSystemFont, \"Segoe UI\", \"Helvetica Neue\", Arial, \"Noto Sans\", \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+        "ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+        "Geist, \"Geist Fallback\"",
         "Geist, sans-serif",
-        "Geist, system-ui, -apple-system, sans-serif"
+        "\"Geist Mono\", monospace",
+        "\"Geist Mono\", \"Geist Mono Fallback\""
       ]
     },
     "palette": {
@@ -1034,9 +1084,7 @@
       "Planos o diagramas simplificados propios",
       "Certificaciones"
     ],
-    "generationRequests": [
-      "Pedir o generar asset hero para Altura Engineers Demo: visual real del rubro, limpio, con espacio para copy y sin logos de terceros."
-    ]
+    "generationRequests": []
   },
   "implementationPlan": [
     "Abrir screenshots desktop y mobile seleccionados antes de tocar layout.",
@@ -1066,16 +1114,14 @@
     "Confirmar que cada URL externa abre y que WhatsApp/email funcionan.",
     "Probar nav, CTA primario y secciones de servicio/contacto."
   ],
-  "warnings": [
-    "Faltan assets visuales; pedirlos o generarlos antes de entrega profesional."
-  ],
+  "warnings": [],
   "confidence": {
     "score": 95,
     "reasons": [
       "8 referencias seleccionadas",
       "6 referencias con screenshot",
       "10 archivos de codigo permitidos como referencia",
-      "1 pedidos de media pendientes"
+      "0 pedidos de media pendientes"
     ]
   }
 }

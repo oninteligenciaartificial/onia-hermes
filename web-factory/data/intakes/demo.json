@@ -1,0 +1,86 @@
+{
+  "project": {
+    "slug": "demo",
+    "template": "landing",
+    "package": "web",
+    "owner": "ONIA"
+  },
+  "business": {
+    "name": "Clinica Aurora",
+    "industry": "clinica dental",
+    "offer": "odontologia moderna con agenda directa",
+    "tagline": "Atencion dental premium sin friccion",
+    "description": "Odontologia moderna con agenda directa, explicaciones claras y tratamientos pensados para que tomes decisiones con confianza.",
+    "location": "Santa Cruz, Bolivia",
+    "trustProofs": ["Agenda directa", "Explicacion clara de tratamientos"]
+  },
+  "brand": {
+    "logoText": "CA",
+    "colors": {
+      "primary": "#0f766e",
+      "secondary": "#1d4ed8",
+      "accent": "#f59e0b",
+      "bg": "#f8fafc",
+      "fg": "#111827"
+    },
+    "typography": {
+      "heading": "Inter",
+      "body": "Inter"
+    },
+    "styleKeywords": ["clinico", "premium", "claro"],
+    "references": [
+      {
+        "title": "Zocdoc",
+        "url": "https://www.zocdoc.com",
+        "type": "layout",
+        "use": "claridad de agenda, confianza y CTA visible",
+        "avoid": "copiar marketplace, claims o identidad"
+      }
+    ]
+  },
+  "media": {
+    "heroPoster": "assets/clinic-aurora-hero.svg",
+    "assetPermission": "generate-ai",
+    "notes": "Demo interna con asset sintetico. Para cliente real, reemplazar por foto aprobada de consultorio, equipo o tratamiento."
+  },
+  "content": {
+    "services": [
+      {
+        "title": "Implantes guiados",
+        "description": "Planificacion digital para tratamientos mas precisos y pacientes mejor informados.",
+        "icon": "sparkles"
+      },
+      {
+        "title": "Ortodoncia estetica",
+        "description": "Opciones discretas con seguimiento claro desde la primera consulta.",
+        "icon": "smile"
+      },
+      {
+        "title": "Urgencias dentales",
+        "description": "Canales directos para resolver dolor, dudas y agenda con velocidad.",
+        "icon": "phone"
+      }
+    ],
+    "benefits": ["Agenda clara", "Explicacion de tratamientos", "Contacto directo"]
+  },
+  "conversion": {
+    "primaryCtaText": "Agendar evaluacion",
+    "whatsappMessage": "Hola, quiero agendar una evaluacion dental."
+  },
+  "contact": {
+    "email": "hola@clinicaaurora.test",
+    "whatsapp": "+59170000000",
+    "address": "Santa Cruz, Bolivia"
+  },
+  "social": {
+    "instagram": "https://instagram.com/clinicaaurora"
+  },
+  "seo": {
+    "title": "Clinica Aurora | Odontologia premium",
+    "description": "Landing demo generada por ONIA Web Factory para clinicas y servicios profesionales."
+  },
+  "operations": {
+    "hosting": "ONIA Web Factory",
+    "missing": ["dominio final", "politica de datos personales"]
+  }
+}

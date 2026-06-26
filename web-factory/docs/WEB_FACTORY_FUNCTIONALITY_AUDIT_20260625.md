@@ -108,13 +108,13 @@ queda estatica o pasa a Next.js con funcionalidades reales.
 
 ## Gaps y riesgos
 
-- Hay pocos perfiles reales. `demo` y `nuvia` no alcanzan para probar muchos
-  rubros sin sesgo.
-- `store` estatico todavia carga video de hero directamente con autoplay; para
-  performance deberia adoptar poster/lazy loading como la version optimizada de
-  Nuvia.
-- `data/schema.ts` no incluye `heroPoster`, aunque Nuvia ya necesita poster para
-  video optimizado.
+- Hay pocos perfiles reales. Las demos ya cubren clinica, ingenieria,
+  restaurante, SaaS y skincare, pero no reemplazan validacion con clientes.
+- `store` estatico ya usa `data-src`, `preload="none"` y poster para video de
+  hero; el riesgo pendiente es mantener posters livianos y no subir videos
+  pesados sin compresion.
+- `data/schema.ts` ya incluye `heroPoster`; el riesgo pendiente es exigir
+  permisos de uso y reemplazo de placeholders antes de entrega profesional.
 - La cobertura de pruebas valida schema, generador y licencia, pero no cubre
   UI real de Next, checkout, carrito runtime, paneles internos ni E2E movil.
 - Checkout real depende de variables de entorno de Supabase y BNB. Sin eso, el
@@ -136,3 +136,23 @@ Convertir Web Factory en un flujo vendible de ONIA:
 5. Definir comandos canonicos: crear cliente, preview, build, deploy y rollback.
 6. Mantener Nuvia como referencia ecommerce premium y no mezclar datos internos
    de proveedor con la tienda publica.
+
+## Actualizacion 2026-06-26
+
+Quedo cerrado el frente de demos internas:
+
+- `demo`, `clinic-demo`, `engineering-demo`, `restaurant-demo`, `saas-demo` y
+  `skincare-demo` tienen intake, perfil, contexto, receta `.design` y preview
+  generable.
+- Las demos tienen assets SVG locales para evitar imagenes rotas y mostrar
+  estructura visual desde el primer viewport.
+- El template landing pinta `heroPoster` en el hero; antes el dato existia pero
+  no se veia en landings.
+- ONIA Center lee `label/objective/generationRequests` de las recetas actuales,
+  no solo nombres antiguos.
+- Se agrego `pnpm build:stable` para cerrar previews locales y evitar builds
+  rotos por manifests incompletos de `.next`.
+
+Pendiente real que no debe inventarse: datos finales de cliente como dominio,
+politicas, credenciales profesionales, precios reales, fotos propias,
+testimonios, pasarelas de pago y aprobacion de assets.

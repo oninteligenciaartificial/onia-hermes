@@ -15,10 +15,10 @@
 
 ## Media
 
-- Permiso de assets: client-owned
+- Permiso de assets: generate-ai
 - Hero video: pendiente
-- Hero poster/imagen: pendiente
-- Notas: Usar fotos reales de consultorio y equipo; evitar claims medicos no aprobados.
+- Hero poster/imagen: assets/clinic-hero.svg
+- Notas: Demo interna con asset sintetico. Para cliente real, reemplazar por fotos de consultorio/equipo y evitar claims medicos no aprobados.
 
 ## Operacion
 
@@ -31,5 +31,4 @@
 
 - matricula o credenciales visibles
 - politica de datos personales
-- asset principal del hero pendiente de producir
 - dominio o decision de hosting

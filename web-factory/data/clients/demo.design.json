@@ -1,0 +1,1216 @@
+{
+  "schemaVersion": "web-factory-auto-design-v1",
+  "generatedAt": "2026-06-26T21:50:10.697Z",
+  "client": {
+    "slug": "demo",
+    "name": "Clinica Aurora",
+    "template": "landing",
+    "inferredVertical": "clinic-health",
+    "verticalLabel": "Clinic / health",
+    "verticalConfidence": 0.67,
+    "matchedKeywords": [
+      "clinica",
+      "clinic",
+      "dental",
+      "odontologia",
+      "paciente",
+      "consulta",
+      "tratamiento"
+    ]
+  },
+  "sourcePaths": {
+    "clientProfile": "C:\\dev\\proyectos\\onia-hermes\\web-factory\\data\\clients\\demo.json",
+    "clientContext": "C:\\dev\\proyectos\\onia-hermes\\web-factory\\data\\clients\\demo.context.md",
+    "designIntelligence": "C:\\dev\\proyectos\\onia-hermes\\web-factory\\data\\references\\design-sources\\latest-design-intelligence.json",
+    "codeExamples": "C:\\dev\\proyectos\\onia-hermes\\web-factory\\data\\references\\code-sources\\latest-component-code-examples.json"
+  },
+  "designRead": {
+    "objective": "Generar confianza suficiente para agendar consulta sin exagerar promesas.",
+    "visualDirection": "Jerarquia sobria, pruebas reales, servicios entendibles, equipo/instalaciones y agenda visible.",
+    "conversionThesis": "La salud requiere confianza y claridad; el CTA funciona cuando el usuario entiende especialidad, ubicacion y proceso.",
+    "genericRisk": "Parecer plantilla medica stock sin equipo, ubicacion ni limites profesionales."
+  },
+  "dials": {
+    "conversionDensity": "medium",
+    "visualDensity": "medium",
+    "motionIntensity": "low",
+    "trustTone": "profesional, preciso y seguro"
+  },
+  "selectedReferences": [
+    {
+      "role": "client-reference",
+      "sourceName": "Zocdoc",
+      "title": "Zocdoc",
+      "url": "https://www.zocdoc.com",
+      "licenseStatus": "client-provided-reference-review-required",
+      "reuseGuidance": "Use: claridad de agenda, confianza y CTA visible | Avoid: copiar marketplace, claims o identidad",
+      "screenshots": {},
+      "headings": [],
+      "ctas": [],
+      "topFonts": [],
+      "motionSignals": [],
+      "codeLinks": [],
+      "qualityWarnings": [],
+      "whySelected": [
+        "referencia exacta entregada en el brief",
+        "usar: claridad de agenda, confianza y CTA visible",
+        "evitar: copiar marketplace, claims o identidad"
+      ],
+      "score": 100
+    },
+    {
+      "role": "structure",
+      "sourceName": "SaaSFrame Landing Pages",
+      "title": "Slite UX/UI Design and Copywrinting Examples - SaaSFrame",
+      "url": "https://www.saasframe.io/saas/slite",
+      "licenseStatus": "inspiration-only",
+      "reuseGuidance": "SaaS landing page hero, value proposition, social proof, pricing and mobile-first CRO patterns.",
+      "screenshots": {
+        "desktop": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/saasframe-landing-pages/285-landing-page-4197935a/desktop.png",
+          "sha256": "4045631a7e8a794e8aa44245ebe855756b8e50d3cc56698fc96bcadfbb2557a7",
+          "mode": "viewport"
+        },
+        "mobile": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/saasframe-landing-pages/285-landing-page-4197935a/mobile.png",
+          "sha256": "a56dfbee361795cd3edfef745ea6fd578e3f54e55e6f0bbbf313e92bf85362d4",
+          "mode": "viewport"
+        }
+      },
+      "headings": [
+        {
+          "level": "h1",
+          "text": "Slite"
+        },
+        {
+          "level": "h3",
+          "text": "Marketing Pages"
+        },
+        {
+          "level": "h3",
+          "text": "Product Interfaces"
+        },
+        {
+          "level": "h3",
+          "text": "Emails"
+        },
+        {
+          "level": "h3",
+          "text": "Slite"
+        },
+        {
+          "level": "h3",
+          "text": "Sign Up Flow"
+        }
+      ],
+      "ctas": [
+        "All screens",
+        "👽 404 Page45",
+        "👨‍👩‍👧‍👦 About Page125",
+        "🎓 Academy25",
+        "🤑 Affiliate Page39",
+        "🪄 AI Page15",
+        "✍️ Blog Feed97",
+        "📝 Blog Template59",
+        "💼 Careers Page92",
+        "🆕 Changelog15",
+        "🥊 Comparison Page54",
+        "💌 Contact Page37"
+      ],
+      "topFonts": [
+        "system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Oxygen, Ubuntu, Cantarell, \"Fira Sans\", \"Droid Sans\", \"Helvetica Neue\", sans-serif",
+        "Montserrat, sans-serif"
+      ],
+      "motionSignals": {
+        "libraries": {
+          "framerMotion": false,
+          "gsap": false,
+          "three": false,
+          "lottie": false,
+          "locomotiveScroll": false
+        },
+        "animatedElementCount": 43,
+        "keyframes": [
+          "spin",
+          "borderTurn",
+          "borderTurnWithTranslate",
+          "scroll"
+        ]
+      },
+      "codeLinks": [
+        {
+          "url": "https://www.saasframe.io/patterns/copy-to-clipboard",
+          "text": "Copy to clipboard78screens"
+        }
+      ],
+      "qualityWarnings": [],
+      "whySelected": [
+        "tiene screenshot desktop",
+        "tiene screenshot mobile",
+        "aporta senales de fuente",
+        "aporta CTAs reales",
+        "aporta links o bloques de codigo para estudiar",
+        "fuente fuerte para patrones web"
+      ],
+      "score": 39
+    },
+    {
+      "role": "structure",
+      "sourceName": "Landingfolio",
+      "title": "HeadshotPro Landing Page Inspiration and More | Landingfolio",
+      "url": "https://www.landingfolio.com/inspiration/post/headshotpro-1",
+      "licenseStatus": "inspiration-only",
+      "reuseGuidance": "Landing page examples, templates and component inspiration. Do not copy templates or proprietary assets.",
+      "screenshots": {
+        "desktop": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/landingfolio/091-headshotpro-a3943c9a/desktop.png",
+          "sha256": "db4eec9b71cbc035c4f0d465650e013db3157b15469cc36b7c6487f204a61b9d",
+          "mode": "viewport"
+        },
+        "mobile": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/landingfolio/091-headshotpro-a3943c9a/mobile.png",
+          "sha256": "4ebaad8617fb2483574338e53f5b594e97c08ec6a3509b4480445e47d272cfc8",
+          "mode": "viewport"
+        }
+      },
+      "headings": [
+        {
+          "level": "h3",
+          "text": "Site & Landing Page Inspiration"
+        },
+        {
+          "level": "h3",
+          "text": "Section & Component Examples"
+        },
+        {
+          "level": "h3",
+          "text": "Landing Page Templates"
+        },
+        {
+          "level": "h3",
+          "text": "Pro Templates"
+        },
+        {
+          "level": "h3",
+          "text": "Blog"
+        },
+        {
+          "level": "h3",
+          "text": "Optimization Tips"
+        }
+      ],
+      "ctas": [
+        "Landingfolio",
+        "Inspiration",
+        "Component Library",
+        "Templates",
+        "Learn",
+        "Optimization Tips Actional design tips to improve your landing page design",
+        "Tool Reviews The Best Landing Page Builder Software: The Definitive Guide.",
+        "Tools",
+        "Free Logos The perfect logo for your project is just a click away.",
+        "Pricing",
+        "Login",
+        "Login"
+      ],
+      "topFonts": [
+        "\"Plus Jakarta Sans\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", Roboto, Ubuntu, Cantarell, \"Noto Sans\", sans-serif, BlinkMacSystemFont, \"Segoe UI\", \"Helvetica Neue\", Arial, \"Noto Sans\", \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+      ],
+      "motionSignals": {
+        "libraries": {
+          "framerMotion": false,
+          "gsap": false,
+          "three": false,
+          "lottie": false,
+          "locomotiveScroll": false
+        },
+        "animatedElementCount": 39,
+        "keyframes": [
+          "pulse",
+          "spin",
+          "sk-chase-01e585e4",
+          "sk-chase-dot-01e585e4",
+          "sk-chase-dot-before-01e585e4",
+          "animatedgradient-4e4b04ca",
+          "animatedgradient",
+          "animatedgradient-06789daf",
+          "animatedgradient-fac1f164",
+          "fadeOut",
+          "fadeInDown",
+          "fadeInUp"
+        ]
+      },
+      "codeLinks": [
+        {
+          "url": "https://www.landingfolio.com/library",
+          "text": "Component Library (0+) Discover instant copy+paste Tailwind, Webflow & Figma components. Explore our huge library."
+        },
+        {
+          "url": "https://www.landingfolio.com/blog",
+          "text": "Blog Get expert advice on landing page design, copywriting, conversion optimization and more."
+        }
+      ],
+      "qualityWarnings": [],
+      "whySelected": [
+        "tiene screenshot desktop",
+        "tiene screenshot mobile",
+        "aporta senales de fuente",
+        "aporta CTAs reales",
+        "aporta links o bloques de codigo para estudiar",
+        "fuente fuerte para patrones web"
+      ],
+      "score": 39
+    },
+    {
+      "role": "structure",
+      "sourceName": "Recent Design",
+      "title": "Web Design Inspiration — Recent",
+      "url": "https://recent.design/websites",
+      "licenseStatus": "inspiration-only",
+      "reuseGuidance": "Daily recent design references across websites, OG images, app screenshots and design skills.",
+      "screenshots": {
+        "desktop": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/recent-design/003-websites-cd2e1db3/desktop.png",
+          "sha256": "cbcac84dd3dbd849d20f15fc8cc844deb369bf9af8163cf333725cfc33b23270",
+          "mode": "viewport"
+        },
+        "mobile": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/recent-design/003-websites-cd2e1db3/mobile.png",
+          "sha256": "b4a59bd1ac6583c9e1c38bf63b6900f3d3df31b8a3a87160aaaf9e730468f96c",
+          "mode": "viewport"
+        }
+      },
+      "headings": [
+        {
+          "level": "h2",
+          "text": "Subscribe to the Recent digest"
+        },
+        {
+          "level": "h2",
+          "text": "Stay ahead of trends"
+        }
+      ],
+      "ctas": [
+        "Recent",
+        "All",
+        "Best of X",
+        "Websites",
+        "OG Images",
+        "App Screenshots",
+        "App Icons",
+        "Skills",
+        "Info",
+        "Subscribe",
+        "All",
+        "Portfolio"
+      ],
+      "topFonts": [
+        "ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+      ],
+      "motionSignals": {
+        "libraries": {
+          "framerMotion": false,
+          "gsap": false,
+          "three": false,
+          "lottie": false,
+          "locomotiveScroll": false
+        },
+        "animatedElementCount": 48,
+        "keyframes": [
+          "ping",
+          "pulse"
+        ]
+      },
+      "codeLinks": [],
+      "qualityWarnings": [],
+      "whySelected": [
+        "tiene screenshot desktop",
+        "tiene screenshot mobile",
+        "aporta senales de fuente",
+        "aporta CTAs reales",
+        "fuente fuerte para patrones web"
+      ],
+      "score": 35
+    },
+    {
+      "role": "structure",
+      "sourceName": "Awwwards Winning Websites",
+      "title": "Wolverine Worldwide - Awwwards SOTD",
+      "url": "https://www.awwwards.com/sites/wolverine-worldwide",
+      "licenseStatus": "inspiration-only-high-overdesign-risk",
+      "reuseGuidance": "Art direction, typography, motion and experimental interaction reference. Translate into one usable design move for ONIA client work.",
+      "screenshots": {
+        "desktop": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/awwwards-winning-websites/476-locomotive-040978f6/desktop.png",
+          "sha256": "099dc91e686c465a98093a9588dd8e94b59ebda3de5d4540822cafcad0d26e9a",
+          "mode": "viewport"
+        },
+        "mobile": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/awwwards-winning-websites/476-locomotive-040978f6/mobile.png",
+          "sha256": "9c7d78c2b629a2b438fbfd3d9f02fc9a20f21419e20f0317ea9586b103292ef3",
+          "mode": "viewport"
+        }
+      },
+      "headings": [
+        {
+          "level": "h2",
+          "text": "Site of the Day - Jun 24, 2026"
+        },
+        {
+          "level": "h1",
+          "text": "Wolverine Worldwide"
+        },
+        {
+          "level": "h2",
+          "text": "Elements"
+        },
+        {
+          "level": "h3",
+          "text": "See the highlights of this website."
+        },
+        {
+          "level": "h3",
+          "text": "Fullscreen Masked Parallax"
+        },
+        {
+          "level": "h3",
+          "text": "Fullscreen Masked Parallax"
+        }
+      ],
+      "ctas": [
+        "Courses",
+        "Honor Mentions",
+        "Nominees",
+        "Sites of the Day",
+        "Sites of the Month",
+        "Sites of the Year",
+        "Honors New",
+        "Most Awarded Profiles",
+        "Jury 2026",
+        "Annual Awards",
+        "Portfolio Websites",
+        "Free fonts"
+      ],
+      "topFonts": [
+        "\"Inter Tight\""
+      ],
+      "motionSignals": {
+        "libraries": {},
+        "animatedElementCount": 0,
+        "keyframes": []
+      },
+      "codeLinks": [],
+      "qualityWarnings": [],
+      "whySelected": [
+        "tiene screenshot desktop",
+        "tiene screenshot mobile",
+        "aporta senales de fuente",
+        "aporta CTAs reales",
+        "fuente fuerte para patrones web",
+        "requiere simplificar para ONIA"
+      ],
+      "score": 31
+    },
+    {
+      "role": "component",
+      "sourceName": "Kibo UI",
+      "title": "Gantt",
+      "url": "https://www.kibo-ui.com/components/gantt",
+      "licenseStatus": "open-source-review-required",
+      "reuseGuidance": "Accessible shadcn-compatible component ideas and registry signals. Verify repository/license before copying code.",
+      "screenshots": {
+        "desktop": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/kibo-ui/098-kibo-ui-com-components-gan-8008b377/desktop.png",
+          "sha256": "7bd6f0290c385f9370d07262582f73b7ef8fb661a5dde8e52ca8ca85a359c5a8",
+          "mode": "viewport"
+        },
+        "mobile": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/kibo-ui/098-kibo-ui-com-components-gan-8008b377/mobile.png",
+          "sha256": "2a06f2000efe46447e650bd24ab821eb913b23b142255d7ee50fcaec81bf0a40",
+          "mode": "viewport"
+        }
+      },
+      "headings": [
+        {
+          "level": "h1",
+          "text": "Gantt"
+        },
+        {
+          "level": "h2",
+          "text": "Installation"
+        },
+        {
+          "level": "h2",
+          "text": "Features"
+        },
+        {
+          "level": "h2",
+          "text": "Examples"
+        },
+        {
+          "level": "h3",
+          "text": "Multiple items on one row"
+        },
+        {
+          "level": "h3",
+          "text": "Without a sidebar"
+        }
+      ],
+      "ctas": [
+        "Kibo UIKibo UI",
+        "Docs",
+        "Components41",
+        "Blocks28",
+        "Patterns1101",
+        "Search...⌘K",
+        "Shadcn UI Blocks",
+        "GitHub3.8K",
+        "Avatar Stack",
+        "Cursor",
+        "Calendar",
+        "Gantt"
+      ],
+      "topFonts": [
+        "Geist, \"Geist Fallback\""
+      ],
+      "motionSignals": {
+        "libraries": {
+          "framerMotion": false,
+          "gsap": false,
+          "three": false,
+          "lottie": false,
+          "locomotiveScroll": false
+        },
+        "animatedElementCount": 61,
+        "keyframes": [
+          "spin",
+          "ping",
+          "pulse",
+          "fd-sidebar-in",
+          "fd-sidebar-out",
+          "fd-dialog-in",
+          "fd-dialog-out",
+          "fd-popover-in",
+          "fd-popover-out",
+          "fd-fade-in",
+          "fd-fade-out",
+          "fd-enterFromRight"
+        ]
+      },
+      "codeLinks": [
+        {
+          "url": "https://github.com/shadcnblocks/kibo",
+          "text": "GitHub3.8K"
+        }
+      ],
+      "qualityWarnings": [],
+      "whySelected": [
+        "tiene screenshot desktop",
+        "tiene screenshot mobile",
+        "aporta senales de fuente",
+        "aporta CTAs reales",
+        "aporta links o bloques de codigo para estudiar"
+      ],
+      "score": 33
+    },
+    {
+      "role": "typography",
+      "sourceName": "Magic UI",
+      "title": "Kinetic Text | React Components & Templates",
+      "url": "https://magicui.design/docs/components/kinetic-text",
+      "licenseStatus": "mit-open-source-reference",
+      "reuseGuidance": "Animated marketing components, effects and motion patterns for landing pages. Prefer local MIT repo or registry install commands for implementation.",
+      "screenshots": {
+        "desktop": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/magic-ui/007-introducing-kinetic-text-fbd94463/desktop.png",
+          "sha256": "5d1be9ce1cefe74cbba3d6ce9065f18b0c93c1914a19d7b312d6db04433d624b",
+          "mode": "viewport"
+        },
+        "mobile": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/magic-ui/007-introducing-kinetic-text-fbd94463/mobile.png",
+          "sha256": "2b0e9e5307d001dc3ff968221d8c05b0c717bb43e1af7798cea0cc31a33b3227",
+          "mode": "viewport"
+        }
+      },
+      "headings": [
+        {
+          "level": "h2",
+          "text": "Command Palette"
+        },
+        {
+          "level": "h1",
+          "text": "Kinetic Text"
+        },
+        {
+          "level": "h1",
+          "text": "NostalgiaNostalgia"
+        },
+        {
+          "level": "h2",
+          "text": "Installation"
+        },
+        {
+          "level": "h2",
+          "text": "Usage"
+        },
+        {
+          "level": "h2",
+          "text": "Props"
+        }
+      ],
+      "ctas": [
+        "Toggle Menu",
+        "Magic UI",
+        "Components",
+        "Templates",
+        "Showcase",
+        "Search documentation...Search...⌘K",
+        "21,36621.4k",
+        "215",
+        "Toggle theme",
+        "Introduction",
+        "Installation",
+        "MCP"
+      ],
+      "topFonts": [
+        "Geist, sans-serif",
+        "\"Geist Mono\", monospace"
+      ],
+      "motionSignals": {
+        "libraries": {
+          "framerMotion": false,
+          "gsap": false,
+          "three": false,
+          "lottie": false,
+          "locomotiveScroll": false
+        },
+        "animatedElementCount": 113,
+        "keyframes": [
+          "spin",
+          "ping",
+          "pulse",
+          "enter",
+          "exit",
+          "accordion-down",
+          "accordion-up",
+          "blink-cursor",
+          "aurora",
+          "background-position-spin",
+          "gradient",
+          "meteor"
+        ]
+      },
+      "codeLinks": [
+        {
+          "url": "https://github.com/magicuidesign/magicui",
+          "text": "21,36621.4k"
+        },
+        {
+          "url": "https://github.com/abdmjd1",
+          "text": "@abdmjd1"
+        },
+        {
+          "url": "https://github.com/magicuidesign/magicui/issues/new?title=%5Bbug%5D%3A+%2Fdocs%2Fcomponents%2Fkinetic-text&labels=bug&labels=documentation&template=bug_report.yml",
+          "text": "Report an issue"
+        },
+        {
+          "url": "https://github.com/magicuidesign/magicui/issues/new?title=%5Bfeat%5D%3A+%2Fdocs%2Fcomponents%2Fkinetic-text&labels=enhancement&template=feature_request.yml",
+          "text": "Request a feature"
+        },
+        {
+          "url": "https://github.com/magicuidesign/magicui/edit/main/apps/www/content/docs/components/kinetic-text.mdx",
+          "text": "Edit this page"
+        },
+        {
+          "url": "https://github.com/magicuidesign/magicui",
+          "text": "GitHub"
+        }
+      ],
+      "qualityWarnings": [],
+      "whySelected": [
+        "tiene screenshot desktop",
+        "tiene screenshot mobile",
+        "aporta senales de fuente",
+        "aporta CTAs reales",
+        "aporta links o bloques de codigo para estudiar",
+        "fuente fuerte para patrones web",
+        "tiene pista de codigo reusable con review"
+      ],
+      "score": 43
+    },
+    {
+      "role": "component",
+      "sourceName": "shadcn/ui",
+      "title": "Building Blocks for the Web - shadcn/ui",
+      "url": "https://ui.shadcn.com/blocks/sidebar",
+      "licenseStatus": "mit-repo-available",
+      "reuseGuidance": "Base component architecture and accessible UI primitives. Prefer the locally cached MIT repository for code.",
+      "screenshots": {
+        "desktop": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/shadcn-ui/034-browse-more-blocks-11813c15/desktop.png",
+          "sha256": "78ff29691212bb539569f5981aa5cd69b94b2428e93ad09483963ef9da78882a",
+          "mode": "viewport"
+        },
+        "mobile": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/shadcn-ui/034-browse-more-blocks-11813c15/mobile.png",
+          "sha256": "744cce335ea6e9e3e2f2d48aa5311e654bc179b6ac0373ccbe6a0729a3cf4177",
+          "mode": "viewport"
+        }
+      },
+      "headings": [
+        {
+          "level": "h1",
+          "text": "Building Blocks for the Web"
+        }
+      ],
+      "ctas": [
+        "Toggle MenuMenu",
+        "Home",
+        "Docs",
+        "Components",
+        "Blocks",
+        "Charts",
+        "Directory",
+        "Create",
+        "Search documentation...Search...",
+        "117k",
+        "Toggle theme",
+        "Open in"
+      ],
+      "topFonts": [
+        "Geist, \"Geist Fallback\"",
+        "\"Geist Mono\", \"Geist Mono Fallback\""
+      ],
+      "motionSignals": {
+        "libraries": {
+          "framerMotion": false,
+          "gsap": false,
+          "three": false,
+          "lottie": false,
+          "locomotiveScroll": false
+        },
+        "animatedElementCount": 75,
+        "keyframes": [
+          "spin",
+          "pulse",
+          "enter",
+          "exit",
+          "accordion-down",
+          "accordion-up",
+          "caret-blink",
+          "scroll-fade-reveal-t",
+          "scroll-fade-reveal-b",
+          "scroll-fade-reveal-s",
+          "scroll-fade-reveal-e",
+          "tw-shimmer"
+        ]
+      },
+      "codeLinks": [
+        {
+          "url": "https://github.com/shadcn-ui/ui",
+          "text": "117k"
+        },
+        {
+          "url": "https://github.com/shadcn-ui/ui",
+          "text": "GitHub"
+        }
+      ],
+      "qualityWarnings": [],
+      "whySelected": [
+        "tiene screenshot desktop",
+        "tiene screenshot mobile",
+        "aporta senales de fuente",
+        "aporta CTAs reales",
+        "aporta links o bloques de codigo para estudiar",
+        "fuente fuerte para patrones web",
+        "tiene pista de codigo reusable con review"
+      ],
+      "score": 43
+    }
+  ],
+  "codeReferences": [
+    {
+      "repo": "serafimcloud__21st",
+      "license": "MIT",
+      "status": "allowed-after-review",
+      "localPath": "C:/Users/PC/.codex/design-stack/repos/serafimcloud__21st",
+      "file": "apps/web/components/ui/copy-code-card-button.tsx",
+      "sha256": "3d9f6d9cf43a774a99b276f464ee4104f4c9df553bb075d55fac3332f5931d7d",
+      "signals": {
+        "type": "react-component",
+        "hasTailwind": true,
+        "hasMotion": false,
+        "hasShadcn": false,
+        "imports": [
+          "react",
+          "@codesandbox/sandpack-react",
+          "sonner",
+          "lucide-react",
+          "../../lib/amplitude",
+          "@/hooks/use-analytics",
+          "@/types/global"
+        ],
+        "exports": [
+          "CopyCodeButton"
+        ]
+      },
+      "samplePreview": "import { useState, useEffect } from \"react\"\nimport { useSandpack } from \"@codesandbox/sandpack-react\"\nimport { toast } from \"sonner\"\nimport { CheckIcon, Clipboard } from \"lucide-react\"\nimport { trackEvent, AMPLITUDE_EVENTS } from \"../../lib/amplitude\"\nimport { useSupabaseAnalytics } from \"@/hooks/use-analytics\"\nimport { AnalyticsActivityType } from \"@/types/global\"\n\nexport const CopyCodeButton = ({\n  component_id,\n  user_id,\n}: {\n  component_id: number\n  user_id?: string\n}) => {\n  const [codeCopied, setCodeCopied] = useState(false)\n  const [hasSelection, setHasSelection] = useState(false)\n  const { sandpack } = useSandpack()\n  const { capture } = useSupabaseAnalytics()\n\n  const copyCode = (source: \"button\" | \"shortcut\") => {\n    const activeFile = sandpack.activeFile\n    const fileContent = sandpack.files[activeFile]?.code\n    if (fileContent) {\n      navigator?.clipboard?.writeText(file\n/* sample truncated in recipe */",
+      "whySelected": [
+        "licencia MIT",
+        "compatible con Tailwind/tokenizacion",
+        "match de componente: card, button"
+      ],
+      "reuseRule": "Allowed only after manual code review, retokenization, dependency check, accessibility check and responsive QA.",
+      "score": 32
+    },
+    {
+      "repo": "harshjdhv__componentry",
+      "license": "MIT",
+      "status": "allowed-after-review",
+      "localPath": "C:/Users/PC/.codex/design-stack/repos/harshjdhv__componentry",
+      "file": "packages/ui/src/components/flight-status-card.tsx",
+      "sha256": "cdacb853efe2fd29d42ad5a7bfb426327798cdc80f6d4d78458468c452b789c8",
+      "signals": {
+        "type": "react-component",
+        "hasTailwind": true,
+        "hasMotion": true,
+        "hasShadcn": true,
+        "imports": [
+          "react",
+          "@workspace/ui/lib/utils",
+          "framer-motion"
+        ],
+        "exports": []
+      },
+      "samplePreview": "\"use client\"\n\nimport * as React from \"react\"\nimport { cn } from \"@workspace/ui/lib/utils\"\nimport { motion } from \"framer-motion\"\n\n// Dot matrix patterns for each character (5x7 grid)\nconst DOT_MATRIX: Record<string, number[][]> = {\n  Y: [\n    [1, 0, 0, 0, 1],\n    [0, 1, 0, 1, 0],\n    [0, 0, 1, 0, 0],\n    [0, 0, 1, 0, 0],\n    [0, 0, 1, 0, 0],\n    [0, 0, 1, 0, 0],\n    [0, 0, 1, 0, 0],\n  ],\n  Z: [\n    [1, 1, 1, 1, 1],\n    [0, 0, 0, 1, 0],\n    [0, 0, 1, 0, 0],\n    [0, 1, 0, 0, 0],\n    [1, 0, 0, 0, 0],\n    [1, 0, 0, 0, 0],\n    [1, 1, 1, 1, 1],\n  ],\n  H: [\n    [1, 0, 0, 0, 1],\n    [1, 0, 0, 0, 1],\n    [1, 0, 0, 0, 1],\n    [1, 1, 1, 1, 1],\n    [1, 0, 0, 0, 1],\n    [1, 0, 0, 0, 1],\n    [1, 0, 0, 0, 1],\n  ],\n  N: [\n    [1, 0, 0, 0, 1],\n    [1, 1, 0, 0, 1],\n    [1, 0, 1, 0, 1],\n    [1, 0, 0, 1, 1],\n    [1, 0, 0, 0, 1],\n    [1, 0, 0, 0, 1],\n    [1, 0, 0, 0, 1],\n  ],\n  D: [\n    [1, 1, 1, 1, 0],\n    \n/* sample truncated in recipe */",
+      "whySelected": [
+        "licencia MIT",
+        "compatible con Tailwind/tokenizacion",
+        "patron shadcn revisable",
+        "match de componente: card"
+      ],
+      "reuseRule": "Allowed only after manual code review, retokenization, dependency check, accessibility check and responsive QA.",
+      "score": 31
+    },
+    {
+      "repo": "nolly-studio__cult-ui",
+      "license": "MIT",
+      "status": "allowed-after-review",
+      "localPath": "C:/Users/PC/.codex/design-stack/repos/nolly-studio__cult-ui",
+      "file": "apps/www/components/block-copy-button.tsx",
+      "sha256": "3a5fc8c0ab993a5b4e6ad40b9df506866441f940c4b6d193496bd9dc54a18768",
+      "signals": {
+        "type": "react-component",
+        "hasTailwind": true,
+        "hasMotion": false,
+        "hasShadcn": true,
+        "imports": [
+          "react",
+          "lucide-react",
+          "@/lib/events",
+          "@/components/ui/button",
+          "@/components/ui/tooltip"
+        ],
+        "exports": [
+          "BlockCopyButton"
+        ]
+      },
+      "samplePreview": "\"use client\"\n\nimport * as React from \"react\"\nimport { CheckIcon, ClipboardIcon } from \"lucide-react\"\n\nimport { Event, trackEvent } from \"@/lib/events\"\nimport { Button, ButtonProps } from \"@/components/ui/button\"\nimport {\n  Tooltip,\n  TooltipContent,\n  TooltipTrigger,\n} from \"@/components/ui/tooltip\"\n\nexport function BlockCopyButton({\n  event,\n  name,\n  code,\n  ...props\n}: {\n  event: Event[\"name\"]\n  name: string\n  code: string\n} & ButtonProps) {\n  const [hasCopied, setHasCopied] = React.useState(false)\n\n  React.useEffect(() => {\n    setTimeout(() => {\n      setHasCopied(false)\n    }, 2000)\n  }, [hasCopied])\n\n  return (\n    <Tooltip>\n      <TooltipTrigger asChild>\n        <Button\n          size=\"icon\"\n          variant=\"outline\"\n          className=\"size-7 rounded-[6px] [&_svg]:size-3.5\"\n          onClick={() => {\n            navigator.clipboard.writeText(code)\n            trackEvent({\n   \n/* sample truncated in recipe */",
+      "whySelected": [
+        "licencia MIT",
+        "compatible con Tailwind/tokenizacion",
+        "patron shadcn revisable",
+        "match de componente: button"
+      ],
+      "reuseRule": "Allowed only after manual code review, retokenization, dependency check, accessibility check and responsive QA.",
+      "score": 31
+    },
+    {
+      "repo": "serafimcloud__21st",
+      "license": "MIT",
+      "status": "allowed-after-review",
+      "localPath": "C:/Users/PC/.codex/design-stack/repos/serafimcloud__21st",
+      "file": "apps/web/components/ui/bookmark-button.tsx",
+      "sha256": "796b63abd2e934f45315bddd6d760531abadcbbaa1099278b51d4b1945b1b92b",
+      "signals": {
+        "type": "react-component",
+        "hasTailwind": true,
+        "hasMotion": false,
+        "hasShadcn": true,
+        "imports": [
+          "react",
+          "@clerk/nextjs",
+          "lucide-react",
+          "sonner",
+          "@/components/ui/button",
+          "@/components/ui/tooltip",
+          "@/lib/amplitude",
+          "@/lib/clerk",
+          "@/lib/queries",
+          "@/lib/utils"
+        ],
+        "exports": [
+          "BookmarkButton"
+        ]
+      },
+      "samplePreview": "\"use client\"\n\nimport React, { useEffect, useState } from \"react\"\n\nimport { useUser } from \"@clerk/nextjs\"\nimport { Bookmark } from \"lucide-react\"\nimport { toast } from \"sonner\"\n\nimport { Button } from \"@/components/ui/button\"\nimport {\n  Tooltip,\n  TooltipContent,\n  TooltipTrigger,\n} from \"@/components/ui/tooltip\"\n\nimport { AMPLITUDE_EVENTS, trackEvent } from \"@/lib/amplitude\"\nimport { useClerkSupabaseClient } from \"@/lib/clerk\"\nimport { useBookmarkMutation } from \"@/lib/queries\"\nimport { cn } from \"@/lib/utils\"\n\ninterface BookmarkButtonProps {\n  demoId: number\n  bookmarksCount?: number\n  size?: number\n  showTooltip?: boolean\n  bookmarked: boolean\n  onClick?: () => void\n}\n\nexport function BookmarkButton({\n  demoId,\n  bookmarksCount = 0,\n  size = 18,\n  showTooltip = false,\n  bookmarked,\n  onClick,\n}: BookmarkButtonProps) {\n  const { user } = useUser()\n  const supabase = useClerkSupabaseCli\n/* sample truncated in recipe */",
+      "whySelected": [
+        "licencia MIT",
+        "compatible con Tailwind/tokenizacion",
+        "patron shadcn revisable",
+        "match de componente: button"
+      ],
+      "reuseRule": "Allowed only after manual code review, retokenization, dependency check, accessibility check and responsive QA.",
+      "score": 31
+    },
+    {
+      "repo": "shadcn-ui__ui",
+      "license": "MIT",
+      "status": "allowed-after-review",
+      "localPath": "C:/Users/PC/.codex/design-stack/repos/shadcn-ui__ui",
+      "file": "apps/v4/registry/bases/base/blocks/dashboard-01/components/section-cards.tsx",
+      "sha256": "4b1bc0ea633e504840063dcc505c1b01ce0f6f5d150e3f3fc1429f145ead2111",
+      "signals": {
+        "type": "react-component",
+        "hasTailwind": true,
+        "hasMotion": false,
+        "hasShadcn": true,
+        "imports": [
+          "@/registry/bases/base/ui/badge",
+          "@/registry/bases/base/ui/card",
+          "@/app/(create)/components/icon-placeholder"
+        ],
+        "exports": [
+          "SectionCards"
+        ]
+      },
+      "samplePreview": "\"use client\"\n\nimport { Badge } from \"@/registry/bases/base/ui/badge\"\nimport {\n  Card,\n  CardAction,\n  CardDescription,\n  CardFooter,\n  CardHeader,\n  CardTitle,\n} from \"@/registry/bases/base/ui/card\"\nimport { IconPlaceholder } from \"@/app/(create)/components/icon-placeholder\"\n\nexport function SectionCards() {\n  return (\n    <div className=\"grid grid-cols-1 gap-4 px-4 *:data-[slot=card]:bg-linear-to-t *:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card *:data-[slot=card]:shadow-xs lg:px-6 @xl/main:grid-cols-2 @5xl/main:grid-cols-4 dark:*:data-[slot=card]:bg-card\">\n      <Card className=\"@container/card\">\n        <CardHeader>\n          <CardDescription>Total Revenue</CardDescription>\n          <CardTitle className=\"text-2xl font-semibold tabular-nums @[250px]/card:text-3xl\">\n            $1,250.00\n          </CardTitle>\n          <CardAction>\n            <Badge variant=\"outline\">\n  \n/* sample truncated in recipe */",
+      "whySelected": [
+        "licencia MIT",
+        "compatible con Tailwind/tokenizacion",
+        "patron shadcn revisable",
+        "match de componente: card"
+      ],
+      "reuseRule": "Allowed only after manual code review, retokenization, dependency check, accessibility check and responsive QA.",
+      "score": 31
+    },
+    {
+      "repo": "tremorlabs__tremor",
+      "license": "MIT",
+      "status": "allowed-after-review",
+      "localPath": "C:/Users/PC/.codex/design-stack/repos/tremorlabs__tremor",
+      "file": "src/components/Accordion/accordion.stories.tsx",
+      "sha256": "8c56c52c54d2061766117c3f4c704a0779415aae66e3771fd668352a52e6f790",
+      "signals": {
+        "type": "react-component",
+        "hasTailwind": true,
+        "hasMotion": false,
+        "hasShadcn": true,
+        "imports": [
+          "react",
+          "@remixicon/react",
+          "@storybook/react",
+          "../Badge/Badge",
+          "../Button/Button",
+          "./Accordion"
+        ],
+        "exports": [
+          "Default",
+          "WithIcons",
+          "OneItem",
+          "DefaultValueAndCollapsibleDisabled",
+          "TypeMultiple",
+          "DisabledAccordion",
+          "DisabledAccordionItem",
+          "Controlled"
+        ]
+      },
+      "samplePreview": "import React from \"react\"\nimport {\n  RiAddCircleFill,\n  RiArrowLeftRightLine,\n  RiCheckboxMultipleFill,\n  RiCoupon3Fill,\n} from \"@remixicon/react\"\nimport type { Meta, StoryObj } from \"@storybook/react\"\n\nimport { Badge } from \"../Badge/Badge\"\nimport { Button } from \"../Button/Button\"\nimport {\n  Accordion,\n  AccordionContent,\n  AccordionItem,\n  AccordionTrigger,\n} from \"./Accordion\"\n\nconst meta: Meta<typeof Accordion> = {\n  title: \"ui/Accordion\",\n  component: Accordion,\n}\n\nexport default meta\ntype Story = StoryObj<typeof Accordion>\n\nexport const Default: Story = {\n  render: () => (\n    <Accordion type=\"single\" className=\"mx-auto mt-3 max-w-sm\" collapsible>\n      <AccordionItem value=\"item-1\">\n        <AccordionTrigger>In the app</AccordionTrigger>\n        <AccordionContent>\n          <ol className=\"flex flex-col gap-2\">\n            <li>\n              <span className=\"font-semibold text-gra\n/* sample truncated in recipe */",
+      "whySelected": [
+        "licencia MIT",
+        "compatible con Tailwind/tokenizacion",
+        "patron shadcn revisable",
+        "match de componente: accordion"
+      ],
+      "reuseRule": "Allowed only after manual code review, retokenization, dependency check, accessibility check and responsive QA.",
+      "score": 31
+    },
+    {
+      "repo": "tremorlabs__tremor",
+      "license": "MIT",
+      "status": "allowed-after-review",
+      "localPath": "C:/Users/PC/.codex/design-stack/repos/tremorlabs__tremor",
+      "file": "src/components/Button/button.stories.tsx",
+      "sha256": "957d34b1bfd11a6f10cca355392206d5cba378a697ddfb36854cd5e2cdcb693b",
+      "signals": {
+        "type": "react-component",
+        "hasTailwind": true,
+        "hasMotion": false,
+        "hasShadcn": true,
+        "imports": [
+          "@storybook/react",
+          "../../utils/cx",
+          "./Button"
+        ],
+        "exports": [
+          "Primary",
+          "Secondary",
+          "Light",
+          "Ghost",
+          "Destructive",
+          "WithDisabled",
+          "IsLoading",
+          "IsLoadingWithChildren",
+          "IsLoadingWithLoadingText",
+          "AsChildAnchor"
+        ]
+      },
+      "samplePreview": "import type { Meta, StoryObj } from \"@storybook/react\"\n\nimport { cx } from \"../../utils/cx\"\nimport { Button, buttonVariants } from \"./Button\"\n\nconst meta: Meta<typeof Button> = {\n  title: \"ui/Button\",\n  component: Button,\n  argTypes: {\n    variant: {\n      control: \"radio\",\n      options: [...Object.keys(buttonVariants.variants.variant)],\n    },\n  },\n}\n\nexport default meta\ntype Story = StoryObj<typeof Button>\n\nexport const Primary: Story = {\n  args: {\n    variant: \"primary\",\n    children: \"Primary\",\n  },\n}\n\nexport const Secondary: Story = {\n  args: {\n    variant: \"secondary\",\n    children: \"Secondary\",\n  },\n}\n\nexport const Light: Story = {\n  args: {\n    variant: \"light\",\n    children: \"Light\",\n  },\n}\n\nexport const Ghost: Story = {\n  args: {\n    variant: \"ghost\",\n    children: \"Ghost\",\n  },\n}\n\nexport const Destructive: Story = {\n  args: {\n    variant: \"destructive\",\n    children: \"Destruc\n/* sample truncated in recipe */",
+      "whySelected": [
+        "licencia MIT",
+        "compatible con Tailwind/tokenizacion",
+        "patron shadcn revisable",
+        "match de componente: button"
+      ],
+      "reuseRule": "Allowed only after manual code review, retokenization, dependency check, accessibility check and responsive QA.",
+      "score": 31
+    },
+    {
+      "repo": "tremorlabs__tremor",
+      "license": "MIT",
+      "status": "allowed-after-review",
+      "localPath": "C:/Users/PC/.codex/design-stack/repos/tremorlabs__tremor",
+      "file": "src/components/Button/Button.tsx",
+      "sha256": "fbe3ad597b2e4ebe342c6ea62e33fd5571be826651796ddaa2c6e38399094b54",
+      "signals": {
+        "type": "react-component",
+        "hasTailwind": true,
+        "hasMotion": false,
+        "hasShadcn": true,
+        "imports": [
+          "react",
+          "@radix-ui/react-slot",
+          "@remixicon/react",
+          "tailwind-variants",
+          "../../utils/cx",
+          "../../utils/focusRing"
+        ],
+        "exports": []
+      },
+      "samplePreview": "// Tremor Button [v1.0.0]\n\nimport React from \"react\"\nimport { Slot } from \"@radix-ui/react-slot\"\nimport { RiLoader2Fill } from \"@remixicon/react\"\nimport { tv, type VariantProps } from \"tailwind-variants\"\n\nimport { cx } from \"../../utils/cx\"\nimport { focusRing } from \"../../utils/focusRing\"\n\nconst buttonVariants = tv({\n  base: [\n    // base\n    \"relative inline-flex items-center justify-center whitespace-nowrap rounded-md border px-3 py-2 text-center text-sm font-medium shadow-xs transition-all duration-100 ease-in-out\",\n    // disabled\n    \"disabled:pointer-events-none disabled:shadow-none\",\n    // focus\n    focusRing,\n  ],\n  variants: {\n    variant: {\n      primary: [\n        // border\n        \"border-transparent\",\n        // text color\n        \"text-white dark:text-white\",\n        // background color\n        \"bg-blue-500 dark:bg-blue-500\",\n        // hover color\n        \"hover:bg-blue-\n/* sample truncated in recipe */",
+      "whySelected": [
+        "licencia MIT",
+        "compatible con Tailwind/tokenizacion",
+        "patron shadcn revisable",
+        "match de componente: button"
+      ],
+      "reuseRule": "Allowed only after manual code review, retokenization, dependency check, accessibility check and responsive QA.",
+      "score": 31
+    },
+    {
+      "repo": "tremorlabs__tremor",
+      "license": "MIT",
+      "status": "allowed-after-review",
+      "localPath": "C:/Users/PC/.codex/design-stack/repos/tremorlabs__tremor",
+      "file": "src/components/Card/card.stories.tsx",
+      "sha256": "93dbd367d1e585479cc0d2ad00753e4833f7dc49d89c9db5a65435bafff5e3c0",
+      "signals": {
+        "type": "react-component",
+        "hasTailwind": true,
+        "hasMotion": false,
+        "hasShadcn": true,
+        "imports": [
+          "@storybook/react",
+          "../Button/Button",
+          "../Checkbox/Checkbox",
+          "../Divider/Divider",
+          "../Input/Input",
+          "../Label/Label",
+          "../RadioGroup/RadioGroup",
+          "../Select/Select",
+          "../SelectNative/SelectNative",
+          "../Switch/Switch",
+          "../Tabs/Tabs",
+          "../Textarea/Textarea",
+          "../Tooltip/Tooltip",
+          "./Card"
+        ],
+        "exports": [
+          "Default",
+          "WithText",
+          "WithFullDivider",
+          "AsChildList",
+          "WithInputs"
+        ]
+      },
+      "samplePreview": "import type { Meta, StoryObj } from \"@storybook/react\"\n\nimport { Button } from \"../Button/Button\"\nimport { Checkbox } from \"../Checkbox/Checkbox\"\nimport { Divider } from \"../Divider/Divider\"\nimport { Input } from \"../Input/Input\"\nimport { Label } from \"../Label/Label\"\nimport { RadioGroup, RadioGroupItem } from \"../RadioGroup/RadioGroup\"\nimport {\n  Select,\n  SelectContent,\n  SelectItem,\n  SelectTrigger,\n  SelectValue,\n} from \"../Select/Select\"\nimport { SelectNative } from \"../SelectNative/SelectNative\"\nimport { Switch } from \"../Switch/Switch\"\nimport { Tabs, TabsContent, TabsList, TabsTrigger } from \"../Tabs/Tabs\"\nimport { Textarea } from \"../Textarea/Textarea\"\nimport { Tooltip } from \"../Tooltip/Tooltip\"\nimport { Card } from \"./Card\"\n\nconst meta: Meta<typeof Card> = {\n  title: \"ui/Card\",\n  component: Card,\n}\n\nexport default meta\ntype Story = StoryObj<typeof Card>\n\nexport const Default: S\n/* sample truncated in recipe */",
+      "whySelected": [
+        "licencia MIT",
+        "compatible con Tailwind/tokenizacion",
+        "patron shadcn revisable",
+        "match de componente: card"
+      ],
+      "reuseRule": "Allowed only after manual code review, retokenization, dependency check, accessibility check and responsive QA.",
+      "score": 31
+    },
+    {
+      "repo": "harshjdhv__componentry",
+      "license": "MIT",
+      "status": "allowed-after-review",
+      "localPath": "C:/Users/PC/.codex/design-stack/repos/harshjdhv__componentry",
+      "file": "packages/ui/src/components/github-calendar.tsx",
+      "sha256": "50cbb2b3746b97de30eb6e15dffe17d33c8b5ca690b74f57d3bb757a666f194a",
+      "signals": {
+        "type": "react-component",
+        "hasTailwind": true,
+        "hasMotion": true,
+        "hasShadcn": true,
+        "imports": [
+          "react",
+          "framer-motion",
+          "@workspace/ui/lib/utils"
+        ],
+        "exports": [
+          "GithubCalendar"
+        ]
+      },
+      "samplePreview": "\"use client\"\n\nimport * as React from \"react\"\nimport { motion, AnimatePresence } from \"framer-motion\"\nimport { cn } from \"@workspace/ui/lib/utils\"\n\ninterface ContributionDay {\n    color: string\n    contributionCount: number\n    contributionLevel: \"NONE\" | \"FIRST_QUARTILE\" | \"SECOND_QUARTILE\" | \"THIRD_QUARTILE\" | \"FOURTH_QUARTILE\"\n    date: string\n}\n\ninterface GithubContributionData {\n    contributions: ContributionDay[][]\n    totalContributions: number\n}\n\ninterface GithubCalendarProps {\n    username: string\n    variant?: \"default\" | \"city-lights\" | \"minimal\"\n    shape?: \"square\" | \"rounded\" | \"circle\" | \"squircle\"\n    glowIntensity?: number\n    className?: string\n    showTotal?: boolean\n    colorSchema?: \"green\" | \"blue\" | \"purple\" | \"orange\" | \"gray\"\n}\n\n// Color schemas for custom styling\nconst colorSchemas = {\n    gray: {\n        level0: \"bg-zinc-100 dark:bg-zinc-900\",\n        level1: \"\n/* sample truncated in recipe */",
+      "whySelected": [
+        "licencia MIT",
+        "compatible con Tailwind/tokenizacion",
+        "patron shadcn revisable",
+        "match de componente: calendar"
+      ],
+      "reuseRule": "Allowed only after manual code review, retokenization, dependency check, accessibility check and responsive QA.",
+      "score": 27
+    }
+  ],
+  "sectionPlan": [
+    {
+      "id": "hero-trust",
+      "label": "Hero de confianza",
+      "objective": "Explicar especialidad, ubicacion y agenda.",
+      "pattern": "Copy directo, foto real/equipo, CTA agendar.",
+      "dataNeeded": [
+        "especialidad",
+        "ubicacion",
+        "foto",
+        "contacto"
+      ],
+      "referenceCue": "Evitar estetica hospital generica; buscar confianza especifica."
+    },
+    {
+      "id": "services",
+      "label": "Servicios",
+      "objective": "Organizar tratamientos sin sobreprometer resultados.",
+      "pattern": "Lista con para quien es, duracion/rango si existe y CTA.",
+      "dataNeeded": [
+        "servicios",
+        "restricciones",
+        "precios si aplica"
+      ],
+      "referenceCue": "Densidad clara tipo landing B2B, no card wall."
+    },
+    {
+      "id": "booking-faq",
+      "label": "Agenda y FAQ",
+      "objective": "Resolver dudas de primera visita.",
+      "pattern": "Pasos de agenda, documentos, horarios, FAQ.",
+      "dataNeeded": [
+        "horarios",
+        "politicas",
+        "canal"
+      ],
+      "referenceCue": "Acordeones accesibles de repos MIT."
+    }
+  ],
+  "tokenDirection": {
+    "fonts": {
+      "heading": "Inter",
+      "body": "Inter",
+      "referenceSignals": [
+        "system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Oxygen, Ubuntu, Cantarell, \"Fira Sans\", \"Droid Sans\", \"Helvetica Neue\", sans-serif",
+        "Montserrat, sans-serif",
+        "\"Plus Jakarta Sans\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", Roboto, Ubuntu, Cantarell, \"Noto Sans\", sans-serif, BlinkMacSystemFont, \"Segoe UI\", \"Helvetica Neue\", Arial, \"Noto Sans\", \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+        "ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+        "\"Inter Tight\"",
+        "Geist, \"Geist Fallback\"",
+        "Geist, sans-serif",
+        "\"Geist Mono\", monospace"
+      ]
+    },
+    "palette": {
+      "primary": "#0f766e",
+      "secondary": "#1d4ed8",
+      "accent": "#f59e0b",
+      "bg": "#f8fafc",
+      "fg": "#111827",
+      "usage": [
+        "Primary para CTA principal y estados activos.",
+        "Secondary para texto fuerte, nav o superficies de confianza.",
+        "Accent solo para una familia de accion o senal comercial; evitar que todo sea del mismo tono.",
+        "Fondos sobrios con contraste visible en mobile."
+      ]
+    },
+    "layout": [
+      "Mucho aire",
+      "Contraste alto",
+      "CTA de agenda visible"
+    ],
+    "componentBehavior": [
+      "Formularios con labels claros",
+      "FAQ accesible"
+    ],
+    "motion": [
+      "Motion minimo; nada que parezca juego en salud"
+    ]
+  },
+  "mediaPlan": {
+    "required": [
+      "Foto de equipo, consultorio o hero generado aprobado"
+    ],
+    "optional": [
+      "Iconografia simple por servicio",
+      "Testimonios con permiso"
+    ],
+    "generationRequests": []
+  },
+  "implementationPlan": [
+    "Abrir screenshots desktop y mobile seleccionados antes de tocar layout.",
+    "Elegir una referencia para estructura, una para tipografia/densidad, una para motion o componentes.",
+    "Reconstruir patrones con tokens de ONIA; no pegar HTML/CSS cerrado de referencias inspiration-only.",
+    "Usar solo codigo de repos `allowed-after-review` y registrar archivo exacto usado.",
+    "Mapear cada seccion del plan a datos reales del cliente; eliminar secciones sin dato util.",
+    "Validar hero, servicios, prueba/confianza y CTA principal.",
+    "Aplicar direccion del rubro: Jerarquia sobria, pruebas reales, servicios entendibles, equipo/instalaciones y agenda visible."
+  ],
+  "antiGenericGuardrails": [
+    "No copiar identidad, copy, imagenes, videos, logos, claims ni estructura reconocible de terceros.",
+    "No usar tres cards iguales si no cambian la decision del cliente.",
+    "No usar gradientes genericos ni paletas de un solo tono como solucion visual principal.",
+    "Primer viewport debe tener una senal real del negocio: producto, lugar, equipo, dashboard, proyecto o resultado.",
+    "Todo video debe tener poster, carga diferida y respeto a `prefers-reduced-motion`.",
+    "Cada bloque debe justificar venta, confianza, entendimiento de alcance o siguiente paso.",
+    "No inventar metricas, clientes, testimonios ni resultados.",
+    "Riesgo especifico: Parecer plantilla medica stock sin equipo, ubicacion ni limites profesionales."
+  ],
+  "qaChecklist": [
+    "Correr `pnpm test`.",
+    "Generar preview con `pnpm generate <slug> --template <landing|store>` o `pnpm factory:build`.",
+    "Revisar desktop y mobile con screenshot antes de enviar a cliente.",
+    "Confirmar que no hay imagenes rotas ni videos con carga inmediata pesada.",
+    "Confirmar contraste, foco visible, labels en forms y CTA accesible.",
+    "Confirmar que cada URL externa abre y que WhatsApp/email funcionan.",
+    "Probar nav, CTA primario y secciones de servicio/contacto."
+  ],
+  "warnings": [],
+  "confidence": {
+    "score": 95,
+    "reasons": [
+      "8 referencias seleccionadas",
+      "7 referencias con screenshot",
+      "10 archivos de codigo permitidos como referencia",
+      "0 pedidos de media pendientes"
+    ]
+  }
+}

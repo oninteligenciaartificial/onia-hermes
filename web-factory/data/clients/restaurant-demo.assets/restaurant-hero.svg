@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" role="img" aria-labelledby="title desc">
+  <title id="title">Restaurant demo hero</title>
+  <desc id="desc">Warm restaurant table scene for reservation landing demo.</desc>
+  <rect width="1200" height="900" fill="#fffaf2"/>
+  <rect x="80" y="90" width="1040" height="720" rx="34" fill="#fff3df"/>
+  <circle cx="600" cy="455" r="250" fill="#ffffff" stroke="#f5a524" stroke-width="12"/>
+  <circle cx="600" cy="455" r="170" fill="#fef3c7"/>
+  <path d="M445 458c60-92 188-92 248 0-62 72-186 72-248 0Z" fill="#b42318" opacity=".82"/>
+  <circle cx="548" cy="420" r="28" fill="#16a34a"/>
+  <circle cx="646" cy="420" r="26" fill="#16a34a"/>
+  <rect x="160" y="160" width="280" height="64" rx="16" fill="#b42318"/>
+  <text x="300" y="201" text-anchor="middle" font-family="Onest, Arial, sans-serif" font-size="28" font-weight="700" fill="#ffffff">Reserva directa</text>
+  <rect x="735" y="665" width="290" height="62" rx="18" fill="#1f2937"/>
+  <text x="880" y="704" text-anchor="middle" font-family="Onest, Arial, sans-serif" font-size="27" font-weight="700" fill="#ffffff">Menu visible</text>
+</svg>

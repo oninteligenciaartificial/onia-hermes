@@ -4,6 +4,10 @@
   "tagline": "Atencion dental premium sin friccion",
   "descripcion": "Odontologia moderna con agenda directa, explicaciones claras y tratamientos pensados para que tomes decisiones con confianza.",
   "logo": "CA",
+  "logoIcon": "",
+  "logoWide": "",
+  "heroVideo": "",
+  "heroPoster": "assets/clinic-aurora-hero.svg",
   "colores": {
     "primary": "#0f766e",
     "secondary": "#1d4ed8",
@@ -17,8 +21,8 @@
   },
   "contacto": {
     "email": "hola@clinicaaurora.test",
-    "tel": "+591 70000000",
-    "whatsapp": "https://wa.me/59170000000",
+    "tel": "",
+    "whatsapp": "+59170000000",
     "direccion": "Santa Cruz, Bolivia"
   },
   "redes": {
@@ -44,9 +48,25 @@
       "icono": "phone"
     }
   ],
+  "categorias": [],
+  "productos": [],
+  "beneficios": [
+    "Agenda clara",
+    "Explicacion de tratamientos",
+    "Contacto directo"
+  ],
+  "referencias": [
+    {
+      "title": "Zocdoc",
+      "url": "https://www.zocdoc.com",
+      "type": "layout",
+      "use": "claridad de agenda, confianza y CTA visible",
+      "avoid": "copiar marketplace, claims o identidad"
+    }
+  ],
   "cta": {
     "texto": "Agendar evaluacion",
-    "url": "https://wa.me/59170000000"
+    "url": "https://wa.me/59170000000?text=Hola%2C%20quiero%20agendar%20una%20evaluacion%20dental."
   },
   "seo": {
     "title": "Clinica Aurora | Odontologia premium",

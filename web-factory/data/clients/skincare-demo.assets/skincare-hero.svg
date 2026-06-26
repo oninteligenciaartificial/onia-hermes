@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" role="img" aria-labelledby="title desc">
+  <title id="title">Skincare store demo hero</title>
+  <desc id="desc">Clean skincare product display for ecommerce demo.</desc>
+  <rect width="1200" height="900" fill="#fbfaf7"/>
+  <rect x="110" y="120" width="980" height="660" rx="40" fill="#ffffff"/>
+  <rect x="230" y="260" width="250" height="380" rx="42" fill="#0f766e" opacity=".14"/>
+  <rect x="278" y="318" width="154" height="244" rx="30" fill="#ffffff" stroke="#0f766e" stroke-width="10"/>
+  <rect x="312" y="386" width="86" height="20" rx="10" fill="#0f766e" opacity=".62"/>
+  <rect x="318" y="432" width="74" height="16" rx="8" fill="#263238" opacity=".22"/>
+  <rect x="585" y="250" width="300" height="72" rx="18" fill="#e2a86b" opacity=".35"/>
+  <rect x="585" y="366" width="410" height="28" rx="14" fill="#0f766e" opacity=".22"/>
+  <rect x="585" y="424" width="330" height="24" rx="12" fill="#263238" opacity=".16"/>
+  <rect x="585" y="515" width="280" height="62" rx="18" fill="#0f766e"/>
+  <text x="725" y="554" text-anchor="middle" font-family="Onest, Arial, sans-serif" font-size="27" font-weight="700" fill="#ffffff">Cotizar rutina</text>
+</svg>

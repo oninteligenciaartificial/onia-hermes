@@ -42,8 +42,9 @@
     ]
   },
   "media": {
-    "assetPermission": "client-owned",
-    "notes": "Necesita fotos reales de proyectos, planos o equipo en obra."
+    "heroPoster": "assets/project-hero.svg",
+    "assetPermission": "generate-ai",
+    "notes": "Demo interna con asset sintetico. Para cliente real, reemplazar por fotos de proyectos, planos o equipo en obra."
   },
   "content": {
     "services": [

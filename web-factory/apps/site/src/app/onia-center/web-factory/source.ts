@@ -54,9 +54,11 @@ type AutoDesignRecipe = {
   };
   selectedReferences?: DesignReference[];
   codeReferences?: CodeReference[];
-  sectionPlan?: Array<{ id?: string; title?: string; goal?: string; pattern?: string }>;
+  sectionPlan?: Array<{ id?: string; title?: string; label?: string; goal?: string; objective?: string; pattern?: string }>;
   mediaPlan?: {
     required?: string[];
+    optional?: string[];
+    generationRequests?: string[];
     requestFromClient?: string[];
     fallbackAllowed?: string[];
   };
@@ -402,6 +404,11 @@ export async function getWebFactoryCenterSnapshot(): Promise<WebFactoryCenterSna
         purpose: "Genera el HTML preview del cliente usando la receta y assets disponibles.",
       },
       {
+        label: "Build estable",
+        command: "pnpm build:stable",
+        purpose: "Cierra previews locales, limpia .next y compila Next con un retry controlado si queda un manifest incompleto.",
+      },
+      {
         label: "Validacion rapida",
         command: "pnpm factory:smoke",
         purpose: "Recompila demos principales y evita romper el flujo base de Web Factory.",
@@ -478,7 +485,7 @@ export async function getWebFactoryCenterSnapshot(): Promise<WebFactoryCenterSna
       { label: "Captura de referencias", path: "web-factory/WEB_FACTORY_REFERENCE_CAPTURE_RUNBOOK.md" },
       { label: "Inteligencia actual", path: "web-factory/docs/WEB_FACTORY_DESIGN_INTELLIGENCE_LATEST.md" },
       { label: "Repos GitHub diseno", path: "web-factory/data/references/design-sources/github-design-repos-20260626.json" },
-      { label: "Diseño Nuvia", path: "web-factory/data/clients/nuvia.design.md" },
+      { label: "Diseno Nuvia", path: "web-factory/data/clients/nuvia.design.md" },
     ],
     nextActions: buildNextActions(recipes, missingRecipeProfiles.length),
   };
@@ -523,7 +530,7 @@ async function loadClientRecipe(recipeFile: string, profile: ClientProfile | und
     codeReferenceCount: codeReferences.length,
     sectionCount: recipe.sectionPlan?.length ?? 0,
     requiredMedia: recipe.mediaPlan?.required ?? [],
-    clientMediaRequests: recipe.mediaPlan?.requestFromClient ?? [],
+    clientMediaRequests: getUnique([...(recipe.mediaPlan?.requestFromClient ?? []), ...(recipe.mediaPlan?.generationRequests ?? [])]),
     warnings,
     matchedKeywords: recipe.client?.matchedKeywords ?? [],
     designRead: {
@@ -536,8 +543,8 @@ async function loadClientRecipe(recipeFile: string, profile: ClientProfile | und
     codeReferences,
     sectionPlan: (recipe.sectionPlan ?? []).map((section) => ({
       id: section.id ?? "section",
-      title: section.title ?? "Seccion",
-      goal: section.goal ?? "Objetivo pendiente.",
+      title: section.title ?? section.label ?? "Seccion",
+      goal: section.goal ?? section.objective ?? "Objetivo pendiente.",
       pattern: section.pattern ?? "Patron pendiente.",
     })),
     paths: {
@@ -814,4 +821,8 @@ async function fileExists(filePath: string): Promise<boolean> {
 
 function toRepoPath(filePath: string): string {
   return path.relative(REPO_ROOT, filePath).replaceAll("\\", "/");
+}
+
+function getUnique(values: string[]): string[] {
+  return Array.from(new Set(values.map((value) => value.trim()).filter(Boolean)));
 }

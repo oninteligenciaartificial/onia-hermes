@@ -17,8 +17,8 @@
 
 - Permiso de assets: generate-ai
 - Hero video: pendiente
-- Hero poster/imagen: pendiente
-- Notas: Necesita fotos reales de platos antes de publicar.
+- Hero poster/imagen: assets/restaurant-hero.svg
+- Notas: Demo interna con asset sintetico. Para cliente real, reemplazar por fotos reales de platos antes de publicar.
 
 ## Operacion
 
@@ -31,5 +31,4 @@
 
 - fotos reales de platos
 - menu final
-- asset principal del hero pendiente de producir
 - dominio o decision de hosting

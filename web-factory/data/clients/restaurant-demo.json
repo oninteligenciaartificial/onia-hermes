@@ -7,7 +7,7 @@
   "logoIcon": "",
   "logoWide": "",
   "heroVideo": "",
-  "heroPoster": "",
+  "heroPoster": "assets/restaurant-hero.svg",
   "colores": {
     "primary": "#b42318",
     "secondary": "#1f2937",
