@@ -121,9 +121,22 @@ type RuntimeApiResponse<T = RuntimeData> = {
 };
 type AssistantApiResponse = {
   ok: boolean;
-  mode: "dify" | "dify_not_configured" | "dify_error" | "configuration_pending" | "auth_required" | "auth_error" | "forbidden" | "bad_request";
+  mode:
+    | "dify"
+    | "openai"
+    | "dify_not_configured"
+    | "openai_not_configured"
+    | "assistant_not_configured"
+    | "dify_error"
+    | "openai_error"
+    | "configuration_pending"
+    | "auth_required"
+    | "auth_error"
+    | "forbidden"
+    | "bad_request";
   message?: string;
   answer: string | null;
+  model?: string;
 };
 export type WorkspaceView = "daily" | "capture" | "calendar" | "ideas" | "connections" | "seller-services" | "assistant";
 
@@ -1163,15 +1176,17 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
       const body = (await response.json()) as AssistantApiResponse;
 
       if (response.ok && body.ok && body.answer) {
-        setAssistantAnswer(`${body.answer}\n\nFuente: Dify conectado por ONIA Center.`);
-        setNotice("ONIA Bot respondio usando Dify con contexto filtrado por rol.");
+        const sourceLabel =
+          body.mode === "openai" ? `OpenAI API${body.model ? ` (${body.model})` : ""}` : "Dify conectado";
+        setAssistantAnswer(`${body.answer}\n\nFuente: ${sourceLabel} por ONIA Center.`);
+        setNotice(`ONIA Bot respondio usando ${sourceLabel} con contexto filtrado por rol.`);
         return;
       }
 
-      setAssistantAnswer(`${localAnswer}\n\nModo local: ${body.message ?? "Dify no esta configurado o no hay sesion valida."}`);
+      setAssistantAnswer(`${localAnswer}\n\nModo local: ${body.message ?? "Proveedor IA no configurado o no hay sesion valida."}`);
     } catch (error) {
       const message = error instanceof Error ? error.message : "Error desconocido.";
-      setAssistantAnswer(`${localAnswer}\n\nModo local: no se pudo consultar Dify (${message}).`);
+      setAssistantAnswer(`${localAnswer}\n\nModo local: no se pudo consultar el proveedor IA (${message}).`);
     } finally {
       setAssistantLoading(false);
     }

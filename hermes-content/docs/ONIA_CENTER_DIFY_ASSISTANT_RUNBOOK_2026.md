@@ -1,4 +1,27 @@
-# ONIA Center Dify Assistant Runbook 2026
+# ONIA Center AI Assistant Runbook 2026
+
+## Decision actual
+
+Sergio confirma el 2026-06-26 que ONIA no puede operar modelos locales por
+ahora. El proveedor inmediato del bot interno sera OpenAI API. Dify queda como
+fase posterior para RAG, knowledge base y workflows cuando tenga despliegue
+protegido.
+
+Modo actual recomendado:
+
+```env
+ONIA_ASSISTANT_PROVIDER=openai
+OPENAI_ONIA_CENTER_API_KEY=...
+OPENAI_ONIA_CENTER_MODEL=gpt-5.4-mini
+ONIA_ASSISTANT_MAX_OUTPUT_TOKENS=900
+```
+
+`OPENAI_API_KEY` tambien funciona como fallback, pero para ONIA Center es mejor
+usar `OPENAI_ONIA_CENTER_API_KEY` y separar gastos/rotacion por sistema.
+
+El endpoint usa OpenAI Responses API con `store:false`, contexto filtrado por
+rol y limite de salida. No usar modelos locales hasta tener servidor local/GPU,
+VPN/tunnel privado y presupuesto de energia/operacion.
 
 ## Que es Dify
 
@@ -26,11 +49,11 @@ ONIA Center ya tiene el endpoint:
 POST /api/onia-center/assistant
 ```
 
-El frontend de `ONIA Bot interno` intenta consultar ese endpoint. Si Dify no
-esta configurado, el bot mantiene la respuesta local deterministica con los datos
-visibles para el rol.
+El frontend de `ONIA Bot interno` intenta consultar ese endpoint. Si OpenAI o
+Dify no estan configurados, el bot mantiene la respuesta local deterministica con
+los datos visibles para el rol.
 
-## Variables requeridas
+## Variables Dify
 
 ```env
 ONIA_ASSISTANT_PROVIDER=dify
@@ -97,13 +120,20 @@ Variables que recibira Dify:
 2. Iniciar sesion.
 3. Abrir `/onia-center?view=asistente`.
 4. Preguntar: `Que vendo primero?`
-5. Si Dify esta configurado, la respuesta termina con:
+5. Si OpenAI esta configurado, la respuesta termina con:
+
+```txt
+Fuente: OpenAI API (modelo) por ONIA Center.
+```
+
+6. Si Dify esta configurado, la respuesta termina con:
 
 ```txt
 Fuente: Dify conectado por ONIA Center.
 ```
 
-Si Dify no esta configurado, debe responder en modo local y explicar el faltante.
+Si el proveedor IA no esta configurado, debe responder en modo local y explicar
+el faltante.
 
 ## Decision operativa
 
