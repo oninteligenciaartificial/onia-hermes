@@ -154,7 +154,7 @@ type RuntimeConnection = {
 const navItems: NavItem[] = [
   { id: "dashboard", label: "Hoy", detail: "Tareas y agenda", group: "Trabajo", icon: CalendarDays },
   { id: "uso-diario", label: "Captura", detail: "Notas y evidencia", group: "Trabajo", icon: FileCheck2 },
-  { id: "calendario-sergio", label: "Calendario", detail: "Sergio", group: "Trabajo", icon: CalendarDays },
+  { id: "calendario-sergio", label: "Calendario", detail: "Agenda", group: "Trabajo", icon: CalendarDays },
   { id: "asistente", label: "Asistente", detail: "ONIA Bot", group: "Trabajo", icon: Bot },
   { id: "ideas", label: "Ideas", detail: "Reels e IA", group: "Trabajo", icon: Lightbulb },
   { id: "servicios", label: "Servicios", detail: "Catalogo", group: "Ventas", icon: Layers3 },
@@ -197,9 +197,9 @@ const moduleCopy: Record<string, { title: string; description: string; content: 
     content: ["Leads", "Tareas", "Notas", "Evidencia"],
   },
   "calendario-sergio": {
-    title: "Calendario estricto Sergio",
-    description: "Agenda personal protegida, ventanas de reunion y reglas para evitar saturacion.",
-    content: ["Horario", "Reuniones", "Gym y descanso", "Telegram"],
+    title: "Calendario ONIA",
+    description: "Agenda comercial con Cal.com, Google Calendar y Telegram; muestra informacion privada solo a Sergio.",
+    content: ["Disponibilidad", "Reuniones", "Asignacion", "Telegram"],
   },
   asistente: {
     title: "ONIA Bot interno",

@@ -23,6 +23,7 @@ import {
 import { formatBs } from "./engine";
 import {
   collabIngestionItems,
+  commercialBookingPolicy,
   externalAdapters,
   higgsfieldQuietRule,
   operatingProjects,
@@ -117,6 +118,12 @@ type RuntimeApiResponse<T = RuntimeData> = {
   message: string;
   missingConfiguration?: string[];
   data: T | null;
+};
+type AssistantApiResponse = {
+  ok: boolean;
+  mode: "dify" | "dify_not_configured" | "dify_error" | "configuration_pending" | "auth_required" | "auth_error" | "forbidden" | "bad_request";
+  message?: string;
+  answer: string | null;
 };
 export type WorkspaceView = "daily" | "capture" | "calendar" | "ideas" | "connections" | "seller-services" | "assistant";
 
@@ -621,6 +628,7 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
   const [assistantAnswer, setAssistantAnswer] = useState(
     "Pregunta por un servicio, un precio, una comision propia, un cliente visible o una tarea pendiente.",
   );
+  const [assistantLoading, setAssistantLoading] = useState(false);
   const [notice, setNotice] = useState("Modo local listo. Conecta Supabase self-hosted para multiusuario.");
   const [hydrated, setHydrated] = useState(false);
   const [storageMode, setStorageMode] = useState<StorageMode>("checking");
@@ -1129,16 +1137,44 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
     setNotice("Snapshot filtrado por rol copiado. Sergio exporta todo; otros roles solo su vista permitida.");
   }
 
-  function askAssistant(question = assistantQuestion) {
-    const answer = buildAssistantAnswer({
-      question,
+  async function askAssistant(question = assistantQuestion) {
+    const cleanedQuestion = question.trim();
+    const localAnswer = buildAssistantAnswer({
+      question: cleanedQuestion,
       role: selectedRole,
       leads: visibleLeads,
       tasks: visibleTasks,
       notes: visibleNotes,
     });
-    setAssistantQuestion(question);
-    setAssistantAnswer(answer);
+    setAssistantQuestion(cleanedQuestion);
+    setAssistantAnswer(localAnswer);
+
+    if (!cleanedQuestion) {
+      return;
+    }
+
+    setAssistantLoading(true);
+    try {
+      const response = await fetch("/api/onia-center/assistant", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ question: cleanedQuestion }),
+      });
+      const body = (await response.json()) as AssistantApiResponse;
+
+      if (response.ok && body.ok && body.answer) {
+        setAssistantAnswer(`${body.answer}\n\nFuente: Dify conectado por ONIA Center.`);
+        setNotice("ONIA Bot respondio usando Dify con contexto filtrado por rol.");
+        return;
+      }
+
+      setAssistantAnswer(`${localAnswer}\n\nModo local: ${body.message ?? "Dify no esta configurado o no hay sesion valida."}`);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Error desconocido.";
+      setAssistantAnswer(`${localAnswer}\n\nModo local: no se pudo consultar Dify (${message}).`);
+    } finally {
+      setAssistantLoading(false);
+    }
   }
 
   function resetRuntime() {
@@ -1409,13 +1445,13 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
                 onChange={(event) => setAssistantQuestion(event.target.value)}
                 onKeyDown={(event) => {
                   if (event.key === "Enter") {
-                    askAssistant();
+                    void askAssistant();
                   }
                 }}
                 placeholder="Ej. Que paso con el cliente X, cuanto cuesta Web Pro, que vendo primero"
               />
-              <button className="onia-primary-button" type="button" onClick={() => askAssistant()}>
-                Preguntar
+              <button className="onia-primary-button" type="button" disabled={assistantLoading} onClick={() => void askAssistant()}>
+                {assistantLoading ? "Consultando..." : "Preguntar"}
               </button>
             </div>
             <div className="onia-assistant-suggestions">
@@ -1426,7 +1462,7 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
                 "Clientes pendientes",
                 "Tareas pendientes",
               ].map((question) => (
-                <button key={question} type="button" onClick={() => askAssistant(question)}>
+                <button key={question} type="button" disabled={assistantLoading} onClick={() => void askAssistant(question)}>
                   {question}
                 </button>
               ))}
@@ -1489,8 +1525,8 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
                   </div>
                   <div>
                     <span>Reuniones</span>
-                    <strong>11:30 / 15:30</strong>
-                    <small>Solo ventanas aprobadas.</small>
+                    <strong>14:00-20:00</strong>
+                    <small>Lunes a sabado, Cal + GCal.</small>
                   </div>
                   <div>
                     <span>Protegido</span>
@@ -1644,8 +1680,8 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
               </div>
               <div>
                 <span>Reuniones permitidas</span>
-                <strong>11:30 / 15:30</strong>
-                <small>Con buffer minimo de 15 min.</small>
+                <strong>14:00-20:00</strong>
+                <small>Lunes a sabado, con buffer minimo de 15 min.</small>
               </div>
               <div>
                 <span>Bloques protegidos</span>
@@ -1693,6 +1729,39 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
 
           <article className="onia-live-card onia-calendar-side">
             <div className="onia-live-title">
+              <Bot size={16} />
+              <strong>Cal.com comercial</strong>
+            </div>
+            <div className="onia-calendar-summary">
+              <div>
+                <span>Modo</span>
+                <strong>{commercialBookingPolicy.mode}</strong>
+                <small>{commercialBookingPolicy.publicLinkStatus}</small>
+              </div>
+              <div>
+                <span>Calendario</span>
+                <strong>{commercialBookingPolicy.googleCalendarId}</strong>
+                <small>{commercialBookingPolicy.timezone}</small>
+              </div>
+              <div>
+                <span>Disponibilidad base</span>
+                <strong>{commercialBookingPolicy.defaultAvailability}</strong>
+                <small>Cerrado: {commercialBookingPolicy.closedDays.join(", ")}</small>
+              </div>
+            </div>
+            <div className="onia-live-list">
+              {commercialBookingPolicy.eventTypes.map((eventType) => (
+                <div key={eventType.id}>
+                  <span>{eventType.durationMinutes} min / {eventType.enabled ? "activo" : "desactivado"}</span>
+                  <strong>{eventType.label}</strong>
+                  <small>{eventType.ownerRule}</small>
+                </div>
+              ))}
+            </div>
+          </article>
+
+          <article className="onia-live-card onia-calendar-side">
+            <div className="onia-live-title">
               <MessageSquareOff size={16} />
               <strong>AlfredHQ personal + quiet Higgsfield</strong>
             </div>
@@ -1716,13 +1785,89 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
       ) : null}
 
       {workspaceView === "calendar" && selectedRole !== "sergio" ? (
-        <div className="onia-private-calendar">
-          <ShieldCheck size={17} />
-          <div>
-            <span>Calendario privado Sergio</span>
-            <strong>Oculto para este rol</strong>
-            <p>Arthur, vendedores y freelancers no ven horarios personales, bloques de descanso ni reglas privadas de disponibilidad.</p>
-          </div>
+        <div className="onia-sergio-calendar" id="calendario-sergio">
+          <article className="onia-live-card onia-sergio-calendar-main">
+            <div className="onia-live-title">
+              <CalendarDays size={16} />
+              <strong>Agenda comercial visible</strong>
+            </div>
+            <p className="onia-muted-note">
+              Esta vista permite operar reuniones sin exponer la agenda privada de Sergio. La disponibilidad real se controla con Cal.com gratis y bloqueos en Google Calendar.
+            </p>
+            <div className="onia-calendar-summary">
+              <div>
+                <span>Disponibilidad ONIA</span>
+                <strong>{commercialBookingPolicy.defaultAvailability}</strong>
+                <small>Sergio y Arthur, configurable por dia.</small>
+              </div>
+              <div>
+                <span>Vendedora</span>
+                <strong>Horario propio</strong>
+                <small>Puede configurar sus horas disponibles en Cal.</small>
+              </div>
+              <div>
+                <span>Notificacion</span>
+                <strong>{commercialBookingPolicy.notificationChannels.join(" + ")}</strong>
+                <small>Aceptar, cancelar o reasignar.</small>
+              </div>
+            </div>
+            <div className="onia-live-list">
+              {sergioMeetingWindows.map((window) => (
+                <div key={window.id}>
+                  <span>{window.dayPattern} / {window.start} - {window.end}</span>
+                  <strong>{window.title}</strong>
+                  <small>{window.bookingRule}</small>
+                  <small>Permitido: {window.allowedFor.join(", ")}</small>
+                </div>
+              ))}
+            </div>
+          </article>
+
+          <article className="onia-live-card onia-calendar-side">
+            <div className="onia-live-title">
+              <Bot size={16} />
+              <strong>Tipos de reunion</strong>
+            </div>
+            <div className="onia-live-list">
+              {commercialBookingPolicy.eventTypes.map((eventType) => (
+                <div key={eventType.id}>
+                  <span>{eventType.durationMinutes} min / {eventType.enabled ? "activo" : "desactivado"}</span>
+                  <strong>{eventType.label}</strong>
+                  <small>{eventType.ownerRule}</small>
+                </div>
+              ))}
+            </div>
+          </article>
+
+          <article className="onia-live-card onia-calendar-side">
+            <div className="onia-live-title">
+              <ShieldCheck size={16} />
+              <strong>Reglas de asignacion</strong>
+            </div>
+            <div className="onia-live-list">
+              {commercialBookingPolicy.routingRules.map((rule) => (
+                <div key={rule}>
+                  <span>Regla operativa</span>
+                  <strong>{rule}</strong>
+                </div>
+              ))}
+            </div>
+          </article>
+
+          <article className="onia-live-card onia-calendar-side">
+            <div className="onia-live-title">
+              <FileCheck2 size={16} />
+              <strong>Campos del formulario</strong>
+            </div>
+            <div className="onia-live-list">
+              {commercialBookingPolicy.intakeFields.map((field) => (
+                <div key={field}>
+                  <span>Requerido</span>
+                  <strong>{field}</strong>
+                </div>
+              ))}
+            </div>
+          </article>
         </div>
       ) : null}
 

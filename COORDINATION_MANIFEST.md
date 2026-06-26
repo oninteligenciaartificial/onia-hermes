@@ -49,6 +49,7 @@ Canonical files:
 - `scripts/hermes_week_plan.py`
 - `scripts/vps_audit_selfhosted.js`
 - `scripts/vps_install_selfhosted_stack.js`
+- `scripts/procesa-audio-cliente.js`
 - `scripts/onia_center_auth_admin.js`
 - `HERMES_VIDEO_LAB.md`
 - `HERMES_TELEGRAM_COMMAND_CENTER.md`
@@ -140,6 +141,8 @@ Canonical files:
 - `hermes-content/docs/ONIA_OPEN_SOURCE_AI_VIDEO_LAB_2026.md`
 - `hermes-content/docs/ONIA_SELF_HOSTED_AI_TOOLS_2026.md`
 - `hermes-content/docs/ONIA_SELF_HOSTED_STACK_RUNBOOK_2026.md`
+- `hermes-content/docs/ONIA_CENTER_DIFY_ASSISTANT_RUNBOOK_2026.md`
+- `hermes-content/docs/ONIA_MEETING_INTELLIGENCE_SYSTEM_2026.md`
 - `hermes-content/docs/ONIA_7000_BOB_PRODUCTION_INFRA_INVESTMENT_PLAN_2026.md`
 - `hermes-content/docs/ONIA_INTERNAL_CAPITAL_ALLOCATION_2026.md`
 - `hermes-content/docs/ONIA_PROPUESTA_USO_CAPITAL_FAMILIAR_15000_2026.md`
@@ -273,6 +276,7 @@ Canonical files:
 - `hermes-content/skills/videos-virales-higgsfield.md`
 - `hermes-content/skills/ugc-empresas-higgsfield.md`
 - `hermes-content/skills/audio-elevenlabs.md`
+- `hermes-content/skills/inteligencia-reuniones-onia.md`
 - `hermes-content/skills/marca-personal-sergio.md`
 - `hermes-content/skills/historias-sergio.md`
 - `hermes-content/skills/crons-diarios-hermes.md`
@@ -400,6 +404,8 @@ npm run deploy:selfhosted -- --profile monitor
 npm run deploy:selfhosted -- --profile utility
 npm run deploy:selfhosted -- --profile ai
 npm run deploy:selfhosted -- --profile research
+npm run deploy:selfhosted -- --profile meeting-lite
+npm run deploy:selfhosted -- --profile meeting-gpu
 npm run deploy:selfhosted -- --profile prepare-dify
 ```
 

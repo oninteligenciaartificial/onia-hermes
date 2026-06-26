@@ -95,9 +95,12 @@ async function extraerDatos(transcript) {
 
 async function main() {
   const args = process.argv.slice(2);
+  const inlineTextArg = args.find(a => a.startsWith('--texto=') || a.startsWith('--transcript='));
   let transcript = '';
 
-  if (!process.stdin.isTTY) {
+  if (inlineTextArg) {
+    transcript = inlineTextArg.replace(/^--(?:texto|transcript)=/, '');
+  } else if (!process.stdin.isTTY) {
     const chunks = [];
     for await (const chunk of process.stdin) chunks.push(chunk);
     transcript = Buffer.concat(chunks).toString('utf8');

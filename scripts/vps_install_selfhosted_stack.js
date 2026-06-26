@@ -8,6 +8,7 @@ Env:
 Usage:
   node scripts/vps_install_selfhosted_stack.js --profile monitor
   node scripts/vps_install_selfhosted_stack.js --profile all-safe
+  node scripts/vps_install_selfhosted_stack.js --profile meeting-lite
 */
 
 const fs = require("node:fs");

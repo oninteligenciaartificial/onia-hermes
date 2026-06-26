@@ -1,0 +1,204 @@
+# ONIA Meeting Intelligence System 2026
+
+Estado: decision tecnica y runbook inicial para implementar captura,
+transcripcion y analisis de reuniones/audios comerciales en ONIA.
+
+Fecha de investigacion: 2026-06-26.
+
+## Decision
+
+La mejor opcion para ONIA no es instalar solo Whisper ni una app aislada.
+
+La opcion recomendada es:
+
+1. Speakr como producto interno para grabar, subir, ordenar, buscar y revisar
+   reuniones/audio.
+2. Speaches como API local OpenAI-compatible para transcribir audios sueltos,
+   WhatsApp, Telegram, pruebas y automatizaciones de bajo costo.
+3. WhisperX ASR como motor premium para reuniones donde importa separar
+   hablantes, extraer timestamps y preparar propuestas con mejor contexto.
+
+Implementacion en el stack ONIA:
+
+- `meeting-lite`: Speakr + Speaches CPU. Es el primer paso recomendado.
+- `meeting-gpu`: Speakr + WhisperX ASR. Es la mejor calidad, pero debe correr
+  en un worker con NVIDIA GPU, HF token y suficiente RAM.
+
+## Por que esta opcion
+
+Speakr resuelve la parte de producto: UI, usuarios, grabaciones, uploads,
+busqueda, resumen, chat sobre grabaciones, webhooks y uso de motores externos.
+WhisperX y Speaches resuelven la parte de motor.
+
+Para ONIA, esto importa porque el valor no es "transcribir". El valor es:
+
+- convertir reuniones en propuestas;
+- detectar necesidad, objeciones, presupuesto, urgencia y proximo paso;
+- guardar memoria comercial;
+- reducir trabajo manual despues de cada llamada;
+- procesar audios de WhatsApp/Telegram sin depender de copiar notas a mano.
+
+## Investigacion resumida
+
+Snapshot GitHub al 2026-06-26:
+
+| Proyecto | Uso recomendado | Senal actual | Licencia / riesgo |
+|---|---|---:|---|
+| [openai/whisper](https://github.com/openai/whisper) | Base historica ASR | 103k+ stars | MIT. Muy usado, pero no trae producto interno ni diarizacion nativa. |
+| [ggml-org/whisper.cpp](https://github.com/ggml-org/whisper.cpp) | CPU/local extremo | 51k+ stars | MIT. Excelente motor local, menos completo para flujo de reuniones/propuestas. |
+| [SYSTRAN/faster-whisper](https://github.com/SYSTRAN/faster-whisper) | Motor rapido Whisper | 23k+ stars | MIT. Base practica para APIs como Speaches. |
+| [m-bain/whisperX](https://github.com/m-bain/whisperX) | Diarizacion/timestamps | 22k+ stars | BSD-2. Mejor para reuniones con varios hablantes, pero pide GPU para buena experiencia. |
+| [murtaza-nasir/speakr](https://github.com/murtaza-nasir/speakr) | Producto interno | 3.4k+ stars | AGPL-3. Bueno para uso interno; cuidado si ONIA lo modifica y lo ofrece como servicio a terceros. |
+| [speaches-ai/speaches](https://github.com/speaches-ai/speaches) | API local STT/TTS | 3.4k+ stars | MIT. Muy util como capa compatible con OpenAI. |
+| [pluja/whishper](https://github.com/pluja/whishper) | UI local de transcripcion | 3k+ stars | AGPL-3. Buena UI, pero menos orientada a meeting intelligence/automatizacion ONIA. |
+| [rishikanthc/Scriberr](https://github.com/rishikanthc/Scriberr) | App self-hosted simple | 2.7k+ stars | MIT. Interesante, pero menos alineada que Speakr para colaboracion y webhooks. |
+
+Lectura de foros:
+
+- En self-hosted, WhisperX aparece como opcion fuerte cuando se necesita
+  diarizacion, pero la comunidad marca limites con multiples hablantes,
+  acentos, ruido y audio dificil. Esto confirma que ONIA necesita revision
+  humana antes de enviar propuestas.
+- HN y foros tecnicos repiten el mismo tradeoff: diarizacion local funciona,
+  pero consume GPU y mantenimiento. Por eso `meeting-gpu` debe ir separado del
+  VPS principal si el audit muestra poca RAM.
+- Speakr fue presentado en r/selfhosted como alternativa tipo Otter.ai que
+  mantiene la infraestructura propia y agrego foco colaborativo. Eso calza con
+  ONIA mejor que una herramienta solo CLI.
+
+Fuentes utiles:
+
+- Speakr: https://github.com/murtaza-nasir/speakr
+- Speakr self-hosted post: https://www.reddit.com/r/selfhosted/comments/1p5egkm/speakr_v059_voice_notes_with_major_update_with/
+- Speaches: https://github.com/speaches-ai/speaches
+- WhisperX: https://github.com/m-bain/whisperX
+- WhisperX paper: https://arxiv.org/abs/2303.00747
+- WhisperX ASR service: https://github.com/murtaza-nasir/whisperx-asr-service
+- WhisperX self-hosted discussion: https://www.reddit.com/r/selfhosted/comments/1pplpz8/is_whisperx_the_best_selfhosted_transcription/
+- HN self-hosted diarization discussion: https://news.ycombinator.com/item?id=40483878
+
+## Arquitectura ONIA
+
+```text
+Google Meet / Zoom / llamada / WhatsApp audio / Telegram audio
+  -> Speakr upload o recording
+  -> Speaches local STT (meeting-lite) o WhisperX ASR (meeting-gpu)
+  -> transcript + hablantes + resumen
+  -> scripts/analiza-transcripcion.js
+  -> scripts/genera-propuesta.js
+  -> propuesta HTML + resumen interno + follow-up CRM
+```
+
+Flujo minimo rentable:
+
+1. Sergio graba una reunion con consentimiento o guarda el audio.
+2. Sube el audio a Speakr o ejecuta `scripts/procesa-audio-cliente.js`.
+3. Hermes genera transcript.
+4. Hermes analiza oportunidad y prepara propuesta.
+5. Sergio revisa antes de enviar al cliente.
+
+## Instalacion
+
+Primero auditar:
+
+```powershell
+$env:VPS_HOST="187.77.16.63"
+$env:VPS_USER="root"
+# Set VPS_KEY_PATH or VPS_PASSWORD only in the current shell.
+npm run audit:selfhosted
+```
+
+Instalar el primer perfil recomendado:
+
+```powershell
+npm run deploy:selfhosted -- --profile meeting-lite
+```
+
+Acceso por tunel:
+
+```powershell
+ssh -L 3107:127.0.0.1:3107 -L 3108:127.0.0.1:3108 root@187.77.16.63
+```
+
+Validacion en el VPS:
+
+```bash
+cd /opt/onia-selfhosted
+docker compose --profile meeting-lite ps
+curl -fsS http://127.0.0.1:3107 || true
+curl -fsS http://127.0.0.1:3108/health || true
+```
+
+Instalar el perfil premium solo en un worker con GPU:
+
+```powershell
+npm run deploy:selfhosted -- --profile meeting-gpu
+```
+
+Requisitos de `meeting-gpu`:
+
+- NVIDIA GPU y NVIDIA Container Toolkit;
+- 16 GB RAM aprox.;
+- `HF_TOKEN` en `/root/.hermes/.env`;
+- aceptar terminos de los modelos pyannote requeridos por WhisperX ASR.
+
+## Procesar audios de WhatsApp
+
+Fase 1 recomendada: manual/semiautomatica.
+
+1. Descargar o reenviar audio de WhatsApp a Telegram/Hermes.
+2. Procesar archivo local:
+
+```powershell
+node scripts/procesa-audio-cliente.js --audio "C:\ruta\audio-whatsapp.ogg"
+```
+
+3. Revisar transcript y propuesta.
+
+Fase 2: automatica oficial.
+
+- Solo despues de tener WhatsApp Business API/Meta verificado o Chatwoot
+  configurado.
+- No automatizar WhatsApp personal con scraping de sesion.
+- No enviar propuestas automaticamente sin revision humana.
+
+## Variables y secretos
+
+En `/root/.hermes/.env`:
+
+```bash
+OPENAI_API_KEY=...
+# o:
+TEXT_MODEL_API_KEY=...
+
+# Solo meeting-gpu:
+HF_TOKEN=...
+```
+
+El deploy remoto genera secretos de Speakr en `/opt/onia-selfhosted/.env`:
+
+- `SPEAKR_ADMIN_PASSWORD`
+- `SPEAKR_SECRET_KEY`
+
+No pegar valores reales en docs ni en chat.
+
+## Reglas de uso
+
+- Avisar al inicio de la reunion: "Voy a grabar esta llamada solo para tomar
+  notas y preparar mejor la propuesta. Si prefieren que no, lo hacemos sin
+  grabacion."
+- No grabar sin consentimiento.
+- No subir audios sensibles a servicios publicos si el cliente no lo autorizo.
+- El transcript puede fallar con ruido, acentos, nombres, marcas y terminos
+  tecnicos. Toda propuesta debe revisarse.
+- Si ONIA convierte esto en producto para terceros, revisar AGPL de Speakr y
+  usar Speaches/WhisperX o licencia comercial si corresponde.
+
+## Lo que falta decidir
+
+1. Si se instala primero en el VPS actual o en un worker separado.
+2. Si ONIA quiere maxima privacidad local o aceptamos OpenAI/OpenRouter para
+   resumen y chat interno.
+3. Si el canal inicial sera upload manual, Telegram o WhatsApp Business API.
+4. Politica de retencion: por defecto sugerido, borrar audio crudo a los 90
+   dias y conservar transcript/resumen solo si es necesario para CRM.

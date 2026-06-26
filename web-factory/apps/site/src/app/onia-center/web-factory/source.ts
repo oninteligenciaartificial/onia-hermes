@@ -95,6 +95,26 @@ type DesignIntelligence = {
   }>;
 };
 
+type GithubDesignSources = {
+  generatedAt?: string;
+  policy?: string;
+  selectionRules?: string[];
+  sources?: string[];
+  repos?: Array<{
+    fullName?: string;
+    url?: string;
+    stars?: number;
+    forks?: number;
+    openIssues?: number;
+    pushedAt?: string;
+    license?: string;
+    description?: string;
+    usage?: string;
+    risk?: string;
+    fit?: string[];
+  }>;
+};
+
 export type WebFactoryRecipeStatus = "ready" | "review" | "needs_assets" | "needs_references" | "draft";
 
 export type WebFactoryClientRecipe = {
@@ -218,6 +238,24 @@ export type WebFactoryCenterSnapshot = {
       topCtas: string[];
     }>;
   };
+  githubDesignSources: {
+    generatedAt: string;
+    policy: string;
+    path: string;
+    repos: Array<{
+      fullName: string;
+      url: string;
+      stars: number;
+      forks: number;
+      openIssues: number;
+      pushedAt: string;
+      license: string;
+      description: string;
+      usage: string;
+      risk: string;
+      fit: string[];
+    }>;
+  };
   operatingCommands: Array<{
     label: string;
     command: string;
@@ -256,6 +294,13 @@ const DESIGN_INTELLIGENCE_PATH = path.join(
   "latest-design-intelligence.json",
 );
 const DESIGN_INTELLIGENCE_MARKDOWN_PATH = path.join(WEB_FACTORY_ROOT, "docs", "WEB_FACTORY_DESIGN_INTELLIGENCE_LATEST.md");
+const GITHUB_DESIGN_SOURCES_PATH = path.join(
+  WEB_FACTORY_ROOT,
+  "data",
+  "references",
+  "design-sources",
+  "github-design-repos-20260626.json",
+);
 
 export async function getWebFactoryCenterSnapshot(): Promise<WebFactoryCenterSnapshot> {
   const clientFiles = await readdirSafe(CLIENTS_DIR);
@@ -292,6 +337,7 @@ export async function getWebFactoryCenterSnapshot(): Promise<WebFactoryCenterSna
     .filter((profile) => !recipeSlugs.has(profile.slug));
 
   const intelligence = await loadDesignIntelligence();
+  const githubDesignSources = await loadGithubDesignSources();
   const counts = summarizeRecipes(recipes, profileFiles.length);
 
   return {
@@ -301,6 +347,7 @@ export async function getWebFactoryCenterSnapshot(): Promise<WebFactoryCenterSna
     recipes,
     missingRecipeProfiles,
     intelligence,
+    githubDesignSources,
     operatingCommands: [
       {
         label: "Refrescar referencias",
@@ -398,6 +445,7 @@ export async function getWebFactoryCenterSnapshot(): Promise<WebFactoryCenterSna
       { label: "Runbook operativo", path: "web-factory/docs/WEB_FACTORY_OPERATING_RUNBOOK_20260625.md" },
       { label: "Captura de referencias", path: "web-factory/WEB_FACTORY_REFERENCE_CAPTURE_RUNBOOK.md" },
       { label: "Inteligencia actual", path: "web-factory/docs/WEB_FACTORY_DESIGN_INTELLIGENCE_LATEST.md" },
+      { label: "Repos GitHub diseno", path: "web-factory/data/references/design-sources/github-design-repos-20260626.json" },
       { label: "Diseño Nuvia", path: "web-factory/data/clients/nuvia.design.md" },
     ],
     nextActions: buildNextActions(recipes, missingRecipeProfiles.length),
@@ -512,6 +560,31 @@ async function loadDesignIntelligence(): Promise<WebFactoryCenterSnapshot["intel
       animationLibraries: source.animationLibraries ?? [],
       topFonts: (source.topFonts ?? []).slice(0, 3).map((font) => font.value ?? ""),
       topCtas: (source.topCtas ?? []).slice(0, 4).map((cta) => cta.value ?? ""),
+    })),
+  };
+}
+
+async function loadGithubDesignSources(): Promise<WebFactoryCenterSnapshot["githubDesignSources"]> {
+  const sources = await readJsonSafe<GithubDesignSources>(GITHUB_DESIGN_SOURCES_PATH, {});
+
+  return {
+    generatedAt: sources.generatedAt ?? "",
+    policy:
+      sources.policy ??
+      "Buscar repos actuales por estrellas, actividad reciente y licencia; usar como referencia revisable, no como copia literal.",
+    path: toRepoPath(GITHUB_DESIGN_SOURCES_PATH),
+    repos: (sources.repos ?? []).map((repo) => ({
+      fullName: repo.fullName ?? "repo",
+      url: repo.url ?? "",
+      stars: repo.stars ?? 0,
+      forks: repo.forks ?? 0,
+      openIssues: repo.openIssues ?? 0,
+      pushedAt: repo.pushedAt ?? "",
+      license: repo.license ?? "review",
+      description: repo.description ?? "",
+      usage: repo.usage ?? "Referencia pendiente de clasificar.",
+      risk: repo.risk ?? "Revisar licencia, accesibilidad y adaptacion visual antes de reutilizar.",
+      fit: repo.fit ?? [],
     })),
   };
 }

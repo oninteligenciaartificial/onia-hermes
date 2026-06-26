@@ -14,6 +14,8 @@ auth and rollback are confirmed.
 | `ai` | LiteLLM + Open WebUI | Yes only with `OPENAI_API_KEY` | Requires `/root/.hermes/.env` and enough RAM. |
 | `research` | Crawl4AI | Conditional | Heavy browser workload; keep private. |
 | `mail` | Mailpit + Listmonk | Prepare only | Email QA and campaign UI; no production SMTP until DNS/reputation are ready. |
+| `meeting-lite` | Speakr + Speaches CPU | Recommended first | Private meeting/audio intake, browser recording, uploads and local STT API. Needs text model key and about 8 GB RAM. |
+| `meeting-gpu` | Speakr + WhisperX ASR | Best quality, separate worker preferred | Speaker diarization and voice profile support. Needs NVIDIA GPU, HF token and about 16 GB RAM. |
 | `all-safe` | Monitor + utility + conditional AI/research | Conditional | Skips heavy profiles if env/resources are missing. |
 | `prepare-dify` | Downloads Dify only | Later | Does not start Dify because official compose can bind 80/443. |
 | `prepare-firecrawl` | Downloads Firecrawl only | Later/maintenance window | Does not start Firecrawl; browser/API defaults are heavy and must stay private. |
@@ -28,6 +30,7 @@ $env:VPS_USER="root"
 # Set VPS_KEY_PATH or VPS_PASSWORD only in the current shell.
 npm run audit:selfhosted
 npm run deploy:selfhosted -- --profile monitor
+npm run deploy:selfhosted -- --profile meeting-lite
 ```
 
 Do not commit `.env`. The deploy script uploads this folder to
@@ -53,6 +56,8 @@ ssh -L 3101:127.0.0.1:3101 root@187.77.16.63
 ssh -L 3102:127.0.0.1:3102 root@187.77.16.63
 ssh -L 3103:127.0.0.1:3103 root@187.77.16.63
 ssh -L 3104:127.0.0.1:3104 -L 3105:127.0.0.1:3105 root@187.77.16.63
+ssh -L 3107:127.0.0.1:3107 -L 3108:127.0.0.1:3108 root@187.77.16.63
+ssh -L 3109:127.0.0.1:3109 root@187.77.16.63
 ```
 
 Only after validation should a service receive a domain in Easypanel/Traefik.
@@ -69,6 +74,9 @@ curl -fsS http://127.0.0.1:3101 || true
 curl -fsS http://127.0.0.1:4000/health/liveliness || true
 curl -fsS http://127.0.0.1:11235/health || true
 curl -fsS http://127.0.0.1:3106/serverHealthCheck || true
+curl -fsS http://127.0.0.1:3107 || true
+curl -fsS http://127.0.0.1:3108/health || true
+curl -fsS http://127.0.0.1:3109/health || true
 ```
 
 ## Mail rule
@@ -115,3 +123,35 @@ It is not started automatically. The generated `.env` binds the API to
 `host.docker.internal:8080`, and limits concurrency. Start it only in a
 maintenance window after checking `docker stats`, because upstream defaults are
 heavy for both API and Playwright workers.
+
+## Meeting intelligence rule
+
+Use `meeting-lite` first for ONIA operations. It gives Speakr for recording,
+uploading and reviewing meetings plus Speaches as the local OpenAI-compatible
+STT endpoint for WhatsApp/Telegram/manual audio files.
+
+Use:
+
+```bash
+cd /opt/onia-selfhosted
+./install.sh meeting-lite
+```
+
+`meeting-lite` needs `TEXT_MODEL_API_KEY` in `/root/.hermes/.env`. If only
+`OPENAI_API_KEY` exists, `install.sh` copies it into the generated remote
+`.env` as `TEXT_MODEL_API_KEY` for Speakr.
+
+Use `meeting-gpu` only on a GPU worker:
+
+```bash
+cd /opt/onia-selfhosted
+./install.sh meeting-gpu
+```
+
+Before `meeting-gpu`, add `HF_TOKEN` to `/root/.hermes/.env` after accepting
+the required pyannote model terms on Hugging Face. Do not run this on the
+current crowded VPS unless audit confirms enough RAM, disk and GPU runtime.
+
+Operational rule: record meetings only with consent. Keep these services bound
+to localhost and access through SSH tunnel until auth, retention and client data
+policy are reviewed.

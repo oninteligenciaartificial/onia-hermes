@@ -27,6 +27,26 @@ env_value() {
   grep -E "^${key}=" "$env_file" | tail -n 1 | cut -d= -f2- || true
 }
 
+combined_env_value() {
+  local key="$1"
+  local env_file value
+  for env_file in "${ROOT_DIR}/.env" /root/.hermes/.env; do
+    if [ -f "$env_file" ]; then
+      value="$(grep -E "^${key}=" "$env_file" | tail -n 1 | cut -d= -f2- || true)"
+      if [ -n "$value" ]; then
+        printf '%s' "$value"
+        return 0
+      fi
+    fi
+  done
+  return 0
+}
+
+has_combined_env_value() {
+  local key="$1"
+  [ -n "$(combined_env_value "$key")" ]
+}
+
 set_env_value() {
   local key="$1"
   local value="$2"
@@ -45,6 +65,17 @@ ensure_secret() {
   current="$(env_value "$key")"
   if [ -z "$current" ] || [[ "$current" == *change* ]]; then
     set_env_value "$key" "${prefix}$(openssl rand -hex 24)"
+  fi
+}
+
+copy_secret_from_combined_if_missing() {
+  local target="$1"
+  local source="$2"
+  local target_value source_value
+  target_value="$(combined_env_value "$target")"
+  source_value="$(combined_env_value "$source")"
+  if [ -z "$target_value" ] && [ -n "$source_value" ]; then
+    set_env_value "$target" "$source_value"
   fi
 }
 
@@ -69,6 +100,8 @@ ensure_env() {
   ensure_secret "LISTMONK_ADMIN_PASSWORD"
   ensure_secret "FIRECRAWL_POSTGRES_PASSWORD"
   ensure_secret "FIRECRAWL_BULL_AUTH_KEY"
+  ensure_secret "SPEAKR_ADMIN_PASSWORD"
+  ensure_secret "SPEAKR_SECRET_KEY"
 }
 
 audit() {
@@ -163,6 +196,49 @@ install_mail() {
   start_profiles mail
 }
 
+install_meeting_lite() {
+  ensure_env
+  check_docker
+  copy_secret_from_combined_if_missing "TEXT_MODEL_API_KEY" "OPENAI_API_KEY"
+  set_env_value "SPEAKR_ASR_BASE_URL" ""
+  set_env_value "SPEAKR_TRANSCRIPTION_BASE_URL" "http://speaches:8000/v1"
+
+  if ! has_combined_env_value "TEXT_MODEL_API_KEY"; then
+    fail "meeting-lite needs TEXT_MODEL_API_KEY or OPENAI_API_KEY in /root/.hermes/.env for Speakr summaries/chat."
+  fi
+  if [ "$(total_mem_mb)" -lt 7000 ]; then
+    fail "meeting-lite needs about 8 GB RAM to be safe. Use a worker VPS or stop other heavy containers first."
+  fi
+
+  log "Meeting-lite starts Speakr + Speaches only. Use it for uploads, browser recording, WhatsApp audio files and proposal prep."
+  log "It does not enable speaker diarization as reliably as WhisperX; use meeting-gpu for that."
+  start_profiles meeting-lite
+}
+
+install_meeting_gpu() {
+  ensure_env
+  check_docker
+  copy_secret_from_combined_if_missing "TEXT_MODEL_API_KEY" "OPENAI_API_KEY"
+  set_env_value "SPEAKR_ASR_BASE_URL" "http://whisperx-asr:9000"
+  set_env_value "SPEAKR_TRANSCRIPTION_BASE_URL" ""
+
+  if ! has_combined_env_value "TEXT_MODEL_API_KEY"; then
+    fail "meeting-gpu needs TEXT_MODEL_API_KEY or OPENAI_API_KEY in /root/.hermes/.env for Speakr summaries/chat."
+  fi
+  if ! has_combined_env_value "HF_TOKEN"; then
+    fail "meeting-gpu needs HF_TOKEN in /root/.hermes/.env after accepting the required pyannote model terms."
+  fi
+  if ! command -v nvidia-smi >/dev/null 2>&1; then
+    fail "meeting-gpu needs an NVIDIA GPU host with nvidia-smi and NVIDIA Container Toolkit."
+  fi
+  if [ "$(total_mem_mb)" -lt 14000 ]; then
+    fail "meeting-gpu needs about 16 GB RAM plus GPU VRAM to be safe."
+  fi
+
+  log "Meeting-gpu starts Speakr + WhisperX ASR for best diarization and speaker-aware meeting notes."
+  start_profiles meeting-gpu
+}
+
 install_all_safe() {
   ensure_env
   check_docker
@@ -181,6 +257,7 @@ install_all_safe() {
   fi
 
   log "Skipping mail profile: start it explicitly with './install.sh mail' after DNS/send decision."
+  log "Skipping meeting profiles: start './install.sh meeting-lite' or './install.sh meeting-gpu' explicitly after privacy/resource review."
 }
 
 prepare_dify() {
@@ -295,6 +372,12 @@ case "$PROFILE" in
   mail)
     install_mail
     ;;
+  meeting-lite)
+    install_meeting_lite
+    ;;
+  meeting-gpu)
+    install_meeting_gpu
+    ;;
   all-safe)
     install_all_safe
     ;;
@@ -305,6 +388,6 @@ case "$PROFILE" in
     prepare_firecrawl
     ;;
   *)
-    fail "Unknown profile '$PROFILE'. Use: audit, monitor, utility, ai, research, mail, all-safe, prepare-dify, prepare-firecrawl."
+    fail "Unknown profile '$PROFILE'. Use: audit, monitor, utility, ai, research, mail, meeting-lite, meeting-gpu, all-safe, prepare-dify, prepare-firecrawl."
     ;;
 esac

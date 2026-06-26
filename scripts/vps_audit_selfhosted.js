@@ -86,7 +86,7 @@ checks = {
         "cron": run("test -f /etc/cron.d/onia-supabase-backup && cat /etc/cron.d/onia-supabase-backup || true")
     },
     "selfhosted": {
-        "compose_ps": run("cd /opt/onia-selfhosted 2>/dev/null && docker compose --profile monitor --profile utility --profile ai --profile research --profile mail ps || true")
+        "compose_ps": run("cd /opt/onia-selfhosted 2>/dev/null && docker compose --profile monitor --profile utility --profile ai --profile research --profile mail --profile meeting-lite --profile meeting-gpu ps || true")
     }
 }
 
@@ -111,9 +111,9 @@ function summarize(report) {
   lines.push(`Hermes env: ${report.paths["/root/.hermes/.env"] ? "present" : "missing"}`);
   lines.push(`Running containers: ${containers.trim().split(/\r?\n/).filter(Boolean).length}`);
   if (totalMb && totalMb < 7000) {
-    lines.push("Decision: instalar solo monitor/utility; AI/research/Dify necesitan mas margen.");
+    lines.push("Decision: instalar solo monitor/utility; AI/research/meeting/Dify necesitan mas margen.");
   } else if (totalMb) {
-    lines.push("Decision: VPS podria probar AI/research con cuidado; Dify aun requiere revision de puertos.");
+    lines.push("Decision: VPS podria probar AI/research/meeting-lite con cuidado; Dify y meeting-gpu requieren revision aparte.");
   }
   return lines.join("\n");
 }

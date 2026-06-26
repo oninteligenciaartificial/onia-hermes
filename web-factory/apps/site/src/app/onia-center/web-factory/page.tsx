@@ -17,12 +17,14 @@ import {
   RefreshCw,
   ShieldCheck,
   Sparkles,
+  Star,
   Terminal,
   Wand2,
   Workflow,
   type LucideIcon,
 } from "lucide-react";
 import "../onia-center.css";
+import { WebFactoryIntakeForm } from "./intake-form";
 import { getWebFactoryCenterSnapshot, type WebFactoryClientRecipe, type WebFactoryRecipeStatus } from "./source";
 
 export const dynamic = "force-dynamic";
@@ -109,6 +111,8 @@ export default async function WebFactoryCenterPage() {
           <MetricCard icon={Code2} label="Codigo" value={String(snapshot.counts.codeReferences)} detail="Referencias permitidas tras review" />
         </section>
 
+        <WebFactoryIntakeForm />
+
         <section className="onia-panel onia-webfactory-playbook">
           <SectionHeader
             icon={Workflow}
@@ -170,6 +174,40 @@ export default async function WebFactoryCenterPage() {
                 <span>{command.label}</span>
                 <code>{command.command}</code>
                 <p>{command.purpose}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section className="onia-panel onia-webfactory-github">
+          <SectionHeader
+            icon={Code2}
+            eyebrow="Repos GitHub"
+            title="Fuentes de diseno por estrellas y actividad"
+            description={`${snapshot.githubDesignSources.policy} Actualizado: ${formatDate(snapshot.githubDesignSources.generatedAt)}.`}
+          />
+
+          <div className="onia-webfactory-github-grid">
+            {snapshot.githubDesignSources.repos.slice(0, 8).map((repo) => (
+              <article key={repo.fullName}>
+                <div>
+                  <strong>{repo.fullName}</strong>
+                  <span>{repo.license}</span>
+                </div>
+                <p>{repo.usage}</p>
+                <small>{repo.description}</small>
+                <div className="onia-webfactory-github-meta">
+                  <span>
+                    <Star size={13} />
+                    {formatNumber(repo.stars)} stars
+                  </span>
+                  <span>{formatDate(repo.pushedAt)}</span>
+                </div>
+                {repo.url ? (
+                  <a href={repo.url} target="_blank" rel="noreferrer">
+                    Abrir repo <ExternalLink size={13} />
+                  </a>
+                ) : null}
               </article>
             ))}
           </div>
@@ -473,6 +511,10 @@ function formatDate(value: string) {
     dateStyle: "medium",
     timeStyle: "short",
   }).format(date);
+}
+
+function formatNumber(value: number) {
+  return new Intl.NumberFormat("en-US").format(value);
 }
 
 function formatRoleLabel(role: "arthur" | "sergio" | "area") {

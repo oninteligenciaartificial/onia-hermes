@@ -1,8 +1,9 @@
 # Skill: agenda-calendario
 
 ## Objetivo
-Gestionar el cronograma de Sergio y ONIA via Google Calendar + Cal.com desde Telegram.
-Hermes interpreta intenciones de agenda, n8n ejecuta contra GCal API.
+Gestionar el cronograma de Sergio y ONIA via Google Calendar + Cal.com desde
+Telegram. Hermes interpreta intenciones de agenda y n8n ejecuta contra Google
+Calendar API.
 
 ## Comandos
 
@@ -12,93 +13,127 @@ prioridades y recordatorio de que Higgsfield esta en modo manual.
 
 ### Puedo reunirme <dia> <hora>?
 Valida si una reunion cabe dentro de las ventanas permitidas sin romper gym,
-descanso, novia, trabajo profundo o shutdown.
+descanso, vida personal, trabajo profundo o shutdown.
 
 ### Modo enfoque / Modo gym / Modo novia / Estoy saturado / Cierre Sergio
 Comandos personales para AlfredHQ. Deben responder corto y proteger energia
 antes de proponer mas trabajo.
 
 ### /agenda hoy
-Muestra todos los eventos del día actual desde Google Calendar.
+Muestra todos los eventos del dia actual desde Google Calendar.
 
 ### /agenda semana
-Muestra cronograma de los próximos 7 días.
+Muestra cronograma de los proximos 7 dias.
 
 ### agendar <datos>
-Crea un evento. Datos mínimos requeridos:
-- Título
-- Fecha (ej: "jueves", "15/06", "mañana")
-- Hora inicio y fin
-- Descripción opcional
+Crea un evento. Datos minimos requeridos:
+- Titulo.
+- Fecha, por ejemplo `jueves`, `15/06`, `manana`.
+- Hora inicio y fin.
+- Descripcion opcional.
 
-Ejemplo: `agendar Reunión Epic Motion | jueves 10am-11am | Ver propuesta web`
+Ejemplo: `agendar Reunion Epic Motion | jueves 10am-11am | Ver propuesta web`
 
-> **Importante (bot Alfredhq):** enviar **sin `/`** al inicio. El bot Hermes en el VPS
-> rechaza slash-commands desconocidos. `agendar ...` (sin slash) se enruta a
-> `hermes-command telegram` → `_agendar` → webhook n8n `agendar-create` → Google Calendar.
-> El router (`scripts/hermes_command_center.py`) acepta ambas formas; `/agendar` sirve al invocar el CLI directo.
+Importante para el bot AlfredHQ: enviar sin `/` al inicio. El bot Hermes en el
+VPS rechaza slash-commands desconocidos. `agendar ...` se enruta a
+`hermes-command telegram` -> `_agendar` -> webhook n8n `agendar-create` ->
+Google Calendar. El router acepta ambas formas cuando se invoca por CLI directo.
 
 ### /cancelar <evento>
-Cancela o elimina evento existente. Requiere confirmación explícita.
+Cancela o elimina evento existente. Requiere confirmacion explicita.
 
 ### /recordatorio <evento> <tiempo>
 Agrega recordatorio adicional a evento existente.
-Ejemplo: `/recordatorio Reunión Epic Motion 1 hora antes`
+Ejemplo: `/recordatorio Reunion Epic Motion 1 hora antes`.
 
-## Parsing de fechas (Bolivia UTC-4)
-- "hoy" → fecha actual
-- "mañana" → fecha actual + 1
-- "lunes/martes..." → próximo día de semana
-- "15 de junio" → fecha literal
-- "en 2 horas" → hora actual + 2
+## Parsing de fechas Bolivia UTC-4
+- `hoy` -> fecha actual.
+- `manana` -> fecha actual + 1.
+- `lunes/martes/...` -> proximo dia de semana.
+- `15 de junio` -> fecha literal.
+- `en 2 horas` -> hora actual + 2.
 
 ## Flujos n8n asociados
-- `ONIA - Agenda: Briefing Diario` — cron 8am → GCal → Telegram
-- `ONIA - Agenda: Crear Evento` — Telegram trigger → GCal create → confirm
-- `ONIA - Agenda: Recordatorios` — cron 30min → GCal check → Telegram alert
-- `ONIA - Agenda: Cal.com Booking` — Cal.com webhook → GCal create → Telegram notify
+- `ONIA - Agenda: Briefing Diario`: cron 8am -> GCal -> Telegram.
+- `ONIA - Agenda: Crear Evento`: Telegram trigger -> GCal create -> confirm.
+- `ONIA - Agenda: Recordatorios`: cron 30min -> GCal check -> Telegram alert.
+- `ONIA - Agenda: Cal.com Booking`: Cal.com webhook -> GCal create -> Telegram notify.
 
-## Formato de confirmación de evento creado
-```
-✅ Evento agendado:
-📅 [Título]
-🗓 [Fecha] [Hora inicio] - [Hora fin]
-📝 [Descripción]
-🔗 Link GCal: [link]
+## Formato de confirmacion de evento creado
+```text
+Evento agendado:
+[Titulo]
+[Fecha] [Hora inicio] - [Hora fin]
+[Descripcion]
+Link GCal: [link]
 ```
 
 ## Formato de briefing diario
+```text
+Agenda del [dia], [fecha]:
+
+[HH:MM] [Titulo evento 1]
+[HH:MM] [Titulo evento 2]
+
+Sin eventos: "Dia libre"
 ```
-📅 Agenda del [día], [fecha]:
 
-[HH:MM] [Título evento 1]
-[HH:MM] [Título evento 2]
-...
-
-Sin eventos: "Día libre ✓"
-```
-
-## Cal.com — links de booking para clientes
-- URL base: `https://cal.onia.ai` (o dominio configurado en VPS)
+## Cal.com - links de booking para clientes
+- Modo inicial: link gratis de Cal.com hosted.
+- URL base: pendiente de crear en Cal.com gratis; no usar todavia `cal.onia.ai`
+  como link publico.
+- Calendario Google conectado: `oninteligenciaartificial@gmail.com`.
 - Tipos de evento disponibles:
-  - `consulta-inicial` — 30min, gratis
-  - `reunion-proyecto` — 60min, para clientes activos
-  - `demo-onia` — 45min, para prospectos
-- Cuando cliente agenda → webhook → GCal crea evento → Hermes notifica a Sergio por Telegram
+  - `consulta-inicial`: 30min, gratis.
+  - `demo-onia`: 45min, para DentalGest, GestiOS, Web ONIA y automatizaciones.
+  - `reunion-proyecto`: 60min, para clientes activos.
+  - `auditoria-pagada`: 60min, desactivada por ahora porque ONIA aun no cobrara
+    asesorias pagadas en fase inicial.
+- Cuando cliente agenda: Cal webhook -> Google Calendar -> Telegram -> ONIA Center.
+- Toda reserva debe crear lead en ONIA Center como `reunion_agendada_pendiente`
+  y Telegram debe permitir aceptar, cancelar o reasignar.
 
 Nota ONIA 2026:
-- `cal.onia.ai` depende de DNS/deploy; si no resuelve, usar agenda manual por Telegram.
-- Agregar `auditoria-pagada` como tipo de evento de 60min solo si ya pago.
-- El webhook debe registrar booking en Google Calendar, Telegram y Supabase privado `onia_ops.*`.
-- No abrir todo el calendario a prospectos: usar bloques controlados y minimo 4 horas de anticipacion.
-- Ventanas base Sergio:
-  - Lunes a viernes 11:30-12:30.
-  - Lunes a jueves 15:30-16:30.
-- Bloquear gym, novia/vida personal, shutdown, dormir, almuerzo y trabajo profundo.
+- `cal.onia.ai` queda como camino futuro self-host; para vender rapido se usa
+  Cal.com gratis hasta validar flujo.
+- La vendedora puede agendar para Sergio, Arthur o para ella, pero su
+  disponibilidad propia se configura separada.
+- La vendedora atiende por ahora webs, DentalGest, GestiOS, automatizaciones y
+  asesorias que Sergio no pueda tomar.
+- Sergio/Arthur toman reuniones tecnicas, cierres de propuesta, clientes activos
+  y casos con riesgo de alcance.
+- El webhook debe registrar booking en Google Calendar, Telegram y Supabase
+  privado `onia_ops.*`.
+- No abrir todo el calendario privado a prospectos: Cal muestra ventanas
+  comerciales y Google Calendar bloquea horas no disponibles.
+- Ventanas base ONIA:
+  - Lunes a sabado 14:00-20:00.
+  - Domingo cerrado.
+  - Minimo 4 horas de anticipacion.
+  - Buffer minimo 15 minutos.
+- Horarios deben poder cambiarse rapido en Cal o bloqueando eventos en Google
+  Calendar cuando Sergio, Arthur o la vendedora no puedan.
+- Bloquear gym, vida personal, shutdown, dormir, almuerzo y trabajo profundo.
+
+## Formulario Cal recomendado
+Campos requeridos:
+- Nombre completo.
+- Empresa o negocio.
+- WhatsApp.
+- Correo.
+- Ciudad.
+- Servicio de interes.
+- Problema principal.
+- Presupuesto aproximado.
+- Web, Instagram o Facebook actual.
+- Quien debe tomar la reunion: Sergio, Arthur, vendedora o cualquiera disponible.
+- Urgencia: esta semana, este mes o exploratorio.
 
 ## Reglas
-- Timezone siempre America/La_Paz (UTC-4)
-- Confirmación requerida antes de cancelar eventos
-- No crear eventos en el pasado sin confirmación explícita
-- Eventos de clientes via Cal.com → GCal automático, sin intervención manual
-- Buffer mínimo entre reuniones: 15 minutos (advertir si no hay buffer)
+- Timezone siempre `America/La_Paz` UTC-4.
+- Confirmacion requerida antes de cancelar eventos.
+- No crear eventos en el pasado sin confirmacion explicita.
+- Eventos de clientes via Cal.com pasan por Google Calendar, Telegram y ONIA
+  Center.
+- Buffer minimo entre reuniones: 15 minutos.
+- No contar una reunion para comision o seguimiento si no queda lead registrado.

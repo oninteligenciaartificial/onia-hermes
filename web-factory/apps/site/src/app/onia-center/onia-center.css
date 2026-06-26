@@ -3033,6 +3033,131 @@
   font-size: 10px;
 }
 
+.onia-webfactory-intake {
+  display: grid;
+  gap: 18px;
+}
+
+.onia-webfactory-intake-grid {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.onia-webfactory-intake fieldset {
+  background: #ffffff;
+  border: 1px solid var(--onia-line-soft);
+  border-radius: var(--onia-radius);
+  display: grid;
+  gap: 11px;
+  margin: 0;
+  min-width: 0;
+  padding: 14px;
+}
+
+.onia-webfactory-intake legend {
+  color: var(--onia-ink);
+  font-size: 13px;
+  font-weight: 900;
+  padding: 0 4px;
+}
+
+.onia-webfactory-intake label {
+  color: var(--onia-muted);
+  display: grid;
+  font-size: 12px;
+  font-weight: 800;
+  gap: 6px;
+}
+
+.onia-webfactory-intake input,
+.onia-webfactory-intake textarea,
+.onia-webfactory-intake select {
+  background: #f8faf7;
+  border: 1px solid var(--onia-line-soft);
+  border-radius: calc(var(--onia-radius) - 2px);
+  color: var(--onia-ink);
+  font: inherit;
+  font-size: 13px;
+  padding: 9px 10px;
+  width: 100%;
+}
+
+.onia-webfactory-inline-fields,
+.onia-webfactory-intake-actions {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.onia-webfactory-intake-output {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.1fr) minmax(0, 1.1fr);
+}
+
+.onia-webfactory-intake-output article {
+  background: #ffffff;
+  border: 1px solid var(--onia-line-soft);
+  border-radius: var(--onia-radius);
+  display: grid;
+  gap: 10px;
+  min-width: 0;
+  padding: 14px;
+}
+
+.onia-webfactory-intake-output article > div {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+  justify-content: space-between;
+}
+
+.onia-webfactory-intake-output strong {
+  color: var(--onia-ink);
+  font-size: 13px;
+}
+
+.onia-webfactory-intake-output span,
+.onia-webfactory-intake-output li {
+  color: var(--onia-muted);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.onia-webfactory-intake-output ul {
+  display: grid;
+  gap: 7px;
+  margin: 0;
+  padding-left: 16px;
+}
+
+.onia-webfactory-intake-output pre {
+  background: #101a16;
+  border-radius: calc(var(--onia-radius) - 2px);
+  color: #eff8f1;
+  font-family: var(--font-mono), "SFMono-Regular", Consolas, monospace;
+  font-size: 11px;
+  line-height: 1.55;
+  margin: 0;
+  max-height: 360px;
+  overflow: auto;
+  padding: 12px;
+  white-space: pre-wrap;
+}
+
+.onia-webfactory-intake-output button,
+.onia-webfactory-intake-actions button {
+  background: #153f30;
+  border: 0;
+  border-radius: calc(var(--onia-radius) - 2px);
+  color: #ffffff;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 900;
+  padding: 8px 10px;
+}
+
 .onia-webfactory-grid {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
@@ -3305,6 +3430,81 @@
   padding-top: 14px;
 }
 
+.onia-webfactory-github {
+  display: grid;
+  gap: 18px;
+}
+
+.onia-webfactory-github-grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.onia-webfactory-github-grid article {
+  background: #fbfcfa;
+  border: 1px solid var(--onia-line-soft);
+  border-radius: var(--onia-radius);
+  display: grid;
+  gap: 9px;
+  min-width: 0;
+  padding: 13px;
+}
+
+.onia-webfactory-github-grid article > div:first-child,
+.onia-webfactory-github-meta {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+  justify-content: space-between;
+}
+
+.onia-webfactory-github-grid strong {
+  color: var(--onia-ink);
+  font-size: 14px;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+.onia-webfactory-github-grid p {
+  color: var(--onia-muted);
+  font-size: 13px;
+  line-height: 1.45;
+  margin: 0;
+}
+
+.onia-webfactory-github-grid span,
+.onia-webfactory-github-grid small {
+  color: var(--onia-faint);
+  font-size: 11px;
+  font-weight: 850;
+}
+
+.onia-webfactory-github-grid span {
+  text-transform: uppercase;
+}
+
+.onia-webfactory-github-grid small {
+  line-height: 1.4;
+}
+
+.onia-webfactory-github-grid a {
+  align-items: center;
+  color: var(--onia-blue);
+  display: inline-flex;
+  font-size: 12px;
+  font-weight: 850;
+  gap: 5px;
+  text-decoration: none;
+}
+
+.onia-webfactory-github-meta span {
+  align-items: center;
+  display: inline-flex;
+  gap: 5px;
+  text-transform: none;
+}
+
 .onia-seller-services,
 .onia-assistant-workspace,
 .onia-seller-service-section {
@@ -3547,6 +3747,9 @@
   .onia-webfactory-step-grid,
   .onia-webfactory-grid,
   .onia-webfactory-two-column,
+  .onia-webfactory-intake-grid,
+  .onia-webfactory-intake-output,
+  .onia-webfactory-github-grid,
   .onia-seller-service-grid,
   .onia-seller-rule-grid,
   .onia-assistant-workspace {
@@ -3564,6 +3767,8 @@
   .onia-webfactory-recipe__stats,
   .onia-webfactory-artifacts,
   .onia-webfactory-intel-stats,
+  .onia-webfactory-inline-fields,
+  .onia-webfactory-intake-actions,
   .onia-service-rule-grid,
   .onia-service-dos-donts {
     grid-template-columns: 1fr;
@@ -3574,9 +3779,12 @@
   .onia-webfactory-references article > div,
   .onia-webfactory-code article > div,
   .onia-webfactory-source-list article > div,
+  .onia-webfactory-github-grid article > div:first-child,
+  .onia-webfactory-github-meta,
   .onia-section-strip,
   .onia-assistant-input {
     display: grid;
+    grid-template-columns: 1fr;
   }
 
   .onia-section-strip span {

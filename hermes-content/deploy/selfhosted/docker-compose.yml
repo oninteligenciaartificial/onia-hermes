@@ -210,6 +210,127 @@ services:
     security_opt:
       - no-new-privileges:true
 
+  speaches:
+    profiles: ["meeting-lite"]
+    image: ${SPEACHES_IMAGE:-ghcr.io/speaches-ai/speaches:latest-cpu}
+    restart: unless-stopped
+    env_file:
+      - ./.env
+      - /root/.hermes/.env
+    ports:
+      - "${SPEACHES_BIND:-127.0.0.1}:${SPEACHES_PORT:-3108}:8000"
+    volumes:
+      - speaches_hf_cache:/home/ubuntu/.cache/huggingface/hub
+    networks:
+      - onia_internal
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://127.0.0.1:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+    mem_limit: ${SPEACHES_MEM_LIMIT:-4096m}
+    security_opt:
+      - no-new-privileges:true
+
+  whisperx-asr:
+    profiles: ["meeting-gpu"]
+    image: ${WHISPERX_ASR_IMAGE:-learnedmachine/whisperx-asr-service:latest}
+    restart: unless-stopped
+    env_file:
+      - ./.env
+      - /root/.hermes/.env
+    environment:
+      PYTHONWARNINGS: ignore::UserWarning
+      DEVICE: ${WHISPERX_DEVICE:-cuda}
+      COMPUTE_TYPE: ${WHISPERX_COMPUTE_TYPE:-float16}
+      BATCH_SIZE: ${WHISPERX_BATCH_SIZE:-16}
+      CACHE_DIR: ${WHISPERX_CACHE_DIR:-/.cache}
+      HF_HOME: ${WHISPERX_CACHE_DIR:-/.cache}
+      NLTK_DATA: ${WHISPERX_CACHE_DIR:-/.cache}/nltk_data
+      PRELOAD_MODEL: ${WHISPERX_PRELOAD_MODEL:-large-v3}
+      MAX_FILE_SIZE_MB: ${WHISPERX_MAX_FILE_SIZE_MB:-1000}
+      SERVE_MODE: ${WHISPERX_SERVE_MODE:-simple}
+      GPU_CONCURRENCY: ${WHISPERX_GPU_CONCURRENCY:-1}
+    shm_size: ${WHISPERX_SHM_SIZE:-8g}
+    ports:
+      - "${WHISPERX_ASR_BIND:-127.0.0.1}:${WHISPERX_ASR_PORT:-3109}:9000"
+    volumes:
+      - whisperx_cache:/.cache
+    networks:
+      - onia_internal
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import requests; requests.get('http://127.0.0.1:9000/health', timeout=5)"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 120s
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    mem_limit: ${WHISPERX_ASR_MEM_LIMIT:-12288m}
+    security_opt:
+      - no-new-privileges:true
+
+  speakr:
+    profiles: ["meeting-lite", "meeting-gpu"]
+    image: ${SPEAKR_IMAGE:-learnedmachine/speakr:latest}
+    restart: unless-stopped
+    env_file:
+      - ./.env
+      - /root/.hermes/.env
+    environment:
+      LOG_LEVEL: ${SPEAKR_LOG_LEVEL:-ERROR}
+      ADMIN_USERNAME: ${SPEAKR_ADMIN_USERNAME:-admin}
+      ADMIN_EMAIL: ${SPEAKR_ADMIN_EMAIL:-admin@onia.local}
+      ADMIN_PASSWORD: ${SPEAKR_ADMIN_PASSWORD:?set SPEAKR_ADMIN_PASSWORD}
+      SECRET_KEY: ${SPEAKR_SECRET_KEY:?set SPEAKR_SECRET_KEY}
+      ALLOW_REGISTRATION: ${SPEAKR_ALLOW_REGISTRATION:-false}
+      ENABLE_PUBLIC_SHARING: ${SPEAKR_ENABLE_PUBLIC_SHARING:-false}
+      ENABLE_INTERNAL_SHARING: ${SPEAKR_ENABLE_INTERNAL_SHARING:-true}
+      ENABLE_SERVER_RECORDING_CHUNKS: ${SPEAKR_ENABLE_SERVER_RECORDING_CHUNKS:-true}
+      RECORDING_MAX_HOURS: ${SPEAKR_RECORDING_MAX_HOURS:-8}
+      AUDIO_COMPRESS_UPLOADS: ${SPEAKR_AUDIO_COMPRESS_UPLOADS:-true}
+      AUDIO_CODEC: ${SPEAKR_AUDIO_CODEC:-mp3}
+      AUDIO_BITRATE: ${SPEAKR_AUDIO_BITRATE:-128k}
+      TEXT_MODEL_BASE_URL: ${SPEAKR_TEXT_MODEL_BASE_URL:-https://api.openai.com/v1}
+      TEXT_MODEL_NAME: ${SPEAKR_TEXT_MODEL_NAME:-gpt-4o-mini}
+      TRANSCRIPTION_BASE_URL: ${SPEAKR_TRANSCRIPTION_BASE_URL:-http://speaches:8000/v1}
+      TRANSCRIPTION_MODEL: ${SPEAKR_TRANSCRIPTION_MODEL:-Systran/faster-distil-whisper-large-v3}
+      TRANSCRIPTION_API_KEY: ${SPEAKR_TRANSCRIPTION_API_KEY:-local}
+      ASR_BASE_URL: ${SPEAKR_ASR_BASE_URL:-}
+      ASR_DIARIZE: ${SPEAKR_ASR_DIARIZE:-true}
+      ASR_MIN_SPEAKERS: ${SPEAKR_ASR_MIN_SPEAKERS:-1}
+      ASR_MAX_SPEAKERS: ${SPEAKR_ASR_MAX_SPEAKERS:-5}
+      ASR_RETURN_SPEAKER_EMBEDDINGS: ${SPEAKR_ASR_RETURN_SPEAKER_EMBEDDINGS:-true}
+      SQLALCHEMY_DATABASE_URI: sqlite:////data/instance/transcriptions.db
+      UPLOAD_FOLDER: /data/uploads
+      FILE_STORAGE_BACKEND: local
+      JOB_QUEUE_WORKERS: ${SPEAKR_JOB_QUEUE_WORKERS:-2}
+      SUMMARY_QUEUE_WORKERS: ${SPEAKR_SUMMARY_QUEUE_WORKERS:-2}
+    ports:
+      - "${SPEAKR_BIND:-127.0.0.1}:${SPEAKR_PORT:-3107}:8899"
+    volumes:
+      - speakr_uploads:/data/uploads
+      - speakr_instance:/data/instance
+      - speakr_exports:/data/exports
+      - speakr_auto_process:/data/auto-process
+    networks:
+      - onia_internal
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://127.0.0.1:8899', timeout=5)\""]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 120s
+    mem_limit: ${SPEAKR_MEM_LIMIT:-4096m}
+    security_opt:
+      - no-new-privileges:true
+
 networks:
   onia_internal:
     driver: bridge
@@ -224,3 +345,9 @@ volumes:
   crawl4ai_data:
   listmonk_pgdata:
   listmonk_uploads:
+  speaches_hf_cache:
+  whisperx_cache:
+  speakr_uploads:
+  speakr_instance:
+  speakr_exports:
+  speakr_auto_process:

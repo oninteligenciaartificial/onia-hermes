@@ -12,6 +12,22 @@ Self-host booking pages for ONIA meetings and route bookings into:
 4. Telegram notification to Sergio.
 5. ONIA shared Supabase operations layer.
 
+## Current MVP Decision
+
+As of 2026-06-25, ONIA should start with a free hosted Cal.com link before
+moving public booking to this self-host kit. The hosted MVP uses:
+
+- Google Calendar: `oninteligenciaartificial@gmail.com`.
+- Base availability: Monday-Saturday, 14:00-20:00 America/La_Paz.
+- Sunday closed.
+- 15 minute buffer.
+- Minimum 4 hours notice.
+- Notifications: Google Calendar + Telegram.
+- ONIA Center lead creation for every booking, pending accept/cancel/reassign.
+
+Keep this self-host kit for the next phase after the hosted flow proves bookings,
+Telegram notifications, ONIA Center lead creation and owner assignment.
+
 ## Important Decision
 
 ONIA already has a VPS and a private self-hosted Supabase stack. Supabase is the

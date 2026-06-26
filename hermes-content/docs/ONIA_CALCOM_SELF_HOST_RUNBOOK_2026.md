@@ -6,7 +6,12 @@ Fecha: 2026-06-19.
 
 ## Decision
 
-Usar booking self-hosted para ONIA. Estado actual:
+Decision operativa actual 2026-06-25: usar primero un link gratis de Cal.com
+hosted para validar ventas, agenda, notificaciones y registro en ONIA Center.
+El self-host queda como camino preparado para cuando el flujo ya funcione y
+convenga usar dominio propio.
+
+Estado self-host preparado:
 
 - Temporal activo: `https://onia-calcom.hqdqgh.easypanel.host`
 - Dominio final pendiente DNS: `https://cal.onia.ai`
@@ -129,14 +134,21 @@ evitar choques.
 - `consulta-inicial`: 30 min, gratis, para prospectos nuevos.
 - `demo-onia`: 45 min, DentalGest/Gesti-OS/Web.
 - `reunion-proyecto`: 60 min, clientes activos.
-- `auditoria-pagada`: 60 min, solo si ya pago auditoria.
+- `auditoria-pagada`: 60 min, desactivada en fase inicial porque ONIA aun no
+  cobrara asesorias pagadas.
 
 Reglas base:
 
 - Timezone: `America/La_Paz`.
 - Buffer: 15 min minimo.
 - No aceptar reuniones el mismo dia con menos de 4 horas de anticipacion.
-- Consultas iniciales solo en bloques definidos; no abrir todo el calendario.
+- Disponibilidad comercial base: lunes a sabado 14:00-20:00.
+- Domingo cerrado.
+- Calendario operativo: `oninteligenciaartificial@gmail.com`.
+- La vendedora puede agendar para Sergio, Arthur o para ella, con disponibilidad
+  propia separada.
+- Consultas iniciales solo en bloques definidos; no abrir todo el calendario
+  privado.
 
 ## n8n
 
