@@ -187,6 +187,44 @@ export default async function WebFactoryCenterPage() {
             description={`${snapshot.githubDesignSources.policy} Actualizado: ${formatDate(snapshot.githubDesignSources.generatedAt)}.`}
           />
 
+          {snapshot.githubDesignSources.skillSources.length > 0 ? (
+            <div className="onia-webfactory-skill-sources">
+              <div>
+                <h3>Skills y criterio visual</h3>
+                <p>Primero se usan para razonar direccion, calidad, riesgos y patrones. No son fuentes para copiar identidades.</p>
+              </div>
+              <div className="onia-webfactory-github-grid is-skills">
+                {snapshot.githubDesignSources.skillSources.slice(0, 6).map((source) => (
+                  <article key={source.fullName}>
+                    <div>
+                      <strong>{source.fullName}</strong>
+                      <span>{source.category}</span>
+                    </div>
+                    <p>{source.usage}</p>
+                    <small>{source.risk}</small>
+                    <div className="onia-webfactory-github-meta">
+                      <span>
+                        <Star size={13} />
+                        {formatNumber(source.stars)} stars
+                      </span>
+                      <span>{source.license}</span>
+                    </div>
+                    {source.url ? (
+                      <a href={source.url} target="_blank" rel="noreferrer">
+                        Abrir fuente <ExternalLink size={13} />
+                      </a>
+                    ) : null}
+                  </article>
+                ))}
+              </div>
+            </div>
+          ) : null}
+
+          <div className="onia-webfactory-github-subhead">
+            <h3>Componentes, sistemas y motion</h3>
+            <p>Despues se revisa codigo reutilizable, licencias y componentes utiles para implementar sin copiar una web literal.</p>
+          </div>
+
           <div className="onia-webfactory-github-grid">
             {snapshot.githubDesignSources.repos.slice(0, 8).map((repo) => (
               <article key={repo.fullName}>

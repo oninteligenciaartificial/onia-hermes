@@ -3435,10 +3435,35 @@
   gap: 18px;
 }
 
+.onia-webfactory-skill-sources,
+.onia-webfactory-github-subhead {
+  display: grid;
+  gap: 10px;
+}
+
+.onia-webfactory-skill-sources h3,
+.onia-webfactory-github-subhead h3 {
+  color: var(--onia-ink);
+  font-size: 15px;
+  margin: 0;
+}
+
+.onia-webfactory-skill-sources p,
+.onia-webfactory-github-subhead p {
+  color: var(--onia-muted);
+  font-size: 13px;
+  line-height: 1.45;
+  margin: 0;
+}
+
 .onia-webfactory-github-grid {
   display: grid;
   gap: 12px;
   grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.onia-webfactory-github-grid.is-skills {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .onia-webfactory-github-grid article {

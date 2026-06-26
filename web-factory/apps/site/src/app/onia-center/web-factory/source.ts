@@ -10,7 +10,13 @@ type DesignReference = {
   reuseGuidance?: string;
   screenshots?: Record<string, { path?: string } | undefined>;
   topFonts?: Array<{ value?: string; count?: number } | string>;
-  motionSignals?: string[];
+  motionSignals?:
+    | string[]
+    | {
+        libraries?: Record<string, unknown>;
+        animatedElementCount?: number;
+        keyframes?: unknown[];
+      };
 };
 
 type CodeReference = {
@@ -112,6 +118,19 @@ type GithubDesignSources = {
     usage?: string;
     risk?: string;
     fit?: string[];
+  }>;
+  skillSources?: Array<{
+    fullName?: string;
+    url?: string;
+    stars?: number;
+    forks?: number;
+    openIssues?: number;
+    pushedAt?: string;
+    license?: string;
+    category?: string;
+    description?: string;
+    usage?: string;
+    risk?: string;
   }>;
 };
 
@@ -254,6 +273,19 @@ export type WebFactoryCenterSnapshot = {
       usage: string;
       risk: string;
       fit: string[];
+    }>;
+    skillSources: Array<{
+      fullName: string;
+      url: string;
+      stars: number;
+      forks: number;
+      openIssues: number;
+      pushedAt: string;
+      license: string;
+      category: string;
+      description: string;
+      usage: string;
+      risk: string;
     }>;
   };
   operatingCommands: Array<{
@@ -586,6 +618,19 @@ async function loadGithubDesignSources(): Promise<WebFactoryCenterSnapshot["gith
       risk: repo.risk ?? "Revisar licencia, accesibilidad y adaptacion visual antes de reutilizar.",
       fit: repo.fit ?? [],
     })),
+    skillSources: (sources.skillSources ?? []).map((source) => ({
+      fullName: source.fullName ?? "source",
+      url: source.url ?? "",
+      stars: source.stars ?? 0,
+      forks: source.forks ?? 0,
+      openIssues: source.openIssues ?? 0,
+      pushedAt: source.pushedAt ?? "",
+      license: source.license ?? "review",
+      category: source.category ?? "design-intelligence",
+      description: source.description ?? "",
+      usage: source.usage ?? "Fuente pendiente de clasificar.",
+      risk: source.risk ?? "Usar como criterio y patrones; no copiar identidad, claims ni codigo sin licencia clara.",
+    })),
   };
 }
 
@@ -602,8 +647,32 @@ function normalizeReference(reference: DesignReference): WebFactoryClientRecipe[
       .slice(0, 3)
       .map((font) => (typeof font === "string" ? font : font.value ?? ""))
       .filter(Boolean),
-    motionSignals: (reference.motionSignals ?? []).slice(0, 4),
+    motionSignals: normalizeMotionSignals(reference.motionSignals),
   };
+}
+
+function normalizeMotionSignals(motionSignals: DesignReference["motionSignals"]) {
+  if (Array.isArray(motionSignals)) {
+    return motionSignals.filter((signal) => typeof signal === "string" && signal.trim()).slice(0, 4);
+  }
+
+  if (!motionSignals || typeof motionSignals !== "object") {
+    return [];
+  }
+
+  const libraries =
+    motionSignals.libraries && typeof motionSignals.libraries === "object" ? Object.keys(motionSignals.libraries) : [];
+  const signals = libraries.slice(0, 2).map((library) => `library:${library}`);
+
+  if (typeof motionSignals.animatedElementCount === "number" && motionSignals.animatedElementCount > 0) {
+    signals.push(`${motionSignals.animatedElementCount} animated elements`);
+  }
+
+  if (Array.isArray(motionSignals.keyframes) && motionSignals.keyframes.length > 0) {
+    signals.push(`${motionSignals.keyframes.length} keyframes`);
+  }
+
+  return signals.slice(0, 4);
 }
 
 function normalizeCodeReference(reference: CodeReference): WebFactoryClientRecipe["codeReferences"][number] {
