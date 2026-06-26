@@ -19,6 +19,7 @@ import {
   CheckCircle2,
   ChevronRight,
   ClipboardCheck,
+  Code2,
   Crown,
   Database,
   EyeOff,
@@ -136,6 +137,7 @@ type RuntimeStatusResponse = {
     reviews?: unknown[];
     notes?: unknown[];
     ideas?: unknown[];
+    codexJobs?: unknown[];
   } | null;
 };
 
@@ -149,6 +151,7 @@ type RuntimeConnection = {
     reviews: number;
     notes: number;
     ideas: number;
+    codexJobs: number;
   };
 };
 
@@ -159,6 +162,7 @@ const navItems: NavItem[] = [
   { id: "asistente", label: "Asistente", detail: "ONIA Bot", group: "Trabajo", icon: Bot },
   { id: "audio-intelligence", label: "Audio IA", detail: "Propuestas", group: "Trabajo", icon: Mic },
   { id: "ideas", label: "Ideas", detail: "Reels e IA", group: "Trabajo", icon: Lightbulb },
+  { id: "codex", label: "Codex", detail: "Jobs", group: "Trabajo", icon: Code2 },
   { id: "servicios", label: "Servicios", detail: "Catalogo", group: "Ventas", icon: Layers3 },
   { id: "pagos", label: "Comisiones", detail: "Propias", group: "Ventas", icon: HandCoins },
   { id: "evidencias", label: "Evidencias", detail: "Gates", group: "Ventas", icon: FileCheck2 },
@@ -222,6 +226,11 @@ const moduleCopy: Record<string, { title: string; description: string; content: 
     title: "Bandeja de ideas",
     description: "Reels, links y referencias para revisar despues con Codex, Claude o modelo self-hosted.",
     content: ["Ideas inbox", "Prompts", "Visibilidad", "Revision IA"],
+  },
+  codex: {
+    title: "Codex Queue",
+    description: "Trabajos tecnicos preparados con contexto, repo, archivos, aceptacion, validacion y evidencia.",
+    content: ["Prompt", "Repo", "Validacion", "Evidencia"],
   },
   proyectos: {
     title: "Proyectos ONIA",
@@ -533,7 +542,7 @@ export default function OniaCenterPage() {
     state: "checking",
     mode: "checking",
     detail: "Verificando Auth y Supabase.",
-    counts: { leads: 0, tasks: 0, reviews: 0, notes: 0, ideas: 0 },
+    counts: { leads: 0, tasks: 0, reviews: 0, notes: 0, ideas: 0, codexJobs: 0 },
   });
   const roleLocked = sessionRole !== null && sessionRole !== "sergio";
   const role = roleDefinitions.find((item) => item.id === selectedRole) ?? roleDefinitions[0];
@@ -660,7 +669,7 @@ export default function OniaCenterPage() {
             state: body.mode === "auth_required" || body.mode === "auth_error" ? "blocked" : "error",
             mode: body.mode,
             detail: body.message ?? "No se pudo leer el runtime de ONIA Center.",
-            counts: { leads: 0, tasks: 0, reviews: 0, notes: 0, ideas: 0 },
+            counts: { leads: 0, tasks: 0, reviews: 0, notes: 0, ideas: 0, codexJobs: 0 },
           });
           return;
         }
@@ -676,6 +685,7 @@ export default function OniaCenterPage() {
             reviews: data?.reviews?.length ?? 0,
             notes: data?.notes?.length ?? 0,
             ideas: data?.ideas?.length ?? 0,
+            codexJobs: data?.codexJobs?.length ?? 0,
           },
         });
       } catch {
@@ -684,7 +694,7 @@ export default function OniaCenterPage() {
             state: "error",
             mode: "network_error",
             detail: "No se pudo conectar al runtime. Revisa el tunel local a Supabase.",
-            counts: { leads: 0, tasks: 0, reviews: 0, notes: 0, ideas: 0 },
+            counts: { leads: 0, tasks: 0, reviews: 0, notes: 0, ideas: 0, codexJobs: 0 },
           });
         }
       }
@@ -816,12 +826,12 @@ export default function OniaCenterPage() {
               {runtimeConnection.counts.tasks} tareas / {runtimeConnection.counts.reviews} revisiones
             </strong>
             <p>
-              Leads {runtimeConnection.counts.leads}, ideas {runtimeConnection.counts.ideas}, notas {runtimeConnection.counts.notes}.
+              Leads {runtimeConnection.counts.leads}, ideas {runtimeConnection.counts.ideas}, Codex {runtimeConnection.counts.codexJobs}, notas {runtimeConnection.counts.notes}.
             </p>
           </article>
         </section>
 
-        {["dashboard", "uso-diario", "calendario-sergio", "asistente", "audio-intelligence", "ideas", "integraciones", "servicios"].includes(activeView) ? (
+        {["dashboard", "uso-diario", "calendario-sergio", "asistente", "audio-intelligence", "ideas", "codex", "integraciones", "servicios"].includes(activeView) ? (
           <OperatingWorkspace
             selectedRole={selectedRole}
             workspaceView={
@@ -835,11 +845,13 @@ export default function OniaCenterPage() {
                       ? "audio-intelligence"
                       : activeView === "ideas"
                         ? "ideas"
-                        : activeView === "servicios"
-                          ? "seller-services"
-                          : activeView === "integraciones"
-                            ? "connections"
-                            : "capture"
+                        : activeView === "codex"
+                          ? "codex-queue"
+                          : activeView === "servicios"
+                            ? "seller-services"
+                            : activeView === "integraciones"
+                              ? "connections"
+                              : "capture"
             }
           />
         ) : null}

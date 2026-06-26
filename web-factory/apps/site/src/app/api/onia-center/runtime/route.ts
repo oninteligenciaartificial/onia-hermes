@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import {
   createOniaCenterEntity,
-  filterOniaCenterRuntimeForRole,
+  filterOniaCenterRuntimeForActor,
   getMissingOniaCenterConfig,
   getOniaCenterRuntime,
   isOniaCenterConfigured,
@@ -40,30 +40,56 @@ function authFailureResponse(auth: Extract<OniaCenterAuthResult, { ok: false }>)
   );
 }
 
-function actorScopedPayload(entity: RuntimeEntity, data: unknown, role: RoleId) {
-  if (role === "sergio") {
+function actorScopedPayload(
+  entity: RuntimeEntity,
+  data: unknown,
+  actor: { role: RoleId; userKey: string; displayName: string },
+) {
+  if (actor.role === "sergio") {
     return data;
   }
 
   if (entity === "lead" && typeof data === "object" && data) {
-    return { ...data, owner: role };
+    const source = data as Record<string, unknown>;
+    return {
+      ...source,
+      owner: actor.role,
+      ownerUserKey: actor.userKey,
+      originUserKey: actor.userKey,
+      meetingOwner: source.meetingOwner === "sergio" || source.meetingOwner === "arthur" ? source.meetingOwner : actor.role,
+      meetingOwnerUserKey: source.meetingOwner === "sergio" || source.meetingOwner === "arthur" ? undefined : actor.userKey,
+      meetingOwnerLabel: source.meetingOwner === "sergio" || source.meetingOwner === "arthur" ? source.meetingOwnerLabel : actor.displayName,
+      meetingStatus: source.meetingStatus === "confirmada" ? "solicitada" : source.meetingStatus ?? "pendiente",
+    };
   }
 
   if (entity === "task" && typeof data === "object" && data) {
-    return { ...data, assignedRole: role };
+    return { ...data, assignedRole: actor.role, assignedUserKey: actor.userKey };
   }
 
   if (entity === "note" && typeof data === "object" && data) {
-    return { ...data, actorRole: role };
+    return { ...data, actorRole: actor.role, actorUserKey: actor.userKey };
   }
 
   if (entity === "idea" && typeof data === "object" && data) {
     const source = data as Record<string, unknown>;
     return {
       ...source,
-      owner: role,
+      owner: actor.role,
+      ownerUserKey: actor.userKey,
       visibility: source.visibility === "team_safe" ? "team_safe" : "assigned_only",
       status: "inbox",
+    };
+  }
+
+  if (entity === "codex_job" && typeof data === "object" && data) {
+    const source = data as Record<string, unknown>;
+    return {
+      ...source,
+      owner: actor.role,
+      ownerUserKey: actor.userKey,
+      visibility: "internal_restricted",
+      status: "draft",
     };
   }
 
@@ -81,7 +107,7 @@ export async function GET(request: Request) {
   }
 
   try {
-    const data = filterOniaCenterRuntimeForRole(await getOniaCenterRuntime(), auth.actor.role);
+    const data = filterOniaCenterRuntimeForActor(await getOniaCenterRuntime(), auth.actor);
     return NextResponse.json({
       ok: true,
       mode: "supabase",
@@ -132,7 +158,7 @@ export async function POST(request: Request) {
   }
 
   try {
-    const data = await createOniaCenterEntity(payload.entity, actorScopedPayload(payload.entity, payload.data, auth.actor.role));
+    const data = await createOniaCenterEntity(payload.entity, actorScopedPayload(payload.entity, payload.data, auth.actor));
     return NextResponse.json({ ok: true, mode: "supabase", data });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Error guardando ONIA Center.";
@@ -172,6 +198,13 @@ export async function PATCH(request: Request) {
 
   if (!isSergio(auth.actor) && payload.entity === "task" && payload.status === "done") {
     return NextResponse.json({ ok: false, mode: "forbidden", message: "El equipo puede mover tareas a revision; Sergio aprueba el cierre." }, { status: 403 });
+  }
+
+  if (!isSergio(auth.actor) && payload.entity === "codex_job" && !["draft", "blocked"].includes(payload.status)) {
+    return NextResponse.json(
+      { ok: false, mode: "forbidden", message: "Solo Sergio puede aprobar, enviar a Codex o cerrar jobs de codigo." },
+      { status: 403 },
+    );
   }
 
   try {

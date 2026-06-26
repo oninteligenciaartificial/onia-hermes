@@ -34,6 +34,7 @@ export const sourceDocuments = [
   "web-factory/WEB_FACTORY_REFERENCE_CAPTURE_RUNBOOK.md",
   "web-factory/docs/WEB_FACTORY_DESIGN_INTELLIGENCE_LATEST.md",
   "web-factory/data/clients/nuvia.design.md",
+  "hermes-content/docs/ONIA_CENTER_CODEX_INTEGRATION_RUNBOOK_2026.md",
 ] as const;
 
 export const oniaCenterSeedSource = {
@@ -321,6 +322,13 @@ export const dataModelTables: DataModelTable[] = [
     implementedInSql: true,
     implementedInApp: true,
   },
+  {
+    name: "onia_center.audit_logs[action=codex_job]",
+    purpose: "Cola auditada de trabajos para Codex con repo, contexto, archivos, criterios de aceptacion, validacion y evidencia.",
+    requiredForPhase: 1,
+    implementedInSql: true,
+    implementedInApp: true,
+  },
 ];
 
 export const sustainabilityTargets = {
@@ -449,6 +457,7 @@ export const roleDefinitions: RoleDefinition[] = [
       "asistente",
       "audio-intelligence",
       "ideas",
+      "codex",
       "proyectos",
       "tareas",
       "collab",
@@ -500,6 +509,7 @@ export const roleDefinitions: RoleDefinition[] = [
       "asistente",
       "audio-intelligence",
       "ideas",
+      "codex",
       "proyectos",
       "tareas",
       "collab",

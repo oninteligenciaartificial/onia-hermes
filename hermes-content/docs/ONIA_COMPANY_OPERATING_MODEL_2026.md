@@ -79,8 +79,12 @@ Usar:
 6. Ningun servicio nuevo hereda porcentaje alto.
 7. Nuvia no puede matar a ONIA.
 8. Higgsfield y herramientas premium se prorratean por uso.
-9. Self-hosted se usa para ahorrar, no para instalar herramientas por moda.
-10. Si no esta en ONIA Center/CRM, no existe para pago, cierre o decision.
+9. ONIA va por la mejor solucion sostenible: mas control, calidad y capacidad
+   compuesta cuando se pueda operar bien; no se elige lo barato/rapido como
+   arquitectura permanente si debilita a la empresa.
+10. Self-hosted se usa para ahorrar, controlar y subir calidad, no para instalar
+    herramientas por moda.
+11. Si no esta en ONIA Center/CRM, no existe para pago, cierre o decision.
 
 ## Organigrama inicial
 

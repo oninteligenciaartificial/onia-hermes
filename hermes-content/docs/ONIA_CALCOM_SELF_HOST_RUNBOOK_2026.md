@@ -1,20 +1,20 @@
 # ONIA Cal.com / Cal.diy self-host runbook 2026
 
-Estado: activo en dominio temporal, admin bootstrap creado, pendiente SMTP,
-event types, webhook Cal y DNS oficial.
-Fecha: 2026-06-19.
+Estado: activo en dominio temporal y validado publicamente, admin bootstrap
+creado, pendiente SMTP, event types, webhook Cal y DNS oficial.
+Fecha: 2026-06-26.
 
 ## Decision
 
-Decision operativa actual 2026-06-25: usar primero un link gratis de Cal.com
-hosted para validar ventas, agenda, notificaciones y registro en ONIA Center.
-El self-host queda como camino preparado para cuando el flujo ya funcione y
-convenga usar dominio propio.
+Decision operativa actual 2026-06-26: usar Cal.com self-hosted como camino
+principal de agenda ONIA. El link gratis de Cal.com hosted queda solo como
+fallback si el self-host bloquea una reserva comercial real por SMTP, Google
+Calendar, DNS o webhook.
 
-Estado self-host preparado:
+Estado self-host:
 
-- Temporal activo: `https://onia-calcom.hqdqgh.easypanel.host`
-- Dominio final pendiente DNS: `https://cal.onia.ai`
+- Temporal activo y validado: `https://onia-calcom.hqdqgh.easypanel.host`
+- Dominio final pendiente DNS: `https://cal.onia.com.bo`
 
 Conectarlo a:
 
@@ -26,12 +26,21 @@ Conectarlo a:
 
 ## Diagnostico
 
-- `cal.onia.ai` no resolvio en DNS durante la revision local del 2026-06-19.
+- `cal.onia.com.bo` resolvio durante la revision local del 2026-06-26, pero
+  apunta a `64.29.17.65` y `64.29.17.1`, no al VPS ONIA `187.77.16.63`.
 - Se uso la llave local `onia_hermes_vps_ed25519` para activar el servicio en el
   VPS.
 - Cal.com `v6.2.0`, Postgres y Redis quedaron activos en `/opt/onia-calcom`.
 - Traefik/Easypanel enruta el dominio temporal
   `onia-calcom.hqdqgh.easypanel.host`.
+- Validacion publica 2026-06-26:
+  - `http://onia-calcom.hqdqgh.easypanel.host` devuelve `308` a HTTPS.
+  - `https://onia-calcom.hqdqgh.easypanel.host` devuelve `307` a `/auth/login`.
+  - `https://onia-calcom.hqdqgh.easypanel.host/auth/login` devuelve `200`.
+  - `GET https://onia-calcom.hqdqgh.easypanel.host/api/auth/session` devuelve
+    `200 {}`; no usar `curl -I` en este endpoint porque HEAD responde `400`.
+- Backup de Traefik antes del ultimo fix:
+  `/etc/easypanel/traefik/config/main.yaml.bak-onia-calcom-fix-20260626212232`.
 - El setup inicial ya fue completado con admin bootstrap. La API
   `/api/auth/setup` ahora responde `400 No setup needed` ante nuevos intentos.
 - La credencial bootstrap quedo fuera del repo:
@@ -54,7 +63,7 @@ Conectarlo a:
 ```text
 Cliente/prospecto
   -> onia-calcom.hqdqgh.easypanel.host (temporal)
-  -> cal.onia.ai (final, cuando DNS este listo)
+  -> cal.onia.com.bo (final, cuando DNS este listo)
   -> Cal booking
   -> webhook n8n /calcom-booking
   -> Google Calendar
@@ -95,17 +104,18 @@ frontend hasta definir politicas, gateway y limites.
 Crear para dominio final:
 
 ```text
-cal.onia.ai -> VPS ONIA
+cal.onia.com.bo -> VPS ONIA
 ```
 
-Si el DNS se maneja donde esta `onia.ai`, agregar `A` hacia `187.77.16.63` o
-`CNAME` segun el proveedor. No activar el link en Instagram hasta que:
+En el proveedor DNS de `onia.com.bo`, reemplazar los A records actuales de
+`cal` para que apunten solo a `187.77.16.63`. No activar el link en Instagram
+hasta que:
 
 ```powershell
-Resolve-DnsName cal.onia.ai
+Resolve-DnsName cal.onia.com.bo
 ```
 
-devuelva el destino esperado.
+devuelva `187.77.16.63` y no otros IPs.
 
 ## Variables y secretos requeridos
 
@@ -145,7 +155,7 @@ Reglas base:
 - Disponibilidad comercial base: lunes a sabado 14:00-20:00.
 - Domingo cerrado.
 - Calendario operativo: `oninteligenciaartificial@gmail.com`.
-- Cuenta/identidad publica Cal en MVP hosted: `business@onia.com.bo` como
+- Cuenta/identidad publica Cal self-host: `business@onia.com.bo` como
   `ONIA | Agenda Comercial`.
 - El correo formal al cliente se envia desde `business@onia.com.bo` despues de
   aceptar por Telegram.
@@ -233,8 +243,10 @@ Configurar dominio/SSL desde Easypanel o Nginx.
 ```bash
 docker compose ps
 docker compose logs --tail=120 calcom
-curl -I https://cal.onia.ai
-curl -I https://cal.onia.ai/api/auth/session
+curl -I https://cal.onia.com.bo
+curl -sS -i https://cal.onia.com.bo/api/auth/session
+curl -I https://onia-calcom.hqdqgh.easypanel.host/auth/login
+curl -sS -i https://onia-calcom.hqdqgh.easypanel.host/api/auth/session
 ```
 
 Prueba funcional:
@@ -255,9 +267,11 @@ limit 5;
 
 ## Bloqueos actuales
 
-- Falta DNS `cal.onia.ai`.
-- Falta definir SMTP real para `agenda@onia.ai`.
+- Falta corregir DNS `cal.onia.com.bo` para que apunte al VPS ONIA.
+- Falta definir SMTP real para `business@onia.com.bo` o
+  `agenda@onia.com.bo`.
 - Falta crear event types y webhook dentro del panel de Cal.
+- Falta conectar Google Calendar real y probar disponibilidad.
 - Falta revisar/confirmar licencia y eleccion final de imagen Cal.com/Cal.diy
   antes de uso publico sostenido.
 
@@ -269,7 +283,9 @@ limit 5;
 - Cal no expone puerto directo; Traefik entra por red `easypanel`.
 - Supabase migration aplicada: `onia_ops.booking_sources`,
   `onia_ops.booking_events`, `onia_ops.booking_followups`.
-- Admin bootstrap creado con `admin@onia.ai`; password guardado fuera del repo.
+- Admin bootstrap historico creado con `admin@onia.ai`; password guardado fuera
+  del repo. Cambiar o crear admin final con correo del dominio `onia.com.bo`
+  despues de entrar.
 - Validacion setup: `POST /api/auth/setup` devuelve `400 No setup needed`.
 - Validacion externa:
   `https://onia-calcom.hqdqgh.easypanel.host/auth/setup?step=1` devuelve HTTP

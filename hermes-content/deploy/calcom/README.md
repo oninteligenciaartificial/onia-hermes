@@ -12,10 +12,13 @@ Self-host booking pages for ONIA meetings and route bookings into:
 4. Telegram notification to Sergio.
 5. ONIA shared Supabase operations layer.
 
-## Current MVP Decision
+## Current Operating Decision
 
-As of 2026-06-25, ONIA should start with a free hosted Cal.com link before
-moving public booking to this self-host kit. The hosted MVP uses:
+As of 2026-06-26, ONIA uses the self-hosted Cal.com instance as the primary
+booking path. Hosted Cal.com remains only as fallback if the self-host route,
+SMTP, Google Calendar or webhook flow blocks a live commercial booking.
+
+Primary self-host flow uses:
 
 - Google Calendar: `oninteligenciaartificial@gmail.com`.
 - Cal account/public identity: `business@onia.com.bo` as `ONIA | Agenda Comercial`.
@@ -27,8 +30,17 @@ moving public booking to this self-host kit. The hosted MVP uses:
 - ONIA Center lead creation for every booking, pending accept/cancel/reassign.
 - Final client confirmation email only after ONIA accepts the booking by Telegram.
 
-Keep this self-host kit for the next phase after the hosted flow proves bookings,
-Telegram notifications, ONIA Center lead creation and owner assignment.
+Public temporary URL:
+
+```text
+https://onia-calcom.hqdqgh.easypanel.host
+```
+
+Final DNS pending:
+
+```text
+https://cal.onia.com.bo
+```
 
 ## Important Decision
 
@@ -42,13 +54,13 @@ content systems and future project dashboards.
 
 ## Before Deploy
 
-- Point DNS `cal.onia.ai` to the ONIA VPS.
+- Point DNS `cal.onia.com.bo` to the ONIA VPS.
 - Confirm VPS/Easypanel access.
 - Generate real secrets on the VPS:
   - `openssl rand -base64 32` for `NEXTAUTH_SECRET`
   - `openssl rand -base64 24` for `CALENDSO_ENCRYPTION_KEY`
   - strong password for `POSTGRES_PASSWORD`
-- Confirm SMTP credentials for `agenda@onia.ai` or the selected sender.
+- Confirm SMTP credentials for `business@onia.com.bo` or the selected sender.
 - Review current Cal.com/Cal.diy licensing and image choice before public use.
 
 ## Event Types To Create
@@ -75,7 +87,7 @@ Recommended follow-up events later:
 ```bash
 docker compose ps
 curl -I https://onia-calcom.hqdqgh.easypanel.host
-curl -I https://onia-calcom.hqdqgh.easypanel.host/api/auth/session
+curl -sS -i https://onia-calcom.hqdqgh.easypanel.host/api/auth/session
 ```
 
 ## Rollback

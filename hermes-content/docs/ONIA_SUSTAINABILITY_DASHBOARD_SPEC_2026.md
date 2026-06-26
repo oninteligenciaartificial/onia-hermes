@@ -16,6 +16,14 @@ herramientas premium sin pagar su parte. Sergio gana mas cuando Sergio pone mas
 capital, direccion, herramientas y riesgo.
 ```
 
+Regla de infraestructura:
+
+```text
+ONIA va por la mejor solucion sostenible. Si self-hosted da mas control, ahorro,
+datos propios y capacidad compuesta sin bloquear ventas ni seguridad, se prioriza
+frente a una opcion gratis/hosted temporal.
+```
+
 ## Cuanto debe vender ONIA para sostenerse con 40%
 
 Gasto conservador mensual actual:

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import {
   ArrowRight,
+  CalendarClock,
   ClipboardCheck,
   ExternalLink,
   Lightbulb,
@@ -25,6 +26,13 @@ type RuntimeLead = {
   status: "nuevo" | "contactado" | "reunion" | "propuesta" | "ganado" | "perdido";
   nextAction: string;
   owner: RoleId;
+  ownerUserKey?: string;
+  originUserKey?: string;
+  meetingOwner: RoleId;
+  meetingOwnerUserKey?: string;
+  meetingOwnerLabel?: string;
+  meetingWindow?: string;
+  meetingStatus?: "pendiente" | "solicitada" | "confirmada" | "cancelada";
   createdAt: string;
 };
 
@@ -36,6 +44,7 @@ type RuntimeTask = {
   status: "todo" | "doing" | "review" | "done" | "blocked";
   priority: "alta" | "media" | "baja";
   evidence: string;
+  assignedUserKey?: string;
   createdAt: string;
 };
 
@@ -46,6 +55,7 @@ type RuntimeNote = {
   detail: string;
   linkedTo: string;
   actorRole?: RoleId;
+  actorUserKey?: string;
   createdAt: string;
 };
 
@@ -59,6 +69,7 @@ type RuntimeIdea = {
   whyUseful: string;
   targetProjectId: string;
   owner: RoleId;
+  ownerUserKey?: string;
   visibility: "sergio_private" | "assigned_only" | "team_safe";
   reviewTool: "codex" | "claude" | "self_hosted" | "manual";
   status: "inbox" | "queued" | "reviewed" | "approved" | "archived";
@@ -136,6 +147,16 @@ const roleLabels: Record<RoleId, string> = {
   freelancer: "Freelancer",
 };
 
+const commercialAssignees: Array<{ key: string; role: RoleId; userKey?: string; label: string; scope: string }> = [
+  { key: "seller_001", role: "seller", userKey: "seller_001", label: "Vendedora", scope: "Prospeccion, seguimiento y llamadas comerciales" },
+  { key: "sergio", role: "sergio", userKey: "sergio", label: "Sergio", scope: "Cierre sensible, tecnico o alto valor" },
+  { key: "arthur", role: "arthur", userKey: "arthur", label: "Arthur", scope: "Apoyo comercial y reuniones operativas" },
+];
+
+function getAssignee(key: string) {
+  return commercialAssignees.find((assignee) => assignee.key === key) ?? commercialAssignees[0];
+}
+
 const emptyRuntime: RuntimeSnapshot = {
   leads: [],
   tasks: [],
@@ -175,6 +196,10 @@ export default function OniaCenterTeamPage() {
     contact: "",
     source: "Manual",
     serviceId: "onia-motor-local-growth",
+    leadOwnerKey: "seller_001",
+    meetingOwnerKey: "seller_001",
+    meetingWindow: "",
+    meetingNotes: "",
     nextAction: "",
   });
   const [taskForm, setTaskForm] = useState({
@@ -225,8 +250,12 @@ export default function OniaCenterTeamPage() {
     () => [
       { label: "Leads visibles", value: runtime.leads.length, detail: "Filtrados por rol desde Supabase/RLS." },
       { label: "Tareas asignadas", value: runtime.tasks.length, detail: "Cierre final solo Sergio." },
+      {
+        label: "Llamadas",
+        value: runtime.leads.filter((lead) => lead.meetingWindow || lead.meetingStatus === "solicitada").length,
+        detail: "Pendientes o solicitadas para agenda comercial.",
+      },
       { label: "Ideas en revision", value: runtime.ideas.filter((idea) => idea.status !== "archived").length, detail: "Codex, Claude o modelo local." },
-      { label: "Notas registradas", value: runtime.notes.length, detail: "Llamadas, bloqueos y seguimiento." },
     ],
     [runtime],
   );
@@ -271,13 +300,38 @@ export default function OniaCenterTeamPage() {
 
   function handleLeadSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    const leadOwner = getAssignee(leadForm.leadOwnerKey);
+    const meetingOwner = getAssignee(leadForm.meetingOwnerKey);
+    const meetingLine = leadForm.meetingWindow
+      ? `Llamada solicitada para ${meetingOwner.label}: ${leadForm.meetingWindow}.`
+      : "";
+    const nextAction = [leadForm.nextAction, meetingLine, leadForm.meetingNotes].filter(Boolean).join("\n");
+
     createEntity("lead", {
       ...leadForm,
       status: "nuevo",
-      owner: actor?.role ?? "seller",
+      owner: actor?.role === "sergio" ? leadOwner.role : actor?.role ?? leadOwner.role,
+      ownerUserKey: actor?.role === "sergio" ? leadOwner.userKey : actor?.userKey,
+      originUserKey: actor?.userKey ?? leadOwner.userKey,
+      meetingOwner: meetingOwner.role,
+      meetingOwnerUserKey: meetingOwner.userKey,
+      meetingOwnerLabel: meetingOwner.label,
+      meetingWindow: leadForm.meetingWindow,
+      meetingStatus: leadForm.meetingWindow ? "solicitada" : "pendiente",
+      nextAction,
       createdAt: new Date().toISOString(),
     });
-    setLeadForm({ company: "", contact: "", source: "Manual", serviceId: "onia-motor-local-growth", nextAction: "" });
+    setLeadForm({
+      company: "",
+      contact: "",
+      source: "Manual",
+      serviceId: "onia-motor-local-growth",
+      leadOwnerKey: "seller_001",
+      meetingOwnerKey: "seller_001",
+      meetingWindow: "",
+      meetingNotes: "",
+      nextAction: "",
+    });
   }
 
   function handleTaskSubmit(event: FormEvent<HTMLFormElement>) {
@@ -286,6 +340,7 @@ export default function OniaCenterTeamPage() {
       ...taskForm,
       status: "todo",
       assignedRole: actor?.role ?? "seller",
+      assignedUserKey: actor?.userKey,
       evidence: "pendiente",
       createdAt: new Date().toISOString(),
     });
@@ -297,6 +352,7 @@ export default function OniaCenterTeamPage() {
     createEntity("note", {
       ...noteForm,
       actorRole: actor?.role ?? "seller",
+      actorUserKey: actor?.userKey,
       createdAt: new Date().toISOString(),
     });
     setNoteForm({ kind: "nota", title: "", detail: "", linkedTo: "" });
@@ -307,6 +363,7 @@ export default function OniaCenterTeamPage() {
     createEntity("idea", {
       ...ideaForm,
       owner: actor?.role ?? "seller",
+      ownerUserKey: actor?.userKey,
       status: "inbox",
       createdAt: new Date().toISOString(),
     });
@@ -422,6 +479,32 @@ export default function OniaCenterTeamPage() {
               <Plus size={17} />
               <strong>Nuevo lead</strong>
             </div>
+            <div className="onia-form-row">
+              <label>
+                Responsable del lead
+                <select
+                  disabled={actor?.role !== "sergio"}
+                  onChange={(event) => setLeadForm({ ...leadForm, leadOwnerKey: event.target.value })}
+                  value={actor?.role === "sergio" ? leadForm.leadOwnerKey : actor?.userKey ?? leadForm.leadOwnerKey}
+                >
+                  {commercialAssignees.map((assignee) => (
+                    <option key={assignee.key} value={assignee.key}>
+                      {assignee.label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <label>
+                Toma la llamada
+                <select onChange={(event) => setLeadForm({ ...leadForm, meetingOwnerKey: event.target.value })} value={leadForm.meetingOwnerKey}>
+                  {commercialAssignees.map((assignee) => (
+                    <option key={assignee.key} value={assignee.key}>
+                      {assignee.label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            </div>
             <label>
               Empresa
               <input onChange={(event) => setLeadForm({ ...leadForm, company: event.target.value })} required value={leadForm.company} />
@@ -447,11 +530,66 @@ export default function OniaCenterTeamPage() {
               </label>
             </div>
             <label>
+              Ventana de llamada
+              <input
+                onChange={(event) => setLeadForm({ ...leadForm, meetingWindow: event.target.value })}
+                placeholder="Ej. martes 16:00 o esta semana por la tarde"
+                value={leadForm.meetingWindow}
+              />
+            </label>
+            <label>
+              Nota para la llamada
+              <textarea
+                onChange={(event) => setLeadForm({ ...leadForm, meetingNotes: event.target.value })}
+                placeholder="Que necesita saber quien toma la llamada"
+                rows={2}
+                value={leadForm.meetingNotes}
+              />
+            </label>
+            <label>
               Proxima accion
               <textarea onChange={(event) => setLeadForm({ ...leadForm, nextAction: event.target.value })} rows={3} value={leadForm.nextAction} />
             </label>
             <button className="onia-team-submit" disabled={isSaving} type="submit">Registrar lead</button>
           </form>
+
+          <article className="onia-live-card onia-panel">
+            <div className="onia-live-title">
+              <CalendarClock size={17} />
+              <strong>Agenda comercial</strong>
+            </div>
+            <p className="onia-team-helper">
+              Las llamadas se registran como solicitud interna. Cal/Google Calendar se confirma despues desde Sergio/ONIA.
+            </p>
+            <div className="onia-live-list">
+              {runtime.leads.filter((lead) => lead.meetingWindow || lead.meetingStatus === "solicitada").length ? (
+                runtime.leads
+                  .filter((lead) => lead.meetingWindow || lead.meetingStatus === "solicitada")
+                  .map((lead) => (
+                    <div key={`meeting-${lead.id}`}>
+                      <strong>{lead.company}</strong>
+                      <span>
+                        {lead.meetingOwnerLabel ?? roleLabels[lead.meetingOwner]} / {lead.meetingStatus ?? "pendiente"}
+                      </span>
+                      <small>{lead.meetingWindow || "Sin ventana definida."}</small>
+                    </div>
+                  ))
+              ) : (
+                <div>
+                  <strong>Sin llamadas asignadas</strong>
+                  <small>Cuando un lead tenga ventana, aparecera aqui.</small>
+                </div>
+              )}
+            </div>
+            <div className="onia-assignee-rules">
+              {commercialAssignees.map((assignee) => (
+                <span key={assignee.key}>
+                  <strong>{assignee.label}</strong>
+                  {assignee.scope}
+                </span>
+              ))}
+            </div>
+          </article>
 
           <form className="onia-live-card onia-panel" onSubmit={handleTaskSubmit}>
             <div className="onia-live-title">
@@ -639,7 +777,12 @@ export default function OniaCenterTeamPage() {
                 <div key={lead.id}>
                   <strong>{lead.company}</strong>
                   <span>{lead.status} / {serviceLabel(lead.serviceId)}</span>
-                  <small>{lead.nextAction || lead.contact || "Sin siguiente accion."}</small>
+                  <small>
+                    {lead.meetingWindow
+                      ? `Llamada: ${lead.meetingOwnerLabel ?? roleLabels[lead.meetingOwner]} / ${lead.meetingWindow}`
+                      : lead.contact || "Sin llamada asignada."}
+                  </small>
+                  <small>{lead.nextAction || "Sin siguiente accion."}</small>
                 </div>
               )) : <div><strong>Sin leads visibles</strong><small>Registra uno desde Captura.</small></div>}
             </div>

@@ -105,7 +105,7 @@ Configuracion recomendada:
 
 - Cal publico principal: self-host en
   `https://onia-calcom.hqdqgh.easypanel.host`.
-- Dominio final pendiente: `https://cal.onia.ai`.
+- Dominio final pendiente: `https://cal.onia.com.bo`.
 - Cal hosted gratis: fallback solamente si self-host bloquea una reserva real.
 - Cuenta publica: `business@onia.com.bo`.
 - Nombre publico: `ONIA | Agenda Comercial`.

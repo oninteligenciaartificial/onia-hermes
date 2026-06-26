@@ -545,6 +545,28 @@ export type IdeaInboxRecord = {
   status: "inbox" | "queued" | "reviewed" | "approved" | "archived";
 };
 
+export type CodexJobStatus = "draft" | "ready" | "in_codex" | "review" | "done" | "blocked";
+
+export type CodexJobRisk = "bajo" | "medio" | "alto";
+
+export type CodexJobRecord = {
+  id: string;
+  title: string;
+  projectId: string;
+  targetRepo: string;
+  requestType: "feature" | "bugfix" | "audit" | "docs" | "refactor" | "ops";
+  ownerRole: RoleId;
+  visibility: "sergio_private" | "internal_restricted";
+  risk: CodexJobRisk;
+  status: CodexJobStatus;
+  context: string;
+  files: string;
+  acceptance: string;
+  validation: string;
+  evidence: string;
+  createdAt: string;
+};
+
 export type AccessPolicyRecord = {
   id: string;
   roleId: RoleId;

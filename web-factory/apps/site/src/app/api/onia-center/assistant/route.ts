@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { operationalServices, vendorCommissionRules } from "@/app/onia-center/source";
 import type { RoleId } from "@/app/onia-center/types";
 import {
-  filterOniaCenterRuntimeForRole,
+  filterOniaCenterRuntimeForActor,
   getMissingOniaCenterConfig,
   getOniaCenterRuntime,
   isOniaCenterConfigured,
@@ -169,7 +169,7 @@ function assistantInput(question: string, safeContext: unknown) {
 }
 
 async function getSafeAssistantContext(auth: Extract<OniaCenterAuthResult, { ok: true }>) {
-  const runtimeSnapshot = filterOniaCenterRuntimeForRole(await getOniaCenterRuntime(), auth.actor.role);
+  const runtimeSnapshot = filterOniaCenterRuntimeForActor(await getOniaCenterRuntime(), auth.actor);
 
   return {
     actor: {
@@ -184,6 +184,7 @@ async function getSafeAssistantContext(auth: Extract<OniaCenterAuthResult, { ok:
       reviews: runtimeSnapshot.reviews.slice(0, 20),
       notes: runtimeSnapshot.notes.slice(0, 60),
       ideas: runtimeSnapshot.ideas.slice(0, 40),
+      codexJobs: runtimeSnapshot.codexJobs.slice(0, 30),
     },
     guardrails: [
       "Arthur y vendedores no ven capital Sergio, deuda exacta, caja real completa, compras futuras ni utilidad personal.",

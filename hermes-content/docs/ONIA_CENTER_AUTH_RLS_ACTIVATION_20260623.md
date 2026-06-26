@@ -25,6 +25,7 @@ multiusuario con rangos:
 - `web-factory/apps/site/src/app/api/onia-center/auth/status/route.ts`
 - `web-factory/apps/site/src/app/onia-center/login/page.tsx`
 - `web-factory/apps/site/src/app/onia-center/equipo/page.tsx`
+- `hermes-content/docs/ONIA_VENDOR_ACCESS_AND_CALENDAR_RUNBOOK_2026.md`
 
 ## Variables necesarias
 
@@ -103,9 +104,23 @@ $env:ONIA_CENTER_SELLER_PASSWORD="<password-seguro-no-commitear>"
 npm run onia-center:auth-user -- --email "vendedor@dominio.com" --password-env ONIA_CENTER_SELLER_PASSWORD --user-key seller_001 --display-name "Vendedor 001" --role seller
 ```
 
+Vendedora inicial recomendada:
+
+```powershell
+$env:ONIA_CENTER_SELLER_PASSWORD="<password-seguro-no-commitear>"
+
+npm run onia-center:auth-user -- --email "vendedora@onia.com.bo" --password-env ONIA_CENTER_SELLER_PASSWORD --user-key seller_001 --display-name "Vendedora ONIA" --role seller --login-alias "vendedora"
+```
+
 El script crea el usuario en Supabase Auth, confirma email, enlaza
 `onia_center.user_profiles.auth_user_id` y upsertea la membresia por
 `organization_key,user_key`.
+
+Nota 2026-06-26: `/onia-center/equipo` ahora conserva `ownerUserKey`,
+`assignedUserKey`, `actorUserKey` y `ownerUserKey` en `raw` para separar a
+usuarios dentro del mismo rol. Sergio ve todo. Un vendedor ve registros
+asignados a su `user_key`; registros antiguos sin `user_key` siguen usando el
+fallback por rol.
 
 ## Reglas aplicadas
 
@@ -115,7 +130,8 @@ El script crea el usuario en Supabase Auth, confirma email, enlaza
 - `/onia-center/equipo` queda disponible para usuarios autenticados y usa solo
   APIs filtradas por rol, sin cargar fuentes privadas del panel completo.
 - Arthur no ve capital Sergio, deuda exacta, caja completa ni utilidad interna.
-- Vendedor solo ve leads/tareas propias.
+- Vendedor solo ve leads/tareas propias; si hay mas de un vendedor, usar
+  `ownerUserKey`/`assignedUserKey` desde ONIA Center para evitar mezcla.
 - Freelancer solo ve entregables asignados.
 - Nuvia lotes queda Sergio-only por contener capital y reparto.
 - Calendario Sergio queda Sergio-only.

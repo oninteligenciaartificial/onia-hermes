@@ -1,7 +1,7 @@
 # ONIA Self-hosted Stack Runbook 2026
 
 Estado: desplegado por perfiles privados. No contiene secretos.
-Actualizado: 2026-06-19 America/Caracas.
+Actualizado: 2026-06-26 America/Caracas.
 
 ## Diagnostico
 
@@ -247,11 +247,21 @@ Backup creado antes del cambio:
 
 ```text
 /etc/easypanel/traefik/config/main.yaml.bak-onia-calcom-route-20260625012301
+/etc/easypanel/traefik/config/main.yaml.bak-onia-calcom-fix-20260626212232
 ```
 
 La ruta agregada apunta `onia-calcom.hqdqgh.easypanel.host` a
 `http://onia-calcom:3000/` en la red externa `easypanel`. El contenedor Cal.com
 ya declara alias `onia-calcom` en esa red.
+
+Validacion publica del 2026-06-26:
+
+```text
+http://onia-calcom.hqdqgh.easypanel.host -> 308 HTTPS
+https://onia-calcom.hqdqgh.easypanel.host -> 307 /auth/login
+https://onia-calcom.hqdqgh.easypanel.host/auth/login -> 200
+GET https://onia-calcom.hqdqgh.easypanel.host/api/auth/session -> 200 {}
+```
 
 Recursos despues de activar todo:
 

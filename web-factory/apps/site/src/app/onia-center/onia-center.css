@@ -1456,6 +1456,7 @@
 .onia-daily-command,
 .onia-live-grid,
 .onia-ideas-board,
+.onia-codex-workspace,
 .onia-selfhosted-panel {
   display: grid;
   gap: 10px;
@@ -2393,6 +2394,7 @@
   .onia-sergio-calendar,
   .onia-live-grid,
   .onia-ideas-board,
+  .onia-codex-workspace,
   .onia-selfhosted-panel,
   .onia-collab-summary,
   .onia-agent-columns,
@@ -2503,6 +2505,7 @@
   .onia-calendar-sync-grid,
   .onia-live-grid,
   .onia-ideas-board,
+  .onia-codex-workspace,
   .onia-selfhosted-panel,
   .onia-collab-summary,
   .onia-security-grid,
@@ -3554,6 +3557,7 @@
 
 .onia-seller-services,
 .onia-assistant-workspace,
+.onia-codex-workspace,
 .onia-seller-service-section {
   display: grid;
   gap: 16px;
@@ -3748,6 +3752,64 @@
   grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
 }
 
+.onia-codex-workspace {
+  grid-template-columns: minmax(340px, 0.9fr) minmax(0, 1.1fr);
+}
+
+.onia-codex-form {
+  grid-row: span 2;
+}
+
+.onia-codex-list {
+  gap: 14px;
+}
+
+.onia-codex-stats {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.onia-codex-stats div,
+.onia-codex-detail-grid div {
+  background: #f8faf7;
+  border: 1px solid var(--onia-line-soft);
+  border-radius: var(--onia-radius);
+  display: grid;
+  gap: 5px;
+  padding: 11px;
+}
+
+.onia-codex-stats span,
+.onia-codex-detail-grid span {
+  color: var(--onia-faint);
+  font-size: 11px;
+  font-weight: 850;
+  text-transform: uppercase;
+}
+
+.onia-codex-stats strong {
+  color: var(--onia-ink);
+  font-size: 22px;
+  line-height: 1;
+}
+
+.onia-codex-item {
+  gap: 10px;
+}
+
+.onia-codex-detail-grid {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.onia-codex-detail-grid small {
+  color: var(--onia-muted);
+  font-size: 11px;
+  line-height: 1.45;
+}
+
 .onia-assistant-scope {
   grid-column: 1 / -1;
 }
@@ -3936,11 +3998,16 @@
   .onia-seller-service-grid,
   .onia-seller-rule-grid,
   .onia-assistant-workspace,
+  .onia-codex-workspace,
   .onia-audio-workspace {
     grid-template-columns: 1fr;
   }
 
   .onia-audio-input-panel {
+    grid-row: auto;
+  }
+
+  .onia-codex-form {
     grid-row: auto;
   }
 
@@ -3959,6 +4026,8 @@
   .onia-webfactory-intake-actions,
   .onia-service-rule-grid,
   .onia-service-dos-donts,
+  .onia-codex-stats,
+  .onia-codex-detail-grid,
   .onia-audio-summary-grid,
   .onia-audio-proposal-grid {
     grid-template-columns: 1fr;

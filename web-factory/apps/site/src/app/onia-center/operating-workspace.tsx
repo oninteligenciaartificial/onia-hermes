@@ -96,10 +96,30 @@ type RuntimeIdea = {
   createdAt: string;
 };
 
+type RuntimeCodexJob = {
+  id: string;
+  title: string;
+  projectId: string;
+  targetRepo: string;
+  requestType: "feature" | "bugfix" | "audit" | "docs" | "refactor" | "ops";
+  owner: RoleId;
+  ownerUserKey?: string;
+  visibility: "sergio_private" | "internal_restricted";
+  risk: "bajo" | "medio" | "alto";
+  status: "draft" | "ready" | "in_codex" | "review" | "done" | "blocked";
+  context: string;
+  files: string;
+  acceptance: string;
+  validation: string;
+  evidence: string;
+  createdAt: string;
+};
+
 type LeadForm = Omit<RuntimeLead, "id" | "createdAt" | "status">;
 type TaskForm = Omit<RuntimeTask, "id" | "createdAt" | "status" | "evidence">;
 type NoteForm = Omit<RuntimeNote, "id" | "createdAt" | "actorRole">;
 type IdeaForm = Omit<RuntimeIdea, "id" | "createdAt" | "status">;
+type CodexJobForm = Omit<RuntimeCodexJob, "id" | "createdAt" | "status" | "ownerUserKey">;
 type ServiceUpdateForm = {
   serviceId: string;
   title: string;
@@ -113,6 +133,7 @@ type RuntimeData = {
   reviews: RuntimeReview[];
   notes: RuntimeNote[];
   ideas: RuntimeIdea[];
+  codexJobs: RuntimeCodexJob[];
 };
 type RuntimeApiResponse<T = RuntimeData> = {
   ok: boolean;
@@ -174,6 +195,7 @@ export type WorkspaceView =
   | "capture"
   | "calendar"
   | "ideas"
+  | "codex-queue"
   | "connections"
   | "seller-services"
   | "assistant"
@@ -217,6 +239,11 @@ const workspaceCopy: Record<WorkspaceView, { label: string; title: string; descr
     label: "Ideas y referencias",
     title: "Inbox de reels, links e ideas",
     description: "Guarda referencias para revisar despues con Codex, Claude o modelos self-hosted sin mezclarlo con CRM.",
+  },
+  "codex-queue": {
+    label: "Codex",
+    title: "Cola tecnica aprobable",
+    description: "Prepara trabajos para Codex con contexto, repo, archivos, criterio de aceptacion, validacion y evidencia esperada.",
   },
   connections: {
     label: "Conexiones",
@@ -317,6 +344,72 @@ const starterTasks: RuntimeTask[] = operatingTasks.map((task) => ({
   createdAt: "seed",
 }));
 
+const starterCodexJobs: RuntimeCodexJob[] = [
+  {
+    id: "codex-onia-center-supabase-rls",
+    title: "ONIA Center: activar Supabase real, Auth y RLS sin exponer service role",
+    projectId: "project-onia-center",
+    targetRepo: "onia-hermes",
+    requestType: "ops",
+    owner: "sergio",
+    visibility: "sergio_private",
+    risk: "alto",
+    status: "blocked",
+    context:
+      "El runtime ya tiene fallback local y endpoints server-side. Falta aplicar migraciones en Supabase self-hosted, cargar env vars seguras y validar usuarios reales por rol.",
+    files:
+      "supabase/migrations/20260622_onia_center_schema.sql, supabase/migrations/20260623_onia_center_auth_rls.sql, web-factory/apps/site/src/lib/onia-center-store.ts",
+    acceptance:
+      "Login Sergio funciona, Arthur/vendedor/freelancer ven solo su scope, service role nunca llega al navegador y /api/onia-center/runtime responde con datos reales.",
+    validation:
+      "npm run lint, npx tsc --noEmit --pretty false, prueba login, prueba GET/POST runtime y revision de policies RLS.",
+    evidence: "Pendiente: tunnel Supabase activo, env server-side y captura de runtime conectado.",
+    createdAt: "seed",
+  },
+  {
+    id: "codex-collab-importer-readonly",
+    title: "Importador read-only de onia-hermes-collab a review queue",
+    projectId: "project-onia-center",
+    targetRepo: "onia-hermes",
+    requestType: "feature",
+    owner: "sergio",
+    visibility: "internal_restricted",
+    risk: "medio",
+    status: "ready",
+    context:
+      "Arthur debe trabajar en onia-hermes-collab sin ver memoria privada. ONIA Center necesita listar aportes, clasificar sensibilidad y permitir aprobar/rechazar/importar.",
+    files:
+      "web-factory/apps/site/src/app/onia-center/operating-source.ts, web-factory/apps/site/src/app/api/onia-center/runtime/route.ts, hermes-content/docs/ONIA_HERMES_COLLABORATOR_ACCESS_MODEL_2026.md",
+    acceptance:
+      "La vista Collab muestra cambios recientes clasificados como lead, brief, tarea, contenido, Bolivian o bloqueo; nada se importa a Hermes privado sin aprobacion Sergio.",
+    validation:
+      "Fixture local con 3 aportes, filtro sensible/no sensible, pruebas manuales de aprobar/rechazar y snapshot sin datos privados.",
+    evidence: "Pendiente: token GitHub minimo o fuente local del repo colaborativo.",
+    createdAt: "seed",
+  },
+  {
+    id: "codex-web-factory-client-form",
+    title: "Web Factory: formulario cliente a brief y receta web revisable",
+    projectId: "project-webs",
+    targetRepo: "onia-hermes/web-factory",
+    requestType: "feature",
+    owner: "sergio",
+    visibility: "internal_restricted",
+    risk: "medio",
+    status: "draft",
+    context:
+      "Queremos que clientes llenen un formulario y el sistema genere brief, estructura, requisitos, assets faltantes y una receta de web sin publicar automaticamente.",
+    files:
+      "web-factory/apps/site/src/app/onia-center/web-factory, web-factory/docs/WEB_FACTORY_OPERATING_RUNBOOK_20260625.md",
+    acceptance:
+      "Formulario captura negocio, objetivo, secciones, referencias, tono, assets, dominio y restricciones; genera brief interno y checklist QA antes de pasar a Codex.",
+    validation:
+      "Smoke test de formulario, salida JSON limpia, sin credenciales, sin publicar, y prompt listo para Codex.",
+    evidence: "Pendiente: definir primer formulario comercial y storage de assets.",
+    createdAt: "seed",
+  },
+];
+
 const emptyLeadForm: LeadForm = {
   company: "",
   contact: "",
@@ -354,6 +447,21 @@ const emptyIdeaForm: IdeaForm = {
   reviewTool: "codex",
 };
 
+const emptyCodexJobForm: CodexJobForm = {
+  title: "",
+  projectId: "project-onia-center",
+  targetRepo: "onia-hermes",
+  requestType: "feature",
+  owner: "sergio",
+  visibility: "sergio_private",
+  risk: "medio",
+  context: "",
+  files: "",
+  acceptance: "",
+  validation: "npm run lint; npx tsc --noEmit --pretty false; git diff --check",
+  evidence: "",
+};
+
 const emptyServiceUpdateForm: ServiceUpdateForm = {
   serviceId: "onia-motor-local-growth",
   title: "",
@@ -386,6 +494,7 @@ function readLocalRuntime(): RuntimeData | null {
     reviews: parsed.reviews ?? starterReviews,
     notes: parsed.notes ?? [],
     ideas: parsed.ideas ?? [],
+    codexJobs: parsed.codexJobs ?? starterCodexJobs,
   };
 }
 
@@ -394,7 +503,7 @@ async function fetchRuntimeData() {
   return (await response.json()) as RuntimeApiResponse;
 }
 
-async function createRuntimeEntity<T>(entity: "lead" | "task" | "note" | "idea", data: T) {
+async function createRuntimeEntity<T>(entity: "lead" | "task" | "note" | "idea" | "codex_job", data: T) {
   const response = await fetch("/api/onia-center/runtime", {
     method: "POST",
     headers: { "content-type": "application/json" },
@@ -410,7 +519,7 @@ async function createRuntimeEntity<T>(entity: "lead" | "task" | "note" | "idea",
   return body.data;
 }
 
-async function updateRuntimeStatus<T>(entity: "task" | "review" | "idea", id: string, status: string) {
+async function updateRuntimeStatus<T>(entity: "task" | "review" | "idea" | "codex_job", id: string, status: string) {
   const response = await fetch("/api/onia-center/runtime", {
     method: "PATCH",
     headers: { "content-type": "application/json" },
@@ -552,12 +661,14 @@ function buildAssistantAnswer({
   leads,
   tasks,
   notes,
+  codexJobs,
 }: {
   question: string;
   role: RoleId;
   leads: RuntimeLead[];
   tasks: RuntimeTask[];
   notes: RuntimeNote[];
+  codexJobs: RuntimeCodexJob[];
 }) {
   const normalizedQuestion = normalizeText(question);
   if (!normalizedQuestion) {
@@ -638,6 +749,22 @@ function buildAssistantAnswer({
     return ["Tareas visibles pendientes:", ...pending.map((task) => `- ${task.title} (${task.priority}, ${task.status}) en ${projectLabel(task.projectId)}.`)].join("\n");
   }
 
+  if (/\b(codex|codigo|repo|tecnico|dev|programar|pull request|commit)\b/.test(normalizedQuestion)) {
+    if (role !== "sergio" && role !== "arthur") {
+      return "La cola Codex no esta visible para este rol. Registra la necesidad como tarea o evidencia para revision de Sergio.";
+    }
+
+    const openJobs = codexJobs.filter((job) => !["done"].includes(job.status)).slice(0, 6);
+    if (!openJobs.length) {
+      return "No hay jobs Codex visibles pendientes.";
+    }
+
+    return [
+      "Jobs Codex visibles:",
+      ...openJobs.map((job) => `- ${job.title}: ${job.status}, repo ${job.targetRepo}, riesgo ${job.risk}. Validacion: ${job.validation || "pendiente"}.`),
+    ].join("\n");
+  }
+
   const updates = notes.filter((note) => note.kind === "actualizacion_servicio").slice(0, 5);
   if (/\b(actualizacion|actualizaciones|cambio|precio nuevo|precios)\b/.test(normalizedQuestion)) {
     return updates.length
@@ -667,6 +794,37 @@ function buildIdeaPrompt(idea: RuntimeIdea) {
     "3. Como adaptarla a ONIA sin copiar.",
     "4. Tareas concretas para ejecutar.",
     "5. Si conviene convertirla en contenido, lead, producto, automatizacion o tarea interna.",
+  ].join("\n");
+}
+
+function buildCodexJobPrompt(job: RuntimeCodexJob) {
+  return [
+    `Proyecto: ${projectLabel(job.projectId)}`,
+    `Repo objetivo: ${job.targetRepo}`,
+    `Tipo: ${job.requestType}`,
+    `Riesgo: ${job.risk}`,
+    "",
+    `Objetivo: ${job.title}`,
+    "",
+    "Contexto real:",
+    job.context || "Pendiente de contexto. No ejecutes sin pedir aclaracion.",
+    "",
+    "Archivos o rutas relevantes:",
+    job.files || "Buscar primero en docs canonicos, source de ONIA Center y git status.",
+    "",
+    "Criterios de aceptacion:",
+    job.acceptance || "Debe quedar funcional, validado y sin datos sensibles.",
+    "",
+    "Validacion requerida:",
+    job.validation || "npm run lint; npx tsc --noEmit --pretty false; git diff --check",
+    "",
+    "Evidencia esperada:",
+    job.evidence || "Resumen de archivos modificados, checks ejecutados y bloqueo exacto si falta credencial.",
+    "",
+    "Reglas ONIA:",
+    "- No inventes datos reales ni cambies reglas financieras.",
+    "- No expongas secretos, credenciales, capital privado ni informacion sensible.",
+    "- Si hay cambios productivos coherentes, valida, commit y push seguro.",
   ].join("\n");
 }
 
@@ -740,10 +898,12 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
   const [reviews, setReviews] = useState<RuntimeReview[]>(starterReviews);
   const [notes, setNotes] = useState<RuntimeNote[]>([]);
   const [ideas, setIdeas] = useState<RuntimeIdea[]>([]);
+  const [codexJobs, setCodexJobs] = useState<RuntimeCodexJob[]>(starterCodexJobs);
   const [leadForm, setLeadForm] = useState<LeadForm>(emptyLeadForm);
   const [taskForm, setTaskForm] = useState<TaskForm>(emptyTaskForm);
   const [noteForm, setNoteForm] = useState<NoteForm>(emptyNoteForm);
   const [ideaForm, setIdeaForm] = useState<IdeaForm>(emptyIdeaForm);
+  const [codexJobForm, setCodexJobForm] = useState<CodexJobForm>(emptyCodexJobForm);
   const [serviceUpdateForm, setServiceUpdateForm] = useState<ServiceUpdateForm>(emptyServiceUpdateForm);
   const [assistantQuestion, setAssistantQuestion] = useState("");
   const [assistantAnswer, setAssistantAnswer] = useState(
@@ -780,6 +940,7 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
         setReviews(localRuntime.reviews);
         setNotes(localRuntime.notes);
         setIdeas(localRuntime.ideas);
+        setCodexJobs(localRuntime.codexJobs.length ? localRuntime.codexJobs : starterCodexJobs);
       }
 
       try {
@@ -794,6 +955,7 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
           setReviews(runtime.data.reviews.length ? runtime.data.reviews : starterReviews);
           setNotes(runtime.data.notes);
           setIdeas(runtime.data.ideas);
+          setCodexJobs(runtime.data.codexJobs.length ? runtime.data.codexJobs : starterCodexJobs);
           setStorageMode("supabase");
           setNotice("Conectado a Supabase self-hosted. Los nuevos registros se guardan en onia_center.");
           return;
@@ -836,8 +998,8 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
       return;
     }
 
-    window.localStorage.setItem(storageKey, JSON.stringify({ leads, tasks, reviews, notes, ideas }));
-  }, [hydrated, ideas, leads, notes, reviews, storageMode, tasks]);
+    window.localStorage.setItem(storageKey, JSON.stringify({ leads, tasks, reviews, notes, ideas, codexJobs }));
+  }, [codexJobs, hydrated, ideas, leads, notes, reviews, storageMode, tasks]);
 
   const canApprove = selectedRole === "sergio";
   const visibleLeads = useMemo(
@@ -859,6 +1021,15 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
   const visibleIdeas = useMemo(
     () => ideas.filter((idea) => canViewIdea(idea, selectedRole)),
     [ideas, selectedRole],
+  );
+  const visibleCodexJobs = useMemo(
+    () =>
+      selectedRole === "sergio"
+        ? codexJobs
+        : selectedRole === "arthur"
+          ? codexJobs.filter((job) => job.visibility === "internal_restricted" || job.owner === "arthur")
+          : [],
+    [codexJobs, selectedRole],
   );
   const visibleServiceUpdates = useMemo(
     () =>
@@ -912,9 +1083,10 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
     const recordedPayments = visibleNotes.filter((note) => note.kind === "cobro").length;
     const evidenceRecords = visibleNotes.filter((note) => note.kind === "evidencia").length;
     const ideasInbox = visibleIdeas.filter((idea) => ["inbox", "queued"].includes(idea.status)).length;
+    const codexReady = visibleCodexJobs.filter((job) => ["ready", "review", "in_codex"].includes(job.status)).length;
 
-    return { hotLeads, pendingTasks, pendingReviews, recordedPayments, evidenceRecords, ideasInbox };
-  }, [visibleIdeas, visibleLeads, visibleNotes, visibleReviews, visibleTasks]);
+    return { hotLeads, pendingTasks, pendingReviews, recordedPayments, evidenceRecords, ideasInbox, codexReady };
+  }, [visibleCodexJobs, visibleIdeas, visibleLeads, visibleNotes, visibleReviews, visibleTasks]);
 
   const pendingTodayTasks = useMemo(
     () =>
@@ -958,6 +1130,14 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
         detail: reviewToolLabels[idea.reviewTool],
         at: idea.createdAt,
       })),
+      ...visibleCodexJobs.map((job) => ({
+        id: job.id,
+        actor: job.owner,
+        label: "Codex",
+        title: job.title,
+        detail: job.status,
+        at: job.createdAt,
+      })),
       ...visibleNotes.map((note) => ({
         id: note.id,
         actor: note.actorRole ?? "sergio",
@@ -969,7 +1149,7 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
     ]
       .sort((a, b) => timeRank(b.at) - timeRank(a.at))
       .slice(0, 8);
-  }, [visibleIdeas, visibleLeads, visibleNotes, visibleTasks]);
+  }, [visibleCodexJobs, visibleIdeas, visibleLeads, visibleNotes, visibleTasks]);
 
   const snapshot = useMemo(
     () => ({
@@ -979,9 +1159,10 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
       reviews: visibleReviews,
       notes: visibleNotes,
       ideas: visibleIdeas,
+      codexJobs: visibleCodexJobs,
       exportedAt: nowIso(),
     }),
-    [selectedRole, visibleIdeas, visibleLeads, visibleNotes, visibleReviews, visibleTasks],
+    [selectedRole, visibleCodexJobs, visibleIdeas, visibleLeads, visibleNotes, visibleReviews, visibleTasks],
   );
 
   async function addLead() {
@@ -1208,6 +1389,87 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
     setIdeas((current) => current.map((idea) => (idea.id === id ? { ...idea, status } : idea)));
   }
 
+  async function addCodexJob() {
+    if (selectedRole !== "sergio" && selectedRole !== "arthur") {
+      setNotice("Solo Sergio o Arthur pueden proponer trabajos tecnicos para Codex.");
+      return;
+    }
+
+    if (!codexJobForm.title.trim()) {
+      setNotice("Falta titulo del trabajo Codex.");
+      return;
+    }
+
+    const owner = selectedRole === "sergio" ? codexJobForm.owner : selectedRole;
+    const job: RuntimeCodexJob = {
+      ...codexJobForm,
+      owner,
+      visibility: selectedRole === "sergio" ? codexJobForm.visibility : "internal_restricted",
+      status: selectedRole === "sergio" ? "ready" : "draft",
+      id: makeId("codex-job"),
+      createdAt: nowIso(),
+    };
+
+    if (storageMode === "supabase") {
+      setIsSyncing(true);
+      try {
+        const saved = await createRuntimeEntity<RuntimeCodexJob>("codex_job", job);
+        if (saved) {
+          setCodexJobs((current) => [saved, ...current]);
+          setCodexJobForm({ ...emptyCodexJobForm, owner: selectedRole === "sergio" ? "sergio" : selectedRole });
+          setNotice("Job Codex guardado en Supabase como audit log revisable.");
+          return;
+        }
+      } catch (error) {
+        const message = error instanceof Error ? error.message : "Error desconocido.";
+        setNotice(`Supabase fallo al guardar job Codex; se guardo localmente. ${message}`);
+      } finally {
+        setIsSyncing(false);
+      }
+    }
+
+    setCodexJobs((current) => [job, ...current]);
+    setCodexJobForm({ ...emptyCodexJobForm, owner: selectedRole === "sergio" ? "sergio" : selectedRole });
+    setNotice("Job Codex guardado. Copia el prompt y ejecutalo desde Codex cuando corresponda.");
+  }
+
+  async function updateCodexJobStatus(id: string, status: RuntimeCodexJob["status"]) {
+    const job = codexJobs.find((item) => item.id === id);
+    if (!job) {
+      setNotice("Job Codex no encontrado.");
+      return;
+    }
+
+    if (selectedRole !== "sergio" && !["draft", "blocked"].includes(status)) {
+      setNotice("Arthur puede proponer o bloquear; Sergio aprueba, envia a Codex y cierra.");
+      return;
+    }
+
+    if (status === "done" && !job.evidence.trim()) {
+      setNotice("No cierres un job Codex sin evidencia de validacion o commit.");
+      return;
+    }
+
+    if (storageMode === "supabase") {
+      setIsSyncing(true);
+      try {
+        const updated = await updateRuntimeStatus<RuntimeCodexJob>("codex_job", id, status);
+        if (updated) {
+          setCodexJobs((current) => current.map((item) => (item.id === id ? updated : item)));
+          setNotice("Estado Codex actualizado en Supabase.");
+          return;
+        }
+      } catch (error) {
+        const message = error instanceof Error ? error.message : "Error desconocido.";
+        setNotice(`No se pudo actualizar job Codex en Supabase; se actualizo localmente. ${message}`);
+      } finally {
+        setIsSyncing(false);
+      }
+    }
+
+    setCodexJobs((current) => current.map((item) => (item.id === id ? { ...item, status } : item)));
+  }
+
   async function updateTaskStatus(id: string, status: RuntimeTask["status"]) {
     if (storageMode === "supabase") {
       setIsSyncing(true);
@@ -1260,6 +1522,11 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
     setNotice(`Prompt de idea copiado para ${reviewToolLabels[idea.reviewTool]}.`);
   }
 
+  async function copyCodexJobPrompt(job: RuntimeCodexJob) {
+    await navigator.clipboard.writeText(buildCodexJobPrompt(job));
+    setNotice(`Prompt Codex copiado: ${job.title}.`);
+  }
+
   async function copySnapshot() {
     await navigator.clipboard.writeText(JSON.stringify(snapshot, null, 2));
     setNotice("Snapshot filtrado por rol copiado. Sergio exporta todo; otros roles solo su vista permitida.");
@@ -1273,6 +1540,7 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
       leads: visibleLeads,
       tasks: visibleTasks,
       notes: visibleNotes,
+      codexJobs: visibleCodexJobs,
     });
     setAssistantQuestion(cleanedQuestion);
     setAssistantAnswer(localAnswer);
@@ -1372,6 +1640,7 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
     setReviews(starterReviews);
     setNotes([]);
     setIdeas([]);
+    setCodexJobs(starterCodexJobs);
     window.localStorage.removeItem(storageKey);
     window.localStorage.removeItem(legacyStorageKey);
     setNotice("Estado local reiniciado al seed operativo.");
@@ -1433,6 +1702,13 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
           <strong>{summary.ideasInbox}</strong>
           <small>Reels, links y notas para IA</small>
         </article>
+        {selectedRole === "sergio" || selectedRole === "arthur" ? (
+          <article>
+            <span>Codex listos</span>
+            <strong>{summary.codexReady}</strong>
+            <small>Jobs tecnicos con contexto</small>
+          </article>
+        ) : null}
         <article>
           <span>Cobros anotados</span>
           <strong>{summary.recordedPayments}</strong>
@@ -1648,6 +1924,7 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
                 "Actualizaciones de precios",
                 "Clientes pendientes",
                 "Tareas pendientes",
+                ...(selectedRole === "sergio" || selectedRole === "arthur" ? ["Jobs Codex pendientes"] : []),
               ].map((question) => (
                 <button key={question} type="button" disabled={assistantLoading} onClick={() => void askAssistant(question)}>
                   {question}
@@ -2675,6 +2952,251 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
                 <small>{item.detail}</small>
               </div>
             ))}
+          </div>
+        </article>
+      </div>
+      ) : null}
+
+      {workspaceView === "codex-queue" ? (
+      <div className="onia-codex-workspace" id="codex-queue">
+        <article className="onia-live-card onia-codex-form">
+          <div className="onia-live-title">
+            <Bot size={16} />
+            <strong>Nuevo trabajo para Codex</strong>
+          </div>
+          {selectedRole === "sergio" || selectedRole === "arthur" ? (
+            <>
+              <label>
+                Objetivo tecnico
+                <input
+                  value={codexJobForm.title}
+                  onChange={(event) => setCodexJobForm({ ...codexJobForm, title: event.target.value })}
+                  placeholder="Ej. Conectar Supabase real a ONIA Center"
+                />
+              </label>
+              <div className="onia-form-row">
+                <label>
+                  Proyecto
+                  <select value={codexJobForm.projectId} onChange={(event) => setCodexJobForm({ ...codexJobForm, projectId: event.target.value })}>
+                    {operatingProjects.map((project) => (
+                      <option key={project.id} value={project.id}>
+                        {project.name}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <label>
+                  Repo/ruta
+                  <input
+                    value={codexJobForm.targetRepo}
+                    onChange={(event) => setCodexJobForm({ ...codexJobForm, targetRepo: event.target.value })}
+                    placeholder="onia-hermes, dental-saas, Gestios..."
+                  />
+                </label>
+              </div>
+              <div className="onia-form-row">
+                <label>
+                  Tipo
+                  <select
+                    value={codexJobForm.requestType}
+                    onChange={(event) => setCodexJobForm({ ...codexJobForm, requestType: event.target.value as RuntimeCodexJob["requestType"] })}
+                  >
+                    <option value="feature">Feature</option>
+                    <option value="bugfix">Bugfix</option>
+                    <option value="audit">Auditoria</option>
+                    <option value="docs">Docs</option>
+                    <option value="refactor">Refactor</option>
+                    <option value="ops">Ops</option>
+                  </select>
+                </label>
+                <label>
+                  Riesgo
+                  <select value={codexJobForm.risk} onChange={(event) => setCodexJobForm({ ...codexJobForm, risk: event.target.value as RuntimeCodexJob["risk"] })}>
+                    <option value="bajo">Bajo</option>
+                    <option value="medio">Medio</option>
+                    <option value="alto">Alto</option>
+                  </select>
+                </label>
+              </div>
+              <div className="onia-form-row">
+                <label>
+                  Responsable
+                  <select
+                    value={selectedRole === "sergio" ? codexJobForm.owner : selectedRole}
+                    disabled={selectedRole !== "sergio"}
+                    onChange={(event) => setCodexJobForm({ ...codexJobForm, owner: event.target.value as RoleId })}
+                  >
+                    <option value="sergio">Sergio</option>
+                    <option value="arthur">Arthur</option>
+                  </select>
+                </label>
+                <label>
+                  Visibilidad
+                  <select
+                    value={selectedRole === "sergio" ? codexJobForm.visibility : "internal_restricted"}
+                    disabled={selectedRole !== "sergio"}
+                    onChange={(event) => setCodexJobForm({ ...codexJobForm, visibility: event.target.value as RuntimeCodexJob["visibility"] })}
+                  >
+                    <option value="sergio_private">Solo Sergio</option>
+                    <option value="internal_restricted">Sergio + Arthur</option>
+                  </select>
+                </label>
+              </div>
+              <label>
+                Contexto real
+                <textarea
+                  value={codexJobForm.context}
+                  onChange={(event) => setCodexJobForm({ ...codexJobForm, context: event.target.value })}
+                  placeholder="Que pasa, por que importa, que decisiones ya existen y que no debe tocar."
+                  rows={4}
+                />
+              </label>
+              <label>
+                Archivos/rutas relevantes
+                <textarea
+                  value={codexJobForm.files}
+                  onChange={(event) => setCodexJobForm({ ...codexJobForm, files: event.target.value })}
+                  placeholder="Rutas, docs canonicos, componentes o migraciones."
+                  rows={3}
+                />
+              </label>
+              <label>
+                Criterios de aceptacion
+                <textarea
+                  value={codexJobForm.acceptance}
+                  onChange={(event) => setCodexJobForm({ ...codexJobForm, acceptance: event.target.value })}
+                  placeholder="Que debe quedar funcionando para considerar esto cerrado."
+                  rows={3}
+                />
+              </label>
+              <div className="onia-form-row">
+                <label>
+                  Validacion
+                  <textarea
+                    value={codexJobForm.validation}
+                    onChange={(event) => setCodexJobForm({ ...codexJobForm, validation: event.target.value })}
+                    rows={3}
+                  />
+                </label>
+                <label>
+                  Evidencia esperada
+                  <textarea
+                    value={codexJobForm.evidence}
+                    onChange={(event) => setCodexJobForm({ ...codexJobForm, evidence: event.target.value })}
+                    placeholder="Commit, captura, test, bloqueo exacto o link de PR."
+                    rows={3}
+                  />
+                </label>
+              </div>
+              <button className="onia-primary-button" type="button" onClick={addCodexJob}>
+                {isSyncing ? "Guardando..." : selectedRole === "sergio" ? "Crear job listo" : "Proponer job"}
+              </button>
+            </>
+          ) : (
+            <p className="onia-muted-note">Vendedores y freelancers no crean trabajos Codex. Registra la necesidad como tarea, nota o lead para revision.</p>
+          )}
+        </article>
+
+        <article className="onia-live-card onia-codex-list">
+          <div className="onia-live-title">
+            <ClipboardCheck size={16} />
+            <strong>Cola operativa</strong>
+          </div>
+          <div className="onia-codex-stats">
+            <div>
+              <span>Listos</span>
+              <strong>{visibleCodexJobs.filter((job) => job.status === "ready").length}</strong>
+            </div>
+            <div>
+              <span>En Codex</span>
+              <strong>{visibleCodexJobs.filter((job) => job.status === "in_codex").length}</strong>
+            </div>
+            <div>
+              <span>Bloqueados</span>
+              <strong>{visibleCodexJobs.filter((job) => job.status === "blocked").length}</strong>
+            </div>
+          </div>
+          <div className="onia-live-list is-codex">
+            {visibleCodexJobs.length ? (
+              visibleCodexJobs.map((job) => (
+                <div className="onia-codex-item" key={job.id}>
+                  <span>{projectLabel(job.projectId)} / {job.targetRepo} / riesgo {job.risk}</span>
+                  <strong>{job.title}</strong>
+                  <small>{job.context}</small>
+                  <div className="onia-idea-meta">
+                    <span>{roleLabel(job.owner)}</span>
+                    <span>{job.requestType}</span>
+                    <span>{job.visibility}</span>
+                  </div>
+                  <div className="onia-codex-detail-grid">
+                    <div>
+                      <span>Archivos</span>
+                      <small>{job.files || "Pendiente de rutas concretas"}</small>
+                    </div>
+                    <div>
+                      <span>Aceptacion</span>
+                      <small>{job.acceptance || "Pendiente de criterio claro"}</small>
+                    </div>
+                    <div>
+                      <span>Validacion</span>
+                      <small>{job.validation || "Pendiente de checks"}</small>
+                    </div>
+                    <div>
+                      <span>Evidencia</span>
+                      <small>{job.evidence || "Pendiente"}</small>
+                    </div>
+                  </div>
+                  <div className="onia-review-actions">
+                    <button type="button" onClick={() => copyCodexJobPrompt(job)}>
+                      <Copy size={13} />
+                      Prompt Codex
+                    </button>
+                    <select
+                      value={job.status}
+                      disabled={selectedRole !== "sergio" && job.owner !== selectedRole}
+                      onChange={(event) => updateCodexJobStatus(job.id, event.target.value as RuntimeCodexJob["status"])}
+                    >
+                      <option value="draft">Borrador</option>
+                      <option value="ready" disabled={selectedRole !== "sergio"}>Listo</option>
+                      <option value="in_codex" disabled={selectedRole !== "sergio"}>En Codex</option>
+                      <option value="review" disabled={selectedRole !== "sergio"}>Revision</option>
+                      <option value="done" disabled={selectedRole !== "sergio"}>Cerrado</option>
+                      <option value="blocked">Bloqueado</option>
+                    </select>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div>
+                <span>Sin jobs visibles</span>
+                <strong>No hay trabajo tecnico asignado a tu rol.</strong>
+                <small>Usa Captura para registrar una necesidad si requiere revision.</small>
+              </div>
+            )}
+          </div>
+        </article>
+
+        <article className="onia-live-card onia-access-card">
+          <div className="onia-live-title">
+            <ShieldCheck size={16} />
+            <strong>Regla de ejecucion</strong>
+          </div>
+          <div className="onia-access-rules">
+            <div>
+              <span>Sergio</span>
+              <strong>Aprueba y cierra</strong>
+              <small>Puede mover jobs a listo, en Codex, revision y cerrado.</small>
+            </div>
+            <div>
+              <span>Arthur</span>
+              <strong>Propone contexto</strong>
+              <small>Puede sugerir trabajos internos restringidos, no aprobar ni cerrar.</small>
+            </div>
+            <div>
+              <span>Vendedor/Freelancer</span>
+              <strong>No ve cola tecnica</strong>
+              <small>Registra tareas o evidencia; Sergio decide si pasa a Codex.</small>
+            </div>
           </div>
         </article>
       </div>
