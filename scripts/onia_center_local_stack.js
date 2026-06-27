@@ -1,0 +1,184 @@
+#!/usr/bin/env node
+
+const fs = require("fs");
+const net = require("net");
+const os = require("os");
+const path = require("path");
+const { spawn, execFileSync } = require("child_process");
+
+const args = new Set(process.argv.slice(2));
+const restart = args.has("--restart");
+const installStartup = args.has("--install-startup");
+
+const repoRoot = path.resolve(__dirname, "..");
+const siteRoot = path.join(repoRoot, "web-factory", "apps", "site");
+const envPath = path.join(siteRoot, ".env.local");
+const logRoot = path.join(process.env.LOCALAPPDATA || os.tmpdir(), "ONIA", "onia-center");
+const vpsHost = process.env.VPS_HOST || "187.77.16.63";
+const vpsUser = process.env.VPS_USER || "root";
+const keyPath = process.env.VPS_KEY_PATH || path.join(os.homedir(), ".ssh", "onia_hermes_vps_ed25519");
+const appPort = Number(process.env.ONIA_CENTER_LOCAL_PORT || 3012);
+
+fs.mkdirSync(logRoot, { recursive: true });
+
+function readEnvValue(name) {
+  if (!fs.existsSync(envPath)) return "";
+  const content = fs.readFileSync(envPath, "utf8");
+  const lines = content.split(/\r?\n/);
+  for (let index = lines.length - 1; index >= 0; index -= 1) {
+    const line = lines[index];
+    const match = line.match(new RegExp(`^\\s*${name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\s*=\\s*(.*)\\s*$`));
+    if (match) return match[1].trim().replace(/^["']|["']$/g, "");
+  }
+  return "";
+}
+
+function getSupabaseLocalPort() {
+  const url = readEnvValue("ONIA_CENTER_SUPABASE_URL");
+  if (!url) return 54321;
+  try {
+    return Number(new URL(url).port || 54321);
+  } catch {
+    return 54321;
+  }
+}
+
+function isPortOpen(port) {
+  return new Promise((resolve) => {
+    const socket = new net.Socket();
+    const done = (value) => {
+      socket.destroy();
+      resolve(value);
+    };
+    socket.setTimeout(500);
+    socket.once("connect", () => done(true));
+    socket.once("timeout", () => done(false));
+    socket.once("error", () => done(false));
+    socket.connect(port, "127.0.0.1");
+  });
+}
+
+async function waitForPort(port, seconds) {
+  const deadline = Date.now() + seconds * 1000;
+  while (Date.now() < deadline) {
+    if (await isPortOpen(port)) return true;
+    await new Promise((resolve) => setTimeout(resolve, 500));
+  }
+  return false;
+}
+
+function quoteForVbs(value) {
+  return String(value).replace(/"/g, '""');
+}
+
+function installStartupLauncher() {
+  const startupDir = path.join(process.env.APPDATA || path.join(os.homedir(), "AppData", "Roaming"), "Microsoft", "Windows", "Start Menu", "Programs", "Startup");
+  const launcherPath = path.join(startupDir, "onia-center-local-stack.vbs");
+  const launcher = [
+    'Set shell = CreateObject("WScript.Shell")',
+    `shell.Run """${quoteForVbs(process.execPath)}"" ""${quoteForVbs(__filename)}""", 0, False`,
+    "",
+  ].join("\r\n");
+  try {
+    fs.mkdirSync(startupDir, { recursive: true });
+    fs.writeFileSync(launcherPath, launcher, "ascii");
+    console.log(`Launcher instalado en Inicio de Windows: ${launcherPath}`);
+    return;
+  } catch (error) {
+    console.log(`No se pudo escribir en Inicio de Windows: ${error.message}`);
+  }
+
+  const runKey = "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run";
+  const valueName = "ONIA Center Local Stack";
+  const command = `powershell.exe -WindowStyle Hidden -NoProfile -ExecutionPolicy Bypass -Command "Start-Process -WindowStyle Hidden -FilePath '${process.execPath.replace(/'/g, "''")}' -ArgumentList '${__filename.replace(/'/g, "''")}'"`;
+  execFileSync("reg.exe", ["add", runKey, "/v", valueName, "/t", "REG_SZ", "/d", command, "/f"], { stdio: "ignore" });
+  console.log(`Arranque instalado en registro de usuario: ${runKey}\\${valueName}`);
+}
+
+function stopPortOwner(port) {
+  const command = [
+    `$connections = Get-NetTCPConnection -LocalPort ${port} -State Listen -ErrorAction SilentlyContinue`,
+    "$pids = $connections | Select-Object -ExpandProperty OwningProcess -Unique",
+    "foreach ($pid in $pids) { if ($pid -and $pid -ne $PID) { Stop-Process -Id $pid -Force -ErrorAction SilentlyContinue } }",
+  ].join("; ");
+  try {
+    execFileSync("powershell.exe", ["-NoProfile", "-Command", command], { stdio: "ignore" });
+  } catch {
+    // Best effort only. If the port stays open, the later health check will report it.
+  }
+}
+
+function spawnDetached(command, commandArgs, outName, errName, cwd = repoRoot) {
+  const out = fs.openSync(path.join(logRoot, outName), "a");
+  const err = fs.openSync(path.join(logRoot, errName), "a");
+  const child = spawn(command, commandArgs, {
+    cwd,
+    detached: true,
+    stdio: ["ignore", out, err],
+    windowsHide: true,
+  });
+  child.unref();
+}
+
+async function ensureTunnel(supabaseLocalPort) {
+  if (!fs.existsSync(keyPath)) {
+    throw new Error(`No existe la llave SSH: ${keyPath}`);
+  }
+
+  const portMap = [
+    { local: supabaseLocalPort, remote: 54321 },
+    { local: 54322, remote: 54322 },
+    { local: 54323, remote: 54323 },
+    { local: 54320, remote: 54320 },
+    { local: 54329, remote: 54329 },
+  ];
+  const sshArgs = ["-N", "-o", "ExitOnForwardFailure=yes", "-o", "ServerAliveInterval=30", "-o", "ServerAliveCountMax=3", "-i", keyPath];
+
+  for (const map of portMap) {
+    if (!(await isPortOpen(map.local))) {
+      sshArgs.push("-L", `${map.local}:127.0.0.1:${map.remote}`);
+    }
+  }
+
+  if (!sshArgs.includes("-L")) return;
+
+  sshArgs.push(`${vpsUser}@${vpsHost}`);
+  spawnDetached("ssh.exe", sshArgs, "supabase-tunnel.out.log", "supabase-tunnel.err.log");
+
+  if (!(await waitForPort(supabaseLocalPort, 25))) {
+    throw new Error(`No se pudo levantar el tunel Supabase en 127.0.0.1:${supabaseLocalPort}. Revisa ${path.join(logRoot, "supabase-tunnel.err.log")}`);
+  }
+}
+
+async function ensureApp() {
+  if (restart) {
+    stopPortOwner(appPort);
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+  }
+
+  if (await isPortOpen(appPort)) return;
+
+  spawnDetached("npm.cmd", ["run", "dev", "--", "-p", String(appPort)], "onia-center-next.out.log", "onia-center-next.err.log", siteRoot);
+
+  if (!(await waitForPort(appPort, 40))) {
+    throw new Error(`ONIA Center no arranco en 127.0.0.1:${appPort}. Revisa ${path.join(logRoot, "onia-center-next.err.log")}`);
+  }
+}
+
+async function main() {
+  if (installStartup) installStartupLauncher();
+
+  const supabaseLocalPort = getSupabaseLocalPort();
+  await ensureTunnel(supabaseLocalPort);
+  await ensureApp();
+
+  console.log("ONIA Center local activo");
+  console.log(`App: http://localhost:${appPort}/onia-center/login`);
+  console.log(`Supabase tunnel: 127.0.0.1:${supabaseLocalPort} -> ${vpsHost}:54321`);
+  console.log(`Logs: ${logRoot}`);
+}
+
+main().catch((error) => {
+  console.error(error.message || error);
+  process.exit(1);
+});
