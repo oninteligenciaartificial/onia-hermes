@@ -9,6 +9,8 @@ const { spawn, execFileSync } = require("child_process");
 const args = new Set(process.argv.slice(2));
 const restart = args.has("--restart");
 const installStartup = args.has("--install-startup");
+const tunnelOnly = args.has("--tunnel-only") || args.has("--no-app");
+const watch = args.has("--watch");
 
 const repoRoot = path.resolve(__dirname, "..");
 const siteRoot = path.join(repoRoot, "web-factory", "apps", "site");
@@ -18,6 +20,7 @@ const vpsHost = process.env.VPS_HOST || "187.77.16.63";
 const vpsUser = process.env.VPS_USER || "root";
 const keyPath = process.env.VPS_KEY_PATH || path.join(os.homedir(), ".ssh", "onia_hermes_vps_ed25519");
 const appPort = Number(process.env.ONIA_CENTER_LOCAL_PORT || 3012);
+const watchIntervalMs = Number(process.env.ONIA_CENTER_TUNNEL_WATCH_MS || 15000);
 
 fs.mkdirSync(logRoot, { recursive: true });
 
@@ -74,9 +77,10 @@ function quoteForVbs(value) {
 function installStartupLauncher() {
   const startupDir = path.join(process.env.APPDATA || path.join(os.homedir(), "AppData", "Roaming"), "Microsoft", "Windows", "Start Menu", "Programs", "Startup");
   const launcherPath = path.join(startupDir, "onia-center-local-stack.vbs");
+  const launcherFlags = [watch ? "--watch" : "", tunnelOnly ? "--tunnel-only" : ""].filter(Boolean).join(" ");
   const launcher = [
     'Set shell = CreateObject("WScript.Shell")',
-    `shell.Run """${quoteForVbs(process.execPath)}"" ""${quoteForVbs(__filename)}""", 0, False`,
+    `shell.Run """${quoteForVbs(process.execPath)}"" ""${quoteForVbs(__filename)}"" ${launcherFlags}", 0, False`,
     "",
   ].join("\r\n");
   try {
@@ -90,7 +94,9 @@ function installStartupLauncher() {
 
   const runKey = "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run";
   const valueName = "ONIA Center Local Stack";
-  const command = `powershell.exe -WindowStyle Hidden -NoProfile -ExecutionPolicy Bypass -Command "Start-Process -WindowStyle Hidden -FilePath '${process.execPath.replace(/'/g, "''")}' -ArgumentList '${__filename.replace(/'/g, "''")}'"`;
+  const runFlags = [watch ? "--watch" : "", tunnelOnly ? "--tunnel-only" : ""].filter(Boolean);
+  const runArgs = [__filename, ...runFlags].map((value) => `'${value.replace(/'/g, "''")}'`).join(",");
+  const command = `powershell.exe -WindowStyle Hidden -NoProfile -ExecutionPolicy Bypass -Command "Start-Process -WindowStyle Hidden -FilePath '${process.execPath.replace(/'/g, "''")}' -ArgumentList @(${runArgs})"`;
   execFileSync("reg.exe", ["add", runKey, "/v", valueName, "/t", "REG_SZ", "/d", command, "/f"], { stdio: "ignore" });
   console.log(`Arranque instalado en registro de usuario: ${runKey}\\${valueName}`);
 }
@@ -170,12 +176,23 @@ async function main() {
 
   const supabaseLocalPort = getSupabaseLocalPort();
   await ensureTunnel(supabaseLocalPort);
-  await ensureApp();
+  if (!tunnelOnly) await ensureApp();
 
   console.log("ONIA Center local activo");
-  console.log(`App: http://localhost:${appPort}/onia-center/login`);
+  if (!tunnelOnly) console.log(`App: http://localhost:${appPort}/onia-center/login`);
   console.log(`Supabase tunnel: 127.0.0.1:${supabaseLocalPort} -> ${vpsHost}:54321`);
   console.log(`Logs: ${logRoot}`);
+
+  if (!watch) return;
+
+  console.log(`Watchdog activo cada ${watchIntervalMs} ms`);
+  setInterval(async () => {
+    try {
+      await ensureTunnel(supabaseLocalPort);
+    } catch (error) {
+      console.error(`[${new Date().toISOString()}] ${error.message || error}`);
+    }
+  }, watchIntervalMs);
 }
 
 main().catch((error) => {
