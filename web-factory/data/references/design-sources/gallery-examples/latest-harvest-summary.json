@@ -1,12 +1,12 @@
 {
-  "id": "2026-06-26T18-17-07-136Z",
-  "startedAt": "2026-06-26T18:17:07.137Z",
-  "finishedAt": "2026-06-26T18:23:59.316Z",
+  "id": "2026-06-27T15-25-24-522Z",
+  "startedAt": "2026-06-27T15:25:24.524Z",
+  "finishedAt": "2026-06-27T15:31:52.624Z",
   "policy": "Automated design reference harvest. Screenshots and closed-site structures are reference-only. Code reuse is limited to allowed-after-review repositories and compatible registry/docs code after review.",
   "steps": [
     {
       "name": "gallery",
-      "out": "data/references/design-sources/gallery-examples/2026-06-26T18-17-07-136Z-design-harvest.json",
+      "out": "data/references/design-sources/gallery-examples/2026-06-27T15-25-24-522Z-design-harvest.json",
       "sourceIds": [
         "21st-landing-page-components",
         "registry-directory",
@@ -25,8 +25,8 @@
     },
     {
       "name": "code",
-      "codeIndexOut": "data/references/code-sources/2026-06-26T18-17-07-136Z-code-cache-index.json",
-      "codeExamplesOut": "data/references/code-sources/2026-06-26T18-17-07-136Z-component-code-reference-pack.json",
+      "codeIndexOut": "data/references/code-sources/2026-06-27T15-25-24-522Z-code-cache-index.json",
+      "codeExamplesOut": "data/references/code-sources/2026-06-27T15-25-24-522Z-component-code-reference-pack.json",
       "maxFilesPerRepo": 36
     },
     {

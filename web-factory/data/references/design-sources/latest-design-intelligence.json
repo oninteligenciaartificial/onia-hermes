@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-26T18:24:02.466Z",
+  "generatedAt": "2026-06-27T15:31:57.633Z",
   "policy": "Use this as design intelligence, not as a copy source. Screenshots and closed-site structures are inspiration only. Reuse code only from allowed-after-review repositories after retokenization and QA.",
   "inputs": {
     "gallery": "data/references/design-sources/gallery-examples/latest-gallery-examples.json",
@@ -868,11 +868,11 @@
           "count": 3
         },
         {
-          "value": "installation",
+          "value": "197",
           "count": 2
         },
         {
-          "value": "introduction",
+          "value": "installation",
           "count": 2
         }
       ]
@@ -1238,7 +1238,7 @@
       "animationLibraries": [],
       "topCtas": [
         {
-          "value": "117k",
+          "value": "118k",
           "count": 3
         },
         {
@@ -1736,12 +1736,12 @@
       "screenshots": {
         "desktop": {
           "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/magic-ui/007-introducing-kinetic-text-fbd94463/desktop.png",
-          "sha256": "5d1be9ce1cefe74cbba3d6ce9065f18b0c93c1914a19d7b312d6db04433d624b",
+          "sha256": "01c98b70863d95f62764e53a3fb23f27c29b541ade0fbef33161461a3f2b98d7",
           "mode": "viewport"
         },
         "mobile": {
           "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/magic-ui/007-introducing-kinetic-text-fbd94463/mobile.png",
-          "sha256": "2b0e9e5307d001dc3ff968221d8c05b0c717bb43e1af7798cea0cc31a33b3227",
+          "sha256": "be68ed951eef0a1e70d8d98d3c39a9aa8fd3db6331667f9aeacf0aaa80e59840",
           "mode": "viewport"
         }
       },
@@ -1779,7 +1779,7 @@
         "Showcase",
         "Search documentation...Search...⌘K",
         "21,36621.4k",
-        "215",
+        "197",
         "Toggle theme",
         "Introduction",
         "Installation",
@@ -1853,12 +1853,12 @@
       "screenshots": {
         "desktop": {
           "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/magic-ui/008-browse-components-04478d02/desktop.png",
-          "sha256": "3d796a8cb027d01bb4d00c95fe9daba1ca3a61aade7c2e5381ec7d9148cdef61",
+          "sha256": "975f96907f8866c44c2ab90f300f51aae8dd7d27c854e2863c96f7779b2e328c",
           "mode": "viewport"
         },
         "mobile": {
           "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/magic-ui/008-browse-components-04478d02/mobile.png",
-          "sha256": "7f3905085413027ef9764e440eb6460dc71284fdf6de35e9a7f7803bf8bef1b8",
+          "sha256": "8587b06fb68cfa878b156bdf252333a5db24fa031907e85cdd65175f1120b939",
           "mode": "viewport"
         }
       },
@@ -1880,7 +1880,7 @@
         "Showcase",
         "Search documentation...Search...⌘K",
         "21,36621.4k",
-        "211",
+        "197",
         "Toggle theme",
         "Introduction",
         "Installation",
@@ -2038,13 +2038,13 @@
       "reuseGuidance": "Animated marketing components, effects and motion patterns for landing pages. Prefer local MIT repo or registry install commands for implementation.",
       "screenshots": {
         "desktop": {
-          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/magic-ui/247-magicui-design-6edb6ee7/desktop.png",
-          "sha256": "0ce7b8850f4c12e0d571f36a75c900354622ed055b9c27c2a0e2e0272eaa20a2",
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/magic-ui/242-magicui-design-6edb6ee7/desktop.png",
+          "sha256": "63113e92dceda6c007b8a4deaa589a3bba23ae3309064971a67d79adc95261fb",
           "mode": "viewport"
         },
         "mobile": {
-          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/magic-ui/247-magicui-design-6edb6ee7/mobile.png",
-          "sha256": "61c21a75d25f9e8f6360a153e95b26af125112f1144c6866e94abd053a1a6c9e",
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/magic-ui/242-magicui-design-6edb6ee7/mobile.png",
+          "sha256": "0b532644a1135b2e47e906b3d18559cf37e67a99b0de7f5b60a93fe1dddddbe1",
           "mode": "viewport"
         }
       },
@@ -2082,7 +2082,7 @@
         "Showcase",
         "Search documentation...Search...⌘K",
         "21,36621.4k",
-        "209",
+        "199",
         "Toggle theme",
         "🎉 Introducing Kinetic Text",
         "Browse Components",
@@ -2265,7 +2265,7 @@
       "screenshots": {
         "desktop": {
           "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/shadcnblocks-blocks/026-integration-ebd04f60/desktop.png",
-          "sha256": "ae70b6ef7a9708e2eecd2a8c0f577cf3b607e186df4a1995976790add7e12b1d",
+          "sha256": "85d82cdb32b4b76a9468a23adc1b3bb9d44d0f130abbfb82d2fc2fafd4cf9d6f",
           "mode": "viewport"
         },
         "mobile": {
@@ -2366,12 +2366,12 @@
       "screenshots": {
         "desktop": {
           "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/shadcn-ui/034-browse-more-blocks-11813c15/desktop.png",
-          "sha256": "78ff29691212bb539569f5981aa5cd69b94b2428e93ad09483963ef9da78882a",
+          "sha256": "35d32153f7631e27643b7dd40c7454523ae7dd57c64a68e10740aeea11375fe6",
           "mode": "viewport"
         },
         "mobile": {
           "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/shadcn-ui/034-browse-more-blocks-11813c15/mobile.png",
-          "sha256": "744cce335ea6e9e3e2f2d48aa5311e654bc179b6ac0373ccbe6a0729a3cf4177",
+          "sha256": "b0327df85cb2f7931ac12bc817e1f040a308bcfd4d797f7f2db66bb4a7a011fa",
           "mode": "viewport"
         }
       },
@@ -2391,7 +2391,7 @@
         "Directory",
         "Create",
         "Search documentation...Search...",
-        "117k",
+        "118k",
         "Toggle theme",
         "Open in"
       ],
@@ -2426,7 +2426,7 @@
       "codeLinks": [
         {
           "url": "https://github.com/shadcn-ui/ui",
-          "text": "117k"
+          "text": "118k"
         },
         {
           "url": "https://github.com/shadcn-ui/ui",
@@ -2447,12 +2447,12 @@
       "screenshots": {
         "desktop": {
           "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/shadcn-ui/017-signup-0ff19f64/desktop.png",
-          "sha256": "3ebd8212955f79858d7215f584d7c3ca9d228101ec2287fb5dc21ab6875cf7db",
+          "sha256": "5047cecba34bdf926f1807ec02c7cdb831d2c24e1225ea7a5d3b1c21592468cf",
           "mode": "viewport"
         },
         "mobile": {
           "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/shadcn-ui/017-signup-0ff19f64/mobile.png",
-          "sha256": "ed8e0d8c8fbde7d19ae88334c3ee7f086068b32665ebe28457947af11cb97b0e",
+          "sha256": "344ef36cc37c4f13b61795138121c923fda197cb0ac2d2e625ab7a4ab42440ab",
           "mode": "viewport"
         }
       },
@@ -2472,7 +2472,7 @@
         "Directory",
         "Create",
         "Search documentation...Search...",
-        "117k",
+        "118k",
         "Toggle theme",
         "Open in"
       ],
@@ -2507,7 +2507,7 @@
       "codeLinks": [
         {
           "url": "https://github.com/shadcn-ui/ui",
-          "text": "117k"
+          "text": "118k"
         },
         {
           "url": "https://github.com/shadcn-ui/ui",
@@ -2528,12 +2528,12 @@
       "screenshots": {
         "desktop": {
           "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/shadcn-ui/016-login-b924663c/desktop.png",
-          "sha256": "dc3e6543ef83dfab59cb37af0905b5defe51daa50032f29c48f6bb67c2b8fe1c",
+          "sha256": "7284679bbb4d617ee90ae02fac4a5290119387e37d58802147cd1d935e7cb73c",
           "mode": "viewport"
         },
         "mobile": {
           "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/shadcn-ui/016-login-b924663c/mobile.png",
-          "sha256": "2b87a2b3d26bec727d74484e789c824c89fdc3f7d57cd934777927b5d9e36e33",
+          "sha256": "fcffe9c629374b044f7e6be0a4799b7586e777892fbd5131219d683ecbe38047",
           "mode": "viewport"
         }
       },
@@ -2553,7 +2553,7 @@
         "Directory",
         "Create",
         "Search documentation...Search...",
-        "117k",
+        "118k",
         "Toggle theme",
         "Open in"
       ],
@@ -2588,7 +2588,7 @@
       "codeLinks": [
         {
           "url": "https://github.com/shadcn-ui/ui",
-          "text": "117k"
+          "text": "118k"
         },
         {
           "url": "https://github.com/shadcn-ui/ui",
@@ -2602,19 +2602,112 @@
       "sourceId": "21st-landing-page-components",
       "sourceName": "21st.dev Landing Page Components",
       "licenseStatus": "review-required-per-component",
+      "url": "https://21st.dev/community/components/thanh/animated-section-with-gradient-and-dynamic-lines/default",
+      "title": "Animated Section with Gradient and Dynamic Lines | Community Components - 21st | 21st",
+      "description": "Animated Dark‐Mode Section with Gradient Heading and Dynamic SVG Lines",
+      "reuseGuidance": "High-density landing-page component discovery: heroes, features, CTAs, pricing, testimonials and animated sections. Verify each component license before code reuse.",
+      "screenshots": {
+        "desktop": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/21st-landing-page-components/1764-animated-section-with-gradient-and-dynamic-lines-9e7dde56/desktop.png",
+          "sha256": "ed170349a3dbf8140d8cfaec27b75ed209b71cde737e88ecffe0cc035348beed",
+          "mode": "viewport"
+        },
+        "mobile": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/21st-landing-page-components/1764-animated-section-with-gradient-and-dynamic-lines-9e7dde56/mobile.png",
+          "sha256": "630e1a74919c35bce9da9b347d4b0cfe58d4104d0fbf995f710378620fe6be85",
+          "mode": "viewport"
+        }
+      },
+      "headings": [
+        {
+          "level": "h3",
+          "text": "Animated Section with Gradient and Dynamic Lines"
+        },
+        {
+          "level": "h3",
+          "text": "Created by"
+        },
+        {
+          "level": "h3",
+          "text": "Installation"
+        },
+        {
+          "level": "h3",
+          "text": "How to use"
+        },
+        {
+          "level": "h3",
+          "text": "Explore"
+        },
+        {
+          "level": "h3",
+          "text": "Build"
+        }
+      ],
+      "ctas": [
+        "Open sidebar",
+        "Components",
+        "thanh",
+        "SearchK",
+        "Copy prompt",
+        "Copy code",
+        "View code",
+        "Components",
+        "thanh",
+        "Le Thanh",
+        "Reveal the install command",
+        "Remix in Magic Chat"
+      ],
+      "topFonts": [
+        "GeistSans, \"GeistSans Fallback\", Geist, \"Geist Fallback\", Arial, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\"",
+        "\"ABC Diatype\", system-ui, -apple-system, sans-serif",
+        "GeistMono, ui-monospace, SFMono-Regular, \"Roboto Mono\", Menlo, Monaco, \"Liberation Mono\", \"DejaVu Sans Mono\", \"Courier New\", monospace"
+      ],
+      "animationSignals": {
+        "libraries": {
+          "framerMotion": false,
+          "gsap": false,
+          "three": false,
+          "lottie": false,
+          "locomotiveScroll": false
+        },
+        "animatedElementCount": 68,
+        "keyframes": [
+          "bounce",
+          "ping-slow",
+          "pulse",
+          "shimmer-slide",
+          "spin",
+          "spin-around",
+          "star-movement-bottom",
+          "star-movement-top",
+          "text-shimmer",
+          "enter",
+          "exit",
+          "shimmer"
+        ]
+      },
+      "codeLinks": [],
+      "codeBlockCount": 0,
+      "qualityWarnings": []
+    },
+    {
+      "sourceId": "21st-landing-page-components",
+      "sourceName": "21st.dev Landing Page Components",
+      "licenseStatus": "review-required-per-component",
       "url": "https://21st.dev/community/components/thanh/digital-serenity-animated-landing-page/default",
       "title": "Digital Serenity - Animated Landing Page | Community Components - 21st | 21st",
       "description": "Component creates a visually immersive and calming landing page. It features a dark UI with animated text quotes appearing word by word, a dynamic grid background, subtle floating elements, corner decorative accents, and interactive effects like a mouse-following gradient and click ripples. ",
       "reuseGuidance": "High-density landing-page component discovery: heroes, features, CTAs, pricing, testimonials and animated sections. Verify each component license before code reuse.",
       "screenshots": {
         "desktop": {
-          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/21st-landing-page-components/228-digital-serenity-animated-landing-page-e1d0bfcd/desktop.png",
-          "sha256": "0689f3a848dc49b4269b10f95701fadba18244d75a0f8efcb7b6448a2ac650cf",
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/21st-landing-page-components/226-digital-serenity-animated-landing-page-e1d0bfcd/desktop.png",
+          "sha256": "6822333a2f497369ecfbd81c8c4c2966b486b7383e481e85cbd73726601208a2",
           "mode": "viewport"
         },
         "mobile": {
-          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/21st-landing-page-components/228-digital-serenity-animated-landing-page-e1d0bfcd/mobile.png",
-          "sha256": "cd0cad59b8407fb8891e123f41448d985105ef1d571dcf6770730704eab2bcfe",
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/21st-landing-page-components/226-digital-serenity-animated-landing-page-e1d0bfcd/mobile.png",
+          "sha256": "afbbc629323d2761f2b22b1b96a3d4e329fadb882baac2f26b97be1c3185169f",
           "mode": "viewport"
         }
       },
@@ -2701,13 +2794,13 @@
       "reuseGuidance": "High-density landing-page component discovery: heroes, features, CTAs, pricing, testimonials and animated sections. Verify each component license before code reuse.",
       "screenshots": {
         "desktop": {
-          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/21st-landing-page-components/1368-dynamic-animated-hero-section-with-gradient-cfdf51fe/desktop.png",
-          "sha256": "b32d899cac0716a11b8e837e5ca192981e910d88e495e5a0f5fac9fbd778f5b0",
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/21st-landing-page-components/1364-dynamic-animated-hero-section-with-gradient-cfdf51fe/desktop.png",
+          "sha256": "710c5c7b40ad10febe06ea7406e3f651cd06b2131448a756d1cc06bc2b8ff5c3",
           "mode": "viewport"
         },
         "mobile": {
-          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/21st-landing-page-components/1368-dynamic-animated-hero-section-with-gradient-cfdf51fe/mobile.png",
-          "sha256": "f5748b4924a82a86927d966a8a35a24e8ea479dc7b730a48b40bcea7512adf9c",
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/21st-landing-page-components/1364-dynamic-animated-hero-section-with-gradient-cfdf51fe/mobile.png",
+          "sha256": "8e1ad3c9c5487c776e5838a59811e5581fb24046d5700c7fa6e65a015df58ea2",
           "mode": "viewport"
         }
       },
@@ -2785,69 +2878,51 @@
       "qualityWarnings": []
     },
     {
-      "sourceId": "21st-landing-page-components",
-      "sourceName": "21st.dev Landing Page Components",
-      "licenseStatus": "review-required-per-component",
-      "url": "https://21st.dev/community/components/thanh/animated-section-with-gradient-and-dynamic-lines/default",
-      "title": "Animated Section with Gradient and Dynamic Lines | Community Components - 21st | 21st",
-      "description": "Animated Dark‐Mode Section with Gradient Heading and Dynamic SVG Lines",
-      "reuseGuidance": "High-density landing-page component discovery: heroes, features, CTAs, pricing, testimonials and animated sections. Verify each component license before code reuse.",
+      "sourceId": "recent-design",
+      "sourceName": "Recent Design",
+      "licenseStatus": "inspiration-only",
+      "url": "https://recent.design/websites",
+      "title": "Web Design Inspiration — Recent",
+      "description": "The best of recent website design found on the Internet updated daily.",
+      "reuseGuidance": "Daily recent design references across websites, OG images, app screenshots and design skills.",
       "screenshots": {
         "desktop": {
-          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/21st-landing-page-components/1768-animated-section-with-gradient-and-dynamic-lines-9e7dde56/desktop.png",
-          "sha256": "95c571ea7c759f76cf52af3644c70a72fd916e099875c3b84100f8cee1425028",
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/recent-design/003-websites-cd2e1db3/desktop.png",
+          "sha256": "afa8a9985da2827d202d31b23cef21322847d5082054e3e309807cdce9a27cc0",
           "mode": "viewport"
         },
         "mobile": {
-          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/21st-landing-page-components/1768-animated-section-with-gradient-and-dynamic-lines-9e7dde56/mobile.png",
-          "sha256": "d7c2ea374d3099ed1fb4e9a0c947452ae20e0c17172d351980f426aa52814431",
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/recent-design/003-websites-cd2e1db3/mobile.png",
+          "sha256": "3a1d1560862b105f2b822554b60c015e680751f9dc195e9010278cbf26f76798",
           "mode": "viewport"
         }
       },
       "headings": [
         {
-          "level": "h3",
-          "text": "Animated Section with Gradient and Dynamic Lines"
+          "level": "h2",
+          "text": "Subscribe to the Recent digest"
         },
         {
-          "level": "h3",
-          "text": "Created by"
-        },
-        {
-          "level": "h3",
-          "text": "Installation"
-        },
-        {
-          "level": "h3",
-          "text": "How to use"
-        },
-        {
-          "level": "h3",
-          "text": "Explore"
-        },
-        {
-          "level": "h3",
-          "text": "Build"
+          "level": "h2",
+          "text": "Stay ahead of trends"
         }
       ],
       "ctas": [
-        "Open sidebar",
-        "Components",
-        "thanh",
-        "SearchK",
-        "Copy prompt",
-        "Copy code",
-        "View code",
-        "Components",
-        "thanh",
-        "Le Thanh",
-        "Reveal the install command",
-        "Remix in Magic Chat"
+        "Recent",
+        "All",
+        "Best of X",
+        "Websites",
+        "OG Images",
+        "App Screenshots",
+        "App Icons",
+        "Skills",
+        "Info",
+        "Subscribe",
+        "All",
+        "Portfolio"
       ],
       "topFonts": [
-        "GeistSans, \"GeistSans Fallback\", Geist, \"Geist Fallback\", Arial, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\"",
-        "\"ABC Diatype\", system-ui, -apple-system, sans-serif",
-        "GeistMono, ui-monospace, SFMono-Regular, \"Roboto Mono\", Menlo, Monaco, \"Liberation Mono\", \"DejaVu Sans Mono\", \"Courier New\", monospace"
+        "ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
       ],
       "animationSignals": {
         "libraries": {
@@ -2857,20 +2932,10 @@
           "lottie": false,
           "locomotiveScroll": false
         },
-        "animatedElementCount": 68,
+        "animatedElementCount": 63,
         "keyframes": [
-          "bounce",
-          "ping-slow",
-          "pulse",
-          "shimmer-slide",
-          "spin",
-          "spin-around",
-          "star-movement-bottom",
-          "star-movement-top",
-          "text-shimmer",
-          "enter",
-          "exit",
-          "shimmer"
+          "ping",
+          "pulse"
         ]
       },
       "codeLinks": [],
@@ -2888,12 +2953,12 @@
       "screenshots": {
         "desktop": {
           "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/kibo-ui/098-kibo-ui-com-components-gan-8008b377/desktop.png",
-          "sha256": "7bd6f0290c385f9370d07262582f73b7ef8fb661a5dde8e52ca8ca85a359c5a8",
+          "sha256": "657b041d17d69ff32a9f14f901603ff8c4196e52df0638fc6603ddcf2208d5d3",
           "mode": "viewport"
         },
         "mobile": {
           "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/kibo-ui/098-kibo-ui-com-components-gan-8008b377/mobile.png",
-          "sha256": "2a06f2000efe46447e650bd24ab821eb913b23b142255d7ee50fcaec81bf0a40",
+          "sha256": "edda34f13118ff593f6d0102ec3b31b4ef847aba9ce82d977d83e94cb89773db",
           "mode": "viewport"
         }
       },
@@ -2970,71 +3035,6 @@
           "text": "GitHub3.8K"
         }
       ],
-      "codeBlockCount": 0,
-      "qualityWarnings": []
-    },
-    {
-      "sourceId": "recent-design",
-      "sourceName": "Recent Design",
-      "licenseStatus": "inspiration-only",
-      "url": "https://recent.design/websites",
-      "title": "Web Design Inspiration — Recent",
-      "description": "The best of recent website design found on the Internet updated daily.",
-      "reuseGuidance": "Daily recent design references across websites, OG images, app screenshots and design skills.",
-      "screenshots": {
-        "desktop": {
-          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/recent-design/003-websites-cd2e1db3/desktop.png",
-          "sha256": "cbcac84dd3dbd849d20f15fc8cc844deb369bf9af8163cf333725cfc33b23270",
-          "mode": "viewport"
-        },
-        "mobile": {
-          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/recent-design/003-websites-cd2e1db3/mobile.png",
-          "sha256": "b4a59bd1ac6583c9e1c38bf63b6900f3d3df31b8a3a87160aaaf9e730468f96c",
-          "mode": "viewport"
-        }
-      },
-      "headings": [
-        {
-          "level": "h2",
-          "text": "Subscribe to the Recent digest"
-        },
-        {
-          "level": "h2",
-          "text": "Stay ahead of trends"
-        }
-      ],
-      "ctas": [
-        "Recent",
-        "All",
-        "Best of X",
-        "Websites",
-        "OG Images",
-        "App Screenshots",
-        "App Icons",
-        "Skills",
-        "Info",
-        "Subscribe",
-        "All",
-        "Portfolio"
-      ],
-      "topFonts": [
-        "ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
-      ],
-      "animationSignals": {
-        "libraries": {
-          "framerMotion": false,
-          "gsap": false,
-          "three": false,
-          "lottie": false,
-          "locomotiveScroll": false
-        },
-        "animatedElementCount": 48,
-        "keyframes": [
-          "ping",
-          "pulse"
-        ]
-      },
-      "codeLinks": [],
       "codeBlockCount": 0,
       "qualityWarnings": []
     },
@@ -3173,12 +3173,12 @@
       "screenshots": {
         "desktop": {
           "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/saasframe-landing-pages/285-landing-page-4197935a/desktop.png",
-          "sha256": "4045631a7e8a794e8aa44245ebe855756b8e50d3cc56698fc96bcadfbb2557a7",
+          "sha256": "38f11b3f5f74910b17c1941191ba305213678a77238f6b33e9c77e58676da4fc",
           "mode": "viewport"
         },
         "mobile": {
           "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/saasframe-landing-pages/285-landing-page-4197935a/mobile.png",
-          "sha256": "a56dfbee361795cd3edfef745ea6fd578e3f54e55e6f0bbbf313e92bf85362d4",
+          "sha256": "61f71e1b33216aaebcd4a6307cb14d171d8102d7aae66872b4219f380ce3d7c1",
           "mode": "viewport"
         }
       },
@@ -3349,12 +3349,12 @@
       "screenshots": {
         "desktop": {
           "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/saasframe-landing-pages/289-landing-page-47cc659e/desktop.png",
-          "sha256": "eacdd0dea6e7821e3e6e11669f650a6e9f9921ba72da337615bf1b0ec68977e7",
+          "sha256": "1893caa68bae4969a0eebe199fded61ff87824e677d31cf1798645decb8b2fed",
           "mode": "viewport"
         },
         "mobile": {
           "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/saasframe-landing-pages/289-landing-page-47cc659e/mobile.png",
-          "sha256": "78701317e579a8afeb80f47705fb53db365a39488884ea7e86266a557cc28082",
+          "sha256": "15b08b1f0d297b71426df09cef02f27f1b3d0c4ccc2af377454957ac8a335100",
           "mode": "viewport"
         }
       },
@@ -4201,7 +4201,7 @@
       "screenshots": {
         "desktop": {
           "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/aceternity-ui/076-logo-clouds-6-blocks-a-collection-of-logo-clouds-with-micro-interactions-and-minimal-animations-bb7689d4/desktop.png",
-          "sha256": "a8e6196bbb607532f401ee10ce49aad7d3f6bcd33043f79b2f9309a6b0b82b25",
+          "sha256": "c5b4ef49b5cec37435280df077b2b45cbbba29ac80d8de80b0bdf4adc5e20842",
           "mode": "viewport"
         },
         "mobile": {
@@ -4294,12 +4294,12 @@
       "screenshots": {
         "desktop": {
           "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/recent-design/004-og-images-e4824f8c/desktop.png",
-          "sha256": "ac22384776b621341266e18e25796213d13c645532fc39d8cf9b30f83b76b7e4",
+          "sha256": "396b844f9ea9ca124867a2cec3e1148e819bf3828abd9f4a53a4d214bb9e2483",
           "mode": "viewport"
         },
         "mobile": {
           "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/recent-design/004-og-images-e4824f8c/mobile.png",
-          "sha256": "bca4aad658974a6f79dd7dbf7b049ba0a585daa7d7c6fa769a95e189a3c0877f",
+          "sha256": "05e7bbe33d35e4716a4cb709a26395fd00f7b23971309643cc03d59883ba9b16",
           "mode": "viewport"
         }
       },
@@ -4450,12 +4450,12 @@
       "screenshots": {
         "desktop": {
           "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/recent-design/002-best-of-x-a4051cce/desktop.png",
-          "sha256": "7a24d576129ba689d39ce58dce4cdedef56e597551c9796c035c5a42e0053929",
+          "sha256": "e02500bb5d827d4cfc9a7bba3d32be942a722fb57a6d37ea2609cdbc4d763775",
           "mode": "viewport"
         },
         "mobile": {
           "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/recent-design/002-best-of-x-a4051cce/mobile.png",
-          "sha256": "def7b44f4477d71438a299b2e6eab9caa3b79052925bf38cfd3f88f32217c3d5",
+          "sha256": "095b6f326bce9abed0435cb83ad7d4442398f4d95d4f8ea851d1343e565a26f2",
           "mode": "viewport"
         }
       },

@@ -1,7 +1,7 @@
 {
-  "capturedAt": "2026-06-26T18:23:58.861Z",
+  "capturedAt": "2026-06-27T15:31:52.311Z",
   "policy": "Samples are indexed only from local repositories marked allowed-after-review. Review original license and attribution before using code in generated sites.",
-  "codeIndexPath": "data/references/code-sources/2026-06-26T18-17-07-136Z-code-cache-index.json",
+  "codeIndexPath": "data/references/code-sources/2026-06-27T15-25-24-522Z-code-cache-index.json",
   "maxSampleChars": 5000,
   "maxFilesPerRepo": 36,
   "repositories": [
