@@ -148,6 +148,7 @@ Canonical files:
 - `hermes-content/docs/ONIA_SELF_HOSTED_STACK_RUNBOOK_2026.md`
 - `hermes-content/docs/ONIA_CENTER_DIFY_ASSISTANT_RUNBOOK_2026.md`
 - `hermes-content/docs/ONIA_CENTER_CODEX_INTEGRATION_RUNBOOK_2026.md`
+- `hermes-content/docs/ONIA_CENTER_AI_MODEL_ROUTING_2026.md`
 - `hermes-content/docs/ONIA_MEETING_INTELLIGENCE_SYSTEM_2026.md`
 - `hermes-content/docs/ONIA_7000_BOB_PRODUCTION_INFRA_INVESTMENT_PLAN_2026.md`
 - `hermes-content/docs/ONIA_INTERNAL_CAPITAL_ALLOCATION_2026.md`
