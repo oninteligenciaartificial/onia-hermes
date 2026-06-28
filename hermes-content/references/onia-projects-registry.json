@@ -52,7 +52,7 @@
       "id": "dentalgest",
       "name": "DentalGest",
       "type": "vertical_saas",
-      "local_path": "C:\\dev\\Proyectos\\dental-saas",
+      "local_path": "C:\\dev\\proyectos\\DentaGest\\dental-saas",
       "primary_audience": "Clinicas dentales de Bolivia",
       "pain_signals": [
         "mensajes de pacientes sin registrar",

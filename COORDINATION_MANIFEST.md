@@ -120,6 +120,7 @@ Canonical files:
 - `hermes-content/docs/ONIA_SYSTEM_PORTFOLIO_ARCHITECTURE_2026.md`
 - `hermes-content/docs/ONIA_VERTICAL_SERVICE_MATRIX_2026.md`
 - `hermes-content/docs/ONIA_VERTICAL_SERVICE_AUDIT_2026.md`
+- `hermes-content/docs/ONIA_INITIAL_CORE_BLUEPRINT_2026.md`
 - `hermes-content/docs/ONIA_SERGIO_BOLIVIAN_LONG_TERM_INCOME_STRATEGY_2026.md`
 - `hermes-content/docs/ONIA_HERMES_COLLABORATOR_ACCESS_MODEL_2026.md`
 - `hermes-content/docs/ONIA_HERMES_COLLABORATOR_SETUP_RUNBOOK_2026.md`

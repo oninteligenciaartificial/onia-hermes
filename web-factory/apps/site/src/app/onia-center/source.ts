@@ -35,6 +35,10 @@ export const sourceDocuments = [
   "web-factory/docs/WEB_FACTORY_DESIGN_INTELLIGENCE_LATEST.md",
   "web-factory/data/clients/nuvia.design.md",
   "hermes-content/docs/ONIA_CENTER_CODEX_INTEGRATION_RUNBOOK_2026.md",
+  "hermes-content/docs/ONIA_SYSTEM_PORTFOLIO_ARCHITECTURE_2026.md",
+  "hermes-content/docs/ONIA_VERTICAL_SERVICE_MATRIX_2026.md",
+  "hermes-content/docs/ONIA_VERTICAL_SERVICE_AUDIT_2026.md",
+  "hermes-content/docs/ONIA_INITIAL_CORE_BLUEPRINT_2026.md",
 ] as const;
 
 export const oniaCenterSeedSource = {
