@@ -164,7 +164,7 @@ async function ensureApp() {
 
   if (await isPortOpen(appPort)) return;
 
-  spawnDetached("npm.cmd", ["run", "dev", "--", "-p", String(appPort)], "onia-center-next.out.log", "onia-center-next.err.log", siteRoot);
+  spawnDetached("cmd.exe", ["/d", "/s", "/c", `npm run dev -- -p ${appPort}`], "onia-center-next.out.log", "onia-center-next.err.log", siteRoot);
 
   if (!(await waitForPort(appPort, 40))) {
     throw new Error(`ONIA Center no arranco en 127.0.0.1:${appPort}. Revisa ${path.join(logRoot, "onia-center-next.err.log")}`);
