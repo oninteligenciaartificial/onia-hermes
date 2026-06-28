@@ -34,8 +34,8 @@ Esto protege caja: ONIA necesita velocidad y bajo costo para uso diario, pero ca
 | Agente Ventas y CRM | Siguientes pasos, resumen de leads, objeciones, tareas comerciales | `gpt-5.4-mini` | Alto volumen; no debe consumir modelo caro por cada pregunta. |
 | Agente CEO mensual | Plan mensual, priorizacion, riesgos, caja, decisiones privadas | `gpt-5.5` | Requiere razonamiento fuerte y contexto cruzado. Debe correr pocas veces. |
 | Finanzas/Fondo ONIA | Alertas, centros contables, pagos bloqueados, uso premium | `gpt-5.4-mini` para alertas, `gpt-5.5` para revision mensual | La regla financiera debe venir de datos/calculos; el modelo solo explica y revisa. |
-| Audio Intelligence | Analizar llamada/transcript y preparar propuesta | `gpt-5.5` si hay venta real; `gpt-5.4-mini` para resumen rapido | Las propuestas comerciales necesitan precision y buen criterio. |
-| Transcripcion de audio | Audio a texto | `gpt-4o-mini-transcribe` por defecto; `gpt-4o-transcribe` para llamadas importantes; diarize si hace falta separar hablantes | Modelos oficiales de STT; no usar modelo de razonamiento para transcribir. |
+| Audio Intelligence | Analizar llamada/transcript y preparar propuesta | `gpt-5.4-mini` por defecto; `gpt-5.5` solo con escalamiento manual | Buen balance costo/calidad. La propuesta sigue siendo borrador interno con revision humana. |
+| Transcripcion de audio | Audio a texto | Speaches local con `Systran/faster-distil-whisper-large-v3`; fallback `gpt-4o-mini-transcribe`; `gpt-4o-transcribe` solo si falla calidad | Primero open source/local. El fallback oficial cuesta aprox. USD 0.003/min y mantiene el flujo vivo si el tunel local cae. |
 | Ideas Inbox/Reels | Clasificar idea, resumir link, crear tareas | `gpt-5.4-mini` | Volumen alto y riesgo bajo. |
 | Media Lab/Remotion | Guion, storyboard, shot list, plantilla render | `gpt-5.4-mini`; subir a `gpt-5.5` para piezas importantes | El costo fuerte debe reservarse para piezas comerciales o marca Sergio. |
 | Web Factory intake | Convertir formulario cliente en brief, scope y checklist | `gpt-5.4-mini` | Primera pasada barata. |
@@ -61,8 +61,11 @@ Agregar cuando activemos los modulos:
 ONIA_DEEP_REASONING_MODEL=gpt-5.5
 ONIA_FAST_MODEL=gpt-5.4-mini
 ONIA_CHEAP_MODEL=gpt-5.4-nano
-ONIA_AUDIO_ANALYSIS_MODEL=gpt-5.5
-ONIA_AUDIO_STT_MODEL=gpt-4o-mini-transcribe
+ONIA_AUDIO_ANALYSIS_MODEL=gpt-5.4-mini
+ONIA_AUDIO_STT_BASE_URL=http://127.0.0.1:3108/v1
+ONIA_AUDIO_STT_MODEL=Systran/faster-distil-whisper-large-v3
+ONIA_AUDIO_STT_FALLBACK_PROVIDER=openai
+ONIA_AUDIO_STT_FALLBACK_MODEL=gpt-4o-mini-transcribe
 ONIA_AUDIO_STT_HIGH_QUALITY_MODEL=gpt-4o-transcribe
 ONIA_EMBEDDING_MODEL=text-embedding-3-small
 ```
@@ -92,9 +95,9 @@ No guardar estos valores como secretos; los modelos no son secretos. Las API key
    - Usar embeddings para docs y catalogos antes de mandar mucho contexto al modelo.
 
 5. Audio Intelligence
-   - Usar OpenAI STT si no esta activo el servicio local `speaches`.
+   - Intentar Speaches local primero y usar OpenAI STT mini solo como fallback.
    - Si hay llamada con varios hablantes, usar diarizacion solo cuando aporte valor.
-   - Analisis comercial con `gpt-5.5` cuando la llamada sea venta/propuesta real.
+   - Analisis comercial con `gpt-5.4-mini`; escalar a `gpt-5.5` solo si la propuesta es grande, compleja o afecta arquitectura/precio.
 
 6. Web Factory
    - Separar generacion de brief, propuesta, copy y codigo.

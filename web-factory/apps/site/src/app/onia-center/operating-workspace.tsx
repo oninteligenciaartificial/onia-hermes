@@ -2,14 +2,17 @@
 
 import { useEffect, useMemo, useState } from "react";
 import {
+  AlertTriangle,
   Bot,
   CalendarDays,
+  CheckCircle2,
   ClipboardCheck,
   Clock,
   Copy,
   Database,
   Dumbbell,
   ExternalLink,
+  FileAudio2,
   FileCheck2,
   HardDrive,
   Heart,
@@ -186,8 +189,29 @@ type AudioApiResponse = {
   source?: {
     stt?: string;
     sttModel?: string | null;
+    sttFallbackUsed?: boolean;
+    sttAttempts?: string[];
     analysisProvider?: string;
     analysisModel?: string;
+  };
+};
+type AudioStatusResponse = {
+  ok: boolean;
+  message?: string;
+  stt?: {
+    baseUrlConfigured: boolean;
+    model: string;
+    maxFileMb: number;
+    reachable: boolean;
+    healthMessage: string;
+    fallbackProvider: "openai" | "off";
+    fallbackModel: string;
+    fallbackConfigured: boolean;
+  };
+  openai?: {
+    configured: boolean;
+    model: string;
+    maxOutputTokens: number;
   };
 };
 export type WorkspaceView =
@@ -846,6 +870,38 @@ function proposalDraft(analysis: AudioAnalysis | null | undefined) {
   return draft && typeof draft === "object" ? draft : null;
 }
 
+function audioSttSourceLabel(source?: AudioApiResponse["source"]) {
+  if (source?.stt === "speaches") {
+    return `Speaches local / ${source.sttModel ?? "modelo open source"}`;
+  }
+
+  if (source?.stt === "openai_transcribe") {
+    return `OpenAI fallback / ${source.sttModel ?? "transcribe mini"}`;
+  }
+
+  if (source?.stt === "transcript_manual") {
+    return "Transcript manual";
+  }
+
+  return "Pendiente";
+}
+
+function audioStatusTone(status: AudioStatusResponse | null) {
+  if (!status?.stt) {
+    return { icon: Database, className: "is-muted", label: "Verificando", detail: "Cargando estado de Audio IA." };
+  }
+
+  if (status.stt.reachable) {
+    return { icon: CheckCircle2, className: "is-ready", label: "Local activo", detail: status.stt.healthMessage };
+  }
+
+  if (status.stt.fallbackConfigured) {
+    return { icon: AlertTriangle, className: "is-warning", label: "Fallback barato", detail: "Speaches no responde; se usara OpenAI transcribe-mini si subes audio." };
+  }
+
+  return { icon: AlertTriangle, className: "is-blocked", label: "STT bloqueado", detail: "Speaches no responde y no hay fallback configurado." };
+}
+
 function formatAudioProposal(analysis: AudioAnalysis | null | undefined) {
   const draft = proposalDraft(analysis);
   if (!draft) {
@@ -917,6 +973,8 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
   const [audioTranscript, setAudioTranscript] = useState("");
   const [audioResult, setAudioResult] = useState<AudioApiResponse | null>(null);
   const [audioLoading, setAudioLoading] = useState(false);
+  const [audioStatus, setAudioStatus] = useState<AudioStatusResponse | null>(null);
+  const [audioStatusLoading, setAudioStatusLoading] = useState(false);
   const [notice, setNotice] = useState("Modo local listo. Conecta Supabase self-hosted para multiusuario.");
   const [hydrated, setHydrated] = useState(false);
   const [storageMode, setStorageMode] = useState<StorageMode>("checking");
@@ -1000,6 +1058,37 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
 
     window.localStorage.setItem(storageKey, JSON.stringify({ leads, tasks, reviews, notes, ideas, codexJobs }));
   }, [codexJobs, hydrated, ideas, leads, notes, reviews, storageMode, tasks]);
+
+  useEffect(() => {
+    if (workspaceView !== "audio-intelligence") {
+      return;
+    }
+
+    let active = true;
+    setAudioStatusLoading(true);
+
+    fetch("/api/onia-center/audio-intelligence", { cache: "no-store" })
+      .then((response) => response.json() as Promise<AudioStatusResponse>)
+      .then((status) => {
+        if (active) {
+          setAudioStatus(status);
+        }
+      })
+      .catch(() => {
+        if (active) {
+          setAudioStatus(null);
+        }
+      })
+      .finally(() => {
+        if (active) {
+          setAudioStatusLoading(false);
+        }
+      });
+
+    return () => {
+      active = false;
+    };
+  }, [workspaceView]);
 
   const canApprove = selectedRole === "sergio";
   const visibleLeads = useMemo(
@@ -1664,6 +1753,11 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
   const audioAnalysis = audioResult?.analysis ?? null;
   const audioProposal = proposalDraft(audioAnalysis);
   const audioTranscriptPreview = audioResult?.transcript || audioTranscript;
+  const audioEngineTone = audioStatusTone(audioStatus);
+  const AudioEngineIcon = audioEngineTone.icon;
+  const audioSttLabel = audioSttSourceLabel(audioResult?.source);
+  const audioAnalysisModel = audioResult?.source?.analysisModel ?? audioStatus?.openai?.model ?? "modelo no confirmado";
+  const audioHasInput = Boolean(audioFile || audioTranscript.trim());
 
   return (
     <section className="onia-live-workspace" id="uso-diario" aria-label="Uso diario ONIA Center">
@@ -2009,10 +2103,51 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
 
       {workspaceView === "audio-intelligence" ? (
         <div className="onia-audio-workspace">
+          <div className="onia-audio-command-bar">
+            <article className={audioEngineTone.className}>
+              <AudioEngineIcon size={17} />
+              <div>
+                <span>Motor de transcripcion</span>
+                <strong>{audioStatusLoading ? "Verificando..." : audioEngineTone.label}</strong>
+                <small>{audioEngineTone.detail}</small>
+              </div>
+            </article>
+            <article>
+              <FileAudio2 size={17} />
+              <div>
+                <span>Ruta recomendada</span>
+                <strong>OBS / WhatsApp / transcript</strong>
+                <small>Sube audio cuando Speaches este activo o usa fallback barato si hace falta.</small>
+              </div>
+            </article>
+            <article>
+              <Bot size={17} />
+              <div>
+                <span>Analisis comercial</span>
+                <strong>{audioStatus?.openai?.configured ? audioAnalysisModel : "OpenAI pendiente"}</strong>
+                <small>{audioStatus?.openai?.configured ? "Modelo barato/usable para propuesta interna." : "Falta API key para propuesta."}</small>
+              </div>
+            </article>
+            <article>
+              <ClipboardCheck size={17} />
+              <div>
+                <span>Salida</span>
+                <strong>Propuesta + CRM</strong>
+                <small>No envia nada al cliente sin revision humana.</small>
+              </div>
+            </article>
+          </div>
+
           <article className="onia-live-card onia-audio-input-panel">
             <div className="onia-live-title">
               <Mic size={16} />
-              <strong>Entrada de reunion</strong>
+              <strong>Nueva reunion</strong>
+            </div>
+            <div className="onia-audio-flow">
+              <span className={audioFile ? "is-done" : ""}>1. Audio</span>
+              <span className={audioTranscript.trim() ? "is-done" : ""}>2. Transcript</span>
+              <span className={audioAnalysis ? "is-done" : ""}>3. Diagnostico</span>
+              <span className={audioProposal ? "is-done" : ""}>4. Propuesta</span>
             </div>
             <div className="onia-form-row">
               <label>
@@ -2044,13 +2179,17 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
               />
               <small>{audioFile ? `${audioFile.name} / ${Math.max(1, Math.round(audioFile.size / 1024 / 1024))} MB` : "Opcional si ya tienes transcript."}</small>
             </label>
+            <div className="onia-audio-source-note">
+              <CheckCircle2 size={14} />
+              <span>OBS guarda en C:\Users\PC\Videos\ONIA-Reuniones. WhatsApp Web descarga `.ogg` y se sube aqui.</span>
+            </div>
             <label>
               Transcript pegado
               <textarea
                 value={audioTranscript}
                 onChange={(event) => setAudioTranscript(event.target.value)}
-                placeholder="Pega aqui el transcript si ya existe. Si subes audio, Speaches genera este texto."
-                rows={8}
+                placeholder="Pega aqui el transcript si ya existe. Si subes audio, Speaches local o el fallback barato lo generan."
+                rows={6}
               />
             </label>
             <label>
@@ -2064,10 +2203,10 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
             </label>
             <button className="onia-primary-button" type="button" disabled={audioLoading} onClick={() => void analyzeAudioIntelligence()}>
               <Mic size={15} />
-              {audioLoading ? "Procesando..." : "Analizar para propuesta"}
+              {audioLoading ? "Procesando..." : audioHasInput ? "Analizar para propuesta" : "Sube audio o pega transcript"}
             </button>
             <p className="onia-muted-note">
-              Usar solo con consentimiento o permiso operativo. El audio crudo se envia al endpoint para procesar y no se guarda desde esta pantalla.
+              Primero intenta Speaches local/open source. Si no responde y hay API, usa `gpt-4o-mini-transcribe` como fallback barato. No guarda audio crudo desde esta pantalla.
             </p>
           </article>
 
@@ -2075,6 +2214,11 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
             <div className="onia-live-title">
               <FileCheck2 size={16} />
               <strong>Diagnostico comercial</strong>
+            </div>
+            <div className="onia-audio-engine-strip">
+              <span>{audioSttLabel}</span>
+              <span>Analisis: {audioAnalysisModel}</span>
+              {audioResult?.source?.sttFallbackUsed ? <strong>Fallback usado</strong> : null}
             </div>
             {audioAnalysis ? (
               <>
@@ -2174,7 +2318,7 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
                 </div>
               </>
             ) : (
-              <p className="onia-muted-note">El borrador aparece despues del analisis con OpenAI. Si solo hay transcript, revisa la configuracion de API.</p>
+              <p className="onia-muted-note">El borrador aparece despues del analisis. Si solo hay transcript, revisa la API de OpenAI o pega mas contexto del cliente.</p>
             )}
           </article>
 
@@ -2183,13 +2327,17 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
               <Database size={16} />
               <strong>Transcript</strong>
             </div>
-            <pre>{audioTranscriptPreview || "Sin transcript todavia."}</pre>
-            <small>
-              {audioResult?.source?.stt === "speaches"
-                ? `STT: Speaches / ${audioResult.source.sttModel ?? "modelo local"}`
-                : "STT: transcript manual o pendiente"}
-              {audioResult?.source?.analysisModel ? ` / Analisis: ${audioResult.source.analysisModel}` : ""}
-            </small>
+            <details open={Boolean(audioTranscriptPreview)}>
+              <summary>{audioTranscriptPreview ? "Ver transcript completo" : "Sin transcript todavia"}</summary>
+              <pre>{audioTranscriptPreview || "Sube un audio o pega un transcript para empezar."}</pre>
+            </details>
+            <div className="onia-audio-technical-note">
+              <small>STT: {audioSttLabel}</small>
+              <small>Analisis: {audioAnalysisModel}</small>
+              {audioResult?.source?.sttAttempts?.length ? (
+                <small>Intentos: {audioResult.source.sttAttempts.join(" | ")}</small>
+              ) : null}
+            </div>
           </article>
         </div>
       ) : null}

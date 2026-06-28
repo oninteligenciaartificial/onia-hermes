@@ -170,8 +170,10 @@ Setup recomendado en la PC de Sergio:
 5. Desactivar `Desktop Audio` global si se usa audio por aplicacion, para evitar
    eco o duplicados.
 6. En `Settings > Output > Recording`, guardar en `.mkv` o `.mp4`.
-7. Antes de iniciar la reunion, avisar al cliente y empezar grabacion.
-8. Al terminar, subir el archivo a `/onia-center?view=audio-intelligence`.
+7. Para audios de propuesta, usar perfil liviano: 640x360, 10 FPS, video bitrate
+   bajo y audio 128 kbps. El objetivo es transcribir, no guardar video pesado.
+8. Antes de iniciar la reunion, avisar al cliente y empezar grabacion.
+9. Al terminar, subir el archivo a `/onia-center?view=audio-intelligence`.
 
 Frase sugerida de consentimiento:
 
@@ -308,16 +310,28 @@ En `web-factory/apps/site/.env.local` o variables del deploy de ONIA Center:
 # en el mismo host o hay SSH tunnel activo.
 ONIA_AUDIO_STT_BASE_URL=http://127.0.0.1:3108/v1
 ONIA_AUDIO_STT_MODEL=Systran/faster-distil-whisper-large-v3
+ONIA_AUDIO_STT_LANGUAGE=es
 ONIA_AUDIO_STT_API_KEY=
-ONIA_AUDIO_MAX_MB=50
+ONIA_AUDIO_STT_FALLBACK_PROVIDER=openai
+ONIA_AUDIO_STT_FALLBACK_MODEL=gpt-4o-mini-transcribe
+ONIA_AUDIO_MAX_MB=100
 
 # Analisis/propuesta por OpenAI mientras ONIA no migre el LLM a local.
 OPENAI_ONIA_CENTER_API_KEY=...
-ONIA_AUDIO_ANALYSIS_MODEL=gpt-4.1-mini
+ONIA_AUDIO_ANALYSIS_MODEL=gpt-5.4-mini
+ONIA_AUDIO_MAX_OUTPUT_TOKENS=1800
 
 # Solo para entornos controlados sin Supabase; no recomendado en produccion.
 ONIA_AUDIO_INTELLIGENCE_ALLOW_LOCAL=false
 ```
+
+Decision de costo:
+
+- Transcripcion diaria: Speaches local/open source.
+- Si Speaches o el tunel no responden: `gpt-4o-mini-transcribe` como fallback
+  barato, aprox. USD 0.003/min segun pricing oficial de OpenAI al 2026-06-28.
+- Analisis/propuesta: `gpt-5.4-mini` por defecto. `gpt-5.5` solo para
+  propuestas grandes o decisiones de arquitectura/precio.
 
 ## Reglas de uso
 

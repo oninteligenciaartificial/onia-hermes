@@ -3863,8 +3863,99 @@
   grid-template-columns: minmax(320px, 0.9fr) minmax(0, 1.1fr);
 }
 
+.onia-audio-command-bar {
+  display: grid;
+  gap: 10px;
+  grid-column: 1 / -1;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.onia-audio-command-bar article {
+  align-items: flex-start;
+  background: #ffffff;
+  border: 1px solid var(--onia-line-soft);
+  border-radius: var(--onia-radius);
+  display: flex;
+  gap: 10px;
+  min-height: 104px;
+  padding: 12px;
+}
+
+.onia-audio-command-bar article.is-ready {
+  background: rgba(223, 244, 232, 0.76);
+  border-color: rgba(35, 123, 100, 0.28);
+}
+
+.onia-audio-command-bar article.is-warning {
+  background: #fff7e6;
+  border-color: rgba(179, 124, 30, 0.28);
+}
+
+.onia-audio-command-bar article.is-blocked {
+  background: rgba(248, 221, 228, 0.68);
+  border-color: rgba(155, 41, 65, 0.28);
+}
+
+.onia-audio-command-bar article.is-muted {
+  background: #f8faf7;
+}
+
+.onia-audio-command-bar svg {
+  color: var(--onia-green);
+  flex: 0 0 auto;
+  margin-top: 1px;
+}
+
+.onia-audio-command-bar span,
+.onia-audio-flow span,
+.onia-audio-engine-strip span {
+  color: var(--onia-faint);
+  display: block;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.onia-audio-command-bar strong {
+  color: var(--onia-ink);
+  display: block;
+  font-size: 14px;
+  line-height: 1.25;
+  margin-top: 5px;
+}
+
+.onia-audio-command-bar small {
+  color: var(--onia-muted);
+  display: block;
+  font-size: 11px;
+  line-height: 1.45;
+  margin-top: 6px;
+}
+
 .onia-audio-input-panel {
   grid-row: span 3;
+}
+
+.onia-audio-flow {
+  display: grid;
+  gap: 7px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.onia-audio-flow span {
+  background: #f8faf7;
+  border: 1px solid var(--onia-line-soft);
+  border-radius: 999px;
+  min-height: 30px;
+  padding: 8px 9px;
+  text-align: center;
+}
+
+.onia-audio-flow span.is-done {
+  background: var(--onia-green-soft);
+  border-color: rgba(35, 123, 100, 0.28);
+  color: var(--onia-green);
 }
 
 .onia-audio-upload {
@@ -3892,6 +3983,24 @@
   margin-top: 8px;
 }
 
+.onia-audio-source-note {
+  align-items: center;
+  background: #f8faf7;
+  border: 1px solid var(--onia-line-soft);
+  border-radius: var(--onia-radius);
+  color: var(--onia-muted);
+  display: flex;
+  font-size: 12px;
+  gap: 8px;
+  line-height: 1.45;
+  padding: 10px;
+}
+
+.onia-audio-source-note svg {
+  color: var(--onia-green);
+  flex: 0 0 auto;
+}
+
 .onia-audio-upload small,
 .onia-audio-transcript-panel small,
 .onia-audio-proposal-grid small {
@@ -3905,6 +4014,29 @@
   display: grid;
   gap: 10px;
   grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.onia-audio-engine-strip {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.onia-audio-engine-strip span,
+.onia-audio-engine-strip strong {
+  background: #f8faf7;
+  border: 1px solid var(--onia-line-soft);
+  border-radius: 999px;
+  color: var(--onia-muted);
+  font-size: 11px;
+  line-height: 1.2;
+  padding: 7px 9px;
+}
+
+.onia-audio-engine-strip strong {
+  background: #fff7e6;
+  color: #7a4b08;
 }
 
 .onia-audio-summary-grid div,
@@ -3980,6 +4112,18 @@
   padding: 9px 10px;
 }
 
+.onia-audio-transcript-panel details {
+  display: grid;
+  gap: 10px;
+}
+
+.onia-audio-transcript-panel summary {
+  color: var(--onia-green);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 900;
+}
+
 .onia-audio-transcript-panel pre {
   background: #101a16;
   border-radius: var(--onia-radius);
@@ -3995,6 +4139,11 @@
   white-space: pre-wrap;
 }
 
+.onia-audio-technical-note {
+  display: grid;
+  gap: 5px;
+}
+
 @media (max-width: 1240px) {
   .onia-webfactory-command-grid,
   .onia-webfactory-step-grid,
@@ -4007,6 +4156,7 @@
   .onia-seller-rule-grid,
   .onia-assistant-workspace,
   .onia-codex-workspace,
+  .onia-audio-command-bar,
   .onia-audio-workspace {
     grid-template-columns: 1fr;
   }
@@ -4037,6 +4187,7 @@
   .onia-codex-stats,
   .onia-codex-detail-grid,
   .onia-audio-summary-grid,
+  .onia-audio-flow,
   .onia-audio-proposal-grid {
     grid-template-columns: 1fr;
   }

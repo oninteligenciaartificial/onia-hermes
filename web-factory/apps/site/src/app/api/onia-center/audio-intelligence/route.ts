@@ -26,6 +26,8 @@ type SttConfig = {
   model: string;
   language: string;
   maxFileMb: number;
+  fallbackProvider: "openai" | "off";
+  fallbackModel: string;
 };
 
 type OpenAIConfig = {
@@ -45,6 +47,14 @@ type OpenAIResponse = {
       text?: string;
     }>;
   }>;
+};
+
+type TranscriptionResult = {
+  transcript: string;
+  provider: "speaches" | "openai_transcribe";
+  model: string;
+  fallbackUsed: boolean;
+  attempts: string[];
 };
 
 function parsePositiveInt(value: string | undefined, fallback: number) {
@@ -72,12 +82,15 @@ function authFailureResponse(auth: Extract<OniaCenterAuthResult, { ok: false }>)
 
 function getSttConfig(): SttConfig {
   const baseUrl = (process.env.ONIA_AUDIO_STT_BASE_URL || process.env.STT_BASE_URL || "http://127.0.0.1:3108/v1").replace(/\/$/, "");
+  const fallbackProvider = (process.env.ONIA_AUDIO_STT_FALLBACK_PROVIDER || "openai").toLowerCase();
   return {
     baseUrl,
     apiKey: process.env.ONIA_AUDIO_STT_API_KEY || process.env.STT_API_KEY || "",
     model: process.env.ONIA_AUDIO_STT_MODEL || process.env.STT_MODEL || "Systran/faster-distil-whisper-large-v3",
     language: process.env.ONIA_AUDIO_STT_LANGUAGE || "es",
     maxFileMb: parsePositiveInt(process.env.ONIA_AUDIO_MAX_MB, 50),
+    fallbackProvider: fallbackProvider === "off" || fallbackProvider === "none" ? "off" : "openai",
+    fallbackModel: process.env.ONIA_AUDIO_STT_FALLBACK_MODEL || process.env.OPENAI_STT_MODEL || "gpt-4o-mini-transcribe",
   };
 }
 
@@ -95,9 +108,14 @@ function openAIResponsesUrl(baseUrl: string) {
   return `${normalized}/responses`;
 }
 
-function sttTranscriptionUrl(baseUrl: string) {
+function transcriptionUrl(baseUrl: string) {
   const normalized = baseUrl.endsWith("/v1") ? baseUrl : `${baseUrl}/v1`;
   return `${normalized}/audio/transcriptions`;
+}
+
+function healthUrl(baseUrl: string) {
+  const withoutVersion = baseUrl.replace(/\/v1$/, "");
+  return `${withoutVersion}/health`;
 }
 
 function formString(formData: FormData, key: string) {
@@ -143,7 +161,10 @@ async function parseRequest(request: Request): Promise<ParsedAudioRequest> {
   };
 }
 
-async function transcribeAudio(file: File, config: SttConfig) {
+async function transcribeWithEndpoint(
+  file: File,
+  config: { baseUrl: string; apiKey: string; model: string; language: string; maxFileMb: number },
+) {
   if (file.size > config.maxFileMb * 1024 * 1024) {
     throw new Error(`El audio supera ${config.maxFileMb} MB. Procesalo con el script del VPS o divide la reunion.`);
   }
@@ -159,7 +180,7 @@ async function transcribeAudio(file: File, config: SttConfig) {
     headers.authorization = `Bearer ${config.apiKey}`;
   }
 
-  const response = await fetch(sttTranscriptionUrl(config.baseUrl), {
+  const response = await fetch(transcriptionUrl(config.baseUrl), {
     method: "POST",
     headers,
     body: formData,
@@ -187,6 +208,65 @@ async function transcribeAudio(file: File, config: SttConfig) {
   }
 
   throw new Error("El motor STT respondio sin transcript.");
+}
+
+async function transcribeAudio(file: File, stt: SttConfig, openai: OpenAIConfig): Promise<TranscriptionResult> {
+  if (file.size > stt.maxFileMb * 1024 * 1024) {
+    throw new Error(`El audio supera ${stt.maxFileMb} MB. Procesalo con el script del VPS o divide la reunion.`);
+  }
+
+  const attempts: string[] = [];
+
+  try {
+    const transcript = await transcribeWithEndpoint(file, stt);
+    return { transcript, provider: "speaches", model: stt.model, fallbackUsed: false, attempts };
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Speaches no disponible.";
+    attempts.push(`Speaches: ${message.slice(0, 240)}`);
+  }
+
+  if (stt.fallbackProvider === "openai" && openai.apiKey) {
+    try {
+      const transcript = await transcribeWithEndpoint(file, {
+        baseUrl: openai.baseUrl,
+        apiKey: openai.apiKey,
+        model: stt.fallbackModel,
+        language: stt.language,
+        maxFileMb: stt.maxFileMb,
+      });
+      return { transcript, provider: "openai_transcribe", model: stt.fallbackModel, fallbackUsed: true, attempts };
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "OpenAI transcription no disponible.";
+      attempts.push(`OpenAI transcribe: ${message.slice(0, 240)}`);
+    }
+  }
+
+  const fallbackHint =
+    stt.fallbackProvider === "openai"
+      ? " Revisa OPENAI_ONIA_CENTER_API_KEY u OPENAI_API_KEY para fallback barato."
+      : " Activa ONIA_AUDIO_STT_FALLBACK_PROVIDER=openai si quieres fallback barato.";
+  throw new Error(`No se pudo transcribir el audio. ${attempts.join(" | ")}.${fallbackHint}`);
+}
+
+async function checkSttHealth(config: SttConfig) {
+  try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 2500);
+    const response = await fetch(healthUrl(config.baseUrl), {
+      cache: "no-store",
+      signal: controller.signal,
+    });
+    clearTimeout(timeout);
+    return {
+      reachable: response.ok,
+      message: response.ok ? "Speaches local responde." : `Speaches respondio HTTP ${response.status}.`,
+    };
+  } catch {
+    return {
+      reachable: false,
+      message: "Speaches local/tunel no responde.",
+    };
+  }
 }
 
 function extractOpenAIText(payload: OpenAIResponse) {
@@ -336,6 +416,7 @@ export async function GET() {
   const configured = isOniaCenterConfigured();
   const openai = getOpenAIConfig();
   const stt = getSttConfig();
+  const sttHealth = await checkSttHealth(stt);
 
   return NextResponse.json({
     ok: true,
@@ -347,10 +428,16 @@ export async function GET() {
       baseUrlConfigured: Boolean(stt.baseUrl),
       model: stt.model,
       maxFileMb: stt.maxFileMb,
+      reachable: sttHealth.reachable,
+      healthMessage: sttHealth.message,
+      fallbackProvider: stt.fallbackProvider,
+      fallbackModel: stt.fallbackModel,
+      fallbackConfigured: stt.fallbackProvider === "openai" && Boolean(openai.apiKey),
     },
     openai: {
       configured: Boolean(openai.apiKey),
       model: openai.model,
+      maxOutputTokens: openai.maxOutputTokens,
     },
   });
 }
@@ -397,11 +484,18 @@ export async function POST(request: Request) {
   const openai = getOpenAIConfig();
   let transcript = parsed.transcript;
   let sttSource = "transcript_manual";
+  let sttModel: string | null = null;
+  let sttFallbackUsed = false;
+  let sttAttempts: string[] = [];
 
   try {
     if (parsed.audioFile && !transcript) {
-      transcript = await transcribeAudio(parsed.audioFile, stt);
-      sttSource = "speaches";
+      const transcription = await transcribeAudio(parsed.audioFile, stt, openai);
+      transcript = transcription.transcript;
+      sttSource = transcription.provider;
+      sttModel = transcription.model;
+      sttFallbackUsed = transcription.fallbackUsed;
+      sttAttempts = transcription.attempts;
     }
   } catch (error) {
     const message = error instanceof Error ? error.message : "No se pudo transcribir el audio.";
@@ -412,7 +506,7 @@ export async function POST(request: Request) {
         message,
         transcript: null,
         analysis: null,
-        source: { stt: sttSource, sttBaseUrl: stt.baseUrl, sttModel: stt.model },
+        source: { stt: sttSource, sttBaseUrl: stt.baseUrl, sttModel: sttModel ?? stt.model, sttAttempts },
       },
       { status: 502 },
     );
@@ -427,7 +521,7 @@ export async function POST(request: Request) {
         missingConfiguration: ["OPENAI_ONIA_CENTER_API_KEY"],
         transcript,
         analysis: null,
-        source: { stt: sttSource, sttModel: stt.model },
+        source: { stt: sttSource, sttModel, sttFallbackUsed, sttAttempts },
       },
       { status: 200 },
     );
@@ -444,7 +538,9 @@ export async function POST(request: Request) {
       responseId: result.responseId,
       source: {
         stt: sttSource,
-        sttModel: sttSource === "speaches" ? stt.model : null,
+        sttModel,
+        sttFallbackUsed,
+        sttAttempts,
         analysisProvider: "openai",
         analysisModel: openai.model,
       },
@@ -458,7 +554,7 @@ export async function POST(request: Request) {
         message,
         transcript,
         analysis: null,
-        source: { stt: sttSource, sttModel: stt.model, analysisProvider: "openai", analysisModel: openai.model },
+        source: { stt: sttSource, sttModel, sttFallbackUsed, sttAttempts, analysisProvider: "openai", analysisModel: openai.model },
       },
       { status: 502 },
     );
