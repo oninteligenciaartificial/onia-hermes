@@ -1,6 +1,6 @@
 # ONIA Cal.com / Cal.diy Deploy Kit
 
-Target: `https://onia-calcom.hqdqgh.easypanel.host`
+Target: `https://cal.onia.com.bo`
 
 ## Purpose
 
@@ -30,16 +30,22 @@ Primary self-host flow uses:
 - ONIA Center lead creation for every booking, pending accept/cancel/reassign.
 - Final client confirmation email only after ONIA accepts the booking by Telegram.
 
-Public temporary URL:
+Public production URL:
+
+```text
+https://cal.onia.com.bo
+```
+
+Previous temporary URL:
 
 ```text
 https://onia-calcom.hqdqgh.easypanel.host
 ```
 
-Final DNS pending:
+DNS:
 
 ```text
-https://cal.onia.com.bo
+cal.onia.com.bo -> 187.77.16.63
 ```
 
 ## Important Decision
@@ -86,8 +92,8 @@ Recommended follow-up events later:
 
 ```bash
 docker compose ps
-curl -I https://onia-calcom.hqdqgh.easypanel.host
-curl -sS -i https://onia-calcom.hqdqgh.easypanel.host/api/auth/session
+curl -I https://cal.onia.com.bo/auth/login
+curl -sS -i https://cal.onia.com.bo/api/auth/session
 ```
 
 ## Rollback

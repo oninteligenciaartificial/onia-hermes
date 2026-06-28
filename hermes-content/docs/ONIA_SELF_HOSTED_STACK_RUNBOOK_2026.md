@@ -1,7 +1,7 @@
 # ONIA Self-hosted Stack Runbook 2026
 
 Estado: desplegado por perfiles privados. No contiene secretos.
-Actualizado: 2026-06-26 America/Caracas.
+Actualizado: 2026-06-28 America/Caracas.
 
 ## Diagnostico
 
@@ -10,6 +10,7 @@ orquesta y audita. Las herramientas self-hosted no deben convertirse en paneles
 sueltos; cada una debe entrar como capacidad controlada:
 
 - Supabase: memoria/base privada.
+- ONIA Center: sistema operativo interno con login por rol.
 - n8n: ejecucion de procesos.
 - LiteLLM: gateway de modelos y costos.
 - Open WebUI: cockpit interno.
@@ -87,6 +88,7 @@ npm run deploy:selfhosted -- --profile prepare-firecrawl
 | Mailpit | Prepared | `127.0.0.1:3104` web / `127.0.0.1:3025` SMTP | Solo QA, no entrega productiva. |
 | Listmonk | Prepared | `127.0.0.1:3105` | Campanas/listas; SMTP pendiente de DNS/reputacion. |
 | Firecrawl | Prepared gated | `127.0.0.1:3106` si se arranca | No iniciado por defecto; workload pesado de navegador/API. |
+| ONIA Center | Publico con login | `https://center.onia.com.bo` | Contenedor `onia-center`; usa Supabase privado por red Docker. |
 
 Modelos expuestos por LiteLLM:
 
@@ -101,6 +103,7 @@ Servicios ya existentes detectados antes de este kit:
 - Supabase self-hosted privado.
 - n8n en Easypanel.
 - Cal.com self-hosted.
+- ONIA Center publico con auth.
 - SearXNG local en `127.0.0.1:8080`.
 - Chatwoot en stack Easypanel `onia-chatbot`.
 
@@ -205,7 +208,8 @@ Stirling PDF: healthy, local VPS 127.0.0.1:3103, HTTP 401 esperado por login
 LiteLLM: healthy, local VPS 127.0.0.1:4000, /health/liveliness HTTP 200
 Crawl4AI: healthy privado, local VPS 127.0.0.1:11235, activado despues de KVM 4
 SearXNG: running, local VPS 127.0.0.1:8080, HTTP 200
-Cal.com: healthy, publico https://onia-calcom.hqdqgh.easypanel.host, HTTP 307 a /auth/login
+Cal.com: healthy, publico https://cal.onia.com.bo, HTTP 200 en /auth/login
+ONIA Center: running, publico https://center.onia.com.bo, login HTTP 200
 n8n: publico https://n8n-sergio-n8n.hqdqgh.easypanel.host, HTTP 200
 Chatwoot: publico https://onia-chatbot-chatwoot.hqdqgh.easypanel.host, HTTP 200
 ```
@@ -254,13 +258,36 @@ La ruta agregada apunta `onia-calcom.hqdqgh.easypanel.host` a
 `http://onia-calcom:3000/` en la red externa `easypanel`. El contenedor Cal.com
 ya declara alias `onia-calcom` en esa red.
 
-Validacion publica del 2026-06-26:
+Validacion publica Cal del 2026-06-28:
 
 ```text
-http://onia-calcom.hqdqgh.easypanel.host -> 308 HTTPS
-https://onia-calcom.hqdqgh.easypanel.host -> 307 /auth/login
-https://onia-calcom.hqdqgh.easypanel.host/auth/login -> 200
-GET https://onia-calcom.hqdqgh.easypanel.host/api/auth/session -> 200 {}
+http://cal.onia.com.bo -> 308 HTTPS
+https://cal.onia.com.bo/auth/login -> 200
+GET https://cal.onia.com.bo/api/auth/session -> 200 {}
+EMAIL_FROM=business@onia.com.bo
+```
+
+ONIA Center se desplego el 2026-06-28:
+
+```text
+DNS: center.onia.com.bo -> 187.77.16.63
+Runtime source: /opt/onia-center-src/web-factory
+Runtime app: /opt/onia-center/runtime-next
+Env: /opt/onia-center/.env (600)
+Container: onia-center
+Networks: easypanel, supabase_default
+Supabase internal URL: http://supabase-kong:8000
+Traefik backup: /etc/easypanel/traefik/config/main.yaml.bak-onia-center-20260628205227
+```
+
+Validacion publica ONIA Center del 2026-06-28:
+
+```text
+https://center.onia.com.bo/onia-center/login -> 200
+https://center.onia.com.bo/api/onia-center/auth/status -> 401 auth_required sin missingConfiguration
+https://center.onia.com.bo/onia-center/equipo -> 307 login si no hay sesion
+Login alias arthur -> 200 authenticated
+Login alias vendedora -> 200 authenticated
 ```
 
 Recursos despues de activar todo:
@@ -288,6 +315,8 @@ Vigilancia:
 
 - No publicar ningun panel directo a internet al inicio.
 - No exponer Supabase compartido por DNS publico.
+- ONIA Center puede ser publico solo detras de login por rol; Supabase debe
+  seguir en red privada y no en DNS publico.
 - No montar Docker socket en agentes.
 - No guardar llaves de modelos en compose ni en repo.
 - Dify no debe correr con su compose oficial sin revisar puertos 80/443 porque

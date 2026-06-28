@@ -1,8 +1,9 @@
 # ONIA Center Auth and RLS Activation 2026-06-23
 
-Estado: implementado en repo y aplicado en Supabase self-hosted del VPS.
-Pendiente: crear usuarios Auth reales, mapearlos a perfiles y cargar variables
-de entorno en el deploy web.
+Estado: implementado, aplicado en Supabase self-hosted y desplegado en dominio
+publico con login por rol.
+Pendiente: rotar/entregar credenciales iniciales por canal seguro y crear UI de
+administracion de miembros.
 
 ## Objetivo
 
@@ -38,6 +39,38 @@ Solo nombres, no valores:
 
 Regla: `SERVICE_ROLE_KEY` nunca va al navegador. Solo server-side.
 
+## Deploy publico activo
+
+ONIA Center ya no depende de `localhost` para Arthur ni vendedores.
+
+Estado validado el 2026-06-28:
+
+- URL publica: `https://center.onia.com.bo/onia-center/login`
+- Ruta equipo: `https://center.onia.com.bo/onia-center/equipo`
+- Contenedor: `onia-center`
+- Runtime: Next standalone en `/opt/onia-center/runtime-next`
+- Env runtime: `/opt/onia-center/.env` con permisos `600`.
+- Redes Docker: `easypanel` para Traefik y `supabase_default` para Supabase
+  privado.
+- Supabase interno desde contenedor: `http://supabase-kong:8000`.
+- Traefik route backup:
+  `/etc/easypanel/traefik/config/main.yaml.bak-onia-center-20260628205227`.
+
+Validacion:
+
+```powershell
+curl -I https://center.onia.com.bo/onia-center/login
+curl -sS -i https://center.onia.com.bo/api/onia-center/auth/status
+```
+
+Resultado esperado sin sesion:
+
+```text
+/onia-center/login -> 200
+/api/onia-center/auth/status -> 401 auth_required sin missingConfiguration
+/onia-center/equipo -> redirect a login
+```
+
 ## Orden de activacion
 
 1. Hacer backup de Supabase.
@@ -59,9 +92,9 @@ Aplicado en VPS el 2026-06-23:
 
 ## Mapeo de usuarios
 
-El VPS ya tiene perfiles `sergio` y `arthur`, pero al 2026-06-23 no hay usuarios
-en `auth.users` y ambos perfiles tienen `auth_user_id` vacio. No inventar emails
-ni passwords. Crear y mapear usuarios con el script seguro:
+El VPS ya tiene perfiles `sergio`, `arthur` y `seller_001` mapeados a Supabase
+Auth. No registrar passwords en repo ni runbooks. Crear o resetear usuarios con
+el script seguro:
 
 ```powershell
 $env:ONIA_CENTER_SUPABASE_URL="http://127.0.0.1:54321"
@@ -87,6 +120,15 @@ Usuario Sergio activado en VPS el 2026-06-24:
 - `onia_center.user_profiles.auth_user_id` enlazado.
 - Membresia `onia / sergio / sergio_private` activa.
 - Password no se registra en repo ni runbook.
+
+Usuarios activados en VPS el 2026-06-28:
+
+- Arthur: email tecnico `arthur@onia.com.bo`, alias `arthur`, rol `arthur`,
+  scope `internal_restricted`.
+- Vendedora inicial: email tecnico `vendedora@onia.com.bo`, alias `vendedora`,
+  user key `seller_001`, rol `seller`, scope `seller_basic`.
+- Archivo local con accesos iniciales: `C:\Users\PC\.onia\onia-center-access-20260628.txt`.
+- Copia segura en VPS: `/root/.hermes/onia-center-access-20260628.txt`.
 
 Arthur queda como colaborador operativo, arriba de vendedor y debajo de Sergio:
 
@@ -155,8 +197,8 @@ fallback por rol.
 
 ## Pendiente
 
-- Crear usuarios Auth reales cuando Sergio defina emails y passwords.
-- Cargar `ONIA_CENTER_SUPABASE_ANON_KEY` en entorno seguro.
+- Entregar credenciales iniciales por canal seguro y rotarlas si se comparten
+  por chat o WhatsApp.
 - Mover `source.ts` y `operating-source.ts` privados a APIs server-only por rol.
 - Crear UI de administracion de miembros despues de validar RLS.
 - Agregar refresh token automatico si las sesiones largas lo requieren.

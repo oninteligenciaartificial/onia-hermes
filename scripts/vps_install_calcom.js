@@ -23,7 +23,7 @@ function ensureDir(dir) {
 }
 
 function getConfig() {
-  const domain = process.env.CALCOM_DOMAIN || "cal.onia.ai";
+  const domain = process.env.CALCOM_DOMAIN || "cal.onia.com.bo";
   const baseUrl = process.env.CALCOM_BASE_URL || `https://${domain}`;
   return {
     domain,
@@ -34,7 +34,7 @@ function getConfig() {
     redisImage: process.env.CALCOM_REDIS_IMAGE || "redis:7-alpine",
     dbName: process.env.CALCOM_DB_NAME || "calcom",
     dbUser: process.env.CALCOM_DB_USER || "calcom",
-    emailFrom: process.env.CALCOM_EMAIL_FROM || "agenda@onia.ai",
+    emailFrom: process.env.CALCOM_EMAIL_FROM || "business@onia.com.bo",
     smtpHost: process.env.CALCOM_SMTP_HOST || "smtp.gmail.com",
     smtpPort: process.env.CALCOM_SMTP_PORT || "587",
     webhookUrl:
@@ -174,13 +174,13 @@ content systems and future project dashboards.
 
 ## Before Deploy
 
-- Point DNS \`cal.onia.ai\` to the ONIA VPS.
+- Point DNS \`cal.onia.com.bo\` to the ONIA VPS.
 - Confirm VPS/Easypanel access.
 - Generate real secrets on the VPS:
   - \`openssl rand -base64 32\` for \`NEXTAUTH_SECRET\`
   - \`openssl rand -base64 24\` for \`CALENDSO_ENCRYPTION_KEY\`
   - strong hex password for \`POSTGRES_PASSWORD\`; avoid raw base64 in database URLs
-- Confirm SMTP credentials for \`agenda@onia.ai\` or the selected sender.
+- Confirm SMTP credentials for \`business@onia.com.bo\` or the selected sender.
 - Review current Cal.com/Cal.diy licensing and image choice before public use.
 
 ## Event Types To Create

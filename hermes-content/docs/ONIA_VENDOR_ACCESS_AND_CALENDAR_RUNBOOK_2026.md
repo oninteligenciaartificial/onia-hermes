@@ -1,7 +1,7 @@
 # ONIA Vendor Access and Calendar Runbook 2026
 
-Estado: operativo en repo, pendiente de conectar credenciales reales.
-Fecha: 2026-06-26
+Estado: operativo en dominio publico, con usuario vendedor inicial creado.
+Fecha: 2026-06-28
 
 ## Decision
 
@@ -10,7 +10,8 @@ La vendedora no recibe acceso al correo principal de ONIA.
 - Correo publico: `business@onia.com.bo`.
 - Cuenta operativa de agenda: `business@onia.com.bo` cuando Sergio confirme acceso directo.
 - Cuenta de respaldo/recuperacion: `oninteligenciaartificial@gmail.com`.
-- Sistema donde trabaja la vendedora: `/onia-center/equipo`.
+- Sistema donde trabaja la vendedora:
+  `https://center.onia.com.bo/onia-center/equipo`.
 - Rol: `seller`.
 - User key inicial recomendado: `seller_001`.
 
@@ -34,10 +35,20 @@ ONIA.
 Ruta:
 
 ```text
-/onia-center/login?next=/onia-center/equipo
+https://center.onia.com.bo/onia-center/login?next=/onia-center/equipo
 ```
 
-Crear usuario cuando las variables Supabase esten disponibles:
+Usuario inicial creado el 2026-06-28:
+
+- Login alias: `vendedora`.
+- Email tecnico: `vendedora@onia.com.bo`.
+- User key: `seller_001`.
+- Rol: `seller`.
+- Scope: `seller_basic`.
+- Archivo local con password inicial:
+  `C:\Users\PC\.onia\onia-center-access-20260628.txt`.
+
+Para crear o resetear vendedores:
 
 ```powershell
 $env:ONIA_CENTER_SUPABASE_URL="<url-supabase>"
@@ -104,8 +115,8 @@ Reglas:
 Configuracion recomendada:
 
 - Cal publico principal: self-host en
-  `https://onia-calcom.hqdqgh.easypanel.host`.
-- Dominio final pendiente: `https://cal.onia.com.bo`.
+  `https://cal.onia.com.bo`.
+- Dominio temporal anterior: `https://onia-calcom.hqdqgh.easypanel.host`.
 - Cal hosted gratis: fallback solamente si self-host bloquea una reserva real.
 - Cuenta publica: `business@onia.com.bo`.
 - Nombre publico: `ONIA | Agenda Comercial`.
@@ -131,17 +142,10 @@ Version profesional:
 
 ## Bloqueos actuales
 
-En esta sesion local no estan configuradas:
-
-- `ONIA_CENTER_SUPABASE_URL`;
-- `ONIA_CENTER_SUPABASE_SERVICE_ROLE_KEY`;
-- `ONIA_CENTER_SUPABASE_ANON_KEY`.
-
-Por eso no se puede crear el usuario real desde aqui todavia.
-
-Tampoco se puede confirmar acceso directo a `business@onia.com.bo` desde el
-conector Gmail actual, porque el conector conectado es
-`oninteligenciaartificial@gmail.com`.
+- Falta configurar event types finales dentro de Cal.
+- Falta conectar Google Calendar real y probar disponibilidad.
+- Falta conectar webhook Cal -> n8n -> ONIA Center -> Telegram.
+- Falta confirmar acceso directo y 2FA de `business@onia.com.bo`.
 
 ## Checklist de activacion
 
@@ -149,9 +153,9 @@ conector Gmail actual, porque el conector conectado es
 2. Activar 2FA y rotar password si fue expuesto.
 3. Configurar Cal self-host con `business@onia.com.bo`.
 4. Activar Requires Confirmation en todos los eventos publicos.
-5. Cargar variables Supabase en entorno seguro.
-6. Crear usuario `seller_001`.
-7. Probar login de la vendedora en `/onia-center/equipo`.
+5. Cargar variables Supabase en entorno seguro. Hecho en VPS.
+6. Crear usuario `seller_001`. Hecho.
+7. Probar login de la vendedora en `/onia-center/equipo`. Hecho por API.
 8. Crear lead de prueba asignado a vendedora.
 9. Verificar que Sergio ve todo y vendedora solo ve lo suyo.
 10. Conectar webhook Cal -> n8n -> ONIA Center -> Telegram.

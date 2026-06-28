@@ -1,8 +1,8 @@
 # ONIA Cal.com / Cal.diy self-host runbook 2026
 
-Estado: activo en dominio temporal y validado publicamente, admin bootstrap
-creado, pendiente SMTP, event types, webhook Cal y DNS oficial.
-Fecha: 2026-06-26.
+Estado: activo en dominio final y validado publicamente, admin bootstrap creado,
+pendiente event types, webhook Cal, Google Calendar y prueba SMTP.
+Fecha: 2026-06-28.
 
 ## Decision
 
@@ -13,8 +13,8 @@ Calendar, DNS o webhook.
 
 Estado self-host:
 
-- Temporal activo y validado: `https://onia-calcom.hqdqgh.easypanel.host`
-- Dominio final pendiente DNS: `https://cal.onia.com.bo`
+- Produccion activo y validado: `https://cal.onia.com.bo`
+- Temporal anterior: `https://onia-calcom.hqdqgh.easypanel.host`
 
 Conectarlo a:
 
@@ -26,8 +26,8 @@ Conectarlo a:
 
 ## Diagnostico
 
-- `cal.onia.com.bo` resolvio durante la revision local del 2026-06-26, pero
-  apunta a `64.29.17.65` y `64.29.17.1`, no al VPS ONIA `187.77.16.63`.
+- `cal.onia.com.bo` resolvio durante la revision del 2026-06-28 a
+  `187.77.16.63`.
 - Se uso la llave local `onia_hermes_vps_ed25519` para activar el servicio en el
   VPS.
 - Cal.com `v6.2.0`, Postgres y Redis quedaron activos en `/opt/onia-calcom`.
@@ -41,6 +41,12 @@ Conectarlo a:
     `200 {}`; no usar `curl -I` en este endpoint porque HEAD responde `400`.
 - Backup de Traefik antes del ultimo fix:
   `/etc/easypanel/traefik/config/main.yaml.bak-onia-calcom-fix-20260626212232`.
+- Backup de Traefik antes de activar dominio final:
+  `/etc/easypanel/traefik/config/main.yaml.bak-onia-calcom-final-domain-20260628203654`.
+- Env backup antes de dominio final:
+  `/opt/onia-calcom/.env.bak-final-domain-20260628203654`.
+- Env backup antes de corregir remitente:
+  `/opt/onia-calcom/.env.bak-email-from-20260628203856`.
 - El setup inicial ya fue completado con admin bootstrap. La API
   `/api/auth/setup` ahora responde `400 No setup needed` ante nuevos intentos.
 - La credencial bootstrap quedo fuera del repo:
@@ -62,8 +68,7 @@ Conectarlo a:
 
 ```text
 Cliente/prospecto
-  -> onia-calcom.hqdqgh.easypanel.host (temporal)
-  -> cal.onia.com.bo (final, cuando DNS este listo)
+  -> cal.onia.com.bo
   -> Cal booking
   -> webhook n8n /calcom-booking
   -> Google Calendar
@@ -107,9 +112,8 @@ Crear para dominio final:
 cal.onia.com.bo -> VPS ONIA
 ```
 
-En el proveedor DNS de `onia.com.bo`, reemplazar los A records actuales de
-`cal` para que apunten solo a `187.77.16.63`. No activar el link en Instagram
-hasta que:
+En el proveedor DNS de `onia.com.bo`, `cal` debe apuntar a `187.77.16.63`.
+Validar con:
 
 ```powershell
 Resolve-DnsName cal.onia.com.bo
@@ -245,8 +249,6 @@ docker compose ps
 docker compose logs --tail=120 calcom
 curl -I https://cal.onia.com.bo
 curl -sS -i https://cal.onia.com.bo/api/auth/session
-curl -I https://onia-calcom.hqdqgh.easypanel.host/auth/login
-curl -sS -i https://onia-calcom.hqdqgh.easypanel.host/api/auth/session
 ```
 
 Prueba funcional:
@@ -267,9 +269,7 @@ limit 5;
 
 ## Bloqueos actuales
 
-- Falta corregir DNS `cal.onia.com.bo` para que apunte al VPS ONIA.
-- Falta definir SMTP real para `business@onia.com.bo` o
-  `agenda@onia.com.bo`.
+- Falta probar SMTP real con `business@onia.com.bo`.
 - Falta crear event types y webhook dentro del panel de Cal.
 - Falta conectar Google Calendar real y probar disponibilidad.
 - Falta revisar/confirmar licencia y eleccion final de imagen Cal.com/Cal.diy
