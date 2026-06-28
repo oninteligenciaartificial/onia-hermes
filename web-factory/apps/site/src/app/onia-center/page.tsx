@@ -187,6 +187,7 @@ const navGroups = ["Trabajo", "Ventas", "Entrega", "IA y automatizacion", "Diner
 
 const heroActionItems = [
   { id: "uso-diario", label: "Captura rapida", icon: FileCheck2 },
+  { id: "audio-intelligence", label: "Audio IA", icon: Mic },
   { id: "ideas", label: "Ideas", icon: Lightbulb },
   { id: "evidencias", label: "Evidencias", icon: ShieldCheck },
 ] as const;
@@ -556,6 +557,7 @@ export default function OniaCenterPage() {
   const activeModule = moduleCopy[activeView] ?? moduleCopy.dashboard;
   const activeNavItem = allowedNavItems.find((item) => item.id === activeView) ?? allowedNavItems[0] ?? navItems[0];
   const ActiveModuleIcon = activeNavItem.icon;
+  const showOperationalContext = ["integraciones", "seguridad", "roles", "archivo"].includes(activeView);
   const groupedNavItems = useMemo(
     () =>
       navGroups
@@ -792,44 +794,46 @@ export default function OniaCenterPage() {
           </div>
         </header>
 
-        <section className="onia-active-module" aria-label="Pantalla activa y conexion">
-          <article>
-            <span>
-              <ActiveModuleIcon size={17} />
-              Pantalla activa
-            </span>
-            <strong>{activeNavItem.label}</strong>
-            <p>{activeModule.content.join(" / ")}</p>
-          </article>
-          <article className={`is-${runtimeConnection.state}`}>
-            <span>
-              <Database size={17} />
-              Runtime
-            </span>
-            <strong>{runtimeConnection.state === "connected" ? "Supabase conectado" : runtimeConnection.mode}</strong>
-            <p>{runtimeConnection.detail}</p>
-          </article>
-          <article>
-            <span>
-              <ShieldCheck size={17} />
-              Sesion y rol
-            </span>
-            <strong>{sessionRole ? sessionLabel : "Verificando sesion"}</strong>
-            <p>{privateVisible ? "Vista Sergio completa." : "Vista filtrada por permisos."}</p>
-          </article>
-          <article>
-            <span>
-              <BarChart3 size={17} />
-              Datos vivos
-            </span>
-            <strong>
-              {runtimeConnection.counts.tasks} tareas / {runtimeConnection.counts.reviews} revisiones
-            </strong>
-            <p>
-              Leads {runtimeConnection.counts.leads}, ideas {runtimeConnection.counts.ideas}, Codex {runtimeConnection.counts.codexJobs}, notas {runtimeConnection.counts.notes}.
-            </p>
-          </article>
-        </section>
+        {showOperationalContext ? (
+          <section className="onia-active-module" aria-label="Pantalla activa y conexion">
+            <article>
+              <span>
+                <ActiveModuleIcon size={17} />
+                Pantalla activa
+              </span>
+              <strong>{activeNavItem.label}</strong>
+              <p>{activeModule.content.join(" / ")}</p>
+            </article>
+            <article className={`is-${runtimeConnection.state}`}>
+              <span>
+                <Database size={17} />
+                Runtime
+              </span>
+              <strong>{runtimeConnection.state === "connected" ? "Supabase conectado" : runtimeConnection.mode}</strong>
+              <p>{runtimeConnection.detail}</p>
+            </article>
+            <article>
+              <span>
+                <ShieldCheck size={17} />
+                Sesion y rol
+              </span>
+              <strong>{sessionRole ? sessionLabel : "Verificando sesion"}</strong>
+              <p>{privateVisible ? "Vista Sergio completa." : "Vista filtrada por permisos."}</p>
+            </article>
+            <article>
+              <span>
+                <BarChart3 size={17} />
+                Datos vivos
+              </span>
+              <strong>
+                {runtimeConnection.counts.tasks} tareas / {runtimeConnection.counts.reviews} revisiones
+              </strong>
+              <p>
+                Leads {runtimeConnection.counts.leads}, ideas {runtimeConnection.counts.ideas}, Codex {runtimeConnection.counts.codexJobs}, notas {runtimeConnection.counts.notes}.
+              </p>
+            </article>
+          </section>
+        ) : null}
 
         {["dashboard", "uso-diario", "calendario-sergio", "asistente", "audio-intelligence", "ideas", "codex", "integraciones", "servicios"].includes(activeView) ? (
           <OperatingWorkspace

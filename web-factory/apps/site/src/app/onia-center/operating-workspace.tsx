@@ -1082,10 +1082,12 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
     const pendingReviews = visibleReviews.filter((review) => review.status === "pendiente").length;
     const recordedPayments = visibleNotes.filter((note) => note.kind === "cobro").length;
     const evidenceRecords = visibleNotes.filter((note) => note.kind === "evidencia").length;
+    const meetingNotes = visibleNotes.filter((note) => note.kind === "llamada").length;
     const ideasInbox = visibleIdeas.filter((idea) => ["inbox", "queued"].includes(idea.status)).length;
     const codexReady = visibleCodexJobs.filter((job) => ["ready", "review", "in_codex"].includes(job.status)).length;
+    const proposalLeads = visibleLeads.filter((lead) => lead.status === "propuesta").length;
 
-    return { hotLeads, pendingTasks, pendingReviews, recordedPayments, evidenceRecords, ideasInbox, codexReady };
+    return { hotLeads, pendingTasks, pendingReviews, recordedPayments, evidenceRecords, meetingNotes, ideasInbox, codexReady, proposalLeads };
   }, [visibleCodexJobs, visibleIdeas, visibleLeads, visibleNotes, visibleReviews, visibleTasks]);
 
   const pendingTodayTasks = useMemo(
@@ -1652,6 +1654,13 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
       ? "assigned_only"
       : ideaForm.visibility;
   const copy = workspaceCopy[workspaceView];
+  const isDailyWorkspace = workspaceView === "daily";
+  const showWorkspaceAdminActions = ["connections", "assistant", "codex-queue"].includes(workspaceView);
+  const persistenceCopy = storageMode === "supabase"
+    ? isDailyWorkspace
+      ? "Datos sincronizados."
+      : "Los cambios se sincronizan con Supabase self-hosted."
+    : "Borrador local en este navegador.";
   const audioAnalysis = audioResult?.analysis ?? null;
   const audioProposal = proposalDraft(audioAnalysis);
   const audioTranscriptPreview = audioResult?.transcript || audioTranscript;
@@ -1663,57 +1672,83 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
           <span>{copy.label}</span>
           <h2>{copy.title}</h2>
           <p>
-            {copy.description}
-            {storageMode === "supabase"
-              ? " Los cambios se sincronizan con Supabase self-hosted."
-              : " Todo persiste en este navegador mientras falta configuracion server-side."}
+            {copy.description} {persistenceCopy}
           </p>
         </div>
-        <div className="onia-workspace-actions">
-          <button type="button" onClick={copySnapshot}>
-            <Copy size={15} />
-            Copiar snapshot
-          </button>
-          <button type="button" onClick={resetRuntime}>
-            <RotateCcw size={15} />
-            {storageMode === "supabase" ? "Bloqueado DB" : "Reiniciar local"}
-          </button>
-        </div>
+        {showWorkspaceAdminActions ? (
+          <div className="onia-workspace-actions">
+            <button type="button" onClick={copySnapshot}>
+              <Copy size={15} />
+              Copiar snapshot
+            </button>
+            <button type="button" onClick={resetRuntime}>
+              <RotateCcw size={15} />
+              {storageMode === "supabase" ? "Bloqueado DB" : "Reiniciar local"}
+            </button>
+          </div>
+        ) : null}
       </div>
 
-      <div className="onia-live-metrics">
-        <article>
-          <span>Leads abiertos</span>
-          <strong>{summary.hotLeads}</strong>
-          <small>Visibles para {roleLabel(selectedRole)}</small>
-        </article>
-        <article>
-          <span>Tareas pendientes</span>
-          <strong>{summary.pendingTasks}</strong>
-          <small>Filtradas por rol</small>
-        </article>
-        <article>
-          <span>Evidencia/info</span>
-          <strong>{summary.evidenceRecords}</strong>
-          <small>Pruebas o datos valiosos</small>
-        </article>
-        <article>
-          <span>Ideas inbox</span>
-          <strong>{summary.ideasInbox}</strong>
-          <small>Reels, links y notas para IA</small>
-        </article>
-        {selectedRole === "sergio" || selectedRole === "arthur" ? (
-          <article>
-            <span>Codex listos</span>
-            <strong>{summary.codexReady}</strong>
-            <small>Jobs tecnicos con contexto</small>
-          </article>
-        ) : null}
-        <article>
-          <span>Cobros anotados</span>
-          <strong>{summary.recordedPayments}</strong>
-          <small>No aprueban comision solos</small>
-        </article>
+      <div className={`onia-live-metrics${isDailyWorkspace ? " is-focused" : ""}`}>
+        {isDailyWorkspace ? (
+          <>
+            <article>
+              <span>Tareas pendientes</span>
+              <strong>{summary.pendingTasks}</strong>
+              <small>Lo que mueve entrega y ventas hoy</small>
+            </article>
+            <article>
+              <span>Leads abiertos</span>
+              <strong>{summary.hotLeads}</strong>
+              <small>Oportunidades visibles para {roleLabel(selectedRole)}</small>
+            </article>
+            <article>
+              <span>Ideas para revisar</span>
+              <strong>{summary.ideasInbox}</strong>
+              <small>Referencias utiles, no ruido operativo</small>
+            </article>
+            <article>
+              <span>Audio/propuestas</span>
+              <strong>{summary.meetingNotes + summary.proposalLeads}</strong>
+              <small>Reuniones o leads en etapa propuesta</small>
+            </article>
+          </>
+        ) : (
+          <>
+            <article>
+              <span>Leads abiertos</span>
+              <strong>{summary.hotLeads}</strong>
+              <small>Visibles para {roleLabel(selectedRole)}</small>
+            </article>
+            <article>
+              <span>Tareas pendientes</span>
+              <strong>{summary.pendingTasks}</strong>
+              <small>Filtradas por rol</small>
+            </article>
+            <article>
+              <span>Evidencia/info</span>
+              <strong>{summary.evidenceRecords}</strong>
+              <small>Pruebas o datos valiosos</small>
+            </article>
+            <article>
+              <span>Ideas inbox</span>
+              <strong>{summary.ideasInbox}</strong>
+              <small>Reels, links y notas para IA</small>
+            </article>
+            {selectedRole === "sergio" || selectedRole === "arthur" ? (
+              <article>
+                <span>Codex listos</span>
+                <strong>{summary.codexReady}</strong>
+                <small>Jobs tecnicos con contexto</small>
+              </article>
+            ) : null}
+            <article>
+              <span>Cobros anotados</span>
+              <strong>{summary.recordedPayments}</strong>
+              <small>No aprueban comision solos</small>
+            </article>
+          </>
+        )}
       </div>
 
       {workspaceView === "seller-services" ? (

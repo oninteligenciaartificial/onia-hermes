@@ -1467,6 +1467,10 @@
   margin-bottom: 12px;
 }
 
+.onia-live-metrics.is-focused {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
 .onia-live-metrics article,
 .onia-live-card,
 .onia-selfhosted-panel article,
@@ -2402,6 +2406,10 @@
   .onia-role-scope-panel,
   .onia-readiness-columns,
   .onia-readiness-meta {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .onia-live-metrics.is-focused {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 

@@ -138,6 +138,84 @@ Flujo minimo rentable:
 4. Hermes analiza oportunidad y prepara propuesta.
 5. Sergio revisa antes de enviar al cliente.
 
+## Grabacion de reuniones
+
+Actualizacion: 2026-06-28.
+
+Decision operativa:
+
+- MVP recomendado: OBS Studio local en Windows.
+- Alternativa simple para audio de computadora: Audacity con WASAPI loopback.
+- Automatizacion posterior: bot open source solo cuando ONIA tenga volumen real
+  de reuniones, reglas de consentimiento y cuenta operativa separada.
+
+### Opcion recomendada ahora: OBS Studio
+
+Por que:
+
+- Es gratis y open source.
+- Graba audio del navegador/reunion y microfono en la misma sesion.
+- En Windows 10/11 permite capturar audio por aplicacion con Application Audio
+  Capture o audio incluido en Window Capture.
+- No depende de que un bot entre a Google Meet, Zoom o Teams.
+- Reduce riesgo de bloqueo por terminos de plataforma.
+
+Setup recomendado en la PC de Sergio:
+
+1. Instalar OBS Studio desde `https://obsproject.com/`.
+2. Crear una escena `ONIA Reuniones`.
+3. Agregar fuente `Application Audio Capture` o `Window Capture` para Chrome,
+   Brave, Zoom o Teams.
+4. Agregar fuente `Audio Input Capture` para el microfono.
+5. Desactivar `Desktop Audio` global si se usa audio por aplicacion, para evitar
+   eco o duplicados.
+6. En `Settings > Output > Recording`, guardar en `.mkv` o `.mp4`.
+7. Antes de iniciar la reunion, avisar al cliente y empezar grabacion.
+8. Al terminar, subir el archivo a `/onia-center?view=audio-intelligence`.
+
+Frase sugerida de consentimiento:
+
+```text
+Voy a grabar esta llamada solo para tomar mejores notas y preparar una propuesta
+mas precisa. No se publica ni se comparte fuera de ONIA. Si prefieren que no,
+tomamos notas manuales.
+```
+
+### Alternativa liviana: Audacity
+
+Usar Audacity solo cuando se quiera capturar audio del sistema de forma rapida,
+sin video ni layout de escena. En Windows, el metodo recomendado es `Windows
+WASAPI` con entrada `(loopback)` del dispositivo por el que se escucha la
+reunion.
+
+Limitacion: Audacity es menos comodo para mezclar microfono + audio de reunion
+en una sola operacion. Para llamadas comerciales reales, OBS sigue siendo mejor.
+
+### Bots open source evaluados
+
+| Opcion | Uso | Recomendacion ONIA |
+|---|---|---|
+| `screenappai/meeting-bot` | Bot TypeScript/Node/Docker para entrar y grabar Google Meet, Teams y Zoom. | Interesante para fase 2. MIT, pero aun joven; probar en entorno aislado antes de usar con clientes. |
+| `meetingbot/meetingbot` | Infra open source para enviar bots a Meet/Teams/Zoom con Terraform/AWS. | Potente, pero mas pesado. No recomendado para MVP local por costo operativo. |
+| `jitsi/jibri` | Grabacion/streaming de conferencias Jitsi Meet. | Mejor si ONIA decide usar reuniones propias en Jitsi. Requiere instalacion completa de Jitsi y maquina/VM separada. |
+
+Decision tecnica:
+
+- No instalar bot automatico todavia.
+- Grabar manualmente con OBS y procesar en Audio IA.
+- Mantener Speakr/Speaches como backend privado de transcripcion.
+- Pasar a bot cuando haya al menos 10-15 reuniones mensuales que justifiquen
+  mantenimiento y pruebas de plataforma.
+
+Fuentes:
+
+- OBS Studio: `https://obsproject.com/`
+- OBS Application Audio Capture: `https://obsproject.com/kb/application-audio-capture-guide`
+- Audacity WASAPI loopback: `https://manual.audacityteam.org/man/tutorial_recording_computer_playback_on_windows.html`
+- screenappai/meeting-bot: `https://github.com/screenappai/meeting-bot`
+- meetingbot/meetingbot: `https://github.com/meetingbot/meetingbot`
+- Jitsi Jibri: `https://github.com/jitsi/jibri`
+
 ## Instalacion
 
 Primero auditar:
