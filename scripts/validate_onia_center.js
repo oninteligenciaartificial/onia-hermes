@@ -363,7 +363,7 @@ const requiredOperatingAppMarkers = [
   "TR4 es adaptador externo",
   "getOperatingDashboardSummary",
   "getVisibleProjects",
-  "Dashboard operativo ONIA",
+  "Operacion diaria con evidencia",
 ];
 
 for (const marker of requiredOperatingAppMarkers) {
@@ -431,7 +431,7 @@ const requiredOperatingAgentAppMarkers = [
   "Agentes operativos",
   "Plan mensual, agenda estricta y conexiones",
   "Agente Calendario y Energia Sergio",
-  "Google Calendar privado Sergio",
+  "Google Calendar ONIA",
 ];
 
 for (const marker of requiredOperatingAgentAppMarkers) {

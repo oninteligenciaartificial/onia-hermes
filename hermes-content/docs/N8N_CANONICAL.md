@@ -67,3 +67,22 @@ Flow:
 - Log decision.
 
 Do not migrate Hermes cron jobs to n8n until this workflow is stable.
+
+## ONIA Center Daily Briefing Workflow
+
+Status 2026-06-28:
+
+- Workflow file: `hermes-content/deploy/n8n/workflows/onia-center-daily-briefing.json`
+- Endpoint: `POST /api/onia-center/briefings/daily`
+- Model default: `gpt-5.4-mini`
+- Schedule: Monday to Saturday 06:45 `America/La_Paz`
+- Mode: creates ONIA Center tasks/notes by role and sends Telegram summary when configured.
+
+Activation requirements:
+
+- `N8N_MCP_URL` and `N8N_MCP_TOKEN` available locally, or manual import in the canonical n8n editor.
+- `ONIA_CENTER_BASE_URL` visible from n8n.
+- `ONIA_CENTER_INTERNAL_API_KEY` loaded in both ONIA Center and n8n.
+- `TELEGRAM_BOT_TOKEN` and `TELEGRAM_SERGIO_CHAT_ID` for notifications.
+
+Google Calendar write remains blocked until OAuth is configured and a dry-run is reviewed.

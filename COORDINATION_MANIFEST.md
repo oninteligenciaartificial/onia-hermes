@@ -149,6 +149,7 @@ Canonical files:
 - `hermes-content/docs/ONIA_CENTER_DIFY_ASSISTANT_RUNBOOK_2026.md`
 - `hermes-content/docs/ONIA_CENTER_CODEX_INTEGRATION_RUNBOOK_2026.md`
 - `hermes-content/docs/ONIA_CENTER_AI_MODEL_ROUTING_2026.md`
+- `hermes-content/docs/ONIA_CENTER_DAILY_N8N_BRIEFING_RUNBOOK_2026.md`
 - `hermes-content/docs/ONIA_MEETING_INTELLIGENCE_SYSTEM_2026.md`
 - `hermes-content/docs/ONIA_7000_BOB_PRODUCTION_INFRA_INVESTMENT_PLAN_2026.md`
 - `hermes-content/docs/ONIA_INTERNAL_CAPITAL_ALLOCATION_2026.md`
@@ -165,6 +166,7 @@ Canonical files:
 - `hermes-content/docs/HERMES_OS_CONTROL_CENTER_2026.md`
 - `hermes-content/docs/ONIA_PANEL_VENDEDORES_2026.md`
 - `hermes-content/deploy/selfhosted/`
+- `hermes-content/deploy/n8n/workflows/onia-center-daily-briefing.json`
 - `hermes-content/references/video-brief-template.json`
 - `hermes-content/references/telegram-command-center.json`
 - `hermes-content/references/sergio-strict-calendar-20260623.json`

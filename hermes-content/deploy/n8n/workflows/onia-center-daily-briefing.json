@@ -1,0 +1,210 @@
+{
+  "name": "ONIA Center - Briefing diario operativo",
+  "active": false,
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "45 6 * * 1-6"
+            }
+          ]
+        }
+      },
+      "id": "schedule-daily-0645",
+      "name": "Lunes a sabado 06:45",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -620,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{$env.ONIA_CENTER_BASE_URL + '/api/onia-center/briefings/daily'}}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "={{'Bearer ' + $env.ONIA_CENTER_INTERNAL_API_KEY}}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { date: $now.setZone('America/La_Paz').toFormat('yyyy-MM-dd'), source: 'n8n', audiences: ['sergio', 'arthur', 'seller'], commit: true } }}",
+        "options": {
+          "timeout": 90000
+        }
+      },
+      "id": "call-onia-center-briefing",
+      "name": "Crear briefing en ONIA Center",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -360,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const payload = items[0].json;\nconst data = payload.data || {};\nconst roles = Array.isArray(data.roles) ? data.roles : [];\nconst result = payload.result || {};\nconst date = data.date || new Date().toISOString().slice(0, 10);\nconst createdTasks = Array.isArray(result.createdTasks) ? result.createdTasks.length : 0;\nconst skippedTasks = Array.isArray(result.skippedTasks) ? result.skippedTasks.length : 0;\nconst lines = [\n  `ONIA Center | Plan diario ${date}`,\n  payload.message || 'Briefing generado.',\n  `Tareas nuevas: ${createdTasks}. Omitidas por duplicado: ${skippedTasks}.`,\n  '',\n];\nfor (const role of roles) {\n  const tasks = Array.isArray(role.topTasks) ? role.topTasks.slice(0, 5) : [];\n  lines.push(`${String(role.role || '').toUpperCase()}: ${role.summary || 'Sin resumen.'}`);\n  for (const task of tasks) {\n    lines.push(`- ${task.timeBlock || 'sin bloque'} | ${task.title || 'Tarea sin titulo'}`);\n  }\n  lines.push('');\n}\nlines.push('Regla: solo cuenta si queda registrado con evidencia. n8n agenda y avisa; Sergio aprueba pagos, descuentos, gastos y uso premium.');\nconst text = lines.join('\\n').slice(0, 3900);\nreturn [{\n  json: {\n    ok: Boolean(payload.ok),\n    mode: payload.mode,\n    date,\n    telegramReady: Boolean(process.env.TELEGRAM_BOT_TOKEN && process.env.TELEGRAM_SERGIO_CHAT_ID),\n    chat_id: process.env.TELEGRAM_SERGIO_CHAT_ID || '',\n    text,\n    calendarBlocks: Array.isArray(data.calendarBlocks) ? data.calendarBlocks : [],\n    createdTasks,\n    skippedTasks\n  }\n}];"
+      },
+      "id": "build-telegram-summary",
+      "name": "Preparar resumen Telegram",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -80,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "telegram-ready",
+              "leftValue": "={{$json.telegramReady}}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "telegram-configured",
+      "name": "Telegram configurado?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        180,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{'https://api.telegram.org/bot' + $env.TELEGRAM_BOT_TOKEN + '/sendMessage'}}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { chat_id: $json.chat_id, text: $json.text, disable_web_page_preview: true } }}",
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "id": "send-sergio-telegram",
+      "name": "Enviar a Telegram Sergio",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        460,
+        -80
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = items[0].json;\nreturn [{\n  json: {\n    ok: item.ok,\n    mode: item.mode,\n    date: item.date,\n    calendarReady: Boolean(process.env.GOOGLE_CALENDAR_CLIENT_ID && process.env.GOOGLE_CALENDAR_REFRESH_TOKEN && process.env.GOOGLE_CALENDAR_ID),\n    calendarBlocks: item.calendarBlocks,\n    note: 'Google Calendar queda preparado. Activar escritura solo despues de OAuth y prueba manual.'\n  }\n}];"
+      },
+      "id": "calendar-readiness",
+      "name": "Preparar calendario protegido",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        460,
+        120
+      ]
+    }
+  ],
+  "connections": {
+    "Lunes a sabado 06:45": {
+      "main": [
+        [
+          {
+            "node": "Crear briefing en ONIA Center",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Crear briefing en ONIA Center": {
+      "main": [
+        [
+          {
+            "node": "Preparar resumen Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preparar resumen Telegram": {
+      "main": [
+        [
+          {
+            "node": "Telegram configurado?",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Preparar calendario protegido",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram configurado?": {
+      "main": [
+        [
+          {
+            "node": "Enviar a Telegram Sergio",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    }
+  },
+  "settings": {
+    "timezone": "America/La_Paz",
+    "executionOrder": "v1"
+  },
+  "pinData": {},
+  "versionId": "onia-center-daily-briefing-20260628",
+  "meta": {
+    "templateCredsSetupCompleted": false,
+    "description": "Genera tareas diarias por rol en ONIA Center, evita duplicados y notifica a Sergio por Telegram si las variables existen. No aprueba pagos ni escribe Google Calendar automaticamente."
+  },
+  "tags": [
+    {
+      "name": "onia-center"
+    },
+    {
+      "name": "daily-briefing"
+    },
+    {
+      "name": "safe-automation"
+    }
+  ]
+}
