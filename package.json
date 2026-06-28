@@ -18,6 +18,8 @@
     "onia-center:local": "node scripts/onia_center_local_stack.js",
     "onia-center:local:restart": "node scripts/onia_center_local_stack.js --restart",
     "onia-center:startup": "node scripts/onia_center_local_stack.js --install-startup",
+    "onia-center:tunnels": "node scripts/onia_center_local_stack.js --tunnel-only --watch",
+    "onia-center:tunnels:startup": "node scripts/onia_center_local_stack.js --install-startup --tunnel-only --watch",
     "deploy:selfhosted": "node scripts/vps_install_selfhosted_stack.js",
     "health:n8n-mcp": "node scripts/n8n_mcp_healthcheck.js",
     "deploy:webhook-propuestas": "node scripts/vps-deploy-webhook-propuestas.js",

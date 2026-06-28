@@ -241,6 +241,18 @@ Acceso por tunel:
 ssh -L 3107:127.0.0.1:3107 -L 3108:127.0.0.1:3108 root@187.77.16.63
 ```
 
+En la PC de Sergio, usar el launcher canonico para mantener Supabase + Speakr +
+Speaches:
+
+```powershell
+npm run onia-center:tunnels
+npm run onia-center:tunnels:startup
+```
+
+`onia-center:tunnels:startup` instala el watchdog en el arranque del usuario de
+Windows. Si la carpeta Startup esta bloqueada, el script cae al registro
+`HKCU\Software\Microsoft\Windows\CurrentVersion\Run`.
+
 Validacion en el VPS:
 
 ```bash

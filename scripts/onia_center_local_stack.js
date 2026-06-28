@@ -21,6 +21,9 @@ const vpsUser = process.env.VPS_USER || "root";
 const keyPath = process.env.VPS_KEY_PATH || path.join(os.homedir(), ".ssh", "onia_hermes_vps_ed25519");
 const appPort = Number(process.env.ONIA_CENTER_LOCAL_PORT || 3012);
 const watchIntervalMs = Number(process.env.ONIA_CENTER_TUNNEL_WATCH_MS || 15000);
+const audioTunnelEnabled = process.env.ONIA_AUDIO_TUNNEL_ENABLED !== "false";
+const speakrLocalPort = Number(process.env.ONIA_SPEAKR_LOCAL_PORT || 3107);
+const speachesLocalPort = Number(process.env.ONIA_SPEACHES_LOCAL_PORT || 3108);
 
 fs.mkdirSync(logRoot, { recursive: true });
 
@@ -132,27 +135,39 @@ async function ensureTunnel(supabaseLocalPort) {
   }
 
   const portMap = [
-    { local: supabaseLocalPort, remote: 54321 },
-    { local: 54322, remote: 54322 },
-    { local: 54323, remote: 54323 },
-    { local: 54320, remote: 54320 },
-    { local: 54329, remote: 54329 },
+    { label: "Supabase API", local: supabaseLocalPort, remote: 54321 },
+    { label: "Supabase studio", local: 54322, remote: 54322 },
+    { label: "Supabase db", local: 54323, remote: 54323 },
+    { label: "Supabase auth", local: 54320, remote: 54320 },
+    { label: "Supabase extra", local: 54329, remote: 54329 },
   ];
+
+  if (audioTunnelEnabled) {
+    portMap.push(
+      { label: "Speakr", local: speakrLocalPort, remote: 3107 },
+      { label: "Speaches", local: speachesLocalPort, remote: 3108 },
+    );
+  }
+
   const sshArgs = ["-N", "-o", "ExitOnForwardFailure=yes", "-o", "ServerAliveInterval=30", "-o", "ServerAliveCountMax=3", "-i", keyPath];
+  const requestedPorts = [];
 
   for (const map of portMap) {
     if (!(await isPortOpen(map.local))) {
       sshArgs.push("-L", `${map.local}:127.0.0.1:${map.remote}`);
+      requestedPorts.push(map);
     }
   }
 
   if (!sshArgs.includes("-L")) return;
 
   sshArgs.push(`${vpsUser}@${vpsHost}`);
-  spawnDetached("ssh.exe", sshArgs, "supabase-tunnel.out.log", "supabase-tunnel.err.log");
+  spawnDetached("ssh.exe", sshArgs, "onia-selfhosted-tunnel.out.log", "onia-selfhosted-tunnel.err.log");
 
-  if (!(await waitForPort(supabaseLocalPort, 25))) {
-    throw new Error(`No se pudo levantar el tunel Supabase en 127.0.0.1:${supabaseLocalPort}. Revisa ${path.join(logRoot, "supabase-tunnel.err.log")}`);
+  for (const map of requestedPorts) {
+    if (!(await waitForPort(map.local, 25))) {
+      throw new Error(`No se pudo levantar el tunel ${map.label} en 127.0.0.1:${map.local}. Revisa ${path.join(logRoot, "onia-selfhosted-tunnel.err.log")}`);
+    }
   }
 }
 
@@ -181,6 +196,10 @@ async function main() {
   console.log("ONIA Center local activo");
   if (!tunnelOnly) console.log(`App: http://localhost:${appPort}/onia-center/login`);
   console.log(`Supabase tunnel: 127.0.0.1:${supabaseLocalPort} -> ${vpsHost}:54321`);
+  if (audioTunnelEnabled) {
+    console.log(`Speakr tunnel: 127.0.0.1:${speakrLocalPort} -> ${vpsHost}:3107`);
+    console.log(`Speaches tunnel: 127.0.0.1:${speachesLocalPort} -> ${vpsHost}:3108`);
+  }
   console.log(`Logs: ${logRoot}`);
 
   if (!watch) return;
