@@ -1,18 +1,26 @@
 {
-  "id": "2026-06-27T15-25-24-522Z",
-  "startedAt": "2026-06-27T15:25:24.524Z",
-  "finishedAt": "2026-06-27T15:31:52.624Z",
+  "id": "2026-06-28-web-factory-daily-split-harvest",
+  "startedAt": "2026-06-28T19:30:18.638Z",
+  "finishedAt": "2026-06-28T19:40:18.391Z",
   "policy": "Automated design reference harvest. Screenshots and closed-site structures are reference-only. Code reuse is limited to allowed-after-review repositories and compatible registry/docs code after review.",
   "steps": [
     {
-      "name": "gallery",
-      "out": "data/references/design-sources/gallery-examples/2026-06-27T15-25-24-522Z-design-harvest.json",
+      "name": "gallery-partial",
+      "out": "data/references/design-sources/gallery-examples/2026-06-28T19-30-18-638Z-design-harvest.json",
       "sourceIds": [
         "21st-landing-page-components",
         "registry-directory",
         "magic-ui",
         "aceternity-ui",
-        "aceternity-shadcn-blocks",
+        "aceternity-shadcn-blocks"
+      ],
+      "maxItems": 24,
+      "detailItems": 3
+    },
+    {
+      "name": "gallery-partial",
+      "out": "data/references/design-sources/gallery-examples/2026-06-28T19-35-remaining-design-harvest.json",
+      "sourceIds": [
         "shadcnblocks-blocks",
         "kibo-ui",
         "shadcn-ui",
@@ -24,14 +32,14 @@
       "detailItems": 3
     },
     {
-      "name": "code",
-      "codeIndexOut": "data/references/code-sources/2026-06-27T15-25-24-522Z-code-cache-index.json",
-      "codeExamplesOut": "data/references/code-sources/2026-06-27T15-25-24-522Z-component-code-reference-pack.json",
-      "maxFilesPerRepo": 36
-    },
-    {
       "name": "merge",
       "out": "data/references/design-sources/gallery-examples/latest-gallery-examples.json"
+    },
+    {
+      "name": "code",
+      "codeIndexOut": "data/references/code-sources/latest-code-cache-index.json",
+      "codeExamplesOut": "data/references/code-sources/latest-component-code-examples.json",
+      "maxFilesPerRepo": 24
     },
     {
       "name": "intelligence",
@@ -43,10 +51,13 @@
   "latestDesignIntelligence": "data/references/design-sources/latest-design-intelligence.json",
   "counts": {
     "sources": 23,
-    "candidates": 406,
+    "candidates": 405,
     "detailedExamples": 93,
     "errors": 0,
     "intelligenceExamples": 93,
     "reusableCodeRepositories": 11
-  }
+  },
+  "notes": [
+    "pnpm references:harvest:daily hung during combined gallery scrape; completed equivalent harvest by splitting the default 11 daily sources into two successful scrape runs before merge/intelligence/test."
+  ]
 }

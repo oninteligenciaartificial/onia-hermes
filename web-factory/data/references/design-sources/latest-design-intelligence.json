@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-27T15:31:57.633Z",
+  "generatedAt": "2026-06-28T19:39:40.978Z",
   "policy": "Use this as design intelligence, not as a copy source. Screenshots and closed-site structures are inspiration only. Reuse code only from allowed-after-review repositories after retokenization and QA.",
   "inputs": {
     "gallery": "data/references/design-sources/gallery-examples/latest-gallery-examples.json",
@@ -147,58 +147,22 @@
       "screenshots": 6,
       "topFonts": [
         {
-          "value": "\"ABC Diatype\", system-ui, -apple-system, sans-serif",
+          "value": "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", monospace",
           "count": 3
         },
         {
-          "value": "GeistMono, ui-monospace, SFMono-Regular, \"Roboto Mono\", Menlo, Monaco, \"Liberation Mono\", \"DejaVu Sans Mono\", \"Courier New\", monospace",
-          "count": 3
-        },
-        {
-          "value": "GeistSans, \"GeistSans Fallback\", Geist, \"Geist Fallback\", Arial, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\"",
+          "value": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif",
           "count": 3
         }
       ],
       "animationLibraries": [],
       "topCtas": [
         {
-          "value": "components",
-          "count": 6
-        },
-        {
-          "value": "thanh",
-          "count": 6
-        },
-        {
-          "value": "copy code",
+          "value": "go home",
           "count": 3
         },
         {
-          "value": "copy prompt",
-          "count": 3
-        },
-        {
-          "value": "le thanh",
-          "count": 3
-        },
-        {
-          "value": "open sidebar",
-          "count": 3
-        },
-        {
-          "value": "remix in magic chat",
-          "count": 3
-        },
-        {
-          "value": "reveal the install command",
-          "count": 3
-        },
-        {
-          "value": "searchk",
-          "count": 3
-        },
-        {
-          "value": "view code",
+          "value": "try again",
           "count": 3
         }
       ]
@@ -639,15 +603,11 @@
       "screenshots": 6,
       "topFonts": [
         {
-          "value": "system-ui, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\"",
-          "count": 2
-        },
-        {
-          "value": "ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
-          "count": 2
-        },
-        {
           "value": "Geist, \"Geist Fallback\"",
+          "count": 3
+        },
+        {
+          "value": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\"",
           "count": 1
         }
       ],
@@ -655,43 +615,43 @@
       "topCtas": [
         {
           "value": "avatar stack",
-          "count": 1
+          "count": 3
         },
         {
           "value": "blocks28",
-          "count": 1
+          "count": 3
         },
         {
           "value": "calendar",
-          "count": 1
+          "count": 3
         },
         {
           "value": "components41",
-          "count": 1
+          "count": 3
         },
         {
           "value": "cursor",
-          "count": 1
+          "count": 3
         },
         {
           "value": "docs",
-          "count": 1
+          "count": 3
         },
         {
           "value": "gantt",
-          "count": 1
+          "count": 3
         },
         {
           "value": "github3.8k",
-          "count": 1
+          "count": 3
         },
         {
           "value": "kibo uikibo ui",
-          "count": 1
+          "count": 3
         },
         {
           "value": "patterns1101",
-          "count": 1
+          "count": 3
         }
       ]
     },
@@ -836,7 +796,7 @@
       "animationLibraries": [],
       "topCtas": [
         {
-          "value": "21,36621.4k",
+          "value": "21,38321.4k",
           "count": 3
         },
         {
@@ -868,7 +828,7 @@
           "count": 3
         },
         {
-          "value": "197",
+          "value": "204",
           "count": 2
         },
         {
@@ -956,13 +916,13 @@
       "mode": "daily-design-curation",
       "licenseStatus": "inspiration-only",
       "usage": "Daily recent design references across websites, OG images, app screenshots and design skills.",
-      "candidates": 6,
+      "candidates": 5,
       "examples": 3,
       "codeBlocks": 0,
       "screenshots": 6,
       "topFonts": [
         {
-          "value": "ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+          "value": "Inter, -apple-system, BlinkMacSystemFont, \"SF Pro Text\", \"SF Pro Display\", sans-serif",
           "count": 3
         }
       ],
@@ -970,7 +930,7 @@
       "topCtas": [
         {
           "value": "all",
-          "count": 6
+          "count": 3
         },
         {
           "value": "app icons",
@@ -981,7 +941,7 @@
           "count": 3
         },
         {
-          "value": "best of x",
+          "value": "design",
           "count": 3
         },
         {
@@ -1400,8 +1360,8 @@
   "globalSignals": {
     "fonts": [
       {
-        "value": "ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
-        "count": 11
+        "value": "Geist, \"Geist Fallback\"",
+        "count": 7
       },
       {
         "value": "Inter, \"Inter Fallback\"",
@@ -1412,16 +1372,12 @@
         "count": 6
       },
       {
+        "value": "ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+        "count": 6
+      },
+      {
         "value": "\"Geist Mono\", \"Geist Mono Fallback\"",
         "count": 5
-      },
-      {
-        "value": "Geist, \"Geist Fallback\"",
-        "count": 5
-      },
-      {
-        "value": "\"ABC Diatype\", system-ui, -apple-system, sans-serif",
-        "count": 3
       },
       {
         "value": "\"Geist Mono\", monospace",
@@ -1440,11 +1396,7 @@
         "count": 3
       },
       {
-        "value": "GeistMono, ui-monospace, SFMono-Regular, \"Roboto Mono\", Menlo, Monaco, \"Liberation Mono\", \"DejaVu Sans Mono\", \"Courier New\", monospace",
-        "count": 3
-      },
-      {
-        "value": "GeistSans, \"GeistSans Fallback\", Geist, \"Geist Fallback\", Arial, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\"",
+        "value": "Inter, -apple-system, BlinkMacSystemFont, \"SF Pro Text\", \"SF Pro Display\", sans-serif",
         "count": 3
       },
       {
@@ -1457,6 +1409,14 @@
       },
       {
         "value": "system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Oxygen, Ubuntu, Cantarell, \"Fira Sans\", \"Droid Sans\", \"Helvetica Neue\", sans-serif",
+        "count": 3
+      },
+      {
+        "value": "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", monospace",
+        "count": 3
+      },
+      {
+        "value": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif",
         "count": 3
       },
       {
@@ -1480,8 +1440,8 @@
         "count": 2
       },
       {
-        "value": "system-ui, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\"",
-        "count": 2
+        "value": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\"",
+        "count": 1
       },
       {
         "value": "\"Mona Sans VF\", -apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Noto Sans\", Helvetica, Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\"",
@@ -1494,35 +1454,31 @@
     ],
     "ctas": [
       {
-        "value": "components",
-        "count": 41
-      },
-      {
         "value": "blocks",
         "count": 37
       },
       {
-        "value": "copy code",
-        "count": 27
+        "value": "components",
+        "count": 35
       },
       {
         "value": "changelog",
         "count": 24
       },
       {
-        "value": "copy prompt",
-        "count": 23
+        "value": "copy code",
+        "count": 24
+      },
+      {
+        "value": "docs",
+        "count": 22
       },
       {
         "value": "pricing",
         "count": 22
       },
       {
-        "value": "searchk",
-        "count": 21
-      },
-      {
-        "value": "docs",
+        "value": "copy prompt",
         "count": 20
       },
       {
@@ -1532,6 +1488,10 @@
       {
         "value": "toggle theme",
         "count": 19
+      },
+      {
+        "value": "searchk",
+        "count": 18
       },
       {
         "value": "templates",
@@ -1552,14 +1512,6 @@
       {
         "value": "inspiration",
         "count": 14
-      },
-      {
-        "value": "open sidebar",
-        "count": 13
-      },
-      {
-        "value": "view code",
-        "count": 13
       },
       {
         "value": "websites",
@@ -1587,6 +1539,14 @@
       },
       {
         "value": "installation",
+        "count": 10
+      },
+      {
+        "value": "lapa ninja - go to homepage",
+        "count": 10
+      },
+      {
+        "value": "minimal3049",
         "count": 10
       }
     ],
@@ -1660,6 +1620,10 @@
         "count": 3
       },
       {
+        "value": "Handhold",
+        "count": 3
+      },
+      {
         "value": "UI Kit & Library Built with Shadcn & Tailwind",
         "count": 3
       },
@@ -1689,10 +1653,6 @@
       },
       {
         "value": "Go from idea to production with AI.",
-        "count": 2
-      },
-      {
-        "value": "Handhold",
         "count": 2
       },
       {
@@ -1736,12 +1696,12 @@
       "screenshots": {
         "desktop": {
           "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/magic-ui/007-introducing-kinetic-text-fbd94463/desktop.png",
-          "sha256": "01c98b70863d95f62764e53a3fb23f27c29b541ade0fbef33161461a3f2b98d7",
+          "sha256": "a75848e8011775a11d2699acb8aa92067ed298e4c39c7090b1aedb2e1d2d8e9e",
           "mode": "viewport"
         },
         "mobile": {
           "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/magic-ui/007-introducing-kinetic-text-fbd94463/mobile.png",
-          "sha256": "be68ed951eef0a1e70d8d98d3c39a9aa8fd3db6331667f9aeacf0aaa80e59840",
+          "sha256": "15c545f0e2a8645c590ac7525abf7db9891eac6807b8d054d3a944a4b395fb3e",
           "mode": "viewport"
         }
       },
@@ -1778,8 +1738,8 @@
         "Templates",
         "Showcase",
         "Search documentation...Search...⌘K",
-        "21,36621.4k",
-        "197",
+        "21,38321.4k",
+        "204",
         "Toggle theme",
         "Introduction",
         "Installation",
@@ -1816,7 +1776,7 @@
       "codeLinks": [
         {
           "url": "https://github.com/magicuidesign/magicui",
-          "text": "21,36621.4k"
+          "text": "21,38321.4k"
         },
         {
           "url": "https://github.com/abdmjd1",
@@ -1853,12 +1813,12 @@
       "screenshots": {
         "desktop": {
           "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/magic-ui/008-browse-components-04478d02/desktop.png",
-          "sha256": "975f96907f8866c44c2ab90f300f51aae8dd7d27c854e2863c96f7779b2e328c",
+          "sha256": "cb227b14ed9b3967a2ed21d284f6340b54b4ae0af3bf9c811fe4fd44f6b423dd",
           "mode": "viewport"
         },
         "mobile": {
           "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/magic-ui/008-browse-components-04478d02/mobile.png",
-          "sha256": "8587b06fb68cfa878b156bdf252333a5db24fa031907e85cdd65175f1120b939",
+          "sha256": "41add6ee546bd9ea8d858cc63a5c2febefd1f4056cbcc7fc722533e10b13abde",
           "mode": "viewport"
         }
       },
@@ -1879,8 +1839,8 @@
         "Templates",
         "Showcase",
         "Search documentation...Search...⌘K",
-        "21,36621.4k",
-        "197",
+        "21,38321.4k",
+        "204",
         "Toggle theme",
         "Introduction",
         "Installation",
@@ -1917,7 +1877,7 @@
       "codeLinks": [
         {
           "url": "https://github.com/magicuidesign/magicui",
-          "text": "21,36621.4k"
+          "text": "21,38321.4k"
         },
         {
           "url": "https://github.com/magicuidesign/magicui",
@@ -2039,12 +1999,12 @@
       "screenshots": {
         "desktop": {
           "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/magic-ui/242-magicui-design-6edb6ee7/desktop.png",
-          "sha256": "63113e92dceda6c007b8a4deaa589a3bba23ae3309064971a67d79adc95261fb",
+          "sha256": "fdd63be648326ee209d4f0f655644e9a345fa3e3e3bcfc374365c80a0ac0c2e1",
           "mode": "viewport"
         },
         "mobile": {
           "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/magic-ui/242-magicui-design-6edb6ee7/mobile.png",
-          "sha256": "0b532644a1135b2e47e906b3d18559cf37e67a99b0de7f5b60a93fe1dddddbe1",
+          "sha256": "297fa1f374accc173e2a3c61db33da08edbf49e7376cb0d1420c8959bf9b9f0f",
           "mode": "viewport"
         }
       },
@@ -2081,8 +2041,8 @@
         "Templates",
         "Showcase",
         "Search documentation...Search...⌘K",
-        "21,36621.4k",
-        "199",
+        "21,38321.4k",
+        "215",
         "Toggle theme",
         "🎉 Introducing Kinetic Text",
         "Browse Components",
@@ -2119,7 +2079,7 @@
       "codeLinks": [
         {
           "url": "https://github.com/magicuidesign/magicui",
-          "text": "21,36621.4k"
+          "text": "21,38321.4k"
         },
         {
           "url": "https://elhussary.vercel.app/",
@@ -2255,6 +2215,111 @@
       "qualityWarnings": []
     },
     {
+      "sourceId": "kibo-ui",
+      "sourceName": "Kibo UI",
+      "licenseStatus": "open-source-review-required",
+      "url": "https://www.kibo-ui.com/components/sandbox",
+      "title": "Sandbox",
+      "description": "The sandbox component allows you to preview and test components in a sandboxed environment.",
+      "reuseGuidance": "Accessible shadcn-compatible component ideas and registry signals. Verify repository/license before copying code.",
+      "screenshots": {
+        "desktop": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/kibo-ui/075-kibo-ui-com-components-san-9c63d7a1/desktop.png",
+          "sha256": "c2d51277fc30da497431392e2ee736f513d270b9897a5ced6bb9dfa00484ee0b",
+          "mode": "viewport"
+        },
+        "mobile": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/kibo-ui/075-kibo-ui-com-components-san-9c63d7a1/mobile.png",
+          "sha256": "cbdfc1f6b45ef2491fefd39b95d06d8d0f2395c4d4615e78be0665c5a70e11eb",
+          "mode": "viewport"
+        }
+      },
+      "headings": [
+        {
+          "level": "h1",
+          "text": "Sandbox"
+        },
+        {
+          "level": "h2",
+          "text": "Installation"
+        },
+        {
+          "level": "h2",
+          "text": "Features"
+        },
+        {
+          "level": "h2",
+          "text": "Examples"
+        },
+        {
+          "level": "h3",
+          "text": "Without File Explorer"
+        },
+        {
+          "level": "h3",
+          "text": "On this page"
+        }
+      ],
+      "ctas": [
+        "Kibo UIKibo UI",
+        "Docs",
+        "Components41",
+        "Blocks28",
+        "Patterns1101",
+        "Search...⌘K",
+        "Shadcn UI Blocks",
+        "GitHub3.8K",
+        "Avatar Stack",
+        "Cursor",
+        "Calendar",
+        "Gantt"
+      ],
+      "topFonts": [
+        "Geist, \"Geist Fallback\"",
+        "-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\""
+      ],
+      "animationSignals": {
+        "libraries": {
+          "framerMotion": false,
+          "gsap": false,
+          "three": false,
+          "lottie": false,
+          "locomotiveScroll": false
+        },
+        "animatedElementCount": 87,
+        "keyframes": [
+          "spin",
+          "ping",
+          "pulse",
+          "fd-sidebar-in",
+          "fd-sidebar-out",
+          "fd-dialog-in",
+          "fd-dialog-out",
+          "fd-popover-in",
+          "fd-popover-out",
+          "fd-fade-in",
+          "fd-fade-out",
+          "fd-enterFromRight"
+        ]
+      },
+      "codeLinks": [
+        {
+          "url": "https://github.com/shadcnblocks/kibo",
+          "text": "GitHub3.8K"
+        },
+        {
+          "url": "https://www.kibo-ui.com/components/snippet",
+          "text": "SnippetSnippet is a component that allows you to display and copy code in a tabbed interface."
+        },
+        {
+          "url": "https://sandpack.codesandbox.io/",
+          "text": "sandpack.codesandbox.io"
+        }
+      ],
+      "codeBlockCount": 0,
+      "qualityWarnings": []
+    },
+    {
       "sourceId": "shadcnblocks-blocks",
       "sourceName": "Shadcnblocks",
       "licenseStatus": "free-and-premium-license-per-block",
@@ -2265,7 +2330,7 @@
       "screenshots": {
         "desktop": {
           "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/shadcnblocks-blocks/026-integration-ebd04f60/desktop.png",
-          "sha256": "85d82cdb32b4b76a9468a23adc1b3bb9d44d0f130abbfb82d2fc2fafd4cf9d6f",
+          "sha256": "00143410f3c7af0076e4b74332c971a4513d5821919d62d432800d91b2c2e4ca",
           "mode": "viewport"
         },
         "mobile": {
@@ -2350,6 +2415,102 @@
         {
           "url": "https://github.com/shadcnblocks/shadcn-ui-blocks",
           "text": "350"
+        }
+      ],
+      "codeBlockCount": 0,
+      "qualityWarnings": []
+    },
+    {
+      "sourceId": "kibo-ui",
+      "sourceName": "Kibo UI",
+      "licenseStatus": "open-source-review-required",
+      "url": "https://www.kibo-ui.com/components",
+      "title": "Avatar Stack",
+      "description": "Avatar Stack is a component that allows you to stack and overlap avatars.",
+      "reuseGuidance": "Accessible shadcn-compatible component ideas and registry signals. Verify repository/license before copying code.",
+      "screenshots": {
+        "desktop": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/kibo-ui/034-kibo-ui-com-components-f7cbd192/desktop.png",
+          "sha256": "56e71ecc5c36235df3d0b43c7ed7cce67507fd9e4874cb129e8b21121040e20a",
+          "mode": "viewport"
+        },
+        "mobile": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/kibo-ui/034-kibo-ui-com-components-f7cbd192/mobile.png",
+          "sha256": "635f61b0f7a1db97b364795185a14bb3b1dc6c7c88a833d74a456b432610f0cf",
+          "mode": "viewport"
+        }
+      },
+      "headings": [
+        {
+          "level": "h1",
+          "text": "Avatar Stack"
+        },
+        {
+          "level": "h2",
+          "text": "Installation"
+        },
+        {
+          "level": "h2",
+          "text": "Features"
+        },
+        {
+          "level": "h2",
+          "text": "Examples"
+        },
+        {
+          "level": "h3",
+          "text": "With hover animation"
+        },
+        {
+          "level": "h3",
+          "text": "On this page"
+        }
+      ],
+      "ctas": [
+        "Kibo UIKibo UI",
+        "Docs",
+        "Components41",
+        "Blocks28",
+        "Patterns1101",
+        "Search...⌘K",
+        "Shadcn UI Blocks",
+        "GitHub3.8K",
+        "Avatar Stack",
+        "Cursor",
+        "Calendar",
+        "Gantt"
+      ],
+      "topFonts": [
+        "Geist, \"Geist Fallback\""
+      ],
+      "animationSignals": {
+        "libraries": {
+          "framerMotion": false,
+          "gsap": false,
+          "three": false,
+          "lottie": false,
+          "locomotiveScroll": false
+        },
+        "animatedElementCount": 79,
+        "keyframes": [
+          "spin",
+          "ping",
+          "pulse",
+          "fd-sidebar-in",
+          "fd-sidebar-out",
+          "fd-dialog-in",
+          "fd-dialog-out",
+          "fd-popover-in",
+          "fd-popover-out",
+          "fd-fade-in",
+          "fd-fade-out",
+          "fd-enterFromRight"
+        ]
+      },
+      "codeLinks": [
+        {
+          "url": "https://github.com/shadcnblocks/kibo",
+          "text": "GitHub3.8K"
         }
       ],
       "codeBlockCount": 0,
@@ -2452,7 +2613,7 @@
         },
         "mobile": {
           "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/shadcn-ui/017-signup-0ff19f64/mobile.png",
-          "sha256": "344ef36cc37c4f13b61795138121c923fda197cb0ac2d2e625ab7a4ab42440ab",
+          "sha256": "353fee431297d7a7f9741e7dee4047502a55d93f75f078ef0b154a0f7d0db657",
           "mode": "viewport"
         }
       },
@@ -2599,305 +2760,30 @@
       "qualityWarnings": []
     },
     {
-      "sourceId": "21st-landing-page-components",
-      "sourceName": "21st.dev Landing Page Components",
-      "licenseStatus": "review-required-per-component",
-      "url": "https://21st.dev/community/components/thanh/animated-section-with-gradient-and-dynamic-lines/default",
-      "title": "Animated Section with Gradient and Dynamic Lines | Community Components - 21st | 21st",
-      "description": "Animated Dark‐Mode Section with Gradient Heading and Dynamic SVG Lines",
-      "reuseGuidance": "High-density landing-page component discovery: heroes, features, CTAs, pricing, testimonials and animated sections. Verify each component license before code reuse.",
-      "screenshots": {
-        "desktop": {
-          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/21st-landing-page-components/1764-animated-section-with-gradient-and-dynamic-lines-9e7dde56/desktop.png",
-          "sha256": "ed170349a3dbf8140d8cfaec27b75ed209b71cde737e88ecffe0cc035348beed",
-          "mode": "viewport"
-        },
-        "mobile": {
-          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/21st-landing-page-components/1764-animated-section-with-gradient-and-dynamic-lines-9e7dde56/mobile.png",
-          "sha256": "630e1a74919c35bce9da9b347d4b0cfe58d4104d0fbf995f710378620fe6be85",
-          "mode": "viewport"
-        }
-      },
-      "headings": [
-        {
-          "level": "h3",
-          "text": "Animated Section with Gradient and Dynamic Lines"
-        },
-        {
-          "level": "h3",
-          "text": "Created by"
-        },
-        {
-          "level": "h3",
-          "text": "Installation"
-        },
-        {
-          "level": "h3",
-          "text": "How to use"
-        },
-        {
-          "level": "h3",
-          "text": "Explore"
-        },
-        {
-          "level": "h3",
-          "text": "Build"
-        }
-      ],
-      "ctas": [
-        "Open sidebar",
-        "Components",
-        "thanh",
-        "SearchK",
-        "Copy prompt",
-        "Copy code",
-        "View code",
-        "Components",
-        "thanh",
-        "Le Thanh",
-        "Reveal the install command",
-        "Remix in Magic Chat"
-      ],
-      "topFonts": [
-        "GeistSans, \"GeistSans Fallback\", Geist, \"Geist Fallback\", Arial, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\"",
-        "\"ABC Diatype\", system-ui, -apple-system, sans-serif",
-        "GeistMono, ui-monospace, SFMono-Regular, \"Roboto Mono\", Menlo, Monaco, \"Liberation Mono\", \"DejaVu Sans Mono\", \"Courier New\", monospace"
-      ],
-      "animationSignals": {
-        "libraries": {
-          "framerMotion": false,
-          "gsap": false,
-          "three": false,
-          "lottie": false,
-          "locomotiveScroll": false
-        },
-        "animatedElementCount": 68,
-        "keyframes": [
-          "bounce",
-          "ping-slow",
-          "pulse",
-          "shimmer-slide",
-          "spin",
-          "spin-around",
-          "star-movement-bottom",
-          "star-movement-top",
-          "text-shimmer",
-          "enter",
-          "exit",
-          "shimmer"
-        ]
-      },
-      "codeLinks": [],
-      "codeBlockCount": 0,
-      "qualityWarnings": []
-    },
-    {
-      "sourceId": "21st-landing-page-components",
-      "sourceName": "21st.dev Landing Page Components",
-      "licenseStatus": "review-required-per-component",
-      "url": "https://21st.dev/community/components/thanh/digital-serenity-animated-landing-page/default",
-      "title": "Digital Serenity - Animated Landing Page | Community Components - 21st | 21st",
-      "description": "Component creates a visually immersive and calming landing page. It features a dark UI with animated text quotes appearing word by word, a dynamic grid background, subtle floating elements, corner decorative accents, and interactive effects like a mouse-following gradient and click ripples. ",
-      "reuseGuidance": "High-density landing-page component discovery: heroes, features, CTAs, pricing, testimonials and animated sections. Verify each component license before code reuse.",
-      "screenshots": {
-        "desktop": {
-          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/21st-landing-page-components/226-digital-serenity-animated-landing-page-e1d0bfcd/desktop.png",
-          "sha256": "6822333a2f497369ecfbd81c8c4c2966b486b7383e481e85cbd73726601208a2",
-          "mode": "viewport"
-        },
-        "mobile": {
-          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/21st-landing-page-components/226-digital-serenity-animated-landing-page-e1d0bfcd/mobile.png",
-          "sha256": "afbbc629323d2761f2b22b1b96a3d4e329fadb882baac2f26b97be1c3185169f",
-          "mode": "viewport"
-        }
-      },
-      "headings": [
-        {
-          "level": "h3",
-          "text": "Digital Serenity - Animated Landing Page"
-        },
-        {
-          "level": "h3",
-          "text": "Created by"
-        },
-        {
-          "level": "h3",
-          "text": "Installation"
-        },
-        {
-          "level": "h3",
-          "text": "How to use"
-        },
-        {
-          "level": "h3",
-          "text": "Explore"
-        },
-        {
-          "level": "h3",
-          "text": "Build"
-        }
-      ],
-      "ctas": [
-        "Open sidebar",
-        "Components",
-        "thanh",
-        "SearchK",
-        "Copy prompt",
-        "Copy code",
-        "View code",
-        "Components",
-        "thanh",
-        "Le Thanh",
-        "Reveal the install command",
-        "Remix in Magic Chat"
-      ],
-      "topFonts": [
-        "GeistSans, \"GeistSans Fallback\", Geist, \"Geist Fallback\", Arial, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\"",
-        "\"ABC Diatype\", system-ui, -apple-system, sans-serif",
-        "GeistMono, ui-monospace, SFMono-Regular, \"Roboto Mono\", Menlo, Monaco, \"Liberation Mono\", \"DejaVu Sans Mono\", \"Courier New\", monospace"
-      ],
-      "animationSignals": {
-        "libraries": {
-          "framerMotion": false,
-          "gsap": false,
-          "three": false,
-          "lottie": false,
-          "locomotiveScroll": false
-        },
-        "animatedElementCount": 68,
-        "keyframes": [
-          "bounce",
-          "ping-slow",
-          "pulse",
-          "shimmer-slide",
-          "spin",
-          "spin-around",
-          "star-movement-bottom",
-          "star-movement-top",
-          "text-shimmer",
-          "enter",
-          "exit",
-          "shimmer"
-        ]
-      },
-      "codeLinks": [],
-      "codeBlockCount": 0,
-      "qualityWarnings": []
-    },
-    {
-      "sourceId": "21st-landing-page-components",
-      "sourceName": "21st.dev Landing Page Components",
-      "licenseStatus": "review-required-per-component",
-      "url": "https://21st.dev/community/components/thanh/dynamic-animated-hero-section-with-gradient/default",
-      "title": "Dynamic Animated Hero Section with Gradient | Community Components - 21st | 21st",
-      "description": "A visually striking React hero section featuring a gradient-text animation that cycles through vibrant colors, SVG line-drawing effects for geometric shapes, subtle background pattern movement , and a pulsing interactive CTA button",
-      "reuseGuidance": "High-density landing-page component discovery: heroes, features, CTAs, pricing, testimonials and animated sections. Verify each component license before code reuse.",
-      "screenshots": {
-        "desktop": {
-          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/21st-landing-page-components/1364-dynamic-animated-hero-section-with-gradient-cfdf51fe/desktop.png",
-          "sha256": "710c5c7b40ad10febe06ea7406e3f651cd06b2131448a756d1cc06bc2b8ff5c3",
-          "mode": "viewport"
-        },
-        "mobile": {
-          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/21st-landing-page-components/1364-dynamic-animated-hero-section-with-gradient-cfdf51fe/mobile.png",
-          "sha256": "8e1ad3c9c5487c776e5838a59811e5581fb24046d5700c7fa6e65a015df58ea2",
-          "mode": "viewport"
-        }
-      },
-      "headings": [
-        {
-          "level": "h3",
-          "text": "Dynamic Animated Hero Section with Gradient"
-        },
-        {
-          "level": "h3",
-          "text": "Created by"
-        },
-        {
-          "level": "h3",
-          "text": "Installation"
-        },
-        {
-          "level": "h3",
-          "text": "How to use"
-        },
-        {
-          "level": "h3",
-          "text": "Explore"
-        },
-        {
-          "level": "h3",
-          "text": "Build"
-        }
-      ],
-      "ctas": [
-        "Open sidebar",
-        "Components",
-        "thanh",
-        "SearchK",
-        "Copy prompt",
-        "Copy code",
-        "View code",
-        "Components",
-        "thanh",
-        "Le Thanh",
-        "Reveal the install command",
-        "Remix in Magic Chat"
-      ],
-      "topFonts": [
-        "GeistSans, \"GeistSans Fallback\", Geist, \"Geist Fallback\", Arial, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\"",
-        "\"ABC Diatype\", system-ui, -apple-system, sans-serif",
-        "GeistMono, ui-monospace, SFMono-Regular, \"Roboto Mono\", Menlo, Monaco, \"Liberation Mono\", \"DejaVu Sans Mono\", \"Courier New\", monospace"
-      ],
-      "animationSignals": {
-        "libraries": {
-          "framerMotion": false,
-          "gsap": false,
-          "three": false,
-          "lottie": false,
-          "locomotiveScroll": false
-        },
-        "animatedElementCount": 68,
-        "keyframes": [
-          "bounce",
-          "ping-slow",
-          "pulse",
-          "shimmer-slide",
-          "spin",
-          "spin-around",
-          "star-movement-bottom",
-          "star-movement-top",
-          "text-shimmer",
-          "enter",
-          "exit",
-          "shimmer"
-        ]
-      },
-      "codeLinks": [],
-      "codeBlockCount": 0,
-      "qualityWarnings": []
-    },
-    {
       "sourceId": "recent-design",
       "sourceName": "Recent Design",
       "licenseStatus": "inspiration-only",
       "url": "https://recent.design/websites",
       "title": "Web Design Inspiration — Recent",
-      "description": "The best of recent website design found on the Internet updated daily.",
+      "description": "The best website inspiration on the Internet.",
       "reuseGuidance": "Daily recent design references across websites, OG images, app screenshots and design skills.",
       "screenshots": {
         "desktop": {
-          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/recent-design/003-websites-cd2e1db3/desktop.png",
-          "sha256": "afa8a9985da2827d202d31b23cef21322847d5082054e3e309807cdce9a27cc0",
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/recent-design/002-websites-cd2e1db3/desktop.png",
+          "sha256": "df6453473d99017974af6bbd57438f82e907ad0b2188199897135ee4135da657",
           "mode": "viewport"
         },
         "mobile": {
-          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/recent-design/003-websites-cd2e1db3/mobile.png",
-          "sha256": "3a1d1560862b105f2b822554b60c015e680751f9dc195e9010278cbf26f76798",
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/recent-design/002-websites-cd2e1db3/mobile.png",
+          "sha256": "2e22ce27f52b76353befc8bd3585726769ad3a8e8f63f38f69e30a14e215445c",
           "mode": "viewport"
         }
       },
       "headings": [
+        {
+          "level": "h1",
+          "text": "Websites"
+        },
         {
           "level": "h2",
           "text": "Subscribe to the Recent digest"
@@ -2909,8 +2795,7 @@
       ],
       "ctas": [
         "Recent",
-        "All",
-        "Best of X",
+        "Design",
         "Websites",
         "OG Images",
         "App Screenshots",
@@ -2919,10 +2804,11 @@
         "Info",
         "Subscribe",
         "All",
-        "Portfolio"
+        "Portfolio",
+        "Agency"
       ],
       "topFonts": [
-        "ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        "Inter, -apple-system, BlinkMacSystemFont, \"SF Pro Text\", \"SF Pro Display\", sans-serif"
       ],
       "animationSignals": {
         "libraries": {
@@ -2932,8 +2818,9 @@
           "lottie": false,
           "locomotiveScroll": false
         },
-        "animatedElementCount": 63,
+        "animatedElementCount": 65,
         "keyframes": [
+          "input-caret-blink",
           "ping",
           "pulse"
         ]
@@ -2953,12 +2840,12 @@
       "screenshots": {
         "desktop": {
           "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/kibo-ui/098-kibo-ui-com-components-gan-8008b377/desktop.png",
-          "sha256": "657b041d17d69ff32a9f14f901603ff8c4196e52df0638fc6603ddcf2208d5d3",
+          "sha256": "5d57e14cf5c86143de336c0957fc73db56d987987a3ad76810b76daf032c075e",
           "mode": "viewport"
         },
         "mobile": {
           "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/kibo-ui/098-kibo-ui-com-components-gan-8008b377/mobile.png",
-          "sha256": "edda34f13118ff593f6d0102ec3b31b4ef847aba9ce82d977d83e94cb89773db",
+          "sha256": "ae1817fee8f5e41d0faaa5917eb59e72eddad0e3c2600e9152ca249d8b552ba2",
           "mode": "viewport"
         }
       },
@@ -3173,12 +3060,12 @@
       "screenshots": {
         "desktop": {
           "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/saasframe-landing-pages/285-landing-page-4197935a/desktop.png",
-          "sha256": "38f11b3f5f74910b17c1941191ba305213678a77238f6b33e9c77e58676da4fc",
+          "sha256": "5f1ed45ff55f31ec63895e6a08f01e1aa9c195d3b5a74a311892501e55f136bb",
           "mode": "viewport"
         },
         "mobile": {
           "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/saasframe-landing-pages/285-landing-page-4197935a/mobile.png",
-          "sha256": "61f71e1b33216aaebcd4a6307cb14d171d8102d7aae66872b4219f380ce3d7c1",
+          "sha256": "31fcdf757b4f6162b9f27e442fa627ac493ea922fdeada46a8d2363f2faa0a08",
           "mode": "viewport"
         }
       },
@@ -3349,12 +3236,12 @@
       "screenshots": {
         "desktop": {
           "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/saasframe-landing-pages/289-landing-page-47cc659e/desktop.png",
-          "sha256": "1893caa68bae4969a0eebe199fded61ff87824e677d31cf1798645decb8b2fed",
+          "sha256": "cd33a910559b5c0013358b5458a9106d38fdc6233ed7e48c2efc6703e28b4797",
           "mode": "viewport"
         },
         "mobile": {
           "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/saasframe-landing-pages/289-landing-page-47cc659e/mobile.png",
-          "sha256": "15b08b1f0d297b71426df09cef02f27f1b3d0c4ccc2af377454957ac8a335100",
+          "sha256": "da8363bbd57ac01e767b4e038410810aa077ada1f07a8368f91f00b87dd2008e",
           "mode": "viewport"
         }
       },
@@ -3722,6 +3609,88 @@
           "text": "Blog Get expert advice on landing page design, copywriting, conversion optimization and more."
         }
       ],
+      "codeBlockCount": 0,
+      "qualityWarnings": []
+    },
+    {
+      "sourceId": "recent-design",
+      "sourceName": "Recent Design",
+      "licenseStatus": "inspiration-only",
+      "url": "https://recent.design/app-store-screenshots",
+      "title": "App Store Screenshot Inspiration — Recent",
+      "description": "The best app screenshot inspiration on the Internet.",
+      "reuseGuidance": "Daily recent design references across websites, OG images, app screenshots and design skills.",
+      "screenshots": {
+        "desktop": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/recent-design/004-app-screenshots-6eff42f4/desktop.png",
+          "sha256": "1fa7ea3860b5d20c4f4e86cb033d4b4d915d8b1bb61fd0649ecef453c93be7bb",
+          "mode": "viewport"
+        },
+        "mobile": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/recent-design/004-app-screenshots-6eff42f4/mobile.png",
+          "sha256": "7f67ae5118d3990f130e610eb9f4d18ef2b4ae4e898e5594676659558fb47fe8",
+          "mode": "viewport"
+        }
+      },
+      "headings": [
+        {
+          "level": "h1",
+          "text": "App Screenshots"
+        },
+        {
+          "level": "h3",
+          "text": "Eight Sleep"
+        },
+        {
+          "level": "h3",
+          "text": "Perplexity"
+        },
+        {
+          "level": "h3",
+          "text": "Joi"
+        },
+        {
+          "level": "h3",
+          "text": "Grok"
+        },
+        {
+          "level": "h3",
+          "text": "Granola"
+        }
+      ],
+      "ctas": [
+        "Recent",
+        "Design",
+        "Websites",
+        "OG Images",
+        "App Screenshots",
+        "App Icons",
+        "Skills",
+        "Info",
+        "Subscribe",
+        "All",
+        "Business",
+        "Education"
+      ],
+      "topFonts": [
+        "Inter, -apple-system, BlinkMacSystemFont, \"SF Pro Text\", \"SF Pro Display\", sans-serif"
+      ],
+      "animationSignals": {
+        "libraries": {
+          "framerMotion": false,
+          "gsap": false,
+          "three": false,
+          "lottie": false,
+          "locomotiveScroll": false
+        },
+        "animatedElementCount": 30,
+        "keyframes": [
+          "input-caret-blink",
+          "ping",
+          "pulse"
+        ]
+      },
+      "codeLinks": [],
       "codeBlockCount": 0,
       "qualityWarnings": []
     },
@@ -4201,7 +4170,7 @@
       "screenshots": {
         "desktop": {
           "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/aceternity-ui/076-logo-clouds-6-blocks-a-collection-of-logo-clouds-with-micro-interactions-and-minimal-animations-bb7689d4/desktop.png",
-          "sha256": "c5b4ef49b5cec37435280df077b2b45cbbba29ac80d8de80b0bdf4adc5e20842",
+          "sha256": "3b6990bf8bb15c4129079fee2e127aa14632331b58cb4a39d96f530a584a36d5",
           "mode": "viewport"
         },
         "mobile": {
@@ -4277,71 +4246,6 @@
           "aurora",
           "moveHorizontal",
           "moveInCircle"
-        ]
-      },
-      "codeLinks": [],
-      "codeBlockCount": 0,
-      "qualityWarnings": []
-    },
-    {
-      "sourceId": "recent-design",
-      "sourceName": "Recent Design",
-      "licenseStatus": "inspiration-only",
-      "url": "https://recent.design/og-images",
-      "title": "OG Image Inspiration — Recent",
-      "description": "The best of recent Open Graph image design found on the Internet updated daily.",
-      "reuseGuidance": "Daily recent design references across websites, OG images, app screenshots and design skills.",
-      "screenshots": {
-        "desktop": {
-          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/recent-design/004-og-images-e4824f8c/desktop.png",
-          "sha256": "396b844f9ea9ca124867a2cec3e1148e819bf3828abd9f4a53a4d214bb9e2483",
-          "mode": "viewport"
-        },
-        "mobile": {
-          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/recent-design/004-og-images-e4824f8c/mobile.png",
-          "sha256": "05e7bbe33d35e4716a4cb709a26395fd00f7b23971309643cc03d59883ba9b16",
-          "mode": "viewport"
-        }
-      },
-      "headings": [
-        {
-          "level": "h2",
-          "text": "Subscribe to the Recent digest"
-        },
-        {
-          "level": "h2",
-          "text": "Stay ahead of trends"
-        }
-      ],
-      "ctas": [
-        "Recent",
-        "All",
-        "Best of X",
-        "Websites",
-        "OG Images",
-        "App Screenshots",
-        "App Icons",
-        "Skills",
-        "Info",
-        "Subscribe",
-        "All",
-        "Portfolio"
-      ],
-      "topFonts": [
-        "ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
-      ],
-      "animationSignals": {
-        "libraries": {
-          "framerMotion": false,
-          "gsap": false,
-          "three": false,
-          "lottie": false,
-          "locomotiveScroll": false
-        },
-        "animatedElementCount": 24,
-        "keyframes": [
-          "ping",
-          "pulse"
         ]
       },
       "codeLinks": [],
@@ -4443,23 +4347,27 @@
       "sourceId": "recent-design",
       "sourceName": "Recent Design",
       "licenseStatus": "inspiration-only",
-      "url": "https://recent.design/x",
-      "title": "Best Designs on X — Recent",
-      "description": "The best of recent design found on X updated daily.",
+      "url": "https://recent.design/og-images",
+      "title": "OG Image Inspiration — Recent",
+      "description": "The best Open Graph image inspiration on the Internet.",
       "reuseGuidance": "Daily recent design references across websites, OG images, app screenshots and design skills.",
       "screenshots": {
         "desktop": {
-          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/recent-design/002-best-of-x-a4051cce/desktop.png",
-          "sha256": "e02500bb5d827d4cfc9a7bba3d32be942a722fb57a6d37ea2609cdbc4d763775",
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/recent-design/003-og-images-e4824f8c/desktop.png",
+          "sha256": "bc795a33b320fff482168a7656a8b30c3ffc350112812f2b74c3817813eaaefd",
           "mode": "viewport"
         },
         "mobile": {
-          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/recent-design/002-best-of-x-a4051cce/mobile.png",
-          "sha256": "095b6f326bce9abed0435cb83ad7d4442398f4d95d4f8ea851d1343e565a26f2",
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/recent-design/003-og-images-e4824f8c/mobile.png",
+          "sha256": "ad737b0bb1476fe3fdf5affafab5163bbbfbba6538d0d5bbd493dcd8039571f7",
           "mode": "viewport"
         }
       },
       "headings": [
+        {
+          "level": "h1",
+          "text": "OG Images"
+        },
         {
           "level": "h2",
           "text": "Subscribe to the Recent digest"
@@ -4471,8 +4379,7 @@
       ],
       "ctas": [
         "Recent",
-        "All",
-        "Best of X",
+        "Design",
         "Websites",
         "OG Images",
         "App Screenshots",
@@ -4481,10 +4388,11 @@
         "Info",
         "Subscribe",
         "All",
-        "Web"
+        "Portfolio",
+        "Agency"
       ],
       "topFonts": [
-        "ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+        "Inter, -apple-system, BlinkMacSystemFont, \"SF Pro Text\", \"SF Pro Display\", sans-serif"
       ],
       "animationSignals": {
         "libraries": {
@@ -4494,8 +4402,9 @@
           "lottie": false,
           "locomotiveScroll": false
         },
-        "animatedElementCount": 19,
+        "animatedElementCount": 22,
         "keyframes": [
+          "input-caret-blink",
           "ping",
           "pulse"
         ]
@@ -5914,6 +5823,192 @@
       "qualityWarnings": []
     },
     {
+      "sourceId": "21st-landing-page-components",
+      "sourceName": "21st.dev Landing Page Components",
+      "licenseStatus": "review-required-per-component",
+      "url": "https://21st.dev/community/components/ayushmxxn/tubelight-navbar/default",
+      "title": "Tubelight Navbar",
+      "description": "",
+      "reuseGuidance": "High-density landing-page component discovery: heroes, features, CTAs, pricing, testimonials and animated sections. Verify each component license before code reuse.",
+      "screenshots": {
+        "desktop": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/21st-landing-page-components/066-tubelight-navbar-732d0d1a/desktop.png",
+          "sha256": "2b6802112f19e27ac6184f6217170c02172af6c839da3274439775223ed5f1c4",
+          "mode": "viewport"
+        },
+        "mobile": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/21st-landing-page-components/066-tubelight-navbar-732d0d1a/mobile.png",
+          "sha256": "e3e94541d60826e33e07992f8204c6550d848a3798d00024f81a8307d2741541",
+          "mode": "viewport"
+        }
+      },
+      "headings": [
+        {
+          "level": "h1",
+          "text": "Something went wrong"
+        }
+      ],
+      "ctas": [
+        "Try again",
+        "Go home"
+      ],
+      "topFonts": [
+        "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif",
+        "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", monospace"
+      ],
+      "animationSignals": {
+        "libraries": {
+          "framerMotion": false,
+          "gsap": false,
+          "three": false,
+          "lottie": false,
+          "locomotiveScroll": false
+        },
+        "animatedElementCount": 0,
+        "keyframes": [
+          "bounce",
+          "ping-slow",
+          "pulse",
+          "shimmer-slide",
+          "spin",
+          "spin-around",
+          "star-movement-bottom",
+          "star-movement-top",
+          "text-shimmer",
+          "enter",
+          "exit",
+          "shimmer"
+        ]
+      },
+      "codeLinks": [],
+      "codeBlockCount": 0,
+      "qualityWarnings": []
+    },
+    {
+      "sourceId": "21st-landing-page-components",
+      "sourceName": "21st.dev Landing Page Components",
+      "licenseStatus": "review-required-per-component",
+      "url": "https://21st.dev/community/components/aceternity/container-scroll-animation/default",
+      "title": "Container Scroll Animation",
+      "description": "",
+      "reuseGuidance": "High-density landing-page component discovery: heroes, features, CTAs, pricing, testimonials and animated sections. Verify each component license before code reuse.",
+      "screenshots": {
+        "desktop": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/21st-landing-page-components/072-container-scroll-animation-0c57158a/desktop.png",
+          "sha256": "2b6802112f19e27ac6184f6217170c02172af6c839da3274439775223ed5f1c4",
+          "mode": "viewport"
+        },
+        "mobile": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/21st-landing-page-components/072-container-scroll-animation-0c57158a/mobile.png",
+          "sha256": "e3e94541d60826e33e07992f8204c6550d848a3798d00024f81a8307d2741541",
+          "mode": "viewport"
+        }
+      },
+      "headings": [
+        {
+          "level": "h1",
+          "text": "Something went wrong"
+        }
+      ],
+      "ctas": [
+        "Try again",
+        "Go home"
+      ],
+      "topFonts": [
+        "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif",
+        "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", monospace"
+      ],
+      "animationSignals": {
+        "libraries": {
+          "framerMotion": false,
+          "gsap": false,
+          "three": false,
+          "lottie": false,
+          "locomotiveScroll": false
+        },
+        "animatedElementCount": 0,
+        "keyframes": [
+          "bounce",
+          "ping-slow",
+          "pulse",
+          "shimmer-slide",
+          "spin",
+          "spin-around",
+          "star-movement-bottom",
+          "star-movement-top",
+          "text-shimmer",
+          "enter",
+          "exit",
+          "shimmer"
+        ]
+      },
+      "codeLinks": [],
+      "codeBlockCount": 0,
+      "qualityWarnings": []
+    },
+    {
+      "sourceId": "21st-landing-page-components",
+      "sourceName": "21st.dev Landing Page Components",
+      "licenseStatus": "review-required-per-component",
+      "url": "https://21st.dev/community/components/kokonutd/beams-background/default",
+      "title": "Beams Background",
+      "description": "",
+      "reuseGuidance": "High-density landing-page component discovery: heroes, features, CTAs, pricing, testimonials and animated sections. Verify each component license before code reuse.",
+      "screenshots": {
+        "desktop": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/21st-landing-page-components/078-beams-background-b9ebf164/desktop.png",
+          "sha256": "2b6802112f19e27ac6184f6217170c02172af6c839da3274439775223ed5f1c4",
+          "mode": "viewport"
+        },
+        "mobile": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/21st-landing-page-components/078-beams-background-b9ebf164/mobile.png",
+          "sha256": "e3e94541d60826e33e07992f8204c6550d848a3798d00024f81a8307d2741541",
+          "mode": "viewport"
+        }
+      },
+      "headings": [
+        {
+          "level": "h1",
+          "text": "Something went wrong"
+        }
+      ],
+      "ctas": [
+        "Try again",
+        "Go home"
+      ],
+      "topFonts": [
+        "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif",
+        "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", monospace"
+      ],
+      "animationSignals": {
+        "libraries": {
+          "framerMotion": false,
+          "gsap": false,
+          "three": false,
+          "lottie": false,
+          "locomotiveScroll": false
+        },
+        "animatedElementCount": 0,
+        "keyframes": [
+          "bounce",
+          "ping-slow",
+          "pulse",
+          "shimmer-slide",
+          "spin",
+          "spin-around",
+          "star-movement-bottom",
+          "star-movement-top",
+          "text-shimmer",
+          "enter",
+          "exit",
+          "shimmer"
+        ]
+      },
+      "codeLinks": [],
+      "codeBlockCount": 0,
+      "qualityWarnings": []
+    },
+    {
       "sourceId": "awwwards-winning-websites",
       "sourceName": "Awwwards Winning Websites",
       "licenseStatus": "inspiration-only-high-overdesign-risk",
@@ -6460,146 +6555,6 @@
       "codeLinks": [],
       "codeBlockCount": 0,
       "qualityWarnings": []
-    },
-    {
-      "sourceId": "efferd-blocks",
-      "sourceName": "Efferd Blocks",
-      "licenseStatus": "license-per-block",
-      "url": "https://efferd.com/blocks/features",
-      "title": "Free & Pro Shadcn Features Blocks - Efferd",
-      "description": "Discover Features blocks — ready to copy, customize, and drop into your Shadcn/UI project.",
-      "reuseGuidance": "Block-level layout discovery. Verify each block license before reuse.",
-      "screenshots": {
-        "desktop": {
-          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/efferd-blocks/features/desktop.png",
-          "sha256": "ff0bad0fff1843fa5a144b5d86ca5fce8fc0fd36b805a956242a07c557e5196a",
-          "mode": "viewport"
-        },
-        "mobile": {
-          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/efferd-blocks/features/mobile.png",
-          "sha256": "15541fc8b8c0605caccbc138729e3c26618487f88adcbb5d14ef25780583a3de",
-          "mode": "viewport"
-        }
-      },
-      "headings": [
-        {
-          "level": "h1",
-          "text": "Explore Features Blocks"
-        },
-        {
-          "level": "h2",
-          "text": "features 1"
-        },
-        {
-          "level": "h2",
-          "text": "features 2"
-        },
-        {
-          "level": "h2",
-          "text": "features 3"
-        },
-        {
-          "level": "h2",
-          "text": "features 4"
-        },
-        {
-          "level": "h2",
-          "text": "features 5"
-        }
-      ],
-      "ctas": [
-        "Efferd",
-        "Blocks",
-        "Pricing",
-        "Docs",
-        "Changelog",
-        "Log In",
-        "Get access",
-        "Toggle menu",
-        "Back to Blocks",
-        "#",
-        "preview",
-        "code"
-      ],
-      "topFonts": [],
-      "animationSignals": {
-        "libraries": {},
-        "animatedElementCount": 0,
-        "keyframes": []
-      },
-      "codeLinks": [],
-      "codeBlockCount": 0,
-      "qualityWarnings": []
-    },
-    {
-      "sourceId": "efferd-blocks",
-      "sourceName": "Efferd Blocks",
-      "licenseStatus": "license-per-block",
-      "url": "https://efferd.com/blocks/footer",
-      "title": "Free & Pro Shadcn Footer Blocks - Efferd",
-      "description": "Discover Footer blocks — ready to copy, customize, and drop into your Shadcn/UI project.",
-      "reuseGuidance": "Block-level layout discovery. Verify each block license before reuse.",
-      "screenshots": {
-        "desktop": {
-          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/efferd-blocks/footer/desktop.png",
-          "sha256": "ed016702cde4ba8b858c9775f4507a2c299f3aee7af9b5cf9b527c93d4ebb8df",
-          "mode": "viewport"
-        },
-        "mobile": {
-          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/efferd-blocks/footer/mobile.png",
-          "sha256": "7ce548c5e372a6887844bc0d45043249580c0ba4e733e2c7fe5cbb4a43c687f1",
-          "mode": "viewport"
-        }
-      },
-      "headings": [
-        {
-          "level": "h1",
-          "text": "Explore Footer Blocks"
-        },
-        {
-          "level": "h2",
-          "text": "footer 1"
-        },
-        {
-          "level": "h2",
-          "text": "footer 2"
-        },
-        {
-          "level": "h2",
-          "text": "footer 3"
-        },
-        {
-          "level": "h2",
-          "text": "footer 4"
-        },
-        {
-          "level": "h2",
-          "text": "footer 5"
-        }
-      ],
-      "ctas": [
-        "Efferd",
-        "Blocks",
-        "Pricing",
-        "Docs",
-        "Changelog",
-        "Log In",
-        "Get access",
-        "Toggle menu",
-        "Back to Blocks",
-        "#",
-        "preview",
-        "code"
-      ],
-      "topFonts": [],
-      "animationSignals": {
-        "libraries": {},
-        "animatedElementCount": 0,
-        "keyframes": []
-      },
-      "codeLinks": [],
-      "codeBlockCount": 0,
-      "qualityWarnings": []
     }
   ],
   "reusableCodeRepositories": [
@@ -6607,79 +6562,79 @@
       "name": "harshjdhv__componentry",
       "license": "MIT",
       "localPath": "C:/Users/PC/.codex/design-stack/repos/harshjdhv__componentry",
-      "selectedExamples": 36,
-      "motionExamples": 16,
-      "shadcnExamples": 11,
-      "tailwindExamples": 28
+      "selectedExamples": 24,
+      "motionExamples": 8,
+      "shadcnExamples": 8,
+      "tailwindExamples": 18
     },
     {
       "name": "ibelick__motion-primitives",
       "license": "MIT",
       "localPath": "C:/Users/PC/.codex/design-stack/repos/ibelick__motion-primitives",
-      "selectedExamples": 36,
-      "motionExamples": 30,
-      "shadcnExamples": 15,
-      "tailwindExamples": 12
+      "selectedExamples": 24,
+      "motionExamples": 18,
+      "shadcnExamples": 10,
+      "tailwindExamples": 9
     },
     {
       "name": "launch-ui__launch-ui",
       "license": "MIT",
       "localPath": "C:/Users/PC/.codex/design-stack/repos/launch-ui__launch-ui",
-      "selectedExamples": 36,
+      "selectedExamples": 24,
       "motionExamples": 0,
-      "shadcnExamples": 15,
-      "tailwindExamples": 17
+      "shadcnExamples": 10,
+      "tailwindExamples": 9
     },
     {
       "name": "magicuidesign__magicui",
       "license": "MIT",
       "localPath": "C:/Users/PC/.codex/design-stack/repos/magicuidesign__magicui",
-      "selectedExamples": 36,
+      "selectedExamples": 24,
       "motionExamples": 0,
-      "shadcnExamples": 16,
-      "tailwindExamples": 19
+      "shadcnExamples": 12,
+      "tailwindExamples": 12
     },
     {
       "name": "markmead__hyperui",
       "license": "MIT",
       "localPath": "C:/Users/PC/.codex/design-stack/repos/markmead__hyperui",
-      "selectedExamples": 36,
+      "selectedExamples": 24,
       "motionExamples": 2,
-      "shadcnExamples": 13,
+      "shadcnExamples": 11,
       "tailwindExamples": 6
     },
     {
       "name": "nolly-studio__cult-ui",
       "license": "MIT",
       "localPath": "C:/Users/PC/.codex/design-stack/repos/nolly-studio__cult-ui",
-      "selectedExamples": 36,
+      "selectedExamples": 24,
       "motionExamples": 5,
-      "shadcnExamples": 19,
-      "tailwindExamples": 22
+      "shadcnExamples": 15,
+      "tailwindExamples": 15
     },
     {
       "name": "serafimcloud__21st",
       "license": "MIT",
       "localPath": "C:/Users/PC/.codex/design-stack/repos/serafimcloud__21st",
-      "selectedExamples": 36,
+      "selectedExamples": 24,
       "motionExamples": 2,
-      "shadcnExamples": 20,
-      "tailwindExamples": 27
+      "shadcnExamples": 15,
+      "tailwindExamples": 16
     },
     {
       "name": "shadcn-ui__ui",
       "license": "MIT",
       "localPath": "C:/Users/PC/.codex/design-stack/repos/shadcn-ui__ui",
-      "selectedExamples": 36,
+      "selectedExamples": 24,
       "motionExamples": 0,
-      "shadcnExamples": 13,
-      "tailwindExamples": 31
+      "shadcnExamples": 11,
+      "tailwindExamples": 22
     },
     {
       "name": "tailwindlabs__headlessui",
       "license": "MIT",
       "localPath": "C:/Users/PC/.codex/design-stack/repos/tailwindlabs__headlessui",
-      "selectedExamples": 36,
+      "selectedExamples": 24,
       "motionExamples": 0,
       "shadcnExamples": 0,
       "tailwindExamples": 0
@@ -6688,10 +6643,10 @@
       "name": "tremorlabs__tremor",
       "license": "MIT",
       "localPath": "C:/Users/PC/.codex/design-stack/repos/tremorlabs__tremor",
-      "selectedExamples": 36,
+      "selectedExamples": 24,
       "motionExamples": 0,
-      "shadcnExamples": 19,
-      "tailwindExamples": 31
+      "shadcnExamples": 9,
+      "tailwindExamples": 20
     },
     {
       "name": "nextlevelbuilder__ui-ux-pro-max-skill",

@@ -1,6 +1,6 @@
 # Web Factory Design Intelligence
 
-Generated: 2026-06-27T15:31:57.633Z
+Generated: 2026-06-28T19:39:40.978Z
 
 ## Summary
 
@@ -31,26 +31,26 @@ Generated: 2026-06-27T15:31:57.633Z
 
 ## Motion Code Repositories
 
-- harshjdhv__componentry: 16 motion examples, license: MIT
-- ibelick__motion-primitives: 30 motion examples, license: MIT
+- harshjdhv__componentry: 8 motion examples, license: MIT
+- ibelick__motion-primitives: 18 motion examples, license: MIT
 - markmead__hyperui: 2 motion examples, license: MIT
 - nolly-studio__cult-ui: 5 motion examples, license: MIT
 - serafimcloud__21st: 2 motion examples, license: MIT
 
 ## Font Signals
 
-- ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji": 11
+- Geist, "Geist Fallback": 7
 - Inter, "Inter Fallback": 6
 - ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace: 6
+- ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji": 6
 - "Geist Mono", "Geist Mono Fallback": 5
-- Geist, "Geist Fallback": 5
-- "ABC Diatype", system-ui, -apple-system, sans-serif: 3
 - "Geist Mono", monospace: 3
 - "IBM Plex Mono", ui-monospace, monospace: 3
 - "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, Cantarell, "Noto Sans", sans-serif, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji": 3
 - Geist, sans-serif: 3
-- GeistMono, ui-monospace, SFMono-Regular, "Roboto Mono", Menlo, Monaco, "Liberation Mono", "DejaVu Sans Mono", "Courier New", monospace: 3
-- GeistSans, "GeistSans Fallback", Geist, "Geist Fallback", Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol": 3
+- Inter, -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", sans-serif: 3
+- Inter, ui-sans-serif, system-ui, sans-serif: 3
+- Montserrat, sans-serif: 3
 
 ## Use Rule
 
