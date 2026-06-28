@@ -10,25 +10,26 @@ GestiOS, ProveeGest, DentalGest, Ganadero OS y clientes piloto.
 
 ONIA no debe construir un ERP universal desde cero.
 
-La ruta correcta es endurecer GestiOS como core operativo reutilizable, usar
-ONIA Center como tablero interno de control y abrir verticales solo cuando el
-core ya soporte la operacion comun.
+La ruta correcta es perfeccionar GestiOS como sistema de organizacion operativa,
+usar ONIA Center como tablero interno de control y abrir verticales solo cuando
+el core ya ordene bien una empresa real.
 
 Orden de producto:
 
 ```text
 ONIA Center controla.
-GestiOS Core ejecuta.
+GestiOS organiza la operacion.
 ProveeGest verticaliza distribucion B2B.
 DentalGest queda separado como clinica dental.
 Ganadero OS queda separado por offline y dominio rural.
 Bolivian Electric valida ProveeGest Electrico.
 ```
 
-La razon es practica: GestiOS ya tiene organizacion, usuarios, roles, planes,
-add-ons, clientes, productos, inventario, ventas, compras, caja, auditoria,
-notificaciones e import/export. Crear otro core ahora duplicaria trabajo y
-subiria el riesgo comercial.
+La razon es practica: el valor central de GestiOS no es ser POS, ERP ni
+inventario. Su valor es ordenar una empresa: quien hace que, para quien, cuando,
+en que estado, con que evidencia y cual es el siguiente paso. Productos,
+inventario, ventas, compras y caja son modulos utiles, pero no son el nucleo.
+Crear otro core ahora duplicaria trabajo y subiria el riesgo comercial.
 
 ## Fuentes revisadas
 
@@ -60,11 +61,31 @@ subiria el riesgo comercial.
 | Sistema | Rol correcto | Lo que no debe hacer ahora |
 |---|---|---|
 | ONIA Center | Control interno, backlog, readiness, evidencia, aprobaciones, prioridades y seguimiento de ONIA | Operar el negocio diario del cliente o guardar datos sensibles sin alcance |
-| GestiOS Core | Base operativa comun para pymes: tenant, usuarios, roles, planes, clientes, productos, inventario, ventas, compras, caja, reportes, auditoria, import/export | Convertirse en ERP pesado, prometer SIAT/WhatsApp/TR4 sin proveedor validado |
+| GestiOS Core | Sistema de organizacion empresarial: tenant, equipo, roles, responsables, contactos, tareas, solicitudes, estados, evidencia, reportes, auditoria y modulos activables | Convertirse en ERP pesado, POS disfrazado, inventario generico o prometer SIAT/WhatsApp/TR4 sin proveedor validado |
 | ProveeGest | Vertical B2B sobre GestiOS Core para importadoras, mayoristas y distribuidoras | Ser repo nuevo antes de validar el core |
 | DentalGest | Vertical clinico dental independiente | Mezclarse dentro de GestiOS o perder foco clinico |
 | Ganadero OS / HatoGest | Vertical rural/offline independiente | Meter ganado y sync offline en GestiOS Core |
 | Bolivian Electric OS | Cliente piloto para validar ProveeGest Electrico | Ser un fork hardcodeado o escribir en TR4 sin contrato y pruebas |
+
+## Definicion corregida de GestiOS
+
+GestiOS es el sistema de organizacion de una empresa.
+
+Debe resolver primero estas preguntas:
+
+1. Quien trabaja en la empresa.
+2. Que rol y permisos tiene cada persona.
+3. Que clientes, proveedores, contactos o areas existen.
+4. Que solicitudes, tareas, casos, pedidos o pendientes estan abiertos.
+5. Quien es responsable de cada pendiente.
+6. En que estado esta cada cosa.
+7. Que fecha limite o siguiente accion existe.
+8. Que evidencia, nota, archivo o historial respalda el avance.
+9. Que alertas requieren atencion.
+10. Que reportes necesita gerencia para decidir.
+
+Si un modulo no ayuda a responder esas preguntas, no entra al core inicial. Puede
+entrar despues como add-on, vertical o integracion.
 
 ## Core existente que se debe proteger
 
@@ -76,26 +97,31 @@ no reemplazarla.
 | Tenant | `Organization`, `Profile`, `organizationId`, `getTenantProfile()` | Mantener como contrato central |
 | Roles | `Role`, permisos en `lib/permissions.ts` | Auditar cobertura antes de ampliar |
 | Planes | `PlanType`, `OrgAddon`, `lib/plans.ts` | Mantener add-ons separados del plan base |
-| Catalogo | `Category`, `Product`, `ProductVariant`, `attributeSchema` | Usar para rubros con atributos |
-| Clientes | `Customer` | Expandir a contactos/CRM solo cuando el flujo lo requiera |
-| Ventas | `Order`, `OrderItem`, caja y pagos internos | No prometer facturacion fiscal |
-| Compras | `Supplier`, `PurchaseOrder`, `PurchaseOrderItem` | Usar para reposicion y proveedores |
-| Operacion | `Notification`, `ActivityLog`, `AuditLog`, sesiones | Usar como backbone de seguimiento |
+| Estructura | `Branch`, usuarios por organizacion y settings | Ordenar sucursales, areas y responsables antes de agregar complejidad |
+| Contactos | `Customer`, `Supplier` | Separar personas/contactos cuando el flujo B2B lo requiera |
+| Pendientes | Pedidos, compras, notificaciones y actividad existentes | Evolucionar hacia tareas, solicitudes y casos transversales |
+| Catalogo | `Category`, `Product`, `ProductVariant`, `attributeSchema` | Mantener como modulo activable por rubro |
+| Ventas | `Order`, `OrderItem`, caja y pagos internos | Mantener como modulo, no como definicion de GestiOS |
+| Compras | `Supplier`, `PurchaseOrder`, `PurchaseOrderItem` | Mantener como modulo de operacion y reposicion |
+| Operacion | `Notification`, `ActivityLog`, `AuditLog`, sesiones | Usar como backbone de seguimiento, evidencia y auditoria |
 | Import/export | Rutas existentes y validadores | Estandarizar dry-run y errores por fila |
 
 ## Piezas comunes que faltan antes de ProveeGest
 
-Estas son las extensiones que tienen sentido para empresas reales B2B. Deben
-entrar en GestiOS Core solo cuando haya contrato de datos, migracion y prueba.
+Estas son las extensiones que perfeccionan a GestiOS como sistema de
+organizacion. Deben entrar al core solo cuando haya contrato de datos,
+migracion y prueba.
 
 | Pieza | Por que importa | Regla |
 |---|---|---|
+| Areas/equipos | Una empresa real trabaja por administracion, ventas, almacen, compras, gerencia y soporte | Debe ser simple; no crear organigrama pesado |
 | Contactos por cliente | Empresas B2B tienen comprador, encargado, almacen, finanzas y gerencia | No reemplaza `Customer`; lo complementa |
-| Solicitud comercial | Permite registrar pedido, duda, reclamo o requerimiento sin convertirlo en venta | Debe tener estado, responsable, prioridad y historial |
-| Cotizacion | Importadoras venden por solicitud, lista, disponibilidad y aprobacion | No debe prometer integracion fiscal |
-| Tareas/SLA | El gerente necesita seguimiento de pendientes y vencidos | Debe ser simple, asignable y auditable |
+| Tareas | Toda empresa necesita pendientes con responsable, fecha, prioridad y evidencia | Debe ser la unidad basica de seguimiento |
+| Solicitud/caso | Permite registrar pedido, duda, reclamo, requerimiento o tramite sin convertirlo en venta | Debe tener estado, responsable, prioridad e historial |
+| Checklist/proceso | Las empresas repiten rutinas de apertura, cierre, compras, cobranza, entrega, soporte o auditoria | Debe ser reusable por rubro |
+| Cotizacion | Importadoras venden por solicitud, lista, disponibilidad y aprobacion | Add-on B2B, no core obligatorio |
 | Import batch | Los datos entran por CSV/XLSX o sistemas heredados | Siempre con dry-run, errores por fila y rollback logico |
-| Knowledge item | Base comercial para vendedores y chatbot futuro | Primero interno; chatbot despues |
+| Knowledge item | Base operativa para procedimientos, respuestas, productos y chatbot futuro | Primero interno; chatbot despues |
 | External adapter | TR4, WhatsApp, n8n, pagos o SIAT | Bloqueado por defecto hasta discovery y credenciales |
 
 ## Orden de construccion
@@ -140,24 +166,25 @@ Cierre:
 - No hay rutas operativas sin tenant scope conocido.
 - Riesgos restantes quedan documentados por archivo.
 
-### Fase 2 - Core operativo vendible
+### Fase 2 - Core de organizacion vendible
 
-Objetivo: fortalecer lo que ayuda a vender y operar.
+Objetivo: fortalecer lo que ayuda a ordenar, controlar y operar una empresa.
 
 Orden:
 
 1. Dashboard operativo.
-2. Clientes y contactos.
-3. Productos, categorias, variantes y stock minimo.
-4. Proveedores y ordenes de compra.
-5. Ventas/pedidos/caja.
-6. Notificaciones y actividad.
+2. Equipo, roles, areas y responsables.
+3. Clientes, proveedores y contactos.
+4. Tareas, solicitudes, casos y estados.
+5. Checklists/procesos repetibles.
+6. Notificaciones, actividad y evidencia.
 7. Reportes gerenciales.
 8. Import/export con dry-run.
+9. Modulos activables: catalogo, inventario, ventas, compras y caja.
 
 Cierre:
 
-- Un comercio real puede operar dia a dia sin integraciones externas.
+- Una empresa real puede ordenar su dia a dia sin integraciones externas.
 - Los add-ons no bloquean el uso base.
 
 ### Fase 3 - Rubros y familia B2B
@@ -188,7 +215,8 @@ categoria de producto.
 Cierre:
 
 - Nuevo rubro definido en GestiOS sin duplicar repo.
-- Catalogo tecnico soporta atributos electricos.
+- El sistema de organizacion soporta responsables, solicitudes y seguimiento.
+- Catalogo tecnico soporta atributos electricos como modulo activable.
 - Solicitudes y cotizaciones quedan preparadas para B2B.
 
 ### Fase 4 - ProveeGest Electrico piloto
@@ -281,8 +309,9 @@ El core inicial esta listo para abrir ProveeGest cuando:
 
 - GestiOS pasa lint, typecheck, tests y build.
 - No hay rutas criticas sin scope por `organizationId`.
-- Roles basicos cubren admin, operador/cajero, inventario y reportes.
-- El cliente puede operar catalogo, ventas, compras, clientes y reportes.
+- Roles basicos cubren admin, operador, responsable de area y reportes.
+- El cliente puede organizar equipo, contactos, tareas, solicitudes, evidencia y reportes.
+- Catalogo, inventario, ventas, compras y caja pueden activarse por rubro.
 - Import/export tiene dry-run o validacion antes de escribir.
 - Integraciones sensibles estan apagadas por defecto.
 - ProveeGest Electrico puede configurarse sin fork ni repo nuevo.
@@ -304,10 +333,9 @@ El core inicial de ONIA se construye asi:
 
 ```text
 1. Documentar orden y contrato.
-2. Endurecer GestiOS Core.
+2. Perfeccionar GestiOS como sistema de organizacion.
 3. Abrir ProveeGest como familia B2B sobre GestiOS.
 4. Validar ProveeGest Electrico con Bolivian Electric.
 5. Mantener DentalGest y Ganadero OS separados.
 6. Integrar solo cuando haya discovery, credenciales y margen.
 ```
-
