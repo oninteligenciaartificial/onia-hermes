@@ -25,6 +25,7 @@ import {
 } from "lucide-react";
 import "../onia-center.css";
 import { WebFactoryIntakeForm } from "./intake-form";
+import { MotionArticle, MotionReveal } from "./motion-shell";
 import { getWebFactoryCenterSnapshot, type WebFactoryClientRecipe, type WebFactoryRecipeStatus } from "./source";
 
 export const dynamic = "force-dynamic";
@@ -104,16 +105,16 @@ export default async function WebFactoryCenterPage() {
           </div>
         </header>
 
-        <section className="onia-active-module onia-webfactory-metrics" aria-label="Estado general Web Factory">
+        <MotionReveal className="onia-active-module onia-webfactory-metrics" ariaLabel="Estado general Web Factory">
           <MetricCard icon={Layers3} label="Recetas" value={`${snapshot.counts.designRecipes}/${snapshot.counts.clientProfiles}`} detail="Clientes con diseno generado" />
           <MetricCard icon={BadgeCheck} label="Operativas" value={String(snapshot.counts.ready)} detail="Sin warnings y con preview" />
           <MetricCard icon={Camera} label="Screenshots" value={String(snapshot.counts.screenshots)} detail="Capturas usadas en recetas" />
           <MetricCard icon={Code2} label="Codigo" value={String(snapshot.counts.codeReferences)} detail="Referencias permitidas tras review" />
-        </section>
+        </MotionReveal>
 
         <WebFactoryIntakeForm />
 
-        <section className="onia-panel onia-webfactory-playbook">
+        <MotionReveal className="onia-panel onia-webfactory-playbook">
           <SectionHeader
             icon={Workflow}
             eyebrow="Paso a paso"
@@ -158,9 +159,9 @@ export default async function WebFactoryCenterPage() {
               </article>
             ))}
           </div>
-        </section>
+        </MotionReveal>
 
-        <section className="onia-panel onia-webfactory-command-center">
+        <MotionReveal className="onia-panel onia-webfactory-command-center">
           <SectionHeader
             icon={Terminal}
             eyebrow="Comandos canonicos"
@@ -177,9 +178,9 @@ export default async function WebFactoryCenterPage() {
               </article>
             ))}
           </div>
-        </section>
+        </MotionReveal>
 
-        <section className="onia-panel onia-webfactory-github">
+        <MotionReveal className="onia-panel onia-webfactory-github">
           <SectionHeader
             icon={Code2}
             eyebrow="Repos GitHub"
@@ -249,15 +250,15 @@ export default async function WebFactoryCenterPage() {
               </article>
             ))}
           </div>
-        </section>
+        </MotionReveal>
 
-        <section className="onia-webfactory-grid" aria-label="Recetas por cliente">
+        <MotionReveal className="onia-webfactory-grid" ariaLabel="Recetas por cliente">
           {snapshot.recipes.map((recipe) => (
             <RecipeCard key={recipe.slug} recipe={recipe} />
           ))}
-        </section>
+        </MotionReveal>
 
-        <section className="onia-webfactory-two-column" aria-label="Inteligencia y pendientes">
+        <MotionReveal className="onia-webfactory-two-column" ariaLabel="Inteligencia y pendientes">
           <article className="onia-panel onia-webfactory-intelligence">
             <SectionHeader
               icon={Sparkles}
@@ -349,7 +350,7 @@ export default async function WebFactoryCenterPage() {
               <small>Ultima lectura: {formatDate(snapshot.generatedAt)}</small>
             </div>
           </article>
-        </section>
+        </MotionReveal>
       </section>
     </main>
   );
@@ -380,7 +381,7 @@ function MetricCard({
 
 function RecipeCard({ recipe }: { recipe: WebFactoryClientRecipe }) {
   return (
-    <article className={`onia-panel onia-webfactory-recipe is-${recipe.status}`} id={`recipe-${recipe.slug}`}>
+    <MotionArticle className={`onia-panel onia-webfactory-recipe is-${recipe.status}`} id={`recipe-${recipe.slug}`}>
       <div className="onia-webfactory-recipe__head">
         <div>
           <span>{recipe.template} / {recipe.verticalLabel}</span>
@@ -481,7 +482,7 @@ function RecipeCard({ recipe }: { recipe: WebFactoryClientRecipe }) {
         <ShieldCheck size={15} />
         <code>{recipe.commands.buildPreview}</code>
       </div>
-    </article>
+    </MotionArticle>
   );
 }
 

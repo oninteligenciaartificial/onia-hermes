@@ -177,6 +177,24 @@ completo sin pedir informacion al usuario si el intake ya tiene datos clave.
   profesional se reemplazan por assets propios, generados/aprobados o
   licenciados.
 
+## Politica de motion
+
+- `motion` esta instalado en `apps/site` para componentes React/Next internos,
+  ONIA Center y futuras superficies Web Factory con interacciones controladas.
+- Las webs estaticas generadas por `packages/templates` deben seguir usando CSS
+  e IntersectionObserver liviano; no depender de React solo para animar una
+  landing exportada.
+- Usar motion solo cuando mejora jerarquia, foco, confianza o conversion:
+  reveal de secciones, estados de cards, transiciones de paneles, filtros o
+  vistas de producto.
+- Todo motion debe respetar `prefers-reduced-motion` o `useReducedMotion`,
+  ejecutarse una sola vez cuando sea scroll reveal y evitar loops decorativos
+  pesados.
+- Evitar shader/canvas/hero animation pesado sin aprobacion y sin prueba de
+  performance. Si el hero ya usa video, priorizar poster y carga diferida.
+- Para copiar patrones de galerias o repos, retokenizar y registrar la fuente;
+  no copiar identidad, assets, claims ni layouts reconocibles.
+
 ## Criterio de "listo para cliente"
 
 Una web esta lista para entregar cuando:
