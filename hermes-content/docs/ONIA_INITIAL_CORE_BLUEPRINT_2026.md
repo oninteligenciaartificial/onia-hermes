@@ -11,16 +11,17 @@ Si, lo miramos desde ONIA Center.
 
 Pero ONIA Center no debe ser el producto core que usan los clientes. ONIA Center
 es el panel interno para dirigir, auditar, priorizar y registrar evidencia. El
-core ejecutable inicial debe nacer desde GestiOS, porque ya tiene la base mas
-cercana a empresas reales: organizaciones, perfiles, planes, roles, clientes,
-productos, inventario, ventas, compras, sucursales, pagos, notificaciones,
-superadmin y add-ons.
+core se llama ONIA Core. La primera implementacion debe nacer dentro de GestiOS,
+porque ya tiene la base mas cercana a empresas reales: organizaciones, perfiles,
+planes, roles, clientes, productos, inventario, ventas, compras, sucursales,
+pagos, notificaciones, superadmin y add-ons.
 
 Decision:
 
 ```text
 ONIA Center controla.
-GestiOS Core ejecuta.
+ONIA Core organiza.
+GestiOS implementa primero ONIA Core.
 DentalGest especializa clinicas.
 ProveeGest especializa importadoras/mayoristas/distribuidoras.
 HatoGest/Ganadero OS queda separado por offline y dominio rural.
@@ -34,14 +35,14 @@ ONIA Center
   -> backlog, proyectos, readiness, leads, evidencias, aprobaciones
   -> NO contiene logica operativa profunda del cliente
 
-GestiOS Core
+ONIA Core
   -> tenant, usuarios, roles, planes, modulos, clientes, tareas, ventas,
      inventario ligero, reportes, auditoria, notificaciones y add-ons
-  -> base para GestiOS Empresas y ProveeGest
+  -> implementado primero en GestiOS y base para ProveeGest
 
 Verticales
   -> DentalGest: dominio clinico dental
-  -> ProveeGest: distribucion B2B sobre GestiOS Core
+  -> ProveeGest: distribucion B2B sobre ONIA Core
   -> HatoGest/Ganadero OS: dominio rural/offline separado
 ```
 
@@ -134,9 +135,9 @@ seguras, precio, responsable y prueba.
 
 ## Primera familia construible
 
-### GestiOS Core
+### ONIA Core implementado en GestiOS
 
-Producto base para pymes operativas.
+Nucleo base para organizar pymes y empresas operativas.
 
 Debe quedar estable antes de abrir mas verticales:
 
@@ -154,7 +155,7 @@ Debe quedar estable antes de abrir mas verticales:
 
 ### ProveeGest
 
-ProveeGest debe ser una configuracion vertical de GestiOS Core, no un repo nuevo
+ProveeGest debe ser una configuracion vertical de ONIA Core, no un repo nuevo
 todavia.
 
 Agrega lenguaje y modulos de distribucion B2B:
@@ -208,7 +209,7 @@ Lo que si puede compartir como patron:
 
 ## Frontera con HatoGest/Ganadero OS
 
-HatoGest no entra al core inicial de GestiOS porque tiene necesidad offline y
+HatoGest no entra a ONIA Core inicial porque tiene necesidad offline y
 modelo de dominio distinto.
 
 Se reutilizan patrones:
@@ -233,7 +234,7 @@ No se reutiliza:
 
 ONIA Center debe mostrar:
 
-- proyecto `GestiOS Core`;
+- proyecto `ONIA Core`;
 - proyecto `ProveeGest`;
 - proyecto `DentalGest`;
 - proyecto `Bolivian Electric OS`;
@@ -266,7 +267,7 @@ Salida esperada:
 - checklist de tenant safety;
 - decision de que se implementa en GestiOS primero.
 
-### Fase 1 - GestiOS Core duro
+### Fase 1 - ONIA Core duro en GestiOS
 
 Prioridad:
 
@@ -332,14 +333,14 @@ Solo despues de validar fase 1 y 2:
 2. Corregir rutas canonicas del registry.
 3. Crear backlog de auditoria core.
 4. Comparar modelos Prisma de DentalGest, GestiOS y Ganadero OS.
-5. Elegir el primer corte de GestiOS Core.
+5. Elegir el primer corte de ONIA Core en GestiOS.
 6. Recien despues tocar codigo de GestiOS.
 
 ## Decision final
 
 ```text
 ONIA no empieza construyendo "un ERP universal".
-ONIA empieza endureciendo GestiOS Core y lo controla desde ONIA Center.
+ONIA empieza implementando ONIA Core en GestiOS y lo controla desde ONIA Center.
 DentalGest queda vertical maduro separado.
 ProveeGest nace como primera vertical B2B sobre GestiOS.
 Bolivian Electric valida ProveeGest Electrico.

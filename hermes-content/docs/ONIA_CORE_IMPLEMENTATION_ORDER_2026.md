@@ -1,35 +1,38 @@
-# ONIA GestiOS Core Implementation Order 2026
+# ONIA Core Implementation Order 2026
 
 Estado: orden operativo canonico.
 Fecha: 2026-06-28.
 Owner: ONIA / Hermes.
-Uso: convertir la decision del core inicial en una secuencia ejecutable para
+Uso: convertir la decision de ONIA Core en una secuencia ejecutable para
 GestiOS, ProveeGest, DentalGest, Ganadero OS y clientes piloto.
 
 ## Veredicto
 
 ONIA no debe construir un ERP universal desde cero.
 
-La ruta correcta es perfeccionar GestiOS como sistema de organizacion operativa,
-usar ONIA Center como tablero interno de control y abrir verticales solo cuando
-el core ya ordene bien una empresa real.
+La ruta correcta es construir ONIA Core como sistema de organizacion operativa,
+usar GestiOS como primera implementacion cliente y abrir verticales solo cuando
+ONIA Core ya ordene bien una empresa real.
 
 Orden de producto:
 
 ```text
 ONIA Center controla.
-GestiOS organiza la operacion.
+ONIA Core organiza la operacion.
+GestiOS implementa primero ONIA Core.
 ProveeGest verticaliza distribucion B2B.
 DentalGest queda separado como clinica dental.
 Ganadero OS queda separado por offline y dominio rural.
 Bolivian Electric valida ProveeGest Electrico.
 ```
 
-La razon es practica: el valor central de GestiOS no es ser POS, ERP ni
+La razon es practica: el valor central de ONIA Core no es ser POS, ERP ni
 inventario. Su valor es ordenar una empresa: quien hace que, para quien, cuando,
-en que estado, con que evidencia y cual es el siguiente paso. Productos,
-inventario, ventas, compras y caja son modulos utiles, pero no son el nucleo.
-Crear otro core ahora duplicaria trabajo y subiria el riesgo comercial.
+en que estado, con que evidencia y cual es el siguiente paso. GestiOS ya tiene
+la primera base de implementacion, pero el nombre del nucleo es ONIA Core.
+Productos, inventario, ventas, compras y caja son modulos utiles, pero no son
+el nucleo. Crear otro core ahora duplicaria trabajo y subiria el riesgo
+comercial.
 
 ## Fuentes revisadas
 
@@ -61,15 +64,16 @@ Crear otro core ahora duplicaria trabajo y subiria el riesgo comercial.
 | Sistema | Rol correcto | Lo que no debe hacer ahora |
 |---|---|---|
 | ONIA Center | Control interno, backlog, readiness, evidencia, aprobaciones, prioridades y seguimiento de ONIA | Operar el negocio diario del cliente o guardar datos sensibles sin alcance |
-| GestiOS Core | Sistema de organizacion empresarial: tenant, equipo, roles, responsables, contactos, tareas, solicitudes, estados, evidencia, reportes, auditoria y modulos activables | Convertirse en ERP pesado, POS disfrazado, inventario generico o prometer SIAT/WhatsApp/TR4 sin proveedor validado |
-| ProveeGest | Vertical B2B sobre GestiOS Core para importadoras, mayoristas y distribuidoras | Ser repo nuevo antes de validar el core |
+| ONIA Core | Sistema de organizacion empresarial: tenant, equipo, roles, responsables, contactos, tareas, solicitudes, estados, evidencia, reportes, auditoria y modulos activables | Convertirse en ERP pesado, POS disfrazado, inventario generico o prometer SIAT/WhatsApp/TR4 sin proveedor validado |
+| GestiOS | Primera implementacion de ONIA Core para pymes y empresas operativas | Ser confundido con el nombre del core |
+| ProveeGest | Vertical B2B sobre ONIA Core para importadoras, mayoristas y distribuidoras | Ser repo nuevo antes de validar el core |
 | DentalGest | Vertical clinico dental independiente | Mezclarse dentro de GestiOS o perder foco clinico |
-| Ganadero OS / HatoGest | Vertical rural/offline independiente | Meter ganado y sync offline en GestiOS Core |
+| Ganadero OS / HatoGest | Vertical rural/offline independiente | Meter ganado y sync offline en ONIA Core base |
 | Bolivian Electric OS | Cliente piloto para validar ProveeGest Electrico | Ser un fork hardcodeado o escribir en TR4 sin contrato y pruebas |
 
-## Definicion corregida de GestiOS
+## Definicion de ONIA Core
 
-GestiOS es el sistema de organizacion de una empresa.
+ONIA Core es el sistema de organizacion de una empresa.
 
 Debe resolver primero estas preguntas:
 
@@ -89,8 +93,8 @@ entrar despues como add-on, vertical o integracion.
 
 ## Core existente que se debe proteger
 
-GestiOS ya trae una base suficiente para empezar. Primero hay que endurecerla,
-no reemplazarla.
+GestiOS ya trae una base suficiente para implementar ONIA Core. Primero hay que
+perfeccionar esa base, no reemplazarla.
 
 | Area | Base existente en GestiOS | Decision |
 |---|---|---|
@@ -108,7 +112,7 @@ no reemplazarla.
 
 ## Piezas comunes que faltan antes de ProveeGest
 
-Estas son las extensiones que perfeccionan a GestiOS como sistema de
+Estas son las extensiones que perfeccionan a ONIA Core como sistema de
 organizacion. Deben entrar al core solo cuando haya contrato de datos,
 migracion y prueba.
 
@@ -132,8 +136,8 @@ Objetivo: dejar claro que existe hoy, que se puede tocar y que queda fuera.
 
 Acciones:
 
-1. Registrar este orden como documento canonico.
-2. Crear checklist local en GestiOS para el primer sprint.
+1. Registrar este orden como documento canonico de ONIA Core.
+2. Crear checklist local en GestiOS para la primera implementacion.
 3. Correr baseline en GestiOS antes de cambios de codigo:
    - `npm run lint`
    - `npx tsc --noEmit`
@@ -150,7 +154,7 @@ Cierre:
 
 ### Fase 1 - Seguridad multi-tenant y permisos
 
-Objetivo: que el core sea confiable para varios clientes.
+Objetivo: que ONIA Core sea confiable para varios clientes.
 
 Acciones:
 
@@ -214,7 +218,7 @@ categoria de producto.
 
 Cierre:
 
-- Nuevo rubro definido en GestiOS sin duplicar repo.
+- Nuevo rubro definido sobre ONIA Core sin duplicar repo.
 - El sistema de organizacion soporta responsables, solicitudes y seguimiento.
 - Catalogo tecnico soporta atributos electricos como modulo activable.
 - Solicitudes y cotizaciones quedan preparadas para B2B.
@@ -294,27 +298,28 @@ Frentes:
 
 Checklist:
 
-1. Crear `docs/ONIA_CORE_IMPLEMENTATION_ORDER.md` en GestiOS.
-2. Correr baseline de GestiOS.
-3. Auditar rutas `app/api/**` por `organizationId`.
-4. Auditar modelos Prisma para decidir si `Contact`, `CommercialRequest` y
+1. Crear contrato de codigo `lib/onia-core.ts` en GestiOS.
+2. Proteger el contrato con `tests/onia-core.test.ts`.
+3. Correr baseline de GestiOS.
+4. Auditar rutas `app/api/**` por `organizationId`.
+5. Auditar modelos Prisma para decidir si `Contact`, `CommercialRequest` y
    `Quote` entran en la primera migracion.
-5. Definir `businessType` para ProveeGest Electrico.
-6. Crear backlog tecnico con P0/P1/P2.
-7. Implementar solo P0/P1 que habiliten venta o seguridad.
+6. Definir `businessType` para ProveeGest Electrico.
+7. Crear backlog tecnico con P0/P1/P2.
+8. Implementar solo P0/P1 que habiliten organizacion, venta o seguridad.
 
 ## Criterios de aceptacion
 
 El core inicial esta listo para abrir ProveeGest cuando:
 
-- GestiOS pasa lint, typecheck, tests y build.
+- La implementacion GestiOS pasa lint, typecheck, tests y build.
 - No hay rutas criticas sin scope por `organizationId`.
 - Roles basicos cubren admin, operador, responsable de area y reportes.
 - El cliente puede organizar equipo, contactos, tareas, solicitudes, evidencia y reportes.
 - Catalogo, inventario, ventas, compras y caja pueden activarse por rubro.
 - Import/export tiene dry-run o validacion antes de escribir.
 - Integraciones sensibles estan apagadas por defecto.
-- ProveeGest Electrico puede configurarse sin fork ni repo nuevo.
+- ProveeGest Electrico puede configurarse sobre ONIA Core sin fork ni repo nuevo.
 
 ## No hacer
 
@@ -333,8 +338,8 @@ El core inicial de ONIA se construye asi:
 
 ```text
 1. Documentar orden y contrato.
-2. Perfeccionar GestiOS como sistema de organizacion.
-3. Abrir ProveeGest como familia B2B sobre GestiOS.
+2. Implementar ONIA Core primero dentro de GestiOS.
+3. Abrir ProveeGest como familia B2B sobre ONIA Core.
 4. Validar ProveeGest Electrico con Bolivian Electric.
 5. Mantener DentalGest y Ganadero OS separados.
 6. Integrar solo cuando haya discovery, credenciales y margen.

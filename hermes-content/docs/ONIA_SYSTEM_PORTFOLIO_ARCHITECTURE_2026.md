@@ -50,7 +50,8 @@ No duplicar logica central ni copiar/pegar sistemas completos.
 | Capa | Que es | Quien la usa | Se vende? |
 |---|---|---|---|
 | Hermes | cerebro interno, memoria, orquestacion, docs, aprobaciones | ONIA/Sergio | no como app directa |
-| GestiOS Core | base multiempresa: usuarios, roles, tareas, clientes, reportes | productos ONIA | si, como sistema |
+| ONIA Core | base multiempresa: usuarios, roles, tareas, clientes, reportes | productos ONIA | si, como sistema |
+| GestiOS | primera implementacion de ONIA Core para empresas operativas | clientes pyme/empresa | si, como producto |
 | Modulos operativos | CRM, inventario, dashboard, conocimiento, contenido, gastos | empresas segun necesidad | si, como add-ons |
 | Verticales | DentalGest, Bolivian Electric OS, Ganadero OS, etc. | rubros concretos | si, por industria |
 | Adaptadores | TR4, WhatsApp, Excel, APIs, Meta, SIAT si aplica | cliente especifico | se cotiza aparte |
@@ -306,11 +307,11 @@ No debe hacer:
 
 | Funcion | Dueno principal | Donde se adapta |
 |---|---|---|
-| Organizaciones | GestiOS Core | todos los sistemas empresariales |
-| Usuarios/roles | GestiOS Core | DentalGest, Bolivian OS, Ganadero OS |
-| Clientes/contactos | GestiOS Core | DentalGest usa pacientes; Bolivian usa clientes/cotizaciones |
-| Tareas/estados | GestiOS Core | todos los verticales |
-| CRM comercial | GestiOS Core | Bolivian, pymes, paginas web |
+| Organizaciones | ONIA Core | todos los sistemas empresariales |
+| Usuarios/roles | ONIA Core | DentalGest, Bolivian OS, Ganadero OS |
+| Clientes/contactos | ONIA Core | DentalGest usa pacientes; Bolivian usa clientes/cotizaciones |
+| Tareas/estados | ONIA Core | todos los verticales |
+| CRM comercial | ONIA Core | Bolivian, pymes, paginas web |
 | Agenda clinica | DentalGest | solo clinicas |
 | Inventario con camara | StockCam | Bolivian, ferreterias, repuestos, almacenes |
 | Insumos dentales simples | DentalGest | no usar como inventario avanzado |
@@ -321,7 +322,7 @@ No debe hacer:
 | WhatsApp | Conector externo | bloqueado hasta Meta/permisos |
 | TR4 | Adaptador | solo clientes que usen TR4 |
 | SIAT | Adaptador futuro | solo si hay necesidad y soporte |
-| Reportes gerenciales | GestiOS Core + modulos | todos con datos suficientes |
+| Reportes gerenciales | ONIA Core + modulos | todos con datos suficientes |
 
 ## Como hacer al cliente especial
 
