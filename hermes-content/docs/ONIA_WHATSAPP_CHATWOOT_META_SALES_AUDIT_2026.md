@@ -535,3 +535,11 @@ Inicio, navegar por el menu lateral:
 - Chatwoot WhatsApp templates: https://www.chatwoot.com/hc/user-guide/articles/1754940076-whatsapp-templates
 
 Nota: la documentacion de coexistencia de Meta debe verificarse en el flujo real de ONIA cuando exista NIT/verificacion. No convertir esta posibilidad en promesa comercial hasta probarla.
+
+## Caso real aplicado - Bolivian Electric
+
+Se documento el aprendizaje de acceso, verificacion Meta, mapeo S.R.L. -> `Empresa privada`, decision de numero unico, Chatwoot Cloud dedicado, n8n dedicado y reglas de handoff humano en:
+
+- [BOLIVIAN_ELECTRIC_META_WHATSAPP_CASE_20260627.md](./BOLIVIAN_ELECTRIC_META_WHATSAPP_CASE_20260627.md)
+
+Usar ese caso como referencia operativa para clientes bolivianos con marca comercial distinta del nombre legal, numero actual en WhatsApp Business App y necesidad de preservar propiedad del portfolio en Meta.
