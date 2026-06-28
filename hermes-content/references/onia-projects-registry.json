@@ -125,6 +125,56 @@
       "crm_tags": ["gestion", "pyme", "operaciones"]
     },
     {
+      "id": "proveegest",
+      "name": "ProveeGest",
+      "type": "b2b_distribution_vertical_validation",
+      "sales_status": "validation",
+      "family": "GestiOS Empresas",
+      "local_path": "C:\\dev\\Proyectos\\Gestios",
+      "primary_audience": "Importadoras, mayoristas y distribuidoras B2B con catalogo, cotizaciones, vendedores, stock o sucursales",
+      "pain_signals": [
+        "cotizaciones sin seguimiento",
+        "catalogo amplio dificil de consultar",
+        "vendedores sin tablero comun",
+        "stock o productos consultados por varios canales",
+        "sucursales sin visibilidad unificada",
+        "clientes empresa sin historial comercial claro"
+      ],
+      "primary_offer": "Sistema comercial y operativo para importadoras, mayoristas y distribuidoras",
+      "pricing": {
+        "entry": "Auditoria Express o Diagnostico + Plan segun complejidad",
+        "discovery": "Discovery Pagado vigente antes de integraciones o sistema profundo",
+        "implementation": "Implementacion Operativa o sistema personalizado segun alcance",
+        "commission": "Aplicar reglas vigentes de consultoria, GestiOS o sistemas personalizados segun el primer cobro neto",
+        "blocked_until_discovery": [
+          "integracion en tiempo real",
+          "reemplazo ERP",
+          "WhatsApp automatico",
+          "portal cliente",
+          "compras/importaciones avanzadas"
+        ]
+      },
+      "vertical_versions": [
+        "ProveeGest Electrico",
+        "ProveeGest Ferreteria",
+        "ProveeGest Repuestos",
+        "ProveeGest Farma",
+        "ProveeGest Frio",
+        "ProveeGest Agro"
+      ],
+      "secondary_offers": [
+        "CRM de cotizaciones",
+        "base de conocimiento comercial",
+        "catalogo tecnico",
+        "inventario con camara",
+        "dashboard gerencial",
+        "importacion Excel/CSV"
+      ],
+      "recommended_channels": ["LinkedIn", "Email publico", "Demo privada", "Diagnostico pagado", "Relacion comercial directa"],
+      "default_cta": "Hagamos un diagnostico corto para ver como quedarian sus cotizaciones, catalogo y seguimiento en un tablero simple.",
+      "crm_tags": ["proveegest", "distribucion", "mayorista", "importadora", "b2b", "validacion"]
+    },
+    {
       "id": "web-onia",
       "name": "Web ONIA",
       "type": "brand_site",
@@ -254,6 +304,10 @@
     {
       "if": "pain contains excel|reportes|tareas|operacion|seguimiento",
       "primary_project": "gestios"
+    },
+    {
+      "if": "industry contains importadora|distribuidora|mayorista|material electrico|ferreteria mayorista|repuestos|agroinsumos",
+      "primary_project": "proveegest"
     },
     {
       "if": "signal contains no website|weak website|no landing",
