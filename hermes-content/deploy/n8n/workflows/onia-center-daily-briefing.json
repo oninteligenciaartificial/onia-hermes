@@ -58,7 +58,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const payload = items[0].json;\nconst data = payload.data || {};\nconst roles = Array.isArray(data.roles) ? data.roles : [];\nconst result = payload.result || {};\nconst date = data.date || new Date().toISOString().slice(0, 10);\nconst createdTasks = Array.isArray(result.createdTasks) ? result.createdTasks.length : 0;\nconst skippedTasks = Array.isArray(result.skippedTasks) ? result.skippedTasks.length : 0;\nconst lines = [\n  `ONIA Center | Plan diario ${date}`,\n  payload.message || 'Briefing generado.',\n  `Tareas nuevas: ${createdTasks}. Omitidas por duplicado: ${skippedTasks}.`,\n  '',\n];\nfor (const role of roles) {\n  const tasks = Array.isArray(role.topTasks) ? role.topTasks.slice(0, 5) : [];\n  lines.push(`${String(role.role || '').toUpperCase()}: ${role.summary || 'Sin resumen.'}`);\n  for (const task of tasks) {\n    lines.push(`- ${task.timeBlock || 'sin bloque'} | ${task.title || 'Tarea sin titulo'}`);\n  }\n  lines.push('');\n}\nlines.push('Regla: solo cuenta si queda registrado con evidencia. n8n agenda y avisa; Sergio aprueba pagos, descuentos, gastos y uso premium.');\nconst text = lines.join('\\n').slice(0, 3900);\nreturn [{\n  json: {\n    ok: Boolean(payload.ok),\n    mode: payload.mode,\n    date,\n    telegramReady: Boolean(process.env.TELEGRAM_BOT_TOKEN && process.env.TELEGRAM_SERGIO_CHAT_ID),\n    chat_id: process.env.TELEGRAM_SERGIO_CHAT_ID || '',\n    text,\n    calendarBlocks: Array.isArray(data.calendarBlocks) ? data.calendarBlocks : [],\n    createdTasks,\n    skippedTasks\n  }\n}];"
+        "jsCode": "const payload = items[0].json;\nconst data = payload.data || {};\nconst roles = Array.isArray(data.roles) ? data.roles : [];\nconst result = payload.result || {};\nconst date = data.date || new Date().toISOString().slice(0, 10);\nconst createdTasks = Array.isArray(result.createdTasks) ? result.createdTasks.length : 0;\nconst skippedTasks = Array.isArray(result.skippedTasks) ? result.skippedTasks.length : 0;\nconst lines = [\n  `ONIA Center | Plan diario ${date}`,\n  payload.message || 'Briefing generado.',\n  `Tareas nuevas: ${createdTasks}. Omitidas por duplicado: ${skippedTasks}.`,\n  '',\n];\nfor (const role of roles) {\n  const tasks = Array.isArray(role.topTasks) ? role.topTasks.slice(0, 5) : [];\n  lines.push(`${String(role.role || '').toUpperCase()}: ${role.summary || 'Sin resumen.'}`);\n  for (const task of tasks) {\n    lines.push(`- ${task.timeBlock || 'sin bloque'} | ${task.title || 'Tarea sin titulo'}`);\n  }\n  lines.push('');\n}\nlines.push('Regla: solo cuenta si queda registrado con evidencia. n8n agenda y avisa; Sergio aprueba pagos, descuentos, gastos y uso premium.');\nconst text = lines.join('\\n').slice(0, 3900);\nreturn [{\n  json: {\n    ok: Boolean(payload.ok),\n    mode: payload.mode,\n    date,\n    text,\n    calendarBlocks: Array.isArray(data.calendarBlocks) ? data.calendarBlocks : [],\n    createdTasks,\n    skippedTasks\n  }\n}];"
       },
       "id": "build-telegram-summary",
       "name": "Preparar resumen Telegram",
@@ -80,7 +80,7 @@
           "conditions": [
             {
               "id": "telegram-ready",
-              "leftValue": "={{$json.telegramReady}}",
+              "leftValue": "={{Boolean($env.TELEGRAM_BOT_TOKEN && $env.TELEGRAM_SERGIO_CHAT_ID)}}",
               "rightValue": true,
               "operator": {
                 "type": "boolean",
@@ -107,7 +107,7 @@
         "url": "={{'https://api.telegram.org/bot' + $env.TELEGRAM_BOT_TOKEN + '/sendMessage'}}",
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={{ { chat_id: $json.chat_id, text: $json.text, disable_web_page_preview: true } }}",
+        "jsonBody": "={{ { chat_id: $env.TELEGRAM_SERGIO_CHAT_ID, text: $json.text, disable_web_page_preview: true } }}",
         "options": {
           "timeout": 30000
         }
@@ -123,7 +123,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const item = items[0].json;\nreturn [{\n  json: {\n    ok: item.ok,\n    mode: item.mode,\n    date: item.date,\n    calendarReady: Boolean(process.env.GOOGLE_CALENDAR_CLIENT_ID && process.env.GOOGLE_CALENDAR_REFRESH_TOKEN && process.env.GOOGLE_CALENDAR_ID),\n    calendarBlocks: item.calendarBlocks,\n    note: 'Google Calendar queda preparado. Activar escritura solo despues de OAuth y prueba manual.'\n  }\n}];"
+        "jsCode": "const item = items[0].json;\nreturn [{\n  json: {\n    ok: item.ok,\n    mode: item.mode,\n    date: item.date,\n    calendarReady: false,\n    calendarBlocks: item.calendarBlocks,\n    note: 'Google Calendar queda preparado. Activar escritura solo despues de OAuth y prueba manual.'\n  }\n}];"
       },
       "id": "calendar-readiness",
       "name": "Preparar calendario protegido",

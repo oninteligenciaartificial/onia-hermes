@@ -111,6 +111,14 @@ Archivo:
 hermes-content/deploy/n8n/workflows/onia-center-daily-briefing.json
 ```
 
+Estado MCP 2026-06-29:
+
+- Workflow importado como `ONIADailyBrief001`.
+- `availableInMCP=true`.
+- `active=false` hasta completar prueba con variables reales.
+- Prueba simulada MCP exitosa con pin data: ejecucion `18708`.
+- Regla tecnica: los Code nodes de n8n no deben usar `process.env`; las variables se leen desde expresiones de n8n como `$env.NOMBRE_VARIABLE` en los parametros del nodo.
+
 Schedule:
 
 ```txt
