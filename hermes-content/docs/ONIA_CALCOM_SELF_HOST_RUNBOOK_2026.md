@@ -157,12 +157,15 @@ evitar choques.
 Configurado en produccion el 2026-06-29:
 
 - `https://cal.onia.com.bo/onia`: pagina publica de ONIA.
-- `https://cal.onia.com.bo/onia/consulta-inicial`: 30 min, gratis, prospectos
-  nuevos, minimo 4 horas de anticipacion, visible.
+- `https://cal.onia.com.bo/onia/consulta-inicial`: 20 min, gratis, prospectos
+  nuevos, minimo 4 horas de anticipacion, visible. Es una llamada comercial de
+  calificacion, no una auditoria tecnica gratuita.
 - `https://cal.onia.com.bo/onia/demo-onia`: 45 min, Web ONIA, DentalGest,
   GestiOS, automatizaciones y sistemas, minimo 8 horas de anticipacion, visible.
 - `https://cal.onia.com.bo/onia/reunion-proyecto`: 60 min, clientes activos o
-  propuestas en curso, minimo 24 horas de anticipacion, visible.
+  propuestas en curso, minimo 24 horas de anticipacion. Queda oculto en la
+  pagina publica y se usa solo con link directo para evitar que prospectos frios
+  tomen una hora completa.
 - `auditoria-pagada`: 60 min, preparada pero no publica. Queda oculta y sin
   relacion publica `_user_eventtype`, por lo tanto el link directo devuelve 404
   hasta que ONIA decida cobrar asesorias.
@@ -182,7 +185,12 @@ Reglas base:
 - Cuenta/identidad publica Cal self-host: `business@onia.com.bo` como
   `ONIA | Agenda Comercial`.
 - Usuario publico Cal: `onia`.
-- Los tres eventos publicos tienen `requiresConfirmation=true`.
+- Avatar publico Cal:
+  `https://center.onia.com.bo/assets/onia/onia-logo-avatar.png`.
+- Asset canonico local: `hermes-content/assets/onia/onia-logo-avatar.png`.
+- Asset publico ONIA Center:
+  `web-factory/apps/site/public/assets/onia/onia-logo-avatar.png`.
+- Los eventos activos tienen `requiresConfirmation=true`.
 - Cada evento tiene 12 campos de calificacion: empresa/negocio, WhatsApp,
   ciudad, servicio de interes, problema principal, presupuesto aproximado,
   link web/redes, quien debe tomar la reunion, urgencia, rol en el negocio,

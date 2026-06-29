@@ -276,9 +276,10 @@ center.onia.com.bo -> http://onia-center:3012/
 https://cal.onia.com.bo/onia -> 200
 https://cal.onia.com.bo/onia/consulta-inicial -> 200
 https://cal.onia.com.bo/onia/demo-onia -> 200
-https://cal.onia.com.bo/onia/reunion-proyecto -> 200
+https://cal.onia.com.bo/onia/reunion-proyecto -> 200 con link directo, oculto en pagina publica
 https://cal.onia.com.bo/onia/auditoria-pagada -> 404 esperado
 https://center.onia.com.bo/onia-center/login -> 200
+https://center.onia.com.bo/assets/onia/onia-logo-avatar.png -> 200
 ```
 
 Nota operativa: no volver a depender de editar solo
@@ -287,9 +288,11 @@ puede regenerarlo. Mantener rutas manuales en archivo separado bajo el file
 provider de Traefik.
 
 Cal agenda comercial quedo configurado con usuario publico `onia`, identidad
-`business@onia.com.bo`, horario lun-sab 14:00-20:00 America/La_Paz, buffers de
-15 minutos, confirmacion requerida y webhook activo hacia n8n solo para
-`BOOKING_CREATED`.
+`business@onia.com.bo`, avatar ONIA servido desde ONIA Center, horario lun-sab
+14:00-20:00 America/La_Paz, buffers de 15 minutos, confirmacion requerida y
+webhook activo hacia n8n solo para `BOOKING_CREATED`. La pagina publica muestra
+solo consulta comercial de 20 min y demo/diagnostico de 45 min; reunion de
+proyecto queda para link directo.
 
 ONIA Center se desplego el 2026-06-28:
 
