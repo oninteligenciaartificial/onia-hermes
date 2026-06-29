@@ -1,0 +1,112 @@
+{
+  "projectId": "dentagest",
+  "projectName": "DentalGest",
+  "repoPath": "C:\\dev\\proyectos\\DentaGest\\dental-saas",
+  "status": "mapped_not_installed",
+  "adoptionRule": "Do not turn DentalGest into a generic ERP. Adopt only common organization patterns that strengthen the dental product.",
+  "businessRole": "Dental clinic SaaS with clinical records, appointments, treatments, invoices and dental inventory.",
+  "entityMappings": [
+    {
+      "coreEntityId": "organization",
+      "existingModel": "Organization",
+      "status": "exists",
+      "notes": "Tenant root already exists."
+    },
+    {
+      "coreEntityId": "member",
+      "existingModel": "Profile",
+      "status": "exists",
+      "notes": "Clinic staff profile and role layer already exist."
+    },
+    {
+      "coreEntityId": "area",
+      "existingModel": "none",
+      "status": "optional_missing",
+      "notes": "Could represent reception, clinical, billing, lab and management, but not required for clinical MVP."
+    },
+    {
+      "coreEntityId": "contact",
+      "existingModel": "Patient",
+      "status": "domain_specific",
+      "notes": "Patients are clinical domain records, not generic contacts. Avoid flattening clinical data into core contacts."
+    },
+    {
+      "coreEntityId": "work_item",
+      "existingModel": "Appointment, PatientTreatment, Invoice",
+      "status": "domain_specific",
+      "notes": "Clinical appointments and treatment follow-up can surface as work items without replacing their domain models."
+    },
+    {
+      "coreEntityId": "process_checklist",
+      "existingModel": "none",
+      "status": "missing",
+      "notes": "Useful for recalls, treatment plans, lab follow-up, consent and billing routines."
+    },
+    {
+      "coreEntityId": "evidence",
+      "existingModel": "ClinicalRecord, PatientTreatment, Invoice, AuditLog",
+      "status": "sensitive_domain_specific",
+      "notes": "Evidence must respect clinical privacy and stay tied to dental domain rules."
+    },
+    {
+      "coreEntityId": "activity_event",
+      "existingModel": "AuditLog",
+      "status": "exists_partial",
+      "notes": "AuditLog can satisfy activity history after contract alignment."
+    },
+    {
+      "coreEntityId": "notification",
+      "existingModel": "Notification",
+      "status": "exists",
+      "notes": "Clinic notifications already exist."
+    },
+    {
+      "coreEntityId": "import_batch",
+      "existingModel": "none",
+      "status": "missing",
+      "notes": "Could support patient or inventory import with strict validation."
+    }
+  ],
+  "capabilityMappings": [
+    {
+      "capabilityId": "tenant",
+      "status": "exists",
+      "evidence": ["Organization", "Profile", "organizationId"]
+    },
+    {
+      "capabilityId": "team_roles",
+      "status": "partial",
+      "evidence": ["Profile.role"]
+    },
+    {
+      "capabilityId": "relationships",
+      "status": "domain_specific",
+      "evidence": ["Patient"]
+    },
+    {
+      "capabilityId": "work_items",
+      "status": "domain_specific",
+      "evidence": ["Appointment", "PatientTreatment", "Invoice"]
+    },
+    {
+      "capabilityId": "evidence_activity",
+      "status": "partial_sensitive",
+      "evidence": ["ClinicalRecord", "AuditLog"]
+    },
+    {
+      "capabilityId": "alerts_reports",
+      "status": "partial",
+      "evidence": ["Notification"]
+    },
+    {
+      "capabilityId": "data_ops",
+      "status": "missing",
+      "evidence": []
+    }
+  ],
+  "blockedUntil": [
+    "ONIA Core beta contract approved",
+    "Dental privacy boundaries reviewed",
+    "Dental-specific workflows defined before generic task UI"
+  ]
+}

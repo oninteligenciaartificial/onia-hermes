@@ -1,0 +1,112 @@
+{
+  "projectId": "gestios",
+  "projectName": "GestiOS",
+  "repoPath": "C:\\dev\\proyectos\\Gestios",
+  "status": "mapped_not_installed",
+  "adoptionRule": "Do not install until ONIA Core beta. GestiOS must adopt the core without becoming the owner of the core.",
+  "businessRole": "General business organization system for small and medium companies.",
+  "entityMappings": [
+    {
+      "coreEntityId": "organization",
+      "existingModel": "Organization",
+      "status": "exists",
+      "notes": "Tenant root already exists."
+    },
+    {
+      "coreEntityId": "member",
+      "existingModel": "Profile",
+      "status": "exists",
+      "notes": "Role and organization membership already exist."
+    },
+    {
+      "coreEntityId": "area",
+      "existingModel": "Branch",
+      "status": "partial",
+      "notes": "Branch covers physical/commercial units. ONIA Core Area may need a logical department layer."
+    },
+    {
+      "coreEntityId": "contact",
+      "existingModel": "Customer, Supplier",
+      "status": "partial",
+      "notes": "Customers and suppliers exist, but generic people/roles around accounts are not canonical yet."
+    },
+    {
+      "coreEntityId": "work_item",
+      "existingModel": "Order, PaymentRequest, Notification",
+      "status": "missing_canonical",
+      "notes": "Orders and payments are domain records. GestiOS still needs a generic pending-work layer."
+    },
+    {
+      "coreEntityId": "process_checklist",
+      "existingModel": "none",
+      "status": "missing",
+      "notes": "Needed for repeatable routines such as onboarding, collections, purchase follow-up and support."
+    },
+    {
+      "coreEntityId": "evidence",
+      "existingModel": "ActivityLog, AuditLog",
+      "status": "partial",
+      "notes": "Logs exist, but attachable evidence for a work item is not canonical."
+    },
+    {
+      "coreEntityId": "activity_event",
+      "existingModel": "ActivityLog, AuditLog",
+      "status": "exists_partial",
+      "notes": "Existing logs can satisfy much of the activity/audit role after contract alignment."
+    },
+    {
+      "coreEntityId": "notification",
+      "existingModel": "Notification",
+      "status": "exists",
+      "notes": "Organization-scoped notifications already exist."
+    },
+    {
+      "coreEntityId": "import_batch",
+      "existingModel": "none",
+      "status": "missing",
+      "notes": "Needed before safe CSV/Excel onboarding."
+    }
+  ],
+  "capabilityMappings": [
+    {
+      "capabilityId": "tenant",
+      "status": "exists",
+      "evidence": ["Organization", "Profile", "organizationId"]
+    },
+    {
+      "capabilityId": "team_roles",
+      "status": "partial",
+      "evidence": ["Profile.role", "Branch"]
+    },
+    {
+      "capabilityId": "relationships",
+      "status": "partial",
+      "evidence": ["Customer", "Supplier"]
+    },
+    {
+      "capabilityId": "work_items",
+      "status": "missing_canonical",
+      "evidence": ["Order", "PaymentRequest", "Notification"]
+    },
+    {
+      "capabilityId": "evidence_activity",
+      "status": "partial",
+      "evidence": ["ActivityLog", "AuditLog"]
+    },
+    {
+      "capabilityId": "alerts_reports",
+      "status": "partial",
+      "evidence": ["Notification"]
+    },
+    {
+      "capabilityId": "data_ops",
+      "status": "missing",
+      "evidence": []
+    }
+  ],
+  "blockedUntil": [
+    "ONIA Core beta contract approved",
+    "Migration and rollback plan created in GestiOS",
+    "Tenant safety tests added before adoption"
+  ]
+}

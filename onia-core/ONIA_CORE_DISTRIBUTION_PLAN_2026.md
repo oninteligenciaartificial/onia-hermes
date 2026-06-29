@@ -1,6 +1,6 @@
 # ONIA Core Distribution Plan 2026
 
-Estado: hold until beta.
+Estado: alpha, hold until beta.
 Owner: ONIA / Hermes.
 
 ## Decision
@@ -30,9 +30,15 @@ ONIA Core canonico
 
 | Proyecto | Estado | Regla |
 |---|---|---|
-| GestiOS | hold until beta | No continuar desarrollando ONIA Core local hasta instalar paquete canonico |
-| DentalGest | hold until beta | No mezclar clinica con GestiOS; adaptar solo tenant, roles, evidencia y reportes |
-| Ganadero OS | hold until beta | Mantener offline-first y dominio rural separado |
+| GestiOS | mapped, not installed | No continuar desarrollando ONIA Core local hasta instalar paquete canonico |
+| DentalGest | mapped, not installed | No mezclar clinica con GestiOS; adaptar solo tenant, roles, evidencia y reportes |
+| Ganadero OS | mapped, not installed | Mantener offline-first y dominio rural separado |
+
+Los mapas viven en:
+
+- `onia-core/adapters/gestios.json`.
+- `onia-core/adapters/dentagest.json`.
+- `onia-core/adapters/ganadero-os.json`.
 
 ## Orden antes de distribuir
 
@@ -62,6 +68,7 @@ ONIA Core pasa a beta cuando:
 
 - el contrato JSON esta validado;
 - las entidades base estan aprobadas;
+- el schema base esta revisado;
 - existe plan de migracion por proyecto;
 - existe plan de rollback;
 - los tres sistemas tienen adaptador definido;

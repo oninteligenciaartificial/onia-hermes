@@ -1,13 +1,59 @@
 {
   "name": "ONIA Core",
   "version": "0.1.0",
-  "status": "canonical_draft",
+  "status": "alpha",
   "sourceOfTruth": "onia-hermes/onia-core",
+  "researchResult": "onia-core/ONIA_CORE_RESEARCH_RESULT_2026.md",
+  "schemaFiles": [
+    "onia-core/schema/base-schema.sql"
+  ],
+  "adapterFiles": [
+    "onia-core/adapters/gestios.json",
+    "onia-core/adapters/dentagest.json",
+    "onia-core/adapters/ganadero-os.json"
+  ],
   "policy": {
     "installInProductRepos": false,
     "reason": "Primero se completa ONIA Core en Hermes; despues se distribuye a los sistemas ONIA.",
     "nextDistributionStage": "beta"
   },
+  "researchSources": [
+    {
+      "type": "local",
+      "name": "GestiOS architecture and Prisma schema",
+      "path": "C:\\dev\\proyectos\\Gestios"
+    },
+    {
+      "type": "local",
+      "name": "DentalGest product docs and Prisma schema",
+      "path": "C:\\dev\\proyectos\\DentaGest\\dental-saas"
+    },
+    {
+      "type": "local",
+      "name": "Ganadero OS architecture, data model and offline-first docs",
+      "path": "C:\\dev\\proyectos\\Ganaderos-Os"
+    },
+    {
+      "type": "external",
+      "name": "Odoo multi-company documentation",
+      "url": "https://www.odoo.com/documentation/19.0/applications/general/companies/multi_company.html"
+    },
+    {
+      "type": "external",
+      "name": "ERPNext workflow documentation",
+      "url": "https://docs.frappe.io/erpnext/workflows"
+    },
+    {
+      "type": "external",
+      "name": "Salesforce tasks and events data model",
+      "url": "https://developer.salesforce.com/docs/platform/data-models/guide/tasks-events.html"
+    },
+    {
+      "type": "external",
+      "name": "Microsoft Dataverse role-based security",
+      "url": "https://learn.microsoft.com/en-us/power-platform/admin/database-security"
+    }
+  ],
   "questions": [
     { "id": "people", "question": "Quien trabaja en la empresa?" },
     { "id": "roles", "question": "Que rol y permisos tiene cada persona?" },
@@ -282,9 +328,11 @@
   ],
   "releaseGates": [
     "Contrato JSON validado",
+    "Resultado de investigacion canonico guardado",
     "Helpers de lectura validados",
     "Blueprint de entidades aprobado",
-    "SQL base disenado antes de tocar Prisma",
+    "SQL base disenado y validado antes de tocar Prisma",
+    "Adaptadores por proyecto definidos y validados",
     "Plan de adopcion por proyecto aprobado",
     "No hay integraciones externas activas por defecto"
   ]

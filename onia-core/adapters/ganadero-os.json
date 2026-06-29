@@ -1,0 +1,118 @@
+{
+  "projectId": "ganadero-os",
+  "projectName": "Ganadero OS",
+  "repoPath": "C:\\dev\\proyectos\\Ganaderos-Os",
+  "status": "mapped_not_installed",
+  "adoptionRule": "Do not install an online-first core. Any ONIA Core adoption must preserve offline-first field workflows.",
+  "businessRole": "Livestock management SaaS for farms and ranches with offline field operation.",
+  "entityMappings": [
+    {
+      "coreEntityId": "organization",
+      "existingModel": "Organization",
+      "status": "exists",
+      "notes": "Tenant/farm root already exists."
+    },
+    {
+      "coreEntityId": "member",
+      "existingModel": "Profile",
+      "status": "exists",
+      "notes": "Internal user profile and role layer already exist."
+    },
+    {
+      "coreEntityId": "area",
+      "existingModel": "Pasture",
+      "status": "domain_specific",
+      "notes": "Pasture is an operational location, not a generic department. Area may be optional."
+    },
+    {
+      "coreEntityId": "contact",
+      "existingModel": "none",
+      "status": "missing_optional",
+      "notes": "Could later model vets, suppliers, buyers or transport contacts."
+    },
+    {
+      "coreEntityId": "work_item",
+      "existingModel": "Alert, HealthEvent, ReproductionEvent, LivestockMovement, Expense",
+      "status": "domain_specific",
+      "notes": "Field events can generate work items, but offline sync must remain the source of truth for field records."
+    },
+    {
+      "coreEntityId": "process_checklist",
+      "existingModel": "none",
+      "status": "missing",
+      "notes": "Useful for vaccination, weighing, reproduction checks and purchase/sale routines."
+    },
+    {
+      "coreEntityId": "evidence",
+      "existingModel": "HealthEvent, ReproductionEvent, WeightRecord, LivestockMovement, AuditLog",
+      "status": "domain_specific",
+      "notes": "Evidence must be compatible with offline capture and sync conflicts."
+    },
+    {
+      "coreEntityId": "activity_event",
+      "existingModel": "AuditLog, SyncOperation",
+      "status": "exists_partial",
+      "notes": "Audit and sync records cover sensitive actions and offline mutations."
+    },
+    {
+      "coreEntityId": "notification",
+      "existingModel": "Alert",
+      "status": "domain_specific",
+      "notes": "Alerts are field-domain notifications and may map to core notification output."
+    },
+    {
+      "coreEntityId": "import_batch",
+      "existingModel": "none",
+      "status": "missing",
+      "notes": "Could support initial herd import, but must not bypass offline conflict rules."
+    }
+  ],
+  "capabilityMappings": [
+    {
+      "capabilityId": "tenant",
+      "status": "exists",
+      "evidence": ["Organization", "Profile", "organizationId"]
+    },
+    {
+      "capabilityId": "team_roles",
+      "status": "partial",
+      "evidence": ["Profile.role"]
+    },
+    {
+      "capabilityId": "relationships",
+      "status": "domain_specific",
+      "evidence": ["Pasture", "Animal"]
+    },
+    {
+      "capabilityId": "work_items",
+      "status": "domain_specific",
+      "evidence": ["Alert", "HealthEvent", "ReproductionEvent", "LivestockMovement"]
+    },
+    {
+      "capabilityId": "evidence_activity",
+      "status": "partial_offline_sensitive",
+      "evidence": ["AuditLog", "SyncOperation", "HealthEvent", "WeightRecord"]
+    },
+    {
+      "capabilityId": "alerts_reports",
+      "status": "partial",
+      "evidence": ["Alert"]
+    },
+    {
+      "capabilityId": "data_ops",
+      "status": "missing",
+      "evidence": []
+    }
+  ],
+  "offlineConstraints": [
+    "Field entities need version and deletedAt semantics.",
+    "Mutations must support clientMutationId or equivalent idempotency.",
+    "Sync conflicts must be visible before overwrite.",
+    "Core work items cannot require permanent connectivity."
+  ],
+  "blockedUntil": [
+    "ONIA Core beta contract approved",
+    "Offline-aware migration plan created",
+    "Sync conflict behavior defined for any core-generated task"
+  ]
+}
