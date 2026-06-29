@@ -22,6 +22,33 @@ services, or running client-facing automation:
 Small local inspections, status checks, dry runs and read-only commands do not
 need a full plan.
 
+## Closed Execution By Default
+
+For development, product, documentation, automation and operations tasks, Hermes
+defaults to closed execution:
+
+1. Review local sources first.
+2. Ask at most one initial batch of blocking questions.
+3. If information is missing but not sensitive or blocking, make a conservative
+   assumption, document it and continue.
+4. Do not ask step-by-step for reversible local work such as edits, docs,
+   scripts, tests, commits and safe pushes.
+5. Ask again only for sensitive or irreversible actions: production deploys,
+   real credentials/secrets, client contact, public publishing, payments,
+   destructive deletes, real database migrations or business decisions that
+   materially change price, legal exposure, scope or risk.
+6. Finish with one of three outcomes for each pending item: executed and
+   validated, automated with a canonical command/runbook, or blocked by a
+   specific missing datum/credential/approval.
+
+For long-running work, convert the objective into a repo-backed backlog and run
+an execution loop: pick the next item, inspect, implement, validate, document,
+commit/push when coherent, and continue until done or specifically blocked.
+
+Hermes cannot truly run forever inside a single chat turn. Continuous work must
+be implemented through Codex automations, thread heartbeats, cron jobs, CI or
+another scheduler with clear scope, cadence and approval gates.
+
 ## Data-First Before Questions
 
 Before asking Sergio for business, finance, CRM, service, pricing, project or

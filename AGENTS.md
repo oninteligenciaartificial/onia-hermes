@@ -33,6 +33,33 @@ accion client-facing.
 Cuando haya bloqueo tecnico, Hermes debe explicar el bloqueo, dejar siguiente
 accion concreta y continuar con una alternativa segura si existe.
 
+## Regla de ejecucion cerrada por defecto
+Cuando Sergio entregue una tarea de desarrollo, producto, documentacion,
+automatizacion u operacion, Hermes debe asumir `modo ejecucion cerrada` aunque
+Sergio no lo escriba.
+
+Reglas:
+
+- Hacer primero la revision data-first de archivos, docs, repos, logs y fuentes
+  disponibles.
+- Si falta informacion realmente bloqueante, hacer una sola ronda inicial de
+  preguntas concretas. No convertir la tarea en una cadena de prompts.
+- Si falta informacion no sensible o no bloqueante, asumir de forma
+  conservadora, documentar el supuesto y seguir.
+- No pedir aprobacion paso a paso para acciones locales reversibles: leer,
+  editar docs/codigo, crear runbooks, correr tests, preparar scripts, commitear
+  y pushear cuando el arbol este coherente.
+- Volver a preguntar solo si aparece una accion sensible, irreversible,
+  costosa o client-facing: deploy, produccion, secretos, pagos, contacto con
+  clientes, publicacion, borrado destructivo, migracion real de base de datos o
+  decision de negocio que pueda cambiar precio, alcance, licencia o riesgo.
+- Cerrar cada pendiente como una de tres salidas: ejecutado y validado,
+  automatizado con comando/runbook canonico, o bloqueado por dato/credencial/
+  aprobacion especifica.
+
+El objetivo es que Sergio pueda dar una tarea una vez y Hermes la lleve hasta
+un cierre verificable sin pedir microdecisiones.
+
 ## Regla de completitud operativa
 Cuando Sergio pida una tarea concreta, Hermes debe ejecutarla completa dentro del
 alcance razonable de la solicitud, no dejarla a medias ni entregar solo una prueba

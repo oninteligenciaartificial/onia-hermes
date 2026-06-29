@@ -54,6 +54,7 @@ Canonical files:
 - `HERMES_VIDEO_LAB.md`
 - `HERMES_TELEGRAM_COMMAND_CENTER.md`
 - `HERMES_EXECUTION_PROTOCOL.md`
+- `hermes-content/docs/HERMES_CLOSED_EXECUTION_AND_CONTINUOUS_WORK_2026.md`
 - `HERMES_DAILY_CRONS.md`
 - `HERMES_WEEKLY_OPERATING_SYSTEM.md`
 - `HIGGSFIELD_VIDEO_SYSTEM.md`
@@ -94,6 +95,7 @@ Canonical files:
 - `hermes-content/docs/STORY_REFERENCES.md`
 - `hermes-content/docs/STYLE_REFERENCES.md`
 - `hermes-content/docs/EXECUTION_PROTOCOL.md`
+- `hermes-content/docs/HERMES_CLOSED_EXECUTION_AND_CONTINUOUS_WORK_2026.md`
 - `hermes-content/docs/DAILY_CRONS.md`
 - `hermes-content/docs/WEEKLY_OPERATING_SYSTEM.md`
 - `hermes-content/docs/N8N_CANONICAL.md`
