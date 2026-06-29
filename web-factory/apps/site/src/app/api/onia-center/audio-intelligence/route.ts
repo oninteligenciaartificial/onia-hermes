@@ -329,6 +329,9 @@ function analysisInstructions() {
     "No inventes empresa, contacto, presupuesto, alcance, fechas, dolores ni precios si no aparecen en el audio o contexto.",
     "Cuando falte un dato, usa null o el texto exacto por verificar.",
     "No prometas entregables fuera del catalogo ONIA. Marca riesgos y datos faltantes antes de proponer.",
+    "Evalua si el prospecto califica comercialmente: problema concreto, autoridad, presupuesto, urgencia, claridad de alcance y respeto por el proceso.",
+    "Si solo hay curiosidad, frases vagas, cero presupuesto, cero autoridad o pide mucho sin compromiso, marca dudoso o descartar. No uses insultos; explica el riesgo comercial.",
+    "No recomiendes una propuesta grande si antes hace falta diagnostico pagado o validacion de alcance.",
     "Devuelve exclusivamente un objeto JSON valido, sin markdown.",
   ].join("\n");
 }
@@ -349,6 +352,15 @@ function analysisInput(request: ParsedAudioRequest, transcript: string) {
     productos_relevantes: ["string"],
     informacion_faltante: ["string"],
     riesgos: ["string"],
+    calidad_cliente: {
+      score: "number 0-100",
+      veredicto: "bueno | dudoso | descartar | por verificar",
+      decision_recomendada: "avanzar a propuesta | pedir diagnostico pagado | nutrir | descartar | por verificar",
+      razon: "string",
+      senales_positivas: ["string"],
+      senales_rojas: ["string"],
+      datos_para_calificar: ["string"],
+    },
     resumen_ejecutivo: "string",
     propuesta_borrador: {
       titulo: "string",

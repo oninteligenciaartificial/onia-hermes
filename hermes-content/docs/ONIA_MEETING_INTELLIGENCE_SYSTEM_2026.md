@@ -354,6 +354,13 @@ Decision de costo:
 - No subir audios sensibles a servicios publicos si el cliente no lo autorizo.
 - El transcript puede fallar con ruido, acentos, nombres, marcas y terminos
   tecnicos. Toda propuesta debe revisarse.
+- Audio IA debe calificar al prospecto antes de vender: buen cliente, dudoso,
+  descartar o por verificar. Si faltan problema concreto, presupuesto,
+  autoridad o urgencia, la salida recomendada es diagnostico/validacion antes
+  de una propuesta grande.
+- El boton `Generar PDF` produce una version imprimible de la propuesta interna.
+  Usar `Guardar como PDF` en el navegador y revisar el archivo antes de enviarlo
+  al cliente.
 - Si ONIA convierte esto en producto para terceros, revisar AGPL de Speakr y
   usar Speaches/WhisperX o licencia comercial si corresponde.
 

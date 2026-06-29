@@ -3877,8 +3877,8 @@
   border-radius: var(--onia-radius);
   display: flex;
   gap: 10px;
-  min-height: 104px;
-  padding: 12px;
+  min-height: 82px;
+  padding: 11px;
 }
 
 .onia-audio-command-bar article.is-ready {
@@ -3931,6 +3931,76 @@
   font-size: 11px;
   line-height: 1.45;
   margin-top: 6px;
+}
+
+.onia-audio-decision-panel {
+  grid-column: 1 / -1;
+}
+
+.onia-audio-decision-panel.is-good {
+  background: #e9f7ef;
+  border-color: rgba(35, 123, 100, 0.28);
+}
+
+.onia-audio-decision-panel.is-warn {
+  background: #fff8e8;
+  border-color: rgba(179, 124, 30, 0.28);
+}
+
+.onia-audio-decision-panel.is-bad {
+  background: #fff0f2;
+  border-color: rgba(155, 41, 65, 0.24);
+}
+
+.onia-audio-decision-panel.is-unknown {
+  background: #fbfdfb;
+}
+
+.onia-audio-decision-panel .onia-live-title > span {
+  background: #ffffff;
+  border: 1px solid var(--onia-line-soft);
+  border-radius: 999px;
+  color: var(--onia-muted);
+  font-size: 11px;
+  font-weight: 900;
+  margin-left: auto;
+  padding: 6px 9px;
+}
+
+.onia-audio-decision-grid {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: minmax(220px, 1.25fr) repeat(3, minmax(0, 1fr));
+}
+
+.onia-audio-decision-grid > div {
+  background: rgba(255, 255, 255, 0.74);
+  border: 1px solid rgba(205, 219, 211, 0.74);
+  border-radius: var(--onia-radius);
+  display: grid;
+  gap: 6px;
+  padding: 12px;
+}
+
+.onia-audio-decision-grid span {
+  color: var(--onia-faint);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.onia-audio-decision-grid strong {
+  color: var(--onia-ink);
+  font-size: 18px;
+  line-height: 1.25;
+}
+
+.onia-audio-decision-grid p {
+  color: var(--onia-muted);
+  font-size: 12px;
+  line-height: 1.45;
+  margin: 0;
 }
 
 .onia-audio-input-panel {
@@ -4062,11 +4132,25 @@
   margin-top: 12px;
 }
 
-.onia-audio-facts div {
+.onia-audio-facts div,
+.onia-audio-facts details {
   border-top: 1px solid var(--onia-line-soft);
   display: grid;
   gap: 5px;
   padding-top: 10px;
+}
+
+.onia-audio-facts details > div {
+  border-top: 0;
+  padding-top: 6px;
+}
+
+.onia-audio-facts summary,
+.onia-audio-tech-details summary {
+  color: var(--onia-green);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 900;
 }
 
 .onia-audio-facts p,
@@ -4132,8 +4216,8 @@
   font-size: 12px;
   line-height: 1.6;
   margin: 0;
-  max-height: 360px;
-  min-height: 220px;
+  max-height: 280px;
+  min-height: 160px;
   overflow: auto;
   padding: 16px;
   white-space: pre-wrap;
@@ -4142,6 +4226,11 @@
 .onia-audio-technical-note {
   display: grid;
   gap: 5px;
+}
+
+.onia-audio-tech-details {
+  border-top: 1px solid var(--onia-line-soft);
+  padding-top: 10px;
 }
 
 @media (max-width: 1240px) {
@@ -4157,6 +4246,7 @@
   .onia-assistant-workspace,
   .onia-codex-workspace,
   .onia-audio-command-bar,
+  .onia-audio-decision-grid,
   .onia-audio-workspace {
     grid-template-columns: 1fr;
   }

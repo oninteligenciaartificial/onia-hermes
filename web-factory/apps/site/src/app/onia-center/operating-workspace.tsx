@@ -14,6 +14,7 @@ import {
   ExternalLink,
   FileAudio2,
   FileCheck2,
+  FileText,
   HardDrive,
   Heart,
   Lightbulb,
@@ -166,8 +167,18 @@ type AssistantApiResponse = {
 };
 type AudioObjective = "propuesta" | "acta" | "seguimiento";
 type AudioProposalDraft = Record<string, unknown>;
+type AudioClientQuality = Record<string, unknown> & {
+  score?: number | string | null;
+  veredicto?: string | null;
+  decision_recomendada?: string | null;
+  razon?: string | null;
+  senales_positivas?: unknown;
+  senales_rojas?: unknown;
+  datos_para_calificar?: unknown;
+};
 type AudioAnalysis = Record<string, unknown> & {
   propuesta_borrador?: AudioProposalDraft | null;
+  calidad_cliente?: AudioClientQuality | null;
   crm_note?: string | null;
 };
 type AudioApiResponse = {
@@ -868,6 +879,154 @@ function audioList(value: unknown) {
 function proposalDraft(analysis: AudioAnalysis | null | undefined) {
   const draft = analysis?.propuesta_borrador;
   return draft && typeof draft === "object" ? draft : null;
+}
+
+function audioNumber(value: unknown, fallback = 0) {
+  if (typeof value === "number" && Number.isFinite(value)) {
+    return value;
+  }
+
+  if (typeof value === "string") {
+    const parsed = Number.parseInt(value, 10);
+    if (Number.isFinite(parsed)) {
+      return parsed;
+    }
+  }
+
+  return fallback;
+}
+
+function clientQualityDraft(analysis: AudioAnalysis | null | undefined): AudioClientQuality | null {
+  const raw = analysis?.calidad_cliente ?? analysis?.evaluacion_cliente ?? analysis?.cliente_calidad;
+  return raw && typeof raw === "object" ? (raw as AudioClientQuality) : null;
+}
+
+function clientQualityDecision(analysis: AudioAnalysis | null | undefined) {
+  const quality = clientQualityDraft(analysis);
+  if (!quality) {
+    return {
+      className: "is-unknown",
+      label: "Sin evaluar",
+      score: 0,
+      scoreLabel: "por verificar",
+      decision: "Procesa un audio para calificar al prospecto.",
+      reason: "La evaluacion aparece despues del analisis.",
+      positives: [],
+      redFlags: [],
+      missing: [],
+    };
+  }
+
+  const score = Math.max(0, Math.min(100, audioNumber(quality.score, 0)));
+  const verdict = audioText(quality.veredicto ?? quality.verdict ?? quality.estado, "por verificar").toLowerCase();
+  const className =
+    verdict.includes("bueno") || verdict.includes("califica") || score >= 75
+      ? "is-good"
+      : verdict.includes("descartar") || verdict.includes("no califica") || score < 35
+        ? "is-bad"
+        : verdict.includes("dudoso") || verdict.includes("nutrir") || score < 75
+          ? "is-warn"
+          : "is-unknown";
+  const label =
+    className === "is-good"
+      ? "Buen cliente"
+      : className === "is-bad"
+        ? "No califica"
+        : className === "is-warn"
+          ? "Dudoso"
+          : "Por verificar";
+
+  return {
+    className,
+    label,
+    score,
+    scoreLabel: score ? `${score}/100` : "por verificar",
+    decision: audioText(quality.decision_recomendada ?? quality.decision ?? quality.siguiente_accion, "por verificar"),
+    reason: audioText(quality.razon ?? quality.reason ?? quality.justificacion, "Sin razon documentada."),
+    positives: audioList(quality.senales_positivas ?? quality.señales_positivas),
+    redFlags: audioList(quality.senales_rojas ?? quality.señales_rojas ?? quality.riesgos),
+    missing: audioList(quality.datos_para_calificar ?? quality.informacion_faltante),
+  };
+}
+
+function escapeHtml(value: unknown) {
+  return audioText(value, "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+function htmlList(items: string[]) {
+  return items.length ? `<ul>${items.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>` : "<p>Por verificar.</p>";
+}
+
+function buildAudioProposalHtml(analysis: AudioAnalysis, transcript: string, source?: AudioApiResponse["source"]) {
+  const proposal = proposalDraft(analysis);
+  const quality = clientQualityDecision(analysis);
+  const now = new Date().toLocaleDateString("es-BO", { day: "2-digit", month: "2-digit", year: "numeric" });
+
+  return `<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <title>${escapeHtml(audioText(analysis.empresa, "Propuesta ONIA"))}</title>
+  <style>
+    body { color: #101a16; font-family: Arial, sans-serif; line-height: 1.5; margin: 42px; }
+    header { border-bottom: 2px solid #123326; margin-bottom: 24px; padding-bottom: 18px; }
+    h1 { font-size: 26px; margin: 6px 0; }
+    h2 { border-top: 1px solid #dfe8e2; font-size: 16px; margin-top: 24px; padding-top: 16px; }
+    p, li { font-size: 12px; }
+    .muted { color: #5d6b63; }
+    .grid { display: grid; gap: 12px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .box { background: #f7faf8; border: 1px solid #dfe8e2; border-radius: 8px; padding: 12px; }
+    .label { color: #607067; display: block; font-size: 10px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
+    .value { display: block; font-size: 14px; font-weight: 700; margin-top: 4px; }
+    .decision { background: #e6f5ec; border-color: #9dd8b7; }
+    pre { background: #0f1b16; border-radius: 8px; color: #f1f8f3; font-size: 10px; max-height: 420px; overflow: auto; padding: 14px; white-space: pre-wrap; }
+    @media print { body { margin: 22mm; } button { display: none; } }
+  </style>
+</head>
+<body>
+  <header>
+    <span class="label">ONIA Center / propuesta interna</span>
+    <h1>${escapeHtml(audioText(proposal?.titulo, "Diagnostico y propuesta preliminar"))}</h1>
+    <p class="muted">Generado el ${escapeHtml(now)}. Revisar antes de enviar al cliente.</p>
+  </header>
+  <section class="grid">
+    <div class="box decision"><span class="label">Calidad del cliente</span><span class="value">${escapeHtml(quality.label)} / ${escapeHtml(quality.scoreLabel)}</span><p>${escapeHtml(quality.reason)}</p></div>
+    <div class="box"><span class="label">Decision recomendada</span><span class="value">${escapeHtml(quality.decision)}</span><p>${escapeHtml(audioText(analysis.proximo_paso_acordado))}</p></div>
+    <div class="box"><span class="label">Empresa</span><span class="value">${escapeHtml(audioText(analysis.empresa))}</span></div>
+    <div class="box"><span class="label">Presupuesto</span><span class="value">${escapeHtml(audioText(analysis.presupuesto_mencionado))}</span></div>
+  </section>
+  <h2>Resumen ejecutivo</h2>
+  <p>${escapeHtml(audioText(analysis.resumen_ejecutivo ?? proposal?.diagnostico))}</p>
+  <h2>Necesidad principal</h2>
+  <p>${escapeHtml(audioText(analysis.necesidad_principal))}</p>
+  <h2>Senales positivas</h2>
+  ${htmlList(quality.positives)}
+  <h2>Riesgos y senales rojas</h2>
+  ${htmlList([...quality.redFlags, ...audioList(analysis.riesgos)])}
+  <h2>Datos faltantes antes de vender</h2>
+  ${htmlList([...quality.missing, ...audioList(analysis.informacion_faltante)])}
+  <h2>Alcance recomendado</h2>
+  ${htmlList(audioList(proposal?.alcance_recomendado))}
+  <h2>Entregables</h2>
+  ${htmlList(audioList(proposal?.entregables))}
+  <h2>Fuera de alcance</h2>
+  ${htmlList(audioList(proposal?.fuera_de_alcance))}
+  <h2>Precio y condiciones</h2>
+  <p><strong>${escapeHtml(audioText(proposal?.precio_sugerido))}</strong></p>
+  ${htmlList(audioList(proposal?.condiciones))}
+  <h2>Nota CRM</h2>
+  <p>${escapeHtml(formatAudioCrmNote(analysis))}</p>
+  <h2>Fuente tecnica</h2>
+  <p class="muted">STT: ${escapeHtml(audioSttSourceLabel(source))}</p>
+  <h2>Anexo: transcript</h2>
+  <pre>${escapeHtml(transcript)}</pre>
+</body>
+</html>`;
 }
 
 function audioSttSourceLabel(source?: AudioApiResponse["source"]) {
@@ -1720,6 +1879,28 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
     setNotice("Nota CRM copiada. No actualiza fuentes externas automaticamente.");
   }
 
+  function generateAudioPdf() {
+    if (!audioResult?.analysis) {
+      setNotice("Primero analiza un audio o transcript antes de generar PDF.");
+      return;
+    }
+
+    const printWindow = window.open("", "_blank", "width=960,height=720");
+    if (!printWindow) {
+      setNotice("El navegador bloqueo la ventana de PDF. Permite popups para localhost.");
+      return;
+    }
+
+    printWindow.document.open();
+    printWindow.document.write(buildAudioProposalHtml(audioResult.analysis, audioTranscriptPreview, audioResult.source));
+    printWindow.document.close();
+    printWindow.focus();
+    window.setTimeout(() => {
+      printWindow.print();
+    }, 250);
+    setNotice("PDF preparado. En la ventana de impresion elige Guardar como PDF.");
+  }
+
   function resetRuntime() {
     if (storageMode === "supabase") {
       setNotice("Con Supabase activo no se borran datos desde este boton. Usa estados o acciones auditadas.");
@@ -1744,6 +1925,7 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
       : ideaForm.visibility;
   const copy = workspaceCopy[workspaceView];
   const isDailyWorkspace = workspaceView === "daily";
+  const showWorkspaceMetrics = workspaceView !== "audio-intelligence";
   const showWorkspaceAdminActions = ["connections", "assistant", "codex-queue"].includes(workspaceView);
   const persistenceCopy = storageMode === "supabase"
     ? isDailyWorkspace
@@ -1758,6 +1940,9 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
   const audioSttLabel = audioSttSourceLabel(audioResult?.source);
   const audioAnalysisModel = audioResult?.source?.analysisModel ?? audioStatus?.openai?.model ?? "modelo no confirmado";
   const audioHasInput = Boolean(audioFile || audioTranscript.trim());
+  const audioClientQuality = clientQualityDecision(audioAnalysis);
+  const audioPrimaryRisks = audioList(audioAnalysis?.riesgos).slice(0, 3);
+  const audioMissingData = audioList(audioAnalysis?.informacion_faltante).slice(0, 3);
 
   return (
     <section className="onia-live-workspace" id="uso-diario" aria-label="Uso diario ONIA Center">
@@ -1783,6 +1968,7 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
         ) : null}
       </div>
 
+      {showWorkspaceMetrics ? (
       <div className={`onia-live-metrics${isDailyWorkspace ? " is-focused" : ""}`}>
         {isDailyWorkspace ? (
           <>
@@ -1844,6 +2030,7 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
           </>
         )}
       </div>
+      ) : null}
 
       {workspaceView === "seller-services" ? (
         <div className="onia-seller-services">
@@ -2138,6 +2325,33 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
             </article>
           </div>
 
+          <article className={`onia-live-card onia-audio-decision-panel ${audioClientQuality.className}`}>
+            <div className="onia-live-title">
+              <ShieldCheck size={16} />
+              <strong>Calificacion comercial</strong>
+              <span>{audioClientQuality.scoreLabel}</span>
+            </div>
+            <div className="onia-audio-decision-grid">
+              <div className="onia-audio-decision-main">
+                <span>{audioClientQuality.label}</span>
+                <strong>{audioClientQuality.decision}</strong>
+                <p>{audioClientQuality.reason}</p>
+              </div>
+              <div>
+                <span>Senales positivas</span>
+                <p>{audioClientQuality.positives.slice(0, 3).join(" / ") || "Aun no hay evidencia suficiente."}</p>
+              </div>
+              <div>
+                <span>Senales rojas</span>
+                <p>{audioClientQuality.redFlags.slice(0, 3).join(" / ") || "Sin senales rojas fuertes."}</p>
+              </div>
+              <div>
+                <span>Para calificar mejor</span>
+                <p>{audioClientQuality.missing.slice(0, 3).join(" / ") || "Sin faltantes criticos."}</p>
+              </div>
+            </div>
+          </article>
+
           <article className="onia-live-card onia-audio-input-panel">
             <div className="onia-live-title">
               <Mic size={16} />
@@ -2213,7 +2427,7 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
           <article className="onia-live-card onia-audio-result-panel">
             <div className="onia-live-title">
               <FileCheck2 size={16} />
-              <strong>Diagnostico comercial</strong>
+              <strong>Datos para decidir</strong>
             </div>
             <div className="onia-audio-engine-strip">
               <span>{audioSttLabel}</span>
@@ -2245,18 +2459,21 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
                     <span>Necesidad principal</span>
                     <p>{audioText(audioAnalysis.necesidad_principal)}</p>
                   </div>
-                  <div>
-                    <span>Objeciones</span>
-                    <p>{audioList(audioAnalysis.objeciones).join(" / ") || "por verificar"}</p>
-                  </div>
-                  <div>
-                    <span>Informacion faltante</span>
-                    <p>{audioList(audioAnalysis.informacion_faltante).join(" / ") || "por verificar"}</p>
-                  </div>
-                  <div>
-                    <span>Riesgos</span>
-                    <p>{audioList(audioAnalysis.riesgos).join(" / ") || "sin riesgos detectados"}</p>
-                  </div>
+                  <details>
+                    <summary>Ver objeciones, faltantes y riesgos</summary>
+                    <div>
+                      <span>Objeciones</span>
+                      <p>{audioList(audioAnalysis.objeciones).join(" / ") || "por verificar"}</p>
+                    </div>
+                    <div>
+                      <span>Informacion faltante</span>
+                      <p>{audioMissingData.join(" / ") || "por verificar"}</p>
+                    </div>
+                    <div>
+                      <span>Riesgos</span>
+                      <p>{audioPrimaryRisks.join(" / ") || "sin riesgos detectados"}</p>
+                    </div>
+                  </details>
                 </div>
               </>
             ) : (
@@ -2311,6 +2528,10 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
                     <Copy size={15} />
                     Copiar propuesta
                   </button>
+                  <button type="button" onClick={generateAudioPdf}>
+                    <FileText size={15} />
+                    Generar PDF
+                  </button>
                   <button type="button" onClick={() => void copyAudioCrmNote()}>
                     <ClipboardCheck size={15} />
                     Copiar nota CRM
@@ -2325,19 +2546,22 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
           <article className="onia-live-card onia-audio-transcript-panel">
             <div className="onia-live-title">
               <Database size={16} />
-              <strong>Transcript</strong>
+              <strong>Transcript y detalle tecnico</strong>
             </div>
-            <details open={Boolean(audioTranscriptPreview)}>
+            <details>
               <summary>{audioTranscriptPreview ? "Ver transcript completo" : "Sin transcript todavia"}</summary>
               <pre>{audioTranscriptPreview || "Sube un audio o pega un transcript para empezar."}</pre>
             </details>
-            <div className="onia-audio-technical-note">
-              <small>STT: {audioSttLabel}</small>
-              <small>Analisis: {audioAnalysisModel}</small>
-              {audioResult?.source?.sttAttempts?.length ? (
-                <small>Intentos: {audioResult.source.sttAttempts.join(" | ")}</small>
-              ) : null}
-            </div>
+            <details className="onia-audio-tech-details">
+              <summary>Ver motor, modelo e intentos</summary>
+              <div className="onia-audio-technical-note">
+                <small>STT: {audioSttLabel}</small>
+                <small>Analisis: {audioAnalysisModel}</small>
+                {audioResult?.source?.sttAttempts?.length ? (
+                  <small>Intentos: {audioResult.source.sttAttempts.join(" | ")}</small>
+                ) : null}
+              </div>
+            </details>
           </article>
         </div>
       ) : null}
