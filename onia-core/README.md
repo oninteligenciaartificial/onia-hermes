@@ -37,6 +37,8 @@ modulos, verticales o integraciones. No son la definicion del core.
 - `index.mjs`: helpers para leer y consultar el contrato.
 - `validate.mjs`: validador local de estructura e invariantes.
 - `ONIA_CORE_RESEARCH_RESULT_2026.md`: resultado de investigacion local y externa.
+- `ONIA_CORE_BENCHMARK_GAP_AUDIT_2026.md`: auditoria contra sistemas ERP, CRM,
+  work management y operacion real de empresas.
 - `ONIA_CORE_DISTRIBUTION_PLAN_2026.md`: plan para subir ONIA Core a los
   sistemas cuando este listo.
 - `schema/base-schema.sql`: SQL base de referencia, no aplicado directamente.
