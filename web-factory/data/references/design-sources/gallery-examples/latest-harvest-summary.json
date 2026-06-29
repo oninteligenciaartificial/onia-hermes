@@ -1,63 +1,55 @@
 {
-  "id": "2026-06-28-web-factory-daily-split-harvest",
-  "startedAt": "2026-06-28T19:30:18.638Z",
-  "finishedAt": "2026-06-28T19:40:18.391Z",
-  "policy": "Automated design reference harvest. Screenshots and closed-site structures are reference-only. Code reuse is limited to allowed-after-review repositories and compatible registry/docs code after review.",
-  "steps": [
-    {
-      "name": "gallery-partial",
-      "out": "data/references/design-sources/gallery-examples/2026-06-28T19-30-18-638Z-design-harvest.json",
-      "sourceIds": [
-        "21st-landing-page-components",
-        "registry-directory",
-        "magic-ui",
-        "aceternity-ui",
-        "aceternity-shadcn-blocks"
-      ],
-      "maxItems": 24,
-      "detailItems": 3
-    },
-    {
-      "name": "gallery-partial",
-      "out": "data/references/design-sources/gallery-examples/2026-06-28T19-35-remaining-design-harvest.json",
-      "sourceIds": [
-        "shadcnblocks-blocks",
-        "kibo-ui",
-        "shadcn-ui",
-        "landingfolio",
-        "saasframe-landing-pages",
-        "recent-design"
-      ],
-      "maxItems": 24,
-      "detailItems": 3
-    },
-    {
-      "name": "merge",
-      "out": "data/references/design-sources/gallery-examples/latest-gallery-examples.json"
-    },
-    {
-      "name": "code",
-      "codeIndexOut": "data/references/code-sources/latest-code-cache-index.json",
-      "codeExamplesOut": "data/references/code-sources/latest-component-code-examples.json",
-      "maxFilesPerRepo": 24
-    },
-    {
-      "name": "intelligence",
-      "out": "data/references/design-sources/latest-design-intelligence.json",
-      "markdown": "docs/WEB_FACTORY_DESIGN_INTELLIGENCE_LATEST.md"
-    }
-  ],
-  "latestGallery": "data/references/design-sources/gallery-examples/latest-gallery-examples.json",
-  "latestDesignIntelligence": "data/references/design-sources/latest-design-intelligence.json",
-  "counts": {
-    "sources": 23,
-    "candidates": 405,
-    "detailedExamples": 93,
-    "errors": 0,
-    "intelligenceExamples": 93,
-    "reusableCodeRepositories": 11
-  },
-  "notes": [
-    "pnpm references:harvest:daily hung during combined gallery scrape; completed equivalent harvest by splitting the default 11 daily sources into two successful scrape runs before merge/intelligence/test."
-  ]
+    "id":  "2026-06-29-web-factory-daily-harvest",
+    "startedAt":  "2026-06-29T19:05:47.892Z",
+    "finishedAt":  "2026-06-29T19:06:08.8456263Z",
+    "policy":  "Automated design reference harvest. Screenshots and closed-site structures are reference-only. Code reuse is limited to allowed-after-review repositories and compatible registry/docs code after review.",
+    "steps":  [
+                  {
+                      "sourceIds":  [
+                                        "21st-landing-page-components",
+                                        "registry-directory",
+                                        "magic-ui",
+                                        "aceternity-ui",
+                                        "aceternity-shadcn-blocks",
+                                        "shadcnblocks-blocks",
+                                        "kibo-ui",
+                                        "shadcn-ui",
+                                        "landingfolio",
+                                        "saasframe-landing-pages",
+                                        "recent-design"
+                                    ],
+                      "out":  "data/references/design-sources/gallery-examples/2026-06-29T18-57-44-663Z-design-harvest.json",
+                      "detailItems":  3,
+                      "name":  "gallery",
+                      "maxItems":  24
+                  },
+                  {
+                      "name":  "merge",
+                      "out":  "data/references/design-sources/gallery-examples/latest-gallery-examples.json"
+                  },
+                  {
+                      "codeIndexOut":  "data/references/code-sources/latest-code-cache-index.json",
+                      "codeExamplesOut":  "data/references/code-sources/latest-component-code-examples.json",
+                      "name":  "code",
+                      "maxFilesPerRepo":  24
+                  },
+                  {
+                      "out":  "data/references/design-sources/latest-design-intelligence.json",
+                      "markdown":  "docs/WEB_FACTORY_DESIGN_INTELLIGENCE_LATEST.md",
+                      "name":  "intelligence"
+                  }
+              ],
+    "latestGallery":  "data/references/design-sources/gallery-examples/latest-gallery-examples.json",
+    "latestDesignIntelligence":  "data/references/design-sources/latest-design-intelligence.json",
+    "counts":  {
+                   "sources":  23,
+                   "reusableCodeRepositories":  11,
+                   "errors":  0,
+                   "intelligenceExamples":  93,
+                   "detailedExamples":  93,
+                   "candidates":  405
+               },
+    "notes":  [
+                  "pnpm references:harvest:daily advanced source-by-source but did not exit cleanly after writing a complete checkpoint; finalized the official output set by merging the completed checkpoint, rebuilding code indexes, regenerating intelligence, and rerunning tests."
+              ]
 }
