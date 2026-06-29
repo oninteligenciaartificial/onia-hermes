@@ -6,20 +6,23 @@ Owner: ONIA / Hermes.
 Uso: convertir la decision de ONIA Core en una secuencia ejecutable para
 GestiOS, ProveeGest, DentalGest, Ganadero OS y clientes piloto.
 
+Fuente tecnica canonica: `onia-core/`.
+
 ## Veredicto
 
 ONIA no debe construir un ERP universal desde cero.
 
-La ruta correcta es construir ONIA Core como sistema de organizacion operativa,
-usar GestiOS como primera implementacion cliente y abrir verticales solo cuando
-ONIA Core ya ordene bien una empresa real.
+La ruta correcta es construir ONIA Core como sistema de organizacion operativa
+canonico dentro de Hermes, no dentro de un producto especifico. Despues se
+instalara en GestiOS, DentalGest y Ganadero OS cuando el contrato pase a beta.
 
 Orden de producto:
 
 ```text
 ONIA Center controla.
 ONIA Core organiza la operacion.
-GestiOS implementa primero ONIA Core.
+Hermes guarda la fuente canonica.
+GestiOS, DentalGest y Ganadero OS adoptan despues.
 ProveeGest verticaliza distribucion B2B.
 DentalGest queda separado como clinica dental.
 Ganadero OS queda separado por offline y dominio rural.
@@ -29,10 +32,9 @@ Bolivian Electric valida ProveeGest Electrico.
 La razon es practica: el valor central de ONIA Core no es ser POS, ERP ni
 inventario. Su valor es ordenar una empresa: quien hace que, para quien, cuando,
 en que estado, con que evidencia y cual es el siguiente paso. GestiOS ya tiene
-la primera base de implementacion, pero el nombre del nucleo es ONIA Core.
-Productos, inventario, ventas, compras y caja son modulos utiles, pero no son
-el nucleo. Crear otro core ahora duplicaria trabajo y subiria el riesgo
-comercial.
+patrones utiles, pero no debe ser el dueno del nucleo. Productos, inventario,
+ventas, compras y caja son modulos utiles, pero no son el nucleo. Crear otro
+core por proyecto ahora duplicaria trabajo y subiria el riesgo comercial.
 
 ## Fuentes revisadas
 
@@ -64,8 +66,8 @@ comercial.
 | Sistema | Rol correcto | Lo que no debe hacer ahora |
 |---|---|---|
 | ONIA Center | Control interno, backlog, readiness, evidencia, aprobaciones, prioridades y seguimiento de ONIA | Operar el negocio diario del cliente o guardar datos sensibles sin alcance |
-| ONIA Core | Sistema de organizacion empresarial: tenant, equipo, roles, responsables, contactos, tareas, solicitudes, estados, evidencia, reportes, auditoria y modulos activables | Convertirse en ERP pesado, POS disfrazado, inventario generico o prometer SIAT/WhatsApp/TR4 sin proveedor validado |
-| GestiOS | Primera implementacion de ONIA Core para pymes y empresas operativas | Ser confundido con el nombre del core |
+| ONIA Core | Sistema de organizacion empresarial: tenant, equipo, roles, responsables, contactos, tareas, solicitudes, estados, evidencia, reportes, auditoria y modulos activables | Vivir primero dentro de un producto o convertirse en ERP/POS/inventario generico |
+| GestiOS | Futuro adoptante de ONIA Core para pymes y empresas operativas | Ser confundido con el nombre del core |
 | ProveeGest | Vertical B2B sobre ONIA Core para importadoras, mayoristas y distribuidoras | Ser repo nuevo antes de validar el core |
 | DentalGest | Vertical clinico dental independiente | Mezclarse dentro de GestiOS o perder foco clinico |
 | Ganadero OS / HatoGest | Vertical rural/offline independiente | Meter ganado y sync offline en ONIA Core base |
@@ -91,10 +93,34 @@ Debe resolver primero estas preguntas:
 Si un modulo no ayuda a responder esas preguntas, no entra al core inicial. Puede
 entrar despues como add-on, vertical o integracion.
 
-## Core existente que se debe proteger
+## Fuente tecnica canonica
 
-GestiOS ya trae una base suficiente para implementar ONIA Core. Primero hay que
-perfeccionar esa base, no reemplazarla.
+La fuente tecnica vive en:
+
+```text
+onia-core/
+```
+
+Archivos:
+
+- `onia-core/contract.json`.
+- `onia-core/index.mjs`.
+- `onia-core/validate.mjs`.
+- `onia-core/ONIA_CORE_DISTRIBUTION_PLAN_2026.md`.
+
+Validacion:
+
+```bash
+npm run validate:onia-core
+```
+
+Hasta que `contract.json` pase a beta, los repos producto quedan en
+`hold_until_beta`.
+
+## Patrones existentes que se deben aprovechar
+
+GestiOS ya trae patrones utiles para implementar ONIA Core despues. Primero hay
+que completar la fuente canonica, no seguir desarrollando copias locales.
 
 | Area | Base existente en GestiOS | Decision |
 |---|---|---|
@@ -136,20 +162,16 @@ Objetivo: dejar claro que existe hoy, que se puede tocar y que queda fuera.
 
 Acciones:
 
-1. Registrar este orden como documento canonico de ONIA Core.
-2. Crear checklist local en GestiOS para la primera implementacion.
-3. Correr baseline en GestiOS antes de cambios de codigo:
-   - `npm run lint`
-   - `npx tsc --noEmit`
-   - `npm test`
-   - `npm run build`
-4. Crear mapa de rutas y acciones que escriben datos.
+1. Registrar `onia-core/contract.json` como fuente tecnica.
+2. Validar `npm run validate:onia-core`.
+3. Mantener GestiOS, DentalGest y Ganadero OS en hold hasta beta.
+4. Disenar entidades base y SQL antes de tocar Prisma en cualquier repo.
 5. Marcar integraciones sensibles como bloqueadas por defecto.
 
 Cierre:
 
 - Documento canonico aprobado.
-- Checklist local creado.
+- Paquete canonico creado.
 - Estado real de checks registrado.
 
 ### Fase 1 - Seguridad multi-tenant y permisos
@@ -298,15 +320,14 @@ Frentes:
 
 Checklist:
 
-1. Crear contrato de codigo `lib/onia-core.ts` en GestiOS.
-2. Proteger el contrato con `tests/onia-core.test.ts`.
-3. Correr baseline de GestiOS.
-4. Auditar rutas `app/api/**` por `organizationId`.
-5. Auditar modelos Prisma para decidir si `Contact`, `CommercialRequest` y
+1. Completar `onia-core/contract.json`.
+2. Proteger el contrato con `npm run validate:onia-core`.
+3. Crear plan de distribucion por proyecto.
+4. Auditar modelos Prisma para decidir si `Contact`, `CommercialRequest` y
    `Quote` entran en la primera migracion.
-6. Definir `businessType` para ProveeGest Electrico.
-7. Crear backlog tecnico con P0/P1/P2.
-8. Implementar solo P0/P1 que habiliten organizacion, venta o seguridad.
+5. Definir `businessType` para ProveeGest Electrico.
+6. Crear backlog tecnico con P0/P1/P2.
+7. Recien despues instalar ONIA Core en GestiOS, DentalGest y Ganadero OS.
 
 ## Criterios de aceptacion
 

@@ -34,6 +34,7 @@
     "mara:comfyui:queue": "node scripts/mara_comfyui_queue.js --workflow C:\\Users\\PC\\Downloads\\video_ltx2_3_i2v.json --mapping hermes-content\\references\\ai-ecommerce-model\\comfyui\\video_ltx2_3_i2v.mapping.json",
     "mara:comfyui:audit": "node scripts/comfyui_video_audit.js",
     "mara:wan:readiness": "node scripts/comfyui_wan_readiness.js",
-    "mara:wan:queue": "node scripts/mara_comfyui_queue.js --workflow hermes-content\\references\\ai-ecommerce-model\\comfyui\\wan22_ti2v_5b_api.json --mapping hermes-content\\references\\ai-ecommerce-model\\comfyui\\wan22_ti2v_5b.mapping.json"
+    "mara:wan:queue": "node scripts/mara_comfyui_queue.js --workflow hermes-content\\references\\ai-ecommerce-model\\comfyui\\wan22_ti2v_5b_api.json --mapping hermes-content\\references\\ai-ecommerce-model\\comfyui\\wan22_ti2v_5b.mapping.json",
+    "validate:onia-core": "node onia-core/validate.mjs"
   }
 }

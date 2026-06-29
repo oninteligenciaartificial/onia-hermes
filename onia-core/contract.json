@@ -1,0 +1,291 @@
+{
+  "name": "ONIA Core",
+  "version": "0.1.0",
+  "status": "canonical_draft",
+  "sourceOfTruth": "onia-hermes/onia-core",
+  "policy": {
+    "installInProductRepos": false,
+    "reason": "Primero se completa ONIA Core en Hermes; despues se distribuye a los sistemas ONIA.",
+    "nextDistributionStage": "beta"
+  },
+  "questions": [
+    { "id": "people", "question": "Quien trabaja en la empresa?" },
+    { "id": "roles", "question": "Que rol y permisos tiene cada persona?" },
+    { "id": "relationships", "question": "Que clientes, proveedores, contactos o areas existen?" },
+    { "id": "open_work", "question": "Que tareas, solicitudes, casos o pendientes estan abiertos?" },
+    { "id": "ownership", "question": "Quien es responsable?" },
+    { "id": "status", "question": "En que estado esta cada pendiente?" },
+    { "id": "next_action", "question": "Cual es la fecha limite o siguiente accion?" },
+    { "id": "evidence", "question": "Que evidencia, nota, archivo o historial existe?" },
+    { "id": "attention", "question": "Que alerta requiere atencion?" },
+    { "id": "management", "question": "Que reporte necesita gerencia?" }
+  ],
+  "entities": [
+    {
+      "id": "organization",
+      "name": "Organization",
+      "scope": "root",
+      "purpose": "Empresa, clinica, rancho o unidad cliente que contiene todo lo operativo.",
+      "requiredFields": ["id", "name", "status", "plan", "createdAt"],
+      "tenantScoped": false
+    },
+    {
+      "id": "member",
+      "name": "Member/Profile",
+      "scope": "core",
+      "purpose": "Persona del equipo asociada a una organizacion.",
+      "requiredFields": ["id", "organizationId", "userId", "name", "role", "active"],
+      "tenantScoped": true
+    },
+    {
+      "id": "area",
+      "name": "Area",
+      "scope": "core",
+      "purpose": "Departamento, sucursal logica o grupo responsable.",
+      "requiredFields": ["id", "organizationId", "name", "type", "active"],
+      "tenantScoped": true
+    },
+    {
+      "id": "contact",
+      "name": "Contact",
+      "scope": "core",
+      "purpose": "Persona relacionada con cliente, proveedor, area o caso.",
+      "requiredFields": ["id", "organizationId", "displayName", "kind", "active"],
+      "tenantScoped": true
+    },
+    {
+      "id": "work_item",
+      "name": "WorkItem",
+      "scope": "core",
+      "purpose": "Unidad comun para tarea, solicitud, caso, pedido pendiente o tramite.",
+      "requiredFields": ["id", "organizationId", "type", "title", "status", "ownerId", "priority", "createdAt"],
+      "tenantScoped": true
+    },
+    {
+      "id": "process_checklist",
+      "name": "ProcessChecklist",
+      "scope": "core",
+      "purpose": "Rutina repetible para apertura, cierre, cobranza, compra, soporte o auditoria.",
+      "requiredFields": ["id", "organizationId", "name", "steps", "active"],
+      "tenantScoped": true
+    },
+    {
+      "id": "evidence",
+      "name": "Evidence",
+      "scope": "core",
+      "purpose": "Nota, archivo, foto, link o metadata que respalda un avance.",
+      "requiredFields": ["id", "organizationId", "entityType", "entityId", "kind", "createdBy", "createdAt"],
+      "tenantScoped": true
+    },
+    {
+      "id": "activity_event",
+      "name": "ActivityEvent",
+      "scope": "core",
+      "purpose": "Historial auditable de cambios y acciones.",
+      "requiredFields": ["id", "organizationId", "actorId", "action", "entityType", "entityId", "createdAt"],
+      "tenantScoped": true
+    },
+    {
+      "id": "notification",
+      "name": "Notification",
+      "scope": "core",
+      "purpose": "Alerta interna para seguimiento humano.",
+      "requiredFields": ["id", "organizationId", "userId", "type", "title", "read", "createdAt"],
+      "tenantScoped": true
+    },
+    {
+      "id": "import_batch",
+      "name": "ImportBatch",
+      "scope": "core",
+      "purpose": "Carga controlada de datos con dry-run, errores por fila y trazabilidad.",
+      "requiredFields": ["id", "organizationId", "source", "status", "dryRun", "createdAt"],
+      "tenantScoped": true
+    }
+  ],
+  "capabilities": [
+    {
+      "id": "tenant",
+      "name": "Tenant y organizacion",
+      "layer": "core",
+      "phase": 0,
+      "entityIds": ["organization", "member"],
+      "answers": ["people", "roles", "relationships"]
+    },
+    {
+      "id": "team_roles",
+      "name": "Equipo, roles y permisos",
+      "layer": "core",
+      "phase": 1,
+      "entityIds": ["member", "area"],
+      "answers": ["people", "roles", "ownership"]
+    },
+    {
+      "id": "relationships",
+      "name": "Clientes, proveedores, contactos y areas",
+      "layer": "core",
+      "phase": 1,
+      "entityIds": ["contact", "area"],
+      "answers": ["relationships", "ownership"]
+    },
+    {
+      "id": "work_items",
+      "name": "Tareas, solicitudes, casos y pendientes",
+      "layer": "core",
+      "phase": 1,
+      "entityIds": ["work_item", "process_checklist"],
+      "answers": ["open_work", "ownership", "status", "next_action"]
+    },
+    {
+      "id": "evidence_activity",
+      "name": "Evidencia, actividad y auditoria",
+      "layer": "core",
+      "phase": 1,
+      "entityIds": ["evidence", "activity_event"],
+      "answers": ["evidence", "status", "management"]
+    },
+    {
+      "id": "alerts_reports",
+      "name": "Alertas y reportes gerenciales",
+      "layer": "core",
+      "phase": 2,
+      "entityIds": ["notification"],
+      "answers": ["attention", "management"]
+    },
+    {
+      "id": "data_ops",
+      "name": "Importacion, exportacion y validacion",
+      "layer": "core",
+      "phase": 2,
+      "entityIds": ["import_batch"],
+      "answers": ["relationships", "open_work", "evidence"]
+    },
+    {
+      "id": "catalog_inventory",
+      "name": "Catalogo, productos e inventario",
+      "layer": "activatable_module",
+      "phase": 3,
+      "entityIds": [],
+      "answers": ["relationships", "attention", "management"]
+    },
+    {
+      "id": "sales_cash",
+      "name": "Ventas, pedidos y caja",
+      "layer": "activatable_module",
+      "phase": 3,
+      "entityIds": [],
+      "answers": ["open_work", "status", "management"]
+    },
+    {
+      "id": "quotes_b2b",
+      "name": "Cotizaciones B2B",
+      "layer": "vertical_extension",
+      "phase": 4,
+      "entityIds": [],
+      "answers": ["open_work", "ownership", "status", "next_action"]
+    },
+    {
+      "id": "knowledge_base",
+      "name": "Base de conocimiento interna",
+      "layer": "vertical_extension",
+      "phase": 4,
+      "entityIds": [],
+      "answers": ["evidence", "next_action", "management"]
+    },
+    {
+      "id": "whatsapp",
+      "name": "WhatsApp automatico",
+      "layer": "external_gate",
+      "phase": 5,
+      "entityIds": [],
+      "answers": ["next_action", "attention"],
+      "blockedUntil": "Meta/proveedor validado, credenciales, precio y soporte definidos"
+    },
+    {
+      "id": "tr4_adapter",
+      "name": "TR4 adapter",
+      "layer": "external_gate",
+      "phase": 5,
+      "entityIds": [],
+      "answers": ["evidence", "management"],
+      "blockedUntil": "Discovery pagado, permiso del cliente, entorno de prueba y rollback"
+    },
+    {
+      "id": "siat",
+      "name": "SIAT/facturacion fiscal",
+      "layer": "external_gate",
+      "phase": 5,
+      "entityIds": [],
+      "answers": ["management"],
+      "blockedUntil": "Proveedor validado, soporte fiscal y margen comercial aprobados"
+    }
+  ],
+  "families": [
+    { "id": "ONIA_CORE", "name": "ONIA Core", "relationship": "core" },
+    { "id": "GESTIOS", "name": "GestiOS", "relationship": "implementation_target" },
+    { "id": "DENTALGEST", "name": "DentalGest", "relationship": "implementation_target" },
+    { "id": "GANADERO_OS", "name": "Ganadero OS", "relationship": "implementation_target" },
+    { "id": "PROVEEGEST", "name": "ProveeGest", "relationship": "future_vertical" }
+  ],
+  "verticalTracks": [
+    {
+      "id": "gestios-general",
+      "familyId": "GESTIOS",
+      "name": "GestiOS General",
+      "status": "pending_adoption",
+      "requiredCapabilityIds": ["tenant", "team_roles", "relationships", "work_items", "evidence_activity", "alerts_reports", "data_ops"],
+      "blockedCapabilityIds": ["whatsapp", "siat"]
+    },
+    {
+      "id": "dentagest-clinical",
+      "familyId": "DENTALGEST",
+      "name": "DentalGest Clinico",
+      "status": "pending_adoption",
+      "requiredCapabilityIds": ["tenant", "team_roles", "evidence_activity", "alerts_reports"],
+      "blockedCapabilityIds": ["siat"]
+    },
+    {
+      "id": "ganadero-offline",
+      "familyId": "GANADERO_OS",
+      "name": "Ganadero OS Offline",
+      "status": "pending_adoption",
+      "requiredCapabilityIds": ["tenant", "team_roles", "work_items", "evidence_activity", "alerts_reports"],
+      "blockedCapabilityIds": ["whatsapp", "siat"]
+    },
+    {
+      "id": "proveegest-electrico",
+      "familyId": "PROVEEGEST",
+      "name": "ProveeGest Electrico",
+      "status": "planned_after_core",
+      "requiredCapabilityIds": ["tenant", "team_roles", "relationships", "work_items", "evidence_activity", "alerts_reports", "data_ops", "catalog_inventory", "quotes_b2b", "knowledge_base"],
+      "blockedCapabilityIds": ["whatsapp", "tr4_adapter", "siat"]
+    }
+  ],
+  "distributionTargets": [
+    {
+      "projectId": "gestios",
+      "repoPath": "C:\\dev\\proyectos\\Gestios",
+      "status": "hold_until_beta",
+      "nextAction": "Revertir prototipo local y esperar paquete ONIA Core beta."
+    },
+    {
+      "projectId": "dentagest",
+      "repoPath": "C:\\dev\\proyectos\\DentaGest\\dental-saas",
+      "status": "hold_until_beta",
+      "nextAction": "No tocar dominio clinico; adaptar solo tenant, roles, evidencia y reportes."
+    },
+    {
+      "projectId": "ganadero-os",
+      "repoPath": "C:\\dev\\proyectos\\Ganaderos-Os",
+      "status": "hold_until_beta",
+      "nextAction": "Mantener offline-first; adaptar ONIA Core solo con sync/local-first."
+    }
+  ],
+  "releaseGates": [
+    "Contrato JSON validado",
+    "Helpers de lectura validados",
+    "Blueprint de entidades aprobado",
+    "SQL base disenado antes de tocar Prisma",
+    "Plan de adopcion por proyecto aprobado",
+    "No hay integraciones externas activas por defecto"
+  ]
+}
