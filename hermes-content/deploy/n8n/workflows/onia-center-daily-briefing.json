@@ -1,4 +1,5 @@
 {
+  "id": "ONIADailyBrief001",
   "name": "ONIA Center - Briefing diario operativo",
   "active": false,
   "nodes": [
@@ -188,7 +189,8 @@
   },
   "settings": {
     "timezone": "America/La_Paz",
-    "executionOrder": "v1"
+    "executionOrder": "v1",
+    "availableInMCP": true
   },
   "pinData": {},
   "versionId": "onia-center-daily-briefing-20260628",
