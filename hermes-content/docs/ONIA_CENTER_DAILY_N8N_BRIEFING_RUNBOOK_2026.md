@@ -115,8 +115,12 @@ Estado MCP 2026-06-29:
 
 - Workflow importado como `ONIADailyBrief001`.
 - `availableInMCP=true`.
-- `active=false` hasta completar prueba con variables reales.
+- `active=true`.
+- Variables cargadas en `n8n-sergio_n8n`: `ONIA_CENTER_BASE_URL`, `ONIA_CENTER_INTERNAL_API_KEY`, `TELEGRAM_BOT_TOKEN`, `TELEGRAM_SERGIO_CHAT_ID`.
+- URL interna validada desde n8n: `http://onia-center:3012`.
 - Prueba simulada MCP exitosa con pin data: ejecucion `18708`.
+- Prueba real n8n en `commit=false` exitosa: ejecucion `18752`.
+- Workflow restaurado a `commit=true` y publicado; primera ejecucion automatica real queda programada para el siguiente bloque `06:45 America/La_Paz`.
 - Regla tecnica: los Code nodes de n8n no deben usar `process.env`; las variables se leen desde expresiones de n8n como `$env.NOMBRE_VARIABLE` en los parametros del nodo.
 
 Schedule:
@@ -249,11 +253,10 @@ ONIA_DAILY_BRIEFING_MODEL=<modelo-local>
 - Si falta Telegram, el workflow no debe bloquear la creacion de tareas.
 - Si falta Google OAuth, el calendario queda preparado pero no escrito.
 
-## Pendiente para activar en produccion
+## Pendiente despues de activacion
 
-- Cargar `ONIA_CENTER_INTERNAL_API_KEY` en n8n y ONIA Center.
-- Confirmar URL real de ONIA Center para n8n.
-- Confirmar Telegram bot y chat ID de Sergio.
-- Importar workflow en la instancia canonica `n8n_n8n`.
-- Hacer dry-run manual.
-- Activar workflow solo despues de revisar una ejecucion completa.
+- Revisar la primera ejecucion real programada y confirmar que crea tareas/notas sin duplicados.
+- Importar/migrar workflow a la instancia canonica `n8n_n8n` cuando vuelva a estar escalada y estable.
+- Conectar Google Calendar OAuth.
+- Conectar Cal self-hosted hacia n8n y ONIA Center.
+- Agregar alerta de fallo si el workflow no puede crear el briefing o no puede enviar Telegram.
