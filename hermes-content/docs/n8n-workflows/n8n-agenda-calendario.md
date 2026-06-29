@@ -2,6 +2,24 @@
 
 Sistema completo de gestión de agenda para Sergio/ONIA via Google Calendar + Cal.com + Telegram.
 
+## Estado verificado 2026-06-29
+
+- `ONIA - Agenda: Cal.com Booking` existe en n8n, ID `X6gd3EBW7Y3z9xTg`, y
+  esta activo.
+- Webhook esperado: POST `/webhook/calcom-booking`.
+- Credenciales enlazadas:
+  - Google Calendar: `Google Calendar account`, ID `a3FResZHqQ32ptyt`.
+  - Telegram: `Telegram account`, ID `r8y2CN5RyOEIDce3`.
+- Cal.com self-host ya apunta a:
+  `https://n8n-sergio-n8n.hqdqgh.easypanel.host/webhook/calcom-booking`.
+- Por seguridad, Cal solo envia `BOOKING_CREATED` a este workflow. El workflow
+  actual crea evento en Google Calendar y manda Telegram; no tiene ramas para
+  `BOOKING_REQUESTED`, `BOOKING_RESCHEDULED`, `BOOKING_CANCELLED` ni botones de
+  aceptar/cancelar.
+- Siguiente mejora obligatoria antes de usar agenda masiva: crear flujo de
+  solicitud pendiente -> Telegram/ONIA Center -> aceptar/cancelar/reasignar ->
+  crear/actualizar Google Calendar.
+
 ## Workflows creados
 
 ### 1. ONIA - Agenda: Briefing Diario

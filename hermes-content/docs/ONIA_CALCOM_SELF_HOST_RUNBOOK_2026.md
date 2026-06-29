@@ -1,8 +1,10 @@
 # ONIA Cal.com / Cal.diy self-host runbook 2026
 
-Estado: activo en dominio final y validado publicamente, admin bootstrap creado,
-pendiente event types, webhook Cal, Google Calendar y prueba SMTP.
-Fecha: 2026-06-28.
+Estado: activo en dominio final y validado publicamente, agenda comercial
+configurada, event types iniciales activos, webhook Cal -> n8n creado.
+Pendiente: prueba SMTP real, Google Calendar directo en Cal y flujo Telegram de
+aceptar/cancelar antes de abrirlo como canal masivo.
+Fecha: 2026-06-29.
 
 ## Decision
 
@@ -47,6 +49,13 @@ Conectarlo a:
   `/opt/onia-calcom/.env.bak-final-domain-20260628203654`.
 - Env backup antes de corregir remitente:
   `/opt/onia-calcom/.env.bak-email-from-20260628203856`.
+- Ruta Traefik persistente 2026-06-29:
+  `/etc/easypanel/traefik/config/onia-manual-routes.yaml`.
+  Se usa archivo separado porque Easypanel puede regenerar `main.yaml` y borrar
+  rutas manuales. Rutea `cal.onia.com.bo` a `http://onia-calcom:3000/` y
+  `center.onia.com.bo` a `http://onia-center:3012/`.
+- Backup Cal DB previo a configurar agenda:
+  `/root/backups/calcom/calcom-pre-onia-agenda-20260629-151221.sql.gz`.
 - El setup inicial ya fue completado con admin bootstrap. La API
   `/api/auth/setup` ahora responde `400 No setup needed` ante nuevos intentos.
 - La credencial bootstrap quedo fuera del repo:
@@ -145,11 +154,18 @@ evitar choques.
 
 ## Event types iniciales
 
-- `consulta-inicial`: 30 min, gratis, para prospectos nuevos.
-- `demo-onia`: 45 min, DentalGest/Gesti-OS/Web.
-- `reunion-proyecto`: 60 min, clientes activos.
-- `auditoria-pagada`: 60 min, desactivada en fase inicial porque ONIA aun no
-  cobrara asesorias pagadas.
+Configurado en produccion el 2026-06-29:
+
+- `https://cal.onia.com.bo/onia`: pagina publica de ONIA.
+- `https://cal.onia.com.bo/onia/consulta-inicial`: 30 min, gratis, prospectos
+  nuevos, minimo 4 horas de anticipacion, visible.
+- `https://cal.onia.com.bo/onia/demo-onia`: 45 min, Web ONIA, DentalGest,
+  GestiOS, automatizaciones y sistemas, minimo 8 horas de anticipacion, visible.
+- `https://cal.onia.com.bo/onia/reunion-proyecto`: 60 min, clientes activos o
+  propuestas en curso, minimo 24 horas de anticipacion, visible.
+- `auditoria-pagada`: 60 min, preparada pero no publica. Queda oculta y sin
+  relacion publica `_user_eventtype`, por lo tanto el link directo devuelve 404
+  hasta que ONIA decida cobrar asesorias.
 
 Reglas base:
 
@@ -158,11 +174,24 @@ Reglas base:
 - No aceptar reuniones el mismo dia con menos de 4 horas de anticipacion.
 - Disponibilidad comercial base: lunes a sabado 14:00-20:00.
 - Domingo cerrado.
+- Ventana futura:
+  - `consulta-inicial`: 14 dias.
+  - `demo-onia`: 21 dias.
+  - `reunion-proyecto`: 30 dias.
 - Calendario operativo: `oninteligenciaartificial@gmail.com`.
 - Cuenta/identidad publica Cal self-host: `business@onia.com.bo` como
   `ONIA | Agenda Comercial`.
+- Usuario publico Cal: `onia`.
+- Los tres eventos publicos tienen `requiresConfirmation=true`.
+- Cada evento tiene 12 campos de calificacion: empresa/negocio, WhatsApp,
+  ciudad, servicio de interes, problema principal, presupuesto aproximado,
+  link web/redes, quien debe tomar la reunion, urgencia, rol en el negocio,
+  origen del lead y autorizacion de contacto por WhatsApp.
+- La ubicacion queda como `somewhereElse` para coordinar canal por WhatsApp
+  despues de aceptar. No marcar Google Meet hasta conectar Google Calendar/Meet
+  en Cal.
 - El correo formal al cliente se envia desde `business@onia.com.bo` despues de
-  aceptar por Telegram.
+  aceptar la reserva. La prueba SMTP real sigue pendiente.
 - La vendedora puede agendar para Sergio, Arthur o para ella, con disponibilidad
   propia separada.
 - Arthur no comparte acceso a `oninteligenciaartificial@gmail.com`; se le asignan
@@ -182,18 +211,34 @@ Eventos iniciales:
 
 - `BOOKING_CREATED`
 
-Eventos posteriores:
+No activar todavia:
 
 - `BOOKING_RESCHEDULED`
 - `BOOKING_CANCELLED`
+- `BOOKING_REQUESTED`
+- `BOOKING_REJECTED`
 
-Salida esperada del workflow:
+Razon: el workflow n8n activo `ONIA - Agenda: Cal.com Booking` actualmente
+parsea el payload, crea un evento en Google Calendar y notifica por Telegram.
+No tiene ramas para solicitud pendiente, cancelacion o reprogramacion. Si Cal
+envia esos eventos ahora, el workflow puede crear eventos incorrectos en GCal.
+
+Salida actual verificada del workflow:
 
 1. Normalizar payload.
-2. Crear/actualizar evento en Google Calendar.
-3. Enviar Telegram a Sergio.
-4. Insertar en `onia_ops.booking_events`.
-5. Crear follow-up en `onia_ops.booking_followups` si aplica.
+2. Crear evento en Google Calendar `oninteligenciaartificial@gmail.com`.
+3. Enviar Telegram a dos chats internos.
+
+Salida objetivo pendiente:
+
+1. `BOOKING_REQUESTED` -> crear lead/reunion pendiente en ONIA Center y mandar
+   Telegram con acciones aceptar/cancelar/reasignar.
+2. Aceptar en Cal o via flujo seguro -> disparar/registrar `BOOKING_CREATED`.
+3. `BOOKING_CREATED` -> crear evento definitivo en Google Calendar.
+4. `BOOKING_CANCELLED` / `BOOKING_RESCHEDULED` -> actualizar GCal y estado en
+   ONIA Center, no crear eventos nuevos.
+5. Insertar auditoria en `onia_ops.booking_events` y follow-up en
+   `onia_ops.booking_followups`.
 
 ## Supabase
 
@@ -270,8 +315,12 @@ limit 5;
 ## Bloqueos actuales
 
 - Falta probar SMTP real con `business@onia.com.bo`.
-- Falta crear event types y webhook dentro del panel de Cal.
-- Falta conectar Google Calendar real y probar disponibilidad.
+- Falta conectar Google Calendar directamente en Cal; `Credential` de Cal esta
+  vacio al 2026-06-29. Sin eso, Cal no puede bloquear horas ocupadas en Google.
+- Falta prueba end-to-end con un booking real de baja criticidad.
+- Falta convertir el workflow n8n a modelo pendiente/aceptar/cancelar por
+  Telegram y ONIA Center.
+- Falta que n8n escriba auditoria en Supabase `onia_ops.booking_events`.
 - Falta revisar/confirmar licencia y eleccion final de imagen Cal.com/Cal.diy
   antes de uso publico sostenido.
 
@@ -293,6 +342,7 @@ limit 5;
 
 ## Recomendacion
 
-Para vender ya desde Instagram: usar el link solo cuando existan event types,
-SMTP y una reserva de prueba end-to-end. Mientras tanto, se puede cerrar por DM
-y agendar manualmente con el comando Telegram `agendar ...`.
+Para vender ya desde DM/WhatsApp: usar `https://cal.onia.com.bo/onia` solo en
+pruebas controladas hasta completar una reserva real end-to-end. Para anuncios o
+alto volumen, primero cerrar SMTP, Google Calendar directo en Cal y workflow de
+aprobacion por Telegram/ONIA Center.
