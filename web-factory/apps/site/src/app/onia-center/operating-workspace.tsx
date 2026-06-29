@@ -1925,7 +1925,7 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
       : ideaForm.visibility;
   const copy = workspaceCopy[workspaceView];
   const isDailyWorkspace = workspaceView === "daily";
-  const showWorkspaceMetrics = workspaceView !== "audio-intelligence";
+  const showWorkspaceMetrics = isDailyWorkspace;
   const showWorkspaceAdminActions = ["connections", "assistant", "codex-queue"].includes(workspaceView);
   const persistenceCopy = storageMode === "supabase"
     ? isDailyWorkspace

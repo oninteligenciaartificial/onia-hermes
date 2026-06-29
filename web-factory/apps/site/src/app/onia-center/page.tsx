@@ -729,27 +729,34 @@ export default function OniaCenterPage() {
         </div>
 
         <nav className="onia-nav" aria-label="Modulos ONIA Center">
-          {groupedNavItems.map(({ group, items }) => (
-            <div className="onia-nav-group" key={group}>
-              <span>{group}</span>
-              {items.map((item) => {
-                const Icon = item.icon;
-                const active = activeView === item.id;
-                return (
-                  <Link
-                    aria-current={active ? "page" : undefined}
-                    className={active ? "is-active" : ""}
-                    href={item.href ?? `/onia-center?view=${item.id}`}
-                    key={item.id}
-                  >
-                    <Icon size={15} />
-                    <span>{item.label}</span>
-                    <small>{item.detail}</small>
-                  </Link>
-                );
-              })}
-            </div>
-          ))}
+          {groupedNavItems.map(({ group, items }) => {
+            const groupHasActiveItem = items.some((item) => item.id === activeView);
+            const startsOpen = group === "Trabajo" || groupHasActiveItem;
+
+            return (
+              <details className="onia-nav-group" key={group} open={startsOpen}>
+                <summary>{group}</summary>
+                <div className="onia-nav-group-links">
+                  {items.map((item) => {
+                    const Icon = item.icon;
+                    const active = activeView === item.id;
+                    return (
+                      <Link
+                        aria-current={active ? "page" : undefined}
+                        className={active ? "is-active" : ""}
+                        href={item.href ?? `/onia-center?view=${item.id}`}
+                        key={item.id}
+                      >
+                        <Icon size={15} />
+                        <span>{item.label}</span>
+                        <small>{item.detail}</small>
+                      </Link>
+                    );
+                  })}
+                </div>
+              </details>
+            );
+          })}
         </nav>
 
         <section className="onia-role-switcher" aria-label="Selector de rol">
