@@ -21,8 +21,8 @@ La arquitectura correcta es:
 
 ```text
 ONIA Core canonico
-  -> GestiOS adopta organizacion empresarial
-  -> DentalGest adopta patrones comunes sin perder dominio clinico
+  -> DentalGest beta prueba direccion clinica para duenos
+  -> GestiOS adopta organizacion empresarial despues
   -> Ganadero OS adopta patrones comunes con offline-first
 ```
 
@@ -30,8 +30,8 @@ ONIA Core canonico
 
 | Proyecto | Estado | Regla |
 |---|---|---|
+| DentalGest | first beta candidate, not installed | Beta orientada a dueno: agenda, pacientes, tratamientos, cobros, seguimiento y reportes |
 | GestiOS | mapped, not installed | No continuar desarrollando ONIA Core local hasta instalar paquete canonico |
-| DentalGest | mapped, not installed | No mezclar clinica con GestiOS; adaptar solo tenant, roles, evidencia y reportes |
 | Ganadero OS | mapped, not installed | Mantener offline-first y dominio rural separado |
 
 Los mapas viven en:
@@ -52,7 +52,8 @@ Los mapas viven en:
    - `adapter-dentagest`.
    - `adapter-ganadero-os`.
 6. Validar tenant safety en cada repo.
-7. Recien instalar ONIA Core en proyectos.
+7. Instalar primero en DentalGest cuando el contrato beta este cerrado.
+8. Despues adaptar GestiOS y Ganadero OS con sus propios gates.
 
 ## No hacer todavia
 

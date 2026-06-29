@@ -4,6 +4,7 @@
   "status": "alpha",
   "sourceOfTruth": "onia-hermes/onia-core",
   "researchResult": "onia-core/ONIA_CORE_RESEARCH_RESULT_2026.md",
+  "betaDirection": "onia-core/ONIA_CORE_DENTALGEST_BETA_DIRECTION_2026.md",
   "schemaFiles": [
     "onia-core/schema/base-schema.sql"
   ],
@@ -285,8 +286,8 @@
       "id": "dentagest-clinical",
       "familyId": "DENTALGEST",
       "name": "DentalGest Clinico",
-      "status": "pending_adoption",
-      "requiredCapabilityIds": ["tenant", "team_roles", "evidence_activity", "alerts_reports"],
+      "status": "first_beta_candidate",
+      "requiredCapabilityIds": ["tenant", "team_roles", "relationships", "work_items", "evidence_activity", "alerts_reports", "data_ops", "sales_cash"],
       "blockedCapabilityIds": ["siat"]
     },
     {
@@ -329,6 +330,7 @@
   "releaseGates": [
     "Contrato JSON validado",
     "Resultado de investigacion canonico guardado",
+    "Direccion DentalGest beta guardada",
     "Helpers de lectura validados",
     "Blueprint de entidades aprobado",
     "SQL base disenado y validado antes de tocar Prisma",

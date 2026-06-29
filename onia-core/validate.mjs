@@ -42,6 +42,7 @@ assert(["canonical_draft", "alpha", "beta"].includes(contract.status), "Contract
 assert(contract.policy?.installInProductRepos === false, "Product repo installation must stay disabled before beta");
 assert(contract.questions.length === 10, "ONIA Core must keep the 10 operating questions");
 assertRepoFile(contract.researchResult, "Research result");
+assertRepoFile(contract.betaDirection, "Beta direction");
 
 assert(Array.isArray(contract.researchSources), "researchSources must be an array");
 assert(contract.researchSources.some((source) => source.type === "local"), "researchSources must include local sources");

@@ -5,6 +5,14 @@
   "status": "mapped_not_installed",
   "adoptionRule": "Do not turn DentalGest into a generic ERP. Adopt only common organization patterns that strengthen the dental product.",
   "businessRole": "Dental clinic SaaS with clinical records, appointments, treatments, invoices and dental inventory.",
+  "betaDecision": {
+    "firstBetaTarget": true,
+    "commercialModel": ["saas_monthly", "paid_implementation"],
+    "primaryUser": "owner",
+    "painScope": ["tasks", "patients", "quotes", "inventory", "agenda", "management_reports"],
+    "financeFromStart": true,
+    "siatPolicy": "Internal billing, payments, balances and export readiness from day one. Live SIAT fiscal emission stays gated until provider/authorization/testing responsibilities are validated."
+  },
   "entityMappings": [
     {
       "coreEntityId": "organization",
@@ -102,11 +110,17 @@
       "capabilityId": "data_ops",
       "status": "missing",
       "evidence": []
+    },
+    {
+      "capabilityId": "sales_cash",
+      "status": "exists_partial",
+      "evidence": ["Invoice", "Payment"]
     }
   ],
   "blockedUntil": [
     "ONIA Core beta contract approved",
     "Dental privacy boundaries reviewed",
-    "Dental-specific workflows defined before generic task UI"
+    "Dental-specific workflows defined before generic task UI",
+    "Fiscal/SIAT provider, authorization and testing responsibilities validated before live fiscal emission"
   ]
 }

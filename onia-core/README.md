@@ -39,6 +39,8 @@ modulos, verticales o integraciones. No son la definicion del core.
 - `ONIA_CORE_RESEARCH_RESULT_2026.md`: resultado de investigacion local y externa.
 - `ONIA_CORE_BENCHMARK_GAP_AUDIT_2026.md`: auditoria contra sistemas ERP, CRM,
   work management y operacion real de empresas.
+- `ONIA_CORE_DENTALGEST_BETA_DIRECTION_2026.md`: decision de beta inicial para
+  DentalGest, dueno como usuario principal y facturacion interna desde inicio.
 - `ONIA_CORE_DISTRIBUTION_PLAN_2026.md`: plan para subir ONIA Core a los
   sistemas cuando este listo.
 - `schema/base-schema.sql`: SQL base de referencia, no aplicado directamente.
