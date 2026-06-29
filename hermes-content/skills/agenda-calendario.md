@@ -87,13 +87,28 @@ Sin eventos: "Dia libre"
 - Calendario Google conectado: `oninteligenciaartificial@gmail.com`.
 - Correo formal al cliente despues de aceptar: `business@onia.com.bo`.
 - Tipos de evento disponibles:
-  - `consulta-inicial`: 30min, gratis.
+  - `consulta-inicial`: 20min, visible como `Consulta comercial - proyecto nuevo`.
+    - Para prospectos nuevos que quieren cotizar o validar si ONIA puede ayudar.
+    - Aplica a paginas web, ecommerce/landing, DentalGest, GestiOS,
+      automatizaciones, chatbots de WhatsApp, IA para publicidad/contenido y
+      sistemas internos.
+    - No es soporte, capacitacion ni auditoria tecnica profunda.
     - Anticipo minimo: 4 horas.
     - Se puede reservar hasta 14 dias hacia adelante.
-  - `demo-onia`: 45min, para DentalGest, GestiOS, Web ONIA y automatizaciones.
+  - `demo-onia`: 45min, visible como `Demo / diagnostico - solucion ONIA`.
+    - Para leads ya calificados con un problema concreto.
+    - Aplica a demos de DentalGest o GestiOS, revision de propuesta
+      web/ecommerce, automatizaciones, chatbot WhatsApp, sistema interno,
+      contenido con IA o publicidad con IA.
+    - Sirve para definir solucion, alcance y siguiente paso comercial.
     - Anticipo minimo: 8 horas.
     - Se puede reservar hasta 21 dias hacia adelante.
-  - `reunion-proyecto`: 60min, para clientes activos.
+  - `reunion-proyecto`: 60min, oculta en la pagina publica y usable con link
+    directo como `Reunion de proyecto - cliente activo`.
+    - Solo para clientes activos, propuestas en curso o proyectos ya aceptados.
+    - Aplica a alcance tecnico, revision de entregables, implementacion,
+      capacitacion, cambios, seguimiento, cierre tecnico/comercial o decisiones
+      de proyecto.
     - Anticipo minimo: 24 horas.
     - Se puede reservar hasta 30 dias hacia adelante.
   - `auditoria-pagada`: 60min, desactivada por ahora porque ONIA aun no cobrara

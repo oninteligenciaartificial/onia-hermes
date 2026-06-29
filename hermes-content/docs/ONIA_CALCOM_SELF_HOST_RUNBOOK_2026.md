@@ -157,14 +157,24 @@ evitar choques.
 Configurado en produccion el 2026-06-29:
 
 - `https://cal.onia.com.bo/onia`: pagina publica de ONIA.
-- `https://cal.onia.com.bo/onia/consulta-inicial`: 20 min, gratis, prospectos
-  nuevos, minimo 4 horas de anticipacion, visible. Es una llamada comercial de
-  calificacion, no una auditoria tecnica gratuita.
-- `https://cal.onia.com.bo/onia/demo-onia`: 45 min, Web ONIA, DentalGest,
-  GestiOS, automatizaciones y sistemas, minimo 8 horas de anticipacion, visible.
-- `https://cal.onia.com.bo/onia/reunion-proyecto`: 60 min, clientes activos o
-  propuestas en curso, minimo 24 horas de anticipacion. Queda oculto en la
-  pagina publica y se usa solo con link directo para evitar que prospectos frios
+- `https://cal.onia.com.bo/onia/consulta-inicial`: 20 min, visible.
+  Titulo publico: `Consulta comercial - proyecto nuevo`.
+  Para prospectos nuevos que quieren cotizar o validar si ONIA puede ayudar.
+  Aplica a paginas web, ecommerce/landing, DentalGest, GestiOS,
+  automatizaciones, chatbots de WhatsApp, IA para publicidad/contenido y
+  sistemas internos. No es soporte, capacitacion ni auditoria tecnica profunda.
+- `https://cal.onia.com.bo/onia/demo-onia`: 45 min, visible.
+  Titulo publico: `Demo / diagnostico - solucion ONIA`.
+  Para leads ya calificados con un problema concreto. Aplica a demos de
+  DentalGest o GestiOS, revision de propuesta web/ecommerce, automatizaciones,
+  chatbot WhatsApp, sistema interno, contenido con IA o publicidad con IA. Sirve
+  para definir solucion, alcance y siguiente paso comercial.
+- `https://cal.onia.com.bo/onia/reunion-proyecto`: 60 min, link directo.
+  Titulo publico: `Reunion de proyecto - cliente activo`.
+  Solo para clientes activos, propuestas en curso o proyectos ya aceptados.
+  Aplica a alcance tecnico, revision de entregables, implementacion,
+  capacitacion, cambios, seguimiento, cierre tecnico/comercial o decisiones de
+  proyecto. Queda oculto en la pagina publica para evitar que prospectos frios
   tomen una hora completa.
 - `auditoria-pagada`: 60 min, preparada pero no publica. Queda oculta y sin
   relacion publica `_user_eventtype`, por lo tanto el link directo devuelve 404
@@ -185,6 +195,16 @@ Reglas base:
 - Cuenta/identidad publica Cal self-host: `business@onia.com.bo` como
   `ONIA | Agenda Comercial`.
 - Usuario publico Cal: `onia`.
+- Gestion Sergio en Cal:
+  - Login: `https://cal.onia.com.bo/auth/login`.
+  - Ver reservas: `https://cal.onia.com.bo/bookings/upcoming`.
+  - Configurar tipos de reunion: `https://cal.onia.com.bo/event-types`.
+  - Configurar horarios/disponibilidad: `https://cal.onia.com.bo/availability`.
+  - Conectar calendarios: `https://cal.onia.com.bo/settings/my-account/calendars`.
+  - Perfil publico: `https://cal.onia.com.bo/settings/my-account/profile`.
+  - Usuario/email de acceso: `business@onia.com.bo`.
+  - Password guardado fuera del repo en `C:\Users\PC\.onia\calcom-admin-bootstrap.txt`
+    y `/root/.hermes/calcom-admin-bootstrap.txt`; no copiarlo a docs ni chat.
 - Avatar publico Cal:
   `https://center.onia.com.bo/assets/onia/onia-logo-avatar.png`.
 - Asset canonico local: `hermes-content/assets/onia/onia-logo-avatar.png`.
