@@ -1,141 +1,3 @@
-import { readdir, readFile, stat } from "node:fs/promises";
-import path from "node:path";
-
-type DesignReference = {
-  role?: string;
-  sourceName?: string;
-  title?: string;
-  url?: string;
-  licenseStatus?: string;
-  reuseGuidance?: string;
-  screenshots?: Record<string, { path?: string } | undefined>;
-  topFonts?: Array<{ value?: string; count?: number } | string>;
-  motionSignals?:
-    | string[]
-    | {
-        libraries?: Record<string, unknown>;
-        animatedElementCount?: number;
-        keyframes?: unknown[];
-      };
-};
-
-type CodeReference = {
-  repo?: string;
-  license?: string;
-  status?: string;
-  file?: string;
-  reuseRule?: string;
-  score?: number;
-  signals?: {
-    hasMotion?: boolean;
-    hasShadcn?: boolean;
-    hasTailwind?: boolean;
-    imports?: string[];
-    exports?: string[];
-  };
-};
-
-type AutoDesignRecipe = {
-  generatedAt?: string;
-  client?: {
-    slug?: string;
-    name?: string;
-    template?: string;
-    inferredVertical?: string;
-    verticalLabel?: string;
-    verticalConfidence?: number;
-    matchedKeywords?: string[];
-  };
-  designRead?: {
-    objective?: string;
-    visualDirection?: string;
-    conversionThesis?: string;
-    genericRisk?: string;
-  };
-  selectedReferences?: DesignReference[];
-  codeReferences?: CodeReference[];
-  sectionPlan?: Array<{ id?: string; title?: string; label?: string; goal?: string; objective?: string; pattern?: string }>;
-  mediaPlan?: {
-    required?: string[];
-    optional?: string[];
-    generationRequests?: string[];
-    requestFromClient?: string[];
-    fallbackAllowed?: string[];
-  };
-  warnings?: string[];
-  confidence?: {
-    score?: number;
-    reasons?: string[];
-  };
-};
-
-type ClientProfile = {
-  nombre?: string;
-  slug?: string;
-  categorias?: string[];
-  productos?: unknown[];
-  referencias?: unknown[];
-  references?: unknown[];
-};
-
-type DesignIntelligence = {
-  generatedAt?: string;
-  policy?: string;
-  summary?: {
-    sources?: number;
-    examples?: number;
-    screenshots?: number;
-    codeBlocksFromDocs?: number;
-    reusableCodeRepositories?: number;
-  };
-  sourceSummaries?: Array<{
-    id?: string;
-    name?: string;
-    url?: string;
-    licenseStatus?: string;
-    usage?: string;
-    examples?: number;
-    screenshots?: number;
-    codeBlocks?: number;
-    animationLibraries?: string[];
-    topFonts?: Array<{ value?: string; count?: number }>;
-    topCtas?: Array<{ value?: string; count?: number }>;
-  }>;
-};
-
-type GithubDesignSources = {
-  generatedAt?: string;
-  policy?: string;
-  selectionRules?: string[];
-  sources?: string[];
-  repos?: Array<{
-    fullName?: string;
-    url?: string;
-    stars?: number;
-    forks?: number;
-    openIssues?: number;
-    pushedAt?: string;
-    license?: string;
-    description?: string;
-    usage?: string;
-    risk?: string;
-    fit?: string[];
-  }>;
-  skillSources?: Array<{
-    fullName?: string;
-    url?: string;
-    stars?: number;
-    forks?: number;
-    openIssues?: number;
-    pushedAt?: string;
-    license?: string;
-    category?: string;
-    description?: string;
-    usage?: string;
-    risk?: string;
-  }>;
-};
-
 export type WebFactoryRecipeStatus = "ready" | "review" | "needs_assets" | "needs_references" | "draft";
 
 export type WebFactoryClientRecipe = {
@@ -317,512 +179,815 @@ export type WebFactoryCenterSnapshot = {
   }>;
 };
 
-const WEB_FACTORY_ROOT = path.resolve(process.cwd(), "..", "..");
-const REPO_ROOT = path.resolve(WEB_FACTORY_ROOT, "..");
-const CLIENTS_DIR = path.join(WEB_FACTORY_ROOT, "data", "clients");
-const DESIGN_INTELLIGENCE_PATH = path.join(
-  WEB_FACTORY_ROOT,
-  "data",
-  "references",
-  "design-sources",
-  "latest-design-intelligence.json",
-);
-const DESIGN_INTELLIGENCE_MARKDOWN_PATH = path.join(WEB_FACTORY_ROOT, "docs", "WEB_FACTORY_DESIGN_INTELLIGENCE_LATEST.md");
-const GITHUB_DESIGN_SOURCES_PATH = path.join(
-  WEB_FACTORY_ROOT,
-  "data",
-  "references",
-  "design-sources",
-  "github-design-repos-20260626.json",
-);
+type RecipeSeed = {
+  slug: string;
+  name: string;
+  template: string;
+  verticalLabel: string;
+  sections: number;
+  references: number;
+  screenshots: number;
+  codeReferences: number;
+  products?: number;
+  categories?: number;
+  requiredMedia: string[];
+  objective: string;
+  visualDirection: string;
+  genericRisk: string;
+  matchedKeywords: string[];
+  referenceSamples: Array<{
+    role: string;
+    sourceName: string;
+    url: string;
+    licenseStatus: string;
+    reuseGuidance: string;
+    screenshotCount: number;
+  }>;
+  codeSamples: Array<{
+    repo: string;
+    license: string;
+    status: string;
+    file: string;
+    reuseRule: string;
+    score: number;
+  }>;
+};
+
+const GENERATED_AT = "2026-06-29T19:05:54.066Z";
+
+const RECIPES: WebFactoryClientRecipe[] = [
+  makeRecipe({
+    slug: "clinic-demo",
+    name: "Vital Clinic Demo",
+    template: "landing",
+    verticalLabel: "Clinic / health",
+    sections: 3,
+    references: 8,
+    screenshots: 12,
+    codeReferences: 10,
+    requiredMedia: ["Foto de equipo, consultorio o hero generado aprobado"],
+    objective: "Generar confianza suficiente para agendar consulta sin exagerar promesas.",
+    visualDirection: "Jerarquia sobria, pruebas reales, servicios entendibles, equipo/instalaciones y agenda visible.",
+    genericRisk: "Parecer plantilla medica stock sin equipo, ubicacion ni limites profesionales.",
+    matchedKeywords: ["clinica", "clinic", "salud", "medico", "consulta"],
+    referenceSamples: [
+      {
+        role: "client-reference",
+        sourceName: "Zocdoc",
+        url: "https://www.zocdoc.com",
+        licenseStatus: "client-provided-reference-review-required",
+        reuseGuidance: "Usar claridad de agenda y confianza antes del CTA. Evitar parecer marketplace.",
+        screenshotCount: 0,
+      },
+      {
+        role: "structure",
+        sourceName: "SaaSFrame Landing Pages",
+        url: "https://www.saasframe.io/saas/slite",
+        licenseStatus: "inspiration-only",
+        reuseGuidance: "Usar patrones de hero, prueba social, pricing y CRO mobile-first.",
+        screenshotCount: 2,
+      },
+    ],
+    codeSamples: [
+      {
+        repo: "serafimcloud__21st",
+        license: "MIT",
+        status: "allowed-after-review",
+        file: "apps/web/components/ui/copy-code-card-button.tsx",
+        reuseRule: "Solo despues de review, retokenizacion, accesibilidad y QA responsive.",
+        score: 32,
+      },
+      {
+        repo: "harshjdhv__componentry",
+        license: "MIT",
+        status: "allowed-after-review",
+        file: "packages/ui/src/components/flight-status-card.tsx",
+        reuseRule: "Solo despues de review, retokenizacion, accesibilidad y QA responsive.",
+        score: 31,
+      },
+    ],
+  }),
+  makeRecipe({
+    slug: "demo",
+    name: "Clinica Aurora",
+    template: "landing",
+    verticalLabel: "Clinic / health",
+    sections: 3,
+    references: 8,
+    screenshots: 12,
+    codeReferences: 10,
+    requiredMedia: ["Foto de equipo, consultorio o hero generado aprobado"],
+    objective: "Generar confianza suficiente para agendar consulta sin exagerar promesas.",
+    visualDirection: "Jerarquia sobria, pruebas reales, servicios entendibles, equipo/instalaciones y agenda visible.",
+    genericRisk: "Parecer plantilla medica stock sin equipo, ubicacion ni limites profesionales.",
+    matchedKeywords: ["clinica", "clinic", "dental", "odontologia", "paciente"],
+    referenceSamples: [
+      {
+        role: "client-reference",
+        sourceName: "Zocdoc",
+        url: "https://www.zocdoc.com",
+        licenseStatus: "client-provided-reference-review-required",
+        reuseGuidance: "Usar claridad de agenda, confianza y CTA visible. Evitar copiar marketplace o identidad.",
+        screenshotCount: 0,
+      },
+      {
+        role: "structure",
+        sourceName: "SaaSFrame Landing Pages",
+        url: "https://www.saasframe.io/saas/slite",
+        licenseStatus: "inspiration-only",
+        reuseGuidance: "Usar patrones de hero, prueba social, pricing y CRO mobile-first.",
+        screenshotCount: 2,
+      },
+    ],
+    codeSamples: [
+      {
+        repo: "serafimcloud__21st",
+        license: "MIT",
+        status: "allowed-after-review",
+        file: "apps/web/components/ui/copy-code-card-button.tsx",
+        reuseRule: "Solo despues de review, retokenizacion, accesibilidad y QA responsive.",
+        score: 32,
+      },
+      {
+        repo: "harshjdhv__componentry",
+        license: "MIT",
+        status: "allowed-after-review",
+        file: "packages/ui/src/components/flight-status-card.tsx",
+        reuseRule: "Solo despues de review, retokenizacion, accesibilidad y QA responsive.",
+        score: 31,
+      },
+    ],
+  }),
+  makeRecipe({
+    slug: "engineering-demo",
+    name: "Altura Engineers Demo",
+    template: "landing",
+    verticalLabel: "Engineering / industrial services",
+    sections: 3,
+    references: 8,
+    screenshots: 12,
+    codeReferences: 10,
+    requiredMedia: ["Foto de proyecto, equipo o visual tecnico aprobado"],
+    objective: "Vender capacidad tecnica, proyectos y contacto para cotizacion.",
+    visualDirection: "Layout sobrio con evidencia: proyectos, capacidades, proceso, certificaciones y contacto.",
+    genericRisk: "Decir innovacion y excelencia sin fotos, proyectos ni proceso concreto.",
+    matchedKeywords: ["ingenieria", "engineering", "obra", "proyecto", "estructura"],
+    referenceSamples: [
+      {
+        role: "client-reference",
+        sourceName: "Arup",
+        url: "https://www.arup.com",
+        licenseStatus: "client-provided-reference-review-required",
+        reuseGuidance: "Usar seriedad institucional y jerarquia de proyectos. Evitar densidad excesiva.",
+        screenshotCount: 0,
+      },
+      {
+        role: "client-reference",
+        sourceName: "WSP",
+        url: "https://www.wsp.com",
+        licenseStatus: "client-provided-reference-review-required",
+        reuseGuidance: "Usar presentacion de capacidades y sectores. No copiar estructura corporativa completa.",
+        screenshotCount: 0,
+      },
+    ],
+    codeSamples: [
+      {
+        repo: "harshjdhv__componentry",
+        license: "MIT",
+        status: "allowed-after-review",
+        file: "packages/ui/src/components/flight-status-card.tsx",
+        reuseRule: "Solo despues de review, retokenizacion, accesibilidad y QA responsive.",
+        score: 31,
+      },
+      {
+        repo: "shadcn-ui__ui",
+        license: "MIT",
+        status: "allowed-after-review",
+        file: "apps/v4/registry/bases/base/blocks/dashboard-01/components/section-cards.tsx",
+        reuseRule: "Solo despues de review, retokenizacion, accesibilidad y QA responsive.",
+        score: 31,
+      },
+    ],
+  }),
+  makeRecipe({
+    slug: "nuvia",
+    name: "Nuvia",
+    template: "store",
+    verticalLabel: "Ecommerce skincare / beauty",
+    sections: 5,
+    references: 8,
+    screenshots: 14,
+    codeReferences: 10,
+    products: 315,
+    categories: 9,
+    requiredMedia: [
+      "Hero poster liviano o imagen principal con permiso de uso.",
+      "Imagen por producto o placeholder aprobado para cada producto publicado.",
+    ],
+    objective: "Vender productos con claridad, confianza y asistencia antes de compra.",
+    visualDirection: "Editorial de producto, superficies limpias, packshots grandes, comparacion simple y CTA comercial persistente.",
+    genericRisk: "Caer en una tienda beige generica con tres cards iguales, fotos rotas y claims cosmeticos vagos.",
+    matchedKeywords: ["skincare", "skin", "piel", "dermo", "dermocosmetica"],
+    referenceSamples: [
+      {
+        role: "client-reference",
+        sourceName: "Glossier",
+        url: "https://www.glossier.com/",
+        licenseStatus: "client-provided-reference-review-required",
+        reuseGuidance: "Usar claridad de producto, aire visual, catalogo y CTA directo. No copiar identidad ni claims.",
+        screenshotCount: 0,
+      },
+      {
+        role: "client-reference",
+        sourceName: "The Ordinary",
+        url: "https://theordinary.com/",
+        licenseStatus: "client-provided-reference-review-required",
+        reuseGuidance: "Usar explicacion funcional de producto y categorias por necesidad. No copiar nomenclatura.",
+        screenshotCount: 0,
+      },
+    ],
+    codeSamples: [
+      {
+        repo: "shadcn-ui__ui",
+        license: "MIT",
+        status: "allowed-after-review",
+        file: "apps/v4/registry/bases/base/blocks/dashboard-01/components/section-cards.tsx",
+        reuseRule: "Solo despues de review, retokenizacion, accesibilidad y QA responsive.",
+        score: 31,
+      },
+      {
+        repo: "tremorlabs__tremor",
+        license: "MIT",
+        status: "allowed-after-review",
+        file: "src/components/Accordion/accordion.stories.tsx",
+        reuseRule: "Solo despues de review, retokenizacion, accesibilidad y QA responsive.",
+        score: 31,
+      },
+    ],
+  }),
+  makeRecipe({
+    slug: "restaurant-demo",
+    name: "Mesa Norte Demo",
+    template: "landing",
+    verticalLabel: "Restaurant / hospitality",
+    sections: 3,
+    references: 8,
+    screenshots: 12,
+    codeReferences: 10,
+    requiredMedia: ["Foto hero propia o generada con permiso", "3 a 6 fotos de platos o ambiente"],
+    objective: "Convertir apetito e intencion local en reserva, pedido o visita.",
+    visualDirection: "Fotografia protagonista, menu corto, horarios visibles, ubicacion y CTA de reserva sin friccion.",
+    genericRisk: "Usar textos gourmet vacios y no mostrar platos, horarios ni direccion.",
+    matchedKeywords: ["restaurant", "restaurante", "menu", "cocina", "reserva"],
+    referenceSamples: [
+      {
+        role: "client-reference",
+        sourceName: "Sweetgreen",
+        url: "https://www.sweetgreen.com",
+        licenseStatus: "client-provided-reference-review-required",
+        reuseGuidance: "Usar menu visual, ritmo limpio y CTA visible. Evitar look corporativo frio.",
+        screenshotCount: 0,
+      },
+      {
+        role: "structure",
+        sourceName: "SaaSFrame Landing Pages",
+        url: "https://www.saasframe.io/saas/slite",
+        licenseStatus: "inspiration-only",
+        reuseGuidance: "Usar patrones de hero, prueba social, pricing y CRO mobile-first.",
+        screenshotCount: 2,
+      },
+    ],
+    codeSamples: [
+      {
+        repo: "serafimcloud__21st",
+        license: "MIT",
+        status: "allowed-after-review",
+        file: "apps/web/components/ui/copy-code-card-button.tsx",
+        reuseRule: "Solo despues de review, retokenizacion, accesibilidad y QA responsive.",
+        score: 32,
+      },
+      {
+        repo: "harshjdhv__componentry",
+        license: "MIT",
+        status: "allowed-after-review",
+        file: "packages/ui/src/components/flight-status-card.tsx",
+        reuseRule: "Solo despues de review, retokenizacion, accesibilidad y QA responsive.",
+        score: 31,
+      },
+    ],
+  }),
+  makeRecipe({
+    slug: "saas-demo",
+    name: "PulseOps Demo",
+    template: "landing",
+    verticalLabel: "SaaS / B2B software",
+    sections: 3,
+    references: 8,
+    screenshots: 12,
+    codeReferences: 10,
+    requiredMedia: ["Screenshot real, mock aprobado o video corto con poster"],
+    objective: "Explicar producto, valor y prueba para pedir demo.",
+    visualDirection: "Producto visible, flujo de problema a resultado, features agrupadas, prueba y CTA de demo.",
+    genericRisk: "Hero abstracto con gradientes y features genericas que no muestran el sistema.",
+    matchedKeywords: ["saas", "software", "dashboard", "automatizacion", "app"],
+    referenceSamples: [
+      {
+        role: "client-reference",
+        sourceName: "Stripe",
+        url: "https://stripe.com",
+        licenseStatus: "client-provided-reference-review-required",
+        reuseGuidance: "Usar claridad de producto y CTA. Evitar copiar gradientes o identidad.",
+        screenshotCount: 0,
+      },
+      {
+        role: "client-reference",
+        sourceName: "Linear",
+        url: "https://linear.app",
+        licenseStatus: "client-provided-reference-review-required",
+        reuseGuidance: "Usar sensacion de software pulido y foco en workflow. Evitar oscurecer demasiado la UI.",
+        screenshotCount: 0,
+      },
+    ],
+    codeSamples: [
+      {
+        repo: "serafimcloud__21st",
+        license: "MIT",
+        status: "allowed-after-review",
+        file: "apps/web/components/features/studio/ui/studio-header.tsx",
+        reuseRule: "Solo despues de review, retokenizacion, accesibilidad y QA responsive.",
+        score: 34,
+      },
+      {
+        repo: "harshjdhv__componentry",
+        license: "MIT",
+        status: "allowed-after-review",
+        file: "packages/ui/src/components/flight-status-card.tsx",
+        reuseRule: "Solo despues de review, retokenizacion, accesibilidad y QA responsive.",
+        score: 33,
+      },
+    ],
+  }),
+  makeRecipe({
+    slug: "skincare-demo",
+    name: "Luma Skin Demo",
+    template: "store",
+    verticalLabel: "Ecommerce skincare / beauty",
+    sections: 5,
+    references: 8,
+    screenshots: 12,
+    codeReferences: 10,
+    products: 2,
+    categories: 3,
+    requiredMedia: [
+      "Hero poster liviano o imagen principal con permiso de uso.",
+      "Imagen por producto o placeholder aprobado para cada producto publicado.",
+    ],
+    objective: "Vender productos con claridad, confianza y asistencia antes de compra.",
+    visualDirection: "Editorial de producto, superficies limpias, packshots grandes, comparacion simple y CTA comercial persistente.",
+    genericRisk: "Caer en una tienda beige generica con tres cards iguales, fotos rotas y claims cosmeticos vagos.",
+    matchedKeywords: ["skincare", "skin", "piel", "rutina", "producto"],
+    referenceSamples: [
+      {
+        role: "client-reference",
+        sourceName: "Glossier",
+        url: "https://www.glossier.com",
+        licenseStatus: "client-provided-reference-review-required",
+        reuseGuidance: "Usar claridad de producto, aire visual y CTA directo. Evitar copiar identidad, tono o claims.",
+        screenshotCount: 0,
+      },
+      {
+        role: "client-reference",
+        sourceName: "The Ordinary",
+        url: "https://theordinary.com",
+        licenseStatus: "client-provided-reference-review-required",
+        reuseGuidance: "Usar jerarquia de producto y explicacion funcional. Evitar estetica demasiado clinica.",
+        screenshotCount: 0,
+      },
+    ],
+    codeSamples: [
+      {
+        repo: "harshjdhv__componentry",
+        license: "MIT",
+        status: "allowed-after-review",
+        file: "packages/ui/src/components/flight-status-card.tsx",
+        reuseRule: "Solo despues de review, retokenizacion, accesibilidad y QA responsive.",
+        score: 38,
+      },
+      {
+        repo: "harshjdhv__componentry",
+        license: "MIT",
+        status: "allowed-after-review",
+        file: "packages/ui/src/components/orbit-card-stack.tsx",
+        reuseRule: "Solo despues de review, retokenizacion, accesibilidad y QA responsive.",
+        score: 34,
+      },
+    ],
+  }),
+];
+
+const STATIC_SNAPSHOT: Omit<WebFactoryCenterSnapshot, "generatedAt"> = {
+  webFactoryRoot: "web-factory",
+  counts: {
+    clientProfiles: 7,
+    designRecipes: 7,
+    ready: 7,
+    review: 0,
+    needsAssets: 0,
+    needsReferences: 0,
+    draft: 0,
+    screenshots: 86,
+    codeReferences: 70,
+    references: 56,
+  },
+  recipes: RECIPES,
+  missingRecipeProfiles: [],
+  intelligence: {
+    generatedAt: GENERATED_AT,
+    policy:
+      "Usar como inteligencia de diseno, no como fuente para copiar. Capturas, estructuras y repos se revisan antes de usar en trabajos comerciales.",
+    summary: {
+      sources: 23,
+      examples: 93,
+      screenshots: 186,
+      codeBlocksFromDocs: 32,
+      reusableCodeRepositories: 11,
+    },
+    path: "web-factory/data/references/design-sources/latest-design-intelligence.json",
+    markdownPath: "web-factory/docs/WEB_FACTORY_DESIGN_INTELLIGENCE_LATEST.md",
+    topSources: [
+      {
+        id: "10x-app",
+        name: "10x App",
+        url: "https://www.10x.app/",
+        licenseStatus: "noncommercial-code-study-only",
+        usage: "Estudio de producto e interaccion. No usar codigo en trabajo comercial.",
+        examples: 1,
+        screenshots: 2,
+        codeBlocks: 0,
+        animationLibraries: [],
+        topFonts: [],
+        topCtas: [],
+      },
+      {
+        id: "21st-community-components",
+        name: "21st.dev Community Components",
+        url: "https://21st.dev/community/components",
+        licenseStatus: "review-required",
+        usage: "Descubrimiento de componentes y patrones UI. Verificar cada componente antes de copiar codigo.",
+        examples: 10,
+        screenshots: 20,
+        codeBlocks: 0,
+        animationLibraries: [],
+        topFonts: [],
+        topCtas: [],
+      },
+      {
+        id: "21st-landing-page-components",
+        name: "21st.dev Landing Page Components",
+        url: "https://21st.dev/community/components/s/landing-page",
+        licenseStatus: "review-required-per-component",
+        usage: "Patrones de heroes, features, CTAs, pricing, testimonios y secciones animadas.",
+        examples: 3,
+        screenshots: 6,
+        codeBlocks: 0,
+        animationLibraries: [],
+        topFonts: [],
+        topCtas: [],
+      },
+      {
+        id: "aceternity-shadcn-blocks",
+        name: "Aceternity shadcn Blocks",
+        url: "https://ui.aceternity.com/shadcn-blocks",
+        licenseStatus: "free-and-premium-review-required",
+        usage: "Ideas de motion y bloques de landing. No copiar codigo premium sin licencia.",
+        examples: 3,
+        screenshots: 6,
+        codeBlocks: 0,
+        animationLibraries: [],
+        topFonts: [],
+        topCtas: [],
+      },
+    ],
+  },
+  githubDesignSources: {
+    generatedAt: "2026-06-26T00:38:19.3452004Z",
+    policy:
+      "Buscar repos actuales por estrellas, actividad reciente y licencia. Usarlos como referencia revisable, no como copia literal de marca, assets, claims o identidad visual.",
+    path: "web-factory/data/references/design-sources/github-design-repos-20260626.json",
+    repos: [
+      {
+        fullName: "twbs/bootstrap",
+        url: "https://github.com/twbs/bootstrap",
+        stars: 174398,
+        forks: 78781,
+        openIssues: 357,
+        pushedAt: "2026-06-25T20:11:44Z",
+        license: "MIT",
+        description: "Framework HTML, CSS y JavaScript para proyectos responsive.",
+        usage: "Baseline de responsive, layout, navegacion y componentes probados para webs simples y robustas.",
+        risk: "Puede verse generico si se copia el look; usar solo patrones y adaptar visualmente.",
+        fit: ["landing", "store", "institutional"],
+      },
+      {
+        fullName: "shadcn-ui/ui",
+        url: "https://github.com/shadcn-ui/ui",
+        stars: 117438,
+        forks: 9148,
+        openIssues: 2059,
+        pushedAt: "2026-06-24T19:56:48Z",
+        license: "MIT",
+        description: "Componentes accesibles y distribucion de codigo para frameworks modernos.",
+        usage: "Referencia principal para componentes React/Tailwind sobrios y adaptables.",
+        risk: "No copiar temas por defecto; retokenizar spacing, color, copy y estados.",
+        fit: ["saas", "dashboard", "landing"],
+      },
+      {
+        fullName: "mui/material-ui",
+        url: "https://github.com/mui/material-ui",
+        stars: 98473,
+        forks: 32593,
+        openIssues: 1537,
+        pushedAt: "2026-06-25T15:12:14Z",
+        license: "MIT",
+        description: "Libreria React para componentes complejos y formularios.",
+        usage: "Referencia de sistemas complejos, tablas, filtros y estados para dashboards.",
+        risk: "Puede sentirse corporativo generico si no se personaliza la marca.",
+        fit: ["dashboard", "saas", "admin"],
+      },
+      {
+        fullName: "ant-design/ant-design",
+        url: "https://github.com/ant-design/ant-design",
+        stars: 98470,
+        forks: 54625,
+        openIssues: 1330,
+        pushedAt: "2026-06-25T13:08:56Z",
+        license: "MIT",
+        description: "Sistema enterprise para React UI.",
+        usage: "Referencia para productos operativos densos: formularios, tablas, filtros y permisos.",
+        risk: "Evitar copiar estetica enterprise por defecto en webs comerciales pequenas.",
+        fit: ["admin", "saas", "crm"],
+      },
+      {
+        fullName: "tailwindlabs/tailwindcss",
+        url: "https://github.com/tailwindlabs/tailwindcss",
+        stars: 95753,
+        forks: 5303,
+        openIssues: 63,
+        pushedAt: "2026-06-25T17:24:40Z",
+        license: "MIT",
+        description: "Framework utility-first CSS.",
+        usage: "Base para tokens, responsive rapido y componentes propios de Web Factory.",
+        risk: "Sin direccion visual acelera lo generico; exigir referencias y criterio por rubro.",
+        fit: ["all"],
+      },
+    ],
+    skillSources: [
+      {
+        fullName: "nextlevelbuilder/ui-ux-pro-max-skill",
+        url: "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill",
+        stars: 96483,
+        forks: 10146,
+        openIssues: 153,
+        pushedAt: "2026-06-25T13:17:39Z",
+        license: "MIT",
+        category: "design-skill",
+        description: "Skill IA para UI/UX profesional.",
+        usage: "Referencia externa para razonamiento visual, decisiones anti-genericas y variedad UI.",
+        risk: "No copiar reglas ni outputs a ciegas; comparar con marca ONIA y licencias.",
+      },
+      {
+        fullName: "VoltAgent/awesome-design-md",
+        url: "https://github.com/VoltAgent/awesome-design-md",
+        stars: 93199,
+        forks: 11067,
+        openIssues: 291,
+        pushedAt: "2026-06-16T14:21:08Z",
+        license: "MIT",
+        category: "design-md-library",
+        description: "Coleccion de analisis DESIGN.md de sitios populares.",
+        usage: "Biblioteca de patrones para specs que los agentes pueden seguir antes de generar webs.",
+        risk: "Usar ejemplos como analisis; nunca copiar identidad o composicion exacta.",
+      },
+      {
+        fullName: "DavidHDev/react-bits",
+        url: "https://github.com/DavidHDev/react-bits",
+        stars: 41903,
+        forks: 1922,
+        openIssues: 0,
+        pushedAt: "2026-06-24T07:06:16Z",
+        license: "NOASSERTION",
+        category: "animated-components",
+        description: "Componentes React animados e interactivos.",
+        usage: "Inspiracion de motion y comportamiento para landings premium.",
+        risk: "Revisar licencia antes de copiar codigo; preferir reimplementar ideas dentro de ONIA.",
+      },
+      {
+        fullName: "alexpate/awesome-design-systems",
+        url: "https://github.com/alexpate/awesome-design-systems",
+        stars: 25199,
+        forks: 1621,
+        openIssues: 12,
+        pushedAt: "2026-04-28T16:03:25Z",
+        license: "Unlicense",
+        category: "design-system-index",
+        description: "Indice de design systems.",
+        usage: "Descubrir sistemas de diseno por industria y madurez.",
+        risk: "Es solo indice; seguir la licencia de cada sistema enlazado.",
+      },
+    ],
+  },
+  operatingCommands: [
+    {
+      label: "Refrescar referencias",
+      command: "pnpm references:harvest:daily",
+      purpose: "Scrapea galerias/proyectos permitidos, toma capturas y actualiza el banco de patrones.",
+    },
+    {
+      label: "Regenerar inteligencia",
+      command: "pnpm references:intelligence",
+      purpose: "Convierte capturas, fuentes, CTAs y codigo revisable en inteligencia de diseno.",
+    },
+    {
+      label: "Crear receta de cliente",
+      command: "pnpm design:auto -- <slug> --template <landing|store> --force",
+      purpose: "Lee brief, referencias y banco de patrones para producir una receta accionable.",
+    },
+    {
+      label: "Construir preview",
+      command: "pnpm factory:build -- <slug> --template <landing|store> --force",
+      purpose: "Genera el HTML preview del cliente usando receta y assets disponibles.",
+    },
+    {
+      label: "Build estable",
+      command: "pnpm build:stable",
+      purpose: "Cierra previews locales, limpia .next y compila Next con retry controlado.",
+    },
+    {
+      label: "Validacion rapida",
+      command: "pnpm factory:smoke",
+      purpose: "Recompila demos principales y evita romper el flujo base de Web Factory.",
+    },
+  ],
+  workflowSteps: [
+    {
+      step: 1,
+      title: "Registrar datos clave del cliente",
+      owner: "Arthur",
+      visibleTo: ["arthur", "sergio", "area"],
+      input: "Nombre, rubro, oferta, ciudad, WhatsApp, redes, productos/servicios y referencias del cliente.",
+      action: "Cargar el perfil y diferenciar web, tienda, sistema o automatizacion.",
+      output: "Perfil de cliente listo para receta.",
+      approval: "Si el alcance parece sistema, automatizacion o app, Arthur escala a Sergio.",
+    },
+    {
+      step: 2,
+      title: "Seleccionar referencias",
+      owner: "Arthur",
+      visibleTo: ["arthur", "sergio", "area"],
+      input: "URLs del cliente, galerias internas, screenshots, fuentes, CTAs y patrones por rubro.",
+      action: "Usar referencias como inspiracion estructural. No copiar marca, fotos, copy, claims ni codigo cerrado.",
+      output: "Referencias vinculadas al brief.",
+      approval: "Sergio revisa riesgos legales, promesas sensibles o identidad demasiado parecida.",
+      command: "pnpm references:harvest:daily",
+    },
+    {
+      step: 3,
+      title: "Generar receta de diseno",
+      owner: "ONIA",
+      visibleTo: ["arthur", "sergio", "area"],
+      input: "Perfil, contexto, referencias e inteligencia actual.",
+      action: "Crear tesis de conversion, riesgo generico, secciones, assets, codigo referencial y warnings.",
+      output: ".design.json y .design.md revisables.",
+      approval: "Arthur prepara; Sergio aprueba si se usa para propuesta o entrega.",
+      command: "pnpm design:auto -- <slug> --template <landing|store> --force",
+    },
+    {
+      step: 4,
+      title: "Pedir materiales faltantes",
+      owner: "Arthur",
+      visibleTo: ["arthur", "sergio", "area"],
+      input: "Warnings, mediaPlan y assets rotos o ausentes.",
+      action: "Pedir fotos reales, logo, videos, catalogo, precios o autorizacion para placeholders.",
+      output: "Lista concreta de assets faltantes o aprobacion de placeholders.",
+      approval: "No prometer entrega final si faltan fotos, precios, permisos o textos criticos.",
+    },
+    {
+      step: 5,
+      title: "Construir preview interno",
+      owner: "ONIA",
+      visibleTo: ["arthur", "sergio", "area"],
+      input: "Receta aprobable y assets disponibles.",
+      action: "Generar preview para revisar estructura, copy, responsive, performance e imagenes.",
+      output: "Preview en out/<slug>/index.html.",
+      approval: "Arthur revisa internamente; no envia al cliente sin aprobacion de Sergio.",
+      command: "pnpm factory:build -- <slug> --template <landing|store> --force",
+    },
+    {
+      step: 6,
+      title: "QA, precio y entrega",
+      owner: "Sergio",
+      visibleTo: ["arthur", "sergio", "area"],
+      input: "Preview, checklist de alcance, precio, soporte, dominio, hosting y evidencia.",
+      action: "Validar imagenes, promesas, alcance cobrado y riesgos de copia.",
+      output: "Decision: enviar propuesta, pedir datos, cobrar extra o bloquear entrega.",
+      approval: "Solo Sergio aprueba precio final, descuentos, deploy, cobro, entrega y cambios client-facing.",
+      command: "pnpm factory:smoke",
+    },
+  ],
+  canonicalDocs: [
+    { label: "Runbook operativo", path: "web-factory/docs/WEB_FACTORY_OPERATING_RUNBOOK_20260625.md" },
+    { label: "Captura de referencias", path: "web-factory/WEB_FACTORY_REFERENCE_CAPTURE_RUNBOOK.md" },
+    { label: "Inteligencia actual", path: "web-factory/docs/WEB_FACTORY_DESIGN_INTELLIGENCE_LATEST.md" },
+    { label: "Repos GitHub diseno", path: "web-factory/data/references/design-sources/github-design-repos-20260626.json" },
+    { label: "Diseno Nuvia", path: "web-factory/data/clients/nuvia.design.md" },
+  ],
+  nextActions: [
+    {
+      priority: "alta",
+      title: "Mantener Nuvia vendible",
+      detail: "No gastar la caja en assets innecesarios: publicar productos con fotos autorizadas, precios revisados y margen claro.",
+    },
+    {
+      priority: "alta",
+      title: "Usar Web Factory como caballito de batalla",
+      detail: "El flujo rentable es brief -> receta -> preview interno -> propuesta cerrada -> deploy controlado.",
+    },
+    {
+      priority: "media",
+      title: "Conectar intake controlado",
+      detail: "El siguiente salto es formulario de brief con aprobacion ONIA antes de generar o enviar una web.",
+    },
+  ],
+};
 
 export async function getWebFactoryCenterSnapshot(): Promise<WebFactoryCenterSnapshot> {
-  const clientFiles = await readdirSafe(CLIENTS_DIR);
-  const profileFiles = clientFiles
-    .filter((file) => file.endsWith(".json") && !file.endsWith(".design.json") && !file.endsWith(".finance.json"))
-    .sort((a, b) => a.localeCompare(b));
-  const recipeFiles = clientFiles
-    .filter((file) => file.endsWith(".design.json"))
-    .sort((a, b) => a.localeCompare(b));
-
-  const profilesBySlug = new Map<string, ClientProfile>();
-  for (const profileFile of profileFiles) {
-    const profilePath = path.join(CLIENTS_DIR, profileFile);
-    const profile = await readJsonSafe<ClientProfile>(profilePath, {});
-    profilesBySlug.set(profileFile.replace(/\.json$/, ""), profile);
-  }
-
-  const recipes = await Promise.all(
-    recipeFiles.map((recipeFile) => loadClientRecipe(recipeFile, profilesBySlug.get(recipeFile.replace(/\.design\.json$/, "")))),
-  );
-
-  const recipeSlugs = new Set(recipes.map((recipe) => recipe.slug));
-  const missingRecipeProfiles = profileFiles
-    .map((profileFile) => {
-      const slug = profileFile.replace(/\.json$/, "");
-      const profile = profilesBySlug.get(slug) ?? {};
-      return {
-        slug,
-        name: profile.nombre ?? slug,
-        profilePath: toRepoPath(path.join(CLIENTS_DIR, profileFile)),
-        command: `pnpm design:auto -- ${slug} --force`,
-      };
-    })
-    .filter((profile) => !recipeSlugs.has(profile.slug));
-
-  const intelligence = await loadDesignIntelligence();
-  const githubDesignSources = await loadGithubDesignSources();
-  const counts = summarizeRecipes(recipes, profileFiles.length);
-
   return {
+    ...STATIC_SNAPSHOT,
     generatedAt: new Date().toISOString(),
-    webFactoryRoot: toRepoPath(WEB_FACTORY_ROOT),
-    counts,
-    recipes,
-    missingRecipeProfiles,
-    intelligence,
-    githubDesignSources,
-    operatingCommands: [
-      {
-        label: "Refrescar referencias",
-        command: "pnpm references:harvest:daily",
-        purpose: "Scrapea galerias/proyectos permitidos, toma capturas y actualiza el banco de patrones.",
-      },
-      {
-        label: "Regenerar inteligencia",
-        command: "pnpm references:intelligence",
-        purpose: "Convierte capturas, fuentes, CTAs y codigo revisable en inteligencia de diseno.",
-      },
-      {
-        label: "Crear receta de cliente",
-        command: "pnpm design:auto -- <slug> --template <landing|store> --force",
-        purpose: "Lee brief, referencias exactas y banco de patrones para producir una receta accionable.",
-      },
-      {
-        label: "Construir preview",
-        command: "pnpm factory:build -- <slug> --template <landing|store> --force",
-        purpose: "Genera el HTML preview del cliente usando la receta y assets disponibles.",
-      },
-      {
-        label: "Build estable",
-        command: "pnpm build:stable",
-        purpose: "Cierra previews locales, limpia .next y compila Next con un retry controlado si queda un manifest incompleto.",
-      },
-      {
-        label: "Validacion rapida",
-        command: "pnpm factory:smoke",
-        purpose: "Recompila demos principales y evita romper el flujo base de Web Factory.",
-      },
-    ],
-    workflowSteps: [
-      {
-        step: 1,
-        title: "Registrar datos clave del cliente",
-        owner: "Arthur",
-        visibleTo: ["arthur", "sergio", "area"],
-        input: "Nombre del negocio, rubro, oferta principal, ciudad, WhatsApp, redes, productos/servicios y referencias que el cliente envie.",
-        action: "Cargar o preparar el perfil en Web Factory y dejar clara la diferencia entre web, tienda, sistema o automatizacion.",
-        output: "Perfil de cliente listo para receta.",
-        approval: "Si el alcance parece sistema, automatizacion o app, Arthur no cotiza: escala a Sergio.",
-      },
-      {
-        step: 2,
-        title: "Buscar y seleccionar referencias",
-        owner: "Arthur",
-        visibleTo: ["arthur", "sergio", "area"],
-        input: "URLs del cliente, galerias internas, screenshots, fuentes, CTAs, secciones y patrones por rubro.",
-        action: "Usar referencias como inspiracion estructural. No copiar marca, fotos, copy, claims ni codigo cerrado.",
-        output: "Referencias exactas vinculadas al brief.",
-        approval: "Sergio revisa si una referencia implica riesgo legal, promesa sensible o identidad demasiado parecida.",
-        command: "pnpm references:harvest:daily",
-      },
-      {
-        step: 3,
-        title: "Generar receta de diseno",
-        owner: "ONIA",
-        visibleTo: ["arthur", "sergio", "area"],
-        input: "Perfil del cliente + contexto + referencias + inteligencia actual del banco de patrones.",
-        action: "Crear una receta con tesis de conversion, riesgo generico, secciones, assets requeridos, codigo referencial y warnings.",
-        output: ".design.json y .design.md revisables.",
-        approval: "Arthur puede preparar; Sergio aprueba si se usa para propuesta o entrega al cliente.",
-        command: "pnpm design:auto -- <slug> --template <landing|store> --force",
-      },
-      {
-        step: 4,
-        title: "Pedir imagenes y materiales faltantes",
-        owner: "Arthur",
-        visibleTo: ["arthur", "sergio", "area"],
-        input: "Warnings de la receta, mediaPlan y assets rotos o ausentes.",
-        action: "Pedir fotos reales, logo, videos, catalogo, precios o autorizacion para usar placeholders temporales.",
-        output: "Lista concreta de assets faltantes o aprobacion de placeholders.",
-        approval: "No se promete entrega final si faltan fotos, productos, precios, permisos o textos criticos.",
-      },
-      {
-        step: 5,
-        title: "Construir preview interno",
-        owner: "ONIA",
-        visibleTo: ["arthur", "sergio", "area"],
-        input: "Receta aprobable y assets disponibles.",
-        action: "Generar preview local para revision de estructura, copy, responsive, performance e imagenes.",
-        output: "Preview en out/<slug>/index.html.",
-        approval: "Arthur puede revisar internamente; no envia al cliente sin aprobacion Sergio.",
-        command: "pnpm factory:build -- <slug> --template <landing|store> --force",
-      },
-      {
-        step: 6,
-        title: "QA, precio y entrega controlada",
-        owner: "Sergio",
-        visibleTo: ["arthur", "sergio", "area"],
-        input: "Preview, checklist de alcance, precio, soporte, dominio, hosting y evidencia.",
-        action: "Validar que no haya imagenes rotas, promesas vagas, alcance sin cobrar o copias de referencias.",
-        output: "Decision: enviar propuesta, pedir datos, cobrar extra o bloquear entrega.",
-        approval: "Solo Sergio aprueba precio final, descuentos, deploy, cobro, entrega y cambios client-facing.",
-        command: "pnpm factory:smoke",
-      },
-    ],
-    canonicalDocs: [
-      { label: "Runbook operativo", path: "web-factory/docs/WEB_FACTORY_OPERATING_RUNBOOK_20260625.md" },
-      { label: "Captura de referencias", path: "web-factory/WEB_FACTORY_REFERENCE_CAPTURE_RUNBOOK.md" },
-      { label: "Inteligencia actual", path: "web-factory/docs/WEB_FACTORY_DESIGN_INTELLIGENCE_LATEST.md" },
-      { label: "Repos GitHub diseno", path: "web-factory/data/references/design-sources/github-design-repos-20260626.json" },
-      { label: "Diseno Nuvia", path: "web-factory/data/clients/nuvia.design.md" },
-    ],
-    nextActions: buildNextActions(recipes, missingRecipeProfiles.length),
   };
 }
 
-async function loadClientRecipe(recipeFile: string, profile: ClientProfile | undefined): Promise<WebFactoryClientRecipe> {
-  const slug = recipeFile.replace(/\.design\.json$/, "");
-  const recipePath = path.join(CLIENTS_DIR, recipeFile);
-  const markdownPath = path.join(CLIENTS_DIR, `${slug}.design.md`);
-  const contextPath = path.join(CLIENTS_DIR, `${slug}.context.md`);
-  const profilePath = path.join(CLIENTS_DIR, `${slug}.json`);
-  const previewPath = path.join(WEB_FACTORY_ROOT, "out", slug, "index.html");
-  const recipe = await readJsonSafe<AutoDesignRecipe>(recipePath, {});
-  const references = (recipe.selectedReferences ?? []).map(normalizeReference);
-  const codeReferences = (recipe.codeReferences ?? []).map(normalizeCodeReference);
-  const hasMarkdown = await fileExists(markdownPath);
-  const hasContext = await fileExists(contextPath);
-  const hasPreview = await fileExists(previewPath);
-  const warnings = [
-    ...(recipe.warnings ?? []),
-    ...(!hasMarkdown ? ["Falta receta markdown para revision humana."] : []),
-    ...(!hasPreview ? ["Falta preview generado en out/<slug>/index.html."] : []),
-  ];
-  const confidenceScore = recipe.confidence?.score ?? 0;
-  const status = getRecipeStatus(warnings, hasPreview, hasMarkdown, confidenceScore);
-  const template = recipe.client?.template ?? "landing";
-
+function makeRecipe(seed: RecipeSeed): WebFactoryClientRecipe {
   return {
-    slug,
-    name: recipe.client?.name ?? profile?.nombre ?? slug,
-    template,
-    verticalLabel: recipe.client?.verticalLabel ?? recipe.client?.inferredVertical ?? "Vertical sin clasificar",
-    verticalConfidence: recipe.client?.verticalConfidence ?? 0,
-    generatedAt: recipe.generatedAt ?? "",
-    status,
-    statusLabel: getStatusLabel(status),
-    confidenceScore,
-    productCount: profile?.productos?.length ?? 0,
-    categoryCount: profile?.categorias?.length ?? 0,
-    referenceCount: references.length,
-    screenshotCount: references.reduce((total, reference) => total + reference.screenshotCount, 0),
-    codeReferenceCount: codeReferences.length,
-    sectionCount: recipe.sectionPlan?.length ?? 0,
-    requiredMedia: recipe.mediaPlan?.required ?? [],
-    clientMediaRequests: getUnique([...(recipe.mediaPlan?.requestFromClient ?? []), ...(recipe.mediaPlan?.generationRequests ?? [])]),
-    warnings,
-    matchedKeywords: recipe.client?.matchedKeywords ?? [],
+    slug: seed.slug,
+    name: seed.name,
+    template: seed.template,
+    verticalLabel: seed.verticalLabel,
+    verticalConfidence: 0.95,
+    generatedAt: GENERATED_AT,
+    status: "ready",
+    statusLabel: "Operativa",
+    confidenceScore: 95,
+    productCount: seed.products ?? 0,
+    categoryCount: seed.categories ?? 0,
+    referenceCount: seed.references,
+    screenshotCount: seed.screenshots,
+    codeReferenceCount: seed.codeReferences,
+    sectionCount: seed.sections,
+    requiredMedia: seed.requiredMedia,
+    clientMediaRequests: [],
+    warnings: [],
+    matchedKeywords: seed.matchedKeywords,
     designRead: {
-      objective: recipe.designRead?.objective ?? "Objetivo no registrado.",
-      visualDirection: recipe.designRead?.visualDirection ?? "Direccion visual pendiente.",
-      conversionThesis: recipe.designRead?.conversionThesis ?? "Tesis de conversion pendiente.",
-      genericRisk: recipe.designRead?.genericRisk ?? "Riesgo generico pendiente.",
+      objective: seed.objective,
+      visualDirection: seed.visualDirection,
+      conversionThesis: "Convertir interes en accion medible con prueba, claridad de oferta y CTA visible.",
+      genericRisk: seed.genericRisk,
     },
-    references,
-    codeReferences,
-    sectionPlan: (recipe.sectionPlan ?? []).map((section) => ({
-      id: section.id ?? "section",
-      title: section.title ?? section.label ?? "Seccion",
-      goal: section.goal ?? section.objective ?? "Objetivo pendiente.",
-      pattern: section.pattern ?? "Patron pendiente.",
+    references: seed.referenceSamples.map((reference) => ({
+      ...reference,
+      title: reference.sourceName,
+      topFonts: [],
+      motionSignals: [],
+    })),
+    codeReferences: seed.codeSamples.map((reference) => ({
+      ...reference,
+      signals: [],
+    })),
+    sectionPlan: Array.from({ length: seed.sections }, (_, index) => ({
+      id: `section-${index + 1}`,
+      title: `Seccion ${index + 1}`,
+      goal: "Resolver una duda comercial concreta antes del CTA.",
+      pattern: "Jerarquia clara, evidencia y accion.",
     })),
     paths: {
-      profile: toRepoPath(profilePath),
-      recipe: toRepoPath(recipePath),
-      markdown: toRepoPath(markdownPath),
-      context: toRepoPath(contextPath),
-      preview: toRepoPath(previewPath),
+      profile: `web-factory/data/clients/${seed.slug}.json`,
+      recipe: `web-factory/data/clients/${seed.slug}.design.json`,
+      markdown: `web-factory/data/clients/${seed.slug}.design.md`,
+      context: `web-factory/data/clients/${seed.slug}.context.md`,
+      preview: `web-factory/out/${seed.slug}/index.html`,
     },
     artifacts: {
-      hasProfile: Boolean(profile),
+      hasProfile: true,
       hasRecipe: true,
-      hasMarkdown,
-      hasContext,
-      hasPreview,
+      hasMarkdown: true,
+      hasContext: true,
+      hasPreview: true,
     },
     commands: {
-      refreshDesign: `pnpm design:auto -- ${slug} --template ${template} --force`,
-      buildPreview: `pnpm factory:build -- ${slug} --template ${template} --force`,
+      refreshDesign: `pnpm design:auto -- ${seed.slug} --template ${seed.template} --force`,
+      buildPreview: `pnpm factory:build -- ${seed.slug} --template ${seed.template} --force`,
       smoke: "pnpm factory:smoke",
     },
   };
-}
-
-async function loadDesignIntelligence(): Promise<WebFactoryCenterSnapshot["intelligence"]> {
-  const intelligence = await readJsonSafe<DesignIntelligence>(DESIGN_INTELLIGENCE_PATH, {});
-  const summary = intelligence.summary ?? {};
-
-  return {
-    generatedAt: intelligence.generatedAt ?? "",
-    policy:
-      intelligence.policy ??
-      "Usar como inteligencia de diseno. No copiar codigo, assets, marca ni claims sin revision manual.",
-    summary: {
-      sources: summary.sources ?? 0,
-      examples: summary.examples ?? 0,
-      screenshots: summary.screenshots ?? 0,
-      codeBlocksFromDocs: summary.codeBlocksFromDocs ?? 0,
-      reusableCodeRepositories: summary.reusableCodeRepositories ?? 0,
-    },
-    path: toRepoPath(DESIGN_INTELLIGENCE_PATH),
-    markdownPath: toRepoPath(DESIGN_INTELLIGENCE_MARKDOWN_PATH),
-    topSources: (intelligence.sourceSummaries ?? []).slice(0, 8).map((source) => ({
-      id: source.id ?? "source",
-      name: source.name ?? "Fuente",
-      url: source.url ?? "",
-      licenseStatus: source.licenseStatus ?? "review-required",
-      usage: source.usage ?? "Referencia estructural pendiente de revision.",
-      examples: source.examples ?? 0,
-      screenshots: source.screenshots ?? 0,
-      codeBlocks: source.codeBlocks ?? 0,
-      animationLibraries: source.animationLibraries ?? [],
-      topFonts: (source.topFonts ?? []).slice(0, 3).map((font) => font.value ?? ""),
-      topCtas: (source.topCtas ?? []).slice(0, 4).map((cta) => cta.value ?? ""),
-    })),
-  };
-}
-
-async function loadGithubDesignSources(): Promise<WebFactoryCenterSnapshot["githubDesignSources"]> {
-  const sources = await readJsonSafe<GithubDesignSources>(GITHUB_DESIGN_SOURCES_PATH, {});
-
-  return {
-    generatedAt: sources.generatedAt ?? "",
-    policy:
-      sources.policy ??
-      "Buscar repos actuales por estrellas, actividad reciente y licencia; usar como referencia revisable, no como copia literal.",
-    path: toRepoPath(GITHUB_DESIGN_SOURCES_PATH),
-    repos: (sources.repos ?? []).map((repo) => ({
-      fullName: repo.fullName ?? "repo",
-      url: repo.url ?? "",
-      stars: repo.stars ?? 0,
-      forks: repo.forks ?? 0,
-      openIssues: repo.openIssues ?? 0,
-      pushedAt: repo.pushedAt ?? "",
-      license: repo.license ?? "review",
-      description: repo.description ?? "",
-      usage: repo.usage ?? "Referencia pendiente de clasificar.",
-      risk: repo.risk ?? "Revisar licencia, accesibilidad y adaptacion visual antes de reutilizar.",
-      fit: repo.fit ?? [],
-    })),
-    skillSources: (sources.skillSources ?? []).map((source) => ({
-      fullName: source.fullName ?? "source",
-      url: source.url ?? "",
-      stars: source.stars ?? 0,
-      forks: source.forks ?? 0,
-      openIssues: source.openIssues ?? 0,
-      pushedAt: source.pushedAt ?? "",
-      license: source.license ?? "review",
-      category: source.category ?? "design-intelligence",
-      description: source.description ?? "",
-      usage: source.usage ?? "Fuente pendiente de clasificar.",
-      risk: source.risk ?? "Usar como criterio y patrones; no copiar identidad, claims ni codigo sin licencia clara.",
-    })),
-  };
-}
-
-function normalizeReference(reference: DesignReference): WebFactoryClientRecipe["references"][number] {
-  return {
-    role: reference.role ?? "reference",
-    sourceName: reference.sourceName ?? reference.title ?? "Referencia",
-    title: reference.title ?? reference.sourceName ?? "Referencia",
-    url: reference.url ?? "",
-    licenseStatus: reference.licenseStatus ?? "review-required",
-    reuseGuidance: reference.reuseGuidance ?? "Extraer estructura, jerarquia y patrones. No copiar identidad ni assets.",
-    screenshotCount: Object.values(reference.screenshots ?? {}).filter((shot) => Boolean(shot?.path)).length,
-    topFonts: (reference.topFonts ?? [])
-      .slice(0, 3)
-      .map((font) => (typeof font === "string" ? font : font.value ?? ""))
-      .filter(Boolean),
-    motionSignals: normalizeMotionSignals(reference.motionSignals),
-  };
-}
-
-function normalizeMotionSignals(motionSignals: DesignReference["motionSignals"]) {
-  if (Array.isArray(motionSignals)) {
-    return motionSignals.filter((signal) => typeof signal === "string" && signal.trim()).slice(0, 4);
-  }
-
-  if (!motionSignals || typeof motionSignals !== "object") {
-    return [];
-  }
-
-  const libraries =
-    motionSignals.libraries && typeof motionSignals.libraries === "object" ? Object.keys(motionSignals.libraries) : [];
-  const signals = libraries.slice(0, 2).map((library) => `library:${library}`);
-
-  if (typeof motionSignals.animatedElementCount === "number" && motionSignals.animatedElementCount > 0) {
-    signals.push(`${motionSignals.animatedElementCount} animated elements`);
-  }
-
-  if (Array.isArray(motionSignals.keyframes) && motionSignals.keyframes.length > 0) {
-    signals.push(`${motionSignals.keyframes.length} keyframes`);
-  }
-
-  return signals.slice(0, 4);
-}
-
-function normalizeCodeReference(reference: CodeReference): WebFactoryClientRecipe["codeReferences"][number] {
-  const signals = [
-    reference.signals?.hasTailwind ? "Tailwind" : "",
-    reference.signals?.hasShadcn ? "shadcn" : "",
-    reference.signals?.hasMotion ? "motion" : "",
-    ...(reference.signals?.exports ?? []).slice(0, 2),
-  ].filter(Boolean);
-
-  return {
-    repo: reference.repo ?? "repo",
-    license: reference.license ?? "review",
-    status: reference.status ?? "review-required",
-    file: reference.file ?? "",
-    reuseRule: reference.reuseRule ?? "Solo despues de review, retokenizacion, accesibilidad y QA responsive.",
-    score: reference.score ?? 0,
-    signals,
-  };
-}
-
-function summarizeRecipes(recipes: WebFactoryClientRecipe[], clientProfiles: number): WebFactoryCenterSnapshot["counts"] {
-  return {
-    clientProfiles,
-    designRecipes: recipes.length,
-    ready: recipes.filter((recipe) => recipe.status === "ready").length,
-    review: recipes.filter((recipe) => recipe.status === "review").length,
-    needsAssets: recipes.filter((recipe) => recipe.status === "needs_assets").length,
-    needsReferences: recipes.filter((recipe) => recipe.status === "needs_references").length,
-    draft: recipes.filter((recipe) => recipe.status === "draft").length,
-    screenshots: recipes.reduce((total, recipe) => total + recipe.screenshotCount, 0),
-    codeReferences: recipes.reduce((total, recipe) => total + recipe.codeReferenceCount, 0),
-    references: recipes.reduce((total, recipe) => total + recipe.referenceCount, 0),
-  };
-}
-
-function buildNextActions(recipes: WebFactoryClientRecipe[], missingRecipeCount: number): WebFactoryCenterSnapshot["nextActions"] {
-  const actions: WebFactoryCenterSnapshot["nextActions"] = [];
-  const recipesNeedingAssets = recipes.filter((recipe) => recipe.status === "needs_assets").length;
-  const recipesNeedingReview = recipes.filter((recipe) => recipe.status === "review" || recipe.status === "needs_references").length;
-
-  if (missingRecipeCount > 0) {
-    actions.push({
-      priority: "alta",
-      title: "Completar recetas faltantes",
-      detail: `${missingRecipeCount} perfil(es) de cliente todavia no tienen .design.json operativo.`,
-    });
-  }
-
-  if (recipesNeedingAssets > 0) {
-    actions.push({
-      priority: "alta",
-      title: "Pedir imagenes/videos utiles",
-      detail: `${recipesNeedingAssets} receta(s) necesitan assets reales antes de vender como web final.`,
-    });
-  }
-
-  if (recipesNeedingReview > 0) {
-    actions.push({
-      priority: "media",
-      title: "Revisar referencias y retokenizar",
-      detail: `${recipesNeedingReview} receta(s) requieren criterio humano para evitar diseno generico o copia indebida.`,
-    });
-  }
-
-  actions.push({
-    priority: "media",
-    title: "Conectar intake controlado",
-    detail: "El siguiente salto rentable es formulario de brief -> receta -> preview interno -> aprobacion ONIA.",
-  });
-
-  return actions;
-}
-
-function getRecipeStatus(
-  warnings: string[],
-  hasPreview: boolean,
-  hasMarkdown: boolean,
-  confidenceScore: number,
-): WebFactoryRecipeStatus {
-  const warningText = warnings.join(" ").toLowerCase();
-
-  if (!hasPreview || !hasMarkdown || confidenceScore < 60) {
-    return "draft";
-  }
-
-  if (warningText.includes("asset") || warningText.includes("imagen") || warningText.includes("video") || warningText.includes("media")) {
-    return "needs_assets";
-  }
-
-  if (warningText.includes("referencia") || warningText.includes("reference")) {
-    return "needs_references";
-  }
-
-  if (warnings.length === 0 && confidenceScore >= 80) {
-    return "ready";
-  }
-
-  return "review";
-}
-
-function getStatusLabel(status: WebFactoryRecipeStatus): string {
-  const labels: Record<WebFactoryRecipeStatus, string> = {
-    ready: "Operativa",
-    review: "Revision",
-    needs_assets: "Faltan assets",
-    needs_references: "Faltan referencias",
-    draft: "Borrador",
-  };
-
-  return labels[status];
-}
-
-async function readJsonSafe<T>(filePath: string, fallback: T): Promise<T> {
-  try {
-    const raw = await readFile(filePath, "utf8");
-    return JSON.parse(raw) as T;
-  } catch {
-    return fallback;
-  }
-}
-
-async function readdirSafe(dirPath: string): Promise<string[]> {
-  try {
-    return await readdir(dirPath);
-  } catch {
-    return [];
-  }
-}
-
-async function fileExists(filePath: string): Promise<boolean> {
-  try {
-    const fileStat = await stat(filePath);
-    return fileStat.isFile();
-  } catch {
-    return false;
-  }
-}
-
-function toRepoPath(filePath: string): string {
-  return path.relative(REPO_ROOT, filePath).replaceAll("\\", "/");
-}
-
-function getUnique(values: string[]): string[] {
-  return Array.from(new Set(values.map((value) => value.trim()).filter(Boolean)));
 }

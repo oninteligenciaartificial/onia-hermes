@@ -33,7 +33,7 @@ const navIcons = {
 };
 
 export function SellerSidebar() {
-  const pathname = usePathname();
+  const pathname = usePathname() ?? "";
 
   return (
     <aside className="seller-sidebar" aria-label="Panel de vendedores">

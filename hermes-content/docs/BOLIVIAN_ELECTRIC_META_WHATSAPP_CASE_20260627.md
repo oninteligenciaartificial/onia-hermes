@@ -100,6 +100,11 @@ Para MVP:
 - ONIA n8n compartido solo para pruebas con datos redacted;
 - IA local solo como fase futura, cuando el flujo comercial este probado.
 
+Si el servidor interno de Bolivian no esta listo o no tiene acceso publico,
+usar temporalmente el puente administrado por ONIA documentado en
+`BOLIVIAN_ELECTRIC_ONIA_MANAGED_BRIDGE_20260629.md`: VPS dedicado para Bolivian,
+n8n self-hosted, Chatwoot Cloud dedicado y plan de traspaso.
+
 ## Bloqueadores antes de activar
 
 - Meta Business no aprobado o pendiente.

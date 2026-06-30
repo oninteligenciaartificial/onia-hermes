@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import {
   AlertTriangle,
@@ -172,6 +173,7 @@ type AudioClientQuality = Record<string, unknown> & {
   veredicto?: string | null;
   decision_recomendada?: string | null;
   razon?: string | null;
+  factores?: unknown;
   senales_positivas?: unknown;
   senales_rojas?: unknown;
   datos_para_calificar?: unknown;
@@ -225,6 +227,29 @@ type AudioStatusResponse = {
     maxOutputTokens: number;
   };
 };
+type AudioPdfThemeId =
+  | "garabato"
+  | "hsb-engineers"
+  | "bench"
+  | "lia-albertengo"
+  | "aw-climatizacion"
+  | "nuvia"
+  | "bolivian-electric"
+  | "onia"
+  | "grigota";
+type AudioPdfTheme = {
+  id: AudioPdfThemeId;
+  label: string;
+  reference: string;
+  referenceFile: string;
+  bestFor: string;
+  accent: string;
+  accentDark: string;
+  accentSoft: string;
+  tableTint: string;
+  heroGrad: string;
+  tone: string;
+};
 export type WorkspaceView =
   | "daily"
   | "capture"
@@ -240,6 +265,126 @@ const storageKey = "onia-center-runtime-v2";
 const legacyStorageKey = "onia-center-runtime-v1";
 
 const roleOptions: RoleId[] = ["sergio", "area", "arthur", "seller", "freelancer"];
+
+const audioPdfThemes: AudioPdfTheme[] = [
+  {
+    id: "garabato",
+    label: "Garabato",
+    reference: "Catalogo / ecommerce",
+    referenceFile: "hermes-content/propuestas/propuesta-garabato.pdf",
+    bestFor: "Tienda, catalogo, pago, pedido, WhatsApp y orden automatica.",
+    accent: "#1e5bff",
+    accentDark: "#1239a8",
+    accentSoft: "#eaf0ff",
+    tableTint: "#eef3fb",
+    heroGrad: "linear-gradient(135deg,#0f1b2e 0%,#16294a 55%,#0e3f32 100%)",
+    tone: "producto, compra y orden claro",
+  },
+  {
+    id: "hsb-engineers",
+    label: "HSB Engineers",
+    reference: "Ingenieria / autoridad tecnica",
+    referenceFile: "hermes-content/propuestas/propuesta-hsb-engineers.pdf",
+    bestFor: "Industria, ingenieria, B2B tecnico, obras, licitaciones y CRM comercial.",
+    accent: "#1e5bff",
+    accentDark: "#1239a8",
+    accentSoft: "#eaf0ff",
+    tableTint: "#eef3fb",
+    heroGrad: "linear-gradient(135deg,#0f1b2e 0%,#16294a 55%,#0e3f32 100%)",
+    tone: "seriedad, trayectoria y captacion B2B",
+  },
+  {
+    id: "bench",
+    label: "Bench",
+    reference: "Agencia / autoridad creativa",
+    referenceFile: "hermes-content/propuestas/propuesta-bench.pdf",
+    bestFor: "Agencias, marketing, portafolio, autoridad, contenido y marca.",
+    accent: "#e30613",
+    accentDark: "#9d0610",
+    accentSoft: "#ffe8ea",
+    tableTint: "#fff0f1",
+    heroGrad: "linear-gradient(135deg,#0a0a0a 0%,#1a0306 55%,#e30613 150%)",
+    tone: "impacto, marca y portafolio",
+  },
+  {
+    id: "lia-albertengo",
+    label: "Lia",
+    reference: "Salud / confianza profesional",
+    referenceFile: "hermes-content/propuestas/propuesta-lia-albertengo.pdf",
+    bestFor: "Salud, consultoria, profesional independiente, cursos y productos digitales.",
+    accent: "#0f8b62",
+    accentDark: "#0b6048",
+    accentSoft: "#e3f4ec",
+    tableTint: "#edf8f2",
+    heroGrad: "linear-gradient(135deg,#16294a 0%,#0e3f32 60%,#0f8b62 100%)",
+    tone: "calma, confianza y claridad",
+  },
+  {
+    id: "aw-climatizacion",
+    label: "AW",
+    reference: "Servicio tecnico / climatizacion",
+    referenceFile: "hermes-content/propuestas/propuesta-aw-climatizacion.pdf",
+    bestFor: "Servicio tecnico, mantenimiento, instalacion, agenda y soporte operativo.",
+    accent: "#0aa3d6",
+    accentDark: "#087ca3",
+    accentSoft: "#e5f7fc",
+    tableTint: "#eaf8fc",
+    heroGrad: "linear-gradient(135deg,#06121a 0%,#0a2230 55%,#0aa3d6 160%)",
+    tone: "tecnico, fresco y operativo",
+  },
+  {
+    id: "nuvia",
+    label: "Nuvia",
+    reference: "Ecommerce skincare",
+    referenceFile: "web-factory/data/clients/nuvia.design.json",
+    bestFor: "Ecommerce visual, catalogo amplio, producto, rutinas y compra asistida.",
+    accent: "#00A7A0",
+    accentDark: "#0F2D52",
+    accentSoft: "#e5f7f6",
+    tableTint: "#fff6d8",
+    heroGrad: "linear-gradient(135deg,#0F2D52 0%,#0b5f68 58%,#F5B400 145%)",
+    tone: "editorial de producto y claridad de compra",
+  },
+  {
+    id: "bolivian-electric",
+    label: "Bolivian Electric",
+    reference: "Industrial / cotizacion B2B",
+    referenceFile: "hermes-content/propuestas/bolivian-electric-transformacion-ia-2026.pdf",
+    bestFor: "Industrial, operaciones, cotizaciones, inventario y control comercial.",
+    accent: "#c9932f",
+    accentDark: "#4b3a19",
+    accentSoft: "#fbf0dc",
+    tableTint: "#f5f0e8",
+    heroGrad: "linear-gradient(135deg,#11171a 0%,#213036 58%,#c9932f 145%)",
+    tone: "control-room industrial y alta confianza",
+  },
+  {
+    id: "onia",
+    label: "ONIA",
+    reference: "Marca interna ONIA",
+    referenceFile: "hermes-content/brand/tokens.css",
+    bestFor: "Propuestas generales de IA, sistemas internos, automatizacion y consultoria.",
+    accent: "#10C26B",
+    accentDark: "#0B8F4F",
+    accentSoft: "#D6F5E5",
+    tableTint: "#eef8f2",
+    heroGrad: "linear-gradient(135deg,#0A0F0D 0%,#10251b 58%,#10C26B 150%)",
+    tone: "inteligencia operativa, confianza y accion",
+  },
+  {
+    id: "grigota",
+    label: "Grigota",
+    reference: "Tema provisional",
+    referenceFile: "pendiente: falta PDF o paleta canonica de Grigota",
+    bestFor: "Comercio local y propuesta directa hasta reemplazar por referencia real.",
+    accent: "#c66a18",
+    accentDark: "#8a410b",
+    accentSoft: "#faeadb",
+    tableTint: "#fbf1e8",
+    heroGrad: "linear-gradient(135deg,#160f0a 0%,#3a1d0b 58%,#c66a18 145%)",
+    tone: "comercial, local y directo",
+  },
+];
 
 const ideaVisibilityLabels: Record<RuntimeIdea["visibility"], string> = {
   sergio_private: "Privado Sergio",
@@ -896,6 +1041,10 @@ function audioNumber(value: unknown, fallback = 0) {
   return fallback;
 }
 
+function audioRecord(value: unknown): Record<string, unknown> | null {
+  return value && typeof value === "object" && !Array.isArray(value) ? (value as Record<string, unknown>) : null;
+}
+
 function clientQualityDraft(analysis: AudioAnalysis | null | undefined): AudioClientQuality | null {
   const raw = analysis?.calidad_cliente ?? analysis?.evaluacion_cliente ?? analysis?.cliente_calidad;
   return raw && typeof raw === "object" ? (raw as AudioClientQuality) : null;
@@ -943,10 +1092,48 @@ function clientQualityDecision(analysis: AudioAnalysis | null | undefined) {
     scoreLabel: score ? `${score}/100` : "por verificar",
     decision: audioText(quality.decision_recomendada ?? quality.decision ?? quality.siguiente_accion, "por verificar"),
     reason: audioText(quality.razon ?? quality.reason ?? quality.justificacion, "Sin razon documentada."),
-    positives: audioList(quality.senales_positivas ?? quality.señales_positivas),
-    redFlags: audioList(quality.senales_rojas ?? quality.señales_rojas ?? quality.riesgos),
+    positives: audioList(quality.senales_positivas ?? quality["se\u00f1ales_positivas"]),
+    redFlags: audioList(quality.senales_rojas ?? quality["se\u00f1ales_rojas"] ?? quality.riesgos),
     missing: audioList(quality.datos_para_calificar ?? quality.informacion_faltante),
   };
+}
+
+function clientQualityFactors(analysis: AudioAnalysis | null | undefined) {
+  const quality = clientQualityDraft(analysis);
+  const factors = audioRecord(quality?.factores ?? quality?.matriz_calificacion ?? quality?.scorecard);
+
+  return [
+    {
+      label: "Problema",
+      value: audioText(factors?.problema ?? factors?.problem ?? analysis?.necesidad_principal),
+      detail: "Debe existir un dolor concreto que justifique pagar.",
+    },
+    {
+      label: "Autoridad",
+      value: audioText(factors?.autoridad ?? factors?.decision_maker ?? factors?.decisor),
+      detail: "Confirma si habla quien decide o solo quien explora.",
+    },
+    {
+      label: "Presupuesto",
+      value: audioText(factors?.presupuesto ?? analysis?.presupuesto_mencionado),
+      detail: "Sin presupuesto, conviene diagnostico o nutricion antes de propuesta cerrada.",
+    },
+    {
+      label: "Urgencia",
+      value: audioText(factors?.urgencia ?? factors?.timing ?? analysis?.fecha_proximo_paso),
+      detail: "Ayuda a decidir prioridad y velocidad de seguimiento.",
+    },
+    {
+      label: "Ajuste ONIA",
+      value: audioText(factors?.ajuste_onia ?? factors?.fit ?? factors?.producto_recomendado),
+      detail: "Debe mapear a un producto o servicio real de ONIA.",
+    },
+    {
+      label: "Proceso",
+      value: audioText(factors?.respeto_proceso ?? factors?.claridad_alcance ?? factors?.proceso),
+      detail: "Mide si respeta diagnostico, alcance, tiempos y condiciones.",
+    },
+  ];
 }
 
 function escapeHtml(value: unknown) {
@@ -962,69 +1149,266 @@ function htmlList(items: string[]) {
   return items.length ? `<ul>${items.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>` : "<p>Por verificar.</p>";
 }
 
-function buildAudioProposalHtml(analysis: AudioAnalysis, transcript: string, source?: AudioApiResponse["source"]) {
+function audioPdfThemeById(id: AudioPdfThemeId) {
+  return audioPdfThemes.find((theme) => theme.id === id) ?? audioPdfThemes[0];
+}
+
+function uniqueAudioList(...groups: string[][]) {
+  const seen = new Set<string>();
+  return groups.flat().filter((item) => {
+    const key = item.toLowerCase();
+    if (seen.has(key)) {
+      return false;
+    }
+    seen.add(key);
+    return true;
+  });
+}
+
+function htmlInfoCard(label: string, value: unknown, detail?: unknown) {
+  return `<div class="box"><span class="label">${escapeHtml(label)}</span><strong>${escapeHtml(audioText(value))}</strong>${detail ? `<p>${escapeHtml(detail)}</p>` : ""}</div>`;
+}
+
+function buildAudioImplementationSteps(proposal: AudioProposalDraft | null) {
+  const plan = audioList(proposal?.plan_implementacion);
+  if (plan.length >= 2) {
+    return plan.slice(0, 6).map((item, index) => ({
+      title: `Fase ${index + 1}`,
+      detail: item,
+    }));
+  }
+
+  const scope = audioList(proposal?.alcance_recomendado);
+  if (scope.length >= 3) {
+    return scope.slice(0, 5).map((item, index) => ({
+      title: `Fase ${index + 1}`,
+      detail: item,
+    }));
+  }
+
+  return [
+    { title: "Confirmar necesidad y alcance", detail: "Validar problema real, decisor, presupuesto, urgencia y resultado esperado antes de prometer implementacion." },
+    { title: "Diseñar ruta comercial", detail: "Elegir si corresponde diagnostico pagado, web, CRM, automatizacion, contenido o una combinacion gradual." },
+    { title: "Implementar por prioridades", detail: "Construir primero lo que capture datos, reduzca perdida de leads o acelere seguimiento comercial." },
+    { title: "Entrega, medicion y seguimiento", detail: "Dejar responsables, evidencias, proximas acciones y condiciones de soporte claramente registradas." },
+  ];
+}
+
+function buildAudioProposalHtml(analysis: AudioAnalysis, transcript: string, source?: AudioApiResponse["source"], theme = audioPdfThemes[0]) {
   const proposal = proposalDraft(analysis);
   const quality = clientQualityDecision(analysis);
   const now = new Date().toLocaleDateString("es-BO", { day: "2-digit", month: "2-digit", year: "numeric" });
+  const company = audioText(analysis.empresa, "Cliente por verificar");
+  const title = audioText(proposal?.titulo, `Diagnostico y propuesta preliminar para ${company}`);
+  const executiveSummary = audioText(
+    analysis.resumen_ejecutivo ?? proposal?.diagnostico,
+    "El audio fue procesado, pero aun falta contexto para convertirlo en una propuesta lista para enviar.",
+  );
+  const missingData = uniqueAudioList(quality.missing, audioList(analysis.informacion_faltante));
+  const risks = uniqueAudioList(quality.redFlags, audioList(analysis.riesgos));
+  const implementationSteps = buildAudioImplementationSteps(proposal);
+  const valueItems = audioList(proposal?.valor_para_cliente);
+  const successCriteria = audioList(proposal?.criterios_exito);
+  const assumptions = audioList(proposal?.supuestos);
+  const closingQuestions = audioList(proposal?.preguntas_para_cliente);
+  const factorRows = clientQualityFactors(analysis);
+  const suggestedTasks = audioList(analysis.tareas_sugeridas).slice(0, 6);
+  const sourceLabel = audioSttSourceLabel(source);
+  const analysisModel = source?.analysisModel ?? "modelo de analisis no confirmado";
 
   return `<!doctype html>
 <html lang="es">
 <head>
   <meta charset="utf-8" />
-  <title>${escapeHtml(audioText(analysis.empresa, "Propuesta ONIA"))}</title>
+  <title>${escapeHtml(company)} - Propuesta ONIA</title>
   <style>
-    body { color: #101a16; font-family: Arial, sans-serif; line-height: 1.5; margin: 42px; }
-    header { border-bottom: 2px solid #123326; margin-bottom: 24px; padding-bottom: 18px; }
-    h1 { font-size: 26px; margin: 6px 0; }
-    h2 { border-top: 1px solid #dfe8e2; font-size: 16px; margin-top: 24px; padding-top: 16px; }
-    p, li { font-size: 12px; }
-    .muted { color: #5d6b63; }
+    :root {
+      --accent: ${theme.accent};
+      --accent-dark: ${theme.accentDark};
+      --hero: ${theme.heroGrad};
+      --ink: #101827;
+      --muted: #526172;
+      --line: #d8e0ea;
+      --bg: #f6f8fb;
+      --white: #ffffff;
+      --accent-soft: ${theme.accentSoft};
+      --table-tint: ${theme.tableTint};
+    }
+    @page { size: A4; margin: 13mm; }
+    * { box-sizing: border-box; }
+    body { background: var(--bg); color: var(--ink); font-family: Aptos, "Avenir Next", "Segoe UI", system-ui, sans-serif; line-height: 1.5; margin: 0; }
+    .page { margin: 0 auto; max-width: 900px; padding: 38px 28px; }
+    .hero { background: var(--hero); border-radius: 18px; color: #ffffff; margin-bottom: 28px; padding: 42px 40px; }
+    .kicker { color: #dce8ff; font-size: 11px; font-weight: 900; letter-spacing: .09em; margin-bottom: 12px; text-transform: uppercase; }
+    h1 { font-size: 42px; line-height: 1.04; margin: 0 0 14px; }
+    h2 { border-bottom: 3px solid var(--accent); font-size: 23px; margin: 30px 0 14px; padding-bottom: 8px; }
+    h3 { font-size: 15px; margin: 0 0 7px; }
+    p, li { color: var(--muted); font-size: 13px; margin-top: 0; }
+    li { margin-bottom: 5px; }
+    ul { margin: 6px 0 0; padding-left: 18px; }
+    .hero p { color: #edf4ff; font-size: 16px; max-width: 720px; }
+    .muted { color: var(--muted); }
     .grid { display: grid; gap: 12px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .box { background: #f7faf8; border: 1px solid #dfe8e2; border-radius: 8px; padding: 12px; }
-    .label { color: #607067; display: block; font-size: 10px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
-    .value { display: block; font-size: 14px; font-weight: 700; margin-top: 4px; }
-    .decision { background: #e6f5ec; border-color: #9dd8b7; }
-    pre { background: #0f1b16; border-radius: 8px; color: #f1f8f3; font-size: 10px; max-height: 420px; overflow: auto; padding: 14px; white-space: pre-wrap; }
-    @media print { body { margin: 22mm; } button { display: none; } }
+    .three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .box, .card { background: var(--white); border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; }
+    .box strong { display: block; font-size: 16px; margin-top: 4px; }
+    .box strong, .box p, .card p { overflow-wrap: anywhere; }
+    .label, .tag { color: var(--accent-dark); display: inline-block; font-size: 10px; font-weight: 900; letter-spacing: .06em; text-transform: uppercase; }
+    .tag { background: var(--accent-soft); border-radius: 999px; padding: 4px 10px; }
+    .decision { background: var(--accent-soft); border-color: var(--accent); }
+    .decision strong { color: var(--accent-dark); font-size: 18px; }
+    .toc .box { border-top: 4px solid var(--accent); }
+    .factor-grid { display: grid; gap: 10px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .factor { background: linear-gradient(180deg, var(--accent-soft), var(--white) 34%); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; }
+    .factor strong { display: block; font-size: 13px; margin: 4px 0; }
+    .factor p { font-size: 11px; line-height: 1.45; }
+    table { background: var(--white); border: 1px solid var(--line); border-collapse: collapse; border-radius: 12px; overflow: hidden; width: 100%; }
+    th, td { border-bottom: 1px solid var(--line); font-size: 12px; padding: 10px 12px; text-align: left; vertical-align: top; }
+    th { background: var(--table-tint); color: var(--ink); font-weight: 900; }
+    .step { align-items: flex-start; display: grid; gap: 12px; grid-template-columns: 32px 1fr; margin-bottom: 13px; }
+    .step .n { align-items: center; background: var(--accent); border-radius: 50%; color: #ffffff; display: flex; font-weight: 900; height: 30px; justify-content: center; width: 30px; }
+    .split { display: grid; gap: 14px; grid-template-columns: 1.05fr .95fr; }
+    .footer { border-top: 1px solid var(--line); color: var(--muted); margin-top: 28px; padding-top: 14px; }
+    .page-break { break-before: page; page-break-before: always; }
+    pre { background: #0f1b16; border-radius: 12px; color: #f1f8f3; font-size: 10px; line-height: 1.55; overflow: hidden; padding: 14px; white-space: pre-wrap; }
+    @media print {
+      body { background: #ffffff; }
+      .page { max-width: 100%; padding: 0; }
+      .box, .card, .hero { break-inside: avoid; }
+      .factor-grid, .grid, .split { break-inside: avoid; }
+    }
   </style>
 </head>
 <body>
-  <header>
-    <span class="label">ONIA Center / propuesta interna</span>
-    <h1>${escapeHtml(audioText(proposal?.titulo, "Diagnostico y propuesta preliminar"))}</h1>
-    <p class="muted">Generado el ${escapeHtml(now)}. Revisar antes de enviar al cliente.</p>
-  </header>
-  <section class="grid">
-    <div class="box decision"><span class="label">Calidad del cliente</span><span class="value">${escapeHtml(quality.label)} / ${escapeHtml(quality.scoreLabel)}</span><p>${escapeHtml(quality.reason)}</p></div>
-    <div class="box"><span class="label">Decision recomendada</span><span class="value">${escapeHtml(quality.decision)}</span><p>${escapeHtml(audioText(analysis.proximo_paso_acordado))}</p></div>
-    <div class="box"><span class="label">Empresa</span><span class="value">${escapeHtml(audioText(analysis.empresa))}</span></div>
-    <div class="box"><span class="label">Presupuesto</span><span class="value">${escapeHtml(audioText(analysis.presupuesto_mencionado))}</span></div>
+<div class="page">
+  <section class="hero">
+    <div class="kicker">Propuesta comercial - ONIA Inteligencia Artificial</div>
+    <h1>${escapeHtml(title)}</h1>
+    <p>${escapeHtml(executiveSummary)}</p>
   </section>
+
+  <section class="grid three">
+    ${htmlInfoCard("Cliente / empresa", company)}
+    ${htmlInfoCard("Fecha", now)}
+    ${htmlInfoCard("Estilo visual", `${theme.label} - ${theme.reference}`, theme.tone)}
+  </section>
+
   <h2>Resumen ejecutivo</h2>
-  <p>${escapeHtml(audioText(analysis.resumen_ejecutivo ?? proposal?.diagnostico))}</p>
-  <h2>Necesidad principal</h2>
-  <p>${escapeHtml(audioText(analysis.necesidad_principal))}</p>
-  <h2>Senales positivas</h2>
-  ${htmlList(quality.positives)}
-  <h2>Riesgos y senales rojas</h2>
-  ${htmlList([...quality.redFlags, ...audioList(analysis.riesgos)])}
-  <h2>Datos faltantes antes de vender</h2>
-  ${htmlList([...quality.missing, ...audioList(analysis.informacion_faltante)])}
-  <h2>Alcance recomendado</h2>
-  ${htmlList(audioList(proposal?.alcance_recomendado))}
-  <h2>Entregables</h2>
-  ${htmlList(audioList(proposal?.entregables))}
-  <h2>Fuera de alcance</h2>
-  ${htmlList(audioList(proposal?.fuera_de_alcance))}
-  <h2>Precio y condiciones</h2>
-  <p><strong>${escapeHtml(audioText(proposal?.precio_sugerido))}</strong></p>
-  ${htmlList(audioList(proposal?.condiciones))}
+  <section class="grid three toc">
+    ${htmlInfoCard("Ruta comercial", quality.decision, "Decision sugerida por calidad del prospecto.")}
+    ${htmlInfoCard("Propuesta", audioText(proposal?.titulo, title), "Borrador sujeto a revision humana.")}
+    ${htmlInfoCard("Referencia visual", theme.referenceFile, theme.bestFor)}
+  </section>
+
+  <h2>Diagnostico comercial</h2>
+  <section class="grid">
+    ${htmlInfoCard("Necesidad principal", analysis.necesidad_principal)}
+    ${htmlInfoCard("Nivel de interes", analysis.nivel_interes)}
+    ${htmlInfoCard("Presupuesto mencionado", analysis.presupuesto_mencionado)}
+    ${htmlInfoCard("Proximo paso acordado", analysis.proximo_paso_acordado)}
+  </section>
+
+  <h2>Calificacion del prospecto</h2>
+  <section class="grid">
+    <div class="box decision">
+      <span class="label">Veredicto</span>
+      <strong>${escapeHtml(quality.label)} / ${escapeHtml(quality.scoreLabel)}</strong>
+      <p>${escapeHtml(quality.reason)}</p>
+    </div>
+    <div class="box">
+      <span class="label">Decision recomendada</span>
+      <strong>${escapeHtml(quality.decision)}</strong>
+      <p>Si faltan datos criticos, priorizar diagnostico pagado o seguimiento antes de preparar una propuesta cerrada.</p>
+    </div>
+  </section>
+  <section class="factor-grid">
+    ${factorRows.map((factor) => `
+      <div class="factor">
+        <span class="label">${escapeHtml(factor.label)}</span>
+        <strong>${escapeHtml(factor.value)}</strong>
+        <p>${escapeHtml(factor.detail)}</p>
+      </div>
+    `).join("")}
+  </section>
+
+  <section class="split">
+    <div>
+      <h2>Senales positivas</h2>
+      <div class="card">${htmlList(quality.positives)}</div>
+    </div>
+    <div>
+      <h2>Senales rojas</h2>
+      <div class="card">${htmlList(risks)}</div>
+    </div>
+  </section>
+
+  <h2>Propuesta recomendada</h2>
+  <section class="card">
+    <span class="tag">Diagnostico</span>
+    <p>${escapeHtml(audioText(proposal?.diagnostico, executiveSummary))}</p>
+  </section>
+  <section class="grid">
+    <div class="box"><span class="label">Por que conviene</span>${htmlList(valueItems)}</div>
+    <div class="box"><span class="label">Criterios de exito</span>${htmlList(successCriteria)}</div>
+  </section>
+  <section class="grid">
+    <div class="box"><span class="label">Alcance recomendado</span>${htmlList(audioList(proposal?.alcance_recomendado))}</div>
+    <div class="box"><span class="label">Entregables</span>${htmlList(audioList(proposal?.entregables))}</div>
+    <div class="box"><span class="label">Fuera de alcance</span>${htmlList(audioList(proposal?.fuera_de_alcance))}</div>
+    <div class="box decision"><span class="label">Precio y condiciones</span><strong>${escapeHtml(audioText(proposal?.precio_sugerido))}</strong>${htmlList(audioList(proposal?.condiciones))}</div>
+  </section>
+
+  <h2>Plan de implementacion</h2>
+  <section class="card">
+    ${implementationSteps.map((step, index) => `
+      <div class="step">
+        <div class="n">${index + 1}</div>
+        <div><h3>${escapeHtml(step.title)}</h3><p>${escapeHtml(step.detail)}</p></div>
+      </div>
+    `).join("")}
+  </section>
+
+  <h2>Seguimiento operativo</h2>
+  <section class="grid">
+    <div class="box"><span class="label">Siguiente paso recomendado</span><strong>${escapeHtml(audioText(proposal?.siguiente_paso ?? analysis.proximo_paso_acordado))}</strong><p>Usar esta accion para CRM, WhatsApp o agenda interna.</p></div>
+    <div class="box"><span class="label">Tareas sugeridas</span>${htmlList(suggestedTasks)}</div>
+  </section>
+
+  <h2>Datos faltantes antes de enviar</h2>
+  <section class="grid">
+    <div class="box"><span class="label">Faltantes detectados</span>${htmlList(missingData)}</div>
+    <div class="box"><span class="label">Preguntas para cerrar alcance</span>${htmlList(closingQuestions)}</div>
+  </section>
+
+  <h2>Condiciones ONIA</h2>
+  <section class="grid">
+    <div class="box">
+      <span class="label">Revision humana</span>
+      <p>Este PDF sale de una reunion o audio. No debe enviarse al cliente sin revisar nombre, alcance, precio, condiciones y datos sensibles.</p>
+    </div>
+    <div class="box">
+      <span class="label">Costos de terceros</span>
+      <p>No incluye dominio, hosting, pauta, creditos IA, APIs, mensajeria WhatsApp, pasarela de pago, comisiones bancarias ni herramientas externas.</p>
+    </div>
+    <div class="box">
+      <span class="label">Supuestos</span>
+      ${htmlList(assumptions)}
+    </div>
+  </section>
+
   <h2>Nota CRM</h2>
-  <p>${escapeHtml(formatAudioCrmNote(analysis))}</p>
-  <h2>Fuente tecnica</h2>
-  <p class="muted">STT: ${escapeHtml(audioSttSourceLabel(source))}</p>
-  <h2>Anexo: transcript</h2>
-  <pre>${escapeHtml(transcript)}</pre>
+  <section class="card"><p>${escapeHtml(formatAudioCrmNote(analysis)).replace(/\n/g, "<br>")}</p></section>
+
+  <div class="footer">
+    <p><strong>ONIA</strong> - sistemas, automatizacion e inteligencia artificial para negocios.</p>
+    <p>Fuente: ${escapeHtml(sourceLabel)}. Analisis: ${escapeHtml(analysisModel)}. Documento interno preparado desde ONIA Center.</p>
+  </div>
+
+  <section class="page-break">
+    <h2>Anexo: transcript de la reunion</h2>
+    <pre>${escapeHtml(transcript || "Sin transcript disponible.")}</pre>
+  </section>
+</div>
 </body>
 </html>`;
 }
@@ -1129,6 +1513,7 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
   const [audioClientName, setAudioClientName] = useState("");
   const [audioContext, setAudioContext] = useState("");
   const [audioObjective, setAudioObjective] = useState<AudioObjective>("propuesta");
+  const [audioPdfTheme, setAudioPdfTheme] = useState<AudioPdfThemeId>("garabato");
   const [audioTranscript, setAudioTranscript] = useState("");
   const [audioResult, setAudioResult] = useState<AudioApiResponse | null>(null);
   const [audioLoading, setAudioLoading] = useState(false);
@@ -1250,6 +1635,14 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
   }, [workspaceView]);
 
   const canApprove = selectedRole === "sergio";
+  const calendarBookingsAdminUrl =
+    commercialBookingPolicy.configurationActions.find((action) => action.id === "admin-bookings")?.url ?? commercialBookingPolicy.adminLoginUrl;
+  const calendarEventTypeAdminUrl =
+    commercialBookingPolicy.configurationActions.find((action) => action.id === "admin-event-types")?.url ?? commercialBookingPolicy.adminLoginUrl;
+  const calendarAvailabilityAdminUrl =
+    commercialBookingPolicy.configurationActions.find((action) => action.id === "admin-availability")?.url ?? commercialBookingPolicy.adminLoginUrl;
+  const calendarProfileAdminUrl =
+    commercialBookingPolicy.configurationActions.find((action) => action.id === "admin-profile")?.url ?? commercialBookingPolicy.adminLoginUrl;
   const visibleLeads = useMemo(
     () => (selectedRole === "sergio" ? leads : leads.filter((lead) => lead.owner === selectedRole)),
     [leads, selectedRole],
@@ -1891,14 +2284,15 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
       return;
     }
 
+    const theme = audioPdfThemeById(audioPdfTheme);
     printWindow.document.open();
-    printWindow.document.write(buildAudioProposalHtml(audioResult.analysis, audioTranscriptPreview, audioResult.source));
+    printWindow.document.write(buildAudioProposalHtml(audioResult.analysis, audioTranscriptPreview, audioResult.source, theme));
     printWindow.document.close();
     printWindow.focus();
     window.setTimeout(() => {
       printWindow.print();
     }, 250);
-    setNotice("PDF preparado. En la ventana de impresion elige Guardar como PDF.");
+    setNotice(`PDF estilo ${theme.label} preparado. En la ventana de impresion elige Guardar como PDF.`);
   }
 
   function resetRuntime() {
@@ -2523,6 +2917,34 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
                     <small>{audioList(audioProposal.condiciones).join(" / ") || "por verificar"}</small>
                   </div>
                 </div>
+                <div className="onia-audio-pdf-controls">
+                  <label>
+                    Estilo PDF
+                    <select value={audioPdfTheme} onChange={(event) => setAudioPdfTheme(event.target.value as AudioPdfThemeId)}>
+                      {audioPdfThemes.map((theme) => (
+                        <option key={theme.id} value={theme.id}>
+                          {theme.label} - {theme.reference}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  <div className="onia-audio-theme-list" aria-label="Estilos visuales para PDF">
+                    {audioPdfThemes.map((theme) => (
+                      <button
+                        className={audioPdfTheme === theme.id ? "is-active" : ""}
+                        key={theme.id}
+                        style={{ borderColor: theme.accent }}
+                        title={`${theme.referenceFile} - ${theme.bestFor}`}
+                        type="button"
+                        onClick={() => setAudioPdfTheme(theme.id)}
+                      >
+                        <span style={{ background: theme.heroGrad }} />
+                        <strong>{theme.label}</strong>
+                        <small>{theme.reference}</small>
+                      </button>
+                    ))}
+                  </div>
+                </div>
                 <div className="onia-audio-actions">
                   <button type="button" onClick={() => void copyAudioProposal()}>
                     <Copy size={15} />
@@ -2790,6 +3212,24 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
               <Bot size={16} />
               <strong>Cal.com comercial</strong>
             </div>
+            <div className="onia-calendar-profile">
+              <Image
+                src={commercialBookingPolicy.profileAvatar.imageUrl}
+                alt={commercialBookingPolicy.profileAvatar.alt}
+                width={64}
+                height={64}
+                priority={false}
+              />
+              <div>
+                <span>Foto de perfil publica</span>
+                <strong>{commercialBookingPolicy.publicDisplayName}</strong>
+                <small>{commercialBookingPolicy.profileAvatar.calProfileTarget}</small>
+                <a href={calendarProfileAdminUrl} target="_blank" rel="noreferrer">
+                  <ExternalLink size={13} />
+                  Configurar perfil
+                </a>
+              </div>
+            </div>
             <div className="onia-calendar-summary">
               <div>
                 <span>Modo</span>
@@ -2812,13 +3252,77 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
                 <small>Cerrado: {commercialBookingPolicy.closedDays.join(", ")}</small>
               </div>
             </div>
+            <div className="onia-calendar-control">
+              <div>
+                <span>Control desde ONIA Center</span>
+                <strong>{commercialBookingPolicy.oniaCenterControl.viewLabel}</strong>
+                <small>{commercialBookingPolicy.oniaCenterControl.ownerView}</small>
+              </div>
+              <div className="onia-calendar-control-actions">
+                <a href={calendarBookingsAdminUrl} target="_blank" rel="noreferrer">
+                  <ExternalLink size={13} />
+                  Mis reuniones
+                </a>
+                <a href={calendarEventTypeAdminUrl} target="_blank" rel="noreferrer">
+                  <ExternalLink size={13} />
+                  Tipos
+                </a>
+                <a href={calendarAvailabilityAdminUrl} target="_blank" rel="noreferrer">
+                  <ExternalLink size={13} />
+                  Horarios
+                </a>
+              </div>
+              <ul>
+                {commercialBookingPolicy.oniaCenterControl.configurableItems.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            </div>
+            <div className="onia-calendar-admin-panel">
+              <div>
+                <span>Configuracion desde ONIA Center</span>
+                <strong>Panel operativo de agenda</strong>
+                <small>{commercialBookingPolicy.configurationRule}</small>
+              </div>
+              <div className="onia-calendar-admin-actions">
+                {commercialBookingPolicy.configurationActions.map((action) => (
+                  <a href={action.url} key={action.id} target="_blank" rel="noreferrer">
+                    <ExternalLink size={13} />
+                    <span>{action.label}</span>
+                    <small>{action.scope}</small>
+                  </a>
+                ))}
+              </div>
+            </div>
             <div className="onia-live-list">
               {commercialBookingPolicy.eventTypes.map((eventType) => (
                 <div key={eventType.id}>
                   <span>{eventType.durationMinutes} min / {eventType.enabled ? "activo" : "desactivado"}</span>
                   <strong>{eventType.label}</strong>
                   <small>Anticipo: {eventType.minimumNotice} / Agenda: {eventType.bookingWindow}</small>
+                  <small>{eventType.visibility}</small>
+                  <small>{eventType.projectFit}</small>
                   <small>{eventType.ownerRule}</small>
+                  <ul className="onia-event-type-list">
+                    {eventType.projectTypes.map((item) => (
+                      <li key={item}>{item}</li>
+                    ))}
+                  </ul>
+                  <small>Usar: {eventType.whenToUse}</small>
+                  <small>No usar: {eventType.whenNotUse}</small>
+                  <small>ONIA Center: {eventType.oniaCenterRule}</small>
+                  <div className="onia-review-actions">
+                    {eventType.publicUrl ? (
+                      <a href={eventType.publicUrl} target="_blank" rel="noreferrer">
+                        <ExternalLink size={13} />
+                        Link publico
+                      </a>
+                    ) : null}
+                    <a href={calendarEventTypeAdminUrl} target="_blank" rel="noreferrer">
+                      <ExternalLink size={13} />
+                      Configurar
+                    </a>
+                  </div>
                 </div>
               ))}
             </div>
@@ -2856,8 +3360,22 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
               <strong>Agenda comercial visible</strong>
             </div>
             <p className="onia-muted-note">
-              Esta vista permite operar reuniones sin exponer la agenda privada de Sergio. La disponibilidad real se controla con Cal.com gratis y bloqueos en Google Calendar.
+              Esta vista permite operar reuniones sin exponer la agenda privada de Sergio. La disponibilidad real se controla desde ONIA Center entrando a Cal self-hosted y bloqueos en Google Calendar.
             </p>
+            <div className="onia-calendar-profile">
+              <Image
+                src={commercialBookingPolicy.profileAvatar.imageUrl}
+                alt={commercialBookingPolicy.profileAvatar.alt}
+                width={56}
+                height={56}
+                priority={false}
+              />
+              <div>
+                <span>Perfil publico ONIA</span>
+                <strong>{commercialBookingPolicy.publicDisplayName}</strong>
+                <small>{commercialBookingPolicy.profileAvatar.configureFrom}</small>
+              </div>
+            </div>
             <div className="onia-calendar-summary">
               <div>
                 <span>Disponibilidad ONIA</span>
@@ -2903,10 +3421,39 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
                   <span>{eventType.durationMinutes} min / {eventType.enabled ? "activo" : "desactivado"}</span>
                   <strong>{eventType.label}</strong>
                   <small>Anticipo: {eventType.minimumNotice} / Agenda: {eventType.bookingWindow}</small>
+                  <small>{eventType.visibility}</small>
+                  <small>{eventType.projectFit}</small>
                   <small>{eventType.ownerRule}</small>
+                  <ul className="onia-event-type-list">
+                    {eventType.projectTypes.map((item) => (
+                      <li key={item}>{item}</li>
+                    ))}
+                  </ul>
+                  <small>Usar: {eventType.whenToUse}</small>
+                  <small>No usar: {eventType.whenNotUse}</small>
+                  <small>ONIA Center: {eventType.oniaCenterRule}</small>
+                  {eventType.publicUrl ? (
+                    <div className="onia-review-actions">
+                      <a href={eventType.publicUrl} target="_blank" rel="noreferrer">
+                        <ExternalLink size={13} />
+                        Link publico
+                      </a>
+                    </div>
+                  ) : null}
                 </div>
               ))}
             </div>
+            {selectedRole === "seller" ? (
+              <div className="onia-calendar-admin-note">
+                <span>Disponibilidad de vendedora</span>
+                <strong>Configurable con cuenta propia Cal</strong>
+                <small>Cuando ONIA le cree usuario propio, ajusta su horario aqui sin tocar agenda Sergio/Arthur.</small>
+                <a href={calendarAvailabilityAdminUrl} target="_blank" rel="noreferrer">
+                  <ExternalLink size={13} />
+                  Configurar mis horarios
+                </a>
+              </div>
+            ) : null}
           </article>
 
           <article className="onia-live-card onia-calendar-side">

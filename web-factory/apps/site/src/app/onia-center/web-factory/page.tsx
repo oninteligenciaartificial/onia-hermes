@@ -28,7 +28,7 @@ import { WebFactoryIntakeForm } from "./intake-form";
 import { MotionArticle, MotionReveal } from "./motion-shell";
 import { getWebFactoryCenterSnapshot, type WebFactoryClientRecipe, type WebFactoryRecipeStatus } from "./source";
 
-export const dynamic = "force-dynamic";
+export const dynamic = "force-static";
 
 export const metadata = {
   title: "Web Factory | ONIA Center",

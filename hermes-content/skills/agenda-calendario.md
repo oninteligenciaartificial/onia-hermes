@@ -79,11 +79,17 @@ Sin eventos: "Dia libre"
 ```
 
 ## Cal.com - links de booking para clientes
-- Modo inicial: link gratis de Cal.com hosted.
+- Modo actual: Cal.com self-hosted en `https://cal.onia.com.bo`.
 - Cuenta/identidad publica Cal: `business@onia.com.bo`.
 - Nombre publico: `ONIA | Agenda Comercial`.
-- URL base: pendiente de crear en Cal.com gratis; no usar todavia `cal.onia.ai`
-  como link publico.
+- URL base: `https://cal.onia.com.bo/onia`.
+- Configuracion operativa desde ONIA Center: vista `Agenda Sergio` muestra
+  tipos, links publicos, reglas y accesos directos para editar reuniones,
+  disponibilidad, calendarios y perfil.
+- Foto de perfil comercial: usar `https://center.onia.com.bo/assets/onia/onia-logo-avatar.png`
+  en el perfil publico de `business@onia.com.bo`.
+- ONIA Center no debe fingir escritura directa hasta que exista adaptador con
+  auditoria: por ahora abre Cal self-hosted para aplicar cambios reales.
 - Calendario Google conectado: `oninteligenciaartificial@gmail.com`.
 - Correo formal al cliente despues de aceptar: `business@onia.com.bo`.
 - Tipos de evento disponibles:
@@ -116,13 +122,12 @@ Sin eventos: "Dia libre"
 - Cuando cliente agenda: Cal webhook -> Google Calendar -> Telegram -> ONIA Center.
 - Toda reserva debe crear lead en ONIA Center como `reunion_agendada_pendiente`
   y Telegram debe permitir aceptar, cancelar o reasignar.
-- Si Cal gratis no permite aprobacion manual en la UI, ONIA tratara el booking
-  como solicitud hasta que Telegram lo acepte.
+- Aunque Cal registre la reserva, ONIA la tratara como solicitud hasta que
+  Sergio/equipo la acepte por Telegram o desde ONIA Center.
 - El correo final de confirmacion se envia solo despues de aceptar por Telegram.
 
 Nota ONIA 2026:
-- `cal.onia.ai` queda como camino futuro self-host; para vender rapido se usa
-  Cal.com gratis hasta validar flujo.
+- `cal.onia.com.bo` es el dominio operativo. No usar `cal.onia.ai`.
 - La vendedora puede agendar para Sergio, Arthur o para ella, pero su
   disponibilidad propia se configura separada.
 - Arthur no usa la misma cuenta de `oninteligenciaartificial@gmail.com`; se le

@@ -330,8 +330,8 @@ ONIA_AUDIO_MAX_MB=100
 
 # Analisis/propuesta por OpenAI mientras ONIA no migre el LLM a local.
 OPENAI_ONIA_CENTER_API_KEY=...
-ONIA_AUDIO_ANALYSIS_MODEL=gpt-5.4-mini
-ONIA_AUDIO_MAX_OUTPUT_TOKENS=1800
+ONIA_AUDIO_ANALYSIS_MODEL=gpt-4.1-mini
+ONIA_AUDIO_MAX_OUTPUT_TOKENS=2600
 
 # Solo para entornos controlados sin Supabase; no recomendado en produccion.
 ONIA_AUDIO_INTELLIGENCE_ALLOW_LOCAL=false
@@ -341,9 +341,53 @@ Decision de costo:
 
 - Transcripcion diaria: Speaches local/open source.
 - Si Speaches o el tunel no responden: `gpt-4o-mini-transcribe` como fallback
-  barato, aprox. USD 0.003/min segun pricing oficial de OpenAI al 2026-06-28.
-- Analisis/propuesta: `gpt-5.4-mini` por defecto. `gpt-5.5` solo para
-  propuestas grandes o decisiones de arquitectura/precio.
+  barato. Verificar pricing actual antes de presupuestar uso recurrente.
+- Analisis/propuesta: `gpt-4.1-mini` por defecto, configurable con
+  `ONIA_AUDIO_ANALYSIS_MODEL`. Subir a un modelo superior solo para propuestas
+  grandes o decisiones de arquitectura/precio.
+
+## PDFs de propuesta desde Audio IA
+
+El boton `Generar PDF` en ONIA Center usa una version imprimible del analisis de
+Audio IA. La estructura sigue el piso visual del generador de propuestas:
+
+- portada oscura con titulo grande;
+- linea de acento por seccion;
+- diagnostico comercial;
+- calificacion del prospecto;
+- alcance recomendado;
+- entregables;
+- fuera de alcance;
+- precio y condiciones;
+- plan de implementacion;
+- datos faltantes;
+- nota CRM;
+- anexo con transcript.
+
+Temas disponibles:
+
+| Tema | Referencia interna | Uso recomendado |
+|---|---|---|
+| `Garabato` | `hermes-content/propuestas/propuesta-garabato.pdf` | ecommerce, catalogo, tienda, compra/orden. |
+| `HSB Engineers` | `hermes-content/propuestas/propuesta-hsb-engineers.pdf` | industria, ingenieria, B2B tecnico, proyectos. |
+| `Bench` | `hermes-content/propuestas/propuesta-bench.pdf` | agencia, marketing, autoridad creativa, portafolio. |
+| `Lia` | `hermes-content/propuestas/propuesta-lia-albertengo.pdf` | salud, profesional independiente, confianza. |
+| `AW` | `hermes-content/propuestas/propuesta-aw-climatizacion.pdf` | servicio tecnico, climatizacion, mantenimiento. |
+| `Nuvia` | `web-factory/data/clients/nuvia.design.json` | ecommerce visual, catalogo amplio, skincare/producto. |
+| `Bolivian Electric` | `hermes-content/propuestas/bolivian-electric-transformacion-ia-2026.pdf` | industrial, cotizacion B2B, operaciones. |
+| `ONIA` | `hermes-content/brand/tokens.css` | IA, sistemas internos, automatizacion y consultoria general. |
+| `Grigota` | pendiente de PDF o colores canonicos | tema provisional comercial/local hasta recibir referencia real. |
+
+Regla: el PDF puede ser detallado, pero cada bloque debe ayudar a decidir,
+vender, acotar alcance o registrar seguimiento. No llenar por llenar ni incluir
+datos privados que no correspondan al cliente.
+
+La version detallada del PDF incluye resumen ejecutivo, diagnostico, matriz de
+calificacion del prospecto, decision recomendada, senales positivas, senales
+rojas, alcance, entregables, fuera de alcance, precio/condiciones, plan de
+implementacion, tareas sugeridas, datos faltantes, nota CRM y anexo de
+transcript. Si falta una referencia real de marca, el tema debe quedar marcado
+como provisional y no como canonico.
 
 ## Reglas de uso
 

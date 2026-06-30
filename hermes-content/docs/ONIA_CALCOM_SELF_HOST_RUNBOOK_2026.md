@@ -157,6 +157,11 @@ evitar choques.
 Configurado en produccion el 2026-06-29:
 
 - `https://cal.onia.com.bo/onia`: pagina publica de ONIA.
+- Perfil publico de `business@onia.com.bo`: usar logo ONIA como avatar desde
+  `https://center.onia.com.bo/assets/onia/onia-logo-avatar.png`.
+- ONIA Center es el panel operativo: `Agenda Sergio` debe mostrar reuniones,
+  tipos, disponibilidad, perfil y enlaces directos para configurar Cal
+  self-hosted sin exponer la agenda privada a vendedores.
 - `https://cal.onia.com.bo/onia/consulta-inicial`: 20 min, visible.
   Titulo publico: `Consulta comercial - proyecto nuevo`.
   Para prospectos nuevos que quieren cotizar o validar si ONIA puede ayudar.
@@ -195,6 +200,13 @@ Reglas base:
 - Cuenta/identidad publica Cal self-host: `business@onia.com.bo` como
   `ONIA | Agenda Comercial`.
 - Usuario publico Cal: `onia`.
+- Punto de control operativo: ONIA Center, vista `Agenda Sergio`.
+  - ONIA Center muestra tipos de reunion, links publicos, reglas de asignacion,
+    links de administracion y disponibilidad base.
+  - Por ahora ONIA Center no escribe directo en Cal: abre las pantallas
+    exactas de Cal self-host para aplicar cambios reales.
+  - Antes de construir escritura directa, cualquier cambio automatico debe tener
+    auditoria, rol responsable y bloqueo para cambios fuera de ventana.
 - Gestion Sergio en Cal:
   - Login: `https://cal.onia.com.bo/auth/login`.
   - Ver reservas: `https://cal.onia.com.bo/bookings/upcoming`.

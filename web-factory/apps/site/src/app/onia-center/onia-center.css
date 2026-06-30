@@ -1580,6 +1580,9 @@
 .onia-sergio-calendar,
 .onia-calendar-summary,
 .onia-calendar-timeline,
+.onia-calendar-admin-panel,
+.onia-calendar-admin-actions,
+.onia-calendar-admin-note,
 .onia-private-calendar {
   display: grid;
   gap: 10px;
@@ -1645,6 +1648,187 @@
   color: var(--onia-muted);
   font-size: 11px;
   line-height: 1.38;
+}
+
+.onia-calendar-admin-panel,
+.onia-calendar-admin-note {
+  padding: 10px;
+  border: 1px solid rgba(35, 123, 100, 0.2);
+  border-radius: var(--onia-radius);
+  background: #f3fbf6;
+}
+
+.onia-calendar-profile,
+.onia-calendar-control {
+  display: grid;
+  gap: 10px;
+  padding: 10px;
+  border: 1px solid rgba(47, 102, 136, 0.18);
+  border-radius: var(--onia-radius);
+  background: #f4f9fc;
+}
+
+.onia-calendar-profile {
+  grid-template-columns: 64px minmax(0, 1fr);
+  align-items: center;
+}
+
+.onia-calendar-profile img {
+  width: 64px;
+  height: 64px;
+  border: 1px solid var(--onia-line-soft);
+  border-radius: var(--onia-radius);
+  background: #ffffff;
+  object-fit: cover;
+}
+
+.onia-calendar-profile span,
+.onia-calendar-control span,
+.onia-event-type-list li {
+  color: var(--onia-faint);
+  font-size: 11px;
+  font-weight: 900;
+  line-height: 1.35;
+}
+
+.onia-calendar-profile strong,
+.onia-calendar-control strong {
+  display: block;
+  margin-top: 5px;
+  color: var(--onia-ink);
+  font-size: 13px;
+  line-height: 1.25;
+}
+
+.onia-calendar-profile small,
+.onia-calendar-control small {
+  display: block;
+  margin-top: 6px;
+  color: var(--onia-muted);
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+.onia-calendar-profile a,
+.onia-calendar-control-actions a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 34px;
+  margin-top: 8px;
+  padding: 0 10px;
+  border: 1px solid rgba(47, 102, 136, 0.2);
+  border-radius: var(--onia-radius);
+  color: #1d4b67;
+  background: #ffffff;
+  font-size: 12px;
+  font-weight: 900;
+  text-decoration: none;
+}
+
+.onia-calendar-control-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.onia-calendar-control ul,
+.onia-event-type-list {
+  display: grid;
+  gap: 5px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.onia-calendar-control li,
+.onia-event-type-list li {
+  position: relative;
+  padding-left: 14px;
+}
+
+.onia-calendar-control li::before,
+.onia-event-type-list li::before {
+  position: absolute;
+  top: 0.62em;
+  left: 0;
+  width: 5px;
+  height: 5px;
+  border-radius: 999px;
+  background: var(--onia-blue);
+  content: "";
+}
+
+.onia-calendar-admin-panel > div:first-child span,
+.onia-calendar-admin-note span,
+.onia-calendar-admin-actions small {
+  color: var(--onia-faint);
+  font-size: 11px;
+  font-weight: 900;
+  line-height: 1.35;
+}
+
+.onia-calendar-admin-panel > div:first-child strong,
+.onia-calendar-admin-note strong {
+  display: block;
+  margin-top: 5px;
+  color: var(--onia-ink);
+  font-size: 13px;
+  line-height: 1.25;
+}
+
+.onia-calendar-admin-panel > div:first-child small,
+.onia-calendar-admin-note small {
+  display: block;
+  margin-top: 6px;
+  color: var(--onia-muted);
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+.onia-calendar-admin-actions {
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+}
+
+.onia-calendar-admin-actions a,
+.onia-calendar-admin-note a {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 3px 7px;
+  min-height: 54px;
+  padding: 9px;
+  border: 1px solid rgba(35, 123, 100, 0.2);
+  border-radius: var(--onia-radius);
+  color: #153f30;
+  background: #ffffff;
+  text-decoration: none;
+}
+
+.onia-calendar-admin-actions a svg,
+.onia-calendar-admin-note a svg {
+  grid-row: span 2;
+  margin-top: 1px;
+}
+
+.onia-calendar-admin-actions span,
+.onia-calendar-admin-note a {
+  font-size: 12px;
+  font-weight: 900;
+  line-height: 1.25;
+}
+
+.onia-calendar-admin-actions small {
+  font-weight: 750;
+}
+
+.onia-calendar-admin-note a {
+  align-items: center;
+  display: inline-flex;
+  gap: 7px;
+  justify-content: center;
+  min-height: 34px;
+  padding: 0 10px;
 }
 
 .onia-calendar-timeline {
@@ -4215,6 +4399,59 @@
   padding-left: 16px;
 }
 
+.onia-audio-pdf-controls {
+  border-top: 1px solid var(--onia-line-soft);
+  display: grid;
+  gap: 10px;
+  padding-top: 12px;
+}
+
+.onia-audio-pdf-controls label {
+  max-width: 520px;
+}
+
+.onia-audio-theme-list {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+}
+
+.onia-audio-theme-list button {
+  background: #fbfdfb;
+  border: 1px solid var(--onia-line-soft);
+  border-radius: var(--onia-radius);
+  color: var(--onia-ink);
+  cursor: pointer;
+  display: grid;
+  gap: 6px;
+  min-height: 92px;
+  padding: 9px;
+  text-align: left;
+}
+
+.onia-audio-theme-list button > span {
+  border-radius: 999px;
+  display: block;
+  height: 8px;
+  width: 100%;
+}
+
+.onia-audio-theme-list strong {
+  font-size: 12px;
+  line-height: 1.2;
+}
+
+.onia-audio-theme-list small {
+  color: var(--onia-muted);
+  font-size: 11px;
+  line-height: 1.3;
+}
+
+.onia-audio-theme-list button.is-active {
+  background: #f4faf6;
+  box-shadow: 0 0 0 2px rgba(35, 123, 100, 0.08);
+}
+
 .onia-audio-actions {
   display: flex;
   flex-wrap: wrap;
@@ -4286,6 +4523,7 @@
   .onia-codex-workspace,
   .onia-audio-command-bar,
   .onia-audio-decision-grid,
+  .onia-audio-theme-list,
   .onia-audio-workspace {
     grid-template-columns: 1fr;
   }

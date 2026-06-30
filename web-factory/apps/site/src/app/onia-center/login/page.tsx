@@ -21,7 +21,7 @@ export default function OniaCenterLoginPage() {
   const [notice, setNotice] = useState("Acceso interno. Usa el usuario creado en Supabase Auth.");
 
   useEffect(() => {
-    const reason = searchParams.get("reason");
+    const reason = searchParams?.get("reason");
     if (reason === "sergio_only") {
       setNotice("ONIA Center completo esta bloqueado para Sergio. Arthur y vendedores deben entrar por /onia-center/equipo.");
       return;
@@ -61,7 +61,7 @@ export default function OniaCenterLoginPage() {
         return;
       }
 
-      const nextPath = searchParams.get("next") || "/onia-center";
+      const nextPath = searchParams?.get("next") || "/onia-center";
       setNotice("Sesion iniciada. Abriendo ONIA Center...");
       window.location.href = nextPath;
     } catch (error) {

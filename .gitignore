@@ -12,6 +12,7 @@ node_modules/
 
 # Caches / build (regenerables)
 .ruff_cache/
+.pnpm-store/
 __pycache__/
 *.pyc
 .cache/

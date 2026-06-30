@@ -535,7 +535,7 @@ function PrivateCapitalPanel({ visible }: { visible: boolean }) {
 
 export default function OniaCenterPage() {
   const searchParams = useSearchParams();
-  const requestedView = searchParams.get("view") || "dashboard";
+  const requestedView = searchParams?.get("view") || "dashboard";
   const [selectedRole, setSelectedRole] = useState<RoleId>("sergio");
   const [sessionRole, setSessionRole] = useState<RoleId | null>(null);
   const [sessionLabel, setSessionLabel] = useState("Sesion local");

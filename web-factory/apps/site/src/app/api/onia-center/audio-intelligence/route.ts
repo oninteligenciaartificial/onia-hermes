@@ -99,7 +99,7 @@ function getOpenAIConfig(): OpenAIConfig {
     baseUrl: (process.env.OPENAI_BASE_URL || "https://api.openai.com/v1").replace(/\/$/, ""),
     apiKey: process.env.OPENAI_ONIA_CENTER_API_KEY || process.env.OPENAI_API_KEY || "",
     model: process.env.ONIA_AUDIO_ANALYSIS_MODEL || process.env.OPENAI_ONIA_CENTER_MODEL || process.env.OPENAI_MODEL || "gpt-4.1-mini",
-    maxOutputTokens: parsePositiveInt(process.env.ONIA_AUDIO_MAX_OUTPUT_TOKENS, 1800),
+    maxOutputTokens: parsePositiveInt(process.env.ONIA_AUDIO_MAX_OUTPUT_TOKENS, 2600),
   };
 }
 
@@ -332,6 +332,9 @@ function analysisInstructions() {
     "Evalua si el prospecto califica comercialmente: problema concreto, autoridad, presupuesto, urgencia, claridad de alcance y respeto por el proceso.",
     "Si solo hay curiosidad, frases vagas, cero presupuesto, cero autoridad o pide mucho sin compromiso, marca dudoso o descartar. No uses insultos; explica el riesgo comercial.",
     "No recomiendes una propuesta grande si antes hace falta diagnostico pagado o validacion de alcance.",
+    "En calidad_cliente.factores, califica de forma breve: problema, autoridad, presupuesto, urgencia, ajuste_onia y respeto_proceso.",
+    "Para el PDF interno, entrega informacion suficiente y ordenada: valor para el cliente, plan de implementacion, supuestos, criterios de exito y preguntas de cierre.",
+    "Cada lista importante debe tener entre 3 y 6 items, salvo que no haya evidencia suficiente.",
     "Devuelve exclusivamente un objeto JSON valido, sin markdown.",
   ].join("\n");
 }
@@ -357,6 +360,14 @@ function analysisInput(request: ParsedAudioRequest, transcript: string) {
       veredicto: "bueno | dudoso | descartar | por verificar",
       decision_recomendada: "avanzar a propuesta | pedir diagnostico pagado | nutrir | descartar | por verificar",
       razon: "string",
+      factores: {
+        problema: "claro | medio | debil | por verificar + breve evidencia",
+        autoridad: "decisor | influenciador | no decisor | por verificar + breve evidencia",
+        presupuesto: "confirmado | probable | no mencionado | insuficiente | por verificar + breve evidencia",
+        urgencia: "alta | media | baja | por verificar + breve evidencia",
+        ajuste_onia: "alto | medio | bajo | por verificar + producto/servicio recomendado",
+        respeto_proceso: "bueno | dudoso | malo | por verificar + evidencia",
+      },
       senales_positivas: ["string"],
       senales_rojas: ["string"],
       datos_para_calificar: ["string"],
@@ -365,9 +376,14 @@ function analysisInput(request: ParsedAudioRequest, transcript: string) {
     propuesta_borrador: {
       titulo: "string",
       diagnostico: "string",
+      valor_para_cliente: ["string"],
       alcance_recomendado: ["string"],
       entregables: ["string"],
       fuera_de_alcance: ["string"],
+      plan_implementacion: ["string"],
+      criterios_exito: ["string"],
+      supuestos: ["string"],
+      preguntas_para_cliente: ["string"],
       precio_sugerido: "string | por verificar",
       condiciones: ["string"],
       siguiente_paso: "string",
