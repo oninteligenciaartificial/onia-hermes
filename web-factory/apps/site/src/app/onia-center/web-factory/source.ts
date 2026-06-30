@@ -157,6 +157,31 @@ export type WebFactoryCenterSnapshot = {
     command: string;
     purpose: string;
   }>;
+  intakeContract: {
+    status: string;
+    minimumFields: string[];
+    resourceRules: string[];
+    outputs: Array<{
+      label: string;
+      target: string;
+      status: "ready" | "prepared" | "manual_review" | "blocked";
+      detail: string;
+    }>;
+  };
+  automationFunctions: Array<{
+    id: string;
+    title: string;
+    status: "ready" | "prepared" | "manual_review" | "blocked";
+    statusLabel: string;
+    owner: "Arthur" | "Sergio" | "ONIA";
+    cadence: string;
+    trigger: string;
+    input: string;
+    output: string;
+    command?: string;
+    approval: string;
+    nextAction: string;
+  }>;
   workflowSteps: Array<{
     step: number;
     title: string;
@@ -826,6 +851,174 @@ const STATIC_SNAPSHOT: Omit<WebFactoryCenterSnapshot, "generatedAt"> = {
       label: "Validacion rapida",
       command: "pnpm factory:smoke",
       purpose: "Recompila demos principales y evita romper el flujo base de Web Factory.",
+    },
+  ],
+  intakeContract: {
+    status: "Formulario operativo en ONIA Center + salida JSON compatible con data/intakes/<slug>.json.",
+    minimumFields: [
+      "Nombre comercial, slug, rubro, ciudad y oferta principal.",
+      "CTA de conversion: WhatsApp, email, formulario o reserva.",
+      "Logo/text mark, colores, estilo y 3 a 6 referencias con que usar/evitar.",
+      "Hero image/video o permiso explicito para generar IA/usar stock licenciado.",
+      "Servicios, beneficios, productos/precios si es tienda, FAQs y prueba de confianza.",
+      "Dominio, hosting, metodos de pago, razon social y permisos de assets si aplica.",
+    ],
+    resourceRules: [
+      "No inventar precios, testimonios, certificaciones, politicas, metodos de pago ni claims sensibles.",
+      "No entregar web final si los derechos de fotos, videos, logos o producto no estan aprobados.",
+      "Si el pedido parece sistema, SaaS, automatizacion o ecommerce backend, escalar alcance antes de cotizar como web.",
+      "Las referencias cerradas son inspiracion estructural; codigo solo se reutiliza si la licencia y QA lo permiten.",
+    ],
+    outputs: [
+      {
+        label: "Intake JSON",
+        target: "web-factory/data/intakes/<slug>.json",
+        status: "ready",
+        detail: "El formulario genera un JSON descargable/copiable compatible con el generador.",
+      },
+      {
+        label: "Nota runtime",
+        target: "/api/onia-center/runtime entity=note",
+        status: "prepared",
+        detail: "El formulario puede registrar el brief y faltantes en ONIA Center cuando hay login y Supabase runtime.",
+      },
+      {
+        label: "Tarea de preview",
+        target: "/api/onia-center/runtime entity=task",
+        status: "prepared",
+        detail: "Se crea una tarea para guardar intake, correr receta, build y QA interno.",
+      },
+      {
+        label: "Receta razonada",
+        target: "web-factory/data/clients/<slug>.design.md",
+        status: "ready",
+        detail: "design:auto cruza rubro, referencias, capturas, fuentes, motion y codigo revisable.",
+      },
+    ],
+  },
+  automationFunctions: [
+    {
+      id: "intake-runtime-capture",
+      title: "Guardar brief desde ONIA Center",
+      status: "prepared",
+      statusLabel: "Preparado",
+      owner: "Arthur",
+      cadence: "Cada lead web",
+      trigger: "Arthur o Sergio completa el formulario Web Factory.",
+      input: "Datos clave, referencias, permisos de assets y faltantes.",
+      output: "Nota auditada + tarea de preview en ONIA Center.",
+      approval: "No envia ni publica; solo registra trabajo interno.",
+      nextAction: "Usar el boton Guardar en ONIA Center cuando el runtime este conectado.",
+    },
+    {
+      id: "reference-harvest",
+      title: "Radar diario de referencias web",
+      status: "ready",
+      statusLabel: "Listo",
+      owner: "ONIA",
+      cadence: "Diario o manual antes de proyectos premium",
+      trigger: "Cron/n8n o comando manual.",
+      input: "Galerias curadas, repos permitidos, capturas, fuentes, CTAs y motion signals.",
+      output: "latest-gallery-examples.json, latest-component-code-examples.json y latest-design-intelligence.json.",
+      command: "pnpm references:harvest:daily",
+      approval: "Puede correr interno; revisar licencias antes de reutilizar codigo.",
+      nextAction: "Conectarlo a n8n con reporte, limite de tiempo y alerta si falla.",
+    },
+    {
+      id: "design-intelligence",
+      title: "Actualizar inteligencia de diseno",
+      status: "ready",
+      statusLabel: "Listo",
+      owner: "ONIA",
+      cadence: "Despues de cada harvest",
+      trigger: "Termina la captura de referencias.",
+      input: "Galerias, screenshots y codigo local permitido.",
+      output: "Resumen legible para Arthur/Sergio y datos para design:auto.",
+      command: "pnpm references:intelligence",
+      approval: "Interno; no copia identidad ni assets.",
+      nextAction: "Agregar al mismo workflow n8n del radar diario.",
+    },
+    {
+      id: "recipe-generator",
+      title: "Receta automatica por cliente",
+      status: "ready",
+      statusLabel: "Listo",
+      owner: "ONIA",
+      cadence: "Por cada intake aprobado",
+      trigger: "Existe data/intakes/<slug>.json o data/clients/<slug>.json.",
+      input: "Perfil, contexto, referencias exactas e inteligencia actual.",
+      output: "design.json/design.md con secciones, fuentes, CTAs, riesgos, assets y comandos.",
+      command: "pnpm design:auto -- <slug> --template <landing|store> --force",
+      approval: "Arthur prepara; Sergio revisa si se usara para propuesta o entrega.",
+      nextAction: "Crear job Codex/n8n que lo corra tras guardar intake.",
+    },
+    {
+      id: "preview-build",
+      title: "Build de preview interno",
+      status: "ready",
+      statusLabel: "Listo",
+      owner: "ONIA",
+      cadence: "Por cada receta",
+      trigger: "Receta creada o actualizada.",
+      input: "Perfil cliente, receta, assets aprobados o placeholders internos.",
+      output: "out/<slug>/index.html y site.css revisables.",
+      command: "pnpm factory:build -- <slug> --template <landing|store> --force",
+      approval: "No se envia al cliente sin QA y aprobacion Sergio.",
+      nextAction: "Agregar vista de artifact/preview path en ONIA Center por intake.",
+    },
+    {
+      id: "asset-gap-request",
+      title: "Pedido automatico de recursos",
+      status: "prepared",
+      statusLabel: "Preparado",
+      owner: "Arthur",
+      cadence: "Cada brief incompleto",
+      trigger: "El formulario detecta campos criticos faltantes.",
+      input: "Missing checklist, tipo de web y permisos de media.",
+      output: "Mensaje listo para pedir logo, fotos, videos, productos, precios y derechos.",
+      approval: "Arthur puede pedir recursos; promesas, precio y deploy quedan con Sergio.",
+      nextAction: "Guardar el mensaje como nota y convertirlo en plantilla WhatsApp/Telegram.",
+    },
+    {
+      id: "qa-smoke",
+      title: "QA de fabrica",
+      status: "ready",
+      statusLabel: "Listo",
+      owner: "ONIA",
+      cadence: "Antes de cerrar cambios",
+      trigger: "Cambio en templates, generator, ONIA Center o recetas.",
+      input: "Demos canonicas y proyecto Next.",
+      output: "Tests, previews demo, lint y build estable.",
+      command: "pnpm factory:smoke && pnpm --filter site lint && pnpm build:stable",
+      approval: "Interno; si falla se bloquea entrega.",
+      nextAction: "Dividir en workflow rapido y workflow completo para no frenar tareas chicas.",
+    },
+    {
+      id: "deploy-handoff",
+      title: "Entrega/deploy controlado",
+      status: "manual_review",
+      statusLabel: "Revision Sergio",
+      owner: "Sergio",
+      cadence: "Solo al cerrar venta/entrega",
+      trigger: "Preview aprobado, pago/alcance claro y assets autorizados.",
+      input: "Build final, dominio, hosting, variables y checklist de derechos.",
+      output: "Deploy o paquete entregable con rollback.",
+      approval: "Sergio aprueba precio final, descuentos, publicacion y deploy.",
+      nextAction: "Crear runbook de deploy por tipo: estatico, Vercel, VPS o dominio cliente.",
+    },
+    {
+      id: "nuvia-catalog-watch",
+      title: "Watcher Nuvia/catalogo",
+      status: "ready",
+      statusLabel: "Listo",
+      owner: "ONIA",
+      cadence: "Diario o antes de campanas",
+      trigger: "Necesidad de revisar precios/catalogo Nuvia.",
+      input: "Scrape temporal, catalogo interno y reglas de secreto proveedor.",
+      output: "Diff guardado, catalogo publico sanitizado y rollback si algo parece sospechoso.",
+      command: "pnpm nuvia:prices:check",
+      approval: "Aplicar cambios requiere watcher seguro; no exponer proveedor ni costos internos.",
+      nextAction: "Mostrar ultimo reporte del watcher en este modulo.",
     },
   ],
   workflowSteps: [

@@ -3138,7 +3138,10 @@
 }
 
 .onia-webfactory-command-grid,
+.onia-webfactory-contract-grid,
 .onia-webfactory-step-grid,
+.onia-webfactory-automation-grid,
+.onia-webfactory-automation-summary,
 .onia-webfactory-grid,
 .onia-webfactory-two-column,
 .onia-webfactory-recipe__stats,
@@ -3146,6 +3149,7 @@
 .onia-webfactory-intel-stats,
 .onia-webfactory-source-list,
 .onia-webfactory-action-list,
+.onia-webfactory-output-list,
 .onia-webfactory-docs,
 .onia-webfactory-missing {
   display: grid;
@@ -3160,8 +3164,23 @@
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
+.onia-webfactory-contract-grid {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(320px, 0.85fr);
+}
+
+.onia-webfactory-automation-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.onia-webfactory-automation-summary {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
 .onia-webfactory-command-grid article,
+.onia-webfactory-contract-grid article,
 .onia-webfactory-step-grid article,
+.onia-webfactory-automation-grid article,
+.onia-webfactory-automation-summary article,
 .onia-webfactory-source-list article,
 .onia-webfactory-action-list article,
 .onia-webfactory-missing div {
@@ -3176,6 +3195,65 @@
   gap: 9px;
   min-height: 154px;
   padding: 13px;
+}
+
+.onia-webfactory-contract-grid article,
+.onia-webfactory-automation-summary article {
+  display: grid;
+  gap: 10px;
+  padding: 14px;
+}
+
+.onia-webfactory-contract-grid h3 {
+  color: var(--onia-ink);
+  font-size: 15px;
+  margin: 0;
+}
+
+.onia-webfactory-contract-grid ul {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding-left: 18px;
+}
+
+.onia-webfactory-contract-grid li,
+.onia-webfactory-output-list p,
+.onia-webfactory-runtime-status {
+  color: var(--onia-muted);
+  font-size: 12px;
+  line-height: 1.45;
+  margin: 0;
+}
+
+.onia-webfactory-output-list div {
+  border-left: 3px solid #cfe0db;
+  display: grid;
+  gap: 6px;
+  padding-left: 10px;
+}
+
+.onia-webfactory-status-dot {
+  border-radius: 999px;
+  display: inline-block;
+  height: 9px;
+  width: 9px;
+}
+
+.onia-webfactory-status-dot.is-ready {
+  background: var(--onia-green);
+}
+
+.onia-webfactory-status-dot.is-prepared {
+  background: var(--onia-blue);
+}
+
+.onia-webfactory-status-dot.is-manual_review {
+  background: var(--onia-yellow);
+}
+
+.onia-webfactory-status-dot.is-blocked {
+  background: var(--onia-red);
 }
 
 .onia-webfactory-step-grid article {
@@ -3210,7 +3288,9 @@
 
 .onia-webfactory-command-grid span,
 .onia-webfactory-step-head span,
+.onia-webfactory-automation-head span,
 .onia-webfactory-step-body dt,
+.onia-webfactory-automation-grid dt,
 .onia-webfactory-source-list span,
 .onia-webfactory-action-list span,
 .onia-webfactory-docs strong,
@@ -3224,7 +3304,10 @@
 
 .onia-webfactory-command-grid code,
 .onia-webfactory-step-body code,
+.onia-webfactory-automation-grid code,
 .onia-webfactory-next-command code,
+.onia-webfactory-next-command-inline,
+.onia-webfactory-output-list code,
 .onia-webfactory-docs code,
 .onia-webfactory-missing code,
 .onia-webfactory-code code,
@@ -3239,6 +3322,9 @@
 
 .onia-webfactory-command-grid code,
 .onia-webfactory-step-body code,
+.onia-webfactory-automation-grid code,
+.onia-webfactory-next-command-inline,
+.onia-webfactory-output-list code,
 .onia-webfactory-docs code,
 .onia-webfactory-missing code,
 .onia-webfactory-code code,
@@ -3250,6 +3336,9 @@
 
 .onia-webfactory-command-grid p,
 .onia-webfactory-step-body dd,
+.onia-webfactory-automation-grid dd,
+.onia-webfactory-automation-grid p,
+.onia-webfactory-automation-summary p,
 .onia-webfactory-source-list p,
 .onia-webfactory-action-list p,
 .onia-webfactory-recipe p,
@@ -3266,6 +3355,68 @@
   color: var(--onia-ink);
   font-size: 15px;
   line-height: 1.25;
+}
+
+.onia-webfactory-automation {
+  display: grid;
+  gap: 18px;
+}
+
+.onia-webfactory-automation-grid article {
+  align-content: start;
+  display: grid;
+  gap: 11px;
+  padding: 14px;
+}
+
+.onia-webfactory-automation-grid article.is-ready {
+  background: #f5fbf7;
+}
+
+.onia-webfactory-automation-grid article.is-prepared {
+  background: #f5f9fc;
+}
+
+.onia-webfactory-automation-grid article.is-manual_review {
+  background: #fffaf0;
+}
+
+.onia-webfactory-automation-grid article.is-blocked {
+  background: #fff6f7;
+}
+
+.onia-webfactory-automation-head {
+  display: grid;
+  gap: 4px;
+}
+
+.onia-webfactory-automation-head strong,
+.onia-webfactory-automation-summary strong,
+.onia-webfactory-output-list strong {
+  color: var(--onia-ink);
+  font-size: 14px;
+}
+
+.onia-webfactory-automation-head small {
+  color: var(--onia-muted);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.onia-webfactory-automation-grid dl {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+}
+
+.onia-webfactory-automation-grid dl div {
+  display: grid;
+  gap: 3px;
+}
+
+.onia-webfactory-automation-summary article {
+  align-items: flex-start;
+  display: flex;
 }
 
 .onia-webfactory-step-head small {
@@ -3346,6 +3497,10 @@
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
+.onia-webfactory-intake-actions {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
 .onia-webfactory-intake-output {
   display: grid;
   gap: 14px;
@@ -3412,6 +3567,12 @@
   font-size: 12px;
   font-weight: 900;
   padding: 8px 10px;
+}
+
+.onia-webfactory-intake-output button:disabled,
+.onia-webfactory-intake-actions button:disabled {
+  cursor: wait;
+  opacity: 0.72;
 }
 
 .onia-webfactory-grid {
@@ -4511,7 +4672,10 @@
 
 @media (max-width: 1240px) {
   .onia-webfactory-command-grid,
+  .onia-webfactory-contract-grid,
   .onia-webfactory-step-grid,
+  .onia-webfactory-automation-grid,
+  .onia-webfactory-automation-summary,
   .onia-webfactory-grid,
   .onia-webfactory-two-column,
   .onia-webfactory-intake-grid,
@@ -4543,7 +4707,10 @@
 
 @media (max-width: 760px) {
   .onia-webfactory-command-grid,
+  .onia-webfactory-contract-grid,
   .onia-webfactory-step-grid,
+  .onia-webfactory-automation-grid,
+  .onia-webfactory-automation-summary,
   .onia-webfactory-recipe__stats,
   .onia-webfactory-artifacts,
   .onia-webfactory-intel-stats,

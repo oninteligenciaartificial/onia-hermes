@@ -75,10 +75,13 @@ const initialState: IntakeFormState = {
 export function WebFactoryIntakeForm() {
   const [form, setForm] = useState<IntakeFormState>(initialState);
   const [copied, setCopied] = useState("");
+  const [runtimeStatus, setRuntimeStatus] = useState("");
+  const [isSavingRuntime, setIsSavingRuntime] = useState(false);
   const intake = useMemo(() => buildIntake(form), [form]);
   const missing = useMemo(() => getMissing(form), [form]);
   const clientRequest = useMemo(() => buildClientRequest(form, missing), [form, missing]);
   const intakeJson = useMemo(() => JSON.stringify(intake, null, 2), [intake]);
+  const nextCommand = useMemo(() => buildNextCommand(form), [form]);
 
   function update<K extends keyof IntakeFormState>(key: K, value: IntakeFormState[K]) {
     setForm((current) => {
@@ -108,6 +111,69 @@ export function WebFactoryIntakeForm() {
     link.download = `${form.slug || "web-factory-intake"}.intake.json`;
     link.click();
     URL.revokeObjectURL(url);
+  }
+
+  async function saveToOniaCenter() {
+    const slug = form.slug || slugify(form.name) || "cliente-web";
+    const now = new Date().toISOString();
+    const noteId = `wf-intake-${slug}-${Date.now()}`;
+    const taskId = `wf-preview-${slug}-${Date.now()}`;
+    const missingText = missing.length ? missing.join(", ") : "sin faltantes criticos para preview interno";
+
+    setIsSavingRuntime(true);
+    setRuntimeStatus("Guardando intake en ONIA Center...");
+
+    try {
+      const noteResponse = await postRuntimeEntity("note", {
+        id: noteId,
+        kind: "nota",
+        title: `Web Factory intake: ${form.name || slug}`,
+        detail: [
+          clientRequest,
+          "",
+          `Comando siguiente: ${nextCommand}`,
+          "",
+          "JSON intake:",
+          intakeJson,
+        ].join("\n"),
+        linkedTo: `web-factory:${slug}`,
+        visibility: "team_safe",
+        createdAt: now,
+      });
+
+      if (!noteResponse.ok) {
+        setRuntimeStatus(noteResponse.message);
+        return;
+      }
+
+      const taskResponse = await postRuntimeEntity("task", {
+        id: taskId,
+        projectId: "web-factory",
+        title: `Preparar preview Web Factory: ${form.name || slug}`,
+        assignedRole: "arthur",
+        status: "todo",
+        priority: missing.length ? "alta" : "media",
+        evidence: [
+          `Guardar intake como web-factory/data/intakes/${slug}.json.`,
+          `Ejecutar: ${nextCommand}.`,
+          "Revisar receta, assets, derechos, responsive, imagenes rotas y CTA.",
+          `Faltantes: ${missingText}.`,
+        ].join(" "),
+        createdAt: now,
+      });
+
+      if (!taskResponse.ok) {
+        setRuntimeStatus(taskResponse.message);
+        return;
+      }
+
+      setRuntimeStatus("Intake guardado como nota y tarea en ONIA Center.");
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "No se pudo guardar el intake.";
+      setRuntimeStatus(message);
+    } finally {
+      setIsSavingRuntime(false);
+    }
   }
 
   return (
@@ -246,12 +312,36 @@ export function WebFactoryIntakeForm() {
             <button type="button" onClick={downloadJson}>
               Descargar JSON
             </button>
+            <button type="button" onClick={saveToOniaCenter} disabled={isSavingRuntime}>
+              {isSavingRuntime ? "Guardando..." : "Guardar en ONIA Center"}
+            </button>
           </div>
+          {runtimeStatus ? <p className="onia-webfactory-runtime-status">{runtimeStatus}</p> : null}
+          <code className="onia-webfactory-next-command-inline">{nextCommand}</code>
           <pre>{intakeJson}</pre>
         </article>
       </div>
     </section>
   );
+}
+
+async function postRuntimeEntity(entity: "note" | "task", data: unknown): Promise<{ ok: boolean; message: string }> {
+  const response = await fetch("/api/onia-center/runtime", {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({ entity, data }),
+  });
+  const result = await response.json().catch(() => null) as { ok?: boolean; message?: string; mode?: string } | null;
+
+  if (!response.ok || !result?.ok) {
+    const mode = result?.mode ? `${result.mode}: ` : "";
+    return {
+      ok: false,
+      message: `${mode}${result?.message ?? "Runtime ONIA Center no disponible. Copia/descarga el JSON y guardalo manualmente."}`,
+    };
+  }
+
+  return { ok: true, message: "Guardado." };
 }
 
 function TextInput({ label, value, onChange }: { label: string; value: string; onChange: (value: string) => void }) {
@@ -377,6 +467,11 @@ function buildClientRequest(form: IntakeFormState, missing: string[]) {
     "",
     "Nota: ONIA revisa alcance, precio y permisos antes de enviar o publicar la web.",
   ].join("\n");
+}
+
+function buildNextCommand(form: IntakeFormState) {
+  const slug = form.slug || slugify(form.name) || "cliente-web";
+  return `pnpm factory:build -- --input data/intakes/${slug}.json --force`;
 }
 
 function parseReferences(value: string, fallbackType: "visual" | "anti-reference") {

@@ -5,7 +5,9 @@ import {
   ArrowLeft,
   BadgeCheck,
   Camera,
+  ClipboardCheck,
   Code2,
+  Database,
   ExternalLink,
   Factory,
   FileCode2,
@@ -13,6 +15,7 @@ import {
   Globe2,
   Image as ImageIcon,
   Layers3,
+  ListChecks,
   Play,
   RefreshCw,
   ShieldCheck,
@@ -112,6 +115,47 @@ export default async function WebFactoryCenterPage() {
           <MetricCard icon={Code2} label="Codigo" value={String(snapshot.counts.codeReferences)} detail="Referencias permitidas tras review" />
         </MotionReveal>
 
+        <MotionReveal className="onia-panel onia-webfactory-intake-contract">
+          <SectionHeader
+            icon={ClipboardCheck}
+            eyebrow="Alimentacion"
+            title="Que datos necesita el generador"
+            description={snapshot.intakeContract.status}
+          />
+
+          <div className="onia-webfactory-contract-grid">
+            <article>
+              <h3>Datos minimos</h3>
+              <ul>
+                {snapshot.intakeContract.minimumFields.map((field) => (
+                  <li key={field}>{field}</li>
+                ))}
+              </ul>
+            </article>
+            <article>
+              <h3>Reglas de recursos</h3>
+              <ul>
+                {snapshot.intakeContract.resourceRules.map((rule) => (
+                  <li key={rule}>{rule}</li>
+                ))}
+              </ul>
+            </article>
+            <article>
+              <h3>Salidas del flujo</h3>
+              <div className="onia-webfactory-output-list">
+                {snapshot.intakeContract.outputs.map((output) => (
+                  <div key={output.target}>
+                    <span className={`onia-webfactory-status-dot is-${output.status}`} />
+                    <strong>{output.label}</strong>
+                    <code>{output.target}</code>
+                    <p>{output.detail}</p>
+                  </div>
+                ))}
+              </div>
+            </article>
+          </div>
+        </MotionReveal>
+
         <WebFactoryIntakeForm />
 
         <MotionReveal className="onia-panel onia-webfactory-playbook">
@@ -177,6 +221,64 @@ export default async function WebFactoryCenterPage() {
                 <p>{command.purpose}</p>
               </article>
             ))}
+          </div>
+        </MotionReveal>
+
+        <MotionReveal className="onia-panel onia-webfactory-automation">
+          <SectionHeader
+            icon={RefreshCw}
+            eyebrow="Automatizaciones"
+            title="Funciones que podemos automatizar"
+            description="La regla es simple: automatizamos captura, analisis, recetas, previews y QA; dejamos precio, derechos, cliente y deploy bajo aprobacion humana."
+          />
+
+          <div className="onia-webfactory-automation-grid">
+            {snapshot.automationFunctions.map((automation) => (
+              <article key={automation.id} className={`is-${automation.status}`}>
+                <div className="onia-webfactory-automation-head">
+                  <span>{automation.owner}</span>
+                  <strong>{automation.title}</strong>
+                  <small>{automation.statusLabel} / {automation.cadence}</small>
+                </div>
+                <dl>
+                  <div>
+                    <dt>Trigger</dt>
+                    <dd>{automation.trigger}</dd>
+                  </div>
+                  <div>
+                    <dt>Entrada</dt>
+                    <dd>{automation.input}</dd>
+                  </div>
+                  <div>
+                    <dt>Salida</dt>
+                    <dd>{automation.output}</dd>
+                  </div>
+                  <div>
+                    <dt>Aprobacion</dt>
+                    <dd>{automation.approval}</dd>
+                  </div>
+                </dl>
+                {automation.command ? <code>{automation.command}</code> : null}
+                <p>{automation.nextAction}</p>
+              </article>
+            ))}
+          </div>
+
+          <div className="onia-webfactory-automation-summary">
+            <article>
+              <Database size={16} />
+              <div>
+                <strong>Automatizar ya</strong>
+                <p>Intake, referencias, inteligencia, receta, preview, QA y watcher Nuvia.</p>
+              </div>
+            </article>
+            <article>
+              <ListChecks size={16} />
+              <div>
+                <strong>Requiere aprobacion</strong>
+                <p>Precio, alcance, derechos de media, contacto client-facing, deploy y gastos externos.</p>
+              </div>
+            </article>
           </div>
         </MotionReveal>
 

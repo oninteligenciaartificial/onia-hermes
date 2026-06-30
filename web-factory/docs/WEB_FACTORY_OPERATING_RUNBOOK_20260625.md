@@ -6,6 +6,34 @@ Que ONIA pueda entregar solo datos clave, referencias y assets/permisos, y que
 Web Factory produzca un perfil validado, contexto operativo y preview estatico
 sin depender de memoria del chat.
 
+## Modulo ONIA Center
+
+Ruta operativa:
+
+```text
+/onia-center/web-factory
+```
+
+El modulo debe servir como centro visible para Sergio, Arthur y responsables de
+area:
+
+- explicar que datos alimentan una web automatica;
+- cargar un intake y producir JSON compatible con `data/intakes/<slug>.json`;
+- detectar faltantes criticos antes de prometer entrega;
+- generar mensaje para pedir recursos al cliente;
+- registrar el brief como nota y tarea en ONIA Center cuando el runtime este
+  conectado;
+- mostrar comandos canonicos, recetas existentes, referencias, codigo
+  revisable, assets pendientes y automatizaciones disponibles.
+
+Contrato operativo:
+
+- Arthur puede preparar datos, referencias, assets y tareas de preview.
+- ONIA puede automatizar captura, recetas, previews, QA y radar de referencias.
+- Sergio conserva aprobacion sobre precio, descuentos, promesas sensibles,
+  entrega client-facing, deploy, gastos externos y derechos de uso.
+- El modulo no publica, no contacta clientes y no hace deploy por si solo.
+
 ## Flujo canonico
 
 1. Copiar `data/intakes/client-intake.template.json`.
@@ -102,6 +130,38 @@ pnpm build:stable
 `build:stable` detiene procesos locales de `next`/`pnpm`/`postcss` que esten
 apuntando a `apps/site`, borra solo `.next` dentro de ese sitio y reintenta una
 vez si Next deja un manifest parcial.
+
+## Funciones automatizables
+
+Automatizar primero lo que reduce tiempo sin aumentar riesgo legal/comercial:
+
+| Funcion | Estado | Trigger | Comando/base | Aprobacion |
+|---|---|---|---|---|
+| Guardar brief desde ONIA Center | preparado | formulario completo o parcial | `/api/onia-center/runtime` nota+tarea | Interno; no publica |
+| Radar diario de referencias | listo | cron/n8n o manual | `pnpm references:harvest:daily` | Revisar licencias antes de usar codigo |
+| Inteligencia de diseno | listo | termina radar | `pnpm references:intelligence` | Interno |
+| Receta automatica | listo | existe intake/perfil | `pnpm design:auto -- <slug> --template <landing|store> --force` | Arthur prepara, Sergio aprueba entrega |
+| Preview interno | listo | receta generada | `pnpm factory:build -- <slug> --template <landing|store> --force` | No enviar sin QA |
+| Pedido de assets | preparado | faltantes criticos | mensaje generado por formulario | No inventar datos |
+| QA de fabrica | listo | cambios en factory | `pnpm factory:smoke`, lint y build | Bloquea si falla |
+| Watcher Nuvia/catalogo | listo | diario o precampana | `pnpm nuvia:prices:check` | No exponer proveedor/costos |
+| Deploy/entrega | revision manual | preview aprobado y pago/alcance claro | runbook por tipo de hosting | Solo Sergio |
+
+Automatizacion recomendada en n8n:
+
+1. Ejecutar `references:harvest:daily` una vez al dia con limite de tiempo.
+2. Si pasa, ejecutar `references:intelligence`.
+3. Registrar resumen como nota interna en ONIA Center.
+4. Alertar si falla Playwright, GitHub, licencia, screenshot o build.
+5. No crear ni enviar webs a clientes sin aprobacion humana.
+
+Automatizacion recomendada desde el modulo:
+
+1. Arthur completa intake.
+2. Boton `Guardar en ONIA Center` crea nota auditada y tarea de preview.
+3. ONIA/Codex toma la tarea, guarda `data/intakes/<slug>.json`, ejecuta
+   `factory:build` y adjunta evidencia.
+4. Sergio revisa precio, alcance, derechos y entrega.
 
 ## Contrato de referencias
 
