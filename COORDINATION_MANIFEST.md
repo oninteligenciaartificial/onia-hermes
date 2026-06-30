@@ -154,6 +154,7 @@ Canonical files:
 - `hermes-content/docs/ONIA_CENTER_AI_MODEL_ROUTING_2026.md`
 - `hermes-content/docs/ONIA_CENTER_DAILY_N8N_BRIEFING_RUNBOOK_2026.md`
 - `hermes-content/docs/ONIA_PROJECT_HYGIENE_AUTOMATION_2026.md`
+- `hermes-content/docs/ONIA_N8N_TELEGRAM_CLEANUP_20260630.md`
 - `hermes-content/docs/ONIA_MEETING_INTELLIGENCE_SYSTEM_2026.md`
 - `hermes-content/docs/ONIA_7000_BOB_PRODUCTION_INFRA_INVESTMENT_PLAN_2026.md`
 - `hermes-content/docs/ONIA_INTERNAL_CAPITAL_ALLOCATION_2026.md`

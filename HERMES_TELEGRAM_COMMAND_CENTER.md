@@ -240,6 +240,16 @@ Nueva regla:
   - `Watcher Higgsfield detalle`
   - `Siguiente Video Lab`
 
+Actualizacion 2026-06-30:
+
+- El n8n real todavia tiene activo `ONIA - Scheduled Operations Pack`, que
+  incluye recordatorios de Video Lab/Higgsfield y falla por credencial SSH.
+- El flujo `Mara Daily Content - Trend Research` tambien esta activo y depende
+  de SSH.
+- Recomendacion operativa: pausar ambos hasta que Video Lab/Higgsfield sea
+  manual o escriba estado real en ONIA Center.
+- Auditoria canonica: `hermes-content/docs/ONIA_N8N_TELEGRAM_CLEANUP_20260630.md`.
+
 ## Canales
 
 - Instagram: conectado para publicar Reels/carruseles con aprobacion.

@@ -10,12 +10,15 @@ Two n8n Docker services were detected:
 - `n8n-sergio_n8n` using `n8nio/n8n:latest`
 - `n8n_n8n` using `n8nio/n8n:2.20.7`
 
-Recommended canonical instance:
+Current production instance:
 
-- `n8n_n8n`
+- `n8n-sergio_n8n`
 
-Reason: it uses a pinned version instead of `latest`, which is safer for
-repeatable automation.
+Historical note:
+
+- `n8n_n8n` used a pinned version and was previously recommended, but the
+  current operating workflows and credentials are in `n8n-sergio_n8n`.
+  Do not switch instances without a separate migration/export plan.
 
 ## MCP Access Status
 
@@ -45,6 +48,28 @@ Important nuance:
   MCP.
 - If a Codex session was already open before the token/config update, restart
   Codex so the MCP tool list is loaded into the session.
+
+## Cleanup Status 2026-06-30
+
+Canonical cleanup audit:
+
+- `hermes-content/docs/ONIA_N8N_TELEGRAM_CLEANUP_20260630.md`
+
+Recommended now:
+
+- Keep ONIA Center daily briefing, Cal.com booking, Google Calendar reminders,
+  n8n health monitor and active intake forms.
+- Pause daily Video Lab/Higgsfield pushes, Mara daily content, daily OpenAI web
+  radar, demo assistant and duplicate agenda briefing until they write to ONIA
+  Center or have a clear operator owner.
+- Do not pause DentalGest/GestiOS payment, patient, onboarding or dunning flows
+  without checking the product repo and production impact.
+
+Known issue:
+
+- `SSH Password account` fails with authentication errors, so any workflow that
+  depends on SSH to run `hermes-command` is not reliable until the credential is
+  replaced or the workflow is moved to internal HTTP endpoints.
 
 ## Before Using n8n as Orchestrator
 
