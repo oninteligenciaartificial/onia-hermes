@@ -129,6 +129,16 @@ Modulo ONIA Center implementado:
 - Seguridad: la pantalla no guarda audio crudo por si sola; procesa y devuelve
   transcript/analisis para revision humana.
 
+Actualizacion operativa 2026-06-29:
+
+- ONIA Center quedo conectado a Speaches por red Docker interna.
+- Variable activa: `ONIA_AUDIO_STT_BASE_URL=http://speaches:8000/v1`.
+- ONIA Center debe correr en las redes `easypanel`, `supabase_default` y
+  `onia_selfhosted_onia_internal`.
+- Validacion: `/api/onia-center/audio-intelligence` devuelve
+  `sttReachable=true`, `Speaches local responde`, fallback OpenAI configurado
+  y OpenAI configurado para analisis.
+
 Flujo minimo rentable:
 
 1. Sergio graba una reunion con consentimiento o guarda el audio.

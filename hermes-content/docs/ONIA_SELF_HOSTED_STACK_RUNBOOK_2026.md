@@ -302,10 +302,22 @@ Runtime source: /opt/onia-center-src/web-factory
 Runtime app: /opt/onia-center/runtime-next
 Env: /opt/onia-center/.env (600)
 Container: onia-center
-Networks: easypanel, supabase_default
+Networks: easypanel, supabase_default, onia_selfhosted_onia_internal
 Supabase internal URL: http://supabase-kong:8000
+Audio STT internal URL: http://speaches:8000/v1
 Traefik backup: /etc/easypanel/traefik/config/main.yaml.bak-onia-center-20260628205227
 ```
+
+Actualizacion operativa 2026-06-29:
+
+- Se corrigio `ONIA_AUDIO_STT_BASE_URL` de `127.0.0.1` a `http://speaches:8000/v1`.
+- Se recreo `onia-center` con `PORT=3012`, `HOSTNAME=0.0.0.0`, red `easypanel`,
+  red `supabase_default` y red `onia_selfhosted_onia_internal`.
+- Validacion:
+  - `https://center.onia.com.bo/onia-center/login -> 200`
+  - `http://onia-center:3012/onia-center/login` desde red `easypanel -> 200`
+  - `/api/onia-center/audio-intelligence` reporta `sttReachable=true`,
+    Speaches responde y fallback OpenAI sigue configurado.
 
 Validacion publica ONIA Center del 2026-06-28:
 

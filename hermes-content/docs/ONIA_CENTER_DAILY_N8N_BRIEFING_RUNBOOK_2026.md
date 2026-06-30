@@ -123,6 +123,16 @@ Estado MCP 2026-06-29:
 - Workflow restaurado a `commit=true` y publicado; primera ejecucion automatica real queda programada para el siguiente bloque `06:45 America/La_Paz`.
 - Regla tecnica: los Code nodes de n8n no deben usar `process.env`; las variables se leen desde expresiones de n8n como `$env.NOMBRE_VARIABLE` en los parametros del nodo.
 
+Validacion adicional 2026-06-29:
+
+- Conectividad desde contenedor n8n a ONIA Center:
+  `http://onia-center:3012/onia-center/login -> 200`.
+- El endpoint diario rechaza llamadas sin token interno con `401 unauthorized`.
+- Dry-run con token interno desde n8n:
+  `/api/onia-center/briefings/daily`, `commit=false`, audiencias
+  `sergio`, `arthur`, `seller` -> `200 daily_briefing_dry_run`.
+- Modelo reportado por el endpoint: `gpt-5.4-mini`.
+
 Schedule:
 
 ```txt
