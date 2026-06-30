@@ -35,7 +35,13 @@
     "references:gallery:merge": "node harvester/vision/merge_gallery_examples.mjs --input-dir data/references/design-sources/gallery-examples --out data/references/design-sources/gallery-examples/latest-gallery-examples.json",
     "references:gallery:21st": "node harvester/vision/scrape_gallery_examples.mjs --config data/references/design-sources/gallery-reference-sources.json --cache-root C:/Users/PC/.codex/design-stack/gallery-examples-full --out data/references/design-sources/gallery-examples/21st-community-components.json --source-ids 21st-community-components --max-items 30 --detail-items 10",
     "references:gallery:all": "node harvester/vision/scrape_gallery_examples.mjs --config data/references/design-sources/gallery-reference-sources.json --cache-root C:/Users/PC/.codex/design-stack/gallery-examples-full --out data/references/design-sources/gallery-examples/full-gallery-run.json",
-    "references:playwright:install": "pnpm exec playwright install chromium"
+    "references:playwright:install": "pnpm exec playwright install chromium",
+    "automation:vps:dry": "node scripts/web-factory-vps-automation.mjs --mode daily --dry-run",
+    "automation:vps:daily": "node scripts/web-factory-vps-automation.mjs --mode daily",
+    "automation:vps:references": "node scripts/web-factory-vps-automation.mjs --mode references",
+    "automation:vps:nuvia-check": "node scripts/web-factory-vps-automation.mjs --mode nuvia-check",
+    "automation:vps:nuvia-watch": "node scripts/web-factory-vps-automation.mjs --mode nuvia-watch",
+    "automation:vps:smoke": "node scripts/web-factory-vps-automation.mjs --mode smoke"
   },
   "keywords": [],
   "author": "",

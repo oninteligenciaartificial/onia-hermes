@@ -823,9 +823,19 @@ const STATIC_SNAPSHOT: Omit<WebFactoryCenterSnapshot, "generatedAt"> = {
   },
   operatingCommands: [
     {
+      label: "Runner VPS diario",
+      command: "pnpm automation:vps:daily",
+      purpose: "Comando canonico para el worker del VPS: referencias, inteligencia y check seguro de Nuvia.",
+    },
+    {
+      label: "Dry-run runner VPS",
+      command: "pnpm automation:vps:dry",
+      purpose: "Valida el plan de automatizacion sin scrapear ni modificar archivos; util antes de activar n8n.",
+    },
+    {
       label: "Refrescar referencias",
       command: "pnpm references:harvest:daily",
-      purpose: "Scrapea galerias/proyectos permitidos, toma capturas y actualiza el banco de patrones.",
+      purpose: "Subcomando del runner: scrapea galerias/proyectos permitidos, toma capturas y actualiza patrones.",
     },
     {
       label: "Regenerar inteligencia",
@@ -917,12 +927,12 @@ const STATIC_SNAPSHOT: Omit<WebFactoryCenterSnapshot, "generatedAt"> = {
       statusLabel: "Listo",
       owner: "ONIA",
       cadence: "Diario o manual antes de proyectos premium",
-      trigger: "Cron/n8n o comando manual.",
+      trigger: "n8n en VPS dispara el worker; manual solo para pruebas controladas.",
       input: "Galerias curadas, repos permitidos, capturas, fuentes, CTAs y motion signals.",
       output: "latest-gallery-examples.json, latest-component-code-examples.json y latest-design-intelligence.json.",
-      command: "pnpm references:harvest:daily",
+      command: "pnpm automation:vps:daily",
       approval: "Puede correr interno; revisar licencias antes de reutilizar codigo.",
-      nextAction: "Conectarlo a n8n con reporte, limite de tiempo y alerta si falla.",
+      nextAction: "Activar workflow n8n con credencial SSH del VPS y revisar el reporte latest-web-factory-vps-automation.json.",
     },
     {
       id: "design-intelligence",
@@ -934,9 +944,9 @@ const STATIC_SNAPSHOT: Omit<WebFactoryCenterSnapshot, "generatedAt"> = {
       trigger: "Termina la captura de referencias.",
       input: "Galerias, screenshots y codigo local permitido.",
       output: "Resumen legible para Arthur/Sergio y datos para design:auto.",
-      command: "pnpm references:intelligence",
+      command: "pnpm automation:vps:references",
       approval: "Interno; no copia identidad ni assets.",
-      nextAction: "Agregar al mismo workflow n8n del radar diario.",
+      nextAction: "Queda dentro del mismo runner VPS para evitar trabajos sueltos en laptop.",
     },
     {
       id: "recipe-generator",
@@ -1016,9 +1026,9 @@ const STATIC_SNAPSHOT: Omit<WebFactoryCenterSnapshot, "generatedAt"> = {
       trigger: "Necesidad de revisar precios/catalogo Nuvia.",
       input: "Scrape temporal, catalogo interno y reglas de secreto proveedor.",
       output: "Diff guardado, catalogo publico sanitizado y rollback si algo parece sospechoso.",
-      command: "pnpm nuvia:prices:check",
+      command: "pnpm automation:vps:nuvia-check",
       approval: "Aplicar cambios requiere watcher seguro; no exponer proveedor ni costos internos.",
-      nextAction: "Mostrar ultimo reporte del watcher en este modulo.",
+      nextAction: "Auto-aplicar solo con modo nuvia-watch despues de revisar que no haya cambios estructurales.",
     },
   ],
   workflowSteps: [
@@ -1041,7 +1051,7 @@ const STATIC_SNAPSHOT: Omit<WebFactoryCenterSnapshot, "generatedAt"> = {
       action: "Usar referencias como inspiracion estructural. No copiar marca, fotos, copy, claims ni codigo cerrado.",
       output: "Referencias vinculadas al brief.",
       approval: "Sergio revisa riesgos legales, promesas sensibles o identidad demasiado parecida.",
-      command: "pnpm references:harvest:daily",
+      command: "pnpm automation:vps:daily",
     },
     {
       step: 3,
@@ -1089,6 +1099,7 @@ const STATIC_SNAPSHOT: Omit<WebFactoryCenterSnapshot, "generatedAt"> = {
   ],
   canonicalDocs: [
     { label: "Runbook operativo", path: "web-factory/docs/WEB_FACTORY_OPERATING_RUNBOOK_20260625.md" },
+    { label: "Automatizacion VPS/n8n", path: "web-factory/docs/WEB_FACTORY_VPS_AUTOMATION_20260630.md" },
     { label: "Captura de referencias", path: "web-factory/WEB_FACTORY_REFERENCE_CAPTURE_RUNBOOK.md" },
     { label: "Inteligencia actual", path: "web-factory/docs/WEB_FACTORY_DESIGN_INTELLIGENCE_LATEST.md" },
     { label: "Repos GitHub diseno", path: "web-factory/data/references/design-sources/github-design-repos-20260626.json" },
@@ -1107,8 +1118,8 @@ const STATIC_SNAPSHOT: Omit<WebFactoryCenterSnapshot, "generatedAt"> = {
     },
     {
       priority: "media",
-      title: "Conectar intake controlado",
-      detail: "El siguiente salto es formulario de brief con aprobacion ONIA antes de generar o enviar una web.",
+      title: "Activar worker VPS con n8n",
+      detail: "La laptop no debe ser scheduler: n8n dispara el worker del VPS, guarda reporte y avisa fallos.",
     },
   ],
 };

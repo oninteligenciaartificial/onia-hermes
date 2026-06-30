@@ -9,5 +9,6 @@ data/references/product-sources/hbderm-products-latest-check.json
 data/references/product-sources/nuvia-price-watch-latest.json
 data/references/product-sources/price-watch/
 data/references/product-sources/*.backup-*
+data/automation-runs/
 
 .vercel

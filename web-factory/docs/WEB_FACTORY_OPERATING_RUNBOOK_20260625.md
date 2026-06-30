@@ -138,22 +138,29 @@ Automatizar primero lo que reduce tiempo sin aumentar riesgo legal/comercial:
 | Funcion | Estado | Trigger | Comando/base | Aprobacion |
 |---|---|---|---|---|
 | Guardar brief desde ONIA Center | preparado | formulario completo o parcial | `/api/onia-center/runtime` nota+tarea | Interno; no publica |
-| Radar diario de referencias | listo | cron/n8n o manual | `pnpm references:harvest:daily` | Revisar licencias antes de usar codigo |
-| Inteligencia de diseno | listo | termina radar | `pnpm references:intelligence` | Interno |
+| Radar diario de referencias | listo | n8n en VPS -> worker | `pnpm automation:vps:daily` | Revisar licencias antes de usar codigo |
+| Inteligencia de diseno | listo | termina radar VPS | `pnpm automation:vps:references` | Interno |
 | Receta automatica | listo | existe intake/perfil | `pnpm design:auto -- <slug> --template <landing|store> --force` | Arthur prepara, Sergio aprueba entrega |
 | Preview interno | listo | receta generada | `pnpm factory:build -- <slug> --template <landing|store> --force` | No enviar sin QA |
 | Pedido de assets | preparado | faltantes criticos | mensaje generado por formulario | No inventar datos |
 | QA de fabrica | listo | cambios en factory | `pnpm factory:smoke`, lint y build | Bloquea si falla |
-| Watcher Nuvia/catalogo | listo | diario o precampana | `pnpm nuvia:prices:check` | No exponer proveedor/costos |
+| Watcher Nuvia/catalogo | listo | n8n en VPS -> worker | `pnpm automation:vps:nuvia-check` | No exponer proveedor/costos |
 | Deploy/entrega | revision manual | preview aprobado y pago/alcance claro | runbook por tipo de hosting | Solo Sergio |
 
 Automatizacion recomendada en n8n:
 
-1. Ejecutar `references:harvest:daily` una vez al dia con limite de tiempo.
-2. Si pasa, ejecutar `references:intelligence`.
-3. Registrar resumen como nota interna en ONIA Center.
-4. Alertar si falla Playwright, GitHub, licencia, screenshot o build.
-5. No crear ni enviar webs a clientes sin aprobacion humana.
+1. n8n corre en VPS y dispara el worker por SSH; no depende de la laptop.
+2. Ejecutar `pnpm automation:vps:daily` una vez al dia con lock y limite de tiempo.
+3. El worker corre `references:harvest:daily`, `references:intelligence` y `nuvia:prices:check`.
+4. Guardar reporte en `/var/log/onia/web-factory/latest-web-factory-vps-automation.json`.
+5. Alertar si falla Playwright, GitHub, licencia, screenshot, build o Nuvia.
+6. No crear, publicar, pushear ni enviar webs a clientes sin aprobacion humana.
+
+Runbook VPS/n8n:
+
+```text
+web-factory/docs/WEB_FACTORY_VPS_AUTOMATION_20260630.md
+```
 
 Automatizacion recomendada desde el modulo:
 

@@ -131,7 +131,7 @@ Recommended production flow:
 2. Execute command:
 
 ```bash
-cd /path/to/onia-hermes/web-factory && pnpm nuvia:prices:watch
+cd /opt/onia-hermes/web-factory && pnpm automation:vps:nuvia-check
 ```
 
 3. Read `data/references/product-sources/nuvia-price-watch-latest.json`.
@@ -140,6 +140,10 @@ cd /path/to/onia-hermes/web-factory && pnpm nuvia:prices:watch
    - build/deploy step for the storefront
    - Telegram/Discord notification to Sergio with changed product count
 6. If `summary.unsafe_scrape = true`, notify Sergio and do not deploy.
+
+Use `pnpm automation:vps:nuvia-watch` only after reviewing that the catalog
+membership is stable. The daily automation must stay in check-only mode by
+default.
 
 ## Windows Task Scheduler Command
 
