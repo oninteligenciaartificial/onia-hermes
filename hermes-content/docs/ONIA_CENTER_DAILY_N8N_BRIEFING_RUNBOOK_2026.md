@@ -133,6 +133,26 @@ Validacion adicional 2026-06-29:
   `sergio`, `arthur`, `seller` -> `200 daily_briefing_dry_run`.
 - Modelo reportado por el endpoint: `gpt-5.4-mini`.
 
+Correccion operativa 2026-06-30:
+
+- La ejecucion programada `18971` fallo porque las notas `seller_safe` se
+  intentaban guardar en `audit_logs.sensitivity_scope=internal`, valor no
+  permitido por la constraint de Supabase.
+- Fix aplicado en `web-factory/apps/site/src/lib/onia-center-store.ts`:
+  - `team_safe -> collab_safe`
+  - `seller_safe -> seller_basic`
+  - Sergio mantiene `sergio_private`
+  - fallback interno mantiene `internal_restricted`
+- ONIA Center se reconstruyo en VPS desde `/opt/onia-center-src/web-factory`
+  con `ONIA_STANDALONE_BUILD=true` y se promovio a
+  `/opt/onia-center/runtime-next`.
+- Backup previo del runtime:
+  `/opt/onia-center/runtime-next.bak-20260630193753`.
+- Reparacion manual ejecutada desde n8n contra el endpoint interno para
+  `2026-06-30`, `commit=true`, audiencias `sergio`, `arthur`, `seller`:
+  `200 daily_briefing_committed`, `createdTasks=4`, `createdNotes=1`,
+  `skippedTasks=7`, `skippedNotes=2`.
+
 Schedule:
 
 ```txt

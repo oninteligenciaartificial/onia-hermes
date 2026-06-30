@@ -645,11 +645,13 @@ export async function createOniaCenterEntity(entity: RuntimeEntity, payload: unk
     const note = payload as RuntimeNote & { author?: string; body?: string };
     const summary = note.title || note.body || note.detail || "Nota ONIA Center";
     const sensitivityScope =
-      note.visibility === "team_safe" || note.visibility === "seller_safe"
-        ? "internal"
-        : note.actorRole === "sergio"
-          ? "sergio_private"
-          : "internal_restricted";
+      note.visibility === "team_safe"
+        ? "collab_safe"
+        : note.visibility === "seller_safe"
+          ? "seller_basic"
+          : note.actorRole === "sergio"
+            ? "sergio_private"
+            : "internal_restricted";
     const rows = await supabaseRequest<DbNote[]>("audit_logs?select=audit_key,actor_role_key,summary,raw,created_at", {
       method: "POST",
       headers: { prefer: "return=representation" },
