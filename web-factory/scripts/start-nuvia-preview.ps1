@@ -196,7 +196,7 @@ try {
     Remove-Item -LiteralPath $logFile -Force
   }
 
-  $command = "Set-Location '$webFactoryRoot'; pnpm --filter site start -- --hostname 127.0.0.1 --port $Port *> 'site-$Port.log'"
+  $command = "Set-Location '$webFactoryRoot'; pnpm --filter site start --hostname 127.0.0.1 --port $Port *> 'site-$Port.log'"
   Write-Host "Starting Nuvia preview at $previewUrl..."
   Start-Process powershell -WindowStyle Hidden -ArgumentList @("-NoProfile", "-ExecutionPolicy", "Bypass", "-Command", $command) | Out-Null
 
