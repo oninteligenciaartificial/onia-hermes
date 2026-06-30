@@ -163,6 +163,7 @@ $webFactoryRoot = (Resolve-Path -LiteralPath (Join-Path $scriptRoot "..")).Path
 $siteDir = (Resolve-Path -LiteralPath (Join-Path $webFactoryRoot "apps\site")).Path
 $nextDir = Join-Path $siteDir ".next"
 $logFile = Join-Path $webFactoryRoot "site-$Port.log"
+$errorLogFile = Join-Path $webFactoryRoot "site-$Port.err.log"
 $baseUrl = "http://127.0.0.1:$Port"
 $previewUrl = "$baseUrl$Route"
 
@@ -195,14 +196,22 @@ try {
   if (Test-Path -LiteralPath $logFile) {
     Remove-Item -LiteralPath $logFile -Force
   }
+  if (Test-Path -LiteralPath $errorLogFile) {
+    Remove-Item -LiteralPath $errorLogFile -Force
+  }
 
-  $command = "Set-Location '$webFactoryRoot'; pnpm --filter site start --hostname 127.0.0.1 --port $Port *> 'site-$Port.log'"
   Write-Host "Starting Nuvia preview at $previewUrl..."
-  Start-Process powershell -WindowStyle Hidden -ArgumentList @("-NoProfile", "-ExecutionPolicy", "Bypass", "-Command", $command) | Out-Null
+  Start-Process -FilePath "node" `
+    -WorkingDirectory $siteDir `
+    -WindowStyle Hidden `
+    -ArgumentList @("node_modules/next/dist/bin/next", "start", "--hostname", "127.0.0.1", "--port", [string]$Port) `
+    -RedirectStandardOutput $logFile `
+    -RedirectStandardError $errorLogFile | Out-Null
 
   Wait-ForPreview -Url $previewUrl -BaseUrl $baseUrl
   Write-Host "Nuvia preview ready: $previewUrl"
   Write-Host "Log file: $logFile"
+  Write-Host "Error log file: $errorLogFile"
 } finally {
   Pop-Location
 }
