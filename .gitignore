@@ -17,6 +17,7 @@ __pycache__/
 *.pyc
 .cache/
 .hermes/audits/
+.onia-hygiene/
 dist/
 build/
 *.log

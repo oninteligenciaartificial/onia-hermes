@@ -57,6 +57,7 @@ Canonical files:
 - `hermes-content/docs/HERMES_CLOSED_EXECUTION_AND_CONTINUOUS_WORK_2026.md`
 - `HERMES_DAILY_CRONS.md`
 - `HERMES_WEEKLY_OPERATING_SYSTEM.md`
+- `.github/workflows/onia-hygiene-daily.yml`
 - `HIGGSFIELD_VIDEO_SYSTEM.md`
 - `HIGGSFIELD_FULL_CAPABILITIES_MAP.md`
 - `ELEVENLABS_AUDIO_SYSTEM.md`
@@ -152,6 +153,7 @@ Canonical files:
 - `hermes-content/docs/ONIA_CENTER_CODEX_INTEGRATION_RUNBOOK_2026.md`
 - `hermes-content/docs/ONIA_CENTER_AI_MODEL_ROUTING_2026.md`
 - `hermes-content/docs/ONIA_CENTER_DAILY_N8N_BRIEFING_RUNBOOK_2026.md`
+- `hermes-content/docs/ONIA_PROJECT_HYGIENE_AUTOMATION_2026.md`
 - `hermes-content/docs/ONIA_MEETING_INTELLIGENCE_SYSTEM_2026.md`
 - `hermes-content/docs/ONIA_7000_BOB_PRODUCTION_INFRA_INVESTMENT_PLAN_2026.md`
 - `hermes-content/docs/ONIA_INTERNAL_CAPITAL_ALLOCATION_2026.md`
@@ -175,6 +177,7 @@ Canonical files:
 - `hermes-content/references/sergio-onia-content-kit-20260602.json`
 - `hermes-content/references/sergio-ai-influencer-identity-system-20260606.json`
 - `hermes-content/references/onia-projects-registry.json`
+- `hermes-content/references/onia-project-hygiene-config.json`
 - `hermes-content/references/onia-vendor-pipeline-template.csv`
 - `hermes-content/references/onia-commercial-campaigns.json`
 - `hermes-content/references/onia-best-opportunity-matrix-20260605.json`
@@ -347,6 +350,7 @@ Canonical files already visible for Session B:
 - `hermes-content/references/n8n-workflows/atlas-ai-media-content-factory-draft-v1.sdk.js`
 - `hermes-content/references/n8n-workflows/onia-scheduled-ops-pack-v1.sdk.js`
 - `scripts/n8n_mcp_healthcheck.js`
+- `scripts/onia_project_hygiene.mjs`
 - External DentalGest repo:
   `C:\dev\Proyectos\dental-saas\supabase\migrations\20260605_n8n_postgrest_schema_cache_fix.sql`
 - `hermes-content/skills/plan-semanal-onia.md`

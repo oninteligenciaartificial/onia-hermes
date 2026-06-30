@@ -1,0 +1,72 @@
+name: ONIA Daily Project Hygiene
+
+on:
+  schedule:
+    - cron: "0 10 * * *"
+  workflow_dispatch:
+    inputs:
+      commit:
+        description: "Register tasks/jobs in ONIA Center"
+        required: true
+        default: "true"
+        type: choice
+        options:
+          - "true"
+          - "false"
+      fail_on_blocker:
+        description: "Fail the workflow when blocker findings exist"
+        required: true
+        default: "false"
+        type: choice
+        options:
+          - "false"
+          - "true"
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: onia-daily-project-hygiene
+  cancel-in-progress: false
+
+jobs:
+  hygiene:
+    name: Audit projects and register ONIA Center tasks
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      ONIA_HYGIENE_COMMIT: ${{ github.event_name == 'schedule' && 'true' || inputs.commit }}
+      ONIA_HYGIENE_FAIL_ON_BLOCKER: ${{ github.event_name == 'schedule' && 'false' || inputs.fail_on_blocker }}
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_TEAM_ID: ${{ secrets.VERCEL_TEAM_ID }}
+      ONIA_GITHUB_AUDIT_TOKEN: ${{ secrets.ONIA_GITHUB_AUDIT_TOKEN }}
+      ONIA_CENTER_BASE_URL: ${{ secrets.ONIA_CENTER_BASE_URL }}
+      ONIA_CENTER_INTERNAL_API_KEY: ${{ secrets.ONIA_CENTER_INTERNAL_API_KEY }}
+      ONIA_HYGIENE_MONITOR_WEBHOOK_URL: ${{ secrets.ONIA_HYGIENE_MONITOR_WEBHOOK_URL }}
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+    steps:
+      - name: Checkout ONIA Hermes
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Run ONIA project hygiene
+        run: |
+          node scripts/onia_project_hygiene.mjs \
+            --config hermes-content/references/onia-project-hygiene-config.json \
+            --out .onia-hygiene \
+            --commit "$ONIA_HYGIENE_COMMIT" \
+            --failOnBlocker "$ONIA_HYGIENE_FAIL_ON_BLOCKER"
+
+      - name: Upload hygiene report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: onia-project-hygiene-report
+          path: .onia-hygiene/
+          if-no-files-found: warn
