@@ -74,13 +74,39 @@ Estado validado:
 - SSH endurecido: sin contrasena, sin login directo de `root`, acceso por llave con `onia-deploy`.
 - `fail2ban` y `unattended-upgrades` activos.
 
+## Revision operativa 2026-06-30
+
+Estado real verificado:
+
+- n8n responde por HTTPS en `https://srv1793230.hstgr.cloud/`.
+- `docker compose config --quiet` valido correctamente.
+- `postgres` esta healthy y `n8n`, `task-runners`, `caddy` estan arriba.
+- `/rest/settings` muestra `showSetupOnFirstLoad=true`; falta crear owner inicial.
+- No hay variables duplicadas en `.env`.
+- Backups ampliados: Postgres, configuracion del stack y volumen `n8n_data`.
+- Healthcheck cada 10 minutos: Docker, Postgres, HTTPS y `/rest/settings`.
+- Secretos del stack rotados por seguridad; no registrar valores en Markdown ni chat.
+- Como no existian owner, workflows ni credenciales, se regenero la configuracion interna de n8n despues de la rotacion de encryption key.
+
+Workflow preparado:
+
+- `C:\dev\clientes\Bolivian Electric\infra\n8n\workflows\be-chatwoot-whatsapp-intake.sdk.js`
+- Nombre: `BE - Chatwoot WhatsApp Intake`
+- Validacion n8n SDK: `valid=true`, `nodeCount=7`.
+
+Guia operativa:
+
+- `C:\dev\clientes\Bolivian Electric\docs\operations\n8n-owner-and-settings-guide.md`
+
 Pendiente inmediato:
 
 1. Crear cuenta owner en n8n desde la URL temporal.
-2. Agregar credencial OpenAI dentro de n8n sin exponer API key en chat.
-3. Crear Chatwoot Cloud dedicado para Bolivian Electric.
-4. Conectar WhatsApp oficial por Embedded Signup/coexistencia si Meta lo permite.
-5. Crear dominio definitivo `n8n.bolivianelectric.com.bo` apuntando al VPS.
+2. Crear Chatwoot Cloud dedicado para Bolivian Electric.
+3. Agregar credencial OpenAI dentro de n8n sin exponer API key en chat.
+4. Agregar credencial `Chatwoot Bolivian API Token`.
+5. Importar o crear workflow `BE - Chatwoot WhatsApp Intake`.
+6. Conectar WhatsApp oficial por Embedded Signup/coexistencia si Meta lo permite.
+7. Crear dominio definitivo `n8n.bolivianelectric.com.bo` apuntando al VPS.
 
 Runbook tecnico del cliente:
 
