@@ -50,8 +50,13 @@ modulos, verticales o integraciones. No son la definicion del core.
   sistemas cuando este listo.
 - `ONIA_CORE_CLIENT_ADOPTION_MAP_2026.md`: clientes candidatos y arquetipos
   mapeados a tracks verticales, con orden de adopcion.
-- `ONIA_CORE_EXTERNAL_RESEARCH_20260703.md`: proyectos open source y modelos
-  aplicables (GitHub, Hugging Face) como referencias de diseno.
+- `ONIA_CORE_EXTERNAL_RESEARCH_20260703.md`: proyectos open source, modelos y
+  skills verificadas (GitHub, Hugging Face) como referencias de diseno.
+- `ONIA_VERTICAL_FACTORY_STRATEGY_2026.md`: estrategia de fabrica de
+  verticales por rubro y go-to-market (un core, muchos verticales
+  especializados; ProveeGest = distribucion B2B multi-rubro).
+- `ONIA_CORE_OWNER_PANEL_AND_INTAKE_2026.md`: diseno canonico del read-model
+  owner_dashboard y la politica de intake externo -> WorkItem.
 - `schema/base-schema.sql`: SQL base de referencia, no aplicado directamente.
 - `adapters/gestios.json`: mapa de adopcion para GestiOS.
 - `adapters/dentagest.json`: mapa de adopcion para DentalGest.

@@ -43,6 +43,28 @@ etiquetar `WorkItem.type` y prioridad al crear items desde intake externo
 (WhatsApp/Chatwoot/formularios), sin meter IA dentro del contrato — la IA vive
 como servicio alrededor del core, igual que las integraciones gated.
 
+## Skills verificadas (GitHub, por stars — verificado 2026-07-03)
+
+Fuentes verificadas con `gh repo view` (stars reales, no listas de blogs):
+
+| Repo | Stars | Que aporta a ONIA |
+|---|---|---|
+| [obra/superpowers](https://github.com/obra/superpowers) | 245k | Framework de skills agentic (brainstorm -> spec -> plan -> TDD -> review). YA instalado en este entorno; usarlo al construir DentalGest beta. |
+| [anthropics/skills](https://github.com/anthropics/skills) | 158k | Repo oficial de Agent Skills (docx, pdf, xlsx, pptx...). Base para generar propuestas y reportes de clientes. |
+| [hesreallyhim/awesome-claude-code](https://github.com/hesreallyhim/awesome-claude-code) | 48k | Indice curado de skills/agents/tooling. Primera parada al buscar skill para una tarea nueva. |
+| [wshobson/agents](https://github.com/wshobson/agents) | 37k | Marketplace multi-harness de plugins (Claude Code, Codex, Cursor...). Referencia si ONIA publica skills propias. |
+| [davila7/claude-code-templates](https://github.com/davila7/claude-code-templates) | 28k | CLI de configuracion y monitoreo de Claude Code. |
+| [VoltAgent/awesome-claude-code-subagents](https://github.com/VoltAgent/awesome-claude-code-subagents) | 23k | 100+ subagentes especializados listos para adaptar. |
+
+Aplicacion ONIA:
+
+1. Skills de documento (anthropics/skills: docx/pdf/xlsx) -> reportes
+   exportables del panel del dueno y propuestas por rubro.
+2. Superpowers workflow -> disciplina para el desarrollo de DentalGest beta.
+3. Publicar a futuro "onia-core skill" interna para que cualquier sesion de
+   desarrollo en productos respete el contrato (leer contract.json, validar,
+   no romper gates).
+
 ## Skills / mejoras internas detectadas durante la investigacion
 
 1. La skill `orquestacion-proyectos-onia` ya referencia ONIA Core y el mapa de

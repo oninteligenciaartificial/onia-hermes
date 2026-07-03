@@ -1,6 +1,6 @@
 {
   "name": "ONIA Core",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "status": "beta",
   "sourceOfTruth": "onia-hermes/onia-core",
   "researchResult": "onia-core/ONIA_CORE_RESEARCH_RESULT_2026.md",
@@ -380,11 +380,35 @@
   ],
   "families": [
     { "id": "ONIA_CORE", "name": "ONIA Core", "relationship": "core" },
-    { "id": "GESTIOS", "name": "GestiOS", "relationship": "implementation_target" },
-    { "id": "DENTALGEST", "name": "DentalGest", "relationship": "implementation_target" },
-    { "id": "GANADERO_OS", "name": "Ganadero OS", "relationship": "implementation_target" },
-    { "id": "PROVEEGEST", "name": "ProveeGest", "relationship": "future_vertical" }
+    { "id": "GESTIOS", "name": "GestiOS", "relationship": "implementation_target", "focus": "Generico pymes; base de motor para verticales" },
+    { "id": "DENTALGEST", "name": "DentalGest", "relationship": "implementation_target", "focus": "Vertical salud: clinicas dentales" },
+    { "id": "GANADERO_OS", "name": "Ganadero OS", "relationship": "implementation_target", "focus": "Vertical agro offline-first: ganaderia" },
+    { "id": "PROVEEGEST", "name": "ProveeGest", "relationship": "future_vertical", "focus": "Vertical distribucion B2B multi-rubro: importadoras, mayoristas, distribuidoras. Electrico es el primer skin de validacion, no el limite." }
   ],
+  "verticalFactory": {
+    "pattern": "Un solo core + motor GestiOS + pack vertical por rubro. Cada vertical se vende especializado (vocabulario, checklists, KPIs e intake del rubro), nunca como ERP generico. Nuevos rubros = nuevo pack, no nuevo codigo de core.",
+    "packContents": [
+      "vocabulario del rubro: tipos de WorkItem, tipos de BusinessPartner, areas tipicas",
+      "checklists de procesos del rubro (ProcessChecklist)",
+      "panel del dueno con KPIs del rubro (SavedView sobre owner_dashboard)",
+      "plantillas de intake del rubro (canales y formularios)",
+      "oferta y pricing del rubro"
+    ],
+    "strategy": "onia-core/ONIA_VERTICAL_FACTORY_STRATEGY_2026.md",
+    "roadmapRubros": [
+      { "rubro": "salud_dental", "vertical": "DentalGest", "estado": "beta_activa" },
+      { "rubro": "distribucion_b2b", "vertical": "ProveeGest", "estado": "validacion_bolivian_electric" },
+      { "rubro": "pymes_general", "vertical": "GestiOS", "estado": "post_beta" },
+      { "rubro": "agro_ganaderia", "vertical": "Ganadero OS", "estado": "post_beta_offline" },
+      { "rubro": "salud_estetica", "vertical": "EsteticaGest (pack sobre DentalGest)", "estado": "planificado" },
+      { "rubro": "salud_veterinaria", "vertical": "VetGest (pack salud + partners agro)", "estado": "planificado" },
+      { "rubro": "gastronomia", "vertical": "pack GestiOS restaurantes", "estado": "planificado" },
+      { "rubro": "servicios_profesionales", "vertical": "pack GestiOS estudios/agencias", "estado": "planificado" },
+      { "rubro": "educacion", "vertical": "pack GestiOS institutos", "estado": "explorar" },
+      { "rubro": "construccion_ferreteria", "vertical": "pack ProveeGest materiales", "estado": "explorar" },
+      { "rubro": "turismo_hoteleria", "vertical": "pack GestiOS reservas", "estado": "explorar" }
+    ]
+  },
   "verticalTracks": [
     {
       "id": "gestios-general",
@@ -419,6 +443,43 @@
       "blockedCapabilityIds": ["whatsapp", "tr4_adapter", "siat"]
     }
   ],
+  "readModels": {
+    "owner_dashboard": {
+      "purpose": "Panel del dueno/gerente: una sola pantalla que responde que paso hoy, cuanto entro, que falta cobrar, que esta pendiente y que requiere atencion. Cada vertical agrega KPIs de rubro sin cambiar las secciones core.",
+      "detail": "onia-core/ONIA_CORE_OWNER_PANEL_AND_INTAKE_2026.md",
+      "sections": [
+        { "id": "today", "name": "Hoy", "entities": ["schedule_event", "work_item"], "answers": ["open_work", "next_action"] },
+        { "id": "money", "name": "Dinero", "entities": ["work_item", "approval_request"], "answers": ["management", "status"], "note": "Cobros/saldos vienen del modulo financiero del producto; el core aporta pendientes de cobro como work items y aprobaciones de descuento." },
+        { "id": "pending", "name": "Pendientes y responsables", "entities": ["work_item", "comment"], "answers": ["open_work", "ownership", "status"] },
+        { "id": "team", "name": "Equipo y actividad", "entities": ["member", "activity_event", "role_assignment"], "answers": ["people", "roles"] },
+        { "id": "attention", "name": "Alertas y aprobaciones", "entities": ["notification", "approval_request"], "answers": ["attention"] },
+        { "id": "partners", "name": "Clientes y partners", "entities": ["business_partner", "contact"], "answers": ["relationships"] }
+      ],
+      "verticalExtensions": {
+        "dentagest-clinical": ["citas de hoy y no asistio", "presupuestos pendientes", "tratamientos abiertos", "cobros del dia y cuentas por cobrar", "inventario critico"],
+        "proveegest-electrico": ["cotizaciones abiertas por vendedor", "cotizaciones vencidas (SLA)", "descuentos esperando aprobacion", "pipeline por sucursal", "clientes empresa sin actividad 30 dias"],
+        "gestios-general": ["tareas vencidas por area", "carga por responsable", "importaciones recientes"],
+        "ganadero-offline": ["eventos sanitarios pendientes", "alertas de campo sin resolver", "dispositivos sin sincronizar"]
+      }
+    }
+  },
+  "intakePolicy": {
+    "purpose": "Todo canal externo entra al core como WorkItem normalizado. Las integraciones (WhatsApp, formularios, llamadas) viven fuera del core y solo empujan intake normalizado.",
+    "detail": "onia-core/ONIA_CORE_OWNER_PANEL_AND_INTAKE_2026.md",
+    "channels": [
+      { "id": "whatsapp_chatwoot", "source": "Chatwoot/WhatsApp", "workItemType": "lead_conversacion", "gate": "external_gate whatsapp" },
+      { "id": "web_form", "source": "Formularios web-factory / landing", "workItemType": "lead_formulario", "gate": "none" },
+      { "id": "phone_walkin", "source": "Llamada o visita registrada manualmente", "workItemType": "solicitud_manual", "gate": "none" },
+      { "id": "import", "source": "ImportBatch validado", "workItemType": "segun_lote", "gate": "dry_run_obligatorio" }
+    ],
+    "normalizationRules": [
+      "todo intake crea WorkItem con type, priority, canal de origen y payload minimo",
+      "match o creacion de BusinessPartner/Contact antes de asignar responsable",
+      "dedupe por contacto+canal en ventana de 24h antes de crear otro WorkItem",
+      "asignacion por regla de ruteo del area (round-robin u owner fijo), auditada en ActivityEvent",
+      "clasificacion IA opcional (embeddings) corre fuera del core y solo sugiere type/priority"
+    ]
+  },
   "distributionTargets": [
     {
       "projectId": "gestios",

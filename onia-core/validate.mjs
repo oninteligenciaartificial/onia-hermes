@@ -115,6 +115,42 @@ for (const target of contract.distributionTargets) {
   assert(target.status === "hold_until_beta", `${target.projectId} must stay on hold until beta`);
 }
 
+if (contract.readModels) {
+  const ownerDashboard = contract.readModels.owner_dashboard;
+  assert(ownerDashboard, "readModels must define owner_dashboard");
+  assert(ownerDashboard?.sections?.length >= 4, "owner_dashboard must have at least 4 sections");
+
+  for (const section of ownerDashboard?.sections ?? []) {
+    for (const entityId of section.entities) {
+      assert(entityIds.has(entityId), `owner_dashboard section ${section.id} references missing entity ${entityId}`);
+    }
+    for (const questionId of section.answers) {
+      assert(questionIds.has(questionId), `owner_dashboard section ${section.id} references missing question ${questionId}`);
+    }
+  }
+
+  const trackIds = new Set(contract.verticalTracks.map((track) => track.id));
+  for (const extensionTrackId of Object.keys(ownerDashboard?.verticalExtensions ?? {})) {
+    assert(trackIds.has(extensionTrackId), `owner_dashboard extension references missing track ${extensionTrackId}`);
+  }
+}
+
+if (contract.intakePolicy) {
+  assert(contract.intakePolicy.channels?.length > 0, "intakePolicy must define channels");
+  for (const channel of contract.intakePolicy.channels ?? []) {
+    assert(channel.id && channel.workItemType && channel.gate !== undefined, `intake channel ${channel.id ?? "?"} needs id, workItemType and gate`);
+  }
+  assert(contract.intakePolicy.normalizationRules?.length >= 3, "intakePolicy needs at least 3 normalization rules");
+}
+
+if (contract.verticalFactory) {
+  assert(contract.verticalFactory.pattern, "verticalFactory must define pattern");
+  assert(contract.verticalFactory.roadmapRubros?.length > 0, "verticalFactory must define roadmapRubros");
+  for (const rubro of contract.verticalFactory.roadmapRubros ?? []) {
+    assert(rubro.rubro && rubro.vertical && rubro.estado, "each roadmap rubro needs rubro, vertical and estado");
+  }
+}
+
 assert(Array.isArray(contract.schemaFiles), "schemaFiles must be an array");
 for (const schemaFile of contract.schemaFiles) {
   assertRepoFile(schemaFile, "Schema file");
