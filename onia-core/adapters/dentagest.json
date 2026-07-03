@@ -73,6 +73,48 @@
       "existingModel": "none",
       "status": "missing",
       "notes": "Could support patient or inventory import with strict validation."
+    },
+    {
+      "coreEntityId": "business_partner",
+      "existingModel": "none",
+      "status": "missing_optional",
+      "notes": "Dental labs, suppliers and insurers can be partners. Patient stays a clinical domain record, never flattened into a partner."
+    },
+    {
+      "coreEntityId": "role_assignment",
+      "existingModel": "Profile.role",
+      "status": "partial",
+      "notes": "Needed for fine roles: owner/admin, doctor, reception, cash, assistant. Cash must not edit clinical history; doctor must not touch fiscal config."
+    },
+    {
+      "coreEntityId": "comment",
+      "existingModel": "none",
+      "status": "missing",
+      "notes": "Internal threads on patient, treatment, appointment or budget. Must respect clinical privacy."
+    },
+    {
+      "coreEntityId": "document",
+      "existingModel": "ClinicalRecord attachments",
+      "status": "sensitive_missing",
+      "notes": "Consents, referenced radiographs, signed budgets and payment receipts with clinical visibility rules. Storage stays external."
+    },
+    {
+      "coreEntityId": "approval_request",
+      "existingModel": "none",
+      "status": "missing",
+      "notes": "Approvals for discounts, budget acceptance, cancellations or sensitive fiscal changes."
+    },
+    {
+      "coreEntityId": "schedule_event",
+      "existingModel": "Appointment",
+      "status": "domain_specific",
+      "notes": "Appointment already covers clinical scheduling. ScheduleEvent adds recalls, follow-ups and reminders without replacing Appointment."
+    },
+    {
+      "coreEntityId": "saved_view",
+      "existingModel": "none",
+      "status": "missing",
+      "notes": "Powers the owner dashboard: saved views per role (owner, doctor, reception, cash)."
     }
   ],
   "capabilityMappings": [
@@ -115,6 +157,36 @@
       "capabilityId": "sales_cash",
       "status": "exists_partial",
       "evidence": ["Invoice", "Payment"]
+    },
+    {
+      "capabilityId": "partners",
+      "status": "missing_optional",
+      "evidence": []
+    },
+    {
+      "capabilityId": "permissions",
+      "status": "partial",
+      "evidence": ["Profile.role"]
+    },
+    {
+      "capabilityId": "collaboration",
+      "status": "missing",
+      "evidence": []
+    },
+    {
+      "capabilityId": "approvals",
+      "status": "missing",
+      "evidence": []
+    },
+    {
+      "capabilityId": "scheduling",
+      "status": "exists_partial",
+      "evidence": ["Appointment"]
+    },
+    {
+      "capabilityId": "saved_reporting",
+      "status": "missing",
+      "evidence": []
     }
   ],
   "blockedUntil": [

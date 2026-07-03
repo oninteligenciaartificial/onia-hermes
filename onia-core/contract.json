@@ -1,7 +1,7 @@
 {
   "name": "ONIA Core",
-  "version": "0.1.0",
-  "status": "alpha",
+  "version": "0.2.0",
+  "status": "beta",
   "sourceOfTruth": "onia-hermes/onia-core",
   "researchResult": "onia-core/ONIA_CORE_RESEARCH_RESULT_2026.md",
   "betaDirection": "onia-core/ONIA_CORE_DENTALGEST_BETA_DIRECTION_2026.md",
@@ -15,8 +15,8 @@
   ],
   "policy": {
     "installInProductRepos": false,
-    "reason": "Primero se completa ONIA Core en Hermes; despues se distribuye a los sistemas ONIA.",
-    "nextDistributionStage": "beta"
+    "reason": "Contrato beta cerrado en Hermes con piezas transversales. La instalacion en repos producto sigue bloqueada hasta aprobar el plan de adopcion por proyecto.",
+    "nextDistributionStage": "dentagest_adoption"
   },
   "researchSources": [
     {
@@ -106,6 +106,7 @@
       "scope": "core",
       "purpose": "Unidad comun para tarea, solicitud, caso, pedido pendiente o tramite.",
       "requiredFields": ["id", "organizationId", "type", "title", "status", "ownerId", "priority", "createdAt"],
+      "optionalFields": ["slaPolicy", "slaDueAt", "escalationLevel", "partnerId"],
       "tenantScoped": true
     },
     {
@@ -146,6 +147,69 @@
       "scope": "core",
       "purpose": "Carga controlada de datos con dry-run, errores por fila y trazabilidad.",
       "requiredFields": ["id", "organizationId", "source", "status", "dryRun", "createdAt"],
+      "tenantScoped": true
+    },
+    {
+      "id": "business_partner",
+      "name": "BusinessPartner",
+      "scope": "core",
+      "purpose": "Relacion externa comun: cliente empresa, proveedor, aliado, comprador B2B, laboratorio o veterinario. Contact queda como persona asociada a un partner.",
+      "requiredFields": ["id", "organizationId", "name", "partnerType", "status", "createdAt"],
+      "optionalFields": ["taxId", "primaryContactId", "areaId"],
+      "tenantScoped": true
+    },
+    {
+      "id": "role_assignment",
+      "name": "RoleAssignment",
+      "scope": "core",
+      "purpose": "Permiso efectivo de un miembro por area, sucursal, accion o dato sensible. Evita depender de un solo Profile.role.",
+      "requiredFields": ["id", "organizationId", "memberId", "roleKey", "scopeType", "active", "createdAt"],
+      "optionalFields": ["scopeId", "expiresAt"],
+      "tenantScoped": true
+    },
+    {
+      "id": "comment",
+      "name": "Comment",
+      "scope": "core",
+      "purpose": "Hilo interno sobre work item, partner, cita, caso o evento. Conversacion y cambios de contexto.",
+      "requiredFields": ["id", "organizationId", "entityType", "entityId", "authorId", "body", "createdAt"],
+      "optionalFields": ["parentId", "visibility"],
+      "tenantScoped": true
+    },
+    {
+      "id": "document",
+      "name": "Document",
+      "scope": "core",
+      "purpose": "Archivo o registro formal con tipo, entidad relacionada, propietario y visibilidad. Storage externo configurable, no secretos en repo.",
+      "requiredFields": ["id", "organizationId", "entityType", "entityId", "docType", "storageRef", "visibility", "createdAt"],
+      "optionalFields": ["ownerId", "signedAt", "expiresAt"],
+      "tenantScoped": true
+    },
+    {
+      "id": "approval_request",
+      "name": "ApprovalRequest",
+      "scope": "core",
+      "purpose": "Aprobacion por monto, descuento, compra, cotizacion, gasto, cierre o cambio sensible.",
+      "requiredFields": ["id", "organizationId", "entityType", "entityId", "requestType", "status", "requestedBy", "createdAt"],
+      "optionalFields": ["approvedBy", "decidedAt", "amount", "reason"],
+      "tenantScoped": true
+    },
+    {
+      "id": "schedule_event",
+      "name": "ScheduleEvent",
+      "scope": "core",
+      "purpose": "Seguimiento, cita, reunion, vencimiento, visita, entrega o recordatorio. Separa el tiempo real del dueAt de un work item.",
+      "requiredFields": ["id", "organizationId", "title", "eventType", "startAt", "status", "ownerId", "createdAt"],
+      "optionalFields": ["endAt", "entityType", "entityId", "remindAt"],
+      "tenantScoped": true
+    },
+    {
+      "id": "saved_view",
+      "name": "SavedView",
+      "scope": "core",
+      "purpose": "Vista o reporte guardado por rol: gerente, vendedor, recepcion, operador. Filtros y KPIs reutilizables.",
+      "requiredFields": ["id", "organizationId", "name", "targetEntity", "filters", "roleScope", "createdBy", "createdAt"],
+      "optionalFields": ["isDefault", "sharedWith"],
       "tenantScoped": true
     }
   ],
@@ -205,6 +269,54 @@
       "phase": 2,
       "entityIds": ["import_batch"],
       "answers": ["relationships", "open_work", "evidence"]
+    },
+    {
+      "id": "partners",
+      "name": "Partners comerciales externos",
+      "layer": "core",
+      "phase": 1,
+      "entityIds": ["business_partner", "contact"],
+      "answers": ["relationships", "ownership"]
+    },
+    {
+      "id": "permissions",
+      "name": "Permisos finos por area y dato",
+      "layer": "core",
+      "phase": 1,
+      "entityIds": ["role_assignment", "member"],
+      "answers": ["roles", "ownership"]
+    },
+    {
+      "id": "collaboration",
+      "name": "Comentarios y documentos",
+      "layer": "core",
+      "phase": 2,
+      "entityIds": ["comment", "document"],
+      "answers": ["evidence", "next_action", "ownership"]
+    },
+    {
+      "id": "approvals",
+      "name": "Aprobaciones internas",
+      "layer": "core",
+      "phase": 2,
+      "entityIds": ["approval_request"],
+      "answers": ["status", "attention", "management"]
+    },
+    {
+      "id": "scheduling",
+      "name": "Agenda, citas y recordatorios",
+      "layer": "core",
+      "phase": 2,
+      "entityIds": ["schedule_event"],
+      "answers": ["next_action", "attention"]
+    },
+    {
+      "id": "saved_reporting",
+      "name": "Vistas y reportes guardados por rol",
+      "layer": "core",
+      "phase": 2,
+      "entityIds": ["saved_view"],
+      "answers": ["management"]
     },
     {
       "id": "catalog_inventory",
@@ -286,8 +398,8 @@
       "id": "dentagest-clinical",
       "familyId": "DENTALGEST",
       "name": "DentalGest Clinico",
-      "status": "first_beta_candidate",
-      "requiredCapabilityIds": ["tenant", "team_roles", "relationships", "work_items", "evidence_activity", "alerts_reports", "data_ops", "sales_cash"],
+      "status": "first_beta_active",
+      "requiredCapabilityIds": ["tenant", "team_roles", "relationships", "work_items", "evidence_activity", "alerts_reports", "data_ops", "partners", "permissions", "collaboration", "approvals", "scheduling", "saved_reporting", "sales_cash"],
       "blockedCapabilityIds": ["siat"]
     },
     {

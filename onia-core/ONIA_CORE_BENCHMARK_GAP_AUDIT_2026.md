@@ -4,6 +4,12 @@ Fecha: 2026-06-29.
 Estado: auditoria de brechas para ONIA Core alpha.
 Owner: ONIA / Hermes.
 
+> Actualizacion 2026-07-03: las 8 piezas transversales recomendadas
+> (BusinessPartner, RoleAssignment, Comment, Document, ApprovalRequest,
+> ScheduleEvent, SavedView y WorkItem con SLA opcional) ya entraron al contrato
+> beta v0.2.0, con SQL base y adaptadores de los 3 productos. La instalacion en
+> repos producto sigue bloqueada hasta aprobar el plan de adopcion de DentalGest.
+
 ## Veredicto
 
 ONIA Core alpha todavia no cumple todas las funciones que una empresa real espera.

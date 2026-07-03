@@ -65,6 +65,48 @@
       "existingModel": "none",
       "status": "missing",
       "notes": "Needed before safe CSV/Excel onboarding."
+    },
+    {
+      "coreEntityId": "business_partner",
+      "existingModel": "Customer, Supplier",
+      "status": "partial",
+      "notes": "Customer and Supplier can consolidate into BusinessPartner for B2B accounts, allies and buyers, keeping Contact as the associated person."
+    },
+    {
+      "coreEntityId": "role_assignment",
+      "existingModel": "Profile.role, Branch",
+      "status": "partial",
+      "notes": "Needs area/branch/action scoped permissions beyond a single role field."
+    },
+    {
+      "coreEntityId": "comment",
+      "existingModel": "none",
+      "status": "missing",
+      "notes": "Internal threads on account, order or work item."
+    },
+    {
+      "coreEntityId": "document",
+      "existingModel": "none",
+      "status": "missing",
+      "notes": "Contracts, quotes, receipts and formal files per account/order."
+    },
+    {
+      "coreEntityId": "approval_request",
+      "existingModel": "none",
+      "status": "missing",
+      "notes": "Approvals for quotes, discounts, purchases and expenses. First place to implement Core beta approvals."
+    },
+    {
+      "coreEntityId": "schedule_event",
+      "existingModel": "none",
+      "status": "missing",
+      "notes": "Follow-ups, meetings, delivery and payment reminders."
+    },
+    {
+      "coreEntityId": "saved_view",
+      "existingModel": "none",
+      "status": "missing",
+      "notes": "Manager, seller and cash saved reports and filtered views."
     }
   ],
   "capabilityMappings": [
@@ -100,6 +142,36 @@
     },
     {
       "capabilityId": "data_ops",
+      "status": "missing",
+      "evidence": []
+    },
+    {
+      "capabilityId": "partners",
+      "status": "partial",
+      "evidence": ["Customer", "Supplier"]
+    },
+    {
+      "capabilityId": "permissions",
+      "status": "partial",
+      "evidence": ["Profile.role", "Branch"]
+    },
+    {
+      "capabilityId": "collaboration",
+      "status": "missing",
+      "evidence": []
+    },
+    {
+      "capabilityId": "approvals",
+      "status": "missing",
+      "evidence": []
+    },
+    {
+      "capabilityId": "scheduling",
+      "status": "missing",
+      "evidence": []
+    },
+    {
+      "capabilityId": "saved_reporting",
       "status": "missing",
       "evidence": []
     }
