@@ -55,6 +55,10 @@ Cierre Sergio
 Estado Semana
 Plan Semana
 Plan Hoy
+Brief Hoy
+Tareas de hoy
+Recomiendame hoy
+Tendencias hoy
 Estado Hermesa
 Automatizaciones ONIA
 Mapa proyectos ONIA

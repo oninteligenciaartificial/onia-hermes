@@ -53,6 +53,10 @@ Bot ACTIVO. El trabajo es cerrar integraciones y automatizaciones, no codigo nue
 | B8 | Gestion de facturas (registrar enviadas/recibidas + seguimiento pagos) | DEV | hermes-automation | P2 | — | Comando funcional + registro persistente |
 | B9 | Completar datos fiscales (NIT, regimen, responsable, calendario) y activar recordatorios | S | onia-integrations | P1 | validacion contador | Fechas validadas; alertas activas |
 | B10 | Desplegar hermes-content al VPS y smoke test desde Telegram | OPS | hermes-automation | P1 | — | `npm run deploy:hermes-content` + comandos clave responden |
+| B11 | Skill `brief-diario-onia` (comando `Brief Hoy`: agenda + tareas + tendencias) | AG | onia-creative-radar | P1 | — | DONE — skill creada + comando en centro-comando-telegram |
+| B12 | Workflow n8n `ONIA - Recomendaciones de tendencia` (seccion 3, plan VPS) | AG | hermes-automation | P1 | — | DONE — JSON valido; falta importar en n8n + credencial telegramApi |
+| B13 | Importar `onia-trend-recommendations.json` en n8n y setear credencial telegramApi | OPS | hermes-automation | P1 | acceso n8n | Workflow activo; brief 06:50 llega a Telegram |
+| B14 | Anexar seccion 3 (tendencias) al briefing 06:45 existente o encadenar ambos | DEV | hermes-automation | P2 | B13 | Un solo brief diario con agenda+tareas+tendencias |
 
 **Gate del track:** publicacion automatica OFF por defecto; nada client-facing
 sin aprobacion exacta de pieza/caption/canal.

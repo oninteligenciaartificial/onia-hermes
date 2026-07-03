@@ -1,0 +1,101 @@
+{
+  "id": "ONIATrendRecs001",
+  "name": "ONIA - Recomendaciones de tendencia",
+  "active": false,
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "50 6 * * 1-6"
+            }
+          ]
+        }
+      },
+      "id": "schedule-daily-0650",
+      "name": "Lunes a sabado 06:50",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [-640, 0]
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:8080/search",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            { "name": "q", "value": "IA generativa marketing redes sociales tendencias" },
+            { "name": "format", "value": "json" },
+            { "name": "time_range", "value": "day" },
+            { "name": "categories", "value": "news" }
+          ]
+        },
+        "options": { "timeout": 30000 }
+      },
+      "id": "searxng-trends",
+      "name": "SearXNG tendencias (local)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [-380, 0],
+      "notes": "SearXNG self-hosted en localhost:8080 del VPS. Sin secreto: no requiere env ni credencial. Ajustar q por rubro activo."
+    },
+    {
+      "parameters": {
+        "jsCode": "// Rankea las tendencias de SearXNG y arma la seccion 3 del Brief Diario.\n// No copiar identidad de creadores: solo estructura/tema accionable.\nconst payload = items[0].json || {};\nconst results = Array.isArray(payload.results) ? payload.results : [];\nconst seen = new Set();\nconst top = [];\nfor (const r of results) {\n  const title = (r.title || '').trim();\n  if (!title) continue;\n  const key = title.toLowerCase().slice(0, 60);\n  if (seen.has(key)) continue;\n  seen.add(key);\n  top.push({ title, url: r.url || '', engine: r.engine || '' });\n  if (top.length >= 3) break;\n}\nconst date = new Date().toLocaleDateString('es-BO', { timeZone: 'America/La_Paz' });\nconst lines = [`ONIA | Recomendaciones y tendencias ${date}`, ''];\nif (top.length === 0) {\n  lines.push('Sin senal fuerte hoy en SearXNG. Revisar radar-creativo-onia manualmente.');\n} else {\n  top.forEach((t, i) => {\n    lines.push(`${i + 1}. ${t.title}`);\n    lines.push(`   Accion ONIA: convertir en carrusel/guion o angulo de venta. Fuente: ${t.url}`);\n  });\n}\nlines.push('');\nlines.push('Regla: inspiracion estructural, no copiar voz/identidad. Nada se publica sin aprobacion.');\nconst text = lines.join('\\n').slice(0, 3900);\nreturn [{ json: { date, count: top.length, text, trends: top } }];"
+      },
+      "id": "rank-trends",
+      "name": "Rankear y armar seccion 3",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-120, 0]
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "sendMessage",
+        "chatId": "6830070978",
+        "text": "={{ $json.text }}",
+        "additionalFields": { "disable_web_page_preview": true }
+      },
+      "id": "send-telegram-sergio",
+      "name": "Enviar a Telegram Sergio",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [160, 0],
+      "credentials": {
+        "telegramApi": { "id": "REEMPLAZAR", "name": "Hermes Telegram Bot" }
+      },
+      "notes": "Plan VPS: usar credencial n8n telegramApi (no env token). chatId de Sergio hardcodeado (no es secreto)."
+    }
+  ],
+  "connections": {
+    "Lunes a sabado 06:50": {
+      "main": [[{ "node": "SearXNG tendencias (local)", "type": "main", "index": 0 }]]
+    },
+    "SearXNG tendencias (local)": {
+      "main": [[{ "node": "Rankear y armar seccion 3", "type": "main", "index": 0 }]]
+    },
+    "Rankear y armar seccion 3": {
+      "main": [[{ "node": "Enviar a Telegram Sergio", "type": "main", "index": 0 }]]
+    }
+  },
+  "settings": {
+    "timezone": "America/La_Paz",
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "pinData": {},
+  "versionId": "onia-trend-recommendations-20260703",
+  "meta": {
+    "templateCredsSetupCompleted": false,
+    "description": "Seccion 3 del Brief Diario: tendencias accionables diarias desde SearXNG local, enviadas a Telegram. Compatible con plan VPS (sin env; SearXNG local hardcodeado, Telegram por credencial n8n). No publica ni contacta."
+  },
+  "tags": [
+    { "name": "onia" },
+    { "name": "daily-briefing" },
+    { "name": "trends" },
+    { "name": "safe-automation" }
+  ]
+}
