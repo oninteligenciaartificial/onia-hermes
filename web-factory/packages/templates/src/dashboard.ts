@@ -215,45 +215,81 @@ function renderEmpty(title: string, hint: string): string {
 
 const CHART_W = 320;
 const CHART_H = 150;
-const CHART_PAD = 24;
+const PAD_L = 34;
+const PAD_R = 12;
+const PAD_T = 12;
+const PAD_B = 22;
+const PLOT_W = CHART_W - PAD_L - PAD_R;
+const PLOT_H = CHART_H - PAD_T - PAD_B;
+
+function niceMax(value: number): number {
+  if (value <= 0) {
+    return 1;
+  }
+  const exponent = Math.floor(Math.log10(value));
+  const base = Math.pow(10, exponent);
+  const fraction = value / base;
+  const niceFraction = fraction <= 1 ? 1 : fraction <= 2 ? 2 : fraction <= 5 ? 5 : 10;
+  return niceFraction * base;
+}
+
+function formatTick(value: number): string {
+  if (value >= 1000) {
+    return `${(value / 1000).toFixed(value % 1000 === 0 ? 0 : 1)}k`;
+  }
+  return `${Math.round(value)}`;
+}
+
+function renderGrid(max: number): string {
+  return [0, 0.5, 1]
+    .map((tick) => {
+      const y = PAD_T + PLOT_H - tick * PLOT_H;
+      const dash = tick === 0 ? "" : ' stroke-dasharray="2 3"';
+      return (
+        `<line x1="${PAD_L}" y1="${y.toFixed(1)}" x2="${CHART_W - PAD_R}" y2="${y.toFixed(
+          1,
+        )}" stroke="var(--border)" stroke-width="1"${dash}></line>` +
+        `<text x="${PAD_L - 6}" y="${(y + 3).toFixed(1)}" text-anchor="end" class="wf-chart-axis">${formatTick(
+          tick * max,
+        )}</text>`
+      );
+    })
+    .join("");
+}
 
 function renderBarChart(points: Array<{ label: string; value: number }>): string {
-  const max = Math.max(...points.map((point) => Math.max(point.value, 0)), 1);
+  const max = niceMax(Math.max(...points.map((point) => Math.max(point.value, 0)), 1));
   const count = points.length;
   const gap = count > 12 ? 3 : 8;
-  const barWidth = Math.max(2, (CHART_W - CHART_PAD * 2 - gap * (count - 1)) / count);
+  const barWidth = Math.max(2, (PLOT_W - gap * (count - 1)) / count);
 
   const bars = points
     .map((point, index) => {
-      const height = (Math.max(point.value, 0) / max) * (CHART_H - CHART_PAD * 2);
-      const x = CHART_PAD + index * (barWidth + gap);
-      const y = CHART_H - CHART_PAD - height;
+      const height = (Math.max(point.value, 0) / max) * PLOT_H;
+      const x = PAD_L + index * (barWidth + gap);
+      const y = PAD_T + PLOT_H - height;
       return `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${barWidth.toFixed(1)}" height="${height.toFixed(
         1,
       )}" rx="3" fill="var(--color-primary)"><title>${escapeHtml(point.label)}: ${point.value}</title></rect>`;
     })
     .join("");
 
-  const labels = renderChartLabels(points, (index) => CHART_PAD + index * (barWidth + gap) + barWidth / 2);
+  const labels = renderChartLabels(points, (index) => PAD_L + index * (barWidth + gap) + barWidth / 2);
 
-  return chartSvg(`${baseline()}${bars}${labels}`);
+  return chartSvg(`${renderGrid(max)}${bars}${labels}`);
 }
 
 function renderLineChart(points: Array<{ label: string; value: number }>): string {
-  const values = points.map((point) => point.value);
-  const max = Math.max(...values, 1);
-  const min = Math.min(...values, 0);
-  const range = max - min || 1;
+  const max = niceMax(Math.max(...points.map((point) => point.value), 1));
   const count = points.length;
 
   const xFor = (index: number): number =>
-    CHART_PAD + (count === 1 ? (CHART_W - CHART_PAD * 2) / 2 : (index / (count - 1)) * (CHART_W - CHART_PAD * 2));
-  const yFor = (value: number): number =>
-    CHART_H - CHART_PAD - ((value - min) / range) * (CHART_H - CHART_PAD * 2);
+    PAD_L + (count === 1 ? PLOT_W / 2 : (index / (count - 1)) * PLOT_W);
+  const yFor = (value: number): number => PAD_T + PLOT_H - (Math.max(value, 0) / max) * PLOT_H;
 
   const line = points.map((point, index) => `${xFor(index).toFixed(1)},${yFor(point.value).toFixed(1)}`).join(" ");
-  const area = `${xFor(0).toFixed(1)},${(CHART_H - CHART_PAD).toFixed(1)} ${line} ${xFor(count - 1).toFixed(1)},${(
-    CHART_H - CHART_PAD
+  const area = `${xFor(0).toFixed(1)},${(PAD_T + PLOT_H).toFixed(1)} ${line} ${xFor(count - 1).toFixed(1)},${(
+    PAD_T + PLOT_H
   ).toFixed(1)}`;
   const dots = points
     .map(
@@ -267,7 +303,7 @@ function renderLineChart(points: Array<{ label: string; value: number }>): strin
   const labels = renderChartLabels(points, xFor);
 
   return chartSvg(
-    `${baseline()}<polygon points="${area}" fill="var(--color-primary)" fill-opacity="0.12"></polygon>` +
+    `${renderGrid(max)}<polygon points="${area}" fill="var(--color-primary)" fill-opacity="0.12"></polygon>` +
       `<polyline points="${line}" fill="none" stroke="var(--color-primary)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"></polyline>${dots}${labels}`,
   );
 }
@@ -288,14 +324,8 @@ function renderChartLabels(
     .join("");
 }
 
-function baseline(): string {
-  return `<line x1="${CHART_PAD}" y1="${CHART_H - CHART_PAD}" x2="${CHART_W - CHART_PAD}" y2="${
-    CHART_H - CHART_PAD
-  }" stroke="var(--border)" stroke-width="1"></line>`;
-}
-
 function chartSvg(inner: string): string {
-  return `<svg class="wf-chart" viewBox="0 0 ${CHART_W} ${CHART_H}" role="img" preserveAspectRatio="none">${inner}</svg>`;
+  return `<svg class="wf-chart" viewBox="0 0 ${CHART_W} ${CHART_H}" role="img" preserveAspectRatio="xMidYMid meet">${inner}</svg>`;
 }
 
 function trendGlyph(trend: DashboardKpi["trend"]): string {
@@ -646,7 +676,8 @@ h1, h2, h3 {
 
 .wf-chart {
   width: 100%;
-  height: 160px;
+  height: auto;
+  aspect-ratio: 320 / 150;
   display: block;
 }
 
