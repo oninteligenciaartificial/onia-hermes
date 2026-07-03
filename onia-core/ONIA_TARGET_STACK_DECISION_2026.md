@@ -147,7 +147,7 @@ PC<->VPS mantenidos por watchdog (incluye tuneles de audio speakr/speaches).
 
 | Fase | Que | Estado |
 |---|---|---|
-| 1 | Migrar el Supabase local de ONIA Center al VPS (patron ya probado con dentalgest-staging) + deploy de Center en Easypanel -> eliminar tuneles y watchdog | **PENDIENTE — la unica migracion real** |
+| 1 | ~~Migrar Supabase de Center al VPS~~ **VERIFICADO 2026-07-03: YA ESTA HECHO.** Los datos viven en el VPS (`supabase-db`, schema `onia_center`, 44 tablas; kong publica 54321 local). El container `onia-center` corre en el VPS y `https://center.onia.com.bo` responde 200. Los tuneles de la PC son SOLO para desarrollo local (PC consume servicios del VPS, no al reves). **Ninguna infra de negocio depende de la PC.** El watchdog es una comodidad de dev, no un riesgo | HECHO (verificado) |
 | 2 | Chatwoot: ya selfhosted en VPS ONIA (para uso ONIA/clientes chicos). **REGLA (Sergio 2026-07-03): el Chatwoot de Bolivian Electric va en SU propio VPS (srv1793230), no se mezcla con el de ONIA.** La migracion del inbox BE desde Chatwoot Cloud se hace hacia el VPS del cliente (sesion en repo BE) | regla fijada |
 | 3 | n8n: ya en VPS. Falta consolidar crons dispersos (Hermes cron activo vs n8n) | 70% hecho |
 | 4 | Redis: existe (chatwoot-redis). Matiz: DentaGest/GestiOS corren en Vercel — mantener Upstash FREE tier para ellos hasta que se muden (latencia Vercel->VPS no vale la pena); no pagar Upstash | ajustado |
