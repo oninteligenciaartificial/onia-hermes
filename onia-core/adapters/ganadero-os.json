@@ -107,38 +107,65 @@
       "existingModel": "none",
       "status": "missing",
       "notes": "Herd, expense, alert and health saved reports for management."
+    },
+    {
+      "coreEntityId": "communication_channel",
+      "existingModel": "none",
+      "status": "missing_optional",
+      "notes": "Canales de la hacienda (telefono del capataz, correo administrativo); baja prioridad frente a offline."
     }
   ],
   "capabilityMappings": [
     {
       "capabilityId": "tenant",
       "status": "exists",
-      "evidence": ["Organization", "Profile", "organizationId"]
+      "evidence": [
+        "Organization",
+        "Profile",
+        "organizationId"
+      ]
     },
     {
       "capabilityId": "team_roles",
       "status": "partial",
-      "evidence": ["Profile.role"]
+      "evidence": [
+        "Profile.role"
+      ]
     },
     {
       "capabilityId": "relationships",
       "status": "domain_specific",
-      "evidence": ["Pasture", "Animal"]
+      "evidence": [
+        "Pasture",
+        "Animal"
+      ]
     },
     {
       "capabilityId": "work_items",
       "status": "domain_specific",
-      "evidence": ["Alert", "HealthEvent", "ReproductionEvent", "LivestockMovement"]
+      "evidence": [
+        "Alert",
+        "HealthEvent",
+        "ReproductionEvent",
+        "LivestockMovement"
+      ]
     },
     {
       "capabilityId": "evidence_activity",
       "status": "partial_offline_sensitive",
-      "evidence": ["AuditLog", "SyncOperation", "HealthEvent", "WeightRecord"]
+      "evidence": [
+        "AuditLog",
+        "SyncOperation",
+        "HealthEvent",
+        "WeightRecord"
+      ]
     },
     {
       "capabilityId": "alerts_reports",
       "status": "partial",
-      "evidence": ["Alert"]
+      "evidence": [
+        "Alert"
+      ]
     },
     {
       "capabilityId": "data_ops",
@@ -153,7 +180,9 @@
     {
       "capabilityId": "permissions",
       "status": "partial",
-      "evidence": ["Profile.role"]
+      "evidence": [
+        "Profile.role"
+      ]
     },
     {
       "capabilityId": "collaboration",
@@ -172,6 +201,11 @@
     },
     {
       "capabilityId": "saved_reporting",
+      "status": "missing",
+      "evidence": []
+    },
+    {
+      "capabilityId": "channels",
       "status": "missing",
       "evidence": []
     }

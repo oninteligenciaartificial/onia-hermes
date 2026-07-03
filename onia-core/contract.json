@@ -1,6 +1,6 @@
 {
   "name": "ONIA Core",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "status": "beta",
   "sourceOfTruth": "onia-hermes/onia-core",
   "researchResult": "onia-core/ONIA_CORE_RESEARCH_RESULT_2026.md",
@@ -211,6 +211,15 @@
       "requiredFields": ["id", "organizationId", "name", "targetEntity", "filters", "roleScope", "createdBy", "createdAt"],
       "optionalFields": ["isDefault", "sharedWith"],
       "tenantScoped": true
+    },
+    {
+      "id": "communication_channel",
+      "name": "CommunicationChannel",
+      "scope": "core",
+      "purpose": "Registro de TODOS los canales oficiales de la empresa (correos, WhatsApp, telefonos, formularios, redes) con area/dueno y regla de ruteo. Resuelve el caos de mensajes llegando a correos distintos sin responsable: todo canal registrado alimenta el intake y nada queda sin dueno.",
+      "requiredFields": ["id", "organizationId", "channelType", "address", "routedAreaId", "routingRule", "active", "createdAt"],
+      "optionalFields": ["ownerId", "label", "intakeWorkItemType", "lastSeenMessageAt"],
+      "tenantScoped": true
     }
   ],
   "capabilities": [
@@ -317,6 +326,14 @@
       "phase": 2,
       "entityIds": ["saved_view"],
       "answers": ["management"]
+    },
+    {
+      "id": "channels",
+      "name": "Canales oficiales y ruteo de mensajes",
+      "layer": "core",
+      "phase": 1,
+      "entityIds": ["communication_channel"],
+      "answers": ["relationships", "next_action", "attention"]
     },
     {
       "id": "catalog_inventory",
@@ -453,7 +470,8 @@
         { "id": "pending", "name": "Pendientes y responsables", "entities": ["work_item", "comment"], "answers": ["open_work", "ownership", "status"] },
         { "id": "team", "name": "Equipo y actividad", "entities": ["member", "activity_event", "role_assignment"], "answers": ["people", "roles"] },
         { "id": "attention", "name": "Alertas y aprobaciones", "entities": ["notification", "approval_request"], "answers": ["attention"] },
-        { "id": "partners", "name": "Clientes y partners", "entities": ["business_partner", "contact"], "answers": ["relationships"] }
+        { "id": "partners", "name": "Clientes y partners", "entities": ["business_partner", "contact"], "answers": ["relationships"] },
+        { "id": "channels", "name": "Canales y mensajes sin dueno", "entities": ["communication_channel", "work_item"], "answers": ["attention", "next_action"], "note": "Mensajes entrantes por canal, sin responder, y canales sin actividad o sin registrar. Mata el caos de correos multiples." }
       ],
       "verticalExtensions": {
         "dentagest-clinical": ["citas de hoy y no asistio", "presupuestos pendientes", "tratamientos abiertos", "cobros del dia y cuentas por cobrar", "inventario critico"],
@@ -468,11 +486,14 @@
     "detail": "onia-core/ONIA_CORE_OWNER_PANEL_AND_INTAKE_2026.md",
     "channels": [
       { "id": "whatsapp_chatwoot", "source": "Chatwoot/WhatsApp", "workItemType": "lead_conversacion", "gate": "external_gate whatsapp" },
+      { "id": "email_shared", "source": "Correos oficiales de la empresa (todos registrados como CommunicationChannel)", "workItemType": "mensaje_correo", "gate": "none" },
       { "id": "web_form", "source": "Formularios web-factory / landing", "workItemType": "lead_formulario", "gate": "none" },
       { "id": "phone_walkin", "source": "Llamada o visita registrada manualmente", "workItemType": "solicitud_manual", "gate": "none" },
       { "id": "import", "source": "ImportBatch validado", "workItemType": "segun_lote", "gate": "dry_run_obligatorio" }
     ],
     "normalizationRules": [
+      "todo canal oficial de la empresa DEBE existir como CommunicationChannel; un mensaje que llega por canal no registrado es una alerta de gobernanza",
+      "el ruteo usa routedAreaId/routingRule del CommunicationChannel de origen, no reglas sueltas",
       "todo intake crea WorkItem con type, priority, canal de origen y payload minimo",
       "match o creacion de BusinessPartner/Contact antes de asignar responsable",
       "dedupe por contacto+canal en ventana de 24h antes de crear otro WorkItem",

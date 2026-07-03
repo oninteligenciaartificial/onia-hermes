@@ -171,6 +171,7 @@ for (const schemaFile of contract.schemaFiles) {
     "onia_core_approval_requests",
     "onia_core_schedule_events",
     "onia_core_saved_views",
+    "onia_core_communication_channels",
   ]) {
     assert(schema.includes(table), `${schemaFile} must define ${table}`);
   }

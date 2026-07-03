@@ -7,9 +7,19 @@
   "businessRole": "Dental clinic SaaS with clinical records, appointments, treatments, invoices and dental inventory.",
   "betaDecision": {
     "firstBetaTarget": true,
-    "commercialModel": ["saas_monthly", "paid_implementation"],
+    "commercialModel": [
+      "saas_monthly",
+      "paid_implementation"
+    ],
     "primaryUser": "owner",
-    "painScope": ["tasks", "patients", "quotes", "inventory", "agenda", "management_reports"],
+    "painScope": [
+      "tasks",
+      "patients",
+      "quotes",
+      "inventory",
+      "agenda",
+      "management_reports"
+    ],
     "financeFromStart": true,
     "siatPolicy": "Internal billing, payments, balances and export readiness from day one. Live SIAT fiscal emission stays gated until provider/authorization/testing responsibilities are validated."
   },
@@ -115,38 +125,61 @@
       "existingModel": "none",
       "status": "missing",
       "notes": "Powers the owner dashboard: saved views per role (owner, doctor, reception, cash)."
+    },
+    {
+      "coreEntityId": "communication_channel",
+      "existingModel": "ClinicSettings (whatsapp fields)",
+      "status": "partial",
+      "notes": "ClinicSettings ya guarda el canal WhatsApp; falta registro general de correos/telefonos de la clinica con ruteo a recepcion/caja."
     }
   ],
   "capabilityMappings": [
     {
       "capabilityId": "tenant",
       "status": "exists",
-      "evidence": ["Organization", "Profile", "organizationId"]
+      "evidence": [
+        "Organization",
+        "Profile",
+        "organizationId"
+      ]
     },
     {
       "capabilityId": "team_roles",
       "status": "partial",
-      "evidence": ["Profile.role"]
+      "evidence": [
+        "Profile.role"
+      ]
     },
     {
       "capabilityId": "relationships",
       "status": "domain_specific",
-      "evidence": ["Patient"]
+      "evidence": [
+        "Patient"
+      ]
     },
     {
       "capabilityId": "work_items",
       "status": "domain_specific",
-      "evidence": ["Appointment", "PatientTreatment", "Invoice"]
+      "evidence": [
+        "Appointment",
+        "PatientTreatment",
+        "Invoice"
+      ]
     },
     {
       "capabilityId": "evidence_activity",
       "status": "partial_sensitive",
-      "evidence": ["ClinicalRecord", "AuditLog"]
+      "evidence": [
+        "ClinicalRecord",
+        "AuditLog"
+      ]
     },
     {
       "capabilityId": "alerts_reports",
       "status": "partial",
-      "evidence": ["Notification"]
+      "evidence": [
+        "Notification"
+      ]
     },
     {
       "capabilityId": "data_ops",
@@ -156,7 +189,10 @@
     {
       "capabilityId": "sales_cash",
       "status": "exists_partial",
-      "evidence": ["Invoice", "Payment"]
+      "evidence": [
+        "Invoice",
+        "Payment"
+      ]
     },
     {
       "capabilityId": "partners",
@@ -166,7 +202,9 @@
     {
       "capabilityId": "permissions",
       "status": "partial",
-      "evidence": ["Profile.role"]
+      "evidence": [
+        "Profile.role"
+      ]
     },
     {
       "capabilityId": "collaboration",
@@ -181,12 +219,21 @@
     {
       "capabilityId": "scheduling",
       "status": "exists_partial",
-      "evidence": ["Appointment"]
+      "evidence": [
+        "Appointment"
+      ]
     },
     {
       "capabilityId": "saved_reporting",
       "status": "missing",
       "evidence": []
+    },
+    {
+      "capabilityId": "channels",
+      "status": "partial",
+      "evidence": [
+        "ClinicSettings.whatsappPhoneNumberId"
+      ]
     }
   ],
   "blockedUntil": [

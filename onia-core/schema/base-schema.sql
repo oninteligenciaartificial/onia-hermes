@@ -283,3 +283,24 @@ create table if not exists onia_core_saved_views (
 
 create index if not exists onia_core_saved_views_scope_idx
   on onia_core_saved_views (organization_id, target_entity, role_scope);
+
+create table if not exists onia_core_communication_channels (
+  id text primary key,
+  organization_id text not null,
+  channel_type text not null,
+  address text not null,
+  label text,
+  routed_area_id text not null,
+  routing_rule text not null default 'fixed_owner',
+  owner_id text,
+  intake_work_item_type text,
+  active boolean not null default true,
+  last_seen_message_at timestamptz,
+  metadata jsonb not null default '{}'::jsonb,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  unique (organization_id, channel_type, address)
+);
+
+create index if not exists onia_core_communication_channels_org_idx
+  on onia_core_communication_channels (organization_id, active, channel_type);
