@@ -4,6 +4,14 @@ Estado: interno Sergio/ONIA.
 Fecha: 2026-06-25.
 Visibilidad: privado Sergio/ONIA. No enviar completo a Arthur.
 
+> Actualizacion 2026-07-03: decidido que Arthur entra SIN capital ONIA (ver
+> `ONIA_ARRANQUE_ARTHUR_60_DIAS_20260703.md`). Por lo tanto
+> `arthur_operating_capital_balance = 0`, no se abre linea de aporte recuperable
+> para Arthur, y el 100% del excedente recuperable del Fondo ONIA va a recuperar
+> el capital de Sergio (deuda 2.414,49 primero, luego arranque 15.000,00). El
+> split 70/30 y la seccion "Si Arthur paga apps o gastos mensuales de ONIA"
+> quedan inactivos hasta que exista acuerdo escrito nuevo.
+
 ## Veredicto
 
 Arthur puede aportar dinero a ONIA para pagar apps, IA, VPS o gastos
