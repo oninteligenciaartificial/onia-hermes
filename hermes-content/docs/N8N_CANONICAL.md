@@ -104,15 +104,36 @@ Accion tomada en `VeCHKr6wkK5Wet25`:
 - El workflow queda **`unpublish`** (respeta la direccion quiet del cleanup),
   pero ya es seguro republicar con `publish_workflow` porque no falla.
 
-Pendiente (no completable desde aqui sin deploy al VPS):
+Path INTERACTIVO `ONIA - Telegram Command Center` (`vuicWsvh0hwqKhYs`):
 
-- El path INTERACTIVO `ONIA - Telegram Command Center` (`vuicWsvh0hwqKhYs`)
-  sigue usando SSH `Run Video Lab Router on VPS` para el router completo
-  (video_lab, estado/plan semanal). No se migro porque esos comandos necesitan
-  estado del VPS; portarlos requiere desplegar el router como endpoint HTTP en
-  ONIA Center (`/api/onia-center/command` u similar) y reconectar el nodo. Su
-  rama `/agendar` no usa SSH (Google Calendar directo), asi que agendar sigue
-  funcionando aunque el resto del router falle mientras SSH este rota.
+- Se **creo el endpoint** `web-factory/apps/site/src/app/api/onia-center/command/route.ts`
+  que porta los comandos DETERMINISTAS del router (agenda Sergio, modos,
+  disponibilidad, radar, cola, CRM, copy, quiet Higgsfield, registro,
+  automatizaciones, mapa proyectos, ayuda), reutilizando el calendario canonico
+  de ONIA Center. Los comandos que dependen de estado del VPS (Video Lab,
+  estado/plan semanal, generacion de video) devuelven una respuesta honesta que
+  dirige al comando manual, en vez de fallar. Auth por `ONIA_CENTER_INTERNAL_API_KEY`
+  (mismo patron que el briefing diario). Router probado local: 25/25 comandos.
+- Falta (necesita deploy al VPS + edicion del workflow, no completable desde el
+  repo):
+
+  1. **Deploy ONIA Center** con el nuevo endpoint (mismo proceso que el fix del
+     2026-06-30: rebuild desde `/opt/onia-center-src/web-factory` con
+     `ONIA_STANDALONE_BUILD=true` y promover a `/opt/onia-center/runtime-next`).
+  2. **Verificar** desde el contenedor n8n:
+     `POST http://onia-center:3012/api/onia-center/command`
+     con header `Authorization: Bearer <ONIA_CENTER_INTERNAL_API_KEY>` y body
+     `{"message":"Plan Sergio hoy"}` -> debe devolver `{ ok, telegram_reply }`.
+  3. **Rewire del workflow** `vuicWsvh0hwqKhYs`: reemplazar el nodo SSH
+     `Run Video Lab Router on VPS` por un nodo HTTP Request (POST al endpoint,
+     header con la API key desde credencial n8n, body
+     `{"message": "={{ $json.message }}"}`) y ajustar `Format Telegram Reply` CC
+     para leer `$json.telegram_reply` de la respuesta HTTP. La rama `/agendar` no
+     se toca (usa Google Calendar directo, nunca dependio de SSH).
+  4. Opcional: mismo rewire para republicar el Scheduled Pack apuntando sus
+     comandos al endpoint en vez del Code node embebido, si se quiere una sola
+     fuente de verdad.
+
 - `Mara Daily Content` (`zediOCdtlP1zpImK`) queda `unpublish`; es contenido de
   video que el sistema definio como quiet/manual, no se migro.
 
