@@ -70,6 +70,9 @@ const productSchema = z.object({
   detalleImagenes: z.array(productDetailImageSchema).default([]),
   detalleNota: z.string().default(""),
   ordenRutina: z.number().int().positive().optional(),
+  destacadoMes: z.boolean().optional(),
+  descuentoPorcentaje: z.number().min(0).max(100).optional(),
+  precioPromocional: z.number().positive().nullable().optional(),
 });
 
 const dashboardKpiSchema = z.object({

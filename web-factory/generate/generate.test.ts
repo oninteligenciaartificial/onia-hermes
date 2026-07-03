@@ -73,6 +73,9 @@ describe("generateSite", () => {
             incluye: ["Caja", "Cable de carga"],
             especificaciones: [{ label: "Bateria", value: "24 horas" }],
             detalleImagenes: [{ src: "assets/audifonos-demo.webp", label: "Packshot" }],
+            destacadoMes: true,
+            descuentoPorcentaje: 15,
+            precioPromocional: 85,
           },
         ],
         heroVideo: "assets/store-hero.mp4",
@@ -91,7 +94,8 @@ describe("generateSite", () => {
 
     expect(html).toContain("ELIGE, CONSULTA Y COMPRA CON ASISTENCIA");
     expect(html).toContain("productos destacados del mes");
-    expect(html).toContain("10% de descuento");
+    expect(html).toContain("15% de descuento");
+    expect(html).toContain("store-product-discount");
     expect(html).toContain("store-cart-data");
     expect(html).toContain("data-store-hero-video");
     expect(html).toContain('preload="none"');
@@ -116,6 +120,8 @@ describe("generateSite", () => {
     expect(productHtml).toContain("tu carrito");
     expect(productHtml).toContain("Caracteristicas");
     expect(productHtml).toContain("Indicaciones");
+    expect(productHtml).toContain("precio - 15% off");
+    expect(productHtml).toContain("Bs. 85");
     expect(productHtml).toContain("Cable de carga");
     expect(productHtml).toContain("Bateria");
     expect(productHtml).toContain('href="../../site.css');
