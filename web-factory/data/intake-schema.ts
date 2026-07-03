@@ -67,10 +67,53 @@ const intakeProductSchema = z.object({
     .default([]),
 });
 
+const intakeDashboardKpiSchema = z.object({
+  label: z.string().min(1),
+  value: z.string().min(1),
+  delta: z.string().default(""),
+  trend: z.enum(["up", "down", "flat"]).default("flat"),
+  context: z.string().default(""),
+});
+
+const intakeDashboardChartSchema = z.object({
+  title: z.string().min(1),
+  unit: z.string().default(""),
+  type: z.enum(["bar", "line"]).default("bar"),
+  points: z
+    .array(z.object({ label: z.string().min(1), value: z.number() }))
+    .default([]),
+});
+
+const intakeDashboardSchema = z
+  .object({
+    title: z.string().default("Panel de control"),
+    subtitle: z.string().default(""),
+    nav: z.array(z.string().min(1)).default([]),
+    filters: z.array(z.string().min(1)).default([]),
+    kpis: z.array(intakeDashboardKpiSchema).default([]),
+    charts: z.array(intakeDashboardChartSchema).default([]),
+    table: z
+      .object({
+        title: z.string().default("Detalle"),
+        columns: z.array(z.string().min(1)).default([]),
+        rows: z.array(z.array(z.string())).default([]),
+      })
+      .default({ title: "Detalle", columns: [], rows: [] }),
+  })
+  .default({
+    title: "Panel de control",
+    subtitle: "",
+    nav: [],
+    filters: [],
+    kpis: [],
+    charts: [],
+    table: { title: "Detalle", columns: [], rows: [] },
+  });
+
 export const webFactoryIntakeSchema = z.object({
   project: z.object({
     slug: slugSchema,
-    template: z.enum(["landing", "store"]).default("landing"),
+    template: z.enum(["landing", "store", "dashboard"]).default("landing"),
     package: z.string().default("web"),
     owner: z.string().default("ONIA"),
   }),
@@ -226,6 +269,7 @@ export const webFactoryIntakeSchema = z.object({
       taxId: "",
       missing: [],
     }),
+  dashboard: intakeDashboardSchema,
 });
 
 export type WebFactoryIntake = z.infer<typeof webFactoryIntakeSchema>;
@@ -305,6 +349,7 @@ export function buildClientProfileFromIntake(input: unknown): ClientProfile {
       description: intake.seo.description || intake.business.description || intake.business.offer,
       ogImage: intake.seo.ogImage,
     },
+    dashboard: intake.dashboard,
   };
 
   return clientSchema.parse(profile);
@@ -340,6 +385,14 @@ export function getMissingClientInputs(input: unknown): string[] {
 
   if (intake.project.template === "store" && !intake.operations.paymentMethods.length) {
     missing.add("metodos de pago y politicas comerciales");
+  }
+
+  if (
+    intake.project.template === "dashboard" &&
+    !intake.dashboard.kpis.length &&
+    !intake.dashboard.charts.length
+  ) {
+    missing.add("metricas/KPIs o series de datos aprobadas para el panel");
   }
 
   if (!intake.operations.domain) {

@@ -58,6 +58,39 @@ describe("webFactoryIntakeSchema", () => {
     expect(missing).toContain("metodos de pago y politicas comerciales");
   });
 
+  it("maps dashboard data through the intake to the client profile", () => {
+    const client = buildClientProfileFromIntake({
+      project: { slug: "ops-panel", template: "dashboard" },
+      business: {
+        name: "Ops Panel",
+        industry: "dashboard analytics interno",
+        offer: "panel operativo con KPIs y reportes",
+      },
+      dashboard: {
+        title: "Panel operativo",
+        filters: ["7 dias", "30 dias"],
+        kpis: [{ label: "Ingresos", value: "Bs. 48.2k", delta: "12%", trend: "up", context: "vs anterior" }],
+        charts: [{ title: "Ingresos", type: "bar", points: [{ label: "Ene", value: 32 }] }],
+        table: { title: "Pedidos", columns: ["Pedido", "Monto"], rows: [["#1042", "Bs. 1.240"]] },
+      },
+    });
+
+    expect(client.dashboard.title).toBe("Panel operativo");
+    expect(client.dashboard.kpis).toHaveLength(1);
+    expect(client.dashboard.kpis[0].trend).toBe("up");
+    expect(client.dashboard.charts[0].points[0].value).toBe(32);
+    expect(client.dashboard.table.rows[0]).toEqual(["#1042", "Bs. 1.240"]);
+  });
+
+  it("flags missing dashboard metrics when a panel has no KPIs or charts", () => {
+    const missing = getMissingClientInputs({
+      project: { slug: "empty-panel", template: "dashboard" },
+      business: { name: "Empty Panel", industry: "analytics", offer: "panel interno" },
+    });
+
+    expect(missing).toContain("metricas/KPIs o series de datos aprobadas para el panel");
+  });
+
   it("keeps a context file with references and pending fields", () => {
     const context = buildClientContextMarkdown({
       project: { slug: "saas-demo", template: "landing", owner: "ONIA" },
