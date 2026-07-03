@@ -1,24 +1,27 @@
 {
-  "id": "2026-07-03T20-48-52-800Z",
-  "startedAt": "2026-07-03T20:48:52.801Z",
-  "finishedAt": "2026-07-03T20:49:19.849Z",
+  "id": "2026-07-03T21-11-35-052Z",
+  "startedAt": "2026-07-03T21:11:35.054Z",
+  "finishedAt": "2026-07-03T21:13:35.721Z",
   "policy": "Automated design reference harvest. Screenshots and closed-site structures are reference-only. Code reuse is limited to allowed-after-review repositories and compatible registry/docs code after review.",
   "steps": [
     {
       "name": "gallery",
-      "out": "data/references/design-sources/gallery-examples/2026-07-03T20-48-52-800Z-design-harvest.json",
+      "out": "data/references/design-sources/gallery-examples/2026-07-03T21-11-35-052Z-design-harvest.json",
       "sourceIds": [
-        "tremor-dashboard-components",
-        "shadcn-charts"
+        "21st-landing-page-components",
+        "watermelon-ui",
+        "lapa-ninja",
+        "shadcn-ui",
+        "tabler-admin-dashboard"
       ],
-      "maxItems": 3,
-      "detailItems": 1
+      "maxItems": 6,
+      "detailItems": 2
     },
     {
       "name": "code",
-      "codeIndexOut": "data/references/code-sources/2026-07-03T20-48-52-800Z-code-cache-index.json",
-      "codeExamplesOut": "data/references/code-sources/2026-07-03T20-48-52-800Z-component-code-reference-pack.json",
-      "maxFilesPerRepo": 8
+      "codeIndexOut": "data/references/code-sources/2026-07-03T21-11-35-052Z-code-cache-index.json",
+      "codeExamplesOut": "data/references/code-sources/2026-07-03T21-11-35-052Z-component-code-reference-pack.json",
+      "maxFilesPerRepo": 12
     },
     {
       "name": "merge",
@@ -33,11 +36,11 @@
   "latestGallery": "data/references/design-sources/gallery-examples/latest-gallery-examples.json",
   "latestDesignIntelligence": "data/references/design-sources/latest-design-intelligence.json",
   "counts": {
-    "sources": 25,
-    "candidates": 384,
-    "detailedExamples": 91,
+    "sources": 26,
+    "candidates": 335,
+    "detailedExamples": 78,
     "errors": 0,
-    "intelligenceExamples": 91,
+    "intelligenceExamples": 78,
     "reusableCodeRepositories": 11
   }
 }

@@ -1,14 +1,14 @@
 {
-  "generatedAt": "2026-07-03T20:49:19.815Z",
+  "generatedAt": "2026-07-03T21:13:35.687Z",
   "policy": "Use this as design intelligence, not as a copy source. Screenshots and closed-site structures are inspiration only. Reuse code only from allowed-after-review repositories after retokenization and QA.",
   "inputs": {
     "gallery": "data/references/design-sources/gallery-examples/latest-gallery-examples.json",
-    "code": "data/references/code-sources/2026-07-03T20-48-52-800Z-component-code-reference-pack.json"
+    "code": "data/references/code-sources/2026-07-03T21-11-35-052Z-component-code-reference-pack.json"
   },
   "summary": {
-    "sources": 25,
-    "examples": 91,
-    "screenshots": 182,
+    "sources": 26,
+    "examples": 78,
+    "screenshots": 156,
     "codeBlocksFromDocs": 32,
     "reusableCodeRepositories": 11
   },
@@ -141,13 +141,63 @@
       "mode": "landing-component-gallery",
       "licenseStatus": "review-required-per-component",
       "usage": "High-density landing-page component discovery: heroes, features, CTAs, pricing, testimonials and animated sections. Verify each component license before code reuse.",
-      "candidates": 0,
-      "examples": 0,
+      "candidates": 6,
+      "examples": 2,
       "codeBlocks": 0,
-      "screenshots": 0,
-      "topFonts": [],
+      "screenshots": 4,
+      "topFonts": [
+        {
+          "value": "\"General Sans\", system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif, \"General Sans\", Arial, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", sans-serif",
+          "count": 2
+        },
+        {
+          "value": "\"General Sans\", system-ui, -apple-system, sans-serif",
+          "count": 2
+        }
+      ],
       "animationLibraries": [],
-      "topCtas": []
+      "topCtas": [
+        {
+          "value": "announcements10",
+          "count": 2
+        },
+        {
+          "value": "backgrounds33",
+          "count": 2
+        },
+        {
+          "value": "borders12",
+          "count": 2
+        },
+        {
+          "value": "calls to action34",
+          "count": 2
+        },
+        {
+          "value": "clients16",
+          "count": 2
+        },
+        {
+          "value": "close sidebar",
+          "count": 2
+        },
+        {
+          "value": "comparisons6",
+          "count": 2
+        },
+        {
+          "value": "components",
+          "count": 2
+        },
+        {
+          "value": "docks6",
+          "count": 2
+        },
+        {
+          "value": "featured",
+          "count": 2
+        }
+      ]
     },
     {
       "id": "aceternity-shadcn-blocks",
@@ -713,54 +763,13 @@
       "mode": "landing-gallery",
       "licenseStatus": "inspiration-only",
       "usage": "Landing-page structure, section ordering, visual hierarchy and copy patterns. Do not copy site code or proprietary assets.",
-      "candidates": 40,
-      "examples": 10,
+      "candidates": 0,
+      "examples": 0,
       "codeBlocks": 0,
-      "screenshots": 20,
+      "screenshots": 0,
       "topFonts": [],
       "animationLibraries": [],
-      "topCtas": [
-        {
-          "value": "agency ⭐961",
-          "count": 10
-        },
-        {
-          "value": "browse all ⭐7388",
-          "count": 10
-        },
-        {
-          "value": "business ⭐2450",
-          "count": 10
-        },
-        {
-          "value": "lapa ninja - go to homepage",
-          "count": 10
-        },
-        {
-          "value": "minimal3049",
-          "count": 10
-        },
-        {
-          "value": "open main menu",
-          "count": 10
-        },
-        {
-          "value": "portfolio ⭐1063",
-          "count": 10
-        },
-        {
-          "value": "saas ⭐687",
-          "count": 10
-        },
-        {
-          "value": "studio ⭐849",
-          "count": 10
-        },
-        {
-          "value": "toggle dark mode",
-          "count": 10
-        }
-      ]
+      "topCtas": []
     },
     {
       "id": "magic-ui",
@@ -1187,51 +1196,60 @@
       "licenseStatus": "mit-repo-available",
       "usage": "Base component architecture and accessible UI primitives. Prefer the locally cached MIT repository for code.",
       "candidates": 3,
-      "examples": 3,
+      "examples": 2,
       "codeBlocks": 0,
-      "screenshots": 6,
-      "topFonts": [],
+      "screenshots": 4,
+      "topFonts": [
+        {
+          "value": "\"Geist Mono\", \"Geist Mono Fallback\"",
+          "count": 2
+        },
+        {
+          "value": "Geist, \"Geist Fallback\"",
+          "count": 2
+        }
+      ],
       "animationLibraries": [],
       "topCtas": [
         {
-          "value": "117k",
-          "count": 3
+          "value": "118k",
+          "count": 2
         },
         {
           "value": "blocks",
-          "count": 3
+          "count": 2
         },
         {
           "value": "charts",
-          "count": 3
+          "count": 2
         },
         {
           "value": "components",
-          "count": 3
+          "count": 2
         },
         {
           "value": "create",
-          "count": 3
+          "count": 2
         },
         {
           "value": "directory",
-          "count": 3
+          "count": 2
         },
         {
           "value": "docs",
-          "count": 3
+          "count": 2
         },
         {
           "value": "home",
-          "count": 3
+          "count": 2
         },
         {
           "value": "open in",
-          "count": 3
+          "count": 2
         },
         {
           "value": "search documentation...search...",
-          "count": 3
+          "count": 2
         }
       ]
     },
@@ -1297,6 +1315,71 @@
         {
           "value": "templates",
           "count": 3
+        }
+      ]
+    },
+    {
+      "id": "tabler-admin-dashboard",
+      "name": "Tabler",
+      "url": "https://preview.tabler.io/",
+      "mode": "admin-dashboard-template",
+      "licenseStatus": "mit-open-source",
+      "usage": "MIT admin dashboard UI kit: layouts, data tables, charts, forms and empty/loading states. Prefer the local MIT repo for code reuse.",
+      "candidates": 3,
+      "examples": 2,
+      "codeBlocks": 0,
+      "screenshots": 4,
+      "topFonts": [
+        {
+          "value": "\"Inter Var\", Inter, -apple-system, BlinkMacSystemFont, \"San Francisco\", \"Segoe UI\", Roboto, \"Helvetica Neue\", sans-serif",
+          "count": 1
+        },
+        {
+          "value": "Inter, \"Inter Fallback\", system-ui, -apple-system, \"Segoe UI\", Roboto, Ubuntu, Cantarell, \"Noto Sans\", sans-serif",
+          "count": 1
+        }
+      ],
+      "animationLibraries": [],
+      "topCtas": [
+        {
+          "value": "icons",
+          "count": 2
+        },
+        {
+          "value": "admin template",
+          "count": 1
+        },
+        {
+          "value": "amazon",
+          "count": 1
+        },
+        {
+          "value": "android",
+          "count": 1
+        },
+        {
+          "value": "apple app store",
+          "count": 1
+        },
+        {
+          "value": "apple podcast",
+          "count": 1
+        },
+        {
+          "value": "archive all",
+          "count": 1
+        },
+        {
+          "value": "avatars",
+          "count": 1
+        },
+        {
+          "value": "blog",
+          "count": 1
+        },
+        {
+          "value": "changelog",
+          "count": 1
         }
       ]
     },
@@ -1368,54 +1451,67 @@
       "mode": "block-gallery",
       "licenseStatus": "review-required",
       "usage": "Component taxonomy and interaction reference. Verify license before copying code.",
-      "candidates": 24,
-      "examples": 8,
+      "candidates": 6,
+      "examples": 2,
       "codeBlocks": 0,
-      "screenshots": 16,
-      "topFonts": [],
+      "screenshots": 4,
+      "topFonts": [
+        {
+          "value": "\"Inter Variable\", sans-serif",
+          "count": 2
+        },
+        {
+          "value": "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", \"Courier New\", monospace",
+          "count": 2
+        }
+      ],
       "animationLibraries": [],
       "topCtas": [
         {
           "value": "animated",
-          "count": 16
+          "count": 4
         },
         {
           "value": "blocks",
-          "count": 16
+          "count": 4
         },
         {
           "value": "component",
-          "count": 16
+          "count": 4
         },
         {
           "value": "changelog",
-          "count": 8
+          "count": 2
         },
         {
           "value": "framework support",
-          "count": 8
+          "count": 2
         },
         {
           "value": "installation",
-          "count": 8
+          "count": 2
         },
         {
           "value": "searchk",
-          "count": 8
+          "count": 2
         },
         {
           "value": "toggle sidebar",
-          "count": 8
+          "count": 2
         },
         {
           "value": "watermelon uibeta",
-          "count": 8
+          "count": 2
         }
       ]
     }
   ],
   "globalSignals": {
     "fonts": [
+      {
+        "value": "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", \"Courier New\", monospace",
+        "count": 8
+      },
       {
         "value": "ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
         "count": 7
@@ -1425,8 +1521,12 @@
         "count": 6
       },
       {
-        "value": "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", \"Courier New\", monospace",
-        "count": 6
+        "value": "Geist, \"Geist Fallback\"",
+        "count": 5
+      },
+      {
+        "value": "\"Geist Mono\", \"Geist Mono Fallback\"",
+        "count": 4
       },
       {
         "value": "\"Geist Mono\", monospace",
@@ -1438,10 +1538,6 @@
       },
       {
         "value": "\"Plus Jakarta Sans\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", Roboto, Ubuntu, Cantarell, \"Noto Sans\", sans-serif, BlinkMacSystemFont, \"Segoe UI\", \"Helvetica Neue\", Arial, \"Noto Sans\", \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
-        "count": 3
-      },
-      {
-        "value": "Geist, \"Geist Fallback\"",
         "count": 3
       },
       {
@@ -1469,11 +1565,19 @@
         "count": 2
       },
       {
-        "value": "\"Geist Mono\", \"Geist Mono Fallback\"",
+        "value": "\"General Sans\", system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif, \"General Sans\", Arial, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", sans-serif",
+        "count": 2
+      },
+      {
+        "value": "\"General Sans\", system-ui, -apple-system, sans-serif",
         "count": 2
       },
       {
         "value": "\"Inter Tight\"",
+        "count": 2
+      },
+      {
+        "value": "\"Inter Variable\", sans-serif",
         "count": 2
       },
       {
@@ -1497,30 +1601,18 @@
         "count": 1
       },
       {
-        "value": "\"Mona Sans VF\", -apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Noto Sans\", Helvetica, Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\"",
-        "count": 1
-      },
-      {
-        "value": "Arial",
-        "count": 1
-      },
-      {
-        "value": "system-ui, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\"",
+        "value": "\"Inter Var\", Inter, -apple-system, BlinkMacSystemFont, \"San Francisco\", \"Segoe UI\", Roboto, \"Helvetica Neue\", sans-serif",
         "count": 1
       }
     ],
     "ctas": [
       {
-        "value": "blocks",
-        "count": 38
-      },
-      {
         "value": "components",
-        "count": 35
+        "count": 36
       },
       {
-        "value": "changelog",
-        "count": 24
+        "value": "blocks",
+        "count": 25
       },
       {
         "value": "copy code",
@@ -1543,24 +1635,16 @@
         "count": 20
       },
       {
-        "value": "toggle theme",
+        "value": "changelog",
         "count": 19
-      },
-      {
-        "value": "searchk",
-        "count": 18
       },
       {
         "value": "templates",
         "count": 18
       },
       {
-        "value": "animated",
-        "count": 16
-      },
-      {
-        "value": "component",
-        "count": 16
+        "value": "toggle theme",
+        "count": 18
       },
       {
         "value": "edwinvakayil",
@@ -1571,40 +1655,52 @@
         "count": 14
       },
       {
-        "value": "websites",
-        "count": 13
-      },
-      {
         "value": "log in",
         "count": 12
       },
       {
-        "value": "open main menu",
-        "count": 11
+        "value": "searchk",
+        "count": 12
       },
       {
         "value": "toggle menu",
         "count": 11
       },
       {
-        "value": "agency ⭐961",
+        "value": "open sidebar",
         "count": 10
       },
       {
-        "value": "browse all ⭐7388",
+        "value": "view code",
         "count": 10
       },
       {
-        "value": "business ⭐2450",
-        "count": 10
+        "value": "#",
+        "count": 8
       },
       {
-        "value": "installation",
-        "count": 10
+        "value": "back to blocks",
+        "count": 8
       },
       {
-        "value": "lapa ninja - go to homepage",
-        "count": 10
+        "value": "bun",
+        "count": 8
+      },
+      {
+        "value": "code",
+        "count": 8
+      },
+      {
+        "value": "copy as markdown",
+        "count": 8
+      },
+      {
+        "value": "efferd",
+        "count": 8
+      },
+      {
+        "value": "fonts",
+        "count": 8
       }
     ],
     "animationLibraries": [
@@ -1616,11 +1712,11 @@
     "technologies": [
       {
         "value": "hasNextAssets",
-        "count": 18
+        "count": 23
       },
       {
         "value": "hasViteAssets",
-        "count": 6
+        "count": 8
       },
       {
         "value": "hasNuxtAssets",
@@ -1661,19 +1757,15 @@
         "count": 4
       },
       {
-        "value": "Blog",
-        "count": 3
-      },
-      {
-        "value": "Building Blocks for the Web",
-        "count": 3
-      },
-      {
         "value": "Built by dillion. The source code is available on GitHub.",
         "count": 3
       },
       {
-        "value": "Built by shadcn at Vercel. The source code is available on GitHub.",
+        "value": "Do you need Figma plugin? No problem!",
+        "count": 3
+      },
+      {
+        "value": "Enjoy Free Icons with Optional Support Plans",
         "count": 3
       },
       {
@@ -1686,6 +1778,18 @@
       },
       {
         "value": "Awards",
+        "count": 2
+      },
+      {
+        "value": "Blog",
+        "count": 2
+      },
+      {
+        "value": "Building Blocks for the Web",
+        "count": 2
+      },
+      {
+        "value": "Built by shadcn at Vercel. The source code is available on GitHub.",
         "count": 2
       },
       {
@@ -1723,14 +1827,6 @@
       {
         "value": "Site of the Day - Jun 24, 2026",
         "count": 2
-      },
-      {
-        "value": "Slite Landing Page Structure",
-        "count": 2
-      },
-      {
-        "value": "Testimonial section",
-        "count": 2
       }
     ]
   },
@@ -1742,6 +1838,166 @@
     "Write final selected references into data/intakes/<slug>.json before generating the client profile."
   ],
   "topExamples": [
+    {
+      "sourceId": "21st-landing-page-components",
+      "sourceName": "21st.dev Landing Page Components",
+      "licenseStatus": "review-required-per-component",
+      "url": "https://21st.dev/community/components/featured",
+      "title": "Featured community UI components | 21st",
+      "description": "Curated, high-quality React components featured by the 21st.dev team and community.",
+      "reuseGuidance": "High-density landing-page component discovery: heroes, features, CTAs, pricing, testimonials and animated sections. Verify each component license before code reuse.",
+      "screenshots": {
+        "desktop": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/21st-landing-page-components/000-featured-f19e5f78/desktop.png",
+          "sha256": "0015efc775c45495ff3491d914492687f39f69fdaa2587d5c09572fb673b64c0",
+          "mode": "viewport"
+        },
+        "mobile": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/21st-landing-page-components/000-featured-f19e5f78/mobile.png",
+          "sha256": "0b9a318e103513589d2f2de991e1a0748ea0dcfb6677106c760a6dab12f63c7a",
+          "mode": "viewport"
+        }
+      },
+      "headings": [
+        {
+          "level": "h3",
+          "text": "Marketing Blocks"
+        },
+        {
+          "level": "h3",
+          "text": "UI Components"
+        }
+      ],
+      "ctas": [
+        "Close sidebar",
+        "Components",
+        "Featured",
+        "Newest",
+        "Top Authors",
+        "Announcements10",
+        "Backgrounds33",
+        "Borders12",
+        "Calls to Action34",
+        "Clients16",
+        "Comparisons6",
+        "Docks6"
+      ],
+      "topFonts": [
+        "\"General Sans\", system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif, \"General Sans\", Arial, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", sans-serif",
+        "\"General Sans\", system-ui, -apple-system, sans-serif"
+      ],
+      "animationSignals": {
+        "libraries": {
+          "framerMotion": false,
+          "gsap": false,
+          "three": false,
+          "lottie": false,
+          "locomotiveScroll": false
+        },
+        "animatedElementCount": 127,
+        "keyframes": [
+          "pulse-custom",
+          "ping-slow",
+          "scale-pulse",
+          "accordion-down",
+          "accordion-up",
+          "spin-around",
+          "shimmer-slide",
+          "success-ring",
+          "copy-success",
+          "border-rotate",
+          "star-movement-bottom",
+          "star-movement-top"
+        ]
+      },
+      "codeLinks": [],
+      "codeBlockCount": 0,
+      "qualityWarnings": []
+    },
+    {
+      "sourceId": "21st-landing-page-components",
+      "sourceName": "21st.dev Landing Page Components",
+      "licenseStatus": "review-required-per-component",
+      "url": "https://21st.dev/community/components/week/2026-W27",
+      "title": "Best Components of Week 27, 2026 | 21st",
+      "description": "Top React components from Jun 29 - Jul 5, 2026, ranked by views and bookmarks. Discover the most popular UI components created during Week 27, 2026.",
+      "reuseGuidance": "High-density landing-page component discovery: heroes, features, CTAs, pricing, testimonials and animated sections. Verify each component license before code reuse.",
+      "screenshots": {
+        "desktop": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/21st-landing-page-components/001-newest-0089eab8/desktop.png",
+          "sha256": "7c98595f891348a8fe98fd524fad7e0c85a8763e0dc62442be62bc3cf0dec1b7",
+          "mode": "viewport"
+        },
+        "mobile": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/21st-landing-page-components/001-newest-0089eab8/mobile.png",
+          "sha256": "666145b1e536c0019584ddaf7bb4d44d555151fd55ea842d79a41113634926b0",
+          "mode": "viewport"
+        }
+      },
+      "headings": [
+        {
+          "level": "h3",
+          "text": "Marketing Blocks"
+        },
+        {
+          "level": "h3",
+          "text": "UI Components"
+        },
+        {
+          "level": "h2",
+          "text": "Week 26, 2026"
+        },
+        {
+          "level": "h2",
+          "text": "Week 25, 2026"
+        }
+      ],
+      "ctas": [
+        "Close sidebar",
+        "Components",
+        "Featured",
+        "Newest",
+        "Top Authors",
+        "Announcements10",
+        "Backgrounds33",
+        "Borders12",
+        "Calls to Action34",
+        "Clients16",
+        "Comparisons6",
+        "Docks6"
+      ],
+      "topFonts": [
+        "\"General Sans\", system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif, \"General Sans\", Arial, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", sans-serif",
+        "\"General Sans\", system-ui, -apple-system, sans-serif"
+      ],
+      "animationSignals": {
+        "libraries": {
+          "framerMotion": false,
+          "gsap": false,
+          "three": false,
+          "lottie": false,
+          "locomotiveScroll": false
+        },
+        "animatedElementCount": 125,
+        "keyframes": [
+          "pulse-custom",
+          "ping-slow",
+          "scale-pulse",
+          "accordion-down",
+          "accordion-up",
+          "spin-around",
+          "shimmer-slide",
+          "success-ring",
+          "copy-success",
+          "border-rotate",
+          "star-movement-bottom",
+          "star-movement-top"
+        ]
+      },
+      "codeLinks": [],
+      "codeBlockCount": 0,
+      "qualityWarnings": []
+    },
     {
       "sourceId": "magic-ui",
       "sourceName": "Magic UI",
@@ -2396,6 +2652,87 @@
       "qualityWarnings": []
     },
     {
+      "sourceId": "watermelon-ui",
+      "sourceName": "Watermelon UI",
+      "licenseStatus": "review-required",
+      "url": "https://ui.watermelon.sh/blocks/Announcement",
+      "title": "Announcement - UI Blocks | Watermelon UI",
+      "description": "A collection of high-quality React components, dashboards, and UI blocks. Copy and paste production-ready UI with ease.",
+      "reuseGuidance": "Component taxonomy and interaction reference. Verify license before copying code.",
+      "screenshots": {
+        "desktop": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/watermelon-ui/034-announcement-9-blocks-3a4686a4/desktop.png",
+          "sha256": "2e27a561c5431a873ba0b1dfd2fd5a635839e8a3da7ad5dfa535cb9b53b2c4ac",
+          "mode": "viewport"
+        },
+        "mobile": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/watermelon-ui/034-announcement-9-blocks-3a4686a4/mobile.png",
+          "sha256": "c72ec4215bc6b680a2127adbccd60d2b4263fb09083a6cf2f33c524cb8273e99",
+          "mode": "viewport"
+        }
+      },
+      "headings": [
+        {
+          "level": "h1",
+          "text": "Watermelon UI - High-Quality React Components Registry"
+        },
+        {
+          "level": "h1",
+          "text": "Announcement"
+        }
+      ],
+      "ctas": [
+        "Watermelon UIbeta",
+        "Toggle Sidebar",
+        "searchK",
+        "Installation",
+        "Framework Support",
+        "Changelog",
+        "Animated",
+        "Animated",
+        "Component",
+        "Component",
+        "Blocks",
+        "Blocks"
+      ],
+      "topFonts": [
+        "\"Inter Variable\", sans-serif",
+        "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", \"Courier New\", monospace"
+      ],
+      "animationSignals": {
+        "libraries": {
+          "framerMotion": false,
+          "gsap": false,
+          "three": false,
+          "lottie": false,
+          "locomotiveScroll": false
+        },
+        "animatedElementCount": 95,
+        "keyframes": [
+          "spin",
+          "ping",
+          "pulse",
+          "bounce",
+          "enter",
+          "exit",
+          "accordion-down",
+          "accordion-up",
+          "collapsible-down",
+          "collapsible-up",
+          "caret-blink",
+          "fadeIn"
+        ]
+      },
+      "codeLinks": [
+        {
+          "url": "https://github.com/watermeloncorp",
+          "text": ""
+        }
+      ],
+      "codeBlockCount": 0,
+      "qualityWarnings": []
+    },
+    {
       "sourceId": "kibo-ui",
       "sourceName": "Kibo UI",
       "licenseStatus": "open-source-review-required",
@@ -2501,6 +2838,103 @@
       "qualityWarnings": []
     },
     {
+      "sourceId": "watermelon-ui",
+      "sourceName": "Watermelon UI",
+      "licenseStatus": "review-required",
+      "url": "https://ui.watermelon.sh/blocks/auth",
+      "title": "Auth - UI Blocks | Watermelon UI",
+      "description": "A collection of high-quality React components, dashboards, and UI blocks. Copy and paste production-ready UI with ease.",
+      "reuseGuidance": "Component taxonomy and interaction reference. Verify license before copying code.",
+      "screenshots": {
+        "desktop": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/watermelon-ui/035-auth-13-blocks-71e02600/desktop.png",
+          "sha256": "bd0579323d5beb95e1257abe50cbf5261d3be24c24be4576cbdaaa95dfbaabee",
+          "mode": "viewport"
+        },
+        "mobile": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/watermelon-ui/035-auth-13-blocks-71e02600/mobile.png",
+          "sha256": "cc804525081192500f9b5b7e03d1384f086d39fd317728fe2a5d9f24c86caf23",
+          "mode": "viewport"
+        }
+      },
+      "headings": [
+        {
+          "level": "h1",
+          "text": "Watermelon UI - High-Quality React Components Registry"
+        },
+        {
+          "level": "h1",
+          "text": "Auth"
+        },
+        {
+          "level": "h1",
+          "text": "Create your free account"
+        },
+        {
+          "level": "h2",
+          "text": "Welcome back"
+        },
+        {
+          "level": "h1",
+          "text": "Welcome back"
+        },
+        {
+          "level": "h1",
+          "text": "Get started with Watermelon"
+        }
+      ],
+      "ctas": [
+        "Watermelon UIbeta",
+        "Toggle Sidebar",
+        "searchK",
+        "Installation",
+        "Framework Support",
+        "Changelog",
+        "Animated",
+        "Animated",
+        "Component",
+        "Component",
+        "Blocks",
+        "Blocks"
+      ],
+      "topFonts": [
+        "\"Inter Variable\", sans-serif",
+        "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", \"Courier New\", monospace"
+      ],
+      "animationSignals": {
+        "libraries": {
+          "framerMotion": false,
+          "gsap": false,
+          "three": false,
+          "lottie": false,
+          "locomotiveScroll": false
+        },
+        "animatedElementCount": 86,
+        "keyframes": [
+          "spin",
+          "ping",
+          "pulse",
+          "bounce",
+          "enter",
+          "exit",
+          "accordion-down",
+          "accordion-up",
+          "collapsible-down",
+          "collapsible-up",
+          "caret-blink",
+          "fadeIn"
+        ]
+      },
+      "codeLinks": [
+        {
+          "url": "https://github.com/watermeloncorp",
+          "text": ""
+        }
+      ],
+      "codeBlockCount": 0,
+      "qualityWarnings": []
+    },
+    {
       "sourceId": "shadcnblocks-blocks",
       "sourceName": "Shadcnblocks",
       "licenseStatus": "free-and-premium-license-per-block",
@@ -2596,6 +3030,404 @@
         {
           "url": "https://github.com/shadcnblocks/shadcn-ui-blocks",
           "text": "360"
+        }
+      ],
+      "codeBlockCount": 0,
+      "qualityWarnings": []
+    },
+    {
+      "sourceId": "tabler-admin-dashboard",
+      "sourceName": "Tabler",
+      "licenseStatus": "mit-open-source",
+      "url": "https://tabler.io/icons",
+      "title": "Tabler Icons: 6100+ free vector icons for web design",
+      "description": "Tabler Icons: 6146 free and open source SVG icons. Customizable size, color and stroke. Available for React, SolidJS, Vue, Figma and more for free!",
+      "reuseGuidance": "MIT admin dashboard UI kit: layouts, data tables, charts, forms and empty/loading states. Prefer the local MIT repo for code reuse.",
+      "screenshots": {
+        "desktop": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/tabler-admin-dashboard/234-tabler-icons-c0300d9f/desktop.png",
+          "sha256": "dab4ae2893466636fc6da5576114d6a0a3d21e3e66b84e7996e182c420009703",
+          "mode": "viewport"
+        },
+        "mobile": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/tabler-admin-dashboard/234-tabler-icons-c0300d9f/mobile.png",
+          "sha256": "f0a1cb5b25dce250582c292e2abf763c77770b1f2c02c8e200e85ba31bb5e393",
+          "mode": "viewport"
+        }
+      },
+      "headings": [
+        {
+          "level": "h3",
+          "text": "🌷 Tabler Illustrations v1.14 – Spring & Easter"
+        },
+        {
+          "level": "h3",
+          "text": "6,000 Icons and Counting: Tabler Icons v3.38–3.40"
+        },
+        {
+          "level": "h3",
+          "text": "💝 Tabler Illustrations v1.13 – Valentine’s Day & Beyond"
+        },
+        {
+          "level": "h3",
+          "text": "🎄 Tabler Illustrations v1.12 – Christmas Edition"
+        },
+        {
+          "level": "h1",
+          "text": "One Icon Set for Every Project"
+        },
+        {
+          "level": "h2",
+          "text": "Customize icons"
+        }
+      ],
+      "ctas": [
+        "Skip to content",
+        "Close banner",
+        "Icons",
+        "Admin Template",
+        "SVG IllustrationsIllustrationsNew",
+        "Email TemplatesEmails",
+        "Icons",
+        "Avatars",
+        "Blog",
+        "Changelog",
+        "View all blog posts",
+        "Docs"
+      ],
+      "topFonts": [
+        "Inter, \"Inter Fallback\", system-ui, -apple-system, \"Segoe UI\", Roboto, Ubuntu, Cantarell, \"Noto Sans\", sans-serif"
+      ],
+      "animationSignals": {
+        "libraries": {
+          "framerMotion": false,
+          "gsap": false,
+          "three": false,
+          "lottie": false,
+          "locomotiveScroll": false
+        },
+        "animatedElementCount": 78,
+        "keyframes": [
+          "fade-in",
+          "slideDown",
+          "shimmerText",
+          "fadeIn",
+          "pulse",
+          "pulse-keyframes",
+          "tada-keyframes",
+          "animated-ellipsis-keyframes",
+          "move-forever1",
+          "move-forever2",
+          "move-forever3",
+          "figma-1"
+        ]
+      },
+      "codeLinks": [
+        {
+          "url": "https://github.com/tabler/tabler-icons",
+          "text": "20.2k stars on Github"
+        },
+        {
+          "url": "https://tabler.io/icons/icon/copy",
+          "text": ""
+        },
+        {
+          "url": "https://github.com/tabler/tabler-icons?checkout%5Bcustom%5D%5Bph_distinct_id%5D=6200b3fd-5236-42c2-9b30-f3dd2a2c5a80&reference_id=6200b3fd-5236-42c2-9b30-f3dd2a2c5a80",
+          "text": "Browse on Github"
+        },
+        {
+          "url": "https://github.com/sponsors/codecalm",
+          "text": "GitHub Sponsors"
+        },
+        {
+          "url": "https://github.com/tabler/tabler-icons",
+          "text": "Tabler Icons"
+        },
+        {
+          "url": "https://github.com/tabler/tabler",
+          "text": "Tabler Admin Template"
+        },
+        {
+          "url": "https://github.com/tabler/tabler/releases",
+          "text": "Releases"
+        },
+        {
+          "url": "https://github.com/tabler",
+          "text": "Github"
+        }
+      ],
+      "codeBlockCount": 0,
+      "qualityWarnings": []
+    },
+    {
+      "sourceId": "shadcn-ui",
+      "sourceName": "shadcn/ui",
+      "licenseStatus": "mit-repo-available",
+      "url": "https://ui.shadcn.com/blocks/sidebar",
+      "title": "Building Blocks for the Web - shadcn/ui",
+      "description": "Clean, modern building blocks. Copy and paste into your apps. Works with all React frameworks. Open Source. Free forever.",
+      "reuseGuidance": "Base component architecture and accessible UI primitives. Prefer the locally cached MIT repository for code.",
+      "screenshots": {
+        "desktop": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/shadcn-ui/034-browse-more-blocks-11813c15/desktop.png",
+          "sha256": "0491f086169556a92013f3a59705694a27f33fa730c9c79c7d8a91ae778b2f69",
+          "mode": "viewport"
+        },
+        "mobile": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/shadcn-ui/034-browse-more-blocks-11813c15/mobile.png",
+          "sha256": "aee06c2b8cbf3c5f0e175497492a9ca37d99bc849d808005f001342ea81c95a6",
+          "mode": "viewport"
+        }
+      },
+      "headings": [
+        {
+          "level": "h1",
+          "text": "Building Blocks for the Web"
+        }
+      ],
+      "ctas": [
+        "Toggle MenuMenu",
+        "Home",
+        "Docs",
+        "Components",
+        "Blocks",
+        "Charts",
+        "Directory",
+        "Create",
+        "Search documentation...Search...",
+        "118k",
+        "Toggle theme",
+        "Open in"
+      ],
+      "topFonts": [
+        "Geist, \"Geist Fallback\"",
+        "\"Geist Mono\", \"Geist Mono Fallback\""
+      ],
+      "animationSignals": {
+        "libraries": {
+          "framerMotion": false,
+          "gsap": false,
+          "three": false,
+          "lottie": false,
+          "locomotiveScroll": false
+        },
+        "animatedElementCount": 75,
+        "keyframes": [
+          "spin",
+          "pulse",
+          "enter",
+          "exit",
+          "accordion-down",
+          "accordion-up",
+          "caret-blink",
+          "scroll-fade-reveal-t",
+          "scroll-fade-reveal-b",
+          "scroll-fade-reveal-s",
+          "scroll-fade-reveal-e",
+          "tw-shimmer"
+        ]
+      },
+      "codeLinks": [
+        {
+          "url": "https://github.com/shadcn-ui/ui",
+          "text": "118k"
+        },
+        {
+          "url": "https://github.com/shadcn-ui/ui",
+          "text": "GitHub"
+        }
+      ],
+      "codeBlockCount": 0,
+      "qualityWarnings": []
+    },
+    {
+      "sourceId": "tabler-admin-dashboard",
+      "sourceName": "Tabler",
+      "licenseStatus": "mit-open-source",
+      "url": "https://preview.tabler.io/illustrations.html",
+      "title": "SVG Illustrations - Tabler - Premium and Open Source dashboard template with responsive and high quality UI.",
+      "description": "Tabler is packed with beautifully crafted components and powerful features. Jump in and start building a stunning dashboard — all for free!",
+      "reuseGuidance": "MIT admin dashboard UI kit: layouts, data tables, charts, forms and empty/loading states. Prefer the local MIT repo for code reuse.",
+      "screenshots": {
+        "desktop": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/tabler-admin-dashboard/217-welcome-back-pawe-778ed835/desktop.png",
+          "sha256": "fee6974155effd6e26040d8407b4963db34a97c1a6e9d33d4b0f5d2be5c46e31",
+          "mode": "viewport"
+        },
+        "mobile": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/tabler-admin-dashboard/217-welcome-back-pawe-778ed835/mobile.png",
+          "sha256": "5ab68ee7f50b28d7f3d20a1d09eda224297773219ef2848762a6f1bcb4133f0e",
+          "mode": "viewport"
+        }
+      },
+      "headings": [
+        {
+          "level": "h3",
+          "text": "Notifications"
+        },
+        {
+          "level": "h2",
+          "text": "SVG Illustrations"
+        },
+        {
+          "level": "h2",
+          "text": "81 more SVG Illustrations"
+        },
+        {
+          "level": "h3",
+          "text": "Tabler Illustrations"
+        },
+        {
+          "level": "h2",
+          "text": "Theme Settings"
+        }
+      ],
+      "ctas": [
+        "Source code",
+        "Sponsor",
+        "Example 1",
+        "Example 2",
+        "Example 3",
+        "Example 4",
+        "Archive all",
+        "Mark all as read",
+        "Amazon",
+        "Android",
+        "Apple App Store",
+        "Apple Podcast"
+      ],
+      "topFonts": [
+        "\"Inter Var\", Inter, -apple-system, BlinkMacSystemFont, \"San Francisco\", \"Segoe UI\", Roboto, \"Helvetica Neue\", sans-serif"
+      ],
+      "animationSignals": {
+        "libraries": {
+          "framerMotion": false,
+          "gsap": false,
+          "three": false,
+          "lottie": false,
+          "locomotiveScroll": false
+        },
+        "animatedElementCount": 74,
+        "keyframes": [
+          "progress-bar-stripes",
+          "spinner-border",
+          "spinner-grow",
+          "placeholder-glow",
+          "placeholder-wave",
+          "pulse",
+          "tada",
+          "rotate-360",
+          "blink",
+          "shake",
+          "animated-dots",
+          "progress-indeterminate"
+        ]
+      },
+      "codeLinks": [
+        {
+          "url": "https://github.com/tabler/tabler",
+          "text": "Source code"
+        },
+        {
+          "url": "https://github.com/sponsors/codecalm",
+          "text": "Sponsor"
+        },
+        {
+          "url": "https://github.com/tabler/tabler",
+          "text": "Source code"
+        },
+        {
+          "url": "https://github.com/sponsors/codecalm",
+          "text": "Sponsor project!"
+        },
+        {
+          "url": "https://github.com/tabler/tabler",
+          "text": "Source code"
+        },
+        {
+          "url": "https://github.com/sponsors/codecalm",
+          "text": "Sponsor"
+        }
+      ],
+      "codeBlockCount": 0,
+      "qualityWarnings": []
+    },
+    {
+      "sourceId": "shadcn-ui",
+      "sourceName": "shadcn/ui",
+      "licenseStatus": "mit-repo-available",
+      "url": "https://ui.shadcn.com/blocks/signup",
+      "title": "Building Blocks for the Web - shadcn/ui",
+      "description": "Clean, modern building blocks. Copy and paste into your apps. Works with all React frameworks. Open Source. Free forever.",
+      "reuseGuidance": "Base component architecture and accessible UI primitives. Prefer the locally cached MIT repository for code.",
+      "screenshots": {
+        "desktop": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/shadcn-ui/017-signup-0ff19f64/desktop.png",
+          "sha256": "480ed0e8e97c37f8b3c15965e818148f121878af1ce435efe2e43b771e0de85a",
+          "mode": "viewport"
+        },
+        "mobile": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/shadcn-ui/017-signup-0ff19f64/mobile.png",
+          "sha256": "6ec697abe512adc1bb95b3c1e6a6b0aac5b380e474b925ba7240fde65404fc27",
+          "mode": "viewport"
+        }
+      },
+      "headings": [
+        {
+          "level": "h1",
+          "text": "Building Blocks for the Web"
+        }
+      ],
+      "ctas": [
+        "Toggle MenuMenu",
+        "Home",
+        "Docs",
+        "Components",
+        "Blocks",
+        "Charts",
+        "Directory",
+        "Create",
+        "Search documentation...Search...",
+        "118k",
+        "Toggle theme",
+        "Open in"
+      ],
+      "topFonts": [
+        "Geist, \"Geist Fallback\"",
+        "\"Geist Mono\", \"Geist Mono Fallback\""
+      ],
+      "animationSignals": {
+        "libraries": {
+          "framerMotion": false,
+          "gsap": false,
+          "three": false,
+          "lottie": false,
+          "locomotiveScroll": false
+        },
+        "animatedElementCount": 72,
+        "keyframes": [
+          "spin",
+          "pulse",
+          "enter",
+          "exit",
+          "accordion-down",
+          "accordion-up",
+          "caret-blink",
+          "scroll-fade-reveal-t",
+          "scroll-fade-reveal-b",
+          "scroll-fade-reveal-s",
+          "scroll-fade-reveal-e",
+          "tw-shimmer"
+        ]
+      },
+      "codeLinks": [
+        {
+          "url": "https://github.com/shadcn-ui/ui",
+          "text": "118k"
+        },
+        {
+          "url": "https://github.com/shadcn-ui/ui",
+          "text": "GitHub"
         }
       ],
       "codeBlockCount": 0,
@@ -6059,563 +6891,6 @@
       "codeLinks": [],
       "codeBlockCount": 0,
       "qualityWarnings": []
-    },
-    {
-      "sourceId": "efferd-blocks",
-      "sourceName": "Efferd Blocks",
-      "licenseStatus": "license-per-block",
-      "url": "https://efferd.com/blocks/cta",
-      "title": "Free & Pro Shadcn Cta Blocks - Efferd",
-      "description": "Discover Cta blocks — ready to copy, customize, and drop into your Shadcn/UI project.",
-      "reuseGuidance": "Block-level layout discovery. Verify each block license before reuse.",
-      "screenshots": {
-        "desktop": {
-          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/efferd-blocks/call-to-action/desktop.png",
-          "sha256": "86a77bc7dcdd562cd1051616c6bf46d388c7cb2714747c5a1dec1e8047913194",
-          "mode": "viewport"
-        },
-        "mobile": {
-          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/efferd-blocks/call-to-action/mobile.png",
-          "sha256": "4386b20c016ce3fb006db5cfadfd651fbe0ca10e8a3b33bb0729ec7a160139ce",
-          "mode": "viewport"
-        }
-      },
-      "headings": [
-        {
-          "level": "h1",
-          "text": "Explore Cta Blocks"
-        },
-        {
-          "level": "h2",
-          "text": "cta 1"
-        },
-        {
-          "level": "h2",
-          "text": "cta 2"
-        },
-        {
-          "level": "h2",
-          "text": "cta 3"
-        },
-        {
-          "level": "h2",
-          "text": "cta 4"
-        },
-        {
-          "level": "h2",
-          "text": "cta 5"
-        }
-      ],
-      "ctas": [
-        "Efferd",
-        "Blocks",
-        "Pricing",
-        "Docs",
-        "Changelog",
-        "Log In",
-        "Get access",
-        "Toggle menu",
-        "Back to Blocks",
-        "#",
-        "preview",
-        "code"
-      ],
-      "topFonts": [],
-      "animationSignals": {
-        "libraries": {},
-        "animatedElementCount": 0,
-        "keyframes": []
-      },
-      "codeLinks": [],
-      "codeBlockCount": 0,
-      "qualityWarnings": []
-    },
-    {
-      "sourceId": "efferd-blocks",
-      "sourceName": "Efferd Blocks",
-      "licenseStatus": "license-per-block",
-      "url": "https://efferd.com/blocks/faqs",
-      "title": "Free & Pro Shadcn Faqs Blocks - Efferd",
-      "description": "Discover Faqs blocks — ready to copy, customize, and drop into your Shadcn/UI project.",
-      "reuseGuidance": "Block-level layout discovery. Verify each block license before reuse.",
-      "screenshots": {
-        "desktop": {
-          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/efferd-blocks/faqs/desktop.png",
-          "sha256": "240ff65e2b6cb219560f0c0ebca1e45fb224eb0cf4fb495ca425cca275817b72",
-          "mode": "viewport"
-        },
-        "mobile": {
-          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/efferd-blocks/faqs/mobile.png",
-          "sha256": "b2b8e684fc9e219434a8244bedfdd0b12852cab037b9a1ca2ea917021163b0ba",
-          "mode": "viewport"
-        }
-      },
-      "headings": [
-        {
-          "level": "h1",
-          "text": "Explore Faqs Blocks"
-        },
-        {
-          "level": "h2",
-          "text": "faqs 1"
-        },
-        {
-          "level": "h2",
-          "text": "faqs 2"
-        },
-        {
-          "level": "h2",
-          "text": "faqs 3"
-        },
-        {
-          "level": "h2",
-          "text": "faqs 4"
-        },
-        {
-          "level": "h2",
-          "text": "faqs 5"
-        }
-      ],
-      "ctas": [
-        "Efferd",
-        "Blocks",
-        "Pricing",
-        "Docs",
-        "Changelog",
-        "Log In",
-        "Get access",
-        "Toggle menu",
-        "Back to Blocks",
-        "#",
-        "preview",
-        "code"
-      ],
-      "topFonts": [],
-      "animationSignals": {
-        "libraries": {},
-        "animatedElementCount": 0,
-        "keyframes": []
-      },
-      "codeLinks": [],
-      "codeBlockCount": 0,
-      "qualityWarnings": []
-    },
-    {
-      "sourceId": "efferd-blocks",
-      "sourceName": "Efferd Blocks",
-      "licenseStatus": "license-per-block",
-      "url": "https://efferd.com/blocks/features",
-      "title": "Free & Pro Shadcn Features Blocks - Efferd",
-      "description": "Discover Features blocks — ready to copy, customize, and drop into your Shadcn/UI project.",
-      "reuseGuidance": "Block-level layout discovery. Verify each block license before reuse.",
-      "screenshots": {
-        "desktop": {
-          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/efferd-blocks/features/desktop.png",
-          "sha256": "ff0bad0fff1843fa5a144b5d86ca5fce8fc0fd36b805a956242a07c557e5196a",
-          "mode": "viewport"
-        },
-        "mobile": {
-          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/efferd-blocks/features/mobile.png",
-          "sha256": "15541fc8b8c0605caccbc138729e3c26618487f88adcbb5d14ef25780583a3de",
-          "mode": "viewport"
-        }
-      },
-      "headings": [
-        {
-          "level": "h1",
-          "text": "Explore Features Blocks"
-        },
-        {
-          "level": "h2",
-          "text": "features 1"
-        },
-        {
-          "level": "h2",
-          "text": "features 2"
-        },
-        {
-          "level": "h2",
-          "text": "features 3"
-        },
-        {
-          "level": "h2",
-          "text": "features 4"
-        },
-        {
-          "level": "h2",
-          "text": "features 5"
-        }
-      ],
-      "ctas": [
-        "Efferd",
-        "Blocks",
-        "Pricing",
-        "Docs",
-        "Changelog",
-        "Log In",
-        "Get access",
-        "Toggle menu",
-        "Back to Blocks",
-        "#",
-        "preview",
-        "code"
-      ],
-      "topFonts": [],
-      "animationSignals": {
-        "libraries": {},
-        "animatedElementCount": 0,
-        "keyframes": []
-      },
-      "codeLinks": [],
-      "codeBlockCount": 0,
-      "qualityWarnings": []
-    },
-    {
-      "sourceId": "efferd-blocks",
-      "sourceName": "Efferd Blocks",
-      "licenseStatus": "license-per-block",
-      "url": "https://efferd.com/blocks/footer",
-      "title": "Free & Pro Shadcn Footer Blocks - Efferd",
-      "description": "Discover Footer blocks — ready to copy, customize, and drop into your Shadcn/UI project.",
-      "reuseGuidance": "Block-level layout discovery. Verify each block license before reuse.",
-      "screenshots": {
-        "desktop": {
-          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/efferd-blocks/footer/desktop.png",
-          "sha256": "ed016702cde4ba8b858c9775f4507a2c299f3aee7af9b5cf9b527c93d4ebb8df",
-          "mode": "viewport"
-        },
-        "mobile": {
-          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/efferd-blocks/footer/mobile.png",
-          "sha256": "7ce548c5e372a6887844bc0d45043249580c0ba4e733e2c7fe5cbb4a43c687f1",
-          "mode": "viewport"
-        }
-      },
-      "headings": [
-        {
-          "level": "h1",
-          "text": "Explore Footer Blocks"
-        },
-        {
-          "level": "h2",
-          "text": "footer 1"
-        },
-        {
-          "level": "h2",
-          "text": "footer 2"
-        },
-        {
-          "level": "h2",
-          "text": "footer 3"
-        },
-        {
-          "level": "h2",
-          "text": "footer 4"
-        },
-        {
-          "level": "h2",
-          "text": "footer 5"
-        }
-      ],
-      "ctas": [
-        "Efferd",
-        "Blocks",
-        "Pricing",
-        "Docs",
-        "Changelog",
-        "Log In",
-        "Get access",
-        "Toggle menu",
-        "Back to Blocks",
-        "#",
-        "preview",
-        "code"
-      ],
-      "topFonts": [],
-      "animationSignals": {
-        "libraries": {},
-        "animatedElementCount": 0,
-        "keyframes": []
-      },
-      "codeLinks": [],
-      "codeBlockCount": 0,
-      "qualityWarnings": []
-    },
-    {
-      "sourceId": "efferd-blocks",
-      "sourceName": "Efferd Blocks",
-      "licenseStatus": "license-per-block",
-      "url": "https://efferd.com/blocks/header",
-      "title": "Free & Pro Shadcn Header Blocks - Efferd",
-      "description": "Discover Header blocks — ready to copy, customize, and drop into your Shadcn/UI project.",
-      "reuseGuidance": "Block-level layout discovery. Verify each block license before reuse.",
-      "screenshots": {
-        "desktop": {
-          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/efferd-blocks/header/desktop.png",
-          "sha256": "f951ea3d661b05ae450128a17296a1cf00c98d4506fba106b9ac1bfda3fd7843",
-          "mode": "viewport"
-        },
-        "mobile": {
-          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/efferd-blocks/header/mobile.png",
-          "sha256": "26750578593a2cea59bb778ecc3ab01deda7f22143e9676405d0d0b884648c3f",
-          "mode": "viewport"
-        }
-      },
-      "headings": [
-        {
-          "level": "h1",
-          "text": "Explore Header Blocks"
-        },
-        {
-          "level": "h2",
-          "text": "header 1"
-        },
-        {
-          "level": "h2",
-          "text": "header 2"
-        },
-        {
-          "level": "h2",
-          "text": "header 3"
-        },
-        {
-          "level": "h2",
-          "text": "header 4"
-        },
-        {
-          "level": "h2",
-          "text": "header 5"
-        }
-      ],
-      "ctas": [
-        "Efferd",
-        "Blocks",
-        "Pricing",
-        "Docs",
-        "Changelog",
-        "Log In",
-        "Get access",
-        "Toggle menu",
-        "Back to Blocks",
-        "#",
-        "preview",
-        "code"
-      ],
-      "topFonts": [],
-      "animationSignals": {
-        "libraries": {},
-        "animatedElementCount": 0,
-        "keyframes": []
-      },
-      "codeLinks": [],
-      "codeBlockCount": 0,
-      "qualityWarnings": []
-    },
-    {
-      "sourceId": "fontpair",
-      "sourceName": "Fontpair",
-      "licenseStatus": "typography-reference",
-      "url": "https://fontpair.co/fonts",
-      "title": "All Free Fonts - Google Fonts & Fontshare Collection | Fontpair",
-      "description": "Browse 1,500+ free fonts with pairing suggestions, specimens, and usage examples.",
-      "reuseGuidance": "Font-pair inspiration and typographic mood extraction. Check font licenses before use.",
-      "screenshots": {
-        "desktop": {
-          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/fontpair/087-fontpair-43c62d22/desktop.png",
-          "sha256": "844e31963756e3dab64a66053bba7fec5e9dae91d95f8e9e74d4cea5352711af",
-          "mode": "viewport"
-        },
-        "mobile": {
-          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/fontpair/087-fontpair-43c62d22/mobile.png",
-          "sha256": "9ffcf9cf26657669789bb3759b9f1fac3c36c661472e497415c9e3254544e49c",
-          "mode": "viewport"
-        }
-      },
-      "headings": [
-        {
-          "level": "h1",
-          "text": "All Fonts"
-        },
-        {
-          "level": "h3",
-          "text": "ABeeZee"
-        },
-        {
-          "level": "h3",
-          "text": "Abel"
-        },
-        {
-          "level": "h3",
-          "text": "Abhaya Libre"
-        },
-        {
-          "level": "h3",
-          "text": "Abril Fatface"
-        },
-        {
-          "level": "h3",
-          "text": "Abyssinica SIL"
-        }
-      ],
-      "ctas": [
-        "Playground",
-        "Pairings",
-        "Fonts",
-        "Inspiration",
-        "Resources",
-        "Login",
-        "Sign Up",
-        "Go Pro",
-        "Settings",
-        "Toggle mobile menu",
-        "All Fonts",
-        "Serif"
-      ],
-      "topFonts": [],
-      "animationSignals": {
-        "libraries": {},
-        "animatedElementCount": 0,
-        "keyframes": []
-      },
-      "codeLinks": [],
-      "codeBlockCount": 0,
-      "qualityWarnings": []
-    },
-    {
-      "sourceId": "fontpair",
-      "sourceName": "Fontpair",
-      "licenseStatus": "typography-reference",
-      "url": "https://fontpair.co/icons",
-      "title": "Icons Library — Free Open-Source SVG Icon Sets | Fontpair",
-      "description": "Browse and search free open-source icon libraries. Copy SVG and React code for Feather, Eva, Iconoir, and more.",
-      "reuseGuidance": "Font-pair inspiration and typographic mood extraction. Check font licenses before use.",
-      "screenshots": {
-        "desktop": {
-          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/fontpair/088-fontpair-8ba6d672/desktop.png",
-          "sha256": "49936ca7c22c00eb64863596f168e6072471b9eaac54b13a46d55fa399691da9",
-          "mode": "viewport"
-        },
-        "mobile": {
-          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/fontpair/088-fontpair-8ba6d672/mobile.png",
-          "sha256": "0ee831c9265cb4b60a2df4e94f7d878c2508ad2345d2845c4e0b0dc5f522f135",
-          "mode": "viewport"
-        }
-      },
-      "headings": [
-        {
-          "level": "h1",
-          "text": "Icons"
-        },
-        {
-          "level": "h3",
-          "text": "Akar Icons"
-        },
-        {
-          "level": "h3",
-          "text": "Eva Icons"
-        },
-        {
-          "level": "h3",
-          "text": "Feather Icons"
-        },
-        {
-          "level": "h3",
-          "text": "Flowbite Icons"
-        },
-        {
-          "level": "h3",
-          "text": "Glow Icons"
-        }
-      ],
-      "ctas": [
-        "Playground",
-        "Pairings",
-        "Fonts",
-        "Inspiration",
-        "Resources",
-        "Login",
-        "Sign Up",
-        "Go Pro",
-        "Settings",
-        "Toggle mobile menu",
-        "Icons",
-        "Colors"
-      ],
-      "topFonts": [],
-      "animationSignals": {
-        "libraries": {},
-        "animatedElementCount": 0,
-        "keyframes": []
-      },
-      "codeLinks": [
-        {
-          "url": "https://supercons.vercel.app/",
-          "text": ""
-        }
-      ],
-      "codeBlockCount": 0,
-      "qualityWarnings": []
-    },
-    {
-      "sourceId": "fontpair",
-      "sourceName": "Fontpair",
-      "licenseStatus": "typography-reference",
-      "url": "https://fontpair.co/colors",
-      "title": "Color Palettes for Designers — Accessible Color Schemes | Fontpair",
-      "description": "Browse curated color palettes with WCAG contrast ratings. Find accessible color combinations for your brand, website, or design project.",
-      "reuseGuidance": "Font-pair inspiration and typographic mood extraction. Check font licenses before use.",
-      "screenshots": {
-        "desktop": {
-          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/fontpair/089-fontpair-13737529/desktop.png",
-          "sha256": "33e854f1473bc4c4a437ff4a4cf0fced9285506e27b93ede55b7ddb037be0c58",
-          "mode": "viewport"
-        },
-        "mobile": {
-          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/fontpair/089-fontpair-13737529/mobile.png",
-          "sha256": "c588952723802ca92de987ce0659c654af43b315328534ba014e9ae0d65e2fd2",
-          "mode": "viewport"
-        }
-      },
-      "headings": [
-        {
-          "level": "h1",
-          "text": "Color Systems for UI Design"
-        },
-        {
-          "level": "h2",
-          "text": "OKLCH Gradients"
-        },
-        {
-          "level": "h2",
-          "text": "Join 25,000+ designers choosing fonts with confidence"
-        },
-        {
-          "level": "h3",
-          "text": "Fontpair"
-        }
-      ],
-      "ctas": [
-        "Playground",
-        "Pairings",
-        "Fonts",
-        "Inspiration",
-        "Resources",
-        "Login",
-        "Sign Up",
-        "Go Pro",
-        "Settings",
-        "Toggle mobile menu",
-        "Colors",
-        "Typography"
-      ],
-      "topFonts": [],
-      "animationSignals": {
-        "libraries": {},
-        "animatedElementCount": 0,
-        "keyframes": []
-      },
-      "codeLinks": [],
-      "codeBlockCount": 0,
-      "qualityWarnings": []
     }
   ],
   "reusableCodeRepositories": [
@@ -6623,79 +6898,79 @@
       "name": "harshjdhv__componentry",
       "license": "MIT",
       "localPath": "C:/Users/PC/.codex/design-stack/repos/harshjdhv__componentry",
-      "selectedExamples": 8,
-      "motionExamples": 1,
-      "shadcnExamples": 3,
-      "tailwindExamples": 5
+      "selectedExamples": 12,
+      "motionExamples": 2,
+      "shadcnExamples": 4,
+      "tailwindExamples": 8
     },
     {
       "name": "ibelick__motion-primitives",
       "license": "MIT",
       "localPath": "C:/Users/PC/.codex/design-stack/repos/ibelick__motion-primitives",
-      "selectedExamples": 8,
-      "motionExamples": 2,
-      "shadcnExamples": 3,
-      "tailwindExamples": 2
+      "selectedExamples": 12,
+      "motionExamples": 6,
+      "shadcnExamples": 4,
+      "tailwindExamples": 4
     },
     {
       "name": "launch-ui__launch-ui",
       "license": "MIT",
       "localPath": "C:/Users/PC/.codex/design-stack/repos/launch-ui__launch-ui",
-      "selectedExamples": 8,
-      "motionExamples": 0,
-      "shadcnExamples": 4,
-      "tailwindExamples": 2
-    },
-    {
-      "name": "magicuidesign__magicui",
-      "license": "MIT",
-      "localPath": "C:/Users/PC/.codex/design-stack/repos/magicuidesign__magicui",
-      "selectedExamples": 8,
+      "selectedExamples": 12,
       "motionExamples": 0,
       "shadcnExamples": 6,
       "tailwindExamples": 4
     },
     {
+      "name": "magicuidesign__magicui",
+      "license": "MIT",
+      "localPath": "C:/Users/PC/.codex/design-stack/repos/magicuidesign__magicui",
+      "selectedExamples": 12,
+      "motionExamples": 0,
+      "shadcnExamples": 7,
+      "tailwindExamples": 6
+    },
+    {
       "name": "markmead__hyperui",
       "license": "MIT",
       "localPath": "C:/Users/PC/.codex/design-stack/repos/markmead__hyperui",
-      "selectedExamples": 8,
-      "motionExamples": 0,
-      "shadcnExamples": 5,
-      "tailwindExamples": 3
+      "selectedExamples": 12,
+      "motionExamples": 2,
+      "shadcnExamples": 7,
+      "tailwindExamples": 5
     },
     {
       "name": "nolly-studio__cult-ui",
       "license": "MIT",
       "localPath": "C:/Users/PC/.codex/design-stack/repos/nolly-studio__cult-ui",
-      "selectedExamples": 8,
-      "motionExamples": 3,
-      "shadcnExamples": 4,
-      "tailwindExamples": 7
+      "selectedExamples": 12,
+      "motionExamples": 5,
+      "shadcnExamples": 7,
+      "tailwindExamples": 11
     },
     {
       "name": "serafimcloud__21st",
       "license": "MIT",
       "localPath": "C:/Users/PC/.codex/design-stack/repos/serafimcloud__21st",
-      "selectedExamples": 8,
+      "selectedExamples": 12,
       "motionExamples": 1,
-      "shadcnExamples": 7,
-      "tailwindExamples": 7
+      "shadcnExamples": 9,
+      "tailwindExamples": 8
     },
     {
       "name": "shadcn-ui__ui",
       "license": "MIT",
       "localPath": "C:/Users/PC/.codex/design-stack/repos/shadcn-ui__ui",
-      "selectedExamples": 8,
+      "selectedExamples": 12,
       "motionExamples": 0,
-      "shadcnExamples": 5,
-      "tailwindExamples": 7
+      "shadcnExamples": 8,
+      "tailwindExamples": 11
     },
     {
       "name": "tailwindlabs__headlessui",
       "license": "MIT",
       "localPath": "C:/Users/PC/.codex/design-stack/repos/tailwindlabs__headlessui",
-      "selectedExamples": 8,
+      "selectedExamples": 12,
       "motionExamples": 0,
       "shadcnExamples": 0,
       "tailwindExamples": 0
@@ -6704,10 +6979,10 @@
       "name": "tremorlabs__tremor",
       "license": "MIT",
       "localPath": "C:/Users/PC/.codex/design-stack/repos/tremorlabs__tremor",
-      "selectedExamples": 8,
+      "selectedExamples": 12,
       "motionExamples": 0,
-      "shadcnExamples": 3,
-      "tailwindExamples": 7
+      "shadcnExamples": 5,
+      "tailwindExamples": 11
     },
     {
       "name": "nextlevelbuilder__ui-ux-pro-max-skill",

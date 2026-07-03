@@ -1,9 +1,9 @@
 {
-  "capturedAt": "2026-07-03T20:49:19.478Z",
+  "capturedAt": "2026-07-03T21:13:35.429Z",
   "policy": "Samples are indexed only from local repositories marked allowed-after-review. Review original license and attribution before using code in generated sites.",
-  "codeIndexPath": "data/references/code-sources/2026-07-03T20-48-52-800Z-code-cache-index.json",
+  "codeIndexPath": "data/references/code-sources/2026-07-03T21-11-35-052Z-code-cache-index.json",
   "maxSampleChars": 5000,
-  "maxFilesPerRepo": 8,
+  "maxFilesPerRepo": 12,
   "repositories": [
     {
       "name": "10x-app-builder__10x",
@@ -20,8 +20,8 @@
       "licensePath": "C:/Users/PC/.codex/design-stack/repos/harshjdhv__componentry/LICENSE",
       "status": "allowed-after-review",
       "indexed": true,
-      "totalCandidateFiles": 24,
-      "selectedExamples": 8,
+      "totalCandidateFiles": 36,
+      "selectedExamples": 12,
       "examples": [
         {
           "relativePath": "apps/web/components/code-block.tsx",
@@ -190,6 +190,90 @@
               "@workspace/ui/lib/utils"
             ]
           }
+        },
+        {
+          "relativePath": "packages/ui/src/components/closing-plasma.tsx",
+          "score": 15,
+          "bytes": 13638,
+          "sha256": "1e2f372178293bbb91a2bf5a25530e218c143738219e6313bd27a8d994fcde3f",
+          "sampleChars": 5000,
+          "sample": "\"use client\";\r\n\r\nimport { useEffect, useMemo, useRef } from \"react\";\r\nimport { cn } from \"@workspace/ui/lib/utils\";\r\n\r\nconst VERTEX_SHADER = `\r\nattribute vec2 position;\r\nvoid main() {\r\n  gl_Position = vec4(position, 0.0, 1.0);\r\n}\r\n`;\r\n\r\nconst FRAGMENT_SHADER = `\r\nprecision highp float;\r\n\r\nuniform vec2 u_res;\r\nuniform float u_time;\r\nuniform vec2 u_mouse;\r\nuniform float u_isDark;\r\nuniform float u_speed;\r\nuniform float u_turbulence;\r\nuniform float u_mouseInfluence;\r\nuniform float u_grain;\r\nuniform float u_sparkle;\r\nuniform float u_vignette;\r\nuniform float u_opacity;\r\n\r\nuniform vec3 u_darkA;\r\nuniform vec3 u_darkB;\r\nuniform vec3 u_darkC;\r\nuniform vec3 u_lightA;\r\nuniform vec3 u_lightB;\r\nuniform vec3 u_lightC;\r\n\r\nvec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }\r\nvec2 mod289(vec2 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }\r\nvec3 permute(vec3 x) { return mod289(((x * 34.0) + 1.0) * x); }\r\n\r\nfloat snoise(vec2 v) {\r\n  const vec4 C = vec4(0.211324865405187, 0.366025403784439,\r\n                     -0.577350269189626, 0.024390243902439);\r\n  vec2 i = floor(v + dot(v, C.yy));\r\n  vec2 x0 = v - i + dot(i, C.xx);\r\n  vec2 i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);\r\n  vec4 x12 = x0.xyxy + C.xxzz;\r\n  x12.xy -= i1;\r\n  i = mod289(i);\r\n  vec3 p = permute(permute(i.y + vec3(0.0, i1.y, 1.0)) + i.x + vec3(0.0, i1.x, 1.0));\r\n  vec3 m = max(0.5 - vec3(dot(x0, x0), dot(x12.xy, x12.xy), dot(x12.zw, x12.zw)), 0.0);\r\n  m = m * m;\r\n  m = m * m;\r\n  vec3 x = 2.0 * fract(p * C.www) - 1.0;\r\n  vec3 h = abs(x) - 0.5;\r\n  vec3 ox = floor(x + 0.5);\r\n  vec3 a0 = x - ox;\r\n  m *= 1.79284291400159 - 0.85373472095314 * (a0 * a0 + h * h);\r\n  vec3 g;\r\n  g.x = a0.x * x0.x + h.x * x0.y;\r\n  g.yz = a0.yz * x12.xz + h.yz * x12.yw;\r\n  return 130.0 * dot(m, g);\r\n}\r\n\r\nfloat fbm(vec2 p, float turbulence) {\r\n  float total = 0.0;\r\n  float amp = 0.5;\r\n  float freq = 1.0;\r\n  mat2 rot = mat2(cos(0.45), sin(0.45), -sin(0.45), cos(0.45));\r\n  for (int i = 0; i < 5; i++) {\r\n    total += snoise(p * freq) * amp;\r\n    p = rot * p;\r\n    freq *= mix(1.85, 2.35, clamp(turbulence, 0.0, 2.0) * 0.5);\r\n    amp *= 0.5;\r\n  }\r\n  return total;\r\n}\r\n\r\nvoid main() {\r\n  vec2 uv = gl_FragCoord.xy / u_res;\r\n  float aspect = u_res.x / max(u_res.y, 1.0);\r\n  vec2 p = (uv - 0.5) * vec2(aspect, 1.0);\r\n  float t = u_time * (0.15 * u_speed);\r\n\r\n  vec2 mouse = (u_mouse - 0.5) * vec2(aspect, 1.0);\r\n  float dMouse = length(p - mouse);\r\n  p += (mouse - p) * 0.02 * u_mouseInfluence * smoothstep(0.45, 0.0, dMouse);\r\n\r\n  vec2 flow = vec2(\r\n    fbm(p + vec2(t * 0.2, t * 0.1), u_turbulence),\r\n    fbm(p + vec2(-t * 0.1, t * 0.3), u_turbulence)\r\n  );\r\n\r\n  float n = fbm(p * 2.0 + flow * 1.45, u_turbulence);\r\n  float ridges = 1.0 - abs(snoise(p * 4.0 + n) * 2.0);\r\n  ridges = pow(ridges, 3.0);\r\n\r\n  vec3 colorA = mix(u_lightA, u_darkA, u_isDark);\r\n  vec3 colorB = mix(u_lightB, u_darkB, u_isDark);\r\n  vec3 colorC = mix(u_lightC, u_darkC, u_isDark);\r\n\r\n  vec3 col = mix(colorA, colorB, smoothstep(-0.5, 0.5, n));\r\n  col = mix(col, colorC, smoothstep(0.25, 1.0, n * 0.52 + ridges * 0.48));\r\n\r\n  float sparkle = pow(max(0.0, snoise(gl_FragCoord.xy * 0.2 + t * 2.0)), 18.0) * 0.5 * u_sparkle;\r\n  vec3 sparkleColor = mix(vec3(0.56, 0.58, 0.72), vec3(0.8, 0.9, 1.0), u_isDark);\r\n  col += sparkleColor * sparkle;\r\n\r\n  float vigDark = 1.0 - smoothstep(0.5, mix(1.8, 1.55, u_isDark), length(p));\r\n  col = mix(col, col * vigDark, u_isDark * u_vignette);\r\n  float vigLight = 1.0 - smoothstep(0.4, 1.45, length(p));\r\n  col = mix(mix(vec3(1.0), col, vigLight), col, u_isDark);\r\n\r\n  float grain = (fract(sin(dot(gl_FragCoord.xy + t * 50.0, vec2(12.9898, 78.233))) * 43758.5453) - 0.5) * (0.06 * u_grain);\r\n  col += grain;\r\n\r\n  gl_FragColor = vec4(clamp(col, 0.0, 1.0), u_opacity);\r\n}\r\n`;\r\n\r\nconst HEX_COLOR_REGEX = /^#?[0-9a-fA-F]{6}$/;\r\n\r\nfunction sanitizeHexColor(value: string, fallback: string) {\r\n  const trimmed = value.trim();\r\n  if (!HEX_COLOR_REGEX.test(trimmed)) {\r\n    return fallback;\r\n  }\r\n  return trimmed.startsWith(\"#\") ? trimmed : `#${trimmed}`;\r\n}\r\n\r\nfunction hexToRgb01(hex: string, fallback: string): [number, number, number] {\r\n  const normalized = sanitizeHexColor(hex, fallback).replace(\"#\", \"\");\r\n  const r = parseInt(normalized.slice(0, 2), 16) / 255;\r\n  const g = parseInt(normalized.slice(2, 4), 16) / 255;\r\n  const b = parseInt(normalized.slice(4, 6), 16) / 255;\r\n  return [r, g, b];\r\n}\r\n\r\nconst DARK_A = \"#0d0d14\";\r\nconst DARK_B = \"#1f2540\";\r\nconst DARK_C = \"#4a6191\";\r\nconst LIGHT_A = \"#f0f2f7\";\r\nconst LIGHT_B = \"#d7dceb\";\r\nconst LIGHT_C = \"#bcc5e0\";\r\n\r\nexport interface ClosingPlasmaProps extends React.HTMLAttributes<HTMLDivElement> {\r\n  themeMode?: \"auto\" | \"light\" | \"dark\";\r\n  speed?: number;\r\n  turbulence?: number;\r\n  mouseInfluence?: number;\r\n  grain?: number;\r\n  sparkle?: number;\r\n  vignette?: number;\r\n  opacity?: number;\r\n  interactive?: boolean;\r\n  darkColorA?: string;\r\n  darkColorB?: string;\r\n  darkColorC?: string;\r\n  lightColorA?: string;\r\n  lightColorB?: string;\r\n  lightColorC?: stri",
+          "signals": {
+            "type": "react-component",
+            "hasTailwind": true,
+            "hasMotion": false,
+            "hasShadcn": false,
+            "exports": [
+              "ClosingPlasma"
+            ],
+            "imports": [
+              "react",
+              "@workspace/ui/lib/utils"
+            ]
+          }
+        },
+        {
+          "relativePath": "packages/ui/src/components/collection-surfer.tsx",
+          "score": 15,
+          "bytes": 8988,
+          "sha256": "6c2dc398b31f9168a7e824cc9da13dc9a7d1c37d283920970055d8a418d4b134",
+          "sampleChars": 5000,
+          "sample": "import { motion, useScroll, useTransform, useSpring, useMotionValue, MotionValue } from \"framer-motion\";\r\nimport React from \"react\";\r\n\r\nexport interface CollectionItem {\r\n    id: number;\r\n    image: string;\r\n    title: string;\r\n}\r\n\r\nexport type CollectionSurferVariant = \"magnetic\" | \"uplift\" | \"simple\";\r\n\r\ninterface CollectionSurferProps {\r\n    items: CollectionItem[];\r\n    variant?: CollectionSurferVariant;\r\n}\r\n\r\nexport function CollectionSurfer({ items, variant = \"magnetic\" }: CollectionSurferProps) {\r\n    // 1. Loop Setup: Duplicate items to create a buffer\r\n    // We render the list twice: [Original Set, Duplicate Set]\r\n    // When we scroll past the Original Set, we snap back to the start.\r\n    const duplicatedItems = [...items, ...items];\r\n\r\n    // Scroll sensitivity\r\n    const scrollPerItem = 600;\r\n\r\n    // The exact scroll distance to complete one full loop of the ORIGINAL items\r\n    const loopDistance = items.length * scrollPerItem;\r\n\r\n    const { scrollY } = useScroll();\r\n\r\n    const smoothScroll = useSpring(scrollY, {\r\n        mass: 0.1,\r\n        stiffness: 100,\r\n        damping: 20\r\n    });\r\n\r\n    // 2. Modulo Logic:\r\n    // Instead of mapping 0 -> totalScroll, we map to a looped value.\r\n    // loops 0 -> loopDistance -> 0 -> loopDistance...\r\n    const loopedProgress = useTransform(smoothScroll, (value) => value % loopDistance);\r\n\r\n    // Step vector\r\n    const stepX = 240;\r\n    const stepY = -84;\r\n    const stepZ = -288;\r\n\r\n    // We only move the scene backwards by the length of ONE set of items\r\n    const x = useTransform(loopedProgress, [0, loopDistance], [0, -items.length * stepX]);\r\n    const y = useTransform(loopedProgress, [0, loopDistance], [0, -items.length * stepY]);\r\n    const z = useTransform(loopedProgress, [0, loopDistance], [0, -items.length * stepZ]);\r\n\r\n    // Mouse position for magnetic effect\r\n    // Initialize off-screen so no card is scaled by default\r\n    const mouseX = useMotionValue(-10000);\r\n    const mouseY = useMotionValue(-10000);\r\n\r\n    const handleMouseMove = (e: React.MouseEvent) => {\r\n        if (variant === \"simple\") return;\r\n        mouseX.set(e.clientX);\r\n        mouseY.set(e.clientY);\r\n    };\r\n\r\n    const handleMouseLeave = () => {\r\n        if (variant === \"simple\") return;\r\n        mouseX.set(-10000);\r\n        mouseY.set(-10000);\r\n    };\r\n\r\n    return (\r\n        <div className=\"relative bg-black min-h-screen text-white w-full\">\r\n            {/* 3. Infinite Spacer: \r\n                We make this huge so the user can scroll for a very long time.\r\n                (e.g., 50,000px) */}\r\n            <div style={{ height: \"50000px\" }} className=\"w-full\" />\r\n\r\n            {/* Fixed viewport */}\r\n            <div\r\n                className=\"fixed inset-0 w-full h-screen overflow-hidden flex items-center justify-center perspective-container\"\r\n                onMouseMove={handleMouseMove}\r\n                onMouseLeave={handleMouseLeave}\r\n            >\r\n\r\n                {/* UI Overlays */}\r\n                <div className=\"absolute top-[3vw] left-[3vw] z-50 pointer-events-none mix-blend-difference\">\r\n                    <h1 className=\"font-heading font-bold text-[clamp(2rem,6vw,5rem)] leading-[0.9] tracking-tighter ml-[4vw]\">\r\n                        HERITAGE FW25/26\r\n                    </h1>\r\n                    <h1 className=\"font-heading font-bold text-[clamp(2rem,6vw,5rem)] leading-[0.9] tracking-tighter\">\r\n                        COLLECTION\r\n                        <span className=\"text-[0.4em] align-top relative top-[0.6em] ml-2 font-mono tabular-nums\">\r\n                            ({items.length})\r\n                        </span>\r\n                    </h1>\r\n                </div>\r\n\r\n                <div className=\"absolute bottom-[3vw] right-[3vw] z-50 font-mono text-xs tracking-wider uppercase opacity-70\">\r\n                    scroll to surf\r\n                </div>\r\n\r\n                {/* 3D Scene */}\r\n                <div\r\n                    className=\"absolute inset-0 flex items-center justify-center\"\r\n                    style={{\r\n                        perspective: \"2000px\",\r\n                        perspectiveOrigin: \"10% 10%\",\r\n                    }}\r\n                >\r\n                    {/* Animated Track */}\r\n                    <motion.div\r\n                        className=\"relative w-0 h-0\"\r\n                        style={{\r\n                            x,\r\n                            y,\r\n                            z,\r\n                            transformStyle: \"preserve-3d\",\r\n                        }}\r\n                    >\r\n                        {duplicatedItems.map((item, i) => (\r\n                            <Card\r\n                                // We need a unique key because IDs repeat in the duplicated array\r\n                                key={`${item.id}-${i}`}\r\n                                item={item}\r\n                                i={i}\r\n                                stepX={stepX}\r\n                                stepY={step",
+          "signals": {
+            "type": "react-component",
+            "hasTailwind": true,
+            "hasMotion": true,
+            "hasShadcn": true,
+            "exports": [
+              "CollectionSurfer"
+            ],
+            "imports": [
+              "framer-motion",
+              "react"
+            ]
+          }
+        },
+        {
+          "relativePath": "packages/ui/src/components/cursor-driven-particle-typography.tsx",
+          "score": 15,
+          "bytes": 9679,
+          "sha256": "9c275035059bb30e569a38c4761c31089bc2bf6f7fae9471f1ceb9acb9289f2e",
+          "sampleChars": 5000,
+          "sample": "\"use client\";\r\n\r\nimport { cn } from \"@workspace/ui/lib/utils\";\r\nimport React, { useEffect, useRef } from \"react\";\r\n\r\nexport interface CursorDrivenParticleTypographyProps {\r\n    /** Additional CSS classes */\r\n    className?: string;\r\n    /** The text to render */\r\n    text: string;\r\n    /** Font size in pixels */\r\n    fontSize?: number;\r\n    /** Font family */\r\n    fontFamily?: string;\r\n    /** Size of each particle */\r\n    particleSize?: number;\r\n    /** Density of particles (lower number = more particles, minimum 1) */\r\n    particleDensity?: number;\r\n    /** How strongly the cursor pushes particles away */\r\n    dispersionStrength?: number;\r\n    /** Speed at which particles return to origin */\r\n    returnSpeed?: number;\r\n    /** Custom color for particles. Overrides inherited text color if set. */\r\n    color?: string;\r\n}\r\n\r\nclass Particle {\r\n    x: number;\r\n    y: number;\r\n    originX: number;\r\n    originY: number;\r\n    vx: number;\r\n    vy: number;\r\n    size: number;\r\n    color: string;\r\n    dispersion: number;\r\n    returnSpd: number;\r\n\r\n    constructor(\r\n        x: number,\r\n        y: number,\r\n        size: number,\r\n        color: string,\r\n        dispersion: number,\r\n        returnSpd: number\r\n    ) {\r\n        this.x = x + (Math.random() - 0.5) * 10; // start with slight randomness\r\n        this.y = y + (Math.random() - 0.5) * 10;\r\n        this.originX = x;\r\n        this.originY = y;\r\n        this.vx = (Math.random() - 0.5) * 5;\r\n        this.vy = (Math.random() - 0.5) * 5;\r\n        this.size = size;\r\n        this.color = color;\r\n        this.dispersion = dispersion;\r\n        this.returnSpd = returnSpd;\r\n    }\r\n\r\n    update(mouseX: number, mouseY: number) {\r\n        const dx = mouseX - this.x;\r\n        const dy = mouseY - this.y;\r\n        const distance = Math.sqrt(dx * dx + dy * dy);\r\n\r\n        // Physics interaction with mouse\r\n        const interactionRadius = 120; // 120px interaction radius\r\n\r\n        if (distance < interactionRadius && mouseX !== -1000 && mouseY !== -1000) {\r\n            const forceDirectionX = dx / distance;\r\n            const forceDirectionY = dy / distance;\r\n\r\n            const force = (interactionRadius - distance) / interactionRadius;\r\n\r\n            // Calculate repulsion\r\n            const repulsionX = forceDirectionX * force * this.dispersion;\r\n            const repulsionY = forceDirectionY * force * this.dispersion;\r\n\r\n            this.vx -= repulsionX;\r\n            this.vy -= repulsionY;\r\n        }\r\n\r\n        // Return to origin (spring physics)\r\n        this.vx += (this.originX - this.x) * this.returnSpd;\r\n        this.vy += (this.originY - this.y) * this.returnSpd;\r\n\r\n        // Friction\r\n        this.vx *= 0.85;\r\n        this.vy *= 0.85;\r\n\r\n        // Add subtle noise/jitter when close to origin\r\n        const distToOrigin = Math.sqrt(\r\n            Math.pow(this.x - this.originX, 2) + Math.pow(this.y - this.originY, 2)\r\n        );\r\n        if (distToOrigin < 1 && Math.random() > 0.95) {\r\n            this.vx += (Math.random() - 0.5) * 0.2;\r\n            this.vy += (Math.random() - 0.5) * 0.2;\r\n        }\r\n\r\n        this.x += this.vx;\r\n        this.y += this.vy;\r\n    }\r\n\r\n    draw(ctx: CanvasRenderingContext2D) {\r\n        ctx.fillStyle = this.color;\r\n        ctx.beginPath();\r\n        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);\r\n        ctx.fill();\r\n    }\r\n}\r\n\r\nexport function CursorDrivenParticleTypography({\r\n    className,\r\n    text,\r\n    fontSize = 120,\r\n    fontFamily = \"Inter, sans-serif\",\r\n    particleSize = 1.5,\r\n    particleDensity = 6,\r\n    dispersionStrength = 15,\r\n    returnSpeed = 0.08,\r\n    color,\r\n}: CursorDrivenParticleTypographyProps) {\r\n    const canvasRef = useRef<HTMLCanvasElement>(null);\r\n    const containerRef = useRef<HTMLDivElement>(null);\r\n\r\n    useEffect(() => {\r\n        const canvas = canvasRef.current;\r\n        if (!canvas) return;\r\n        const ctx = canvas.getContext(\"2d\", { willReadFrequently: true });\r\n        if (!ctx) return;\r\n\r\n        let animationFrameId: number;\r\n        let particles: Particle[] = [];\r\n\r\n        let mouseX = -1000;\r\n        let mouseY = -1000;\r\n\r\n        let containerWidth = 0;\r\n        let containerHeight = 0;\r\n\r\n        const init = () => {\r\n            const container = containerRef.current;\r\n            if (!container) return;\r\n\r\n            containerWidth = container.clientWidth;\r\n            containerHeight = container.clientHeight;\r\n\r\n            const dpr = window.devicePixelRatio || 1;\r\n            canvas.width = containerWidth * dpr;\r\n            canvas.height = containerHeight * dpr;\r\n            canvas.style.width = `${containerWidth}px`;\r\n            canvas.style.height = `${containerHeight}px`;\r\n\r\n            ctx.scale(dpr, dpr);\r\n\r\n            // Determine text color\r\n            const computedStyle = window.getComputedStyle(container);\r\n            const textColor = color || computedStyle.color || \"#000000\";\r\n\r\n            ctx.clearRect(0, 0, containerWidth, containerHeight);\r\n\r\n            // Dra",
+          "signals": {
+            "type": "react-component",
+            "hasTailwind": true,
+            "hasMotion": false,
+            "hasShadcn": false,
+            "exports": [
+              "CursorDrivenParticleTypography"
+            ],
+            "imports": [
+              "@workspace/ui/lib/utils",
+              "react"
+            ]
+          }
+        },
+        {
+          "relativePath": "packages/ui/src/components/dither-gradient.tsx",
+          "score": 15,
+          "bytes": 3681,
+          "sha256": "0d594a7d921f14d197697f310f95f56da11e57e1be73adbb45f2412707382ed7",
+          "sampleChars": 3681,
+          "sample": "\"use client\"\r\n\r\nimport { useEffect, useRef } from \"react\"\r\nimport { cn } from \"@workspace/ui/lib/utils\"\r\n\r\ninterface DitherGradientProps {\r\n  className?: string\r\n  colorFrom?: string\r\n  colorTo?: string\r\n  colorMid?: string\r\n  intensity?: number\r\n  speed?: number\r\n  angle?: number\r\n}\r\n\r\nexport function DitherGradient({\r\n  className,\r\n  colorFrom = \"#4f46e5\",\r\n  colorTo = \"#ec4899\",\r\n  colorMid = \"#a855f7\",\r\n  intensity = 0.15,\r\n  speed = 3,\r\n  angle = 45,\r\n}: DitherGradientProps) {\r\n  const canvasRef = useRef<HTMLCanvasElement>(null)\r\n  const animationRef = useRef<number>(0)\r\n\r\n  useEffect(() => {\r\n    const canvas = canvasRef.current\r\n    if (!canvas) return\r\n\r\n    const ctx = canvas.getContext(\"2d\")\r\n    if (!ctx) return\r\n\r\n    const resize = () => {\r\n      const rect = canvas.getBoundingClientRect()\r\n      canvas.width = rect.width\r\n      canvas.height = rect.height\r\n    }\r\n\r\n    resize()\r\n    window.addEventListener(\"resize\", resize)\r\n\r\n    let time = 0\r\n    const bayerMatrix = [\r\n      [0, 8, 2, 10],\r\n      [12, 4, 14, 6],\r\n      [3, 11, 1, 9],\r\n      [15, 7, 13, 5],\r\n    ]\r\n\r\n    const hexToRgb = (hex: string) => {\r\n      const result = /^#?([a-f\\d]{2})([a-f\\d]{2})([a-f\\d]{2})$/i.exec(hex)\r\n      if (!result) return { r: 0, g: 0, b: 0 }\r\n      return {\r\n        r: parseInt(result[1]!, 16),\r\n        g: parseInt(result[2]!, 16),\r\n        b: parseInt(result[3]!, 16),\r\n      }\r\n    }\r\n\r\n    const smoothstep = (t: number) => t * t * (3 - 2 * t)\r\n\r\n    const animate = () => {\r\n      const { width, height } = canvas\r\n      const imageData = ctx.createImageData(width, height)\r\n      const data = imageData.data\r\n\r\n      const from = hexToRgb(colorFrom)\r\n      const mid = hexToRgb(colorMid)\r\n      const to = hexToRgb(colorTo)\r\n      const rad = (angle * Math.PI) / 180\r\n\r\n      for (let y = 0; y < height; y++) {\r\n        for (let x = 0; x < width; x++) {\r\n          const normalizedX = x / width\r\n          const normalizedY = y / height\r\n          \r\n          const gradientPos = \r\n            (normalizedX * Math.cos(rad) + normalizedY * Math.sin(rad)) * 0.8 + \r\n            0.1 + \r\n            Math.sin(time * speed * 0.0008) * 0.1\r\n\r\n          const clampedPos = Math.max(0, Math.min(1, gradientPos))\r\n\r\n          let r: number, g: number, b: number\r\n          if (clampedPos < 0.5) {\r\n            const t = smoothstep(clampedPos * 2)\r\n            r = from.r + (mid.r - from.r) * t\r\n            g = from.g + (mid.g - from.g) * t\r\n            b = from.b + (mid.b - from.b) * t\r\n          } else {\r\n            const t = smoothstep((clampedPos - 0.5) * 2)\r\n            r = mid.r + (to.r - mid.r) * t\r\n            g = mid.g + (to.g - mid.g) * t\r\n            b = mid.b + (to.b - mid.b) * t\r\n          }\r\n\r\n          const threshold = (bayerMatrix[y % 4]![x % 4]! / 16 - 0.5) * intensity * 180\r\n          const noise = (Math.random() - 0.5) * intensity * 60\r\n\r\n          const idx = (y * width + x) * 4\r\n          data[idx] = Math.min(255, Math.max(0, r + threshold + noise))\r\n          data[idx + 1] = Math.min(255, Math.max(0, g + threshold + noise))\r\n          data[idx + 2] = Math.min(255, Math.max(0, b + threshold + noise))\r\n          data[idx + 3] = 255\r\n        }\r\n      }\r\n\r\n      ctx.putImageData(imageData, 0, 0)\r\n      time += 16\r\n      animationRef.current = requestAnimationFrame(animate)\r\n    }\r\n\r\n    animate()\r\n\r\n    return () => {\r\n      window.removeEventListener(\"resize\", resize)\r\n      cancelAnimationFrame(animationRef.current)\r\n    }\r\n  }, [colorFrom, colorTo, colorMid, intensity, speed, angle])\r\n\r\n  return (\r\n    <canvas\r\n      ref={canvasRef}\r\n      className={cn(\"absolute inset-0 h-full w-full\", className)}\r\n    />\r\n  )\r\n}\r\n",
+          "signals": {
+            "type": "react-component",
+            "hasTailwind": false,
+            "hasMotion": false,
+            "hasShadcn": false,
+            "exports": [
+              "DitherGradient"
+            ],
+            "imports": [
+              "react",
+              "@workspace/ui/lib/utils"
+            ]
+          }
         }
       ]
     },
@@ -200,8 +284,8 @@
       "licensePath": "C:/Users/PC/.codex/design-stack/repos/ibelick__motion-primitives/LICENCE.md",
       "status": "allowed-after-review",
       "indexed": true,
-      "totalCandidateFiles": 24,
-      "selectedExamples": 8,
+      "totalCandidateFiles": 36,
+      "selectedExamples": 12,
       "examples": [
         {
           "relativePath": "components/website/code-block.tsx",
@@ -370,6 +454,90 @@
               "react"
             ]
           }
+        },
+        {
+          "relativePath": "components/core/animated-group.tsx",
+          "score": 7,
+          "bytes": 3253,
+          "sha256": "d2580c93743511784cda57fa945d3197121158a60970677fd837c2fab2113bfe",
+          "sampleChars": 3253,
+          "sample": "'use client';\r\nimport { ReactNode } from 'react';\r\nimport { motion, Variants } from 'motion/react';\r\nimport React from 'react';\r\n\r\nexport type PresetType =\r\n  | 'fade'\r\n  | 'slide'\r\n  | 'scale'\r\n  | 'blur'\r\n  | 'blur-slide'\r\n  | 'zoom'\r\n  | 'flip'\r\n  | 'bounce'\r\n  | 'rotate'\r\n  | 'swing';\r\n\r\nexport type AnimatedGroupProps = {\r\n  children: ReactNode;\r\n  className?: string;\r\n  variants?: {\r\n    container?: Variants;\r\n    item?: Variants;\r\n  };\r\n  preset?: PresetType;\r\n  as?: React.ElementType;\r\n  asChild?: React.ElementType;\r\n};\r\n\r\nconst defaultContainerVariants: Variants = {\r\n  visible: {\r\n    transition: {\r\n      staggerChildren: 0.1,\r\n    },\r\n  },\r\n};\r\n\r\nconst defaultItemVariants: Variants = {\r\n  hidden: { opacity: 0 },\r\n  visible: { opacity: 1 },\r\n};\r\n\r\nconst presetVariants: Record<PresetType, Variants> = {\r\n  fade: {},\r\n  slide: {\r\n    hidden: { y: 20 },\r\n    visible: { y: 0 },\r\n  },\r\n  scale: {\r\n    hidden: { scale: 0.8 },\r\n    visible: { scale: 1 },\r\n  },\r\n  blur: {\r\n    hidden: { filter: 'blur(4px)' },\r\n    visible: { filter: 'blur(0px)' },\r\n  },\r\n  'blur-slide': {\r\n    hidden: { filter: 'blur(4px)', y: 20 },\r\n    visible: { filter: 'blur(0px)', y: 0 },\r\n  },\r\n  zoom: {\r\n    hidden: { scale: 0.5 },\r\n    visible: {\r\n      scale: 1,\r\n      transition: { type: 'spring', stiffness: 300, damping: 20 },\r\n    },\r\n  },\r\n  flip: {\r\n    hidden: { rotateX: -90 },\r\n    visible: {\r\n      rotateX: 0,\r\n      transition: { type: 'spring', stiffness: 300, damping: 20 },\r\n    },\r\n  },\r\n  bounce: {\r\n    hidden: { y: -50 },\r\n    visible: {\r\n      y: 0,\r\n      transition: { type: 'spring', stiffness: 400, damping: 10 },\r\n    },\r\n  },\r\n  rotate: {\r\n    hidden: { rotate: -180 },\r\n    visible: {\r\n      rotate: 0,\r\n      transition: { type: 'spring', stiffness: 200, damping: 15 },\r\n    },\r\n  },\r\n  swing: {\r\n    hidden: { rotate: -10 },\r\n    visible: {\r\n      rotate: 0,\r\n      transition: { type: 'spring', stiffness: 300, damping: 8 },\r\n    },\r\n  },\r\n};\r\n\r\nconst addDefaultVariants = (variants: Variants) => ({\r\n  hidden: { ...defaultItemVariants.hidden, ...variants.hidden },\r\n  visible: { ...defaultItemVariants.visible, ...variants.visible },\r\n});\r\n\r\nfunction AnimatedGroup({\r\n  children,\r\n  className,\r\n  variants,\r\n  preset,\r\n  as = 'div',\r\n  asChild = 'div',\r\n}: AnimatedGroupProps) {\r\n  const selectedVariants = {\r\n    item: addDefaultVariants(preset ? presetVariants[preset] : {}),\r\n    container: addDefaultVariants(defaultContainerVariants),\r\n  };\r\n  const containerVariants = variants?.container || selectedVariants.container;\r\n  const itemVariants = variants?.item || selectedVariants.item;\r\n\r\n  const MotionComponent = React.useMemo(\r\n    () => motion.create(as as keyof JSX.IntrinsicElements),\r\n    [as]\r\n  );\r\n  const MotionChild = React.useMemo(\r\n    () => motion.create(asChild as keyof JSX.IntrinsicElements),\r\n    [asChild]\r\n  );\r\n\r\n  return (\r\n    <MotionComponent\r\n      initial='hidden'\r\n      animate='visible'\r\n      variants={containerVariants}\r\n      className={className}\r\n    >\r\n      {React.Children.map(children, (child, index) => (\r\n        <MotionChild key={index} variants={itemVariants}>\r\n          {child}\r\n        </MotionChild>\r\n      ))}\r\n    </MotionComponent>\r\n  );\r\n}\r\n\r\nexport { AnimatedGroup };\r\n",
+          "signals": {
+            "type": "react-component",
+            "hasTailwind": false,
+            "hasMotion": true,
+            "hasShadcn": true,
+            "exports": [],
+            "imports": [
+              "react",
+              "motion/react",
+              "react"
+            ]
+          }
+        },
+        {
+          "relativePath": "components/core/animated-number.tsx",
+          "score": 7,
+          "bytes": 863,
+          "sha256": "42f685ad122fdb2fe8b1daf2aea686b6a42c591a31adb8acf2394bc2e7db7f94",
+          "sampleChars": 863,
+          "sample": "'use client';\r\nimport { cn } from '@/lib/utils';\r\nimport { motion, SpringOptions, useSpring, useTransform } from 'motion/react';\r\nimport { useEffect } from 'react';\r\n\r\nexport type AnimatedNumberProps = {\r\n  value: number;\r\n  className?: string;\r\n  springOptions?: SpringOptions;\r\n  as?: React.ElementType;\r\n};\r\n\r\nexport function AnimatedNumber({\r\n  value,\r\n  className,\r\n  springOptions,\r\n  as = 'span',\r\n}: AnimatedNumberProps) {\r\n  const MotionComponent = motion.create(as as keyof JSX.IntrinsicElements);\r\n\r\n  const spring = useSpring(value, springOptions);\r\n  const display = useTransform(spring, (current) =>\r\n    Math.round(current).toLocaleString()\r\n  );\r\n\r\n  useEffect(() => {\r\n    spring.set(value);\r\n  }, [spring, value]);\r\n\r\n  return (\r\n    <MotionComponent className={cn('tabular-nums', className)}>\r\n      {display}\r\n    </MotionComponent>\r\n  );\r\n}\r\n",
+          "signals": {
+            "type": "react-component",
+            "hasTailwind": false,
+            "hasMotion": true,
+            "hasShadcn": false,
+            "exports": [
+              "AnimatedNumber"
+            ],
+            "imports": [
+              "@/lib/utils",
+              "motion/react",
+              "react"
+            ]
+          }
+        },
+        {
+          "relativePath": "components/core/border-trail.tsx",
+          "score": 7,
+          "bytes": 1226,
+          "sha256": "76ff37e0a1eba249e6ba325902602f3fc271679e0b6f386cd2739d779dcfd157",
+          "sampleChars": 1226,
+          "sample": "'use client';\r\nimport { cn } from '@/lib/utils';\r\nimport { motion, Transition } from 'motion/react';\r\n\r\nexport type BorderTrailProps = {\r\n  className?: string;\r\n  size?: number;\r\n  transition?: Transition;\r\n  onAnimationComplete?: () => void;\r\n  style?: React.CSSProperties;\r\n};\r\n\r\nexport function BorderTrail({\r\n  className,\r\n  size = 60,\r\n  transition,\r\n  onAnimationComplete,\r\n  style,\r\n}: BorderTrailProps) {\r\n  const defaultTransition: Transition = {\r\n    repeat: Infinity,\r\n    duration: 5,\r\n    ease: 'linear',\r\n  };\r\n\r\n  return (\r\n    <div className='pointer-events-none absolute inset-0 rounded-[inherit] border border-transparent [mask-clip:padding-box,border-box] [mask-composite:intersect] [mask-image:linear-gradient(transparent,transparent),linear-gradient(#000,#000)]'>\r\n      <motion.div\r\n        className={cn('absolute aspect-square bg-zinc-500', className)}\r\n        style={{\r\n          width: size,\r\n          offsetPath: `rect(0 auto auto 0 round ${size}px)`,\r\n          ...style,\r\n        }}\r\n        animate={{\r\n          offsetDistance: ['0%', '100%'],\r\n        }}\r\n        transition={transition || defaultTransition}\r\n        onAnimationComplete={onAnimationComplete}\r\n      />\r\n    </div>\r\n  );\r\n}\r\n",
+          "signals": {
+            "type": "react-component",
+            "hasTailwind": true,
+            "hasMotion": true,
+            "hasShadcn": false,
+            "exports": [
+              "BorderTrail"
+            ],
+            "imports": [
+              "@/lib/utils",
+              "motion/react"
+            ]
+          }
+        },
+        {
+          "relativePath": "components/core/carousel.tsx",
+          "score": 7,
+          "bytes": 8620,
+          "sha256": "8d4648c85575d0f777050c41c0ec691d6b407be3e33a35f5b1bb246cf2cc6e75",
+          "sampleChars": 5000,
+          "sample": "'use client';\r\nimport {\r\n  Children,\r\n  ReactNode,\r\n  createContext,\r\n  useContext,\r\n  useEffect,\r\n  useRef,\r\n  useState,\r\n} from 'react';\r\nimport { motion, Transition, useMotionValue } from 'motion/react';\r\nimport { cn } from '@/lib/utils';\r\nimport { ChevronLeft, ChevronRight } from 'lucide-react';\r\n\r\nexport type CarouselContextType = {\r\n  index: number;\r\n  setIndex: (newIndex: number) => void;\r\n  itemsCount: number;\r\n  setItemsCount: (newItemsCount: number) => void;\r\n  disableDrag: boolean;\r\n};\r\n\r\nconst CarouselContext = createContext<CarouselContextType | undefined>(\r\n  undefined\r\n);\r\n\r\nfunction useCarousel() {\r\n  const context = useContext(CarouselContext);\r\n  if (!context) {\r\n    throw new Error('useCarousel must be used within an CarouselProvider');\r\n  }\r\n  return context;\r\n}\r\n\r\nexport type CarouselProviderProps = {\r\n  children: ReactNode;\r\n  initialIndex?: number;\r\n  onIndexChange?: (newIndex: number) => void;\r\n  disableDrag?: boolean;\r\n};\r\n\r\nfunction CarouselProvider({\r\n  children,\r\n  initialIndex = 0,\r\n  onIndexChange,\r\n  disableDrag = false,\r\n}: CarouselProviderProps) {\r\n  const [index, setIndex] = useState<number>(initialIndex);\r\n  const [itemsCount, setItemsCount] = useState<number>(0);\r\n\r\n  const handleSetIndex = (newIndex: number) => {\r\n    setIndex(newIndex);\r\n    onIndexChange?.(newIndex);\r\n  };\r\n\r\n  useEffect(() => {\r\n    setIndex(initialIndex);\r\n  }, [initialIndex]);\r\n\r\n  return (\r\n    <CarouselContext.Provider\r\n      value={{\r\n        index,\r\n        setIndex: handleSetIndex,\r\n        itemsCount,\r\n        setItemsCount,\r\n        disableDrag,\r\n      }}\r\n    >\r\n      {children}\r\n    </CarouselContext.Provider>\r\n  );\r\n}\r\n\r\nexport type CarouselProps = {\r\n  children: ReactNode;\r\n  className?: string;\r\n  initialIndex?: number;\r\n  index?: number;\r\n  onIndexChange?: (newIndex: number) => void;\r\n  disableDrag?: boolean;\r\n};\r\n\r\nfunction Carousel({\r\n  children,\r\n  className,\r\n  initialIndex = 0,\r\n  index: externalIndex,\r\n  onIndexChange,\r\n  disableDrag = false,\r\n}: CarouselProps) {\r\n  const [internalIndex, setInternalIndex] = useState<number>(initialIndex);\r\n  const isControlled = externalIndex !== undefined;\r\n  const currentIndex = isControlled ? externalIndex : internalIndex;\r\n\r\n  const handleIndexChange = (newIndex: number) => {\r\n    if (!isControlled) {\r\n      setInternalIndex(newIndex);\r\n    }\r\n    onIndexChange?.(newIndex);\r\n  };\r\n\r\n  return (\r\n    <CarouselProvider\r\n      initialIndex={currentIndex}\r\n      onIndexChange={handleIndexChange}\r\n      disableDrag={disableDrag}\r\n    >\r\n      <div className={cn('group/hover relative', className)}>\r\n        <div className='overflow-hidden'>{children}</div>\r\n      </div>\r\n    </CarouselProvider>\r\n  );\r\n}\r\n\r\nexport type CarouselNavigationProps = {\r\n  className?: string;\r\n  classNameButton?: string;\r\n  alwaysShow?: boolean;\r\n};\r\n\r\nfunction CarouselNavigation({\r\n  className,\r\n  classNameButton,\r\n  alwaysShow,\r\n}: CarouselNavigationProps) {\r\n  const { index, setIndex, itemsCount } = useCarousel();\r\n\r\n  return (\r\n    <div\r\n      className={cn(\r\n        'pointer-events-none absolute left-[-12.5%] top-1/2 flex w-[125%] -translate-y-1/2 justify-between px-2',\r\n        className\r\n      )}\r\n    >\r\n      <button\r\n        type='button'\r\n        aria-label='Previous slide'\r\n        className={cn(\r\n          'pointer-events-auto h-fit w-fit rounded-full bg-zinc-50 p-2 transition-opacity duration-300 dark:bg-zinc-950',\r\n          alwaysShow\r\n            ? 'opacity-100'\r\n            : 'opacity-0 group-hover/hover:opacity-100',\r\n          alwaysShow\r\n            ? 'disabled:opacity-40'\r\n            : 'group-hover/hover:disabled:opacity-40',\r\n          classNameButton\r\n        )}\r\n        disabled={index === 0}\r\n        onClick={() => {\r\n          if (index > 0) {\r\n            setIndex(index - 1);\r\n          }\r\n        }}\r\n      >\r\n        <ChevronLeft\r\n          className='stroke-zinc-600 dark:stroke-zinc-50'\r\n          size={16}\r\n        />\r\n      </button>\r\n      <button\r\n        type='button'\r\n        className={cn(\r\n          'pointer-events-auto h-fit w-fit rounded-full bg-zinc-50 p-2 transition-opacity duration-300 dark:bg-zinc-950',\r\n          alwaysShow\r\n            ? 'opacity-100'\r\n            : 'opacity-0 group-hover/hover:opacity-100',\r\n          alwaysShow\r\n            ? 'disabled:opacity-40'\r\n            : 'group-hover/hover:disabled:opacity-40',\r\n          classNameButton\r\n        )}\r\n        aria-label='Next slide'\r\n        disabled={index + 1 === itemsCount}\r\n        onClick={() => {\r\n          if (index < itemsCount - 1) {\r\n            setIndex(index + 1);\r\n          }\r\n        }}\r\n      >\r\n        <ChevronRight\r\n          className='stroke-zinc-600 dark:stroke-zinc-50'\r\n          size={16}\r\n        />\r\n      </button>\r\n    </div>\r\n  );\r\n}\r\n\r\nexport type CarouselIndicatorProps = {\r\n  className?: string;\r\n  classNameButton?: string;\r\n};\r\n\r\nfunction CarouselIndicator({\r\n  className,\r\n  classNameButton,\r\n}: CarouselIndicatorProps) {\r\n  const { index, ite",
+          "signals": {
+            "type": "react-component",
+            "hasTailwind": true,
+            "hasMotion": true,
+            "hasShadcn": false,
+            "exports": [],
+            "imports": [
+              "react",
+              "motion/react",
+              "@/lib/utils",
+              "lucide-react"
+            ]
+          }
         }
       ]
     },
@@ -380,8 +548,8 @@
       "licensePath": "C:/Users/PC/.codex/design-stack/repos/launch-ui__launch-ui/LICENSE.md",
       "status": "allowed-after-review",
       "indexed": true,
-      "totalCandidateFiles": 24,
-      "selectedExamples": 8,
+      "totalCandidateFiles": 36,
+      "selectedExamples": 12,
       "examples": [
         {
           "relativePath": "components/ui/accordion.tsx",
@@ -544,6 +712,88 @@
               "@/lib/utils"
             ]
           }
+        },
+        {
+          "relativePath": "components/ui/item.tsx",
+          "score": 10,
+          "bytes": 1194,
+          "sha256": "bdd654441a084d0a665cb2bf65e12891bb0ca93fdb476ba8896b2044e4fc6c62",
+          "sampleChars": 1194,
+          "sample": "import * as React from \"react\";\r\n\r\nimport { cn } from \"@/lib/utils\";\r\n\r\nfunction Item({ className, ...props }: React.ComponentProps<\"div\">) {\r\n  return (\r\n    <div\r\n      data-slot=\"item\"\r\n      className={cn(\"text-foreground flex flex-col gap-4 p-4\", className)}\r\n      {...props}\r\n    />\r\n  );\r\n}\r\n\r\nfunction ItemTitle({ className, ...props }: React.ComponentProps<\"h3\">) {\r\n  return (\r\n    <h3\r\n      data-slot=\"item-title\"\r\n      className={cn(\r\n        \"text-sm leading-none font-semibold tracking-tight sm:text-base\",\r\n        className,\r\n      )}\r\n      {...props}\r\n    />\r\n  );\r\n}\r\n\r\nfunction ItemDescription({ className, ...props }: React.ComponentProps<\"div\">) {\r\n  return (\r\n    <div\r\n      data-slot=\"item-description\"\r\n      className={cn(\r\n        \"text-muted-foreground flex max-w-[240px] flex-col gap-2 text-sm text-balance\",\r\n        className,\r\n      )}\r\n      {...props}\r\n    />\r\n  );\r\n}\r\n\r\nfunction ItemIcon({ className, ...props }: React.ComponentProps<\"div\">) {\r\n  return (\r\n    <div\r\n      data-slot=\"item-icon\"\r\n      className={cn(\"flex items-center self-start\", className)}\r\n      {...props}\r\n    />\r\n  );\r\n}\r\n\r\nexport { Item, ItemDescription, ItemIcon, ItemTitle };\r\n",
+          "signals": {
+            "type": "react-component",
+            "hasTailwind": false,
+            "hasMotion": false,
+            "hasShadcn": false,
+            "exports": [],
+            "imports": [
+              "react",
+              "@/lib/utils"
+            ]
+          }
+        },
+        {
+          "relativePath": "components/ui/layout-lines.tsx",
+          "score": 10,
+          "bytes": 428,
+          "sha256": "3fd980c5e8c0bf162acad98e93d0bcb570a56a05a41922236e4257afca728117",
+          "sampleChars": 428,
+          "sample": "import * as React from \"react\";\r\n\r\nimport { cn } from \"@/lib/utils\";\r\n\r\nfunction LayoutLines({ className, ...props }: React.ComponentProps<\"section\">) {\r\n  return (\r\n    <section\r\n      className={cn(\"pointer-events-none fixed inset-0 top-0\", className)}\r\n      {...props}\r\n    >\r\n      <div className=\"max-w-container line-y line-dashed mx-auto flex h-full flex-col\"></div>\r\n    </section>\r\n  );\r\n}\r\n\r\nexport { LayoutLines };\r\n",
+          "signals": {
+            "type": "react-component",
+            "hasTailwind": true,
+            "hasMotion": false,
+            "hasShadcn": false,
+            "exports": [],
+            "imports": [
+              "react",
+              "@/lib/utils"
+            ]
+          }
+        },
+        {
+          "relativePath": "components/ui/link-button.tsx",
+          "score": 10,
+          "bytes": 738,
+          "sha256": "0dfb157950be674d9dc36c50762980b7ad76082309423c30d2031bb374e924ce",
+          "sampleChars": 738,
+          "sample": "import { type VariantProps } from \"class-variance-authority\";\r\nimport { type ComponentProps, type ReactNode } from \"react\";\r\n\r\nimport { Button, buttonVariants } from \"./button\";\r\n\r\nexport interface LinkButtonProps {\r\n  href: string;\r\n  children: ReactNode;\r\n  variant?: VariantProps<typeof buttonVariants>[\"variant\"];\r\n  icon?: ReactNode;\r\n  iconRight?: ReactNode;\r\n  size?: ComponentProps<typeof Button>[\"size\"];\r\n}\r\n\r\nexport function LinkButton({\r\n  href,\r\n  children,\r\n  variant = \"default\",\r\n  icon,\r\n  iconRight,\r\n  size = \"lg\",\r\n}: LinkButtonProps) {\r\n  return (\r\n    <Button variant={variant} size={size} asChild>\r\n      <a href={href}>\r\n        {icon}\r\n        {children}\r\n        {iconRight}\r\n      </a>\r\n    </Button>\r\n  );\r\n}\r\n",
+          "signals": {
+            "type": "react-component",
+            "hasTailwind": false,
+            "hasMotion": false,
+            "hasShadcn": true,
+            "exports": [
+              "LinkButton"
+            ],
+            "imports": [
+              "class-variance-authority",
+              "react",
+              "./button"
+            ]
+          }
+        },
+        {
+          "relativePath": "components/ui/logo.tsx",
+          "score": 10,
+          "bytes": 1122,
+          "sha256": "8f32f7b70e7cfd34aeee2ebf2b735609673ccb51b77b6fc6968d09f8576f6791",
+          "sampleChars": 1122,
+          "sample": "import React from \"react\";\r\n\r\nimport { cn } from \"@/lib/utils\";\r\n\r\nimport { Badge } from \"./badge\";\r\n\r\nexport interface LogoProps extends React.HTMLAttributes<HTMLDivElement> {\r\n  image: React.ComponentType<React.SVGProps<SVGSVGElement>>;\r\n  name: string;\r\n  version?: string;\r\n  width?: number;\r\n  height?: number;\r\n  showName?: boolean;\r\n  badge?: string;\r\n}\r\n\r\nexport default function Logo({\r\n  className,\r\n  image: SvgImage,\r\n  name,\r\n  version,\r\n  width = 24,\r\n  height = 24,\r\n  showName = true,\r\n  badge,\r\n  ...props\r\n}: LogoProps) {\r\n  return (\r\n    <div\r\n      data-slot=\"logo\"\r\n      className={cn(\"flex items-center gap-2 text-sm font-medium\", className)}\r\n      {...props}\r\n    >\r\n      <SvgImage\r\n        width={width}\r\n        height={height}\r\n        aria-hidden=\"true\"\r\n        className=\"max-h-full max-w-full opacity-70\"\r\n      />\r\n      <span className={cn(!showName && \"sr-only\")}>{name}</span>\r\n      {version && <span className=\"text-muted-foreground\">{version}</span>}\r\n      {badge && (\r\n        <Badge variant=\"brand\" size=\"sm\">\r\n          {badge}\r\n        </Badge>\r\n      )}\r\n    </div>\r\n  );\r\n}\r\n",
+          "signals": {
+            "type": "react-component",
+            "hasTailwind": true,
+            "hasMotion": false,
+            "hasShadcn": true,
+            "exports": [
+              "Logo"
+            ],
+            "imports": [
+              "react",
+              "@/lib/utils",
+              "./badge"
+            ]
+          }
         }
       ]
     },
@@ -554,8 +804,8 @@
       "licensePath": "C:/Users/PC/.codex/design-stack/repos/magicuidesign__magicui/LICENSE.md",
       "status": "allowed-after-review",
       "indexed": true,
-      "totalCandidateFiles": 24,
-      "selectedExamples": 8,
+      "totalCandidateFiles": 36,
+      "selectedExamples": 12,
       "examples": [
         {
           "relativePath": "apps/www/components/code-block-command.tsx",
@@ -729,6 +979,86 @@
               "@/components/ui/button"
             ]
           }
+        },
+        {
+          "relativePath": "apps/www/components/ui/card.tsx",
+          "score": 15,
+          "bytes": 1828,
+          "sha256": "588076549982a167b2bd72c9325100f77f9ba513cd57d80d815ab37d0a9ba5f5",
+          "sampleChars": 1828,
+          "sample": "import * as React from \"react\"\n\nimport { cn } from \"@/lib/utils\"\n\nconst Card = React.forwardRef<\n  HTMLDivElement,\n  React.HTMLAttributes<HTMLDivElement>\n>(({ className, ...props }, ref) => (\n  <div\n    ref={ref}\n    className={cn(\n      \"bg-card text-card-foreground rounded-xl border shadow\",\n      className\n    )}\n    {...props}\n  />\n))\nCard.displayName = \"Card\"\n\nconst CardHeader = React.forwardRef<\n  HTMLDivElement,\n  React.HTMLAttributes<HTMLDivElement>\n>(({ className, ...props }, ref) => (\n  <div\n    ref={ref}\n    className={cn(\"flex flex-col space-y-1.5 p-6\", className)}\n    {...props}\n  />\n))\nCardHeader.displayName = \"CardHeader\"\n\nconst CardTitle = React.forwardRef<\n  HTMLDivElement,\n  React.HTMLAttributes<HTMLDivElement>\n>(({ className, ...props }, ref) => (\n  <div\n    ref={ref}\n    className={cn(\"leading-none font-semibold tracking-tight\", className)}\n    {...props}\n  />\n))\nCardTitle.displayName = \"CardTitle\"\n\nconst CardDescription = React.forwardRef<\n  HTMLDivElement,\n  React.HTMLAttributes<HTMLDivElement>\n>(({ className, ...props }, ref) => (\n  <div\n    ref={ref}\n    className={cn(\"text-muted-foreground text-sm\", className)}\n    {...props}\n  />\n))\nCardDescription.displayName = \"CardDescription\"\n\nconst CardContent = React.forwardRef<\n  HTMLDivElement,\n  React.HTMLAttributes<HTMLDivElement>\n>(({ className, ...props }, ref) => (\n  <div ref={ref} className={cn(\"p-6 pt-0\", className)} {...props} />\n))\nCardContent.displayName = \"CardContent\"\n\nconst CardFooter = React.forwardRef<\n  HTMLDivElement,\n  React.HTMLAttributes<HTMLDivElement>\n>(({ className, ...props }, ref) => (\n  <div\n    ref={ref}\n    className={cn(\"flex items-center p-6 pt-0\", className)}\n    {...props}\n  />\n))\nCardFooter.displayName = \"CardFooter\"\n\nexport { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent }\n",
+          "signals": {
+            "type": "react-component",
+            "hasTailwind": false,
+            "hasMotion": false,
+            "hasShadcn": false,
+            "exports": [],
+            "imports": [
+              "react",
+              "@/lib/utils"
+            ]
+          }
+        },
+        {
+          "relativePath": "apps/www/components/ui/collapsible.tsx",
+          "score": 15,
+          "bytes": 329,
+          "sha256": "f4cdd104de29928bfcd40b865c7d08eed9157a537fbb8b5e6d0921f02b63cc04",
+          "sampleChars": 329,
+          "sample": "\"use client\"\n\nimport * as CollapsiblePrimitive from \"@radix-ui/react-collapsible\"\n\nconst Collapsible = CollapsiblePrimitive.Root\n\nconst CollapsibleTrigger = CollapsiblePrimitive.CollapsibleTrigger\n\nconst CollapsibleContent = CollapsiblePrimitive.CollapsibleContent\n\nexport { Collapsible, CollapsibleTrigger, CollapsibleContent }\n",
+          "signals": {
+            "type": "utility",
+            "hasTailwind": false,
+            "hasMotion": false,
+            "hasShadcn": false,
+            "exports": [],
+            "imports": [
+              "@radix-ui/react-collapsible"
+            ]
+          }
+        },
+        {
+          "relativePath": "apps/www/components/ui/command.tsx",
+          "score": 15,
+          "bytes": 4818,
+          "sha256": "71f7efa974c1855940a2daaa95bb6cbeaddc3f3c527841c6125ec858265db82c",
+          "sampleChars": 4818,
+          "sample": "\"use client\"\n\nimport * as React from \"react\"\nimport { Command as CommandPrimitive } from \"cmdk\"\nimport { SearchIcon } from \"lucide-react\"\n\nimport { cn } from \"@/lib/utils\"\nimport {\n  Dialog,\n  DialogContent,\n  DialogDescription,\n  DialogHeader,\n  DialogTitle,\n} from \"@/components/ui/dialog\"\n\nfunction Command({\n  className,\n  ...props\n}: React.ComponentProps<typeof CommandPrimitive>) {\n  return (\n    <CommandPrimitive\n      data-slot=\"command\"\n      className={cn(\n        \"bg-popover text-popover-foreground flex h-full w-full flex-col overflow-hidden rounded-md\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction CommandDialog({\n  title = \"Command Palette\",\n  description = \"Search for a command to run...\",\n  children,\n  className,\n  showCloseButton = true,\n  ...props\n}: React.ComponentProps<typeof Dialog> & {\n  title?: string\n  description?: string\n  className?: string\n  showCloseButton?: boolean\n}) {\n  return (\n    <Dialog {...props}>\n      <DialogHeader className=\"sr-only\">\n        <DialogTitle>{title}</DialogTitle>\n        <DialogDescription>{description}</DialogDescription>\n      </DialogHeader>\n      <DialogContent\n        className={cn(\"overflow-hidden p-0\", className)}\n        showCloseButton={showCloseButton}\n      >\n        <Command className=\"[&_[cmdk-group-heading]]:text-muted-foreground **:data-[slot=command-input-wrapper]:h-12 [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group]]:px-2 [&_[cmdk-group]:not([hidden])_~[cmdk-group]]:pt-0 [&_[cmdk-input-wrapper]_svg]:h-5 [&_[cmdk-input-wrapper]_svg]:w-5 [&_[cmdk-input]]:h-12 [&_[cmdk-item]]:px-2 [&_[cmdk-item]]:py-3 [&_[cmdk-item]_svg]:h-5 [&_[cmdk-item]_svg]:w-5\">\n          {children}\n        </Command>\n      </DialogContent>\n    </Dialog>\n  )\n}\n\nfunction CommandInput({\n  className,\n  ...props\n}: React.ComponentProps<typeof CommandPrimitive.Input>) {\n  return (\n    <div\n      data-slot=\"command-input-wrapper\"\n      className=\"flex h-9 items-center gap-2 border-b px-3\"\n    >\n      <SearchIcon className=\"size-4 shrink-0 opacity-50\" />\n      <CommandPrimitive.Input\n        data-slot=\"command-input\"\n        className={cn(\n          \"placeholder:text-muted-foreground flex h-10 w-full rounded-md bg-transparent py-3 text-sm outline-hidden disabled:cursor-not-allowed disabled:opacity-50\",\n          className\n        )}\n        {...props}\n      />\n    </div>\n  )\n}\n\nfunction CommandList({\n  className,\n  ...props\n}: React.ComponentProps<typeof CommandPrimitive.List>) {\n  return (\n    <CommandPrimitive.List\n      data-slot=\"command-list\"\n      className={cn(\n        \"max-h-[300px] scroll-py-1 overflow-x-hidden overflow-y-auto\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction CommandEmpty({\n  ...props\n}: React.ComponentProps<typeof CommandPrimitive.Empty>) {\n  return (\n    <CommandPrimitive.Empty\n      data-slot=\"command-empty\"\n      className=\"py-6 text-center text-sm\"\n      {...props}\n    />\n  )\n}\n\nfunction CommandGroup({\n  className,\n  ...props\n}: React.ComponentProps<typeof CommandPrimitive.Group>) {\n  return (\n    <CommandPrimitive.Group\n      data-slot=\"command-group\"\n      className={cn(\n        \"text-foreground [&_[cmdk-group-heading]]:text-muted-foreground overflow-hidden p-1 [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-xs [&_[cmdk-group-heading]]:font-medium\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction CommandSeparator({\n  className,\n  ...props\n}: React.ComponentProps<typeof CommandPrimitive.Separator>) {\n  return (\n    <CommandPrimitive.Separator\n      data-slot=\"command-separator\"\n      className={cn(\"bg-border -mx-1 h-px\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction CommandItem({\n  className,\n  ...props\n}: React.ComponentProps<typeof CommandPrimitive.Item>) {\n  return (\n    <CommandPrimitive.Item\n      data-slot=\"command-item\"\n      className={cn(\n        \"data-[selected=true]:bg-accent data-[selected=true]:text-accent-foreground [&_svg:not([class*='text-'])]:text-muted-foreground relative flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden select-none data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction CommandShortcut({\n  className,\n  ...props\n}: React.ComponentProps<\"span\">) {\n  return (\n    <span\n      data-slot=\"command-shortcut\"\n      className={cn(\n        \"text-muted-foreground ml-auto text-xs tracking-widest\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nexport {\n  Command,\n  CommandDialog,\n  CommandEmpty,\n  CommandGroup,\n  CommandInput,\n  CommandItem,\n  CommandList,\n  CommandSeparator,\n  CommandShortcut,\n}\n",
+          "signals": {
+            "type": "react-component",
+            "hasTailwind": true,
+            "hasMotion": false,
+            "hasShadcn": true,
+            "exports": [],
+            "imports": [
+              "react",
+              "cmdk",
+              "lucide-react",
+              "@/lib/utils",
+              "@/components/ui/dialog"
+            ]
+          }
+        },
+        {
+          "relativePath": "apps/www/components/ui/context-menu.tsx",
+          "score": 15,
+          "bytes": 7420,
+          "sha256": "99d156995c47991a4bdbac47b5f8654021062050bb11dd6e895f8bdd4300cf0d",
+          "sampleChars": 5000,
+          "sample": "\"use client\"\n\nimport * as React from \"react\"\nimport * as ContextMenuPrimitive from \"@radix-ui/react-context-menu\"\nimport { Check, ChevronRight, Circle } from \"lucide-react\"\n\nimport { cn } from \"@/lib/utils\"\n\nconst ContextMenu = ContextMenuPrimitive.Root\n\nconst ContextMenuTrigger = ContextMenuPrimitive.Trigger\n\nconst ContextMenuGroup = ContextMenuPrimitive.Group\n\nconst ContextMenuPortal = ContextMenuPrimitive.Portal\n\nconst ContextMenuSub = ContextMenuPrimitive.Sub\n\nconst ContextMenuRadioGroup = ContextMenuPrimitive.RadioGroup\n\nconst ContextMenuSubTrigger = React.forwardRef<\n  React.ElementRef<typeof ContextMenuPrimitive.SubTrigger>,\n  React.ComponentPropsWithoutRef<typeof ContextMenuPrimitive.SubTrigger> & {\n    inset?: boolean\n  }\n>(({ className, inset, children, ...props }, ref) => (\n  <ContextMenuPrimitive.SubTrigger\n    ref={ref}\n    className={cn(\n      \"focus:bg-accent focus:text-accent-foreground data-[state=open]:bg-accent data-[state=open]:text-accent-foreground flex cursor-default items-center rounded-sm px-2 py-1.5 text-sm outline-none select-none\",\n      inset && \"pl-8\",\n      className\n    )}\n    {...props}\n  >\n    {children}\n    <ChevronRight className=\"ml-auto h-4 w-4\" />\n  </ContextMenuPrimitive.SubTrigger>\n))\nContextMenuSubTrigger.displayName = ContextMenuPrimitive.SubTrigger.displayName\n\nconst ContextMenuSubContent = React.forwardRef<\n  React.ElementRef<typeof ContextMenuPrimitive.SubContent>,\n  React.ComponentPropsWithoutRef<typeof ContextMenuPrimitive.SubContent>\n>(({ className, ...props }, ref) => (\n  <ContextMenuPrimitive.SubContent\n    ref={ref}\n    className={cn(\n      \"bg-popover text-popover-foreground data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 min-w-[8rem] origin-[--radix-context-menu-content-transform-origin] overflow-hidden rounded-md border p-1 shadow-lg\",\n      className\n    )}\n    {...props}\n  />\n))\nContextMenuSubContent.displayName = ContextMenuPrimitive.SubContent.displayName\n\nconst ContextMenuContent = React.forwardRef<\n  React.ElementRef<typeof ContextMenuPrimitive.Content>,\n  React.ComponentPropsWithoutRef<typeof ContextMenuPrimitive.Content>\n>(({ className, ...props }, ref) => (\n  <ContextMenuPrimitive.Portal>\n    <ContextMenuPrimitive.Content\n      ref={ref}\n      className={cn(\n        \"bg-popover text-popover-foreground data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 max-h-[--radix-context-menu-content-available-height] min-w-[8rem] origin-[--radix-context-menu-content-transform-origin] overflow-x-hidden overflow-y-auto rounded-md border p-1 shadow-md\",\n        className\n      )}\n      {...props}\n    />\n  </ContextMenuPrimitive.Portal>\n))\nContextMenuContent.displayName = ContextMenuPrimitive.Content.displayName\n\nconst ContextMenuItem = React.forwardRef<\n  React.ElementRef<typeof ContextMenuPrimitive.Item>,\n  React.ComponentPropsWithoutRef<typeof ContextMenuPrimitive.Item> & {\n    inset?: boolean\n  }\n>(({ className, inset, ...props }, ref) => (\n  <ContextMenuPrimitive.Item\n    ref={ref}\n    className={cn(\n      \"focus:bg-accent focus:text-accent-foreground relative flex cursor-default items-center rounded-sm px-2 py-1.5 text-sm outline-none select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50\",\n      inset && \"pl-8\",\n      className\n    )}\n    {...props}\n  />\n))\nContextMenuItem.displayName = ContextMenuPrimitive.Item.displayName\n\nconst ContextMenuCheckboxItem = React.forwardRef<\n  React.ElementRef<typeof ContextMenuPrimitive.CheckboxItem>,\n  React.ComponentPropsWithoutRef<typeof ContextMenuPrimitive.CheckboxItem>\n>(({ className, children, checked, ...props }, ref) => (\n  <ContextMenuPrimitive.CheckboxItem\n    ref={ref}\n    className={cn(\n      \"focus:bg-accent focus:text-accent-foreground relative flex cursor-default items-center rounded-sm py-1.5 pr-2 pl-8 text-sm outline-none select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50\",\n      className\n    )}\n    checked={checked}\n    {...props}\n  >\n    <span className=\"absolute left-2 flex h-3.5 w-3.5 items-center justify-center\">\n      <ContextMenuPrimitive.ItemIndicator>\n        <Check className=\"h-4 w-4\" />\n      </ContextMenuPrimitive.ItemIndicator>\n    </span>\n    {children}\n  </ContextMenuPrimitive.CheckboxItem>\n))\nContextMenuCheckboxItem.displayName =\n  ContextMenuPrimitive.CheckboxItem.displayName\n\nconst ContextMenuRadioItem = React.forwardRef<\n  React.ElementRef<typeof ContextMenuPrimitive",
+          "signals": {
+            "type": "react-component",
+            "hasTailwind": true,
+            "hasMotion": false,
+            "hasShadcn": false,
+            "exports": [],
+            "imports": [
+              "react",
+              "@radix-ui/react-context-menu",
+              "lucide-react",
+              "@/lib/utils"
+            ]
+          }
         }
       ]
     },
@@ -739,8 +1069,8 @@
       "licensePath": "C:/Users/PC/.codex/design-stack/repos/markmead__hyperui/LICENSE",
       "status": "allowed-after-review",
       "indexed": true,
-      "totalCandidateFiles": 24,
-      "selectedExamples": 8,
+      "totalCandidateFiles": 36,
+      "selectedExamples": 12,
       "examples": [
         {
           "relativePath": ".agents/skills/building-components/references/registry.mdx",
@@ -884,6 +1214,75 @@
             "exports": [],
             "imports": []
           }
+        },
+        {
+          "relativePath": ".agents/skills/building-components/references/marketplaces.mdx",
+          "score": 5,
+          "bytes": 6091,
+          "sha256": "6f49443ac113881cadbc20f8eb19569df5290e5c93af4a89377a94a752296520",
+          "sampleChars": 5000,
+          "sample": "---\r\ntitle: Marketplaces\r\ndescription: Using component marketplaces to share your components.\r\ntype: conceptual\r\nsummary: Centralized platforms like 21st.dev for publishing, discovering, and installing UI components with built-in previews and community feedback.\r\nprerequisites:\r\n  - /registry\r\nrelated:\r\n  - /npm\r\n  - /docs\r\n---\r\n\r\nComponent marketplaces represent another new paradigm in how developers share and discover UI components. Platforms like [21st.dev](https://21st.dev) have emerged as centralized hubs where creators can publish components and consumers can discover, preview, and install them seamlessly.\r\n\r\nThese marketplaces combine the accessibility of registries with the discoverability of traditional package repositories, creating vibrant ecosystems for component sharing.\r\n\r\n## How Marketplaces Work\r\n\r\nWhen you publish to a marketplace, the platform typically:\r\n\r\n1. **Hosts your component code** - No need to manage your own infrastructure\r\n2. **Provides a unified CLI** - Users install components through the marketplace's tooling\r\n3. **Generates previews** - Live demos and interactive examples are created automatically\r\n4. **Handles discovery** - Search, categories, and recommendations surface relevant components\r\n\r\nFor example, installing from 21st.dev uses the familiar shadcn CLI pattern:\r\n\r\n```bash title=\"Terminal\"\r\nnpx shadcn@latest add https://21st.dev/r/haydenbleasel/dialog-stack\r\n```\r\n\r\nThe marketplace handles serving the component metadata and source code, making the installation process seamless.\r\n\r\n## Benefits of Component Marketplaces\r\n\r\nMarketplaces offer unique advantages that neither registries nor npm packages can match on their own.\r\n\r\n### For Component Authors\r\n\r\n#### Distribution Without Infrastructure\r\n\r\nPublishing to a marketplace eliminates infrastructure concerns. You don't need to setup hosting for your components, or manage CDN distribution.\r\n\r\nThe marketplace handles all of this, letting you focus on creating great components.\r\n\r\n#### Built-in Audience\r\n\r\nMarketplaces aggregate demand. When developers visit 21st.dev or similar platforms, they're actively looking for components. Your work gets discovered organically through search, categories, and recommendations.\r\n\r\nThis built-in traffic means you don't need to market your components independently.\r\n\r\n#### Monetization Opportunities\r\n\r\nSome marketplaces enable creators to monetize their work through premium component tiers, sponsorship programs, usage-based pricing, and one-time purchase models.\r\n\r\nThis creates sustainable incentives for maintaining high-quality components.\r\n\r\n#### Community Feedback\r\n\r\nMarketplaces typically include rating systems, comment sections, usage analytics, and issue tracking.\r\n\r\nThis feedback loop helps you understand how developers use your components and what improvements they need.\r\n\r\n### For Component Consumers\r\n\r\n#### Curated Discovery\r\n\r\nUnlike searching through GitHub or npm, marketplaces offer curated experiences:\r\n\r\n```\r\nBrowse by category:\r\n├── Marketing\r\n│   ├── Heroes\r\n│   ├── Pricing\r\n│   └── Testimonials\r\n├── Application\r\n│   ├── Dashboards\r\n│   ├── Forms\r\n│   └── Data Display\r\n└── E-commerce\r\n    ├── Product Cards\r\n    ├── Cart\r\n    └── Checkout\r\n```\r\n\r\nThis organization makes finding the right component significantly faster.\r\n\r\n#### Quality Assurance\r\n\r\nMany marketplaces implement review processes. Components might go through code quality checks, accessibility audits, performance testing, and documentation review.\r\n\r\nThis curation ensures a baseline quality that self-published components might lack.\r\n\r\n#### Unified Tooling\r\n\r\nUsing a single CLI for all marketplace components simplifies workflow. You can install any component from the marketplace using the same command:\r\n\r\n```bash title=\"Terminal\"\r\nnpx shadcn@latest add https://21st.dev/r/<author>/<component>\r\n```\r\n\r\n## Challenges of Marketplaces\r\n\r\nWhile marketplaces offer compelling benefits, they also introduce unique challenges.\r\n\r\n### For Authors\r\n\r\n#### Competition and Visibility\r\n\r\nIn a crowded marketplace, standing out becomes difficult. You're competing with hundreds of similar components, established creators with followings, featured or sponsored content, and algorithm-driven recommendations.\r\n\r\nSuccess requires more than just good code - you need compelling previews, excellent documentation, and often, active promotion.\r\n\r\n#### Platform Dependency\r\n\r\nPublishing on a marketplace means accepting their terms of service, revenue sharing models, technical requirements, and review processes.\r\n\r\nIf the platform changes policies or shuts down, your distribution channel disappears.\r\n\r\n#### Quality Pressure\r\n\r\nMarketplace users expect polished, production-ready components. This means comprehensive documentation, multiple demo variations, responsive design, cross-browser testing, and accessibility compliance.\r\n\r\nMeeting these expectations requires significant time investment beyond just writing component code.\r\n\r\n### For Consume",
+          "signals": {
+            "type": "docs-example",
+            "hasTailwind": false,
+            "hasMotion": true,
+            "hasShadcn": false,
+            "exports": [],
+            "imports": []
+          }
+        },
+        {
+          "relativePath": ".agents/skills/building-components/references/npm.mdx",
+          "score": 5,
+          "bytes": 5625,
+          "sha256": "9a2c1aee094a850f6e53fb060c3c716ea0a17ed501c00f52a31f5838c270dfb4",
+          "sampleChars": 5000,
+          "sample": "---\r\ntitle: NPM\r\ndescription: How to publish your components to NPM.\r\ntype: guide\r\nsummary: Publishing component libraries to npm with versioned distribution, Tailwind configuration, TypeScript support, and package.json setup.\r\nprerequisites:\r\n  - /registry\r\nrelated:\r\n  - /marketplaces\r\n  - /docs\r\n---\r\n\r\nNPM packages represent the traditional approach to distributing component libraries. While [registries](/registry) have gained popularity for their flexibility, npm publishing remains a powerful option with distinct advantages for certain use cases.\r\n\r\nThe fundamental difference between npm packages and registries lies in how they distribute code and manage ownership.\r\n\r\n## Package Model\r\n\r\nWhen you publish components as an npm package, you're distributing pre-built, versioned code that users install as a dependency:\r\n\r\n```bash title=\"Terminal\"\r\nnpm install @acme/ui-components\r\n```\r\n\r\n```tsx title=\"MyApp.tsx\"\r\nimport { Button } from \"@acme/ui-components\";\r\n\r\n// Component is imported from node_modules\r\n// Source code is not directly editable\r\n```\r\n\r\nThis offers several compelling advantages that make them the right choice for many component libraries.\r\n\r\n### Version Management\r\n\r\nAs the package author, you control versioning and updates. Users can lock to specific versions, ensuring stability:\r\n\r\n```json\r\n{\r\n  \"dependencies\": {\r\n    \"@acme/ui-components\": \"^2.1.0\"\r\n  }\r\n}\r\n```\r\n\r\nThis centralized version control means you can push updates, security patches, and new features that users receive through standard dependency updates.\r\n\r\n### Simplified Installation\r\n\r\nNPM packages provide a frictionless installation experience. A single command adds your entire component library:\r\n\r\n```bash\r\nnpm install @acme/ui-components\r\n```\r\n\r\nNo need to manually copy files, manage dependencies, or configure build tools. Everything works out of the box.\r\n\r\n### Dependency Resolution\r\n\r\nNPM automatically handles transitive dependencies. If your components require specific versions of React, Framer Motion, or other libraries, npm resolves these dependencies automatically, preventing version conflicts.\r\n\r\n### TypeScript Support\r\n\r\nPublished packages can include pre-built type definitions, providing immediate TypeScript support without additional configuration:\r\n\r\n```json\r\n{\r\n  \"types\": \"./dist/index.d.ts\",\r\n  \"exports\": {\r\n    \".\": {\r\n      \"types\": \"./dist/index.d.ts\",\r\n      \"import\": \"./dist/index.js\"\r\n    }\r\n  }\r\n}\r\n```\r\n\r\n## Limitations of NPM Packages\r\n\r\nWhile npm packages excel in distribution, they come with trade-offs that registries specifically address.\r\n\r\n### Source Code Ownership\r\n\r\nThe most significant limitation is the lack of source code access. Users cannot:\r\n\r\n- Modify component behavior directly\r\n- Fix bugs without waiting for updates\r\n- Customize implementation details\r\n- Remove unused code\r\n\r\nThis creates a dependency relationship where users must rely on the package maintainer for all changes.\r\n\r\n### Customization Constraints\r\n\r\nTweaking components requires working within the exposed API. While you can provide props for customization:\r\n\r\n```tsx\r\n<Button variant=\"primary\" size=\"large\" className=\"custom-styles\" />\r\n```\r\n\r\nUsers cannot fundamentally alter how the component works without forking the entire package.\r\n\r\n### Bundle Size\r\n\r\nNPM packages include all components, even if users only need a subset. While tree-shaking helps, it's not always perfect, potentially adding unnecessary weight to applications.\r\n\r\n## CSS and Tailwind Configuration\r\n\r\nOne critical consideration when publishing Tailwind-based components via npm is ensuring styles work correctly in the consuming application.\r\n\r\nBy default, Tailwind only generates styles for classes it finds in your project files. It doesn't look inside `node_modules`, which means your component styles won't be included.\r\n\r\nTo fix this, users need to add a `@source` directive to their Tailwind configuration, telling it to scan your package for class names:\r\n\r\n```css title=\"globals.css\"\r\n@import \"tailwindcss\";\r\n\r\n/* Tell Tailwind to look for classes in your package */\r\n@source \"../node_modules/@acme/ui-components\";\r\n```\r\n\r\nAlways document this requirement prominently in your package README.\r\n\r\n## Publishing Your Component Library\r\n\r\nTo publish your components to npm, you need a properly configured `package.json` which might look like this:\r\n\r\n```json title=\"package.json\"\r\n{\r\n  \"name\": \"@acme/ui-components\",\r\n  \"version\": \"1.0.0\",\r\n  \"description\": \"A collection of accessible React components\",\r\n  \"main\": \"./dist/index.js\",\r\n  \"module\": \"./dist/index.mjs\",\r\n  \"types\": \"./dist/index.d.ts\",\r\n  \"exports\": {\r\n    \".\": {\r\n      \"types\": \"./dist/index.d.ts\",\r\n      \"import\": \"./dist/index.mjs\",\r\n      \"require\": \"./dist/index.js\"\r\n    },\r\n    \"./styles.css\": \"./dist/styles.css\"\r\n  },\r\n  \"files\": [\"dist\"],\r\n  \"scripts\": {\r\n    \"build\": \"tsup\",\r\n    \"prepublishOnly\": \"npm run build\"\r\n  },\r\n  \"peerDependencies\": {\r\n    \"react\": \"^18.0.0\",\r\n    \"react-dom\": \"^18.0.0\"\r\n  },\r\n  \"de",
+          "signals": {
+            "type": "react-component",
+            "hasTailwind": true,
+            "hasMotion": false,
+            "hasShadcn": true,
+            "exports": [],
+            "imports": [
+              "@acme/ui-components"
+            ]
+          }
+        },
+        {
+          "relativePath": ".agents/skills/building-components/references/polymorphism.mdx",
+          "score": 5,
+          "bytes": 14499,
+          "sha256": "90f2d39d31c9591a7c393e8f06bc4b0293ab5823d27f26767136fa1c808bd2d7",
+          "sampleChars": 5000,
+          "sample": "---\r\ntitle: Polymorphism\r\ndescription: How to use the `as` prop to change the rendered HTML element while preserving component functionality.\r\ntype: reference\r\nsummary: The as prop pattern for polymorphic components, compared with Radix UI's Slot-based asChild approach with TypeScript best practices.\r\nprerequisites:\r\n  - /composition\r\n  - /types\r\nrelated:\r\n  - /as-child\r\n  - /accessibility\r\n---\r\n\r\nThe `as` prop is a fundamental pattern in modern React component libraries that allows you to change the underlying HTML element or component that gets rendered.\r\n\r\nPopularized by libraries like [Styled Components](https://styled-components.com/), [Emotion](https://emotion.sh/), and [Chakra UI](https://chakra-ui.com/), this pattern provides flexibility in choosing semantic HTML while maintaining component styling and behavior.\r\n\r\nThe `as` prop enables polymorphic components - components that can render as different element types while preserving their core functionality:\r\n\r\n```tsx\r\n<Button as=\"a\" href=\"/home\">\r\n  Go Home\r\n</Button>\r\n\r\n<Button as=\"button\" type=\"submit\">\r\n  Submit Form\r\n</Button>\r\n\r\n<Button as=\"div\" role=\"button\" tabIndex={0}>\r\n  Custom Element\r\n</Button>\r\n```\r\n\r\n## Understanding `as`\r\n\r\nThe `as` prop allows you to override the default element type of a component. Instead of being locked into a specific HTML element, you can adapt the component to render as any valid HTML tag or even another React component.\r\n\r\nFor example:\r\n\r\n```tsx\r\n// Default renders as a div\r\n<Box>Content</Box>\r\n\r\n// Renders as a section\r\n<Box as=\"section\">Content</Box>\r\n\r\n// Renders as a nav\r\n<Box as=\"nav\">Content</Box>\r\n```\r\n\r\nThis renders different HTML elements:\r\n\r\n```html\r\n<!-- Default -->\r\n<div>Content</div>\r\n\r\n<!-- With as=\"section\" -->\r\n<section>Content</section>\r\n\r\n<!-- With as=\"nav\" -->\r\n<nav>Content</nav>\r\n```\r\n\r\n## Implementation Methods\r\n\r\nThere are two main approaches to implementing polymorphic components: a manual implementation and using Radix UI's `Slot` component.\r\n\r\n### Manual Implementation\r\n\r\nThe `as` prop implementation uses dynamic component rendering:\r\n\r\n```tsx\r\n// Simplified implementation\r\nfunction Component({ as: Element = \"div\", children, ...props }) {\r\n  return <Element {...props}>{children}</Element>;\r\n}\r\n\r\n// More complete implementation with TypeScript\r\ntype PolymorphicProps<E extends React.ElementType> = {\r\n  as?: E;\r\n  children?: React.ReactNode;\r\n} & React.ComponentPropsWithoutRef<E>;\r\n\r\nfunction Component<E extends React.ElementType = \"div\">({\r\n  as,\r\n  children,\r\n  ...props\r\n}: PolymorphicProps<E>) {\r\n  const Element = as || \"div\";\r\n  return <Element {...props}>{children}</Element>;\r\n}\r\n```\r\n\r\nThe component:\r\n\r\n1. Accepts an `as` prop with a default element type\r\n2. Uses the provided element or fallback to default\r\n3. Spreads all other props to the rendered element\r\n4. Maintains type safety with TypeScript generics\r\n\r\n### Using Radix UI Slot\r\n\r\n[Radix UI](https://www.radix-ui.com/) provides a `Slot` component that offers a more powerful alternative to the `as` prop pattern. Instead of just changing the element type, `Slot` merges props with the child component, enabling composition patterns.\r\n\r\nFirst, install the package:\r\n\r\n```package-install\r\nnpm install @radix-ui/react-slot\r\n```\r\n\r\nThe `asChild` pattern uses a boolean prop instead of specifying the element type:\r\n\r\n```tsx\r\nimport { Slot } from \"@radix-ui/react-slot\";\r\nimport { cva, type VariantProps } from \"class-variance-authority\";\r\n\r\nconst itemVariants = cva(\"rounded-lg border p-4\", {\r\n  variants: {\r\n    variant: {\r\n      default: \"bg-white\",\r\n      primary: \"bg-blue-500 text-white\",\r\n    },\r\n    size: {\r\n      default: \"h-10 px-4\",\r\n      sm: \"h-8 px-3\",\r\n      lg: \"h-12 px-6\",\r\n    },\r\n  },\r\n  defaultVariants: {\r\n    variant: \"default\",\r\n    size: \"default\",\r\n  },\r\n});\r\n\r\nfunction Item({\r\n  className,\r\n  variant = \"default\",\r\n  size = \"default\",\r\n  asChild = false,\r\n  ...props\r\n}: React.ComponentProps<\"div\"> &\r\n  VariantProps<typeof itemVariants> & { asChild?: boolean }) {\r\n  const Comp = asChild ? Slot : \"div\";\r\n  return (\r\n    <Comp\r\n      data-slot=\"item\"\r\n      data-variant={variant}\r\n      data-size={size}\r\n      className={cn(itemVariants({ variant, size, className }))}\r\n      {...props}\r\n    />\r\n  );\r\n}\r\n```\r\n\r\nNow you can use it in two ways:\r\n\r\n```tsx\r\n// Default: renders as a div\r\n<Item variant=\"primary\">Content</Item>\r\n\r\n// With asChild: merges props with child component\r\n<Item variant=\"primary\" asChild>\r\n  <a href=\"/home\">Link with Item styles</a>\r\n</Item>\r\n```\r\n\r\nThe `Slot` component:\r\n\r\n1. Clones the child element\r\n2. Merges the component's props (className, data attributes, etc.) with the child's props\r\n3. Forwards refs correctly\r\n4. Handles event handler composition\r\n\r\n### Comparison: `as` vs `asChild`\r\n\r\n**`as` prop (manual implementation):**\r\n\r\n```tsx\r\n// Explicit element type\r\n<Button as=\"a\" href=\"/home\">Link Button</Button>\r\n<Button as=\"button\" type=\"submit\">Submit Button</Button>\r\n\r\n// Simple, predictable API\r\n// ",
+          "signals": {
+            "type": "react-component",
+            "hasTailwind": true,
+            "hasMotion": true,
+            "hasShadcn": true,
+            "exports": [],
+            "imports": [
+              "@radix-ui/react-slot",
+              "class-variance-authority"
+            ]
+          }
+        },
+        {
+          "relativePath": ".agents/skills/building-components/references/principles.mdx",
+          "score": 5,
+          "bytes": 4289,
+          "sha256": "1bfd8205b3afc2ef44689ae56657fe9ff654aa7a6d771d87f19173132856b3c2",
+          "sampleChars": 4253,
+          "sample": "---\r\ntitle: Core Principles\r\ndescription: When building modern UI components, it's important to keep these core principles in mind.\r\ntype: conceptual\r\nsummary: The foundational values behind the specification including composability, accessibility, customizability, performance, and transparency.\r\nprerequisites:\r\n  - /definitions\r\nrelated:\r\n  - /composition\r\n  - /accessibility\r\n---\r\n\r\n## Composability and Reusability\r\n\r\nFavor composition over inheritance – build components that can be combined and nested to create more complex UIs, rather than relying on deep class hierarchies.\r\n\r\nComposable components expose a clear API (via props/slots) that allows developers to customize behavior and appearance by plugging in child elements or callbacks.\r\n\r\nThis makes components highly reusable in different contexts. (React’s design reinforces this: “Props and composition give you all the flexibility you need to customize a component’s look and behavior in an explicit and safe way.”)\r\n\r\n## Accessible by Default\r\n\r\nComponents must be usable by all users. Use semantic HTML elements appropriate to the component’s role (e.g. `<button>` for clickable actions, `<ul>/<li>` for lists, etc.) and augment with WAI-ARIA attributes when necessary.\r\n\r\nEnsure keyboard navigation and focus management are supported (for example, arrow-key navigation in menus, focus traps in modals). Each component should adhere to accessibility standards and guidelines out of the box.\r\n\r\nThis means providing proper ARIA roles/states and testing with screen readers. Accessibility is not optional – it’s a baseline feature of every component.\r\n\r\n## Customizability and Theming\r\n\r\nA component should be easy to restyle or adapt to different design requirements. Avoid hard-coding visual styles that cannot be overridden.\r\n\r\nProvide mechanisms for theming and styling, such as CSS variables, clearly documented class names, or style props. Ideally, components come with sensible default styling but allow developers to customize appearance with minimal effort (for example, by passing a className or using design tokens).\r\n\r\nThis principle ensures components can fit into any brand or design system without “fighting” against default styles.\r\n\r\n## Lightweight and Performant\r\n\r\nComponents should be as lean as possible in terms of assets and dependencies. Avoid bloating a component with large library dependencies or overly complex logic, especially if that logic isn’t always needed.\r\n\r\nStrive for good performance (both rendering and interaction) by minimizing unnecessary re-renders and using efficient algorithms for heavy tasks. If a component is data-intensive (like a large list or table), consider patterns like virtualization or incremental rendering, but keep such features optional.\r\n\r\nLightweight components are easier to maintain and faster for end users.\r\n\r\n## Transparency and Code Ownership\r\n\r\nIn open-source, consumers often benefit from having full visibility and control of component code. This spec encourages an “open-source first” mindset: components should not be black boxes.\r\n\r\nWhen developers import or copy your component, they should be able to inspect how it works and modify it if needed. This principle underlies the emerging “copy-and-paste” distribution model (discussed later) where developers integrate component code directly into their projects.\r\n\r\nBy giving users ownership of the code, you increase trust and allow deeper customization.\r\n\r\nEven if you distribute via a package, embrace transparency by providing source maps, readable code, and thorough documentation.\r\n\r\n## Well-documented and DX-Friendly\r\n\r\nA great component is not just code – it comes with clear documentation and examples. From a developer experience (DX) perspective, your components should be easy to learn and integrate.\r\n\r\nDocument each component’s purpose, props, and usage examples. Include notes on accessibility (like keyboard controls or ARIA attributes used) and any customization options.\r\n\r\nGood documentation reduces misuse and lowers the barrier for adoption. We will cover documentation expectations in the Publish section, but it’s listed here as a principle because planning for good documentation and DX should happen during the design/build phase.\r\n",
+          "signals": {
+            "type": "docs-example",
+            "hasTailwind": false,
+            "hasMotion": false,
+            "hasShadcn": false,
+            "exports": [],
+            "imports": []
+          }
         }
       ]
     },
@@ -905,8 +1304,8 @@
       "licensePath": "C:/Users/PC/.codex/design-stack/repos/nolly-studio__cult-ui/LICENSE.md",
       "status": "allowed-after-review",
       "indexed": true,
-      "totalCandidateFiles": 24,
-      "selectedExamples": 8,
+      "totalCandidateFiles": 36,
+      "selectedExamples": 12,
       "examples": [
         {
           "relativePath": "apps/www/components/ai-elements/code-block.tsx",
@@ -1125,6 +1524,101 @@
               "@/components/copy-button"
             ]
           }
+        },
+        {
+          "relativePath": "apps/www/components/code-block-wrapper.tsx",
+          "score": 16,
+          "bytes": 1644,
+          "sha256": "29cfce6038287fb8905083dea5881633e06152b767361c504e9e87ff78096a31",
+          "sampleChars": 1644,
+          "sample": "\"use client\"\r\n\r\nimport * as React from \"react\"\r\n\r\nimport { cn } from \"@/lib/utils\"\r\nimport { Button } from \"@/components/ui/button\"\r\nimport {\r\n  Collapsible,\r\n  CollapsibleContent,\r\n  CollapsibleTrigger,\r\n} from \"@/components/ui/collapsible\"\r\n\r\ninterface CodeBlockProps extends React.HTMLAttributes<HTMLDivElement> {\r\n  expandButtonTitle?: string\r\n}\r\n\r\nexport function CodeBlockWrapper({\r\n  expandButtonTitle = \"View Code\",\r\n  className,\r\n  children,\r\n  ...props\r\n}: CodeBlockProps) {\r\n  const [isOpened, setIsOpened] = React.useState(false)\r\n\r\n  return (\r\n    <Collapsible open={isOpened} onOpenChange={setIsOpened}>\r\n      <div className={cn(\"relative overflow-hidden\", className)} {...props}>\r\n        <CollapsibleContent\r\n          forceMount\r\n          className={cn(\"overflow-hidden\", !isOpened && \"max-h-32\")}\r\n        >\r\n          <div\r\n            className={cn(\r\n              \"[&_pre]:my-0 [&_pre]:max-h-[650px] [&_pre]:pb-[100px]\",\r\n              !isOpened ? \"[&_pre]:overflow-hidden\" : \"[&_pre]:overflow-auto]\"\r\n            )}\r\n          >\r\n            {children}\r\n          </div>\r\n        </CollapsibleContent>\r\n        <div\r\n          className={cn(\r\n            \"absolute flex items-center justify-center bg-gradient-to-b from-zinc-700/30 to-zinc-950/90 p-2\",\r\n            isOpened ? \"inset-x-0 bottom-0 h-12\" : \"inset-0\"\r\n          )}\r\n        >\r\n          <CollapsibleTrigger asChild>\r\n            <Button variant=\"secondary\" className=\"h-8 text-xs\">\r\n              {isOpened ? \"Collapse\" : expandButtonTitle}\r\n            </Button>\r\n          </CollapsibleTrigger>\r\n        </div>\r\n      </div>\r\n    </Collapsible>\r\n  )\r\n}\r\n",
+          "signals": {
+            "type": "react-component",
+            "hasTailwind": true,
+            "hasMotion": false,
+            "hasShadcn": true,
+            "exports": [
+              "CodeBlockWrapper"
+            ],
+            "imports": [
+              "react",
+              "@/lib/utils",
+              "@/components/ui/button",
+              "@/components/ui/collapsible"
+            ]
+          }
+        },
+        {
+          "relativePath": "apps/www/components/landing/blocks-grid.tsx",
+          "score": 16,
+          "bytes": 35828,
+          "sha256": "a21d06a8ce35bdb9d0f9ba501208059dd82b5e47888f3c0d3b0ced4a02d5046a",
+          "sampleChars": 5000,
+          "sample": "import { SVGProps } from \"react\";\r\nimport { ArrowRight, Shapes } from \"lucide-react\";\r\nimport { PixelHeading } from \"./pixel-heading-word\";\r\n\r\nexport function MiniBlocksGrid() {\r\n\treturn (\r\n\t\t<section className=\"mx-auto max-w-6xl md:px-4 py-16 md:py-12\">\r\n\t\t\t{/* Section Header */}\r\n\t\t\t<div className=\"mb-12 text-center\">\r\n\t\t\t\t{/* Section divider */}\r\n\t\t\t\t<div className=\"mx-auto mb-8 flex max-w-2xl items-center justify-center gap-4\">\r\n\t\t\t\t\t<div className=\"h-px flex-1 bg-gradient-to-r from-transparent to-border\" />\r\n\t\t\t\t\t<div className=\"flex items-center gap-2 border border-border bg-background px-4 py-2\">\r\n\t\t\t\t\t\t<Shapes className=\"size-3.5 md:size-4 fill-[#ADFA1B]/50\" />\r\n\t\t\t\t\t\t<span className=\"font-mono text-[11px] uppercase tracking-wider text-muted-foreground\">\r\n\t\t\t\t\t\t\tCULT PRO\r\n\t\t\t\t\t\t</span>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t\t<div className=\"h-px flex-1 bg-gradient-to-l from-transparent to-border\" />\r\n\t\t\t\t</div>\r\n\r\n\t\t\t\t<PixelHeading\r\n\t\t\t\t\tas=\"h2\"\r\n\t\t\t\t\tclassName=\"mx-auto mb-4 max-w-3xl font-medium text-3xl tracking-tight md:text-4xl lg:text-5xl\"\r\n\t\t\t\t\tinitialFont=\"square\"\r\n\t\t\t\t\tdisableCycling\r\n\t\t\t\t\tdisableHover\r\n\t\t\t\t>\r\n\t\t\t\t\tPremium Cult Blocks\r\n\t\t\t\t</PixelHeading>\r\n\r\n\t\t\t\t<p className=\"mx-auto max-w-md  font-light text-base text-foreground/70 leading-relaxed md:text-lg\">\r\n\t\t\t\t\tRad full-stack blocks and marketing patterns. <br /> Copy and paste\r\n\t\t\t\t\tinto your project.\r\n\t\t\t\t</p>\r\n\t\t\t</div>\r\n\r\n\t\t\t{/* Blocks Grid */}\r\n\t\t\t<div className=\"grid gap-4 sm:grid-cols-2 lg:grid-cols-3\">\r\n\t\t\t\t{BLOCK_PREVIEW_DATA.slice(0, 6)\r\n\t\t\t\t\t.sort((a, b) => {\r\n\t\t\t\t\t\tif (a.isNew && !b.isNew) return -1;\r\n\t\t\t\t\t\tif (!a.isNew && b.isNew) return 1;\r\n\t\t\t\t\t\treturn 0;\r\n\t\t\t\t\t})\r\n\t\t\t\t\t.sort((a, b) => {\r\n\t\t\t\t\t\tconst dateA = new Date(a.dateReleased || 0);\r\n\t\t\t\t\t\tconst dateB = new Date(b.dateReleased || 0);\r\n\t\t\t\t\t\treturn dateB.getTime() - dateA.getTime();\r\n\t\t\t\t\t})\r\n\t\t\t\t\t.map((block) => (\r\n\t\t\t\t\t\t<a\r\n\t\t\t\t\t\t\tkey={block.name}\r\n\t\t\t\t\t\t\thref={`https://pro.cult-ui.com/blocks/${block.name}`}\r\n\t\t\t\t\t\t\ttarget=\"_blank\"\r\n\t\t\t\t\t\t\trel=\"noopener noreferrer\"\r\n\t\t\t\t\t\t\tclassName=\"group relative flex flex-col border border-border bg-background transition-all duration-150 hover:border-foreground/10 hover:shadow-lg hover:shadow-primary/5\"\r\n\t\t\t\t\t\t>\r\n\t\t\t\t\t\t\t{/* Corner accents */}\r\n\t\t\t\t\t\t\t<div className=\"-top-px -left-px pointer-events-none absolute h-3 w-3 border-primary/50 border-t-2 border-l-2 opacity-0 transition-all duration-200 group-hover:opacity-100\" />\r\n\t\t\t\t\t\t\t<div className=\"-top-px -right-px pointer-events-none absolute h-3 w-3 border-primary/50 border-t-2 border-r-2 opacity-0 transition-all duration-200 group-hover:opacity-100\" />\r\n\t\t\t\t\t\t\t<div className=\"-bottom-px -left-px pointer-events-none absolute h-3 w-3 border-primary/50 border-b-2 border-l-2 opacity-0 transition-all duration-200 group-hover:opacity-100\" />\r\n\t\t\t\t\t\t\t<div className=\"-bottom-px -right-px pointer-events-none absolute h-3 w-3 border-primary/50 border-r-2 border-b-2 opacity-0 transition-all duration-200 group-hover:opacity-100\" />\r\n\r\n\t\t\t\t\t\t\t{/* Content */}\r\n\t\t\t\t\t\t\t<div className=\"flex flex-1 flex-col p-4\">\r\n\t\t\t\t\t\t\t\t<h3 className=\"mb-2 line-clamp-1 font-medium text-sm leading-tight tracking-tight\">\r\n\t\t\t\t\t\t\t\t\t{block.title}\r\n\t\t\t\t\t\t\t\t</h3>\r\n\r\n\t\t\t\t\t\t\t\t{block.meta.problemSolved && (\r\n\t\t\t\t\t\t\t\t\t<p className=\"mb-4 line-clamp-3 flex-1 font-light text-muted-foreground text-xs leading-relaxed\">\r\n\t\t\t\t\t\t\t\t\t\t{block.description}\r\n\t\t\t\t\t\t\t\t\t</p>\r\n\t\t\t\t\t\t\t\t)}\r\n\r\n\t\t\t\t\t\t\t\t{/* Footer */}\r\n\t\t\t\t\t\t\t\t<div className=\"flex items-center justify-between border-border border-t pt-3\">\r\n\t\t\t\t\t\t\t\t\t<div className=\"flex items-center gap-0.5\">\r\n\t\t\t\t\t\t\t\t\t\t{(() => {\r\n\t\t\t\t\t\t\t\t\t\t\tconst allDependencies = Array.from(\r\n\t\t\t\t\t\t\t\t\t\t\t\tnew Set([\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t...block.dependencies,\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t...(block.meta.externalServices || []),\r\n\t\t\t\t\t\t\t\t\t\t\t\t]),\r\n\t\t\t\t\t\t\t\t\t\t\t);\r\n\r\n\t\t\t\t\t\t\t\t\t\t\tconst seenIcons = new Set();\r\n\t\t\t\t\t\t\t\t\t\t\tconst uniqueIcons = allDependencies\r\n\t\t\t\t\t\t\t\t\t\t\t\t.reduce<Array<{ dep: string; icon: any }>>(\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t(acc, dep) => {\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\tconst depLower = dep.toLowerCase();\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\tconst matchingIcon = Object.entries(\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tDEPENDENCY_ICONS,\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t).find(([key, icon]) =>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\ticon.match.some((pattern) =>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tdepLower.includes(pattern.toLowerCase()),\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t),\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t);\r\n\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\tif (\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tmatchingIcon &&\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t!seenIcons.has(matchingIcon[0])\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t) {\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tseenIcons.add(matchingIcon[0]);\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tacc.push({\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tdep,\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\ticon: matchingIcon[1].icon,\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t});\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t}\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\treturn acc;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t},\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t[],\r\n\t\t\t\t\t\t\t\t\t\t\t\t)\r\n\t\t\t\t\t\t\t\t\t\t\t\t.slice(0, 4);\r\n\r\n\t\t\t\t\t\t\t\t\t\t\treturn uniqueIcons.map(({ dep, icon: Icon }) => (\r\n\t\t\t\t\t\t\t\t\t\t\t\t<div\r\n\t\t\t\t\t\t\t\t\t\t\t\t\tkey={dep}\r\n\t\t\t\t\t\t\t\t\t\t\t\t\tclassName=\"flex size-5 items-center justify-center border border-transparent text-muted-foreground transition-all hover:border-border hover:text-foreground\"\r\n\t\t\t\t\t\t\t\t\t\t\t\t\ttitle={dep}\r\n\t\t\t\t\t\t\t\t\t\t\t",
+          "signals": {
+            "type": "react-component",
+            "hasTailwind": true,
+            "hasMotion": true,
+            "hasShadcn": false,
+            "exports": [
+              "MiniBlocksGrid",
+              "VercelIcon"
+            ],
+            "imports": [
+              "react",
+              "lucide-react",
+              "./pixel-heading-word"
+            ]
+          }
+        },
+        {
+          "relativePath": "apps/www/components/cli-registry-snippet.tsx",
+          "score": 15,
+          "bytes": 4115,
+          "sha256": "ea1a3beb3c7d64074b8bcc28ec2907b7aa8d22a345edaf0c299d36370b06301a",
+          "sampleChars": 4115,
+          "sample": "\"use client\"\r\n\r\nimport * as React from \"react\"\r\nimport { useState } from \"react\"\r\nimport {\r\n  CheckIcon,\r\n  ChevronDownIcon,\r\n  ChevronRightIcon,\r\n  CopyIcon,\r\n} from \"lucide-react\"\r\nimport { AnimatePresence, motion } from \"motion/react\"\r\n\r\nimport { cn } from \"@/lib/utils\"\r\nimport { Button } from \"@/components/ui/button\"\r\nimport {\r\n  Collapsible,\r\n  CollapsibleContent,\r\n  CollapsibleTrigger,\r\n} from \"@/components/ui/collapsible\"\r\n\r\ninterface CliRegistrySnippetProps {\r\n  className?: string\r\n}\r\n\r\nexport function CliRegistrySnippet({ className }: CliRegistrySnippetProps) {\r\n  const [isOpen, setIsOpen] = useState(false)\r\n  const [isCopied, setIsCopied] = useState(false)\r\n\r\n  const registrySnippet = `{\r\n  \"registries\": {\r\n    \"@cult-ui\": \"https://cult-ui.com/r/{name}.json\"\r\n  }\r\n}`\r\n\r\n  const onCopy = async () => {\r\n    try {\r\n      await navigator.clipboard.writeText(registrySnippet)\r\n      setIsCopied(true)\r\n      setTimeout(() => setIsCopied(false), 2000)\r\n    } catch (err) {\r\n      console.error(\"Failed to copy:\", err)\r\n    }\r\n  }\r\n\r\n  return (\r\n    <div className={cn(\"space-y-3\", className)}>\r\n      <Collapsible open={isOpen} onOpenChange={setIsOpen}>\r\n        <CollapsibleTrigger asChild>\r\n          <Button\r\n            variant=\"ghost\"\r\n            className=\"flex h-auto items-center gap-2 p-0 text-sm text-muted-foreground hover:text-foreground\"\r\n          >\r\n            {isOpen ? (\r\n              <ChevronDownIcon className=\"size-4\" />\r\n            ) : (\r\n              <ChevronRightIcon className=\"size-4\" />\r\n            )}\r\n            <span>Configure registry (shadcn v3)</span>\r\n          </Button>\r\n        </CollapsibleTrigger>\r\n\r\n        <CollapsibleContent className=\"space-y-3\">\r\n          <div className=\"space-y-2\">\r\n            <p className=\"text-sm text-muted-foreground\">\r\n              Add this to your{\" \"}\r\n              <code className=\"rounded bg-muted px-1.5 py-0.5 text-xs\">\r\n                components.json\r\n              </code>{\" \"}\r\n              file:\r\n            </p>\r\n\r\n            <div className=\"relative\">\r\n              <pre className=\"overflow-x-auto rounded-md bg-muted p-3 text-sm\">\r\n                <code>{registrySnippet}</code>\r\n              </pre>\r\n\r\n              <Button\r\n                variant=\"ghost\"\r\n                size=\"icon\"\r\n                onClick={onCopy}\r\n                className={cn(\r\n                  \"absolute right-2 top-2 size-8 transition-all duration-200\",\r\n                  isCopied\r\n                    ? \"bg-green-100 text-green-600 hover:bg-green-100\"\r\n                    : \"hover:bg-background\"\r\n                )}\r\n                aria-label={isCopied ? \"Copied!\" : \"Copy to clipboard\"}\r\n              >\r\n                <AnimatePresence mode=\"wait\" initial={false}>\r\n                  {isCopied ? (\r\n                    <motion.div\r\n                      key=\"check\"\r\n                      initial={{ scale: 0.5, opacity: 0 }}\r\n                      animate={{ scale: 1, opacity: 1 }}\r\n                      exit={{ scale: 0.5, opacity: 0 }}\r\n                      transition={{ duration: 0.15 }}\r\n                    >\r\n                      <CheckIcon className=\"size-4\" />\r\n                    </motion.div>\r\n                  ) : (\r\n                    <motion.div\r\n                      key=\"copy\"\r\n                      initial={{ scale: 0.5, opacity: 0 }}\r\n                      animate={{ scale: 1, opacity: 1 }}\r\n                      exit={{ scale: 0.5, opacity: 0 }}\r\n                      transition={{ duration: 0.15 }}\r\n                    >\r\n                      <CopyIcon className=\"size-4\" />\r\n                    </motion.div>\r\n                  )}\r\n                </AnimatePresence>\r\n              </Button>\r\n            </div>\r\n\r\n            <p className=\"text-xs text-muted-foreground\">\r\n              Then install with:{\" \"}\r\n              <code className=\"rounded bg-muted px-1.5 py-0.5 text-xs\">\r\n                npx shadcn@beta add @cult-ui/component-name\r\n              </code>\r\n            </p>\r\n          </div>\r\n        </CollapsibleContent>\r\n      </Collapsible>\r\n    </div>\r\n  )\r\n}\r\n",
+          "signals": {
+            "type": "react-component",
+            "hasTailwind": true,
+            "hasMotion": true,
+            "hasShadcn": true,
+            "exports": [
+              "CliRegistrySnippet"
+            ],
+            "imports": [
+              "react",
+              "react",
+              "lucide-react",
+              "motion/react",
+              "@/lib/utils",
+              "@/components/ui/button",
+              "@/components/ui/collapsible"
+            ]
+          }
+        },
+        {
+          "relativePath": "apps/www/components/component-example.tsx",
+          "score": 15,
+          "bytes": 4015,
+          "sha256": "70a8bcc056fe6e7e48c6b30da8b224b20fdfb5cff1ad090f94e8033f8cde167d",
+          "sampleChars": 4015,
+          "sample": "\"use client\"\r\n\r\nimport * as React from \"react\"\r\n\r\nimport { cn } from \"@/lib/utils\"\r\nimport { Tabs, TabsContent, TabsList, TabsTrigger } from \"@/components/ui/tabs\"\r\nimport { CopyButton, CopyWithClassNames } from \"@/components/copy-button\"\r\n\r\ninterface ComponentExampleProps extends React.HTMLAttributes<HTMLDivElement> {\r\n  extractClassname?: boolean\r\n  extractedClassNames?: string\r\n  align?: \"center\" | \"start\" | \"end\"\r\n  src?: string\r\n}\r\n\r\nexport function ComponentExample({\r\n  children,\r\n  className,\r\n  extractClassname,\r\n  extractedClassNames,\r\n  align = \"center\",\r\n  src: _,\r\n  ...props\r\n}: ComponentExampleProps) {\r\n  const [Example, Code, ...Children] = React.Children.toArray(\r\n    children\r\n  ) as React.ReactElement[]\r\n\r\n  const codeString = React.useMemo(() => {\r\n    if (\r\n      typeof (Code?.props as any)?.[\"data-rehype-pretty-code-fragment\"] !==\r\n      \"undefined\"\r\n    ) {\r\n      const [, Button] = React.Children.toArray(\r\n        (Code?.props as any)?.children\r\n      ) as React.ReactElement[]\r\n      return (\r\n        (Button?.props as any)?.value ||\r\n        (Button?.props as any)?.__rawString__ ||\r\n        null\r\n      )\r\n    }\r\n  }, [Code])\r\n\r\n  return (\r\n    <div\r\n      className={cn(\"group relative my-4 flex flex-col space-y-2\", className)}\r\n      {...props}\r\n    >\r\n      <Tabs defaultValue=\"preview\" className=\"relative mr-auto w-full\">\r\n        <div className=\"flex items-center justify-between pb-3\">\r\n          <TabsList className=\"w-full justify-start rounded-none border-b bg-transparent p-0\">\r\n            <TabsTrigger\r\n              value=\"preview\"\r\n              className=\"relative h-9 rounded-none rounded-tl-lg border border-b-2 border-b-transparent border-l-black/10 border-r-transparent border-t-black/10 bg-transparent px-4 pb-3 pt-2 font-semibold text-muted-foreground shadow-none transition-none data-[state=active]:border-b-primary data-[state=active]:text-foreground data-[state=active]:shadow-none dark:border-l-white/10 dark:border-t-white/10\"\r\n            >\r\n              Preview\r\n            </TabsTrigger>\r\n            <TabsTrigger\r\n              value=\"code\"\r\n              className=\"relative h-9 rounded-none rounded-tr-lg border border-b-2 border-b-transparent border-l-transparent border-r-black/10 border-t-black/10 bg-transparent px-4 pb-3 pt-2 font-semibold text-muted-foreground shadow-none transition-none data-[state=active]:border-b-primary data-[state=active]:text-foreground data-[state=active]:shadow-none dark:border-r-white/10 dark:border-t-white/10\"\r\n            >\r\n              Code\r\n            </TabsTrigger>\r\n          </TabsList>\r\n          {extractedClassNames ? (\r\n            <CopyWithClassNames\r\n              value={codeString}\r\n              classNames={extractedClassNames}\r\n              className=\"absolute right-4 top-20\"\r\n            />\r\n          ) : (\r\n            codeString && (\r\n              <CopyButton\r\n                value={codeString}\r\n                className=\"absolute right-4 top-20\"\r\n              />\r\n            )\r\n          )}\r\n        </div>\r\n        <TabsContent value=\"preview\" className=\"rounded-md border\">\r\n          <div\r\n            className={cn(\"flex min-h-[350px] justify-center p-2 md:p-10\", {\r\n              \"items-center\": align === \"center\",\r\n              \"items-start\": align === \"start\",\r\n              \"items-end\": align === \"end\",\r\n            })}\r\n          >\r\n            {Example}\r\n          </div>\r\n        </TabsContent>\r\n        <TabsContent value=\"code\">\r\n          <div className=\"flex flex-col space-y-4\">\r\n            <div className=\"w-full rounded-md [&_button]:hidden [&_pre]:my-0 [&_pre]:max-h-[350px] [&_pre]:overflow-auto\">\r\n              {Code}\r\n            </div>\r\n            {Children?.length ? (\r\n              <div className=\"rounded-md [&_button]:hidden [&_pre]:my-0 [&_pre]:max-h-[350px] [&_pre]:overflow-auto\">\r\n                {Children}\r\n              </div>\r\n            ) : null}\r\n          </div>\r\n        </TabsContent>\r\n      </Tabs>\r\n    </div>\r\n  )\r\n}\r\n",
+          "signals": {
+            "type": "react-component",
+            "hasTailwind": true,
+            "hasMotion": false,
+            "hasShadcn": true,
+            "exports": [
+              "ComponentExample"
+            ],
+            "imports": [
+              "react",
+              "@/lib/utils",
+              "@/components/ui/tabs",
+              "@/components/copy-button"
+            ]
+          }
         }
       ]
     },
@@ -1135,8 +1629,8 @@
       "licensePath": "C:/Users/PC/.codex/design-stack/repos/serafimcloud__21st/LICENSE",
       "status": "allowed-after-review",
       "indexed": true,
-      "totalCandidateFiles": 24,
-      "selectedExamples": 8,
+      "totalCandidateFiles": 36,
+      "selectedExamples": 12,
       "examples": [
         {
           "relativePath": "apps/web/components/features/studio/sandbox/components/add-registry-modal.tsx",
@@ -1364,6 +1858,87 @@
               "@/components/ui/button"
             ]
           }
+        },
+        {
+          "relativePath": "apps/web/components/ui/alert.tsx",
+          "score": 15,
+          "bytes": 1682,
+          "sha256": "db38bfdc76b6ec0e799e9e485f71962497ee3435cb861fe1f45a628acfa8c722",
+          "sampleChars": 1682,
+          "sample": "import * as React from \"react\"\r\nimport { cva, type VariantProps } from \"class-variance-authority\"\r\n\r\nimport { cn } from \"@/lib/utils\"\r\n\r\nconst alertVariants = cva(\r\n  \"relative w-full rounded-lg border p-4 [&>svg~*]:pl-7 [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-foreground\",\r\n  {\r\n    variants: {\r\n      variant: {\r\n        default: \"bg-background text-foreground\",\r\n        destructive:\r\n          \"border-destructive/50 text-destructive dark:border-destructive [&>svg]:text-destructive\",\r\n      },\r\n    },\r\n    defaultVariants: {\r\n      variant: \"default\",\r\n    },\r\n  },\r\n)\r\n\r\nconst Alert = React.forwardRef<\r\n  HTMLDivElement,\r\n  React.HTMLAttributes<HTMLDivElement> & VariantProps<typeof alertVariants>\r\n>(({ className, variant, ...props }, ref) => (\r\n  <div\r\n    ref={ref}\r\n    role=\"alert\"\r\n    className={cn(alertVariants({ variant }), className)}\r\n    {...props}\r\n  />\r\n))\r\nAlert.displayName = \"Alert\"\r\n\r\nconst AlertTitle = React.forwardRef<\r\n  HTMLParagraphElement,\r\n  React.HTMLAttributes<HTMLHeadingElement>\r\n>(({ className, ...props }, ref) => (\r\n  <h5\r\n    ref={ref}\r\n    className={cn(\r\n      \"mb-1 text-[14px] font-medium leading-none tracking-tight\",\r\n      className,\r\n    )}\r\n    {...props}\r\n  />\r\n))\r\nAlertTitle.displayName = \"AlertTitle\"\r\n\r\nconst AlertDescription = React.forwardRef<\r\n  HTMLParagraphElement,\r\n  React.HTMLAttributes<HTMLParagraphElement>\r\n>(({ className, ...props }, ref) => (\r\n  <div\r\n    ref={ref}\r\n    className={cn(\"text-[14px] [&_p]:leading-relaxed\", className)}\r\n    {...props}\r\n  />\r\n))\r\nAlertDescription.displayName = \"AlertDescription\"\r\n\r\nexport { Alert, AlertTitle, AlertDescription }\r\n",
+          "signals": {
+            "type": "react-component",
+            "hasTailwind": false,
+            "hasMotion": false,
+            "hasShadcn": true,
+            "exports": [],
+            "imports": [
+              "react",
+              "class-variance-authority",
+              "@/lib/utils"
+            ]
+          }
+        },
+        {
+          "relativePath": "apps/web/components/ui/aurora-background.tsx",
+          "score": 15,
+          "bytes": 2280,
+          "sha256": "4a32fc8819a9d0808d4e6767808297d08c50f80a932c3d03fc922cc220b7df5d",
+          "sampleChars": 2280,
+          "sample": "\"use client\"\r\nimport { cn } from \"@/lib/utils\"\r\nimport React, { ReactNode } from \"react\"\r\n\r\ninterface AuroraBackgroundProps extends React.HTMLProps<HTMLDivElement> {\r\n  children: ReactNode\r\n  showRadialGradient?: boolean\r\n}\r\n\r\nexport const AuroraBackground = ({\r\n  className,\r\n  children,\r\n  showRadialGradient = true,\r\n  ...props\r\n}: AuroraBackgroundProps) => {\r\n  return (\r\n    <main>\r\n      <div\r\n        className={cn(\r\n          \"relative flex flex-col  h-[100vh] items-center justify-center bg-zinc-50 dark:bg-zinc-900  text-slate-950 transition-bg\",\r\n          className,\r\n        )}\r\n        {...props}\r\n      >\r\n        <div className=\"absolute inset-0 overflow-hidden\">\r\n          <div\r\n            className={cn(\r\n              `\r\n            [--white-gradient:repeating-linear-gradient(100deg,var(--white)_0%,var(--white)_7%,var(--transparent)_10%,var(--transparent)_12%,var(--white)_16%)]\r\n            [--dark-gradient:repeating-linear-gradient(100deg,var(--black)_0%,var(--black)_7%,var(--transparent)_10%,var(--transparent)_12%,var(--black)_16%)]\r\n            [--aurora:repeating-linear-gradient(100deg,hsl(var(--primary-gradient-start))_10%,var(--blue-600)_20%,hsl(var(--primary-gradient-end))_35%,var(--blue-500)_50%,var(--blue-400)_65%,hsl(var(--primary-gradient-start))_80%)]\r\n            [background-image:var(--white-gradient),var(--aurora)]\r\n            dark:[background-image:var(--dark-gradient),var(--aurora)]\r\n            [background-size:300%,_200%]\r\n            [background-position:50%_50%,50%_50%]\r\n            filter blur-[10px] invert dark:invert-0\r\n            after:content-[\"\"] after:absolute after:inset-0 after:[background-image:var(--white-gradient),var(--aurora)] \r\n            after:dark:[background-image:var(--dark-gradient),var(--aurora)]\r\n            after:[background-size:200%,_100%] \r\n            after:animate-aurora after:[background-attachment:fixed] after:mix-blend-difference\r\n            pointer-events-none\r\n            absolute -inset-[10px] opacity-50 will-change-transform`,\r\n\r\n              showRadialGradient &&\r\n                `[mask-image:radial-gradient(ellipse_at_100%_0%,black_10%,var(--transparent)_70%)]`,\r\n            )}\r\n          ></div>\r\n        </div>\r\n        {children}\r\n      </div>\r\n    </main>\r\n  )\r\n}\r\n",
+          "signals": {
+            "type": "react-component",
+            "hasTailwind": true,
+            "hasMotion": false,
+            "hasShadcn": false,
+            "exports": [
+              "AuroraBackground"
+            ],
+            "imports": [
+              "@/lib/utils",
+              "react"
+            ]
+          }
+        },
+        {
+          "relativePath": "apps/web/components/ui/avatar.tsx",
+          "score": 15,
+          "bytes": 1471,
+          "sha256": "ff46ebcc6f079fbb5bce5581516d9b35285b9c22ed6947ddffbaacbd2e48a988",
+          "sampleChars": 1471,
+          "sample": "\"use client\"\r\n\r\nimport * as React from \"react\"\r\nimport * as AvatarPrimitive from \"@radix-ui/react-avatar\"\r\n\r\nimport { cn } from \"@/lib/utils\"\r\n\r\nconst Avatar = React.forwardRef<\r\n  React.ElementRef<typeof AvatarPrimitive.Root>,\r\n  React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Root>\r\n>(({ className, ...props }, ref) => (\r\n  <AvatarPrimitive.Root\r\n    ref={ref}\r\n    className={cn(\r\n      \"relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full\",\r\n      className,\r\n    )}\r\n    {...props}\r\n  />\r\n))\r\nAvatar.displayName = AvatarPrimitive.Root.displayName\r\n\r\nconst AvatarImage = React.forwardRef<\r\n  React.ElementRef<typeof AvatarPrimitive.Image>,\r\n  React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Image>\r\n>(({ className, ...props }, ref) => (\r\n  <AvatarPrimitive.Image\r\n    ref={ref}\r\n    className={cn(\"aspect-square h-full w-full\", className)}\r\n    {...props}\r\n  />\r\n))\r\nAvatarImage.displayName = AvatarPrimitive.Image.displayName\r\n\r\nconst AvatarFallback = React.forwardRef<\r\n  React.ElementRef<typeof AvatarPrimitive.Fallback>,\r\n  React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Fallback>\r\n>(({ className, ...props }, ref) => (\r\n  <AvatarPrimitive.Fallback\r\n    ref={ref}\r\n    className={cn(\r\n      \"flex h-full w-full items-center justify-center rounded-full bg-muted\",\r\n      className,\r\n    )}\r\n    {...props}\r\n  />\r\n))\r\nAvatarFallback.displayName = AvatarPrimitive.Fallback.displayName\r\n\r\nexport { Avatar, AvatarImage, AvatarFallback }\r\n",
+          "signals": {
+            "type": "react-component",
+            "hasTailwind": false,
+            "hasMotion": false,
+            "hasShadcn": false,
+            "exports": [],
+            "imports": [
+              "react",
+              "@radix-ui/react-avatar",
+              "@/lib/utils"
+            ]
+          }
+        },
+        {
+          "relativePath": "apps/web/components/ui/badge.tsx",
+          "score": 15,
+          "bytes": 1143,
+          "sha256": "04ca0c4549f81929d0ef3e7a01f96a0607de800d98f4d3b8c27ff6b2fcef799b",
+          "sampleChars": 1143,
+          "sample": "import * as React from \"react\"\r\nimport { cva, type VariantProps } from \"class-variance-authority\"\r\n\r\nimport { cn } from \"@/lib/utils\"\r\n\r\nconst badgeVariants = cva(\r\n  \"inline-flex items-center rounded-full border px-2 py-[1px] transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2\",\r\n  {\r\n    variants: {\r\n      variant: {\r\n        default:\r\n          \"border-transparent bg-primary text-primary-foreground hover:bg-primary/80\",\r\n        secondary:\r\n          \"border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80\",\r\n        destructive:\r\n          \"border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80\",\r\n        outline: \"text-foreground\",\r\n      },\r\n    },\r\n    defaultVariants: {\r\n      variant: \"default\",\r\n    },\r\n  },\r\n)\r\n\r\nexport interface BadgeProps\r\n  extends React.HTMLAttributes<HTMLDivElement>,\r\n    VariantProps<typeof badgeVariants> {}\r\n\r\nfunction Badge({ className, variant, ...props }: BadgeProps) {\r\n  return (\r\n    <div className={cn(badgeVariants({ variant }), className)} {...props} />\r\n  )\r\n}\r\n\r\nexport { Badge, badgeVariants }\r\n",
+          "signals": {
+            "type": "react-component",
+            "hasTailwind": false,
+            "hasMotion": false,
+            "hasShadcn": true,
+            "exports": [],
+            "imports": [
+              "react",
+              "class-variance-authority",
+              "@/lib/utils"
+            ]
+          }
         }
       ]
     },
@@ -1374,8 +1949,8 @@
       "licensePath": "C:/Users/PC/.codex/design-stack/repos/shadcn-ui__ui/LICENSE.md",
       "status": "allowed-after-review",
       "indexed": true,
-      "totalCandidateFiles": 24,
-      "selectedExamples": 8,
+      "totalCandidateFiles": 36,
+      "selectedExamples": 12,
       "examples": [
         {
           "relativePath": "apps/v4/registry/bases/base/blocks/dashboard-01/components/app-sidebar.tsx",
@@ -1579,6 +2154,98 @@
               "@/app/(create)/components/icon-placeholder"
             ]
           }
+        },
+        {
+          "relativePath": "apps/v4/registry/bases/base/blocks/dashboard-01/components/site-header.tsx",
+          "score": 24,
+          "bytes": 718,
+          "sha256": "7fd9ae0ded84506f1301f65bd5c4725d56dfc7d75807ec2297c531c107d2df28",
+          "sampleChars": 718,
+          "sample": "import { Separator } from \"@/registry/bases/base/ui/separator\"\r\nimport { SidebarTrigger } from \"@/registry/bases/base/ui/sidebar\"\r\n\r\nexport function SiteHeader() {\r\n  return (\r\n    <header className=\"flex h-(--header-height) shrink-0 items-center gap-2 border-b transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-(--header-height)\">\r\n      <div className=\"flex w-full items-center gap-1 px-4 lg:gap-2 lg:px-6\">\r\n        <SidebarTrigger className=\"-ml-1\" />\r\n        <Separator\r\n          orientation=\"vertical\"\r\n          className=\"mx-2 h-4 data-vertical:self-auto\"\r\n        />\r\n        <h1 className=\"text-base font-medium\">Documents</h1>\r\n      </div>\r\n    </header>\r\n  )\r\n}\r\n",
+          "signals": {
+            "type": "react-component",
+            "hasTailwind": true,
+            "hasMotion": false,
+            "hasShadcn": false,
+            "exports": [
+              "SiteHeader"
+            ],
+            "imports": [
+              "@/registry/bases/base/ui/separator",
+              "@/registry/bases/base/ui/sidebar"
+            ]
+          }
+        },
+        {
+          "relativePath": "apps/v4/registry/bases/base/blocks/login-01/components/login-form.tsx",
+          "score": 24,
+          "bytes": 2168,
+          "sha256": "913ccd933f0b3a34cd065d5139db2885213d2e71210925d54cd465e17e231da7",
+          "sampleChars": 2168,
+          "sample": "import { cn } from \"@/registry/bases/base/lib/utils\"\r\nimport { Button } from \"@/registry/bases/base/ui/button\"\r\nimport {\r\n  Card,\r\n  CardContent,\r\n  CardDescription,\r\n  CardHeader,\r\n  CardTitle,\r\n} from \"@/registry/bases/base/ui/card\"\r\nimport {\r\n  Field,\r\n  FieldDescription,\r\n  FieldGroup,\r\n  FieldLabel,\r\n} from \"@/registry/bases/base/ui/field\"\r\nimport { Input } from \"@/registry/bases/base/ui/input\"\r\n\r\nexport function LoginForm({\r\n  className,\r\n  ...props\r\n}: React.ComponentProps<\"div\">) {\r\n  return (\r\n    <div className={cn(\"flex flex-col gap-6\", className)} {...props}>\r\n      <Card>\r\n        <CardHeader>\r\n          <CardTitle>Login to your account</CardTitle>\r\n          <CardDescription>\r\n            Enter your email below to login to your account\r\n          </CardDescription>\r\n        </CardHeader>\r\n        <CardContent>\r\n          <form>\r\n            <FieldGroup>\r\n              <Field>\r\n                <FieldLabel htmlFor=\"email\">Email</FieldLabel>\r\n                <Input\r\n                  id=\"email\"\r\n                  type=\"email\"\r\n                  placeholder=\"m@example.com\"\r\n                  required\r\n                />\r\n              </Field>\r\n              <Field>\r\n                <div className=\"flex items-center\">\r\n                  <FieldLabel htmlFor=\"password\">Password</FieldLabel>\r\n                  <a\r\n                    href=\"#\"\r\n                    className=\"ml-auto inline-block text-sm underline-offset-4 hover:underline\"\r\n                  >\r\n                    Forgot your password?\r\n                  </a>\r\n                </div>\r\n                <Input id=\"password\" type=\"password\" required />\r\n              </Field>\r\n              <Field>\r\n                <Button type=\"submit\">Login</Button>\r\n                <Button variant=\"outline\" type=\"button\">\r\n                  Login with Google\r\n                </Button>\r\n                <FieldDescription className=\"text-center\">\r\n                  Don&apos;t have an account? <a href=\"#\">Sign up</a>\r\n                </FieldDescription>\r\n              </Field>\r\n            </FieldGroup>\r\n          </form>\r\n        </CardContent>\r\n      </Card>\r\n    </div>\r\n  )\r\n}\r\n",
+          "signals": {
+            "type": "react-component",
+            "hasTailwind": true,
+            "hasMotion": false,
+            "hasShadcn": true,
+            "exports": [
+              "LoginForm"
+            ],
+            "imports": [
+              "@/registry/bases/base/lib/utils",
+              "@/registry/bases/base/ui/button",
+              "@/registry/bases/base/ui/card",
+              "@/registry/bases/base/ui/field",
+              "@/registry/bases/base/ui/input"
+            ]
+          }
+        },
+        {
+          "relativePath": "apps/v4/registry/bases/base/blocks/login-02/components/login-form.tsx",
+          "score": 24,
+          "bytes": 2859,
+          "sha256": "77fbaefa04e06c42053412f8d660f3bd2493cc74d87c6b245db185b50ba60ab1",
+          "sampleChars": 2859,
+          "sample": "import { cn } from \"@/registry/bases/base/lib/utils\"\r\nimport { Button } from \"@/registry/bases/base/ui/button\"\r\nimport {\r\n  Field,\r\n  FieldDescription,\r\n  FieldGroup,\r\n  FieldLabel,\r\n  FieldSeparator,\r\n} from \"@/registry/bases/base/ui/field\"\r\nimport { Input } from \"@/registry/bases/base/ui/input\"\r\n\r\nexport function LoginForm({\r\n  className,\r\n  ...props\r\n}: React.ComponentProps<\"form\">) {\r\n  return (\r\n    <form className={cn(\"flex flex-col gap-6\", className)} {...props}>\r\n      <FieldGroup>\r\n        <div className=\"flex flex-col items-center gap-1 text-center\">\r\n          <h1 className=\"text-2xl font-bold\">Login to your account</h1>\r\n          <p className=\"text-sm text-balance text-muted-foreground\">\r\n            Enter your email below to login to your account\r\n          </p>\r\n        </div>\r\n        <Field>\r\n          <FieldLabel htmlFor=\"email\">Email</FieldLabel>\r\n          <Input id=\"email\" type=\"email\" placeholder=\"m@example.com\" required />\r\n        </Field>\r\n        <Field>\r\n          <div className=\"flex items-center\">\r\n            <FieldLabel htmlFor=\"password\">Password</FieldLabel>\r\n            <a\r\n              href=\"#\"\r\n              className=\"ml-auto text-sm underline-offset-4 hover:underline\"\r\n            >\r\n              Forgot your password?\r\n            </a>\r\n          </div>\r\n          <Input id=\"password\" type=\"password\" required />\r\n        </Field>\r\n        <Field>\r\n          <Button type=\"submit\">Login</Button>\r\n        </Field>\r\n        <FieldSeparator>Or continue with</FieldSeparator>\r\n        <Field>\r\n          <Button variant=\"outline\" type=\"button\">\r\n            <svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\">\r\n              <path\r\n                d=\"M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12\"\r\n                fill=\"currentColor\"\r\n              />\r\n            </svg>\r\n            Login with GitHub\r\n          </Button>\r\n          <FieldDescription className=\"text-center\">\r\n            Don&apos;t have an account?{\" \"}\r\n            <a href=\"#\" className=\"underline underline-offset-4\">\r\n              Sign up\r\n            </a>\r\n          </FieldDescription>\r\n        </Field>\r\n      </FieldGroup>\r\n    </form>\r\n  )\r\n}\r\n",
+          "signals": {
+            "type": "react-component",
+            "hasTailwind": true,
+            "hasMotion": false,
+            "hasShadcn": true,
+            "exports": [
+              "LoginForm"
+            ],
+            "imports": [
+              "@/registry/bases/base/lib/utils",
+              "@/registry/bases/base/ui/button",
+              "@/registry/bases/base/ui/field",
+              "@/registry/bases/base/ui/input"
+            ]
+          }
+        },
+        {
+          "relativePath": "apps/v4/registry/bases/base/blocks/login-03/components/login-form.tsx",
+          "score": 24,
+          "bytes": 4083,
+          "sha256": "189fb469b4d7557906aa4c6b29ee0b960c92dad301a03715385c7c03ee296fec",
+          "sampleChars": 4083,
+          "sample": "import { cn } from \"@/registry/bases/base/lib/utils\"\r\nimport { Button } from \"@/registry/bases/base/ui/button\"\r\nimport {\r\n  Card,\r\n  CardContent,\r\n  CardDescription,\r\n  CardHeader,\r\n  CardTitle,\r\n} from \"@/registry/bases/base/ui/card\"\r\nimport {\r\n  Field,\r\n  FieldDescription,\r\n  FieldGroup,\r\n  FieldLabel,\r\n  FieldSeparator,\r\n} from \"@/registry/bases/base/ui/field\"\r\nimport { Input } from \"@/registry/bases/base/ui/input\"\r\n\r\nexport function LoginForm({\r\n  className,\r\n  ...props\r\n}: React.ComponentProps<\"div\">) {\r\n  return (\r\n    <div className={cn(\"flex flex-col gap-6\", className)} {...props}>\r\n      <Card>\r\n        <CardHeader className=\"text-center\">\r\n          <CardTitle className=\"text-xl\">Welcome back</CardTitle>\r\n          <CardDescription>\r\n            Login with your Apple or Google account\r\n          </CardDescription>\r\n        </CardHeader>\r\n        <CardContent>\r\n          <form>\r\n            <FieldGroup>\r\n              <Field>\r\n                <Button variant=\"outline\" type=\"button\">\r\n                  <svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\">\r\n                    <path\r\n                      d=\"M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701\"\r\n                      fill=\"currentColor\"\r\n                    />\r\n                  </svg>\r\n                  Login with Apple\r\n                </Button>\r\n                <Button variant=\"outline\" type=\"button\">\r\n                  <svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\">\r\n                    <path\r\n                      d=\"M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z\"\r\n                      fill=\"currentColor\"\r\n                    />\r\n                  </svg>\r\n                  Login with Google\r\n                </Button>\r\n              </Field>\r\n              <FieldSeparator className=\"*:data-[slot=field-separator-content]:bg-card\">\r\n                Or continue with\r\n              </FieldSeparator>\r\n              <Field>\r\n                <FieldLabel htmlFor=\"email\">Email</FieldLabel>\r\n                <Input\r\n                  id=\"email\"\r\n                  type=\"email\"\r\n                  placeholder=\"m@example.com\"\r\n                  required\r\n                />\r\n              </Field>\r\n              <Field>\r\n                <div className=\"flex items-center\">\r\n                  <FieldLabel htmlFor=\"password\">Password</FieldLabel>\r\n                  <a\r\n                    href=\"#\"\r\n                    className=\"ml-auto text-sm underline-offset-4 hover:underline\"\r\n                  >\r\n                    Forgot your password?\r\n                  </a>\r\n                </div>\r\n                <Input id=\"password\" type=\"password\" required />\r\n              </Field>\r\n              <Field>\r\n                <Button type=\"submit\">Login</Button>\r\n                <FieldDescription className=\"text-center\">\r\n                  Don&apos;t have an account? <a href=\"#\">Sign up</a>\r\n                </FieldDescription>\r\n              </Field>\r\n            </FieldGroup>\r\n          </form>\r\n        </CardContent>\r\n      </Card>\r\n      <FieldDescription className=\"px-6 text-center\">\r\n        By clicking continue, you agree to our <a href=\"#\">Terms of Service</a>{\" \"}\r\n        and <a href=\"#\">Privacy Policy</a>.\r\n      </FieldDescription>\r\n    </div>\r\n  )\r\n}\r\n",
+          "signals": {
+            "type": "react-component",
+            "hasTailwind": true,
+            "hasMotion": false,
+            "hasShadcn": true,
+            "exports": [
+              "LoginForm"
+            ],
+            "imports": [
+              "@/registry/bases/base/lib/utils",
+              "@/registry/bases/base/ui/button",
+              "@/registry/bases/base/ui/card",
+              "@/registry/bases/base/ui/field",
+              "@/registry/bases/base/ui/input"
+            ]
+          }
         }
       ]
     },
@@ -1589,8 +2256,8 @@
       "licensePath": "C:/Users/PC/.codex/design-stack/repos/tailwindlabs__headlessui/LICENSE",
       "status": "allowed-after-review",
       "indexed": true,
-      "totalCandidateFiles": 24,
-      "selectedExamples": 8,
+      "totalCandidateFiles": 36,
+      "selectedExamples": 12,
       "examples": [
         {
           "relativePath": "packages/@headlessui-react/src/components/button/button.tsx",
@@ -1769,6 +2436,120 @@
               "../combobox/combobox"
             ]
           }
+        },
+        {
+          "relativePath": "packages/@headlessui-react/src/components/combobox/combobox-machine-glue.tsx",
+          "score": 12,
+          "bytes": 919,
+          "sha256": "0f60f9fea70743457a6146ae44677bfc875b34f42deaf5c50c9352c9bb13b051",
+          "sampleChars": 919,
+          "sample": "import { createContext, useContext, useMemo } from 'react'\r\nimport { useOnUnmount } from '../../hooks/use-on-unmount'\r\nimport { ComboboxMachine } from './combobox-machine'\r\n\r\nexport const ComboboxContext = createContext<ComboboxMachine<unknown> | null>(null)\r\nexport function useComboboxMachineContext<T>(component: string) {\r\n  let context = useContext(ComboboxContext)\r\n  if (context === null) {\r\n    let err = new Error(`<${component} /> is missing a parent <Combobox /> component.`)\r\n    if (Error.captureStackTrace) Error.captureStackTrace(err, useComboboxMachine)\r\n    throw err\r\n  }\r\n  return context as ComboboxMachine<T>\r\n}\r\n\r\nexport function useComboboxMachine({\r\n  id,\r\n  virtual = null,\r\n  __demoMode = false,\r\n}: Parameters<typeof ComboboxMachine.new>[0]) {\r\n  let machine = useMemo(() => ComboboxMachine.new({ id, virtual, __demoMode }), [])\r\n  useOnUnmount(() => machine.dispose())\r\n  return machine\r\n}\r\n",
+          "signals": {
+            "type": "react-component",
+            "hasTailwind": false,
+            "hasMotion": false,
+            "hasShadcn": false,
+            "exports": [
+              "ComboboxContext",
+              "useComboboxMachineContext",
+              "useComboboxMachine"
+            ],
+            "imports": [
+              "react",
+              "../../hooks/use-on-unmount",
+              "./combobox-machine"
+            ]
+          }
+        },
+        {
+          "relativePath": "packages/@headlessui-react/src/components/combobox/combobox.tsx",
+          "score": 12,
+          "bytes": 56675,
+          "sha256": "4610e97215d7bae2c6de52aa68a6c8fbe9a4c77a5a51a0fe974dfd1a2cbb79e3",
+          "sampleChars": 5000,
+          "sample": "'use client'\r\n\r\nimport { useFocusRing } from '@react-aria/focus'\r\nimport { useHover } from '@react-aria/interactions'\r\nimport { Virtualizer, useVirtualizer } from '@tanstack/react-virtual'\r\nimport React, {\r\n  Fragment,\r\n  createContext,\r\n  useCallback,\r\n  useContext,\r\n  useMemo,\r\n  useRef,\r\n  useState,\r\n  type CSSProperties,\r\n  type ElementType,\r\n  type MutableRefObject,\r\n  type FocusEvent as ReactFocusEvent,\r\n  type KeyboardEvent as ReactKeyboardEvent,\r\n  type MouseEvent as ReactMouseEvent,\r\n  type Ref,\r\n} from 'react'\r\nimport { flushSync } from 'react-dom'\r\nimport { useActivePress } from '../../hooks/use-active-press'\r\nimport { useByComparator, type ByComparator } from '../../hooks/use-by-comparator'\r\nimport { useControllable } from '../../hooks/use-controllable'\r\nimport { useDefaultValue } from '../../hooks/use-default-value'\r\nimport { useDisposables } from '../../hooks/use-disposables'\r\nimport { useElementSize } from '../../hooks/use-element-size'\r\nimport { useEvent } from '../../hooks/use-event'\r\nimport { useHandleToggle } from '../../hooks/use-handle-toggle'\r\nimport { useId } from '../../hooks/use-id'\r\nimport { useInertOthers } from '../../hooks/use-inert-others'\r\nimport { useIsoMorphicEffect } from '../../hooks/use-iso-morphic-effect'\r\nimport { useLatestValue } from '../../hooks/use-latest-value'\r\nimport { useOnDisappear } from '../../hooks/use-on-disappear'\r\nimport { useOutsideClick } from '../../hooks/use-outside-click'\r\nimport { useOwnerDocument } from '../../hooks/use-owner'\r\nimport { Action as QuickReleaseAction, useQuickRelease } from '../../hooks/use-quick-release'\r\nimport { useRefocusableInput } from '../../hooks/use-refocusable-input'\r\nimport { useResolveButtonType } from '../../hooks/use-resolve-button-type'\r\nimport { useScrollLock } from '../../hooks/use-scroll-lock'\r\nimport { useSlot } from '../../hooks/use-slot'\r\nimport { useSyncRefs } from '../../hooks/use-sync-refs'\r\nimport { useTrackedPointer } from '../../hooks/use-tracked-pointer'\r\nimport { transitionDataAttributes, useTransition } from '../../hooks/use-transition'\r\nimport { useTreeWalker } from '../../hooks/use-tree-walker'\r\nimport { useWatch } from '../../hooks/use-watch'\r\nimport { useDisabled } from '../../internal/disabled'\r\nimport {\r\n  FloatingProvider,\r\n  useFloatingPanel,\r\n  useFloatingPanelProps,\r\n  useFloatingReference,\r\n  useResolvedAnchor,\r\n  type AnchorProps,\r\n} from '../../internal/floating'\r\nimport { FormFields } from '../../internal/form-fields'\r\nimport { Frozen, useFrozenData } from '../../internal/frozen'\r\nimport { useProvidedId } from '../../internal/id'\r\nimport { OpenClosedProvider, State, useOpenClosed } from '../../internal/open-closed'\r\nimport { stackMachines } from '../../machines/stack-machine'\r\nimport { useSlice } from '../../react-glue'\r\nimport type { EnsureArray, Props } from '../../types'\r\nimport { history } from '../../utils/active-element-history'\r\nimport { Focus } from '../../utils/calculate-active-index'\r\nimport { disposables } from '../../utils/disposables'\r\nimport * as DOM from '../../utils/dom'\r\nimport { match } from '../../utils/match'\r\nimport { isActiveElement } from '../../utils/owner'\r\nimport { isMobile } from '../../utils/platform'\r\nimport {\r\n  RenderFeatures,\r\n  forwardRefWithAs,\r\n  mergeProps,\r\n  useRender,\r\n  type HasDisplayName,\r\n  type PropsForFeatures,\r\n  type RefProp,\r\n} from '../../utils/render'\r\nimport { useDescribedBy } from '../description/description'\r\nimport { Keys } from '../keyboard'\r\nimport { Label, useLabelledBy, useLabels, type _internal_ComponentLabel } from '../label/label'\r\nimport { MouseButton } from '../mouse'\r\nimport { Portal } from '../portal/portal'\r\nimport {\r\n  ActionTypes,\r\n  ActivationTrigger,\r\n  ComboboxState,\r\n  ValueMode,\r\n  type ComboboxOptionDataRef,\r\n} from './combobox-machine'\r\nimport {\r\n  ComboboxContext,\r\n  useComboboxMachine,\r\n  useComboboxMachineContext,\r\n} from './combobox-machine-glue'\r\n\r\nlet ComboboxDataContext = createContext<{\r\n  value: unknown\r\n  defaultValue: unknown\r\n  disabled: boolean\r\n  invalid: boolean\r\n  mode: ValueMode\r\n  immediate: boolean\r\n\r\n  virtual: { options: unknown[]; disabled: (value: unknown) => boolean } | null\r\n  calculateIndex(value: unknown): number\r\n  compare(a: unknown, z: unknown): boolean\r\n  isSelected(value: unknown): boolean\r\n  onChange(value: unknown): void\r\n\r\n  __demoMode: boolean\r\n\r\n  optionsPropsRef: MutableRefObject<{\r\n    static: boolean\r\n    hold: boolean\r\n  }>\r\n} | null>(null)\r\nComboboxDataContext.displayName = 'ComboboxDataContext'\r\n\r\nfunction useData(component: string) {\r\n  let context = useContext(ComboboxDataContext)\r\n  if (context === null) {\r\n    let err = new Error(`<${component} /> is missing a parent <Combobox /> component.`)\r\n    if (Error.captureStackTrace) Error.captureStackTrace(err, useData)\r\n    throw err\r\n  }\r\n  return context\r\n}\r\ntype _Data = ReturnType<typeof useData>\r\n\r\nlet VirtualContext = createContext<Virtualizer<any, any> | null>(null)\r\n\r\nfunction VirtualProvider(props: {\r\n  slot: OptionsRe",
+          "signals": {
+            "type": "react-component",
+            "hasTailwind": false,
+            "hasMotion": false,
+            "hasShadcn": false,
+            "exports": [],
+            "imports": [
+              "@react-aria/focus",
+              "@react-aria/interactions",
+              "@tanstack/react-virtual",
+              "react",
+              "react-dom",
+              "../../hooks/use-active-press",
+              "../../hooks/use-by-comparator",
+              "../../hooks/use-controllable",
+              "../../hooks/use-default-value",
+              "../../hooks/use-disposables",
+              "../../hooks/use-element-size",
+              "../../hooks/use-event",
+              "../../hooks/use-handle-toggle",
+              "../../hooks/use-id",
+              "../../hooks/use-inert-others",
+              "../../hooks/use-iso-morphic-effect",
+              "../../hooks/use-latest-value",
+              "../../hooks/use-on-disappear",
+              "../../hooks/use-outside-click",
+              "../../hooks/use-owner"
+            ]
+          }
+        },
+        {
+          "relativePath": "packages/@headlessui-react/src/components/data-interactive/data-interactive.tsx",
+          "score": 12,
+          "bytes": 2128,
+          "sha256": "586b90198d0e95bb928307df37da6b7de0652c57c474452167d6b635f1d04d60",
+          "sampleChars": 2128,
+          "sample": "'use client'\r\n\r\nimport { useFocusRing } from '@react-aria/focus'\r\nimport { useHover } from '@react-aria/interactions'\r\nimport { Fragment, type ElementType, type Ref } from 'react'\r\nimport { useActivePress } from '../../hooks/use-active-press'\r\nimport { useSlot } from '../../hooks/use-slot'\r\nimport type { Props } from '../../types'\r\nimport {\r\n  forwardRefWithAs,\r\n  mergeProps,\r\n  useRender,\r\n  type HasDisplayName,\r\n  type RefProp,\r\n} from '../../utils/render'\r\n\r\nlet DEFAULT_DATA_INTERACTIVE_TAG = Fragment\r\n\r\ntype DataInteractiveRenderPropArg = {\r\n  hover: boolean\r\n  focus: boolean\r\n  active: boolean\r\n}\r\ntype DataInteractivePropsWeControl = never\r\n\r\nexport type DataInteractiveProps<TTag extends ElementType = typeof DEFAULT_DATA_INTERACTIVE_TAG> =\r\n  Props<TTag, DataInteractiveRenderPropArg, DataInteractivePropsWeControl, {}>\r\n\r\nfunction DataInteractiveFn<TTag extends ElementType = typeof DEFAULT_DATA_INTERACTIVE_TAG>(\r\n  props: DataInteractiveProps<TTag>,\r\n  ref: Ref<HTMLElement>\r\n) {\r\n  let { ...theirProps } = props\r\n\r\n  // Ideally we can use a `disabled` prop, but that would depend on the props of the child element\r\n  // and we don't have access to that in this component.\r\n\r\n  let disabled = false\r\n\r\n  let { isFocusVisible: focus, focusProps } = useFocusRing()\r\n  let { isHovered: hover, hoverProps } = useHover({ isDisabled: disabled })\r\n  let { pressed: active, pressProps } = useActivePress({ disabled })\r\n\r\n  let ourProps = mergeProps({ ref }, focusProps, hoverProps, pressProps)\r\n\r\n  let slot = useSlot<DataInteractiveRenderPropArg>({ hover, focus, active })\r\n\r\n  let render = useRender()\r\n\r\n  return render({\r\n    ourProps,\r\n    theirProps,\r\n    slot,\r\n    defaultTag: DEFAULT_DATA_INTERACTIVE_TAG,\r\n    name: 'DataInteractive',\r\n  })\r\n}\r\n\r\nexport interface _internal_ComponentDataInteractive extends HasDisplayName {\r\n  <TTag extends ElementType = typeof DEFAULT_DATA_INTERACTIVE_TAG>(\r\n    props: DataInteractiveProps<TTag> & RefProp<typeof DataInteractiveFn>\r\n  ): React.JSX.Element\r\n}\r\n\r\nexport let DataInteractive = forwardRefWithAs(\r\n  DataInteractiveFn\r\n) as _internal_ComponentDataInteractive\r\n",
+          "signals": {
+            "type": "react-component",
+            "hasTailwind": false,
+            "hasMotion": false,
+            "hasShadcn": false,
+            "exports": [],
+            "imports": [
+              "@react-aria/focus",
+              "@react-aria/interactions",
+              "react",
+              "../../hooks/use-active-press",
+              "../../hooks/use-slot",
+              "../../types",
+              "../../utils/render"
+            ]
+          }
+        },
+        {
+          "relativePath": "packages/@headlessui-react/src/components/description/description.tsx",
+          "score": 12,
+          "bytes": 4233,
+          "sha256": "42128e20d40a7ca4c1082e3b476540241d246111081abb87c029db1aa4226f19",
+          "sampleChars": 4233,
+          "sample": "'use client'\r\n\r\nimport React, {\r\n  createContext,\r\n  useContext,\r\n  useMemo,\r\n  useState,\r\n  type ElementType,\r\n  type ReactNode,\r\n  type Ref,\r\n} from 'react'\r\nimport { useEvent } from '../../hooks/use-event'\r\nimport { useId } from '../../hooks/use-id'\r\nimport { useIsoMorphicEffect } from '../../hooks/use-iso-morphic-effect'\r\nimport { useSlot } from '../../hooks/use-slot'\r\nimport { useSyncRefs } from '../../hooks/use-sync-refs'\r\nimport { useDisabled } from '../../internal/disabled'\r\nimport type { Props } from '../../types'\r\nimport { forwardRefWithAs, useRender, type HasDisplayName, type RefProp } from '../../utils/render'\r\n\r\n// ---\r\n\r\ninterface SharedData {\r\n  slot?: {}\r\n  name?: string\r\n  props?: {}\r\n}\r\n\r\nlet DescriptionContext = createContext<\r\n  ({ value: string | undefined; register(value: string): () => void } & SharedData) | null\r\n>(null)\r\nDescriptionContext.displayName = 'DescriptionContext'\r\n\r\nfunction useDescriptionContext() {\r\n  let context = useContext(DescriptionContext)\r\n  if (context === null) {\r\n    let err = new Error(\r\n      'You used a <Description /> component, but it is not inside a relevant parent.'\r\n    )\r\n    if (Error.captureStackTrace) Error.captureStackTrace(err, useDescriptionContext)\r\n    throw err\r\n  }\r\n  return context\r\n}\r\n\r\nexport function useDescribedBy() {\r\n  return useContext(DescriptionContext)?.value ?? undefined\r\n}\r\n\r\ninterface DescriptionProviderProps extends SharedData {\r\n  children: ReactNode\r\n  value?: string | undefined\r\n}\r\n\r\nexport function useDescriptions(): [\r\n  string | undefined,\r\n  (props: DescriptionProviderProps) => React.JSX.Element,\r\n] {\r\n  let [descriptionIds, setDescriptionIds] = useState<string[]>([])\r\n\r\n  return [\r\n    // The actual id's as string or undefined\r\n    descriptionIds.length > 0 ? descriptionIds.join(' ') : undefined,\r\n\r\n    // The provider component\r\n    useMemo(() => {\r\n      return function DescriptionProvider(props: DescriptionProviderProps) {\r\n        let register = useEvent((value: string) => {\r\n          setDescriptionIds((existing) => [...existing, value])\r\n\r\n          return () => {\r\n            return setDescriptionIds((existing) => {\r\n              let clone = existing.slice()\r\n              let idx = clone.indexOf(value)\r\n              if (idx !== -1) clone.splice(idx, 1)\r\n              return clone\r\n            })\r\n          }\r\n        })\r\n\r\n        let contextBag = useMemo(\r\n          () => ({\r\n            register,\r\n            slot: props.slot,\r\n            name: props.name,\r\n            props: props.props,\r\n            value: props.value,\r\n          }),\r\n          [register, props.slot, props.name, props.props, props.value]\r\n        )\r\n\r\n        return (\r\n          <DescriptionContext.Provider value={contextBag}>\r\n            {props.children}\r\n          </DescriptionContext.Provider>\r\n        )\r\n      }\r\n    }, [setDescriptionIds]),\r\n  ]\r\n}\r\n\r\n// ---\r\n\r\nlet DEFAULT_DESCRIPTION_TAG = 'p' as const\r\n\r\nexport type DescriptionProps<TTag extends ElementType = typeof DEFAULT_DESCRIPTION_TAG> =\r\n  Props<TTag>\r\n\r\nfunction DescriptionFn<TTag extends ElementType = typeof DEFAULT_DESCRIPTION_TAG>(\r\n  props: DescriptionProps<TTag>,\r\n  ref: Ref<HTMLElement>\r\n) {\r\n  let internalId = useId()\r\n  let providedDisabled = useDisabled()\r\n  let { id = `headlessui-description-${internalId}`, ...theirProps } = props\r\n  let context = useDescriptionContext()\r\n  let descriptionRef = useSyncRefs(ref)\r\n\r\n  useIsoMorphicEffect(() => context.register(id), [id, context.register])\r\n\r\n  let slot = useSlot({ ...context.slot, disabled: providedDisabled || false })\r\n  let ourProps = { ref: descriptionRef, ...context.props, id }\r\n\r\n  let render = useRender()\r\n\r\n  return render({\r\n    ourProps,\r\n    theirProps,\r\n    slot,\r\n    defaultTag: DEFAULT_DESCRIPTION_TAG,\r\n    name: context.name || 'Description',\r\n  })\r\n}\r\n\r\n// ---\r\nexport interface _internal_ComponentDescription extends HasDisplayName {\r\n  <TTag extends ElementType = typeof DEFAULT_DESCRIPTION_TAG>(\r\n    props: DescriptionProps<TTag> & RefProp<typeof DescriptionFn>\r\n  ): React.JSX.Element\r\n}\r\n\r\nlet DescriptionRoot = forwardRefWithAs(DescriptionFn) as _internal_ComponentDescription\r\n\r\nexport let Description = Object.assign(DescriptionRoot, {\r\n  //\r\n})\r\n",
+          "signals": {
+            "type": "react-component",
+            "hasTailwind": false,
+            "hasMotion": false,
+            "hasShadcn": false,
+            "exports": [
+              "useDescribedBy",
+              "useDescriptions"
+            ],
+            "imports": [
+              "react",
+              "../../hooks/use-event",
+              "../../hooks/use-id",
+              "../../hooks/use-iso-morphic-effect",
+              "../../hooks/use-slot",
+              "../../hooks/use-sync-refs",
+              "../../internal/disabled",
+              "../../types",
+              "../../utils/render"
+            ]
+          }
         }
       ]
     },
@@ -1779,8 +2560,8 @@
       "licensePath": "C:/Users/PC/.codex/design-stack/repos/tremorlabs__tremor/LICENSE",
       "status": "allowed-after-review",
       "indexed": true,
-      "totalCandidateFiles": 24,
-      "selectedExamples": 8,
+      "totalCandidateFiles": 36,
+      "selectedExamples": 12,
       "examples": [
         {
           "relativePath": "src/components/Accordion/accordion.stories.tsx",
@@ -1994,6 +2775,109 @@
               "../../utils/chartColors",
               "../../utils/cx",
               "../../utils/getYAxisDomain"
+            ]
+          }
+        },
+        {
+          "relativePath": "src/components/BarList/barlist.stories.tsx",
+          "score": 12,
+          "bytes": 3076,
+          "sha256": "9aef02b959856998599360a76fef5bf4ba1723c48c65be4cc2d30c5c1d2a301e",
+          "sampleChars": 3076,
+          "sample": "import React from \"react\"\r\nimport type { Meta, StoryObj } from \"@storybook/react\"\r\n\r\nimport { BarList } from \"./BarList\"\r\n\r\nconst meta: Meta<typeof BarList> = {\r\n  title: \"visualization/BarList\",\r\n  component: BarList,\r\n  render: (args) => <BarList data-testid=\"barlist\" {...args} />,\r\n}\r\n\r\nexport default meta\r\ntype Story = StoryObj<typeof BarList>\r\n\r\nconst data = [\r\n  { name: \"/home\", value: 843 },\r\n  { name: \"/imprint\", value: 46 },\r\n  { name: \"/cancellation\", value: 3 },\r\n  { name: \"/blocks\", value: 108 },\r\n  { name: \"/documentation\", value: 384 },\r\n]\r\n\r\nconst dataSame = [\r\n  { name: \"/home\", value: 100 },\r\n  { name: \"/imprint\", value: 100 },\r\n  { name: \"/cancellation\", value: 100 },\r\n  { name: \"/blocks\", value: 100 },\r\n  { name: \"/documentation\", value: 100 },\r\n]\r\n\r\nconst dataHref = [\r\n  { name: \"/home\", value: 843, href: \"https://tremor.so\" },\r\n  { name: \"/imprint\", value: 46, href: \"https://tremor.so\" },\r\n  { name: \"/cancellation\", value: 3, href: \"https://tremor.so\" },\r\n  { name: \"/blocks\", value: 108, href: \"https://tremor.so\" },\r\n  { name: \"/documentation\", value: 384, href: \"https://tremor.so\" },\r\n]\r\n\r\nexport const Default: Story = {\r\n  args: {\r\n    data: data,\r\n  },\r\n}\r\n\r\nexport const WithHrefAndValueFormatter: Story = {\r\n  args: {\r\n    data: dataHref,\r\n    valueFormatter: (value) => `${value} Visitors`,\r\n  },\r\n}\r\n\r\nexport const WithSortOrderAscending: Story = {\r\n  args: {\r\n    data: data,\r\n    sortOrder: \"ascending\",\r\n  },\r\n}\r\n\r\nexport const WithSortOrderNone: Story = {\r\n  args: {\r\n    data: data,\r\n    sortOrder: \"none\",\r\n  },\r\n}\r\n\r\nexport const WithOnValueChange: Story = {\r\n  args: {\r\n    data: data,\r\n  },\r\n  render: (args) => {\r\n    const [selectedItem, setSelectedItem] = React.useState(\"\")\r\n    return (\r\n      <div className=\"relative flex flex-col gap-3\">\r\n        <BarList\r\n          data-testid=\"barlist-onvaluechange\"\r\n          onValueChange={(item) =>\r\n            setSelectedItem(JSON.stringify(item, null, 2))\r\n          }\r\n          {...args}\r\n        />\r\n        <pre className=\"w-fit rounded-md bg-gray-100 p-2 font-mono text-sm text-gray-700\">\r\n          {selectedItem === \"\" ? \"Click on a bar\" : selectedItem}\r\n        </pre>\r\n      </div>\r\n    )\r\n  },\r\n}\r\n\r\nexport const WithOnValueChangeAndHref: Story = {\r\n  args: {\r\n    data: dataHref,\r\n  },\r\n  render: (args) => {\r\n    const [selectedItem, setSelectedItem] = React.useState(\"\")\r\n    return (\r\n      <div className=\"relative flex flex-col gap-3\">\r\n        <BarList\r\n          data-testid=\"barlist-onvaluechangehref\"\r\n          onValueChange={(item) =>\r\n            setSelectedItem(JSON.stringify(item, null, 2))\r\n          }\r\n          {...args}\r\n        />\r\n        <pre className=\"w-fit rounded-md bg-gray-100 p-2 font-mono text-sm text-gray-700\">\r\n          {selectedItem === \"\" ? \"Click on a bar\" : selectedItem}\r\n        </pre>\r\n      </div>\r\n    )\r\n  },\r\n}\r\n\r\nexport const DataSameWithOnValueChange: Story = {\r\n  args: {\r\n    onValueChange: () => {},\r\n    data: dataSame,\r\n  },\r\n}\r\n\r\nexport const DataSame: Story = {\r\n  args: {\r\n    data: dataSame,\r\n  },\r\n}\r\n",
+          "signals": {
+            "type": "react-component",
+            "hasTailwind": true,
+            "hasMotion": false,
+            "hasShadcn": false,
+            "exports": [
+              "Default",
+              "WithHrefAndValueFormatter",
+              "WithSortOrderAscending",
+              "WithSortOrderNone",
+              "WithOnValueChange",
+              "WithOnValueChangeAndHref",
+              "DataSameWithOnValueChange",
+              "DataSame"
+            ],
+            "imports": [
+              "react",
+              "@storybook/react",
+              "./BarList"
+            ]
+          }
+        },
+        {
+          "relativePath": "src/components/BarList/BarList.tsx",
+          "score": 12,
+          "bytes": 5145,
+          "sha256": "5437c3406c3623e1678eeb29b26d007007016cf6e10f0814e94a8daaeb982a06",
+          "sampleChars": 5000,
+          "sample": "// Tremor BarList [v1.0.0]\r\n\r\nimport React from \"react\"\r\n\r\nimport { cx } from \"../../utils/cx\"\r\nimport { focusRing } from \"../../utils/focusRing\"\r\n\r\ntype Bar<T> = T & {\r\n  key?: string\r\n  href?: string\r\n  value: number\r\n  name: string\r\n}\r\n\r\ninterface BarListProps<T = unknown>\r\n  extends React.HTMLAttributes<HTMLDivElement> {\r\n  data: Bar<T>[]\r\n  valueFormatter?: (value: number) => string\r\n  showAnimation?: boolean\r\n  onValueChange?: (payload: Bar<T>) => void\r\n  sortOrder?: \"ascending\" | \"descending\" | \"none\"\r\n}\r\n\r\nfunction BarListInner<T>(\r\n  {\r\n    data = [],\r\n    valueFormatter = (value) => value.toString(),\r\n    showAnimation = false,\r\n    onValueChange,\r\n    sortOrder = \"descending\",\r\n    className,\r\n    ...props\r\n  }: BarListProps<T>,\r\n  forwardedRef: React.ForwardedRef<HTMLDivElement>,\r\n) {\r\n  const Component = onValueChange ? \"button\" : \"div\"\r\n  const sortedData = React.useMemo(() => {\r\n    if (sortOrder === \"none\") {\r\n      return data\r\n    }\r\n    return [...data].sort((a, b) => {\r\n      return sortOrder === \"ascending\" ? a.value - b.value : b.value - a.value\r\n    })\r\n  }, [data, sortOrder])\r\n\r\n  const widths = React.useMemo(() => {\r\n    const maxValue = Math.max(...sortedData.map((item) => item.value), 0)\r\n    return sortedData.map((item) =>\r\n      item.value === 0 ? 0 : Math.max((item.value / maxValue) * 100, 2),\r\n    )\r\n  }, [sortedData])\r\n\r\n  const rowHeight = \"h-8\"\r\n\r\n  return (\r\n    <div\r\n      ref={forwardedRef}\r\n      className={cx(\"flex justify-between space-x-6\", className)}\r\n      aria-sort={sortOrder}\r\n      tremor-id=\"tremor-raw\"\r\n      {...props}\r\n    >\r\n      <div className=\"relative w-full space-y-1.5\">\r\n        {sortedData.map((item, index) => (\r\n          <Component\r\n            key={item.key ?? item.name}\r\n            onClick={() => {\r\n              onValueChange?.(item)\r\n            }}\r\n            className={cx(\r\n              // base\r\n              \"group w-full rounded-sm\",\r\n              // focus\r\n              focusRing,\r\n              onValueChange\r\n                ? [\r\n                    \"-m-0! cursor-pointer\",\r\n                    // hover\r\n                    \"hover:bg-gray-50 dark:hover:bg-gray-900\",\r\n                  ]\r\n                : \"\",\r\n            )}\r\n          >\r\n            <div\r\n              className={cx(\r\n                // base\r\n                \"flex items-center rounded-sm transition-all\",\r\n                rowHeight,\r\n                // background color\r\n                \"bg-blue-200 dark:bg-blue-900\",\r\n                onValueChange\r\n                  ? \"group-hover:bg-blue-300 dark:group-hover:bg-blue-800\"\r\n                  : \"\",\r\n                // margin and duration\r\n                {\r\n                  \"mb-0\": index === sortedData.length - 1,\r\n                  \"duration-800\": showAnimation,\r\n                },\r\n              )}\r\n              style={{ width: `${widths[index]}%` }}\r\n            >\r\n              <div className={cx(\"absolute left-2 flex max-w-full pr-2\")}>\r\n                {item.href ? (\r\n                  <a\r\n                    href={item.href}\r\n                    className={cx(\r\n                      // base\r\n                      \"truncate whitespace-nowrap rounded-sm text-sm\",\r\n                      // text color\r\n                      \"text-gray-900 dark:text-gray-50\",\r\n                      // hover\r\n                      \"hover:underline hover:underline-offset-2\",\r\n                      // focus\r\n                      focusRing,\r\n                    )}\r\n                    target=\"_blank\"\r\n                    rel=\"noreferrer\"\r\n                    onClick={(event) => event.stopPropagation()}\r\n                  >\r\n                    {item.name}\r\n                  </a>\r\n                ) : (\r\n                  <p\r\n                    className={cx(\r\n                      // base\r\n                      \"truncate whitespace-nowrap text-sm\",\r\n                      // text color\r\n                      \"text-gray-900 dark:text-gray-50\",\r\n                    )}\r\n                  >\r\n                    {item.name}\r\n                  </p>\r\n                )}\r\n              </div>\r\n            </div>\r\n          </Component>\r\n        ))}\r\n      </div>\r\n      <div>\r\n        {sortedData.map((item, index) => (\r\n          <div\r\n            key={item.key ?? item.name}\r\n            className={cx(\r\n              \"flex items-center justify-end\",\r\n              rowHeight,\r\n              index === sortedData.length - 1 ? \"mb-0\" : \"mb-1.5\",\r\n            )}\r\n          >\r\n            <p\r\n              className={cx(\r\n                // base\r\n                \"truncate whitespace-nowrap text-sm leading-none\",\r\n                // text color\r\n                \"text-gray-900 dark:text-gray-50\",\r\n              )}\r\n            >\r\n              {valueFormatter(item.value)}\r\n            </p>\r\n          </div>\r\n        ))}\r\n      </div>\r\n    </div>\r\n  )\r\n}\r\n\r\nBarListInner.displayName = \"BarList\"\r\n\r\nconst BarList = React.forwardRef(BarListInner) as <T>(\r\n  p:",
+          "signals": {
+            "type": "react-component",
+            "hasTailwind": true,
+            "hasMotion": false,
+            "hasShadcn": false,
+            "exports": [],
+            "imports": [
+              "react",
+              "../../utils/cx",
+              "../../utils/focusRing"
+            ]
+          }
+        },
+        {
+          "relativePath": "src/components/Button/button.stories.tsx",
+          "score": 12,
+          "bytes": 1814,
+          "sha256": "957d34b1bfd11a6f10cca355392206d5cba378a697ddfb36854cd5e2cdcb693b",
+          "sampleChars": 1814,
+          "sample": "import type { Meta, StoryObj } from \"@storybook/react\"\r\n\r\nimport { cx } from \"../../utils/cx\"\r\nimport { Button, buttonVariants } from \"./Button\"\r\n\r\nconst meta: Meta<typeof Button> = {\r\n  title: \"ui/Button\",\r\n  component: Button,\r\n  argTypes: {\r\n    variant: {\r\n      control: \"radio\",\r\n      options: [...Object.keys(buttonVariants.variants.variant)],\r\n    },\r\n  },\r\n}\r\n\r\nexport default meta\r\ntype Story = StoryObj<typeof Button>\r\n\r\nexport const Primary: Story = {\r\n  args: {\r\n    variant: \"primary\",\r\n    children: \"Primary\",\r\n  },\r\n}\r\n\r\nexport const Secondary: Story = {\r\n  args: {\r\n    variant: \"secondary\",\r\n    children: \"Secondary\",\r\n  },\r\n}\r\n\r\nexport const Light: Story = {\r\n  args: {\r\n    variant: \"light\",\r\n    children: \"Light\",\r\n  },\r\n}\r\n\r\nexport const Ghost: Story = {\r\n  args: {\r\n    variant: \"ghost\",\r\n    children: \"Ghost\",\r\n  },\r\n}\r\n\r\nexport const Destructive: Story = {\r\n  args: {\r\n    variant: \"destructive\",\r\n    children: \"Destructive\",\r\n  },\r\n}\r\n\r\nexport const WithDisabled: Story = {\r\n  args: {\r\n    children: \"Disabled\",\r\n    disabled: true,\r\n  },\r\n}\r\n\r\nexport const IsLoading: Story = {\r\n  args: {\r\n    isLoading: true,\r\n  },\r\n}\r\n\r\nexport const IsLoadingWithChildren: Story = {\r\n  args: {\r\n    isLoading: true,\r\n    children: \"Add item\",\r\n  },\r\n}\r\n\r\nexport const IsLoadingWithLoadingText: Story = {\r\n  args: {\r\n    loadingText: \"Custom loading text\",\r\n    isLoading: true,\r\n  },\r\n}\r\n\r\nexport const AsChildAnchor: Story = {\r\n  render: () => (\r\n    <Button asChild>\r\n      <a href=\"#api-reference-button\">API Reference</a>\r\n    </Button>\r\n  ),\r\n}\r\n\r\nexport const AnchorWithBadgeVariantsStyle: Story = {\r\n  render: () => (\r\n    <div className=\"flex flex-wrap gap-4\">\r\n      <a className={cx(buttonVariants({ variant: \"secondary\" }))}>\r\n        Anchor element\r\n      </a>\r\n    </div>\r\n  ),\r\n}\r\n",
+          "signals": {
+            "type": "react-component",
+            "hasTailwind": true,
+            "hasMotion": false,
+            "hasShadcn": true,
+            "exports": [
+              "Primary",
+              "Secondary",
+              "Light",
+              "Ghost",
+              "Destructive",
+              "WithDisabled",
+              "IsLoading",
+              "IsLoadingWithChildren",
+              "IsLoadingWithLoadingText",
+              "AsChildAnchor"
+            ],
+            "imports": [
+              "@storybook/react",
+              "../../utils/cx",
+              "./Button"
+            ]
+          }
+        },
+        {
+          "relativePath": "src/components/Button/Button.tsx",
+          "score": 12,
+          "bytes": 4209,
+          "sha256": "fbe3ad597b2e4ebe342c6ea62e33fd5571be826651796ddaa2c6e38399094b54",
+          "sampleChars": 4209,
+          "sample": "// Tremor Button [v1.0.0]\r\n\r\nimport React from \"react\"\r\nimport { Slot } from \"@radix-ui/react-slot\"\r\nimport { RiLoader2Fill } from \"@remixicon/react\"\r\nimport { tv, type VariantProps } from \"tailwind-variants\"\r\n\r\nimport { cx } from \"../../utils/cx\"\r\nimport { focusRing } from \"../../utils/focusRing\"\r\n\r\nconst buttonVariants = tv({\r\n  base: [\r\n    // base\r\n    \"relative inline-flex items-center justify-center whitespace-nowrap rounded-md border px-3 py-2 text-center text-sm font-medium shadow-xs transition-all duration-100 ease-in-out\",\r\n    // disabled\r\n    \"disabled:pointer-events-none disabled:shadow-none\",\r\n    // focus\r\n    focusRing,\r\n  ],\r\n  variants: {\r\n    variant: {\r\n      primary: [\r\n        // border\r\n        \"border-transparent\",\r\n        // text color\r\n        \"text-white dark:text-white\",\r\n        // background color\r\n        \"bg-blue-500 dark:bg-blue-500\",\r\n        // hover color\r\n        \"hover:bg-blue-600 dark:hover:bg-blue-600\",\r\n        // disabled\r\n        \"disabled:bg-blue-300 disabled:text-white\",\r\n        \"dark:disabled:bg-blue-800 dark:disabled:text-blue-400\",\r\n      ],\r\n      secondary: [\r\n        // border\r\n        \"border-gray-300 dark:border-gray-800\",\r\n        // text color\r\n        \"text-gray-900 dark:text-gray-50\",\r\n        // background color\r\n        \"bg-white dark:bg-gray-950\",\r\n        //hover color\r\n        \"hover:bg-gray-50 dark:hover:bg-gray-900/60\",\r\n        // disabled\r\n        \"disabled:text-gray-400\",\r\n        \"dark:disabled:text-gray-600\",\r\n      ],\r\n      light: [\r\n        // base\r\n        \"shadow-none\",\r\n        // border\r\n        \"border-transparent\",\r\n        // text color\r\n        \"text-gray-900 dark:text-gray-50\",\r\n        // background color\r\n        \"bg-gray-200 dark:bg-gray-900\",\r\n        // hover color\r\n        \"hover:bg-gray-300/70 dark:hover:bg-gray-800/80\",\r\n        // disabled\r\n        \"disabled:bg-gray-100 disabled:text-gray-400\",\r\n        \"dark:disabled:bg-gray-800 dark:disabled:text-gray-600\",\r\n      ],\r\n      ghost: [\r\n        // base\r\n        \"shadow-none\",\r\n        // border\r\n        \"border-transparent\",\r\n        // text color\r\n        \"text-gray-900 dark:text-gray-50\",\r\n        // hover color\r\n        \"bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800/80\",\r\n        // disabled\r\n        \"disabled:text-gray-400\",\r\n        \"dark:disabled:text-gray-600\",\r\n      ],\r\n      destructive: [\r\n        // text color\r\n        \"text-white\",\r\n        // border\r\n        \"border-transparent\",\r\n        // background color\r\n        \"bg-red-600 dark:bg-red-700\",\r\n        // hover color\r\n        \"hover:bg-red-700 dark:hover:bg-red-600\",\r\n        // disabled\r\n        \"disabled:bg-red-300 disabled:text-white\",\r\n        \"dark:disabled:bg-red-950 dark:disabled:text-red-400\",\r\n      ],\r\n    },\r\n  },\r\n  defaultVariants: {\r\n    variant: \"primary\",\r\n  },\r\n})\r\n\r\ninterface ButtonProps\r\n  extends React.ComponentPropsWithoutRef<\"button\">,\r\n    VariantProps<typeof buttonVariants> {\r\n  asChild?: boolean\r\n  isLoading?: boolean\r\n  loadingText?: string\r\n}\r\n\r\nconst Button = React.forwardRef<HTMLButtonElement, ButtonProps>(\r\n  (\r\n    {\r\n      asChild,\r\n      isLoading = false,\r\n      loadingText,\r\n      className,\r\n      disabled,\r\n      variant,\r\n      children,\r\n      ...props\r\n    }: ButtonProps,\r\n    forwardedRef,\r\n  ) => {\r\n    const Component = asChild ? Slot : \"button\"\r\n    return (\r\n      <Component\r\n        ref={forwardedRef}\r\n        className={cx(buttonVariants({ variant }), className)}\r\n        disabled={disabled || isLoading}\r\n        tremor-id=\"tremor-raw\"\r\n        {...props}\r\n      >\r\n        {isLoading ? (\r\n          <span className=\"pointer-events-none flex shrink-0 items-center justify-center gap-1.5\">\r\n            <RiLoader2Fill\r\n              className=\"size-4 shrink-0 animate-spin\"\r\n              aria-hidden=\"true\"\r\n            />\r\n            <span className=\"sr-only\">\r\n              {loadingText ? loadingText : \"Loading\"}\r\n            </span>\r\n            {loadingText ? loadingText : children}\r\n          </span>\r\n        ) : (\r\n          children\r\n        )}\r\n      </Component>\r\n    )\r\n  },\r\n)\r\n\r\nButton.displayName = \"Button\"\r\n\r\nexport { Button, buttonVariants, type ButtonProps }\r\n",
+          "signals": {
+            "type": "react-component",
+            "hasTailwind": true,
+            "hasMotion": false,
+            "hasShadcn": true,
+            "exports": [],
+            "imports": [
+              "react",
+              "@radix-ui/react-slot",
+              "@remixicon/react",
+              "tailwind-variants",
+              "../../utils/cx",
+              "../../utils/focusRing"
             ]
           }
         }
