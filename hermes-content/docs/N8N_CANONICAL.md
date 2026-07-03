@@ -114,25 +114,48 @@ Path INTERACTIVO `ONIA - Telegram Command Center` (`vuicWsvh0hwqKhYs`):
   estado/plan semanal, generacion de video) devuelven una respuesta honesta que
   dirige al comando manual, en vez de fallar. Auth por `ONIA_CENTER_INTERNAL_API_KEY`
   (mismo patron que el briefing diario). Router probado local: 25/25 comandos.
-- Falta (necesita deploy al VPS + edicion del workflow, no completable desde el
-  repo):
+- **EJECUTADO 2026-07-03 (deploy + rewire + publish, verificado):**
 
-  1. **Deploy ONIA Center** con el nuevo endpoint (mismo proceso que el fix del
-     2026-06-30: rebuild desde `/opt/onia-center-src/web-factory` con
-     `ONIA_STANDALONE_BUILD=true` y promover a `/opt/onia-center/runtime-next`).
-  2. **Verificar** desde el contenedor n8n:
-     `POST http://onia-center:3012/api/onia-center/command`
-     con header `Authorization: Bearer <ONIA_CENTER_INTERNAL_API_KEY>` y body
-     `{"message":"Plan Sergio hoy"}` -> debe devolver `{ ok, telegram_reply }`.
-  3. **Rewire del workflow** `vuicWsvh0hwqKhYs`: reemplazar el nodo SSH
-     `Run Video Lab Router on VPS` por un nodo HTTP Request (POST al endpoint,
-     header con la API key desde credencial n8n, body
-     `{"message": "={{ $json.message }}"}`) y ajustar `Format Telegram Reply` CC
-     para leer `$json.telegram_reply` de la respuesta HTTP. La rama `/agendar` no
-     se toca (usa Google Calendar directo, nunca dependio de SSH).
-  4. Opcional: mismo rewire para republicar el Scheduled Pack apuntando sus
-     comandos al endpoint en vez del Code node embebido, si se quiere una sola
-     fuente de verdad.
+  1. **Deploy ONIA Center hecho.** Se subio el endpoint al VPS
+     (`/opt/onia-center-src/web-factory/.../api/onia-center/command/route.ts`),
+     se hizo `ONIA_STANDALONE_BUILD=true pnpm --filter site build` (compilo OK,
+     mi route en el bundle), y se promovio a `/opt/onia-center/runtime-next` por
+     **rsync in-place** (ver gotcha del bind-mount abajo) + `docker restart
+     onia-center`. Backup del runtime previo en
+     `/opt/onia-center/runtime-next.bak3-20260703213349`.
+  2. **Verificado interno** (como llama n8n): `POST
+     http://onia-center:3012/api/onia-center/command` con Bearer key ->
+     `200` con `telegram_reply` real. Smoke: `Plan Sergio hoy`, `Puedo reunirme
+     jueves 18:00?` (-> "NO, choca con gym"), `Radar creativo ONIA`,
+     `Siguiente Video Lab` (-> degradado con gracia). Todos `200`.
+  3. **Rewire hecho y publicado** en `vuicWsvh0hwqKhYs`: el nodo SSH
+     `Run Video Lab Router on VPS` se reemplazo por un HTTP Request (v4.2)
+     `Call ONIA Center Command` que hace POST a
+     `={{$env.ONIA_CENTER_BASE_URL + '/api/onia-center/command'}}` con header
+     `Authorization: ={{'Bearer ' + $env.ONIA_CENTER_INTERNAL_API_KEY}}` y body
+     `={{ { message: $json.command } }}`. `Format Telegram Reply` CC ahora lee
+     `$json.telegram_reply` (antes parseaba `stdout` del SSH). La rama `/agendar`
+     no se toco. Probado end-to-end por el webhook (`telegram-alfred`) con chat id
+     dummy: nodo HTTP `success` con la respuesta correcta; solo el Send falla por
+     el chat dummy. **El Command Center interactivo ya no depende de SSH.**
+  4. Pendiente opcional: comandos VPS-only (Video Lab, plan/estado semanal,
+     generar video) hoy devuelven mensaje "requiere VPS". Para conectarlos de
+     verdad hay que exponer `video_lab.py` / `hermes_week_*.py` por HTTP en ONIA
+     Center. Tambien opcional: republicar el Scheduled Pack apuntando al endpoint.
+
+- **Gotcha 1 (bind-mount):** el contenedor `onia-center` monta
+  `/opt/onia-center/runtime-next` (read-only). Reemplazar el dir con `mv` crea un
+  inode nuevo que `docker restart` NO re-monta (sirve el viejo). Hay que
+  actualizar el contenido **in-place** (`rsync -a --delete --exclude /data
+  <build>/ runtime-next/`, preservando `data/`) y luego `docker restart`.
+- **Gotcha 2 (publish):** `update_workflow` via MCP guarda una version nueva pero
+  **NO la publica**; el workflow activo sigue corriendo la version anterior hasta
+  llamar `publish_workflow`. Todos los edits MCP de esta sesion
+  (`X6gd3EBW7Y3z9xTg`, `lryabRhGQW4WIuJG`, `vuicWsvh0hwqKhYs`) se publicaron.
+- **Nota routing:** `center.onia.com.bo` (Traefik service `onia-center-manual`)
+  a veces sirve un estado distinto al contenedor `onia-center:3012` en rutas
+  `/api` (p. ej. briefings da 503 publico vs 401 interno). n8n usa la ruta
+  interna, asi que no afecta; revisar el service de Traefik si se quiere paridad.
 
 - `Mara Daily Content` (`zediOCdtlP1zpImK`) queda `unpublish`; es contenido de
   video que el sistema definio como quiet/manual, no se migro.
