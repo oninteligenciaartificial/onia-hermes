@@ -52,7 +52,27 @@ ACTIVE_HEALTHY, Postgres 17).
 | Namespace `dentalgest` NO aplicado | La migracion `supabase/migrations/20260629_dentalgest_namespace.sql` (commit ed4e032) no corrio en prod: no existe schema `dentalgest`. |
 | 24 tablas public vs 23 modelos Prisma | Cuadra; la extra es `prospect_leads` (solo Supabase, fuera de Prisma — decision pendiente: agregarla al schema o documentarla como tabla externa). |
 
-#### Runbook de correccion (pendiente de ejecutar)
+#### EJECUTADO 2026-07-03 — commit `612a177` en DentaGest
+
+Resultado: `prisma migrate status` -> "Database schema is up to date!".
+
+- Drift real corregido en prod (migracion Supabase
+  `align_prisma_drift_email_default_language_not_null`): emailNotifications
+  DEFAULT true + language NOT NULL (0 nulls verificados antes).
+- schema.prisma alineado a prod: followupSentAt y whatsappOnboardingAt como
+  `@db.Timestamptz(6)`.
+- Historial viejo (20 items) archivado en `prisma/migrations-archive/`;
+  baseline unico `20260703000000_baseline_v1` (23 tablas) marcado como
+  aplicado con `migrate resolve`.
+- Namespace `dentalgest`: aclarado — es SOLO para stack self-hosted, no es
+  codigo muerto ni aplica a cloud prod.
+- `prospect_leads`: frontera documentada (solo Supabase).
+- Gates verdes: typecheck + 134 tests en DentaGest.
+- Doc canonico en el producto: `docs/DATABASE_MIGRATION_BASELINE_2026.md`.
+- Pendiente del sprint: CI con `migrate deploy` + tests de tenant safety
+  (pasan al inicio de Sprint 1).
+
+#### Runbook original (referencia)
 
 1. **Confirmar cero drift de contenido**: `prisma migrate diff
    --from-schema-datamodel prisma/schema.prisma --to-url $DIRECT_URL` (debe
