@@ -169,3 +169,54 @@ Si Sergio confirma, ejecutar:
 3. Corregir SSH o reemplazarlo por endpoints internos.
 4. Registrar en ONIA Center cualquier lead/tarea generado por prospeccion.
 
+## Ejecutado 2026-07-03
+
+Auditoria re-verificada con `search_workflows`/`search_executions`/`get_execution`
+via MCP (`n8n-sergio_n8n`). Estado real encontrado antes de actuar:
+
+- `VeCHKr6wkK5Wet25` (Scheduled Operations Pack): **100% de fallo** desde
+  2026-06-28 hasta 2026-07-03, varias corridas por dia (07:30 disabled, 08:00,
+  08:30, 10:00, 15:00, 17:00, 21:00 y lunes 09:00), todas por el mismo error
+  `client-authentication: All configured authentication methods failed` en el
+  nodo SSH `Run Hermes Scheduled Command` (credencial `SSH Password account`).
+- `zediOCdtlP1zpImK` (Mara Daily Content): mismo error, misma credencial SSH,
+  fallando en cada corrida diaria de 17:00 UTC.
+- El monitor `ONIA - Monitor de Salud n8n` (`drFWP7nttzvtZzso`) corre cada hora
+  y SI esta avisando estos fallos a Sergio por Telegram desde hace 6+ dias
+  (confirmado: busca ejecuciones fallidas de la ultima hora y notifica).
+
+Accion tomada: se hizo `unpublish_workflow` en `VeCHKr6wkK5Wet25` y
+`zediOCdtlP1zpImK` (2026-07-03) porque ya no producian ningun resultado util,
+solo fallas y ruido de Telegram. Republicar es reversible desde el editor n8n
+o MCP `publish_workflow` una vez reemplazada la credencial SSH o migrado
+`hermes-command` a un endpoint HTTP interno.
+
+Confirmado por Sergio el mismo dia 2026-07-03, se ejecuto tambien:
+
+- `GnmIyrHWb1mO5eNy` (Demo Asistente Diario) y `qdAEP9seSxp5whXh` (Agenda:
+  Briefing Diario, duplicaba `ONIADailyBrief001`): `unpublish_workflow`
+  aplicado. No estaban rotos, corrian sin error; se pausaron por
+  ruido/duplicacion, recomendacion que quedaba pendiente desde el 2026-06-30.
+- `lryabRhGQW4WIuJG` (Hermes Radar): NO se pauso, se corrigio. Causa raiz
+  encontrada: el nodo Telegram `Send Telegram Radar` no fijaba `parse_mode`,
+  y el default real de n8n para ese campo es `HTML`; el texto libre generado
+  por `Hermes Radar Agent` a veces incluye caracteres que rompen el parser
+  HTML de Telegram (`Bad Request: can't parse entities`). Fix aplicado via
+  MCP `update_workflow` (`setNodeParameter` en
+  `additionalFields/parse_mode = "Markdown"`, el modo mas tolerante de los 3
+  disponibles en este nodo: `Markdown`/`MarkdownV2`/`HTML`, ninguno soporta
+  "sin formato"). Validado con `validate_node_config` antes de aplicar y
+  confirmado que persistio con `get_workflow_details` despues. No elimina el
+  riesgo al 100% (Markdown legacy tambien puede romper con un numero impar de
+  `_`/`*` sueltos), pero corrige la causa documentada.
+
+Todos los workflows quedan asi despues del 2026-07-03: unico stack activo de
+"ruido diario" que sigue corriendo es el core (briefing, Cal.com, recordatorios,
+monitor, intakes). Los 4 workflows de la lista "Pausar Ahora" original quedaron
+pausados (los 2 rotos por SSH + los 2 de ruido/duplicacion); Hermes Radar se
+arreglo en vez de pausarse.
+
+Workflows core verificados activos y sanos post-cambio: `ONIADailyBrief001`,
+`X6gd3EBW7Y3z9xTg` (Cal.com Booking), `uwqJDGwkkWJaFtLU` (Recordatorios),
+`drFWP7nttzvtZzso` (Monitor de Salud), `w3vgUCV1yMkv70TW` (Intake Cliente).
+

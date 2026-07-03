@@ -285,7 +285,11 @@ ONIA_DAILY_BRIEFING_MODEL=<modelo-local>
 
 ## Pendiente despues de activacion
 
-- Revisar la primera ejecucion real programada y confirmar que crea tareas/notas sin duplicados.
+- ~~Revisar la primera ejecucion real programada y confirmar que crea tareas/notas sin duplicados.~~
+  Confirmado 2026-07-03: `search_executions` sobre `ONIADailyBrief001` muestra
+  ejecucion exitosa diaria a las `06:45 America/La_Paz` los dias 2026-07-01,
+  2026-07-02 y 2026-07-03 (sin errores desde el fix de `sensitivity_scope` del
+  2026-06-30). No se detectaron duplicados en los runs revisados.
 - Importar/migrar workflow a la instancia canonica `n8n_n8n` cuando vuelva a estar escalada y estable.
 - Conectar Google Calendar OAuth.
 - Conectar Cal self-hosted hacia n8n y ONIA Center.

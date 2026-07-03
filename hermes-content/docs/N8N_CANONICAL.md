@@ -38,6 +38,11 @@ Update 2026-06-04:
   - `tools/list`: OK
   - exposed tools: 27
 
+Re-validado 2026-07-03: healthcheck sigue OK, ahora expone 30 tools (subieron
+`validate_workflow`, `validate_node_config`, `create_workflow_from_code` y
+herramientas de data tables). Ver auditoria completa en
+`hermes-content/docs/ONIA_N8N_TELEGRAM_CLEANUP_20260630.md`.
+
 Important nuance:
 
 - A raw GET to `/mcp-server/http` can return `406`; that does not prove the
@@ -70,6 +75,14 @@ Known issue:
 - `SSH Password account` fails with authentication errors, so any workflow that
   depends on SSH to run `hermes-command` is not reliable until the credential is
   replaced or the workflow is moved to internal HTTP endpoints.
+- Actualizacion 2026-07-03: `SSH Password account` sigue rota (`All configured
+  authentication methods failed`). Confirmado con `search_executions`/
+  `get_execution`: `ONIA - Scheduled Operations Pack` (`VeCHKr6wkK5Wet25`) y
+  `Mara Daily Content - Trend Research` (`zediOCdtlP1zpImK`) fallaban el 100%
+  de sus corridas desde el 2026-06-28 (varias veces al dia cada una), y el
+  monitor de salud (`drFWP7nttzvtZzso`) avisaba por Telegram cada hora. Ambos
+  workflows quedaron `unpublish` el 2026-07-03 via MCP hasta reemplazar la
+  credencial SSH o mover `hermes-command` a un endpoint HTTP interno.
 
 ## Before Using n8n as Orchestrator
 

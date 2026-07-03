@@ -352,6 +352,31 @@ order by created_at desc
 limit 5;
 ```
 
+## Verificacion 2026-07-03
+
+Chequeo de coherencia publico (sin credenciales, solo HTTP/n8n MCP):
+
+- `https://cal.onia.com.bo/onia` responde `200` y lista publicamente
+  `consulta-inicial` (`Consulta comercial - proyecto nuevo`) y `demo-onia`
+  (`Demo / diagnostico - solucion ONIA`), tal como esta documentado.
+- `https://cal.onia.com.bo/onia/reunion-proyecto` responde `200` por link
+  directo pero no aparece en el listado publico: coherente con "oculto en la
+  pagina publica, solo link directo".
+- `https://cal.onia.com.bo/onia/auditoria-pagada` responde `404`: coherente con
+  "preparada pero no publica, sin relacion `_user_eventtype`".
+- Workflow n8n `ONIA - Agenda: Cal.com Booking` (`X6gd3EBW7Y3z9xTg`) sigue
+  activo, webhook trigger configurado en `path=calcom-booking` (coincide con
+  la URL documentada). `search_executions` devuelve **0 ejecuciones
+  historicas**: nunca se disparo con una reserva real, confirma que sigue
+  pendiente la prueba end-to-end ya listada en "Bloqueos actuales" (no es una
+  regresion nueva).
+- El nodo no tiene validacion de firma/secret del webhook: sigue sin resolver
+  el problema #4 de `ONIA_N8N_TELEGRAM_CLEANUP_20260630.md`.
+
+Conclusion: la config de meeting types sigue coherente con lo documentado; no
+se necesitaron cambios. El bloqueo real sigue siendo la prueba end-to-end de
+un booking real y la firma del webhook, ambos ya listados abajo.
+
 ## Bloqueos actuales
 
 - Falta probar SMTP real con `business@onia.com.bo`.
