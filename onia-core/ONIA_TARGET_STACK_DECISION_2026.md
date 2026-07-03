@@ -114,22 +114,46 @@ deploy por git push, SSL automatico, backups configurables):
   el reemplazo moderno es Better Auth (open source, Postgres-nativo) — no
   tocar ahora.
 
-## Plan de ejecucion propuesto (orden)
+## DECISIONES TOMADAS (Sergio, 2026-07-03)
 
-| Fase | Que | Esfuerzo | Resultado |
-|---|---|---|---|
-| 1 | Instalar Dokploy/Coolify en VPS ONIA; migrar ONIA Center+Cal+Supabase local de la PC al VPS | 1-2 dias | Nada de negocio corre en la PC |
-| 2 | Chatwoot selfhosted en VPS ONIA; migrar inbox BE; cancelar cloud | 1 dia | Corta el gasto por agente |
-| 3 | Consolidar n8n ONIA + crons (absorber crons de Vercel donde tenga sentido) | 0.5 dia | Un solo orquestador |
-| 4 | Redis en VPS reemplaza Upstash; GlitchTip opcional | 0.5 dia | Menos SaaS sueltos |
-| 5 | Ensayo de backups/restore de Postgres en VPS (con DB de prueba) | 1 dia | Habilita futuro selfhost de productos |
-| 6 | (Cuando haya trafico) mover DentaGest a VPS dedicado con el stack selfhost | 2-3 dias | Margen maximo |
+1. Plataforma ONIA: consolidar en el VPS actual `187.77.16.63`.
+2. Productos SaaS: cloud (Vercel+Supabase) hasta el trigger (~50 orgs o
+   US$100/mes/producto).
+3. Recortes aprobados: Chatwoot selfhost, Upstash->Redis, consolidar n8n,
+   Sentry/PostHog a free tier.
 
-## Decisiones pendientes de Sergio
+## Auditoria del VPS ejecutada 2026-07-03 (cambia el plan)
 
-1. Plataforma ONIA: consolidar en VPS `187.77.16.63` o contratar VPS nuevo
-   dedicado (depende de RAM disponible; Center+Chatwoot+n8n+Redis piden
-   ~8GB comodos).
-2. Productos SaaS: confirmar que se quedan en Vercel+Supabase hasta el
-   trigger, o acelerar selfhost.
-3. Recortes de la tabla: cuales ejecutar ya.
+VPS `srv1360183` (187.77.16.63): 4 vCPU, **15GB RAM (6.7 disponibles)**,
+193GB disco (45% usado). Ya corre MUCHO mas de lo documentado:
+
+| Ya en el VPS | Estado |
+|---|---|
+| **Easypanel + Traefik** | PaaS ya instalado — no hace falta Dokploy/Coolify |
+| **Chatwoot selfhosted completo** (app+db+redis+sidekiq: `onia-chatbot_*`) | Up, healthy |
+| **n8n** (`n8n-sergio`) | Up |
+| **Cal.com** (`onia-calcom`) | Up, healthy |
+| **onia-center** (container) | Up |
+| **Supabase selfhosted staging DentalGest** (stack completo: db, auth, kong, rest, realtime, storage, studio) | Up, healthy — el ensayo selfhost YA EXISTE |
+| speakr (transcripcion audio) + **ollama** (LLM local) | Up |
+| hermes-control-tower + hermes-assets (systemd) + pm2 | Running |
+
+Lo que REALMENTE depende de la PC (verificado en
+`scripts/onia_center_local_stack.js` + watchdog): la app ONIA Center local
+(puerto 3012) usa un **Supabase local en la PC (54321)** y tuneles SSH
+PC<->VPS mantenidos por watchdog (incluye tuneles de audio speakr/speaches).
+
+## Plan de ejecucion corregido
+
+| Fase | Que | Estado |
+|---|---|---|
+| 1 | Migrar el Supabase local de ONIA Center al VPS (patron ya probado con dentalgest-staging) + deploy de Center en Easypanel -> eliminar tuneles y watchdog | **PENDIENTE — la unica migracion real** |
+| 2 | Chatwoot: ya selfhosted en VPS. Falta migrar el inbox WhatsApp de Bolivian Electric desde Chatwoot Cloud starter y cancelar el cloud | 80% hecho |
+| 3 | n8n: ya en VPS. Falta consolidar crons dispersos (Hermes cron activo vs n8n) | 70% hecho |
+| 4 | Redis: existe (chatwoot-redis). Matiz: DentaGest/GestiOS corren en Vercel — mantener Upstash FREE tier para ellos hasta que se muden (latencia Vercel->VPS no vale la pena); no pagar Upstash | ajustado |
+| 5 | Backups/restore Postgres en VPS: el stack staging ya es el laboratorio; falta el ENSAYO de restore documentado | pendiente |
+| 6 | Sentry/PostHog: verificar en billing que esten en free tier | verificar |
+
+Conclusion: el gasto innecesario mayor detectado es **Chatwoot Cloud starter
+de BE duplicando el Chatwoot selfhosted que ya corre en el VPS**. La fragilidad
+mayor sigue siendo ONIA Center dependiendo de la PC.
