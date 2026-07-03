@@ -26,6 +26,8 @@
     "nuvia:prices:force": "node harvester/product/watch_nuvia_price_changes.mjs --force --concurrency=1",
     "nuvia:sanitize-public": "node harvester/product/sanitize_nuvia_public_catalog.mjs",
     "test": "vitest run",
+    "e2e": "playwright test",
+    "e2e:install": "pnpm exec playwright install chromium",
     "references:code-index": "node harvester/vision/index_licensed_code.mjs --repos-root C:/Users/PC/.codex/design-stack/repos --out data/references/code-sources/latest-code-cache-index.json",
     "references:code-examples": "node harvester/vision/index_component_code_examples.mjs --code-index data/references/code-sources/latest-code-cache-index.json --out data/references/code-sources/latest-component-code-examples.json --max-files-per-repo 24",
     "references:intelligence": "node harvester/vision/build_design_intelligence.mjs --gallery data/references/design-sources/gallery-examples/latest-gallery-examples.json --code data/references/code-sources/latest-component-code-examples.json --out data/references/design-sources/latest-design-intelligence.json --markdown docs/WEB_FACTORY_DESIGN_INTELLIGENCE_LATEST.md",
@@ -57,8 +59,9 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
+    "@playwright/test": "^1.61.1",
     "@types/node": "^20.19.43",
-    "playwright": "^1.61.0",
+    "playwright": "^1.61.1",
     "tsx": "^4.22.4",
     "vitest": "^4.1.8"
   }

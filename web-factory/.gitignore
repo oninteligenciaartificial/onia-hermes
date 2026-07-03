@@ -3,6 +3,10 @@ out/
 node_modules/
 .next/
 tmp/
+test-results/
+playwright-report/
+blob-report/
+.playwright/
 .vercel/
 /public/
 data/references/product-sources/hbderm-products-latest-check.json
