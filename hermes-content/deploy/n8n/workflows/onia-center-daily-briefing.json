@@ -18,43 +18,34 @@
       "name": "Lunes a sabado 06:45",
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.2,
-      "position": [
-        -620,
-        0
-      ]
+      "position": [-620, 0]
     },
     {
       "parameters": {
         "method": "POST",
-        "url": "={{$env.ONIA_CENTER_BASE_URL + '/api/onia-center/briefings/daily'}}",
+        "url": "https://center.onia.com.bo/api/onia-center/briefings/daily",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "httpHeaderAuth",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
-            {
-              "name": "Authorization",
-              "value": "={{'Bearer ' + $env.ONIA_CENTER_INTERNAL_API_KEY}}"
-            },
-            {
-              "name": "Content-Type",
-              "value": "application/json"
-            }
+            { "name": "Content-Type", "value": "application/json" }
           ]
         },
         "sendBody": true,
         "specifyBody": "json",
         "jsonBody": "={{ { date: $now.setZone('America/La_Paz').toFormat('yyyy-MM-dd'), source: 'n8n', audiences: ['sergio', 'arthur', 'seller'], commit: true } }}",
-        "options": {
-          "timeout": 90000
-        }
+        "options": { "timeout": 90000 }
       },
       "id": "call-onia-center-briefing",
       "name": "Crear briefing en ONIA Center",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [
-        -360,
-        0
-      ]
+      "position": [-360, 0],
+      "credentials": {
+        "httpHeaderAuth": { "id": "REEMPLAZAR", "name": "ONIA Center API (Authorization Bearer)" }
+      },
+      "notes": "Plan VPS: sin env. Base URL hardcodeada (no secreta). La API key va en credencial n8n Header Auth: Name=Authorization, Value=Bearer <ONIA_CENTER_INTERNAL_API_KEY>."
     },
     {
       "parameters": {
@@ -64,62 +55,25 @@
       "name": "Preparar resumen Telegram",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [
-        -80,
-        0
-      ]
+      "position": [-80, 0]
     },
     {
       "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "strict"
-          },
-          "conditions": [
-            {
-              "id": "telegram-ready",
-              "leftValue": "={{Boolean($env.TELEGRAM_BOT_TOKEN && $env.TELEGRAM_SERGIO_CHAT_ID)}}",
-              "rightValue": true,
-              "operator": {
-                "type": "boolean",
-                "operation": "equals"
-              }
-            }
-          ],
-          "combinator": "and"
-        },
-        "options": {}
-      },
-      "id": "telegram-configured",
-      "name": "Telegram configurado?",
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2,
-      "position": [
-        180,
-        0
-      ]
-    },
-    {
-      "parameters": {
-        "method": "POST",
-        "url": "={{'https://api.telegram.org/bot' + $env.TELEGRAM_BOT_TOKEN + '/sendMessage'}}",
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "={{ { chat_id: $env.TELEGRAM_SERGIO_CHAT_ID, text: $json.text, disable_web_page_preview: true } }}",
-        "options": {
-          "timeout": 30000
-        }
+        "resource": "message",
+        "operation": "sendMessage",
+        "chatId": "6830070978",
+        "text": "={{ $json.text }}",
+        "additionalFields": { "disable_web_page_preview": true }
       },
       "id": "send-sergio-telegram",
       "name": "Enviar a Telegram Sergio",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [
-        460,
-        -80
-      ]
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [200, -80],
+      "credentials": {
+        "telegramApi": { "id": "REEMPLAZAR", "name": "Hermes Telegram Bot" }
+      },
+      "notes": "Plan VPS: usar credencial n8n telegramApi (no env token). chatId de Sergio hardcodeado (no es secreto)."
     },
     {
       "parameters": {
@@ -129,62 +83,21 @@
       "name": "Preparar calendario protegido",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [
-        460,
-        120
-      ]
+      "position": [200, 120]
     }
   ],
   "connections": {
     "Lunes a sabado 06:45": {
-      "main": [
-        [
-          {
-            "node": "Crear briefing en ONIA Center",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
+      "main": [[{ "node": "Crear briefing en ONIA Center", "type": "main", "index": 0 }]]
     },
     "Crear briefing en ONIA Center": {
-      "main": [
-        [
-          {
-            "node": "Preparar resumen Telegram",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
+      "main": [[{ "node": "Preparar resumen Telegram", "type": "main", "index": 0 }]]
     },
     "Preparar resumen Telegram": {
-      "main": [
-        [
-          {
-            "node": "Telegram configurado?",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "Preparar calendario protegido",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Telegram configurado?": {
-      "main": [
-        [
-          {
-            "node": "Enviar a Telegram Sergio",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        []
-      ]
+      "main": [[
+        { "node": "Enviar a Telegram Sergio", "type": "main", "index": 0 },
+        { "node": "Preparar calendario protegido", "type": "main", "index": 0 }
+      ]]
     }
   },
   "settings": {
@@ -193,20 +106,14 @@
     "availableInMCP": true
   },
   "pinData": {},
-  "versionId": "onia-center-daily-briefing-20260628",
+  "versionId": "onia-center-daily-briefing-20260703-credentials",
   "meta": {
     "templateCredsSetupCompleted": false,
-    "description": "Genera tareas diarias por rol en ONIA Center, evita duplicados y notifica a Sergio por Telegram si las variables existen. No aprueba pagos ni escribe Google Calendar automaticamente."
+    "description": "Briefing diario por rol en ONIA Center + Telegram. Migrado a plan VPS: sin env; base URL hardcodeada, API key por credencial Header Auth, Telegram por credencial telegramApi. No aprueba pagos ni escribe Google Calendar automaticamente."
   },
   "tags": [
-    {
-      "name": "onia-center"
-    },
-    {
-      "name": "daily-briefing"
-    },
-    {
-      "name": "safe-automation"
-    }
+    { "name": "onia-center" },
+    { "name": "daily-briefing" },
+    { "name": "safe-automation" }
   ]
 }

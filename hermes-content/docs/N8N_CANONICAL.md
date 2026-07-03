@@ -49,6 +49,17 @@ Important nuance:
 - If a Codex session was already open before the token/config update, restart
   Codex so the MCP tool list is loaded into the session.
 
+## Cleanup Status 2026-07-03
+
+Ejecucion via n8n MCP:
+
+- `hermes-content/docs/ONIA_N8N_CLEANUP_20260703.md`
+- Hecho: 25 workflows agrupados por tag (`onia-ops`, `onia-intake`,
+  `dentalgest`, `gestios`, `infra`), verificado por query por tag.
+- Pendiente manual: archivar 13 workflows UDIA/practica (no tienen MCP access,
+  la API MCP no puede tocarlos). 3 GestiOS activos tienen estructura rota
+  (`connections.sendAdminEmail`) que bloquea cualquier update.
+
 ## Cleanup Status 2026-06-30
 
 Canonical cleanup audit:
@@ -103,11 +114,16 @@ Status 2026-06-28:
 - Schedule: Monday to Saturday 06:45 `America/La_Paz`
 - Mode: creates ONIA Center tasks/notes by role and sends Telegram summary when configured.
 
-Activation requirements:
+Activation requirements (migrado 2026-07-03 a plan VPS, sin `$env`):
 
-- `N8N_MCP_URL` and `N8N_MCP_TOKEN` available locally, or manual import in the canonical n8n editor.
-- `ONIA_CENTER_BASE_URL` visible from n8n.
-- `ONIA_CENTER_INTERNAL_API_KEY` loaded in both ONIA Center and n8n.
-- `TELEGRAM_BOT_TOKEN` and `TELEGRAM_SERGIO_CHAT_ID` for notifications.
+- Import manual del JSON en el editor n8n canonico.
+- Credencial n8n **Header Auth** `ONIA Center API (Authorization Bearer)`:
+  Name=`Authorization`, Value=`Bearer <ONIA_CENTER_INTERNAL_API_KEY>`.
+- Credencial n8n **telegramApi** `Hermes Telegram Bot` para las notificaciones.
+- Base URL `https://center.onia.com.bo` y chatId de Sergio van hardcodeados en el
+  workflow (no son secretos). Reemplazar los `"id":"REEMPLAZAR"` al importar.
+
+Companion: `onia-trend-recommendations.json` (seccion tendencias del brief
+diario, cron 06:50, mismo patron de credenciales).
 
 Google Calendar write remains blocked until OAuth is configured and a dry-run is reviewed.
