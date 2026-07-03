@@ -23,6 +23,9 @@ export type StoreProduct = {
   detalleImagenes: StoreProductDetailImage[];
   detalleNota: string;
   ordenRutina?: number;
+  destacadoMes?: boolean;
+  descuentoPorcentaje?: number;
+  precioPromocional?: number | null;
 };
 
 export type StoreProductSpec = {
@@ -58,7 +61,8 @@ const productPageRenderContext: StoreRenderContext = { rootHref: "../../", asset
 export function renderStoreBody(client: StoreClient): string {
   const products = client.productos.length ? client.productos : fallbackProducts(client);
   const routineProducts = getRoutineProducts(products);
-  const featuredProducts = products.slice(0, 2);
+  const featuredProducts = getFeaturedProducts(products);
+  const featuredDiscountLabel = getFeaturedDiscountLabel(featuredProducts);
   const brandNames = getUniqueValues(products.map((product) => product.marca || product.categoria));
   const categoryNames = getUniqueValues(products.map((product) => product.categoria));
   const slogan = client.tagline || "Everything for everyone";
@@ -92,7 +96,7 @@ export function renderStoreBody(client: StoreClient): string {
               <span></span>
               <span></span>
               <strong>productos destacados del mes</strong>
-              <small>10% de descuento</small>
+              <small>${escapeHtml(featuredDiscountLabel)}</small>
             </div>
             <div class="store-stage-grid">
               ${featuredProducts.map((product, index) => renderStageProduct(product, index, rootRenderContext)).join("")}
@@ -121,9 +125,12 @@ export function renderStoreBody(client: StoreClient): string {
             <p>${escapeHtml(categoryNames.join(" + ") || "Seleccion activa")}</p>
           </div>
         </div>
-        <div class="store-product-grid">
+        ${renderCatalogFilters(products)}
+        <p class="store-catalog-count" data-catalog-count aria-live="polite"></p>
+        <div class="store-product-grid" data-product-grid>
           ${products.map((product, index) => renderProductCard(product, index, rootRenderContext)).join("")}
         </div>
+        <button class="store-load-more" type="button" data-load-more hidden>mostrar mas productos</button>
       </section>
 
       <section class="store-guide store-reveal" id="guia" data-reveal>
@@ -279,7 +286,7 @@ function renderStoreProductBody(client: StoreClient, product: StoreProduct): str
         <div class="store-product-page-visual">
           <a class="store-product-back" href="${escapeAttribute(sectionHref(productPageRenderContext, "catalogo"))}">VOLVER AL CATALOGO</a>
           <figure class="store-product-page-media">
-            ${renderProductImage(product, productPageRenderContext)}
+            ${renderProductImage(product, productPageRenderContext, true)}
           </figure>
         </div>
         <div class="store-product-page-copy">
@@ -289,9 +296,10 @@ function renderStoreProductBody(client: StoreClient, product: StoreProduct): str
           <ul class="store-product-page-points">
             ${productChips.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
           </ul>
-          <div class="store-product-price-panel">
-            <span>precio</span>
-            <strong>${escapeHtml(product.precio)}</strong>
+          <div class="store-product-price-panel${hasActiveDiscount(product) ? " has-discount" : ""}">
+            <span>${hasActiveDiscount(product) ? `precio - ${product.descuentoPorcentaje}% off` : "precio"}</span>
+            <strong>${escapeHtml(hasActiveDiscount(product) ? formatMoney(product.precioPromocional as number, product.moneda) : product.precio)}</strong>
+            ${hasActiveDiscount(product) ? `<s>${escapeHtml(product.precio)}</s>` : ""}
           </div>
           <div class="store-product-page-actions">
             <button class="store-button-primary store-product-buy-button" type="button" data-cart-add="${escapeAttribute(storeProductSlug(product))}">agregar al carrito</button>
@@ -323,6 +331,7 @@ function renderStoreScripts(client: StoreClient, products: StoreProduct[], conte
   return `${renderStoreCartDataScript(products, context)}
 ${renderStoreHeroVideoScript()}
 ${renderStoreRevealScript()}
+${renderStoreCatalogScript()}
 ${renderStoreCartScript(client)}`;
 }
 
@@ -414,8 +423,12 @@ function renderStoreCart(client: StoreClient, products: StoreProduct[], context:
           </div>
           <div class="store-cart-items" data-cart-items></div>
           <footer class="store-cart-footer">
+            <div class="store-cart-discount" data-cart-discount hidden>
+              <span>descuento destacados</span>
+              <strong data-cart-discount-value>-Bs. 0</strong>
+            </div>
             <div class="store-cart-total">
-              <span data-cart-total-label>${hasPricedProducts ? "subtotal" : "subtotal pendiente"}</span>
+              <span data-cart-total-label>${hasPricedProducts ? "total" : "total pendiente"}</span>
               <strong data-cart-total>${hasPricedProducts ? "Bs. 0" : "cotizacion"}</strong>
             </div>
             <a class="store-cart-checkout" href="${escapeAttribute(getStoreActionHref(client, undefined, context))}" data-cart-checkout>${escapeHtml(checkoutLabel)}</a>
@@ -438,6 +451,7 @@ function renderStoreCartDataScript(products: StoreProduct[], context: StoreRende
     priceLabel: product.precio || "Consultar precio",
     priceValue: typeof product.precioValor === "number" ? product.precioValor : null,
     currency: product.moneda || "BOB",
+    discountPercent: hasActiveDiscount(product) ? (product.descuentoPorcentaje as number) : 0,
     image: product.imagen ? resolveAssetPath(product.imagen, context) : "",
     imageAlt: product.imagenAlt || product.titulo,
     href: productPageHref(product, context),
@@ -477,6 +491,81 @@ function renderStoreRevealScript(): string {
 </script>`;
 }
 
+function renderStoreCatalogScript(): string {
+  return `<script>
+(() => {
+  const BATCH_SIZE = 24;
+  const grid = document.querySelector("[data-product-grid]");
+  const filters = document.querySelector("[data-catalog-filters]");
+  const countNode = document.querySelector("[data-catalog-count]");
+  const loadMoreButton = document.querySelector("[data-load-more]");
+  const cards = grid ? Array.from(grid.querySelectorAll("[data-category]")) : [];
+
+  if (!grid || !cards.length) {
+    return;
+  }
+
+  let activeFilter = "todos";
+  let visibleCount = BATCH_SIZE;
+
+  const render = () => {
+    let shown = 0;
+    let matched = 0;
+
+    cards.forEach((card) => {
+      const matches = activeFilter === "todos" || card.getAttribute("data-category") === activeFilter;
+
+      if (!matches) {
+        card.hidden = true;
+        return;
+      }
+
+      matched += 1;
+      const visible = matched <= visibleCount;
+      card.hidden = !visible;
+      if (visible) {
+        shown += 1;
+      }
+    });
+
+    if (countNode) {
+      countNode.textContent = matched
+        ? \`mostrando \${shown} de \${matched} productos\`
+        : "no encontramos productos en esta categoria";
+    }
+
+    if (loadMoreButton) {
+      const remaining = matched - shown;
+      loadMoreButton.hidden = remaining <= 0;
+      loadMoreButton.textContent = \`mostrar \${Math.min(BATCH_SIZE, remaining)} productos mas\`;
+    }
+  };
+
+  if (filters) {
+    filters.addEventListener("click", (event) => {
+      const button = event.target.closest("button[data-filter-value]");
+      if (!button) {
+        return;
+      }
+
+      activeFilter = button.getAttribute("data-filter-value") || "todos";
+      visibleCount = BATCH_SIZE;
+
+      filters.querySelectorAll("button").forEach((btn) => btn.classList.toggle("is-active", btn === button));
+      render();
+    });
+  }
+
+  loadMoreButton?.addEventListener("click", () => {
+    visibleCount += BATCH_SIZE;
+    render();
+  });
+
+  render();
+})();
+</script>`;
+}
+
 function renderStoreCartScript(client: StoreClient): string {
   const config = getCartContactConfig(client);
 
@@ -490,6 +579,8 @@ function renderStoreCartScript(client: StoreClient): string {
   const countNodes = document.querySelectorAll("[data-cart-count]");
   const totalNode = document.querySelector("[data-cart-total]");
   const totalLabelNode = document.querySelector("[data-cart-total-label]");
+  const discountRowNode = document.querySelector("[data-cart-discount]");
+  const discountValueNode = document.querySelector("[data-cart-discount-value]");
   const checkoutNode = document.querySelector("[data-cart-checkout]");
   const noteNode = document.querySelector("[data-cart-note]");
   const clearNode = document.querySelector("[data-cart-clear]");
@@ -529,13 +620,37 @@ function renderStoreCartScript(client: StoreClient): string {
 
   const countItems = () => cart.reduce((total, item) => total + item.qty, 0);
 
+  const computeTotals = () => {
+    const totalCount = countItems();
+    const priced = cart.length > 0 && cart.every((item) => typeof productMap.get(item.id)?.priceValue === "number");
+    const subtotal = cart.reduce((sum, item) => {
+      const product = productMap.get(item.id);
+      return sum + (typeof product.priceValue === "number" ? product.priceValue * item.qty : 0);
+    }, 0);
+    const discountTotal = cart.reduce((sum, item) => {
+      const product = productMap.get(item.id);
+      if (typeof product.priceValue !== "number" || !product.discountPercent) {
+        return sum;
+      }
+
+      return sum + product.priceValue * item.qty * (product.discountPercent / 100);
+    }, 0);
+    const total = Math.max(0, subtotal - discountTotal);
+
+    return { totalCount, priced, subtotal, discountTotal, total };
+  };
+
   const buildMessage = () => {
     const lines = cart.map((item) => {
       const product = productMap.get(item.id);
-      return "- " + item.qty + " x " + product.title + " (" + product.brand + (product.size ? ", " + product.size : "") + ") - " + product.priceLabel;
+      const label = product.discountPercent ? product.priceLabel + " (-" + product.discountPercent + "%)" : product.priceLabel;
+      return "- " + item.qty + " x " + product.title + " (" + product.brand + (product.size ? ", " + product.size : "") + ") - " + label;
     });
 
-    return "Hola Nuvia, quiero cotizar este pedido:\\n" + lines.join("\\n") + "\\n\\nPor favor confirmame disponibilidad, precio final y forma de entrega.";
+    const totals = computeTotals();
+    const totalLine = totals.priced && totals.totalCount ? "\\n\\nTotal estimado: " + money(totals.total, "BOB") : "";
+
+    return "Hola Nuvia, quiero cotizar este pedido:\\n" + lines.join("\\n") + totalLine + "\\n\\nPor favor confirmame disponibilidad, precio final y forma de entrega.";
   };
 
   const checkoutHref = () => {
@@ -558,12 +673,7 @@ function renderStoreCartScript(client: StoreClient): string {
   };
 
   const render = () => {
-    const totalCount = countItems();
-    const priced = cart.every((item) => typeof productMap.get(item.id)?.priceValue === "number");
-    const total = cart.reduce((sum, item) => {
-      const product = productMap.get(item.id);
-      return sum + (typeof product.priceValue === "number" ? product.priceValue * item.qty : 0);
-    }, 0);
+    const { totalCount, priced, discountTotal, total } = computeTotals();
 
     countNodes.forEach((node) => {
       node.textContent = String(totalCount);
@@ -575,11 +685,19 @@ function renderStoreCartScript(client: StoreClient): string {
     clearNode.hidden = totalCount === 0;
 
     if (totalLabelNode) {
-      totalLabelNode.textContent = priced && totalCount ? "subtotal" : "subtotal pendiente";
+      totalLabelNode.textContent = priced && totalCount ? "total" : "total pendiente";
     }
 
     if (totalNode) {
       totalNode.textContent = priced && totalCount ? money(total, "BOB") : "cotizacion";
+    }
+
+    if (discountRowNode) {
+      const showDiscount = priced && totalCount && discountTotal > 0;
+      discountRowNode.hidden = !showDiscount;
+      if (discountValueNode && showDiscount) {
+        discountValueNode.textContent = "-" + money(discountTotal, "BOB");
+      }
     }
 
     if (checkoutNode) {
@@ -596,7 +714,9 @@ function renderStoreCartScript(client: StoreClient): string {
 
     itemsNode.innerHTML = cart.map((item) => {
       const product = productMap.get(item.id);
-      const itemTotal = typeof product.priceValue === "number" ? money(product.priceValue * item.qty, product.currency) : product.priceLabel;
+      const discountFactor = product.discountPercent ? 1 - product.discountPercent / 100 : 1;
+      const itemTotal = typeof product.priceValue === "number" ? money(product.priceValue * item.qty * discountFactor, product.currency) : product.priceLabel;
+      const discountTag = product.discountPercent ? \`<em>\${product.discountPercent}% descuento destacado</em>\` : "";
 
       return \`
         <article class="store-cart-item" data-cart-item="\${product.id}">
@@ -605,6 +725,7 @@ function renderStoreCartScript(client: StoreClient): string {
             <span>\${product.brand}\${product.size ? " - " + product.size : ""}</span>
             <strong>\${product.title}</strong>
             <small>\${itemTotal}</small>
+            \${discountTag}
             <div class="store-cart-qty" aria-label="Cantidad">
               <button type="button" data-cart-decrease="\${product.id}" aria-label="Restar \${product.title}">-</button>
               <output>\${item.qty}</output>
@@ -789,12 +910,33 @@ function renderBuyingStep(index: string, title: string, description: string): st
   `;
 }
 
+function renderCatalogFilters(products: StoreProduct[]): string {
+  const categories = Array.from(new Set(products.map((product) => product.categoria).filter(Boolean)));
+
+  if (categories.length < 2) {
+    return "";
+  }
+
+  const allButton = `<button type="button" class="is-active" data-filter-value="todos">todos<span>${products.length}</span></button>`;
+  const categoryButtons = categories
+    .map((category) => {
+      const count = products.filter((product) => product.categoria === category).length;
+      return `<button type="button" data-filter-value="${escapeAttribute(category)}">${escapeHtml(category)}<span>${count}</span></button>`;
+    })
+    .join("");
+
+  return `<div class="store-catalog-filters" role="group" aria-label="Filtrar catalogo por categoria" data-catalog-filters>${allButton}${categoryButtons}</div>`;
+}
+
 function renderStageProduct(product: StoreProduct, index: number, context: StoreRenderContext): string {
-  const image = renderProductImage(product, context);
+  const image = renderProductImage(product, context, true);
+  const discountBadge = hasActiveDiscount(product)
+    ? `<b class="store-stage-discount">-${product.descuentoPorcentaje}%</b>`
+    : "";
 
   return `
     <a class="store-stage-card is-${index + 1}" href="${escapeAttribute(productPageHref(product, context))}">
-      <figure>${image}</figure>
+      <figure>${image}${discountBadge}</figure>
       <div class="store-stage-meta">
         <span>${escapeHtml(product.marca || product.categoria)}</span>
         <small>${escapeHtml(product.uso || product.etiqueta)}</small>
@@ -808,11 +950,16 @@ function renderProductCard(product: StoreProduct, index: number, context: StoreR
   const chips = [...product.idealPara, ...product.beneficios].slice(0, 3);
   const meta = [product.marca, product.tamano].filter(Boolean).join(" - ") || product.categoria;
   const keyIngredients = product.ingredientesClave.slice(0, 3).join(", ");
+  const discounted = hasActiveDiscount(product);
+  const priceMarkup = discounted
+    ? `<strong>${escapeHtml(formatMoney(product.precioPromocional as number, product.moneda))}</strong><s>${escapeHtml(product.precio)}</s>`
+    : `<strong>${escapeHtml(product.precio)}</strong>`;
 
   return `
-    <article class="store-product-card store-reveal" id="${escapeAttribute(productDomId(product))}" data-reveal style="--reveal-index: ${index}">
+    <article class="store-product-card store-reveal" id="${escapeAttribute(productDomId(product))}" data-reveal data-category="${escapeAttribute(product.categoria)}" style="--reveal-index: ${index}">
       <figure>
         <span class="store-product-badge">${escapeHtml(product.etiqueta || product.categoria)}</span>
+        ${discounted ? `<b class="store-product-discount">-${product.descuentoPorcentaje}%</b>` : ""}
         ${renderProductImage(product, context)}
       </figure>
       <div class="store-product-body">
@@ -825,7 +972,7 @@ function renderProductCard(product: StoreProduct, index: number, context: StoreR
         ${keyIngredients ? `<p class="store-product-ingredients">claves: ${escapeHtml(keyIngredients)}</p>` : ""}
         ${chips.length ? `<ul>${chips.map((chip) => `<li>${escapeHtml(chip)}</li>`).join("")}</ul>` : ""}
         <div class="store-product-footer">
-          <strong>${escapeHtml(product.precio)}</strong>
+          <div class="store-product-price${discounted ? " has-discount" : ""}">${priceMarkup}</div>
           <div class="store-product-actions">
             <a href="${escapeAttribute(productPageHref(product, context))}">ver detalle</a>
             <button type="button" data-cart-add="${escapeAttribute(storeProductSlug(product))}">agregar</button>
@@ -931,9 +1078,10 @@ function getProductSpecs(product: StoreProduct): StoreProductSpec[] {
   ];
 }
 
-function renderProductImage(product: StoreProduct, context: StoreRenderContext): string {
+function renderProductImage(product: StoreProduct, context: StoreRenderContext, priority = false): string {
   if (product.imagen) {
-    return `<img src="${escapeAttribute(resolveAssetPath(product.imagen, context))}" alt="${escapeAttribute(product.imagenAlt || product.titulo)}" loading="lazy">`;
+    const loadingAttrs = priority ? `loading="eager" fetchpriority="high"` : `loading="lazy"`;
+    return `<img src="${escapeAttribute(resolveAssetPath(product.imagen, context))}" alt="${escapeAttribute(product.imagenAlt || product.titulo)}" ${loadingAttrs}>`;
   }
 
   return `<span>${escapeHtml(product.categoria)}</span>`;
@@ -943,6 +1091,35 @@ function getRoutineProducts(products: StoreProduct[]): StoreProduct[] {
   return products
     .filter((product) => product.ordenRutina)
     .sort((a, b) => (a.ordenRutina ?? 99) - (b.ordenRutina ?? 99));
+}
+
+function getFeaturedProducts(products: StoreProduct[]): StoreProduct[] {
+  const flagged = products.filter((product) => product.destacadoMes);
+  return (flagged.length ? flagged : products).slice(0, 2);
+}
+
+function getFeaturedDiscountLabel(featuredProducts: StoreProduct[]): string {
+  const percentages = Array.from(
+    new Set(
+      featuredProducts
+        .map((product) => product.descuentoPorcentaje)
+        .filter((value): value is number => typeof value === "number" && value > 0),
+    ),
+  );
+
+  if (percentages.length === 1) {
+    return `${percentages[0]}% de descuento`;
+  }
+
+  return percentages.length > 1 ? "descuentos activos" : "seleccion del mes";
+}
+
+function hasActiveDiscount(product: StoreProduct): boolean {
+  return (
+    typeof product.descuentoPorcentaje === "number" &&
+    product.descuentoPorcentaje > 0 &&
+    typeof product.precioPromocional === "number"
+  );
 }
 
 function renderContactStatus(client: StoreClient): string {
@@ -1052,6 +1229,14 @@ function getStoreActionHref(client: StoreClient, product: StoreProduct | undefin
 
 function productDomId(product: StoreProduct): string {
   return `producto-${storeProductSlug(product)}`;
+}
+
+function formatMoney(value: number, currency = "BOB"): string {
+  if (currency === "BOB") {
+    return `Bs. ${Math.round(value)}`;
+  }
+
+  return new Intl.NumberFormat("es", { style: "currency", currency }).format(value);
 }
 
 export function storeProductSlug(product: StoreProduct): string {
@@ -1615,6 +1800,20 @@ figure {
     rgba(255, 255, 255, 0.04);
 }
 
+.store-stage-discount {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 1;
+  min-height: 24px;
+  padding: 5px 9px;
+  border-radius: 999px;
+  color: #fffdfa;
+  background: var(--nuvia-coral);
+  font-size: 0.68rem;
+  font-weight: 760;
+}
+
 .store-stage-card img,
 .store-product-card img {
   width: 100%;
@@ -1720,6 +1919,72 @@ figure {
   line-height: 1.2;
 }
 
+.store-catalog-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 16px;
+}
+
+.store-catalog-filters button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 38px;
+  padding: 0 14px;
+  border: 1px solid rgba(17, 22, 21, 0.12);
+  border-radius: 999px;
+  color: rgba(17, 22, 21, 0.68);
+  background: rgba(251, 251, 248, 0.6);
+  font-size: 0.78rem;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.store-catalog-filters button span {
+  color: inherit;
+  opacity: 0.6;
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+.store-catalog-filters button.is-active {
+  border-color: var(--nuvia-navy);
+  color: #fffdfa;
+  background: var(--nuvia-navy);
+}
+
+.store-catalog-filters button.is-active span {
+  opacity: 0.78;
+}
+
+.store-catalog-count {
+  margin: 0 0 18px;
+  color: rgba(17, 22, 21, 0.5);
+  font-size: 0.8rem;
+  font-weight: 620;
+}
+
+.store-load-more {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 48px;
+  margin-top: 24px;
+  border: 1px solid rgba(17, 22, 21, 0.14);
+  border-radius: 999px;
+  color: var(--store-ink);
+  background: rgba(251, 251, 248, 0.6);
+  font-size: 0.84rem;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.store-load-more[hidden] {
+  display: none;
+}
+
 .store-section {
   padding: clamp(70px, 9vw, 112px) 0 0;
 }
@@ -1755,6 +2020,12 @@ figure {
   background: rgba(251, 251, 248, 0.7);
   box-shadow: 0 18px 44px rgba(17, 22, 21, 0.05);
   backdrop-filter: blur(10px);
+  content-visibility: auto;
+  contain-intrinsic-size: 0 560px;
+}
+
+.store-product-card[hidden] {
+  display: none;
 }
 
 .store-product-card figure {
@@ -1776,6 +2047,36 @@ figure {
   background: rgba(245, 180, 0, 0.78);
   font-size: 0.72rem;
   font-weight: 650;
+}
+
+.store-product-discount {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 1;
+  min-height: 30px;
+  padding: 7px 10px;
+  border-radius: 999px;
+  color: #fffdfa;
+  background: var(--nuvia-coral);
+  font-size: 0.72rem;
+  font-weight: 760;
+}
+
+.store-product-price {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.store-product-price.has-discount strong {
+  color: var(--nuvia-coral);
+}
+
+.store-product-price s {
+  color: rgba(17, 22, 21, 0.42);
+  font-size: 0.82rem;
+  font-weight: 560;
 }
 
 .store-product-body {
@@ -2010,6 +2311,20 @@ figure {
   font-size: clamp(1.7rem, 3vw, 2.35rem);
   font-weight: 600;
   letter-spacing: 0;
+}
+
+.store-product-price-panel.has-discount span {
+  color: var(--nuvia-coral);
+}
+
+.store-product-price-panel.has-discount strong {
+  color: var(--nuvia-coral);
+}
+
+.store-product-price-panel s {
+  color: rgba(17, 22, 21, 0.42);
+  font-size: 1.1rem;
+  font-weight: 560;
 }
 
 .store-product-buy-button {
@@ -2505,6 +2820,15 @@ figure {
   line-height: 1.14;
 }
 
+.store-cart-item em {
+  display: block;
+  margin: -2px 0 4px;
+  color: var(--nuvia-coral);
+  font-size: 0.7rem;
+  font-style: normal;
+  font-weight: 700;
+}
+
 .store-cart-qty {
   display: flex;
   align-items: center;
@@ -2538,6 +2862,26 @@ figure {
   gap: 10px;
   border-top: 1px solid rgba(17, 22, 21, 0.1);
   background: rgba(255, 255, 255, 0.42);
+}
+
+.store-cart-discount {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.store-cart-discount span {
+  color: rgba(17, 22, 21, 0.58);
+  font-size: 0.72rem;
+  font-weight: 720;
+  text-transform: uppercase;
+}
+
+.store-cart-discount strong {
+  color: var(--nuvia-coral);
+  font-size: 0.9rem;
+  font-weight: 700;
 }
 
 .store-cart-total {
@@ -2702,12 +3046,25 @@ figure {
   .store-stage-card,
   .store-product-card,
   .store-guide-step,
-  .store-subscribe-form button {
+  .store-subscribe-form button,
+  .store-catalog-filters button,
+  .store-load-more {
     transition:
       transform 180ms ease,
       background 180ms ease,
       border-color 180ms ease,
-      box-shadow 180ms ease;
+      box-shadow 180ms ease,
+      color 180ms ease;
+  }
+
+  .store-catalog-filters button:not(.is-active):hover {
+    border-color: rgba(0, 167, 160, 0.32);
+    color: var(--store-ink);
+  }
+
+  .store-load-more:hover {
+    border-color: rgba(0, 167, 160, 0.32);
+    background: rgba(255, 255, 255, 0.9);
   }
 
   .store-header-cta:hover,

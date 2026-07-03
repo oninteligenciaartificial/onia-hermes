@@ -671,7 +671,14 @@ function CartDrawer({
   const [checkoutLoading, setCheckoutLoading] = useState(false);
   const [checkoutResult, setCheckoutResult] = useState<CheckoutResult | null>(null);
   const [checkoutError, setCheckoutError] = useState("");
+  const panelRef = useRef<HTMLElement>(null);
   const firstCurrency = cart.length ? productMap.get(cart[0].id)?.currency : "BOB";
+
+  useEffect(() => {
+    if (open) {
+      panelRef.current?.focus();
+    }
+  }, [open]);
   const productSections = useMemo(() => {
     const groups = new Map<string, CartProduct[]>();
 
@@ -738,7 +745,7 @@ function CartDrawer({
   return (
     <div className="nuvia-cart-shell" data-open={open ? "true" : "false"} aria-hidden={!open}>
       <button className="nuvia-cart-backdrop" type="button" onClick={() => setOpen(false)} aria-label="Cerrar carrito" />
-      <aside className="nuvia-cart-panel" role="dialog" aria-modal="true" aria-label="Carrito Nuvia" tabIndex={-1}>
+      <aside className="nuvia-cart-panel" role="dialog" aria-modal="true" aria-label="Carrito Nuvia" tabIndex={-1} ref={panelRef}>
         <header>
           <div>
             <span>nuvia checkout</span>
@@ -1198,7 +1205,7 @@ function HeroStage({
             <article className="nuvia-stage-card" key={slug}>
               <Link href={productHref(product)}>
                 <figure>
-                  <Image src={product.imagen} alt={product.imagenAlt} width={520} height={520} sizes="(max-width: 680px) 42vw, 260px" />
+                  <Image src={product.imagen} alt={product.imagenAlt} width={520} height={520} sizes="(max-width: 680px) 42vw, 260px" priority />
                 </figure>
                 <span>{product.marca}</span>
                 <strong>{briefProductTitle(product)}</strong>
