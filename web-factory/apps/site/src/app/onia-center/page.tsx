@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
 import {
   AlertTriangle,
   Archive,
@@ -107,6 +107,17 @@ import {
   getVisibleTasks,
 } from "./operating-engine";
 import { OperatingWorkspace } from "./operating-workspace";
+
+// Shell protegido por el middleware (/onia-center/:path*); los datos por
+// usuario se cargan client-side. useSearchParams() (?view=) obliga a envolver
+// el panel en un limite Suspense para el prerender estatico de Next 15.
+export default function OniaCenterPage() {
+  return (
+    <Suspense fallback={null}>
+      <OniaCenterPageInner />
+    </Suspense>
+  );
+}
 
 type NavItem = {
   id: string;
@@ -533,7 +544,7 @@ function PrivateCapitalPanel({ visible }: { visible: boolean }) {
   );
 }
 
-export default function OniaCenterPage() {
+function OniaCenterPageInner() {
   const searchParams = useSearchParams();
   const requestedView = searchParams?.get("view") || "dashboard";
   const [selectedRole, setSelectedRole] = useState<RoleId>("sergio");

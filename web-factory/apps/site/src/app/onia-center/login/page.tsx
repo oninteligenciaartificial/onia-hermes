@@ -1,10 +1,20 @@
 "use client";
 
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, Suspense, useEffect, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { ArrowLeft, LockKeyhole, ShieldCheck } from "lucide-react";
 import "../onia-center.css";
+
+// Lee ?next= y ?reason= (useSearchParams) tras el redirect del middleware;
+// requiere un limite Suspense para el prerender estatico de Next 15.
+export default function OniaCenterLoginPage() {
+  return (
+    <Suspense fallback={null}>
+      <OniaCenterLoginPageInner />
+    </Suspense>
+  );
+}
 
 type LoginResult = {
   ok: boolean;
@@ -13,7 +23,7 @@ type LoginResult = {
   missingConfiguration?: string[];
 };
 
-export default function OniaCenterLoginPage() {
+function OniaCenterLoginPageInner() {
   const searchParams = useSearchParams();
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
