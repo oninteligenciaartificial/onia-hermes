@@ -1,19 +1,23 @@
 # ONIA - Estado de higiene del proyecto (2026-07-03)
 
 Pasada de higiene documental sobre `hermes-content/docs/`, `web-factory/docs/`,
-docs de raiz, `scripts/` y `package.json`. Solo lectura salvo una limpieza segura
-(ver seccion 5). Nada con valor comercial fue borrado. Los borrados propuestos
-quedan pendientes de confirmacion.
+docs de raiz, `scripts/` y `package.json`. Consolidacion ejecutada el 2026-07-03
+con aprobacion. Se eliminaron 10 duplicados de raiz obsoletos + 4 capturas de
+sesion. Los 3 casos ambiguos (contenido unico en ambos lados) se conservaron sin
+tocar (ver seccion 2). Nada con valor unico fue borrado.
 
 ## Resumen
 
 - Docs sanos: no se detectaron referencias muertas. Todos los scripts, configs,
   migraciones y workflows citados en la documentacion existen en disco.
-- Problema principal: 13 documentos estan duplicados entre la raiz del repo y
-  `hermes-content/docs/`. `hermes-content/docs/` es la copia canonica (mas
-  reciente); las copias de raiz estan desactualizadas. Riesgo real: el
-  `ONIA_LEADS_PRIORITY_2026.md` de raiz lista precios DentalGest viejos que
-  contradicen el pricing canonico.
+- Consolidacion hecha: de 13 documentos duplicados entre raiz y
+  `hermes-content/docs/`, se eliminaron 10 copias de raiz obsoletas (6 identicas +
+  4 desactualizadas, incluida la de precios DentalGest viejos). `hermes-content/docs/`
+  queda como fuente unica de esos 10.
+- Excepcion: 3 archivos (`HIGGSFIELD_VIDEO_SYSTEM.md`, `HIGGSFIELD_CONTENT_USE_CASES.md`,
+  `ELEVENLABS_AUDIO_SYSTEM.md`) NO son mirrors obsoletos: la version de raiz es
+  larga (prosa) y la de `docs/` es una reescritura corta respaldada por JSON.
+  Ambas tienen contenido unico. Se conservaron; requieren decision de contenido.
 - web-factory/docs sano: runbooks vivos y snapshots recientes, sin redundancia
   danina. Los pendientes son bloqueos operativos ya documentados, no deuda oculta.
 - Limpieza segura hecha: se destrackearon 11 archivos `.pyc` de
@@ -35,33 +39,34 @@ Actions contra el disco. Todo existe:
 
 No hay scripts ni docs apuntando a archivos inexistentes.
 
-## 2. Duplicacion raiz vs hermes-content/docs (consolidar)
+## 2. Duplicacion raiz vs hermes-content/docs
 
-13 archivos existen en ambos lugares. `hermes-content/docs/` es la copia
-mantenida (los divergentes se actualizaron alli el 2026-06-18; la raiz quedo en
-2026-06-06). Ningun codigo depende del path de raiz (solo aparecen como etiquetas
-de nombre en metadata), asi que consolidar es seguro.
+13 archivos existian en ambos lugares. Ningun codigo ni enlace markdown depende
+del path de raiz (solo aparecen como etiquetas de nombre en metadata), asi que la
+consolidacion fue segura. Resultado:
 
-| Archivo | Estado | Nota |
+| Archivo | Estado | Accion |
 |---|---|---|
-| ONIA_PRICING_2026.md | Identico | En sync (ambos 2026-06-22). |
-| ONIA_VENDOR_MANUAL_2026.md | Identico | En sync. |
-| ONIA_VENDOR_SALES_PLAYBOOK_2026.md | Identico | En sync. |
-| NOTION_VENDOR_CRM_SCHEMA_2026.md | Identico | En sync. |
-| PROJECTS_ORCHESTRATION.md | Identico | En sync. |
-| CROSS_PLATFORM_PUBLISHING.md | Identico | En sync. |
-| ONIA_LEADS_PRIORITY_2026.md | DIFIERE | **Raiz desactualizado: precios DentalGest viejos (Starter/Pro/Clinic Bs. 174,50/295/495). El canonico usa Basico/Profesional/Clinica Bs. 112/262,50/525.** |
-| PROJECT_PRICE_UPDATE_PROMPTS_2026.md | DIFIERE | Raiz 06-06, docs 06-18. |
-| SALES_VENDOR_PRICING_DECK_2026.html | DIFIERE | Raiz 06-06, docs 06-18. |
-| ONIA_PROJECTS_VENDOR_DECK_2026.html | DIFIERE | Raiz 06-06, docs 06-18. |
-| HIGGSFIELD_VIDEO_SYSTEM.md | DIFIERE | Divergieron el 06-06, sin reconciliar. |
-| HIGGSFIELD_CONTENT_USE_CASES.md | DIFIERE | Divergieron el 06-06, sin reconciliar. |
-| ELEVENLABS_AUDIO_SYSTEM.md | DIFIERE | Divergieron el 06-06, sin reconciliar. |
+| ONIA_PRICING_2026.md | Identico | Raiz eliminada. Canonico en docs/. |
+| ONIA_VENDOR_MANUAL_2026.md | Identico | Raiz eliminada. |
+| ONIA_VENDOR_SALES_PLAYBOOK_2026.md | Identico | Raiz eliminada. |
+| NOTION_VENDOR_CRM_SCHEMA_2026.md | Identico | Raiz eliminada. |
+| PROJECTS_ORCHESTRATION.md | Identico | Raiz eliminada. |
+| CROSS_PLATFORM_PUBLISHING.md | Identico | Raiz eliminada. |
+| ONIA_LEADS_PRIORITY_2026.md | Raiz obsoleta | **Raiz eliminada (tenia precios DentalGest viejos Starter/Pro/Clinic Bs. 174,50/295/495; el canonico docs/ usa Basico/Profesional/Clinica Bs. 112/262,50/525).** |
+| PROJECT_PRICE_UPDATE_PROMPTS_2026.md | Raiz obsoleta (06-06 vs 06-18) | Raiz eliminada. |
+| SALES_VENDOR_PRICING_DECK_2026.html | Raiz obsoleta (06-06 vs 06-18) | Raiz eliminada. |
+| ONIA_PROJECTS_VENDOR_DECK_2026.html | Raiz obsoleta (06-06 vs 06-18) | Raiz eliminada. |
+| HIGGSFIELD_VIDEO_SYSTEM.md | Divergente (raiz 584L vs docs 411L) | CONSERVADO. Contenido unico en ambos. |
+| HIGGSFIELD_CONTENT_USE_CASES.md | Divergente (raiz 536L vs docs 47L) | CONSERVADO. Docs/ es reescritura corta con JSON; raiz es prosa larga. |
+| ELEVENLABS_AUDIO_SYSTEM.md | Divergente (raiz 218L vs docs 153L) | CONSERVADO. Contenido unico en ambos. |
 
-Recomendacion (pendiente de confirmacion): declarar `hermes-content/docs/` como
-fuente unica y eliminar las copias de raiz, o dejarlas como redirecciones. El
-`ONIA_LEADS_PRIORITY_2026.md` de raiz deberia arreglarse primero por el riesgo de
-cotizar precios viejos.
+Los 3 conservados NO son mirrors obsoletos: la raiz es la version larga
+(long-form) y `docs/` es una reescritura concisa respaldada por JSON machine-readable
+(ej. `higgsfield-content-use-cases.json`), pensada para que Hermes/VPS la consuma.
+Borrar cualquiera de los dos lados pierde contenido. Requieren una decision manual:
+fusionar la prosa de raiz dentro del JSON/docs, o quedarse con una sola. No es
+higiene mecanica.
 
 ## 3. Pendientes abiertos reales
 
@@ -102,26 +107,25 @@ tocarlas:
 
 ## 5. Limpieza
 
-Hecho en esta pasada (seguro, sin perdida de informacion):
+Hecho en esta pasada (seguro, sin perdida de contenido unico):
 
-- `git rm --cached scripts/__pycache__/*.pyc` (11 archivos). Eran bytecode
-  regenerable ya listado en `.gitignore`; siguen en disco y se regeneran solos.
-
-Pendiente de confirmacion (no se toco nada):
-
-- Eliminar/consolidar las copias de raiz de la seccion 2.
-- 4 capturas de pantalla trackeadas en la raiz (`tmp_screen_notion*.png`, ~1,2 MB
-  en total) que parecen restos de una sesion de Notion. Candidatas a borrar.
+- `git rm --cached scripts/__pycache__/*.pyc` (11 archivos). Bytecode regenerable
+  ya listado en `.gitignore`; sigue en disco y se regenera solo.
+- Eliminadas 10 copias de raiz obsoletas de la seccion 2 (6 identicas + 4
+  desactualizadas). `hermes-content/docs/` queda como fuente unica.
+- Eliminadas 4 capturas de sesion Notion trackeadas en la raiz
+  (`tmp_screen_notion*.png`, ~1,2 MB).
 
 Conservado a proposito:
 
+- Los 3 archivos divergentes de la seccion 2 (contenido unico en ambos lados).
 - `tmp-assets/` (avatares/videos Sergio) y `references-inbox/` (9,2 MB de
   referencias): `.gitignore` indica explicitamente que assets/fotos SI se sincronizan.
 
 ## Proximos pasos sugeridos
 
-1. Arreglar precios en el `ONIA_LEADS_PRIORITY_2026.md` de raiz o eliminarlo (riesgo).
-2. Confirmar consolidacion raiz -> `hermes-content/docs/` para los 13 duplicados.
-3. Revisar los 8 pendientes del cierre 06-23 y cerrar los ya resueltos.
-4. Destrabar los 3 bloqueos SSH/n8n de la automatizacion VPS de web-factory.
-5. Confirmar borrado de las 4 capturas `tmp_screen_notion*.png`.
+1. Decidir los 3 archivos divergentes (seccion 2): fusionar la prosa de raiz
+   dentro de la version JSON/docs, o elegir una sola. Es lo unico que queda de la
+   duplicacion.
+2. Revisar los 8 pendientes del cierre 06-23 y cerrar los ya resueltos.
+3. Destrabar los 3 bloqueos SSH/n8n de la automatizacion VPS de web-factory.
