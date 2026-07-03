@@ -2,22 +2,25 @@
 
 Pasada de higiene documental sobre `hermes-content/docs/`, `web-factory/docs/`,
 docs de raiz, `scripts/` y `package.json`. Consolidacion ejecutada el 2026-07-03
-con aprobacion. Se eliminaron 10 duplicados de raiz obsoletos + 4 capturas de
-sesion. Los 3 casos ambiguos (contenido unico en ambos lados) se conservaron sin
-tocar (ver seccion 2). Nada con valor unico fue borrado.
+con aprobacion. La duplicacion raiz vs docs quedo 100% resuelta: 10 duplicados de
+raiz obsoletos eliminados, 3 divergentes fusionados dentro de `hermes-content/docs/`
+(preservando el contenido unico de ambos lados) y 4 capturas de sesion borradas.
+Nada con valor unico fue borrado.
 
 ## Resumen
 
 - Docs sanos: no se detectaron referencias muertas. Todos los scripts, configs,
   migraciones y workflows citados en la documentacion existen en disco.
-- Consolidacion hecha: de 13 documentos duplicados entre raiz y
+- Consolidacion completa: de 13 documentos duplicados entre raiz y
   `hermes-content/docs/`, se eliminaron 10 copias de raiz obsoletas (6 identicas +
-  4 desactualizadas, incluida la de precios DentalGest viejos). `hermes-content/docs/`
-  queda como fuente unica de esos 10.
-- Excepcion: 3 archivos (`HIGGSFIELD_VIDEO_SYSTEM.md`, `HIGGSFIELD_CONTENT_USE_CASES.md`,
-  `ELEVENLABS_AUDIO_SYSTEM.md`) NO son mirrors obsoletos: la version de raiz es
-  larga (prosa) y la de `docs/` es una reescritura corta respaldada por JSON.
-  Ambas tienen contenido unico. Se conservaron; requieren decision de contenido.
+  4 desactualizadas, incluida la de precios DentalGest viejos) y se fusionaron 3
+  divergentes. `hermes-content/docs/` queda como fuente unica de los 13. Ya no
+  quedan duplicados raiz vs docs.
+- Fusion de los 3 divergentes (`HIGGSFIELD_VIDEO_SYSTEM.md`,
+  `HIGGSFIELD_CONTENT_USE_CASES.md`, `ELEVENLABS_AUDIO_SYSTEM.md`): la version de
+  raiz (prosa larga) y la de `docs/` (reescritura corta respaldada por JSON) tenian
+  cada una contenido unico; se combinaron en la copia de `docs/` y se elimino la
+  de raiz. Detalle en seccion 2.
 - web-factory/docs sano: runbooks vivos y snapshots recientes, sin redundancia
   danina. Los pendientes son bloqueos operativos ya documentados, no deuda oculta.
 - Limpieza segura hecha: se destrackearon 11 archivos `.pyc` de
@@ -57,16 +60,16 @@ consolidacion fue segura. Resultado:
 | PROJECT_PRICE_UPDATE_PROMPTS_2026.md | Raiz obsoleta (06-06 vs 06-18) | Raiz eliminada. |
 | SALES_VENDOR_PRICING_DECK_2026.html | Raiz obsoleta (06-06 vs 06-18) | Raiz eliminada. |
 | ONIA_PROJECTS_VENDOR_DECK_2026.html | Raiz obsoleta (06-06 vs 06-18) | Raiz eliminada. |
-| HIGGSFIELD_VIDEO_SYSTEM.md | Divergente (raiz 584L vs docs 411L) | CONSERVADO. Contenido unico en ambos. |
-| HIGGSFIELD_CONTENT_USE_CASES.md | Divergente (raiz 536L vs docs 47L) | CONSERVADO. Docs/ es reescritura corta con JSON; raiz es prosa larga. |
-| ELEVENLABS_AUDIO_SYSTEM.md | Divergente (raiz 218L vs docs 153L) | CONSERVADO. Contenido unico en ambos. |
+| HIGGSFIELD_VIDEO_SYSTEM.md | Divergente (raiz 584L vs docs 411L) | FUSIONADO en docs/ (534L). Base = core canonico de docs/ (Source Of Truth, runbook, Commands, Safe Negative Prompt) + secciones unicas de raiz (Current Local Auth State, Viral/UGC/Client Ad Framework, Prompt Package, Success Metrics). Raiz eliminada. |
+| HIGGSFIELD_CONTENT_USE_CASES.md | Divergente (raiz 536L vs docs 47L) | FUSIONADO en docs/. Se adopto la prosa larga de raiz (15 rubros) + nota "fuente machine-readable" que tenia el stub de docs/. Raiz eliminada. |
+| ELEVENLABS_AUDIO_SYSTEM.md | Divergente (raiz 218L vs docs 153L) | FUSIONADO en docs/. Base = version de raiz (mas completa) + Runtime Paths y Environment Variables que solo tenia docs/. Raiz eliminada. |
 
-Los 3 conservados NO son mirrors obsoletos: la raiz es la version larga
-(long-form) y `docs/` es una reescritura concisa respaldada por JSON machine-readable
-(ej. `higgsfield-content-use-cases.json`), pensada para que Hermes/VPS la consuma.
-Borrar cualquiera de los dos lados pierde contenido. Requieren una decision manual:
-fusionar la prosa de raiz dentro del JSON/docs, o quedarse con una sola. No es
-higiene mecanica.
+Los 3 divergentes eran documentos con contenido unico en cada lado (raiz =
+long-form; `docs/` = reescritura concisa respaldada por JSON machine-readable).
+Se fusionaron manualmente dentro de la copia de `hermes-content/docs/` (la que se
+despliega al VPS) preservando el contenido unico de ambos lados, y se eliminaron
+las copias de raiz. Los bloques compartidos (ej. las recetas de identidad de
+Sergio) eran identicos, asi que no se perdio ninguna refinacion.
 
 ## 3. Pendientes abiertos reales
 
@@ -113,19 +116,22 @@ Hecho en esta pasada (seguro, sin perdida de contenido unico):
   ya listado en `.gitignore`; sigue en disco y se regenera solo.
 - Eliminadas 10 copias de raiz obsoletas de la seccion 2 (6 identicas + 4
   desactualizadas). `hermes-content/docs/` queda como fuente unica.
+- Fusionados 3 archivos divergentes dentro de `hermes-content/docs/` y eliminadas
+  sus copias de raiz (ver seccion 2). Sin perdida de contenido unico.
 - Eliminadas 4 capturas de sesion Notion trackeadas en la raiz
   (`tmp_screen_notion*.png`, ~1,2 MB).
 
+Resultado: ya no quedan documentos duplicados entre la raiz y
+`hermes-content/docs/`.
+
 Conservado a proposito:
 
-- Los 3 archivos divergentes de la seccion 2 (contenido unico en ambos lados).
 - `tmp-assets/` (avatares/videos Sergio) y `references-inbox/` (9,2 MB de
   referencias): `.gitignore` indica explicitamente que assets/fotos SI se sincronizan.
 
 ## Proximos pasos sugeridos
 
-1. Decidir los 3 archivos divergentes (seccion 2): fusionar la prosa de raiz
-   dentro de la version JSON/docs, o elegir una sola. Es lo unico que queda de la
-   duplicacion.
-2. Revisar los 8 pendientes del cierre 06-23 y cerrar los ya resueltos.
-3. Destrabar los 3 bloqueos SSH/n8n de la automatizacion VPS de web-factory.
+1. Revisar los 8 pendientes del cierre 06-23 y cerrar los ya resueltos.
+2. Destrabar los 3 bloqueos SSH/n8n de la automatizacion VPS de web-factory.
+3. Opcional: revisar `ONIA_MASTER_PLAN.md` de raiz (edicion 06-06, varios
+   PENDIENTE) para confirmar vigencia.

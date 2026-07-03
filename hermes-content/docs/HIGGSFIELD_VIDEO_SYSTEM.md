@@ -25,6 +25,27 @@ Sources:
 - https://higgsfield.ai/mcp
 - https://docs.higgsfield.ai/
 
+## Current Local Auth State
+
+On 2026-06-01, Higgsfield CLI authentication succeeded locally through:
+
+```powershell
+npx -y -p @higgsfield/cli higgsfield auth login --no-color
+```
+
+Validated read-only status:
+
+- account: `oninteligenciaartificial@gmail.com`
+- plan: `ultra`
+- available credits at validation: `3000`
+
+Use the CLI path for generation until Codex app exposes the Higgsfield MCP tools
+directly in the active tool list.
+
+Full capabilities and model decision map:
+
+- `HIGGSFIELD_FULL_CAPABILITIES_MAP.md`
+
 ## Hermes Rule
 
 Higgsfield never publishes. Higgsfield only generates media.
@@ -374,6 +395,85 @@ Use for:
 
 Every client job requires approval before delivery or publication.
 
+Commercial playbook: `HIGGSFIELD_CLIENT_SALES_PLAYBOOK.md`.
+
+Every client job must store:
+
+- business
+- offer
+- target audience
+- proof available
+- required disclaimer
+- approval status
+- delivery URL
+
+## Viral Framework
+
+Every viral video brief needs:
+
+- Hook: a visual or verbal interruption in the first 1-2 seconds.
+- Pain: the viewer recognizes the problem immediately.
+- Proof: show the system, product, result, screen or process.
+- Shift: a surprising angle or reframing.
+- CTA: one simple next action.
+
+Default structure for 20-35 seconds:
+
+```text
+0-2s: pattern interrupt
+2-6s: problem
+6-14s: mechanism or demo
+14-24s: proof or transformation
+24-35s: CTA
+```
+
+## UGC Ad Framework
+
+Default UGC format:
+
+```text
+0-2s: "I did not expect this to work..."
+2-5s: show problem
+5-12s: show product/system in use
+12-20s: explain benefit like a friend
+20-28s: objection handling
+28-35s: CTA
+```
+
+UGC should feel human, not like a studio commercial.
+
+## Client Ad Framework
+
+For companies, Hermes should choose one of these:
+
+- Direct response UGC.
+- Founder/operator pitch.
+- Product demo.
+- Local business offer.
+- Explainer with motion graphics.
+- Testimonial style, only if testimonial is real or clearly scripted.
+
+## Prompt Package For Higgsfield
+
+Every generation request should include:
+
+```json
+{
+  "lane": "sergio | onia | client",
+  "format": "ugc | demo | talking_head | product_ad | story | cinematic",
+  "aspect_ratio": "9:16",
+  "duration_seconds": 15,
+  "hook": "",
+  "script": [],
+  "shot_list": [],
+  "visual_style": "",
+  "references": [],
+  "brand_rules": [],
+  "negative_prompt": "",
+  "approval_required": true
+}
+```
+
 ## Commands
 
 ```text
@@ -409,3 +509,26 @@ No copyrighted logos unless provided by the brand. No third-party likeness. No
 fake testimonials. No fake dashboards. No misleading financial claims. No
 generated Sergio face unless explicitly approved. No placeholder text.
 ```
+
+## Success Metrics
+
+For Sergio:
+
+- watch time
+- replies/DMs
+- profile visits
+- trust-building comments
+
+For ONIA:
+
+- saves
+- DMs
+- lead inquiries
+- demo requests
+
+For clients:
+
+- CTR
+- cost per lead
+- booking rate
+- reply quality

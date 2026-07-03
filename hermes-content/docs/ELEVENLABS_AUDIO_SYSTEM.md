@@ -1,18 +1,45 @@
 # ElevenLabs Audio System
 
-Hermes uses ElevenLabs as the voice/audio layer for Video Lab.
+Hermes uses ElevenLabs as the audio layer for short-form videos, UGC ads,
+client campaigns, ONIA explainers and Sergio personal brand content.
 
-ElevenLabs can support:
+Hermes remains the brain:
+
+- script
+- voice direction
+- approval
+- claims safety
+- caption
+- video/audio assembly plan
+- publishing decision
+
+ElevenLabs is the audio engine:
 
 - text to speech
-- speech to text
-- dubbing
+- voice library
+- voice cloning/design, only with consent
+- dubbing/localization
 - sound effects
-- voice changer
-- voice isolation
-- voice library/design
-- forced alignment
-- dialogue audio
+- speech to text/transcription
+- dialogue or multi-speaker audio when needed
+
+## Official Capabilities
+
+ElevenLabs documentation describes API capabilities for:
+
+- Text to Speech
+- Speech to Text
+- Music
+- Text to Dialogue
+- Image and Video
+- Voice changer
+- Voice isolator
+- Dubbing
+- Sound effects
+- Voices
+- Voice Remixing
+- Forced Alignment
+- ElevenAgents
 
 Sources:
 
@@ -21,113 +48,174 @@ Sources:
 - https://elevenlabs.io/docs/api-reference/text-to-speech
 - https://github.com/elevenlabs/elevenlabs-mcp
 
-## Architecture
+## Operating Rule
+
+ElevenLabs never publishes. It only creates or analyzes audio.
+
+The safe chain is:
 
 ```text
-Hermes script and approval
--> ElevenLabs voice/audio
--> Higgsfield or editor combines media
--> asset server
+Telegram / Dashboard
+-> Hermes writes script
+-> Video Lab creates job
+-> approval
+-> ElevenLabs generates voice/audio
+-> Higgsfield or editor combines video/audio
+-> public MP4 URL
 -> review
--> ig-publish after approval
+-> publish approval
+-> ig-publish reel_publish
 ```
-
-ElevenLabs must not publish directly.
 
 ## Voice Lanes
 
 ### Sergio
 
-Use Sergio's real voice when possible.
+Default: use Sergio's real voice when possible.
 
-AI voice or voice clone requires explicit approval before publishing.
+AI voice use requires explicit approval because it affects trust.
 
-Recommended:
+Good use cases:
 
+- cleaning/re-recording short lines
 - draft narration
-- quick hook variants
-- cleanup/re-recording support
-- transcripts
+- alternate hook testing
+- subtitles/transcripts
 
 Avoid:
 
-- fake personal confession
-- fake results in Sergio's voice
-- unapproved voice clone
+- fake personal confession in Sergio's AI voice
+- generated voice claiming real results
+- publishing voice clone without approval
 
 ### ONIA
 
-Use neutral, clear Latin American Spanish.
+Default: clear Spanish narrator, practical, low hype.
 
-Recommended:
+Good use cases:
 
-- demos
-- explainers
+- demo narration
+- explainer videos
 - educational reels
-- bilingual versions
+- bilingual content
 
 ### Clients
 
-Use client-safe voiceover.
+Default: client-safe narrator or UGC voice.
 
-Recommended:
+Good use cases:
 
-- UGC-style ad narration
-- product/service explainer
-- translated ad variants
+- UGC ad voiceover
+- product explainer
+- local business ads
+- translated variants
 
-If using a cloned client voice, store consent status.
+Every client voice job must store:
 
-## Voice Presets
+- business
+- offer
+- voice style
+- language
+- consent status if cloning is used
+- approval status
 
-### Sergio Founder
+## Voice Styles
+
+### Founder Real
+
+Use for Sergio:
 
 ```text
-Natural Spanish, direct, conversational, practical, founder-to-founder, not
-announcer, slightly fast, warm.
+Natural Spanish, direct, conversational, slightly fast, no announcer voice,
+warm but practical, founder building in public.
 ```
 
 ### ONIA Educator
 
+Use for ONIA:
+
 ```text
-Neutral Latin American Spanish, clear, consultative, educational, confident,
-short pauses, low hype.
+Neutral Latin American Spanish, confident, clear, educational, not corporate,
+not hype, short pauses after key ideas.
 ```
 
 ### UGC Friend
 
+Use for client UGC:
+
 ```text
-Casual, believable, social-media native, friend-to-friend, natural pauses,
-not polished.
+Casual, believable, friend-to-friend, curious, not polished, natural pauses.
 ```
 
 ### Premium Client
 
+Use for clinics, real estate, high-ticket services:
+
 ```text
-Calm, warm, trustworthy, premium, measured pacing, polished but human.
+Calm, trustworthy, polished, warm, premium, measured pacing.
 ```
 
-## Telegram Commands To Add
+## Telegram Commands
 
-Future commands:
+Generation triggers (create or update Video Lab jobs, never publish):
 
 ```text
 Genera voz Sergio: <texto>
 Genera voz ONIA: <texto>
 Genera voz cliente: <negocio> | <texto> | <estilo>
 Doblaje video: <url_video> | <idioma>
+```
+
+## Audio Approval Gates
+
+Voice brief approval:
+
+```text
+Aprobar audio <job_id>
+```
+
+Audio generated:
+
+```text
 Audio generado <job_id>: <audio_url>
 ```
 
-These commands should create or update Video Lab jobs, not publish anything.
+Video generated with audio:
 
-## Approval Rules
+```text
+Video generado <job_id>: <video_url>
+```
 
-- Voice cloning requires explicit consent.
-- Generated Sergio voice requires explicit approval before public use.
-- Client voice requires approval before delivery.
+Publishing:
+
+```text
+Publicar video <job_id>
+```
+
+## Prompt Package For ElevenLabs
+
+```json
+{
+  "lane": "sergio | onia | client",
+  "language": "es-419",
+  "voice_style": "",
+  "script": "",
+  "emotion": "",
+  "pace": "",
+  "duration_target_seconds": 30,
+  "approval_required": true,
+  "voice_clone_allowed": false
+}
+```
+
+## Safety Rules
+
+- Never clone Sergio or a client without explicit consent.
+- Never publish generated voice as if it were real recording unless approved.
+- Never generate fake testimonials.
+- Never generate medical, financial or legal claims without review.
 - Dubbing must not change meaning or claims.
-- No fake testimonials.
+- Store API keys only in `/root/.hermes/.env`.
 
 ## Runtime Paths
 
@@ -151,3 +239,13 @@ ELEVENLABS_MODEL_ID
 
 Store only in `/root/.hermes/.env`. Never print full values.
 
+## Future Integration
+
+When the ElevenLabs MCP or API is connected:
+
+1. List approved voices.
+2. Generate audio draft from Video Lab script.
+3. Save audio in `/var/www/html/hermes-assets/audio`.
+4. Store public audio URL in Video Lab job JSON.
+5. Combine audio with Higgsfield/editor output.
+6. Send preview before publishing.
