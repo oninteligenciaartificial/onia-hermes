@@ -41,6 +41,7 @@ Siguiente accion comercial ONIA
 
 - Clinicas dentales -> DentalGest.
 - Pymes con Excel, reportes, tareas o operaciones desordenadas -> Gesti-OS.
+- Importadoras, mayoristas y distribuidoras B2B -> ProveeGest (validacion).
 - Negocios sin web clara -> paginas web ONIA.
 - Negocios con presencia debil -> auditoria express, web o diagnostico.
 - Negocios con procesos confusos, herramientas sueltas o dudas sobre que comprar
@@ -49,6 +50,23 @@ Siguiente accion comercial ONIA
 
 Videos IA/Higgsfield esta pausado como producto comercial independiente. No
 ofrecer packs de video IA salvo aprobacion explicita de Sergio.
+
+## ONIA Core (nucleo de los SaaS)
+
+Todos los SaaS ONIA comparten un nucleo operativo: ONIA Core
+(`onia-core/contract.json`, beta v0.2.0). Al orquestar o vender:
+
+- Cada prospecto se mapea a un track: dental -> `dentagest-clinical`,
+  B2B/distribucion -> `proveegest-electrico`, pyme general -> `gestios-general`,
+  agro -> `ganadero-offline`. Ver
+  `onia-core/ONIA_CORE_CLIENT_ADOPTION_MAP_2026.md`.
+- Lo que se vende como "seguimiento, responsables, aprobaciones, agenda,
+  reportes del dueno" ya esta definido en el core; no prometer funciones fuera
+  del contrato sin marcarlas como modulo o integracion.
+- WhatsApp automatico, SIAT y TR4 son integraciones gated: no prometerlas como
+  incluidas.
+- Orden de adopcion vigente: DentalGest beta -> Bolivian Electric/ProveeGest ->
+  GestiOS -> Ganadero OS.
 
 ## Salida requerida
 

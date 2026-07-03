@@ -54,6 +54,26 @@ Docs internos de referencia: `PRICING_RATIONALE_INTERNO.md`,
 `PLAYBOOK_CONSTRUCCION_INTERNO.md`, `ESTRATEGIA_PLANTILLAS_WEB_INTERNO.md`,
 `BCP_PASARELA_CREDENCIALES_INTERNO.md`.
 
+## ONIA Core (REGLA)
+
+> Fuente de verdad: `onia-core/contract.json` (beta v0.2.0). Docs canonicos en
+> `onia-core/*.md`.
+
+- ONIA Core es el nucleo operativo comun de los SaaS ONIA (DentalGest, GestiOS,
+  Ganadero OS, ProveeGest). Vive SOLO en este repo hasta aprobar adopcion.
+- `policy.installInProductRepos = false`: NO crear migraciones, rutas ni UI
+  dependientes del core en los repos producto sin plan de adopcion aprobado.
+- Todo cambio al contrato, schema o adapters DEBE pasar
+  `npm run validate:onia-core` antes de commitear.
+- Cada entidad nueva del core exige: entrada en `contract.json`, tabla en
+  `schema/base-schema.sql` y mapeo en los 3 adapters (el validador lo bloquea).
+- Clientes nuevos se mapean a un track vertical, nunca a un fork del core.
+  Ver `onia-core/ONIA_CORE_CLIENT_ADOPTION_MAP_2026.md`.
+- Integraciones externas (WhatsApp, SIAT, TR4) siguen `external_gate`: fuera
+  del core, entran solo como intake normalizado (work items).
+- Orden de adopcion: DentalGest beta → Bolivian Electric/ProveeGest → GestiOS
+  → Ganadero OS (offline).
+
 ## Git — Auto-sync multi-dispositivo (REGLA)
 
 > Trabajamos desde varios dispositivos. Nada debe quedar como archivo local sin

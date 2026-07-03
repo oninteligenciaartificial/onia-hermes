@@ -6,6 +6,9 @@ import {
   getBlockedCapabilitiesForTrack,
   getCapabilitiesByLayer,
   getCapability,
+  getCoreCapabilityIds,
+  getOrphanEntityIds,
+  getUnansweredQuestions,
   loadOniaCoreContract,
 } from "./index.mjs";
 
@@ -38,6 +41,7 @@ function assertUnique(items, label) {
 }
 
 assert(contract.name === "ONIA Core", "Contract name must be ONIA Core");
+assert(/^\d+\.\d+\.\d+$/.test(contract.version), "Contract version must be semver (x.y.z)");
 assert(["canonical_draft", "alpha", "beta"].includes(contract.status), "Contract status must be canonical_draft, alpha or beta");
 assert(contract.policy?.installInProductRepos === false, "Product repo installation must stay disabled before beta");
 assert(contract.questions.length === 10, "ONIA Core must keep the 10 operating questions");
@@ -79,7 +83,17 @@ for (const capability of contract.capabilities) {
 
 for (const coreCapability of getCapabilitiesByLayer(contract, "core")) {
   assert(coreCapability.phase <= 2, `${coreCapability.id} core phase must be <= 2`);
+  assert(coreCapability.entityIds.length > 0, `${coreCapability.id} core capability must own at least one entity`);
 }
+
+const orphanEntities = getOrphanEntityIds(contract);
+assert(orphanEntities.length === 0, `Entities not referenced by any capability: ${orphanEntities.join(", ")}`);
+
+const unansweredQuestions = getUnansweredQuestions(contract, "core");
+assert(
+  unansweredQuestions.length === 0,
+  `Operating questions not answered by any core capability: ${unansweredQuestions.map((question) => question.id).join(", ")}`,
+);
 
 for (const notCore of ["catalog_inventory", "sales_cash", "quotes_b2b", "whatsapp", "tr4_adapter", "siat"]) {
   assert(getCapability(contract, notCore)?.layer !== "core", `${notCore} must not be a core capability`);
@@ -114,8 +128,19 @@ for (const schemaFile of contract.schemaFiles) {
     "onia_core_evidence",
     "onia_core_activity_events",
     "onia_core_import_batches",
+    "onia_core_business_partners",
+    "onia_core_role_assignments",
+    "onia_core_comments",
+    "onia_core_documents",
+    "onia_core_approval_requests",
+    "onia_core_schedule_events",
+    "onia_core_saved_views",
   ]) {
     assert(schema.includes(table), `${schemaFile} must define ${table}`);
+  }
+
+  for (const slaColumn of ["sla_policy", "sla_due_at", "escalation_level"]) {
+    assert(schema.includes(slaColumn), `${schemaFile} must define WorkItem SLA column ${slaColumn}`);
   }
 }
 
@@ -150,6 +175,11 @@ for (const { file, adapter } of adapters) {
   for (const mapping of adapter.capabilityMappings) {
     assert(capabilityIds.has(mapping.capabilityId), `${file} maps missing capability ${mapping.capabilityId}`);
     assert(mapping.status, `${file} capability ${mapping.capabilityId} needs status`);
+  }
+
+  const mappedCapabilityIds = new Set(adapter.capabilityMappings.map((mapping) => mapping.capabilityId));
+  for (const coreCapabilityId of getCoreCapabilityIds(contract)) {
+    assert(mappedCapabilityIds.has(coreCapabilityId), `${file} must map core capability ${coreCapabilityId}`);
   }
 }
 

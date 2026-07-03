@@ -34,3 +34,67 @@ export function getBlockedCapabilitiesForTrack(contract, trackId) {
     .map((capabilityId) => getCapability(contract, capabilityId))
     .filter(Boolean);
 }
+
+export function getEntity(contract, entityId) {
+  return contract.entities.find((entity) => entity.id === entityId);
+}
+
+export function getCoreEntityIds(contract) {
+  return contract.entities.map((entity) => entity.id);
+}
+
+export function getCoreCapabilityIds(contract) {
+  return getCapabilitiesByLayer(contract, "core").map((capability) => capability.id);
+}
+
+export function getAnsweredQuestionIds(contract, layer = "core") {
+  const answered = new Set();
+
+  for (const capability of getCapabilitiesByLayer(contract, layer)) {
+    for (const questionId of capability.answers) {
+      answered.add(questionId);
+    }
+  }
+
+  return answered;
+}
+
+export function getUnansweredQuestions(contract, layer = "core") {
+  const answered = getAnsweredQuestionIds(contract, layer);
+  return contract.questions.filter((question) => !answered.has(question.id));
+}
+
+export function getOrphanEntityIds(contract) {
+  const referenced = new Set();
+
+  for (const capability of contract.capabilities) {
+    for (const entityId of capability.entityIds) {
+      referenced.add(entityId);
+    }
+  }
+
+  return contract.entities
+    .map((entity) => entity.id)
+    .filter((entityId) => !referenced.has(entityId));
+}
+
+export function getTrackReadiness(contract, trackId) {
+  const track = getVerticalTrack(contract, trackId);
+
+  if (!track) {
+    return null;
+  }
+
+  const required = track.requiredCapabilityIds
+    .map((capabilityId) => getCapability(contract, capabilityId))
+    .filter(Boolean);
+
+  return {
+    trackId: track.id,
+    status: track.status,
+    requiredCount: required.length,
+    coreCount: required.filter((capability) => capability.layer === "core").length,
+    moduleCount: required.filter((capability) => capability.layer !== "core").length,
+    blockedCount: track.blockedCapabilityIds.length,
+  };
+}
