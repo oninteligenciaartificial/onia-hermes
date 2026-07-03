@@ -126,6 +126,20 @@ El flujo `ONIA - Agenda: Cal.com Booking` recibe POST sin credenciales. Es
 funcional, pero se debe validar firma/secret del webhook antes de tratarlo como
 produccion estricta.
 
+Actualizacion 2026-07-03:
+
+- Se agrego un **guard de tipo de evento** al nodo `Parsear Booking CalCom`:
+  solo `BOOKING_CREATED` crea evento GCal; cualquier otro `triggerEvent` se
+  ignora (`return []`). Evita crear eventos basura si se amplian los eventos
+  suscritos en Cal.
+- La cadena n8n -> GCal -> Telegram se **probo end-to-end** (ejecucion `20532`,
+  success): la credencial GCal funciona.
+- La **validacion de firma HMAC sigue pendiente** y NO se activo porque hacerlo
+  sin el secret configurado en Cal admin rompe todas las reservas. Procedimiento
+  paso a paso (generar secret en Cal, nodo Code de validacion en n8n, prueba)
+  documentado en `ONIA_CALCOM_SELF_HOST_RUNBOOK_2026.md`, seccion "Validacion de
+  firma del webhook".
+
 ## Stack Recomendado Para Esta Semana
 
 Activo:

@@ -81,8 +81,40 @@ Known issue:
   `Mara Daily Content - Trend Research` (`zediOCdtlP1zpImK`) fallaban el 100%
   de sus corridas desde el 2026-06-28 (varias veces al dia cada una), y el
   monitor de salud (`drFWP7nttzvtZzso`) avisaba por Telegram cada hora. Ambos
-  workflows quedaron `unpublish` el 2026-07-03 via MCP hasta reemplazar la
-  credencial SSH o mover `hermes-command` a un endpoint HTTP interno.
+  workflows quedaron `unpublish` el 2026-07-03 via MCP.
+
+### Migracion SSH -> nativo (2026-07-03)
+
+`hermes-command` es `scripts/hermes_command_center.py`, un router determinista.
+Los 7 comandos programados del Scheduled Operations Pack ("Radar creativo ONIA",
+"Cola contenido diaria", "Seguimientos ONIA hoy", "Recordatorios Video Lab",
+"Platform Copy Queue", "Watcher Higgsfield", "Registro Hermes") devuelven texto
+estatico (funciones `_creative_radar`, `_daily_content_queue`,
+`_crm_followups_today`, `_quiet_video_reply`, `_platform_copy_queue`,
+`_notion_outbox_status`; las partes que dependian de Video Lab estan en modo
+quiet por diseno).
+
+Accion tomada en `VeCHKr6wkK5Wet25`:
+
+- Se reemplazo el nodo SSH `Run Hermes Scheduled Command` por un nodo Code v2
+  autonomo que porta ese texto determinista y emite el mismo shape
+  (`{ stdout, code }`) que esperaba `Format Telegram Reply`. Sin SSH, sin VPS.
+- Verificado: 0 nodos SSH restantes, 7 conexiones de entrada + 1 de salida
+  intactas, logica probada localmente para los 7 comandos.
+- El workflow queda **`unpublish`** (respeta la direccion quiet del cleanup),
+  pero ya es seguro republicar con `publish_workflow` porque no falla.
+
+Pendiente (no completable desde aqui sin deploy al VPS):
+
+- El path INTERACTIVO `ONIA - Telegram Command Center` (`vuicWsvh0hwqKhYs`)
+  sigue usando SSH `Run Video Lab Router on VPS` para el router completo
+  (video_lab, estado/plan semanal). No se migro porque esos comandos necesitan
+  estado del VPS; portarlos requiere desplegar el router como endpoint HTTP en
+  ONIA Center (`/api/onia-center/command` u similar) y reconectar el nodo. Su
+  rama `/agendar` no usa SSH (Google Calendar directo), asi que agendar sigue
+  funcionando aunque el resto del router falle mientras SSH este rota.
+- `Mara Daily Content` (`zediOCdtlP1zpImK`) queda `unpublish`; es contenido de
+  video que el sistema definio como quiet/manual, no se migro.
 
 ## Before Using n8n as Orchestrator
 

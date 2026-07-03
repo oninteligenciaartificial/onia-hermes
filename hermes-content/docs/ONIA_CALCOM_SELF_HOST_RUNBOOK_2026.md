@@ -366,16 +366,72 @@ Chequeo de coherencia publico (sin credenciales, solo HTTP/n8n MCP):
   "preparada pero no publica, sin relacion `_user_eventtype`".
 - Workflow n8n `ONIA - Agenda: Cal.com Booking` (`X6gd3EBW7Y3z9xTg`) sigue
   activo, webhook trigger configurado en `path=calcom-booking` (coincide con
-  la URL documentada). `search_executions` devuelve **0 ejecuciones
-  historicas**: nunca se disparo con una reserva real, confirma que sigue
-  pendiente la prueba end-to-end ya listada en "Bloqueos actuales" (no es una
-  regresion nueva).
-- El nodo no tiene validacion de firma/secret del webhook: sigue sin resolver
-  el problema #4 de `ONIA_N8N_TELEGRAM_CLEANUP_20260630.md`.
+  la URL documentada). Antes de esta sesion tenia 0 ejecuciones historicas
+  (nunca se disparo con una reserva real).
 
-Conclusion: la config de meeting types sigue coherente con lo documentado; no
-se necesitaron cambios. El bloqueo real sigue siendo la prueba end-to-end de
-un booking real y la firma del webhook, ambos ya listados abajo.
+### Cambios aplicados 2026-07-03
+
+1. **Guard de tipo de evento (aplicado via MCP `update_workflow`).** El nodo
+   `Parsear Booking CalCom` ahora corta si `triggerEvent` existe y no es
+   `BOOKING_CREATED` (`return []`). Antes, si Cal enviaba
+   `BOOKING_CANCELLED`/`RESCHEDULED`/`REQUESTED`/`REJECTED`, el workflow habria
+   creado un evento GCal incorrecto. Hoy Cal solo esta suscrito a
+   `BOOKING_CREATED`, asi que no cambia el comportamiento actual; protege contra
+   la ampliacion de eventos documentada en "Salida objetivo pendiente".
+
+2. **Prueba end-to-end ejecutada (con OK de Sergio por los efectos).** Se envio
+   un payload sintetico `BOOKING_CREATED` etiquetado `[PRUEBA ONIA]` al webhook
+   de produccion. Resultado: ejecucion `20532` **success** en los 5 nodos; se
+   creo el evento en `oninteligenciaartificial@gmail.com` y se enviaron los 2
+   Telegram. **Conclusion: la credencial de Google Calendar del nodo SI funciona
+   y toda la cadena Cal -> n8n -> GCal -> Telegram opera correctamente.** El
+   evento de prueba se borro despues (quedo `status=cancelled`); los 2 mensajes
+   de Telegram de prueba quedaron en el chat, claramente etiquetados.
+   - Nota: esto valida la cadena n8n->GCal->Telegram, NO valida el emisor real
+     Cal->webhook (Cal envia `BOOKING_REQUESTED` primero por
+     `requiresConfirmation=true`; recien tras aceptar en Cal emite
+     `BOOKING_CREATED`). Falta la prueba con una reserva real aceptada + SMTP.
+
+3. **Firma del webhook: pendiente de activar (necesita secret en Cal admin).**
+   Ver seccion "Validacion de firma del webhook" abajo.
+
+Conclusion: la config de meeting types sigue coherente con lo documentado. Se
+blindo el workflow (guard) y se probo la cadena tecnica. Los bloqueos que
+quedan requieren acceso admin a Cal (firma, SMTP) o una reserva real.
+
+## Validacion de firma del webhook
+
+Estado: **pendiente**. El webhook `calcom-booking` recibe POST sin verificar
+firma. Cal.com firma cada webhook con `X-Cal-Signature-256` = HMAC-SHA256 del
+body crudo usando el `secret` configurado en el webhook.
+
+No se activo automaticamente porque **activar la validacion sin el secret puesto
+en Cal rompe todas las reservas** (todo POST seria rechazado). Requiere hacer
+los dos lados a la vez:
+
+1. En Cal admin (`https://cal.onia.com.bo/settings/developer/webhooks`), abrir el
+   webhook de `calcom-booking` y generar/pegar un `secret` (p. ej.
+   `openssl rand -hex 32` en el VPS, no en chat).
+2. En n8n, insertar un nodo Code justo despues del webhook y antes de
+   `Parsear Booking CalCom` que valide la firma. Guardar el secret como
+   credencial n8n (plan VPS: no usar `$env`, ver `CLAUDE.md`). Logica de
+   referencia:
+
+   ```js
+   const crypto = require('crypto');
+   const secret = '<desde credencial n8n, no hardcodear>';
+   const sig = ($input.first().json.headers || {})['x-cal-signature-256'] || '';
+   const raw = JSON.stringify($input.first().json.body); // ajustar a body crudo real
+   const expected = crypto.createHmac('sha256', secret).update(raw).digest('hex');
+   if (sig !== expected) { throw new Error('Firma Cal invalida'); }
+   return $input.all();
+   ```
+
+   Nota: el HMAC de Cal es sobre el **body crudo** exacto; si n8n ya parseo el
+   JSON, re-serializar puede no coincidir byte a byte. Para robustez, capturar el
+   raw body en el nodo Webhook (`rawBody`) antes de validar.
+3. Probar una reserva de prueba: si pasa, la firma quedo bien; si falla, revisar
+   que el secret coincida en ambos lados y que se use el body crudo.
 
 ## Bloqueos actuales
 
