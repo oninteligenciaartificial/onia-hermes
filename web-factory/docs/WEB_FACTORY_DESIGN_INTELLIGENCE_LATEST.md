@@ -1,12 +1,12 @@
 # Web Factory Design Intelligence
 
-Generated: 2026-06-30T19:21:57.957Z
+Generated: 2026-07-03T20:49:19.815Z
 
 ## Summary
 
-- Sources: 23
-- Opened examples: 90
-- Screenshots indexed: 180
+- Sources: 25
+- Opened examples: 91
+- Screenshots indexed: 182
 - Doc code blocks indexed: 32
 - Reusable code repositories: 11
 
@@ -31,11 +31,10 @@ Generated: 2026-06-30T19:21:57.957Z
 
 ## Motion Code Repositories
 
-- harshjdhv__componentry: 8 motion examples, license: MIT
-- ibelick__motion-primitives: 18 motion examples, license: MIT
-- markmead__hyperui: 2 motion examples, license: MIT
-- nolly-studio__cult-ui: 5 motion examples, license: MIT
-- serafimcloud__21st: 2 motion examples, license: MIT
+- harshjdhv__componentry: 1 motion examples, license: MIT
+- ibelick__motion-primitives: 2 motion examples, license: MIT
+- nolly-studio__cult-ui: 3 motion examples, license: MIT
+- serafimcloud__21st: 1 motion examples, license: MIT
 
 ## Font Signals
 

@@ -1,14 +1,14 @@
 {
-  "generatedAt": "2026-06-30T19:21:57.957Z",
+  "generatedAt": "2026-07-03T20:49:19.815Z",
   "policy": "Use this as design intelligence, not as a copy source. Screenshots and closed-site structures are inspiration only. Reuse code only from allowed-after-review repositories after retokenization and QA.",
   "inputs": {
     "gallery": "data/references/design-sources/gallery-examples/latest-gallery-examples.json",
-    "code": "data/references/code-sources/latest-component-code-examples.json"
+    "code": "data/references/code-sources/2026-07-03T20-48-52-800Z-component-code-reference-pack.json"
   },
   "summary": {
-    "sources": 23,
-    "examples": 90,
-    "screenshots": 180,
+    "sources": 25,
+    "examples": 91,
+    "screenshots": 182,
     "codeBlocksFromDocs": 32,
     "reusableCodeRepositories": 11
   },
@@ -1165,6 +1165,21 @@
       ]
     },
     {
+      "id": "shadcn-charts",
+      "name": "shadcn/ui Charts",
+      "url": "https://ui.shadcn.com/charts",
+      "mode": "chart-block-gallery",
+      "licenseStatus": "mit-repo-available",
+      "usage": "MIT Recharts-based chart blocks (area, bar, line, pie, radar, radial) with tooltip variants. Prefer the local MIT repo or shadcn registry install.",
+      "candidates": 0,
+      "examples": 0,
+      "codeBlocks": 0,
+      "screenshots": 0,
+      "topFonts": [],
+      "animationLibraries": [],
+      "topCtas": []
+    },
+    {
       "id": "shadcn-ui",
       "name": "shadcn/ui",
       "url": "https://ui.shadcn.com/blocks",
@@ -1282,6 +1297,67 @@
         {
           "value": "templates",
           "count": 3
+        }
+      ]
+    },
+    {
+      "id": "tremor-dashboard-components",
+      "name": "Tremor",
+      "url": "https://www.tremor.so/",
+      "mode": "dashboard-component-library",
+      "licenseStatus": "apache-2.0-open-source",
+      "usage": "Dashboard and chart component taxonomy: KPI cards, area/bar/line charts, tables and filters. Apache-2.0, so code is reusable after review; prefer the local repo or npm install.",
+      "candidates": 3,
+      "examples": 1,
+      "codeBlocks": 0,
+      "screenshots": 2,
+      "topFonts": [
+        {
+          "value": "__Inter_f367f3, __Inter_Fallback_f367f3",
+          "count": 1
+        }
+      ],
+      "animationLibraries": [],
+      "topCtas": [
+        {
+          "value": "advanced tables",
+          "count": 1
+        },
+        {
+          "value": "blocks",
+          "count": 1
+        },
+        {
+          "value": "deploy to vercel",
+          "count": 1
+        },
+        {
+          "value": "download .zip file",
+          "count": 1
+        },
+        {
+          "value": "getting started",
+          "count": 1
+        },
+        {
+          "value": "go to github repository",
+          "count": 1
+        },
+        {
+          "value": "live preview",
+          "count": 1
+        },
+        {
+          "value": "open main menu",
+          "count": 1
+        },
+        {
+          "value": "templates",
+          "count": 1
+        },
+        {
+          "value": "tremor",
+          "count": 1
         }
       ]
     },
@@ -1413,6 +1489,10 @@
         "count": 2
       },
       {
+        "value": "__Inter_f367f3, __Inter_Fallback_f367f3",
+        "count": 1
+      },
+      {
         "value": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\"",
         "count": 1
       },
@@ -1432,7 +1512,7 @@
     "ctas": [
       {
         "value": "blocks",
-        "count": 37
+        "count": 38
       },
       {
         "value": "components",
@@ -1472,7 +1552,7 @@
       },
       {
         "value": "templates",
-        "count": 17
+        "count": 18
       },
       {
         "value": "animated",
@@ -1499,6 +1579,10 @@
         "count": 12
       },
       {
+        "value": "open main menu",
+        "count": 11
+      },
+      {
         "value": "toggle menu",
         "count": 11
       },
@@ -1521,10 +1605,6 @@
       {
         "value": "lapa ninja - go to homepage",
         "count": 10
-      },
-      {
-        "value": "minimal3049",
-        "count": 10
       }
     ],
     "animationLibraries": [
@@ -1536,7 +1616,7 @@
     "technologies": [
       {
         "value": "hasNextAssets",
-        "count": 17
+        "count": 18
       },
       {
         "value": "hasViteAssets",
@@ -1960,6 +2040,130 @@
         {
           "url": "https://github.com/shadcnblocks/shadcn-ui-blocks",
           "text": "360"
+        }
+      ],
+      "codeBlockCount": 0,
+      "qualityWarnings": []
+    },
+    {
+      "sourceId": "tremor-dashboard-components",
+      "sourceName": "Tremor",
+      "licenseStatus": "apache-2.0-open-source",
+      "url": "https://blocks.tremor.so/templates",
+      "title": "Tremor Blocks – Official Tremor Templates",
+      "description": "Beautiful blocks to build dashboard and charts even faster. Created with React and Tailwind CSS.",
+      "reuseGuidance": "Dashboard and chart component taxonomy: KPI cards, area/bar/line charts, tables and filters. Apache-2.0, so code is reusable after review; prefer the local repo or npm install.",
+      "screenshots": {
+        "desktop": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/tremor-dashboard-components/010-dashboard-template-8ff68d73/desktop.png",
+          "sha256": "d6035bee85a6962037017bb8513676c8e7e7519685ba015ee074ef88b5b1417e",
+          "mode": "viewport"
+        },
+        "mobile": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/tremor-dashboard-components/010-dashboard-template-8ff68d73/mobile.png",
+          "sha256": "28fc9806f6fa444695dca81eba65c6cd97aff4f91abc8de8612400ea1f26abe1",
+          "mode": "viewport"
+        }
+      },
+      "headings": [
+        {
+          "level": "h1",
+          "text": "Beautiful website templates built with Tailwind CSS"
+        },
+        {
+          "level": "h2",
+          "text": "«Planner»"
+        },
+        {
+          "level": "h2",
+          "text": "«Solar»"
+        },
+        {
+          "level": "h2",
+          "text": "«Overview»"
+        },
+        {
+          "level": "h2",
+          "text": "«Insights»"
+        },
+        {
+          "level": "h2",
+          "text": "«Dashboard»"
+        }
+      ],
+      "ctas": [
+        "Tremor is joining Vercel. Read more about our journey",
+        "Tremor Logo and Home Link",
+        "Tremor",
+        "Blocks",
+        "Templates",
+        "Getting Started",
+        "Go to GitHub Repository",
+        "Open main menu",
+        "Live preview",
+        "Download .zip file",
+        "Deploy to Vercel",
+        "Advanced tables"
+      ],
+      "topFonts": [
+        "__Inter_f367f3, __Inter_Fallback_f367f3"
+      ],
+      "animationSignals": {
+        "libraries": {
+          "framerMotion": false,
+          "gsap": false,
+          "three": false,
+          "lottie": false,
+          "locomotiveScroll": false
+        },
+        "animatedElementCount": 97,
+        "keyframes": [
+          "ping",
+          "fade-up",
+          "flash",
+          "pulse",
+          "spin",
+          "draw",
+          "slideUpFade",
+          "shimmer",
+          "accordionClose",
+          "hide",
+          "accordionOpen",
+          "dialogContentShow"
+        ]
+      },
+      "codeLinks": [
+        {
+          "url": "https://github.com/tremorlabs/tremor-blocks",
+          "text": ""
+        },
+        {
+          "url": "https://github.com/tremorlabs/template-planner/archive/refs/heads/main.zip",
+          "text": "Download .zip file"
+        },
+        {
+          "url": "https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Ftremorlabs%2Ftemplate-planner&project-name=template-planner&repository-name=template-planner&demo-title=Planner&demo-description=Dashboard+Template+for+SaaS+or+Internal+Tool&demo-url=https%3A%2F%2Fplanner.tremor.so",
+          "text": "Deploy to Vercel"
+        },
+        {
+          "url": "https://github.com/tremorlabs/template-solar/archive/refs/heads/main.zip",
+          "text": "Download .zip file"
+        },
+        {
+          "url": "https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Ftremorlabs%2Ftemplate-solar&project-name=template-solar&repository-name=template-solar&demo-title=Solar&demo-description=SaaS+Marketing+Website&demo-url=https%3A%2F%2Fsolar.tremor.so",
+          "text": "Deploy to Vercel"
+        },
+        {
+          "url": "https://github.com/tremorlabs/template-overview/archive/refs/heads/main.zip",
+          "text": "Download .zip file"
+        },
+        {
+          "url": "https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Ftremorlabs%2Ftemplate-overview&project-name=template-overview&repository-name=template-overview&demo-title=Overview&demo-description=Template+featuring+dashboard+overview+pages&demo-url=https%3A%2F%2Foverview.tremor.so",
+          "text": "Deploy to Vercel"
+        },
+        {
+          "url": "https://github.com/tremorlabs/template-insights/archive/refs/heads/main.zip",
+          "text": "Download .zip file"
         }
       ],
       "codeBlockCount": 0,
@@ -6412,64 +6616,6 @@
       "codeLinks": [],
       "codeBlockCount": 0,
       "qualityWarnings": []
-    },
-    {
-      "sourceId": "fontpair",
-      "sourceName": "Fontpair",
-      "licenseStatus": "typography-reference",
-      "url": "https://fontpair.co/inspiration",
-      "title": "Typography Inspiration — Real-World Font Examples | Fontpair",
-      "description": "See real-world typography inspiration from top websites using curated font pairings.",
-      "reuseGuidance": "Font-pair inspiration and typographic mood extraction. Check font licenses before use.",
-      "screenshots": {
-        "desktop": {
-          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/fontpair/090-fontpair-a91e10f4/desktop.png",
-          "sha256": "e277065a0d6c2b2bb9ad535691f1dc0db480a459a708507363c3226839c894a6",
-          "mode": "viewport"
-        },
-        "mobile": {
-          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/fontpair/090-fontpair-a91e10f4/mobile.png",
-          "sha256": "b907da73d7ab23ab68a0e108ff1fa93f86bec43a9554e575c6168d94d611a8ae",
-          "mode": "viewport"
-        }
-      },
-      "headings": [
-        {
-          "level": "h1",
-          "text": "Fonts In Use"
-        },
-        {
-          "level": "h2",
-          "text": "Join 25,000+ designers choosing fonts with confidence"
-        },
-        {
-          "level": "h3",
-          "text": "Fontpair"
-        }
-      ],
-      "ctas": [
-        "Playground",
-        "Pairings",
-        "Fonts",
-        "Inspiration",
-        "Resources",
-        "Login",
-        "Sign Up",
-        "Go Pro",
-        "Settings",
-        "Toggle mobile menu",
-        "Inspiration",
-        "Typography"
-      ],
-      "topFonts": [],
-      "animationSignals": {
-        "libraries": {},
-        "animatedElementCount": 0,
-        "keyframes": []
-      },
-      "codeLinks": [],
-      "codeBlockCount": 0,
-      "qualityWarnings": []
     }
   ],
   "reusableCodeRepositories": [
@@ -6477,79 +6623,79 @@
       "name": "harshjdhv__componentry",
       "license": "MIT",
       "localPath": "C:/Users/PC/.codex/design-stack/repos/harshjdhv__componentry",
-      "selectedExamples": 24,
-      "motionExamples": 8,
-      "shadcnExamples": 8,
-      "tailwindExamples": 18
+      "selectedExamples": 8,
+      "motionExamples": 1,
+      "shadcnExamples": 3,
+      "tailwindExamples": 5
     },
     {
       "name": "ibelick__motion-primitives",
       "license": "MIT",
       "localPath": "C:/Users/PC/.codex/design-stack/repos/ibelick__motion-primitives",
-      "selectedExamples": 24,
-      "motionExamples": 18,
-      "shadcnExamples": 10,
-      "tailwindExamples": 9
+      "selectedExamples": 8,
+      "motionExamples": 2,
+      "shadcnExamples": 3,
+      "tailwindExamples": 2
     },
     {
       "name": "launch-ui__launch-ui",
       "license": "MIT",
       "localPath": "C:/Users/PC/.codex/design-stack/repos/launch-ui__launch-ui",
-      "selectedExamples": 24,
+      "selectedExamples": 8,
       "motionExamples": 0,
-      "shadcnExamples": 10,
-      "tailwindExamples": 9
+      "shadcnExamples": 4,
+      "tailwindExamples": 2
     },
     {
       "name": "magicuidesign__magicui",
       "license": "MIT",
       "localPath": "C:/Users/PC/.codex/design-stack/repos/magicuidesign__magicui",
-      "selectedExamples": 24,
+      "selectedExamples": 8,
       "motionExamples": 0,
-      "shadcnExamples": 12,
-      "tailwindExamples": 12
+      "shadcnExamples": 6,
+      "tailwindExamples": 4
     },
     {
       "name": "markmead__hyperui",
       "license": "MIT",
       "localPath": "C:/Users/PC/.codex/design-stack/repos/markmead__hyperui",
-      "selectedExamples": 24,
-      "motionExamples": 2,
-      "shadcnExamples": 11,
-      "tailwindExamples": 6
+      "selectedExamples": 8,
+      "motionExamples": 0,
+      "shadcnExamples": 5,
+      "tailwindExamples": 3
     },
     {
       "name": "nolly-studio__cult-ui",
       "license": "MIT",
       "localPath": "C:/Users/PC/.codex/design-stack/repos/nolly-studio__cult-ui",
-      "selectedExamples": 24,
-      "motionExamples": 5,
-      "shadcnExamples": 15,
-      "tailwindExamples": 15
+      "selectedExamples": 8,
+      "motionExamples": 3,
+      "shadcnExamples": 4,
+      "tailwindExamples": 7
     },
     {
       "name": "serafimcloud__21st",
       "license": "MIT",
       "localPath": "C:/Users/PC/.codex/design-stack/repos/serafimcloud__21st",
-      "selectedExamples": 24,
-      "motionExamples": 2,
-      "shadcnExamples": 15,
-      "tailwindExamples": 16
+      "selectedExamples": 8,
+      "motionExamples": 1,
+      "shadcnExamples": 7,
+      "tailwindExamples": 7
     },
     {
       "name": "shadcn-ui__ui",
       "license": "MIT",
       "localPath": "C:/Users/PC/.codex/design-stack/repos/shadcn-ui__ui",
-      "selectedExamples": 24,
+      "selectedExamples": 8,
       "motionExamples": 0,
-      "shadcnExamples": 11,
-      "tailwindExamples": 22
+      "shadcnExamples": 5,
+      "tailwindExamples": 7
     },
     {
       "name": "tailwindlabs__headlessui",
       "license": "MIT",
       "localPath": "C:/Users/PC/.codex/design-stack/repos/tailwindlabs__headlessui",
-      "selectedExamples": 24,
+      "selectedExamples": 8,
       "motionExamples": 0,
       "shadcnExamples": 0,
       "tailwindExamples": 0
@@ -6558,10 +6704,10 @@
       "name": "tremorlabs__tremor",
       "license": "MIT",
       "localPath": "C:/Users/PC/.codex/design-stack/repos/tremorlabs__tremor",
-      "selectedExamples": 24,
+      "selectedExamples": 8,
       "motionExamples": 0,
-      "shadcnExamples": 9,
-      "tailwindExamples": 20
+      "shadcnExamples": 3,
+      "tailwindExamples": 7
     },
     {
       "name": "nextlevelbuilder__ui-ux-pro-max-skill",

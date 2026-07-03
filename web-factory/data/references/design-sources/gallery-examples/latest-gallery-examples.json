@@ -1,5 +1,5 @@
 {
-  "capturedAt": "2026-06-30T19:21:36.389Z",
+  "capturedAt": "2026-07-03T20:49:19.693Z",
   "policy": "Merged Web Factory gallery index. Use candidates for design intelligence; use examples for deeper screenshots/code. Respect licenseStatus before code reuse.",
   "inputDir": "data/references/design-sources/gallery-examples",
   "inputs": [
@@ -21,6 +21,7 @@
     "data/references/design-sources/gallery-examples/2026-06-28T19-30-18-638Z-design-harvest.json",
     "data/references/design-sources/gallery-examples/2026-06-28T19-35-remaining-design-harvest.json",
     "data/references/design-sources/gallery-examples/2026-06-29T18-57-44-663Z-design-harvest.json",
+    "data/references/design-sources/gallery-examples/2026-06-30T19-18-26-995Z-design-harvest.json",
     "data/references/design-sources/gallery-examples/21st-community-components.json",
     "data/references/design-sources/gallery-examples/componentry.json",
     "data/references/design-sources/gallery-examples/dribbble-axion.json",
@@ -30,12 +31,12 @@
     "data/references/design-sources/gallery-examples/motion-primitives.json",
     "data/references/design-sources/gallery-examples/shadcn-ui.json",
     "data/references/design-sources/gallery-examples/watermelon-ui.json",
-    "data/references/design-sources/gallery-examples/2026-06-30T19-18-26-995Z-design-harvest.json"
+    "data/references/design-sources/gallery-examples/2026-07-03T20-48-52-800Z-design-harvest.json"
   ],
   "summary": {
-    "sources": 23,
-    "candidates": 381,
-    "detailedExamples": 90,
+    "sources": 25,
+    "candidates": 384,
+    "detailedExamples": 91,
     "errors": 0,
     "codeBlocks": 32
   },
@@ -63048,6 +63049,50 @@
       "mergedFrom": "data/references/design-sources/gallery-examples/2026-06-24-resource-reference-pack.json"
     },
     {
+      "id": "shadcn-charts",
+      "name": "shadcn/ui Charts",
+      "url": "https://ui.shadcn.com/charts",
+      "mode": "chart-block-gallery",
+      "usage": "MIT Recharts-based chart blocks (area, bar, line, pie, radar, radial) with tooltip variants. Prefer the local MIT repo or shadcn registry install.",
+      "licenseStatus": "mit-repo-available",
+      "status": 200,
+      "failedRequestCount": 0,
+      "rawCandidateCount": 6,
+      "selectedCandidateCount": 0,
+      "detailedExampleCount": 0,
+      "candidates": [],
+      "screenshot": {
+        "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/shadcn-charts/gallery.png",
+        "sha256": "e652168063fac0292cb2eae1fbf43f62e7377835a545349d29a3ab67cfc41459",
+        "mode": "full-page"
+      },
+      "screenshotQuality": {
+        "viewport": {
+          "width": 1440,
+          "height": 1000
+        },
+        "textLength": 738,
+        "mediaCount": 26,
+        "codeCount": 0,
+        "headingCount": 2,
+        "usefulElementCount": 33,
+        "visibleAreaRatio": 1.843,
+        "isLikelySparse": false,
+        "visibleSamples": [
+          "Home",
+          "Docs",
+          "Components",
+          "Blocks",
+          "Charts",
+          "Directory",
+          "Create",
+          "Search documentation...Search..."
+        ]
+      },
+      "examples": [],
+      "mergedFrom": "data/references/design-sources/gallery-examples/2026-07-03T20-48-52-800Z-design-harvest.json"
+    },
+    {
       "id": "shadcn-ui",
       "name": "shadcn/ui",
       "url": "https://ui.shadcn.com/blocks",
@@ -71216,6 +71261,1947 @@
         }
       ],
       "mergedFrom": "data/references/design-sources/gallery-examples/2026-06-29T18-57-44-663Z-design-harvest.json"
+    },
+    {
+      "id": "tremor-dashboard-components",
+      "name": "Tremor",
+      "url": "https://www.tremor.so/",
+      "mode": "dashboard-component-library",
+      "usage": "Dashboard and chart component taxonomy: KPI cards, area/bar/line charts, tables and filters. Apache-2.0, so code is reusable after review; prefer the local repo or npm install.",
+      "licenseStatus": "apache-2.0-open-source",
+      "status": 200,
+      "failedRequestCount": 0,
+      "rawCandidateCount": 17,
+      "selectedCandidateCount": 3,
+      "detailedExampleCount": 1,
+      "candidates": [
+        {
+          "index": 10,
+          "url": "https://blocks.tremor.so/templates",
+          "text": "Dashboard Template Analytical interfaces that allow your audience to better understand their data. Drive revenue and provide an advanced dat",
+          "heading": "Dashboard Template",
+          "description": "Dashboard TemplateAnalytical interfaces that allow your audience to better understand their data. Drive revenue and provide an advanced data visualization experience.View TemplateSaaS Marketing WebsiteLaunch your next idea with a beautiful website template.View TemplateReport PagesOverview dashboard pages to summarize data.View TemplateSaaS TemplateFeed and ",
+          "imageSrc": "https://www.tremor.so/_next/image?url=%2Fimages%2Fhome%2Fdashboard.webp&w=3840&q=75&dpl=dpl_HNgBxhvh5SZCJAbDJ3ZX3eMffMCF",
+          "imageAlt": "Screenshot of dashboard template",
+          "buttonText": [
+            "Dashboard TemplateAnalytical interfaces that allow your audience to better understand their data. Drive revenue and provide an advanced data visualization experience.View Template",
+            "View Template",
+            "SaaS Marketing WebsiteLaunch your next idea with a beautiful website template.View Template",
+            "View Template",
+            "Report PagesOverview dashboard pages to summarize data.View Template",
+            "View Template",
+            "SaaS TemplateFeed and track your data in the best way possible. Everything you need to build your first data application.View Template",
+            "View Template"
+          ],
+          "tags": [],
+          "cardArea": 2225641,
+          "score": 12,
+          "sourceMode": "dashboard-component-library"
+        },
+        {
+          "index": 4,
+          "url": "https://blocks.tremor.so/",
+          "text": "Blocks & Templates",
+          "heading": "",
+          "description": "ComponentsChartsBlocks & TemplatesDocs",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [
+            "Components",
+            "Charts",
+            "Blocks & Templates",
+            "Docs"
+          ],
+          "tags": [],
+          "cardArea": 11718,
+          "score": 7,
+          "sourceMode": "dashboard-component-library"
+        },
+        {
+          "index": 2,
+          "url": "https://www.tremor.so/docs/visualizations/area-chart",
+          "text": "Components",
+          "heading": "",
+          "description": "ComponentsChartsBlocks & TemplatesDocs",
+          "imageSrc": "",
+          "imageAlt": "",
+          "buttonText": [
+            "Components",
+            "Charts",
+            "Blocks & Templates",
+            "Docs"
+          ],
+          "tags": [],
+          "cardArea": 11718,
+          "score": 5,
+          "sourceMode": "dashboard-component-library"
+        }
+      ],
+      "screenshot": {
+        "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/tremor-dashboard-components/gallery.png",
+        "sha256": "a8be0069fc0bb641ed0d9e1527077559e21e4594cbfbd61e9dbd28db9cc11c2d",
+        "mode": "full-page"
+      },
+      "screenshotQuality": {
+        "viewport": {
+          "width": 1440,
+          "height": 1000
+        },
+        "textLength": 12555,
+        "mediaCount": 56,
+        "codeCount": 4,
+        "headingCount": 24,
+        "usefulElementCount": 26,
+        "visibleAreaRatio": 2.12,
+        "isLikelySparse": false,
+        "visibleSamples": [
+          "Tremor is joining Vercel. Read more about our journey",
+          "Components",
+          "Charts",
+          "Blocks & Templates",
+          "Docs",
+          "NewBuild faster with 300+ Premium BlocksBuilt forReactTailwind CSSReact components to build charts and dashboardsself.__",
+          "NewBuild faster with 300+ Premium BlocksBuilt forReactTailwind CSSReact components to build charts and dashboardsself.__",
+          "React components to build charts and dashboardsself.__wrap_n=self.__wrap_n||(self.CSS&&CSS.supports(\"text-wrap\",\"balance"
+        ]
+      },
+      "examples": [
+        {
+          "sourceId": "tremor-dashboard-components",
+          "url": "https://blocks.tremor.so/templates",
+          "status": 200,
+          "licenseStatus": "apache-2.0-open-source",
+          "reuseGuidance": "Dashboard and chart component taxonomy: KPI cards, area/bar/line charts, tables and filters. Apache-2.0, so code is reusable after review; prefer the local repo or npm install.",
+          "candidate": {
+            "index": 10,
+            "url": "https://blocks.tremor.so/templates",
+            "text": "Dashboard Template Analytical interfaces that allow your audience to better understand their data. Drive revenue and provide an advanced dat",
+            "heading": "Dashboard Template",
+            "description": "Dashboard TemplateAnalytical interfaces that allow your audience to better understand their data. Drive revenue and provide an advanced data visualization experience.View TemplateSaaS Marketing WebsiteLaunch your next idea with a beautiful website template.View TemplateReport PagesOverview dashboard pages to summarize data.View TemplateSaaS TemplateFeed and ",
+            "imageSrc": "https://www.tremor.so/_next/image?url=%2Fimages%2Fhome%2Fdashboard.webp&w=3840&q=75&dpl=dpl_HNgBxhvh5SZCJAbDJ3ZX3eMffMCF",
+            "imageAlt": "Screenshot of dashboard template",
+            "buttonText": [
+              "Dashboard TemplateAnalytical interfaces that allow your audience to better understand their data. Drive revenue and provide an advanced data visualization experience.View Template",
+              "View Template",
+              "SaaS Marketing WebsiteLaunch your next idea with a beautiful website template.View Template",
+              "View Template",
+              "Report PagesOverview dashboard pages to summarize data.View Template",
+              "View Template",
+              "SaaS TemplateFeed and track your data in the best way possible. Everything you need to build your first data application.View Template",
+              "View Template"
+            ],
+            "tags": [],
+            "cardArea": 2225641,
+            "score": 12,
+            "sourceMode": "dashboard-component-library"
+          },
+          "screenshots": {
+            "desktop": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/tremor-dashboard-components/010-dashboard-template-8ff68d73/desktop.png",
+              "sha256": "d6035bee85a6962037017bb8513676c8e7e7519685ba015ee074ef88b5b1417e",
+              "mode": "viewport"
+            },
+            "mobile": {
+              "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/tremor-dashboard-components/010-dashboard-template-8ff68d73/mobile.png",
+              "sha256": "28fc9806f6fa444695dca81eba65c6cd97aff4f91abc8de8612400ea1f26abe1",
+              "mode": "viewport"
+            }
+          },
+          "screenshotQuality": {
+            "desktop": {
+              "viewport": {
+                "width": 1440,
+                "height": 1000
+              },
+              "textLength": 5741,
+              "mediaCount": 60,
+              "codeCount": 0,
+              "headingCount": 14,
+              "usefulElementCount": 29,
+              "visibleAreaRatio": 1.125,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Tremor is joining Vercel. Read more about our journey",
+                "Tremor",
+                "Blocks",
+                "Templates",
+                "Getting Started",
+                "Tailwind CSS TemplatesBeautiful website templates built with Tailwind CSSWebsite templates crafted with React, Next.js a",
+                "Beautiful website templates built with Tailwind CSS",
+                "«Planner» Dashboard Template for SaaS or Internal ToolLive previewDownload .zip fileDeploy to VercelAdvanced tablesInter"
+              ]
+            },
+            "mobile": {
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "textLength": 5695,
+              "mediaCount": 60,
+              "codeCount": 0,
+              "headingCount": 14,
+              "usefulElementCount": 22,
+              "visibleAreaRatio": 1.276,
+              "isLikelySparse": false,
+              "visibleSamples": [
+                "Tremor is joining Vercel. Read more about our journey",
+                "Tremor",
+                "Open main menu",
+                "Tailwind CSS TemplatesBeautiful website templates built with Tailwind CSSWebsite templates crafted with React, Next.js a",
+                "Beautiful website templates built with Tailwind CSS",
+                "«Planner» Dashboard Template for SaaS or Internal ToolLive previewDownload .zip fileDeploy to VercelAdvanced tablesInter",
+                "«Planner»",
+                "Live preview"
+              ]
+            }
+          },
+          "qualityWarnings": [],
+          "failedRequestCount": 0,
+          "title": "Tremor Blocks – Official Tremor Templates",
+          "description": "Beautiful blocks to build dashboard and charts even faster. Created with React and Tailwind CSS.",
+          "headings": [
+            {
+              "level": "h1",
+              "text": "Beautiful website templates built with Tailwind CSS"
+            },
+            {
+              "level": "h2",
+              "text": "«Planner»"
+            },
+            {
+              "level": "h2",
+              "text": "«Solar»"
+            },
+            {
+              "level": "h2",
+              "text": "«Overview»"
+            },
+            {
+              "level": "h2",
+              "text": "«Insights»"
+            },
+            {
+              "level": "h2",
+              "text": "«Dashboard»"
+            },
+            {
+              "level": "h2",
+              "text": "«Database»"
+            },
+            {
+              "level": "h2",
+              "text": "Footer"
+            },
+            {
+              "level": "h3",
+              "text": "Charts & Helpers"
+            },
+            {
+              "level": "h3",
+              "text": "Advanced Visualizations"
+            },
+            {
+              "level": "h3",
+              "text": "Inputs & Forms"
+            },
+            {
+              "level": "h3",
+              "text": "Tables"
+            },
+            {
+              "level": "h3",
+              "text": "Layout & Forms"
+            },
+            {
+              "level": "h3",
+              "text": "Marketing"
+            }
+          ],
+          "sections": [
+            {
+              "index": 0,
+              "heading": "Beautiful website templates built with Tailwind CSS",
+              "textSample": "Tailwind CSS TemplatesBeautiful website templates built with Tailwind CSSWebsite templates crafted with React, Next.js and Tailwind CSS. Ideal for launching your next project with a modern tech stack.self.__wrap_n=self.__wrap_n||(self.CSS&&CSS.supports(\"text-wrap\",\"balance\")?1:2);self.__wrap_b=(a,t,e)=>{let r=null==(e=",
+              "imageCount": 0,
+              "buttonCount": 0
+            },
+            {
+              "index": 1,
+              "heading": "«Planner»",
+              "textSample": "«Planner» Dashboard Template for SaaS or Internal ToolLive previewDownload .zip fileDeploy to VercelAdvanced tablesInteractive charts & custom tooltipsPowerful layout elementsBuilt with modern tools. Work with data easily.«Planner» is the perfect template for visualizing simple data. Build your first reporting tool or ",
+              "imageCount": 6,
+              "buttonCount": 6
+            },
+            {
+              "index": 2,
+              "heading": "«Solar»",
+              "textSample": "«Solar» SaaS Marketing WebsiteLive previewDownload .zip fileDeploy to VercelHero SectionProduct featuresHeader sectionsCTA sectionsAnimated SVG illustrationsGridline layoutBuilt with modern tools. Created to amaze.«Solar» is a simple one-page website equipped with everything you need to captivate your audience and show",
+              "imageCount": 9,
+              "buttonCount": 9
+            },
+            {
+              "index": 3,
+              "heading": "«Overview»",
+              "textSample": "«Overview» Template featuring dashboard overview pagesLive previewDownload .zip fileDeploy to VercelKPI OverviewRetention chartScenario analysisDark modeNotifications panelAdvanced charts & tablesBuilt with modern tools. Summarize data better.«Overview» offers 4 different dashboards pages to show data with advanced vis",
+              "imageCount": 9,
+              "buttonCount": 9
+            },
+            {
+              "index": 4,
+              "heading": "«Insights»",
+              "textSample": "«Insights» Template for feeding and tracking dataLive previewDownload .zip fileDeploy to VercelUser onboardingInteractive charts & filterbar with URL paramsLogin managementDark modeTable with input drawerSettings & user managementBuilt with modern tools. Provide better insights.«Insights» is the perfect template for fe",
+              "imageCount": 9,
+              "buttonCount": 9
+            },
+            {
+              "index": 5,
+              "heading": "«Dashboard»",
+              "textSample": "«Dashboard» Dashboard Template for SaaS or Internal ToolLive previewDownload .zip fileDeploy to VercelInteractive charts & statsTable filtering & bulk editBilling & cost managementDrag-and-drop capabilitiesSettings & user managementDark modeBuilt with modern tools. Present data more clearly.«Dashboard» is the perfect t",
+              "imageCount": 9,
+              "buttonCount": 9
+            },
+            {
+              "index": 6,
+              "heading": "«Database»",
+              "textSample": "«Database» SaaS Marketing WebsiteLive previewDownload .zip fileDeploy to VercelLanding pageAbout pagePricing tableChangelogCode HighlighterDark modeBuilt with modern tools. Designed to impress.«Database» is the perfect template for launching your next SaaS, Dev Tool or anything related to it. It's based on Next.js with",
+              "imageCount": 9,
+              "buttonCount": 9
+            }
+          ],
+          "ctas": [
+            "Tremor is joining Vercel. Read more about our journey",
+            "Tremor Logo and Home Link",
+            "Tremor",
+            "Blocks",
+            "Templates",
+            "Getting Started",
+            "Go to GitHub Repository",
+            "Open main menu",
+            "Live preview",
+            "Download .zip file",
+            "Deploy to Vercel",
+            "Advanced tables",
+            "Interactive charts & custom tooltips",
+            "Powerful layout elements",
+            "Live preview",
+            "Download .zip file",
+            "Deploy to Vercel",
+            "Hero Section",
+            "Product features",
+            "Header sections",
+            "CTA sections",
+            "Animated SVG illustrations",
+            "Gridline layout",
+            "Live preview",
+            "Download .zip file",
+            "Deploy to Vercel",
+            "KPI Overview",
+            "Retention chart",
+            "Scenario analysis",
+            "Dark mode",
+            "Notifications panel",
+            "Advanced charts & tables",
+            "Live preview",
+            "Download .zip file",
+            "Deploy to Vercel",
+            "User onboarding",
+            "Interactive charts & filterbar with URL params",
+            "Login management",
+            "Dark mode",
+            "Table with input drawer",
+            "Settings & user management",
+            "Live preview",
+            "Download .zip file",
+            "Deploy to Vercel",
+            "Interactive charts & stats",
+            "Table filtering & bulk edit",
+            "Billing & cost management",
+            "Drag-and-drop capabilities",
+            "Settings & user management",
+            "Dark mode"
+          ],
+          "palette": [
+            "rgb(0, 0, 0)",
+            "rgb(229, 231, 235)",
+            "rgba(255, 255, 255, 0.9)",
+            "rgb(226, 232, 240)",
+            "rgb(255, 255, 255)",
+            "rgb(17, 24, 39)",
+            "rgb(243, 244, 246)",
+            "rgb(209, 213, 219)",
+            "rgb(15, 23, 42)",
+            "rgb(51, 65, 85)",
+            "rgb(75, 85, 99)"
+          ],
+          "layoutSignals": {
+            "hasNav": true,
+            "hasHero": true,
+            "hasPricing": true,
+            "hasTestimonials": true,
+            "hasFAQ": false,
+            "hasVideo": false,
+            "cardLikeCount": 0,
+            "imageCount": 35,
+            "buttonCount": 93,
+            "formCount": 0
+          },
+          "htmlOutline": {
+            "language": "en",
+            "bodyClasses": [
+              "__className_f367f3"
+            ],
+            "semanticLandmarks": [
+              {
+                "index": 0,
+                "tag": "header",
+                "id": "",
+                "classes": [
+                  "sticky",
+                  "top-0",
+                  "z-50",
+                  "border-b",
+                  "border-slate-200",
+                  "bg-white/90",
+                  "backdrop-blur-lg"
+                ],
+                "heading": "",
+                "textSample": "Tremor is joining Vercel. Read more about our journeyTremorBlocksTemplatesGetting StartedOpen main menu",
+                "linkCount": 6,
+                "buttonCount": 2,
+                "formControlCount": 0,
+                "mediaCount": 7
+              },
+              {
+                "index": 1,
+                "tag": "nav",
+                "id": "",
+                "classes": [
+                  "flex",
+                  "space-x-6"
+                ],
+                "heading": "",
+                "textSample": "BlocksTemplatesGetting StartedOpen main menu",
+                "linkCount": 4,
+                "buttonCount": 1,
+                "formControlCount": 0,
+                "mediaCount": 2
+              },
+              {
+                "index": 2,
+                "tag": "section",
+                "id": "templates-header",
+                "classes": [
+                  "mt-8",
+                  "sm:mt-16"
+                ],
+                "heading": "Beautiful website templates built with Tailwind CSS",
+                "textSample": "Tailwind CSS TemplatesBeautiful website templates built with Tailwind CSSWebsite templates crafted with React, Next.js and Tailwind CSS. Ideal for launching your next project with a modern tech stack.self.__wrap_n=self._",
+                "linkCount": 0,
+                "buttonCount": 0,
+                "formControlCount": 0,
+                "mediaCount": 0
+              },
+              {
+                "index": 3,
+                "tag": "section",
+                "id": "template-planner",
+                "classes": [
+                  "mt-24",
+                  "scroll-mt-20"
+                ],
+                "heading": "«Planner»",
+                "textSample": "«Planner» Dashboard Template for SaaS or Internal ToolLive previewDownload .zip fileDeploy to VercelAdvanced tablesInteractive charts & custom tooltipsPowerful layout elementsBuilt with modern tools. Work with data easil",
+                "linkCount": 6,
+                "buttonCount": 0,
+                "formControlCount": 0,
+                "mediaCount": 6
+              },
+              {
+                "index": 4,
+                "tag": "section",
+                "id": "template-solar",
+                "classes": [
+                  "mt-24",
+                  "scroll-mt-20"
+                ],
+                "heading": "«Solar»",
+                "textSample": "«Solar» SaaS Marketing WebsiteLive previewDownload .zip fileDeploy to VercelHero SectionProduct featuresHeader sectionsCTA sectionsAnimated SVG illustrationsGridline layoutBuilt with modern tools. Created to amaze.«Solar",
+                "linkCount": 9,
+                "buttonCount": 0,
+                "formControlCount": 0,
+                "mediaCount": 9
+              },
+              {
+                "index": 5,
+                "tag": "section",
+                "id": "template-overview",
+                "classes": [
+                  "mt-24",
+                  "scroll-mt-20"
+                ],
+                "heading": "«Overview»",
+                "textSample": "«Overview» Template featuring dashboard overview pagesLive previewDownload .zip fileDeploy to VercelKPI OverviewRetention chartScenario analysisDark modeNotifications panelAdvanced charts & tablesBuilt with modern tools.",
+                "linkCount": 9,
+                "buttonCount": 0,
+                "formControlCount": 0,
+                "mediaCount": 9
+              },
+              {
+                "index": 6,
+                "tag": "section",
+                "id": "template-insights",
+                "classes": [
+                  "mt-24",
+                  "scroll-mt-20"
+                ],
+                "heading": "«Insights»",
+                "textSample": "«Insights» Template for feeding and tracking dataLive previewDownload .zip fileDeploy to VercelUser onboardingInteractive charts & filterbar with URL paramsLogin managementDark modeTable with input drawerSettings & user ",
+                "linkCount": 9,
+                "buttonCount": 0,
+                "formControlCount": 0,
+                "mediaCount": 9
+              },
+              {
+                "index": 7,
+                "tag": "section",
+                "id": "template-dashboard",
+                "classes": [
+                  "mt-24",
+                  "scroll-mt-20"
+                ],
+                "heading": "«Dashboard»",
+                "textSample": "«Dashboard» Dashboard Template for SaaS or Internal ToolLive previewDownload .zip fileDeploy to VercelInteractive charts & statsTable filtering & bulk editBilling & cost managementDrag-and-drop capabilitiesSettings & use",
+                "linkCount": 9,
+                "buttonCount": 0,
+                "formControlCount": 0,
+                "mediaCount": 9
+              },
+              {
+                "index": 8,
+                "tag": "section",
+                "id": "template-database",
+                "classes": [
+                  "mt-32",
+                  "scroll-mt-20"
+                ],
+                "heading": "«Database»",
+                "textSample": "«Database» SaaS Marketing WebsiteLive previewDownload .zip fileDeploy to VercelLanding pageAbout pagePricing tableChangelogCode HighlighterDark modeBuilt with modern tools. Designed to impress.«Database» is the perfect t",
+                "linkCount": 9,
+                "buttonCount": 0,
+                "formControlCount": 0,
+                "mediaCount": 9
+              },
+              {
+                "index": 9,
+                "tag": "footer",
+                "id": "",
+                "classes": [
+                  "mt-28",
+                  "border-t",
+                  "border-slate-200",
+                  "py-10"
+                ],
+                "heading": "Footer",
+                "textSample": "FooterCharts & HelpersArea ChartsLine ChartsBar ChartsDonut ChartsChart TooltipsAdvanced VisualizationsBar ListsStatus MonitoringSpark ChartsKPI CardsChart CompositionsInputs & FormsStandard FormsFile UploadsTablesStanda",
+                "linkCount": 34,
+                "buttonCount": 0,
+                "formControlCount": 0,
+                "mediaCount": 2
+              }
+            ],
+            "navLinks": [
+              {
+                "text": "Tremor is joining Vercel. Read more about our journey",
+                "href": "https://vercel.com/blog/vercel-acquires-tremor?utm_source=tremor-site&utm_medium=banner&utm_campaign=tremor-acquisition"
+              },
+              {
+                "text": "Tremor Logo and Home Link",
+                "href": "https://blocks.tremor.so/"
+              },
+              {
+                "text": "Blocks",
+                "href": "https://blocks.tremor.so/blocks"
+              },
+              {
+                "text": "Templates",
+                "href": "https://blocks.tremor.so/templates"
+              },
+              {
+                "text": "Getting Started",
+                "href": "https://blocks.tremor.so/getting-started"
+              },
+              {
+                "text": "Go to GitHub Repository",
+                "href": "https://github.com/tremorlabs/tremor-blocks"
+              }
+            ],
+            "forms": []
+          },
+          "resources": {
+            "images": [
+              {
+                "src": "https://blocks.tremor.so/logos/vercel.svg",
+                "currentSrc": "https://blocks.tremor.so/logos/vercel.svg",
+                "srcset": "",
+                "alt": "Vercel wordmark",
+                "width": 83,
+                "height": 64,
+                "loading": "",
+                "sectionHeading": ""
+              },
+              {
+                "src": "https://blocks.tremor.so/_next/image?url=%2Ftemplates%2Fplanner%2Ffirst_page.webp&w=1920&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+                "currentSrc": "https://blocks.tremor.so/_next/image?url=%2Ftemplates%2Fplanner%2Ffirst_page.webp&w=828&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+                "srcset": "/_next/image?url=%2Ftemplates%2Fplanner%2Ffirst_page.webp&w=828&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk 1x, /_next/image?url=%2Ftemplates%2Fplanner%2Ffirst_page.webp&w=1920&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk 2x",
+                "alt": "Website preview thumbnail",
+                "width": 768,
+                "height": 384,
+                "loading": "",
+                "sectionHeading": "«Planner»"
+              },
+              {
+                "src": "https://blocks.tremor.so/_next/image?url=%2Ftemplates%2Fplanner%2Fsecond_page.webp&w=1920&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+                "currentSrc": "https://blocks.tremor.so/_next/image?url=%2Ftemplates%2Fplanner%2Fsecond_page.webp&w=828&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+                "srcset": "/_next/image?url=%2Ftemplates%2Fplanner%2Fsecond_page.webp&w=828&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk 1x, /_next/image?url=%2Ftemplates%2Fplanner%2Fsecond_page.webp&w=1920&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk 2x",
+                "alt": "Website preview thumbnail",
+                "width": 768,
+                "height": 384,
+                "loading": "",
+                "sectionHeading": "«Planner»"
+              },
+              {
+                "src": "https://blocks.tremor.so/_next/image?url=%2Ftemplates%2Fplanner%2Fthird_page.webp&w=1920&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+                "currentSrc": "https://blocks.tremor.so/_next/image?url=%2Ftemplates%2Fplanner%2Fthird_page.webp&w=828&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+                "srcset": "/_next/image?url=%2Ftemplates%2Fplanner%2Fthird_page.webp&w=828&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk 1x, /_next/image?url=%2Ftemplates%2Fplanner%2Fthird_page.webp&w=1920&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk 2x",
+                "alt": "Website preview thumbnail",
+                "width": 768,
+                "height": 384,
+                "loading": "",
+                "sectionHeading": "«Planner»"
+              },
+              {
+                "src": "https://blocks.tremor.so/_next/image?url=%2Ftemplates%2Fsolar%2Flanding_page.webp&w=1920&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+                "currentSrc": "https://blocks.tremor.so/_next/image?url=%2Ftemplates%2Fsolar%2Flanding_page.webp&w=828&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+                "srcset": "/_next/image?url=%2Ftemplates%2Fsolar%2Flanding_page.webp&w=828&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk 1x, /_next/image?url=%2Ftemplates%2Fsolar%2Flanding_page.webp&w=1920&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk 2x",
+                "alt": "Website preview thumbnail",
+                "width": 768,
+                "height": 384,
+                "loading": "",
+                "sectionHeading": "«Solar»"
+              },
+              {
+                "src": "https://blocks.tremor.so/_next/image?url=%2Ftemplates%2Fsolar%2Fchart.webp&w=1920&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+                "currentSrc": "https://blocks.tremor.so/_next/image?url=%2Ftemplates%2Fsolar%2Fchart.webp&w=828&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+                "srcset": "/_next/image?url=%2Ftemplates%2Fsolar%2Fchart.webp&w=828&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk 1x, /_next/image?url=%2Ftemplates%2Fsolar%2Fchart.webp&w=1920&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk 2x",
+                "alt": "Website preview thumbnail",
+                "width": 768,
+                "height": 384,
+                "loading": "",
+                "sectionHeading": "«Solar»"
+              },
+              {
+                "src": "https://blocks.tremor.so/_next/image?url=%2Ftemplates%2Fsolar%2Fillustration_2.webp&w=1920&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+                "currentSrc": "https://blocks.tremor.so/_next/image?url=%2Ftemplates%2Fsolar%2Fillustration_2.webp&w=828&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+                "srcset": "/_next/image?url=%2Ftemplates%2Fsolar%2Fillustration_2.webp&w=828&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk 1x, /_next/image?url=%2Ftemplates%2Fsolar%2Fillustration_2.webp&w=1920&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk 2x",
+                "alt": "Website preview thumbnail",
+                "width": 768,
+                "height": 384,
+                "loading": "",
+                "sectionHeading": "«Solar»"
+              },
+              {
+                "src": "https://blocks.tremor.so/_next/image?url=%2Ftemplates%2Fsolar%2Fillustration.webp&w=1920&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+                "currentSrc": "https://blocks.tremor.so/_next/image?url=%2Ftemplates%2Fsolar%2Fillustration.webp&w=828&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+                "srcset": "/_next/image?url=%2Ftemplates%2Fsolar%2Fillustration.webp&w=828&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk 1x, /_next/image?url=%2Ftemplates%2Fsolar%2Fillustration.webp&w=1920&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk 2x",
+                "alt": "Website preview thumbnail",
+                "width": 768,
+                "height": 384,
+                "loading": "",
+                "sectionHeading": "«Solar»"
+              },
+              {
+                "src": "https://blocks.tremor.so/_next/image?url=%2Ftemplates%2Fsolar%2Fillustration_3.webp&w=1920&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+                "currentSrc": "https://blocks.tremor.so/_next/image?url=%2Ftemplates%2Fsolar%2Fillustration_3.webp&w=828&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+                "srcset": "/_next/image?url=%2Ftemplates%2Fsolar%2Fillustration_3.webp&w=828&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk 1x, /_next/image?url=%2Ftemplates%2Fsolar%2Fillustration_3.webp&w=1920&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk 2x",
+                "alt": "Website preview thumbnail",
+                "width": 768,
+                "height": 384,
+                "loading": "",
+                "sectionHeading": "«Solar»"
+              },
+              {
+                "src": "https://blocks.tremor.so/_next/image?url=%2Ftemplates%2Fsolar%2Ffooter.webp&w=1920&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+                "currentSrc": "https://blocks.tremor.so/_next/image?url=%2Ftemplates%2Fsolar%2Ffooter.webp&w=828&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+                "srcset": "/_next/image?url=%2Ftemplates%2Fsolar%2Ffooter.webp&w=828&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk 1x, /_next/image?url=%2Ftemplates%2Fsolar%2Ffooter.webp&w=1920&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk 2x",
+                "alt": "Website preview thumbnail",
+                "width": 768,
+                "height": 384,
+                "loading": "",
+                "sectionHeading": "«Solar»"
+              },
+              {
+                "src": "https://blocks.tremor.so/_next/image?url=%2Ftemplates%2Foverview%2Fhome.webp&w=1920&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+                "currentSrc": "https://blocks.tremor.so/_next/image?url=%2Ftemplates%2Foverview%2Fhome.webp&w=828&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+                "srcset": "/_next/image?url=%2Ftemplates%2Foverview%2Fhome.webp&w=828&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk 1x, /_next/image?url=%2Ftemplates%2Foverview%2Fhome.webp&w=1920&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk 2x",
+                "alt": "Website preview thumbnail",
+                "width": 768,
+                "height": 384,
+                "loading": "",
+                "sectionHeading": "«Overview»"
+              },
+              {
+                "src": "https://blocks.tremor.so/_next/image?url=%2Ftemplates%2Foverview%2Fheatmap.webp&w=1920&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+                "currentSrc": "https://blocks.tremor.so/_next/image?url=%2Ftemplates%2Foverview%2Fheatmap.webp&w=828&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+                "srcset": "/_next/image?url=%2Ftemplates%2Foverview%2Fheatmap.webp&w=828&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk 1x, /_next/image?url=%2Ftemplates%2Foverview%2Fheatmap.webp&w=1920&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk 2x",
+                "alt": "Website preview thumbnail",
+                "width": 768,
+                "height": 384,
+                "loading": "",
+                "sectionHeading": "«Overview»"
+              },
+              {
+                "src": "https://blocks.tremor.so/_next/image?url=%2Ftemplates%2Foverview%2Fworkflow.webp&w=1920&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+                "currentSrc": "https://blocks.tremor.so/_next/image?url=%2Ftemplates%2Foverview%2Fworkflow.webp&w=828&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+                "srcset": "/_next/image?url=%2Ftemplates%2Foverview%2Fworkflow.webp&w=828&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk 1x, /_next/image?url=%2Ftemplates%2Foverview%2Fworkflow.webp&w=1920&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk 2x",
+                "alt": "Website preview thumbnail",
+                "width": 768,
+                "height": 384,
+                "loading": "",
+                "sectionHeading": "«Overview»"
+              },
+              {
+                "src": "https://blocks.tremor.so/_next/image?url=%2Ftemplates%2Foverview%2Fdark_mode.webp&w=1920&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+                "currentSrc": "https://blocks.tremor.so/_next/image?url=%2Ftemplates%2Foverview%2Fdark_mode.webp&w=828&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+                "srcset": "/_next/image?url=%2Ftemplates%2Foverview%2Fdark_mode.webp&w=828&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk 1x, /_next/image?url=%2Ftemplates%2Foverview%2Fdark_mode.webp&w=1920&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk 2x",
+                "alt": "Website preview thumbnail",
+                "width": 768,
+                "height": 384,
+                "loading": "",
+                "sectionHeading": "«Overview»"
+              },
+              {
+                "src": "https://blocks.tremor.so/_next/image?url=%2Ftemplates%2Foverview%2Fnotifications.webp&w=1920&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+                "currentSrc": "https://blocks.tremor.so/_next/image?url=%2Ftemplates%2Foverview%2Fnotifications.webp&w=828&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+                "srcset": "/_next/image?url=%2Ftemplates%2Foverview%2Fnotifications.webp&w=828&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk 1x, /_next/image?url=%2Ftemplates%2Foverview%2Fnotifications.webp&w=1920&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk 2x",
+                "alt": "Website preview thumbnail",
+                "width": 768,
+                "height": 384,
+                "loading": "",
+                "sectionHeading": "«Overview»"
+              },
+              {
+                "src": "https://blocks.tremor.so/_next/image?url=%2Ftemplates%2Foverview%2Ftable.webp&w=1920&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+                "currentSrc": "https://blocks.tremor.so/_next/image?url=%2Ftemplates%2Foverview%2Ftable.webp&w=828&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+                "srcset": "/_next/image?url=%2Ftemplates%2Foverview%2Ftable.webp&w=828&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk 1x, /_next/image?url=%2Ftemplates%2Foverview%2Ftable.webp&w=1920&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk 2x",
+                "alt": "Website preview thumbnail",
+                "width": 768,
+                "height": 384,
+                "loading": "",
+                "sectionHeading": "«Overview»"
+              },
+              {
+                "src": "https://blocks.tremor.so/_next/image?url=%2Ftemplates%2Finsights%2Fonboarding.webp&w=1920&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+                "currentSrc": "https://blocks.tremor.so/_next/image?url=%2Ftemplates%2Finsights%2Fonboarding.webp&w=828&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+                "srcset": "/_next/image?url=%2Ftemplates%2Finsights%2Fonboarding.webp&w=828&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk 1x, /_next/image?url=%2Ftemplates%2Finsights%2Fonboarding.webp&w=1920&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk 2x",
+                "alt": "Website preview thumbnail",
+                "width": 768,
+                "height": 384,
+                "loading": "",
+                "sectionHeading": "«Insights»"
+              },
+              {
+                "src": "https://blocks.tremor.so/_next/image?url=%2Ftemplates%2Finsights%2Ffilterbar.webp&w=1920&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+                "currentSrc": "https://blocks.tremor.so/_next/image?url=%2Ftemplates%2Finsights%2Ffilterbar.webp&w=828&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+                "srcset": "/_next/image?url=%2Ftemplates%2Finsights%2Ffilterbar.webp&w=828&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk 1x, /_next/image?url=%2Ftemplates%2Finsights%2Ffilterbar.webp&w=1920&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk 2x",
+                "alt": "Website preview thumbnail",
+                "width": 768,
+                "height": 384,
+                "loading": "",
+                "sectionHeading": "«Insights»"
+              },
+              {
+                "src": "https://blocks.tremor.so/_next/image?url=%2Ftemplates%2Finsights%2Flogin.webp&w=1920&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+                "currentSrc": "https://blocks.tremor.so/_next/image?url=%2Ftemplates%2Finsights%2Flogin.webp&w=828&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+                "srcset": "/_next/image?url=%2Ftemplates%2Finsights%2Flogin.webp&w=828&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk 1x, /_next/image?url=%2Ftemplates%2Finsights%2Flogin.webp&w=1920&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk 2x",
+                "alt": "Website preview thumbnail",
+                "width": 768,
+                "height": 384,
+                "loading": "",
+                "sectionHeading": "«Insights»"
+              },
+              {
+                "src": "https://blocks.tremor.so/_next/image?url=%2Ftemplates%2Finsights%2Fdark_mode.webp&w=1920&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+                "currentSrc": "https://blocks.tremor.so/_next/image?url=%2Ftemplates%2Finsights%2Fdark_mode.webp&w=828&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+                "srcset": "/_next/image?url=%2Ftemplates%2Finsights%2Fdark_mode.webp&w=828&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk 1x, /_next/image?url=%2Ftemplates%2Finsights%2Fdark_mode.webp&w=1920&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk 2x",
+                "alt": "Website preview thumbnail",
+                "width": 768,
+                "height": 384,
+                "loading": "",
+                "sectionHeading": "«Insights»"
+              },
+              {
+                "src": "https://blocks.tremor.so/_next/image?url=%2Ftemplates%2Finsights%2Finput_drawer.webp&w=1920&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+                "currentSrc": "https://blocks.tremor.so/_next/image?url=%2Ftemplates%2Finsights%2Finput_drawer.webp&w=828&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+                "srcset": "/_next/image?url=%2Ftemplates%2Finsights%2Finput_drawer.webp&w=828&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk 1x, /_next/image?url=%2Ftemplates%2Finsights%2Finput_drawer.webp&w=1920&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk 2x",
+                "alt": "Website preview thumbnail",
+                "width": 768,
+                "height": 384,
+                "loading": "",
+                "sectionHeading": "«Insights»"
+              },
+              {
+                "src": "https://blocks.tremor.so/_next/image?url=%2Ftemplates%2Finsights%2Fsettings.webp&w=1920&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+                "currentSrc": "https://blocks.tremor.so/_next/image?url=%2Ftemplates%2Finsights%2Fsettings.webp&w=828&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+                "srcset": "/_next/image?url=%2Ftemplates%2Finsights%2Fsettings.webp&w=828&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk 1x, /_next/image?url=%2Ftemplates%2Finsights%2Fsettings.webp&w=1920&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk 2x",
+                "alt": "Website preview thumbnail",
+                "width": 768,
+                "height": 384,
+                "loading": "",
+                "sectionHeading": "«Insights»"
+              },
+              {
+                "src": "https://blocks.tremor.so/_next/image?url=%2Ftemplates%2Fdashboard%2Fcharts_2.webp&w=1920&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+                "currentSrc": "https://blocks.tremor.so/_next/image?url=%2Ftemplates%2Fdashboard%2Fcharts_2.webp&w=828&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+                "srcset": "/_next/image?url=%2Ftemplates%2Fdashboard%2Fcharts_2.webp&w=828&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk 1x, /_next/image?url=%2Ftemplates%2Fdashboard%2Fcharts_2.webp&w=1920&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk 2x",
+                "alt": "Website preview thumbnail",
+                "width": 768,
+                "height": 384,
+                "loading": "",
+                "sectionHeading": "«Dashboard»"
+              },
+              {
+                "src": "https://blocks.tremor.so/_next/image?url=%2Ftemplates%2Fdashboard%2Ftable.webp&w=1920&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+                "currentSrc": "https://blocks.tremor.so/_next/image?url=%2Ftemplates%2Fdashboard%2Ftable.webp&w=828&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+                "srcset": "/_next/image?url=%2Ftemplates%2Fdashboard%2Ftable.webp&w=828&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk 1x, /_next/image?url=%2Ftemplates%2Fdashboard%2Ftable.webp&w=1920&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk 2x",
+                "alt": "Website preview thumbnail",
+                "width": 768,
+                "height": 384,
+                "loading": "",
+                "sectionHeading": "«Dashboard»"
+              },
+              {
+                "src": "https://blocks.tremor.so/_next/image?url=%2Ftemplates%2Fdashboard%2Fbilling_2.webp&w=1920&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+                "currentSrc": "https://blocks.tremor.so/_next/image?url=%2Ftemplates%2Fdashboard%2Fbilling_2.webp&w=828&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+                "srcset": "/_next/image?url=%2Ftemplates%2Fdashboard%2Fbilling_2.webp&w=828&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk 1x, /_next/image?url=%2Ftemplates%2Fdashboard%2Fbilling_2.webp&w=1920&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk 2x",
+                "alt": "Website preview thumbnail",
+                "width": 768,
+                "height": 384,
+                "loading": "",
+                "sectionHeading": "«Dashboard»"
+              },
+              {
+                "src": "https://blocks.tremor.so/_next/image?url=%2Ftemplates%2Fdashboard%2Fdrag_drop.webp&w=1920&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+                "currentSrc": "https://blocks.tremor.so/_next/image?url=%2Ftemplates%2Fdashboard%2Fdrag_drop.webp&w=828&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+                "srcset": "/_next/image?url=%2Ftemplates%2Fdashboard%2Fdrag_drop.webp&w=828&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk 1x, /_next/image?url=%2Ftemplates%2Fdashboard%2Fdrag_drop.webp&w=1920&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk 2x",
+                "alt": "Website preview thumbnail",
+                "width": 768,
+                "height": 384,
+                "loading": "",
+                "sectionHeading": "«Dashboard»"
+              },
+              {
+                "src": "https://blocks.tremor.so/_next/image?url=%2Ftemplates%2Fdashboard%2Fsettings_2.webp&w=1920&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+                "currentSrc": "https://blocks.tremor.so/_next/image?url=%2Ftemplates%2Fdashboard%2Fsettings_2.webp&w=828&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+                "srcset": "/_next/image?url=%2Ftemplates%2Fdashboard%2Fsettings_2.webp&w=828&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk 1x, /_next/image?url=%2Ftemplates%2Fdashboard%2Fsettings_2.webp&w=1920&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk 2x",
+                "alt": "Website preview thumbnail",
+                "width": 768,
+                "height": 384,
+                "loading": "",
+                "sectionHeading": "«Dashboard»"
+              },
+              {
+                "src": "https://blocks.tremor.so/_next/image?url=%2Ftemplates%2Fdashboard%2Fdark_mode.webp&w=1920&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+                "currentSrc": "https://blocks.tremor.so/_next/image?url=%2Ftemplates%2Fdashboard%2Fdark_mode.webp&w=828&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+                "srcset": "/_next/image?url=%2Ftemplates%2Fdashboard%2Fdark_mode.webp&w=828&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk 1x, /_next/image?url=%2Ftemplates%2Fdashboard%2Fdark_mode.webp&w=1920&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk 2x",
+                "alt": "Website preview thumbnail",
+                "width": 768,
+                "height": 384,
+                "loading": "",
+                "sectionHeading": "«Dashboard»"
+              },
+              {
+                "src": "https://blocks.tremor.so/_next/image?url=%2Ftemplates%2Fdatabase%2Flanding_page.webp&w=1920&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+                "currentSrc": "https://blocks.tremor.so/_next/image?url=%2Ftemplates%2Fdatabase%2Flanding_page.webp&w=828&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+                "srcset": "/_next/image?url=%2Ftemplates%2Fdatabase%2Flanding_page.webp&w=828&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk 1x, /_next/image?url=%2Ftemplates%2Fdatabase%2Flanding_page.webp&w=1920&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk 2x",
+                "alt": "Website preview thumbnail",
+                "width": 768,
+                "height": 384,
+                "loading": "",
+                "sectionHeading": "«Database»"
+              },
+              {
+                "src": "https://blocks.tremor.so/_next/image?url=%2Ftemplates%2Fdatabase%2Fabout_page.webp&w=1920&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+                "currentSrc": "https://blocks.tremor.so/_next/image?url=%2Ftemplates%2Fdatabase%2Fabout_page.webp&w=828&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+                "srcset": "/_next/image?url=%2Ftemplates%2Fdatabase%2Fabout_page.webp&w=828&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk 1x, /_next/image?url=%2Ftemplates%2Fdatabase%2Fabout_page.webp&w=1920&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk 2x",
+                "alt": "Website preview thumbnail",
+                "width": 768,
+                "height": 384,
+                "loading": "",
+                "sectionHeading": "«Database»"
+              },
+              {
+                "src": "https://blocks.tremor.so/_next/image?url=%2Ftemplates%2Fdatabase%2Fpricing_page.webp&w=1920&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+                "currentSrc": "https://blocks.tremor.so/_next/image?url=%2Ftemplates%2Fdatabase%2Fpricing_page.webp&w=828&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+                "srcset": "/_next/image?url=%2Ftemplates%2Fdatabase%2Fpricing_page.webp&w=828&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk 1x, /_next/image?url=%2Ftemplates%2Fdatabase%2Fpricing_page.webp&w=1920&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk 2x",
+                "alt": "Website preview thumbnail",
+                "width": 768,
+                "height": 384,
+                "loading": "",
+                "sectionHeading": "«Database»"
+              },
+              {
+                "src": "https://blocks.tremor.so/_next/image?url=%2Ftemplates%2Fdatabase%2Fchangelog.webp&w=1920&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+                "currentSrc": "https://blocks.tremor.so/_next/image?url=%2Ftemplates%2Fdatabase%2Fchangelog.webp&w=828&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+                "srcset": "/_next/image?url=%2Ftemplates%2Fdatabase%2Fchangelog.webp&w=828&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk 1x, /_next/image?url=%2Ftemplates%2Fdatabase%2Fchangelog.webp&w=1920&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk 2x",
+                "alt": "Website preview thumbnail",
+                "width": 768,
+                "height": 384,
+                "loading": "",
+                "sectionHeading": "«Database»"
+              },
+              {
+                "src": "https://blocks.tremor.so/_next/image?url=%2Ftemplates%2Fdatabase%2Fcode_highlighter.webp&w=1920&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+                "currentSrc": "https://blocks.tremor.so/_next/image?url=%2Ftemplates%2Fdatabase%2Fcode_highlighter.webp&w=828&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+                "srcset": "/_next/image?url=%2Ftemplates%2Fdatabase%2Fcode_highlighter.webp&w=828&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk 1x, /_next/image?url=%2Ftemplates%2Fdatabase%2Fcode_highlighter.webp&w=1920&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk 2x",
+                "alt": "Website preview thumbnail",
+                "width": 768,
+                "height": 384,
+                "loading": "",
+                "sectionHeading": "«Database»"
+              },
+              {
+                "src": "https://blocks.tremor.so/_next/image?url=%2Ftemplates%2Fdatabase%2Fdark_mode.webp&w=1920&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+                "currentSrc": "https://blocks.tremor.so/_next/image?url=%2Ftemplates%2Fdatabase%2Fdark_mode.webp&w=828&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+                "srcset": "/_next/image?url=%2Ftemplates%2Fdatabase%2Fdark_mode.webp&w=828&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk 1x, /_next/image?url=%2Ftemplates%2Fdatabase%2Fdark_mode.webp&w=1920&q=75&dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk 2x",
+                "alt": "Website preview thumbnail",
+                "width": 768,
+                "height": 384,
+                "loading": "",
+                "sectionHeading": "«Database»"
+              }
+            ],
+            "videos": [],
+            "canvasCount": 1,
+            "svgCount": 25,
+            "stylesheets": [
+              "https://blocks.tremor.so/_next/static/css/7cca8e2c5137bd71.css?dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+              "https://blocks.tremor.so/_next/static/css/022c5b33bb1e0458.css?dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk"
+            ],
+            "fontLinks": [
+              "https://blocks.tremor.so/_next/static/media/e4af272ccee01ff0-s.p.woff2"
+            ],
+            "ogImages": [
+              "https://blocks.tremor.so/opengraph-image.png?c62e8406c6421cf1"
+            ],
+            "downloadableAssets": []
+          },
+          "fontSignals": {
+            "computedFamilies": [
+              "__Inter_f367f3, __Inter_Fallback_f367f3"
+            ],
+            "computedWeights": [
+              "400",
+              "500",
+              "800",
+              "700"
+            ],
+            "fontFaceNames": [
+              "__Inter_f367f3",
+              "__Inter_Fallback_f367f3",
+              "JetBrainsMono"
+            ]
+          },
+          "animationSignals": {
+            "animatedElementCount": 97,
+            "keyframes": [
+              "ping",
+              "fade-up",
+              "flash",
+              "pulse",
+              "spin",
+              "draw",
+              "slideUpFade",
+              "shimmer",
+              "accordionClose",
+              "hide",
+              "accordionOpen",
+              "dialogContentShow",
+              "dialogOverlayShow",
+              "slideDownAndFade",
+              "slideLeftAndFade",
+              "slideRightAndFade",
+              "slideUpAndFade"
+            ],
+            "samples": [
+              {
+                "tag": "img",
+                "id": "",
+                "classes": [
+                  "absolute",
+                  "inset-0",
+                  "h-full",
+                  "w-full",
+                  "scale-[101%]",
+                  "transition-all",
+                  "group-hover:scale-[102%]"
+                ],
+                "area": 74429,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.15s",
+                "transform": "matrix(1.01, 0, 0, 1.01, 0, 0)",
+                "sectionHeading": "«Planner»"
+              },
+              {
+                "tag": "img",
+                "id": "",
+                "classes": [
+                  "absolute",
+                  "inset-0",
+                  "h-full",
+                  "w-full",
+                  "scale-[101%]",
+                  "transition-all",
+                  "group-hover:scale-[102%]"
+                ],
+                "area": 74429,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.15s",
+                "transform": "matrix(1.01, 0, 0, 1.01, 0, 0)",
+                "sectionHeading": "«Planner»"
+              },
+              {
+                "tag": "img",
+                "id": "",
+                "classes": [
+                  "absolute",
+                  "inset-0",
+                  "h-full",
+                  "w-full",
+                  "scale-[101%]",
+                  "transition-all",
+                  "group-hover:scale-[102%]"
+                ],
+                "area": 74429,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.15s",
+                "transform": "matrix(1.01, 0, 0, 1.01, 0, 0)",
+                "sectionHeading": "«Planner»"
+              },
+              {
+                "tag": "img",
+                "id": "",
+                "classes": [
+                  "absolute",
+                  "inset-0",
+                  "h-full",
+                  "w-full",
+                  "scale-[101%]",
+                  "transition-all",
+                  "group-hover:scale-[102%]"
+                ],
+                "area": 74429,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.15s",
+                "transform": "matrix(1.01, 0, 0, 1.01, 0, 0)",
+                "sectionHeading": "«Solar»"
+              },
+              {
+                "tag": "img",
+                "id": "",
+                "classes": [
+                  "absolute",
+                  "inset-0",
+                  "h-full",
+                  "w-full",
+                  "scale-[101%]",
+                  "transition-all",
+                  "group-hover:scale-[102%]"
+                ],
+                "area": 74429,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.15s",
+                "transform": "matrix(1.01, 0, 0, 1.01, 0, 0)",
+                "sectionHeading": "«Solar»"
+              },
+              {
+                "tag": "img",
+                "id": "",
+                "classes": [
+                  "absolute",
+                  "inset-0",
+                  "h-full",
+                  "w-full",
+                  "scale-[101%]",
+                  "transition-all",
+                  "group-hover:scale-[102%]"
+                ],
+                "area": 74429,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.15s",
+                "transform": "matrix(1.01, 0, 0, 1.01, 0, 0)",
+                "sectionHeading": "«Solar»"
+              },
+              {
+                "tag": "img",
+                "id": "",
+                "classes": [
+                  "absolute",
+                  "inset-0",
+                  "h-full",
+                  "w-full",
+                  "scale-[101%]",
+                  "transition-all",
+                  "group-hover:scale-[102%]"
+                ],
+                "area": 74429,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.15s",
+                "transform": "matrix(1.01, 0, 0, 1.01, 0, 0)",
+                "sectionHeading": "«Solar»"
+              },
+              {
+                "tag": "img",
+                "id": "",
+                "classes": [
+                  "absolute",
+                  "inset-0",
+                  "h-full",
+                  "w-full",
+                  "scale-[101%]",
+                  "transition-all",
+                  "group-hover:scale-[102%]"
+                ],
+                "area": 74429,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.15s",
+                "transform": "matrix(1.01, 0, 0, 1.01, 0, 0)",
+                "sectionHeading": "«Solar»"
+              },
+              {
+                "tag": "img",
+                "id": "",
+                "classes": [
+                  "absolute",
+                  "inset-0",
+                  "h-full",
+                  "w-full",
+                  "scale-[101%]",
+                  "transition-all",
+                  "group-hover:scale-[102%]"
+                ],
+                "area": 74429,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.15s",
+                "transform": "matrix(1.01, 0, 0, 1.01, 0, 0)",
+                "sectionHeading": "«Solar»"
+              },
+              {
+                "tag": "img",
+                "id": "",
+                "classes": [
+                  "absolute",
+                  "inset-0",
+                  "h-full",
+                  "w-full",
+                  "scale-[101%]",
+                  "transition-all",
+                  "group-hover:scale-[102%]"
+                ],
+                "area": 74429,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.15s",
+                "transform": "matrix(1.01, 0, 0, 1.01, 0, 0)",
+                "sectionHeading": "«Overview»"
+              },
+              {
+                "tag": "img",
+                "id": "",
+                "classes": [
+                  "absolute",
+                  "inset-0",
+                  "h-full",
+                  "w-full",
+                  "scale-[101%]",
+                  "transition-all",
+                  "group-hover:scale-[102%]"
+                ],
+                "area": 74429,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.15s",
+                "transform": "matrix(1.01, 0, 0, 1.01, 0, 0)",
+                "sectionHeading": "«Overview»"
+              },
+              {
+                "tag": "img",
+                "id": "",
+                "classes": [
+                  "absolute",
+                  "inset-0",
+                  "h-full",
+                  "w-full",
+                  "scale-[101%]",
+                  "transition-all",
+                  "group-hover:scale-[102%]"
+                ],
+                "area": 74429,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.15s",
+                "transform": "matrix(1.01, 0, 0, 1.01, 0, 0)",
+                "sectionHeading": "«Overview»"
+              },
+              {
+                "tag": "img",
+                "id": "",
+                "classes": [
+                  "absolute",
+                  "inset-0",
+                  "h-full",
+                  "w-full",
+                  "scale-[101%]",
+                  "transition-all",
+                  "group-hover:scale-[102%]"
+                ],
+                "area": 74429,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.15s",
+                "transform": "matrix(1.01, 0, 0, 1.01, 0, 0)",
+                "sectionHeading": "«Overview»"
+              },
+              {
+                "tag": "img",
+                "id": "",
+                "classes": [
+                  "absolute",
+                  "inset-0",
+                  "h-full",
+                  "w-full",
+                  "scale-[101%]",
+                  "transition-all",
+                  "group-hover:scale-[102%]"
+                ],
+                "area": 74429,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.15s",
+                "transform": "matrix(1.01, 0, 0, 1.01, 0, 0)",
+                "sectionHeading": "«Overview»"
+              },
+              {
+                "tag": "img",
+                "id": "",
+                "classes": [
+                  "absolute",
+                  "inset-0",
+                  "h-full",
+                  "w-full",
+                  "scale-[101%]",
+                  "transition-all",
+                  "group-hover:scale-[102%]"
+                ],
+                "area": 74429,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.15s",
+                "transform": "matrix(1.01, 0, 0, 1.01, 0, 0)",
+                "sectionHeading": "«Overview»"
+              },
+              {
+                "tag": "img",
+                "id": "",
+                "classes": [
+                  "absolute",
+                  "inset-0",
+                  "h-full",
+                  "w-full",
+                  "scale-[101%]",
+                  "transition-all",
+                  "group-hover:scale-[102%]"
+                ],
+                "area": 74429,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.15s",
+                "transform": "matrix(1.01, 0, 0, 1.01, 0, 0)",
+                "sectionHeading": "«Insights»"
+              },
+              {
+                "tag": "img",
+                "id": "",
+                "classes": [
+                  "absolute",
+                  "inset-0",
+                  "h-full",
+                  "w-full",
+                  "scale-[101%]",
+                  "transition-all",
+                  "group-hover:scale-[102%]"
+                ],
+                "area": 74429,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.15s",
+                "transform": "matrix(1.01, 0, 0, 1.01, 0, 0)",
+                "sectionHeading": "«Insights»"
+              },
+              {
+                "tag": "img",
+                "id": "",
+                "classes": [
+                  "absolute",
+                  "inset-0",
+                  "h-full",
+                  "w-full",
+                  "scale-[101%]",
+                  "transition-all",
+                  "group-hover:scale-[102%]"
+                ],
+                "area": 74429,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.15s",
+                "transform": "matrix(1.01, 0, 0, 1.01, 0, 0)",
+                "sectionHeading": "«Insights»"
+              },
+              {
+                "tag": "img",
+                "id": "",
+                "classes": [
+                  "absolute",
+                  "inset-0",
+                  "h-full",
+                  "w-full",
+                  "scale-[101%]",
+                  "transition-all",
+                  "group-hover:scale-[102%]"
+                ],
+                "area": 74429,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.15s",
+                "transform": "matrix(1.01, 0, 0, 1.01, 0, 0)",
+                "sectionHeading": "«Insights»"
+              },
+              {
+                "tag": "img",
+                "id": "",
+                "classes": [
+                  "absolute",
+                  "inset-0",
+                  "h-full",
+                  "w-full",
+                  "scale-[101%]",
+                  "transition-all",
+                  "group-hover:scale-[102%]"
+                ],
+                "area": 74429,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.15s",
+                "transform": "matrix(1.01, 0, 0, 1.01, 0, 0)",
+                "sectionHeading": "«Insights»"
+              },
+              {
+                "tag": "img",
+                "id": "",
+                "classes": [
+                  "absolute",
+                  "inset-0",
+                  "h-full",
+                  "w-full",
+                  "scale-[101%]",
+                  "transition-all",
+                  "group-hover:scale-[102%]"
+                ],
+                "area": 74429,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.15s",
+                "transform": "matrix(1.01, 0, 0, 1.01, 0, 0)",
+                "sectionHeading": "«Insights»"
+              },
+              {
+                "tag": "img",
+                "id": "",
+                "classes": [
+                  "absolute",
+                  "inset-0",
+                  "h-full",
+                  "w-full",
+                  "scale-[101%]",
+                  "transition-all",
+                  "group-hover:scale-[102%]"
+                ],
+                "area": 74429,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.15s",
+                "transform": "matrix(1.01, 0, 0, 1.01, 0, 0)",
+                "sectionHeading": "«Dashboard»"
+              },
+              {
+                "tag": "img",
+                "id": "",
+                "classes": [
+                  "absolute",
+                  "inset-0",
+                  "h-full",
+                  "w-full",
+                  "scale-[101%]",
+                  "transition-all",
+                  "group-hover:scale-[102%]"
+                ],
+                "area": 74429,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.15s",
+                "transform": "matrix(1.01, 0, 0, 1.01, 0, 0)",
+                "sectionHeading": "«Dashboard»"
+              },
+              {
+                "tag": "img",
+                "id": "",
+                "classes": [
+                  "absolute",
+                  "inset-0",
+                  "h-full",
+                  "w-full",
+                  "scale-[101%]",
+                  "transition-all",
+                  "group-hover:scale-[102%]"
+                ],
+                "area": 74429,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.15s",
+                "transform": "matrix(1.01, 0, 0, 1.01, 0, 0)",
+                "sectionHeading": "«Dashboard»"
+              },
+              {
+                "tag": "img",
+                "id": "",
+                "classes": [
+                  "absolute",
+                  "inset-0",
+                  "h-full",
+                  "w-full",
+                  "scale-[101%]",
+                  "transition-all",
+                  "group-hover:scale-[102%]"
+                ],
+                "area": 74429,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.15s",
+                "transform": "matrix(1.01, 0, 0, 1.01, 0, 0)",
+                "sectionHeading": "«Dashboard»"
+              },
+              {
+                "tag": "img",
+                "id": "",
+                "classes": [
+                  "absolute",
+                  "inset-0",
+                  "h-full",
+                  "w-full",
+                  "scale-[101%]",
+                  "transition-all",
+                  "group-hover:scale-[102%]"
+                ],
+                "area": 74429,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.15s",
+                "transform": "matrix(1.01, 0, 0, 1.01, 0, 0)",
+                "sectionHeading": "«Dashboard»"
+              },
+              {
+                "tag": "div",
+                "id": "",
+                "classes": [
+                  "overflow-hidden",
+                  "rounded-lg",
+                  "border",
+                  "border-gray-200/70",
+                  "bg-gray-50/50",
+                  "ring-gray-100",
+                  "transition-all",
+                  "group-hover:border-gray-300/80",
+                  "group-hover:ring-4"
+                ],
+                "area": 74112,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.15s",
+                "transform": "",
+                "sectionHeading": "«Planner»"
+              },
+              {
+                "tag": "div",
+                "id": "",
+                "classes": [
+                  "overflow-hidden",
+                  "rounded-lg",
+                  "border",
+                  "border-gray-200/70",
+                  "bg-gray-50/50",
+                  "ring-gray-100",
+                  "transition-all",
+                  "group-hover:border-gray-300/80",
+                  "group-hover:ring-4"
+                ],
+                "area": 74112,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.15s",
+                "transform": "",
+                "sectionHeading": "«Planner»"
+              },
+              {
+                "tag": "div",
+                "id": "",
+                "classes": [
+                  "overflow-hidden",
+                  "rounded-lg",
+                  "border",
+                  "border-gray-200/70",
+                  "bg-gray-50/50",
+                  "ring-gray-100",
+                  "transition-all",
+                  "group-hover:border-gray-300/80",
+                  "group-hover:ring-4"
+                ],
+                "area": 74112,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.15s",
+                "transform": "",
+                "sectionHeading": "«Planner»"
+              },
+              {
+                "tag": "div",
+                "id": "",
+                "classes": [
+                  "overflow-hidden",
+                  "rounded-lg",
+                  "border",
+                  "border-gray-200/70",
+                  "bg-gray-50/50",
+                  "ring-gray-100",
+                  "transition-all",
+                  "group-hover:border-gray-300/80",
+                  "group-hover:ring-4"
+                ],
+                "area": 74112,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.15s",
+                "transform": "",
+                "sectionHeading": "«Solar»"
+              },
+              {
+                "tag": "div",
+                "id": "",
+                "classes": [
+                  "overflow-hidden",
+                  "rounded-lg",
+                  "border",
+                  "border-gray-200/70",
+                  "bg-gray-50/50",
+                  "ring-gray-100",
+                  "transition-all",
+                  "group-hover:border-gray-300/80",
+                  "group-hover:ring-4"
+                ],
+                "area": 74112,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.15s",
+                "transform": "",
+                "sectionHeading": "«Solar»"
+              },
+              {
+                "tag": "div",
+                "id": "",
+                "classes": [
+                  "overflow-hidden",
+                  "rounded-lg",
+                  "border",
+                  "border-gray-200/70",
+                  "bg-gray-50/50",
+                  "ring-gray-100",
+                  "transition-all",
+                  "group-hover:border-gray-300/80",
+                  "group-hover:ring-4"
+                ],
+                "area": 74112,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.15s",
+                "transform": "",
+                "sectionHeading": "«Solar»"
+              },
+              {
+                "tag": "div",
+                "id": "",
+                "classes": [
+                  "overflow-hidden",
+                  "rounded-lg",
+                  "border",
+                  "border-gray-200/70",
+                  "bg-gray-50/50",
+                  "ring-gray-100",
+                  "transition-all",
+                  "group-hover:border-gray-300/80",
+                  "group-hover:ring-4"
+                ],
+                "area": 74112,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.15s",
+                "transform": "",
+                "sectionHeading": "«Solar»"
+              },
+              {
+                "tag": "div",
+                "id": "",
+                "classes": [
+                  "overflow-hidden",
+                  "rounded-lg",
+                  "border",
+                  "border-gray-200/70",
+                  "bg-gray-50/50",
+                  "ring-gray-100",
+                  "transition-all",
+                  "group-hover:border-gray-300/80",
+                  "group-hover:ring-4"
+                ],
+                "area": 74112,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.15s",
+                "transform": "",
+                "sectionHeading": "«Solar»"
+              },
+              {
+                "tag": "div",
+                "id": "",
+                "classes": [
+                  "overflow-hidden",
+                  "rounded-lg",
+                  "border",
+                  "border-gray-200/70",
+                  "bg-gray-50/50",
+                  "ring-gray-100",
+                  "transition-all",
+                  "group-hover:border-gray-300/80",
+                  "group-hover:ring-4"
+                ],
+                "area": 74112,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.15s",
+                "transform": "",
+                "sectionHeading": "«Solar»"
+              },
+              {
+                "tag": "div",
+                "id": "",
+                "classes": [
+                  "overflow-hidden",
+                  "rounded-lg",
+                  "border",
+                  "border-gray-200/70",
+                  "bg-gray-50/50",
+                  "ring-gray-100",
+                  "transition-all",
+                  "group-hover:border-gray-300/80",
+                  "group-hover:ring-4"
+                ],
+                "area": 74112,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.15s",
+                "transform": "",
+                "sectionHeading": "«Overview»"
+              },
+              {
+                "tag": "div",
+                "id": "",
+                "classes": [
+                  "overflow-hidden",
+                  "rounded-lg",
+                  "border",
+                  "border-gray-200/70",
+                  "bg-gray-50/50",
+                  "ring-gray-100",
+                  "transition-all",
+                  "group-hover:border-gray-300/80",
+                  "group-hover:ring-4"
+                ],
+                "area": 74112,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.15s",
+                "transform": "",
+                "sectionHeading": "«Overview»"
+              },
+              {
+                "tag": "div",
+                "id": "",
+                "classes": [
+                  "overflow-hidden",
+                  "rounded-lg",
+                  "border",
+                  "border-gray-200/70",
+                  "bg-gray-50/50",
+                  "ring-gray-100",
+                  "transition-all",
+                  "group-hover:border-gray-300/80",
+                  "group-hover:ring-4"
+                ],
+                "area": 74112,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.15s",
+                "transform": "",
+                "sectionHeading": "«Overview»"
+              },
+              {
+                "tag": "div",
+                "id": "",
+                "classes": [
+                  "overflow-hidden",
+                  "rounded-lg",
+                  "border",
+                  "border-gray-200/70",
+                  "bg-gray-50/50",
+                  "ring-gray-100",
+                  "transition-all",
+                  "group-hover:border-gray-300/80",
+                  "group-hover:ring-4"
+                ],
+                "area": 74112,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.15s",
+                "transform": "",
+                "sectionHeading": "«Overview»"
+              },
+              {
+                "tag": "div",
+                "id": "",
+                "classes": [
+                  "overflow-hidden",
+                  "rounded-lg",
+                  "border",
+                  "border-gray-200/70",
+                  "bg-gray-50/50",
+                  "ring-gray-100",
+                  "transition-all",
+                  "group-hover:border-gray-300/80",
+                  "group-hover:ring-4"
+                ],
+                "area": 74112,
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationTimingFunction": "ease",
+                "transitionProperty": "all",
+                "transitionDuration": "0.15s",
+                "transform": "",
+                "sectionHeading": "«Overview»"
+              }
+            ],
+            "libraries": {
+              "framerMotion": false,
+              "gsap": false,
+              "three": false,
+              "lottie": false,
+              "locomotiveScroll": false
+            },
+            "hasReducedMotionCss": false
+          },
+          "technologySignals": {
+            "hasNextData": false,
+            "hasNextAssets": true,
+            "hasNuxtAssets": false,
+            "hasViteAssets": false,
+            "hasWebflow": false,
+            "hasFramer": false,
+            "hasShopify": false,
+            "hasWordPress": false,
+            "scriptSrcs": [
+              "https://blocks.tremor.so/_next/static/chunks/2200cc46-10e24af50098b054.js?dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+              "https://blocks.tremor.so/_next/static/chunks/945-5841f1cc0fd576bd.js?dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+              "https://blocks.tremor.so/_next/static/chunks/main-app-74cd7bc221eb6143.js?dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+              "https://blocks.tremor.so/_next/static/chunks/3ff02bd4-977e2baad9c58e29.js?dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+              "https://blocks.tremor.so/_next/static/chunks/838-1136c2d32572c2a9.js?dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+              "https://blocks.tremor.so/_next/static/chunks/663-ff61a332dd7345f7.js?dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+              "https://blocks.tremor.so/_next/static/chunks/app/(with-app-shell)/templates/page-be299824ebafc334.js?dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+              "https://blocks.tremor.so/_next/static/chunks/bdec28db-7aceb805c5619d2b.js?dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+              "https://blocks.tremor.so/_next/static/chunks/375250d7-4404a6e07ace0e29.js?dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+              "https://blocks.tremor.so/_next/static/chunks/159-b30eab730ec600cc.js?dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+              "https://blocks.tremor.so/_next/static/chunks/38-d81593e92b415687.js?dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+              "https://blocks.tremor.so/_next/static/chunks/275-e53895c865b04c3b.js?dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+              "https://blocks.tremor.so/_next/static/chunks/app/error-b1767e032d293f9b.js?dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+              "https://blocks.tremor.so/_next/static/chunks/app/layout-3810e324e9c6c8b5.js?dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+              "https://blocks.tremor.so/_next/static/chunks/polyfills-42372ed130431b0a.js?dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk",
+              "https://blocks.tremor.so/_vercel/insights/script.js",
+              "https://blocks.tremor.so/_next/static/chunks/webpack-e19909fb09ec20fe.js?dpl=dpl_8E8Z4NpVLqUwJtuwEktCoC7woRxk"
+            ]
+          },
+          "codeBlocks": [],
+          "codeLinks": [
+            {
+              "url": "https://github.com/tremorlabs/tremor-blocks",
+              "text": ""
+            },
+            {
+              "url": "https://github.com/tremorlabs/template-planner/archive/refs/heads/main.zip",
+              "text": "Download .zip file"
+            },
+            {
+              "url": "https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Ftremorlabs%2Ftemplate-planner&project-name=template-planner&repository-name=template-planner&demo-title=Planner&demo-description=Dashboard+Template+for+SaaS+or+Internal+Tool&demo-url=https%3A%2F%2Fplanner.tremor.so",
+              "text": "Deploy to Vercel"
+            },
+            {
+              "url": "https://github.com/tremorlabs/template-solar/archive/refs/heads/main.zip",
+              "text": "Download .zip file"
+            },
+            {
+              "url": "https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Ftremorlabs%2Ftemplate-solar&project-name=template-solar&repository-name=template-solar&demo-title=Solar&demo-description=SaaS+Marketing+Website&demo-url=https%3A%2F%2Fsolar.tremor.so",
+              "text": "Deploy to Vercel"
+            },
+            {
+              "url": "https://github.com/tremorlabs/template-overview/archive/refs/heads/main.zip",
+              "text": "Download .zip file"
+            },
+            {
+              "url": "https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Ftremorlabs%2Ftemplate-overview&project-name=template-overview&repository-name=template-overview&demo-title=Overview&demo-description=Template+featuring+dashboard+overview+pages&demo-url=https%3A%2F%2Foverview.tremor.so",
+              "text": "Deploy to Vercel"
+            },
+            {
+              "url": "https://github.com/tremorlabs/template-insights/archive/refs/heads/main.zip",
+              "text": "Download .zip file"
+            },
+            {
+              "url": "https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Ftremorlabs%2Ftemplate-insights&project-name=template-insights&repository-name=template-insights&demo-title=Insights&demo-description=Template+for+feeding+and+tracking+data&demo-url=https%3A%2F%2Fplanner.tremor.so",
+              "text": "Deploy to Vercel"
+            },
+            {
+              "url": "https://github.com/tremorlabs/template-dashboard/archive/refs/heads/main.zip",
+              "text": "Download .zip file"
+            },
+            {
+              "url": "https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Ftremorlabs%2Ftemplate-dashboard&project-name=template-dashboard&repository-name=template-dashboard&demo-title=Dashboard&demo-description=Dashboard+Template+for+SaaS+or+Internal+Tool&demo-url=https%3A%2F%2Fdashboard.tremor.so",
+              "text": "Deploy to Vercel"
+            },
+            {
+              "url": "https://github.com/tremorlabs/template-database/archive/refs/heads/main.zip",
+              "text": "Download .zip file"
+            },
+            {
+              "url": "https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Ftremorlabs%2Ftemplate-database&project-name=template-database&repository-name=template-database&demo-title=Database&demo-description=SaaS+Marketing+Website&demo-url=https%3A%2F%2Fdatabase.tremor.so",
+              "text": "Deploy to Vercel"
+            },
+            {
+              "url": "https://github.com/tremorlabs/tremor",
+              "text": "GitHub"
+            }
+          ]
+        }
+      ],
+      "mergedFrom": "data/references/design-sources/gallery-examples/2026-07-03T20-48-52-800Z-design-harvest.json"
     },
     {
       "id": "watermelon-ui",
