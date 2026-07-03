@@ -1010,6 +1010,12 @@ queda recuperado, y entonces el reparto vuelve a calcularse sobre el ingreso
 neto completo. Los montos internos de capital son privados de Sergio/ONIA; a
 Arthur se le muestra el mecanismo (10%), no las cifras internas.
 
+Nota interna (no afecta el reparto de Arthur): el 10% es un apartado contable,
+no un retiro por venta. Solo pasa a Sergio a fin de mes y solo si la caja quedo
+verde (el Fondo cubrio herramientas y reserva). En caja roja/amarilla el
+apartado se queda como caja operativa de ONIA y la recuperacion se difiere. Para
+Arthur el calculo es identico en cualquier caso: siempre sobre el 90%.
+
 ## Calendario de cierres y pagos
 
 Ningun pago se hace por promesa, conversacion o venta no cobrada. Todo pago debe

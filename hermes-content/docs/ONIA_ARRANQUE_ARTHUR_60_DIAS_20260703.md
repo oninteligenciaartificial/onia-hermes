@@ -44,47 +44,48 @@ Montos vigentes (`FINANCE_LOG_2026.md`):
 | Deuda operativa | 2.414,49 |
 | Capital de arranque | 15.000,00 |
 
-Modelo elegido: **skim de capital primero** (2026-07-03). La recuperacion tiene
-dos motores, no uno:
+Modelo elegido: **skim de capital como apartado contable** (2026-07-03,
+corregido). Regla inviolable: *primero ONIA vive, despues se recupera capital.*
+El skim nunca se paga si el mes no cubrio su propia operacion.
 
-**Motor 1 - Skim en cada venta (garantizado).** Mientras haya capital pendiente,
-de cada ingreso neto se aparta 10% de recuperacion ANTES del reparto:
+**Paso 1 - Apartado en cada venta.** Mientras haya capital pendiente, de cada
+ingreso neto se MARCA 10% como "capital por recuperar". Ese apartado baja la base
+de reparto, asi que el numero de Arthur es estable e igual siempre (el nunca ve
+ese 10%):
 
 ```text
 ingreso_neto = cobro - costos_directos_externos
-skim_recuperacion = ingreso_neto * 10%   -> 100% a capital Sergio (deuda, luego arranque)
-base_repartible   = ingreso_neto * 90%
-Fondo ONIA        = base_repartible * 40%
-Arthur            = base_repartible * (% segun nivel de intervencion)
-Sergio/gestion    = base_repartible * (% segun nivel)
+skim_apartado = ingreso_neto * 10%   -> se anota en el ledger "capital por recuperar"
+base_repartible = ingreso_neto * 90%
+Fondo ONIA      = base_repartible * 40%
+Arthur          = base_repartible * (% segun nivel de intervencion)
+Sergio/gestion  = base_repartible * (% segun nivel)
 ```
 
-El skim se apaga solo cuando `capital_pendiente = 0`; ahi todo vuelve al
-40/50/10 sobre el ingreso neto completo.
-
-Orden dentro del skim: **1) deuda operativa 2.414,49  ->  2) arranque 15.000,00.**
-
-**Motor 2 - Excedente del Fondo ONIA (mensual).** Ademas del skim, si el Fondo
-sobra a fin de mes despues de herramientas/caja/reserva, ese excedente tambien
-recupera capital:
+**Paso 2 - Cobro solo a fin de mes y solo en caja verde.** El apartado NO pasa a
+tu bolsillo en cada venta. A fin de mes:
 
 ```text
-1. Herramientas / apps / IA / VPS / Workspace del mes (2.950,50)
-2. Caja chica aprobada
-3. Reserva minima de operacion
-4. Excedente -> capital Sergio (deuda primero, luego arranque)
-5. Recien despues: bonos, reinversion no urgente, retiro Sergio
+Fondo del mes paga: herramientas (2.950,50) -> caja chica -> reserva minima.
+
+Si la caja quedo VERDE (herramientas + reserva cubiertas y hay excedente):
+    recuperacion_sergio = skim_apartado_del_mes + fondo_excedente
+    -> a tu capital: deuda 2.414,49 primero, luego arranque 15.000,00
+
+Si la caja quedo ROJA/AMARILLA (Fondo no cubrio herramientas + reserva):
+    el skim_apartado se queda como caja operativa de ONIA (ayuda a pagar
+    herramientas), la recuperacion se difiere y el ledger sigue acumulando.
+    recuperacion_sergio = 0 ese mes
 ```
 
-Como Arthur no tiene saldo recuperable, el 100% de ambos motores va a Sergio:
+El apartado se apaga solo cuando `capital_pendiente = 0`; ahi todo vuelve al
+40/50/10 sobre el ingreso neto completo, con el techo de 50% de Arthur intacto.
 
-```text
-sergio_recovery = skim_del_periodo + max(0, fondo_excedente)
-arthur_recovery = 0
-```
-
-Impacto: con 6 ventas/mes de Bs. 1.500, el skim solo aporta Bs. 900/mes fijos a
-capital. La deuda 2.414,49 se cubre en ~3 meses aunque el Fondo no deje excedente.
+Por que asi: en un mes flojo, pagar el skim mientras el Fondo no cubre
+herramientas seria recuperar con una mano e inyectar capital fresco con la otra
+-- recuperacion ficticia. Con el apartado + gate de caja verde, recuperas rapido
+en meses buenos y no te engañas en meses malos. Para Arthur no cambia nada: su
+reparto siempre se calcula sobre el 90%.
 
 Semaforo de caja (decide que se puede hacer cada cierre):
 
