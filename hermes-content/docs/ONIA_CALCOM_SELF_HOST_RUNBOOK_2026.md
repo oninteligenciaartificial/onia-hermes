@@ -433,9 +433,36 @@ los dos lados a la vez:
 3. Probar una reserva de prueba: si pasa, la firma quedo bien; si falla, revisar
    que el secret coincida en ambos lados y que se use el body crudo.
 
+### Nodo de validacion ya montado (2026-07-03)
+
+En el workflow `ONIA - Agenda: Cal.com Booking` (`X6gd3EBW7Y3z9xTg`) ya se agrego
+el nodo Code **`Validar firma Cal (OFF)`** entre `Cal.com Booking Webhook` y
+`Parsear Booking CalCom`, **deshabilitado** (por eso hoy es passthrough y no
+afecta el flujo; verificado con una reserva sintetica). Trae la logica HMAC y
+lee el secret de `$env.CALCOM_WEBHOOK_SECRET`. Para activarlo:
+
+1. Setear el secret en Cal admin (webhook `calcom-booking`).
+2. Cargar `CALCOM_WEBHOOK_SECRET` en n8n (`n8n-sergio_n8n`) con el mismo valor.
+3. Habilitar el nodo (y publicar el workflow con `publish_workflow` o desde el
+   editor).
+4. Si la firma no coincide, activar "Raw Body" en el nodo Webhook y ajustar el
+   nodo para hashear el string crudo (el HMAC de Cal es sobre el body crudo).
+
 ## Bloqueos actuales
 
-- Falta probar SMTP real con `business@onia.com.bo`.
+- **SMTP a medio configurar (verificado 2026-07-03 en el VPS).** En
+  `/opt/onia-calcom/.env`: `EMAIL_FROM=business@onia.com.bo`,
+  `EMAIL_SERVER_HOST=smtp.gmail.com`, `EMAIL_SERVER_PORT=587` estan seteados y
+  `smtp.gmail.com:587` es alcanzable desde el VPS, pero **`EMAIL_SERVER_USER` y
+  `EMAIL_SERVER_PASSWORD` estan VACIAS**. Por eso Cal no puede enviar correos.
+  Para activar SMTP:
+  1. Generar un **App Password de Gmail** para la cuenta (needs 2FA):
+     myaccount.google.com -> Seguridad -> Contrasenas de aplicaciones.
+  2. En `/opt/onia-calcom/.env` setear
+     `EMAIL_SERVER_USER=business@onia.com.bo` (o la cuenta Gmail real) y
+     `EMAIL_SERVER_PASSWORD=<app-password-16-char>`.
+  3. `cd /opt/onia-calcom && docker compose up -d` (recrea el contenedor calcom).
+  4. Probar aceptando una reserva real y confirmar que llega el correo.
 - Falta conectar Google Calendar directamente en Cal; `Credential` de Cal esta
   vacio al 2026-06-29. Sin eso, Cal no puede bloquear horas ocupadas en Google.
 - Falta prueba end-to-end con un booking real de baja criticidad.
