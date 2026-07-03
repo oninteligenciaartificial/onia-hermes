@@ -39,12 +39,39 @@ entidades core que faltan, (c) alinear el cockpit al contrato.
 
 ### Sprint 0 — Saneamiento de base (bloqueante, sin core)
 
-1. Resolver DG-013: `npx prisma migrate status`, definir fuente canonica
-   (Prisma vs Supabase), crear baseline reproducible.
-2. Tests de seguridad de tenant (todas las queries con `organizationId`) —
+#### Diagnostico ejecutado 2026-07-03 (read-only, via Supabase MCP)
+
+Proyecto Supabase `kvepqgikokjlacxngkiw` (Dental-gest, us-west-2,
+ACTIVE_HEALTHY, Postgres 17).
+
+| Hallazgo | Detalle |
+|---|---|
+| `_prisma_migrations` NO existe en prod | Prisma migrate nunca gestiono produccion. El historial `prisma/migrations/` (hasta `20260618161500_email_notifications_default_on`) no tiene registro en prod. |
+| Tracking real: `supabase_migrations.schema_migrations` | Ultima aplicada: `20260610201810_add_inventory_addon`. |
+| Contenido AL DIA a pesar del doble tracking | Columnas de migraciones de junio existen en prod (`onboardingCompletedAt`, `extraUserSeats`, `emailNotifications`, `inventoryAddon`). El drift es de REGISTRO, no de contenido. |
+| Namespace `dentalgest` NO aplicado | La migracion `supabase/migrations/20260629_dentalgest_namespace.sql` (commit ed4e032) no corrio en prod: no existe schema `dentalgest`. |
+| 24 tablas public vs 23 modelos Prisma | Cuadra; la extra es `prospect_leads` (solo Supabase, fuera de Prisma — decision pendiente: agregarla al schema o documentarla como tabla externa). |
+
+#### Runbook de correccion (pendiente de ejecutar)
+
+1. **Confirmar cero drift de contenido**: `prisma migrate diff
+   --from-schema-datamodel prisma/schema.prisma --to-url $DIRECT_URL` (debe
+   dar vacio o diferencias solo de `prospect_leads`/objetos Supabase).
+2. **Elegir fuente canonica** (recomendacion): Prisma migrate para el schema
+   de la app; `supabase/migrations` SOLO para objetos Supabase (RLS,
+   realtime, RPC, schemas de integracion). Documentar la frontera.
+3. **Baseline Prisma**: squash del historial local a una migracion baseline y
+   `prisma migrate resolve --applied <baseline>` contra prod (solo escribe la
+   tabla de tracking `_prisma_migrations`; no toca tablas de la app).
+4. **CI**: `prisma migrate deploy` como unico camino de schema de app a prod.
+5. **Decidir namespace `dentalgest`**: aplicar la migracion 20260629 o
+   retirarla del repo (hoy es codigo muerto sin aplicar).
+6. Tests de seguridad de tenant (todas las queries con `organizationId`) —
    gate exigido por el adapter.
-3. Criterio de salida: una DB nueva se reconstruye desde cero con baseline
-   documentado. Sin esto NO se agregan tablas core.
+
+Criterio de salida: una DB nueva se reconstruye desde cero con baseline
+documentado y `prisma migrate status` en prod responde limpio. Sin esto NO se
+agregan tablas core.
 
 ### Sprint 1 — WorkItem dental + panel `pending`
 
