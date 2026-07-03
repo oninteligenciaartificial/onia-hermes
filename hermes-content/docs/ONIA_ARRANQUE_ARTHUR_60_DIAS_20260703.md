@@ -44,23 +44,47 @@ Montos vigentes (`FINANCE_LOG_2026.md`):
 | Deuda operativa | 2.414,49 |
 | Capital de arranque | 15.000,00 |
 
-Orden de recuperacion desde excedente del Fondo ONIA (40% protegido):
+Modelo elegido: **skim de capital primero** (2026-07-03). La recuperacion tiene
+dos motores, no uno:
+
+**Motor 1 - Skim en cada venta (garantizado).** Mientras haya capital pendiente,
+de cada ingreso neto se aparta 10% de recuperacion ANTES del reparto:
+
+```text
+ingreso_neto = cobro - costos_directos_externos
+skim_recuperacion = ingreso_neto * 10%   -> 100% a capital Sergio (deuda, luego arranque)
+base_repartible   = ingreso_neto * 90%
+Fondo ONIA        = base_repartible * 40%
+Arthur            = base_repartible * (% segun nivel de intervencion)
+Sergio/gestion    = base_repartible * (% segun nivel)
+```
+
+El skim se apaga solo cuando `capital_pendiente = 0`; ahi todo vuelve al
+40/50/10 sobre el ingreso neto completo.
+
+Orden dentro del skim: **1) deuda operativa 2.414,49  ->  2) arranque 15.000,00.**
+
+**Motor 2 - Excedente del Fondo ONIA (mensual).** Ademas del skim, si el Fondo
+sobra a fin de mes despues de herramientas/caja/reserva, ese excedente tambien
+recupera capital:
 
 ```text
 1. Herramientas / apps / IA / VPS / Workspace del mes (2.950,50)
 2. Caja chica aprobada
 3. Reserva minima de operacion
-4. Deuda operativa 2.414,49  (recuperar primero: es dinero prestado)
-5. Capital de arranque 15.000,00  (objetivo: devolver a fuente familiar)
-6. Recien despues: bonos, reinversion no urgente, retiro Sergio
+4. Excedente -> capital Sergio (deuda primero, luego arranque)
+5. Recien despues: bonos, reinversion no urgente, retiro Sergio
 ```
 
-Como Arthur no tiene saldo recuperable, aplica la formula del sistema:
+Como Arthur no tiene saldo recuperable, el 100% de ambos motores va a Sergio:
 
 ```text
-sergio_recovery = min(sergio_capital_balance, recovery_pool)
+sergio_recovery = skim_del_periodo + max(0, fondo_excedente)
 arthur_recovery = 0
 ```
+
+Impacto: con 6 ventas/mes de Bs. 1.500, el skim solo aporta Bs. 900/mes fijos a
+capital. La deuda 2.414,49 se cubre en ~3 meses aunque el Fondo no deje excedente.
 
 Semaforo de caja (decide que se puede hacer cada cierre):
 
