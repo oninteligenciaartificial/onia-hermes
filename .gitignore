@@ -21,6 +21,9 @@ __pycache__/
 dist/
 build/
 *.log
+# Excepcion: logs de provenance de generacion bajo references/ SI se sincronizan
+# (son outputs de runs, no cache regenerable).
+!hermes-content/references/**/*.log
 
 # OS
 .DS_Store

@@ -1,5 +1,25 @@
 # ONIA cierre de dia - 2026-06-23
 
+> Actualizacion 2026-07-03 (triage de higiene). Este es un snapshot historico del
+> 06-23; abajo el estado real de los pendientes 10 dias despues. No se re-audito el
+> VPS en vivo (requiere `VPS_HOST`/`VPS_KEY_PATH`), asi que los items de infra
+> quedan "confirmar en VPS".
+>
+> | Pendiente 06-23 | Estado 07-03 | Base |
+> |---|---|---|
+> | Migraciones ONIA Center en Supabase real | Avanzado | La migracion auth/RLS se aplico en el Supabase self-hosted (ver `ONIA_CENTER_AUTH_RLS_ACTIVATION_20260623.md`). Falta confirmar schema/seed completo en VPS. |
+> | Reimportar/actualizar workflow n8n | Atendido | Auditado en `ONIA_N8N_TELEGRAM_CLEANUP_20260630.md` (06-30). Confirmar workflow vivo en VPS. |
+> | Activar auth/roles reales | Hecho | Implementado y desplegado con login por rol (`ONIA_CENTER_AUTH_RLS_ACTIVATION_20260623.md`). Pendiente solo rotar credenciales iniciales. |
+> | Conectar ONIA Center a datos reales | Parcial | Auth ya conecta al Supabase self-hosted; falta operacion con datos reales de usuarios. |
+> | Backups servidor local/self-hosted | Abierto | Sin evidencia de backup diario + copia externa. Infra, requiere VPS. |
+> | QA visual cutouts Nuvia por lote | Abierto | Revision visual manual, no automatizable. |
+> | Confirmar costos proveedor Nuvia | Abierto | Dato de negocio, requiere proveedor. |
+> | Decidir VPS vs local 30 dias | Encaminado a VPS | La automatizacion (hygiene diaria + web-factory VPS runner) apunta a VPS remoto. |
+> | Vercel/envs de produccion | Abierto | Confirmar variables/auth/RLS antes de exponer panel. |
+>
+> Resumen: auth/roles y n8n resueltos o atendidos; migraciones avanzadas; el resto
+> son infra/negocio que necesitan acceso VPS o decision humana, no higiene de docs.
+
 ## Operativo validado hoy
 
 | Frente | Estado | Evidencia |

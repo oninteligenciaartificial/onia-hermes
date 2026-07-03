@@ -160,6 +160,40 @@ Candidatos de archivo:
 No eliminarlos hasta confirmar si tienen dominio, cliente, caso, demo comercial o
 codigo reutilizable.
 
+## Higiene de documentacion diaria (docs hygiene)
+
+Complemento del audit de proyectos: revisa la salud de la documentacion del repo,
+que era limpieza manual hasta el 2026-07-03.
+
+Script: `scripts/onia_docs_hygiene.mjs`. Corre en el mismo workflow diario de
+GitHub Actions (paso "Run ONIA docs hygiene"), sin secrets. Es determinista y
+read-only por defecto.
+
+Comandos:
+
+```txt
+npm run hygiene:docs        # solo reporta
+npm run hygiene:docs:fix    # aplica solo los arreglos safe_auto
+```
+
+Que detecta:
+
+- Docs duplicados entre la raiz y `hermes-content/docs/` (identicos o divergentes).
+- Archivos regenerables (pycache, dist, build) trackeados pese a `.gitignore`.
+- Otros archivos ignorados-pero-trackeados bajo references/assets (solo aviso).
+- Archivos temporales trackeados (`tmp_*`, `*.tmp`, capturas de sesion).
+- Referencias en Markdown a scripts que no existen en el repo.
+
+Politica de arreglo automatico (`--fix`):
+
+- `safe_auto`: solo destrackea cache regenerable (git rm --cached; el archivo
+  queda en disco). Nunca borra contenido de docs.
+- `pull_request` / `approval_required`: nunca se auto-ejecutan. Fusionar docs
+  divergentes o borrar duplicados con contenido queda para un humano/PR.
+
+Salida: `.onia-hygiene/onia-docs-hygiene-report.json` y `-summary.md`, que se
+suben como artefacto junto al reporte de proyectos.
+
 ## Siguiente fase
 
 1. Crear vista dedicada `Higiene` dentro de ONIA Center.

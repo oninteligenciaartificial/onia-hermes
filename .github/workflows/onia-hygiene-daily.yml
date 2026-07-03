@@ -63,6 +63,10 @@ jobs:
             --commit "$ONIA_HYGIENE_COMMIT" \
             --failOnBlocker "$ONIA_HYGIENE_FAIL_ON_BLOCKER"
 
+      - name: Run ONIA docs hygiene
+        if: always()
+        run: node scripts/onia_docs_hygiene.mjs --out .onia-hygiene
+
       - name: Upload hygiene report
         if: always()
         uses: actions/upload-artifact@v4

@@ -83,10 +83,11 @@ Checklists y bloqueos vigentes (no son deuda oculta, pero conviene rastrearlos):
   cerrado intake -> JSON -> preview -> deploy -> entrega (linea 122); checkout real
   bloqueado por env vars Supabase/BNB (lineas 120-121); falta politica de derechos
   de imagen (lineas 125-126); cobertura E2E incompleta (lineas 118-119).
-- `hermes-content/docs/ONIA_CIERRE_DIA_20260623.md` (lineas 25-37): 8 pendientes
-  del cierre del 06-23 (migraciones Supabase, workflow n8n, activar auth/roles,
-  conectar DB de ONIA Center, backups, QA Nuvia, costos vendedores, decision
-  VPS vs local). Snapshot de hace 10 dias; conviene verificar cuales siguen abiertos.
+- `hermes-content/docs/ONIA_CIERRE_DIA_20260623.md`: los 8 pendientes del cierre
+  06-23 fueron triados el 07-03 (tabla de estado al inicio de ese doc). Resueltos:
+  auth/roles (desplegado) y n8n (auditado 06-30); migraciones avanzadas. Siguen
+  abiertos por infra/negocio (no higiene de docs): backups, QA visual Nuvia, costos
+  proveedor Nuvia, envs Vercel produccion, y confirmar todo en el VPS en vivo.
 - `hermes-content/docs/MODEL_VIDEO_PRODUCTION_SYSTEM.md` (lineas 509-524): pipeline
   de video con smoke test, produccion e integracion avanzada.
 - `hermes-content/docs/ONIA_HERMES_COLLABORATOR_SETUP_RUNBOOK_2026.md` (233-248) y
@@ -129,9 +130,26 @@ Conservado a proposito:
 - `tmp-assets/` (avatares/videos Sergio) y `references-inbox/` (9,2 MB de
   referencias): `.gitignore` indica explicitamente que assets/fotos SI se sincronizan.
 
+## 6. Automatizacion: higiene diaria de docs
+
+Para que esta limpieza no dependa de una pasada manual, se agrego un check
+determinista que corre todos los dias.
+
+- Script: `scripts/onia_docs_hygiene.mjs` (read-only por defecto; `--fix` solo
+  destrackea cache regenerable, nunca borra contenido).
+- Comandos: `npm run hygiene:docs` y `npm run hygiene:docs:fix`.
+- Corre en el workflow diario `.github/workflows/onia-hygiene-daily.yml`
+  (06:00 America/La_Paz), junto al audit de proyectos, sin depender de la PC de
+  Sergio. Sube reporte como artefacto.
+- Detecta: duplicados raiz vs docs, cache trackeado pese a `.gitignore`, temporales
+  trackeados y referencias a scripts inexistentes.
+- Estado actual: 0 hallazgos (repo limpio tras la consolidacion).
+- Detalle en `ONIA_PROJECT_HYGIENE_AUTOMATION_2026.md`.
+
 ## Proximos pasos sugeridos
 
-1. Revisar los 8 pendientes del cierre 06-23 y cerrar los ya resueltos.
+1. Cerrar los items de infra del cierre 06-23 que necesitan VPS/negocio (backups,
+   QA Nuvia, costos proveedor, envs Vercel). Ver tabla de triage en ese doc.
 2. Destrabar los 3 bloqueos SSH/n8n de la automatizacion VPS de web-factory.
 3. Opcional: revisar `ONIA_MASTER_PLAN.md` de raiz (edicion 06-06, varios
    PENDIENTE) para confirmar vigencia.

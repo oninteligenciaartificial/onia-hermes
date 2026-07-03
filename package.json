@@ -25,6 +25,8 @@
     "deploy:webhook-propuestas": "node scripts/vps-deploy-webhook-propuestas.js",
     "deploy:calcom": "node scripts/vps_install_calcom.js --kit hermes-content/deploy/calcom",
     "hygiene:projects": "node scripts/onia_project_hygiene.mjs --config hermes-content/references/onia-project-hygiene-config.json --out .onia-hygiene",
+    "hygiene:docs": "node scripts/onia_docs_hygiene.mjs --out .onia-hygiene",
+    "hygiene:docs:fix": "node scripts/onia_docs_hygiene.mjs --out .onia-hygiene --fix",
     "carousel": "node scripts/carousel_pipeline.js",
     "carousel:render": "node scripts/carousel_render.js",
     "carousel:publish": "node scripts/carousel_publish.js",
