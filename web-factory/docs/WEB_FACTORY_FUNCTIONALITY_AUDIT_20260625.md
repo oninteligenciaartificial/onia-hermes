@@ -156,3 +156,32 @@ Quedo cerrado el frente de demos internas:
 Pendiente real que no debe inventarse: datos finales de cliente como dominio,
 politicas, credenciales profesionales, precios reales, fotos propias,
 testimonios, pasarelas de pago y aprobacion de assets.
+
+## Actualizacion 2026-07-03
+
+Se cerraron dos gaps de mayor impacto en el flujo vendible (intake -> preview),
+verificados contra el codigo y con tests del paquete:
+
+- `generate/factory-build.ts` (orquestrador del flujo cerrado) pasa de 0 a
+  cobertura con `generate/factory-build.test.ts`: flujo completo intake ->
+  perfil -> receta -> preview, modo dry-run y validacion de slug/intake.
+- Bug corregido: `factory:build --input <intake> --dry-run` crasheaba con
+  ENOENT porque el paso de intake no escribe el perfil en dry-run, pero la
+  receta de diseno intentaba cargarlo. Ahora dry-run desde intake se detiene en
+  la validacion del intake y devuelve rutas + warning claro, sin escribir nada.
+- Bug sistemico corregido: los comandos canonicos documentados con la forma
+  `pnpm <script> -- <args>` (`client:new`, `design:auto`, `factory:build`,
+  `generate`) fallaban en pnpm 10.x porque el separador `--` se reenviaba al
+  argv del script y commander lo rechazaba ("too many arguments" / "required
+  option not specified"). Se agrego `generate/argv.ts` (`sanitizeCliArgv`) con
+  tests y se conecto a los cuatro entrypoints CLI. La forma documentada del
+  runbook ahora funciona verbatim.
+
+Validacion ejecutada desde `web-factory/`: `pnpm test` (22 tests, 8 archivos),
+`pnpm --filter site lint`, `pnpm factory:smoke` y los tres comandos `--`
+documentados en modo `--dry-run`.
+
+Gaps de mayor esfuerzo que siguen abiertos: E2E Playwright real (home,
+catalogo, producto, carrito, CTA) sobre el runtime Next; plantillas fuertes
+adicionales por rubro mas alla de `landing`/`store`; y flujo deploy/rollback
+(manual por diseno, requiere aprobacion humana).

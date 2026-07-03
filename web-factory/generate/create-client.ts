@@ -9,6 +9,7 @@ import {
   getMissingClientInputs,
   webFactoryIntakeSchema,
 } from "../data/intake-schema";
+import { sanitizeCliArgv } from "./argv";
 
 export type CreateClientOptions = {
   rootDir?: string;
@@ -88,7 +89,7 @@ program
   });
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
-  program.parse();
+  program.parse(sanitizeCliArgv(process.argv));
 }
 
 async function assertDoesNotExist(filePath: string): Promise<void> {
