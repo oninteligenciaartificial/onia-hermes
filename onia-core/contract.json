@@ -491,7 +491,8 @@
       "projectId": "dentagest",
       "repoPath": "C:\\dev\\proyectos\\DentaGest\\dental-saas",
       "status": "hold_until_beta",
-      "nextAction": "No tocar dominio clinico; adaptar solo tenant, roles, evidencia y reportes."
+      "adoptionPlan": "onia-core/ONIA_CORE_DENTALGEST_ADOPTION_PLAN_2026.md",
+      "nextAction": "Aprobar plan de adopcion; Sprint 0 (baseline de migraciones DG-013) puede arrancar sin tocar core."
     },
     {
       "projectId": "ganadero-os",
