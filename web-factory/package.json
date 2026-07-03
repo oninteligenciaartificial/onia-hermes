@@ -12,7 +12,7 @@
     "client:new": "tsx generate/create-client.ts",
     "design:auto": "tsx generate/auto-design.ts",
     "factory:build": "tsx generate/factory-build.ts",
-    "factory:smoke": "pnpm test && pnpm generate demo && pnpm generate skincare-demo --template store && pnpm generate restaurant-demo && pnpm generate clinic-demo && pnpm generate engineering-demo && pnpm generate saas-demo",
+    "factory:smoke": "pnpm test && pnpm generate demo && pnpm generate skincare-demo --template store && pnpm generate restaurant-demo && pnpm generate clinic-demo && pnpm generate engineering-demo && pnpm generate saas-demo && pnpm generate dashboard-demo --template dashboard",
     "lint": "pnpm --filter site lint",
     "preview:stop": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/stop-local-previews.ps1",
     "preview:nuvia": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/start-nuvia-preview.ps1",

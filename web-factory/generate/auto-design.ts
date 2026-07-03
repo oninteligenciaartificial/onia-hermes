@@ -70,9 +70,9 @@ function parseTemplate(value?: string): WebFactoryTemplate | undefined {
     return undefined;
   }
 
-  if (value === "landing" || value === "store") {
+  if (value === "landing" || value === "store" || value === "dashboard") {
     return value;
   }
 
-  throw new Error(`Unsupported template "${value}". Available: landing, store.`);
+  throw new Error(`Unsupported template "${value}". Available: landing, store, dashboard.`);
 }

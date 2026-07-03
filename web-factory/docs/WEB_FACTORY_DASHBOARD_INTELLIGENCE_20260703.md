@@ -67,11 +67,37 @@ pnpm references:intelligence
 El harvester respeta `include`/`exclude` y la licencia declarada por fuente.
 Revisar licencias antes de reusar codigo (especialmente Hugging Face Spaces).
 
+## Template estatico de dashboard (construido 2026-07-03)
+
+Ya existe `packages/templates/src/dashboard.ts` (`renderDashboardDocument` /
+`renderDashboardCss`), cableado en `generate/generate.ts` como tercer template
+(`landing` | `store` | `dashboard`). Es estatico y tokenizado, sin React:
+
+- Shell con navegacion lateral (colapsa a barra superior en movil).
+- Fila de KPIs con delta semantico (verde sube / rojo baja / neutro estable).
+- Graficos como **SVG inline calculado de los datos** (barras y linea con area),
+  sin librerias de chart en la salida.
+- Tabla operativa con header sticky y **estado vacio** ("sin registros").
+- JS liviano: segmento de filtro (toggle visual) + reveal con IntersectionObserver
+  que respeta `prefers-reduced-motion`.
+- Los datos viven en `client.dashboard` (schema Zod: `kpis`, `charts`, `table`);
+  campos opcionales con default, asi que no afecta a clientes landing/store.
+
+Demo: `data/clients/dashboard-demo.json`. Preview:
+
+```powershell
+pnpm generate dashboard-demo --template dashboard
+```
+
+Las fuentes MIT/Apache (Tremor/Tabler/shadcn) se usaron como referencia de
+estructura y taxonomia de componentes; el codigo es propio y retokenizado, no
+copiado.
+
 ## Pendiente de mayor esfuerzo
 
-- **Template estatico de dashboard** en `packages/templates/` (hoy solo existen
-  `landing` y `store`). El vertical ya razona sobre el rubro, pero el generador
-  todavia no pinta un panel; ese es el siguiente build grande y conviene basarlo
-  en Tremor/shadcn (MIT/Apache) retokenizados.
+- Flujo intake -> perfil para datos de dashboard: hoy `dashboard-demo.json` se
+  escribe a mano; falta mapear `dashboard.*` en `buildClientProfileFromIntake`
+  para generar paneles desde un intake.
+- Charts mas ricos (ejes Y, tooltips, series multiples) manteniendo SVG sin deps.
 - Cache local de los repos MIT/Apache (Tremor, Tabler, shadcn) para
   `references:code-index` y reuso de codigo con revision.

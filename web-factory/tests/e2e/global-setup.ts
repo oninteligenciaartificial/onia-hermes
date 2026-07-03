@@ -12,4 +12,5 @@ const rootDir = path.resolve(fileURLToPath(new URL("../..", import.meta.url)));
 export default async function globalSetup(): Promise<void> {
   await generateSite("demo", { rootDir, template: "landing" });
   await generateSite("skincare-demo", { rootDir, template: "store" });
+  await generateSite("dashboard-demo", { rootDir, template: "dashboard" });
 }

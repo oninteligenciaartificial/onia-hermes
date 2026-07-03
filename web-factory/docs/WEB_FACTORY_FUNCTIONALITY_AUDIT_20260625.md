@@ -201,8 +201,14 @@ adicionales por rubro mas alla de `landing`/`store`; y flujo deploy/rollback
   operativa; densidad visual alta, motion bajo) con test; 5 fuentes con licencia
   verificada en el harvester (Tremor Apache-2.0, Tabler MIT, shadcn charts +
   dashboard-01 MIT, Hugging Face Spaces per-Space); playbook en el pattern bank y
-  doc `WEB_FACTORY_DASHBOARD_INTELLIGENCE_20260703.md`. Pendiente de mayor
-  esfuerzo: template estatico de dashboard en `packages/templates/`.
+  doc `WEB_FACTORY_DASHBOARD_INTELLIGENCE_20260703.md`.
+- **Template estatico de dashboard construido** (`packages/templates/src/dashboard.ts`,
+  tercer template junto a `landing`/`store`): shell con nav lateral, KPIs con delta
+  semantico, graficos SVG inline calculados de los datos (barras + linea), tabla con
+  estado vacio, filtro y reveal con `prefers-reduced-motion`. Datos en
+  `client.dashboard` (schema Zod opcional). Demo `dashboard-demo`; cubierto por unit
+  tests y E2E (chromium+mobile) y QA visual. Pendiente: mapear `dashboard.*` en el
+  intake para generar paneles desde intake (hoy el demo es client json a mano).
 
 Validacion: `pnpm test` (23 tests), `pnpm e2e` (8, chromium+mobile),
 `pnpm --filter site lint`, y verificacion de que `saas-demo` sigue infiriendo
