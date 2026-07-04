@@ -2,7 +2,7 @@ import { mkdir, mkdtemp, readFile, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
-import { buildAutoDesignRecipe, writeAutoDesignRecipe } from "./auto-designer";
+import { buildAutoDesignRecipe, renderAutoDesignMarkdown, writeAutoDesignRecipe } from "./auto-designer";
 
 describe("auto designer", () => {
   it("builds a vertical design recipe from client data, screenshots and allowed code", async () => {
@@ -67,6 +67,85 @@ describe("auto designer", () => {
     expect(recipe.client.inferredVertical).toBe("dashboard-analytics");
     expect(recipe.client.matchedKeywords).toEqual(expect.arrayContaining(["dashboard", "kpi", "metricas"]));
     expect(recipe.sectionPlan.some((section) => section.id === "kpi-overview")).toBe(true);
+  });
+
+  it("surfaces Tremor components and a per-section map for a dashboard recipe", async () => {
+    const rootDir = await createAutoDesignFixture();
+
+    await writeFile(
+      path.join(rootDir, "data", "references", "code-sources", "latest-component-code-examples.json"),
+      JSON.stringify({
+        capturedAt: "2026-07-03T00:00:00.000Z",
+        repositories: [
+          {
+            name: "tremorlabs__tremor",
+            localPath: "C:/repos/tremor",
+            license: "MIT",
+            status: "allowed-after-review",
+            examples: [
+              {
+                relativePath: "src/components/AreaChart/AreaChart.tsx",
+                sha256: "area",
+                sample: "export function AreaChart() { return <div />; }",
+                signals: { type: "react-component", hasTailwind: true, exports: ["AreaChart"] },
+              },
+              {
+                relativePath: "src/components/Badge/Badge.tsx",
+                sha256: "badge",
+                sample: "export function Badge() { return <span />; }",
+                signals: { type: "react-component", hasTailwind: true, exports: ["Badge"] },
+              },
+            ],
+          },
+          {
+            name: "shadcn-ui__ui",
+            localPath: "C:/repos/shadcn",
+            license: "MIT",
+            status: "allowed-after-review",
+            examples: [
+              {
+                relativePath: "blocks/dashboard-01/components/data-table.tsx",
+                sha256: "dt",
+                sample: "export function DataTable() { return <table />; }",
+                signals: { type: "react-component", hasTailwind: true, hasShadcn: true, exports: ["DataTable"] },
+              },
+            ],
+          },
+        ],
+      }),
+      "utf8",
+    );
+
+    await writeFile(
+      path.join(rootDir, "data", "clients", "ops-panel-demo.json"),
+      JSON.stringify({
+        nombre: "Panel Operativo Demo",
+        slug: "ops-panel-demo",
+        tagline: "Tablero con KPIs, graficos y reportes",
+        descripcion: "Panel administrativo con metricas, graficos y tabla operativa para dashboard analytics.",
+      }),
+      "utf8",
+    );
+    await writeFile(
+      path.join(rootDir, "data", "clients", "ops-panel-demo.context.md"),
+      "# Context\n\nRubro: dashboard analytics.\n",
+      "utf8",
+    );
+
+    const recipe = await buildAutoDesignRecipe("ops-panel-demo", {
+      rootDir,
+      now: new Date("2026-07-04T12:00:00.000Z"),
+    });
+
+    expect(recipe.client.inferredVertical).toBe("dashboard-analytics");
+    // Tremor is boosted for dashboards, so it leads the code references.
+    expect(recipe.codeReferences[0].repo).toBe("tremorlabs__tremor");
+    expect(recipe.codeReferences.some((code) => code.file.includes("AreaChart"))).toBe(true);
+
+    const markdown = renderAutoDesignMarkdown(recipe);
+    expect(markdown).toContain("## Componentes De Dashboard Sugeridos");
+    expect(markdown).toContain("AreaChart");
+    expect(markdown).toContain("data-table");
   });
 
   it("writes json and markdown recipes without overwriting unless forced", async () => {

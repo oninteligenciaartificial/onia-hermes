@@ -1,0 +1,1278 @@
+{
+  "schemaVersion": "web-factory-auto-design-v1",
+  "generatedAt": "2026-07-04T17:07:31.662Z",
+  "client": {
+    "slug": "dashboard-demo",
+    "name": "ONIA Ops Demo",
+    "template": "dashboard",
+    "inferredVertical": "dashboard-analytics",
+    "verticalLabel": "Dashboard / analytics / internal tool",
+    "verticalConfidence": 0.95,
+    "matchedKeywords": [
+      "dashboard",
+      "panel",
+      "kpi",
+      "kpis",
+      "metrica",
+      "metricas",
+      "reporte",
+      "reportes",
+      "analytics",
+      "grafico"
+    ]
+  },
+  "sourcePaths": {
+    "clientProfile": "C:\\dev\\proyectos\\onia-hermes\\web-factory\\data\\clients\\dashboard-demo.json",
+    "clientContext": "C:\\dev\\proyectos\\onia-hermes\\web-factory\\data\\clients\\dashboard-demo.context.md",
+    "designIntelligence": "C:\\dev\\proyectos\\onia-hermes\\web-factory\\data\\references\\design-sources\\latest-design-intelligence.json",
+    "codeExamples": "C:\\dev\\proyectos\\onia-hermes\\web-factory\\data\\references\\code-sources\\latest-component-code-examples.json"
+  },
+  "designRead": {
+    "objective": "Mostrar el estado del negocio de un vistazo y permitir accion sobre los datos.",
+    "visualDirection": "Layout de datos: KPIs arriba, graficos y tablas con jerarquia clara, filtros y estados de carga/vacio cuidados.",
+    "conversionThesis": "Un panel funciona cuando el usuario entiende el estado en segundos y puede filtrar o accionar sin friccion; la densidad es una feature, no adorno.",
+    "genericRisk": "Cards de KPI sin jerarquia, graficos decorativos sin insight y tablas sin estados de carga/vacio ni acciones."
+  },
+  "dials": {
+    "conversionDensity": "medium",
+    "visualDensity": "high",
+    "motionIntensity": "low",
+    "trustTone": "operativo, denso y legible"
+  },
+  "selectedReferences": [
+    {
+      "role": "client-reference",
+      "sourceName": "Tremor",
+      "title": "Tremor",
+      "url": "https://www.tremor.so",
+      "licenseStatus": "client-provided-reference-review-required",
+      "reuseGuidance": "Use: jerarquia de KPI y graficos | Avoid: copiar identidad",
+      "screenshots": {},
+      "headings": [],
+      "ctas": [],
+      "topFonts": [],
+      "motionSignals": [],
+      "codeLinks": [],
+      "qualityWarnings": [],
+      "whySelected": [
+        "referencia exacta entregada en el brief",
+        "usar: jerarquia de KPI y graficos",
+        "evitar: copiar identidad"
+      ],
+      "score": 100
+    },
+    {
+      "role": "structure",
+      "sourceName": "SaaSFrame Landing Pages",
+      "title": "Slite UX/UI Design and Copywrinting Examples - SaaSFrame",
+      "url": "https://www.saasframe.io/saas/slite",
+      "licenseStatus": "inspiration-only",
+      "reuseGuidance": "SaaS landing page hero, value proposition, social proof, pricing and mobile-first CRO patterns.",
+      "screenshots": {
+        "desktop": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/saasframe-landing-pages/285-landing-page-4197935a/desktop.png",
+          "sha256": "5f1ed45ff55f31ec63895e6a08f01e1aa9c195d3b5a74a311892501e55f136bb",
+          "mode": "viewport"
+        },
+        "mobile": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/saasframe-landing-pages/285-landing-page-4197935a/mobile.png",
+          "sha256": "31fcdf757b4f6162b9f27e442fa627ac493ea922fdeada46a8d2363f2faa0a08",
+          "mode": "viewport"
+        }
+      },
+      "headings": [
+        {
+          "level": "h1",
+          "text": "Slite"
+        },
+        {
+          "level": "h3",
+          "text": "Marketing Pages"
+        },
+        {
+          "level": "h3",
+          "text": "Product Interfaces"
+        },
+        {
+          "level": "h3",
+          "text": "Emails"
+        },
+        {
+          "level": "h3",
+          "text": "Slite"
+        },
+        {
+          "level": "h3",
+          "text": "Sign Up Flow"
+        }
+      ],
+      "ctas": [
+        "All screens",
+        "👽 404 Page45",
+        "👨‍👩‍👧‍👦 About Page125",
+        "🎓 Academy25",
+        "🤑 Affiliate Page39",
+        "🪄 AI Page15",
+        "✍️ Blog Feed97",
+        "📝 Blog Template59",
+        "💼 Careers Page92",
+        "🆕 Changelog15",
+        "🥊 Comparison Page54",
+        "💌 Contact Page37"
+      ],
+      "topFonts": [
+        "system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Oxygen, Ubuntu, Cantarell, \"Fira Sans\", \"Droid Sans\", \"Helvetica Neue\", sans-serif",
+        "Montserrat, sans-serif"
+      ],
+      "motionSignals": {
+        "libraries": {
+          "framerMotion": false,
+          "gsap": false,
+          "three": false,
+          "lottie": false,
+          "locomotiveScroll": false
+        },
+        "animatedElementCount": 43,
+        "keyframes": [
+          "spin",
+          "borderTurn",
+          "borderTurnWithTranslate",
+          "scroll"
+        ]
+      },
+      "codeLinks": [
+        {
+          "url": "https://www.saasframe.io/patterns/copy-to-clipboard",
+          "text": "Copy to clipboard78screens"
+        }
+      ],
+      "qualityWarnings": [],
+      "whySelected": [
+        "coincide con rubro: bi",
+        "tiene screenshot desktop",
+        "tiene screenshot mobile",
+        "aporta senales de fuente",
+        "aporta CTAs reales",
+        "aporta links o bloques de codigo para estudiar",
+        "fuente fuerte para patrones web"
+      ],
+      "score": 44
+    },
+    {
+      "role": "structure",
+      "sourceName": "Landingfolio",
+      "title": "HeadshotPro Landing Page Inspiration and More | Landingfolio",
+      "url": "https://www.landingfolio.com/inspiration/post/headshotpro-1",
+      "licenseStatus": "inspiration-only",
+      "reuseGuidance": "Landing page examples, templates and component inspiration. Do not copy templates or proprietary assets.",
+      "screenshots": {
+        "desktop": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/landingfolio/091-headshotpro-a3943c9a/desktop.png",
+          "sha256": "db4eec9b71cbc035c4f0d465650e013db3157b15469cc36b7c6487f204a61b9d",
+          "mode": "viewport"
+        },
+        "mobile": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/landingfolio/091-headshotpro-a3943c9a/mobile.png",
+          "sha256": "4ebaad8617fb2483574338e53f5b594e97c08ec6a3509b4480445e47d272cfc8",
+          "mode": "viewport"
+        }
+      },
+      "headings": [
+        {
+          "level": "h3",
+          "text": "Site & Landing Page Inspiration"
+        },
+        {
+          "level": "h3",
+          "text": "Section & Component Examples"
+        },
+        {
+          "level": "h3",
+          "text": "Landing Page Templates"
+        },
+        {
+          "level": "h3",
+          "text": "Pro Templates"
+        },
+        {
+          "level": "h3",
+          "text": "Blog"
+        },
+        {
+          "level": "h3",
+          "text": "Optimization Tips"
+        }
+      ],
+      "ctas": [
+        "Landingfolio",
+        "Inspiration",
+        "Component Library",
+        "Templates",
+        "Learn",
+        "Optimization Tips Actional design tips to improve your landing page design",
+        "Tool Reviews The Best Landing Page Builder Software: The Definitive Guide.",
+        "Tools",
+        "Free Logos The perfect logo for your project is just a click away.",
+        "Pricing",
+        "Login",
+        "Login"
+      ],
+      "topFonts": [
+        "\"Plus Jakarta Sans\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", Roboto, Ubuntu, Cantarell, \"Noto Sans\", sans-serif, BlinkMacSystemFont, \"Segoe UI\", \"Helvetica Neue\", Arial, \"Noto Sans\", \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+      ],
+      "motionSignals": {
+        "libraries": {
+          "framerMotion": false,
+          "gsap": false,
+          "three": false,
+          "lottie": false,
+          "locomotiveScroll": false
+        },
+        "animatedElementCount": 39,
+        "keyframes": [
+          "pulse",
+          "spin",
+          "sk-chase-01e585e4",
+          "sk-chase-dot-01e585e4",
+          "sk-chase-dot-before-01e585e4",
+          "animatedgradient-4e4b04ca",
+          "animatedgradient",
+          "animatedgradient-06789daf",
+          "animatedgradient-fac1f164",
+          "fadeOut",
+          "fadeInDown",
+          "fadeInUp"
+        ]
+      },
+      "codeLinks": [
+        {
+          "url": "https://www.landingfolio.com/library",
+          "text": "Component Library (0+) Discover instant copy+paste Tailwind, Webflow & Figma components. Explore our huge library."
+        },
+        {
+          "url": "https://www.landingfolio.com/blog",
+          "text": "Blog Get expert advice on landing page design, copywriting, conversion optimization and more."
+        }
+      ],
+      "qualityWarnings": [],
+      "whySelected": [
+        "tiene screenshot desktop",
+        "tiene screenshot mobile",
+        "aporta senales de fuente",
+        "aporta CTAs reales",
+        "aporta links o bloques de codigo para estudiar",
+        "fuente fuerte para patrones web"
+      ],
+      "score": 39
+    },
+    {
+      "role": "structure",
+      "sourceName": "Recent Design",
+      "title": "App Store Screenshot Inspiration — Recent",
+      "url": "https://recent.design/app-store-screenshots",
+      "licenseStatus": "inspiration-only",
+      "reuseGuidance": "Daily recent design references across websites, OG images, app screenshots and design skills.",
+      "screenshots": {
+        "desktop": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/recent-design/004-app-screenshots-6eff42f4/desktop.png",
+          "sha256": "8a6b80b97193a740825d3bf107e14239869f1fedbb1ba600039cb0885a9ff15b",
+          "mode": "viewport"
+        },
+        "mobile": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/recent-design/004-app-screenshots-6eff42f4/mobile.png",
+          "sha256": "4d7ef7a1464ade97b419df082cfa66fd9432267306cf0f14569b7a8b06f05699",
+          "mode": "viewport"
+        }
+      },
+      "headings": [
+        {
+          "level": "h1",
+          "text": "App Screenshots"
+        },
+        {
+          "level": "h2",
+          "text": "Subscribe to the Recent digest"
+        },
+        {
+          "level": "h2",
+          "text": "Stay ahead of trends"
+        }
+      ],
+      "ctas": [
+        "Recent",
+        "Design",
+        "Websites",
+        "OG Images",
+        "App Screenshots",
+        "App Icons",
+        "Skills",
+        "Info",
+        "Subscribe",
+        "All",
+        "Business",
+        "Education"
+      ],
+      "topFonts": [
+        "Inter, -apple-system, BlinkMacSystemFont, \"SF Pro Text\", \"SF Pro Display\", sans-serif"
+      ],
+      "motionSignals": {
+        "libraries": {
+          "framerMotion": false,
+          "gsap": false,
+          "three": false,
+          "lottie": false,
+          "locomotiveScroll": false
+        },
+        "animatedElementCount": 63,
+        "keyframes": [
+          "input-caret-blink",
+          "ping",
+          "pulse"
+        ]
+      },
+      "codeLinks": [],
+      "qualityWarnings": [],
+      "whySelected": [
+        "tiene screenshot desktop",
+        "tiene screenshot mobile",
+        "aporta senales de fuente",
+        "aporta CTAs reales",
+        "fuente fuerte para patrones web"
+      ],
+      "score": 35
+    },
+    {
+      "role": "structure",
+      "sourceName": "Awwwards Winning Websites",
+      "title": "Wolverine Worldwide - Awwwards SOTD",
+      "url": "https://www.awwwards.com/sites/wolverine-worldwide",
+      "licenseStatus": "inspiration-only-high-overdesign-risk",
+      "reuseGuidance": "Art direction, typography, motion and experimental interaction reference. Translate into one usable design move for ONIA client work.",
+      "screenshots": {
+        "desktop": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/awwwards-winning-websites/476-locomotive-040978f6/desktop.png",
+          "sha256": "099dc91e686c465a98093a9588dd8e94b59ebda3de5d4540822cafcad0d26e9a",
+          "mode": "viewport"
+        },
+        "mobile": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/awwwards-winning-websites/476-locomotive-040978f6/mobile.png",
+          "sha256": "9c7d78c2b629a2b438fbfd3d9f02fc9a20f21419e20f0317ea9586b103292ef3",
+          "mode": "viewport"
+        }
+      },
+      "headings": [
+        {
+          "level": "h2",
+          "text": "Site of the Day - Jun 24, 2026"
+        },
+        {
+          "level": "h1",
+          "text": "Wolverine Worldwide"
+        },
+        {
+          "level": "h2",
+          "text": "Elements"
+        },
+        {
+          "level": "h3",
+          "text": "See the highlights of this website."
+        },
+        {
+          "level": "h3",
+          "text": "Fullscreen Masked Parallax"
+        },
+        {
+          "level": "h3",
+          "text": "Fullscreen Masked Parallax"
+        }
+      ],
+      "ctas": [
+        "Courses",
+        "Honor Mentions",
+        "Nominees",
+        "Sites of the Day",
+        "Sites of the Month",
+        "Sites of the Year",
+        "Honors New",
+        "Most Awarded Profiles",
+        "Jury 2026",
+        "Annual Awards",
+        "Portfolio Websites",
+        "Free fonts"
+      ],
+      "topFonts": [
+        "\"Inter Tight\""
+      ],
+      "motionSignals": {
+        "libraries": {},
+        "animatedElementCount": 0,
+        "keyframes": []
+      },
+      "codeLinks": [],
+      "qualityWarnings": [],
+      "whySelected": [
+        "tiene screenshot desktop",
+        "tiene screenshot mobile",
+        "aporta senales de fuente",
+        "aporta CTAs reales",
+        "fuente fuerte para patrones web",
+        "requiere simplificar para ONIA"
+      ],
+      "score": 31
+    },
+    {
+      "role": "structure",
+      "sourceName": "Tabler",
+      "title": "Tabler Icons: 6100+ free vector icons for web design",
+      "url": "https://tabler.io/icons",
+      "licenseStatus": "mit-open-source",
+      "reuseGuidance": "MIT admin dashboard UI kit: layouts, data tables, charts, forms and empty/loading states. Prefer the local MIT repo for code reuse.",
+      "screenshots": {
+        "desktop": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/tabler-admin-dashboard/234-tabler-icons-c0300d9f/desktop.png",
+          "sha256": "dab4ae2893466636fc6da5576114d6a0a3d21e3e66b84e7996e182c420009703",
+          "mode": "viewport"
+        },
+        "mobile": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/tabler-admin-dashboard/234-tabler-icons-c0300d9f/mobile.png",
+          "sha256": "f0a1cb5b25dce250582c292e2abf763c77770b1f2c02c8e200e85ba31bb5e393",
+          "mode": "viewport"
+        }
+      },
+      "headings": [
+        {
+          "level": "h3",
+          "text": "🌷 Tabler Illustrations v1.14 – Spring & Easter"
+        },
+        {
+          "level": "h3",
+          "text": "6,000 Icons and Counting: Tabler Icons v3.38–3.40"
+        },
+        {
+          "level": "h3",
+          "text": "💝 Tabler Illustrations v1.13 – Valentine’s Day & Beyond"
+        },
+        {
+          "level": "h3",
+          "text": "🎄 Tabler Illustrations v1.12 – Christmas Edition"
+        },
+        {
+          "level": "h1",
+          "text": "One Icon Set for Every Project"
+        },
+        {
+          "level": "h2",
+          "text": "Customize icons"
+        }
+      ],
+      "ctas": [
+        "Skip to content",
+        "Close banner",
+        "Icons",
+        "Admin Template",
+        "SVG IllustrationsIllustrationsNew",
+        "Email TemplatesEmails",
+        "Icons",
+        "Avatars",
+        "Blog",
+        "Changelog",
+        "View all blog posts",
+        "Docs"
+      ],
+      "topFonts": [
+        "Inter, \"Inter Fallback\", system-ui, -apple-system, \"Segoe UI\", Roboto, Ubuntu, Cantarell, \"Noto Sans\", sans-serif"
+      ],
+      "motionSignals": {
+        "libraries": {
+          "framerMotion": false,
+          "gsap": false,
+          "three": false,
+          "lottie": false,
+          "locomotiveScroll": false
+        },
+        "animatedElementCount": 78,
+        "keyframes": [
+          "fade-in",
+          "slideDown",
+          "shimmerText",
+          "fadeIn",
+          "pulse",
+          "pulse-keyframes",
+          "tada-keyframes",
+          "animated-ellipsis-keyframes",
+          "move-forever1",
+          "move-forever2",
+          "move-forever3",
+          "figma-1"
+        ]
+      },
+      "codeLinks": [
+        {
+          "url": "https://github.com/tabler/tabler-icons",
+          "text": "20.2k stars on Github"
+        },
+        {
+          "url": "https://tabler.io/icons/icon/copy",
+          "text": ""
+        },
+        {
+          "url": "https://github.com/tabler/tabler-icons?checkout%5Bcustom%5D%5Bph_distinct_id%5D=6200b3fd-5236-42c2-9b30-f3dd2a2c5a80&reference_id=6200b3fd-5236-42c2-9b30-f3dd2a2c5a80",
+          "text": "Browse on Github"
+        },
+        {
+          "url": "https://github.com/sponsors/codecalm",
+          "text": "GitHub Sponsors"
+        },
+        {
+          "url": "https://github.com/tabler/tabler-icons",
+          "text": "Tabler Icons"
+        },
+        {
+          "url": "https://github.com/tabler/tabler",
+          "text": "Tabler Admin Template"
+        },
+        {
+          "url": "https://github.com/tabler/tabler/releases",
+          "text": "Releases"
+        },
+        {
+          "url": "https://github.com/tabler",
+          "text": "Github"
+        }
+      ],
+      "qualityWarnings": [],
+      "whySelected": [
+        "coincide con rubro: dashboard, admin",
+        "tiene screenshot desktop",
+        "tiene screenshot mobile",
+        "aporta senales de fuente",
+        "aporta CTAs reales",
+        "aporta links o bloques de codigo para estudiar",
+        "tiene pista de codigo reusable con review"
+      ],
+      "score": 47
+    },
+    {
+      "role": "typography",
+      "sourceName": "Magic UI",
+      "title": "Kinetic Text | React Components & Templates",
+      "url": "https://magicui.design/docs/components/kinetic-text",
+      "licenseStatus": "mit-open-source-reference",
+      "reuseGuidance": "Animated marketing components, effects and motion patterns for landing pages. Prefer local MIT repo or registry install commands for implementation.",
+      "screenshots": {
+        "desktop": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/magic-ui/007-introducing-kinetic-text-fbd94463/desktop.png",
+          "sha256": "6dda46b6f9e0fc1bba15c05ae55cc2d60a7d2dd8b520258e7d384ee5ed252c83",
+          "mode": "viewport"
+        },
+        "mobile": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/magic-ui/007-introducing-kinetic-text-fbd94463/mobile.png",
+          "sha256": "f9bda98bced1f8700bab1256b01fe72b7be861559bea93b4180a5ed01c908bdc",
+          "mode": "viewport"
+        }
+      },
+      "headings": [
+        {
+          "level": "h2",
+          "text": "Command Palette"
+        },
+        {
+          "level": "h1",
+          "text": "Kinetic Text"
+        },
+        {
+          "level": "h1",
+          "text": "NostalgiaNostalgia"
+        },
+        {
+          "level": "h2",
+          "text": "Installation"
+        },
+        {
+          "level": "h2",
+          "text": "Usage"
+        },
+        {
+          "level": "h2",
+          "text": "Props"
+        }
+      ],
+      "ctas": [
+        "Toggle Menu",
+        "Magic UI",
+        "Components",
+        "Templates",
+        "Showcase",
+        "Search documentation...Search...⌘K",
+        "21,38921.4k",
+        "226",
+        "Toggle theme",
+        "Introduction",
+        "Installation",
+        "MCP"
+      ],
+      "topFonts": [
+        "Geist, sans-serif",
+        "\"Geist Mono\", monospace"
+      ],
+      "motionSignals": {
+        "libraries": {
+          "framerMotion": false,
+          "gsap": false,
+          "three": false,
+          "lottie": false,
+          "locomotiveScroll": false
+        },
+        "animatedElementCount": 113,
+        "keyframes": [
+          "spin",
+          "ping",
+          "pulse",
+          "enter",
+          "exit",
+          "accordion-down",
+          "accordion-up",
+          "blink-cursor",
+          "aurora",
+          "background-position-spin",
+          "gradient",
+          "meteor"
+        ]
+      },
+      "codeLinks": [
+        {
+          "url": "https://github.com/magicuidesign/magicui",
+          "text": "21,38921.4k"
+        },
+        {
+          "url": "https://github.com/abdmjd1",
+          "text": "@abdmjd1"
+        },
+        {
+          "url": "https://github.com/magicuidesign/magicui/issues/new?title=%5Bbug%5D%3A+%2Fdocs%2Fcomponents%2Fkinetic-text&labels=bug&labels=documentation&template=bug_report.yml",
+          "text": "Report an issue"
+        },
+        {
+          "url": "https://github.com/magicuidesign/magicui/issues/new?title=%5Bfeat%5D%3A+%2Fdocs%2Fcomponents%2Fkinetic-text&labels=enhancement&template=feature_request.yml",
+          "text": "Request a feature"
+        },
+        {
+          "url": "https://github.com/magicuidesign/magicui/edit/main/apps/www/content/docs/components/kinetic-text.mdx",
+          "text": "Edit this page"
+        },
+        {
+          "url": "https://github.com/magicuidesign/magicui",
+          "text": "GitHub"
+        }
+      ],
+      "qualityWarnings": [],
+      "whySelected": [
+        "tiene screenshot desktop",
+        "tiene screenshot mobile",
+        "aporta senales de fuente",
+        "aporta CTAs reales",
+        "aporta links o bloques de codigo para estudiar",
+        "fuente fuerte para patrones web",
+        "tiene pista de codigo reusable con review"
+      ],
+      "score": 43
+    },
+    {
+      "role": "component",
+      "sourceName": "shadcn/ui",
+      "title": "Building Blocks for the Web - shadcn/ui",
+      "url": "https://ui.shadcn.com/blocks/sidebar",
+      "licenseStatus": "mit-repo-available",
+      "reuseGuidance": "Base component architecture and accessible UI primitives. Prefer the locally cached MIT repository for code.",
+      "screenshots": {
+        "desktop": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/shadcn-ui/034-browse-more-blocks-11813c15/desktop.png",
+          "sha256": "0491f086169556a92013f3a59705694a27f33fa730c9c79c7d8a91ae778b2f69",
+          "mode": "viewport"
+        },
+        "mobile": {
+          "path": "C:/Users/PC/.codex/design-stack/gallery-examples-full/shadcn-ui/034-browse-more-blocks-11813c15/mobile.png",
+          "sha256": "aee06c2b8cbf3c5f0e175497492a9ca37d99bc849d808005f001342ea81c95a6",
+          "mode": "viewport"
+        }
+      },
+      "headings": [
+        {
+          "level": "h1",
+          "text": "Building Blocks for the Web"
+        }
+      ],
+      "ctas": [
+        "Toggle MenuMenu",
+        "Home",
+        "Docs",
+        "Components",
+        "Blocks",
+        "Charts",
+        "Directory",
+        "Create",
+        "Search documentation...Search...",
+        "118k",
+        "Toggle theme",
+        "Open in"
+      ],
+      "topFonts": [
+        "Geist, \"Geist Fallback\"",
+        "\"Geist Mono\", \"Geist Mono Fallback\""
+      ],
+      "motionSignals": {
+        "libraries": {
+          "framerMotion": false,
+          "gsap": false,
+          "three": false,
+          "lottie": false,
+          "locomotiveScroll": false
+        },
+        "animatedElementCount": 75,
+        "keyframes": [
+          "spin",
+          "pulse",
+          "enter",
+          "exit",
+          "accordion-down",
+          "accordion-up",
+          "caret-blink",
+          "scroll-fade-reveal-t",
+          "scroll-fade-reveal-b",
+          "scroll-fade-reveal-s",
+          "scroll-fade-reveal-e",
+          "tw-shimmer"
+        ]
+      },
+      "codeLinks": [
+        {
+          "url": "https://github.com/shadcn-ui/ui",
+          "text": "118k"
+        },
+        {
+          "url": "https://github.com/shadcn-ui/ui",
+          "text": "GitHub"
+        }
+      ],
+      "qualityWarnings": [],
+      "whySelected": [
+        "tiene screenshot desktop",
+        "tiene screenshot mobile",
+        "aporta senales de fuente",
+        "aporta CTAs reales",
+        "aporta links o bloques de codigo para estudiar",
+        "fuente fuerte para patrones web",
+        "tiene pista de codigo reusable con review"
+      ],
+      "score": 43
+    }
+  ],
+  "codeReferences": [
+    {
+      "repo": "tremorlabs__tremor",
+      "license": "MIT",
+      "status": "allowed-after-review",
+      "localPath": "C:/Users/PC/.codex/design-stack/repos/tremorlabs__tremor",
+      "file": "src/components/AreaChart/areachart.stories.tsx",
+      "sha256": "9586069d1e4cd596c4aa5a72e85f48a5016ac5acfdf530dca6d8e2620e622726",
+      "signals": {
+        "type": "react-component",
+        "hasTailwind": true,
+        "hasMotion": false,
+        "hasShadcn": false,
+        "imports": [
+          "react",
+          "@storybook/react",
+          "../Label/Label",
+          "../Switch/Switch",
+          "./AreaChart"
+        ],
+        "exports": [
+          "Default",
+          "DefaultNegative",
+          "WithValueFormatter",
+          "WithAxisLabels",
+          "WithMinValue",
+          "WithMinAndMaxValue",
+          "AllColors",
+          "WithLegendLeft",
+          "WithLegendCenter",
+          "WithLegendSlider"
+        ]
+      },
+      "samplePreview": "import React from \"react\"\nimport type { Meta, StoryObj } from \"@storybook/react\"\n\nimport { Label } from \"../Label/Label\"\nimport { Switch } from \"../Switch/Switch\"\nimport { AreaChart, TooltipProps } from \"./AreaChart\"\n\nconst chartdata = [\n  {\n    date: \"Jan 23\",\n    SolarCells: 2890,\n    Glass: 2338,\n    Encapsulant: 1450,\n    BackSheet: 1900,\n    Frame: 1600,\n    JunctionBox: 1800,\n    Adhesive: 1700,\n  },\n  {\n    date: \"Feb 23\",\n    SolarCells: 2756,\n    Glass: 2103,\n    Encapsulant: 1200,\n    BackSheet: 1850,\n    Frame: 1700,\n    JunctionBox: 1750,\n    Adhesive: 1650,\n  },\n  {\n    date: \"Mar 23\",\n    SolarCells: 3322,\n    Glass: 2194,\n    Encapsulant: 1300,\n    BackSheet: 2200,\n    Frame: 1400,\n    JunctionBox: 2000,\n    Adhesive: 800,\n  },\n  {\n    date: \"Apr 23\",\n    SolarCells: 3470,\n    Glass: 2108,\n    Encapsulant: 1400,\n    BackSheet: 1600,\n    Frame: 1800,\n    JunctionBox: 1900,\n\n/* sample truncated in recipe */",
+      "whySelected": [
+        "licencia MIT",
+        "compatible con Tailwind/tokenizacion",
+        "match de componente: chart, area"
+      ],
+      "reuseRule": "Allowed only after manual code review, retokenization, dependency check, accessibility check and responsive QA.",
+      "score": 46
+    },
+    {
+      "repo": "tremorlabs__tremor",
+      "license": "MIT",
+      "status": "allowed-after-review",
+      "localPath": "C:/Users/PC/.codex/design-stack/repos/tremorlabs__tremor",
+      "file": "src/components/AreaChart/AreaChart.tsx",
+      "sha256": "77dc0e11464f83bbf6cdf69c67d4bd3c6a0c5ea5522342e084ff13394327e730",
+      "signals": {
+        "type": "react-component",
+        "hasTailwind": true,
+        "hasMotion": false,
+        "hasShadcn": false,
+        "imports": [
+          "react",
+          "@remixicon/react",
+          "recharts",
+          "recharts/types/util/types",
+          "../../hooks/useOnWindowResize",
+          "../../utils/chartColors",
+          "../../utils/cx",
+          "../../utils/getYAxisDomain",
+          "../../utils/hasOnlyOneValueForKey"
+        ],
+        "exports": []
+      },
+      "samplePreview": "// Tremor AreaChart [v1.0.0]\n/* eslint-disable @typescript-eslint/no-explicit-any */\n\n\"use client\"\n\nimport React from \"react\"\nimport { RiArrowLeftSLine, RiArrowRightSLine } from \"@remixicon/react\"\nimport {\n  Area,\n  CartesianGrid,\n  Dot,\n  Label,\n  Line,\n  AreaChart as RechartsAreaChart,\n  Legend as RechartsLegend,\n  ResponsiveContainer,\n  Tooltip,\n  XAxis,\n  YAxis,\n} from \"recharts\"\nimport type { AxisDomain } from \"recharts/types/util/types\"\n\nimport { useOnWindowResize } from \"../../hooks/useOnWindowResize\"\nimport {\n  AvailableChartColors,\n  type AvailableChartColorsKeys,\n  constructCategoryColors,\n  getColorClassName,\n} from \"../../utils/chartColors\"\nimport { cx } from \"../../utils/cx\"\nimport { getYAxisDomain } from \"../../utils/getYAxisDomain\"\nimport { hasOnlyOneValueForKey } from \"../../utils/hasOnlyOneValueForKey\"\n\n//#region Legend\n\ninterface LegendItemProps {\n  name: string\n  color\n/* sample truncated in recipe */",
+      "whySelected": [
+        "licencia MIT",
+        "compatible con Tailwind/tokenizacion",
+        "match de componente: chart, area"
+      ],
+      "reuseRule": "Allowed only after manual code review, retokenization, dependency check, accessibility check and responsive QA.",
+      "score": 46
+    },
+    {
+      "repo": "tremorlabs__tremor",
+      "license": "MIT",
+      "status": "allowed-after-review",
+      "localPath": "C:/Users/PC/.codex/design-stack/repos/tremorlabs__tremor",
+      "file": "src/components/BarChart/barchart.stories.tsx",
+      "sha256": "c923dab83393948abc57245a45cccd0c18c8f81a7a5f42e449343ab448a75ba0",
+      "signals": {
+        "type": "react-component",
+        "hasTailwind": true,
+        "hasMotion": false,
+        "hasShadcn": false,
+        "imports": [
+          "react",
+          "@storybook/react",
+          "../Label/Label",
+          "../Switch/Switch",
+          "./BarChart"
+        ],
+        "exports": [
+          "Default",
+          "DefaultNegative",
+          "WithValueFormatter",
+          "WithAxisLabels",
+          "WithMinValue",
+          "WithMinAndMaxValue",
+          "AllColors",
+          "WithLegendLeft",
+          "WithLegendCenter",
+          "WithLegendSlider"
+        ]
+      },
+      "samplePreview": "import React from \"react\"\nimport type { Meta, StoryObj } from \"@storybook/react\"\n\nimport { Label } from \"../Label/Label\"\nimport { Switch } from \"../Switch/Switch\"\nimport { BarChart, type TooltipProps } from \"./BarChart\"\n\nconst chartdata = [\n  {\n    date: \"Jan 23\",\n    SolarCells: 2890,\n    Glass: 2338,\n    Encapsulant: 1450,\n    BackSheet: 1900,\n    Frame: 1600,\n    JunctionBox: 1800,\n    Adhesive: 1700,\n  },\n  {\n    date: \"Feb 23\",\n    SolarCells: 2756,\n    Glass: 2103,\n    Encapsulant: 1200,\n    BackSheet: 1850,\n    Frame: 1700,\n    JunctionBox: 1750,\n    Adhesive: 1650,\n  },\n  {\n    date: \"Mar 23\",\n    SolarCells: 3322,\n    Glass: 2194,\n    Encapsulant: 1300,\n    BackSheet: 2200,\n    Frame: 1400,\n    JunctionBox: 2000,\n    Adhesive: 800,\n  },\n  {\n    date: \"Apr 23\",\n    SolarCells: 3470,\n    Glass: 2108,\n    Encapsulant: 1400,\n    BackSheet: 1600,\n    Frame: 1800,\n    JunctionBox: 190\n/* sample truncated in recipe */",
+      "whySelected": [
+        "licencia MIT",
+        "compatible con Tailwind/tokenizacion",
+        "match de componente: chart, bar"
+      ],
+      "reuseRule": "Allowed only after manual code review, retokenization, dependency check, accessibility check and responsive QA.",
+      "score": 46
+    },
+    {
+      "repo": "tremorlabs__tremor",
+      "license": "MIT",
+      "status": "allowed-after-review",
+      "localPath": "C:/Users/PC/.codex/design-stack/repos/tremorlabs__tremor",
+      "file": "src/components/BarChart/BarChart.tsx",
+      "sha256": "e4f0b1ca32b2ad3d5fd33b4b955bc69951ac3f8946649686df36cedaa2bbafe2",
+      "signals": {
+        "type": "react-component",
+        "hasTailwind": true,
+        "hasMotion": false,
+        "hasShadcn": false,
+        "imports": [
+          "react",
+          "@remixicon/react",
+          "recharts",
+          "recharts/types/util/types",
+          "../../hooks/useOnWindowResize",
+          "../../utils/chartColors",
+          "../../utils/cx",
+          "../../utils/getYAxisDomain"
+        ],
+        "exports": []
+      },
+      "samplePreview": "// Tremor BarChart [v1.0.0]\n/* eslint-disable @typescript-eslint/no-explicit-any */\n\n\"use client\"\n\nimport React from \"react\"\nimport { RiArrowLeftSLine, RiArrowRightSLine } from \"@remixicon/react\"\nimport {\n  Bar,\n  CartesianGrid,\n  Label,\n  BarChart as RechartsBarChart,\n  Legend as RechartsLegend,\n  ResponsiveContainer,\n  Tooltip,\n  XAxis,\n  YAxis,\n} from \"recharts\"\nimport type { AxisDomain } from \"recharts/types/util/types\"\n\nimport { useOnWindowResize } from \"../../hooks/useOnWindowResize\"\nimport {\n  AvailableChartColors,\n  type AvailableChartColorsKeys,\n  constructCategoryColors,\n  getColorClassName,\n} from \"../../utils/chartColors\"\nimport { cx } from \"../../utils/cx\"\nimport { getYAxisDomain } from \"../../utils/getYAxisDomain\"\n\n//#region Shape\n\nfunction deepEqual<T>(obj1: T, obj2: T): boolean {\n  if (obj1 === obj2) return true\n\n  if (\n    typeof obj1 !== \"object\" ||\n    typeof obj2 !== \n/* sample truncated in recipe */",
+      "whySelected": [
+        "licencia MIT",
+        "compatible con Tailwind/tokenizacion",
+        "match de componente: chart, bar"
+      ],
+      "reuseRule": "Allowed only after manual code review, retokenization, dependency check, accessibility check and responsive QA.",
+      "score": 46
+    },
+    {
+      "repo": "shadcn-ui__ui",
+      "license": "MIT",
+      "status": "allowed-after-review",
+      "localPath": "C:/Users/PC/.codex/design-stack/repos/shadcn-ui__ui",
+      "file": "apps/v4/registry/bases/base/blocks/dashboard-01/components/chart-area-interactive.tsx",
+      "sha256": "c07b4d28344611ca12fd24fa37d51d8bbb08afe7ff4f1e11c670e68165f49ef8",
+      "signals": {
+        "type": "react-component",
+        "hasTailwind": true,
+        "hasMotion": false,
+        "hasShadcn": true,
+        "imports": [
+          "react",
+          "recharts",
+          "@/registry/bases/base/hooks/use-mobile",
+          "@/registry/bases/base/ui/card",
+          "@/registry/bases/base/ui/chart",
+          "@/registry/bases/base/ui/select",
+          "@/registry/bases/base/ui/toggle-group"
+        ],
+        "exports": [
+          "description",
+          "ChartAreaInteractive"
+        ]
+      },
+      "samplePreview": "\"use client\"\n\nimport * as React from \"react\"\nimport { Area, AreaChart, CartesianGrid, XAxis } from \"recharts\"\n\nimport { useIsMobile } from \"@/registry/bases/base/hooks/use-mobile\"\nimport {\n  Card,\n  CardAction,\n  CardContent,\n  CardDescription,\n  CardHeader,\n  CardTitle,\n} from \"@/registry/bases/base/ui/card\"\nimport {\n  ChartContainer,\n  ChartTooltip,\n  ChartTooltipContent,\n  type ChartConfig,\n} from \"@/registry/bases/base/ui/chart\"\nimport {\n  Select,\n  SelectContent,\n  SelectItem,\n  SelectTrigger,\n  SelectValue,\n} from \"@/registry/bases/base/ui/select\"\nimport {\n  ToggleGroup,\n  ToggleGroupItem,\n} from \"@/registry/bases/base/ui/toggle-group\"\n\nexport const description = \"An interactive area chart\"\n\nconst chartData = [\n  { date: \"2024-04-01\", desktop: 222, mobile: 150 },\n  { date: \"2024-04-02\", desktop: 97, mobile: 180 },\n  { date: \"2024-04-03\", desktop: 167, mobile: 120 },\n  { date: \"2024\n/* sample truncated in recipe */",
+      "whySelected": [
+        "licencia MIT",
+        "compatible con Tailwind/tokenizacion",
+        "patron shadcn revisable",
+        "match de componente: chart, area, dashboard"
+      ],
+      "reuseRule": "Allowed only after manual code review, retokenization, dependency check, accessibility check and responsive QA.",
+      "score": 43
+    },
+    {
+      "repo": "tremorlabs__tremor",
+      "license": "MIT",
+      "status": "allowed-after-review",
+      "localPath": "C:/Users/PC/.codex/design-stack/repos/tremorlabs__tremor",
+      "file": "src/components/BarList/barlist.stories.tsx",
+      "sha256": "9aef02b959856998599360a76fef5bf4ba1723c48c65be4cc2d30c5c1d2a301e",
+      "signals": {
+        "type": "react-component",
+        "hasTailwind": true,
+        "hasMotion": false,
+        "hasShadcn": false,
+        "imports": [
+          "react",
+          "@storybook/react",
+          "./BarList"
+        ],
+        "exports": [
+          "Default",
+          "WithHrefAndValueFormatter",
+          "WithSortOrderAscending",
+          "WithSortOrderNone",
+          "WithOnValueChange",
+          "WithOnValueChangeAndHref",
+          "DataSameWithOnValueChange",
+          "DataSame"
+        ]
+      },
+      "samplePreview": "import React from \"react\"\nimport type { Meta, StoryObj } from \"@storybook/react\"\n\nimport { BarList } from \"./BarList\"\n\nconst meta: Meta<typeof BarList> = {\n  title: \"visualization/BarList\",\n  component: BarList,\n  render: (args) => <BarList data-testid=\"barlist\" {...args} />,\n}\n\nexport default meta\ntype Story = StoryObj<typeof BarList>\n\nconst data = [\n  { name: \"/home\", value: 843 },\n  { name: \"/imprint\", value: 46 },\n  { name: \"/cancellation\", value: 3 },\n  { name: \"/blocks\", value: 108 },\n  { name: \"/documentation\", value: 384 },\n]\n\nconst dataSame = [\n  { name: \"/home\", value: 100 },\n  { name: \"/imprint\", value: 100 },\n  { name: \"/cancellation\", value: 100 },\n  { name: \"/blocks\", value: 100 },\n  { name: \"/documentation\", value: 100 },\n]\n\nconst dataHref = [\n  { name: \"/home\", value: 843, href: \"https://tremor.so\" },\n  { name: \"/imprint\", value: 46, href: \"https://tremor.so\" },\n  { name:\n/* sample truncated in recipe */",
+      "whySelected": [
+        "licencia MIT",
+        "compatible con Tailwind/tokenizacion",
+        "match de componente: bar, list"
+      ],
+      "reuseRule": "Allowed only after manual code review, retokenization, dependency check, accessibility check and responsive QA.",
+      "score": 40
+    },
+    {
+      "repo": "tremorlabs__tremor",
+      "license": "MIT",
+      "status": "allowed-after-review",
+      "localPath": "C:/Users/PC/.codex/design-stack/repos/tremorlabs__tremor",
+      "file": "src/components/BarList/BarList.tsx",
+      "sha256": "5437c3406c3623e1678eeb29b26d007007016cf6e10f0814e94a8daaeb982a06",
+      "signals": {
+        "type": "react-component",
+        "hasTailwind": true,
+        "hasMotion": false,
+        "hasShadcn": false,
+        "imports": [
+          "react",
+          "../../utils/cx",
+          "../../utils/focusRing"
+        ],
+        "exports": []
+      },
+      "samplePreview": "// Tremor BarList [v1.0.0]\n\nimport React from \"react\"\n\nimport { cx } from \"../../utils/cx\"\nimport { focusRing } from \"../../utils/focusRing\"\n\ntype Bar<T> = T & {\n  key?: string\n  href?: string\n  value: number\n  name: string\n}\n\ninterface BarListProps<T = unknown>\n  extends React.HTMLAttributes<HTMLDivElement> {\n  data: Bar<T>[]\n  valueFormatter?: (value: number) => string\n  showAnimation?: boolean\n  onValueChange?: (payload: Bar<T>) => void\n  sortOrder?: \"ascending\" | \"descending\" | \"none\"\n}\n\nfunction BarListInner<T>(\n  {\n    data = [],\n    valueFormatter = (value) => value.toString(),\n    showAnimation = false,\n    onValueChange,\n    sortOrder = \"descending\",\n    className,\n    ...props\n  }: BarListProps<T>,\n  forwardedRef: React.ForwardedRef<HTMLDivElement>,\n) {\n  const Component = onValueChange ? \"button\" : \"div\"\n  const sortedData = React.useMemo(() => {\n    if (sortOrder === \"none\") \n/* sample truncated in recipe */",
+      "whySelected": [
+        "licencia MIT",
+        "compatible con Tailwind/tokenizacion",
+        "match de componente: bar, list"
+      ],
+      "reuseRule": "Allowed only after manual code review, retokenization, dependency check, accessibility check and responsive QA.",
+      "score": 40
+    },
+    {
+      "repo": "tremorlabs__tremor",
+      "license": "MIT",
+      "status": "allowed-after-review",
+      "localPath": "C:/Users/PC/.codex/design-stack/repos/tremorlabs__tremor",
+      "file": "src/components/Badge/badge.stories.tsx",
+      "sha256": "b4fab0b0f2f3d35841f6b073efaa01eaf54486869635aa9eaf991dd5d7958a91",
+      "signals": {
+        "type": "react-component",
+        "hasTailwind": true,
+        "hasMotion": false,
+        "hasShadcn": true,
+        "imports": [
+          "@storybook/react",
+          "../../utils/cx",
+          "./Badge"
+        ],
+        "exports": [
+          "Default",
+          "Variants",
+          "AnchorWithBadgeVariantsStyle",
+          "CustomisedBadge"
+        ]
+      },
+      "samplePreview": "import type { Meta, StoryObj } from \"@storybook/react\"\n\nimport { cx } from \"../../utils/cx\"\nimport { Badge, badgeVariants } from \"./Badge\"\n\nconst meta: Meta<typeof Badge> = {\n  title: \"ui/Badge\",\n  component: Badge,\n  args: {\n    children: \"Badge\",\n  },\n  argTypes: {\n    variant: {\n      control: \"radio\",\n      options: [...Object.keys(badgeVariants.variants.variant)],\n    },\n  },\n}\n\nexport default meta\ntype Story = StoryObj<typeof Badge>\n\nexport const Default: Story = {}\n\nexport const Variants: Story = {\n  render: () => (\n    <div className=\"flex flex-wrap gap-4\">\n      <Badge variant=\"neutral\">Neutral</Badge>\n      <Badge>Default</Badge>\n      <Badge variant=\"success\">Success</Badge>\n      <Badge variant=\"error\">Error</Badge>\n      <Badge variant=\"warning\">Warning</Badge>\n    </div>\n  ),\n}\n\nexport const AnchorWithBadgeVariantsStyle: Story = {\n  render: () => (\n    <div className=\"flex \n/* sample truncated in recipe */",
+      "whySelected": [
+        "licencia MIT",
+        "compatible con Tailwind/tokenizacion",
+        "patron shadcn revisable",
+        "match de componente: badge"
+      ],
+      "reuseRule": "Allowed only after manual code review, retokenization, dependency check, accessibility check and responsive QA.",
+      "score": 39
+    },
+    {
+      "repo": "shadcn-ui__ui",
+      "license": "MIT",
+      "status": "allowed-after-review",
+      "localPath": "C:/Users/PC/.codex/design-stack/repos/shadcn-ui__ui",
+      "file": "apps/v4/registry/bases/base/blocks/dashboard-01/components/data-table.tsx",
+      "sha256": "64e1d02effdc1107475cf546217e13dc4c126136cf455e76ad44b7561a8c0441",
+      "signals": {
+        "type": "react-component",
+        "hasTailwind": true,
+        "hasMotion": false,
+        "hasShadcn": true,
+        "imports": [
+          "react",
+          "@dnd-kit/core",
+          "@dnd-kit/modifiers",
+          "@dnd-kit/sortable",
+          "@dnd-kit/utilities",
+          "@tanstack/react-table",
+          "recharts",
+          "sonner",
+          "zod",
+          "@/registry/bases/base/hooks/use-mobile",
+          "@/registry/bases/base/ui/badge",
+          "@/registry/bases/base/ui/button",
+          "@/registry/bases/base/ui/chart",
+          "@/registry/bases/base/ui/checkbox",
+          "@/registry/bases/base/ui/drawer",
+          "@/registry/bases/base/ui/dropdown-menu",
+          "@/registry/bases/base/ui/input",
+          "@/registry/bases/base/ui/label",
+          "@/registry/bases/base/ui/select",
+          "@/registry/bases/base/ui/separator"
+        ],
+        "exports": [
+          "schema",
+          "DataTable"
+        ]
+      },
+      "samplePreview": "\"use client\"\n\nimport * as React from \"react\"\nimport {\n  closestCenter,\n  DndContext,\n  KeyboardSensor,\n  MouseSensor,\n  TouchSensor,\n  useSensor,\n  useSensors,\n  type DragEndEvent,\n  type UniqueIdentifier,\n} from \"@dnd-kit/core\"\nimport { restrictToVerticalAxis } from \"@dnd-kit/modifiers\"\nimport {\n  arrayMove,\n  SortableContext,\n  useSortable,\n  verticalListSortingStrategy,\n} from \"@dnd-kit/sortable\"\nimport { CSS } from \"@dnd-kit/utilities\"\nimport {\n  flexRender,\n  getCoreRowModel,\n  getFacetedRowModel,\n  getFacetedUniqueValues,\n  getFilteredRowModel,\n  getPaginationRowModel,\n  getSortedRowModel,\n  useReactTable,\n  type ColumnDef,\n  type ColumnFiltersState,\n  type Row,\n  type SortingState,\n  type VisibilityState,\n} from \"@tanstack/react-table\"\nimport { Area, AreaChart, CartesianGrid, XAxis } from \"recharts\"\nimport { toast } from \"sonner\"\nimport { z } from \"zod\"\n\nimport { useIsMobile } fro\n/* sample truncated in recipe */",
+      "whySelected": [
+        "licencia MIT",
+        "compatible con Tailwind/tokenizacion",
+        "patron shadcn revisable",
+        "match de componente: table, dashboard"
+      ],
+      "reuseRule": "Allowed only after manual code review, retokenization, dependency check, accessibility check and responsive QA.",
+      "score": 38
+    },
+    {
+      "repo": "tremorlabs__tremor",
+      "license": "MIT",
+      "status": "allowed-after-review",
+      "localPath": "C:/Users/PC/.codex/design-stack/repos/tremorlabs__tremor",
+      "file": "src/components/Accordion/accordion.stories.tsx",
+      "sha256": "8c56c52c54d2061766117c3f4c704a0779415aae66e3771fd668352a52e6f790",
+      "signals": {
+        "type": "react-component",
+        "hasTailwind": true,
+        "hasMotion": false,
+        "hasShadcn": true,
+        "imports": [
+          "react",
+          "@remixicon/react",
+          "@storybook/react",
+          "../Badge/Badge",
+          "../Button/Button",
+          "./Accordion"
+        ],
+        "exports": [
+          "Default",
+          "WithIcons",
+          "OneItem",
+          "DefaultValueAndCollapsibleDisabled",
+          "TypeMultiple",
+          "DisabledAccordion",
+          "DisabledAccordionItem",
+          "Controlled"
+        ]
+      },
+      "samplePreview": "import React from \"react\"\nimport {\n  RiAddCircleFill,\n  RiArrowLeftRightLine,\n  RiCheckboxMultipleFill,\n  RiCoupon3Fill,\n} from \"@remixicon/react\"\nimport type { Meta, StoryObj } from \"@storybook/react\"\n\nimport { Badge } from \"../Badge/Badge\"\nimport { Button } from \"../Button/Button\"\nimport {\n  Accordion,\n  AccordionContent,\n  AccordionItem,\n  AccordionTrigger,\n} from \"./Accordion\"\n\nconst meta: Meta<typeof Accordion> = {\n  title: \"ui/Accordion\",\n  component: Accordion,\n}\n\nexport default meta\ntype Story = StoryObj<typeof Accordion>\n\nexport const Default: Story = {\n  render: () => (\n    <Accordion type=\"single\" className=\"mx-auto mt-3 max-w-sm\" collapsible>\n      <AccordionItem value=\"item-1\">\n        <AccordionTrigger>In the app</AccordionTrigger>\n        <AccordionContent>\n          <ol className=\"flex flex-col gap-2\">\n            <li>\n              <span className=\"font-semibold text-gra\n/* sample truncated in recipe */",
+      "whySelected": [
+        "licencia MIT",
+        "compatible con Tailwind/tokenizacion",
+        "patron shadcn revisable"
+      ],
+      "reuseRule": "Allowed only after manual code review, retokenization, dependency check, accessibility check and responsive QA.",
+      "score": 38
+    }
+  ],
+  "sectionPlan": [
+    {
+      "id": "kpi-overview",
+      "label": "Resumen de KPIs",
+      "objective": "Comunicar el estado del negocio de un vistazo.",
+      "pattern": "Fila de 4-6 KPIs con valor, delta y contexto de periodo.",
+      "dataNeeded": [
+        "metricas clave",
+        "periodo",
+        "comparativo"
+      ],
+      "referenceCue": "Tremor/shadcn charts (Apache/MIT) para jerarquia de KPI; no copiar identidad."
+    },
+    {
+      "id": "charts-grid",
+      "label": "Graficos",
+      "objective": "Explicar tendencia y composicion, un insight por grafico.",
+      "pattern": "Grid de 2-3 graficos con titulo, unidad y leyenda claras.",
+      "dataNeeded": [
+        "series",
+        "dimensiones",
+        "unidades"
+      ],
+      "referenceCue": "Recharts/Tremor para tipos de grafico; revisar licencia antes de reusar codigo."
+    },
+    {
+      "id": "data-table",
+      "label": "Tabla operativa",
+      "objective": "Permitir detalle y accion sobre los datos.",
+      "pattern": "Tabla con orden, filtro, paginacion, estados de carga/vacio y acciones por fila.",
+      "dataNeeded": [
+        "columnas",
+        "filas",
+        "acciones"
+      ],
+      "referenceCue": "Tabler/shadcn data-table (MIT) para patrones de tabla accesible."
+    }
+  ],
+  "tokenDirection": {
+    "fonts": {
+      "heading": "Onest",
+      "body": "Onest",
+      "referenceSignals": [
+        "system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Oxygen, Ubuntu, Cantarell, \"Fira Sans\", \"Droid Sans\", \"Helvetica Neue\", sans-serif",
+        "Montserrat, sans-serif",
+        "\"Plus Jakarta Sans\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", Roboto, Ubuntu, Cantarell, \"Noto Sans\", sans-serif, BlinkMacSystemFont, \"Segoe UI\", \"Helvetica Neue\", Arial, \"Noto Sans\", \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+        "Inter, -apple-system, BlinkMacSystemFont, \"SF Pro Text\", \"SF Pro Display\", sans-serif",
+        "\"Inter Tight\"",
+        "Inter, \"Inter Fallback\", system-ui, -apple-system, \"Segoe UI\", Roboto, Ubuntu, Cantarell, \"Noto Sans\", sans-serif",
+        "Geist, sans-serif",
+        "\"Geist Mono\", monospace"
+      ]
+    },
+    "palette": {
+      "primary": "#4f46e5",
+      "secondary": "#0f172a",
+      "accent": "#22c55e",
+      "bg": "#f8fafc",
+      "fg": "#0f172a",
+      "usage": [
+        "Primary para CTA principal y estados activos.",
+        "Secondary para texto fuerte, nav o superficies de confianza.",
+        "Accent solo para una familia de accion o senal comercial; evitar que todo sea del mismo tono.",
+        "Fondos sobrios con contraste visible en mobile."
+      ]
+    },
+    "layout": [
+      "KPIs arriba, luego graficos, luego tabla",
+      "Densidad alta con ritmo legible",
+      "Shell con navegacion lateral opcional"
+    ],
+    "componentBehavior": [
+      "Filtros controlan toda la vista",
+      "Tablas con estados de carga y vacio explicitos",
+      "Acciones destructivas confirmadas"
+    ],
+    "motion": [
+      "Motion bajo; solo transiciones de estado y skeleton de carga, nada decorativo"
+    ]
+  },
+  "mediaPlan": {
+    "required": [
+      "Datos o mock de metricas/series aprobado",
+      "Definicion de KPIs, unidades y periodos"
+    ],
+    "optional": [
+      "Logo/marca para el shell",
+      "Iconografia de estados"
+    ],
+    "generationRequests": [
+      "Pedir o generar asset hero para ONIA Ops Demo: visual real del rubro, limpio, con espacio para copy y sin logos de terceros."
+    ]
+  },
+  "implementationPlan": [
+    "Abrir screenshots desktop y mobile seleccionados antes de tocar layout.",
+    "Elegir una referencia para estructura, una para tipografia/densidad, una para motion o componentes.",
+    "Reconstruir patrones con tokens de ONIA; no pegar HTML/CSS cerrado de referencias inspiration-only.",
+    "Usar solo codigo de repos `allowed-after-review` y registrar archivo exacto usado.",
+    "Mapear cada seccion del plan a datos reales del cliente; eliminar secciones sin dato util.",
+    "Validar hero, servicios, prueba/confianza y CTA principal.",
+    "Aplicar direccion del rubro: Layout de datos: KPIs arriba, graficos y tablas con jerarquia clara, filtros y estados de carga/vacio cuidados."
+  ],
+  "antiGenericGuardrails": [
+    "No copiar identidad, copy, imagenes, videos, logos, claims ni estructura reconocible de terceros.",
+    "No usar tres cards iguales si no cambian la decision del cliente.",
+    "No usar gradientes genericos ni paletas de un solo tono como solucion visual principal.",
+    "Primer viewport debe tener una senal real del negocio: producto, lugar, equipo, dashboard, proyecto o resultado.",
+    "Todo video debe tener poster, carga diferida y respeto a `prefers-reduced-motion`.",
+    "Cada bloque debe justificar venta, confianza, entendimiento de alcance o siguiente paso.",
+    "No inventar metricas, clientes, testimonios ni resultados.",
+    "Riesgo especifico: Cards de KPI sin jerarquia, graficos decorativos sin insight y tablas sin estados de carga/vacio ni acciones."
+  ],
+  "qaChecklist": [
+    "Correr `pnpm test`.",
+    "Generar preview con `pnpm generate <slug> --template <landing|store>` o `pnpm factory:build`.",
+    "Revisar desktop y mobile con screenshot antes de enviar a cliente.",
+    "Confirmar que no hay imagenes rotas ni videos con carga inmediata pesada.",
+    "Confirmar contraste, foco visible, labels en forms y CTA accesible.",
+    "Confirmar que cada URL externa abre y que WhatsApp/email funcionan.",
+    "Probar nav, CTA primario y secciones de servicio/contacto."
+  ],
+  "warnings": [
+    "Faltan assets visuales; pedirlos o generarlos antes de entrega profesional."
+  ],
+  "confidence": {
+    "score": 95,
+    "reasons": [
+      "8 referencias seleccionadas",
+      "7 referencias con screenshot",
+      "10 archivos de codigo permitidos como referencia",
+      "1 pedidos de media pendientes"
+    ]
+  }
+}

@@ -1,0 +1,164 @@
+{
+  "projectId": "bolivian-electric",
+  "projectName": "Bolivian Electric OS",
+  "repoPath": "C:\\dev\\clientes\\Bolivian Electric",
+  "vertical": "PROVEEGEST",
+  "verticalTrackId": "proveegest-electrico",
+  "status": "installing",
+  "stack": "Next 16 + Postgres self-hosted (VPS) + Kysely (SQL fuente de verdad) + Better Auth. No Prisma, no Supabase.",
+  "adoptionRule": "No convertir BE en un ERP generico. Adoptar solo patrones comunes de organizacion que refuercen el vertical de distribucion B2B (ProveeGest). Las tres tablas de trabajo del producto (crm_requests, quote_requests, tasks) se conservan como dominio; onia_core_work_items las UNIFICA por referencia (relatedEntityType/relatedEntityId), nunca las reemplaza ni migra sus datos.",
+  "businessRole": "Importador y distribuidor B2B de material electrico y paneles solares, multi-sucursal, con ventas, cotizaciones con SLA, almacenes e importaciones (costo landed USD/BOB).",
+  "betaDecision": {
+    "secondBetaTarget": true,
+    "commercialModel": [
+      "saas_monthly",
+      "paid_implementation",
+      "web_commercial_addon"
+    ],
+    "primaryUser": "owner_and_sales_chief",
+    "painScope": [
+      "cotizaciones",
+      "pipeline_por_vendedor_sucursal",
+      "leads_whatsapp",
+      "almacenes_inventario",
+      "importaciones_landed_cost",
+      "management_reports"
+    ],
+    "financeFromStart": false,
+    "siatPolicy": "Facturacion fiscal SIAT gated hasta validar proveedor y margen; primero ventas/cotizaciones/caja internas."
+  },
+  "entityMappings": [
+    {
+      "coreEntityId": "organization",
+      "existingModel": "organizations",
+      "status": "exists",
+      "notes": "Tenant root ya existe (organizations). Sembrado: Bolivian Group SRL."
+    },
+    {
+      "coreEntityId": "member",
+      "existingModel": "users + roles",
+      "status": "exists",
+      "notes": "users con role_id (owner/manager/sales_viewer) y branch_id. Better Auth vincula auth_user_id (text)."
+    },
+    {
+      "coreEntityId": "area",
+      "existingModel": "branches",
+      "status": "exists",
+      "notes": "Sucursales = areas (SCZ Central, etc.). Ruteo por ciudad/sucursal ya usado por el seller-router."
+    },
+    {
+      "coreEntityId": "contact",
+      "existingModel": "contacts",
+      "status": "exists",
+      "notes": "Contacts asociados a customers; telefono/email redactados."
+    },
+    {
+      "coreEntityId": "work_item",
+      "existingModel": "crm_requests, quote_requests, tasks",
+      "status": "installing_referencing",
+      "notes": "Sprint 1: onia_core_work_items UNIFICA la cola/panel y referencia las tres tablas via relatedEntityType/relatedEntityId. No se migran datos. Tipos ProveeGest: cotizacion, lead_conversacion, solicitud_soporte, reposicion, mensaje_correo. Columnas SLA (sla_policy, sla_due_at, escalation_level) para cotizaciones vencidas."
+    },
+    {
+      "coreEntityId": "process_checklist",
+      "existingModel": "none",
+      "status": "planned",
+      "notes": "Rutinas del rubro: seguimiento de cotizacion, recepcion de mercaderia, cierre de importacion."
+    },
+    {
+      "coreEntityId": "evidence",
+      "existingModel": "crm_request_events, audit_events",
+      "status": "exists_partial",
+      "notes": "crm_request_events cubre historial por solicitud; generalizar a evidence transversal (notas/fotos/links por entidad)."
+    },
+    {
+      "coreEntityId": "activity_event",
+      "existingModel": "audit_events",
+      "status": "exists_partial",
+      "notes": "audit_events satisface historial auditable tras alinear al contrato (actor/action/entity)."
+    },
+    {
+      "coreEntityId": "notification",
+      "existingModel": "notifications, notification_rules",
+      "status": "exists",
+      "notes": "Notificaciones internas + reglas ya existen en el schema desplegado."
+    },
+    {
+      "coreEntityId": "import_batch",
+      "existingModel": "import_batches (en mock)",
+      "status": "planned",
+      "notes": "Import controlado de customers/quotes/products/crm_requests ya validado por scripts; falta desplegar la tabla (hoy delega al mock)."
+    },
+    {
+      "coreEntityId": "business_partner",
+      "existingModel": "customers",
+      "status": "exists_partial",
+      "notes": "customers = partnerType cliente_empresa. Falta agregar proveedor/importador y aliado/instalador como partnerType para compras e importaciones."
+    },
+    {
+      "coreEntityId": "role_assignment",
+      "existingModel": "users.role_id",
+      "status": "planned",
+      "notes": "Permiso fino por area/sucursal/dato: vendedor no ve pipeline de otra sucursal salvo manager; caja/descuentos restringidos. Fallback desde el Role base."
+    },
+    {
+      "coreEntityId": "comment",
+      "existingModel": "none",
+      "status": "planned",
+      "notes": "Hilos internos sobre cotizacion, cliente empresa o importacion (crm_request_events cubre solo solicitudes)."
+    },
+    {
+      "coreEntityId": "document",
+      "existingModel": "none",
+      "status": "planned",
+      "notes": "Metadata de proformas, facturas proforma, docs de importacion (DAV, packing list); archivo en storage externo via storageRef."
+    },
+    {
+      "coreEntityId": "approval_request",
+      "existingModel": "none",
+      "status": "planned",
+      "notes": "Aprobacion de descuento por monto, cotizacion sobre limite o gasto de importacion. crm_requests tiene flags requires_human_approval pero no entidad de aprobacion."
+    },
+    {
+      "coreEntityId": "schedule_event",
+      "existingModel": "tasks.due_at",
+      "status": "planned",
+      "notes": "Agenda real (visita, entrega, vencimiento de cotizacion, ETA de importacion) separada del due de un work item."
+    },
+    {
+      "coreEntityId": "saved_view",
+      "existingModel": "crm_request_queues",
+      "status": "exists_partial",
+      "notes": "crm_request_queues es una vista guardada CRM; generalizar a SavedView por rol para el owner_dashboard (pipeline por vendedor/sucursal, cotizaciones vencidas)."
+    },
+    {
+      "coreEntityId": "communication_channel",
+      "existingModel": "none (WhatsApp/Chatwoot y correos hoy sin registro unificado)",
+      "status": "planned",
+      "notes": "Registrar TODOS los canales oficiales (numeros WhatsApp, correos, formularios) con area/dueno y regla de ruteo. Mata el caos de correos sin responsable. El seller-router/Chatwoot ya vivo alimenta el intake."
+    }
+  ],
+  "capabilityMappings": [
+    { "capabilityId": "tenant", "status": "exists", "evidence": ["organizations", "users", "organizationId en cada tabla"] },
+    { "capabilityId": "team_roles", "status": "exists_partial", "evidence": ["users.role_id", "roles", "branches"] },
+    { "capabilityId": "relationships", "status": "exists", "evidence": ["customers", "contacts", "branches"] },
+    { "capabilityId": "work_items", "status": "installing", "evidence": ["crm_requests", "quote_requests", "tasks", "onia_core_work_items (referencing)"] },
+    { "capabilityId": "evidence_activity", "status": "exists_partial", "evidence": ["audit_events", "crm_request_events"] },
+    { "capabilityId": "alerts_reports", "status": "exists_partial", "evidence": ["notifications", "notification_rules"] },
+    { "capabilityId": "data_ops", "status": "planned", "evidence": ["import_batches (mock)", "scripts/imports validados"] },
+    { "capabilityId": "partners", "status": "exists_partial", "evidence": ["customers"] },
+    { "capabilityId": "permissions", "status": "planned", "evidence": ["users.role_id", "access-control.ts"] },
+    { "capabilityId": "collaboration", "status": "planned", "evidence": [] },
+    { "capabilityId": "approvals", "status": "planned", "evidence": ["crm_requests.requires_human_approval (flag)"] },
+    { "capabilityId": "scheduling", "status": "planned", "evidence": ["tasks.due_at"] },
+    { "capabilityId": "saved_reporting", "status": "exists_partial", "evidence": ["crm_request_queues", "management-insights.ts"] },
+    { "capabilityId": "channels", "status": "planned", "evidence": ["chatwoot-webhook", "seller-router (vivo, sin registro de canal)"] }
+  ],
+  "blockedUntil": [
+    "ONIA Core beta contract aprobado (cumplido)",
+    "Reconciliacion de ramas main + persistencia en un tronco unico (cumplido: claude/onia-core-integration)",
+    "Intake automatico WhatsApp/Chatwoot activado solo tras validar canal como CommunicationChannel normalizado",
+    "TR4 (SQL Server del ERP del cliente) gated: sin acceso SQL directo; solo Excel o vista read-only aprobada",
+    "SIAT / facturacion fiscal gated hasta validar proveedor, soporte fiscal y margen"
+  ],
+  "installedEntities": []
+}
