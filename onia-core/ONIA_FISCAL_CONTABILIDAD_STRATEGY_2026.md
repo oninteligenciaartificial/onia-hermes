@@ -11,7 +11,7 @@ Tres shocks simultaneos obligan a TODA empresa boliviana a digitalizarse:
 
 | Shock | Fecha | Consecuencia |
 |---|---|---|
-| **Facturacion EN LINEA obligatoria para todos** (grupos 9-12, los ultimos) | 01-abr-2026 | Toda empresa necesita software de facturacion autorizado SIN |
+| **Facturacion EN LINEA obligatoria para todos** (grupos 9-12, los ultimos) | **30-sep-2026** (RND-102600000007 prorrogo el plazo original de abril; detectado por el Radar Normativo 04-jul) | Toda empresa necesita software autorizado SIN — la cuenta regresiva del Q3 ES el pitch |
 | Tipo de cambio flotante (RM 245/2026) | 26-jun-2026 | Reprecios constantes, margen en riesgo |
 | Arancel nuevo + GA -5pts (DS 5646) | 06-jul-2026 | Costos de importacion cambian |
 
