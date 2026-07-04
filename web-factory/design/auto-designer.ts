@@ -886,7 +886,7 @@ ${refRows || "| - | - | - | - | - | - | - |"}
 ${codeRows || "| - | - | - | - | - |"}
 
 Regla: usar estos archivos solo como referencia compatible despues de review, retokenizacion, accessibility check y responsive QA.
-
+${renderDashboardComponentMap(recipe)}
 ## Plan De Secciones
 
 | Seccion | Objetivo | Patron | Datos necesarios |
@@ -922,6 +922,45 @@ ${recipe.qaChecklist.map((item) => `- ${item}`).join("\n")}
 
 ## Warnings
 ${recipe.warnings.map((item) => `- ${item}`).join("\n") || "- Sin warnings."}
+`;
+}
+
+/**
+ * For dashboards, map each panel section to the concrete indexed component so the
+ * recipe is actionable (which Tremor/shadcn file to adapt per section). Only the
+ * dashboard-analytics vertical emits this block.
+ */
+function renderDashboardComponentMap(recipe: AutoDesignRecipe): string {
+  if (recipe.client.inferredVertical !== "dashboard-analytics") {
+    return "";
+  }
+
+  const mapping: Array<{ section: string; keywords: string[] }> = [
+    { section: "kpi-overview", keywords: ["metric", "kpi", "stat", "badge", "card"] },
+    { section: "charts-grid", keywords: ["chart", "area", "bar", "line"] },
+    { section: "data-table", keywords: ["table", "datagrid"] },
+  ];
+
+  const rows = mapping
+    .map(({ section, keywords }) => {
+      const match = recipe.codeReferences.find((code) =>
+        keywords.some((keyword) => normalizeText(code.file).includes(keyword)),
+      );
+      const suggestion = match
+        ? `${match.repo} - \`${match.file}\` (${match.license})`
+        : "pendiente de indexar (correr references:harvest para capturar el componente)";
+      return `| ${escapeMarkdownCell(section)} | ${escapeMarkdownCell(suggestion)} |`;
+    })
+    .join("\n");
+
+  return `
+## Componentes De Dashboard Sugeridos
+
+Mapeo de cada seccion del panel al componente concreto ya indexado (MIT). Usar solo como referencia tras review + retokenizacion, nunca copiar identidad.
+
+| Seccion | Componente sugerido |
+|---|---|
+${rows}
 `;
 }
 
@@ -1286,6 +1325,23 @@ function scoreCodeExample(
     score += 7;
   }
 
+  // Dashboards: Tremor (MIT) is the canonical chart/data library we indexed, so
+  // prefer it and its chart/table primitives for this vertical.
+  if (vertical.id === "dashboard-analytics") {
+    if (repoName.includes("tremor")) {
+      score += 12;
+    }
+    if (
+      file.includes("chart") ||
+      file.includes("table") ||
+      file.includes("metric") ||
+      file.includes("stat") ||
+      file.includes("kpi")
+    ) {
+      score += 6;
+    }
+  }
+
   for (const keyword of codeKeywordsForVertical(vertical.id)) {
     if (file.includes(keyword) || repoName.includes(keyword)) {
       score += 5;
@@ -1631,6 +1687,8 @@ function codeKeywordsForVertical(vertical: VerticalId): string[] {
       return ["timeline", "stats", "grid", "card", "case", "project", "accordion"];
     case "saas-b2b":
       return ["pricing", "feature", "hero", "dashboard", "tabs", "marquee", "accordion", "button"];
+    case "dashboard-analytics":
+      return ["chart", "area", "bar", "line", "list", "badge", "kpi", "metric", "card", "table", "dashboard", "stat", "grid"];
     default:
       return ["hero", "card", "button", "accordion", "form", "feature"];
   }
