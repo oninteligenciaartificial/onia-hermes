@@ -52,7 +52,7 @@ cliente paga funcionalidad**. El margen vive en lo recurrente (nivel 2-3).
 | 3 | ~~Dark mode en tokens~~ **HECHO** | Table-stakes 2026; hoy solo hay tema claro | variante dark en `packages/tokens` (auto + `[data-theme]`) + toggle en dashboard; a11y gated en light+dark |
 | 4 | ~~Gate de performance (Lighthouse/CWV)~~ **HECHO** | LCP<=2.5s, INP<=200ms, CLS<=0.1 son piso | `tests/e2e/perf.spec.ts` mide LCP/FCP/CLS + peso same-origin y falla si excede; encontró y arregló LCP 3.2s en store (fuente Google render-blocking → async) |
 | 5 | ~~Inyectar codigo Tremor en `design:auto`~~ **HECHO** | Cerrar el loop harvester -> receta (ya esta indexado) | receta de dashboard lidera con Tremor AreaChart/BarChart + mapa seccion->componente (kpi/charts/table) |
-| 6 | Pipeline de imagenes AVIF/WebP + width/height | LCP/CLS; hoy assets sin optimizar | paso de optimizacion en `generate` |
+| 6 | ~~Pipeline de imagenes AVIF/WebP + width/height~~ **PARCIAL** | LCP/CLS; hoy assets sin optimizar | guard `pnpm images:check <slug>` (sin dep nativa) flagea raster no-webp/avif y sobre-peso; encontró 108 PNG >400kb en nuvia. Auto-conversion con sharp = follow-up cuando haya fotos raw pesadas |
 | 7 | Charts mas ricos (multi-serie, donut, sparkline) | Cubrir mas casos de panel sin libreria | nuevos tipos en `dashboard.ts` |
 | 8 | Conversion research (single-column, sin nav) | Unbounce: -10/15% conversion con nav en landing | variante de landing "focus" sin nav |
 | 9 | Mas templates por rubro (portfolio, servicios premium) | Ampliar catalogo vendible | 1-2 templates nuevos |
