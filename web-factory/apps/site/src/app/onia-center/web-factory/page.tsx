@@ -66,6 +66,11 @@ export default async function WebFactoryCenterPage() {
               <span>Web Factory</span>
               <small>Operativo</small>
             </Link>
+            <Link href="/onia-center/video-lab">
+              <Play size={15} />
+              <span>Video Lab</span>
+              <small>Modulo</small>
+            </Link>
             <Link href="/onia-center?view=integraciones">
               <Workflow size={15} />
               <span>Integraciones</span>
