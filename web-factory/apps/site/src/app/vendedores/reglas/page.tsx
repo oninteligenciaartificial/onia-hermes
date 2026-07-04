@@ -1,5 +1,6 @@
-import { playbook, sellerScreens } from "../data";
+import { openingMessages, playbook, salesDecisionGuide, sellerDataChecklist, sellerScreens } from "../data";
 import { PlaybookSection } from "../_components/playbook-section";
+import { SalesKitSection } from "../_components/sales-kit-section";
 import { OperatingBlock, SellerScreenGrid, SellerScreenHeader } from "../_components/screen-chrome";
 
 export default function ReglasPage() {
@@ -33,6 +34,7 @@ export default function ReglasPage() {
         }
       >
         <PlaybookSection playbook={playbook} />
+        <SalesKitSection decisions={salesDecisionGuide} messages={openingMessages} checklist={sellerDataChecklist} />
       </SellerScreenGrid>
     </>
   );

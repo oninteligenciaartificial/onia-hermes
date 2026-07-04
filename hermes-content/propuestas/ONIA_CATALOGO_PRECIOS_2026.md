@@ -1,134 +1,128 @@
 # ONIA — Catálogo de precios oficial 2026
 
-Fecha: 2026-07-03.
-Estado: precios de arranque vigentes (fase sin portafolio).
-Fuente de verdad de precios. El "por qué" vive en `PRICING_RATIONALE_INTERNO.md`.
-Reglas de comisión: `docs/ONIA_ACUERDO_ARTHUR_FUENTES_60_DIAS_2026.md`.
+Fecha: 2026-07-04.
+Estado: precios de arranque vigentes (Kit Comercial Interno, junio/julio 2026).
+Fuente de verdad de precios y comisiones de la vendedora.
+El cotizador del panel (`/vendedores/cotizador`) lee estos mismos precios.
+
+> Comisión de la vendedora = **porcentaje fijo del PRIMER PAGO** (una sola vez).
+> Los pagos siguientes son de ONIA. El modelo de colaborador de Arthur (skim +
+> escala de intervención) es SEPARADO y vive en
+> `docs/ONIA_ACUERDO_ARTHUR_FUENTES_60_DIAS_2026.md`; no aplica a la vendedora.
 
 ## 0. LA REGLA — precio por proyecto
 
 No hay precio fijo de lista: **cada proyecto se cotiza aparte**. Esta tabla es el
-**ancla de referencia** por componente. El precio final del proyecto se arma
-sumando componentes y ajustando por alcance real, siempre bajo estas reglas:
+**ancla de referencia** por componente. El precio final se arma sumando
+componentes y ajustando por alcance real, bajo estas reglas:
 
-1. **El catálogo es el PISO.** Nunca cotizar por debajo del piso sin aprobación
-   de Sergio. Se puede subir por alcance, no bajar por regatear.
-2. **Precio de cierre, no de exprimir.** Sin portafolio, el objetivo es ganar el
-   caso y abrir la recurrencia, no maximizar el ticket único.
-3. **Todo proyecto sale con un mensual pegado.** La web/entregable abre; el
-   recurrente (Cuidado Web / SaaS / contenido) es el negocio. Cotizar único +
-   mensual en la misma propuesta.
+1. **El catálogo es el PISO.** No cotizar por debajo sin aprobación de Sergio.
+2. **No improvisar precios.** Descuentos en DentalGest / Gesti-OS requieren
+   aprobación.
+3. **Todo proyecto sale con un mensual pegado** (Cuidado Web / SaaS / add-on).
 4. **Se cobra resultado y automatización, no horas ni páginas.**
-5. **Terceros los paga el cliente:** dominio, hosting, comisión pasarela,
-   créditos IA, WhatsApp pagado, pauta. Nunca en nuestro precio.
-6. **Sergio aprueba** precio final, descuentos y alcance antes de enviar.
-7. **Asesorías / consultorías NO se cobran por ahora.** Auditoría y diagnóstico
-   se usan como gancho gratis para abrir la venta, no como servicio pago.
+5. **Terceros los paga el cliente:** dominio, hosting, pasarela, QR, Meta, IA,
+   pauta, migración grande. Nunca en nuestro precio.
+6. **Prometer solo alcance confirmado.** WhatsApp sujeto a validación Meta.
+7. **Asesorías no se cobran por ahora:** auditoría y diagnóstico son gancho gratis.
+8. **Sergio aprueba** precio final, descuentos y alcance antes de enviar.
 
-Dos mundos:
-- **SaaS / Core** (DentalGest, GestiOS, ProveeGest, Ganadero): lo construye
-  Sergio, la recurrencia es de ONIA. Arthur vende y onboardea.
-- **Webs / Higgsfield / contenido**: lo ejecuta Arthur, llega al 50%.
+## 1. SaaS (DentalGest / Gesti-OS) — recurrente
 
-La línea premium (Landing 2.000 / Web Pro 4.500) es el objetivo con 3-5 casos en
-portafolio.
+Recurrencia de ONIA. Comisión vendedora: **35% del primer mes**, una vez.
 
-El reparto siempre sobre el ingreso neto, con skim de recuperación 10% primero
-(apartado contable; solo se cobra a fin de mes si la caja quedó verde) mientras
-haya capital pendiente.
-
----
-
-## 1. Webs y automatización (pago único)
-
-| Producto | Precio Bs | Comisión Arthur |
-|---|---:|---|
-| Landing | 790 | 15% / 50% |
-| Web Pro | 1.500 | 15% / 50% |
-| Web Pro ONIA (web mayor) | 2.900 | 15% / 50% |
-| Tienda con pago (BCP + carrito) | 2.500 | 15% / 50% |
-| Automatización n8n simple | 790 | 25%-50% |
-| Flujo n8n (orden + WhatsApp) | 1.200 | 25%-50% |
-
-"15% cierre" = Arthur trae + cierra y Sergio/ONIA entrega. "50%" = Arthur vende,
-produce y entrega todo aprobado sin rescate. Escala intermedia según intervención
-de Sergio (ver contrato).
-
-Auditoría y diagnóstico NO se cobran por ahora: se dan gratis como gancho para
-abrir la venta.
-
----
-
-## 2. SaaS / Core (recurrente — Sergio construye, Arthur vende)
-
-| Producto | Precio Bs/mes | Setup Bs | Comisión Arthur |
-|---|---:|---:|---|
-| DentalGest Básico | 320 | 500 | 30% primer mes + onboarding |
-| DentalGest Profesional | 750 | 500 | 30% primer mes + onboarding |
-| DentalGest Clínica | 1.500 | 500 | 30% primer mes + onboarding |
-| GestiOS Básico | 350 | 690 | 30% primer mes + onboarding |
-| GestiOS Pro | 690 | 690 | 30% primer mes + onboarding |
-| GestiOS Empresarial | 1.250 | 690 | 30% primer mes + onboarding |
-| ProveeGest B2B (por asiento) | 150 / asiento, mín. 5 (piso 750) | 3.500 | 30% primer mes + onboarding |
-| Ganadero OS Básico | 290 | 690 | 30% primer mes + onboarding |
-| Ganadero OS Estancia | 690 | 690 | 30% primer mes + onboarding |
-
-Comisión SaaS de Arthur:
-- **30% del primer mes** cobrado (una vez).
-- **40% del fee de setup** si Arthur ejecuta el onboarding / carga de datos /
-  capacitación (es su trabajo real). Si lo hace Sergio, Arthur cobra 8%-10%.
-- **Meses 2 en adelante: 0% para Arthur.** La recurrencia queda 100% en ONIA.
-
-Ejemplo Bolivian Electric (ProveeGest, 13 vendedores): 13 × 150 = **1.950/mes** +
-setup 3.500. Arthur al cerrar: 30% de 1.950 (585) + 40% de 3.500 si onboardea
-(1.400) = hasta ~1.985 una vez. Los 1.950/mes siguen siendo de ONIA.
-
----
-
-## 3. Servicios de Arthur (creativo / contenido — su recurrencia)
-
-| Servicio | Precio Bs | Comisión Arthur |
-|---|---:|---|
-| Pack contenido mensual básico (carruseles + reels) | 1.500/mes | 50% mientras produce |
-| Pack contenido + Higgsfield (8 videos) | 2.200/mes | 50% mientras produce |
-| Pack contenido premium (video + gestión) | 2.900/mes | 50% mientras produce |
-| Video IA / UGC (por pieza) | 350 | 50% |
-| Gestión de redes mensual | 690-1.500/mes | 10%-20% mensual mientras gestiona |
-| Capacitación a equipo del cliente | 490 / 890 | 20%-50% según ejecute |
-
-En packs con Higgsfield/IA, el costo de la herramienta se prorratea y se descuenta
-como costo directo antes del reparto.
-
----
-
-## 4. Add-ons
-
-| Add-on | Setup Bs | Mensual Bs |
+| Producto | Precio Bs/mes | Comisión vendedora (35%) |
 |---|---:|---:|
-| WhatsApp botón click-to-chat | INCLUIDO en la web | — |
-| Chatbot WhatsApp IA (responde/califica/deriva) | 900 | 80 |
-| Pasarela de pago (BCP u otra) | 1.900 | — |
-| Conexión Instagram / TikTok | 900 | 150 |
-| Videos con IA (8/mes) | — | 2.200 |
-| Cuidado Web | — | 190 / 390 / 690 |
+| DentalGest Básico | 320 | 112 |
+| DentalGest Profesional | 750 | 262,50 |
+| DentalGest Clínica | 1.500 | 525 |
+| Gesti-OS Básico | 350 | 122,50 |
+| Gesti-OS Crecer | 530 | 185,50 |
+| Gesti-OS Pro | 800 | 280 |
+| Gesti-OS Empresarial | 1.250 | 437,50 |
 
-El chatbot WhatsApp IA solo se vende tras verificación Meta. El botón simple va
-gratis en toda web.
+Onboarding SaaS (una vez): DentalGest **290 / 690 / 1.490** según alcance —
+comisión **10%**.
 
----
+## 2. Páginas web y captación (pago único)
 
-## 5. Costos que paga el cliente (NUNCA en nuestro precio)
+| Producto | Precio Bs | Comisión vendedora |
+|---|---:|---:|
+| Landing de Captación | 790 | 79 (10%) |
+| Web Profesional | 1.500 | 180 (12%) |
+| Web Pro ONIA | 2.900 | 348 (12%) |
 
-Dominio · hosting · comisión y afiliación de pasarela · créditos de IA ·
-mensajería WhatsApp pagada · pauta publicitaria. Dominio y hosting a nombre del
-cliente.
+Cuidado Web (mensual, comisión 10% del primer mes):
 
----
+| Plan | Precio Bs/mes | Comisión |
+|---|---:|---:|
+| Cuidado Web Básico | 190 | 19 |
+| Cuidado Web Crecimiento | 390 | 39 |
+| Cuidado Web Pro | 690 | 69 |
 
-## 6. Plan de subida de precios
+## 3. Automatizaciones y bots (setup único, comisión 10%)
 
-Cuando ONIA tenga 3-5 casos con resultados en portafolio:
-- Landing 790 → 2.000
-- Web Pro 1.500 → 4.500
-- Los SaaS suben tier o se agregan módulos (catálogo, ventas/caja, cotizaciones
-  B2B) según el contrato del Core.
+| Producto | Precio Bs | Comisión |
+|---|---:|---:|
+| Automatización simple n8n | 790 | 79 |
+| Flujo de aprobación n8n | 1.200 | 120 |
+| Bot Telegram recordatorios | 690 | 69 |
+| Bot Telegram operativo | 790 | 79 |
+| Bot Telegram avanzado | 1.200 | 120 |
+| Chatbot WhatsApp conversacional (+ Meta) | desde 990 | desde 99 |
+
+Chatbot WhatsApp requiere validación técnica y costos Meta antes de prometer.
+
+## 4. A medida y add-ons
+
+Servicio a medida: **Portal o mini sistema desde Bs. 6.500** (login, dashboard,
+BD) — comisión 10%. Requiere alcance escrito antes de dar precio.
+
+Add-ons (se venden después del primer cierre):
+
+| Add-on | Precio Bs | Nota |
+|---|---:|---|
+| WhatsApp operativo DentalGest | 650 inst. + 350/mes + Meta | Requiere aprobación |
+| Agenda pública DentalGest | 150/mes | |
+| Usuario extra DentalGest | 70/mes | |
+| Insumos DentalGest | 80/mes | |
+| WhatsApp Gesti-OS | 280/mes + excedentes | Requiere aprobación |
+| QR / cobro Gesti-OS | 105/mes | Validar proveedor |
+| E-commerce Gesti-OS (PRO+) | 140/mes | |
+| CRM / formulario a n8n | 790 setup | |
+| Conexión canal social (IG/TikTok) | 690 setup | Sin prometer aprobación automática |
+| Integración extra entre sistemas | desde 1.900 | Diagnóstico + alcance escrito |
+
+Comisión de add-ons: 10% del primer pago, salvo los marcados "requiere
+aprobación" (WhatsApp/Meta), que se aprueban caso por caso.
+
+## 5. Ganchos gratis y productos pausados
+
+- **Auditoría Express** y **Diagnóstico + Plan**: se dan **gratis** como gancho
+  para abrir la venta. No se cobran por ahora.
+- **Videos IA / Higgsfield**: **pausados** como producto comercial.
+
+## 6. Costos que paga el cliente (NUNCA en nuestro precio)
+
+Dominio · hosting · correo · comisión y afiliación de pasarela · QR/banco ·
+mensajería y plantillas Meta · créditos de IA · pauta · migración masiva ·
+fotos profesionales. Dominio y hosting a nombre del cliente.
+
+## 7. Regla de comisión de la vendedora
+
+- Se paga **una sola vez** por cliente y por sistema, sobre el **primer pago
+  neto real y comprobado** (primer mes de SaaS, enganche, anticipo o setup).
+- Los pagos siguientes (mensualidad, renovación, mantenimiento) son de ONIA.
+- La vendedora lidera llamadas y seguimiento; Sergio entra en casos importantes,
+  objeciones técnicas o cierres grandes.
+- Las comisiones pueden subir con ventas reales cobradas y buen desempeño, pero
+  no suben automáticamente.
+
+Ejemplo: vende DentalGest Profesional, el cliente paga el primer mes de Bs. 750
+→ comisión Bs. 262,50 una sola vez. Los meses siguientes son de ONIA.
+
+## 8. Plan de subida de precios
+
+Cuando ONIA tenga 3-5 casos con resultados en portafolio, se sube la línea de
+webs (Landing → 2.000, Web Pro → 4.500) y se agregan módulos del Core. Los precios
+de arriba son de arranque para vender ahora, no permanentes.

@@ -6,12 +6,14 @@ import type {
   Lead,
   Note,
   NuviaClosureRule,
+  OpeningMessage,
   OperatingCenter,
   OperationSnapshot,
   PaymentCadence,
   PayoutRule,
   PlaybookItem,
   RequirementGroup,
+  SalesDecision,
   SellerNavigationItem,
   SellerScreen,
   ServiceScope,
@@ -78,8 +80,8 @@ export const sellerScreens: Record<string, SellerScreen> = {
     label: "Precio por proyecto",
     title: "Cotizador ONIA",
     description:
-      "Arma el precio de un proyecto sumando componentes del catalogo. Muestra total unico, mensual y cuanto cobra Arthur. El catalogo es el piso; Sergio aprueba el precio final.",
-    tags: ["Precio de lanzamiento", "Unico + mensual", "Comision Arthur"],
+      "Arma el precio de un proyecto sumando componentes del catalogo. Muestra total unico, mensual y la comision de la vendedora (primer pago). El catalogo es el piso; Sergio aprueba el precio final.",
+    tags: ["Kit vendedora", "Unico + mensual", "Comision primer pago"],
     primaryAction: { href: "/vendedores/ingresos", label: "Ver ingresos" },
   },
   notas: {
@@ -398,6 +400,68 @@ export const playbook: PlaybookItem[] = [
     detail: "Ese caso va a discovery pagado o sistema a medida.",
     tone: "warning",
   },
+  {
+    id: "rule-comision-primer-pago",
+    title: "Comision = primer pago",
+    body: "La comision se paga una sola vez, sobre el primer cobro neto real y comprobado. Los pagos siguientes son de ONIA.",
+    detail: "Primer mes de SaaS, enganche, anticipo o setup. No es comision recurrente.",
+    tone: "success",
+  },
+  {
+    id: "rule-descuentos",
+    title: "No improvisar precios",
+    body: "DentalGest y Gesti-OS mantienen precio actual. Cualquier descuento requiere aprobacion de Sergio.",
+    detail: "El catalogo es el piso; se sube por alcance, no se baja por regatear.",
+    tone: "warning",
+  },
+  {
+    id: "rule-llamadas-vendedora",
+    title: "La vendedora lidera",
+    body: "Ella contacta, llama, diagnostica, da seguimiento y agenda la siguiente accion. Sergio entra solo en casos importantes.",
+    detail: "Objeciones tecnicas, cierres complejos o clientes estrategicos.",
+    tone: "info",
+  },
+];
+
+export const salesDecisionGuide: SalesDecision[] = [
+  { id: "dec-dental", situation: "Clinica dental", offer: "DentalGest primero. Si la web es debil, agregar Landing o Web Profesional." },
+  { id: "dec-excel", situation: "Negocio con Excel o WhatsApp suelto", offer: "Gesti-OS. Si el proceso no esta claro, empezar con Diagnostico + Plan." },
+  { id: "dec-web-debil", situation: "Web debil o incompleta", offer: "Landing si necesita captar rapido; Web Profesional si necesita presencia completa." },
+  { id: "dec-claridad", situation: "Necesita claridad antes de comprar", offer: "Auditoria Express (gancho gratis). Abre una venta mayor." },
+  { id: "dec-automatizar", situation: "Quiere automatizar", offer: "n8n solo si hay flujo claro: entrada, regla, salida y responsable." },
+  { id: "dec-tareas", situation: "Olvida tareas o seguimientos", offer: "Bot de Telegram con recordatorios y alertas internas." },
+  { id: "dec-preguntas", situation: "Recibe muchas preguntas repetidas", offer: "Chatbot WhatsApp conversacional, sujeto a validacion Meta." },
+  { id: "dec-grande", situation: "Pide algo grande o a medida", offer: "Agendar diagnostico y pedir alcance escrito antes de dar precio." },
+];
+
+export const openingMessages: OpeningMessage[] = [
+  {
+    id: "msg-dental",
+    audience: "Clinica dental",
+    message:
+      "Hola, soy de ONIA. Vi que reciben consultas y probablemente manejan agenda, pacientes y seguimiento por varios canales. Estamos mostrando DentalGest, un sistema para ordenar pacientes, citas y seguimiento. Si les sirve, les muestro una demo corta y vemos si encaja con su flujo.",
+  },
+  {
+    id: "msg-sin-web",
+    audience: "Negocio sin web clara",
+    message:
+      "Hola, soy de ONIA. Vi su presencia digital y creo que hay una mejora simple: una pagina clara para captar consultas y un seguimiento basico para no perder oportunidades. Si quieres, te preparo una auditoria corta con 2 o 3 mejoras puntuales.",
+  },
+  {
+    id: "msg-desordenado",
+    audience: "Negocio desordenado",
+    message:
+      "Hola, soy de ONIA. Vi que su negocio maneja clientes, pedidos o tareas que se pueden perder entre chats y planillas. Podemos mostrarles Gesti-OS o revisar su proceso primero con un diagnostico corto para proponer algo concreto.",
+  },
+];
+
+export const sellerDataChecklist: string[] = [
+  "Empresa, rubro, ciudad y contacto publico.",
+  "Canal principal: WhatsApp, Instagram, email, LinkedIn o llamada.",
+  "Dolor probable y producto sugerido.",
+  "Estado del pipeline, ultimo contacto y proximo seguimiento.",
+  "Fecha de llamada, resultado y siguiente accion acordada.",
+  "Monto cobrado y comprobante si la venta se cierra.",
 ];
 
 export const operationSnapshot: OperationSnapshot = {
