@@ -147,6 +147,16 @@ agregan tablas core.
 
 ### Sprint 3 — RoleAssignment + ScheduleEvent + SavedView
 
+> **COMPLETADO 2026-07-03 (commit `4e8c85d` en DentaGest):** 3 tablas en prod
+> (7 de 8 entidades beta instaladas). Matriz de permisos del pack dental:
+> caja nunca lee historia clinica, doctor no toca config/finanzas, recepcion
+> solo agenda, roles multiples suman por union, rol desconocido no otorga
+> nada. Fallback automatico desde el Role base (la clinica funciona sin
+> configurar roles finos). ScheduleEvent separado de Appointment. SavedViews
+> por rol con filtros validados. typecheck + 159 tests.
+> **Falta del sprint (UI):** pantalla de administracion de roles finos y
+> selector de vistas guardadas en el cockpit.
+
 1. `onia_core_role_assignments`: roles finos dueno/doctor/recepcion/caja/
    asistente (matriz del beta direction: caja no toca historia clinica,
    doctor no toca config fiscal).

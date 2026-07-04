@@ -93,7 +93,7 @@
     {
       "coreEntityId": "role_assignment",
       "existingModel": "Profile.role",
-      "status": "partial",
+      "status": "installed",
       "notes": "Needed for fine roles: owner/admin, doctor, reception, cash, assistant. Cash must not edit clinical history; doctor must not touch fiscal config."
     },
     {
@@ -117,13 +117,13 @@
     {
       "coreEntityId": "schedule_event",
       "existingModel": "Appointment",
-      "status": "domain_specific",
+      "status": "installed",
       "notes": "Appointment already covers clinical scheduling. ScheduleEvent adds recalls, follow-ups and reminders without replacing Appointment."
     },
     {
       "coreEntityId": "saved_view",
       "existingModel": "none",
-      "status": "missing",
+      "status": "installed",
       "notes": "Powers the owner dashboard: saved views per role (owner, doctor, reception, cash)."
     },
     {
@@ -270,6 +270,27 @@
       "migration": "20260703200000_add_onia_core_collab_approvals",
       "installedAt": "2026-07-03",
       "notes": "descuento/anulacion/cambio de plan; decide ADMIN+; cola en cockpit."
+    },
+    {
+      "coreEntityId": "role_assignment",
+      "table": "onia_core_role_assignments",
+      "migration": "20260703210000_add_onia_core_roles_schedule_views",
+      "installedAt": "2026-07-03",
+      "notes": "Roles finos dueno/doctor/recepcion/caja/asistente con matriz de permisos; fallback desde Role base."
+    },
+    {
+      "coreEntityId": "schedule_event",
+      "table": "onia_core_schedule_events",
+      "migration": "20260703210000_add_onia_core_roles_schedule_views",
+      "installedAt": "2026-07-03",
+      "notes": "Recalls/seguimientos separados de Appointment (dominio intacto)."
+    },
+    {
+      "coreEntityId": "saved_view",
+      "table": "onia_core_saved_views",
+      "migration": "20260703210000_add_onia_core_roles_schedule_views",
+      "installedAt": "2026-07-03",
+      "notes": "Vistas por rol fino; filtros validados (sin organizationId ni proto)."
     }
   ]
 }
