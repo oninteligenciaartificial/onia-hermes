@@ -450,19 +450,18 @@ lee el secret de `$env.CALCOM_WEBHOOK_SECRET`. Para activarlo:
 
 ## Bloqueos actuales
 
-- **SMTP a medio configurar (verificado 2026-07-03 en el VPS).** En
-  `/opt/onia-calcom/.env`: `EMAIL_FROM=business@onia.com.bo`,
-  `EMAIL_SERVER_HOST=smtp.gmail.com`, `EMAIL_SERVER_PORT=587` estan seteados y
-  `smtp.gmail.com:587` es alcanzable desde el VPS, pero **`EMAIL_SERVER_USER` y
-  `EMAIL_SERVER_PASSWORD` estan VACIAS**. Por eso Cal no puede enviar correos.
-  Para activar SMTP:
-  1. Generar un **App Password de Gmail** para la cuenta (needs 2FA):
-     myaccount.google.com -> Seguridad -> Contrasenas de aplicaciones.
-  2. En `/opt/onia-calcom/.env` setear
-     `EMAIL_SERVER_USER=business@onia.com.bo` (o la cuenta Gmail real) y
-     `EMAIL_SERVER_PASSWORD=<app-password-16-char>`.
-  3. `cd /opt/onia-calcom && docker compose up -d` (recrea el contenedor calcom).
-  4. Probar aceptando una reserva real y confirmar que llega el correo.
+- **SMTP RESUELTO 2026-07-03.** `onia.com.bo` esta en Google Workspace (MX ->
+  `aspmx.l.google.com`), asi que `business@onia.com.bo` es un buzon Gmail real.
+  Config final en `/opt/onia-calcom/.env`: `EMAIL_FROM` y `EMAIL_SERVER_USER =
+  business@onia.com.bo`, `EMAIL_SERVER_HOST=smtp.gmail.com`, `PORT=587`,
+  `EMAIL_SERVER_PASSWORD = App Password de Gmail (16 char) de esa cuenta`.
+  Contenedor recreado (`docker compose up -d`), arranco healthy.
+  **Verificado con prueba real de AUTH SMTP: login `smtplib` contra
+  `smtp.gmail.com:587` como `business@onia.com.bo` = OK.** Cal ya puede enviar.
+  - Pendiente menor: probar el correo end-to-end con una reserva real aceptada.
+  - Seguridad: el App Password se compartio una vez en chat; rotarlo (revocar +
+    generar nuevo) tras confirmar, sin pegarlo en texto plano.
+  - Backup del `.env` previo en `/opt/onia-calcom/.env.bak-smtp-*`.
 - Falta conectar Google Calendar directamente en Cal; `Credential` de Cal esta
   vacio al 2026-06-29. Sin eso, Cal no puede bloquear horas ocupadas en Google.
 - Falta prueba end-to-end con un booking real de baja criticidad.
