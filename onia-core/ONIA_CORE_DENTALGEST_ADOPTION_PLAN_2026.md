@@ -167,6 +167,18 @@ agregan tablas core.
 
 ### Sprint 4 — Intake + onboarding pagado
 
+> **INTAKE COMPLETADO 2026-07-03 (commit `32134a7` en DentaGest):** endpoint
+> `POST /api/onia-core/intake` (secreto `ONIA_INTAKE_SECRET`) implementa el
+> intakePolicy del contrato: canal no registrado se rechaza (gobernanza),
+> WhatsApp gated por `whatsappAddon` de la organizacion, match de paciente
+> por telefono/email (nunca se crea paciente desde intake), dedupe 24h por
+> contacto+canal (comenta el item existente en vez de duplicar), ruteo
+> round-robin por carga entre STAFF con fallback ADMIN. typecheck + 166
+> tests. Conectores pendientes de apuntar: formulario web-factory y n8n
+> (correo -> intake), con el secret configurado en Vercel.
+> **Falta del sprint:** wizard de onboarding (cuestionario 7 preguntas) +
+> paquete de implementacion pagada (ImportBatch dry-run + checklist).
+
 1. Handler `intake.normalize` segun `intakePolicy` del contrato: formulario
    web (`lead_formulario`) primero; WhatsApp queda gated.
 2. Dedupe 24h + ruteo (recepcion por defecto, round-robin si hay varias).
