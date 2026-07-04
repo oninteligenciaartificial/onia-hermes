@@ -986,7 +986,35 @@ Reglas:
 ## Pagos y porcentajes
 
 Los porcentajes se calculan sobre el ingreso neto ONIA, despues de descontar
-costos directos externos. El 30% de Fondo ONIA siempre se separa primero.
+costos directos externos. Durante la prueba el Fondo ONIA es 40% y se separa
+primero.
+
+### Skim de recuperacion de capital (prueba 60 dias)
+
+Mientras ONIA tenga capital operativo pendiente de recuperar, antes del reparto
+se aparta un 10% de recuperacion de capital operativo del ingreso neto. El
+reparto (Fondo ONIA y porcentajes de Arthur/Sergio) se calcula sobre el 90%
+restante.
+
+```text
+ingreso_neto = cobro - costos_directos_externos
+skim_recuperacion = ingreso_neto * 10%   (recuperacion de capital operativo ONIA)
+base_repartible   = ingreso_neto * 90%
+Fondo ONIA        = base_repartible * 40%
+Arthur / Sergio   = base_repartible * porcentaje segun nivel de intervencion
+```
+
+Este 10% no es ganancia personal libre ni comision de nadie: recupera capital
+que ONIA puso para existir. Se apaga automaticamente cuando el capital operativo
+queda recuperado, y entonces el reparto vuelve a calcularse sobre el ingreso
+neto completo. Los montos internos de capital son privados de Sergio/ONIA; a
+Arthur se le muestra el mecanismo (10%), no las cifras internas.
+
+Nota interna (no afecta el reparto de Arthur): el 10% es un apartado contable,
+no un retiro por venta. Solo pasa a Sergio a fin de mes y solo si la caja quedo
+verde (el Fondo cubrio herramientas y reserva). En caja roja/amarilla el
+apartado se queda como caja operativa de ONIA y la recuperacion se difiere. Para
+Arthur el calculo es identico en cualquier caso: siempre sobre el 90%.
 
 ## Calendario de cierres y pagos
 

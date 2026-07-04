@@ -176,8 +176,18 @@ agregan tablas core.
 > round-robin por carga entre STAFF con fallback ADMIN. typecheck + 166
 > tests. Conectores pendientes de apuntar: formulario web-factory y n8n
 > (correo -> intake), con el secret configurado en Vercel.
-> **Falta del sprint:** wizard de onboarding (cuestionario 7 preguntas) +
-> paquete de implementacion pagada (ImportBatch dry-run + checklist).
+> **WIZARD COMPLETADO 2026-07-03 (commit `05a4554` en DentaGest):** pagina
+> `/setup` (solo ADMIN+) con las 7 preguntas del configurador. Instala las 2
+> entidades restantes (`onia_core_communication_channels`,
+> `onia_core_business_partners`) — **9/9 entidades core en prod**. Las
+> respuestas configuran solo: canales con ruteo, roles finos del equipo,
+> tipos de pendiente, partners, reglas de aprobacion con umbral de descuento,
+> SavedViews del panel del dueno, y si hay datos para importar crea un
+> pendiente prioritario "Coordinar carga inicial con ONIA" (= gancho de la
+> implementacion pagada). Dashboard muestra "Completar configuracion inicial"
+> hasta que se haga. Guardado idempotente (re-ejecutable). 173 tests.
+> **Falta del sprint:** ImportBatch dry-run real (la carga guiada se coordina
+> como servicio por ahora).
 
 1. Handler `intake.normalize` segun `intakePolicy` del contrato: formulario
    web (`lead_formulario`) primero; WhatsApp queda gated.
