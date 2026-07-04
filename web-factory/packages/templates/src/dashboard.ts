@@ -105,6 +105,9 @@ function renderTopbar(client: DashboardClient): string {
             ${subtitle}
           </div>
           <div class="wf-dash-topbar-actions">
+            <button type="button" class="wf-dash-theme" data-theme-toggle aria-label="Cambiar entre tema claro y oscuro">
+              <span aria-hidden="true">◐</span> Tema
+            </button>
             ${filters}
             ${cta}
           </div>
@@ -380,6 +383,7 @@ export function renderDashboardDocument(client: DashboardClient): string {
     <meta property="og:title" content="${escapeHtml(client.seo.title)}">
     <meta property="og:description" content="${escapeHtml(client.seo.description)}">
     ${ogImage}
+    <script>try{var t=localStorage.getItem("wf-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
     <link rel="stylesheet" href="./site.css">
   </head>
   <body>
@@ -402,6 +406,20 @@ const dashboardScript = `<script>
         });
       });
     });
+
+    var themeToggle = document.querySelector("[data-theme-toggle]");
+    if (themeToggle) {
+      themeToggle.addEventListener("click", function () {
+        var root = document.documentElement;
+        var current = root.getAttribute("data-theme");
+        if (!current) {
+          current = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        }
+        var next = current === "dark" ? "light" : "dark";
+        root.setAttribute("data-theme", next);
+        try { localStorage.setItem("wf-theme", next); } catch (e) {}
+      });
+    }
 
     var reveal = document.querySelectorAll("[data-reveal]");
     var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -434,6 +452,20 @@ body {
   font-family: var(--font-body);
   --wf-pos: #166534;
   --wf-neg: #b91c1c;
+}
+
+/* Dark mode: the dark green/red status text fails contrast on the dark tinted
+   pill, so lift them to brighter tones that read on a dark surface. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) body {
+    --wf-pos: #4ade80;
+    --wf-neg: #f87171;
+  }
+}
+
+[data-theme="dark"] body {
+  --wf-pos: #4ade80;
+  --wf-neg: #f87171;
 }
 
 a {
@@ -586,6 +618,25 @@ h1, h2, h3 {
   font-weight: 750;
   color: var(--color-on-primary);
   background: var(--color-secondary);
+}
+
+.wf-dash-theme {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 40px;
+  padding: 0 14px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: var(--card);
+  color: var(--color-fg);
+  font: inherit;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.wf-dash-theme:hover {
+  background: color-mix(in srgb, var(--color-fg) 6%, var(--card));
 }
 
 .wf-dash-kpis {

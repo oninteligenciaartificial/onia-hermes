@@ -7,39 +7,37 @@ import { expect, test } from "@playwright/test";
 const WCAG_TAGS = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"];
 const BLOCKING = new Set(["serious", "critical"]);
 
-// `enforce: false` scans the page and logs violations without failing the build.
-// All three templates are now gated at WCAG 2.2 AA (store's light-hero contrast
-// debt was fixed via the .store-page--light-hero dark-text overrides).
+// landing and dashboard use the token system, so they get a real dark variant
+// (prefers-color-scheme). store.ts ships a fixed Nuvia palette (not token-driven
+// dark), so it is only gated in light.
 const PAGES = [
-  { name: "landing (demo)", url: "/demo/", enforce: true },
-  { name: "dashboard (dashboard-demo)", url: "/dashboard-demo/", enforce: true },
-  { name: "store (skincare-demo)", url: "/skincare-demo/", enforce: true },
+  { name: "landing (demo)", url: "/demo/", schemes: ["light", "dark"] as const },
+  { name: "dashboard (dashboard-demo)", url: "/dashboard-demo/", schemes: ["light", "dark"] as const },
+  { name: "store (skincare-demo)", url: "/skincare-demo/", schemes: ["light"] as const },
 ];
 
 for (const target of PAGES) {
-  test(`accessibility: ${target.name} WCAG 2.2 AA (${target.enforce ? "gated" : "audit-only"})`, async ({ page }) => {
-    await page.goto(target.url);
-    await page.waitForLoadState("networkidle");
+  for (const scheme of target.schemes) {
+    test(`accessibility: ${target.name} — ${scheme} — WCAG 2.2 AA`, async ({ page }) => {
+      await page.emulateMedia({ colorScheme: scheme });
+      await page.goto(target.url);
+      await page.waitForLoadState("networkidle");
 
-    const results = await new AxeBuilder({ page }).withTags(WCAG_TAGS).analyze();
-    const blocking = results.violations.filter((violation) => BLOCKING.has(violation.impact ?? ""));
+      const results = await new AxeBuilder({ page }).withTags(WCAG_TAGS).analyze();
+      const blocking = results.violations.filter((violation) => BLOCKING.has(violation.impact ?? ""));
 
-    if (results.violations.length) {
-      console.log(
-        `[a11y] ${target.name}: ${results.violations
-          .map((violation) => `${violation.impact}:${violation.id}(${violation.nodes.length})`)
-          .join(", ")}`,
-      );
-    }
+      if (results.violations.length) {
+        console.log(
+          `[a11y] ${target.name} (${scheme}): ${results.violations
+            .map((violation) => `${violation.impact}:${violation.id}(${violation.nodes.length})`)
+            .join(", ")}`,
+        );
+      }
 
-    if (!target.enforce) {
-      test.info().annotations.push({ type: "a11y-debt", description: `${blocking.length} serious/critical (not gated)` });
-      return;
-    }
-
-    expect(
-      blocking,
-      `serious/critical violations: ${blocking.map((violation) => `${violation.id} - ${violation.help}`).join(" | ")}`,
-    ).toEqual([]);
-  });
+      expect(
+        blocking,
+        `serious/critical violations: ${blocking.map((violation) => `${violation.id} - ${violation.help}`).join(" | ")}`,
+      ).toEqual([]);
+    });
+  }
 }
