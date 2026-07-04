@@ -59,6 +59,8 @@ Brief Hoy
 Tareas de hoy
 Recomiendame hoy
 Tendencias hoy
+Guiones Hoy
+Guiones Hoy: <tema>
 Estado Hermesa
 Automatizaciones ONIA
 Mapa proyectos ONIA

@@ -1,0 +1,120 @@
+{
+  "id": "ONIAGuionesDiarios01",
+  "name": "ONIA - Guiones Diarios de Contenido",
+  "active": false,
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            { "field": "cronExpression", "expression": "0 7 * * 1-6" }
+          ]
+        }
+      },
+      "id": "schedule-daily-0700",
+      "name": "Lunes a sabado 07:00",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [-640, 0]
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:8080/search",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            { "name": "q", "value": "IA para negocios automatizacion pymes tendencia contenido" },
+            { "name": "format", "value": "json" },
+            { "name": "time_range", "value": "day" },
+            { "name": "categories", "value": "news" }
+          ]
+        },
+        "options": { "timeout": 30000 }
+      },
+      "id": "searxng-trends",
+      "name": "SearXNG tendencias (local)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [-400, 0],
+      "notes": "SearXNG self-hosted localhost:8080. Sin secreto. Da contexto de tendencia para los guiones."
+    },
+    {
+      "parameters": {
+        "jsCode": "// Extrae hasta 5 titulares de tendencia para pasar como contexto al generador.\nconst results = Array.isArray(items[0].json?.results) ? items[0].json.results : [];\nconst trends = results.slice(0, 5).map(r => (r.title || '').trim()).filter(Boolean);\nreturn [{ json: { trends } }];"
+      },
+      "id": "prep-trends",
+      "name": "Preparar contexto de tendencia",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-180, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://center.onia.com.bo/api/onia-center/content/daily-scripts",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [ { "name": "Content-Type", "value": "application/json" } ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { date: $now.setZone('America/La_Paz').toFormat('yyyy-MM-dd'), brand: 'onia', count: 3, formats: ['reel','carrusel','historia'], trends: $json.trends, skill: 'guiones-diarios-onia', commit: false } }}",
+        "options": { "timeout": 120000 }
+      },
+      "id": "call-onia-center-scripts",
+      "name": "Generar guiones en ONIA Center",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [60, 0],
+      "credentials": {
+        "httpHeaderAuth": { "id": "REEMPLAZAR", "name": "ONIA Center API (Authorization Bearer)" }
+      },
+      "notes": "Plan VPS: sin env. ONIA Center corre la skill guiones-diarios-onia con su LLM y devuelve 3 guiones. API key en credencial Header Auth."
+    },
+    {
+      "parameters": {
+        "jsCode": "// Arma el mensaje de Telegram con los 3 guiones para aprobacion.\nconst payload = items[0].json || {};\nconst scripts = Array.isArray(payload.scripts) ? payload.scripts : (Array.isArray(payload.data?.scripts) ? payload.data.scripts : []);\nconst date = payload.date || new Date().toISOString().slice(0,10);\nconst lines = [`ONIA | Guiones de contenido ${date}`, ''];\nif (scripts.length === 0) {\n  lines.push('No llegaron guiones. Revisar endpoint /content/daily-scripts en ONIA Center o correr la skill guiones-diarios-onia a mano.');\n} else {\n  scripts.slice(0,3).forEach((s, i) => {\n    lines.push(`GUION ${i+1} — ${s.pilar || ''} — ${s.formato || ''}`);\n    if (s.gancho) lines.push(`Gancho: ${s.gancho}`);\n    if (s.cta) lines.push(`CTA: ${s.cta}`);\n    lines.push('');\n  });\n  lines.push('Para producir: \"Genera Reel ONIA: <tema>\" o \"Flujo carrusel: <slug>\". Nada se publica sin tu OK.');\n}\nreturn [{ json: { text: lines.join('\\n').slice(0, 3900), scripts } }];"
+      },
+      "id": "build-telegram",
+      "name": "Preparar guiones para Telegram",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [300, 0]
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "sendMessage",
+        "chatId": "6830070978",
+        "text": "={{ $json.text }}",
+        "additionalFields": { "disable_web_page_preview": true }
+      },
+      "id": "send-telegram-sergio",
+      "name": "Enviar guiones a Telegram Sergio",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [540, 0],
+      "credentials": {
+        "telegramApi": { "id": "REEMPLAZAR", "name": "Hermes Telegram Bot" }
+      },
+      "notes": "Plan VPS: credencial telegramApi (no env token). chatId de Sergio (no secreto)."
+    }
+  ],
+  "connections": {
+    "Lunes a sabado 07:00": { "main": [[{ "node": "SearXNG tendencias (local)", "type": "main", "index": 0 }]] },
+    "SearXNG tendencias (local)": { "main": [[{ "node": "Preparar contexto de tendencia", "type": "main", "index": 0 }]] },
+    "Preparar contexto de tendencia": { "main": [[{ "node": "Generar guiones en ONIA Center", "type": "main", "index": 0 }]] },
+    "Generar guiones en ONIA Center": { "main": [[{ "node": "Preparar guiones para Telegram", "type": "main", "index": 0 }]] },
+    "Preparar guiones para Telegram": { "main": [[{ "node": "Enviar guiones a Telegram Sergio", "type": "main", "index": 0 }]] }
+  },
+  "settings": { "timezone": "America/La_Paz", "executionOrder": "v1", "availableInMCP": true },
+  "pinData": {},
+  "versionId": "onia-guiones-diarios-20260703",
+  "meta": {
+    "templateCredsSetupCompleted": false,
+    "description": "Cada dia 07:00 L-S: toma tendencias (SearXNG local), pide 3 guiones de contenido propio de ONIA a ONIA Center (skill guiones-diarios-onia) y los envia a Telegram para aprobar. Plan VPS: sin env; credenciales n8n. No publica."
+  },
+  "tags": [ { "name": "onia-ops" }, { "name": "content" }, { "name": "daily-briefing" }, { "name": "safe-automation" } ]
+}

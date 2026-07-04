@@ -63,17 +63,24 @@ Accion: reparar el nodo `sendAdminEmail` (conexion de salida faltante) en el
 editor; despues se pueden taggear como `gestios`. Son de GestiOS producto:
 no tocar su logica sin revisar el repo de GestiOS.
 
+## Ejecucion adicional 2026-07-03 (tercera pasada)
+
+Verificado por `get_workflow_details`:
+- `ONIA - Agenda Create API` (kB10A8oLWioS8lXP, ACTIVE) tiene el webhook
+  `agendar-create` -> es el que usa el plugin `agendar`. SE QUEDA.
+- `ONIA - Agenda: Crear Evento` (PEo2XKM1l1bgEwIr) era el flujo viejo por trigger
+  de Telegram, reemplazado. ARCHIVADO.
+- `ONIA - Demo Asistente Diario` (GnmIyrHWb1mO5eNy, demo clima/tip, ruido).
+  ARCHIVADO.
+
+Total archivado acumulado: 18 workflows.
+
 ## Sin clasificar — pendientes de decision de Sergio (NO tocados)
 
 Inactivos, no son practica. Juicio del dueno antes de archivar (todos reversibles):
 
-- `PEo2XKM1l1bgEwIr` ONIA - Agenda: Crear Evento — posible duplicado de "Agenda
-  Create API" (ON, tag onia-ops). RIESGO: verificar cual usa el plugin `agendar`
-  antes de archivar; si es este, romperia el agendado.
 - `aOb3lNzewdGckb9H` ONIA - Demo Cliente New Sakura — demo con nombre de cliente;
   podria ser material de venta. Confirmar.
-- `GnmIyrHWb1mO5eNy` ONIA - Demo Asistente Diario — demo clima/tip, el audit lo
-  marco como ruido. Recomendacion: archivar.
 - `Si1cPoh65Ld4z7Ej` Atlas AI Media YouTube Draft v1 — borrador de proyecto de
   contenido. Confirmar si el proyecto sigue vivo.
 - `VeCHKr6wkK5Wet25` Scheduled Operations Pack — SSH roto; era automacion real.
