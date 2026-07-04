@@ -35,12 +35,13 @@ cliente paga funcionalidad**. El margen vive en lo recurrente (nivel 2-3).
 
 ## Deuda tecnica priorizada
 
-- **Contraste en `store.ts` (18 nodos, serio).** Texto casi blanco sobre header/
-  hero claro (ej. `#fffdfa` sobre `#f5f6f3`, ratio 1.06). El template asume fondo
-  oscuro en header/hero pero los tokens del demo dan fondo claro -> texto
-  invisible. Arreglo: la logica de color de header/hero de store debe usar
-  `--color-fg` sobre fondo claro (o forzar fondo `--color-primary/secondary`).
-  Es el item #1 de la semana.
+- ~~**Contraste en `store.ts` (18 nodos, serio).**~~ **RESUELTO 2026-07-03.** El
+  header/hero de store usaba texto blanco pensado para el hero de video oscuro de
+  Nuvia; sin video (hero claro) fallaba AA. Se agrego el modificador
+  `.store-page--light-hero` (cuando no hay `heroVideo`) con overrides de texto
+  navy para header, wordmark, nav, hero-proof, product stage y CTA primario.
+  Scoped: **Nuvia (siempre con video) queda intacto.** `store` ahora esta gated
+  en el a11y gate (0 serios). Verificado con axe + QA visual.
 
 ## Plan de investigacion para la semana (priorizado)
 

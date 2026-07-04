@@ -8,13 +8,12 @@ const WCAG_TAGS = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"];
 const BLOCKING = new Set(["serious", "critical"]);
 
 // `enforce: false` scans the page and logs violations without failing the build.
-// store.ts has known contrast debt (near-white text on light header/hero, ~18
-// nodes) tracked as a top item in the week roadmap; it is scanned for visibility
-// but not yet gated so CI stays honest and green.
+// All three templates are now gated at WCAG 2.2 AA (store's light-hero contrast
+// debt was fixed via the .store-page--light-hero dark-text overrides).
 const PAGES = [
   { name: "landing (demo)", url: "/demo/", enforce: true },
   { name: "dashboard (dashboard-demo)", url: "/dashboard-demo/", enforce: true },
-  { name: "store (skincare-demo)", url: "/skincare-demo/", enforce: false },
+  { name: "store (skincare-demo)", url: "/skincare-demo/", enforce: true },
 ];
 
 for (const target of PAGES) {
