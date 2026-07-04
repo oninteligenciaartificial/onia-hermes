@@ -1,0 +1,103 @@
+{
+  "name": "ONIA - Tipo de cambio Bolivia diario",
+  "active": false,
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [{ "field": "cronExpression", "expression": "30 7 * * 1-6" }]
+        }
+      },
+      "id": "schedule",
+      "name": "Lunes a sabado 07:30",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://p2p.binance.com/bapi/c2c/v2/friendly/c2c/adv/search",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\"asset\":\"USDT\",\"fiat\":\"BOB\",\"tradeType\":\"SELL\",\"page\":1,\"rows\":10,\"payTypes\":[],\"publisherType\":null}",
+        "options": { "timeout": 15000 }
+      },
+      "id": "binance",
+      "name": "Binance P2P USDT/BOB",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [220, -100],
+      "notes": "API publica de Binance P2P. tradeType SELL = precio al que la gente VENDE USDT (lo que paga quien compra dolares digitales)."
+    },
+    {
+      "parameters": {
+        "url": "https://www.bcb.gob.bo/",
+        "options": { "timeout": 15000, "response": { "response": { "responseFormat": "text" } } }
+      },
+      "id": "bcb",
+      "name": "BCB home (VRD)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [220, 100],
+      "continueOnFail": true,
+      "notes": "Scrape del home del BCB para el VRD (Valor Referencial del Dolar, publicado diario desde dic-2025). Fragil por diseno: si falla, el Code node lo marca no disponible y el flujo sigue."
+    },
+    {
+      "parameters": {
+        "jsCode": "// Consolida las 3 tasas de Bolivia: oficial (fija), VRD (BCB diario) y\n// paralelo (mediana Binance P2P). Ver onia-core/ONIA_EXCHANGE_RATE_AUTOPRICING_2026.md\nconst OFICIAL_COMPRA = 6.86;\nconst OFICIAL_VENTA = 6.96;\n\nlet paralelo = null;\ntry {\n  const data = $('Binance P2P USDT/BOB').first().json;\n  const prices = (data.data || [])\n    .map((row) => Number(row?.adv?.price))\n    .filter((price) => Number.isFinite(price) && price > 0)\n    .sort((a, b) => a - b);\n  if (prices.length) {\n    paralelo = prices[Math.floor(prices.length / 2)];\n  }\n} catch (error) { /* sin datos binance */ }\n\nlet vrd = null;\ntry {\n  const html = String($('BCB home (VRD)').first().json.data ?? $('BCB home (VRD)').first().json ?? '');\n  const match = html.match(/VRD[^0-9]{0,80}([0-9]{1,2}[.,][0-9]{2})/i) || html.match(/[Rr]eferencial[^0-9]{0,80}([0-9]{1,2}[.,][0-9]{2})/);\n  if (match) vrd = Number(match[1].replace(',', '.'));\n} catch (error) { /* BCB no disponible */ }\n\nconst brechaPct = paralelo ? (((paralelo - OFICIAL_VENTA) / OFICIAL_VENTA) * 100).toFixed(1) : null;\nconst fecha = new Date().toLocaleDateString('es-BO', { timeZone: 'America/La_Paz', day: '2-digit', month: '2-digit', year: 'numeric' });\n\nconst lineas = [\n  `Tipo de cambio Bolivia — ${fecha}`,\n  ``,\n  `Oficial BCB: ${OFICIAL_COMPRA} compra / ${OFICIAL_VENTA} venta (fijo)`,\n  vrd ? `VRD (BCB, mercado bancario): ${vrd.toFixed(2)} Bs` : `VRD: no disponible hoy`,\n  paralelo ? `Paralelo (Binance P2P mediana): ${paralelo.toFixed(2)} Bs` : `Paralelo: no disponible`,\n  brechaPct ? `Brecha vs oficial: ${brechaPct}%` : null,\n  ``,\n  `Costo de reposicion de importadores sigue al paralelo/VRD.`,\n].filter((line) => line !== null);\n\nreturn [{ json: { text: lineas.join('\\n'), oficialVenta: OFICIAL_VENTA, vrd, paralelo, brechaPct } }];"
+      },
+      "id": "consolidar",
+      "name": "Consolidar tasas",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [440, 0]
+    },
+    {
+      "parameters": {
+        "chatId": "REEMPLAZAR_CHAT_ID_SERGIO",
+        "text": "={{ $json.text }}",
+        "additionalFields": {}
+      },
+      "id": "telegram",
+      "name": "Telegram a Sergio",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [660, 0],
+      "credentials": {
+        "telegramApi": {
+          "id": "REEMPLAZAR_EN_N8N_UI",
+          "name": "Telegram Hermes"
+        }
+      },
+      "notes": "Reusar la credencial Telegram del briefing diario y el mismo chatId."
+    }
+  ],
+  "connections": {
+    "Lunes a sabado 07:30": {
+      "main": [[
+        { "node": "Binance P2P USDT/BOB", "type": "main", "index": 0 },
+        { "node": "BCB home (VRD)", "type": "main", "index": 0 }
+      ]]
+    },
+    "Binance P2P USDT/BOB": {
+      "main": [[{ "node": "Consolidar tasas", "type": "main", "index": 0 }]]
+    },
+    "BCB home (VRD)": {
+      "main": [[{ "node": "Consolidar tasas", "type": "main", "index": 0 }]]
+    },
+    "Consolidar tasas": {
+      "main": [[{ "node": "Telegram a Sergio", "type": "main", "index": 0 }]]
+    }
+  },
+  "settings": {
+    "timezone": "America/La_Paz",
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "pinData": {},
+  "meta": {
+    "notes": "v1: alerta diaria con las 3 tasas. v2 (con catalogo ProveeGest): repricing con ApprovalRequest. Ver ONIA_EXCHANGE_RATE_AUTOPRICING_2026.md"
+  },
+  "tags": []
+}

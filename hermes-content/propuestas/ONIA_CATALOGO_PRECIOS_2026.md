@@ -5,14 +5,33 @@ Estado: precios de arranque vigentes (fase sin portafolio).
 Fuente de verdad de precios. El "por qué" vive en `PRICING_RATIONALE_INTERNO.md`.
 Reglas de comisión: `docs/ONIA_ACUERDO_ARTHUR_FUENTES_60_DIAS_2026.md`.
 
-Regla base: precios bajos para CERRAR y abrir recurrencia. La línea premium
-(Landing 2.000 / Web Pro 4.500) es el objetivo con 3-5 casos en portafolio.
+## 0. LA REGLA — precio por proyecto
+
+No hay precio fijo de lista: **cada proyecto se cotiza aparte**. Esta tabla es el
+**ancla de referencia** por componente. El precio final del proyecto se arma
+sumando componentes y ajustando por alcance real, siempre bajo estas reglas:
+
+1. **El catálogo es el PISO.** Nunca cotizar por debajo del piso sin aprobación
+   de Sergio. Se puede subir por alcance, no bajar por regatear.
+2. **Precio de cierre, no de exprimir.** Sin portafolio, el objetivo es ganar el
+   caso y abrir la recurrencia, no maximizar el ticket único.
+3. **Todo proyecto sale con un mensual pegado.** La web/entregable abre; el
+   recurrente (Cuidado Web / SaaS / contenido) es el negocio. Cotizar único +
+   mensual en la misma propuesta.
+4. **Se cobra resultado y automatización, no horas ni páginas.**
+5. **Terceros los paga el cliente:** dominio, hosting, comisión pasarela,
+   créditos IA, WhatsApp pagado, pauta. Nunca en nuestro precio.
+6. **Sergio aprueba** precio final, descuentos y alcance antes de enviar.
+7. **Asesorías / consultorías NO se cobran por ahora.** Auditoría y diagnóstico
+   se usan como gancho gratis para abrir la venta, no como servicio pago.
 
 Dos mundos:
 - **SaaS / Core** (DentalGest, GestiOS, ProveeGest, Ganadero): lo construye
   Sergio, la recurrencia es de ONIA. Arthur vende y onboardea.
-- **Webs / Higgsfield / consultoría / contenido**: lo ejecuta Arthur, llega al
-  50%.
+- **Webs / Higgsfield / contenido**: lo ejecuta Arthur, llega al 50%.
+
+La línea premium (Landing 2.000 / Web Pro 4.500) es el objetivo con 3-5 casos en
+portafolio.
 
 El reparto siempre sobre el ingreso neto, con skim de recuperación 10% primero
 (apartado contable; solo se cobra a fin de mes si la caja quedó verde) mientras
@@ -24,8 +43,6 @@ haya capital pendiente.
 
 | Producto | Precio Bs | Comisión Arthur |
 |---|---:|---|
-| Auditoría Express (entrada fría) | 250 | 15% cierre / 50% si hace todo |
-| Diagnóstico + Plan de acción | 690 | 15% / 50% |
 | Landing | 790 | 15% / 50% |
 | Web Pro | 1.500 | 15% / 50% |
 | Web Pro ONIA (web mayor) | 2.900 | 15% / 50% |
@@ -36,6 +53,9 @@ haya capital pendiente.
 "15% cierre" = Arthur trae + cierra y Sergio/ONIA entrega. "50%" = Arthur vende,
 produce y entrega todo aprobado sin rescate. Escala intermedia según intervención
 de Sergio (ver contrato).
+
+Auditoría y diagnóstico NO se cobran por ahora: se dan gratis como gancho para
+abrir la venta.
 
 ---
 
@@ -74,7 +94,6 @@ setup 3.500. Arthur al cerrar: 30% de 1.950 (585) + 40% de 3.500 si onboardea
 | Pack contenido premium (video + gestión) | 2.900/mes | 50% mientras produce |
 | Video IA / UGC (por pieza) | 350 | 50% |
 | Gestión de redes mensual | 690-1.500/mes | 10%-20% mensual mientras gestiona |
-| Consultoría presencia digital | 690 | 50% |
 | Capacitación a equipo del cliente | 490 / 890 | 20%-50% según ejecute |
 
 En packs con Higgsfield/IA, el costo de la herramienta se prorratea y se descuenta
