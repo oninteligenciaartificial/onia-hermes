@@ -1,5 +1,18 @@
 # DentalGest Email Intake Connector 2026
 
+> **ESTADO 2026-07-04: workflows creados EN el n8n del VPS via MCP.**
+>
+> | Workflow | ID | Estado |
+> |---|---|---|
+> | ONIA - Tipo de cambio Bolivia diario | `tUaQasfCDGOXEl2j` | **ACTIVO** (07:30 L-S) — probado: oficial 9.76 [scrape BCB validado 9.0-12.0], efectiva 9.86, Binance 9.97; Telegram entregado |
+> | DentalGest - Email Intake (ONIA Core) | `XxiHPNgpsL5FsHct` | Creado, SIN publicar — Gmail trigger listo (cuenta principal), piloto org-demo-001 |
+>
+> **Unico paso manual restante (email intake):** en n8n UI abrir el workflow ->
+> nodo "POST intake DentalGest" -> credencial "DentalGest Intake Secret"
+> (Header Auth): Name = `x-intake-secret`, Value = el `ONIA_INTAKE_SECRET`
+> de Vercel (dental-gest -> Settings -> Environment Variables). Luego Activar.
+> Los pasos IMAP de abajo quedan como referencia para buzones no-Gmail.
+
 Fecha: 2026-07-03.
 Estado: workflow listo para importar; requiere 2 credenciales en n8n UI.
 Owner: ONIA / Hermes.
