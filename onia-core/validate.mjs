@@ -111,8 +111,15 @@ for (const track of contract.verticalTracks) {
   }
 }
 
+// Misma doble llave que los adapters: solo proyectos aprobados pueden salir
+// de hold_until_beta en distributionTargets.
+const TARGET_ADOPTION_APPROVED = new Set(["dentagest"]);
+
 for (const target of contract.distributionTargets) {
-  assert(target.status === "hold_until_beta", `${target.projectId} must stay on hold until beta`);
+  const allowed = TARGET_ADOPTION_APPROVED.has(target.projectId)
+    ? ["hold_until_beta", "installing"]
+    : ["hold_until_beta"];
+  assert(allowed.includes(target.status), `${target.projectId} status ${target.status} not allowed (approved: ${allowed.join("/")})`);
 }
 
 if (contract.readModels) {

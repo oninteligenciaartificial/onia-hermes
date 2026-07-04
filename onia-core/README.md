@@ -57,6 +57,10 @@ modulos, verticales o integraciones. No son la definicion del core.
   especializados; ProveeGest = distribucion B2B multi-rubro).
 - `ONIA_CORE_OWNER_PANEL_AND_INTAKE_2026.md`: diseno canonico del read-model
   owner_dashboard y la politica de intake externo -> WorkItem.
+- `CHANGELOG.md`: historial de versiones del contrato (0.1.0 alpha ->
+  0.5.0 beta congelado).
+- `ONIA_CORE_INSTALL_GUIDE_2026.md`: receta repetible de instalacion en
+  productos, destilada de la adopcion real en DentalGest.
 - `ONIA_STACK_ASSESSMENT_2026.md`: evaluacion del stack (Postgres/Prisma/Next
   confirmados; riesgos reales: tenant isolation, sync offline, motor
   compartido).

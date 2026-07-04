@@ -1,6 +1,6 @@
 {
   "name": "ONIA Core",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "status": "beta",
   "sourceOfTruth": "onia-hermes/onia-core",
   "researchResult": "onia-core/ONIA_CORE_RESEARCH_RESULT_2026.md",
@@ -15,7 +15,7 @@
   ],
   "policy": {
     "installInProductRepos": false,
-    "reason": "Contrato beta cerrado en Hermes con piezas transversales. La instalacion en repos producto sigue bloqueada hasta aprobar el plan de adopcion por proyecto.",
+    "reason": "Core beta congelado para adopcion. DentalGest instalando via plan aprobado; el resto de productos siguen bloqueados hasta su propio plan.",
     "nextDistributionStage": "dentagest_adoption"
   },
   "researchSources": [
@@ -56,16 +56,46 @@
     }
   ],
   "questions": [
-    { "id": "people", "question": "Quien trabaja en la empresa?" },
-    { "id": "roles", "question": "Que rol y permisos tiene cada persona?" },
-    { "id": "relationships", "question": "Que clientes, proveedores, contactos o areas existen?" },
-    { "id": "open_work", "question": "Que tareas, solicitudes, casos o pendientes estan abiertos?" },
-    { "id": "ownership", "question": "Quien es responsable?" },
-    { "id": "status", "question": "En que estado esta cada pendiente?" },
-    { "id": "next_action", "question": "Cual es la fecha limite o siguiente accion?" },
-    { "id": "evidence", "question": "Que evidencia, nota, archivo o historial existe?" },
-    { "id": "attention", "question": "Que alerta requiere atencion?" },
-    { "id": "management", "question": "Que reporte necesita gerencia?" }
+    {
+      "id": "people",
+      "question": "Quien trabaja en la empresa?"
+    },
+    {
+      "id": "roles",
+      "question": "Que rol y permisos tiene cada persona?"
+    },
+    {
+      "id": "relationships",
+      "question": "Que clientes, proveedores, contactos o areas existen?"
+    },
+    {
+      "id": "open_work",
+      "question": "Que tareas, solicitudes, casos o pendientes estan abiertos?"
+    },
+    {
+      "id": "ownership",
+      "question": "Quien es responsable?"
+    },
+    {
+      "id": "status",
+      "question": "En que estado esta cada pendiente?"
+    },
+    {
+      "id": "next_action",
+      "question": "Cual es la fecha limite o siguiente accion?"
+    },
+    {
+      "id": "evidence",
+      "question": "Que evidencia, nota, archivo o historial existe?"
+    },
+    {
+      "id": "attention",
+      "question": "Que alerta requiere atencion?"
+    },
+    {
+      "id": "management",
+      "question": "Que reporte necesita gerencia?"
+    }
   ],
   "entities": [
     {
@@ -73,7 +103,13 @@
       "name": "Organization",
       "scope": "root",
       "purpose": "Empresa, clinica, rancho o unidad cliente que contiene todo lo operativo.",
-      "requiredFields": ["id", "name", "status", "plan", "createdAt"],
+      "requiredFields": [
+        "id",
+        "name",
+        "status",
+        "plan",
+        "createdAt"
+      ],
       "tenantScoped": false
     },
     {
@@ -81,7 +117,14 @@
       "name": "Member/Profile",
       "scope": "core",
       "purpose": "Persona del equipo asociada a una organizacion.",
-      "requiredFields": ["id", "organizationId", "userId", "name", "role", "active"],
+      "requiredFields": [
+        "id",
+        "organizationId",
+        "userId",
+        "name",
+        "role",
+        "active"
+      ],
       "tenantScoped": true
     },
     {
@@ -89,7 +132,13 @@
       "name": "Area",
       "scope": "core",
       "purpose": "Departamento, sucursal logica o grupo responsable.",
-      "requiredFields": ["id", "organizationId", "name", "type", "active"],
+      "requiredFields": [
+        "id",
+        "organizationId",
+        "name",
+        "type",
+        "active"
+      ],
       "tenantScoped": true
     },
     {
@@ -97,7 +146,13 @@
       "name": "Contact",
       "scope": "core",
       "purpose": "Persona relacionada con cliente, proveedor, area o caso.",
-      "requiredFields": ["id", "organizationId", "displayName", "kind", "active"],
+      "requiredFields": [
+        "id",
+        "organizationId",
+        "displayName",
+        "kind",
+        "active"
+      ],
       "tenantScoped": true
     },
     {
@@ -105,8 +160,23 @@
       "name": "WorkItem",
       "scope": "core",
       "purpose": "Unidad comun para tarea, solicitud, caso, pedido pendiente o tramite.",
-      "requiredFields": ["id", "organizationId", "type", "title", "status", "ownerId", "priority", "createdAt"],
-      "optionalFields": ["slaPolicy", "slaDueAt", "escalationLevel", "partnerId"],
+      "requiredFields": [
+        "id",
+        "organizationId",
+        "type",
+        "title",
+        "status",
+        "ownerId",
+        "priority",
+        "createdAt"
+      ],
+      "optionalFields": [
+        "slaPolicy",
+        "slaDueAt",
+        "escalationLevel",
+        "partnerId",
+        "channelId"
+      ],
       "tenantScoped": true
     },
     {
@@ -114,7 +184,13 @@
       "name": "ProcessChecklist",
       "scope": "core",
       "purpose": "Rutina repetible para apertura, cierre, cobranza, compra, soporte o auditoria.",
-      "requiredFields": ["id", "organizationId", "name", "steps", "active"],
+      "requiredFields": [
+        "id",
+        "organizationId",
+        "name",
+        "steps",
+        "active"
+      ],
       "tenantScoped": true
     },
     {
@@ -122,7 +198,15 @@
       "name": "Evidence",
       "scope": "core",
       "purpose": "Nota, archivo, foto, link o metadata que respalda un avance.",
-      "requiredFields": ["id", "organizationId", "entityType", "entityId", "kind", "createdBy", "createdAt"],
+      "requiredFields": [
+        "id",
+        "organizationId",
+        "entityType",
+        "entityId",
+        "kind",
+        "createdBy",
+        "createdAt"
+      ],
       "tenantScoped": true
     },
     {
@@ -130,7 +214,15 @@
       "name": "ActivityEvent",
       "scope": "core",
       "purpose": "Historial auditable de cambios y acciones.",
-      "requiredFields": ["id", "organizationId", "actorId", "action", "entityType", "entityId", "createdAt"],
+      "requiredFields": [
+        "id",
+        "organizationId",
+        "actorId",
+        "action",
+        "entityType",
+        "entityId",
+        "createdAt"
+      ],
       "tenantScoped": true
     },
     {
@@ -138,7 +230,15 @@
       "name": "Notification",
       "scope": "core",
       "purpose": "Alerta interna para seguimiento humano.",
-      "requiredFields": ["id", "organizationId", "userId", "type", "title", "read", "createdAt"],
+      "requiredFields": [
+        "id",
+        "organizationId",
+        "userId",
+        "type",
+        "title",
+        "read",
+        "createdAt"
+      ],
       "tenantScoped": true
     },
     {
@@ -146,7 +246,14 @@
       "name": "ImportBatch",
       "scope": "core",
       "purpose": "Carga controlada de datos con dry-run, errores por fila y trazabilidad.",
-      "requiredFields": ["id", "organizationId", "source", "status", "dryRun", "createdAt"],
+      "requiredFields": [
+        "id",
+        "organizationId",
+        "source",
+        "status",
+        "dryRun",
+        "createdAt"
+      ],
       "tenantScoped": true
     },
     {
@@ -154,8 +261,19 @@
       "name": "BusinessPartner",
       "scope": "core",
       "purpose": "Relacion externa comun: cliente empresa, proveedor, aliado, comprador B2B, laboratorio o veterinario. Contact queda como persona asociada a un partner.",
-      "requiredFields": ["id", "organizationId", "name", "partnerType", "status", "createdAt"],
-      "optionalFields": ["taxId", "primaryContactId", "areaId"],
+      "requiredFields": [
+        "id",
+        "organizationId",
+        "name",
+        "partnerType",
+        "status",
+        "createdAt"
+      ],
+      "optionalFields": [
+        "taxId",
+        "primaryContactId",
+        "areaId"
+      ],
       "tenantScoped": true
     },
     {
@@ -163,8 +281,19 @@
       "name": "RoleAssignment",
       "scope": "core",
       "purpose": "Permiso efectivo de un miembro por area, sucursal, accion o dato sensible. Evita depender de un solo Profile.role.",
-      "requiredFields": ["id", "organizationId", "memberId", "roleKey", "scopeType", "active", "createdAt"],
-      "optionalFields": ["scopeId", "expiresAt"],
+      "requiredFields": [
+        "id",
+        "organizationId",
+        "memberId",
+        "roleKey",
+        "scopeType",
+        "active",
+        "createdAt"
+      ],
+      "optionalFields": [
+        "scopeId",
+        "expiresAt"
+      ],
       "tenantScoped": true
     },
     {
@@ -172,8 +301,19 @@
       "name": "Comment",
       "scope": "core",
       "purpose": "Hilo interno sobre work item, partner, cita, caso o evento. Conversacion y cambios de contexto.",
-      "requiredFields": ["id", "organizationId", "entityType", "entityId", "authorId", "body", "createdAt"],
-      "optionalFields": ["parentId", "visibility"],
+      "requiredFields": [
+        "id",
+        "organizationId",
+        "entityType",
+        "entityId",
+        "authorId",
+        "body",
+        "createdAt"
+      ],
+      "optionalFields": [
+        "parentId",
+        "visibility"
+      ],
       "tenantScoped": true
     },
     {
@@ -181,8 +321,21 @@
       "name": "Document",
       "scope": "core",
       "purpose": "Archivo o registro formal con tipo, entidad relacionada, propietario y visibilidad. Storage externo configurable, no secretos en repo.",
-      "requiredFields": ["id", "organizationId", "entityType", "entityId", "docType", "storageRef", "visibility", "createdAt"],
-      "optionalFields": ["ownerId", "signedAt", "expiresAt"],
+      "requiredFields": [
+        "id",
+        "organizationId",
+        "entityType",
+        "entityId",
+        "docType",
+        "storageRef",
+        "visibility",
+        "createdAt"
+      ],
+      "optionalFields": [
+        "ownerId",
+        "signedAt",
+        "expiresAt"
+      ],
       "tenantScoped": true
     },
     {
@@ -190,8 +343,22 @@
       "name": "ApprovalRequest",
       "scope": "core",
       "purpose": "Aprobacion por monto, descuento, compra, cotizacion, gasto, cierre o cambio sensible.",
-      "requiredFields": ["id", "organizationId", "entityType", "entityId", "requestType", "status", "requestedBy", "createdAt"],
-      "optionalFields": ["approvedBy", "decidedAt", "amount", "reason"],
+      "requiredFields": [
+        "id",
+        "organizationId",
+        "entityType",
+        "entityId",
+        "requestType",
+        "status",
+        "requestedBy",
+        "createdAt"
+      ],
+      "optionalFields": [
+        "approvedBy",
+        "decidedAt",
+        "amount",
+        "reason"
+      ],
       "tenantScoped": true
     },
     {
@@ -199,8 +366,22 @@
       "name": "ScheduleEvent",
       "scope": "core",
       "purpose": "Seguimiento, cita, reunion, vencimiento, visita, entrega o recordatorio. Separa el tiempo real del dueAt de un work item.",
-      "requiredFields": ["id", "organizationId", "title", "eventType", "startAt", "status", "ownerId", "createdAt"],
-      "optionalFields": ["endAt", "entityType", "entityId", "remindAt"],
+      "requiredFields": [
+        "id",
+        "organizationId",
+        "title",
+        "eventType",
+        "startAt",
+        "status",
+        "ownerId",
+        "createdAt"
+      ],
+      "optionalFields": [
+        "endAt",
+        "entityType",
+        "entityId",
+        "remindAt"
+      ],
       "tenantScoped": true
     },
     {
@@ -208,8 +389,20 @@
       "name": "SavedView",
       "scope": "core",
       "purpose": "Vista o reporte guardado por rol: gerente, vendedor, recepcion, operador. Filtros y KPIs reutilizables.",
-      "requiredFields": ["id", "organizationId", "name", "targetEntity", "filters", "roleScope", "createdBy", "createdAt"],
-      "optionalFields": ["isDefault", "sharedWith"],
+      "requiredFields": [
+        "id",
+        "organizationId",
+        "name",
+        "targetEntity",
+        "filters",
+        "roleScope",
+        "createdBy",
+        "createdAt"
+      ],
+      "optionalFields": [
+        "isDefault",
+        "sharedWith"
+      ],
       "tenantScoped": true
     },
     {
@@ -217,8 +410,22 @@
       "name": "CommunicationChannel",
       "scope": "core",
       "purpose": "Registro de TODOS los canales oficiales de la empresa (correos, WhatsApp, telefonos, formularios, redes) con area/dueno y regla de ruteo. Resuelve el caos de mensajes llegando a correos distintos sin responsable: todo canal registrado alimenta el intake y nada queda sin dueno.",
-      "requiredFields": ["id", "organizationId", "channelType", "address", "routedAreaId", "routingRule", "active", "createdAt"],
-      "optionalFields": ["ownerId", "label", "intakeWorkItemType", "lastSeenMessageAt"],
+      "requiredFields": [
+        "id",
+        "organizationId",
+        "channelType",
+        "address",
+        "routedAreaId",
+        "routingRule",
+        "active",
+        "createdAt"
+      ],
+      "optionalFields": [
+        "ownerId",
+        "label",
+        "intakeWorkItemType",
+        "lastSeenMessageAt"
+      ],
       "tenantScoped": true
     }
   ],
@@ -228,112 +435,198 @@
       "name": "Tenant y organizacion",
       "layer": "core",
       "phase": 0,
-      "entityIds": ["organization", "member"],
-      "answers": ["people", "roles", "relationships"]
+      "entityIds": [
+        "organization",
+        "member"
+      ],
+      "answers": [
+        "people",
+        "roles",
+        "relationships"
+      ]
     },
     {
       "id": "team_roles",
       "name": "Equipo, roles y permisos",
       "layer": "core",
       "phase": 1,
-      "entityIds": ["member", "area"],
-      "answers": ["people", "roles", "ownership"]
+      "entityIds": [
+        "member",
+        "area"
+      ],
+      "answers": [
+        "people",
+        "roles",
+        "ownership"
+      ]
     },
     {
       "id": "relationships",
       "name": "Clientes, proveedores, contactos y areas",
       "layer": "core",
       "phase": 1,
-      "entityIds": ["contact", "area"],
-      "answers": ["relationships", "ownership"]
+      "entityIds": [
+        "contact",
+        "area"
+      ],
+      "answers": [
+        "relationships",
+        "ownership"
+      ]
     },
     {
       "id": "work_items",
       "name": "Tareas, solicitudes, casos y pendientes",
       "layer": "core",
       "phase": 1,
-      "entityIds": ["work_item", "process_checklist"],
-      "answers": ["open_work", "ownership", "status", "next_action"]
+      "entityIds": [
+        "work_item",
+        "process_checklist"
+      ],
+      "answers": [
+        "open_work",
+        "ownership",
+        "status",
+        "next_action"
+      ]
     },
     {
       "id": "evidence_activity",
       "name": "Evidencia, actividad y auditoria",
       "layer": "core",
       "phase": 1,
-      "entityIds": ["evidence", "activity_event"],
-      "answers": ["evidence", "status", "management"]
+      "entityIds": [
+        "evidence",
+        "activity_event"
+      ],
+      "answers": [
+        "evidence",
+        "status",
+        "management"
+      ]
     },
     {
       "id": "alerts_reports",
       "name": "Alertas y reportes gerenciales",
       "layer": "core",
       "phase": 2,
-      "entityIds": ["notification"],
-      "answers": ["attention", "management"]
+      "entityIds": [
+        "notification"
+      ],
+      "answers": [
+        "attention",
+        "management"
+      ]
     },
     {
       "id": "data_ops",
       "name": "Importacion, exportacion y validacion",
       "layer": "core",
       "phase": 2,
-      "entityIds": ["import_batch"],
-      "answers": ["relationships", "open_work", "evidence"]
+      "entityIds": [
+        "import_batch"
+      ],
+      "answers": [
+        "relationships",
+        "open_work",
+        "evidence"
+      ]
     },
     {
       "id": "partners",
       "name": "Partners comerciales externos",
       "layer": "core",
       "phase": 1,
-      "entityIds": ["business_partner", "contact"],
-      "answers": ["relationships", "ownership"]
+      "entityIds": [
+        "business_partner",
+        "contact"
+      ],
+      "answers": [
+        "relationships",
+        "ownership"
+      ]
     },
     {
       "id": "permissions",
       "name": "Permisos finos por area y dato",
       "layer": "core",
       "phase": 1,
-      "entityIds": ["role_assignment", "member"],
-      "answers": ["roles", "ownership"]
+      "entityIds": [
+        "role_assignment",
+        "member"
+      ],
+      "answers": [
+        "roles",
+        "ownership"
+      ]
     },
     {
       "id": "collaboration",
       "name": "Comentarios y documentos",
       "layer": "core",
       "phase": 2,
-      "entityIds": ["comment", "document"],
-      "answers": ["evidence", "next_action", "ownership"]
+      "entityIds": [
+        "comment",
+        "document"
+      ],
+      "answers": [
+        "evidence",
+        "next_action",
+        "ownership"
+      ]
     },
     {
       "id": "approvals",
       "name": "Aprobaciones internas",
       "layer": "core",
       "phase": 2,
-      "entityIds": ["approval_request"],
-      "answers": ["status", "attention", "management"]
+      "entityIds": [
+        "approval_request"
+      ],
+      "answers": [
+        "status",
+        "attention",
+        "management"
+      ]
     },
     {
       "id": "scheduling",
       "name": "Agenda, citas y recordatorios",
       "layer": "core",
       "phase": 2,
-      "entityIds": ["schedule_event"],
-      "answers": ["next_action", "attention"]
+      "entityIds": [
+        "schedule_event"
+      ],
+      "answers": [
+        "next_action",
+        "attention"
+      ]
     },
     {
       "id": "saved_reporting",
       "name": "Vistas y reportes guardados por rol",
       "layer": "core",
       "phase": 2,
-      "entityIds": ["saved_view"],
-      "answers": ["management"]
+      "entityIds": [
+        "saved_view"
+      ],
+      "answers": [
+        "management"
+      ]
     },
     {
       "id": "channels",
       "name": "Canales oficiales y ruteo de mensajes",
       "layer": "core",
       "phase": 1,
-      "entityIds": ["communication_channel"],
-      "answers": ["relationships", "next_action", "attention"]
+      "entityIds": [
+        "communication_channel"
+      ],
+      "answers": [
+        "relationships",
+        "next_action",
+        "attention"
+      ]
     },
     {
       "id": "catalog_inventory",
@@ -341,7 +634,11 @@
       "layer": "activatable_module",
       "phase": 3,
       "entityIds": [],
-      "answers": ["relationships", "attention", "management"]
+      "answers": [
+        "relationships",
+        "attention",
+        "management"
+      ]
     },
     {
       "id": "sales_cash",
@@ -349,7 +646,11 @@
       "layer": "activatable_module",
       "phase": 3,
       "entityIds": [],
-      "answers": ["open_work", "status", "management"]
+      "answers": [
+        "open_work",
+        "status",
+        "management"
+      ]
     },
     {
       "id": "quotes_b2b",
@@ -357,7 +658,12 @@
       "layer": "vertical_extension",
       "phase": 4,
       "entityIds": [],
-      "answers": ["open_work", "ownership", "status", "next_action"]
+      "answers": [
+        "open_work",
+        "ownership",
+        "status",
+        "next_action"
+      ]
     },
     {
       "id": "knowledge_base",
@@ -365,7 +671,11 @@
       "layer": "vertical_extension",
       "phase": 4,
       "entityIds": [],
-      "answers": ["evidence", "next_action", "management"]
+      "answers": [
+        "evidence",
+        "next_action",
+        "management"
+      ]
     },
     {
       "id": "whatsapp",
@@ -373,7 +683,10 @@
       "layer": "external_gate",
       "phase": 5,
       "entityIds": [],
-      "answers": ["next_action", "attention"],
+      "answers": [
+        "next_action",
+        "attention"
+      ],
       "blockedUntil": "Meta/proveedor validado, credenciales, precio y soporte definidos"
     },
     {
@@ -382,7 +695,10 @@
       "layer": "external_gate",
       "phase": 5,
       "entityIds": [],
-      "answers": ["evidence", "management"],
+      "answers": [
+        "evidence",
+        "management"
+      ],
       "blockedUntil": "Discovery pagado, permiso del cliente, entorno de prueba y rollback"
     },
     {
@@ -391,16 +707,42 @@
       "layer": "external_gate",
       "phase": 5,
       "entityIds": [],
-      "answers": ["management"],
+      "answers": [
+        "management"
+      ],
       "blockedUntil": "Proveedor validado, soporte fiscal y margen comercial aprobados"
     }
   ],
   "families": [
-    { "id": "ONIA_CORE", "name": "ONIA Core", "relationship": "core" },
-    { "id": "GESTIOS", "name": "GestiOS", "relationship": "implementation_target", "focus": "Generico pymes; base de motor para verticales" },
-    { "id": "DENTALGEST", "name": "DentalGest", "relationship": "implementation_target", "focus": "Vertical salud: clinicas dentales" },
-    { "id": "GANADERO_OS", "name": "Ganadero OS", "relationship": "implementation_target", "focus": "Vertical agro offline-first: ganaderia" },
-    { "id": "PROVEEGEST", "name": "ProveeGest", "relationship": "future_vertical", "focus": "Vertical distribucion B2B multi-rubro: importadoras, mayoristas, distribuidoras. Electrico es el primer skin de validacion, no el limite." }
+    {
+      "id": "ONIA_CORE",
+      "name": "ONIA Core",
+      "relationship": "core"
+    },
+    {
+      "id": "GESTIOS",
+      "name": "GestiOS",
+      "relationship": "implementation_target",
+      "focus": "Generico pymes; base de motor para verticales"
+    },
+    {
+      "id": "DENTALGEST",
+      "name": "DentalGest",
+      "relationship": "implementation_target",
+      "focus": "Vertical salud: clinicas dentales"
+    },
+    {
+      "id": "GANADERO_OS",
+      "name": "Ganadero OS",
+      "relationship": "implementation_target",
+      "focus": "Vertical agro offline-first: ganaderia"
+    },
+    {
+      "id": "PROVEEGEST",
+      "name": "ProveeGest",
+      "relationship": "future_vertical",
+      "focus": "Vertical distribucion B2B multi-rubro: importadoras, mayoristas, distribuidoras. Electrico es el primer skin de validacion, no el limite."
+    }
   ],
   "verticalFactory": {
     "pattern": "Un solo core + motor GestiOS + pack vertical por rubro. Cada vertical se vende especializado (vocabulario, checklists, KPIs e intake del rubro), nunca como ERP generico. Nuevos rubros = nuevo pack, no nuevo codigo de core.",
@@ -413,17 +755,61 @@
     ],
     "strategy": "onia-core/ONIA_VERTICAL_FACTORY_STRATEGY_2026.md",
     "roadmapRubros": [
-      { "rubro": "salud_dental", "vertical": "DentalGest", "estado": "beta_activa" },
-      { "rubro": "distribucion_b2b", "vertical": "ProveeGest", "estado": "validacion_bolivian_electric" },
-      { "rubro": "pymes_general", "vertical": "GestiOS", "estado": "post_beta" },
-      { "rubro": "agro_ganaderia", "vertical": "Ganadero OS", "estado": "post_beta_offline" },
-      { "rubro": "salud_estetica", "vertical": "EsteticaGest (pack sobre DentalGest)", "estado": "planificado" },
-      { "rubro": "salud_veterinaria", "vertical": "VetGest (pack salud + partners agro)", "estado": "planificado" },
-      { "rubro": "gastronomia", "vertical": "pack GestiOS restaurantes", "estado": "planificado" },
-      { "rubro": "servicios_profesionales", "vertical": "pack GestiOS estudios/agencias", "estado": "planificado" },
-      { "rubro": "educacion", "vertical": "pack GestiOS institutos", "estado": "explorar" },
-      { "rubro": "construccion_ferreteria", "vertical": "pack ProveeGest materiales", "estado": "explorar" },
-      { "rubro": "turismo_hoteleria", "vertical": "pack GestiOS reservas", "estado": "explorar" }
+      {
+        "rubro": "salud_dental",
+        "vertical": "DentalGest",
+        "estado": "beta_activa"
+      },
+      {
+        "rubro": "distribucion_b2b",
+        "vertical": "ProveeGest",
+        "estado": "validacion_bolivian_electric"
+      },
+      {
+        "rubro": "pymes_general",
+        "vertical": "GestiOS",
+        "estado": "post_beta"
+      },
+      {
+        "rubro": "agro_ganaderia",
+        "vertical": "Ganadero OS",
+        "estado": "post_beta_offline"
+      },
+      {
+        "rubro": "salud_estetica",
+        "vertical": "EsteticaGest (pack sobre DentalGest)",
+        "estado": "planificado"
+      },
+      {
+        "rubro": "salud_veterinaria",
+        "vertical": "VetGest (pack salud + partners agro)",
+        "estado": "planificado"
+      },
+      {
+        "rubro": "gastronomia",
+        "vertical": "pack GestiOS restaurantes",
+        "estado": "planificado"
+      },
+      {
+        "rubro": "servicios_profesionales",
+        "vertical": "pack GestiOS estudios/agencias",
+        "estado": "planificado"
+      },
+      {
+        "rubro": "educacion",
+        "vertical": "pack GestiOS institutos",
+        "estado": "explorar"
+      },
+      {
+        "rubro": "construccion_ferreteria",
+        "vertical": "pack ProveeGest materiales",
+        "estado": "explorar"
+      },
+      {
+        "rubro": "turismo_hoteleria",
+        "vertical": "pack GestiOS reservas",
+        "estado": "explorar"
+      }
     ]
   },
   "verticalTracks": [
@@ -432,32 +818,84 @@
       "familyId": "GESTIOS",
       "name": "GestiOS General",
       "status": "pending_adoption",
-      "requiredCapabilityIds": ["tenant", "team_roles", "relationships", "work_items", "evidence_activity", "alerts_reports", "data_ops"],
-      "blockedCapabilityIds": ["whatsapp", "siat"]
+      "requiredCapabilityIds": [
+        "tenant",
+        "team_roles",
+        "relationships",
+        "work_items",
+        "evidence_activity",
+        "alerts_reports",
+        "data_ops"
+      ],
+      "blockedCapabilityIds": [
+        "whatsapp",
+        "siat"
+      ]
     },
     {
       "id": "dentagest-clinical",
       "familyId": "DENTALGEST",
       "name": "DentalGest Clinico",
       "status": "first_beta_active",
-      "requiredCapabilityIds": ["tenant", "team_roles", "relationships", "work_items", "evidence_activity", "alerts_reports", "data_ops", "partners", "permissions", "collaboration", "approvals", "scheduling", "saved_reporting", "sales_cash"],
-      "blockedCapabilityIds": ["siat"]
+      "requiredCapabilityIds": [
+        "tenant",
+        "team_roles",
+        "relationships",
+        "work_items",
+        "evidence_activity",
+        "alerts_reports",
+        "data_ops",
+        "partners",
+        "permissions",
+        "collaboration",
+        "approvals",
+        "scheduling",
+        "saved_reporting",
+        "sales_cash"
+      ],
+      "blockedCapabilityIds": [
+        "siat"
+      ]
     },
     {
       "id": "ganadero-offline",
       "familyId": "GANADERO_OS",
       "name": "Ganadero OS Offline",
       "status": "pending_adoption",
-      "requiredCapabilityIds": ["tenant", "team_roles", "work_items", "evidence_activity", "alerts_reports"],
-      "blockedCapabilityIds": ["whatsapp", "siat"]
+      "requiredCapabilityIds": [
+        "tenant",
+        "team_roles",
+        "work_items",
+        "evidence_activity",
+        "alerts_reports"
+      ],
+      "blockedCapabilityIds": [
+        "whatsapp",
+        "siat"
+      ]
     },
     {
       "id": "proveegest-electrico",
       "familyId": "PROVEEGEST",
       "name": "ProveeGest Electrico",
       "status": "planned_after_core",
-      "requiredCapabilityIds": ["tenant", "team_roles", "relationships", "work_items", "evidence_activity", "alerts_reports", "data_ops", "catalog_inventory", "quotes_b2b", "knowledge_base"],
-      "blockedCapabilityIds": ["whatsapp", "tr4_adapter", "siat"]
+      "requiredCapabilityIds": [
+        "tenant",
+        "team_roles",
+        "relationships",
+        "work_items",
+        "evidence_activity",
+        "alerts_reports",
+        "data_ops",
+        "catalog_inventory",
+        "quotes_b2b",
+        "knowledge_base"
+      ],
+      "blockedCapabilityIds": [
+        "whatsapp",
+        "tr4_adapter",
+        "siat"
+      ]
     }
   ],
   "readModels": {
@@ -465,19 +903,118 @@
       "purpose": "Panel del dueno/gerente: una sola pantalla que responde que paso hoy, cuanto entro, que falta cobrar, que esta pendiente y que requiere atencion. Cada vertical agrega KPIs de rubro sin cambiar las secciones core.",
       "detail": "onia-core/ONIA_CORE_OWNER_PANEL_AND_INTAKE_2026.md",
       "sections": [
-        { "id": "today", "name": "Hoy", "entities": ["schedule_event", "work_item"], "answers": ["open_work", "next_action"] },
-        { "id": "money", "name": "Dinero", "entities": ["work_item", "approval_request"], "answers": ["management", "status"], "note": "Cobros/saldos vienen del modulo financiero del producto; el core aporta pendientes de cobro como work items y aprobaciones de descuento." },
-        { "id": "pending", "name": "Pendientes y responsables", "entities": ["work_item", "comment"], "answers": ["open_work", "ownership", "status"] },
-        { "id": "team", "name": "Equipo y actividad", "entities": ["member", "activity_event", "role_assignment"], "answers": ["people", "roles"] },
-        { "id": "attention", "name": "Alertas y aprobaciones", "entities": ["notification", "approval_request"], "answers": ["attention"] },
-        { "id": "partners", "name": "Clientes y partners", "entities": ["business_partner", "contact"], "answers": ["relationships"] },
-        { "id": "channels", "name": "Canales y mensajes sin dueno", "entities": ["communication_channel", "work_item"], "answers": ["attention", "next_action"], "note": "Mensajes entrantes por canal, sin responder, y canales sin actividad o sin registrar. Mata el caos de correos multiples." }
+        {
+          "id": "today",
+          "name": "Hoy",
+          "entities": [
+            "schedule_event",
+            "work_item"
+          ],
+          "answers": [
+            "open_work",
+            "next_action"
+          ]
+        },
+        {
+          "id": "money",
+          "name": "Dinero",
+          "entities": [
+            "work_item",
+            "approval_request"
+          ],
+          "answers": [
+            "management",
+            "status"
+          ],
+          "note": "Cobros/saldos vienen del modulo financiero del producto; el core aporta pendientes de cobro como work items y aprobaciones de descuento."
+        },
+        {
+          "id": "pending",
+          "name": "Pendientes y responsables",
+          "entities": [
+            "work_item",
+            "comment"
+          ],
+          "answers": [
+            "open_work",
+            "ownership",
+            "status"
+          ]
+        },
+        {
+          "id": "team",
+          "name": "Equipo y actividad",
+          "entities": [
+            "member",
+            "activity_event",
+            "role_assignment"
+          ],
+          "answers": [
+            "people",
+            "roles"
+          ]
+        },
+        {
+          "id": "attention",
+          "name": "Alertas y aprobaciones",
+          "entities": [
+            "notification",
+            "approval_request"
+          ],
+          "answers": [
+            "attention"
+          ]
+        },
+        {
+          "id": "partners",
+          "name": "Clientes y partners",
+          "entities": [
+            "business_partner",
+            "contact"
+          ],
+          "answers": [
+            "relationships"
+          ]
+        },
+        {
+          "id": "channels",
+          "name": "Canales y mensajes sin dueno",
+          "entities": [
+            "communication_channel",
+            "work_item"
+          ],
+          "answers": [
+            "attention",
+            "next_action"
+          ],
+          "note": "Mensajes entrantes por canal, sin responder, y canales sin actividad o sin registrar. Mata el caos de correos multiples."
+        }
       ],
       "verticalExtensions": {
-        "dentagest-clinical": ["citas de hoy y no asistio", "presupuestos pendientes", "tratamientos abiertos", "cobros del dia y cuentas por cobrar", "inventario critico"],
-        "proveegest-electrico": ["cotizaciones abiertas por vendedor", "cotizaciones vencidas (SLA)", "descuentos esperando aprobacion", "pipeline por sucursal", "clientes empresa sin actividad 30 dias"],
-        "gestios-general": ["tareas vencidas por area", "carga por responsable", "importaciones recientes"],
-        "ganadero-offline": ["eventos sanitarios pendientes", "alertas de campo sin resolver", "dispositivos sin sincronizar"]
+        "dentagest-clinical": [
+          "citas de hoy y no asistio",
+          "presupuestos pendientes",
+          "tratamientos abiertos",
+          "cobros del dia y cuentas por cobrar",
+          "inventario critico"
+        ],
+        "proveegest-electrico": [
+          "cotizaciones abiertas por vendedor",
+          "cotizaciones vencidas (SLA)",
+          "descuentos esperando aprobacion",
+          "pipeline por sucursal",
+          "clientes empresa sin actividad 30 dias"
+        ],
+        "gestios-general": [
+          "tareas vencidas por area",
+          "carga por responsable",
+          "importaciones recientes"
+        ],
+        "ganadero-offline": [
+          "eventos sanitarios pendientes",
+          "alertas de campo sin resolver",
+          "dispositivos sin sincronizar"
+        ]
       }
     }
   },
@@ -485,11 +1022,36 @@
     "purpose": "Todo canal externo entra al core como WorkItem normalizado. Las integraciones (WhatsApp, formularios, llamadas) viven fuera del core y solo empujan intake normalizado.",
     "detail": "onia-core/ONIA_CORE_OWNER_PANEL_AND_INTAKE_2026.md",
     "channels": [
-      { "id": "whatsapp_chatwoot", "source": "Chatwoot/WhatsApp", "workItemType": "lead_conversacion", "gate": "external_gate whatsapp" },
-      { "id": "email_shared", "source": "Correos oficiales de la empresa (todos registrados como CommunicationChannel)", "workItemType": "mensaje_correo", "gate": "none" },
-      { "id": "web_form", "source": "Formularios web-factory / landing", "workItemType": "lead_formulario", "gate": "none" },
-      { "id": "phone_walkin", "source": "Llamada o visita registrada manualmente", "workItemType": "solicitud_manual", "gate": "none" },
-      { "id": "import", "source": "ImportBatch validado", "workItemType": "segun_lote", "gate": "dry_run_obligatorio" }
+      {
+        "id": "whatsapp_chatwoot",
+        "source": "Chatwoot/WhatsApp",
+        "workItemType": "lead_conversacion",
+        "gate": "external_gate whatsapp"
+      },
+      {
+        "id": "email_shared",
+        "source": "Correos oficiales de la empresa (todos registrados como CommunicationChannel)",
+        "workItemType": "mensaje_correo",
+        "gate": "none"
+      },
+      {
+        "id": "web_form",
+        "source": "Formularios web-factory / landing",
+        "workItemType": "lead_formulario",
+        "gate": "none"
+      },
+      {
+        "id": "phone_walkin",
+        "source": "Llamada o visita registrada manualmente",
+        "workItemType": "solicitud_manual",
+        "gate": "none"
+      },
+      {
+        "id": "import",
+        "source": "ImportBatch validado",
+        "workItemType": "segun_lote",
+        "gate": "dry_run_obligatorio"
+      }
     ],
     "normalizationRules": [
       "todo canal oficial de la empresa DEBE existir como CommunicationChannel; un mensaje que llega por canal no registrado es una alerta de gobernanza",
@@ -511,9 +1073,9 @@
     {
       "projectId": "dentagest",
       "repoPath": "C:\\dev\\proyectos\\DentaGest\\dental-saas",
-      "status": "hold_until_beta",
+      "status": "installing",
       "adoptionPlan": "onia-core/ONIA_CORE_DENTALGEST_ADOPTION_PLAN_2026.md",
-      "nextAction": "Aprobar plan de adopcion; Sprint 0 (baseline de migraciones DG-013) puede arrancar sin tocar core."
+      "nextAction": "Sprints 0-4 instalados (7/8 entidades + intake + cola /pending). Falta: conector n8n correo, wizard onboarding, business_partner opcional."
     },
     {
       "projectId": "ganadero-os",

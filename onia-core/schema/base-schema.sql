@@ -52,6 +52,7 @@ create table if not exists onia_core_work_items (
   due_at timestamptz,
   next_action text,
   partner_id text,
+  channel_id text,
   sla_policy text,
   sla_due_at timestamptz,
   escalation_level integer not null default 0,
