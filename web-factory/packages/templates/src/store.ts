@@ -65,7 +65,7 @@ export function renderStoreBody(client: StoreClient): string {
   const heroVideo = renderStoreHeroVideo(client, rootRenderContext);
 
   return `
-    <main class="store-page" id="top">
+    <main class="store-page${client.heroVideo ? "" : " store-page--light-hero"}" id="top">
       ${renderStoreHeader(client, slogan, rootRenderContext)}
 
       <section class="store-hero${client.heroVideo ? " has-video" : ""}" aria-labelledby="nuvia-hero-title">
@@ -272,7 +272,7 @@ function renderStoreProductBody(client: StoreClient, product: StoreProduct): str
   const productChips = getProductPageChips(product);
 
   return `
-    <main class="store-page store-product-page" id="top">
+    <main class="store-page store-product-page${client.heroVideo ? "" : " store-page--light-hero"}" id="top">
       ${renderStoreHeader(client, slogan, productPageRenderContext)}
 
       <section class="store-product-page-hero store-reveal" data-reveal>
@@ -1437,6 +1437,50 @@ figure {
 
 .store-hero-proof li:nth-child(3) span {
   background: var(--nuvia-purple);
+}
+
+/* Light-hero clients (no hero video): header/hero text defaults to white for
+   Nuvia's dark video hero. On a light hero that fails WCAG AA contrast, so
+   switch to dark navy text. Scoped to .store-page--light-hero, so Nuvia (which
+   always ships a video hero) is unaffected. */
+.store-page--light-hero .store-header,
+.store-page--light-hero .store-wordmark {
+  color: var(--nuvia-navy);
+}
+
+.store-page--light-hero .store-wordmark-copy small {
+  color: rgba(15, 45, 82, 0.74);
+}
+
+.store-page--light-hero .store-nav {
+  border-color: rgba(15, 45, 82, 0.22);
+  background: rgba(255, 255, 255, 0.74);
+  color: var(--nuvia-navy);
+}
+
+.store-page--light-hero .store-header-cta {
+  color: var(--nuvia-navy);
+}
+
+.store-page--light-hero .store-hero-proof li {
+  border-color: rgba(15, 45, 82, 0.2);
+  background: rgba(255, 255, 255, 0.74);
+  color: rgba(15, 45, 82, 0.92);
+}
+
+/* Product stage sits on the light hero without the dark video treatment, so its
+   white/teal text needs to go dark too. */
+.store-page--light-hero .store-product-stage strong,
+.store-page--light-hero .store-stage-meta span,
+.store-page--light-hero .store-stage-meta small {
+  color: var(--nuvia-navy);
+}
+
+/* Primary CTA is white on coral (2.73:1). Dark navy text on coral clears AA
+   (~5.3:1) while keeping the brand coral; scoped to light-hero demos so Nuvia
+   is untouched. */
+.store-page--light-hero .store-button-primary {
+  color: var(--nuvia-navy);
 }
 
 .store-kicker {
