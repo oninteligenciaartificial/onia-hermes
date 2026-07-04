@@ -144,42 +144,146 @@
             "label": "Jun",
             "value": 48
           }
+        ],
+        "series": []
+      },
+      {
+        "title": "Ingresos vs meta",
+        "unit": "Bs. (miles)",
+        "type": "line",
+        "points": [],
+        "series": [
+          {
+            "name": "Real",
+            "points": [
+              {
+                "label": "Ene",
+                "value": 32
+              },
+              {
+                "label": "Feb",
+                "value": 38
+              },
+              {
+                "label": "Mar",
+                "value": 30
+              },
+              {
+                "label": "Abr",
+                "value": 41
+              },
+              {
+                "label": "May",
+                "value": 45
+              },
+              {
+                "label": "Jun",
+                "value": 48
+              }
+            ]
+          },
+          {
+            "name": "Meta",
+            "points": [
+              {
+                "label": "Ene",
+                "value": 35
+              },
+              {
+                "label": "Feb",
+                "value": 36
+              },
+              {
+                "label": "Mar",
+                "value": 38
+              },
+              {
+                "label": "Abr",
+                "value": 40
+              },
+              {
+                "label": "May",
+                "value": 43
+              },
+              {
+                "label": "Jun",
+                "value": 46
+              }
+            ]
+          }
         ]
       },
       {
-        "title": "Sesiones diarias",
-        "unit": "sesiones",
-        "type": "line",
+        "title": "Ventas por categoria",
+        "unit": "% del total",
+        "type": "donut",
         "points": [
           {
-            "label": "L",
-            "value": 120
+            "label": "Serum",
+            "value": 42
           },
           {
-            "label": "M",
-            "value": 145
+            "label": "Protector",
+            "value": 28
           },
           {
-            "label": "X",
-            "value": 138
+            "label": "Limpieza",
+            "value": 18
           },
           {
-            "label": "J",
-            "value": 162
-          },
+            "label": "Otros",
+            "value": 12
+          }
+        ],
+        "series": []
+      },
+      {
+        "title": "Tendencia de ingresos (14d)",
+        "unit": "Bs.",
+        "type": "sparkline",
+        "points": [
           {
-            "label": "V",
-            "value": 190
-          },
-          {
-            "label": "S",
+            "label": "1",
             "value": 210
           },
           {
-            "label": "D",
-            "value": 176
+            "label": "2",
+            "value": 240
+          },
+          {
+            "label": "3",
+            "value": 228
+          },
+          {
+            "label": "4",
+            "value": 265
+          },
+          {
+            "label": "5",
+            "value": 250
+          },
+          {
+            "label": "6",
+            "value": 288
+          },
+          {
+            "label": "7",
+            "value": 302
+          },
+          {
+            "label": "8",
+            "value": 296
+          },
+          {
+            "label": "9",
+            "value": 320
+          },
+          {
+            "label": "10",
+            "value": 340
           }
-        ]
+        ],
+        "series": []
       }
     ],
     "table": {

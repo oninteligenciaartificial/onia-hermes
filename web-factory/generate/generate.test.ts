@@ -218,4 +218,45 @@ describe("generateSite", () => {
     expect(html).toContain("Sin KPIs definidos");
     expect(html).toContain("Sin registros para el periodo seleccionado.");
   });
+
+  it("renders donut, sparkline and multi-series dashboard charts", async () => {
+    const rootDir = await mkdtemp(path.join(os.tmpdir(), "onia-web-factory-"));
+    await mkdir(path.join(rootDir, "data", "clients"), { recursive: true });
+
+    await writeFile(
+      path.join(rootDir, "data", "clients", "panel.json"),
+      JSON.stringify({
+        nombre: "Panel Demo",
+        slug: "panel",
+        tagline: "Panel demo",
+        descripcion: "Dashboard con tipos de chart.",
+        dashboard: {
+          title: "Panel",
+          charts: [
+            { title: "Categorias", type: "donut", points: [{ label: "A", value: 60 }, { label: "B", value: 40 }] },
+            { title: "Tendencia", type: "sparkline", points: [{ label: "1", value: 10 }, { label: "2", value: 30 }] },
+            {
+              title: "Real vs meta",
+              type: "line",
+              series: [
+                { name: "Real", points: [{ label: "Ene", value: 20 }, { label: "Feb", value: 30 }] },
+                { name: "Meta", points: [{ label: "Ene", value: 25 }, { label: "Feb", value: 28 }] },
+              ],
+            },
+          ],
+        },
+      }),
+      "utf8",
+    );
+
+    const result = await generateSite("panel", { rootDir, template: "dashboard" });
+    const html = await readFile(path.join(result.outputDir, "index.html"), "utf8");
+
+    expect(html).toContain("wf-donut");
+    expect(html).toContain("wf-sparkline");
+    expect(html).toContain("wf-chart-legend"); // multi-series + donut legends
+    expect(html).toContain("stroke-dasharray"); // donut arc segments
+    // multi-series line draws one polyline per series, plus the sparkline
+    expect((html.match(/<polyline/g) ?? []).length).toBeGreaterThanOrEqual(3);
+  });
 });
