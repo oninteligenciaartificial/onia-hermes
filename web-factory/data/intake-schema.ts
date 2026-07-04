@@ -119,7 +119,7 @@ const intakeDashboardSchema = z
 export const webFactoryIntakeSchema = z.object({
   project: z.object({
     slug: slugSchema,
-    template: z.enum(["landing", "store", "dashboard"]).default("landing"),
+    template: z.enum(["landing", "store", "dashboard", "landing-focus"]).default("landing"),
     package: z.string().default("web"),
     owner: z.string().default("ONIA"),
   }),

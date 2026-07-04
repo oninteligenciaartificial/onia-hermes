@@ -354,6 +354,30 @@ h1 {
   font-weight: 700;
 }
 
+.wf-focus-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 56px;
+  font-weight: 800;
+}
+
+.wf-final-cta {
+  width: min(1120px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: clamp(56px, 8vw, 96px) 0;
+  display: grid;
+  gap: 24px;
+  justify-items: center;
+  text-align: center;
+}
+
+.wf-final-cta h2 {
+  font-size: clamp(2rem, 4vw, 3.25rem);
+  line-height: 1.02;
+  max-width: 720px;
+}
+
 @media (max-width: 840px) {
   .wf-hero {
     min-height: auto;

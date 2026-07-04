@@ -9,6 +9,7 @@ const MAX_SCRIPT_KB = 60;
 
 const PAGES = [
   { name: "landing (demo)", url: "/demo/", maxBytesKb: 60 },
+  { name: "landing-focus (demo-focus)", url: "/demo-focus/", maxBytesKb: 60 },
   { name: "store (skincare-demo)", url: "/skincare-demo/", maxBytesKb: 150 },
   { name: "dashboard (dashboard-demo)", url: "/dashboard-demo/", maxBytesKb: 60 },
 ];

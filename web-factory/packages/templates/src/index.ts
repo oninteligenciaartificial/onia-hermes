@@ -5,6 +5,11 @@ export {
   type LandingClient,
 } from "./landing";
 export {
+  renderLandingFocusBody,
+  renderLandingFocusCss,
+  renderLandingFocusDocument,
+} from "./landing-focus";
+export {
   renderStoreBody,
   renderStoreCss,
   renderStoreDocument,

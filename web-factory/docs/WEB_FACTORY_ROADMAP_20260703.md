@@ -54,7 +54,9 @@ cliente paga funcionalidad**. El margen vive en lo recurrente (nivel 2-3).
 | 5 | ~~Inyectar codigo Tremor en `design:auto`~~ **HECHO** | Cerrar el loop harvester -> receta (ya esta indexado) | receta de dashboard lidera con Tremor AreaChart/BarChart + mapa seccion->componente (kpi/charts/table) |
 | 6 | ~~Pipeline de imagenes AVIF/WebP + width/height~~ **PARCIAL** | LCP/CLS; hoy assets sin optimizar | guard `pnpm images:check <slug>` (sin dep nativa) flagea raster no-webp/avif y sobre-peso; encontró 108 PNG >400kb en nuvia. Auto-conversion con sharp = follow-up cuando haya fotos raw pesadas |
 | 7 | ~~Charts mas ricos (multi-serie, donut, sparkline)~~ **HECHO** | Cubrir mas casos de panel sin libreria | donut, sparkline y line multi-serie (campo `series`) en `dashboard.ts`, todo SVG con paleta tokenizada + leyenda; demo actualizado |
-| 8 | Conversion research (single-column, sin nav) | Unbounce: -10/15% conversion con nav en landing | variante de landing "focus" sin nav |
+| 8 | ~~Conversion research (single-column, sin nav)~~ **HECHO** | Unbounce: -10/15% conversion con nav en landing | template `landing-focus`: sin nav, un solo CTA, CTA final, footer minimo. `pnpm generate <slug> --template landing-focus`. Gated en a11y+perf |
+
+> **Roadmap completo (8/8).** Los 3 gates de calidad (a11y light+dark, visual, performance CWV) blindan la fabrica; el pipeline de diseno propone componentes Tremor concretos; hay 4 templates (landing, landing-focus, store, dashboard) con dark mode.
 | 9 | Mas templates por rubro (portfolio, servicios premium) | Ampliar catalogo vendible | 1-2 templates nuevos |
 
 ## Fuentes de investigacion
