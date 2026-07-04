@@ -50,7 +50,7 @@ cliente paga funcionalidad**. El margen vive en lo recurrente (nivel 2-3).
 | 1 | ~~Fix contraste store.ts (header/hero AA)~~ **HECHO** | Deuda serie que bloquea calidad; 18 nodos | store gated en el a11y gate (PR #3) |
 | 2 | ~~PoC Astro islands + Tremor~~ **HECHO** | Dashboards interactivos reales sin perder static-first | `experiments/astro-islands-poc/`: shell estatico + chart Tremor hidratado (build+QA OK) |
 | 3 | ~~Dark mode en tokens~~ **HECHO** | Table-stakes 2026; hoy solo hay tema claro | variante dark en `packages/tokens` (auto + `[data-theme]`) + toggle en dashboard; a11y gated en light+dark |
-| 4 | Gate de performance (Lighthouse/CWV) | LCP<=2.5s, INP<=200ms, CLS<=0.1 son piso | script/CI que mide y falla si excede |
+| 4 | ~~Gate de performance (Lighthouse/CWV)~~ **HECHO** | LCP<=2.5s, INP<=200ms, CLS<=0.1 son piso | `tests/e2e/perf.spec.ts` mide LCP/FCP/CLS + peso same-origin y falla si excede; encontró y arregló LCP 3.2s en store (fuente Google render-blocking → async) |
 | 5 | ~~Inyectar codigo Tremor en `design:auto`~~ **HECHO** | Cerrar el loop harvester -> receta (ya esta indexado) | receta de dashboard lidera con Tremor AreaChart/BarChart + mapa seccion->componente (kpi/charts/table) |
 | 6 | Pipeline de imagenes AVIF/WebP + width/height | LCP/CLS; hoy assets sin optimizar | paso de optimizacion en `generate` |
 | 7 | Charts mas ricos (multi-serie, donut, sparkline) | Cubrir mas casos de panel sin libreria | nuevos tipos en `dashboard.ts` |
