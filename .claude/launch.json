@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "site",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["-C", "web-factory", "--filter", "site", "dev", "--port", "3277"],
+      "port": 3277
+    }
+  ]
+}
