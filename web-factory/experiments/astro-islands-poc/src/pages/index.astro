@@ -1,0 +1,72 @@
+---
+import SalesChart from "../components/SalesChart.tsx";
+
+// Static data rendered at build time (zero JS shipped for these).
+const kpis = [
+  { label: "Ingresos", value: "Bs. 48.2k", delta: "+12.4%", up: true },
+  { label: "Clientes nuevos", value: "184", delta: "+8.1%", up: true },
+  { label: "Ticket promedio", value: "Bs. 262", delta: "-1.9%", up: false },
+  { label: "Tasa de cierre", value: "34%", delta: "0.0%", up: true },
+];
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Astro Islands + Tremor — PoC dashboard</title>
+    <meta
+      name="description"
+      content="PoC: dashboard estatico Astro con un chart Tremor hidratado como isla."
+    />
+  </head>
+  <body class="min-h-screen bg-gray-50 text-gray-900 antialiased">
+    <main class="mx-auto max-w-5xl px-6 py-10">
+      <!-- Static shell: header + KPIs are plain prerendered HTML, no JS. -->
+      <header class="mb-8 flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <p class="text-sm font-semibold uppercase tracking-wide text-indigo-600">ONIA Web Factory</p>
+          <h1 class="mt-1 text-3xl font-bold">Panel operativo — PoC islas</h1>
+          <p class="mt-1 text-gray-500">
+            Todo es HTML estatico salvo el grafico, que se hidrata como isla.
+          </p>
+        </div>
+        <a
+          href="#"
+          class="inline-flex min-h-10 items-center rounded-lg bg-gray-900 px-4 font-semibold text-white"
+        >
+          Exportar reporte
+        </a>
+      </header>
+
+      <section
+        class="mb-6 grid grid-cols-2 gap-4 md:grid-cols-4"
+        aria-label="Indicadores clave"
+      >
+        {
+          kpis.map((kpi) => (
+            <article class="rounded-xl border border-gray-200 bg-white p-4">
+              <p class="text-xs font-semibold uppercase tracking-wide text-gray-500">{kpi.label}</p>
+              <p class="mt-2 text-2xl font-bold">{kpi.value}</p>
+              <p class={`mt-1 text-sm font-semibold ${kpi.up ? "text-emerald-700" : "text-rose-700"}`}>
+                {kpi.delta}
+              </p>
+            </article>
+          ))
+        }
+      </section>
+
+      <!--
+        The only interactive island. `client:visible` defers hydration until it
+        scrolls into view, so the chart's React + Tremor JS loads lazily and the
+        rest of the page stays static.
+      -->
+      <SalesChart client:visible />
+
+      <p class="mt-6 text-center text-sm text-gray-400">
+        Isla hidratada: solo este bloque envia JS. El resto es estatico.
+      </p>
+    </main>
+  </body>
+</html>

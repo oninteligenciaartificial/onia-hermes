@@ -1373,3 +1373,343 @@
     width: 100%;
   }
 }
+
+/* Cotizador */
+.seller-quote {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: 18px;
+  align-items: start;
+}
+
+.seller-quote__catalog {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.seller-quote-group {
+  background: var(--seller-surface);
+  border: 1px solid var(--seller-line);
+  border-radius: var(--seller-radius);
+  padding: 14px 16px;
+}
+
+.seller-quote-group > header {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-bottom: 10px;
+}
+
+.seller-quote-group > header strong {
+  font-size: 14px;
+}
+
+.seller-quote-group > header small {
+  color: var(--seller-faint);
+  font-size: 12px;
+}
+
+.seller-quote-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.seller-quote-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border: 1px solid var(--seller-line-soft);
+  border-radius: 6px;
+  background: var(--seller-surface-2);
+}
+
+.seller-quote-row.is-active {
+  border-color: var(--seller-accent);
+  background: color-mix(in srgb, var(--seller-accent) 7%, #fff);
+}
+
+.seller-quote-check {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  flex: 0 0 26px;
+  border: 1px solid var(--seller-line);
+  border-radius: 6px;
+  background: #fff;
+  color: var(--seller-muted);
+  cursor: pointer;
+}
+
+.seller-quote-row.is-active .seller-quote-check {
+  background: var(--seller-accent);
+  border-color: var(--seller-accent);
+  color: #fff;
+}
+
+.seller-quote-row__body {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.seller-quote-row__label {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.seller-quote-row__price {
+  font-size: 12px;
+  color: var(--seller-accent);
+  font-weight: 700;
+}
+
+.seller-quote-row__note {
+  font-size: 11px;
+  color: var(--seller-faint);
+}
+
+.seller-quote-qty {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.seller-quote-qty button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border: 1px solid var(--seller-line);
+  border-radius: 6px;
+  background: #fff;
+  color: var(--seller-ink);
+  cursor: pointer;
+}
+
+.seller-quote-qty input {
+  width: 42px;
+  text-align: center;
+  border: 1px solid var(--seller-line);
+  border-radius: 6px;
+  padding: 3px 4px;
+  font-size: 13px;
+}
+
+.seller-quote__summary {
+  position: sticky;
+  top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: var(--seller-surface);
+  border: 1px solid var(--seller-line);
+  border-radius: var(--seller-radius);
+  padding: 16px;
+}
+
+.seller-quote-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--seller-line-soft);
+}
+
+.seller-quote-toggle {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.seller-quote-toggle > span {
+  font-size: 12px;
+  color: var(--seller-muted);
+  font-weight: 600;
+}
+
+.seller-quote-toggle > div {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+.seller-quote-toggle button {
+  padding: 6px 8px;
+  border: 1px solid var(--seller-line);
+  border-radius: 6px;
+  background: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--seller-muted);
+  cursor: pointer;
+}
+
+.seller-quote-toggle button.is-on {
+  background: var(--seller-accent-2);
+  border-color: var(--seller-accent-2);
+  color: #fff;
+}
+
+.seller-quote-switch {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--seller-ink);
+  cursor: pointer;
+}
+
+.seller-quote-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.seller-quote-card {
+  border: 1px solid var(--seller-line-soft);
+  border-radius: 6px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.seller-quote-card span {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--seller-faint);
+  font-weight: 700;
+}
+
+.seller-quote-card strong {
+  font-size: 20px;
+}
+
+.seller-quote-card small {
+  font-size: 11px;
+  color: var(--seller-muted);
+}
+
+.seller-quote-card p {
+  margin: 2px 0 0;
+  font-size: 12px;
+  color: var(--seller-muted);
+}
+
+.seller-quote-card.is-client {
+  background: color-mix(in srgb, var(--seller-accent-2) 8%, #fff);
+  border-color: color-mix(in srgb, var(--seller-accent-2) 25%, #fff);
+}
+
+.seller-quote-card.is-arthur {
+  background: color-mix(in srgb, var(--seller-warning) 10%, #fff);
+  border-color: color-mix(in srgb, var(--seller-warning) 25%, #fff);
+}
+
+.seller-quote-card.is-onia {
+  background: color-mix(in srgb, var(--seller-accent) 9%, #fff);
+  border-color: color-mix(in srgb, var(--seller-accent) 25%, #fff);
+}
+
+.seller-quote-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 0;
+  border-top: 1px solid var(--seller-line-soft);
+  border-bottom: 1px solid var(--seller-line-soft);
+}
+
+.seller-quote-breakdown > div {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--seller-muted);
+}
+
+.seller-quote-breakdown strong {
+  color: var(--seller-ink);
+}
+
+.seller-quote-selected__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.seller-quote-selected__head strong {
+  font-size: 12px;
+}
+
+.seller-quote-selected__head button {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border: none;
+  background: none;
+  color: var(--seller-danger);
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.seller-quote-selected ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.seller-quote-selected li {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 12px;
+  color: var(--seller-muted);
+}
+
+.seller-quote-empty {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--seller-faint);
+  margin: 0;
+}
+
+.seller-quote-rules {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-top: 10px;
+  border-top: 1px solid var(--seller-line-soft);
+}
+
+.seller-quote-rules p {
+  margin: 0;
+  font-size: 11px;
+  color: var(--seller-faint);
+  line-height: 1.4;
+}
+
+@media (max-width: 900px) {
+  .seller-quote {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .seller-quote__summary {
+    position: static;
+  }
+}

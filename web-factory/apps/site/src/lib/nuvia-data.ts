@@ -89,6 +89,41 @@ export type NuviaMerchandising = {
   seccionesRapidas: NuviaQuickSection[];
 };
 
+export type NuviaRoutineStep = {
+  orden: number;
+  accion: string;
+  titulo: string;
+  nota: string;
+  productSlugs: string[];
+};
+
+export type NuviaRoutine = {
+  id: string;
+  necesidad: string;
+  titulo: string;
+  resumen: string;
+  momento: string;
+  pasos: NuviaRoutineStep[];
+  advertencia?: string;
+  borrador?: boolean;
+};
+
+export type NuviaAdvice = {
+  id: string;
+  tipo: string;
+  titulo: string;
+  cuerpo: string;
+  productSlugs?: string[];
+  disclaimer?: string;
+};
+
+export type NuviaContenido = {
+  version: string;
+  generatedAt: string;
+  rutinas: NuviaRoutine[];
+  consejos: NuviaAdvice[];
+};
+
 export type NuviaProduct = {
   titulo: string;
   categoria: string;
@@ -134,6 +169,7 @@ export type NuviaClient = {
   };
   productos: NuviaProduct[];
   merchandising?: NuviaMerchandising;
+  contenido?: NuviaContenido;
   seo: {
     title: string;
     description: string;
@@ -220,6 +256,13 @@ export const nuviaMerchandising: NuviaMerchandising = {
       imagen: publicAsset(product.imagen),
     })),
   })),
+};
+
+export const nuviaContenido: NuviaContenido = {
+  version: nuvia.contenido?.version || "",
+  generatedAt: nuvia.contenido?.generatedAt || "",
+  rutinas: nuvia.contenido?.rutinas || [],
+  consejos: nuvia.contenido?.consejos || [],
 };
 
 export const nuviaCartProducts: CartProduct[] = nuviaProducts.map((product) => ({

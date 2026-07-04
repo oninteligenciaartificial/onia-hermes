@@ -25,6 +25,7 @@ export const sellerNavigation: SellerNavigationItem[] = [
   { id: "captura", href: "/vendedores/captura", label: "Captura", detail: "Nuevo prospecto" },
   { id: "leads", href: "/vendedores/pipeline", label: "Pipeline", detail: "Seguimientos" },
   { id: "webs", href: "/vendedores/webs", label: "Webs", detail: "Diagnostico" },
+  { id: "cotizador", href: "/vendedores/cotizador", label: "Cotizador", detail: "Precio por proyecto" },
   { id: "notas", href: "/vendedores/notas", label: "Notas", detail: "Llamadas" },
   { id: "ideas", href: "/vendedores/ideas", label: "Ideas", detail: "Oportunidades" },
   { id: "ingresos", href: "/vendedores/ingresos", label: "Ingresos", detail: "Comisiones" },
@@ -72,6 +73,14 @@ export const sellerScreens: Record<string, SellerScreen> = {
       "Pantalla para diferenciar landing, web profesional, CRM, automatizacion o sistema antes de cotizar mal.",
     tags: ["Web", "CRM", "Automatizacion", "Discovery"],
     primaryAction: { href: "/vendedores/requerimientos", label: "Ver requerimientos" },
+  },
+  cotizador: {
+    label: "Precio por proyecto",
+    title: "Cotizador ONIA",
+    description:
+      "Arma el precio de un proyecto sumando componentes del catalogo. Muestra total unico, mensual y cuanto cobra Arthur. El catalogo es el piso; Sergio aprueba el precio final.",
+    tags: ["Precio de lanzamiento", "Unico + mensual", "Comision Arthur"],
+    primaryAction: { href: "/vendedores/ingresos", label: "Ver ingresos" },
   },
   notas: {
     label: "Memoria de llamadas",
