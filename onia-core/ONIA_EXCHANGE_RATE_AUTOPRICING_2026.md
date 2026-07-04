@@ -72,20 +72,24 @@ n8n diario 07:30 (VPS ONIA)
      de repricing del producto
 ```
 
-### v2 con el catalogo real de BE: puente TR4
+### v2 con el catalogo real de BE: puente TR4 (ACTUALIZADO 2026-07-04)
 
-Confirmado (Sergio 2026-07-03): el catalogo de precios de Bolivian Electric
-vive en su **ERP local TR4** (auditado en
-`hermes-content/docs/BOLIVIAN_TR4_LOCAL_STATIC_AUDIT_20260624.md`). El
-repricing entonces sigue el patron `external_gate` del contrato:
+El catalogo vive en el ERP local **TR4** (PowerBuilder + SQL Server).
+**Decision del cliente: NO dan acceso SQL** (el proveedor de TR4 no lo
+permite por exposicion de codigo fuente). **SI permiten extraer planillas
+Excel u otros formatos.** El puente definitivo:
 
-1. n8n calcula la lista de precios sugerida (costo USD x tasa_efectiva x
-   margen) — el catalogo se obtiene de TR4 por export CSV programado o por
-   tunel a su base (ver modelos de despliegue).
-2. Se genera `ApprovalRequest` con el resumen para el dueno.
-3. Aprobado: se produce la lista final (Excel/CSV) para cargar en TR4 — o
-   escritura directa si el analisis de TR4 confirma una base escribible con
-   respaldo. Investigacion pendiente en el repo de BE.
+1. TR4 exporta planilla (catalogo: codigo, descripcion, costo, precio) —
+   manual o programada; llega por correo o carpeta compartida.
+2. n8n la lee (Spreadsheet File node), normaliza y calcula la lista sugerida
+   (landed cost + tasa_efectiva x margen). Ver
+   `ONIA_IMPORT_LANDED_COST_MODULE_2026.md`.
+3. `ApprovalRequest` con resumen para el dueno.
+4. Aprobado: n8n genera el Excel de lista nueva para cargar en TR4 (mismo
+   formato que su equipo ya usa).
+
+Cero riesgo para el cliente, cero dependencia del proveedor TR4. Pendiente
+con Saul: columnas exactas del export y frecuencia.
 
 ### Politica de repricing (v2, cuando el catalogo viva en ProveeGest)
 
