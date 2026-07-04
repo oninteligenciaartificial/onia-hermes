@@ -2,7 +2,7 @@
   "projectId": "dentagest",
   "projectName": "DentalGest",
   "repoPath": "C:\\dev\\proyectos\\DentaGest\\dental-saas",
-  "status": "mapped_not_installed",
+  "status": "installing",
   "adoptionRule": "Do not turn DentalGest into a generic ERP. Adopt only common organization patterns that strengthen the dental product.",
   "businessRole": "Dental clinic SaaS with clinical records, appointments, treatments, invoices and dental inventory.",
   "betaDecision": {
@@ -241,5 +241,14 @@
     "Dental privacy boundaries reviewed",
     "Dental-specific workflows defined before generic task UI",
     "Fiscal/SIAT provider, authorization and testing responsibilities validated before live fiscal emission"
+  ],
+  "installedEntities": [
+    {
+      "coreEntityId": "work_item",
+      "table": "onia_core_work_items",
+      "migration": "20260703180000_add_onia_core_work_items",
+      "installedAt": "2026-07-03",
+      "notes": "Primera entidad core en prod. Tenant guard + dedupe + transiciones en lib/onia-core/."
+    }
   ]
 }

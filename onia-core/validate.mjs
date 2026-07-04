@@ -191,9 +191,16 @@ for (const adapterFile of contract.adapterFiles) {
 
 assertUnique(adapters.map(({ adapter }) => ({ id: adapter.projectId })), "adapterFiles");
 
+// Doble llave de adopcion: solo los proyectos listados aqui pueden estar en
+// estado "installing" (cambiar esta lista + el adapter juntos, a proposito).
+const ADOPTION_APPROVED = new Set(["dentagest"]);
+
 for (const { file, adapter } of adapters) {
   assert(distributionProjectIds.has(adapter.projectId), `${file} references project outside distributionTargets`);
-  assert(adapter.status === "mapped_not_installed", `${file} must stay mapped_not_installed before beta`);
+  const allowedStatuses = ADOPTION_APPROVED.has(adapter.projectId)
+    ? ["mapped_not_installed", "installing"]
+    : ["mapped_not_installed"];
+  assert(allowedStatuses.includes(adapter.status), `${file} status ${adapter.status} not allowed (approved: ${allowedStatuses.join("/")})`);
   assert(Array.isArray(adapter.entityMappings), `${file} must include entityMappings`);
   assert(Array.isArray(adapter.capabilityMappings), `${file} must include capabilityMappings`);
   assert(adapter.blockedUntil?.length > 0, `${file} must include blockedUntil gates`);

@@ -95,6 +95,16 @@ agregan tablas core.
 
 ### Sprint 1 — WorkItem dental + panel `pending`
 
+> **AVANCE 2026-07-03 (commit `9bff9ee` en DentaGest):** puntos 1, 2 y parte
+> del 3 y 5 ejecutados. Tabla `onia_core_work_items` desplegada en prod via
+> `migrate deploy` (primera migracion del flujo baseline). Lib
+> `lib/onia-core/`: tenant guard (bloqueo de cruce de tenant), tipos del pack
+> dental, dedupe 24h, transiciones, cola pending ordenada por SLA, y
+> generadores puros (no-asistio, saldo vencido, presupuesto sin respuesta).
+> typecheck + 143 tests verdes. Adapter -> `installing`.
+> **Falta:** wiring de generadores a crons/eventos reales, seccion pending del
+> cockpit consumiendo la cola, y tests de integracion con DB.
+
 1. Migracion `onia_core_work_items` (traducida del SQL base del contrato a
    Prisma, prefijo/namespace `dentalgest` ya existente).
 2. Tipos dentales del pack: `llamar_paciente`, `confirmar_cita`,
