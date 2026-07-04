@@ -158,8 +158,8 @@ function renderCharts(charts: DashboardChart[]): string {
             ${
               chart.points.length
                 ? chart.type === "line"
-                  ? renderLineChart(chart.points)
-                  : renderBarChart(chart.points)
+                  ? renderLineChart(chart)
+                  : renderBarChart(chart)
                 : renderEmpty("Sin datos", "Este grafico se completa cuando llegan los datos.")
             }
           </article>`,
@@ -257,7 +257,13 @@ function renderGrid(max: number): string {
     .join("");
 }
 
-function renderBarChart(points: Array<{ label: string; value: number }>): string {
+function chartLabel(chart: DashboardChart): string {
+  const kind = chart.type === "line" ? "Grafico de linea" : "Grafico de barras";
+  return `${kind}: ${chart.title}${chart.unit ? ` (${chart.unit})` : ""}`;
+}
+
+function renderBarChart(chart: DashboardChart): string {
+  const points = chart.points;
   const max = niceMax(Math.max(...points.map((point) => Math.max(point.value, 0)), 1));
   const count = points.length;
   const gap = count > 12 ? 3 : 8;
@@ -276,10 +282,11 @@ function renderBarChart(points: Array<{ label: string; value: number }>): string
 
   const labels = renderChartLabels(points, (index) => PAD_L + index * (barWidth + gap) + barWidth / 2);
 
-  return chartSvg(`${renderGrid(max)}${bars}${labels}`);
+  return chartSvg(`${renderGrid(max)}${bars}${labels}`, chartLabel(chart));
 }
 
-function renderLineChart(points: Array<{ label: string; value: number }>): string {
+function renderLineChart(chart: DashboardChart): string {
+  const points = chart.points;
   const max = niceMax(Math.max(...points.map((point) => point.value), 1));
   const count = points.length;
 
@@ -305,6 +312,7 @@ function renderLineChart(points: Array<{ label: string; value: number }>): strin
   return chartSvg(
     `${renderGrid(max)}<polygon points="${area}" fill="var(--color-primary)" fill-opacity="0.12"></polygon>` +
       `<polyline points="${line}" fill="none" stroke="var(--color-primary)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"></polyline>${dots}${labels}`,
+    chartLabel(chart),
   );
 }
 
@@ -324,8 +332,10 @@ function renderChartLabels(
     .join("");
 }
 
-function chartSvg(inner: string): string {
-  return `<svg class="wf-chart" viewBox="0 0 ${CHART_W} ${CHART_H}" role="img" preserveAspectRatio="xMidYMid meet">${inner}</svg>`;
+function chartSvg(inner: string, label: string): string {
+  return `<svg class="wf-chart" viewBox="0 0 ${CHART_W} ${CHART_H}" role="img" aria-label="${escapeAttribute(
+    label,
+  )}" preserveAspectRatio="xMidYMid meet">${inner}</svg>`;
 }
 
 function trendGlyph(trend: DashboardKpi["trend"]): string {
@@ -422,7 +432,7 @@ body {
   background: var(--color-bg);
   color: var(--color-fg);
   font-family: var(--font-body);
-  --wf-pos: #15803d;
+  --wf-pos: #166534;
   --wf-neg: #b91c1c;
 }
 
