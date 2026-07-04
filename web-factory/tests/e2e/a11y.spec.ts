@@ -12,6 +12,7 @@ const BLOCKING = new Set(["serious", "critical"]);
 // dark), so it is only gated in light.
 const PAGES = [
   { name: "landing (demo)", url: "/demo/", schemes: ["light", "dark"] as const },
+  { name: "landing-focus (demo-focus)", url: "/demo-focus/", schemes: ["light", "dark"] as const },
   { name: "dashboard (dashboard-demo)", url: "/dashboard-demo/", schemes: ["light", "dark"] as const },
   { name: "store (skincare-demo)", url: "/skincare-demo/", schemes: ["light"] as const },
 ];

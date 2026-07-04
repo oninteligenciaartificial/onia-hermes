@@ -1,0 +1,26 @@
+{
+  "nombre": "Aurora Dental",
+  "slug": "demo-focus",
+  "tagline": "Agenda tu evaluacion dental sin filas ni vueltas",
+  "descripcion": "Una landing enfocada: una sola accion y cero distracciones para que reserves en un clic.",
+  "logo": "AD",
+  "colores": {
+    "primary": "#0f766e",
+    "secondary": "#155e75",
+    "accent": "#f59e0b",
+    "bg": "#f8fafc",
+    "fg": "#0f172a"
+  },
+  "tipografia": { "heading": "Onest", "body": "Onest" },
+  "contacto": { "email": "", "tel": "", "whatsapp": "+59170000000", "direccion": "Santa Cruz, Bolivia" },
+  "servicios": [
+    { "titulo": "Evaluacion clara", "desc": "Diagnostico explicado sin tecnicismos y con presupuesto cerrado.", "icono": "search" },
+    { "titulo": "Agenda directa", "desc": "Reservas por WhatsApp, sin llamadas ni esperas.", "icono": "message" },
+    { "titulo": "Sin sorpresas", "desc": "Precios claros antes de empezar cualquier tratamiento.", "icono": "shield" }
+  ],
+  "cta": { "texto": "Agendar evaluacion", "url": "https://wa.me/59170000000" },
+  "seo": {
+    "title": "Aurora Dental - Agenda tu evaluacion",
+    "description": "Landing enfocada para reservar tu evaluacion dental en un clic."
+  }
+}

@@ -3,7 +3,7 @@ import path from "node:path";
 import { loadClientProfile, type ClientProfile } from "../data/schema";
 import { parseSlug } from "../generate/generate";
 
-export type WebFactoryTemplate = "landing" | "store" | "dashboard";
+export type WebFactoryTemplate = "landing" | "store" | "dashboard" | "landing-focus";
 
 export type VerticalId =
   | "skincare-ecommerce"

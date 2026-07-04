@@ -21,7 +21,7 @@ export type CreateClientOptions = {
 
 export type CreateClientResult = {
   slug: string;
-  template: "landing" | "store" | "dashboard";
+  template: "landing" | "store" | "dashboard" | "landing-focus";
   profilePath: string;
   contextPath: string;
   missingInputs: string[];

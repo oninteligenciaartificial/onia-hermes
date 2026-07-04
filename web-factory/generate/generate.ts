@@ -5,6 +5,7 @@ import {
   renderDashboardDocument,
   renderLandingCss,
   renderLandingDocument,
+  renderLandingFocusDocument,
   renderStoreCss,
   renderStoreDocument,
   renderStoreProductDocument,
@@ -15,7 +16,7 @@ import { loadClientProfile } from "../data/schema";
 export type GenerateOptions = {
   rootDir?: string;
   outDir?: string;
-  template?: "landing" | "store" | "dashboard";
+  template?: "landing" | "store" | "dashboard" | "landing-focus";
 };
 
 export type GenerateResult = {
@@ -37,8 +38,8 @@ export async function generateSite(
 
   const template = options.template ?? "landing";
 
-  if (!["landing", "store", "dashboard"].includes(template)) {
-    throw new Error(`Unsupported template "${template}". Available: landing, store, dashboard.`);
+  if (!["landing", "store", "dashboard", "landing-focus"].includes(template)) {
+    throw new Error(`Unsupported template "${template}". Available: landing, store, dashboard, landing-focus.`);
   }
 
   await mkdir(outputDir, { recursive: true });
@@ -52,7 +53,9 @@ export async function generateSite(
       ? renderStoreDocument(client)
       : template === "dashboard"
         ? renderDashboardDocument(client)
-        : renderLandingDocument(client);
+        : template === "landing-focus"
+          ? renderLandingFocusDocument(client)
+          : renderLandingDocument(client);
   const css =
     template === "store"
       ? renderStoreCss(client)

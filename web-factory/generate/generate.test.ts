@@ -44,6 +44,35 @@ describe("generateSite", () => {
     expect(result.files).toContain(path.join(result.outputDir, "demo.design.md"));
   });
 
+  it("creates a focus landing without nav and with a single CTA path", async () => {
+    const rootDir = await mkdtemp(path.join(os.tmpdir(), "onia-web-factory-"));
+    await mkdir(path.join(rootDir, "data", "clients"), { recursive: true });
+
+    await writeFile(
+      path.join(rootDir, "data", "clients", "focus.json"),
+      JSON.stringify({
+        nombre: "Focus Co",
+        slug: "focus",
+        tagline: "Reserva en un clic",
+        descripcion: "Landing enfocada.",
+        cta: { texto: "Agendar", url: "https://wa.me/59170000000" },
+      }),
+      "utf8",
+    );
+
+    const result = await generateSite("focus", { rootDir, template: "landing-focus" });
+    const html = await readFile(path.join(result.outputDir, "index.html"), "utf8");
+
+    // No navigation and no secondary CTA = fewer exits.
+    expect(html).not.toContain("wf-nav");
+    expect(html).not.toContain("wf-button-secondary");
+    expect(html).not.toContain("Ver servicios");
+    // Minimal brand + a repeated final CTA driving the single action.
+    expect(html).toContain("wf-focus-brand");
+    expect(html).toContain("wf-final-cta");
+    expect((html.match(/wf-button-primary/g) ?? []).length).toBe(2);
+  });
+
   it("rejects unsafe slugs", () => {
     expect(() => parseSlug("../demo")).toThrow();
     expect(() => parseSlug("Demo")).toThrow();

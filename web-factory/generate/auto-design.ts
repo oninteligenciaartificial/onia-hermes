@@ -70,7 +70,7 @@ function parseTemplate(value?: string): WebFactoryTemplate | undefined {
     return undefined;
   }
 
-  if (value === "landing" || value === "store" || value === "dashboard") {
+  if (value === "landing" || value === "store" || value === "dashboard" || value === "landing-focus") {
     return value;
   }
 
