@@ -1,8 +1,17 @@
-import { mkdir, mkdtemp, readFile, writeFile } from "node:fs/promises";
+import { access, mkdir, mkdtemp, readFile, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { generateSite, parseSlug } from "./generate";
+
+async function exists(target: string): Promise<boolean> {
+  try {
+    await access(target);
+    return true;
+  } catch {
+    return false;
+  }
+}
 
 describe("generateSite", () => {
   it("creates a tokenized static site for a valid client", async () => {
@@ -47,6 +56,59 @@ describe("generateSite", () => {
   it("rejects unsafe slugs", () => {
     expect(() => parseSlug("../demo")).toThrow();
     expect(() => parseSlug("Demo")).toThrow();
+  });
+
+  it("ships only referenced cutout assets and keeps everything else", async () => {
+    const rootDir = await mkdtemp(path.join(os.tmpdir(), "onia-web-factory-"));
+    const clientsDir = path.join(rootDir, "data", "clients");
+    const cutoutDir = path.join(rootDir, "data", "clients", "shop.assets", "product-media-cutout");
+    const mediaDir = path.join(rootDir, "data", "clients", "shop.assets", "product-media");
+    await mkdir(clientsDir, { recursive: true });
+    await mkdir(cutoutDir, { recursive: true });
+    await mkdir(mediaDir, { recursive: true });
+
+    // Referenced webp + its unreferenced PNG master sibling + an orphan PNG.
+    await writeFile(path.join(cutoutDir, "001-foo.webp"), "webp", "utf8");
+    await writeFile(path.join(cutoutDir, "001-foo.png"), "png-master", "utf8");
+    await writeFile(path.join(cutoutDir, "999-orphan.png"), "png-orphan", "utf8");
+    // Assets outside the cutout dir always ship (logo referenced, packshot not).
+    await writeFile(path.join(rootDir, "data", "clients", "shop.assets", "logo.png"), "logo", "utf8");
+    await writeFile(path.join(mediaDir, "packshot.webp"), "packshot", "utf8");
+
+    await writeFile(
+      path.join(clientsDir, "shop.json"),
+      JSON.stringify({
+        nombre: "Shop Co",
+        slug: "shop",
+        tagline: "Catalogo",
+        descripcion: "Catalogo demo.",
+        logoIcon: "assets/logo.png",
+        categorias: ["Cuidado"],
+        productos: [
+          {
+            titulo: "Foo",
+            categoria: "Cuidado",
+            precio: "Bs. 10",
+            desc: "Producto foo.",
+            imagen: "assets/product-media-cutout/001-foo.webp",
+            imagenAlt: "Foo",
+            detalleImagenes: [{ src: "assets/product-media-cutout/001-foo.webp", label: "Packshot" }],
+          },
+        ],
+      }),
+      "utf8",
+    );
+
+    const result = await generateSite("shop", { rootDir, template: "store" });
+    const assetsDir = path.join(result.outputDir, "assets");
+
+    // Referenced webp ships; its PNG master and the orphan PNG do not.
+    expect(await exists(path.join(assetsDir, "product-media-cutout", "001-foo.webp"))).toBe(true);
+    expect(await exists(path.join(assetsDir, "product-media-cutout", "001-foo.png"))).toBe(false);
+    expect(await exists(path.join(assetsDir, "product-media-cutout", "999-orphan.png"))).toBe(false);
+    // Assets outside the cutout directory are always copied.
+    expect(await exists(path.join(assetsDir, "logo.png"))).toBe(true);
+    expect(await exists(path.join(assetsDir, "product-media", "packshot.webp"))).toBe(true);
   });
 
   it("creates a static store site when requested", async () => {

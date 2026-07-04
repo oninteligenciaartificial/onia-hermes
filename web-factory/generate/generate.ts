@@ -40,7 +40,7 @@ export async function generateSite(
   }
 
   await mkdir(outputDir, { recursive: true });
-  await copyClientAssets(rootDir, outputDir, safeSlug);
+  await copyClientAssets(rootDir, outputDir, safeSlug, collectReferencedAssets(client));
 
   const htmlPath = path.join(outputDir, "index.html");
   const cssPath = path.join(outputDir, "site.css");
@@ -93,12 +93,65 @@ async function copyDesignArtifacts(rootDir: string, outputDir: string, slug: str
   return files;
 }
 
-async function copyClientAssets(rootDir: string, outputDir: string, slug: string): Promise<void> {
+const CUTOUT_REL_DIR = "product-media-cutout";
+
+// Walk the client profile and collect every asset path it references
+// (e.g. "assets/product-media-cutout/001-foo.webp"). Used to keep the static
+// bundle lean: the cutout directory holds many unreferenced/orphaned masters,
+// so we ship only the files the rendered site actually points at.
+function collectReferencedAssets(value: unknown, acc: Set<string> = new Set()): Set<string> {
+  if (typeof value === "string") {
+    if (value.startsWith("assets/")) {
+      acc.add(value);
+    }
+    return acc;
+  }
+
+  if (Array.isArray(value)) {
+    for (const item of value) {
+      collectReferencedAssets(item, acc);
+    }
+    return acc;
+  }
+
+  if (value && typeof value === "object") {
+    for (const item of Object.values(value)) {
+      collectReferencedAssets(item, acc);
+    }
+  }
+
+  return acc;
+}
+
+async function copyClientAssets(
+  rootDir: string,
+  outputDir: string,
+  slug: string,
+  referencedAssets: Set<string>,
+): Promise<void> {
   const sourceDir = path.join(rootDir, "data", "clients", `${slug}.assets`);
   const targetDir = path.join(outputDir, "assets");
+  const cutoutDir = path.join(sourceDir, CUTOUT_REL_DIR);
+
+  // Basenames of cutout files the site references. Everything outside the
+  // (flat) cutout directory is always copied.
+  const allowedCutouts = new Set(
+    Array.from(referencedAssets)
+      .filter((ref) => ref.startsWith(`assets/${CUTOUT_REL_DIR}/`))
+      .map((ref) => path.basename(ref)),
+  );
 
   try {
-    await cp(sourceDir, targetDir, { recursive: true });
+    await cp(sourceDir, targetDir, {
+      recursive: true,
+      filter: (src) => {
+        if (path.dirname(src) !== cutoutDir) {
+          return true;
+        }
+
+        return allowedCutouts.has(path.basename(src));
+      },
+    });
   } catch (error) {
     if (!(error instanceof Error) || !("code" in error) || error.code !== "ENOENT") {
       throw error;

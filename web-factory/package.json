@@ -16,11 +16,12 @@
     "lint": "pnpm --filter site lint",
     "preview:stop": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/stop-local-previews.ps1",
     "preview:nuvia": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/start-nuvia-preview.ps1",
-    "nuvia:catalog": "node harvester/product/scrape_hbderm_products.mjs --concurrency=1 && node harvester/product/build_nuvia_hbderm_catalog.mjs && node harvester/product/sanitize_nuvia_public_catalog.mjs && node harvester/product/apply_existing_nuvia_cutouts.mjs && node harvester/product/build_nuvia_merchandising.mjs",
+    "nuvia:catalog": "node harvester/product/scrape_hbderm_products.mjs --concurrency=1 && node harvester/product/build_nuvia_hbderm_catalog.mjs && node harvester/product/sanitize_nuvia_public_catalog.mjs && node harvester/product/apply_existing_nuvia_cutouts.mjs && node harvester/product/build_nuvia_merchandising.mjs && node harvester/product/optimize_nuvia_product_media.mjs",
     "nuvia:merchandising": "node harvester/product/build_nuvia_merchandising.mjs",
     "nuvia:media": "node harvester/product/enrich_nuvia_product_media.mjs --concurrency=5",
-    "nuvia:cutouts": "python harvester/product/create_nuvia_product_cutouts.py && node harvester/product/apply_existing_nuvia_cutouts.mjs",
-    "nuvia:cutout-map": "node harvester/product/apply_existing_nuvia_cutouts.mjs",
+    "nuvia:cutouts": "python harvester/product/create_nuvia_product_cutouts.py && node harvester/product/apply_existing_nuvia_cutouts.mjs && node harvester/product/optimize_nuvia_product_media.mjs",
+    "nuvia:cutout-map": "node harvester/product/apply_existing_nuvia_cutouts.mjs && node harvester/product/optimize_nuvia_product_media.mjs",
+    "nuvia:optimize-media": "node harvester/product/optimize_nuvia_product_media.mjs",
     "nuvia:prices:check": "node harvester/product/watch_nuvia_price_changes.mjs --check-only --concurrency=1",
     "nuvia:prices:watch": "node harvester/product/watch_nuvia_price_changes.mjs --concurrency=1",
     "nuvia:prices:force": "node harvester/product/watch_nuvia_price_changes.mjs --force --concurrency=1",
@@ -59,6 +60,7 @@
   "devDependencies": {
     "@types/node": "^20.19.43",
     "playwright": "^1.61.0",
+    "sharp": "^0.35.3",
     "tsx": "^4.22.4",
     "vitest": "^4.1.8"
   }
