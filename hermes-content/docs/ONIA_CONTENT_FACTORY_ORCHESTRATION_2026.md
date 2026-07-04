@@ -8,6 +8,14 @@ como **cadencia diaria programada + agentes on-demand**, no como procesos
 siempre encendidos (eso seria caro y fragil). Cada frente tiene un cron que lo
 dispara, un agente que lo ejecuta, una salida y un gate de aprobacion.
 
+## Regla de autonomia (Sergio)
+
+Todo workflow debe ser **autonomo y no depender de nada local**: prohibido
+depender de endpoints propios de ONIA Center o de SearXNG en localhost. Los
+workflows llaman APIs gestionadas externas (LLM tipo OpenAI/OpenRouter, etc.) via
+credenciales n8n (plan VPS, sin `$env`) y llevan el prompt/logica inline. Si un
+workflow todavia depende de infra local, esta pendiente de migrar.
+
 ## Como encaja (3 capas)
 
 1. **n8n (scheduler)**: los crons disparan cada frente a su hora. Plan VPS: sin
@@ -48,23 +56,23 @@ reducen segun `plan-semanal-onia`.
 
 | Pieza | Estado |
 |---|---|
+| guiones-diarios-onia (skill) | listo |
+| onia-guiones-diarios (n8n) | listo y AUTONOMO (LLM gestionado inline, nada local) |
 | brief-diario-onia (skill) | listo |
-| onia-center-daily-briefing (n8n) | listo, migrado a credenciales |
-| onia-trend-recommendations (n8n) | listo |
-| guiones-diarios-onia (skill) | listo (este sprint) |
-| onia-guiones-diarios (n8n) | listo (este sprint); requiere endpoint ONIA Center `/api/onia-center/content/daily-scripts` |
-| Cron prospeccion | pendiente (skill `prospeccion-onia` existe; falta workflow) |
-| Cron propuestas | pendiente (skill `genera-propuesta` existe; falta workflow) |
+| onia-center-daily-briefing (n8n) | usa ONIA Center — PENDIENTE migrar a autonomo |
+| onia-trend-recommendations (n8n) | usa SearXNG local — PENDIENTE migrar a autonomo |
+| Cron prospeccion | pendiente (skill `prospeccion-onia` existe; falta workflow autonomo) |
+| Cron propuestas | pendiente (skill `genera-propuesta` existe; falta workflow autonomo) |
 | 9 agentes ONIA (`.claude/agents/`) | listos |
 
-## Activacion (una vez, en n8n / ONIA Center)
+## Activacion (una vez, en n8n)
 
 1. Importar `onia-guiones-diarios.json` en n8n; setear credenciales
-   `httpHeaderAuth` (ONIA Center API) y `telegramApi`.
-2. Construir el endpoint `/api/onia-center/content/daily-scripts` en ONIA Center
-   (corre la skill `guiones-diarios-onia` con el LLM y devuelve `{scripts:[...]}`).
-3. Activar el workflow. Verificar que el guion llega a Telegram 07:00.
-4. Siguiente: crear los crons de prospeccion y propuestas con el mismo patron.
+   `httpHeaderAuth` (LLM API, ej. OpenAI: `Authorization: Bearer <key>`) y
+   `telegramApi`. Ajustar `url`/`model` del nodo LLM si se usa otro proveedor.
+2. Activar el workflow. Verificar que el guion llega a Telegram 07:00.
+3. Siguiente: crear los crons de prospeccion y propuestas con el mismo patron
+   autonomo, y migrar briefing + trend-recommendations a autonomo.
 
 ## Comandos on-demand (Telegram)
 

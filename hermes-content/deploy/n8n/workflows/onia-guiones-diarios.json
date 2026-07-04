@@ -5,83 +5,54 @@
   "nodes": [
     {
       "parameters": {
-        "rule": {
-          "interval": [
-            { "field": "cronExpression", "expression": "0 7 * * 1-6" }
-          ]
-        }
+        "rule": { "interval": [ { "field": "cronExpression", "expression": "0 7 * * 1-6" } ] }
       },
       "id": "schedule-daily-0700",
       "name": "Lunes a sabado 07:00",
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.2,
-      "position": [-640, 0]
+      "position": [-620, 0]
     },
     {
       "parameters": {
-        "url": "http://localhost:8080/search",
-        "sendQuery": true,
-        "queryParameters": {
-          "parameters": [
-            { "name": "q", "value": "IA para negocios automatizacion pymes tendencia contenido" },
-            { "name": "format", "value": "json" },
-            { "name": "time_range", "value": "day" },
-            { "name": "categories", "value": "news" }
-          ]
-        },
-        "options": { "timeout": 30000 }
+        "jsCode": "// Fecha y pilar rotativo del dia (sin dependencias externas).\nconst date = new Date().toLocaleDateString('es-BO', { timeZone: 'America/La_Paz' });\nconst pilares = ['Dolor real (proceso manual que pierde plata/tiempo)','Antes/Despues (negocio sin sistema vs con ONIA, sin metricas falsas)','Caso de uso concreto (chatbot que califica / web que capta / automatizacion que agenda)','Educativo o mito (que si y que no puede la IA para una pyme)','Detras de escena (como ONIA construye)','Autoridad Sergio (fundador joven construyendo el sistema)'];\nconst dayIdx = Math.floor(Date.now() / 86400000) % pilares.length;\nconst pilarDelDia = pilares[dayIdx];\nreturn [{ json: { date, pilarDelDia } }];"
       },
-      "id": "searxng-trends",
-      "name": "SearXNG tendencias (local)",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [-400, 0],
-      "notes": "SearXNG self-hosted localhost:8080. Sin secreto. Da contexto de tendencia para los guiones."
-    },
-    {
-      "parameters": {
-        "jsCode": "// Extrae hasta 5 titulares de tendencia para pasar como contexto al generador.\nconst results = Array.isArray(items[0].json?.results) ? items[0].json.results : [];\nconst trends = results.slice(0, 5).map(r => (r.title || '').trim()).filter(Boolean);\nreturn [{ json: { trends } }];"
-      },
-      "id": "prep-trends",
-      "name": "Preparar contexto de tendencia",
+      "id": "prep-context",
+      "name": "Fecha + pilar del dia",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [-180, 0]
+      "position": [-380, 0]
     },
     {
       "parameters": {
         "method": "POST",
-        "url": "https://center.onia.com.bo/api/onia-center/content/daily-scripts",
+        "url": "https://api.openai.com/v1/chat/completions",
         "authentication": "predefinedCredentialType",
         "nodeCredentialType": "httpHeaderAuth",
         "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [ { "name": "Content-Type", "value": "application/json" } ]
-        },
+        "headerParameters": { "parameters": [ { "name": "Content-Type", "value": "application/json" } ] },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={{ { date: $now.setZone('America/La_Paz').toFormat('yyyy-MM-dd'), brand: 'onia', count: 3, formats: ['reel','carrusel','historia'], trends: $json.trends, skill: 'guiones-diarios-onia', commit: false } }}",
+        "jsonBody": "={{ { model: 'gpt-4o-mini', temperature: 0.8, messages: [ { role: 'system', content: 'Eres el guionista de contenido propio de ONIA, agencia de IA practica para negocios de Bolivia. Escribes guiones listos para producir, en espanol, claros y directos, sin humo ni tono de guru. REGLAS DURAS: no inventes testimonios, metricas, resultados, precios ni claims; antes/despues sin numeros falsos; inspiracion estructural, nunca copiar identidad de creadores; nada se publica sin aprobacion. Cara/voz IA de Sergio solo con aprobacion. Formato de CADA guion EXACTO: \\\"GUION N — [Pilar] — [Formato]\\nGancho (0-3s):\\nDesarrollo (beats):\\nCierre + CTA:\\nTexto en pantalla:\\nPrompt visual/escenas:\\nVoz/tono:\\nDuracion/formato objetivo:\\\". El gancho debe enganchar en 3s y el CTA mover a DM, comentario o link.' }, { role: 'user', content: 'Genera los 3 guiones de contenido de ONIA para hoy ' + $json.date + '. Guion 1 = Reel (video). Guion 2 = Carrusel. Guion 3 = Historia o formato corto. Prioriza el pilar del dia: ' + $json.pilarDelDia + ' para el Guion 1, y varia el angulo en los otros dos. Cierra con una linea: \\\"Guion recomendado para hoy:\\\" y \\\"Siguiente comando:\\\".' } ] } }}",
         "options": { "timeout": 120000 }
       },
-      "id": "call-onia-center-scripts",
-      "name": "Generar guiones en ONIA Center",
+      "id": "llm-guiones",
+      "name": "Generar guiones (LLM gestionado)",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [60, 0],
-      "credentials": {
-        "httpHeaderAuth": { "id": "REEMPLAZAR", "name": "ONIA Center API (Authorization Bearer)" }
-      },
-      "notes": "Plan VPS: sin env. ONIA Center corre la skill guiones-diarios-onia con su LLM y devuelve 3 guiones. API key en credencial Header Auth."
+      "position": [-120, 0],
+      "credentials": { "httpHeaderAuth": { "id": "REEMPLAZAR", "name": "LLM API (Authorization Bearer)" } },
+      "notes": "Autonomo: llama API gestionada (OpenAI-compatible), NADA local. API key en credencial n8n Header Auth (Authorization: Bearer <key>). Cambiar 'url' y 'model' si se usa otro proveedor (OpenRouter, etc.)."
     },
     {
       "parameters": {
-        "jsCode": "// Arma el mensaje de Telegram con los 3 guiones para aprobacion.\nconst payload = items[0].json || {};\nconst scripts = Array.isArray(payload.scripts) ? payload.scripts : (Array.isArray(payload.data?.scripts) ? payload.data.scripts : []);\nconst date = payload.date || new Date().toISOString().slice(0,10);\nconst lines = [`ONIA | Guiones de contenido ${date}`, ''];\nif (scripts.length === 0) {\n  lines.push('No llegaron guiones. Revisar endpoint /content/daily-scripts en ONIA Center o correr la skill guiones-diarios-onia a mano.');\n} else {\n  scripts.slice(0,3).forEach((s, i) => {\n    lines.push(`GUION ${i+1} — ${s.pilar || ''} — ${s.formato || ''}`);\n    if (s.gancho) lines.push(`Gancho: ${s.gancho}`);\n    if (s.cta) lines.push(`CTA: ${s.cta}`);\n    lines.push('');\n  });\n  lines.push('Para producir: \"Genera Reel ONIA: <tema>\" o \"Flujo carrusel: <slug>\". Nada se publica sin tu OK.');\n}\nreturn [{ json: { text: lines.join('\\n').slice(0, 3900), scripts } }];"
+        "jsCode": "// Extrae el texto del guion de la respuesta OpenAI-compatible y arma el mensaje.\nconst j = items[0].json || {};\nconst content = j.choices && j.choices[0] && j.choices[0].message ? j.choices[0].message.content : '';\nconst date = new Date().toLocaleDateString('es-BO', { timeZone: 'America/La_Paz' });\nlet text;\nif (!content) {\n  text = `ONIA | Guiones ${date}\\nNo se pudo generar. Revisar credencial LLM API en n8n o correr la skill guiones-diarios-onia a mano.`;\n} else {\n  text = `ONIA | Guiones de contenido ${date}\\n\\n${content}\\n\\nNada se publica sin tu OK. Para producir: \\\"Genera Reel ONIA: <tema>\\\" o \\\"Flujo carrusel: <slug>\\\".`;\n}\nreturn [{ json: { text: text.slice(0, 3900) } }];"
       },
       "id": "build-telegram",
-      "name": "Preparar guiones para Telegram",
+      "name": "Preparar mensaje Telegram",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [300, 0]
+      "position": [140, 0]
     },
     {
       "parameters": {
@@ -95,26 +66,23 @@
       "name": "Enviar guiones a Telegram Sergio",
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
-      "position": [540, 0],
-      "credentials": {
-        "telegramApi": { "id": "REEMPLAZAR", "name": "Hermes Telegram Bot" }
-      },
-      "notes": "Plan VPS: credencial telegramApi (no env token). chatId de Sergio (no secreto)."
+      "position": [380, 0],
+      "credentials": { "telegramApi": { "id": "REEMPLAZAR", "name": "Hermes Telegram Bot" } },
+      "notes": "Credencial telegramApi (no env). chatId de Sergio (no secreto)."
     }
   ],
   "connections": {
-    "Lunes a sabado 07:00": { "main": [[{ "node": "SearXNG tendencias (local)", "type": "main", "index": 0 }]] },
-    "SearXNG tendencias (local)": { "main": [[{ "node": "Preparar contexto de tendencia", "type": "main", "index": 0 }]] },
-    "Preparar contexto de tendencia": { "main": [[{ "node": "Generar guiones en ONIA Center", "type": "main", "index": 0 }]] },
-    "Generar guiones en ONIA Center": { "main": [[{ "node": "Preparar guiones para Telegram", "type": "main", "index": 0 }]] },
-    "Preparar guiones para Telegram": { "main": [[{ "node": "Enviar guiones a Telegram Sergio", "type": "main", "index": 0 }]] }
+    "Lunes a sabado 07:00": { "main": [[{ "node": "Fecha + pilar del dia", "type": "main", "index": 0 }]] },
+    "Fecha + pilar del dia": { "main": [[{ "node": "Generar guiones (LLM gestionado)", "type": "main", "index": 0 }]] },
+    "Generar guiones (LLM gestionado)": { "main": [[{ "node": "Preparar mensaje Telegram", "type": "main", "index": 0 }]] },
+    "Preparar mensaje Telegram": { "main": [[{ "node": "Enviar guiones a Telegram Sergio", "type": "main", "index": 0 }]] }
   },
   "settings": { "timezone": "America/La_Paz", "executionOrder": "v1", "availableInMCP": true },
   "pinData": {},
-  "versionId": "onia-guiones-diarios-20260703",
+  "versionId": "onia-guiones-diarios-20260703-autonomo",
   "meta": {
     "templateCredsSetupCompleted": false,
-    "description": "Cada dia 07:00 L-S: toma tendencias (SearXNG local), pide 3 guiones de contenido propio de ONIA a ONIA Center (skill guiones-diarios-onia) y los envia a Telegram para aprobar. Plan VPS: sin env; credenciales n8n. No publica."
+    "description": "AUTONOMO, nada local. Cada dia 07:00 L-S llama un LLM gestionado (credencial n8n) con el prompt de guiones ONIA inline y envia 3 guiones a Telegram para aprobar. No depende de ONIA Center ni SearXNG. No publica."
   },
   "tags": [ { "name": "onia-ops" }, { "name": "content" }, { "name": "daily-briefing" }, { "name": "safe-automation" } ]
 }
