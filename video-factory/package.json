@@ -1,0 +1,14 @@
+{
+  "name": "video-factory",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Fábrica de video de ONIA — produce planes y jobs, motor Higgsfield reemplazable.",
+  "scripts": {
+    "test": "node --test"
+  },
+  "dependencies": {
+    "commander": "^12.1.0",
+    "zod": "^3.23.8"
+  }
+}

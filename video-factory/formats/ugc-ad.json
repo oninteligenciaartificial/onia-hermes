@@ -1,0 +1,17 @@
+{
+  "id": "ugc-ad",
+  "engine": "higgsfield",
+  "engine_model": "marketing_studio_video",
+  "aspect_ratio": "9:16",
+  "duration_s": 15,
+  "lane": "cliente",
+  "shots": [
+    { "n": 1, "description": "Hook: problema del negocio en 2s", "seconds": 3 },
+    { "n": 2, "description": "Demo de la oferta/producto en uso", "seconds": 9 },
+    { "n": 3, "description": "CTA claro a WhatsApp", "seconds": 3 }
+  ],
+  "hook": "Interrupción visual en el primer segundo",
+  "negative_prompt": "No logos de terceros. No likeness de terceros. No testimonios falsos. No claims financieros engañosos. No placeholder text.",
+  "requires_gate": ["brief", "cost", "review"],
+  "generate_audio": false
+}

@@ -1,0 +1,16 @@
+{
+  "id": "sergio-talking-head",
+  "engine": "higgsfield",
+  "engine_model": "seedance_2_0",
+  "aspect_ratio": "9:16",
+  "duration_s": 5,
+  "lane": "sergio",
+  "shots": [
+    { "n": 1, "description": "Still identidad-lock (text2image_soul_v2), revisar antes de animar" },
+    { "n": 2, "description": "Motion mínimo: respiración, micro movimiento de cabeza, un parpadeo" }
+  ],
+  "hook": "Founder directo a cámara",
+  "negative_prompt": "No cara de Sergio sin aprobación. No elongación facial, no cuello estirado, no ojos más grandes, no piel de cera, no look CGI. No logos, no watermark, no placeholder text.",
+  "requires_gate": ["identity", "review"],
+  "generate_audio": false
+}
