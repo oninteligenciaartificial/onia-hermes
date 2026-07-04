@@ -6,6 +6,7 @@ import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties }
 import { ArrowLeft, Minus, Plus, Search, ShoppingBag, Trash2, X } from "lucide-react";
 import {
   type CartProduct,
+  type NuviaContenido,
   type NuviaMerchandising,
   type NuviaPack,
   type NuviaProduct,
@@ -607,12 +608,14 @@ function NuviaHeader({
     variant === "landing"
       ? [
           { href: "/nuvia/catalogo", label: "catalogo" },
+          { href: "/nuvia/rutinas", label: "rutinas" },
           { href: "#guia", label: "guia" },
           { href: "#descuentos", label: "descuentos" },
         ]
       : [
           { href: "/nuvia", label: "inicio" },
           { href: "/nuvia/catalogo", label: "catalogo" },
+          { href: "/nuvia/rutinas", label: "rutinas" },
           { href: "/nuvia/catalogo#como-comprar", label: "como comprar" },
         ];
 
@@ -1278,6 +1281,9 @@ export function NuviaStorefront(props: StoreProps) {
           <span>guia rapida</span>
           <h2>rutina perfecta en 4 pasos</h2>
           <p>Limpia, trata, hidrata y protege. La landing muestra solo la ruta; el catalogo queda para explorar todos los productos.</p>
+          <Link className="nuvia-routine-more" href="/nuvia/rutinas">
+            ver rutinas por necesidad
+          </Link>
         </div>
         <div className="nuvia-routine-rail" aria-label="Rutina skincare Nuvia en 4 pasos">
           {routineSteps.map((step) => (
@@ -1330,6 +1336,144 @@ export function NuviaStorefront(props: StoreProps) {
           </details>
         </div>
       </section>
+
+      <footer className="nuvia-next-footer" id="contacto">
+        <strong>NUVIA</strong>
+        <p>{props.description}</p>
+        <Link className="nuvia-footer-link" href="/nuvia/catalogo">
+          abrir catalogo
+        </Link>
+      </footer>
+
+      <CartDrawer {...cart} />
+      <NuviaToastStack notices={cart.notices} onDismiss={cart.dismissNotice} />
+    </main>
+  );
+}
+
+export function NuviaRoutinesPage(props: StoreProps & { contenido: NuviaContenido }) {
+  useRevealMotion();
+  const cart = useCart(props.cartProducts);
+
+  const rutinas = useMemo(() => {
+    const bySlug = new Map(props.products.map((product) => [productSlug(product), product]));
+    return props.contenido.rutinas
+      .map((rutina) => ({
+        ...rutina,
+        pasos: rutina.pasos
+          .map((paso) => ({
+            ...paso,
+            productos: paso.productSlugs
+              .map((slug) => bySlug.get(slug))
+              .filter((product): product is NuviaProduct => Boolean(product)),
+          }))
+          .filter((paso) => paso.productos.length > 0),
+      }))
+      .filter((rutina) => rutina.pasos.length > 0);
+  }, [props.contenido.rutinas, props.products]);
+
+  const consejos = props.contenido.consejos;
+
+  return (
+    <main className="nuvia-next-page is-routines">
+      <NuviaHeader
+        cartCount={cart.totalCount}
+        logoIcon={props.logoIcon}
+        onCartOpen={() => cart.setOpen(true)}
+        tagline={props.tagline}
+        variant="catalog"
+      />
+
+      <section className="nuvia-routines-hero" data-nuvia-reveal>
+        <span>rutinas y consejos</span>
+        <h1>rutinas de skincare por necesidad</h1>
+        <p>
+          Elegimos productos reales del catalogo para cada tipo de piel. Empeza por tu necesidad,
+          arma la rutina en un clic y confirma con un asesor antes de cerrar la compra.
+        </p>
+        {rutinas.length > 0 ? (
+          <nav className="nuvia-routines-index" aria-label="Rutinas por necesidad">
+            {rutinas.map((rutina) => (
+              <a href={`#${rutina.id}`} key={rutina.id}>
+                {rutina.necesidad}
+              </a>
+            ))}
+          </nav>
+        ) : null}
+      </section>
+
+      <div className="nuvia-routines-list">
+        {rutinas.map((rutina) => {
+          const rutinaItems = rutina.pasos.flatMap((paso) =>
+            paso.productos.map((product) => ({ id: productSlug(product), qty: 1 })),
+          );
+
+          return (
+            <article className="nuvia-routine-block" id={rutina.id} key={rutina.id} data-nuvia-reveal>
+              <header>
+                <span>{rutina.necesidad}</span>
+                <h2>{rutina.titulo}</h2>
+                <p>{rutina.resumen}</p>
+                <div className="nuvia-routine-block-meta">
+                  <small>{rutina.momento}</small>
+                  {rutina.borrador ? <em>guia inicial, sujeta a ajuste</em> : null}
+                </div>
+                <button type="button" onClick={() => cart.addMany(rutinaItems)}>
+                  armar esta rutina
+                </button>
+              </header>
+
+              <ol className="nuvia-routine-steps">
+                {rutina.pasos.map((paso) => (
+                  <li key={paso.orden}>
+                    <div className="nuvia-routine-step-head">
+                      <b>{String(paso.orden).padStart(2, "0")}</b>
+                      <span>{paso.accion}</span>
+                    </div>
+                    <div className="nuvia-routine-step-body">
+                      <strong>{paso.titulo}</strong>
+                      <p>{paso.nota}</p>
+                      {paso.productos.map((product) => (
+                        <div className="nuvia-routine-product" key={productSlug(product)}>
+                          <Link href={productHref(product)}>
+                            <Image
+                              src={product.imagen}
+                              alt={product.imagenAlt}
+                              width={72}
+                              height={84}
+                              sizes="72px"
+                            />
+                            <em>{briefProductTitle(product)}</em>
+                          </Link>
+                          <button type="button" onClick={() => cart.add(productSlug(product))}>
+                            agregar
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </li>
+                ))}
+              </ol>
+            </article>
+          );
+        })}
+      </div>
+
+      {consejos.length > 0 ? (
+        <section className="nuvia-advice-section" data-nuvia-reveal>
+          <h2>consejos para comprar mejor</h2>
+          <div className="nuvia-advice-grid">
+            {consejos.map((consejo) => (
+              <article className="nuvia-advice-card" key={consejo.id}>
+                <span>{consejo.tipo}</span>
+                <h3>{consejo.titulo}</h3>
+                <p>{consejo.cuerpo}</p>
+                {consejo.disclaimer ? <small>{consejo.disclaimer}</small> : null}
+              </article>
+            ))}
+          </div>
+        </section>
+      ) : null}
 
       <footer className="nuvia-next-footer" id="contacto">
         <strong>NUVIA</strong>

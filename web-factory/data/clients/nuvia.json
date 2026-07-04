@@ -24004,6 +24004,85 @@
     "description": "Catalogo Nuvia con skincare, dermocosmetica, carrito y compra asistida.",
     "ogImage": ""
   },
+  "contenido": {
+    "version": "nuvia-content-v1",
+    "generatedAt": "2026-07-04",
+    "rutinas": [
+      {
+        "id": "rutina-piel-grasa-acne",
+        "necesidad": "Piel grasa y acne",
+        "titulo": "Rutina para piel grasa y con tendencia acneica",
+        "resumen": "Controla brillo y brotes sin resecar la barrera.",
+        "momento": "manana y noche",
+        "borrador": true,
+        "pasos": [
+          { "orden": 1, "accion": "limpiar", "titulo": "Limpieza matificante", "nota": "Retira grasa y suciedad sin resecar la piel.", "productSlugs": ["svr-sebiaclear-gel-moussant"] },
+          { "orden": 2, "accion": "tratar", "titulo": "Tratamiento de noche", "nota": "Trabaja sobre brotes e imperfecciones mientras dormis.", "productSlugs": ["acniben-night-concentrate"] },
+          { "orden": 3, "accion": "hidratar", "titulo": "Hidratacion ligera", "nota": "Repara la barrera con una textura no grasa.", "productSlugs": ["bariederm-cica-daily-gel-crema-40ml"] },
+          { "orden": 4, "accion": "proteger", "titulo": "Proteccion diaria", "nota": "SPF de acabado seco para usar en el dia.", "productSlugs": ["isdin-fusion-water-magic-spf-50"] }
+        ]
+      },
+      {
+        "id": "rutina-manchas",
+        "necesidad": "Manchas",
+        "titulo": "Rutina para unificar el tono y atenuar manchas",
+        "resumen": "Constancia en el tratamiento y proteccion solar alta.",
+        "momento": "manana y noche",
+        "borrador": true,
+        "pasos": [
+          { "orden": 1, "accion": "limpiar", "titulo": "Limpieza suave", "nota": "Prepara la piel sin alterar la barrera.", "productSlugs": ["age-purify-cleanser"] },
+          { "orden": 2, "accion": "tratar", "titulo": "Serum despigmentante", "nota": "Actua sobre las manchas de forma progresiva.", "productSlugs": ["clairial-serum"] },
+          { "orden": 3, "accion": "hidratar", "titulo": "Hidratacion reparadora", "nota": "Mantiene la piel comoda durante el tratamiento.", "productSlugs": ["bariederm-cica-daily-gel-crema-40ml"] },
+          { "orden": 4, "accion": "proteger", "titulo": "Proteccion muy alta", "nota": "El SPF alto es clave para que las manchas no vuelvan.", "productSlugs": ["bariesun-100-spf50"] }
+        ]
+      },
+      {
+        "id": "rutina-antiedad",
+        "necesidad": "Antiedad",
+        "titulo": "Rutina antiedad para firmeza y luminosidad",
+        "resumen": "Trata los signos de edad y protege el resultado cada dia.",
+        "momento": "manana y noche",
+        "borrador": true,
+        "pasos": [
+          { "orden": 1, "accion": "limpiar", "titulo": "Limpieza que respeta la piel", "nota": "Deja la piel lista para los activos.", "productSlugs": ["age-purify-cleanser"] },
+          { "orden": 2, "accion": "tratar", "titulo": "Concentrado antiedad", "nota": "Trabaja firmeza y textura de forma constante.", "productSlugs": ["pepti-biotic"] },
+          { "orden": 3, "accion": "hidratar", "titulo": "Hidratacion nutritiva", "nota": "Refuerza la barrera y mantiene la piel flexible.", "productSlugs": ["cera-biotic"] },
+          { "orden": 4, "accion": "proteger", "titulo": "Proteccion diaria", "nota": "SPF diario para cuidar el resultado del tratamiento.", "productSlugs": ["isdin-fusion-water-magic-spf-50"] }
+        ]
+      },
+      {
+        "id": "rutina-piel-sensible",
+        "necesidad": "Piel sensible",
+        "titulo": "Rutina para piel sensible y barrera debilitada",
+        "resumen": "Pocos pasos, foco en reparar y calmar.",
+        "momento": "manana y noche",
+        "borrador": true,
+        "pasos": [
+          { "orden": 1, "accion": "limpiar", "titulo": "Limpieza sin irritar", "nota": "Limpia sin resecar ni tensar la piel.", "productSlugs": ["age-purify-cleanser"] },
+          { "orden": 2, "accion": "hidratar", "titulo": "Reparacion de barrera", "nota": "Textura cica para calmar y reforzar la piel.", "productSlugs": ["bariederm-cica-daily-gel-crema-40ml"] },
+          { "orden": 3, "accion": "proteger", "titulo": "Proteccion ligera", "nota": "SPF de textura liviana para el dia a dia.", "productSlugs": ["bariesun-bruma-seca-spf50"] }
+        ]
+      },
+      {
+        "id": "rutina-esencial",
+        "necesidad": "Rutina esencial",
+        "titulo": "Rutina esencial en 3 pasos para empezar",
+        "resumen": "Lo minimo que toda piel necesita, sin comprar de mas.",
+        "momento": "manana",
+        "borrador": true,
+        "pasos": [
+          { "orden": 1, "accion": "limpiar", "titulo": "Limpieza diaria", "nota": "El primer paso para que todo lo demas funcione.", "productSlugs": ["svr-sebiaclear-gel-moussant"] },
+          { "orden": 2, "accion": "hidratar", "titulo": "Hidratacion basica", "nota": "Mantiene la piel comoda y equilibrada.", "productSlugs": ["bariederm-cica-daily-gel-crema-40ml"] },
+          { "orden": 3, "accion": "proteger", "titulo": "Proteccion solar", "nota": "El paso que mas cuida tu piel a largo plazo.", "productSlugs": ["isdin-fusion-water-magic-spf-50"] }
+        ]
+      }
+    ],
+    "consejos": [
+      { "id": "consejo-orden-aplicacion", "tipo": "aplicacion", "titulo": "En que orden se aplican los productos", "cuerpo": "De la textura mas liquida a la mas densa: primero el limpiador, despues el serum o tratamiento, luego el hidratante y al final el protector solar en la manana.", "productSlugs": [] },
+      { "id": "consejo-spf-diario", "tipo": "cuidado", "titulo": "El protector solar es el paso que mas cuida", "cuerpo": "Usalo todos los dias del ano, incluso en interiores cerca de ventanas, y reaplicalo cuando estas al aire libre.", "productSlugs": [] },
+      { "id": "consejo-introducir-activos", "tipo": "cuidado", "titulo": "Suma un activo nuevo a la vez", "cuerpo": "Introducir un tratamiento por vez ayuda a ver que le sienta bien a tu piel y reduce el riesgo de irritacion.", "disclaimer": "La dermocosmetica no reemplaza una consulta dermatologica." }
+    ]
+  },
   "merchandising": {
     "version": "2026-06-25",
     "generatedAt": "2026-06-26T01:22:54.146Z",
