@@ -1,121 +1,145 @@
-# ONIA Catalogo Comercial 2026 — EL MAPA UNICO DE VENTA
+# ONIA Catalogo Comercial 2026 — EL MAPA UNICO DE VENTA (v2)
 
-Fecha: 2026-07-04.
-Estado: documento maestro de empaquetado. Si hay conflicto con otros docs,
-ESTE manda para lo comercial (respaldos: PLAN_VENTAS_90D, VERTICAL_FACTORY,
-FISCAL_CONTABILIDAD, registry de precios).
+Fecha: 2026-07-04 (v2 — repricing con ancla real TR4 ~USD 20.000).
+Estado: documento maestro de empaquetado. Manda sobre lo comercial.
 Owner: ONIA / Sergio.
 
-## 0. La regla que ordena todo
+## 0. Las reglas que ordenan todo
 
 ```text
-ONIA Core NO SE VENDE. Es el motor.
-El cliente compra EL SISTEMA DE SU RUBRO (nunca "un CRM" ni "un ERP").
-Cada producto tiene LOS MISMOS 4 PLANES.
-Los add-ons son UN SOLO catalogo transversal.
-Enterprise = el modelo Bolivian Electric, formalizado para todos.
+1. ONIA Core NO SE VENDE. El cliente compra EL SISTEMA DE SU RUBRO.
+2. LO QUE LA EMPRESA NECESITA VA DENTRO DEL PLAN.
+   Extra SOLO si: (a) tiene costo por uso de terceros (WhatsApp API,
+   creditos IA, pauta), (b) es infraestructura dedicada, o (c) es
+   desarrollo a medida. Nada mas es extra.
+3. Ancla de mercado: TR4 costo ~USD 20.000 (pago unico, software muerto).
+   ONIA compite con MAS valor vivo por el mismo orden de precio total,
+   o entrada mensual sin barrera.
+4. Pymes se cobran en Bs (mensual/anual). Enterprise se cotiza en USD
+   (como cotizan los ERP en Bolivia).
+5. Anual = 10 meses (2 gratis). Nunca pago unico sin mensualidad: el
+   pais cambia cada mes (RNDs, dolar) y mantenerse legal ES el servicio.
 ```
 
-"Como vendemos los CRMs": NO existe el producto "CRM" en el catalogo. El CRM
-es una capacidad que vive dentro de cada vertical. BE no compro "un CRM":
-compro gestion de vendedores + WhatsApp + cotizaciones. Esa es la formula.
+## 1. El portfolio
 
-## 1. El portfolio (que proyectos hacemos y vendemos)
-
-| # | Producto | Rubro | Estado | Se vende hoy? |
-|---|---|---|---|---|
-| 1 | **DentalGest** | Clinicas dentales | Core 9/9 + wizard + intake + Contador Pack | ✅ SI (prioridad 1) |
-| 2 | **ProveeGest** | Importadoras/distribuidoras B2B | Validacion con Bolivian Electric | ✅ SI via proyecto enterprise (BE) |
-| 3 | **GestiOS** | Pymes de servicios/comercio | Produccion (411 tests) | ✅ SI (prioridad 3) |
-| 4 | Ganadero OS | Agro | 🔴 pausado (decision pendiente) | ❌ No hasta decidir |
-| 5 | Web ONIA / Webs | Todos | Produccion | ✅ SI — puerta de entrada, no SaaS |
-| — | ONIA Core | (motor interno) | v0.5.0 congelado | ❌ NUNCA se vende solo |
-
-Rubros futuros (farmacias, ferreterias, estetica...) = packs sobre estos 3
-motores segun vertical factory. NO se abren sin 1 cliente pagando.
-
-## 2. Los 4 planes (MISMO esqueleto en todos los productos)
-
-La columna vertebral (10 piezas del core) se reparte asi:
-
-| Plan | Promesa | Que incluye (capabilities del core) | Precio referencia |
+| # | Producto | Rubro | Estado venta |
 |---|---|---|---|
-| **1. Ordenado** | "Sabes que pasa en tu negocio" | Panel del dueno + pendientes con responsable + agenda + 1 sucursal + N usuarios base | Dental 320 / GestiOS 350 (vigentes) |
-| **2. Profesional** | "Ningun cliente se te escapa" | Todo lo anterior + canales registrados (correos/tel/WhatsApp boton) + intake automatico + roles finos + comentarios/documentos | Dental 750 / GestiOS 530-800 (vigentes) |
-| **3. Empresa** | "Controlas sin estar encima" | Todo + aprobaciones (descuentos/anulaciones) + multi-area + SLA + vistas por rol + Contador Pack basico incluido | Dental 1500 / GestiOS 1250 (vigentes) |
-| **4. ONIA EMPRESARIAL** (enterprise) | "Vemos ABSOLUTAMENTE TODO por vos" | Ver seccion 3 | Setup 3.500-9.000 + 1.500-3.500/mes (PROPUESTA, ajustar por alcance) |
+| 1 | **DentalGest** | Clinicas dentales | ✅ vender YA |
+| 2 | **ProveeGest** | Importadoras/distribuidoras B2B | ✅ via ONIA Empresarial (BE = caso fundador) |
+| 3 | **GestiOS** | Pymes servicios/comercio | ✅ vender |
+| 4 | Ganadero OS | Agro | ⏸️ pausado (decision) |
+| 5 | Webs ONIA | Todos | ✅ puerta de entrada |
+| — | ONIA Core | motor interno | ❌ nunca se vende solo |
 
-Regla de venta: se entra por el dolor del rubro, se DEMUESTRA con la org
-demo, se cierra en plan 1 o 2, y se sube con add-ons. El plan 3 se vende al
-dueno con sucursales o equipo grande. El 4 se vende por consultoria.
+## 2. Planes pymes (Bs/mes por sucursal — TODO INCLUIDO por nivel)
 
-## 3. ONIA EMPRESARIAL — el plan robusto "viendo absolutamente todo"
+Anual = x10 (2 meses gratis). Precios de LISTA nuevos; los precios de
+lanzamiento vigentes (Dental 320/750/1500, GestiOS 350-1250) se respetan a
+quien cierre antes del 31-jul-2026 y quedan congelados 12 meses.
 
-Es el modelo Bolivian Electric convertido en producto estandar. Para
-empresas con sistemas propios, sucursales y gerencia exigente:
-
-**Incluye TODO lo de Empresa, mas:**
-
-1. **Infraestructura dedicada**: su VPS gestionado (Modelo B) o instalacion
-   on-premise en su servidor (Modelo C, stack Docker ya probado con
-   backup/restore verificado 24/24).
-2. **Puentes a sus sistemas**: integracion con su ERP/base existente via
-   planillas o tunel de solo-lectura (patron TR4/SQL Server ya disenado);
-   nada de su sistema se toca.
-3. **Automatizaciones a medida en n8n**: tipo de cambio + reprecios con
-   aprobacion del dueno (importadoras), radar normativo aplicado a SU rubro,
-   correos multi-sucursal -> pendientes ruteados.
-4. **Hermes ejecutivo**: la gerencia consulta y ordena por Telegram
-   (/pendientes, /crm, /tarea "...") — el "ver absolutamente todo" en el
-   bolsillo del dueno.
-5. **SLA de vendedores con escalamiento**: vendedor no responde -> gerencia
-   avisada automaticamente (ya construido para BE).
-6. **Gestion mensual ONIA**: nosotros operamos, monitoreamos y actualizamos
-   (el margen recurrente vive aca).
-7. Onboarding dedicado: cuestionario guiado + ImportBatch + capacitacion
-   por rol.
-
-Precio: por alcance, con piso setup Bs 3.500 + Bs 1.500/mes (PROPUESTA —
-BE es la referencia real; documentar su ticket cuando cierre fase 1).
-
-## 4. Add-ons (UN catalogo transversal, mismo en todos los productos)
-
-| Add-on | Que hace | Precio | Estado |
+| | **ORDENADO** | **PROFESIONAL** | **EMPRESA** |
 |---|---|---|---|
-| **Contador Pack** | Export RCV mensual + vencimientos por NIT como pendientes + alertas normativas | **Bs 90-150/mes (PROPUESTA — decidir Sergio)**; incluido en plan Empresa+ | ✅ Construido |
-| Chatbot WhatsApp IA | Responde, califica, deriva (el boton simple es gratis en todos) | 690 setup + mensual segun registry | ✅ Patron BE |
-| **Facturacion SIAT** | Emitir factura en linea legal desde el sistema | A definir post-certificacion — EL add-on del Q3 (deadline 30-sep) | 🔨 Requiere certificacion proveedor |
-| Reprecios / Landed cost | Tasa efectiva diaria + recalculo con aprobacion + aranceles NANDINA | Parte de ProveeGest plan 2+; add-on en otros | 🔨 Disenado, motor FX vivo |
-| Web + Cuidado Web | Landing/web del negocio + mantenimiento | 790-2.900 + care 190-690/mes (vigentes) | ✅ Web factory |
-| Usuarios extra / sucursal extra | Crecimiento | segun registry | ✅ |
+| Precio | **Bs 390/mes** (anual 3.900) | **Bs 890/mes** (anual 8.900) | **Bs 1.990/mes** (anual 19.900) |
+| Promesa | "Sabes que pasa" | "Ningun cliente se escapa" | "Controlas sin estar encima" |
+| Panel del dueno + pendientes con responsable | ✅ | ✅ | ✅ |
+| Agenda + clientes + historial | ✅ | ✅ | ✅ |
+| Usuarios | 3 | 8 | 20 |
+| Canales registrados (correos/tel) -> intake automatico | — | ✅ | ✅ |
+| Roles finos (caja no ve lo clinico, etc.) | — | ✅ | ✅ |
+| Comentarios + documentos/consentimientos | — | ✅ | ✅ |
+| **Contador Pack** (RCV + vencimientos NIT + radar normativo) | — | ✅ **INCLUIDO** | ✅ INCLUIDO |
+| Inventario basico (stock, minimos -> pendiente reponer) | — | ✅ | ✅ |
+| **Inventario detallado** (multi-almacen, lotes/vencimientos, kardex promedio ponderado, conteos fisicos) | — | — | ✅ |
+| Aprobaciones (descuentos/anulaciones) + SLA + escalamiento | — | — | ✅ |
+| Multi-area/sucursal (hasta 3) + vistas por rol | — | — | ✅ |
+| **Bot WhatsApp** (respuestas + horario + derivacion) | — | — | ✅ INCLUIDO* |
+| **Facturacion SIAT en linea** (al certificar) | — | +Bs 190/mes | ✅ INCLUIDO* |
+| Soporte | correo | WhatsApp habil | prioritario |
 
-## 5. Como se vende (el proceso, simple)
+(*) Incluido el software; los costos POR USO de terceros van aparte por
+regla 2: conversaciones WhatsApp API de Meta, y si el SIN cobrara algo por
+volumen. Implementacion unica: Ordenado Bs 490 / Profesional Bs 1.490 /
+Empresa Bs 3.900 (carga guiada + wizard + capacitacion).
+
+## 3. ONIA EMPRESARIAL (enterprise, cotizado en USD — ancla TR4 $20k)
+
+El modelo Bolivian Electric productizado. Para empresas robustas que
+"quieren ver absolutamente TODO": multi-sucursal real, sistemas propios,
+gerencia exigente.
+
+**TODO INCLUIDO** (nada de add-ons): Empresa completo + infraestructura
+dedicada (su VPS gestionado o on-premise con backups verificados) + puentes
+de solo-lectura a sus sistemas (patron TR4/SQL Server/planillas) +
+automatizaciones a medida en n8n (tipo de cambio -> reprecios con
+aprobacion, radar normativo del rubro, correos multi-sucursal ruteados) +
+**Hermes ejecutivo por Telegram** (gerencia consulta y ordena: /pendientes,
+/crm, /tarea) + bot WhatsApp con IA + SLA de vendedores con aviso a
+gerencia + usuarios ilimitados + gestion mensual ONIA (operamos,
+monitoreamos, actualizamos ante cada RND).
+
+| Escala | Implementacion (unica) | Suscripcion |
+|---|---|---|
+| **E1** (1 empresa, hasta 3 sucursales, 1 puente) | **USD 4.900** | **USD 490/mes** o USD 4.900/ano |
+| **E2** (multi-sucursal amplio, 2+ puentes, reprecios) | **USD 8.900** | **USD 790/mes** o USD 7.900/ano |
+| **E3** (a medida: integraciones profundas, modulos propios) | desde USD 14.900 | desde USD 1.190/mes |
+
+**El pitch contra el ancla**: "TR4 te costo $20.000 y quedo congelado en el
+tiempo. Por menos de la mitad de entrada tenes un sistema VIVO: se actualiza
+con cada RND del SIN, se adapta al dolar de cada dia, tu gerencia lo maneja
+desde Telegram, y si mañana cambia la ley, nosotros ya lo cambiamos. Y si
+preferis, entras sin los $20.000: USD 490 al mes." TCO 3 anos E1 ≈ USD
+22.500 — misma liga que TR4, valor incomparable.
+
+Regla: BE fase 1 define el precio ancla REAL; estos numeros se calibran con
+su ticket al cerrar.
+
+## 4. Extras legitimos (los UNICOS, por la regla 2)
+
+| Extra | Por que es extra | Precio |
+|---|---|---|
+| Conversaciones WhatsApp API (Meta) | costo por uso de tercero | al costo + 20% gestion |
+| Creditos IA de alto volumen (bot avanzado) | costo por uso | al costo + 20% |
+| Web del negocio + Cuidado Web | producto aparte (puerta de entrada) | 790-2.900 + 190-690/mes (vigente) |
+| Sucursal adicional (pymes, >3 en Empresa) | infraestructura/uso | Bs 490/mes c/u |
+| Desarrollo a medida fuera de alcance | ingenieria dedicada | cotizado (USD 60/h referencia interna) |
+| Videos/contenido IA | servicio creativo | pausado (regla vigente) |
+
+## 5. Terminar el desarrollo — el TODO priorizado
+
+Lo que las empresas necesitan vs donde estamos:
+
+| Necesidad | Estado | Que falta | Cuando |
+|---|---|---|---|
+| Columna vertebral (pendientes, canales, aprobaciones, panel) | ✅ 9/9 en DentalGest | replicar a GestiOS con la install guide | Q3 |
+| Contador Pack (RCV, vencimientos, radar) | ✅ construido | precio ya definido: INCLUIDO desde Profesional | listo |
+| Automatizaciones (FX diario, radar normativo) | ✅ vivas en n8n | radar -> WorkItem automatico via intake | Q3 |
+| **Inventario MUY detallado** | basico en Dental/GestiOS | multi-almacen, lotes/vencimientos, kardex promedio ponderado (norma BO), conteos fisicos, integracion landed-cost | **Q3 — siguiente sprint grande (GestiOS/ProveeGest)** |
+| Bots WhatsApp | patron BE construido | productizar: config por org (ya hay whatsappAddon + wizard) | Q3 |
+| **Facturacion SIAT** | gated | certificacion proveedor (prerequisito: NIT ONIA) | **Q3 — antes del 30-sep** |
+| Hermes en productos | 5 integraciones disenadas | /tarea y /dentalgest primero (usa intake vivo) | Q3 |
+| **Contabilidad** | estrategia 4 capas | capa 3 lista (Contador Pack); estados financieros basicos (balance de comprobacion exportable) en Empresa+; contabilidad plena SOLO si un segmento la paga (capa 4, 2027) | Q4 eval |
+| Puentes a ERPs (TR4-style) | disenado (planillas/tunel) | primera implementacion real con BE | con BE |
+
+Regla de foco: NO abrimos contabilidad plena ni rubros nuevos hasta que
+DentalGest venda, BE cierre fase 1 y la certificacion SIAT este en tramite.
+
+## 6. Proceso de venta y orden de ejecucion
 
 ```text
-1. ENTRADA por dolor del rubro (prospeccion skill / contador aliado / web)
-   "Los mensajes se te pierden entre correos?" / "El dolar te come el margen?"
-2. DEMO con org demo del rubro (10 min, datos realistas)
-3. CIERRE en plan 1 o 2 + implementacion unica (wizard 7 preguntas)
-4. MES 2-3: subir con add-ons (Contador Pack, WhatsApp)
-5. EMPRESAS GRANDES: saltan directo a ONIA Empresarial via consultoria
-   (auditoria express pagada -> propuesta con generador oficial)
+Entrada por dolor del rubro -> demo org demo -> plan 1-2 + implementacion
+-> mes 2-3 upgrade natural -> empresas robustas: consultoria -> Empresarial
 ```
 
-Canales: prospeccion directa por rubro + CONTADORES aliados (35% primera
-mensualidad + Contador Pack gratis) + webs como puerta + referidos BE.
-
-## 6. Orden de ejecucion comercial (que hacemos primero)
-
-1. **DentalGest**: unico con todo listo — venta directa YA (cuota plan 90d).
-2. **BE fase 1**: cerrarlo y documentar ticket -> nace "ONIA Empresarial"
-   con caso real y precio ancla.
-3. **GestiOS**: venta a pymes con el gancho del contador.
-4. **SIAT certificacion** (Q3): al lograrla, TODO el catalogo gana el
-   add-on mas vendible del pais antes del deadline 30-sep.
-5. Rubros nuevos: solo con cliente fundador pagando (regla factory).
+1. DentalGest venta directa YA (cuota 90d).
+2. BE fase 1 cerrado = nace ONIA Empresarial con precio ancla real.
+3. GestiOS con contadores aliados (35% primera mensualidad + Pack gratis).
+4. Certificacion SIAT antes del 30-sep (deadline legal = pitch).
+5. Sprint inventario detallado (habilita ProveeGest completo).
 
 ## Decisiones abiertas (Sergio)
 
-- [ ] Precio de lista Contador Pack (propuesta: Bs 90-150/mes).
-- [ ] Piso y estructura de ONIA Empresarial (validar con ticket real de BE).
-- [ ] Ganadero OS: pausar formalmente o sprint de recuperacion.
+- [ ] Validar lista nueva pymes (390/890/1.990) y ventana de lanzamiento 31-jul.
+- [ ] Validar bandas Empresarial (E1 4.900+490 / E2 8.900+790) — calibrar con BE.
+- [ ] Ganadero OS: pausa formal o rescate.
+- [ ] Iniciar tramite NIT ONIA (prerequisito SIAT).
