@@ -102,8 +102,15 @@ agregan tablas core.
 > dental, dedupe 24h, transiciones, cola pending ordenada por SLA, y
 > generadores puros (no-asistio, saldo vencido, presupuesto sin respuesta).
 > typecheck + 143 tests verdes. Adapter -> `installing`.
-> **Falta:** wiring de generadores a crons/eventos reales, seccion pending del
-> cockpit consumiendo la cola, y tests de integracion con DB.
+>
+> **SPRINT 1 COMPLETADO 2026-07-03 (commit `02c3eb9`):** generadores
+> conectados a cron diario `/api/cron/onia-core-workitems` (7:00 La Paz,
+> idempotente por dedupe de item abierto), y la seccion Prioridades del
+> cockpit ahora ARRANCA con los work items reales del core (responsable,
+> siguiente accion, link profundo por entidad). El panel del dueno dejo de
+> ser solo heuristicas: consume la cola canonica.
+> **Pendiente menor:** tests de integracion con DB (cuando haya entorno de
+> test con Postgres); Vercel desplegara el cron en el proximo deploy.
 
 1. Migracion `onia_core_work_items` (traducida del SQL base del contrato a
    Prisma, prefijo/namespace `dentalgest` ya existente).
