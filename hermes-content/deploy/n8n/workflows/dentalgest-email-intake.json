@@ -1,0 +1,78 @@
+{
+  "name": "DentalGest - Email Intake (ONIA Core)",
+  "active": false,
+  "nodes": [
+    {
+      "parameters": {
+        "format": "simple",
+        "options": {}
+      },
+      "id": "email-trigger",
+      "name": "Buzon clinica (IMAP)",
+      "type": "n8n-nodes-base.emailReadImap",
+      "typeVersion": 2,
+      "position": [0, 0],
+      "credentials": {
+        "imap": {
+          "id": "REEMPLAZAR_EN_N8N_UI",
+          "name": "DentalGest Intake Mailbox"
+        }
+      },
+      "notes": "Credencial IMAP creada en n8n UI (Credentials > IMAP). Buzon que recibe los correos de la clinica. Regla VPS: nada de $env."
+    },
+    {
+      "parameters": {
+        "jsCode": "// Mapea el correo entrante al payload de intake normalizado del contrato\n// ONIA Core v0.5.0 (intakePolicy, canal email_shared).\n// ORG_BY_MAILBOX: a que organizacion pertenece cada buzon destino.\n// Completar con los IDs reales (tabla organizations de DentalGest).\nconst ORG_BY_MAILBOX = {\n  \"recepcion@tuclinica.bo\": \"REEMPLAZAR_ORG_ID\",\n};\nconst DEFAULT_ORG_ID = \"REEMPLAZAR_ORG_ID\";\n\nconst results = [];\nfor (const item of $input.all()) {\n  const email = item.json;\n  const toAddress = String(email.to || \"\").toLowerCase();\n  const mailboxKey = Object.keys(ORG_BY_MAILBOX).find((mb) => toAddress.includes(mb));\n  const organizationId = mailboxKey ? ORG_BY_MAILBOX[mailboxKey] : DEFAULT_ORG_ID;\n\n  const fromRaw = String(email.from || \"\");\n  const emailMatch = fromRaw.match(/<([^>]+)>/);\n  const fromEmail = (emailMatch ? emailMatch[1] : fromRaw).trim().toLowerCase();\n  const fromName = fromRaw.replace(/<[^>]+>/, \"\").replace(/\"/g, \"\").trim() || undefined;\n\n  const subject = String(email.subject || \"(sin asunto)\");\n  const text = String(email.textPlain || email.textHtml || \"\").slice(0, 1500);\n\n  results.push({\n    json: {\n      organizationId,\n      channel: \"email_shared\",\n      message: `${subject}\\n\\n${text}`.trim(),\n      contact: { name: fromName, email: fromEmail },\n      receivedAt: email.date ? new Date(email.date).toISOString() : new Date().toISOString(),\n    },\n  });\n}\nreturn results;"
+      },
+      "id": "map-to-intake",
+      "name": "Correo -> payload intake",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [220, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://www.dentalgest.app/api/onia-core/intake",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}",
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "id": "post-intake",
+      "name": "POST intake DentalGest",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [440, 0],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "REEMPLAZAR_EN_N8N_UI",
+          "name": "DentalGest Intake Secret"
+        }
+      },
+      "notes": "Credencial Header Auth en n8n UI: Name = x-intake-secret, Value = ONIA_INTAKE_SECRET (el mismo configurado en Vercel). Regla VPS: el secreto vive en n8n Credentials, no en el nodo."
+    }
+  ],
+  "connections": {
+    "Buzon clinica (IMAP)": {
+      "main": [[{ "node": "Correo -> payload intake", "type": "main", "index": 0 }]]
+    },
+    "Correo -> payload intake": {
+      "main": [[{ "node": "POST intake DentalGest", "type": "main", "index": 0 }]]
+    }
+  },
+  "settings": {
+    "timezone": "America/La_Paz",
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "pinData": {},
+  "meta": {
+    "notes": "Conector email -> intake normalizado (columna vertebral ONIA). El endpoint hace dedupe 24h por contacto+canal y ruteo round-robin: reenviar el mismo correo NO duplica pendientes."
+  },
+  "tags": []
+}
