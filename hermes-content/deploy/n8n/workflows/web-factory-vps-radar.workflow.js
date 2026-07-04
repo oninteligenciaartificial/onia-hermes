@@ -31,7 +31,12 @@ const runWorker = node({
       operation: "execute",
       authentication: "privateKey",
       cwd: "/opt/onia-hermes/web-factory",
-      command: "cd /opt/onia-hermes/web-factory && pnpm automation:vps:daily",
+      // /opt/onia-hermes es un symlink al deploy real (/opt/onia-center-src).
+      // Se invoca el runner por node directo (no `pnpm automation:vps:daily`)
+      // para no depender del wrapper del package.json, que puede estar viejo en
+      // el deploy. Los scripts internos (references:*, nuvia:*) si existen.
+      command:
+        "cd /opt/onia-hermes/web-factory && node scripts/web-factory-vps-automation.mjs --mode daily",
     },
     credentials: {
       sshPrivateKey: newCredential("ONIA VPS SSH"),

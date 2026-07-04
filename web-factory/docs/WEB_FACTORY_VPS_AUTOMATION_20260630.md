@@ -214,11 +214,38 @@ Desde n8n:
 
 ## Bloqueos actuales
 
-- Falta validar SSH remoto desde esta sesion. La prueba local devolvio
-  `Permission denied (publickey)`.
-- Falta confirmar si el checkout canonico del repo ya existe en el VPS bajo
-  `/opt/onia-hermes` o si se debe usar otra ruta.
-- Falta confirmar credencial SSH dentro de n8n para el workflow nuevo.
+Actualizacion 2026-07-03 (resolucion en vivo con `scripts/vps-cmd.js` +
+`~/.ssh/onia_hermes_vps_ed25519`):
 
-Estos bloqueos no impiden que el runner y el workflow queden preparados; solo
-impiden declarar que ya esta activo en produccion.
+- [RESUELTO] SSH remoto validado. Conexion OK como `root@srv1360183`
+  (`187.77.16.63`) con la llave `onia_hermes_vps_ed25519`. Ya no hay
+  `Permission denied`.
+- [RESUELTO] Ruta canonica del repo. `/opt/onia-hermes` NO existia; el deploy
+  real de web-factory esta en `/opt/onia-center-src/web-factory` (tarball, no git
+  clone). Se creo un symlink `/opt/onia-hermes -> /opt/onia-center-src`, asi que
+  `/opt/onia-hermes/web-factory` ya resuelve. El runner
+  `scripts/web-factory-vps-automation.mjs` se subio al VPS (faltaba). Node v20.20.2
+  y pnpm 10.33.3 presentes; los scripts internos (`references:*`, `nuvia:prices:*`,
+  `factory:smoke`) existen. Un `--mode smoke` REAL paso: 16 tests verdes + 7 demos
+  generadas. El `--mode daily` en dry-run tambien pasa.
+- [PENDIENTE - necesita accion] Credencial SSH + import del workflow en n8n. n8n
+  corre en Easypanel (`https://n8n-sergio-n8n.hqdqgh.easypanel.host`, contenedor
+  Docker up). Falta: (1) crear la credencial SSH privateKey "ONIA VPS SSH"
+  (host `187.77.16.63`, user `root`, llave `onia_hermes_vps_ed25519`), (2) compilar
+  e importar `web-factory-vps-radar.workflow.js`, (3) probar manual y activar. Esto
+  requiere el API key de n8n (no esta guardado en el VPS) o acceso a la UI de n8n.
+
+Notas para la activacion:
+
+- El comando del nodo SSH se cambio de `pnpm automation:vps:daily` a
+  `node scripts/web-factory-vps-automation.mjs --mode daily`, porque el
+  `package.json` del deploy es del 2026-06-26 y aun no tiene los wrappers
+  `automation:vps:*` (el runner si esta). Tras un redeploy, el wrapper pnpm
+  tambien funcionaria.
+- El deploy del VPS esta viejo (2026-06-26). Funciona, pero conviene redeploy de
+  web-factory para correr con codigo actual.
+- El workflow usa `$env.TELEGRAM_BOT_TOKEN` / `$env.TELEGRAM_SERGIO_CHAT_ID`. En
+  este plan (Easypanel) `$env` puede no estar disponible; validar o migrar a
+  credenciales n8n antes de confiar en la notificacion Telegram.
+
+El runner y el workflow quedan preparados y probados en vivo salvo el paso n8n.
