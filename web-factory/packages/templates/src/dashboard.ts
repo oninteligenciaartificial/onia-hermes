@@ -8,11 +8,16 @@ export type DashboardKpi = {
   context: string;
 };
 
+export type DashboardPoint = { label: string; value: number };
+
+export type DashboardSeries = { name: string; points: DashboardPoint[] };
+
 export type DashboardChart = {
   title: string;
   unit: string;
-  type: "bar" | "line";
-  points: Array<{ label: string; value: number }>;
+  type: "bar" | "line" | "donut" | "sparkline";
+  points: DashboardPoint[];
+  series?: DashboardSeries[];
 };
 
 export type DashboardTable = {
@@ -159,10 +164,8 @@ function renderCharts(charts: DashboardChart[]): string {
               ${chart.unit ? `<span class="wf-chart-unit">${escapeHtml(chart.unit)}</span>` : ""}
             </div>
             ${
-              chart.points.length
-                ? chart.type === "line"
-                  ? renderLineChart(chart)
-                  : renderBarChart(chart)
+              hasChartData(chart)
+                ? renderChart(chart)
                 : renderEmpty("Sin datos", "Este grafico se completa cuando llegan los datos.")
             }
           </article>`,
@@ -260,13 +263,58 @@ function renderGrid(max: number): string {
     .join("");
 }
 
+// Token-driven palette for multi-series and donut slices (no hardcoded brand).
+const SERIES_COLORS = [
+  "var(--color-primary)",
+  "var(--color-accent)",
+  "var(--color-secondary)",
+  "color-mix(in srgb, var(--color-primary) 50%, var(--color-bg))",
+  "color-mix(in srgb, var(--color-accent) 50%, var(--color-bg))",
+  "color-mix(in srgb, var(--color-secondary) 50%, var(--color-bg))",
+];
+
+function hasChartData(chart: DashboardChart): boolean {
+  return chart.points.length > 0 || (chart.series ?? []).some((series) => series.points.length > 0);
+}
+
+function renderChart(chart: DashboardChart): string {
+  switch (chart.type) {
+    case "donut":
+      return renderDonutChart(chart);
+    case "sparkline":
+      return renderSparkline(chart);
+    case "line":
+      return renderLineChart(chart);
+    default:
+      return renderBarChart(chart);
+  }
+}
+
+function renderLegend(items: Array<{ name: string; color: string }>): string {
+  return `<div class="wf-chart-legend">${items
+    .map(
+      (item) =>
+        `<span class="wf-chart-legend-item"><span class="wf-chart-legend-dot" style="background:${item.color}"></span>${escapeHtml(
+          item.name,
+        )}</span>`,
+    )
+    .join("")}</div>`;
+}
+
 function chartLabel(chart: DashboardChart): string {
-  const kind = chart.type === "line" ? "Grafico de linea" : "Grafico de barras";
+  const kind =
+    chart.type === "line"
+      ? "Grafico de linea"
+      : chart.type === "donut"
+        ? "Grafico de dona"
+        : chart.type === "sparkline"
+          ? "Sparkline"
+          : "Grafico de barras";
   return `${kind}: ${chart.title}${chart.unit ? ` (${chart.unit})` : ""}`;
 }
 
 function renderBarChart(chart: DashboardChart): string {
-  const points = chart.points;
+  const points = chart.points.length ? chart.points : chart.series?.[0]?.points ?? [];
   const max = niceMax(Math.max(...points.map((point) => Math.max(point.value, 0)), 1));
   const count = points.length;
   const gap = count > 12 ? 3 : 8;
@@ -289,34 +337,117 @@ function renderBarChart(chart: DashboardChart): string {
 }
 
 function renderLineChart(chart: DashboardChart): string {
-  const points = chart.points;
-  const max = niceMax(Math.max(...points.map((point) => point.value), 1));
-  const count = points.length;
+  const series =
+    chart.series && chart.series.length ? chart.series : [{ name: chart.title, points: chart.points }];
+  const max = niceMax(Math.max(...series.flatMap((entry) => entry.points.map((point) => point.value)), 1));
+  const multi = series.length > 1;
 
-  const xFor = (index: number): number =>
-    PAD_L + (count === 1 ? PLOT_W / 2 : (index / (count - 1)) * PLOT_W);
+  const xFor = (index: number, count: number): number =>
+    PAD_L + (count <= 1 ? PLOT_W / 2 : (index / (count - 1)) * PLOT_W);
   const yFor = (value: number): number => PAD_T + PLOT_H - (Math.max(value, 0) / max) * PLOT_H;
 
-  const line = points.map((point, index) => `${xFor(index).toFixed(1)},${yFor(point.value).toFixed(1)}`).join(" ");
-  const area = `${xFor(0).toFixed(1)},${(PAD_T + PLOT_H).toFixed(1)} ${line} ${xFor(count - 1).toFixed(1)},${(
-    PAD_T + PLOT_H
-  ).toFixed(1)}`;
-  const dots = points
-    .map(
-      (point, index) =>
-        `<circle cx="${xFor(index).toFixed(1)}" cy="${yFor(point.value).toFixed(
-          1,
-        )}" r="3" fill="var(--color-primary)"><title>${escapeHtml(point.label)}: ${point.value}</title></circle>`,
-    )
+  const lines = series
+    .map((entry, seriesIndex) => {
+      const color = SERIES_COLORS[seriesIndex % SERIES_COLORS.length];
+      const count = entry.points.length;
+      const line = entry.points
+        .map((point, index) => `${xFor(index, count).toFixed(1)},${yFor(point.value).toFixed(1)}`)
+        .join(" ");
+      const area = multi
+        ? ""
+        : `<polygon points="${xFor(0, count).toFixed(1)},${(PAD_T + PLOT_H).toFixed(1)} ${line} ${xFor(
+            count - 1,
+            count,
+          ).toFixed(1)},${(PAD_T + PLOT_H).toFixed(1)}" fill="${color}" fill-opacity="0.12"></polygon>`;
+      const dots = entry.points
+        .map(
+          (point, index) =>
+            `<circle cx="${xFor(index, count).toFixed(1)}" cy="${yFor(point.value).toFixed(
+              1,
+            )}" r="2.5" fill="${color}"><title>${escapeHtml(entry.name)} - ${escapeHtml(point.label)}: ${
+              point.value
+            }</title></circle>`,
+        )
+        .join("");
+      return `${area}<polyline points="${line}" fill="none" stroke="${color}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"></polyline>${dots}`;
+    })
     .join("");
 
-  const labels = renderChartLabels(points, xFor);
+  const labelEntry = series.reduce((longest, entry) => (entry.points.length > longest.points.length ? entry : longest), series[0]);
+  const labels = renderChartLabels(labelEntry.points, (index) => xFor(index, labelEntry.points.length));
 
-  return chartSvg(
-    `${renderGrid(max)}<polygon points="${area}" fill="var(--color-primary)" fill-opacity="0.12"></polygon>` +
-      `<polyline points="${line}" fill="none" stroke="var(--color-primary)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"></polyline>${dots}${labels}`,
-    chartLabel(chart),
+  const svg = chartSvg(`${renderGrid(max)}${lines}${labels}`, chartLabel(chart));
+  if (!multi) {
+    return svg;
+  }
+  const legend = renderLegend(
+    series.map((entry, index) => ({ name: entry.name, color: SERIES_COLORS[index % SERIES_COLORS.length] })),
   );
+  return `${legend}${svg}`;
+}
+
+function renderDonutChart(chart: DashboardChart): string {
+  const points = chart.points.filter((point) => point.value > 0);
+  const total = points.reduce((sum, point) => sum + point.value, 0) || 1;
+  const size = 150;
+  const cx = size / 2;
+  const radius = 52;
+  const stroke = 22;
+  const circumference = 2 * Math.PI * radius;
+
+  let accumulated = 0;
+  const arcs = points
+    .map((point, index) => {
+      const length = (point.value / total) * circumference;
+      const color = SERIES_COLORS[index % SERIES_COLORS.length];
+      const segment = `<circle cx="${cx}" cy="${cx}" r="${radius}" fill="none" stroke="${color}" stroke-width="${stroke}" stroke-dasharray="${length.toFixed(
+        2,
+      )} ${(circumference - length).toFixed(2)}" stroke-dashoffset="${(-accumulated).toFixed(
+        2,
+      )}" transform="rotate(-90 ${cx} ${cx})"><title>${escapeHtml(point.label)}: ${point.value} (${Math.round(
+        (point.value / total) * 100,
+      )}%)</title></circle>`;
+      accumulated += length;
+      return segment;
+    })
+    .join("");
+
+  const svg = `<svg class="wf-chart wf-donut" viewBox="0 0 ${size} ${size}" role="img" aria-label="${escapeAttribute(
+    chartLabel(chart),
+  )}" preserveAspectRatio="xMidYMid meet"><circle cx="${cx}" cy="${cx}" r="${radius}" fill="none" stroke="var(--border)" stroke-width="${stroke}"></circle>${arcs}</svg>`;
+  const legend = renderLegend(
+    points.map((point, index) => ({
+      name: `${point.label} ${Math.round((point.value / total) * 100)}%`,
+      color: SERIES_COLORS[index % SERIES_COLORS.length],
+    })),
+  );
+  return `<div class="wf-donut-wrap">${svg}${legend}</div>`;
+}
+
+function renderSparkline(chart: DashboardChart): string {
+  const points = chart.points;
+  const values = points.map((point) => point.value);
+  const max = Math.max(...values, 1);
+  const min = Math.min(...values, 0);
+  const range = max - min || 1;
+  const width = 320;
+  const height = 60;
+  const pad = 6;
+  const count = points.length;
+
+  const xFor = (index: number): number => pad + (count <= 1 ? (width - 2 * pad) / 2 : (index / (count - 1)) * (width - 2 * pad));
+  const yFor = (value: number): number => height - pad - ((value - min) / range) * (height - 2 * pad);
+
+  const line = points.map((point, index) => `${xFor(index).toFixed(1)},${yFor(point.value).toFixed(1)}`).join(" ");
+  const area = `${xFor(0).toFixed(1)},${height - pad} ${line} ${xFor(count - 1).toFixed(1)},${height - pad}`;
+  const last = points[count - 1];
+  const dot = last
+    ? `<circle cx="${xFor(count - 1).toFixed(1)}" cy="${yFor(last.value).toFixed(1)}" r="3" fill="var(--color-primary)"></circle>`
+    : "";
+
+  return `<svg class="wf-chart wf-sparkline" viewBox="0 0 ${width} ${height}" role="img" aria-label="${escapeAttribute(
+    chartLabel(chart),
+  )}" preserveAspectRatio="none"><polygon points="${area}" fill="var(--color-primary)" fill-opacity="0.12"></polygon><polyline points="${line}" fill="none" stroke="var(--color-primary)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"></polyline>${dot}</svg>`;
 }
 
 function renderChartLabels(
@@ -740,6 +871,45 @@ h1, h2, h3 {
   height: auto;
   aspect-ratio: 320 / 150;
   display: block;
+}
+
+.wf-sparkline {
+  aspect-ratio: 320 / 60;
+}
+
+.wf-donut-wrap {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+.wf-donut {
+  width: 140px;
+  aspect-ratio: 1;
+  flex: 0 0 auto;
+}
+
+.wf-chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  margin-bottom: 10px;
+  font-size: 0.82rem;
+  color: var(--muted-foreground);
+}
+
+.wf-chart-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.wf-chart-legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  flex: 0 0 auto;
 }
 
 .wf-chart-axis {

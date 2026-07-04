@@ -83,15 +83,23 @@ const dashboardKpiSchema = z.object({
   context: z.string().default(""),
 });
 
+const dashboardPointSchema = z.object({
+  label: z.string().min(1),
+  value: z.number(),
+});
+
 const dashboardChartSchema = z.object({
   title: z.string().min(1),
   unit: z.string().default(""),
-  type: z.enum(["bar", "line"]).default("bar"),
-  points: z
+  type: z.enum(["bar", "line", "donut", "sparkline"]).default("bar"),
+  points: z.array(dashboardPointSchema).default([]),
+  // Optional multi-series for bar/line: when present, each series is drawn as its
+  // own colored line/group with a legend.
+  series: z
     .array(
       z.object({
-        label: z.string().min(1),
-        value: z.number(),
+        name: z.string().min(1),
+        points: z.array(dashboardPointSchema).default([]),
       }),
     )
     .default([]),

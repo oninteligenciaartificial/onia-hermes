@@ -78,9 +78,15 @@ const intakeDashboardKpiSchema = z.object({
 const intakeDashboardChartSchema = z.object({
   title: z.string().min(1),
   unit: z.string().default(""),
-  type: z.enum(["bar", "line"]).default("bar"),
-  points: z
-    .array(z.object({ label: z.string().min(1), value: z.number() }))
+  type: z.enum(["bar", "line", "donut", "sparkline"]).default("bar"),
+  points: z.array(z.object({ label: z.string().min(1), value: z.number() })).default([]),
+  series: z
+    .array(
+      z.object({
+        name: z.string().min(1),
+        points: z.array(z.object({ label: z.string().min(1), value: z.number() })).default([]),
+      }),
+    )
     .default([]),
 });
 
