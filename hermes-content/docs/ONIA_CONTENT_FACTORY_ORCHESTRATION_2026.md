@@ -57,7 +57,7 @@ reducen segun `plan-semanal-onia`.
 | Pieza | Estado |
 |---|---|
 | guiones-diarios-onia (skill) | listo |
-| onia-guiones-diarios (n8n) | listo y AUTONOMO (LLM gestionado inline, nada local) |
+| onia-guiones-diarios (n8n) | ACTIVO en n8n (`NDXLJiR00ciQx72V`), autonomo, testeado OK. Nodo OpenAI (cred `OpenAi account`) + Telegram (cred `Telegram account`). Cron 07:00 L-S |
 | brief-diario-onia (skill) | listo |
 | onia-center-daily-briefing (n8n) | usa ONIA Center — PENDIENTE migrar a autonomo |
 | onia-trend-recommendations (n8n) | usa SearXNG local — PENDIENTE migrar a autonomo |
