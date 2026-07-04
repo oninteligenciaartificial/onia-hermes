@@ -18,15 +18,13 @@ Estado real observado: 58 workflows en la instancia.
 Verificacion: `search_workflows` con filtro `tags:[<tag>]` devuelve exactamente
 esos workflows.
 
-## Bloqueado (no se pudo ejecutar via API)
+## Ejecucion 2026-07-03 (segunda pasada, via UI n8n / browser MCP)
 
-### 1. Archivar los 13 workflows UDIA/practica — PENDIENTE
+### 1. Archivar los 13 workflows UDIA/practica — HECHO (archivados)
 
-Los siguientes son claramente de practica/prueba y estan inactivos, pero **no
-tienen "MCP access" habilitado**, asi que `archive_workflow` responde
-`Workflow is not available in MCP`. La API MCP no puede archivarlos.
-
-IDs: `HKTDjx21ohYeO19Y` (udia), `GWLdEFdUsHcuusng` (Action in app Udia),
+Como no tenian "MCP access" habilitado, `archive_workflow` de la API fallaba.
+Se archivaron por la UI de n8n (menu de cada workflow -> Archive; reversible).
+Los 13: `HKTDjx21ohYeO19Y` (udia), `GWLdEFdUsHcuusng` (Action in app Udia),
 `8Jb45VT5MgmrahPI` (Nodos Core y HTTP REQUEST), `mrwDIycuY7SgkFG0`
 (prueba de datos), `A36FdAXRPKW6ULoM` (formularios con mensajes finales),
 `mwAL9Vx15ouc50OW` (practica flujo de datos), `t17aey6LEAhAITWp`
@@ -34,11 +32,22 @@ IDs: `HKTDjx21ohYeO19Y` (udia), `GWLdEFdUsHcuusng` (Action in app Udia),
 `jVrufLM0aWnYLj8c` ([UDIA] Mi primer workflow), `9d6jOYklaeYTdllJ`
 ([UDIA] Primer flujo sencillo), `Ex4Uf3PHb19tt3fz` (UDIA Bot telegram errores),
 `uRZxWpe41EambE0W` (udia if y switch), `kYt1MnjOe1rnL5Rk` (Udia credenciales).
+Viven en los proyectos "udia 1er/2do curso" (cursos de practica).
 
-**Como completarlo (30 seg, cualquiera de las dos):**
-- En el editor n8n: filtrar/seleccionar estos 13 y usar "Archive" (o Delete).
-  Estan inactivos, no rompen nada.
-- O habilitar "MCP access" en cada card y avisar: se archivan por API al toque.
+### 1b. Otros muertos claros — HECHO (archivados)
+
+- `qdAEP9seSxp5whXh` ONIA - Agenda: Briefing Diario (duplicado del briefing ONIA Center).
+- `DnYZpcKpTYSeaq9G` Hermes TEMP - DentalGest PostgREST Status Check (TEMP one-off).
+- `T3qtKnj94fBXQsxY` Hermes Telegram Chat ID Capture (utilidad de una vez; chat id ya conocido).
+
+Total archivado esta pasada: 16 workflows (reversibles con Unarchive).
+
+### 1c. Pausados (sesion previa, via MCP `unpublish_workflow`)
+
+- `lryabRhGQW4WIuJG` Hermes Radar Diario Creativo — `success:true`.
+- `rGvQb4CRBdJPwrp1` ONIA - Prospeccion Diaria — `success:true`.
+
+## Bloqueado (no se pudo ejecutar via API)
 
 ### 2. Tags en 3 GestiOS activos — BLOQUEADO por estructura rota
 
@@ -54,25 +63,24 @@ Accion: reparar el nodo `sendAdminEmail` (conexion de salida faltante) en el
 editor; despues se pueden taggear como `gestios`. Son de GestiOS producto:
 no tocar su logica sin revisar el repo de GestiOS.
 
-## Sin clasificar (revisar antes de archivar/pausar)
+## Sin clasificar — pendientes de decision de Sergio (NO tocados)
 
-Inactivos, no son practica pero tampoco operan hoy. Candidatos a archivar
-tras confirmar:
+Inactivos, no son practica. Juicio del dueno antes de archivar (todos reversibles):
 
-- `DnYZpcKpTYSeaq9G` Hermes TEMP - DentalGest PostgREST Status Check (TEMP)
-- `T3qtKnj94fBXQsxY` Hermes Telegram Chat ID Capture (utilidad de una vez)
-- `aOb3lNzewdGckb9H` ONIA - Demo Cliente New Sakura (demo)
-- `PEo2XKM1l1bgEwIr` ONIA - Agenda: Crear Evento (posible duplicado de Agenda Create API)
-- `qdAEP9seSxp5whXh` ONIA - Agenda: Briefing Diario (duplicado del briefing ONIA Center)
-- `Si1cPoh65Ld4z7Ej` Atlas AI Media YouTube Draft v1 (borrador)
-- `VeCHKr6wkK5Wet25` Scheduled Operations Pack (SSH roto)
-- `zediOCdtlP1zpImK` Mara Daily Content (SSH roto)
-- `GnmIyrHWb1mO5eNy` Demo Asistente Diario
-- `FGqyNTrQfMIFiVG2` ONIA Pipeline Llamada -> Propuesta (feature en curso)
+- `PEo2XKM1l1bgEwIr` ONIA - Agenda: Crear Evento — posible duplicado de "Agenda
+  Create API" (ON, tag onia-ops). RIESGO: verificar cual usa el plugin `agendar`
+  antes de archivar; si es este, romperia el agendado.
+- `aOb3lNzewdGckb9H` ONIA - Demo Cliente New Sakura — demo con nombre de cliente;
+  podria ser material de venta. Confirmar.
+- `GnmIyrHWb1mO5eNy` ONIA - Demo Asistente Diario — demo clima/tip, el audit lo
+  marco como ruido. Recomendacion: archivar.
+- `Si1cPoh65Ld4z7Ej` Atlas AI Media YouTube Draft v1 — borrador de proyecto de
+  contenido. Confirmar si el proyecto sigue vivo.
+- `VeCHKr6wkK5Wet25` Scheduled Operations Pack — SSH roto; era automacion real.
+  Arreglar SSH o archivar.
+- `zediOCdtlP1zpImK` Mara Daily Content — SSH roto. Igual que arriba.
+- `FGqyNTrQfMIFiVG2` ONIA Pipeline Llamada -> Propuesta — feature en curso. Mantener.
 
-## Activos que el audit 2026-06-30 sugirio pasar a manual (no tocados)
-
-Siguen ON; pausar es decision de Sergio (reversible con `unpublish_workflow`):
-
-- `lryabRhGQW4WIuJG` Hermes Radar Diario Creativo (costo OpenAI diario)
-- `rGvQb4CRBdJPwrp1` ONIA - Prospeccion Diaria (regla: debe registrar lead en ONIA Center o no correr)
+Productos (NO tocar sin revisar su repo): `BUAMdJ1pz16CZ997` WF-11 Patient Sync,
+`H1PDrinGPYtBcyhw` WF-GS-ERR-01, `CllIkRkqdcGXS67o` WF-GS-05 Nuevo Tenant,
+`dybtwU9dejZXwYKF` WF-GS-01 Trial, `bfNDDU0b4rOfhHmH` WF-08 GestiOS Onboarding.
