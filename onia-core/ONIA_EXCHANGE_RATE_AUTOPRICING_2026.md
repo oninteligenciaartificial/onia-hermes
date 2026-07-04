@@ -25,6 +25,24 @@ el BCB) y/o **Binance P2P** (mercado real). La factura fiscal (SIAT) sigue al
 oficial; el costo de reposicion sigue al paralelo. Por eso el modulo maneja
 las tres.
 
+### Realidad operativa Bolivian Electric (dato del dueno, 2026-07-03)
+
+- El VRD del BCB hoy: **9.80**; anunciado 9.83 desde el lunes — cambia a
+  diario y ES la referencia que la empresa mira.
+- **Los bancos agregan ~0.10 Bs** sobre el VRD al vender dolares reales:
+  tasa efectiva = VRD + spread (9.83 -> 9.93).
+- **Los bancos NO aceptan fondos provenientes de Binance/USDT** ("dolares de
+  otro lado"): para una importadora que paga por banca formal, Binance NO es
+  canal de compra, solo termometro del mercado.
+
+**Decision de diseno (aprobada por Sergio):**
+
+```text
+tasa_efectiva = VRD_BCB_diario + spread_bancario (config por org, default 0.10)
+Binance P2P   = solo linea de referencia en la alerta (no mueve precios)
+Repricing     = SIEMPRE con ApprovalRequest del dueno (nunca auto por defecto)
+```
+
 ## Diseno del modulo (fuera del core, patron vertical factory)
 
 ```text
@@ -36,6 +54,21 @@ n8n diario 07:30 (VPS ONIA)
   -> (v2, con catalogo en ProveeGest) POST /api/onia-core/intake o endpoint
      de repricing del producto
 ```
+
+### v2 con el catalogo real de BE: puente TR4
+
+Confirmado (Sergio 2026-07-03): el catalogo de precios de Bolivian Electric
+vive en su **ERP local TR4** (auditado en
+`hermes-content/docs/BOLIVIAN_TR4_LOCAL_STATIC_AUDIT_20260624.md`). El
+repricing entonces sigue el patron `external_gate` del contrato:
+
+1. n8n calcula la lista de precios sugerida (costo USD x tasa_efectiva x
+   margen) — el catalogo se obtiene de TR4 por export CSV programado o por
+   tunel a su base (ver modelos de despliegue).
+2. Se genera `ApprovalRequest` con el resumen para el dueno.
+3. Aprobado: se produce la lista final (Excel/CSV) para cargar en TR4 — o
+   escritura directa si el analisis de TR4 confirma una base escribible con
+   respaldo. Investigacion pendiente en el repo de BE.
 
 ### Politica de repricing (v2, cuando el catalogo viva en ProveeGest)
 
