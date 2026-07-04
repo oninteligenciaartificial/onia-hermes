@@ -1,0 +1,8 @@
+{
+  "id": "onia",
+  "gate_before_generate": false,
+  "require_approved_brief": false,
+  "require_cost_estimate": false,
+  "identity_gate": false,
+  "publishable": true
+}

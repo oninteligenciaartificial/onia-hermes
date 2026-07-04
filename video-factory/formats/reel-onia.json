@@ -1,0 +1,16 @@
+{
+  "id": "reel-onia",
+  "engine": "higgsfield",
+  "engine_model": "seedance_2_0",
+  "aspect_ratio": "9:16",
+  "duration_s": 8,
+  "lane": "onia",
+  "shots": [
+    { "n": 1, "description": "Hook educativo sobre automatización", "seconds": 3 },
+    { "n": 2, "description": "Explicación visual clara del concepto", "seconds": 5 }
+  ],
+  "hook": "Dato o pregunta que frena el scroll",
+  "negative_prompt": "No logos de terceros. No testimonios falsos. No claims financieros engañosos. No placeholder text.",
+  "requires_gate": ["review"],
+  "generate_audio": false
+}

@@ -1,0 +1,17 @@
+[
+  { "id": "cinematic_studio_3_0", "name": "Cinema Studio Video 3.0", "tags": ["cinematic", "4k"] },
+  { "id": "cinematic_studio_video_v2", "name": "Cinema Studio Video", "tags": ["cinematic", "multi-shot"] },
+  { "id": "marketing_studio_video", "name": "Marketing Studio", "tags": ["ugc", "ads"] },
+  { "id": "clipify", "name": "Personal Clipper", "tags": ["youtube", "clips"] },
+  { "id": "higgsfield_preset", "name": "Higgsfield Preset", "tags": ["preset", "viral"] },
+  { "id": "seedance_2_0", "name": "Seedance 2.0", "tags": ["reference", "identity", "4k"] },
+  { "id": "seedance_2_0_mini", "name": "Seedance 2.0 Mini", "tags": ["fast", "budget"] },
+  { "id": "kling3_0", "name": "Kling v3.0", "tags": ["multi-shot", "audio"] },
+  { "id": "kling3_0_turbo", "name": "Kling 3.0 Turbo", "tags": ["fast"] },
+  { "id": "veo3_1", "name": "Google Veo 3.1", "tags": ["ultra-realistic"] },
+  { "id": "veo3_1_lite", "name": "Google Veo 3.1 Lite", "tags": ["fast", "budget"] },
+  { "id": "wan2_7", "name": "Wan 2.7", "tags": ["audio", "character"] },
+  { "id": "grok_video_v15", "name": "Grok Video 1.5", "tags": ["audio", "cinematic"] },
+  { "id": "gemini_omni", "name": "Gemini Omni Flash", "tags": ["audio", "reference"] },
+  { "id": "minimax_hailuo", "name": "Minimax Hailuo", "tags": ["physics", "emotion"] }
+]

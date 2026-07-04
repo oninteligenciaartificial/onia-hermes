@@ -1,0 +1,8 @@
+{
+  "id": "cliente",
+  "gate_before_generate": true,
+  "require_approved_brief": true,
+  "require_cost_estimate": true,
+  "identity_gate": false,
+  "publishable": false
+}
