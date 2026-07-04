@@ -125,6 +125,17 @@ agregan tablas core.
 
 ### Sprint 2 — Comment + Document + ApprovalRequest
 
+> **COMPLETADO 2026-07-03 (commit `fa556b1` en DentaGest):** 3 tablas en prod
+> (`onia_core_comments`, `onia_core_documents`, `onia_core_approval_requests`).
+> Visibilidad dura: STAFF nunca ve notas clinicas; finance/restricted solo
+> ADMIN+; deny-by-default. Documentos = solo metadata (path de bucket, nunca
+> URL). Aprobaciones: descuento/anulacion/cambio de plan, decide solo ADMIN+,
+> decision one-shot, dedupe de pendientes por entidad. Cola de aprobaciones
+> visible primero en el cockpit para quien decide. typecheck + 150 tests.
+> **Falta del sprint (UI):** formularios para crear comentarios/documentos/
+> solicitudes desde las pantallas de paciente/factura (hoy la lib esta lista
+> y el panel las muestra).
+
 1. Migraciones `onia_core_comments`, `onia_core_documents`,
    `onia_core_approval_requests`.
 2. Hilos internos sobre paciente/tratamiento/cita (visibilidad clinica:

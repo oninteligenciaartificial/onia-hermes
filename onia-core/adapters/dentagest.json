@@ -51,8 +51,8 @@
     {
       "coreEntityId": "work_item",
       "existingModel": "Appointment, PatientTreatment, Invoice",
-      "status": "domain_specific",
-      "notes": "Clinical appointments and treatment follow-up can surface as work items without replacing their domain models."
+      "status": "installed_plus_domain",
+      "notes": "Clinical appointments and treatment follow-up can surface as work items without replacing their domain models. OniaCoreWorkItem instalado (Sprint 1); Appointment/PatientTreatment/Invoice siguen como dominio."
     },
     {
       "coreEntityId": "process_checklist",
@@ -98,20 +98,20 @@
     },
     {
       "coreEntityId": "comment",
-      "existingModel": "none",
-      "status": "missing",
+      "existingModel": "OniaCoreComment",
+      "status": "installed",
       "notes": "Internal threads on patient, treatment, appointment or budget. Must respect clinical privacy."
     },
     {
       "coreEntityId": "document",
-      "existingModel": "ClinicalRecord attachments",
-      "status": "sensitive_missing",
+      "existingModel": "OniaCoreDocument",
+      "status": "installed",
       "notes": "Consents, referenced radiographs, signed budgets and payment receipts with clinical visibility rules. Storage stays external."
     },
     {
       "coreEntityId": "approval_request",
-      "existingModel": "none",
-      "status": "missing",
+      "existingModel": "OniaCoreApprovalRequest",
+      "status": "installed",
       "notes": "Approvals for discounts, budget acceptance, cancellations or sensitive fiscal changes."
     },
     {
@@ -249,6 +249,27 @@
       "migration": "20260703180000_add_onia_core_work_items",
       "installedAt": "2026-07-03",
       "notes": "Primera entidad core en prod. Tenant guard + dedupe + transiciones en lib/onia-core/."
+    },
+    {
+      "coreEntityId": "comment",
+      "table": "onia_core_comments",
+      "migration": "20260703200000_add_onia_core_collab_approvals",
+      "installedAt": "2026-07-03",
+      "notes": "Visibilidad: STAFF no ve notas clinicas; finance solo ADMIN+."
+    },
+    {
+      "coreEntityId": "document",
+      "table": "onia_core_documents",
+      "migration": "20260703200000_add_onia_core_collab_approvals",
+      "installedAt": "2026-07-03",
+      "notes": "Solo metadata; archivo en Supabase Storage via storageRef."
+    },
+    {
+      "coreEntityId": "approval_request",
+      "table": "onia_core_approval_requests",
+      "migration": "20260703200000_add_onia_core_collab_approvals",
+      "installedAt": "2026-07-03",
+      "notes": "descuento/anulacion/cambio de plan; decide ADMIN+; cola en cockpit."
     }
   ]
 }
