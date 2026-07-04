@@ -84,6 +84,47 @@ Reglas que ya estan decididas y aplican a cualquier etapa:
 4. Antes de mover cualquier DB de clientes: ensayo de backup+restore
    documentado (pendiente en el plan de stack, fase 5).
 
+## NAS y Tomcat: que son y si nos sirven (pregunta Sergio 2026-07-03)
+
+**NAS (Network Attached Storage):** una cajita con discos conectada a la red
+local (Synology/QNAP) que sirve archivos y respaldos a toda la oficina.
+
+- Nos sirve? SI, en el **Modelo C (on-premise)**: destino natural del backup
+  diario de la base (dump nocturno al NAS + copia cifrada fuera de la
+  oficina). Tambien para archivos grandes del cliente.
+- NO lo necesitamos para SaaS/VPS (ahi el backup va a storage cloud).
+- Si un cliente ya tiene NAS (comun en empresas con ERP local), lo
+  aprovechamos en la instalacion en vez de vender hardware.
+
+**Apache Tomcat:** servidor web para aplicaciones Java. Muchos ERPs legados
+corren como app Java sobre Tomcat.
+
+- Nos sirve? NO directamente: nuestro stack es Node/Next.js, no Java. Solo
+  importaria si el sistema local de un cliente corriera sobre Tomcat (para
+  saber como integrarlo).
+- **Verificado en la auditoria de TR4**: el ERP de Bolivian Electric NO es
+  Tomcat/Java — es **PowerBuilder + SQL Server** (driver MSOLEDBSQL). Mejor
+  noticia imposible: n8n tiene **nodo nativo de Microsoft SQL Server**, asi
+  que el puente TR4 es: tunel (Tailscale/SSH) a la red de BE -> n8n consulta
+  SQL Server en solo-lectura -> catalogo/precios para el repricing. Sin
+  tocar TR4.
+
+## Ensayo de backup/restore EJECUTADO (2026-07-04, fase 5 del stack plan)
+
+En el staging del VPS (`dentalgest-staging-supabase-db`):
+
+```text
+pg_dump schema dentalgest (formato custom)
+  -> restore a base scratch drill_restore
+  -> verificacion: 24 tablas origen -> 24 restauradas
+  -> 1 warning esperado (policy RLS que referencia auth.uid al restaurar
+     solo el schema; en restore completo no ocurre)
+  -> limpieza total
+```
+
+Conclusion: **la salida de emergencia y el Modelo C estan probados.** Falta
+solo automatizarlo como cron nocturno cuando un producto viva en VPS.
+
 ## Que falta construir para vender el Modelo C manana
 
 1. Empaquetar el selfhost de DentaGest como instalador reproducible

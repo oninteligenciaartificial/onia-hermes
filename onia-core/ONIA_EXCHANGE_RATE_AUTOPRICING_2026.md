@@ -5,7 +5,24 @@ Estado: diseno de modulo (NO core) para importadoras/distribuidoras.
 Primer cliente objetivo: Bolivian Electric (ProveeGest).
 Owner: ONIA / Hermes.
 
-## El problema real (investigado 2026-07-03)
+## ACTUALIZACION CRITICA (investigada 2026-07-03)
+
+**Resolucion Ministerial 245/2026 (26-jun-2026): Bolivia ABANDONO el tipo de
+cambio fijo** tras ~15 anos. Desde el 29-jun el oficial FLOTA a diario:
+9.73 (29-jun) -> 9.80 (hoy) -> 9.83 (anunciado lunes 06-jul). Esto es
+exactamente lo que reporta el dueno de BE. Consecuencias:
+
+- La tabla de abajo queda historica: el "oficial fijo 6.96" murio el 26-jun.
+- La fuente canonica ahora es **el tipo de cambio oficial diario del BCB**
+  (ya no hace falta distinguir VRD vs oficial: convergieron en el regimen
+  flotante). El scraper del workflow apunta al valor diario del BCB.
+- La formula NO cambia: `tasa_efectiva = oficial_diario_BCB + spread_bancario
+  (~0.10)`. Binance sigue siendo solo referencia.
+- Implicacion comercial enorme: TODAS las importadoras de Bolivia ahora
+  necesitan repreciar seguido — el modulo de autopricing pasa de "nice to
+  have" a dolor urgente y vendible del rubro completo.
+
+## El problema real (contexto historico, investigado 2026-07-03)
 
 Bolivia opera con TRES tipos de cambio simultaneos:
 
@@ -93,6 +110,32 @@ repricing entonces sigue el patron `external_gate` del contrato:
   cola en vez de auto.
 - Cuando ProveeGest se separe, el modulo entra a su adapter como
   `exchange_autopricing`.
+
+## Que hacer con los bancos (opciones para BE, validar con su banco/contador)
+
+El cuadro: bancos venden dolares a oficial+spread (~0.10) para operaciones
+documentadas, limitan montos, y **rechazan fondos provenientes de Binance**
+(cripto es legal en Bolivia, pero los bancos no aceptan ese origen en sus
+canales). Opciones reales:
+
+1. **Operativa de precios (lo que ONIA automatiza ya):** tasa efectiva
+   diaria + repricing con aprobacion + **cotizaciones con vencimiento corto
+   (24-48h)** usando el SLA de WorkItem — en regimen flotante, una cotizacion
+   sin fecha de validez es perdida asegurada.
+2. **Pago directo a proveedores en USDT:** legal desde la legalizacion
+   cripto; NO pasa por el banco local (billetera -> proveedor). Comun con
+   proveedores chinos. El rechazo bancario aplica al convertir via banco,
+   no al pago directo. Requiere que el proveedor acepte y contabilidad
+   ordenada.
+3. **Instrumentos bancarios para importacion:** transferencias SWIFT
+   documentadas, cartas de credito y avales internacionales (tarifarios
+   publicos, ej. BNB) — acceso a divisas al oficial para importacion
+   registrada, con tramite y cola.
+4. **Multi-banco:** los cupos mensuales son por banco; operar con 2-3
+   bancos multiplica el cupo formal.
+5. **Cobertura natural:** stock como refugio de valor + lista dual
+   (precio factura al oficial / precio reposicion a efectiva) — decision
+   comercial del dueno.
 
 ## Respuesta: se necesita Linux para conectarse a bases de datos?
 
