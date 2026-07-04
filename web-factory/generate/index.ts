@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import { Command } from "commander";
+import { sanitizeCliArgv } from "./argv";
 import { generateSite } from "./generate";
 
 const program = new Command();
@@ -22,4 +23,4 @@ program
     }
   });
 
-program.parse();
+program.parse(sanitizeCliArgv(process.argv));

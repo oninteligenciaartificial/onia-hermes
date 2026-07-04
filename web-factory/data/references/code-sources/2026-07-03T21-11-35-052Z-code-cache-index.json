@@ -1,0 +1,103 @@
+{
+  "capturedAt": "2026-07-03T21:13:35.104Z",
+  "reposRoot": "C:/Users/PC/.codex/design-stack/repos",
+  "policy": "Copy/adapt code only from allowed-after-review repos. Never use study-only or rejected code in client sites.",
+  "repositories": [
+    {
+      "name": "10x-app-builder__10x",
+      "localPath": "C:/Users/PC/.codex/design-stack/repos/10x-app-builder__10x",
+      "license": "PolyForm Noncommercial",
+      "status": "study-only",
+      "licensePath": "C:/Users/PC/.codex/design-stack/repos/10x-app-builder__10x/LICENSE",
+      "excerpt": "# PolyForm Noncommercial License 1.0.0 <https://polyformproject.org/licenses/noncommercial/1.0.0> ## Acceptance In order to get any license under these terms, you must agr"
+    },
+    {
+      "name": "harshjdhv__componentry",
+      "localPath": "C:/Users/PC/.codex/design-stack/repos/harshjdhv__componentry",
+      "license": "MIT",
+      "status": "allowed-after-review",
+      "licensePath": "C:/Users/PC/.codex/design-stack/repos/harshjdhv__componentry/LICENSE",
+      "excerpt": "MIT License Copyright (c) 2026 Harsh Jadhav Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files"
+    },
+    {
+      "name": "ibelick__motion-primitives",
+      "localPath": "C:/Users/PC/.codex/design-stack/repos/ibelick__motion-primitives",
+      "license": "MIT",
+      "status": "allowed-after-review",
+      "licensePath": "C:/Users/PC/.codex/design-stack/repos/ibelick__motion-primitives/LICENCE.md",
+      "excerpt": "MIT License Copyright (c) 2024 ibelick Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the"
+    },
+    {
+      "name": "launch-ui__launch-ui",
+      "localPath": "C:/Users/PC/.codex/design-stack/repos/launch-ui__launch-ui",
+      "license": "MIT",
+      "status": "allowed-after-review",
+      "licensePath": "C:/Users/PC/.codex/design-stack/repos/launch-ui__launch-ui/LICENSE.md",
+      "excerpt": "MIT License Copyright (c) 2024 Mikolaj Dobrucki Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation fil"
+    },
+    {
+      "name": "magicuidesign__magicui",
+      "localPath": "C:/Users/PC/.codex/design-stack/repos/magicuidesign__magicui",
+      "license": "MIT",
+      "status": "allowed-after-review",
+      "licensePath": "C:/Users/PC/.codex/design-stack/repos/magicuidesign__magicui/LICENSE.md",
+      "excerpt": "MIT License Copyright (c) Magic UI Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software"
+    },
+    {
+      "name": "markmead__hyperui",
+      "localPath": "C:/Users/PC/.codex/design-stack/repos/markmead__hyperui",
+      "license": "MIT",
+      "status": "allowed-after-review",
+      "licensePath": "C:/Users/PC/.codex/design-stack/repos/markmead__hyperui/LICENSE",
+      "excerpt": "MIT License Copyright (c) Mark Mead Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"So"
+    },
+    {
+      "name": "nextlevelbuilder__ui-ux-pro-max-skill",
+      "localPath": "C:/Users/PC/.codex/design-stack/repos/nextlevelbuilder__ui-ux-pro-max-skill",
+      "license": "MIT",
+      "status": "allowed-after-review",
+      "licensePath": "C:/Users/PC/.codex/design-stack/repos/nextlevelbuilder__ui-ux-pro-max-skill/LICENSE",
+      "excerpt": "MIT License Copyright (c) 2024 Next Level Builder Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation"
+    },
+    {
+      "name": "nolly-studio__cult-ui",
+      "localPath": "C:/Users/PC/.codex/design-stack/repos/nolly-studio__cult-ui",
+      "license": "MIT",
+      "status": "allowed-after-review",
+      "licensePath": "C:/Users/PC/.codex/design-stack/repos/nolly-studio__cult-ui/LICENSE.md",
+      "excerpt": "MIT License Copyright (c) 2023 Jordan-Gilliam Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation file"
+    },
+    {
+      "name": "serafimcloud__21st",
+      "localPath": "C:/Users/PC/.codex/design-stack/repos/serafimcloud__21st",
+      "license": "MIT",
+      "status": "allowed-after-review",
+      "licensePath": "C:/Users/PC/.codex/design-stack/repos/serafimcloud__21st/LICENSE",
+      "excerpt": "MIT License Copyright (c) 2024 21st.dev Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the"
+    },
+    {
+      "name": "shadcn-ui__ui",
+      "localPath": "C:/Users/PC/.codex/design-stack/repos/shadcn-ui__ui",
+      "license": "MIT",
+      "status": "allowed-after-review",
+      "licensePath": "C:/Users/PC/.codex/design-stack/repos/shadcn-ui__ui/LICENSE.md",
+      "excerpt": "MIT License Copyright (c) 2023 shadcn Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \""
+    },
+    {
+      "name": "tailwindlabs__headlessui",
+      "localPath": "C:/Users/PC/.codex/design-stack/repos/tailwindlabs__headlessui",
+      "license": "MIT",
+      "status": "allowed-after-review",
+      "licensePath": "C:/Users/PC/.codex/design-stack/repos/tailwindlabs__headlessui/LICENSE",
+      "excerpt": "MIT License Copyright (c) 2020 Tailwind Labs Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files"
+    },
+    {
+      "name": "tremorlabs__tremor",
+      "localPath": "C:/Users/PC/.codex/design-stack/repos/tremorlabs__tremor",
+      "license": "MIT",
+      "status": "allowed-after-review",
+      "licensePath": "C:/Users/PC/.codex/design-stack/repos/tremorlabs__tremor/LICENSE",
+      "excerpt": "Apache License Version 2.0, January 2004 http://www.apache.org/licenses/ TERMS AND CONDITIO"
+    }
+  ]
+}

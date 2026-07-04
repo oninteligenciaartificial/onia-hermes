@@ -1,6 +1,8 @@
 import { cp, mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import {
+  renderDashboardCss,
+  renderDashboardDocument,
   renderLandingCss,
   renderLandingDocument,
   renderStoreCss,
@@ -13,7 +15,7 @@ import { loadClientProfile } from "../data/schema";
 export type GenerateOptions = {
   rootDir?: string;
   outDir?: string;
-  template?: "landing" | "store";
+  template?: "landing" | "store" | "dashboard";
 };
 
 export type GenerateResult = {
@@ -35,8 +37,8 @@ export async function generateSite(
 
   const template = options.template ?? "landing";
 
-  if (!["landing", "store"].includes(template)) {
-    throw new Error(`Unsupported template "${template}". Available: landing, store.`);
+  if (!["landing", "store", "dashboard"].includes(template)) {
+    throw new Error(`Unsupported template "${template}". Available: landing, store, dashboard.`);
   }
 
   await mkdir(outputDir, { recursive: true });
@@ -45,8 +47,18 @@ export async function generateSite(
   const htmlPath = path.join(outputDir, "index.html");
   const cssPath = path.join(outputDir, "site.css");
 
-  const html = template === "store" ? renderStoreDocument(client) : renderLandingDocument(client);
-  const css = template === "store" ? renderStoreCss(client) : renderLandingCss(client);
+  const html =
+    template === "store"
+      ? renderStoreDocument(client)
+      : template === "dashboard"
+        ? renderDashboardDocument(client)
+        : renderLandingDocument(client);
+  const css =
+    template === "store"
+      ? renderStoreCss(client)
+      : template === "dashboard"
+        ? renderDashboardCss(client)
+        : renderLandingCss(client);
 
   await writeFile(htmlPath, html, "utf8");
   await writeFile(cssPath, css, "utf8");

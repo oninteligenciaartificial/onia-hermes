@@ -26,6 +26,49 @@ describe("auto designer", () => {
     expect(recipe.mediaPlan.generationRequests.join(" ")).toContain("Serum demo");
   });
 
+  it("infers the dashboard-analytics vertical for a panel/KPI client", async () => {
+    const rootDir = await createAutoDesignFixture();
+
+    await writeFile(
+      path.join(rootDir, "data", "clients", "ops-panel-demo.json"),
+      JSON.stringify(
+        {
+          nombre: "Panel Operativo Demo",
+          slug: "ops-panel-demo",
+          tagline: "Tablero de control con KPIs y reportes en tiempo real",
+          descripcion:
+            "Panel administrativo con metricas, graficos y tabla operativa para monitoreo y business intelligence del negocio.",
+          referencias: [
+            {
+              title: "Tremor",
+              url: "https://www.tremor.so",
+              type: "visual",
+              use: "jerarquia de KPI y graficos",
+              avoid: "copiar identidad",
+            },
+          ],
+        },
+        null,
+        2,
+      ),
+      "utf8",
+    );
+    await writeFile(
+      path.join(rootDir, "data", "clients", "ops-panel-demo.context.md"),
+      "# Context\n\nRubro: dashboard analytics interno.\n",
+      "utf8",
+    );
+
+    const recipe = await buildAutoDesignRecipe("ops-panel-demo", {
+      rootDir,
+      now: new Date("2026-07-03T12:00:00.000Z"),
+    });
+
+    expect(recipe.client.inferredVertical).toBe("dashboard-analytics");
+    expect(recipe.client.matchedKeywords).toEqual(expect.arrayContaining(["dashboard", "kpi", "metricas"]));
+    expect(recipe.sectionPlan.some((section) => section.id === "kpi-overview")).toBe(true);
+  });
+
   it("writes json and markdown recipes without overwriting unless forced", async () => {
     const rootDir = await createAutoDesignFixture();
 

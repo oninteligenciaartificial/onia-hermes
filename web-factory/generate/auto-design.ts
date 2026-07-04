@@ -3,6 +3,7 @@ import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { Command } from "commander";
 import { writeAutoDesignRecipe, type WebFactoryTemplate } from "../design/auto-designer";
+import { sanitizeCliArgv } from "./argv";
 
 const program = new Command();
 
@@ -61,7 +62,7 @@ program
   );
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
-  program.parse();
+  program.parse(sanitizeCliArgv(process.argv));
 }
 
 function parseTemplate(value?: string): WebFactoryTemplate | undefined {
@@ -69,9 +70,9 @@ function parseTemplate(value?: string): WebFactoryTemplate | undefined {
     return undefined;
   }
 
-  if (value === "landing" || value === "store") {
+  if (value === "landing" || value === "store" || value === "dashboard") {
     return value;
   }
 
-  throw new Error(`Unsupported template "${value}". Available: landing, store.`);
+  throw new Error(`Unsupported template "${value}". Available: landing, store, dashboard.`);
 }

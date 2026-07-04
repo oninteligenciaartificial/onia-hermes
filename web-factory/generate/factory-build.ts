@@ -3,6 +3,7 @@ import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { Command } from "commander";
 import { writeAutoDesignRecipe, type WebFactoryTemplate } from "../design/auto-designer";
+import { sanitizeCliArgv } from "./argv";
 import { createClientFromIntake } from "./create-client";
 import { generateSite } from "./generate";
 
@@ -52,6 +53,27 @@ export async function runFactoryBuild(options: FactoryBuildOptions): Promise<Fac
 
   if (!slug) {
     throw new Error("Provide a slug or --input data/intakes/<slug>.json.");
+  }
+
+  // In dry-run mode from an intake, createClientFromIntake validated the intake
+  // but did not write data/clients/<slug>.json. The design recipe loads that
+  // profile from disk, so we stop at intake validation instead of crashing with
+  // ENOENT. Passing an existing slug (no --input) still dry-runs the design step.
+  if (options.dryRun && options.input) {
+    const clientsDir = path.join(rootDir, "data", "clients");
+    return {
+      slug,
+      template,
+      profilePath,
+      contextPath,
+      designJsonPath: path.join(clientsDir, `${slug}.design.json`),
+      designMarkdownPath: path.join(clientsDir, `${slug}.design.md`),
+      files: [],
+      missingInputs,
+      warnings: [
+        "dry-run desde intake: receta de diseno omitida (perfil aun no escrito). Corre sin --dry-run o con --force para generar la receta.",
+      ],
+    };
   }
 
   const design = await writeAutoDesignRecipe(slug, {
@@ -158,7 +180,7 @@ program
   );
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
-  program.parse();
+  program.parse(sanitizeCliArgv(process.argv));
 }
 
 function parseTemplate(value?: string): WebFactoryTemplate | undefined {
@@ -166,9 +188,9 @@ function parseTemplate(value?: string): WebFactoryTemplate | undefined {
     return undefined;
   }
 
-  if (value === "landing" || value === "store") {
+  if (value === "landing" || value === "store" || value === "dashboard") {
     return value;
   }
 
-  throw new Error(`Unsupported template "${value}". Available: landing, store.`);
+  throw new Error(`Unsupported template "${value}". Available: landing, store, dashboard.`);
 }

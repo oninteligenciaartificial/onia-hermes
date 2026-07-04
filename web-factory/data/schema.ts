@@ -72,6 +72,54 @@ const productSchema = z.object({
   ordenRutina: z.number().int().positive().optional(),
 });
 
+const dashboardKpiSchema = z.object({
+  label: z.string().min(1),
+  value: z.string().min(1),
+  delta: z.string().default(""),
+  trend: z.enum(["up", "down", "flat"]).default("flat"),
+  context: z.string().default(""),
+});
+
+const dashboardChartSchema = z.object({
+  title: z.string().min(1),
+  unit: z.string().default(""),
+  type: z.enum(["bar", "line"]).default("bar"),
+  points: z
+    .array(
+      z.object({
+        label: z.string().min(1),
+        value: z.number(),
+      }),
+    )
+    .default([]),
+});
+
+const dashboardTableSchema = z.object({
+  title: z.string().default("Detalle"),
+  columns: z.array(z.string().min(1)).default([]),
+  rows: z.array(z.array(z.string())).default([]),
+});
+
+const dashboardSchema = z
+  .object({
+    title: z.string().default("Panel de control"),
+    subtitle: z.string().default(""),
+    nav: z.array(z.string().min(1)).default([]),
+    filters: z.array(z.string().min(1)).default([]),
+    kpis: z.array(dashboardKpiSchema).default([]),
+    charts: z.array(dashboardChartSchema).default([]),
+    table: dashboardTableSchema.default({ title: "Detalle", columns: [], rows: [] }),
+  })
+  .default({
+    title: "Panel de control",
+    subtitle: "",
+    nav: [],
+    filters: [],
+    kpis: [],
+    charts: [],
+    table: { title: "Detalle", columns: [], rows: [] },
+  });
+
 export const clientSchema = z.object({
   nombre: z.string().min(1).default("ONIA Demo Client"),
   slug: z
@@ -183,6 +231,7 @@ export const clientSchema = z.object({
       description: "Sitio web generado por ONIA Web Factory.",
       ogImage: "",
     }),
+  dashboard: dashboardSchema,
 });
 
 export type ClientProfile = z.infer<typeof clientSchema>;

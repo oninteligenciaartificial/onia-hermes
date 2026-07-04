@@ -156,3 +156,60 @@ Quedo cerrado el frente de demos internas:
 Pendiente real que no debe inventarse: datos finales de cliente como dominio,
 politicas, credenciales profesionales, precios reales, fotos propias,
 testimonios, pasarelas de pago y aprobacion de assets.
+
+## Actualizacion 2026-07-03
+
+Se cerraron dos gaps de mayor impacto en el flujo vendible (intake -> preview),
+verificados contra el codigo y con tests del paquete:
+
+- `generate/factory-build.ts` (orquestrador del flujo cerrado) pasa de 0 a
+  cobertura con `generate/factory-build.test.ts`: flujo completo intake ->
+  perfil -> receta -> preview, modo dry-run y validacion de slug/intake.
+- Bug corregido: `factory:build --input <intake> --dry-run` crasheaba con
+  ENOENT porque el paso de intake no escribe el perfil en dry-run, pero la
+  receta de diseno intentaba cargarlo. Ahora dry-run desde intake se detiene en
+  la validacion del intake y devuelve rutas + warning claro, sin escribir nada.
+- Bug sistemico corregido: los comandos canonicos documentados con la forma
+  `pnpm <script> -- <args>` (`client:new`, `design:auto`, `factory:build`,
+  `generate`) fallaban en pnpm 10.x porque el separador `--` se reenviaba al
+  argv del script y commander lo rechazaba ("too many arguments" / "required
+  option not specified"). Se agrego `generate/argv.ts` (`sanitizeCliArgv`) con
+  tests y se conecto a los cuatro entrypoints CLI. La forma documentada del
+  runbook ahora funciona verbatim.
+
+Validacion ejecutada desde `web-factory/`: `pnpm test` (22 tests, 8 archivos),
+`pnpm --filter site lint`, `pnpm factory:smoke` y los tres comandos `--`
+documentados en modo `--dry-run`.
+
+Gaps de mayor esfuerzo que siguen abiertos: E2E Playwright real (home,
+catalogo, producto, carrito, CTA) sobre el runtime Next; plantillas fuertes
+adicionales por rubro mas alla de `landing`/`store`; y flujo deploy/rollback
+(manual por diseno, requiere aprobacion humana).
+
+## Actualizacion 2026-07-03 (segunda tanda)
+
+- **E2E de previews estaticos cerrado** (recomendacion #4 del audit para el
+  artefacto que se entrega al cliente): suite Playwright sobre `out/<slug>` en
+  chromium + mobile que cubre home, hero, CTA, catalogo, pagina de producto y
+  carrito con persistencia en localStorage. Corre con `pnpm e2e`; usa un server
+  estatico propio (`scripts/serve-out.mjs`) y regenera los previews con el mismo
+  generador de fabrica. `vitest.config.ts` separa unit (`*.test.ts`) de E2E.
+  Sigue abierto solo el E2E sobre el runtime Next (checkout/carrito de Nuvia),
+  que depende de credenciales Supabase/BNB.
+- **Rubro dashboard agregado a la "red neuronal" de diseno**: nuevo vertical
+  `dashboard-analytics` en `design/auto-designer.ts` (KPIs, grid de charts, tabla
+  operativa; densidad visual alta, motion bajo) con test; 5 fuentes con licencia
+  verificada en el harvester (Tremor Apache-2.0, Tabler MIT, shadcn charts +
+  dashboard-01 MIT, Hugging Face Spaces per-Space); playbook en el pattern bank y
+  doc `WEB_FACTORY_DASHBOARD_INTELLIGENCE_20260703.md`.
+- **Template estatico de dashboard construido** (`packages/templates/src/dashboard.ts`,
+  tercer template junto a `landing`/`store`): shell con nav lateral, KPIs con delta
+  semantico, graficos SVG inline calculados de los datos (barras + linea), tabla con
+  estado vacio, filtro y reveal con `prefers-reduced-motion`. Datos en
+  `client.dashboard` (schema Zod opcional). Demo `dashboard-demo`; cubierto por unit
+  tests y E2E (chromium+mobile) y QA visual. Pendiente: mapear `dashboard.*` en el
+  intake para generar paneles desde intake (hoy el demo es client json a mano).
+
+Validacion: `pnpm test` (23 tests), `pnpm e2e` (8, chromium+mobile),
+`pnpm --filter site lint`, y verificacion de que `saas-demo` sigue infiriendo
+SaaS/B2B (sin regresion del vertical existente).

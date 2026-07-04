@@ -287,6 +287,33 @@ Avoid: abstract AI glow, fake dashboards, vague automation claims, screenshots m
 
 Asset needs: real app screenshots, demo video, integration logos, security notes.
 
+### Dashboard / Analytics / Internal Tool
+
+Design read: status at a glance, dense but legible, action over decoration.
+Density is a feature here, not a flaw; the win is understanding state in seconds
+and being able to filter or act without friction.
+
+Recommended sections:
+
+1. KPI overview row: 4-6 metrics with value, delta and period context.
+2. Chart grid: 2-3 charts, one insight each, with title, unit and legend.
+3. Data table: sort, filter, pagination, plus explicit loading and empty states.
+4. Filter bar that controls the whole view, not one widget.
+5. Optional app shell with side navigation and account/context switcher.
+6. Row actions with confirmation on anything destructive.
+
+Avoid: KPI cards with no hierarchy, decorative charts with no insight, tables
+with no loading/empty state, fake data mistaken for approved data, motion for
+its own sake.
+
+Asset needs: approved metrics/series or a signed-off mock, KPI definitions with
+units and periods, brand mark for the shell, state iconography.
+
+License-clear sources (see design intelligence doc): Tremor (Apache-2.0),
+Tabler (MIT), shadcn/ui charts + dashboard-01 (MIT), Hugging Face Spaces
+(per-Space, review required). Extract structure and component taxonomy; never
+copy identity, proprietary data or assets.
+
 ### Legal / Finance / Consulting
 
 Design read: restraint, clarity, authority, low-risk conversion.

@@ -13,3 +13,9 @@ export {
   type StoreClient,
   type StoreProduct,
 } from "./store";
+export {
+  renderDashboardBody,
+  renderDashboardCss,
+  renderDashboardDocument,
+  type DashboardClient,
+} from "./dashboard";

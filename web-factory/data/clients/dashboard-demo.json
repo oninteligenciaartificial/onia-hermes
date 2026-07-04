@@ -1,0 +1,221 @@
+{
+  "nombre": "ONIA Ops Demo",
+  "slug": "dashboard-demo",
+  "tagline": "Panel operativo de ejemplo para la fabrica",
+  "descripcion": "Dashboard demo interno con KPIs, graficos y tabla operativa. Datos de ejemplo, reemplazar por metricas reales aprobadas.",
+  "logo": "ON",
+  "logoIcon": "",
+  "logoWide": "",
+  "heroVideo": "",
+  "heroPoster": "",
+  "colores": {
+    "primary": "#4f46e5",
+    "secondary": "#0f172a",
+    "accent": "#22c55e",
+    "bg": "#f8fafc",
+    "fg": "#0f172a"
+  },
+  "tipografia": {
+    "heading": "Onest",
+    "body": "Onest"
+  },
+  "contacto": {
+    "email": "",
+    "tel": "",
+    "whatsapp": "",
+    "direccion": ""
+  },
+  "redes": {
+    "ig": "",
+    "fb": "",
+    "linkedin": "",
+    "x": ""
+  },
+  "servicios": [
+    {
+      "titulo": "Propuesta clara",
+      "desc": "Explica panel operativo con KPIs, graficos y reportes sin hacer que el visitante adivine el valor.",
+      "icono": "layout"
+    },
+    {
+      "titulo": "Confianza rapida",
+      "desc": "Presenta experiencia y senales reales de dashboard analytics interno.",
+      "icono": "shield"
+    },
+    {
+      "titulo": "Contacto directo",
+      "desc": "Lleva al visitante al canal correcto para cotizar, reservar o comprar.",
+      "icono": "message"
+    }
+  ],
+  "categorias": [],
+  "productos": [],
+  "beneficios": [],
+  "referencias": [
+    {
+      "title": "Tremor",
+      "url": "https://www.tremor.so",
+      "type": "visual",
+      "use": "jerarquia de KPI y graficos",
+      "avoid": "copiar identidad"
+    }
+  ],
+  "cta": {
+    "texto": "Exportar reporte",
+    "url": "#top"
+  },
+  "seo": {
+    "title": "ONIA Ops Demo - Panel operativo",
+    "description": "Dashboard demo generado por ONIA Web Factory con KPIs, graficos y tabla.",
+    "ogImage": ""
+  },
+  "dashboard": {
+    "title": "Panel operativo",
+    "subtitle": "Resumen de actividad - datos de ejemplo",
+    "nav": [
+      "Resumen",
+      "Ventas",
+      "Clientes",
+      "Reportes",
+      "Ajustes"
+    ],
+    "filters": [
+      "7 dias",
+      "30 dias",
+      "90 dias"
+    ],
+    "kpis": [
+      {
+        "label": "Ingresos",
+        "value": "Bs. 48.2k",
+        "delta": "12.4%",
+        "trend": "up",
+        "context": "vs periodo anterior"
+      },
+      {
+        "label": "Clientes nuevos",
+        "value": "184",
+        "delta": "8.1%",
+        "trend": "up",
+        "context": "vs periodo anterior"
+      },
+      {
+        "label": "Ticket promedio",
+        "value": "Bs. 262",
+        "delta": "1.9%",
+        "trend": "down",
+        "context": "vs periodo anterior"
+      },
+      {
+        "label": "Tasa de cierre",
+        "value": "34%",
+        "delta": "0.0%",
+        "trend": "flat",
+        "context": "estable"
+      }
+    ],
+    "charts": [
+      {
+        "title": "Ingresos por mes",
+        "unit": "Bs. (miles)",
+        "type": "bar",
+        "points": [
+          {
+            "label": "Ene",
+            "value": 32
+          },
+          {
+            "label": "Feb",
+            "value": 38
+          },
+          {
+            "label": "Mar",
+            "value": 30
+          },
+          {
+            "label": "Abr",
+            "value": 41
+          },
+          {
+            "label": "May",
+            "value": 45
+          },
+          {
+            "label": "Jun",
+            "value": 48
+          }
+        ]
+      },
+      {
+        "title": "Sesiones diarias",
+        "unit": "sesiones",
+        "type": "line",
+        "points": [
+          {
+            "label": "L",
+            "value": 120
+          },
+          {
+            "label": "M",
+            "value": 145
+          },
+          {
+            "label": "X",
+            "value": 138
+          },
+          {
+            "label": "J",
+            "value": 162
+          },
+          {
+            "label": "V",
+            "value": 190
+          },
+          {
+            "label": "S",
+            "value": 210
+          },
+          {
+            "label": "D",
+            "value": 176
+          }
+        ]
+      }
+    ],
+    "table": {
+      "title": "Ultimos pedidos",
+      "columns": [
+        "Pedido",
+        "Cliente",
+        "Monto",
+        "Estado"
+      ],
+      "rows": [
+        [
+          "#1042",
+          "Comercial Andina",
+          "Bs. 1.240",
+          "Pagado"
+        ],
+        [
+          "#1041",
+          "Ferreteria Sur",
+          "Bs. 860",
+          "Pendiente"
+        ],
+        [
+          "#1040",
+          "Distribuidora Lux",
+          "Bs. 2.310",
+          "Pagado"
+        ],
+        [
+          "#1039",
+          "Clinica Vida",
+          "Bs. 540",
+          "Enviado"
+        ]
+      ]
+    }
+  }
+}
