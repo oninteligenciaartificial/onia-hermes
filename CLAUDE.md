@@ -41,8 +41,11 @@ Cada propuesta DEBE cumplir:
 
 7. **Pricing**: cobrar la automatización y el resultado, no los píxeles. El
    margen vive en lo recurrente (Cuidado Web / GestiOS / videos). La web única se
-   precia para cerrar y abrir el mensual. Línea estándar: Landing 2,000 / Web Pro
-   4,500. Ver `hermes-content/propuestas/PRICING_RATIONALE_INTERNO.md`.
+   precia para cerrar y abrir el mensual. **Precio de lanzamiento vigente (fase
+   sin portafolio, desde 2026-07-03): Landing 790 / Web Pro 1.500.** La línea
+   premium (Landing 2,000 / Web Pro 4,500) es el objetivo con 3-5 casos en
+   portafolio. Fuente de verdad:
+   `hermes-content/propuestas/PRICING_RATIONALE_INTERNO.md` sección 0.
 
 8. **Plantillas internas = confidencial.** Nunca decir al cliente que usamos
    plantillas. Objetivo: maximizar producción.

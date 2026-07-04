@@ -1,8 +1,49 @@
 # Pricing — Razonamiento interno (NO mostrar al cliente)
 
-Última actualización: 2026-06-10
+Última actualización: 2026-07-03
 Clientes en pipeline: Garabato, Ingeniería, Lia Albertengo
 Documento interno ONIA. No incluir en propuestas ni decks client-facing.
+
+---
+
+## 0. Precios OFICIALES de lanzamiento (fase sin portafolio) — 2026-07-03
+
+Decisión Sergio: mientras ONIA no tenga 3-5 casos en portafolio, los precios de
+web de arranque son bajos para CERRAR y abrir el mensual. La línea premium
+(Landing 2.000 / Web Pro 4.500) es el OBJETIVO con portafolio, no el precio de
+ahora. Estos precios mandan sobre cualquier otra tabla de este documento para
+clientes nuevos.
+
+**Web / pago único (lanzamiento):**
+
+| Producto | Precio Bs |
+|---|---:|
+| Auditoría Express (entrada fría) | 250 |
+| Diagnóstico + Plan de acción | 690 |
+| Landing | 790 |
+| Web Pro | 1.500 |
+| Web Pro ONIA (web mayor) | 2.900 |
+| Automatización n8n simple | 790 |
+| Flujo n8n (orden + WhatsApp) | 1.200 |
+| Tienda con pago (BCP + carrito) | 2.500 |
+
+**Recurrente (acá vive el margen — NO regalar):**
+
+| Producto | Precio Bs/mes |
+|---|---:|
+| Cuidado Web | 190 – 690 |
+| GestiOS | 350 – 1.250 |
+| DentalGest | 320 – 1.500 |
+| Videos IA (8/mes) | 2.200 |
+
+Lógica: la web barata es el gancho, no el negocio. Con plantillas una landing
+toma ~5h, así que a Bs. 790 el margen sigue siendo alto. El dinero real se acumula
+en los mensuales. Regla de cierre: cerrar la web → activar el mensual en la misma
+firma. Cuando haya 3-5 casos, subir a línea premium (secciones 3-4).
+
+Los decks ya cotizados de Garabato / Ingeniería / Lia quedaron en línea premium
+(sección 4); no se re-cotizan. Los precios de lanzamiento aplican a clientes
+nuevos desde 2026-07-03.
 
 ---
 

@@ -176,9 +176,11 @@ seguimientos y reporte.
 Recurrencia (segundo foco): DentalGest (320-1.500/mes), GestiOS (350-1.250/mes),
 Cuidado Web (190-690/mes).
 
-Nota: CLAUDE.md del repo usa linea estandar Landing 2.000 / Web Pro 4.500 para
-propuestas generadas. Los precios de arriba son el piso de referencia del
-acuerdo de Arthur; Sergio confirma el precio final por propuesta.
+Nota: estos son los **precios oficiales de lanzamiento** (fase sin portafolio),
+decididos 2026-07-03. Landing 790 / Web Pro 1.500 mandan para clientes nuevos.
+La linea premium (Landing 2.000 / Web Pro 4.500) es el objetivo cuando ONIA
+tenga 3-5 casos en portafolio. Fuente: `propuestas/PRICING_RATIONALE_INTERNO.md`
+seccion 0.
 
 ### Objetivo de los 60 dias
 
