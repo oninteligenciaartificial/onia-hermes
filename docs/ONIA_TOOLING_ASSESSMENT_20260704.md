@@ -220,6 +220,35 @@ El VPS corre **dos stacks Supabase completos** + Cal.com (1.08GB) + Speakr
    barato que la inestabilidad. Regla del stack assessment: "selfhost para
    margen" solo si el box aguanta.
 
+## Lente cliente / futuro (revision 2026-07-04)
+
+Correccion de foco: la lista casi no sirve para que ONIA COMPRE, pero varias
+cosas se vuelven servicios/features VENDIBLES. ONIA es el vendedor, no el cliente
+de estas tools.
+
+| Producto | Comprar para ONIA | Cliente / futuro |
+|---|---|---|
+| Blender | Si (gratis) | Servicio: renders 3D de producto (e-commerce/retail), assets de ads. Por proyecto + upsell. |
+| Buffer -> Postiz | No pagar Buffer | Servicio recurrente: redes gestionadas white-label sobre infra propia. Backbone de content-factory. |
+| ManyChat -> Typebot | No pagar ManyChat | Core: chatbot WA/IG como servicio recurrente en stack OSS = margen propio. ManyChat solo piloto express. |
+| Live IA 24/7 avatar | No (Bolivia sin TikTok Shop) | Oferta: vendedor virtual 24/7 en FB/IG Live (local) + live-selling para exportadores MX/US. Futuro: TikTok Shop avanza en LatAm. Prototipar. |
+| Weavy | Skip ahora | Upsell futuro en linea SaaS (chat/feed/copilot en DentalGest/GestiOS). Construir en Supabase Realtime; Weavy solo si velocidad > margen. |
+| Playwright MCP | Nice-to-have | Escala con clientes: QA visual de muchos sitios web-factory + research competencia. |
+| Fathom -> Speakr | Ya lo tenes | Servicio: actas de reunion automaticas en consultoria/GestiOS; alimenta CRM. |
+| Momentum.io | No aplica | Solo la idea: alertas de deal + seguimiento en GestiOS/n8n. |
+| Miro | No pagar (FigJam) | Bajo. Workshops via FigJam. |
+| OpenClaw | Skip (hay Hermes) | Nada que Hermes+Chatwoot no cubran. |
+
+Patron: no pagar la herramienta; construir el servicio sobre stack OSS y cobrar
+el resultado recurrente (regla de pricing ONIA).
+
+Ranking de ofertas de cliente (por retorno):
+1. Redes gestionadas (Postiz) - recurrente.
+2. Chatbot WhatsApp/IG (Typebot+Chatwoot+n8n) - recurrente, core.
+3. Renders 3D de producto (Blender) - proyecto + upsell, costo cero.
+4. Vendedor virtual 24/7 / live-selling IA - diferenciador, prototipar.
+5. (Futuro) Colaboracion en SaaS (patron Weavy via Supabase) - retencion.
+
 ## Backlog priorizado
 
 ### P0 (esta semana)
