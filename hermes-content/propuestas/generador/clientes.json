@@ -840,6 +840,12 @@
     "heroGrad": "linear-gradient(135deg,#071a1e 0%,#0b2f33 55%,#0aa3a3 160%)",
     "titulo": "DentalGest — El sistema de gestión de tu clínica dental",
     "subtitulo": "Agenda, pacientes, historial, cobros y cumplimiento tributario en un solo lugar — todo incluido por nivel, sin sorpresas. Un sistema vivo que se actualiza con cada norma nueva.",
+    "portada": {
+      "titulo": "DentalGest",
+      "subtitulo": "El sistema de gestión de tu clínica dental — vivo, completo y sin sorpresas.",
+      "para": "Dueños y administradores de clínicas dentales",
+      "fecha": "Julio 2026"
+    },
     "problema": "La clínica funciona, pero la operación vive repartida: agenda en cuaderno o WhatsApp, historias clínicas en papel, cobros que se pierden, y los vencimientos con Impuestos corriendo por detrás. <b>DentalGest</b> ordena todo eso en un solo sistema: el dueño ve qué pasa, ningún paciente se escapa, y el <b>Contador Pack</b> (RCV, vencimientos NIT y radar normativo) te mantiene al día sin perseguir a nadie. Y como Bolivia cambia cada mes (RNDs, dólar), mantenerse legal ES el servicio: el sistema se actualiza solo.",
     "incluye": [
       {
