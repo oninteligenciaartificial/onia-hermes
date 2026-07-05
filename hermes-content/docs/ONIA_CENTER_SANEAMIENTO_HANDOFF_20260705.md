@@ -17,8 +17,43 @@ vacíos.
 | Fase | Qué | Estado |
 |------|-----|--------|
 | 1 | Frenar spam de tareas (generador) | ✅ Código listo y verificado, commiteado. Falta DEPLOY + CLEANUP en prod. |
-| 2 | Quitar/ocultar módulos vacíos (Leads, Ideas, Audio) | ⏳ Pendiente. Mapa en §Fase 2. |
-| 3 | Rediseño visual + quitar rutina personal rígida | ⏳ Pendiente. §Fase 3. |
+| 2 | Quitar/ocultar módulos vacíos (Leads, Ideas, Audio) | ✅ Hecho en rama `claude/great-chandrasekhar-3c99b6` (2026-07-05). Ver §Fase 2 addendum. |
+| 3 | Rediseño visual + quitar rutina personal rígida | ✅ Hecho en rama `claude/great-chandrasekhar-3c99b6` (2026-07-05). Ver §Fase 3 addendum. |
+
+> ADDENDUM 2026-07-05 (rama `great-chandrasekhar-3c99b6`, sobre `main` post-PR#16):
+> Fase 2 y 3 ejecutadas. Gates verdes: `tsc --noEmit` (exit 0), `next lint`
+> (0 errores), `/onia-center` renderiza HTTP 200 (compilación limpia, sin errores
+> de consola). Falta solo el DEPLOY (carril M1/infra) — este PR NO despliega.
+>
+> **Fase 2 — hecho:**
+> - Seeds estáticos que se hacían pasar por datos vivos ELIMINADOS
+>   (`starterTasks`, `starterReviews`, `starterCodexJobs` en operating-workspace.tsx).
+>   El fallback "si runtime vacío → mostrar seed" se quitó: tasks/reviews/codexJobs
+>   ahora usan `runtime.data.*` directo → empty-state honesto. Imports muertos
+>   (`operatingTasks`, `collabIngestionItems`) removidos.
+> - Empty-state honesto agregado a "Revisión collab" (antes `.map` a secas → en
+>   blanco cuando vacío). Ideas/Codex/Tareas-del-día ya tenían guard.
+> - **Audio IA** oculto del nav (quitado de `navItems` + `heroActionItems` +
+>   import `Mic`); el widget sigue en operating-workspace.tsx, se reactiva
+>   re-agregando el item. "Esconder hasta usarlo".
+> - `operatingProjects`/`operatingTasks`: REVISADOS, se CONSERVAN. Son el
+>   portafolio/roadmap real de ONIA (no spam) y alimentan el summary operativo y
+>   las vistas de proyectos vía operating-engine. Ya no se filtran a la lista de
+>   tareas vivas (eso era `starterTasks`, ahora removido), así que no simulan
+>   tareas de usuario.
+>
+> **Fase 3 — hecho:**
+> - `sergioStrictScheduleBlocks`: 6 bloques personales ELIMINADOS (wake-reset,
+>   lunch-reset, gym, girlfriend, shutdown, sleep). Quedan 7 bloques de trabajo
+>   (categorías planning/sales/deep_work/meetings/admin).
+> - Renders reencuadrados de "rutina estricta personal" a "agenda operativa":
+>   preview diario (tarjeta "Gym + personal" → "Cierre 16:30-17:15") y pestaña
+>   Calendario ("Hora de levantarse" + "Gym + novia + dormir" → "Arranque 07:00"
+>   + "Cierre del día"; título "Calendario estricto" → "Agenda operativa").
+> - `briefings/daily/route.ts`: filtro de `calendarBlocks` sin "gym"/"personal".
+> - Nota: "agenda estricta"/"cronograma estricto" en planes de agentes
+>   (page.tsx:872, operating-source.ts:481) se DEJARON — son disciplina de
+>   scheduling operativo, no rutina personal.
 
 ---
 

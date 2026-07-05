@@ -30,7 +30,6 @@ import {
   Layers3,
   Lightbulb,
   LockKeyhole,
-  Mic,
   Percent,
   PiggyBank,
   ReceiptText,
@@ -160,7 +159,8 @@ const navItems: NavItem[] = [
   { id: "uso-diario", label: "Captura", detail: "Notas y evidencia", group: "Trabajo", icon: FileCheck2 },
   { id: "calendario-sergio", label: "Calendario", detail: "Agenda", group: "Trabajo", icon: CalendarDays },
   { id: "asistente", label: "Asistente", detail: "ONIA Bot", group: "Trabajo", icon: Bot },
-  { id: "audio-intelligence", label: "Audio IA", detail: "Propuestas", group: "Trabajo", icon: Mic },
+  // "Audio IA" (audio-intelligence) oculto del nav hasta usarlo en real. El
+  // widget sigue en operating-workspace.tsx; se reactiva agregando el item aqui.
   { id: "ideas", label: "Ideas", detail: "Reels e IA", group: "Trabajo", icon: Lightbulb },
   { id: "codex", label: "Codex", detail: "Jobs", group: "Trabajo", icon: Code2 },
   { id: "servicios", label: "Servicios", detail: "Catalogo", group: "Ventas", icon: Layers3 },
@@ -187,7 +187,6 @@ const navGroups = ["Trabajo", "Ventas", "Entrega", "IA y automatizacion", "Diner
 
 const heroActionItems = [
   { id: "uso-diario", label: "Captura rapida", icon: FileCheck2 },
-  { id: "audio-intelligence", label: "Audio IA", icon: Mic },
   { id: "ideas", label: "Ideas", icon: Lightbulb },
   { id: "evidencias", label: "Evidencias", icon: ShieldCheck },
 ] as const;

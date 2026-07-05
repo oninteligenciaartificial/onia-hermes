@@ -290,7 +290,7 @@ function deterministicBriefing(snapshot: RuntimeSnapshot, date: string, audience
       };
     }),
     calendarBlocks: sergioStrictScheduleBlocks
-      .filter((block) => ["planning", "sales", "deep_work", "meetings", "admin", "gym", "personal"].includes(block.category))
+      .filter((block) => ["planning", "sales", "deep_work", "meetings", "admin"].includes(block.category))
       .slice(0, 9)
       .map((block) => ({
         owner: "sergio",
