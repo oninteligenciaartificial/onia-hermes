@@ -1,7 +1,7 @@
 {
   "module": "commerce",
   "name": "ONIA Commerce Module",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "status": "draft",
   "layer": "activatable_module",
   "purpose": "Catalogo, inventario multi-almacen y cotizaciones B2B como add-on activable SOBRE ONIA Core. Vive FUERA del core (el core no es inventario/ventas); se activa por vertical. ProveeGest/Bolivian Electric es el primer consumidor: catalogo electrico, almacenes por sucursal, listas de precio USD/BOB y cotizaciones con SLA.",
@@ -10,7 +10,8 @@
   "installInProductRepos": false,
   "activatesCapabilities": [
     "catalog_inventory",
-    "quotes_b2b"
+    "quotes_b2b",
+    "sales_cash"
   ],
   "coreDependencies": [
     { "coreEntityId": "organization", "as": "tenant root de cada entidad del modulo" },
@@ -113,12 +114,42 @@
       "requiredFields": ["id", "organizationId", "quoteId", "variantId", "quantity", "unitPrice", "createdAt"],
       "optionalFields": ["discount", "lineTotal", "notes"],
       "tenantScoped": true
+    },
+    {
+      "id": "order",
+      "name": "Order",
+      "capabilityId": "sales_cash",
+      "table": "onia_commerce_orders",
+      "purpose": "Pedido de venta a un business_partner. Puede nacer de una cotizacion aceptada (order.quoteId) y descuenta stock por sus lineas.",
+      "requiredFields": ["id", "organizationId", "partnerId", "status", "currency", "ownerId", "createdAt"],
+      "optionalFields": ["quoteId", "warehouseId", "total", "workItemId"],
+      "tenantScoped": true
+    },
+    {
+      "id": "order_line",
+      "name": "OrderLine",
+      "capabilityId": "sales_cash",
+      "table": "onia_commerce_order_lines",
+      "purpose": "Linea de un pedido: variante, cantidad, precio unitario y descuento.",
+      "requiredFields": ["id", "organizationId", "orderId", "variantId", "quantity", "unitPrice", "createdAt"],
+      "optionalFields": ["discount", "lineTotal", "notes"],
+      "tenantScoped": true
+    },
+    {
+      "id": "payment",
+      "name": "Payment",
+      "capabilityId": "sales_cash",
+      "table": "onia_commerce_payments",
+      "purpose": "Cobro/caja contra un pedido o partner. Metodo, monto, moneda y estado; base para cuentas por cobrar.",
+      "requiredFields": ["id", "organizationId", "amount", "currency", "method", "status", "createdAt"],
+      "optionalFields": ["orderId", "partnerId", "receivedAt", "reference"],
+      "tenantScoped": true
     }
   ],
   "notes": [
     "El modulo NO redefine entidades del core; agrega entidades propias con namespace onia_commerce_*.",
     "Landed cost / aranceles (CIF->GA->IVA import) es un modulo aparte, no entra aca (ver ONIA_IMPORT_LANDED_COST_MODULE_2026.md).",
-    "Ventas/caja/pedidos (capability sales_cash) quedan para una segunda iteracion del modulo.",
+    "Ventas/caja (capability sales_cash): order, order_line y payment; el pedido puede nacer de una cotizacion aceptada (order.quoteId).",
     "El repricing por tipo de cambio se hace creando/actualizando price_list, siempre con approval_request para el cambio sensible."
   ],
   "gates": [

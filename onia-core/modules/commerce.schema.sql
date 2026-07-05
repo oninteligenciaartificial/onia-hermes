@@ -169,3 +169,67 @@ create table if not exists onia_commerce_quote_lines (
 
 create index if not exists onia_commerce_quote_lines_quote_idx
   on onia_commerce_quote_lines (organization_id, quote_id);
+
+-- Capability: sales_cash -------------------------------------------------------
+
+create table if not exists onia_commerce_orders (
+  id text primary key,
+  organization_id text not null,
+  partner_id text not null,
+  status text not null default 'draft',
+  currency text not null,
+  owner_id text not null,
+  quote_id text,
+  warehouse_id text,
+  total numeric,
+  work_item_id text,
+  metadata jsonb not null default '{}'::jsonb,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create index if not exists onia_commerce_orders_status_idx
+  on onia_commerce_orders (organization_id, status, created_at desc);
+
+create index if not exists onia_commerce_orders_partner_idx
+  on onia_commerce_orders (organization_id, partner_id);
+
+create table if not exists onia_commerce_order_lines (
+  id text primary key,
+  organization_id text not null,
+  order_id text not null,
+  variant_id text not null,
+  quantity numeric not null,
+  unit_price numeric not null,
+  discount numeric,
+  line_total numeric,
+  notes text,
+  metadata jsonb not null default '{}'::jsonb,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create index if not exists onia_commerce_order_lines_order_idx
+  on onia_commerce_order_lines (organization_id, order_id);
+
+create table if not exists onia_commerce_payments (
+  id text primary key,
+  organization_id text not null,
+  order_id text,
+  partner_id text,
+  amount numeric not null,
+  currency text not null,
+  method text not null,
+  status text not null default 'pending',
+  reference text,
+  received_at timestamptz,
+  metadata jsonb not null default '{}'::jsonb,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create index if not exists onia_commerce_payments_status_idx
+  on onia_commerce_payments (organization_id, status, created_at desc);
+
+create index if not exists onia_commerce_payments_order_idx
+  on onia_commerce_payments (organization_id, order_id);

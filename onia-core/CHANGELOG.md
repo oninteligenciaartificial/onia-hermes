@@ -1,5 +1,13 @@
 # ONIA Core Changelog
 
+## modules/commerce 0.2.0 — 2026-07-05 (ventas/caja)
+
+- Capability `sales_cash` agregada al modulo commerce: entidades `order`,
+  `order_line` y `payment` (+3 tablas `onia_commerce_*` en el schema). El pedido
+  puede nacer de una cotizacion aceptada (`order.quoteId`) y payment es la base de
+  cuentas por cobrar. Commerce ahora cubre catalog_inventory + quotes_b2b +
+  sales_cash (12 entidades). +1 test (9 en modulos).
+
 ## modules/commerce 0.1.0 — 2026-07-05 (capa de modulos vendibles)
 
 - Nueva capa `onia-core/modules/`: add-ons vendibles activables SOBRE el core,

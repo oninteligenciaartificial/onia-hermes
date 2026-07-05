@@ -71,6 +71,14 @@ describe("commerce module", () => {
     assert.equal(getModuleEntity(commerce, "nope"), undefined);
   });
 
+  it("covers sales_cash with order, order_line and payment", () => {
+    assert.ok(commerce.activatesCapabilities.includes("sales_cash"), "sales_cash activated");
+    const salesEntities = getModuleEntitiesByCapability(commerce, "sales_cash").map((entity) => entity.id);
+    for (const id of ["order", "order_line", "payment"]) {
+      assert.ok(salesEntities.includes(id), `sales_cash includes ${id}`);
+    }
+  });
+
   it("declares a SQL schema that defines every entity table", () => {
     assert.ok(commerce.schemaFile, "schemaFile present");
     const schema = readFileSync(new URL(`../../${commerce.schemaFile}`, import.meta.url), "utf8");

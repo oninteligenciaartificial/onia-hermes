@@ -49,8 +49,9 @@ modulos, verticales o integraciones. No son la definicion del core.
 - `report.test.mjs`: tests del reporte.
 - `modules/`: modulos vendibles (add-ons activables SOBRE el core, FUERA del
   contrato congelado — el core no es inventario/ventas). `commerce.json` =
-  catalogo + inventario multi-almacen + cotizaciones B2B (primer consumidor:
-  ProveeGest/Bolivian Electric); `validate-modules.mjs` = validador propio.
+  catalogo + inventario multi-almacen + cotizaciones B2B + ventas/caja
+  (`commerce.schema.sql` = SQL base; primer consumidor: ProveeGest/Bolivian
+  Electric); `validate-modules.mjs` = validador propio.
 - `ONIA_CORE_RESEARCH_RESULT_2026.md`: resultado de investigacion local y externa.
 - `ONIA_CORE_BENCHMARK_GAP_AUDIT_2026.md`: auditoria contra sistemas ERP, CRM,
   work management y operacion real de empresas.
