@@ -68,6 +68,15 @@ type OpenAIResponse = {
 
 const allowedAudiences: DailyAudience[] = ["sergio", "arthur", "seller", "freelancer"];
 
+// Quita cualquier cantidad de prefijos "[Plan YYYY-MM-DD] " apilados para obtener
+// el titulo base real de una tarea. Evita que el briefing diario re-prefije tareas
+// que ya vienen de la base con un prefijo previo.
+const PLAN_PREFIX_PATTERN = /^(?:\[Plan \d{4}-\d{2}-\d{2}\]\s*)+/;
+
+function basePlanTitle(title: string) {
+  return title.replace(PLAN_PREFIX_PATTERN, "").trim();
+}
+
 function todayIso() {
   return new Intl.DateTimeFormat("en-CA", {
     timeZone: "America/La_Paz",
@@ -172,7 +181,7 @@ function taskFromLead(lead: RuntimeLead, role: DailyAudience, index: number): Da
 
 function taskFromRuntimeTask(task: RuntimeTask, role: DailyAudience): DailyBriefingTask {
   return {
-    title: task.title,
+    title: basePlanTitle(task.title),
     assignedRole: role,
     projectId: task.projectId,
     priority: task.priority,
@@ -401,17 +410,24 @@ async function commitBriefing(briefing: DailyBriefing, snapshot: RuntimeSnapshot
   const createdNotes = [];
   const skippedTasks = [];
   const skippedNotes = [];
-  const existingTaskTitles = new Set(snapshot.tasks.map((task) => task.title));
+  // Deduplicamos por titulo BASE (sin prefijos "[Plan ...]"). Asi una tarea creada
+  // cualquier dia anterior nunca se vuelve a crear y el prefijo nunca se apila.
+  const existingTaskBaseTitles = new Set(snapshot.tasks.map((task) => basePlanTitle(task.title)));
   const existingNoteTitles = new Set(snapshot.notes.map((note) => note.title));
 
   for (const rolePlan of briefing.roles) {
     for (const task of rolePlan.topTasks) {
-      const title = `[Plan ${briefing.date}] ${task.title}`;
-      if (existingTaskTitles.has(title)) {
-        skippedTasks.push({ title, assignedRole: task.assignedRole, reason: "already_exists" });
+      const baseTitle = basePlanTitle(task.title);
+      if (!baseTitle) {
+        continue;
+      }
+      if (existingTaskBaseTitles.has(baseTitle)) {
+        skippedTasks.push({ title: baseTitle, assignedRole: task.assignedRole, reason: "already_exists" });
         continue;
       }
 
+      // Un solo prefijo de fecha, sobre el titulo base. Nunca se apila.
+      const title = `[Plan ${briefing.date}] ${baseTitle}`;
       const created = await createOniaCenterEntity("task", {
         projectId: task.projectId,
         title,
@@ -422,7 +438,7 @@ async function commitBriefing(briefing: DailyBriefing, snapshot: RuntimeSnapshot
         createdAt: new Date().toISOString(),
       });
       createdTasks.push(created);
-      existingTaskTitles.add(title);
+      existingTaskBaseTitles.add(baseTitle);
     }
 
     const noteTitle = `[Briefing diario ${briefing.date}] ${rolePlan.role}`;
