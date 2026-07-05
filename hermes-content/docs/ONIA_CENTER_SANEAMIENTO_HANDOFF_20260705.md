@@ -38,23 +38,29 @@ Persistencia real: Supabase self-hosted, schema `onia_center`, tabla `tasks`
 (NO `work_items`; NO la base dentalgest-staging que se revisó). Store:
 `web-factory/apps/site/src/lib/onia-center-store.ts`.
 
-### Cambios hechos (commit `c9f528af`)
-- `briefings/daily/route.ts`: ya NO re-prefija; usa `stripPlanPrefixes()` para
-  limpiar prefijos apilados/legacy y deduplica tareas + notas por título base.
-  Nota de briefing ahora es 1 por rol (sin fecha en el título) → deja de
-  acumular. La fecha del plan va en el cuerpo, no en el título.
-- `hygiene/daily/route.ts`: misma normalización; `titleExists()` compara título
-  base → deja de crear duplicados diarios `[Higiene <fecha>]`.
-- `onia-center-store.ts`: nuevos `stripPlanPrefixes()`,
+### IMPORTANTE — otra sesión ya arregló `briefings/daily` en `main`
+Commit `3d87f093` (en `main`) resolvió el mismo bug con `basePlanTitle()` +
+dedup por título base (mantiene UN prefijo `[Plan <fecha>]`, no lo apila). Ese
+mismo commit **también empezó Fase 2/3**: el inicio "Hoy en ONIA" en
+operating-workspace.tsx ahora sólo muestra bloques operativos
+(planning/sales/deep_work/meetings/admin), NO la rutina personal, y oculta las
+tarjetas de métricas en 0 (leads/ideas/audio). → No re-hacer eso.
+
+Este PR (rama `claude/dreamy-cartwright-dda93b`, rebasada sobre main) ya NO toca
+`briefings/daily` (usa la versión de main). Aporta lo que main NO tiene:
+- `hygiene/daily/route.ts`: `titleExists()` compara título base (vía
+  `stripPlanPrefixes`) → deja de crear duplicados diarios `[Higiene <fecha>]`.
+  (El fix de main no tocó higiene.)
+- `onia-center-store.ts`: `stripPlanPrefixes()`,
   `countOniaCenterTasksByTitlePatterns()`,
   `deleteOniaCenterTasksByTitlePatterns()` (patrones ILIKE
   `[Plan *`, `[Briefing diario *`, `[Higiene *`).
 - **NUEVO** `api/onia-center/maintenance/route.ts`: endpoint POST protegido por
   `ONIA_CENTER_INTERNAL_API_KEY`. `action:"cleanup_generated_tasks"`,
-  `commit:false` = cuenta cuántas matchean; `commit:true` = las borra.
+  `commit:false` = cuenta; `commit:true` = borra las 61 acumuladas. **main
+  previene nuevas pero NO limpia las viejas — este endpoint sí.**
 
-Verificado local: `tsc --noEmit` limpio; regex probada contra títulos apilados
-y legacy (incluye variantes con/sin espacio entre corchetes).
+Verificado local (post-rebase): `tsc --noEmit` limpio.
 
 ### Mitigación aplicada 2026-07-05
 - **Workflow n8n `ONIADailyBrief001` DESACTIVADO** (`active:false`, vía n8n MCP).
