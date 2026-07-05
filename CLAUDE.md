@@ -98,3 +98,42 @@ Docs internos de referencia: `PRICING_RATIONALE_INTERNO.md`,
   cuando es seguro (avance lineal). Así `main` queda al día solo y todos los
   dispositivos sincronizan con `git pull` en `main`. Si `main` divergió (no es
   FF), no fuerza nada: queda merge manual.
+
+## Desarrollo en paralelo — carriles (REGLA)
+
+> Trabajamos muchos frentes a la vez. El límite NO es el plan de Claude (Max) — el
+> límite es el CHOQUE: mismos archivos, la rama `main`, o la infra única. Aislás
+> eso y corrés TODOS los carriles no bloqueados en paralelo.
+
+Fuentes (no duplicar; editar estas, no crear otras):
+- Asignación + prompts copy-paste: `hermes-content/docs/ONIA_SESION_KICKOFFS_20260705.md`.
+- Backlog e ítems (P/R/M/S): `hermes-content/docs/ONIA_PROXIMA_SESION_PLAN_20260705.md`.
+- Dueño de archivos por carril: `COORDINATION_MANIFEST.md` (sección "Modelo de carriles").
+
+Carriles = 1 sesión = 1 worktree = 1 rama = 1 carpeta/repo:
+- **A** `onia-center-saneamiento` → onia-hermes `src/app/onia-center/**` + `api/onia-center/**` (P2→P3)
+- **B** `wf-landing-dentalgest` → onia-hermes landings `src/app`, `data/clients`, `templates`, `harvester` (P4, E*)
+- **C** `propuestas-v2` → onia-hermes `hermes-content/propuestas` + docs/skills comercial (P1)
+- **D** `dentagest-core-ui` → repo DentaGest (R2, R4)
+- **E** `gestios-core` → repo Gestios (R1→R5)
+- **F** `bolivian-electric-fase1` → repo Bolivian Electric (R3)
+- **G** `infra-deploy-n8n` → n8n/VPS/Supabase, SERIAL, un solo dueño (M1→M6)
+- **H** `contenido-higgsfield` → onia-hermes `hermes-content/references` + skills(video/IG) + scripts(video/ig) + `.hermes/video-lab` (producción continua)
+- **Core** `onia-core` → `onia-core/**` (CONGELADO; solo bajo adopción aprobada)
+
+Reglas duras:
+- Repos distintos (DentaGest, Gestios, Bolivian Electric) = paralelo libre.
+- Dentro de onia-hermes: cada carril su carpeta; **AVISAR** antes de tocar los 4
+  raíz de web-factory (`next.config.ts`, `layout.tsx`, `globals.css`, `package.json`).
+- Infra (G) = UN solo dueño a la vez.
+- Correr todo en paralelo; lo único que se estagia son DEPENDENCIAS reales, no cupo:
+  P3 tras P2 · R5 tras R1 · M1 deploya tras A/C en main · M2 no re-publica el n8n
+  `ONIADailyBrief001` hasta M1 · H publica IG tras token (S6).
+- Terminar un carril: rama propia → `git rebase origin/main` antes de mergear →
+  commits chicos por carpeta → gates (`tsc --noEmit`, `pnpm e2e` donde aplique,
+  code-reviewer) → merge a main. Un ítem cierra cuando su código está en main (y en
+  prod para los M-*).
+
+Bloqueos humanos de Sergio (hacer apenas se pueda; destraban lo comercial): S1
+precios, S2 NIT SIAT, S3 secret intake n8n, S4 columnas TR4, S5 Meta, S6 token IG,
+S7 keys Tavily/fal, S8 fiscal, S9 password. Detalle en el plan maestro §(b).
