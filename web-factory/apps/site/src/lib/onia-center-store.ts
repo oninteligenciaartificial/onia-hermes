@@ -349,6 +349,53 @@ function makeKey(prefix: string) {
   return `${prefix}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
 }
 
+// Legacy auto-generated titles looked like "[Plan 2026-07-04] ...",
+// "[Briefing diario 2026-07-04] ..." and "[Higiene 2026-07-04] ...". The daily
+// generator re-ingested pending tasks and re-prefixed them, stacking prefixes
+// ("[Plan 07-04] [Plan 07-03] ..."). Strip every leading date prefix so titles
+// dedup to a stable base and never accumulate.
+const GENERATED_TITLE_PREFIX_RE =
+  /^(?:\[(?:Plan|Briefing diario|Higiene diaria|Higiene)\s+\d{4}-\d{2}-\d{2}\]\s*)+/;
+
+export function stripPlanPrefixes(title: string): string {
+  return title.replace(GENERATED_TITLE_PREFIX_RE, "").trim();
+}
+
+// SQL ILIKE patterns (PostgREST maps "*" to "%") that match every task title
+// ever produced by the auto-generators. Used by the maintenance cleanup.
+export const GENERATED_TASK_TITLE_PATTERNS = ["[Plan *", "[Briefing diario *", "[Higiene *"] as const;
+
+export async function deleteOniaCenterTasksByTitlePatterns(
+  patterns: readonly string[] = GENERATED_TASK_TITLE_PATTERNS,
+): Promise<{ deleted: number; keys: string[] }> {
+  const keys: string[] = [];
+  for (const pattern of patterns) {
+    const rows = await supabaseRequest<Array<{ task_key: string }>>(
+      `tasks?title=ilike.${encodeURIComponent(pattern)}&select=task_key`,
+      { method: "DELETE", headers: { prefer: "return=representation" } },
+    );
+    if (Array.isArray(rows)) {
+      for (const row of rows) {
+        keys.push(row.task_key);
+      }
+    }
+  }
+  return { deleted: keys.length, keys };
+}
+
+export async function countOniaCenterTasksByTitlePatterns(
+  patterns: readonly string[] = GENERATED_TASK_TITLE_PATTERNS,
+): Promise<number> {
+  let total = 0;
+  for (const pattern of patterns) {
+    const rows = await supabaseRequest<Array<{ task_key: string }>>(
+      `tasks?title=ilike.${encodeURIComponent(pattern)}&select=task_key`,
+    );
+    total += Array.isArray(rows) ? rows.length : 0;
+  }
+  return total;
+}
+
 function rawString(raw: Record<string, unknown> | null | undefined, key: string) {
   const value = raw?.[key];
   return typeof value === "string" && value.trim() ? value.trim() : undefined;

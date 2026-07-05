@@ -5,6 +5,7 @@ import {
   getMissingOniaCenterConfig,
   getOniaCenterRuntime,
   isOniaCenterConfigured,
+  stripPlanPrefixes,
   type RuntimeSnapshot,
 } from "@/lib/onia-center-store";
 
@@ -107,10 +108,11 @@ function riskForFinding(finding: HygieneFinding) {
 }
 
 function titleExists(snapshot: RuntimeSnapshot, title: string) {
+  const base = stripPlanPrefixes(title);
   return (
-    snapshot.tasks.some((task) => task.title === title) ||
-    snapshot.notes.some((note) => note.title === title) ||
-    snapshot.codexJobs.some((job) => job.title === title)
+    snapshot.tasks.some((task) => stripPlanPrefixes(task.title) === base) ||
+    snapshot.notes.some((note) => stripPlanPrefixes(note.title) === base) ||
+    snapshot.codexJobs.some((job) => stripPlanPrefixes(job.title) === base)
   );
 }
 
@@ -144,12 +146,12 @@ async function commitReport(report: HygieneReport, snapshot: RuntimeSnapshot) {
   const createdCodexJobs = [];
   const skipped = [];
 
-  const noteTitle = `[Higiene diaria ${date}] Resumen proyectos ONIA`;
+  const noteTitle = "Higiene diaria: resumen proyectos ONIA";
   if (!titleExists(snapshot, noteTitle)) {
     const note = await createOniaCenterEntity("note", {
       kind: "nota",
       title: noteTitle,
-      detail: summarizeReport(report),
+      detail: [`Reporte ${date}`, summarizeReport(report)].join("\n"),
       linkedTo: "onia-project-hygiene",
       actorRole: "sergio" as RoleId,
       visibility: "sergio_private",
@@ -166,7 +168,7 @@ async function commitReport(report: HygieneReport, snapshot: RuntimeSnapshot) {
 
   for (const finding of topFindings) {
     const projectId = projectIdForOniaCenter(finding.projectId);
-    const taskTitle = `[Higiene ${date}] ${finding.title}`;
+    const taskTitle = finding.title;
 
     if (titleExists(snapshot, taskTitle)) {
       skipped.push({ title: taskTitle, reason: "already_exists" });
@@ -185,7 +187,7 @@ async function commitReport(report: HygieneReport, snapshot: RuntimeSnapshot) {
     createdTasks.push(task);
 
     if (["blocker", "high", "medium"].includes(finding.severity) && finding.cleanupLevel !== "safe_auto") {
-      const jobTitle = `[Higiene ${date}] ${finding.title}`;
+      const jobTitle = finding.title;
       const job = await createOniaCenterEntity("codex_job", {
         id: `hygiene-${date}-${finding.id}`.replace(/[^a-zA-Z0-9_-]/g, "-").slice(0, 120),
         title: jobTitle,
