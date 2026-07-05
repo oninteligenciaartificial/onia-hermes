@@ -177,9 +177,14 @@ function validateCliente(c, i) {
 
 // --- Plantilla única --------------------------------------------------------
 
-function buildHtml(c) {
+function buildHtml(c, opts = {}) {
   const accent = c.accent || '#1e5bff';
   const moneda = c.moneda || 'Bs';
+  // Pixel de apertura (n8n webhook). Solo en la variante HTML trackeada:
+  // el PDF se imprime desde el HTML sin beacon para no falsear aperturas.
+  const beacon = opts.trackUrl
+    ? `\n<img src="${esc(opts.trackUrl)}" alt="" width="1" height="1" style="position:absolute;left:-9999px;opacity:0" aria-hidden="true">`
+    : '';
   const heroGrad = c.heroGrad || 'linear-gradient(135deg,#0f1b2e 0%,#16294a 55%,#0e3f32 100%)';
   return `<!doctype html>
 <html lang="es">
@@ -204,7 +209,7 @@ function buildHtml(c) {
   .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
   table{width:100%;border-collapse:collapse;background:var(--white);border-radius:12px;overflow:hidden;border:1px solid var(--line);}
   th,td{padding:12px 14px;text-align:left;font-size:15px;border-bottom:1px solid var(--line);}
-  th{background:#eef3fb;color:var(--ink);font-weight:800;}
+  th{background:#eef3fb;color:var(--ink);font-weight:800;font-size:13px;text-transform:uppercase;letter-spacing:.05em;}
   td.num,th.num{text-align:right;white-space:nowrap;}
   .tag{display:inline-block;background:#eaf0ff;color:var(--blue-dark);font-size:12px;font-weight:800;padding:3px 10px;border-radius:999px;margin-bottom:8px;}
   .tag.green{background:#e3f4ec;color:var(--green);}
@@ -215,8 +220,11 @@ function buildHtml(c) {
   .big{font-size:20px;color:var(--ink);font-weight:800;}
   .step{display:flex;gap:14px;align-items:flex-start;margin-bottom:12px;}
   .step .n{background:var(--accent);color:#fff;font-weight:800;border-radius:50%;width:30px;height:30px;display:flex;align-items:center;justify-content:center;flex:0 0 30px;}
-  tr.rec td{background:#fff7ed;}
+  tr.rec td{background:#fff7ed;border-top:2px solid var(--accent);border-bottom:2px solid var(--accent);}
+  tr.rec td.num{font-size:17px;font-weight:800;}
   .res{color:var(--accent);font-weight:700;font-size:13px;}
+  .step p{margin:0;color:var(--ink);}
+  .step h3 + p{color:var(--muted);}
   .vgrid .vcard{background:var(--white);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:12px;padding:16px 18px;}
   .vcard h3{color:var(--ink);}
   figure{margin:18px 0;}
@@ -276,7 +284,7 @@ ${renderRequisitos(c.requisitos)}${renderProximosPasos(c.proximosPasos, c.ctaWha
     <p>ONIA — Sistemas, automatización y contenido para negocios. business@onia.com.bo</p>
   </div>
 
-</div>
+</div>${beacon}
 </body>
 </html>`;
 }
@@ -297,10 +305,21 @@ function printPdf(browser, htmlPath, pdfPath) {
 
 // --- Main -------------------------------------------------------------------
 
+// Webhook n8n de aperturas (workflow "ONIA Propuesta Abierta"). El token
+// identifica al prospecto; se pasa con --track <token>.
+const TRACK_WEBHOOK = 'https://n8n-sergio-n8n.hqdqgh.easypanel.host/webhook/propuesta-abierta';
+
 function main() {
   const args = process.argv.slice(2);
   const wantPdf = args.includes('--pdf');
-  const only = args.filter((a) => !a.startsWith('--'));
+  const trackIdx = args.indexOf('--track');
+  const trackToken = trackIdx !== -1 ? args[trackIdx + 1] : null;
+  if (trackIdx !== -1 && !trackToken) {
+    console.error('[ONIA] --track requiere un token (ej: --track cliente-x-jul26)');
+    process.exit(1);
+  }
+  const positional = args.filter((a, i) => !a.startsWith('--') && i !== trackIdx + 1);
+  const only = positional;
 
   const clientes = JSON.parse(fs.readFileSync(DATA, 'utf8'));
   const browser = wantPdf ? findBrowser() : null;
@@ -321,6 +340,12 @@ function main() {
       } catch (e) {
         console.warn(`[ONIA] PDF falló (${c.slug}): ${e.message}. ¿Está abierto en un visor?`);
       }
+    }
+    if (trackToken) {
+      const trackUrl = `${TRACK_WEBHOOK}?t=${encodeURIComponent(trackToken)}&s=${encodeURIComponent(c.slug)}`;
+      const trackedPath = path.join(OUT, `propuesta-${c.slug}-${trackToken}.html`);
+      fs.writeFileSync(trackedPath, buildHtml(c, { trackUrl }), 'utf8');
+      console.log(`[ONIA] TRACK → ${trackedPath} (avisa a Telegram al abrirse)`);
     }
   }
   console.log('[ONIA] Listo.');

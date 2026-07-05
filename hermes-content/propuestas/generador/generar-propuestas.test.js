@@ -130,6 +130,13 @@ test('buildHtml renderiza portada solo si existe', () => {
   assert.ok(html.includes('Julio 2026'));
 });
 
+test('buildHtml inserta pixel de tracking solo con opts.trackUrl', () => {
+  assert.ok(!buildHtml(base).includes('width="1" height="1"'));
+  const html = buildHtml(base, { trackUrl: 'https://n8n.example/webhook/propuesta-abierta?t=tok1&s=t' });
+  assert.ok(html.includes('https://n8n.example/webhook/propuesta-abierta?t=tok1&amp;s=t'));
+  assert.ok(html.includes('width="1" height="1"'));
+});
+
 test('clientes.json es válido y todos cumplen requeridos', () => {
   const data = JSON.parse(fs.readFileSync(path.join(__dirname, 'clientes.json'), 'utf8'));
   assert.ok(Array.isArray(data) && data.length > 0);

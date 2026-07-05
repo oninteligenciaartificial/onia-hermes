@@ -26,7 +26,26 @@ node generar-propuestas.js --pdf
 
 # Un solo cliente
 node generar-propuestas.js garabato --pdf
+
+# Variante TRACKEADA por prospecto (avisa a Telegram al abrirse)
+node generar-propuestas.js dentalgest --track clinica-sonrisa-jul26
 ```
+
+## Propuesta trackeable (--track)
+
+`--track <token>` genera un archivo extra `propuesta-<slug>-<token>.html` con un
+pixel invisible que llama al webhook n8n `propuesta-abierta` (workflow
+"ONIA - Propuesta Abierta (pixel)", id `UMpcKi7wfMmC9KCw`). Al abrirlo, Sergio
+recibe por Telegram: token del prospecto, slug, hora y dispositivo.
+
+- Enviar al prospecto el **HTML trackeado** (o hostearlo); el PDF normal no
+  trackea (los PDF no ejecutan el pixel).
+- El PDF se imprime siempre desde el HTML SIN pixel — la generación no cuenta
+  como apertura.
+- Token sugerido: `<cliente>-<mes>` (ej. `clinica-sonrisa-jul26`). Un token por
+  prospecto para saber QUIÉN abrió.
+- El webhook ignora bots/crawlers (`ignoreBots`), pero un antivirus de correo
+  corporativo podría disparar un falso positivo — preferir envío por WhatsApp.
 
 > Si el PDF falla con "está siendo utilizado en otro proceso": cerrá el PDF
 > abierto en el visor. Edge no puede sobrescribir un archivo abierto.
