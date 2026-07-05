@@ -190,7 +190,7 @@ calidad en `pnpm e2e` (a11y WCAG 2.2 AA light+dark, visual, performance CWV);
 | E2 | Optimizar 108 imagenes pesadas de Nuvia (`product-media-cutout/*.png`, hasta 815kb) -> webp/avif. Task spawneada `task_589d5cca`. Meta: `pnpm images:check nuvia` sin errores. | `web-factory/data/clients/nuvia.assets/` | M |
 | E3 | Dark mode del template `store` (usa paleta `--nuvia-*` fija, NO adapta — intencional). Si se quiere, tokenizar el shell. | `web-factory/packages/templates/src/store.ts` | M |
 | E4 | Medir INP en el perf gate (hoy LCP/FCP/CLS; INP requiere interaccion simulada). Opcional. | `web-factory/tests/e2e/perf.spec.ts` | S |
-| E5 | Estabilizar flakiness del E2E bajo carga paralela. **EN CURSO — subagente 2026-07-05.** | `web-factory/tests/e2e/` + `playwright.config.ts` | S |
+| E5 | ~~Estabilizar flakiness del E2E bajo carga paralela~~ **HECHO 2026-07-05** (commit `9b9ffd86`): `playwright.config.ts` split en 4 proyectos (funcional paralelo; medicion `chromium-measure`/`mobile-measure` serial, `fullyParallel:false`, workers capados); `perf.spec.ts` y `a11y.spec.ts` en `mode:"serial"`; retries local 1. Root cause: bajo 6 workers, axe/PerformanceObserver escaneaban antes de asentar layout. 3 corridas `pnpm e2e` limpias (32 pass / 4 skip) + 37 unit. Budgets/gates intactos. | `web-factory/tests/e2e/` + `playwright.config.ts` | done |
 | E6 | Dashboard interactivo real (Astro islands + Tremor) mas alla del PoC `experiments/astro-islands-poc/`, si un cliente pide datos vivos. | nuevo build | L |
 
 ## Orden recomendado de sesiones
