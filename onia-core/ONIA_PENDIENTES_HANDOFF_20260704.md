@@ -28,13 +28,13 @@ push multi-sesion: add solo tus archivos -> commit -> pull --rebase
 - **Plan prospeccion Semana 1**:
   `hermes-content/docs/ONIA_PLAN_PROSPECCION_SEMANA1_2026.md` (35 por segmento).
 
-## A. EN CURSO — subagentes corriendo (verificar sus commits primero)
+## A. COMPLETADO POR SUBAGENTES (2026-07-05) — verificado
 
 | # | Frente | Repo | Verificar |
 |---|---|---|---|
-| A1 | Inventario detallado (kardex promedio ponderado, lotes/FEFO, conteos) + Contador Pack completo (RCV ventas+compras, resumen IVA, balance comprobacion) | Gestios | `git log --oneline -5` en C:\dev\proyectos\Gestios; tests verdes; si el agente reporto drift de migraciones, resolver baseline como en DentaGest (docs/DATABASE_MIGRATION_BASELINE_2026.md) |
-| A2 | Hermes bridge: /tarea y /dentalgest via Telegram | DentaGest + onia-hermes | endpoint /api/onia-core/bridge/pending en DentaGest; comandos en gateway; doc HERMES_PRODUCT_BRIDGE_2026.md; setear claves en VPS que indique el runbook |
-| A3 | Plan certificacion SIAT proveedor | onia-hermes | onia-core/ONIA_SIAT_CERTIFICACION_PLAN_2026.md en main |
+| A1 | ✅ Logica pura COMPLETA en Gestios main (77172ce+1563731): kardex promedio ponderado, FEFO+alertas, conteos, tax-calendar+cron, RCV ventas (NIT=Customer.rfc) y compras interino, iva-summary, balance cuadrado; 544/544 tests. **BLOQUEADO por baseline sucio**: sin _prisma_migrations, drift bidireccional (falta qr_payments, sobra personal_subscriptions), DIRECT_URL con credenciales invalidas, migraciones se aplican A MANO (docs/DATABASE.md). Faltan modelos Warehouse/StockLot/StockMovement/PurchaseInvoice + APIs de persistencia | Gestios | **C1-bis: sanear baseline GestiOS** (runbook DentaGest DATABASE_MIGRATION_BASELINE_2026.md; conseguir DIRECT_URL valida via vercel env del proyecto gesti-os o dashboard Supabase jafxylfocvvlflpqfsix) y conectar la logica ya testeada |
+| A2 | ✅ VIVO y probado e2e: /tarea y /dentalgest desde Telegram (DentaGest 189b312 + hermes c8660a38 + claves en VPS /root/.hermes/.env + fix proxy.ts 307). Pulido pendiente: titulo de /tarea = texto de la tarea | DentaGest+hermes | listo |
+| A3 | ✅ ONIA_SIAT_CERTIFICACION_PLAN_2026.md en main (69714a15): computarizada sin certificado por cliente, sandbox pilotosiat, cronograma al 30-sep, bloqueo #1 = NIT (SEPREC+MASI 07-jul) | onia-hermes | listo |
 | A4 | ~~ONIA Center: fix spam de tareas del briefing~~ HECHO 2026-07-05: mergeado a main (3d87f093) y DEPLOYADO al VPS (backup runtime-next.bak5-20260705162820; rollback = mv de vuelta + docker restart). El briefing ya no apila prefijos ni duplica; tarjetas en 0 ocultas. PENDIENTE MENOR: limpiar las ~61 tareas viejas ya acumuladas (lo cubre A5). |
 | A5 | ONIA Center: rediseno completo (datos reales, quitar modulos vacios, simplificar UI) | onia-hermes (web-factory) | sesion del chip task_4be0c81c corriendo independiente — verificar sus commits antes de duplicar; diagnostico completo en el prompt del chip |
 
