@@ -196,3 +196,44 @@ quitar "gym"/"personal" de ese filtro también si se quitan los bloques).
    deploy.
 
 Orden: terminar Fase 1 en prod → Fase 2 → Fase 3. No mezclar.
+
+---
+
+## ANEXO — Origen de datos por dominio (static vs runtime)
+
+Hallazgo clave: **Leads, Tasks, Reviews, Notes, Ideas, CodexJobs YA están
+conectados en vivo** a Supabase (`getOniaCenterRuntime()`,
+onia-center-store.ts:551-581, vía `/api/onia-center/runtime`). Están "vacíos"
+sólo porque aún no hay registros — NO porque estén desconectados. Decisión Fase
+2: dejarlos con empty-state honesto (o esconder del nav hasta que se usen), no
+borrarlos.
+
+Lo que SÍ es estático/hardcode (parece dato pero no lo es):
+
+| Dominio | Origen | Ref |
+|--------|--------|-----|
+| Leads/Tasks/Reviews/Notes/Ideas/CodexJobs | **Runtime Supabase (vivo)** | onia-center-store.ts:551-581 |
+| Rutina personal / bloques estrictos | **Static hardcode** | `sergioStrictScheduleBlocks` operating-source.ts:42-206 |
+| Ventanas de reunión | **Static hardcode** | `sergioMeetingWindows` operating-source.ts:208-229 |
+| Política de booking comercial (Cal.com) | Static config; Cal.com NO sincroniza en UI | `commercialBookingPolicy` operating-source.ts:231-414 |
+| Proyectos operativos | **Static seed** (no Supabase) | `operatingProjects` operating-source.ts:~899 |
+| Tareas operativas (para summary) | **Static seed** (distinto de tasks runtime) | `operatingTasks` operating-source.ts:~1128 |
+| Codex jobs seed | **Static hardcode** (da falso "no-vacío") | `starterCodexJobs` page.tsx:527-590 |
+| Agentes / planes mensuales | **Static** | `operatingAgents` ~472, `agentMonthlyPlans` ~643 operating-source.ts |
+| Conectores de integración / calendar plans | **Static status docs** ("prepared_pending_connection") | `integrationConnectors` ~1555, `calendarConnectorPlans` ~728 operating-source.ts |
+| Centros contables | **Static** | `accountingCenters` source.ts:389-446 |
+| Roles / permisos | **Static** | `roleDefinitions` source.ts:448-592 |
+| Audio IA / propuestas | API real (`audio-intelligence/route.ts`), pero sólo análisis LLM efímero; NO guarda propuestas | route.ts:302-323 inyecta catálogo estático como contexto |
+
+Agenda real: **NO conectada.** Sólo bloques estáticos + Google Calendar ID
+hardcode (`oninteligenciaartificial@gmail.com`, operating-source.ts:238) + plan
+n8n marcado "planned". Para "agenda real" (objetivo del brief) hay que
+implementar lectura de Cal.com self-hosted (`cal.onia.com.bo`) o Google
+Calendar vía n8n → nuevo endpoint runtime.
+
+Implicación Fase 2/3: el mayor ruido no son los módulos runtime vacíos, sino el
+contenido estático que aparenta ser dato real (proyectos/tareas operativas seed,
+Codex seed, rutina personal). Priorizar: (1) quitar rutina personal del view de
+trabajo; (2) quitar/limpiar seeds estáticos o marcarlos como demo; (3) empty-
+states honestos en los módulos runtime; (4) conectar agenda real como feature
+aparte.
