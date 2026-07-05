@@ -56,6 +56,17 @@ Persistencia real: Supabase self-hosted, schema `onia_center`, tabla `tasks`
 Verificado local: `tsc --noEmit` limpio; regex probada contra títulos apilados
 y legacy (incluye variantes con/sin espacio entre corchetes).
 
+### Mitigación aplicada 2026-07-05
+- **Workflow n8n `ONIADailyBrief001` DESACTIVADO** (`active:false`, vía n8n MCP).
+  Fuente principal del spam (títulos apilados `[Plan …]`) frenada. Re-publicar
+  (`publish_workflow`) sólo DESPUÉS de desplegar el fix.
+- **Pendiente/secundario:** el GitHub Action `.github/workflows/onia-hygiene-daily.yml`
+  (cron `0 10 * * *`, `commit=true` en schedule) sigue activo y crea tareas
+  `[Higiene <fecha>]` a diario hasta que se despliegue el fix de higiene.
+  Contribuyente menor (≤12/día). Para frenarlo también:
+  `gh workflow disable "ONIA Daily Project Hygiene"` (o desplegar el fix). El
+  cleanup del maintenance ya borra las `[Higiene *]` acumuladas.
+
 ### PENDIENTE Fase 1 (acciones en producción — requieren OK de Sergio)
 1. **Deploy** del código a VPS (ver §Deploy). Sin deploy, el generador sigue
    apilando cada mañana.
