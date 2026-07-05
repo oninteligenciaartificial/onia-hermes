@@ -1,5 +1,14 @@
 # ONIA Core Changelog
 
+## modules/knowledge 0.1.0 — 2026-07-05 (base de conocimiento)
+
+- Nuevo modulo `knowledge` (vertical_extension) que activa la capability
+  `knowledge_base` (hasta ahora sin modulo, que el reporte flagueaba como FALTA
+  MODULO). Entidades `knowledge_category` + `knowledge_article` (namespace
+  `onia_knowledge_*`) + `knowledge.schema.sql`. Con esto ProveeGest/Bolivian
+  Electric queda 100% cubierto por modulos (catalog_inventory + quotes_b2b +
+  sales_cash + knowledge_base). +1 test.
+
 ## modules/commerce 0.2.0 — 2026-07-05 (ventas/caja)
 
 - Capability `sales_cash` agregada al modulo commerce: entidades `order`,

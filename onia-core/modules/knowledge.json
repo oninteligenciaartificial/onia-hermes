@@ -1,0 +1,53 @@
+{
+  "module": "knowledge",
+  "name": "ONIA Knowledge Module",
+  "version": "0.1.0",
+  "status": "draft",
+  "layer": "vertical_extension",
+  "purpose": "Base de conocimiento interna (fichas tecnicas, procedimientos, FAQ) como add-on activable SOBRE el core. ProveeGest la usa para conocimiento tecnico de material electrico (hojas de especificacion, compatibilidades); cualquier vertical puede activarla. Adjuntos pesados van por el document del core.",
+  "coreContract": "onia-core/contract.json",
+  "schemaFile": "onia-core/modules/knowledge.schema.sql",
+  "installInProductRepos": false,
+  "activatesCapabilities": [
+    "knowledge_base"
+  ],
+  "coreDependencies": [
+    { "coreEntityId": "organization", "as": "tenant root de cada entidad del modulo" },
+    { "coreEntityId": "member", "as": "knowledge_article.authorId (autor interno)" },
+    { "coreEntityId": "document", "as": "adjuntos formales de un articulo via document core (storageRef)" }
+  ],
+  "verticalTracks": [
+    "proveegest-electrico"
+  ],
+  "entities": [
+    {
+      "id": "knowledge_category",
+      "name": "KnowledgeCategory",
+      "capabilityId": "knowledge_base",
+      "table": "onia_knowledge_categories",
+      "purpose": "Categoria/arbol para organizar los articulos (por linea de producto, procedimiento o area).",
+      "requiredFields": ["id", "organizationId", "name", "active", "createdAt"],
+      "optionalFields": ["parentId"],
+      "tenantScoped": true
+    },
+    {
+      "id": "knowledge_article",
+      "name": "KnowledgeArticle",
+      "capabilityId": "knowledge_base",
+      "table": "onia_knowledge_articles",
+      "purpose": "Ficha tecnica, procedimiento o respuesta reutilizable. Puede referenciar una entidad del core (producto, partner, caso) sin acoplarse a ella.",
+      "requiredFields": ["id", "organizationId", "title", "body", "status", "authorId", "createdAt"],
+      "optionalFields": ["categoryId", "tags", "relatedEntityType", "relatedEntityId"],
+      "tenantScoped": true
+    }
+  ],
+  "notes": [
+    "El modulo NO redefine entidades del core; agrega entidades propias con namespace onia_knowledge_*.",
+    "La busqueda semantica (embeddings) corre FUERA del modulo (igual que la clasificacion de intake); el modulo solo guarda el contenido.",
+    "Adjuntos (PDF de datasheet, planos) usan el document del core, no se guardan aca."
+  ],
+  "gates": [
+    "installInProductRepos = false hasta plan de adopcion del modulo aprobado",
+    "SQL base del modulo (knowledge.schema.sql) se traduce a migraciones del producto, no se aplica directo"
+  ]
+}

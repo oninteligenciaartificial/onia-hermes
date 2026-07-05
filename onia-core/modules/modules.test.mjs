@@ -89,6 +89,19 @@ describe("commerce module", () => {
   });
 });
 
+describe("knowledge module", () => {
+  const knowledge = getModule(modules, "knowledge");
+
+  it("covers knowledge_base with articles and categories", () => {
+    assert.ok(knowledge, "knowledge module present");
+    assert.equal(knowledge.layer, "vertical_extension");
+    assert.deepEqual(knowledge.activatesCapabilities, ["knowledge_base"]);
+    const ids = knowledge.entities.map((entity) => entity.id);
+    assert.ok(ids.includes("knowledge_article"), "has knowledge_article");
+    assert.ok(ids.includes("knowledge_category"), "has knowledge_category");
+  });
+});
+
 describe("modules validator integration", () => {
   it("modules pass validate-modules.mjs (exit 0)", () => {
     const validatePath = fileURLToPath(new URL("./validate-modules.mjs", import.meta.url));

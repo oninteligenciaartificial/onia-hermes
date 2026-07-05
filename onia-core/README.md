@@ -48,10 +48,11 @@ modulos, verticales o integraciones. No son la definicion del core.
   cuanto del core lleva instalado cada producto). Correr: `node onia-core/report.mjs`.
 - `report.test.mjs`: tests del reporte.
 - `modules/`: modulos vendibles (add-ons activables SOBRE el core, FUERA del
-  contrato congelado — el core no es inventario/ventas). `commerce.json` =
-  catalogo + inventario multi-almacen + cotizaciones B2B + ventas/caja
-  (`commerce.schema.sql` = SQL base; primer consumidor: ProveeGest/Bolivian
-  Electric); `validate-modules.mjs` = validador propio.
+  contrato congelado — el core no es inventario/ventas). `commerce.json`
+  (catalogo/inventario/cotizaciones B2B/ventas-caja) y `knowledge.json` (base de
+  conocimiento), cada uno con su `*.schema.sql`. Primer consumidor:
+  ProveeGest/Bolivian Electric (100% cubierto). `validate-modules.mjs` =
+  validador propio.
 - `ONIA_CORE_RESEARCH_RESULT_2026.md`: resultado de investigacion local y externa.
 - `ONIA_CORE_BENCHMARK_GAP_AUDIT_2026.md`: auditoria contra sistemas ERP, CRM,
   work management y operacion real de empresas.

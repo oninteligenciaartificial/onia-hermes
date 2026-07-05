@@ -132,7 +132,7 @@ describe("module coverage in the report", () => {
     );
     assert.equal(moduleByCapability.get("catalog_inventory"), "commerce");
     assert.equal(moduleByCapability.get("quotes_b2b"), "commerce");
-    assert.equal(moduleByCapability.get("knowledge_base"), null);
+    assert.equal(moduleByCapability.get("knowledge_base"), "knowledge");
   });
 });
 
@@ -144,11 +144,45 @@ describe("renderReport", () => {
     assert.match(text, /PRODUCTOS/);
     assert.match(text, /MODULOS/);
     assert.match(text, /commerce v/);
-    assert.match(text, /FALTA MODULO/);
+    assert.match(text, /knowledge v/);
+    assert.match(text, /modulos de rubro: /);
     assert.match(text, /DentalGest/);
     assert.match(text, /pack "salud_dental"/);
     assert.match(text, /bloqueadas: 1 \(siat\)/);
     assert.match(text, /falta instalar: /);
     assert.match(text, /process_checklist/);
+  });
+
+  it("marks an uncovered module capability as FALTA MODULO", () => {
+    const synthetic = {
+      contract: {
+        name: "X",
+        version: "0.0.0",
+        status: "beta",
+        entities: 0,
+        capabilities: 0,
+        coreCapabilities: 0,
+        tracks: 1,
+        packs: 0,
+        modules: 0,
+      },
+      tracks: [
+        {
+          id: "t",
+          name: "T",
+          status: "s",
+          requiredCount: 1,
+          coreCount: 0,
+          moduleCount: 1,
+          blockedCount: 0,
+          blocked: [],
+          moduleCapabilities: [{ id: "catalog_inventory", module: null }],
+          pack: null,
+        },
+      ],
+      products: [],
+      modules: [],
+    };
+    assert.match(renderReport(synthetic), /catalog_inventory=FALTA MODULO/);
   });
 });
