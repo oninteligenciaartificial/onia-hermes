@@ -59,7 +59,22 @@ infra única (n8n/VPS/Supabase/tokens). Aislás eso y paralelizás.
 | F | `bolivian-electric-fase1` | repo Bolivian Electric | R3 | repo aparte |
 | G | `infra-deploy-n8n` | infra (n8n/VPS/Supabase) | M1 → M2 → M3-M6 | UN solo dueño, SERIAL; M1 requiere OK humano |
 | H | `contenido-higgsfield` | onia-hermes · `hermes-content/references` + `skills`(video/IG) + `scripts`(video/ig) + `.hermes/video-lab` + assets | producción continua (carruseles, video, IG) | usa Higgsfield MCP + token IG; NO toca código de apps |
+| I | `research-estrategia` | onia-hermes · `hermes-content/docs/research/**` (nuevo) + lectura read-only global | analizar productos ganadores + validar ventures | NO codea productos; entrega docs de decisión |
+| J | `video-remotion` | onia-hermes · `scripts/remotion` o `apps/video` (nuevo) + skill `remotion` | video programático (React) para marketing/producto | distinto de H (H = generativo Higgsfield) |
 | Core | `onia-core` (bajo demanda) | onia-hermes · `onia-core/**` | cambios de contrato/schema/adapters | hoy CONGELADO (beta v0.5.0); solo si se aprueba adopción |
+
+**Iniciativas nuevas (2026-07-05) — pasan por el carril I antes de construirse:**
+- Analizar productos ganadores (Halter, Medvi, etc.) → extraer el patrón que
+  gana y qué es replicable por ONIA.
+- Ventures a validar: (1) importadora automatizada con IA (cruza con M5 landed
+  cost / TR4); (2) motor de venta diaria — ONIA levanta webs y vende sus
+  softwares a todo negocio (ejecución = carril B web-factory + C propuestas + H
+  contenido + prospección n8n); (3) empresa tipo Nuvia (storefront productizado).
+- "Propuestas dentro del sistema": acción "generar propuesta" desde el panel
+  (backlog de carril A/onia-center; hoy es sesión C).
+Regla: I decide/valida con fuentes (skills `deep-research`/`office-hours`); si un
+venture gana, su ejecución va al carril que corresponde (B, repo nuevo, etc.),
+nunca todo en una sesión.
 
 Dos tipos de carril: **backlog** (A-G, cierran ítems P/R/M) y **operación
 continua** (H contenido, y el bot Hermes) que no "terminan" — producen a diario.

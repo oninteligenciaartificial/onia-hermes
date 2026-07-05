@@ -109,6 +109,9 @@ Fuentes (no duplicar; editar estas, no crear otras):
 - Asignación + prompts copy-paste: `hermes-content/docs/ONIA_SESION_KICKOFFS_20260705.md`.
 - Backlog e ítems (P/R/M/S): `hermes-content/docs/ONIA_PROXIMA_SESION_PLAN_20260705.md`.
 - Dueño de archivos por carril: `COORDINATION_MANIFEST.md` (sección "Modelo de carriles").
+- Stack de skills + reglas de subagentes: `hermes-content/docs/ONIA_SKILLS_STACK_Y_SUBAGENTES_20260705.md`.
+  REGLA subagentes: uno por dominio de carril; nunca edita archivos de otro carril;
+  research con fuentes citadas; mismos gates antes de mergear.
 
 Carriles = 1 sesión = 1 worktree = 1 rama = 1 carpeta/repo:
 - **A** `onia-center-saneamiento` → onia-hermes `src/app/onia-center/**` + `api/onia-center/**` (P2→P3)
@@ -119,6 +122,8 @@ Carriles = 1 sesión = 1 worktree = 1 rama = 1 carpeta/repo:
 - **F** `bolivian-electric-fase1` → repo Bolivian Electric (R3)
 - **G** `infra-deploy-n8n` → n8n/VPS/Supabase, SERIAL, un solo dueño (M1→M6)
 - **H** `contenido-higgsfield` → onia-hermes `hermes-content/references` + skills(video/IG) + scripts(video/ig) + `.hermes/video-lab` (producción continua)
+- **I** `research-estrategia` → onia-hermes `hermes-content/docs/research/**` (analizar productos ganadores + validar ventures; NO codea, entrega decisión)
+- **J** `video-remotion` → onia-hermes `scripts/remotion`|`apps/video` (video programático React; distinto de H generativo)
 - **Core** `onia-core` → `onia-core/**` (CONGELADO; solo bajo adopción aprobada)
 
 Reglas duras:
