@@ -6,6 +6,7 @@ import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 
 import { loadOniaCoreContract } from "./index.mjs";
+import { loadModules } from "./modules/index.mjs";
 import {
   buildCoreReport,
   classifyAdoptionStatus,
@@ -16,7 +17,8 @@ import {
 
 const contract = loadOniaCoreContract();
 const adapters = loadAdapters(contract);
-const report = buildCoreReport(contract, adapters);
+const modules = loadModules();
+const report = buildCoreReport(contract, adapters, modules);
 
 describe("classifyAdoptionStatus", () => {
   it("maps status strings to adoption buckets", () => {
@@ -112,12 +114,37 @@ describe("buildCoreReport", () => {
   });
 });
 
+describe("module coverage in the report", () => {
+  it("summarizes each available module in the header and list", () => {
+    assert.equal(report.contract.modules, modules.length);
+    const commerce = report.modules.find((module) => module.module === "commerce");
+    assert.ok(commerce, "commerce present in report");
+    assert.ok(commerce.entities >= 12, "commerce entity count");
+    assert.ok(commerce.capabilities.includes("catalog_inventory"));
+    assert.ok(commerce.capabilities.includes("sales_cash"));
+  });
+
+  it("marks per-track module capabilities as covered or missing", () => {
+    const proveegest = report.tracks.find((track) => track.id === "proveegest-electrico");
+    assert.ok(proveegest.moduleCapabilities.length > 0);
+    const moduleByCapability = new Map(
+      proveegest.moduleCapabilities.map((capability) => [capability.id, capability.module]),
+    );
+    assert.equal(moduleByCapability.get("catalog_inventory"), "commerce");
+    assert.equal(moduleByCapability.get("quotes_b2b"), "commerce");
+    assert.equal(moduleByCapability.get("knowledge_base"), null);
+  });
+});
+
 describe("renderReport", () => {
   it("renders a readable text report with the key sections", () => {
     const text = renderReport(report);
     assert.match(text, /ONIA Core - Reporte de avance/);
     assert.match(text, /VERTICALES/);
     assert.match(text, /PRODUCTOS/);
+    assert.match(text, /MODULOS/);
+    assert.match(text, /commerce v/);
+    assert.match(text, /FALTA MODULO/);
     assert.match(text, /DentalGest/);
     assert.match(text, /pack "salud_dental"/);
     assert.match(text, /bloqueadas: 1 \(siat\)/);

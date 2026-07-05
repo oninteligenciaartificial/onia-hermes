@@ -20,6 +20,7 @@ import {
   getVerticalPacks,
   loadOniaCoreContract,
 } from "./index.mjs";
+import { loadModules } from "./modules/index.mjs";
 
 const oniaCoreDir = dirname(fileURLToPath(import.meta.url));
 const repoRoot = resolve(oniaCoreDir, "..");
@@ -56,10 +57,24 @@ export function summarizeMappings(mappings = []) {
   return summary;
 }
 
-export function buildCoreReport(contract, adapters = []) {
+export function buildCoreReport(contract, adapters = [], modules = []) {
+  const capabilityLayerById = new Map(contract.capabilities.map((capability) => [capability.id, capability.layer]));
+  const moduleLayers = new Set(["activatable_module", "vertical_extension"]);
+  const moduleByCapability = new Map();
+  for (const module of modules) {
+    for (const capabilityId of module.activatesCapabilities ?? []) {
+      if (!moduleByCapability.has(capabilityId)) {
+        moduleByCapability.set(capabilityId, module.module);
+      }
+    }
+  }
+
   const tracks = contract.verticalTracks.map((track) => {
     const readiness = getTrackReadiness(contract, track.id);
     const pack = getVerticalPack(contract, track.id);
+    const moduleCapabilities = track.requiredCapabilityIds
+      .filter((capabilityId) => moduleLayers.has(capabilityLayerById.get(capabilityId)))
+      .map((capabilityId) => ({ id: capabilityId, module: moduleByCapability.get(capabilityId) ?? null }));
     return {
       id: track.id,
       name: track.name,
@@ -69,6 +84,7 @@ export function buildCoreReport(contract, adapters = []) {
       moduleCount: readiness?.moduleCount ?? 0,
       blockedCount: readiness?.blockedCount ?? 0,
       blocked: track.blockedCapabilityIds ?? [],
+      moduleCapabilities,
       pack: pack
         ? {
             id: pack.id,
@@ -102,6 +118,13 @@ export function buildCoreReport(contract, adapters = []) {
   });
 
   const coreCapabilities = contract.capabilities.filter((capability) => capability.layer === "core").length;
+  const moduleSummaries = modules.map((module) => ({
+    module: module.module,
+    version: module.version,
+    status: module.status,
+    capabilities: module.activatesCapabilities ?? [],
+    entities: module.entities?.length ?? 0,
+  }));
 
   return {
     contract: {
@@ -113,9 +136,11 @@ export function buildCoreReport(contract, adapters = []) {
       coreCapabilities,
       tracks: contract.verticalTracks.length,
       packs: getVerticalPacks(contract).length,
+      modules: moduleSummaries.length,
     },
     tracks,
     products,
+    modules: moduleSummaries,
   };
 }
 
@@ -127,7 +152,7 @@ export function renderReport(report) {
   lines.push("=============================");
   lines.push(`Contrato: ${header.name} v${header.version} (${header.status})`);
   lines.push(
-    `Piezas: ${header.entities} entidades | ${header.capabilities} capabilities (${header.coreCapabilities} core) | ${header.tracks} tracks | ${header.packs} packs`,
+    `Piezas: ${header.entities} entidades | ${header.capabilities} capabilities (${header.coreCapabilities} core) | ${header.tracks} tracks | ${header.packs} packs | ${header.modules} modulos`,
   );
   lines.push("");
 
@@ -145,6 +170,12 @@ export function renderReport(report) {
       );
     } else {
       lines.push("      pack: SIN PACK (falta)");
+    }
+    if (track.moduleCapabilities.length > 0) {
+      const parts = track.moduleCapabilities.map(
+        (capability) => `${capability.id}=${capability.module ?? "FALTA MODULO"}`,
+      );
+      lines.push(`      modulos de rubro: ${parts.join(", ")}`);
     }
   }
   lines.push("");
@@ -170,6 +201,17 @@ export function renderReport(report) {
   }
   lines.push("");
 
+  lines.push("MODULOS (add-ons vendibles sobre el core)");
+  if (report.modules.length === 0) {
+    lines.push("  (ninguno)");
+  } else {
+    for (const module of report.modules) {
+      lines.push(`  - ${module.module} v${module.version} [${module.status}]`);
+      lines.push(`      capabilities: ${module.capabilities.join(", ")} | entidades: ${module.entities}`);
+    }
+  }
+  lines.push("");
+
   return lines.join("\n");
 }
 
@@ -177,5 +219,6 @@ const isMain = process.argv[1] && import.meta.url === pathToFileURL(process.argv
 if (isMain) {
   const contract = loadOniaCoreContract();
   const adapters = loadAdapters(contract);
-  process.stdout.write(`${renderReport(buildCoreReport(contract, adapters))}\n`);
+  const modules = loadModules();
+  process.stdout.write(`${renderReport(buildCoreReport(contract, adapters, modules))}\n`);
 }
