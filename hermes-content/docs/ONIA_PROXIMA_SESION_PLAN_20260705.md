@@ -222,9 +222,13 @@ Infra + borrado en DB de producción. **Requiere SSH + OK humano explícito**
 (producción + borrado irreversible). Fusiona saneamiento Fase 1 pendiente +
 PENDIENTES A4 "PENDIENTE MENOR limpiar ~61 tareas" + A5 cola.
 
-- Código Fase 1 ya hecho (commit `c9f528af`): `briefings/daily/route.ts` y
-  `hygiene/daily/route.ts` normalizados; nuevo endpoint protegido
+- Código Fase 1: el fix de `briefings/daily/route.ts` YA está en `main` (commit
+  `3d87f093`, otra sesión: `basePlanTitle` + dedup por título base). Lo que falta
+  para el cleanup está en **PR #12** (rama `claude/dreamy-cartwright-dda93b`,
+  rebasada sobre main, aditivo, CI verde): dedup de `hygiene/daily/route.ts` +
+  helpers en `onia-center-store.ts` + nuevo endpoint protegido
   `api/onia-center/maintenance/route.ts` (`action:"cleanup_generated_tasks"`).
+  → Mergear PR #12 antes del deploy.
 - Deploy por tarball al VPS 187.77.16.63 (Easypanel), llave
   `~/.ssh/onia_hermes_vps_ed25519`: empaquetar web-factory/ →
   `/opt/onia-center-src/web-factory`, rebuild `ONIA_STANDALONE_BUILD=true`,
