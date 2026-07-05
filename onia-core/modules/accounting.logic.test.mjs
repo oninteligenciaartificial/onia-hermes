@@ -11,15 +11,18 @@ import {
   accountBalance,
   addDays,
   assertBalanced,
+  balanceSheet,
   computeIt,
   computeIue,
   computeIva,
   fiscalYearEnd,
+  incomeStatement,
   isBalanced,
   iueDueDate,
   ivaOfRecord,
   ledgerByAccount,
   requiresBankization,
+  subsidiaryLedger,
   sumDebitCredit,
   taxDueDate,
   trialBalance,
@@ -70,6 +73,61 @@ describe("libro mayor y balance de comprobacion", () => {
     assert.equal(tb.totalCredit, 1130);
     assert.equal(tb.balanced, true);
     assert.equal(tb.rows.length, 3);
+  });
+});
+
+describe("libro auxiliar (libro menor) por partner", () => {
+  const cxc = [
+    { accountCode: "1.1.3", debit: 500, credit: 0, partnerId: "cli-1" },
+    { accountCode: "1.1.3", debit: 300, credit: 0, partnerId: "cli-2" },
+    { accountCode: "1.1.3", debit: 0, credit: 200, partnerId: "cli-1" },
+    { accountCode: "1.1.3", debit: 100, credit: 0 },
+  ];
+
+  it("agrupa por cliente y deja lo no asignado aparte", () => {
+    const aux = subsidiaryLedger(cxc, { accountCode: "1.1.3", by: "partnerId" });
+    assert.deepEqual(aux["cli-1"], { debit: 500, credit: 200, balance: 300 });
+    assert.deepEqual(aux["cli-2"], { debit: 300, credit: 0, balance: 300 });
+    assert.equal(aux["sin_asignar"].balance, 100);
+  });
+});
+
+describe("estados financieros", () => {
+  // Mes completo y cuadrado: apertura + una venta + un gasto.
+  const accounts = {
+    "1.1.1": { accountType: "activo" }, // Caja
+    "2.1.3": { accountType: "pasivo" }, // IVA debito fiscal
+    "3.1.1": { accountType: "patrimonio" }, // Capital
+    "4.1.1": { accountType: "ingreso" }, // Ventas
+    "5.1.1": { accountType: "gasto" }, // Alquiler
+  };
+  const lines = [
+    { accountCode: "1.1.1", debit: 2000, credit: 0 },
+    { accountCode: "3.1.1", debit: 0, credit: 2000 },
+    { accountCode: "1.1.1", debit: 1130, credit: 0 },
+    { accountCode: "4.1.1", debit: 0, credit: 1000 },
+    { accountCode: "2.1.3", debit: 0, credit: 130 },
+    { accountCode: "5.1.1", debit: 500, credit: 0 },
+    { accountCode: "1.1.1", debit: 0, credit: 500 },
+  ];
+
+  it("estado de resultados: ingresos - gastos = resultado", () => {
+    assert.deepEqual(incomeStatement(lines, accounts), {
+      ingresos: 1000,
+      gastos: 500,
+      costos: 0,
+      resultado: 500,
+    });
+  });
+
+  it("balance general cuadra: activo = pasivo + patrimonio + resultado", () => {
+    const bs = balanceSheet(lines, accounts);
+    assert.equal(bs.activo, 2630);
+    assert.equal(bs.pasivo, 130);
+    assert.equal(bs.patrimonio, 2000);
+    assert.equal(bs.resultado, 500);
+    assert.equal(bs.patrimonioTotal, 2500);
+    assert.equal(bs.balanced, true);
   });
 });
 

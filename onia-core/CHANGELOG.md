@@ -15,6 +15,12 @@
   configurable; NO es asesoria fiscal). + `accounting.schema.sql` (7 tablas).
 - Validador: `providesCapabilities` no puede chocar con una capability del core;
   cada capability activada O provista tiene al menos una entidad. +3 tests.
+- `accounting.logic.mjs` (funciones puras, referencia canonica): doble partida
+  (cuadre debe=haber), libro mayor, balance de comprobacion, libro auxiliar por
+  partner (libro menor), estado de resultados y balance general (cuadran por
+  construccion), IVA (debito/credito/saldo a favor), IT, IUE, bancarizacion,
+  vencimiento por digito NIT y cierre de gestion por sector. 18 tests enlazados al
+  bolivianConfig real; alicuotas por parametro. No es asesoria fiscal.
 
 ## modules/knowledge 0.1.0 — 2026-07-05 (base de conocimiento)
 

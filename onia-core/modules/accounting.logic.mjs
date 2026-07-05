@@ -90,6 +90,96 @@ export function trialBalance(lines = []) {
   return { rows, totalDebit, totalCredit, balanced: totalDebit === totalCredit };
 }
 
+/**
+ * Libro auxiliar (libro menor): agrupa las lineas por un campo (partnerId por
+ * defecto: mayor por cliente/proveedor), opcionalmente filtrando por cuenta.
+ * Devuelve { clave: { debit, credit, balance } }.
+ */
+export function subsidiaryLedger(lines = [], { accountCode, by = "partnerId" } = {}) {
+  const scoped = accountCode ? lines.filter((line) => line?.accountCode === accountCode) : lines;
+  const auxiliary = {};
+  for (const line of scoped) {
+    const key = line?.[by] ?? "sin_asignar";
+    if (!auxiliary[key]) {
+      auxiliary[key] = { debit: 0, credit: 0, balance: 0 };
+    }
+    auxiliary[key].debit += Number(line?.debit ?? 0);
+    auxiliary[key].credit += Number(line?.credit ?? 0);
+  }
+  for (const key of Object.keys(auxiliary)) {
+    const entry = auxiliary[key];
+    entry.debit = round2(entry.debit);
+    entry.credit = round2(entry.credit);
+    entry.balance = round2(entry.debit - entry.credit);
+  }
+  return auxiliary;
+}
+
+// --- Estados financieros ----------------------------------------------------
+
+/**
+ * Estado de resultados. `accounts` mapea code -> { accountType }. Ingresos por
+ * (haber - debe), gastos/costos por (debe - haber). resultado = ingresos -
+ * gastos - costos.
+ */
+export function incomeStatement(lines = [], accounts = {}) {
+  const ledger = ledgerByAccount(lines);
+  let ingresos = 0;
+  let gastos = 0;
+  let costos = 0;
+  for (const [code, entry] of Object.entries(ledger)) {
+    const type = accounts[code]?.accountType;
+    const net = entry.debit - entry.credit;
+    if (type === "ingreso") {
+      ingresos += -net;
+    } else if (type === "gasto") {
+      gastos += net;
+    } else if (type === "costo") {
+      costos += net;
+    }
+  }
+  ingresos = round2(ingresos);
+  gastos = round2(gastos);
+  costos = round2(costos);
+  return { ingresos, gastos, costos, resultado: round2(ingresos - gastos - costos) };
+}
+
+/**
+ * Balance general (estado de situacion patrimonial). Activo por (debe - haber);
+ * pasivo y patrimonio por (haber - debe). El resultado del ejercicio suma al
+ * patrimonio. balanced verifica activo = pasivo + patrimonio + resultado.
+ */
+export function balanceSheet(lines = [], accounts = {}) {
+  const ledger = ledgerByAccount(lines);
+  const { resultado } = incomeStatement(lines, accounts);
+  let activo = 0;
+  let pasivo = 0;
+  let patrimonio = 0;
+  for (const [code, entry] of Object.entries(ledger)) {
+    const type = accounts[code]?.accountType;
+    const net = entry.debit - entry.credit;
+    if (type === "activo") {
+      activo += net;
+    } else if (type === "pasivo") {
+      pasivo += -net;
+    } else if (type === "patrimonio") {
+      patrimonio += -net;
+    }
+  }
+  activo = round2(activo);
+  pasivo = round2(pasivo);
+  patrimonio = round2(patrimonio);
+  const patrimonioTotal = round2(patrimonio + resultado);
+  return {
+    activo,
+    pasivo,
+    patrimonio,
+    resultado,
+    patrimonioTotal,
+    balanced: activo === round2(pasivo + patrimonioTotal),
+  };
+}
+
 // --- Impuestos Bolivia ------------------------------------------------------
 
 /** IVA contenido en un registro RCV (usa ivaAmount si viene, si no amount*rate). */
