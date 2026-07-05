@@ -122,7 +122,7 @@ export function buildCoreReport(contract, adapters = [], modules = []) {
     module: module.module,
     version: module.version,
     status: module.status,
-    capabilities: module.activatesCapabilities ?? [],
+    capabilities: [...(module.activatesCapabilities ?? []), ...(module.providesCapabilities ?? [])],
     entities: module.entities?.length ?? 0,
   }));
 

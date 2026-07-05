@@ -102,6 +102,47 @@ describe("knowledge module", () => {
   });
 });
 
+describe("accounting module (Bolivia)", () => {
+  const accounting = getModule(modules, "accounting");
+
+  it("provides its own capabilities instead of activating core ones", () => {
+    assert.ok(accounting, "accounting module present");
+    assert.deepEqual(accounting.activatesCapabilities, []);
+    assert.deepEqual(accounting.providesCapabilities, ["accounting", "tax_bolivia"]);
+    const coreCapabilityIds = new Set(contract.capabilities.map((capability) => capability.id));
+    for (const capabilityId of accounting.providesCapabilities) {
+      assert.ok(!coreCapabilityIds.has(capabilityId), `${capabilityId} must not be a core capability`);
+    }
+  });
+
+  it("has the double-entry, ledger and tax entities", () => {
+    const ids = accounting.entities.map((entity) => entity.id);
+    for (const id of [
+      "account",
+      "fiscal_period",
+      "journal_entry",
+      "journal_entry_line",
+      "tax_rate",
+      "tax_declaration",
+      "rcv_record",
+    ]) {
+      assert.ok(ids.includes(id), `has ${id}`);
+    }
+  });
+
+  it("encodes Bolivian tax config (IVA/IT/IUE) and NIT due days", () => {
+    const config = accounting.bolivianConfig;
+    assert.ok(config, "bolivianConfig present");
+    assert.equal(config.currency, "BOB");
+    const byCode = new Map(config.taxes.map((tax) => [tax.code, tax]));
+    assert.equal(byCode.get("IVA").rate, 0.13);
+    assert.equal(byCode.get("IT").rate, 0.03);
+    assert.equal(byCode.get("IUE").rate, 0.25);
+    assert.equal(config.nitDueDay["0"], 13);
+    assert.equal(config.nitDueDay["9"], 22);
+  });
+});
+
 describe("modules validator integration", () => {
   it("modules pass validate-modules.mjs (exit 0)", () => {
     const validatePath = fileURLToPath(new URL("./validate-modules.mjs", import.meta.url));

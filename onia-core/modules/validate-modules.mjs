@@ -47,12 +47,16 @@ for (const module of modules) {
   assert(module.installInProductRepos === false, `${label} must keep installInProductRepos false`);
   assert(module.purpose, `${label} needs a purpose`);
 
-  // Un modulo solo activa capabilities de capa modulo del core.
+  // Un modulo puede ACTIVAR capabilities de capa modulo del core (que llena) y/o
+  // PROVEER capabilities nuevas que el core deja fuera a proposito (ej: contabilidad,
+  // fiscal). Las provistas NO deben chocar con una capability del core.
+  const activatesCapabilities = module.activatesCapabilities ?? [];
+  const providesCapabilities = module.providesCapabilities ?? [];
   assert(
-    Array.isArray(module.activatesCapabilities) && module.activatesCapabilities.length > 0,
-    `${label} must activate at least one capability`,
+    activatesCapabilities.length + providesCapabilities.length > 0,
+    `${label} must activate or provide at least one capability`,
   );
-  for (const capabilityId of module.activatesCapabilities ?? []) {
+  for (const capabilityId of activatesCapabilities) {
     const capability = capabilityById.get(capabilityId);
     assert(capability, `${label} activates missing capability ${capabilityId}`);
     if (capability) {
@@ -61,6 +65,13 @@ for (const module of modules) {
         `${label} activates ${capabilityId} which is layer ${capability.layer}, not a module layer`,
       );
     }
+  }
+  for (const capabilityId of providesCapabilities) {
+    assert(capabilityId, `${label} has an empty provided capability`);
+    assert(
+      !capabilityById.has(capabilityId),
+      `${label} provides ${capabilityId} which already exists as a core capability (use activatesCapabilities)`,
+    );
   }
 
   // Dependencias al core: entidades reales.
@@ -77,7 +88,7 @@ for (const module of modules) {
   }
 
   // Entidades del modulo.
-  const activated = new Set(module.activatesCapabilities ?? []);
+  const declared = new Set([...activatesCapabilities, ...providesCapabilities]);
   const seenEntityIds = new Set();
   const coveredCapabilities = new Set();
   assert(Array.isArray(module.entities) && module.entities.length > 0, `${label} must define entities`);
@@ -97,15 +108,15 @@ for (const module of modules) {
       `${label} entity ${entity.id} must be tenant-scoped or explicitly root`,
     );
     assert(
-      activated.has(entity.capabilityId),
-      `${label} entity ${entity.id} maps to capability ${entity.capabilityId} not activated by the module`,
+      declared.has(entity.capabilityId),
+      `${label} entity ${entity.id} maps to capability ${entity.capabilityId} not activated/provided by the module`,
     );
     coveredCapabilities.add(entity.capabilityId);
   }
 
-  // Cada capability activada tiene al menos una entidad que la implementa.
-  for (const capabilityId of activated) {
-    assert(coveredCapabilities.has(capabilityId), `${label} activates ${capabilityId} but no entity implements it`);
+  // Cada capability activada o provista tiene al menos una entidad que la implementa.
+  for (const capabilityId of declared) {
+    assert(coveredCapabilities.has(capabilityId), `${label} declares ${capabilityId} but no entity implements it`);
   }
 
   // Si el modulo declara SQL base, existe y define la tabla de cada entidad.

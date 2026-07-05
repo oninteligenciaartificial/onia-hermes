@@ -1,5 +1,21 @@
 # ONIA Core Changelog
 
+## modules/accounting 0.1.0 — 2026-07-05 (contabilidad Bolivia)
+
+- Nuevo modulo `accounting` (Bolivia) que PROVEE capabilities propias
+  (`accounting`, `tax_bolivia`): el core deja la contabilidad/fiscal afuera a
+  proposito, asi que el modulo las introduce. Nuevo campo `providesCapabilities`
+  (una capability nueva que el core no tiene) ademas de `activatesCapabilities`.
+- Ciclo contable de doble partida: `account` (plan de cuentas), `fiscal_period`
+  (gestion por sector), `journal_entry` + `journal_entry_line` (libro diario; el
+  mayor y el balance de comprobacion se DERIVAN de las lineas). Impuestos Bolivia:
+  `tax_rate`, `tax_declaration`, `rcv_record` (IVA 13% / IT 3% / IUE 25% / RC-IVA,
+  RCV, vencimiento por digito NIT). `bolivianConfig` con tasas, cierres de gestion
+  por sector, tabla de vencimientos NIT y umbral de bancarizacion (default
+  configurable; NO es asesoria fiscal). + `accounting.schema.sql` (7 tablas).
+- Validador: `providesCapabilities` no puede chocar con una capability del core;
+  cada capability activada O provista tiene al menos una entidad. +3 tests.
+
 ## modules/knowledge 0.1.0 — 2026-07-05 (base de conocimiento)
 
 - Nuevo modulo `knowledge` (vertical_extension) que activa la capability

@@ -1,0 +1,141 @@
+{
+  "module": "accounting",
+  "name": "ONIA Accounting Module (Bolivia)",
+  "version": "0.1.0",
+  "status": "draft",
+  "layer": "activatable_module",
+  "purpose": "Contabilidad de doble partida especializada en Bolivia como add-on activable SOBRE el core. El core NO lleva contabilidad (asi lo manda el gap audit); este modulo la PROVEE: plan de cuentas, asientos (libro diario), libro mayor derivado de las lineas, periodos/gestion, y los impuestos bolivianos (IVA, IT, IUE, RC-IVA) con RCV y vencimientos por digito NIT. La emision fiscal real (SIAT) sigue siendo external_gate del core; este modulo prepara y declara, no emite.",
+  "coreContract": "onia-core/contract.json",
+  "schemaFile": "onia-core/modules/accounting.schema.sql",
+  "installInProductRepos": false,
+  "activatesCapabilities": [],
+  "providesCapabilities": [
+    "accounting",
+    "tax_bolivia"
+  ],
+  "coreDependencies": [
+    { "coreEntityId": "organization", "as": "tenant root de cada entidad del modulo" },
+    { "coreEntityId": "member", "as": "journal_entry.createdBy (quien registra el asiento)" },
+    { "coreEntityId": "business_partner", "as": "journal_entry_line.partnerId y rcv_record (cliente/proveedor de la factura)" },
+    { "coreEntityId": "document", "as": "respaldo del asiento (factura, comprobante) via document core" },
+    { "coreEntityId": "approval_request", "as": "aprobacion de asientos de ajuste/cierre sensibles (external al modulo)" }
+  ],
+  "verticalTracks": [
+    "gestios-general",
+    "dentagest-clinical",
+    "proveegest-electrico"
+  ],
+  "entities": [
+    {
+      "id": "account",
+      "name": "Account",
+      "capabilityId": "accounting",
+      "table": "onia_accounting_accounts",
+      "purpose": "Cuenta del plan de cuentas (PCGA Bolivia). Codigo jerarquico, tipo y naturaleza (deudora/acreedora).",
+      "requiredFields": ["id", "organizationId", "code", "name", "accountType", "nature", "level", "active", "createdAt"],
+      "optionalFields": ["parentCode", "isPostable"],
+      "tenantScoped": true
+    },
+    {
+      "id": "fiscal_period",
+      "name": "FiscalPeriod",
+      "capabilityId": "accounting",
+      "table": "onia_accounting_fiscal_periods",
+      "purpose": "Gestion/periodo contable. En Bolivia el cierre de gestion depende del sector (marzo/junio/septiembre/diciembre). Un periodo cerrado no admite asientos nuevos.",
+      "requiredFields": ["id", "organizationId", "name", "startDate", "endDate", "status", "createdAt"],
+      "optionalFields": ["closedAt", "sector"],
+      "tenantScoped": true
+    },
+    {
+      "id": "journal_entry",
+      "name": "JournalEntry",
+      "capabilityId": "accounting",
+      "table": "onia_accounting_journal_entries",
+      "purpose": "Asiento contable (cabecera del libro diario): fecha, glosa, tipo (apertura/diario/ajuste/cierre) y estado. La suma debe = suma haber de sus lineas.",
+      "requiredFields": ["id", "organizationId", "entryNumber", "date", "glosa", "entryType", "status", "createdBy", "createdAt"],
+      "optionalFields": ["periodId", "sourceType", "sourceId", "postedAt"],
+      "tenantScoped": true
+    },
+    {
+      "id": "journal_entry_line",
+      "name": "JournalEntryLine",
+      "capabilityId": "accounting",
+      "table": "onia_accounting_journal_entry_lines",
+      "purpose": "Partida de un asiento: cuenta, debe y haber. El libro mayor se deriva agregando estas lineas por cuenta.",
+      "requiredFields": ["id", "organizationId", "entryId", "accountCode", "debit", "credit", "createdAt"],
+      "optionalFields": ["description", "partnerId", "costCenter"],
+      "tenantScoped": true
+    },
+    {
+      "id": "tax_rate",
+      "name": "TaxRate",
+      "capabilityId": "tax_bolivia",
+      "table": "onia_accounting_tax_rates",
+      "purpose": "Configuracion de un impuesto boliviano (IVA/IT/IUE/RC-IVA): alicuota y periodicidad. Editable por el contador porque la normativa cambia.",
+      "requiredFields": ["id", "organizationId", "taxCode", "name", "rate", "periodicity", "active", "createdAt"],
+      "optionalFields": ["legalBasis", "validFrom", "validTo"],
+      "tenantScoped": true
+    },
+    {
+      "id": "tax_declaration",
+      "name": "TaxDeclaration",
+      "capabilityId": "tax_bolivia",
+      "table": "onia_accounting_tax_declarations",
+      "purpose": "Declaracion jurada de un impuesto por periodo: base imponible, impuesto determinado, saldo y vencimiento (por digito NIT). Estado pendiente/presentada/pagada.",
+      "requiredFields": ["id", "organizationId", "taxCode", "period", "status", "dueDate", "taxBase", "taxAmount", "createdAt"],
+      "optionalFields": ["filedAt", "formNumber", "previousBalance", "netPayable"],
+      "tenantScoped": true
+    },
+    {
+      "id": "rcv_record",
+      "name": "RcvRecord",
+      "capabilityId": "tax_bolivia",
+      "table": "onia_accounting_rcv_records",
+      "purpose": "Registro de Compras y Ventas (RCV) que alimenta el IVA: factura, autorizacion/CUF, NIT, importe e IVA. kind = venta (debito fiscal) o compra (credito fiscal).",
+      "requiredFields": ["id", "organizationId", "kind", "period", "invoiceNumber", "nit", "date", "amount", "ivaAmount", "createdAt"],
+      "optionalFields": ["authorizationCode", "controlCode", "partnerId", "partnerName"],
+      "tenantScoped": true
+    }
+  ],
+  "bolivianConfig": {
+    "currency": "BOB",
+    "notFinancialAdvice": true,
+    "legalBasis": [
+      "Ley 843 (Reforma Tributaria)",
+      "DS 21530 (reglamento IVA)",
+      "DS 24051 (reglamento IUE)",
+      "DS 25619 (vencimientos por ultimo digito del NIT)",
+      "RND SIAT vigentes (facturacion en linea, RCV)"
+    ],
+    "taxes": [
+      { "code": "IVA", "name": "Impuesto al Valor Agregado", "rate": 0.13, "periodicity": "mensual", "note": "13% nominal; efectiva por dentro ~14.94% sobre precio con IVA incluido. IVA a pagar = debito fiscal (ventas) - credito fiscal (compras)." },
+      { "code": "IT", "name": "Impuesto a las Transacciones", "rate": 0.03, "periodicity": "mensual", "note": "3% sobre ingresos brutos; compensable con el IUE del ejercicio siguiente." },
+      { "code": "IUE", "name": "Impuesto sobre las Utilidades de las Empresas", "rate": 0.25, "periodicity": "anual", "note": "25% sobre la utilidad neta imponible; se paga hasta 120 dias despues del cierre de gestion." },
+      { "code": "RC_IVA", "name": "Regimen Complementario al IVA", "rate": 0.13, "periodicity": "variable", "note": "Dependientes/personas; normalmente fuera del alcance de la contabilidad de empresa." }
+    ],
+    "fiscalYearEndBySector": [
+      { "sector": "industriales_petroleras", "monthDay": "03-31" },
+      { "sector": "agropecuarias_agroindustriales_gomeras_castaneras", "monthDay": "06-30" },
+      { "sector": "mineras", "monthDay": "09-30" },
+      { "sector": "comerciales_servicios_bancos_seguros_otras", "monthDay": "12-31" }
+    ],
+    "nitDueDay": { "0": 13, "1": 14, "2": 15, "3": 16, "4": 17, "5": 18, "6": 19, "7": 20, "8": 21, "9": 22 },
+    "bancarizacionThresholdBob": 50000,
+    "accountTypes": ["activo", "pasivo", "patrimonio", "ingreso", "gasto", "costo", "orden"],
+    "notes": [
+      "Tasas y fechas son DEFAULT configurables por el contador; la normativa cambia (radar RND). Esto NO es asesoria fiscal.",
+      "El IVA se declara con el Libro de Compras y Ventas (RCV) en el portal SIAT.",
+      "La emision fiscal en linea (factura SIAT) es external_gate del core, no de este modulo: aca se prepara y declara, no se emite."
+    ]
+  },
+  "notes": [
+    "El modulo NO redefine entidades del core; agrega entidades propias con namespace onia_accounting_*.",
+    "El libro mayor y el balance de comprobacion se DERIVAN de journal_entry_line (no se guardan duplicados).",
+    "La emision fiscal real (SIAT) queda en el external_gate del core; este modulo prepara/declara."
+  ],
+  "gates": [
+    "installInProductRepos = false hasta plan de adopcion del modulo aprobado",
+    "SQL base del modulo (accounting.schema.sql) se traduce a migraciones del producto, no se aplica directo",
+    "Tasas/fechas se cargan como tax_rate configurables; no se hardcodean en el producto"
+  ]
+}

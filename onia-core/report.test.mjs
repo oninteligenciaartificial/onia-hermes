@@ -122,6 +122,11 @@ describe("module coverage in the report", () => {
     assert.ok(commerce.entities >= 12, "commerce entity count");
     assert.ok(commerce.capabilities.includes("catalog_inventory"));
     assert.ok(commerce.capabilities.includes("sales_cash"));
+
+    const accounting = report.modules.find((module) => module.module === "accounting");
+    assert.ok(accounting, "accounting present in report");
+    assert.ok(accounting.capabilities.includes("accounting"), "shows provided capability accounting");
+    assert.ok(accounting.capabilities.includes("tax_bolivia"), "shows provided capability tax_bolivia");
   });
 
   it("marks per-track module capabilities as covered or missing", () => {
