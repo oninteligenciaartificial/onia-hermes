@@ -16,7 +16,7 @@ vacíos.
 
 | Fase | Qué | Estado |
 |------|-----|--------|
-| 1 | Frenar spam de tareas (generador) | ✅ Código listo y verificado, commiteado. Falta DEPLOY + CLEANUP en prod. |
+| 1 | Frenar spam de tareas (generador) | ✅ HECHO EN PROD (2026-07-05): deploy de main + cleanup de 55 tareas + workflow reactivado. Ver §Fase 1 ejecutada. |
 | 2 | Quitar/ocultar módulos vacíos (Leads, Ideas, Audio) | ⏳ Pendiente. Mapa en §Fase 2. |
 | 3 | Rediseño visual + quitar rutina personal rígida | ⏳ Pendiente. §Fase 3. |
 
@@ -73,22 +73,26 @@ Verificado local (post-rebase): `tsc --noEmit` limpio.
   `gh workflow disable "ONIA Daily Project Hygiene"` (o desplegar el fix). El
   cleanup del maintenance ya borra las `[Higiene *]` acumuladas.
 
-### PENDIENTE Fase 1 (acciones en producción — requieren OK de Sergio)
-1. **Deploy** del código a VPS (ver §Deploy). Sin deploy, el generador sigue
-   apilando cada mañana.
-2. **Limpiar las 61 acumuladas** — tras deploy, ejecutar el endpoint de
-   mantenimiento (borra filas en la DB, irreversible):
-   ```bash
-   # desde el VPS (donde ONIA_CENTER_INTERNAL_API_KEY vive en el entorno del contenedor)
-   # dry-run primero:
-   curl -s -X POST https://center.onia.com.bo/api/onia-center/maintenance \
-     -H "Authorization: Bearer $ONIA_CENTER_INTERNAL_API_KEY" \
-     -H "Content-Type: application/json" \
-     -d '{"action":"cleanup_generated_tasks","commit":false}'
-   # si el conteo es razonable, commit:true para borrar.
-   ```
-3. (Opcional, mitigación inmediata sin deploy) Desactivar temporalmente el
-   workflow n8n `ONIADailyBrief001` para parar la sangría hasta el deploy.
+### Fase 1 ejecutada (2026-07-05, sesión infra)
+1. **Deploy** de `origin/main` (fbabfe17, incluye el fix 87b0bbb9 + saneamiento
+   b0d2747d) al VPS por rebuild standalone. Scripts commiteados en
+   `hermes-content/deploy/onia-center/`:
+   - `build-and-stage.sh` (build aislado, no toca prod) + `swap-and-verify.sh`
+     (backup + swap + restart + health-check con rollback). Paquete = `git archive`
+     code-only (excluye `data/references`, `public/nuvia`, `data/clients/nuvia.assets`
+     — assets estáticos reusados del runtime vivo). Subida con `scripts/vps-put.js`
+     (usar `MSYS_NO_PATHCONV=1` en Git Bash o las rutas remotas se corrompen).
+   - Backup del runtime previo: `/opt/onia-center/runtime-next.bak-deploy-20260705185430`.
+   - Verificado: login 200, `maintenance` y `briefings/daily` (dry-run) 200.
+2. **Cleanup**: 55 tareas auto-generadas borradas vía
+   `maintenance-cleanup.js` (`docker exec -e MCHECK_COMMIT=true -i onia-center node -`).
+   Dry-run posterior: 0 restantes. El fix desplegado evita que se regeneren.
+3. **Reactivado** `ONIADailyBrief001` (`publish_workflow`) → `active:true`. El cron
+   06:45 vuelve a correr con `commit:true` sin apilar prefijos.
+
+Re-ejecutar el cleanup a futuro (patrones `[Plan *`/`[Briefing diario *`/`[Higiene *`):
+`docker exec -i onia-center node - < /opt/onia-center/_deploy/maintenance-cleanup.js`
+(dry-run) y con `-e MCHECK_COMMIT=true` para borrar.
 
 ---
 
