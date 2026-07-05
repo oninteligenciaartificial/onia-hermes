@@ -216,5 +216,70 @@
     "ONIA Core beta contract approved",
     "Migration and rollback plan created in GestiOS",
     "Tenant safety tests added before adoption"
+  ],
+  "installedEntities": [
+    {
+      "coreEntityId": "work_item",
+      "table": "onia_core_work_items",
+      "migration": "add_onia_core_work_items",
+      "installedAt": "2026-07-05",
+      "notes": "Primera entidad core en prod. Tenant guard + dedupe + transiciones + generadores en lib/onia-core/. DDL via Supabase MCP (canonical)."
+    },
+    {
+      "coreEntityId": "comment",
+      "table": "onia_core_comments",
+      "migration": "add_onia_core_collab_approvals",
+      "installedAt": "2026-07-05",
+      "notes": "Visibilidad deny-by-default por Role base: STAFF/VIEWER no ven finanzas ni direccion."
+    },
+    {
+      "coreEntityId": "document",
+      "table": "onia_core_documents",
+      "migration": "add_onia_core_collab_approvals",
+      "installedAt": "2026-07-05",
+      "notes": "Solo metadata; storageRef path de bucket (rechaza URLs)."
+    },
+    {
+      "coreEntityId": "approval_request",
+      "table": "onia_core_approval_requests",
+      "migration": "add_onia_core_collab_approvals",
+      "installedAt": "2026-07-05",
+      "notes": "descuento/anulacion/compra/gasto; decide solo ADMIN+; dedupe de pendiente."
+    },
+    {
+      "coreEntityId": "role_assignment",
+      "table": "onia_core_role_assignments",
+      "migration": "add_onia_core_roles_schedule_views",
+      "installedAt": "2026-07-05",
+      "notes": "7 roles finos (dueno/gerente/vendedor/caja/compras/almacen/consulta); matriz deny-by-default; fallback desde Role base. Mapeo propuesto, sujeto a revision."
+    },
+    {
+      "coreEntityId": "schedule_event",
+      "table": "onia_core_schedule_events",
+      "migration": "add_onia_core_roles_schedule_views",
+      "installedAt": "2026-07-05",
+      "notes": "Seguimientos/vencimientos/recordatorios separados del dominio POS."
+    },
+    {
+      "coreEntityId": "saved_view",
+      "table": "onia_core_saved_views",
+      "migration": "add_onia_core_roles_schedule_views",
+      "installedAt": "2026-07-05",
+      "notes": "Vistas por rol; filtros validados (sin organizationId ni prototype pollution)."
+    },
+    {
+      "coreEntityId": "communication_channel",
+      "table": "onia_core_communication_channels",
+      "migration": "add_onia_core_channels_partners",
+      "installedAt": "2026-07-05",
+      "notes": "Canales con ruteo; base del intake unificado. WhatsApp sigue external_gate."
+    },
+    {
+      "coreEntityId": "business_partner",
+      "table": "onia_core_business_partners",
+      "migration": "add_onia_core_channels_partners",
+      "installedAt": "2026-07-05",
+      "notes": "Cliente empresa/proveedor/aliado/comprador B2B; Contact queda como persona asociada."
+    }
   ]
 }
