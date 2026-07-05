@@ -2,6 +2,7 @@
  * Tests de los modulos vendibles de ONIA Core (module contracts + validador).
  * Dependency-free (node:test). Run: node --test onia-core/modules/modules.test.mjs
  */
+import { readFileSync } from "node:fs";
 import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import assert from "node:assert/strict";
@@ -68,6 +69,15 @@ describe("commerce module", () => {
   it("looks up a module entity by id", () => {
     assert.equal(getModuleEntity(commerce, "quote")?.name, "Quote");
     assert.equal(getModuleEntity(commerce, "nope"), undefined);
+  });
+
+  it("declares a SQL schema that defines every entity table", () => {
+    assert.ok(commerce.schemaFile, "schemaFile present");
+    const schema = readFileSync(new URL(`../../${commerce.schemaFile}`, import.meta.url), "utf8");
+    for (const entity of commerce.entities) {
+      assert.ok(entity.table, `${entity.id} declares a table`);
+      assert.ok(schema.includes(entity.table), `schema defines ${entity.table}`);
+    }
   });
 });
 

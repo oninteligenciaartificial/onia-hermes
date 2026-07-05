@@ -9,11 +9,15 @@
   entidades `onia_commerce_*`), activa las capabilities de modulo
   `catalog_inventory` y `quotes_b2b` (hoy declaradas pero vacias en el core).
   Primer consumidor: ProveeGest / Bolivian Electric.
+- `commerce.schema.sql`: SQL base del modulo (tablas `onia_commerce_*` con tenant
+  scope, indices y uniques). Cada entidad declara su `table`; el validador exige
+  que el schema la defina (mismo patron blueprint->SQL que uso el core).
 - Validador `modules/validate-modules.mjs`: un modulo solo activa capabilities de
   capa modulo (nunca core ni external_gate), depende solo de entidades core
   reales, referencia tracks existentes, sus entidades son tenant-scoped y no
-  chocan con ids del core, y cada capability activada tiene al menos una entidad.
-  + 7 tests (`modules/modules.test.mjs`).
+  chocan con ids del core, cada capability activada tiene al menos una entidad, y
+  si declara `schemaFile` este define la tabla de cada entidad.
+  + 8 tests (`modules/modules.test.mjs`).
 
 ## 0.6.0 — 2026-07-05 (vertical packs formalizados)
 

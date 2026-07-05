@@ -10,11 +10,16 @@
  *
  * Run: node onia-core/modules/validate-modules.mjs
  */
+import { existsSync, readFileSync } from "node:fs";
+import { dirname, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
+
 import { loadOniaCoreContract } from "../index.mjs";
 import { loadModules } from "./index.mjs";
 
 const contract = loadOniaCoreContract();
 const modules = loadModules();
+const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..", "..");
 const errors = [];
 
 function assert(condition, message) {
@@ -101,6 +106,21 @@ for (const module of modules) {
   // Cada capability activada tiene al menos una entidad que la implementa.
   for (const capabilityId of activated) {
     assert(coveredCapabilities.has(capabilityId), `${label} activates ${capabilityId} but no entity implements it`);
+  }
+
+  // Si el modulo declara SQL base, existe y define la tabla de cada entidad.
+  if (module.schemaFile) {
+    const schemaPath = resolve(repoRoot, module.schemaFile);
+    assert(existsSync(schemaPath), `${label} schemaFile missing: ${module.schemaFile}`);
+    if (existsSync(schemaPath)) {
+      const schema = readFileSync(schemaPath, "utf8");
+      for (const entity of module.entities ?? []) {
+        assert(entity.table, `${label} entity ${entity.id} needs a table when schemaFile is set`);
+        if (entity.table) {
+          assert(schema.includes(entity.table), `${label} schema must define table ${entity.table}`);
+        }
+      }
+    }
   }
 }
 
