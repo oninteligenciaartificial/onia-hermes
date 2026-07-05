@@ -5,6 +5,30 @@ This file prevents duplicate work while two Codex/Hermes sessions run at the sam
 
 Use this as the source of truth before creating new files, skills, docs, or scripts.
 
+## Modelo de carriles (2026-07-05) — AUTORIDAD ACTUAL
+
+Reemplaza el split Session A / Session B de abajo (histórico, se conserva por
+referencia). Fuente única de asignación de trabajo y prompts de arranque:
+`hermes-content/docs/ONIA_PROXIMA_SESION_PLAN_20260705.md`, sección
+"Ejecución en paralelo — sesiones y carriles".
+
+7 carriles, dueño por carpeta/repo; una sesión por carril, no chocar:
+
+| Carril | Sesión | Dueño de archivos | Ítems |
+|--------|--------|-------------------|-------|
+| A | `onia-center-saneamiento` | onia-hermes `web-factory/apps/site/src/app/onia-center/**` + `api/onia-center/**` | P2→P3 |
+| B | `wf-landing-dentalgest` | onia-hermes landings `src/app`, `data/clients`, `templates`, `harvester` | P4, E* |
+| C | `propuestas-v2` | onia-hermes `hermes-content/propuestas` + `docs` + `skills` | P1 |
+| D | `dentagest-core-ui` | repo DentaGest (todo) | R2, R4 |
+| E | `gestios-core` | repo Gestios (todo) | R1→R5 |
+| F | `bolivian-electric-fase1` | repo Bolivian Electric (todo) | R3 |
+| G | `infra-deploy-n8n` | n8n / VPS / Supabase — SERIAL, un solo dueño | M1→M6 |
+
+Regla dura: 1 carril = 1 worktree = 1 rama = 1 carpeta. A/B/C avisan antes de
+tocar los 4 archivos raíz de web-factory (`next.config.ts`, `layout.tsx`,
+`globals.css`, `package.json`). Infra (G) = un solo dueño a la vez; nadie más
+toca n8n/VPS/DB mientras G trabaja.
+
 ## Ownership split
 
 ### Session A: Instagram, assets, dashboard, publishing
