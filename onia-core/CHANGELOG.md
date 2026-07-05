@@ -1,5 +1,20 @@
 # ONIA Core Changelog
 
+## modules/commerce 0.1.0 — 2026-07-05 (capa de modulos vendibles)
+
+- Nueva capa `onia-core/modules/`: add-ons vendibles activables SOBRE el core,
+  FUERA del contrato congelado (el core no es inventario/ventas — asi lo manda el
+  gap audit). No requiere entrada en contract.json ni mapeo en adapters.
+- `commerce.json`: catalogo + inventario multi-almacen + cotizaciones B2B (9
+  entidades `onia_commerce_*`), activa las capabilities de modulo
+  `catalog_inventory` y `quotes_b2b` (hoy declaradas pero vacias en el core).
+  Primer consumidor: ProveeGest / Bolivian Electric.
+- Validador `modules/validate-modules.mjs`: un modulo solo activa capabilities de
+  capa modulo (nunca core ni external_gate), depende solo de entidades core
+  reales, referencia tracks existentes, sus entidades son tenant-scoped y no
+  chocan con ids del core, y cada capability activada tiene al menos una entidad.
+  + 7 tests (`modules/modules.test.mjs`).
+
 ## 0.6.0 — 2026-07-05 (vertical packs formalizados)
 
 - Nueva estructura `verticalPacks`: un pack por track vertical con vocabulario

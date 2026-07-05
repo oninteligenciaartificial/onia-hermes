@@ -1,0 +1,82 @@
+/*
+ * Tests de los modulos vendibles de ONIA Core (module contracts + validador).
+ * Dependency-free (node:test). Run: node --test onia-core/modules/modules.test.mjs
+ */
+import { spawnSync } from "node:child_process";
+import { fileURLToPath } from "node:url";
+import assert from "node:assert/strict";
+import { describe, it } from "node:test";
+
+import { loadOniaCoreContract } from "../index.mjs";
+import { getModule, getModuleEntitiesByCapability, getModuleEntity, loadModules } from "./index.mjs";
+
+const contract = loadOniaCoreContract();
+const modules = loadModules();
+const commerce = getModule(modules, "commerce");
+
+describe("commerce module", () => {
+  it("is loaded as a non-installed activatable module", () => {
+    assert.ok(commerce, "commerce module present");
+    assert.equal(commerce.layer, "activatable_module");
+    assert.equal(commerce.installInProductRepos, false);
+    assert.match(commerce.version, /^\d+\.\d+\.\d+$/);
+    assert.ok(["draft", "alpha", "beta"].includes(commerce.status));
+  });
+
+  it("only activates module-layer core capabilities (never core or external_gate)", () => {
+    const capabilityById = new Map(contract.capabilities.map((capability) => [capability.id, capability]));
+    assert.ok(commerce.activatesCapabilities.length > 0);
+    for (const capabilityId of commerce.activatesCapabilities) {
+      const capability = capabilityById.get(capabilityId);
+      assert.ok(capability, `capability ${capabilityId} exists in core`);
+      assert.ok(
+        ["activatable_module", "vertical_extension"].includes(capability.layer),
+        `${capabilityId} is a module layer, got ${capability.layer}`,
+      );
+    }
+  });
+
+  it("depends only on real core entities", () => {
+    const coreEntityIds = new Set(contract.entities.map((entity) => entity.id));
+    for (const dependency of commerce.coreDependencies) {
+      assert.ok(coreEntityIds.has(dependency.coreEntityId), `core entity ${dependency.coreEntityId}`);
+    }
+  });
+
+  it("references only existing core vertical tracks", () => {
+    const trackIds = new Set(contract.verticalTracks.map((track) => track.id));
+    for (const trackId of commerce.verticalTracks) {
+      assert.ok(trackIds.has(trackId), `track ${trackId}`);
+    }
+  });
+
+  it("gives every activated capability at least one tenant-scoped entity with no core-id collision", () => {
+    const coreEntityIds = new Set(contract.entities.map((entity) => entity.id));
+    for (const capabilityId of commerce.activatesCapabilities) {
+      assert.ok(getModuleEntitiesByCapability(commerce, capabilityId).length > 0, `${capabilityId} has entities`);
+    }
+    for (const entity of commerce.entities) {
+      assert.ok(!coreEntityIds.has(entity.id), `${entity.id} must not collide with a core id`);
+      assert.ok(
+        entity.tenantScoped === false || entity.requiredFields.includes("organizationId"),
+        `${entity.id} must be tenant-scoped`,
+      );
+      assert.ok(commerce.activatesCapabilities.includes(entity.capabilityId), `${entity.id} capability activated`);
+    }
+  });
+
+  it("looks up a module entity by id", () => {
+    assert.equal(getModuleEntity(commerce, "quote")?.name, "Quote");
+    assert.equal(getModuleEntity(commerce, "nope"), undefined);
+  });
+});
+
+describe("modules validator integration", () => {
+  it("modules pass validate-modules.mjs (exit 0)", () => {
+    const validatePath = fileURLToPath(new URL("./validate-modules.mjs", import.meta.url));
+    const result = spawnSync(process.execPath, [validatePath], { encoding: "utf8" });
+
+    assert.equal(result.status, 0, result.stderr || result.stdout);
+    assert.match(result.stdout, /ONIA Core modules OK/);
+  });
+});
