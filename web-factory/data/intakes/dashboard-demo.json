@@ -1,0 +1,118 @@
+{
+  "project": { "slug": "dashboard-demo", "template": "dashboard", "owner": "ONIA" },
+  "business": {
+    "name": "ONIA Ops Demo",
+    "industry": "dashboard analytics interno",
+    "offer": "panel operativo con KPIs, graficos y reportes",
+    "tagline": "Panel operativo de ejemplo para la fabrica",
+    "description": "Dashboard demo interno con KPIs, graficos y tabla operativa. Datos de ejemplo, reemplazar por metricas reales aprobadas."
+  },
+  "brand": {
+    "logoText": "ON",
+    "colors": { "primary": "#4f46e5", "secondary": "#0f172a", "accent": "#22c55e", "bg": "#f8fafc", "fg": "#0f172a" },
+    "typography": { "heading": "Onest", "body": "Onest" },
+    "references": [
+      { "title": "Tremor", "url": "https://www.tremor.so", "type": "visual", "use": "jerarquia de KPI y graficos", "avoid": "copiar identidad" }
+    ]
+  },
+  "conversion": { "primaryCtaText": "Exportar reporte", "primaryCtaUrl": "#top" },
+  "seo": {
+    "title": "ONIA Ops Demo - Panel operativo",
+    "description": "Dashboard demo generado por ONIA Web Factory con KPIs, graficos y tabla."
+  },
+  "operations": { "domain": "demo.onia.local" },
+  "dashboard": {
+    "title": "Panel operativo",
+    "subtitle": "Resumen de actividad - datos de ejemplo",
+    "nav": ["Resumen", "Ventas", "Clientes", "Reportes", "Ajustes"],
+    "filters": ["7 dias", "30 dias", "90 dias"],
+    "kpis": [
+      { "label": "Ingresos", "value": "Bs. 48.2k", "delta": "12.4%", "trend": "up", "context": "vs periodo anterior" },
+      { "label": "Clientes nuevos", "value": "184", "delta": "8.1%", "trend": "up", "context": "vs periodo anterior" },
+      { "label": "Ticket promedio", "value": "Bs. 262", "delta": "1.9%", "trend": "down", "context": "vs periodo anterior" },
+      { "label": "Tasa de cierre", "value": "34%", "delta": "0.0%", "trend": "flat", "context": "estable" }
+    ],
+    "charts": [
+      {
+        "title": "Ingresos por mes",
+        "unit": "Bs. (miles)",
+        "type": "bar",
+        "points": [
+          { "label": "Ene", "value": 32 },
+          { "label": "Feb", "value": 38 },
+          { "label": "Mar", "value": 30 },
+          { "label": "Abr", "value": 41 },
+          { "label": "May", "value": 45 },
+          { "label": "Jun", "value": 48 }
+        ]
+      },
+      {
+        "title": "Ingresos vs meta",
+        "unit": "Bs. (miles)",
+        "type": "line",
+        "series": [
+          {
+            "name": "Real",
+            "points": [
+              { "label": "Ene", "value": 32 },
+              { "label": "Feb", "value": 38 },
+              { "label": "Mar", "value": 30 },
+              { "label": "Abr", "value": 41 },
+              { "label": "May", "value": 45 },
+              { "label": "Jun", "value": 48 }
+            ]
+          },
+          {
+            "name": "Meta",
+            "points": [
+              { "label": "Ene", "value": 35 },
+              { "label": "Feb", "value": 36 },
+              { "label": "Mar", "value": 38 },
+              { "label": "Abr", "value": 40 },
+              { "label": "May", "value": 43 },
+              { "label": "Jun", "value": 46 }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Ventas por categoria",
+        "unit": "% del total",
+        "type": "donut",
+        "points": [
+          { "label": "Serum", "value": 42 },
+          { "label": "Protector", "value": 28 },
+          { "label": "Limpieza", "value": 18 },
+          { "label": "Otros", "value": 12 }
+        ]
+      },
+      {
+        "title": "Tendencia de ingresos (14d)",
+        "unit": "Bs.",
+        "type": "sparkline",
+        "points": [
+          { "label": "1", "value": 210 },
+          { "label": "2", "value": 240 },
+          { "label": "3", "value": 228 },
+          { "label": "4", "value": 265 },
+          { "label": "5", "value": 250 },
+          { "label": "6", "value": 288 },
+          { "label": "7", "value": 302 },
+          { "label": "8", "value": 296 },
+          { "label": "9", "value": 320 },
+          { "label": "10", "value": 340 }
+        ]
+      }
+    ],
+    "table": {
+      "title": "Ultimos pedidos",
+      "columns": ["Pedido", "Cliente", "Monto", "Estado"],
+      "rows": [
+        ["#1042", "Comercial Andina", "Bs. 1.240", "Pagado"],
+        ["#1041", "Ferreteria Sur", "Bs. 860", "Pendiente"],
+        ["#1040", "Distribuidora Lux", "Bs. 2.310", "Pagado"],
+        ["#1039", "Clinica Vida", "Bs. 540", "Enviado"]
+      ]
+    }
+  }
+}

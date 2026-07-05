@@ -1,24 +1,31 @@
 {
-  "id": "2026-06-30-web-factory-daily-harvest",
-  "startedAt": "2026-06-30T19:18:26.995Z",
-  "finishedAt": "2026-06-30T19:21:57.957Z",
+  "id": "2026-07-03T21-11-35-052Z",
+  "startedAt": "2026-07-03T21:11:35.054Z",
+  "finishedAt": "2026-07-03T21:13:35.721Z",
   "policy": "Automated design reference harvest. Screenshots and closed-site structures are reference-only. Code reuse is limited to allowed-after-review repositories and compatible registry/docs code after review.",
   "steps": [
     {
       "name": "gallery",
-      "out": "data/references/design-sources/gallery-examples/2026-06-30T19-18-26-995Z-design-harvest.json",
-      "maxItems": 24,
-      "detailItems": 3
+      "out": "data/references/design-sources/gallery-examples/2026-07-03T21-11-35-052Z-design-harvest.json",
+      "sourceIds": [
+        "21st-landing-page-components",
+        "watermelon-ui",
+        "lapa-ninja",
+        "shadcn-ui",
+        "tabler-admin-dashboard"
+      ],
+      "maxItems": 6,
+      "detailItems": 2
+    },
+    {
+      "name": "code",
+      "codeIndexOut": "data/references/code-sources/2026-07-03T21-11-35-052Z-code-cache-index.json",
+      "codeExamplesOut": "data/references/code-sources/2026-07-03T21-11-35-052Z-component-code-reference-pack.json",
+      "maxFilesPerRepo": 12
     },
     {
       "name": "merge",
       "out": "data/references/design-sources/gallery-examples/latest-gallery-examples.json"
-    },
-    {
-      "name": "code",
-      "codeIndexOut": "data/references/code-sources/latest-code-cache-index.json",
-      "codeExamplesOut": "data/references/code-sources/latest-component-code-examples.json",
-      "maxFilesPerRepo": 24
     },
     {
       "name": "intelligence",
@@ -29,16 +36,11 @@
   "latestGallery": "data/references/design-sources/gallery-examples/latest-gallery-examples.json",
   "latestDesignIntelligence": "data/references/design-sources/latest-design-intelligence.json",
   "counts": {
-    "sources": 23,
-    "candidates": 381,
-    "detailedExamples": 90,
+    "sources": 26,
+    "candidates": 335,
+    "detailedExamples": 78,
     "errors": 0,
-    "intelligenceExamples": 90,
+    "intelligenceExamples": 78,
     "reusableCodeRepositories": 11
-  },
-  "notes": [
-    "The direct pnpm wrapper was blocked by the local pnpm-workspace allowBuilds placeholders, so the equivalent node harvester commands were run against the existing workspace install.",
-    "The fresh gallery checkpoint processed 4 source files and captured 52 candidates plus 9 detailed examples before 21st.dev returned HTTP 500.",
-    "The canonical latest outputs were finalized by merging the new checkpoint with the existing gallery bank, rebuilding code indexes, regenerating intelligence, and rerunning tests."
-  ]
+  }
 }

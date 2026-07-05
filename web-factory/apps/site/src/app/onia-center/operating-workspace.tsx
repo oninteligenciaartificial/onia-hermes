@@ -481,6 +481,14 @@ const scheduleCategoryIcons: Record<string, typeof Clock> = {
   sleep: Moon,
 };
 
+// El inicio "Hoy en ONIA" muestra solo bloques operativos. La rutina personal
+// rigida (levantarse/aseo, gym, novia, dormir, apagar) sigue disponible en la
+// pestana Calendario, pero no se mezcla con el arranque de trabajo del dia.
+const dailyOperationalCategories = new Set(["planning", "sales", "deep_work", "meetings", "admin"]);
+const operationalDailyBlocks = sergioStrictScheduleBlocks
+  .filter((block) => dailyOperationalCategories.has(block.category))
+  .slice(0, 6);
+
 const starterReviews: RuntimeReview[] = collabIngestionItems.map((item) => ({
   id: item.id,
   source: item.sourcePath,
@@ -2366,26 +2374,34 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
       <div className={`onia-live-metrics${isDailyWorkspace ? " is-focused" : ""}`}>
         {isDailyWorkspace ? (
           <>
+            {/* Tarea siempre visible: es el ancla operativa del dia. Las demas tarjetas
+                solo aparecen cuando su fuente real tiene datos, para no mostrar 0 vacios. */}
             <article>
               <span>Tareas pendientes</span>
               <strong>{summary.pendingTasks}</strong>
               <small>Lo que mueve entrega y ventas hoy</small>
             </article>
-            <article>
-              <span>Leads abiertos</span>
-              <strong>{summary.hotLeads}</strong>
-              <small>Oportunidades visibles para {roleLabel(selectedRole)}</small>
-            </article>
-            <article>
-              <span>Ideas para revisar</span>
-              <strong>{summary.ideasInbox}</strong>
-              <small>Referencias utiles, no ruido operativo</small>
-            </article>
-            <article>
-              <span>Audio/propuestas</span>
-              <strong>{summary.meetingNotes + summary.proposalLeads}</strong>
-              <small>Reuniones o leads en etapa propuesta</small>
-            </article>
+            {summary.hotLeads > 0 ? (
+              <article>
+                <span>Leads abiertos</span>
+                <strong>{summary.hotLeads}</strong>
+                <small>Oportunidades visibles para {roleLabel(selectedRole)}</small>
+              </article>
+            ) : null}
+            {summary.ideasInbox > 0 ? (
+              <article>
+                <span>Ideas para revisar</span>
+                <strong>{summary.ideasInbox}</strong>
+                <small>Referencias utiles, no ruido operativo</small>
+              </article>
+            ) : null}
+            {summary.meetingNotes + summary.proposalLeads > 0 ? (
+              <article>
+                <span>Audio/propuestas</span>
+                <strong>{summary.meetingNotes + summary.proposalLeads}</strong>
+                <small>Reuniones o leads en etapa propuesta</small>
+              </article>
+            ) : null}
           </>
         ) : (
           <>
@@ -3015,7 +3031,7 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
                   </div>
                 </div>
                 <div className="onia-calendar-timeline is-compact">
-                  {sergioStrictScheduleBlocks.slice(0, 7).map((block) => {
+                  {operationalDailyBlocks.map((block) => {
                     const CategoryIcon = scheduleCategoryIcons[block.category] ?? Clock;
                     return (
                       <div className={`onia-calendar-block is-${block.category}`} key={block.id}>

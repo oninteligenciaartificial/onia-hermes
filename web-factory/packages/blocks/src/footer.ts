@@ -1,13 +1,22 @@
 import { escapeAttribute, escapeHtml } from "./escape";
 import type { SiteClient } from "./types";
 
-export function renderFooter(client: SiteClient): string {
-  const socialLinks = [
-    ["Instagram", client.redes.ig],
-    ["Facebook", client.redes.fb],
-    ["LinkedIn", client.redes.linkedin],
-    ["X", client.redes.x],
-  ]
+export type FooterOptions = {
+  // Focus landing: drop social links (exits) and keep only conversion contact.
+  minimal?: boolean;
+};
+
+export function renderFooter(client: SiteClient, options: FooterOptions = {}): string {
+  const socialLinks = (
+    options.minimal
+      ? []
+      : [
+          ["Instagram", client.redes.ig],
+          ["Facebook", client.redes.fb],
+          ["LinkedIn", client.redes.linkedin],
+          ["X", client.redes.x],
+        ]
+  )
     .filter(([, url]) => Boolean(url))
     .map(
       ([label, url]) =>

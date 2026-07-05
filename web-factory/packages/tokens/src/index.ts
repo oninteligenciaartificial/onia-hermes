@@ -45,12 +45,56 @@ export function clientTokenVars(client: ClientTokenInput): Record<string, string
   };
 }
 
+/**
+ * Neutral dark-mode surface overrides. Only bg/fg and the direct surface vars
+ * are swapped; everything derived from --color-fg/--color-bg via color-mix
+ * (muted, border, input, muted-foreground) re-resolves automatically in the
+ * dark scope thanks to lazy var() substitution, and brand colors stay intact.
+ */
+export function clientDarkTokenVars(): Record<string, string> {
+  return {
+    "--color-bg": "#0c1013",
+    "--color-fg": "#e7e9ec",
+    "--background": "#0c1013",
+    "--foreground": "#e7e9ec",
+    "--card": "#161c22",
+    "--card-foreground": "#e7e9ec",
+    "--popover": "#161c22",
+    "--popover-foreground": "#e7e9ec",
+  };
+}
+
 export function clientTokenCss(client: ClientTokenInput, selector = ":root"): string {
   const declarations = Object.entries(clientTokenVars(client))
     .map(([name, value]) => `  ${name}: ${value};`)
     .join("\n");
+  const light = `${selector} {\n${declarations}\n}`;
 
-  return `${selector} {\n${declarations}\n}`;
+  // The dark variant is only emitted for the default :root scope. It follows the
+  // OS preference (unless the user forced light) and honors an explicit
+  // [data-theme="dark"] on <html> for a manual toggle.
+  if (selector !== ":root") {
+    return light;
+  }
+
+  const darkAuto = Object.entries(clientDarkTokenVars())
+    .map(([name, value]) => `    ${name}: ${value};`)
+    .join("\n");
+  const darkManual = Object.entries(clientDarkTokenVars())
+    .map(([name, value]) => `  ${name}: ${value};`)
+    .join("\n");
+
+  return `${light}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+${darkAuto}
+  }
+}
+
+[data-theme="dark"] {
+${darkManual}
+}`;
 }
 
 export function clientTokenStyle(client: ClientTokenInput): Record<string, string> {

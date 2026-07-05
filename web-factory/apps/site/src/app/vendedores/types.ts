@@ -93,6 +93,18 @@ export type PlaybookItem = {
   tone: Tone;
 };
 
+export type SalesDecision = {
+  id: string;
+  situation: string;
+  offer: string;
+};
+
+export type OpeningMessage = {
+  id: string;
+  audience: string;
+  message: string;
+};
+
 export type DailyAction = {
   id: string;
   time: string;

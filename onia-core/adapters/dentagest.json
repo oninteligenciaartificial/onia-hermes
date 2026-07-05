@@ -87,7 +87,7 @@
     {
       "coreEntityId": "business_partner",
       "existingModel": "none",
-      "status": "missing_optional",
+      "status": "installed",
       "notes": "Dental labs, suppliers and insurers can be partners. Patient stays a clinical domain record, never flattened into a partner."
     },
     {
@@ -129,7 +129,7 @@
     {
       "coreEntityId": "communication_channel",
       "existingModel": "ClinicSettings (whatsapp fields)",
-      "status": "partial",
+      "status": "installed",
       "notes": "ClinicSettings ya guarda el canal WhatsApp; falta registro general de correos/telefonos de la clinica con ruteo a recepcion/caja."
     }
   ],
@@ -196,8 +196,10 @@
     },
     {
       "capabilityId": "partners",
-      "status": "missing_optional",
-      "evidence": []
+      "status": "installed_partial",
+      "evidence": [
+        "OniaCoreBusinessPartner"
+      ]
     },
     {
       "capabilityId": "permissions",
@@ -230,9 +232,11 @@
     },
     {
       "capabilityId": "channels",
-      "status": "partial",
+      "status": "installed",
       "evidence": [
-        "ClinicSettings.whatsappPhoneNumberId"
+        "OniaCoreCommunicationChannel",
+        "/setup wizard",
+        "/api/onia-core/intake"
       ]
     }
   ],
@@ -291,6 +295,20 @@
       "migration": "20260703210000_add_onia_core_roles_schedule_views",
       "installedAt": "2026-07-03",
       "notes": "Vistas por rol fino; filtros validados (sin organizationId ni proto)."
+    },
+    {
+      "coreEntityId": "communication_channel",
+      "table": "onia_core_communication_channels",
+      "migration": "20260703230000_add_onia_core_channels_partners_onboarding",
+      "installedAt": "2026-07-03",
+      "notes": "Registro de canales con ruteo; poblado por el wizard /setup."
+    },
+    {
+      "coreEntityId": "business_partner",
+      "table": "onia_core_business_partners",
+      "migration": "20260703230000_add_onia_core_channels_partners_onboarding",
+      "installedAt": "2026-07-03",
+      "notes": "Labs/aseguradoras/proveedores; poblado por el wizard."
     }
   ]
 }

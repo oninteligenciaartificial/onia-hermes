@@ -1,0 +1,124 @@
+// Catalogo de cotizacion ONIA — fuente: Kit Comercial Interno (vendedora) + ONIA_CATALOGO_PRECIOS_2026.md
+// Comision = porcentaje fijo del PRIMER PAGO (una sola vez). Los pagos siguientes son de ONIA.
+
+export type QuoteKind = "oneoff" | "monthly";
+
+export type QuoteCategory = "saas" | "onboarding" | "web" | "care" | "automation" | "custom" | "addon";
+
+export interface QuoteComponent {
+  id: string;
+  label: string;
+  price: number; // Bs (precio cliente, piso de referencia)
+  kind: QuoteKind;
+  category: QuoteCategory;
+  commissionRate: number; // % del primer pago para la vendedora
+  perSeat?: boolean;
+  needsApproval?: boolean; // WhatsApp/Meta u otros: requiere validacion antes de prometer
+  note?: string;
+}
+
+export interface QuoteGroup {
+  id: QuoteCategory;
+  title: string;
+  hint: string;
+  components: QuoteComponent[];
+}
+
+export const quoteGroups: QuoteGroup[] = [
+  {
+    id: "saas",
+    title: "SaaS (DentalGest / Gesti-OS)",
+    hint: "Recurrente de ONIA. Comision de la vendedora: 35% del primer mes, una vez.",
+    components: [
+      { id: "dentalgest-basico", label: "DentalGest Basico", price: 320, kind: "monthly", category: "saas", commissionRate: 0.35 },
+      { id: "dentalgest-pro", label: "DentalGest Profesional", price: 750, kind: "monthly", category: "saas", commissionRate: 0.35 },
+      { id: "dentalgest-clinica", label: "DentalGest Clinica", price: 1500, kind: "monthly", category: "saas", commissionRate: 0.35 },
+      { id: "gestios-basico", label: "Gesti-OS Basico", price: 350, kind: "monthly", category: "saas", commissionRate: 0.35 },
+      { id: "gestios-crecer", label: "Gesti-OS Crecer", price: 530, kind: "monthly", category: "saas", commissionRate: 0.35 },
+      { id: "gestios-pro", label: "Gesti-OS Pro", price: 800, kind: "monthly", category: "saas", commissionRate: 0.35 },
+      { id: "gestios-empresarial", label: "Gesti-OS Empresarial", price: 1250, kind: "monthly", category: "saas", commissionRate: 0.35 },
+    ],
+  },
+  {
+    id: "onboarding",
+    title: "Onboarding / setup SaaS",
+    hint: "Configuracion, migracion ligera y capacitacion. Comision 10%.",
+    components: [
+      { id: "onboarding-dental", label: "Onboarding DentalGest (290 / 690 / 1.490 segun alcance)", price: 690, kind: "oneoff", category: "onboarding", commissionRate: 0.1, note: "Elegi el precio segun alcance: 290 basico, 690 medio, 1.490 completo." },
+    ],
+  },
+  {
+    id: "web",
+    title: "Paginas web y captacion",
+    hint: "Pago unico. Comision: Landing 10%, Web Profesional y Web Pro ONIA 12%.",
+    components: [
+      { id: "landing", label: "Landing de Captacion", price: 790, kind: "oneoff", category: "web", commissionRate: 0.1 },
+      { id: "web-profesional", label: "Web Profesional", price: 1500, kind: "oneoff", category: "web", commissionRate: 0.12 },
+      { id: "web-pro-onia", label: "Web Pro ONIA", price: 2900, kind: "oneoff", category: "web", commissionRate: 0.12 },
+    ],
+  },
+  {
+    id: "care",
+    title: "Cuidado Web (mensual)",
+    hint: "Mantenimiento vendido aparte. Comision 10% del primer mes.",
+    components: [
+      { id: "cuidado-basico", label: "Cuidado Web Basico", price: 190, kind: "monthly", category: "care", commissionRate: 0.1 },
+      { id: "cuidado-crecimiento", label: "Cuidado Web Crecimiento", price: 390, kind: "monthly", category: "care", commissionRate: 0.1 },
+      { id: "cuidado-pro", label: "Cuidado Web Pro", price: 690, kind: "monthly", category: "care", commissionRate: 0.1 },
+    ],
+  },
+  {
+    id: "automation",
+    title: "Automatizaciones y bots",
+    hint: "Setup unico. Comision 10%. WhatsApp requiere validacion Meta.",
+    components: [
+      { id: "n8n-simple", label: "Automatizacion simple n8n", price: 790, kind: "oneoff", category: "automation", commissionRate: 0.1 },
+      { id: "n8n-flujo", label: "Flujo de aprobacion n8n", price: 1200, kind: "oneoff", category: "automation", commissionRate: 0.1 },
+      { id: "bot-recordatorios", label: "Bot Telegram recordatorios", price: 690, kind: "oneoff", category: "automation", commissionRate: 0.1 },
+      { id: "bot-operativo", label: "Bot Telegram operativo", price: 790, kind: "oneoff", category: "automation", commissionRate: 0.1 },
+      { id: "bot-avanzado", label: "Bot Telegram avanzado", price: 1200, kind: "oneoff", category: "automation", commissionRate: 0.1 },
+      { id: "chatbot-whatsapp", label: "Chatbot WhatsApp conversacional (+ Meta)", price: 990, kind: "oneoff", category: "automation", commissionRate: 0.1, needsApproval: true, note: "Desde 990 setup + costos Meta. Requiere validacion tecnica antes de prometer." },
+    ],
+  },
+  {
+    id: "custom",
+    title: "Servicios a medida",
+    hint: "Requiere alcance escrito antes de dar precio. Comision 10%.",
+    components: [
+      { id: "portal-mini", label: "Portal o mini sistema (login, dashboard, BD)", price: 6500, kind: "oneoff", category: "custom", commissionRate: 0.1, note: "Desde 6.500. Cotizar por alcance real." },
+    ],
+  },
+  {
+    id: "addon",
+    title: "Add-ons",
+    hint: "Se venden despues del primer cierre. Terceros los paga el cliente.",
+    components: [
+      { id: "wa-operativo-dental-setup", label: "WhatsApp operativo DentalGest (instalacion + Meta)", price: 650, kind: "oneoff", category: "addon", commissionRate: 0.1, needsApproval: true, note: "650 inst. + 350/mes + costos Meta. Requiere aprobacion." },
+      { id: "wa-operativo-dental-mes", label: "WhatsApp operativo DentalGest (mensual)", price: 350, kind: "monthly", category: "addon", commissionRate: 0, needsApproval: true },
+      { id: "agenda-publica", label: "Agenda publica DentalGest", price: 150, kind: "monthly", category: "addon", commissionRate: 0.1 },
+      { id: "usuario-extra", label: "Usuario extra DentalGest", price: 70, kind: "monthly", category: "addon", commissionRate: 0.1 },
+      { id: "insumos-dental", label: "Insumos DentalGest", price: 80, kind: "monthly", category: "addon", commissionRate: 0.1 },
+      { id: "wa-gestios", label: "WhatsApp Gesti-OS (+ excedentes)", price: 280, kind: "monthly", category: "addon", commissionRate: 0.1, needsApproval: true },
+      { id: "qr-gestios", label: "QR / cobro Gesti-OS", price: 105, kind: "monthly", category: "addon", commissionRate: 0.1 },
+      { id: "ecommerce-gestios", label: "E-commerce Gesti-OS (PRO+)", price: 140, kind: "monthly", category: "addon", commissionRate: 0.1 },
+      { id: "crm-n8n", label: "CRM / formulario a n8n", price: 790, kind: "oneoff", category: "addon", commissionRate: 0.1 },
+      { id: "conexion-social", label: "Conexion canal social (IG / TikTok)", price: 690, kind: "oneoff", category: "addon", commissionRate: 0.1 },
+      { id: "integracion-extra", label: "Integracion extra entre sistemas", price: 1900, kind: "oneoff", category: "addon", commissionRate: 0.1, note: "Desde 1.900. Requiere diagnostico y alcance escrito." },
+    ],
+  },
+];
+
+// Ganchos gratis para abrir la venta (NO se cobran por ahora).
+export const freeHooks: string[] = [
+  "Auditoria Express: revision corta, 3 problemas + 3 acciones + siguiente oferta ONIA sugerida.",
+  "Diagnostico + Plan: sesion mas profunda, mapa del proceso y presupuesto recomendado.",
+];
+
+export const quoteRules: string[] = [
+  "Comision = solo el primer pago neto real y comprobado (primer mes, enganche, anticipo o setup). No es recurrente.",
+  "No improvisar precios. Descuentos en DentalGest / Gesti-OS requieren aprobacion de Sergio.",
+  "La vendedora lidera llamadas y seguimiento. Sergio entra en casos importantes o cierres complejos.",
+  "Prometer solo alcance confirmado. WhatsApp conversacional u operativo: sujeto a validacion Meta y costos de mensajeria.",
+  "Terceros los paga el cliente: dominio, hosting, pasarela, QR, Meta, IA, pauta, migracion grande.",
+  "Auditoria y diagnostico son gancho gratis por ahora. Videos IA / Higgsfield pausados como producto.",
+];

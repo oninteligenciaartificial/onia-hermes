@@ -17,6 +17,7 @@ import sys
 import time
 import urllib.request
 import urllib.error
+import urllib.parse
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
@@ -73,6 +74,21 @@ ACTIONABLE_VIDEO_STATES = {
 
 VIDEO_REMINDERS_MODE = os.environ.get("HERMES_VIDEO_REMINDERS_MODE", "quiet").strip().lower()
 HIGGSFIELD_WATCHER_MODE = os.environ.get("HERMES_HIGGSFIELD_WATCHER_MODE", "quiet").strip().lower()
+
+# ---------------------------------------------------------------------------
+# Bridge DentalGest (ONIA Core). El gateway habla con el producto por HTTP:
+# lectura via GET /api/onia-core/bridge/pending y alta de pendientes via
+# POST /api/onia-core/intake. Claves en /root/.hermes/.env del VPS
+# (runbook: hermes-content/docs/HERMES_PRODUCT_BRIDGE_2026.md):
+#   DENTALGEST_BRIDGE_URL    base del producto (default https://dentalgest.app)
+#   DENTALGEST_BRIDGE_SECRET mismo valor que ONIA_INTAKE_SECRET del producto
+#   DENTALGEST_ORG_ID        organizationId de la clinica que opera este bot
+# ---------------------------------------------------------------------------
+DENTALGEST_BRIDGE_URL = os.environ.get("DENTALGEST_BRIDGE_URL", "https://dentalgest.app").strip().rstrip("/")
+DENTALGEST_BRIDGE_SECRET = os.environ.get("DENTALGEST_BRIDGE_SECRET", "").strip()
+DENTALGEST_ORG_ID = os.environ.get("DENTALGEST_ORG_ID", "").strip()
+
+TELEGRAM_REPLY_MAX = 3500
 
 SERGIO_SCHEDULE_BLOCKS = [
     {
@@ -866,6 +882,8 @@ def _help() -> dict:
         "Modo novia",
         "Cierre Sergio",
         "/agendar Título | fecha hora-inicio-hora-fin | descripción",
+        "/dentalgest (pendientes de la clinica)",
+        "/tarea <texto> (crear pendiente en DentalGest)",
         "Estado Semana",
         "Plan Semana",
         "Plan Hoy",
@@ -1025,6 +1043,194 @@ def _agendar(payload: str) -> dict:
     }
 
 
+# ---------------------------------------------------------------------------
+# DentalGest bridge: /dentalgest (pendientes) y /tarea (crear pendiente).
+# ---------------------------------------------------------------------------
+
+
+def _clip_reply(reply: str) -> str:
+    if len(reply) <= TELEGRAM_REPLY_MAX:
+        return reply
+    return reply[: TELEGRAM_REPLY_MAX - 25].rstrip() + "\n[respuesta recortada]"
+
+
+def _dentalgest_missing_config() -> list[str]:
+    missing = []
+    if not DENTALGEST_BRIDGE_SECRET:
+        missing.append("DENTALGEST_BRIDGE_SECRET")
+    if not DENTALGEST_ORG_ID:
+        missing.append("DENTALGEST_ORG_ID")
+    return missing
+
+
+def _dentalgest_config_error(action: str, missing: list[str]) -> dict:
+    return {
+        "ok": False,
+        "action": action,
+        "telegram_reply": (
+            "DentalGest no esta conectado todavia.\n"
+            f"Faltan claves en /root/.hermes/.env del VPS: {', '.join(missing)}.\n"
+            "Runbook: hermes-content/docs/HERMES_PRODUCT_BRIDGE_2026.md"
+        ),
+    }
+
+
+def _dentalgest_request(path: str, method: str = "GET", payload: dict = None, timeout: int = 25) -> dict:
+    url = f"{DENTALGEST_BRIDGE_URL}{path}"
+    data = json.dumps(payload).encode("utf-8") if payload is not None else None
+    req = urllib.request.Request(
+        url,
+        data=data,
+        headers={
+            "Content-Type": "application/json",
+            "x-intake-secret": DENTALGEST_BRIDGE_SECRET,
+        },
+        method=method,
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=timeout) as resp:
+            body = resp.read().decode("utf-8")
+        parsed = json.loads(body) if body else {}
+        if isinstance(parsed, dict):
+            return parsed
+        return {"ok": False, "error": "La respuesta del bridge no era un objeto JSON"}
+    except urllib.error.HTTPError as exc:
+        detail = ""
+        try:
+            raw = exc.read().decode("utf-8", "replace") if exc.fp else ""
+            parsed = json.loads(raw) if raw else {}
+            detail = str(parsed.get("error") or raw[:200] or exc)
+        except Exception:  # noqa: BLE001 - el detalle es best-effort
+            detail = str(exc)
+        return {"ok": False, "http_status": exc.code, "error": f"HTTP {exc.code}: {detail}"}
+    except Exception as exc:  # noqa: BLE001 - transporte caido debe llegar amable a Telegram
+        return {"ok": False, "error": str(exc)}
+
+
+def _format_bridge_due(iso: str) -> str:
+    if not iso:
+        return "sin fecha"
+    try:
+        due = datetime.fromisoformat(str(iso).replace("Z", "+00:00"))
+    except ValueError:
+        return str(iso)[:16]
+    if LAPAZ_TZ is not None and due.tzinfo is not None:
+        due = due.astimezone(LAPAZ_TZ)
+    return due.strftime("%d/%m %H:%M")
+
+
+def _format_dentalgest_pending(data: dict) -> str:
+    counts = data.get("counts") or {}
+    items = data.get("items") or []
+    lines = [
+        "DentalGest - pendientes:",
+        (
+            f"Abiertos: {counts.get('open', 0)} | "
+            f"Vencidos: {counts.get('overdue', 0)} | "
+            f"Aprobaciones pendientes: {counts.get('pendingApprovals', 0)}"
+        ),
+        "",
+    ]
+    if not items:
+        lines.append("No hay pendientes abiertos. Todo al dia.")
+    else:
+        for idx, item in enumerate(items[:10], start=1):
+            flag = " [VENCIDO]" if item.get("overdue") else ""
+            owner = item.get("owner") or "sin asignar"
+            lines.append(f"{idx}. {item.get('title') or '(sin titulo)'}{flag}")
+            lines.append(
+                f"   Resp: {owner} | Prioridad: {item.get('priority') or 'normal'} | "
+                f"Vence: {_format_bridge_due(item.get('dueAt'))}"
+            )
+    lines.extend(["", "Crear pendiente: /tarea <texto>"])
+    return _clip_reply("\n".join(lines))
+
+
+def _dentalgest_pending(subcommand: str = "") -> dict:
+    subcommand = (subcommand or "").strip().lower()
+    if subcommand not in ("", "pendientes"):
+        return {
+            "ok": False,
+            "action": "dentalgest_pending",
+            "telegram_reply": (
+                f"No reconozco '/dentalgest {subcommand}'.\n"
+                "Comandos DentalGest:\n"
+                "/dentalgest - pendientes de la clinica (alias: /dentalgest pendientes)\n"
+                "/tarea <texto> - crear un pendiente"
+            ),
+        }
+    missing = _dentalgest_missing_config()
+    if missing:
+        return _dentalgest_config_error("dentalgest_pending", missing)
+    query = urllib.parse.urlencode({"organizationId": DENTALGEST_ORG_ID})
+    data = _dentalgest_request(f"/api/onia-core/bridge/pending?{query}")
+    if not data.get("ok"):
+        return {
+            "ok": False,
+            "action": "dentalgest_pending",
+            "telegram_reply": (
+                "No pude leer los pendientes de DentalGest.\n"
+                f"Detalle: {data.get('error', 'sin detalle')}\n"
+                "Revisa que el producto este arriba y que DENTALGEST_BRIDGE_SECRET "
+                "coincida con ONIA_INTAKE_SECRET del producto."
+            ),
+            "result": data,
+        }
+    return {
+        "ok": True,
+        "action": "dentalgest_pending",
+        "telegram_reply": _format_dentalgest_pending(data),
+        "counts": data.get("counts"),
+    }
+
+
+def _dentalgest_create_task(text: str) -> dict:
+    text = (text or "").strip()
+    if not text:
+        return {
+            "ok": False,
+            "action": "dentalgest_create_task",
+            "telegram_reply": (
+                "Formato: /tarea <texto del pendiente>\n"
+                "Ejemplo: /tarea Llamar al laboratorio por la protesis de Maria"
+            ),
+        }
+    missing = _dentalgest_missing_config()
+    if missing:
+        return _dentalgest_config_error("dentalgest_create_task", missing)
+    payload = {
+        "organizationId": DENTALGEST_ORG_ID,
+        "channel": "phone_walkin",
+        "message": text,
+        "contact": {"name": "Sergio via Telegram"},
+    }
+    data = _dentalgest_request("/api/onia-core/intake", method="POST", payload=payload, timeout=30)
+    if not data.get("ok"):
+        return {
+            "ok": False,
+            "action": "dentalgest_create_task",
+            "telegram_reply": (
+                "No pude crear el pendiente en DentalGest.\n"
+                f"Detalle: {data.get('error', 'sin detalle')}\n"
+                "El texto no se perdio: reintenta con /tarea o carga el pendiente en el panel."
+            ),
+            "result": data,
+        }
+    title = data.get("title") or f"solicitud_manual: {text[:80]}"
+    owner = data.get("ownerName") or "sin asignar"
+    reply = f"Pendiente creado: {title} → {owner}"
+    if data.get("deduped"):
+        reply = (
+            "Ya habia un pendiente abierto de este contacto; sume el mensaje ahi.\n" + reply
+        )
+    return {
+        "ok": True,
+        "action": "dentalgest_create_task",
+        "telegram_reply": _clip_reply(reply),
+        "result": data,
+    }
+
+
 def handle_telegram(message: str) -> dict:
     normalized = _normalize(message)
     lower = normalized.lower()
@@ -1034,6 +1240,16 @@ def handle_telegram(message: str) -> dict:
     if lower.startswith("/agendar") or lower.startswith("agendar "):
         payload = re.sub(r"^/?agendar\s*", "", normalized, flags=re.IGNORECASE)
         return _dispatch(_agendar(payload), {"message": normalized[:500]})
+
+    # Bridge DentalGest: /tarea crea pendiente, /dentalgest lista pendientes.
+    # Acepta el sufijo @bot que Telegram agrega en grupos.
+    bridge_match = re.match(r"^/(tarea|dentalgest)(?:@\S+)?\s*(.*)$", normalized, flags=re.IGNORECASE)
+    if bridge_match:
+        bridge_cmd = bridge_match.group(1).lower()
+        bridge_payload = bridge_match.group(2).strip()
+        if bridge_cmd == "tarea":
+            return _dispatch(_dentalgest_create_task(bridge_payload), {"message": normalized[:500]})
+        return _dispatch(_dentalgest_pending(bridge_payload), {"message": normalized[:500]})
 
     if lower.startswith("plan sergio") or lower.startswith("agenda sergio") or lower.startswith("calendario sergio"):
         return _dispatch(_sergio_plan(), {"message": normalized[:500]})

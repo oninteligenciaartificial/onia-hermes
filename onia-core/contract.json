@@ -11,7 +11,8 @@
   "adapterFiles": [
     "onia-core/adapters/gestios.json",
     "onia-core/adapters/dentagest.json",
-    "onia-core/adapters/ganadero-os.json"
+    "onia-core/adapters/ganadero-os.json",
+    "onia-core/adapters/bolivian-electric.json"
   ],
   "policy": {
     "installInProductRepos": false,
@@ -1082,6 +1083,14 @@
       "repoPath": "C:\\dev\\proyectos\\Ganaderos-Os",
       "status": "hold_until_beta",
       "nextAction": "Mantener offline-first; adaptar ONIA Core solo con sync/local-first."
+    },
+    {
+      "projectId": "bolivian-electric",
+      "repoPath": "C:\\dev\\clientes\\Bolivian Electric",
+      "status": "installing",
+      "verticalTrackId": "proveegest-electrico",
+      "adapterFile": "onia-core/adapters/bolivian-electric.json",
+      "nextAction": "Sprint 1: onia_core_work_items (referencing) + tenant-guard en Kysely sobre el tronco reconciliado claude/onia-core-integration."
     }
   ],
   "releaseGates": [

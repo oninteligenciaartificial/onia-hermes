@@ -4,6 +4,36 @@ Estado: interno Sergio/ONIA.
 Fecha: 2026-06-25.
 Visibilidad: privado Sergio/ONIA. No enviar completo a Arthur.
 
+> Actualizacion 2026-07-03: decidido que Arthur entra SIN capital ONIA (ver
+> `ONIA_ARRANQUE_ARTHUR_60_DIAS_20260703.md`). Por lo tanto
+> `arthur_operating_capital_balance = 0`, no se abre linea de aporte recuperable
+> para Arthur, y el 100% de la recuperacion va al capital de Sergio (deuda
+> 2.414,49 primero, luego arranque 15.000,00). El split 70/30 y la seccion "Si
+> Arthur paga apps o gastos mensuales de ONIA" quedan inactivos hasta que exista
+> acuerdo escrito nuevo.
+>
+> Ademas se agrega un **skim de recuperacion del 10% como apartado contable**:
+> mientras `capital_pendiente > 0`, de cada ingreso neto de ONIA Servicios se
+> MARCA 10% como capital por recuperar ANTES del reparto, y el 40/50/10 se
+> calcula sobre el 90% restante. El apartado se apaga cuando el capital queda en
+> cero.
+>
+> Correccion clave (2026-07-03): el skim NO se paga en cada venta. Es un apartado
+> en el ledger; la plata solo pasa a Sergio a fin de mes y solo si la caja quedo
+> verde (Fondo cubrio herramientas + reserva). En caja roja/amarilla el skim se
+> queda como caja operativa de ONIA y la recuperacion se difiere. Esto respeta la
+> regla "primero ONIA vive": nunca se recupera capital en un mes que no cubrio su
+> operacion. Formula:
+>
+> ```text
+> skim_apartado = ingreso_neto * 0.10   (solo si capital_pendiente > 0)
+> base_repartible = ingreso_neto * 0.90
+> fondo_onia      = base_repartible * 0.40
+>
+> Si caja_verde:  recovery_total = skim_apartado_mes + max(0, fondo_excedente)
+> Si caja_roja:   recovery_total = 0   (skim queda como operacion, se difiere)
+> ```
+
 ## Veredicto
 
 Arthur puede aportar dinero a ONIA para pagar apps, IA, VPS o gastos

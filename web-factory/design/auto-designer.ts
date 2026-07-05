@@ -3,7 +3,7 @@ import path from "node:path";
 import { loadClientProfile, type ClientProfile } from "../data/schema";
 import { parseSlug } from "../generate/generate";
 
-export type WebFactoryTemplate = "landing" | "store";
+export type WebFactoryTemplate = "landing" | "store" | "dashboard" | "landing-focus";
 
 export type VerticalId =
   | "skincare-ecommerce"
@@ -11,6 +11,7 @@ export type VerticalId =
   | "clinic-health"
   | "engineering-industrial"
   | "saas-b2b"
+  | "dashboard-analytics"
   | "local-services";
 
 export type DesignDial = "low" | "medium" | "high";
@@ -582,6 +583,92 @@ const VERTICALS: VerticalDefinition[] = [
     motion: ["Motion medio para reveal de producto; siempre con reduced motion"],
   },
   {
+    id: "dashboard-analytics",
+    label: "Dashboard / analytics / internal tool",
+    keywords: [
+      "dashboard",
+      "panel",
+      "panel de control",
+      "panel administrativo",
+      "tablero",
+      "cuadro de mando",
+      "admin",
+      "administrador",
+      "backoffice",
+      "back office",
+      "kpi",
+      "kpis",
+      "metrica",
+      "metricas",
+      "indicador",
+      "indicadores",
+      "reporte",
+      "reportes",
+      "reporteria",
+      "analitica",
+      "analytics",
+      "business intelligence",
+      "bi",
+      "observabilidad",
+      "monitoreo",
+      "tiempo real",
+      "grafico",
+      "graficas",
+      "visualizacion",
+    ],
+    objective: "Mostrar el estado del negocio de un vistazo y permitir accion sobre los datos.",
+    visualDirection:
+      "Layout de datos: KPIs arriba, graficos y tablas con jerarquia clara, filtros y estados de carga/vacio cuidados.",
+    conversionThesis:
+      "Un panel funciona cuando el usuario entiende el estado en segundos y puede filtrar o accionar sin friccion; la densidad es una feature, no adorno.",
+    genericRisk:
+      "Cards de KPI sin jerarquia, graficos decorativos sin insight y tablas sin estados de carga/vacio ni acciones.",
+    trustTone: "operativo, denso y legible",
+    dials: { conversionDensity: "medium", visualDensity: "high", motionIntensity: "low" },
+    sections: [
+      {
+        id: "kpi-overview",
+        label: "Resumen de KPIs",
+        objective: "Comunicar el estado del negocio de un vistazo.",
+        pattern: "Fila de 4-6 KPIs con valor, delta y contexto de periodo.",
+        dataNeeded: ["metricas clave", "periodo", "comparativo"],
+        referenceCue: "Tremor/shadcn charts (Apache/MIT) para jerarquia de KPI; no copiar identidad.",
+      },
+      {
+        id: "charts-grid",
+        label: "Graficos",
+        objective: "Explicar tendencia y composicion, un insight por grafico.",
+        pattern: "Grid de 2-3 graficos con titulo, unidad y leyenda claras.",
+        dataNeeded: ["series", "dimensiones", "unidades"],
+        referenceCue: "Recharts/Tremor para tipos de grafico; revisar licencia antes de reusar codigo.",
+      },
+      {
+        id: "data-table",
+        label: "Tabla operativa",
+        objective: "Permitir detalle y accion sobre los datos.",
+        pattern: "Tabla con orden, filtro, paginacion, estados de carga/vacio y acciones por fila.",
+        dataNeeded: ["columnas", "filas", "acciones"],
+        referenceCue: "Tabler/shadcn data-table (MIT) para patrones de tabla accesible.",
+      },
+    ],
+    requiredMedia: [
+      "Datos o mock de metricas/series aprobado",
+      "Definicion de KPIs, unidades y periodos",
+    ],
+    optionalMedia: ["Logo/marca para el shell", "Iconografia de estados"],
+    layout: [
+      "KPIs arriba, luego graficos, luego tabla",
+      "Densidad alta con ritmo legible",
+      "Shell con navegacion lateral opcional",
+    ],
+    componentBehavior: [
+      "Filtros controlan toda la vista",
+      "Tablas con estados de carga y vacio explicitos",
+      "Acciones destructivas confirmadas",
+    ],
+    motion: ["Motion bajo; solo transiciones de estado y skeleton de carga, nada decorativo"],
+  },
+  {
     id: "local-services",
     label: "Local services / professional business",
     keywords: ["servicio", "empresa", "negocio", "local", "cotizacion", "agenda", "whatsapp", "bolivia"],
@@ -799,7 +886,7 @@ ${refRows || "| - | - | - | - | - | - | - |"}
 ${codeRows || "| - | - | - | - | - |"}
 
 Regla: usar estos archivos solo como referencia compatible despues de review, retokenizacion, accessibility check y responsive QA.
-
+${renderDashboardComponentMap(recipe)}
 ## Plan De Secciones
 
 | Seccion | Objetivo | Patron | Datos necesarios |
@@ -835,6 +922,45 @@ ${recipe.qaChecklist.map((item) => `- ${item}`).join("\n")}
 
 ## Warnings
 ${recipe.warnings.map((item) => `- ${item}`).join("\n") || "- Sin warnings."}
+`;
+}
+
+/**
+ * For dashboards, map each panel section to the concrete indexed component so the
+ * recipe is actionable (which Tremor/shadcn file to adapt per section). Only the
+ * dashboard-analytics vertical emits this block.
+ */
+function renderDashboardComponentMap(recipe: AutoDesignRecipe): string {
+  if (recipe.client.inferredVertical !== "dashboard-analytics") {
+    return "";
+  }
+
+  const mapping: Array<{ section: string; keywords: string[] }> = [
+    { section: "kpi-overview", keywords: ["metric", "kpi", "stat", "badge", "card"] },
+    { section: "charts-grid", keywords: ["chart", "area", "bar", "line"] },
+    { section: "data-table", keywords: ["table", "datagrid"] },
+  ];
+
+  const rows = mapping
+    .map(({ section, keywords }) => {
+      const match = recipe.codeReferences.find((code) =>
+        keywords.some((keyword) => normalizeText(code.file).includes(keyword)),
+      );
+      const suggestion = match
+        ? `${match.repo} - \`${match.file}\` (${match.license})`
+        : "pendiente de indexar (correr references:harvest para capturar el componente)";
+      return `| ${escapeMarkdownCell(section)} | ${escapeMarkdownCell(suggestion)} |`;
+    })
+    .join("\n");
+
+  return `
+## Componentes De Dashboard Sugeridos
+
+Mapeo de cada seccion del panel al componente concreto ya indexado (MIT). Usar solo como referencia tras review + retokenizacion, nunca copiar identidad.
+
+| Seccion | Componente sugerido |
+|---|---|
+${rows}
 `;
 }
 
@@ -1199,6 +1325,23 @@ function scoreCodeExample(
     score += 7;
   }
 
+  // Dashboards: Tremor (MIT) is the canonical chart/data library we indexed, so
+  // prefer it and its chart/table primitives for this vertical.
+  if (vertical.id === "dashboard-analytics") {
+    if (repoName.includes("tremor")) {
+      score += 12;
+    }
+    if (
+      file.includes("chart") ||
+      file.includes("table") ||
+      file.includes("metric") ||
+      file.includes("stat") ||
+      file.includes("kpi")
+    ) {
+      score += 6;
+    }
+  }
+
   for (const keyword of codeKeywordsForVertical(vertical.id)) {
     if (file.includes(keyword) || repoName.includes(keyword)) {
       score += 5;
@@ -1544,6 +1687,8 @@ function codeKeywordsForVertical(vertical: VerticalId): string[] {
       return ["timeline", "stats", "grid", "card", "case", "project", "accordion"];
     case "saas-b2b":
       return ["pricing", "feature", "hero", "dashboard", "tabs", "marquee", "accordion", "button"];
+    case "dashboard-analytics":
+      return ["chart", "area", "bar", "line", "list", "badge", "kpi", "metric", "card", "table", "dashboard", "stat", "grid"];
     default:
       return ["hero", "card", "button", "accordion", "form", "feature"];
   }

@@ -5,6 +5,11 @@ export {
   type LandingClient,
 } from "./landing";
 export {
+  renderLandingFocusBody,
+  renderLandingFocusCss,
+  renderLandingFocusDocument,
+} from "./landing-focus";
+export {
   renderStoreBody,
   renderStoreCss,
   renderStoreDocument,
@@ -13,3 +18,9 @@ export {
   type StoreClient,
   type StoreProduct,
 } from "./store";
+export {
+  renderDashboardBody,
+  renderDashboardCss,
+  renderDashboardDocument,
+  type DashboardClient,
+} from "./dashboard";

@@ -44,6 +44,35 @@ describe("generateSite", () => {
     expect(result.files).toContain(path.join(result.outputDir, "demo.design.md"));
   });
 
+  it("creates a focus landing without nav and with a single CTA path", async () => {
+    const rootDir = await mkdtemp(path.join(os.tmpdir(), "onia-web-factory-"));
+    await mkdir(path.join(rootDir, "data", "clients"), { recursive: true });
+
+    await writeFile(
+      path.join(rootDir, "data", "clients", "focus.json"),
+      JSON.stringify({
+        nombre: "Focus Co",
+        slug: "focus",
+        tagline: "Reserva en un clic",
+        descripcion: "Landing enfocada.",
+        cta: { texto: "Agendar", url: "https://wa.me/59170000000" },
+      }),
+      "utf8",
+    );
+
+    const result = await generateSite("focus", { rootDir, template: "landing-focus" });
+    const html = await readFile(path.join(result.outputDir, "index.html"), "utf8");
+
+    // No navigation and no secondary CTA = fewer exits.
+    expect(html).not.toContain("wf-nav");
+    expect(html).not.toContain("wf-button-secondary");
+    expect(html).not.toContain("Ver servicios");
+    // Minimal brand + a repeated final CTA driving the single action.
+    expect(html).toContain("wf-focus-brand");
+    expect(html).toContain("wf-final-cta");
+    expect((html.match(/wf-button-primary/g) ?? []).length).toBe(2);
+  });
+
   it("rejects unsafe slugs", () => {
     expect(() => parseSlug("../demo")).toThrow();
     expect(() => parseSlug("Demo")).toThrow();
@@ -73,6 +102,9 @@ describe("generateSite", () => {
             incluye: ["Caja", "Cable de carga"],
             especificaciones: [{ label: "Bateria", value: "24 horas" }],
             detalleImagenes: [{ src: "assets/audifonos-demo.webp", label: "Packshot" }],
+            destacadoMes: true,
+            descuentoPorcentaje: 15,
+            precioPromocional: 85,
           },
         ],
         heroVideo: "assets/store-hero.mp4",
@@ -91,7 +123,8 @@ describe("generateSite", () => {
 
     expect(html).toContain("ELIGE, CONSULTA Y COMPRA CON ASISTENCIA");
     expect(html).toContain("productos destacados del mes");
-    expect(html).toContain("10% de descuento");
+    expect(html).toContain("15% de descuento");
+    expect(html).toContain("store-product-discount");
     expect(html).toContain("store-cart-data");
     expect(html).toContain("data-store-hero-video");
     expect(html).toContain('preload="none"');
@@ -116,6 +149,8 @@ describe("generateSite", () => {
     expect(productHtml).toContain("tu carrito");
     expect(productHtml).toContain("Caracteristicas");
     expect(productHtml).toContain("Indicaciones");
+    expect(productHtml).toContain("precio - 15% off");
+    expect(productHtml).toContain("Bs. 85");
     expect(productHtml).toContain("Cable de carga");
     expect(productHtml).toContain("Bateria");
     expect(productHtml).toContain('href="../../site.css');
@@ -136,5 +171,121 @@ describe("generateSite", () => {
     expect(css).toContain("storeProductFloat");
     expect(css).toContain(".store-product-grid");
     expect(css).toContain(".store-subscribe");
+  });
+
+  it("creates a static dashboard site when requested", async () => {
+    const rootDir = await mkdtemp(path.join(os.tmpdir(), "onia-web-factory-"));
+    await mkdir(path.join(rootDir, "data", "clients"), { recursive: true });
+
+    await writeFile(
+      path.join(rootDir, "data", "clients", "panel.json"),
+      JSON.stringify({
+        nombre: "Panel Demo",
+        slug: "panel",
+        tagline: "Panel de control demo",
+        descripcion: "Dashboard de ejemplo.",
+        cta: { texto: "Exportar", url: "#top" },
+        dashboard: {
+          title: "Panel operativo",
+          subtitle: "Resumen de ejemplo",
+          nav: ["Resumen", "Ventas"],
+          filters: ["7 dias", "30 dias"],
+          kpis: [{ label: "Ingresos", value: "Bs. 48.2k", delta: "12%", trend: "up", context: "vs anterior" }],
+          charts: [
+            { title: "Ingresos por mes", unit: "Bs.", type: "bar", points: [{ label: "Ene", value: 32 }, { label: "Feb", value: 41 }] },
+            { title: "Sesiones", unit: "n", type: "line", points: [{ label: "L", value: 120 }, { label: "M", value: 162 }] },
+          ],
+          table: {
+            title: "Ultimos pedidos",
+            columns: ["Pedido", "Monto"],
+            rows: [["#1042", "Bs. 1.240"]],
+          },
+        },
+      }),
+      "utf8",
+    );
+
+    const result = await generateSite("panel", { rootDir, template: "dashboard" });
+    const html = await readFile(path.join(result.outputDir, "index.html"), "utf8");
+    const css = await readFile(path.join(result.outputDir, "site.css"), "utf8");
+
+    expect(html).toContain("wf-dash");
+    expect(html).toContain("Panel operativo");
+    expect(html).toContain("Bs. 48.2k");
+    expect(html).toContain("wf-kpi-delta--up");
+    expect(html).toContain('<svg class="wf-chart"');
+    expect(html).toContain("<polyline");
+    expect(html).toContain("<rect");
+    expect(html).toContain("Ultimos pedidos");
+    expect(html).toContain("#1042");
+    expect(html).toContain("data-dash-filter");
+    expect(css).toContain(".wf-dash-kpis");
+    expect(css).toContain(".wf-chart");
+    expect(css).toContain("--color-primary");
+  });
+
+  it("renders dashboard empty states when data is missing", async () => {
+    const rootDir = await mkdtemp(path.join(os.tmpdir(), "onia-web-factory-"));
+    await mkdir(path.join(rootDir, "data", "clients"), { recursive: true });
+
+    await writeFile(
+      path.join(rootDir, "data", "clients", "empty-panel.json"),
+      JSON.stringify({
+        nombre: "Empty Panel",
+        slug: "empty-panel",
+        tagline: "Panel sin datos",
+        descripcion: "Dashboard sin metricas cargadas.",
+        dashboard: { title: "Panel vacio", table: { title: "Detalle", columns: ["A"], rows: [] } },
+      }),
+      "utf8",
+    );
+
+    const result = await generateSite("empty-panel", { rootDir, template: "dashboard" });
+    const html = await readFile(path.join(result.outputDir, "index.html"), "utf8");
+
+    expect(html).toContain("wf-dash-empty");
+    expect(html).toContain("Sin KPIs definidos");
+    expect(html).toContain("Sin registros para el periodo seleccionado.");
+  });
+
+  it("renders donut, sparkline and multi-series dashboard charts", async () => {
+    const rootDir = await mkdtemp(path.join(os.tmpdir(), "onia-web-factory-"));
+    await mkdir(path.join(rootDir, "data", "clients"), { recursive: true });
+
+    await writeFile(
+      path.join(rootDir, "data", "clients", "panel.json"),
+      JSON.stringify({
+        nombre: "Panel Demo",
+        slug: "panel",
+        tagline: "Panel demo",
+        descripcion: "Dashboard con tipos de chart.",
+        dashboard: {
+          title: "Panel",
+          charts: [
+            { title: "Categorias", type: "donut", points: [{ label: "A", value: 60 }, { label: "B", value: 40 }] },
+            { title: "Tendencia", type: "sparkline", points: [{ label: "1", value: 10 }, { label: "2", value: 30 }] },
+            {
+              title: "Real vs meta",
+              type: "line",
+              series: [
+                { name: "Real", points: [{ label: "Ene", value: 20 }, { label: "Feb", value: 30 }] },
+                { name: "Meta", points: [{ label: "Ene", value: 25 }, { label: "Feb", value: 28 }] },
+              ],
+            },
+          ],
+        },
+      }),
+      "utf8",
+    );
+
+    const result = await generateSite("panel", { rootDir, template: "dashboard" });
+    const html = await readFile(path.join(result.outputDir, "index.html"), "utf8");
+
+    expect(html).toContain("wf-donut");
+    expect(html).toContain("wf-sparkline");
+    expect(html).toContain("wf-chart-legend"); // multi-series + donut legends
+    expect(html).toContain("stroke-dasharray"); // donut arc segments
+    // multi-series line draws one polyline per series, plus the sparkline
+    expect((html.match(/<polyline/g) ?? []).length).toBeGreaterThanOrEqual(3);
   });
 });

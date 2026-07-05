@@ -1,0 +1,209 @@
+{
+  "name": "ONIA - Radar Normativo Bolivia",
+  "active": false,
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 8 * * 1-5"
+            }
+          ]
+        }
+      },
+      "id": "schedule",
+      "name": "Lunes a viernes 08:00",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "url": "=https://impuestos.com.bo/normativa-{{ $now.year }}/",
+        "options": {
+          "timeout": 20000,
+          "response": {
+            "response": {
+              "responseFormat": "text"
+            }
+          }
+        }
+      },
+      "id": "normativa",
+      "name": "Normativa SIN (impuestos.com.bo)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        220,
+        0
+      ],
+      "onError": "continueRegularOutput",
+      "notes": "Pagina anual de normativa (WordPress estatico, scrapeable — verificado por curl 2026-07-04). El anio se resuelve solo con $now (timezone del workflow). Si la pagina del anio nuevo aun no existe (enero), el nodo continua y el radar sigue con siatinfo."
+    },
+    {
+      "parameters": {
+        "url": "https://siatinfo.impuestos.gob.bo/",
+        "options": {
+          "timeout": 20000,
+          "response": {
+            "response": {
+              "responseFormat": "text"
+            }
+          }
+        }
+      },
+      "id": "siatinfo",
+      "name": "SIAT novedades (siatinfo)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        440,
+        0
+      ],
+      "onError": "continueRegularOutput",
+      "notes": "Fuente oficial de novedades de facturacion del SIN (Joomla estatico, scrapeable — verificado por curl 2026-07-04). Encadenado (no en paralelo) para que el Code node corra una sola vez."
+    },
+    {
+      "parameters": {
+        "jsCode": "// Radar Normativo Bolivia — detecta normas nuevas del SIN y evita repetir avisos.\n// Estructura HTML verificada con curl el 2026-07-04 (runbook: ONIA_RADAR_NORMATIVO_RUNBOOK_2026.md):\n// - impuestos.com.bo/normativa-<anio>/ (WordPress estatico, scrapeable): cada norma es\n//   <h2 class=\"wp-block-heading\"><span class=\"ez-toc-section\" id=\"RND-...\"></span>\n//   <a href=\"https://www.impuestos.gob.bo/....pdf\">RND-102600000012</a><span class=\"ez-toc-section-end\"></span></h2>\n//   seguida de <p class=\"wp-block-paragraph\">resumen</p> (los decretos supremos se mencionan en ese resumen).\n// - siatinfo.impuestos.gob.bo (Joomla estatico, scrapeable): anchors <a href=\"....pdf\">RND-102500000018</a>.\nconst ZONA = 'America/La_Paz';\nconst ahora = new Date();\nconst anio = new Intl.DateTimeFormat('es-BO', { timeZone: ZONA, year: 'numeric' }).format(ahora);\nconst anio2 = anio.slice(2);\n\nconst limpiar = (s) => String(s).replace(/<[^>]+>/g, ' ').replace(/&nbsp;|&#160;/g, ' ').replace(/&amp;/g, '&').replace(/\\s+/g, ' ').trim();\n\nconst htmlDe = (nombre) => {\n  try {\n    const j = $(nombre).first().json;\n    return String(j.data ?? '');\n  } catch (e) {\n    return '';\n  }\n};\n\nconst items = [];\nlet m;\n\n// Fuente 1: pagina de normativa del anio en curso (impuestos.com.bo).\nconst htmlNormativa = htmlDe('Normativa SIN (impuestos.com.bo)');\nconst RE_WP = /<h2 class=\"wp-block-heading\"><span class=\"ez-toc-section\" id=\"[^\"]*\"><\\/span><a href=\"([^\"]+)\"[^>]*>\\s*([^<]{3,80}?)\\s*<\\/a><span class=\"ez-toc-section-end\"><\\/span><\\/h2>\\s*(?:<p[^>]*>([\\s\\S]{0,400}?)<\\/p>)?/g;\nwhile ((m = RE_WP.exec(htmlNormativa)) !== null) {\n  items.push({ titulo: limpiar(m[2]).toUpperCase(), link: m[1], resumen: limpiar(m[3] || '').slice(0, 160), fuente: 'impuestos.com.bo' });\n}\n\n// Fuente 2: home de siatinfo (novedades oficiales de facturacion).\nconst htmlSiat = htmlDe('SIAT novedades (siatinfo)');\nconst RE_SIAT = /<a href=\"([^\"]+)\"[^>]*>\\s*(RND[-\\s]?N?°?\\s?\\d{10,14})\\s*<\\/a>/gi;\nwhile ((m = RE_SIAT.exec(htmlSiat)) !== null) {\n  const link = m[1].indexOf('http') === 0 ? m[1] : 'https://siatinfo.impuestos.gob.bo' + m[1];\n  items.push({ titulo: limpiar(m[2]).toUpperCase(), link, resumen: '', fuente: 'siatinfo (SIN)' });\n}\n\n// Solo lo del anio en curso: el codigo RND embebe el anio (10YY), o el titulo/link lo menciona.\nconst RE_ANIO = new RegExp('RND[-\\\\s]?N?°?\\\\s?10' + anio2 + '\\\\d');\nconst esDelAnio = (it) => it.titulo.includes(anio) || RE_ANIO.test(it.titulo) || it.link.includes('/' + anio + '/');\n\nconst enCorrida = new Set();\nconst delAnio = items.filter((it) => {\n  if (!esDelAnio(it) || enCorrida.has(it.titulo)) return false;\n  enCorrida.add(it.titulo);\n  return true;\n});\n\n// Memoria entre ejecuciones: solo persiste en ejecuciones de produccion (workflow activo), no en Test.\nconst memoria = $getWorkflowStaticData('global');\nif (!Array.isArray(memoria.lastSeen)) memoria.lastSeen = [];\nconst yaVistos = new Set(memoria.lastSeen);\nconst novedades = delAnio.filter((it) => !yaVistos.has(it.titulo));\nmemoria.lastSeen = memoria.lastSeen.concat(novedades.map((it) => it.titulo)).slice(-200); // cap 200, FIFO\n\nconst fecha = new Intl.DateTimeFormat('es-BO', { timeZone: ZONA, day: '2-digit', month: '2-digit', year: 'numeric' }).format(ahora);\nconst MAX_LISTA = 15; // limite defensivo (Telegram corta a 4096 chars)\nconst visibles = novedades.slice(0, MAX_LISTA);\nconst lineas = [\n  'Radar Normativo Bolivia — ' + fecha,\n  '',\n  ...visibles.map((it) => '• ' + it.titulo + ' [' + it.fuente + ']' + (it.resumen ? '\\n  ' + it.resumen : '') + '\\n  ' + it.link),\n  novedades.length > MAX_LISTA ? '(+' + (novedades.length - MAX_LISTA) + ' mas en las fuentes)' : null,\n  '',\n  'Revisar impacto en clientes → crear pendiente si aplica.',\n].filter((l) => l !== null);\n\nreturn [{\n  json: {\n    count: novedades.length,\n    novedades,\n    text: lineas.join('\\n'),\n    anio,\n    fuentesLeidas: { normativa: htmlNormativa.length > 0, siatinfo: htmlSiat.length > 0 },\n  },\n}];"
+      },
+      "id": "detectar",
+      "name": "Detectar novedades",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        660,
+        0
+      ],
+      "notes": "Extrae RNDs (titulo+link+resumen), filtra anio en curso y recuerda titulos ya vistos en staticData global (lastSeen, cap 200). staticData solo persiste con el workflow ACTIVO (no en Test manual)."
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "hay-novedades",
+              "leftValue": "={{ $json.count }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "if-novedades",
+      "name": "Hay novedades?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        880,
+        0
+      ],
+      "notes": "Sin novedades no se envia nada (radar silencioso)."
+    },
+    {
+      "parameters": {
+        "chatId": "6830070978",
+        "text": "={{ $json.text }}",
+        "additionalFields": {}
+      },
+      "id": "telegram",
+      "name": "Telegram a Sergio",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1100,
+        0
+      ],
+      "credentials": {
+        "telegramApi": {
+          "id": "r8y2CN5RyOEIDce3",
+          "name": "Telegram account"
+        }
+      },
+      "notes": "Misma credencial y chat del briefing diario / tipo de cambio."
+    }
+  ],
+  "connections": {
+    "Lunes a viernes 08:00": {
+      "main": [
+        [
+          {
+            "node": "Normativa SIN (impuestos.com.bo)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normativa SIN (impuestos.com.bo)": {
+      "main": [
+        [
+          {
+            "node": "SIAT novedades (siatinfo)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SIAT novedades (siatinfo)": {
+      "main": [
+        [
+          {
+            "node": "Detectar novedades",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Detectar novedades": {
+      "main": [
+        [
+          {
+            "node": "Hay novedades?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Hay novedades?": {
+      "main": [
+        [
+          {
+            "node": "Telegram a Sergio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "timezone": "America/La_Paz",
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "pinData": {},
+  "meta": {
+    "notes": "v1: radar diario (L-V 08:00 La Paz) de RNDs/normas del SIN con memoria lastSeen en staticData. v2 (Contador Pack): novedad -> POST intake -> WorkItem con responsable. Ver hermes-content/docs/ONIA_RADAR_NORMATIVO_RUNBOOK_2026.md"
+  },
+  "tags": []
+}

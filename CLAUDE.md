@@ -41,8 +41,11 @@ Cada propuesta DEBE cumplir:
 
 7. **Pricing**: cobrar la automatización y el resultado, no los píxeles. El
    margen vive en lo recurrente (Cuidado Web / GestiOS / videos). La web única se
-   precia para cerrar y abrir el mensual. Línea estándar: Landing 2,000 / Web Pro
-   4,500. Ver `hermes-content/propuestas/PRICING_RATIONALE_INTERNO.md`.
+   precia para cerrar y abrir el mensual. **Precio de lanzamiento vigente (fase
+   sin portafolio, desde 2026-07-03): Landing 790 / Web Pro 1.500.** La línea
+   premium (Landing 2,000 / Web Pro 4,500) es el objetivo con 3-5 casos en
+   portafolio. Fuente de verdad:
+   `hermes-content/propuestas/PRICING_RATIONALE_INTERNO.md` sección 0.
 
 8. **Plantillas internas = confidencial.** Nunca decir al cliente que usamos
    plantillas. Objetivo: maximizar producción.
@@ -56,8 +59,10 @@ Docs internos de referencia: `PRICING_RATIONALE_INTERNO.md`,
 
 ## ONIA Core (REGLA)
 
-> Fuente de verdad: `onia-core/contract.json` (beta v0.2.0). Docs canonicos en
-> `onia-core/*.md`.
+> Fuente de verdad: `onia-core/contract.json` (beta v0.5.0, congelado para
+> adopcion; ver `onia-core/CHANGELOG.md`). Docs canonicos en `onia-core/*.md`.
+> Receta de instalacion en productos: `onia-core/ONIA_CORE_INSTALL_GUIDE_2026.md`.
+> DentalGest esta `installing` (9/9 entidades, wizard /setup, intake vivo).
 
 - ONIA Core es el nucleo operativo comun de los SaaS ONIA (DentalGest, GestiOS,
   Ganadero OS, ProveeGest). Vive SOLO en este repo hasta aprobar adopcion.
