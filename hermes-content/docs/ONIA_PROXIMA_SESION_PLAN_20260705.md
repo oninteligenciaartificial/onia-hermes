@@ -43,6 +43,46 @@ luego destrabar S1/S3 con Sergio (2 min c/u), luego infra M1/M2.
 
 ---
 
+## Ejecución en paralelo — sesiones y carriles
+
+**7 carriles cubren el 100% del backlog ejecutable por agente, sin chocar.** El
+choque sale de 3 recursos compartidos: los mismos archivos, la rama `main`, y la
+infra única (n8n/VPS/Supabase/tokens). Aislás eso y paralelizás.
+
+| # | Sesión (nombre) | Repo · carpeta dueña | Ítems | Nota |
+|---|---|---|---|---|
+| A | `onia-center-saneamiento` | onia-hermes · `web-factory/apps/site/src/app/onia-center/**` + `api/onia-center/**` | P2 → P3 | P2 y P3 SECUENCIALES (mismos archivos) |
+| B | `wf-landing-dentalgest` | onia-hermes · landings `src/app`, `data/clients`, `templates`, `harvester` | P4 + E1-E6 | comparte config raíz con A/C |
+| C | `propuestas-v2` | onia-hermes · `hermes-content/propuestas` + `docs` + `skills` | P1 | carpeta aislada, cero choque |
+| D | `dentagest-core-ui` | repo DentaGest | R2 + R4 | repo aparte = cero choque |
+| E | `gestios-core` | repo Gestios | R1 → R5 | R5 después de R1 |
+| F | `bolivian-electric-fase1` | repo Bolivian Electric | R3 | repo aparte |
+| G | `infra-deploy-n8n` | infra (n8n/VPS/Supabase) | M1 → M2 → M3-M6 | UN solo dueño, SERIAL; M1 requiere OK humano |
+
+**Reglas duras (no chocar):**
+- 1 carril = 1 worktree = 1 rama = 1 dominio de archivos.
+- A/B/C comparten el repo onia-hermes: distinta carpeta, y **AVISAR** antes de
+  tocar los 4 archivos raíz de web-factory (`next.config.ts`, `layout.tsx`,
+  `globals.css`, `package.json`).
+- D/E/F son repos separados → paralelo libre.
+- G (infra) = recurso único: **nunca dos sesiones tocando n8n/VPS/DB a la vez.**
+
+**Olas (para no abrir 7 de golpe):**
+- **Ola 1 (abrir ya — sin bloqueos, cero solape): C, A, D, E** (P1, P2, R2, R1).
+- **Ola 2: B, F, G** (P4, R3, M1→…). G corre en paralelo pero **deploya después**
+  de que A/C estén en main; no re-publica el n8n `ONIADailyBrief001` hasta M1.
+
+**Cross-deps:** M1 deploy tras P2/P3 en main · M2 no re-publica ONIADailyBrief001
+hasta M1 · R1/R4 usan precios firmes (S1) · R5 tras R1 · Sergio destraba S1-S9.
+
+**Cómo terminarlo (cada carril):** rama propia → `git rebase origin/main` antes
+de mergear → commits chicos por carpeta → merge frecuente a main (FF) → gates
+(`tsc --noEmit`, `pnpm e2e` donde aplique, code-reviewer) antes de cerrar. Un
+ítem se cierra cuando su código está en main (y en prod para los M-*). El board
+de este doc (§(a)-(d)) es el checklist.
+
+---
+
 ## (a) AGENTE-YA — máxima prioridad (vender / cobrar / limpiar lo que Sergio ve)
 
 ### P1-PROPUESTAS — Generar propuestas oficiales con precios v2
