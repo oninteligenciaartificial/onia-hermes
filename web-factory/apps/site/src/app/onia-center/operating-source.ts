@@ -424,8 +424,8 @@ export const operatingAgents: OperatingAgent[] = [
   },
   {
     id: "agent-sales-crm",
-    name: "Agente Ventas y CRM",
-    mission: "Decir que leads, llamadas, demos y seguimientos deben ejecutarse durante el mes.",
+    name: "Agente Vendedor",
+    mission: "Proponer que leads, llamadas, demos, mensajes y seguimientos ejecutar; deja cada propuesta en la cola de aprobacion de Sergio.",
     ownerRole: "sergio",
     visibility: "internal_restricted",
     cadence: "weekly",
