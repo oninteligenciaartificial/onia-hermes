@@ -2,7 +2,8 @@
   "content_id": "ai-trends-video-001-agentes-20260606",
   "brand": "Radar IA",
   "date": "2026-06-06",
-  "status": "waiting_approval",
+  "status": "approved_for_generation",
+  "assets_round": "hermes-content/references/radar-ia/video-001/20260705-radar-ia-001-storyboard-round-01.md",
   "format": "vertical_9_16",
   "duration_target_seconds": 62,
   "language": "es",
@@ -90,6 +91,9 @@
       "ia para negocios",
       "radar ia"
     ],
+    "instagram_caption": "La IA ya no solo responde. Ahora trabaja.\n\nEl cambio no es que sea mas lista: es que empieza a ejecutar tareas dentro de tus herramientas (analisis, reportes, sitios, seguimiento) en vez de solo contestar preguntas.\n\nPero un agente sobre un proceso roto solo automatiza el caos mas rapido. Primero ordenas el proceso en pasos claros; despues le pasas las tareas repetibles a la IA, sin decisiones sensibles.\n\nComenta el proceso que quieres automatizar y lo convertimos en un radar.\n\n#InteligenciaArtificial #AgentesIA #AutomatizacionDeNegocios #IAparaEmpresas #RadarIA",
+    "tiktok_description": "La IA paso de responder a ejecutar tareas dentro de tus apps. Que proceso automatizarias primero?\n#ia #automatizacion #agentesia #radaria",
+    "linkedin_copy": "La conversacion sobre IA cambio de \"que tan inteligente es\" a \"que trabajo hace dentro de la operacion\".\n\nOpenAI lleva Codex mas alla del codigo, Google habla de una era agentica, Microsoft dice que el reto ya no es usar IA sino redisenar como trabaja la empresa, y Anthropic empuja workflows con subagentes. El patron es uno: el chatbot que respondia preguntas se esta volviendo operador.\n\nEl mecanismo practico: elegi un proceso repetido, escribilo en cinco pasos y marca donde una IA puede ejecutar sin tomar decisiones sensibles. Un agente sobre un proceso roto solo automatiza el caos mas rapido.\n\nQue proceso de tu operacion seria el primero en volverse radar?",
     "cta": "Comenta el proceso que quieres automatizar y lo convertimos en un radar."
   },
   "approval_required_for": [
