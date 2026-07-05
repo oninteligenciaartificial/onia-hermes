@@ -13,6 +13,8 @@ push multi-sesion: add solo tus archivos -> commit -> pull --rebase
 | A1 | Inventario detallado (kardex promedio ponderado, lotes/FEFO, conteos) + Contador Pack completo (RCV ventas+compras, resumen IVA, balance comprobacion) | Gestios | `git log --oneline -5` en C:\dev\proyectos\Gestios; tests verdes; si el agente reporto drift de migraciones, resolver baseline como en DentaGest (docs/DATABASE_MIGRATION_BASELINE_2026.md) |
 | A2 | Hermes bridge: /tarea y /dentalgest via Telegram | DentaGest + onia-hermes | endpoint /api/onia-core/bridge/pending en DentaGest; comandos en gateway; doc HERMES_PRODUCT_BRIDGE_2026.md; setear claves en VPS que indique el runbook |
 | A3 | Plan certificacion SIAT proveedor | onia-hermes | onia-core/ONIA_SIAT_CERTIFICACION_PLAN_2026.md en main |
+| A4 | ONIA Center: fix spam de tareas del briefing (dedupe titulo base) | onia-hermes | rama `worktree-agent-ae46a670c4cd391ff` (WIP 282aa814 + commit final del subagente build-error-resolver); tras merge, DEPLOY tarball a /opt/onia-center/runtime-next en VPS y reiniciar contenedor (memoria onia-center-hosting: `--env-file /opt/onia-center/.env -e PORT=3012`) |
+| A5 | ONIA Center: rediseno completo (datos reales, quitar modulos vacios, simplificar UI) | onia-hermes (web-factory) | sesion del chip task_4be0c81c corriendo independiente — verificar sus commits antes de duplicar; diagnostico completo en el prompt del chip |
 
 ## B. ACCIONES DE SERGIO (nadie mas puede)
 
@@ -111,10 +113,45 @@ verificar billing Sentry/PostHog en free tier (solo UI); automatizar backup
 nocturno Postgres staging (drill 24/24 ya probado, falta cron).
 ```
 
+### C10. Autonomizar workflows restantes + crons faltantes (regla: nada local)
+```
+Proyecto onia-hermes. Regla Sergio (memoria automatizaciones-autonomas):
+workflows n8n autonomos, sin ONIA Center endpoints ni SearXNG localhost.
+(1) Migrar `onia-center-daily-briefing` (ONIADailyBrief001) y
+`onia-trend-recommendations` al patron autonomo del workflow de guiones
+NDXLJiR00ciQx72V (nodo OpenAI nativo cred "OpenAi account" + telegramApi,
+prompt inline) — via MCP n8n, validar con execute_workflow. (2) Crear crons
+prospeccion 09:00 (skill prospeccion-onia; solo borradores, no contacta) y
+propuestas 12:00 (skill genera-propuesta). (3) Tras el fix A4 deployado,
+verificar que el briefing ya no apila tareas. Tabla horaria canonica:
+hermes-content/docs/ONIA_CONTENT_FACTORY_ORCHESTRATION_2026.md.
+```
+
+### C11. n8n restos de limpieza
+```
+Instancia n8n-sergio (MCP). (1) Reparar conexion rota `sendAdminEmail` en 3
+workflows GestiOS activos (WF-GS-04/03/02: 6oowIHo8G9baBOYc, qOVpQwPZplQKYkMc,
+xx4wzzzqZBGfu836) y taggearlos `gestios`. (2) Decidir con Sergio: Demo Cliente
+New Sakura, Atlas YouTube Draft, Scheduled Ops Pack y Mara Daily (SSH roto:
+arreglar credencial SSH key o archivar). Estado completo:
+hermes-content/docs/ONIA_N8N_CLEANUP_20260703.md (18 archivados, 2 pausados).
+```
+
+## B-bis. ACCIONES DE SERGIO adicionales (taskboard ONIA_SYSTEM_TASKBOARD_2026)
+
+7. **Token IG long-lived + Business Account ID** (desbloquea publicacion IG).
+8. **API keys Tavily y fal.ai** (prospeccion con fuentes + imagenes).
+9. **Verificacion negocio Meta** (desbloquea WhatsApp -> Chatwoot).
+10. **Datos fiscales con contador** (activa recordatorios fiscales).
+11. **Cambiar password ONIA Center** (la primera se expuso en chat 2026-07-04).
+
 ## D. AUTOMATIZACIONES VIVAS (no tocar sin razon)
 
 - n8n `tUaQasfCDGOXEl2j` FX diario 07:30 L-S (BCB widget exacto + spread).
 - n8n `OovRU4r0o7pvglJP` Radar Normativo 08:00 L-V (memoria staticData).
+- n8n `NDXLJiR00ciQx72V` Guiones Diarios 07:00 L-S (autonomo, testeado OK).
+- n8n `ONIADailyBrief001` Briefing diario 06:45 (apila tareas hasta deploy A4).
+- ONIA Center vivo en center.onia.com.bo (VPS; memoria onia-center-hosting).
 - Crons Vercel DentaGest: reminders, recurring, onia-core-workitems 07:00.
 - Autosync git en sesiones Claude (hook Stop).
 
