@@ -28,6 +28,7 @@ compatible para activarse cuando lleguen credenciales (fuera de alcance de esta 
 | --- | --- |
 | Superficie | Página dedicada `/nuvia/checkout` (no multi-paso en drawer, no mínimo) |
 | Canal del pedido | WhatsApp deep-link con el pedido completo (productos + cliente + entrega + código) |
+| Número WhatsApp | Provisional = número ONIA `59175470140` (swappable). Mensaje con marcador `#NuviaPedido` para ruteo del futuro bot |
 | Envío | **No se calcula ni se muestra monto en la web.** Se coordina y cobra al despachar según zona |
 | Total en web | Productos − descuento. Nota honesta bajo el total sobre el envío |
 | Ubicación capturada | Ciudad (lista) + zona/barrio + dirección + referencia |
@@ -146,6 +147,7 @@ así que nadie consume los modos viejos en el MVP.
 `buildWhatsappOrderMessage` (en `nuvia-order.ts`, puro, testeable) produce:
 
 ```
+#NuviaPedido {publicCode}
 Hola Nuvia 👋 Confirmo mi pedido:
 
 🛒 PEDIDO {publicCode}
@@ -172,6 +174,15 @@ Notas: {notes}       (solo si hay)
 
 URL final: `https://wa.me/{digits}?text={encodeURIComponent(message)}`, con `digits` normalizado desde
 `nuvia.contacto.whatsapp` (acepta número crudo o URL `wa.me` completa, igual que el helper actual).
+
+La **primera línea `#NuviaPedido {publicCode}`** es un marcador legible por máquina: cuando el número
+destino se convierta en chatbot multi-tenant, el bot detecta ese prefijo y **enruta el pedido como
+Nuvia** (acusa recibo + deriva a humano/CRM) en vez de responder como agencia ONIA. Ver
+`WEB_FACTORY_CHATBOT_MULTITENANT_ARCHITECTURE.md`.
+
+**Número destino (provisional):** `59175470140` (número ONIA, `+591 75470140`) en `contacto.whatsapp`.
+Es swappable por un número dedicado de Nuvia con un cambio de una línea en `nuvia.json`, sin tocar
+código.
 
 ## 9. Validación
 
@@ -238,11 +249,15 @@ app real como infraestructura nueva.
   catálogo real.
 - Sin secretos hardcodeados. `contacto.whatsapp` es dato público de negocio, va en `nuvia.json`.
 
-## 14. Bloqueantes de lanzamiento (dato humano, no código)
+## 14. Estado de lanzamiento (sin bloqueantes duros)
 
-1. **Número de WhatsApp de Nuvia** → `contacto.whatsapp` en `nuvia.json`. Sin esto el checkout
-   funciona pero cae en `configuration_pending` (muestra código + respaldo email si existe).
-2. (Opcional, más adelante) credenciales BNB + Supabase service role para pago online y persistencia.
+1. **Número WhatsApp: resuelto (provisional).** Destino = número ONIA `59175470140` en
+   `contacto.whatsapp`. El checkout entrega pedidos desde el día uno. Mejora futura (no bloqueante):
+   número dedicado de Nuvia (SIM prepago) — swap de una línea en `nuvia.json`.
+2. **Bot Nuvia-aware (carril aparte, no bloquea el checkout).** Cuando el número ONIA se convierta en
+   chatbot, debe reconocer el marcador `#NuviaPedido` y enrutar el pedido; hasta entonces lo atiende
+   un humano. Es trabajo del carril de chatbot/infra, no de este checkout.
+3. (Opcional, más adelante) credenciales BNB + Supabase service role para pago online y persistencia.
 
 ## 15. Plan de implementación (alto nivel — el detalle va al writing-plans)
 
