@@ -82,7 +82,15 @@ Envia propuesta: <slug>  (PDF + mensaje de envío)
 
 ## Clientes actuales (clientes.json)
 
-bench · garabato · hsb-engineers · lia-albertengo
+bench · garabato · hsb-engineers · lia-albertengo · aw-climatizacion
+(+ variantes aw-climatizacion-web / aw-climatizacion-chatbot) · dentalgest ·
+onia-empresarial
+
+> `dentalgest` y `onia-empresarial` son propuestas de producto (SaaS/enterprise),
+> con precios del catálogo v2 (`onia-core/ONIA_CATALOGO_COMERCIAL_2026.md`).
+> Antes de ENVIARLAS, Sergio valida los precios v2 (ítem S1 del plan 2026-07-05);
+> el pendiente exacto está en el campo `_todo` de cada cliente en `clientes.json`.
+> Propuestas en USD o moneda mixta: usar el campo opcional `moneda` del generador.
 
 ## Flujo de envío
 

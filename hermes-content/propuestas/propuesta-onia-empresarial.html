@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Propuesta ONIA — ONIA Empresarial</title>
+<style>
+  :root{--ink:#101827;--muted:#526172;--line:#d8e0ea;--blue:#1e5bff;--blue-dark:#1239a8;
+    --green:#0f8b62;--amber:#a75b00;--bg:#f6f8fb;--white:#fff;--accent:#1239a8;}
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:Arial,Helvetica,sans-serif;color:var(--ink);background:var(--bg);}
+  .page{max-width:900px;margin:0 auto;padding:40px 28px;}
+  .hero{background:linear-gradient(135deg,#060b18 0%,#0d1b3f 55%,#1239a8 160%);color:#fff;border-radius:18px;padding:44px 40px;margin-bottom:28px;}
+  .kicker{color:#cfe0ff;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;}
+  h1{font-size:clamp(34px,6vw,56px);line-height:1.02;margin:0 0 14px;}
+  h2{font-size:26px;margin:34px 0 14px;border-bottom:3px solid var(--accent);padding-bottom:8px;}
+  h3{font-size:18px;margin:0 0 8px;}
+  p{font-size:16px;line-height:1.5;color:var(--muted);margin:0 0 10px;}
+  .hero p{color:#e6eefb;font-size:18px;}
+  .card{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin-bottom:14px;}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  table{width:100%;border-collapse:collapse;background:var(--white);border-radius:12px;overflow:hidden;border:1px solid var(--line);}
+  th,td{padding:12px 14px;text-align:left;font-size:15px;border-bottom:1px solid var(--line);}
+  th{background:#eef3fb;color:var(--ink);font-weight:800;}
+  td.num,th.num{text-align:right;white-space:nowrap;}
+  .tag{display:inline-block;background:#eaf0ff;color:var(--blue-dark);font-size:12px;font-weight:800;padding:3px 10px;border-radius:999px;margin-bottom:8px;}
+  .tag.green{background:#e3f4ec;color:var(--green);}
+  .tag.amber{background:#fbeede;color:var(--amber);}
+  ul{margin:6px 0 0;padding-left:20px;}
+  li{font-size:15px;color:var(--muted);line-height:1.5;margin-bottom:5px;}
+  .foot{margin-top:30px;border-top:1px solid var(--line);padding-top:16px;font-size:13px;color:var(--muted);}
+  .big{font-size:20px;color:var(--ink);font-weight:800;}
+  .step{display:flex;gap:14px;align-items:flex-start;margin-bottom:12px;}
+  .step .n{background:var(--accent);color:#fff;font-weight:800;border-radius:50%;width:30px;height:30px;display:flex;align-items:center;justify-content:center;flex:0 0 30px;}
+  tr.rec td{background:#fff7ed;}
+  .res{color:var(--accent);font-weight:700;font-size:13px;}
+  .vgrid .vcard{background:var(--white);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:12px;padding:16px 18px;}
+  .vcard h3{color:var(--ink);}
+  @media print{.page{max-width:100%;}body{background:#fff;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="hero">
+    <div class="kicker">Propuesta comercial · ONIA Inteligencia Artificial</div>
+    <h1>ONIA Empresarial — Tu empresa entera, viva y bajo control</h1>
+    <p>El sistema de gestión completo para empresas robustas: multi-sucursal real, puentes a tus sistemas actuales, automatizaciones a medida y gerencia que consulta y ordena desde Telegram. Operado y actualizado por ONIA cada mes.</p>
+  </div>
+
+  <h2>Qué problema resolvemos</h2>
+  <div class="card"><p>Un ERP tradicional tipo TR4 cuesta alrededor de <b>USD 20.000</b>, pago único — y queda <b>congelado en el tiempo</b>. Pero Bolivia cambia cada mes: RNDs del SIN, dólar, normas nuevas. <b>ONIA Empresarial</b> es lo contrario: un sistema <b>vivo</b> que se actualiza con cada norma y cada tipo de cambio, conectado a los sistemas que ya usás (sin migraciones traumáticas), con tu gerencia manejando todo desde Telegram. Entrás por menos de la mitad del ancla — o sin barrera: desde USD 490/mes.</p></div>
+
+  <h2>Qué incluye</h2>
+  <div class="grid">
+    <div class="card">
+      <div class="tag ">Sistema completo</div>
+      <h3>Todo lo que la empresa necesita, dentro del plan</h3>
+      <ul><li>Panel de gerencia + pendientes con responsable y SLA de vendedores con aviso a gerencia</li><li>Aprobaciones (descuentos, anulaciones) con escalamiento</li><li>Inventario detallado: multi-almacén, lotes y vencimientos, kardex</li><li>Multi-sucursal real con vistas por rol + usuarios ilimitados</li></ul>
+    </div>
+    <div class="card">
+      <div class="tag green">Operado por ONIA</div>
+      <h3>Nosotros lo mantenemos vivo</h3>
+      <ul><li>Infraestructura dedicada (tu VPS gestionado u on-premise) con backups verificados</li><li>Puentes de solo-lectura a tus sistemas actuales (ERP, SQL Server, planillas)</li><li>Automatizaciones a medida: tipo de cambio → reprecios con aprobación, radar normativo del rubro, correos multi-sucursal ruteados</li><li>Hermes ejecutivo por Telegram (/pendientes, /crm, /tarea) + bot WhatsApp con IA</li></ul>
+    </div></div>
+
+  <h2>Cómo lo construimos</h2>
+  <div class="card">
+    <div class="step"><div class="n">1</div><div>
+      <h3>Diagnóstico y alcance</h3><p>Relevamos sucursales, sistemas actuales y qué necesita ver la gerencia. De ahí sale el alcance firmado.</p>
+    </div></div>
+    <div class="step"><div class="n">2</div><div>
+      <h3>Infraestructura + puentes</h3><p>Montamos tu infraestructura dedicada y conectamos puentes de solo-lectura a tus sistemas — tus datos actuales se ven sin migrar nada.</p>
+    </div></div>
+    <div class="step"><div class="n">3</div><div>
+      <h3>Automatizaciones y bots</h3><p>Armamos las automatizaciones de tu operación (reprecios, radar normativo, correos) y el bot WhatsApp con IA.</p>
+    </div></div>
+    <div class="step"><div class="n">4</div><div>
+      <h3>Operación mensual ONIA</h3><p>Operamos, monitoreamos y actualizamos el sistema ante cada RND del SIN y cada cambio del dólar. Eso es la suscripción.</p>
+    </div></div></div>
+
+  <h2>Por qué te conviene</h2>
+  <div class="grid vgrid">
+    <div class="vcard">
+      <h3>Vivo vs. congelado</h3>
+      <p>El software de pago único queda viejo el día que cambia una norma. ONIA Empresarial se actualiza con cada RND y con el dólar de cada día — nosotros ya lo cambiamos antes de que te afecte.</p>
+    </div>
+    <div class="vcard">
+      <h3>La gerencia manda desde el bolsillo</h3>
+      <p>Hermes por Telegram: la gerencia consulta pendientes, CRM y ordena tareas desde el celular, sin abrir el sistema.</p>
+    </div>
+    <div class="vcard">
+      <h3>Entrada sin barrera</h3>
+      <p>No necesitás los USD 20.000 de un ERP tradicional: entrás desde USD 490/mes, o con implementación de USD 4.900 — menos de la cuarta parte del ancla.</p>
+    </div>
+    <div class="vcard">
+      <h3>Tus sistemas actuales siguen funcionando</h3>
+      <p>Los puentes de solo-lectura conectan lo que ya usás (ERP, SQL Server, planillas): valor desde la semana uno, sin migración traumática.</p>
+    </div></div>
+  <h2>Paquetes — elegí el tuyo</h2>
+  <table>
+    <tr><th>Paquete</th><th>Qué incluye</th><th class="num">Precio (USD)</th></tr>
+    <tr class="rec"><td><b>E1</b> ⭐</td><td>1 empresa, hasta 3 sucursales, 1 puente a tus sistemas + todo lo descrito (infraestructura dedicada, automatizaciones, Hermes, bot WhatsApp IA, gestión mensual ONIA)<br><span class="res">→ Toda tu operación viva y bajo control, con tu sistema actual conectado.</span></td><td class="num">4.900 impl. + 490/mes (o 4.900/año)</td></tr><tr><td><b>E2</b></td><td>Multi-sucursal amplio, 2+ puentes, reprecios automáticos por tipo de cambio con aprobación de gerencia<br><span class="res">→ Varias sucursales y sistemas hablando entre sí, con reprecios al día.</span></td><td class="num">8.900 impl. + 790/mes (o 7.900/año)</td></tr><tr><td><b>E3</b></td><td>A medida: integraciones profundas, módulos propios de tu operación, alcance definido por escrito<br><span class="res">→ El sistema se adapta a tu empresa, no al revés.</span></td><td class="num">desde 14.900 impl. + desde 1.190/mes</td></tr>
+  </table>
+  <p style="margin-top:10px;">Diferencia clave: <b>E1</b> = tu empresa completa en línea y bajo control (1 puente) · <b>E2</b> = convertir la operación multi-sucursal en un solo sistema con reprecios automáticos · <b>E3</b> = automatización a medida sin límites. Recomendado: <b>E1</b> para arrancar. <b>Todo incluido por nivel — no hay add-ons</b>: solo los costos por uso de terceros van aparte. Anual = 10 meses (2 gratis).</p>
+  <p style="margin-top:6px;"><b>Plazo de entrega estimado:</b> Se confirma en el diagnóstico de alcance; implementación por fases desde la primera semana desde el anticipo y la entrega de contenidos.</p>
+
+  <h2>Add-ons (opcionales)</h2>
+  <table>
+    <tr><th>Add-on</th><th class="num">Setup (USD)</th><th class="num">Mensual (USD)</th></tr>
+    <tr><td>Conversaciones WhatsApp API de Meta (costo por uso del bot)</td><td class="num">—</td><td class="num">al costo + 20% gestión</td></tr><tr><td>Créditos de IA de alto volumen (bot avanzado)</td><td class="num">—</td><td class="num">al costo + 20% gestión</td></tr><tr><td>Web del negocio + Cuidado Web (presencia online, producto aparte)</td><td class="num">Bs 790–2.900</td><td class="num">Bs 190–690</td></tr><tr><td>Desarrollo a medida fuera del alcance firmado</td><td class="num">cotizado por alcance</td><td class="num">—</td></tr>
+  </table>
+
+  <div class="card" style="margin-top:16px;">
+    <div class="tag amber">Importante — costos de terceros</div>
+    <p>No incluidos (costos por uso que cobra cada proveedor): conversaciones de WhatsApp Business API de Meta y créditos de IA de alto volumen (se facturan al costo + 20% de gestión). Si contratás la web, dominio y hosting van a nombre de la empresa. Todo lo demás está incluido en el plan.</p>
+  </div>
+
+
+  <div class="foot">
+    <p class="big">Precio reservado hasta 30 días con confirmación de pago.</p>
+    <p>ONIA — Sistemas, automatización y contenido para negocios. business@onia.com.bo</p>
+  </div>
+
+</div>
+</body>
+</html>

@@ -60,6 +60,16 @@ test('buildHtml renderiza plazoEntrega si existe', () => {
   assert.ok(buildHtml({ ...base, plazoEntrega: '2 semanas' }).includes('Plazo de entrega'));
 });
 
+test('buildHtml usa moneda para los headers de precio', () => {
+  const html = buildHtml(base);
+  assert.ok(html.includes('Precio (Bs)'));
+  assert.ok(html.includes('Setup (Bs)'));
+  const usd = buildHtml({ ...base, moneda: 'USD' });
+  assert.ok(usd.includes('Precio (USD)'));
+  assert.ok(usd.includes('Setup (USD)'));
+  assert.ok(usd.includes('Mensual (USD)'));
+});
+
 test('clientes.json es válido y todos cumplen requeridos', () => {
   const data = JSON.parse(fs.readFileSync(path.join(__dirname, 'clientes.json'), 'utf8'));
   assert.ok(Array.isArray(data) && data.length > 0);

@@ -53,6 +53,8 @@ node generar-propuestas.js garabato --pdf
 | `notaPaquetes` | texto bajo la tabla (acepta `<b>`) |
 | `addons[]` | `nombre`, `setup`, `mensual` |
 | `terceros` | nota de costos que paga el cliente |
+| `moneda` | (opcional) etiqueta de moneda de los headers de precio; default `Bs` |
+| `_todo` | (opcional, interno) pendientes antes de enviar — el generador lo ignora |
 
 ## Reglas de pricing
 

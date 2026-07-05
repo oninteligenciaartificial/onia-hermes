@@ -832,5 +832,250 @@
       }
     ],
     "terceros": "No incluidos: créditos de IA y mensajería de WhatsApp Business API pagada (se paga por conversación según volumen). El número de WhatsApp y la cuenta Business quedan a nombre de AW Climatización Group SRL."
+  },
+  {
+    "slug": "dentalgest",
+    "nombre": "DentalGest",
+    "accent": "#0aa3a3",
+    "heroGrad": "linear-gradient(135deg,#071a1e 0%,#0b2f33 55%,#0aa3a3 160%)",
+    "titulo": "DentalGest — El sistema de gestión de tu clínica dental",
+    "subtitulo": "Agenda, pacientes, historial, cobros y cumplimiento tributario en un solo lugar — todo incluido por nivel, sin sorpresas. Un sistema vivo que se actualiza con cada norma nueva.",
+    "problema": "La clínica funciona, pero la operación vive repartida: agenda en cuaderno o WhatsApp, historias clínicas en papel, cobros que se pierden, y los vencimientos con Impuestos corriendo por detrás. <b>DentalGest</b> ordena todo eso en un solo sistema: el dueño ve qué pasa, ningún paciente se escapa, y el <b>Contador Pack</b> (RCV, vencimientos NIT y radar normativo) te mantiene al día sin perseguir a nadie. Y como Bolivia cambia cada mes (RNDs, dólar), mantenerse legal ES el servicio: el sistema se actualiza solo.",
+    "incluye": [
+      {
+        "tag": "Operación diaria",
+        "tagClass": "",
+        "titulo": "Tu clínica ordenada",
+        "items": [
+          "Panel del dueño + pendientes con responsable",
+          "Agenda, pacientes e historial clínico",
+          "Canales registrados (correo/teléfono) → cada consulta entra sola al sistema",
+          "Roles finos: caja no ve lo clínico, cada quien ve lo suyo"
+        ]
+      },
+      {
+        "tag": "Cobros y cumplimiento",
+        "tagClass": "green",
+        "titulo": "Plata y normas bajo control",
+        "items": [
+          "Contador Pack: RCV + vencimientos NIT + radar normativo (incluido desde Profesional)",
+          "Comentarios, documentos y consentimientos en la ficha del paciente",
+          "Inventario de insumos (básico o detallado según plan)",
+          "Facturación SIAT en línea y bot WhatsApp según plan"
+        ]
+      }
+    ],
+    "pasos": [
+      {
+        "titulo": "Carga guiada",
+        "detalle": "Cargamos juntos pacientes, agenda y servicios de la clínica — no arrancás de cero."
+      },
+      {
+        "titulo": "Configuración con el wizard",
+        "detalle": "El asistente de configuración deja la clínica operando: usuarios, roles, canales y áreas."
+      },
+      {
+        "titulo": "Capacitación al equipo",
+        "detalle": "Entrenamos a recepción, doctores y caja en lo que cada rol usa — sin manuales eternos."
+      },
+      {
+        "titulo": "Acompañamiento continuo",
+        "detalle": "Soporte según plan y actualizaciones automáticas ante cada cambio normativo (RND) del SIN."
+      }
+    ],
+    "valor": [
+      {
+        "titulo": "Ningún paciente se escapa",
+        "detalle": "Cada consulta que entra por correo o teléfono queda registrada con responsable y seguimiento — se acabaron los pacientes que preguntaron y nunca volvieron."
+      },
+      {
+        "titulo": "Cobrás lo que trabajás",
+        "detalle": "Tratamientos, deudas y pagos visibles por paciente: la plata deja de perderse entre cuaderno y memoria."
+      },
+      {
+        "titulo": "Impuestos sin sustos",
+        "detalle": "El Contador Pack te avisa cada vencimiento del NIT y cada norma nueva que te afecta — te mantenés legal sin perseguir al contador."
+      },
+      {
+        "titulo": "Controlás sin estar encima",
+        "detalle": "Panel del dueño con pendientes, aprobaciones y sucursales: sabés qué pasa en la clínica aunque no estés parado ahí."
+      }
+    ],
+    "plazoEntrega": "1 a 2 semanas para estar operando (carga guiada + capacitación)",
+    "moneda": "Bs · Empresarial en USD",
+    "paquetes": [
+      {
+        "nombre": "Ordenado",
+        "incluye": "Panel del dueño + pendientes con responsable + agenda, pacientes e historial + 3 usuarios + soporte por correo",
+        "resultado": "Sabés qué pasa en tu clínica cada día.",
+        "precio": "390/mes (anual 3.900)",
+        "recomendado": false
+      },
+      {
+        "nombre": "Profesional",
+        "incluye": "Lo anterior + canales registrados → intake automático + roles finos + comentarios y consentimientos + Contador Pack INCLUIDO + inventario básico + 8 usuarios + soporte WhatsApp",
+        "resultado": "Ningún paciente se escapa: cada consulta entra y se sigue sola.",
+        "precio": "890/mes (anual 8.900)",
+        "recomendado": true
+      },
+      {
+        "nombre": "Empresa",
+        "incluye": "Lo anterior + inventario detallado (lotes, kardex) + aprobaciones con SLA + hasta 3 sucursales + bot WhatsApp INCLUIDO + facturación SIAT INCLUIDA + 20 usuarios + soporte prioritario",
+        "resultado": "Controlás sin estar encima: aprobaciones, sucursales y WhatsApp automatizados.",
+        "precio": "1.990/mes (anual 19.900)",
+        "recomendado": false
+      },
+      {
+        "nombre": "Empresarial E1",
+        "incluye": "Empresa completo + infraestructura dedicada con backups verificados + puente de solo-lectura a tus sistemas + automatizaciones a medida + Hermes ejecutivo por Telegram + usuarios ilimitados + gestión mensual ONIA",
+        "resultado": "ONIA opera el sistema por vos; la gerencia consulta y ordena desde Telegram.",
+        "precio": "USD 4.900 impl. + USD 490/mes",
+        "recomendado": false
+      }
+    ],
+    "notaPaquetes": "Diferencia clave: <b>Ordenado</b> = tu clínica ordenada y visible · <b>Profesional</b> = ningún paciente se escapa (capta y sigue solo) · <b>Empresa</b> = automatizar el control (aprobaciones, WhatsApp, sucursales) · <b>Empresarial E1</b> = ONIA lo opera por vos con infraestructura dedicada. Recomendado: <b>Profesional</b>. Implementación única (carga guiada + wizard + capacitación): Bs 490 / 1.490 / 3.900 según plan. Anual = 10 meses (2 gratis). Precios por sucursal.",
+    "addons": [
+      {
+        "nombre": "Facturación SIAT en línea (para plan Profesional; en Empresa va incluida)",
+        "setup": "—",
+        "mensual": "190"
+      },
+      {
+        "nombre": "Sucursal adicional (a partir de la 4ª en Empresa)",
+        "setup": "—",
+        "mensual": "490 c/u"
+      },
+      {
+        "nombre": "Web de la clínica + Cuidado Web (para que te encuentren en Google)",
+        "setup": "790–2.900",
+        "mensual": "190–690"
+      },
+      {
+        "nombre": "Conversaciones WhatsApp API de Meta (costo por uso del bot)",
+        "setup": "—",
+        "mensual": "al costo + 20%"
+      }
+    ],
+    "terceros": "No incluidos (costos por uso que cobra cada proveedor, no ONIA): conversaciones de WhatsApp Business API de Meta, créditos de IA de alto volumen y, si contratás la web, dominio y hosting a nombre de la clínica. El software del bot WhatsApp y de la facturación SIAT va incluido según plan; SIAT queda activo al certificar ONIA como proveedor.",
+    "_todo": "S1: Sergio valida precios v2 (390/890/1.990 Bs + E1 USD 4.900+490) y ventana de lanzamiento 31-jul antes de enviar. Precios de lanzamiento previos (320/750/1.500) se respetan a quien cierre antes del 31-jul-2026 y quedan congelados 12 meses. Confirmar plazo de implementación (1-2 semanas es estimado)."
+  },
+  {
+    "slug": "onia-empresarial",
+    "nombre": "ONIA Empresarial",
+    "accent": "#1239a8",
+    "heroGrad": "linear-gradient(135deg,#060b18 0%,#0d1b3f 55%,#1239a8 160%)",
+    "titulo": "ONIA Empresarial — Tu empresa entera, viva y bajo control",
+    "subtitulo": "El sistema de gestión completo para empresas robustas: multi-sucursal real, puentes a tus sistemas actuales, automatizaciones a medida y gerencia que consulta y ordena desde Telegram. Operado y actualizado por ONIA cada mes.",
+    "problema": "Un ERP tradicional tipo TR4 cuesta alrededor de <b>USD 20.000</b>, pago único — y queda <b>congelado en el tiempo</b>. Pero Bolivia cambia cada mes: RNDs del SIN, dólar, normas nuevas. <b>ONIA Empresarial</b> es lo contrario: un sistema <b>vivo</b> que se actualiza con cada norma y cada tipo de cambio, conectado a los sistemas que ya usás (sin migraciones traumáticas), con tu gerencia manejando todo desde Telegram. Entrás por menos de la mitad del ancla — o sin barrera: desde USD 490/mes.",
+    "incluye": [
+      {
+        "tag": "Sistema completo",
+        "tagClass": "",
+        "titulo": "Todo lo que la empresa necesita, dentro del plan",
+        "items": [
+          "Panel de gerencia + pendientes con responsable y SLA de vendedores con aviso a gerencia",
+          "Aprobaciones (descuentos, anulaciones) con escalamiento",
+          "Inventario detallado: multi-almacén, lotes y vencimientos, kardex",
+          "Multi-sucursal real con vistas por rol + usuarios ilimitados"
+        ]
+      },
+      {
+        "tag": "Operado por ONIA",
+        "tagClass": "green",
+        "titulo": "Nosotros lo mantenemos vivo",
+        "items": [
+          "Infraestructura dedicada (tu VPS gestionado u on-premise) con backups verificados",
+          "Puentes de solo-lectura a tus sistemas actuales (ERP, SQL Server, planillas)",
+          "Automatizaciones a medida: tipo de cambio → reprecios con aprobación, radar normativo del rubro, correos multi-sucursal ruteados",
+          "Hermes ejecutivo por Telegram (/pendientes, /crm, /tarea) + bot WhatsApp con IA"
+        ]
+      }
+    ],
+    "pasos": [
+      {
+        "titulo": "Diagnóstico y alcance",
+        "detalle": "Relevamos sucursales, sistemas actuales y qué necesita ver la gerencia. De ahí sale el alcance firmado."
+      },
+      {
+        "titulo": "Infraestructura + puentes",
+        "detalle": "Montamos tu infraestructura dedicada y conectamos puentes de solo-lectura a tus sistemas — tus datos actuales se ven sin migrar nada."
+      },
+      {
+        "titulo": "Automatizaciones y bots",
+        "detalle": "Armamos las automatizaciones de tu operación (reprecios, radar normativo, correos) y el bot WhatsApp con IA."
+      },
+      {
+        "titulo": "Operación mensual ONIA",
+        "detalle": "Operamos, monitoreamos y actualizamos el sistema ante cada RND del SIN y cada cambio del dólar. Eso es la suscripción."
+      }
+    ],
+    "valor": [
+      {
+        "titulo": "Vivo vs. congelado",
+        "detalle": "El software de pago único queda viejo el día que cambia una norma. ONIA Empresarial se actualiza con cada RND y con el dólar de cada día — nosotros ya lo cambiamos antes de que te afecte."
+      },
+      {
+        "titulo": "La gerencia manda desde el bolsillo",
+        "detalle": "Hermes por Telegram: la gerencia consulta pendientes, CRM y ordena tareas desde el celular, sin abrir el sistema."
+      },
+      {
+        "titulo": "Entrada sin barrera",
+        "detalle": "No necesitás los USD 20.000 de un ERP tradicional: entrás desde USD 490/mes, o con implementación de USD 4.900 — menos de la cuarta parte del ancla."
+      },
+      {
+        "titulo": "Tus sistemas actuales siguen funcionando",
+        "detalle": "Los puentes de solo-lectura conectan lo que ya usás (ERP, SQL Server, planillas): valor desde la semana uno, sin migración traumática."
+      }
+    ],
+    "plazoEntrega": "Se confirma en el diagnóstico de alcance; implementación por fases desde la primera semana",
+    "moneda": "USD",
+    "paquetes": [
+      {
+        "nombre": "E1",
+        "incluye": "1 empresa, hasta 3 sucursales, 1 puente a tus sistemas + todo lo descrito (infraestructura dedicada, automatizaciones, Hermes, bot WhatsApp IA, gestión mensual ONIA)",
+        "resultado": "Toda tu operación viva y bajo control, con tu sistema actual conectado.",
+        "precio": "4.900 impl. + 490/mes (o 4.900/año)",
+        "recomendado": true
+      },
+      {
+        "nombre": "E2",
+        "incluye": "Multi-sucursal amplio, 2+ puentes, reprecios automáticos por tipo de cambio con aprobación de gerencia",
+        "resultado": "Varias sucursales y sistemas hablando entre sí, con reprecios al día.",
+        "precio": "8.900 impl. + 790/mes (o 7.900/año)",
+        "recomendado": false
+      },
+      {
+        "nombre": "E3",
+        "incluye": "A medida: integraciones profundas, módulos propios de tu operación, alcance definido por escrito",
+        "resultado": "El sistema se adapta a tu empresa, no al revés.",
+        "precio": "desde 14.900 impl. + desde 1.190/mes",
+        "recomendado": false
+      }
+    ],
+    "notaPaquetes": "Diferencia clave: <b>E1</b> = tu empresa completa en línea y bajo control (1 puente) · <b>E2</b> = convertir la operación multi-sucursal en un solo sistema con reprecios automáticos · <b>E3</b> = automatización a medida sin límites. Recomendado: <b>E1</b> para arrancar. <b>Todo incluido por nivel — no hay add-ons</b>: solo los costos por uso de terceros van aparte. Anual = 10 meses (2 gratis).",
+    "addons": [
+      {
+        "nombre": "Conversaciones WhatsApp API de Meta (costo por uso del bot)",
+        "setup": "—",
+        "mensual": "al costo + 20% gestión"
+      },
+      {
+        "nombre": "Créditos de IA de alto volumen (bot avanzado)",
+        "setup": "—",
+        "mensual": "al costo + 20% gestión"
+      },
+      {
+        "nombre": "Web del negocio + Cuidado Web (presencia online, producto aparte)",
+        "setup": "Bs 790–2.900",
+        "mensual": "Bs 190–690"
+      },
+      {
+        "nombre": "Desarrollo a medida fuera del alcance firmado",
+        "setup": "cotizado por alcance",
+        "mensual": "—"
+      }
+    ],
+    "terceros": "No incluidos (costos por uso que cobra cada proveedor): conversaciones de WhatsApp Business API de Meta y créditos de IA de alto volumen (se facturan al costo + 20% de gestión). Si contratás la web, dominio y hosting van a nombre de la empresa. Todo lo demás está incluido en el plan.",
+    "_todo": "S1: bandas Empresarial (E1 4.900+490 / E2 8.900+790) se calibran con el cierre de Bolivian Electric fase 1 — Sergio valida antes de enviar. Confirmar plazo de implementación en el diagnóstico."
   }
 ]

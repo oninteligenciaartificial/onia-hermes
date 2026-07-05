@@ -109,6 +109,7 @@ function validateCliente(c, i) {
 
 function buildHtml(c) {
   const accent = c.accent || '#1e5bff';
+  const moneda = c.moneda || 'Bs';
   const heroGrad = c.heroGrad || 'linear-gradient(135deg,#0f1b2e 0%,#16294a 55%,#0e3f32 100%)';
   return `<!doctype html>
 <html lang="es">
@@ -171,7 +172,7 @@ function buildHtml(c) {
 ${renderValor(c.valor)}
   <h2>Paquetes — elegí el tuyo</h2>
   <table>
-    <tr><th>Paquete</th><th>Qué incluye</th><th class="num">Precio (Bs)</th></tr>
+    <tr><th>Paquete</th><th>Qué incluye</th><th class="num">Precio (${esc(moneda)})</th></tr>
     ${renderPaquetes(c.paquetes)}
   </table>
   <p style="margin-top:10px;">${c.notaPaquetes}</p>
@@ -179,7 +180,7 @@ ${renderValor(c.valor)}
 
   <h2>Add-ons (opcionales)</h2>
   <table>
-    <tr><th>Add-on</th><th class="num">Setup (Bs)</th><th class="num">Mensual (Bs)</th></tr>
+    <tr><th>Add-on</th><th class="num">Setup (${esc(moneda)})</th><th class="num">Mensual (${esc(moneda)})</th></tr>
     ${renderAddons(c.addons)}
   </table>
 
