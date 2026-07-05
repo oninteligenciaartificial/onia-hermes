@@ -23,6 +23,8 @@ referencia). Fuente única de asignación de trabajo y prompts de arranque:
 | E | `gestios-core` | repo Gestios (todo) | R1→R5 |
 | F | `bolivian-electric-fase1` | repo Bolivian Electric (todo) | R3 |
 | G | `infra-deploy-n8n` | n8n / VPS / Supabase — SERIAL, un solo dueño | M1→M6 |
+| H | `contenido-higgsfield` | onia-hermes `hermes-content/references`+`skills`(video/IG)+`scripts`(video/ig)+`.hermes/video-lab`+assets | producción continua (video, carruseles, IG) |
+| Core | `onia-core` | onia-hermes `onia-core/**` | contrato/schema/adapters — CONGELADO, solo bajo adopción aprobada |
 
 Regla dura: 1 carril = 1 worktree = 1 rama = 1 carpeta. A/B/C avisan antes de
 tocar los 4 archivos raíz de web-factory (`next.config.ts`, `layout.tsx`,

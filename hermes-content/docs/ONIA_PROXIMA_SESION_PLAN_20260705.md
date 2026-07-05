@@ -58,6 +58,11 @@ infra única (n8n/VPS/Supabase/tokens). Aislás eso y paralelizás.
 | E | `gestios-core` | repo Gestios | R1 → R5 | R5 después de R1 |
 | F | `bolivian-electric-fase1` | repo Bolivian Electric | R3 | repo aparte |
 | G | `infra-deploy-n8n` | infra (n8n/VPS/Supabase) | M1 → M2 → M3-M6 | UN solo dueño, SERIAL; M1 requiere OK humano |
+| H | `contenido-higgsfield` | onia-hermes · `hermes-content/references` + `skills`(video/IG) + `scripts`(video/ig) + `.hermes/video-lab` + assets | producción continua (carruseles, video, IG) | usa Higgsfield MCP + token IG; NO toca código de apps |
+| Core | `onia-core` (bajo demanda) | onia-hermes · `onia-core/**` | cambios de contrato/schema/adapters | hoy CONGELADO (beta v0.5.0); solo si se aprueba adopción |
+
+Dos tipos de carril: **backlog** (A-G, cierran ítems P/R/M) y **operación
+continua** (H contenido, y el bot Hermes) que no "terminan" — producen a diario.
 
 **Reglas duras (no chocar):**
 - 1 carril = 1 worktree = 1 rama = 1 dominio de archivos.
