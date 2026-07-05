@@ -12,7 +12,7 @@ const readexPro = Readex_Pro({
 });
 
 export const metadata: Metadata = {
-  title: "Hermes OS Control Center",
+  title: "ONIA Center",
   description: "Panel operativo de ONIA para servicios self-hosted, migracion, requisitos y control de riesgos.",
 };
 
