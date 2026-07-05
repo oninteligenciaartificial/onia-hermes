@@ -17,6 +17,7 @@ const PAGES = [
   { name: "landing-focus (demo-focus)", url: "/demo-focus/", maxBytesKb: 60 },
   { name: "store (skincare-demo)", url: "/skincare-demo/", maxBytesKb: 150 },
   { name: "dashboard (dashboard-demo)", url: "/dashboard-demo/", maxBytesKb: 60 },
+  { name: "landing-clinic (dental-demo)", url: "/dental-demo/", maxBytesKb: 60 },
 ];
 
 for (const target of PAGES) {
