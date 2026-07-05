@@ -38,7 +38,7 @@ Imágenes de ambientación generadas con Higgsfield (soul_2, 2K) en
 | 2.1 | `casos[]` con el caso fundador Bolivian Electric (números reales del ticket) | cierre BE fase 1 (R3) |
 | 2.2 | Screenshot real del panel DentalGest reemplaza ambientación en la propuesta | app viva en dentalgest.app pero requiere login → carril D (repo DentaGest) saca el screenshot de una org demo |
 | 2.3 | Testimonios de clientes web (Bench/Garabato/HSB al entregar) | entregas en curso |
-| 2.4 | Validación de precios v2 antes de ENVIAR cualquier PDF | **S1 — Sergio (2 min)** |
+| 2.4 | ~~Validación de precios v2~~ **RESUELTO 2026-07-05**: Sergio ratificó lista v2 pymes + ventana 31-jul (320/750/1.500 congelado 12m) y E1 ofertable ya (E2/E3 se recotizan tras BE). Ambas propuestas LISTAS para enviar. | — |
 
 ## Fase 3 — Propuesta trackeable (pixel HECHO 2026-07-05; hosting opcional)
 

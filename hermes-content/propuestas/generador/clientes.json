@@ -955,7 +955,7 @@
         "recomendado": false
       }
     ],
-    "notaPaquetes": "Diferencia clave: <b>Ordenado</b> = tu clínica ordenada y visible · <b>Profesional</b> = ningún paciente se escapa (capta y sigue solo) · <b>Empresa</b> = automatizar el control (aprobaciones, WhatsApp, sucursales) · <b>Empresarial E1</b> = ONIA lo opera por vos con infraestructura dedicada. Recomendado: <b>Profesional</b>. Implementación única (carga guiada + wizard + capacitación): Bs 490 / 1.490 / 3.900 según plan. Anual = 10 meses (2 gratis). Precios por sucursal.",
+    "notaPaquetes": "Diferencia clave: <b>Ordenado</b> = tu clínica ordenada y visible · <b>Profesional</b> = ningún paciente se escapa (capta y sigue solo) · <b>Empresa</b> = automatizar el control (aprobaciones, WhatsApp, sucursales) · <b>Empresarial E1</b> = ONIA lo opera por vos con infraestructura dedicada. Recomendado: <b>Profesional</b>. Implementación única (carga guiada + wizard + capacitación): Bs 490 / 1.490 / 3.900 según plan. Anual = 10 meses (2 gratis). Precios por sucursal. <b>Precio de lanzamiento:</b> cerrando antes del 31-jul-2026 mantenés la lista anterior (320 / 750 / 1.500) congelada 12 meses.",
     "addons": [
       {
         "nombre": "Facturación SIAT en línea (para plan Profesional; en Empresa va incluida)",
@@ -979,7 +979,7 @@
       }
     ],
     "terceros": "No incluidos (costos por uso que cobra cada proveedor, no ONIA): conversaciones de WhatsApp Business API de Meta, créditos de IA de alto volumen y, si contratás la web, dominio y hosting a nombre de la clínica. El software del bot WhatsApp y de la facturación SIAT va incluido según plan; SIAT queda activo al certificar ONIA como proveedor.",
-    "_todo": "S1: Sergio valida precios v2 (390/890/1.990 Bs + E1 USD 4.900+490) y ventana de lanzamiento 31-jul antes de enviar. Precios de lanzamiento previos (320/750/1.500) se respetan a quien cierre antes del 31-jul-2026 y quedan congelados 12 meses. Confirmar plazo de implementación (1-2 semanas es estimado)."
+    "_todo": "PRECIOS RATIFICADOS por Sergio 2026-07-05 (lista v2 + ventana 31-jul con 320/750/1.500 congelado 12 meses) — propuesta LISTA para enviar. Pendiente menor: confirmar plazo de implementación (1-2 semanas es estimado)."
   },
   {
     "slug": "onia-empresarial",
@@ -1133,6 +1133,6 @@
       "url": "https://wa.me/59175470140?text=Hola%20ONIA%2C%20quiero%20agendar%20el%20diagn%C3%B3stico%20de%20ONIA%20Empresarial",
       "texto": "Agendar diagnóstico sin costo →"
     },
-    "_todo": "S1: bandas Empresarial (E1 4.900+490 / E2 8.900+790) se calibran con el cierre de Bolivian Electric fase 1 — Sergio valida antes de enviar. Confirmar plazo de implementación en el diagnóstico."
+    "_todo": "RATIFICADO 2026-07-05: E1 (4.900+490) ofertable YA — propuesta LISTA para enviar. E2/E3 se muestran como referencia/ancla pero NO se firman sin recotizar tras el cierre de Bolivian Electric fase 1."
   }
 ]
