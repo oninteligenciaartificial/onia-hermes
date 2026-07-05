@@ -3,22 +3,22 @@ import { expect, test } from "@playwright/test";
 test.describe("landing-clinic preview (dental-demo)", () => {
   test("shows business, offer and a real booking CTA in the hero", async ({ page }) => {
     await page.goto("/dental-demo/");
-    await expect(page.locator(".wf-hero")).toBeVisible();
+    await expect(page.locator(".wf-clinic-hero")).toBeVisible();
     const heading = page.locator("h1");
     await expect(heading).toBeVisible();
     await expect(heading).not.toBeEmpty();
 
-    const cta = page.locator(".wf-hero a[href]").first();
+    const cta = page.locator(".wf-clinic-hero a[href]").first();
     const href = await cta.getAttribute("href");
     expect(href).toContain("wa.me");
   });
 
   test("renders trust, services, process and faq sections", async ({ page }) => {
     await page.goto("/dental-demo/");
-    await expect(page.locator(".wf-trust")).toBeVisible();
+    await expect(page.locator(".wf-clinic-strip")).toBeVisible();
     await expect(page.locator("#servicios")).toBeVisible();
     await expect(page.locator("#proceso")).toBeVisible();
-    await expect(page.locator(".wf-faq details").first()).toBeVisible();
+    await expect(page.locator(".wf-clinic-faq-item").first()).toBeVisible();
   });
 
   test("keeps a persistent whatsapp cta", async ({ page }) => {

@@ -6,4 +6,8 @@ export { renderTrust } from "./trust";
 export { renderProcess } from "./process";
 export { renderFaq } from "./faq";
 export { renderStickyCta } from "./sticky-cta";
+export { renderIcon, pickCredencialIcon } from "./icons";
+export { renderClinicHero } from "./clinic-hero";
+export { renderClinicServices } from "./clinic-services";
+export { renderClinicProcess } from "./clinic-process";
 export type { SiteClient } from "./types";

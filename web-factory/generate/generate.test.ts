@@ -315,15 +315,17 @@ describe("generateSite", () => {
     const html = await readFile(path.join(result.outputDir, "index.html"), "utf8");
     const css = await readFile(path.join(result.outputDir, "site.css"), "utf8");
 
-    expect(html).toContain("wf-trust");
+    expect(html).toContain("wf-clinic-hero");
     expect(html).toContain("Matricula profesional");
-    expect(html).toContain("wf-process");
-    expect(html).toContain("wf-faq");
+    expect(html).toContain("wf-clinic-bento");
+    expect(html).toContain("wf-clinic-timeline");
+    expect(html).toContain("wf-clinic-faq");
     expect(html).toContain("<details");
     expect(html).toContain("wf-sticky-cta");
-    expect(html).toContain("wf-final-cta");
+    expect(html).toContain("wf-clinic-final");
+    expect(html).toContain("data-reveal");
     expect(html).not.toContain("wf-nav");
     expect(css).toContain(".wf-sticky-cta");
-    expect(css).toContain(".wf-faq-item");
+    expect(css).toContain(".wf-clinic-bento");
   });
 });

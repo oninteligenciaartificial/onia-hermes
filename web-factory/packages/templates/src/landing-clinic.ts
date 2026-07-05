@@ -1,47 +1,98 @@
 import {
   escapeAttribute,
   escapeHtml,
-  renderFaq,
-  renderFeatures,
+  renderClinicHero,
+  renderClinicProcess,
+  renderClinicServices,
   renderFooter,
-  renderHero,
-  renderProcess,
+  renderIcon,
   renderStickyCta,
-  renderTrust,
 } from "@onia/blocks";
 import { renderLandingCss, type LandingClient } from "./landing";
+import { clinicCss } from "./clinic-css";
 
-// Clinic/Health vertical (Pattern Bank "Fast Landing"): hero -> trust -> offer
-// -> process -> faq -> final CTA, plus a persistent WhatsApp CTA. Focus hero
-// (no nav) keeps a single conversion intent. Reuses landing CSS + clinic CSS.
-function renderFinalCta(client: LandingClient): string {
+// Clinic/Health vertical, editorial direction. Hero (media + glass card) ->
+// benefits strip -> bento services -> process timeline -> two-column FAQ ->
+// final CTA surface + persistent WhatsApp. Reveal-on-scroll motion is opt-in and
+// reduced-motion safe. Reuses landing CSS tokens/base + clinic CSS.
+
+function renderClinicStrip(client: LandingClient): string {
+  const items = (client.beneficios ?? []).filter((item) => item.trim().length > 0);
+  if (items.length === 0) return "";
   return `
-    <section class="wf-final-cta" aria-labelledby="wf-final-cta-heading">
-      <h2 id="wf-final-cta-heading">${escapeHtml(client.tagline)}</h2>
-      <a class="wf-button-primary" href="${escapeAttribute(client.cta.url)}">${escapeHtml(client.cta.texto)}</a>
+    <div class="wf-clinic-strip" data-reveal>
+      ${items
+        .map(
+          (item) =>
+            `<span class="wf-clinic-chip">${renderIcon("check", "wf-icon")}<span>${escapeHtml(item)}</span></span>`,
+        )
+        .join("")}
+    </div>
+  `;
+}
+
+function renderClinicFaq(client: LandingClient): string {
+  const items = client.faq ?? [];
+  if (items.length === 0) return "";
+  const rows = items
+    .map(
+      (item) =>
+        `<details class="wf-clinic-faq-item"><summary>${escapeHtml(item.pregunta)}</summary><p>${escapeHtml(item.respuesta)}</p></details>`,
+    )
+    .join("");
+  return `
+    <section class="wf-clinic-section wf-clinic-faq" id="preguntas" data-reveal aria-labelledby="wf-clinic-faq-h">
+      <div class="wf-clinic-faq-grid">
+        <div class="wf-clinic-faq-aside">
+          <p class="wf-clinic-kicker">Preguntas frecuentes</p>
+          <h2 id="wf-clinic-faq-h">Lo que preguntan antes de venir</h2>
+          <p>¿Otra duda puntual? Escribinos y te respondemos por WhatsApp.</p>
+          <a class="wf-clinic-btn wf-clinic-btn--ghost" href="${escapeAttribute(client.cta.url)}"><span>${escapeHtml(client.cta.texto)}</span></a>
+        </div>
+        <div class="wf-clinic-faq-list">${rows}</div>
+      </div>
     </section>
   `;
 }
 
+function renderClinicFinalCta(client: LandingClient): string {
+  return `
+    <section class="wf-clinic-final" data-reveal aria-labelledby="wf-clinic-final-h">
+      <div class="wf-clinic-final-inner">
+        <h2 id="wf-clinic-final-h">${escapeHtml(client.tagline)}</h2>
+        <a class="wf-clinic-btn wf-clinic-btn--primary" href="${escapeAttribute(client.cta.url)}">${renderIcon("message", "wf-icon")}<span>${escapeHtml(client.cta.texto)}</span></a>
+      </div>
+    </section>
+  `;
+}
+
+// Progressive-enhancement reveal: content is visible by default; the script adds
+// the motion class (hide) then reveals on scroll, with a timeout fallback and a
+// reduced-motion short-circuit. No external JS, so the static output stays light.
+function renderRevealScript(): string {
+  return `<script>(function(){var r=document.querySelector('.wf-clinic-page');if(!r)return;var i=r.querySelectorAll('[data-reveal]');var m=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;if(m||!('IntersectionObserver' in window)){r.classList.add('wf-clinic-motion');i.forEach(function(e){e.classList.add('is-revealed')});return;}r.classList.add('wf-clinic-motion');var o=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('is-revealed');o.unobserve(e.target);}})},{rootMargin:'0px 0px -8% 0px',threshold:0.08});i.forEach(function(e){o.observe(e)});setTimeout(function(){i.forEach(function(e){e.classList.add('is-revealed')})},1400);})();</script>`;
+}
+
 export function renderLandingClinicBody(client: LandingClient): string {
   return `
-    <main class="wf-page wf-page--focus wf-page--clinic" id="top">
-      ${renderHero(client, { focus: true })}
-      ${renderTrust(client)}
-      ${renderFeatures(client)}
-      ${renderProcess(client)}
-      ${renderFaq(client)}
-      ${renderFinalCta(client)}
+    <main class="wf-clinic-page" id="top">
+      ${renderClinicHero(client)}
+      ${renderClinicStrip(client)}
+      ${renderClinicServices(client)}
+      ${renderClinicProcess(client)}
+      ${renderClinicFaq(client)}
+      ${renderClinicFinalCta(client)}
       ${renderFooter(client, { minimal: true })}
     </main>
     ${renderStickyCta(client)}
+    ${renderRevealScript()}
   `;
 }
 
 export function renderLandingClinicCss(client: LandingClient): string {
   return `${renderLandingCss(client)}
 
-${clinicExtraCss}`;
+${clinicCss}`;
 }
 
 export function renderLandingClinicDocument(client: LandingClient): string {
@@ -67,174 +118,3 @@ export function renderLandingClinicDocument(client: LandingClient): string {
 </html>
 `;
 }
-
-// Clinic-specific styles. Tokens only, no hardcoded client colors. Motion is
-// minimal (Pattern Bank motion=2) and respects prefers-reduced-motion.
-const clinicExtraCss = `
-.wf-proof-points {
-  margin: 16px 0 0;
-  padding: 0;
-  list-style: none;
-  display: grid;
-  gap: 10px;
-}
-
-.wf-proof-points li {
-  position: relative;
-  padding-left: 26px;
-  color: color-mix(in srgb, var(--color-fg) 82%, var(--color-bg));
-  line-height: 1.5;
-}
-
-.wf-proof-points li::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 7px;
-  width: 12px;
-  height: 12px;
-  border-radius: 999px;
-  background: var(--color-primary);
-}
-
-.wf-trust {
-  width: min(1120px, calc(100% - 32px));
-  margin: 0 auto;
-  padding: 20px 0 4px;
-}
-
-.wf-trust-list {
-  margin: 0;
-  padding: 18px 22px;
-  list-style: none;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 10px 24px;
-  border: 1px solid color-mix(in srgb, var(--color-fg) 12%, transparent);
-  border-radius: 8px;
-  background: color-mix(in srgb, var(--color-bg) 88%, transparent);
-}
-
-.wf-trust-item {
-  position: relative;
-  padding-left: 24px;
-  font-weight: 650;
-  color: var(--color-secondary);
-}
-
-.wf-trust-item::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 6px;
-  width: 12px;
-  height: 12px;
-  border-radius: 3px;
-  background: color-mix(in srgb, var(--color-accent) 70%, var(--color-primary));
-}
-
-.wf-process-list {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 16px;
-}
-
-.wf-process-step {
-  padding: 22px;
-  border: 1px solid color-mix(in srgb, var(--color-fg) 12%, transparent);
-  border-radius: 8px;
-  background: color-mix(in srgb, var(--color-bg) 92%, transparent);
-}
-
-.wf-process-number {
-  color: var(--color-primary);
-  font-weight: 850;
-  font-size: 0.9rem;
-  letter-spacing: 0;
-}
-
-.wf-process-title {
-  margin: 8px 0 6px;
-  color: var(--color-secondary);
-  font-size: 1.2rem;
-}
-
-.wf-faq-list {
-  display: grid;
-  gap: 10px;
-  max-width: 820px;
-}
-
-.wf-faq-item {
-  border: 1px solid color-mix(in srgb, var(--color-fg) 12%, transparent);
-  border-radius: 8px;
-  background: color-mix(in srgb, var(--color-bg) 92%, transparent);
-  overflow: hidden;
-}
-
-.wf-faq-question {
-  padding: 16px 20px;
-  cursor: pointer;
-  font-weight: 700;
-  color: var(--color-secondary);
-  list-style: none;
-}
-
-.wf-faq-question::-webkit-details-marker {
-  display: none;
-}
-
-.wf-faq-question::after {
-  content: "+";
-  float: right;
-  color: var(--color-primary);
-  font-weight: 850;
-}
-
-.wf-faq-item[open] .wf-faq-question::after {
-  content: "-";
-}
-
-.wf-faq-answer {
-  margin: 0;
-  padding: 0 20px 18px;
-  color: color-mix(in srgb, var(--color-fg) 72%, var(--color-bg));
-  line-height: 1.6;
-}
-
-.wf-sticky-cta {
-  position: fixed;
-  right: 16px;
-  bottom: 16px;
-  z-index: 50;
-  display: inline-flex;
-  align-items: center;
-  min-height: 48px;
-  padding: 0 20px;
-  border-radius: 999px;
-  font-weight: 800;
-  color: var(--color-on-primary);
-  background: var(--color-primary);
-  box-shadow: 0 14px 34px color-mix(in srgb, var(--color-primary) 34%, transparent);
-}
-
-@media (min-width: 841px) {
-  .wf-sticky-cta {
-    right: 24px;
-    bottom: 24px;
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .wf-sticky-cta {
-    transition: transform var(--duration-fast, 150ms) ease;
-  }
-
-  .wf-sticky-cta:hover {
-    transform: translateY(-2px);
-  }
-}
-`;
