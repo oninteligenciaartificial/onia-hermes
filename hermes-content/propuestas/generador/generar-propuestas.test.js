@@ -7,7 +7,7 @@
 const assert = require('assert');
 const fs = require('fs');
 const path = require('path');
-const { buildHtml, validateCliente } = require('./generar-propuestas');
+const { buildHtml, validateCliente, parseArgs } = require('./generar-propuestas');
 
 let pass = 0;
 const test = (name, fn) => {
@@ -135,6 +135,22 @@ test('buildHtml inserta pixel de tracking solo con opts.trackUrl', () => {
   const html = buildHtml(base, { trackUrl: 'https://n8n.example/webhook/propuesta-abierta?t=tok1&s=t' });
   assert.ok(html.includes('https://n8n.example/webhook/propuesta-abierta?t=tok1&amp;s=t'));
   assert.ok(html.includes('width="1" height="1"'));
+});
+
+test('parseArgs: slug sin --track no se pierde', () => {
+  const p = parseArgs(['dentalgest', '--pdf']);
+  assert.deepStrictEqual(p.only, ['dentalgest']);
+  assert.strictEqual(p.wantPdf, true);
+  assert.strictEqual(p.trackToken, null);
+});
+
+test('parseArgs: --track consume su token y respeta slugs', () => {
+  const p = parseArgs(['dentalgest', '--track', 'tok-1']);
+  assert.deepStrictEqual(p.only, ['dentalgest']);
+  assert.strictEqual(p.trackToken, 'tok-1');
+  const p2 = parseArgs(['--track', 'tok-2', 'garabato', '--pdf']);
+  assert.deepStrictEqual(p2.only, ['garabato']);
+  assert.strictEqual(p2.trackToken, 'tok-2');
 });
 
 test('clientes.json es válido y todos cumplen requeridos', () => {

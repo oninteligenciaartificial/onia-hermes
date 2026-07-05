@@ -309,17 +309,21 @@ function printPdf(browser, htmlPath, pdfPath) {
 // identifica al prospecto; se pasa con --track <token>.
 const TRACK_WEBHOOK = 'https://n8n-sergio-n8n.hqdqgh.easypanel.host/webhook/propuesta-abierta';
 
-function main() {
-  const args = process.argv.slice(2);
+function parseArgs(args) {
   const wantPdf = args.includes('--pdf');
   const trackIdx = args.indexOf('--track');
-  const trackToken = trackIdx !== -1 ? args[trackIdx + 1] : null;
+  const trackToken = trackIdx !== -1 ? (args[trackIdx + 1] || null) : null;
+  const only = args.filter((a, i) =>
+    !a.startsWith('--') && (trackIdx === -1 || i !== trackIdx + 1));
+  return { wantPdf, trackIdx, trackToken, only };
+}
+
+function main() {
+  const { wantPdf, trackIdx, trackToken, only } = parseArgs(process.argv.slice(2));
   if (trackIdx !== -1 && !trackToken) {
     console.error('[ONIA] --track requiere un token (ej: --track cliente-x-jul26)');
     process.exit(1);
   }
-  const positional = args.filter((a, i) => !a.startsWith('--') && i !== trackIdx + 1);
-  const only = positional;
 
   const clientes = JSON.parse(fs.readFileSync(DATA, 'utf8'));
   const browser = wantPdf ? findBrowser() : null;
@@ -352,4 +356,4 @@ function main() {
 }
 
 if (require.main === module) main();
-module.exports = { buildHtml, validateCliente };
+module.exports = { buildHtml, validateCliente, parseArgs };
