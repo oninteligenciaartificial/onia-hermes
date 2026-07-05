@@ -7,6 +7,11 @@ import { expect, test } from "@playwright/test";
 const CWV = { lcpMs: 2500, fcpMs: 1800, cls: 0.1 };
 const MAX_SCRIPT_KB = 60;
 
+// Serialize so LCP/CLS/FCP are measured one page at a time — under parallel CPU
+// contention PerformanceObserver timings spike and flake. Runs in the
+// chromium-measure project (fullyParallel: false) per playwright.config.ts.
+test.describe.configure({ mode: "serial" });
+
 const PAGES = [
   { name: "landing (demo)", url: "/demo/", maxBytesKb: 60 },
   { name: "landing-focus (demo-focus)", url: "/demo-focus/", maxBytesKb: 60 },
@@ -16,7 +21,7 @@ const PAGES = [
 
 for (const target of PAGES) {
   test(`performance: ${target.name} meets the CWV + weight budget`, async ({ page }, testInfo) => {
-    test.skip(testInfo.project.name !== "chromium", "perf is measured on chromium only");
+    test.skip(testInfo.project.name.startsWith("mobile"), "perf is measured on desktop chromium only");
 
     // Deterministic: third-party origins do not count against our budget.
     await page.route("**/*", (route) => {
