@@ -8,7 +8,7 @@
   :root{--ink:#101827;--muted:#526172;--line:#d8e0ea;--blue:#1e5bff;--blue-dark:#1239a8;
     --green:#0f8b62;--amber:#a75b00;--bg:#f6f8fb;--white:#fff;--accent:#1239a8;}
   *{box-sizing:border-box;}
-  body{margin:0;font-family:Arial,Helvetica,sans-serif;color:var(--ink);background:var(--bg);}
+  body{margin:0;font-family:'Segoe UI',system-ui,-apple-system,Arial,Helvetica,sans-serif;color:var(--ink);background:var(--bg);}
   .page{max-width:900px;margin:0 auto;padding:40px 28px;}
   .hero{background:linear-gradient(135deg,#060b18 0%,#0d1b3f 55%,#1239a8 160%);color:#fff;border-radius:18px;padding:44px 40px;margin-bottom:28px;}
   .kicker{color:#cfe0ff;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;}
@@ -36,21 +36,47 @@
   .res{color:var(--accent);font-weight:700;font-size:13px;}
   .vgrid .vcard{background:var(--white);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:12px;padding:16px 18px;}
   .vcard h3{color:var(--ink);}
-  @media print{.page{max-width:100%;}body{background:#fff;}}
+  figure{margin:18px 0;}
+  figure img{width:100%;border-radius:14px;display:block;}
+  figcaption{font-size:13px;color:var(--muted);margin-top:6px;text-align:center;}
+  table.comp td.win{background:#e3f4ec;color:var(--ink);font-weight:600;}
+  a.cta{display:inline-block;background:var(--accent);color:#fff;font-weight:800;font-size:16px;padding:12px 22px;border-radius:10px;text-decoration:none;}
+  .cover{background:linear-gradient(135deg,#060b18 0%,#0d1b3f 55%,#1239a8 160%);color:#fff;border-radius:18px;padding:60px 48px;min-height:88vh;display:flex;align-items:center;margin-bottom:28px;page-break-after:always;}
+  .cover p{color:#e6eefb;font-size:19px;}
+  .cover .meta{margin-top:26px;font-size:15px;color:#cfe0ff;}
+  @media print{
+    .page{max-width:100%;}body{background:#fff;}
+    .card,table,figure,.vcard,.step{page-break-inside:avoid;}
+    h2{page-break-after:avoid;}
+  }
 </style>
 </head>
 <body>
 <div class="page">
 
+  <div class="cover">
+    <div>
+      <div class="kicker">Propuesta comercial · ONIA Inteligencia Artificial</div>
+      <h1>ONIA Empresarial</h1>
+      <p>Tu empresa entera, viva y bajo control — operada y actualizada por ONIA.</p>
+      <p class="meta">Preparado para: <b>Gerencia / Dirección de la empresa</b> · Julio 2026</p>
+    </div>
+  </div>
   <div class="hero">
     <div class="kicker">Propuesta comercial · ONIA Inteligencia Artificial</div>
     <h1>ONIA Empresarial — Tu empresa entera, viva y bajo control</h1>
     <p>El sistema de gestión completo para empresas robustas: multi-sucursal real, puentes a tus sistemas actuales, automatizaciones a medida y gerencia que consulta y ordena desde Telegram. Operado y actualizado por ONIA cada mes.</p>
   </div>
 
+  <h2>Resumen ejecutivo</h2>
+  <div class="card"><p>Un ERP tradicional cuesta ~<b>USD 20.000</b> de entrada y queda congelado. <b>ONIA Empresarial</b> entrega el sistema completo de gestión (multi-sucursal, inventario detallado, aprobaciones, bots) <b>conectado a los sistemas que ya usás</b>, operado y actualizado por ONIA ante cada RND del SIN y cada cambio del dólar. Entrada: <b>USD 4.900 + 490/mes (E1)</b> — o directo por mensualidad, sin barrera. El siguiente paso es una reunión de diagnóstico sin costo.</p></div>
   <h2>Qué problema resolvemos</h2>
   <div class="card"><p>Un ERP tradicional tipo TR4 cuesta alrededor de <b>USD 20.000</b>, pago único — y queda <b>congelado en el tiempo</b>. Pero Bolivia cambia cada mes: RNDs del SIN, dólar, normas nuevas. <b>ONIA Empresarial</b> es lo contrario: un sistema <b>vivo</b> que se actualiza con cada norma y cada tipo de cambio, conectado a los sistemas que ya usás (sin migraciones traumáticas), con tu gerencia manejando todo desde Telegram. Entrás por menos de la mitad del ancla — o sin barrera: desde USD 490/mes.</p></div>
 
+  <figure>
+    <img src="assets/propuesta-onia-empresarial-hero.webp" alt="Gerente de operaciones recorriendo la planta de una empresa de distribución">
+    <figcaption>La gerencia ve toda la operación — sucursales, ventas y pendientes — sin estar parada en la planta.</figcaption>
+  </figure>
   <h2>Qué incluye</h2>
   <div class="grid">
     <div class="card">
@@ -97,6 +123,11 @@
       <h3>Tus sistemas actuales siguen funcionando</h3>
       <p>Los puentes de solo-lectura conectan lo que ya usás (ERP, SQL Server, planillas): valor desde la semana uno, sin migración traumática.</p>
     </div></div>
+  <h2>ERP tradicional vs. ONIA Empresarial</h2>
+  <table class="comp">
+    <tr><th></th><th>ERP pago único (tipo TR4)</th><th>ONIA Empresarial E1</th></tr>
+    <tr><td><b>Inversión inicial</b></td><td>~USD 20.000</td><td class="win">USD 4.900 — o USD 0 entrando por mensualidad</td></tr><tr><td><b>Cambia una norma (RND del SIN)</b></td><td>Queda desactualizado o pagás upgrade</td><td class="win">Lo actualizamos nosotros, incluido</td></tr><tr><td><b>Dólar y reprecios</b></td><td>Manual, planilla por planilla</td><td class="win">Automatizado con aprobación de gerencia</td></tr><tr><td><b>Gerencia fuera de la oficina</b></td><td>Depende de llamadas</td><td class="win">Consulta y ordena por Telegram</td></tr><tr><td><b>Soporte y monitoreo</b></td><td>Por contrato o por incidente</td><td class="win">Gestión mensual ONIA incluida</td></tr><tr><td><b>Tus sistemas actuales</b></td><td>Migración traumática</td><td class="win">Puentes de solo lectura, sin migrar nada</td></tr>
+  </table>
   <h2>Paquetes — elegí el tuyo</h2>
   <table>
     <tr><th>Paquete</th><th>Qué incluye</th><th class="num">Precio (USD)</th></tr>
@@ -116,7 +147,11 @@
     <p>No incluidos (costos por uso que cobra cada proveedor): conversaciones de WhatsApp Business API de Meta y créditos de IA de alto volumen (se facturan al costo + 20% de gestión). Si contratás la web, dominio y hosting van a nombre de la empresa. Todo lo demás está incluido en el plan.</p>
   </div>
 
-
+  <h2>Próximos pasos</h2>
+  <div class="card">
+    <div class="step"><div class="n">1</div><div><p>Reunión de diagnóstico (sin costo): relevamos sucursales, sistemas actuales y qué necesita ver la gerencia.</p></div></div>
+    <div class="step"><div class="n">2</div><div><p>Te entregamos alcance y precio firmes por escrito (E1, E2 o E3).</p></div></div>
+    <div class="step"><div class="n">3</div><div><p>Firmamos, montamos la infraestructura dedicada y arrancás por fases desde la primera semana.</p></div></div><p style="margin-top:14px;"><a class="cta" href="https://wa.me/59175470140?text=Hola%20ONIA%2C%20quiero%20agendar%20el%20diagn%C3%B3stico%20de%20ONIA%20Empresarial">Agendar diagnóstico sin costo →</a></p></div>
   <div class="foot">
     <p class="big">Precio reservado hasta 30 días con confirmación de pago.</p>
     <p>ONIA — Sistemas, automatización y contenido para negocios. business@onia.com.bo</p>

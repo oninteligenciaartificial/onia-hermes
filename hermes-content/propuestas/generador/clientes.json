@@ -903,6 +903,22 @@
     ],
     "plazoEntrega": "1 a 2 semanas para estar operando (carga guiada + capacitación)",
     "moneda": "Bs · Empresarial en USD",
+    "imagenes": [
+      {
+        "src": "assets/propuesta-dentalgest-hero.webp",
+        "alt": "Dentista conversando tranquilo con su paciente en un consultorio moderno",
+        "caption": "Menos tiempo administrando, más tiempo con tus pacientes: el sistema ordena todo lo demás."
+      }
+    ],
+    "proximosPasos": [
+      "Elegís el plan (podés arrancar en Ordenado o Profesional y subir cuando la clínica lo pida).",
+      "Pagás la implementación y hacemos juntos la carga guiada de pacientes, agenda y servicios.",
+      "Capacitamos a tu equipo y quedás operando — con soporte y actualizaciones según plan."
+    ],
+    "ctaWhatsapp": {
+      "url": "https://wa.me/59175470140?text=Hola%20ONIA%2C%20quiero%20DentalGest%20para%20mi%20cl%C3%ADnica",
+      "texto": "Quiero DentalGest para mi clínica →"
+    },
     "paquetes": [
       {
         "nombre": "Ordenado",
@@ -966,6 +982,32 @@
     "heroGrad": "linear-gradient(135deg,#060b18 0%,#0d1b3f 55%,#1239a8 160%)",
     "titulo": "ONIA Empresarial — Tu empresa entera, viva y bajo control",
     "subtitulo": "El sistema de gestión completo para empresas robustas: multi-sucursal real, puentes a tus sistemas actuales, automatizaciones a medida y gerencia que consulta y ordena desde Telegram. Operado y actualizado por ONIA cada mes.",
+    "portada": {
+      "titulo": "ONIA Empresarial",
+      "subtitulo": "Tu empresa entera, viva y bajo control — operada y actualizada por ONIA.",
+      "para": "Gerencia / Dirección de la empresa",
+      "fecha": "Julio 2026"
+    },
+    "resumenEjecutivo": "Un ERP tradicional cuesta ~<b>USD 20.000</b> de entrada y queda congelado. <b>ONIA Empresarial</b> entrega el sistema completo de gestión (multi-sucursal, inventario detallado, aprobaciones, bots) <b>conectado a los sistemas que ya usás</b>, operado y actualizado por ONIA ante cada RND del SIN y cada cambio del dólar. Entrada: <b>USD 4.900 + 490/mes (E1)</b> — o directo por mensualidad, sin barrera. El siguiente paso es una reunión de diagnóstico sin costo.",
+    "imagenes": [
+      {
+        "src": "assets/propuesta-onia-empresarial-hero.webp",
+        "alt": "Gerente de operaciones recorriendo la planta de una empresa de distribución",
+        "caption": "La gerencia ve toda la operación — sucursales, ventas y pendientes — sin estar parada en la planta."
+      }
+    ],
+    "comparativa": {
+      "titulo": "ERP tradicional vs. ONIA Empresarial",
+      "columnas": ["ERP pago único (tipo TR4)", "ONIA Empresarial E1"],
+      "filas": [
+        ["Inversión inicial", "~USD 20.000", "USD 4.900 — o USD 0 entrando por mensualidad"],
+        ["Cambia una norma (RND del SIN)", "Queda desactualizado o pagás upgrade", "Lo actualizamos nosotros, incluido"],
+        ["Dólar y reprecios", "Manual, planilla por planilla", "Automatizado con aprobación de gerencia"],
+        ["Gerencia fuera de la oficina", "Depende de llamadas", "Consulta y ordena por Telegram"],
+        ["Soporte y monitoreo", "Por contrato o por incidente", "Gestión mensual ONIA incluida"],
+        ["Tus sistemas actuales", "Migración traumática", "Puentes de solo lectura, sin migrar nada"]
+      ]
+    },
     "problema": "Un ERP tradicional tipo TR4 cuesta alrededor de <b>USD 20.000</b>, pago único — y queda <b>congelado en el tiempo</b>. Pero Bolivia cambia cada mes: RNDs del SIN, dólar, normas nuevas. <b>ONIA Empresarial</b> es lo contrario: un sistema <b>vivo</b> que se actualiza con cada norma y cada tipo de cambio, conectado a los sistemas que ya usás (sin migraciones traumáticas), con tu gerencia manejando todo desde Telegram. Entrás por menos de la mitad del ancla — o sin barrera: desde USD 490/mes.",
     "incluye": [
       {
@@ -1076,6 +1118,15 @@
       }
     ],
     "terceros": "No incluidos (costos por uso que cobra cada proveedor): conversaciones de WhatsApp Business API de Meta y créditos de IA de alto volumen (se facturan al costo + 20% de gestión). Si contratás la web, dominio y hosting van a nombre de la empresa. Todo lo demás está incluido en el plan.",
+    "proximosPasos": [
+      "Reunión de diagnóstico (sin costo): relevamos sucursales, sistemas actuales y qué necesita ver la gerencia.",
+      "Te entregamos alcance y precio firmes por escrito (E1, E2 o E3).",
+      "Firmamos, montamos la infraestructura dedicada y arrancás por fases desde la primera semana."
+    ],
+    "ctaWhatsapp": {
+      "url": "https://wa.me/59175470140?text=Hola%20ONIA%2C%20quiero%20agendar%20el%20diagn%C3%B3stico%20de%20ONIA%20Empresarial",
+      "texto": "Agendar diagnóstico sin costo →"
+    },
     "_todo": "S1: bandas Empresarial (E1 4.900+490 / E2 8.900+790) se calibran con el cierre de Bolivian Electric fase 1 — Sergio valida antes de enviar. Confirmar plazo de implementación en el diagnóstico."
   }
 ]

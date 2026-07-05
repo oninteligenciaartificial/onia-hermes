@@ -77,6 +77,76 @@ function renderAddons(addons) {
   ).join('');
 }
 
+// Bloques opcionales v3: resumen ejecutivo, imágenes, casos, comparativa,
+// próximos pasos + CTA, portada. Solo se renderizan si el cliente los define.
+
+function renderResumen(txt) {
+  if (!txt) return '';
+  return `
+  <h2>Resumen ejecutivo</h2>
+  <div class="card"><p>${txt}</p></div>`;
+}
+
+function renderImagenes(imagenes) {
+  if (!imagenes || !imagenes.length) return '';
+  return imagenes.map((im) => `
+  <figure>
+    <img src="${esc(im.src)}" alt="${esc(im.alt || '')}">
+    ${im.caption ? `<figcaption>${esc(im.caption)}</figcaption>` : ''}
+  </figure>`).join('');
+}
+
+function renderCasos(casos) {
+  if (!casos || !casos.length) return '';
+  const items = casos.map((v) => `
+    <div class="vcard">
+      <h3>${esc(v.titulo)}</h3>
+      <p>${v.detalle}</p>
+    </div>`).join('');
+  return `
+  <h2>Resultados</h2>
+  <div class="grid vgrid">${items}</div>`;
+}
+
+function renderComparativa(comp) {
+  if (!comp || !comp.filas || !comp.filas.length) return '';
+  const cols = comp.columnas || ['Opción A', 'Opción B'];
+  const filas = comp.filas.map((f) =>
+    `<tr><td><b>${esc(f[0])}</b></td><td>${esc(f[1])}</td><td class="win">${esc(f[2])}</td></tr>`
+  ).join('');
+  return `
+  <h2>${esc(comp.titulo || 'Comparativa')}</h2>
+  <table class="comp">
+    <tr><th></th><th>${esc(cols[0])}</th><th>${esc(cols[1])}</th></tr>
+    ${filas}
+  </table>`;
+}
+
+function renderProximosPasos(pasos, cta) {
+  if (!pasos || !pasos.length) return '';
+  const steps = pasos.map((p, i) => `
+    <div class="step"><div class="n">${i + 1}</div><div><p>${esc(p)}</p></div></div>`).join('');
+  const btn = cta && cta.url
+    ? `<p style="margin-top:14px;"><a class="cta" href="${esc(cta.url)}">${esc(cta.texto || 'Escribinos por WhatsApp')}</a></p>`
+    : '';
+  return `
+  <h2>Próximos pasos</h2>
+  <div class="card">${steps}${btn}</div>`;
+}
+
+function renderPortada(p, nombre) {
+  if (!p) return '';
+  return `
+  <div class="cover">
+    <div>
+      <div class="kicker">Propuesta comercial · ONIA Inteligencia Artificial</div>
+      <h1>${esc(p.titulo)}</h1>
+      <p>${esc(p.subtitulo || '')}</p>
+      <p class="meta">Preparado para: <b>${esc(p.para || nombre)}</b>${p.fecha ? ` · ${esc(p.fecha)}` : ''}</p>
+    </div>
+  </div>`;
+}
+
 // Bloque opcional: requisitos a cargo del cliente (cobros online en Bolivia).
 // Ver hermes-content/propuestas/REQUISITOS_LEGALES_BOLIVIA_INTERNO.md
 function renderRequisitos(req) {
@@ -121,7 +191,7 @@ function buildHtml(c) {
   :root{--ink:#101827;--muted:#526172;--line:#d8e0ea;--blue:#1e5bff;--blue-dark:#1239a8;
     --green:#0f8b62;--amber:#a75b00;--bg:#f6f8fb;--white:#fff;--accent:${accent};}
   *{box-sizing:border-box;}
-  body{margin:0;font-family:Arial,Helvetica,sans-serif;color:var(--ink);background:var(--bg);}
+  body{margin:0;font-family:'Segoe UI',system-ui,-apple-system,Arial,Helvetica,sans-serif;color:var(--ink);background:var(--bg);}
   .page{max-width:900px;margin:0 auto;padding:40px 28px;}
   .hero{background:${heroGrad};color:#fff;border-radius:18px;padding:44px 40px;margin-bottom:28px;}
   .kicker{color:#cfe0ff;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;}
@@ -149,27 +219,39 @@ function buildHtml(c) {
   .res{color:var(--accent);font-weight:700;font-size:13px;}
   .vgrid .vcard{background:var(--white);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:12px;padding:16px 18px;}
   .vcard h3{color:var(--ink);}
-  @media print{.page{max-width:100%;}body{background:#fff;}}
+  figure{margin:18px 0;}
+  figure img{width:100%;border-radius:14px;display:block;}
+  figcaption{font-size:13px;color:var(--muted);margin-top:6px;text-align:center;}
+  table.comp td.win{background:#e3f4ec;color:var(--ink);font-weight:600;}
+  a.cta{display:inline-block;background:var(--accent);color:#fff;font-weight:800;font-size:16px;padding:12px 22px;border-radius:10px;text-decoration:none;}
+  .cover{background:${heroGrad};color:#fff;border-radius:18px;padding:60px 48px;min-height:88vh;display:flex;align-items:center;margin-bottom:28px;page-break-after:always;}
+  .cover p{color:#e6eefb;font-size:19px;}
+  .cover .meta{margin-top:26px;font-size:15px;color:#cfe0ff;}
+  @media print{
+    .page{max-width:100%;}body{background:#fff;}
+    .card,table,figure,.vcard,.step{page-break-inside:avoid;}
+    h2{page-break-after:avoid;}
+  }
 </style>
 </head>
 <body>
 <div class="page">
-
+${renderPortada(c.portada, c.nombre)}
   <div class="hero">
     <div class="kicker">Propuesta comercial · ONIA Inteligencia Artificial</div>
     <h1>${esc(c.titulo)}</h1>
     <p>${esc(c.subtitulo)}</p>
   </div>
-
+${renderResumen(c.resumenEjecutivo)}
   <h2>Qué problema resolvemos</h2>
   <div class="card"><p>${c.problema}</p></div>
-
+${renderImagenes(c.imagenes)}
   <h2>Qué incluye</h2>
   <div class="grid">${renderCards(c.incluye)}</div>
 
   <h2>Cómo lo construimos</h2>
   <div class="card">${renderSteps(c.pasos)}</div>
-${renderValor(c.valor)}
+${renderValor(c.valor)}${renderCasos(c.casos)}${renderComparativa(c.comparativa)}
   <h2>Paquetes — elegí el tuyo</h2>
   <table>
     <tr><th>Paquete</th><th>Qué incluye</th><th class="num">Precio (${esc(moneda)})</th></tr>
@@ -188,8 +270,7 @@ ${renderValor(c.valor)}
     <div class="tag amber">Importante — costos de terceros</div>
     <p>${c.terceros}</p>
   </div>
-${renderRequisitos(c.requisitos)}
-
+${renderRequisitos(c.requisitos)}${renderProximosPasos(c.proximosPasos, c.ctaWhatsapp)}
   <div class="foot">
     <p class="big">Precio reservado hasta 30 días con confirmación de pago.</p>
     <p>ONIA — Sistemas, automatización y contenido para negocios. business@onia.com.bo</p>

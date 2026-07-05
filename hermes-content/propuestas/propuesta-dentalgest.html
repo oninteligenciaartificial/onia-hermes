@@ -8,7 +8,7 @@
   :root{--ink:#101827;--muted:#526172;--line:#d8e0ea;--blue:#1e5bff;--blue-dark:#1239a8;
     --green:#0f8b62;--amber:#a75b00;--bg:#f6f8fb;--white:#fff;--accent:#0aa3a3;}
   *{box-sizing:border-box;}
-  body{margin:0;font-family:Arial,Helvetica,sans-serif;color:var(--ink);background:var(--bg);}
+  body{margin:0;font-family:'Segoe UI',system-ui,-apple-system,Arial,Helvetica,sans-serif;color:var(--ink);background:var(--bg);}
   .page{max-width:900px;margin:0 auto;padding:40px 28px;}
   .hero{background:linear-gradient(135deg,#071a1e 0%,#0b2f33 55%,#0aa3a3 160%);color:#fff;border-radius:18px;padding:44px 40px;margin-bottom:28px;}
   .kicker{color:#cfe0ff;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;}
@@ -36,7 +36,19 @@
   .res{color:var(--accent);font-weight:700;font-size:13px;}
   .vgrid .vcard{background:var(--white);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:12px;padding:16px 18px;}
   .vcard h3{color:var(--ink);}
-  @media print{.page{max-width:100%;}body{background:#fff;}}
+  figure{margin:18px 0;}
+  figure img{width:100%;border-radius:14px;display:block;}
+  figcaption{font-size:13px;color:var(--muted);margin-top:6px;text-align:center;}
+  table.comp td.win{background:#e3f4ec;color:var(--ink);font-weight:600;}
+  a.cta{display:inline-block;background:var(--accent);color:#fff;font-weight:800;font-size:16px;padding:12px 22px;border-radius:10px;text-decoration:none;}
+  .cover{background:linear-gradient(135deg,#071a1e 0%,#0b2f33 55%,#0aa3a3 160%);color:#fff;border-radius:18px;padding:60px 48px;min-height:88vh;display:flex;align-items:center;margin-bottom:28px;page-break-after:always;}
+  .cover p{color:#e6eefb;font-size:19px;}
+  .cover .meta{margin-top:26px;font-size:15px;color:#cfe0ff;}
+  @media print{
+    .page{max-width:100%;}body{background:#fff;}
+    .card,table,figure,.vcard,.step{page-break-inside:avoid;}
+    h2{page-break-after:avoid;}
+  }
 </style>
 </head>
 <body>
@@ -51,6 +63,10 @@
   <h2>Qué problema resolvemos</h2>
   <div class="card"><p>La clínica funciona, pero la operación vive repartida: agenda en cuaderno o WhatsApp, historias clínicas en papel, cobros que se pierden, y los vencimientos con Impuestos corriendo por detrás. <b>DentalGest</b> ordena todo eso en un solo sistema: el dueño ve qué pasa, ningún paciente se escapa, y el <b>Contador Pack</b> (RCV, vencimientos NIT y radar normativo) te mantiene al día sin perseguir a nadie. Y como Bolivia cambia cada mes (RNDs, dólar), mantenerse legal ES el servicio: el sistema se actualiza solo.</p></div>
 
+  <figure>
+    <img src="assets/propuesta-dentalgest-hero.webp" alt="Dentista conversando tranquilo con su paciente en un consultorio moderno">
+    <figcaption>Menos tiempo administrando, más tiempo con tus pacientes: el sistema ordena todo lo demás.</figcaption>
+  </figure>
   <h2>Qué incluye</h2>
   <div class="grid">
     <div class="card">
@@ -116,7 +132,11 @@
     <p>No incluidos (costos por uso que cobra cada proveedor, no ONIA): conversaciones de WhatsApp Business API de Meta, créditos de IA de alto volumen y, si contratás la web, dominio y hosting a nombre de la clínica. El software del bot WhatsApp y de la facturación SIAT va incluido según plan; SIAT queda activo al certificar ONIA como proveedor.</p>
   </div>
 
-
+  <h2>Próximos pasos</h2>
+  <div class="card">
+    <div class="step"><div class="n">1</div><div><p>Elegís el plan (podés arrancar en Ordenado o Profesional y subir cuando la clínica lo pida).</p></div></div>
+    <div class="step"><div class="n">2</div><div><p>Pagás la implementación y hacemos juntos la carga guiada de pacientes, agenda y servicios.</p></div></div>
+    <div class="step"><div class="n">3</div><div><p>Capacitamos a tu equipo y quedás operando — con soporte y actualizaciones según plan.</p></div></div><p style="margin-top:14px;"><a class="cta" href="https://wa.me/59175470140?text=Hola%20ONIA%2C%20quiero%20DentalGest%20para%20mi%20cl%C3%ADnica">Quiero DentalGest para mi clínica →</a></p></div>
   <div class="foot">
     <p class="big">Precio reservado hasta 30 días con confirmación de pago.</p>
     <p>ONIA — Sistemas, automatización y contenido para negocios. business@onia.com.bo</p>

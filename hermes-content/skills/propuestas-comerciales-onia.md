@@ -71,6 +71,23 @@ Cliente nuevo = agregar un objeto a `clientes.json` y correr el generador.
 12. **No fabricar.** Si falta dato del cliente (brochure, sector), pedirlo o
     marcarlo. Personalizar con datos reales (cartera, números, sector).
 
+## Secciones v3 del generador (usar cuando suman, no por default)
+
+Campos opcionales de `clientes.json` (data: imágenes +72% cierre, prueba
+social +34%, CTA claro convierte lectura en respuesta):
+
+- `imagenes[]` — ambientación editorial (Higgsfield) o fotos REALES en
+  `propuestas/assets/`. NUNCA screenshots falsos de producto.
+- `casos[]` — prueba social SOLO con casos reales; vacío hasta tener el caso
+  fundador (Bolivian Electric).
+- `comparativa` — tabla vs. statu quo (ej. TR4 vs ONIA) ANTES del pricing.
+- `proximosPasos[]` + `ctaWhatsapp` — 3 pasos + botón wa.me prefilleado.
+- `portada` + `resumenEjecutivo` — solo propuestas enterprise/formales.
+- `moneda` — header de precios en USD o mixto.
+
+Roadmap completo: `hermes-content/docs/ONIA_PROPUESTAS_V3_PLAN_20260705.md`
+(Fase 2 contenido real, Fase 3 propuesta trackeable en VPS, Fase 4 video QR).
+
 ## Comandos
 
 ```text

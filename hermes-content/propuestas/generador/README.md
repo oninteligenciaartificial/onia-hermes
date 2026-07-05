@@ -56,6 +56,23 @@ node generar-propuestas.js garabato --pdf
 | `moneda` | (opcional) etiqueta de moneda de los headers de precio; default `Bs` |
 | `_todo` | (opcional, interno) pendientes antes de enviar — el generador lo ignora |
 
+Secciones opcionales v3 (solo se renderizan si existen; data de conversión:
+imágenes +72% cierre, prueba social +34%, CTA claro):
+
+| Campo | Qué es |
+|---|---|
+| `portada` | portada full-page: `titulo`, `subtitulo`, `para`, `fecha` (enterprise) |
+| `resumenEjecutivo` | párrafo tras el hero (acepta `<b>`) — para compradores formales |
+| `imagenes[]` | `src` (relativo a /propuestas, ej. `assets/x.jpg`), `alt`, `caption` |
+| `casos[]` | prueba social REAL: `titulo`, `detalle`. NO fabricar — vacío hasta tener casos |
+| `comparativa` | tabla vs. statu quo: `titulo`, `columnas[2]`, `filas[][3]` (aspecto, ellos, ONIA) |
+| `proximosPasos[]` | 3 pasos concretos para cerrar |
+| `ctaWhatsapp` | botón final: `url` (wa.me con texto prefilleado), `texto` |
+
+Imágenes: viven en `../assets/`. Ambientación editorial (Higgsfield/IA) o fotos
+reales — NUNCA screenshots falsos de producto (regla: no fabricar). Cuando haya
+screenshot real del panel, reemplaza la ambientación.
+
 ## Reglas de pricing
 
 Ver `../PRICING_RATIONALE_INTERNO.md` (interno). Resumen:

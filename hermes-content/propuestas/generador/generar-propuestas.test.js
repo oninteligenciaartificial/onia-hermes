@@ -70,6 +70,66 @@ test('buildHtml usa moneda para los headers de precio', () => {
   assert.ok(usd.includes('Mensual (USD)'));
 });
 
+test('buildHtml renderiza resumen ejecutivo solo si existe', () => {
+  assert.ok(!buildHtml(base).includes('Resumen ejecutivo'));
+  const c = { ...base, resumenEjecutivo: 'RESUMEN-X' };
+  const html = buildHtml(c);
+  assert.ok(html.includes('Resumen ejecutivo'));
+  assert.ok(html.includes('RESUMEN-X'));
+});
+
+test('buildHtml renderiza imágenes solo si existen', () => {
+  assert.ok(!buildHtml(base).includes('<figure'));
+  const c = { ...base, imagenes: [{ src: 'assets/x.png', alt: 'ALT-X', caption: 'CAP-X' }] };
+  const html = buildHtml(c);
+  assert.ok(html.includes('assets/x.png'));
+  assert.ok(html.includes('ALT-X'));
+  assert.ok(html.includes('CAP-X'));
+});
+
+test('buildHtml renderiza casos solo si existen', () => {
+  assert.ok(!buildHtml(base).includes('Resultados'));
+  const c = { ...base, casos: [{ titulo: 'CASO-T', detalle: 'CASO-D' }] };
+  const html = buildHtml(c);
+  assert.ok(html.includes('CASO-T'));
+  assert.ok(html.includes('CASO-D'));
+});
+
+test('buildHtml renderiza comparativa solo si existe', () => {
+  assert.ok(!buildHtml(base).includes('class="comp"'));
+  const c = { ...base, comparativa: {
+    titulo: 'COMP-T', columnas: ['Ellos', 'ONIA'],
+    filas: [['Costo', 'ALTO-X', 'BAJO-X']],
+  } };
+  const html = buildHtml(c);
+  assert.ok(html.includes('COMP-T'));
+  assert.ok(html.includes('Ellos'));
+  assert.ok(html.includes('ALTO-X'));
+  assert.ok(html.includes('BAJO-X'));
+});
+
+test('buildHtml renderiza próximos pasos y CTA solo si existen', () => {
+  assert.ok(!buildHtml(base).includes('Próximos pasos'));
+  const c = { ...base,
+    proximosPasos: ['PASO-UNO', 'PASO-DOS'],
+    ctaWhatsapp: { url: 'https://wa.me/59175470140?text=hola', texto: 'CTA-X' },
+  };
+  const html = buildHtml(c);
+  assert.ok(html.includes('Próximos pasos'));
+  assert.ok(html.includes('PASO-UNO'));
+  assert.ok(html.includes('https://wa.me/59175470140?text=hola'));
+  assert.ok(html.includes('CTA-X'));
+});
+
+test('buildHtml renderiza portada solo si existe', () => {
+  assert.ok(!buildHtml(base).includes('class="cover"'));
+  const c = { ...base, portada: { titulo: 'PORTADA-T', subtitulo: 'PORTADA-S', fecha: 'Julio 2026' } };
+  const html = buildHtml(c);
+  assert.ok(html.includes('class="cover"'));
+  assert.ok(html.includes('PORTADA-T'));
+  assert.ok(html.includes('Julio 2026'));
+});
+
 test('clientes.json es válido y todos cumplen requeridos', () => {
   const data = JSON.parse(fs.readFileSync(path.join(__dirname, 'clientes.json'), 'utf8'));
   assert.ok(Array.isArray(data) && data.length > 0);
