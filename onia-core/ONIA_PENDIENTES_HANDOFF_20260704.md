@@ -1,10 +1,32 @@
-# ONIA Pendientes — Handoff 2026-07-04
+# ONIA Pendientes — Handoff 2026-07-04 (act. 2026-07-05)
 
 Fecha: 2026-07-04. Proposito: lista maestra para abrir sesiones nuevas y
 terminar todo. Cualquier sesion arranca leyendo ESTE doc + memoria.
 Regla: trabajos grandes se ejecutan CON SUBAGENTES en paralelo (uno por repo,
 push multi-sesion: add solo tus archivos -> commit -> pull --rebase
 --autostash origin main -> push origin HEAD:main).
+
+## 0. PROGRESO 2026-07-05 (cerrado desde el handoff)
+
+- **A4 ONIA Center spam briefing**: HECHO y DEPLOYADO al VPS (commit 3d87f093).
+  Briefing ya no apila prefijos.
+- **A5 saneamiento ONIA Center dashboard**: sesion corrio; handoff en
+  `hermes-content/docs/ONIA_CENTER_SANEAMIENTO_HANDOFF_20260705.md` (n8n
+  briefing desactivado 2026-07-05, tasks en Supabase onia_center.tasks).
+- **Panel vendedora (NUEVO)**: cotizador `/vendedores/cotizador` (precios +
+  comision del kit real de Camila = % del primer pago, export de cotizacion
+  cliente con diseno del generador) + pantalla Reglas (guia de decision,
+  mensajes de apertura con copiar, checklist CRM). Catalogo
+  `hermes-content/propuestas/ONIA_CATALOGO_PRECIOS_2026.md` fuente de verdad.
+  Commit 8e0524e3. tsc verde + render 200.
+- **Arthur colaborador 60 dias**: arranque, skim de capital, acuerdo HTML
+  sellado (dia 0 2026-07-03 / dia 60 2026-09-01), inversion obsoleta,
+  recuperacion 100% Sergio. Commiteado.
+- **Cuenta Arthur ONIA Center**: CREADA y verificada — tukomaluko2310@gmail.com,
+  alias arthur, rol arthur (internal_restricted), org onia. Login 200 + token.
+  Stray arthur@onia.com.bo borrado. (Password temporal en chat -> B-bis #11.)
+- **Plan prospeccion Semana 1**:
+  `hermes-content/docs/ONIA_PLAN_PROSPECCION_SEMANA1_2026.md` (35 por segmento).
 
 ## A. EN CURSO — subagentes corriendo (verificar sus commits primero)
 
@@ -154,6 +176,22 @@ hermes-content/docs/ONIA_N8N_CLEANUP_20260703.md (18 archivados, 2 pausados).
 - ONIA Center vivo en center.onia.com.bo (VPS; memoria onia-center-hosting).
 - Crons Vercel DentaGest: reminders, recurring, onia-core-workitems 07:00.
 - Autosync git en sesiones Claude (hook Stop).
+
+## E. WEB-FACTORY — follow-ups (roadmap 8/8 HECHO, PRs #3-#10 en main)
+
+El roadmap `web-factory/docs/WEB_FACTORY_ROADMAP_20260703.md` esta completo:
+4 templates (landing, landing-focus, store, dashboard) con dark mode; 3 gates de
+calidad en `pnpm e2e` (a11y WCAG 2.2 AA light+dark, visual, performance CWV);
+`design:auto` propone componentes Tremor por seccion. Quedan follow-ups menores:
+
+| # | Item | Donde | Esfuerzo |
+|---|---|---|---|
+| E1 | Auto-conversion de imagenes con `sharp` (hoy solo guard `pnpm images:check`). Paso en `generate`: png/jpg -> webp/avif + resize. Version completa del roadmap #6. | `web-factory/generate/` (nuevo paso) | M |
+| E2 | Optimizar 108 imagenes pesadas de Nuvia (`product-media-cutout/*.png`, hasta 815kb) -> webp/avif. Task spawneada `task_589d5cca`. Meta: `pnpm images:check nuvia` sin errores. | `web-factory/data/clients/nuvia.assets/` | M |
+| E3 | Dark mode del template `store` (usa paleta `--nuvia-*` fija, NO adapta — intencional). Si se quiere, tokenizar el shell. | `web-factory/packages/templates/src/store.ts` | M |
+| E4 | Medir INP en el perf gate (hoy LCP/FCP/CLS; INP requiere interaccion simulada). Opcional. | `web-factory/tests/e2e/perf.spec.ts` | S |
+| E5 | Estabilizar flakiness del E2E bajo carga paralela. **EN CURSO — subagente 2026-07-05.** | `web-factory/tests/e2e/` + `playwright.config.ts` | S |
+| E6 | Dashboard interactivo real (Astro islands + Tremor) mas alla del PoC `experiments/astro-islands-poc/`, si un cliente pide datos vivos. | nuevo build | L |
 
 ## Orden recomendado de sesiones
 
