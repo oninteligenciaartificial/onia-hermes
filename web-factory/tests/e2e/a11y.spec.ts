@@ -7,6 +7,12 @@ import { expect, test } from "@playwright/test";
 const WCAG_TAGS = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"];
 const BLOCKING = new Set(["serious", "critical"]);
 
+// Serialize so axe scans (and the networkidle waits before them) run one page at
+// a time. Under parallel CPU contention the page can be scanned before layout
+// settles, which made the store contrast check flake. Runs in the *-measure
+// projects (fullyParallel: false) per playwright.config.ts.
+test.describe.configure({ mode: "serial" });
+
 // landing and dashboard use the token system, so they get a real dark variant
 // (prefers-color-scheme). store.ts ships a fixed Nuvia palette (not token-driven
 // dark), so it is only gated in light.
