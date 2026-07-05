@@ -27,6 +27,16 @@ const serviceSchema = z.object({
   icono: z.string().min(1).default("sparkles"),
 });
 
+const procesoPasoSchema = z.object({
+  titulo: z.string().min(1),
+  desc: z.string().min(1),
+});
+
+const faqItemSchema = z.object({
+  pregunta: z.string().min(1),
+  respuesta: z.string().min(1),
+});
+
 const productSpecSchema = z.object({
   label: z.string().min(1),
   value: z.string().min(1),
@@ -218,6 +228,9 @@ export const clientSchema = z.object({
   categorias: z.array(z.string().min(1)).default([]),
   productos: z.array(productSchema).default([]),
   beneficios: z.array(z.string().min(1)).default([]),
+  credenciales: z.array(z.string().min(1)).default([]),
+  proceso: z.array(procesoPasoSchema).default([]),
+  faq: z.array(faqItemSchema).default([]),
   referencias: z.array(referenceSchema).default([]),
   cta: z
     .object({

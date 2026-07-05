@@ -21,6 +21,10 @@ export type SiteClient = {
     desc: string;
     icono: string;
   }>;
+  beneficios?: string[];
+  credenciales?: string[];
+  proceso?: Array<{ titulo: string; desc: string }>;
+  faq?: Array<{ pregunta: string; respuesta: string }>;
   cta: {
     texto: string;
     url: string;
