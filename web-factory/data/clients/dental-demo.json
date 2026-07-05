@@ -1,0 +1,46 @@
+{
+  "nombre": "Clinica Dental Aura",
+  "slug": "dental-demo",
+  "tagline": "Sonrisas sanas, sin miedo al dentista",
+  "descripcion": "Clinica dental con atencion clara, trato humano y reserva directa por WhatsApp.",
+  "logo": "AU",
+  "heroPoster": "assets/dental-hero.svg",
+  "colores": {
+    "primary": "#0369a1",
+    "secondary": "#0f172a",
+    "accent": "#14b8a6",
+    "bg": "#f6fafd",
+    "fg": "#0f172a"
+  },
+  "tipografia": { "heading": "Onest", "body": "Onest" },
+  "contacto": { "email": "", "tel": "", "whatsapp": "+59170000000", "direccion": "La Paz, Bolivia" },
+  "redes": { "ig": "", "fb": "", "linkedin": "", "x": "" },
+  "servicios": [
+    { "titulo": "Limpieza y prevencion", "desc": "Control, profilaxis y guia de higiene para mantener tu boca sana.", "icono": "sparkles" },
+    { "titulo": "Ortodoncia", "desc": "Brackets y alineadores con plan claro y seguimiento.", "icono": "smile" },
+    { "titulo": "Implantes", "desc": "Reemplazo de piezas con evaluacion y opciones de pago.", "icono": "tooth" },
+    { "titulo": "Blanqueamiento", "desc": "Aclarado seguro supervisado por profesional.", "icono": "star" },
+    { "titulo": "Endodoncia", "desc": "Tratamiento de conducto para calmar el dolor y salvar la pieza.", "icono": "shield" },
+    { "titulo": "Urgencias", "desc": "Atencion el mismo dia para dolor o golpes.", "icono": "alert" }
+  ],
+  "beneficios": ["Trato humano", "Reserva directa", "Planes de pago"],
+  "credenciales": ["Matricula profesional", "Esterilizacion por ciclo certificada", "Atencion de urgencias el mismo dia"],
+  "proceso": [
+    { "titulo": "Agenda", "desc": "Escribinos por WhatsApp y elegimos horario." },
+    { "titulo": "Evaluacion", "desc": "Revisamos tu caso y explicamos opciones sin letra chica." },
+    { "titulo": "Plan y presupuesto", "desc": "Te damos un plan claro con costos y tiempos." },
+    { "titulo": "Tratamiento y control", "desc": "Hacemos el trabajo y agendamos el seguimiento." }
+  ],
+  "faq": [
+    { "pregunta": "Duele el tratamiento?", "respuesta": "Trabajamos con anestesia local y tecnicas de manejo del dolor para que estes comodo." },
+    { "pregunta": "Cuanto cuesta la primera consulta?", "respuesta": "La evaluacion inicial es corta y te damos el presupuesto antes de empezar cualquier tratamiento." },
+    { "pregunta": "Atienden urgencias?", "respuesta": "Si, reservamos espacio para urgencias el mismo dia cuando hay dolor o un golpe." },
+    { "pregunta": "Que formas de pago aceptan?", "respuesta": "Coordinamos opciones y planes de pago segun el tratamiento." }
+  ],
+  "cta": { "texto": "Agendar cita", "url": "https://wa.me/59170000000?text=Hola%2C%20quiero%20agendar%20una%20cita." },
+  "seo": {
+    "title": "Clinica Dental Aura | agenda tu cita sin miedo al dentista",
+    "description": "Clinica dental con atencion clara, trato humano y reserva directa por WhatsApp. Limpieza, ortodoncia, implantes y urgencias.",
+    "ogImage": ""
+  }
+}
