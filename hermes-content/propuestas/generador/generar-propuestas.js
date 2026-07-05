@@ -55,7 +55,9 @@ function renderPaquetes(paquetes) {
     const rowClass = p.recomendado ? ' class="rec"' : '';
     const resultado = p.resultado
       ? `<br><span class="res">→ ${esc(p.resultado)}</span>` : '';
-    return `<tr${rowClass}><td>${nombre}</td><td>${esc(p.incluye)}${resultado}</td><td class="num">${esc(p.precio)}</td></tr>`;
+    const limite = p.limite
+      ? `<br><span class="lim">Tope: ${esc(p.limite)}</span>` : '';
+    return `<tr${rowClass}><td>${nombre}</td><td>${esc(p.incluye)}${resultado}${limite}</td><td class="num">${esc(p.precio)}</td></tr>`;
   }).join('');
 }
 
@@ -223,6 +225,7 @@ function buildHtml(c, opts = {}) {
   tr.rec td{background:#fff7ed;border-top:2px solid var(--accent);border-bottom:2px solid var(--accent);}
   tr.rec td.num{font-size:17px;font-weight:800;}
   .res{color:var(--accent);font-weight:700;font-size:13px;}
+  .lim{color:var(--muted);font-size:12px;}
   .step p{margin:0;color:var(--ink);}
   .step h3 + p{color:var(--muted);}
   .vgrid .vcard{background:var(--white);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:12px;padding:16px 18px;}

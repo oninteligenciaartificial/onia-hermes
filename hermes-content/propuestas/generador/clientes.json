@@ -930,6 +930,7 @@
         "nombre": "Ordenado",
         "incluye": "Panel del dueño + pendientes con responsable + agenda, pacientes e historial + 3 usuarios + soporte por correo",
         "resultado": "Sabés qué pasa en tu clínica cada día.",
+        "limite": "las consultas se registran a mano (sin intake automático), sin Contador Pack ni inventario.",
         "precio": "390/mes (anual 3.900)",
         "recomendado": false
       },
@@ -937,13 +938,15 @@
         "nombre": "Profesional",
         "incluye": "Lo anterior + canales registrados → intake automático + roles finos + comentarios y consentimientos + Contador Pack INCLUIDO + inventario básico + 8 usuarios + soporte WhatsApp",
         "resultado": "Ningún paciente se escapa: cada consulta entra y se sigue sola.",
+        "limite": "una sola sucursal, sin aprobaciones con SLA ni bot WhatsApp; SIAT va como add-on (+190/mes).",
         "precio": "890/mes (anual 8.900)",
         "recomendado": true
       },
       {
         "nombre": "Empresa",
-        "incluye": "Lo anterior + inventario detallado (lotes, kardex) + aprobaciones con SLA + hasta 3 sucursales + bot WhatsApp INCLUIDO + facturación SIAT INCLUIDA + 20 usuarios + soporte prioritario",
+        "incluye": "Lo anterior + aprobaciones con SLA + hasta 3 sucursales + 20 usuarios + soporte prioritario + bot WhatsApp incluido (se activa con la verificación de Meta) + inventario detallado con lotes y kardex (se libera en Q3-2026 sin costo extra) + facturación SIAT incluida (al certificar ONIA ante el SIN)",
         "resultado": "Controlás sin estar encima: aprobaciones, sucursales y WhatsApp automatizados.",
+        "limite": "hasta 3 sucursales (adicional Bs 490/mes c/u); bot, inventario detallado y SIAT entran según su fecha de liberación indicada.",
         "precio": "1.990/mes (anual 19.900)",
         "recomendado": false
       },
@@ -951,6 +954,7 @@
         "nombre": "Empresarial E1",
         "incluye": "Empresa completo + infraestructura dedicada con backups verificados + puente de solo-lectura a tus sistemas + automatizaciones a medida + Hermes ejecutivo por Telegram + usuarios ilimitados + gestión mensual ONIA",
         "resultado": "ONIA opera el sistema por vos; la gerencia consulta y ordena desde Telegram.",
+        "limite": "requiere diagnóstico de alcance previo; hasta 3 sucursales y 1 puente (más = cotización E2).",
         "precio": "USD 4.900 impl. + USD 490/mes",
         "recomendado": false
       }
@@ -1082,6 +1086,7 @@
         "nombre": "E1",
         "incluye": "1 empresa, hasta 3 sucursales, 1 puente a tus sistemas + todo lo descrito (infraestructura dedicada, automatizaciones, Hermes, bot WhatsApp IA, gestión mensual ONIA)",
         "resultado": "Toda tu operación viva y bajo control, con tu sistema actual conectado.",
+        "limite": "hasta 3 sucursales y 1 puente; más sucursales o más sistemas conectados = E2.",
         "precio": "4.900 impl. + 490/mes (o 4.900/año)",
         "recomendado": true
       },
@@ -1089,6 +1094,7 @@
         "nombre": "E2",
         "incluye": "Multi-sucursal amplio, 2+ puentes, reprecios automáticos por tipo de cambio con aprobación de gerencia",
         "resultado": "Varias sucursales y sistemas hablando entre sí, con reprecios al día.",
+        "limite": "precio de referencia — se confirma por escrito tras el diagnóstico de alcance.",
         "precio": "8.900 impl. + 790/mes (o 7.900/año)",
         "recomendado": false
       },
@@ -1096,6 +1102,7 @@
         "nombre": "E3",
         "incluye": "A medida: integraciones profundas, módulos propios de tu operación, alcance definido por escrito",
         "resultado": "El sistema se adapta a tu empresa, no al revés.",
+        "limite": "solo con alcance firmado por escrito; el 'desde' depende de las integraciones.",
         "precio": "desde 14.900 impl. + desde 1.190/mes",
         "recomendado": false
       }

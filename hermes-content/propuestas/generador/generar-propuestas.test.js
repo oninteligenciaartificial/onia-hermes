@@ -137,6 +137,14 @@ test('buildHtml inserta pixel de tracking solo con opts.trackUrl', () => {
   assert.ok(html.includes('width="1" height="1"'));
 });
 
+test('buildHtml renderiza límite del paquete solo si existe', () => {
+  assert.ok(!buildHtml(base).includes('class="lim"'));
+  const c = { ...base, paquetes: [{ ...base.paquetes[0], limite: 'LIMITE-X' }] };
+  const html = buildHtml(c);
+  assert.ok(html.includes('class="lim"'));
+  assert.ok(html.includes('LIMITE-X'));
+});
+
 test('parseArgs: slug sin --track no se pierde', () => {
   const p = parseArgs(['dentalgest', '--pdf']);
   assert.deepStrictEqual(p.only, ['dentalgest']);

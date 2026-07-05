@@ -32,6 +32,12 @@ Cliente nuevo = agregar un objeto a `clientes.json` y correr el generador.
    - Nivel 2 = convertir (captar clientes / briefs / leads).
    - Nivel 3 = automatizar (motor de captación + seguimiento, valor recurrente).
    Explicar la diferencia en una línea en `notaPaquetes`.
+   **Cada plan lleva ventaja Y desventaja (regla Sergio 2026-07-05):** además
+   del `resultado`, usar el campo `limite` del generador para decir el tope o
+   qué NO incluye — el límite hace creíble la ventaja y empuja el upgrade.
+   Si una feature vendida aún no está liberada (ej. inventario detallado Q3,
+   SIAT al certificar, bot al verificar Meta), marcar su disponibilidad en el
+   texto — nunca venderla como disponible hoy.
 
 2. **Resultado por paquete** (`resultado`): frase de resultado concreto, no solo
    qué incluye. Ej: "Convertís tu audiencia en briefs".
