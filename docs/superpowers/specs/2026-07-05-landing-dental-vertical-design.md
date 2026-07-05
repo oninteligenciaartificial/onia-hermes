@@ -103,3 +103,26 @@ Registrar en `packages/templates/src/index.ts`.
 - Política de datos personales / disclaimers de salud.
 - Dominio + hosting a nombre del cliente.
 - Reseñas reales aprobadas (activar bloque reviews).
+
+## v2 — Rediseño editorial (anti-genérico, 2026-07-05)
+
+Feedback de Sergio: la v1 quedó genérica (hero split plano + cards uniformes 3×2,
+radios/sombras uniformes). Rediseño usando la galería interna del repo (10x,
+pixel-perfect-hero, layered-stack; `DESIGN_STACK.md`, Pattern Bank). Nuevos
+bloques `clinic-hero` / `clinic-services` / `clinic-process` + `icons.ts` +
+`templates/src/clinic-css.ts`:
+
+- **Hero editorial**: titular display grande, fondo mesh + dot-grid, media grande
+  con **tarjeta glass flotante** de reserva, trust inline con iconos SVG.
+- **Servicios en bento asimétrico** (celda destacada 2×2) con iconos SVG reales,
+  no cards uniformes con iniciales.
+- **Proceso como timeline conectada**; **FAQ a 2 columnas**; **CTA final** con
+  superficie de color y profundidad.
+- **Motion** reveal-on-scroll (IntersectionObserver, progressive enhancement) +
+  hover, con `prefers-reduced-motion`; hero sin reveal para no penalizar LCP.
+- **Contraste dark-safe**: textos sobre `--color-fg` y un mix adaptativo
+  `primary/fg` para acentos (kickers, números), verificado en light y dark.
+
+Gates: 54 unit + 45 e2e verdes (a11y WCAG 2.2 AA light+dark, perf LCP < 70ms,
+estructura); peso ≈ 38kb same-origin, 0kb JS externo. Los bloques genéricos
+previos (`trust`/`process`/`faq`) quedan en el kit para otros templates.
