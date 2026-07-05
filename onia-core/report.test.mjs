@@ -94,6 +94,7 @@ describe("buildCoreReport", () => {
     assert.ok(dental.installedEntities > 0, "DentalGest has installed migrations");
     // Adapters map every core entity, so the rollup covers all of them.
     assert.equal(dental.entities.total, contract.entities.length);
+    assert.ok(dental.pendingEntities.includes("process_checklist"), "dental names pending entities");
 
     for (const product of report.products) {
       const entities = product.entities;
@@ -101,6 +102,11 @@ describe("buildCoreReport", () => {
         entities.cubierto + entities.parcial + entities.dominio + entities.pendiente,
         entities.total,
         `${product.projectId} buckets add up`,
+      );
+      assert.equal(
+        product.pendingEntities.length,
+        entities.pendiente,
+        `${product.projectId} pending names match the pending count`,
       );
     }
   });
@@ -115,5 +121,7 @@ describe("renderReport", () => {
     assert.match(text, /DentalGest/);
     assert.match(text, /pack "salud_dental"/);
     assert.match(text, /bloqueadas: 1 \(siat\)/);
+    assert.match(text, /falta instalar: /);
+    assert.match(text, /process_checklist/);
   });
 });

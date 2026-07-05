@@ -86,13 +86,17 @@ export function buildCoreReport(contract, adapters = []) {
 
   const products = contract.distributionTargets.map((target) => {
     const adapter = adapters.find((item) => item.projectId === target.projectId);
+    const entityMappings = adapter?.entityMappings ?? [];
     return {
       projectId: target.projectId,
       projectName: adapter?.projectName ?? target.projectId,
       status: target.status,
       verticalTrackId: target.verticalTrackId ?? adapter?.verticalTrackId ?? null,
       installedEntities: adapter?.installedEntities?.length ?? 0,
-      entities: adapter ? summarizeMappings(adapter.entityMappings) : null,
+      entities: adapter ? summarizeMappings(entityMappings) : null,
+      pendingEntities: entityMappings
+        .filter((mapping) => classifyAdoptionStatus(mapping.status) === "pendiente")
+        .map((mapping) => mapping.coreEntityId),
       nextAction: target.nextAction ?? null,
     };
   });
@@ -157,6 +161,9 @@ export function renderReport(report) {
       lines.push("      entidades: sin adapter");
     }
     lines.push(`      migraciones instaladas: ${product.installedEntities} entidades`);
+    if (product.status === "installing" && product.pendingEntities.length > 0) {
+      lines.push(`      falta instalar: ${product.pendingEntities.join(", ")}`);
+    }
     if (product.nextAction) {
       lines.push(`      siguiente: ${product.nextAction}`);
     }
