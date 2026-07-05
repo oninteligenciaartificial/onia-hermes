@@ -18,6 +18,11 @@ export const formatSchema = z.object({
   negative_prompt: z.string().min(1),
   requires_gate: z.array(z.enum(["brief", "cost", "identity", "review"])).default([]),
   generate_audio: z.boolean().default(false),
+  mode: z.string().optional(),
+  preset_id: z.string().optional(),
+  source_url: z.string().optional(),
+  garment_ref: z.string().optional(),
+  soul_id: z.string().optional(),
 });
 
 export function parseFormat(input) {

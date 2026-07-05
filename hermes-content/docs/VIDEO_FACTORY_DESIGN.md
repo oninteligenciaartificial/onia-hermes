@@ -111,6 +111,7 @@ Validación en todo boundary (regla de coding-style: no confiar en input externo
 | `sergio-talking-head` | Soul ID: `text2image_soul_v2` still → Seedance 2.0 minimal motion | 9:16 · 5s | Sergio | identidad + revisión |
 | `viral-preset` | `higgsfield_preset` (image-to-video, presets trending) | 9:16 | ONIA/Sergio | revisión (+ identidad si Sergio) |
 | `clip-from-long` | Personal Clipper (`clipify`, 1 YouTube → 10-20 clips) | 9:16 · subtítulos | ONIA | revisión |
+| `avatar-outfit` | `nano_banana` (virtual try-on / outfit edit sobre Soul ID) | 9:16 · 5s | Sergio | identidad + revisión |
 
 `generate_audio` = false por defecto (audio via ElevenLabs/editado). Negative
 prompt seguro por defecto (ver §10).

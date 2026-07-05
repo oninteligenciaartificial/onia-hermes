@@ -4,6 +4,11 @@ const CREDIT_RATE = {
   seedance_2_0_mini: 3,
   veo3_1_lite: 4,
   kling3_0: 9,
+  // Fase 2: estimados a refinar con el cost real que devuelva el MCP.
+  explainer_video: 6,
+  higgsfield_preset: 5,
+  clipify: 3,
+  nano_banana: 2,
 };
 
 export function estimateCost({ model, duration_s }) {

@@ -1,0 +1,18 @@
+{
+  "id": "product-showcase",
+  "engine": "higgsfield",
+  "engine_model": "marketing_studio_video",
+  "mode": "product_showcase",
+  "aspect_ratio": "9:16",
+  "duration_s": 15,
+  "lane": "cliente",
+  "shots": [
+    { "n": 1, "description": "Producto en contexto de uso, ángulo que muestra beneficio", "seconds": 5 },
+    { "n": 2, "description": "Detalle/textura del producto, foco en calidad", "seconds": 6 },
+    { "n": 3, "description": "CTA claro a WhatsApp con el producto en cuadro", "seconds": 4 }
+  ],
+  "hook": "El producto resolviendo el problema en el primer segundo",
+  "negative_prompt": "No logos de terceros. No likeness de terceros. No testimonios falsos. No claims financieros engañosos. No placeholder text.",
+  "requires_gate": ["brief", "cost", "review"],
+  "generate_audio": false
+}

@@ -1,0 +1,17 @@
+{
+  "id": "explainer",
+  "engine": "higgsfield",
+  "engine_model": "explainer_video",
+  "aspect_ratio": "9:16",
+  "duration_s": 30,
+  "lane": "onia",
+  "shots": [
+    { "n": 1, "description": "Bloque narrado 1: problema o pregunta que engancha", "seconds": 10 },
+    { "n": 2, "description": "Bloque narrado 2: explicación visual del concepto", "seconds": 10 },
+    { "n": 3, "description": "Bloque narrado 3: resultado + cierre con marca", "seconds": 10 }
+  ],
+  "hook": "Pregunta que abre el tema en 2s",
+  "negative_prompt": "No logos de terceros. No testimonios falsos. No claims financieros engañosos. No placeholder text.",
+  "requires_gate": ["review"],
+  "generate_audio": false
+}

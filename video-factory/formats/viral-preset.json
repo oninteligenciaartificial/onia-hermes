@@ -1,0 +1,16 @@
+{
+  "id": "viral-preset",
+  "engine": "higgsfield",
+  "engine_model": "higgsfield_preset",
+  "preset_id": "<preset-id-del-radar>",
+  "aspect_ratio": "9:16",
+  "duration_s": 5,
+  "lane": "onia",
+  "shots": [
+    { "n": 1, "description": "Imagen base animada con el preset trending del radar", "seconds": 5 }
+  ],
+  "hook": "Efecto visual del preset que frena el scroll",
+  "negative_prompt": "No logos de terceros. No likeness de terceros. No testimonios falsos. No claims financieros engañosos. No placeholder text.",
+  "requires_gate": ["review"],
+  "generate_audio": false
+}

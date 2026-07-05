@@ -1,0 +1,16 @@
+{
+  "id": "clip-from-long",
+  "engine": "higgsfield",
+  "engine_model": "clipify",
+  "source_url": "<youtube-url>",
+  "aspect_ratio": "9:16",
+  "duration_s": 60,
+  "lane": "onia",
+  "shots": [
+    { "n": 1, "description": "Clip recortado del video largo, mejor momento con subtítulos", "seconds": 60 }
+  ],
+  "hook": "El pico de retención del video largo original",
+  "negative_prompt": "No logos de terceros. No testimonios falsos. No claims financieros engañosos. No placeholder text.",
+  "requires_gate": ["review"],
+  "generate_audio": false
+}

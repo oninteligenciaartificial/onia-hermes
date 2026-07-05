@@ -1,0 +1,19 @@
+{
+  "id": "avatar-outfit",
+  "engine": "higgsfield",
+  "engine_model": "nano_banana",
+  "mode": "virtual_try_on",
+  "garment_ref": "<imagen-prenda>",
+  "soul_id": "<soul-id-sergio>",
+  "aspect_ratio": "9:16",
+  "duration_s": 5,
+  "lane": "sergio",
+  "shots": [
+    { "n": 1, "description": "Avatar con la prenda de referencia (virtual try-on), still identidad-lock, revisar antes de animar" },
+    { "n": 2, "description": "Motion mínimo: pose natural con la prenda, sin deriva facial" }
+  ],
+  "hook": "Founder mostrando el outfit directo a cámara",
+  "negative_prompt": "No cara de Sergio sin aprobación. No deriva facial, no elongación facial, no cuello estirado, no ojos más grandes, no piel de cera, no look CGI. No logos de terceros, no watermark, no placeholder text.",
+  "requires_gate": ["identity", "review"],
+  "generate_audio": false
+}
