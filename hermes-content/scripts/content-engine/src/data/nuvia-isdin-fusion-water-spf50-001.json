@@ -7,8 +7,8 @@
     "totalDurationInFrames": 660,
     "platform": "youtube_short",
     "lane": "client",
-    "status": "draft_pending_assets",
-    "notes": "Product imagery is reference-only until owned/approved media exists. Voice + Mara shots generated separately (Higgsfield). Nothing publishes without approval."
+    "status": "rendered_v1",
+    "notes": "Rendered v1 out/nuvia-isdin-fusion-water-spf50-001.mp4 (22s, voz Elena seed_audio, presentadora Mara soul_2). Product imagery is reference-only until owned/approved media exists. Nothing publishes without approval."
   },
   "brand": {
     "name": "Nuvia",
@@ -42,10 +42,10 @@
   },
   "audio": { "voice": "audio/vo.mp3", "music": null },
   "scenes": [
-    { "id": "hook", "from": 0, "durationInFrames": 120, "image": "mara/hook.jpg", "kind": "presenter", "kenBurns": "in" },
-    { "id": "problem", "from": 120, "durationInFrames": 120, "image": "mara/problem.jpg", "kind": "presenter", "kenBurns": "out" },
-    { "id": "product", "from": 240, "durationInFrames": 240, "image": "mara/product.jpg", "kind": "product", "kenBurns": "in" },
-    { "id": "cta", "from": 480, "durationInFrames": 180, "image": "mara/cta.jpg", "kind": "cta", "kenBurns": "out" }
+    { "id": "hook", "from": 0, "durationInFrames": 120, "image": "mara/hook.png", "kind": "presenter", "kenBurns": "in" },
+    { "id": "problem", "from": 120, "durationInFrames": 120, "image": "mara/problem.png", "kind": "presenter", "kenBurns": "out" },
+    { "id": "product", "from": 240, "durationInFrames": 240, "image": null, "kind": "product", "kenBurns": "in" },
+    { "id": "cta", "from": 480, "durationInFrames": 180, "image": "mara/cta.png", "kind": "cta", "kenBurns": "out" }
   ],
   "subtitles": [
     { "text": "En altura, el sol pega mas fuerte.", "from": 6, "to": 62 },

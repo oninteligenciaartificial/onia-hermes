@@ -248,7 +248,13 @@ const CtaCard: React.FC<{ spec: VideoSpec; scene: Scene }> = ({ spec, scene }) =
   const c = spec.brand.colors;
   return (
     <AbsoluteFill style={{ alignItems: "center", justifyContent: "center", opacity: s }}>
-      <div style={{ transform: `scale(${scale})`, textAlign: "center", fontFamily: FONT, padding: 40 }}>
+      {scene.image ? (
+        <>
+          <Img src={staticFile(scene.image)} style={{ position: "absolute", width: "100%", height: "100%", objectFit: "cover" }} />
+          <AbsoluteFill style={{ background: "linear-gradient(180deg, rgba(5,9,15,0.6) 0%, rgba(5,9,15,0.35) 42%, rgba(5,9,15,0.88) 100%)" }} />
+        </>
+      ) : null}
+      <div style={{ transform: `scale(${scale})`, textAlign: "center", fontFamily: FONT, padding: 40, position: "relative" }}>
         {spec.brand.logo ? (
           <Img src={staticFile(spec.brand.logo)} style={{ height: 110, objectFit: "contain", marginBottom: 30 }} />
         ) : (
