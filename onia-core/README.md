@@ -44,6 +44,9 @@ modulos, verticales o integraciones. No son la definicion del core.
 - `index.mjs`: helpers para leer y consultar el contrato.
 - `index.test.mjs`: tests de los helpers + integracion del validador (node:test).
 - `validate.mjs`: validador local de estructura e invariantes.
+- `report.mjs`: reporte de avance en lenguaje simple (verticales con su pack y
+  cuanto del core lleva instalado cada producto). Correr: `node onia-core/report.mjs`.
+- `report.test.mjs`: tests del reporte.
 - `ONIA_CORE_RESEARCH_RESULT_2026.md`: resultado de investigacion local y externa.
 - `ONIA_CORE_BENCHMARK_GAP_AUDIT_2026.md`: auditoria contra sistemas ERP, CRM,
   work management y operacion real de empresas.
@@ -75,10 +78,12 @@ modulos, verticales o integraciones. No son la definicion del core.
 - `adapters/dentagest.json`: mapa de adopcion para DentalGest.
 - `adapters/ganadero-os.json`: mapa de adopcion para Ganadero OS.
 
-## Validacion
+## Validacion, tests y reporte
 
 ```bash
-npm run validate:onia-core
+npm run validate:onia-core          # invariantes del contrato
+node --test onia-core/*.test.mjs    # 42 tests (helpers, packs, reporte)
+node onia-core/report.mjs           # foto de avance por vertical y producto
 ```
 
 ## Politica de distribucion
