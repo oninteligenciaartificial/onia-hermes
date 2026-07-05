@@ -81,6 +81,8 @@ describe("buildCoreReport", () => {
       assert.ok(track.pack, `${track.id} should have a pack`);
       assert.equal(track.coreCount + track.moduleCount, track.requiredCount);
       assert.ok(track.pack.kpis > 0, `${track.id} pack kpis`);
+      assert.ok(Array.isArray(track.blocked), `${track.id} blocked list`);
+      assert.equal(track.blocked.length, track.blockedCount);
     }
   });
 
@@ -112,5 +114,6 @@ describe("renderReport", () => {
     assert.match(text, /PRODUCTOS/);
     assert.match(text, /DentalGest/);
     assert.match(text, /pack "salud_dental"/);
+    assert.match(text, /bloqueadas: 1 \(siat\)/);
   });
 });

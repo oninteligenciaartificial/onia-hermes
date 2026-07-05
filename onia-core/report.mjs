@@ -68,6 +68,7 @@ export function buildCoreReport(contract, adapters = []) {
       coreCount: readiness?.coreCount ?? 0,
       moduleCount: readiness?.moduleCount ?? 0,
       blockedCount: readiness?.blockedCount ?? 0,
+      blocked: track.blockedCapabilityIds ?? [],
       pack: pack
         ? {
             id: pack.id,
@@ -129,8 +130,9 @@ export function renderReport(report) {
   lines.push("VERTICALES (track + pack de rubro)");
   for (const track of report.tracks) {
     lines.push(`  - ${track.name}  [${track.status}]`);
+    const blockedLabel = track.blocked.length ? `${track.blockedCount} (${track.blocked.join(", ")})` : "0";
     lines.push(
-      `      capabilities requeridas: ${track.requiredCount} (${track.coreCount} core, ${track.moduleCount} modulo) | bloqueadas: ${track.blockedCount}`,
+      `      capabilities requeridas: ${track.requiredCount} (${track.coreCount} core, ${track.moduleCount} modulo) | bloqueadas: ${blockedLabel}`,
     );
     if (track.pack) {
       const pack = track.pack;

@@ -166,15 +166,15 @@ assert(Array.isArray(contract.verticalPacks), "verticalPacks must be an array");
 if (Array.isArray(contract.verticalPacks)) {
   assertUnique(contract.verticalPacks, "verticalPacks");
 
-  const trackIds = new Set(contract.verticalTracks.map((track) => track.id));
+  const tracksById = new Map(contract.verticalTracks.map((track) => [track.id, track]));
   const rubroIds = new Set((contract.verticalFactory?.roadmapRubros ?? []).map((entry) => entry.rubro));
-  const intakeChannelIds = new Set((contract.intakePolicy?.channels ?? []).map((channel) => channel.id));
+  const channelsById = new Map((contract.intakePolicy?.channels ?? []).map((channel) => [channel.id, channel]));
   const dashboardExtensions = contract.readModels?.owner_dashboard?.verticalExtensions ?? {};
   const packedTrackIds = new Set();
 
   for (const pack of contract.verticalPacks) {
     assert(pack.id, "verticalPack needs id");
-    assert(trackIds.has(pack.trackId), `verticalPack ${pack.id} references missing track ${pack.trackId}`);
+    assert(tracksById.has(pack.trackId), `verticalPack ${pack.id} references missing track ${pack.trackId}`);
     assert(!packedTrackIds.has(pack.trackId), `verticalPack ${pack.id} duplicates track ${pack.trackId}`);
     packedTrackIds.add(pack.trackId);
 
@@ -193,8 +193,20 @@ if (Array.isArray(contract.verticalPacks)) {
       `verticalPack ${pack.id} needs at least one intake channel`,
     );
 
+    const blockedCapabilityIds = new Set(tracksById.get(pack.trackId)?.blockedCapabilityIds ?? []);
     for (const channelId of pack.intakeChannels ?? []) {
-      assert(intakeChannelIds.has(channelId), `verticalPack ${pack.id} references missing intake channel ${channelId}`);
+      const channel = channelsById.get(channelId);
+      assert(channel, `verticalPack ${pack.id} references missing intake channel ${channelId}`);
+      // Un canal con compuerta external_gate no puede alimentar un vertical que
+      // bloquea esa capability (ej: intake WhatsApp en un track que gatea whatsapp).
+      const gate = channel?.gate ?? "";
+      if (gate.startsWith("external_gate ")) {
+        const gatedCapabilityId = gate.slice("external_gate ".length).trim();
+        assert(
+          !blockedCapabilityIds.has(gatedCapabilityId),
+          `verticalPack ${pack.id} usa canal "${channelId}" con compuerta ${gatedCapabilityId}, pero el track ${pack.trackId} bloquea esa capability`,
+        );
+      }
     }
 
     const dashboardKpis = dashboardExtensions[pack.trackId];

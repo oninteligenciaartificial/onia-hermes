@@ -256,6 +256,24 @@ describe("verticalPacks", () => {
       }
     }
   });
+
+  it("no pack feeds a gated intake channel that its own track blocks", () => {
+    const channelsById = new Map(contract.intakePolicy.channels.map((channel) => [channel.id, channel]));
+    for (const pack of getVerticalPacks(contract)) {
+      const track = getVerticalTrack(contract, pack.trackId);
+      const blocked = new Set(track.blockedCapabilityIds);
+      for (const channelId of pack.intakeChannels) {
+        const gate = channelsById.get(channelId)?.gate ?? "";
+        if (gate.startsWith("external_gate ")) {
+          const gatedCapabilityId = gate.slice("external_gate ".length).trim();
+          assert.ok(
+            !blocked.has(gatedCapabilityId),
+            `${pack.id} channel ${channelId} gated by blocked ${gatedCapabilityId}`,
+          );
+        }
+      }
+    }
+  });
 });
 
 describe("validator integration", () => {

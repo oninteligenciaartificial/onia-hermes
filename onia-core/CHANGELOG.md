@@ -10,10 +10,14 @@
   que los productos en adopcion (DentalGest, Bolivian Electric) no se ven
   afectados.
 - Validador: biyeccion track<->pack, `rubro` en el roadmap, `intakeChannels`
-  subconjunto de `intakePolicy.channels`, vocabulario/checklists/kpis no vacios y
-  KPIs sincronizados con `owner_dashboard.verticalExtensions`.
-- Helpers `getVerticalPacks` / `getVerticalPack` / `getVerticalPackByRubro` +
-  7 tests nuevos (33 en total).
+  subconjunto de `intakePolicy.channels`, vocabulario/checklists/kpis no vacios,
+  KPIs sincronizados con `owner_dashboard.verticalExtensions` y coherencia de
+  compuerta (un pack no puede alimentar un canal `external_gate` cuya capability
+  su track bloquea; ej: intake WhatsApp en un vertical que gatea whatsapp).
+- Helpers `getVerticalPacks` / `getVerticalPack` / `getVerticalPackByRubro`.
+- Nuevo `report.mjs`: reporte de avance en lenguaje simple (verticales con su
+  pack + cuanto del core lleva instalado cada producto); nombra las capabilities
+  bloqueadas por vertical. Suite dependency-free (`node:test`): 43 tests.
 
 ## 0.5.0 — 2026-07-03 (core finalizado para beta)
 
