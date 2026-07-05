@@ -2,7 +2,7 @@
   "projectId": "gestios",
   "projectName": "GestiOS",
   "repoPath": "C:\\dev\\proyectos\\Gestios",
-  "status": "mapped_not_installed",
+  "status": "installing",
   "adoptionRule": "Do not install until ONIA Core beta. GestiOS must adopt the core without becoming the owner of the core.",
   "businessRole": "General business organization system for small and medium companies.",
   "entityMappings": [

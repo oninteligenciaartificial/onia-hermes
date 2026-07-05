@@ -113,7 +113,7 @@ for (const track of contract.verticalTracks) {
 
 // Misma doble llave que los adapters: solo proyectos aprobados pueden salir
 // de hold_until_beta en distributionTargets.
-const TARGET_ADOPTION_APPROVED = new Set(["dentagest", "bolivian-electric"]);
+const TARGET_ADOPTION_APPROVED = new Set(["dentagest", "bolivian-electric", "gestios"]);
 
 for (const target of contract.distributionTargets) {
   const allowed = TARGET_ADOPTION_APPROVED.has(target.projectId)
@@ -200,7 +200,7 @@ assertUnique(adapters.map(({ adapter }) => ({ id: adapter.projectId })), "adapte
 
 // Doble llave de adopcion: solo los proyectos listados aqui pueden estar en
 // estado "installing" (cambiar esta lista + el adapter juntos, a proposito).
-const ADOPTION_APPROVED = new Set(["dentagest", "bolivian-electric"]);
+const ADOPTION_APPROVED = new Set(["dentagest", "bolivian-electric", "gestios"]);
 
 for (const { file, adapter } of adapters) {
   assert(distributionProjectIds.has(adapter.projectId), `${file} references project outside distributionTargets`);

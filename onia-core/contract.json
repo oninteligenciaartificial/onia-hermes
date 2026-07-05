@@ -1068,8 +1068,8 @@
     {
       "projectId": "gestios",
       "repoPath": "C:\\dev\\proyectos\\Gestios",
-      "status": "hold_until_beta",
-      "nextAction": "Revertir prototipo local y esperar paquete ONIA Core beta."
+      "status": "installing",
+      "nextAction": "Sprint 0 baseline de migraciones en curso (drift confirmado: sin _prisma_migrations, falta qr_payments, sobra personal_subscriptions). Portar lib/onia-core + tablas segun adapters/gestios.json."
     },
     {
       "projectId": "dentagest",
