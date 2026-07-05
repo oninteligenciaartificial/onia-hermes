@@ -15,6 +15,18 @@ export function getVerticalTrack(contract, trackId) {
   return contract.verticalTracks.find((track) => track.id === trackId);
 }
 
+export function getVerticalPacks(contract) {
+  return contract.verticalPacks ?? [];
+}
+
+export function getVerticalPack(contract, trackId) {
+  return getVerticalPacks(contract).find((pack) => pack.trackId === trackId);
+}
+
+export function getVerticalPackByRubro(contract, rubro) {
+  return getVerticalPacks(contract).find((pack) => pack.rubro === rubro);
+}
+
 export function getDistributionTarget(contract, projectId) {
   return contract.distributionTargets.find((target) => target.projectId === projectId);
 }

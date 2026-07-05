@@ -158,6 +158,59 @@ if (contract.verticalFactory) {
   }
 }
 
+// verticalPacks: cada track vertical trae un pack de rubro (vocabulario,
+// checklists, KPIs e intake). Onboardear un rubro nuevo = agregar track + pack
+// (datos), no codigo de core. La biyeccion track<->pack evita packs huerfanos y
+// verticales sin pack.
+assert(Array.isArray(contract.verticalPacks), "verticalPacks must be an array");
+if (Array.isArray(contract.verticalPacks)) {
+  assertUnique(contract.verticalPacks, "verticalPacks");
+
+  const trackIds = new Set(contract.verticalTracks.map((track) => track.id));
+  const rubroIds = new Set((contract.verticalFactory?.roadmapRubros ?? []).map((entry) => entry.rubro));
+  const intakeChannelIds = new Set((contract.intakePolicy?.channels ?? []).map((channel) => channel.id));
+  const dashboardExtensions = contract.readModels?.owner_dashboard?.verticalExtensions ?? {};
+  const packedTrackIds = new Set();
+
+  for (const pack of contract.verticalPacks) {
+    assert(pack.id, "verticalPack needs id");
+    assert(trackIds.has(pack.trackId), `verticalPack ${pack.id} references missing track ${pack.trackId}`);
+    assert(!packedTrackIds.has(pack.trackId), `verticalPack ${pack.id} duplicates track ${pack.trackId}`);
+    packedTrackIds.add(pack.trackId);
+
+    assert(rubroIds.has(pack.rubro), `verticalPack ${pack.id} references missing rubro ${pack.rubro}`);
+
+    assert(
+      Array.isArray(pack.vocabulary?.workItemTypes) && pack.vocabulary.workItemTypes.length > 0,
+      `verticalPack ${pack.id} needs vocabulary.workItemTypes`,
+    );
+    assert(Array.isArray(pack.vocabulary?.partnerTypes), `verticalPack ${pack.id} needs vocabulary.partnerTypes array`);
+    assert(Array.isArray(pack.vocabulary?.areas), `verticalPack ${pack.id} needs vocabulary.areas array`);
+    assert(Array.isArray(pack.checklists) && pack.checklists.length > 0, `verticalPack ${pack.id} needs at least one checklist`);
+    assert(Array.isArray(pack.kpis) && pack.kpis.length > 0, `verticalPack ${pack.id} needs at least one kpi`);
+    assert(
+      Array.isArray(pack.intakeChannels) && pack.intakeChannels.length > 0,
+      `verticalPack ${pack.id} needs at least one intake channel`,
+    );
+
+    for (const channelId of pack.intakeChannels ?? []) {
+      assert(intakeChannelIds.has(channelId), `verticalPack ${pack.id} references missing intake channel ${channelId}`);
+    }
+
+    const dashboardKpis = dashboardExtensions[pack.trackId];
+    if (dashboardKpis) {
+      assert(
+        JSON.stringify(dashboardKpis) === JSON.stringify(pack.kpis),
+        `verticalPack ${pack.id} kpis must match owner_dashboard.verticalExtensions[${pack.trackId}]`,
+      );
+    }
+  }
+
+  for (const track of contract.verticalTracks) {
+    assert(packedTrackIds.has(track.id), `verticalTrack ${track.id} has no verticalPack`);
+  }
+}
+
 assert(Array.isArray(contract.schemaFiles), "schemaFiles must be an array");
 for (const schemaFile of contract.schemaFiles) {
   assertRepoFile(schemaFile, "Schema file");

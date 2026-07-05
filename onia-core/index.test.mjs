@@ -27,6 +27,9 @@ import {
   getOrphanEntityIds,
   getTrackReadiness,
   getUnansweredQuestions,
+  getVerticalPack,
+  getVerticalPackByRubro,
+  getVerticalPacks,
   getVerticalTrack,
   isCoreCapability,
   loadOniaCoreContract,
@@ -195,6 +198,63 @@ describe("getTrackReadiness", () => {
 
   it("returns null for a missing track", () => {
     assert.equal(getTrackReadiness(contract, "ghost-track"), null);
+  });
+});
+
+describe("verticalPacks", () => {
+  it("gives every vertical track exactly one pack (track<->pack bijection)", () => {
+    const packs = getVerticalPacks(contract);
+    assert.equal(packs.length, contract.verticalTracks.length);
+
+    const trackIds = contract.verticalTracks.map((track) => track.id).sort();
+    const packTrackIds = packs.map((pack) => pack.trackId).sort();
+    assert.deepEqual(packTrackIds, trackIds);
+  });
+
+  it("looks up a pack by track id", () => {
+    assert.equal(getVerticalPack(contract, "dentagest-clinical")?.rubro, "salud_dental");
+    assert.equal(getVerticalPack(contract, "ghost-track"), undefined);
+  });
+
+  it("looks up a pack by rubro", () => {
+    assert.equal(getVerticalPackByRubro(contract, "distribucion_b2b")?.trackId, "proveegest-electrico");
+    assert.equal(getVerticalPackByRubro(contract, "ghost-rubro"), undefined);
+  });
+
+  it("every pack carries non-empty rubro vocabulary, checklists and kpis", () => {
+    for (const pack of getVerticalPacks(contract)) {
+      assert.ok(pack.vocabulary.workItemTypes.length > 0, `${pack.id} workItemTypes`);
+      assert.ok(Array.isArray(pack.vocabulary.partnerTypes), `${pack.id} partnerTypes`);
+      assert.ok(Array.isArray(pack.vocabulary.areas), `${pack.id} areas`);
+      assert.ok(pack.checklists.length > 0, `${pack.id} checklists`);
+      assert.ok(pack.kpis.length > 0, `${pack.id} kpis`);
+    }
+  });
+
+  it("every pack rubro exists in the vertical factory roadmap", () => {
+    const rubros = new Set(contract.verticalFactory.roadmapRubros.map((entry) => entry.rubro));
+    for (const pack of getVerticalPacks(contract)) {
+      assert.ok(rubros.has(pack.rubro), `${pack.id} rubro ${pack.rubro} not in roadmap`);
+    }
+  });
+
+  it("every pack intake channel exists in the intake policy", () => {
+    const channelIds = new Set(contract.intakePolicy.channels.map((channel) => channel.id));
+    for (const pack of getVerticalPacks(contract)) {
+      assert.ok(pack.intakeChannels.length > 0, `${pack.id} intakeChannels`);
+      for (const channelId of pack.intakeChannels) {
+        assert.ok(channelIds.has(channelId), `${pack.id} channel ${channelId}`);
+      }
+    }
+  });
+
+  it("pack kpis stay in sync with the owner dashboard vertical extension", () => {
+    const extensions = contract.readModels.owner_dashboard.verticalExtensions;
+    for (const pack of getVerticalPacks(contract)) {
+      if (extensions[pack.trackId]) {
+        assert.deepEqual(pack.kpis, extensions[pack.trackId], `${pack.id} kpis vs dashboard`);
+      }
+    }
   });
 });
 

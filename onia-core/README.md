@@ -1,6 +1,6 @@
 # ONIA Core
 
-Estado: beta canonico (v0.2.0), no instalado en productos.
+Estado: beta canonico (v0.6.0), no instalado en productos.
 Owner: ONIA / Hermes.
 
 > Beta contract cerrado: se agregaron las 8 piezas transversales
@@ -38,8 +38,11 @@ modulos, verticales o integraciones. No son la definicion del core.
 
 ## Archivos
 
-- `contract.json`: contrato canonico versionado.
+- `contract.json`: contrato canonico versionado. Incluye `verticalPacks`: el
+  kit por rubro (vocabulario, checklists, KPIs e intake) que hace vendible cada
+  vertical sin tocar el core. Onboardear un rubro = agregar track + pack (datos).
 - `index.mjs`: helpers para leer y consultar el contrato.
+- `index.test.mjs`: tests de los helpers + integracion del validador (node:test).
 - `validate.mjs`: validador local de estructura e invariantes.
 - `ONIA_CORE_RESEARCH_RESULT_2026.md`: resultado de investigacion local y externa.
 - `ONIA_CORE_BENCHMARK_GAP_AUDIT_2026.md`: auditoria contra sistemas ERP, CRM,
@@ -58,7 +61,7 @@ modulos, verticales o integraciones. No son la definicion del core.
 - `ONIA_CORE_OWNER_PANEL_AND_INTAKE_2026.md`: diseno canonico del read-model
   owner_dashboard y la politica de intake externo -> WorkItem.
 - `CHANGELOG.md`: historial de versiones del contrato (0.1.0 alpha ->
-  0.5.0 beta congelado).
+  0.6.0 vertical packs).
 - `ONIA_CORE_INSTALL_GUIDE_2026.md`: receta repetible de instalacion en
   productos, destilada de la adopcion real en DentalGest.
 - `ONIA_STACK_ASSESSMENT_2026.md`: evaluacion del stack (Postgres/Prisma/Next

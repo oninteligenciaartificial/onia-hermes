@@ -1,5 +1,20 @@
 # ONIA Core Changelog
 
+## 0.6.0 — 2026-07-05 (vertical packs formalizados)
+
+- Nueva estructura `verticalPacks`: un pack por track vertical con vocabulario
+  del rubro (`workItemTypes`, `partnerTypes`, `areas`), `checklists`, `kpis` e
+  `intakeChannels`. Onboardear un rubro nuevo = agregar track + pack (datos), no
+  codigo de core.
+- Aditivo/no-breaking: no toca entidades, capabilities, schema ni adapters, asi
+  que los productos en adopcion (DentalGest, Bolivian Electric) no se ven
+  afectados.
+- Validador: biyeccion track<->pack, `rubro` en el roadmap, `intakeChannels`
+  subconjunto de `intakePolicy.channels`, vocabulario/checklists/kpis no vacios y
+  KPIs sincronizados con `owner_dashboard.verticalExtensions`.
+- Helpers `getVerticalPacks` / `getVerticalPack` / `getVerticalPackByRubro` +
+  7 tests nuevos (33 en total).
+
 ## 0.5.0 — 2026-07-03 (core finalizado para beta)
 
 - `work_item.channelId` agregado al contrato + `channel_id` al SQL base

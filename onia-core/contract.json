@@ -1,6 +1,6 @@
 {
   "name": "ONIA Core",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "status": "beta",
   "sourceOfTruth": "onia-hermes/onia-core",
   "researchResult": "onia-core/ONIA_CORE_RESEARCH_RESULT_2026.md",
@@ -896,6 +896,179 @@
         "whatsapp",
         "tr4_adapter",
         "siat"
+      ]
+    }
+  ],
+  "verticalPacks": [
+    {
+      "id": "dentagest-clinical-pack",
+      "trackId": "dentagest-clinical",
+      "rubro": "salud_dental",
+      "vocabulary": {
+        "workItemTypes": [
+          "cita",
+          "tratamiento",
+          "recall",
+          "presupuesto",
+          "cobro_pendiente",
+          "seguimiento_laboratorio"
+        ],
+        "partnerTypes": [
+          "laboratorio",
+          "aseguradora",
+          "proveedor_insumos"
+        ],
+        "areas": [
+          "recepcion",
+          "clinica",
+          "facturacion",
+          "laboratorio",
+          "gerencia"
+        ]
+      },
+      "checklists": [
+        "apertura_clinica",
+        "cierre_caja",
+        "plan_tratamiento",
+        "consentimiento_informado",
+        "seguimiento_laboratorio"
+      ],
+      "kpis": [
+        "citas de hoy y no asistio",
+        "presupuestos pendientes",
+        "tratamientos abiertos",
+        "cobros del dia y cuentas por cobrar",
+        "inventario critico"
+      ],
+      "intakeChannels": [
+        "whatsapp_chatwoot",
+        "email_shared",
+        "web_form",
+        "phone_walkin"
+      ]
+    },
+    {
+      "id": "gestios-general-pack",
+      "trackId": "gestios-general",
+      "rubro": "pymes_general",
+      "vocabulary": {
+        "workItemTypes": [
+          "tarea",
+          "solicitud",
+          "pedido",
+          "cobro_pendiente"
+        ],
+        "partnerTypes": [
+          "cliente",
+          "proveedor"
+        ],
+        "areas": [
+          "administracion",
+          "ventas",
+          "operaciones",
+          "gerencia"
+        ]
+      },
+      "checklists": [
+        "alta_cliente",
+        "cierre_caja",
+        "seguimiento_pedido"
+      ],
+      "kpis": [
+        "tareas vencidas por area",
+        "carga por responsable",
+        "importaciones recientes"
+      ],
+      "intakeChannels": [
+        "email_shared",
+        "web_form",
+        "phone_walkin",
+        "import"
+      ]
+    },
+    {
+      "id": "ganadero-offline-pack",
+      "trackId": "ganadero-offline",
+      "rubro": "agro_ganaderia",
+      "vocabulary": {
+        "workItemTypes": [
+          "evento_sanitario",
+          "tarea_campo",
+          "movimiento_hacienda",
+          "alerta_campo"
+        ],
+        "partnerTypes": [
+          "veterinario",
+          "comprador",
+          "proveedor_insumos",
+          "transportista"
+        ],
+        "areas": [
+          "campo",
+          "sanidad",
+          "administracion",
+          "gerencia"
+        ]
+      },
+      "checklists": [
+        "ronda_sanitaria",
+        "registro_pesaje",
+        "cierre_jornada"
+      ],
+      "kpis": [
+        "eventos sanitarios pendientes",
+        "alertas de campo sin resolver",
+        "dispositivos sin sincronizar"
+      ],
+      "intakeChannels": [
+        "phone_walkin",
+        "import"
+      ]
+    },
+    {
+      "id": "proveegest-electrico-pack",
+      "trackId": "proveegest-electrico",
+      "rubro": "distribucion_b2b",
+      "vocabulary": {
+        "workItemTypes": [
+          "cotizacion",
+          "pedido",
+          "solicitud_compra",
+          "reclamo",
+          "cobro_pendiente"
+        ],
+        "partnerTypes": [
+          "cliente_empresa",
+          "proveedor",
+          "importador",
+          "transportista"
+        ],
+        "areas": [
+          "ventas",
+          "compras",
+          "almacen",
+          "facturacion",
+          "gerencia"
+        ]
+      },
+      "checklists": [
+        "alta_cliente_empresa",
+        "cotizacion_tecnica",
+        "recepcion_mercaderia",
+        "cierre_caja"
+      ],
+      "kpis": [
+        "cotizaciones abiertas por vendedor",
+        "cotizaciones vencidas (SLA)",
+        "descuentos esperando aprobacion",
+        "pipeline por sucursal",
+        "clientes empresa sin actividad 30 dias"
+      ],
+      "intakeChannels": [
+        "email_shared",
+        "web_form",
+        "phone_walkin",
+        "import"
       ]
     }
   ],
