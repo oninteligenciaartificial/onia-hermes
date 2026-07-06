@@ -1,5 +1,16 @@
 # ONIA Core Changelog
 
+## core/logic — 2026-07-05 (intake + roles)
+
+- `logic/intake.logic.mjs`: gobernanza de canal (registrado o alerta de
+  gobernanza), dedupe por contacto+canal en 24h, ruteo por routedAreaId/
+  routingRule, round-robin por carga y normalizacion a WorkItem draft. Implementa
+  las `normalizationRules` del `intakePolicy` del contrato.
+- `logic/roles.logic.mjs`: motor de permisos deny-by-default sobre RoleAssignment
+  -> asignaciones activas/no vencidas, alcance organizacion/area, union multi-rol
+  y wildcard '*'. La matriz de permisos la aporta el vertical, no el core.
+  +18 tests (130 total).
+
 ## report/verticalReadiness — 2026-07-05 (parar un vertical nuevo)
 
 - `verticalReadiness(contract, modules, trackId)` en `report.mjs`: dice si un
