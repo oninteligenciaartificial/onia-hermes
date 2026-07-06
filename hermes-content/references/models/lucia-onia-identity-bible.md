@@ -58,12 +58,15 @@ Cada lugar = UNA imagen real (sin personas) subida como Reference Element (`envi
 - Cercana, honesta, natural. Skincare desde la experiencia, sin humo. Claims seguros
   (sin cura/antiedad/antes-despues). Lenguaje de cuidado, no medico.
 
-## Produccion — ver [[AVATAR-CONSISTENCY-SCHEME]] (regla obligatoria, leer antes de generar)
-- **Metodo PRINCIPAL (0.12cr, alta consistencia):** `soul_2` + soul_id `9a0d6953-...` +
-  prompt de outfit/lugar de esta bible. Usar para TODO contenido donde la cara importa.
-- **Metodo SECUNDARIO (2cr, consistencia mas debil):** `nano_banana_2` + Elements, solo
-  cuando se necesita el objeto/prenda/lugar EXACTO de una foto real. Requiere 2-3
-  candidatos + QA manual antes de aceptar cualquier resultado. Ver [[lucia-elements-catalog]].
+## Produccion — ver [[AVATAR-CONSISTENCY-SCHEME]] (4 niveles, leer antes de generar)
+- **Nivel 1 (0.12cr, DEFAULT):** `soul_2` + soul_id `9a0d6953-...` + prompt de texto.
+- **Nivel 2 (42-75cr, UGC con producto real):** Marketing Studio, avatar custom creado
+  desde una foto Nivel 1 (nunca desde Elements). Pendiente probar con Lucia (solo Mara
+  validada hasta ahora).
+- **Nivel 3 (15cr/10s, talking sin producto):** still Nivel 1 -> `wan2_7` + audio.
+  Verificado estable con Lucia.
+- **Nivel 4 (2cr, ultimo recurso):** `nano_banana_2` + Elements, solo prop/lugar exacto
+  sin que hable. QA obligatorio. Ver [[lucia-elements-catalog]].
 - **Lip sync (barato-medio, 15cr/10s):** `wan2_7` con still de Lucia + audio de voz. Ya
   verificado estable (`valentina-lipsync-wan27-10s.mp4`, cara sin romperse, boca sincronizada).
 - **Hero/UGC con producto en mano (42-75cr):** Marketing Studio, avatar custom.
