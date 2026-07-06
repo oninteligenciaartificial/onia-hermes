@@ -2956,6 +2956,8 @@ a.workflow-card:hover {
   opacity: 0.6;
 }
 
+.nuvia-cart-checkout-button[data-disabled="true"] { pointer-events: none; opacity: 0.5; }
+
 .nuvia-checkout-result {
   display: grid;
   gap: 8px;

@@ -49,32 +49,6 @@ type RoutineStepDefinition = {
   categories: string[];
 };
 
-type CheckoutResult = {
-  ok: boolean;
-  mode: "payment" | "quote" | "configuration_pending" | "invalid_request";
-  message: string;
-  order?: {
-    id: string | null;
-    publicCode: string;
-    persisted: boolean;
-    subtotal: number;
-    discountTotal: number;
-    total: number;
-    currency: string;
-  };
-  payment?: {
-    id: string | null;
-    provider: string;
-    status: string;
-    qrImageUrl?: string | null;
-    qrPayload?: string | null;
-    expiresAt?: string | null;
-    requiredCredentials?: string[];
-    providerReference?: string | null;
-  } | null;
-  requiredConfiguration?: string[];
-};
-
 const PROMO_NOTICE_KEY = "nuvia-promo-notice-20260623";
 const CATALOG_PAGE_SIZE = 48;
 
@@ -582,16 +556,12 @@ function CartDrawer({
   open,
   priced,
   productMap,
-  pushNotice,
   remove,
   setOpen,
   subtotal,
   total,
   totalCount,
 }: ReturnType<typeof useCart>) {
-  const [checkoutLoading, setCheckoutLoading] = useState(false);
-  const [checkoutResult, setCheckoutResult] = useState<CheckoutResult | null>(null);
-  const [checkoutError, setCheckoutError] = useState("");
   const panelRef = useRef<HTMLElement>(null);
   const firstCurrency = cart.length ? productMap.get(cart[0].id)?.currency : "BOB";
 
@@ -613,55 +583,6 @@ function CartDrawer({
       .slice(0, 6)
       .map(([label, products]) => ({ label, products: products.slice(0, 4) }));
   }, [productMap]);
-
-  const startCheckout = async () => {
-    if (!cart.length || checkoutLoading) {
-      return;
-    }
-
-    setCheckoutLoading(true);
-    setCheckoutError("");
-    setCheckoutResult(null);
-
-    try {
-      const response = await fetch("/api/nuvia/checkout", {
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-        },
-        body: JSON.stringify({
-          storeSlug: "nuvia",
-          provider: "bnb_qr_simple",
-          items: cart.map((item) => ({
-            id: item.id,
-            quantity: item.qty,
-          })),
-        }),
-      });
-      const result = (await response.json()) as CheckoutResult;
-
-      if (!response.ok || !result.ok) {
-        throw new Error(result.message || "No se pudo crear el checkout.");
-      }
-
-      setCheckoutResult(result);
-      pushNotice({
-        tone: result.mode === "configuration_pending" ? "promo" : "success",
-        title: result.order?.publicCode ? `orden ${result.order.publicCode}` : "checkout preparado",
-        body: result.message,
-      });
-    } catch (error) {
-      const message = error instanceof Error ? error.message : "No se pudo crear el checkout.";
-      setCheckoutError(message);
-      pushNotice({
-        tone: "error",
-        title: "checkout pendiente",
-        body: message,
-      });
-    } finally {
-      setCheckoutLoading(false);
-    }
-  };
 
   return (
     <div className="nuvia-cart-shell" data-open={open ? "true" : "false"} aria-hidden={!open}>
@@ -766,30 +687,15 @@ function CartDrawer({
             <span>{priced ? "total" : "total pendiente"}</span>
             <strong>{priced && totalCount ? money(total, firstCurrency) : "cotizacion"}</strong>
           </div>
-          <button className="nuvia-cart-checkout-button" type="button" onClick={startCheckout} disabled={!totalCount || checkoutLoading}>
-            {checkoutLoading ? "creando orden..." : priced && totalCount ? "generar QR / orden" : "crear cotizacion"}
-          </button>
-          {checkoutResult ? (
-            <div className="nuvia-checkout-result" data-mode={checkoutResult.mode}>
-              <span>{checkoutResult.order?.publicCode ? `orden ${checkoutResult.order.publicCode}` : "checkout nuvia"}</span>
-              <strong>{checkoutResult.mode === "configuration_pending" ? "faltan credenciales" : checkoutResult.mode}</strong>
-              <p>{checkoutResult.message}</p>
-              {checkoutResult.order?.total ? (
-                <small>{money(checkoutResult.order.total, checkoutResult.order.currency)}</small>
-              ) : null}
-              {checkoutResult.payment?.qrImageUrl ? (
-                <Image src={checkoutResult.payment.qrImageUrl} alt="QR de pago Nuvia" width={220} height={220} unoptimized />
-              ) : null}
-              {checkoutResult.requiredConfiguration?.length ? (
-                <ul>
-                  {checkoutResult.requiredConfiguration.map((item) => (
-                    <li key={item}>{item}</li>
-                  ))}
-                </ul>
-              ) : null}
-            </div>
-          ) : null}
-          {checkoutError ? <p className="nuvia-checkout-error">{checkoutError}</p> : null}
+          <Link
+            className="nuvia-cart-checkout-button"
+            href="/nuvia/checkout"
+            onClick={() => setOpen(false)}
+            aria-disabled={!totalCount}
+            data-disabled={!totalCount ? "true" : undefined}
+          >
+            {totalCount ? "finalizar compra" : "tu carrito está vacío"}
+          </Link>
           <button type="button" onClick={clear} hidden={!cart.length}>
             vaciar carrito
           </button>
