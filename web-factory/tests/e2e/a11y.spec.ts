@@ -21,6 +21,7 @@ const PAGES = [
   { name: "landing-focus (demo-focus)", url: "/demo-focus/", schemes: ["light", "dark"] as const },
   { name: "dashboard (dashboard-demo)", url: "/dashboard-demo/", schemes: ["light", "dark"] as const },
   { name: "store (skincare-demo)", url: "/skincare-demo/", schemes: ["light"] as const },
+  { name: "landing-clinic (dental-demo)", url: "/dental-demo/", schemes: ["light", "dark"] as const },
 ];
 
 for (const target of PAGES) {

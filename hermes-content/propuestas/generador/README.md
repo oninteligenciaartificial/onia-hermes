@@ -26,7 +26,26 @@ node generar-propuestas.js --pdf
 
 # Un solo cliente
 node generar-propuestas.js garabato --pdf
+
+# Variante TRACKEADA por prospecto (avisa a Telegram al abrirse)
+node generar-propuestas.js dentalgest --track clinica-sonrisa-jul26
 ```
+
+## Propuesta trackeable (--track)
+
+`--track <token>` genera un archivo extra `propuesta-<slug>-<token>.html` con un
+pixel invisible que llama al webhook n8n `propuesta-abierta` (workflow
+"ONIA - Propuesta Abierta (pixel)", id `UMpcKi7wfMmC9KCw`). Al abrirlo, Sergio
+recibe por Telegram: token del prospecto, slug, hora y dispositivo.
+
+- Enviar al prospecto el **HTML trackeado** (o hostearlo); el PDF normal no
+  trackea (los PDF no ejecutan el pixel).
+- El PDF se imprime siempre desde el HTML SIN pixel — la generación no cuenta
+  como apertura.
+- Token sugerido: `<cliente>-<mes>` (ej. `clinica-sonrisa-jul26`). Un token por
+  prospecto para saber QUIÉN abrió.
+- El webhook ignora bots/crawlers (`ignoreBots`), pero un antivirus de correo
+  corporativo podría disparar un falso positivo — preferir envío por WhatsApp.
 
 > Si el PDF falla con "está siendo utilizado en otro proceso": cerrá el PDF
 > abierto en el visor. Edge no puede sobrescribir un archivo abierto.
@@ -55,6 +74,23 @@ node generar-propuestas.js garabato --pdf
 | `terceros` | nota de costos que paga el cliente |
 | `moneda` | (opcional) etiqueta de moneda de los headers de precio; default `Bs` |
 | `_todo` | (opcional, interno) pendientes antes de enviar — el generador lo ignora |
+
+Secciones opcionales v3 (solo se renderizan si existen; data de conversión:
+imágenes +72% cierre, prueba social +34%, CTA claro):
+
+| Campo | Qué es |
+|---|---|
+| `portada` | portada full-page: `titulo`, `subtitulo`, `para`, `fecha` (enterprise) |
+| `resumenEjecutivo` | párrafo tras el hero (acepta `<b>`) — para compradores formales |
+| `imagenes[]` | `src` (relativo a /propuestas, ej. `assets/x.jpg`), `alt`, `caption` |
+| `casos[]` | prueba social REAL: `titulo`, `detalle`. NO fabricar — vacío hasta tener casos |
+| `comparativa` | tabla vs. statu quo: `titulo`, `columnas[2]`, `filas[][3]` (aspecto, ellos, ONIA) |
+| `proximosPasos[]` | 3 pasos concretos para cerrar |
+| `ctaWhatsapp` | botón final: `url` (wa.me con texto prefilleado), `texto` |
+
+Imágenes: viven en `../assets/`. Ambientación editorial (Higgsfield/IA) o fotos
+reales — NUNCA screenshots falsos de producto (regla: no fabricar). Cuando haya
+screenshot real del panel, reemplaza la ambientación.
 
 ## Reglas de pricing
 

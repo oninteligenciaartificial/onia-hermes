@@ -840,6 +840,12 @@
     "heroGrad": "linear-gradient(135deg,#071a1e 0%,#0b2f33 55%,#0aa3a3 160%)",
     "titulo": "DentalGest — El sistema de gestión de tu clínica dental",
     "subtitulo": "Agenda, pacientes, historial, cobros y cumplimiento tributario en un solo lugar — todo incluido por nivel, sin sorpresas. Un sistema vivo que se actualiza con cada norma nueva.",
+    "portada": {
+      "titulo": "DentalGest",
+      "subtitulo": "El sistema de gestión de tu clínica dental — vivo, completo y sin sorpresas.",
+      "para": "Dueños y administradores de clínicas dentales",
+      "fecha": "Julio 2026"
+    },
     "problema": "La clínica funciona, pero la operación vive repartida: agenda en cuaderno o WhatsApp, historias clínicas en papel, cobros que se pierden, y los vencimientos con Impuestos corriendo por detrás. <b>DentalGest</b> ordena todo eso en un solo sistema: el dueño ve qué pasa, ningún paciente se escapa, y el <b>Contador Pack</b> (RCV, vencimientos NIT y radar normativo) te mantiene al día sin perseguir a nadie. Y como Bolivia cambia cada mes (RNDs, dólar), mantenerse legal ES el servicio: el sistema se actualiza solo.",
     "incluye": [
       {
@@ -903,11 +909,28 @@
     ],
     "plazoEntrega": "1 a 2 semanas para estar operando (carga guiada + capacitación)",
     "moneda": "Bs · Empresarial en USD",
+    "imagenes": [
+      {
+        "src": "assets/propuesta-dentalgest-hero.webp",
+        "alt": "Dentista conversando tranquilo con su paciente en un consultorio moderno",
+        "caption": "Menos tiempo administrando, más tiempo con tus pacientes: el sistema ordena todo lo demás."
+      }
+    ],
+    "proximosPasos": [
+      "Elegís el plan (podés arrancar en Ordenado o Profesional y subir cuando la clínica lo pida).",
+      "Pagás la implementación y hacemos juntos la carga guiada de pacientes, agenda y servicios.",
+      "Capacitamos a tu equipo y quedás operando — con soporte y actualizaciones según plan."
+    ],
+    "ctaWhatsapp": {
+      "url": "https://wa.me/59175470140?text=Hola%20ONIA%2C%20quiero%20DentalGest%20para%20mi%20cl%C3%ADnica",
+      "texto": "Quiero DentalGest para mi clínica →"
+    },
     "paquetes": [
       {
         "nombre": "Ordenado",
         "incluye": "Panel del dueño + pendientes con responsable + agenda, pacientes e historial + 3 usuarios + soporte por correo",
         "resultado": "Sabés qué pasa en tu clínica cada día.",
+        "limite": "las consultas se registran a mano (sin intake automático), sin Contador Pack ni inventario.",
         "precio": "390/mes (anual 3.900)",
         "recomendado": false
       },
@@ -915,13 +938,15 @@
         "nombre": "Profesional",
         "incluye": "Lo anterior + canales registrados → intake automático + roles finos + comentarios y consentimientos + Contador Pack INCLUIDO + inventario básico + 8 usuarios + soporte WhatsApp",
         "resultado": "Ningún paciente se escapa: cada consulta entra y se sigue sola.",
+        "limite": "una sola sucursal, sin aprobaciones con SLA ni bot WhatsApp; SIAT va como add-on (+190/mes).",
         "precio": "890/mes (anual 8.900)",
         "recomendado": true
       },
       {
         "nombre": "Empresa",
-        "incluye": "Lo anterior + inventario detallado (lotes, kardex) + aprobaciones con SLA + hasta 3 sucursales + bot WhatsApp INCLUIDO + facturación SIAT INCLUIDA + 20 usuarios + soporte prioritario",
+        "incluye": "Lo anterior + aprobaciones con SLA + hasta 3 sucursales + 20 usuarios + soporte prioritario + bot WhatsApp incluido (se activa con la verificación de Meta) + inventario detallado con lotes y kardex (se libera en Q3-2026 sin costo extra) + facturación SIAT incluida (al certificar ONIA ante el SIN)",
         "resultado": "Controlás sin estar encima: aprobaciones, sucursales y WhatsApp automatizados.",
+        "limite": "hasta 3 sucursales (adicional Bs 490/mes c/u); bot, inventario detallado y SIAT entran según su fecha de liberación indicada.",
         "precio": "1.990/mes (anual 19.900)",
         "recomendado": false
       },
@@ -929,11 +954,12 @@
         "nombre": "Empresarial E1",
         "incluye": "Empresa completo + infraestructura dedicada con backups verificados + puente de solo-lectura a tus sistemas + automatizaciones a medida + Hermes ejecutivo por Telegram + usuarios ilimitados + gestión mensual ONIA",
         "resultado": "ONIA opera el sistema por vos; la gerencia consulta y ordena desde Telegram.",
+        "limite": "requiere diagnóstico de alcance previo; hasta 3 sucursales y 1 puente (más = cotización E2).",
         "precio": "USD 4.900 impl. + USD 490/mes",
         "recomendado": false
       }
     ],
-    "notaPaquetes": "Diferencia clave: <b>Ordenado</b> = tu clínica ordenada y visible · <b>Profesional</b> = ningún paciente se escapa (capta y sigue solo) · <b>Empresa</b> = automatizar el control (aprobaciones, WhatsApp, sucursales) · <b>Empresarial E1</b> = ONIA lo opera por vos con infraestructura dedicada. Recomendado: <b>Profesional</b>. Implementación única (carga guiada + wizard + capacitación): Bs 490 / 1.490 / 3.900 según plan. Anual = 10 meses (2 gratis). Precios por sucursal.",
+    "notaPaquetes": "Diferencia clave: <b>Ordenado</b> = tu clínica ordenada y visible · <b>Profesional</b> = ningún paciente se escapa (capta y sigue solo) · <b>Empresa</b> = automatizar el control (aprobaciones, WhatsApp, sucursales) · <b>Empresarial E1</b> = ONIA lo opera por vos con infraestructura dedicada. Recomendado: <b>Profesional</b>. Implementación única (carga guiada + wizard + capacitación): Bs 490 / 1.490 / 3.900 según plan. Anual = 10 meses (2 gratis). Precios por sucursal. <b>Precio de lanzamiento:</b> cerrando antes del 31-jul-2026 mantenés la lista anterior (320 / 750 / 1.500) congelada 12 meses.",
     "addons": [
       {
         "nombre": "Facturación SIAT en línea (para plan Profesional; en Empresa va incluida)",
@@ -957,7 +983,7 @@
       }
     ],
     "terceros": "No incluidos (costos por uso que cobra cada proveedor, no ONIA): conversaciones de WhatsApp Business API de Meta, créditos de IA de alto volumen y, si contratás la web, dominio y hosting a nombre de la clínica. El software del bot WhatsApp y de la facturación SIAT va incluido según plan; SIAT queda activo al certificar ONIA como proveedor.",
-    "_todo": "S1: Sergio valida precios v2 (390/890/1.990 Bs + E1 USD 4.900+490) y ventana de lanzamiento 31-jul antes de enviar. Precios de lanzamiento previos (320/750/1.500) se respetan a quien cierre antes del 31-jul-2026 y quedan congelados 12 meses. Confirmar plazo de implementación (1-2 semanas es estimado)."
+    "_todo": "PRECIOS RATIFICADOS por Sergio 2026-07-05 (lista v2 + ventana 31-jul con 320/750/1.500 congelado 12 meses) — propuesta LISTA para enviar. Pendiente menor: confirmar plazo de implementación (1-2 semanas es estimado)."
   },
   {
     "slug": "onia-empresarial",
@@ -966,6 +992,32 @@
     "heroGrad": "linear-gradient(135deg,#060b18 0%,#0d1b3f 55%,#1239a8 160%)",
     "titulo": "ONIA Empresarial — Tu empresa entera, viva y bajo control",
     "subtitulo": "El sistema de gestión completo para empresas robustas: multi-sucursal real, puentes a tus sistemas actuales, automatizaciones a medida y gerencia que consulta y ordena desde Telegram. Operado y actualizado por ONIA cada mes.",
+    "portada": {
+      "titulo": "ONIA Empresarial",
+      "subtitulo": "Tu empresa entera, viva y bajo control — operada y actualizada por ONIA.",
+      "para": "Gerencia / Dirección de la empresa",
+      "fecha": "Julio 2026"
+    },
+    "resumenEjecutivo": "Un ERP tradicional cuesta ~<b>USD 20.000</b> de entrada y queda congelado. <b>ONIA Empresarial</b> entrega el sistema completo de gestión (multi-sucursal, inventario detallado, aprobaciones, bots) <b>conectado a los sistemas que ya usás</b>, operado y actualizado por ONIA ante cada RND del SIN y cada cambio del dólar. Entrada: <b>USD 4.900 + 490/mes (E1)</b> — o directo por mensualidad, sin barrera. El siguiente paso es una reunión de diagnóstico sin costo.",
+    "imagenes": [
+      {
+        "src": "assets/propuesta-onia-empresarial-hero.webp",
+        "alt": "Gerente de operaciones recorriendo la planta de una empresa de distribución",
+        "caption": "La gerencia ve toda la operación — sucursales, ventas y pendientes — sin estar parada en la planta."
+      }
+    ],
+    "comparativa": {
+      "titulo": "ERP tradicional vs. ONIA Empresarial",
+      "columnas": ["ERP pago único (tipo TR4)", "ONIA Empresarial E1"],
+      "filas": [
+        ["Inversión inicial", "~USD 20.000", "USD 4.900 — o USD 0 entrando por mensualidad"],
+        ["Cambia una norma (RND del SIN)", "Queda desactualizado o pagás upgrade", "Lo actualizamos nosotros, incluido"],
+        ["Dólar y reprecios", "Manual, planilla por planilla", "Automatizado con aprobación de gerencia"],
+        ["Gerencia fuera de la oficina", "Depende de llamadas", "Consulta y ordena por Telegram"],
+        ["Soporte y monitoreo", "Por contrato o por incidente", "Gestión mensual ONIA incluida"],
+        ["Tus sistemas actuales", "Migración traumática", "Puentes de solo lectura, sin migrar nada"]
+      ]
+    },
     "problema": "Un ERP tradicional tipo TR4 cuesta alrededor de <b>USD 20.000</b>, pago único — y queda <b>congelado en el tiempo</b>. Pero Bolivia cambia cada mes: RNDs del SIN, dólar, normas nuevas. <b>ONIA Empresarial</b> es lo contrario: un sistema <b>vivo</b> que se actualiza con cada norma y cada tipo de cambio, conectado a los sistemas que ya usás (sin migraciones traumáticas), con tu gerencia manejando todo desde Telegram. Entrás por menos de la mitad del ancla — o sin barrera: desde USD 490/mes.",
     "incluye": [
       {
@@ -1034,6 +1086,7 @@
         "nombre": "E1",
         "incluye": "1 empresa, hasta 3 sucursales, 1 puente a tus sistemas + todo lo descrito (infraestructura dedicada, automatizaciones, Hermes, bot WhatsApp IA, gestión mensual ONIA)",
         "resultado": "Toda tu operación viva y bajo control, con tu sistema actual conectado.",
+        "limite": "hasta 3 sucursales y 1 puente; más sucursales o más sistemas conectados = E2.",
         "precio": "4.900 impl. + 490/mes (o 4.900/año)",
         "recomendado": true
       },
@@ -1041,6 +1094,7 @@
         "nombre": "E2",
         "incluye": "Multi-sucursal amplio, 2+ puentes, reprecios automáticos por tipo de cambio con aprobación de gerencia",
         "resultado": "Varias sucursales y sistemas hablando entre sí, con reprecios al día.",
+        "limite": "precio de referencia — se confirma por escrito tras el diagnóstico de alcance.",
         "precio": "8.900 impl. + 790/mes (o 7.900/año)",
         "recomendado": false
       },
@@ -1048,6 +1102,7 @@
         "nombre": "E3",
         "incluye": "A medida: integraciones profundas, módulos propios de tu operación, alcance definido por escrito",
         "resultado": "El sistema se adapta a tu empresa, no al revés.",
+        "limite": "solo con alcance firmado por escrito; el 'desde' depende de las integraciones.",
         "precio": "desde 14.900 impl. + desde 1.190/mes",
         "recomendado": false
       }
@@ -1076,6 +1131,15 @@
       }
     ],
     "terceros": "No incluidos (costos por uso que cobra cada proveedor): conversaciones de WhatsApp Business API de Meta y créditos de IA de alto volumen (se facturan al costo + 20% de gestión). Si contratás la web, dominio y hosting van a nombre de la empresa. Todo lo demás está incluido en el plan.",
-    "_todo": "S1: bandas Empresarial (E1 4.900+490 / E2 8.900+790) se calibran con el cierre de Bolivian Electric fase 1 — Sergio valida antes de enviar. Confirmar plazo de implementación en el diagnóstico."
+    "proximosPasos": [
+      "Reunión de diagnóstico (sin costo): relevamos sucursales, sistemas actuales y qué necesita ver la gerencia.",
+      "Te entregamos alcance y precio firmes por escrito (E1, E2 o E3).",
+      "Firmamos, montamos la infraestructura dedicada y arrancás por fases desde la primera semana."
+    ],
+    "ctaWhatsapp": {
+      "url": "https://wa.me/59175470140?text=Hola%20ONIA%2C%20quiero%20agendar%20el%20diagn%C3%B3stico%20de%20ONIA%20Empresarial",
+      "texto": "Agendar diagnóstico sin costo →"
+    },
+    "_todo": "RATIFICADO 2026-07-05: E1 (4.900+490) ofertable YA — propuesta LISTA para enviar. E2/E3 se muestran como referencia/ancla pero NO se firman sin recotizar tras el cierre de Bolivian Electric fase 1."
   }
 ]

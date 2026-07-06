@@ -8,7 +8,7 @@
   :root{--ink:#101827;--muted:#526172;--line:#d8e0ea;--blue:#1e5bff;--blue-dark:#1239a8;
     --green:#0f8b62;--amber:#a75b00;--bg:#f6f8fb;--white:#fff;--accent:#0aa3a3;}
   *{box-sizing:border-box;}
-  body{margin:0;font-family:Arial,Helvetica,sans-serif;color:var(--ink);background:var(--bg);}
+  body{margin:0;font-family:'Segoe UI',system-ui,-apple-system,Arial,Helvetica,sans-serif;color:var(--ink);background:var(--bg);}
   .page{max-width:900px;margin:0 auto;padding:40px 28px;}
   .hero{background:linear-gradient(135deg,#071a1e 0%,#0b2f33 55%,#0aa3a3 160%);color:#fff;border-radius:18px;padding:44px 40px;margin-bottom:28px;}
   .kicker{color:#cfe0ff;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;}
@@ -21,7 +21,7 @@
   .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
   table{width:100%;border-collapse:collapse;background:var(--white);border-radius:12px;overflow:hidden;border:1px solid var(--line);}
   th,td{padding:12px 14px;text-align:left;font-size:15px;border-bottom:1px solid var(--line);}
-  th{background:#eef3fb;color:var(--ink);font-weight:800;}
+  th{background:#eef3fb;color:var(--ink);font-weight:800;font-size:13px;text-transform:uppercase;letter-spacing:.05em;}
   td.num,th.num{text-align:right;white-space:nowrap;}
   .tag{display:inline-block;background:#eaf0ff;color:var(--blue-dark);font-size:12px;font-weight:800;padding:3px 10px;border-radius:999px;margin-bottom:8px;}
   .tag.green{background:#e3f4ec;color:var(--green);}
@@ -32,16 +32,40 @@
   .big{font-size:20px;color:var(--ink);font-weight:800;}
   .step{display:flex;gap:14px;align-items:flex-start;margin-bottom:12px;}
   .step .n{background:var(--accent);color:#fff;font-weight:800;border-radius:50%;width:30px;height:30px;display:flex;align-items:center;justify-content:center;flex:0 0 30px;}
-  tr.rec td{background:#fff7ed;}
+  tr.rec td{background:#fff7ed;border-top:2px solid var(--accent);border-bottom:2px solid var(--accent);}
+  tr.rec td.num{font-size:17px;font-weight:800;}
   .res{color:var(--accent);font-weight:700;font-size:13px;}
+  .lim{color:var(--muted);font-size:12px;}
+  .step p{margin:0;color:var(--ink);}
+  .step h3 + p{color:var(--muted);}
   .vgrid .vcard{background:var(--white);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:12px;padding:16px 18px;}
   .vcard h3{color:var(--ink);}
-  @media print{.page{max-width:100%;}body{background:#fff;}}
+  figure{margin:18px 0;}
+  figure img{width:100%;border-radius:14px;display:block;}
+  figcaption{font-size:13px;color:var(--muted);margin-top:6px;text-align:center;}
+  table.comp td.win{background:#e3f4ec;color:var(--ink);font-weight:600;}
+  a.cta{display:inline-block;background:var(--accent);color:#fff;font-weight:800;font-size:16px;padding:12px 22px;border-radius:10px;text-decoration:none;}
+  .cover{background:linear-gradient(135deg,#071a1e 0%,#0b2f33 55%,#0aa3a3 160%);color:#fff;border-radius:18px;padding:60px 48px;min-height:88vh;display:flex;align-items:center;margin-bottom:28px;page-break-after:always;}
+  .cover p{color:#e6eefb;font-size:19px;}
+  .cover .meta{margin-top:26px;font-size:15px;color:#cfe0ff;}
+  @media print{
+    .page{max-width:100%;}body{background:#fff;}
+    .card,table,figure,.vcard,.step{page-break-inside:avoid;}
+    h2{page-break-after:avoid;}
+  }
 </style>
 </head>
 <body>
 <div class="page">
 
+  <div class="cover">
+    <div>
+      <div class="kicker">Propuesta comercial · ONIA Inteligencia Artificial</div>
+      <h1>DentalGest</h1>
+      <p>El sistema de gestión de tu clínica dental — vivo, completo y sin sorpresas.</p>
+      <p class="meta">Preparado para: <b>Dueños y administradores de clínicas dentales</b> · Julio 2026</p>
+    </div>
+  </div>
   <div class="hero">
     <div class="kicker">Propuesta comercial · ONIA Inteligencia Artificial</div>
     <h1>DentalGest — El sistema de gestión de tu clínica dental</h1>
@@ -51,6 +75,10 @@
   <h2>Qué problema resolvemos</h2>
   <div class="card"><p>La clínica funciona, pero la operación vive repartida: agenda en cuaderno o WhatsApp, historias clínicas en papel, cobros que se pierden, y los vencimientos con Impuestos corriendo por detrás. <b>DentalGest</b> ordena todo eso en un solo sistema: el dueño ve qué pasa, ningún paciente se escapa, y el <b>Contador Pack</b> (RCV, vencimientos NIT y radar normativo) te mantiene al día sin perseguir a nadie. Y como Bolivia cambia cada mes (RNDs, dólar), mantenerse legal ES el servicio: el sistema se actualiza solo.</p></div>
 
+  <figure>
+    <img src="assets/propuesta-dentalgest-hero.webp" alt="Dentista conversando tranquilo con su paciente en un consultorio moderno">
+    <figcaption>Menos tiempo administrando, más tiempo con tus pacientes: el sistema ordena todo lo demás.</figcaption>
+  </figure>
   <h2>Qué incluye</h2>
   <div class="grid">
     <div class="card">
@@ -100,9 +128,9 @@
   <h2>Paquetes — elegí el tuyo</h2>
   <table>
     <tr><th>Paquete</th><th>Qué incluye</th><th class="num">Precio (Bs · Empresarial en USD)</th></tr>
-    <tr><td><b>Ordenado</b></td><td>Panel del dueño + pendientes con responsable + agenda, pacientes e historial + 3 usuarios + soporte por correo<br><span class="res">→ Sabés qué pasa en tu clínica cada día.</span></td><td class="num">390/mes (anual 3.900)</td></tr><tr class="rec"><td><b>Profesional</b> ⭐</td><td>Lo anterior + canales registrados → intake automático + roles finos + comentarios y consentimientos + Contador Pack INCLUIDO + inventario básico + 8 usuarios + soporte WhatsApp<br><span class="res">→ Ningún paciente se escapa: cada consulta entra y se sigue sola.</span></td><td class="num">890/mes (anual 8.900)</td></tr><tr><td><b>Empresa</b></td><td>Lo anterior + inventario detallado (lotes, kardex) + aprobaciones con SLA + hasta 3 sucursales + bot WhatsApp INCLUIDO + facturación SIAT INCLUIDA + 20 usuarios + soporte prioritario<br><span class="res">→ Controlás sin estar encima: aprobaciones, sucursales y WhatsApp automatizados.</span></td><td class="num">1.990/mes (anual 19.900)</td></tr><tr><td><b>Empresarial E1</b></td><td>Empresa completo + infraestructura dedicada con backups verificados + puente de solo-lectura a tus sistemas + automatizaciones a medida + Hermes ejecutivo por Telegram + usuarios ilimitados + gestión mensual ONIA<br><span class="res">→ ONIA opera el sistema por vos; la gerencia consulta y ordena desde Telegram.</span></td><td class="num">USD 4.900 impl. + USD 490/mes</td></tr>
+    <tr><td><b>Ordenado</b></td><td>Panel del dueño + pendientes con responsable + agenda, pacientes e historial + 3 usuarios + soporte por correo<br><span class="res">→ Sabés qué pasa en tu clínica cada día.</span><br><span class="lim">Tope: las consultas se registran a mano (sin intake automático), sin Contador Pack ni inventario.</span></td><td class="num">390/mes (anual 3.900)</td></tr><tr class="rec"><td><b>Profesional</b> ⭐</td><td>Lo anterior + canales registrados → intake automático + roles finos + comentarios y consentimientos + Contador Pack INCLUIDO + inventario básico + 8 usuarios + soporte WhatsApp<br><span class="res">→ Ningún paciente se escapa: cada consulta entra y se sigue sola.</span><br><span class="lim">Tope: una sola sucursal, sin aprobaciones con SLA ni bot WhatsApp; SIAT va como add-on (+190/mes).</span></td><td class="num">890/mes (anual 8.900)</td></tr><tr><td><b>Empresa</b></td><td>Lo anterior + aprobaciones con SLA + hasta 3 sucursales + 20 usuarios + soporte prioritario + bot WhatsApp incluido (se activa con la verificación de Meta) + inventario detallado con lotes y kardex (se libera en Q3-2026 sin costo extra) + facturación SIAT incluida (al certificar ONIA ante el SIN)<br><span class="res">→ Controlás sin estar encima: aprobaciones, sucursales y WhatsApp automatizados.</span><br><span class="lim">Tope: hasta 3 sucursales (adicional Bs 490/mes c/u); bot, inventario detallado y SIAT entran según su fecha de liberación indicada.</span></td><td class="num">1.990/mes (anual 19.900)</td></tr><tr><td><b>Empresarial E1</b></td><td>Empresa completo + infraestructura dedicada con backups verificados + puente de solo-lectura a tus sistemas + automatizaciones a medida + Hermes ejecutivo por Telegram + usuarios ilimitados + gestión mensual ONIA<br><span class="res">→ ONIA opera el sistema por vos; la gerencia consulta y ordena desde Telegram.</span><br><span class="lim">Tope: requiere diagnóstico de alcance previo; hasta 3 sucursales y 1 puente (más = cotización E2).</span></td><td class="num">USD 4.900 impl. + USD 490/mes</td></tr>
   </table>
-  <p style="margin-top:10px;">Diferencia clave: <b>Ordenado</b> = tu clínica ordenada y visible · <b>Profesional</b> = ningún paciente se escapa (capta y sigue solo) · <b>Empresa</b> = automatizar el control (aprobaciones, WhatsApp, sucursales) · <b>Empresarial E1</b> = ONIA lo opera por vos con infraestructura dedicada. Recomendado: <b>Profesional</b>. Implementación única (carga guiada + wizard + capacitación): Bs 490 / 1.490 / 3.900 según plan. Anual = 10 meses (2 gratis). Precios por sucursal.</p>
+  <p style="margin-top:10px;">Diferencia clave: <b>Ordenado</b> = tu clínica ordenada y visible · <b>Profesional</b> = ningún paciente se escapa (capta y sigue solo) · <b>Empresa</b> = automatizar el control (aprobaciones, WhatsApp, sucursales) · <b>Empresarial E1</b> = ONIA lo opera por vos con infraestructura dedicada. Recomendado: <b>Profesional</b>. Implementación única (carga guiada + wizard + capacitación): Bs 490 / 1.490 / 3.900 según plan. Anual = 10 meses (2 gratis). Precios por sucursal. <b>Precio de lanzamiento:</b> cerrando antes del 31-jul-2026 mantenés la lista anterior (320 / 750 / 1.500) congelada 12 meses.</p>
   <p style="margin-top:6px;"><b>Plazo de entrega estimado:</b> 1 a 2 semanas para estar operando (carga guiada + capacitación) desde el anticipo y la entrega de contenidos.</p>
 
   <h2>Add-ons (opcionales)</h2>
@@ -116,7 +144,11 @@
     <p>No incluidos (costos por uso que cobra cada proveedor, no ONIA): conversaciones de WhatsApp Business API de Meta, créditos de IA de alto volumen y, si contratás la web, dominio y hosting a nombre de la clínica. El software del bot WhatsApp y de la facturación SIAT va incluido según plan; SIAT queda activo al certificar ONIA como proveedor.</p>
   </div>
 
-
+  <h2>Próximos pasos</h2>
+  <div class="card">
+    <div class="step"><div class="n">1</div><div><p>Elegís el plan (podés arrancar en Ordenado o Profesional y subir cuando la clínica lo pida).</p></div></div>
+    <div class="step"><div class="n">2</div><div><p>Pagás la implementación y hacemos juntos la carga guiada de pacientes, agenda y servicios.</p></div></div>
+    <div class="step"><div class="n">3</div><div><p>Capacitamos a tu equipo y quedás operando — con soporte y actualizaciones según plan.</p></div></div><p style="margin-top:14px;"><a class="cta" href="https://wa.me/59175470140?text=Hola%20ONIA%2C%20quiero%20DentalGest%20para%20mi%20cl%C3%ADnica">Quiero DentalGest para mi clínica →</a></p></div>
   <div class="foot">
     <p class="big">Precio reservado hasta 30 días con confirmación de pago.</p>
     <p>ONIA — Sistemas, automatización y contenido para negocios. business@onia.com.bo</p>

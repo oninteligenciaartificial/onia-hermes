@@ -68,3 +68,32 @@ describe("clientSchema", () => {
     expect(client.productos[0].ordenRutina).toBe(1);
   });
 });
+
+describe("clientSchema clinic fields", () => {
+  it("parses credenciales, proceso and faq when present", () => {
+    const parsed = clientSchema.parse({
+      nombre: "Aura",
+      slug: "aura",
+      tagline: "Sonrisas sanas",
+      descripcion: "Clinica dental.",
+      credenciales: ["Matricula profesional"],
+      proceso: [{ titulo: "Agenda", desc: "Escribinos por WhatsApp." }],
+      faq: [{ pregunta: "Duele?", respuesta: "Trabajamos con anestesia." }],
+    });
+    expect(parsed.credenciales).toEqual(["Matricula profesional"]);
+    expect(parsed.proceso[0].titulo).toBe("Agenda");
+    expect(parsed.faq[0].pregunta).toBe("Duele?");
+  });
+
+  it("defaults the clinic fields to empty arrays when absent", () => {
+    const parsed = clientSchema.parse({
+      nombre: "Aura",
+      slug: "aura",
+      tagline: "Sonrisas sanas",
+      descripcion: "Clinica dental.",
+    });
+    expect(parsed.credenciales).toEqual([]);
+    expect(parsed.proceso).toEqual([]);
+    expect(parsed.faq).toEqual([]);
+  });
+});
