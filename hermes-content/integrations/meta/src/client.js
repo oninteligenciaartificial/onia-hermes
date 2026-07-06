@@ -83,6 +83,22 @@ class MarketingApiClient {
     return this._publish(this._adAccountPath('adcreatives'), creative, opts);
   }
 
+  /** Upload a video by hosted file_url -> returns a video_id (live). @param {{fileUrl: string, name?: string}} spec */
+  async createAdVideo(spec, opts = {}) {
+    if (!spec || !spec.fileUrl) throw new Error('createAdVideo: fileUrl required');
+    const body = { file_url: spec.fileUrl };
+    if (spec.name) body.name = spec.name;
+    return this._publish(this._adAccountPath('advideos'), body, opts);
+  }
+
+  /** Upload an image by base64 bytes -> returns an image_hash (live). @param {{bytesBase64: string, name?: string}} spec */
+  async createAdImage(spec, opts = {}) {
+    if (!spec || !spec.bytesBase64) throw new Error('createAdImage: bytesBase64 required');
+    const body = { bytes: spec.bytesBase64 };
+    if (spec.name) body.name = spec.name;
+    return this._publish(this._adAccountPath('adimages'), body, opts);
+  }
+
   // --- ACTIVATION / BUDGET: always gated, never dry-bypassable ---
 
   /** Flip an entity to ACTIVE. @param {string} entityId */

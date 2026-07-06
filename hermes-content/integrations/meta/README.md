@@ -19,10 +19,14 @@ src/
   build.js         # builders puros -> objetos PAUSED (nunca ACTIVE)
   approval.js      # freno de gasto: cola de aprobación (borrador->Sergio->activa)
   creative-map.js  # creativo del content-engine -> plan de anuncio (a una landing)
+  bolivia.js       # targeting BO, ciudades (Targeting Search), presupuestos Bs./USD
+  propose.js       # genera N borradores A/B (PAUSED) con targeting Bolivia
+  upload.js        # requests para subir video (file_url) / imagen (bytes)
+  report.js        # insights de Meta -> resumen + reporte markdown (CTR/CPL/CPC)
   pixel.js         # Pixel base + evento CAPI + dedup por event_id
   client.js        # Marketing API: DRY por defecto; publicar/activar = gated
   index.js         # barrel
-test/              # node:assert, 49 tests, cero llamadas a Meta
+test/              # node:assert, 73 tests, cero llamadas a Meta
 examples/          # dry-run-demo.js (corre sin credenciales)
 ```
 
@@ -66,6 +70,27 @@ const draft = await client.createCampaign({ name: plan.campaign.name, objective:
 
 // 3. publicar/activar = SOLO con aprobación de Sergio (ver approval.js)
 ```
+
+### Proponer campañas (Bolivia) + reportar
+
+```js
+const { proposeCampaigns, summarizeInsights, formatReport } = require('@onia/meta-ads');
+
+// N creativos del motor de contenido -> N borradores A/B, todos PAUSED, geo=BO
+const proposals = proposeCampaigns({
+  creatives,                       // array de briefs / descriptores
+  page_id, destinationUrl, pixelId,
+  campaignName: 'ONIA · DentalGest · lead',
+  budgetTier: 'test',              // Bs.35/día sugerido (test|standard|push)
+  currency: 'BOB',                 // o 'USD' según la cuenta
+});
+
+// métricas -> reporte legible (cuando haya insights reales)
+const report = formatReport(summarizeInsights(insights), { currency: 'Bs', title: 'Semana 1' });
+```
+
+Subir creativos (para obtener `video_id` / `image_hash`): `client.createAdVideo({ fileUrl })`
+y `client.createAdImage({ bytesBase64 })` — DRY por defecto, gated en live.
 
 ## Secretos
 

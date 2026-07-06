@@ -9,4 +9,8 @@ module.exports = {
   ...require('./creative-map'),
   ...require('./pixel'),
   ...require('./client'),
+  ...require('./bolivia'),
+  ...require('./propose'),
+  ...require('./upload'),
+  ...require('./report'),
 };
