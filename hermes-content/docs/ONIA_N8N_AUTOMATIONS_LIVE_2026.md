@@ -18,6 +18,7 @@ a Sergio por Telegram vía `$env.TELEGRAM_BOT_TOKEN` / `$env.TELEGRAM_SERGIO_CHA
 | ONIA - Prospeccion diaria | `jspfoUsjQfQ1VXY4` | Lun-Vie 09:00 | Nudge: rota rubro+ciudad y manda el prompt de prospección (no contacta, no inventa) | Diario |
 | ONIA - Generar Propuesta (oficial) | `rwQuwSvd29bV34EY` | Webhook on-demand | `POST /webhook/generar-propuesta` `{slug,secret}`: corre el generador oficial + PDF (chromium VPS) por SSH y manda el PDF a Sergio para revisar antes de enviar al cliente | PDF por propuesta |
 | ONIA - Agente Vendedor (borradores) | `C96NmbalLhaTEf0G` | Lun-Sab 08:30 | SSH `docker exec onia-center sales-agent.mjs`: lee leads del CRM, califica+redacta con LiteLLM, deja SOLO borradores (tarea + review_queue pending/sensitive/reviewer=sergio). NO envia | Solo si hay borradores |
+| ONIA - Nuevo Lead (speed-to-lead) | `WA6VkNu5OHo6Npem` | Webhook on-demand | `POST /webhook/nuevo-lead` `{secret,company,contact,channel,message}`: crea el lead + califica + redacta la primera respuesta (borrador) al toque. Bridge inbound (formulario/WhatsApp/Hermes) -> CRM -> Vendedor. NO envia | Por lead |
 | ONIA - Nuvia Sourcing Score (v1) | `ECC1THa2kTmOGepY` | Webhook on-demand | `POST /webhook/nuvia-candidato` `{secret,candidates[]}`: score ONIA-Bolivia (flete/arancel/demanda/precio) por SSH, upsert en `nuvia_sourcing_candidates`. Read-only, sin contacto ni pago | Por lote |
 
 Los 5 crones fueron probados end-to-end antes de activar (ejecución real + Telegram
