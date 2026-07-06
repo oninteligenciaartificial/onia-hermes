@@ -73,45 +73,50 @@
     "title": "Panel operativo",
     "subtitle": "Resumen de actividad - datos de ejemplo",
     "nav": [
-      "Resumen",
-      "Ventas",
-      "Clientes",
-      "Reportes",
-      "Ajustes"
+      { "group": "Hoy", "items": ["Resumen"] },
+      { "group": "Trabajo", "items": ["Aprobaciones", "Cuentas"] },
+      { "group": "Analisis", "items": ["Reportes"] },
+      { "group": "Cuenta", "items": ["Ajustes"] }
     ],
-    "filters": [
-      "7 dias",
-      "30 dias",
-      "90 dias"
-    ],
+    "filters": ["7 dias", "30 dias", "90 dias"],
+    "heroPanel": {
+      "kind": "queue",
+      "title": "Para hoy",
+      "items": [
+        { "titulo": "Aprobar presupuesto #204 - Comercial Andina", "estado": "urgente", "meta": "Vence hoy" },
+        { "titulo": "Renovar plan de Ferreteria Sur", "estado": "pendiente", "meta": "Vence en 3 dias" },
+        { "titulo": "Revisar uso excedido - Distribuidora Lux", "estado": "pendiente", "meta": "Detectado ayer" },
+        { "titulo": "Confirmar alta de Clinica Vida", "estado": "al-dia", "meta": "Completado" }
+      ]
+    },
     "kpis": [
       {
-        "label": "Ingresos",
+        "label": "Cuentas activas",
+        "value": "312",
+        "delta": "4.2%",
+        "trend": "up",
+        "context": "vs periodo anterior"
+      },
+      {
+        "label": "Ingresos recurrentes",
         "value": "Bs. 48.2k",
         "delta": "12.4%",
         "trend": "up",
         "context": "vs periodo anterior"
       },
       {
-        "label": "Clientes nuevos",
-        "value": "184",
-        "delta": "8.1%",
-        "trend": "up",
-        "context": "vs periodo anterior"
-      },
-      {
-        "label": "Ticket promedio",
-        "value": "Bs. 262",
-        "delta": "1.9%",
+        "label": "Aprobaciones pendientes",
+        "value": "7",
+        "delta": "2",
         "trend": "down",
-        "context": "vs periodo anterior"
+        "context": "menos que ayer"
       },
       {
-        "label": "Tasa de cierre",
-        "value": "34%",
+        "label": "Uptime",
+        "value": "99.95%",
         "delta": "0.0%",
         "trend": "flat",
-        "context": "estable"
+        "context": "ultimos 30 dias"
       }
     ],
     "charts": [
@@ -120,206 +125,46 @@
         "unit": "Bs. (miles)",
         "type": "bar",
         "points": [
-          {
-            "label": "Ene",
-            "value": 32
-          },
-          {
-            "label": "Feb",
-            "value": 38
-          },
-          {
-            "label": "Mar",
-            "value": 30
-          },
-          {
-            "label": "Abr",
-            "value": 41
-          },
-          {
-            "label": "May",
-            "value": 45
-          },
-          {
-            "label": "Jun",
-            "value": 48
-          }
+          { "label": "Ene", "value": 32 },
+          { "label": "Feb", "value": 38 },
+          { "label": "Mar", "value": 30 },
+          { "label": "Abr", "value": 41 },
+          { "label": "May", "value": 45 },
+          { "label": "Jun", "value": 48 }
         ],
         "series": []
       },
       {
-        "title": "Ingresos vs meta",
-        "unit": "Bs. (miles)",
-        "type": "line",
-        "points": [],
-        "series": [
-          {
-            "name": "Real",
-            "points": [
-              {
-                "label": "Ene",
-                "value": 32
-              },
-              {
-                "label": "Feb",
-                "value": 38
-              },
-              {
-                "label": "Mar",
-                "value": 30
-              },
-              {
-                "label": "Abr",
-                "value": 41
-              },
-              {
-                "label": "May",
-                "value": 45
-              },
-              {
-                "label": "Jun",
-                "value": 48
-              }
-            ]
-          },
-          {
-            "name": "Meta",
-            "points": [
-              {
-                "label": "Ene",
-                "value": 35
-              },
-              {
-                "label": "Feb",
-                "value": 36
-              },
-              {
-                "label": "Mar",
-                "value": 38
-              },
-              {
-                "label": "Abr",
-                "value": 40
-              },
-              {
-                "label": "May",
-                "value": 43
-              },
-              {
-                "label": "Jun",
-                "value": 46
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "title": "Ventas por categoria",
+        "title": "Cuentas por plan",
         "unit": "% del total",
         "type": "donut",
         "points": [
-          {
-            "label": "Serum",
-            "value": 42
-          },
-          {
-            "label": "Protector",
-            "value": 28
-          },
-          {
-            "label": "Limpieza",
-            "value": 18
-          },
-          {
-            "label": "Otros",
-            "value": 12
-          }
-        ],
-        "series": []
-      },
-      {
-        "title": "Tendencia de ingresos (14d)",
-        "unit": "Bs.",
-        "type": "sparkline",
-        "points": [
-          {
-            "label": "1",
-            "value": 210
-          },
-          {
-            "label": "2",
-            "value": 240
-          },
-          {
-            "label": "3",
-            "value": 228
-          },
-          {
-            "label": "4",
-            "value": 265
-          },
-          {
-            "label": "5",
-            "value": 250
-          },
-          {
-            "label": "6",
-            "value": 288
-          },
-          {
-            "label": "7",
-            "value": 302
-          },
-          {
-            "label": "8",
-            "value": 296
-          },
-          {
-            "label": "9",
-            "value": 320
-          },
-          {
-            "label": "10",
-            "value": 340
-          }
+          { "label": "Basico", "value": 46 },
+          { "label": "Pro", "value": 34 },
+          { "label": "Enterprise", "value": 20 }
         ],
         "series": []
       }
     ],
     "table": {
-      "title": "Ultimos pedidos",
-      "columns": [
-        "Pedido",
-        "Cliente",
-        "Monto",
-        "Estado"
-      ],
+      "title": "Cuentas recientes",
+      "columns": ["Cuenta", "Plan", "Monto", "Estado"],
+      "filtros": ["Plan", "Estado", "Fecha"],
       "rows": [
-        [
-          "#1042",
-          "Comercial Andina",
-          "Bs. 1.240",
-          "Pagado"
-        ],
-        [
-          "#1041",
-          "Ferreteria Sur",
-          "Bs. 860",
-          "Pendiente"
-        ],
-        [
-          "#1040",
-          "Distribuidora Lux",
-          "Bs. 2.310",
-          "Pagado"
-        ],
-        [
-          "#1039",
-          "Clinica Vida",
-          "Bs. 540",
-          "Enviado"
-        ]
+        ["Comercial Andina", "Enterprise", "Bs. 1.240", { "value": "Pagado", "status": "pos" }],
+        ["Ferreteria Sur", "Pro", "Bs. 860", { "value": "Pendiente", "status": "warn" }],
+        ["Distribuidora Lux", "Pro", "Bs. 2.310", { "value": "Pagado", "status": "pos" }],
+        ["Clinica Vida", "Basico", "Bs. 540", { "value": "Rechazado", "status": "neg" }]
       ]
-    }
+    },
+    "sidePanel": {
+      "title": "Aprobaciones recientes",
+      "items": [
+        { "label": "Maria Lopez", "value": "Aprobado", "initial": "ML" },
+        { "label": "Carlos Diaz", "value": "Aprobado", "initial": "CD" },
+        { "label": "Sofia Roman", "value": "Rechazado", "initial": "SR" }
+      ]
+    },
+    "showStatesReference": true
   }
 }
