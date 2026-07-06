@@ -1,0 +1,33 @@
+{
+  "name": "@onia/core",
+  "version": "0.6.0",
+  "description": "ONIA Core: contrato canonico + logica pura compartida por los SaaS de ONIA (DentalGest, GestiOS, ProveeGest, Ganadero OS).",
+  "type": "module",
+  "private": true,
+  "license": "UNLICENSED",
+  "exports": {
+    ".": "./index.mjs",
+    "./logic": "./logic/index.mjs",
+    "./report": "./report.mjs",
+    "./modules": "./modules/index.mjs",
+    "./modules/commerce-logic": "./modules/commerce.logic.mjs",
+    "./modules/accounting-logic": "./modules/accounting.logic.mjs",
+    "./modules/bridge-logic": "./modules/bridge.logic.mjs",
+    "./contract": "./contract.json",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "index.mjs",
+    "report.mjs",
+    "contract.json",
+    "logic",
+    "modules",
+    "adapters",
+    "schema",
+    "*.md"
+  ],
+  "scripts": {
+    "validate": "node validate.mjs && node modules/validate-modules.mjs",
+    "test": "node --test *.test.mjs logic/*.test.mjs modules/*.test.mjs"
+  }
+}

@@ -11,6 +11,7 @@
  * must be reviewed on purpose (not by accident during product adoption).
  */
 import { spawnSync } from "node:child_process";
+import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
@@ -273,6 +274,23 @@ describe("verticalPacks", () => {
         }
       }
     }
+  });
+});
+
+describe("@onia/core package.json", () => {
+  const pkg = JSON.parse(readFileSync(new URL("./package.json", import.meta.url), "utf8"));
+
+  it("declares the @onia/core package with a version that tracks the contract", () => {
+    assert.equal(pkg.name, "@onia/core");
+    assert.equal(pkg.type, "module");
+    assert.equal(pkg.version, contract.version);
+  });
+
+  it("exposes the core, logic and modules entry points", () => {
+    assert.equal(pkg.exports["."], "./index.mjs");
+    assert.equal(pkg.exports["./logic"], "./logic/index.mjs");
+    assert.ok(pkg.exports["./modules"], "modules entry point");
+    assert.ok(pkg.exports["./contract"], "contract entry point");
   });
 });
 

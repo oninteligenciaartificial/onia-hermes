@@ -43,8 +43,13 @@ modulos, verticales o integraciones. No son la definicion del core.
   vertical sin tocar el core. Onboardear un rubro = agregar track + pack (datos).
 - `index.mjs`: helpers para leer y consultar el contrato.
 - `index.test.mjs`: tests de los helpers + integracion del validador (node:test).
-- `logic/`: logica pura canonica del CORE que los productos portan en vez de
-  reimplementar (`work-items.logic.mjs`: transiciones, SLA, dedupe, orden de cola).
+- `logic/`: logica pura canonica del CORE que los productos importan en vez de
+  reimplementar. 8 modulos: work-items (transiciones/SLA/dedupe/cola), intake,
+  roles, approvals, scheduling, saved-view, fx (tipo de cambio Bolivia) y
+  numbering (correlativos). `logic/index.mjs` = barrel namespaced.
+- `package.json`: expone `@onia/core` (version = la del contrato). Los productos
+  importan `@onia/core/logic` (workItems, roles, fx, numbering...),
+  `@onia/core/modules` y `@onia/core/contract` en vez de copiar codigo.
 - `validate.mjs`: validador local de estructura e invariantes.
 - `report.mjs`: reporte de avance en lenguaje simple (verticales con su pack y
   cuanto del core lleva instalado cada producto). Correr: `node onia-core/report.mjs`.

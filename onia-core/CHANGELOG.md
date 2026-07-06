@@ -1,5 +1,15 @@
 # ONIA Core Changelog
 
+## @onia/core — 2026-07-05 (paquete importable)
+
+- `package.json` (`@onia/core`, version = la del contrato) + `logic/index.mjs`
+  (barrel namespaced): los productos importan `@onia/core/logic` (workItems,
+  intake, roles, approvals, scheduling, savedView, fx, numbering),
+  `@onia/core/modules`, `@onia/core/report` y `@onia/core/contract` en vez de
+  copiar codigo. Cierra el mecanismo para dejar de duplicar (~15-20K lineas).
+- Test: la version del paquete debe seguir a la del contrato; entry points
+  presentes. +4 tests (153 total).
+
 ## core/logic — 2026-07-05 (tipo de cambio + numeracion)
 
 - `logic/fx.logic.mjs`: tipo de cambio Bolivia -> `effectiveRate` (VRD + spread),
