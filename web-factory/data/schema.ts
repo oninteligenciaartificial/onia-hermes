@@ -171,6 +171,7 @@ const dashboardSchema = z
     table: dashboardTableSchema.default({ title: "Detalle", columns: [], rows: [] }),
     heroPanel: dashboardHeroPanelSchema.optional(),
     sidePanel: dashboardSidePanelSchema.optional(),
+    showStatesReference: z.boolean().default(false),
   })
   .default({
     title: "Panel de control",
@@ -180,6 +181,7 @@ const dashboardSchema = z
     kpis: [],
     charts: [],
     table: { title: "Detalle", columns: [], rows: [] },
+    showStatesReference: false,
   });
 
 export const clientSchema = z.object({

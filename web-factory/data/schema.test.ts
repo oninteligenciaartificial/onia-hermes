@@ -179,3 +179,18 @@ describe("clientSchema dashboard sidePanel", () => {
     expect(parsed.dashboard.sidePanel).toBeUndefined();
   });
 });
+
+describe("clientSchema dashboard showStatesReference", () => {
+  it("defaults showStatesReference to false", () => {
+    const parsed = clientSchema.parse({ nombre: "Panel", slug: "panel", tagline: "t", descripcion: "d" });
+    expect(parsed.dashboard.showStatesReference).toBe(false);
+  });
+
+  it("accepts showStatesReference: true", () => {
+    const parsed = clientSchema.parse({
+      nombre: "Panel", slug: "panel", tagline: "t", descripcion: "d",
+      dashboard: { showStatesReference: true },
+    });
+    expect(parsed.dashboard.showStatesReference).toBe(true);
+  });
+});

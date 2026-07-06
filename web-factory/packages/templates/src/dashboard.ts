@@ -3,6 +3,7 @@ import { dashboardCardsCss, renderCharts, renderKpis, renderSidePanel, renderTab
 import type { DashboardTable } from "./dashboard-cards";
 import { dashboardChartsCss } from "./dashboard-charts";
 import { dashboardHeroCss, renderHeroPanel } from "./dashboard-hero";
+import { dashboardStatesCss, renderStatesShowcase } from "./dashboard-states";
 import type {
   DashboardChart,
   DashboardHeroPanel,
@@ -32,6 +33,7 @@ export type DashboardData = {
   table: DashboardTable;
   heroPanel?: DashboardHeroPanel;
   sidePanel?: DashboardSidePanel;
+  showStatesReference: boolean;
 };
 
 export type DashboardClient = {
@@ -79,6 +81,7 @@ export function renderDashboardBody(client: DashboardClient): string {
             ? `<div class="wf-dash-detail-row">${renderTable(dash.table)}${renderSidePanel(dash.sidePanel)}</div>`
             : renderTable(dash.table)
         }
+        ${renderStatesShowcase(dash.showStatesReference)}
       </div>
     </div>
     ${dashboardScript}
@@ -142,7 +145,9 @@ ${dashboardChartsCss}
 
 ${dashboardCardsCss}
 
-${dashboardHeroCss}`;
+${dashboardHeroCss}
+
+${dashboardStatesCss}`;
 }
 
 export function renderDashboardDocument(client: DashboardClient): string {
