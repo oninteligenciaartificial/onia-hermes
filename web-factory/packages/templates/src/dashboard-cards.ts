@@ -1,0 +1,260 @@
+import { hasChartData, renderChart, trendGlyph } from "./dashboard-charts";
+import type { DashboardChart, DashboardKpi } from "./dashboard-types";
+
+function escapeHtml(value: string): string {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+function escapeAttribute(value: string): string {
+  return escapeHtml(value).replace(/'/g, "&#39;");
+}
+
+export type DashboardTable = {
+  title: string;
+  columns: string[];
+  rows: string[][];
+};
+
+export function renderEmpty(title: string, hint: string): string {
+  return `<div class="wf-dash-card wf-dash-empty" role="status">
+            <strong>${escapeHtml(title)}</strong>
+            <span>${escapeHtml(hint)}</span>
+          </div>`;
+}
+
+export function renderKpis(kpis: DashboardKpi[]): string {
+  if (!kpis.length) {
+    return renderEmpty("Sin KPIs definidos", "Carga metricas clave con valor, delta y periodo.");
+  }
+
+  const cards = kpis
+    .map(
+      (kpi) => `
+          <article class="wf-dash-card wf-dash-card--compact wf-kpi" data-reveal>
+            <span class="wf-kpi-label">${escapeHtml(kpi.label)}</span>
+            <strong class="wf-kpi-value">${escapeHtml(kpi.value)}</strong>
+            <div class="wf-kpi-foot">
+              ${
+                kpi.delta
+                  ? `<span class="wf-kpi-delta wf-kpi-delta--${kpi.trend}">${trendGlyph(kpi.trend)} ${escapeHtml(
+                      kpi.delta,
+                    )}</span>`
+                  : ""
+              }
+              ${kpi.context ? `<span class="wf-kpi-context">${escapeHtml(kpi.context)}</span>` : ""}
+            </div>
+          </article>`,
+    )
+    .join("");
+
+  return `
+        <section class="wf-dash-kpis" aria-label="Indicadores clave">
+          ${cards}
+        </section>`;
+}
+
+export function renderCharts(charts: DashboardChart[]): string {
+  if (!charts.length) {
+    return "";
+  }
+
+  const cards = charts
+    .map(
+      (chart) => `
+          <article class="wf-dash-card wf-chart-card" data-reveal>
+            <div class="wf-chart-head">
+              <h2>${escapeHtml(chart.title)}</h2>
+              ${chart.unit ? `<span class="wf-chart-unit">${escapeHtml(chart.unit)}</span>` : ""}
+            </div>
+            ${
+              hasChartData(chart)
+                ? renderChart(chart)
+                : renderEmpty("Sin datos", "Este grafico se completa cuando llegan los datos.")
+            }
+          </article>`,
+    )
+    .join("");
+
+  return `
+        <section class="wf-dash-charts" aria-label="Graficos">
+          ${cards}
+        </section>`;
+}
+
+export function renderTable(table: DashboardTable): string {
+  if (!table.columns.length) {
+    return "";
+  }
+
+  const head = `<tr>${table.columns.map((column) => `<th scope="col">${escapeHtml(column)}</th>`).join("")}</tr>`;
+
+  const body = table.rows.length
+    ? table.rows
+        .map(
+          (row) =>
+            `<tr>${table.columns
+              .map((_, index) => `<td>${escapeHtml(row[index] ?? "")}</td>`)
+              .join("")}</tr>`,
+        )
+        .join("")
+    : `<tr class="wf-table-empty-row"><td colspan="${table.columns.length}">Sin registros para el periodo seleccionado.</td></tr>`;
+
+  return `
+        <section class="wf-dash-card wf-dash-table" aria-label="${escapeAttribute(table.title)}" data-reveal>
+          <div class="wf-dash-table-head">
+            <h2>${escapeHtml(table.title)}</h2>
+          </div>
+          <div class="wf-dash-table-scroll">
+            <table>
+              <thead>${head}</thead>
+              <tbody>${body}</tbody>
+            </table>
+          </div>
+        </section>`;
+}
+
+export const dashboardCardsCss = `
+.wf-dash-card {
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--card);
+}
+
+.wf-dash-card--compact {
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.wf-dash-kpis {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 14px;
+}
+
+.wf-dash-charts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 14px;
+}
+
+@media (max-width: 520px) {
+  .wf-dash-charts {
+    grid-template-columns: 1fr;
+  }
+}
+
+.wf-kpi-label {
+  color: var(--muted-foreground);
+  font-size: 0.82rem;
+}
+
+.wf-kpi-value {
+  font-family: var(--font-heading);
+  font-size: 1.6rem;
+  color: var(--color-fg);
+}
+
+.wf-kpi-foot {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.wf-kpi-delta {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  background: color-mix(in srgb, var(--color-fg) 8%, transparent);
+}
+
+.wf-kpi-delta--up {
+  color: var(--wf-pos);
+  background: color-mix(in srgb, var(--wf-pos) 14%, transparent);
+}
+
+.wf-kpi-delta--down {
+  color: var(--wf-neg);
+  background: color-mix(in srgb, var(--wf-neg) 14%, transparent);
+}
+
+.wf-kpi-context {
+  color: var(--muted-foreground);
+  font-size: 0.8rem;
+}
+
+.wf-dash-table-scroll {
+  overflow-x: auto;
+}
+
+.wf-dash-table-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.wf-dash-table-head h2 {
+  font-size: 1.05rem;
+}
+
+.wf-dash-table table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+}
+
+.wf-dash-table th,
+.wf-dash-table td {
+  padding: 10px 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+.wf-dash-table th {
+  position: sticky;
+  top: 0;
+  color: var(--muted-foreground);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  background: var(--card);
+}
+
+.wf-dash-table tbody tr:hover td {
+  background: color-mix(in srgb, var(--color-fg) 4%, transparent);
+}
+
+.wf-table-empty-row td {
+  text-align: center;
+  color: var(--muted-foreground);
+  padding: 26px 12px;
+}
+
+.wf-dash-empty {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 26px;
+  text-align: center;
+  border-style: dashed;
+  color: var(--muted-foreground);
+}
+
+.wf-dash-empty strong {
+  color: var(--color-fg);
+}
+`;
