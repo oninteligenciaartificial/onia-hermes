@@ -64,6 +64,12 @@ describe("validateCheckoutInput", () => {
     if (!result.ok) expect(result.errors.phone).toBeTruthy();
   });
 
+  it("rejects a phone with too few digits", () => {
+    const result = validateCheckoutInput({ ...VALID_INPUT, customer: { ...VALID_INPUT.customer, phone: "()-.-()" } });
+    expect(result.ok).toBe(false);
+    if (!result.ok) expect(result.errors.phone).toBeTruthy();
+  });
+
   it("requires cityOther when city is Otra", () => {
     const result = validateCheckoutInput({ ...VALID_INPUT, delivery: { ...VALID_INPUT.delivery, city: "Otra" } });
     expect(result.ok).toBe(false);

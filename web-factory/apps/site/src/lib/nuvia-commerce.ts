@@ -57,7 +57,10 @@ const DEFAULT_CURRENCY = "BOB";
 const STORE_SLUG = "nuvia";
 
 function createPublicCode() {
-  return `NV-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).slice(2, 6).toUpperCase()}`;
+  const random =
+    globalThis.crypto?.randomUUID?.().replace(/-/g, "").slice(0, 8) ??
+    Math.random().toString(36).slice(2, 10);
+  return `NV-${Date.now().toString(36).toUpperCase()}-${random.toUpperCase()}`;
 }
 
 function getSupabaseConfig(): SupabaseConfig | null {
@@ -471,7 +474,19 @@ export async function createNuviaCheckout(input: unknown): Promise<NuviaCheckout
 
   const totals = computeOrderTotals(lines);
   const fallbackCode = createPublicCode();
-  const persisted = await persistOrder({ customer, delivery, lines, totals, publicCode: fallbackCode });
+  let persisted: PersistedOrder;
+  try {
+    persisted = await persistOrder({ customer, delivery, lines, totals, publicCode: fallbackCode });
+  } catch {
+    // Degradación elegante: si Supabase falla, el pedido igual sale por WhatsApp
+    // (no persistido) en lugar de romper el checkout con un 500.
+    persisted = {
+      id: null,
+      publicCode: fallbackCode,
+      persisted: false,
+      requiredConfiguration: ["supabase-persistencia-degradada"],
+    };
+  }
   const publicCode = persisted.publicCode || fallbackCode;
 
   const message = buildWhatsappOrderMessage({ publicCode, lines, totals, customer, delivery });

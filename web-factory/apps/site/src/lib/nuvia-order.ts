@@ -139,7 +139,7 @@ export function validateCheckoutInput(raw: unknown): CheckoutValidation {
   }
 
   const phone = str(customer.phone);
-  if (!PHONE_RE.test(phone)) {
+  if (!PHONE_RE.test(phone) || phone.replace(/\D/g, "").length < 7) {
     errors.phone = "Ingresa un teléfono válido.";
   }
 
@@ -190,6 +190,8 @@ export function validateCheckoutInput(raw: unknown): CheckoutValidation {
 }
 
 export function formatMoney(value: number, currency = "BOB"): string {
+  // BOB se muestra redondeado a bolivianos enteros (convención local; el catálogo
+  // ya usa etiquetas "Bs. N"). Los totales internos conservan 2 decimales.
   if (currency === "BOB") {
     return `Bs. ${Math.round(value)}`;
   }
@@ -212,7 +214,7 @@ export function buildOrderLines(
       const quantity = Math.min(99, Math.max(1, Math.floor(Number(item.quantity) || 1)));
       const unitPrice = typeof product.priceValue === "number" ? product.priceValue : null;
       const lineTotal = unitPrice === null ? null : Number((unitPrice * quantity).toFixed(2));
-      const discountPercent = product.discountPercent || 0;
+      const discountPercent = Math.min(100, Math.max(0, product.discountPercent || 0));
       const discountTotal = lineTotal === null ? 0 : Number((lineTotal * (discountPercent / 100)).toFixed(2));
 
       return {
