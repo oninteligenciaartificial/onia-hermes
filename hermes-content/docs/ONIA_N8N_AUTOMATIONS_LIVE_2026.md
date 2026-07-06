@@ -5,7 +5,13 @@ Workflows autónomos corriendo en el n8n del VPS
 de n8n** (no por el navegador — la sesión web expira y da "Autosave failed:
 Unauthorized"; el MCP tiene su propia auth). Todos usan la credencial SSH
 `ONIA VPS SSH` (id `4XKauEX3b6cqaDhW`, sshPrivateKey) para llegar al VPS y avisan
-a Sergio por Telegram vía `$env.TELEGRAM_BOT_TOKEN` / `$env.TELEGRAM_SERGIO_CHAT_ID`.
+a Sergio por Telegram con la credencial n8n `telegramApi` (token) y el **chat ID
+hardcodeado** `6830070978` en el nodo. REGLA: **no usar `$env`** en nodos n8n (este
+plan Easypanel puede perder las vars en un redeploy) — chat IDs hardcodeados. Los
+webhooks (Nuevo Lead / Nuvia / Propuesta) validan el `secret` **server-side**: un nodo
+SSH previo corre `/opt/onia/check-secret.sh` que compara contra
+`ONIA_CENTER_INTERNAL_API_KEY` (leída del contenedor onia-center) y devuelve solo
+`{authorized:true|false}` — la key nunca entra a n8n, sin `$env`.
 
 ## Workflows activos
 
@@ -18,7 +24,10 @@ a Sergio por Telegram vía `$env.TELEGRAM_BOT_TOKEN` / `$env.TELEGRAM_SERGIO_CHA
 | ONIA - Prospeccion diaria | `jspfoUsjQfQ1VXY4` | Lun-Vie 09:00 | Nudge: rota rubro+ciudad y manda el prompt de prospección (no contacta, no inventa) | Diario |
 | ONIA - Generar Propuesta (oficial) | `rwQuwSvd29bV34EY` | Webhook on-demand | `POST /webhook/generar-propuesta` `{slug,secret}`: corre el generador oficial + PDF (chromium VPS) por SSH y manda el PDF a Sergio para revisar antes de enviar al cliente | PDF por propuesta |
 | ONIA - Agente Vendedor (borradores) | `C96NmbalLhaTEf0G` | Lun-Sab 08:30 | SSH `docker exec onia-center sales-agent.mjs`: lee leads del CRM, califica+redacta con LiteLLM, deja SOLO borradores (tarea + review_queue pending/sensitive/reviewer=sergio). NO envia | Solo si hay borradores |
+| ONIA - Nuevo Lead (speed-to-lead) | `WA6VkNu5OHo6Npem` | Webhook on-demand | `POST /webhook/nuevo-lead` `{secret,company,contact,channel,message}`: crea el lead + califica + redacta la primera respuesta (borrador) al toque. Bridge inbound (formulario/WhatsApp/Hermes) -> CRM -> Vendedor. NO envia | Por lead |
 | ONIA - Nuvia Sourcing Score (v1) | `ECC1THa2kTmOGepY` | Webhook on-demand | `POST /webhook/nuvia-candidato` `{secret,candidates[]}`: score ONIA-Bolivia (flete/arancel/demanda/precio) por SSH, upsert en `nuvia_sourcing_candidates`. Read-only, sin contacto ni pago | Por lote |
+| ONIA - Reporte diario Sergio + Arthur | `xQaO3Sfsl9XzMiid` | Lun-Sab 07:00 | SSH `arthur-report.mjs`: tareas del dia para Sergio y Arthur (obligaciones acuerdo 60d + CRM vivo) + verificacion de ganancias de Arthur (payment_commissions por estado + progreso trial). Determinista, solo suma lo registrado | Diario |
+| ONIA Center - Briefing diario operativo | `ONIADailyBrief001` | Lun-Sab 06:45 | SSH `briefing-run.sh` -> `briefing-run.mjs` (docker exec onia-center): genera+registra el plan diario por rol (Sergio/Arthur/seller), deduplicado. La `ONIA_CENTER_INTERNAL_API_KEY` se lee del contenedor, sin `$env` | Plan diario |
 
 Los 5 crones fueron probados end-to-end antes de activar (ejecución real + Telegram
 recibido). El de propuestas (webhook) se probó con slug real (`bench`), secret
@@ -27,10 +36,18 @@ inválido (401) e inyección de slug (401) — 3/3 ejecuciones OK.
 ## Auditoría de autonomía + limpieza (2026-07-05, sesión infra)
 
 - **Autonomía:** escaneado el export completo de workflows. **Todos los workflows
-  ACTIVOS son autónomos** — no dependen del laptop de Sergio. El briefing usa
-  `http://onia-center:3012` (docker-interno, siempre-on), no localhost. Las únicas
-  dependencias locales (`127.0.0.1:3031` propuestas viejo, `SearXNG`) vivían en
-  workflows **inactivos**.
+  ACTIVOS son autónomos** — no dependen del laptop de Sergio. El briefing llama al
+  endpoint `onia-center` desde **dentro del contenedor** (docker-interno, siempre-on),
+  no localhost. Las únicas dependencias locales (`127.0.0.1:3031` propuestas viejo,
+  `SearXNG`) vivían en workflows **inactivos**.
+- **Briefing sin `$env` (2026-07-06):** el `ONIADailyBrief001` usaba `$env`
+  (`ONIA_CENTER_BASE_URL`, `ONIA_CENTER_INTERNAL_API_KEY`, `TELEGRAM_BOT_TOKEN`,
+  `TELEGRAM_SERGIO_CHAT_ID`) en nodos HTTP crudos. Refactorizado: el HTTP con la key
+  interna -> nodo **SSH** que corre `briefing-run.sh` -> `briefing-run.mjs` dentro de
+  onia-center (la key se lee del contenedor, nunca entra a n8n); el HTTP de Telegram
+  con `$env.TELEGRAM_BOT_TOKEN` -> nodo **Telegram con credencial** `telegramApi` +
+  chat ID hardcodeado; eliminado el IF `Telegram configurado?` (chequeaba `$env`).
+  Probado en vivo (ejecución manual: briefing commit OK, Telegram `message_id` 767).
 - **Propuestas:** el pipeline viejo (`FGqyNTrQfMIFiVG2`) apuntaba a `127.0.0.1:3031`
   (inalcanzable desde el contenedor n8n) y usaba un generador ad-hoc. Reemplazado
   por `ONIA - Generar Propuesta (oficial)` (arriba), que corre el generador oficial
