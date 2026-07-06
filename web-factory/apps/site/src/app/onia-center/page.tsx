@@ -30,7 +30,6 @@ import {
   Layers3,
   Lightbulb,
   LockKeyhole,
-  Mic,
   Percent,
   PiggyBank,
   ReceiptText,
@@ -155,12 +154,110 @@ type RuntimeConnection = {
   };
 };
 
+// Propuestas del agente Vendedor que esperan decision de Sergio. Salen del
+// review_queue real de Supabase (entity "review" del runtime); nunca se inventan.
+type RuntimeReviewItem = {
+  id: string;
+  source: string;
+  title: string;
+  type: string;
+  sensitivity: string;
+  status: "pendiente" | "aprobado" | "rechazado" | "importado";
+};
+
+const SALES_AGENT_ID = "agent-sales-crm";
+
+function parseReviewItems(raw: unknown[] | undefined): RuntimeReviewItem[] {
+  if (!Array.isArray(raw)) {
+    return [];
+  }
+
+  return raw.flatMap((item) => {
+    if (!item || typeof item !== "object") {
+      return [];
+    }
+
+    const record = item as Record<string, unknown>;
+    if (typeof record.id !== "string") {
+      return [];
+    }
+
+    const status = record.status;
+    return [
+      {
+        id: record.id,
+        source: typeof record.source === "string" ? record.source : "",
+        title: typeof record.title === "string" ? record.title : "",
+        type: typeof record.type === "string" ? record.type : "revision",
+        sensitivity: typeof record.sensitivity === "string" ? record.sensitivity : "internal",
+        status:
+          status === "aprobado" || status === "rechazado" || status === "importado" ? status : "pendiente",
+      },
+    ];
+  });
+}
+
+const DAILY_AGENT_ID = "agent-calendar-energy";
+
+const TASK_STATUS_LABEL: Record<string, string> = {
+  todo: "por hacer",
+  doing: "en proceso",
+  review: "en revision",
+  done: "listo",
+  blocked: "bloqueado",
+};
+
+const TASK_PRIORITY_RANK: Record<string, number> = { alta: 0, media: 1, baja: 2 };
+
+// Tareas reales del runtime (schema onia_center) que el Agente del Dia ordena
+// por prioridad para decir "que hacer hoy". Nunca se inventan.
+type RuntimeTaskItem = {
+  id: string;
+  title: string;
+  priority: "alta" | "media" | "baja";
+  status: "todo" | "doing" | "review" | "done" | "blocked";
+  assignedRole: string;
+};
+
+function parseTaskItems(raw: unknown[] | undefined): RuntimeTaskItem[] {
+  if (!Array.isArray(raw)) {
+    return [];
+  }
+
+  return raw.flatMap((item) => {
+    if (!item || typeof item !== "object") {
+      return [];
+    }
+
+    const record = item as Record<string, unknown>;
+    if (typeof record.id !== "string") {
+      return [];
+    }
+
+    const priority = record.priority;
+    const status = record.status;
+    return [
+      {
+        id: record.id,
+        title: typeof record.title === "string" ? record.title : "",
+        priority: priority === "alta" || priority === "baja" ? priority : "media",
+        status:
+          status === "doing" || status === "review" || status === "done" || status === "blocked"
+            ? status
+            : "todo",
+        assignedRole: typeof record.assignedRole === "string" ? record.assignedRole : "",
+      },
+    ];
+  });
+}
+
 const navItems: NavItem[] = [
   { id: "dashboard", label: "Hoy", detail: "Tareas y agenda", group: "Trabajo", icon: CalendarDays },
   { id: "uso-diario", label: "Captura", detail: "Notas y evidencia", group: "Trabajo", icon: FileCheck2 },
   { id: "calendario-sergio", label: "Calendario", detail: "Agenda", group: "Trabajo", icon: CalendarDays },
   { id: "asistente", label: "Asistente", detail: "ONIA Bot", group: "Trabajo", icon: Bot },
-  { id: "audio-intelligence", label: "Audio IA", detail: "Propuestas", group: "Trabajo", icon: Mic },
+  // "Audio IA" (audio-intelligence) oculto del nav hasta usarlo en real. El
+  // widget sigue en operating-workspace.tsx; se reactiva agregando el item aqui.
   { id: "ideas", label: "Ideas", detail: "Reels e IA", group: "Trabajo", icon: Lightbulb },
   { id: "codex", label: "Codex", detail: "Jobs", group: "Trabajo", icon: Code2 },
   { id: "servicios", label: "Servicios", detail: "Catalogo", group: "Ventas", icon: Layers3 },
@@ -187,7 +284,6 @@ const navGroups = ["Trabajo", "Ventas", "Entrega", "IA y automatizacion", "Diner
 
 const heroActionItems = [
   { id: "uso-diario", label: "Captura rapida", icon: FileCheck2 },
-  { id: "audio-intelligence", label: "Audio IA", icon: Mic },
   { id: "ideas", label: "Ideas", icon: Lightbulb },
   { id: "evidencias", label: "Evidencias", icon: ShieldCheck },
 ] as const;
@@ -545,6 +641,10 @@ export default function OniaCenterPage() {
     detail: "Verificando Auth y Supabase.",
     counts: { leads: 0, tasks: 0, reviews: 0, notes: 0, ideas: 0, codexJobs: 0 },
   });
+  const [reviewQueue, setReviewQueue] = useState<RuntimeReviewItem[]>([]);
+  const [approvalNotice, setApprovalNotice] = useState<string | null>(null);
+  const [approvingReviewId, setApprovingReviewId] = useState<string | null>(null);
+  const [runtimeTasks, setRuntimeTasks] = useState<RuntimeTaskItem[]>([]);
   const roleLocked = sessionRole !== null && sessionRole !== "sergio";
   const role = roleDefinitions.find((item) => item.id === selectedRole) ?? roleDefinitions[0];
   const allowedNavItems = useMemo(
@@ -615,6 +715,25 @@ export default function OniaCenterPage() {
   const featureSummary = getFeatureReadinessSummary();
   const membershipSummary = getMembershipSummary(selectedRole);
   const agentSummary = getOperatingAgentSummary(selectedRole);
+  const pendingProposals = reviewQueue.filter((review) => review.status === "pendiente");
+  const salesAgentLiveStatus =
+    runtimeConnection.state !== "connected"
+      ? null
+      : pendingProposals.length > 0
+        ? { label: `Esperando aprobacion (${pendingProposals.length})`, tone: "yellow" as CenterTone }
+        : { label: "Trabajando", tone: "green" as CenterTone };
+  const actionableTasks = runtimeTasks.filter(
+    (task) => task.status === "todo" || task.status === "doing" || task.status === "review",
+  );
+  const todayPriorities = [...actionableTasks]
+    .sort((a, b) => (TASK_PRIORITY_RANK[a.priority] ?? 1) - (TASK_PRIORITY_RANK[b.priority] ?? 1))
+    .slice(0, 5);
+  const dailyAgentLiveStatus =
+    runtimeConnection.state !== "connected"
+      ? null
+      : actionableTasks.length > 0
+        ? { label: `${actionableTasks.length} para hoy`, tone: "blue" as CenterTone }
+        : { label: "Al dia", tone: "green" as CenterTone };
   const visibleCalendarConnectorPlans = useMemo(
     () => (privateVisible ? calendarConnectorPlans : calendarConnectorPlans.filter((plan) => plan.visibility !== "sergio_private")),
     [privateVisible],
@@ -673,6 +792,8 @@ export default function OniaCenterPage() {
             detail: body.message ?? "No se pudo leer el runtime de ONIA Center.",
             counts: { leads: 0, tasks: 0, reviews: 0, notes: 0, ideas: 0, codexJobs: 0 },
           });
+          setReviewQueue([]);
+          setRuntimeTasks([]);
           return;
         }
 
@@ -690,6 +811,8 @@ export default function OniaCenterPage() {
             codexJobs: data?.codexJobs?.length ?? 0,
           },
         });
+        setReviewQueue(parseReviewItems(data?.reviews));
+        setRuntimeTasks(parseTaskItems(data?.tasks));
       } catch {
         if (active) {
           setRuntimeConnection({
@@ -698,6 +821,8 @@ export default function OniaCenterPage() {
             detail: "No se pudo conectar al runtime. Revisa el tunel local a Supabase.",
             counts: { leads: 0, tasks: 0, reviews: 0, notes: 0, ideas: 0, codexJobs: 0 },
           });
+          setReviewQueue([]);
+          setRuntimeTasks([]);
         }
       }
     }
@@ -709,6 +834,38 @@ export default function OniaCenterPage() {
       active = false;
     };
   }, []);
+
+  async function submitReviewDecision(id: string, status: "aprobado" | "rechazado") {
+    if (selectedRole !== "sergio") {
+      setApprovalNotice("Solo Sergio puede aprobar o rechazar propuestas del agente.");
+      return;
+    }
+
+    const previous = reviewQueue;
+    setApprovingReviewId(id);
+    setApprovalNotice(null);
+    setReviewQueue((current) => current.map((review) => (review.id === id ? { ...review, status } : review)));
+
+    try {
+      const response = await fetch("/api/onia-center/runtime", {
+        method: "PATCH",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ entity: "review", id, status }),
+      });
+      const body = (await response.json()) as { ok?: boolean; message?: string };
+      if (!response.ok || !body.ok) {
+        setReviewQueue(previous);
+        setApprovalNotice(body.message ?? "No se pudo actualizar la propuesta en Supabase.");
+        return;
+      }
+      setApprovalNotice(status === "aprobado" ? "Propuesta aprobada." : "Propuesta rechazada.");
+    } catch {
+      setReviewQueue(previous);
+      setApprovalNotice("Error de red al actualizar la propuesta.");
+    } finally {
+      setApprovingReviewId(null);
+    }
+  }
 
   return (
     <main className="onia-center-page">
@@ -902,7 +1059,13 @@ export default function OniaCenterPage() {
                     <span>{agent.cadence} / {agent.visibility}</span>
                     <strong>{agent.name}</strong>
                   </div>
-                  <TonePill tone={getAgentTone(agent.status)}>{agent.status.replaceAll("_", " ")}</TonePill>
+                  {agent.id === SALES_AGENT_ID && salesAgentLiveStatus ? (
+                    <TonePill tone={salesAgentLiveStatus.tone}>{salesAgentLiveStatus.label}</TonePill>
+                  ) : agent.id === DAILY_AGENT_ID && dailyAgentLiveStatus ? (
+                    <TonePill tone={dailyAgentLiveStatus.tone}>{dailyAgentLiveStatus.label}</TonePill>
+                  ) : (
+                    <TonePill tone={getAgentTone(agent.status)}>{agent.status.replaceAll("_", " ")}</TonePill>
+                  )}
                 </div>
                 <p>{agent.mission}</p>
                 <div className="onia-agent-columns">
@@ -926,6 +1089,103 @@ export default function OniaCenterPage() {
                 <small className="onia-agent-rule">{agent.safetyRule}</small>
               </article>
             ))}
+          </div>
+
+          <div className="onia-agent-month-plan onia-agent-approval-queue">
+            <div className="onia-live-title">
+              <CalendarDays size={16} />
+              <strong>Prioridades de hoy</strong>
+            </div>
+            <p>
+              El Agente del Dia ordena tus tareas abiertas reales por prioridad. Esto es lo que conviene hacer hoy; no se inventa nada.
+            </p>
+            {runtimeConnection.state !== "connected" ? (
+              <article>
+                <div>
+                  <span>Runtime</span>
+                  <strong>{runtimeConnection.state === "checking" ? "Verificando runtime" : "Runtime no disponible"}</strong>
+                  <p>{runtimeConnection.detail} Las prioridades aparecen cuando ONIA Center responde con datos reales.</p>
+                </div>
+              </article>
+            ) : todayPriorities.length ? (
+              todayPriorities.map((task) => (
+                <article key={task.id}>
+                  <div>
+                    <span>prioridad {task.priority} / {TASK_STATUS_LABEL[task.status] ?? task.status}</span>
+                    <strong>{task.title || "Tarea sin titulo"}</strong>
+                  </div>
+                  <TonePill tone={task.priority === "alta" ? "red" : task.priority === "media" ? "yellow" : "blue"}>
+                    {task.priority}
+                  </TonePill>
+                </article>
+              ))
+            ) : (
+              <article>
+                <div>
+                  <span>Al dia</span>
+                  <strong>Sin tareas pendientes para hoy.</strong>
+                  <p>Cuando haya tareas abiertas en ONIA Center, el Agente del Dia las ordena aca por prioridad.</p>
+                </div>
+              </article>
+            )}
+          </div>
+
+          <div className="onia-agent-month-plan onia-agent-approval-queue">
+            <div className="onia-live-title">
+              <ClipboardCheck size={16} />
+              <strong>Cola de aprobacion</strong>
+            </div>
+            <p>
+              Lo que el agente Vendedor propone (mensaje a un lead, propuesta o proxima accion) espera tu OK aca. Sale del review_queue real de Supabase; nada se ejecuta sin tu aprobacion.
+            </p>
+            {approvalNotice ? <small className="onia-agent-rule">{approvalNotice}</small> : null}
+            {runtimeConnection.state !== "connected" ? (
+              <article>
+                <div>
+                  <span>Runtime</span>
+                  <strong>{runtimeConnection.state === "checking" ? "Verificando runtime" : "Runtime no disponible"}</strong>
+                  <p>{runtimeConnection.detail} La cola aparece cuando ONIA Center responde con datos reales.</p>
+                </div>
+              </article>
+            ) : pendingProposals.length ? (
+              pendingProposals.map((proposal) => (
+                <article key={proposal.id}>
+                  <div>
+                    <span>{proposal.type} / {proposal.sensitivity}</span>
+                    <strong>{proposal.source || "Propuesta del agente Vendedor"}</strong>
+                    <p>{proposal.title || "Sin detalle registrado."}</p>
+                  </div>
+                  {selectedRole === "sergio" ? (
+                    <div className="onia-review-actions">
+                      <button
+                        type="button"
+                        disabled={approvingReviewId === proposal.id}
+                        onClick={() => submitReviewDecision(proposal.id, "aprobado")}
+                      >
+                        Aprobar
+                      </button>
+                      <button
+                        type="button"
+                        disabled={approvingReviewId === proposal.id}
+                        onClick={() => submitReviewDecision(proposal.id, "rechazado")}
+                      >
+                        Rechazar
+                      </button>
+                    </div>
+                  ) : (
+                    <small>Solo Sergio aprueba o rechaza.</small>
+                  )}
+                </article>
+              ))
+            ) : (
+              <article>
+                <div>
+                  <span>Cola vacia</span>
+                  <strong>Sin propuestas pendientes.</strong>
+                  <p>Cuando el agente Vendedor proponga un mensaje, una propuesta o una proxima accion, aparecera aca para tu aprobacion.</p>
+                </div>
+              </article>
+            )}
           </div>
 
           <div className="onia-agent-month-plan">

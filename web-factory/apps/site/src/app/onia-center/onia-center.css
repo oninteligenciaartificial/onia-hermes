@@ -2488,6 +2488,14 @@
   gap: 10px;
 }
 
+.onia-agent-approval-queue > p {
+  margin: 0 0 2px;
+  max-width: 72ch;
+  color: var(--onia-faint);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
 .onia-agent-grid {
   grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
   margin-top: 12px;

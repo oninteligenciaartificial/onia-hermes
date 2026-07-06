@@ -46,9 +46,8 @@ export function renderHero(client: SiteClient, options: HeroOptions = {}): strin
         <div class="wf-proof-panel" aria-label="Resumen de propuesta">
           ${heroPoster ? renderHeroPoster(heroPoster, client.nombre) : ""}
           <div class="wf-proof-copy">
-            <span class="wf-proof-label">Agenda clara</span>
-            <strong>Servicios explicados sin vueltas y contacto directo.</strong>
-            <p>Una primera impresion ordenada para que cada visita se convierta en conversacion.</p>
+            <span class="wf-proof-label">Por que elegirnos</span>
+            ${renderProofPoints(client)}
           </div>
         </div>
       </div>
@@ -62,4 +61,20 @@ function renderHeroPoster(src: string, clientName: string): string {
       <img src="${escapeAttribute(src)}" alt="${escapeAttribute(`Visual principal de ${clientName}`)}" loading="eager" decoding="async">
     </figure>
   `;
+}
+
+// Proof panel content driven by real client data (credenciales, else beneficios).
+// Falls back to neutral copy so existing landings without this data still render.
+function renderProofPoints(client: SiteClient): string {
+  const points = (client.credenciales?.length ? client.credenciales : client.beneficios ?? [])
+    .filter((point) => point.trim().length > 0)
+    .slice(0, 4);
+
+  if (points.length === 0) {
+    return `<strong>Atencion clara y contacto directo.</strong>
+      <p>Una primera impresion ordenada para que cada visita se vuelva conversacion.</p>`;
+  }
+
+  const list = points.map((point) => `<li>${escapeHtml(point)}</li>`).join("");
+  return `<ul class="wf-proof-points">${list}</ul>`;
 }

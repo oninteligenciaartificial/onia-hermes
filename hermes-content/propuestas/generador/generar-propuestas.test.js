@@ -7,7 +7,7 @@
 const assert = require('assert');
 const fs = require('fs');
 const path = require('path');
-const { buildHtml, validateCliente } = require('./generar-propuestas');
+const { buildHtml, validateCliente, parseArgs } = require('./generar-propuestas');
 
 let pass = 0;
 const test = (name, fn) => {
@@ -68,6 +68,97 @@ test('buildHtml usa moneda para los headers de precio', () => {
   assert.ok(usd.includes('Precio (USD)'));
   assert.ok(usd.includes('Setup (USD)'));
   assert.ok(usd.includes('Mensual (USD)'));
+});
+
+test('buildHtml renderiza resumen ejecutivo solo si existe', () => {
+  assert.ok(!buildHtml(base).includes('Resumen ejecutivo'));
+  const c = { ...base, resumenEjecutivo: 'RESUMEN-X' };
+  const html = buildHtml(c);
+  assert.ok(html.includes('Resumen ejecutivo'));
+  assert.ok(html.includes('RESUMEN-X'));
+});
+
+test('buildHtml renderiza imágenes solo si existen', () => {
+  assert.ok(!buildHtml(base).includes('<figure'));
+  const c = { ...base, imagenes: [{ src: 'assets/x.png', alt: 'ALT-X', caption: 'CAP-X' }] };
+  const html = buildHtml(c);
+  assert.ok(html.includes('assets/x.png'));
+  assert.ok(html.includes('ALT-X'));
+  assert.ok(html.includes('CAP-X'));
+});
+
+test('buildHtml renderiza casos solo si existen', () => {
+  assert.ok(!buildHtml(base).includes('Resultados'));
+  const c = { ...base, casos: [{ titulo: 'CASO-T', detalle: 'CASO-D' }] };
+  const html = buildHtml(c);
+  assert.ok(html.includes('CASO-T'));
+  assert.ok(html.includes('CASO-D'));
+});
+
+test('buildHtml renderiza comparativa solo si existe', () => {
+  assert.ok(!buildHtml(base).includes('class="comp"'));
+  const c = { ...base, comparativa: {
+    titulo: 'COMP-T', columnas: ['Ellos', 'ONIA'],
+    filas: [['Costo', 'ALTO-X', 'BAJO-X']],
+  } };
+  const html = buildHtml(c);
+  assert.ok(html.includes('COMP-T'));
+  assert.ok(html.includes('Ellos'));
+  assert.ok(html.includes('ALTO-X'));
+  assert.ok(html.includes('BAJO-X'));
+});
+
+test('buildHtml renderiza próximos pasos y CTA solo si existen', () => {
+  assert.ok(!buildHtml(base).includes('Próximos pasos'));
+  const c = { ...base,
+    proximosPasos: ['PASO-UNO', 'PASO-DOS'],
+    ctaWhatsapp: { url: 'https://wa.me/59175470140?text=hola', texto: 'CTA-X' },
+  };
+  const html = buildHtml(c);
+  assert.ok(html.includes('Próximos pasos'));
+  assert.ok(html.includes('PASO-UNO'));
+  assert.ok(html.includes('https://wa.me/59175470140?text=hola'));
+  assert.ok(html.includes('CTA-X'));
+});
+
+test('buildHtml renderiza portada solo si existe', () => {
+  assert.ok(!buildHtml(base).includes('class="cover"'));
+  const c = { ...base, portada: { titulo: 'PORTADA-T', subtitulo: 'PORTADA-S', fecha: 'Julio 2026' } };
+  const html = buildHtml(c);
+  assert.ok(html.includes('class="cover"'));
+  assert.ok(html.includes('PORTADA-T'));
+  assert.ok(html.includes('Julio 2026'));
+});
+
+test('buildHtml inserta pixel de tracking solo con opts.trackUrl', () => {
+  assert.ok(!buildHtml(base).includes('width="1" height="1"'));
+  const html = buildHtml(base, { trackUrl: 'https://n8n.example/webhook/propuesta-abierta?t=tok1&s=t' });
+  assert.ok(html.includes('https://n8n.example/webhook/propuesta-abierta?t=tok1&amp;s=t'));
+  assert.ok(html.includes('width="1" height="1"'));
+});
+
+test('buildHtml renderiza límite del paquete solo si existe', () => {
+  assert.ok(!buildHtml(base).includes('class="lim"'));
+  const c = { ...base, paquetes: [{ ...base.paquetes[0], limite: 'LIMITE-X' }] };
+  const html = buildHtml(c);
+  assert.ok(html.includes('class="lim"'));
+  assert.ok(html.includes('LIMITE-X'));
+});
+
+test('parseArgs: slug sin --track no se pierde', () => {
+  const p = parseArgs(['dentalgest', '--pdf']);
+  assert.deepStrictEqual(p.only, ['dentalgest']);
+  assert.strictEqual(p.wantPdf, true);
+  assert.strictEqual(p.trackToken, null);
+});
+
+test('parseArgs: --track consume su token y respeta slugs', () => {
+  const p = parseArgs(['dentalgest', '--track', 'tok-1']);
+  assert.deepStrictEqual(p.only, ['dentalgest']);
+  assert.strictEqual(p.trackToken, 'tok-1');
+  const p2 = parseArgs(['--track', 'tok-2', 'garabato', '--pdf']);
+  assert.deepStrictEqual(p2.only, ['garabato']);
+  assert.strictEqual(p2.trackToken, 'tok-2');
 });
 
 test('clientes.json es válido y todos cumplen requeridos', () => {

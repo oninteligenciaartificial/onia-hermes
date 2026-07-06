@@ -24,3 +24,8 @@ export {
   renderDashboardDocument,
   type DashboardClient,
 } from "./dashboard";
+export {
+  renderLandingClinicBody,
+  renderLandingClinicCss,
+  renderLandingClinicDocument,
+} from "./landing-clinic";

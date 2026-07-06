@@ -4,17 +4,21 @@
   "principle": "Hermes is the ONIA operating system. Self-hosted tools are capabilities behind one control plane, not isolated panels.",
   "current_vps": {
     "host": "187.77.16.63",
+    "hostname": "srv1360183.hstgr.cloud",
+    "provider_plan": "Hostinger KVM 4",
     "os": "Ubuntu 24.04 LTS",
-    "cpu": "2 vCPU",
-    "ram_gib": 7.8,
-    "disk_gib": 96,
+    "cpu": "4 vCPU",
+    "ram_gib": 16,
+    "disk_gib": 200,
+    "verified_at": "2026-07-05 (panel Hostinger)",
     "post_stack_snapshot": {
-      "available_ram_gib": 2.8,
-      "swap_used_gib": 3.7,
-      "root_disk_used_percent": 66,
-      "active_containers": 27
+      "cpu_percent": 32,
+      "ram_used_percent": 59,
+      "available_ram_gib": 6.5,
+      "disk_used_gib": 88
     },
-    "decision": "Keep current VPS as core/control plane. Do not add Dify, Crawl4AI browser workers or mail delivery here."
+    "correction_note": "2026-07-05: la version previa (2 vCPU / 7.8 GB, generada 2026-06-20) estaba DESACTUALIZADA. El VPS fue mejorado a Hostinger KVM 4 (4 vCPU / 16 GB / 200 GB). No fiarse del snapshot viejo.",
+    "decision": "VPS actual (4 vCPU / 16 GB) tiene headroom: los agentes (browser-use / Skyvern + render de video) corren aca con limites sanos (pocos navegadores a la vez, 1 video por vez) y monitoreo con Uptime-Kuma. NO hace falta un worker VPS para arrancar. Considerar un 2do VPS SOLO si scraping masivo + muchos videos en simultaneo compiten con el core (DB / panel / inbox)."
   },
   "control_tower": {
     "local_port": 3010,

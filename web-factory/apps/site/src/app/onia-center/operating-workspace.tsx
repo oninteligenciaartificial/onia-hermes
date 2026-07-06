@@ -29,12 +29,10 @@ import {
 } from "lucide-react";
 import { formatBs } from "./engine";
 import {
-  collabIngestionItems,
   commercialBookingPolicy,
   externalAdapters,
   higgsfieldQuietRule,
   operatingProjects,
-  operatingTasks,
   sergioAssistantCommands,
   sergioMeetingWindows,
   sergioStrictScheduleBlocks,
@@ -412,8 +410,8 @@ const workspaceCopy: Record<WorkspaceView, { label: string; title: string; descr
   },
   calendar: {
     label: "Agenda Sergio",
-    title: "Calendario estricto Sergio",
-    description: "Controla horas de enfoque, reuniones, gym, descanso y reglas personales sin exponerlo al equipo.",
+    title: "Agenda operativa Sergio",
+    description: "Bloques de trabajo del dia: plan CEO, ventas, enfoque, ventanas de reunion y cierre. Filtrado por rol.",
   },
   ideas: {
     label: "Ideas y referencias",
@@ -481,22 +479,14 @@ const scheduleCategoryIcons: Record<string, typeof Clock> = {
   sleep: Moon,
 };
 
-// El inicio "Hoy en ONIA" muestra solo bloques operativos. La rutina personal
-// rigida (levantarse/aseo, gym, novia, dormir, apagar) sigue disponible en la
-// pestana Calendario, pero no se mezcla con el arranque de trabajo del dia.
+// El inicio "Hoy en ONIA" y el Calendario muestran solo agenda de trabajo. La
+// rutina personal se removio del panel; los limites personales los protege la
+// automatizacion de agenda, no esta vista. Este filtro queda como red de
+// seguridad por si mas adelante se reintroduce alguna categoria no operativa.
 const dailyOperationalCategories = new Set(["planning", "sales", "deep_work", "meetings", "admin"]);
 const operationalDailyBlocks = sergioStrictScheduleBlocks
   .filter((block) => dailyOperationalCategories.has(block.category))
   .slice(0, 6);
-
-const starterReviews: RuntimeReview[] = collabIngestionItems.map((item) => ({
-  id: item.id,
-  source: item.sourcePath,
-  title: item.summary,
-  type: item.classification,
-  sensitivity: item.sensitivity,
-  status: "pendiente",
-}));
 
 const starterServiceUpdates: RuntimeNote[] = [
   {
@@ -521,82 +511,6 @@ const starterServiceUpdates: RuntimeNote[] = [
   },
 ];
 
-const starterTasks: RuntimeTask[] = operatingTasks.map((task) => ({
-  id: task.id,
-  projectId: task.projectId,
-  title: task.title,
-  assignedRole: task.assignedRole,
-  status: task.status === "in_progress" ? "doing" : task.status === "approved" ? "done" : task.status === "blocked" ? "blocked" : "todo",
-  priority: task.priority,
-  evidence: task.evidenceRequired ? "pendiente" : "no requerida",
-  createdAt: "seed",
-}));
-
-const starterCodexJobs: RuntimeCodexJob[] = [
-  {
-    id: "codex-onia-center-supabase-rls",
-    title: "ONIA Center: activar Supabase real, Auth y RLS sin exponer service role",
-    projectId: "project-onia-center",
-    targetRepo: "onia-hermes",
-    requestType: "ops",
-    owner: "sergio",
-    visibility: "sergio_private",
-    risk: "alto",
-    status: "blocked",
-    context:
-      "El runtime ya tiene fallback local y endpoints server-side. Falta aplicar migraciones en Supabase self-hosted, cargar env vars seguras y validar usuarios reales por rol.",
-    files:
-      "supabase/migrations/20260622_onia_center_schema.sql, supabase/migrations/20260623_onia_center_auth_rls.sql, web-factory/apps/site/src/lib/onia-center-store.ts",
-    acceptance:
-      "Login Sergio funciona, Arthur/vendedor/freelancer ven solo su scope, service role nunca llega al navegador y /api/onia-center/runtime responde con datos reales.",
-    validation:
-      "npm run lint, npx tsc --noEmit --pretty false, prueba login, prueba GET/POST runtime y revision de policies RLS.",
-    evidence: "Pendiente: tunnel Supabase activo, env server-side y captura de runtime conectado.",
-    createdAt: "seed",
-  },
-  {
-    id: "codex-collab-importer-readonly",
-    title: "Importador read-only de onia-hermes-collab a review queue",
-    projectId: "project-onia-center",
-    targetRepo: "onia-hermes",
-    requestType: "feature",
-    owner: "sergio",
-    visibility: "internal_restricted",
-    risk: "medio",
-    status: "ready",
-    context:
-      "Arthur debe trabajar en onia-hermes-collab sin ver memoria privada. ONIA Center necesita listar aportes, clasificar sensibilidad y permitir aprobar/rechazar/importar.",
-    files:
-      "web-factory/apps/site/src/app/onia-center/operating-source.ts, web-factory/apps/site/src/app/api/onia-center/runtime/route.ts, hermes-content/docs/ONIA_HERMES_COLLABORATOR_ACCESS_MODEL_2026.md",
-    acceptance:
-      "La vista Collab muestra cambios recientes clasificados como lead, brief, tarea, contenido, Bolivian o bloqueo; nada se importa a Hermes privado sin aprobacion Sergio.",
-    validation:
-      "Fixture local con 3 aportes, filtro sensible/no sensible, pruebas manuales de aprobar/rechazar y snapshot sin datos privados.",
-    evidence: "Pendiente: token GitHub minimo o fuente local del repo colaborativo.",
-    createdAt: "seed",
-  },
-  {
-    id: "codex-web-factory-client-form",
-    title: "Web Factory: formulario cliente a brief y receta web revisable",
-    projectId: "project-webs",
-    targetRepo: "onia-hermes/web-factory",
-    requestType: "feature",
-    owner: "sergio",
-    visibility: "internal_restricted",
-    risk: "medio",
-    status: "draft",
-    context:
-      "Queremos que clientes llenen un formulario y el sistema genere brief, estructura, requisitos, assets faltantes y una receta de web sin publicar automaticamente.",
-    files:
-      "web-factory/apps/site/src/app/onia-center/web-factory, web-factory/docs/WEB_FACTORY_OPERATING_RUNBOOK_20260625.md",
-    acceptance:
-      "Formulario captura negocio, objetivo, secciones, referencias, tono, assets, dominio y restricciones; genera brief interno y checklist QA antes de pasar a Codex.",
-    validation:
-      "Smoke test de formulario, salida JSON limpia, sin credenciales, sin publicar, y prompt listo para Codex.",
-    evidence: "Pendiente: definir primer formulario comercial y storage de assets.",
-    createdAt: "seed",
-  },
-];
 
 const emptyLeadForm: LeadForm = {
   company: "",
@@ -678,11 +592,11 @@ function readLocalRuntime(): RuntimeData | null {
   const parsed = JSON.parse(raw) as Partial<RuntimeData>;
   return {
     leads: parsed.leads ?? [],
-    tasks: parsed.tasks ?? starterTasks,
-    reviews: parsed.reviews ?? starterReviews,
+    tasks: parsed.tasks ?? [],
+    reviews: parsed.reviews ?? [],
     notes: parsed.notes ?? [],
     ideas: parsed.ideas ?? [],
-    codexJobs: parsed.codexJobs ?? starterCodexJobs,
+    codexJobs: parsed.codexJobs ?? [],
   };
 }
 
@@ -1501,11 +1415,11 @@ function formatAudioCrmNote(analysis: AudioAnalysis | null | undefined) {
 
 export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: { selectedRole: RoleId; workspaceView?: WorkspaceView }) {
   const [leads, setLeads] = useState<RuntimeLead[]>([]);
-  const [tasks, setTasks] = useState<RuntimeTask[]>(starterTasks);
-  const [reviews, setReviews] = useState<RuntimeReview[]>(starterReviews);
+  const [tasks, setTasks] = useState<RuntimeTask[]>([]);
+  const [reviews, setReviews] = useState<RuntimeReview[]>([]);
   const [notes, setNotes] = useState<RuntimeNote[]>([]);
   const [ideas, setIdeas] = useState<RuntimeIdea[]>([]);
-  const [codexJobs, setCodexJobs] = useState<RuntimeCodexJob[]>(starterCodexJobs);
+  const [codexJobs, setCodexJobs] = useState<RuntimeCodexJob[]>([]);
   const [leadForm, setLeadForm] = useState<LeadForm>(emptyLeadForm);
   const [taskForm, setTaskForm] = useState<TaskForm>(emptyTaskForm);
   const [noteForm, setNoteForm] = useState<NoteForm>(emptyNoteForm);
@@ -1550,7 +1464,7 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
         setReviews(localRuntime.reviews);
         setNotes(localRuntime.notes);
         setIdeas(localRuntime.ideas);
-        setCodexJobs(localRuntime.codexJobs.length ? localRuntime.codexJobs : starterCodexJobs);
+        setCodexJobs(localRuntime.codexJobs);
       }
 
       try {
@@ -1561,11 +1475,11 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
 
         if (runtime.ok && runtime.data) {
           setLeads(runtime.data.leads);
-          setTasks(runtime.data.tasks.length ? runtime.data.tasks : starterTasks);
-          setReviews(runtime.data.reviews.length ? runtime.data.reviews : starterReviews);
+          setTasks(runtime.data.tasks);
+          setReviews(runtime.data.reviews);
           setNotes(runtime.data.notes);
           setIdeas(runtime.data.ideas);
-          setCodexJobs(runtime.data.codexJobs.length ? runtime.data.codexJobs : starterCodexJobs);
+          setCodexJobs(runtime.data.codexJobs);
           setStorageMode("supabase");
           setNotice("Conectado a Supabase self-hosted. Los nuevos registros se guardan en onia_center.");
           return;
@@ -2310,14 +2224,14 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
     }
 
     setLeads([]);
-    setTasks(starterTasks);
-    setReviews(starterReviews);
+    setTasks([]);
+    setReviews([]);
     setNotes([]);
     setIdeas([]);
-    setCodexJobs(starterCodexJobs);
+    setCodexJobs([]);
     window.localStorage.removeItem(storageKey);
     window.localStorage.removeItem(legacyStorageKey);
-    setNotice("Estado local reiniciado al seed operativo.");
+    setNotice("Estado local vaciado. Solo se mostraran registros reales de Supabase.");
   }
 
   const ideaVisibilityValue = selectedRole === "sergio"
@@ -3009,15 +2923,15 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
           <article className="onia-live-card onia-daily-agenda">
             <div className="onia-live-title">
               <CalendarDays size={16} />
-              <strong>{selectedRole === "sergio" ? "Calendario estricto de hoy" : "Agenda privada protegida"}</strong>
+              <strong>{selectedRole === "sergio" ? "Agenda operativa de hoy" : "Agenda privada protegida"}</strong>
             </div>
             {selectedRole === "sergio" ? (
               <>
                 <div className="onia-calendar-summary">
                   <div>
                     <span>Arranque</span>
-                    <strong>06:30</strong>
-                    <small>Plan CEO antes de telefono.</small>
+                    <strong>07:00</strong>
+                    <small>Plan CEO: caja y prioridades.</small>
                   </div>
                   <div>
                     <span>Reuniones</span>
@@ -3025,9 +2939,9 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
                     <small>Lunes a sabado, Cal + GCal.</small>
                   </div>
                   <div>
-                    <span>Protegido</span>
-                    <strong>Gym + personal</strong>
-                    <small>No reuniones ni Higgsfield.</small>
+                    <span>Cierre</span>
+                    <strong>16:30-17:15</strong>
+                    <small>Registro y cabos del dia.</small>
                   </div>
                 </div>
                 <div className="onia-calendar-timeline is-compact">
@@ -3166,13 +3080,13 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
           <article className="onia-live-card onia-sergio-calendar-main">
             <div className="onia-live-title">
               <CalendarDays size={16} />
-              <strong>Calendario estricto Sergio</strong>
+              <strong>Agenda operativa Sergio</strong>
             </div>
             <div className="onia-calendar-summary">
               <div>
-                <span>Hora de levantarse</span>
-                <strong>06:30</strong>
-                <small>Sin telefono hasta terminar plan CEO.</small>
+                <span>Arranque</span>
+                <strong>07:00</strong>
+                <small>Plan CEO antes de abrir backlog.</small>
               </div>
               <div>
                 <span>Reuniones permitidas</span>
@@ -3180,9 +3094,9 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
                 <small>Lunes a sabado, con buffer minimo de 15 min.</small>
               </div>
               <div>
-                <span>Bloques protegidos</span>
-                <strong>Gym + novia + dormir</strong>
-                <small>No vender, no reuniones, no Higgsfield.</small>
+                <span>Cierre del dia</span>
+                <strong>16:30-17:15</strong>
+                <small>Registro de pagos, tareas y blockers.</small>
               </div>
             </div>
             <div className="onia-calendar-timeline">
@@ -3651,22 +3565,30 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
           </button>
 
           <div className="onia-live-list">
-            {visibleTasks.slice(0, 5).map((task) => (
-              <div key={task.id}>
-                <span>{roleLabel(task.assignedRole)} / {task.priority}</span>
-                <strong>{task.title}</strong>
-                <select
-                  value={task.status}
-                  onChange={(event) => updateTaskStatus(task.id, event.target.value as RuntimeTask["status"])}
-                >
-                  <option value="todo">Por hacer</option>
-                  <option value="doing">En proceso</option>
-                  <option value="review">Revision</option>
-                  <option value="done">Listo</option>
-                  <option value="blocked">Bloqueado</option>
-                </select>
+            {visibleTasks.length ? (
+              visibleTasks.slice(0, 5).map((task) => (
+                <div key={task.id}>
+                  <span>{roleLabel(task.assignedRole)} / {task.priority}</span>
+                  <strong>{task.title}</strong>
+                  <select
+                    value={task.status}
+                    onChange={(event) => updateTaskStatus(task.id, event.target.value as RuntimeTask["status"])}
+                  >
+                    <option value="todo">Por hacer</option>
+                    <option value="doing">En proceso</option>
+                    <option value="review">Revision</option>
+                    <option value="done">Listo</option>
+                    <option value="blocked">Bloqueado</option>
+                  </select>
+                </div>
+              ))
+            ) : (
+              <div>
+                <span>Sin tareas registradas</span>
+                <strong>Crea una tarea o registra desde Captura.</strong>
+                <small>Solo se muestran registros reales de Supabase.</small>
               </div>
-            ))}
+            )}
           </div>
         </article>
 
@@ -3676,24 +3598,32 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
             <strong>Revision collab</strong>
           </div>
           <div className="onia-live-list is-review">
-            {visibleReviews.map((review) => (
-              <div key={review.id}>
-                <span>{review.type} / {review.sensitivity}</span>
-                <strong>{review.source}</strong>
-                <small>{review.title}</small>
-                <div className="onia-review-actions">
-                  <button type="button" disabled={!canApprove} onClick={() => updateReviewStatus(review.id, "aprobado")}>
-                    Aprobar
-                  </button>
-                  <button type="button" disabled={!canApprove} onClick={() => updateReviewStatus(review.id, "rechazado")}>
-                    Rechazar
-                  </button>
-                  <button type="button" disabled={!canApprove || review.status !== "aprobado"} onClick={() => updateReviewStatus(review.id, "importado")}>
-                    Importar
-                  </button>
+            {visibleReviews.length ? (
+              visibleReviews.map((review) => (
+                <div key={review.id}>
+                  <span>{review.type} / {review.sensitivity}</span>
+                  <strong>{review.source}</strong>
+                  <small>{review.title}</small>
+                  <div className="onia-review-actions">
+                    <button type="button" disabled={!canApprove} onClick={() => updateReviewStatus(review.id, "aprobado")}>
+                      Aprobar
+                    </button>
+                    <button type="button" disabled={!canApprove} onClick={() => updateReviewStatus(review.id, "rechazado")}>
+                      Rechazar
+                    </button>
+                    <button type="button" disabled={!canApprove || review.status !== "aprobado"} onClick={() => updateReviewStatus(review.id, "importado")}>
+                      Importar
+                    </button>
+                  </div>
                 </div>
+              ))
+            ) : (
+              <div>
+                <span>Sin aportes en revision</span>
+                <strong>Bandeja collab al dia.</strong>
+                <small>Los cambios de onia-hermes-collab apareceran aca al ingresar.</small>
               </div>
-            ))}
+            )}
           </div>
         </article>
 

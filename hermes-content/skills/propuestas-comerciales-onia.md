@@ -32,6 +32,12 @@ Cliente nuevo = agregar un objeto a `clientes.json` y correr el generador.
    - Nivel 2 = convertir (captar clientes / briefs / leads).
    - Nivel 3 = automatizar (motor de captación + seguimiento, valor recurrente).
    Explicar la diferencia en una línea en `notaPaquetes`.
+   **Cada plan lleva ventaja Y desventaja (regla Sergio 2026-07-05):** además
+   del `resultado`, usar el campo `limite` del generador para decir el tope o
+   qué NO incluye — el límite hace creíble la ventaja y empuja el upgrade.
+   Si una feature vendida aún no está liberada (ej. inventario detallado Q3,
+   SIAT al certificar, bot al verificar Meta), marcar su disponibilidad en el
+   texto — nunca venderla como disponible hoy.
 
 2. **Resultado por paquete** (`resultado`): frase de resultado concreto, no solo
    qué incluye. Ej: "Convertís tu audiencia en briefs".
@@ -70,6 +76,26 @@ Cliente nuevo = agregar un objeto a `clientes.json` y correr el generador.
 
 12. **No fabricar.** Si falta dato del cliente (brochure, sector), pedirlo o
     marcarlo. Personalizar con datos reales (cartera, números, sector).
+
+## Secciones v3 del generador (usar cuando suman, no por default)
+
+Campos opcionales de `clientes.json` (data: imágenes +72% cierre, prueba
+social +34%, CTA claro convierte lectura en respuesta):
+
+- `imagenes[]` — ambientación editorial o fotos REALES en `propuestas/assets/`.
+  NUNCA screenshots falsos de producto. **REGLA (2026-07-05): generar imágenes
+  en plataformas externas (Higgsfield, fal.ai, etc.) requiere permiso previo de
+  Sergio en cada caso; validar la idea antes de ejecutar; con permiso, usar el
+  modelo más barato (nano_banana 1k, no soul_2 2k).**
+- `casos[]` — prueba social SOLO con casos reales; vacío hasta tener el caso
+  fundador (Bolivian Electric).
+- `comparativa` — tabla vs. statu quo (ej. TR4 vs ONIA) ANTES del pricing.
+- `proximosPasos[]` + `ctaWhatsapp` — 3 pasos + botón wa.me prefilleado.
+- `portada` + `resumenEjecutivo` — solo propuestas enterprise/formales.
+- `moneda` — header de precios en USD o mixto.
+
+Roadmap completo: `hermes-content/docs/ONIA_PROPUESTAS_V3_PLAN_20260705.md`
+(Fase 2 contenido real, Fase 3 propuesta trackeable en VPS, Fase 4 video QR).
 
 ## Comandos
 
