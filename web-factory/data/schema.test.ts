@@ -159,3 +159,23 @@ describe("clientSchema dashboard table cells and filtros", () => {
     expect(parsed.dashboard.table.filtros).toEqual(["Estado", "Fecha"]);
   });
 });
+
+describe("clientSchema dashboard sidePanel", () => {
+  it("parses a sidePanel with list items", () => {
+    const parsed = clientSchema.parse({
+      nombre: "Panel", slug: "panel", tagline: "t", descripcion: "d",
+      dashboard: {
+        sidePanel: {
+          title: "Aprobaciones recientes",
+          items: [{ label: "Maria Lopez", value: "Aprobado", initial: "ML" }],
+        },
+      },
+    });
+    expect(parsed.dashboard.sidePanel?.items[0].label).toBe("Maria Lopez");
+  });
+
+  it("defaults sidePanel to undefined when absent", () => {
+    const parsed = clientSchema.parse({ nombre: "Panel", slug: "panel", tagline: "t", descripcion: "d" });
+    expect(parsed.dashboard.sidePanel).toBeUndefined();
+  });
+});

@@ -1,5 +1,5 @@
 import { hasChartData, renderChart, trendGlyph } from "./dashboard-charts";
-import type { DashboardChart, DashboardKpi } from "./dashboard-types";
+import type { DashboardChart, DashboardKpi, DashboardSidePanel } from "./dashboard-types";
 
 function escapeHtml(value: string): string {
   return value
@@ -141,6 +141,39 @@ export function renderTable(table: DashboardTable): string {
             </table>
           </div>
         </section>`;
+}
+
+function initialsOf(label: string): string {
+  return (
+    label
+      .split(/\s+/)
+      .filter(Boolean)
+      .slice(0, 2)
+      .map((part) => part[0]?.toUpperCase() ?? "")
+      .join("") || "?"
+  );
+}
+
+export function renderSidePanel(panel: DashboardSidePanel | undefined): string {
+  if (!panel) {
+    return "";
+  }
+  const rows = panel.items
+    .map(
+      (item) => `
+          <li class="wf-dash-side-row">
+            <span class="wf-dash-side-avatar" aria-hidden="true">${escapeHtml(item.initial ?? initialsOf(item.label))}</span>
+            <span class="wf-dash-side-label">${escapeHtml(item.label)}</span>
+            <span class="wf-dash-side-value">${escapeHtml(item.value)}</span>
+          </li>`,
+    )
+    .join("");
+
+  return `
+        <aside class="wf-dash-card wf-dash-side-panel" aria-label="${escapeAttribute(panel.title)}" data-reveal>
+          <h2 class="wf-dash-table-head-title">${escapeHtml(panel.title)}</h2>
+          <ul class="wf-dash-side-list">${rows}</ul>
+        </aside>`;
 }
 
 export const dashboardCardsCss = `
@@ -328,5 +361,71 @@ export const dashboardCardsCss = `
 .wf-dash-pill--warn {
   color: var(--wf-warn);
   background: color-mix(in srgb, var(--wf-warn) 14%, transparent);
+}
+
+.wf-dash-detail-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1.8fr) minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+
+.wf-dash-table-head-title {
+  font-size: 1.05rem;
+  margin-bottom: 14px;
+}
+
+.wf-dash-side-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.wf-dash-side-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.wf-dash-side-row:last-child {
+  border-bottom: none;
+}
+
+.wf-dash-side-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  flex: 0 0 auto;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--color-on-primary, #fff);
+  background: var(--color-primary);
+}
+
+.wf-dash-side-label {
+  flex: 1;
+  color: var(--color-fg);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.wf-dash-side-value {
+  color: var(--muted-foreground);
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+@media (max-width: 860px) {
+  .wf-dash-detail-row {
+    grid-template-columns: 1fr;
+  }
 }
 `;

@@ -1,11 +1,25 @@
 import { clientTokenCss } from "@onia/tokens";
-import { dashboardCardsCss, renderCharts, renderKpis, renderTable } from "./dashboard-cards";
+import { dashboardCardsCss, renderCharts, renderKpis, renderSidePanel, renderTable } from "./dashboard-cards";
 import type { DashboardTable } from "./dashboard-cards";
 import { dashboardChartsCss } from "./dashboard-charts";
 import { dashboardHeroCss, renderHeroPanel } from "./dashboard-hero";
-import type { DashboardChart, DashboardHeroPanel, DashboardKpi, DashboardPoint, DashboardSeries } from "./dashboard-types";
+import type {
+  DashboardChart,
+  DashboardHeroPanel,
+  DashboardKpi,
+  DashboardPoint,
+  DashboardSeries,
+  DashboardSidePanel,
+} from "./dashboard-types";
 
-export type { DashboardChart, DashboardHeroPanel, DashboardKpi, DashboardPoint, DashboardSeries } from "./dashboard-types";
+export type {
+  DashboardChart,
+  DashboardHeroPanel,
+  DashboardKpi,
+  DashboardPoint,
+  DashboardSeries,
+  DashboardSidePanel,
+} from "./dashboard-types";
 export type { DashboardTable } from "./dashboard-cards";
 
 export type DashboardData = {
@@ -17,6 +31,7 @@ export type DashboardData = {
   charts: DashboardChart[];
   table: DashboardTable;
   heroPanel?: DashboardHeroPanel;
+  sidePanel?: DashboardSidePanel;
 };
 
 export type DashboardClient = {
@@ -59,7 +74,11 @@ export function renderDashboardBody(client: DashboardClient): string {
         ${renderHeroPanel(dash.heroPanel)}
         ${renderKpis(dash.kpis)}
         ${renderCharts(dash.charts)}
-        ${renderTable(dash.table)}
+        ${
+          dash.sidePanel
+            ? `<div class="wf-dash-detail-row">${renderTable(dash.table)}${renderSidePanel(dash.sidePanel)}</div>`
+            : renderTable(dash.table)
+        }
       </div>
     </div>
     ${dashboardScript}

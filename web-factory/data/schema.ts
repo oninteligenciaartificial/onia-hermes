@@ -149,6 +149,17 @@ const dashboardHeroPanelSchema = z.discriminatedUnion("kind", [
   }),
 ]);
 
+const dashboardSidePanelSchema = z.object({
+  title: z.string().min(1),
+  items: z.array(
+    z.object({
+      label: z.string().min(1),
+      value: z.string().default(""),
+      initial: z.string().max(3).optional(),
+    }),
+  ).default([]),
+});
+
 const dashboardSchema = z
   .object({
     title: z.string().default("Panel de control"),
@@ -159,6 +170,7 @@ const dashboardSchema = z
     charts: z.array(dashboardChartSchema).default([]),
     table: dashboardTableSchema.default({ title: "Detalle", columns: [], rows: [] }),
     heroPanel: dashboardHeroPanelSchema.optional(),
+    sidePanel: dashboardSidePanelSchema.optional(),
   })
   .default({
     title: "Panel de control",

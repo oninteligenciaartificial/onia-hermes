@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { renderTable } from "./dashboard-cards";
+import { renderSidePanel, renderTable } from "./dashboard-cards";
 
 describe("renderTable", () => {
   it("renders plain string cells as before", () => {
@@ -30,5 +30,29 @@ describe("renderTable", () => {
     expect(html).toContain("wf-dash-chip");
     expect(html).toContain("Estado");
     expect(html).toContain("Fecha");
+  });
+});
+
+describe("renderSidePanel", () => {
+  it("renders list items with an initial-in-circle, never a fake photo avatar", () => {
+    const html = renderSidePanel({
+      title: "Aprobaciones recientes",
+      items: [{ label: "Maria Lopez", value: "Aprobado", initial: "ML" }],
+    });
+    expect(html).toContain("wf-dash-side-panel");
+    expect(html).toContain("Aprobaciones recientes");
+    expect(html).toContain("Maria Lopez");
+    expect(html).toContain("wf-dash-side-avatar");
+    expect(html).toContain("ML");
+    expect(html).not.toContain("<img");
+  });
+
+  it("derives an initial from the label when not provided", () => {
+    const html = renderSidePanel({ title: "t", items: [{ label: "Carlos Diaz", value: "" }] });
+    expect(html).toContain("CD");
+  });
+
+  it("returns empty string when there is no sidePanel", () => {
+    expect(renderSidePanel(undefined)).toBe("");
   });
 });
