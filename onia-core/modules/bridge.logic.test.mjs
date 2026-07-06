@@ -1,12 +1,17 @@
 /*
- * Tests del puente commerce -> accounting. Run:
+ * Tests de los puentes entre modulos (commerce/invoicing -> accounting). Run:
  *   node --test onia-core/modules/bridge.logic.test.mjs
  */
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 
 import { isBalanced } from "./accounting.logic.mjs";
-import { orderToJournalEntry, saleToJournalEntry } from "./bridge.logic.mjs";
+import {
+  invoiceToJournalEntry,
+  invoiceToRcvRecord,
+  orderToJournalEntry,
+  saleToJournalEntry,
+} from "./bridge.logic.mjs";
 
 const accounts = {
   cash: "1.1.1",
@@ -55,5 +60,41 @@ describe("orderToJournalEntry (puente commerce -> accounting)", () => {
     assert.equal(byAccount["1.1.1"].debit, 1000); // total 2*400 + 1*200
     assert.equal(byAccount["4.1"].credit, 870);
     assert.equal(byAccount["2.1.2"].credit, 130);
+  });
+});
+
+describe("invoiceToJournalEntry (puente invoicing -> accounting)", () => {
+  it("arma el asiento cuadrado a partir del total de la factura", () => {
+    const invoice = { id: "f1", invoiceNumber: "FAC-000042", total: 1000, paymentType: "cash", issueDate: "2026-07-06" };
+    const entry = invoiceToJournalEntry(invoice, { accounts });
+    assert.equal(entry.sourceType, "invoice");
+    assert.equal(entry.date, "2026-07-06");
+    assert.match(entry.glosa, /FAC-000042/);
+    assert.ok(isBalanced(entry.lines));
+    const byAccount = Object.fromEntries(entry.lines.map((line) => [line.accountCode, line]));
+    assert.equal(byAccount["1.1.1"].debit, 1000);
+    assert.equal(byAccount["4.1"].credit, 870);
+    assert.equal(byAccount["2.1.2"].credit, 130);
+  });
+});
+
+describe("invoiceToRcvRecord (puente invoicing -> RCV)", () => {
+  it("arma un registro de venta con el IVA calculado y los campos SIAT de la factura", () => {
+    const invoice = {
+      invoiceNumber: "FAC-000042",
+      cuis: "CUIS123",
+      controlCode: "CTRL-456",
+      partnerId: "cli-1",
+      partnerName: "Cliente SRL",
+      issueDate: "2026-07-06",
+      total: 1000,
+    };
+    const record = invoiceToRcvRecord(invoice);
+    assert.equal(record.kind, "venta");
+    assert.equal(record.invoiceNumber, "FAC-000042");
+    assert.equal(record.authorizationCode, "CUIS123");
+    assert.equal(record.controlCode, "CTRL-456");
+    assert.equal(record.amount, 1000);
+    assert.equal(record.ivaAmount, 130);
   });
 });

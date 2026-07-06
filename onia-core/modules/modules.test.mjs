@@ -143,6 +143,48 @@ describe("accounting module (Bolivia)", () => {
   });
 });
 
+describe("invoicing module (Bolivia)", () => {
+  const invoicing = getModule(modules, "invoicing");
+
+  it("provides its own capability (invoicing) instead of activating a core one", () => {
+    assert.ok(invoicing, "invoicing module present");
+    assert.deepEqual(invoicing.activatesCapabilities, []);
+    assert.deepEqual(invoicing.providesCapabilities, ["invoicing"]);
+    const coreCapabilityIds = new Set(contract.capabilities.map((capability) => capability.id));
+    assert.ok(!coreCapabilityIds.has("invoicing"), "invoicing must not be a core capability");
+  });
+
+  it("has the invoice, invoice_line and credit_debit_note entities", () => {
+    const ids = invoicing.entities.map((entity) => entity.id);
+    for (const id of ["invoice", "invoice_line", "credit_debit_note"]) {
+      assert.ok(ids.includes(id), `has ${id}`);
+    }
+  });
+
+  it("declares a SQL schema that defines every entity table", () => {
+    const schema = readFileSync(new URL(`../../${invoicing.schemaFile}`, import.meta.url), "utf8");
+    for (const entity of invoicing.entities) {
+      assert.ok(entity.table, `${entity.id} declares a table`);
+      assert.ok(schema.includes(entity.table), `schema defines ${entity.table}`);
+    }
+  });
+
+  it("encodes SIAT config with CUF field widths, QR structure and cancellation deadline", () => {
+    const config = invoicing.siatConfig;
+    assert.ok(config, "siatConfig present");
+    const totalWidth = Object.values(config.cufFieldWidths).reduce((sum, width) => sum + width, 0);
+    assert.equal(totalWidth, 51);
+    assert.equal(config.cancellationDeadlineDayOfNextMonth, 9);
+    assert.equal(config.qr.params.length, 4);
+    assert.ok(config.recommendedStartModality);
+    assert.ok(config.notes.some((note) => note.includes("external_gate")));
+  });
+
+  it("applies to the same selling verticals as accounting", () => {
+    assert.deepEqual(invoicing.verticalTracks.slice().sort(), ["dentagest-clinical", "gestios-general", "proveegest-electrico"]);
+  });
+});
+
 describe("modules validator integration", () => {
   it("modules pass validate-modules.mjs (exit 0)", () => {
     const validatePath = fileURLToPath(new URL("./validate-modules.mjs", import.meta.url));

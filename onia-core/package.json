@@ -9,9 +9,11 @@
     ".": "./index.mjs",
     "./logic": "./logic/index.mjs",
     "./report": "./report.mjs",
+    "./install-plan": "./install-plan.mjs",
     "./modules": "./modules/index.mjs",
     "./modules/commerce-logic": "./modules/commerce.logic.mjs",
     "./modules/accounting-logic": "./modules/accounting.logic.mjs",
+    "./modules/invoicing-logic": "./modules/invoicing.logic.mjs",
     "./modules/bridge-logic": "./modules/bridge.logic.mjs",
     "./contract": "./contract.json",
     "./package.json": "./package.json"
