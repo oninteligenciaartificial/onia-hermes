@@ -27,6 +27,7 @@
     "nuvia:sanitize-public": "node harvester/product/sanitize_nuvia_public_catalog.mjs",
     "test": "vitest run",
     "e2e": "playwright test",
+    "e2e:next": "pnpm --filter site build && playwright test --config=playwright.next.config.ts",
     "e2e:install": "pnpm exec playwright install chromium",
     "images:check": "tsx generate/check-images.ts",
     "references:code-index": "node harvester/vision/index_licensed_code.mjs --repos-root C:/Users/PC/.codex/design-stack/repos --out data/references/code-sources/latest-code-cache-index.json",
