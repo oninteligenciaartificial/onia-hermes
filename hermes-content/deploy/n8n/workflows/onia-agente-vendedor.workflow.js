@@ -71,7 +71,7 @@ const avisarSergio = node({
     parameters: {
       resource: 'message',
       operation: 'sendMessage',
-      chatId: expr('{{ $env.TELEGRAM_SERGIO_CHAT_ID }}'),
+      chatId: '6830070978',
       text: expr('{{ $json.text }}'),
       additionalFields: { appendAttribution: false, disable_web_page_preview: true }
     },

@@ -5,7 +5,10 @@ Workflows autónomos corriendo en el n8n del VPS
 de n8n** (no por el navegador — la sesión web expira y da "Autosave failed:
 Unauthorized"; el MCP tiene su propia auth). Todos usan la credencial SSH
 `ONIA VPS SSH` (id `4XKauEX3b6cqaDhW`, sshPrivateKey) para llegar al VPS y avisan
-a Sergio por Telegram vía `$env.TELEGRAM_BOT_TOKEN` / `$env.TELEGRAM_SERGIO_CHAT_ID`.
+a Sergio por Telegram con la credencial n8n `telegramApi` (token) y el **chat ID
+hardcodeado** `6830070978` en el nodo. REGLA: **no usar `$env`** en nodos n8n (este
+plan Easypanel puede perder las vars en un redeploy) — chat IDs hardcodeados,
+secretos por credencial.
 
 ## Workflows activos
 

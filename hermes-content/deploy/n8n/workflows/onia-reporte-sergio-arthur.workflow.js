@@ -43,7 +43,7 @@ const avisarSergio = node({
   version: 1.2,
   config: {
     name: 'Enviar a Sergio',
-    parameters: { resource: 'message', operation: 'sendMessage', chatId: expr('{{ $env.TELEGRAM_SERGIO_CHAT_ID }}'), text: expr('{{ $json.text }}'), additionalFields: { appendAttribution: false, disable_web_page_preview: true } },
+    parameters: { resource: 'message', operation: 'sendMessage', chatId: '6830070978', text: expr('{{ $json.text }}'), additionalFields: { appendAttribution: false, disable_web_page_preview: true } },
     credentials: { telegramApi: newCredential('Telegram account', 'r8y2CN5RyOEIDce3') }
   },
   output: [{ ok: true }]
