@@ -8,6 +8,7 @@ import type {
   DashboardChart,
   DashboardHeroPanel,
   DashboardKpi,
+  DashboardNavGroup,
   DashboardPoint,
   DashboardSeries,
   DashboardSidePanel,
@@ -17,6 +18,7 @@ export type {
   DashboardChart,
   DashboardHeroPanel,
   DashboardKpi,
+  DashboardNavGroup,
   DashboardPoint,
   DashboardSeries,
   DashboardSidePanel,
@@ -26,7 +28,7 @@ export type { DashboardTable } from "./dashboard-cards";
 export type DashboardData = {
   title: string;
   subtitle: string;
-  nav: string[];
+  nav: string[] | DashboardNavGroup[];
   filters: string[];
   kpis: DashboardKpi[];
   charts: DashboardChart[];
@@ -51,7 +53,6 @@ export type DashboardClient = {
 export function renderDashboardBody(client: DashboardClient): string {
   const dash = client.dashboard;
   const brandMark = client.logo || initials(client.nombre);
-  const nav = dash.nav.length ? dash.nav : ["Resumen", "Reportes", "Actividad", "Ajustes"];
 
   return `
     <div class="wf-dash" id="top">
@@ -61,14 +62,7 @@ export function renderDashboardBody(client: DashboardClient): string {
           <span class="wf-dash-brand-name">${escapeHtml(client.nombre)}</span>
         </a>
         <nav class="wf-dash-nav">
-          ${nav
-            .map(
-              (item, index) =>
-                `<a class="wf-dash-nav-link${index === 0 ? " is-active" : ""}" href="#top"${
-                  index === 0 ? ' aria-current="page"' : ""
-                }>${escapeHtml(item)}</a>`,
-            )
-            .join("\n          ")}
+          ${renderNavGroups(dash.nav)}
         </nav>
       </aside>
       <div class="wf-dash-main">
@@ -123,6 +117,36 @@ function renderTopbar(client: DashboardClient): string {
             ${cta}
           </div>
         </header>`;
+}
+
+function isGroupedNav(nav: string[] | DashboardNavGroup[]): nav is DashboardNavGroup[] {
+  return nav.length > 0 && typeof nav[0] === "object";
+}
+
+function renderNavLink(item: string, isFirst: boolean): string {
+  return `<a class="wf-dash-nav-link${isFirst ? " is-active" : ""}" href="#top"${
+    isFirst ? ' aria-current="page"' : ""
+  }>${escapeHtml(item)}</a>`;
+}
+
+function renderNavGroups(nav: string[] | DashboardNavGroup[]): string {
+  const groups: DashboardNavGroup[] = isGroupedNav(nav)
+    ? nav
+    : [{ items: nav.length ? nav : ["Resumen", "Reportes", "Actividad", "Ajustes"] }];
+  let seenFirst = false;
+  return groups
+    .map((groupEntry) => {
+      const heading = groupEntry.group ? `<span class="wf-dash-nav-group">${escapeHtml(groupEntry.group)}</span>` : "";
+      const links = groupEntry.items
+        .map((item) => {
+          const isFirst = !seenFirst;
+          seenFirst = true;
+          return renderNavLink(item, isFirst);
+        })
+        .join("\n          ");
+      return `${heading}${links}`;
+    })
+    .join("\n          ");
 }
 
 function initials(name: string): string {
@@ -334,6 +358,21 @@ h1, h2, h3 {
 .wf-dash-nav-link.is-active {
   color: var(--color-on-primary);
   background: var(--color-primary);
+}
+
+.wf-dash-nav-group {
+  display: block;
+  margin: 14px 0 4px;
+  padding: 0 10px;
+  color: var(--muted-foreground);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.wf-dash-nav-group:first-child {
+  margin-top: 0;
 }
 
 .wf-dash-main {

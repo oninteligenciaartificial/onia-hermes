@@ -160,11 +160,18 @@ const dashboardSidePanelSchema = z.object({
   ).default([]),
 });
 
+const dashboardNavGroupSchema = z.object({
+  group: z.string().optional(),
+  items: z.array(z.string().min(1)).min(1),
+});
+
+const dashboardNavSchema = z.union([z.array(z.string().min(1)), z.array(dashboardNavGroupSchema)]);
+
 const dashboardSchema = z
   .object({
     title: z.string().default("Panel de control"),
     subtitle: z.string().default(""),
-    nav: z.array(z.string().min(1)).default([]),
+    nav: dashboardNavSchema.default([]),
     filters: z.array(z.string().min(1)).default([]),
     kpis: z.array(dashboardKpiSchema).default([]),
     charts: z.array(dashboardChartSchema).default([]),

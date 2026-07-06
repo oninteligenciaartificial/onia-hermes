@@ -194,3 +194,26 @@ describe("clientSchema dashboard showStatesReference", () => {
     expect(parsed.dashboard.showStatesReference).toBe(true);
   });
 });
+
+describe("clientSchema dashboard grouped nav", () => {
+  it("accepts a flat string nav (backward compatible)", () => {
+    const parsed = clientSchema.parse({
+      nombre: "Panel", slug: "panel", tagline: "t", descripcion: "d",
+      dashboard: { nav: ["Resumen", "Ventas"] },
+    });
+    expect(parsed.dashboard.nav).toEqual(["Resumen", "Ventas"]);
+  });
+
+  it("accepts a grouped nav shape", () => {
+    const parsed = clientSchema.parse({
+      nombre: "Panel", slug: "panel", tagline: "t", descripcion: "d",
+      dashboard: {
+        nav: [
+          { group: "Hoy", items: ["Resumen"] },
+          { group: "Trabajo", items: ["Aprobaciones", "Tareas"] },
+        ],
+      },
+    });
+    expect(Array.isArray(parsed.dashboard.nav)).toBe(true);
+  });
+});

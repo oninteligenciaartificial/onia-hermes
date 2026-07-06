@@ -278,6 +278,37 @@ describe("generateSite", () => {
     expect(css).toContain(".wf-dash-hero");
   });
 
+  it("renders grouped nav with group headers", async () => {
+    const rootDir = await mkdtemp(path.join(os.tmpdir(), "onia-web-factory-"));
+    await mkdir(path.join(rootDir, "data", "clients"), { recursive: true });
+
+    await writeFile(
+      path.join(rootDir, "data", "clients", "panel.json"),
+      JSON.stringify({
+        nombre: "Panel Demo",
+        slug: "panel",
+        tagline: "Panel de control demo",
+        descripcion: "Dashboard de ejemplo.",
+        dashboard: {
+          title: "Panel operativo",
+          nav: [
+            { group: "Hoy", items: ["Resumen"] },
+            { group: "Trabajo", items: ["Aprobaciones", "Tareas"] },
+          ],
+        },
+      }),
+      "utf8",
+    );
+
+    const result = await generateSite("panel", { rootDir, template: "dashboard" });
+    const html = await readFile(path.join(result.outputDir, "index.html"), "utf8");
+
+    expect(html).toContain("wf-dash-nav-group");
+    expect(html).toContain("Hoy");
+    expect(html).toContain("Trabajo");
+    expect(html).toContain("Aprobaciones");
+  });
+
   it("renders dashboard empty states when data is missing", async () => {
     const rootDir = await mkdtemp(path.join(os.tmpdir(), "onia-web-factory-"));
     await mkdir(path.join(rootDir, "data", "clients"), { recursive: true });
