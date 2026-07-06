@@ -1,5 +1,38 @@
 # ONIA Core Changelog
 
+## modules/invoicing 0.1.0 — 2026-07-06 (factura electronica Bolivia)
+
+- Nuevo modulo `invoicing` (Bolivia) que PROVEE su propia capability
+  (`invoicing`): factura (cabecera + detalle), notas de credito-debito, CUF/QR/
+  anulacion. Validado con subagente de investigacion (2+ fuentes cruzadas:
+  siatinfo.impuestos.gob.bo oficial + analisis tecnico) contra el plan interno
+  `ONIA_SIAT_CERTIFICACION_PLAN_2026.md`. Entidades `invoice`, `invoice_line`,
+  `credit_debit_note` (namespace `onia_invoicing_*`) + `invoicing.schema.sql`
+  (3 tablas).
+- `invoicing.logic.mjs`: `amountToWords`/`integerToWords` (importe en literal,
+  numero a letras en espanol con apocope "uno"->"un" antes de mil/millones),
+  `buildCufPayload`/`mod11CheckDigit`/`decimalStringToHex`/`buildCuf` (CUF de
+  referencia: 51 digitos + verificador -> hex; **advertencia**: el ancho de
+  `invoiceNumber` y el algoritmo exacto de Modulo 11 no estan 100% confirmados
+  contra el Anexo Tecnico oficial, no usar para emitir un CUF real sin
+  verificar), `buildQrUrl` (estructura de URL confirmada: nit/cuf/numero/t),
+  `cancellationDeadline`/`isPastCancellationDeadline`/`canCancelInvoice`
+  (vencimiento dia 9 del mes siguiente, RND 102100000011 Art. 38),
+  `buildCreditDebitNote`. 23 tests.
+- `bridge.logic.mjs` extendido: `invoiceToJournalEntry` e `invoiceToRcvRecord`
+  (factura -> asiento contable / registro RCV, reutilizando `ivaOfRecord` de
+  accounting). +4 tests.
+- **Fix de coherencia en `install-plan.mjs` y `report.mjs`**: los modulos que
+  PROVEEN su propia capability (accounting, invoicing) declaran `verticalTracks`
+  pero no llenaban un slot de capability del core, asi que quedaban invisibles
+  en el plan de instalacion y en el reporte por vertical (bug real, descubierto
+  al construir invoicing). Ahora ambos los listan explicitamente
+  (`install-plan`: se agregan al plan aunque no activen una capability del core;
+  `report`: nueva linea "modulos con capacidad propia"). +5 tests.
+- `package.json`: nuevo subpath `./modules/invoicing-logic` y `./install-plan`.
+- Modulos totales: 4 (commerce, knowledge, accounting, invoicing), 24 entidades.
+  189 tests en total (2 validadores + suite completa verdes).
+
 ## install-plan — 2026-07-05 (la receta hecha herramienta)
 
 - `install-plan.mjs`: generador NUESTRO (read-only) que, dado un vertical (por

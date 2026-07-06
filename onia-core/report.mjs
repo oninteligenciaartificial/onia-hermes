@@ -75,6 +75,12 @@ export function buildCoreReport(contract, adapters = [], modules = []) {
     const moduleCapabilities = track.requiredCapabilityIds
       .filter((capabilityId) => moduleLayers.has(capabilityLayerById.get(capabilityId)))
       .map((capabilityId) => ({ id: capabilityId, module: moduleByCapability.get(capabilityId) ?? null }));
+    // Modulos que PROVEEN su propia capability (ej: accounting, invoicing) y
+    // declaran este track en su verticalTracks. No llenan un slot del core, asi
+    // que quedarian invisibles en moduleCapabilities si no se listan aparte.
+    const providedModules = modules
+      .filter((module) => (module.verticalTracks ?? []).includes(track.id) && (module.providesCapabilities?.length ?? 0) > 0)
+      .map((module) => module.module);
     return {
       id: track.id,
       name: track.name,
@@ -85,6 +91,7 @@ export function buildCoreReport(contract, adapters = [], modules = []) {
       blockedCount: readiness?.blockedCount ?? 0,
       blocked: track.blockedCapabilityIds ?? [],
       moduleCapabilities,
+      providedModules,
       pack: pack
         ? {
             id: pack.id,
@@ -222,6 +229,9 @@ export function renderReport(report) {
         (capability) => `${capability.id}=${capability.module ?? "FALTA MODULO"}`,
       );
       lines.push(`      modulos de rubro: ${parts.join(", ")}`);
+    }
+    if (track.providedModules.length > 0) {
+      lines.push(`      modulos con capacidad propia: ${track.providedModules.join(", ")}`);
     }
   }
   lines.push("");

@@ -17,12 +17,16 @@ const adapters = loadAdapters(contract);
 describe("buildInstallPlan por producto", () => {
   const plan = buildInstallPlan(contract, modules, adapters, { projectId: "bolivian-electric" });
 
-  it("resuelve el track y los modulos que lo cubren", () => {
+  it("resuelve el track y TODOS los modulos que aplican (los que llenan un slot del core y los que proveen su propia capability)", () => {
     assert.equal(plan.trackId, "proveegest-electrico");
     assert.equal(plan.ready, true);
     const moduleIds = plan.modules.map((module) => module.module);
     assert.ok(moduleIds.includes("commerce"));
     assert.ok(moduleIds.includes("knowledge"));
+    // accounting/invoicing PROVEEN su propia capability (no llenan un slot del
+    // core) pero declaran este track en su verticalTracks -> deben aparecer.
+    assert.ok(moduleIds.includes("accounting"));
+    assert.ok(moduleIds.includes("invoicing"));
   });
 
   it("cada modulo trae su schema y tablas", () => {
@@ -36,15 +40,21 @@ describe("buildInstallPlan por producto", () => {
     assert.ok(plan.core.pendingEntities.includes("comment"), "comment esta pendiente");
     assert.equal(plan.logicToPort.core.length, 8);
     assert.ok(plan.logicToPort.modules.includes("@onia/core/modules/commerce-logic"));
+    assert.ok(plan.logicToPort.modules.includes("@onia/core/modules/accounting-logic"));
+    assert.ok(plan.logicToPort.modules.includes("@onia/core/modules/invoicing-logic"));
+    assert.ok(plan.logicToPort.modules.includes("@onia/core/modules/bridge-logic"));
   });
 });
 
 describe("buildInstallPlan por track (sin adapter)", () => {
-  it("sin adapter, todas las entidades del core son a instalar", () => {
+  it("sin adapter, todas las entidades del core son a instalar; incluye modulos que declaran el track aunque no llenen un slot del core", () => {
     const plan = buildInstallPlan(contract, modules, adapters, { trackId: "gestios-general" });
     assert.equal(plan.trackId, "gestios-general");
     assert.equal(plan.core.pendingEntities.length, contract.entities.length);
-    assert.deepEqual(plan.modules, []); // gestios-general no requiere modulos
+    // gestios-general no requiere capabilities de modulo del core, pero
+    // accounting/invoicing declaran este track en su verticalTracks.
+    const moduleIds = plan.modules.map((module) => module.module).sort();
+    assert.deepEqual(moduleIds, ["accounting", "invoicing"]);
   });
 });
 

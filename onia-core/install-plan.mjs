@@ -17,6 +17,7 @@ import { loadModules } from "./modules/index.mjs";
 const MODULE_LOGIC = {
   commerce: ["@onia/core/modules/commerce-logic"],
   accounting: ["@onia/core/modules/accounting-logic"],
+  invoicing: ["@onia/core/modules/invoicing-logic"],
   knowledge: [],
 };
 
@@ -44,11 +45,20 @@ export function buildInstallPlan(contract, modules = [], adapters = [], { projec
     ? adapter.entityMappings.filter((mapping) => classifyAdoptionStatus(mapping.status) !== "cubierto").map((mapping) => mapping.coreEntityId)
     : contract.entities.map((entity) => entity.id);
 
-  // Modulos que cubren las capabilities de modulo del track.
+  // Modulos que cubren las capabilities de modulo del track...
   const neededModuleIds = [];
   for (const capability of readiness?.moduleCapabilities ?? []) {
     if (capability.module && !neededModuleIds.includes(capability.module)) {
       neededModuleIds.push(capability.module);
+    }
+  }
+  // ...y modulos que PROVEEN su propia capability (ej: accounting, invoicing)
+  // y declaran este track como aplicable, aunque no llenen un slot del core
+  // (sin esto, install-plan los deja invisibles aunque el propio modulo diga
+  // que aplica al vertical).
+  for (const module of resolvedTrackId ? modules : []) {
+    if ((module.verticalTracks ?? []).includes(resolvedTrackId) && !neededModuleIds.includes(module.module)) {
+      neededModuleIds.push(module.module);
     }
   }
   const moduleSteps = neededModuleIds.map((id) => {
@@ -69,7 +79,9 @@ export function buildInstallPlan(contract, modules = [], adapters = [], { projec
       }
     }
   }
-  if (neededModuleIds.includes("commerce") && neededModuleIds.includes("accounting")) {
+  const hasAccounting = neededModuleIds.includes("accounting");
+  const hasCommerceOrInvoicing = neededModuleIds.includes("commerce") || neededModuleIds.includes("invoicing");
+  if (hasAccounting && hasCommerceOrInvoicing) {
     moduleLogic.push("@onia/core/modules/bridge-logic");
   }
 
@@ -121,7 +133,7 @@ export function renderInstallPlan(plan) {
   lines.push(`     modulos: ${plan.logicToPort.modules.join(", ") || "(ninguno)"}`);
   lines.push("");
 
-  lines.push("4. CABLEAR: intake -> WorkItem, panel/reporte, y el puente venta -> asiento si hay commerce+accounting");
+  lines.push("4. CABLEAR: intake -> WorkItem, panel/reporte, y el puente venta/factura -> asiento si hay accounting + (commerce o invoicing)");
   lines.push("");
   return lines.join("\n");
 }

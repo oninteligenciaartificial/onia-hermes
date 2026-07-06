@@ -140,6 +140,11 @@ describe("module coverage in the report", () => {
     assert.equal(moduleByCapability.get("quotes_b2b"), "commerce");
     assert.equal(moduleByCapability.get("knowledge_base"), "knowledge");
   });
+
+  it("also lists modules that provide their own capability and declare the track (accounting, invoicing)", () => {
+    const proveegest = report.tracks.find((track) => track.id === "proveegest-electrico");
+    assert.deepEqual(proveegest.providedModules.slice().sort(), ["accounting", "invoicing"]);
+  });
 });
 
 describe("verticalReadiness", () => {
@@ -204,6 +209,7 @@ describe("renderReport", () => {
           blockedCount: 0,
           blocked: [],
           moduleCapabilities: [{ id: "catalog_inventory", module: null }],
+          providedModules: [],
           pack: null,
         },
       ],
