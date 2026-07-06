@@ -1,9 +1,9 @@
 // Export SDK del workflow n8n "ONIA - Nuevo Lead (speed-to-lead)" (id WA6VkNu5OHo6Npem).
-// Webhook POST /nuevo-lead {secret,company,contact,channel,message} -> SSH corre
-// /opt/onia/intake-lead-run.sh (docker exec onia-center node intake-lead.mjs): crea el
-// lead en onia_center.leads, lo califica + redacta la primera respuesta con LiteLLM, deja
-// tarea + borrador en review_queue (pending/sensitive/reviewer=sergio) y avisa a Sergio.
-// Bridge inbound (formulario/WhatsApp/Hermes) -> CRM -> Agente Vendedor. NO envia sin aprobacion.
+// Webhook POST /nuevo-lead {secret,company,contact,channel,message} -> valida el secret
+// SERVER-SIDE (check-secret.sh, sin $env) -> SSH intake-lead-run.sh (docker exec onia-center):
+// crea el lead en onia_center.leads, lo califica + redacta la primera respuesta con LiteLLM,
+// deja tarea + borrador en review_queue (pending/sensitive/reviewer=sergio) y avisa a Sergio.
+// Bridge inbound (formulario/WhatsApp/Hermes) -> CRM -> Vendedor. NO envia sin aprobacion.
 // Recrear con create_workflow_from_code; luego setNodeCredential (sshPrivateKey, telegramApi).
 import { workflow, node, trigger, ifElse, expr, newCredential } from '@n8n/workflow-sdk';
 
@@ -14,17 +14,28 @@ const webhookLead = trigger({
   output: [{ body: { secret: 'k', company: 'X', contact: 'y', channel: 'WhatsApp', message: 'z' } }]
 });
 
+const verificarSecret = node({
+  type: 'n8n-nodes-base.ssh',
+  version: 1,
+  config: {
+    name: 'Verificar secret',
+    parameters: { resource: 'command', operation: 'execute', authentication: 'privateKey', command: expr('bash /opt/onia/check-secret.sh "{{ $json.body.secret }}"'), cwd: '/root' },
+    credentials: { sshPrivateKey: newCredential('ONIA VPS SSH', '4XKauEX3b6cqaDhW') }
+  },
+  output: [{ stdout: '{"authorized":true}', code: 0, stderr: '' }]
+});
+
 const checkAuth = ifElse({
   version: 2.3,
   config: {
     name: 'Autorizado?',
     parameters: { conditions: {
-      options: { caseSensitive: true, leftValue: '', typeValidation: 'strict', version: 2 },
+      options: { caseSensitive: true, leftValue: '', typeValidation: 'loose', version: 2 },
       combinator: 'and',
-      conditions: [ { id: 'cond-secret', leftValue: expr('{{ $json.body.secret }}'), rightValue: expr('{{ $env.ONIA_CENTER_INTERNAL_API_KEY }}'), operator: { type: 'string', operation: 'equals' } } ]
+      conditions: [ { id: 'cond-auth', leftValue: expr('{{ $json.stdout }}'), rightValue: '"authorized":true', operator: { type: 'string', operation: 'contains' } } ]
     } }
   },
-  output: [{ body: { company: 'X' } }]
+  output: [{ stdout: '{"authorized":true}' }]
 });
 
 const encodeLead = node({
@@ -35,7 +46,7 @@ const encodeLead = node({
     parameters: {
       mode: 'runOnceForAllItems',
       language: 'javaScript',
-      jsCode: "const b = $input.first().json.body || {};\nconst lead = { company: b.company, contact: b.contact || null, channel: b.channel || 'Inbound', message: b.message || null, source: b.source || 'webhook' };\nif (!lead.company) { return [{ json: { ok: false, b64: '', error: 'no_company' } }]; }\nconst b64 = Buffer.from(JSON.stringify(lead)).toString('base64');\nreturn [{ json: { ok: true, b64: b64 } }];"
+      jsCode: "const b = $('Webhook Nuevo Lead').first().json.body || {};\nconst lead = { company: b.company, contact: b.contact || null, channel: b.channel || 'Inbound', message: b.message || null, source: b.source || 'webhook' };\nif (!lead.company) { return [{ json: { ok: false, b64: '', error: 'no_company' } }]; }\nconst b64 = Buffer.from(JSON.stringify(lead)).toString('base64');\nreturn [{ json: { ok: true, b64: b64 } }];"
     }
   },
   output: [{ ok: true, b64: 'e30=' }]
@@ -93,6 +104,7 @@ const responderNoAutorizado = node({
 
 export default workflow('onia-nuevo-lead', 'ONIA - Nuevo Lead (speed-to-lead)')
   .add(webhookLead)
+  .to(verificarSecret)
   .to(checkAuth
     .onTrue(encodeLead.to(crearLead).to(prepararAviso).to(avisarSergio).to(responderOk))
     .onFalse(responderNoAutorizado));

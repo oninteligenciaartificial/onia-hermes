@@ -7,8 +7,11 @@ Unauthorized"; el MCP tiene su propia auth). Todos usan la credencial SSH
 `ONIA VPS SSH` (id `4XKauEX3b6cqaDhW`, sshPrivateKey) para llegar al VPS y avisan
 a Sergio por Telegram con la credencial n8n `telegramApi` (token) y el **chat ID
 hardcodeado** `6830070978` en el nodo. REGLA: **no usar `$env`** en nodos n8n (este
-plan Easypanel puede perder las vars en un redeploy) — chat IDs hardcodeados,
-secretos por credencial.
+plan Easypanel puede perder las vars en un redeploy) — chat IDs hardcodeados. Los
+webhooks (Nuevo Lead / Nuvia / Propuesta) validan el `secret` **server-side**: un nodo
+SSH previo corre `/opt/onia/check-secret.sh` que compara contra
+`ONIA_CENTER_INTERNAL_API_KEY` (leída del contenedor onia-center) y devuelve solo
+`{authorized:true|false}` — la key nunca entra a n8n, sin `$env`.
 
 ## Workflows activos
 
