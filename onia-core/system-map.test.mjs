@@ -47,23 +47,18 @@ describe("buildSystemMap - capa RUBROS", () => {
 });
 
 describe("buildSystemMap - capa REPETICION", () => {
-  it("accounting/invoicing/payroll se repiten en 3 de 4 rubros (gestios, dentagest, proveegest)", () => {
-    for (const moduleId of ["accounting", "invoicing", "payroll"]) {
+  it("accounting/invoicing/payroll/commerce se repiten en los 4 rubros: TODO negocio real compra/vende (commerce) y necesita contabilidad/factura/planilla (accounting/invoicing/payroll), sin importar si es offline-first", () => {
+    for (const moduleId of ["accounting", "invoicing", "payroll", "commerce"]) {
       const usage = map.moduleUsage.find((entry) => entry.moduleId === moduleId);
-      assert.equal(usage.usedByCount, 3, `${moduleId} deberia repetirse en 3 rubros`);
+      assert.equal(usage.usedByCount, 4, `${moduleId} deberia repetirse en los 4 rubros`);
       assert.deepEqual(
         usage.usedBy.sort(),
-        ["gestios-general", "dentagest-clinical", "proveegest-electrico"].sort(),
+        ["gestios-general", "dentagest-clinical", "ganadero-offline", "proveegest-electrico"].sort(),
       );
     }
   });
 
-  it("commerce se repite en 2 rubros (dental + distribucion, no en pymes generico ni ganado)", () => {
-    const usage = map.moduleUsage.find((entry) => entry.moduleId === "commerce");
-    assert.equal(usage.usedByCount, 2);
-  });
-
-  it("knowledge NO se repite: solo lo usa ProveeGest (1 rubro)", () => {
+  it("knowledge NO se repite: solo lo usa ProveeGest (1 rubro, catalogo tecnico del distribuidor)", () => {
     const usage = map.moduleUsage.find((entry) => entry.moduleId === "knowledge");
     assert.equal(usage.usedByCount, 1);
   });
@@ -75,17 +70,12 @@ describe("sharedModules / unusedModules", () => {
     assert.deepEqual(shared, ["accounting", "commerce", "invoicing", "payroll"]);
   });
 
-  it("Ganadero OS Offline no usa NINGUN modulo compartido todavia (hallazgo real, no un bug de la herramienta)", () => {
+  it("Ganadero OS Offline SI necesita commerce/accounting/invoicing/payroll (un hato compra insumos, vende ganado y es una empresa formal con contabilidad/planilla igual que las demas verticales)", () => {
     const ganadero = map.rubros.find((rubro) => rubro.id === "ganadero-offline");
-    assert.deepEqual(ganadero.moduleIds, []);
-    // Confirma que es porque ningun modulo declara ganadero-offline en su
-    // propio verticalTracks (no porque la herramienta lo pase por alto).
-    for (const module of modules) {
-      assert.ok(
-        !(module.verticalTracks ?? []).includes("ganadero-offline"),
-        `${module.module} no deberia declarar ganadero-offline (si lo hace, este test hay que actualizarlo)`,
-      );
-    }
+    assert.deepEqual(ganadero.moduleIds, ["accounting", "commerce", "invoicing", "payroll"]);
+    // Solo knowledge queda fuera: es catalogo tecnico especifico de ProveeGest,
+    // no una necesidad generica de cualquier rubro.
+    assert.ok(!ganadero.moduleIds.includes("knowledge"));
   });
 
   it("unusedModules esta vacio: los 5 modulos los usa al menos 1 rubro", () => {
@@ -101,8 +91,8 @@ describe("renderSystemMap", () => {
     assert.match(text, /4\. QUE RUBROS REPITEN/);
     assert.match(text, /odontogram_entry/);
     // El primer modulo listado en la seccion de repeticion debe ser uno con
-    // usedByCount maximo (3), no uno con menos repeticion (orden descendente).
+    // usedByCount maximo (4), no uno con menos repeticion (orden descendente).
     const usageLines = text.split("\n").filter((line) => line.includes("usado por"));
-    assert.match(usageLines[0], /- (accounting|invoicing|payroll): usado por 3\/4/);
+    assert.match(usageLines[0], /- (accounting|invoicing|payroll|commerce): usado por 4\/4/);
   });
 });

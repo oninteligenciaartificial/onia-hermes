@@ -1,5 +1,62 @@
 # ONIA Core Changelog
 
+## 0.6.1 — 2026-07-06 (correccion: catalog_inventory/sales_cash en gestios-general, dentagest-clinical y ganadero-offline)
+
+- **Corrige un hueco real de la epoca alpha del contrato, no una decision de
+  producto pendiente.** El `system-map` de mas abajo dejaba "gestios no tiene
+  commerce" y "ganadero-offline no usa ningun modulo" como pregunta abierta
+  para Sergio. Su respuesta: *"yo no he definido si lo tiene o no lo tiene...
+  gestios no tiene commerce si es un sistema para inventarios, osea comercio,
+  ordena y define las necesidades de cada negocio, yo no he definido nada"* —
+  o sea, no era una decision de negocio pendiente, era una completitud que
+  faltaba, y correspondia razonarla y resolverla, no seguir preguntando.
+- **Evidencia que confirma que era un hueco, no una eleccion valida:**
+  1. `business-tiers.json` (capa mas nueva) YA asumia que `gestios-general`,
+     `dentagest-clinical` y `ganadero-offline` (familia `pyme`) necesitan
+     `commerce` desde el nivel Profesional — el contrato viejo nunca declaro
+     la capability subyacente (`catalog_inventory`/`sales_cash`) en
+     `requiredCapabilityIds` de esos 3 tracks, asi que quedaba invisible pese
+     a que la capa de tiers ya lo daba por hecho.
+  2. Se leyo el `schema.prisma` REAL de GestiOS (producto propio de ONIA,
+     `C:\dev\proyectos\Gestios`, solo lectura): `Product`/`ProductVariant` con
+     `stock`/`minStock`/`PurchaseOrderItem` (inventario real, no un mock) y
+     `Order`/`OrderItem`/`Invoice` (ventas reales) — GestiOS es literalmente
+     un sistema de inventario y ventas sin la capability de core que lo dice.
+  3. Ganadero OS (`C:\dev\proyectos\Ganaderos-Os`, solo lectura) NO tiene
+     ningun modelo `Product`/`Order`/`Invoice` hoy — confirma que ahi si es
+     un gap genuino de producto (no un error de mapeo), documentado como tal
+     en el adapter (`status: missing`, con nota).
+- **Contract.json**: se agrega `catalog_inventory`+`sales_cash` a
+  `gestios-general.requiredCapabilityIds`, `catalog_inventory` a
+  `dentagest-clinical.requiredCapabilityIds` (ya tenia `sales_cash`), y
+  `catalog_inventory`+`sales_cash` a `ganadero-offline.requiredCapabilityIds`.
+  0.6.0 -> 0.6.1 (cambio de datos del contrato, aditivo/no-breaking: ningun
+  producto instalado pierde nada, GestiOS/Ganadero OS siguen
+  `pending_adoption`).
+- **`accounting.json`/`invoicing.json`/`payroll.json`**: se agrega
+  `ganadero-offline` a su propio `verticalTracks` — mismo razonamiento
+  aplicado consistentemente: TODO negocio formal (incluido un hato/rancho)
+  necesita contabilidad, factura y (si tiene empleados) planilla, sin importar
+  si su UX es offline-first. `commerce.json`/`knowledge.json` no se tocan: su
+  vinculo a un track pasa por `activatesCapabilities` (mecanismo "activa"), no
+  por su propio `verticalTracks`, asi que el fix de contract.json ya alcanza.
+- **Adapters**: `gestios.json` gana `capabilityMappings` para
+  `catalog_inventory`/`sales_cash` con `status: exists` (evidencia real:
+  Product/ProductVariant/Order/OrderItem/Invoice); `dentagest.json` gana
+  `catalog_inventory` con `status: exists_partial` (InventoryItem/
+  InventoryMovement, ya en el schema real); `ganadero-os.json` gana ambas con
+  `status: missing` (honesto: no hay evidencia real todavia).
+- **Resultado (antes -> despues, `node onia-core/system-map.mjs`):**
+  `accounting`/`invoicing`/`payroll` pasan de 3/4 a **4/4** rubros;
+  `commerce` pasa de 2/4 a **4/4**; `ganadero-offline` pasa de **0 modulos** a
+  `accounting, commerce, invoicing, payroll` (igual que los otros 3 rubros).
+  Solo `knowledge` sigue en 1/4 (catalogo tecnico especifico de ProveeGest,
+  correctamente no-universal).
+- Tests actualizados para reflejar la matriz corregida (ya no fijan el hueco
+  como si fuera el comportamiento correcto): `system-map.test.mjs`,
+  `install-plan.test.mjs`, `modules/modules.test.mjs`. `package.json` de
+  `@onia/core` sincronizado a 0.6.1. 279 tests, 4 validadores verdes.
+
 ## system-map — 2026-07-06 (core -> rubro -> modulos -> repeticion, en una vista)
 
 - `system-map.mjs` + `system-map.test.mjs`: combina `buildCoreReport` (de

@@ -1,6 +1,6 @@
 # ONIA Core
 
-Estado: beta canonico (v0.6.0), no instalado en productos.
+Estado: beta canonico (v0.6.1), no instalado en productos.
 Owner: ONIA / Hermes.
 
 > Beta contract cerrado: se agregaron las 8 piezas transversales
@@ -110,7 +110,8 @@ modulos, verticales o integraciones. No son la definicion del core.
 - `ONIA_CORE_OWNER_PANEL_AND_INTAKE_2026.md`: diseno canonico del read-model
   owner_dashboard y la politica de intake externo -> WorkItem.
 - `CHANGELOG.md`: historial de versiones del contrato (0.1.0 alpha ->
-  0.6.0 vertical packs).
+  0.6.1 correccion catalog_inventory/sales_cash en gestios-general/
+  dentagest-clinical/ganadero-offline).
 - `ONIA_CORE_INSTALL_GUIDE_2026.md`: receta repetible de instalacion en
   productos, destilada de la adopcion real en DentalGest.
 - `ONIA_STACK_ASSESSMENT_2026.md`: evaluacion del stack (Postgres/Prisma/Next
@@ -131,7 +132,7 @@ npm run validate:onia-core                        # invariantes del contrato cor
 node onia-core/modules/validate-modules.mjs       # validador de modulos vendibles
 node onia-core/validate-business-tiers.mjs        # validador de niveles de tamano
 node onia-core/validate-vertical-extensions.mjs   # validador del catalogo por rubro
-node --test onia-core/*.test.mjs onia-core/logic/*.test.mjs onia-core/modules/*.test.mjs   # 280 tests
+node --test onia-core/*.test.mjs onia-core/logic/*.test.mjs onia-core/modules/*.test.mjs   # 279 tests
 node onia-core/report.mjs                         # foto de avance por vertical/producto/modulo
 node onia-core/install-plan.mjs <track|producto>   # plan de instalacion de un vertical
 node onia-core/business-diagnostic.mjs            # demo del cuestionario -> rubro+nivel+modulos

@@ -50,14 +50,15 @@ describe("buildInstallPlan por producto", () => {
 });
 
 describe("buildInstallPlan por track (sin adapter)", () => {
-  it("sin adapter, todas las entidades del core son a instalar; incluye modulos que declaran el track aunque no llenen un slot del core", () => {
+  it("sin adapter, todas las entidades del core son a instalar; incluye modulos que llenan un slot del core (commerce) y los que declaran el track sin llenar uno (accounting/invoicing/payroll)", () => {
     const plan = buildInstallPlan(contract, modules, adapters, { trackId: "gestios-general" });
     assert.equal(plan.trackId, "gestios-general");
     assert.equal(plan.core.pendingEntities.length, contract.entities.length);
-    // gestios-general no requiere capabilities de modulo del core, pero
-    // accounting/invoicing/payroll declaran este track en su verticalTracks.
+    // gestios-general requiere catalog_inventory/sales_cash (commerce cubre ese
+    // slot del core) y ademas accounting/invoicing/payroll declaran este track
+    // en su propio verticalTracks sin llenar un slot.
     const moduleIds = plan.modules.map((module) => module.module).sort();
-    assert.deepEqual(moduleIds, ["accounting", "invoicing", "payroll"]);
+    assert.deepEqual(moduleIds, ["accounting", "commerce", "invoicing", "payroll"]);
   });
 });
 

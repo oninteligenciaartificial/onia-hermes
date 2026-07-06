@@ -210,6 +210,26 @@
       "capabilityId": "channels",
       "status": "missing",
       "evidence": []
+    },
+    {
+      "capabilityId": "catalog_inventory",
+      "status": "exists",
+      "evidence": [
+        "Product",
+        "ProductVariant",
+        "Product.stock",
+        "Product.minStock",
+        "PurchaseOrderItem"
+      ]
+    },
+    {
+      "capabilityId": "sales_cash",
+      "status": "exists",
+      "evidence": [
+        "Order",
+        "OrderItem",
+        "Invoice"
+      ]
     }
   ],
   "blockedUntil": [

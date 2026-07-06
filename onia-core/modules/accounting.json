@@ -23,6 +23,7 @@
   "verticalTracks": [
     "gestios-general",
     "dentagest-clinical",
+    "ganadero-offline",
     "proveegest-electrico"
   ],
   "entities": [

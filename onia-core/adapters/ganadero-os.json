@@ -208,6 +208,18 @@
       "capabilityId": "channels",
       "status": "missing",
       "evidence": []
+    },
+    {
+      "capabilityId": "catalog_inventory",
+      "status": "missing",
+      "evidence": [],
+      "notes": "Sin modelo hoy (Animal/LivestockMovement no son inventario de insumos). Un hato real compra alimento/medicamento e insume stock; queda pendiente modelar cuando se active commerce."
+    },
+    {
+      "capabilityId": "sales_cash",
+      "status": "missing",
+      "evidence": [],
+      "notes": "Sin modelo hoy. La venta de ganado es la salida comercial real del rubro; pendiente modelar cuando se active commerce."
     }
   ],
   "offlineConstraints": [

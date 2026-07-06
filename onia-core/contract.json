@@ -1,6 +1,6 @@
 {
   "name": "ONIA Core",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "status": "beta",
   "sourceOfTruth": "onia-hermes/onia-core",
   "researchResult": "onia-core/ONIA_CORE_RESEARCH_RESULT_2026.md",
@@ -826,7 +826,9 @@
         "work_items",
         "evidence_activity",
         "alerts_reports",
-        "data_ops"
+        "data_ops",
+        "catalog_inventory",
+        "sales_cash"
       ],
       "blockedCapabilityIds": [
         "whatsapp",
@@ -852,6 +854,7 @@
         "approvals",
         "scheduling",
         "saved_reporting",
+        "catalog_inventory",
         "sales_cash"
       ],
       "blockedCapabilityIds": [
@@ -868,7 +871,9 @@
         "team_roles",
         "work_items",
         "evidence_activity",
-        "alerts_reports"
+        "alerts_reports",
+        "catalog_inventory",
+        "sales_cash"
       ],
       "blockedCapabilityIds": [
         "whatsapp",
