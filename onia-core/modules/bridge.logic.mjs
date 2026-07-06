@@ -1,11 +1,13 @@
 /*
- * Puentes entre modulos (logica pura). Convierte ventas de commerce y facturas
- * de invoicing en su asiento contable/registro RCV boliviano, reutilizando el
- * total de commerce, el cuadre de accounting y el CUF de invoicing. Sin estado,
- * sin IO. Los productos lo portan para contabilizar automaticamente.
+ * Puentes entre modulos (logica pura). Convierte ventas de commerce, facturas
+ * de invoicing y planillas de payroll en su asiento contable/registro RCV
+ * boliviano, reutilizando el total de commerce, el cuadre de accounting, el
+ * CUF de invoicing y los aportes/retenciones de payroll. Sin estado, sin IO.
+ * Los productos lo portan para contabilizar automaticamente.
  */
 import { computeQuoteTotal } from "./commerce.logic.mjs";
 import { assertBalanced, ivaOfRecord, round2 } from "./accounting.logic.mjs";
+import { computeNetPay } from "./payroll.logic.mjs";
 
 /**
  * Asiento contable de una venta a partir de su importe total (IVA incluido).
@@ -97,5 +99,48 @@ export function invoiceToRcvRecord(invoice, { ivaRate = 0.13 } = {}) {
     date: invoice?.issueDate,
     amount: total,
     ivaAmount: ivaOfRecord({ amount: total }, ivaRate),
+  };
+}
+
+/**
+ * Asiento contable de una planilla de sueldos (bridge payroll -> accounting).
+ * Debe: gasto sueldos (bruto) + gasto cargas patronales (AFP patronal + CNS).
+ * Haber: sueldos por pagar (neto), AFP/Gestora por pagar (retenido + patronal),
+ * CNS por pagar, RC-IVA por pagar. Cuadra por construccion: el neto se recalcula
+ * aca (no se confia en un campo externo) para garantizar el balance.
+ *  accounts = { salaryExpense, payrollTax, salariesPayable, afpPayable, cnsPayable, rcIvaPayable }.
+ */
+export function payrollEntryToJournalEntry(entry, { accounts } = {}) {
+  const required = ["salaryExpense", "payrollTax", "salariesPayable", "afpPayable", "cnsPayable", "rcIvaPayable"];
+  for (const key of required) {
+    if (!accounts?.[key]) {
+      throw new Error(`faltan cuentas: se requiere ${required.join(", ")}`);
+    }
+  }
+
+  const totalGanado = round2(Number(entry?.totalGanado ?? 0));
+  const afpLaboral = round2(Number(entry?.afpLaboralTotal ?? 0));
+  const afpPatronal = round2(Number(entry?.afpPatronalTotal ?? 0));
+  const cnsPatronal = round2(Number(entry?.cnsPatronal ?? 0));
+  const rcIvaNeto = round2(Number(entry?.rcIvaRetencionNeta ?? 0));
+  const netPay = computeNetPay(totalGanado, afpLaboral, rcIvaNeto);
+
+  const lines = [
+    { accountCode: accounts.salaryExpense, debit: totalGanado, credit: 0 },
+    { accountCode: accounts.payrollTax, debit: round2(afpPatronal + cnsPatronal), credit: 0 },
+    { accountCode: accounts.salariesPayable, debit: 0, credit: netPay },
+    { accountCode: accounts.afpPayable, debit: 0, credit: round2(afpLaboral + afpPatronal) },
+    { accountCode: accounts.cnsPayable, debit: 0, credit: cnsPatronal },
+    { accountCode: accounts.rcIvaPayable, debit: 0, credit: rcIvaNeto },
+  ];
+  assertBalanced(lines);
+
+  return {
+    date: entry?.date,
+    glosa: entry?.glosa ?? `Planilla ${entry?.periodMonth ?? ""}/${entry?.periodYear ?? ""}`.trim(),
+    entryType: "diario",
+    sourceType: "payroll",
+    sourceId: entry?.id,
+    lines,
   };
 }

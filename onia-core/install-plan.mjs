@@ -18,6 +18,7 @@ const MODULE_LOGIC = {
   commerce: ["@onia/core/modules/commerce-logic"],
   accounting: ["@onia/core/modules/accounting-logic"],
   invoicing: ["@onia/core/modules/invoicing-logic"],
+  payroll: ["@onia/core/modules/payroll-logic"],
   knowledge: [],
 };
 
@@ -80,8 +81,8 @@ export function buildInstallPlan(contract, modules = [], adapters = [], { projec
     }
   }
   const hasAccounting = neededModuleIds.includes("accounting");
-  const hasCommerceOrInvoicing = neededModuleIds.includes("commerce") || neededModuleIds.includes("invoicing");
-  if (hasAccounting && hasCommerceOrInvoicing) {
+  const hasBridgeSource = ["commerce", "invoicing", "payroll"].some((id) => neededModuleIds.includes(id));
+  if (hasAccounting && hasBridgeSource) {
     moduleLogic.push("@onia/core/modules/bridge-logic");
   }
 
@@ -133,7 +134,7 @@ export function renderInstallPlan(plan) {
   lines.push(`     modulos: ${plan.logicToPort.modules.join(", ") || "(ninguno)"}`);
   lines.push("");
 
-  lines.push("4. CABLEAR: intake -> WorkItem, panel/reporte, y el puente venta/factura -> asiento si hay accounting + (commerce o invoicing)");
+  lines.push("4. CABLEAR: intake -> WorkItem, panel/reporte, y el puente venta/factura/planilla -> asiento si hay accounting + (commerce, invoicing o payroll)");
   lines.push("");
   return lines.join("\n");
 }

@@ -58,14 +58,16 @@ modulos, verticales o integraciones. No son la definicion del core.
   modulos + logica de @onia/core a portar, ordenado). Herramienta nuestra,
   read-only: `node onia-core/install-plan.mjs <track|producto>`.
 - `modules/`: modulos vendibles (add-ons activables SOBRE el core, FUERA del
-  contrato congelado — el core no es inventario/ventas/contabilidad/facturacion).
-  `commerce.json` (catalogo/inventario/cotizaciones B2B/ventas-caja),
+  contrato congelado — el core no es inventario/ventas/contabilidad/facturacion/
+  nomina). `commerce.json` (catalogo/inventario/cotizaciones B2B/ventas-caja),
   `knowledge.json` (base de conocimiento), `accounting.json` (contabilidad
-  Bolivia: doble partida + IVA/IT/IUE) e `invoicing.json` (factura electronica
-  Bolivia: CUF/QR/anulacion/notas de credito-debito) — estos dos ultimos PROVEEN
+  Bolivia: doble partida + IVA/IT/IUE), `invoicing.json` (factura electronica
+  Bolivia: CUF/QR/anulacion/notas de credito-debito) y `payroll.json` (planilla
+  de sueldos Bolivia: AFP/Gestora Publica, RC-IVA dependientes, aguinaldo,
+  indemnizacion, desahucio, vacaciones, finiquito) — estos tres ultimos PROVEEN
   su propia capability (`providesCapabilities`) en vez de llenar un slot del
   core. Cada modulo con su `*.schema.sql` y logica pura en `*.logic.mjs`;
-  `bridge.logic.mjs` conecta commerce/invoicing -> accounting.
+  `bridge.logic.mjs` conecta commerce/invoicing/payroll -> accounting.
   `validate-modules.mjs` = validador propio.
 - `ONIA_CORE_RESEARCH_RESULT_2026.md`: resultado de investigacion local y externa.
 - `ONIA_CORE_BENCHMARK_GAP_AUDIT_2026.md`: auditoria contra sistemas ERP, CRM,
@@ -103,7 +105,7 @@ modulos, verticales o integraciones. No son la definicion del core.
 ```bash
 npm run validate:onia-core                    # invariantes del contrato core
 node onia-core/modules/validate-modules.mjs   # validador de modulos vendibles
-node --test onia-core/*.test.mjs onia-core/logic/*.test.mjs onia-core/modules/*.test.mjs   # 189 tests
+node --test onia-core/*.test.mjs onia-core/logic/*.test.mjs onia-core/modules/*.test.mjs   # 220 tests
 node onia-core/report.mjs                     # foto de avance por vertical/producto/modulo
 node onia-core/install-plan.mjs <track|producto>   # plan de instalacion de un vertical
 ```

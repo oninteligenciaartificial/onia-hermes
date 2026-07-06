@@ -10,6 +10,7 @@ import {
   invoiceToJournalEntry,
   invoiceToRcvRecord,
   orderToJournalEntry,
+  payrollEntryToJournalEntry,
   saleToJournalEntry,
 } from "./bridge.logic.mjs";
 
@@ -96,5 +97,61 @@ describe("invoiceToRcvRecord (puente invoicing -> RCV)", () => {
     assert.equal(record.controlCode, "CTRL-456");
     assert.equal(record.amount, 1000);
     assert.equal(record.ivaAmount, 130);
+  });
+});
+
+describe("payrollEntryToJournalEntry (puente payroll -> accounting)", () => {
+  const accounts = {
+    salaryExpense: "5.1.1",
+    payrollTax: "5.1.3",
+    salariesPayable: "2.1.4",
+    afpPayable: "2.1.5",
+    cnsPayable: "2.1.5",
+    rcIvaPayable: "2.1.3",
+  };
+
+  it("arma el asiento cuadrado: gasto sueldos + cargas patronales = neto por pagar + aportes + RC-IVA", () => {
+    const entry = {
+      id: "p1",
+      periodMonth: 7,
+      periodYear: 2026,
+      date: "2026-07-31",
+      totalGanado: 5000,
+      afpLaboralTotal: 635.5,
+      afpPatronalTotal: 360.5,
+      cnsPatronal: 500,
+      rcIvaRetencionNeta: 0,
+    };
+    const journalEntry = payrollEntryToJournalEntry(entry, { accounts });
+    assert.equal(journalEntry.sourceType, "payroll");
+    assert.match(journalEntry.glosa, /7\/2026/);
+    assert.ok(isBalanced(journalEntry.lines), "el asiento cuadra");
+
+    const debitTotal = journalEntry.lines.reduce((sum, line) => sum + line.debit, 0);
+    const creditTotal = journalEntry.lines.reduce((sum, line) => sum + line.credit, 0);
+    assert.equal(debitTotal, 5000 + 360.5 + 500); // sueldos + cargas patronales
+    assert.equal(creditTotal, debitTotal);
+  });
+
+  it("recalcula el neto internamente (no confia en un campo externo) para garantizar el cuadre", () => {
+    const entry = {
+      totalGanado: 5000,
+      afpLaboralTotal: 635.5,
+      afpPatronalTotal: 360.5,
+      cnsPatronal: 500,
+      rcIvaRetencionNeta: 200,
+      netPay: 999999, // deliberadamente incorrecto: la funcion no debe usarlo
+    };
+    const journalEntry = payrollEntryToJournalEntry(entry, { accounts });
+    const salariesPayableLine = journalEntry.lines.find((line) => line.accountCode === accounts.salariesPayable);
+    assert.equal(salariesPayableLine.credit, 5000 - 635.5 - 200); // netPay recalculado, no el campo erroneo
+    assert.ok(isBalanced(journalEntry.lines));
+  });
+
+  it("exige las cuentas necesarias", () => {
+    assert.throws(
+      () => payrollEntryToJournalEntry({ totalGanado: 100 }, { accounts: { salaryExpense: "5.1.1" } }),
+      /faltan cuentas/,
+    );
   });
 });

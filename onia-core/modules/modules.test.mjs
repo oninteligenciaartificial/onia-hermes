@@ -185,6 +185,51 @@ describe("invoicing module (Bolivia)", () => {
   });
 });
 
+describe("payroll module (Bolivia)", () => {
+  const payroll = getModule(modules, "payroll");
+
+  it("provides its own capability (payroll) instead of activating a core one", () => {
+    assert.ok(payroll, "payroll module present");
+    assert.deepEqual(payroll.activatesCapabilities, []);
+    assert.deepEqual(payroll.providesCapabilities, ["payroll"]);
+    const coreCapabilityIds = new Set(contract.capabilities.map((capability) => capability.id));
+    assert.ok(!coreCapabilityIds.has("payroll"), "payroll must not be a core capability");
+  });
+
+  it("has the employee_profile, payroll_period, payroll_entry and termination_settlement entities", () => {
+    const ids = payroll.entities.map((entity) => entity.id);
+    for (const id of ["employee_profile", "payroll_period", "payroll_entry", "termination_settlement"]) {
+      assert.ok(ids.includes(id), `has ${id}`);
+    }
+  });
+
+  it("declares a SQL schema that defines every entity table", () => {
+    const schema = readFileSync(new URL(`../../${payroll.schemaFile}`, import.meta.url), "utf8");
+    for (const entity of payroll.entities) {
+      assert.ok(entity.table, `${entity.id} declares a table`);
+      assert.ok(schema.includes(entity.table), `schema defines ${entity.table}`);
+    }
+  });
+
+  it("encodes laborConfig with AFP/Gestora breakdown, RC-IVA, aguinaldo/indemnizacion thresholds and vacation scale", () => {
+    const config = payroll.laborConfig;
+    assert.ok(config, "laborConfig present");
+    assert.equal(config.afpLaboralBreakdown.total, 0.1271);
+    assert.equal(config.afpPatronalBreakdown.total, 0.0721);
+    assert.equal(config.rcIva.rate, 0.13);
+    assert.equal(config.aguinaldo.minMonthsWorkedToQualify, 3);
+    assert.equal(config.indemnizacion.minDaysWorkedToQualify, 90);
+    assert.equal(config.indemnizacion.appliesToVoluntaryResignation, true);
+    assert.equal(config.vacationScaleDays.length, 3);
+    assert.equal(config.finiquito.deadlineBusinessDays, 15);
+    assert.ok(config.notes.some((note) => note.includes("external_gate")));
+  });
+
+  it("applies to the same selling verticals as accounting/invoicing", () => {
+    assert.deepEqual(payroll.verticalTracks.slice().sort(), ["dentagest-clinical", "gestios-general", "proveegest-electrico"]);
+  });
+});
+
 describe("modules validator integration", () => {
   it("modules pass validate-modules.mjs (exit 0)", () => {
     const validatePath = fileURLToPath(new URL("./validate-modules.mjs", import.meta.url));

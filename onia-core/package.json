@@ -14,6 +14,7 @@
     "./modules/commerce-logic": "./modules/commerce.logic.mjs",
     "./modules/accounting-logic": "./modules/accounting.logic.mjs",
     "./modules/invoicing-logic": "./modules/invoicing.logic.mjs",
+    "./modules/payroll-logic": "./modules/payroll.logic.mjs",
     "./modules/bridge-logic": "./modules/bridge.logic.mjs",
     "./contract": "./contract.json",
     "./package.json": "./package.json"

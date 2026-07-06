@@ -128,6 +128,10 @@ describe("module coverage in the report", () => {
     assert.ok(accounting, "accounting present in report");
     assert.ok(accounting.capabilities.includes("accounting"), "shows provided capability accounting");
     assert.ok(accounting.capabilities.includes("tax_bolivia"), "shows provided capability tax_bolivia");
+
+    const payroll = report.modules.find((module) => module.module === "payroll");
+    assert.ok(payroll, "payroll present in report");
+    assert.ok(payroll.capabilities.includes("payroll"), "shows provided capability payroll");
   });
 
   it("marks per-track module capabilities as covered or missing", () => {
@@ -141,9 +145,9 @@ describe("module coverage in the report", () => {
     assert.equal(moduleByCapability.get("knowledge_base"), "knowledge");
   });
 
-  it("also lists modules that provide their own capability and declare the track (accounting, invoicing)", () => {
+  it("also lists modules that provide their own capability and declare the track (accounting, invoicing, payroll)", () => {
     const proveegest = report.tracks.find((track) => track.id === "proveegest-electrico");
-    assert.deepEqual(proveegest.providedModules.slice().sort(), ["accounting", "invoicing"]);
+    assert.deepEqual(proveegest.providedModules.slice().sort(), ["accounting", "invoicing", "payroll"]);
   });
 });
 

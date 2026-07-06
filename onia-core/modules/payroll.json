@@ -1,0 +1,183 @@
+{
+  "module": "payroll",
+  "name": "ONIA Payroll Module (Bolivia - Planilla de Sueldos)",
+  "version": "0.1.0",
+  "status": "draft",
+  "layer": "activatable_module",
+  "purpose": "Planilla de sueldos especializada en Bolivia como add-on activable SOBRE el core. El core no lleva nomina (mismo criterio que accounting/invoicing: RRHH/laboral vive fuera del core a proposito). Este modulo PROVEE aportes AFP/Gestora Publica, RC-IVA de dependientes, aguinaldo, indemnizacion, desahucio, vacaciones y finiquito. La declaracion real ante el SIN (Form. 604) y la Gestora Publica sigue siendo external_gate del core; este modulo calcula y prepara, no declara.",
+  "coreContract": "onia-core/contract.json",
+  "schemaFile": "onia-core/modules/payroll.schema.sql",
+  "installInProductRepos": false,
+  "activatesCapabilities": [],
+  "providesCapabilities": [
+    "payroll"
+  ],
+  "coreDependencies": [
+    { "coreEntityId": "organization", "as": "tenant root de cada entidad del modulo" },
+    { "coreEntityId": "member", "as": "employee_profile.memberId (la persona del equipo, ya con role/organizationId en el core)" },
+    { "coreEntityId": "work_item", "as": "planilla del mes o finiquito pendiente -> WorkItem con dueno" },
+    { "coreEntityId": "approval_request", "as": "aprobacion del finiquito antes de pagar (external al modulo)" },
+    { "coreEntityId": "document", "as": "contrato, boleta de pago y acta de finiquito via storageRef" }
+  ],
+  "verticalTracks": [
+    "gestios-general",
+    "dentagest-clinical",
+    "proveegest-electrico"
+  ],
+  "entities": [
+    {
+      "id": "employee_profile",
+      "name": "EmployeeProfile",
+      "capabilityId": "payroll",
+      "table": "onia_payroll_employee_profiles",
+      "purpose": "Datos de planilla de un miembro del equipo (CI, fecha de ingreso, sueldo, tipo de contrato). Referencia a member del core; no lo redefine.",
+      "requiredFields": ["id", "organizationId", "memberId", "ci", "hireDate", "monthlySalary", "active", "createdAt"],
+      "optionalFields": ["position", "contractType", "terminationDate", "terminationReason"],
+      "tenantScoped": true
+    },
+    {
+      "id": "payroll_period",
+      "name": "PayrollPeriod",
+      "capabilityId": "payroll",
+      "table": "onia_payroll_periods",
+      "purpose": "Periodo de planilla (mes/gestion). El SMN vigente se guarda por periodo porque cambia por decreto.",
+      "requiredFields": ["id", "organizationId", "periodMonth", "periodYear", "status", "createdAt"],
+      "optionalFields": ["smnBob", "closedAt"],
+      "tenantScoped": true
+    },
+    {
+      "id": "payroll_entry",
+      "name": "PayrollEntry",
+      "capabilityId": "payroll",
+      "table": "onia_payroll_entries",
+      "purpose": "Boleta de pago de un empleado en un periodo: total ganado, aportes AFP/Gestora (laboral y patronal), RC-IVA y neto a pagar.",
+      "requiredFields": ["id", "organizationId", "periodId", "employeeId", "totalGanado", "netPay", "status", "createdAt"],
+      "optionalFields": [
+        "afpLaboralTotal",
+        "afpPatronalTotal",
+        "aporteNacionalSolidario",
+        "cnsPatronal",
+        "rcIvaBase",
+        "rcIvaRetencionBruta",
+        "rcIvaCompensacionAutomatica",
+        "rcIvaRetencionNeta",
+        "workItemId"
+      ],
+      "tenantScoped": true
+    },
+    {
+      "id": "termination_settlement",
+      "name": "TerminationSettlement",
+      "capabilityId": "payroll",
+      "table": "onia_payroll_termination_settlements",
+      "purpose": "Finiquito: liquidacion final al cese de un empleado (sueldo pendiente, aguinaldo proporcional, indemnizacion si califica, desahucio si aplica, vacacion no gozada). Plazo legal 15 dias habiles.",
+      "requiredFields": ["id", "organizationId", "employeeId", "terminationDate", "reason", "total", "deadlineDate", "createdAt"],
+      "optionalFields": ["pendingSalary", "aguinaldoProportional", "indemnizacion", "desahucio", "vacationCompensation", "paidAt", "approvalRequestId"],
+      "tenantScoped": true
+    }
+  ],
+  "laborConfig": {
+    "notFinancialAdvice": true,
+    "verifiedAt": "2026-07-06",
+    "verificationMethod": "Investigacion cruzada de fuentes (Gestora Publica oficial, SIN, Ministerio de Economia y Finanzas Publicas, firmas de asesoria boliviana) por subagente de investigacion. Ver notes para lo NO confirmado.",
+    "legalBasis": [
+      "Ley General del Trabajo (1939, reglamentada 1942) - vacaciones, indemnizacion, aguinaldo",
+      "Ley 065 de Pensiones (2010) - aportes, tope cotizable, Gestora Publica",
+      "DS 5516 (13-ene-2026) - Salario Minimo Nacional Bs 3300, libre negociacion salarial por encima del minimo",
+      "DS 5503 (dic-2025, 'Decreto por la Patria') - reforma amplia RC-IVA/laboral/tributaria",
+      "DS 5383 (may-2025) - redujo compensacion automatica RC-IVA de 2 a 1 SMN",
+      "DS 1802 (2013) - segundo aguinaldo condicionado a crecimiento del PIB > 4.5%",
+      "DS 21531 - reglamento RC-IVA",
+      "DS 21637 (1987) - aporte patronal CNS 10%",
+      "DS 24935 (1997) - aporte Pro-Vivienda Social 2% patronal",
+      "DS 0110 (2009) - indemnizacion desde 90 dias, incluye renuncia voluntaria"
+    ],
+    "pensionEntity": "Gestora Publica de la Seguridad Social de Largo Plazo (reemplazo estatal de las AFP privadas BBVA Prevision/Futuro-Zurich desde mayo 2023; el sistema historico se seguia llamando 'AFP' pero ya no opera asi)",
+    "smnBob": 3300,
+    "smnEffectiveFrom": "2026-01-01",
+    "smnHistory": [
+      { "value": 2750, "effectiveFrom": "2025-01-01" },
+      { "value": 3300, "effectiveFrom": "2026-01-01" }
+    ],
+    "afpLaboralBreakdown": {
+      "cuentaIndividual": 0.10,
+      "primaRiesgoComun": 0.0171,
+      "comisionGestora": 0.005,
+      "aporteSolidarioTrabajador": 0.005,
+      "total": 0.1271
+    },
+    "afpPatronalBreakdown": {
+      "primaRiesgoProfesional": 0.0171,
+      "proViviendaPatronal": 0.02,
+      "aporteSolidarioPatronal": 0.035,
+      "total": 0.0721,
+      "note": "aporteSolidarioPatronal citado como 3% en algunas fuentes y 3.5% en otras (inconsistencia entre fuentes secundarias, sin fecha de cambio precisa). Usamos 3.5% (total 7.21%) como default configurable; VERIFICAR antes de produccion."
+    },
+    "aporteNacionalSolidarioBrackets": [
+      { "thresholdBob": 13000, "rate": 0.0115 },
+      { "thresholdBob": 25000, "rate": 0.0574 },
+      { "thresholdBob": 35000, "rate": 0.1148 }
+    ],
+    "aporteNacionalSolidarioNote": "Solo aplica sobre el excedente de cada umbral, de forma ADITIVA (cada tramo se suma, no reemplaza al anterior). Solo afecta sueldos altos (>Bs 13.000).",
+    "maxCotizableSmnMultiplier": 60,
+    "compensacionCotizacionesSmnMultiplier": 20,
+    "cnsPatronalRate": 0.10,
+    "cnsNote": "100% a cargo del empleador; NO se descuenta al trabajador.",
+    "rcIva": {
+      "rate": 0.13,
+      "minimoNoImponibleSmnMultiplier": 2,
+      "compensacionAutomaticaSmnMultiplier": 1,
+      "compensacionAutomaticaNote": "Reducido de 2 a 1 SMN por el DS 5383 (mayo 2025). Antes de esa fecha corresponde usar 2.",
+      "hechoEnBoliviaCreditBonusRate": 0.20
+    },
+    "aguinaldo": {
+      "monthsPerYear": 1,
+      "minMonthsWorkedToQualify": 3,
+      "paymentDeadlineMonthDay": "12-20",
+      "doubleAguinaldoNote": "El segundo aguinaldo ('Esfuerzo por Bolivia', DS 1802) se activa solo si el PIB crece > 4.5% (periodo jul-jun). El PIB 2025 se CONTRAJO -1.58% segun el INE -> NO se activo. No asumir activo por defecto; verificar el dato del INE de cada gestion antes de aplicarlo."
+    },
+    "indemnizacion": {
+      "minDaysWorkedToQualify": 90,
+      "monthsPerYear": 1,
+      "appliesToVoluntaryResignation": true,
+      "note": "Bolivia paga indemnizacion incluso en renuncia voluntaria si se superaron los 90 dias, a diferencia de la mayoria de paises de la region. La regla de despido con causa justificada no quedo confirmada con cita textual del articulo especifico; no asumir sin verificar."
+    },
+    "desahucio": {
+      "multiplierOfAverageSalary": 3,
+      "appliesOnlyToUnjustifiedDismissal": true
+    },
+    "vacationScaleDays": [
+      { "minYears": 1, "maxYears": 5, "days": 15 },
+      { "minYears": 5, "maxYears": 10, "days": 20 },
+      { "minYears": 10, "maxYears": null, "days": 30 }
+    ],
+    "vacationNote": "Dias HABILES, no calendario (Art. 44 LGT 1942). Menos de 1 anio de antiguedad = sin derecho aun.",
+    "finiquito": {
+      "deadlineBusinessDays": 15,
+      "latePenaltyRate": 0.30,
+      "rcIvaExemptConcepts": ["indemnizacion", "desahucio", "quinquenio"],
+      "rcIvaExemptNote": "Basado en el DS 21531; NO confirmado al 100% contra el texto integro del decreto. Verificar antes de aplicar la exencion en produccion."
+    },
+    "forms": {
+      "employerMonthlyRcIvaDeclaration": "Formulario 604",
+      "employeeCompensationInvoices": "Formulario 110"
+    },
+    "notes": [
+      "Todos los porcentajes y el SMN se tratan como parametros VERSIONADOS por fecha de vigencia, no constantes: hubo 3 cambios normativos solo entre mayo-2025 y enero-2026 (DS 5383, DS 5503, DS 5516).",
+      "aporteSolidarioPatronal (3% vs 3.5%) y la exencion RC-IVA del finiquito (DS 21531) no estan 100% confirmados; verificar contra el texto oficial antes de produccion.",
+      "Este modulo NO declara ante el SIN ni ante la Gestora Publica (eso es external_gate, igual que SIAT); prepara los calculos y los datos.",
+      "Esto no es asesoria legal ni laboral.",
+      "Reutiliza monthlyProvision/accruedProvision de accounting para la matematica de devengo proporcional (aguinaldo/indemnizacion); no la duplica."
+    ]
+  },
+  "notes": [
+    "El modulo NO redefine entidades del core; agrega entidades propias con namespace onia_payroll_*.",
+    "employee_profile depende de member (core) por referencia logica, no lo reemplaza.",
+    "La declaracion fiscal/previsional real queda en el external_gate del core; este modulo prepara/valida estructura y datos, no declara."
+  ],
+  "gates": [
+    "installInProductRepos = false hasta plan de adopcion del modulo aprobado",
+    "SQL base del modulo (payroll.schema.sql) se traduce a migraciones del producto, no se aplica directo",
+    "aporteSolidarioPatronal y la exencion RC-IVA del finiquito deben verificarse contra el texto oficial antes de usarse en produccion"
+  ]
+}

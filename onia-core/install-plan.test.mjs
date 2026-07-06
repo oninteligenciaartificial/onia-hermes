@@ -23,10 +23,12 @@ describe("buildInstallPlan por producto", () => {
     const moduleIds = plan.modules.map((module) => module.module);
     assert.ok(moduleIds.includes("commerce"));
     assert.ok(moduleIds.includes("knowledge"));
-    // accounting/invoicing PROVEEN su propia capability (no llenan un slot del
-    // core) pero declaran este track en su verticalTracks -> deben aparecer.
+    // accounting/invoicing/payroll PROVEEN su propia capability (no llenan un
+    // slot del core) pero declaran este track en su verticalTracks -> deben
+    // aparecer.
     assert.ok(moduleIds.includes("accounting"));
     assert.ok(moduleIds.includes("invoicing"));
+    assert.ok(moduleIds.includes("payroll"));
   });
 
   it("cada modulo trae su schema y tablas", () => {
@@ -42,6 +44,7 @@ describe("buildInstallPlan por producto", () => {
     assert.ok(plan.logicToPort.modules.includes("@onia/core/modules/commerce-logic"));
     assert.ok(plan.logicToPort.modules.includes("@onia/core/modules/accounting-logic"));
     assert.ok(plan.logicToPort.modules.includes("@onia/core/modules/invoicing-logic"));
+    assert.ok(plan.logicToPort.modules.includes("@onia/core/modules/payroll-logic"));
     assert.ok(plan.logicToPort.modules.includes("@onia/core/modules/bridge-logic"));
   });
 });
@@ -52,9 +55,9 @@ describe("buildInstallPlan por track (sin adapter)", () => {
     assert.equal(plan.trackId, "gestios-general");
     assert.equal(plan.core.pendingEntities.length, contract.entities.length);
     // gestios-general no requiere capabilities de modulo del core, pero
-    // accounting/invoicing declaran este track en su verticalTracks.
+    // accounting/invoicing/payroll declaran este track en su verticalTracks.
     const moduleIds = plan.modules.map((module) => module.module).sort();
-    assert.deepEqual(moduleIds, ["accounting", "invoicing"]);
+    assert.deepEqual(moduleIds, ["accounting", "invoicing", "payroll"]);
   });
 });
 

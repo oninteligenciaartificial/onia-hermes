@@ -1,5 +1,48 @@
 # ONIA Core Changelog
 
+## modules/payroll 0.1.0 — 2026-07-06 (planilla de sueldos Bolivia)
+
+- Nuevo modulo `payroll` (Bolivia) que PROVEE su propia capability
+  (`payroll`): planilla mensual (aportes AFP/Gestora Publica, RC-IVA
+  dependientes) y ciclo laboral completo (aguinaldo, indemnizacion, desahucio,
+  vacaciones, finiquito). Validado con subagente de investigacion (Gestora
+  Publica oficial, SIN, MEFP, firmas de asesoria boliviana). Entidades
+  `employee_profile` (referencia `member` del core sin redefinirlo),
+  `payroll_period`, `payroll_entry`, `termination_settlement` (namespace
+  `onia_payroll_*`) + `payroll.schema.sql` (4 tablas).
+- `payroll.logic.mjs`: `computeAfpLaboral`/`computeAfpPatronal` (desglose 12.71%
+  laboral / 7.21% patronal), `computeAporteNacionalSolidario` (tramos
+  progresivos aditivos sobre sueldos altos), `computeCnsPatronal` (10%
+  patronal), cadena RC-IVA (`computeRcIvaBase`/`RetencionBruta`/
+  `CompensacionAutomatica`/`RetencionNeta`) y `computeNetPay`,
+  `qualifiesForAguinaldo`/`computeAguinaldoProportional` (reutiliza
+  `accruedProvision` de accounting), `qualifiesForIndemnizacion`/
+  `computeIndemnizacion`/`computeDesahucio`, `vacationDaysForYears` (escala
+  1-5/5-10/+10 anios), `terminationDeadline` (15 dias HABILES, excluye
+  fin de semana) y `buildTerminationSettlement` (arma el finiquito segun el
+  motivo de cese). 23 tests. **Bug encontrado y corregido durante el
+  desarrollo:** `monthsBetween` ignoraba el dia del mes (solo comparaba
+  año/mes), sobreestimando la antiguedad hasta en 30 dias — afecta
+  directamente los umbrales legales de 90 dias/3 meses; ahora resta un mes si
+  el dia de fin es anterior al dia de inicio.
+- **Advertencias explicitas de incertidumbre** (marcadas en `laborConfig`, no
+  asumidas como ciertas): el "aporte solidario patronal" se cita como 3% o
+  3.5% segun la fuente (usamos 3.5%, total 7.21%, configurable); la exencion de
+  RC-IVA sobre indemnizacion/desahucio en el finiquito (DS 21531) no esta
+  100% confirmada contra el texto oficial. Dato clave que CORRIGE un supuesto
+  inicial: la indemnizacion aplica desde **90 dias** trabajados (no desde el
+  primer dia) e incluso en **renuncia voluntaria**, a diferencia de la mayoria
+  de paises de la region.
+- `bridge.logic.mjs` extendido: `payrollEntryToJournalEntry` (planilla ->
+  asiento contable: gasto sueldos + cargas patronales = neto por pagar +
+  aportes + RC-IVA; recalcula el neto internamente para garantizar el cuadre,
+  no confia en un campo externo). +3 tests.
+- `install-plan.mjs`/`report.mjs`: `payroll` sumado a `MODULE_LOGIC` y a la
+  condicion del puente (`accounting` + cualquiera de commerce/invoicing/
+  payroll). `package.json`: nuevo subpath `./modules/payroll-logic`.
+- Modulos totales: 5 (commerce, knowledge, accounting, invoicing, payroll),
+  28 entidades. 220 tests en total (2 validadores + suite completa verdes).
+
 ## modules/invoicing 0.1.0 — 2026-07-06 (factura electronica Bolivia)
 
 - Nuevo modulo `invoicing` (Bolivia) que PROVEE su propia capability
