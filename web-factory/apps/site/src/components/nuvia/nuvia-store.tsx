@@ -275,10 +275,11 @@ function useDeferredHeroVideo() {
   const [shouldLoad, setShouldLoad] = useState(false);
 
   useEffect(() => {
-    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    // El hero video es un clip mudo/ambiental (sin parpadeos ni audio): se muestra
+    // igual bajo prefers-reduced-motion. Solo se respeta el ahorro de datos real.
     const connection = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection;
 
-    if (reducedMotion || connection?.saveData) {
+    if (connection?.saveData) {
       return;
     }
 
