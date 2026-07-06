@@ -9,8 +9,8 @@
 - **Nombre:** Lucia. **Rol:** influencer skincare/UGC + cuenta propia + contenido de clientes.
 - **Higgsfield Soul (USAR ESTE):** `36305a9b-af24-4390-959b-885082dddd5d` ("LUCIA-REAL-v2-clean", `soul_2`). Gen ~0.12cr/img.
 - **Entrenada desde:** 18 frames reales verificados, TODOS del mismo video (`hf_20260615_013651_d60afdd2...`, tubo verde SVR): `hermes-content/references/models/pecas-clean-v2/`. Frames REALES, no generados.
-- **Soul `9a0d6953-...` = SUPERADO/NO USAR.** El Soul anterior estaba contaminado: 1 de sus 8 frames de entrenamiento (`pecas-B-02.png`) era de OTRA MUJER (video B resulto ser una persona distinta). Esto probablemente causo la perdida de consistencia reportada por Sergio. Ver `AVATAR-CONSISTENCY-SCHEME.md`.
-- **Soul `2fc03fc6-...` = ARCHIVADO/NO USAR.** Era una cara distinta (m2-05, generada por error). No confundir.
+- **Soul `9a0d6953-...` = ELIMINADO de Higgsfield (2026-07-06).** Estaba contaminado: 1 de sus 8 frames de entrenamiento (`pecas-B-02.png`) era de OTRA MUJER (video B resulto ser una persona distinta). Esto probablemente causo la perdida de consistencia reportada por Sergio. Borrado por UI a pedido explicito de Sergio. Ver `AVATAR-CONSISTENCY-SCHEME.md`.
+- **Soul `2fc03fc6-...` = ELIMINADO de Higgsfield (2026-07-06).** Era una cara distinta (m2-05, generada por error). Borrado por UI a pedido explicito de Sergio.
 
 ## Rostro (face lock) — NO romper
 - Pelo castano oscuro ondulado, largo-medio, raya al medio.
@@ -76,7 +76,7 @@ Cada lugar = UNA imagen real (sin personas) subida como Reference Element (`envi
   no identity drift, no quitarle las pecas, no cambiar estructura facial, no piel plastica.
 
 ## Orden de trabajo (2026-07-06, pedido de Sergio)
-1. ✅ Cara real lockeada (Soul `36305a9b-af24-4390-959b-885082dddd5d`, 18 frames verificados de un solo video), en entrenamiento.
+1. ✅ Cara real lockeada (Soul `36305a9b-af24-4390-959b-885082dddd5d`, 18 frames verificados de un solo video), entrenado y verificado.
 2. ✅ Guardarropa + lugares definidos (esta seccion).
-3. ⏳ Pruebas BARATAS (soul_2, 0.12cr) combinando outfits x lugares — verificar que no se rompe.
+3. ✅ Pruebas BARATAS (soul_2, 0.12cr) — 2/2 generaciones verificadas (retrato neutro + bano/producto vs texto), identidad fiel al frame real (pecas, cejas, ojos, labios), sin deformacion. Souls viejos (`9a0d6953`, `2fc03fc6`) eliminados de Higgsfield.
 4. Recien despues: mas trabajo de video/lipsync ("caras" es la fase cara, se hace al final).

@@ -23,21 +23,29 @@ de angulos/expresiones (sosteniendo producto, aplicandolo, sonriendo, neutral). 
 el Soul a usar de ahora en mas para Lucia — el viejo `9a0d6953` queda superado (no
 compatible con esta correccion).
 
-## ⚠️ ALERTA — colision de nombres en Higgsfield (no arreglable por API)
+**✅ Verificado (2026-07-06):** 2 generaciones de prueba con `soul_2` + este soul_id
+(retrato neutro + bano/producto via texto, 0.12cr c/u) comparadas visualmente contra
+`pecas-clean-v2/lucia-clean-01.png` (frame real) — misma cara, pecas, cejas, ojos, labios,
+sin deformacion ni deriva. El Soul limpio queda confirmado funcional.
 
-`show_characters` y `show_reference_elements` **no tienen accion de rename/delete** (solo
-list/train-create/status). Por eso quedaron DOS objetos con "Lucia" en el nombre:
+## ⚠️ ALERTA — colision de nombres en Higgsfield (ya resuelta por borrado manual)
 
-| Nombre en Higgsfield | soul_id | Que es realmente |
+`show_characters` y `show_reference_elements` **no tienen accion de rename/delete via
+API** (solo list/train-create/status) — pero el sitio web de Higgsfield (higgsfield.ai/character)
+SI tiene delete por UI (boton "..." -> Delete en cada tarjeta). Los 2 Souls problematicos
+se borraron ahi el 2026-07-06, a pedido explicito de Sergio:
+
+| Nombre en Higgsfield | soul_id | Estado |
 |---|---|---|
 | "LUCIA-REAL-v2-clean" | `36305a9b-af24-4390-959b-885082dddd5d` | ✅ **USAR ESTE** — 18 frames verificados, solo persona correcta |
-| "Valentina ONIA v1" | `9a0d6953-ff2e-40ba-b763-806e0d447325` | ⚠️ SUPERADO — Lucia real pero contaminado (1 de 8 frames era otra persona) |
-| "Lucia ONIA v1" | `2fc03fc6-c38b-48ca-91f6-ca1eb022ce29` | ❌ **NO es Lucia** — cara equivocada archivada (m2-05), NO USAR |
+| ~~"Valentina ONIA v1"~~ | ~~`9a0d6953-ff2e-40ba-b763-806e0d447325`~~ | 🗑️ **ELIMINADO** (2026-07-06) — era Lucia real pero contaminada (1 de 8 frames era otra persona) |
+| ~~"Lucia ONIA v1"~~ | ~~`2fc03fc6-c38b-48ca-91f6-ca1eb022ce29`~~ | 🗑️ **ELIMINADO** (2026-07-06) — no era Lucia, cara equivocada (m2-05) |
 
-**Regla dura: nunca elegir un Soul/Element por su NOMBRE en la lista de Higgsfield.
-Siempre usar el `soul_id`/`element_id` exacto de la tabla de referencia de abajo.** Si
-alguna vez se genera con "Lucia" y sale una cara distinta a las pecas, es casi seguro que
-se uso `2fc03fc6` por error de nombre.
+**Regla dura (sigue aplicando): nunca elegir un Soul/Element por su NOMBRE en la lista de
+Higgsfield, siempre usar el `soul_id`/`element_id` exacto de la tabla de referencia de
+abajo.** Aunque los 2 Souls equivocados ya no existen, la Reference Element auto-creada
+`44622145` (ver tabla de Lucia abajo) SIGUE viva y SIGUE contaminada — no tiene delete
+verificado todavia.
 
 ## Diagnostico (v1, sigue valido)
 
@@ -120,9 +128,9 @@ mueble/ambiente exacto de fondo). Reglas obligatorias si se usa:
 | Uso | ID | Fuente |
 |---|---|---|
 | **Soul (Nivel 1) — USAR ESTE** | `36305a9b-af24-4390-959b-885082dddd5d` | 18 frames verificados, solo video A (`pecas-clean-v2/`) |
-| Soul viejo, SUPERADO (contaminado) | `9a0d6953-ff2e-40ba-b763-806e0d447325` | 8 frames, 1 de otra persona (pecas-B-02) |
+| ~~Soul viejo, contaminado~~ | ~~`9a0d6953-ff2e-40ba-b763-806e0d447325`~~ | 🗑️ ELIMINADO de Higgsfield 2026-07-06 (era 8 frames, 1 de otra persona) |
 | Ancla real para Nivel 4/Marketing Studio | `ced20cc2-3388-4d98-92ee-b0fcd961aa62` (Element) | frame real (pecas-A-15) escalado 2K |
-| Ancla real alternativa (otro angulo/expresion) | `44622145-b648-4839-85f3-d8fdb7047b19` (Element, auto-creado, mal llamado "Valentina ONIA v1") | frame real (pecas-B-02), sin editar |
+| ⛔ Element CONTAMINADO, NO USAR | `44622145-b648-4839-85f3-d8fdb7047b19` (Element, auto-creado al entrenar el Soul viejo, mal llamado "Valentina ONIA v1") | frame de OTRA PERSONA (pecas-B-02) — sigue existiendo, Reference Elements no se borraron (solo se borraron los 2 Souls). Pendiente: borrar tambien desde la libreria de assets si Higgsfield lo permite |
 | ⛔ Legacy, NO USAR | `de586dbb-0cdd-4ca2-aaac-173d11741c86` (Element "lucia-face-element") | foto YA generada por Soul (1 paso de deriva) |
 | Outfits (prop) | `16833b18` cleangirl · `ec1dece5` streetwear · `5503f588` nightout · `6186d80f` loungewear | flatlays reales sin cara, Pinterest |
 | Lugares (environment) | `44a4686e` bano · `6a721405` dormitorio · `5cfbdab5` cafe · `cddfa484` calle · `2750ef8b` bar | interiores reales sin gente, Pinterest |
