@@ -122,6 +122,20 @@
     "nitDueDay": { "0": 13, "1": 14, "2": 15, "3": 16, "4": 17, "5": 18, "6": 19, "7": 20, "8": 21, "9": 22 },
     "bancarizacionThresholdBob": 50000,
     "accountTypes": ["activo", "pasivo", "patrimonio", "ingreso", "gasto", "costo", "orden"],
+    "depreciationByAssetType": [
+      { "assetType": "edificaciones", "usefulLifeYears": 40, "annualRate": 0.025 },
+      { "assetType": "muebles_enseres", "usefulLifeYears": 10, "annualRate": 0.10 },
+      { "assetType": "maquinaria", "usefulLifeYears": 8, "annualRate": 0.125 },
+      { "assetType": "equipos_instalaciones", "usefulLifeYears": 8, "annualRate": 0.125 },
+      { "assetType": "vehiculos", "usefulLifeYears": 5, "annualRate": 0.20 },
+      { "assetType": "equipos_computacion", "usefulLifeYears": 4, "annualRate": 0.25 },
+      { "assetType": "herramientas", "usefulLifeYears": 4, "annualRate": 0.25 }
+    ],
+    "laborProvisions": {
+      "aguinaldoMonthsPerYear": 1,
+      "indemnizacionMonthsPerYear": 1,
+      "note": "Ley General del Trabajo: aguinaldo = 1 sueldo/anio (pagadero en diciembre; proporcional desde 3 meses). Indemnizacion = 1 sueldo por anio de antiguedad (proporcional). Provision mensual = sueldo * meses_por_anio / 12."
+    },
     "notes": [
       "Tasas y fechas son DEFAULT configurables por el contador; la normativa cambia (radar RND). Esto NO es asesoria fiscal.",
       "El IVA se declara con el Libro de Compras y Ventas (RCV) en el portal SIAT.",

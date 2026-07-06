@@ -24,7 +24,13 @@
 - `accounting.seed.bolivia.json`: plan de cuentas base (PCGA Bolivia, ~46 cuentas
   activo/pasivo/patrimonio/ingreso/gasto/costo con IVA credito/debito, depreciacion
   acumulada y provisiones laborales). Semilla ajustable; sirve de mapa de cuentas
-  para los estados financieros. +6 tests.
+  para los estados financieros. +6 tests. `loadModules` ahora ignora JSON que no
+  son modulos (el seed convive en modules/ sin ser un modulo).
+- Ajustes de cierre en `accounting.logic.mjs`: depreciacion de linea recta con
+  tasas por tipo de activo (DS 24051: edificios 2.5%, muebles 10%, vehiculos 20%,
+  computacion 25%...) + acumulada y valor en libros (topeada a la base), y
+  provisiones laborales aguinaldo/indemnizacion (sueldo/12, devengado por meses).
+  Config `depreciationByAssetType` / `laborProvisions`. 100 tests en total.
 
 ## modules/knowledge 0.1.0 — 2026-07-05 (base de conocimiento)
 

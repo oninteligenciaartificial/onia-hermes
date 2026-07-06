@@ -12,16 +12,21 @@ import {
   addDays,
   assertBalanced,
   balanceSheet,
+  accruedProvision,
   computeIt,
   computeIue,
   computeIva,
+  depreciationForAssetType,
+  depreciationSchedule,
   fiscalYearEnd,
   incomeStatement,
   isBalanced,
   iueDueDate,
   ivaOfRecord,
   ledgerByAccount,
+  monthlyProvision,
   requiresBankization,
+  straightLineDepreciation,
   subsidiaryLedger,
   sumDebitCredit,
   taxDueDate,
@@ -177,6 +182,39 @@ describe("bancarizacion", () => {
     assert.equal(requiresBankization(50000, config.bancarizacionThresholdBob), true);
     assert.equal(requiresBankization(49999.99, config.bancarizacionThresholdBob), false);
     assert.equal(requiresBankization(60000, config.bancarizacionThresholdBob), true);
+  });
+});
+
+describe("depreciacion y provisiones (ajustes de cierre)", () => {
+  it("linea recta: (costo - residual) / vida util", () => {
+    assert.deepEqual(straightLineDepreciation(48000, 4), {
+      depreciableBase: 48000,
+      annual: 12000,
+      monthly: 1000,
+    });
+    assert.equal(straightLineDepreciation(48000, 4, { salvageValue: 8000 }).annual, 10000);
+  });
+
+  it("acumulada y valor en libros, sin superar la base depreciable", () => {
+    const partial = depreciationSchedule(48000, 4, 6);
+    assert.equal(partial.perPeriod, 1000);
+    assert.equal(partial.accumulated, 6000);
+    assert.equal(partial.netBookValue, 42000);
+
+    const overrun = depreciationSchedule(48000, 4, 60);
+    assert.equal(overrun.accumulated, 48000);
+    assert.equal(overrun.netBookValue, 0);
+  });
+
+  it("depreciacion por tipo de activo desde el config (DS 24051)", () => {
+    assert.equal(depreciationForAssetType(20000, "vehiculos", config).annual, 4000);
+    assert.equal(depreciationForAssetType(4800, "equipos_computacion", config).annual, 1200);
+    assert.throws(() => depreciationForAssetType(1000, "nave_espacial", config), /tipo de activo/);
+  });
+
+  it("provisiones laborales aguinaldo/indemnizacion (sueldo/12)", () => {
+    assert.equal(monthlyProvision(5220, 1), 435);
+    assert.equal(accruedProvision(5220, 6, 1), 2610);
   });
 });
 

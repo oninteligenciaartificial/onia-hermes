@@ -18,7 +18,8 @@ export function loadModules(dir = modulesDir) {
   return readdirSync(dir)
     .filter((file) => file.endsWith(".json"))
     .sort()
-    .map((file) => JSON.parse(readFileSync(resolve(dir, file), "utf8")));
+    .map((file) => JSON.parse(readFileSync(resolve(dir, file), "utf8")))
+    .filter((parsed) => typeof parsed.module === "string");
 }
 
 export function getModule(modules, moduleId) {

@@ -273,3 +273,56 @@ export function addDays(isoDate, days) {
 export function iueDueDate(fiscalYearEndDate, days = 120) {
   return addDays(fiscalYearEndDate, days);
 }
+
+// --- Depreciacion (linea recta) y ajustes de cierre -------------------------
+
+/** Depreciacion de linea recta: (costo - valor residual) / vida util. */
+export function straightLineDepreciation(cost, usefulLifeYears, { salvageValue = 0 } = {}) {
+  const depreciableBase = Math.max(0, Number(cost ?? 0) - Number(salvageValue ?? 0));
+  const years = Number(usefulLifeYears ?? 0);
+  const annual = years > 0 ? depreciableBase / years : 0;
+  return {
+    depreciableBase: round2(depreciableBase),
+    annual: round2(annual),
+    monthly: round2(annual / 12),
+  };
+}
+
+/**
+ * Depreciacion acumulada y valor en libros a `periodsElapsed` periodos.
+ * La acumulada nunca supera la base depreciable.
+ */
+export function depreciationSchedule(
+  cost,
+  usefulLifeYears,
+  periodsElapsed,
+  { salvageValue = 0, periodsPerYear = 12 } = {},
+) {
+  const { depreciableBase, annual } = straightLineDepreciation(cost, usefulLifeYears, { salvageValue });
+  const perPeriod = periodsPerYear > 0 ? annual / periodsPerYear : 0;
+  const accumulated = Math.min(depreciableBase, perPeriod * Number(periodsElapsed ?? 0));
+  return {
+    perPeriod: round2(perPeriod),
+    accumulated: round2(accumulated),
+    netBookValue: round2(Number(cost ?? 0) - accumulated),
+  };
+}
+
+/** Depreciacion segun el tipo de activo (usa depreciationByAssetType del config). */
+export function depreciationForAssetType(cost, assetType, config, options = {}) {
+  const entry = (config?.depreciationByAssetType ?? []).find((item) => item.assetType === assetType);
+  if (!entry) {
+    throw new Error(`sin vida util definida para el tipo de activo ${assetType}`);
+  }
+  return straightLineDepreciation(cost, entry.usefulLifeYears, options);
+}
+
+/** Provision mensual de un beneficio (aguinaldo/indemnizacion): sueldo * meses/12. */
+export function monthlyProvision(monthlySalary, monthsPerYear = 1) {
+  return round2((Number(monthlySalary ?? 0) * Number(monthsPerYear ?? 1)) / 12);
+}
+
+/** Beneficio devengado a `monthsWorked` meses: sueldo * meses_por_anio * meses/12. */
+export function accruedProvision(monthlySalary, monthsWorked, monthsPerYear = 1) {
+  return round2((Number(monthlySalary ?? 0) * Number(monthsPerYear ?? 1) * Number(monthsWorked ?? 0)) / 12);
+}
