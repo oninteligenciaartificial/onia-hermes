@@ -20,6 +20,8 @@ export type SiteClient = {
   imagenSecundaria?: string;
   heroVariant?: "auto" | "fullbleed" | "split" | "typographic" | "video";
   rubro?: string;
+  disponibilidad?: string;
+  ctaSecundariaTexto?: string;
   servicios: Array<{
     titulo: string;
     desc: string;

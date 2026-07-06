@@ -23,9 +23,10 @@ export function renderClinicHeroTypographic(client: SiteClient): string {
         .join("")}</ul>`
     : "";
 
+  const disponibilidad = escapeHtml(client.disponibilidad ?? "Atención con turno");
   const eyebrow = client.contacto.direccion
-    ? `<p class="wf-clinic-split-eyebrow">${renderIcon("map-pin", "wf-icon")}<span>${escapeHtml(client.contacto.direccion)}</span><span class="wf-clinic-dot" aria-hidden="true"></span><span>Atención con turno</span></p>`
-    : `<p class="wf-clinic-split-eyebrow"><span>Atención con turno</span></p>`;
+    ? `<p class="wf-clinic-split-eyebrow">${renderIcon("map-pin", "wf-icon")}<span>${escapeHtml(client.contacto.direccion)}</span><span class="wf-clinic-dot" aria-hidden="true"></span><span>${disponibilidad}</span></p>`
+    : `<p class="wf-clinic-split-eyebrow"><span>${disponibilidad}</span></p>`;
 
   const mediaLayer = media
     ? `<figure class="wf-clinic-typo-media" data-parallax><img src="${escapeAttribute(media)}" alt="${escapeAttribute(`Ambiente de ${client.nombre}`)}" fetchpriority="high" decoding="async"></figure>`
@@ -47,7 +48,7 @@ export function renderClinicHeroTypographic(client: SiteClient): string {
         <p class="wf-clinic-split-lede">${escapeHtml(client.descripcion)}</p>
         <div class="wf-clinic-actions">
           <a class="wf-clinic-btn wf-clinic-btn--primary" href="${escapeAttribute(client.cta.url)}">${renderIcon("message", "wf-icon")}<span>${escapeHtml(client.cta.texto)}</span></a>
-          <a class="wf-clinic-btn wf-clinic-btn--ghost" href="#servicios"><span>Ver tratamientos</span>${renderIcon("arrow-right", "wf-icon")}</a>
+          <a class="wf-clinic-btn wf-clinic-btn--ghost" href="#servicios"><span>${escapeHtml(client.ctaSecundariaTexto ?? "Ver tratamientos")}</span>${renderIcon("arrow-right", "wf-icon")}</a>
         </div>
         ${trustRow}
       </div>

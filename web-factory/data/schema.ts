@@ -234,6 +234,8 @@ export const clientSchema = z.object({
   credenciales: z.array(z.string().min(1)).default([]),
   proceso: z.array(procesoPasoSchema).default([]),
   faq: z.array(faqItemSchema).default([]),
+  disponibilidad: z.string().optional(),
+  ctaSecundariaTexto: z.string().optional(),
   referencias: z.array(referenceSchema).default([]),
   cta: z
     .object({

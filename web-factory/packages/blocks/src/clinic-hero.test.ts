@@ -45,4 +45,21 @@ describe("hero variant dispatcher", () => {
     expect(html).toContain("wf-clinic-hero-media");
     expect(html).not.toContain("wf-clinic-hero--split");
   });
+
+  it("uses clinic copy as the default but honors non-clinic overrides (generalization)", () => {
+    const defaultCopy = renderClinicHero({ ...base, heroPoster: "assets/x.webp" });
+    expect(defaultCopy).toContain("Atención con turno");
+    expect(defaultCopy).toContain("Ver tratamientos");
+
+    const engineering = renderClinicHero({
+      ...base,
+      heroPoster: "assets/x.webp",
+      disponibilidad: "Visita tecnica sin costo",
+      ctaSecundariaTexto: "Ver servicios",
+    });
+    expect(engineering).toContain("Visita tecnica sin costo");
+    expect(engineering).toContain("Ver servicios");
+    expect(engineering).not.toContain("Atención con turno");
+    expect(engineering).not.toContain("Ver tratamientos");
+  });
 });

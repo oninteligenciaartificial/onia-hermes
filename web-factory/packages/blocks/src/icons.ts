@@ -24,12 +24,15 @@ export function renderIcon(name: string, className = "wf-icon"): string {
 }
 
 // Pick a credential icon by keyword so trust items feel specific, not generic.
+// Covers health vocabulary and general business-credential vocabulary (years of
+// experience, licensing bodies, project counts, urgency/turnaround) so the same
+// heuristic reads well outside the clinic vertical.
 export function pickCredencialIcon(text: string): string {
   const t = text.toLowerCase();
-  if (/(matr[ií]cula|colegiad|licencia|t[ií]tulo)/.test(t)) return "award";
-  if (/(esteril|higien|bioseg|seguridad)/.test(t)) return "shield-check";
-  if (/(urgenc|mismo d[ií]a|guardia|dolor)/.test(t)) return "activity";
-  if (/(a[ñn]os|experien|trayect)/.test(t)) return "star";
-  if (/(pago|plan|financ|cuota)/.test(t)) return "clock";
+  if (/(matr[ií]cula|colegiad|licencia|t[ií]tulo|habilitad)/.test(t)) return "award";
+  if (/(esteril|higien|bioseg|seguridad|calidad|norma|certificaci[oó]n|certificad)/.test(t)) return "shield-check";
+  if (/(urgenc|mismo d[ií]a|guardia|dolor|24\s?\/?\s?7|inmediat)/.test(t)) return "activity";
+  if (/(a[ñn]os|experien|trayect|proyectos entregad|clientes atendid|casos)/.test(t)) return "star";
+  if (/(pago|plan|financ|cuota|presupuesto)/.test(t)) return "clock";
   return "check";
 }

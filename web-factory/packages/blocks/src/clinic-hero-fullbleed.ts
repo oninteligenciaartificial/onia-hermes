@@ -20,9 +20,10 @@ export function renderOverlayHero(client: SiteClient, mediaLayer: string): strin
         .join("")}</ul>`
     : "";
 
+  const disponibilidad = escapeHtml(client.disponibilidad ?? "Atención con turno");
   const eyebrow = client.contacto.direccion
-    ? `<p class="wf-clinic-eyebrow">${renderIcon("map-pin", "wf-icon")}<span>${escapeHtml(client.contacto.direccion)}</span><span class="wf-clinic-dot" aria-hidden="true"></span><span>Atención con turno</span></p>`
-    : `<p class="wf-clinic-eyebrow"><span>Atención con turno</span></p>`;
+    ? `<p class="wf-clinic-eyebrow">${renderIcon("map-pin", "wf-icon")}<span>${escapeHtml(client.contacto.direccion)}</span><span class="wf-clinic-dot" aria-hidden="true"></span><span>${disponibilidad}</span></p>`
+    : `<p class="wf-clinic-eyebrow"><span>${disponibilidad}</span></p>`;
 
   return `
     <header class="wf-clinic-hero" id="top">
@@ -38,7 +39,7 @@ export function renderOverlayHero(client: SiteClient, mediaLayer: string): strin
         <p class="wf-clinic-hero-lede">${escapeHtml(client.descripcion)}</p>
         <div class="wf-clinic-actions">
           <a class="wf-clinic-btn wf-clinic-btn--primary" href="${escapeAttribute(client.cta.url)}">${renderIcon("message", "wf-icon")}<span>${escapeHtml(client.cta.texto)}</span></a>
-          <a class="wf-clinic-btn wf-clinic-btn--glass" href="#servicios"><span>Ver tratamientos</span>${renderIcon("arrow-right", "wf-icon")}</a>
+          <a class="wf-clinic-btn wf-clinic-btn--glass" href="#servicios"><span>${escapeHtml(client.ctaSecundariaTexto ?? "Ver tratamientos")}</span>${renderIcon("arrow-right", "wf-icon")}</a>
         </div>
         ${trustRow}
       </div>
