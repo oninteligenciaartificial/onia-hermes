@@ -75,6 +75,11 @@ modulos, verticales o integraciones. No son la definicion del core.
     rubro + nivel + modulos a partir de las respuestas de una empresa.
     `resolveDiagnostic()` nunca inventa un upsell: si ningun nivel alcanza,
     devuelve null (revision humana). Demo: `node onia-core/business-diagnostic.mjs`.
+  - `system-map.mjs`: las 4 capas en una vista (core -> rubro -> modulos que
+    necesita cada rubro -> que rubros REPITEN cada modulo). Reutiliza
+    `report.mjs`/`vertical-extensions.mjs`, no duplica su logica.
+    `sharedModules()`/`unusedModules()` identifican candidatos reales a
+    modulo compartido vs. huerfanos del catalogo. Demo: `node onia-core/system-map.mjs`.
 - `modules/`: modulos vendibles (add-ons activables SOBRE el core, FUERA del
   contrato congelado — el core no es inventario/ventas/contabilidad/facturacion/
   nomina). `commerce.json` (catalogo/inventario/cotizaciones B2B/ventas-caja),
@@ -126,10 +131,11 @@ npm run validate:onia-core                        # invariantes del contrato cor
 node onia-core/modules/validate-modules.mjs       # validador de modulos vendibles
 node onia-core/validate-business-tiers.mjs        # validador de niveles de tamano
 node onia-core/validate-vertical-extensions.mjs   # validador del catalogo por rubro
-node --test onia-core/*.test.mjs onia-core/logic/*.test.mjs onia-core/modules/*.test.mjs   # 265 tests
+node --test onia-core/*.test.mjs onia-core/logic/*.test.mjs onia-core/modules/*.test.mjs   # 280 tests
 node onia-core/report.mjs                         # foto de avance por vertical/producto/modulo
 node onia-core/install-plan.mjs <track|producto>   # plan de instalacion de un vertical
 node onia-core/business-diagnostic.mjs            # demo del cuestionario -> rubro+nivel+modulos
+node onia-core/system-map.mjs                     # core -> rubro -> modulos -> que rubros repiten cada modulo
 ```
 
 ## Politica de distribucion

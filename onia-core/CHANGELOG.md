@@ -1,5 +1,29 @@
 # ONIA Core Changelog
 
+## system-map — 2026-07-06 (core -> rubro -> modulos -> repeticion, en una vista)
+
+- `system-map.mjs` + `system-map.test.mjs`: combina `buildCoreReport` (de
+  `report.mjs`) con `vertical-extensions.mjs` para mostrar las 4 capas del
+  sistema de una vez: (1) CORE — 18 entidades/14 capabilities de capa core,
+  lo universal; (2) RUBROS — los 4 verticalTracks con su pack y sus funciones
+  propias (ej. 11 entidades dentales, 10 ganaderas); (3) MODULOS — que
+  modulos necesita cada rubro (derivado de moduleCapabilities+providedModules,
+  no recalculado); (4) REPETICION — una matriz modulo->rubros que lo usan,
+  ordenada de mayor a menor repeticion. No duplica logica de report.mjs, la
+  combina. `sharedModules(map, minRubros)` y `unusedModules(map)` como
+  helpers de analisis.
+- **Hallazgo real, no corregido sin preguntar:** `accounting`/`invoicing`/
+  `payroll` se repiten en 3/4 rubros (gestios-general, dentagest-clinical,
+  proveegest-electrico) — valida por que viven como modulo compartido.
+  `commerce` se repite en 2/4 (dental + distribucion). PERO
+  **`ganadero-offline` no usa NINGUN modulo compartido**: ninguno de los 5
+  modulos declara ese track en su `verticalTracks`. Podria ser intencional
+  (offline-first, producto en pausa comercial) o un descuido de copiar el
+  mismo listado de 3 verticales sin reconsiderar Ganadero OS explicitamente.
+  Se deja como pregunta abierta para Sergio, NO se agrego ganadero-offline a
+  ningun modulo sin confirmar.
+- +11 tests (280 total, 4 validadores verdes). Demo: `node onia-core/system-map.mjs`.
+
 ## vertical-extensions — 2026-07-06 (verificado contra DentaGest real)
 
 - El catalogo dental se VERIFICO leyendo `prisma/schema.prisma` real de
