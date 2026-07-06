@@ -1,8 +1,16 @@
 import { redirect } from "next/navigation";
+import { headers } from "next/headers";
 
-// La raiz va directo al panel real (ONIA Center). El viejo snapshot estatico
-// "Hermes OS Control Center" (jun 2026) quedo obsoleto; la info de migracion
-// vive en hermes-content/docs y ya no se sirve como homepage.
-export default function Home() {
-  redirect("/onia-center");
+// La raiz depende del dominio: onia-center.vercel.app (panel interno) sigue
+// yendo a /onia-center. Cualquier otro host (el proyecto/dominio propio de
+// Nuvia) va directo a la tienda. Revisar esta heuristica si onia-center suma
+// un dominio propio que no contenga "onia-center".
+export default async function Home() {
+  const host = (await headers()).get("host") || "";
+
+  if (host.includes("onia-center")) {
+    redirect("/onia-center");
+  }
+
+  redirect("/nuvia");
 }
