@@ -1,8 +1,11 @@
 // Export SDK del workflow n8n "ONIA - Reporte diario Sergio + Arthur" (id xQaO3Sfsl9XzMiid).
-// Cron Lun-Sab 07:00 La Paz -> SSH `docker exec -i onia-center node - < /opt/onia/arthur-report.mjs`:
-// da las tareas del dia a Sergio y a Arthur (obligaciones del acuerdo 60 dias + CRM vivo) y
-// verifica las ganancias de Arthur (payment_commissions por estado + ventas + progreso trial).
-// Determinista (sin LLM); solo suma lo REGISTRADO. Telegram a Sergio.
+// Cron Lun-Sab 07:00 La Paz -> lee el repo pulse (SSH cat, generado por
+// .github/workflows/repo-pulse.yml) -> SSH `docker exec -i onia-center node - <
+// /opt/onia/arthur-report.mjs`: da las tareas del dia a Sergio y a Arthur (obligaciones
+// del acuerdo 60 dias + CRM vivo) y verifica las ganancias de Arthur (payment_commissions
+// por estado + ventas + progreso trial). Determinista (sin LLM); solo suma lo REGISTRADO.
+// El Code final agrega la seccion de actividad de repo (commits por carril) al texto que
+// arma el propio script. Telegram a Sergio.
 // Recrear con create_workflow_from_code; luego setNodeCredential (sshPrivateKey, telegramApi).
 import { workflow, node, trigger, expr, newCredential } from '@n8n/workflow-sdk';
 
@@ -11,6 +14,17 @@ const cronTrigger = trigger({
   version: 1.2,
   config: { name: 'Lun-Sab 07:00', parameters: { rule: { interval: [{ field: 'cronExpression', expression: '0 7 * * 1-6' }] } } },
   output: [{}]
+});
+
+const leerRepoPulse = node({
+  type: 'n8n-nodes-base.ssh',
+  version: 1,
+  config: {
+    name: 'Leer repo pulse',
+    parameters: { resource: 'command', operation: 'execute', authentication: 'privateKey', command: "cat /opt/onia/state/repo-pulse-latest.json 2>/dev/null || echo '{}'", cwd: '/root' },
+    credentials: { sshPrivateKey: newCredential('ONIA VPS SSH', '4XKauEX3b6cqaDhW') }
+  },
+  output: [{ stdout: '{"totalCommits":0,"byLane":[],"staleLanes":[]}', code: 0, stderr: '' }]
 });
 
 const correrReporte = node({
@@ -32,7 +46,7 @@ const extraerTexto = node({
     parameters: {
       mode: 'runOnceForAllItems',
       language: 'javaScript',
-      jsCode: "const raw = ($input.first().json.stdout || '').trim();\nlet s;\ntry { s = JSON.parse(raw.split('\\n').pop()); } catch (e) { s = { ok: false, error: 'parse' }; }\nconst text = s.ok ? s.text : ('Reporte Arthur - ERROR: ' + (s.error || 'desconocido'));\nreturn [{ json: { text: text } }];"
+      jsCode: "let pulse = {};\ntry {\n  const pulseRaw = (($('Leer repo pulse').first().json.stdout) || '{}').trim();\n  pulse = JSON.parse(pulseRaw) || {};\n} catch (e) {\n  pulse = {};\n}\nconst raw = ($input.first().json.stdout || '').trim();\nlet s;\ntry { s = JSON.parse(raw.split('\\n').pop()); } catch (e) { s = { ok: false, error: 'parse' }; }\nlet text = s.ok ? s.text : ('Reporte Arthur - ERROR: ' + (s.error || 'desconocido'));\nif (s.ok && pulse && typeof pulse.totalCommits === 'number') {\n  const topLanes = (pulse.byLane || []).slice(0, 5).map((l) => `${l.lane} (${l.commits})`).join(', ');\n  const stale = (pulse.staleLanes || []).slice(0, 5).map((l) => `${l.lane}${l.daysSinceLastCommit != null ? ' (' + l.daysSinceLastCommit + 'd)' : ' (sin historial)'}`);\n  const lines = [`Repo (ultimas ${pulse.lookbackHours || '?'}h): ${pulse.totalCommits} commits.`];\n  if (topLanes) lines.push(`Carriles activos: ${topLanes}`);\n  if (stale.length) lines.push(`Sin actividad: ${stale.join(', ')}`);\n  text = text + '\\n\\n' + lines.join('\\n');\n}\nreturn [{ json: { text: text } }];"
     }
   },
   output: [{ text: 'ONIA - Plan del dia...' }]
@@ -51,6 +65,7 @@ const avisarSergio = node({
 
 export default workflow('onia-reporte-sergio-arthur', 'ONIA - Reporte diario Sergio + Arthur')
   .add(cronTrigger)
+  .to(leerRepoPulse)
   .to(correrReporte)
   .to(extraerTexto)
   .to(avisarSergio);

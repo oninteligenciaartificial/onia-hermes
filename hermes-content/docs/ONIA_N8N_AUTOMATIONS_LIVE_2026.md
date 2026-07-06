@@ -27,7 +27,7 @@ SSH previo corre `/opt/onia/check-secret.sh` que compara contra
 | ONIA - Nuevo Lead (speed-to-lead) | `WA6VkNu5OHo6Npem` | Webhook on-demand | `POST /webhook/nuevo-lead` `{secret,company,contact,channel,message}`: crea el lead + califica + redacta la primera respuesta (borrador) al toque. Bridge inbound (formulario/WhatsApp/Hermes) -> CRM -> Vendedor. NO envia | Por lead |
 | ONIA - Nuvia Sourcing Score (v1) | `ECC1THa2kTmOGepY` | Webhook on-demand | `POST /webhook/nuvia-candidato` `{secret,candidates[]}`: score ONIA-Bolivia (flete/arancel/demanda/precio) por SSH, upsert en `nuvia_sourcing_candidates`. Read-only, sin contacto ni pago | Por lote |
 | ONIA - Reporte diario Sergio + Arthur | `xQaO3Sfsl9XzMiid` | Lun-Sab 07:00 | SSH `arthur-report.mjs`: tareas del dia para Sergio y Arthur (obligaciones acuerdo 60d + CRM vivo) + verificacion de ganancias de Arthur (payment_commissions por estado + progreso trial). Determinista, solo suma lo registrado | Diario |
-| ONIA Center - Briefing diario operativo | `ONIADailyBrief001` | Lun-Sab 06:45 | SSH `briefing-run.sh` -> `briefing-run.mjs` (docker exec onia-center): genera+registra el plan diario por rol (Sergio/Arthur/seller), deduplicado. La `ONIA_CENTER_INTERNAL_API_KEY` se lee del contenedor, sin `$env` | Plan diario |
+| ONIA Center - Briefing diario operativo | `ONIADailyBrief001` | Lun-Sab 06:45 | Lee el repo pulse (SSH cat) -> SSH `briefing-run.sh` -> `briefing-run.mjs` (docker exec onia-center): genera+registra el plan diario por rol (Sergio/Arthur/seller), deduplicado, con seccion de actividad de repo. La `ONIA_CENTER_INTERNAL_API_KEY` se lee del contenedor, sin `$env` | Plan diario + repo |
 
 Los 5 crones fueron probados end-to-end antes de activar (ejecución real + Telegram
 recibido). El de propuestas (webhook) se probó con slug real (`bench`), secret
@@ -48,6 +48,17 @@ inválido (401) e inyección de slug (401) — 3/3 ejecuciones OK.
   con `$env.TELEGRAM_BOT_TOKEN` -> nodo **Telegram con credencial** `telegramApi` +
   chat ID hardcodeado; eliminado el IF `Telegram configurado?` (chequeaba `$env`).
   Probado en vivo (ejecución manual: briefing commit OK, Telegram `message_id` 767).
+- **Repo pulse (2026-07-06):** los bots de plan diario (Briefing + Reporte Sergio/Arthur)
+  ahora leen el repo. Mecanismo sin secrets nuevos: `.github/workflows/repo-pulse.yml`
+  (cron 06:00 La Paz + `workflow_dispatch`) corre `scripts/repo-pulse.mjs` en el checkout
+  de Actions (git log --all sobre historial completo + todas las ramas, clasifica cada
+  commit por carril con rutas reales del repo, detecta carriles sin actividad >=3 dias) y
+  sube el JSON al VPS por SSH reusando `ONIA_VPS_SSH_KEY` (el mismo del deploy) a
+  `/opt/onia/state/repo-pulse-latest.json`. Los workflows n8n solo hacen `cat` de ese
+  archivo (nodo SSH "Leer repo pulse", sin tocar GitHub desde el VPS) y agregan una
+  seccion "Repo (ultimas Nh): X commits. Carriles activos: ..." al texto de Telegram.
+  Probado en vivo: Action corrida por `workflow_dispatch` (verde, JSON en el VPS),
+  ambos workflows n8n republicados y probados (`message_id` 769 Briefing, 770 Reporte).
 - **Propuestas:** el pipeline viejo (`FGqyNTrQfMIFiVG2`) apuntaba a `127.0.0.1:3031`
   (inalcanzable desde el contenedor n8n) y usaba un generador ad-hoc. Reemplazado
   por `ONIA - Generar Propuesta (oficial)` (arriba), que corre el generador oficial
