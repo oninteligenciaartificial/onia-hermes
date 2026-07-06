@@ -1,70 +1,16 @@
 import { nuvia, nuviaCartProducts } from "@/lib/nuvia-data";
-
-export type NuviaCheckoutLineInput = {
-  id: string;
-  qty?: number;
-  quantity?: number;
-};
-
-export type NuviaCheckoutCustomerInput = {
-  name?: string;
-  email?: string;
-  phone?: string;
-  taxId?: string;
-  city?: string;
-  address?: string;
-  notes?: string;
-};
-
-export type NuviaCheckoutRequest = {
-  storeSlug?: string;
-  items?: NuviaCheckoutLineInput[];
-  customer?: NuviaCheckoutCustomerInput;
-  provider?: "bnb_qr_simple" | "yape_manual" | "bank_transfer_manual";
-};
-
-export type NuviaCheckoutLine = {
-  id: string;
-  title: string;
-  brand: string;
-  category: string;
-  quantity: number;
-  unitPrice: number | null;
-  lineTotal: number | null;
-  discountPercent: number;
-  discountTotal: number;
-  priceLabel: string;
-};
-
-export type NuviaCheckoutResponse = {
-  ok: boolean;
-  mode: "payment" | "quote" | "configuration_pending" | "invalid_request";
-  message: string;
-  order: {
-    id: string | null;
-    publicCode: string;
-    persisted: boolean;
-    subtotal: number;
-    discountTotal: number;
-    total: number;
-    currency: string;
-    items: NuviaCheckoutLine[];
-  };
-  payment: {
-    id: string | null;
-    provider: string;
-    status: "requires_configuration" | "pending" | "processing" | "paid" | "failed" | "expired";
-    qrImageUrl?: string | null;
-    qrPayload?: string | null;
-    checkoutUrl?: string | null;
-    expiresAt?: string | null;
-    requiredCredentials?: string[];
-    providerReference?: string | null;
-  } | null;
-  requiredConfiguration: string[];
-};
-
-type PaymentStatus = NonNullable<NuviaCheckoutResponse["payment"]>["status"];
+import {
+  buildNuviaWhatsappUrl,
+  buildOrderLines,
+  buildWhatsappOrderMessage,
+  computeOrderTotals,
+  validateCheckoutInput,
+  type CheckoutCustomer,
+  type CheckoutDelivery,
+  type CheckoutLine,
+  type NuviaCheckoutResponse,
+  type OrderTotals,
+} from "@/lib/nuvia-order";
 
 type SupabaseConfig = {
   url: string;
@@ -74,17 +20,25 @@ type SupabaseConfig = {
 
 type PersistedOrder = {
   id: string | null;
-  publicCode: string | null;
+  publicCode: string;
   persisted: boolean;
   requiredConfiguration: string[];
 };
+
+type PaymentStatus =
+  | "requires_configuration"
+  | "pending"
+  | "processing"
+  | "paid"
+  | "failed"
+  | "expired";
 
 type PaymentCreationInput = {
   orderId: string | null;
   publicCode: string;
   amount: number;
   currency: string;
-  lines: NuviaCheckoutLine[];
+  lines: CheckoutLine[];
 };
 
 type PaymentCreationResult = {
@@ -103,17 +57,10 @@ const DEFAULT_CURRENCY = "BOB";
 const STORE_SLUG = "nuvia";
 
 function createPublicCode() {
-  return `NV-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).slice(2, 6).toUpperCase()}`;
-}
-
-function getPositiveQuantity(item: NuviaCheckoutLineInput) {
-  const raw = item.quantity ?? item.qty ?? 1;
-  const value = Number(raw);
-  if (!Number.isFinite(value)) {
-    return 1;
-  }
-
-  return Math.min(99, Math.max(1, Math.floor(value)));
+  const random =
+    globalThis.crypto?.randomUUID?.().replace(/-/g, "").slice(0, 8) ??
+    Math.random().toString(36).slice(2, 10);
+  return `NV-${Date.now().toString(36).toUpperCase()}-${random.toUpperCase()}`;
 }
 
 function getSupabaseConfig(): SupabaseConfig | null {
@@ -193,64 +140,60 @@ async function getStoreId(config: SupabaseConfig) {
 
 async function persistOrder({
   customer,
-  discountTotal,
+  delivery,
   lines,
+  totals,
   publicCode,
-  subtotal,
-  total,
 }: {
-  customer: NuviaCheckoutCustomerInput;
-  discountTotal: number;
-  lines: NuviaCheckoutLine[];
+  customer: CheckoutCustomer;
+  delivery: CheckoutDelivery;
+  lines: CheckoutLine[];
+  totals: OrderTotals;
   publicCode: string;
-  subtotal: number;
-  total: number;
 }): Promise<PersistedOrder> {
   const config = getSupabaseConfig();
   if (!config) {
-    return {
-      id: null,
-      publicCode,
-      persisted: false,
-      requiredConfiguration: getMissingSupabaseConfig(),
-    };
+    return { id: null, publicCode, persisted: false, requiredConfiguration: getMissingSupabaseConfig() };
   }
 
   const storeId = await getStoreId(config);
   if (!storeId) {
-    return {
-      id: null,
-      publicCode,
-      persisted: false,
-      requiredConfiguration: ["web_factory.stores row for slug=nuvia"],
-    };
+    return { id: null, publicCode, persisted: false, requiredConfiguration: ["web_factory.stores row for slug=nuvia"] };
   }
+
+  const deliveryCity = delivery.city === "Otra" && delivery.cityOther ? delivery.cityOther : delivery.city;
+  const deliveryAddress = [
+    delivery.address,
+    delivery.zone ? `Zona: ${delivery.zone}` : "",
+    delivery.reference ? `Ref: ${delivery.reference}` : "",
+  ]
+    .filter(Boolean)
+    .join(" | ");
 
   const createdOrders = await supabaseRequest<Array<{ id: string; public_code: string }>>(config, "orders", {
     method: "POST",
-    headers: {
-      prefer: "return=representation",
-    },
+    headers: { prefer: "return=representation" },
     body: JSON.stringify({
       store_id: storeId,
       public_code: publicCode,
       customer_name: customer.name || null,
       customer_email: customer.email || null,
       customer_phone: customer.phone || null,
-      customer_tax_id: customer.taxId || null,
-      delivery_city: customer.city || null,
-      delivery_address: customer.address || null,
-      customer_notes: customer.notes || null,
-      status: total > 0 ? "pending_payment" : "draft",
-      payment_status: total > 0 ? "pending" : "unpaid",
-      subtotal,
-      discount_total: discountTotal,
-      total,
+      customer_tax_id: null,
+      delivery_city: deliveryCity || null,
+      delivery_address: deliveryAddress || null,
+      customer_notes: delivery.notes || null,
+      status: totals.total > 0 ? "pending_payment" : "draft",
+      payment_status: "unpaid",
+      subtotal: totals.subtotal,
+      discount_total: totals.discountTotal,
+      total: totals.total,
       currency: DEFAULT_CURRENCY,
       raw: {
         source: "nuvia-next-api",
+        channel: "whatsapp",
         product_source: "web-factory/data/clients/nuvia.json",
-        contact_configured: Boolean(nuvia.contacto.whatsapp || nuvia.contacto.email),
+        contact_configured: Boolean(nuvia.contacto.whatsapp),
       },
     }),
   });
@@ -282,20 +225,17 @@ async function persistOrder({
     ),
   });
 
-  return {
-    id: order.id,
-    publicCode: order.public_code,
-    persisted: true,
-    requiredConfiguration: [],
-  };
+  return { id: order.id, publicCode: order.public_code, persisted: true, requiredConfiguration: [] };
 }
 
-function getMissingBnbConfig() {
+// Dormido: se reactiva cuando lleguen credenciales BNB (ver spec §6).
+export function getMissingBnbConfig() {
   const required = ["BNB_ACCOUNT_ID", "BNB_AUTHORIZATION_ID", "BNB_AUTH_BASE_URL", "BNB_QR_BASE_URL"];
   return required.filter((key) => !process.env[key]);
 }
 
-function getBnbBaseConfig() {
+// Dormido: se reactiva cuando lleguen credenciales BNB (ver spec §6).
+export function getBnbBaseConfig() {
   const missing = getMissingBnbConfig();
   if (missing.length) {
     return { missing };
@@ -310,7 +250,8 @@ function getBnbBaseConfig() {
   };
 }
 
-async function createBnbQrPayment(input: PaymentCreationInput): Promise<PaymentCreationResult> {
+// Dormido: se reactiva cuando lleguen credenciales BNB (ver spec §6).
+export async function createBnbQrPayment(input: PaymentCreationInput): Promise<PaymentCreationResult> {
   const config = getBnbBaseConfig();
 
   if (config.missing.length) {
@@ -431,7 +372,8 @@ async function createBnbQrPayment(input: PaymentCreationInput): Promise<PaymentC
   };
 }
 
-async function persistPayment({
+// Dormido: se reactiva cuando lleguen credenciales BNB (ver spec §6).
+export async function persistPayment({
   orderId,
   payment,
   publicCode,
@@ -498,142 +440,79 @@ async function persistPayment({
   return paymentId;
 }
 
-export async function createNuviaCheckout(
-  input: NuviaCheckoutRequest,
-): Promise<NuviaCheckoutResponse> {
-  const requestedItems = Array.isArray(input.items) ? input.items : [];
-  const lines = requestedItems
-    .map((item) => {
-      const product = nuviaCartProducts.find((entry) => entry.id === item.id);
-      if (!product) {
-        return null;
-      }
+function invalidResponse(message: string): NuviaCheckoutResponse {
+  return {
+    ok: false,
+    mode: "invalid_request",
+    message,
+    order: {
+      publicCode: createPublicCode(),
+      persisted: false,
+      subtotal: 0,
+      discountTotal: 0,
+      total: 0,
+      currency: DEFAULT_CURRENCY,
+      items: [],
+    },
+    whatsappUrl: null,
+    requiredConfiguration: [],
+  };
+}
 
-      const quantity = getPositiveQuantity(item);
-      const unitPrice = typeof product.priceValue === "number" ? product.priceValue : null;
-      const lineSubtotal = unitPrice === null ? null : Number((unitPrice * quantity).toFixed(2));
-      const discountPercent = product.discountPercent || 0;
-      const lineDiscount = lineSubtotal === null ? 0 : Number((lineSubtotal * (discountPercent / 100)).toFixed(2));
+export async function createNuviaCheckout(input: unknown): Promise<NuviaCheckoutResponse> {
+  const validation = validateCheckoutInput(input);
+  if (!validation.ok) {
+    const firstError = Object.values(validation.errors)[0] || "Datos de checkout inválidos.";
+    return invalidResponse(firstError);
+  }
 
-      return {
-        id: product.id,
-        title: product.title,
-        brand: product.brand,
-        category: product.category,
-        quantity,
-        unitPrice,
-        lineTotal: lineSubtotal,
-        discountPercent,
-        discountTotal: lineDiscount,
-        priceLabel: product.priceLabel,
-      };
-    })
-    .filter(Boolean) as NuviaCheckoutLine[];
-
-  const publicCode = createPublicCode();
-
+  const { items, customer, delivery } = validation.data;
+  const lines = buildOrderLines(items, nuviaCartProducts);
   if (!lines.length) {
-    return {
-      ok: false,
-      mode: "invalid_request",
-      message: "Agrega productos al carrito antes de crear checkout.",
-      order: {
-        id: null,
-        publicCode,
-        persisted: false,
-        subtotal: 0,
-        discountTotal: 0,
-        total: 0,
-        currency: DEFAULT_CURRENCY,
-        items: [],
-      },
-      payment: null,
-      requiredConfiguration: [],
-    };
+    return invalidResponse("No encontramos productos válidos en el carrito.");
   }
 
-  const allPriced = lines.every((line) => typeof line.unitPrice === "number");
-  const subtotal = Number(lines.reduce((sum, line) => sum + (line.lineTotal || 0), 0).toFixed(2));
-  const discountTotal = Number(lines.reduce((sum, line) => sum + line.discountTotal, 0).toFixed(2));
-  const total = Number((subtotal - discountTotal).toFixed(2));
-  const customer = input.customer || {};
-
-  const persistedOrder = await persistOrder({
-    customer,
-    discountTotal,
-    lines,
-    publicCode,
-    subtotal,
-    total,
-  });
-
-  if (!allPriced || total <= 0) {
-    return {
-      ok: true,
-      mode: "quote",
-      message: "El carrito quedo como cotizacion porque faltan precios finales en uno o mas productos.",
-      order: {
-        id: persistedOrder.id,
-        publicCode: persistedOrder.publicCode || publicCode,
-        persisted: persistedOrder.persisted,
-        subtotal,
-        discountTotal,
-        total,
-        currency: DEFAULT_CURRENCY,
-        items: lines,
-      },
-      payment: null,
-      requiredConfiguration: persistedOrder.requiredConfiguration,
+  const totals = computeOrderTotals(lines);
+  const fallbackCode = createPublicCode();
+  let persisted: PersistedOrder;
+  try {
+    persisted = await persistOrder({ customer, delivery, lines, totals, publicCode: fallbackCode });
+  } catch {
+    // Degradación elegante: si Supabase falla, el pedido igual sale por WhatsApp
+    // (no persistido) en lugar de romper el checkout con un 500.
+    persisted = {
+      id: null,
+      publicCode: fallbackCode,
+      persisted: false,
+      requiredConfiguration: ["supabase-persistencia-degradada"],
     };
   }
+  const publicCode = persisted.publicCode || fallbackCode;
 
-  const payment = await createBnbQrPayment({
-    orderId: persistedOrder.id,
-    publicCode: persistedOrder.publicCode || publicCode,
-    amount: total,
-    currency: DEFAULT_CURRENCY,
-    lines,
-  });
-  const paymentId = await persistPayment({
-    orderId: persistedOrder.id,
-    payment,
-    publicCode: persistedOrder.publicCode || publicCode,
-    total,
-  });
+  const message = buildWhatsappOrderMessage({ publicCode, lines, totals, customer, delivery });
+  const whatsappUrl = buildNuviaWhatsappUrl(nuvia.contacto.whatsapp || "", message);
 
-  const requiredConfiguration = [
-    ...persistedOrder.requiredConfiguration,
-    ...payment.requiredCredentials,
-  ];
+  const requiredConfiguration = [...persisted.requiredConfiguration];
+  if (!whatsappUrl) {
+    requiredConfiguration.push("contacto.whatsapp");
+  }
 
   return {
     ok: true,
-    mode: payment.status === "requires_configuration" ? "configuration_pending" : "payment",
-    message:
-      payment.status === "requires_configuration"
-        ? "La orden fue calculada. Falta configurar Supabase y/o BNB para generar QR real."
-        : "Checkout creado. Verifica el estado del pago desde backend antes de marcar la orden como pagada.",
+    mode: whatsappUrl ? "whatsapp" : "configuration_pending",
+    message: whatsappUrl
+      ? "Pedido listo. Te abrimos WhatsApp para enviarlo a Nuvia."
+      : "Pedido calculado. Falta configurar el WhatsApp de Nuvia para enviar el pedido.",
     order: {
-      id: persistedOrder.id,
-      publicCode: persistedOrder.publicCode || publicCode,
-      persisted: persistedOrder.persisted,
-      subtotal,
-      discountTotal,
-      total,
+      publicCode,
+      persisted: persisted.persisted,
+      subtotal: totals.subtotal,
+      discountTotal: totals.discountTotal,
+      total: totals.total,
       currency: DEFAULT_CURRENCY,
       items: lines,
     },
-    payment: {
-      id: paymentId,
-      provider: "bnb_qr_simple",
-      status: payment.status,
-      qrImageUrl: payment.qrImageUrl,
-      qrPayload: payment.qrPayload,
-      checkoutUrl: payment.checkoutUrl,
-      expiresAt: payment.expiresAt,
-      requiredCredentials: payment.requiredCredentials,
-      providerReference: payment.providerReference || null,
-    },
+    whatsappUrl,
     requiredConfiguration,
   };
 }

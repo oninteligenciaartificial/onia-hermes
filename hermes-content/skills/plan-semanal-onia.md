@@ -1,87 +1,88 @@
 # Skill: plan-semanal-onia
 
-## Objetivo
-Crear un plan semanal de contenido para ONIA usando investigacion fiable de tendencias IA, tendencias de redes sociales y prioridades comerciales de ONIA.
+## Cuando usar
+Cuando Sergio pida el plan semanal de contenido de ONIA, general o enfocado en
+un tema/industria. Combina investigacion fiable de tendencias con las
+prioridades comerciales de la semana.
 
 ## Comandos
 
 ### Plan semanal ONIA
-Generar un plan semanal general para ONIA.
+Plan semanal general.
 
 ### Plan semanal ONIA: <tema o industria>
-Generar un plan semanal enfocado en el tema indicado.
-Ejemplos:
+Plan enfocado. Ejemplos:
 - `Plan semanal ONIA: clinicas dentales Bolivia`
 - `Plan semanal ONIA: automatizacion para pymes`
 - `Plan semanal ONIA: agentes IA para ventas`
 
-## Flujo recomendado
-1. Investigar tendencias actuales con la skill `tendencias-ia-redes`.
-2. Filtrar solo hallazgos con fuentes fiables.
-3. Convertir los hallazgos en ideas originales para ONIA.
-4. Proponer calendario semanal.
-5. Recomendar una pieza prioritaria para producir primero.
-6. Pedir aprobacion antes de publicar o ejecutar `ig-publish`.
+## Flujo premium
+1. **Retro rapida**: revisar que se publico la semana pasada y que funciono
+   (si hay datos de rendimiento, usarlos; si no, decirlo y seguir).
+2. **Investigar** tendencias actuales con la skill `tendencias-ia-redes`.
+3. **Filtrar**: solo hallazgos con fuentes fiables; descartar rumores.
+4. **Alinear con negocio**: cruzar con prioridades comerciales de la semana
+   (prospeccion activa, propuestas abiertas, DentalGest/GestiOS/Web ONIA).
+   El contenido debe empujar lo que ONIA esta vendiendo esa semana.
+5. **Convertir** hallazgos en ideas originales para ONIA (nunca copiar).
+6. **Calendario**: proponer 5 piezas distribuidas en la semana.
+7. **Priorizar** una pieza para producir primero y desarrollarla completa.
+8. **Aprobar**: pedir aprobacion antes de producir en serie o publicar.
+
+## Mix de formatos recomendado (5 piezas)
+- 1-2 carruseles (skill `carruseles-onia`, pack `dark-product` por defecto).
+- 1-2 Reels/videos (skills `videos-virales-higgsfield` / `video-lab-higgsfield`).
+- 1 historia o pieza ligera (skill `historias-onia`).
+- Variar el objetivo: no hacer 5 piezas de venta dura; mezclar autoridad,
+  educacion y captacion.
 
 ## Uso de n8n
-n8n debe ser el orquestador para flujos recurrentes:
-- Disparador semanal.
-- Solicitud a Hermes para investigar tendencias.
-- Generacion del plan semanal.
-- Envio del resumen por Telegram.
-- Espera de aprobacion manual.
-- Publicacion solo si el usuario confirma.
+n8n orquesta el ciclo recurrente:
+- Disparador semanal -> solicitud a Hermes de investigacion.
+- Generacion del plan -> resumen por Telegram a Arthur Y Sergio.
+- Espera de aprobacion manual -> publicacion solo si se confirma.
 
-## Reglas de aprobacion
-- No publicar automaticamente.
-- No llamar `ig-publish` sin aprobacion explicita del usuario.
-- Si el usuario aprueba, publicar solo la pieza exacta aprobada.
-- Si hay dudas sobre imagen, caption, fecha u objetivo, pedir confirmacion antes de publicar.
+## Reglas de aprobacion (no negociables)
+- No publicar automaticamente. No llamar `ig-publish` sin aprobacion literal.
+- Aprobacion valida: `Apruebo publicar <pieza>`. `ok`/`dale` no publican.
+- Publicar SOLO la pieza exacta aprobada.
+- Duda sobre imagen, caption, fecha u objetivo -> confirmar antes de publicar.
 
 ## Formato de respuesta
 
-Responder siempre con:
-
 ### Resumen semanal
-- Objetivo de la semana.
+- Objetivo de la semana (ligado a una meta comercial concreta).
 - Audiencia principal.
 - Tema central.
 - Oportunidad detectada.
 
-### Hallazgos usados
-Lista breve de tendencias o actualizaciones usadas:
-- Hallazgo.
-- Fuente.
-- Nivel de confianza.
-- Por que importa para ONIA.
+### Retro (si hay historial)
+- Que se publico, que funciono, que se ajusta esta semana.
 
-### Calendario de contenido
-Proponer 5 piezas:
-- Dia sugerido.
-- Plataforma principal.
-- Formato: Reel, carrusel, post LinkedIn, Short, historia o pin.
-- Hook.
-- Idea central.
-- CTA.
+### Hallazgos usados
+Por cada uno: hallazgo, fuente, nivel de confianza, por que importa para ONIA.
+
+### Calendario de contenido (5 piezas)
+Por pieza: dia sugerido, plataforma, formato (Reel, carrusel, post LinkedIn,
+Short, historia o pin), hook, idea central, CTA y skill que la produce.
 
 ### Pieza prioritaria
-Elegir una pieza para producir primero:
-- Titulo.
-- Objetivo.
+- Titulo y objetivo.
 - Guion por slides o estructura del video.
-- Caption.
-- Hashtags.
+- Caption y hashtags.
 - Prompt visual original.
-- Siguiente accion recomendada.
+- Siguiente accion recomendada con comando exacto
+  (ej. `Genera carrusel ONIA: <tema> | <objetivo> | <audiencia>`).
 
 ### Aprobacion
-Cerrar con:
+Cerrar siempre con:
 `Para publicar, responde: Apruebo publicar <pieza>.`
 
 ## Criterios de calidad
-- El plan debe ser concreto y ejecutable en 7 dias.
-- Cada tendencia factual debe tener fuente.
-- Las ideas deben sonar utiles para empresas bolivianas, no genericas.
-- Priorizar ventas, leads, automatizacion, atencion al cliente, reportes, desarrollo web e IA aplicada.
+- Ejecutable en 7 dias reales con la capacidad actual (Higgsfield en modo
+  manual y creditos limitados: no planear 5 videos pesados).
+- Cada tendencia factual con fuente; sin claims absolutos ni promesas.
+- Ideas utiles para empresas bolivianas, no genericas de LinkedIn global.
+- Priorizar: ventas, leads, automatizacion, atencion al cliente, reportes,
+  desarrollo web e IA aplicada.
 - No copiar contenido de terceros.
-- Evitar promesas absolutas o claims sin evidencia.

@@ -410,6 +410,10 @@ Session B should not edit publishing scripts unless coordinating first.
 - Nuvia local preview stability runbook lives in `web-factory/NUVIA_LOCAL_PREVIEW_RUNBOOK.md`.
 - Nuvia price automation runbook lives in `web-factory/docs/NUVIA_PRICE_AUTOMATION.md`.
 - Nuvia product harvester scripts live in `web-factory/harvester/product/`.
+- Nuvia app code lives in `web-factory/apps/site` (routes `src/app/nuvia/**`, same
+  Next.js app as onia-center/vendedores). Deploys as its OWN Vercel project
+  `nuvia-store` (domain `nuvia-store.vercel.app`), same repo/commit as the
+  `onia-center` project — see `hermes-content/docs/ONIA_NUVIA_DOMINIO_PROPIO_20260706.md`.
 - Global Web Factory design stack lives in `C:\Users\PC\.codex\design-stack\DESIGN_STACK.md`; project usage notes live in `web-factory/DESIGN_STACK.md`.
 - Use Spanish names for Hermes skills.
 - Use English uppercase names for repo-level operational docs.

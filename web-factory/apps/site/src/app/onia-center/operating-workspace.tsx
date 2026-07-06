@@ -487,6 +487,7 @@ const dailyOperationalCategories = new Set(["planning", "sales", "deep_work", "m
 const operationalDailyBlocks = sergioStrictScheduleBlocks
   .filter((block) => dailyOperationalCategories.has(block.category))
   .slice(0, 6);
+const dailyTimelineLayout = buildTimelineLayout(operationalDailyBlocks);
 
 const starterServiceUpdates: RuntimeNote[] = [
   {
@@ -692,6 +693,43 @@ function canViewNote(note: RuntimeNote, role: RoleId) {
 function timeRank(value: string) {
   const parsed = Date.parse(value);
   return Number.isFinite(parsed) ? parsed : 0;
+}
+
+function timeToMinutes(time: string) {
+  const [hours, minutes] = time.split(":").map(Number);
+  return (Number.isFinite(hours) ? hours : 0) * 60 + (Number.isFinite(minutes) ? minutes : 0);
+}
+
+// Convierte los bloques de agenda (start/end "HH:MM") en una grilla de horario
+// visual: rango redondeado a horas completas + cuantos slots de 30 min ocupa.
+// Puramente presentacional, no toca el array de bloques ni su origen. Asume
+// "HH:MM" bien formado y end > start (no cruza medianoche) porque la fuente
+// es el array estatico sergioStrictScheduleBlocks, no input externo.
+function buildTimelineLayout(blocks: { start: string; end: string }[]) {
+  if (!blocks.length) {
+    return { startMinutes: 0, slotCount: 0, hourMarks: [] as number[] };
+  }
+
+  const starts = blocks.map((block) => timeToMinutes(block.start));
+  const ends = blocks.map((block) => timeToMinutes(block.end));
+  const startMinutes = Math.floor(Math.min(...starts) / 60) * 60;
+  const endMinutes = Math.ceil(Math.max(...ends) / 60) * 60;
+  const slotCount = Math.max(1, Math.round((endMinutes - startMinutes) / 30));
+  const hourMarks: number[] = [];
+  for (let minute = startMinutes; minute <= endMinutes; minute += 60) {
+    hourMarks.push(minute);
+  }
+
+  return { startMinutes, slotCount, hourMarks };
+}
+
+function minutesToSlotLine(minutes: number, startMinutes: number) {
+  return Math.round((minutes - startMinutes) / 30) + 1;
+}
+
+function formatHourMark(minutes: number) {
+  const hours = Math.floor(minutes / 60) % 24;
+  return `${String(hours).padStart(2, "0")}:00`;
 }
 
 function normalizeText(value: string) {
@@ -2944,17 +2982,35 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
                     <small>Registro y cabos del dia.</small>
                   </div>
                 </div>
-                <div className="onia-calendar-timeline is-compact">
+                <div
+                  className="onia-day-timeline"
+                  style={{ gridTemplateRows: `repeat(${dailyTimelineLayout.slotCount}, minmax(22px, 1fr))` }}
+                >
+                  {dailyTimelineLayout.hourMarks.map((minute) => (
+                    <span
+                      aria-hidden="true"
+                      className="onia-day-timeline-hour"
+                      key={minute}
+                      style={{ gridRow: minutesToSlotLine(minute, dailyTimelineLayout.startMinutes) }}
+                    >
+                      {formatHourMark(minute)}
+                    </span>
+                  ))}
                   {operationalDailyBlocks.map((block) => {
                     const CategoryIcon = scheduleCategoryIcons[block.category] ?? Clock;
+                    const rowStart = minutesToSlotLine(timeToMinutes(block.start), dailyTimelineLayout.startMinutes);
+                    const rowEnd = minutesToSlotLine(timeToMinutes(block.end), dailyTimelineLayout.startMinutes);
                     return (
-                      <div className={`onia-calendar-block is-${block.category}`} key={block.id}>
+                      <div
+                        className={`onia-day-timeline-block is-${block.category}`}
+                        key={block.id}
+                        style={{ gridRow: `${rowStart} / ${rowEnd}` }}
+                      >
                         <span>
-                          <CategoryIcon size={14} />
-                          {block.start} - {block.end}
+                          <CategoryIcon size={13} />
+                          {block.start}-{block.end}
                         </span>
                         <strong>{block.title}</strong>
-                        <small>{block.meetingPolicy === "available" ? "reuniones permitidas" : "bloqueado"}</small>
                       </div>
                     );
                   })}
@@ -2977,12 +3033,19 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
               <ClipboardCheck size={16} />
               <strong>Tareas del dia</strong>
             </div>
-            <div className="onia-live-list">
+            <div className="onia-live-list onia-daily-task-list">
               {pendingTodayTasks.length ? (
-                pendingTodayTasks.map((task) => (
-                  <div key={task.id}>
-                    <span>{roleLabel(task.assignedRole)} / {task.priority} / {projectLabel(task.projectId)}</span>
-                    <strong>{task.title}</strong>
+                pendingTodayTasks.map((task, index) => (
+                  <div className={index === 0 ? "is-top-priority" : ""} key={task.id}>
+                    <span className={`onia-task-rank is-${task.priority}`} aria-hidden="true">
+                      {index + 1}
+                    </span>
+                    <div className="onia-task-body">
+                      <strong>{task.title}</strong>
+                      <small>
+                        {roleLabel(task.assignedRole)} &middot; prioridad {task.priority} &middot; {projectLabel(task.projectId)}
+                      </small>
+                    </div>
                     <select value={task.status} onChange={(event) => updateTaskStatus(task.id, event.target.value as RuntimeTask["status"])}>
                       <option value="todo">Por hacer</option>
                       <option value="doing">En proceso</option>
