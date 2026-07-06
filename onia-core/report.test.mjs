@@ -13,6 +13,7 @@ import {
   loadAdapters,
   renderReport,
   summarizeMappings,
+  verticalReadiness,
 } from "./report.mjs";
 
 const contract = loadOniaCoreContract();
@@ -138,6 +139,27 @@ describe("module coverage in the report", () => {
     assert.equal(moduleByCapability.get("catalog_inventory"), "commerce");
     assert.equal(moduleByCapability.get("quotes_b2b"), "commerce");
     assert.equal(moduleByCapability.get("knowledge_base"), "knowledge");
+  });
+});
+
+describe("verticalReadiness", () => {
+  it("ProveeGest esta listo: tiene pack y modulos que cubren sus capabilities", () => {
+    const readiness = verticalReadiness(contract, modules, "proveegest-electrico");
+    assert.equal(readiness.hasPack, true);
+    assert.deepEqual(readiness.uncoveredModuleCaps, []);
+    assert.equal(readiness.ready, true);
+    assert.deepEqual(readiness.missing, []);
+  });
+
+  it("sin modulos, marca las capabilities de modulo que faltan", () => {
+    const readiness = verticalReadiness(contract, [], "proveegest-electrico");
+    assert.equal(readiness.ready, false);
+    assert.ok(readiness.uncoveredModuleCaps.includes("catalog_inventory"));
+    assert.ok(readiness.missing.some((item) => item.startsWith("modulo:")));
+  });
+
+  it("devuelve null para un track inexistente", () => {
+    assert.equal(verticalReadiness(contract, modules, "ghost-track"), null);
   });
 });
 

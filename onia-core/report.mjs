@@ -144,6 +144,52 @@ export function buildCoreReport(contract, adapters = [], modules = []) {
   };
 }
 
+/**
+ * Readiness de un vertical para volverse un sistema vendible (tipo ProveeGest):
+ * necesita su pack (vocabulario del rubro) y que sus capabilities de capa modulo
+ * esten cubiertas por algun modulo. El adapter/producto es el paso siguiente.
+ */
+export function verticalReadiness(contract, modules = [], trackId) {
+  const track = contract.verticalTracks.find((item) => item.id === trackId);
+  if (!track) {
+    return null;
+  }
+
+  const capabilityLayerById = new Map(contract.capabilities.map((capability) => [capability.id, capability.layer]));
+  const moduleLayers = new Set(["activatable_module", "vertical_extension"]);
+  const moduleByCapability = new Map();
+  for (const module of modules) {
+    for (const capabilityId of module.activatesCapabilities ?? []) {
+      if (!moduleByCapability.has(capabilityId)) {
+        moduleByCapability.set(capabilityId, module.module);
+      }
+    }
+  }
+
+  const pack = getVerticalPack(contract, trackId);
+  const moduleCapabilities = track.requiredCapabilityIds
+    .filter((capabilityId) => moduleLayers.has(capabilityLayerById.get(capabilityId)))
+    .map((capabilityId) => ({ id: capabilityId, module: moduleByCapability.get(capabilityId) ?? null }));
+  const uncoveredModuleCaps = moduleCapabilities.filter((capability) => !capability.module).map((capability) => capability.id);
+
+  const missing = [];
+  if (!pack) {
+    missing.push("pack");
+  }
+  for (const capabilityId of uncoveredModuleCaps) {
+    missing.push(`modulo:${capabilityId}`);
+  }
+
+  return {
+    trackId,
+    hasPack: Boolean(pack),
+    moduleCapabilities,
+    uncoveredModuleCaps,
+    ready: Boolean(pack) && uncoveredModuleCaps.length === 0,
+    missing,
+  };
+}
+
 export function renderReport(report) {
   const lines = [];
   const header = report.contract;

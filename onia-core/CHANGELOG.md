@@ -1,5 +1,12 @@
 # ONIA Core Changelog
 
+## report/verticalReadiness — 2026-07-05 (parar un vertical nuevo)
+
+- `verticalReadiness(contract, modules, trackId)` en `report.mjs`: dice si un
+  vertical esta listo para ser un sistema vendible (tiene su pack + sus
+  capabilities de capa modulo cubiertas por algun modulo) y que le falta. Guia
+  para parar un sistema nuevo tipo ProveeGest sin ir a ojo. +3 tests (115 total).
+
 ## core/logic — 2026-07-05 (logica canonica del core: work_items)
 
 - Nueva carpeta `onia-core/logic/`: logica pura canonica del CORE (aditiva, no
