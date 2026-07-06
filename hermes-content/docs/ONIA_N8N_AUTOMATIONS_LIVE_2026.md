@@ -26,7 +26,7 @@ SSH previo corre `/opt/onia/check-secret.sh` que compara contra
 | ONIA - Agente Vendedor (borradores) | `C96NmbalLhaTEf0G` | Lun-Sab 08:30 | SSH `docker exec onia-center sales-agent.mjs`: lee leads del CRM, califica+redacta con LiteLLM, deja SOLO borradores (tarea + review_queue pending/sensitive/reviewer=sergio). NO envia | Solo si hay borradores |
 | ONIA - Nuevo Lead (speed-to-lead) | `WA6VkNu5OHo6Npem` | Webhook on-demand | `POST /webhook/nuevo-lead` `{secret,company,contact,channel,message}`: crea el lead + califica + redacta la primera respuesta (borrador) al toque. Bridge inbound (formulario/WhatsApp/Hermes) -> CRM -> Vendedor. NO envia | Por lead |
 | ONIA - Nuvia Sourcing Score (v1) | `ECC1THa2kTmOGepY` | Webhook on-demand | `POST /webhook/nuvia-candidato` `{secret,candidates[]}`: score ONIA-Bolivia (flete/arancel/demanda/precio) por SSH, upsert en `nuvia_sourcing_candidates`. Read-only, sin contacto ni pago | Por lote |
-| ONIA - Reporte diario Sergio + Arthur | `xQaO3Sfsl9XzMiid` | Lun-Sab 07:00 | SSH `arthur-report.mjs`: tareas del dia para Sergio y Arthur (obligaciones acuerdo 60d + CRM vivo) + verificacion de ganancias de Arthur (payment_commissions por estado + progreso trial). Determinista, solo suma lo registrado | Diario |
+| ONIA - Reporte diario Sergio + Arthur | `xQaO3Sfsl9XzMiid` | Lun-Sab 07:00 | SSH `arthur-report.mjs`: tareas del dia para Sergio y Arthur (obligaciones acuerdo 60d + CRM vivo) + verificacion de ganancias de Arthur (payment_commissions por estado + progreso trial). Determinista, solo suma lo registrado. Agrega repo pulse + docs hygiene (duplicados raiz/docs) al texto | Diario |
 | ONIA Center - Briefing diario operativo | `ONIADailyBrief001` | Lun-Sab 06:45 | Lee el repo pulse (SSH cat) -> SSH `briefing-run.sh` -> `briefing-run.mjs` (docker exec onia-center): genera+registra el plan diario por rol (Sergio/Arthur/seller), deduplicado, con seccion de actividad de repo. La `ONIA_CENTER_INTERNAL_API_KEY` se lee del contenedor, sin `$env` | Plan diario + repo |
 
 Los 5 crones fueron probados end-to-end antes de activar (ejecución real + Telegram
@@ -59,6 +59,25 @@ inválido (401) e inyección de slug (401) — 3/3 ejecuciones OK.
   seccion "Repo (ultimas Nh): X commits. Carriles activos: ..." al texto de Telegram.
   Probado en vivo: Action corrida por `workflow_dispatch` (verde, JSON en el VPS),
   ambos workflows n8n republicados y probados (`message_id` 769 Briefing, 770 Reporte).
+- **Docs hygiene (2026-07-06):** agente de limpieza diaria de docs (carril G). Fuente
+  de verdad `hermes-content/docs/`; la raiz no deberia tener gemelos. Mismo mecanismo
+  sin secrets nuevos que repo pulse: `.github/workflows/docs-hygiene-daily.yml` (cron
+  06:10 La Paz + `workflow_dispatch` con input `apply` true/false) corre
+  `scripts/docs-hygiene.mjs`, que detecta duplicados raiz<->docs/ por hash de
+  contenido (identico byte-a-byte, cualquier nombre) y por nombre (exacto o "fuzzy":
+  mismo tema con prefijo distinto, ej. `HERMES_OPERATIONS.md` <-> `OPERATIONS.md`).
+  Con `--apply` borra (git rm + commit local; el push lo hace el workflow) SOLO los
+  identicos byte-a-byte — nunca toca `hermes-content/docs/`, nunca borra divergentes
+  ni "nuevos en raiz". El JSON completo sube al VPS por SSH a
+  `/opt/onia/state/docs-hygiene-latest.json`; el nodo SSH "Leer docs hygiene" (cat,
+  igual que repo pulse) lo agrega al Reporte Sergio+Arthur con la seccion "Docs
+  (limpieza diaria)": conteos + top divergentes (posible fusion pendiente) + top
+  nuevos en raiz (deberian moverse a docs/). 18 tests (`node --test
+  scripts/docs-hygiene.test.mjs`, unitarios + fixture git real). Estado real del repo
+  al construirlo (2026-07-06): 0 identicos (ya limpiados en `f9a6a4db`), 18
+  divergentes (incluye el patron `HERMES_*` vs su version en docs/) y 19 nuevos en
+  raiz — quedan listados en el primer reporte para que Sergio decida cuales fusionar
+  y cuales archivar.
 - **Propuestas:** el pipeline viejo (`FGqyNTrQfMIFiVG2`) apuntaba a `127.0.0.1:3031`
   (inalcanzable desde el contenedor n8n) y usaba un generador ad-hoc. Reemplazado
   por `ONIA - Generar Propuesta (oficial)` (arriba), que corre el generador oficial
