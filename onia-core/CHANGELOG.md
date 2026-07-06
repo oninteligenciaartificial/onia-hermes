@@ -21,6 +21,10 @@
   construccion), IVA (debito/credito/saldo a favor), IT, IUE, bancarizacion,
   vencimiento por digito NIT y cierre de gestion por sector. 18 tests enlazados al
   bolivianConfig real; alicuotas por parametro. No es asesoria fiscal.
+- `accounting.seed.bolivia.json`: plan de cuentas base (PCGA Bolivia, ~46 cuentas
+  activo/pasivo/patrimonio/ingreso/gasto/costo con IVA credito/debito, depreciacion
+  acumulada y provisiones laborales). Semilla ajustable; sirve de mapa de cuentas
+  para los estados financieros. +6 tests.
 
 ## modules/knowledge 0.1.0 — 2026-07-05 (base de conocimiento)
 
