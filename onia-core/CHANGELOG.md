@@ -1,5 +1,13 @@
 # ONIA Core Changelog
 
+## modules/bridge — 2026-07-05 (commerce -> contabilidad)
+
+- `bridge.logic.mjs`: convierte una venta/pedido de commerce en su asiento
+  contable boliviano con IVA por dentro (debe caja/CxC por el total, haber ventas
+  por el neto + IVA debito fiscal), reutilizando `computeQuoteTotal` (commerce) y
+  `assertBalanced` (accounting). `saleToJournalEntry` / `orderToJournalEntry`.
+  Conecta los dos modulos: una venta genera su asiento cuadrado solo. +4 tests.
+
 ## modules/accounting 0.1.0 — 2026-07-05 (contabilidad Bolivia)
 
 - Nuevo modulo `accounting` (Bolivia) que PROVEE capabilities propias
