@@ -18,9 +18,11 @@ real** (sourced de Pinterest, sin caras de terceros) subida como **Reference Ele
 | `lucia-place-bedroom` | environment | `6a721405-d019-48b3-b3e6-92bdf6a4474e` | Pinterest dormitorio cozy sin gente |
 | `lucia-face-element` | character | `de586dbb-0cdd-4ca2-aaac-173d11741c86` | Foto verificada de Lucia (soul_2, identidad confirmada) |
 
-**Pendientes (bloqueado por rate-limit de Pinterest a mitad de sesion, retomar despues):**
-lugar cocina/cafe, lugar calle, lugar bar/restaurante nocturno. El guardarropa (4 looks)
-esta completo.
+| `lucia-place-cafe` | environment | `5cfbdab5-3fdd-4cda-b0e3-efb60aa5a9b4` | Pinterest cafe/cocina calida, mostrador madera |
+| `lucia-place-street` | environment | `cddfa484-8dea-4920-8d6b-9d00f896ae51` | Pinterest vereda urbana arbolada |
+| `lucia-place-bar` | environment | `2750ef8b-7fe6-483c-9d32-01292ce32034` | Pinterest restaurante/bar terciopelo rojo |
+
+**Completo: 4 outfits + 5 lugares + 1 cara = 10 Reference Elements.** Ya no quedan pendientes.
 
 ## Como generar (combinar cara + outfit + lugar en 1 sola llamada)
 
@@ -37,12 +39,17 @@ en el prompt:
 **fidelidad exacta del outfit/lugar real** (accesorios, joyeria, cartera, mueblaje) en vez
 de una aproximacion por texto.
 
-## Test verificado (2026-07-06)
+## Tests verificados (2026-07-06)
 
-`lucia-wardrobe-locations-test/lucia-elements-combo-cleangirl-bathroom.png` — Lucia +
-look clean-girl + bano, 2cr. Resultado: identidad reconocible (pecas, pelo, ojos), TODOS
-los accesorios del flatlay transferidos con precision (aros, 2 collares, cartera camel,
-lentes de sol), bano de marmol fiel a la referencia. Combo exitoso.
+1. `lucia-elements-combo-cleangirl-bathroom.png` — Lucia + look clean-girl + bano, 2cr.
+   Accesorios del flatlay transferidos con precision (aros, 2 collares, cartera camel,
+   lentes de sol), bano de marmol fiel a la referencia.
+2. `lucia-elements-combo-nightout-bar.png` — Lucia + look night-out + bar, 2cr. Trajo
+   TODOS los props del flatlay (cami negra, collar con dije, aros, reloj, cartera,
+   perfume, labial, lentes) + escenario de terciopelo rojo con luz calida fiel.
+
+2/2 combos exitosos. El sistema (cara+outfit+lugar como Elements combinados en 1 llamada
+nano_banana_2) queda validado para produccion.
 
 ## Estrategia de uso (cual via segun el caso)
 

@@ -47,9 +47,9 @@ Cada lugar = UNA imagen real (sin personas) subida como Reference Element (`envi
 |---|---|---|---|
 | **Bano (base)** | Marmol blanco/negro, ducha de vidrio, luz calida | `44a4686e-1733-4b41-811d-1eb5d1cf88fc` | Rutina, review, hook diario. Validado (wan2.7 + combo elements). |
 | **Dormitorio cozy** | Ropa de cama clara, luz natural de ventana | `6a721405-d019-48b3-b3e6-92bdf6a4474e` | Storytime, GRWM |
-| **Cocina/cafe** | PENDIENTE — bloqueado por rate-limit Pinterest, retomar | — | Lifestyle, "rutina de manana" |
-| **Calle / urbano** | PENDIENTE | — | Walking hooks |
-| **Restaurante/bar (noche)** | PENDIENTE | — | Contenido "salida" con look night-out |
+| **Cocina/cafe** | Mostrador de madera calida, plantas, luz calida | `5cfbdab5-3fdd-4cda-b0e3-efb60aa5a9b4` | Lifestyle, "rutina de manana" |
+| **Calle / urbano** | Vereda arbolada, vidrieras y autos desenfocados | `cddfa484-8dea-4920-8d6b-9d00f896ae51` | Walking hooks |
+| **Restaurante/bar (noche)** | Terciopelo rojo, luz calida baja, copas | `2750ef8b-7fe6-483c-9d32-01292ce32034` | "Salida" con look night-out. Validado (combo elements). |
 
 ## Voz
 - Preset sugerido `seed_audio` **Isabella** (`80924413-1ea8-4e64-9719-e00b86796f05`) — distinta de Mara. O clonar voz propia con **ElevenLabs** (Sergio la tiene) para consistencia real en produccion 24/7.
