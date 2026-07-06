@@ -62,8 +62,11 @@ Cada lugar = UNA imagen real (sin personas) subida como Reference Element (`envi
 ## Produccion — ver [[AVATAR-CONSISTENCY-SCHEME]] (4 niveles, leer antes de generar)
 - **Nivel 1 (0.12cr, DEFAULT):** `soul_2` + soul_id `36305a9b-af24-4390-959b-885082dddd5d` + prompt de texto.
 - **Nivel 2 (42-75cr, UGC con producto real):** Marketing Studio, avatar custom creado
-  desde una foto Nivel 1 (nunca desde Elements). Pendiente probar con Lucia (solo Mara
-  validada hasta ahora).
+  desde una foto Nivel 1 (nunca desde Elements). **VALIDADO 2026-07-06** con ISDIN
+  Fusion Water SPF 50 (`ms-lucia-isdin-480p-12s.mp4`, 42cr, avatar `fc5c6553-...`):
+  identidad estable, producto real en mano con etiqueta legible, sin deformacion.
+  Ojo: el guion auto salio en ingles esta vez (no es determinista) — forzar espanol
+  con `prompt` explicito para piezas de produccion real.
 - **Nivel 3 (15cr/10s, talking sin producto):** still Nivel 1 -> `wan2_7` + audio.
   Verificado estable con Lucia.
 - **Nivel 4 (2cr, ultimo recurso):** `nano_banana_2` + Elements, solo prop/lugar exacto

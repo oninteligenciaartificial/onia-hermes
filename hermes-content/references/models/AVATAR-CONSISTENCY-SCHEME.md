@@ -178,6 +178,9 @@ ni como ancla, ni como fuente de un avatar custom de Marketing Studio.
    generando encima.
 4. **Antes de entrenar un Soul nuevo, confirmar con Sergio** — cuesta 25cr real, no es gratis.
 5. **Para UGC con producto real:** Marketing Studio (Nivel 2), avatar creado desde una
-   foto Nivel 1 limpia. Pendiente probarlo con Lucia (solo Mara validada).
+   foto Nivel 1 limpia. **Validado con las 2 modelos** (Mara+ISDIN y Lucia+ISDIN,
+   2026-07-06, 42cr c/u). Ojo: el guion auto-generado no es determinista en idioma
+   (Mara salio en espanol, Lucia en ingles con el mismo preset) — pasar `prompt`
+   explicito en espanol para piezas de produccion real.
 6. **Elements (Nivel 4) es el ultimo recurso**, nunca el default, siempre con 2-3
    candidatos + QA, nunca para "hablar" o "sostener algo con precision".
