@@ -6,6 +6,23 @@
 > UGC (Marketing Studio). v3 (esta version, 2026-07-06) — auditoria completa: IDs
 > verificados, colision de nombres en la plataforma, y correccion de costos.
 
+## 🔴 HALLAZGO CRITICO (2026-07-06) — el Soul de Lucia estaba contaminado
+
+Al auditar de nuevo, se encontro la causa raiz REAL (mas grave que el problema de
+metodologia Elements-vs-Soul): de los 8 frames usados para entrenar el Soul original
+de Lucia (`9a0d6953`), **uno (`pecas-B-02.png`) era de OTRA MUJER** (pelo con trenzas,
+sin pecas, terraza con tripode) — el video B completo resulto ser de esa otra persona,
+no de la de las pecas. El Soul se entreno con 7 fotos correctas + 1 foto de alguien mas,
+lo cual mezcla rasgos de forma impredecible. Esto explica la perdida de consistencia
+mejor que la mezcla de metodos (Soul vs Elements).
+
+**Fix aplicado:** nuevo Soul **`36305a9b-af24-4390-959b-885082dddd5d`**
+("LUCIA-REAL-v2-clean"), entrenado con **18 frames**, TODOS extraidos y verificados
+visualmente del video A (el unico 100% confirmado de la persona correcta), con variedad
+de angulos/expresiones (sosteniendo producto, aplicandolo, sonriendo, neutral). Este es
+el Soul a usar de ahora en mas para Lucia — el viejo `9a0d6953` queda superado (no
+compatible con esta correccion).
+
 ## ⚠️ ALERTA — colision de nombres en Higgsfield (no arreglable por API)
 
 `show_characters` y `show_reference_elements` **no tienen accion de rename/delete** (solo
@@ -13,7 +30,8 @@ list/train-create/status). Por eso quedaron DOS objetos con "Lucia" en el nombre
 
 | Nombre en Higgsfield | soul_id | Que es realmente |
 |---|---|---|
-| "Valentina ONIA v1" | `9a0d6953-ff2e-40ba-b763-806e0d447325` | ✅ **ES Lucia** (la real, pecas, de los videos de Sergio) |
+| "LUCIA-REAL-v2-clean" | `36305a9b-af24-4390-959b-885082dddd5d` | ✅ **USAR ESTE** — 18 frames verificados, solo persona correcta |
+| "Valentina ONIA v1" | `9a0d6953-ff2e-40ba-b763-806e0d447325` | ⚠️ SUPERADO — Lucia real pero contaminado (1 de 8 frames era otra persona) |
 | "Lucia ONIA v1" | `2fc03fc6-c38b-48ca-91f6-ca1eb022ce29` | ❌ **NO es Lucia** — cara equivocada archivada (m2-05), NO USAR |
 
 **Regla dura: nunca elegir un Soul/Element por su NOMBRE en la lista de Higgsfield.
@@ -101,13 +119,15 @@ mueble/ambiente exacto de fondo). Reglas obligatorias si se usa:
 ### Lucia (pelinegra con pecas — identidad DEBE ser fiel al video real de Sergio)
 | Uso | ID | Fuente |
 |---|---|---|
-| Soul (Nivel 1) | `9a0d6953-ff2e-40ba-b763-806e0d447325` | 8 frames reales, `pecas-source-frames/` |
+| **Soul (Nivel 1) — USAR ESTE** | `36305a9b-af24-4390-959b-885082dddd5d` | 18 frames verificados, solo video A (`pecas-clean-v2/`) |
+| Soul viejo, SUPERADO (contaminado) | `9a0d6953-ff2e-40ba-b763-806e0d447325` | 8 frames, 1 de otra persona (pecas-B-02) |
 | Ancla real para Nivel 4/Marketing Studio | `ced20cc2-3388-4d98-92ee-b0fcd961aa62` (Element) | frame real (pecas-A-15) escalado 2K |
 | Ancla real alternativa (otro angulo/expresion) | `44622145-b648-4839-85f3-d8fdb7047b19` (Element, auto-creado, mal llamado "Valentina ONIA v1") | frame real (pecas-B-02), sin editar |
 | ⛔ Legacy, NO USAR | `de586dbb-0cdd-4ca2-aaac-173d11741c86` (Element "lucia-face-element") | foto YA generada por Soul (1 paso de deriva) |
 | Outfits (prop) | `16833b18` cleangirl · `ec1dece5` streetwear · `5503f588` nightout · `6186d80f` loungewear | flatlays reales sin cara, Pinterest |
 | Lugares (environment) | `44a4686e` bano · `6a721405` dormitorio · `5cfbdab5` cafe · `cddfa484` calle · `2750ef8b` bar | interiores reales sin gente, Pinterest |
-| Referencia QA (comparar SIEMPRE contra esto) | `hermes-content/references/models/pecas-source-frames/*.png` | frames reales del video de Sergio |
+| Referencia QA (comparar SIEMPRE contra esto) | `hermes-content/references/models/pecas-clean-v2/*.png` | 18 frames verificados, SOLO video A |
+| ⛔ Carpeta de OTRA PERSONA, no usar | `pecas-source-frames/OTRA-PERSONA-video-B-NO-USAR/` | 34 frames del video B — es una mujer distinta |
 
 ### Mara (pelirroja — identidad 100% sintetica, NO representa a nadie real)
 | Uso | ID | Fuente |

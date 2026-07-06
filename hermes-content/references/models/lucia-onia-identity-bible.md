@@ -7,9 +7,10 @@
 
 ## Ficha
 - **Nombre:** Lucia. **Rol:** influencer skincare/UGC + cuenta propia + contenido de clientes.
-- **Higgsfield Soul (el bueno, real):** `9a0d6953-ff2e-40ba-b763-806e0d447325` (`soul_2`). Gen ~0.12cr/img.
-- **Entrenada desde:** 8 frames reales de los videos aprobados de Sergio (`hermes-content/references/models/pecas-source-frames/`): `pecas-A-02,10,11,12,13,14,15`, `pecas-B-02` (videos `hf_20260615_013651_d60afdd2...` + `hf_20260615_005124_cde0c155...`). Frames REALES, no generados.
-- **Soul viejo `2fc03fc6-...` = ARCHIVADO/NO USAR.** Era una cara distinta (m2-05, generada por error). No confundir.
+- **Higgsfield Soul (USAR ESTE):** `36305a9b-af24-4390-959b-885082dddd5d` ("LUCIA-REAL-v2-clean", `soul_2`). Gen ~0.12cr/img.
+- **Entrenada desde:** 18 frames reales verificados, TODOS del mismo video (`hf_20260615_013651_d60afdd2...`, tubo verde SVR): `hermes-content/references/models/pecas-clean-v2/`. Frames REALES, no generados.
+- **Soul `9a0d6953-...` = SUPERADO/NO USAR.** El Soul anterior estaba contaminado: 1 de sus 8 frames de entrenamiento (`pecas-B-02.png`) era de OTRA MUJER (video B resulto ser una persona distinta). Esto probablemente causo la perdida de consistencia reportada por Sergio. Ver `AVATAR-CONSISTENCY-SCHEME.md`.
+- **Soul `2fc03fc6-...` = ARCHIVADO/NO USAR.** Era una cara distinta (m2-05, generada por error). No confundir.
 
 ## Rostro (face lock) — NO romper
 - Pelo castano oscuro ondulado, largo-medio, raya al medio.
@@ -59,7 +60,7 @@ Cada lugar = UNA imagen real (sin personas) subida como Reference Element (`envi
   (sin cura/antiedad/antes-despues). Lenguaje de cuidado, no medico.
 
 ## Produccion — ver [[AVATAR-CONSISTENCY-SCHEME]] (4 niveles, leer antes de generar)
-- **Nivel 1 (0.12cr, DEFAULT):** `soul_2` + soul_id `9a0d6953-...` + prompt de texto.
+- **Nivel 1 (0.12cr, DEFAULT):** `soul_2` + soul_id `36305a9b-af24-4390-959b-885082dddd5d` + prompt de texto.
 - **Nivel 2 (42-75cr, UGC con producto real):** Marketing Studio, avatar custom creado
   desde una foto Nivel 1 (nunca desde Elements). Pendiente probar con Lucia (solo Mara
   validada hasta ahora).
@@ -75,7 +76,7 @@ Cada lugar = UNA imagen real (sin personas) subida como Reference Element (`envi
   no identity drift, no quitarle las pecas, no cambiar estructura facial, no piel plastica.
 
 ## Orden de trabajo (2026-07-06, pedido de Sergio)
-1. ✅ Cara real lockeada (Soul `9a0d6953`), verificada estable.
+1. ✅ Cara real lockeada (Soul `36305a9b-af24-4390-959b-885082dddd5d`, 18 frames verificados de un solo video), en entrenamiento.
 2. ✅ Guardarropa + lugares definidos (esta seccion).
 3. ⏳ Pruebas BARATAS (soul_2, 0.12cr) combinando outfits x lugares — verificar que no se rompe.
 4. Recien despues: mas trabajo de video/lipsync ("caras" es la fase cara, se hace al final).
