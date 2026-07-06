@@ -1,5 +1,15 @@
 # ONIA Core Changelog
 
+## core/logic — 2026-07-05 (tipo de cambio + numeracion)
+
+- `logic/fx.logic.mjs`: tipo de cambio Bolivia -> `effectiveRate` (VRD + spread),
+  `usdToBob`/`bobToUsd`/`convertUsdToBob`/`repriceUsdToBob`. El oficial 6.96 esta
+  marcado SOLO para SIAT (no para precios); Binance es referencia. Utilidad
+  transversal para commerce (repricing USD/BOB) y accounting (moneda extranjera).
+- `logic/numbering.logic.mjs`: correlativos de comprobantes
+  (`formatDocNumber`/`parseDocNumber`/`nextSequence`/`nextDocNumber`) para
+  factura, asiento, cotizacion, pedido. +9 tests (149 total).
+
 ## core/logic — 2026-07-05 (aprobaciones + agenda + vistas)
 
 - `logic/approvals.logic.mjs`: decision one-shot (pending -> approved/rejected,
