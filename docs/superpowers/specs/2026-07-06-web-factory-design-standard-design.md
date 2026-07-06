@@ -93,20 +93,53 @@ prohíben.
 
 Grounding visual usado (capturas reales, licencia clara, ya cacheadas en
 `C:\Users\PC\.codex\design-stack`): shadcn `dashboard-01` (MIT), launch-ui
-dashboard dark (revisado en esta sesión), Tremor dashboard blocks
-(Apache-2.0). Extraer estructura/jerarquía, no copiar identidad ni datos.
+dashboard dark, Tremor dashboard blocks (Apache-2.0) — los tres son
+dashboards de **analytics/growth SaaS**. Extraer estructura/jerarquía, no
+copiar identidad ni datos.
 
-### Modelo de jerarquía (3 niveles)
+**Corrección tras revisión propia**: los tres primeros references son de
+analytics/growth, pero DentalGest/GestiOS son **ERPs operativos** — lo más
+crítico en su uso diario no es "ver una tendencia", es "qué tengo que atender
+hoy" (agenda, aprobaciones, stock bajo). Se sumó grounding real de producto vía
+Mobbin (capturas de producto real, no plantillas, licencia de referencia):
+Asana "Insights" (panel de trabajo B2B, primo cercano a un ERP) y un dashboard
+fintech, ambos en
+`design-stack/gallery-examples-full/mobbin-web/021-view-collection-beautiful-saas-dashboards-44e47f62/`.
+Confirman dos cosas que el modelo original no tenía:
 
-1. **Hero** — un chart dominante (≈2/3 del ancho en desktop), justo debajo del
-   topbar, con el selector de rango (`wf-dash-filters`, ya existe) anclado a
-   su título en vez de flotando en el topbar general.
-2. **KPIs de apoyo** — 3-5 cards secundarias: tipografía menor que el hero,
-   sin elevación extra, dan contexto (no compiten visualmente con el hero).
-3. **Detalle** — grid de 2-3 charts secundarios + **fila asimétrica**: tabla
-   (~65%) + panel lateral compacto tipo lista (~35%), en vez de grid uniforme
-   (inspirado en el patrón real Transactions + Recent Sales de shadcn
-   dashboard-01, sin copiar su código ni datos).
+- El dashboard fintech funde el **KPI headline con su propia mini-visualización
+  de tendencia dentro de la misma card** (`Net cashflow S$3.00 ▲100%` + un
+  chart de línea debajo, en un solo panel), no como dos elementos separados.
+- Asana Insights renderiza sus KPIs **sin card/borde** (solo número + label),
+  ubica un único chart con una línea de explicación bajo el título
+  ("Engagement — da un panorama de alto nivel de..."), y el peso real de la
+  página vive en **paneles de listas** (Recently added / Most influential
+  members), no en más charts. Eso es lo que un ERP realmente necesita.
+
+### Modelo de jerarquía (3 niveles, con Tier 1 flexible)
+
+1. **Hero (`heroPanel`)** — el elemento de mayor peso, con dos variantes
+   soportadas por el sistema (una elección de datos, no de código separado):
+   - `metric-trend`: un KPI headline + su propia mini-visualización de
+     tendencia fusionada en la misma card (sparkline o barra corta bajo el
+     número) — para "estado de un vistazo" (ingresos, ocupación, uptime).
+     Perfil growth/analytics.
+   - `queue`: una lista priorizada de acciones (título + estado + urgencia/
+     vencimiento + acción rápida) — para "qué tengo que atender hoy"
+     (turnos de hoy, aprobaciones pendientes, stock bajo). Perfil ops/ERP,
+     validado por el patrón de listas de Asana Insights.
+   - **El dashboard de referencia (`dashboard-demo`) usa `queue`**, porque es
+     el perfil que de verdad sirve a DentalGest/GestiOS (ver "Validación
+     pendiente" más abajo). El sistema soporta ambos; el doc explica cuál
+     elegir según la tarea diaria real del producto.
+2. **KPIs de apoyo** — 3-5 métricas secundarias. Pueden ser cards livianas
+   (`.wf-dash-card--compact`) o, si el `heroPanel` ya es `queue`, incluso
+   sin borde (patrón Asana) para no competir visualmente con el hero.
+3. **Detalle** — grid de 1-2 charts secundarios + **fila asimétrica**: tabla
+   con filtros tipo chip (patrón real: Hotjar, filtros de pill sobre la
+   tabla) + panel lateral compacto tipo lista (inspirado en Transactions +
+   Recent Sales de shadcn dashboard-01 y en Recently added/Most influential
+   de Asana), en vez de grid uniforme de charts.
 
 ### Primitivo de card único
 
@@ -122,46 +155,101 @@ token-driven, la misma declaración que hoy están triplicada) con modificadores
 `.wf-dash-card` (clase compartida + clase específica para tipografía/contenido
 interno), eliminando la triplicación actual.
 
-### Charts (se mantiene SVG sin dependencias)
+### Charts (se mantiene SVG sin dependencias) — reglas de data-viz reales
 
 Se mantiene el renderer SVG puro actual (cero JS runtime, alineado a
 `web/performance.md` y al resto del factory) — no se introduce una librería de
-charts nueva. Mejoras:
+charts nueva. Se agregan reglas concretas de selección/accesibilidad (lo que
+faltaba en el draft anterior, que solo decía "mejorar el SVG" sin criterio):
 
-- Variante "hero": `viewBox` más grande, area-fill con gradiente (`<linearGradient>`
-  token-driven, ya que `renderLineChart` hoy dibuja solo `<polyline>`) para el
-  chart dominante.
+- **Selección de tipo**: línea/área para tendencia en el tiempo (1-3 series);
+  barra para comparación categórica; donut **solo** con ≤4-5 segmentos (más
+  que eso deja de leerse — no usar donut para más categorías); sparkline
+  para el mini-chart inline del `heroPanel` tipo `metric-trend` (sin ejes,
+  mínimo). **Prohibido eje dual** (dos escalas Y en un mismo chart): confunde
+  la correlación entre series y ya es un anti-patrón conocido de data-viz.
+- **Redundancia de color** (accesibilidad para daltonismo): el código ya
+  cumple esto para KPI deltas — `trendGlyph()` (`dashboard.ts:475-483`) agrega
+  ▲/▼/• además del color verde/rojo (`--wf-pos`/`--wf-neg`). **Se extiende la
+  misma regla al status pill nuevo** (abajo): nunca solo el punto de color,
+  siempre con un glyph o texto que no dependa del color para distinguir el
+  estado.
+- **Leyendas multi-serie**: se reutiliza `SERIES_COLORS` (ya token-driven);
+  verificar que la separación de luminancia entre series sea suficiente para
+  diferenciarlas en escala de grises (proxy simple de daltonismo), no solo
+  distintos tonos del mismo brillo.
+- **Ejes**: siempre con unidad visible (`chart.unit` ya existe); en mobile
+  (375px) reducir la cantidad de ticks del eje X en vez de rotar/truncar
+  etiquetas ilegibles.
+- Variante "hero" (`metric-trend`): `viewBox` más grande, area-fill con
+  gradiente (`<linearGradient>` token-driven, ya que `renderLineChart` hoy
+  dibuja solo `<polyline>`).
 - Tooltips accesibles vía `<title>` dentro de cada punto/segmento (hover +
   focus, sin JS adicional a lo que ya existe).
-- Se reutiliza `SERIES_COLORS` (ya token-driven) para leyendas multi-serie.
 
 ### Tabla y panel lateral
 
-- Nuevo tipo de celda **status pill**: punto de color + texto, usando los
-  tokens existentes `--wf-pos`/`--wf-neg` (ya definidos con variante dark en
+- Fila de **filtros tipo chip** sobre la tabla (patrón real validado: vista de
+  encuestas de Hotjar en la misma captura Mobbin — chips de filtro como
+  "Page URL", "Sentiment", "Tag", "Rating" sobre una tabla de gestión), en vez
+  de una tabla sin forma de acotar los datos.
+- Nuevo tipo de celda **status pill**: punto de color + **glyph/texto**
+  (nunca solo color, ver regla de redundancia arriba), usando los tokens
+  existentes `--wf-pos`/`--wf-neg` (ya definidos con variante dark en
   `dashboard.ts:584-599`) más un neutro `--wf-warn` nuevo (ámbar, mismo patrón
   `color-mix` que los otros dos) para estados intermedios ("pendiente").
 - Panel lateral (nuevo): lista compacta de filas con **inicial-en-círculo**
   (mismo patrón que el logo del sidebar, `wf-dash-brand-mark`) + label + valor
   — nunca avatar fotográfico de una persona falsa (regla del Pattern Bank: no
-  fabricar identidades).
+  fabricar identidades). Patrón validado por los paneles "Recently added" /
+  "Most influential members" de Asana Insights (misma captura Mobbin).
 
 ### Estados: loading / vacío / error
 
-- **Loading**: overlay de skeleton por sección (`.wf-dash-card.is-loading`),
-  bloques grises con shimmer CSS (`@keyframes` de gradiente desplazado);
-  `prefers-reduced-motion: reduce` cambia el shimmer a estático (sin animación,
-  solo el bloque gris). Progressive enhancement: un pequeño script (mismo
-  patrón que `renderRevealScript` en landing-clinic) alterna la clase
-  únicamente para que la referencia sea inspeccionable en vivo — los productos
-  reales (DentalGest/GestiOS) cablean esta clase a su propio estado async, no
-  a este script de demo.
+**Corrección tras revisión propia**: el draft original escondía loading/error
+detrás de un toggle JS que nadie iba a descubrir — inútil como referencia real
+("lo que no se ve, no se copia"). Los 3 estados se muestran **siempre visibles**
+en el output estático, en una sección dedicada `#estados` al final del dashboard
+de referencia ("Estados de la interfaz"), con un ejemplo fijo de cada uno lado a
+lado (una card KPI, un chart-card y una fila de tabla, ×3 estados) — no requiere
+interacción para verlos.
+
+- **Loading**: bloques grises con shimmer CSS (`@keyframes` de gradiente
+  desplazado) sobre `.wf-dash-card.is-loading`; `prefers-reduced-motion: reduce`
+  cambia el shimmer a estático (sin animación, solo el bloque gris). Los
+  productos reales (DentalGest/GestiOS) cablean esta clase a su propio estado
+  async; acá se ve fija para que el patrón sea copiable con solo inspeccionar
+  el HTML/CSS, sin depender de encontrar un toggle oculto.
 - **Vacío**: ya existe (`renderEmpty`); se re-estiliza sobre `.wf-dash-card`
   para quedar consistente con el nuevo sistema, sin cambiar su contrato
-  (mismo `title`/`hint`).
+  (mismo `title`/`hint`). Se muestra en la sección `#estados` además de en su
+  uso real (KPIs/charts/tabla sin datos).
 - **Error** (nuevo): ícono de alerta + mensaje + botón "Reintentar" (sin
   handler real en el demo estático; el markup/clase es lo que cada producto
-  cablea a su propio retry). Usa `--wf-neg` para el ícono/acento.
+  cablea a su propio retry). Usa `--wf-neg` para el ícono/acento, con el
+  mismo criterio de redundancia de color (ícono + texto, no solo color rojo).
+
+### Tipo de datos del hero (nuevo, en `DashboardData`)
+
+```ts
+export type DashboardHeroPanel =
+  | { kind: "metric-trend"; kpi: DashboardKpi; points: DashboardPoint[] }
+  | {
+      kind: "queue";
+      title: string;
+      items: Array<{
+        titulo: string;
+        estado: "pendiente" | "urgente" | "al-dia";
+        meta: string; // ej. "Hoy 15:30", "Vence manana"
+        url?: string; // accion rapida opcional
+      }>;
+    };
+```
+
+`DashboardData.heroPanel` es opcional (`?`) para no romper clientes existentes
+que aún no lo definen (backward-compatible, mismo criterio que `nav`); sin él,
+el dashboard renderiza como hoy (sin tier 1 diferenciado) hasta que el cliente
+lo adopte.
 
 ### Navegación agrupada
 
@@ -190,7 +278,7 @@ jerarquía técnica.
 - Sidebar ya colapsa a fila con scroll horizontal en `max-width: 860px`
   (existente, se mantiene).
 - KPI row de apoyo: en mobile pasa a `grid-auto-flow: column` con scroll-snap
-  horizontal (en vez de apilarse en columna, que dejaría el hero chart muy
+  horizontal (en vez de apilarse en columna, que dejaría el `heroPanel` muy
   lejos del fold) — decisión de diseño, verificada visualmente en el gate.
   Documentado el trade-off por si un producto prefiere apilado clásico.
   Aunque el user-facing test es simple: **cero overflow horizontal accidental
@@ -203,19 +291,21 @@ jerarquía técnica.
 
 **No se agrega un cliente demo nuevo.** Se enriquecen los datos de
 `data/clients/dashboard-demo.json` (mismo slug) para ejercitar el sistema
-completo: un chart marcado como hero, 4-5 KPIs de apoyo, 2 charts secundarios
-de tipos distintos, tabla con status pills, panel lateral, nav agrupada, y al
-menos un caso de cada estado (vacío ya cubierto por un test dedicado con datos
-mínimos, como hoy; loading/error se documentan vía la clase CSS + el script de
-demo, no requieren un cliente separado). Escenario **neutro**: consola de
-operaciones genérica (ingresos, cuentas activas, tareas pendientes de
-aprobación, uptime/SLA), sin atarlo a un vertical.
+completo: `heroPanel` tipo **`queue`** (perfil ops, no chart de tendencia —
+ver corrección arriba) con 4-5 ítems priorizados, 3-4 KPIs de apoyo, 2 charts
+secundarios de tipos distintos (respetando las reglas de selección de arriba),
+tabla con filtros chip + status pills, panel lateral tipo lista, nav agrupada,
+y la sección `#estados` con los 3 estados siempre visibles. Escenario
+**neutro**: consola de operaciones genérica (cuentas activas, tareas
+pendientes de aprobación, uptime/SLA), sin atarlo a un vertical. El caso de
+`heroPanel: metric-trend` (perfil growth) se cubre con un test unitario
+dedicado (dato sintético mínimo), no necesita su propio cliente demo.
 
 ### Refactor de archivo (justificado, no oportunista)
 
 `dashboard.ts` ya tiene 1039 líneas antes de este cambio; agregar el sistema
-completo (cards, estados, nav agrupada, hero chart) lo haría inmanejable en un
-solo archivo. Se separa en:
+completo (cards, estados, nav agrupada, `heroPanel` con sus 2 variantes) lo
+haría inmanejable en un solo archivo. Se separa en:
 
 - `packages/templates/src/dashboard.ts` — orquesta: tipos, composición del
   body, doc HTML completo (igual rol que hoy, mucho más corto).
@@ -232,12 +322,17 @@ CSS se mantiene en un solo string exportado (mismo patrón que
 ## Gates y no-regresión
 
 - Unit (`generate.test.ts`): casos existentes de dashboard (básico, vacío,
-  tipos de chart) se mantienen verdes; se agregan casos para hero chart, nav
-  agrupada, status pills, y los 3 estados.
-- e2e: `tests/e2e/dashboard.spec.ts` se extiende para la nueva jerarquía/nav;
-  `a11y.spec.ts` debe seguir en verde light+dark para `dashboard-demo` (riesgo
-  principal: contraste de los status pills y el gradiente del hero chart en
-  dark — se verifica, no se asume); `perf.spec.ts` — el budget actual es 60kb;
+  tipos de chart) se mantienen verdes; se agregan casos para `heroPanel`
+  (ambas variantes: `metric-trend` y `queue`), nav agrupada, status pills, y
+  los 3 estados.
+- e2e: `tests/e2e/dashboard.spec.ts` se extiende para la nueva jerarquía/nav,
+  incluida la sección `#estados` (loading/vacío/error siempre visibles); se
+  verifica que el status pill y `trendGlyph()` no dependan solo de color
+  (glyph/texto presente en el HTML, no solo la clase de color). `a11y.spec.ts`
+  debe seguir en verde light+dark para `dashboard-demo` (riesgo principal:
+  contraste de los status pills y del `heroPanel` en dark, sea `queue` o
+  `metric-trend` — se verifica, no se asume); `perf.spec.ts` — el budget
+  actual es 60kb;
   como no se agregan imágenes (todo SVG/CSS), se espera mantenerlo, pero se
   mide antes de decidir si hay que ajustarlo (igual que se hizo con
   landing-clinic).
@@ -246,6 +341,26 @@ CSS se mantiene en un solo string exportado (mismo patrón que
   shadcn/launch-ui/Tremor — solo estructura/jerarquía, con licencias
   compatibles (MIT/Apache-2.0) documentadas.
 - Commits conventional, por carpeta/responsabilidad.
+
+## Validación pendiente (honestidad sobre el alcance)
+
+Este sistema es un **modelo B2B razonado y grounded en producto real** (Asana
+Insights, Hotjar, shadcn/launch-ui/Tremor, fintech dashboard vía Mobbin), pero
+**no fue validado contra las pantallas reales de DentalGest, GestiOS ni ONIA
+Center** — no tengo acceso a esos repos desde este carril (DentalGest/GestiOS
+son repos externos; ONIA Center es otra sesión, no se toca). La elección de
+`heroPanel: queue` para el ops-perfil es la mejor inferencia disponible sobre
+lo que un ERP de agenda/clínica necesita, no un hecho confirmado por esos
+equipos.
+
+**Antes de que DentalGest/GestiOS lo adopten como estándar obligatorio**,
+alguien de esos equipos debería revisar el doc final contra 2-3 pantallas
+reales de su producto y confirmar o ajustar: qué va en el `heroPanel` (¿de
+verdad es una cola de turnos/aprobaciones, o hay algo más crítico?), qué
+agrupación de nav corresponde a como sus usuarios deciden, y si el status pill
+/ tabla con chips cubre sus casos de uso reales. Esto se deja anotado como
+seguimiento explícito, no bloquea la entrega de la referencia dentro de Web
+Factory.
 
 ## Fuera de alcance (explícito)
 
