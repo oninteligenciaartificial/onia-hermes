@@ -58,11 +58,12 @@ Cada lugar = UNA imagen real (sin personas) subida como Reference Element (`envi
 - Cercana, honesta, natural. Skincare desde la experiencia, sin humo. Claims seguros
   (sin cura/antiedad/antes-despues). Lenguaje de cuidado, no medico.
 
-## Produccion (ver [[higgsfield-models-roster]] y `PIPELINE-lipsync-24-7.md`)
-- **Fotos (barato, 0.12cr):** `soul_2` + soul_id `9a0d6953-...` + prompt de outfit/lugar de esta bible.
-- **Fotos con outfit/lugar EXACTO (2cr):** `nano_banana_2` + Elements, usando SIEMPRE
-  `lucia-face-real-anchor` (`ced20cc2-3388-4d98-92ee-b0fcd961aa62`, frame real escalado 2K,
-  no una foto generada) como ancla de cara. Ver [[lucia-elements-catalog]].
+## Produccion — ver [[AVATAR-CONSISTENCY-SCHEME]] (regla obligatoria, leer antes de generar)
+- **Metodo PRINCIPAL (0.12cr, alta consistencia):** `soul_2` + soul_id `9a0d6953-...` +
+  prompt de outfit/lugar de esta bible. Usar para TODO contenido donde la cara importa.
+- **Metodo SECUNDARIO (2cr, consistencia mas debil):** `nano_banana_2` + Elements, solo
+  cuando se necesita el objeto/prenda/lugar EXACTO de una foto real. Requiere 2-3
+  candidatos + QA manual antes de aceptar cualquier resultado. Ver [[lucia-elements-catalog]].
 - **Lip sync (barato-medio, 15cr/10s):** `wan2_7` con still de Lucia + audio de voz. Ya
   verificado estable (`valentina-lipsync-wan27-10s.mp4`, cara sin romperse, boca sincronizada).
 - **Hero/UGC con producto en mano (42-75cr):** Marketing Studio, avatar custom.
