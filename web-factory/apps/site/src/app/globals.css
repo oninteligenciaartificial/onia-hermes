@@ -4160,3 +4160,122 @@ a.workflow-card:hover {
     grid-template-columns: 1fr;
   }
 }
+
+/* ===== Nuvia checkout ===== */
+.nuvia-checkout-page {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 16px 16px 64px;
+  color: #0f2d52;
+}
+.nuvia-checkout-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0 20px;
+}
+.nuvia-checkout-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.9rem;
+  color: #0f2d52;
+  text-decoration: none;
+}
+.nuvia-checkout-back:hover { color: #00a7a0; }
+.nuvia-checkout-grid { display: grid; gap: 20px; }
+.nuvia-checkout-form { display: grid; gap: 18px; }
+.nuvia-checkout-form fieldset {
+  border: 1px solid rgba(15, 45, 82, 0.12);
+  border-radius: 16px;
+  padding: 16px;
+  display: grid;
+  gap: 12px;
+}
+.nuvia-checkout-form legend { font-weight: 600; padding: 0 6px; }
+.nuvia-checkout-form label { display: grid; gap: 6px; font-size: 0.85rem; font-weight: 500; }
+.nuvia-checkout-form input,
+.nuvia-checkout-form select,
+.nuvia-checkout-form textarea {
+  width: 100%;
+  padding: 11px 12px;
+  border: 1px solid rgba(15, 45, 82, 0.2);
+  border-radius: 10px;
+  font: inherit;
+  background: #fff;
+}
+.nuvia-checkout-form input:focus,
+.nuvia-checkout-form select:focus,
+.nuvia-checkout-form textarea:focus {
+  outline: 2px solid #00a7a0;
+  outline-offset: 1px;
+  border-color: #00a7a0;
+}
+.nuvia-checkout-form label em {
+  color: #d33;
+  font-style: normal;
+  font-size: 0.78rem;
+}
+.nuvia-checkout-submit {
+  width: 100%;
+  padding: 15px;
+  border: 0;
+  border-radius: 12px;
+  background: #ff6b6b;
+  color: #fff;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 150ms ease, transform 150ms ease;
+}
+.nuvia-checkout-submit:hover:not(:disabled) { background: #f2564f; transform: translateY(-1px); }
+.nuvia-checkout-submit:disabled { opacity: 0.55; cursor: not-allowed; }
+.nuvia-checkout-trust {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  color: rgba(15, 45, 82, 0.7);
+}
+.nuvia-checkout-error { color: #d33; font-size: 0.85rem; }
+.nuvia-checkout-summary {
+  border: 1px solid rgba(15, 45, 82, 0.12);
+  border-radius: 16px;
+  padding: 16px;
+  background: #fffbf4;
+  align-self: start;
+}
+.nuvia-checkout-summary h2 { margin: 0 0 12px; font-size: 1.05rem; }
+.nuvia-checkout-summary ul { list-style: none; margin: 0 0 14px; padding: 0; display: grid; gap: 12px; }
+.nuvia-checkout-summary li { display: grid; grid-template-columns: 56px 1fr; gap: 10px; align-items: center; }
+.nuvia-checkout-summary li img { border-radius: 8px; object-fit: contain; background: #fff; }
+.nuvia-checkout-summary li div { display: grid; gap: 1px; }
+.nuvia-checkout-summary li span { font-size: 0.72rem; color: rgba(15, 45, 82, 0.6); }
+.nuvia-checkout-summary li strong { font-size: 0.85rem; line-height: 1.2; }
+.nuvia-checkout-summary li small { font-size: 0.8rem; color: #00a7a0; }
+.nuvia-checkout-summary dl { display: grid; gap: 8px; margin: 0; border-top: 1px solid rgba(15, 45, 82, 0.12); padding-top: 12px; }
+.nuvia-checkout-summary dl div { display: flex; justify-content: space-between; font-size: 0.9rem; }
+.nuvia-checkout-summary dl dt, .nuvia-checkout-summary dl dd { margin: 0; }
+.nuvia-checkout-total { font-weight: 700; font-size: 1rem !important; }
+.nuvia-checkout-ship { color: rgba(15, 45, 82, 0.65); font-size: 0.82rem !important; }
+.nuvia-checkout-confirm, .nuvia-checkout-empty { text-align: center; padding: 48px 16px; display: grid; gap: 14px; justify-items: center; }
+.nuvia-checkout-confirm h1, .nuvia-checkout-empty h1 { font-size: 1.6rem; margin: 0; }
+.nuvia-checkout-wa {
+  display: inline-block;
+  padding: 14px 22px;
+  border-radius: 12px;
+  background: #25d366;
+  color: #05331b;
+  font-weight: 600;
+  text-decoration: none;
+}
+.nuvia-checkout-wa:hover { background: #1fbf5b; }
+.nuvia-checkout-shipnote { font-size: 0.85rem; color: rgba(15, 45, 82, 0.7); }
+
+@media (min-width: 860px) {
+  .nuvia-checkout-grid { grid-template-columns: 1.4fr 1fr; align-items: start; }
+  .nuvia-checkout-summary { position: sticky; top: 20px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .nuvia-checkout-submit { transition: none; }
+}
