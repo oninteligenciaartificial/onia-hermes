@@ -20,6 +20,7 @@ a Sergio por Telegram vía `$env.TELEGRAM_BOT_TOKEN` / `$env.TELEGRAM_SERGIO_CHA
 | ONIA - Agente Vendedor (borradores) | `C96NmbalLhaTEf0G` | Lun-Sab 08:30 | SSH `docker exec onia-center sales-agent.mjs`: lee leads del CRM, califica+redacta con LiteLLM, deja SOLO borradores (tarea + review_queue pending/sensitive/reviewer=sergio). NO envia | Solo si hay borradores |
 | ONIA - Nuevo Lead (speed-to-lead) | `WA6VkNu5OHo6Npem` | Webhook on-demand | `POST /webhook/nuevo-lead` `{secret,company,contact,channel,message}`: crea el lead + califica + redacta la primera respuesta (borrador) al toque. Bridge inbound (formulario/WhatsApp/Hermes) -> CRM -> Vendedor. NO envia | Por lead |
 | ONIA - Nuvia Sourcing Score (v1) | `ECC1THa2kTmOGepY` | Webhook on-demand | `POST /webhook/nuvia-candidato` `{secret,candidates[]}`: score ONIA-Bolivia (flete/arancel/demanda/precio) por SSH, upsert en `nuvia_sourcing_candidates`. Read-only, sin contacto ni pago | Por lote |
+| ONIA - Reporte diario Sergio + Arthur | `xQaO3Sfsl9XzMiid` | Lun-Sab 07:00 | SSH `arthur-report.mjs`: tareas del dia para Sergio y Arthur (obligaciones acuerdo 60d + CRM vivo) + verificacion de ganancias de Arthur (payment_commissions por estado + progreso trial). Determinista, solo suma lo registrado | Diario |
 
 Los 5 crones fueron probados end-to-end antes de activar (ejecución real + Telegram
 recibido). El de propuestas (webhook) se probó con slug real (`bench`), secret
