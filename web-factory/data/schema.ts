@@ -115,10 +115,16 @@ const dashboardChartSchema = z.object({
     .default([]),
 });
 
+const dashboardTableCellSchema = z.union([
+  z.string(),
+  z.object({ value: z.string(), status: z.enum(["pos", "neg", "warn"]).optional() }),
+]);
+
 const dashboardTableSchema = z.object({
   title: z.string().default("Detalle"),
   columns: z.array(z.string().min(1)).default([]),
-  rows: z.array(z.array(z.string())).default([]),
+  rows: z.array(z.array(dashboardTableCellSchema)).default([]),
+  filtros: z.array(z.string().min(1)).default([]),
 });
 
 const dashboardHeroPanelSchema = z.discriminatedUnion("kind", [

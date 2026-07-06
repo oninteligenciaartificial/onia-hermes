@@ -13,10 +13,13 @@ function escapeAttribute(value: string): string {
   return escapeHtml(value).replace(/'/g, "&#39;");
 }
 
+export type DashboardTableCell = string | { value: string; status?: "pos" | "neg" | "warn" };
+
 export type DashboardTable = {
   title: string;
   columns: string[];
-  rows: string[][];
+  rows: DashboardTableCell[][];
+  filtros?: string[];
 };
 
 export function renderEmpty(title: string, hint: string): string {
@@ -85,6 +88,28 @@ export function renderCharts(charts: DashboardChart[]): string {
         </section>`;
 }
 
+const PILL_GLYPH: Record<string, string> = { pos: "&#10003;", neg: "&#10005;", warn: "&#33;" };
+
+function renderCell(cell: DashboardTableCell): string {
+  if (typeof cell === "string") {
+    return escapeHtml(cell);
+  }
+  const status = cell.status;
+  if (!status) {
+    return escapeHtml(cell.value);
+  }
+  return `<span class="wf-dash-pill wf-dash-pill--${status}"><span class="wf-dash-pill-glyph" aria-hidden="true">${PILL_GLYPH[status]}</span>${escapeHtml(cell.value)}</span>`;
+}
+
+function renderFiltros(filtros: string[] | undefined): string {
+  if (!filtros || !filtros.length) {
+    return "";
+  }
+  return `<div class="wf-dash-chips" role="group" aria-label="Filtros">${filtros
+    .map((label) => `<button type="button" class="wf-dash-chip">${escapeHtml(label)}</button>`)
+    .join("")}</div>`;
+}
+
 export function renderTable(table: DashboardTable): string {
   if (!table.columns.length) {
     return "";
@@ -97,7 +122,7 @@ export function renderTable(table: DashboardTable): string {
         .map(
           (row) =>
             `<tr>${table.columns
-              .map((_, index) => `<td>${escapeHtml(row[index] ?? "")}</td>`)
+              .map((_, index) => `<td>${row[index] !== undefined ? renderCell(row[index]) : ""}</td>`)
               .join("")}</tr>`,
         )
         .join("")
@@ -108,6 +133,7 @@ export function renderTable(table: DashboardTable): string {
           <div class="wf-dash-table-head">
             <h2>${escapeHtml(table.title)}</h2>
           </div>
+          ${renderFiltros(table.filtros)}
           <div class="wf-dash-table-scroll">
             <table>
               <thead>${head}</thead>
@@ -256,5 +282,51 @@ export const dashboardCardsCss = `
 
 .wf-dash-empty strong {
   color: var(--color-fg);
+}
+
+.wf-dash-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.wf-dash-chip {
+  padding: 6px 12px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted-foreground);
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.wf-dash-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 9px;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.wf-dash-pill-glyph {
+  font-size: 0.72rem;
+}
+
+.wf-dash-pill--pos {
+  color: var(--wf-pos);
+  background: color-mix(in srgb, var(--wf-pos) 14%, transparent);
+}
+
+.wf-dash-pill--neg {
+  color: var(--wf-neg);
+  background: color-mix(in srgb, var(--wf-neg) 14%, transparent);
+}
+
+.wf-dash-pill--warn {
+  color: var(--wf-warn);
+  background: color-mix(in srgb, var(--wf-warn) 14%, transparent);
 }
 `;

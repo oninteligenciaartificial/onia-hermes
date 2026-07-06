@@ -132,3 +132,30 @@ describe("clientSchema dashboard heroPanel", () => {
     expect(parsed.dashboard.heroPanel).toBeUndefined();
   });
 });
+
+describe("clientSchema dashboard table cells and filtros", () => {
+  it("accepts plain string cells (backward compatible)", () => {
+    const parsed = clientSchema.parse({
+      nombre: "Panel", slug: "panel", tagline: "t", descripcion: "d",
+      dashboard: { table: { title: "Pedidos", columns: ["Pedido", "Estado"], rows: [["#1", "Pagado"]] } },
+    });
+    expect(parsed.dashboard.table.rows[0][1]).toBe("Pagado");
+  });
+
+  it("accepts rich status cells", () => {
+    const parsed = clientSchema.parse({
+      nombre: "Panel", slug: "panel", tagline: "t", descripcion: "d",
+      dashboard: {
+        table: {
+          title: "Pedidos",
+          columns: ["Pedido", "Estado"],
+          rows: [["#1", { value: "Pagado", status: "pos" }]],
+          filtros: ["Estado", "Fecha"],
+        },
+      },
+    });
+    const cell = parsed.dashboard.table.rows[0][1];
+    expect(typeof cell === "object" ? cell.value : cell).toBe("Pagado");
+    expect(parsed.dashboard.table.filtros).toEqual(["Estado", "Fecha"]);
+  });
+});
