@@ -24,6 +24,7 @@ referencia). Fuente única de asignación de trabajo y prompts de arranque:
 | F | `bolivian-electric-fase1` | repo Bolivian Electric (todo) | R3 |
 | G | `infra-deploy-n8n` | n8n / VPS / Supabase — SERIAL, un solo dueño | M1→M6 |
 | H | `contenido-higgsfield` | onia-hermes `hermes-content/references`+`skills`(video/IG)+`scripts`(video/ig)+`.hermes/video-lab`+assets | producción continua (video, carruseles, IG) |
+| K | `meta-ads` | onia-hermes `hermes-content/integrations/meta/**` + `hermes-content/docs/ONIA_META_SETUP_Y_ADS_RUNBOOK.md` | motor Meta Ads (DRY, cero gasto) + runbook setup Meta/WhatsApp |
 | Core | `onia-core` | onia-hermes `onia-core/**` | contrato/schema/adapters — CONGELADO, solo bajo adopción aprobada |
 
 Regla dura: 1 carril = 1 worktree = 1 rama = 1 carpeta. A/B/C avisan antes de

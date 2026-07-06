@@ -1,0 +1,14 @@
+{
+  "name": "@onia/meta-ads",
+  "version": "0.1.0",
+  "private": true,
+  "description": "ONIA Meta Ads engine — DRY-by-default Marketing API client + creative->ad mapping + Pixel/CAPI. Zero spend without Sergio's approval.",
+  "main": "src/index.js",
+  "type": "commonjs",
+  "scripts": {
+    "test": "node test/all.test.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "job_id": "demo-dentalgest-001",
+  "account": "client",
+  "objective": "lead",
+  "caption": {
+    "text": "Tu clínica dental llena de turnos, sin contestar el teléfono todo el día."
+  },
+  "cta": { "type": "dm", "text": "Escribinos" },
+  "asset": {
+    "type": "video",
+    "video_id": "REPLACE_WITH_UPLOADED_VIDEO_ID",
+    "image_url": "https://onia.com.bo/assets/dentalgest-thumb.jpg"
+  },
+  "notes": "EJEMPLO. El video sale del motor de contenido (content-engine/Higgsfield). El video_id real se obtiene tras subir el asset a Meta (client.createAdVideo, fuera de DRY). No es data de un cliente real."
+}
