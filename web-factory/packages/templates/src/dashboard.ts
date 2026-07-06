@@ -205,20 +205,23 @@ body {
   font-family: var(--font-body);
   --wf-pos: #166534;
   --wf-neg: #b91c1c;
+  --wf-warn: #92400e;
 }
 
-/* Dark mode: the dark green/red status text fails contrast on the dark tinted
-   pill, so lift them to brighter tones that read on a dark surface. */
+/* Dark mode: the dark green/red/amber status text fails contrast on the dark
+   tinted pill, so lift them to brighter tones that read on a dark surface. */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) body {
     --wf-pos: #4ade80;
     --wf-neg: #f87171;
+    --wf-warn: #fbbf24;
   }
 }
 
 [data-theme="dark"] body {
   --wf-pos: #4ade80;
   --wf-neg: #f87171;
+  --wf-warn: #fbbf24;
 }
 
 a {

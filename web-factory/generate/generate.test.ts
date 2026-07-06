@@ -224,6 +224,28 @@ describe("generateSite", () => {
     expect(css).toContain("--color-primary");
   });
 
+  it("emits a --wf-warn token alongside --wf-pos/--wf-neg for status pills", async () => {
+    const rootDir = await mkdtemp(path.join(os.tmpdir(), "onia-web-factory-"));
+    await mkdir(path.join(rootDir, "data", "clients"), { recursive: true });
+
+    await writeFile(
+      path.join(rootDir, "data", "clients", "panel.json"),
+      JSON.stringify({
+        nombre: "Panel Demo",
+        slug: "panel",
+        tagline: "Panel de control demo",
+        descripcion: "Dashboard de ejemplo.",
+        dashboard: { title: "Panel" },
+      }),
+      "utf8",
+    );
+
+    const result = await generateSite("panel", { rootDir, template: "dashboard" });
+    const css = await readFile(path.join(result.outputDir, "site.css"), "utf8");
+
+    expect(css).toContain("--wf-warn:");
+  });
+
   it("renders dashboard empty states when data is missing", async () => {
     const rootDir = await mkdtemp(path.join(os.tmpdir(), "onia-web-factory-"));
     await mkdir(path.join(rootDir, "data", "clients"), { recursive: true });
