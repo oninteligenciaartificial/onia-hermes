@@ -2,12 +2,11 @@ import { escapeAttribute, escapeHtml } from "./escape";
 import { pickCredencialIcon, renderIcon } from "./icons";
 import type { SiteClient } from "./types";
 
-// Full-bleed image hero: a dominant photo fills the viewport, nav overlays the
-// top, and a large display headline sits over a bottom scrim. The media layer is
-// a parallax target.
-export function renderClinicHeroFullbleed(client: SiteClient): string {
+// Shared overlay-hero shell: a full-bleed media layer, a scrim, nav overlay and a
+// large headline over the bottom. Both the photo and video hero variants reuse
+// it by passing a different media layer.
+export function renderOverlayHero(client: SiteClient, mediaLayer: string): string {
   const logo = client.logo.trim() || client.nombre.slice(0, 2).toUpperCase();
-  const media = client.heroPoster?.trim();
 
   const trust = (client.credenciales?.length ? client.credenciales : client.beneficios ?? [])
     .filter((item) => item.trim().length > 0)
@@ -24,12 +23,6 @@ export function renderClinicHeroFullbleed(client: SiteClient): string {
   const eyebrow = client.contacto.direccion
     ? `<p class="wf-clinic-eyebrow">${renderIcon("map-pin", "wf-icon")}<span>${escapeHtml(client.contacto.direccion)}</span><span class="wf-clinic-dot" aria-hidden="true"></span><span>Atención con turno</span></p>`
     : `<p class="wf-clinic-eyebrow"><span>Atención con turno</span></p>`;
-
-  const mediaLayer = media
-    ? `<div class="wf-clinic-hero-media" data-parallax>
-        <img class="wf-clinic-hero-img" src="${escapeAttribute(media)}" alt="${escapeAttribute(`Ambiente de ${client.nombre}`)}" fetchpriority="high" decoding="async">
-      </div>`
-    : `<div class="wf-clinic-hero-media wf-clinic-hero-media--empty" aria-hidden="true"></div>`;
 
   return `
     <header class="wf-clinic-hero" id="top">
@@ -51,4 +44,14 @@ export function renderClinicHeroFullbleed(client: SiteClient): string {
       </div>
     </header>
   `;
+}
+
+export function renderClinicHeroFullbleed(client: SiteClient): string {
+  const media = client.heroPoster?.trim();
+  const mediaLayer = media
+    ? `<div class="wf-clinic-hero-media" data-parallax>
+        <img class="wf-clinic-hero-img" src="${escapeAttribute(media)}" alt="${escapeAttribute(`Ambiente de ${client.nombre}`)}" fetchpriority="high" decoding="async">
+      </div>`
+    : `<div class="wf-clinic-hero-media wf-clinic-hero-media--empty" aria-hidden="true"></div>`;
+  return renderOverlayHero(client, mediaLayer);
 }

@@ -743,4 +743,88 @@ export const clinicCss = `
   .wf-clinic-split-panel { width: 100%; margin-left: 0; }
   .wf-clinic-split-body { padding-top: 28px; }
 }
+
+/* ---------- Hero variant: video (reuses the overlay shell) ---------- */
+.wf-clinic-hero-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ---------- Hero variant: typographic ---------- */
+.wf-clinic-hero--typo {
+  min-height: auto;
+  display: flex;
+  flex-direction: column;
+  width: var(--wrap);
+  margin-inline: auto;
+  padding-bottom: clamp(40px, 6vw, 72px);
+  color: var(--color-fg);
+  overflow: hidden;
+}
+
+.wf-clinic-hero--typo .wf-clinic-brand { color: var(--color-fg); }
+
+.wf-clinic-typo-stage {
+  position: relative;
+  display: grid;
+  place-items: center;
+  padding: clamp(20px, 4vw, 48px) 0 clamp(8px, 2vw, 24px);
+  min-height: clamp(320px, 44vh, 560px);
+}
+
+.wf-clinic-typo-word {
+  grid-area: 1 / 1;
+  font-family: var(--font-heading);
+  font-weight: 850;
+  font-size: clamp(4.5rem, 20vw, 15rem);
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--color-fg) 12%, var(--color-bg));
+  white-space: nowrap;
+  max-width: 100%;
+  overflow: hidden;
+  user-select: none;
+}
+
+.wf-clinic-typo-media {
+  grid-area: 1 / 1;
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  width: clamp(240px, 34vw, 420px);
+  aspect-ratio: 3 / 4;
+  border-radius: calc(var(--radius) * 1.3);
+  overflow: hidden;
+  box-shadow: 0 40px 90px color-mix(in srgb, var(--color-fg) 24%, transparent);
+}
+
+.wf-clinic-typo-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.wf-clinic-typo-content { max-width: 640px; }
+
+.wf-clinic-typo-h1 {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: clamp(1.9rem, 3.6vw, 3rem);
+  line-height: 1.04;
+  letter-spacing: -0.02em;
+  color: var(--color-fg);
+}
+
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .wf-clinic-typo-media {
+      animation: wfHeroParallax linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0 80vh;
+    }
+  }
+}
+
+@media (max-width: 560px) {
+  .wf-clinic-typo-word { font-size: clamp(3.5rem, 26vw, 6rem); }
+}
 `;

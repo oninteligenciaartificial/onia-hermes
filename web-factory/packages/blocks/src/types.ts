@@ -15,9 +15,11 @@ export type SiteClient = {
     linkedin: string;
     x: string;
   };
+  heroVideo?: string;
   heroPoster?: string;
   imagenSecundaria?: string;
-  heroVariant?: "auto" | "fullbleed" | "split" | "typographic";
+  heroVariant?: "auto" | "fullbleed" | "split" | "typographic" | "video";
+  rubro?: string;
   servicios: Array<{
     titulo: string;
     desc: string;

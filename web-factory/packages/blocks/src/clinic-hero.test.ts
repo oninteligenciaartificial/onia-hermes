@@ -20,6 +20,20 @@ describe("hero variant dispatcher", () => {
     expect(resolveHeroVariant({ ...base, heroVariant: "auto" })).toBe("split");
   });
 
+  it("auto-selects video with a hero video and typographic for brand-led rubros", () => {
+    expect(resolveHeroVariant({ ...base, heroVideo: "assets/v.mp4", heroPoster: "assets/x.webp" })).toBe("video");
+    expect(resolveHeroVariant({ ...base, rubro: "estudio de estetica dental" })).toBe("typographic");
+  });
+
+  it("renders typographic and video compositions", () => {
+    const typo = renderClinicHero({ ...base, heroVariant: "typographic", heroPoster: "assets/x.webp" });
+    expect(typo).toContain("wf-clinic-hero--typo");
+    expect(typo).toContain("wf-clinic-typo-word");
+    const video = renderClinicHero({ ...base, heroVariant: "video", heroVideo: "assets/v.mp4" });
+    expect(video).toContain("wf-clinic-hero-video");
+    expect(video).toContain("assets/v.mp4");
+  });
+
   it("renders the split composition when selected", () => {
     const html = renderClinicHero({ ...base, heroVariant: "split", heroPoster: "assets/x.webp" });
     expect(html).toContain("wf-clinic-hero--split");
