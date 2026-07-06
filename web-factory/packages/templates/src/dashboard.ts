@@ -2,6 +2,7 @@ import { clientTokenCss } from "@onia/tokens";
 import { dashboardCardsCss, renderCharts, renderKpis, renderTable } from "./dashboard-cards";
 import type { DashboardTable } from "./dashboard-cards";
 import { dashboardChartsCss } from "./dashboard-charts";
+import { dashboardHeroCss, renderHeroPanel } from "./dashboard-hero";
 import type { DashboardChart, DashboardHeroPanel, DashboardKpi, DashboardPoint, DashboardSeries } from "./dashboard-types";
 
 export type { DashboardChart, DashboardHeroPanel, DashboardKpi, DashboardPoint, DashboardSeries } from "./dashboard-types";
@@ -55,6 +56,7 @@ export function renderDashboardBody(client: DashboardClient): string {
       </aside>
       <div class="wf-dash-main">
         ${renderTopbar(client)}
+        ${renderHeroPanel(dash.heroPanel)}
         ${renderKpis(dash.kpis)}
         ${renderCharts(dash.charts)}
         ${renderTable(dash.table)}
@@ -119,7 +121,9 @@ ${dashboardBaseCss}
 
 ${dashboardChartsCss}
 
-${dashboardCardsCss}`;
+${dashboardCardsCss}
+
+${dashboardHeroCss}`;
 }
 
 export function renderDashboardDocument(client: DashboardClient): string {

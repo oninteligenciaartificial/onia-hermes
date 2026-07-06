@@ -246,6 +246,38 @@ describe("generateSite", () => {
     expect(css).toContain("--wf-warn:");
   });
 
+  it("renders a queue heroPanel through the dashboard generator", async () => {
+    const rootDir = await mkdtemp(path.join(os.tmpdir(), "onia-web-factory-"));
+    await mkdir(path.join(rootDir, "data", "clients"), { recursive: true });
+
+    await writeFile(
+      path.join(rootDir, "data", "clients", "panel.json"),
+      JSON.stringify({
+        nombre: "Panel Demo",
+        slug: "panel",
+        tagline: "Panel de control demo",
+        descripcion: "Dashboard de ejemplo.",
+        dashboard: {
+          title: "Panel operativo",
+          heroPanel: {
+            kind: "queue",
+            title: "Para hoy",
+            items: [{ titulo: "Aprobar presupuesto #204", estado: "urgente", meta: "Vence hoy" }],
+          },
+        },
+      }),
+      "utf8",
+    );
+
+    const result = await generateSite("panel", { rootDir, template: "dashboard" });
+    const html = await readFile(path.join(result.outputDir, "index.html"), "utf8");
+    const css = await readFile(path.join(result.outputDir, "site.css"), "utf8");
+
+    expect(html).toContain("wf-dash-hero--queue");
+    expect(html).toContain("Aprobar presupuesto #204");
+    expect(css).toContain(".wf-dash-hero");
+  });
+
   it("renders dashboard empty states when data is missing", async () => {
     const rootDir = await mkdtemp(path.join(os.tmpdir(), "onia-web-factory-"));
     await mkdir(path.join(rootDir, "data", "clients"), { recursive: true });
