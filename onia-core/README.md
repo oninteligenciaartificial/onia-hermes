@@ -57,6 +57,24 @@ modulos, verticales o integraciones. No son la definicion del core.
 - `install-plan.mjs`: genera el plan de instalacion de un vertical (core +
   modulos + logica de @onia/core a portar, ordenado). Herramienta nuestra,
   read-only: `node onia-core/install-plan.mjs <track|producto>`.
+- **Plan por negocio** (rubro + tamano + cuestionario), aditivo, no toca el
+  contrato:
+  - `business-tiers.json`/`.mjs`: convierte el empaquetado comercial YA
+    DECIDIDO (Ordenado/Profesional/Empresa + Empresarial E1/E2/E3, ver
+    `ONIA_CATALOGO_COMERCIAL_2026.md`) en datos validables — que capabilities
+    del core, que modulos y que limites (usuarios/sucursales/puentes) trae
+    cada nivel de tamano de negocio. `validate-business-tiers.mjs` exige
+    monotonia (un nivel superior nunca pierde algo del inferior).
+  - `vertical-extensions.json`/`.mjs`: catalogo de las funciones ESPECIFICAS
+    de cada rubro que NO viven en onia-core (ej. odontograma para
+    DentalGest, guia de movimiento animal para Ganadero OS) — investigado con
+    subagente por rubro. `validate-vertical-extensions.mjs` exige que ninguna
+    choque con una entidad del core.
+  - `business-diagnostic.json`/`.mjs`: cuestionario PREVIO al configurador de
+    7 preguntas (`ONIA_COMPANY_BACKBONE_AND_SELF_SERVICE_2026.md`) — resuelve
+    rubro + nivel + modulos a partir de las respuestas de una empresa.
+    `resolveDiagnostic()` nunca inventa un upsell: si ningun nivel alcanza,
+    devuelve null (revision humana). Demo: `node onia-core/business-diagnostic.mjs`.
 - `modules/`: modulos vendibles (add-ons activables SOBRE el core, FUERA del
   contrato congelado — el core no es inventario/ventas/contabilidad/facturacion/
   nomina). `commerce.json` (catalogo/inventario/cotizaciones B2B/ventas-caja),
@@ -104,11 +122,14 @@ modulos, verticales o integraciones. No son la definicion del core.
 ## Validacion, tests y reporte
 
 ```bash
-npm run validate:onia-core                    # invariantes del contrato core
-node onia-core/modules/validate-modules.mjs   # validador de modulos vendibles
-node --test onia-core/*.test.mjs onia-core/logic/*.test.mjs onia-core/modules/*.test.mjs   # 231 tests
-node onia-core/report.mjs                     # foto de avance por vertical/producto/modulo
+npm run validate:onia-core                        # invariantes del contrato core
+node onia-core/modules/validate-modules.mjs       # validador de modulos vendibles
+node onia-core/validate-business-tiers.mjs        # validador de niveles de tamano
+node onia-core/validate-vertical-extensions.mjs   # validador del catalogo por rubro
+node --test onia-core/*.test.mjs onia-core/logic/*.test.mjs onia-core/modules/*.test.mjs   # 265 tests
+node onia-core/report.mjs                         # foto de avance por vertical/producto/modulo
 node onia-core/install-plan.mjs <track|producto>   # plan de instalacion de un vertical
+node onia-core/business-diagnostic.mjs            # demo del cuestionario -> rubro+nivel+modulos
 ```
 
 ## Politica de distribucion

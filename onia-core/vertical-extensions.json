@@ -1,0 +1,91 @@
+{
+  "name": "ONIA Vertical Extensions Catalog",
+  "version": "0.1.0",
+  "purpose": "Cataloga las funciones/entidades ESPECIFICAS de cada rubro que NO viven en onia-core ni en sus modulos (son del PRODUCTO, ej. DentaGest, Ganadero OS). El core responde quien/pendiente/evidencia para CUALQUIER negocio; estas entidades resuelven el rubro puntual (odontograma para dental, potreros/sanidad para ganado). Sirve para no confundir 'especifico del rubro' con 'core' al construir un producto nuevo, y como insumo del cuestionario de diagnostico (business-diagnostic.json).",
+  "extensions": [
+    {
+      "trackId": "dentagest-clinical",
+      "product": "DentalGest",
+      "domainName": "salud_dental",
+      "coreHooks": [
+        { "coreEntityId": "contact", "as": "Patient es domain_specific: NUNCA se aplana a Contact generico (adapter dentagest.json)" },
+        { "coreEntityId": "schedule_event", "as": "Appointment cubre la cita clinica; ScheduleEvent del core solo agrega recalls/seguimientos" },
+        { "coreEntityId": "document", "as": "radiografias/consentimientos via storageRef, con visibilidad clinica restringida" }
+      ],
+      "entities": [
+        { "id": "patient", "name": "Patient", "purpose": "Paciente con historia clinica. Vive fuera del core, nunca se aplana a Contact/BusinessPartner." },
+        { "id": "clinical_record", "name": "ClinicalRecord", "purpose": "Historia clinica del paciente. Bolivia exige 'Norma Nacional de Historia Clinica Odontologica' (Ministerio de Salud) para todo establecimiento." },
+        { "id": "odontogram_entry", "name": "OdontogramEntry", "purpose": "Registro por pieza dental (numeracion FDI, ISO 3950) + superficie (oclusal/mesial/distal/vestibular/palatina) con estado clinico y color convencional. El corazon del producto dental." },
+        { "id": "perio_chart", "name": "PeriodontalReading", "purpose": "6 puntos por diente: profundidad de bolsa, sangrado, recesion, movilidad, furcacion. Entidad separada del odontograma." },
+        { "id": "treatment_plan", "name": "TreatmentPlan", "purpose": "Agrupa varios tratamientos con costo total y aprobacion/firma del paciente, distinto de cada tratamiento individual ejecutado." },
+        { "id": "patient_treatment", "name": "PatientTreatment", "purpose": "Tratamiento ejecutado o programado, dentro de un TreatmentPlan." },
+        { "id": "informed_consent", "name": "InformedConsent", "purpose": "Consentimiento firmado (paciente + profesional + testigo) antes de un procedimiento invasivo (implante, endodoncia, exodoncia, ortodoncia)." },
+        { "id": "medical_alert", "name": "MedicalAlert", "purpose": "Alergias/medicacion/condiciones sistemicas, ESTRUCTURADO (no texto libre), con alerta visual prominente al abrir la ficha." },
+        { "id": "recall_schedule", "name": "RecallSchedule", "purpose": "Proximo control/limpieza periodica con intervalo configurable y recordatorio." },
+        { "id": "dental_lab_case", "name": "DentalLabCase", "purpose": "Encargo a laboratorio protesico (protesis/corona/guarda) con estado de envio/recepcion y costo." },
+        { "id": "tooth_image", "name": "ToothImage", "purpose": "Radiografia/foto intraoral vinculada a pieza dental y fecha (distinto de un adjunto generico)." }
+      ],
+      "notes": [
+        "FDI (ISO 3950, dos digitos) es el estandar en Latinoamerica; el Universal 1-32 es propio de Norteamerica.",
+        "Bolivia exige la Historia Clinica Odontologica (Ministerio de Salud) pero no dicta el modelo de datos del odontograma en si.",
+        "Investigado con subagente 2026-07-06 (fuentes: OpenDental, softwaredentalink, MinSalud Bolivia — norma de historia clinica)."
+      ]
+    },
+    {
+      "trackId": "ganadero-offline",
+      "product": "Ganadero OS",
+      "domainName": "agro_ganaderia",
+      "coreHooks": [
+        { "coreEntityId": "area", "as": "Pasture/Potrero es domain_specific: no se aplana a Area generica" },
+        { "coreEntityId": "document", "as": "certificados sanitarios (aftosa/brucelosis) via storageRef" }
+      ],
+      "entities": [
+        { "id": "animal_identifier", "name": "AnimalIdentifier", "purpose": "Caravana (numerica o boton RFID) o marca a fuego. SINTRABOL/SENASAG exige identificacion individual desde los 3 meses o antes del destete (REGENSA cap. 3.15/3.16)." },
+        { "id": "herd", "name": "Herd", "purpose": "Lote/grupo de manejo (edad, categoria) independiente del potrero fisico; rota entre potreros manteniendo su identidad." },
+        { "id": "herd_pasture_assignment", "name": "HerdPastureAssignment", "purpose": "Que lote ocupo que potrero en que rango de fechas (rotacion de pasturas)." },
+        { "id": "lifecycle_category", "name": "LifecycleCategory", "purpose": "Etapa productiva (ternero, destete, vaquillona, novillo, vaca de cria, vaca seca, toro) con fecha de transicion; dispara reglas de manejo." },
+        { "id": "vaccination_campaign", "name": "VaccinationCampaign", "purpose": "Campana oficial obligatoria (PRONEFA fiebre aftosa, programa de brucelosis) por periodo/zona, distinta del evento sanitario puntual." },
+        { "id": "brand_registration", "name": "BrandRegistration", "purpose": "Marca/hierro del hato registrado ante CONGABOL (Ley 80, DS 28303): prueba legal de propiedad, a nivel de predio, no de animal individual." },
+        { "id": "genealogy", "name": "Genealogy", "purpose": "Padre/madre/linea genetica + categoria de registro (PO/LA), solo para ganado de raza pura via asociacion (ej. ASOCEBU)." },
+        { "id": "movement_guide", "name": "MovementGuide", "purpose": "Guia de Movimiento Animal (GMA) de SENASAG: documento obligatorio para cualquier venta/traslado legal." },
+        { "id": "premises_registration", "name": "PremisesRegistration", "purpose": "Registro del predio pecuario (RUNSA) ante SENASAG; precondicion legal para operar y para emitir GMA." },
+        { "id": "weaning_event", "name": "WeaningEvent", "purpose": "Destete: dispara cambio de LifecycleCategory y habilita la identificacion SINTRABOL obligatoria." }
+      ],
+      "notes": [
+        "Bolivia: SENASAG administra SINTRABOL (trazabilidad), PRONEFA (aftosa) y el programa de brucelosis; identificacion individual obligatoria por reglamento.",
+        "Marcas/hierros (Ley 80, DS 28303) son un registro de PROPIEDAD distinto y anterior a la identificacion individual SINTRABOL.",
+        "Genealogia/pedigri solo aplica a ganado de registro (ASOCEBU); no es universal para todo productor.",
+        "Investigado con subagente 2026-07-06 (fuentes: SENASAG oficial, ASOCEBU, DS 28303 Lexivox).",
+        "Producto en pausa comercial (ver ONIA_CATALOGO_COMERCIAL_2026.md); catalogo preparado para cuando se retome."
+      ]
+    },
+    {
+      "trackId": "proveegest-electrico",
+      "product": "ProveeGest (Bolivian Electric = caso fundador)",
+      "domainName": "distribucion_b2b",
+      "coreHooks": [
+        { "coreEntityId": "business_partner", "as": "cliente_empresa/proveedor/importador ya cubierto por partnerType del core" }
+      ],
+      "entities": [
+        { "id": "product_homologation", "name": "ProductHomologation", "purpose": "Mapeo de codigo interno de producto a codigo generico SIN (nacional vs importado), requerido para facturar via el modulo invoicing." },
+        { "id": "landed_cost_calculation", "name": "LandedCostCalculation", "purpose": "CIF -> Gravamen Arancelario por NANDINA -> IVA import -> logistica -> tasa efectiva. Vive fuera de onia-core (ver ONIA_IMPORT_LANDED_COST_MODULE_2026.md); usaria fx.logic.mjs del core para el tipo de cambio." },
+        { "id": "technical_catalog_spec", "name": "TechnicalCatalogSpec", "purpose": "Ficha tecnica de material electrico (voltajes, calibres, normas) mas alla del Product generico de commerce; se apoya en el modulo knowledge." }
+      ],
+      "notes": [
+        "La mayor parte de las necesidades de ProveeGest YA estan cubiertas por los modulos (commerce/accounting/invoicing/payroll/knowledge); la extension vertical es delgada a proposito.",
+        "Landed cost/aranceles es un modulo pendiente (ver ONIA_IMPORT_LANDED_COST_MODULE_2026.md), no construido todavia."
+      ]
+    },
+    {
+      "trackId": "gestios-general",
+      "product": "GestiOS",
+      "domainName": "pymes_general",
+      "coreHooks": [],
+      "entities": [],
+      "notes": [
+        "GestiOS ES el vertical generico: casi todas sus necesidades se resuelven con core + modulos (commerce/accounting), sin extension propia.",
+        "Si aparece una necesidad realmente especifica de un sub-rubro (ej. restaurantes, estudios profesionales), se modela como un pack nuevo (verticalPacks del contrato), no aca."
+      ]
+    }
+  ]
+}

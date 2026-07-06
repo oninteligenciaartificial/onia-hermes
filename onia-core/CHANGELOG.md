@@ -1,5 +1,66 @@
 # ONIA Core Changelog
 
+## business-planning — 2026-07-06 (plan por negocio: rubro + tamano + diagnostico)
+
+- **Nueva capa aditiva (3 artefactos, no toca contract.json):** formaliza "como
+  armar el plan por negocio" — que es del CORE (toda empresa), que es de
+  MODULO (reutilizable entre rubros), que es EXTENSION VERTICAL (solo un
+  rubro, ej. odontograma) y que TAMANO de negocio necesita cada combinacion.
+- `business-tiers.json`/`.mjs` + `validate-business-tiers.mjs`: convierte el
+  empaquetado comercial YA DECIDIDO (`ONIA_CATALOGO_COMERCIAL_2026.md`
+  seccion 2-3: Ordenado/Profesional/Empresa en BOB + Empresarial E1/E2/E3 en
+  USD) en datos validables — NO se inventa una segmentacion paralela (ej.
+  micro/pequena/mediana/grande legal boliviana), se usa la que ONIA ya
+  decidio y cobra. Cada nivel declara sus `coreCapabilities`, `modules` (con
+  nota de "focus" cuando el modulo se usa parcialmente, ej. accounting =
+  "solo tax_bolivia" en Profesional) y `limits` (maxUsers/maxSucursales/
+  maxBridges, `null` = sin tope). El validador exige **monotonia**: un nivel
+  superior nunca pierde una capability/modulo que ya tenia el inferior
+  (probado con test de ruptura intencional). Helpers: `recommendTierForLimits`
+  (el nivel MAS CHICO que alcanza los limites pedidos, no el mayor).
+  2 familias (pyme, empresarial), 6 niveles. +14 tests.
+- `vertical-extensions.json`/`.mjs` + `validate-vertical-extensions.mjs`:
+  catalogo de las entidades ESPECIFICAS de cada rubro que viven en el
+  PRODUCTO, nunca en onia-core ni en sus modulos. Validado con 2 subagentes
+  de investigacion en paralelo:
+  - **DentalGest**: `odontogram_entry` (numeracion FDI/ISO 3950 — estandar
+    Latam, no el Universal americano — por pieza y por las 5 superficies:
+    oclusal/mesial/distal/vestibular/palatina), `perio_chart` (periodontograma,
+    entidad separada del odontograma), `treatment_plan` (agrupa tratamientos
+    con aprobacion del paciente, distinto de cada tratamiento individual),
+    `informed_consent`, `medical_alert` (estructurado, no texto libre),
+    `recall_schedule`, `dental_lab_case`, `tooth_image`. Bolivia exige
+    "Historia Clinica Odontologica" (Ministerio de Salud) pero no dicta el
+    modelo de datos del odontograma en si.
+  - **Ganadero OS**: `animal_identifier` (SINTRABOL/SENASAG exige
+    identificacion individual obligatoria), `herd` (lote de manejo,
+    independiente del potrero fisico — patron universal del software
+    ganadero), `vaccination_campaign` (PRONEFA fiebre aftosa + brucelosis,
+    campana oficial obligatoria, distinta del evento sanitario puntual),
+    `brand_registration` (marca/hierro, Ley 80 + DS 28303, registro de
+    PROPIEDAD via CONGABOL, a nivel de predio no de animal), `genealogy`
+    (solo ganado de registro via ASOCEBU), `movement_guide` (Guia de
+    Movimiento Animal, SENASAG, obligatoria para cualquier venta/traslado),
+    `premises_registration` (RUNSA).
+  - El validador exige que ninguna entidad de rubro choque con un id de
+    entidad del core (probado con ruptura intencional). GestiOS (rubro
+    generico) queda con extension vacia a proposito: casi todo se resuelve
+    con core+modulos. ProveeGest queda delgada (la mayoria ya cubierta por
+    los 5 modulos). 4 tracks, 24 entidades de rubro. +7 tests.
+- `business-diagnostic.json`/`.mjs`: cuestionario PREVIO al configurador de 7
+  preguntas ya existente (`ONIA_COMPANY_BACKBONE_AND_SELF_SERVICE_2026.md`).
+  6 preguntas (rubro, empleados, sucursales, sistemas propios a conectar,
+  facturacion electronica, planilla formal) cuyas respuestas resuelven, via
+  `resolveDiagnostic()`: el track vertical, la familia+nivel de tamano
+  (reusando `recommendTierForLimits`), los modulos que el nivel ya incluye, y
+  los modulos pedidos que el nivel NO trae de forma titular (senal de
+  upsell/add-on para ventas). Si ningun nivel de la familia alcanza los
+  limites indicados, devuelve nivel `null` explicitamente: es una senal de
+  revision humana/comercial, nunca un upsell automatico silencioso.
+  Demo: `node onia-core/business-diagnostic.mjs`. +13 tests.
+- Total: 34 tests nuevos (265 en total), 4 validadores verdes
+  (contrato + modulos + tiers + extensions), `contract.json` intacto.
+
 ## modules/accounting 0.2.0 — 2026-07-06 (retenciones a terceros + activo fijo)
 
 - Ultimo tramo de investigacion (subagente, cruzo SIN/MEFP/Colegio de

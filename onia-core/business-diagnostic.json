@@ -1,0 +1,73 @@
+{
+  "name": "ONIA Business Diagnostic",
+  "version": "0.1.0",
+  "purpose": "Cuestionario PREVIO al configurador de 7 preguntas (ver ONIA_COMPANY_BACKBONE_AND_SELF_SERVICE_2026.md). Determina el RUBRO (vertical track) y el TAMANO (business tier) de una empresa con un punado de preguntas simples, y resuelve que modulos le corresponden. Las 7 preguntas siguen despues para cablear el detalle (canales, tipos de pendiente, aprobaciones, KPIs) una vez que ya se sabe rubro+tamano.",
+  "questions": [
+    {
+      "id": "rubro",
+      "text": "A que se dedica tu negocio?",
+      "type": "single_choice",
+      "options": [
+        { "value": "clinica_dental", "label": "Clinica u odontologia", "trackId": "dentagest-clinical" },
+        { "value": "distribucion_importacion", "label": "Distribucion, importacion o venta B2B", "trackId": "proveegest-electrico" },
+        { "value": "ganaderia", "label": "Ganaderia / agro", "trackId": "ganadero-offline" },
+        { "value": "otro_comercio_servicio", "label": "Otro comercio o servicio", "trackId": "gestios-general" }
+      ]
+    },
+    {
+      "id": "empleados",
+      "text": "Cuantas personas trabajan en tu negocio (incluyendote)?",
+      "type": "single_choice",
+      "options": [
+        { "value": "1_3", "label": "1 a 3", "signal": { "maxUsers": 3 } },
+        { "value": "4_8", "label": "4 a 8", "signal": { "maxUsers": 8 } },
+        { "value": "9_20", "label": "9 a 20", "signal": { "maxUsers": 20 } },
+        { "value": "mas_20", "label": "Mas de 20", "signal": { "maxUsers": 21 } }
+      ]
+    },
+    {
+      "id": "sucursales",
+      "text": "Cuantas sucursales o locales tenes?",
+      "type": "single_choice",
+      "options": [
+        { "value": "1", "label": "1 sola", "signal": { "maxSucursales": 1 } },
+        { "value": "2_3", "label": "2 a 3", "signal": { "maxSucursales": 3 } },
+        { "value": "mas_3", "label": "Mas de 3", "signal": { "maxSucursales": 4 } }
+      ]
+    },
+    {
+      "id": "sistemas_propios",
+      "text": "Ya usan algun sistema propio (ERP, planillas, base de datos) que haya que conectar?",
+      "type": "single_choice",
+      "options": [
+        { "value": "no", "label": "No, arrancamos de cero", "signal": { "maxBridges": 0 } },
+        { "value": "uno", "label": "Si, uno", "signal": { "maxBridges": 1 } },
+        { "value": "varios", "label": "Si, varios sistemas", "signal": { "maxBridges": 2 } }
+      ]
+    },
+    {
+      "id": "facturacion_electronica",
+      "text": "Necesitas facturar electronicamente ante el SIN?",
+      "type": "single_choice",
+      "options": [
+        { "value": "si_ya", "label": "Si, ya estamos obligados", "requiresModule": "invoicing" },
+        { "value": "pronto", "label": "Pronto (nos toca este anio)", "requiresModule": "invoicing" },
+        { "value": "no_aun", "label": "Todavia no", "requiresModule": null }
+      ]
+    },
+    {
+      "id": "empleados_formales",
+      "text": "Tenes empleados en planilla (con AFP/Gestora, aguinaldo)?",
+      "type": "single_choice",
+      "options": [
+        { "value": "si", "label": "Si", "requiresModule": "payroll" },
+        { "value": "no", "label": "No / trabajo solo", "requiresModule": null }
+      ]
+    }
+  ],
+  "notes": [
+    "Este cuestionario resuelve RUBRO + TAMANO + MODULOS; las 7 preguntas de ONIA_COMPANY_BACKBONE_AND_SELF_SERVICE_2026.md resuelven el detalle de configuracion (canales, tipos de pendiente, aprobaciones, KPIs) una vez que esto ya se sabe.",
+    "El resolver (business-diagnostic.mjs) combina las respuestas con business-tiers.json (recommendTierForLimits) para producir el nivel recomendado; install-plan.mjs produce despues el plan tecnico concreto.",
+    "Si ningun nivel de la familia alcanza los limites indicados (ej. mas sucursales de las que soporta el tier mas alto de esa familia), el resolver devuelve tierId null: es una senal de que corresponde revision humana/comercial, no una decision automatica de upsell."
+  ]
+}
