@@ -10,4 +10,5 @@ export { renderIcon, pickCredencialIcon } from "./icons";
 export { renderClinicHero } from "./clinic-hero";
 export { renderClinicServices } from "./clinic-services";
 export { renderClinicProcess } from "./clinic-process";
+export { renderClinicFeature } from "./clinic-feature";
 export type { SiteClient } from "./types";

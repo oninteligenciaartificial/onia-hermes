@@ -4,7 +4,8 @@
   "tagline": "Sonrisas sanas, sin miedo al dentista",
   "descripcion": "Clinica dental con atencion clara, trato humano y reserva directa por WhatsApp.",
   "logo": "AU",
-  "heroPoster": "assets/dental-hero.svg",
+  "heroPoster": "assets/hero-consultorio.webp",
+  "imagenSecundaria": "assets/detalle-atencion.webp",
   "colores": {
     "primary": "#0369a1",
     "secondary": "#0f172a",

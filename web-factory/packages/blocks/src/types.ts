@@ -16,6 +16,7 @@ export type SiteClient = {
     x: string;
   };
   heroPoster?: string;
+  imagenSecundaria?: string;
   servicios: Array<{
     titulo: string;
     desc: string;

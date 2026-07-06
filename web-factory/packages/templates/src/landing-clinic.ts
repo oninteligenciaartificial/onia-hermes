@@ -1,6 +1,7 @@
 import {
   escapeAttribute,
   escapeHtml,
+  renderClinicFeature,
   renderClinicHero,
   renderClinicProcess,
   renderClinicServices,
@@ -75,10 +76,11 @@ function renderRevealScript(): string {
 
 export function renderLandingClinicBody(client: LandingClient): string {
   return `
-    <main class="wf-clinic-page" id="top">
+    <main class="wf-clinic-page">
       ${renderClinicHero(client)}
       ${renderClinicStrip(client)}
       ${renderClinicServices(client)}
+      ${renderClinicFeature(client)}
       ${renderClinicProcess(client)}
       ${renderClinicFaq(client)}
       ${renderClinicFinalCta(client)}

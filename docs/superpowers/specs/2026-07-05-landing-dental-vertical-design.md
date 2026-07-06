@@ -126,3 +126,29 @@ bloques `clinic-hero` / `clinic-services` / `clinic-process` + `icons.ts` +
 Gates: 54 unit + 45 e2e verdes (a11y WCAG 2.2 AA light+dark, perf LCP < 70ms,
 estructura); peso ≈ 38kb same-origin, 0kb JS externo. Los bloques genéricos
 previos (`trust`/`process`/`faq`) quedan en el kit para otros templates.
+
+## v3 — Hero full-bleed + imágenes reales + scroll dinámico (2026-07-05)
+
+Feedback de Sergio: "siempre repetís texto a la izquierda + imagen a la derecha;
+scrapeá las webs reales, usá imágenes grandes, aprendé scroll dinámico y
+animaciones". Investigué en el browser (Awwwards categoría dental → 6 clínicas
+premiadas reales: minemal, atelier, aventura, halo, nova, south-cliff) capturadas
+headless a distintas alturas de scroll. Patrón real confirmado: **imágenes grandes
+reales + tipografía masiva + layering**, nunca un panelito a la derecha.
+
+Cambios:
+- **Hero full-bleed** (`clinic-hero.ts` reescrito): foto de consultorio a pantalla
+  completa, nav overlay, titular display gigante sobre scrim (+ text-shadow),
+  trust chips glass. Ya no es split.
+- **Banda editorial** (`clinic-feature.ts` nuevo): imagen grande + copy + bullets,
+  a mitad de página, rompe el ritmo.
+- **Imágenes reales**: fotos stock libres (Unsplash License) como placeholder,
+  optimizadas WebP (hero 161kb, detalle 71kb); schema `imagenSecundaria`. Marcadas
+  como stock en `.context.md` (reemplazar por fotos del cliente).
+- **Scroll dinámico**: parallax del hero (`animation-timeline: scroll()`) e
+  image-reveal por sección (`animation-timeline: view()`), bajo `@supports` +
+  `prefers-reduced-motion: no-preference`; IO reveals con fallback visible.
+- Perf budget del vertical subido a 320kb (ahora lleva fotos); peso ≈ 270kb.
+
+Gates: 54 unit + e2e verdes (a11y WCAG 2.2 AA light+dark, perf, estructura).
+Método de investigación reutilizable en [[web-factory-disenos-genericos]].

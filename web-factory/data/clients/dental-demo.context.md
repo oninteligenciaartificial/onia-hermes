@@ -9,10 +9,12 @@
 - Paquete: web
 
 ## Media
-- Permiso de assets: generate-ai
-- Hero: assets/dental-hero.svg (SVG sintetico demo, sin caras)
-- Notas: DEMO INTERNA. Para cliente real, reemplazar por foto de consultorio/equipo
-  y no usar retratos de doctor generados como si fueran reales.
+- Permiso de assets: stock libre (Unsplash License, uso comercial) como PLACEHOLDER.
+- Hero full-bleed: assets/hero-consultorio.webp (Unsplash photo-1629909613654-28e377c37b09).
+- Seccion editorial: assets/detalle-atencion.webp (Unsplash photo-1593022356769-11f762e25ed9).
+- Notas: DEMO INTERNA. Las fotos son stock de ambiente/tratamiento (no fingen ser el
+  equipo real). Para cliente real, reemplazar por fotos propias del consultorio/equipo
+  y no usar retratos de doctor generados/stock como si fueran el equipo real.
 
 ## Datos demo (reemplazar en cliente real)
 - WhatsApp +59170000000 es placeholder.

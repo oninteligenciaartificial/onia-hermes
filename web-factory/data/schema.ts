@@ -158,6 +158,7 @@ export const clientSchema = z.object({
   logoWide: optionalAssetSchema,
   heroVideo: optionalAssetSchema,
   heroPoster: optionalAssetSchema,
+  imagenSecundaria: optionalAssetSchema,
   colores: z
     .object({
       primary: hexColorSchema.default("#0f766e"),

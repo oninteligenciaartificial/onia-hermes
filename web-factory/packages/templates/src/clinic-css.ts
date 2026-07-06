@@ -1,6 +1,8 @@
-// Editorial clinic styles. Tokens only, no hardcoded client colors. Text colors
-// derive from --color-fg (and an adaptive primary/fg mix for accents) so they
-// keep contrast in both light and dark. Motion is opt-in and reduced-motion safe.
+// Editorial clinic styles. Tokens for the page body (light/dark safe via
+// color-mix on --color-fg/--color-bg); the full-bleed hero sits over a photo so
+// its text is white on a scrim. Scroll-driven parallax + image reveals are
+// progressive (only under @supports + no-reduced-motion); IO reveals have a
+// visible-by-default fallback.
 export const clinicCss = `
 .wf-clinic-page {
   --ink-accent: color-mix(in srgb, var(--color-primary) 62%, var(--color-fg));
@@ -8,7 +10,6 @@ export const clinicCss = `
   overflow-x: hidden;
 }
 
-.wf-clinic-hero,
 .wf-clinic-section,
 .wf-clinic-strip,
 .wf-clinic-final {
@@ -16,129 +17,7 @@ export const clinicCss = `
   margin-inline: auto;
 }
 
-.wf-icon {
-  width: 1.2em;
-  height: 1.2em;
-  flex: 0 0 auto;
-}
-
-/* ---------- Hero ---------- */
-.wf-clinic-hero {
-  position: relative;
-  padding-block: clamp(20px, 4vw, 40px) clamp(48px, 7vw, 96px);
-}
-
-.wf-clinic-hero-bg {
-  position: absolute;
-  inset: -10% -20% auto;
-  height: 120%;
-  z-index: 0;
-  background:
-    radial-gradient(55% 55% at 12% 0%, color-mix(in srgb, var(--color-primary) 16%, transparent), transparent 70%),
-    radial-gradient(48% 58% at 102% 12%, color-mix(in srgb, var(--color-accent) 18%, transparent), transparent 72%);
-}
-
-.wf-clinic-hero-bg::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image: radial-gradient(color-mix(in srgb, var(--color-fg) 16%, transparent) 1px, transparent 1.4px);
-  background-size: 24px 24px;
-  -webkit-mask-image: radial-gradient(70% 60% at 50% 8%, #000, transparent 78%);
-  mask-image: radial-gradient(70% 60% at 50% 8%, #000, transparent 78%);
-  opacity: 0.45;
-}
-
-.wf-clinic-topbar,
-.wf-clinic-hero-grid {
-  position: relative;
-  z-index: 1;
-}
-
-.wf-clinic-topbar {
-  display: flex;
-  align-items: center;
-  height: 60px;
-}
-
-.wf-clinic-brand {
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  font-weight: 800;
-  font-family: var(--font-heading);
-}
-
-.wf-clinic-brand-mark {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 11px;
-  font-size: 0.82rem;
-  color: var(--color-on-primary);
-  background: var(--color-primary);
-  box-shadow: 0 8px 20px color-mix(in srgb, var(--color-primary) 32%, transparent);
-}
-
-.wf-clinic-hero-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
-  align-items: center;
-  gap: clamp(32px, 5vw, 72px);
-  padding-top: clamp(24px, 4vw, 48px);
-}
-
-.wf-clinic-eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 9px;
-  margin: 0 0 20px;
-  padding: 8px 14px;
-  border-radius: 999px;
-  border: 1px solid var(--border);
-  background: color-mix(in srgb, var(--color-bg) 60%, transparent);
-  font-size: 0.86rem;
-  font-weight: 600;
-  color: color-mix(in srgb, var(--color-fg) 78%, var(--color-bg));
-}
-
-.wf-clinic-eyebrow .wf-icon {
-  color: var(--ink-accent);
-}
-
-.wf-clinic-dot {
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: color-mix(in srgb, var(--color-fg) 40%, var(--color-bg));
-}
-
-.wf-clinic-title {
-  margin: 0;
-  font-family: var(--font-heading);
-  font-size: clamp(2.7rem, 6vw, 5.4rem);
-  line-height: 0.98;
-  letter-spacing: -0.025em;
-  font-weight: 820;
-  color: var(--color-fg);
-}
-
-.wf-clinic-lede {
-  margin: 22px 0 0;
-  max-width: 44ch;
-  font-size: clamp(1.05rem, 1.4vw, 1.22rem);
-  line-height: 1.6;
-  color: color-mix(in srgb, var(--color-fg) 72%, var(--color-bg));
-}
-
-.wf-clinic-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-top: 32px;
-}
+.wf-icon { width: 1.2em; height: 1.2em; flex: 0 0 auto; }
 
 .wf-clinic-btn {
   display: inline-flex;
@@ -164,110 +43,189 @@ export const clinicCss = `
   background: color-mix(in srgb, var(--color-bg) 70%, transparent);
 }
 
-.wf-clinic-hero-trust {
-  list-style: none;
-  margin: 30px 0 0;
-  padding: 0;
+.wf-clinic-btn--glass {
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  background: rgba(255, 255, 255, 0.14);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+
+/* ---------- Full-bleed hero ---------- */
+.wf-clinic-hero {
+  position: relative;
+  min-height: 92svh;
   display: flex;
-  flex-wrap: wrap;
-  gap: 12px 22px;
-}
-
-.wf-clinic-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  font-weight: 600;
-  font-size: 0.92rem;
-  color: color-mix(in srgb, var(--color-fg) 82%, var(--color-bg));
-}
-
-.wf-clinic-badge-icon {
-  width: 36px;
-  height: 36px;
-  padding: 8px;
-  border-radius: 10px;
-  color: var(--color-primary);
-  background: color-mix(in srgb, var(--color-primary) 12%, var(--color-bg));
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: hidden;
+  isolation: isolate;
+  color: #fff;
 }
 
 .wf-clinic-hero-media {
-  position: relative;
+  position: absolute;
+  inset: -6% 0;
+  height: 112%;
+  z-index: 0;
+  background: color-mix(in srgb, var(--color-primary) 22%, #0b0f14);
 }
 
-.wf-clinic-hero-figure {
-  margin: 0;
-  aspect-ratio: 4 / 5;
-  border-radius: calc(var(--radius) * 1.4);
-  overflow: hidden;
-  background: color-mix(in srgb, var(--color-primary) 10%, var(--color-bg));
-  box-shadow: 0 40px 90px color-mix(in srgb, var(--color-fg) 18%, transparent);
-}
-
-.wf-clinic-hero-figure img {
+.wf-clinic-hero-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
 }
 
-.wf-clinic-hero-card {
+.wf-clinic-hero-scrim {
   position: absolute;
-  left: clamp(-8px, -2vw, 0px);
-  bottom: 24px;
+  inset: 0;
+  z-index: 1;
+  background:
+    linear-gradient(94deg, rgba(6, 12, 18, 0.62) 0%, rgba(6, 12, 18, 0.2) 40%, transparent 66%),
+    linear-gradient(180deg, rgba(6, 12, 18, 0.45) 0%, rgba(6, 12, 18, 0.08) 24%, rgba(6, 12, 18, 0.34) 52%, rgba(6, 12, 18, 0.85) 100%);
+}
+
+.wf-clinic-nav {
+  position: relative;
+  z-index: 2;
+  width: var(--wrap);
+  margin: 0 auto;
+  padding-top: 26px;
   display: flex;
   align-items: center;
-  gap: 14px;
-  padding: 16px 18px;
-  border-radius: 16px;
-  border: 1px solid color-mix(in srgb, var(--color-fg) 10%, transparent);
-  background: color-mix(in srgb, var(--color-bg) 74%, transparent);
-  -webkit-backdrop-filter: blur(14px);
-  backdrop-filter: blur(14px);
-  box-shadow: 0 20px 50px color-mix(in srgb, var(--color-fg) 20%, transparent);
-  max-width: 300px;
+  justify-content: space-between;
+  gap: 16px;
 }
 
-.wf-clinic-hero-card-pulse {
-  position: relative;
-  width: 12px;
-  height: 12px;
-  flex: 0 0 auto;
-  border-radius: 50%;
-  background: var(--color-accent);
-}
-
-.wf-clinic-hero-card-text strong {
-  display: block;
+.wf-clinic-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 800;
   font-family: var(--font-heading);
-  font-size: 1.05rem;
-  color: var(--color-fg);
+  color: #fff;
 }
 
-.wf-clinic-hero-card-text p {
-  margin: 2px 0 0;
-  font-size: 0.86rem;
-  line-height: 1.4;
-  color: color-mix(in srgb, var(--color-fg) 68%, var(--color-bg));
-}
-
-.wf-clinic-hero-card-btn {
+.wf-clinic-brand-mark {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 42px;
-  height: 42px;
-  flex: 0 0 auto;
-  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  border-radius: 11px;
+  font-size: 0.82rem;
   color: var(--color-on-primary);
   background: var(--color-primary);
 }
 
-/* ---------- Strip (beneficios) ---------- */
+.wf-clinic-nav-cta {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 20px;
+  border-radius: 999px;
+  font-weight: 700;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.12);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+
+.wf-clinic-hero-content {
+  position: relative;
+  z-index: 2;
+  width: var(--wrap);
+  margin: 0 auto;
+  padding: 40px 0 clamp(40px, 6vw, 72px);
+  max-width: 900px;
+}
+
+.wf-clinic-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  margin: 0 0 20px;
+  padding: 8px 15px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.12);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.94);
+}
+
+.wf-clinic-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.wf-clinic-hero-title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: clamp(2.9rem, 7vw, 6rem);
+  line-height: 0.96;
+  letter-spacing: -0.025em;
+  font-weight: 820;
+  color: #fff;
+  text-wrap: balance;
+  text-shadow: 0 2px 34px rgba(6, 12, 18, 0.42);
+}
+
+.wf-clinic-hero-lede {
+  margin: 22px 0 0;
+  max-width: 46ch;
+  font-size: clamp(1.05rem, 1.5vw, 1.3rem);
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.92);
+  text-shadow: 0 1px 18px rgba(6, 12, 18, 0.5);
+}
+
+.wf-clinic-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 32px;
+}
+
+.wf-clinic-hero-trust {
+  list-style: none;
+  margin: 30px 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+}
+
+.wf-clinic-hero-trust .wf-clinic-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+  font-size: 0.92rem;
+  color: rgba(255, 255, 255, 0.94);
+}
+
+.wf-clinic-hero-trust .wf-clinic-badge-icon {
+  width: 36px;
+  height: 36px;
+  padding: 8px;
+  border-radius: 10px;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.18);
+}
+
+/* ---------- Benefits strip ---------- */
 .wf-clinic-strip {
   position: relative;
-  z-index: 1;
-  margin-top: clamp(28px, 4vw, 44px);
+  z-index: 2;
+  margin-top: clamp(-34px, -3vw, -22px);
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
@@ -275,9 +233,10 @@ export const clinicCss = `
   padding: 18px;
   border-radius: var(--radius);
   border: 1px solid var(--border);
-  background: color-mix(in srgb, var(--color-bg) 55%, transparent);
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
+  background: color-mix(in srgb, var(--color-bg) 82%, transparent);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 22px 50px color-mix(in srgb, var(--color-fg) 12%, transparent);
 }
 
 .wf-clinic-chip {
@@ -292,19 +251,12 @@ export const clinicCss = `
   font-size: 0.9rem;
 }
 
-.wf-clinic-chip .wf-icon {
-  color: color-mix(in srgb, var(--color-accent) 60%, var(--color-fg));
-}
+.wf-clinic-chip .wf-icon { color: color-mix(in srgb, var(--color-accent) 60%, var(--color-fg)); }
 
 /* ---------- Section head ---------- */
-.wf-clinic-section {
-  padding-block: clamp(48px, 7vw, 90px);
-}
+.wf-clinic-section { padding-block: clamp(48px, 7vw, 92px); }
 
-.wf-clinic-section-head {
-  max-width: 720px;
-  margin-bottom: clamp(24px, 3vw, 42px);
-}
+.wf-clinic-section-head { max-width: 720px; margin-bottom: clamp(24px, 3vw, 42px); }
 
 .wf-clinic-kicker {
   display: inline-flex;
@@ -318,12 +270,7 @@ export const clinicCss = `
   color: var(--ink-accent);
 }
 
-.wf-clinic-kicker::before {
-  content: "";
-  width: 24px;
-  height: 2px;
-  background: var(--color-primary);
-}
+.wf-clinic-kicker::before { content: ""; width: 24px; height: 2px; background: var(--color-primary); }
 
 .wf-clinic-section-head h2 {
   margin: 0;
@@ -332,6 +279,65 @@ export const clinicCss = `
   line-height: 1.05;
   letter-spacing: -0.02em;
   color: var(--color-fg);
+}
+
+/* ---------- Editorial feature (big image) ---------- */
+.wf-clinic-feature-grid {
+  display: grid;
+  grid-template-columns: 1.02fr 0.98fr;
+  gap: clamp(28px, 4vw, 64px);
+  align-items: center;
+}
+
+.wf-clinic-feature-media {
+  margin: 0;
+  border-radius: calc(var(--radius) * 1.4);
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+  box-shadow: 0 40px 90px color-mix(in srgb, var(--color-fg) 20%, transparent);
+}
+
+.wf-clinic-feature-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.wf-clinic-feature-copy h2 {
+  margin: 0 0 16px;
+  font-family: var(--font-heading);
+  font-size: clamp(1.9rem, 3.4vw, 2.9rem);
+  line-height: 1.04;
+  letter-spacing: -0.02em;
+  color: var(--color-fg);
+}
+
+.wf-clinic-feature-copy > p {
+  margin: 0 0 20px;
+  color: var(--muted-foreground);
+  line-height: 1.65;
+  max-width: 46ch;
+}
+
+.wf-clinic-feature-points {
+  list-style: none;
+  margin: 0 0 26px;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+}
+
+.wf-clinic-feature-points li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 600;
+  color: color-mix(in srgb, var(--color-fg) 86%, var(--color-bg));
+}
+
+.wf-clinic-feature-points .wf-icon {
+  width: 34px;
+  height: 34px;
+  padding: 8px;
+  border-radius: 10px;
+  color: var(--color-primary);
+  background: color-mix(in srgb, var(--color-primary) 12%, var(--color-bg));
 }
 
 /* ---------- Bento services ---------- */
@@ -377,16 +383,8 @@ export const clinicCss = `
   background: var(--color-primary);
 }
 
-.wf-clinic-card-icon .wf-icon {
-  width: 100%;
-  height: 100%;
-}
-
-.wf-clinic-card--featured .wf-clinic-card-icon {
-  width: 64px;
-  height: 64px;
-  padding: 16px;
-}
+.wf-clinic-card-icon .wf-icon { width: 100%; height: 100%; }
+.wf-clinic-card--featured .wf-clinic-card-icon { width: 64px; height: 64px; padding: 16px; }
 
 .wf-clinic-card h3 {
   margin: 0;
@@ -395,15 +393,9 @@ export const clinicCss = `
   color: var(--color-fg);
 }
 
-.wf-clinic-card--featured h3 {
-  font-size: clamp(1.6rem, 2.4vw, 2.1rem);
-}
+.wf-clinic-card--featured h3 { font-size: clamp(1.6rem, 2.4vw, 2.1rem); }
 
-.wf-clinic-card p {
-  margin: 6px 0 0;
-  color: var(--muted-foreground);
-  line-height: 1.55;
-}
+.wf-clinic-card p { margin: 6px 0 0; color: var(--muted-foreground); line-height: 1.55; }
 
 /* ---------- Process timeline ---------- */
 .wf-clinic-timeline {
@@ -426,12 +418,7 @@ export const clinicCss = `
   background: linear-gradient(90deg, transparent, var(--border) 15%, var(--border) 85%, transparent);
 }
 
-.wf-clinic-step {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
+.wf-clinic-step { position: relative; display: flex; flex-direction: column; gap: 12px; }
 
 .wf-clinic-step-num {
   position: relative;
@@ -449,17 +436,8 @@ export const clinicCss = `
   border: 2px solid color-mix(in srgb, var(--color-primary) 45%, var(--border));
 }
 
-.wf-clinic-step h3 {
-  margin: 0;
-  font-size: 1.15rem;
-  color: var(--color-fg);
-}
-
-.wf-clinic-step p {
-  margin: 0;
-  color: var(--muted-foreground);
-  line-height: 1.55;
-}
+.wf-clinic-step h3 { margin: 0; font-size: 1.15rem; color: var(--color-fg); }
+.wf-clinic-step p { margin: 0; color: var(--muted-foreground); line-height: 1.55; }
 
 /* ---------- FAQ ---------- */
 .wf-clinic-faq-grid {
@@ -478,16 +456,9 @@ export const clinicCss = `
   color: var(--color-fg);
 }
 
-.wf-clinic-faq-aside p {
-  margin: 0 0 20px;
-  color: var(--muted-foreground);
-  line-height: 1.6;
-}
+.wf-clinic-faq-aside p { margin: 0 0 20px; color: var(--muted-foreground); line-height: 1.6; }
 
-.wf-clinic-faq-list {
-  display: grid;
-  gap: 12px;
-}
+.wf-clinic-faq-list { display: grid; gap: 12px; }
 
 .wf-clinic-faq-item {
   border: 1px solid var(--border);
@@ -508,27 +479,10 @@ export const clinicCss = `
   list-style: none;
 }
 
-.wf-clinic-faq-item summary::-webkit-details-marker {
-  display: none;
-}
-
-.wf-clinic-faq-item summary::after {
-  content: "+";
-  color: var(--ink-accent);
-  font-weight: 850;
-  font-size: 1.3rem;
-}
-
-.wf-clinic-faq-item[open] summary::after {
-  content: "-";
-}
-
-.wf-clinic-faq-item p {
-  margin: 0;
-  padding: 0 20px 20px;
-  color: var(--muted-foreground);
-  line-height: 1.6;
-}
+.wf-clinic-faq-item summary::-webkit-details-marker { display: none; }
+.wf-clinic-faq-item summary::after { content: "+"; color: var(--ink-accent); font-weight: 850; font-size: 1.3rem; }
+.wf-clinic-faq-item[open] summary::after { content: "-"; }
+.wf-clinic-faq-item p { margin: 0; padding: 0 20px 20px; color: var(--muted-foreground); line-height: 1.6; }
 
 /* ---------- Final CTA ---------- */
 .wf-clinic-final {
@@ -554,13 +508,7 @@ export const clinicCss = `
   opacity: 0.5;
 }
 
-.wf-clinic-final-inner {
-  position: relative;
-  z-index: 1;
-  display: grid;
-  justify-items: center;
-  gap: 24px;
-}
+.wf-clinic-final-inner { position: relative; z-index: 1; display: grid; justify-items: center; gap: 24px; }
 
 .wf-clinic-final h2 {
   margin: 0;
@@ -595,52 +543,52 @@ export const clinicCss = `
   box-shadow: 0 16px 36px color-mix(in srgb, var(--color-primary) 36%, transparent);
 }
 
-@media (min-width: 841px) {
-  .wf-sticky-cta { right: 24px; bottom: 24px; }
-}
+@media (min-width: 841px) { .wf-sticky-cta { right: 24px; bottom: 24px; } }
 
-/* ---------- Motion ---------- */
-.wf-clinic-motion [data-reveal] {
-  opacity: 0;
-  transform: translateY(20px);
-}
-
+/* ---------- Motion: IO reveals (visible-by-default fallback) ---------- */
+.wf-clinic-motion [data-reveal] { opacity: 0; transform: translateY(22px); }
 .wf-clinic-motion [data-reveal].is-revealed {
   opacity: 1;
   transform: none;
   transition: opacity 0.6s ease, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .wf-clinic-hero-card-pulse::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: 50%;
-    background: var(--color-accent);
-    animation: wfClinicPulse 2s ease-out infinite;
+/* ---------- Motion: scroll-driven parallax + image reveal ---------- */
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .wf-clinic-hero-media {
+      animation: wfHeroParallax linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0 90vh;
+      will-change: transform;
+    }
   }
-  .wf-clinic-btn,
-  .wf-clinic-hero-card-btn,
-  .wf-sticky-cta {
-    transition: transform 0.18s ease, box-shadow 0.18s ease;
-  }
-  .wf-clinic-btn:hover,
-  .wf-sticky-cta:hover { transform: translateY(-2px); }
-  .wf-clinic-hero-card-btn:hover { transform: scale(1.08); }
 }
 
-@keyframes wfClinicPulse {
-  0% { transform: scale(1); opacity: 0.6; }
-  100% { transform: scale(2.6); opacity: 0; }
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    [data-reveal-img] img {
+      animation: wfImgReveal linear both;
+      animation-timeline: view();
+      animation-range: entry 4% cover 42%;
+      transform-origin: center;
+    }
+  }
+}
+
+@keyframes wfHeroParallax { from { transform: translateY(0); } to { transform: translateY(6%); } }
+@keyframes wfImgReveal {
+  from { clip-path: inset(0 0 16% 0); transform: scale(1.08); }
+  to { clip-path: inset(0 0 0 0); transform: scale(1); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .wf-clinic-btn, .wf-clinic-nav-cta, .wf-sticky-cta { transition: transform 0.18s ease, box-shadow 0.18s ease; }
+  .wf-clinic-btn:hover, .wf-clinic-nav-cta:hover, .wf-sticky-cta:hover { transform: translateY(-2px); }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .wf-clinic-motion [data-reveal] {
-    opacity: 1 !important;
-    transform: none !important;
-    transition: none !important;
-  }
+  .wf-clinic-motion [data-reveal] { opacity: 1 !important; transform: none !important; transition: none !important; }
   html { scroll-behavior: auto; }
 }
 
@@ -651,15 +599,12 @@ export const clinicCss = `
 }
 
 @media (max-width: 860px) {
-  .wf-clinic-hero-grid { grid-template-columns: 1fr; }
-  .wf-clinic-hero-media { order: -1; }
-  .wf-clinic-hero-figure { aspect-ratio: 16 / 11; }
+  .wf-clinic-hero { min-height: 88svh; }
+  .wf-clinic-feature-grid { grid-template-columns: 1fr; }
+  .wf-clinic-feature-media { order: -1; }
   .wf-clinic-faq-grid { grid-template-columns: 1fr; }
   .wf-clinic-timeline { grid-template-columns: 1fr; gap: 0; }
-  .wf-clinic-timeline::before {
-    top: 0; bottom: 0; left: 26px; right: auto; width: 2px; height: auto;
-    background: var(--border);
-  }
+  .wf-clinic-timeline::before { top: 0; bottom: 0; left: 26px; right: auto; width: 2px; height: auto; background: var(--border); }
   .wf-clinic-step { flex-direction: row; gap: 16px; padding-bottom: 26px; }
   .wf-clinic-step-num { flex: 0 0 auto; }
 }
@@ -667,6 +612,6 @@ export const clinicCss = `
 @media (max-width: 560px) {
   .wf-clinic-bento { grid-template-columns: 1fr; }
   .wf-clinic-card--featured { grid-column: auto; }
-  .wf-clinic-hero-card { position: static; margin-top: 14px; max-width: none; }
+  .wf-clinic-nav-cta { display: none; }
 }
 `;
