@@ -737,6 +737,18 @@ export default function OniaCenterPage() {
       : actionableTasks.length > 0
         ? { label: `${actionableTasks.length} para hoy`, tone: "blue" as CenterTone }
         : { label: "Al dia", tone: "green" as CenterTone };
+  // Resumen hablado con datos reales (nunca se muestra si no hay conexion real).
+  const voiceBriefing =
+    runtimeConnection.state !== "connected"
+      ? null
+      : actionableTasks.length === 0 && pendingProposals.length === 0
+        ? "Hoy: sin pendientes."
+        : [
+            actionableTasks.length > 0 ? `${actionableTasks.length} tarea(s) abierta(s)` : null,
+            pendingProposals.length > 0 ? `${pendingProposals.length} propuesta(s) esperando tu aprobacion` : null,
+          ]
+            .filter(Boolean)
+            .join(", ") + ".";
   const visibleCalendarConnectorPlans = useMemo(
     () => (privateVisible ? calendarConnectorPlans : calendarConnectorPlans.filter((plan) => plan.visibility !== "sergio_private")),
     [privateVisible],
@@ -879,12 +891,15 @@ export default function OniaCenterPage() {
         </Link>
 
         <div className="onia-brand">
-          <span>
+          <span className={pendingProposals.length > 0 ? "has-signal" : ""}>
             <Crown size={20} />
+            {pendingProposals.length > 0 ? <i className="onia-signal-dot" aria-hidden="true" /> : null}
           </span>
           <div>
             <strong>ONIA Center</strong>
-            <small>Sistema operativo</small>
+            <small>
+              {pendingProposals.length > 0 ? `${pendingProposals.length} por aprobar` : "Al dia"}
+            </small>
           </div>
         </div>
 
@@ -948,6 +963,7 @@ export default function OniaCenterPage() {
             <span className="onia-eyebrow">ONIA Center / {activeNavItem.group}</span>
             <h1>{activeModule.title}</h1>
             <p>{activeModule.description}</p>
+            {voiceBriefing ? <p className="onia-voice-briefing">{voiceBriefing}</p> : null}
           </div>
           <div className="onia-hero-actions">
             {visibleHeroActions.map((item) => {
@@ -961,6 +977,21 @@ export default function OniaCenterPage() {
             })}
           </div>
         </header>
+
+        {runtimeConnection.mode === "configuration_pending" ? (
+          <div className="onia-wrong-deployment-banner" role="alert">
+            <ShieldCheck size={16} />
+            <div>
+              <strong>Este no es el panel de produccion.</strong>
+              <p>
+                Este despliegue no tiene acceso a la base de datos real (por diseño: la base vive en una red
+                privada). Entra por{" "}
+                <a href="https://center.onia.com.bo/onia-center">center.onia.com.bo/onia-center</a> para ver
+                datos reales.
+              </p>
+            </div>
+          </div>
+        ) : null}
 
         {showOperationalContext ? (
           <section className="onia-active-module" aria-label="Pantalla activa y conexion">
