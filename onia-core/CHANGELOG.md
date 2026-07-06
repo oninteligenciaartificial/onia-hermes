@@ -1,5 +1,15 @@
 # ONIA Core Changelog
 
+## install-plan — 2026-07-05 (la receta hecha herramienta)
+
+- `install-plan.mjs`: generador NUESTRO (read-only) que, dado un vertical (por
+  track o por producto), emite el plan ORDENADO para dejarlo funcionando -> tablas
+  del core (pendientes segun el adapter), modulos que cubren sus capabilities (con
+  su schema y # de tablas), que logica de `@onia/core` portar, y el cableado
+  final. Convierte la receta de adopcion en un checklist mecanico para abrir el
+  core a cualquier industria. No toca repos de clientes.
+  `node onia-core/install-plan.mjs <track|producto>`. +5 tests (158 total).
+
 ## @onia/core — 2026-07-05 (paquete importable)
 
 - `package.json` (`@onia/core`, version = la del contrato) + `logic/index.mjs`

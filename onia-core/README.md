@@ -54,6 +54,9 @@ modulos, verticales o integraciones. No son la definicion del core.
 - `report.mjs`: reporte de avance en lenguaje simple (verticales con su pack y
   cuanto del core lleva instalado cada producto). Correr: `node onia-core/report.mjs`.
 - `report.test.mjs`: tests del reporte.
+- `install-plan.mjs`: genera el plan de instalacion de un vertical (core +
+  modulos + logica de @onia/core a portar, ordenado). Herramienta nuestra,
+  read-only: `node onia-core/install-plan.mjs <track|producto>`.
 - `modules/`: modulos vendibles (add-ons activables SOBRE el core, FUERA del
   contrato congelado — el core no es inventario/ventas/contabilidad).
   `commerce.json` (catalogo/inventario/cotizaciones B2B/ventas-caja),
@@ -97,8 +100,9 @@ modulos, verticales o integraciones. No son la definicion del core.
 ```bash
 npm run validate:onia-core                    # invariantes del contrato core
 node onia-core/modules/validate-modules.mjs   # validador de modulos vendibles
-node --test onia-core/*.test.mjs onia-core/logic/*.test.mjs onia-core/modules/*.test.mjs   # 140 tests
+node --test onia-core/*.test.mjs onia-core/logic/*.test.mjs onia-core/modules/*.test.mjs   # 158 tests
 node onia-core/report.mjs                     # foto de avance por vertical/producto/modulo
+node onia-core/install-plan.mjs <track|producto>   # plan de instalacion de un vertical
 ```
 
 ## Politica de distribucion
