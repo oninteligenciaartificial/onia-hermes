@@ -827,4 +827,19 @@ export const clinicCss = `
 @media (max-width: 560px) {
   .wf-clinic-typo-word { font-size: clamp(3.5rem, 26vw, 6rem); }
 }
+
+/* ---------- Keyboard focus (PRODUCT.md: keyboard-visible focus) ---------- */
+.wf-clinic-page :where(a, button, summary):focus-visible,
+.wf-sticky-cta:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 5px color-mix(in srgb, var(--color-primary) 26%, transparent);
+  border-radius: 8px;
+}
+
+/* Over the hero photo, a light ring + dark halo stays visible on any image. */
+.wf-clinic-hero :where(a, button):focus-visible {
+  outline-color: #fff;
+  box-shadow: 0 0 0 5px rgba(6, 12, 18, 0.55);
+}
 `;
