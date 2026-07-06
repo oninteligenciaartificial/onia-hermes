@@ -1,5 +1,33 @@
 # ONIA Core Changelog
 
+## vertical-extensions — 2026-07-06 (verificado contra DentaGest real)
+
+- El catalogo dental se VERIFICO leyendo `prisma/schema.prisma` real de
+  DentaGest (C:\dev\proyectos\DentaGest\dental-saas, solo lectura — DentaGest
+  es producto propio de ONIA, no un cliente externo, a diferencia de
+  Bolivian Electric). Corrige 3 cosas que el research generico no podia saber:
+  1. El odontograma real (`ToothRecord`) es una tabla por DIENTE, no por
+     diente+superficie (oclusal/mesial/distal/etc.) como recomienda el
+     estandar de industria (OpenDental) — marcado `implemented_simpler`.
+  2. **DentaGest usa numeracion Universal 1-32**, no FDI (el estandar
+     Latam/Bolivia que recomendaba el research). Se deja como nota de
+     DECISION DE PRODUCTO abierta (migrar implicaria convertir datos de
+     pacientes existentes), no se resuelve en ningun sentido.
+  3. `recall_schedule` NO es una entidad dental nueva: ya la cubre
+     `ScheduleEvent` del core (confirmado en `adapters/dentagest.json`) — se
+     saco del catalogo de entidades y se dejo solo como nota en `coreHooks`.
+- Entidad nueva encontrada que el research generico no traia:
+  `prescription` (receta medica, model `Prescription` real: medicamentos
+  JSON + instrucciones).
+- Cada entidad dental ahora declara `status`: `implemented` /
+  `implemented_simpler` (existe pero mas simple que el estandar de industria)
+  / `gap` (confirmado ausente en el producto real: `perio_chart`,
+  `treatment_plan`, `informed_consent`, `medical_alert`, `dental_lab_case`,
+  `tooth_image`) — ya no es solo "lo que dice el research", es "lo que HAY
+  vs. lo que FALTA" en el producto que los clientes usan hoy.
+- +4 tests que fijan estos hallazgos. 269 tests en total, 4 validadores
+  verdes, `contract.json` intacto, cero escrituras en el repo de DentaGest.
+
 ## business-planning — 2026-07-06 (plan por negocio: rubro + tamano + diagnostico)
 
 - **Nueva capa aditiva (3 artefactos, no toca contract.json):** formaliza "como

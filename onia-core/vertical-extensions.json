@@ -7,28 +7,33 @@
       "trackId": "dentagest-clinical",
       "product": "DentalGest",
       "domainName": "salud_dental",
+      "verifiedAgainstRealProduct": {
+        "verifiedAt": "2026-07-06",
+        "method": "Lectura directa de prisma/schema.prisma en C:\\dev\\proyectos\\DentaGest\\dental-saas (solo lectura, sin escribir en ese repo).",
+        "note": "El research generico (subagente) da el catalogo 'completo' de la industria; esta verificacion contra el producto REAL corrigio 3 cosas: (1) el odontograma real es una tabla por diente (ToothRecord), no por diente+superficie; (2) DentaGest usa numeracion Universal 1-32, no FDI; (3) 'recall' no es una entidad dental nueva, ya usa ScheduleEvent del core (adapter dentagest.json lo confirma)."
+      },
       "coreHooks": [
         { "coreEntityId": "contact", "as": "Patient es domain_specific: NUNCA se aplana a Contact generico (adapter dentagest.json)" },
-        { "coreEntityId": "schedule_event", "as": "Appointment cubre la cita clinica; ScheduleEvent del core solo agrega recalls/seguimientos" },
+        { "coreEntityId": "schedule_event", "as": "Appointment cubre la cita clinica; ScheduleEvent del core cubre recalls/seguimientos (CONFIRMADO instalado, no es una entidad dental nueva)" },
         { "coreEntityId": "document", "as": "radiografias/consentimientos via storageRef, con visibilidad clinica restringida" }
       ],
       "entities": [
-        { "id": "patient", "name": "Patient", "purpose": "Paciente con historia clinica. Vive fuera del core, nunca se aplana a Contact/BusinessPartner." },
-        { "id": "clinical_record", "name": "ClinicalRecord", "purpose": "Historia clinica del paciente. Bolivia exige 'Norma Nacional de Historia Clinica Odontologica' (Ministerio de Salud) para todo establecimiento." },
-        { "id": "odontogram_entry", "name": "OdontogramEntry", "purpose": "Registro por pieza dental (numeracion FDI, ISO 3950) + superficie (oclusal/mesial/distal/vestibular/palatina) con estado clinico y color convencional. El corazon del producto dental." },
-        { "id": "perio_chart", "name": "PeriodontalReading", "purpose": "6 puntos por diente: profundidad de bolsa, sangrado, recesion, movilidad, furcacion. Entidad separada del odontograma." },
-        { "id": "treatment_plan", "name": "TreatmentPlan", "purpose": "Agrupa varios tratamientos con costo total y aprobacion/firma del paciente, distinto de cada tratamiento individual ejecutado." },
-        { "id": "patient_treatment", "name": "PatientTreatment", "purpose": "Tratamiento ejecutado o programado, dentro de un TreatmentPlan." },
-        { "id": "informed_consent", "name": "InformedConsent", "purpose": "Consentimiento firmado (paciente + profesional + testigo) antes de un procedimiento invasivo (implante, endodoncia, exodoncia, ortodoncia)." },
-        { "id": "medical_alert", "name": "MedicalAlert", "purpose": "Alergias/medicacion/condiciones sistemicas, ESTRUCTURADO (no texto libre), con alerta visual prominente al abrir la ficha." },
-        { "id": "recall_schedule", "name": "RecallSchedule", "purpose": "Proximo control/limpieza periodica con intervalo configurable y recordatorio." },
-        { "id": "dental_lab_case", "name": "DentalLabCase", "purpose": "Encargo a laboratorio protesico (protesis/corona/guarda) con estado de envio/recepcion y costo." },
-        { "id": "tooth_image", "name": "ToothImage", "purpose": "Radiografia/foto intraoral vinculada a pieza dental y fecha (distinto de un adjunto generico)." }
+        { "id": "patient", "name": "Patient", "status": "implemented", "purpose": "Paciente con historia clinica. Vive fuera del core, nunca se aplana a Contact/BusinessPartner." },
+        { "id": "clinical_record", "name": "ClinicalRecord", "status": "implemented", "purpose": "Historia clinica del paciente (model ClinicalRecord real). Bolivia exige 'Norma Nacional de Historia Clinica Odontologica' (Ministerio de Salud) para todo establecimiento." },
+        { "id": "odontogram_entry", "name": "OdontogramEntry", "status": "implemented_simpler", "purpose": "Registro por pieza dental (model ToothRecord real, numeracion Universal 1-32, 7 estados: SANO/CARIES/RESTAURADO/AUSENTE/CORONA/IMPLANTE/FRACTURA). El estandar de industria (OpenDental) usa 12+ estados y registra por SUPERFICIE del diente (oclusal/mesial/distal/vestibular/palatina), no solo por diente completo -- DentaGest hoy es mas simple; ampliar es una mejora de producto, no un bug." },
+        { "id": "patient_treatment", "name": "PatientTreatment", "status": "implemented", "purpose": "Tratamiento ejecutado o programado (model PatientTreatment real, referencia a Treatment del catalogo, status PENDIENTE/EN_PROGRESO/COMPLETADO/CANCELADO)." },
+        { "id": "prescription", "name": "Prescription", "status": "implemented", "purpose": "Receta medica (model Prescription real: medicamentos JSON + instrucciones). Funcion dental/medica que NINGUN otro rubro de ONIA necesita; no estaba en el catalogo de research generico, se agrego tras verificar el schema real." },
+        { "id": "perio_chart", "name": "PeriodontalReading", "status": "gap", "purpose": "6 puntos por diente: profundidad de bolsa, sangrado, recesion, movilidad, furcacion. Confirmado ausente en el producto real; entidad separada del odontograma." },
+        { "id": "treatment_plan", "name": "TreatmentPlan", "status": "gap", "purpose": "Agrupador con costo total y aprobacion/firma del paciente, distinto de cada PatientTreatment individual. Confirmado ausente: hoy cada PatientTreatment es independiente, sin un 'plan' que los agrupe." },
+        { "id": "informed_consent", "name": "InformedConsent", "status": "gap", "purpose": "Consentimiento firmado (paciente + profesional + testigo) antes de un procedimiento invasivo (implante, endodoncia, exodoncia, ortodoncia). Confirmado ausente." },
+        { "id": "medical_alert", "name": "MedicalAlert", "status": "gap", "purpose": "Alergias/medicacion/condiciones sistemicas, ESTRUCTURADO (no texto libre), con alerta visual prominente. Confirmado ausente (ClinicalRecord solo tiene campos de texto libre)." },
+        { "id": "dental_lab_case", "name": "DentalLabCase", "status": "gap", "purpose": "Encargo a laboratorio protesico (protesis/corona/guarda) con estado de envio/recepcion y costo. Confirmado ausente." },
+        { "id": "tooth_image", "name": "ToothImage", "status": "gap", "purpose": "Radiografia/foto intraoral vinculada a pieza dental y fecha (distinto de un adjunto generico). Confirmado ausente." }
       ],
       "notes": [
-        "FDI (ISO 3950, dos digitos) es el estandar en Latinoamerica; el Universal 1-32 es propio de Norteamerica.",
+        "FDI (ISO 3950, dos digitos) es el estandar de LA INDUSTRIA en Latinoamerica; DentaGest hoy usa Universal 1-32 (confirmado en app/api/teeth/route.ts: toothNumber.max(32)). Migrar a FDI implicaria convertir datos de pacientes existentes y reentrenar personal -- es una DECISION DE PRODUCTO (Sergio), no algo para resolver silenciosamente en ningun sentido.",
         "Bolivia exige la Historia Clinica Odontologica (Ministerio de Salud) pero no dicta el modelo de datos del odontograma en si.",
-        "Investigado con subagente 2026-07-06 (fuentes: OpenDental, softwaredentalink, MinSalud Bolivia — norma de historia clinica)."
+        "Investigado con subagente 2026-07-06 (fuentes: OpenDental, softwaredentalink, MinSalud Bolivia) y luego VERIFICADO contra prisma/schema.prisma real de DentaGest (mismo dia). status='gap' = confirmado ausente en el producto real (candidato a construir); 'implemented'/'implemented_simpler' = ya existe."
       ]
     },
     {

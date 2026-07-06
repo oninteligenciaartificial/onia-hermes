@@ -44,6 +44,35 @@ describe("getVerticalExtension / getVerticalExtensionEntities", () => {
     assert.ok(ids.includes("movement_guide"), "tiene movement_guide (GMA)");
     assert.ok(ids.includes("brand_registration"), "tiene brand_registration");
   });
+});
+
+describe("dental verificado contra el producto real (DentaGest prisma/schema.prisma, 2026-07-06)", () => {
+  const entities = getVerticalExtensionEntities(catalog, "dentagest-clinical");
+  const byId = new Map(entities.map((entity) => [entity.id, entity]));
+
+  it("marca lo confirmado IMPLEMENTADO en el schema real (no solo investigado)", () => {
+    assert.equal(byId.get("patient").status, "implemented");
+    assert.equal(byId.get("odontogram_entry").status, "implemented_simpler");
+    assert.equal(byId.get("prescription").status, "implemented");
+  });
+
+  it("prescription se agrego tras verificar el schema real, no vino del research generico", () => {
+    assert.ok(byId.has("prescription"), "prescription presente");
+  });
+
+  it("recall_schedule NO se lista como entidad nueva: ya la cubre schedule_event del core", () => {
+    assert.ok(!byId.has("recall_schedule"), "recall_schedule no es una entidad de rubro; es ScheduleEvent del core");
+    const scheduleHook = getVerticalExtension(catalog, "dentagest-clinical").coreHooks.find(
+      (hook) => hook.coreEntityId === "schedule_event",
+    );
+    assert.match(scheduleHook.as, /recalls/);
+  });
+
+  it("marca lo confirmado AUSENTE (gap real, no solo teorico) con status='gap'", () => {
+    for (const id of ["perio_chart", "treatment_plan", "informed_consent", "medical_alert", "dental_lab_case", "tooth_image"]) {
+      assert.equal(byId.get(id).status, "gap", `${id} debe estar marcado como gap`);
+    }
+  });
 
   it("devuelve undefined/vacio para un track sin extension", () => {
     assert.equal(getVerticalExtension(catalog, "ghost-track"), undefined);
