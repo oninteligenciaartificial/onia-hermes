@@ -16,7 +16,8 @@ real** (sourced de Pinterest, sin caras de terceros) subida como **Reference Ele
 | `lucia-outfit-loungewear` | prop | `6186d80f-cb02-4cd2-89d9-e5afdcce7c6c` | Pinterest flatlay sweater crema+pantuflas |
 | `lucia-place-bathroom` | environment | `44a4686e-1733-4b41-811d-1eb5d1cf88fc` | Pinterest bano marmol B&N sin gente |
 | `lucia-place-bedroom` | environment | `6a721405-d019-48b3-b3e6-92bdf6a4474e` | Pinterest dormitorio cozy sin gente |
-| `lucia-face-element` | character | `de586dbb-0cdd-4ca2-aaac-173d11741c86` | Foto verificada de Lucia (soul_2, identidad confirmada) |
+| `lucia-face-real-anchor` ⭐ **USAR ESTE** | character | `ced20cc2-3388-4d98-92ee-b0fcd961aa62` | Frame REAL del video de Sergio (pecas-A-15) escalado 2K, sin generacion IA |
+| ~~`lucia-face-element`~~ (legacy, no usar) | character | `de586dbb-0cdd-4ca2-aaac-173d11741c86` | Foto generada por soul_2 — ya tiene 1 paso de deriva de IA (pecas reposicionadas, piel mas pareja) |
 
 | `lucia-place-cafe` | environment | `5cfbdab5-3fdd-4cda-b0e3-efb60aa5a9b4` | Pinterest cafe/cocina calida, mostrador madera |
 | `lucia-place-street` | environment | `cddfa484-8dea-4920-8d6b-9d00f896ae51` | Pinterest vereda urbana arbolada |
@@ -27,13 +28,34 @@ real** (sourced de Pinterest, sin caras de terceros) subida como **Reference Ele
 ## Como generar (combinar cara + outfit + lugar en 1 sola llamada)
 
 Modelo: `nano_banana_2` (soul_2 NO soporta Reference Elements). Embeber los 3 placeholders
-en el prompt:
+en el prompt, usando SIEMPRE `lucia-face-real-anchor` (no el legacy):
 
 ```
-<<<de586dbb-0cdd-4ca2-aaac-173d11741c86>>> wearing the exact outfit from
+<<<ced20cc2-3388-4d98-92ee-b0fcd961aa62>>> wearing the exact outfit from
 <<<16833b18-9e23-434a-99b2-92bac2915e4c>>>, standing in
 <<<44a4686e-1733-4b41-811d-1eb5d1cf88fc>>>. Keep her identical face and features.
 ```
+
+## Fix de deriva de identidad (2026-07-06, pedido de Sergio)
+
+Sergio pidio ver la referencia usada y "perfeccionarla para que no rompa la cara". Diagnostico:
+`lucia-face-element` (legacy) era una foto ya GENERADA por `soul_2` — un paso de aproximacion
+de IA sobre la real, con leve suavizado (pecas reposicionadas, piel mas pareja, labios un
+toque mas llenos). Cada hop generativo adicional (ej. animar con wan2.7) compone esa deriva.
+
+**Fix:** usar el frame REAL del video de Sergio (`pecas-A-15.png`, sin producto, sonrisa
+natural) directo como ancla, en vez de una foto generada. Se escalo 720x1280 -> 2160x3840
+con `bytedance_image_upscale` (2cr, sin parametros de "creatividad" que alteren rasgos) solo
+para compensar la compresion de video — CERO generacion, solo mas resolucion/nitidez.
+Resultado: `lucia-face-real-anchor` (`ced20cc2-3388-4d98-92ee-b0fcd961aa62`).
+
+Verificado: mismo combo (clean-girl+bano) repetido con el ancla real da un resultado
+mas fiel — sonrisa/dientes/pecas genuinamente suyas, sin el suavizado sutil de la v1.
+`lucia-elements-combo-cleangirl-bathroom-v2-realface.png`.
+
+**Regla para el futuro:** el ancla de cualquier personaje SIEMPRE debe ser el frame real
+(o su version escalada), nunca una foto ya generada por otro modelo — asi se evita
+acumular deriva en cadena.
 
 **Costo: 2cr por imagen** (nano_banana_2 2k). Mas caro que soul_2 solo (0.12cr) pero da
 **fidelidad exacta del outfit/lugar real** (accesorios, joyeria, cartera, mueblaje) en vez

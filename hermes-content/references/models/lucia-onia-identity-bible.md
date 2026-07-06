@@ -60,6 +60,9 @@ Cada lugar = UNA imagen real (sin personas) subida como Reference Element (`envi
 
 ## Produccion (ver [[higgsfield-models-roster]] y `PIPELINE-lipsync-24-7.md`)
 - **Fotos (barato, 0.12cr):** `soul_2` + soul_id `9a0d6953-...` + prompt de outfit/lugar de esta bible.
+- **Fotos con outfit/lugar EXACTO (2cr):** `nano_banana_2` + Elements, usando SIEMPRE
+  `lucia-face-real-anchor` (`ced20cc2-3388-4d98-92ee-b0fcd961aa62`, frame real escalado 2K,
+  no una foto generada) como ancla de cara. Ver [[lucia-elements-catalog]].
 - **Lip sync (barato-medio, 15cr/10s):** `wan2_7` con still de Lucia + audio de voz. Ya
   verificado estable (`valentina-lipsync-wan27-10s.mp4`, cara sin romperse, boca sincronizada).
 - **Hero/UGC con producto en mano (42-75cr):** Marketing Studio, avatar custom.
