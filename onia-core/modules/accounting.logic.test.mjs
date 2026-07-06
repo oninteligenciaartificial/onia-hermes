@@ -11,20 +11,27 @@ import {
   accountBalance,
   addDays,
   assertBalanced,
+  assetDepreciationAsOf,
   balanceSheet,
   accruedProvision,
   computeIt,
   computeIue,
   computeIva,
+  computeWithholdingAlquiler,
+  computeWithholdingBeneficiarioExterior,
+  computeWithholdingCompraSinFactura,
+  computeWithholdingHonorarios,
   depreciationForAssetType,
   depreciationSchedule,
   fiscalYearEnd,
   incomeStatement,
   isBalanced,
+  isFullyDepreciated,
   iueDueDate,
   ivaOfRecord,
   ledgerByAccount,
   monthlyProvision,
+  monthsBetween,
   requiresBankization,
   straightLineDepreciation,
   subsidiaryLedger,
@@ -237,5 +244,67 @@ describe("vencimientos por NIT y cierre de gestion", () => {
   it("IUE vence 120 dias despues del cierre", () => {
     assert.equal(addDays("2026-12-31", 120), "2027-04-30");
     assert.equal(iueDueDate("2026-12-31"), "2027-04-30");
+  });
+});
+
+describe("activo fijo (registro individual)", () => {
+  it("monthsBetween cuenta meses COMPLETOS (mismo criterio day-aware que payroll)", () => {
+    assert.equal(monthsBetween("2024-01-15", "2026-01-15"), 24);
+    assert.equal(monthsBetween("2024-01-15", "2026-01-06"), 23); // dia 6 < dia 15
+  });
+
+  it("assetDepreciationAsOf se deriva de acquisitionDate/cost/assetType (no se guarda duplicado)", () => {
+    const asset = { assetType: "equipos_computacion", acquisitionDate: "2024-01-15", acquisitionCost: 48000 };
+    const result = assetDepreciationAsOf(asset, "2026-01-15", config);
+    assert.equal(result.perPeriod, 1000);
+    assert.equal(result.accumulated, 24000);
+    assert.equal(result.netBookValue, 24000);
+  });
+
+  it("isFullyDepreciated es true cuando el valor en libros llega a 0", () => {
+    const asset = { assetType: "equipos_computacion", acquisitionDate: "2024-01-15", acquisitionCost: 48000 };
+    assert.equal(isFullyDepreciated(asset, "2026-01-15", config), false);
+    assert.equal(isFullyDepreciated(asset, "2034-01-15", config), true); // 10 anios > 4 de vida util
+  });
+
+  it("lanza si el tipo de activo no tiene vida util definida", () => {
+    const asset = { assetType: "nave_espacial", acquisitionDate: "2024-01-15", acquisitionCost: 1000 };
+    assert.throws(() => assetDepreciationAsOf(asset, "2026-01-15", config), /tipo de activo/);
+  });
+});
+
+describe("retenciones a terceros (agente de retencion)", () => {
+  it("compra sin factura: IUE 5% + IT 3% = 8%", () => {
+    const result = computeWithholdingCompraSinFactura(1000, config.withholdings.compraSinFactura);
+    assert.equal(result.iue, 50);
+    assert.equal(result.it, 30);
+    assert.equal(result.total, 80);
+  });
+
+  it("alquiler a persona natural: RC-IVA 13% + IT 3% = 16%", () => {
+    const result = computeWithholdingAlquiler(1000, config.withholdings.alquilerPersonaNatural);
+    assert.equal(result.rcIva, 130);
+    assert.equal(result.it, 30);
+    assert.equal(result.total, 160);
+  });
+
+  it("honorarios a persona natural: RC-IVA 13%", () => {
+    assert.equal(computeWithholdingHonorarios(1000, config.withholdings.honorariosPersonaNatural.rcIvaRate), 130);
+  });
+
+  it("beneficiario del exterior: 25% sobre base presunta 50% = 12.5% efectivo", () => {
+    const result = computeWithholdingBeneficiarioExterior(10000, config.withholdings.beneficiarioExterior);
+    assert.equal(result.base, 5000);
+    assert.equal(result.withheld, 1250);
+    assert.equal(result.effectiveRate, 0.125);
+  });
+});
+
+describe("advertencia de reforma del IVA (Ley 1.733)", () => {
+  it("el modulo documenta el cambio pendiente sin haber tocado el codigo de IVA", () => {
+    const warning = getModule(loadModules(), "accounting").bolivianConfig.ivaReformWarning;
+    assert.ok(warning, "ivaReformWarning present");
+    assert.match(warning.law, /1\.733/);
+    assert.match(warning.impact, /NO se modifico ningun codigo/);
   });
 });

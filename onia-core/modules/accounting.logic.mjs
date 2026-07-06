@@ -326,3 +326,76 @@ export function monthlyProvision(monthlySalary, monthsPerYear = 1) {
 export function accruedProvision(monthlySalary, monthsWorked, monthsPerYear = 1) {
   return round2((Number(monthlySalary ?? 0) * Number(monthsPerYear ?? 1) * Number(monthsWorked ?? 0)) / 12);
 }
+
+// --- Activo fijo (registro individual) ---------------------------------------
+
+/**
+ * Meses COMPLETOS entre dos fechas ISO (UTC): si el dia de fin es anterior al
+ * dia de inicio, ese ultimo mes calendario todavia no se completo por dia.
+ * Duplicado a proposito (mismo criterio que round2 en cada *.logic.mjs): cada
+ * modulo se mantiene autocontenido, sin depender de otro para una utilidad chica.
+ */
+export function monthsBetween(startIso, endIso) {
+  const start = new Date(`${String(startIso).slice(0, 10)}T00:00:00Z`);
+  const end = new Date(`${String(endIso).slice(0, 10)}T00:00:00Z`);
+  let months = (end.getUTCFullYear() - start.getUTCFullYear()) * 12 + (end.getUTCMonth() - start.getUTCMonth());
+  if (end.getUTCDate() < start.getUTCDate()) {
+    months -= 1;
+  }
+  return months;
+}
+
+/**
+ * Depreciacion acumulada y valor en libros de un activo REGISTRADO, a la fecha
+ * dada. Se deriva de acquisitionDate/acquisitionCost/assetType (no se guarda
+ * duplicado); reutiliza depreciationSchedule.
+ */
+export function assetDepreciationAsOf(asset, asOfIso, config) {
+  const entry = (config?.depreciationByAssetType ?? []).find((item) => item.assetType === asset?.assetType);
+  if (!entry) {
+    throw new Error(`sin vida util definida para el tipo de activo ${asset?.assetType}`);
+  }
+  const periodsElapsed = monthsBetween(asset?.acquisitionDate, asOfIso);
+  return depreciationSchedule(asset?.acquisitionCost, entry.usefulLifeYears, periodsElapsed, {
+    salvageValue: asset?.salvageValue ?? 0,
+  });
+}
+
+/** True si el activo ya esta totalmente depreciado (valor en libros <= 0) a la fecha dada. */
+export function isFullyDepreciated(asset, asOfIso, config) {
+  return assetDepreciationAsOf(asset, asOfIso, config).netBookValue <= 0;
+}
+
+// --- Retenciones a terceros (agente de retencion) ----------------------------
+
+/** Retencion combinada IUE+IT sobre compras de bienes/servicios sin factura. */
+export function computeWithholdingCompraSinFactura(grossAmount, { iueRate = 0.05, itRate = 0.03 } = {}) {
+  const amount = Number(grossAmount ?? 0);
+  const iue = round2(amount * iueRate);
+  const it = round2(amount * itRate);
+  return { iue, it, total: round2(iue + it) };
+}
+
+/** Retencion combinada RC-IVA+IT sobre alquileres a personas naturales sin factura. */
+export function computeWithholdingAlquiler(grossAmount, { rcIvaRate = 0.13, itRate = 0.03 } = {}) {
+  const amount = Number(grossAmount ?? 0);
+  const rcIva = round2(amount * rcIvaRate);
+  const it = round2(amount * itRate);
+  return { rcIva, it, total: round2(rcIva + it) };
+}
+
+/** Retencion RC-IVA sobre honorarios/pagos ocasionales a personas naturales sin factura. */
+export function computeWithholdingHonorarios(grossAmount, rate = 0.13) {
+  return round2(Number(grossAmount ?? 0) * rate);
+}
+
+/**
+ * Retencion IUE-Beneficiarios del Exterior: alicuota IUE sobre una base
+ * presunta (por defecto 50% del monto remesado) -> 25% x 50% = 12.5% efectivo.
+ */
+export function computeWithholdingBeneficiarioExterior(remittedAmount, { presumedBaseRate = 0.5, iueRate = 0.25 } = {}) {
+  const amount = Number(remittedAmount ?? 0);
+  const base = round2(amount * presumedBaseRate);
+  const withheld = round2(base * iueRate);
+  return { base, withheld, effectiveRate: presumedBaseRate * iueRate };
+}

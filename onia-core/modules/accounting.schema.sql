@@ -158,5 +158,52 @@ create table if not exists onia_accounting_rcv_records (
 create index if not exists onia_accounting_rcv_records_period_idx
   on onia_accounting_rcv_records (organization_id, kind, period);
 
+create table if not exists onia_accounting_withholding_records (
+  id text primary key,
+  organization_id text not null,
+  withholding_type text not null,
+  period text not null,
+  date date not null,
+  payee_id text,
+  payee_name text,
+  payee_nit text,
+  gross_amount numeric not null,
+  retention_amount numeric not null,
+  form_number text,
+  status text not null default 'pending',
+  notes text,
+  metadata jsonb not null default '{}'::jsonb,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create index if not exists onia_accounting_withholding_records_period_idx
+  on onia_accounting_withholding_records (organization_id, withholding_type, period);
+
+-- Capability: accounting (activo fijo) -----------------------------------------
+
+create table if not exists onia_accounting_fixed_assets (
+  id text primary key,
+  organization_id text not null,
+  asset_code text not null,
+  name text not null,
+  asset_type text not null,
+  acquisition_date date not null,
+  acquisition_cost numeric not null,
+  salvage_value numeric not null default 0,
+  status text not null default 'active',
+  serial_number text,
+  area_id text,
+  disposal_date date,
+  disposal_amount numeric,
+  metadata jsonb not null default '{}'::jsonb,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  unique (organization_id, asset_code)
+);
+
+create index if not exists onia_accounting_fixed_assets_status_idx
+  on onia_accounting_fixed_assets (organization_id, status, asset_type);
+
 create index if not exists onia_accounting_rcv_records_nit_idx
   on onia_accounting_rcv_records (organization_id, nit);

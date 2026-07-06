@@ -1,5 +1,43 @@
 # ONIA Core Changelog
 
+## modules/accounting 0.2.0 — 2026-07-06 (retenciones a terceros + activo fijo)
+
+- Ultimo tramo de investigacion (subagente, cruzo SIN/MEFP/Colegio de
+  Auditores) sobre huecos transversales del sistema. Extiende `accounting`
+  (no crea un modulo nuevo: retenciones y activo fijo son parte del dominio
+  fiscal/contable que ya provee) en vez de fragmentar en mas modulos.
+- 2 entidades nuevas: `withholding_record` (retencion a terceros: agente de
+  retencion IUE+IT en compras sin factura 8%, RC-IVA+IT en alquileres a
+  personas naturales 16%, RC-IVA en honorarios 13%, IUE-BE en remesas al
+  exterior 12.5% efectivo) y `fixed_asset` (Libro de Activos Fijos: codigo,
+  fecha/costo de adquisicion, tipo, baja — la depreciacion acumulada y el
+  valor en libros se DERIVAN, no se guardan duplicados). +2 tablas en
+  `accounting.schema.sql`.
+- `accounting.logic.mjs`: `computeWithholdingCompraSinFactura`/
+  `Alquiler`/`Honorarios`/`BeneficiarioExterior`; `assetDepreciationAsOf`/
+  `isFullyDepreciated` (reutilizan `depreciationSchedule` ya existente,
+  cerrando el hueco que la propia auditoria estructural detecto: existia la
+  FORMULA de depreciacion pero ninguna entidad para REGISTRAR un activo
+  individual). +8 tests (31 en accounting.logic, incluye `monthsBetween`
+  duplicado a proposito, mismo criterio day-aware que en payroll).
+- **Advertencia documentada, SIN tocar codigo**: la Ley N 1.733 "Ley de
+  Alivio Tributario" (27-may-2026) cambia el calculo del IVA de "por dentro"
+  (~14.94% efectivo) a "desagregado" (13% real, transparente). El reglamento
+  no esta confirmado; las formulas de IVA existentes (accounting/invoicing/
+  payroll) NO se modificaron — cambiar una formula ya probada sin la mecanica
+  exacta confirmada seria peor que dejarlo marcado en `ivaReformWarning`.
+- **Investigado y descartado para este tramo** (con razon documentada, no
+  construido): RTS/STI/RAU (regimenes de personas naturales de subsistencia,
+  no del publico objetivo — empresas formales), ajuste por inflacion NC3/UFV
+  (suspendido desde 2020 por Resolucion CTNAC 03/2020, nadie lo aplica hoy),
+  revalorizacion tecnica de activos NC4 (evento raro, requiere perito
+  externo), aging de cartera y presupuesto vs. real (sin marco legal
+  boliviano — el presupuesto solo es obligatorio para el sector publico via
+  Ley 1178 SAFCO).
+- Modulos totales: 5 (sin cambio de cantidad), 30 entidades (28→30, +2:
+  withholding_record y fixed_asset). 231 tests en total (2 validadores +
+  suite completa verdes).
+
 ## modules/payroll 0.1.0 — 2026-07-06 (planilla de sueldos Bolivia)
 
 - Nuevo modulo `payroll` (Bolivia) que PROVEE su propia capability

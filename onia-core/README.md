@@ -61,7 +61,8 @@ modulos, verticales o integraciones. No son la definicion del core.
   contrato congelado — el core no es inventario/ventas/contabilidad/facturacion/
   nomina). `commerce.json` (catalogo/inventario/cotizaciones B2B/ventas-caja),
   `knowledge.json` (base de conocimiento), `accounting.json` (contabilidad
-  Bolivia: doble partida + IVA/IT/IUE), `invoicing.json` (factura electronica
+  Bolivia: doble partida + IVA/IT/IUE + retenciones a terceros + registro de
+  activo fijo), `invoicing.json` (factura electronica
   Bolivia: CUF/QR/anulacion/notas de credito-debito) y `payroll.json` (planilla
   de sueldos Bolivia: AFP/Gestora Publica, RC-IVA dependientes, aguinaldo,
   indemnizacion, desahucio, vacaciones, finiquito) — estos tres ultimos PROVEEN
@@ -105,7 +106,7 @@ modulos, verticales o integraciones. No son la definicion del core.
 ```bash
 npm run validate:onia-core                    # invariantes del contrato core
 node onia-core/modules/validate-modules.mjs   # validador de modulos vendibles
-node --test onia-core/*.test.mjs onia-core/logic/*.test.mjs onia-core/modules/*.test.mjs   # 220 tests
+node --test onia-core/*.test.mjs onia-core/logic/*.test.mjs onia-core/modules/*.test.mjs   # 231 tests
 node onia-core/report.mjs                     # foto de avance por vertical/producto/modulo
 node onia-core/install-plan.mjs <track|producto>   # plan de instalacion de un vertical
 ```

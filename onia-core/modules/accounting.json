@@ -1,7 +1,7 @@
 {
   "module": "accounting",
   "name": "ONIA Accounting Module (Bolivia)",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "status": "draft",
   "layer": "activatable_module",
   "purpose": "Contabilidad de doble partida especializada en Bolivia como add-on activable SOBRE el core. El core NO lleva contabilidad (asi lo manda el gap audit); este modulo la PROVEE: plan de cuentas, asientos (libro diario), libro mayor derivado de las lineas, periodos/gestion, y los impuestos bolivianos (IVA, IT, IUE, RC-IVA) con RCV y vencimientos por digito NIT. La emision fiscal real (SIAT) sigue siendo external_gate del core; este modulo prepara y declara, no emite.",
@@ -95,6 +95,26 @@
       "requiredFields": ["id", "organizationId", "kind", "period", "invoiceNumber", "nit", "date", "amount", "ivaAmount", "createdAt"],
       "optionalFields": ["authorizationCode", "controlCode", "partnerId", "partnerName"],
       "tenantScoped": true
+    },
+    {
+      "id": "withholding_record",
+      "name": "WithholdingRecord",
+      "capabilityId": "tax_bolivia",
+      "table": "onia_accounting_withholding_records",
+      "purpose": "Retencion a terceros (la empresa actua como agente de retencion): IUE+IT en compras sin factura, RC-IVA+IT en alquileres a personas naturales, RC-IVA en honorarios, o IUE-BE en remesas al exterior. Alimenta la declaracion mensual (Form. 570/604/530 segun el tipo).",
+      "requiredFields": ["id", "organizationId", "withholdingType", "period", "date", "grossAmount", "retentionAmount", "status", "createdAt"],
+      "optionalFields": ["payeeId", "payeeName", "payeeNit", "formNumber", "notes"],
+      "tenantScoped": true
+    },
+    {
+      "id": "fixed_asset",
+      "name": "FixedAsset",
+      "capabilityId": "accounting",
+      "table": "onia_accounting_fixed_assets",
+      "purpose": "Registro de un activo fijo individual (Libro de Activos Fijos): codigo, fecha y costo de adquisicion, vida util (DS 24051 Art. 22), baja. La depreciacion acumulada y el valor en libros se DERIVAN de la fecha de adquisicion (assetDepreciationAsOf), no se guardan duplicados.",
+      "requiredFields": ["id", "organizationId", "assetCode", "name", "assetType", "acquisitionDate", "acquisitionCost", "status", "createdAt"],
+      "optionalFields": ["serialNumber", "areaId", "salvageValue", "disposalDate", "disposalAmount"],
+      "tenantScoped": true
     }
   ],
   "bolivianConfig": {
@@ -108,7 +128,7 @@
       "RND SIAT vigentes (facturacion en linea, RCV)"
     ],
     "taxes": [
-      { "code": "IVA", "name": "Impuesto al Valor Agregado", "rate": 0.13, "periodicity": "mensual", "note": "13% nominal; efectiva por dentro ~14.94% sobre precio con IVA incluido. IVA a pagar = debito fiscal (ventas) - credito fiscal (compras)." },
+      { "code": "IVA", "name": "Impuesto al Valor Agregado", "rate": 0.13, "periodicity": "mensual", "note": "13% nominal; efectiva por dentro ~14.94% sobre precio con IVA incluido (regimen historico). IVA a pagar = debito fiscal (ventas) - credito fiscal (compras). VER ivaReformWarning: la Ley 1.733 (2026) cambia este calculo." },
       { "code": "IT", "name": "Impuesto a las Transacciones", "rate": 0.03, "periodicity": "mensual", "note": "3% sobre ingresos brutos; compensable con el IUE del ejercicio siguiente." },
       { "code": "IUE", "name": "Impuesto sobre las Utilidades de las Empresas", "rate": 0.25, "periodicity": "anual", "note": "25% sobre la utilidad neta imponible; se paga hasta 120 dias despues del cierre de gestion." },
       { "code": "RC_IVA", "name": "Regimen Complementario al IVA", "rate": 0.13, "periodicity": "variable", "note": "Dependientes/personas; normalmente fuera del alcance de la contabilidad de empresa." }
@@ -136,10 +156,52 @@
       "indemnizacionMonthsPerYear": 1,
       "note": "Ley General del Trabajo: aguinaldo = 1 sueldo/anio (pagadero en diciembre; proporcional desde 3 meses). Indemnizacion = 1 sueldo por anio de antiguedad (proporcional). Provision mensual = sueldo * meses_por_anio / 12."
     },
+    "withholdings": {
+      "verifiedAt": "2026-07-06",
+      "compraSinFactura": {
+        "iueRate": 0.05,
+        "itRate": 0.03,
+        "totalRate": 0.08,
+        "form": "Formulario 570",
+        "legalBasis": "DS 24051 art. 3 (parrafo final) + DS 21532 art. 10",
+        "note": "Compras de bienes/servicios a proveedor ocasional/no inscrito, sin factura. El mas frecuente en distribuidoras/clinicas/comercios formales."
+      },
+      "alquilerPersonaNatural": {
+        "rcIvaRate": 0.13,
+        "itRate": 0.03,
+        "totalRate": 0.16,
+        "form": "Formulario 604",
+        "note": "Alquiler de inmueble a persona natural sin factura. Casi toda empresa formal alquila su local."
+      },
+      "honorariosPersonaNatural": {
+        "rcIvaRate": 0.13,
+        "form": "Formulario 604",
+        "note": "Honorarios/pagos ocasionales a personas naturales sin factura, cuando el ingreso no esta alcanzado por IUE."
+      },
+      "beneficiarioExterior": {
+        "presumedBaseRate": 0.5,
+        "iueRate": 0.25,
+        "effectiveRate": 0.125,
+        "form": "Formulario 530 v3",
+        "legalBasis": "Ley 843 art. 51 (IUE-BE); DS 5563 puede exonerar/reducir por reinversion de utilidades",
+        "note": "Remesas a beneficiarios del exterior (proveedores/socios extranjeros). Poco frecuente en distribuidora/clinica/comercio local."
+      },
+      "notes": [
+        "compraSinFactura (8%) y alquilerPersonaNatural (16%) son los mas usados en empresas formales tipicas; honorarios y beneficiarioExterior dependen del cliente.",
+        "No es asesoria fiscal; verificar el caso puntual (tipo de proveedor, monto, si corresponde retener) antes de aplicar."
+      ]
+    },
+    "ivaReformWarning": {
+      "law": "Ley N 1.733 'Ley de Alivio Tributario' (promulgada 27-mayo-2026)",
+      "change": "Cambia el calculo del IVA de 'por dentro' (tasa efectiva ~14.94% sobre el precio con IVA incluido) a calculo DESAGREGADO fuera del valor neto (tasa transparente 13% real).",
+      "effectiveDate": "Desde el primer dia del mes siguiente a su reglamentacion. Reglamento NO confirmado al 2026-07-06 (verificado por subagente de investigacion).",
+      "impact": "Las formulas de IVA de este modulo (ivaOfRecord/computeIva), de invoicing (buildCuf/QR no afectados, pero el TOTAL de la factura si) y de payroll (RC-IVA) usan hoy 'iva = total * 0.13' tratando el 13% como aplicado sobre el total. Cuando el reglamento este disponible, VERIFICAR si esa formula sigue siendo correcta o si el calculo desagregado cambia la base. NO se modifico ningun codigo por esta advertencia: la mecanica exacta no esta confirmada; cambiar formulas ya probadas sin certeza seria peor que dejarlo marcado."
+    },
     "notes": [
       "Tasas y fechas son DEFAULT configurables por el contador; la normativa cambia (radar RND). Esto NO es asesoria fiscal.",
       "El IVA se declara con el Libro de Compras y Ventas (RCV) en el portal SIAT.",
-      "La emision fiscal en linea (factura SIAT) es external_gate del core, no de este modulo: aca se prepara y declara, no se emite."
+      "La emision fiscal en linea (factura SIAT) es external_gate del core, no de este modulo: aca se prepara y declara, no se emite.",
+      "Ver ivaReformWarning: hay un cambio legal 2026 pendiente de reglamentacion que puede afectar el calculo del IVA en todo el core."
     ]
   },
   "notes": [

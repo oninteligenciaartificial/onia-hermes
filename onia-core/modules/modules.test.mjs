@@ -115,7 +115,7 @@ describe("accounting module (Bolivia)", () => {
     }
   });
 
-  it("has the double-entry, ledger and tax entities", () => {
+  it("has the double-entry, ledger, tax, withholding and fixed asset entities", () => {
     const ids = accounting.entities.map((entity) => entity.id);
     for (const id of [
       "account",
@@ -125,6 +125,8 @@ describe("accounting module (Bolivia)", () => {
       "tax_rate",
       "tax_declaration",
       "rcv_record",
+      "withholding_record",
+      "fixed_asset",
     ]) {
       assert.ok(ids.includes(id), `has ${id}`);
     }
@@ -140,6 +142,21 @@ describe("accounting module (Bolivia)", () => {
     assert.equal(byCode.get("IUE").rate, 0.25);
     assert.equal(config.nitDueDay["0"], 13);
     assert.equal(config.nitDueDay["9"], 22);
+  });
+
+  it("encodes withholding rates for the 4 investigated cases", () => {
+    const withholdings = accounting.bolivianConfig.withholdings;
+    assert.ok(withholdings, "withholdings config present");
+    assert.equal(withholdings.compraSinFactura.totalRate, 0.08);
+    assert.equal(withholdings.alquilerPersonaNatural.totalRate, 0.16);
+    assert.equal(withholdings.honorariosPersonaNatural.rcIvaRate, 0.13);
+    assert.equal(withholdings.beneficiarioExterior.effectiveRate, 0.125);
+  });
+
+  it("flags the pending Ley 1.733 IVA reform without having changed the IVA code", () => {
+    const warning = accounting.bolivianConfig.ivaReformWarning;
+    assert.ok(warning, "ivaReformWarning present");
+    assert.match(warning.law, /1\.733/);
   });
 });
 
