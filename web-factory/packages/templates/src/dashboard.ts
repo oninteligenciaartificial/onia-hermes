@@ -494,16 +494,30 @@ h1, h2, h3 {
     align-items: center;
     justify-content: space-between;
     gap: 12px;
-    overflow-x: auto;
+    min-width: 0;
+  }
+
+  .wf-dash-brand {
+    flex: 0 0 auto;
   }
 
   .wf-dash-nav {
+    flex: 1 1 0%;
     flex-direction: row;
     gap: 4px;
+    min-width: 0;
+    overflow-x: auto;
   }
 
   .wf-dash-nav-link {
     white-space: nowrap;
+    flex: 0 0 auto;
+  }
+
+  .wf-dash-nav-group {
+    white-space: nowrap;
+    flex: 0 0 auto;
+    margin: 0 4px 0 10px;
   }
 }
 
