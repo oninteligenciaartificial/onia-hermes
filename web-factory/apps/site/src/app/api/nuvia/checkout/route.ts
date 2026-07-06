@@ -1,20 +1,16 @@
 import { NextResponse } from "next/server";
-import { createNuviaCheckout, type NuviaCheckoutRequest } from "@/lib/nuvia-commerce";
+import { createNuviaCheckout } from "@/lib/nuvia-commerce";
 
 export const runtime = "nodejs";
 
 export async function POST(request: Request) {
-  let payload: NuviaCheckoutRequest;
+  let payload: unknown;
 
   try {
-    payload = (await request.json()) as NuviaCheckoutRequest;
+    payload = await request.json();
   } catch {
     return NextResponse.json(
-      {
-        ok: false,
-        mode: "invalid_request",
-        message: "El cuerpo del checkout debe ser JSON valido.",
-      },
+      { ok: false, mode: "invalid_request", message: "El cuerpo del checkout debe ser JSON valido." },
       { status: 400 },
     );
   }
@@ -24,13 +20,6 @@ export async function POST(request: Request) {
     return NextResponse.json(checkout, { status: checkout.ok ? 200 : 400 });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Error desconocido creando checkout.";
-    return NextResponse.json(
-      {
-        ok: false,
-        mode: "invalid_request",
-        message,
-      },
-      { status: 500 },
-    );
+    return NextResponse.json({ ok: false, mode: "invalid_request", message }, { status: 500 });
   }
 }
