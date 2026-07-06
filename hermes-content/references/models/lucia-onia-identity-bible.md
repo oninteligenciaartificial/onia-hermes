@@ -24,16 +24,16 @@
 
 ## Guardarropa (curado de Pinterest 2026-07-06, por Sergio+Claude)
 
-Fuente: busquedas Pinterest "UGC content creator outfit casual beige aesthetic",
-"clean girl outfit", "brunette casual chic outfit going out night". Extraidos solo
-principios de estilo/color — no copiar fotos de personas reales como referencia de cara.
+Fuente: busquedas Pinterest de flatlays (prenda sola, SIN cara de terceros) — cada look es
+UNA imagen real subida a Higgsfield como **Reference Element** (categoria `prop`), no solo
+texto. Ver catalogo completo + como generar: [[lucia-elements-catalog]].
 
-| Look | Descripcion | Uso |
-|---|---|---|
-| **Clean girl / skincare diario** | Top crema/beige liso o acanalado (ribbed), pantalon o jean claro, dorado minimalista (cadena fina, aros chicos). Paleta: crema, beige, arena, blanco roto. | Contenido skincare/UGC diario, bano, rutina — el look BASE de Lucia. |
-| **Casual streetwear** | Remera blanca o top basico + jean recto + zapatillas blancas. Joyeria dorada discreta. | Calle, cafe, salidas cortas, "iba caminando y..." |
-| **Night out chic (elegante)** | Total black: top halter o musculosa + pantalon de vestir, o vestido corto negro con blazer, o top de encaje + palazzo. Accesorios plateados/dorados discretos. | Contenido "salida", restaurante, bar, review de noche. |
-| **Loungewear / casa** | Top o sweater crema oversized, pantalon suelto de friza clara. Sin joyeria o minima. | Contenido "GRWM", rutina de noche, storytime en casa. |
+| Look | Descripcion | Element ID | Uso |
+|---|---|---|---|
+| **Clean girl / skincare diario** | Top crema acanalado, cadena/aros dorados, cartera camel, lentes de sol | `16833b18-9e23-434a-99b2-92bac2915e4c` | Contenido skincare/UGC diario, el look BASE |
+| **Casual streetwear** | Remera blanca, jean, cartera marron, dorado discreto | `ec1dece5-23c4-4ee3-84c6-14a49a926f7c` | Calle, cafe, salidas cortas |
+| **Night out chic** | Total black: vestido/top, tacos, cartera, joyeria dorada | `5503f588-d543-4925-be56-e4db560f632d` | "Salida", restaurante, bar, review de noche |
+| **Loungewear / casa** | Sweater y pantalon crema, pantuflas | `6186d80f-cb02-4cd2-89d9-e5afdcce7c6c` | GRWM, storytime en casa |
 
 Reglas de vestuario: sin logos de terceros, sin marcas reales visibles salvo el producto
 que se esta promocionando, colores coherentes con su paleta calida (crema/beige/negro),
@@ -41,16 +41,15 @@ nunca ropa que exponga de mas (mantener seguro para marca).
 
 ## Lugares / escenarios (curado de Pinterest 2026-07-06)
 
-Fuente: busquedas "UGC creator bedroom bathroom aesthetic setting", "UGC creator kitchen
-street cafe aesthetic lifestyle". Principios de ambiente, no fotos de personas.
+Cada lugar = UNA imagen real (sin personas) subida como Reference Element (`environment`).
 
-| Escenario | Descripcion | Uso |
-|---|---|---|
-| **Bano (base)** | Mesada de marmol blanco/beige, espejo grande, luz calida suave (ring light sutil), toallas neutras, 1-2 productos de skincare visibles. | Rutina, review de producto, hook diario. Ya validado (test wan2.7). |
-| **Dormitorio cozy** | Ropa de cama blanca/crema, luz natural de ventana, ambiente calido y ordenado, sin desorden. | Storytime, GRWM, contenido mas intimo/calido. |
-| **Cocina/cafe** | Mesada de madera clara o cafeteria con luz calida, taza de cafe, ambiente acogedor. | Contenido lifestyle, "mi rutina de mañana", pausa/reflexion. |
-| **Calle / urbano** | Vereda o pasillo exterior, luz natural de dia, fondo desenfocado (vidrieras, gente borrosa). | Walking hooks, "iba caminando y penso en...", descubrimiento. |
-| **Restaurante/bar (noche)** | Luz calida baja, madera oscura o cortinas de terciopelo, ambiente elegante. | Contenido "salida", solo con look night-out. |
+| Escenario | Descripcion | Element ID | Uso |
+|---|---|---|---|
+| **Bano (base)** | Marmol blanco/negro, ducha de vidrio, luz calida | `44a4686e-1733-4b41-811d-1eb5d1cf88fc` | Rutina, review, hook diario. Validado (wan2.7 + combo elements). |
+| **Dormitorio cozy** | Ropa de cama clara, luz natural de ventana | `6a721405-d019-48b3-b3e6-92bdf6a4474e` | Storytime, GRWM |
+| **Cocina/cafe** | PENDIENTE — bloqueado por rate-limit Pinterest, retomar | — | Lifestyle, "rutina de manana" |
+| **Calle / urbano** | PENDIENTE | — | Walking hooks |
+| **Restaurante/bar (noche)** | PENDIENTE | — | Contenido "salida" con look night-out |
 
 ## Voz
 - Preset sugerido `seed_audio` **Isabella** (`80924413-1ea8-4e64-9719-e00b86796f05`) — distinta de Mara. O clonar voz propia con **ElevenLabs** (Sergio la tiene) para consistencia real en produccion 24/7.
