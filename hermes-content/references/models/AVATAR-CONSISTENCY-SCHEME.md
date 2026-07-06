@@ -2,9 +2,24 @@
 
 > Aplica a TODOS los personajes IA (Lucia, Mara, y los que sigan). v1 escrito 2026-07-06
 > despues de que Sergio reporto perdida de consistencia (pelo, sonrisa, dientes
-> cambiando entre generaciones usando el metodo Elements+nano_banana_2). v2 (esta version)
-> refinado para el caso real de uso: **UGC** — hablando a camara, con producto real en
-> mano, movimiento.
+> cambiando entre generaciones usando el metodo Elements+nano_banana_2). v2 refinado para
+> UGC (Marketing Studio). v3 (esta version, 2026-07-06) — auditoria completa: IDs
+> verificados, colision de nombres en la plataforma, y correccion de costos.
+
+## ⚠️ ALERTA — colision de nombres en Higgsfield (no arreglable por API)
+
+`show_characters` y `show_reference_elements` **no tienen accion de rename/delete** (solo
+list/train-create/status). Por eso quedaron DOS objetos con "Lucia" en el nombre:
+
+| Nombre en Higgsfield | soul_id | Que es realmente |
+|---|---|---|
+| "Valentina ONIA v1" | `9a0d6953-ff2e-40ba-b763-806e0d447325` | ✅ **ES Lucia** (la real, pecas, de los videos de Sergio) |
+| "Lucia ONIA v1" | `2fc03fc6-c38b-48ca-91f6-ca1eb022ce29` | ❌ **NO es Lucia** — cara equivocada archivada (m2-05), NO USAR |
+
+**Regla dura: nunca elegir un Soul/Element por su NOMBRE en la lista de Higgsfield.
+Siempre usar el `soul_id`/`element_id` exacto de la tabla de referencia de abajo.** Si
+alguna vez se genera con "Lucia" y sale una cara distinta a las pecas, es casi seguro que
+se uso `2fc03fc6` por error de nombre.
 
 ## Diagnostico (v1, sigue valido)
 
@@ -81,15 +96,60 @@ mueble/ambiente exacto de fondo). Reglas obligatorias si se usa:
 | Hablando con voz propia, sin producto en mano | 3 (wan2.7 desde still Nivel 1) |
 | Mostrar un prop/lugar exacto de fondo, sin que hable | 4 (Elements, con QA) — ultimo recurso |
 
-## Aplica a
+## Tabla de referencia definitiva (IDs verificados, 2026-07-06)
 
-- **Lucia** — Soul `9a0d6953-ff2e-40ba-b763-806e0d447325`. Fuente real: `pecas-source-frames/`.
-  Pendiente: probar Nivel 2 (Marketing Studio) con Lucia (solo se probo con Mara hasta ahora).
-- **Mara** — Soul `b8f5c353-faaf-44eb-ae5a-4e0bacfd333f`. Nivel 2 ya validado (Mara+ISDIN).
-  Pendiente: auditar si su ancla actual (Nivel 1) es frame real o generado.
+### Lucia (pelinegra con pecas — identidad DEBE ser fiel al video real de Sergio)
+| Uso | ID | Fuente |
+|---|---|---|
+| Soul (Nivel 1) | `9a0d6953-ff2e-40ba-b763-806e0d447325` | 8 frames reales, `pecas-source-frames/` |
+| Ancla real para Nivel 4/Marketing Studio | `ced20cc2-3388-4d98-92ee-b0fcd961aa62` (Element) | frame real (pecas-A-15) escalado 2K |
+| Ancla real alternativa (otro angulo/expresion) | `44622145-b648-4839-85f3-d8fdb7047b19` (Element, auto-creado, mal llamado "Valentina ONIA v1") | frame real (pecas-B-02), sin editar |
+| ⛔ Legacy, NO USAR | `de586dbb-0cdd-4ca2-aaac-173d11741c86` (Element "lucia-face-element") | foto YA generada por Soul (1 paso de deriva) |
+| Outfits (prop) | `16833b18` cleangirl · `ec1dece5` streetwear · `5503f588` nightout · `6186d80f` loungewear | flatlays reales sin cara, Pinterest |
+| Lugares (environment) | `44a4686e` bano · `6a721405` dormitorio · `5cfbdab5` cafe · `cddfa484` calle · `2750ef8b` bar | interiores reales sin gente, Pinterest |
+| Referencia QA (comparar SIEMPRE contra esto) | `hermes-content/references/models/pecas-source-frames/*.png` | frames reales del video de Sergio |
+
+### Mara (pelirroja — identidad 100% sintetica, NO representa a nadie real)
+| Uso | ID | Fuente |
+|---|---|---|
+| Soul (Nivel 1) | `b8f5c353-faaf-44eb-ae5a-4e0bacfd333f` | `identity-bank-50/` (50 fotos, ya generadas por IA en rondas previas) |
+| Nivel 2 (Marketing Studio) | validado con Mara+ISDIN (2026-07-06), 42cr | avatar custom creado desde una foto Nivel 1 |
+| Referencia QA | Round 09 "photoshoot maestro" + `identity-bank-50-sheet-01` | A diferencia de Lucia, NO hay video real que igualar — la QA es contra el master APROBADO por Sergio, no contra una persona real |
+| Pendiente | Auditar si el `mara_identity_02.jpg` (ancla historica) sigue siendo la mejor referencia o conviene fijar una nueva desde una generacion Nivel 1 reciente | — |
+
+## Costos verificados (historial real de transacciones, no estimados)
+
+| Accion | Costo real | Nota |
+|---|---|---|
+| Entrenar un Soul (`show_characters` train) | **25cr** ⚠️ | Antes documentado como "sin cargo" — ERA INCORRECTO. Se gastaron 50cr entrenando 2 Souls esta sesion (25cr de eso en la cara equivocada archivada). Pensarlo antes de entrenar un Soul nuevo. |
+| Generar con Soul (`soul_2` + texto) | 0.12cr/img | Nivel 1, el barato real |
+| z_image (explorar estilo, sin identidad) | 0.15cr/img | Solo para elegir cara/estilo, no fija identidad |
+| nano_banana_2 + Elements (combo cara+outfit+lugar) | 2cr/img | Nivel 4 |
+| bytedance_image_upscale | 2cr/img | Escalar frame real sin generar |
+| wan2_7 (still + audio, lipsync) | 15cr/10s video | Nivel 3 |
+| seed_audio (voz) | ~1-2.4cr | Varia con largo del texto |
+| Marketing Studio Video (avatar+producto) | 42cr (480p) — 75cr (720p/15s) | Nivel 2 |
+| kling3_0_turbo (b-roll movido, sin cara fija) | 7.5cr/5s | Para Radar IA / contenido sin identidad |
+| Seedance 2.0 std | **45-135cr** ⚠️ EVITAR | El mas caro, evitar salvo aprobacion explicita |
+
+Balance actual: 2769.9 / 3000 (verificado 2026-07-06).
 
 ## Que hacer con lo ya generado con Elements (Nivel 4, sesion previa)
 
 Las imagenes `lucia-elements-combo-*.png` quedan como **pruebas de concepto del Nivel 4**,
 no como contenido aprobado ni como referencia de identidad. No usarlas para entrenar nada,
 ni como ancla, ni como fuente de un avatar custom de Marketing Studio.
+
+## Como se logran los mejores resultados (resumen ejecutable)
+
+1. **Default siempre Nivel 1** (`soul_2` + soul_id correcto de la tabla + texto). Es lo
+   mas barato y lo mas consistente — usar para el 90%+ del contenido.
+2. **Nunca elegir Soul/Element por nombre** — copiar el ID de la tabla de arriba, siempre.
+3. **Antes de aprobar cualquier imagen/video, comparar contra la referencia QA** (frames
+   reales para Lucia, master aprobado para Mara). Si no calza, descartar y no seguir
+   generando encima.
+4. **Antes de entrenar un Soul nuevo, confirmar con Sergio** — cuesta 25cr real, no es gratis.
+5. **Para UGC con producto real:** Marketing Studio (Nivel 2), avatar creado desde una
+   foto Nivel 1 limpia. Pendiente probarlo con Lucia (solo Mara validada).
+6. **Elements (Nivel 4) es el ultimo recurso**, nunca el default, siempre con 2-3
+   candidatos + QA, nunca para "hablar" o "sostener algo con precision".

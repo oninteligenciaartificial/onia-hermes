@@ -22,7 +22,7 @@ media_ids subidos a Higgsfield:
 
 ## Costo (REGLA Sergio: solo barato)
 
-- Entrenar Soul: sin cargo visible en el historial de transacciones (parece incluido en plan ultra).
+- Entrenar Soul: **25cr** (corregido 2026-07-06 — se creyo "sin cargo" por error, ver AVATAR-CONSISTENCY-SCHEME.md).
 - Generar con `soul_2` + este soul_id: **~0.12 cr/imagen**.
 - Comparar: nano_banana_2 1.5-3cr; z_image 0.15cr (no fija identidad); Seedance video 45-135cr (evitar). Ver [[radar-ia-content-production]] y [[gasto-plataformas-validar-primero]].
 

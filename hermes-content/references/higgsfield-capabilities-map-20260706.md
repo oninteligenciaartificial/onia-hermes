@@ -69,7 +69,7 @@ Movimiento "movido" barato = kling3_0_turbo (7.5/clip) o edicion en nuestro edit
 
 - **z_image** -> explorar y elegir UNA cara (barato).
 - **nano_banana (2/Pro)** con esa cara como **image ref** -> **contact sheet** multi-pose (mismo rostro). Recortar en fotos individuales = banco de identidad. (Probado: mantiene identidad.)
-- **show_characters (Soul train)**: subir 5-20 fotos del banco -> **Soul entrenado** (~10 min, sin cargo visible). Genera con **soul_2** a ~0.12/img. Solo soul_2 / soul_cinematic.
+- **show_characters (Soul train)**: subir 5-20 fotos del banco -> **Soul entrenado** (~10 min, **25cr** — corregido 2026-07-06, se creyo gratis por error). Genera con **soul_2** a ~0.12/img. Solo soul_2 / soul_cinematic.
 - **show_reference_elements**: guardar 1 imagen como **Element** reusable (instantaneo) -> sirve con nano/seedream/gpt/kling/seedance/cinema (NO soul_2). Para multi-personaje o modelos sin Soul.
 - **Cuerpo completo / vestuario**: generar sheets de cuerpo y looks con nano/soul y documentarlos en el bible.
 - Souls actuales: Mara `b8f5c353` (pelirroja) + 4 de Sergio. Modelo 2 (morena m2-05): banco listo, falta entrenar Soul.
