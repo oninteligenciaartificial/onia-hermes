@@ -1656,9 +1656,123 @@
   grid-area: evidence;
 }
 
-.onia-calendar-timeline.is-compact {
+/* Vista "Hoy": timeline visual de la agenda (grilla proporcional al horario,
+   no una lista plana). Clases propias (no .onia-calendar-timeline/-block) para
+   no tocar la pestana "Calendario" completa, que reusa esas otras clases. */
+.onia-day-timeline {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr);
+  gap: 3px 10px;
   max-height: 440px;
-  overflow: auto;
+  padding: 2px 2px 2px 0;
+  overflow-y: auto;
+}
+
+.onia-day-timeline-hour {
+  grid-column: 1;
+  align-self: start;
+  transform: translateY(-6px);
+  color: var(--onia-faint);
+  font-size: 10px;
+  font-weight: 800;
+  text-align: right;
+}
+
+.onia-day-timeline-block {
+  display: flex;
+  flex-direction: column;
+  grid-column: 2;
+  gap: 2px;
+  min-height: 0;
+  padding: 6px 10px;
+  overflow: hidden;
+  border-radius: var(--onia-radius);
+  background: var(--onia-neutral-soft);
+  color: #554b3a;
+}
+
+.onia-day-timeline-block span {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10px;
+  font-weight: 800;
+  opacity: 0.8;
+}
+
+.onia-day-timeline-block strong {
+  overflow: hidden;
+  color: var(--onia-ink);
+  font-size: 12px;
+  line-height: 1.25;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.onia-day-timeline-block.is-sales {
+  background: var(--onia-yellow-soft);
+  color: var(--onia-yellow);
+}
+
+.onia-day-timeline-block.is-deep_work {
+  background: var(--onia-green-soft);
+  color: #153f30;
+}
+
+.onia-day-timeline-block.is-meetings {
+  background: var(--onia-blue-soft);
+  color: var(--onia-blue);
+}
+
+/* Lista "Tareas del dia": numero de prioridad al frente (nunca solo color,
+   siempre acompanado del texto "prioridad X"), la primera tarea destacada. */
+.onia-daily-task-list > div {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+}
+
+.onia-daily-task-list > div.is-top-priority {
+  border-color: var(--onia-green);
+  background: var(--onia-green-soft);
+}
+
+.onia-task-rank {
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--onia-neutral-soft);
+  color: #554b3a;
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.onia-task-rank.is-alta {
+  background: var(--onia-red-soft);
+  color: var(--onia-red);
+}
+
+.onia-task-rank.is-media {
+  background: var(--onia-yellow-soft);
+  color: var(--onia-yellow);
+}
+
+.onia-task-rank.is-baja {
+  background: var(--onia-blue-soft);
+  color: var(--onia-blue);
+}
+
+.onia-task-body {
+  display: grid;
+  min-width: 0;
+  gap: 3px;
+}
+
+.onia-daily-task-list select {
+  flex: 0 0 auto;
 }
 
 .onia-quick-note {
