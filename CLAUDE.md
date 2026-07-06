@@ -124,6 +124,7 @@ Carriles = 1 sesión = 1 worktree = 1 rama = 1 carpeta/repo:
 - **H** `contenido-higgsfield` → onia-hermes `hermes-content/references` + skills(video/IG) + scripts(video/ig) + `.hermes/video-lab` (producción continua)
 - **I** `research-estrategia` → onia-hermes `hermes-content/docs/research/**` (analizar productos ganadores + validar ventures; NO codea, entrega decisión)
 - **J** `video-remotion` → onia-hermes `scripts/remotion`|`apps/video` (video programático React; distinto de H generativo)
+- **K** `yt-canal` → onia-hermes `hermes-content/channels/onia-automatiza/**` (canal YT faceless "ONIA Automatiza" ES; reusa content-engine/Higgsfield sin editarlos, upload→handoff a n8n; plan en `docs/research/ONIA_YT_CANAL_ONIA_AUTOMATIZA_20260706.md`)
 - **Core** `onia-core` → `onia-core/**` (CONGELADO; solo bajo adopción aprobada)
 
 Reglas duras:
