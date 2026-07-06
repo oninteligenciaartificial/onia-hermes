@@ -11,15 +11,16 @@ test.describe("Nuvia checkout", () => {
   });
 
   test("captura datos y arma el link de WhatsApp con el marcador Nuvia", async ({ page }) => {
-    // Sembrar el carrito directamente en localStorage (determinista).
-    await page.goto("/nuvia");
-    await page.evaluate((id) => {
+    // Sembrar el carrito ANTES de que cargue la app (determinista): así el
+    // localStorage ya tiene la semilla cuando el checkout la lee, sin pasar por la
+    // tienda (cuyo efecto de guardado pisaría la semilla en una carrera).
+    await page.addInitScript((id) => {
       window.localStorage.setItem("nuvia-next-cart-v1", JSON.stringify([{ id, qty: 2 }]));
     }, PRODUCT_ID);
 
     await page.goto("/nuvia/checkout");
 
-    // El resumen muestra un total de productos.
+    // El resumen muestra un total de productos (confirma que el carrito cargó).
     await expect(page.getByText("Total productos")).toBeVisible();
 
     // Completar el formulario.
@@ -27,7 +28,9 @@ test.describe("Nuvia checkout", () => {
     await page.getByLabel("Teléfono / WhatsApp").fill("70000000");
     await page.getByLabel("Dirección exacta").fill("Av. San Martin 123, Equipetrol");
 
-    await page.getByRole("button", { name: /enviar pedido por whatsapp/i }).click();
+    const submit = page.getByRole("button", { name: /enviar pedido por whatsapp/i });
+    await expect(submit).toBeEnabled();
+    await submit.click();
 
     // Confirmación con link de WhatsApp al número configurado y el marcador.
     const waLink = page.getByTestId("nuvia-wa-link");
