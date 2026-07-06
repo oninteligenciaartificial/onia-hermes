@@ -197,6 +197,60 @@ function parseReviewItems(raw: unknown[] | undefined): RuntimeReviewItem[] {
   });
 }
 
+const DAILY_AGENT_ID = "agent-calendar-energy";
+
+const TASK_STATUS_LABEL: Record<string, string> = {
+  todo: "por hacer",
+  doing: "en proceso",
+  review: "en revision",
+  done: "listo",
+  blocked: "bloqueado",
+};
+
+const TASK_PRIORITY_RANK: Record<string, number> = { alta: 0, media: 1, baja: 2 };
+
+// Tareas reales del runtime (schema onia_center) que el Agente del Dia ordena
+// por prioridad para decir "que hacer hoy". Nunca se inventan.
+type RuntimeTaskItem = {
+  id: string;
+  title: string;
+  priority: "alta" | "media" | "baja";
+  status: "todo" | "doing" | "review" | "done" | "blocked";
+  assignedRole: string;
+};
+
+function parseTaskItems(raw: unknown[] | undefined): RuntimeTaskItem[] {
+  if (!Array.isArray(raw)) {
+    return [];
+  }
+
+  return raw.flatMap((item) => {
+    if (!item || typeof item !== "object") {
+      return [];
+    }
+
+    const record = item as Record<string, unknown>;
+    if (typeof record.id !== "string") {
+      return [];
+    }
+
+    const priority = record.priority;
+    const status = record.status;
+    return [
+      {
+        id: record.id,
+        title: typeof record.title === "string" ? record.title : "",
+        priority: priority === "alta" || priority === "baja" ? priority : "media",
+        status:
+          status === "doing" || status === "review" || status === "done" || status === "blocked"
+            ? status
+            : "todo",
+        assignedRole: typeof record.assignedRole === "string" ? record.assignedRole : "",
+      },
+    ];
+  });
+}
+
 const navItems: NavItem[] = [
   { id: "dashboard", label: "Hoy", detail: "Tareas y agenda", group: "Trabajo", icon: CalendarDays },
   { id: "uso-diario", label: "Captura", detail: "Notas y evidencia", group: "Trabajo", icon: FileCheck2 },
@@ -590,6 +644,7 @@ export default function OniaCenterPage() {
   const [reviewQueue, setReviewQueue] = useState<RuntimeReviewItem[]>([]);
   const [approvalNotice, setApprovalNotice] = useState<string | null>(null);
   const [approvingReviewId, setApprovingReviewId] = useState<string | null>(null);
+  const [runtimeTasks, setRuntimeTasks] = useState<RuntimeTaskItem[]>([]);
   const roleLocked = sessionRole !== null && sessionRole !== "sergio";
   const role = roleDefinitions.find((item) => item.id === selectedRole) ?? roleDefinitions[0];
   const allowedNavItems = useMemo(
@@ -667,6 +722,18 @@ export default function OniaCenterPage() {
       : pendingProposals.length > 0
         ? { label: `Esperando aprobacion (${pendingProposals.length})`, tone: "yellow" as CenterTone }
         : { label: "Trabajando", tone: "green" as CenterTone };
+  const actionableTasks = runtimeTasks.filter(
+    (task) => task.status === "todo" || task.status === "doing" || task.status === "review",
+  );
+  const todayPriorities = [...actionableTasks]
+    .sort((a, b) => (TASK_PRIORITY_RANK[a.priority] ?? 1) - (TASK_PRIORITY_RANK[b.priority] ?? 1))
+    .slice(0, 5);
+  const dailyAgentLiveStatus =
+    runtimeConnection.state !== "connected"
+      ? null
+      : actionableTasks.length > 0
+        ? { label: `${actionableTasks.length} para hoy`, tone: "blue" as CenterTone }
+        : { label: "Al dia", tone: "green" as CenterTone };
   const visibleCalendarConnectorPlans = useMemo(
     () => (privateVisible ? calendarConnectorPlans : calendarConnectorPlans.filter((plan) => plan.visibility !== "sergio_private")),
     [privateVisible],
@@ -726,6 +793,7 @@ export default function OniaCenterPage() {
             counts: { leads: 0, tasks: 0, reviews: 0, notes: 0, ideas: 0, codexJobs: 0 },
           });
           setReviewQueue([]);
+          setRuntimeTasks([]);
           return;
         }
 
@@ -744,6 +812,7 @@ export default function OniaCenterPage() {
           },
         });
         setReviewQueue(parseReviewItems(data?.reviews));
+        setRuntimeTasks(parseTaskItems(data?.tasks));
       } catch {
         if (active) {
           setRuntimeConnection({
@@ -753,6 +822,7 @@ export default function OniaCenterPage() {
             counts: { leads: 0, tasks: 0, reviews: 0, notes: 0, ideas: 0, codexJobs: 0 },
           });
           setReviewQueue([]);
+          setRuntimeTasks([]);
         }
       }
     }
@@ -991,6 +1061,8 @@ export default function OniaCenterPage() {
                   </div>
                   {agent.id === SALES_AGENT_ID && salesAgentLiveStatus ? (
                     <TonePill tone={salesAgentLiveStatus.tone}>{salesAgentLiveStatus.label}</TonePill>
+                  ) : agent.id === DAILY_AGENT_ID && dailyAgentLiveStatus ? (
+                    <TonePill tone={dailyAgentLiveStatus.tone}>{dailyAgentLiveStatus.label}</TonePill>
                   ) : (
                     <TonePill tone={getAgentTone(agent.status)}>{agent.status.replaceAll("_", " ")}</TonePill>
                   )}
@@ -1017,6 +1089,45 @@ export default function OniaCenterPage() {
                 <small className="onia-agent-rule">{agent.safetyRule}</small>
               </article>
             ))}
+          </div>
+
+          <div className="onia-agent-month-plan onia-agent-approval-queue">
+            <div className="onia-live-title">
+              <CalendarDays size={16} />
+              <strong>Prioridades de hoy</strong>
+            </div>
+            <p>
+              El Agente del Dia ordena tus tareas abiertas reales por prioridad. Esto es lo que conviene hacer hoy; no se inventa nada.
+            </p>
+            {runtimeConnection.state !== "connected" ? (
+              <article>
+                <div>
+                  <span>Runtime</span>
+                  <strong>{runtimeConnection.state === "checking" ? "Verificando runtime" : "Runtime no disponible"}</strong>
+                  <p>{runtimeConnection.detail} Las prioridades aparecen cuando ONIA Center responde con datos reales.</p>
+                </div>
+              </article>
+            ) : todayPriorities.length ? (
+              todayPriorities.map((task) => (
+                <article key={task.id}>
+                  <div>
+                    <span>prioridad {task.priority} / {TASK_STATUS_LABEL[task.status] ?? task.status}</span>
+                    <strong>{task.title || "Tarea sin titulo"}</strong>
+                  </div>
+                  <TonePill tone={task.priority === "alta" ? "red" : task.priority === "media" ? "yellow" : "blue"}>
+                    {task.priority}
+                  </TonePill>
+                </article>
+              ))
+            ) : (
+              <article>
+                <div>
+                  <span>Al dia</span>
+                  <strong>Sin tareas pendientes para hoy.</strong>
+                  <p>Cuando haya tareas abiertas en ONIA Center, el Agente del Dia las ordena aca por prioridad.</p>
+                </div>
+              </article>
+            )}
           </div>
 
           <div className="onia-agent-month-plan onia-agent-approval-queue">
