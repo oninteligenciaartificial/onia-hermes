@@ -2,9 +2,9 @@ import { clientTokenCss } from "@onia/tokens";
 import { dashboardCardsCss, renderCharts, renderKpis, renderTable } from "./dashboard-cards";
 import type { DashboardTable } from "./dashboard-cards";
 import { dashboardChartsCss } from "./dashboard-charts";
-import type { DashboardChart, DashboardKpi, DashboardPoint, DashboardSeries } from "./dashboard-types";
+import type { DashboardChart, DashboardHeroPanel, DashboardKpi, DashboardPoint, DashboardSeries } from "./dashboard-types";
 
-export type { DashboardChart, DashboardKpi, DashboardPoint, DashboardSeries } from "./dashboard-types";
+export type { DashboardChart, DashboardHeroPanel, DashboardKpi, DashboardPoint, DashboardSeries } from "./dashboard-types";
 export type { DashboardTable } from "./dashboard-cards";
 
 export type DashboardData = {
@@ -15,6 +15,7 @@ export type DashboardData = {
   kpis: DashboardKpi[];
   charts: DashboardChart[];
   table: DashboardTable;
+  heroPanel?: DashboardHeroPanel;
 };
 
 export type DashboardClient = {

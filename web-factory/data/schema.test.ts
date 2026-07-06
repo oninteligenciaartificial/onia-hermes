@@ -97,3 +97,38 @@ describe("clientSchema clinic fields", () => {
     expect(parsed.faq).toEqual([]);
   });
 });
+
+describe("clientSchema dashboard heroPanel", () => {
+  it("parses a metric-trend heroPanel", () => {
+    const parsed = clientSchema.parse({
+      nombre: "Panel", slug: "panel", tagline: "t", descripcion: "d",
+      dashboard: {
+        heroPanel: {
+          kind: "metric-trend",
+          kpi: { label: "Ingresos", value: "Bs. 48.2k", delta: "12%", trend: "up", context: "vs mes anterior" },
+          points: [{ label: "Ene", value: 10 }, { label: "Feb", value: 12 }],
+        },
+      },
+    });
+    expect(parsed.dashboard.heroPanel?.kind).toBe("metric-trend");
+  });
+
+  it("parses a queue heroPanel", () => {
+    const parsed = clientSchema.parse({
+      nombre: "Panel", slug: "panel", tagline: "t", descripcion: "d",
+      dashboard: {
+        heroPanel: {
+          kind: "queue",
+          title: "Para hoy",
+          items: [{ titulo: "Turno 10:00", estado: "pendiente", meta: "Hoy 10:00" }],
+        },
+      },
+    });
+    expect(parsed.dashboard.heroPanel?.kind).toBe("queue");
+  });
+
+  it("defaults heroPanel to undefined when absent", () => {
+    const parsed = clientSchema.parse({ nombre: "Panel", slug: "panel", tagline: "t", descripcion: "d" });
+    expect(parsed.dashboard.heroPanel).toBeUndefined();
+  });
+});

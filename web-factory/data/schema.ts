@@ -121,6 +121,28 @@ const dashboardTableSchema = z.object({
   rows: z.array(z.array(z.string())).default([]),
 });
 
+const dashboardHeroPanelSchema = z.discriminatedUnion("kind", [
+  z.object({
+    kind: z.literal("metric-trend"),
+    kpi: dashboardKpiSchema,
+    points: z.array(dashboardPointSchema).default([]),
+  }),
+  z.object({
+    kind: z.literal("queue"),
+    title: z.string().min(1).default("Para hoy"),
+    items: z
+      .array(
+        z.object({
+          titulo: z.string().min(1),
+          estado: z.enum(["pendiente", "urgente", "al-dia"]).default("pendiente"),
+          meta: z.string().default(""),
+          url: z.string().optional(),
+        }),
+      )
+      .default([]),
+  }),
+]);
+
 const dashboardSchema = z
   .object({
     title: z.string().default("Panel de control"),
@@ -130,6 +152,7 @@ const dashboardSchema = z
     kpis: z.array(dashboardKpiSchema).default([]),
     charts: z.array(dashboardChartSchema).default([]),
     table: dashboardTableSchema.default({ title: "Detalle", columns: [], rows: [] }),
+    heroPanel: dashboardHeroPanelSchema.optional(),
   })
   .default({
     title: "Panel de control",
