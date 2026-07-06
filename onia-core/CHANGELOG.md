@@ -1,5 +1,16 @@
 # ONIA Core Changelog
 
+## core/logic — 2026-07-05 (logica canonica del core: work_items)
+
+- Nueva carpeta `onia-core/logic/`: logica pura canonica del CORE (aditiva, no
+  toca el contrato congelado). Cierra el hueco de completitud: las funciones del
+  core estaban completas en estructura pero sin logica canonica (cada producto la
+  reimplementa, ~15-20K lineas duplicadas).
+- `work-items.logic.mjs`: maquina de estados (open/in_progress/done/cancelled con
+  reapertura), `applyTransition` inmutable con closedAt, SLA (`slaDueAt`/
+  `isOverdue`), `dedupeKey` del intake, `priorityRank` y `comparePending` (orden
+  de la cola del panel: vencidos -> prioridad -> antiguedad). +8 tests (112 total).
+
 ## modules/bridge — 2026-07-05 (commerce -> contabilidad)
 
 - `bridge.logic.mjs`: convierte una venta/pedido de commerce en su asiento
