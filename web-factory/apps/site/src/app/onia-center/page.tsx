@@ -251,36 +251,39 @@ function parseTaskItems(raw: unknown[] | undefined): RuntimeTaskItem[] {
   });
 }
 
+// Nav reordenado por lo que Sergio HACE (no por categoria tecnica). Primario:
+// Trabajo (dia a dia) · Ventas · Entrega · Dinero. Todo lo secundario/config/
+// referencia vive en "Mas" (colapsado). Objetivo: entrar y en 5s saber que hacer.
 const navItems: NavItem[] = [
-  { id: "dashboard", label: "Hoy", detail: "Tareas y agenda", group: "Trabajo", icon: CalendarDays },
+  { id: "dashboard", label: "Hoy", detail: "Prioridades y agenda", group: "Trabajo", icon: CalendarDays },
   { id: "uso-diario", label: "Captura", detail: "Notas y evidencia", group: "Trabajo", icon: FileCheck2 },
   { id: "calendario-sergio", label: "Calendario", detail: "Agenda", group: "Trabajo", icon: CalendarDays },
   { id: "asistente", label: "Asistente", detail: "ONIA Bot", group: "Trabajo", icon: Bot },
+  { id: "ideas", label: "Ideas", detail: "Reels e IA", group: "Trabajo", icon: Lightbulb },
   // "Audio IA" (audio-intelligence) oculto del nav hasta usarlo en real. El
   // widget sigue en operating-workspace.tsx; se reactiva agregando el item aqui.
-  { id: "ideas", label: "Ideas", detail: "Reels e IA", group: "Trabajo", icon: Lightbulb },
-  { id: "codex", label: "Codex", detail: "Jobs", group: "Trabajo", icon: Code2 },
+  { id: "agentes", label: "Agentes", detail: "Aprobar Vendedor", group: "Ventas", icon: Sparkles },
   { id: "servicios", label: "Servicios", detail: "Catalogo", group: "Ventas", icon: Layers3 },
   { id: "pagos", label: "Comisiones", detail: "Propias", group: "Ventas", icon: HandCoins },
-  { id: "evidencias", label: "Evidencias", detail: "Gates", group: "Ventas", icon: FileCheck2 },
   { id: "proyectos", label: "Proyectos", detail: "ONIA", group: "Entrega", icon: BriefcaseBusiness },
   { id: "tareas", label: "Tareas", detail: "Revision", group: "Entrega", icon: ClipboardCheck },
-  { id: "collab", label: "Collab", detail: "Ingestion", group: "Entrega", icon: Database },
-  { id: "bolivian", label: "Bolivian", detail: "Modulo", group: "Entrega", icon: Building2 },
-  { id: "agentes", label: "Agentes", detail: "Mes", group: "IA y automatizacion", icon: Sparkles },
-  { id: "integraciones", label: "Integraciones", detail: "Pendientes", group: "IA y automatizacion", icon: Workflow },
-  { id: "web-factory", label: "Web Factory", detail: "Modulo", group: "IA y automatizacion", icon: Globe2, href: "/onia-center/web-factory" },
-  { id: "premium", label: "Premium", detail: "Herramientas", group: "IA y automatizacion", icon: Zap },
   { id: "finanzas", label: "Finanzas", detail: "Centros", group: "Dinero", icon: WalletCards },
-  { id: "nuvia", label: "Nuvia", detail: "Lotes", group: "Dinero", icon: Boxes },
-  { id: "ceo", label: "CEO", detail: "Privado", group: "Direccion", icon: Crown },
-  { id: "roles", label: "Roles", detail: "Permisos", group: "Direccion", icon: UsersRound },
-  { id: "arthur", label: "Arthur", detail: "60 dias", group: "Direccion", icon: UserCheck },
-  { id: "seguridad", label: "Seguridad", detail: "Privacidad", group: "Archivo", icon: ShieldCheck },
-  { id: "archivo", label: "Archivo", detail: "Fuentes y reglas", group: "Archivo", icon: Archive },
+  { id: "codex", label: "Codex", detail: "Jobs", group: "Mas", icon: Code2 },
+  { id: "evidencias", label: "Evidencias", detail: "Gates", group: "Mas", icon: FileCheck2 },
+  { id: "collab", label: "Collab", detail: "Ingestion", group: "Mas", icon: Database },
+  { id: "bolivian", label: "Bolivian", detail: "Modulo", group: "Mas", icon: Building2 },
+  { id: "integraciones", label: "Integraciones", detail: "Pendientes", group: "Mas", icon: Workflow },
+  { id: "web-factory", label: "Web Factory", detail: "Modulo", group: "Mas", icon: Globe2, href: "/onia-center/web-factory" },
+  { id: "premium", label: "Premium", detail: "Herramientas", group: "Mas", icon: Zap },
+  { id: "nuvia", label: "Nuvia", detail: "Lotes", group: "Mas", icon: Boxes },
+  { id: "ceo", label: "CEO", detail: "Privado", group: "Mas", icon: Crown },
+  { id: "roles", label: "Roles", detail: "Permisos", group: "Mas", icon: UsersRound },
+  { id: "arthur", label: "Arthur", detail: "60 dias", group: "Mas", icon: UserCheck },
+  { id: "seguridad", label: "Seguridad", detail: "Privacidad", group: "Mas", icon: ShieldCheck },
+  { id: "archivo", label: "Archivo", detail: "Fuentes y reglas", group: "Mas", icon: Archive },
 ];
 
-const navGroups = ["Trabajo", "Ventas", "Entrega", "IA y automatizacion", "Dinero", "Direccion", "Archivo"];
+const navGroups = ["Trabajo", "Ventas", "Entrega", "Dinero", "Mas"];
 
 const heroActionItems = [
   { id: "uso-diario", label: "Captura rapida", icon: FileCheck2 },
@@ -888,10 +891,11 @@ export default function OniaCenterPage() {
         <nav className="onia-nav" aria-label="Modulos ONIA Center">
           {groupedNavItems.map(({ group, items }) => {
             const groupHasActiveItem = items.some((item) => item.id === activeView);
-            const startsOpen = group === "Trabajo" || groupHasActiveItem;
+            // Primarios abiertos de arranque; "Mas" colapsado (disclosure progresivo).
+            const startsOpen = group !== "Mas" || groupHasActiveItem;
 
             return (
-              <details className="onia-nav-group" key={group} open={startsOpen}>
+              <details className={group === "Mas" ? "onia-nav-group is-mas" : "onia-nav-group"} key={group} open={startsOpen}>
                 <summary>{group}</summary>
                 <div className="onia-nav-group-links">
                   {items.map((item) => {

@@ -231,6 +231,20 @@
   color: rgba(7, 29, 20, 0.72);
 }
 
+/* "Mas" = grupo secundario (overflow): separado y mas discreto que los primarios,
+   para que la jerarquia sea obvia (lo importante arriba, lo demas guardado).
+   Se marca por clase (.is-mas), no por posicion, para no depender de que "Mas"
+   sea el ultimo grupo visible en todos los roles. */
+.onia-nav-group.is-mas {
+  margin-top: 8px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.onia-nav-group.is-mas > summary {
+  color: rgba(238, 245, 242, 0.4);
+}
+
 .onia-role-switcher {
   gap: 8px;
   margin-top: auto;
@@ -2668,17 +2682,20 @@
     gap: 12px;
   }
 
+  /* Mobile: nav como acordeon vertical limpio (no scroll horizontal de acordeones).
+     Primarios visibles, "Mas" colapsado. Se acota la altura para que el contenido
+     quede a mano (Sergio entra desde el celular). */
   .onia-nav {
     display: flex;
-    gap: 8px;
-    overflow-x: auto;
-    padding-bottom: 4px;
-    scroll-snap-type: x proximity;
+    flex-direction: column;
+    gap: 12px;
+    max-height: 46vh;
+    overflow-y: auto;
+    overscroll-behavior: contain;
   }
 
   .onia-nav a {
-    min-width: 132px;
-    scroll-snap-align: start;
+    min-height: 44px;
   }
 
   .onia-role-switcher {
