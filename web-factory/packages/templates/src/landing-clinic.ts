@@ -7,6 +7,7 @@ import {
   renderClinicServices,
   renderFooter,
   renderIcon,
+  renderMarquee,
   renderStickyCta,
 } from "@onia/blocks";
 import { renderLandingCss, type LandingClient } from "./landing";
@@ -74,6 +75,13 @@ function renderRevealScript(): string {
   return `<script>(function(){var r=document.querySelector('.wf-clinic-page');if(!r)return;var i=r.querySelectorAll('[data-reveal]');var m=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;if(m||!('IntersectionObserver' in window)){r.classList.add('wf-clinic-motion');i.forEach(function(e){e.classList.add('is-revealed')});return;}r.classList.add('wf-clinic-motion');var o=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('is-revealed');o.unobserve(e.target);}})},{rootMargin:'0px 0px -8% 0px',threshold:0.08});i.forEach(function(e){o.observe(e)});setTimeout(function(){i.forEach(function(e){e.classList.add('is-revealed')})},1400);})();</script>`;
 }
 
+function renderClinicTrustMarquee(client: LandingClient): string {
+  const items = [...(client.credenciales ?? []), ...(client.beneficios ?? [])].filter(
+    (item) => item.trim().length > 0,
+  );
+  return renderMarquee(items, { icon: "shield-check", label: "Sellos de confianza y beneficios" });
+}
+
 export function renderLandingClinicBody(client: LandingClient): string {
   return `
     <main class="wf-clinic-page">
@@ -81,6 +89,7 @@ export function renderLandingClinicBody(client: LandingClient): string {
       ${renderClinicStrip(client)}
       ${renderClinicServices(client)}
       ${renderClinicFeature(client)}
+      ${renderClinicTrustMarquee(client)}
       ${renderClinicProcess(client)}
       ${renderClinicFaq(client)}
       ${renderClinicFinalCta(client)}

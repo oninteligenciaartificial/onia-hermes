@@ -842,4 +842,44 @@ export const clinicCss = `
   outline-color: #fff;
   box-shadow: 0 0 0 5px rgba(6, 12, 18, 0.55);
 }
+
+/* ---------- Marquee (trust ticker, reusable) ---------- */
+.wf-clinic-marquee {
+  width: 100%;
+  margin-block: clamp(8px, 2vw, 20px);
+  overflow: hidden;
+  border-block: 1px solid var(--border);
+  padding: 18px 0;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+}
+
+.wf-clinic-marquee-track {
+  display: flex;
+  align-items: center;
+  gap: 18px 48px;
+  width: max-content;
+}
+
+.wf-clinic-marquee-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 650;
+  white-space: nowrap;
+  color: color-mix(in srgb, var(--color-fg) 78%, var(--color-bg));
+}
+
+.wf-clinic-marquee-item .wf-icon { color: var(--ink-accent); }
+
+@media (prefers-reduced-motion: no-preference) {
+  .wf-clinic-marquee-track { animation: wfMarquee 36s linear infinite; }
+  .wf-clinic-marquee:hover .wf-clinic-marquee-track { animation-play-state: paused; }
+}
+
+@keyframes wfMarquee { to { transform: translateX(-50%); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .wf-clinic-marquee-track { flex-wrap: wrap; width: auto; justify-content: center; }
+}
 `;

@@ -11,4 +11,5 @@ export { renderClinicHero } from "./clinic-hero";
 export { renderClinicServices } from "./clinic-services";
 export { renderClinicProcess } from "./clinic-process";
 export { renderClinicFeature } from "./clinic-feature";
+export { renderMarquee } from "./marquee";
 export type { SiteClient } from "./types";
