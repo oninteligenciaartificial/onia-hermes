@@ -1247,12 +1247,14 @@
       "projectId": "gestios",
       "repoPath": "C:\\dev\\proyectos\\Gestios",
       "status": "hold_until_beta",
+      "verticalTrackId": "gestios-general",
       "nextAction": "Revertir prototipo local y esperar paquete ONIA Core beta."
     },
     {
       "projectId": "dentagest",
       "repoPath": "C:\\dev\\proyectos\\DentaGest\\dental-saas",
       "status": "installing",
+      "verticalTrackId": "dentagest-clinical",
       "adoptionPlan": "onia-core/ONIA_CORE_DENTALGEST_ADOPTION_PLAN_2026.md",
       "nextAction": "Sprints 0-4 instalados (7/8 entidades + intake + cola /pending). Falta: conector n8n correo, wizard onboarding, business_partner opcional."
     },
@@ -1260,6 +1262,7 @@
       "projectId": "ganadero-os",
       "repoPath": "C:\\dev\\proyectos\\Ganaderos-Os",
       "status": "hold_until_beta",
+      "verticalTrackId": "ganadero-offline",
       "nextAction": "Mantener offline-first; adaptar ONIA Core solo con sync/local-first."
     },
     {
