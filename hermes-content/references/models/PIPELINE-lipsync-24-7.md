@@ -5,14 +5,14 @@ y **produccion 24/7**. Tiene **ElevenLabs**.
 
 ## Por que "se rompia" antes
 Los videos previos (Seedance 2.0) derivaban la identidad y desincronizaban la voz. Fix base:
-1. **Soul entrenado por modelo** = identidad estable (Mara `b8f5c353`, Valentina `9a0d6953`).
+1. **Soul entrenado por modelo** = identidad estable (Mara `b8f5c353`, Lucia `9a0d6953`).
 2. Video con **modelo que hace lip sync**, no un img2video generico.
 
 ## Opciones de lip sync (con Soul + voz)
 | Via | Lip sync | Costo | Notas |
 |---|---|---|---|
-| **Marketing Studio** (avatar custom) | Bueno, estable (probado con Mara) | 42-75cr/video | Auto-guion; sin overlays de marca; 480/720p |
-| **kling3_0 / wan2_7** (start_image Soul + audio ElevenLabs) | Sync a audio | medio-alto (validar) | Control de voz propia (ElevenLabs), 1 toma |
+| **wan2_7** (start_image Soul + audio) | Estable, cara NO se rompe (verificado con Lucia) | **15cr/10s** | La mas barata con control de voz propia — via elegida para 24/7 |
+| **Marketing Studio** (avatar custom) | Bueno, estable (probado con Mara) | 42-75cr/video | Auto-guion; sin overlays de marca; 480/720p; producto en mano real |
 | **Editor Remotion** (fotos Soul + subtitulos) | Sin lip sync (subtitulos) | ~3cr | Branded/precio; volumen; NO habla |
 
 ## Recomendacion de arquitectura 24/7
