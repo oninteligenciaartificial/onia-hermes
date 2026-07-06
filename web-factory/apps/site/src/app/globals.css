@@ -2958,61 +2958,6 @@ a.workflow-card:hover {
 
 .nuvia-cart-checkout-button[data-disabled="true"] { pointer-events: none; opacity: 0.5; }
 
-.nuvia-checkout-result {
-  display: grid;
-  gap: 8px;
-  padding: 12px;
-  border: 1px solid rgba(15, 45, 82, 0.14);
-  border-radius: 18px;
-  background: rgba(255, 255, 255, 0.72);
-  color: var(--nuvia-ink);
-}
-
-.nuvia-checkout-result span,
-.nuvia-checkout-result small {
-  color: rgba(16, 20, 21, 0.58);
-  font-size: 0.72rem;
-  font-weight: 820;
-  text-transform: uppercase;
-}
-
-.nuvia-checkout-result strong {
-  color: var(--nuvia-teal);
-  font-size: 0.9rem;
-  font-weight: 860;
-  text-transform: uppercase;
-}
-
-.nuvia-checkout-result p,
-.nuvia-checkout-error {
-  margin: 0;
-  color: rgba(16, 20, 21, 0.68);
-  font-size: 0.78rem;
-  line-height: 1.45;
-}
-
-.nuvia-checkout-result img {
-  width: min(220px, 100%);
-  height: auto;
-  margin: 4px auto;
-  border-radius: 14px;
-  background: #fff;
-}
-
-.nuvia-checkout-result ul {
-  display: grid;
-  gap: 4px;
-  margin: 0;
-  padding: 0 0 0 16px;
-  color: rgba(16, 20, 21, 0.7);
-  font-size: 0.74rem;
-}
-
-.nuvia-checkout-error {
-  color: #a33535;
-  font-weight: 760;
-}
-
 .nuvia-toast-stack {
   position: fixed;
   right: 18px;
