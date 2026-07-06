@@ -453,19 +453,6 @@ const sellerNotebookChecklist = [
   "Bloqueo o duda que necesita Sergio",
 ];
 
-const scheduleCategoryLabels: Record<string, string> = {
-  wake: "Arranque",
-  planning: "Direccion",
-  deep_work: "Trabajo profundo",
-  sales: "Ventas",
-  meetings: "Reuniones",
-  admin: "Admin",
-  gym: "Gym",
-  personal: "Personal",
-  shutdown: "Cierre",
-  sleep: "Dormir",
-};
-
 const scheduleCategoryIcons: Record<string, typeof Clock> = {
   wake: Clock,
   planning: ClipboardCheck,
@@ -488,6 +475,7 @@ const operationalDailyBlocks = sergioStrictScheduleBlocks
   .filter((block) => dailyOperationalCategories.has(block.category))
   .slice(0, 6);
 const dailyTimelineLayout = buildTimelineLayout(operationalDailyBlocks);
+const fullTimelineLayout = buildTimelineLayout(sergioStrictScheduleBlocks);
 
 const starterServiceUpdates: RuntimeNote[] = [
   {
@@ -730,6 +718,22 @@ function minutesToSlotLine(minutes: number, startMinutes: number) {
 function formatHourMark(minutes: number) {
   const hours = Math.floor(minutes / 60) % 24;
   return `${String(hours).padStart(2, "0")}:00`;
+}
+
+const WEEKDAY_LETTERS = ["L", "M", "M", "J", "V", "S", "D"];
+
+// Los bloques usan un texto libre ("Lunes a viernes") en vez de dias sueltos.
+// Cubre los patrones que existen hoy en sergioStrictScheduleBlocks; si aparece
+// un patron nuevo no reconocido, asume L-V (el caso mas comun) en vez de
+// romper el render.
+function activeWeekdays(dayPattern: string): boolean[] {
+  if (dayPattern === "Lunes a jueves") {
+    return [true, true, true, true, false, false, false];
+  }
+  if (dayPattern === "Lunes a sabado") {
+    return [true, true, true, true, true, true, false];
+  }
+  return [true, true, true, true, true, false, false];
 }
 
 function normalizeText(value: string) {
@@ -3162,18 +3166,49 @@ export function OperatingWorkspace({ selectedRole, workspaceView = "capture" }: 
                 <small>Registro de pagos, tareas y blockers.</small>
               </div>
             </div>
-            <div className="onia-calendar-timeline">
+            <div
+              className="onia-day-timeline onia-day-timeline--full"
+              style={{ gridTemplateRows: `repeat(${fullTimelineLayout.slotCount}, minmax(34px, 1fr))` }}
+            >
+              {fullTimelineLayout.hourMarks.map((minute) => (
+                <span
+                  aria-hidden="true"
+                  className="onia-day-timeline-hour"
+                  key={minute}
+                  style={{ gridRow: minutesToSlotLine(minute, fullTimelineLayout.startMinutes) }}
+                >
+                  {formatHourMark(minute)}
+                </span>
+              ))}
               {sergioStrictScheduleBlocks.map((block) => {
                 const CategoryIcon = scheduleCategoryIcons[block.category] ?? Clock;
+                const rowStart = minutesToSlotLine(timeToMinutes(block.start), fullTimelineLayout.startMinutes);
+                const rowEnd = minutesToSlotLine(timeToMinutes(block.end), fullTimelineLayout.startMinutes);
+                const activeDays = activeWeekdays(block.dayPattern);
                 return (
-                  <div className={`onia-calendar-block is-${block.category}`} key={block.id}>
+                  <div
+                    className={`onia-day-timeline-block is-${block.category}`}
+                    key={block.id}
+                    style={{ gridRow: `${rowStart} / ${rowEnd}` }}
+                  >
                     <span>
-                      <CategoryIcon size={14} />
-                      {block.start} - {block.end}
+                      <CategoryIcon size={13} />
+                      {block.start}-{block.end}
                     </span>
                     <strong>{block.title}</strong>
+                    <div className="onia-weekday-strip" role="img" aria-label={`Se repite: ${block.dayPattern}`}>
+                      {WEEKDAY_LETTERS.map((letter, index) => (
+                        <span
+                          aria-hidden="true"
+                          className={activeDays[index] ? "onia-weekday-chip is-active" : "onia-weekday-chip"}
+                          key={index}
+                        >
+                          {letter}
+                        </span>
+                      ))}
+                    </div>
                     <small>
-                      {block.dayPattern} / {scheduleCategoryLabels[block.category]} / {block.meetingPolicy === "available" ? "reuniones permitidas" : "bloqueado"}
+                      {block.dayPattern} / {block.meetingPolicy === "available" ? "reuniones permitidas" : "bloqueado"}
                     </small>
                     <p>{block.note}</p>
                     {block.command ? <em>Telegram: {block.command}</em> : null}

@@ -17,7 +17,6 @@ import {
   Calculator,
   CalendarDays,
   CheckCircle2,
-  ChevronRight,
   ClipboardCheck,
   Code2,
   Crown,
@@ -885,11 +884,6 @@ export default function OniaCenterPage() {
   return (
     <main className="onia-center-page">
       <aside className="onia-center-sidebar" aria-label="Navegacion ONIA Center">
-        <Link className="onia-back-link" href="/">
-          <ChevronRight size={15} />
-          Hermes Control
-        </Link>
-
         <div className="onia-brand">
           <span className={pendingProposals.length > 0 ? "has-signal" : ""}>
             <Crown size={20} />
@@ -1062,108 +1056,10 @@ export default function OniaCenterPage() {
         <section className="onia-panel onia-agent-command-center" id="agentes" hidden={activeView !== "agentes"}>
           <SectionHeader
             eyebrow="Agentes operativos"
-            title="Plan mensual, agenda estricta y conexiones"
-            description="Los agentes proponen tareas del mes y protegen el cronograma. Las acciones sensibles siguen bloqueadas hasta aprobacion de Sergio y conectores reales."
+            title="Que necesita tu decision ahora"
+            description="Lo real y accionable primero. El roster completo y lo que todavia no esta conectado queda mas abajo."
             icon={Sparkles}
           />
-
-          <div className="onia-collab-summary">
-            <div>
-              <span>Agentes visibles</span>
-              <strong>{agentSummary.visibleAgents.length}</strong>
-            </div>
-            <div>
-              <span>Preparados</span>
-              <strong>{agentSummary.prepared}</strong>
-            </div>
-            <div>
-              <span>Tareas del mes</span>
-              <strong>{agentSummary.monthlyTasks}</strong>
-            </div>
-            <div>
-              <span>Alta prioridad</span>
-              <strong>{agentSummary.highPriorityPlans}</strong>
-            </div>
-          </div>
-
-          <div className="onia-agent-grid">
-            {agentSummary.visibleAgents.map((agent) => (
-              <article className="onia-agent-card" key={agent.id}>
-                <div className="onia-agent-card__head">
-                  <div>
-                    <span>{agent.cadence} / {agent.visibility}</span>
-                    <strong>{agent.name}</strong>
-                  </div>
-                  {agent.id === SALES_AGENT_ID && salesAgentLiveStatus ? (
-                    <TonePill tone={salesAgentLiveStatus.tone}>{salesAgentLiveStatus.label}</TonePill>
-                  ) : agent.id === DAILY_AGENT_ID && dailyAgentLiveStatus ? (
-                    <TonePill tone={dailyAgentLiveStatus.tone}>{dailyAgentLiveStatus.label}</TonePill>
-                  ) : (
-                    <TonePill tone={getAgentTone(agent.status)}>{agent.status.replaceAll("_", " ")}</TonePill>
-                  )}
-                </div>
-                <p>{agent.mission}</p>
-                <div className="onia-agent-columns">
-                  <div>
-                    <strong>Entrega mensual</strong>
-                    <small>{agent.monthlyOutcome}</small>
-                  </div>
-                  <div>
-                    <strong>Siguiente accion</strong>
-                    <small>{agent.nextAction}</small>
-                  </div>
-                </div>
-                <ul className="onia-compact-list">
-                  {agent.actions.slice(0, 4).map((action) => (
-                    <li key={action}>
-                      <CheckCircle2 size={14} />
-                      <span>{action}</span>
-                    </li>
-                  ))}
-                </ul>
-                <small className="onia-agent-rule">{agent.safetyRule}</small>
-              </article>
-            ))}
-          </div>
-
-          <div className="onia-agent-month-plan onia-agent-approval-queue">
-            <div className="onia-live-title">
-              <CalendarDays size={16} />
-              <strong>Prioridades de hoy</strong>
-            </div>
-            <p>
-              El Agente del Dia ordena tus tareas abiertas reales por prioridad. Esto es lo que conviene hacer hoy; no se inventa nada.
-            </p>
-            {runtimeConnection.state !== "connected" ? (
-              <article>
-                <div>
-                  <span>Runtime</span>
-                  <strong>{runtimeConnection.state === "checking" ? "Verificando runtime" : "Runtime no disponible"}</strong>
-                  <p>{runtimeConnection.detail} Las prioridades aparecen cuando ONIA Center responde con datos reales.</p>
-                </div>
-              </article>
-            ) : todayPriorities.length ? (
-              todayPriorities.map((task) => (
-                <article key={task.id}>
-                  <div>
-                    <span>prioridad {task.priority} / {TASK_STATUS_LABEL[task.status] ?? task.status}</span>
-                    <strong>{task.title || "Tarea sin titulo"}</strong>
-                  </div>
-                  <TonePill tone={task.priority === "alta" ? "red" : task.priority === "media" ? "yellow" : "blue"}>
-                    {task.priority}
-                  </TonePill>
-                </article>
-              ))
-            ) : (
-              <article>
-                <div>
-                  <span>Al dia</span>
-                  <strong>Sin tareas pendientes para hoy.</strong>
-                  <p>Cuando haya tareas abiertas en ONIA Center, el Agente del Dia las ordena aca por prioridad.</p>
-                </div>
-              </article>
-            )}
-          </div>
 
           <div className="onia-agent-month-plan onia-agent-approval-queue">
             <div className="onia-live-title">
@@ -1221,6 +1117,91 @@ export default function OniaCenterPage() {
                 </div>
               </article>
             )}
+          </div>
+
+          <div className="onia-agent-month-plan onia-agent-approval-queue">
+            <div className="onia-live-title">
+              <CalendarDays size={16} />
+              <strong>Prioridades de hoy</strong>
+            </div>
+            <p>
+              El Agente del Dia ordena tus tareas abiertas reales por prioridad. Esto es lo que conviene hacer hoy; no se inventa nada.
+            </p>
+            {runtimeConnection.state !== "connected" ? (
+              <article>
+                <div>
+                  <span>Runtime</span>
+                  <strong>{runtimeConnection.state === "checking" ? "Verificando runtime" : "Runtime no disponible"}</strong>
+                  <p>{runtimeConnection.detail} Las prioridades aparecen cuando ONIA Center responde con datos reales.</p>
+                </div>
+              </article>
+            ) : todayPriorities.length ? (
+              todayPriorities.map((task) => (
+                <article key={task.id}>
+                  <div>
+                    <span>prioridad {task.priority} / {TASK_STATUS_LABEL[task.status] ?? task.status}</span>
+                    <strong>{task.title || "Tarea sin titulo"}</strong>
+                  </div>
+                  <TonePill tone={task.priority === "alta" ? "red" : task.priority === "media" ? "yellow" : "blue"}>
+                    {task.priority}
+                  </TonePill>
+                </article>
+              ))
+            ) : (
+              <article>
+                <div>
+                  <span>Al dia</span>
+                  <strong>Sin tareas pendientes para hoy.</strong>
+                  <p>Cuando haya tareas abiertas en ONIA Center, el Agente del Dia las ordena aca por prioridad.</p>
+                </div>
+              </article>
+            )}
+          </div>
+
+          <div className="onia-collab-summary">
+            <div>
+              <span>Agentes visibles</span>
+              <strong>{agentSummary.visibleAgents.length}</strong>
+            </div>
+            <div>
+              <span>Preparados</span>
+              <strong>{agentSummary.prepared}</strong>
+            </div>
+            <div>
+              <span>Tareas del mes</span>
+              <strong>{agentSummary.monthlyTasks}</strong>
+            </div>
+            <div>
+              <span>Alta prioridad</span>
+              <strong>{agentSummary.highPriorityPlans}</strong>
+            </div>
+          </div>
+
+          <div className="onia-agent-grid">
+            {agentSummary.visibleAgents.map((agent) => (
+              <article className="onia-agent-card" key={agent.id}>
+                <div className="onia-agent-card__head">
+                  <div>
+                    <span>{agent.cadence} / {agent.visibility}</span>
+                    <strong>{agent.name}</strong>
+                  </div>
+                  {agent.id === SALES_AGENT_ID && salesAgentLiveStatus ? (
+                    <TonePill tone={salesAgentLiveStatus.tone}>{salesAgentLiveStatus.label}</TonePill>
+                  ) : agent.id === DAILY_AGENT_ID && dailyAgentLiveStatus ? (
+                    <TonePill tone={dailyAgentLiveStatus.tone}>{dailyAgentLiveStatus.label}</TonePill>
+                  ) : (
+                    <TonePill tone={getAgentTone(agent.status)}>{agent.status.replaceAll("_", " ")}</TonePill>
+                  )}
+                </div>
+                <p>{agent.mission}</p>
+                <div className="onia-agent-columns is-single">
+                  <div>
+                    <strong>Siguiente accion</strong>
+                    <small>{agent.nextAction}</small>
+                  </div>
+                </div>
+              </article>
+            ))}
           </div>
 
           <div className="onia-agent-month-plan">
@@ -2154,16 +2135,6 @@ export default function OniaCenterPage() {
           </article>
         </section>
 
-        <footer className="onia-footer">
-          <span>
-            <BarChart3 size={16} />
-            JSON vendor panel parseado en validacion local.
-          </span>
-          <span>
-            <ShieldCheck size={16} />
-            Nada publicado ni enviado a clientes.
-          </span>
-        </footer>
       </section>
     </main>
   );

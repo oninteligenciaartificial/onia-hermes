@@ -52,7 +52,6 @@
   border-right: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.onia-back-link,
 .onia-brand,
 .onia-nav a,
 .onia-role-switcher button,
@@ -63,22 +62,9 @@
 .onia-service-card__top,
 .onia-blocker,
 .onia-rule-strip,
-.onia-premium-list article,
-.onia-footer span {
+.onia-premium-list article {
   display: flex;
   align-items: center;
-}
-
-.onia-back-link {
-  gap: 7px;
-  min-height: 34px;
-  color: #b8c4c1;
-  font-size: 12px;
-  font-weight: 800;
-}
-
-.onia-back-link svg {
-  transform: rotate(180deg);
 }
 
 .onia-brand {
@@ -1449,29 +1435,6 @@
   background: var(--onia-neutral-soft);
 }
 
-.onia-footer {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 16px;
-}
-
-.onia-footer span {
-  gap: 8px;
-  min-height: 38px;
-  padding: 0 11px;
-  border: 1px solid var(--onia-line);
-  border-radius: var(--onia-radius);
-  color: #34414e;
-  background: rgba(255, 255, 255, 0.72);
-  font-size: 12px;
-  font-weight: 800;
-}
-
-.onia-footer svg {
-  color: var(--onia-green);
-}
-
 .onia-live-workspace {
   margin-bottom: 16px;
   padding: 18px;
@@ -1722,6 +1685,74 @@
 .onia-day-timeline-block.is-meetings {
   background: var(--onia-blue-soft);
   color: var(--onia-blue);
+}
+
+/* Variante grande de la pestana "Calendario" completa: mas alto, sin truncar
+   texto (nota, comando Telegram, franja de dias por bloque). */
+.onia-day-timeline--full {
+  grid-template-columns: 56px minmax(0, 1fr);
+  max-height: none;
+}
+
+.onia-day-timeline--full .onia-day-timeline-hour {
+  font-size: 11px;
+}
+
+.onia-day-timeline--full .onia-day-timeline-block {
+  gap: 4px;
+  padding: 8px 12px;
+  overflow: visible;
+}
+
+.onia-day-timeline--full .onia-day-timeline-block strong {
+  overflow: visible;
+  font-size: 13px;
+  white-space: normal;
+}
+
+.onia-day-timeline--full .onia-day-timeline-block > small {
+  opacity: 0.8;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.onia-day-timeline--full .onia-day-timeline-block p {
+  margin: 0;
+  font-size: 11px;
+  line-height: 1.4;
+  opacity: 0.85;
+}
+
+.onia-day-timeline--full .onia-day-timeline-block em {
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 800;
+  opacity: 0.8;
+}
+
+.onia-weekday-strip {
+  display: flex;
+  gap: 4px;
+  margin: 2px 0;
+}
+
+/* Selector con 2 clases a proposito (mas especifico que ".onia-day-timeline-block
+   span") para no depender del orden de aparicion en el archivo. */
+.onia-weekday-strip .onia-weekday-chip {
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.55);
+  font-size: 9px;
+  font-weight: 800;
+  opacity: 0.55;
+}
+
+.onia-weekday-strip .onia-weekday-chip.is-active {
+  background: rgba(255, 255, 255, 0.9);
+  opacity: 1;
 }
 
 /* Lista "Tareas del dia": numero de prioridad al frente (nunca solo color,
@@ -2768,6 +2799,10 @@
 
 .onia-agent-columns {
   grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.onia-agent-columns.is-single {
+  grid-template-columns: 1fr;
 }
 
 .onia-agent-columns div {
