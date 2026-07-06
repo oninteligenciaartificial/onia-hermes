@@ -614,4 +614,133 @@ export const clinicCss = `
   .wf-clinic-card--featured { grid-column: auto; }
   .wf-clinic-nav-cta { display: none; }
 }
+
+/* ---------- Hero variant: split-editorial ---------- */
+.wf-clinic-hero--split {
+  min-height: auto;
+  display: block;
+  color: var(--color-fg);
+}
+
+.wf-clinic-split-grid {
+  display: grid;
+  grid-template-columns: 1.02fr 0.98fr;
+  min-height: 92svh;
+  align-items: stretch;
+}
+
+.wf-clinic-split-panel {
+  display: flex;
+  flex-direction: column;
+  width: min(640px, 100%);
+  margin-left: auto;
+  padding: 26px clamp(24px, 4vw, 60px) clamp(40px, 5vw, 72px);
+}
+
+.wf-clinic-split-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  height: 60px;
+}
+
+.wf-clinic-hero--split .wf-clinic-brand { color: var(--color-fg); }
+.wf-clinic-split-navcta { min-height: 44px; padding: 0 18px; }
+
+.wf-clinic-split-body { margin-top: auto; padding-top: 40px; }
+
+.wf-clinic-split-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  margin: 0 0 20px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: color-mix(in srgb, var(--color-bg) 60%, transparent);
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: color-mix(in srgb, var(--color-fg) 78%, var(--color-bg));
+}
+
+.wf-clinic-split-eyebrow .wf-icon { color: var(--ink-accent); }
+.wf-clinic-split-eyebrow .wf-clinic-dot { background: color-mix(in srgb, var(--color-fg) 40%, var(--color-bg)); }
+
+.wf-clinic-split-title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: clamp(2.7rem, 5.4vw, 4.8rem);
+  line-height: 0.98;
+  letter-spacing: -0.025em;
+  font-weight: 820;
+  color: var(--color-fg);
+  text-wrap: balance;
+}
+
+.wf-clinic-split-lede {
+  margin: 22px 0 0;
+  max-width: 42ch;
+  font-size: clamp(1.05rem, 1.4vw, 1.22rem);
+  line-height: 1.6;
+  color: color-mix(in srgb, var(--color-fg) 72%, var(--color-bg));
+}
+
+.wf-clinic-split-trust {
+  list-style: none;
+  margin: 28px 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 22px;
+}
+
+.wf-clinic-split-trust .wf-clinic-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+  font-size: 0.92rem;
+  color: color-mix(in srgb, var(--color-fg) 82%, var(--color-bg));
+}
+
+.wf-clinic-split-trust .wf-clinic-badge-icon {
+  width: 36px;
+  height: 36px;
+  padding: 8px;
+  border-radius: 10px;
+  color: var(--color-primary);
+  background: color-mix(in srgb, var(--color-primary) 12%, var(--color-bg));
+}
+
+.wf-clinic-split-media {
+  position: relative;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--color-primary) 12%, var(--color-bg));
+}
+
+.wf-clinic-split-media img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .wf-clinic-split-media img {
+      animation: wfHeroParallax linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0 90vh;
+    }
+  }
+}
+
+@media (max-width: 860px) {
+  .wf-clinic-split-grid { grid-template-columns: 1fr; min-height: auto; }
+  .wf-clinic-split-media { order: -1; min-height: 46svh; }
+  .wf-clinic-split-panel { width: 100%; margin-left: 0; }
+  .wf-clinic-split-body { padding-top: 28px; }
+}
 `;

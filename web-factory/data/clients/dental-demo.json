@@ -6,6 +6,7 @@
   "logo": "AU",
   "heroPoster": "assets/hero-consultorio.webp",
   "imagenSecundaria": "assets/detalle-atencion.webp",
+  "heroVariant": "auto",
   "colores": {
     "primary": "#0369a1",
     "secondary": "#0f172a",

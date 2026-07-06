@@ -17,6 +17,7 @@ export type SiteClient = {
   };
   heroPoster?: string;
   imagenSecundaria?: string;
+  heroVariant?: "auto" | "fullbleed" | "split" | "typographic";
   servicios: Array<{
     titulo: string;
     desc: string;

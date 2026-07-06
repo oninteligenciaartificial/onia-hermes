@@ -159,6 +159,7 @@ export const clientSchema = z.object({
   heroVideo: optionalAssetSchema,
   heroPoster: optionalAssetSchema,
   imagenSecundaria: optionalAssetSchema,
+  heroVariant: z.enum(["auto", "fullbleed", "split", "typographic"]).default("auto"),
   colores: z
     .object({
       primary: hexColorSchema.default("#0f766e"),
