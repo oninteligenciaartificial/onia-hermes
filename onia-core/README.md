@@ -92,7 +92,7 @@ modulos, verticales o integraciones. No son la definicion del core.
 ```bash
 npm run validate:onia-core                    # invariantes del contrato core
 node onia-core/modules/validate-modules.mjs   # validador de modulos vendibles
-node --test onia-core/*.test.mjs onia-core/logic/*.test.mjs onia-core/modules/*.test.mjs   # 112 tests
+node --test onia-core/*.test.mjs onia-core/logic/*.test.mjs onia-core/modules/*.test.mjs   # 140 tests
 node onia-core/report.mjs                     # foto de avance por vertical/producto/modulo
 ```
 

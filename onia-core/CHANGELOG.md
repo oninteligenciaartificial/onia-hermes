@@ -1,5 +1,16 @@
 # ONIA Core Changelog
 
+## core/logic — 2026-07-05 (aprobaciones + agenda + vistas)
+
+- `logic/approvals.logic.mjs`: decision one-shot (pending -> approved/rejected,
+  no se re-decide), no se aprueba la propia solicitud (salvo allowSelf).
+- `logic/scheduling.logic.mjs`: proximos, vencidos y recordatorios de ScheduleEvent.
+- `logic/saved-view.logic.mjs`: sanea filtros de SavedView (no sobrescribir el
+  tenant/organizationId; evita prototype pollution __proto__/constructor/prototype).
+- Con esto el CORE queda con logica canonica en sus capabilities principales:
+  work_items, intake, roles, approvals, scheduling y saved views. +10 tests
+  (140 total).
+
 ## core/logic — 2026-07-05 (intake + roles)
 
 - `logic/intake.logic.mjs`: gobernanza de canal (registrado o alerta de
