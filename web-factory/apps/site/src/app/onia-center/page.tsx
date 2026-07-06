@@ -979,7 +979,7 @@ export default function OniaCenterPage() {
         </header>
 
         {runtimeConnection.mode === "configuration_pending" ? (
-          <div className="onia-wrong-deployment-banner" role="alert">
+          <div className="onia-wrong-deployment-banner" role="status">
             <ShieldCheck size={16} />
             <div>
               <strong>Este no es el panel de produccion.</strong>
