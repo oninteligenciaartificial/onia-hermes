@@ -1,5 +1,38 @@
 # ONIA Core Changelog
 
+## 0.6.2 — 2026-07-07 (GestiOS aprobado para adopcion, segundo producto)
+
+- Tras cerrar el gap de 0.6.1 y arrancar la adopcion en DentaGest (item R6,
+  carril D), Sergio aprobo tambien GestiOS como segundo producto en adoptar el
+  core (pregunta directa: "GestiOS sigue en hold_until_beta... que hacemos" ->
+  "Aprobar GestiOS ahora").
+- `distributionTargets.gestios.status`: `hold_until_beta` -> `installing`, con
+  `adoptionPlan` apuntando a `ONIA_CORE_GESTIOS_ADOPTION_PLAN_2026.md` (nuevo)
+  y `nextAction` describiendo el Sprint 0 + la decision pendiente de reemplazar
+  o mantener `lib/fiscal/`/`lib/inventory/kardex.ts` propios de GestiOS.
+- `adapters/gestios.json.status`: `mapped_not_installed` -> `installing`;
+  `adoptionRule` actualizada con una nota real encontrada en el repo: un
+  intento previo de copiar `contract.json` directo a GestiOS fue revertido
+  (commit `cf57afa` -> `3d8aec4`) — confirma la regla de nunca forkear el core.
+- `validate.mjs`: `gestios` agregado a `TARGET_ADOPTION_APPROVED` y
+  `ADOPTION_APPROVED` (doble llave, mismo mecanismo que dentagest/bolivian-electric),
+  paso que ya estaba anticipado en `ONIA_PENDIENTES_HANDOFF_20260704.md` (item C1).
+- **Verificado contra el repo real de GestiOS antes de escribir el plan** (no
+  solo memoria de sesion previa): `lib/fiscal/` (balance-comprobacion.ts,
+  iva-summary.ts, rcv-export.ts, tax-calendar.ts, commit `1563731`) y
+  `lib/inventory/kardex.ts` (commit `77172ce`) existen de verdad, con tests
+  (`tests/fiscal-*.test.ts`, `tests/inventory-kardex.test.ts`). El plan NO
+  decide si se reemplazan por los modulos `commerce`/`accounting` del core o
+  se mantienen — lo deja explicito como decision de Sergio, distinta de la
+  adopcion de la columna vertebral organizacional (work_items/roles/etc.) que
+  si puede arrancar ya, sin chocar con ninguna de las dos opciones.
+- `ONIA_PROXIMA_SESION_PLAN_20260705.md` y `ONIA_SESION_KICKOFFS_20260705.md`
+  actualizados: item R1-GESTIOS-CORE refleja la aprobacion; kickoff del carril
+  E reescrito con rutas absolutas (mismo bug de rutas relativas cross-repo que
+  se encontro y corrigio en el kickoff de DentaGest) y la decision fiscal/
+  inventario explicita.
+- `package.json` sincronizado a 0.6.2. 279 tests, 4 validadores verdes.
+
 ## 0.6.1 — 2026-07-06 (correccion: catalog_inventory/sales_cash en gestios-general, dentagest-clinical y ganadero-offline)
 
 - **Corrige un hueco real de la epoca alpha del contrato, no una decision de

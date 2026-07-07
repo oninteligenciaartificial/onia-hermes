@@ -136,21 +136,48 @@ Gate: typecheck + tests verdes; si tocas onia-core/adapters/dentagest.json,
 DentaGest. Commit conventional.
 ```
 
-### 4) `gestios-core` — R1 → R5
+### 4) `gestios-core` — R1 → R5 (APROBADO 2026-07-07)
 ```
 Sos el carril GESTIOS. Repo Gestios (C:\dev\proyectos\Gestios), NO onia-hermes.
-Referencia: plan maestro de onia-hermes items R1 y R5.
+Referencia: plan maestro de onia-hermes items R1 y R5, y el plan completo
+`C:\dev\proyectos\onia-hermes\onia-core\ONIA_CORE_GESTIOS_ADOPTION_PLAN_2026.md`
+(leelo entero antes de arrancar -- tiene el estado real verificado y la decision
+que tenes que resolver antes de tocar entidades).
 
-R1 — instalar ONIA Core en GestiOS como columna vertebral. ANTES: verifica A1
-(pack inventario kardex/contador, commits del subagente) y resuelve drift de
-migraciones con baseline si aplica. Segui onia-core/ONIA_CORE_INSTALL_GUIDE_2026.md
-y onia-core/ONIA_CORE_CLIENT_ADOPTION_MAP_2026.md. GestiOS es el track aprobado
-tras DentalGest; respeta installInProductRepos.
-R5 (DESPUES de R1) — extraer paquetes @onia/* (core-db, fiscal, ui). NO antes de
-que R1 pruebe los patrones. Fuente: ONIA_ECOSYSTEM_INVENTORY_20260704.md.
+IMPORTANTE: todas las rutas `onia-core/...` de este bloque viven en el OTRO repo
+(`C:\dev\proyectos\onia-hermes\onia-core\...`), no en Gestios. Leelas por ruta
+absoluta; el contrato/schema/modulos siguen congelados (solo lectura para vos).
 
-Gate: typecheck + tests verdes; si tocas el core, npm run validate:onia-core verde
-(en onia-hermes). Commit conventional.
+Estado: Sergio APROBO la adopcion (2026-07-07) -- `distributionTargets.gestios`
+y `adapters/gestios.json` ya estan en `installing`, `validate.mjs` ya tiene
+gestios en `TARGET_ADOPTION_APPROVED`/`ADOPTION_APPROVED`. onia-core v0.6.2,
+CORE COMPLETO (18 entidades, 5 modulos: commerce/knowledge/accounting/
+invoicing/payroll, todos con logica Bolivia real y tests).
+
+DECISION QUE TENES QUE RESOLVER PRIMERO (con Sergio, no la asumas): GestiOS ya
+tiene `lib/fiscal/` (RCV/IVA/balance de comprobacion/calendario NIT, commit
+1563731) y `lib/inventory/kardex.ts` (kardex promedio ponderado/FEFO, commit
+77172ce) propios, con 544 tests. El core ahora cubre lo mismo via los modulos
+`commerce`/`accounting`. ¿Reemplazar esa logica propia por los modulos del core
+(consistencia con otros productos, pero tira 544 tests probados) o mantenerla y
+adoptar del core SOLO la columna vertebral organizacional (work_items, roles,
+comments, documents, approvals, schedule, saved_views, intake)? Mientras se
+decide, arranca por la columna vertebral (R1, mismo alcance que DentaGest
+Sprints 1-4): no choca con ninguna de las dos opciones.
+
+R1 -- instalar ONIA Core en GestiOS como columna vertebral (Sprint 0 primero:
+RE-VERIFICA si el baseline de migraciones sigue sucio -- _prisma_migrations,
+DIRECT_URL valida -- antes de instalar nada, mismo runbook que uso DentaGest).
+Segui `C:\dev\proyectos\onia-hermes\onia-core\ONIA_CORE_INSTALL_GUIDE_2026.md`.
+NUNCA copies contract.json ni el schema al repo de Gestios -- ya paso una vez
+(commit cf57afa, revertido en 3d8aec4) y esta prohibido: se referencia via
+adapter + logica portada, no se forkea.
+R5 (DESPUES de R1) -- extraer paquetes @onia/* (core-db, fiscal, ui). NO antes de
+que R1 pruebe los patrones. Fuente: `ONIA_ECOSYSTEM_INVENTORY_20260704.md` (onia-hermes).
+
+Gate: typecheck + tests verdes en Gestios; si tocas
+`onia-core/adapters/gestios.json` (avance de status), `node onia-core/validate.mjs`
+sigue verde en onia-hermes. Commit conventional.
 ```
 
 ---

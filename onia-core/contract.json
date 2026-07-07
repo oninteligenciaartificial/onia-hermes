@@ -1,6 +1,6 @@
 {
   "name": "ONIA Core",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "status": "beta",
   "sourceOfTruth": "onia-hermes/onia-core",
   "researchResult": "onia-core/ONIA_CORE_RESEARCH_RESULT_2026.md",
@@ -16,8 +16,8 @@
   ],
   "policy": {
     "installInProductRepos": false,
-    "reason": "Core beta congelado para adopcion. DentalGest instalando via plan aprobado; el resto de productos siguen bloqueados hasta su propio plan.",
-    "nextDistributionStage": "dentagest_adoption"
+    "reason": "Core beta congelado para adopcion. DentalGest y GestiOS instalando via plan aprobado; Ganadero OS sigue bloqueado hasta su propio plan.",
+    "nextDistributionStage": "dentagest_and_gestios_adoption"
   },
   "researchSources": [
     {
@@ -1246,9 +1246,10 @@
     {
       "projectId": "gestios",
       "repoPath": "C:\\dev\\proyectos\\Gestios",
-      "status": "hold_until_beta",
+      "status": "installing",
       "verticalTrackId": "gestios-general",
-      "nextAction": "Revertir prototipo local y esperar paquete ONIA Core beta."
+      "adoptionPlan": "onia-core/ONIA_CORE_GESTIOS_ADOPTION_PLAN_2026.md",
+      "nextAction": "Sprint 0: sanear baseline de migraciones (mismo patron que DentaGest: confirmar _prisma_migrations, DIRECT_URL valida, baseline unico) ANTES de instalar entidades core. GestiOS ya tiene lib/fiscal/ + lib/inventory/kardex.ts propios (commits 77172ce+1563731, 544 tests) -- decidir con Sergio si se migran a los modulos onia-core/modules/commerce+accounting o se mantienen y solo se adopta la columna vertebral organizacional (work_items/roles/etc)."
     },
     {
       "projectId": "dentagest",

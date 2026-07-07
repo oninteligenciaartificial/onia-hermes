@@ -1,12 +1,14 @@
 # ONIA Core
 
-Estado: beta canonico (v0.6.1), no instalado en productos.
+Estado: beta canonico (v0.6.2), instalando en DentalGest y GestiOS.
 Owner: ONIA / Hermes.
 
 > Beta contract cerrado: se agregaron las 8 piezas transversales
 > (BusinessPartner, RoleAssignment, Comment, Document, ApprovalRequest,
 > ScheduleEvent, SavedView y WorkItem con SLA opcional). La instalacion en repos
-> producto sigue bloqueada hasta aprobar el plan de adopcion de DentalGest.
+> producto esta aprobada para DentalGest (`ONIA_CORE_DENTALGEST_ADOPTION_PLAN_2026.md`)
+> y GestiOS (`ONIA_CORE_GESTIOS_ADOPTION_PLAN_2026.md`, aprobado 2026-07-07);
+> Ganadero OS sigue bloqueado hasta su propio plan.
 
 ONIA Core es el nucleo de organizacion operativa que despues se instalara en
 los sistemas de ONIA: GestiOS, DentalGest y Ganadero OS.
@@ -120,6 +122,12 @@ modulos, verticales o integraciones. No son la definicion del core.
 - `ONIA_CORE_DENTALGEST_ADOPTION_PLAN_2026.md`: plan de sprints para instalar
   el core en DentalGest (Sprint 0 = baseline de migraciones; cockpit v1 ya
   existe en el producto como prototipo del owner_dashboard).
+- `ONIA_CORE_GESTIOS_ADOPTION_PLAN_2026.md`: plan de sprints para instalar el
+  core en GestiOS (segundo producto aprobado, 2026-07-07). GestiOS ya tiene
+  `lib/fiscal/` + `lib/inventory/kardex.ts` propios (544 tests) — el plan deja
+  explicito que reemplazarlos por los modulos commerce/accounting del core o
+  mantenerlos y adoptar solo la columna vertebral organizacional es una
+  decision de Sergio, no asumida.
 - `schema/base-schema.sql`: SQL base de referencia, no aplicado directamente.
 - `adapters/gestios.json`: mapa de adopcion para GestiOS.
 - `adapters/dentagest.json`: mapa de adopcion para DentalGest.
