@@ -64,9 +64,10 @@ usuario tras comparar mockups.
 
 `Hoy · Pipeline · Agentes · Negocio`
 
-- **Hoy** — foco del día: agenda + roster de agentes + cola de aprobación +
-  panel rápido de notas/ideas (no es pestaña propia, vive acá como panel
-  lateral).
+- **Hoy** — foco del día: agenda + roster de agentes + cola de aprobación.
+  Notas/ideas no tienen pestaña propia: se acceden desde un panel lateral
+  disparado por un botón en el topbar del shell (disponible en cualquier
+  pestaña, no solo en Hoy).
 - **Pipeline** — leads + tareas (lo que se mueve).
 - **Agentes** — detalle de revisiones, auditoría, integraciones, feature
   readiness (más profundo que el resumen de Hoy).
@@ -127,7 +128,10 @@ onia-center/
     shell/
       AppShell.tsx               (~100 líneas) — topbar + TopNav + slot de contenido
       TopNav.tsx                 (~80 líneas) — 4 pestañas, estado activo por ruta
-      QuickCapturePanel.tsx      (~100 líneas) — stub Fase 1: drawer con EmptyState
+      QuickCapturePanel.tsx      (~100 líneas) — slide-over global (se monta
+                                   una vez en AppShell, se abre desde el
+                                   topbar en cualquier pestaña); stub Fase 1
+                                   con EmptyState, sin datos reales todavía
     ui/
       Tile.tsx                  — primitivo tile/tarjeta de estado
       Badge.tsx                 — pill de tono (reusa CenterTone)
@@ -138,7 +142,10 @@ onia-center/
         HoyView.tsx              (~120 líneas) — compone las 3 piezas de abajo
         AgentRosterTile.tsx      — lee `operatingAgents` (import directo, solo lectura)
         ReviewQueueTile.tsx      — lee `reviews` desde `getOniaCenterRuntime()`
-        TodayScheduleCard.tsx    — lee `sergioStrictScheduleBlocks` (import directo)
+        TodayScheduleCard.tsx    — lee `sergioStrictScheduleBlocks` (import
+                                   directo) y filtra al día/hora actual sobre
+                                   la plantilla semanal existente; no agrega
+                                   una fuente de datos nueva
       pipeline/   (vacío, placeholder Fase 2)
       agentes/    (vacío, placeholder Fase 2)
       negocio/    (vacío, placeholder Fase 2)
