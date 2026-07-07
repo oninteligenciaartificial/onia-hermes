@@ -78,6 +78,15 @@ inválido (401) e inyección de slug (401) — 3/3 ejecuciones OK.
   divergentes (incluye el patron `HERMES_*` vs su version en docs/) y 19 nuevos en
   raiz — quedan listados en el primer reporte para que Sergio decida cuales fusionar
   y cuales archivar.
+  Republicado y probado en vivo (`update_workflow` + `publish_workflow` +
+  `execute_workflow` production): `message_id` 774 (Telegram real a Sergio, con la
+  seccion "Docs (limpieza diaria)" ya incluida). Ese primer envio expuso un bug real
+  del nodo Telegram: sin `parse_mode` seteado, Telegram parseaba el texto como
+  Markdown legacy y se comia los "_" de los nombres de archivo (`HERMES_OPERATIONS.md`
+  llegaba como `HERMESOPERATIONS.md`). Fix: `parse_mode: 'HTML'` en "Enviar a Sergio"
+  (HTML no toca "_") + separador `relPath <-> twin` cambiado a `relPath vs twin` (un
+  `<->` crudo es inseguro en HTML). Re-probado en vivo: `message_id` 775, nombres de
+  archivo intactos.
 - **Propuestas:** el pipeline viejo (`FGqyNTrQfMIFiVG2`) apuntaba a `127.0.0.1:3031`
   (inalcanzable desde el contenedor n8n) y usaba un generador ad-hoc. Reemplazado
   por `ONIA - Generar Propuesta (oficial)` (arriba), que corre el generador oficial
