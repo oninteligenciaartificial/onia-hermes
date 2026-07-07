@@ -84,8 +84,11 @@ Cada lugar = UNA imagen real (sin personas) subida como Reference Element (`envi
   Verificado estable con Lucia.
 - **Nivel 4 (2cr, ultimo recurso):** `nano_banana_2` + Elements, solo prop/lugar exacto
   sin que hable. QA obligatorio. Ver [[lucia-elements-catalog]].
-- **Lip sync (barato-medio, 15cr/10s):** `wan2_7` con still de Lucia + audio de voz. Ya
-  verificado estable (`valentina-lipsync-wan27-10s.mp4`, cara sin romperse, boca sincronizada).
+- **Lip sync (barato-medio, 15cr/10s):** `wan2_7` con still de Lucia + audio de voz.
+  **El still SIEMPRE debe tener sonrisa abierta con dientes visibles** — con boca
+  cerrada el modelo inventa dientes desde cero al hablar y pierden consistencia (fix
+  verificado 2026-07-06, ver `AVATAR-CONSISTENCY-SCHEME.md`). Version corregida:
+  `lucia-lifestyle-talking-es-v2-teeth-fix.mp4`.
 - **Hero/UGC con producto en mano (42-75cr):** Marketing Studio, avatar custom.
 - **Branded/precio (barato, ~3cr):** editor Remotion (content-engine).
 - **Negative constante:** no app/IG UI, no texto en pantalla, no logos, no watermark,

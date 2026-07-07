@@ -101,6 +101,16 @@ de `wan2_7` + `audio_references` de la voz. Verificado con Lucia: cara estable e
 clip, boca sincronizada. NUNCA partir de un still generado por Elements para esto (mas
 deriva compuesta).
 
+**⚠️ Regla dura — el `start_image` DEBE mostrar sonrisa con dientes visibles, nunca boca
+cerrada.** `wan2_7` solo acepta UN `start_image` (no tiene rol separado de "dental lock"
+como Kling3). Si el still de arranque tiene la boca cerrada, el modelo inventa los
+dientes desde cero en cada frame donde habla -> pierden consistencia (forma/blancura
+cambia). Hallado 2026-07-06 con Lucia, mismo diagnostico que el "Face + Teeth Lock" de
+Sergio (`sergio-approved-media/identity-shoots/20260605-nano-banana-face-teeth-lock/`):
+los dientes se anclan con una FOTO real de sonrisa, no con texto de prompt. Fix
+verificado: generar el Nivel 1 con sonrisa abierta + dientes visibles explicito en el
+prompt, usar ESE como `start_image`.
+
 ### Nivel 4 (ultimo recurso) — Reference Elements (`nano_banana_2`) — 2cr
 Solo para casos muy especificos donde se necesita un prop/lugar EXACTO de una foto real
 y NO hace falta que el personaje hable ni sostenga nada con precision (ej. mostrar un
