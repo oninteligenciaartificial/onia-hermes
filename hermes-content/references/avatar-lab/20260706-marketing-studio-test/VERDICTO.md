@@ -14,6 +14,13 @@ Test real 2 (mismo dia, mas tarde): `ms-lucia-isdin-480p-12s.mp4` — mismo prod
 ## Nivel 2 (Marketing Studio) — VALIDADO con las 2 modelos
 Ya no es "pendiente probar con Lucia" — confirmado 2026-07-06 con el mismo resultado de calidad que Mara: identidad estable, producto real fiel, sin deformacion.
 
+## Fix post-test: forehead con arrugas (detectado por Sergio)
+La foto fuente del avatar Lucia (`fc5c6553-...`) tenia arrugas de forehead que no estan
+en la referencia real. Corregido con una foto nueva (encuadre half-body + luz difusa +
+negativo explicito anti-arrugas) -> nuevo avatar **`d9a80b78-70d3-4e7c-af25-e2bcebadf63d`
+("Lucia ONIA v2") = USAR ESTE**. Detalle completo en `lucia-onia-identity-bible.md` y
+`AVATAR-CONSISTENCY-SCHEME.md` (nuevo pitfall documentado, aplica a cualquier modelo).
+
 ## Comparacion
 
 | | Marketing Studio nativo | Editor Remotion (nuestro) |

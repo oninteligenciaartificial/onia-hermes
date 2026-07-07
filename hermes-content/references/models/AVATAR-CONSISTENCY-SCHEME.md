@@ -71,6 +71,15 @@ puede describir bien en palabras (no necesita ser un objeto real fotografiado).
 Como: `soul_2` + soul_id + prompt de texto (wardrobe/lugar de la bible). Alta consistencia,
 validado repetidas veces.
 
+**⚠️ Pitfall conocido — arrugas de forehead que no estan en la referencia real** (hallado
+2026-07-06 con Lucia, Sergio lo detecto en el resultado). Causa: combinar "no makeup" +
+enfasis de textura hiper-realista + primer plano muy cerrado + luz cenital dura empuja al
+modelo a exagerar lineas de expresion en la frente que la persona real no tiene. Fix que
+funciono: encuadre half-body (no primer plano extremo) + luz difusa pareja + negativo
+explicito "poreless smooth forehead, zero wrinkles zero fine lines zero creases" en el
+prompt. Aplica a cualquier modelo, no solo Lucia — revisar el forehead en el QA visual,
+no solo pecas/cejas/ojos.
+
 ### Nivel 2 — Marketing Studio (avatar custom) — 42-75cr — UGC CON PRODUCTO REAL
 Para: el caso real de UGC — hablando a camara, sosteniendo el producto REAL (con su
 etiqueta/forma exacta), guion natural, lipsync. Es la herramienta correcta para esto,

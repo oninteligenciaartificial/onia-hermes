@@ -63,10 +63,23 @@ Cada lugar = UNA imagen real (sin personas) subida como Reference Element (`envi
 - **Nivel 1 (0.12cr, DEFAULT):** `soul_2` + soul_id `36305a9b-af24-4390-959b-885082dddd5d` + prompt de texto.
 - **Nivel 2 (42-75cr, UGC con producto real):** Marketing Studio, avatar custom creado
   desde una foto Nivel 1 (nunca desde Elements). **VALIDADO 2026-07-06** con ISDIN
-  Fusion Water SPF 50 (`ms-lucia-isdin-480p-12s.mp4`, 42cr, avatar `fc5c6553-...`):
-  identidad estable, producto real en mano con etiqueta legible, sin deformacion.
-  Ojo: el guion auto salio en ingles esta vez (no es determinista) — forzar espanol
-  con `prompt` explicito para piezas de produccion real.
+  Fusion Water SPF 50 (`ms-lucia-isdin-480p-12s.mp4`, 42cr): identidad estable,
+  producto real en mano con etiqueta legible, sin deformacion.
+  - Avatar `fc5c6553-...` ("Lucia ONIA") = **SUPERADO** — su foto fuente tenia arrugas
+    de forehead que no estan en la referencia real (Sergio lo detecto). Causa: prompt
+    con "no makeup" + enfasis de textura realista + luz cenital dura + primer plano muy
+    cerrado empujaron al modelo a exagerar lineas de expresion en la frente.
+  - **Avatar `d9a80b78-70d3-4e7c-af25-e2bcebadf63d` ("Lucia ONIA v2") = USAR ESTE.**
+    Foto fuente corregida: forehead liso igual a la referencia real. Fix que funciono:
+    encuadre "half-body" (no primer plano muy cerrado) + luz difusa pareja (no cenital
+    dura) + negativo explicito "poreless smooth forehead, zero wrinkles zero fine lines
+    zero creases". Bonus: el encuadre half-body en ambiente casero ya lee como
+    "lifestyle" en vez de selfie clinico.
+  - **Para videos de produccion real:** SIEMPRE pasar `prompt` explicito en **espanol**
+    (el guion auto no es determinista en idioma — con Mara salio en espanol, con Lucia
+    en ingles usando el mismo preset) describiendo una escena **lifestyle** (rutina en
+    casa, mañana, algo cotidiano — no clinico/laboratorio) y reforzar "forehead liso,
+    sin arrugas" en el prompt para evitar que reaparezca el artefacto.
 - **Nivel 3 (15cr/10s, talking sin producto):** still Nivel 1 -> `wan2_7` + audio.
   Verificado estable con Lucia.
 - **Nivel 4 (2cr, ultimo recurso):** `nano_banana_2` + Elements, solo prop/lugar exacto
@@ -77,6 +90,22 @@ Cada lugar = UNA imagen real (sin personas) subida como Reference Element (`envi
 - **Branded/precio (barato, ~3cr):** editor Remotion (content-engine).
 - **Negative constante:** no app/IG UI, no texto en pantalla, no logos, no watermark,
   no identity drift, no quitarle las pecas, no cambiar estructura facial, no piel plastica.
+
+## Patron de contenido: barato/generico vs caro/marca real (2026-07-06)
+Probando una tanda de 4 fotos Nivel 1 (dormitorio, cocina, calle, bano+producto) se
+confirmo un patron estructural util: **Nivel 1 (0.12cr, solo texto) NUNCA puede traer una
+marca/producto real** — cuando el prompt pide "sostener un frasco verde de skincare" el
+modelo INVENTA una etiqueta generica (ej. "ROXIA"), no reproduce el packshot real. Recien
+Nivel 2 (Marketing Studio, image-conditioning real) o Nivel 4 (Elements) muestran la
+marca real y legible.
+
+**Esto simplifica la pregunta "cuenta propia vs cuenta Nuvia":** no es necesariamente un
+account distinto por marca — es el mismo patron que usan influencers reales: contenido
+generico/lifestyle (barato, frecuente, SIN marca) vive bien en cualquier cuenta como
+"vida cotidiana", y el contenido con producto real (caro, puntual, Nivel 2+) es la pieza
+"sponsoreada". Ambos pueden convivir en la MISMA cuenta propia — el nivel de produccion
+ya separa naturalmente que es organico y que es contenido de cliente/Nuvia, sin necesidad
+de duplicar cuentas.
 
 ## Orden de trabajo (2026-07-06, pedido de Sergio)
 1. ✅ Cara real lockeada (Soul `36305a9b-af24-4390-959b-885082dddd5d`, 18 frames verificados de un solo video), entrenado y verificado.
