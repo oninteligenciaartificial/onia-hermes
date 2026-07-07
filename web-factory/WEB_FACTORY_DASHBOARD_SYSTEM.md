@@ -14,6 +14,17 @@ DentalGest, GestiOS ni ONIA Center (no hay acceso a esos repos desde este
 carril). Antes de adoptarlo como estándar obligatorio, alguien de esos equipos
 debería confirmarlo contra 2-3 pantallas reales de su producto.
 
+**Segunda referencia (validación de concepto)**: además del escenario neutro
+(`dashboard-demo`), hay un segundo demo — `dentalgest-demo` — que aplica el
+mismo sistema a un escenario dental concreto (marca "Clínica Dental Aura",
+reutilizada del vertical de landing): `heroPanel: queue` con urgencias reales
+("dolor agudo sin turno", presupuestos pendientes de aprobación), KPIs de
+ocupación de sillones/inasistencias, tratamientos por tipo, turnos del día con
+estados (confirmado/pendiente/cancelado). Esto no reemplaza la validación con
+el equipo real de DentalGest, pero confirma que la elección de `queue` como
+hero (en vez de un chart de tendencia) se sostiene con datos de dominio
+plausibles, no solo en abstracto.
+
 ## Modelo de jerarquía (3 niveles)
 
 1. **Hero (`heroPanel`)** — el elemento de mayor peso visual. Dos variantes,
@@ -89,7 +100,11 @@ no por jerarquía técnica interna del producto.
 
 ## Referencia viva
 
-`pnpm generate dashboard-demo --template dashboard` — código en
-`packages/templates/src/dashboard*.ts` (5 archivos: orquestación, charts,
-cards, hero, states). Datos de ejemplo en `data/clients/dashboard-demo.json`
-(escenario neutro: consola de operaciones genérica).
+Código en `packages/templates/src/dashboard*.ts` (5 archivos: orquestación,
+charts, cards, hero, states). Dos escenarios de datos, mismo sistema:
+
+- `pnpm generate dashboard-demo --template dashboard` — neutro (consola de
+  operaciones genérica, `heroPanel: queue`).
+- `pnpm generate dentalgest-demo --template dashboard` — concreto (clínica
+  dental "Aura" sobre DentalGest: agenda, turnos, pagos, `heroPanel: queue`
+  con urgencias reales).

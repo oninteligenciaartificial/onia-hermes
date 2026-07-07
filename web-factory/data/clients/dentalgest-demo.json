@@ -1,0 +1,171 @@
+{
+  "nombre": "Clinica Dental Aura",
+  "slug": "dentalgest-demo",
+  "tagline": "Panel operativo de la clinica (DentalGest)",
+  "descripcion": "Referencia de panel interno para una clinica dental que usa DentalGest: agenda del dia, turnos, pagos y facturacion.",
+  "logo": "AU",
+  "logoIcon": "",
+  "logoWide": "",
+  "heroVideo": "",
+  "heroPoster": "",
+  "colores": {
+    "primary": "#0369a1",
+    "secondary": "#0f172a",
+    "accent": "#14b8a6",
+    "bg": "#f6fafd",
+    "fg": "#0f172a"
+  },
+  "tipografia": {
+    "heading": "Onest",
+    "body": "Onest"
+  },
+  "contacto": {
+    "email": "",
+    "tel": "",
+    "whatsapp": "",
+    "direccion": ""
+  },
+  "redes": {
+    "ig": "",
+    "fb": "",
+    "linkedin": "",
+    "x": ""
+  },
+  "servicios": [
+    {
+      "titulo": "Agenda clara",
+      "desc": "Turnos de hoy, confirmaciones y urgencias en un solo lugar.",
+      "icono": "layout"
+    },
+    {
+      "titulo": "Fichas de pacientes",
+      "desc": "Historial clinico y tratamientos sin perder contexto.",
+      "icono": "shield"
+    },
+    {
+      "titulo": "Cobros ordenados",
+      "desc": "Pagos, planes y facturacion sin hojas sueltas.",
+      "icono": "message"
+    }
+  ],
+  "categorias": [],
+  "productos": [],
+  "beneficios": [],
+  "referencias": [
+    {
+      "title": "Asana Insights",
+      "url": "https://asana.com",
+      "type": "visual",
+      "use": "cola de acciones priorizada como elemento principal",
+      "avoid": "copiar identidad"
+    }
+  ],
+  "cta": {
+    "texto": "Nueva cita",
+    "url": "#top"
+  },
+  "seo": {
+    "title": "Clinica Dental Aura - Panel DentalGest",
+    "description": "Panel operativo de referencia para una clinica dental que usa DentalGest.",
+    "ogImage": ""
+  },
+  "dashboard": {
+    "title": "Panel de la clinica",
+    "subtitle": "Martes 7 de julio - datos de ejemplo",
+    "nav": [
+      { "group": "Hoy", "items": ["Agenda"] },
+      { "group": "Pacientes", "items": ["Fichas", "Historias"] },
+      { "group": "Facturacion", "items": ["Cobros", "Planes de pago"] },
+      { "group": "Cuenta", "items": ["Configuracion"] }
+    ],
+    "filters": ["Hoy", "Esta semana", "Este mes"],
+    "heroPanel": {
+      "kind": "queue",
+      "title": "Para hoy",
+      "items": [
+        { "titulo": "Dolor agudo sin turno - Roberto Salinas", "estado": "urgente", "meta": "Atender ahora" },
+        { "titulo": "Confirmar turnos de manana (4 pendientes)", "estado": "pendiente", "meta": "Antes de las 18:00" },
+        { "titulo": "Presupuesto de implante - Ana Quiroga", "estado": "pendiente", "meta": "Esperando aprobacion" },
+        { "titulo": "Control post-tratamiento enviado - Luis Mamani", "estado": "al-dia", "meta": "Recordatorio enviado" }
+      ]
+    },
+    "kpis": [
+      {
+        "label": "Pacientes atendidos hoy",
+        "value": "14",
+        "delta": "3",
+        "trend": "up",
+        "context": "vs mismo dia semana pasada"
+      },
+      {
+        "label": "Sillones ocupados",
+        "value": "3 de 4",
+        "delta": "",
+        "trend": "flat",
+        "context": "ocupacion actual"
+      },
+      {
+        "label": "Ingresos del mes",
+        "value": "Bs. 32.4k",
+        "delta": "8.6%",
+        "trend": "up",
+        "context": "vs mes anterior"
+      },
+      {
+        "label": "Inasistencias",
+        "value": "6%",
+        "delta": "2%",
+        "trend": "down",
+        "context": "menos que el mes pasado"
+      }
+    ],
+    "charts": [
+      {
+        "title": "Tratamientos por tipo",
+        "unit": "% del total",
+        "type": "donut",
+        "points": [
+          { "label": "Limpieza", "value": 32 },
+          { "label": "Ortodoncia", "value": 26 },
+          { "label": "Implantes", "value": 18 },
+          { "label": "Endodoncia", "value": 14 },
+          { "label": "Otros", "value": 10 }
+        ],
+        "series": []
+      },
+      {
+        "title": "Ingresos por semana",
+        "unit": "Bs. (miles)",
+        "type": "bar",
+        "points": [
+          { "label": "Sem 1", "value": 6.8 },
+          { "label": "Sem 2", "value": 7.5 },
+          { "label": "Sem 3", "value": 8.1 },
+          { "label": "Sem 4", "value": 9.9 }
+        ],
+        "series": []
+      }
+    ],
+    "table": {
+      "title": "Turnos de hoy",
+      "columns": ["Paciente", "Tratamiento", "Hora", "Estado"],
+      "filtros": ["Profesional", "Tratamiento", "Estado"],
+      "rows": [
+        ["Roberto Salinas", "Urgencia", "09:00", { "value": "En curso", "status": "warn" }],
+        ["Ana Quiroga", "Implante (presupuesto)", "10:30", { "value": "Confirmado", "status": "pos" }],
+        ["Luis Mamani", "Control", "11:15", { "value": "Confirmado", "status": "pos" }],
+        ["Elena Vargas", "Ortodoncia", "12:00", { "value": "Cancelado", "status": "neg" }],
+        ["Jorge Ticona", "Limpieza", "16:30", { "value": "Pendiente", "status": "warn" }]
+      ]
+    },
+    "sidePanel": {
+      "title": "Pagos recientes",
+      "items": [
+        { "label": "Ana Quiroga", "value": "Bs. 450", "initial": "AQ" },
+        { "label": "Luis Mamani", "value": "Bs. 120", "initial": "LM" },
+        { "label": "Jorge Ticona", "value": "Bs. 80", "initial": "JT" }
+      ]
+    },
+    "showStatesReference": false
+  }
+}
