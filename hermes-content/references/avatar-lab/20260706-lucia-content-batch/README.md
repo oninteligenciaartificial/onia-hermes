@@ -53,6 +53,17 @@ luz difusa (no cenital dura), + negativo explicito "poreless smooth forehead ski
 zero wrinkles zero fine lines zero creases". Se mantiene estable incluso animado
 (wan2_7). Ver el pitfall completo en `AVATAR-CONSISTENCY-SCHEME.md`.
 
+## Iteracion de estilo "mas atractiva" (2026-07-06, pedido de Sergio)
+Sergio sintio que Lucia "no se ve muy atractiva" en los retratos estaticos/neutros.
+Diagnostico: NO era problema de identidad (el Soul es fiel a la referencia) — era que
+las fotos de prueba eran poses quietas/neutras (selfie con boca cerrada). Se probo una
+tanda de 8 candidatos en `style-iteration/` variando ACCION genuina en vez de pose:
+riendo en la calle, riendo en cafe, tocandose el pelo, aplicando skincare con reaccion,
+bar/night-out, espejo, hablando caminando. **Resultado: la accion/expresion genuina se
+ve consistentemente mas atractiva que la pose estatica, con la MISMA identidad.** Es un
+problema de direccion de foto, no de Soul — no hizo falta entrenar un modelo nuevo.
+Sergio aprobo esta direccion para seguir iterando.
+
 ## Pendiente (no ejecutado, queda armado)
 Video Marketing Studio (Nivel 2, ~42cr) en espanol + estilo lifestyle (dormitorio/cocina
 en vez de bano clinico) con producto real de Nuvia — prompt armado, no corrido todavia

@@ -203,3 +203,59 @@ ni como ancla, ni como fuente de un avatar custom de Marketing Studio.
    explicito en espanol para piezas de produccion real.
 6. **Elements (Nivel 4) es el ultimo recurso**, nunca el default, siempre con 2-3
    candidatos + QA, nunca para "hablar" o "sostener algo con precision".
+
+## 📋 PLAYBOOK — de Soul entrenado a produccion (repetir con cualquier modelo nuevo)
+
+Proceso completo aprendido con Lucia (2026-07-06), generalizado para aplicar a Mara,
+modelos futuros, o re-perfeccionar uno existente. **Orden estricto: barato primero,
+caro recien cuando lo barato ya esta perfeccionado.**
+
+### Paso 1 — Identidad (una sola vez)
+- Real: extraer frames de UN SOLO video, verificar cada uno visualmente (contact
+  sheet) antes de entrenar — nunca asumir que 2 clips del mismo shoot son la misma
+  persona (asi se contamino el Soul original de Lucia). Entrenar Soul (**25cr real**,
+  confirmar con Sergio antes).
+- Sintetico (estilo Mara): banco de imagenes ya generadas y aprobadas como master.
+- QA obligatorio: 2-3 generaciones Nivel 1 comparadas cara a cara contra la
+  referencia (frame real o master aprobado) — pecas/cejas/ojos/labios deben calzar.
+
+### Paso 2 — Perfeccionar Nivel 1 (barato, 0.12cr) ANTES de gastar en Nivel 2/3
+No pasar a modelos caros hasta resolver estos 3 puntos con el Soul:
+1. **Forehead liso**: encuadre half-body (no primer plano extremo) + luz difusa
+   pareja (no cenital dura) + negativo explicito "poreless smooth forehead skin,
+   zero wrinkles zero fine lines zero creases". Sin esto, el modelo exagera lineas
+   de expresion que la persona real no tiene.
+2. **Dientes como ancla futura**: si en algun momento se va a animar (Nivel 3), el
+   still debe tener sonrisa ABIERTA con dientes visibles — nunca boca cerrada. Un
+   video hablado (`wan2_7`) solo recibe un `start_image`, asi que ese still ES el
+   unico ancla de dientes; sin dientes visibles ahi, el video los inventa y pierden
+   consistencia al hablar.
+3. **Accion real > pose estatica para "atractivo"**: selfies neutros/quietos leen
+   planos y poco carismaticos incluso con identidad perfecta. Generar variedad con
+   ACCION genuina (riendo, caminando, gesto real, situacion social) en vez de
+   retrato posado — la diferencia percibida en atractivo es grande y es un problema
+   de direccion de foto, no de identidad. Generar 4+ candidatos variados (escenario
+   x accion x luz), contact sheet, elegir los mejores con el cliente antes de seguir.
+
+### Paso 3 — Recien ahi, Nivel 2/3 (caro) para produccion
+- Nivel 3 (`wan2_7`, 15cr/10s): usar el MEJOR still de Nivel 1 ya perfeccionado
+  (forehead liso + dientes visibles + accion/expresion ya validada) como
+  `start_image`. Audio SIEMPRE en español explicito (el guion/voz no vienen solos en
+  español por defecto).
+- Nivel 2 (Marketing Studio, 42-75cr): avatar custom creado desde ESE MISMO still
+  perfeccionado (nunca desde uno viejo/con bugs conocidos). `prompt` explicito en
+  **español** describiendo escena **lifestyle** (no clinica/laboratorio) + reforzar
+  "forehead liso, sin arrugas" en el texto. El guion/idioma automatico no es
+  confiable — no dejarlo en automatico para piezas de produccion real.
+- QA final identico al Paso 1: comparar contra la referencia antes de aprobar.
+
+### Como aplicar esto a un modelo nuevo (checklist rapido)
+1. Identidad (real verificada o banco sintetico aprobado) -> Soul.
+2. 2-3 fotos Nivel 1, QA contra referencia.
+3. Fix forehead + fix dientes (aplicar los prompts de arriba desde el primer intento,
+   no esperar a que el cliente lo detecte).
+4. Tanda de 4+ Nivel 1 con accion/expresion variada, elegir direccion con el cliente.
+5. Solo entonces: Nivel 3 (talking) y/o Nivel 2 (Marketing Studio) para piezas reales.
+6. Documentar el modelo (bible propia, como `lucia-onia-identity-bible.md` /
+   `mara-onia-identity-bible.md`) con Soul ID, prompts que funcionaron, y pitfalls
+   encontrados especificos de ese modelo.
