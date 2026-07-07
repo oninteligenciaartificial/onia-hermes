@@ -97,3 +97,6 @@ jobs:
           name: docs-hygiene-report
           path: .onia-docs-hygiene/
           if-no-files-found: warn
+          # El dir de salida empieza con "." (oculto); upload-artifact@v4 lo excluye
+          # por defecto y sube 0 archivos sin avisar con error (solo un warning suelto).
+          include-hidden-files: true
