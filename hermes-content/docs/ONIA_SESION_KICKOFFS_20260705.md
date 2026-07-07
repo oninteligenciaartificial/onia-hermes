@@ -77,13 +77,37 @@ Gates: tsc --noEmit limpio; render 200 del panel local; code-reviewer +
 typescript-reviewer. Commit conventional; rebase sobre main antes de mergear.
 ```
 
-### 3) `dentagest-core-ui` — R2 + R4
+### 3) `dentagest-core-ui` — R6 -> R2 + R4
 ```
 Sos el carril DENTAGEST. Trabajas en el repo DentaGest
 (C:\dev\proyectos\DentaGest\dental-saas), NO en onia-hermes. Referencia de tareas:
-el plan maestro de onia-hermes items R2 y R4
+el plan maestro de onia-hermes items R6, R2 y R4
 (hermes-content/docs/ONIA_PROXIMA_SESION_PLAN_20260705.md; si no esta en tu arbol,
 git show origin/main:hermes-content/docs/ONIA_PROXIMA_SESION_PLAN_20260705.md).
+
+Estado actual de onia-core (verificalo vos mismo, no confies solo en esto):
+v0.6.1, CORE COMPLETO -- 18 entidades, 5 modulos vendibles ya validados con tests
+(`commerce`, `knowledge`, `accounting`, `invoicing`, `payroll`, todos con logica
+Bolivia real: IVA/IT/IUE/retenciones/activo fijo/CUF-QR/AFP-RC-IVA/aguinaldo-
+indemnizacion). Ver onia-core/README.md + onia-core/CHANGELOG.md (entrada 0.6.1)
+para el detalle. `contract.json`/`onia-core/**` siguen CONGELADOS: NO los edites
+desde este carril; si encontras algo que el core deberia tener y no tiene,
+documentalo y avisa, no forkees.
+
+R6 (HACELA PRIMERO, antes que R2/R4) — adoptar formalmente los modulos
+commerce+accounting+invoicing en vez de las tablas bespoke actuales. Confirmado
+en `onia-core/adapters/dentagest.json`: `sales_cash` hoy es tu propio
+Invoice/Payment y `catalog_inventory` es tu propio InventoryItem/InventoryMovement
+(status "exists_partial" en el adapter, NO el modulo validado). Traduci
+`onia-core/modules/commerce.schema.sql` + `accounting.schema.sql` +
+`invoicing.schema.sql` a migraciones Prisma (namespace `onia_commerce_*` /
+`onia_accounting_*` / `onia_invoicing_*`, mismo patron que ya usaste para
+work_items/comments/documents) e importa `@onia/core/modules/commerce-logic`,
+`accounting-logic`, `invoicing-logic` en vez de reimplementar calculos (IVA,
+totales de cotizacion, CUF). Por que primero: mejor tener el dato financiero
+real ANTES de construir mas UI (R2) encima de las tablas bespoke que vas a
+reemplazar. Si ya tenes datos reales en Invoice/Payment/InventoryItem, confirma
+con Sergio el plan de migracion de datos antes de correr nada destructivo.
 
 R2 — completar la UI del ONIA Core en DentaGest (demo-able): hilo de
 comentarios+docs en la ficha del paciente, admin de roles finos, selector de
@@ -94,8 +118,9 @@ DEPENDE de precios firmes (item S1): si no estan, deja el numero parametrizable 
 TODO. (La landing de captacion es el carril P4, no la hagas aca.)
 Respeta ONIA Core: tenant scoping por organizationId; nunca forkear el core.
 
-Gate: typecheck + tests verdes; push a master del repo DentaGest. Commit
-conventional.
+Gate: typecheck + tests verdes; si tocas onia-core/adapters/dentagest.json,
+`node onia-core/validate.mjs` sigue verde en onia-hermes; push a master del repo
+DentaGest. Commit conventional.
 ```
 
 ### 4) `gestios-core` — R1 → R5

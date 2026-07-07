@@ -32,7 +32,7 @@ en VPS, NIT) quedan como ítems BLOQUEADO-SERGIO abajo.
 |-----|-------|-----|
 | (a) AGENTE-YA | 4 | P1-PROPUESTAS, P2-SANEAMIENTO-F2, P3-SANEAMIENTO-F3, P4-SELF-SERVICE-LANDING |
 | (b) BLOQUEADO-SERGIO | 9 | S1-PRECIOS, S2-NIT-SIAT, S3-SECRET-INTAKE, S4-TR4-COLS, S5-META, S6-IG-TOKEN, S7-KEYS-TAVILY-FAL, S8-FISCAL, S9-PASSWORD |
-| (c) OTRO-REPO | 5 | R1-GESTIOS-CORE, R2-DENTAGEST-UI, R3-BE-FASE1, R4-DENTAGEST-SELFSERVE, R5-EXTRACT-PKGS |
+| (c) OTRO-REPO | 6 | R1-GESTIOS-CORE, R2-DENTAGEST-UI, R3-BE-FASE1, R4-DENTAGEST-SELFSERVE, R5-EXTRACT-PKGS, R6-DENTAGEST-MODULES-ADOPTION |
 | (d) NECESITA-MCP/INFRA | 6 | M1-SANEAMIENTO-DEPLOY, M2-N8N-AUTONOMIZAR, M3-N8N-CLEANUP, M4-RADAR-WORKITEM, M5-LANDED-COST, M6-HIGIENE-INFRA |
 
 Total ítems abiertos deduplicados: 24 (fusionados ~11 duplicados cruzados entre
@@ -54,14 +54,14 @@ infra única (n8n/VPS/Supabase/tokens). Aislás eso y paralelizás.
 | A | `onia-center-saneamiento` | onia-hermes · `web-factory/apps/site/src/app/onia-center/**` + `api/onia-center/**` | P2 → P3 | P2 y P3 SECUENCIALES (mismos archivos) |
 | B | `wf-landing-dentalgest` | onia-hermes · landings `src/app`, `data/clients`, `templates`, `harvester` | P4 + E1-E6 | comparte config raíz con A/C |
 | C | `propuestas-v2` | onia-hermes · `hermes-content/propuestas` + `docs` + `skills` | P1 | carpeta aislada, cero choque |
-| D | `dentagest-core-ui` | repo DentaGest | R2 + R4 | repo aparte = cero choque |
+| D | `dentagest-core-ui` | repo DentaGest | R6 → R2 + R4 | repo aparte = cero choque; R6 primero (datos reales antes de UI) |
 | E | `gestios-core` | repo Gestios | R1 → R5 | R5 después de R1 |
 | F | `bolivian-electric-fase1` | repo Bolivian Electric | R3 | repo aparte |
 | G | `infra-deploy-n8n` | infra (n8n/VPS/Supabase) | M1 → M2 → M3-M6 | UN solo dueño, SERIAL; M1 requiere OK humano |
 | H | `contenido-higgsfield` | onia-hermes · `hermes-content/references` + `skills`(video/IG) + `scripts`(video/ig) + `.hermes/video-lab` + assets | producción continua (carruseles, video, IG) | usa Higgsfield MCP + token IG; NO toca código de apps |
 | I | `research-estrategia` | onia-hermes · `hermes-content/docs/research/**` (nuevo) + lectura read-only global | analizar productos ganadores + validar ventures | NO codea productos; entrega docs de decisión |
 | J | `video-remotion` | onia-hermes · `scripts/remotion` o `apps/video` (nuevo) + skill `remotion` | video programático (React) para marketing/producto | distinto de H (H = generativo Higgsfield) |
-| Core | `onia-core` (bajo demanda) | onia-hermes · `onia-core/**` | cambios de contrato/schema/adapters | hoy CONGELADO (beta v0.5.0); solo si se aprueba adopción |
+| Core | `onia-core` (bajo demanda) | onia-hermes · `onia-core/**` | cambios de contrato/schema/adapters | v0.6.1, CORE COMPLETO (2026-07-06): 18 entidades, 5 módulos (commerce/knowledge/accounting/invoicing/payroll) validados, capa plan-por-negocio. Sigue CONGELADO para instalación en repos producto salvo adopción aprobada; abrir solo para correcciones de datos como R6 |
 
 **Iniciativas nuevas (2026-07-05) — pasan por el carril I antes de construirse:**
 - Analizar productos ganadores (Halter, Medvi, etc.) → extraer el patrón que
@@ -266,6 +266,7 @@ completo para recordatorios.
 | ID | Título | Repo | Notas |
 |----|--------|------|-------|
 | **R1-GESTIOS-CORE** | Instalar ONIA Core en GestiOS (columna vertebral) | `C:\dev\proyectos\Gestios` | PENDIENTES C1. Antes: verificar A1 (inventario kardex/contador pack) commits del subagente; resolver drift de migraciones con baseline si aplica. Requiere aprobación implícita (regla installInProductRepos). Desbloquea R5. |
+| **R6-DENTAGEST-MODULES-ADOPTION** | Adoptar formalmente commerce+accounting+invoicing en DentaGest | `C:\dev\proyectos\DentaGest\dental-saas` | NUEVO (2026-07-06, tras cerrar onia-core v0.6.1). DentaGest ya tiene 9/9 entidades core instaladas pero CERO módulos de onia-core adoptados: `sales_cash`/`catalog_inventory` hoy son tablas bespoke (`Invoice`/`Payment`, `InventoryItem`/`InventoryMovement`, confirmado en `adapters/dentagest.json`), no los módulos validados. Reemplazar por `onia-core/modules/commerce.schema.sql` + `accounting.schema.sql` + `invoicing.schema.sql` (traducir a migraciones Prisma, namespace `onia_commerce_*`/`onia_accounting_*`/`onia_invoicing_*`) e importar `@onia/core/modules/*-logic` en vez de reimplementar. Prioridad sobre R2/R4: mejor tener el dato financiero real antes de construir más UI encima del bespoke. Gate: typecheck+tests verdes, `node onia-core/validate.mjs` sigue verde en onia-hermes si se toca el adapter, push master. |
 | **R2-DENTAGEST-UI** | Completar UI del core en DentaGest (demo-able) | `C:\dev\proyectos\DentaGest\dental-saas` | PENDIENTES C2 + TASKBOARD A8/A9. Hilo comentarios+docs en ficha paciente, admin roles finos, selector saved-views, balance de comprobación clínica. Gate: typecheck+tests verdes, push master. |
 | **R4-DENTAGEST-SELFSERVE** | Pago QR/pasarela BCP + wizard /setup self-service | onia-hermes + DentaGest | PENDIENTES C3 (parte backend/pago). SubscriptionPayment ya existe. La landing es P4; esto es el registro→pago→wizard→operando + org demo. Depende de S1 (precios). |
 | **R3-BE-FASE1** | Bolivian Electric fase 1 + inbox Chatwoot + puente TR4 | `C:\dev\clientes\Bolivian Electric` | PENDIENTES C8 + TASKBOARD B (ancla Empresarial). Migrar inbox Chatwoot a SU VPS srv1793230 (NO mezclar con VPS ONIA); cerrar y documentar ticket real → ancla ONIA Empresarial; puente TR4 por planillas. Al cerrar, calibra precios Empresarial (PENDIENTES B#6). |
