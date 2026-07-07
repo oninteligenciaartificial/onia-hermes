@@ -1,0 +1,102 @@
+name: ONIA Docs Hygiene (Daily)
+
+# Agente de limpieza diaria de docs: corre scripts/docs-hygiene.mjs (root <->
+# hermes-content/docs/), borra SOLO duplicados de raiz identicos byte-a-byte
+# (git rm + commit local, nunca toca hermes-content/docs/), pushea ese commit
+# si hubo limpieza, y sube el reporte de flags (divergentes/nuevos en raiz) al
+# VPS por SSH reusando ONIA_VPS_SSH_KEY (mismo mecanismo que repo-pulse.yml),
+# para que el workflow n8n "ONIA - Reporte diario Sergio + Arthur" lo lea con
+# un simple `cat` y avise a Sergio por Telegram.
+
+on:
+  schedule:
+    - cron: "10 10 * * *" # 06:10 America/La_Paz (UTC-4), despues de repo-pulse (06:00), antes del Reporte Sergio+Arthur (07:00)
+  workflow_dispatch:
+    inputs:
+      apply:
+        description: "Borrar duplicados identicos + commitear (false = solo reporte, dry-run)"
+        required: true
+        default: "false"
+        type: choice
+        options:
+          - "false"
+          - "true"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: docs-hygiene-daily
+  cancel-in-progress: false
+
+env:
+  DOCS_HYGIENE_APPLY: ${{ github.event_name == 'schedule' && 'true' || inputs.apply }}
+
+jobs:
+  hygiene:
+    name: Audit + auto-clean docs, deliver report
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout (historial completo, necesario para fecha de ultimo commit por archivo)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Configurar identidad git para el commit automatico
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Correr docs hygiene
+        id: hygiene
+        run: |
+          BEFORE_SHA=$(git rev-parse HEAD)
+          if [ "$DOCS_HYGIENE_APPLY" = "true" ]; then
+            node scripts/docs-hygiene.mjs --apply --out .onia-docs-hygiene
+          else
+            node scripts/docs-hygiene.mjs --out .onia-docs-hygiene
+          fi
+          AFTER_SHA=$(git rev-parse HEAD)
+          if [ "$BEFORE_SHA" != "$AFTER_SHA" ]; then
+            echo "pushed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "pushed=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Pushear limpieza segura (si hubo commit)
+        if: steps.hygiene.outputs.pushed == 'true'
+        run: git push origin HEAD:${{ github.ref_name }}
+
+      - name: Escribir llave SSH del VPS
+        if: always()
+        env:
+          KEY: ${{ secrets.ONIA_VPS_SSH_KEY }}
+        run: |
+          printf '%s\n' "$KEY" > /tmp/vps_key
+          chmod 600 /tmp/vps_key
+
+      - name: Subir reporte al VPS (para que n8n lo lea con `cat`)
+        if: always()
+        env:
+          VPS_HOST: "187.77.16.63"
+          VPS_USER: "root"
+        run: |
+          ssh -i /tmp/vps_key -o StrictHostKeyChecking=no "$VPS_USER@$VPS_HOST" "mkdir -p /opt/onia/state"
+          scp -i /tmp/vps_key -o StrictHostKeyChecking=no .onia-docs-hygiene/docs-hygiene-report.json "$VPS_USER@$VPS_HOST:/opt/onia/state/docs-hygiene-latest.json"
+
+      - name: Upload hygiene report (artifact)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: docs-hygiene-report
+          path: .onia-docs-hygiene/
+          if-no-files-found: warn
+          # El dir de salida empieza con "." (oculto); upload-artifact@v4 lo excluye
+          # por defecto y sube 0 archivos sin avisar con error (solo un warning suelto).
+          include-hidden-files: true

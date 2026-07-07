@@ -16,11 +16,16 @@ export type SiteClient = {
     x: string;
   };
   heroPoster?: string;
+  imagenSecundaria?: string;
   servicios: Array<{
     titulo: string;
     desc: string;
     icono: string;
   }>;
+  beneficios?: string[];
+  credenciales?: string[];
+  proceso?: Array<{ titulo: string; desc: string }>;
+  faq?: Array<{ pregunta: string; respuesta: string }>;
   cta: {
     texto: string;
     url: string;

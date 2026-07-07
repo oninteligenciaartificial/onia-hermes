@@ -4,8 +4,15 @@
     {
       "name": "site",
       "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["-C", "web-factory", "--filter", "site", "dev", "--port", "3277"],
-      "port": 3277
+      "runtimeArgs": ["-C", "web-factory", "--filter", "site", "dev"],
+      "port": 3277,
+      "autoPort": true
+    },
+    {
+      "name": "web-factory-out",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["web-factory/scripts/serve-out.mjs", "4330"],
+      "port": 4330
     }
   ]
 }

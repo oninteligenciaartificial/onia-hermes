@@ -1,0 +1,74 @@
+name: Deploy ONIA Center
+
+# Mantiene produccion (center.onia.com.bo) al dia con main. Buildea el standalone en
+# ubuntu (NO en el VPS: swap 100%; NO en Windows: sharp nativo) y deploya por SSH.
+# - push a main que toca web-factory/** -> deploy automatico (swap).
+# - manual (workflow_dispatch) -> elegis swap=false (solo build+stage) o true (promueve).
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "web-factory/**"
+  workflow_dispatch:
+    inputs:
+      swap:
+        description: "Promover a produccion (swap). false = solo build + stage."
+        type: choice
+        default: "true"
+        options: ["true", "false"]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-onia-center
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Build (ubuntu) + deploy (SSH) ONIA Center
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Enable pnpm
+        run: corepack enable
+
+      - name: Write VPS SSH key
+        env:
+          KEY: ${{ secrets.ONIA_VPS_SSH_KEY }}
+        run: |
+          printf '%s\n' "$KEY" > /tmp/vps_key
+          chmod 600 /tmp/vps_key
+
+      - name: Deploy
+        env:
+          VPS_HOST: "187.77.16.63"
+          VPS_USER: "root"
+          VPS_KEY: "/tmp/vps_key"
+          DEPLOY_SWAP: ${{ github.event_name == 'push' && 'true' || inputs.swap }}
+          DEPLOY_REF: ${{ github.sha }}
+        run: bash scripts/deploy-onia-center.sh
+
+      - name: Notify Sergio (Telegram)
+        if: always()
+        env:
+          TG_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TG_CHAT: ${{ secrets.TELEGRAM_SERGIO_CHAT_ID }}
+          STATUS: ${{ job.status }}
+          EVENT: ${{ github.event_name }}
+        run: |
+          SHORT="${GITHUB_SHA:0:7}"
+          MSG="Deploy ONIA Center [$STATUS] commit $SHORT ($EVENT). https://center.onia.com.bo/onia-center"
+          if [ -n "$TG_TOKEN" ] && [ -n "$TG_CHAT" ]; then
+            curl -s -m 15 -X POST "https://api.telegram.org/bot$TG_TOKEN/sendMessage" \
+              -d chat_id="$TG_CHAT" --data-urlencode text="$MSG" >/dev/null || true
+          fi

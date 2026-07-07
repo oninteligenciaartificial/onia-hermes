@@ -16,9 +16,44 @@ vacíos.
 
 | Fase | Qué | Estado |
 |------|-----|--------|
-| 1 | Frenar spam de tareas (generador) | ✅ Código listo y verificado, commiteado. Falta DEPLOY + CLEANUP en prod. |
-| 2 | Quitar/ocultar módulos vacíos (Leads, Ideas, Audio) | ⏳ Pendiente. Mapa en §Fase 2. |
-| 3 | Rediseño visual + quitar rutina personal rígida | ⏳ Pendiente. §Fase 3. |
+| 1 | Frenar spam de tareas (generador) | ✅ HECHO EN PROD (2026-07-05): deploy de main + cleanup de 55 tareas + workflow reactivado. Ver §Fase 1 ejecutada. |
+| 2 | Quitar/ocultar módulos vacíos (Leads, Ideas, Audio) | ✅ Hecho en rama `claude/great-chandrasekhar-3c99b6` (2026-07-05). Ver §Fase 2 addendum. |
+| 3 | Rediseño visual + quitar rutina personal rígida | ✅ Hecho en rama `claude/great-chandrasekhar-3c99b6` (2026-07-05). Ver §Fase 3 addendum. |
+
+> ADDENDUM 2026-07-05 (rama `great-chandrasekhar-3c99b6`, sobre `main` post-PR#16):
+> Fase 2 y 3 ejecutadas. Gates verdes: `tsc --noEmit` (exit 0), `next lint`
+> (0 errores), `/onia-center` renderiza HTTP 200 (compilación limpia, sin errores
+> de consola). Falta solo el DEPLOY (carril M1/infra) — este PR NO despliega.
+>
+> **Fase 2 — hecho:**
+> - Seeds estáticos que se hacían pasar por datos vivos ELIMINADOS
+>   (`starterTasks`, `starterReviews`, `starterCodexJobs` en operating-workspace.tsx).
+>   El fallback "si runtime vacío → mostrar seed" se quitó: tasks/reviews/codexJobs
+>   ahora usan `runtime.data.*` directo → empty-state honesto. Imports muertos
+>   (`operatingTasks`, `collabIngestionItems`) removidos.
+> - Empty-state honesto agregado a "Revisión collab" (antes `.map` a secas → en
+>   blanco cuando vacío). Ideas/Codex/Tareas-del-día ya tenían guard.
+> - **Audio IA** oculto del nav (quitado de `navItems` + `heroActionItems` +
+>   import `Mic`); el widget sigue en operating-workspace.tsx, se reactiva
+>   re-agregando el item. "Esconder hasta usarlo".
+> - `operatingProjects`/`operatingTasks`: REVISADOS, se CONSERVAN. Son el
+>   portafolio/roadmap real de ONIA (no spam) y alimentan el summary operativo y
+>   las vistas de proyectos vía operating-engine. Ya no se filtran a la lista de
+>   tareas vivas (eso era `starterTasks`, ahora removido), así que no simulan
+>   tareas de usuario.
+>
+> **Fase 3 — hecho:**
+> - `sergioStrictScheduleBlocks`: 6 bloques personales ELIMINADOS (wake-reset,
+>   lunch-reset, gym, girlfriend, shutdown, sleep). Quedan 7 bloques de trabajo
+>   (categorías planning/sales/deep_work/meetings/admin).
+> - Renders reencuadrados de "rutina estricta personal" a "agenda operativa":
+>   preview diario (tarjeta "Gym + personal" → "Cierre 16:30-17:15") y pestaña
+>   Calendario ("Hora de levantarse" + "Gym + novia + dormir" → "Arranque 07:00"
+>   + "Cierre del día"; título "Calendario estricto" → "Agenda operativa").
+> - `briefings/daily/route.ts`: filtro de `calendarBlocks` sin "gym"/"personal".
+> - Nota: "agenda estricta"/"cronograma estricto" en planes de agentes
+>   (page.tsx:872, operating-source.ts:481) se DEJARON — son disciplina de
+>   scheduling operativo, no rutina personal.
 
 ---
 
@@ -73,22 +108,26 @@ Verificado local (post-rebase): `tsc --noEmit` limpio.
   `gh workflow disable "ONIA Daily Project Hygiene"` (o desplegar el fix). El
   cleanup del maintenance ya borra las `[Higiene *]` acumuladas.
 
-### PENDIENTE Fase 1 (acciones en producción — requieren OK de Sergio)
-1. **Deploy** del código a VPS (ver §Deploy). Sin deploy, el generador sigue
-   apilando cada mañana.
-2. **Limpiar las 61 acumuladas** — tras deploy, ejecutar el endpoint de
-   mantenimiento (borra filas en la DB, irreversible):
-   ```bash
-   # desde el VPS (donde ONIA_CENTER_INTERNAL_API_KEY vive en el entorno del contenedor)
-   # dry-run primero:
-   curl -s -X POST https://center.onia.com.bo/api/onia-center/maintenance \
-     -H "Authorization: Bearer $ONIA_CENTER_INTERNAL_API_KEY" \
-     -H "Content-Type: application/json" \
-     -d '{"action":"cleanup_generated_tasks","commit":false}'
-   # si el conteo es razonable, commit:true para borrar.
-   ```
-3. (Opcional, mitigación inmediata sin deploy) Desactivar temporalmente el
-   workflow n8n `ONIADailyBrief001` para parar la sangría hasta el deploy.
+### Fase 1 ejecutada (2026-07-05, sesión infra)
+1. **Deploy** de `origin/main` (fbabfe17, incluye el fix 87b0bbb9 + saneamiento
+   b0d2747d) al VPS por rebuild standalone. Scripts commiteados en
+   `hermes-content/deploy/onia-center/`:
+   - `build-and-stage.sh` (build aislado, no toca prod) + `swap-and-verify.sh`
+     (backup + swap + restart + health-check con rollback). Paquete = `git archive`
+     code-only (excluye `data/references`, `public/nuvia`, `data/clients/nuvia.assets`
+     — assets estáticos reusados del runtime vivo). Subida con `scripts/vps-put.js`
+     (usar `MSYS_NO_PATHCONV=1` en Git Bash o las rutas remotas se corrompen).
+   - Backup del runtime previo: `/opt/onia-center/runtime-next.bak-deploy-20260705185430`.
+   - Verificado: login 200, `maintenance` y `briefings/daily` (dry-run) 200.
+2. **Cleanup**: 55 tareas auto-generadas borradas vía
+   `maintenance-cleanup.js` (`docker exec -e MCHECK_COMMIT=true -i onia-center node -`).
+   Dry-run posterior: 0 restantes. El fix desplegado evita que se regeneren.
+3. **Reactivado** `ONIADailyBrief001` (`publish_workflow`) → `active:true`. El cron
+   06:45 vuelve a correr con `commit:true` sin apilar prefijos.
+
+Re-ejecutar el cleanup a futuro (patrones `[Plan *`/`[Briefing diario *`/`[Higiene *`):
+`docker exec -i onia-center node - < /opt/onia-center/_deploy/maintenance-cleanup.js`
+(dry-run) y con `-e MCHECK_COMMIT=true` para borrar.
 
 ---
 

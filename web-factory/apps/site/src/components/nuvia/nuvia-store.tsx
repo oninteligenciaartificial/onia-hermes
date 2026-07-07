@@ -13,11 +13,7 @@ import {
   productHref,
   productSlug,
 } from "@/lib/nuvia-data";
-
-type CartLine = {
-  id: string;
-  qty: number;
-};
+import { useNuviaCart } from "@/lib/nuvia-cart";
 
 type NuviaNotice = {
   id: string;
@@ -53,33 +49,6 @@ type RoutineStepDefinition = {
   categories: string[];
 };
 
-type CheckoutResult = {
-  ok: boolean;
-  mode: "payment" | "quote" | "configuration_pending" | "invalid_request";
-  message: string;
-  order?: {
-    id: string | null;
-    publicCode: string;
-    persisted: boolean;
-    subtotal: number;
-    discountTotal: number;
-    total: number;
-    currency: string;
-  };
-  payment?: {
-    id: string | null;
-    provider: string;
-    status: string;
-    qrImageUrl?: string | null;
-    qrPayload?: string | null;
-    expiresAt?: string | null;
-    requiredCredentials?: string[];
-    providerReference?: string | null;
-  } | null;
-  requiredConfiguration?: string[];
-};
-
-const STORAGE_KEY = "nuvia-next-cart-v1";
 const PROMO_NOTICE_KEY = "nuvia-promo-notice-20260623";
 const CATALOG_PAGE_SIZE = 48;
 
@@ -306,10 +275,11 @@ function useDeferredHeroVideo() {
   const [shouldLoad, setShouldLoad] = useState(false);
 
   useEffect(() => {
-    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    // El hero video es un clip mudo/ambiental (sin parpadeos ni audio): se muestra
+    // igual bajo prefers-reduced-motion. Solo se respeta el ahorro de datos real.
     const connection = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection;
 
-    if (reducedMotion || connection?.saveData) {
+    if (connection?.saveData) {
       return;
     }
 
@@ -377,10 +347,9 @@ function useRevealMotion() {
 }
 
 function useCart(cartProducts: CartProduct[]) {
-  const productMap = useMemo(() => new Map(cartProducts.map((product) => [product.id, product])), [cartProducts]);
-  const [cart, setCart] = useState<CartLine[]>([]);
+  const core = useNuviaCart(cartProducts);
+  const { productMap, ready } = core;
   const [open, setOpen] = useState(false);
-  const [ready, setReady] = useState(false);
   const [notices, setNotices] = useState<NuviaNotice[]>([]);
 
   const pushNotice = useCallback((notice: Omit<NuviaNotice, "id">) => {
@@ -393,39 +362,12 @@ function useCart(cartProducts: CartProduct[]) {
   }, []);
 
   useEffect(() => {
-    try {
-      const parsed = JSON.parse(window.localStorage.getItem(STORAGE_KEY) || "[]");
-      if (Array.isArray(parsed)) {
-        setCart(
-          parsed
-            .filter((item) => productMap.has(item.id))
-            .map((item) => ({ id: item.id, qty: Math.max(1, Number(item.qty) || 1) })),
-        );
-      }
-    } catch {
-      setCart([]);
-    } finally {
-      setReady(true);
-    }
-  }, [productMap]);
-
-  useEffect(() => {
     if (!ready) {
       return;
     }
-
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(cart));
-  }, [cart, ready]);
-
-  useEffect(() => {
-    if (!ready) {
-      return;
-    }
-
     if (window.sessionStorage.getItem(PROMO_NOTICE_KEY)) {
       return;
     }
-
     const timer = window.setTimeout(() => {
       pushNotice({
         tone: "promo",
@@ -434,7 +376,6 @@ function useCart(cartProducts: CartProduct[]) {
       });
       window.sessionStorage.setItem(PROMO_NOTICE_KEY, "shown");
     }, 900);
-
     return () => window.clearTimeout(timer);
   }, [pushNotice, ready]);
 
@@ -443,109 +384,61 @@ function useCart(cartProducts: CartProduct[]) {
     return () => document.documentElement.classList.remove("nuvia-cart-open");
   }, [open]);
 
-  const add = useCallback((id: string, qty = 1) => {
-    const amount = Math.max(1, Math.floor(Number(qty) || 1));
-    const product = productMap.get(id);
-
-    setCart((current) => {
-      const existing = current.find((item) => item.id === id);
-      if (existing) {
-        return current.map((item) => (item.id === id ? { ...item, qty: item.qty + amount } : item));
-      }
-
-      return [...current, { id, qty: amount }];
-    });
-    pushNotice({
-      tone: "success",
-      title: "agregado al carrito",
-      body: product ? `${briefProductTitle({ titulo: product.title })} x ${amount}` : "Producto agregado.",
-    });
-    setOpen(true);
-  }, [productMap, pushNotice]);
-
-  const addMany = useCallback((items: Array<{ id: string; qty?: number }>, label = "pack") => {
-    const normalized = items
-      .map((item) => ({ id: item.id, qty: Math.max(1, Math.floor(Number(item.qty) || 1)) }))
-      .filter((item) => productMap.has(item.id));
-
-    if (!normalized.length) {
+  const add = useCallback(
+    (id: string, qty = 1) => {
+      const amount = Math.max(1, Math.floor(Number(qty) || 1));
+      const product = productMap.get(id);
+      core.add(id, amount);
       pushNotice({
-        tone: "error",
-        title: "pack no disponible",
-        body: "No encontramos productos activos para este pack.",
+        tone: "success",
+        title: "agregado al carrito",
+        body: product ? `${briefProductTitle({ titulo: product.title })} x ${amount}` : "Producto agregado.",
       });
-      return;
-    }
+      setOpen(true);
+    },
+    [core, productMap, pushNotice],
+  );
 
-    setCart((current) => {
-      const next = new Map(current.map((item) => [item.id, item.qty]));
-      normalized.forEach((item) => {
-        next.set(item.id, (next.get(item.id) || 0) + item.qty);
+  const addMany = useCallback(
+    (items: Array<{ id: string; qty?: number }>, label = "pack") => {
+      const added = core.addMany(items);
+      if (!added) {
+        pushNotice({
+          tone: "error",
+          title: "pack no disponible",
+          body: "No encontramos productos activos para este pack.",
+        });
+        return;
+      }
+      pushNotice({
+        tone: "success",
+        title: `${label} agregado`,
+        body: `${added} productos agregados al carrito.`,
       });
-      return Array.from(next.entries()).map(([id, qty]) => ({ id, qty }));
-    });
-
-    pushNotice({
-      tone: "success",
-      title: `${label} agregado`,
-      body: `${normalized.length} productos agregados al carrito.`,
-    });
-    setOpen(true);
-  }, [productMap, pushNotice]);
-
-  const increase = useCallback((id: string) => {
-    setCart((current) => current.map((item) => (item.id === id ? { ...item, qty: item.qty + 1 } : item)));
-  }, []);
-
-  const decrease = useCallback((id: string) => {
-    setCart((current) =>
-      current
-        .map((item) => (item.id === id ? { ...item, qty: item.qty - 1 } : item))
-        .filter((item) => item.qty > 0),
-    );
-  }, []);
-
-  const remove = useCallback((id: string) => {
-    setCart((current) => current.filter((item) => item.id !== id));
-  }, []);
-
-  const clear = useCallback(() => setCart([]), []);
-
-  const totalCount = cart.reduce((sum, item) => sum + item.qty, 0);
-  const priced = cart.length > 0 && cart.every((item) => typeof productMap.get(item.id)?.priceValue === "number");
-  const subtotal = cart.reduce((sum, item) => {
-    const product = productMap.get(item.id);
-    return sum + (typeof product?.priceValue === "number" ? product.priceValue * item.qty : 0);
-  }, 0);
-  const discountTotal = cart.reduce((sum, item) => {
-    const product = productMap.get(item.id);
-    if (typeof product?.priceValue !== "number" || !product.discountPercent) {
-      return sum;
-    }
-
-    return sum + product.priceValue * item.qty * (product.discountPercent / 100);
-  }, 0);
-  const total = Math.max(0, subtotal - discountTotal);
+      setOpen(true);
+    },
+    [core, pushNotice],
+  );
 
   return {
     add,
     addMany,
-    cart,
-    clear,
-    decrease,
+    cart: core.cart,
+    clear: core.clear,
+    decrease: core.decrease,
     dismissNotice,
-    discountTotal,
-    increase,
+    discountTotal: core.discountTotal,
+    increase: core.increase,
     notices,
     open,
-    priced,
+    priced: core.priced,
     productMap,
     pushNotice,
-    remove,
+    remove: core.remove,
     setOpen,
-    subtotal,
-    total,
-    totalCount,
+    subtotal: core.subtotal,
+    total: core.total,
+    totalCount: core.totalCount,
   };
 }
 
@@ -664,16 +557,12 @@ function CartDrawer({
   open,
   priced,
   productMap,
-  pushNotice,
   remove,
   setOpen,
   subtotal,
   total,
   totalCount,
 }: ReturnType<typeof useCart>) {
-  const [checkoutLoading, setCheckoutLoading] = useState(false);
-  const [checkoutResult, setCheckoutResult] = useState<CheckoutResult | null>(null);
-  const [checkoutError, setCheckoutError] = useState("");
   const panelRef = useRef<HTMLElement>(null);
   const firstCurrency = cart.length ? productMap.get(cart[0].id)?.currency : "BOB";
 
@@ -695,55 +584,6 @@ function CartDrawer({
       .slice(0, 6)
       .map(([label, products]) => ({ label, products: products.slice(0, 4) }));
   }, [productMap]);
-
-  const startCheckout = async () => {
-    if (!cart.length || checkoutLoading) {
-      return;
-    }
-
-    setCheckoutLoading(true);
-    setCheckoutError("");
-    setCheckoutResult(null);
-
-    try {
-      const response = await fetch("/api/nuvia/checkout", {
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-        },
-        body: JSON.stringify({
-          storeSlug: "nuvia",
-          provider: "bnb_qr_simple",
-          items: cart.map((item) => ({
-            id: item.id,
-            quantity: item.qty,
-          })),
-        }),
-      });
-      const result = (await response.json()) as CheckoutResult;
-
-      if (!response.ok || !result.ok) {
-        throw new Error(result.message || "No se pudo crear el checkout.");
-      }
-
-      setCheckoutResult(result);
-      pushNotice({
-        tone: result.mode === "configuration_pending" ? "promo" : "success",
-        title: result.order?.publicCode ? `orden ${result.order.publicCode}` : "checkout preparado",
-        body: result.message,
-      });
-    } catch (error) {
-      const message = error instanceof Error ? error.message : "No se pudo crear el checkout.";
-      setCheckoutError(message);
-      pushNotice({
-        tone: "error",
-        title: "checkout pendiente",
-        body: message,
-      });
-    } finally {
-      setCheckoutLoading(false);
-    }
-  };
 
   return (
     <div className="nuvia-cart-shell" data-open={open ? "true" : "false"} aria-hidden={!open}>
@@ -848,30 +688,15 @@ function CartDrawer({
             <span>{priced ? "total" : "total pendiente"}</span>
             <strong>{priced && totalCount ? money(total, firstCurrency) : "cotizacion"}</strong>
           </div>
-          <button className="nuvia-cart-checkout-button" type="button" onClick={startCheckout} disabled={!totalCount || checkoutLoading}>
-            {checkoutLoading ? "creando orden..." : priced && totalCount ? "generar QR / orden" : "crear cotizacion"}
-          </button>
-          {checkoutResult ? (
-            <div className="nuvia-checkout-result" data-mode={checkoutResult.mode}>
-              <span>{checkoutResult.order?.publicCode ? `orden ${checkoutResult.order.publicCode}` : "checkout nuvia"}</span>
-              <strong>{checkoutResult.mode === "configuration_pending" ? "faltan credenciales" : checkoutResult.mode}</strong>
-              <p>{checkoutResult.message}</p>
-              {checkoutResult.order?.total ? (
-                <small>{money(checkoutResult.order.total, checkoutResult.order.currency)}</small>
-              ) : null}
-              {checkoutResult.payment?.qrImageUrl ? (
-                <Image src={checkoutResult.payment.qrImageUrl} alt="QR de pago Nuvia" width={220} height={220} unoptimized />
-              ) : null}
-              {checkoutResult.requiredConfiguration?.length ? (
-                <ul>
-                  {checkoutResult.requiredConfiguration.map((item) => (
-                    <li key={item}>{item}</li>
-                  ))}
-                </ul>
-              ) : null}
-            </div>
-          ) : null}
-          {checkoutError ? <p className="nuvia-checkout-error">{checkoutError}</p> : null}
+          <Link
+            className="nuvia-cart-checkout-button"
+            href="/nuvia/checkout"
+            onClick={() => setOpen(false)}
+            aria-disabled={!totalCount}
+            data-disabled={!totalCount ? "true" : undefined}
+          >
+            {totalCount ? "finalizar compra" : "tu carrito está vacío"}
+          </Link>
           <button type="button" onClick={clear} hidden={!cart.length}>
             vaciar carrito
           </button>

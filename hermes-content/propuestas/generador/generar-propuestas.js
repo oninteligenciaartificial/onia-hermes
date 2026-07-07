@@ -55,7 +55,9 @@ function renderPaquetes(paquetes) {
     const rowClass = p.recomendado ? ' class="rec"' : '';
     const resultado = p.resultado
       ? `<br><span class="res">→ ${esc(p.resultado)}</span>` : '';
-    return `<tr${rowClass}><td>${nombre}</td><td>${esc(p.incluye)}${resultado}</td><td class="num">${esc(p.precio)}</td></tr>`;
+    const limite = p.limite
+      ? `<br><span class="lim">Tope: ${esc(p.limite)}</span>` : '';
+    return `<tr${rowClass}><td>${nombre}</td><td>${esc(p.incluye)}${resultado}${limite}</td><td class="num">${esc(p.precio)}</td></tr>`;
   }).join('');
 }
 
@@ -75,6 +77,76 @@ function renderAddons(addons) {
   return addons.map((a) =>
     `<tr><td>${esc(a.nombre)}</td><td class="num">${esc(a.setup)}</td><td class="num">${esc(a.mensual)}</td></tr>`
   ).join('');
+}
+
+// Bloques opcionales v3: resumen ejecutivo, imágenes, casos, comparativa,
+// próximos pasos + CTA, portada. Solo se renderizan si el cliente los define.
+
+function renderResumen(txt) {
+  if (!txt) return '';
+  return `
+  <h2>Resumen ejecutivo</h2>
+  <div class="card"><p>${txt}</p></div>`;
+}
+
+function renderImagenes(imagenes) {
+  if (!imagenes || !imagenes.length) return '';
+  return imagenes.map((im) => `
+  <figure>
+    <img src="${esc(im.src)}" alt="${esc(im.alt || '')}">
+    ${im.caption ? `<figcaption>${esc(im.caption)}</figcaption>` : ''}
+  </figure>`).join('');
+}
+
+function renderCasos(casos) {
+  if (!casos || !casos.length) return '';
+  const items = casos.map((v) => `
+    <div class="vcard">
+      <h3>${esc(v.titulo)}</h3>
+      <p>${v.detalle}</p>
+    </div>`).join('');
+  return `
+  <h2>Resultados</h2>
+  <div class="grid vgrid">${items}</div>`;
+}
+
+function renderComparativa(comp) {
+  if (!comp || !comp.filas || !comp.filas.length) return '';
+  const cols = comp.columnas || ['Opción A', 'Opción B'];
+  const filas = comp.filas.map((f) =>
+    `<tr><td><b>${esc(f[0])}</b></td><td>${esc(f[1])}</td><td class="win">${esc(f[2])}</td></tr>`
+  ).join('');
+  return `
+  <h2>${esc(comp.titulo || 'Comparativa')}</h2>
+  <table class="comp">
+    <tr><th></th><th>${esc(cols[0])}</th><th>${esc(cols[1])}</th></tr>
+    ${filas}
+  </table>`;
+}
+
+function renderProximosPasos(pasos, cta) {
+  if (!pasos || !pasos.length) return '';
+  const steps = pasos.map((p, i) => `
+    <div class="step"><div class="n">${i + 1}</div><div><p>${esc(p)}</p></div></div>`).join('');
+  const btn = cta && cta.url
+    ? `<p style="margin-top:14px;"><a class="cta" href="${esc(cta.url)}">${esc(cta.texto || 'Escribinos por WhatsApp')}</a></p>`
+    : '';
+  return `
+  <h2>Próximos pasos</h2>
+  <div class="card">${steps}${btn}</div>`;
+}
+
+function renderPortada(p, nombre) {
+  if (!p) return '';
+  return `
+  <div class="cover">
+    <div>
+      <div class="kicker">Propuesta comercial · ONIA Inteligencia Artificial</div>
+      <h1>${esc(p.titulo)}</h1>
+      <p>${esc(p.subtitulo || '')}</p>
+      <p class="meta">Preparado para: <b>${esc(p.para || nombre)}</b>${p.fecha ? ` · ${esc(p.fecha)}` : ''}</p>
+    </div>
+  </div>`;
 }
 
 // Bloque opcional: requisitos a cargo del cliente (cobros online en Bolivia).
@@ -107,9 +179,14 @@ function validateCliente(c, i) {
 
 // --- Plantilla única --------------------------------------------------------
 
-function buildHtml(c) {
+function buildHtml(c, opts = {}) {
   const accent = c.accent || '#1e5bff';
   const moneda = c.moneda || 'Bs';
+  // Pixel de apertura (n8n webhook). Solo en la variante HTML trackeada:
+  // el PDF se imprime desde el HTML sin beacon para no falsear aperturas.
+  const beacon = opts.trackUrl
+    ? `\n<img src="${esc(opts.trackUrl)}" alt="" width="1" height="1" style="position:absolute;left:-9999px;opacity:0" aria-hidden="true">`
+    : '';
   const heroGrad = c.heroGrad || 'linear-gradient(135deg,#0f1b2e 0%,#16294a 55%,#0e3f32 100%)';
   return `<!doctype html>
 <html lang="es">
@@ -121,7 +198,7 @@ function buildHtml(c) {
   :root{--ink:#101827;--muted:#526172;--line:#d8e0ea;--blue:#1e5bff;--blue-dark:#1239a8;
     --green:#0f8b62;--amber:#a75b00;--bg:#f6f8fb;--white:#fff;--accent:${accent};}
   *{box-sizing:border-box;}
-  body{margin:0;font-family:Arial,Helvetica,sans-serif;color:var(--ink);background:var(--bg);}
+  body{margin:0;font-family:'Segoe UI',system-ui,-apple-system,Arial,Helvetica,sans-serif;color:var(--ink);background:var(--bg);}
   .page{max-width:900px;margin:0 auto;padding:40px 28px;}
   .hero{background:${heroGrad};color:#fff;border-radius:18px;padding:44px 40px;margin-bottom:28px;}
   .kicker{color:#cfe0ff;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;}
@@ -134,7 +211,7 @@ function buildHtml(c) {
   .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
   table{width:100%;border-collapse:collapse;background:var(--white);border-radius:12px;overflow:hidden;border:1px solid var(--line);}
   th,td{padding:12px 14px;text-align:left;font-size:15px;border-bottom:1px solid var(--line);}
-  th{background:#eef3fb;color:var(--ink);font-weight:800;}
+  th{background:#eef3fb;color:var(--ink);font-weight:800;font-size:13px;text-transform:uppercase;letter-spacing:.05em;}
   td.num,th.num{text-align:right;white-space:nowrap;}
   .tag{display:inline-block;background:#eaf0ff;color:var(--blue-dark);font-size:12px;font-weight:800;padding:3px 10px;border-radius:999px;margin-bottom:8px;}
   .tag.green{background:#e3f4ec;color:var(--green);}
@@ -145,31 +222,47 @@ function buildHtml(c) {
   .big{font-size:20px;color:var(--ink);font-weight:800;}
   .step{display:flex;gap:14px;align-items:flex-start;margin-bottom:12px;}
   .step .n{background:var(--accent);color:#fff;font-weight:800;border-radius:50%;width:30px;height:30px;display:flex;align-items:center;justify-content:center;flex:0 0 30px;}
-  tr.rec td{background:#fff7ed;}
+  tr.rec td{background:#fff7ed;border-top:2px solid var(--accent);border-bottom:2px solid var(--accent);}
+  tr.rec td.num{font-size:17px;font-weight:800;}
   .res{color:var(--accent);font-weight:700;font-size:13px;}
+  .lim{color:var(--muted);font-size:12px;}
+  .step p{margin:0;color:var(--ink);}
+  .step h3 + p{color:var(--muted);}
   .vgrid .vcard{background:var(--white);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:12px;padding:16px 18px;}
   .vcard h3{color:var(--ink);}
-  @media print{.page{max-width:100%;}body{background:#fff;}}
+  figure{margin:18px 0;}
+  figure img{width:100%;border-radius:14px;display:block;}
+  figcaption{font-size:13px;color:var(--muted);margin-top:6px;text-align:center;}
+  table.comp td.win{background:#e3f4ec;color:var(--ink);font-weight:600;}
+  a.cta{display:inline-block;background:var(--accent);color:#fff;font-weight:800;font-size:16px;padding:12px 22px;border-radius:10px;text-decoration:none;}
+  .cover{background:${heroGrad};color:#fff;border-radius:18px;padding:60px 48px;min-height:88vh;display:flex;align-items:center;margin-bottom:28px;page-break-after:always;}
+  .cover p{color:#e6eefb;font-size:19px;}
+  .cover .meta{margin-top:26px;font-size:15px;color:#cfe0ff;}
+  @media print{
+    .page{max-width:100%;}body{background:#fff;}
+    .card,table,figure,.vcard,.step{page-break-inside:avoid;}
+    h2{page-break-after:avoid;}
+  }
 </style>
 </head>
 <body>
 <div class="page">
-
+${renderPortada(c.portada, c.nombre)}
   <div class="hero">
     <div class="kicker">Propuesta comercial · ONIA Inteligencia Artificial</div>
     <h1>${esc(c.titulo)}</h1>
     <p>${esc(c.subtitulo)}</p>
   </div>
-
+${renderResumen(c.resumenEjecutivo)}
   <h2>Qué problema resolvemos</h2>
   <div class="card"><p>${c.problema}</p></div>
-
+${renderImagenes(c.imagenes)}
   <h2>Qué incluye</h2>
   <div class="grid">${renderCards(c.incluye)}</div>
 
   <h2>Cómo lo construimos</h2>
   <div class="card">${renderSteps(c.pasos)}</div>
-${renderValor(c.valor)}
+${renderValor(c.valor)}${renderCasos(c.casos)}${renderComparativa(c.comparativa)}
   <h2>Paquetes — elegí el tuyo</h2>
   <table>
     <tr><th>Paquete</th><th>Qué incluye</th><th class="num">Precio (${esc(moneda)})</th></tr>
@@ -188,14 +281,13 @@ ${renderValor(c.valor)}
     <div class="tag amber">Importante — costos de terceros</div>
     <p>${c.terceros}</p>
   </div>
-${renderRequisitos(c.requisitos)}
-
+${renderRequisitos(c.requisitos)}${renderProximosPasos(c.proximosPasos, c.ctaWhatsapp)}
   <div class="foot">
     <p class="big">Precio reservado hasta 30 días con confirmación de pago.</p>
     <p>ONIA — Sistemas, automatización y contenido para negocios. business@onia.com.bo</p>
   </div>
 
-</div>
+</div>${beacon}
 </body>
 </html>`;
 }
@@ -216,10 +308,25 @@ function printPdf(browser, htmlPath, pdfPath) {
 
 // --- Main -------------------------------------------------------------------
 
-function main() {
-  const args = process.argv.slice(2);
+// Webhook n8n de aperturas (workflow "ONIA Propuesta Abierta"). El token
+// identifica al prospecto; se pasa con --track <token>.
+const TRACK_WEBHOOK = 'https://n8n-sergio-n8n.hqdqgh.easypanel.host/webhook/propuesta-abierta';
+
+function parseArgs(args) {
   const wantPdf = args.includes('--pdf');
-  const only = args.filter((a) => !a.startsWith('--'));
+  const trackIdx = args.indexOf('--track');
+  const trackToken = trackIdx !== -1 ? (args[trackIdx + 1] || null) : null;
+  const only = args.filter((a, i) =>
+    !a.startsWith('--') && (trackIdx === -1 || i !== trackIdx + 1));
+  return { wantPdf, trackIdx, trackToken, only };
+}
+
+function main() {
+  const { wantPdf, trackIdx, trackToken, only } = parseArgs(process.argv.slice(2));
+  if (trackIdx !== -1 && !trackToken) {
+    console.error('[ONIA] --track requiere un token (ej: --track cliente-x-jul26)');
+    process.exit(1);
+  }
 
   const clientes = JSON.parse(fs.readFileSync(DATA, 'utf8'));
   const browser = wantPdf ? findBrowser() : null;
@@ -241,9 +348,15 @@ function main() {
         console.warn(`[ONIA] PDF falló (${c.slug}): ${e.message}. ¿Está abierto en un visor?`);
       }
     }
+    if (trackToken) {
+      const trackUrl = `${TRACK_WEBHOOK}?t=${encodeURIComponent(trackToken)}&s=${encodeURIComponent(c.slug)}`;
+      const trackedPath = path.join(OUT, `propuesta-${c.slug}-${trackToken}.html`);
+      fs.writeFileSync(trackedPath, buildHtml(c, { trackUrl }), 'utf8');
+      console.log(`[ONIA] TRACK → ${trackedPath} (avisa a Telegram al abrirse)`);
+    }
   }
   console.log('[ONIA] Listo.');
 }
 
 if (require.main === module) main();
-module.exports = { buildHtml, validateCliente };
+module.exports = { buildHtml, validateCliente, parseArgs };

@@ -1,0 +1,84 @@
+{
+  "project": {
+    "slug": "dental-demo",
+    "template": "landing-clinic",
+    "package": "web",
+    "owner": "ONIA"
+  },
+  "business": {
+    "name": "Clinica Dental Aura",
+    "industry": "clinica dental",
+    "offer": "atencion dental clara con reserva directa por WhatsApp",
+    "tagline": "Sonrisas sanas, sin miedo al dentista",
+    "description": "Clinica dental con atencion clara, trato humano y reserva directa por WhatsApp.",
+    "location": "La Paz, Bolivia",
+    "trustProofs": ["Matricula profesional", "Esterilizacion por ciclo certificada", "Atencion de urgencias el mismo dia"]
+  },
+  "brand": {
+    "logoText": "AU",
+    "colors": {
+      "primary": "#0369a1",
+      "secondary": "#0f172a",
+      "accent": "#14b8a6",
+      "bg": "#f6fafd",
+      "fg": "#0f172a"
+    },
+    "styleKeywords": ["dental", "limpio", "confiable", "cercano"],
+    "references": [
+      {
+        "title": "Zocdoc",
+        "url": "https://www.zocdoc.com",
+        "type": "layout",
+        "use": "claridad de agenda y confianza antes del CTA",
+        "avoid": "parecer marketplace"
+      }
+    ]
+  },
+  "media": {
+    "heroPoster": "assets/dental-hero.svg",
+    "assetPermission": "generate-ai",
+    "notes": "DEMO INTERNA con asset sintetico (sin caras). Para cliente real, reemplazar por fotos de consultorio/equipo y evitar retratos de doctor generados como reales."
+  },
+  "content": {
+    "services": [
+      { "title": "Limpieza y prevencion", "description": "Control, profilaxis y guia de higiene para mantener tu boca sana.", "icon": "sparkles" },
+      { "title": "Ortodoncia", "description": "Brackets y alineadores con plan claro y seguimiento.", "icon": "smile" },
+      { "title": "Implantes", "description": "Reemplazo de piezas con evaluacion y opciones de pago.", "icon": "tooth" },
+      { "title": "Blanqueamiento", "description": "Aclarado seguro supervisado por profesional.", "icon": "star" },
+      { "title": "Endodoncia", "description": "Tratamiento de conducto para calmar el dolor y salvar la pieza.", "icon": "shield" },
+      { "title": "Urgencias", "description": "Atencion el mismo dia para dolor o golpes.", "icon": "alert" }
+    ],
+    "benefits": ["Trato humano", "Reserva directa", "Planes de pago"],
+    "proceso": [
+      { "titulo": "Agenda", "desc": "Escribinos por WhatsApp y elegimos horario." },
+      { "titulo": "Evaluacion", "desc": "Revisamos tu caso y explicamos opciones sin letra chica." },
+      { "titulo": "Plan y presupuesto", "desc": "Te damos un plan claro con costos y tiempos." },
+      { "titulo": "Tratamiento y control", "desc": "Hacemos el trabajo y agendamos el seguimiento." }
+    ],
+    "faq": [
+      { "pregunta": "Duele el tratamiento?", "respuesta": "Trabajamos con anestesia local y tecnicas de manejo del dolor para que estes comodo." },
+      { "pregunta": "Cuanto cuesta la primera consulta?", "respuesta": "La evaluacion inicial es corta y te damos el presupuesto antes de empezar cualquier tratamiento." },
+      { "pregunta": "Atienden urgencias?", "respuesta": "Si, reservamos espacio para urgencias el mismo dia cuando hay dolor o un golpe." },
+      { "pregunta": "Que formas de pago aceptan?", "respuesta": "Coordinamos opciones y planes de pago segun el tratamiento." }
+    ]
+  },
+  "conversion": {
+    "primaryCtaText": "Agendar cita",
+    "whatsappMessage": "Hola, quiero agendar una cita."
+  },
+  "contact": {
+    "whatsapp": "+59170000000",
+    "address": "La Paz, Bolivia"
+  },
+  "operations": {
+    "hosting": "ONIA Web Factory",
+    "missing": [
+      "foto real de consultorio/equipo",
+      "matricula o credenciales visibles",
+      "politica de datos personales / disclaimers de salud",
+      "dominio o decision de hosting",
+      "resenas reales aprobadas",
+      "mapear credenciales/proceso/faq en intake-schema + create-client (pipeline oficial)"
+    ]
+  }
+}

@@ -124,6 +124,9 @@ Carriles = 1 sesión = 1 worktree = 1 rama = 1 carpeta/repo:
 - **H** `contenido-higgsfield` → onia-hermes `hermes-content/references` + skills(video/IG) + scripts(video/ig) + `.hermes/video-lab` (producción continua)
 - **I** `research-estrategia` → onia-hermes `hermes-content/docs/research/**` (analizar productos ganadores + validar ventures; NO codea, entrega decisión)
 - **J** `video-remotion` → onia-hermes `scripts/remotion`|`apps/video` (video programático React; distinto de H generativo)
+- **K** `yt-canal` → onia-hermes `hermes-content/channels/onia-automatiza/**` (canal YT faceless "ONIA Automatiza" ES; reusa content-engine/Higgsfield sin editarlos, upload→handoff a n8n; plan en `docs/research/ONIA_YT_CANAL_ONIA_AUTOMATIZA_20260706.md`)
+- **onia-center-rebuild** (carril A, sesión fresca) → el panel es un MONOLITO (~14k líneas en 4 archivos: page.tsx/operating-workspace.tsx/operating-source.ts/onia-center.css). NO rediseñar en su lugar (ningún agente puede con 14k líneas → se pierde y rompe). Reconstruir en componentes chicos (`src/app/onia-center/components/**`, ~100-200 líneas c/u) reusando la data (lib/onia-center-store + api/onia-center), AL LADO de prod, y swap al final. Conservar agentes Vendedor/Día + cola de aprobación.
+- **docs-hygiene diaria** (carril infra) → `scripts/docs-hygiene.mjs` + cron diario: auto-borra SOLO duplicados de raíz IDÉNTICOS a su copia en `hermes-content/docs/`, flaggea el resto (divergentes/superseded) a Sergio por Telegram. Mantiene el repo ordenado para que las sesiones no se pierdan con docs viejos/duplicados. Regla: `hermes-content/docs/` es la fuente, la raíz sin gemelos.
 - **Core** `onia-core` → `onia-core/**` (CONGELADO; solo bajo adopción aprobada)
 
 Reglas duras:

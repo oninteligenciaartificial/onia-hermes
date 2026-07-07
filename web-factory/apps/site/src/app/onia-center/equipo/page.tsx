@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import {
-  ArrowRight,
   CalendarClock,
   ClipboardCheck,
   ExternalLink,
@@ -383,11 +382,6 @@ export default function OniaCenterTeamPage() {
   return (
     <main className="onia-center-page onia-team-page">
       <aside className="onia-center-sidebar">
-        <Link className="onia-back-link" href="/">
-          <ArrowRight size={16} />
-          Control Center
-        </Link>
-
         <div className="onia-brand">
           <span>
             <ShieldCheck size={22} />

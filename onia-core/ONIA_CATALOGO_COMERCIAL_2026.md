@@ -139,7 +139,11 @@ Entrada por dolor del rubro -> demo org demo -> plan 1-2 + implementacion
 
 ## Decisiones abiertas (Sergio)
 
-- [ ] Validar lista nueva pymes (390/890/1.990) y ventana de lanzamiento 31-jul.
-- [ ] Validar bandas Empresarial (E1 4.900+490 / E2 8.900+790) — calibrar con BE.
+- [x] Validar lista nueva pymes (390/890/1.990) y ventana de lanzamiento 31-jul.
+      **RATIFICADO por Sergio 2026-07-05**: lista v2 oficial; quien cierre antes
+      del 31-jul-2026 mantiene 320/750/1.500 congelado 12 meses.
+- [x] Validar bandas Empresarial — **RATIFICADO PARCIAL 2026-07-05**: E1
+      (4.900 + 490/mes) ofertable desde hoy; E2/E3 quedan como referencia y se
+      calibran con el cierre de BE fase 1 (no firmar E2/E3 sin recotizar).
 - [ ] Ganadero OS: pausa formal o rescate.
 - [ ] Iniciar tramite NIT ONIA (prerequisito SIAT).

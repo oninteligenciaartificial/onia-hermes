@@ -288,4 +288,44 @@ describe("generateSite", () => {
     // multi-series line draws one polyline per series, plus the sparkline
     expect((html.match(/<polyline/g) ?? []).length).toBeGreaterThanOrEqual(3);
   });
+
+  it("creates a clinic landing with trust, process, faq and sticky cta", async () => {
+    const rootDir = await mkdtemp(path.join(os.tmpdir(), "onia-web-factory-"));
+    await mkdir(path.join(rootDir, "data", "clients"), { recursive: true });
+
+    await writeFile(
+      path.join(rootDir, "data", "clients", "clinic.json"),
+      JSON.stringify({
+        nombre: "Clinica Dental Aura",
+        slug: "clinic",
+        tagline: "Sonrisas sanas, sin miedo al dentista",
+        descripcion: "Clinica dental con atencion clara y reserva directa.",
+        cta: { texto: "Agendar cita", url: "https://wa.me/59170000000" },
+        credenciales: ["Matricula profesional", "Esterilizacion certificada"],
+        proceso: [
+          { titulo: "Agenda", desc: "Escribinos por WhatsApp." },
+          { titulo: "Evaluacion", desc: "Revisamos tu caso." },
+        ],
+        faq: [{ pregunta: "Duele?", respuesta: "Trabajamos con anestesia local." }],
+      }),
+      "utf8",
+    );
+
+    const result = await generateSite("clinic", { rootDir, template: "landing-clinic" });
+    const html = await readFile(path.join(result.outputDir, "index.html"), "utf8");
+    const css = await readFile(path.join(result.outputDir, "site.css"), "utf8");
+
+    expect(html).toContain("wf-clinic-hero");
+    expect(html).toContain("Matricula profesional");
+    expect(html).toContain("wf-clinic-bento");
+    expect(html).toContain("wf-clinic-timeline");
+    expect(html).toContain("wf-clinic-faq");
+    expect(html).toContain("<details");
+    expect(html).toContain("wf-sticky-cta");
+    expect(html).toContain("wf-clinic-final");
+    expect(html).toContain("data-reveal");
+    expect(html).not.toContain("wf-nav");
+    expect(css).toContain(".wf-sticky-cta");
+    expect(css).toContain(".wf-clinic-bento");
+  });
 });
