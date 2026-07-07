@@ -64,6 +64,15 @@ ve consistentemente mas atractiva que la pose estatica, con la MISMA identidad.*
 problema de direccion de foto, no de Soul — no hizo falta entrenar un modelo nuevo.
 Sergio aprobo esta direccion para seguir iterando.
 
+**Tanda 3 (pedido: "diferentes escenas, cuerpo completo, diferentes caras/emociones,
+saltando, ejercicio, espejo gym after gym"):** 6 candidatos mas en `style-iteration/`
+(`full-jumping`, `full-workout`, `gym-mirror`, `emotion-surprised`,
+`emotion-calm-fullbody`, `full-stretching`). Confirma que la regla accion>pose
+tambien aplica a cuerpo completo/fitness. **Hallazgo nuevo:** en `full-stretching.png`
+el modelo metio un logo real de "Nike" en la ropa deportiva sin pedirlo — viola la
+regla de sin marcas de terceros. Fix: agregar siempre "no brand logos, unbranded
+clothing" en prompts de ropa deportiva/casual. Ver `AVATAR-CONSISTENCY-SCHEME.md`.
+
 ## Pendiente (no ejecutado, queda armado)
 Video Marketing Studio (Nivel 2, ~42cr) en espanol + estilo lifestyle (dormitorio/cocina
 en vez de bano clinico) con producto real de Nuvia — prompt armado, no corrido todavia

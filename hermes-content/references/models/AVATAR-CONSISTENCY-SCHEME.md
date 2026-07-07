@@ -232,10 +232,16 @@ No pasar a modelos caros hasta resolver estos 3 puntos con el Soul:
    consistencia al hablar.
 3. **Accion real > pose estatica para "atractivo"**: selfies neutros/quietos leen
    planos y poco carismaticos incluso con identidad perfecta. Generar variedad con
-   ACCION genuina (riendo, caminando, gesto real, situacion social) en vez de
-   retrato posado — la diferencia percibida en atractivo es grande y es un problema
-   de direccion de foto, no de identidad. Generar 4+ candidatos variados (escenario
-   x accion x luz), contact sheet, elegir los mejores con el cliente antes de seguir.
+   ACCION genuina (riendo, caminando, gesto real, situacion social, cuerpo completo,
+   saltando, ejercicio) en vez de retrato posado — la diferencia percibida en
+   atractivo es grande y es un problema de direccion de foto, no de identidad.
+   Confirmado tambien en cuerpo completo/fitness (saltando, gym, estirando). Generar
+   4-6+ candidatos variados (escenario x accion x emocion x luz), contact sheet,
+   elegir los mejores con el cliente antes de seguir.
+4. **Ropa deportiva/casual: forzar "sin logos" explicito.** El modelo a veces mete
+   un logo de marca real sin que se pida (ej. "Nike" en un top deportivo) — viola la
+   regla de no usar marcas de terceros. Agregar siempre "no brand logos, unbranded
+   clothing" en el prompt para cualquier ropa deportiva/casual, revisar en el QA.
 
 ### Paso 3 — Recien ahi, Nivel 2/3 (caro) para produccion
 - Nivel 3 (`wan2_7`, 15cr/10s): usar el MEJOR still de Nivel 1 ya perfeccionado
