@@ -85,29 +85,42 @@ el plan maestro de onia-hermes items R6, R2 y R4
 (hermes-content/docs/ONIA_PROXIMA_SESION_PLAN_20260705.md; si no esta en tu arbol,
 git show origin/main:hermes-content/docs/ONIA_PROXIMA_SESION_PLAN_20260705.md).
 
+IMPORTANTE: todas las rutas `onia-core/...` de este bloque viven en el OTRO repo
+(`C:\dev\proyectos\onia-hermes\onia-core\...`), no en DentaGest. Podes leerlas por
+ruta absoluta desde tu sesion en DentaGest (son de solo lectura para vos: el
+contrato/schema/modulos siguen congelados). No asumas que existen relativas a tu
+cwd.
+
 Estado actual de onia-core (verificalo vos mismo, no confies solo en esto):
 v0.6.1, CORE COMPLETO -- 18 entidades, 5 modulos vendibles ya validados con tests
 (`commerce`, `knowledge`, `accounting`, `invoicing`, `payroll`, todos con logica
 Bolivia real: IVA/IT/IUE/retenciones/activo fijo/CUF-QR/AFP-RC-IVA/aguinaldo-
-indemnizacion). Ver onia-core/README.md + onia-core/CHANGELOG.md (entrada 0.6.1)
-para el detalle. `contract.json`/`onia-core/**` siguen CONGELADOS: NO los edites
-desde este carril; si encontras algo que el core deberia tener y no tiene,
-documentalo y avisa, no forkees.
+indemnizacion). Ver `C:\dev\proyectos\onia-hermes\onia-core\README.md` +
+`C:\dev\proyectos\onia-hermes\onia-core\CHANGELOG.md` (entrada 0.6.1) para el
+detalle. `contract.json`/`onia-core/**` siguen CONGELADOS: NO los edites desde
+este carril; si encontras algo que el core deberia tener y no tiene, documentalo
+y avisa, no forkees.
 
 R6 (HACELA PRIMERO, antes que R2/R4) — adoptar formalmente los modulos
 commerce+accounting+invoicing en vez de las tablas bespoke actuales. Confirmado
-en `onia-core/adapters/dentagest.json`: `sales_cash` hoy es tu propio
-Invoice/Payment y `catalog_inventory` es tu propio InventoryItem/InventoryMovement
-(status "exists_partial" en el adapter, NO el modulo validado). Traduci
-`onia-core/modules/commerce.schema.sql` + `accounting.schema.sql` +
-`invoicing.schema.sql` a migraciones Prisma (namespace `onia_commerce_*` /
-`onia_accounting_*` / `onia_invoicing_*`, mismo patron que ya usaste para
-work_items/comments/documents) e importa `@onia/core/modules/commerce-logic`,
-`accounting-logic`, `invoicing-logic` en vez de reimplementar calculos (IVA,
-totales de cotizacion, CUF). Por que primero: mejor tener el dato financiero
-real ANTES de construir mas UI (R2) encima de las tablas bespoke que vas a
-reemplazar. Si ya tenes datos reales en Invoice/Payment/InventoryItem, confirma
-con Sergio el plan de migracion de datos antes de correr nada destructivo.
+en `C:\dev\proyectos\onia-hermes\onia-core\adapters\dentagest.json`: `sales_cash`
+hoy es tu propio Invoice/Payment y `catalog_inventory` es tu propio
+InventoryItem/InventoryMovement (status "exists_partial" en el adapter, NO el
+modulo validado). Traduci
+`C:\dev\proyectos\onia-hermes\onia-core\modules\commerce.schema.sql` +
+`accounting.schema.sql` + `invoicing.schema.sql` (misma carpeta) a migraciones
+Prisma (namespace `onia_commerce_*` / `onia_accounting_*` / `onia_invoicing_*`,
+mismo patron que ya usaste para work_items/comments/documents). El paquete
+`@onia/core` (`onia-hermes/onia-core/package.json`) todavia no esta publicado ni
+linkeado a DentaGest -- si lo queres importar de verdad (`@onia/core/modules/
+commerce-logic`, `accounting-logic`, `invoicing-logic`) en vez de reimplementar
+los calculos (IVA, totales de cotizacion, CUF), resolve primero como lo
+consumis (paquete local file: / workspace / copiar el .logic.mjs con nota de
+origen) porque hoy no hay mecanismo de publicacion entre los dos repos. Por que
+primero: mejor tener el dato financiero real ANTES de construir mas UI (R2)
+encima de las tablas bespoke que vas a reemplazar. Si ya tenes datos reales en
+Invoice/Payment/InventoryItem, confirma con Sergio el plan de migracion de datos
+antes de correr nada destructivo.
 
 R2 — completar la UI del ONIA Core en DentaGest (demo-able): hilo de
 comentarios+docs en la ficha del paciente, admin de roles finos, selector de
