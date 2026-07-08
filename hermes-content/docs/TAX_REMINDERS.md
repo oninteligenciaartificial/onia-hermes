@@ -31,5 +31,29 @@ Ayudar a ONIA a recordar obligaciones fiscales de Bolivia sin inventar fechas ni
 - Si faltan datos, listar pendientes.
 - Recomendar validacion con contador o fuente oficial.
 
+## Plantilla base
+Archivo:
+`hermes-content/references/impuestos-bolivia.template.json`
+
+## Campos recomendados en Notion
+- Obligacion
+- Impuesto
+- Frecuencia
+- Fecha vencimiento
+- Estado: pendiente, preparado, presentado, pagado, no aplica
+- Responsable
+- Canal de alerta
+- Alertas enviadas
+- Fuente/calendario confirmado
+- Notas contador
+
 ## n8n
-n8n debe revisar diariamente las obligaciones configuradas y enviar alertas por Telegram segun anticipacion definida.
+
+Flujo diario:
+1. Schedule Trigger diario.
+2. Leer configuracion fiscal desde Notion o archivo de referencia.
+3. Verificar si la configuracion esta completa.
+4. Si falta informacion, enviar tarea pendiente por Telegram.
+5. Si esta completa, calcular alertas proximas.
+6. Enviar recordatorio.
+7. Registrar alerta enviada.

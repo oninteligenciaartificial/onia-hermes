@@ -151,3 +151,64 @@ ELEVENLABS_MODEL_ID
 
 Store only in `/root/.hermes/.env`. Never print full values.
 
+## Audio Approval Gates
+
+Voice brief approval:
+
+```text
+Aprobar audio <job_id>
+```
+
+Audio generated:
+
+```text
+Audio generado <job_id>: <audio_url>
+```
+
+Video generated with audio:
+
+```text
+Video generado <job_id>: <video_url>
+```
+
+Publishing:
+
+```text
+Publicar video <job_id>
+```
+
+## Prompt Package For ElevenLabs
+
+```json
+{
+  "lane": "sergio | onia | client",
+  "language": "es-419",
+  "voice_style": "",
+  "script": "",
+  "emotion": "",
+  "pace": "",
+  "duration_target_seconds": 30,
+  "approval_required": true,
+  "voice_clone_allowed": false
+}
+```
+
+## Safety Rules
+
+- Never clone Sergio or a client without explicit consent.
+- Never publish generated voice as if it were real recording unless approved.
+- Never generate fake testimonials.
+- Never generate medical, financial or legal claims without review.
+- Store API keys only in `/root/.hermes/.env`.
+
+## Future Integration
+
+When the ElevenLabs MCP or API is connected:
+
+1. List approved voices.
+2. Generate audio draft from Video Lab script.
+3. Save audio in `/var/www/html/hermes-assets/audio`.
+4. Store public audio URL in Video Lab job JSON.
+5. Combine audio with Higgsfield/editor output.
+6. Send preview before publishing.
+

@@ -124,3 +124,71 @@ Reglas:
 - No contactar un lead asignado a otro vendedor sin reasignacion.
 - No prometer descuentos, WhatsApp automatico ni automatizaciones sensibles sin aprobacion.
 - El chatbot califica y deriva; no cierra ventas complejas.
+
+## Oferta segun rubro
+
+| Senal | Oferta primaria | Oferta secundaria | CTA |
+|---|---|---|---|
+| Clinica dental | DentalGest | landing dental + contenido Higgsfield | "Te muestro una demo corta." |
+| Empresa con Excel/reportes/tareas | Gesti-OS | automatizacion n8n + dashboard | "Te muestro tu operacion en un tablero." |
+| Negocio sin web clara | Pagina web ONIA | CRM simple + contenido de lanzamiento | "Te hago una auditoria rapida de captacion." |
+| Negocio publica poco | Marketing con Higgsfield | landing + seguimiento | "Te preparo 3 ideas de videos para vender mejor." |
+| Prospecto aun ambiguo | Auditoria ONIA | recomendacion personalizada | "Te comparto 2 mejoras puntuales." |
+
+## Comandos Hermes
+- `Busca prospectos ONIA: <industria> | <ubicacion>`
+- `Guarda prospecto: <datos>`
+- `Resumen CRM ONIA`
+- `Seguimientos ONIA hoy`
+- `Prepara mensaje prospecto: <empresa>`
+- `Crea UGC empresa: <negocio> | <oferta> | <audiencia> | <estilo>`
+- `Orquesta ONIA: <empresa o rubro> | <objetivo>`
+- `Prepara venta DentalGest: <clinica>`
+- `Prepara venta Gestios: <empresa>`
+- `Prepara venta Web ONIA: <negocio>`
+- `Prepara marketing Higgsfield: <negocio> | <oferta>`
+
+### Propuestas personalizadas (HTML slide deck)
+- `Genera propuesta: <empresa> | <industria> | <necesidad>`
+- `Crea presentación para: <empresa>`
+- `Propuesta ONIA: <empresa> | <datos del cliente>`
+
+Skill: `hermes-content/skills/genera-propuesta.md`
+Script: `node scripts/genera-propuesta.js --empresa="X" --industria="Y" --necesidad="Z"`
+Output: `hermes-content/propuestas/propuesta-<slug>.html`
+
+Industrias reconocidas: dental, clinica, audiovisual, productora, arquitecto, constructora, retail, comercio, restaurant, pyme, servicio
+Para refinar: re-ejecutar con `--productos="id1,id2"` y/o `--notas="feedback del cliente"`
+
+### Análisis de llamadas (transcript → propuesta automática)
+- `Analiza llamada: [texto transcripción]`
+- `Transcripción llamada: [texto]`
+- Adjuntar .txt con transcript
+
+Skill: `hermes-content/skills/analiza-llamada.md`
+Script: `node scripts/analiza-transcripcion.js <archivo.txt>`
+Requiere: `ANTHROPIC_API_KEY`
+Flujo completo: audio Telegram → Whisper → Claude Haiku extracción → genera-propuesta → HTML + resumen + próximos pasos
+
+## Flujo n8n - Prospeccion semanal
+1. Schedule Trigger semanal.
+2. Cargar industria y ubicacion objetivo.
+3. Pedir busqueda a Hermes.
+4. Validar que cada prospecto tenga fuente.
+5. Clasificar oferta con `onia-projects-registry.json`.
+6. Enviar top 5 a Telegram.
+7. Esperar aprobacion para contactar o investigar mas.
+8. Crear o actualizar registros en CRM/Notion.
+
+## Flujo n8n - Seguimientos diarios
+1. Schedule Trigger diario.
+2. Consultar Notion por seguimientos vencidos o de hoy.
+3. Pedir a Hermes mensajes sugeridos.
+4. Enviar lista por Telegram.
+5. Registrar decision del usuario.
+
+## Criterios de calidad
+- Priorizar calidad sobre cantidad.
+- No hacer spam.
+- Cada recomendacion debe explicar por que esa empresa podria necesitar ONIA.
+- El mensaje sugerido debe ser breve, consultivo y personalizado.
