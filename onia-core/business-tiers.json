@@ -9,14 +9,14 @@
       "name": "Planes pymes",
       "currency": "BOB",
       "billingNote": "mensual o anual x10 (2 meses gratis)",
-      "appliesToVerticalTracks": ["dentagest-clinical", "gestios-general", "ganadero-offline"]
+      "appliesToVerticalTracks": ["dentagest-clinical", "gestios-general", "ganadero-offline", "esteticagest-clinical", "vetgest-clinical", "gestios-gastronomia", "gestios-servicios-profesionales", "gestios-educacion", "gestios-turismo"]
     },
     {
       "id": "empresarial",
       "name": "ONIA Empresarial",
       "currency": "USD",
       "billingNote": "implementacion unica + suscripcion mensual o anual",
-      "appliesToVerticalTracks": ["proveegest-electrico"]
+      "appliesToVerticalTracks": ["proveegest-electrico", "proveegest-construccion"]
     }
   ],
   "tiers": [

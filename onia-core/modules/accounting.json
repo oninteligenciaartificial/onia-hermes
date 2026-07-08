@@ -24,7 +24,14 @@
     "gestios-general",
     "dentagest-clinical",
     "ganadero-offline",
-    "proveegest-electrico"
+    "proveegest-electrico",
+    "esteticagest-clinical",
+    "vetgest-clinical",
+    "gestios-gastronomia",
+    "gestios-servicios-profesionales",
+    "gestios-educacion",
+    "proveegest-construccion",
+    "gestios-turismo"
   ],
   "entities": [
     {

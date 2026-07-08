@@ -26,11 +26,23 @@ describe("buildSystemMap - capa CORE", () => {
 });
 
 describe("buildSystemMap - capa RUBROS", () => {
-  it("cubre los 4 tracks verticales", () => {
-    assert.equal(map.rubros.length, 4);
+  it("cubre los 11 tracks verticales (4 originales + 7 nuevos definidos 2026-07-07)", () => {
+    assert.equal(map.rubros.length, 11);
     assert.deepEqual(
       map.rubros.map((rubro) => rubro.id).sort(),
-      ["dentagest-clinical", "gestios-general", "ganadero-offline", "proveegest-electrico"].sort(),
+      [
+        "dentagest-clinical",
+        "esteticagest-clinical",
+        "ganadero-offline",
+        "gestios-educacion",
+        "gestios-gastronomia",
+        "gestios-general",
+        "gestios-servicios-profesionales",
+        "gestios-turismo",
+        "proveegest-construccion",
+        "proveegest-electrico",
+        "vetgest-clinical",
+      ].sort(),
     );
   });
 
@@ -54,27 +66,24 @@ describe("buildSystemMap - capa RUBROS", () => {
 });
 
 describe("buildSystemMap - capa REPETICION", () => {
-  it("accounting/invoicing/payroll/commerce se repiten en los 4 rubros: TODO negocio real compra/vende (commerce) y necesita contabilidad/factura/planilla (accounting/invoicing/payroll), sin importar si es offline-first", () => {
+  it("accounting/invoicing/payroll/commerce se repiten en los 11 rubros: TODO negocio real compra/vende (commerce) y necesita contabilidad/factura/planilla (accounting/invoicing/payroll), sin importar el rubro", () => {
     for (const moduleId of ["accounting", "invoicing", "payroll", "commerce"]) {
       const usage = map.moduleUsage.find((entry) => entry.moduleId === moduleId);
-      assert.equal(usage.usedByCount, 4, `${moduleId} deberia repetirse en los 4 rubros`);
-      assert.deepEqual(
-        usage.usedBy.sort(),
-        ["gestios-general", "dentagest-clinical", "ganadero-offline", "proveegest-electrico"].sort(),
-      );
+      assert.equal(usage.usedByCount, 11, `${moduleId} deberia repetirse en los 11 rubros`);
     }
   });
 
-  it("knowledge NO se repite: solo lo usa ProveeGest (1 rubro, catalogo tecnico del distribuidor)", () => {
+  it("knowledge se repite en 2 rubros: ProveeGest electrico y ProveeGest construccion (ambos con catalogo tecnico via knowledge_article)", () => {
     const usage = map.moduleUsage.find((entry) => entry.moduleId === "knowledge");
-    assert.equal(usage.usedByCount, 1);
+    assert.equal(usage.usedByCount, 2);
+    assert.deepEqual(usage.usedBy.sort(), ["proveegest-construccion", "proveegest-electrico"]);
   });
 });
 
 describe("sharedModules / unusedModules", () => {
-  it("sharedModules(2) devuelve los 4 modulos usados por 2+ rubros (todos menos knowledge y dental, que son de 1 solo rubro)", () => {
+  it("sharedModules(2) devuelve 5 modulos usados por 2+ rubros (todos menos dental, que es de 1 solo rubro)", () => {
     const shared = sharedModules(map, 2).map((entry) => entry.moduleId).sort();
-    assert.deepEqual(shared, ["accounting", "commerce", "invoicing", "payroll"]);
+    assert.deepEqual(shared, ["accounting", "commerce", "invoicing", "knowledge", "payroll"]);
   });
 
   it("Ganadero OS Offline SI necesita commerce/accounting/invoicing/payroll (un hato compra insumos, vende ganado y es una empresa formal con contabilidad/planilla igual que las demas verticales)", () => {
@@ -98,8 +107,8 @@ describe("renderSystemMap", () => {
     assert.match(text, /4\. QUE RUBROS REPITEN/);
     assert.match(text, /odontogram_entry/);
     // El primer modulo listado en la seccion de repeticion debe ser uno con
-    // usedByCount maximo (4), no uno con menos repeticion (orden descendente).
+    // usedByCount maximo (11), no uno con menos repeticion (orden descendente).
     const usageLines = text.split("\n").filter((line) => line.includes("usado por"));
-    assert.match(usageLines[0], /- (accounting|invoicing|payroll|commerce): usado por 4\/4/);
+    assert.match(usageLines[0], /- (accounting|invoicing|payroll|commerce): usado por 11\/11/);
   });
 });

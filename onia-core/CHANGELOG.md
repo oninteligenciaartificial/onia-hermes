@@ -1,5 +1,93 @@
 # ONIA Core Changelog
 
+## 0.7.0 — 2026-07-07 (los 11 rubros del roadmap, definidos)
+
+- Sergio pidio "sigamos definiendo todos los rubros para tenerlos definidos".
+  Hasta esta entrada, solo 4 de los 11 rubros de `verticalFactory.roadmapRubros`
+  tenian track+pack real (salud_dental, distribucion_b2b, pymes_general,
+  agro_ganaderia); el resto eran solo un nombre en el roadmap. Se despacharon
+  7 subagentes de investigacion EN PARALELO (patron
+  `superpowers:dispatching-parallel-agents`, tareas independientes sin estado
+  compartido), uno por rubro: salud_estetica, salud_veterinaria, gastronomia,
+  servicios_profesionales, educacion, construccion_ferreteria,
+  turismo_hoteleria. Cada uno investigo vocabulario operativo + angulo
+  regulatorio boliviano (con fuente citada, marcando explicitamente lo no
+  confirmado en vez de inventarlo) + que entidades son gap real vs. ya
+  cubierto por core/modulos.
+- **Nueva familia `VETGEST`** (contract.json.families, relationship
+  `future_vertical` igual que PROVEEGEST). La investigacion de veterinaria
+  concluyo que NO cabe como pack sobre DentalGest (violaria "no convertir a
+  DentalGest en ERP generico") ni sobre Ganadero OS (offline-first, ganado de
+  produccion, marco regulatorio distinto) — necesita su propio track
+  (`vetgest-clinical`) aunque reuse el patron clinico de dental.
+- **7 verticalTracks nuevos** (11 tracks totales, de 4): `esteticagest-clinical`
+  (familia DENTALGEST), `vetgest-clinical` (familia VETGEST nueva),
+  `gestios-gastronomia`, `gestios-servicios-profesionales`, `gestios-educacion`,
+  `gestios-turismo` (familia GESTIOS — ya se describia a si misma como "base
+  de motor para verticales"), `proveegest-construccion` (familia PROVEEGEST —
+  ya se describia como "multi-rubro... electrico es el primer skin, no el
+  limite"). Status `roadmap_planned` para los 5 con evidencia solida
+  (equivalente a "planificado" del roadmap) y `roadmap_exploring` para
+  educacion/turismo (equivalente a "explorar", el estado mas temprano) — para
+  no confundirlos con tracks realmente en adopcion (`installing`).
+- **7 verticalPacks nuevos**, cada uno con vocabulario (workItemTypes/
+  partnerTypes/areas), checklists, KPIs e intakeChannels sintetizados de la
+  investigacion. Fix real encontrado por el propio validador de coherencia de
+  compuertas (construido en la sesion de verticalPacks original): 5 packs
+  inicialmente usaban el canal `whatsapp_chatwoot` en tracks que bloquean
+  `whatsapp` — corregido reemplazandolo por `email_shared` (mismo patron que
+  ya usa `gestios-general-pack`).
+- **`vertical-extensions.json`: 5 de los 7 rubros suman catalogo de entidades
+  especificas** (9 tracks con catalogo en total, 33 entidades):
+  - `salud_estetica` (2): TreatmentProgressPhoto, SessionPackage +
+    SessionPackageRedemption. Reusa InformedConsent/MedicalAlert del modulo
+    `dental` tal cual (documentado, no forkeado).
+  - `salud_veterinaria` (3): PetIdentifier, PetVaccinationRecord (NO reusa
+    VaccinationCampaign de ganadero — esa es campana masiva regulatoria,
+    distinta de vacuna individual), HospitalizationStay. Reusa
+    InformedConsent/MedicalAlert/Prescription del modulo dental.
+  - `gastronomia` (2): Ingredient/receta (conversion de unidades, unico gap
+    real segun el research), Table/mesa (estado de ocupacion). Comanda de
+    cocina y delivery NO necesitan entidad nueva (work_item + Order.status).
+  - `servicios_profesionales` (0): CONFIRMADO cero entidades nuevas — caso
+    ejemplar de rubro 100% cubierto por vocabulario+core. Hallazgo tecnico
+    real: `onia_commerce_order_lines.variant_id` es NOT NULL, acopla
+    sales_cash a catalog_inventory aunque el rubro no tenga stock — resuelto
+    con catalogo de servicios sin stock poblado, no con cambio de schema.
+  - `construccion_ferreteria` (1): WorkOrder/pedido por obra (entregas
+    fraccionadas). `product_homologation` y `landed_cost_calculation` de
+    proveegest-electrico se REUSAN sin cambios (fiscalidad/aduana boliviana
+    generica, no especifica de electrico); `technical_catalog_spec` no
+    necesita modulo nuevo, solo nuevas plantillas de `knowledge_article`.
+  - `educacion` y `turismo_hoteleria`: **sin entidades**, a proposito. Ambas
+    investigaciones concluyeron independientemente que no hay cliente real
+    todavia (mismo criterio #1 de priorizacion que ya uso ONIA para DentalGest/
+    Bolivian Electric) y que construir sus entidades (Student/Enrollment para
+    educacion; Room/Booking/SeasonalRate para turismo, esta ultima candidata a
+    MODULO reusable, no extension de un rubro, por ser un patron generico de
+    "inventario por disponibilidad temporal") es mas caro que el resto. Quedan
+    con pack (vocabulario/checklists/KPIs) para "estar definidos" sin
+    comprometerse a construir.
+- **`accounting.json`/`invoicing.json`/`payroll.json`**: los 7 tracks nuevos
+  agregados a `verticalTracks` de los 3 (mismo criterio universal ya aplicado
+  en 0.6.1: todo negocio real necesita contabilidad/factura/planilla).
+  `commerce.json`/`knowledge.json` NO se tocaron: su vinculo pasa por
+  `activatesCapabilities` contra `requiredCapabilityIds` de cada track (ya
+  incluye `catalog_inventory`/`sales_cash`, y `proveegest-construccion` suma
+  `knowledge_base`), mecanismo confirmado generico antes de tocar nada.
+- **`business-tiers.json`**: los 6 tracks GESTIOS/DENTALGEST nuevos suman a la
+  familia `pyme`; `proveegest-construccion` suma a `empresarial` (USD, mismo
+  criterio que proveegest-electrico — distribucion B2B de mayor escala).
+- **`business-diagnostic.json`**: 7 opciones nuevas en la pregunta de rubro,
+  cada una mapeada a su trackId — el cuestionario ya puede resolver los 11
+  rubros, no solo los 4 originales.
+- Tests actualizados para reflejar la matriz de 11 rubros (antes hardcodeaban
+  4): `system-map.test.mjs`, `vertical-extensions.test.mjs`,
+  `modules/modules.test.mjs`. Sin tests nuevos (esta entrada es capa de datos/
+  definicion, no logica nueva) — 314 tests, 4 validadores verdes.
+- `contract.json` 0.6.2 -> 0.7.0 (salto MINOR: nueva familia + 7 tracks + 7
+  packs es la expansion mas grande del contrato desde 0.6.0 verticalPacks).
+
 ## modules/dental 0.1.0 — 2026-07-07 (primer modulo VERTICAL, de un solo rubro)
 
 - Sergio pidio "empecemos a desarrollar los modulos por rubro". Hasta ahora

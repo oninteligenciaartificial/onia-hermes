@@ -18,14 +18,19 @@ import {
 const catalog = loadVerticalExtensions();
 
 describe("loadVerticalExtensions", () => {
-  it("carga una extension por cada uno de los 4 tracks verticales", () => {
-    assert.equal(catalog.extensions.length, 4);
+  it("carga una extension por cada uno de los 9 tracks con catalogo (educacion y turismo quedan sin extension a proposito, sin cliente real)", () => {
+    assert.equal(catalog.extensions.length, 9);
     const trackIds = catalog.extensions.map((extension) => extension.trackId).sort();
     assert.deepEqual(trackIds, [
       "dentagest-clinical",
+      "esteticagest-clinical",
+      "gestios-gastronomia",
       "gestios-general",
+      "gestios-servicios-profesionales",
       "ganadero-offline",
+      "proveegest-construccion",
       "proveegest-electrico",
+      "vetgest-clinical",
     ].sort());
   });
 });

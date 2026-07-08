@@ -93,6 +93,117 @@
         "GestiOS ES el vertical generico: casi todas sus necesidades se resuelven con core + modulos (commerce/accounting), sin extension propia.",
         "Si aparece una necesidad realmente especifica de un sub-rubro (ej. restaurantes, estudios profesionales), se modela como un pack nuevo (verticalPacks del contrato), no aca."
       ]
+    },
+    {
+      "trackId": "esteticagest-clinical",
+      "product": "EsteticaGest (pack sobre DentalGest)",
+      "domainName": "salud_estetica",
+      "investigadoConSubagente": {
+        "investigadoEn": "2026-07-07",
+        "metodo": "Investigacion web dedicada (sin verificacion contra producto real: EsteticaGest todavia no existe como producto, a diferencia de DentalGest). Estado roadmap: planificado."
+      },
+      "coreHooks": [
+        { "coreEntityId": "document", "as": "TreatmentProgressPhoto envuelve document con storageRef, no lo reemplaza (mismo patron que tooth_image en el modulo dental)" }
+      ],
+      "entities": [
+        { "id": "treatment_progress_photo", "name": "TreatmentProgressPhoto", "status": "gap", "purpose": "Foto de progreso antes/durante/despues de un tratamiento, vinculada a patientTreatment/treatmentPlan con momento y zona corporal (no pieza dental como tooth_image). Confirmado como gap real: document (core) es generico y tooth_image (modulo dental) esta anclado a toothNumber, ninguno cubre 'zona corporal + fase del tratamiento'." },
+        { "id": "session_package", "name": "SessionPackage", "status": "gap", "purpose": "Paquete de N sesiones prepagadas de un tratamiento, con vigencia. Entidad mas claramente exclusiva de estetica: commerce (Product/Order) no modela 'N sesiones de un servicio con saldo decreciente y vigencia', dental tampoco (vende tratamientos individuales, no paquetes)." },
+        { "id": "session_package_redemption", "name": "SessionPackageRedemption", "status": "gap", "purpose": "Consumo de una sesion contra un SessionPackage (fecha, sesion restante resultante). Se separa de SessionPackage para llevar el historial de uso sin mutar el saldo en la cabecera." }
+      ],
+      "notes": [
+        "InformedConsent y MedicalAlert del modulo `dental` (onia-core/modules/dental.json) se REUSAN tal cual, sin cambios: ambos ya son genericos en su diseno (procedureType string libre, severity/description estructurado) y no estan anclados a nada especificamente dental (no referencian toothNumber ni odontograma). NO se agregan como entidades nuevas aca.",
+        "Venta de productos dermocosmeticos post-tratamiento: cubierta 100% por el modulo commerce (Product/StockItem/Order), sin cambios. Es un canal de ingreso central del rubro pero no requiere modelado especial.",
+        "Angulo regulatorio boliviano investigado y NO CONFIRMADO con fuente especifica y citable de una categoria 'centro de estetica' separada de clinica/consultorio privado generico (marco general: Codigo de Salud DL 15629 + RESPP DS 18886, habilitacion via SEDES departamental; Ley 3131 del ejercicio medico para quien puede operar). Recomendacion explicita del research: NO construir ningun campo obligatorio de 'numero de registro SEDES' hasta validarlo con un cliente real del rubro, mismo criterio que se uso para verificar el catalogo dental contra DentaGest real."
+      ]
+    },
+    {
+      "trackId": "vetgest-clinical",
+      "product": "VetGest",
+      "domainName": "salud_veterinaria",
+      "investigadoConSubagente": {
+        "investigadoEn": "2026-07-07",
+        "metodo": "Investigacion web dedicada (fuentes oficiales SENASAG/REGENSA, Ley 1763 via Lexivox, normas NB 69001-69007 via IBNORCA). Producto no existe todavia; estado roadmap: planificado."
+      },
+      "coreHooks": [
+        { "coreEntityId": "document", "as": "certificados sanitarios y constancias de retiro de residuos biologicos via storageRef" }
+      ],
+      "entities": [
+        { "id": "pet_identifier", "name": "PetIdentifier", "status": "gap", "purpose": "Microchip (estandar ISO 11784/11785) o tatuaje de mascota individual. Distinto de AnimalIdentifier de Ganadero OS (caravana/marca a fuego para trazabilidad de produccion SINTRABOL/SENASAG) -- proveedores, estandar y proposito distintos (compania vs. produccion). Microchipeo obligatorio de mascotas: NO CONFIRMADO a nivel nacional boliviano, posible solo por ordenanza municipal de tenencia responsable en algunos municipios." },
+        { "id": "pet_vaccination_record", "name": "PetVaccinationRecord", "status": "gap", "purpose": "Vacuna individual por mascota con proxima dosis y lote. Confirmado que NO reusa VaccinationCampaign de Ganadero OS: esa entidad es explicitamente 'campana oficial obligatoria (PRONEFA aftosa, brucelosis) por periodo/zona, DISTINTA del evento sanitario puntual' -- es decir, campana masiva regulatoria de produccion pecuaria, no aplica a una vacuna individual de mascota urbana." },
+        { "id": "hospitalization_stay", "name": "HospitalizationStay", "status": "gap", "purpose": "Internacion multi-dia con monitoreo por turno y criterios de alta. Dominio nuevo real: ni dental (no interna pacientes) ni ganadero (offline/campo) tienen equivalente." }
+      ],
+      "notes": [
+        "InformedConsent, MedicalAlert y Prescription del modulo `dental` se REUSAN tal cual si VetGest comparte ese modulo (o se extrae un modulo `clinical-common` reusable entre dental y veterinaria) -- mismo razonamiento que EsteticaGest.",
+        "ClinicalRecord del patron dental tambien se reusa, con un campo `species`/`breed` agregado y config propia del modulo (mismo mecanismo que `clinicalConfig.perioSiteLabels` en dental.json) -- NO es una entidad separada por especie.",
+        "Familia de producto: VETGEST (nueva, ver contract.json.families), NO DentalGest ni Ganadero OS -- justificado porque el sujeto (mascota+tutor), el catalogo de especies y el marco regulatorio son estructuralmente distintos de ambos (ver adoptionRule de cada uno).",
+        "Regulatorio CONFIRMADO con fuente oficial: registro de establecimiento veterinario ante SENASAG via REGENSA Capitulo 2.3 (distinto del Capitulo 2.1, que regula solo importadoras/fabricantes, no clinicas); responsable tecnico permanente con colegiatura obligatoria en COMVETBOL (Ley 1763 de 1997 + reglamento DS 25595); Normas Bolivianas NB 69001-69007 de residuos solidos en establecimientos de salud, que INCLUYEN explicitamente clinicas veterinarias en su alcance declarado.",
+        "NO CONFIRMADO: formato de 'receta veterinaria controlada' tipo triplicado -- REGENSA exige registro de venta de productos bajo receta pero no se encontro fuente que especifique un formato controlado especifico; no construir ese flujo sin verificar con SENASAG o un veterinario colegiado boliviano."
+      ]
+    },
+    {
+      "trackId": "gestios-gastronomia",
+      "product": "pack GestiOS restaurantes",
+      "domainName": "gastronomia",
+      "investigadoConSubagente": {
+        "investigadoEn": "2026-07-07",
+        "metodo": "Investigacion web dedicada (SEDES La Paz, GAMLP, SENASAG/Ley 830). Producto no existe todavia; estado roadmap: planificado, se apoya en el motor GestiOS existente."
+      },
+      "coreHooks": [
+        { "coreEntityId": "work_item", "as": "pedido_cocina (comanda) se modela como WorkItem tipado, no como entidad nueva -- el core ya cubre 'unidad de trabajo pendiente con owner/status/priority'" },
+        { "coreEntityId": "schedule_event", "as": "reserva de mesa se modela como ScheduleEvent tipado (eventType=reserva_mesa, entityType=table), mismo patron que usa DentalGest con las citas" }
+      ],
+      "entities": [
+        { "id": "ingredient", "name": "Ingredient", "status": "gap", "purpose": "Vincula un Product 'plato' con N insumos (Product/StockItem) con cantidad y unidad (con conversion: receta en gramos, insumo comprado por kilo). Al vender el plato, genera StockMovement de salida por cada insumo segun receta x cantidad vendida. Entidad mas claramente nueva: commerce no modela 'un producto compuesto de otros productos con conversion de unidades'." },
+        { "id": "table", "name": "Table", "status": "gap", "purpose": "Mesa con estado operativo (libre/ocupada/reservada/en limpieza), capacidad y zona (salon/terraza). Ningun modulo existente modela un espacio fisico asignable con estado de ocupacion en tiempo real." }
+      ],
+      "notes": [
+        "Comanda de cocina y estado de delivery NO requieren entidad nueva: se resuelven con work_item tipado y extension del enum Order.status respectivamente (analisis conservador, ver investigacion completa).",
+        "Regulatorio CONFIRMADO con fuente oficial, dos regimenes DISTINTOS del generico de cualquier pyme boliviana: (a) carnet sanitario del manipulador de alimentos (SEDES departamental, dato POR EMPLEADO que se renueva cada 3 meses); (b) licencia de funcionamiento municipal con categoria gastronomica diferenciada (ej. GAMLP: categorias A-H segun tipo de establecimiento, con requisitos propios de gas/electrico/acustica).",
+        "SENASAG (registro sanitario Ley 830) NO aplica a restaurantes -- ese regimen es para procesadoras/fraccionadoras/importadoras de alimentos, no para lugares de expendio/servicio de alimentos. Confirmado por descarte explicito, NO asumir que un restaurante necesita registro SENASAG."
+      ]
+    },
+    {
+      "trackId": "gestios-servicios-profesionales",
+      "product": "pack GestiOS estudios/agencias",
+      "domainName": "servicios_profesionales",
+      "investigadoConSubagente": {
+        "investigadoEn": "2026-07-07",
+        "metodo": "Investigacion web dedicada (DS 5563 marzo-2026, regimen RC-IVA profesionales independientes, CAUB, Ley 387 abogacia). Producto no existe todavia; estado roadmap: planificado, se apoya en el motor GestiOS existente."
+      },
+      "coreHooks": [
+        { "coreEntityId": "work_item", "as": "Proyecto/Engagement se modela como WorkItem tipado (type=proyecto), sin entidad nueva" },
+        { "coreEntityId": "document", "as": "contrato/propuesta firmada ya cubierto 100% (signedAt/expiresAt opcionales)" },
+        { "coreEntityId": "approval_request", "as": "aprobacion de propuesta o descuento de honorarios ya cubierto 100%" }
+      ],
+      "entities": [],
+      "notes": [
+        "CONFIRMADO: cero entidades nuevas necesarias. Es el caso ejemplar de rubro que se resuelve 100% con vocabulario+checklists+KPIs (verticalPacks), sin ninguna entidad ni modulo vertical adicional -- contraste directo con dental (6 entidades) o veterinaria (3).",
+        "Registro de horas trabajadas (time tracking) es la UNICA candidata real a extension futura, pero NO se construye ahora: no todo el rubro cobra por hora (muchos estudios cobran por proyecto o fee fijo mensual), y no hay evidencia de necesidad actual.",
+        "Hallazgo tecnico real (no asumido): `onia-commerce-order_lines.variant_id` es NOT NULL en commerce.schema.sql -- sales_cash esta hoy acoplado a catalog_inventory aunque el rubro no tenga stock fisico. Recomendacion: cargar servicios como Product sin poblar StockItem/StockMovement (catalogo de servicios sin stock), NO relajar el NOT NULL del schema para este pack -- ese cambio de schema, si se necesita, se evalua aparte.",
+        "Regulatorio fiscal MUY RECIENTE (marzo 2026): DS 5563 establece 'las tres reglas de oro' para facturas deducibles de profesionales independientes (a nombre del contribuyente, mismo periodo, vinculada a la actividad) y amplia gastos deducibles. Desde 2023 los profesionales independientes tributan RC-IVA (Formulario 610, 13% trimestral) en vez de IUE -- el `accounting.seed.bolivia.json` del core TODAVIA NO refleja el DS 5563, queda como posible actualizacion futura del modulo accounting, fuera de alcance de este pack.",
+        "Colegio de Auditores/Contadores (CAUB) SI emite documentos que el estudio contable necesita (certificado de control de ejercicio profesional, ~Bs 50-150 por dictamen) -- modelable como Document.docType, no como entidad nueva. Abogados NO tienen equivalente rentado: el habilitante real es el Registro Publico de Abogados del Ministerio de Justicia (Ley 387), la colegiatura departamental es gremial/voluntaria."
+      ]
+    },
+    {
+      "trackId": "proveegest-construccion",
+      "product": "pack ProveeGest materiales",
+      "domainName": "construccion_ferreteria",
+      "investigadoConSubagente": {
+        "investigadoEn": "2026-07-07",
+        "metodo": "Investigacion web dedicada (IBNORCA/normas NB de cemento/hormigon/acero/ladrillo, ONIA_IMPORT_LANDED_COST_MODULE_2026.md interno). Producto no existe todavia; estado roadmap: planificado, se apoya en el track proveegest-electrico existente."
+      },
+      "coreHooks": [
+        { "coreEntityId": "business_partner", "as": "contratista/constructora/ferreteria_minorista ya cubierto por partnerType del core, igual que proveegest-electrico" }
+      ],
+      "entities": [
+        { "id": "work_order", "name": "WorkOrder", "status": "gap", "purpose": "Pedido por obra: agrupador que referencia N Order del modulo commerce con estado de avance propio y posible direccion de entrega distinta a la del business_partner (entrega fraccionada a una misma obra). Patron arquitectonico analogo a treatment_plan de dental (agrupador con estado sobre entidades base), dominio distinto. Confirmado en ERPs reales del rubro (patron presupuesto->pedido->albaran->factura con entregas parciales)." }
+      ],
+      "notes": [
+        "product_homologation y landed_cost_calculation de proveegest-electrico (ver extension proveegest-electrico arriba) se REUSAN sin cambios: son mecanica fiscal/aduanera boliviana generica (mapeo a codigo SIN, formula CIF->NANDINA->IVA import->logistica), no dependen del rubro electrico. NO se duplican aca.",
+        "technical_catalog_spec de proveegest-electrico NO se reusa tal cual (voltajes/calibres es vocabulario electrico) pero tampoco necesita modulo nuevo: el mecanismo subyacente (knowledge_article del modulo knowledge, generico) ya sirve, solo cambian las plantillas/categorias de ficha tecnica (ej. resistencia de materiales, dimensiones) -- es trabajo de contenido, no de esquema.",
+        "Garantia de material y unidades de medida (bolsa/m3/quintal) NO justifican entidad nueva: unit ya es campo libre en product (commerce), y garantia es dato del fabricante mejor modelado como campo opcional en knowledge_article o product, no como flujo de trabajo separado.",
+        "Regulatorio CONFIRMADO y mas extenso que en electrico: normas NB/IBNORCA activas con certificacion real de fabricantes bolivianos -- NB 011/096 (cemento, SOBOCE/FANCESA certificados), NB 604 y NB 1225001-1 (hormigon), NB 1225004-1 (estructuras de acero), NB 1211001-1211003 (ladrillo ceramico). NO CONFIRMADO: valores numericos exactos de cada norma (documentos de pago) ni una norma especifica boliviana para varilla corrugada de refuerzo (fierro de construccion)."
+      ]
     }
   ]
 }
