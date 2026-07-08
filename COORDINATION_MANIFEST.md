@@ -24,7 +24,14 @@ referencia). Fuente única de asignación de trabajo y prompts de arranque:
 | F | `bolivian-electric-fase1` | repo Bolivian Electric (todo) | R3 |
 | G | `infra-deploy-n8n` | n8n / VPS / Supabase — SERIAL, un solo dueño | M1→M6 |
 | H | `contenido-higgsfield` | onia-hermes `hermes-content/references`+`skills`(video/IG)+`scripts`(video/ig)+`.hermes/video-lab`+assets | producción continua (video, carruseles, IG) |
+| K | `yt-canal` | onia-hermes `hermes-content/channels/onia-automatiza/**` | canal YT "ONIA Automatiza" (faceless, funnel a productos) — ver `hermes-content/docs/research/ONIA_YT_CANAL_ONIA_AUTOMATIZA_20260706.md` |
+| L | `yt-ciencia-cuerpo` | onia-hermes `hermes-content/channels/ciencia-cuerpo/**` | canal YT "La Ciencia de tu Cuerpo" (educativo, largo 8-12min, YMYL — solo explica mecanismos, cero consejo medico) — ver `hermes-content/channels/ciencia-cuerpo/PLAN.md` |
 | Core | `onia-core` | onia-hermes `onia-core/**` | contrato/schema/adapters — CONGELADO, solo bajo adopción aprobada |
+
+Nota: `video-factory/` (raíz) es el motor de video compartido (contratos, lanes,
+adapter Higgsfield con estimación de costo). Los carriles de canal YouTube
+(K, L) lo REUSAN vía sus propios scripts/CLI — no lo editan, porque no tiene
+dueño de carril único todavía y varias sesiones dependen de él.
 
 Regla dura: 1 carril = 1 worktree = 1 rama = 1 carpeta. A/B/C avisan antes de
 tocar los 4 archivos raíz de web-factory (`next.config.ts`, `layout.tsx`,

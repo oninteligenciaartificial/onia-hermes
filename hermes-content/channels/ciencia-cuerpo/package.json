@@ -1,0 +1,16 @@
+{
+  "name": "ciencia-cuerpo-pipeline",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Pipeline y subida YouTube del canal 'La Ciencia de tu Cuerpo' (ONIA, carril yt-ciencia-cuerpo).",
+  "scripts": {
+    "test": "node --test",
+    "validate": "node pipeline/validate.mjs",
+    "upload": "node scripts/upload-youtube.mjs"
+  },
+  "dependencies": {
+    "googleapis": "^173.0.0",
+    "zod": "^3.23.8"
+  }
+}

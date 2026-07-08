@@ -1,0 +1,26 @@
+{
+  "topic_id": "",
+  "slug": "",
+  "title_working": "",
+  "angle_thesis": "",
+  "audience": "adultos hispanohablantes curiosos, sin formacion medica",
+  "ymyl_sensitive_topic": false,
+  "sensitive_topic_tags": [],
+  "key_claims": [
+    {
+      "claim": "",
+      "source_title": "",
+      "source_url": "",
+      "source_publisher": "",
+      "verified_date": ""
+    }
+  ],
+  "risks": [],
+  "what_we_dont_know_yet": [],
+  "disclaimer_required": true,
+  "fact_check": {
+    "status": "pending",
+    "reviewed_by": "",
+    "notes": ""
+  }
+}

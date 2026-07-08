@@ -1,0 +1,28 @@
+{
+  "topic_id": "",
+  "video_slug": "",
+  "style_guide": {
+    "palette": "",
+    "line_style": "ilustracion plana estilo Kurzgesagt, sin fotorrealismo de personas ni eventos reales",
+    "reused_assets_ref": "pipeline/asset-library/ (a construir con el primer piloto)"
+  },
+  "shots": [
+    {
+      "n": 1,
+      "script_ref": "Hook",
+      "seconds": 8,
+      "type": "hero_clip",
+      "description": "",
+      "higgsfield_model": "",
+      "higgsfield_prompt": "",
+      "negative_prompt": "sin texto placeholder, sin logos de terceros, sin fotorrealismo de personas reales",
+      "estimated_credits": 0,
+      "reuse_from_library": false
+    }
+  ],
+  "totals": {
+    "still_count": 0,
+    "hero_clip_count": 0,
+    "estimated_credits_total": 0
+  }
+}

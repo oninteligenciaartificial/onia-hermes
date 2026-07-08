@@ -1,0 +1,29 @@
+{
+  "system": "La Ciencia de tu Cuerpo",
+  "created_at": "2026-07-08",
+  "default_rule": "prepare_only_until_explicit_approval",
+  "actions": [
+    { "action": "research_topic", "allowed_without_sergio": true, "risk": "low", "required_text": null },
+    { "action": "draft_research_brief", "allowed_without_sergio": true, "risk": "low", "required_text": null },
+    { "action": "write_script", "allowed_without_sergio": true, "risk": "low", "required_text": null },
+    { "action": "fact_check", "allowed_without_sergio": true, "risk": "low", "required_text": null },
+    { "action": "create_visual_prompts_and_shot_list", "allowed_without_sergio": true, "risk": "low", "required_text": null },
+    { "action": "generate_paid_visual_assets", "allowed_without_sergio": false, "risk": "medium", "required_text": "Apruebo generacion IA pagada: <pilot_id> presupuesto <creditos>" },
+    { "action": "generate_paid_voiceover", "allowed_without_sergio": false, "risk": "medium", "required_text": "Apruebo voz IA pagada: <pilot_id> presupuesto <monto>" },
+    { "action": "assemble_video_from_approved_assets", "allowed_without_sergio": true, "risk": "low", "required_text": null, "note": "solo despues de que los assets ya fueron generados con aprobacion" },
+    { "action": "connect_youtube_api", "allowed_without_sergio": false, "risk": "high", "required_text": "Apruebo conectar YouTube API: <channel_id>" },
+    { "action": "dry_run_upload", "allowed_without_sergio": true, "risk": "low", "required_text": null, "note": "no llama a la API real de YouTube, solo valida el payload" },
+    { "action": "private_upload", "allowed_without_sergio": false, "risk": "high", "required_text": "Apruebo subida privada YouTube: <content_id>" },
+    { "action": "public_publish", "allowed_without_sergio": false, "risk": "critical", "required_text": "Apruebo publicar YouTube: <content_id>" },
+    { "action": "activate_n8n_schedule", "allowed_without_sergio": false, "risk": "medium", "required_text": "Apruebo schedule n8n: <workflow_id>" }
+  ],
+  "ymyl_extra_gate": {
+    "action": "sensitive_topic_review",
+    "trigger_topics": ["cancer", "vacunas", "salud mental", "adicciones", "embarazo", "medicacion", "enfermedades especificas"],
+    "requirement": "minimo 2 fuentes independientes revisadas por pares + confirmar que el guion no cruza de mecanismo a consejo/tratamiento, antes de marcar fact_check.status = passed"
+  },
+  "notes": [
+    "Adaptado del patron ya validado en hermes-content/references/ai-youtube-approval-matrix-20260605.json (sistema Atlas AI Media), no es una copia — se agrega el gate YMYL especifico de salud.",
+    "disclosure IA (status.containsSyntheticMedia) se deja SIEMPRE en true en la subida real, ver PLAN.md #1 — no es una accion que requiera aprobacion, es un default fijo del script de subida."
+  ]
+}

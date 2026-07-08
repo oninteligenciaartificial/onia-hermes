@@ -1,0 +1,21 @@
+{
+  "content_id": "",
+  "title_options": ["", "", ""],
+  "title_final": "",
+  "description": "",
+  "disclaimer_text": "Este video es contenido educativo y no reemplaza el consejo de un profesional de la salud.",
+  "sources_in_description": [
+    { "n": 1, "title": "", "url": "" }
+  ],
+  "tags": [],
+  "thumbnail_brief": "",
+  "chapters": [
+    { "time": "0:00", "label": "" }
+  ],
+  "language": "es",
+  "category": "Education",
+  "made_for_kids": false,
+  "contains_synthetic_media": true,
+  "privacy_status_initial": "private",
+  "pinned_comment": ""
+}

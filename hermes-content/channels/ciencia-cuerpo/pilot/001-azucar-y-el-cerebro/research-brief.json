@@ -1,0 +1,48 @@
+{
+  "topic_id": "01",
+  "slug": "azucar-y-el-cerebro",
+  "title_working": "Que le hace el azucar a tu cerebro",
+  "angle_thesis": "El azucar activa el mismo circuito dopaminergico mesolimbico (nucleo accumbens) que ciertas drogas de abuso, a traves de DOS vias distintas (sabor y valor calorico) - un mecanismo real y medible, pero eso no significa que el azucar sea 'una droga' en sentido clinico estricto.",
+  "audience": "adultos hispanohablantes curiosos, sin formacion medica",
+  "ymyl_sensitive_topic": true,
+  "sensitive_topic_tags": ["adicciones"],
+  "key_claims": [
+    {
+      "claim": "Tanto los sabores dulces como las drogas de abuso estimulan la senalizacion de dopamina en el estriado ventral (nucleo accumbens), circuito central de recompensa y aprendizaje.",
+      "source_title": "Sugars and Sweet Taste: Addictive or Rewarding?",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8468293/",
+      "source_publisher": "NIH / PubMed Central",
+      "verified_date": "2026-07-08"
+    },
+    {
+      "claim": "En estudios con roedores, el consumo intenso de sabor dulce genero una senal de dopamina postsinaptica mas intensa que la cocaina.",
+      "source_title": "Intense Sweetness Surpasses Cocaine Reward",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC1931610/",
+      "source_publisher": "NIH / PubMed Central",
+      "verified_date": "2026-07-08"
+    },
+    {
+      "claim": "Existen dos vias de dopamina separadas para el azucar: una vinculada al valor gustativo (estriado ventral) y otra al valor nutricional post-ingesta (estriado dorsal) - el azucar 'golpea' el circuito de recompensa dos veces, no una.",
+      "source_title": "Circuit Organization of Sugar Reinforcement",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5003755/",
+      "source_publisher": "NIH / PubMed Central",
+      "verified_date": "2026-07-08"
+    }
+  ],
+  "risks": [
+    "Riesgo de sobre-simplificar a 'el azucar es una droga' - la comparacion es de MECANISMO (via dopaminergica compartida), no de equivalencia clinica; el nivel absoluto de dopamina no predice por si solo el potencial adictivo de una sustancia o conducta.",
+    "Riesgo de sonar prescriptivo ('por eso no comas azucar') - el guion se mantiene estrictamente en el mecanismo, nunca en la recomendacion.",
+    "'Adiccion a la comida' como diagnostico clinico formal sigue debatido en la literatura - el guion no debe presentarlo como un diagnostico establecido y cerrado."
+  ],
+  "what_we_dont_know_yet": [
+    "Si el nivel de dopamina que genera un estimulo predice de forma fiable su potencial adictivo en humanos (la literatura de roedores no se traslada 1:1).",
+    "Que tan generalizable es a personas el hallazgo de roedores sobre azucar vs. cocaina.",
+    "Si 'adiccion a la comida' como entidad clinica formal esta establecida o sigue en debate activo entre investigadores."
+  ],
+  "disclaimer_required": true,
+  "fact_check": {
+    "status": "passed",
+    "reviewed_by": "sesion yt-ciencia-cuerpo, 2026-07-08 (verificacion propia via WebSearch, pendiente confirmacion humana de Sergio antes de gasto real)",
+    "notes": "3 fuentes NIH/PMC independientes revisadas por pares para el circuito compartido de recompensa; guion evita la equivalencia 'azucar = droga' y explicita la matizacion en seccion 'que no sabemos todavia'. Cumple el gate YMYL extra (tema con tag 'adicciones' exige minimo 2 fuentes independientes, aqui hay 3)."
+  }
+}
