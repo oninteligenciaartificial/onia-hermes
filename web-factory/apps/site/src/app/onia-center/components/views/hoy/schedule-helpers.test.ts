@@ -43,6 +43,16 @@ describe("isBlockHappeningNow", () => {
     const reference = new Date("2026-07-06T07:30:00");
     expect(isBlockHappeningNow({ start: "07:00", end: "07:30" }, reference)).toBe(false);
   });
+
+  it("returns true when a midnight-crossing block is happening now, after midnight", () => {
+    const reference = new Date("2026-07-06T01:00:00");
+    expect(isBlockHappeningNow({ start: "22:00", end: "02:00" }, reference)).toBe(true);
+  });
+
+  it("returns false when a midnight-crossing block has already ended", () => {
+    const reference = new Date("2026-07-06T03:00:00");
+    expect(isBlockHappeningNow({ start: "22:00", end: "02:00" }, reference)).toBe(false);
+  });
 });
 
 describe("getTodaysScheduleBlocks", () => {

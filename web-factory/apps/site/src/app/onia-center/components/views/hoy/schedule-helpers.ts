@@ -42,6 +42,12 @@ export function isBlockHappeningNow(
   referenceDate: Date,
 ): boolean {
   const nowLabel = timeLabel(referenceDate);
+  const crossesMidnight = block.end <= block.start;
+
+  if (crossesMidnight) {
+    return nowLabel >= block.start || nowLabel < block.end;
+  }
+
   return nowLabel >= block.start && nowLabel < block.end;
 }
 
