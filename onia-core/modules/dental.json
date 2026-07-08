@@ -1,0 +1,108 @@
+{
+  "module": "dental",
+  "name": "ONIA Dental Module (Clinica Odontologica)",
+  "version": "0.1.0",
+  "status": "draft",
+  "layer": "vertical_extension",
+  "purpose": "Primer modulo VERTICAL (de un solo rubro, a diferencia de commerce/accounting que sirven a varios): cubre las entidades clinicas dentales confirmadas como GAP contra el schema real de DentaGest (vertical-extensions.json) -- periodontograma, plan de tratamiento agrupador, consentimiento informado, alerta medica estructurada, caso de laboratorio protesico e imagen dental por pieza. NO reconstruye lo que DentaGest ya tiene (Patient, ClinicalRecord, ToothRecord/odontograma, PatientTreatment, Prescription siguen siendo del producto). El core no es clinico; este modulo tampoco lo fuerza a serlo -- vive fuera del contrato, activable solo por el track dentagest-clinical.",
+  "coreContract": "onia-core/contract.json",
+  "schemaFile": "onia-core/modules/dental.schema.sql",
+  "installInProductRepos": false,
+  "activatesCapabilities": [],
+  "providesCapabilities": [
+    "dental_clinical"
+  ],
+  "coreDependencies": [
+    { "coreEntityId": "organization", "as": "tenant root de cada entidad del modulo" },
+    { "coreEntityId": "member", "as": "medical_alert.recordedBy / treatment_plan.approvedByStaffId / dental_lab_case.orderedBy (quien registra o aprueba)" },
+    { "coreEntityId": "document", "as": "tooth_image.documentId (radiografia/foto via storageRef) e informed_consent.documentId (PDF firmado)" }
+  ],
+  "verticalTracks": [
+    "dentagest-clinical"
+  ],
+  "entities": [
+    {
+      "id": "perio_chart",
+      "name": "PeriodontalReading",
+      "capabilityId": "dental_clinical",
+      "table": "onia_dental_perio_charts",
+      "purpose": "Periodontograma: lectura de 6 puntos por diente en una fecha de examen (profundidad de bolsa, sangrado al sondaje, recesion, movilidad, furcacion). Entidad separada del odontograma (que registra estado por diente, no salud periodontal).",
+      "requiredFields": ["id", "organizationId", "patientId", "toothNumber", "examDate", "sitesJson", "createdAt"],
+      "optionalFields": ["mobilityGrade", "furcationGrade", "recordedByMemberId", "notes"],
+      "tenantScoped": true
+    },
+    {
+      "id": "treatment_plan",
+      "name": "TreatmentPlan",
+      "capabilityId": "dental_clinical",
+      "table": "onia_dental_treatment_plans",
+      "purpose": "Agrupador de PatientTreatment (dominio del producto) con costo total y aprobacion/firma del paciente. Hoy en DentaGest cada tratamiento es independiente; esto agrega el 'plan' que los junta y que el paciente aprueba una sola vez.",
+      "requiredFields": ["id", "organizationId", "patientId", "status", "createdAt"],
+      "optionalFields": ["title", "totalCost", "patientApprovedAt", "approvedByStaffMemberId", "notes"],
+      "tenantScoped": true
+    },
+    {
+      "id": "informed_consent",
+      "name": "InformedConsent",
+      "capabilityId": "dental_clinical",
+      "table": "onia_dental_informed_consents",
+      "purpose": "Consentimiento informado firmado (paciente + profesional, testigo opcional) antes de un procedimiento invasivo (implante, endodoncia, exodoncia, ortodoncia). Debe existir y estar firmado antes de proceder.",
+      "requiredFields": ["id", "organizationId", "patientId", "procedureType", "status", "createdAt"],
+      "optionalFields": ["treatmentPlanId", "patientSignedAt", "professionalSignedAt", "witnessName", "documentId"],
+      "tenantScoped": true
+    },
+    {
+      "id": "medical_alert",
+      "name": "MedicalAlert",
+      "capabilityId": "dental_clinical",
+      "table": "onia_dental_medical_alerts",
+      "purpose": "Alergia, medicacion o condicion sistemica ESTRUCTURADA (no texto libre), con severidad, para alerta visual prominente. ClinicalRecord real de DentaGest solo tiene campos de texto libre hoy.",
+      "requiredFields": ["id", "organizationId", "patientId", "alertType", "severity", "description", "active", "createdAt"],
+      "optionalFields": ["recordedByMemberId", "resolvedAt"],
+      "tenantScoped": true
+    },
+    {
+      "id": "dental_lab_case",
+      "name": "DentalLabCase",
+      "capabilityId": "dental_clinical",
+      "table": "onia_dental_lab_cases",
+      "purpose": "Encargo a laboratorio protesico (protesis, corona, guarda) con estado de envio/recepcion y costo. Estado sigue una maquina de transiciones (ordered -> in_lab -> shipped -> received -> installed, o cancelled).",
+      "requiredFields": ["id", "organizationId", "patientId", "labName", "caseType", "status", "orderedAt", "createdAt"],
+      "optionalFields": ["treatmentPlanId", "expectedReturnDate", "receivedAt", "installedAt", "cost", "orderedByMemberId"],
+      "tenantScoped": true
+    },
+    {
+      "id": "tooth_image",
+      "name": "ToothImage",
+      "capabilityId": "dental_clinical",
+      "table": "onia_dental_tooth_images",
+      "purpose": "Radiografia o foto intraoral vinculada a una pieza dental y fecha (distinto de un documento adjunto generico). Referencia document del core via storageRef.",
+      "requiredFields": ["id", "organizationId", "patientId", "toothNumber", "imageType", "capturedAt", "documentId", "createdAt"],
+      "optionalFields": ["notes"],
+      "tenantScoped": true
+    }
+  ],
+  "clinicalConfig": {
+    "notClinicalAdvice": true,
+    "perioSiteLabels": ["mesiobuccal", "buccal", "distobuccal", "distolingual", "lingual", "mesiolingual"],
+    "perioScreeningReferenceMm": {
+      "healthyMax": 3,
+      "note": "1-3mm de profundidad de sondaje es el rango de referencia comun para surco sano (ej. sistema PSR de la ADA). Sitios por encima de este rango son una senal de screening, NO un diagnostico -- requiere evaluacion del odontologo/periodoncista."
+    },
+    "medicalAlertSeverities": ["low", "moderate", "high", "critical"],
+    "labCaseStatuses": ["ordered", "in_lab", "shipped", "received", "installed", "cancelled"],
+    "notes": [
+      "Este modulo NO sustituye juicio clinico; estructura datos y flujo, no diagnostica.",
+      "Bolivia exige la Historia Clinica Odontologica (Ministerio de Salud) pero no dicta el modelo de datos de periodontograma/consentimiento/alertas -- estos campos siguen practica de industria (OpenDental y estandares similares), no una norma boliviana especifica."
+    ]
+  },
+  "notes": [
+    "El modulo NO redefine entidades del core ni las ya implementadas en DentaGest (Patient, ClinicalRecord, ToothRecord/odontograma, PatientTreatment, Prescription); agrega SOLO las 6 confirmadas como gap en vertical-extensions.json.",
+    "Primer modulo de capa vertical_extension de UN solo rubro (verticalTracks = [dentagest-clinical] unicamente) -- distinto de commerce/accounting/invoicing/payroll, que sirven a varios rubros a la vez."
+  ],
+  "gates": [
+    "installInProductRepos = false hasta plan de adopcion del modulo aprobado",
+    "SQL base del modulo (dental.schema.sql) se traduce a migraciones del producto, no se aplica directo",
+    "No sustituye asesoria clinica; los umbrales de referencia son de screening, no diagnostico"
+  ]
+}

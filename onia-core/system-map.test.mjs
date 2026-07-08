@@ -34,10 +34,17 @@ describe("buildSystemMap - capa RUBROS", () => {
     );
   });
 
-  it("DentalGest necesita commerce/accounting/invoicing/payroll y tiene extension propia (odontograma)", () => {
+  it("DentalGest necesita commerce/accounting/invoicing/payroll (compartidos) + dental (vertical, solo suyo) y tiene extension propia (odontograma)", () => {
     const dental = map.rubros.find((rubro) => rubro.id === "dentagest-clinical");
-    assert.deepEqual(dental.moduleIds, ["accounting", "commerce", "invoicing", "payroll"]);
+    assert.deepEqual(dental.moduleIds, ["accounting", "commerce", "dental", "invoicing", "payroll"]);
     assert.ok(dental.verticalExtensionIds.includes("odontogram_entry"));
+  });
+
+  it("dental es modulo de UN solo rubro: no aparece en ningun otro track", () => {
+    for (const rubro of map.rubros) {
+      if (rubro.id === "dentagest-clinical") continue;
+      assert.ok(!rubro.moduleIds.includes("dental"), `${rubro.id} no deberia necesitar el modulo dental`);
+    }
   });
 
   it("ProveeGest es el unico que necesita knowledge (catalogo tecnico del rubro)", () => {
@@ -65,7 +72,7 @@ describe("buildSystemMap - capa REPETICION", () => {
 });
 
 describe("sharedModules / unusedModules", () => {
-  it("sharedModules(2) devuelve los 4 modulos usados por 2+ rubros (todos menos knowledge)", () => {
+  it("sharedModules(2) devuelve los 4 modulos usados por 2+ rubros (todos menos knowledge y dental, que son de 1 solo rubro)", () => {
     const shared = sharedModules(map, 2).map((entry) => entry.moduleId).sort();
     assert.deepEqual(shared, ["accounting", "commerce", "invoicing", "payroll"]);
   });
@@ -78,7 +85,7 @@ describe("sharedModules / unusedModules", () => {
     assert.ok(!ganadero.moduleIds.includes("knowledge"));
   });
 
-  it("unusedModules esta vacio: los 5 modulos los usa al menos 1 rubro", () => {
+  it("unusedModules esta vacio: los 6 modulos los usa al menos 1 rubro", () => {
     assert.deepEqual(unusedModules(map), []);
   });
 });

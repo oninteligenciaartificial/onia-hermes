@@ -19,6 +19,7 @@ const MODULE_LOGIC = {
   accounting: ["@onia/core/modules/accounting-logic"],
   invoicing: ["@onia/core/modules/invoicing-logic"],
   payroll: ["@onia/core/modules/payroll-logic"],
+  dental: ["@onia/core/modules/dental-logic"],
   knowledge: [],
 };
 

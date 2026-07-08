@@ -247,6 +247,48 @@ describe("payroll module (Bolivia)", () => {
   });
 });
 
+describe("dental module (first single-rubro vertical module)", () => {
+  const dental = getModule(modules, "dental");
+
+  it("provides its own capability (dental_clinical) instead of activating a core one", () => {
+    assert.ok(dental, "dental module present");
+    assert.deepEqual(dental.activatesCapabilities, []);
+    assert.deepEqual(dental.providesCapabilities, ["dental_clinical"]);
+    const coreCapabilityIds = new Set(contract.capabilities.map((capability) => capability.id));
+    assert.ok(!coreCapabilityIds.has("dental_clinical"), "dental_clinical must not be a core capability");
+  });
+
+  it("applies to EXACTLY ONE vertical (dentagest-clinical), unlike commerce/accounting/invoicing/payroll", () => {
+    assert.deepEqual(dental.verticalTracks, ["dentagest-clinical"]);
+  });
+
+  it("has the 6 gap entities confirmed against DentaGest's real schema (vertical-extensions.json)", () => {
+    const ids = dental.entities.map((entity) => entity.id);
+    for (const id of ["perio_chart", "treatment_plan", "informed_consent", "medical_alert", "dental_lab_case", "tooth_image"]) {
+      assert.ok(ids.includes(id), `has ${id}`);
+    }
+    // No reconstruye lo que DentaGest ya tiene implementado.
+    for (const id of ["patient", "clinical_record", "odontogram_entry", "patient_treatment", "prescription"]) {
+      assert.ok(!ids.includes(id), `must NOT rebuild ${id} (already implemented in DentaGest)`);
+    }
+  });
+
+  it("declares a SQL schema that defines every entity table", () => {
+    const schema = readFileSync(new URL(`../../${dental.schemaFile}`, import.meta.url), "utf8");
+    for (const entity of dental.entities) {
+      assert.ok(entity.table, `${entity.id} declares a table`);
+      assert.ok(schema.includes(entity.table), `schema defines ${entity.table}`);
+    }
+  });
+
+  it("flags clinical thresholds as screening reference, not diagnosis (notClinicalAdvice)", () => {
+    const config = dental.clinicalConfig;
+    assert.ok(config, "clinicalConfig present");
+    assert.equal(config.notClinicalAdvice, true);
+    assert.equal(config.perioScreeningReferenceMm.healthyMax, 3);
+  });
+});
+
 describe("modules validator integration", () => {
   it("modules pass validate-modules.mjs (exit 0)", () => {
     const validatePath = fileURLToPath(new URL("./validate-modules.mjs", import.meta.url));

@@ -1,5 +1,77 @@
 # ONIA Core Changelog
 
+## modules/dental 0.1.0 — 2026-07-07 (primer modulo VERTICAL, de un solo rubro)
+
+- Sergio pidio "empecemos a desarrollar los modulos por rubro". Hasta ahora
+  `onia-core/modules/` solo tenia modulos CROSS-CUTTING (commerce/accounting/
+  invoicing/payroll/knowledge, usados por 4/4 o al menos 2+ rubros). Este es
+  el primer modulo de UN solo rubro (`verticalTracks: ["dentagest-clinical"]`
+  exclusivamente) — la contraparte construida del catalogo
+  `vertical-extensions.json`, que hasta ahora solo documentaba (sin schema ni
+  logica real) que' es especifico de cada rubro.
+- No es una contradiccion del principio "lo especifico del rubro vive en el
+  PRODUCTO, no en onia-core": es la MISMA relacion que ya existe entre
+  commerce/accounting y sus productos (blueprint reusable en onia-core, cada
+  producto lo adopta traduciendolo a su propia migracion). Antes, "especifico
+  de un rubro" significaba "sin blueprint, cada producto lo inventa desde
+  cero"; ahora puede significar "blueprint reusable, pero solo relevante para
+  ese rubro" — util si ONIA vende el mismo vertical a mas de un cliente
+  (la estrategia de fabrica de verticales, `ONIA_VERTICAL_FACTORY_STRATEGY_2026.md`,
+  siempre asumio esto).
+- 6 entidades, las mismas marcadas `status: "gap"` en `vertical-extensions.json`
+  tras la verificacion contra el schema real de DentaGest (sesion 2026-07-06):
+  `perio_chart` (periodontograma, 6 puntos por diente), `treatment_plan`
+  (agrupador de tratamientos con aprobacion del paciente), `informed_consent`
+  (firmas paciente+profesional antes de procedimiento invasivo),
+  `medical_alert` (alergias/medicacion estructuradas con severidad, no texto
+  libre), `dental_lab_case` (encargo a laboratorio protesico con estados) y
+  `tooth_image` (radiografia/foto por pieza). NO reconstruye Patient/
+  ClinicalRecord/odontograma/PatientTreatment/Prescription — esos ya existen
+  en el producto real (`status: "implemented"`/`"implemented_simpler"`).
+- PROVEE su propia capability (`dental_clinical`), mismo mecanismo que
+  accounting/invoicing/payroll (`providesCapabilities`, no
+  `activatesCapabilities`) — el core no tiene ni tendra una capability
+  clinica.
+- `dental.logic.mjs`: `computeTreatmentPlanTotal`/`isTreatmentPlanApproved`,
+  `hasRequiredSignatures`/`canProceedWithProcedure` (el consentimiento debe
+  estar firmado por paciente Y profesional en o antes de la fecha del
+  procedimiento — firmar despues no cuenta), `severityRank`/
+  `sortAlertsBySeverity`/`hasCriticalAlerts` (solo alertas ACTIVAS),
+  maquina de estados `canTransitionLabCase`/`applyLabCaseTransition`
+  (ordered -> in_lab -> shipped -> received -> installed, cancelled desde
+  cualquier no-terminal) + `isLabCaseOverdue`, y `summarizePerioReading`
+  (promedio/maximo de profundidad + conteo de sitios sobre el rango de
+  referencia de screening). 21 tests.
+- **Umbrales clinicos tratados con el mismo cuidado que los fiscales**:
+  `clinicalConfig.notClinicalAdvice: true` explicito; el umbral de 3mm de
+  periodontograma se documenta como "rango de referencia de screening
+  comun (ej. sistema PSR de la ADA), NO un diagnostico" — el modulo
+  estructura datos y flujo, nunca sustituye juicio clinico.
+- `vertical-extensions.json`: el track dental gana `oniaCoreModule: "dental"`
+  + nota cruzada explicando la relacion (el `status` de cada entity sigue
+  describiendo el PRODUCTO real, no cambia solo porque el modulo exista;
+  adoptarlo en DentaGest es trabajo separado, mismo criterio que R6 con
+  commerce/accounting/invoicing).
+- Se integra a `report.mjs`/`system-map.mjs`/`install-plan.mjs` SIN cambios
+  de codigo en esos archivos: la deteccion ya era generica por
+  `verticalTracks` + `providesCapabilities` (confirmado antes de construir,
+  no asumido). `system-map.mjs` ahora muestra `dental: usado por 1/4 rubros` —
+  primer modulo con reparticion genuinamente exclusiva de un rubro (antes
+  solo `knowledge` estaba en esa categoria, para ProveeGest).
+- `install-plan.mjs` (`MODULE_LOGIC.dental`) y `package.json`
+  (`./modules/dental-logic`) actualizados, mismo patron que los demas.
+- Modulos totales: 6 (commerce, knowledge, accounting, invoicing, payroll,
+  dental), 36 entidades. `contract.json` intacto (este modulo no lo toca,
+  igual que los anteriores). 314 tests en total (4 validadores + suite
+  completa verdes).
+- Candidatos siguientes, NO construidos todavia (decision de secuencia
+  pendiente de Sergio): modulo `ganadero` (10 entidades ya catalogadas en
+  `vertical-extensions.json`, pero el producto Ganadero OS esta en pausa
+  comercial) y modulo `proveegest`/distribucion (3 entidades: product_homologation,
+  technical_catalog_spec son chicas; landed_cost_calculation ya tiene su
+  propio doc de diseno completo, `ONIA_IMPORT_LANDED_COST_MODULE_2026.md`, y
+  probablemente merece su propia sesion en vez de una adicion rapida aca).
+
 ## 0.6.2 — 2026-07-07 (GestiOS aprobado para adopcion, segundo producto)
 
 - Tras cerrar el gap de 0.6.1 y arrancar la adopcion en DentaGest (item R6,

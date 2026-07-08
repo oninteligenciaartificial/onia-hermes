@@ -7,6 +7,8 @@
       "trackId": "dentagest-clinical",
       "product": "DentalGest",
       "domainName": "salud_dental",
+      "oniaCoreModule": "dental",
+      "oniaCoreModuleNote": "Los 6 entities marcados status='gap' abajo (perio_chart, treatment_plan, informed_consent, medical_alert, dental_lab_case, tooth_image) tienen ahora un blueprint reusable en onia-core/modules/dental.json (schema + logica pura), mismo mecanismo que commerce/accounting pero para UN solo rubro. El status de cada entity sigue describiendo el PRODUCTO real (DentaGest), no cambia solo porque el modulo exista -- adoptarlo es trabajo separado del carril D, igual que R6 con commerce/accounting/invoicing.",
       "verifiedAgainstRealProduct": {
         "verifiedAt": "2026-07-06",
         "method": "Lectura directa de prisma/schema.prisma en C:\\dev\\proyectos\\DentaGest\\dental-saas (solo lectura, sin escribir en ese repo).",
