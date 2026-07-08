@@ -1,3 +1,16 @@
+export type Listing = {
+  titulo: string;
+  precio: string;
+  zona: string;
+  tipo: string;
+  operacion: "venta" | "alquiler";
+  dormitorios?: number;
+  banos?: number;
+  imagen?: string;
+  imagenAlt?: string;
+  destacado?: boolean;
+};
+
 export type SiteClient = {
   nombre: string;
   tagline: string;
@@ -33,6 +46,9 @@ export type SiteClient = {
   procesoKicker?: string;
   procesoTitulo?: string;
   faq?: Array<{ pregunta: string; respuesta: string }>;
+  listings?: Listing[];
+  zonas?: string[];
+  wordmarkBreak?: string;
   cta: {
     texto: string;
     url: string;

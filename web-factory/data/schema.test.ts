@@ -217,3 +217,60 @@ describe("clientSchema dashboard grouped nav", () => {
     expect(Array.isArray(parsed.dashboard.nav)).toBe(true);
   });
 });
+
+describe("clientSchema realty fields", () => {
+  it("parses listings, zonas and wordmarkBreak when present", () => {
+    const parsed = clientSchema.parse({
+      nombre: "Terra Propiedades",
+      slug: "terra",
+      tagline: "Encontra tu proximo lugar",
+      descripcion: "Agencia inmobiliaria.",
+      wordmarkBreak: "TERRA",
+      zonas: ["Zona Sur", "Centro"],
+      listings: [
+        {
+          titulo: "Casa 3 dormitorios en Zona Sur",
+          precio: "USD 145.000",
+          zona: "Zona Sur",
+          tipo: "Casa",
+          operacion: "venta",
+          dormitorios: 3,
+          banos: 2,
+          imagen: "assets/listing-1.webp",
+          imagenAlt: "Fachada de casa en Zona Sur",
+          destacado: true,
+        },
+      ],
+    });
+    expect(parsed.wordmarkBreak).toBe("TERRA");
+    expect(parsed.zonas).toEqual(["Zona Sur", "Centro"]);
+    expect(parsed.listings[0].operacion).toBe("venta");
+    expect(parsed.listings[0].destacado).toBe(true);
+  });
+
+  it("defaults realty fields to empty when absent", () => {
+    const parsed = clientSchema.parse({
+      nombre: "Terra Propiedades",
+      slug: "terra",
+      tagline: "t",
+      descripcion: "d",
+    });
+    expect(parsed.wordmarkBreak).toBe("");
+    expect(parsed.zonas).toEqual([]);
+    expect(parsed.listings).toEqual([]);
+  });
+
+  it("defaults listing operacion to venta and destacado to false", () => {
+    const parsed = clientSchema.parse({
+      nombre: "Terra Propiedades",
+      slug: "terra",
+      tagline: "t",
+      descripcion: "d",
+      listings: [
+        { titulo: "Depto", precio: "USD 80.000", zona: "Centro", tipo: "Departamento" },
+      ],
+    });
+    expect(parsed.listings[0].operacion).toBe("venta");
+    expect(parsed.listings[0].destacado).toBe(false);
+  });
+});

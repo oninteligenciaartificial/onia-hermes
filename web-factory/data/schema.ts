@@ -37,6 +37,19 @@ const faqItemSchema = z.object({
   respuesta: z.string().min(1),
 });
 
+const listingSchema = z.object({
+  titulo: z.string().min(1),
+  precio: z.string().min(1),
+  zona: z.string().min(1),
+  tipo: z.string().min(1),
+  operacion: z.enum(["venta", "alquiler"]).default("venta"),
+  dormitorios: z.number().int().min(0).optional(),
+  banos: z.number().int().min(0).optional(),
+  imagen: optionalAssetSchema,
+  imagenAlt: z.string().default(""),
+  destacado: z.boolean().default(false),
+});
+
 const productSpecSchema = z.object({
   label: z.string().min(1),
   value: z.string().min(1),
@@ -283,10 +296,15 @@ export const clientSchema = z.object({
   beneficios: z.array(z.string().min(1)).default([]),
   credenciales: z.array(z.string().min(1)).default([]),
   proceso: z.array(procesoPasoSchema).default([]),
+  procesoKicker: z.string().optional(),
+  procesoTitulo: z.string().optional(),
   faq: z.array(faqItemSchema).default([]),
   disponibilidad: z.string().optional(),
   ctaSecundariaTexto: z.string().optional(),
   referencias: z.array(referenceSchema).default([]),
+  listings: z.array(listingSchema).default([]),
+  zonas: z.array(z.string().min(1)).default([]),
+  wordmarkBreak: z.string().default(""),
   cta: z
     .object({
       texto: z.string().min(1).default("Agendar una llamada"),
