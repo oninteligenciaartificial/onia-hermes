@@ -200,6 +200,42 @@ Pendiente:
 - La aprobacion debe mencionar la pieza, empresa u obligacion exacta.
 - Respuestas ambiguas como `ok` o `dale` no son suficientes.
 
+Formato valido:
+- `Apruebo plan semanal: <pieza exacta>`
+- `Apruebo contactar: <empresa>`
+- `Confirmo impuesto: <obligacion> <fecha>`
+- `Aprobar video <job_id>`
+- `Publicar video <job_id>`
+
+Formatos no validos: `ok`, `dale`, `hazlo`, `publica algo`.
+
+## Variables recomendadas
+Fuente de los IDs de Notion: `EXECUTION_PROTOCOL.md` (seccion "Confirmed Notion Sources").
+
+- `ONIA_TELEGRAM_APPROVAL_CHAT_ID`
+- `ONIA_DEFAULT_WEEKLY_TOPIC`
+- `ONIA_DEFAULT_PROSPECTING_INDUSTRY`
+- `ONIA_DEFAULT_PROSPECTING_LOCATION`
+- `ONIA_NOTION_CRM_DATABASE_ID=95acb20d-e7f5-4eaa-b185-7a7933ffdd1a`
+- `ONIA_NOTION_CRM_DATA_SOURCE_ID=9b4c77be-d02b-4840-8f91-827ec8007839`
+- `ONIA_NOTION_FINANCE_DATABASE_ID=ffc07959-c372-4ff7-aaf6-2d744d5bf81c`
+- `ONIA_NOTION_FINANCE_DATA_SOURCE_ID=0e6e404f-d329-4898-9861-64f8ce973ac5`
+- `ONIA_NOTION_TOOLS_DATABASE_ID=dc6a6e27-453a-4d7c-800b-ef9c29c8d5ff`
+- `ONIA_NOTION_TOOLS_DATA_SOURCE_ID=5eaa8d12-823c-4b3b-96bb-e7aaeab1ff9c`
+- `ONIA_NOTION_TASKS_DATABASE_ID=698f00c1-b022-4c37-81f2-3fb8e73955b4`
+- `ONIA_NOTION_REPORTS_DATABASE_ID`
+- `ONIA_NOTION_TAX_DATABASE_ID`
+- `TIKTOK_CLIENT_KEY`
+- `TIKTOK_CLIENT_SECRET`
+- `TIKTOK_REFRESH_TOKEN`
+- `YOUTUBE_CLIENT_ID`
+- `YOUTUBE_CLIENT_SECRET`
+- `YOUTUBE_REFRESH_TOKEN`
+
+Nota: este repo usa credenciales n8n (Header Auth / tipos nativos) en vez de
+`$env` para secretos (ver regla del plan VPS en `CLAUDE.md`); esta lista es de
+referencia para IDs no secretos y para cuando se agregue una credencial nueva.
+
 ## Comandos relacionados
 - `Plan semanal ONIA`
 - `Busca prospectos ONIA: <industria> | <ubicacion>`

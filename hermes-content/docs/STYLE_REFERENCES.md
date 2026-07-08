@@ -15,6 +15,14 @@ Hermes uses Pinterest and professional references as inspiration, not as source 
 - CTA style.
 - What not to copy.
 
+## Content angles
+- "Estas tareas ya no deberian hacerse a mano."
+- "Como una pyme boliviana puede usar IA sin contratar un equipo tecnico."
+- "Errores que hacen perder leads en WhatsApp/Instagram."
+- "Automatizacion practica para clinicas dentales."
+- "Antes/despues de un proceso con IA."
+- "Checklist para saber si tu negocio esta listo para automatizar."
+
 ## ONIA quality bar
 - Clear Spanish.
 - Practical business value.
@@ -116,3 +124,21 @@ Use creator videos as structural inspiration only. Extract:
 Never copy a creator's exact words, face, brand, edit sequence, music, captions
 or proprietary product framing. If a reference depends on the creator's personal
 likeness, treat it as rhythm/structure only.
+
+## Example adaptation
+
+Reference pattern:
+- Hook: "5 errores que te hacen perder clientes"
+- Rhythm: one mistake per slide
+- CTA: "Comenta AUDITORIA"
+
+ONIA adaptation:
+- Title: "5 errores que hacen que tu clinica pierda pacientes por WhatsApp"
+- Audience: clinicas dentales en Bolivia
+- Slides:
+  - No respondes en menos de 5 minutos.
+  - No haces seguimiento automatico.
+  - No separas consultas de pacientes reales.
+  - No tienes recordatorios de cita.
+  - No mides de donde vienen los leads.
+- CTA: "Escribenos AUDITORIA y revisamos tu proceso."

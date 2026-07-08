@@ -1,0 +1,35 @@
+:root {
+  --center-tone-green: oklch(0.5 0.13 155);
+  --center-tone-green-bg: oklch(0.94 0.05 155);
+  --center-tone-yellow: oklch(0.52 0.14 85);
+  --center-tone-yellow-bg: oklch(0.94 0.06 85);
+  --center-tone-red: oklch(0.5 0.19 25);
+  --center-tone-red-bg: oklch(0.93 0.06 25);
+  --center-tone-blue: oklch(0.46 0.12 250);
+  --center-tone-blue-bg: oklch(0.93 0.04 250);
+}
+
+.onia-center-tone-green {
+  color: var(--center-tone-green);
+  background: var(--center-tone-green-bg);
+}
+
+.onia-center-tone-yellow {
+  color: var(--center-tone-yellow);
+  background: var(--center-tone-yellow-bg);
+}
+
+.onia-center-tone-red {
+  color: var(--center-tone-red);
+  background: var(--center-tone-red-bg);
+}
+
+.onia-center-tone-blue {
+  color: var(--center-tone-blue);
+  background: var(--center-tone-blue-bg);
+}
+
+.onia-center-tone-neutral {
+  color: var(--muted-foreground);
+  background: var(--muted);
+}

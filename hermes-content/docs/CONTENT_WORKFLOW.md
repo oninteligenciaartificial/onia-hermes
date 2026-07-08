@@ -139,3 +139,9 @@ Caption formula:
 TikTok and YouTube are planned channels. Until their APIs are connected, Hermes
 prepares `tiktok_description`, `youtube_title`, `youtube_description` and
 `youtube_tags`, but does not publish there.
+
+## Acceptance criteria
+- Every published asset is original or owned by ONIA.
+- Every Instagram URL is public and direct.
+- Hermes reports `published_id` after publishing.
+- Failed publishes include the exact Graph API error and next action.

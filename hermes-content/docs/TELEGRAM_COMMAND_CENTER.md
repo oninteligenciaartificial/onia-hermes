@@ -19,6 +19,11 @@ n8n debe responder el campo:
 telegram_reply
 ```
 
+Regla: AlfredHQ puede ser el bot personal por ahora. No crear un segundo bot
+hasta que haya usuarios externos usando el mismo canal o hasta que la
+separacion de privacidad lo exija. El problema historico era el scheduling,
+no el bot.
+
 ## Comandos utiles
 
 ```text
@@ -67,15 +72,32 @@ Nada se publica con solo crear un brief.
 - ONIA: educacion, demos, sistemas, autoridad y conversion.
 - Clientes: videos seguros con oferta aprobada.
 
+## Daily loop recomendado (agenda personal Sergio)
+
+| Hora Bolivia | Accion |
+|---|---|
+| 06:30 | levantarse, agua, aseo, cero telefono |
+| 07:00 | Plan Sergio hoy: caja, ventas, 3 prioridades |
+| 08:30 | ventas, CRM y seguimientos |
+| 11:30 | ventana de reuniones 1 |
+| 15:30 | ventana de reuniones 2 |
+| 17:30 | gym protegido en dias de entrenamiento |
+| 20:00 | novia/vida personal en bloques protegidos |
+| 22:15 | cierre Sergio, sin Higgsfield ni tareas grandes |
+
 ## Proyectos
 
-Hermes debe usar:
+| Proyecto | Que vende | Para quien | Primer CTA seguro |
+|---|---|---|---|
+| DentalGest | SaaS dental | clinicas dentales | demo corta |
+| Gesti-OS | gestion operativa | pymes con Excel, tareas o reportes | tablero simple |
+| Paginas web ONIA | landing/web + formularios | negocios sin captacion clara | auditoria rapida |
+| Consultoria ONIA | diagnostico, roadmap, implementacion | negocios desordenados | auditoria corta |
+| Sergio personal | confianza y fundador | empresarios, pymes, audiencia ONIA | escribime sistema |
+| ONIA marca | autoridad y conversion | prospectos B2B | pedir demo/auditoria |
 
-- DentalGest para clinicas dentales.
-- Gesti-OS para pymes con tareas, Excel, reportes o procesos.
-- Paginas web ONIA para captacion y presencia.
-- Videos IA / Higgsfield no se ofrecen comercialmente por ahora.
-- Consultoria ONIA para diagnostico, roadmap e implementacion.
+Videos IA / Higgsfield no se ofrecen comercialmente por ahora, por eso no
+aparecen en la tabla activa.
 
 Fuente:
 
@@ -139,3 +161,32 @@ Pendiente:
 - credencial Notion en n8n para sincronizar outbox;
 - API/MCP Higgsfield estable para polling real de renders;
 - TikTok/YouTube/LinkedIn publisher cuando existan OAuth y aprobacion.
+
+## Guardrails
+
+- No secretos completos en Markdown ni Telegram.
+- No acciones client-facing con `ok`, `dale` o frases ambiguas.
+- Contactar prospectos requiere `Apruebo contactar: <empresa>`.
+- Publicar requiere `Publicar video <job_id>`.
+- Cara o voz IA de Sergio requiere aprobacion por pieza.
+- Clientes requieren aprobacion antes de entregar o publicar.
+
+## Estado Hermesa
+
+`Estado Hermesa` es el resumen ejecutivo del sistema. Debe observar y
+priorizar, no ejecutar acciones sensibles. Debe incluir:
+
+- memoria local y outbox Notion;
+- proyectos ONIA conocidos;
+- workflows n8n activos conocidos;
+- pendientes accionables de Video Lab;
+- prioridad operativa inmediata;
+- siguiente comando exacto.
+
+## Siguiente implementacion n8n
+
+1. Probar en Telegram: `Mapa proyectos ONIA`, `Automatizaciones ONIA`,
+   `Siguiente Video Lab`.
+2. Crear credencial Notion en n8n para sincronizar el outbox local.
+3. Conectar polling real de Higgsfield cuando exista API/MCP estable.
+4. Mantener publicaciones y contactos solo con aprobacion exacta.
