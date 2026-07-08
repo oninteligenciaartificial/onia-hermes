@@ -1,0 +1,17 @@
+{
+  "video_slug": "",
+  "shorts": [
+    {
+      "id": "",
+      "source_video_slug": "",
+      "source_shots": [1],
+      "hook": "",
+      "caption": "",
+      "target_platforms": ["youtube_shorts", "tiktok"],
+      "aspect_ratio": "9:16",
+      "duration_target_s": 30,
+      "reuses_existing_assets": true,
+      "additional_generation_needed": false
+    }
+  ]
+}

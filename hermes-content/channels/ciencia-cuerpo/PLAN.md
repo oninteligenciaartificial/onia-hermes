@@ -224,6 +224,143 @@ subida → gate Sergio → subida privada real → gate Sergio → público.`
 4. Aprobar el piloto (`pilot/001-azucar-y-el-cerebro/`) antes de gastar
    créditos reales de generación — ver §7.
 
+## 10. Distribución short-form (Shorts + TikTok) — agregado 2026-07-08
+
+Pregunta de Sergio tras el primer entregable. No estaba en el brief original
+(long-form 8-12min), investigado y verificado antes de construir.
+
+**La idea central: los shorts no cuestan créditos nuevos.** Cada short se
+recorta de los assets que el video largo YA generó (hero clips + stills del
+`shot-list.json`), re-encuadrados a 9:16 con `ffmpeg`. Cero llamadas
+adicionales a Higgsfield. Ver `pilot/001-azucar-y-el-cerebro/shorts-plan.json`
+para el ejemplo real (3 shorts cortados del piloto).
+
+### YouTube Shorts — no requiere integración nueva
+
+YouTube clasifica un video como Short automáticamente por formato: **9:16,
+≤3 minutos** (ya no hace falta el hashtag `#Shorts`, aunque ayuda a la
+categorización). Se sube por el **mismo endpoint y el mismo script** que el
+video largo (`scripts/upload-youtube.mjs`, `videos.insert`) — solo cambia el
+archivo de video (vertical, corto) y el `metadata.json` (título/caption más
+cortos). Mismas reglas duras: `containsSyntheticMedia: true`,
+`made_for_kids: false`, `privacyStatus: "private"` hasta aprobación.
+
+### TikTok — SÍ requiere una integración y una auditoría nuevas
+
+Verificado contra la documentación oficial de TikTok (2026-07-08):
+
+- API: **Content Posting API**, endpoint `POST /v2/post/publish/inbox/video/init/`
+  con `source_info.source = "FILE_UPLOAD"` (subida por chunks) — ver
+  `scripts/upload-tiktok.mjs`.
+- **Dos modos, uno de los dos está prohibido en este canal:**
+  - `DIRECT_POST` (scope `video.publish`) publica derecho al perfil — **no se
+    usa nunca en este pipeline**, mismo espíritu que nunca subir "public" a
+    YouTube.
+  - `MEDIA_UPLOAD`/bandeja (scope `video.upload`) manda el video al inbox de
+    TikTok y **una persona lo tiene que terminar de publicar a mano adentro
+    de la app** — este es el modo que usa `scripts/upload-tiktok.mjs`, siempre,
+    sin flag para cambiarlo. Ventaja real: el "nunca publicar sin aprobación
+    humana" queda garantizado por el diseño de la propia API de TikTok, no
+    solo por una regla nuestra.
+  - Antes de publicar hay que llamar `creator_info/query` (requisito de la
+    API, trae opciones de privacidad y duración máxima del creador).
+- **Auditoría de TikTok** (2-6 semanas, igual de real que la de Google): sin
+  una app aprobada por TikTok for Developers, el contenido queda restringido
+  a "solo privado" — mismo patrón que YouTube, bloqueo nuevo e independiente.
+  Bloqueo humano: Sergio tiene que registrar la app en
+  [TikTok for Developers](https://developers.tiktok.com/) y pedir el scope
+  `video.upload`.
+- **Disclosure IA:** la Content Posting API **no expone hoy un campo
+  equivalente a `containsSyntheticMedia`** (a diferencia de YouTube). Como el
+  modo `MEDIA_UPLOAD` igual pasa por un humano dentro de la app, la mitigación
+  es que **Sergio active el toggle "AI-generated content" de TikTok a mano**
+  al terminar de publicar — el script se lo recuerda en pantalla.
+- Specs de video: MP4/WebM, 3-600s, ≤4GB, 9:16 recomendado.
+
+### Qué falta para que esto corra de verdad
+
+1. Sergio: cuenta de creador en TikTok + registrar app en TikTok for
+   Developers + pedir scope `video.upload` + pasar la auditoría (bloqueo
+   real, no depende de esta sesión).
+2. Mismo gate de siempre: nada se sube ni en YouTube Shorts ni en TikTok sin
+   aprobación de Sergio (ver `pipeline/approval-matrix.json`).
+
+## 11. Auditoría de capacidades Higgsfield — agregado 2026-07-08 (solo lectura, nada generado)
+
+Pedido de Sergio: familiarizarse con todas las funciones de Higgsfield antes
+de generar. Hecho vía herramientas de solo lectura del MCP (`balance`,
+`transactions`, `models_explore`, `presets_show`, `get_workflow_instructions`,
+etc.) — cero llamadas a `generate_*`.
+
+### Hallazgo crítico: el pool de créditos es compartido y hay gasto concurrente activo
+
+`list_workspaces` devuelve **un solo workspace** (privado, plan Ultra). Todos
+los carriles que usan Higgsfield gastan del mismo pool. Balance real al
+momento de esta auditoría: **2545.72 / 3000 créditos** — ya se gastaron
+~454cr este ciclo. Y en `transactions` se ve gasto **activo en los últimos
+~90 minutos** (11× Nano Banana Pro, Minimax Hailuo, Marketing Studio Video,
+Wan 2.7, Seed Audio) que **no es de esta sesión** — es contenido UGC de otro
+carril (Lucía/protector solar, contenido financiero) corriendo en paralelo.
+Conclusión: el presupuesto de §5 de este documento **compite en tiempo real**
+con el resto de ONIA, no es un presupuesto aislado de este canal. Cualquier
+aprobación de gasto debería considerar esto.
+
+### El workflow nativo "video-explainer" existe y calza casi exacto con este canal — pero es mucho más caro
+
+`get_workflow_instructions(workflow="video-explainer")`: narrador único sobre
+**N bloques fijos de 10s** (`N = minutos × 6`), un "style key" (una imagen)
+que fija el look en TODOS los clips, ensamblado 100% server-side
+(`explainer_video`, sin ffmpeg local), subtítulos opcionales quemados
+(+0.05cr/bloque). Para un video de 9-10min esto es **N=54-60 bloques**.
+
+- **Costo:** cada bloque es video real generado con `gemini_omni` (modelo
+  "reference-driven video, native audio", no expone tarifa exacta en
+  `models_explore`, pero por tier es plausible 5-10cr/s). 54-60 bloques × 10s
+  × 5-10cr/s ≈ **2700-6000 créditos — 1 a 2 meses de plan completo en un solo
+  video.** El pipeline custom de este canal (mayoría stills + 5 clips hero,
+  ver §5 y `pilot/001-azucar-y-el-cerebro/shot-list.json`) estima ~360cr:
+  **8-15x más barato.**
+- El propio workflow **exige preguntarle a Sergio** estilo (galería
+  obligatoria), duración, mascota, aspecto y subtítulos antes de generar
+  nada — "never decide silently, never proceed without their answer". Mismo
+  espíritu que nuestra regla de aprobación, pero más granular.
+- 10 presets en `get_youtube_explainer_presets`: Pixel Art, Claymotion, Mixed
+  Media, 3D Papercraft, **2D Illustrator** (el más parecido a Kurzgesagt),
+  Whiteboard Doodle, Low Poly, 3D Mix, Isometric Flat Vector, Fluffy Toy.
+  **Sin confirmar todavía:** los 10 presets están listados en `9:16`, y el
+  propio doc dice "let the preset set the aspect" — no verifiqué si se puede
+  forzar `16:9` (long-form horizontal) usando un preset, o si hace falta
+  construir un style-key propio (rama "no photos" de la Fase 1) para eso.
+- **Recomendación:** seguir con el pipeline custom (barato, ya construido y
+  probado) para el piloto y la cadencia semanal. Reservar el workflow nativo
+  para un video "insignia" puntual si el presupuesto lo justifica más
+  adelante — no como default.
+
+### Otros hallazgos
+
+- **IDs de modelo reales** (mi `shot-list.json` tenía el placeholder
+  `"nano_banana"`, corregido a `"nano_banana_pro"` en esta sesión — mejor
+  ajuste además, porque sus tags incluyen `diagrams`/`text-rendering`).
+  `kling3_0_turbo` (mis clips hero) sí era un ID real, confirmado.
+- **Voces:** 30+ voces preset (`list_voices`). "Elena" ya se usó antes en
+  este workspace para narración en español (ver memoria
+  `content-engine-remotion`, video Nuvia/ISDIN) — candidata natural, pero la
+  elección de voz es siempre de Sergio, tanto por nuestra regla como por la
+  regla dura del propio workflow de Higgsfield.
+- **Presets "virales"** (`presets_show`, 40+ items: DRIFT RACING, CGI
+  BREAKDOWN, RED CARPET, ZOMBIE DANCE, etc.) son todos de contenido
+  humano/UGC realista — ninguno aplica a nuestro estilo ilustrado abstracto.
+  Confirma que las "tendencias" propias de Higgsfield no son un insumo útil
+  para este canal en particular (si hace falta detectar tendencias de
+  *contenido*, la fuente correcta sigue siendo vidIQ/Google Trends, §6).
+- **Personal Clipper** (`personal_clipper_create`, sin uso todavía en la
+  cuenta) suena como la herramienta correcta para auto-cortar Shorts de un
+  video largo ya existente — pendiente de explorar en profundidad cuando
+  exista un video largo real para cortar (ver §10).
+- **Souls/Elements existentes** (Lucía, Mara, Sergio, Valentina) son todos de
+  personas reales de otros carriles — ninguno aplica a un canal
+  faceless/ilustrado.
+
 ## Fuentes generales de esta investigación (2026-07-08)
 
 Todas las fuentes de la tabla §3 más: [Medical misinformation policy — YouTube Help](https://support.google.com/youtube/answer/13813322) ·

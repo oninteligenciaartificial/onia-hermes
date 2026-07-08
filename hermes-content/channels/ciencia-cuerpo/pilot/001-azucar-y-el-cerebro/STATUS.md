@@ -14,6 +14,11 @@
 - [x] `metadata.json` — título, descripción con fuentes resueltas y
       disclaimer, tags, capítulos, brief de miniatura, `made_for_kids: false`,
       `contains_synthetic_media: true`, `privacy_status_initial: "private"`.
+- [x] `shorts-plan.json` — 3 shorts (9:16, 30-45s) recortados de los shots ya
+      planeados (1/12/13, 8/9/10, 14/15/18): **cero generación adicional**,
+      solo re-encuadre. Para YouTube Shorts se suben con
+      `scripts/upload-youtube.mjs` (mismo endpoint). Para TikTok, con el nuevo
+      `scripts/upload-tiktok.mjs` (modo bandeja, ver `PLAN.md` §10).
 - [x] Validado con `node pipeline/validate.mjs pilot/001-azucar-y-el-cerebro`
       (ver sección "Validación" abajo).
 
@@ -51,6 +56,11 @@ para generación real.
    llama a la API real) para confirmar que el payload es válido.
 6. Recién ahí: `Apruebo subida privada YouTube: ciencia-cuerpo-001-azucar-y-el-cerebro`.
 7. Publicación pública: gate aparte, ver `pipeline/approval-matrix.json`.
+8. **Bloqueo nuevo (Shorts/TikTok, ver `PLAN.md` §10):** YouTube Shorts sube
+   con el mismo script/credencial de arriba, sin bloqueo nuevo. TikTok sí
+   necesita una app registrada en TikTok for Developers (scope
+   `video.upload`, auditoría propia de 2-6 semanas) antes de que
+   `scripts/upload-tiktok.mjs --live` funcione — el `--dry-run` ya corre hoy.
 
 ## Validación
 

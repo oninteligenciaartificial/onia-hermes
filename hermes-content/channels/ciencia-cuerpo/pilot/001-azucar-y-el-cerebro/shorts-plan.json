@@ -1,0 +1,41 @@
+{
+  "video_slug": "azucar-y-el-cerebro",
+  "shorts": [
+    {
+      "id": "azucar-cerebro-short-01-hook",
+      "source_video_slug": "azucar-y-el-cerebro",
+      "source_shots": [1, 12, 13],
+      "hook": "Tu cerebro reacciona al azúcar casi como a una droga — pero hay un matiz gigante",
+      "caption": "¿El azúcar activa tu cerebro como una droga? La ciencia real, con el matiz que casi nadie cuenta. Contenido educativo, no reemplaza consejo médico. Fuentes en el video completo. #ciencia #neurociencia",
+      "target_platforms": ["youtube_shorts", "tiktok"],
+      "aspect_ratio": "9:16",
+      "duration_target_s": 45,
+      "reuses_existing_assets": true,
+      "additional_generation_needed": false
+    },
+    {
+      "id": "azucar-cerebro-short-02-dos-vias",
+      "source_video_slug": "azucar-y-el-cerebro",
+      "source_shots": [8, 9, 10],
+      "hook": "El azúcar activa TU cerebro dos veces, no una",
+      "caption": "Sabor y calorías activan dos circuitos de dopamina distintos. Así es como tu cerebro distingue 'sabe dulce' de 'alimenta de verdad'. Contenido educativo, no reemplaza consejo médico. #cerebro #dopamina",
+      "target_platforms": ["youtube_shorts", "tiktok"],
+      "aspect_ratio": "9:16",
+      "duration_target_s": 30,
+      "reuses_existing_assets": true,
+      "additional_generation_needed": false
+    },
+    {
+      "id": "azucar-cerebro-short-03-evolutivo",
+      "source_video_slug": "azucar-y-el-cerebro",
+      "source_shots": [14, 15, 18],
+      "hook": "Tu cerebro no está roto: funciona para un mundo que ya no existe",
+      "caption": "Por qué te gusta tanto el azúcar, explicado por evolución (y por qué no es tu culpa). Contenido educativo, no reemplaza consejo médico. #divulgacioncientifica #cuerpohumano",
+      "target_platforms": ["youtube_shorts", "tiktok"],
+      "aspect_ratio": "9:16",
+      "duration_target_s": 40,
+      "reuses_existing_assets": true,
+      "additional_generation_needed": false
+    }
+  ]
+}

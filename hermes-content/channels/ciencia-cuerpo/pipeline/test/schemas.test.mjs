@@ -4,6 +4,7 @@ import {
   parseResearchBrief,
   parseShotList,
   parseMetadata,
+  parseShortsPlan,
 } from "../schemas.mjs";
 
 function baseBrief(overrides = {}) {
@@ -137,5 +138,82 @@ test("shot list sin shots falla", () => {
       shots: [],
       totals: { still_count: 0, hero_clip_count: 0, estimated_credits_total: 0 },
     }),
+  );
+});
+
+function baseShortsPlan(overrides = {}) {
+  return {
+    video_slug: "azucar-y-el-cerebro",
+    shorts: [
+      {
+        id: "short-01",
+        source_video_slug: "azucar-y-el-cerebro",
+        source_shots: [1, 12, 13],
+        hook: "Tu cerebro reacciona al azucar casi como a una droga",
+        caption: "Contenido educativo, no reemplaza consejo medico. Fuentes en comentario fijado.",
+        target_platforms: ["youtube_shorts", "tiktok"],
+        aspect_ratio: "9:16",
+        duration_target_s: 45,
+        reuses_existing_assets: true,
+        additional_generation_needed: false,
+      },
+    ],
+    ...overrides,
+  };
+}
+
+test("shorts plan valido pasa y marca reuso de assets", () => {
+  const out = parseShortsPlan(baseShortsPlan());
+  assert.equal(out.shorts[0].reuses_existing_assets, true);
+  assert.equal(out.shorts[0].additional_generation_needed, false);
+});
+
+test("shorts plan sin shorts falla", () => {
+  assert.throws(() => parseShortsPlan(baseShortsPlan({ shorts: [] })));
+});
+
+test("short con aspect_ratio distinto de 9:16 falla (regla dura de formato)", () => {
+  assert.throws(() =>
+    parseShortsPlan(
+      baseShortsPlan({
+        shorts: [
+          {
+            id: "short-01",
+            source_video_slug: "azucar-y-el-cerebro",
+            source_shots: [1],
+            hook: "x",
+            caption: "x",
+            target_platforms: ["tiktok"],
+            aspect_ratio: "16:9",
+            duration_target_s: 30,
+            reuses_existing_assets: true,
+            additional_generation_needed: false,
+          },
+        ],
+      }),
+    ),
+  );
+});
+
+test("short de mas de 180s falla (excede limite de Shorts/TikTok)", () => {
+  assert.throws(() =>
+    parseShortsPlan(
+      baseShortsPlan({
+        shorts: [
+          {
+            id: "short-01",
+            source_video_slug: "azucar-y-el-cerebro",
+            source_shots: [1],
+            hook: "x",
+            caption: "x",
+            target_platforms: ["youtube_shorts"],
+            aspect_ratio: "9:16",
+            duration_target_s: 200,
+            reuses_existing_assets: true,
+            additional_generation_needed: false,
+          },
+        ],
+      }),
+    ),
   );
 });

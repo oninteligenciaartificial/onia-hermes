@@ -84,6 +84,24 @@ export const metadataSchema = z.object({
   pinned_comment: z.string().default(""),
 });
 
+export const shortClipSchema = z.object({
+  id: z.string().min(1),
+  source_video_slug: z.string().min(1),
+  source_shots: z.array(z.number().int().positive()).min(1),
+  hook: z.string().min(1),
+  caption: z.string().min(1),
+  target_platforms: z.array(z.enum(["youtube_shorts", "tiktok"])).min(1),
+  aspect_ratio: z.literal("9:16"),
+  duration_target_s: z.number().positive().max(180),
+  reuses_existing_assets: z.boolean(),
+  additional_generation_needed: z.boolean(),
+});
+
+export const shortsPlanSchema = z.object({
+  video_slug: z.string().min(1),
+  shorts: z.array(shortClipSchema).min(1),
+});
+
 export function parseResearchBrief(input) {
   return researchBriefSchema.parse(input);
 }
@@ -94,4 +112,8 @@ export function parseShotList(input) {
 
 export function parseMetadata(input) {
   return metadataSchema.parse(input);
+}
+
+export function parseShortsPlan(input) {
+  return shortsPlanSchema.parse(input);
 }

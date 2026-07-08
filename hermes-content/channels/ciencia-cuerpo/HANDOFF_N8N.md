@@ -108,6 +108,31 @@ mantener dos copias casi idénticas cuando cambie un gate o un nodo.
 5. Publicar (`public`) es SIEMPRE un paso manual fuera de n8n — no existe un
    nodo "publicar" en este workflow a propósito.
 
+## Shorts + TikTok (agregado 2026-07-08)
+
+- **YouTube Shorts no necesita nodo/credencial nueva.** Se sube con el mismo
+  nodo `n8n-nodes-base.youTube` / operation `upload` de arriba — YouTube lo
+  clasifica solo por formato (9:16, ≤3min). Mismo gate de aprobación, mismo
+  workflow.
+- **TikTok sí necesita una credencial y una auditoría nuevas e
+  independientes** de la de Google — no hay nodo nativo de n8n para la
+  Content Posting API de TikTok hoy (no apareció en `search_nodes`), así que
+  el workflow tendría que llamarla vía **HTTP Request** (ver
+  `scripts/upload-tiktok.mjs` para el contrato exacto: `creator_info/query`
+  primero, después `inbox/video/init`, después `PUT` del archivo).
+- **Insight clave para el gate de aprobación:** TikTok solo soporta
+  publicación automática vía el scope `video.publish` (modo `DIRECT_POST`),
+  que este canal **prohíbe usar**. El modo que sí se usa,
+  `video.upload`/`MEDIA_UPLOAD`, manda el video al inbox de TikTok — la
+  publicación real la termina un humano DENTRO de la app de TikTok. Eso
+  significa que, para TikTok, **no hace falta un `Telegram sendAndWait` de
+  "aprobar subida"**: la propia API ya fuerza el paso humano. Sí sigue
+  haciendo falta el gate de guion y el de gasto (esos son previos a generar
+  el short, no a subirlo).
+- Bloqueo humano nuevo: Sergio tiene que registrar la app en
+  [TikTok for Developers](https://developers.tiktok.com/) y pedir el scope
+  `video.upload` — auditoría de 2-6 semanas, igual de real que la de Google.
+
 ## Estado a la fecha de este handoff (2026-07-08)
 
 - No existe ninguna credencial de YouTube en n8n todavía (`list_credentials`
