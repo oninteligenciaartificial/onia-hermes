@@ -16,7 +16,8 @@ real** (sourced de Pinterest, sin caras de terceros) subida como **Reference Ele
 | `lucia-outfit-loungewear` | prop | `6186d80f-cb02-4cd2-89d9-e5afdcce7c6c` | Pinterest flatlay sweater crema+pantuflas |
 | `lucia-place-bathroom` | environment | `44a4686e-1733-4b41-811d-1eb5d1cf88fc` | Pinterest bano marmol B&N sin gente |
 | `lucia-place-bedroom` | environment | `6a721405-d019-48b3-b3e6-92bdf6a4474e` | Pinterest dormitorio cozy sin gente |
-| `lucia-face-real-anchor` ⭐ **USAR ESTE** | character | `ced20cc2-3388-4d98-92ee-b0fcd961aa62` | Frame REAL del video de Sergio (pecas-A-15) escalado 2K, sin generacion IA |
+| `lucia-surgical-anchor` ⭐ **USAR ESTE para combos** | character | `902eeebb-89e9-4477-8426-c555b20f7ecc` | Foto 03 (sonrisa completa) del photoshoot quirurgico fondo blanco, **aprobado por Sergio 2026-07-07** como identidad definitiva. Ver `LUCIA_SURGICAL_FACE_LOCK.md` |
+| `lucia-face-real-anchor` (ground-truth QA, no combos) | character | `ced20cc2-3388-4d98-92ee-b0fcd961aa62` | Frame REAL del video de Sergio (pecas-A-15) escalado 2K, sin generacion IA — sigue siendo la verdad ultima para comparar, pero para GENERAR combos usar `lucia-surgical-anchor` |
 | ~~`lucia-face-element`~~ (legacy, no usar) | character | `de586dbb-0cdd-4ca2-aaac-173d11741c86` | Foto generada por soul_2 — ya tiene 1 paso de deriva de IA (pecas reposicionadas, piel mas pareja) |
 
 | `lucia-place-cafe` | environment | `5cfbdab5-3fdd-4cda-b0e3-efb60aa5a9b4` | Pinterest cafe/cocina calida, mostrador madera |
@@ -27,13 +28,15 @@ real** (sourced de Pinterest, sin caras de terceros) subida como **Reference Ele
 
 ## Como generar (combinar cara + outfit + lugar en 1 sola llamada)
 
-Modelo: `nano_banana_2` (soul_2 NO soporta Reference Elements). Embeber los 3 placeholders
-en el prompt, usando SIEMPRE `lucia-face-real-anchor` (no el legacy):
+Modelo: `nano_banana_2`/`nano_banana_pro` (soul_2 NO soporta Reference Elements).
+Embeber los 3 placeholders en el prompt, usando SIEMPRE `lucia-surgical-anchor`
+(2026-07-07, no el legacy ni `lucia-face-real-anchor` para esto):
 
 ```
-<<<ced20cc2-3388-4d98-92ee-b0fcd961aa62>>> wearing the exact outfit from
+<<<902eeebb-89e9-4477-8426-c555b20f7ecc>>> wearing the exact outfit from
 <<<16833b18-9e23-434a-99b2-92bac2915e4c>>>, standing in
-<<<44a4686e-1733-4b41-811d-1eb5d1cf88fc>>>. Keep her identical face and features.
+<<<44a4686e-1733-4b41-811d-1eb5d1cf88fc>>>. Keep her identical face and features,
+poreless smooth forehead skin zero wrinkles, no brand logos.
 ```
 
 ## Fix de deriva de identidad (2026-07-06, pedido de Sergio)

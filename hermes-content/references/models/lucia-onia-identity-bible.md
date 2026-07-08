@@ -5,6 +5,18 @@
 > de marca. No publicar sin aprobacion. Renombrada 2026-07-06 (antes "Valentina" en un paso
 > intermedio de la sesion) para alinear con el nombre que usa Sergio.
 
+## Referencia maestra definitiva — `LUCIA_SURGICAL_FACE_LOCK.md` (2026-07-07) ✅ APROBADA
+Photoshoot completo de 10 tomas en fondo blanco (frontal neutral/sonrisa suave/sonrisa
+grande, perfil izq/der, 3/4 izq/der, detalle nariz, detalle oreja, cuerpo completo) via
+`nano_banana_pro` + ancla real. **Aprobado explicitamente por Sergio** ("ahora esta
+perfecta") — es el banco de QA mas completo que existe, comparar CUALQUIER generacion
+nueva contra estas 10 fotos. Carpeta: `lucia-surgical-shoot-20260707/`.
+
+**Nuevo Element de estilo:** `902eeebb-89e9-4477-8426-c555b20f7ecc`
+("lucia-surgical-anchor", desde la foto 03 sonrisa completa) — USAR ESTE para combos
+de outfit/lugar de ahora en mas (reemplaza a `ced20cc2` para generar variedad; `ced20cc2`
+sigue siendo el ground-truth real para QA, no se descarta).
+
 ## Ficha
 - **Nombre:** Lucia. **Rol:** influencer skincare/UGC + cuenta propia + contenido de clientes.
 - **Higgsfield Soul (USAR ESTE):** `36305a9b-af24-4390-959b-885082dddd5d` ("LUCIA-REAL-v2-clean", `soul_2`). Gen ~0.12cr/img.
@@ -69,7 +81,12 @@ Cada lugar = UNA imagen real (sin personas) subida como Reference Element (`envi
     de forehead que no estan en la referencia real (Sergio lo detecto). Causa: prompt
     con "no makeup" + enfasis de textura realista + luz cenital dura + primer plano muy
     cerrado empujaron al modelo a exagerar lineas de expresion en la frente.
-  - **Avatar `d9a80b78-70d3-4e7c-af25-e2bcebadf63d` ("Lucia ONIA v2") = USAR ESTE.**
+  - Avatar `d9a80b78-...` ("Lucia ONIA v2") y `e9b6eca1-...` ("Lucia ONIA v3
+    identity-kit") = **SUPERADOS** (2026-07-07) por el shoot quirurgico.
+  - **Avatar `a1e334f3-5316-4132-b454-ddd9dcc06943` ("Lucia ONIA v4 FINAL") = USAR
+    ESTE**, creado desde `03-front-big-smile.png` del `LUCIA_SURGICAL_FACE_LOCK.md`
+    (aprobado por Sergio). No hay delete de avatares via API — los superados quedan
+    en la libreria de Higgsfield pero NO se usan, elegir siempre por ID exacto.
     Foto fuente corregida: forehead liso igual a la referencia real. Fix que funciono:
     encuadre "half-body" (no primer plano muy cerrado) + luz difusa pareja (no cenital
     dura) + negativo explicito "poreless smooth forehead, zero wrinkles zero fine lines
