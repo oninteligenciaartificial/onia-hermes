@@ -1,6 +1,6 @@
 # ONIA Core
 
-Estado: beta canonico (v0.6.2), instalando en DentalGest y GestiOS.
+Estado: beta canonico (v0.7.0), instalando en DentalGest y GestiOS.
 Owner: ONIA / Hermes.
 
 > Beta contract cerrado: se agregaron las 8 piezas transversales
@@ -9,6 +9,16 @@ Owner: ONIA / Hermes.
 > producto esta aprobada para DentalGest (`ONIA_CORE_DENTALGEST_ADOPTION_PLAN_2026.md`)
 > y GestiOS (`ONIA_CORE_GESTIOS_ADOPTION_PLAN_2026.md`, aprobado 2026-07-07);
 > Ganadero OS sigue bloqueado hasta su propio plan.
+
+> v0.7.0 (2026-07-07): los 11 rubros del roadmap (`verticalFactory.roadmapRubros`)
+> tienen ahora track + pack definidos (antes solo 4). 7 rubros nuevos investigados
+> con subagentes en paralelo: salud_estetica, salud_veterinaria (familia nueva
+> VETGEST), gastronomia, servicios_profesionales, educacion, construccion_ferreteria
+> y turismo_hoteleria. 5 de los 7 suman catalogo de entidades especificas en
+> `vertical-extensions.json`; educacion y turismo quedan solo con pack (sin
+> entidades) porque sus propias investigaciones concluyeron que no hay cliente
+> real todavia. Ningun rubro nuevo tiene producto/repo construido: es la capa de
+> DEFINICION (vocabulario/checklists/KPIs/gaps), no de desarrollo.
 
 ONIA Core es el nucleo de organizacion operativa que despues se instalara en
 los sistemas de ONIA: GestiOS, DentalGest y Ganadero OS.
@@ -127,8 +137,7 @@ modulos, verticales o integraciones. No son la definicion del core.
 - `ONIA_CORE_OWNER_PANEL_AND_INTAKE_2026.md`: diseno canonico del read-model
   owner_dashboard y la politica de intake externo -> WorkItem.
 - `CHANGELOG.md`: historial de versiones del contrato (0.1.0 alpha ->
-  0.6.1 correccion catalog_inventory/sales_cash en gestios-general/
-  dentagest-clinical/ganadero-offline).
+  0.7.0 los 11 rubros del roadmap con track+pack definidos).
 - `ONIA_CORE_INSTALL_GUIDE_2026.md`: receta repetible de instalacion en
   productos, destilada de la adopcion real en DentalGest.
 - `ONIA_STACK_ASSESSMENT_2026.md`: evaluacion del stack (Postgres/Prisma/Next

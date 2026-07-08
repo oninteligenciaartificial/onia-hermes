@@ -198,7 +198,7 @@ describe("invoicing module (Bolivia)", () => {
   });
 
   it("applies to the same selling verticals as accounting", () => {
-    assert.deepEqual(invoicing.verticalTracks.slice().sort(), ["dentagest-clinical", "ganadero-offline", "gestios-general", "proveegest-electrico"]);
+    assert.deepEqual(invoicing.verticalTracks.slice().sort(), ["dentagest-clinical", "esteticagest-clinical", "ganadero-offline", "gestios-educacion", "gestios-gastronomia", "gestios-general", "gestios-servicios-profesionales", "gestios-turismo", "proveegest-construccion", "proveegest-electrico", "vetgest-clinical"]);
   });
 });
 
@@ -243,7 +243,7 @@ describe("payroll module (Bolivia)", () => {
   });
 
   it("applies to the same selling verticals as accounting/invoicing", () => {
-    assert.deepEqual(payroll.verticalTracks.slice().sort(), ["dentagest-clinical", "ganadero-offline", "gestios-general", "proveegest-electrico"]);
+    assert.deepEqual(payroll.verticalTracks.slice().sort(), ["dentagest-clinical", "esteticagest-clinical", "ganadero-offline", "gestios-educacion", "gestios-gastronomia", "gestios-general", "gestios-servicios-profesionales", "gestios-turismo", "proveegest-construccion", "proveegest-electrico", "vetgest-clinical"]);
   });
 });
 

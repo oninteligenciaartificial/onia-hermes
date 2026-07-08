@@ -1,6 +1,6 @@
 {
   "name": "ONIA Core",
-  "version": "0.6.2",
+  "version": "0.7.0",
   "status": "beta",
   "sourceOfTruth": "onia-hermes/onia-core",
   "researchResult": "onia-core/ONIA_CORE_RESEARCH_RESULT_2026.md",
@@ -743,6 +743,12 @@
       "name": "ProveeGest",
       "relationship": "future_vertical",
       "focus": "Vertical distribucion B2B multi-rubro: importadoras, mayoristas, distribuidoras. Electrico es el primer skin de validacion, no el limite."
+    },
+    {
+      "id": "VETGEST",
+      "name": "VetGest",
+      "relationship": "future_vertical",
+      "focus": "Vertical salud animal de compania (clinicas veterinarias urbanas). Reusa el patron clinico de DentalGest (paciente/historia/cita/tratamiento) pero NO es un pack sobre DentalGest ni sobre Ganadero OS: el sujeto (mascota+tutor), el catalogo de especies y el marco regulatorio (SENASAG REGENSA cap 2.3, COMVETBOL) son distintos de ambos. Investigado y confirmado con subagente 2026-07-07."
     }
   ],
   "verticalFactory": {
@@ -900,6 +906,167 @@
       "blockedCapabilityIds": [
         "whatsapp",
         "tr4_adapter",
+        "siat"
+      ]
+    },
+    {
+      "id": "esteticagest-clinical",
+      "familyId": "DENTALGEST",
+      "name": "EsteticaGest Clinico",
+      "status": "roadmap_planned",
+      "requiredCapabilityIds": [
+        "tenant",
+        "team_roles",
+        "relationships",
+        "work_items",
+        "evidence_activity",
+        "alerts_reports",
+        "data_ops",
+        "partners",
+        "permissions",
+        "collaboration",
+        "approvals",
+        "scheduling",
+        "saved_reporting",
+        "catalog_inventory",
+        "sales_cash"
+      ],
+      "blockedCapabilityIds": [
+        "whatsapp",
+        "siat"
+      ]
+    },
+    {
+      "id": "vetgest-clinical",
+      "familyId": "VETGEST",
+      "name": "VetGest Clinico",
+      "status": "roadmap_planned",
+      "requiredCapabilityIds": [
+        "tenant",
+        "team_roles",
+        "relationships",
+        "work_items",
+        "evidence_activity",
+        "alerts_reports",
+        "data_ops",
+        "partners",
+        "permissions",
+        "collaboration",
+        "approvals",
+        "scheduling",
+        "saved_reporting",
+        "catalog_inventory",
+        "sales_cash"
+      ],
+      "blockedCapabilityIds": [
+        "whatsapp",
+        "siat"
+      ]
+    },
+    {
+      "id": "gestios-gastronomia",
+      "familyId": "GESTIOS",
+      "name": "GestiOS Gastronomia",
+      "status": "roadmap_planned",
+      "requiredCapabilityIds": [
+        "tenant",
+        "team_roles",
+        "relationships",
+        "work_items",
+        "evidence_activity",
+        "alerts_reports",
+        "data_ops",
+        "catalog_inventory",
+        "sales_cash"
+      ],
+      "blockedCapabilityIds": [
+        "whatsapp",
+        "siat"
+      ]
+    },
+    {
+      "id": "gestios-servicios-profesionales",
+      "familyId": "GESTIOS",
+      "name": "GestiOS Servicios Profesionales",
+      "status": "roadmap_planned",
+      "requiredCapabilityIds": [
+        "tenant",
+        "team_roles",
+        "relationships",
+        "work_items",
+        "evidence_activity",
+        "alerts_reports",
+        "data_ops",
+        "catalog_inventory",
+        "sales_cash"
+      ],
+      "blockedCapabilityIds": [
+        "whatsapp",
+        "siat"
+      ]
+    },
+    {
+      "id": "gestios-educacion",
+      "familyId": "GESTIOS",
+      "name": "GestiOS Educacion",
+      "status": "roadmap_exploring",
+      "requiredCapabilityIds": [
+        "tenant",
+        "team_roles",
+        "relationships",
+        "work_items",
+        "evidence_activity",
+        "alerts_reports",
+        "data_ops",
+        "catalog_inventory",
+        "sales_cash"
+      ],
+      "blockedCapabilityIds": [
+        "whatsapp",
+        "siat"
+      ]
+    },
+    {
+      "id": "proveegest-construccion",
+      "familyId": "PROVEEGEST",
+      "name": "ProveeGest Construccion",
+      "status": "roadmap_planned",
+      "requiredCapabilityIds": [
+        "tenant",
+        "team_roles",
+        "relationships",
+        "work_items",
+        "evidence_activity",
+        "alerts_reports",
+        "data_ops",
+        "catalog_inventory",
+        "quotes_b2b",
+        "knowledge_base"
+      ],
+      "blockedCapabilityIds": [
+        "whatsapp",
+        "tr4_adapter",
+        "siat"
+      ]
+    },
+    {
+      "id": "gestios-turismo",
+      "familyId": "GESTIOS",
+      "name": "GestiOS Turismo y Hoteleria",
+      "status": "roadmap_exploring",
+      "requiredCapabilityIds": [
+        "tenant",
+        "team_roles",
+        "relationships",
+        "work_items",
+        "evidence_activity",
+        "alerts_reports",
+        "data_ops",
+        "catalog_inventory",
+        "sales_cash"
+      ],
+      "blockedCapabilityIds": [
+        "whatsapp",
         "siat"
       ]
     }
@@ -1074,6 +1241,315 @@
         "web_form",
         "phone_walkin",
         "import"
+      ]
+    },
+    {
+      "id": "esteticagest-clinical-pack",
+      "trackId": "esteticagest-clinical",
+      "rubro": "salud_estetica",
+      "vocabulary": {
+        "workItemTypes": [
+          "agendar_sesion",
+          "seguimiento_post_tratamiento",
+          "renovacion_paquete",
+          "cobro_pendiente",
+          "evaluacion_previa"
+        ],
+        "partnerTypes": [
+          "proveedor_insumos",
+          "laboratorio_dermocosmetico",
+          "capacitador_tecnico",
+          "proveedor_equipamiento"
+        ],
+        "areas": [
+          "recepcion",
+          "tratamientos",
+          "ventas_productos",
+          "marketing_captacion",
+          "gerencia"
+        ]
+      },
+      "checklists": [
+        "protocolo_pre_tratamiento",
+        "control_post_procedimiento",
+        "apertura_sala_tratamiento",
+        "venta_paquete_sesiones"
+      ],
+      "kpis": [
+        "sesiones vencidas de seguir",
+        "ingreso por tipo de tratamiento",
+        "paquetes con sesiones por vencer",
+        "ventas de producto dermocosmetico vs servicios"
+      ],
+      "intakeChannels": [
+        "email_shared",
+        "web_form",
+        "phone_walkin"
+      ]
+    },
+    {
+      "id": "vetgest-clinical-pack",
+      "trackId": "vetgest-clinical",
+      "rubro": "salud_veterinaria",
+      "vocabulary": {
+        "workItemTypes": [
+          "recordatorio_vacuna",
+          "seguimiento_post_cirugia",
+          "recordatorio_desparasitacion",
+          "hospitalizacion_activa",
+          "cobro_pendiente"
+        ],
+        "partnerTypes": [
+          "proveedor_insumos_veterinarios",
+          "laboratorio_diagnostico",
+          "veterinario_campo",
+          "criadero_refugio"
+        ],
+        "areas": [
+          "recepcion",
+          "clinica",
+          "farmacia",
+          "facturacion",
+          "gerencia"
+        ]
+      },
+      "checklists": [
+        "protocolo_pre_cirugia",
+        "esquema_vacunacion_anual",
+        "protocolo_hospitalizacion",
+        "cierre_caja"
+      ],
+      "kpis": [
+        "citas de hoy y no-show",
+        "mascotas hospitalizadas en observacion",
+        "vacunas y desparasitaciones vencidas o proximas",
+        "cobros del dia y cuentas por cobrar"
+      ],
+      "intakeChannels": [
+        "email_shared",
+        "web_form",
+        "phone_walkin"
+      ]
+    },
+    {
+      "id": "gestios-gastronomia-pack",
+      "trackId": "gestios-gastronomia",
+      "rubro": "gastronomia",
+      "vocabulary": {
+        "workItemTypes": [
+          "pedido_cocina",
+          "reservar_mesa",
+          "reposicion_insumo_critico",
+          "delivery_pendiente",
+          "reclamo_cliente"
+        ],
+        "partnerTypes": [
+          "proveedor_insumos",
+          "distribuidor_bebidas",
+          "plataforma_delivery",
+          "arrendador_local"
+        ],
+        "areas": [
+          "cocina",
+          "salon",
+          "caja",
+          "compras",
+          "gerencia"
+        ]
+      },
+      "checklists": [
+        "apertura_de_turno",
+        "cierre_de_caja",
+        "control_de_vencimientos_insumos",
+        "recepcion_de_mercaderia"
+      ],
+      "kpis": [
+        "ticket promedio",
+        "rotacion de mesas",
+        "insumos por vencer o stock critico de receta",
+        "tiempo promedio de preparacion cocina-entrega"
+      ],
+      "intakeChannels": [
+        "email_shared",
+        "web_form",
+        "phone_walkin"
+      ]
+    },
+    {
+      "id": "gestios-servicios-profesionales-pack",
+      "trackId": "gestios-servicios-profesionales",
+      "rubro": "servicios_profesionales",
+      "vocabulary": {
+        "workItemTypes": [
+          "entregable_pendiente",
+          "reunion_cliente",
+          "cobro_honorarios",
+          "propuesta_pendiente",
+          "revision_interna"
+        ],
+        "partnerTypes": [
+          "cliente_recurrente",
+          "cliente_proyecto",
+          "freelancer_colaborador",
+          "referente_derivador"
+        ],
+        "areas": [
+          "cuentas",
+          "produccion",
+          "administracion",
+          "comercial",
+          "gerencia"
+        ]
+      },
+      "checklists": [
+        "onboarding_cliente_nuevo",
+        "cierre_de_proyecto",
+        "entrega_mensual_reportes",
+        "renovacion_contrato"
+      ],
+      "kpis": [
+        "horas facturables vs no facturables",
+        "proyectos o entregables por vencer",
+        "ingreso recurrente mensual vs proyecto puntual",
+        "cuentas por cobrar / honorarios pendientes"
+      ],
+      "intakeChannels": [
+        "email_shared",
+        "web_form",
+        "phone_walkin"
+      ]
+    },
+    {
+      "id": "gestios-educacion-pack",
+      "trackId": "gestios-educacion",
+      "rubro": "educacion",
+      "vocabulary": {
+        "workItemTypes": [
+          "cobro_mensualidad_vencido",
+          "seguimiento_matricula",
+          "inasistencia_alumno",
+          "renovacion_modulo_pendiente",
+          "entrega_certificado_pendiente"
+        ],
+        "partnerTypes": [
+          "docente_freelance",
+          "proveedor_material",
+          "convenio_institucional",
+          "plataforma_certificacion"
+        ],
+        "areas": [
+          "academico",
+          "admisiones",
+          "administracion",
+          "caja_cobranzas",
+          "direccion"
+        ]
+      },
+      "checklists": [
+        "matricula_nueva",
+        "apertura_modulo",
+        "cierre_de_modulo",
+        "cobranza_mensual"
+      ],
+      "kpis": [
+        "morosidad de mensualidades",
+        "tasa de retencion o renovacion entre modulos",
+        "ocupacion por grupo o paralelo",
+        "prospectos sin conversion (funnel de admisiones)"
+      ],
+      "intakeChannels": [
+        "email_shared",
+        "web_form",
+        "phone_walkin"
+      ]
+    },
+    {
+      "id": "proveegest-construccion-pack",
+      "trackId": "proveegest-construccion",
+      "rubro": "construccion_ferreteria",
+      "vocabulary": {
+        "workItemTypes": [
+          "cotizacion",
+          "pedido_por_obra",
+          "solicitud_compra",
+          "reclamo",
+          "cobro_pendiente"
+        ],
+        "partnerTypes": [
+          "contratista",
+          "constructora",
+          "ferreteria_minorista",
+          "transportista"
+        ],
+        "areas": [
+          "ventas",
+          "compras",
+          "almacen",
+          "logistica",
+          "gerencia"
+        ]
+      },
+      "checklists": [
+        "recepcion_mercaderia_a_granel",
+        "alta_cliente_contratista",
+        "despacho_a_obra",
+        "cierre_caja"
+      ],
+      "kpis": [
+        "rotacion de inventario por categoria (ABC)",
+        "pedidos de obra abiertos y su avance de entrega",
+        "quiebres de stock en materiales criticos",
+        "cuentas por cobrar por contratista o constructora"
+      ],
+      "intakeChannels": [
+        "email_shared",
+        "web_form",
+        "phone_walkin",
+        "import"
+      ]
+    },
+    {
+      "id": "gestios-turismo-pack",
+      "trackId": "gestios-turismo",
+      "rubro": "turismo_hoteleria",
+      "vocabulary": {
+        "workItemTypes": [
+          "checkin_pendiente",
+          "checkout_pendiente",
+          "preparacion_habitacion",
+          "mantenimiento_habitacion",
+          "reserva_por_confirmar"
+        ],
+        "partnerTypes": [
+          "agencia_de_viajes_referente",
+          "proveedor_lavanderia",
+          "proveedor_desayuno_catering",
+          "plataforma_ota"
+        ],
+        "areas": [
+          "recepcion",
+          "limpieza",
+          "mantenimiento",
+          "reservas",
+          "administracion"
+        ]
+      },
+      "checklists": [
+        "checkin",
+        "checkout",
+        "preparacion_habitacion",
+        "onboarding_temporada_alta"
+      ],
+      "kpis": [
+        "ocupacion %",
+        "RevPAR (ingreso por habitacion disponible)",
+        "reservas pendientes de confirmar",
+        "ADR (tarifa promedio diaria)"
+      ],
+      "intakeChannels": [
+        "email_shared",
+        "web_form",
+        "phone_walkin"
       ]
     }
   ],

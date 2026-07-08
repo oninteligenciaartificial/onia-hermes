@@ -9,8 +9,15 @@
       "type": "single_choice",
       "options": [
         { "value": "clinica_dental", "label": "Clinica u odontologia", "trackId": "dentagest-clinical" },
-        { "value": "distribucion_importacion", "label": "Distribucion, importacion o venta B2B", "trackId": "proveegest-electrico" },
+        { "value": "distribucion_importacion", "label": "Distribucion, importacion o venta B2B (electrico/tecnico)", "trackId": "proveegest-electrico" },
+        { "value": "distribucion_construccion", "label": "Distribucion o venta B2B de materiales de construccion/ferreteria", "trackId": "proveegest-construccion" },
         { "value": "ganaderia", "label": "Ganaderia / agro", "trackId": "ganadero-offline" },
+        { "value": "estetica", "label": "Centro de estetica / spa medico", "trackId": "esteticagest-clinical" },
+        { "value": "veterinaria", "label": "Clinica veterinaria", "trackId": "vetgest-clinical" },
+        { "value": "gastronomia", "label": "Restaurante / cafeteria", "trackId": "gestios-gastronomia" },
+        { "value": "servicios_profesionales", "label": "Estudio contable/juridico o agencia de servicios", "trackId": "gestios-servicios-profesionales" },
+        { "value": "educacion", "label": "Instituto o academia de capacitacion", "trackId": "gestios-educacion" },
+        { "value": "turismo_hoteleria", "label": "Hotel / hostal", "trackId": "gestios-turismo" },
         { "value": "otro_comercio_servicio", "label": "Otro comercio o servicio", "trackId": "gestios-general" }
       ]
     },
