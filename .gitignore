@@ -6,6 +6,7 @@
 *.pem
 *_token.txt
 **/credentials.json
+hermes-content/channels/*/credentials/
 
 # Dependencias (se reinstalan con npm install; no se sincronizan)
 node_modules/
