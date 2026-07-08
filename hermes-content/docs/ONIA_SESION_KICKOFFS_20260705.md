@@ -77,59 +77,60 @@ Gates: tsc --noEmit limpio; render 200 del panel local; code-reviewer +
 typescript-reviewer. Commit conventional; rebase sobre main antes de mergear.
 ```
 
-### 3) `dentagest-core-ui` — R6 -> R2 + R4
+### 3) `dentagest-core-ui` — R7 (NUEVO) — R2/R4/R6 YA CERRADOS
 ```
 Sos el carril DENTAGEST. Trabajas en el repo DentaGest
-(C:\dev\proyectos\DentaGest\dental-saas), NO en onia-hermes. Referencia de tareas:
-el plan maestro de onia-hermes items R6, R2 y R4
-(hermes-content/docs/ONIA_PROXIMA_SESION_PLAN_20260705.md; si no esta en tu arbol,
-git show origin/main:hermes-content/docs/ONIA_PROXIMA_SESION_PLAN_20260705.md).
+(C:\dev\proyectos\DentaGest\dental-saas), NO en onia-hermes.
+
+ESTADO VERIFICADO 2026-07-08 (por git log real del repo, no por memoria): R2
+(UI del core), R4 (self-service) y R6 (adopcion de commerce+accounting+invoicing,
+commit 96b89a9 "R6 completo (3/3) -- 24 tablas aditivas") estan LOS TRES
+cerrados. DentaGest es el primer producto con adopcion COMPLETA del core
+(columna vertebral organizacional + los 3 modulos financieros universales). No
+hay que rehacer nada de eso.
 
 IMPORTANTE: todas las rutas `onia-core/...` de este bloque viven en el OTRO repo
 (`C:\dev\proyectos\onia-hermes\onia-core\...`), no en DentaGest. Podes leerlas por
-ruta absoluta desde tu sesion en DentaGest (son de solo lectura para vos: el
-contrato/schema/modulos siguen congelados). No asumas que existen relativas a tu
-cwd.
+ruta absoluta (son de solo lectura para vos: el contrato/schema/modulos siguen
+congelados). No asumas que existen relativas a tu cwd.
 
 Estado actual de onia-core (verificalo vos mismo, no confies solo en esto):
-v0.6.1, CORE COMPLETO -- 18 entidades, 5 modulos vendibles ya validados con tests
-(`commerce`, `knowledge`, `accounting`, `invoicing`, `payroll`, todos con logica
-Bolivia real: IVA/IT/IUE/retenciones/activo fijo/CUF-QR/AFP-RC-IVA/aguinaldo-
-indemnizacion). Ver `C:\dev\proyectos\onia-hermes\onia-core\README.md` +
-`C:\dev\proyectos\onia-hermes\onia-core\CHANGELOG.md` (entrada 0.6.1) para el
-detalle. `contract.json`/`onia-core/**` siguen CONGELADOS: NO los edites desde
-este carril; si encontras algo que el core deberia tener y no tiene, documentalo
-y avisa, no forkees.
+v0.7.0 -- 18 entidades core, 6 modulos vendibles (commerce/knowledge/accounting/
+invoicing/payroll YA ADOPTADOS por vos en R6/anteriores, mas `dental` -- nuevo,
+2026-07-07, TODAVIA NO PROPUESTO a este carril hasta ahora) y los 11 rubros del
+roadmap definidos (track+pack). Ver
+`C:\dev\proyectos\onia-hermes\onia-core\README.md` +
+`C:\dev\proyectos\onia-hermes\onia-core\CHANGELOG.md` (entradas 0.7.0 y
+"modules/dental 0.1.0") para el detalle completo.
 
-R6 (HACELA PRIMERO, antes que R2/R4) — adoptar formalmente los modulos
-commerce+accounting+invoicing en vez de las tablas bespoke actuales. Confirmado
-en `C:\dev\proyectos\onia-hermes\onia-core\adapters\dentagest.json`: `sales_cash`
-hoy es tu propio Invoice/Payment y `catalog_inventory` es tu propio
-InventoryItem/InventoryMovement (status "exists_partial" en el adapter, NO el
-modulo validado). Traduci
-`C:\dev\proyectos\onia-hermes\onia-core\modules\commerce.schema.sql` +
-`accounting.schema.sql` + `invoicing.schema.sql` (misma carpeta) a migraciones
-Prisma (namespace `onia_commerce_*` / `onia_accounting_*` / `onia_invoicing_*`,
-mismo patron que ya usaste para work_items/comments/documents). El paquete
-`@onia/core` (`onia-hermes/onia-core/package.json`) todavia no esta publicado ni
-linkeado a DentaGest -- si lo queres importar de verdad (`@onia/core/modules/
-commerce-logic`, `accounting-logic`, `invoicing-logic`) en vez de reimplementar
-los calculos (IVA, totales de cotizacion, CUF), resolve primero como lo
-consumis (paquete local file: / workspace / copiar el .logic.mjs con nota de
-origen) porque hoy no hay mecanismo de publicacion entre los dos repos. Por que
-primero: mejor tener el dato financiero real ANTES de construir mas UI (R2)
-encima de las tablas bespoke que vas a reemplazar. Si ya tenes datos reales en
-Invoice/Payment/InventoryItem, confirma con Sergio el plan de migracion de datos
-antes de correr nada destructivo.
-
-R2 — completar la UI del ONIA Core en DentaGest (demo-able): hilo de
-comentarios+docs en la ficha del paciente, admin de roles finos, selector de
-saved-views, balance de comprobacion clinica.
-R4 — self-service (backend/pago): pago QR/pasarela BCP + wizard /setup
-(registro -> pago -> wizard -> operando + org demo). SubscriptionPayment ya existe.
-DEPENDE de precios firmes (item S1): si no estan, deja el numero parametrizable +
-TODO. (La landing de captacion es el carril P4, no la hagas aca.)
-Respeta ONIA Core: tenant scoping por organizationId; nunca forkear el core.
+R7 (NUEVO, propuesto por Sergio 2026-07-08) -- adoptar el modulo `dental`: 6
+entidades clinicas confirmadas como GAP real contra tu propio schema (la
+verificacion se hizo leyendo tu prisma/schema.prisma en 2026-07-06, no son
+teoricas):
+- `perio_chart` (periodontograma, 6 puntos por diente -- entidad separada del
+  odontograma que ya tenes).
+- `treatment_plan` (agrupador de PatientTreatment con costo total y aprobacion
+  del paciente -- hoy cada tratamiento tuyo es independiente, sin un "plan"
+  que los junte).
+- `informed_consent` (consentimiento firmado paciente+profesional antes de
+  procedimiento invasivo).
+- `medical_alert` (alergia/medicacion ESTRUCTURADA con severidad -- tu
+  ClinicalRecord hoy solo tiene texto libre).
+- `dental_lab_case` (encargo a laboratorio protesico con estados).
+- `tooth_image` (radiografia/foto vinculada a pieza dental y fecha).
+NO reconstruye Patient/ClinicalRecord/odontograma/PatientTreatment/Prescription
+-- esos siguen siendo tuyos, intactos.
+Traduci `C:\dev\proyectos\onia-hermes\onia-core\modules\dental.schema.sql` a
+migraciones Prisma (namespace `onia_dental_*`, mismo patron que usaste para
+commerce/accounting/invoicing en R6). Logica pura ya escrita y testeada en
+`dental.logic.mjs` (21 tests): totales de plan de tratamiento, validez de
+consentimiento por firmas (paciente Y profesional, firmadas en o antes del
+procedimiento), severidad de alertas, maquina de estados del caso de
+laboratorio, resumen de periodontograma -- portala igual que ya portaste
+accounting/invoicing-logic en R6 (vos ya resolviste el mecanismo de consumo de
+`@onia/core`, reusalo). Umbrales clinicos marcados como referencia de
+screening, NO diagnostico (`clinicalConfig.notClinicalAdvice`) -- no
+sustituyas juicio clinico en la UI que construyas encima.
 
 Gate: typecheck + tests verdes; si tocas onia-core/adapters/dentagest.json,
 `node onia-core/validate.mjs` sigue verde en onia-hermes; push a master del repo
@@ -150,9 +151,18 @@ absoluta; el contrato/schema/modulos siguen congelados (solo lectura para vos).
 
 Estado: Sergio APROBO la adopcion (2026-07-07) -- `distributionTargets.gestios`
 y `adapters/gestios.json` ya estan en `installing`, `validate.mjs` ya tiene
-gestios en `TARGET_ADOPTION_APPROVED`/`ADOPTION_APPROVED`. onia-core v0.6.2,
-CORE COMPLETO (18 entidades, 5 modulos: commerce/knowledge/accounting/
-invoicing/payroll, todos con logica Bolivia real y tests).
+gestios en `TARGET_ADOPTION_APPROVED`/`ADOPTION_APPROVED`. onia-core v0.7.0,
+CORE COMPLETO (18 entidades, 6 modulos: commerce/knowledge/accounting/
+invoicing/payroll/dental -- este ultimo es vertical, no te aplica a vos --
+todos con logica Bolivia real y tests; 11 rubros del roadmap definidos).
+
+PRUEBA DE QUE EL PATRON FUNCIONA EN PRODUCCION: DentaGest (carril D) ya cerro
+la MISMA adopcion que R1 te pide (columna vertebral) mas la de commerce/
+accounting/invoicing (equivalente a lo que vos decidas en la seccion
+siguiente), commit `96b89a9` en su repo "R6 completo (3/3) -- 24 tablas
+aditivas". Si te trabas con el mecanismo de portar `@onia/core/modules/
+*-logic` (el paquete no esta publicado formalmente entre repos), fijate como
+lo resolvio esa sesion antes de reinventar la rueda.
 
 DECISION QUE TENES QUE RESOLVER PRIMERO (con Sergio, no la asumas): GestiOS ya
 tiene `lib/fiscal/` (RCV/IVA/balance de comprobacion/calendario NIT, commit
