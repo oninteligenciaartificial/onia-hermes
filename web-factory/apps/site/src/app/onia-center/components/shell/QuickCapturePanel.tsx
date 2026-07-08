@@ -1,10 +1,25 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { EmptyState } from "../ui/EmptyState";
 
 export function QuickCapturePanel() {
   const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    if (!open) {
+      return;
+    }
+
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        setOpen(false);
+      }
+    }
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [open]);
 
   return (
     <>
@@ -19,6 +34,7 @@ export function QuickCapturePanel() {
         <div className="fixed inset-0 z-30 flex justify-end bg-black/30" onClick={() => setOpen(false)}>
           <div
             role="dialog"
+            aria-modal="true"
             aria-label="Notas e ideas"
             onClick={(event) => event.stopPropagation()}
             className="h-full w-full max-w-md overflow-y-auto border-l border-border bg-card p-6"
