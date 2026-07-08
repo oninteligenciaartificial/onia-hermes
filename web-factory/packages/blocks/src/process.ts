@@ -6,6 +6,9 @@ export function renderProcess(client: SiteClient): string {
   const steps = client.proceso ?? [];
   if (steps.length === 0) return "";
 
+  const kicker = client.procesoKicker ?? "Como funciona";
+  const titulo = client.procesoTitulo ?? "De tu mensaje a tu cita, sin vueltas";
+
   const items = steps
     .map(
       (step, index) => `
@@ -21,8 +24,8 @@ export function renderProcess(client: SiteClient): string {
   return `
     <section class="wf-section wf-process" id="proceso" aria-labelledby="wf-process-heading">
       <div class="wf-section-heading">
-        <p class="wf-kicker">Como funciona</p>
-        <h2 id="wf-process-heading">De tu mensaje a tu cita, sin vueltas</h2>
+        <p class="wf-kicker">${kicker}</p>
+        <h2 id="wf-process-heading">${titulo}</h2>
       </div>
       <ol class="wf-process-list">
         ${items}
