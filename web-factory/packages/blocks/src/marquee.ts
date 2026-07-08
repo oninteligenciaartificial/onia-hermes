@@ -17,14 +17,14 @@ export function renderMarquee(
     clean
       .map(
         (item) =>
-          `<span class="wf-clinic-marquee-item"${hidden ? ' aria-hidden="true"' : ""}>${renderIcon(icon, "wf-icon")}<span>${escapeHtml(item)}</span></span>`,
+          `<span class="wf-marquee-item"${hidden ? ' aria-hidden="true"' : ""}>${renderIcon(icon, "wf-icon")}<span>${escapeHtml(item)}</span></span>`,
       )
       .join("");
 
   const label = opts.label ? ` aria-label="${escapeAttribute(opts.label)}"` : "";
   return `
-    <div class="wf-clinic-marquee"${label}>
-      <div class="wf-clinic-marquee-track">${renderSet(false)}${renderSet(true)}</div>
+    <div class="wf-marquee"${label}>
+      <div class="wf-marquee-track">${renderSet(false)}${renderSet(true)}</div>
     </div>
   `;
 }

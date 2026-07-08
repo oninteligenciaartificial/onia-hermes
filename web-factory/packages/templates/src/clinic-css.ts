@@ -844,7 +844,7 @@ export const clinicCss = `
 }
 
 /* ---------- Marquee (trust ticker, reusable) ---------- */
-.wf-clinic-marquee {
+.wf-marquee {
   width: 100%;
   margin-block: clamp(8px, 2vw, 20px);
   overflow: hidden;
@@ -854,14 +854,14 @@ export const clinicCss = `
   mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
 }
 
-.wf-clinic-marquee-track {
+.wf-marquee-track {
   display: flex;
   align-items: center;
   gap: 18px 48px;
   width: max-content;
 }
 
-.wf-clinic-marquee-item {
+.wf-marquee-item {
   display: inline-flex;
   align-items: center;
   gap: 10px;
@@ -870,16 +870,16 @@ export const clinicCss = `
   color: color-mix(in srgb, var(--color-fg) 78%, var(--color-bg));
 }
 
-.wf-clinic-marquee-item .wf-icon { color: var(--ink-accent); }
+.wf-marquee-item .wf-icon { color: var(--ink-accent); }
 
 @media (prefers-reduced-motion: no-preference) {
-  .wf-clinic-marquee-track { animation: wfMarquee 36s linear infinite; }
-  .wf-clinic-marquee:hover .wf-clinic-marquee-track { animation-play-state: paused; }
+  .wf-marquee-track { animation: wfMarquee 36s linear infinite; }
+  .wf-marquee:hover .wf-marquee-track { animation-play-state: paused; }
 }
 
 @keyframes wfMarquee { to { transform: translateX(-50%); } }
 
 @media (prefers-reduced-motion: reduce) {
-  .wf-clinic-marquee-track { flex-wrap: wrap; width: auto; justify-content: center; }
+  .wf-marquee-track { flex-wrap: wrap; width: auto; justify-content: center; }
 }
 `;
