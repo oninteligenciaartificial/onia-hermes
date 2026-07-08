@@ -16,6 +16,21 @@ Formato definido a pedido de Sergio, comparando su investigacion de herramientas
 de gasto con Sergio antes de usarlas (regla [[gasto-plataformas-validar-primero]]). Por
 ahora Kling+wan2.7 cubren el mismo caso de uso sin sumar plataforma.
 
+**Aclaracion de Sergio (2026-07-07) sobre su investigacion:**
+- Para escenas de bikini/swimwear: algunos modelos rechazan el contenido aunque no
+  muestre nada explicito. Su investigacion dice que **Seedance 4** y **`soul_2`**
+  (el que ya usamos de default) son los que mejor generan ese tipo de escena sin
+  bloquear. Anotado para cuando haga falta contenido de ese tipo — no se probo todavia.
+- Para lipsync: **HeyGen da el mejor resultado en su investigacion, pero no esta en
+  Higgsfield.** De lo disponible en Higgsfield, **Marketing Studio da mejores
+  resultados que `wan2_7` puro** para hablar a camara.
+- **`wan2_7` (lipsync suelto) falla demasiado para b-roll** — la solucion no es
+  mejorar el lipsync del b-roll, es NO intentar lipsync ahi: el b-roll lleva
+  movimiento puro (Kling) + la VOZ de Lucia (`seed_audio`) puesta encima en edicion,
+  sin sincronizar labios. El unico segmento con lipsync real es el de "hablando a
+  camara", y ahi usar Marketing Studio en vez de `wan2_7` cuando el presupuesto lo
+  permita (42cr vs 15cr).
+
 ## Estructura de video (formato validado)
 
 1. **Hook en b-roll** (Kling, movimiento puro, sin lipsync) — VO por encima.
@@ -41,6 +56,25 @@ formas con el fix de ancla).
   antes de usar en produccion, puede necesitar un prompt de camara mas contenido.
 
 Costo total del ejemplo: ~35cr (10+15+10).
+
+## Test Marketing Studio SIN producto (talking puro) — confirma la investigacion de Sergio
+
+`ms-talking-noproduct.mp4` — Marketing Studio, avatar `e9b6eca1-...` (creado desde la
+mejor foto del Identity Kit, `kit-03-full-smile.png`), preset `ugc_direct_to_camera`,
+**sin `product_ids`**, 42cr. Prompt con guion explicito entre comillas en espanol.
+
+- Guion salio en **espanol** (a diferencia del primer test de Lucia+ISDIN que salio en
+  ingles) — pasar el guion completo entre comillas en el `prompt` fuerza el idioma de
+  forma confiable, no hace falta dejarlo en automatico.
+- Sin `product_ids` el modelo igual inventa un producto/prop generico si el prompt lo
+  menciona (aca metio un tubo sin marca) — no hace falta pasar producto real para
+  contenido de talking puro.
+- Ambiente dormitorio prolijo, sin logos, identidad y forehead consistentes en las 12
+  muestras revisadas. Calidad visual mas pulida que `wan2_7` puro.
+- **Confirma la observacion de Sergio: Marketing Studio da mejor resultado que
+  `wan2_7` suelto para el segmento de "hablando a camara"**, incluso sin producto.
+  Diferencia de costo: 42cr (Marketing Studio) vs 15cr (`wan2_7`) — usar Marketing
+  Studio cuando el presupuesto lo permita, `wan2_7` como opcion barata de respaldo.
 
 ## Pendiente (no ejecutado)
 

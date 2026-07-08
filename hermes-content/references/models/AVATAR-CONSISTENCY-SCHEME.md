@@ -99,7 +99,11 @@ risa grande), usar `nano_banana_pro` + el Element de ancla de cara real del pers
 default (mas barato, ya validado). Verificar esta regla en Mara y modelos futuros — por
 ahora solo confirmada en Lucia.
 
-### Nivel 2 — Marketing Studio (avatar custom) — 42-75cr — UGC CON PRODUCTO REAL
+### Nivel 2 — Marketing Studio (avatar custom) — 42-75cr — UGC CON PRODUCTO REAL (o talking puro sin producto)
+`product_ids` es opcional en `generate_video(model=marketing_studio_video)` — tambien
+sirve para talking-to-camera SIN producto (`mode: ugc_direct_to_camera`, sin
+`product_ids`), y da mejor lipsync que `wan2_7` suelto. Usar cuando el presupuesto lo
+permita para el segmento de "hablando a camara" de la estructura b-roll+lipsync.
 Para: el caso real de UGC — hablando a camara, sosteniendo el producto REAL (con su
 etiqueta/forma exacta), guion natural, lipsync. Es la herramienta correcta para esto,
 no Elements.
@@ -111,6 +115,19 @@ Como:
 3. Elegir formato (`ugc_selfie_testimonial`, `ugc_direct_to_camera`, etc.) y setting.
 4. Generar. Verificado con Mara+ISDIN: identidad estable, producto fiel, guion espanol
    seguro auto-generado. Costo real por probar: 42cr en 480p (piso), 75cr en 720p/15s.
+
+### Nota sobre b-roll + voz (2026-07-07)
+Para clips de b-roll (Kling, movimiento puro, sin que hable a camara): el lipsync
+suelto (`wan2_7`) falla demasiado si se fuerza sobre movimiento que no es "hablar a
+camara". La solucion NO es mejorar ese lipsync — es no intentarlo ahi. Generar la voz
+de Lucia por separado (`seed_audio`) y ponerla como VO en edicion, sin sincronizar
+labios. Reservar el lipsync real (Nivel 2 o 3) solo para el/los segmento(s) donde
+efectivamente se la ve hablando a camara.
+
+### Nota sobre contenido de bikini/swimwear (investigacion de Sergio, no probado aun)
+Algunos modelos rechazan escenas de bikini/swimwear aunque no muestren nada explicito.
+Segun su investigacion, `soul_2` (ya default) y Seedance 4 son los que mejor generan
+ese tipo de escena sin bloquear. Anotado para cuando haga falta, sin validar todavia.
 
 ### Nivel 3 — wan2_7 (still Soul + audio) — 15cr/10s — TALKING SIN MARKETING STUDIO
 Para: video hablando con voz propia (ElevenLabs/seed_audio) cuando no hace falta el
