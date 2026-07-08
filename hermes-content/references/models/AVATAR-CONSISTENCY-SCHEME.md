@@ -80,6 +80,25 @@ explicito "poreless smooth forehead, zero wrinkles zero fine lines zero creases"
 prompt. Aplica a cualquier modelo, no solo Lucia — revisar el forehead en el QA visual,
 no solo pecas/cejas/ojos.
 
+**Update 2026-07-07 — el fix de prompt NO alcanza con cejas levantadas (expresiones
+fuertes: sorpresa, risa grande, shock).** Sergio detecto que en expresiones con cejas
+arriba las arrugas seguian apareciendo con `soul_2`, y no se veian como arrugas
+naturales de la expresion — se veian como artefacto del modelo. Se confirmo con un
+test A/B: mismo tipo de expresion (sorpresa, cejas levantadas), mismo `soul_id`, dos
+modelos distintos:
+- `soul_2` + texto -> forehead con lineas no naturales (visible en `emotion-surprised.png`).
+- `nano_banana_pro`/`nano_banana_2` + Reference Element `ced20cc2-...` (ancla de cara
+  REAL, sin combinar con otros elements de outfit/lugar) + mismo prompt de expresion ->
+  forehead LISO, sin artefacto, con la misma expresion de sorpresa/cejas levantadas.
+  Costo: 2cr (vs 0.12cr de soul_2 — ~16x mas caro por imagen).
+
+**Regla resultante:** para expresiones fuertes/cejas muy levantadas (sorpresa, shock,
+risa grande), usar `nano_banana_pro` + el Element de ancla de cara real del personaje
+(solo ese Element, no combinar con outfit/lugar para no diluir fidelidad) en vez de
+`soul_2`. Para expresiones calmas/neutras/sonrisa suave, `soul_2` sigue siendo el
+default (mas barato, ya validado). Verificar esta regla en Mara y modelos futuros — por
+ahora solo confirmada en Lucia.
+
 ### Nivel 2 — Marketing Studio (avatar custom) — 42-75cr — UGC CON PRODUCTO REAL
 Para: el caso real de UGC — hablando a camara, sosteniendo el producto REAL (con su
 etiqueta/forma exacta), guion natural, lipsync. Es la herramienta correcta para esto,
