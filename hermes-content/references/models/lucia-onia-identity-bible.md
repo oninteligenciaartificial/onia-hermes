@@ -80,6 +80,14 @@ Cada lugar = UNA imagen real (sin personas) subida como Reference Element (`envi
     en ingles usando el mismo preset) describiendo una escena **lifestyle** (rutina en
     casa, mañana, algo cotidiano — no clinico/laboratorio) y reforzar "forehead liso,
     sin arrugas" en el prompt para evitar que reaparezca el artefacto.
+  - **Update 2026-07-07 — Identity Kit definitivo.** El fix de texto no alcanza en
+    expresiones fuertes (cejas muy levantadas: sorpresa, risa grande) — `soul_2` sigue
+    generando arrugas no naturales ahi. Fix: `nano_banana_pro` + Reference Element
+    `ced20cc2-3388-4d98-92ee-b0fcd961aa62` (ancla real, sola, sin combinar con
+    outfit/lugar), 2cr/img. Kit completo de 6 imagenes (neutral, sonrisa suave, sonrisa
+    completa, 3/4, perfil, sorpresa) verificado sin arrugas en ningun caso, en
+    `lucia-identity-kit-20260707/`. **Regla: `soul_2` sigue de default para expresiones
+    calmas (barato); `nano_banana_pro`+ancla real para expresiones fuertes.**
 - **Nivel 3 (15cr/10s, talking sin producto):** still Nivel 1 -> `wan2_7` + audio.
   Verificado estable con Lucia.
 - **Nivel 4 (2cr, ultimo recurso):** `nano_banana_2` + Elements, solo prop/lugar exacto
