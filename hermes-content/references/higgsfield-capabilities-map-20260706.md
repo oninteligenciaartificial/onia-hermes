@@ -1,5 +1,12 @@
 # Higgsfield — Mapa completo de funciones -> pipeline ONIA (2026-07-06)
 
+> **Verificado 2026-07-07 contra `models_explore(action=list)` en vivo — el catalogo de
+> este doc (imagen/video) sigue siendo exacto.** Este es el doc a consultar SIEMPRE que
+> la pregunta sea "¿existe/tenemos el modelo X?" — no usar `models_explore(action=search)`
+> con 1-2 palabras sueltas para esa pregunta, el matching de esa herramienta no es
+> exhaustivo y da falsos negativos (paso con Veo 3: se dijo "no disponible" por una
+> busqueda angosta cuando en realidad ya estaba listado aca mismo).
+
 Auditoria de TODAS las funciones del MCP de Higgsfield y como usarlas para: (a) modelos
 IA influencer, (b) contenido UGC que vende, (c) movimiento/formatos, (d) automatizacion.
 Regla: **barato por defecto**, validar antes de gastar, no publicar sin aprobacion.

@@ -99,6 +99,14 @@ risa grande), usar `nano_banana_pro` + el Element de ancla de cara real del pers
 default (mas barato, ya validado). Verificar esta regla en Mara y modelos futuros — por
 ahora solo confirmada en Lucia.
 
+**Update 2026-07-07 — alternativa para VIDEO (no solo foto): `minimax_hailuo`.**
+Probado animando un still ya existente con una reaccion de sorpresa genuina (cejas
+subiendo, sonrisa grande): forehead liso en todo el clip, dientes consistentes, 6cr
+(mas barato que Kling 10cr), sin necesitar el paso extra de generar antes una imagen
+con `nano_banana_pro`. Candidato fuerte para b-roll con emocion/reaccion marcada —
+`models_explore` ya lo tenia catalogado como "natural physics, facial emotion" en
+`higgsfield-capabilities-map-20260706.md`, confirmado con test real.
+
 ### Nivel 2 — Marketing Studio (avatar custom) — 42-75cr — UGC CON PRODUCTO REAL (o talking puro sin producto)
 `product_ids` es opcional en `generate_video(model=marketing_studio_video)` — tambien
 sirve para talking-to-camera SIN producto (`mode: ugc_direct_to_camera`, sin

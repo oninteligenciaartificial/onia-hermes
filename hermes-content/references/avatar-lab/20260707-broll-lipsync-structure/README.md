@@ -10,11 +10,29 @@ Formato definido a pedido de Sergio, comparando su investigacion de herramientas
 | Solo movimiento (b-roll) | Kling 2.5 | **Kling 2.6** (mas nuevo, "cinematic motion, advanced physics") o Kling 3.0 — ya en la cuenta |
 | Hablar (lipsync) | HeyGen Avatar 5 | `wan2_7` — ya resuelto hoy (fix de dientes), sin plataforma nueva |
 | — | Seedance 2.0 | Ya documentado como EVITAR (45-135cr, la mas cara) |
-| — | Veo 3 | No disponible en Higgsfield — integracion externa, no evaluado |
+| — | Veo 3 | **CORRECCION 2026-07-07: SI esta en Higgsfield** (`veo3`, `veo3_1`, `veo3_1_lite`) — dije que no por una busqueda mal hecha (query muy angosta en `models_explore`). Ver catalogo completo abajo. |
 
-**HeyGen y Veo 3 no se dieron de alta** — son plataformas nuevas, requieren validacion
-de gasto con Sergio antes de usarlas (regla [[gasto-plataformas-validar-primero]]). Por
-ahora Kling+wan2.7 cubren el mismo caso de uso sin sumar plataforma.
+**Correccion de un error mio (2026-07-07):** dije "Veo 3 no disponible en Higgsfield"
+basado en una busqueda en vivo con `models_explore(action=search, query="veo google")`
+que devolvio vacio. Sergio lo cuestiono con razon. La realidad: **el catalogo completo
+y correcto ya estaba documentado** en
+[`hermes-content/references/higgsfield-capabilities-map-20260706.md`](../../higgsfield-capabilities-map-20260706.md)
+desde el dia anterior — `veo3`/`veo3_1`/`veo3_1_lite` ya figuraban ahi. Mi error no fue
+de catalogo sino de proceso: no consulte ese doc antes de responder y confie en una
+busqueda en vivo con query angosta, que no es confiable para "¿existe X?" (`search`
+hace matching por palabras clave, no es exhaustivo). **Leccion: para "que modelos
+hay/existe X", consultar primero el capabilities-map; usar `models_explore(action=list)`
+sin filtro si hace falta verificar en vivo, nunca `search` con 1-2 palabras sueltas.**
+
+Ese doc ya tiene el catalogo completo de imagen/video/audio con costos y mapeo a
+nuestro pipeline — no se duplica aca. Relevante para lo que seguimos armando:
+`minimax_hailuo` (Hailuo) ya estaba anotado ahi como "fisica natural, **emocion
+facial**" — candidato a probar para expresiones fuertes, alternativa a
+`nano_banana_pro`+ancla real. `veo3`/`veo3_1` generan su propio audio/voz (no toman
+`audio_references` externo como `wan2_7`), asi que no sirven para mantener la voz
+Isabella ya establecida de Lucia — mejor candidato para b-roll premium que para
+lipsync con voz consistente. **HeyGen si sigue sin estar en Higgsfield** (verificado
+contra el listado completo, no aparece en ningun tipo) — esa parte era correcta.
 
 **Aclaracion de Sergio (2026-07-07) sobre su investigacion:**
 - Para escenas de bikini/swimwear: algunos modelos rechazan el contenido aunque no
@@ -75,6 +93,22 @@ mejor foto del Identity Kit, `kit-03-full-smile.png`), preset `ugc_direct_to_cam
   `wan2_7` suelto para el segmento de "hablando a camara"**, incluso sin producto.
   Diferencia de costo: 42cr (Marketing Studio) vs 15cr (`wan2_7`) — usar Marketing
   Studio cuando el presupuesto lo permita, `wan2_7` como opcion barata de respaldo.
+
+## Test minimax_hailuo para expresiones fuertes (2026-07-07)
+
+`minimax-surprised.mp4` — `minimax_hailuo` (variant minimax-2.3, default), 6cr, still
+de partida `action-cafe` (mismo usado en `broll-kitchen.mp4`). Prompt: reaccion de
+sorpresa genuina, cejas subiendo, gran sonrisa.
+
+**Resultado: forehead liso en las 12 muestras revisadas, incluso en el frame de ojos
+bien abiertos** (el caso mas exigente) — sin el artefacto de arrugas que si aparece con
+`soul_2`/Kling en expresiones fuertes. Dientes consistentes en todos los frames con
+sonrisa. Costo 6cr, mas barato que Kling (10cr) y no necesita el paso extra de generar
+primero una imagen con `nano_banana_pro` — anima directo desde el still de partida.
+
+**Candidato fuerte para b-roll con reacciones/emociones fuertes** (no reemplaza el
+lipsync real de Marketing Studio/`wan2_7` para "hablando a camara", pero es mejor opcion
+que Kling para b-roll donde ella reacciona/gesticula con expresion marcada).
 
 ## Pendiente (no ejecutado)
 
