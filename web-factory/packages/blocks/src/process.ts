@@ -6,8 +6,8 @@ export function renderProcess(client: SiteClient): string {
   const steps = client.proceso ?? [];
   if (steps.length === 0) return "";
 
-  const kicker = client.procesoKicker ?? "Como funciona";
-  const titulo = client.procesoTitulo ?? "De tu mensaje a tu cita, sin vueltas";
+  const kicker = escapeHtml(client.procesoKicker ?? "Como funciona");
+  const titulo = escapeHtml(client.procesoTitulo ?? "De tu mensaje a tu cita, sin vueltas");
 
   const items = steps
     .map(

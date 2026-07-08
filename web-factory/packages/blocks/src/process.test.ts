@@ -52,4 +52,15 @@ describe("renderProcess", () => {
     expect(html).toContain("Como funciona");
     expect(html).toContain("De tu mensaje a tu cita, sin vueltas");
   });
+
+  it("escapes HTML in procesoKicker and procesoTitulo overrides", () => {
+    const html = renderProcess({
+      ...base,
+      proceso: [{ titulo: "Paso", desc: "d" }],
+      procesoKicker: "<script>x</script>",
+      procesoTitulo: "<b>y</b>",
+    });
+    expect(html).not.toContain("<script>x</script>");
+    expect(html).not.toContain("<b>y</b>");
+  });
 });
