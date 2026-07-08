@@ -33,4 +33,23 @@ describe("renderProcess", () => {
     const html = renderProcess({ ...base, proceso: [{ titulo: "<b>x</b>", desc: "d" }] });
     expect(html).not.toContain("<b>x</b>");
   });
+
+  it("uses process copy overrides when provided (generalization)", () => {
+    const html = renderProcess({
+      ...base,
+      proceso: [{ titulo: "Contacto", desc: "Nos escribis por WhatsApp." }],
+      procesoKicker: "Como comprar",
+      procesoTitulo: "De tu consulta a la firma, sin vueltas",
+    });
+    expect(html).toContain("Como comprar");
+    expect(html).toContain("De tu consulta a la firma, sin vueltas");
+    expect(html).not.toContain("Como funciona");
+    expect(html).not.toContain("De tu mensaje a tu cita");
+  });
+
+  it("still defaults to the clinic copy when no override is given (backward compatible)", () => {
+    const html = renderProcess({ ...base, proceso: [{ titulo: "Agenda", desc: "d" }] });
+    expect(html).toContain("Como funciona");
+    expect(html).toContain("De tu mensaje a tu cita, sin vueltas");
+  });
 });
