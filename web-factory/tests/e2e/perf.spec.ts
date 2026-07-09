@@ -18,7 +18,9 @@ const PAGES = [
   { name: "store (skincare-demo)", url: "/skincare-demo/", maxBytesKb: 150 },
   { name: "dashboard (dashboard-demo)", url: "/dashboard-demo/", maxBytesKb: 60 },
   { name: "dashboard (dentalgest-demo)", url: "/dentalgest-demo/", maxBytesKb: 60 },
-  { name: "landing-clinic (dental-demo)", url: "/dental-demo/", maxBytesKb: 320 },
+  // Realty ships a hero photo (eager) plus three lazy listing webps; budget is
+  // the real full-page weight (~479kb of HTML+CSS+4 webp) rounded up with headroom.
+  { name: "landing-realty (realty-demo)", url: "/realty-demo/", maxBytesKb: 490 },
 ];
 
 for (const target of PAGES) {

@@ -8,6 +8,16 @@ export const realtyCss = `
   overflow-x: hidden;
 }
 
+/* The shared process block reuses .wf-kicker (raw --color-primary). Raw
+   terracotta is small uppercase text on the page surface, which drops below
+   WCAG AA on the dark surface (#b5502e on #0c1013 ≈ 3.8). Blend toward
+   --color-fg so the kicker tracks the scheme: darker terracotta on the sand
+   surface, lighter terracotta on the charcoal one — clearing 4.5:1 both ways
+   while staying visibly on-brand. Scoped to the realty page only. */
+.wf-realty-page .wf-kicker {
+  color: color-mix(in srgb, var(--color-primary) 80%, var(--color-fg));
+}
+
 .wf-icon { width: 1.2em; height: 1.2em; flex: 0 0 auto; }
 
 /* ---------- Hero ---------- */
