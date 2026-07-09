@@ -1,13 +1,14 @@
 import { describe, expect, it } from "vitest";
 import { renderStickyCta } from "./sticky-cta";
+import type { SiteClient } from "./types";
 
-const base = {
+const base: SiteClient = {
   nombre: "Aura", tagline: "t", descripcion: "d", logo: "A",
   contacto: { email: "", tel: "", whatsapp: "", direccion: "" },
   redes: { ig: "", fb: "", linkedin: "", x: "" },
   servicios: [{ titulo: "s", desc: "d", icono: "x" }],
   cta: { texto: "Agendar cita", url: "https://wa.me/59170000000" },
-} as const;
+};
 
 describe("renderStickyCta", () => {
   it("renders a fixed CTA pointing at the real channel", () => {

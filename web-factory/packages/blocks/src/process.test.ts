@@ -1,13 +1,14 @@
 import { describe, expect, it } from "vitest";
 import { renderProcess } from "./process";
+import type { SiteClient } from "./types";
 
-const base = {
+const base: SiteClient = {
   nombre: "Aura", tagline: "t", descripcion: "d", logo: "A",
   contacto: { email: "", tel: "", whatsapp: "", direccion: "" },
   redes: { ig: "", fb: "", linkedin: "", x: "" },
   servicios: [{ titulo: "s", desc: "d", icono: "x" }],
   cta: { texto: "c", url: "#" },
-} as const;
+};
 
 describe("renderProcess", () => {
   it("renders numbered steps", () => {

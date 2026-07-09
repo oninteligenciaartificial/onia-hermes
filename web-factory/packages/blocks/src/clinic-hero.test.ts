@@ -1,13 +1,14 @@
 import { describe, expect, it } from "vitest";
 import { renderClinicHero, resolveHeroVariant } from "./clinic-hero";
+import type { SiteClient } from "./types";
 
-const base = {
+const base: SiteClient = {
   nombre: "Aura", tagline: "Sonrisas sanas", descripcion: "Clinica dental.", logo: "A",
   contacto: { email: "", tel: "", whatsapp: "", direccion: "La Paz" },
   redes: { ig: "", fb: "", linkedin: "", x: "" },
   servicios: [{ titulo: "s", desc: "d", icono: "x" }],
   cta: { texto: "Agendar cita", url: "https://wa.me/1" },
-} as const;
+};
 
 describe("hero variant dispatcher", () => {
   it("uses the explicit variant when set", () => {

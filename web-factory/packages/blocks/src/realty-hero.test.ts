@@ -1,13 +1,14 @@
 import { describe, expect, it } from "vitest";
 import { renderRealtyHero } from "./realty-hero";
+import type { SiteClient } from "./types";
 
-const base = {
+const base: SiteClient = {
   nombre: "Terra Propiedades", tagline: "Encontra tu proximo lugar", descripcion: "Agencia inmobiliaria.", logo: "TP",
   contacto: { email: "", tel: "", whatsapp: "", direccion: "" },
   redes: { ig: "", fb: "", linkedin: "", x: "" },
   servicios: [{ titulo: "s", desc: "d", icono: "x" }],
   cta: { texto: "Consultar por WhatsApp", url: "https://wa.me/1" },
-} as const;
+};
 
 describe("renderRealtyHero", () => {
   it("renders a full-bleed hero with a floating search panel", () => {

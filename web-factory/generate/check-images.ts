@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import type { Dirent } from "node:fs";
 import { readdir, stat } from "node:fs/promises";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
@@ -9,9 +10,9 @@ import { parseSlug } from "./generate";
 
 async function collectAssets(dir: string, baseDir = dir): Promise<AssetInfo[]> {
   const assets: AssetInfo[] = [];
-  let entries: Awaited<ReturnType<typeof readdir>>;
+  let entries: Dirent[];
   try {
-    entries = await readdir(dir, { withFileTypes: true });
+    entries = await readdir(dir, { withFileTypes: true, encoding: "utf8" });
   } catch {
     return assets;
   }

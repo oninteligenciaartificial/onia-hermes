@@ -1,13 +1,14 @@
 import { describe, expect, it } from "vitest";
 import { renderListings } from "./realty-listings";
+import type { SiteClient } from "./types";
 
-const base = {
+const base: SiteClient = {
   nombre: "Terra Propiedades", tagline: "t", descripcion: "d", logo: "TP",
   contacto: { email: "", tel: "", whatsapp: "", direccion: "" },
   redes: { ig: "", fb: "", linkedin: "", x: "" },
   servicios: [{ titulo: "s", desc: "d", icono: "x" }],
   cta: { texto: "c", url: "#" },
-} as const;
+};
 
 describe("renderListings", () => {
   it("renders a featured card and a grid of regular cards", () => {

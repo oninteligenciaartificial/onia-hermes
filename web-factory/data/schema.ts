@@ -188,7 +188,7 @@ const dashboardSchema = z
     filters: z.array(z.string().min(1)).default([]),
     kpis: z.array(dashboardKpiSchema).default([]),
     charts: z.array(dashboardChartSchema).default([]),
-    table: dashboardTableSchema.default({ title: "Detalle", columns: [], rows: [] }),
+    table: dashboardTableSchema.default({ title: "Detalle", columns: [], rows: [], filtros: [] }),
     heroPanel: dashboardHeroPanelSchema.optional(),
     sidePanel: dashboardSidePanelSchema.optional(),
     showStatesReference: z.boolean().default(false),
@@ -200,7 +200,7 @@ const dashboardSchema = z
     filters: [],
     kpis: [],
     charts: [],
-    table: { title: "Detalle", columns: [], rows: [] },
+    table: { title: "Detalle", columns: [], rows: [], filtros: [] },
     showStatesReference: false,
   });
 
