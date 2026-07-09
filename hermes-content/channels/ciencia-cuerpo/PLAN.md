@@ -404,27 +404,48 @@ ingreso en Bolivia. El "dónde facturamos" son en realidad dos cosas separadas:
   ingreso de fuera de EE.UU. tiene 0% de retención estadounidense). **Confirmar
   con contador** — esto no es asesoría fiscal.
 
-### Dónde se declara (Bolivia) — decisión abierta
+### Dónde se declara (Bolivia) — el vehículo
 
-- No se emite factura boliviana a Google; se **declara el ingreso de fuente
-  extranjera** bajo la figura fiscal que corresponda (NIT/régimen ONIA; IUE anual
-  e IT/IVA según cómo se estructure). Conecta con la skill existente
-  `hermes-content/skills/recordatorios-fiscales-bolivia.md`.
-- **Decisión genuina de Sergio + su contador:** ¿a nombre de quién va la cuenta
-  de AdSense/el canal?
-  1. **Sergio persona natural** — lo más simple para arrancar; ingreso personal.
-  2. **ONIA (empresa)** — el canal como activo de la empresa; entra a los libros
-     de ONIA. Coherente si es un motor de ingresos de la compañía.
-  3. **US LLC** — algunos creadores lo usan para estructurar; agrega complejidad
-     y costos, y no elimina la obligación fiscal boliviana. Solo si el contador
-     lo justifica.
-- Esto **no es asesoría contable**; la skill fiscal misma exige validar con
-  contador y no presentar plantillas como definitivas.
+No se emite factura boliviana a Google; se **declara el ingreso de fuente
+extranjera** bajo un NIT/régimen. A la fecha (2026-07-08) **no existe una entidad
+ONIA registrada aparte** en el repo (la skill fiscal es plantilla vacía). El
+vehículo de negocio concreto disponible es una **empresa unipersonal recién
+abierta (a nombre de un familiar de Sergio)** con su NIT. El eje real de decisión
+entonces es:
+
+1. **Unipersonal (vehículo de negocio) — recomendado si el canal es activo de
+   ONIA.** Ya existe y tiene NIT para declarar ingreso de negocio. Consolida la
+   plata en los libros de ONIA en vez de mezclarla en lo personal.
+2. **Sergio persona natural** — fallback simple; mezcla negocio con personal.
+3. **US LLC** — más complejidad/costo, no elimina la obligación boliviana. Solo
+   si el contador lo justifica.
+
+**Restricción crítica (aplica sí o sí a la opción 1):** toda la cadena de
+identidad de monetización tiene que ser LA MISMA persona/NIT — la cuenta de
+**AdSense**, el formulario **W-8BEN**, y la cuenta **Payoneer/banco** de payout.
+Como la unipersonal está a nombre de un familiar, eso significa que el ingreso es
+legalmente suyo, declarado bajo su NIT, con su identidad en todo el KYC de
+Google/Payoneer. No se puede "canal de Sergio, pago a la unipersonal del
+familiar": el beneficiario debe coincidir. Es una decisión familiar consciente,
+no algo para que pase por default.
+
+**Preguntas exactas para el contador:**
+- ¿La unipersonal puede declarar ingreso de publicidad/servicios digitales del
+  exterior (AdSense en USD)? ¿Bajo qué impuestos — IUE anual, IT, IVA?
+- ¿Hay retención o formalidad especial por ingreso en USD del exterior vía
+  Payoneer?
+- ¿Conviene registrar/facturar ese ingreso de algún modo específico para que
+  quede limpio?
+
+Esto **no es asesoría contable**; la skill fiscal misma exige validar con
+contador y no presentar plantillas como definitivas.
 
 ### Sin construir todavía — lo que Sergio necesita destrabar
 
-1. Confirmar el **titular** de la cuenta (opción 1/2/3 arriba) — con su contador.
-2. Abrir/confirmar **Payoneer** para el payout boliviano.
+1. Decidir el **vehículo** (unipersonal vs personal) con el contador, asumiendo
+   la restricción de identidad de arriba.
+2. Abrir/confirmar **Payoneer** para el payout boliviano (a nombre que coincida
+   con el vehículo elegido).
 3. Al crear la cuenta AdSense: cargar el **W-8BEN** apenas se pueda.
 Ninguno bloquea el pipeline ni el radar (que construyen hacia el umbral YPP);
 bloquean el cobro, que recién aplica al cruzar 1.000 subs + 4.000 horas.
