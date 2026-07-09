@@ -110,6 +110,20 @@ primero una imagen con `nano_banana_pro` — anima directo desde el still de par
 lipsync real de Marketing Studio/`wan2_7` para "hablando a camara", pero es mejor opcion
 que Kling para b-roll donde ella reacciona/gesticula con expresion marcada).
 
+## Pieza #1 ensamblada (prueba del pipeline completo, 2026-07-07)
+
+`lucia-piece01-rough.mp4` — primer video FINAL ensamblado end-to-end, CERO creditos
+nuevos (solo edicion ffmpeg de clips ya generados). Estructura: b-roll cocina (Kling,
+intro) -> corte a ella hablando del producto en español (`wan2_7`). 17s, 1080x1920,
+30fps, audio normalizado. Los 2 segmentos comparten top blanco/ambiente asi que cortan
+juntos naturalmente; identidad y forehead consistentes en todo el cut.
+
+Es una prueba de concepto del ARMADO (que el pipeline llega a un .mp4 publicable), no la
+pieza final de produccion — para eso se generan clips a proposito con guion, y el b-roll
+lleva VO `seed_audio` en vez de audio nativo. Comando ffmpeg usado: normalizar ambos a
+1080x1920/30fps + concat filter (v=1:a=1). Sistema completo de contenido en
+`hermes-content/references/models/LUCIA_CONTENT_SYSTEM.md`.
+
 ## Pendiente (no ejecutado)
 
 - Armar el edit final (concatenar los 3 clips + mezclar VO de b-roll con el audio
