@@ -429,16 +429,50 @@ Google/Payoneer. No se puede "canal de Sergio, pago a la unipersonal del
 familiar": el beneficiario debe coincidir. Es una decisión familiar consciente,
 no algo para que pase por default.
 
-**Preguntas exactas para el contador:**
-- ¿La unipersonal puede declarar ingreso de publicidad/servicios digitales del
-  exterior (AdSense en USD)? ¿Bajo qué impuestos — IUE anual, IT, IVA?
-- ¿Hay retención o formalidad especial por ingreso en USD del exterior vía
-  Payoneer?
-- ¿Conviene registrar/facturar ese ingreso de algún modo específico para que
-  quede limpio?
+### Qué podemos hacer (estructura fiscal — Ley 843, investigado 2026-07-08)
 
-Esto **no es asesoría contable**; la skill fiscal misma exige validar con
-contador y no presentar plantillas como definitivas.
+La unipersonal está en **Régimen General**. Justo el **DS 5563 (marzo 2026)**
+cerró el vacío y dejó explícito que las empresas unipersonales son sujetos de
+IVA/IT/IUE. Stack de impuestos:
+
+- **IUE 25%** — sobre la **utilidad NETA** (ingresos menos gastos deducibles),
+  anual.
+- **IT 3%** — sobre el ingreso bruto (posible compensación con el IUE pagado;
+  confirmar estado actual, hubo intentos de reforma).
+- **IVA 13%** — pero ver la jugada de abajo.
+
+**¿Es gravable en Bolivia?** Sí. Principio de **fuente** (Art. 42 Ley 843 + DS
+24051): la actividad se realiza en territorio boliviano (el contenido se produce
+acá) → renta de **fuente boliviana** → IUE aplica, aunque Google pague desde el
+exterior y la audiencia sea global. El pagador extranjero no la vuelve renta del
+exterior.
+
+**Las dos palancas legales (esto es lo que ahorra):**
+1. **Estructurar el AdSense como EXPORTACIÓN DE SERVICIOS → IVA tasa cero (0%).**
+   Art. 11 Ley 843: las exportaciones están liberadas de IVA; existe el mecanismo
+   formal de **Factura Comercial de Exportación de servicios** (sin derecho a
+   crédito fiscal). El servicio se presta a Google (empresa del exterior) y se
+   consume/paga afuera → el argumento de "exportación de servicios" saca el 13%
+   de IVA del ingreso de ads. **Es la jugada grande** — la tiene que calificar y
+   firmar el contador ante el SIN.
+2. **IUE solo sobre la utilidad NETA → deducir todo el costo de producción.**
+   Créditos Higgsfield, voz IA, VPS, dominios, herramientas: son **gastos
+   deducibles** si están soportados. Bajan la base del IUE. Por eso hay que
+   **guardar comprobante de cada gasto** (conecta con el costeo del §5).
+
+**El W-8BEN (lado EE.UU.)** es independiente de todo esto: se carga en AdSense
+para que EE.UU. no retenga de más; su 30% pega solo sobre la porción de vistas de
+EE.UU. (chica para un canal en español).
+
+**Lo puntual que el contador matriculado debe confirmar/firmar:**
+- Que AdSense **califica como exportación de servicios** ante el SIN (ahí está el
+  ahorro del IVA).
+- Estado **actual de la compensación IUE↔IT** (hubo reforma en trámite).
+- Formalidad de la factura de exportación y del ingreso en USD vía Payoneer.
+
+Esto **no es asesoría contable definitiva**: es la estructura que la Ley 843
+habilita; la calificación de exportación de servicios la firma un profesional
+matriculado porque el SIN puede observarla.
 
 ### Sin construir todavía — lo que Sergio necesita destrabar
 
