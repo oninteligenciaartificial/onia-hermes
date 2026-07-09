@@ -1,5 +1,36 @@
 # ONIA Core Changelog
 
+## portable-artifacts — 2026-07-08 (mecanismo anti-drift de adopcion de logica)
+
+- Sergio pidio "formalizar @onia/core publicable". Investigado como consume
+  DentalGest el core en R6 (commit `96b89a9`): NO usa `@onia/core` como paquete
+  npm -- porta cada `*.logic.mjs` a `*.ts` a mano con nota
+  `// Origen: @onia/core@0.6.2 · ...`. Publicar a npm se evaluo y descarto (sin
+  registry privado, y los productos TS igual traducen el mjs -> la ceremonia no
+  elimina la traduccion). El problema REAL a resolver es el **drift silencioso**:
+  si el core corrige un bug (tasa fiscal, formula IVA) el producto que copio no
+  se entera.
+- `portable-artifacts.mjs` + `PORTABLE_ARTIFACTS.json`: manifest con el `sha256`
+  de cada artefacto portable (19: 14 `*.logic.mjs` de logic/+modules/, 4
+  sub-secciones de config de datos de los .json de modulo —bolivianConfig/
+  siatConfig/laborConfig/clinicalConfig, hasheadas por SUB-SECCION para que
+  agregar un track no marque falso drift—, 1 seed boliviano). `manifestDrift()`
+  compara committeado vs real.
+- `portable-artifacts.test.mjs` (8 tests): exige que el manifest committeado
+  este SINCRONIZADO con los archivos reales -> no puede quedar viejo en
+  silencio (cambiar un .logic.mjs sin regenerar el manifest rompe el test).
+  Probado con ruptura intencional: ensuciar accounting.logic.mjs -> 2 tests
+  fallan + drift lo reporta; revertir -> 8 verdes.
+- `ONIA_CORE_LOGIC_PORTING_RECIPE_2026.md`: receta de port segura para
+  productos (portar con nota de origen + hash, tests de paridad, chequear drift
+  contra el manifest). Convencion mejorada: guardar el `sha256` del manifest en
+  el comentario de origen, no solo la version.
+- **Verificado por git (respuesta practica inmediata)**: los 3 `.logic.mjs` que
+  DentalGest porto en v0.6.2 (commerce/accounting/invoicing) NO cambiaron entre
+  0.6.2 y 0.7.0 -> el port de DentalGest sigue vigente, no hay que re-portar.
+- `package.json`: subpath `./portable-artifacts` + script `artifacts`. 322
+  tests (314+8), 4 validadores verdes. Aditivo: `contract.json` intacto.
+
 ## 0.7.0 — 2026-07-07 (los 11 rubros del roadmap, definidos)
 
 - Sergio pidio "sigamos definiendo todos los rubros para tenerlos definidos".

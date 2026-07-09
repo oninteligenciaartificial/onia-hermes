@@ -1,0 +1,125 @@
+{
+  "note": "Generado por onia-core/portable-artifacts.mjs. No editar a mano; correr `node onia-core/portable-artifacts.mjs --write`.",
+  "coreVersion": "0.7.0",
+  "artifactCount": 19,
+  "artifacts": [
+    {
+      "id": "logic/approvals.logic.mjs",
+      "kind": "logic",
+      "path": "onia-core/logic/approvals.logic.mjs",
+      "sha256": "b170b06b070bea31e56723aebed423db9b5af0de9c0460093c48996ba724b8f1"
+    },
+    {
+      "id": "logic/fx.logic.mjs",
+      "kind": "logic",
+      "path": "onia-core/logic/fx.logic.mjs",
+      "sha256": "c120b1872dab704e123e3624f3abd61db59b80cadb038376e5097e87cefa2394"
+    },
+    {
+      "id": "logic/intake.logic.mjs",
+      "kind": "logic",
+      "path": "onia-core/logic/intake.logic.mjs",
+      "sha256": "cda09ab6b34f4077fc27b24998520e31c346502543ddc2e94f7456347554499b"
+    },
+    {
+      "id": "logic/numbering.logic.mjs",
+      "kind": "logic",
+      "path": "onia-core/logic/numbering.logic.mjs",
+      "sha256": "9683754ad6269bc5010dde774726cd20484d6234e99290394b90648b62894cef"
+    },
+    {
+      "id": "logic/roles.logic.mjs",
+      "kind": "logic",
+      "path": "onia-core/logic/roles.logic.mjs",
+      "sha256": "80a2b23391ceaf1638c476b9fc9869dd4a3d179bec324939663cf4755e34d19f"
+    },
+    {
+      "id": "logic/saved-view.logic.mjs",
+      "kind": "logic",
+      "path": "onia-core/logic/saved-view.logic.mjs",
+      "sha256": "39de0fc1592acffd39b10584e650681f1acb376bc56f6547b0bb622ccbb104bb"
+    },
+    {
+      "id": "logic/scheduling.logic.mjs",
+      "kind": "logic",
+      "path": "onia-core/logic/scheduling.logic.mjs",
+      "sha256": "8a1c89875b3e456bb280ae53f98c0cde055aa3b61e0b4008743dfc8519ed246c"
+    },
+    {
+      "id": "logic/work-items.logic.mjs",
+      "kind": "logic",
+      "path": "onia-core/logic/work-items.logic.mjs",
+      "sha256": "e6653676473878f4ee41abcba6ae9834a4b01149190341804cc50d455c23bf87"
+    },
+    {
+      "id": "modules/accounting.json#bolivianConfig",
+      "kind": "config",
+      "path": "onia-core/modules/accounting.json",
+      "jsonKey": "bolivianConfig",
+      "sha256": "5cb9fd915843e87e25416efa9ad547bd00631e045121c2383005fa0b6ece4ab8"
+    },
+    {
+      "id": "modules/accounting.logic.mjs",
+      "kind": "logic",
+      "path": "onia-core/modules/accounting.logic.mjs",
+      "sha256": "aeb4f305cab6080cfc6de4812c415248a9c08f40f44303833954e1e903297787"
+    },
+    {
+      "id": "modules/accounting.seed.bolivia.json",
+      "kind": "seed",
+      "path": "onia-core/modules/accounting.seed.bolivia.json",
+      "sha256": "f94abbe8d4da33d6388e6880e7965020e2f7fd91c939b212895d4f13ae6c2b0d"
+    },
+    {
+      "id": "modules/bridge.logic.mjs",
+      "kind": "logic",
+      "path": "onia-core/modules/bridge.logic.mjs",
+      "sha256": "bf098cf49b09f7bd3cd6ca2f220a722160988ef7639fa8cc762e25910fff6c22"
+    },
+    {
+      "id": "modules/commerce.logic.mjs",
+      "kind": "logic",
+      "path": "onia-core/modules/commerce.logic.mjs",
+      "sha256": "66e7449638bcbc4c7ea3dfb5db4dfe207a6d757165b2d7dd062f8b0d06ac78d6"
+    },
+    {
+      "id": "modules/dental.json#clinicalConfig",
+      "kind": "config",
+      "path": "onia-core/modules/dental.json",
+      "jsonKey": "clinicalConfig",
+      "sha256": "82d8f90d354de02261b513bc2f46a7e3132a542045beb84dac15c066b5d2e24f"
+    },
+    {
+      "id": "modules/dental.logic.mjs",
+      "kind": "logic",
+      "path": "onia-core/modules/dental.logic.mjs",
+      "sha256": "1bf50ab3e2e0ff08178ac9dae94557a79a1a971d083bbfa16cbf3dd823a0fc73"
+    },
+    {
+      "id": "modules/invoicing.json#siatConfig",
+      "kind": "config",
+      "path": "onia-core/modules/invoicing.json",
+      "jsonKey": "siatConfig",
+      "sha256": "57abf7a66d8d64105303180a57c2edaf46e35300fe79a144be1bc02199752c06"
+    },
+    {
+      "id": "modules/invoicing.logic.mjs",
+      "kind": "logic",
+      "path": "onia-core/modules/invoicing.logic.mjs",
+      "sha256": "25bb3dd9c95299df1d8f561fc47697197bc1c17faa5ce4987d009864569eba6b"
+    },
+    {
+      "id": "modules/payroll.json#laborConfig",
+      "kind": "config",
+      "path": "onia-core/modules/payroll.json",
+      "jsonKey": "laborConfig",
+      "sha256": "39dd689a67bef6b9941a1d0255833fe2cdf53387237a1af3707edb7b6c08c917"
+    },
+    {
+      "id": "modules/payroll.logic.mjs",
+      "kind": "logic",
+      "path": "onia-core/modules/payroll.logic.mjs",
+      "sha256": "e67be628fbd7b30f45d5da045981894d8430eb35a3d4d7db20f79a156d2eedd4"
+    }
+  ]
+}

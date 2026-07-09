@@ -62,6 +62,16 @@ modulos, verticales o integraciones. No son la definicion del core.
 - `package.json`: expone `@onia/core` (version = la del contrato). Los productos
   importan `@onia/core/logic` (workItems, roles, fx, numbering...),
   `@onia/core/modules` y `@onia/core/contract` en vez de copiar codigo.
+- **Anti-drift** (`portable-artifacts.mjs` + `PORTABLE_ARTIFACTS.json` +
+  `ONIA_CORE_LOGIC_PORTING_RECIPE_2026.md`): los productos son TS/Prisma en
+  repos separados y PORTAN la logica pura a mano (mjs->ts). El manifest
+  registra el `sha256` de cada artefacto portable (14 logic + 4 config + 1
+  seed) para detectar drift silencioso cuando el core corrige algo y el
+  producto que copio no se entera. `portable-artifacts.test.mjs` exige que el
+  manifest este sincronizado (no puede quedar viejo). Regenerar:
+  `node onia-core/portable-artifacts.mjs --write`. Receta de port segura en el
+  MD. (Verificado 2026-07-08: el port de DentalGest en v0.6.2 sigue vigente,
+  sus 3 logic no cambiaron en 0.7.0.)
 - `validate.mjs`: validador local de estructura e invariantes.
 - `report.mjs`: reporte de avance en lenguaje simple (verticales con su pack y
   cuanto del core lleva instalado cada producto). Correr: `node onia-core/report.mjs`.
