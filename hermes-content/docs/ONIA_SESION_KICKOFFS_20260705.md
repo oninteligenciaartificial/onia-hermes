@@ -175,13 +175,28 @@ comments, documents, approvals, schedule, saved_views, intake)? Mientras se
 decide, arranca por la columna vertebral (R1, mismo alcance que DentaGest
 Sprints 1-4): no choca con ninguna de las dos opciones.
 
-R1 -- instalar ONIA Core en GestiOS como columna vertebral (Sprint 0 primero:
-RE-VERIFICA si el baseline de migraciones sigue sucio -- _prisma_migrations,
-DIRECT_URL valida -- antes de instalar nada, mismo runbook que uso DentaGest).
-Segui `C:\dev\proyectos\onia-hermes\onia-core\ONIA_CORE_INSTALL_GUIDE_2026.md`.
+R1 -- instalar ONIA Core en GestiOS como columna vertebral. Sprint 0 primero:
+el baseline de migraciones esta CONFIRMADO sucio (verificado 2026-07-08 en
+docs/DATABASE.md, ya no es dato de memoria): varias migraciones aplicadas a
+mano a Supabase fuera de `migrate deploy` (cash_registers, email_log), la
+ultima es un `.sql` suelto, y NO hay `DATABASE_URL`/`DIRECT_URL` local (se
+aplican en Vercel en el build). PRIMER PASO CONCRETO: conseguir esa URL valida
+(Vercel env del proyecto o el Supabase de GestiOS) -- sin eso no podes ni
+correr `prisma migrate status`. Luego el mismo runbook de baseline que uso
+DentaGest en su Sprint 0. Ver el plan completo con todo esto en
+`C:\dev\proyectos\onia-hermes\onia-core\ONIA_CORE_GESTIOS_ADOPTION_PLAN_2026.md`
+(seccion "Baseline de migraciones — CONFIRMADO 2026-07-08") +
+`ONIA_CORE_INSTALL_GUIDE_2026.md`.
+OJO datos que YA existen en GestiOS y no hay que reinventar: `Invoice`
+(cuis/cufd/cufe -- hubo un intento SIAT "retirado del alcance comercial"),
+`QrPayment` (multi-PSP), `OrgAddon`/`PlanType` (empaquetado comercial PROPIO
+que NO coincide con business-tiers del core -- no forzar alineacion sin
+criterio de Sergio).
 NUNCA copies contract.json ni el schema al repo de Gestios -- ya paso una vez
 (commit cf57afa, revertido en 3d8aec4) y esta prohibido: se referencia via
-adapter + logica portada, no se forkea.
+adapter + logica portada, no se forkea. Para portar logica del core seguí
+`ONIA_CORE_LOGIC_PORTING_RECIPE_2026.md` (guardá el sha256 del manifest
+PORTABLE_ARTIFACTS.json en la nota de origen, no solo la version).
 R5 (DESPUES de R1) -- extraer paquetes @onia/* (core-db, fiscal, ui). NO antes de
 que R1 pruebe los patrones. Fuente: `ONIA_ECOSYSTEM_INVENTORY_20260704.md` (onia-hermes).
 

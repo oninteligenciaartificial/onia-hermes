@@ -27,12 +27,40 @@ propia que NO pasa todavia por onia-core:
   onia core contract"` seguido de `3d8aec4 "Revert..."` — alguien copio el
   contrato directo al repo de GestiOS y se revirtio. Confirma la regla: el core
   se REFERENCIA (adapter + logica portada), nunca se forkea/copia entero.
-- **Bloqueante conocido (memoria de sesion previa, RE-VERIFICAR al arrancar)**:
-  baseline de migraciones sucio — sin `_prisma_migrations` de registro real,
-  drift bidireccional (falta `qr_payments`, sobra `personal_subscriptions`
-  segun la ultima auditoria), `DIRECT_URL` con credenciales invalidas en el
-  entorno usado. Este dato viene de memoria, no de esta verificacion — el
-  Sprint 0 empieza confirmando si sigue siendo cierto.
+- **Modelos fiscales/pago que YA existen (relevante para el SIAT compartido y
+  para business-tiers)**: `Invoice` (con `cuis`/`cufd`/`cufe`/`nitEmisor`/
+  `xmlData`/`sinResponse` — nota literal en DATABASE.md: "SIAT esta retirado del
+  alcance comercial actual"), `QrPayment` (multi-proveedor: AGGREGATOR/QR_SWITCH/
+  TIGO/BIPAGO). Ergo hubo un intento previo de facturacion SIAT en GestiOS que se
+  pauso — cuando exista el emisor SIAT compartido, GestiOS es candidato a
+  consumirlo en vez de re-emitir por su cuenta.
+- **Empaquetado comercial PROPIO** (`PlanType` BASICO/CRECER/PRO/EMPRESARIAL +
+  `AddonType` WHATSAPP/FACTURACION/QR_BOLIVIA/ECOMMERCE/CONTABILIDAD/
+  INVENTARIO_AVANZADO, via `OrgAddon`). NO coincide con los niveles del core
+  (`business-tiers.json`: Ordenado/Profesional/Empresa). Al adoptar, decidir si
+  se alinean o conviven — no forzar sin criterio comercial de Sergio.
+
+### Baseline de migraciones — CONFIRMADO 2026-07-08 (leyendo docs/DATABASE.md)
+
+Ya no es "dato de memoria": verificado. El baseline SIGUE sucio y es el bloqueo
+real del Sprint 0.
+
+- **Sin `DATABASE_URL`/`DIRECT_URL` local**: DATABASE.md dice literal "las
+  migraciones se aplican en Vercel via `prisma migrate deploy` en el build". No
+  se puede operar Prisma localmente contra prod sin conseguir esa URL primero
+  (Vercel env del proyecto o el Supabase de GestiOS). ESTE es el primer paso
+  concreto del Sprint 0.
+- **Migraciones aplicadas A MANO, fuera de `migrate deploy`**: `cash_registers`
+  ("Aplicado directamente a Supabase el 2026-05-09"), `email_log` ("Aplicar
+  manualmente a Supabase"). La ultima (`20260610_add_inventario_avanzado_addon.sql`)
+  es un `.sql` suelto, ni siquiera una carpeta de migracion Prisma estandar.
+  Drift de REGISTRO confirmado (el contenido puede estar al dia, pero el
+  historial `_prisma_migrations` no refleja lo aplicado).
+- Runbook a seguir: el mismo baseline que ejecuto DentaGest en su Sprint 0
+  (`docs/DATABASE_MIGRATION_BASELINE_2026.md` en el repo DentaGest como patron
+  de referencia): conseguir la URL valida -> `migrate status` -> squash a
+  baseline unico -> `migrate resolve --applied`. Sin esto NO se agrega ninguna
+  tabla del core.
 
 ## Decision que el carril E tiene que resolver ANTES de instalar entidades (no la resuelve este plan)
 
