@@ -47,14 +47,26 @@ export default async function HoyPage() {
     );
   }
 
-  const runtime = filterOniaCenterRuntimeForActor(await getOniaCenterRuntime(), auth.actor);
+  let runtimeReviews;
+  try {
+    const runtime = filterOniaCenterRuntimeForActor(await getOniaCenterRuntime(), auth.actor);
+    runtimeReviews = runtime.reviews;
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Error leyendo ONIA Center.";
+    return (
+      <AppShell>
+        <EmptyState title="No se pudo cargar la cola de aprobacion" body={message} />
+      </AppShell>
+    );
+  }
+
   const visibleAgents = getVisibleOperatingAgents(auth.actor.role);
 
   return (
     <AppShell>
       <HoyView
         agents={visibleAgents}
-        reviews={runtime.reviews}
+        reviews={runtimeReviews}
         scheduleBlocks={sergioStrictScheduleBlocks}
         referenceDate={new Date()}
       />
