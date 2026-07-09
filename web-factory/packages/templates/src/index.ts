@@ -29,3 +29,8 @@ export {
   renderLandingClinicCss,
   renderLandingClinicDocument,
 } from "./landing-clinic";
+export {
+  renderLandingRealtyBody,
+  renderLandingRealtyCss,
+  renderLandingRealtyDocument,
+} from "./landing-realty";
