@@ -145,13 +145,19 @@ autorización "API" del SIN hasta que haga falta).
 
 ## 4. Checklist del trámite (orden, responsable, duración estimada)
 
+> **Estado 2026-07-08:** NIT ONIA ✅ obtenido (SIN). Matrícula SEPREC ⏳ en
+> trámite (esperando aceptación). El paso 4 (emisor técnico) ya arrancó en
+> `hermes-content/integrations/siat/` (constantes + máquina de estados de
+> emisión, 19 tests). Si el registro del sistema (paso 3) necesita el SEPREC
+> aprobado o le basta el NIT está EN VERIFICACIÓN (subagente 2026-07-08).
+
 | # | Paso | Resp. | Duración | Nota |
 |---|---|---|---|---|
-| 0 | **NIT ONIA**: SEPREC + MASI + actividad software — **BLOQUEO ACTUAL #1** | Sergio | 1-2 sem [ESTIMADO] | sin NIT no se puede ni solicitar |
-| 1 | Credenciales SIAT en línea del NIT ONIA | Sergio | 1 día | |
-| 2 | Leer RND 1021-11 compilada + anexos técnicos (XSD/WSDL) | dev | 3 días | en paralelo a 0 |
-| 3 | Registrar sistema en "Gestión de Autorización de Sistemas": tipo proveedor, modalidad computarizada, doc sector compra-venta (+salud para dental [VERIFICAR doc sector clínicas]) | Sergio+dev | 1 día | requiere 0-1 |
-| 4 | Construir emisor: CUIS/CUFD/CUF, catálogos, XML+XSD, hash | dev | 3 sem | arranca sin NIT (specs públicas) |
+| 0 | **NIT ONIA**: SEPREC + MASI + actividad software | Sergio | — | ✅ NIT obtenido; ⏳ SEPREC en trámite (esperando aceptación) |
+| 1 | Credenciales SIAT en línea del NIT ONIA | Sergio | 1 día | desbloqueable YA con el NIT [VERIFICAR si necesita SEPREC] |
+| 2 | Leer RND 1021-11 compilada + anexos técnicos (XSD/WSDL) | dev | 3 días | en paralelo |
+| 3 | Registrar sistema en "Gestión de Autorización de Sistemas": tipo proveedor, modalidad computarizada, doc sector compra-venta (+salud para dental [VERIFICAR doc sector clínicas]) | Sergio+dev | 1 día | requiere NIT; ¿requiere SEPREC aprobado? EN VERIFICACIÓN |
+| 4 | Construir emisor: CUIS/CUFD/CUF, catálogos, XML+XSD, hash | dev | 3 sem | 🟡 arrancado (constantes + state machine); falta SOAP/XML/CUF real |
 | 5 | Fase 1 en piloto: etapas I-VII y XI (≈1.200 operaciones) | dev | 2 sem | requiere 3 |
 | 6 | Funcionalidades de inspección (leyendas, medios pago, contingencia auto) | dev | 1 sem | solapa con 5 |
 | 7 | Solicitar y pasar Fase 2 inspección | Sergio+dev | 1-3 sem [ESTIMADO — agenda del SIN no publicada] | |

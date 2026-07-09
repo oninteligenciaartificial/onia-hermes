@@ -36,13 +36,20 @@ arquitectura, cronograma). Esto es el arranque tecnico del servicio.
 - Tenant registry (NIT, tokens delegados cifrados, sucursales, puntos de venta,
   catalogo homologado por organizacion) + scheduler CUFD/CUIS + contingencia.
 
-## Bloqueo #1 (Sergio)
+## Bloqueo #1 (Sergio) — AVANZANDO 2026-07-08
 
-El NIT ONIA (SEPREC + MASI + actividad software) es el bloqueo del tramite: sin
-NIT no se puede ni registrar el sistema como proveedor. TODO el desarrollo
-tecnico de arriba (constantes, maquina de estados, builder XML, cliente SOAP
-contra el piloto con specs publicas) puede avanzar en paralelo sin el NIT — que
-es justo lo que arranca esta carpeta.
+- **NIT ONIA: ✅ obtenido** (ante Impuestos Nacionales / SIN).
+- **Matricula SEPREC: ⏳ en tramite** (esperando aceptacion, aun no aprobada).
+
+Con el NIT activo probablemente YA se pueden pedir las credenciales SIAT en
+linea y acceder al piloto; si el registro del sistema como PROVEEDOR requiere el
+SEPREC aprobado o solo el NIT esta EN VERIFICACION (subagente de investigacion
+2026-07-08, tema de tramite boliviano — no asumir sin fuente). Ver el plan
+`onia-core/ONIA_SIAT_CERTIFICACION_PLAN_2026.md` (checklist §4) para el detalle.
+
+TODO el desarrollo tecnico de arriba (constantes, maquina de estados, builder
+XML, cliente SOAP contra el piloto con specs publicas) avanza en paralelo sin
+depender de ninguno de los dos.
 
 ## Regla de secretos
 
