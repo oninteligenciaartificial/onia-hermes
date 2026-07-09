@@ -28,6 +28,8 @@ SSH previo corre `/opt/onia/check-secret.sh` que compara contra
 | ONIA - Nuvia Sourcing Score (v1) | `ECC1THa2kTmOGepY` | Webhook on-demand | `POST /webhook/nuvia-candidato` `{secret,candidates[]}`: score ONIA-Bolivia (flete/arancel/demanda/precio) por SSH, upsert en `nuvia_sourcing_candidates`. Read-only, sin contacto ni pago | Por lote |
 | ONIA - Reporte diario Sergio + Arthur | `xQaO3Sfsl9XzMiid` | Lun-Sab 07:00 | SSH `arthur-report.mjs`: tareas del dia para Sergio y Arthur (obligaciones acuerdo 60d + CRM vivo) + verificacion de ganancias de Arthur (payment_commissions por estado + progreso trial). Determinista, solo suma lo registrado. Agrega repo pulse + docs hygiene (duplicados raiz/docs) al texto | Diario |
 | ONIA Center - Briefing diario operativo | `ONIADailyBrief001` | Lun-Sab 06:45 | Lee el repo pulse (SSH cat) -> SSH `briefing-run.sh` -> `briefing-run.mjs` (docker exec onia-center): genera+registra el plan diario por rol (Sergio/Arthur/seller), deduplicado, con seccion de actividad de repo. La `ONIA_CENTER_INTERNAL_API_KEY` se lee del contenedor, sin `$env` | Plan diario + repo |
+| ONIA - Agente Finanzas y Fondo ONIA | `oKSTNdvS58ixBgnl` | Lun-Sab 07:15 | SSH `finance-fund-agent.mjs` (docker exec onia-center): agrega caja + ingresos 30d + comisiones por estado + Fondo ONIA en `onia_center.finance_summary` (upsert diario) + pone `agent_finance_fund` en `ready`. Determinista, READ-ONLY sobre la plata | Solo si hay anomalias |
+| ONIA - Agente Contenido y Media Lab | `nZkaXaZVKzgtwUqU` | Lun-Sab 07:20 | SSH `content-media-agent.mjs` (docker exec onia-center): elige pilar/idea, redacta con LiteLLM SOLO texto (guion "que grabar hoy" + carruseles), deja borradores en `review_queue` (pending/sensitive/reviewer=sergio) + pone `agent_content_media` en `ready`. Higgsfield NO automatico | Si hay borradores |
 
 Los 5 crones fueron probados end-to-end antes de activar (ejecución real + Telegram
 recibido). El de propuestas (webhook) se probó con slug real (`bench`), secret
@@ -127,6 +129,30 @@ master key de LiteLLM se lee de su contenedor y se inyecta. Scripts en
   **Falta un VPS worker dedicado** para el sourcing autónomo; hoy el webhook recibe
   candidatos (de Hermes/manual/otra fuente) y los scorea. Ver research doc
   `hermes-content/docs/research/ONIA_RESEARCH_AGENTE_IMPORTACION_NUVIA_20260705.md`.
+
+## Agentes Contenido + Finanzas (2026-07-09, sesion infra)
+
+Dos runtimes nuevos con el mismo patron Agente Vendedor (cron -> SSH -> `docker exec
+onia-center node <script>` -> escribe a Supabase + status del agente `ready` -> Telegram;
+NO ejecuta ni gasta sin aprobacion). Ambos probados en vivo con `execute_workflow`
+(contenido: 3 borradores + Telegram `message_id` 835; finanzas: `finance_summary` escrito,
+sin Telegram por no haber anomalias — comportamiento correcto).
+
+- **Agente Contenido y Media Lab** (`nZkaXaZVKzgtwUqU`): `content-media-agent.mjs` +
+  `content-media-agent-run.sh`. Reusa la rotacion de pilares de "Guiones Diarios" + lee
+  `idea_inbox`; LiteLLM `gpt-4o-mini` redacta SOLO texto (1 guion + 1-2 carruseles) y deja
+  cada pieza en `review_queue` (`source_type=project`, `source_key=project-content`,
+  `raw.agent=content-media-agent-v1`, `raw.kind=content_script|content_carousel`). Dedupe por
+  fecha (no re-genera si ya hay borradores de hoy). La generacion PESADA (Higgsfield) NO es
+  automatica: el agente propone texto, no gasta creditos (gasto-validar-primero).
+- **Agente Finanzas y Fondo ONIA** (`oKSTNdvS58ixBgnl`): `finance-fund-agent.mjs` +
+  `finance-fund-agent-run.sh`. Determinista (sin LLM), READ-ONLY sobre la plata. Agrega caja
+  (income_entries), comisiones por estado (payment_commissions), Fondo ONIA (fund_allocation)
+  y riesgos (pagos bloqueados, uso premium sin aprobar, gastos pendientes sin evidencia) en
+  `onia_center.finance_summary` (tabla nueva, migracion
+  `20260709_onia_center_finance_summary.sql`, upsert 1 fila/dia). Telegram SOLO si hay
+  anomalias. **Punto de coordinacion con el panel:** el panel LEE la fila mas reciente de
+  `finance_summary` — contrato en `ONIA_FINANCE_SUMMARY_CONTRACT.md`.
 
 ## Scripts de ops (en el VPS bajo /opt/onia/)
 
