@@ -1,0 +1,84 @@
+{
+  "nombre": "Terra Propiedades",
+  "slug": "realty-demo",
+  "tagline": "Encontra tu proximo lugar",
+  "descripcion": "Agencia inmobiliaria con presencia en toda la ciudad. Casas, departamentos y terrenos en venta y alquiler.",
+  "logo": "TP",
+  "heroPoster": "assets/hero-exterior.webp",
+  "colores": {
+    "primary": "#b5502e",
+    "secondary": "#2a2118",
+    "accent": "#c9a24b",
+    "bg": "#faf6ef",
+    "fg": "#2a2118"
+  },
+  "tipografia": { "heading": "Onest", "body": "Onest" },
+  "contacto": { "email": "", "tel": "", "whatsapp": "+59170000001", "direccion": "La Paz, Bolivia" },
+  "redes": { "ig": "", "fb": "", "linkedin": "", "x": "" },
+  "servicios": [
+    { "titulo": "Venta", "desc": "Casas, departamentos y terrenos.", "icono": "search" },
+    { "titulo": "Alquiler", "desc": "Opciones amuebladas y sin amueblar.", "icono": "check" },
+    { "titulo": "Asesoria", "desc": "Acompanamiento en toda la operacion.", "icono": "shield" }
+  ],
+  "beneficios": ["12 anos en el mercado", "Mas de 300 operaciones cerradas", "Asesoria sin costo"],
+  "credenciales": ["12 anos en el mercado", "Mas de 300 operaciones cerradas", "Agentes matriculados"],
+  "wordmarkBreak": "TERRA",
+  "zonas": ["Zona Sur", "Centro", "Zona Norte", "Achumani", "Calacoto"],
+  "listings": [
+    {
+      "titulo": "Casa 3 dormitorios en Zona Sur",
+      "precio": "USD 185.000",
+      "zona": "Zona Sur",
+      "tipo": "Casa",
+      "operacion": "venta",
+      "dormitorios": 3,
+      "banos": 2,
+      "imagen": "assets/listing-casa.webp",
+      "imagenAlt": "Fachada de casa en Zona Sur",
+      "destacado": true
+    },
+    {
+      "titulo": "Departamento 2 dormitorios en Centro",
+      "precio": "USD 92.000",
+      "zona": "Centro",
+      "tipo": "Departamento",
+      "operacion": "venta",
+      "dormitorios": 2,
+      "banos": 1,
+      "imagen": "assets/listing-depto.webp",
+      "imagenAlt": "Living de departamento en Centro"
+    },
+    {
+      "titulo": "Terreno 500m2 en Achumani",
+      "precio": "USD 65.000",
+      "zona": "Achumani",
+      "tipo": "Terreno",
+      "operacion": "venta",
+      "imagen": "assets/listing-terreno.webp",
+      "imagenAlt": "Terreno en Achumani"
+    },
+    {
+      "titulo": "Departamento amueblado en alquiler, Calacoto",
+      "precio": "Bs. 3.800 / mes",
+      "zona": "Calacoto",
+      "tipo": "Departamento",
+      "operacion": "alquiler",
+      "dormitorios": 1,
+      "banos": 1
+    }
+  ],
+  "proceso": [
+    { "titulo": "Contacto", "desc": "Nos contas que estas buscando y tu presupuesto." },
+    { "titulo": "Visitas", "desc": "Coordinamos visitas a las propiedades que encajan." },
+    { "titulo": "Oferta", "desc": "Te acompanamos a armar y negociar la oferta." },
+    { "titulo": "Cierre", "desc": "Gestionamos la documentacion hasta la firma." }
+  ],
+  "procesoKicker": "Como funciona",
+  "procesoTitulo": "De tu consulta a la firma, sin vueltas",
+  "cta": { "texto": "Consultar por WhatsApp", "url": "https://wa.me/59170000001?text=Hola%2C%20quiero%20consultar%20por%20una%20propiedad." },
+  "seo": {
+    "title": "Terra Propiedades | casas, departamentos y terrenos",
+    "description": "Agencia inmobiliaria con presencia en toda la ciudad. Casas, departamentos y terrenos en venta y alquiler.",
+    "ogImage": ""
+  }
+}

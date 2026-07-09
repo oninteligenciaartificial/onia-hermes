@@ -1,0 +1,74 @@
+{
+  "project": {
+    "slug": "realty-demo",
+    "template": "landing-realty",
+    "package": "web",
+    "owner": "ONIA"
+  },
+  "business": {
+    "name": "Terra Propiedades",
+    "industry": "inmobiliaria",
+    "offer": "casas, departamentos y terrenos en venta y alquiler con consulta directa por WhatsApp",
+    "tagline": "Encontra tu proximo lugar",
+    "description": "Agencia inmobiliaria con presencia en toda la ciudad. Casas, departamentos y terrenos en venta y alquiler.",
+    "location": "La Paz, Bolivia",
+    "trustProofs": ["12 anos en el mercado", "Mas de 300 operaciones cerradas", "Agentes matriculados"]
+  },
+  "brand": {
+    "logoText": "TP",
+    "colors": {
+      "primary": "#b5502e",
+      "secondary": "#2a2118",
+      "accent": "#c9a24b",
+      "bg": "#faf6ef",
+      "fg": "#2a2118"
+    },
+    "styleKeywords": ["inmobiliaria", "editorial", "calido", "confiable"],
+    "references": []
+  },
+  "media": {
+    "heroPoster": "assets/hero-exterior.webp",
+    "assetPermission": "stock-unsplash",
+    "notes": "DEMO INTERNA. Hero + 3 fotos de listings son stock libre (Unsplash License, uso comercial) como PLACEHOLDER; no fingen ser propiedades reales de una agencia real. Para cliente real, reemplazar por fotos reales de las propiedades en cartera."
+  },
+  "content": {
+    "services": [
+      { "title": "Venta", "description": "Casas, departamentos y terrenos.", "icon": "search" },
+      { "title": "Alquiler", "description": "Opciones amuebladas y sin amueblar.", "icon": "check" },
+      { "title": "Asesoria", "description": "Acompanamiento en toda la operacion.", "icon": "shield" }
+    ],
+    "benefits": ["12 anos en el mercado", "Mas de 300 operaciones cerradas", "Asesoria sin costo"],
+    "listings": [
+      { "titulo": "Casa 3 dormitorios en Zona Sur", "precio": "USD 185.000", "zona": "Zona Sur", "tipo": "Casa", "operacion": "venta", "destacado": true },
+      { "titulo": "Departamento 2 dormitorios en Centro", "precio": "USD 92.000", "zona": "Centro", "tipo": "Departamento", "operacion": "venta" },
+      { "titulo": "Terreno 500m2 en Achumani", "precio": "USD 65.000", "zona": "Achumani", "tipo": "Terreno", "operacion": "venta" },
+      { "titulo": "Departamento amueblado en alquiler, Calacoto", "precio": "Bs. 3.800 / mes", "zona": "Calacoto", "tipo": "Departamento", "operacion": "alquiler" }
+    ],
+    "zonas": ["Zona Sur", "Centro", "Zona Norte", "Achumani", "Calacoto"],
+    "proceso": [
+      { "titulo": "Contacto", "desc": "Nos contas que estas buscando y tu presupuesto." },
+      { "titulo": "Visitas", "desc": "Coordinamos visitas a las propiedades que encajan." },
+      { "titulo": "Oferta", "desc": "Te acompanamos a armar y negociar la oferta." },
+      { "titulo": "Cierre", "desc": "Gestionamos la documentacion hasta la firma." }
+    ]
+  },
+  "conversion": {
+    "primaryCtaText": "Consultar por WhatsApp",
+    "whatsappMessage": "Hola, quiero consultar por una propiedad."
+  },
+  "contact": {
+    "whatsapp": "+59170000001",
+    "address": "La Paz, Bolivia"
+  },
+  "operations": {
+    "hosting": "ONIA Web Factory",
+    "missing": [
+      "listings reales con disponibilidad verificada",
+      "fotos reales de las propiedades (reemplazar stock)",
+      "zonas de cobertura reales",
+      "credenciales reales verificadas (anos en el mercado, operaciones cerradas, matricula)",
+      "numero de WhatsApp real (placeholder +59170000001)",
+      "dominio + hosting a nombre del cliente"
+    ]
+  }
+}
