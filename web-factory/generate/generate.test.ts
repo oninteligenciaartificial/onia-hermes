@@ -413,4 +413,42 @@ describe("generateSite", () => {
     expect(css).toContain(".wf-sticky-cta");
     expect(css).toContain(".wf-clinic-bento");
   });
+
+  it("creates a realty landing with hero search, wordmark break, listings and zones", async () => {
+    const rootDir = await mkdtemp(path.join(os.tmpdir(), "onia-web-factory-"));
+    await mkdir(path.join(rootDir, "data", "clients"), { recursive: true });
+
+    await writeFile(
+      path.join(rootDir, "data", "clients", "terra.json"),
+      JSON.stringify({
+        nombre: "Terra Propiedades",
+        slug: "terra",
+        tagline: "Encontra tu proximo lugar",
+        descripcion: "Agencia inmobiliaria con presencia en toda la ciudad.",
+        cta: { texto: "Consultar por WhatsApp", url: "https://wa.me/59170000000" },
+        wordmarkBreak: "TERRA",
+        zonas: ["Zona Sur", "Centro", "Norte"],
+        listings: [
+          { titulo: "Casa Zona Sur", precio: "USD 145.000", zona: "Zona Sur", tipo: "Casa", operacion: "venta", dormitorios: 3, banos: 2, destacado: true },
+          { titulo: "Depto Centro", precio: "USD 80.000", zona: "Centro", tipo: "Departamento", operacion: "venta", dormitorios: 2, banos: 1 },
+        ],
+      }),
+      "utf8",
+    );
+
+    const result = await generateSite("terra", { rootDir, template: "landing-realty" });
+    const html = await readFile(path.join(result.outputDir, "index.html"), "utf8");
+    const css = await readFile(path.join(result.outputDir, "site.css"), "utf8");
+
+    expect(html).toContain("wf-realty-hero");
+    expect(html).toContain("wf-realty-search");
+    expect(html).toContain("wf-realty-wordmark");
+    expect(html).toContain("TERRA");
+    expect(html).toContain("wf-realty-listing--featured");
+    expect(html).toContain("Casa Zona Sur");
+    expect(html).toContain("Zona Sur");
+    expect(html).toContain("wf-realty-zone-chip");
+    expect(css).toContain(".wf-realty-hero");
+    expect(css).toContain(".wf-realty-listing-card");
+  });
 });

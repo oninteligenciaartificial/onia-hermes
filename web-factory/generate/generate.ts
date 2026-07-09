@@ -8,6 +8,8 @@ import {
   renderLandingCss,
   renderLandingDocument,
   renderLandingFocusDocument,
+  renderLandingRealtyCss,
+  renderLandingRealtyDocument,
   renderStoreCss,
   renderStoreDocument,
   renderStoreProductDocument,
@@ -18,7 +20,7 @@ import { loadClientProfile } from "../data/schema";
 export type GenerateOptions = {
   rootDir?: string;
   outDir?: string;
-  template?: "landing" | "store" | "dashboard" | "landing-focus" | "landing-clinic";
+  template?: "landing" | "store" | "dashboard" | "landing-focus" | "landing-clinic" | "landing-realty";
 };
 
 export type GenerateResult = {
@@ -40,8 +42,8 @@ export async function generateSite(
 
   const template = options.template ?? "landing";
 
-  if (!["landing", "store", "dashboard", "landing-focus", "landing-clinic"].includes(template)) {
-    throw new Error(`Unsupported template "${template}". Available: landing, store, dashboard, landing-focus, landing-clinic.`);
+  if (!["landing", "store", "dashboard", "landing-focus", "landing-clinic", "landing-realty"].includes(template)) {
+    throw new Error(`Unsupported template "${template}". Available: landing, store, dashboard, landing-focus, landing-clinic, landing-realty.`);
   }
 
   await mkdir(outputDir, { recursive: true });
@@ -59,7 +61,9 @@ export async function generateSite(
           ? renderLandingFocusDocument(client)
           : template === "landing-clinic"
             ? renderLandingClinicDocument(client)
-            : renderLandingDocument(client);
+            : template === "landing-realty"
+              ? renderLandingRealtyDocument(client)
+              : renderLandingDocument(client);
   const css =
     template === "store"
       ? renderStoreCss(client)
@@ -67,7 +71,9 @@ export async function generateSite(
         ? renderDashboardCss(client)
         : template === "landing-clinic"
           ? renderLandingClinicCss(client)
-          : renderLandingCss(client);
+          : template === "landing-realty"
+            ? renderLandingRealtyCss(client)
+            : renderLandingCss(client);
 
   await writeFile(htmlPath, html, "utf8");
   await writeFile(cssPath, css, "utf8");
