@@ -525,6 +525,32 @@ h1, h2, h3 {
   .wf-dash-topbar {
     align-items: flex-start;
   }
+
+  .wf-dash-main {
+    min-width: 0;
+  }
+
+  .wf-dash-topbar-actions {
+    width: 100%;
+    min-width: 0;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    padding-bottom: 4px;
+  }
+
+  .wf-dash-filters {
+    flex: 0 0 auto;
+  }
+
+  .wf-dash-cta {
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+
+  .wf-dash-theme {
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
 }
 `;
 

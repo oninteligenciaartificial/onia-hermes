@@ -134,7 +134,7 @@ export function renderTable(table: DashboardTable): string {
             <h2>${escapeHtml(table.title)}</h2>
           </div>
           ${renderFiltros(table.filtros)}
-          <div class="wf-dash-table-scroll">
+          <div class="wf-dash-table-scroll" tabindex="0" role="group" aria-label="${escapeAttribute(table.title)} (tabla desplazable)">
             <table>
               <thead>${head}</thead>
               <tbody>${body}</tbody>
@@ -425,7 +425,12 @@ export const dashboardCardsCss = `
 
 @media (max-width: 860px) {
   .wf-dash-detail-row {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .wf-dash-table,
+  .wf-dash-side-panel {
+    min-width: 0;
   }
 }
 `;
