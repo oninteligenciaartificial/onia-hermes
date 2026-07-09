@@ -64,8 +64,18 @@ Cada lugar = UNA imagen real (sin personas) subida como Reference Element (`envi
 | **Calle / urbano** | Vereda arbolada, vidrieras y autos desenfocados | `cddfa484-8dea-4920-8d6b-9d00f896ae51` | Walking hooks |
 | **Restaurante/bar (noche)** | Terciopelo rojo, luz calida baja, copas | `2750ef8b-7fe6-483c-9d32-01292ce32034` | "Salida" con look night-out. Validado (combo elements). |
 
-## Voz
-- Preset sugerido `seed_audio` **Isabella** (`80924413-1ea8-4e64-9719-e00b86796f05`) — distinta de Mara. O clonar voz propia con **ElevenLabs** (Sergio la tiene) para consistencia real en produccion 24/7.
+## Voz (LOCKEADA 2026-07-09)
+- **Voz canonica: `seed_audio` + voice_type='element' + `8de5db95-e898-46a6-bb68-26d02f311686` ("Lucia-voz").**
+  Asset propio clonado del preset Isabella, español, tono cercano/natural skincare. Usar SIEMPRE este id.
+- Fallback: preset Isabella `80924413-1ea8-4e64-9719-e00b86796f05` (la fuente del clon).
+- Muestra de referencia ("Hola, soy Lucia..."): `lucia-voice/lucia-voz-signature.wav`.
+- Opcional a futuro: re-clonar desde una voz real (ElevenLabs) si se quiere una voz mas unica.
+
+## ⚠️ Metodo de generacion de fotos (CORRECCION 2026-07-09, Sergio)
+Para contenido ORIGINAL: anclar SOLO la cara (`902eeebb`) + describir outfit/lugar/accion
+en TEXTO. NO combinar los Elements de outfit+lugar (eso copia las fotos de referencia
+1:1, sale "foto vieja con la cara pegada"). Los outfit/lugar Elements solo para match
+exacto de producto/lugar real. Ver `lucia-elements-catalog.md` y `lucia-content-bank-20260709/`.
 
 ## Personalidad / tono
 - Cercana, honesta, natural. Skincare desde la experiencia, sin humo. Claims seguros

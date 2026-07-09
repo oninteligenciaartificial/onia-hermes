@@ -41,12 +41,13 @@ producto (Nuvia). Regla 80/20: ~80% organico/personaje, ~20% producto.
 |---|---|---|
 | Foto calma/sonrisa suave | `soul_2` + soul_id `36305a9b` (0.12cr) | barato, OK para expresiones calmas |
 | Foto expresion fuerte (cejas arriba, sorpresa, risa grande) | `nano_banana_pro` + Element `902eeebb` (2cr) | `soul_2` mete arrugas de forehead aca |
-| Combo cara+outfit+lugar exacto | `nano_banana_pro` + `902eeebb` + outfit + lugar (2cr) | SIEMPRE "no brand logos" en el prompt (mete Nike/NY solo) |
+| **Contenido original (feed, variedad)** | `nano_banana_pro` + SOLO `902eeebb` (cara) + outfit/lugar/accion EN TEXTO (2cr) | escena nueva cada vez, identidad lockeada. SIEMPRE "no brand logos". Ver `lucia-content-bank-20260709/` |
+| Match EXACTO de producto/lugar real | `nano_banana_pro` + `902eeebb` + Element del producto/lugar (2cr) | SOLO cuando el objeto tiene que verse identico (producto cliente). Combinar outfit+lugar Elements copia las fotos 1:1 (no usar para variedad) |
 | B-roll movimiento simple | `kling2_6` (10cr) | cinematico |
 | B-roll con reaccion/emocion marcada | `minimax_hailuo` (6cr) | mas barato, mejor cara en emocion, forehead liso |
 | Hablando a camara (premium) | Marketing Studio `ugc_direct_to_camera` + avatar `a1e334f3` (42cr) | mejor lipsync disponible; guion entre comillas en el prompt fuerza español |
 | Hablando a camara (barato) | `wan2_7` + still con dientes visibles + audio (15cr) | el still DEBE tener sonrisa abierta (ancla de dientes) |
-| Voz para VO de b-roll | `seed_audio` Isabella español | b-roll NO lleva lipsync — voz va como VO en edicion |
+| Voz (VO y lipsync) | `seed_audio` + voice_type='element' + **`8de5db95-e898-46a6-bb68-26d02f311686`** ("Lucia-voz", asset clonado propio) | voz canonica lockeada de Lucia, español. Fallback: preset Isabella `80924413`. B-roll NO lleva lipsync — voz va como VO en edicion |
 | Producto real en mano | Marketing Studio avatar+producto (42-75cr) | Nivel 2 |
 | EVITAR | Seedance 2.0 (45-135cr) | salvo bikini/swimwear donde otros bloquean |
 

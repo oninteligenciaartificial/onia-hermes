@@ -26,11 +26,29 @@ real** (sourced de Pinterest, sin caras de terceros) subida como **Reference Ele
 
 **Completo: 4 outfits + 5 lugares + 1 cara = 10 Reference Elements.** Ya no quedan pendientes.
 
-## Como generar (combinar cara + outfit + lugar en 1 sola llamada)
+## ⚠️ CORRECCION 2026-07-09 (Sergio lo detecto) — NO combinar los 3 Elements para contenido normal
 
-Modelo: `nano_banana_2`/`nano_banana_pro` (soul_2 NO soporta Reference Elements).
-Embeber los 3 placeholders en el prompt, usando SIEMPRE `lucia-surgical-anchor`
-(2026-07-07, no el legacy ni `lucia-face-real-anchor` para esto):
+Combinar **cara + outfit-Element + lugar-Element** hace que `nano_banana_pro` **componga
+las fotos de referencia casi 1:1**: misma habitacion exacta del Element de lugar, misma
+ropa exacta del flatlay, mismos accesorios — sale "foto de referencia con la cara
+pegada", NO una escena original. Se repite igual cada vez.
+
+**Metodo correcto para contenido ORIGINAL (feed, variedad):** anclar SOLO la cara
+(`902eeebb`) y describir outfit + lugar + accion + luz **EN TEXTO**. Cada foto es una
+escena nueva inventada, identidad lockeada. Ver `lucia-content-bank-20260709/`.
+
+```
+<<<902eeebb-89e9-4477-8426-c555b20f7ecc>>> Candid photo of her making coffee in a
+bright sunlit kitchen, oversized cream knit sweater, laughing, golden window light.
+Keep her identical face, freckles, hair and features, poreless smooth forehead skin
+zero wrinkles. Authentic phone photo, no brand logos, no text, no watermark.
+```
+
+**Los outfit/lugar Elements (abajo) SOLO se usan cuando se necesita un objeto/lugar
+EXACTO real** (producto de cliente, un lugar especifico que debe verse igual) — no para
+variedad de feed.
+
+## (Legacy) Como se combinaban los 3 Elements — solo para match exacto
 
 ```
 <<<902eeebb-89e9-4477-8426-c555b20f7ecc>>> wearing the exact outfit from
