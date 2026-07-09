@@ -1477,7 +1477,8 @@ figure {
   min-height: 42px;
   border: 0;
   border-radius: 999px;
-  color: #fffdfa;
+  /* Dark ink on coral clears WCAG AA (6.58:1); white was 2.73:1 and failed. */
+  color: var(--store-ink);
   background: var(--nuvia-coral);
   font-size: 0.82rem;
   font-weight: 650;
@@ -2208,6 +2209,9 @@ figure {
 }
 
 .store-product-actions button {
+  /* Inherits #fffdfa from the shared rule above; override to dark ink so the
+     coral quick-add button clears WCAG AA (6.58:1 vs the old 2.73:1). */
+  color: var(--store-ink);
   background: var(--nuvia-coral);
 }
 
@@ -2373,9 +2377,13 @@ figure {
   font-weight: 560;
 }
 
-.store-product-buy-button {
+/* The product-detail buy button uses a dark ink background (not coral), so it
+   needs light text. The compound selector also beats the .store-page--light-hero
+   override above (which forces navy and would render navy-on-dark ~1.3:1). */
+.store-button-primary.store-product-buy-button {
   width: min(100%, 360px);
   margin-top: 4px;
+  color: #fffdfa;
   background: var(--store-ink);
 }
 
@@ -2956,7 +2964,8 @@ figure {
   justify-content: center;
   min-height: 46px;
   border-radius: 999px;
-  color: #fffdfa;
+  /* Dark ink on coral clears WCAG AA (6.58:1); white was 2.73:1 and failed. */
+  color: var(--store-ink);
   background: var(--nuvia-coral);
   font-weight: 700;
 }
