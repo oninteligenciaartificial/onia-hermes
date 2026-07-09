@@ -361,6 +361,74 @@ que fija el look en TODOS los clips, ensamblado 100% server-side
   personas reales de otros carriles — ninguno aplica a un canal
   faceless/ilustrado.
 
+## 12. Monetización — cómo llega y dónde se declara la plata (agregado 2026-07-08)
+
+Pregunta de Sergio ("¿dónde facturaríamos? YT es lo más importante"). Corrección
+de fondo primero: **no se le factura a YouTube.** Google, vía **AdSense** (la
+capa financiera detrás de YouTube), nos paga; nosotros después **declaramos** ese
+ingreso en Bolivia. El "dónde facturamos" son en realidad dos cosas separadas:
+(1) dónde aterriza el dinero, y (2) bajo qué figura fiscal se declara.
+
+### El portón: no hay ingreso hasta cruzar el YouTube Partner Program (YPP)
+
+- **Ad revenue (lo que importa por CPM):** 1.000 suscriptores **+ 4.000 horas de
+  reproducción en 12 meses** (o 10M de vistas de Shorts en 90 días).
+- **Fan funding (Super Thanks, membresías) — antes:** 500 subs + 3.000 horas (o
+  3M vistas Shorts en 90 días).
+- **Dato clave que valida la estrategia long-form:** las horas de Shorts **NO
+  cuentan** para las 4.000 horas. El video largo 8-12min es justamente lo que
+  construye ese umbral; los Shorts solo dan un atajo si llegás a 10M de vistas.
+- **Implicación honesta:** la monetización es un **milestone a meses**, no día 1.
+  Se invierte producción (créditos + tiempo) ANTES de que exista un centavo de
+  ad revenue. El radar y el pipeline construyen hacia ese umbral.
+
+### Dónde aterriza (Bolivia)
+
+- AdSense paga **mensual** (21-26 de cada mes), en USD, cuando el balance cruza
+  el **umbral de $100**.
+- Bolivia: la ruta realista es **Payoneer** (cuenta multi-moneda → banco local o
+  tarjeta), muy usada en la región; hay hilo específico en la comunidad de
+  AdSense sobre Payoneer en Bolivia. Transferencia bancaria SWIFT donde el banco
+  la soporte. Los métodos exactos aparecen en la página "Agregar forma de pago"
+  de la cuenta AdSense según el país — esa es la fuente de verdad, verificable
+  cuando exista la cuenta.
+
+### Lo que se descuenta antes de que salga de Google (impuesto EE.UU.)
+
+- Todo creador no-estadounidense debe cargar el **W-8BEN** en AdSense. Si NO se
+  carga: retención de respaldo de hasta 24% sobre el total.
+- Con W-8BEN y **sin tratado fiscal EE.UU.–Bolivia** (Bolivia no tiene tratado
+  de renta con EE.UU.): **30% de retención, pero solo sobre la porción de vistas
+  de EE.UU.** — no sobre el ingreso global. Para un canal en español dirigido a
+  LatAm, esa porción es chica (la mayoría de las vistas no son de EE.UU., y el
+  ingreso de fuera de EE.UU. tiene 0% de retención estadounidense). **Confirmar
+  con contador** — esto no es asesoría fiscal.
+
+### Dónde se declara (Bolivia) — decisión abierta
+
+- No se emite factura boliviana a Google; se **declara el ingreso de fuente
+  extranjera** bajo la figura fiscal que corresponda (NIT/régimen ONIA; IUE anual
+  e IT/IVA según cómo se estructure). Conecta con la skill existente
+  `hermes-content/skills/recordatorios-fiscales-bolivia.md`.
+- **Decisión genuina de Sergio + su contador:** ¿a nombre de quién va la cuenta
+  de AdSense/el canal?
+  1. **Sergio persona natural** — lo más simple para arrancar; ingreso personal.
+  2. **ONIA (empresa)** — el canal como activo de la empresa; entra a los libros
+     de ONIA. Coherente si es un motor de ingresos de la compañía.
+  3. **US LLC** — algunos creadores lo usan para estructurar; agrega complejidad
+     y costos, y no elimina la obligación fiscal boliviana. Solo si el contador
+     lo justifica.
+- Esto **no es asesoría contable**; la skill fiscal misma exige validar con
+  contador y no presentar plantillas como definitivas.
+
+### Sin construir todavía — lo que Sergio necesita destrabar
+
+1. Confirmar el **titular** de la cuenta (opción 1/2/3 arriba) — con su contador.
+2. Abrir/confirmar **Payoneer** para el payout boliviano.
+3. Al crear la cuenta AdSense: cargar el **W-8BEN** apenas se pueda.
+Ninguno bloquea el pipeline ni el radar (que construyen hacia el umbral YPP);
+bloquean el cobro, que recién aplica al cruzar 1.000 subs + 4.000 horas.
+
 ## Fuentes generales de esta investigación (2026-07-08)
 
 Todas las fuentes de la tabla §3 más: [Medical misinformation policy — YouTube Help](https://support.google.com/youtube/answer/13813322) ·
