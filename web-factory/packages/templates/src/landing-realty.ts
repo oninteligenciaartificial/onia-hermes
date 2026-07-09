@@ -39,7 +39,7 @@ function renderRealtyTrust(client: LandingClient): string {
 
 export function renderLandingRealtyBody(client: LandingClient): string {
   return `
-    <main class="wf-realty-page wf-realty-motion">
+    <main class="wf-realty-page">
       ${renderRealtyHero(client)}
       ${renderRealtyTrust(client)}
       ${renderWordmarkBreak(client)}
@@ -92,5 +92,5 @@ export function renderLandingRealtyDocument(client: LandingClient): string {
 // content is visible by default; JS only adds motion, with a timeout fallback
 // and a reduced-motion / no-IntersectionObserver short-circuit.
 function renderRealtyRevealScript(): string {
-  return `<script>(function(){var r=document.querySelector('.wf-realty-page');if(!r)return;var i=r.querySelectorAll('[data-reveal]');var m=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;if(m||!('IntersectionObserver' in window)){i.forEach(function(e){e.classList.add('is-revealed')});return;}var o=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('is-revealed');o.unobserve(e.target);}})},{rootMargin:'0px 0px -8% 0px',threshold:0.08});i.forEach(function(e){o.observe(e)});setTimeout(function(){i.forEach(function(e){e.classList.add('is-revealed')})},1400);})();</script>`;
+  return `<script>(function(){var r=document.querySelector('.wf-realty-page');if(!r)return;var i=r.querySelectorAll('[data-reveal]');var m=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;if(m||!('IntersectionObserver' in window)){r.classList.add('wf-realty-motion');i.forEach(function(e){e.classList.add('is-revealed')});return;}r.classList.add('wf-realty-motion');var o=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('is-revealed');o.unobserve(e.target);}})},{rootMargin:'0px 0px -8% 0px',threshold:0.08});i.forEach(function(e){o.observe(e)});setTimeout(function(){i.forEach(function(e){e.classList.add('is-revealed')})},1400);})();</script>`;
 }
