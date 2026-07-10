@@ -58,6 +58,40 @@ GET /rest/v1/finance_summary?select=*&order=generated_at.desc&limit=1
 | `breakdown` | jsonb | `{ by_center, commissions_by_status, income_count, period_days }` |
 | `summary_text` | text | Texto humano listo para mostrar (mismo que va a Telegram) |
 | `raw` | jsonb | Metadata del run |
+| `tax_posture` | jsonb | **NUEVO 2026-07-10** — postura fiscal del mes (ver subsección abajo). Aditivo, no rompe nada |
+
+### Postura fiscal (`tax_posture`) — NUEVO 2026-07-10 ⚠️ PANEL LEER
+
+> **Aviso al carril Panel:** columna **aditiva** `tax_posture jsonb` en `finance_summary`. Tu
+> `select=*` ya la trae; no rompe ninguna columna existente. Es la sección fiscal para mostrar
+> en Finanzas. Todo es **estimación** (etiqueta "validar con contador"); es READ-ONLY.
+
+Objeto con la postura fiscal **del mes en curso** (se recalcula cada corrida). Base: régimen
+**General**, sin planilla (RC-IVA N/A). Forma:
+
+```jsonc
+tax_posture: {
+  "regime": "general", "rc_iva_applies": false, "siat_emitting": false,
+  "nit": "5371375010", "nit_last_digit": "0", "razon_social": "LESLIE MERCADO MORENO",
+  "period": "2026-07",
+  "rates": { "iva": 0.13, "it": 0.03, "iue": 0.25, "iue_be": 0.125 },
+  "iva_debito_bs": 0,            // 13% de ventas formales (0 mientras SIAT en trámite)
+  "iva_credito_bs": 0,           // 13% de gastos NACIONALES con factura
+  "iva_a_pagar_bs": 0,           // max(0, débito − crédito)
+  "iva_saldo_favor_bs": 0,       // max(0, crédito − débito), se acumula
+  "it_bs": 0,                    // 3% de ingresos del mes
+  "iue_estimado_bs": 0,          // 25% de (ingresos − gastos deducibles) del año
+  "credito_fiscal_perdido_bs": 0,// 13% de gastos nacionales SIN factura (a corregir)
+  "iue_be_retenciones_bs": 0,    // 12.5% de gastos del exterior (a retener/pagar)
+  "gastos_exterior_bs": 0, "gastos_con_factura_bs": 0, "gastos_sin_factura_bs": 0,
+  "vencimiento_dia": null,       // TODO(bloqueado): calendario RND por dígito NIT
+  "notes": "Estimación automática...",
+  "generated_at": "ISO"
+}
+```
+
+Sugerencia de UI: destacar `iva_a_pagar_bs` / `iva_saldo_favor_bs`, `iue_estimado_bs`, y
+**`credito_fiscal_perdido_bs`** en rojo (plata que se pierde por no pedir factura).
 
 `anomalies[].kind` ∈ `blocked_payment`, `pending_premium`, `pending_expense_no_evidence`,
 `delivery_blocked`. El panel puede resaltar `anomaly_count > 0` en rojo.
