@@ -8,6 +8,7 @@ import {
 import { getOniaCenterActor } from "@/lib/onia-center-auth";
 import { sergioStrictScheduleBlocks } from "@/app/onia-center/operating-source";
 import { getVisibleOperatingAgents } from "@/app/onia-center/operating-engine";
+import { getLiveAgentStatuses, mergeLiveAgentStatus } from "@/app/onia-center/live/live-runtime";
 import { AppShell } from "@/app/onia-center/components/shell/AppShell";
 import { HoyView } from "@/app/onia-center/components/views/hoy/HoyView";
 import { EmptyState } from "@/app/onia-center/components/ui/EmptyState";
@@ -60,7 +61,8 @@ export default async function HoyPage() {
     );
   }
 
-  const visibleAgents = getVisibleOperatingAgents(auth.actor.role);
+  const liveStatuses = await getLiveAgentStatuses();
+  const visibleAgents = mergeLiveAgentStatus(getVisibleOperatingAgents(auth.actor.role), liveStatuses);
 
   return (
     <AppShell>
