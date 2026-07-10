@@ -110,6 +110,38 @@ El panel puede mostrar "última corrida: `raw.last_run.at`" como señal de fresc
 
 ---
 
+## Qué falta conectar en el panel (checklist para onia-center-rebuild)
+
+Verificado 2026-07-09 leyendo `web-factory/apps/site/src/lib/onia-center-store.ts` +
+`api/onia-center/runtime/route.ts`, y probando el endpoint de **producción**
+(`GET https://center.onia.com.bo/api/onia-center/runtime` responde
+`{"mode":"auth_required"}` = desplegado y conectado a Supabase; solo falta login).
+
+1. **Borradores de contenido — YA se ven, pero solo el título.** `getOniaCenterRuntime()`
+   lee `review_queue` en vivo (sin filtrar `source_type`, limit 80), así que las piezas de
+   contenido salen en **Revisiones** como `status=pendiente` (`dbStatusToReview['pending']`).
+   PERO `mapReview` trae solo `review_key, source_type, source_key, title, sensitive, status`
+   — **NO trae `raw`**, donde vive el guion/slides. Hoy Sergio ve el título del borrador pero
+   no el cuerpo.
+   - **Acción panel:** agregar `raw` al select de `review_queue` en `getOniaCenterRuntime` y
+     exponerlo en `RuntimeReview` (ej. `body`) para leer el guion completo y los slides sin
+     salir del panel. Distinguir contenido de ventas por `raw->>agent`
+     (`content-media-agent-v1` vs `sales-agent-v1`) y separar la cola con su propio rótulo
+     (hoy dice "lo que propone el Vendedor").
+
+2. **Resumen de finanzas — NO se lee todavía.** Agregar a `getOniaCenterRuntime` (o un
+   endpoint aparte) la lectura de la fila más reciente de `finance_summary` (§1) y pintarlo en
+   la sección Finanzas.
+
+3. **Estado de los agentes — se pinta estático.** `operating-source.ts` tiene
+   `agent_finance_fund` / `agent_content_media` hardcodeados como
+   `prepared_pending_connection`. La DB ya los tiene en `ready` con `raw.last_run`. Leer
+   `operating_agents` en vivo (al menos `status` + `raw.last_run`) para reflejar la última
+   corrida.
+
+Ninguno de estos 3 lo toca el carril infra (no editamos `src/app/onia-center`); quedan para
+la sesión del panel. **La escritura (infra) ya está viva y probada.**
+
 ## Fuentes
 
 - Migración: `supabase/migrations/20260709_onia_center_finance_summary.sql` (aplicada en `supabase-db`).
