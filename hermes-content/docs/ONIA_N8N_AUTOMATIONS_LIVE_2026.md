@@ -158,6 +158,24 @@ sin Telegram por no haber anomalias — comportamiento correcto).
   anomalias. **Punto de coordinacion con el panel:** el panel LEE la fila mas reciente de
   `finance_summary` — contrato en `ONIA_FINANCE_SUMMARY_CONTRACT.md`.
 
+## Building in Public + pausa por vacaciones (2026-07-10, sesion infra)
+
+**Agente Building in Public** (`XRS9fWY4yFMQQftF`, **DESACTIVADO**): `building-public-agent.mjs`
++ `building-public-agent-run.sh`. Lee el repo-pulse (commits por carril,
+`/opt/onia/state/repo-pulse-latest.json`), escribe `onia_center.dev_pulse` (visibilidad de
+"estamos construyendo todo el tiempo" — nombres reales de carril, interno/sergio_private) y
+redacta con LiteLLM contenido building-in-public **SANITIZADO** (allowlist carril->tema publico;
+clientes como Bolivian Electric se DESCARTAN) en `review_queue` (`raw.agent=building-public-agent-v1`).
+Migracion `20260710_onia_center_dev_pulse.sql`. Cron Lunes 07:25 (semanal). Creado inactivo a
+pedido de Sergio (vacaciones); runtime probado en vivo (224 commits/72h -> dev_pulse + 2
+borradores sanitizados). **Activar con `publish_workflow` al volver.**
+
+**Pausa por vacaciones (2026-07-10):** desactivados (`unpublish_workflow`) mientras Sergio no
+puede aprobar borradores: Agente Contenido (`nZkaXaZVKzgtwUqU`), Agente Vendedor
+(`C96NmbalLhaTEf0G`), Prospeccion diaria (`jspfoUsjQfQ1VXY4`). **Siguen activos** (read-only o
+sin necesitar a Sergio): Agente Finanzas (`oKSTNdvS58ixBgnl`, solo avisa por anomalias), backup,
+healthcheck, VPS radar, tipo de cambio, etc. Reactivar con `publish_workflow` al volver.
+
 ## Scripts de ops (en el VPS bajo /opt/onia/)
 
 Fuente en este repo: `hermes-content/deploy/vps-ops/`. Se despliegan al VPS a
