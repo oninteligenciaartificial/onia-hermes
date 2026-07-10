@@ -99,15 +99,27 @@ presenta ante el SIN.
 - No presentar cifras al SIN sin que el contador matriculado las valide.
 - No asumir régimen ni fechas: se confirman con fuente oficial / contador.
 
-## 6. Lo que falta para activar (bloqueantes de dato)
-1. **Régimen tributario** de ONIA (general/otro) — CONFIRMAR.
-2. **NIT + último dígito** (para el calendario de vencimientos).
-3. **¿Empleados en planilla?** → define si aplica RC-IVA + aportes laborales.
-4. **¿Ya emite facturas / está el NIT activo?** (SIAT).
-5. **¿Contador matriculado en el loop?** (ONIA prepara; él valida/firma IUE y EEFF).
+## 6. Estado confirmado (2026-07-10) y lo que falta
 
-Con eso: (a) lleno `references/impuestos-bolivia.template.json`, (b) construyo la postura fiscal
-en el Agente Finanzas, (c) activo los recordatorios de vencimiento.
+**Confirmado por Sergio** (cargado en `references/impuestos-bolivia.template.json`):
+- Régimen: **General** → aplican IVA (13%), IT (3%), IUE (25%).
+- **Sin empleados en planilla** (socios/honorarios) → **RC-IVA no aplica** (reevaluar si contrata).
+- **Facturación SIAT: en trámite** (aún no emite).
+- **Sin contador matriculado**: ONIA prepara todo; un matriculado valida/firma el IUE anual.
+
+**Falta 1 dato:** el **NIT + último dígito** (para fijar las fechas de vencimiento del calendario SIN).
+
+**Acciones prioritarias (dado el estado):**
+1. **Completar la emisión SIAT** (trámite) — obligatorio para todos antes del 30-sep-2026 y necesario
+   para facturar formalmente a clientes. [acción de Sergio]
+2. **Capturar crédito fiscal en las COMPRAS desde YA**, aunque todavía no se emita: cada gasto con
+   factura al NIT de ONIA acumula **saldo a favor de IVA** para cuando arranquen las ventas. Cuesta
+   cero y es la palanca #1.
+3. Honorarios (Arthur/freelancers): con factura o retención correcta → deducibles para IUE.
+4. Separar personal vs empresa desde el primer boliviano.
+
+Con el NIT: (a) completo el calendario de vencimientos, (b) construyo la postura fiscal en el
+Agente Finanzas (IVA/IT/IUE + crédito perdido), (c) activo los recordatorios.
 
 ## Fuentes
 - `onia-core/ONIA_FISCAL_CONTABILIDAD_STRATEGY_2026.md` (estrategia + rates radar-confirmados).
