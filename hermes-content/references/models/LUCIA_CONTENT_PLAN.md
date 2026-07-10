@@ -76,7 +76,22 @@ en 0 que abre vendiendo no convierte.
 - Confirmar producto(s) Nuvia a destacar (para pilar 5).
 - Armar motor repetible (1 JSON → pieza) para escalar a diario.
 
-## Nota sobre inspiración IG
-IG esconde el contenido tras login; para inspiración puntual, Sergio nombra cuentas
-concretas de skincare/lifestyle que le gusten y se revisan juntas (con browser). Este
-plan ya usa los formatos/hooks que funcionan en el nicho.
+## Inspiración IG REAL (observado en vivo 2026-07-09, tag #skincareroutine, logueado @oniaagency)
+
+Patrones que rinden en el nicho, vistos en vivo — incorporar a Lucia:
+1. **Carrusel educativo con tipografía EDITORIAL** — ej. "Orden correcto de tu rutina de
+   skincare" en serif elegante, con flechas mostrando el orden de aplicación + foto
+   aplicándose. Estética tipo revista, limpia. → NUEVO FORMATO para Lucia: carruseles
+   educativos (orden de rutina, tipos de piel, cómo aplicar) con tipografía editorial.
+   Se hacen con nuestras fotos realistas (`ced20cc2`) + diseño de texto (Remotion/editor).
+2. **"skincare with me" / GRWM candid** — flatlay de productos + momento cotidiano
+   (tomando café, mañana), natural, NO sobreproducido. → Refuerza el pilar Rutina/GRWM.
+3. **Estética general que gana: clara, natural, minimal, luz de día** — coincide con el
+   vibe de Lucia (clean girl / relatable). NO sobreproducir, NO look "ad".
+4. **Texto-hook overlay** en la miniatura del reel/carrusel (la primera frase se lee sin audio).
+
+Formatos a AÑADIR al mix por esto: **carrusel educativo editorial** (orden de rutina /
+tipos de piel) — alto valor, muy shareable, barato (fotos + texto, sin video).
+
+Para inspiración de cuentas puntuales: Sergio las nombra y se revisan juntas (browser Brave
+logueado). Este plan ya usa los formatos/hooks ganadores del nicho.
