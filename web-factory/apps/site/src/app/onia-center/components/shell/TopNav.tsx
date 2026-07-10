@@ -7,6 +7,7 @@ const TABS = [
   { href: "/onia-center/next/hoy", label: "Hoy" },
   { href: "/onia-center/next/pipeline", label: "Pipeline" },
   { href: "/onia-center/next/agentes", label: "Agentes" },
+  { href: "/onia-center/next/finanzas", label: "Finanzas" },
   { href: "/onia-center/next/negocio", label: "Negocio" },
 ];
 
