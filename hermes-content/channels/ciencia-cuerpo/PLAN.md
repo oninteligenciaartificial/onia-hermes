@@ -1,9 +1,21 @@
-# PLAN — "La Ciencia de tu Cuerpo" (carril `yt-ciencia-cuerpo`)
+# PLAN — "Máquina Humana" (carril `yt-ciencia-cuerpo`)
 
-Canal YouTube faceless, español, long-form (8-12 min), estilo Kurzgesagt: ciencia
-visualizada de cómo funciona el cuerpo humano. Motor de ingresos = vistas/AdSense
-(CPM), no funnelea a producto (a diferencia de `onia-automatiza`, carril K). Mejora
-la salud del espectador **enseñando el mecanismo**, nunca recetando una acción.
+> Marca pública del canal: **Máquina Humana** (definida con Sergio 2026-07-09). El
+> slug interno de la carpeta/carril sigue siendo `ciencia-cuerpo` — no se renombra
+> para no romper referencias del manifest/lane; es solo un identificador interno.
+
+Canal YouTube faceless, español, long-form (8-12 min), estilo Kurzgesagt: la ciencia
+de **cómo rendís mejor — cuerpo y mente**. Qué pasa adentro tuyo cuando dormís, te
+concentrás, te estresás, aprendés o te desmotivás, explicado para que entiendas cómo
+funcionás. Motor de ingresos = vistas/AdSense (CPM), no funnelea a producto (a
+diferencia de `onia-automatiza`, carril K).
+
+**El marco "rendí mejor" (elegido con Sergio 2026-07-09):** el enfoque es
+performance/autoconocimiento — mejor CPM y más buscado que "cuerpo" a secas, y menos
+riesgoso que salud-medicina pura. PERO es también el más fácil de resbalar a consejo,
+que es justo lo que el YMYL castiga. Por eso el canal se rige por una **regla dura**
+(ver §4.0): **el título promete rendir, el video explica el mecanismo, la conclusión
+la saca el espectador. Nunca "hacé esto".**
 
 Dueño de carpeta: `hermes-content/channels/ciencia-cuerpo/**`. Ver
 `COORDINATION_MANIFEST.md` (carril L) y `CLAUDE.md` (sección "Desarrollo en
@@ -53,8 +65,9 @@ pensado sí lo tiene (strike, remonetización forzada, ver §7).
 - **Duración:** 8-12 min (long-form, monetizable con anuncios medios; también
   habilita capítulos).
 - **Estructura estándar** (ajustar por tema):
-  1. Hook (0:00-0:20): pregunta o dato que rompe intuición ("¿Por qué tu cuerpo
-     se incendia a propósito cuando tenés fiebre?").
+  1. Hook (0:00-0:20): gancho de rendimiento + dato que rompe intuición ("¿Por
+     qué no te podés concentrar? No es falta de voluntad — mirá lo que pasa
+     adentro de tu cerebro").
   2. Contexto (0:20-1:30): qué sabemos, por qué importa.
   3. Mecanismo, paso a paso (1:30-8:00): el cuerpo del video — 3 a 5 "escenas"
      de mecanismo, cada una con su propio micro-hook.
@@ -65,8 +78,16 @@ pensado sí lo tiene (strike, remonetización forzada, ver §7).
   ver la matemática de créditos en §5 — a 2-3/semana con calidad Kurzgesagt el
   gasto en Higgsfield excede el plan mensual. Subir cadencia una vez que exista
   biblioteca de assets reusable (§5) y datos reales de qué temas rinden.
-- **Idioma:** español (arbitraje de idioma: el nicho ciencia/salud explicativa
-  está mucho más saturado en inglés que en español).
+- **Motor de crecimiento (definido 2026-07-09):** cada long-form genera 2-3
+  **Shorts** verticales (imán de suscriptores para la mitad "1.000 subs" del
+  umbral YPP, ver §10); **packaging fuerte** (título + miniatura con el gancho de
+  rendimiento = la palanca #1 de crecimiento en YouTube); y **estructura de serie**
+  por tema (foco, sueño, motivación…) para encadenar vistas y construir la mitad
+  "4.000 horas".
+- **Idioma:** español (arbitraje: la ciencia explicativa de cuerpo+mente está
+  mucho más saturada en inglés que en español). Reafirmado 2026-07-09: español
+  para crecer de verdad; inglés queda como clon a futuro (el pipeline es agnóstico
+  al idioma, solo cambian guion y voz).
 
 ## 3. Los 20 temas — ángulo/tesis + fuente verificada
 
@@ -103,10 +124,19 @@ pipeline lo consuma).
 
 ## 4. Guardrails YMYL (duros — bloquean publicación si fallan)
 
+0. **Regla del marco "rendí mejor" (la más importante de este canal).** El
+   enfoque performance/autoconocimiento es el que más fácil se resbala a consejo.
+   Blindaje: **el título/miniatura prometen rendir (gancho jugoso), el video
+   explica el MECANISMO, y la conclusión práctica la saca el espectador solo.**
+   Ejemplo correcto: título *"Por qué no te podés concentrar"* → adentro explico
+   qué pasa con la atención y la dopamina, NO doy una lista de tips. Prohibido que
+   el video derive en "para concentrarte hacé X". Si el guion cruza a receta, se
+   reescribe o no se publica. Esta regla hace compatible el marco elegido con el
+   resto del §4.
 1. **Cero consejo/diagnóstico/cura.** Ningún guion puede decir "hacé esto",
    "dejá de", "tomá X", "esto cura/previene Y". Se permite: "así es como el
-   cuerpo hace Z". Filtro simple: si la frase se puede responder con "¿debería
-   yo hacer esto?", está mal formulada — reescribir a mecanismo.
+   cuerpo/cerebro hace Z". Filtro simple: si la frase se puede responder con
+   "¿debería yo hacer esto?", está mal formulada — reescribir a mecanismo.
 2. **Fuente real por afirmación causal**, no por video. Guion trae marcador
    `[n]` inline; la descripción resuelve `[n]` a URL real. Nunca inventar un
    estudio, nunca citar "un estudio dice" sin URL verificable.
