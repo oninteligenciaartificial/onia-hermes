@@ -110,6 +110,23 @@ El panel puede mostrar "última corrida: `raw.last_run.at`" como señal de fresc
 
 ---
 
+## 4. Pulso de desarrollo → `onia_center.dev_pulse` ("estamos construyendo todo el tiempo")
+
+El Agente Building in Public (n8n `XRS9fWY4yFMQQftF`, **DESACTIVADO** por vacaciones 2026-07-10)
+escribe la fila más reciente de `dev_pulse` con la actividad real del repo (commits por carril,
+de la Action repo-pulse). READ-ONLY, interno (`sergio_private`). El panel lee la última fila
+para mostrar que el desarrollo es constante.
+
+```
+GET /rest/v1/dev_pulse?select=*&order=generated_at.desc&limit=1
+```
+
+Columnas: `total_commits`, `lookback_hours`, `active_lanes` (`[{lane,commits}]`, **nombres
+INTERNOS reales — NO exponer en superficies públicas**), `stale_lanes`, `summary_text`.
+
+Los borradores building-in-public salen en `review_queue` como el contenido normal, marcados
+`raw->>agent = 'building-public-agent-v1'` (contenido ya SANITIZADO, sin clientes).
+
 ## Qué falta conectar en el panel (checklist para onia-center-rebuild)
 
 Verificado 2026-07-09 leyendo `web-factory/apps/site/src/lib/onia-center-store.ts` +
@@ -139,7 +156,11 @@ Verificado 2026-07-09 leyendo `web-factory/apps/site/src/lib/onia-center-store.t
    `operating_agents` en vivo (al menos `status` + `raw.last_run`) para reflejar la última
    corrida.
 
-Ninguno de estos 3 lo toca el carril infra (no editamos `src/app/onia-center`); quedan para
+4. **Pulso de desarrollo — NO se lee todavía.** Leer la última fila de `dev_pulse` (§4) para
+   la sección "estamos construyendo todo el tiempo". Ojo: `active_lanes` tiene nombres internos
+   — no mostrarlos en nada público/cliente.
+
+Ninguno de estos lo toca el carril infra (no editamos `src/app/onia-center`); quedan para
 la sesión del panel. **La escritura (infra) ya está viva y probada.**
 
 ## Fuentes
