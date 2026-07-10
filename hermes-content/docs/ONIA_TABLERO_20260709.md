@@ -4,6 +4,49 @@ Snapshot honesto de dónde está cada frente post-core. Nada flotando: cada íte
 abierto tiene DUEÑO y CONDICIÓN DE DESTRABE exacta. Reemplaza cualquier lectura
 de memoria sobre "qué falta".
 
+## 💵 DECISIONES DE PRECIO PENDIENTES (esperando OK de Sergio, 2026-07-09)
+
+**Contexto:** DentaGest está LIVE y completo (auditoría: cubre todo lo de una
+clínica + contabilidad boliviana + SIAT-ready). Se repensó el pricing mirando
+todas las funciones. Nada de esto está aplicado al código todavía — espera el OK.
+
+**A) Planes base (mensual, Bs) — propuesta:**
+| Nivel | Lista (valor) | Lanzamiento (early-bird, congelado 12m) |
+|---|---|---|
+| Básico | 390 | 320 |
+| Profesional | 890 | 750 |
+| Clínica | 1.990 | 1.500 |
+| Grupo Clínico | desde 3.900 + setup (o USD ~$490/mes) | 2.900 |
+- Estrategia: publicar la LISTA (390/890/1.990) y ofrecer el LANZAMIENTO tachado
+  como "precio Clínica Fundadora congelado 12m" (ancla + gancho de cierre).
+- El código hoy tiene 320/750/1.500 (lanzamiento) + comentario TODO stale que
+  dice "precios no firmes" → ya se ratificaron, hay que limpiarlo.
+- **Grupo Clínico está barato** para multi-sucursal+SIAT+instancia privada → subir.
+- Descuento anual: código = 3 meses gratis (9x); política ratificada = 2 meses
+  (10x) → ajustar a 2.
+
+**B) Chatbot/automatización — reemplazar el add-on único (650+350) por una
+ESCALERA de 3 niveles** (Sergio: 650 es bajo, el setup real de un chatbot es el
+trabajo de entrenarlo). Vale para CUALQUIER rubro (lo potencia el módulo
+`automation` del core). Costos reales: setup = lo caro (horas de entrenar el
+bot); IA = barata con modelos eficientes (~$0.01-0.03/conversación); Meta =
+pass-through.
+| Nivel | Qué hace | Precio (Bs) |
+|---|---|---|
+| N1 Recordatorios (sin IA) | recordatorio cita/cobro, reglas fijas | setup 300 + 200/mes |
+| N2 Chatbot IA responde+capta | contesta, califica leads 24/7, deriva | setup 1.500 + 550/mes |
+| N3 Chatbot IA opera | agenda solo, crea tareas, seguimiento | setup desde 3.500 + 900/mes |
+- N2 = producto estrella (era el mal precificado a "650"). La IA barata es el margen.
+- Otros add-ons (agenda pública 150, usuario extra 70, inventario avanzado 180,
+  self-hosted 4.500+900): se quedan como están.
+
+**Al aprobar:** (1) alinear código DentaGest (`lib/subscription-plans.ts`
+DEFAULT_PLAN_AMOUNTS + `lib/pricing.ts` add-ons + sacar TODO stale); (2)
+actualizar `propuesta-dentalgest.pdf` (generador, slug "dentalgest") con estos
+números + el ángulo de venta ("cobrá más, perdé menos": recordatorios bajan
+no-show, historia no se pierde, listo para SIAT). Ambas son trabajo de producto/
+carril C, con el precio ya decidido.
+
 ## ✅ Cerrado y en `main`
 
 | Qué | Estado |
