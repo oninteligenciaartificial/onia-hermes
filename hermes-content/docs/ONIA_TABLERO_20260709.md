@@ -39,13 +39,32 @@ lo caro es el setup (entrenar el bot); Meta = pass-through.
 - Otros add-ons sin cambio: agenda pública 150, usuario extra 70, inventario
   avanzado 180, self-hosted 4.500+900.
 
+### Resolución 2026-07-09 (revisado con Sergio)
+
+**4º nivel → Camino B: "Grupo Clínico" es un plan Bs visible** (entre Empresa y
+ONIA Empresarial USD). Precio 3.900 lista / 2.900 lanzamiento (anual 10x =
+39.000 / 29.000). En código = el plan `enterprise` (hoy 2.900; falta subir la
+lista a 3.900). Valor diferencial sobre Empresa (apoyado en la multi-sucursal del
+core v0.7.1: `area` con `parentAreaId`/GRUPO + `branchCode` SIAT):
+- Sucursales **ilimitadas incluidas** (sin el +490/suc de Empresa).
+- **Panel de grupo**: consolidado del grupo + comparativa entre sucursales.
+- **SIAT por sucursal** (código de sucursal propio) + usuarios ilimitados.
+- Onboarding/soporte prioritario de grupo.
+- Sigue self-serve (cliente opera). El salto a "ONIA opera + infra dedicada +
+  puentes a otros sistemas" es **ONIA Empresarial** E1/E2/E3 (USD, propuesta aparte).
+
+**Chatbot → add-on sobre cualquier plan.** La escalera N1/N2/N3 reemplaza el
+add-on único (650+350). El bot **deja de estar "incluido según plan"** en Empresa:
+se cotiza por nivel como add-on. (El costo por uso de Meta sigue siendo tercero
+al costo+20%.)
+
 ### ▶ Handoff de ejecución (números FIRMES; cada ítem con su gate)
 
 | # | Carril | Qué aplicar | Archivos | Gate |
 |---|---|---|---|---|
 | P-1 | **D** (repo DentaGest) | annual 9x→10x en `DEFAULT_PLAN_AMOUNTS` (2.880→3.200, 6.750→7.500, 13.500→15.000, 26.100→29.000) + limpiar TODO stale | `lib/subscription-plans.ts` (+ `lib/subscription-plans.test.ts`, `__tests__/lib/subscription-payment-validation.test.ts`) | tsc + tests verdes |
 | P-2 | **D** (repo DentaGest) | reemplazar `WHATSAPP_ADDON_PRICE` único por escalera N1/N2/N3 | `lib/pricing.ts` + consumidores: `app/page.tsx`, `app/(dashboard)/settings/PlanClient.tsx`, `app/(dashboard)/help/page.tsx`, `lib/plan-limits.ts` | tsc + tests + build |
-| P-3 | **C** (propuestas, este repo) | regenerar propuesta con números nuevos + ángulo "cobrá más, perdé menos" (recordatorios bajan no-show, historia no se pierde, listo para SIAT) | `hermes-content/propuestas/generador/clientes.json` (slug `dentalgest`) → `node generar-propuestas.js dentalgest --pdf` | PDF regenerado |
+| P-3 ✅ | **C** (hecho 09-jul, esta sesión) | propuesta actualizada: +plan Grupo Clínico, chatbot como add-on N1/N2/N3, bot fuera de "incluido" en Empresa | `clientes.json` (slug `dentalgest`) + `propuesta-dentalgest.{html,pdf}` regenerados | ✅ HTML+PDF OK |
 
 ⚠️ **No editar el código de DentaGest desde otra sesión**: hay un worktree
 `onia-core-sprint5` activo con copias de esos archivos → hacer P-1/P-2 en la

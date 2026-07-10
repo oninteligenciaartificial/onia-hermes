@@ -867,7 +867,7 @@
           "Contador Pack: RCV + vencimientos NIT + radar normativo (incluido desde Profesional)",
           "Comentarios, documentos y consentimientos en la ficha del paciente",
           "Inventario de insumos (básico o detallado según plan)",
-          "Facturación SIAT en línea y bot WhatsApp según plan"
+          "Facturación SIAT en línea según plan; chatbot WhatsApp como add-on"
         ]
       }
     ],
@@ -944,10 +944,18 @@
       },
       {
         "nombre": "Empresa",
-        "incluye": "Lo anterior + aprobaciones con SLA + hasta 3 sucursales + 20 usuarios + soporte prioritario + bot WhatsApp incluido (se activa con la verificación de Meta) + inventario detallado con lotes y kardex (se libera en Q3-2026 sin costo extra) + facturación SIAT incluida (al certificar ONIA ante el SIN)",
-        "resultado": "Controlás sin estar encima: aprobaciones, sucursales y WhatsApp automatizados.",
-        "limite": "hasta 3 sucursales (adicional Bs 490/mes c/u); bot, inventario detallado y SIAT entran según su fecha de liberación indicada.",
+        "incluye": "Lo anterior + aprobaciones con SLA + hasta 3 sucursales + 20 usuarios + soporte prioritario + inventario detallado con lotes y kardex (se libera en Q3-2026 sin costo extra) + facturación SIAT incluida (al certificar ONIA ante el SIN)",
+        "resultado": "Controlás sin estar encima: aprobaciones, sucursales e inventario detallado bajo control.",
+        "limite": "hasta 3 sucursales (adicional Bs 490/mes c/u); inventario detallado y SIAT entran según su fecha de liberación indicada. El chatbot WhatsApp se suma como add-on (ver abajo).",
         "precio": "1.990/mes (anual 19.900)",
+        "recomendado": false
+      },
+      {
+        "nombre": "Grupo Clínico",
+        "incluye": "Lo de Empresa + sucursales ILIMITADAS incluidas (sin cargo por sucursal) + panel de grupo con consolidado y comparativa entre sucursales + facturación SIAT por sucursal (código propio) + usuarios ilimitados + onboarding y soporte prioritario del grupo",
+        "resultado": "Manejás todas tus clínicas como un solo grupo: consolidado y por sucursal, en un tablero.",
+        "limite": "el cliente opera el sistema; si necesitás que ONIA lo opere con infraestructura dedicada y puentes a tus otros sistemas, ese es ONIA Empresarial.",
+        "precio": "3.900/mes (anual 39.000)",
         "recomendado": false
       },
       {
@@ -959,8 +967,23 @@
         "recomendado": false
       }
     ],
-    "notaPaquetes": "Diferencia clave: <b>Ordenado</b> = tu clínica ordenada y visible · <b>Profesional</b> = ningún paciente se escapa (capta y sigue solo) · <b>Empresa</b> = automatizar el control (aprobaciones, WhatsApp, sucursales) · <b>Empresarial E1</b> = ONIA lo opera por vos con infraestructura dedicada. Recomendado: <b>Profesional</b>. Implementación única (carga guiada + wizard + capacitación): Bs 490 / 1.490 / 3.900 según plan. Anual = 10 meses (2 gratis). Precios por sucursal. <b>Precio de lanzamiento:</b> cerrando antes del 31-jul-2026 mantenés la lista anterior (320 / 750 / 1.500) congelada 12 meses.",
+    "notaPaquetes": "Diferencia clave: <b>Ordenado</b> = tu clínica ordenada y visible · <b>Profesional</b> = ningún paciente se escapa (capta y sigue solo) · <b>Empresa</b> = automatizar el control (aprobaciones, sucursales, inventario detallado) · <b>Grupo Clínico</b> = varias clínicas como un solo grupo (sucursales ilimitadas, consolidado y comparativa, SIAT por sucursal) · <b>Empresarial E1</b> = ONIA lo opera por vos con infraestructura dedicada y puentes a tus sistemas. Recomendado: <b>Profesional</b>. Implementación única (carga guiada + wizard + capacitación): Bs 490 / 1.490 / 3.900 / desde 5.900 según plan. Anual = 10 meses (2 gratis). El chatbot WhatsApp se cotiza como add-on por nivel (ver abajo). <b>Precio de lanzamiento:</b> cerrando antes del 31-jul-2026 mantenés la lista congelada 12 meses (Ordenado 320 · Profesional 750 · Empresa 1.500 · Grupo Clínico 2.900).",
     "addons": [
+      {
+        "nombre": "Chatbot WhatsApp N1 — Recordatorios (sin IA): recordatorio de cita y cobro con reglas fijas",
+        "setup": "300",
+        "mensual": "200"
+      },
+      {
+        "nombre": "Chatbot WhatsApp N2 — IA responde y capta: contesta, califica y deriva leads 24/7 ⭐",
+        "setup": "1.500",
+        "mensual": "550 + Meta"
+      },
+      {
+        "nombre": "Chatbot WhatsApp N3 — IA opera: agenda, crea tareas y hace seguimiento solo",
+        "setup": "desde 3.500",
+        "mensual": "900 + Meta"
+      },
       {
         "nombre": "Facturación SIAT en línea (para plan Profesional; en Empresa va incluida)",
         "setup": "—",
@@ -982,8 +1005,8 @@
         "mensual": "al costo + 20%"
       }
     ],
-    "terceros": "No incluidos (costos por uso que cobra cada proveedor, no ONIA): conversaciones de WhatsApp Business API de Meta, créditos de IA de alto volumen y, si contratás la web, dominio y hosting a nombre de la clínica. El software del bot WhatsApp y de la facturación SIAT va incluido según plan; SIAT queda activo al certificar ONIA como proveedor.",
-    "_todo": "PRECIOS RATIFICADOS por Sergio 2026-07-05 (lista v2 + ventana 31-jul con 320/750/1.500 congelado 12 meses) — propuesta LISTA para enviar. Pendiente menor: confirmar plazo de implementación (1-2 semanas es estimado)."
+    "terceros": "No incluidos (costos por uso que cobra cada proveedor, no ONIA): conversaciones de WhatsApp Business API de Meta, créditos de IA de alto volumen y, si contratás la web, dominio y hosting a nombre de la clínica. El chatbot WhatsApp se contrata como add-on por nivel (N1/N2/N3); la facturación SIAT va incluida según plan y queda activa al certificar ONIA como proveedor.",
+    "_todo": "PRECIOS RATIFICADOS: planes base 05-jul + Grupo Clínico y chatbot ladder aprobados por Sergio 09-jul. Grupo Clínico 3.900/2.900 (4+ sucursales, consolidado, SIAT por sucursal). Chatbot ahora es add-on N1/N2/N3 (ya no incluido en Empresa). PENDIENTE CONFIRMAR (estimados, no fabricar): implementación Grupo Clínico ('desde 5.900' es estimado) y plazo 1-2 semanas."
   },
   {
     "slug": "onia-empresarial",
