@@ -2,10 +2,12 @@ import type { RuntimeReview } from "@/lib/onia-center-store";
 import type { ReviewBody } from "@/app/onia-center/live/live-runtime";
 import { Badge } from "../../ui/Badge";
 import { SurfaceCard } from "../../ui/SurfaceCard";
+import { ReviewActions } from "./ReviewActions";
 
 interface ReviewQueueTileProps {
   reviews: RuntimeReview[];
   bodies?: Record<string, ReviewBody>;
+  canApprove?: boolean;
 }
 
 const STATUS_TONE: Record<RuntimeReview["status"], "green" | "yellow" | "red" | "blue"> = {
@@ -51,7 +53,7 @@ function ReviewBodyDetails({ body }: { body: ReviewBody }) {
   );
 }
 
-export function ReviewQueueTile({ reviews, bodies }: ReviewQueueTileProps) {
+export function ReviewQueueTile({ reviews, bodies, canApprove }: ReviewQueueTileProps) {
   const pending = reviews.filter((review) => review.status === "pendiente");
 
   return (
@@ -72,6 +74,7 @@ export function ReviewQueueTile({ reviews, bodies }: ReviewQueueTileProps) {
                   <Badge tone={STATUS_TONE[review.status]}>{review.status}</Badge>
                 </div>
                 {body ? <ReviewBodyDetails body={body} /> : null}
+                {canApprove ? <ReviewActions reviewId={review.id} /> : null}
               </div>
             );
           })}

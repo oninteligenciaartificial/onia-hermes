@@ -10,12 +10,21 @@ interface HoyViewProps {
   agents: OperatingAgent[];
   reviews: RuntimeReview[];
   reviewBodies?: Record<string, ReviewBody>;
+  canApprove?: boolean;
   tasks: RuntimeTask[];
   scheduleBlocks: SergioScheduleBlock[];
   referenceDate: Date;
 }
 
-export function HoyView({ agents, reviews, reviewBodies, tasks, scheduleBlocks, referenceDate }: HoyViewProps) {
+export function HoyView({
+  agents,
+  reviews,
+  reviewBodies,
+  canApprove,
+  tasks,
+  scheduleBlocks,
+  referenceDate,
+}: HoyViewProps) {
   return (
     <div className="grid gap-4 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
       <div className="grid content-start gap-4">
@@ -23,7 +32,7 @@ export function HoyView({ agents, reviews, reviewBodies, tasks, scheduleBlocks, 
         <TeamWorkPanel tasks={tasks} />
       </div>
       <div className="grid content-start gap-4">
-        <ReviewQueueTile reviews={reviews} bodies={reviewBodies} />
+        <ReviewQueueTile reviews={reviews} bodies={reviewBodies} canApprove={canApprove} />
         <AgentRosterTile agents={agents} />
       </div>
     </div>

@@ -5,7 +5,7 @@ import {
   getOniaCenterRuntime,
   isOniaCenterConfigured,
 } from "@/lib/onia-center-store";
-import { getOniaCenterActor } from "@/lib/onia-center-auth";
+import { getOniaCenterActor, isSergio } from "@/lib/onia-center-auth";
 import { sergioStrictScheduleBlocks } from "@/app/onia-center/operating-source";
 import { getVisibleOperatingAgents } from "@/app/onia-center/operating-engine";
 import { getLiveAgentStatuses, getReviewBodies, mergeLiveAgentStatus } from "@/app/onia-center/live/live-runtime";
@@ -73,6 +73,7 @@ export default async function HoyPage() {
         agents={visibleAgents}
         reviews={runtimeReviews}
         reviewBodies={reviewBodies}
+        canApprove={isSergio(auth.actor)}
         tasks={runtimeTasks}
         scheduleBlocks={sergioStrictScheduleBlocks}
         referenceDate={new Date()}
