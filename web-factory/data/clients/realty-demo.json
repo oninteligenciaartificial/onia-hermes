@@ -12,7 +12,7 @@
     "bg": "#faf6ef",
     "fg": "#2a2118"
   },
-  "tipografia": { "heading": "Onest", "body": "Onest" },
+  "tipografia": { "heading": "Inter", "body": "Inter" },
   "contacto": { "email": "", "tel": "", "whatsapp": "+59170000001", "direccion": "La Paz, Bolivia" },
   "redes": { "ig": "", "fb": "", "linkedin": "", "x": "" },
   "servicios": [

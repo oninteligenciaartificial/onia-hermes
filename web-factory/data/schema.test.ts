@@ -6,7 +6,7 @@ describe("clientSchema", () => {
     const client = clientSchema.parse({ nombre: "Demo", slug: "demo" });
 
     expect(client.colores.primary).toBe("#0f766e");
-    expect(client.tipografia.heading).toBe("Onest");
+    expect(client.tipografia.heading).toBe("Inter");
     expect(client.servicios).toHaveLength(3);
     expect(client.cta.url).toBe("/contacto");
   });

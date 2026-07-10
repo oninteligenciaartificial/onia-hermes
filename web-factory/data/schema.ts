@@ -241,12 +241,12 @@ export const clientSchema = z.object({
     }),
   tipografia: z
     .object({
-      heading: z.string().min(1).default("Onest"),
-      body: z.string().min(1).default("Onest"),
+      heading: z.string().min(1).default("Inter"),
+      body: z.string().min(1).default("Inter"),
     })
     .default({
-      heading: "Onest",
-      body: "Onest",
+      heading: "Inter",
+      body: "Inter",
     }),
   contacto: z
     .object({
