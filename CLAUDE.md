@@ -144,6 +144,13 @@ Reglas duras:
 - Dentro de onia-hermes: cada carril su carpeta; **AVISAR** antes de tocar los 4
   raíz de web-factory (`next.config.ts`, `layout.tsx`, `globals.css`, `package.json`).
 - Infra (G) = UN solo dueño a la vez.
+- **`main` siempre debe compilar.** El auto-sync hace FF de `main`: nunca dejar que
+  arrastre WIP parcial (si un archivo nuevo importa otro archivo nuevo, van los DOS
+  o ninguno). Rebuild entra a `main` solo como merge COMPLETO con `tsc --noEmit`
+  verde en `web-factory/apps/site` (ojo casing de imports: Linux distingue). `main`
+  alimenta el deploy real (VPS) Y el Vercel `onia-center`; roto, rompe ambos y
+  spamea "Failed preview deployment". Detalle + incidente ref:
+  `COORDINATION_MANIFEST.md` → "no filtrar WIP parcial a main".
 - Correr todo en paralelo; lo único que se estagia son DEPENDENCIAS reales, no cupo:
   P3 tras P2 · R5 tras R1 · M1 deploya tras A/C en main · M2 no re-publica el n8n
   `ONIADailyBrief001` hasta M1 · H publica IG tras token (S6).
