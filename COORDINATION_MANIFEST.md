@@ -31,6 +31,15 @@ tocar los 4 archivos raíz de web-factory (`next.config.ts`, `layout.tsx`,
 `globals.css`, `package.json`). Infra (G) = un solo dueño a la vez; nadie más
 toca n8n/VPS/DB mientras G trabaja.
 
+> **Carril L (canal YT) = rama propia `yt-maquina-humana`** (2026-07-10). Canal
+> "Máquina Humana" (marca pública; ex "La Ciencia de tu Cuerpo"), dueño de
+> `hermes-content/channels/ciencia-cuerpo/**` (slug interno se mantiene — renombrarlo
+> solo rompe referencias). **NO confundir con el panel (carril A, rama
+> `claude/vibrant-ritchie-9304f8`): son carpetas Y ramas distintas — el canal nunca
+> comparte rama con el panel.** Incidente 2026-07-10: el build del canal se estaba
+> commiteando en la rama del panel; se separó a rama propia (archivos disjuntos, sin
+> conflicto). El loop autónomo semanal del canal se hand-off a n8n/infra, no queda local.
+
 ### Regla dura — no filtrar WIP parcial a `main` (build coherente)
 
 `main` alimenta DOS deploys: el auto-deploy real al VPS (`center.onia.com.bo`,
