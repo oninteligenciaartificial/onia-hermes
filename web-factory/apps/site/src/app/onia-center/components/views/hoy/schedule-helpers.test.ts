@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
+  buildDayTimeline,
   getTodaysScheduleBlocks,
   isBlockHappeningNow,
   isScheduleBlockActiveToday,
@@ -98,5 +99,51 @@ describe("getTodaysScheduleBlocks", () => {
   it("returns only today's blocks sorted by start time", () => {
     const result = getTodaysScheduleBlocks(blocks, MONDAY);
     expect(result.map((block) => block.id)).toEqual(["sergio-ceo-plan", "sergio-sales-block"]);
+  });
+});
+
+describe("buildDayTimeline", () => {
+  const blocks: SergioScheduleBlock[] = [
+    {
+      id: "b1",
+      dayPattern: "Lunes a viernes",
+      start: "08:00",
+      end: "10:00",
+      title: "Bloque manana",
+      category: "deep_work",
+      strictness: "fixed",
+      meetingPolicy: "blocked",
+      note: "",
+      visibility: "sergio_private",
+    },
+    {
+      id: "b2",
+      dayPattern: "Lunes a viernes",
+      start: "10:00",
+      end: "11:00",
+      title: "Ventas",
+      category: "sales",
+      strictness: "fixed",
+      meetingPolicy: "available",
+      note: "",
+      visibility: "sergio_private",
+    },
+  ];
+
+  it("lays out blocks proportionally within the hour window", () => {
+    const timeline = buildDayTimeline(blocks, MONDAY);
+    expect(timeline.hourMarks).toEqual([8, 9, 10, 11]);
+    expect(timeline.blocks).toHaveLength(2);
+    expect(timeline.blocks[0].topPct).toBe(0);
+    expect(timeline.blocks[0].heightPct).toBeCloseTo(66.67, 1);
+    expect(timeline.blocks[1].isNow).toBe(true);
+    expect(timeline.nowPct).toBeCloseTo(66.67, 1);
+  });
+
+  it("returns an empty timeline when no blocks are active today", () => {
+    const timeline = buildDayTimeline(blocks, SATURDAY);
+    expect(timeline.blocks).toHaveLength(0);
+    expect(timeline.hourMarks).toHaveLength(0);
+    expect(timeline.nowPct).toBeNull();
   });
 });

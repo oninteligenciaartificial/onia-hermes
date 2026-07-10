@@ -59,3 +59,64 @@ export function getTodaysScheduleBlocks(
     .filter((block) => isScheduleBlockActiveToday(block.dayPattern, referenceDate))
     .sort((a, b) => a.start.localeCompare(b.start));
 }
+
+// --- Timeline visual proporcional -----------------------------------------
+
+export interface TimelineBlock {
+  id: string;
+  title: string;
+  start: string;
+  end: string;
+  category: SergioScheduleBlock["category"];
+  topPct: number;
+  heightPct: number;
+  isNow: boolean;
+}
+
+export interface DayTimeline {
+  hourMarks: number[];
+  blocks: TimelineBlock[];
+  nowPct: number | null;
+}
+
+function timeToMinutes(hhmm: string): number {
+  const [hours, minutes] = hhmm.split(":");
+  return Number(hours) * 60 + Number(minutes);
+}
+
+export function buildDayTimeline(blocks: SergioScheduleBlock[], referenceDate: Date): DayTimeline {
+  const today = getTodaysScheduleBlocks(blocks, referenceDate);
+  if (today.length === 0) {
+    return { hourMarks: [], blocks: [], nowPct: null };
+  }
+
+  const windowStart = Math.floor(Math.min(...today.map((block) => timeToMinutes(block.start))) / 60) * 60;
+  const windowEnd = Math.ceil(Math.max(...today.map((block) => timeToMinutes(block.end))) / 60) * 60;
+  const total = Math.max(1, windowEnd - windowStart);
+
+  const hourMarks: number[] = [];
+  for (let hour = windowStart / 60; hour <= windowEnd / 60; hour += 1) {
+    hourMarks.push(hour);
+  }
+
+  const timelineBlocks: TimelineBlock[] = today.map((block) => {
+    const start = timeToMinutes(block.start);
+    const end = timeToMinutes(block.end);
+    return {
+      id: block.id,
+      title: block.title,
+      start: block.start,
+      end: block.end,
+      category: block.category,
+      topPct: ((start - windowStart) / total) * 100,
+      heightPct: (Math.max(0, end - start) / total) * 100,
+      isNow: isBlockHappeningNow(block, referenceDate),
+    };
+  });
+
+  const nowMinutes = referenceDate.getHours() * 60 + referenceDate.getMinutes();
+  const nowPct =
+    nowMinutes >= windowStart && nowMinutes <= windowEnd ? ((nowMinutes - windowStart) / total) * 100 : null;
+
+  return { hourMarks, blocks: timelineBlocks, nowPct };
+}

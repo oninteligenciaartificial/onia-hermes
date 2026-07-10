@@ -1,25 +1,30 @@
 import type { OperatingAgent, SergioScheduleBlock } from "@/app/onia-center/types";
-import type { RuntimeReview } from "@/lib/onia-center-store";
+import type { RuntimeReview, RuntimeTask } from "@/lib/onia-center-store";
 import type { ReviewBody } from "@/app/onia-center/live/live-runtime";
 import { AgentRosterTile } from "./AgentRosterTile";
+import { DayTimeline } from "./DayTimeline";
 import { ReviewQueueTile } from "./ReviewQueueTile";
-import { TodayScheduleCard } from "./TodayScheduleCard";
+import { TeamWorkPanel } from "./TeamWorkPanel";
 
 interface HoyViewProps {
   agents: OperatingAgent[];
   reviews: RuntimeReview[];
   reviewBodies?: Record<string, ReviewBody>;
+  tasks: RuntimeTask[];
   scheduleBlocks: SergioScheduleBlock[];
   referenceDate: Date;
 }
 
-export function HoyView({ agents, reviews, reviewBodies, scheduleBlocks, referenceDate }: HoyViewProps) {
+export function HoyView({ agents, reviews, reviewBodies, tasks, scheduleBlocks, referenceDate }: HoyViewProps) {
   return (
-    <div className="grid gap-4">
-      <TodayScheduleCard blocks={scheduleBlocks} referenceDate={referenceDate} />
-      <div className="grid grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-4">
-        <AgentRosterTile agents={agents} />
+    <div className="grid gap-4 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
+      <div className="grid content-start gap-4">
+        <DayTimeline blocks={scheduleBlocks} referenceDate={referenceDate} />
+        <TeamWorkPanel tasks={tasks} />
+      </div>
+      <div className="grid content-start gap-4">
         <ReviewQueueTile reviews={reviews} bodies={reviewBodies} />
+        <AgentRosterTile agents={agents} />
       </div>
     </div>
   );

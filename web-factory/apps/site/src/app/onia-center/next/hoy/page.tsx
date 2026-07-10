@@ -49,9 +49,11 @@ export default async function HoyPage() {
   }
 
   let runtimeReviews;
+  let runtimeTasks;
   try {
     const runtime = filterOniaCenterRuntimeForActor(await getOniaCenterRuntime(), auth.actor);
     runtimeReviews = runtime.reviews;
+    runtimeTasks = runtime.tasks;
   } catch (error) {
     const message = error instanceof Error ? error.message : "Error leyendo ONIA Center.";
     return (
@@ -71,6 +73,7 @@ export default async function HoyPage() {
         agents={visibleAgents}
         reviews={runtimeReviews}
         reviewBodies={reviewBodies}
+        tasks={runtimeTasks}
         scheduleBlocks={sergioStrictScheduleBlocks}
         referenceDate={new Date()}
       />
