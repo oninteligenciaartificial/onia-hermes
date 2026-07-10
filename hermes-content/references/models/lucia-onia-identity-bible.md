@@ -19,6 +19,12 @@ sigue siendo el ground-truth real para QA, no se descarta).
 
 ## Ficha
 - **Nombre:** Lucia. **Rol:** influencer skincare/UGC + cuenta propia + contenido de clientes.
+- **Nombre completo / identidad publica (2026-07-09):** *Lucia Belen Antelo Justiniano* — Santa
+  Cruz de la Sierra, Bolivia, 26 anos. Apodo "Lu". **Handle IG: `@lu.antelo`** (verificado LIBRE),
+  **display: "Lucia Antelo"**. El "es IA" NO va en el nombre (parece persona real) — se revela como
+  gancho en el contenido. Posicionamiento: hibrido lifestyle + meta-AI ([[LUCIA_CONTENT_PLAN]],
+  [[LUCIA_BENCHMARK_ARIA_CRUZ_20260709]]). Ops de cuenta: `ONIA_AI_INFLUENCERS_ACCOUNT_OPS_2026.md`.
+  (Sergio puede ajustar 2do nombre/apellido materno; el resto de la identidad esta lockeado.)
 - **Higgsfield Soul (USAR ESTE):** `36305a9b-af24-4390-959b-885082dddd5d` ("LUCIA-REAL-v2-clean", `soul_2`). Gen ~0.12cr/img.
 - **Entrenada desde:** 18 frames reales verificados, TODOS del mismo video (`hf_20260615_013651_d60afdd2...`, tubo verde SVR): `hermes-content/references/models/pecas-clean-v2/`. Frames REALES, no generados.
 - **Soul `9a0d6953-...` = ELIMINADO de Higgsfield (2026-07-06).** Estaba contaminado: 1 de sus 8 frames de entrenamiento (`pecas-B-02.png`) era de OTRA MUJER (video B resulto ser una persona distinta). Esto probablemente causo la perdida de consistencia reportada por Sergio. Borrado por UI a pedido explicito de Sergio. Ver `AVATAR-CONSISTENCY-SCHEME.md`.

@@ -71,6 +71,33 @@ carrier-grade**. Opciones:
 - **SIM bank (sin celulares) + API para publicar:** más barato por número, escala a cientos,
   más limpio. **Este es el camino.** No necesitás un celular por modelo.
 
+## ⭐ SIM bank ONIA — diseño para desarrollarlo (FUTURO, IMPORTANTE — no ahora)
+
+Cómo lo armaríamos cuando sumemos modelos (dejar listo el diseño, ejecutar en Fase 2):
+
+- **Hardware:** modem pool GSM/LTE 8→32 puertos (empezar en 8). Cada puerto = 1 SIM + su radio.
+  Conexión Ethernet (expone API por red) o USB a un host.
+- **Host:** mini-PC / Raspberry Pi / NUC en Bolivia (casa/oficina), corriendo el software. SIMs
+  bolivianas (Tigo/Entel/Viva) → números **+591 locales** (autenticidad local + baratos).
+- **Software:** **SMSgate** (open-source Python, gratis) u Ozeki — administra los módems, recibe
+  SMS y expone una API/DB.
+- **Capa de integración ONIA** (n8n/script):
+  - Asigna una SIM libre a cada modelo nueva → registro **{modelo ↔ SIM ↔ número}** en Supabase.
+  - Captura el OTP entrante y lo entrega al flujo de alta (webhook).
+  - **Mantiene las SIMs vivas** (tráfico mínimo periódico; las prepago se dan de baja sin uso ~60-90d).
+  - Guarda la asociación para re-verificación / 2FA / recuperación futura.
+- **Flujo de alta:** asignar SIM #N → crear cuenta IG con ese número → IG manda OTP → el pool lo
+  recibe → software lo captura → se ingresa → cuenta verificada → se registra la asociación.
+- **Nube:** el pool vive local (Bolivia) y expone su API por túnel/VPN al VPS/n8n. OTP y números
+  son sensibles → API con auth, nunca exponerlos.
+- **⚠️ A validar antes (Bolivia):** el registro legal de SIMs prepago (en Bolivia las líneas se
+  registran con CI ante la ATT). A escala hay que resolver cómo dar de alta muchas SIMs de forma
+  legal. NO inventar — validar con normativa/operadora antes de comprar en volumen.
+- **Costo:** pool 8-port ~$150-300 (32-port ~$500-900) + SIMs prepago (chip + saldo mínimo) +
+  mini-PC ~$50-100 (o reusar). Software SMSgate = gratis.
+- **Puente mientras tanto:** para las primeras 2-3 modelos, un servicio non-VoIP OTP en la nube
+  (número descartable) evita el hardware; el SIM bank se justifica cuando el roster crece.
+
 ## Escala sin que Meta te marque como "red coordinada" (crítico)
 
 Crear **muchas** influencers AI puede verse como red coordinada si se hace mal. Para escalar sano:
@@ -94,6 +121,30 @@ Crear **muchas** influencers AI puede verse como red coordinada si se hace mal. 
 - Números: **SIM bank / modem pool** (empezar 8-32 puertos) + lote de SIMs prepago, software
   para recibir OTPs desde un dashboard.
 - Gestión: Business Manager + publicación 100% por API. Warm-up y etiqueta IA por cuenta.
+
+## Checklist de alta de una modelo (Fase 1) — plantilla, caso Lucía
+
+Orden de ejecución. (H) = tarea humana de Sergio (crear cuentas / credenciales / comprar);
+(C) = la puede hacer Claude/infra.
+
+1. **Dominio + email** (C, tras registrar dominio): registrar el dominio de las modelos →
+   Zoho Mail + catch-all → crear `lucia@<dominio>`. (Registrar dominio = H.)
+2. **Número** (H): 1 SIM prepago real (Tigo/Entel/Viva) para Lucía.
+3. **Cuenta IG** (H): crear con `lucia@<dominio>` + el número → verificar OTP. Handle
+   **`@lu.antelo`**, nombre **Lucía Antelo**. (No puedo crear cuentas ni ingresar credenciales.)
+4. **Perfil** (C prepara / H sube): foto de perfil = render aprobado (`ced20cc2`), **bio con
+   etiqueta IA**, link de bio.
+5. **Professional + Página FB** (H): pasar la cuenta a Professional (Creator) + crear Página de
+   Facebook + vincularlas.
+6. **Business Manager** (H con guía C): agregar la cuenta IG + la Página al Business Manager de ONIA.
+7. **Etiqueta IA** (H): activar la etiqueta de contenido AI en el perfil.
+8. **Warm-up** (C/H): primeros días, actividad orgánica ligera antes de publicar por API.
+9. **API / token** (C, carril infra): con la cuenta Business + Página listas, sacar token IG
+   (bloqueo **S6**) → conectar n8n para publicar con cola de aprobación.
+
+**Lo que avanzo YO ya:** configurar Zoho (tras dominio), preparar foto+bio+textos del perfil,
+guiar el Business Manager, dejar el flujo n8n de publicación listo para el token.
+**Lo que necesita HUMANO:** registrar dominio, conseguir la SIM, crear la cuenta IG y la Página FB.
 
 ## Costos aproximados
 - Email: dominio ~$10-15/año + Zoho (plan gratuito para pocos buzones, o ~$1/buzón/mes).
