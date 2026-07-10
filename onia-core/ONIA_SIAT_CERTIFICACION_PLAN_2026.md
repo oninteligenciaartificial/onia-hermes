@@ -167,13 +167,23 @@ autorización "API" del SIN hasta que haga falta).
 
 ## 4. Checklist del trámite (orden, responsable, duración estimada)
 
-> **Estado 2026-07-08:** NIT ONIA ✅ obtenido (SIN). SEPREC ⏳ en trámite —
-> CONFIRMADO que NO bloquea el registro del sistema. Secuencia reordenada por el
-> **plazo de 90 días** (Art. 18.III): los pasos que NO arrancan ese reloj
-> (verificar padrón/marcas, credenciales) se hacen ya; el registro del sistema
-> (paso 3, que SÍ arranca el reloj) se abre recién cuando el emisor técnico
-> (paso 4) pueda sostener la Fase 1. El paso 4 ya arrancó en
-> `hermes-content/integrations/siat/` (constantes + máquina de estados, 19 tests).
+> **Estado 2026-07-09 — Fase A CUMPLIDA (padrón verificado):** NIT `5371375010`
+> (empresa unipersonal, Gerencia Distrital Santa Cruz II), Régimen General,
+> ACTIVO, sin marcas de suspensión, IVA vigente. **Actividad económica de
+> software CONFIRMADA y es la PRIMARIA** (4651200 venta de programas de
+> informática; complementarias 6209920 servicios en la nube, 6312000 portales
+> web, 8549100 enseñanza informática, 7310100 publicidad digital). Todos los
+> requisitos del Art. 19 cumplidos → el registro del sistema como Proveedor está
+> desbloqueado. Modalidad de facturación ya seleccionada: COMPUTARIZADA EN LÍNEA
+> (estado PENDIENTE de habilitar). El emisor técnico avanza en
+> `hermes-content/integrations/siat/` (constantes + máquina de estados +
+> contrato de payload, 32 tests). SEPREC ⏳ en trámite (NO bloquea).
+>
+> **Reloj de 90 días (Art. 18.III):** el registro del sistema (paso 5) se abre
+> SOLO cuando el emisor pueda sostener la Fase 1 de pruebas — no antes.
+>
+> **⚠️ Nota del contador:** desde 03/06/2026 las obligaciones IVA/IT/RC-IVA
+> corren; primera declaración vence 13/08/2026 (aunque sea sin movimiento).
 
 **Fase A — sin arrancar el reloj de 90 días (se puede YA, con el NIT):**
 

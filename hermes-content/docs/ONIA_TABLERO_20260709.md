@@ -17,10 +17,12 @@ de memoria sobre "qué falta".
 
 | # | Ítem | Acción EXACTA | Destraba |
 |---|---|---|---|
-| S1 | **Padrón SIAT (Fase A)** | En la Oficina Virtual del SIN: (1) confirmar que la actividad "desarrollo de software / servicios informáticos" está en el padrón del NIT; (2) confirmar que no hay marcas de riesgo tributario. Gratis, NO arranca el reloj de 90 días. | Registro del sistema SIAT |
-| S2 | **SEPREC** | Solo esperar la aceptación (ya en trámite). NO bloquea nada del SIAT. | Formalización, no el SIAT |
-| S3 | **GestiOS DATABASE_URL** | Conseguir la `DATABASE_URL`/`DIRECT_URL` de GestiOS (Vercel env del proyecto o su Supabase). Sin esto no se puede correr `prisma migrate status`. | GestiOS R1 (Sprint 0) |
-| S4 | **Registro sistema SIAT** | Después de S1 y de que el emisor técnico esté listo para pruebas: registrar el sistema como Proveedor / Computarizada en Línea. **Arranca los 90 días** — no abrirlo antes. | Fase 1 de pruebas piloto |
+| S1 | ~~**Padrón SIAT (Fase A)**~~ | ✅ **CUMPLIDO 2026-07-09** (padrón verificado). NIT `5371375010` (empresa unipersonal, Santa Cruz II), Régimen General, ACTIVO, sin suspensiones, IVA vigente. **Actividad software CONFIRMADA y es la PRIMARIA**: 4651200 venta de programas de informática + 6209920 servicios en la nube + 6312000 portales web. Todos los requisitos del Art. 19 cumplidos. | ✅ Registro del sistema SIAT desbloqueado |
+| **S1b** | **⚠️ FISCAL — calendario ya corre** | Desde 03/06/2026 hay obligaciones VIGENTES: IVA (F200) + IT (F400) + RC-IVA agente retención (F608) **primer vencimiento 13/08/2026** (día 13 = NIT termina en 0); IUE (F500) anual 30/04/2027. Aunque sea SIN MOVIMIENTO hay que declarar o es multa por deber formal. Definir quién declara (contador humano o el Contador Pack). Desbloquea el playbook `ONIA_OPTIMIZACION_FISCAL_PROPIA_2026.md` (otro carril, estaba esperando estos datos). | Evitar multas + crédito fiscal IVA |
+| S2 | **Habilitar facturación en línea** | El padrón muestra "Modalidad Facturación: COMPUTARIZADA EN LÍNEA - **PENDIENTE**". Completar la habilitación de la facturación en línea del NIT en la Oficina Virtual. Es la modalidad correcta (sin cert digital). | Facturar ventas propias de ONIA |
+| S3 | **SEPREC** | Solo esperar la aceptación (ya en trámite). NO bloquea nada del SIAT. | Formalización, no el SIAT |
+| S4 | **GestiOS DATABASE_URL** | Conseguir la `DATABASE_URL`/`DIRECT_URL` de GestiOS (Vercel env del proyecto o su Supabase). Sin esto no se puede correr `prisma migrate status`. | GestiOS R1 (Sprint 0) |
+| S5 | **Registro sistema SIAT (Proveedor)** | Con S1 ✅, abrir el registro del sistema como Proveedor / Computarizada en Línea SOLO cuando el emisor técnico esté listo para pruebas. **Arranca los 90 días** — no abrirlo antes. | Fase 1 de pruebas piloto |
 
 ## 🔜 En otra sesión (otro repo — kickoff listo, no se hace desde el carril onia-core)
 
