@@ -437,8 +437,10 @@ IVA/IT/IUE. Stack de impuestos:
 
 - **IUE 25%** — sobre la **utilidad NETA** (ingresos menos gastos deducibles),
   anual.
-- **IT 3%** — sobre el ingreso bruto (posible compensación con el IUE pagado;
-  confirmar estado actual, hubo intentos de reforma).
+- **IT 3%** — sobre el ingreso bruto, pero el **DS 5563 restituyó la
+  compensación del IT con el IUE** (revirtió el DS 5327): el IT pagado se
+  compensa con el IUE, así que en la práctica deja de ser un costo extra
+  significativo.
 - **IVA 13%** — pero ver la jugada de abajo.
 
 **¿Es gravable en Bolivia?** Sí. Principio de **fuente** (Art. 42 Ley 843 + DS
@@ -447,32 +449,38 @@ acá) → renta de **fuente boliviana** → IUE aplica, aunque Google pague desd
 exterior y la audiencia sea global. El pagador extranjero no la vuelve renta del
 exterior.
 
-**Las dos palancas legales (esto es lo que ahorra):**
-1. **Estructurar el AdSense como EXPORTACIÓN DE SERVICIOS → IVA tasa cero (0%).**
-   Art. 11 Ley 843: las exportaciones están liberadas de IVA; existe el mecanismo
-   formal de **Factura Comercial de Exportación de servicios** (sin derecho a
-   crédito fiscal). El servicio se presta a Google (empresa del exterior) y se
-   consume/paga afuera → el argumento de "exportación de servicios" saca el 13%
-   de IVA del ingreso de ads. **Es la jugada grande** — la tiene que calificar y
-   firmar el contador ante el SIN.
-2. **IUE solo sobre la utilidad NETA → deducir todo el costo de producción.**
-   Créditos Higgsfield, voz IA, VPS, dominios, herramientas: son **gastos
-   deducibles** si están soportados. Bajan la base del IUE. Por eso hay que
-   **guardar comprobante de cada gasto** (conecta con el costeo del §5).
+**La palanca REAL y confiable — IUE solo sobre la utilidad NETA.** Todo el costo
+de producción (créditos Higgsfield, voz IA, VPS, dominios, equipos) es **gasto
+deducible** con comprobante → baja la base del IUE. Guardar comprobante de cada
+gasto desde el video 1 (conecta con el costeo del §5). Además, el DS 5563 habilita
+**depreciación acelerada** de activos fijos comprados en 2026 (mitad de la vida
+útil) — si la unipersonal compra equipo (PC, cámara), la deducción entra más rápido.
 
-**El W-8BEN (lado EE.UU.)** es independiente de todo esto: se carga en AdSense
-para que EE.UU. no retenga de más; su 30% pega solo sobre la porción de vistas de
-EE.UU. (chica para un canal en español).
+**IVA 13% — CORRECCIÓN de honestidad (2ª revisión).** En la 1ª pasada afirmé que
+el AdSense calificaba como *exportación de servicios* con IVA 0%. **Reverificado,
+eso NO es confiable en Bolivia:** la tasa cero es sobre todo para **exportación
+de BIENES** (Ley 1489); en servicios solo aplica a sectores puntuales por leyes
+específicas (ej. transporte internacional, Ley 3249) — y esa misma ley aclara que
+*no constituye exportación de servicios* y no da crédito fiscal. Bolivia **no
+tiene** una tasa-cero general de exportación de servicios donde el AdSense entre
+solo. El IVA del AdSense es un **área gris real**: va de *no gravado por
+territorialidad* (servicio consumido en el exterior) hasta *gravado al 13%*. **No
+contar con el 0%.** Es la pregunta #1 para el matriculado.
 
-**Lo puntual que el contador matriculado debe confirmar/firmar:**
-- Que AdSense **califica como exportación de servicios** ante el SIN (ahí está el
-  ahorro del IVA).
-- Estado **actual de la compensación IUE↔IT** (hubo reforma en trámite).
-- Formalidad de la factura de exportación y del ingreso en USD vía Payoneer.
+**El W-8BEN (lado EE.UU.)** es independiente: se carga en AdSense para que EE.UU.
+no retenga de más; su 30% pega solo sobre la porción de vistas de EE.UU. (chica
+para un canal en español).
 
-Esto **no es asesoría contable definitiva**: es la estructura que la Ley 843
-habilita; la calificación de exportación de servicios la firma un profesional
-matriculado porque el SIN puede observarla.
+**Lo que el contador matriculado debe resolver/firmar:**
+- **El tratamiento de IVA del AdSense** (no gravado por territorialidad vs gravado
+  13% vs algún régimen) — acá está la plata y la incertidumbre real.
+- Aplicación a tu caso de la **compensación IT-IUE** restituida por DS 5563.
+- Formalidad de facturación del ingreso del exterior y del cobro en USD vía Payoneer.
+
+**Balance honesto:** lo confiable es **IUE solo sobre utilidad neta (deducir toda
+la producción) + IT compensado con el IUE (DS 5563)**. El IVA 0% que vendí en la
+1ª pasada NO está respaldado; queda como pregunta abierta para el matriculado.
+Esto **no es asesoría contable definitiva**.
 
 ### Sin construir todavía — lo que Sergio necesita destrabar
 
