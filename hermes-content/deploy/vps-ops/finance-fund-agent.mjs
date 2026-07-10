@@ -23,8 +23,8 @@ const AGENT_KEY = "agent_finance_fund";
 const PERIOD_DAYS = 30;
 
 // Config fiscal de ONIA (parametrizable). Confirmado 2026-07-10 por Sergio.
-// TODO(bloqueado por Sergio): vencimiento_dia = calendario de vencimientos IVA/IT por ultimo
-// digito de NIT (0) segun RND SIN vigente — no se fuerza hasta confirmar la fuente oficial.
+// vencimiento_dia: calendario SIN por ultimo digito de NIT (0 -> dia 13; verificado 2026-07-10 con
+// el Calendario Tributario 2026 de impuestos.gob.bo: IVA F-200 / IT F-400 / RC-IVA F-610, dia 13-22).
 const FISCAL = {
   regime: "general",
   rc_iva_applies: false,
@@ -37,7 +37,7 @@ const FISCAL = {
   it: 0.03,
   iue: 0.25,
   iue_be: 0.125,
-  vencimiento_dia: null,
+  vencimiento_dia: 13, // digito 0. Declara el periodo del mes anterior.
 };
 
 function out(o) {
@@ -205,6 +205,22 @@ async function main() {
   // --- Postura fiscal (estimacion, no genera ping) ---
   const tax = computeTaxPosture(income, expenses, monthStart, yearStart, period);
 
+  // Proximo vencimiento (dia 13 para digito 0; declara el periodo del mes anterior).
+  if (FISCAL.vencimiento_dia) {
+    const d = FISCAL.vencimiento_dia;
+    const ty = Number(today.slice(0, 4));
+    const tm = Number(today.slice(5, 7));
+    const dayNow = Number(today.slice(8, 10));
+    let vy = ty, vm = tm;
+    if (dayNow > d) { vm += 1; if (vm > 12) { vm = 1; vy += 1; } }
+    const venc = vy + "-" + String(vm).padStart(2, "0") + "-" + String(d).padStart(2, "0");
+    let py = vy, pm = vm - 1; if (pm < 1) { pm = 12; py -= 1; }
+    tax.vencimiento_dia = d;
+    tax.proximo_vencimiento = venc;
+    tax.proximo_vencimiento_periodo = py + "-" + String(pm).padStart(2, "0");
+    tax.dias_para_vencimiento = Math.round((Date.parse(venc + "T00:00:00-04:00") - Date.parse(today + "T00:00:00-04:00")) / 86400000);
+  }
+
   // --- Anomalias deterministas (de PLATA: gatillan Telegram) ---
   const anomalies = [];
   if (byStatus.blocked > 0) {
@@ -252,6 +268,7 @@ async function main() {
   if (tax.credito_fiscal_perdido_bs > 0) L.push("- Credito fiscal PERDIDO (gastos sin factura): " + bs(tax.credito_fiscal_perdido_bs) + " — pedi factura al NIT");
   if (tax.iue_be_retenciones_bs > 0) L.push("- Retencion IUE-BE (pagos al exterior): " + bs(tax.iue_be_retenciones_bs));
   L.push("- IUE estimado (ano): " + bs(tax.iue_estimado_bs) + (FISCAL.siat_emitting ? "" : " · SIAT en tramite: sin debito IVA formal aun"));
+  if (tax.proximo_vencimiento) L.push("- Proximo vencimiento IVA/IT: dia " + FISCAL.vencimiento_dia + " -> " + tax.proximo_vencimiento + " (declara " + tax.proximo_vencimiento_periodo + ", en " + tax.dias_para_vencimiento + "d)");
   if (income.length === 0 && comm.length === 0 && expenses.length === 0) {
     L.push("");
     L.push("(Aun sin ingresos/gastos registrados — la caja y el fiscal se llenan cuando cargues cobros y facturas de gasto.)");

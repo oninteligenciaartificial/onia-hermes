@@ -25,15 +25,15 @@
       "name": "IVA",
       "frequency": "monthly",
       "applies": true,
-      "due_rule": "Pendiente: mensual segun ultimo digito de NIT (calendario SIN vigente).",
-      "confirmed": false
+      "due_rule": "Mensual, dia 13 del mes siguiente (ultimo digito NIT 0; Calendario Tributario 2026 SIN). Declara el periodo anterior. Formulario 200.",
+      "confirmed": true
     },
     {
       "name": "IT",
       "frequency": "monthly",
       "applies": true,
-      "due_rule": "Pendiente: mensual segun ultimo digito de NIT. Se compensa con IUE pagado.",
-      "confirmed": false
+      "due_rule": "Mensual, dia 13 del mes siguiente (digito 0). Se compensa con IUE pagado. Formulario 400.",
+      "confirmed": true
     },
     {
       "name": "RC-IVA",

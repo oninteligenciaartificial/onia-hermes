@@ -84,7 +84,10 @@ tax_posture: {
   "credito_fiscal_perdido_bs": 0,// 13% de gastos nacionales SIN factura (a corregir)
   "iue_be_retenciones_bs": 0,    // 12.5% de gastos del exterior (a retener/pagar)
   "gastos_exterior_bs": 0, "gastos_con_factura_bs": 0, "gastos_sin_factura_bs": 0,
-  "vencimiento_dia": null,       // TODO(bloqueado): calendario RND por dígito NIT
+  "vencimiento_dia": 13,              // dígito 0 → día 13 (calendario SIN)
+  "proximo_vencimiento": "2026-08-13",// próxima fecha de declaración IVA/IT
+  "proximo_vencimiento_periodo": "2026-07", // período que declara (mes anterior)
+  "dias_para_vencimiento": 34,
   "notes": "Estimación automática...",
   "generated_at": "ISO"
 }
