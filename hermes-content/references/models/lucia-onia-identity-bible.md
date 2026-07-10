@@ -64,12 +64,15 @@ Cada lugar = UNA imagen real (sin personas) subida como Reference Element (`envi
 | **Calle / urbano** | Vereda arbolada, vidrieras y autos desenfocados | `cddfa484-8dea-4920-8d6b-9d00f896ae51` | Walking hooks |
 | **Restaurante/bar (noche)** | Terciopelo rojo, luz calida baja, copas | `2750ef8b-7fe6-483c-9d32-01292ce32034` | "Salida" con look night-out. Validado (combo elements). |
 
-## Voz (LOCKEADA 2026-07-09)
-- **Voz canonica: `seed_audio` + voice_type='element' + `8de5db95-e898-46a6-bb68-26d02f311686` ("Lucia-voz").**
-  Asset propio clonado del preset Isabella, español, tono cercano/natural skincare. Usar SIEMPRE este id.
-- Fallback: preset Isabella `80924413-1ea8-4e64-9719-e00b86796f05` (la fuente del clon).
-- Muestra de referencia ("Hola, soy Lucia..."): `lucia-voice/lucia-voz-signature.wav`.
-- Opcional a futuro: re-clonar desde una voz real (ElevenLabs) si se quiere una voz mas unica.
+## Voz (OFICIAL 2026-07-09 — ElevenLabs)
+- **Voz canonica: ElevenLabs "Lucia-ONIA", voice_id `wrXs6GqcC7X03dDKMoeT`** (creada con
+  Voice Design, voz UNICA propia, español latino, tono cercano skincare). Modelo
+  `eleven_multilingual_v2`. Se usa via API REST con la key del VPS (`/root/.hermes/.env`,
+  `LUCIA_ELEVENLABS_VOICE_ID`). NO por MCP (no hay conector). Muestra: `lucia-voice/lucia-voz-OFICIAL.mp3`.
+- **Uso:** b-roll = VO encima del video; lipsync = `wan2_7` con el mp3 de esta voz
+  (Marketing Studio NO, genera su propia voz y rompe consistencia). Ver `lucia-voice/README.md`.
+- Alternativa barata de respaldo (Higgsfield, sin ElevenLabs): seed_audio element
+  `8de5db95-e898-46a6-bb68-26d02f311686` ("Lucia-voz"). Solo si no se puede usar ElevenLabs.
 
 ## ⚠️ Metodo de generacion de fotos (CORRECCION 2026-07-09, Sergio)
 Para contenido ORIGINAL: anclar SOLO la cara (`902eeebb`) + describir outfit/lugar/accion
