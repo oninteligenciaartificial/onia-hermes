@@ -28,7 +28,7 @@ const PERIOD_DAYS = 30;
 const FISCAL = {
   regime: "general",
   rc_iva_applies: false,
-  siat_emitting: false, // SIAT en tramite -> sin debito IVA formal todavia
+  siat_emitting: true, // Portal Web en Linea ACTIVO (2026-07-09): ONIA ya emite facturas -> se calcula debito IVA/IT sobre ventas registradas
   nit: "5371375010",
   nit_last_digit: "0",
   razon_social: "LESLIE MERCADO MORENO",

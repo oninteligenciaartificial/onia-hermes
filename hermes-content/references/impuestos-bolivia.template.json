@@ -7,7 +7,7 @@
     "tax_regime": "General",
     "employees_on_payroll": false,
     "rc_iva_applies": false,
-    "siat_invoicing_status": "en_tramite",
+    "siat_invoicing_status": "activo_portal_web",
     "external_accountant": "none_yet_onia_prepares",
     "note": "Sin planilla (socios/honorarios). ONIA prepara todo (RCV, deducciones, calendario, optimizacion); un contador matriculado valida/firma el IUE anual. Prioridad: completar emision SIAT + capturar credito fiscal en compras desde ya (saldo a favor)."
   },
