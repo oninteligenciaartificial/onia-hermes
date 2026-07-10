@@ -4,48 +4,52 @@ Snapshot honesto de dónde está cada frente post-core. Nada flotando: cada íte
 abierto tiene DUEÑO y CONDICIÓN DE DESTRABE exacta. Reemplaza cualquier lectura
 de memoria sobre "qué falta".
 
-## 💵 DECISIONES DE PRECIO PENDIENTES (esperando OK de Sergio, 2026-07-09)
+## 💵 PRICING RATIFICADO (Sergio aprobó 2026-07-09) → falta aplicarlo en carriles D y C
 
 **Contexto:** DentaGest está LIVE y completo (auditoría: cubre todo lo de una
 clínica + contabilidad boliviana + SIAT-ready). Se repensó el pricing mirando
-todas las funciones. Nada de esto está aplicado al código todavía — espera el OK.
+todas las funciones y **Sergio lo aprobó tal cual**. Números FIRMES. Fuente de
+verdad de precio: `hermes-content/propuestas/PRICING_RATIONALE_INTERNO.md` §0.1 +
+`ONIA_CATALOGO_PRECIOS_2026.md`. Falta SOLO aplicarlo (código DentaGest + propuesta).
 
-**A) Planes base (mensual, Bs) — propuesta:**
+**A) Planes base (mensual, Bs) — APROBADO:**
 | Nivel | Lista (valor) | Lanzamiento (early-bird, congelado 12m) |
 |---|---|---|
 | Básico | 390 | 320 |
 | Profesional | 890 | 750 |
 | Clínica | 1.990 | 1.500 |
 | Grupo Clínico | desde 3.900 + setup (o USD ~$490/mes) | 2.900 |
-- Estrategia: publicar la LISTA (390/890/1.990) y ofrecer el LANZAMIENTO tachado
-  como "precio Clínica Fundadora congelado 12m" (ancla + gancho de cierre).
-- El código hoy tiene 320/750/1.500 (lanzamiento) + comentario TODO stale que
-  dice "precios no firmes" → ya se ratificaron, hay que limpiarlo.
-- **Grupo Clínico está barato** para multi-sucursal+SIAT+instancia privada → subir.
-- Descuento anual: código = 3 meses gratis (9x); política ratificada = 2 meses
-  (10x) → ajustar a 2.
+- Publicar la LISTA (390/890/1.990) y ofrecer el LANZAMIENTO tachado como
+  "precio Clínica Fundadora congelado 12m" (ancla + gancho de cierre).
+- **Anual = 2 meses gratis (10x)** → total anual lanzamiento: **3.200 / 7.500 /
+  15.000 / 29.000** (el código tenía 9x = 2.880/6.750/13.500/26.100 → ajustar).
+- Los MENSUALES de lanzamiento (320/750/1.500/2.900) ya están correctos en el
+  código; cambia solo el anual + limpiar el TODO stale.
 
-**B) Chatbot/automatización — reemplazar el add-on único (650+350) por una
-ESCALERA de 3 niveles** (Sergio: 650 es bajo, el setup real de un chatbot es el
-trabajo de entrenarlo). Vale para CUALQUIER rubro (lo potencia el módulo
-`automation` del core). Costos reales: setup = lo caro (horas de entrenar el
-bot); IA = barata con modelos eficientes (~$0.01-0.03/conversación); Meta =
-pass-through.
-| Nivel | Qué hace | Precio (Bs) |
-|---|---|---|
-| N1 Recordatorios (sin IA) | recordatorio cita/cobro, reglas fijas | setup 300 + 200/mes |
-| N2 Chatbot IA responde+capta | contesta, califica leads 24/7, deriva | setup 1.500 + 550/mes |
-| N3 Chatbot IA opera | agenda solo, crea tareas, seguimiento | setup desde 3.500 + 900/mes |
-- N2 = producto estrella (era el mal precificado a "650"). La IA barata es el margen.
-- Otros add-ons (agenda pública 150, usuario extra 70, inventario avanzado 180,
-  self-hosted 4.500+900): se quedan como están.
+**B) Chatbot/automatización — ESCALERA DE 3 NIVELES APROBADA** (reemplaza el
+add-on único 650+350, mal precificado). Vale para CUALQUIER rubro (lo potencia el
+módulo `automation` del core). Margen: la IA es barata (~$0.01-0.03/conversación),
+lo caro es el setup (entrenar el bot); Meta = pass-through.
+| Nivel | Qué hace | Setup (Bs) | Mensual (Bs) |
+|---|---|---|---|
+| N1 Recordatorios (sin IA) | recordatorio cita/cobro, reglas fijas | 300 | 200 |
+| N2 Chatbot IA responde+capta ⭐ | contesta, califica leads 24/7, deriva | 1.500 | 550 |
+| N3 Chatbot IA opera | agenda solo, crea tareas, seguimiento | desde 3.500 | 900 |
+- N2 = producto estrella (era el mal precificado a "650").
+- Otros add-ons sin cambio: agenda pública 150, usuario extra 70, inventario
+  avanzado 180, self-hosted 4.500+900.
 
-**Al aprobar:** (1) alinear código DentaGest (`lib/subscription-plans.ts`
-DEFAULT_PLAN_AMOUNTS + `lib/pricing.ts` add-ons + sacar TODO stale); (2)
-actualizar `propuesta-dentalgest.pdf` (generador, slug "dentalgest") con estos
-números + el ángulo de venta ("cobrá más, perdé menos": recordatorios bajan
-no-show, historia no se pierde, listo para SIAT). Ambas son trabajo de producto/
-carril C, con el precio ya decidido.
+### ▶ Handoff de ejecución (números FIRMES; cada ítem con su gate)
+
+| # | Carril | Qué aplicar | Archivos | Gate |
+|---|---|---|---|---|
+| P-1 | **D** (repo DentaGest) | annual 9x→10x en `DEFAULT_PLAN_AMOUNTS` (2.880→3.200, 6.750→7.500, 13.500→15.000, 26.100→29.000) + limpiar TODO stale | `lib/subscription-plans.ts` (+ `lib/subscription-plans.test.ts`, `__tests__/lib/subscription-payment-validation.test.ts`) | tsc + tests verdes |
+| P-2 | **D** (repo DentaGest) | reemplazar `WHATSAPP_ADDON_PRICE` único por escalera N1/N2/N3 | `lib/pricing.ts` + consumidores: `app/page.tsx`, `app/(dashboard)/settings/PlanClient.tsx`, `app/(dashboard)/help/page.tsx`, `lib/plan-limits.ts` | tsc + tests + build |
+| P-3 | **C** (propuestas, este repo) | regenerar propuesta con números nuevos + ángulo "cobrá más, perdé menos" (recordatorios bajan no-show, historia no se pierde, listo para SIAT) | `hermes-content/propuestas/generador/clientes.json` (slug `dentalgest`) → `node generar-propuestas.js dentalgest --pdf` | PDF regenerado |
+
+⚠️ **No editar el código de DentaGest desde otra sesión**: hay un worktree
+`onia-core-sprint5` activo con copias de esos archivos → hacer P-1/P-2 en la
+sesión del carril D (su repo) para no colisionar.
 
 ## ✅ Cerrado y en `main`
 

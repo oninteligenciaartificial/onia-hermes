@@ -1,6 +1,6 @@
 # Pricing — Razonamiento interno (NO mostrar al cliente)
 
-Última actualización: 2026-07-03
+Última actualización: 2026-07-09
 Clientes en pipeline: Garabato, Ingeniería, Lia Albertengo
 Documento interno ONIA. No incluir en propuestas ni decks client-facing.
 
@@ -48,6 +48,41 @@ firma. Cuando haya 3-5 casos, subir a línea premium (secciones 3-4).
 Los decks ya cotizados de Garabato / Ingeniería / Lia quedaron en línea premium
 (sección 4); no se re-cotizan. Los precios de lanzamiento aplican a clientes
 nuevos desde 2026-07-03.
+
+### 0.1 DentalGest SaaS — pricing RATIFICADO (Sergio aprobó 2026-07-09)
+
+DentaGest está LIVE y completo; se repricingó mirando funciones reales y Sergio
+aprobó. Estructura **lista/lanzamiento** (publicar la lista, ofrecer el
+lanzamiento tachado como "Clínica Fundadora congelado 12m"):
+
+| Nivel | Lista Bs/mes | Lanzamiento Bs/mes (congelado 12m) |
+|---|---:|---:|
+| Básico | 390 | 320 |
+| Profesional | 890 | 750 |
+| Clínica | 1.990 | 1.500 |
+| Grupo Clínico | desde 3.900 + setup (~USD $490) | 2.900 |
+
+- **Anual = 2 meses gratis (10x)**: total anual lanzamiento **3.200 / 7.500 /
+  15.000 / 29.000**.
+- Grupo Clínico (multi-sucursal + SIAT + instancia privada) se subió: estaba barato.
+
+**Chatbot / automatización — escalera de 3 niveles** (reemplaza el add-on único
+650+350, mal precificado). Aplica a cualquier rubro (módulo `automation` del
+core). El margen está en que la IA es barata (~$0.01-0.03/conversación) y lo caro
+es el setup de entrenar el bot; Meta es pass-through:
+
+| Nivel | Qué hace | Setup Bs | Mensual Bs |
+|---|---|---:|---:|
+| N1 Recordatorios (sin IA) | recordatorio cita/cobro, reglas fijas | 300 | 200 |
+| N2 Chatbot IA responde+capta ⭐ | contesta, califica leads 24/7, deriva | 1.500 | 550 |
+| N3 Chatbot IA opera | agenda solo, crea tareas, seguimiento | desde 3.500 | 900 |
+
+Otros add-ons DentalGest sin cambio: agenda pública 150/mes, usuario extra
+70/mes, inventario avanzado 180/mes, self-hosted 4.500 + 900/mes.
+
+Aplicación (números firmes): código DentaGest (`lib/subscription-plans.ts` annual
+10x + `lib/pricing.ts` escalera) y propuesta (`generar-propuestas.js dentalgest`).
+Handoff con archivos y gates en `docs/ONIA_TABLERO_20260709.md`.
 
 ---
 

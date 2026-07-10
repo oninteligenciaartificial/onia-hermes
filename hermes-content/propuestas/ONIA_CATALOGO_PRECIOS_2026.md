@@ -1,6 +1,6 @@
 # ONIA — Catálogo de precios oficial 2026
 
-Fecha: 2026-07-04.
+Fecha: 2026-07-04 (rev. 2026-07-09: DentalGest planes lista/lanzamiento + chatbot ladder ratificados).
 Estado: precios de arranque vigentes (Kit Comercial Interno, junio/julio 2026).
 Fuente de verdad de precios y comisiones de la vendedora.
 El cotizador del panel (`/vendedores/cotizador`) lee estos mismos precios.
@@ -36,6 +36,7 @@ Recurrencia de ONIA. Comisión vendedora: **35% del primer mes**, una vez.
 | DentalGest Básico | 320 | 112 |
 | DentalGest Profesional | 750 | 262,50 |
 | DentalGest Clínica | 1.500 | 525 |
+| DentalGest Grupo Clínico | 2.900 | 1.015 |
 | Gesti-OS Básico | 350 | 122,50 |
 | Gesti-OS Crecer | 530 | 185,50 |
 | Gesti-OS Pro | 800 | 280 |
@@ -43,6 +44,12 @@ Recurrencia de ONIA. Comisión vendedora: **35% del primer mes**, una vez.
 
 Onboarding SaaS (una vez): DentalGest **290 / 690 / 1.490** según alcance —
 comisión **10%**.
+
+> **DentalGest — lista vs lanzamiento (ratificado 2026-07-09):** la tabla muestra
+> el **precio de lanzamiento** (early-bird "Clínica Fundadora", congelado 12m), que
+> es lo que cobra el cotizador. Lista de valor para anclar/tachar: Básico **390**,
+> Profesional **890**, Clínica **1.990**, Grupo Clínico **desde 3.900 + setup**.
+> Anual = 2 meses gratis (10x).
 
 ## 2. Páginas web y captación (pago único)
 
@@ -82,7 +89,9 @@ Add-ons (se venden después del primer cierre):
 
 | Add-on | Precio Bs | Nota |
 |---|---:|---|
-| WhatsApp operativo DentalGest | 650 inst. + 350/mes + Meta | Requiere aprobación |
+| Chatbot N1 Recordatorios DentalGest (sin IA) | 300 inst. + 200/mes | Reglas fijas (cita/cobro) |
+| Chatbot N2 IA responde+capta DentalGest ⭐ | 1.500 inst. + 550/mes + Meta | Estrella. Requiere aprobación |
+| Chatbot N3 IA opera DentalGest | desde 3.500 inst. + 900/mes + Meta | Requiere aprobación |
 | Agenda pública DentalGest | 150/mes | |
 | Usuario extra DentalGest | 70/mes | |
 | Insumos DentalGest | 80/mes | |
