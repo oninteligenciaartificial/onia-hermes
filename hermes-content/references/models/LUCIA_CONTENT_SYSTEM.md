@@ -60,6 +60,23 @@ producto (Nuvia). Regla 80/20: ~80% organico/personaje, ~20% producto.
 B-roll = voz como VO (nunca forzar lipsync ahi, falla). Lipsync real solo en el segmento
 de "hablando a camara".
 
+## 4b. Prompt de REALISMO (upgrade 2026-07-09 — salto de calidad)
+
+Para fotos que parezcan reales (no "IA plana"), agregar SIEMPRE al prompt:
+`shot on an iPhone, hyper-realistic skin with visible natural pores and fine texture,
+slight film grain, natural available light, candid unposed, shallow depth of field,
+no beauty filter, no retouching`. Mantener `smooth forehead without wrinkles` (no
+"poreless" en toda la cara — poros en mejillas/nariz suman realismo, la frente lisa
+evita el artefacto). Ejemplos: `lucia-content-bank-20260709/realism-cafe.png` y
+`realism-goldenhour.png` — diferencia clara vs los selfies planos anteriores.
+
+## 4c. Acciones creativas / "random" (verificado 2026-07-09)
+
+Veo3.1 maneja acciones dinámicas y transformaciones mágicas (saltar, girar,
+**convertirse en un ave y volar**). Ejemplo: `lucia-demos-20260709/transform-bird-veo31.mp4`
+(mujer → ave, morph limpio, 9:16). Para estas cosas usar `veo3_1` (force `aspect_ratio:9:16`,
+mutear su audio). Es EL modelo para contenido creativo/viral con acción o VFX.
+
 ## 5. Pipeline de produccion (de idea a publicable)
 
 1. Guion corto en español (hook + valor + CTA).

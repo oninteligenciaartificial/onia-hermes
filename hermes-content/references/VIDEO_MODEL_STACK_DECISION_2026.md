@@ -15,8 +15,9 @@ se descartan para "hablar", salvo excepción puntual.
 
 | Uso | Modelo | Costo | Por qué |
 |---|---|---|---|
-| **B-roll movimiento/emoción (DEFAULT)** | `minimax_hailuo` | **6cr** | El más barato bueno; emoción facial; forehead liso (validado). Caballo de batalla del b-roll |
-| **B-roll cinematográfico (cuando se justifica)** | `kling2_6` | 10cr | Movimiento con más physics/cine, cuando queremos más producción |
+| **B-roll lifestyle/emoción (DEFAULT, cheap)** | `minimax_hailuo` | **6cr** | El más barato bueno; emoción facial, gestos, movimiento sutil. Débil en ACCIÓN física grande. Caballo de batalla del b-roll cotidiano |
+| **B-roll de ACCIÓN dinámica (saltar, correr, deporte, movimiento grande)** | **`veo3_1`** (quality basic) | 16.5cr | Shootout 2026-07-09: el ÚNICO que entendió y renderizó bien un salto real (física, cuerpo, cara estable). **Corregí mi error de descartarlo por "caro" — 16.5cr es competitivo.** OJO: default sale 16:9, hay que forzar `aspect_ratio:9:16`; genera su propia voz → mutear para b-roll |
+| **B-roll cinematográfico intermedio** | `kling2_6` | 10cr | Movimiento decente, alternativa. `kling3_0` DESCARTADO: deforma la cara en movimiento dinámico (peor que 2.6 pese a ser más nuevo) |
 | **Hablar a cámara / lipsync con voz de Lucia** | **PRIMARIO: `seedance_2_0_mini`** · PLAN B: `wan2_7` (ambos + voz ElevenLabs) | 15cr c/u (6s) | Decidido 2026-07-09 (Sergio): seedance mini es el mejor, wan2_7 de respaldo. Ambos toman NUESTRO audio → mantienen la voz propia. **CRÍTICO: ancla cara al frente, calma, manos fuera de cuadro, clip 5-6s** — pose de acción rompe la cara (ver nota abajo) |
 | **UGC hero con producto real en mano** | `marketing_studio_video` | 42cr | Mejor lipsync + producto real con etiqueta. PERO usa su PROPIA voz → SOLO para piezas hero puntuales donde se acepte |
 | **Trend viral desde 1 foto** | `higgsfield_preset` | medio | ~45 plantillas virales, para contenido de tendencia ocasional |
@@ -28,8 +29,8 @@ se descartan para "hablar", salvo excepción puntual.
 | Modelo | Por qué se descarta |
 |---|---|
 | `seedance_2_0`, `seedance1_5` | Caros (45-135cr). minimax/kling cubren b-roll mucho más barato. (el `_mini` queda solo para bikini) |
-| `veo3`, `veo3_1`, `veo3_1_lite` | Cinematográficos pero **generan su propia voz** (no sirve para voz consistente) y caros. No aportan sobre lo que tenemos para UGC de avatar |
-| `kling3_0`, `kling3_0_turbo` | `kling2_6` ya cubre b-roll; no justifican costo/complejidad extra |
+| ~~`veo3_1`~~ | **RE-EVALUADO 2026-07-09: NO se descarta** → es el MEJOR para b-roll de ACCIÓN dinámica (ver arriba). 16.5cr es competitivo. Solo `veo3`/`veo3_1_lite` quedan sin uso claro por ahora |
+| `kling3_0` (DESCARTADO por prueba) | Shootout: deforma la cara en movimiento dinámico. `kling3_0_turbo` sin uso claro |
 | `wan2_6` | Experimental/stylized; `wan2_7` es el bueno |
 | `grok_video`, `grok_video_v15`, `gemini_omni` | Voz propia, sin ventaja clara, sin probar. No |
 | `cinematic_studio_video/_v2/_3_0` | Para "cine", no UGC de avatar |
