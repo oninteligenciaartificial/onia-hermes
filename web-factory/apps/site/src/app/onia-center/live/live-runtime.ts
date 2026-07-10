@@ -213,3 +213,102 @@ export function mergeLiveAgentStatus(
     return { ...agent, status: live.status };
   });
 }
+
+// ---------------------------------------------------------------------------
+// 3. Cuerpo de los borradores de contenido — review_queue.raw.
+//    La lista de reviews (getOniaCenterRuntime, ya filtrada por rol) trae sólo
+//    el título; el guion/carrusel vive en `raw`. Acá lo leemos aparte y el tile
+//    lo muestra SÓLO para reviews que ya están en la lista filtrada (match por
+//    review_key), así el filtrado de seguridad del store se respeta.
+// ---------------------------------------------------------------------------
+
+export interface ReviewBody {
+  kind: "content_script" | "content_carousel";
+  format?: string;
+  pillar?: string;
+  hook?: string;
+  body?: string;
+  cta?: string;
+  title?: string;
+  slides?: string[];
+}
+
+function asString(value: unknown): string | undefined {
+  return typeof value === "string" && value.trim() !== "" ? value : undefined;
+}
+
+function toSlides(value: unknown): string[] {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+  return value
+    .map((slide) => {
+      if (typeof slide === "string") {
+        return slide;
+      }
+      if (slide && typeof slide === "object") {
+        const record = slide as Record<string, unknown>;
+        return asString(record.text) ?? asString(record.body) ?? asString(record.title) ?? JSON.stringify(slide);
+      }
+      return String(slide);
+    })
+    .filter((slide) => slide.trim() !== "");
+}
+
+export function parseReviewBody(raw: unknown): ReviewBody | null {
+  if (!raw || typeof raw !== "object") {
+    return null;
+  }
+  const record = raw as Record<string, unknown>;
+  const kind = asString(record.kind);
+
+  if (kind === "content_script" && record.script && typeof record.script === "object") {
+    const script = record.script as Record<string, unknown>;
+    return {
+      kind: "content_script",
+      format: asString(script.format),
+      pillar: asString(script.pillar),
+      hook: asString(script.hook),
+      body: asString(script.body),
+      cta: asString(script.cta),
+    };
+  }
+
+  if (kind === "content_carousel" && record.carousel && typeof record.carousel === "object") {
+    const carousel = record.carousel as Record<string, unknown>;
+    return {
+      kind: "content_carousel",
+      title: asString(carousel.title),
+      cta: asString(carousel.cta),
+      slides: toSlides(carousel.slides),
+    };
+  }
+
+  return null;
+}
+
+type DbReviewRawRow = {
+  review_key?: string;
+  raw?: unknown;
+};
+
+export async function getReviewBodies(): Promise<Record<string, ReviewBody>> {
+  const rows = await liveRequest<DbReviewRawRow[]>(
+    "review_queue?select=review_key,raw&status=eq.pending&order=created_at.desc&limit=80",
+  );
+  if (!rows) {
+    return {};
+  }
+
+  const map: Record<string, ReviewBody> = {};
+  for (const row of rows) {
+    if (!row.review_key) {
+      continue;
+    }
+    const body = parseReviewBody(row.raw);
+    if (body) {
+      map[row.review_key] = body;
+    }
+  }
+  return map;
+}
