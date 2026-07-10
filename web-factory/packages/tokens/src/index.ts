@@ -64,15 +64,30 @@ export function clientDarkTokenVars(): Record<string, string> {
   };
 }
 
+/**
+ * Self-hosted Inter, one Latin variable file (~47kb) covering every weight
+ * 100-900. Shipped next to each generated site as ./fonts/inter-latin-var.woff2
+ * (the generator copies it), so no runtime request to a third-party font CDN —
+ * better performance, privacy, and a clean production CSP. `font-display: swap`
+ * keeps text visible while the face loads.
+ */
+export const fontFaceCss = `@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("./fonts/inter-latin-var.woff2") format("woff2");
+}`;
+
 export function clientTokenCss(client: ClientTokenInput, selector = ":root"): string {
   const declarations = Object.entries(clientTokenVars(client))
     .map(([name, value]) => `  ${name}: ${value};`)
     .join("\n");
   const light = `${selector} {\n${declarations}\n}`;
 
-  // The dark variant is only emitted for the default :root scope. It follows the
-  // OS preference (unless the user forced light) and honors an explicit
-  // [data-theme="dark"] on <html> for a manual toggle.
+  // The @font-face and dark variant are only emitted for the default :root
+  // scope. A scoped (preview) call embeds tokens inside an already-rendered
+  // page, so re-declaring the global font-face would duplicate it.
   if (selector !== ":root") {
     return light;
   }
@@ -84,7 +99,9 @@ export function clientTokenCss(client: ClientTokenInput, selector = ":root"): st
     .map(([name, value]) => `  ${name}: ${value};`)
     .join("\n");
 
-  return `${light}
+  return `${fontFaceCss}
+
+${light}
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
@@ -102,8 +119,11 @@ export function clientTokenStyle(client: ClientTokenInput): Record<string, strin
 }
 
 function fontStack(font: string): string {
-  const clean = font.replace(/["'<>]/g, "").trim() || "Onest";
-  return `"${clean}", "Onest", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif`;
+  const clean = font.replace(/["'<>]/g, "").trim() || "Inter";
+  // "Inter" is always the loaded fallback: a client can name its own family,
+  // but unless that face is also self-hosted it degrades to Inter (which is),
+  // then to the platform UI sans — never to an unstyled serif.
+  return `"${clean}", "Inter", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif`;
 }
 
 function readableTextOn(hex: string): string {

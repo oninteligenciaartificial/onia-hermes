@@ -36,3 +36,34 @@ describe("clientTokenCss dark variant", () => {
     expect(dark).not.toHaveProperty("--color-accent");
   });
 });
+
+describe("clientTokenCss font loading (self-hosted Inter)", () => {
+  it("self-hosts Inter via @font-face in the default :root scope", () => {
+    const css = clientTokenCss(client);
+
+    expect(css).toContain("@font-face");
+    expect(css).toContain('font-family: "Inter"');
+    expect(css).toContain("./fonts/inter-latin-var.woff2");
+    expect(css).toContain("font-display: swap");
+    expect(css).toContain("font-weight: 100 900");
+  });
+
+  it("does not duplicate @font-face in a scoped (preview) call", () => {
+    const css = clientTokenCss(client, ".wf-preview");
+
+    expect(css).not.toContain("@font-face");
+  });
+
+  it("defaults the font stack to loaded Inter when the client font is empty", () => {
+    const css = clientTokenCss({ ...client, tipografia: { heading: "", body: "" } });
+
+    expect(css).toContain('--font-heading: "Inter"');
+    expect(css).toContain('--font-body: "Inter"');
+  });
+
+  it("keeps a custom client font first but falls back to loaded Inter", () => {
+    const css = clientTokenCss(client); // heading "Onest"
+
+    expect(css).toContain('--font-heading: "Onest", "Inter"');
+  });
+});

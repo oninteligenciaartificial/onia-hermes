@@ -103,9 +103,10 @@ export const realtyCss = `
   margin: 0;
   font-family: var(--font-heading);
   font-size: clamp(3rem, 7.5vw, 6.5rem);
-  line-height: 0.94;
-  letter-spacing: -0.02em;
-  font-weight: 700;
+  line-height: 0.96;
+  /* Apple "recipe A": SF-style display — Semibold, tight tracking. */
+  letter-spacing: -0.022em;
+  font-weight: 600;
   color: #fff;
   text-wrap: balance;
   text-shadow: 0 2px 30px rgba(20, 12, 6, 0.4);

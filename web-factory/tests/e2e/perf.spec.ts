@@ -12,15 +12,18 @@ const MAX_SCRIPT_KB = 60;
 // chromium-measure project (fullyParallel: false) per playwright.config.ts.
 test.describe.configure({ mode: "serial" });
 
+// Every page self-hosts one ~47kb Inter variable woff2 (all weights, Latin),
+// cached across the site. Budgets below include that shared font cost, measured
+// per page and rounded up with headroom — not a guess.
 const PAGES = [
-  { name: "landing (demo)", url: "/demo/", maxBytesKb: 60 },
-  { name: "landing-focus (demo-focus)", url: "/demo-focus/", maxBytesKb: 60 },
+  { name: "landing (demo)", url: "/demo/", maxBytesKb: 80 },
+  { name: "landing-focus (demo-focus)", url: "/demo-focus/", maxBytesKb: 80 },
   { name: "store (skincare-demo)", url: "/skincare-demo/", maxBytesKb: 150 },
-  { name: "dashboard (dashboard-demo)", url: "/dashboard-demo/", maxBytesKb: 60 },
-  { name: "dashboard (dentalgest-demo)", url: "/dentalgest-demo/", maxBytesKb: 60 },
+  { name: "dashboard (dashboard-demo)", url: "/dashboard-demo/", maxBytesKb: 96 },
+  { name: "dashboard (dentalgest-demo)", url: "/dentalgest-demo/", maxBytesKb: 96 },
   // Realty ships a hero photo (eager) plus three lazy listing webps; budget is
-  // the real full-page weight (~479kb of HTML+CSS+4 webp) rounded up with headroom.
-  { name: "landing-realty (realty-demo)", url: "/realty-demo/", maxBytesKb: 490 },
+  // the real full-page weight (~527kb: HTML+CSS+font+4 webp) rounded up.
+  { name: "landing-realty (realty-demo)", url: "/realty-demo/", maxBytesKb: 540 },
 ];
 
 for (const target of PAGES) {

@@ -1,4 +1,4 @@
-import { mkdir, mkdtemp, readFile, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, readFile, stat, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
@@ -42,6 +42,32 @@ describe("generateSite", () => {
     expect(design).toContain("Demo design");
     expect(result.files).toContain(path.join(result.outputDir, "demo.design.json"));
     expect(result.files).toContain(path.join(result.outputDir, "demo.design.md"));
+  });
+
+  it("self-hosts the Inter font next to every generated site", async () => {
+    const rootDir = await mkdtemp(path.join(os.tmpdir(), "onia-web-factory-"));
+    await mkdir(path.join(rootDir, "data", "clients"), { recursive: true });
+
+    await writeFile(
+      path.join(rootDir, "data", "clients", "mini.json"),
+      JSON.stringify({
+        nombre: "Mini Co",
+        slug: "mini",
+        tagline: "Mini tagline",
+        descripcion: "Mini description",
+        cta: { texto: "Hola", url: "#" },
+      }),
+      "utf8",
+    );
+
+    const result = await generateSite("mini", { rootDir, template: "landing" });
+    const css = await readFile(path.join(result.outputDir, "site.css"), "utf8");
+    const fontStat = await stat(path.join(result.outputDir, "fonts", "inter-latin-var.woff2"));
+
+    // The @font-face resolves to a file the generator copied into the site.
+    expect(css).toContain("@font-face");
+    expect(css).toContain("./fonts/inter-latin-var.woff2");
+    expect(fontStat.size).toBeGreaterThan(20000); // ~47kb variable woff2
   });
 
   it("creates a focus landing without nav and with a single CTA path", async () => {

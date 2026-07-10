@@ -1,5 +1,6 @@
 import { cp, mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 import {
   renderDashboardCss,
   renderDashboardDocument,
@@ -48,6 +49,7 @@ export async function generateSite(
 
   await mkdir(outputDir, { recursive: true });
   await copyClientAssets(rootDir, outputDir, safeSlug);
+  await copySharedFonts(outputDir);
 
   const htmlPath = path.join(outputDir, "index.html");
   const cssPath = path.join(outputDir, "site.css");
@@ -131,6 +133,26 @@ async function copyClientAssets(rootDir: string, outputDir: string, slug: string
       throw error;
     }
   }
+}
+
+// The self-hosted Inter file is a build-time asset shipped with the generator
+// (not per-client data), so it is resolved relative to this module — that keeps
+// it findable even when generateSite runs against a throwaway rootDir (tests).
+// The @font-face in the token CSS points at "./fonts/inter-latin-var.woff2",
+// so it lands in every site's own fonts/ directory.
+const FONT_FILE = "inter-latin-var.woff2";
+const sharedFontSource = path.join(
+  path.dirname(fileURLToPath(import.meta.url)),
+  "..",
+  "assets",
+  "fonts",
+  FONT_FILE,
+);
+
+async function copySharedFonts(outputDir: string): Promise<void> {
+  const targetDir = path.join(outputDir, "fonts");
+  await mkdir(targetDir, { recursive: true });
+  await cp(sharedFontSource, path.join(targetDir, FONT_FILE));
 }
 
 export function parseSlug(slug: string): string {
