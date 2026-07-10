@@ -482,6 +482,26 @@ la producción) + IT compensado con el IUE (DS 5563)**. El IVA 0% que vendí en 
 1ª pasada NO está respaldado; queda como pregunta abierta para el matriculado.
 Esto **no es asesoría contable definitiva**.
 
+### ¿Desde Bolivia, o con VPS/VPN/proxy?
+
+Crear el canal/AdSense **desde Bolivia, como Bolivia** — sin VPN ni proxy para
+aparentar otro país:
+- Google define tu país por tu **dirección + formulario fiscal + cuenta de cobro**
+  (Payoneer/banco), NO por tu IP. IP extranjero + payout boliviano = contradicción
+  que puede **congelar la cuenta y la plata** (y queda a nombre del titular de la
+  unipersonal).
+- El **CPM depende de dónde están los espectadores**, no de dónde te conectás.
+  VPN a EE.UU. no sube el CPM.
+- Bolivia está habilitado para YPP; no hay nada que esquivar.
+- Entrar a la cuenta **saltando de país** con VPN dispara las alertas de seguridad
+  de Google (verificaciones, bloqueos temporales). Al crear/entrar: conexión
+  normal de Bolivia, sin VPN.
+- El **VPS SÍ** se usa — pero solo para correr el robot de subida (automatización
+  con el token de la cuenta real). No define el país de la cuenta; puede estar en
+  cualquier lado.
+- Si se busca más CPM, la palanca es la **audiencia/idioma** (contenido en inglés
+  para EE.UU. = otro canal), no un truco de IP.
+
 ### Sin construir todavía — lo que Sergio necesita destrabar
 
 1. Decidir el **vehículo** (unipersonal vs personal) con el contador, asumiendo
