@@ -170,9 +170,10 @@ export const clinicCss = `
   margin: 0;
   font-family: var(--font-heading);
   font-size: clamp(2.9rem, 7vw, 6rem);
-  line-height: 0.96;
-  letter-spacing: -0.025em;
-  font-weight: 820;
+  line-height: 0.98;
+  /* Apple "recipe A": SF-style display — Semibold, tight tracking. */
+  letter-spacing: -0.022em;
+  font-weight: 600;
   color: #fff;
   text-wrap: balance;
   text-shadow: 0 2px 34px rgba(6, 12, 18, 0.42);

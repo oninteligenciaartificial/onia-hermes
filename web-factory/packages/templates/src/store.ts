@@ -1689,8 +1689,9 @@ figure {
   max-width: 780px;
   color: var(--store-ink);
   font-family: var(--font-heading);
-  font-weight: 500;
-  letter-spacing: 0;
+  /* Apple "recipe A": SF-style display — Semibold, tight tracking. */
+  font-weight: 600;
+  letter-spacing: -0.022em;
   line-height: 0.93;
   overflow-wrap: anywhere;
   text-wrap: balance;

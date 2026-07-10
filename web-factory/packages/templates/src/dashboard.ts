@@ -288,6 +288,9 @@ h1, h2, h3, p {
 
 h1, h2, h3 {
   font-family: var(--font-heading);
+  /* Apple "recipe A": SF-style display — Semibold, tight tracking. */
+  font-weight: 600;
+  letter-spacing: -0.022em;
 }
 
 .wf-dash {
