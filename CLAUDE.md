@@ -98,6 +98,15 @@ Docs internos de referencia: `PRICING_RATIONALE_INTERNO.md`,
   cuando es seguro (avance lineal). Así `main` queda al día solo y todos los
   dispositivos sincronizan con `git pull` en `main`. Si `main` divergió (no es
   FF), no fuerza nada: queda merge manual.
+- **REGLA DURA — `main` SIEMPRE compila; nunca imports colgando en `main`.** Antes
+  de hacer FF de `main`, si el avance toca `web-factory/apps/site/**`, el autosync
+  corre `tsc --noEmit` en `apps/site`. Si no compila (ej. un árbol de rebuild a
+  medio mergear que importa archivos que aún no llegaron), **NO avanza `main`**
+  (la rama de trabajo igual se pushea; el WIP vive en su rama). Esto evita romper
+  el deploy de Vercel y el auto-deploy del VPS que buildean `main`. Al terminar un
+  carril de código, mergear a `main` como **un solo árbol coherente que compila**,
+  nunca un subconjunto parcial. Los sync de docs/contenido no pagan tsc (sólo
+  corre cuando el avance a main toca la app).
 
 ## Desarrollo en paralelo — carriles (REGLA)
 

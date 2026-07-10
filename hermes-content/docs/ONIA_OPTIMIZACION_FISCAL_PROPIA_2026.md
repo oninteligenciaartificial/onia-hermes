@@ -121,7 +121,33 @@ presenta ante el SIN.
 Con el NIT: (a) completo el calendario de vencimientos, (b) construyo la postura fiscal en el
 Agente Finanzas (IVA/IT/IUE + crédito perdido), (c) activo los recordatorios.
 
+## 7. Herramientas del exterior (Claude, ElevenLabs, Higgsfield, SaaS/IA) — investigado 2026-07-10
+
+Son las facturas que más gasta ONIA. Respuesta a "¿se pueden presentar?":
+
+- **Crédito fiscal IVA (13%): NO.** No son facturas autorizadas por el SIN (sin CUF ni NIT
+  boliviano) → no dan crédito fiscal. Ese 13% no se recupera por esa vía.
+- **Deducción IUE (25%): SÍ, condicionada.** Un gasto del exterior es deducible si (a) está
+  vinculado a la actividad gravada (lo está — son herramientas de producción), (b) tiene respaldo
+  (invoice del proveedor + comprobante de pago con tarjeta/banco), y (c) se **retiene y paga el
+  IUE-BE (12.5% efectivo)** sobre el pago al exterior (Ley 843 Art. 51; DS 24051; Formulario 530
+  mensual, Boleta 3050). El **comprobante de retención sustituye a la factura** para deducir. Sin
+  la retención, el SIN puede observar/rechazar el gasto.
+- **Conviene formalizarlo:** pagás 12.5% de retención para deducir al 25%. Con utilidad, el neto
+  es a favor (~12.5 puntos) frente a no presentarlos.
+- **Novedad — servicios digitales (DS 4732 + resoluciones SIN):** Bolivia ya grava el consumo de
+  servicios digitales del exterior (software, plataformas, streaming) con IVA/IT. Claude,
+  ElevenLabs y Higgsfield caen exactamente ahí; puede que ya te apliquen IVA/IT en el pago y/o que
+  el proveedor deba registrarse ante el SIN. La **interacción entre este régimen y la retención
+  IUE-BE es el punto más fino → validar con contador matriculado.**
+- **Práctica por proveedor:** cargar razón social + NIT de ONIA en el billing de cada herramienta
+  (Anthropic/Stripe, ElevenLabs, Higgsfield lo permiten) y guardar invoice + comprobante. El
+  sistema trackea cada pago al exterior con su retención.
+
 ## Fuentes
-- `onia-core/ONIA_FISCAL_CONTABILIDAD_STRATEGY_2026.md` (estrategia + rates radar-confirmados).
-- `hermes-content/skills/impuestos-bolivia-operaciones.md`, `references/impuestos-bolivia.template.json`.
-- Ley 843, DS 21530, RNDs del SIN (vía Radar Normativo). Validación final: contador matriculado.
+- Internas: `onia-core/ONIA_FISCAL_CONTABILIDAD_STRATEGY_2026.md`,
+  `hermes-content/skills/impuestos-bolivia-operaciones.md`, `references/impuestos-bolivia.template.json`.
+- Legal: Ley 843, DS 21530, DS 24051 (IUE-BE), DS 4732 (servicios digitales), RNDs del SIN (Radar Normativo).
+- Investigación 2026-07-10: impuestos.com.bo (IUE-BE), boliviaimpuestos.com (gastos deducibles / IUE-BE),
+  emba.com.bo (ampliación IVA servicios digitales), ppolegal.com (tributación no domiciliados).
+- **Validación final: contador matriculado** (esto no es asesoría definitiva).
