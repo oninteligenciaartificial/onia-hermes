@@ -145,9 +145,9 @@ describe("module coverage in the report", () => {
     assert.equal(moduleByCapability.get("knowledge_base"), "knowledge");
   });
 
-  it("also lists modules that provide their own capability and declare the track (accounting, invoicing, payroll)", () => {
+  it("also lists modules that provide their own capability and declare the track (accounting, automation, invoicing, payroll)", () => {
     const proveegest = report.tracks.find((track) => track.id === "proveegest-electrico");
-    assert.deepEqual(proveegest.providedModules.slice().sort(), ["accounting", "invoicing", "payroll"]);
+    assert.deepEqual(proveegest.providedModules.slice().sort(), ["accounting", "automation", "invoicing", "payroll"]);
   });
 });
 

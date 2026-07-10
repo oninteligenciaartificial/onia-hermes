@@ -8,6 +8,14 @@ create table if not exists onia_core_areas (
   name text not null,
   type text not null default 'GENERAL',
   active boolean not null default true,
+  -- Multi-sucursal: type=SUCURSAL usa estos campos. code = codigo de sucursal
+  -- (alimenta el branchCode del SIAT). parent_area_id agrupa sucursales (type=GRUPO).
+  code text,
+  address text,
+  phone text,
+  parent_area_id text,
+  manager_member_id text,
+  timezone text,
   metadata jsonb not null default '{}'::jsonb,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
@@ -16,6 +24,12 @@ create table if not exists onia_core_areas (
 
 create index if not exists onia_core_areas_org_idx
   on onia_core_areas (organization_id);
+
+create index if not exists onia_core_areas_parent_idx
+  on onia_core_areas (organization_id, parent_area_id);
+
+create unique index if not exists onia_core_areas_code_idx
+  on onia_core_areas (organization_id, code) where code is not null;
 
 create table if not exists onia_core_contacts (
   id text primary key,

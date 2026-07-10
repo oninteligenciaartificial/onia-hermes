@@ -1,7 +1,7 @@
 {
   "note": "Generado por onia-core/portable-artifacts.mjs. No editar a mano; correr `node onia-core/portable-artifacts.mjs --write`.",
-  "coreVersion": "0.7.0",
-  "artifactCount": 19,
+  "coreVersion": "0.7.1",
+  "artifactCount": 21,
   "artifacts": [
     {
       "id": "logic/approvals.logic.mjs",
@@ -69,6 +69,18 @@
       "kind": "seed",
       "path": "onia-core/modules/accounting.seed.bolivia.json",
       "sha256": "f94abbe8d4da33d6388e6880e7965020e2f7fd91c939b212895d4f13ae6c2b0d"
+    },
+    {
+      "id": "modules/automation.logic.mjs",
+      "kind": "logic",
+      "path": "onia-core/modules/automation.logic.mjs",
+      "sha256": "7840841c8244c3d4beb7bdf71266d4e26ae0a2f7fd3ec931157f0484bbb7a11e"
+    },
+    {
+      "id": "modules/automation.seed.json",
+      "kind": "seed",
+      "path": "onia-core/modules/automation.seed.json",
+      "sha256": "b2403f4af0f74bfb22f6859f5cd954b079faf6e1d0247ced12a71ecf1f2a43ca"
     },
     {
       "id": "modules/bridge.logic.mjs",

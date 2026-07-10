@@ -1,0 +1,102 @@
+{
+  "module": "automation",
+  "name": "ONIA Automation & Engagement Module",
+  "version": "0.1.0",
+  "status": "draft",
+  "layer": "activatable_module",
+  "purpose": "La capa que hace que CUALQUIER negocio automatice su operacion sin codigo a medida: reglas declarativas 'cuando pasa X -> hacer Y' (recordatorios, seguimientos, captacion de leads, cobros, respuestas). Hoy cada producto hardcodea esto (generadores + workflows n8n sueltos); este modulo lo vuelve un modelo comun y configurable por rubro. Respeta la filosofia del core: el modulo OWNS las reglas, plantillas y el registro de envio; el ENVIO real (correo/WhatsApp/SMS) es external_gate (Resend/Meta/n8n). La IA solo sugiere, no decide sola. Junto con el CRM del core (business_partner + contact + work_item + comment + activity_event) da CRM + automatizacion sobre el mismo nucleo.",
+  "coreContract": "onia-core/contract.json",
+  "schemaFile": "onia-core/modules/automation.schema.sql",
+  "installInProductRepos": false,
+  "activatesCapabilities": [],
+  "providesCapabilities": [
+    "automation"
+  ],
+  "coreDependencies": [
+    { "coreEntityId": "organization", "as": "tenant root de cada entidad del modulo" },
+    { "coreEntityId": "communication_channel", "as": "automation_rule.channelId / message_dispatch.channelId: por que canal registrado sale el mensaje (el envio real es external_gate)" },
+    { "coreEntityId": "schedule_event", "as": "trigger de tiempo: un ScheduleEvent proximo/vencido dispara reglas (recordatorio de cita, recall)" },
+    { "coreEntityId": "work_item", "as": "accion create_work_item: la regla genera un pendiente con dueno (ej. lead sin respuesta -> tarea)" },
+    { "coreEntityId": "business_partner", "as": "destinatario de un mensaje (cliente/paciente/lead), sin aplanar el dominio del producto" },
+    { "coreEntityId": "contact", "as": "destinatario persona (telefono/email) de un partner" },
+    { "coreEntityId": "member", "as": "automation_rule.createdBy / owner de la tarea generada" }
+  ],
+  "verticalTracks": [
+    "gestios-general",
+    "dentagest-clinical",
+    "ganadero-offline",
+    "proveegest-electrico",
+    "esteticagest-clinical",
+    "vetgest-clinical",
+    "gestios-gastronomia",
+    "gestios-servicios-profesionales",
+    "gestios-educacion",
+    "proveegest-construccion",
+    "gestios-turismo"
+  ],
+  "entities": [
+    {
+      "id": "automation_rule",
+      "name": "AutomationRule",
+      "capabilityId": "automation",
+      "table": "onia_automation_rules",
+      "purpose": "Regla declarativa 'cuando pasa X -> hacer Y'. triggerType es un evento del negocio (ej. cita_proxima, saldo_vencido, lead_recibido, tratamiento_completado); condition es JSON (ej. {hoursBefore:24}); actionType es send_message / create_work_item / notify; templateId y channelId definen que se manda y por donde. Configurable por organizacion, activable/desactivable.",
+      "requiredFields": ["id", "organizationId", "name", "triggerType", "actionType", "active", "createdAt"],
+      "optionalFields": ["condition", "templateId", "channelId", "workItemType", "ownerMemberId", "createdBy", "description"],
+      "tenantScoped": true
+    },
+    {
+      "id": "message_template",
+      "name": "MessageTemplate",
+      "capabilityId": "automation",
+      "table": "onia_automation_message_templates",
+      "purpose": "Plantilla de mensaje reutilizable con variables {{var}} (ej. Hola {{nombre}}, tu cita es el {{fecha}}). channel = email/whatsapp/sms (el que la envia es external_gate). subject solo para email. locale para multi-idioma.",
+      "requiredFields": ["id", "organizationId", "channel", "name", "body", "createdAt"],
+      "optionalFields": ["subject", "variables", "locale", "active"],
+      "tenantScoped": true
+    },
+    {
+      "id": "message_dispatch",
+      "name": "MessageDispatch",
+      "capabilityId": "automation",
+      "table": "onia_automation_message_dispatches",
+      "purpose": "Registro de un mensaje saliente: que se mando, a quien, por que canal, con que estado. El ENVIO real lo hace el external_gate (Resend/Meta/n8n); este registro guarda la intencion + el resultado (misma logica que el emisor SIAT: el core prepara y registra, la integracion envia). Estado: queued -> sent -> delivered | failed (con reintentos).",
+      "requiredFields": ["id", "organizationId", "channel", "recipient", "renderedBody", "status", "createdAt"],
+      "optionalFields": ["ruleId", "templateId", "channelId", "subject", "partnerId", "externalMessageId", "sentAt", "deliveredAt", "failedReason", "retryCount", "scheduledFor"],
+      "tenantScoped": true
+    }
+  ],
+  "config": {
+    "triggerTypes": [
+      { "id": "schedule_upcoming", "note": "un ScheduleEvent proximo (cita, recall) con condition.hoursBefore" },
+      { "id": "schedule_overdue", "note": "un ScheduleEvent vencido sin cerrar" },
+      { "id": "balance_overdue", "note": "saldo/cuenta por cobrar vencida (condition.daysOverdue)" },
+      { "id": "lead_received", "note": "intake genero un WorkItem de lead (engancha con intakePolicy del core)" },
+      { "id": "no_show", "note": "cita/cita marcada como no asistio" },
+      { "id": "work_completed", "note": "tratamiento/pedido/trabajo completado -> pedir review o seguimiento" },
+      { "id": "stock_low", "note": "insumo bajo el minimo (condition.only=critical)" },
+      { "id": "manual", "note": "disparo manual desde el panel (campana puntual)" }
+    ],
+    "actionTypes": [
+      { "id": "send_message", "note": "renderiza templateId y encola un message_dispatch por channelId (external_gate envia)" },
+      { "id": "create_work_item", "note": "genera un WorkItem tipado con owner (usa la logica core work-items)" },
+      { "id": "notify", "note": "notificacion interna (Notification del core) para el equipo" }
+    ],
+    "channels": ["email", "whatsapp", "sms", "internal"],
+    "notes": [
+      "El modulo NO envia: modela reglas/plantillas/registro; el envio real (correo/WhatsApp/SMS) es external_gate y se cablea a Resend/Meta/n8n.",
+      "Los triggerType/actionType son un catalogo extensible: un rubro nuevo puede sumar triggers propios sin romper el modelo.",
+      "El catalogo de reglas por defecto por rubro vive en automation.seed.json (lo que hace que un negocio nuevo arranque automatizado 'rapido')."
+    ]
+  },
+  "notes": [
+    "El modulo NO redefine entidades del core; agrega entidades propias con namespace onia_automation_*.",
+    "Es la contraparte de salida del intakePolicy del core (que es la entrada): intake = mensajes que ENTRAN -> WorkItem; automation = acciones que SALEN cuando pasa algo.",
+    "Envio real = external_gate (no toca el core congelado). message_dispatch persiste intencion + resultado, igual patron que el emisor SIAT."
+  ],
+  "gates": [
+    "installInProductRepos = false hasta plan de adopcion del modulo aprobado",
+    "SQL base del modulo (automation.schema.sql) se traduce a migraciones del producto, no se aplica directo",
+    "El envio real (correo/WhatsApp) pasa por external_gate con freno de gasto/aprobacion; el modulo nunca envia por su cuenta"
+  ]
+}

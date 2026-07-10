@@ -1,6 +1,6 @@
 # ONIA Core
 
-Estado: beta canonico (v0.7.0), instalando en DentalGest y GestiOS.
+Estado: beta canonico (v0.7.1), instalando en DentalGest y GestiOS.
 Owner: ONIA / Hermes.
 
 > Beta contract cerrado: se agregaron las 8 piezas transversales
@@ -130,6 +130,18 @@ modulos, verticales o integraciones. No son la definicion del core.
   y flujo, no diagnostica). Mismo mecanismo de `report.mjs`/`system-map.mjs`
   que los modulos compartidos, sin cambios de codigo: se detecta solo por
   `verticalTracks` + `providesCapabilities`.
+- `modules/automation.json`: la **capa de automatizacion/engagement** para
+  CUALQUIER negocio (los 11 rubros). Reglas declarativas "cuando pasa X ->
+  hacer Y" (`automation_rule`), plantillas con variables (`message_template`)
+  y registro de envio con maquina de estados (`message_dispatch`). El ENVIO
+  real (correo/WhatsApp/SMS) es external_gate (Resend/Meta/n8n); el modulo modela
+  reglas y registra, no envia — mismo patron que el emisor SIAT. Es la salida
+  del `intakePolicy` del core (que es la entrada). El CRM ya son las entidades
+  del core (business_partner+contact+work_item+comment+activity); automation las
+  hace ACTUAR solas. `automation.logic.mjs` (render de plantillas, matching de
+  reglas, dispatch state machine con reintentos) + `automation.seed.json`
+  (reglas por defecto por rubro: recordatorio de cita, cobro vencido, bienvenida
+  a lead... para arrancar automatizado sin configurar).
 - `ONIA_CORE_RESEARCH_RESULT_2026.md`: resultado de investigacion local y externa.
 - `ONIA_CORE_BENCHMARK_GAP_AUDIT_2026.md`: auditoria contra sistemas ERP, CRM,
   work management y operacion real de empresas.
@@ -174,7 +186,7 @@ npm run validate:onia-core                        # invariantes del contrato cor
 node onia-core/modules/validate-modules.mjs       # validador de modulos vendibles
 node onia-core/validate-business-tiers.mjs        # validador de niveles de tamano
 node onia-core/validate-vertical-extensions.mjs   # validador del catalogo por rubro
-node --test onia-core/*.test.mjs onia-core/logic/*.test.mjs onia-core/modules/*.test.mjs   # 314 tests
+node --test onia-core/*.test.mjs onia-core/logic/*.test.mjs onia-core/modules/*.test.mjs   # 352 tests
 node onia-core/report.mjs                         # foto de avance por vertical/producto/modulo
 node onia-core/install-plan.mjs <track|producto>   # plan de instalacion de un vertical
 node onia-core/business-diagnostic.mjs            # demo del cuestionario -> rubro+nivel+modulos

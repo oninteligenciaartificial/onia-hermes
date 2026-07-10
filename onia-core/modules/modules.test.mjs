@@ -289,6 +289,44 @@ describe("dental module (first single-rubro vertical module)", () => {
   });
 });
 
+describe("automation module (engagement layer for any business)", () => {
+  const automation = getModule(modules, "automation");
+
+  it("provides its own capability (automation), not a core one", () => {
+    assert.ok(automation, "automation module present");
+    assert.deepEqual(automation.activatesCapabilities, []);
+    assert.deepEqual(automation.providesCapabilities, ["automation"]);
+    const coreCapabilityIds = new Set(contract.capabilities.map((capability) => capability.id));
+    assert.ok(!coreCapabilityIds.has("automation"), "automation must not be a core capability");
+  });
+
+  it("aplica a los 11 rubros (automatizar es universal)", () => {
+    assert.equal(automation.verticalTracks.length, 11);
+  });
+
+  it("tiene las 3 entidades: regla, plantilla, envio", () => {
+    const ids = automation.entities.map((e) => e.id);
+    for (const id of ["automation_rule", "message_template", "message_dispatch"]) {
+      assert.ok(ids.includes(id), `has ${id}`);
+    }
+  });
+
+  it("depende de communication_channel del core (el envio real es external_gate)", () => {
+    const deps = automation.coreDependencies.map((d) => d.coreEntityId);
+    assert.ok(deps.includes("communication_channel"), "usa los canales del core");
+    assert.ok(deps.includes("work_item"), "puede generar tareas");
+    assert.ok(automation.notes.some((n) => n.includes("external_gate")), "documenta que no envia por si mismo");
+  });
+
+  it("declara un SQL schema que define cada tabla", () => {
+    const schema = readFileSync(new URL(`../../${automation.schemaFile}`, import.meta.url), "utf8");
+    for (const entity of automation.entities) {
+      assert.ok(entity.table, `${entity.id} declara tabla`);
+      assert.ok(schema.includes(entity.table), `schema define ${entity.table}`);
+    }
+  });
+});
+
 describe("modules validator integration", () => {
   it("modules pass validate-modules.mjs (exit 0)", () => {
     const validatePath = fileURLToPath(new URL("./validate-modules.mjs", import.meta.url));

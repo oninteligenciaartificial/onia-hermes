@@ -1,0 +1,43 @@
+{
+  "note": "Catalogo de automatizaciones por defecto. NO es un modulo (sin campo 'module', loadModules lo ignora). Un negocio nuevo arranca con estas reglas segun su rubro, sin configurar nada. Cada regla referencia una plantilla por 'templateKey'. El envio real es external_gate; estas son las reglas + plantillas base, editables por el dueno.",
+  "channelsAssumed": "Requiere que el negocio tenga registrado el communication_channel del canal (email/whatsapp). Si no, la regla queda inactiva hasta configurar el canal.",
+  "templates": [
+    { "key": "recordatorio_cita", "channel": "whatsapp", "body": "Hola {{nombre}}, te recordamos tu cita en {{negocio}} el {{fecha}} a las {{hora}}. Responde CONFIRMAR o REAGENDAR." },
+    { "key": "seguimiento_no_show", "channel": "whatsapp", "body": "Hola {{nombre}}, notamos que no pudiste asistir a tu cita en {{negocio}}. Cuando quieras reagendar, escribinos." },
+    { "key": "cobro_vencido", "channel": "whatsapp", "body": "Hola {{nombre}}, tenes un saldo pendiente de {{monto}} en {{negocio}} desde el {{fecha}}. Cualquier duda, avisanos." },
+    { "key": "pedir_review", "channel": "whatsapp", "body": "Hola {{nombre}}, gracias por elegir {{negocio}}. Si quedaste conforme, nos ayudaria mucho tu opinion: {{link}}" },
+    { "key": "recall_control", "channel": "whatsapp", "body": "Hola {{nombre}}, ya paso {{periodo}} desde tu ultima visita a {{negocio}}. Es buen momento para tu control. Agenda cuando quieras." },
+    { "key": "seguimiento_cotizacion", "channel": "email", "subject": "Tu cotizacion de {{negocio}}", "body": "Hola {{nombre}}, seguimos a disposicion por la cotizacion {{numero}} que te enviamos el {{fecha}}. Quedamos atentos." },
+    { "key": "bienvenida_lead", "channel": "whatsapp", "body": "Hola {{nombre}}, gracias por tu interes en {{negocio}}. En breve te contactamos. Si es urgente, respondenos por aca." }
+  ],
+  "rulesByTrack": {
+    "_universal": [
+      { "name": "Recordar cobro vencido", "triggerType": "balance_overdue", "condition": { "daysOverdueMin": 1 }, "actionType": "send_message", "templateKey": "cobro_vencido" },
+      { "name": "Nuevo lead: dar la bienvenida", "triggerType": "lead_received", "condition": {}, "actionType": "send_message", "templateKey": "bienvenida_lead" },
+      { "name": "Nuevo lead: tarea de seguimiento", "triggerType": "lead_received", "condition": {}, "actionType": "create_work_item", "workItemType": "seguimiento_lead" }
+    ],
+    "_clinical": [
+      { "name": "Recordatorio de cita 24h antes", "triggerType": "schedule_upcoming", "condition": { "hoursBeforeMax": 24 }, "actionType": "send_message", "templateKey": "recordatorio_cita" },
+      { "name": "Seguimiento tras inasistencia", "triggerType": "no_show", "condition": {}, "actionType": "send_message", "templateKey": "seguimiento_no_show" },
+      { "name": "Pedir opinion al completar tratamiento", "triggerType": "work_completed", "condition": {}, "actionType": "send_message", "templateKey": "pedir_review" },
+      { "name": "Recall de control periodico", "triggerType": "schedule_upcoming", "condition": { "hoursBeforeMax": 48 }, "actionType": "send_message", "templateKey": "recall_control" }
+    ],
+    "_distribution": [
+      { "name": "Seguir cotizacion sin respuesta", "triggerType": "work_completed", "condition": {}, "actionType": "send_message", "templateKey": "seguimiento_cotizacion" },
+      { "name": "Alerta de stock critico", "triggerType": "stock_low", "condition": { "only": "critical" }, "actionType": "create_work_item", "workItemType": "reponer_insumo" }
+    ]
+  },
+  "trackBundles": {
+    "dentagest-clinical": ["_universal", "_clinical"],
+    "esteticagest-clinical": ["_universal", "_clinical"],
+    "vetgest-clinical": ["_universal", "_clinical"],
+    "proveegest-electrico": ["_universal", "_distribution"],
+    "proveegest-construccion": ["_universal", "_distribution"],
+    "gestios-general": ["_universal"],
+    "gestios-gastronomia": ["_universal", "_distribution"],
+    "gestios-servicios-profesionales": ["_universal"],
+    "gestios-educacion": ["_universal"],
+    "gestios-turismo": ["_universal", "_clinical"],
+    "ganadero-offline": ["_universal"]
+  }
+}

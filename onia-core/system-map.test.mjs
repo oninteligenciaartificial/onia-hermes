@@ -48,7 +48,7 @@ describe("buildSystemMap - capa RUBROS", () => {
 
   it("DentalGest necesita commerce/accounting/invoicing/payroll (compartidos) + dental (vertical, solo suyo) y tiene extension propia (odontograma)", () => {
     const dental = map.rubros.find((rubro) => rubro.id === "dentagest-clinical");
-    assert.deepEqual(dental.moduleIds, ["accounting", "commerce", "dental", "invoicing", "payroll"]);
+    assert.deepEqual(dental.moduleIds, ["accounting", "automation", "commerce", "dental", "invoicing", "payroll"]);
     assert.ok(dental.verticalExtensionIds.includes("odontogram_entry"));
   });
 
@@ -66,8 +66,8 @@ describe("buildSystemMap - capa RUBROS", () => {
 });
 
 describe("buildSystemMap - capa REPETICION", () => {
-  it("accounting/invoicing/payroll/commerce se repiten en los 11 rubros: TODO negocio real compra/vende (commerce) y necesita contabilidad/factura/planilla (accounting/invoicing/payroll), sin importar el rubro", () => {
-    for (const moduleId of ["accounting", "invoicing", "payroll", "commerce"]) {
+  it("accounting/invoicing/payroll/commerce/automation se repiten en los 11 rubros: TODO negocio compra/vende, necesita contabilidad/factura/planilla y quiere automatizar, sin importar el rubro", () => {
+    for (const moduleId of ["accounting", "invoicing", "payroll", "commerce", "automation"]) {
       const usage = map.moduleUsage.find((entry) => entry.moduleId === moduleId);
       assert.equal(usage.usedByCount, 11, `${moduleId} deberia repetirse en los 11 rubros`);
     }
@@ -81,14 +81,14 @@ describe("buildSystemMap - capa REPETICION", () => {
 });
 
 describe("sharedModules / unusedModules", () => {
-  it("sharedModules(2) devuelve 5 modulos usados por 2+ rubros (todos menos dental, que es de 1 solo rubro)", () => {
+  it("sharedModules(2) devuelve 6 modulos usados por 2+ rubros (todos menos dental, que es de 1 solo rubro)", () => {
     const shared = sharedModules(map, 2).map((entry) => entry.moduleId).sort();
-    assert.deepEqual(shared, ["accounting", "commerce", "invoicing", "knowledge", "payroll"]);
+    assert.deepEqual(shared, ["accounting", "automation", "commerce", "invoicing", "knowledge", "payroll"]);
   });
 
   it("Ganadero OS Offline SI necesita commerce/accounting/invoicing/payroll (un hato compra insumos, vende ganado y es una empresa formal con contabilidad/planilla igual que las demas verticales)", () => {
     const ganadero = map.rubros.find((rubro) => rubro.id === "ganadero-offline");
-    assert.deepEqual(ganadero.moduleIds, ["accounting", "commerce", "invoicing", "payroll"]);
+    assert.deepEqual(ganadero.moduleIds, ["accounting", "automation", "commerce", "invoicing", "payroll"]);
     // Solo knowledge queda fuera: es catalogo tecnico especifico de ProveeGest,
     // no una necesidad generica de cualquier rubro.
     assert.ok(!ganadero.moduleIds.includes("knowledge"));

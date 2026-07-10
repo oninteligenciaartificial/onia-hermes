@@ -1,5 +1,59 @@
 # ONIA Core Changelog
 
+## 0.7.1 + modules/automation — 2026-07-09 (multi-sucursal + capa de automatizacion para cualquier negocio)
+
+Sergio: "haz lo de multisucursal" + "el core tiene que aprender a hacer
+[automatizacion: correos, chatbots, CRM] rapidamente para cualquier tipo de
+negocio". Dos piezas, las dos en el CORE (no parche en un producto) para que
+todo vertical las herede.
+
+**Multi-sucursal (0.7.0 -> 0.7.1, aditivo):** la entidad `area` del core ya era
+la sucursal logica (roles se acotan por area via role_assignment.scopeType/
+scopeId; inventario por warehouse.areaId), pero era minima. Enriquecida con
+campos opcionales: `code` (codigo de sucursal — **alimenta el branchCode del
+SIAT**), `address`, `phone`, `parentAreaId` (agrupar sucursales, type=GRUPO),
+`managerMemberId`, `timezone`. `+3` columnas/indices en base-schema.sql
+(incluye unique de code por org). Aditivo/no-breaking: ningun producto pierde
+nada; DentaGest (que hoy no usa sucursales) puede adoptarlo cuando venda Grupo
+Clinico. El gap "multi-sucursal" que encontro la auditoria de DentaGest ahora
+tiene su primitiva en el core.
+
+**modulo `automation` (nuevo, 7mo modulo):** la capa que hace que cualquier
+negocio automatice sin codigo a medida. Hoy cada producto hardcodea esto
+(generadores + workflows n8n sueltos); este modulo lo vuelve un modelo comun,
+declarativo y configurable por rubro.
+- 3 entidades (`onia_automation_*`): `automation_rule` (regla declarativa
+  "cuando pasa X -> hacer Y": triggerType + condition JSON + actionType +
+  template/channel), `message_template` (plantilla con variables {{var}},
+  por canal email/whatsapp/sms), `message_dispatch` (registro de envio con
+  maquina de estados queued->sent->delivered/failed + reintentos).
+- PROVEE su propia capability (`automation`), aplica a los **11 rubros**
+  (automatizar es universal — primer modulo ademas de commerce/accounting/
+  invoicing/payroll que va a 11/11).
+- **Respeta la filosofia del core**: el modulo OWNS reglas/plantillas/registro;
+  el ENVIO real (correo/WhatsApp) es external_gate (Resend/Meta/n8n), con freno
+  de gasto/aprobacion — el modulo nunca envia por su cuenta. Mismo patron que el
+  emisor SIAT (el core prepara y registra, la integracion envia). Es la
+  contraparte de SALIDA del `intakePolicy` del core (que es la entrada).
+- **CRM**: no se inventa una entidad "CRM" — el CRM ya son las entidades del
+  core (business_partner + contact + work_item + comment + activity_event);
+  automation es la capa que las hace ACTUAR solas. Chatbot = intake (entra) +
+  automation (sale) + WhatsApp gate (transporte).
+- `automation.logic.mjs` (25 tests): `renderTemplate` (variables + faltantes),
+  `conditionMatches` (convencion Max/Min/igualdad), `matchRule`/
+  `evaluateTriggers` (que reglas dispara un evento), `buildDispatch`, maquina de
+  estados del envio (`applyDispatchTransition`, reintentos con backoff
+  exponencial).
+- `automation.seed.json`: **catalogo de reglas por defecto por rubro** — lo que
+  hace que un negocio nuevo arranque automatizado "rapido" (recordatorio de cita
+  24h, seguimiento no-show, cobro vencido, bienvenida a lead, recall, stock
+  critico...). Bundles `_universal`/`_clinical`/`_distribution` mapeados a cada
+  track. loadModules lo ignora (sin campo `module`), como el seed de accounting.
+- Cableado a report/system-map/install-plan sin cambios de codigo (deteccion
+  generica) + subpath `@onia/core/modules/automation-logic` + al manifest
+  anti-drift (21 artefactos: +automation.logic + automation.seed).
+- 7 modulos, 39 entidades. 352 tests (327+25), 4 validadores verdes.
+
 ## portable-artifacts — 2026-07-08 (mecanismo anti-drift de adopcion de logica)
 
 - Sergio pidio "formalizar @onia/core publicable". Investigado como consume

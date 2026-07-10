@@ -39,7 +39,7 @@ const CONFIG_ARTIFACTS = [
 ];
 
 // Seeds de datos que un producto puede copiar tal cual.
-const SEED_ARTIFACTS = ["modules/accounting.seed.bolivia.json"];
+const SEED_ARTIFACTS = ["modules/accounting.seed.bolivia.json", "modules/automation.seed.json"];
 
 function sha256(text) {
   return createHash("sha256").update(text, "utf8").digest("hex");
