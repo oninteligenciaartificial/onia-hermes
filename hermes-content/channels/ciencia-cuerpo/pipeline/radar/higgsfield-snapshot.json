@@ -1,0 +1,25 @@
+{
+  "captured_at": "2026-07-10",
+  "note": "Snapshot leido via MCP Higgsfield (get_youtube_explainer_presets + models_explore) por la sesion yt-maquina-humana. El worker lo lee como CACHE (un script standalone no puede llamar al MCP). El diff entre dos snapshots detecta estilos/modelos NUEVOS. Refrescar via MCP periodicamente (cero gasto, es lectura).",
+  "default_style_preset_id": "5a1ae304-c541-4f11-9784-595e0f2c3d2b",
+  "default_style_title": "2D Illustrator",
+  "explainer_presets": [
+    { "id": "5a1ae304-c541-4f11-9784-595e0f2c3d2b", "title": "2D Illustrator", "aspect": "9:16", "note": "el mas cercano a Kurzgesagt (default del canal)" },
+    { "id": "b347d852-98fc-4013-92b7-6b0219fb21be", "title": "Whiteboard Doodle", "aspect": "9:16" },
+    { "id": "c109eddb-1a79-478a-afd5-273bd0b205e5", "title": "Isometric Flat Vector", "aspect": "9:16" },
+    { "id": "80e4dd7b-cd65-42d4-b191-b58d62558602", "title": "Mixed Media", "aspect": "9:16" },
+    { "id": "730d436b-c0d2-4346-a7e9-3d9a80065f30", "title": "Pixel Art", "aspect": "9:16" },
+    { "id": "1de0f39e-c602-4b00-b54a-38440c7f63f7", "title": "Claymotion", "aspect": "9:16" },
+    { "id": "bb90786e-fa06-4911-884b-c576dcd20bef", "title": "3D Papercraft", "aspect": "9:16" },
+    { "id": "3e4bfd81-fbd8-4587-886d-296cbe48d152", "title": "Low Poly", "aspect": "9:16" },
+    { "id": "daa250fe-c353-4d26-8ab2-fc1c4ec777a4", "title": "3D Mix", "aspect": "9:16" },
+    { "id": "1fde6c92-721b-4824-b490-4ea75ad0665f", "title": "Fluffy Toy", "aspect": "9:16" }
+  ],
+  "recommended_models": {
+    "stills": { "id": "nano_banana_pro", "note": "barato; bueno para diagramas y texto" },
+    "hero_clip": { "id": "kling3_0_turbo", "note": "video corto barato (~7.5cr/5s)" },
+    "premium_alt": { "id": "seedance_2_0", "note": "mejor calidad, mas caro; plan B" }
+  },
+  "est_credits_per_video_benchmark": 360,
+  "est_credits_note": "referencia del piloto (mayoria stills + 5 clips hero). Confirmar costo real generando 1 shot antes de lanzar el resto."
+}

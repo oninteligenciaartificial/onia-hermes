@@ -1,0 +1,7 @@
+# Credenciales OAuth locales del canal (YouTube/TikTok) — NUNCA subir.
+# El script de subida escribe credentials/client_secret.json y token.json aca;
+# el .gitignore raiz (**/credentials.json, *_token.txt) NO cubre esos nombres.
+credentials/
+
+# Dependencias (se reinstalan con npm install)
+node_modules/

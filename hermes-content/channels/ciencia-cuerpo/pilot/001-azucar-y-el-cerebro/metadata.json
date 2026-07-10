@@ -1,0 +1,45 @@
+{
+  "content_id": "ciencia-cuerpo-001-azucar-y-el-cerebro",
+  "title_options": [
+    "Por qué querés MÁS (el azúcar y tu cerebro)",
+    "Qué le hace el azúcar a tu cerebro",
+    "¿Tu cerebro reacciona al azúcar como a una droga?"
+  ],
+  "title_final": "Por qué querés MÁS (el azúcar y tu cerebro)",
+  "description": "Este video es contenido educativo y no reemplaza el consejo de un profesional de la salud.\n\nEl azúcar activa el mismo circuito dopaminérgico de recompensa que ciertas drogas de abuso — pero por DOS vías distintas (sabor y valor calórico), y eso no significa que sea una droga en el sentido clínico. En este video abrimos el mecanismo real: cómo funciona el circuito de recompensa, qué pasa cuando el azúcar lo activa dos veces, qué tan lejos llega la comparación con la cocaína (y dónde se rompe esa comparación), y por qué este sistema evolucionó para un mundo que ya no existe.\n\nCapítulos:\n0:00 El circuito que se enciende con el azúcar\n0:25 El sistema de recompensa\n1:35 Cómo está armado el circuito\n2:53 Las dos vías del azúcar\n4:21 ¿Es el azúcar \"como una droga\"?\n5:29 Por qué el circuito no está listo para hoy\n6:19 Qué no sabemos todavía\n7:29 Cierre\n\nFuentes citadas en este video:\n1. Sugars and Sweet Taste: Addictive or Rewarding? — https://pmc.ncbi.nlm.nih.gov/articles/PMC8468293/ (NIH/PubMed Central)\n2. Intense Sweetness Surpasses Cocaine Reward — https://pmc.ncbi.nlm.nih.gov/articles/PMC1931610/ (NIH/PubMed Central)\n3. Circuit Organization of Sugar Reinforcement — https://pmc.ncbi.nlm.nih.gov/articles/PMC5003755/ (NIH/PubMed Central)\n\n#ciencia #neurociencia #divulgacion",
+  "disclaimer_text": "Este video es contenido educativo y no reemplaza el consejo de un profesional de la salud.",
+  "sources_in_description": [
+    { "n": 1, "title": "Sugars and Sweet Taste: Addictive or Rewarding?", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8468293/" },
+    { "n": 2, "title": "Intense Sweetness Surpasses Cocaine Reward", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC1931610/" },
+    { "n": 3, "title": "Circuit Organization of Sugar Reinforcement", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5003755/" }
+  ],
+  "tags": [
+    "ciencia",
+    "cuerpo humano",
+    "neurociencia",
+    "azucar",
+    "dopamina",
+    "cerebro",
+    "divulgacion cientifica",
+    "como funciona el cuerpo",
+    "ciencia en español",
+    "kurzgesagt en español"
+  ],
+  "thumbnail_brief": "Estilo Kurzgesagt: silueta de cerebro flat-design sobre fondo azul profundo, particulas doradas (dopamina) saliendo de un cubo de azucar estilizado, contraste calido/frio fuerte. Texto grande sans-serif: '¿DROGA?' con signo de interrogacion (pregunta, no afirmacion — coherente con el matiz del video). Sin fotos reales, sin caras.",
+  "chapters": [
+    { "time": "0:00", "label": "El circuito que se enciende con el azúcar" },
+    { "time": "0:25", "label": "El sistema de recompensa" },
+    { "time": "1:35", "label": "Cómo está armado el circuito" },
+    { "time": "2:53", "label": "Las dos vías del azúcar" },
+    { "time": "4:21", "label": "¿Es el azúcar \"como una droga\"?" },
+    { "time": "5:29", "label": "Por qué el circuito no está listo para hoy" },
+    { "time": "6:19", "label": "Qué no sabemos todavía" },
+    { "time": "7:29", "label": "Cierre" }
+  ],
+  "language": "es",
+  "category": "Education",
+  "made_for_kids": false,
+  "contains_synthetic_media": true,
+  "privacy_status_initial": "private",
+  "pinned_comment": "Fuentes completas en la descripción (las 3 son NIH/PubMed Central, acceso libre). Este video explica un MECANISMO, no es consejo médico ni una razón para sentir culpa por lo que comés — si algo de tu relación con la comida te preocupa de verdad, esa conversación es con un profesional, no con YouTube. ¿Qué mecanismo del cuerpo querés que abramos la próxima semana?"
+}

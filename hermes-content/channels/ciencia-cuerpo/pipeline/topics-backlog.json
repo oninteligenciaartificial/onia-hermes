@@ -1,0 +1,328 @@
+{
+  "brand": "Maquina Humana",
+  "created_at": "2026-07-08",
+  "updated_at": "2026-07-09",
+  "frame": "rendi mejor - cuerpo + mente. El titulo promete rendir (gancho), el video explica el MECANISMO, la conclusion la saca el espectador. Nunca 'hace esto'. Ver PLAN.md #4.0.",
+  "note": "Formato maquina de PLAN.md #3. title_working = gancho de rendimiento; angle_thesis = mecanismo que explica. sources con url = verificadas via WebSearch (no de memoria). source_status=pending_research_brief = tema nuevo, su fuente se fija y verifica en su research-brief.json ANTES de producir (gate duro). status: pilot=en produccion | backlog=main list pendiente | variety=banco de cuerpo puro para intercalar.",
+  "topics": [
+    {
+      "id": "01",
+      "slug": "azucar-y-el-cerebro",
+      "title_working": "Por que queres MAS (azucar y tu cerebro)",
+      "theme": "motivacion/recompensa",
+      "angle_thesis": "El azucar pega en el mismo circuito dopaminergico de recompensa que engancha; dos vias (sabor + calorias). Mecanismo real y medible, no metafora.",
+      "sources": [
+        { "title": "Sugars and Sweet Taste: Addictive or Rewarding?", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8468293/", "publisher": "NIH/PMC" },
+        { "title": "Intense Sweetness Surpasses Cocaine Reward", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC1931610/", "publisher": "NIH/PMC" }
+      ],
+      "ymyl_sensitive_topic": true,
+      "sensitive_topic_tags": ["adicciones"],
+      "status": "pilot"
+    },
+    {
+      "id": "02",
+      "slug": "que-hace-el-cerebro-mientras-dormis",
+      "title_working": "Por que rendis mal sin dormir",
+      "theme": "sueno/energia",
+      "angle_thesis": "El sistema glinfatico 'lava' el cerebro de desechos metabolicos durante el sueno profundo; sin eso se acumulan.",
+      "sources": [
+        { "title": "The Sleeping Brain: Harnessing the Power of the Glymphatic System", "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7698404/", "publisher": "NIH/PMC" },
+        { "title": "Neuronal activity drives glymphatic waste clearance", "url": "https://www.nature.com/articles/s41582-024-00963-x", "publisher": "Nature Reviews Neurology" }
+      ],
+      "ymyl_sensitive_topic": false,
+      "status": "backlog"
+    },
+    {
+      "id": "06",
+      "slug": "que-le-hace-el-cortisol-a-tu-cuerpo",
+      "title_working": "Por que rendis peor bajo presion",
+      "theme": "estres",
+      "angle_thesis": "El eje HPA/cortisol salva en agudo, pero cronico degrada foco y memoria: 'motor acelerado todo el dia'.",
+      "sources": [
+        { "title": "Understanding the stress response", "url": "https://www.health.harvard.edu/staying-healthy/understanding-the-stress-response", "publisher": "Harvard Health" }
+      ],
+      "ymyl_sensitive_topic": false,
+      "status": "backlog"
+    },
+    {
+      "id": "11",
+      "slug": "por-que-el-cafe-te-despierta",
+      "title_working": "Por que el cafe te deja de despertar",
+      "theme": "energia/foco",
+      "angle_thesis": "La cafeina no da energia: tapa la adenosina (senal de sueno), que igual se sigue acumulando.",
+      "sources": [
+        { "title": "Adenosine, caffeine, and sleep-wake regulation: state of the science and perspectives", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9541543/", "publisher": "NIH/PMC" }
+      ],
+      "ymyl_sensitive_topic": false,
+      "status": "backlog"
+    },
+    {
+      "id": "17",
+      "slug": "como-se-forma-un-recuerdo",
+      "title_working": "Como tu cerebro fija lo que aprendes",
+      "theme": "aprendizaje",
+      "angle_thesis": "Un recuerdo no se 'guarda' en un lugar: es un patron de conexiones que se refuerza fisicamente (potenciacion a largo plazo).",
+      "sources": [
+        { "title": "The synaptic plasticity and memory hypothesis", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3843897/", "publisher": "NIH/PMC" }
+      ],
+      "ymyl_sensitive_topic": false,
+      "status": "backlog"
+    },
+    {
+      "id": "19",
+      "slug": "el-reloj-de-24h-en-cada-celula",
+      "title_working": "El reloj interno que decide tu energia",
+      "theme": "energia",
+      "angle_thesis": "Cada celula corre su propio cronometro molecular (CLOCK/BMAL1/PER/CRY), sincronizado por un reloj maestro en el hipotalamo.",
+      "sources": [
+        { "title": "The discoveries of molecular mechanisms for the circadian rhythm: The 2017 Nobel Prize", "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6138759/", "publisher": "NIH/PMC" }
+      ],
+      "ymyl_sensitive_topic": false,
+      "status": "backlog"
+    },
+    {
+      "id": "18",
+      "slug": "que-pasa-en-el-cerebro-cuando-algo-es-adictivo",
+      "title_working": "Por que es tan facil engancharte",
+      "theme": "habitos/recompensa",
+      "angle_thesis": "No es 'falta de voluntad': el circuito de recompensa se recalibra y sube el umbral de lo placentero (tolerancia).",
+      "sources": [
+        { "title": "Drugs, Brains, and Behavior: The Science of Addiction", "url": "https://nida.nih.gov/publications/drugs-brains-behavior-science-addiction/drugs-brain", "publisher": "NIDA/NIH" }
+      ],
+      "ymyl_sensitive_topic": true,
+      "sensitive_topic_tags": ["adicciones"],
+      "status": "backlog"
+    },
+    {
+      "id": "13",
+      "slug": "como-tu-cerebro-decide-que-algo-duele",
+      "title_working": "Por que el mismo golpe duele distinto",
+      "theme": "dolor/mente",
+      "angle_thesis": "El dolor no esta en la herida: la nocicepcion es la senal, el dolor lo construye el cerebro segun contexto.",
+      "sources": [
+        { "title": "Pain Processing in the Human Nervous System: A Selective Review", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3438523/", "publisher": "NIH/PMC" },
+        { "title": "The Anatomy and Physiology of Pain", "url": "https://www.ncbi.nlm.nih.gov/books/NBK219252/", "publisher": "NCBI/NIH" }
+      ],
+      "ymyl_sensitive_topic": false,
+      "status": "backlog"
+    },
+    {
+      "id": "20",
+      "slug": "como-una-pastilla-de-azucar-cura-de-verdad",
+      "title_working": "Como tu mente cura de verdad (placebo)",
+      "theme": "mente/cuerpo",
+      "angle_thesis": "El efecto placebo no es 'en tu cabeza' en sentido despectivo: libera opioides y dopamina reales, medibles.",
+      "sources": [
+        { "title": "Neurobiological Mechanisms of the Placebo Effect", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6725834/", "publisher": "NIH/PMC" }
+      ],
+      "ymyl_sensitive_topic": false,
+      "status": "backlog"
+    },
+    {
+      "id": "07",
+      "slug": "como-una-fibra-muscular-se-vuelve-mas-fuerte",
+      "title_working": "Como un musculo roto se vuelve mas fuerte",
+      "theme": "cuerpo/rendimiento",
+      "angle_thesis": "El entrenamiento activa mTORC1, que ordena sintetizar mas proteina muscular de la que se dano.",
+      "sources": [
+        { "title": "Molecular responses to acute exercise and their relevance for adaptations in skeletal muscle to exercise training", "url": "https://journals.physiology.org/doi/full/10.1152/physrev.00054.2021", "publisher": "Physiological Reviews (APS)" }
+      ],
+      "ymyl_sensitive_topic": false,
+      "status": "backlog"
+    },
+    {
+      "id": "05",
+      "slug": "el-microbioma-que-decide-tu-animo",
+      "title_working": "Como tu intestino te cambia el animo",
+      "theme": "mente/cuerpo",
+      "angle_thesis": "Comunicacion bidireccional intestino-cerebro via nervio vago, hormonas e inmunidad: el eje microbiota-intestino-cerebro.",
+      "sources": [
+        { "title": "The Brain-Gut-Microbiome Axis", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6047317/", "publisher": "NIH/PMC" }
+      ],
+      "ymyl_sensitive_topic": true,
+      "sensitive_topic_tags": ["salud mental"],
+      "status": "backlog"
+    },
+    {
+      "id": "12",
+      "slug": "que-le-hace-el-alcohol-al-cerebro-e-higado",
+      "title_working": "Que le hace el alcohol a tu cerebro, minuto a minuto",
+      "theme": "cuerpo",
+      "angle_thesis": "Seguir una copa por el higado (acetaldehido toxico) y el cerebro (comunicacion neuronal alterada) en tiempo real.",
+      "sources": [
+        { "title": "Alcohol Metabolism", "url": "https://www.niaaa.nih.gov/publications/alcohol-metabolism", "publisher": "NIAAA/NIH" },
+        { "title": "Alcohol's Effects on the Body", "url": "https://www.niaaa.nih.gov/alcohols-effects-health/alcohols-effects-body", "publisher": "NIAAA/NIH" }
+      ],
+      "ymyl_sensitive_topic": false,
+      "status": "backlog"
+    },
+    {
+      "id": "04",
+      "slug": "por-que-las-celulas-dejan-de-dividirse",
+      "title_working": "Por que envejeces (por dentro)",
+      "theme": "cuerpo",
+      "angle_thesis": "Las celulas senescentes 'se jubilan mal': dejan de dividirse pero secretan senales inflamatorias (SASP) que danan el tejido vecino.",
+      "sources": [
+        { "title": "Hallmarks and mechanisms of cellular senescence in aging and disease", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12322153/", "publisher": "NIH/PMC" }
+      ],
+      "ymyl_sensitive_topic": false,
+      "status": "backlog"
+    },
+    {
+      "id": "03",
+      "slug": "como-tu-sistema-inmune-reconoce-un-virus",
+      "title_working": "Como tu cuerpo reconoce un virus en minutos",
+      "theme": "cuerpo",
+      "angle_thesis": "Dos sistemas en capas: el innato ataca todo por igual en horas, el adaptativo aprende y recuerda de por vida.",
+      "sources": [
+        { "title": "Overview of the Immune System", "url": "https://www.niaid.nih.gov/research/immune-system-overview", "publisher": "NIAID/NIH" }
+      ],
+      "ymyl_sensitive_topic": false,
+      "status": "backlog"
+    },
+    {
+      "id": "21",
+      "slug": "por-que-no-te-podes-concentrar",
+      "title_working": "Por que no te podes concentrar",
+      "theme": "foco",
+      "angle_thesis": "Redes de atencion + el costo real de cambiar de tarea: el 'multitasking' no existe como se cree, el cerebro paga un peaje cada switch.",
+      "sources": [],
+      "source_status": "pending_research_brief",
+      "ymyl_sensitive_topic": false,
+      "status": "backlog"
+    },
+    {
+      "id": "22",
+      "slug": "por-que-dejas-todo-para-despues",
+      "title_working": "Por que dejas todo para despues",
+      "theme": "foco/motivacion",
+      "angle_thesis": "Sesgo del presente: el sistema limbico (quiere la recompensa ya) le gana al prefrontal (piensa en el despues).",
+      "sources": [],
+      "source_status": "pending_research_brief",
+      "ymyl_sensitive_topic": false,
+      "status": "backlog"
+    },
+    {
+      "id": "23",
+      "slug": "por-que-un-habito-se-pega",
+      "title_working": "Por que un habito se pega y cuesta romperlo",
+      "theme": "habitos",
+      "angle_thesis": "Bucle senal -> rutina -> recompensa; los ganglios basales lo automatizan para ahorrar energia.",
+      "sources": [],
+      "source_status": "pending_research_brief",
+      "ymyl_sensitive_topic": false,
+      "status": "backlog"
+    },
+    {
+      "id": "24",
+      "slug": "por-que-arrancas-y-abandonas",
+      "title_working": "Por que arrancas con todo y despues abandonas",
+      "theme": "motivacion",
+      "angle_thesis": "La dopamina de la anticipacion (querer) no es la misma que la de la recompensa (disfrutar); cuando baja la primera, abandonas.",
+      "sources": [],
+      "source_status": "pending_research_brief",
+      "ymyl_sensitive_topic": false,
+      "status": "backlog"
+    },
+    {
+      "id": "25",
+      "slug": "que-pasa-cuando-tenes-miedo",
+      "title_working": "Que pasa en tu cerebro cuando tenes miedo",
+      "theme": "emociones",
+      "angle_thesis": "La amigdala dispara la alarma y la respuesta de amenaza antes de que la corteza 'piense' el peligro.",
+      "sources": [],
+      "source_status": "pending_research_brief",
+      "ymyl_sensitive_topic": true,
+      "sensitive_topic_tags": ["salud mental"],
+      "status": "backlog"
+    },
+    {
+      "id": "26",
+      "slug": "se-te-agota-la-fuerza-de-voluntad",
+      "title_working": "Se te agota la fuerza de voluntad?",
+      "theme": "foco",
+      "angle_thesis": "Fatiga de decision: lo que la evidencia muestra y lo que sigue en debate (el 'ego depletion' es contestado). Tema honesto, sin hype.",
+      "sources": [],
+      "source_status": "pending_research_brief",
+      "ymyl_sensitive_topic": false,
+      "status": "backlog"
+    },
+    {
+      "id": "08",
+      "slug": "que-es-realmente-la-autofagia",
+      "title_working": "Que es realmente la autofagia (ayuno intermitente)",
+      "theme": "variedad/cuerpo",
+      "angle_thesis": "El 'reciclaje celular' es real en modelos animales; en humanos la evidencia todavia es mixta/limitada.",
+      "sources": [
+        { "title": "The Impact of Intermittent Fasting on Human Metabolism and Cell Autophagy (NCT02673515)", "url": "https://clinicaltrials.gov/study/NCT02673515", "publisher": "ClinicalTrials.gov / NIH" },
+        { "title": "Intermittent time-restricted eating may increase autophagic flux in humans: an exploratory analysis", "url": "https://pubmed.ncbi.nlm.nih.gov/40345145/", "publisher": "PubMed" }
+      ],
+      "ymyl_sensitive_topic": true,
+      "sensitive_topic_tags": ["nutricion/ayuno"],
+      "status": "variety"
+    },
+    {
+      "id": "09",
+      "slug": "por-que-tu-cuerpo-se-incendia-fiebre",
+      "title_working": "Por que tu cuerpo se incendia a proposito cuando tenes fiebre",
+      "theme": "variedad/cuerpo",
+      "angle_thesis": "La fiebre no es un error: sube la temperatura del campo de batalla porque a las celulas inmunes les conviene mas el calor que a los patogenos.",
+      "sources": [
+        { "title": "How heat from fever and inflammation affects immune cells", "url": "https://www.nih.gov/news-events/nih-research-matters/how-heat-fever-inflammation-affects-immune-cells", "publisher": "NIH Research Matters" },
+        { "title": "Physiology, Fever", "url": "https://www.ncbi.nlm.nih.gov/books/NBK562334/", "publisher": "StatPearls/NIH" }
+      ],
+      "ymyl_sensitive_topic": false,
+      "status": "variety"
+    },
+    {
+      "id": "10",
+      "slug": "como-una-vacuna-le-ensena-a-tu-cuerpo-a-recordar",
+      "title_working": "Como una vacuna le ensena a tu cuerpo a recordar",
+      "theme": "variedad/cuerpo",
+      "angle_thesis": "Una vacuna es un simulacro de incendio: entrena celulas de memoria B y T sin el riesgo real de la enfermedad.",
+      "sources": [
+        { "title": "Explaining How Vaccines Work", "url": "https://www.cdc.gov/vaccines/basics/explaining-how-vaccines-work.html", "publisher": "CDC" },
+        { "title": "Understand memory, design better vaccines", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3303227/", "publisher": "NIH/PMC" }
+      ],
+      "ymyl_sensitive_topic": true,
+      "sensitive_topic_tags": ["vacunas"],
+      "status": "variety"
+    },
+    {
+      "id": "14",
+      "slug": "las-3-fases-de-curar-una-herida",
+      "title_working": "Las 3 fases de curar una herida",
+      "theme": "variedad/cuerpo",
+      "angle_thesis": "Curar una herida es una obra en construccion de hasta un ano: hemostasia/inflamacion, proliferacion, remodelacion.",
+      "sources": [
+        { "title": "Wound Healing: A Comprehensive Review", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8432991/", "publisher": "NIH/PMC" }
+      ],
+      "ymyl_sensitive_topic": false,
+      "status": "variety"
+    },
+    {
+      "id": "15",
+      "slug": "por-que-tus-huesos-se-demuelen-y-reconstruyen",
+      "title_working": "Por que tus huesos se demuelen y reconstruyen solos",
+      "theme": "variedad/cuerpo",
+      "angle_thesis": "Osteoclastos derriban, osteoblastos construyen: una negociacion celular permanente que da forma al esqueleto.",
+      "sources": [
+        { "title": "Osteoblast-Osteoclast Communication and Bone Homeostasis", "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7564526/", "publisher": "NIH/PMC" }
+      ],
+      "ymyl_sensitive_topic": false,
+      "status": "variety"
+    },
+    {
+      "id": "16",
+      "slug": "la-cascada-hormonal-de-la-pubertad",
+      "title_working": "La cascada hormonal que reconstruye un cuerpo (pubertad)",
+      "theme": "variedad/cuerpo",
+      "angle_thesis": "Un interruptor en el hipotalamo (eje HPG) se enciende y desata anos de cascada hormonal que reconstruyen el cuerpo entero.",
+      "sources": [
+        { "title": "Hypothalamic control of puberty", "url": "https://www.frontiersin.org/journals/endocrinology/articles/10.3389/fendo.2019.00828/pdf", "publisher": "Frontiers in Endocrinology" }
+      ],
+      "ymyl_sensitive_topic": false,
+      "status": "variety"
+    }
+  ]
+}

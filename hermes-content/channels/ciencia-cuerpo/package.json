@@ -1,0 +1,19 @@
+{
+  "name": "ciencia-cuerpo-pipeline",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Pipeline, radar y subida YouTube del canal 'Maquina Humana' (ONIA, carril yt-maquina-humana; slug interno ciencia-cuerpo).",
+  "scripts": {
+    "test": "node --test",
+    "validate": "node pipeline/validate.mjs",
+    "radar": "node pipeline/radar/radar.mjs",
+    "radar:live": "node pipeline/radar/radar.mjs --live",
+    "upload": "node scripts/upload-youtube.mjs"
+  },
+  "dependencies": {
+    "googleapis": "^173.0.0",
+    "rss-parser": "^3.13.0",
+    "zod": "^3.23.8"
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "note": "Fuentes RSS de ciencia (gratis, YMYL-safe, alcanzables desde VPS). Cada item es un LEAD, no la fuente final: el research-brief.json debe encontrar el paper peer-reviewed / NIH / OMS antes de producir. Ver PLAN.md #4.",
+  "feeds": [
+    {
+      "id": "sd-mind-brain",
+      "name": "ScienceDaily - Mind & Brain",
+      "url": "https://www.sciencedaily.com/rss/mind_brain.xml",
+      "lang": "en",
+      "on_brand": "alto (cuerpo+mente)"
+    },
+    {
+      "id": "sd-psychology",
+      "name": "ScienceDaily - Psychology",
+      "url": "https://www.sciencedaily.com/rss/mind_brain/psychology.xml",
+      "lang": "en",
+      "on_brand": "alto (mente/comportamiento)"
+    },
+    {
+      "id": "neurosciencenews",
+      "name": "Neuroscience News",
+      "url": "https://neurosciencenews.com/feed/",
+      "lang": "en",
+      "on_brand": "alto (cerebro, cita journals)"
+    },
+    {
+      "id": "sd-health",
+      "name": "ScienceDaily - Health & Medicine",
+      "url": "https://www.sciencedaily.com/rss/health_medicine.xml",
+      "lang": "en",
+      "on_brand": "medio (cuerpo; dispara flag YMYL con mas frecuencia)"
+    }
+  ]
+}

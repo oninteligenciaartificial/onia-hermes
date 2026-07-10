@@ -1,0 +1,5 @@
+# Los shortlists son salida generada (se regeneran en cada corrida). No se
+# versionan para no ensuciar git; el registro durable es topics-backlog.json
+# (temas que el humano promueve tras el gate). Ver ../README.md.
+*
+!.gitignore
