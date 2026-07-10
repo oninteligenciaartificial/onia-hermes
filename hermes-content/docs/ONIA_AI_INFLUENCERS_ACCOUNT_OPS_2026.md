@@ -1,97 +1,120 @@
 # Administración de cuentas de influencers AI — ONIA (2026)
 
-Cómo operamos las cuentas de las modelos AI (Lucía, Mara, futuras) de forma **escalable,
-legítima y sin riesgo de baneo**. Fuente para todo el equipo. Aplica a cada modelo nueva.
+Cómo operamos las cuentas de las modelos AI (Lucía, y **un roster de muchas más** por venir)
+de forma **escalable, legítima y sin baneo**. Fuente para todo el equipo. Aplica a cada modelo.
 
-## Principio rector: NO granja de celulares
+## Principio rector: NO granja de celulares (pero SÍ SIM bank)
 
-Una **granja de celulares** (phone farm: N teléfonos físicos, apps que simulan toques,
-números descartables masivos) es el enfoque **black-hat de spam / engagement falso**. Meta lo
-detecta (device fingerprint, IP, patrón de comportamiento) y **banea en masa**. Es caro,
-frágil e **innecesario** para lo nuestro.
+Una **granja de celulares de engagement** (N teléfonos + apps que simulan toques + likes/follows
+falsos) es black-hat: Meta la detecta y **banea en masa**. Eso NO lo hacemos.
 
-Nuestras modelos son **influencers AI ficticias y ETIQUETADAS como IA** (como Aitana, Lil
-Miquela o la propia @soy_aria_cruz). Eso es permitido. La operación diaria se hace por **API
-oficial + Meta Business Manager**, desde el servidor — no tocando teléfonos.
+PERO lo que viste — "varios dispositivos manejados desde una computadora" — tiene una versión
+**profesional y legítima**: un **SIM bank / GSM modem pool**. Es hardware de telecom que aloja
+decenas o cientos de SIMs (sin celulares) y **recibe los SMS de verificación (OTP) de todos
+los números desde un solo dashboard**. Se usa legítimamente para OTP/alertas. Esa es la pieza
+que reemplaza "muchos celulares" cuando escalemos el roster.
 
-El teléfono solo se usa **una vez**, para la verificación SMS inicial de cada cuenta.
+Regla de oro: **el SIM bank es solo para recibir el OTP de alta (una vez por cuenta). La
+operación diaria —publicar— es 100% por API oficial**, nunca simulando toques en la app.
 
 ## Arquitectura (4 capas)
 
-### 1. Identidad digital por modelo (setup único)
-Cada modelo tiene su propia identidad, separada de las demás:
-- **1 email dedicado.** SÍ, uno por modelo (separa recuperación, login e identidad).
-  Recomendado: Google Workspace bajo dominio propio (ej. `lucia@<dominio-modelos>`) para
-  control centralizado y aspecto profesional. Gmail gratis también sirve para arrancar.
-- **1 número de teléfono para verificación** (ver "cuello de botella" abajo).
+### 1. Identidad digital por modelo
+- **Email:** ver "Email a escala" abajo. Resumen: para el roster, **dominio propio + catch-all**
+  (no Gmail individual).
+- **Número de teléfono:** non-VoIP real (ver "Números a escala"). VoIP está **muerto** para IG.
 - **Perfil coherente:** nombre completo real-looking (ej. *Lucía Belén Antelo Justiniano*),
-  bio, foto, y **etiqueta "creado con IA"** (obligatorio Meta + es parte de la marca híbrida).
+  bio, foto y **etiqueta "creado con IA"** (obligatorio Meta + parte de la marca híbrida).
 
-### 2. Estructura Meta centralizada (setup único)
-- **1 solo Meta Business Manager de ONIA** agrupa TODAS las cuentas (ya existe: cuenta de ads
-  `act_1073680778314945`, app Marketing API `1562215408796050`).
-- Por modelo: **cuenta IG Professional (Business/Creator)** ↔ vinculada a una **Página de
-  Facebook** propia ↔ dentro del Business Manager de ONIA.
-- Resultado: administrás N cuentas desde **un panel**, sin N teléfonos ni N logins manuales.
+### 2. Estructura Meta centralizada
+- **1 solo Meta Business Manager de ONIA** agrupa TODAS las cuentas (ya existe: ads
+  `act_1073680778314945`, app `1562215408796050`).
+- Por modelo: **cuenta IG Professional (Business/Creator)** ↔ **Página de Facebook** ↔ dentro
+  del Business Manager. Administrás N cuentas desde un panel, sin N teléfonos.
 
 ### 3. Publicación programática (reemplaza la granja)
-- **Instagram Graph API**, permiso `instagram_business_content_publish` (app de ONIA; la app
-  Marketing API existente se puede extender o crear una de content publishing).
-- **n8n** (carril infra) orquesta: **cola de aprobación (OK de Sergio) → API publish**.
-  Soporta Reels 9:16, 5-90s, H.264. Límite 100 posts/24h por cuenta (de sobra).
-- Cero teléfonos, cero apps de automatización de granja, cero riesgo de fingerprint.
-- Requiere: cuenta Business + Página FB + token (bloqueo **S6**) + app review del permiso.
+- **Instagram Graph API**, permiso `instagram_business_content_publish`.
+- **n8n** (carril infra): cola de aprobación (OK de Sergio) → API publish. Reels 9:16, 5-90s.
+  100 posts/24h por cuenta.
+- Cero teléfonos, cero apps de granja. Requiere token (bloqueo **S6**) + app review.
 
 ### 4. Cumplimiento / anti-ban
-- **Etiqueta "AI" en perfil y posts** — Meta la exige para contenido foto-realista generado por
-  IA (enforced 2026). Para nosotros es coherente con "soy IA y lo muestro". Evita baneos.
-- **Warm-up** de cuentas nuevas: no publicar 20 posts el día 1 por API; subir de a poco las
-  primeras 2-3 semanas.
-- **Sin fake engagement**: nada de comprar seguidores/comentarios/bots — ESO sí banea.
-- **Sin impersonar a una persona real**: Lucía es sintética original, no un deepfake de alguien.
-- Gestión estable vía Business Manager (no rotar IPs/logins raros).
+- **Etiqueta "AI"** en perfil y posts (Meta la exige, enforced 2026; a nosotros nos conviene).
+- **Warm-up** de cuentas nuevas (no 20 posts el día 1).
+- **Sin fake engagement**, **sin impersonar personas reales** (Lucía es sintética original).
 
-## El cuello de botella real: los NÚMEROS de teléfono
-IG pide verificación SMS al crear/asegurar la cuenta. Opciones y trade-offs:
+## Email a escala (respuesta: NO Gmail gratis para masa)
 
-| Opción | Robustez | Costo | Veredicto |
+| Opción | Escala | Veredicto |
+|---|---|---|
+| Gmail gratis, 1 por modelo | Mala: cada uno pide teléfono, Google limita por número/IP y en 2025-26 **bloquea tenants** de creación masiva | Solo para 1-2 cuentas de prueba |
+| **Dominio propio + catch-all (Zoho Mail)** | **Excelente:** `lucia@`, `mara@`, `<n>@` **infinitos**, sin verificación por número, catch-all nativo, admin console | **Recomendado para el roster** |
+| Google Workspace + routing | Catch-all solo por routing de admin; Google reprime cuentas de envío masivo (riesgo de lockout de todo el tenant) | Evitar para esto |
+
+→ **Montamos un dominio dedicado a las modelos + Zoho Mail con catch-all.** Un email por modelo,
+ilimitados, profesionales, controlados desde un panel. Esto se arma **desde ya** para no rehacer.
+
+## Números a escala (el verdadero cuello de botella)
+
+VoIP está bloqueado por IG (80%+ de plataformas lo filtran). Solo sirven **números non-VoIP
+carrier-grade**. Opciones:
+
+| Opción | Cómo | Pro / Contra | Cuándo |
 |---|---|---|---|
-| **A. Número real dedicado (eSIM o SIM prepago) por modelo** | Alta (IG no lo bloquea, sirve para re-verificar) | Bajo a esta escala | **Recomendado para las modelos principales** |
-| B. Servicio SMS online (número virtual de un solo uso) | Baja (IG rechaza muchos VoIP; no sirve a futuro) | Muy bajo | Solo como último recurso / escala grande |
-| C. Un número real que verifica varias | Media, pero compartir número entre "personas distintas" es señal de red | — | Evitar para las cuentas principales |
+| **SIM bank / GSM modem pool + SIMs prepago reales** | Hardware 8→512 SIMs por USB/Ethernet a 1 PC; software (SMSgate open-source u Ozeki) recibe todos los OTP | ✅ Robusto, re-verificable, barato por número a escala, control total. ❌ Hardware + gestionar SIMs activas | **Roster (muchas modelos)** |
+| Servicio non-VoIP OTP (NumberOTP, BloomSMS, TextVerified) | Número por dashboard/API, sin hardware | ✅ Cero hardware, rápido para arrancar. ❌ Número **descartable** (no re-verificable), calidad variable, costo por uso | Pruebas / puente |
+| SIM real suelta (eSIM/prepago) | 1 chip por cuenta en un teléfono normal | ✅ Simple para 1-3 cuentas. ❌ No escala (1 cel por SIM) | **Lucía sola, ahora** |
 
-**Para 2-5 modelos:** número real dedicado por modelo. Es barato y robusto. No hace falta
-granja: un chip/eSIM por modelo, verificás una vez, y después todo es por API.
+**Celulares físicos a una compu (lo que viste) vs SIM bank:**
+- Celulares + USB + software (ADB/scrcpy / "phone farm managers"): 1 cel por número → caro,
+  frágil, y si automatiza engagement = señal de granja → ban. Sirve para operar apps a mano.
+- **SIM bank (sin celulares) + API para publicar:** más barato por número, escala a cientos,
+  más limpio. **Este es el camino.** No necesitás un celular por modelo.
 
-## Lo que NO se necesita
-- ❌ Granja de celulares (phone farm).
-- ❌ Un celular físico por cuenta para el día a día (la operación es por API/Business Manager).
-- ❌ Apps tipo "bot de Instagram" que simulan toques (alto riesgo de ban).
-- ❌ Comprar seguidores/engagement.
+## Escala sin que Meta te marque como "red coordinada" (crítico)
 
-## Escalabilidad
-- **2-5 modelos:** trivial con este esquema (emails gratis/baratos, 1 número c/u, Business
-  Manager, API). 
-- **10+ modelos:** se agrega gestión de un pool de eSIM para las verificaciones, pero el core
-  (API + Business Manager + n8n) **no cambia**. Nunca granja física.
+Crear **muchas** influencers AI puede verse como red coordinada si se hace mal. Para escalar sano:
+- **Calidad > cantidad:** un roster de influencers de MARCA con contenido y audiencia real, NO
+  miles de cuentas vacías (eso es spam y se banea).
+- **Independencia por cuenta:** email propio, número propio, identidad y contenido propios.
+- **Etiqueta IA en todas** + sin fake engagement + sin cross-spam entre ellas.
+- **Business Manager agrupa legítimamente** (una agencia con muchas cuentas es normal).
+- **API > 50 logins manuales:** publicar por API es más limpio que operar navegadores; si algún
+  día hay gestión manual masiva, recién ahí se evalúan perfiles antidetect (GoLogin/Multilogin).
+
+## Plan por fases
+
+**FASE 1 — Lucía (ahora, 1 modelo):**
+- Email: montar ya el **dominio propio + Zoho catch-all** → `lucia@…` (no rehacer después).
+- Número: **1 SIM prepago real** (Tigo/Entel/Viva) para verificar. Con una no hace falta SIM bank.
+- Cuenta IG Business ↔ Página FB ↔ Business Manager ONIA. Publicación por API (n8n, tras token).
+
+**FASE 2 — Roster (muchas modelos):**
+- Email: mismo dominio + catch-all, un alias por modelo (infinito).
+- Números: **SIM bank / modem pool** (empezar 8-32 puertos) + lote de SIMs prepago, software
+  para recibir OTPs desde un dashboard.
+- Gestión: Business Manager + publicación 100% por API. Warm-up y etiqueta IA por cuenta.
 
 ## Costos aproximados
-- Emails: $0 (Gmail) o ~$6/mes/usuario (Workspace con dominio propio).
-- Números: costo de eSIM/prepago por modelo (setup único + mantenimiento mínimo).
-- Business Manager + Graph API: $0.
-- Publicación/orquestación: infra que ya tenemos (n8n en el VPS).
+- Email: dominio ~$10-15/año + Zoho (plan gratuito para pocos buzones, o ~$1/buzón/mes).
+- Números Fase 1: 1 SIM prepago (barato). Fase 2: SIM bank (hardware, cientos de USD según
+  puertos) + SIMs prepago (chip + saldo mínimo para mantenerlas activas).
+- Business Manager + Graph API + n8n: $0 (infra que ya tenemos).
 
-## Conexión con infra existente (ONIA)
-- Business Manager + app Marketing API + pixel ya existen (ver memoria Meta Ads engine).
-- **Verificación de negocio Meta EN PAUSA esperando SEPREC/NIT** — cuando salga, desbloquea
-  funciones y da confianza a las cuentas (menos fricción de verificación).
-- **Token IG = bloqueo S6** (pendiente) para publicar por API.
-- Carril **infra (n8n)** ya publica en otras automatizaciones → se agrega el flujo de content
-  publishing con cola de aprobación.
-- Regla dura: **nada se publica sin OK de Sergio** (cola de aprobación en ONIA Center / n8n).
+## Conexión con infra ONIA
+- Business Manager + app Marketing API + pixel ya existen (memoria Meta Ads engine).
+- **Verificación de negocio Meta EN PAUSA esperando SEPREC/NIT** → al salir, da confianza a las cuentas.
+- **Token IG = bloqueo S6** para publicar por API.
+- Carril **infra (n8n)** agrega el flujo de content publishing con cola de aprobación.
+- Regla dura: **nada se publica sin OK de Sergio**.
 
-## Decisiones pendientes de Sergio
-1. **¿Cuántas modelos activamos ahora?** (Lucía sola, o Lucía + Mara + más) → define cuántos números.
-2. **Emails:** ¿Gmail gratis por modelo, o Google Workspace con dominio propio (~$6/mes c/u, más pro y centralizado)?
-3. **Números:** ¿eSIM/prepago real por modelo (recomendado), o probamos un servicio SMS virtual primero?
-4. **Handle/nombre de Lucía** confirmados (`@lu.antelo` / *Lucía Belén Antelo Justiniano*) para arrancar el setup de la 1ª cuenta.
+## Definiciones tomadas (2026-07-09)
+- **Modelos:** arrancamos con Lucía; diseño pensado para **roster grande** desde ya.
+- **Email:** **dominio propio + Zoho catch-all** (mejor que Gmail para masa). Se monta ya.
+- **Números:** SIM real suelta para Lucía; **SIM bank/modem pool** para el roster (no celulares, no VoIP).
+- **Handle/nombre Lucía:** `@lu.antelo` / *Lucía Belén Antelo Justiniano* (pendiente OK final de Sergio).
+
+## Pendiente de decidir/hacer
+- Comprar dominio para las modelos (nombre del dominio) — humano/Sergio.
+- Fase 2: comprar SIM bank cuando sumemos modelos (gasto → OK de Sergio).
+- Conseguir token IG (S6) para encender la publicación por API.
