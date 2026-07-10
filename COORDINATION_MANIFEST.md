@@ -31,6 +31,28 @@ tocar los 4 archivos raíz de web-factory (`next.config.ts`, `layout.tsx`,
 `globals.css`, `package.json`). Infra (G) = un solo dueño a la vez; nadie más
 toca n8n/VPS/DB mientras G trabaja.
 
+### Regla dura — no filtrar WIP parcial a `main` (build coherente)
+
+`main` alimenta DOS deploys: el auto-deploy real al VPS (`center.onia.com.bo`,
+GitHub Action que buildea `main`) y el proyecto Vercel `onia-center` (vestigial,
+`live:false`, buildea cada push de cada rama). Un `main` que no compila rompe el
+deploy real Y spamea emails "Failed preview deployment" de Vercel.
+
+- El auto-sync hace fast-forward de `main`. NUNCA dejes que arrastre un
+  subconjunto incoherente: si un archivo nuevo importa otro archivo nuevo, van
+  los DOS a `main` (o ninguno), jamás uno solo.
+- Sesiones de rebuild (árboles de componentes nuevos, ej. carril A
+  `onia-center-rebuild`): el rebuild entra a `main` SOLO como un merge COMPLETO y
+  COHERENTE que pasa `tsc --noEmit` en `web-factory/apps/site`. Nada de commits
+  sueltos del rebuild colándose a `main` por auto-sync.
+- Antes de cualquier merge/swap a `main`: `tsc --noEmit` verde en tu rama. Ojo
+  con el casing de imports (Linux distingue mayúsculas; Windows no → compila
+  local pero rompe en el build).
+- Incidente de referencia (2026-07-09/10): 3 archivos del rebuild
+  (`onia-center/components/views/hoy/AgentRosterTile.tsx`, `components/shell/TopNav.tsx`,
+  `styles/tokens.css`) llegaron a `main` sin `components/ui/*` que importan → tsc
+  rojo → ambos deploys rotos + lluvia de emails. Arreglado en `a771e5b0`.
+
 ## Ownership split
 
 ### Session A: Instagram, assets, dashboard, publishing
