@@ -15,12 +15,19 @@ arquitectura, cronograma). Esto es el arranque tecnico del servicio.
 
 **Listo (offline, sin depender del NIT ni del Anexo Tecnico):**
 - `src/constants.mjs` — constantes SIAT verificables (estados SIN 901/904/908,
-  modalidades, plazos legales, limites de paquete, ambientes piloto/prod). Lo no
-  confirmado contra el Anexo oficial esta marcado `[VERIFICAR]`.
+  modalidades, plazos legales, limites de paquete, ambientes piloto/prod, tipo
+  de doc sector, tipos de doc de identidad, consumidor final). Lo no confirmado
+  contra el Anexo/catalogo oficial esta marcado `[VERIFICAR]`.
 - `src/emission-state.mjs` — maquina de estados de la emision (el corazon
   operativo de la cola): `draft -> queued -> sent -> validated|observed|rejected`,
   anulacion con plazo (dia 9 del mes siguiente), reversion por unica vez,
   deteccion de envio offline vencido (48h). Pura, inmutable, 19 tests.
+- `src/invoice-payload.mjs` — contrato del PAYLOAD NORMALIZADO (la API interna
+  que un producto le manda al emisor: `POST /api/fiscal/invoices`). Diseño
+  nuestro, NO depende de los WSDLs/XSD del SIN. `buildInvoicePayload` normaliza y
+  deriva totales; `validateInvoicePayload` chequea presencia, items, homologacion,
+  coherencia de totales y formato basico. Le da a los equipos de producto un
+  objetivo concreto (que enviar). 13 tests. Total emisor: 32 tests.
 
 **Pendiente (necesita NIT / ambiente piloto / Anexo Tecnico oficial):**
 - Cliente SOAP al SIN (CUIS por sistema, CUFD diario, recepcion, validacion,

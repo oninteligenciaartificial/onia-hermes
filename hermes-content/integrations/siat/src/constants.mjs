@@ -73,4 +73,28 @@ export const CANCELLATION_RULE = {
   blockedIfDeclared: true, // no anulable si ya esta confirmada en RCV o declarada (F110/111)
 };
 
+// Tipo de documento sector. El emisor arranca con factura de compra-venta.
+// El codigo exacto viaja en el CUF/XML; se confirma contra el catalogo del SIN.
+export const DOC_SECTOR = {
+  COMPRA_VENTA: 1, // [VERIFICAR codigo exacto contra catalogo sincronizado del SIN]
+};
+
+// Tipo de documento de identidad del receptor. Valores comunes del catalogo SIN
+// (sincronizables por servicio web). [VERIFICAR contra el catalogo vigente].
+export const TIPO_DOC_IDENTIDAD = {
+  CI: 1,
+  CEX: 2,
+  PASAPORTE: 3,
+  OD: 4, // otro documento
+  NIT: 5,
+};
+
+// Consumidor final sin NIT: convencion del SIN (numero de documento y razon
+// social especiales). [VERIFICAR contra el catalogo/normativa vigente].
+export const CONSUMIDOR_FINAL = {
+  tipoDocumentoIdentidad: TIPO_DOC_IDENTIDAD.CI,
+  numeroDocumento: "0",
+  razonSocial: "S/N",
+};
+
 export const NOT_FISCAL_ADVICE = true;
