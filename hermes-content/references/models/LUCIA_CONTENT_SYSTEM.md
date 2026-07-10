@@ -60,15 +60,19 @@ producto (Nuvia). Regla 80/20: ~80% organico/personaje, ~20% producto.
 B-roll = voz como VO (nunca forzar lipsync ahi, falla). Lipsync real solo en el segmento
 de "hablando a camara".
 
-## 4b. Prompt de REALISMO (upgrade 2026-07-09 — salto de calidad)
+## 4b. ESTANDAR DE REALISMO (2026-07-09, Sergio eligió — resuelve el "se ve muy AI")
 
-Para fotos que parezcan reales (no "IA plana"), agregar SIEMPRE al prompt:
-`shot on an iPhone, hyper-realistic skin with visible natural pores and fine texture,
-slight film grain, natural available light, candid unposed, shallow depth of field,
-no beauty filter, no retouching`. Mantener `smooth forehead without wrinkles` (no
-"poreless" en toda la cara — poros en mejillas/nariz suman realismo, la frente lisa
-evita el artefacto). Ejemplos: `lucia-content-bank-20260709/realism-cafe.png` y
-`realism-goldenhour.png` — diferencia clara vs los selfies planos anteriores.
+**Para fotos de Lucia que parezcan REALES, el estandar es:**
+1. **Ancla `ced20cc2`** (frame REAL, no `902eeebb` que era generada — esa era la causa del look AI).
+2. **Prompt de realismo agresivo** (ojos con catchlights/vida, cejas con pelos individuales
+   despeinadas, poros/peach fuzz, asimetria, "not AI-looking / not plastic / not doll-like").
+3. **Resolucion 2k.**
+4. **Outfit + lugar EN TEXTO** (la ficha-Element no combina con `ced20cc2`; fichas solo
+   para match exacto con `902eeebb`).
+
+Formula completa en `lucia-onia-identity-bible.md`. Ejemplos del salto de calidad:
+`lucia-content-bank-20260709/realism-v2-REAL-*` (la de la derecha que eligió Sergio) vs
+los selfies planos anteriores.
 
 ## 4c. Acciones creativas / "random" (verificado 2026-07-09)
 

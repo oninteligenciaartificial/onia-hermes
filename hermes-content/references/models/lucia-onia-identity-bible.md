@@ -74,11 +74,31 @@ Cada lugar = UNA imagen real (sin personas) subida como Reference Element (`envi
 - Alternativa barata de respaldo (Higgsfield, sin ElevenLabs): seed_audio element
   `8de5db95-e898-46a6-bb68-26d02f311686` ("Lucia-voz"). Solo si no se puede usar ElevenLabs.
 
-## ⚠️ Metodo de generacion de fotos (CORRECCION 2026-07-09, Sergio)
-Para contenido ORIGINAL: anclar SOLO la cara (`902eeebb`) + describir outfit/lugar/accion
-en TEXTO. NO combinar los Elements de outfit+lugar (eso copia las fotos de referencia
-1:1, sale "foto vieja con la cara pegada"). Los outfit/lugar Elements solo para match
-exacto de producto/lugar real. Ver `lucia-elements-catalog.md` y `lucia-content-bank-20260709/`.
+## ⭐ ESTANDAR DE REALISMO (2026-07-09, Sergio eligió esto — "se veía muy AI" resuelto)
+Sergio detecto que las fotos salian "muy AI". Causa raiz: el ancla `902eeebb` era una
+imagen GENERADA (arrastra perfeccion artificial). **FIX — nuevo estandar:**
+1. **Ancla = `ced20cc2-3388-4d98-92ee-b0fcd961aa62`** (frame REAL del video, no generado)
+   → mas humana, ojos con vida, asimetria natural. NO usar `902eeebb` para fotos realistas.
+2. **Prompt de realismo agresivo** (formula abajo) + **resolucion `2k`**.
+3. **Outfit descrito EN TEXTO** (la ficha-Element NO combina con `ced20cc2` — falla; las
+   fichas `lucia-fit-*` quedan solo para match EXACTO de garment, y ahi se usa `902eeebb`).
+
+**Formula de prompt de realismo (copiar):**
+> `<<<ced20cc2-3388-4d98-92ee-b0fcd961aa62>>> Ultra-realistic candid phone photo of a real
+> woman, [ESCENA + OUTFIT en texto]. Photorealistic real human skin with visible pores,
+> fine peach fuzz, subtle texture and tiny imperfections; natural face asymmetry. Bright
+> lively eyes with sharp catchlights and natural moisture. Natural eyebrows with individual
+> visible hairs, slightly uneven and unruly. Freckles on nose and cheeks. Shot on iPhone,
+> natural light, slight film grain, no beauty filter, no smoothing. Keep her exact identity,
+> smooth forehead without wrinkles. Not a 3D render, not AI-looking, not plastic, not
+> doll-like, not airbrushed. No brand logos, no text, no watermark.`
+
+Validado: identidad consistente + realista en close/medio/cuerpo-entero — ver
+`lucia-content-bank-20260709/realism-v2-REAL-*`. `902eeebb` queda como fallback/para
+Marketing Studio; el ground-truth de QA sigue siendo el video real.
+
+**Regla previa que sigue valiendo:** NO combinar outfit-Element + lugar-Element juntos
+(copia las fotos 1:1). Ahora ademas: para realismo, todo (outfit+lugar+accion) va en texto.
 
 ## Personalidad / tono
 - Cercana, honesta, natural. Skincare desde la experiencia, sin humo. Claims seguros
