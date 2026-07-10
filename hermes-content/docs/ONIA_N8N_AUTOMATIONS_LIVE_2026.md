@@ -29,7 +29,7 @@ SSH previo corre `/opt/onia/check-secret.sh` que compara contra
 | ONIA - Reporte diario Sergio + Arthur | `xQaO3Sfsl9XzMiid` | Lun-Sab 07:00 | SSH `arthur-report.mjs`: tareas del dia para Sergio y Arthur (obligaciones acuerdo 60d + CRM vivo) + verificacion de ganancias de Arthur (payment_commissions por estado + progreso trial). Determinista, solo suma lo registrado. Agrega repo pulse + docs hygiene (duplicados raiz/docs) al texto | Diario |
 | ONIA Center - Briefing diario operativo | `ONIADailyBrief001` | Lun-Sab 06:45 | Lee el repo pulse (SSH cat) -> SSH `briefing-run.sh` -> `briefing-run.mjs` (docker exec onia-center): genera+registra el plan diario por rol (Sergio/Arthur/seller), deduplicado, con seccion de actividad de repo. La `ONIA_CENTER_INTERNAL_API_KEY` se lee del contenedor, sin `$env` | Plan diario + repo |
 | ONIA - Agente Finanzas y Fondo ONIA | `oKSTNdvS58ixBgnl` | Lun-Sab 07:15 | SSH `finance-fund-agent.mjs` (docker exec onia-center): agrega caja + ingresos 30d + comisiones por estado + Fondo ONIA en `onia_center.finance_summary` (upsert diario) + pone `agent_finance_fund` en `ready`. Determinista, READ-ONLY sobre la plata | Solo si hay anomalias |
-| ONIA - Agente Contenido y Media Lab | `nZkaXaZVKzgtwUqU` | Lun-Sab 07:20 | SSH `content-media-agent.mjs` (docker exec onia-center): elige pilar/idea, redacta con LiteLLM SOLO texto (guion "que grabar hoy" + carruseles), deja borradores en `review_queue` (pending/sensitive/reviewer=sergio) + pone `agent_content_media` en `ready`. Higgsfield NO automatico | Si hay borradores |
+| ONIA - Agente Contenido y Media Lab | `nZkaXaZVKzgtwUqU` | Lun-Sab 07:20 | SSH `content-media-agent.mjs` (docker exec onia-center): elige pilar/idea, redacta con LiteLLM SOLO texto (guion "que grabar hoy" + carruseles), deja borradores en `review_queue` (pending/sensitive/reviewer=sergio) + pone `agent_content_media` en `ready`. Higgsfield NO automatico. **Reemplaza a "Guiones Diarios" (`NDXLJiR00ciQx72V`, archivado 2026-07-09).** | Guion completo + carruseles |
 
 Los 5 crones fueron probados end-to-end antes de activar (ejecución real + Telegram
 recibido). El de propuestas (webhook) se probó con slug real (`bench`), secret
@@ -144,7 +144,11 @@ sin Telegram por no haber anomalias — comportamiento correcto).
   cada pieza en `review_queue` (`source_type=project`, `source_key=project-content`,
   `raw.agent=content-media-agent-v1`, `raw.kind=content_script|content_carousel`). Dedupe por
   fecha (no re-genera si ya hay borradores de hoy). La generacion PESADA (Higgsfield) NO es
-  automatica: el agente propone texto, no gasta creditos (gasto-validar-primero).
+  automatica: el agente propone texto, no gasta creditos (gasto-validar-primero). El Telegram
+  manda el GUION COMPLETO + carruseles (gancho/desarrollo/CTA/texto en pantalla/prompt
+  visual/voz-tono + slides), asi que **reemplaza al viejo "Guiones Diarios"**
+  (`NDXLJiR00ciQx72V`), archivado 2026-07-09 para no mandar dos mensajes de contenido. Probado
+  con guion completo: Telegram `message_id` 838.
 - **Agente Finanzas y Fondo ONIA** (`oKSTNdvS58ixBgnl`): `finance-fund-agent.mjs` +
   `finance-fund-agent-run.sh`. Determinista (sin LLM), READ-ONLY sobre la plata. Agrega caja
   (income_entries), comisiones por estado (payment_commissions), Fondo ONIA (fund_allocation)
