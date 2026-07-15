@@ -53,14 +53,30 @@ quien cierre antes del 31-jul-2026 y quedan congelados 12 meses.
 | **Inventario detallado** (multi-almacen, lotes/vencimientos, kardex promedio ponderado, conteos fisicos) | — | — | ✅ |
 | Aprobaciones (descuentos/anulaciones) + SLA + escalamiento | — | — | ✅ |
 | Multi-area/sucursal (hasta 3) + vistas por rol | — | — | ✅ |
-| **Bot WhatsApp** (respuestas + horario + derivacion) | — | — | ✅ INCLUIDO* |
+| **Chatbot WhatsApp** (escalera N1/N2/N3 — ver §4) | add-on | add-on | add-on |
 | **Facturacion SIAT en linea** (al certificar) | — | +Bs 190/mes | ✅ INCLUIDO* |
 | Soporte | correo | WhatsApp habil | prioritario |
 
-(*) Incluido el software; los costos POR USO de terceros van aparte por
-regla 2: conversaciones WhatsApp API de Meta, y si el SIN cobrara algo por
-volumen. Implementacion unica: Ordenado Bs 490 / Profesional Bs 1.490 /
-Empresa Bs 3.900 (carga guiada + wizard + capacitacion).
+(*) Facturacion SIAT: incluido el software (activo al certificar); los costos POR
+USO de terceros van aparte por regla 2. El chatbot WhatsApp NO va incluido en el
+plan: se cotiza como add-on por nivel (§4) — su setup es entrenar el bot y la IA
+es costo por uso (excepciones a+c de la regla 2). Implementacion unica: Ordenado
+Bs 490 / Profesional Bs 1.490 / Empresa Bs 3.900 / Grupo Clinico desde Bs 5.900
+(carga guiada + wizard + capacitacion).
+
+### 2.1 Grupo Clinico (4o nivel Bs — grupos/franquicias)
+
+Para clinicas con varias sucursales que quieren manejar el grupo como una sola
+operacion, sin pasar aun al modelo gestionado en USD.
+
+- **Precio**: Bs 3.900/mes (anual 39.000) · lanzamiento 2.900 congelado 12m.
+- **Promesa**: "todas tus clinicas como un solo grupo".
+- **Sobre Empresa**: sucursales ILIMITADAS incluidas (sin el +490/suc) + panel de
+  grupo (consolidado + comparativa entre sucursales) + facturacion SIAT por
+  sucursal (codigo propio) + usuarios ilimitados + soporte prioritario del grupo.
+- Sigue self-serve (el cliente opera). El salto a "ONIA opera + infra dedicada +
+  puentes a otros sistemas" es ONIA Empresarial (§3, USD).
+- Implementacion desde Bs 5.900 (estimado por nº de sucursales — a confirmar).
 
 ## 3. ONIA EMPRESARIAL (enterprise, cotizado en USD — ancla TR4 $20k)
 
@@ -98,6 +114,9 @@ su ticket al cerrar.
 
 | Extra | Por que es extra | Precio |
 |---|---|---|
+| **Chatbot WhatsApp N1** (recordatorios, sin IA) | automatizacion configurable | Bs 300 setup + 200/mes |
+| **Chatbot WhatsApp N2** (IA responde+capta) ⭐ | trabajo de entrenar el bot + IA por uso | Bs 1.500 setup + 550/mes + Meta |
+| **Chatbot WhatsApp N3** (IA opera) | automatizacion avanzada a medida | desde Bs 3.500 setup + 900/mes + Meta |
 | Conversaciones WhatsApp API (Meta) | costo por uso de tercero | al costo + 20% gestion |
 | Creditos IA de alto volumen (bot avanzado) | costo por uso | al costo + 20% |
 | Web del negocio + Cuidado Web | producto aparte (puerta de entrada) | 790-2.900 + 190-690/mes (vigente) |
