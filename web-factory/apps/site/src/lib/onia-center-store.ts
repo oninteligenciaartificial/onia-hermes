@@ -770,6 +770,22 @@ export async function createOniaCenterEntity(entity: RuntimeEntity, payload: unk
 }
 
 export async function updateOniaCenterEntityStatus(entity: RuntimeEntity, id: string, status: string, actorRole?: RoleId) {
+  if (entity === "lead") {
+    const actorFilter = actorRole && actorRole !== "sergio" ? `&owner_role_key=eq.${encodeURIComponent(roleToDb(actorRole))}` : "";
+    const rows = await supabaseRequest<DbLead[]>(
+      `leads?lead_key=eq.${encodeURIComponent(id)}${actorFilter}&select=lead_key,company_name,public_contact,channel,source,owner_role_key,pipeline_status,suggested_service_key,private_notes,raw,created_at`,
+      {
+        method: "PATCH",
+        headers: { prefer: "return=representation" },
+        body: JSON.stringify({ pipeline_status: leadStatusToDb[status as RuntimeLead["status"]] ?? status }),
+      },
+    );
+    if (!rows[0]) {
+      throw new Error("Lead no encontrado o no asignado al usuario actual.");
+    }
+    return mapLead(rows[0]);
+  }
+
   if (entity === "task") {
     const actorFilter = actorRole && actorRole !== "sergio" ? `&assigned_role_key=eq.${encodeURIComponent(roleToDb(actorRole))}` : "";
     const rows = await supabaseRequest<DbTask[]>(

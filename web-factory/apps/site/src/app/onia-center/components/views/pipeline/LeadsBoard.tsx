@@ -1,5 +1,6 @@
 import type { RuntimeLead } from "@/lib/onia-center-store";
 import { SurfaceCard } from "../../ui/SurfaceCard";
+import { LeadCard } from "./LeadCard";
 
 const STAGES: { key: RuntimeLead["status"]; label: string }[] = [
   { key: "nuevo", label: "Nuevos" },
@@ -33,15 +34,7 @@ export function LeadsBoard({ leads }: LeadsBoardProps) {
                 {items.length === 0 ? (
                   <p className="text-xs text-muted-foreground">Sin leads aca.</p>
                 ) : (
-                  items.map((lead) => (
-                    <div key={lead.id} className="rounded-lg border border-border bg-background p-2.5">
-                      <p className="text-sm font-medium">{lead.company}</p>
-                      <p className="mt-0.5 text-xs text-muted-foreground">{lead.contact || lead.source}</p>
-                      {lead.nextAction ? (
-                        <p className="mt-1 text-xs text-muted-foreground">{lead.nextAction}</p>
-                      ) : null}
-                    </div>
-                  ))
+                  items.map((lead) => <LeadCard key={lead.id} lead={lead} />)
                 )}
               </div>
             </div>
