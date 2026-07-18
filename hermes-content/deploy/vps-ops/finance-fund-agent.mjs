@@ -220,6 +220,8 @@ async function main() {
     tax.proximo_vencimiento_periodo = py + "-" + String(pm).padStart(2, "0");
     tax.dias_para_vencimiento = Math.round((Date.parse(venc + "T00:00:00-04:00") - Date.parse(today + "T00:00:00-04:00")) / 86400000);
   }
+  // Recordatorio: pingear si el vencimiento esta a <= 3 dias (aviso para declarar a tiempo).
+  const vencAlert = !!tax.proximo_vencimiento && typeof tax.dias_para_vencimiento === "number" && tax.dias_para_vencimiento >= 0 && tax.dias_para_vencimiento <= 3;
 
   // --- Anomalias deterministas (de PLATA: gatillan Telegram) ---
   const anomalies = [];
@@ -251,6 +253,10 @@ async function main() {
   // --- Texto humano (Telegram + almacenado) ---
   const L = [];
   L.push("ONIA — Finanzas y Fondo (" + periodLabel + ")");
+  if (vencAlert) {
+    L.push("");
+    L.push("⚠️ RECORDATORIO FISCAL: la declaracion IVA/IT del periodo " + tax.proximo_vencimiento_periodo + " vence el " + tax.proximo_vencimiento + " (en " + tax.dias_para_vencimiento + "d). Presentala aunque sea en cero — F-200/F-400.");
+  }
   L.push("");
   L.push("CAJA:");
   L.push("- Ingresos netos acumulados: " + bs(cashTotal));
@@ -342,7 +348,7 @@ async function main() {
     commissions_by_status: byStatus,
     tax_posture: tax,
     anomalies,
-    notify: anomalies.length > 0,
+    notify: anomalies.length > 0 || vencAlert,
     text,
   };
 }
