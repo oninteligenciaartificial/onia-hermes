@@ -1,9 +1,9 @@
 {
-  "generatedAt": "2026-07-03T21:13:35.687Z",
+  "generatedAt": "2026-07-18T17:08:35.896Z",
   "policy": "Use this as design intelligence, not as a copy source. Screenshots and closed-site structures are inspiration only. Reuse code only from allowed-after-review repositories after retokenization and QA.",
   "inputs": {
     "gallery": "data/references/design-sources/gallery-examples/latest-gallery-examples.json",
-    "code": "data/references/code-sources/2026-07-03T21-11-35-052Z-component-code-reference-pack.json"
+    "code": "data/references/code-sources/latest-component-code-examples.json"
   },
   "summary": {
     "sources": 26,
