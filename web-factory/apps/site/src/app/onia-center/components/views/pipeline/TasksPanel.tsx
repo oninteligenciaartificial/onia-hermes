@@ -2,6 +2,7 @@ import type { RuntimeTask } from "@/lib/onia-center-store";
 import type { CenterTone } from "@/app/onia-center/types";
 import { Badge } from "../../ui/Badge";
 import { SurfaceCard } from "../../ui/SurfaceCard";
+import { NewTaskForm } from "./NewTaskForm";
 
 const STATUS_TONE: Record<RuntimeTask["status"], CenterTone> = {
   todo: "neutral",
@@ -39,6 +40,7 @@ export function TasksPanel({ tasks }: TasksPanelProps) {
 
   return (
     <SurfaceCard title={`Tareas (${open.length} abiertas · ${tasks.length} total)`}>
+      <NewTaskForm />
       {open.length === 0 ? (
         <p className="text-sm text-muted-foreground">Sin tareas abiertas.</p>
       ) : (
