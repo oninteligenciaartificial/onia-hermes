@@ -51,6 +51,9 @@ Pantalla nueva o seccion en `equipo`. Arma la lista del dia con 4 fuentes:
 Muestra progreso semanal (X/meta por fila) y semaforo personal (verde/amarillo/
 rojo) calculado del scorecard.
 
+Contenido y division por colaborador (territorio, dia tipo, cuotas):
+`ONIA_COLABORADORES_TAREAS_DIARIAS_2026.md`.
+
 ### C. Scorecard semanal
 
 - Leer/escribir `weekly_scorecards` por colaborador y semana.
