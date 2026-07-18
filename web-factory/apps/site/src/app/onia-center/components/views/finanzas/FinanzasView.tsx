@@ -4,6 +4,7 @@ import { getVisibleCenters } from "@/app/onia-center/engine";
 import { Badge } from "../../ui/Badge";
 import { SurfaceCard } from "../../ui/SurfaceCard";
 import { FinanceSummaryCard } from "./FinanceSummaryCard";
+import { TaxPostureCard } from "./TaxPostureCard";
 
 interface FinanzasViewProps {
   role: RoleId;
@@ -16,6 +17,7 @@ export function FinanzasView({ role, summary }: FinanzasViewProps) {
   return (
     <div className="grid gap-4">
       <FinanceSummaryCard summary={summary} />
+      <TaxPostureCard taxPosture={summary?.taxPosture ?? null} />
       <SurfaceCard title="Centros contables">
         <div className="grid gap-2.5">
           {centers.map((center) => (

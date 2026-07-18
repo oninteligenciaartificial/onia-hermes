@@ -73,6 +73,21 @@ export interface FinanceAnomaly {
   amountBs: number;
 }
 
+export interface TaxPosture {
+  period: string;
+  regime: string;
+  siatEmitting: boolean;
+  ivaAPagarBs: number;
+  ivaSaldoFavorBs: number;
+  itBs: number;
+  iueEstimadoBs: number;
+  creditoFiscalPerdidoBs: number;
+  iueBeRetencionesBs: number;
+  proximoVencimiento: string;
+  diasParaVencimiento: number | null;
+  notes: string;
+}
+
 export interface FinanceSummary {
   summaryKey: string;
   periodLabel: string;
@@ -88,6 +103,7 @@ export interface FinanceSummary {
   anomalyCount: number;
   anomalies: FinanceAnomaly[];
   summaryText: string;
+  taxPosture: TaxPosture | null;
 }
 
 type DbFinanceRow = {
@@ -105,7 +121,33 @@ type DbFinanceRow = {
   anomaly_count?: unknown;
   anomalies?: unknown;
   summary_text?: string;
+  tax_posture?: unknown;
 };
+
+function mapTaxPosture(value: unknown): TaxPosture | null {
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    return null;
+  }
+  const record = value as Record<string, unknown>;
+  if (Object.keys(record).length === 0) {
+    return null;
+  }
+  const dias = record.dias_para_vencimiento;
+  return {
+    period: typeof record.period === "string" ? record.period : "",
+    regime: typeof record.regime === "string" ? record.regime : "",
+    siatEmitting: record.siat_emitting === true,
+    ivaAPagarBs: toNumber(record.iva_a_pagar_bs),
+    ivaSaldoFavorBs: toNumber(record.iva_saldo_favor_bs),
+    itBs: toNumber(record.it_bs),
+    iueEstimadoBs: toNumber(record.iue_estimado_bs),
+    creditoFiscalPerdidoBs: toNumber(record.credito_fiscal_perdido_bs),
+    iueBeRetencionesBs: toNumber(record.iue_be_retenciones_bs),
+    proximoVencimiento: typeof record.proximo_vencimiento === "string" ? record.proximo_vencimiento : "",
+    diasParaVencimiento: dias === null || dias === undefined ? null : Math.trunc(toNumber(dias)),
+    notes: typeof record.notes === "string" ? record.notes : "",
+  };
+}
 
 function mapAnomalies(value: unknown): FinanceAnomaly[] {
   if (!Array.isArray(value)) {
@@ -146,6 +188,7 @@ export async function getFinanceSummary(): Promise<FinanceSummary | null> {
     anomalyCount: Math.trunc(toNumber(row.anomaly_count)),
     anomalies: mapAnomalies(row.anomalies),
     summaryText: row.summary_text ?? "",
+    taxPosture: mapTaxPosture(row.tax_posture),
   };
 }
 
