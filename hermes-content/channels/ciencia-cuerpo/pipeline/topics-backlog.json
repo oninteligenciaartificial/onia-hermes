@@ -1,7 +1,7 @@
 {
   "brand": "Maquina Humana",
   "created_at": "2026-07-08",
-  "updated_at": "2026-07-09",
+  "updated_at": "2026-07-17",
   "frame": "rendi mejor - cuerpo + mente. El titulo promete rendir (gancho), el video explica el MECANISMO, la conclusion la saca el espectador. Nunca 'hace esto'. Ver PLAN.md #4.0.",
   "note": "Formato maquina de PLAN.md #3. title_working = gancho de rendimiento; angle_thesis = mecanismo que explica. sources con url = verificadas via WebSearch (no de memoria). source_status=pending_research_brief = tema nuevo, su fuente se fija y verifica en su research-brief.json ANTES de producir (gate duro). status: pilot=en produccion | backlog=main list pendiente | variety=banco de cuerpo puro para intercalar.",
   "topics": [
@@ -186,8 +186,11 @@
       "title_working": "Por que no te podes concentrar",
       "theme": "foco",
       "angle_thesis": "Redes de atencion + el costo real de cambiar de tarea: el 'multitasking' no existe como se cree, el cerebro paga un peaje cada switch.",
-      "sources": [],
-      "source_status": "pending_research_brief",
+      "sources": [
+        { "title": "Common Cognitive Control Processes Underlying Performance in Task-Switching and Dual-Task Contexts", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7171593/", "publisher": "NIH/PMC" },
+        { "title": "Between-Task Competition and Cognitive Control in Task Switching", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6675498/", "publisher": "NIH/PMC" }
+      ],
+      "source_status": "verified",
       "ymyl_sensitive_topic": false,
       "status": "backlog"
     },
@@ -197,8 +200,11 @@
       "title_working": "Por que dejas todo para despues",
       "theme": "foco/motivacion",
       "angle_thesis": "Sesgo del presente: el sistema limbico (quiere la recompensa ya) le gana al prefrontal (piensa en el despues).",
-      "sources": [],
-      "source_status": "pending_research_brief",
+      "sources": [
+        { "title": "Identifying the Neural Substrates of Procrastination: a Resting-State fMRI Study", "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5018960/", "publisher": "NIH/PMC" },
+        { "title": "Frontostriatal Functional Connectivity Underlies the Association between Punishment Sensitivity and Procrastination", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9497208/", "publisher": "NIH/PMC" }
+      ],
+      "source_status": "verified",
       "ymyl_sensitive_topic": false,
       "status": "backlog"
     },
@@ -208,8 +214,11 @@
       "title_working": "Por que un habito se pega y cuesta romperlo",
       "theme": "habitos",
       "angle_thesis": "Bucle senal -> rutina -> recompensa; los ganglios basales lo automatizan para ahorrar energia.",
-      "sources": [],
-      "source_status": "pending_research_brief",
+      "sources": [
+        { "title": "The role of the basal ganglia in habit formation (Yin & Knowlton)", "url": "https://pubmed.ncbi.nlm.nih.gov/16715055/", "publisher": "PubMed/NIH" },
+        { "title": "The formation of habits in the neocortex under the implicit supervision of the basal ganglia", "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4699145/", "publisher": "NIH/PMC" }
+      ],
+      "source_status": "verified",
       "ymyl_sensitive_topic": false,
       "status": "backlog"
     },
@@ -219,8 +228,11 @@
       "title_working": "Por que arrancas con todo y despues abandonas",
       "theme": "motivacion",
       "angle_thesis": "La dopamina de la anticipacion (querer) no es la misma que la de la recompensa (disfrutar); cuando baja la primera, abandonas.",
-      "sources": [],
-      "source_status": "pending_research_brief",
+      "sources": [
+        { "title": "The debate over dopamine's role in reward: the case for incentive salience (Berridge, 2007)", "url": "https://pubmed.ncbi.nlm.nih.gov/17072591/", "publisher": "PubMed/NIH" },
+        { "title": "Liking, Wanting and the Incentive-Sensitization Theory of Addiction", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5171207/", "publisher": "NIH/PMC" }
+      ],
+      "source_status": "verified",
       "ymyl_sensitive_topic": false,
       "status": "backlog"
     },
@@ -230,8 +242,11 @@
       "title_working": "Que pasa en tu cerebro cuando tenes miedo",
       "theme": "emociones",
       "angle_thesis": "La amigdala dispara la alarma y la respuesta de amenaza antes de que la corteza 'piense' el peligro.",
-      "sources": [],
-      "source_status": "pending_research_brief",
+      "sources": [
+        { "title": "Prefrontal cortex, amygdala, and threat processing: implications for PTSD", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8617299/", "publisher": "NIH/PMC" },
+        { "title": "Neurobiology of fear and specific phobias", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5580526/", "publisher": "NIH/PMC" }
+      ],
+      "source_status": "verified",
       "ymyl_sensitive_topic": true,
       "sensitive_topic_tags": ["salud mental"],
       "status": "backlog"
@@ -242,8 +257,11 @@
       "title_working": "Se te agota la fuerza de voluntad?",
       "theme": "foco",
       "angle_thesis": "Fatiga de decision: lo que la evidencia muestra y lo que sigue en debate (el 'ego depletion' es contestado). Tema honesto, sin hype.",
-      "sources": [],
-      "source_status": "pending_research_brief",
+      "sources": [
+        { "title": "A Multilab Preregistered Replication of the Ego-Depletion Effect (Hagger et al., 2016)", "url": "https://journals.sagepub.com/doi/10.1177/1745691616652873", "publisher": "Perspectives on Psychological Science" },
+        { "title": "Does willpower mindset really moderate the ego-depletion effect? A preregistered replication (2023)", "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10310002/", "publisher": "NIH/PMC" }
+      ],
+      "source_status": "verified",
       "ymyl_sensitive_topic": false,
       "status": "backlog"
     },

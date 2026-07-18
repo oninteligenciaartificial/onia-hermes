@@ -114,12 +114,12 @@ produce sin fuente real. `★` = piloto.
 | 12 | Qué le hace el alcohol a tu cerebro, minuto a minuto | Acetaldehído tóxico en el hígado + comunicación neuronal alterada, en tiempo real | ✓ [Alcohol metabolism (NIAAA)](https://www.niaaa.nih.gov/publications/alcohol-metabolism) |
 | 13 | Por qué envejecés (por dentro) | Células senescentes "se jubilan mal": dejan de dividirse pero secretan señales que dañan el tejido vecino | ✓ [Cellular senescence (NIH)](https://pmc.ncbi.nlm.nih.gov/articles/PMC12322153/) |
 | 14 | Cómo tu cuerpo reconoce un virus en minutos | Innato (rápido, ataca todo) + adaptativo (aprende y recuerda de por vida) | ✓ [Immune system (NIAID)](https://www.niaid.nih.gov/research/immune-system-overview) |
-| 15 | Por qué no te podés concentrar | Redes de atención + el costo real de cambiar de tarea (el "multitasking" no existe como creés) | ○ por verificar en research-brief |
-| 16 | Por qué dejás todo para después | Sesgo del presente: el sistema límbico (quiere ya) le gana al prefrontal (piensa en después) | ○ por verificar en research-brief |
-| 17 | Por qué un hábito se pega y cuesta romperlo | Bucle señal → rutina → recompensa; los ganglios basales lo automatizan | ○ por verificar en research-brief |
-| 18 | Por qué arrancás con todo y después abandonás | La dopamina de la anticipación no es la misma que la de la recompensa | ○ por verificar en research-brief |
-| 19 | Qué pasa en tu cerebro cuando tenés miedo | La amígdala dispara la alarma antes de que "pienses" el peligro | ○ por verificar en research-brief |
-| 20 | ¿Se te agota la fuerza de voluntad? | Fatiga de decisión: lo que la evidencia muestra y lo que sigue en debate (honesto, no hype) | ○ por verificar en research-brief |
+| 15 | Por qué no te podés concentrar | Redes de atención + el costo real de cambiar de tarea (el "multitasking" no existe como creés) | ✓ [Cognitive control en task-switching (NIH)](https://pmc.ncbi.nlm.nih.gov/articles/PMC7171593/) |
+| 16 | Por qué dejás todo para después | Sesgo del presente: el sistema límbico (quiere ya) le gana al prefrontal (piensa en después) | ✓ [Neural substrates of procrastination (NIH)](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5018960/) |
+| 17 | Por qué un hábito se pega y cuesta romperlo | Bucle señal → rutina → recompensa; los ganglios basales lo automatizan | ✓ [Basal ganglia & habit formation (PubMed)](https://pubmed.ncbi.nlm.nih.gov/16715055/) |
+| 18 | Por qué arrancás con todo y después abandonás | La dopamina de la anticipación no es la misma que la de la recompensa | ✓ [Incentive salience: wanting vs liking (Berridge, PubMed)](https://pubmed.ncbi.nlm.nih.gov/17072591/) |
+| 19 | Qué pasa en tu cerebro cuando tenés miedo | La amígdala dispara la alarma antes de que "pienses" el peligro | ✓ [Amygdala & threat processing (NIH)](https://pmc.ncbi.nlm.nih.gov/articles/PMC8617299/) |
+| 20 | ¿Se te agota la fuerza de voluntad? | Fatiga de decisión: lo que la evidencia muestra y lo que sigue en debate (honesto, no hype) | ✓ [Ego-depletion falló en replicar (Hagger et al.)](https://journals.sagepub.com/doi/10.1177/1745691616652873) |
 
 Banco de variedad (cuerpo puro, fuente ya verificada en el historial de esta
 investigación, para intercalar y dar aire al canal): fiebre, vacunas, curar una
