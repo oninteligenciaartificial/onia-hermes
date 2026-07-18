@@ -175,18 +175,41 @@ comments, documents, approvals, schedule, saved_views, intake)? Mientras se
 decide, arranca por la columna vertebral (R1, mismo alcance que DentaGest
 Sprints 1-4): no choca con ninguna de las dos opciones.
 
-R1 -- instalar ONIA Core en GestiOS como columna vertebral. Sprint 0 primero:
-el baseline de migraciones esta CONFIRMADO sucio (verificado 2026-07-08 en
-docs/DATABASE.md, ya no es dato de memoria): varias migraciones aplicadas a
-mano a Supabase fuera de `migrate deploy` (cash_registers, email_log), la
-ultima es un `.sql` suelto, y NO hay `DATABASE_URL`/`DIRECT_URL` local (se
-aplican en Vercel en el build). PRIMER PASO CONCRETO: conseguir esa URL valida
-(Vercel env del proyecto o el Supabase de GestiOS) -- sin eso no podes ni
-correr `prisma migrate status`. Luego el mismo runbook de baseline que uso
-DentaGest en su Sprint 0. Ver el plan completo con todo esto en
-`C:\dev\proyectos\onia-hermes\onia-core\ONIA_CORE_GESTIOS_ADOPTION_PLAN_2026.md`
-(seccion "Baseline de migraciones — CONFIRMADO 2026-07-08") +
-`ONIA_CORE_INSTALL_GUIDE_2026.md`.
+R1 -- adoptar ONIA Core en GestiOS como columna vertebral. EL ESTADO REAL CAMBIO
+(diagnostico verificado 2026-07-17 via Supabase MCP, proyecto
+jafxylfocvvlflpqfsix "Gesti-Os", ACTIVE_HEALTHY): el core NO esta "por instalar"
+-- ya esta APLICADO EN LA DB pero HUERFANO del codigo. Tres hechos:
+1. La DB de prod YA tiene las 9 tablas onia_core_* CON DATOS (work_items 2 filas,
+   approval_requests 1, schedule_events 1), aplicadas el 2026-07-05 via Supabase
+   migrations (add_onia_core_work_items / collab_approvals / roles_schedule_views /
+   channels_partners). PERO el codigo NO las tiene: schema.prisma = 0 modelos
+   onia_core y NO existe lib/onia-core/ (el intento de copiar el contrato se
+   revirtio en 3d8aec4). => Sprint 0 es RECONCILIAR codigo<->DB, no instalar de
+   cero. Portar la logica de @onia/core (lib/onia-core, como DentaGest) + declarar
+   los modelos Prisma que MAPEEN las tablas ya existentes (mismos nombres/columnas)
+   y marcarlas como ya aplicadas -- NO crear tablas nuevas.
+2. DOS trackings incompatibles: la DB se maneja con supabase_migrations (14 entries,
+   Supabase CLI/dashboard); el repo tiene prisma/migrations/ (12 carpetas + 1 .sql
+   suelto 20260610_add_inventario_avanzado_addon.sql). Nombres/timestamps NO
+   coinciden (qr_payments: disco 20260501 vs DB 20260705; cash_registers: disco
+   ...120000 vs DB ...202520) y Prisma NUNCA corrio contra esta DB (no hay
+   _prisma_migrations). => baseline de Prisma sobre la DB real con
+   `migrate resolve --applied` (runbook DentaGest Sprint 0), NUNCA `migrate deploy`
+   ciego (chocaria con las tablas ya existentes).
+3. SEGURIDAD (surfaceado a Sergio, se decide aparte): 15 tablas con RLS
+   DESHABILITADO -- TODAS las onia_core_* + qr_payments + personal_subscriptions +
+   purchase_orders + UserSession + notifications -- expuestas con la anon key. Hay
+   que poner RLS + policies antes de exponer mas. NO habilitar RLS sin policies
+   (bloquea todo acceso).
+PRIMER PASO CONCRETO: conseguir DATABASE_URL/DIRECT_URL valida (Vercel env del
+proyecto gesti-os o la connection string del Supabase jafxylfocvvlflpqfsix) -- sin
+eso no corres prisma migrate localmente. Con la URL: `prisma migrate status` para
+el gap exacto Prisma<->DB, luego baseline/resolve. Alternativa si no aparece la
+URL: el saneamiento tambien se puede diagnosticar/ejecutar via Supabase MCP
+(list_migrations/list_tables/execute_sql) como se hizo este diagnostico. Plan
+completo: `C:\dev\proyectos\onia-hermes\onia-core\ONIA_CORE_GESTIOS_ADOPTION_PLAN_2026.md`
+(su seccion baseline es del 2026-07-08, DESACTUALIZADA -- vale este diagnostico
+2026-07-17) + `ONIA_CORE_INSTALL_GUIDE_2026.md`.
 OJO datos que YA existen en GestiOS y no hay que reinventar: `Invoice`
 (cuis/cufd/cufe -- hubo un intento SIAT "retirado del alcance comercial"),
 `QrPayment` (multi-PSP), `OrgAddon`/`PlanType` (empaquetado comercial PROPIO
