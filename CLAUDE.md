@@ -115,7 +115,8 @@ Docs internos de referencia: `PRICING_RATIONALE_INTERNO.md`,
 > eso y corrés TODOS los carriles no bloqueados en paralelo.
 
 Fuentes (no duplicar; editar estas, no crear otras):
-- Asignación + prompts copy-paste: `hermes-content/docs/ONIA_SESION_KICKOFFS_20260705.md`.
+- **Arranque actual (foco + prompts, EMPEZAR AQUÍ): `hermes-content/docs/ONIA_PLAN_ARRANQUE_LIMPIO_20260718.md`.**
+- Asignación + prompts copy-paste (histórico): `hermes-content/docs/ONIA_SESION_KICKOFFS_20260705.md`.
 - Backlog e ítems (P/R/M/S): `hermes-content/docs/ONIA_PROXIMA_SESION_PLAN_20260705.md`.
 - Dueño de archivos por carril: `COORDINATION_MANIFEST.md` (sección "Modelo de carriles").
 - Stack de skills + reglas de subagentes: `hermes-content/docs/ONIA_SKILLS_STACK_Y_SUBAGENTES_20260705.md`.
@@ -162,3 +163,21 @@ Reglas duras:
 Bloqueos humanos de Sergio (hacer apenas se pueda; destraban lo comercial): S1
 precios, S2 NIT SIAT, S3 secret intake n8n, S4 columnas TR4, S5 Meta, S6 token IG,
 S7 keys Tavily/fal, S8 fiscal, S9 password. Detalle en el plan maestro §(b).
+
+## Cuándo separar un repo (REGLA)
+
+> El cerebro va junto; los productos con cliente van aparte. Separás por dueño +
+> ciclo de vida + acceso, NUNCA por cantidad ni por "ordenar el desorden".
+
+- **Junto en onia-hermes:** el cerebro (`hermes-content`: docs, skills, memoria,
+  propuestas), el core y la orquestación. Se lee a sí mismo (Hermes, agentes,
+  memoria); fragmentarlo multiplica la sincronización manual (lección `onia-core`,
+  que hubo que mergear a mano para que DentaGest lo leyera).
+- **Separado (repo propio):** un producto SOLO cuando cumple las TRES — (1) cliente
+  real, (2) deploy y ciclo de release propio, (3) el cliente NO debe ver el cerebro.
+  Correctos hoy: DentaGest, GestiOS, Bolivian Electric. Colaboradores = repo saneado
+  `onia-hermes-collab` (separación por acceso).
+- **NO separar por sensación de desorden.** El cruce se arregla con disciplina de
+  cierre (mergear + cerrar sesión) y el tablero de carriles, no partiendo repos.
+- **Candidato futuro (no ahora):** sacar `onia-center` de `web-factory` cuando pese
+  demasiado y ya no comparta packages — con motivo medible, no preventivo.
