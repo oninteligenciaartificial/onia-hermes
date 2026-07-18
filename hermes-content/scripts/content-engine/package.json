@@ -1,0 +1,24 @@
+{
+  "name": "onia-content-engine",
+  "version": "0.1.0",
+  "private": true,
+  "description": "ONIA content-that-sells engine v1: template-driven marketing video assembly with Remotion (one template -> N videos).",
+  "type": "module",
+  "scripts": {
+    "studio": "remotion studio",
+    "render": "node render.mjs",
+    "render:isdin": "node render.mjs src/data/nuvia-isdin-fusion-water-spf50-001.json"
+  },
+  "dependencies": {
+    "@remotion/bundler": "^4.0.0",
+    "@remotion/cli": "^4.0.0",
+    "@remotion/renderer": "^4.0.0",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "remotion": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.0",
+    "typescript": "^5.4.0"
+  }
+}
