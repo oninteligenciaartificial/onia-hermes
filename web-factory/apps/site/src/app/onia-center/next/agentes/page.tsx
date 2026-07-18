@@ -8,7 +8,7 @@ import {
 } from "@/lib/onia-center-store";
 import { getOniaCenterActor } from "@/lib/onia-center-auth";
 import { getVisibleOperatingAgents } from "@/app/onia-center/operating-engine";
-import { getLiveAgentStatuses, mergeLiveAgentStatus } from "@/app/onia-center/live/live-runtime";
+import { getIntegrationConnectors, getLiveAgentStatuses, mergeLiveAgentStatus } from "@/app/onia-center/live/live-runtime";
 import { AppShell } from "@/app/onia-center/components/shell/AppShell";
 import { AgentesView } from "@/app/onia-center/components/views/agentes/AgentesView";
 import { EmptyState } from "@/app/onia-center/components/ui/EmptyState";
@@ -63,9 +63,11 @@ export default async function AgentesPage() {
     reviews = [];
   }
 
+  const integrations = await getIntegrationConnectors();
+
   return (
     <AppShell>
-      <AgentesView agents={agents} lastRuns={lastRuns} reviews={reviews} />
+      <AgentesView agents={agents} lastRuns={lastRuns} reviews={reviews} integrations={integrations} />
     </AppShell>
   );
 }

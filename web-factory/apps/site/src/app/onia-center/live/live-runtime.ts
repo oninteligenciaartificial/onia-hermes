@@ -355,3 +355,53 @@ export async function getReviewBodies(): Promise<Record<string, ReviewBody>> {
   }
   return map;
 }
+
+// ---------------------------------------------------------------------------
+// 4. Estado de integraciones — onia_center.integration_connectors.
+//    El sistema modela cada conector externo (Cal.com, Google Calendar, n8n,
+//    WhatsApp, LiteLLM, etc.) con su estado real de conexion. El panel lo LEE
+//    para responder "que esta conectado / que falta" sin exponer credenciales.
+// ---------------------------------------------------------------------------
+
+export interface IntegrationConnector {
+  key: string;
+  name: string;
+  provider: string;
+  category: string;
+  status: string;
+  selfHosted: boolean;
+  nextAction: string;
+  priority: string;
+}
+
+type DbConnectorRow = {
+  connector_key?: string;
+  connector_name?: string;
+  provider?: string;
+  category?: string;
+  status?: string;
+  self_hosted?: boolean;
+  next_action?: string;
+  priority?: string;
+};
+
+export async function getIntegrationConnectors(): Promise<IntegrationConnector[]> {
+  const rows = await liveRequest<DbConnectorRow[]>(
+    "integration_connectors?select=connector_key,connector_name,provider,category,status,self_hosted,next_action,priority&order=category.asc,connector_key.asc",
+  );
+  if (!rows) {
+    return [];
+  }
+  return rows
+    .filter((row) => row.connector_key)
+    .map((row) => ({
+      key: row.connector_key as string,
+      name: row.connector_name ?? row.provider ?? (row.connector_key as string),
+      provider: row.provider ?? "",
+      category: row.category ?? "otros",
+      status: row.status ?? "planned",
+      selfHosted: row.self_hosted === true,
+      nextAction: row.next_action ?? "",
+      priority: row.priority ?? "",
+    }));
+}
