@@ -10,18 +10,29 @@ Sergio ajusta lo que quiera antes de producir.
 > eso engancha más que abrir diciendo "hola soy una IA". No afirmar cosas no verificables (ej. "la
 > primera de Bolivia").
 
+> **FORMATO ESTÁNDAR (Sergio 2026-07-17): TODO b-roll + VO (voz en off). CERO lipsync.**
+> Motivo: en toda la sesión el lipsync fue el eslabón frágil (aun con Seedance requiere ancla
+> perfecta, es caro y se rompe); el b-roll fue consistente en TODOS los modelos. B-roll + la voz
+> de Lucía (ElevenLabs) narrando encima = más robusto, más barato, más rápido, visualmente más
+> rico y **se entiende mejor**. El lipsync queda como recurso opcional para alguna pieza hero
+> futura, no para el flujo base. Pipeline: foto realista (realism v2: cara + outfit + ambiente) →
+> animar a b-roll (veo3.1 acción / minimax lifestyle) → VO ElevenLabs encima → subtítulos quemados.
+
 ---
 
 ## Pieza 1 — Presentación / reveal (LA importante) 🎯
-**Pilar:** presentación (front → meta). **Formato:** talking-head cara al frente.
-- **Hook (0-3s):** *"Te voy a confesar algo que no le digo a casi nadie…"* (cercana, mirando a cámara).
-- **Reveal (3-7s):** *"…no soy real. Soy una influencer hecha 100% con inteligencia artificial. Pero
-  lo que te voy a enseñar de skincare sí funciona — y sin filtros imposibles."*
-- **Desarrollo (7-15s):** *"Soy Lucía, cruceña, 26. Acá vas a ver rutina real, lo que sí uso y lo que
-  no, y el detrás de cámara de cómo hago todo esto con IA."*
-- **CTA:** *"Quedate, que esto recién empieza. 👇"*
-- **Producción:** Seedance mini + voz ElevenLabs `wrXs6GqcC7X03dDKMoeT`; ancla cara-al-frente
-  (`ced22…` realismo v2), clips 5-6s, subtítulos quemados. Etiqueta IA activada.
+**Pilar:** presentación (front → meta). **Formato:** b-roll + VO (voz en off), SIN lipsync.
+- **Hook (0-3s):** VO *"Te voy a confesar algo que no le digo a casi nadie…"* sobre b-roll de Lucía
+  (plano cercano de su mirada, o entrando a cuadro en su baño — realism v2).
+- **Reveal (3-7s):** VO *"…no soy real. Soy una influencer hecha 100% con IA. Pero lo que te enseño
+  de skincare sí funciona — sin filtros imposibles."* Refuerzo visual: glitch sutil / mostrar la
+  ficha 360° o el proceso ~1s.
+- **Desarrollo (7-15s):** VO *"Soy Lucía, cruceña, 26. Acá vas a ver rutina real y el detrás de
+  cámara de cómo hago todo esto con IA."* sobre b-roll lifestyle (café / caminando).
+- **CTA:** VO/texto *"Quedate, que esto recién empieza. 👇"*
+- **Producción:** fotos realistas (realism v2: cara `902eeebb`/ancla REAL + escena) → animar b-roll
+  (veo3.1 acción / minimax lifestyle) → **VO ElevenLabs `wrXs6GqcC7X03dDKMoeT` encima** → subtítulos
+  quemados. Etiqueta IA activada. Sin lipsync.
 
 ## Pieza 2 — Rutina de mañana (GRWM, front-stage)
 **Pilar:** Lifestyle/GRWM. **Formato:** b-roll aplicándose + VO.
