@@ -1,5 +1,5 @@
 import type { RuntimeLead, RuntimeTask } from "@/lib/onia-center-store";
-import { LeadsPanel } from "./LeadsPanel";
+import { LeadsBoard } from "./LeadsBoard";
 import { TasksPanel } from "./TasksPanel";
 
 interface PipelineViewProps {
@@ -9,8 +9,8 @@ interface PipelineViewProps {
 
 export function PipelineView({ leads, tasks }: PipelineViewProps) {
   return (
-    <div className="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-4">
-      <LeadsPanel leads={leads} />
+    <div className="grid gap-4">
+      <LeadsBoard leads={leads} />
       <TasksPanel tasks={tasks} />
     </div>
   );
