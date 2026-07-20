@@ -181,3 +181,20 @@ S7 keys Tavily/fal, S8 fiscal, S9 password. Detalle en el plan maestro §(b).
   cierre (mergear + cerrar sesión) y el tablero de carriles, no partiendo repos.
 - **Candidato futuro (no ahora):** sacar `onia-center` de `web-factory` cuando pese
   demasiado y ya no comparta packages — con motivo medible, no preventivo.
+
+## Objetivo por sesión — no descarrilar (REGLA)
+
+> Sergio 2026-07-20: separar el trabajo en muchas sesiones mezcla la información y se
+> pierde el objetivo. Se orquesta desde UNA sesión de control con subagentes.
+
+- **Definir el objetivo al inicio de cada sesión, escrito y explícito.** Todo lo que no
+  sirve a ese objetivo se pospone (se anota como pendiente), no se hace.
+- **No terminar la sesión hasta perfeccionar y terminar ese objetivo.** Nada a medias,
+  nada de saltar a otra cosa.
+- **Orquestar con subagentes desde la sesión de control** en vez de abrir muchas
+  sesiones que se cruzan. Cada subagente trabaja en su worktree/carril con ruta
+  explícita, verifica `git branch --show-current`, y hace gates + commit COHERENTES en
+  su propio árbol (nunca mezcla árboles). El orquestador mantiene el objetivo, el orden
+  y el merge a `main` tras revisar.
+- Tareas del mismo carril (misma carpeta) → subagentes SECUENCIALES. Carriles distintos
+  → en paralelo. Lo nuevo que aparezca se anota como pendiente y se retoma DESPUÉS.
