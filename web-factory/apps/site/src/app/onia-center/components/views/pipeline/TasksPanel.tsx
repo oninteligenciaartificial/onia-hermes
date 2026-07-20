@@ -1,8 +1,9 @@
-import type { RuntimeTask } from "@/lib/onia-center-store";
+import type { RuntimeNote, RuntimeTask } from "@/lib/onia-center-store";
 import type { CenterTone } from "@/app/onia-center/types";
 import { Badge } from "../../ui/Badge";
 import { SurfaceCard } from "../../ui/SurfaceCard";
 import { NewTaskForm } from "./NewTaskForm";
+import { TaskControls } from "./TaskControls";
 
 const STATUS_TONE: Record<RuntimeTask["status"], CenterTone> = {
   todo: "neutral",
@@ -31,9 +32,11 @@ const PRIORITY_ORDER: Record<RuntimeTask["priority"], number> = { alta: 0, media
 
 interface TasksPanelProps {
   tasks: RuntimeTask[];
+  notes: RuntimeNote[];
+  canApprove: boolean;
 }
 
-export function TasksPanel({ tasks }: TasksPanelProps) {
+export function TasksPanel({ tasks, notes, canApprove }: TasksPanelProps) {
   const open = tasks
     .filter((task) => OPEN.includes(task.status))
     .sort((a, b) => PRIORITY_ORDER[a.priority] - PRIORITY_ORDER[b.priority]);
@@ -44,18 +47,33 @@ export function TasksPanel({ tasks }: TasksPanelProps) {
       {open.length === 0 ? (
         <p className="text-sm text-muted-foreground">Sin tareas abiertas.</p>
       ) : (
-        <div className="grid gap-2.5">
-          {open.map((task) => (
-            <div key={task.id} className="flex items-start justify-between gap-3">
-              <div className="min-w-0">
-                <p className="text-sm font-medium">{task.title}</p>
-                <div className="mt-1 flex flex-wrap items-center gap-1.5">
-                  <Badge tone={PRIORITY_TONE[task.priority]}>{task.priority}</Badge>
-                  <Badge tone={STATUS_TONE[task.status]}>{STATUS_LABEL[task.status]}</Badge>
+        <div className="grid gap-3">
+          {open.map((task) => {
+            const evidenceNotes = notes.filter(
+              (note) => note.kind === "evidencia" && note.linkedTo === task.id,
+            );
+            return (
+              <div
+                key={task.id}
+                className="grid gap-1 border-b border-border pb-3 last:border-0 last:pb-0"
+              >
+                <div className="min-w-0">
+                  <p className="text-sm font-medium">{task.title}</p>
+                  <div className="mt-1 flex flex-wrap items-center gap-1.5">
+                    <Badge tone={PRIORITY_TONE[task.priority]}>{task.priority}</Badge>
+                    <Badge tone={STATUS_TONE[task.status]}>{STATUS_LABEL[task.status]}</Badge>
+                  </div>
                 </div>
+                <TaskControls
+                  taskId={task.id}
+                  status={task.status}
+                  evidence={task.evidence}
+                  evidenceNotes={evidenceNotes}
+                  canApprove={canApprove}
+                />
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
     </SurfaceCard>

@@ -5,7 +5,7 @@ import {
   getOniaCenterRuntime,
   isOniaCenterConfigured,
 } from "@/lib/onia-center-store";
-import { getOniaCenterActor } from "@/lib/onia-center-auth";
+import { getOniaCenterActor, isSergio } from "@/lib/onia-center-auth";
 import { AppShell } from "@/app/onia-center/components/shell/AppShell";
 import { PipelineView } from "@/app/onia-center/components/views/pipeline/PipelineView";
 import { EmptyState } from "@/app/onia-center/components/ui/EmptyState";
@@ -49,7 +49,12 @@ export default async function PipelinePage() {
     const runtime = filterOniaCenterRuntimeForActor(await getOniaCenterRuntime(), auth.actor);
     return (
       <AppShell>
-        <PipelineView leads={runtime.leads} tasks={runtime.tasks} />
+        <PipelineView
+          leads={runtime.leads}
+          tasks={runtime.tasks}
+          notes={runtime.notes}
+          canApprove={isSergio(auth.actor)}
+        />
       </AppShell>
     );
   } catch (error) {
