@@ -1182,20 +1182,65 @@ export const operatingTasks: TaskRecord[] = [
   },
 ];
 
+// Equipo real de ONIA. userKey casa con las claves que ya escribe la vista
+// /equipo (sergio / arthur / seller_001) y el runtime; para separar a los dos
+// comerciales del mismo rol "seller" se reserva seller_002 (Jeronimo). Datos
+// base: rol, estado y trabajo permitido. CI, contacto y comision se cargan
+// despues, no se inventan aca.
 export const collaborators: CollaboratorRecord[] = [
   {
     id: "collab-arthur",
     userId: "user-arthur",
+    userKey: "arthur",
     displayName: "Arthur",
+    title: "Operativo senior / coordinador",
     role: "arthur",
     status: "trial",
-    allowedWork: ["leads", "briefs", "tareas asignadas", "contenido", "Bolivian permitido", "entregables revisables"],
+    allowedWork: ["coordinacion de equipo", "leads", "briefs", "tareas asignadas", "contenido", "Bolivian permitido", "entregables revisables"],
     restrictions: [
       "No ve capital privado",
       "No ve deuda exacta",
       "No aprueba pagos",
       "No aprueba descuentos",
       "No usa TR4 real sin permiso",
+      "No pide credenciales",
+      "No actua como socio",
+    ],
+  },
+  {
+    id: "collab-jeronimo",
+    userId: "user-jeronimo",
+    userKey: "seller_002",
+    displayName: "Jeronimo",
+    title: "Comercial-operativo (vende + produce contenido)",
+    role: "seller",
+    status: "trial",
+    allowedWork: ["leads", "seguimiento comercial", "llamadas", "contenido", "briefs"],
+    restrictions: [
+      "No ve capital privado",
+      "No ve caja completa",
+      "No aprueba pagos",
+      "No aprueba descuentos",
+      "No aprueba su propia comision",
+      "No pide credenciales",
+      "No actua como socio",
+    ],
+  },
+  {
+    id: "collab-camila",
+    userId: "user-camila",
+    userKey: "seller_001",
+    displayName: "Camila",
+    title: "Vendedora (solo vende)",
+    role: "seller",
+    status: "trial",
+    allowedWork: ["leads", "seguimiento comercial", "llamadas"],
+    restrictions: [
+      "No ve capital privado",
+      "No ve caja completa",
+      "No aprueba pagos",
+      "No aprueba descuentos",
+      "No aprueba su propia comision",
       "No pide credenciales",
       "No actua como socio",
     ],

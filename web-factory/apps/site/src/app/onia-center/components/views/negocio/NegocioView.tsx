@@ -1,13 +1,20 @@
+import type { RuntimeLead, RuntimeNote, RuntimeTask } from "@/lib/onia-center-store";
 import { EmptyState } from "../../ui/EmptyState";
 import { CollaboratorsPanel } from "./CollaboratorsPanel";
 import { ProjectsPanel } from "./ProjectsPanel";
 
-export function NegocioView() {
+interface NegocioViewProps {
+  tasks?: RuntimeTask[];
+  leads?: RuntimeLead[];
+  notes?: RuntimeNote[];
+}
+
+export function NegocioView({ tasks, leads, notes }: NegocioViewProps) {
   return (
     <div className="grid gap-4">
       <div className="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-4">
         <ProjectsPanel />
-        <CollaboratorsPanel />
+        <CollaboratorsPanel tasks={tasks} leads={leads} notes={notes} />
       </div>
       <EmptyState
         title="Inventario se esta portando"

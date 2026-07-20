@@ -454,7 +454,14 @@ export type TaskRecord = {
 export type CollaboratorRecord = {
   id: string;
   userId: string;
+  // Clave de persona usada para casar registros del runtime (assignedUserKey /
+  // ownerUserKey / actorUserKey). Permite separar dos personas del mismo rol
+  // (ej. dos vendedores). Si un registro no trae userKey, se cae al rol.
+  userKey?: string;
   displayName: string;
+  // Rol humano legible (ej. "Vendedora (solo vende)"). Datos base; el detalle
+  // (CI, contacto) se completa despues.
+  title?: string;
   role: RoleId;
   status: "trial" | "active" | "paused" | "blocked";
   allowedWork: string[];
