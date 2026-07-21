@@ -99,6 +99,19 @@ export type RuntimeSnapshot = {
 
 export type RuntimeEntity = "lead" | "task" | "review" | "note" | "idea" | "codex_job";
 
+// Persona real del equipo, derivada de onia_center.user_profiles + su membresia
+// activa. userKey casa con assignedUserKey / ownerUserKey / actorUserKey del
+// runtime para calcular el scorecard por persona.
+export type TeamMember = {
+  userKey: string;
+  displayName: string;
+  role: RoleId;
+  status: "active" | "invited" | "blocked";
+  accessNote: string;
+  organizationKeys: string[];
+  canViewSensitive: boolean;
+};
+
 type SupabaseConfig = {
   url: string;
   serviceRoleKey: string;
@@ -166,6 +179,22 @@ type DbIdea = {
 };
 
 type DbCodexJobLog = DbNote;
+
+type DbUserProfileRow = {
+  user_key: string;
+  display_name: string;
+  primary_role_key: string;
+  status: "active" | "invited" | "blocked";
+  access_note: string | null;
+};
+
+type DbMembershipRow = {
+  organization_key: string;
+  user_key: string;
+  role_key: string;
+  can_view_sensitive: boolean;
+  status: string;
+};
 
 const serviceIdToKey: Record<string, string> = {
   "onia-motor-local-growth": "onia_motor_local_growth",
@@ -625,6 +654,45 @@ export async function getOniaCenterRuntime(): Promise<RuntimeSnapshot> {
     ideas: ideas.map(mapIdea),
     codexJobs: codexJobs.map(mapCodexJob),
   };
+}
+
+// Lee las personas reales del equipo desde onia_center. Fuente de verdad =
+// user_profiles activos; se conserva solo a quien tiene al menos una membresia
+// activa en alguna organizacion ONIA (eso define "el equipo"). No se asume a que
+// organizacion concreta pertenece cada rol: basta con ser miembro activo del
+// workspace. Usa service role igual que getOniaCenterRuntime, no depende de la
+// sesion del usuario.
+export async function getOniaCenterTeam(): Promise<TeamMember[]> {
+  const [profiles, memberships] = await Promise.all([
+    supabaseRequest<DbUserProfileRow[]>(
+      "user_profiles?status=eq.active&select=user_key,display_name,primary_role_key,status,access_note&order=display_name.asc",
+    ),
+    supabaseRequest<DbMembershipRow[]>(
+      "organization_memberships?status=eq.active&select=organization_key,user_key,role_key,can_view_sensitive,status",
+    ),
+  ]);
+
+  const membershipsByUser = new Map<string, DbMembershipRow[]>();
+  for (const membership of memberships) {
+    const list = membershipsByUser.get(membership.user_key) ?? [];
+    list.push(membership);
+    membershipsByUser.set(membership.user_key, list);
+  }
+
+  return profiles
+    .filter((profile) => membershipsByUser.has(profile.user_key))
+    .map((profile) => {
+      const memberOf = membershipsByUser.get(profile.user_key) ?? [];
+      return {
+        userKey: profile.user_key,
+        displayName: profile.display_name,
+        role: roleFromDb(profile.primary_role_key),
+        status: profile.status,
+        accessNote: profile.access_note ?? "",
+        organizationKeys: memberOf.map((membership) => membership.organization_key),
+        canViewSensitive: memberOf.some((membership) => membership.can_view_sensitive),
+      };
+    });
 }
 
 export async function createOniaCenterEntity(entity: RuntimeEntity, payload: unknown) {
