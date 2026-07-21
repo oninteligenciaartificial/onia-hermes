@@ -1,0 +1,7 @@
+# ONIA Core es logica pura + manifests hasheados (PORTABLE_ARTIFACTS.json).
+# El hash se calcula sobre los BYTES del archivo (readFileSync utf8), asi que el
+# working tree DEBE quedar en LF en todo SO; si no, en Windows (core.autocrlf=true)
+# el \r rompe portable-artifacts.test.mjs. Forzamos LF (repo + working tree).
+* text=auto eol=lf
+*.mjs eol=lf
+*.json eol=lf
