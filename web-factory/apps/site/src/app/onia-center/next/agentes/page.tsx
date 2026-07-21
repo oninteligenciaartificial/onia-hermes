@@ -6,9 +6,15 @@ import {
   isOniaCenterConfigured,
   type RuntimeReview,
 } from "@/lib/onia-center-store";
-import { getOniaCenterActor } from "@/lib/onia-center-auth";
+import { canActorSeeScope, getOniaCenterActor, isSergio } from "@/lib/onia-center-auth";
+import type { VisibilityScope } from "@/app/onia-center/types";
 import { getVisibleOperatingAgents } from "@/app/onia-center/operating-engine";
-import { getIntegrationConnectors, getLiveAgentStatuses, mergeLiveAgentStatus } from "@/app/onia-center/live/live-runtime";
+import {
+  getAgentRunFeed,
+  getIntegrationConnectors,
+  getLiveAgentStatuses,
+  mergeLiveAgentStatus,
+} from "@/app/onia-center/live/live-runtime";
 import { AppShell } from "@/app/onia-center/components/shell/AppShell";
 import { AgentesView } from "@/app/onia-center/components/views/agentes/AgentesView";
 import { EmptyState } from "@/app/onia-center/components/ui/EmptyState";
@@ -65,9 +71,23 @@ export default async function AgentesPage() {
 
   const integrations = await getIntegrationConnectors();
 
+  // El feed de auditoria se filtra por sensibilidad: el motor marca cada evento
+  // con sensitivity_scope; roles no-Sergio no ven eventos privados.
+  const rawFeed = await getAgentRunFeed();
+  const feed = rawFeed.filter((entry) =>
+    canActorSeeScope(auth.actor, entry.sensitivityScope as VisibilityScope),
+  );
+
   return (
     <AppShell>
-      <AgentesView agents={agents} lastRuns={lastRuns} reviews={reviews} integrations={integrations} />
+      <AgentesView
+        agents={agents}
+        lastRuns={lastRuns}
+        reviews={reviews}
+        integrations={integrations}
+        feed={feed}
+        canTrigger={isSergio(auth.actor)}
+      />
     </AppShell>
   );
 }

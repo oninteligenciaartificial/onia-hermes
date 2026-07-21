@@ -2,6 +2,7 @@ import { getAgentTone } from "@/app/onia-center/operating-engine";
 import type { OperatingAgent } from "@/app/onia-center/types";
 import { Badge } from "../../ui/Badge";
 import { SurfaceCard } from "../../ui/SurfaceCard";
+import { AgentTriggerButton } from "./AgentTriggerButton";
 
 function formatWhen(iso: string | null): string | null {
   if (!iso) {
@@ -14,9 +15,10 @@ function formatWhen(iso: string | null): string | null {
 interface AgentDetailPanelProps {
   agents: OperatingAgent[];
   lastRuns: Record<string, string | null>;
+  canTrigger: boolean;
 }
 
-export function AgentDetailPanel({ agents, lastRuns }: AgentDetailPanelProps) {
+export function AgentDetailPanel({ agents, lastRuns, canTrigger }: AgentDetailPanelProps) {
   return (
     <SurfaceCard title={`Agentes (${agents.length})`}>
       <div className="grid gap-3">
@@ -36,6 +38,11 @@ export function AgentDetailPanel({ agents, lastRuns }: AgentDetailPanelProps) {
                 <p className="text-xs text-muted-foreground">Bloqueado por: {agent.blockedBy.join(", ")}</p>
               ) : null}
               {lastRun ? <p className="text-xs text-muted-foreground">Ultima corrida: {lastRun}</p> : null}
+              {canTrigger ? (
+                <div className="mt-1">
+                  <AgentTriggerButton agentId={agent.id} agentName={agent.name} />
+                </div>
+              ) : null}
             </div>
           );
         })}
