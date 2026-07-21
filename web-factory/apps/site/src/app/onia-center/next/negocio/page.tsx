@@ -2,10 +2,12 @@ import { cookies } from "next/headers";
 import {
   filterOniaCenterRuntimeForActor,
   getOniaCenterRuntime,
+  getOniaCenterTeam,
   isOniaCenterConfigured,
   type RuntimeLead,
   type RuntimeNote,
   type RuntimeTask,
+  type TeamMember,
 } from "@/lib/onia-center-store";
 import { getOniaCenterActor } from "@/lib/onia-center-auth";
 import { AppShell } from "@/app/onia-center/components/shell/AppShell";
@@ -29,11 +31,23 @@ export default async function NegocioPage() {
   let tasks: RuntimeTask[] | undefined;
   let leads: RuntimeLead[] | undefined;
   let notes: RuntimeNote[] | undefined;
+  let team: TeamMember[] | undefined;
 
-  // El scorecard del equipo usa datos reales del runtime. Si falta Supabase,
-  // sesion o la lectura falla, el panel cae al roster estatico y el resto de la
-  // vista Negocio (Proyectos) sigue funcionando.
+  // Personas reales del equipo + scorecard con datos reales del runtime. Si
+  // falta Supabase, sesion o la lectura falla, el panel cae al roster estatico y
+  // el resto de la vista Negocio (Proyectos) sigue funcionando.
   if (isOniaCenterConfigured()) {
+    // Roster real del equipo (service role, no depende de la sesion del usuario).
+    try {
+      const members = await getOniaCenterTeam();
+      if (members.length > 0) {
+        team = members;
+      }
+    } catch {
+      // Lectura del equipo fallida: se mantiene el roster estatico.
+    }
+
+    // Scorecard: tareas, leads y notas reales, filtrados por el actor en sesion.
     try {
       const auth = await getOniaCenterActor(await buildAuthRequest());
       if (auth.ok) {
@@ -43,13 +57,13 @@ export default async function NegocioPage() {
         notes = runtime.notes;
       }
     } catch {
-      // Lectura del runtime fallida: se mantiene el roster estatico.
+      // Lectura del runtime fallida: se muestran las personas sin scorecard.
     }
   }
 
   return (
     <AppShell>
-      <NegocioView tasks={tasks} leads={leads} notes={notes} />
+      <NegocioView tasks={tasks} leads={leads} notes={notes} team={team} />
     </AppShell>
   );
 }

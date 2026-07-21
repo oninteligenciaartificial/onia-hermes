@@ -1,18 +1,50 @@
 import { collaborators } from "@/app/onia-center/operating-source";
-import type { CenterTone, CollaboratorRecord, RoleId } from "@/app/onia-center/types";
-import type { RuntimeLead, RuntimeNote, RuntimeTask } from "@/lib/onia-center-store";
+import type { CenterTone, RoleId } from "@/app/onia-center/types";
+import type { RuntimeLead, RuntimeNote, RuntimeTask, TeamMember } from "@/lib/onia-center-store";
 import { Badge } from "../../ui/Badge";
 import { SurfaceCard } from "../../ui/SurfaceCard";
 
-const STATUS_TONE: Record<CollaboratorRecord["status"], CenterTone> = {
+// Cubre tanto los estados de user_profiles (active/invited/blocked) como los del
+// roster estatico (trial/active/paused/blocked).
+const STATUS_TONE: Record<string, CenterTone> = {
   trial: "yellow",
+  invited: "blue",
   active: "green",
   paused: "neutral",
   blocked: "red",
+  revoked: "red",
+};
+
+const ROLE_LABEL: Record<RoleId, string> = {
+  sergio: "Dueno / operacion",
+  arthur: "Colaborador",
+  seller: "Comercial",
+  area: "Responsable de area",
+  freelancer: "Freelancer",
 };
 
 // "Abiertas" = trabajo vivo que no esta en revision ni cerrado.
 const OPEN_TASK_STATUS: RuntimeTask["status"][] = ["todo", "doing", "blocked"];
+
+// Persona ya normalizada para pintar la tarjeta, venga del equipo real o del
+// roster estatico de respaldo.
+type PanelPerson = {
+  id: string;
+  userKey?: string;
+  displayName: string;
+  subtitle: string;
+  role: RoleId;
+  statusLabel: string;
+  tone: CenterTone;
+};
+
+function statusTone(status: string): CenterTone {
+  return STATUS_TONE[status] ?? "neutral";
+}
+
+function roleLabel(role: RoleId): string {
+  return ROLE_LABEL[role] ?? role;
+}
 
 function initials(name: string): string {
   return name
@@ -37,26 +69,55 @@ function belongsTo(
   return recordRole === person.role;
 }
 
+function fromTeam(member: TeamMember): PanelPerson {
+  return {
+    id: `team-${member.userKey}`,
+    userKey: member.userKey,
+    displayName: member.displayName,
+    subtitle: member.accessNote || roleLabel(member.role),
+    role: member.role,
+    statusLabel: member.status,
+    tone: statusTone(member.status),
+  };
+}
+
+function fromStaticRoster(): PanelPerson[] {
+  return collaborators.map((collaborator) => ({
+    id: collaborator.id,
+    userKey: collaborator.userKey,
+    displayName: collaborator.displayName,
+    subtitle: collaborator.title ?? collaborator.allowedWork.join(", "),
+    role: collaborator.role,
+    statusLabel: collaborator.status,
+    tone: statusTone(collaborator.status),
+  }));
+}
+
 interface CollaboratorsPanelProps {
   tasks?: RuntimeTask[];
   leads?: RuntimeLead[];
   notes?: RuntimeNote[];
+  /** Personas reales del equipo (onia_center). Si falta, cae al roster estatico. */
+  team?: TeamMember[];
 }
 
-export function CollaboratorsPanel({ tasks, leads, notes }: CollaboratorsPanelProps) {
+export function CollaboratorsPanel({ tasks, leads, notes, team }: CollaboratorsPanelProps) {
   const hasSnapshot = Boolean(tasks || leads || notes);
   const taskList = tasks ?? [];
   const leadList = leads ?? [];
   const noteList = notes ?? [];
 
+  const usingRealTeam = Boolean(team && team.length > 0);
+  const roster: PanelPerson[] = usingRealTeam ? team!.map(fromTeam) : fromStaticRoster();
+  const title = usingRealTeam ? `Equipo (${roster.length})` : `Colaboradores (${roster.length})`;
+
   return (
-    <SurfaceCard title={`Colaboradores (${collaborators.length})`}>
-      {collaborators.length === 0 ? (
-        <p className="text-sm text-muted-foreground">Sin colaboradores registrados.</p>
+    <SurfaceCard title={title}>
+      {roster.length === 0 ? (
+        <p className="text-sm text-muted-foreground">Sin personas registradas.</p>
       ) : (
         <div className="grid gap-4">
-          {collaborators.map((collaborator) => {
-            const person = { role: collaborator.role, userKey: collaborator.userKey };
+          {roster.map((person) => {
             const personTasks = taskList.filter((task) =>
               belongsTo(task.assignedRole, task.assignedUserKey, person),
             );
@@ -72,22 +133,20 @@ export function CollaboratorsPanel({ tasks, leads, notes }: CollaboratorsPanelPr
 
             return (
               <div
-                key={collaborator.id}
+                key={person.id}
                 className="grid gap-2.5 border-b border-border pb-4 last:border-0 last:pb-0"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex min-w-0 items-center gap-2.5">
                     <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-secondary text-xs font-semibold text-foreground">
-                      {initials(collaborator.displayName)}
+                      {initials(person.displayName)}
                     </span>
                     <div className="min-w-0">
-                      <p className="text-sm font-medium">{collaborator.displayName}</p>
-                      <p className="mt-0.5 truncate text-xs text-muted-foreground">
-                        {collaborator.title ?? collaborator.allowedWork.join(", ")}
-                      </p>
+                      <p className="text-sm font-medium">{person.displayName}</p>
+                      <p className="mt-0.5 truncate text-xs text-muted-foreground">{person.subtitle}</p>
                     </div>
                   </div>
-                  <Badge tone={STATUS_TONE[collaborator.status]}>{collaborator.status}</Badge>
+                  <Badge tone={person.tone}>{person.statusLabel}</Badge>
                 </div>
 
                 {hasSnapshot ? (
