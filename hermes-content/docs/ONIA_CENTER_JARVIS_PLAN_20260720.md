@@ -92,6 +92,32 @@ Reusar: operating_agents (estado), briefings/daily (patrón de trigger con API k
 y aparece su corrida en el feed; tsc+build verdes → merge → PARÁS. NO HAGAS: crear agentes nuevos, chat.
 ```
 
+## Activación del disparo de agentes (webhooks n8n) - último paso
+
+El código (J-5) y la config están listos. Falta 1 workflow n8n despachador. Estado
+verificado 2026-07-21:
+
+- El panel (`api/onia-center/agents/trigger`) manda `POST {agentId, agentName, ...}`
+  al webhook resuelto por `resolveAgentWebhookUrl` (env `ONIA_CENTER_AGENT_WEBHOOKS`
+  / `ONIA_CENTER_AGENT_WEBHOOK_<ID>` / `integration_connectors` / fallback
+  `ONIA_CENTER_N8N_WEBHOOK_URL`). Solo Sergio dispara. Registra en `audit_logs`.
+- Los agentes corren en el HOST: `bash /opt/onia/<x>-agent-run.sh` → obtiene la
+  LiteLLM master key + `docker exec -i onia-center node - < /opt/onia/<x>.mjs`.
+  Scripts: `sales-agent-run.sh`, `content-media-agent-run.sh`,
+  `finance-fund-agent-run.sh`, `building-public-agent-run.sh`.
+- **Falta:** un workflow n8n "ONIA - Disparador de Agentes (panel)" =
+  `Webhook (POST)` → `Code` (mapea `agentName` → script: contiene "Vendedor"→sales,
+  "Contenido/Media"→content-media, "Finanzas/Fondo"→finance-fund, "Building"→
+  building-public) → `SSH` (`bash /opt/onia/<script>-agent-run.sh`, reusar la
+  credencial SSH del workflow `ONIA - Agente Vendedor` C96NmbalLhaTEf0G) →
+  `Respond to Webhook`. Luego setear `ONIA_CENTER_N8N_WEBHOOK_URL` = URL del webhook
+  en el env del contenedor `onia-center` + `docker restart onia-center`.
+- **Bloqueo 2026-07-21:** el MCP n8n no respondió a `list_credentials` (no dio el
+  credential ID SSH para armar el despachador por código). Alternativa: crearlo
+  desde la UI de n8n copiando el nodo SSH del "Agente Vendedor" (ya trae la
+  credencial), o reintentar el MCP. Mientras tanto el botón "Disparar" responde
+  "sin webhook configurado" sin romper — los agentes igual corren por su cron.
+
 ## Después del Jarvis
 
 - **Fase 2 - activar el equipo:** alta de Camila/Jerónimo, firmar acuerdos, empezar a vender.
