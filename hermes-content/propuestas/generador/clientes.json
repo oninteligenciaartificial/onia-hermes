@@ -834,6 +834,151 @@
     "terceros": "No incluidos: créditos de IA y mensajería de WhatsApp Business API pagada (se paga por conversación según volumen). El número de WhatsApp y la cuenta Business quedan a nombre de AW Climatización Group SRL."
   },
   {
+    "slug": "airpods-ventas-bot",
+    "nombre": "Tienda de AirPods",
+    "accent": "#2563eb",
+    "heroGrad": "linear-gradient(135deg,#0a0f1f 0%,#111c3a 55%,#2563eb 160%)",
+    "titulo": "Chatbot de ventas en WhatsApp que responde, cobra y agenda tus pedidos solo",
+    "subtitulo": "Un asistente con IA que atiende a tus clientes de AirPods por mayor y menor, arma el pedido, pasa tu QR, verifica el comprobante y calcula el delivery — sin que contestes cada mensaje a mano.",
+    "problema": "Vender AirPods por mayor y menor por WhatsApp significa responder lo mismo todo el día — precios, si hay stock, cómo se paga, cuánto sale el envío — y encima revisar a mano cada comprobante de pago. Se te van horas y se enfrían clientes que escriben de noche. Montamos un <b>chatbot con IA en WhatsApp</b> que responde, arma el pedido, pasa tu QR, <b>verifica el comprobante</b> y <b>calcula el costo de envío por zona</b> — 24/7, sin que toques cada chat.",
+    "incluye": [
+      {
+        "tag": "Atención + ventas 24/7",
+        "tagClass": "",
+        "titulo": "Chatbot IA en WhatsApp",
+        "items": [
+          "Responde precios y dudas al instante (venta al público y por mayor)",
+          "Arma y registra el pedido: producto, cantidad y total",
+          "Pasa tu QR de pago y confirma cuando el pago está verificado",
+          "Deriva a una persona cuando el caso lo necesita"
+        ]
+      },
+      {
+        "tag": "Cobro y envío sin trabajo manual",
+        "tagClass": "green",
+        "titulo": "Cada pedido y pago, ordenado",
+        "items": [
+          "Verifica el comprobante de pago que envía el cliente",
+          "Calcula el costo del delivery según la zona",
+          "Cada pedido y pago queda registrado, ninguno se pierde",
+          "Reportes de lo más vendido y de tus clientes mayoristas"
+        ]
+      }
+    ],
+    "pasos": [
+      {
+        "titulo": "Levantamiento",
+        "detalle": "Relevamos tu catálogo, precios (público y por mayor), cantidad mínima mayorista, zonas de envío y cómo cobrás."
+      },
+      {
+        "titulo": "Entreno del bot",
+        "detalle": "Cargamos productos, precios y respuestas reales para que el bot conteste con precisión."
+      },
+      {
+        "titulo": "Pedido y cobro",
+        "detalle": "El bot toma el pedido, calcula el total, pasa tu QR y verifica el comprobante de pago."
+      },
+      {
+        "titulo": "Delivery y conexión",
+        "detalle": "Calcula el envío por zona, lo conectamos a tu WhatsApp Business y te damos el panel de reportes."
+      }
+    ],
+    "valor": [
+      {
+        "titulo": "Vendés incluso mientras dormís",
+        "detalle": "El bot atiende y arma pedidos las 24 horas — nunca más un cliente sin respuesta a medianoche."
+      },
+      {
+        "titulo": "Dejás de perseguir pagos",
+        "detalle": "Verifica el comprobante que manda el cliente y te avisa cuando el pago está confirmado."
+      },
+      {
+        "titulo": "El envío ya viene calculado",
+        "detalle": "Calcula el costo de delivery por zona automáticamente, sin ir y volver preguntando."
+      },
+      {
+        "titulo": "Escalás el por mayor sin caos",
+        "detalle": "Maneja precio público y mayorista y la cantidad mínima, con cada pedido ordenado y registrado."
+      }
+    ],
+    "plazoEntrega": "2 a 3 semanas",
+    "comparativa": {
+      "titulo": "De hacerlo a mano a tu bot ONIA",
+      "columnas": ["Hoy, a mano", "Con tu bot ONIA"],
+      "filas": [
+        ["Consultas fuera de horario", "Se pierden o se responden tarde", "Respuesta al instante, 24/7"],
+        ["Tomar el pedido", "Lo anotás a mano y con errores", "El bot lo arma y lo registra solo"],
+        ["Revisar el comprobante", "Mirás cada captura de pago", "El bot verifica el comprobante"],
+        ["Costo de envío", "Lo calculás en cada chat", "El bot lo calcula por zona"]
+      ]
+    },
+    "paquetes": [
+      {
+        "nombre": "Bot de Ventas",
+        "incluye": "Responde precios y dudas 24/7 (público y por mayor), pasa tu QR y deriva a una persona",
+        "resultado": "Ninguna consulta sin responder, de día o de noche.",
+        "limite": "Responde y deriva: todavía no toma el pedido ni verifica pagos.",
+        "precio": "1,900",
+        "recomendado": false
+      },
+      {
+        "nombre": "Bot de Ventas + Pedidos",
+        "incluye": "Lo anterior + toma y registra el pedido (producto, cantidad, mayor/menor) y calcula el total",
+        "resultado": "El pedido llega armado y registrado, sin cargarlo a mano.",
+        "limite": "El comprobante y el costo de envío todavía los revisás vos.",
+        "precio": "desde 4,800",
+        "recomendado": false
+      },
+      {
+        "nombre": "Bot de Ventas Automatizado",
+        "incluye": "Lo anterior + verifica el comprobante de pago + calcula el delivery por zona + QR dinámico por monto",
+        "resultado": "Vende, cobra, verifica el pago y calcula el envío casi solo.",
+        "limite": "Requiere tus zonas y tarifas de envío y las credenciales de tu QR bancario.",
+        "precio": "desde 8,900",
+        "recomendado": true
+      }
+    ],
+    "notaPaquetes": "La diferencia es el salto de valor: <b>Ventas</b> = responde y no perdés clientes · <b>Ventas + Pedidos</b> = arma el pedido solo · <b>Automatizado</b> = además cobra, verifica el comprobante y calcula el envío. Recomendado: <b>Automatizado</b>. Todos incluyen el setup; la operación mensual del bot va aparte (ver add-ons). El número de WhatsApp queda a tu nombre. La atención automática en WhatsApp se activa al verificar tu cuenta en Meta — te acompañamos.",
+    "addons": [
+      {
+        "nombre": "Operación y mejora mensual del bot",
+        "setup": "—",
+        "mensual": "350–530"
+      },
+      {
+        "nombre": "Integración con tu catálogo web o tienda online",
+        "setup": "600",
+        "mensual": "—"
+      },
+      {
+        "nombre": "Reportes avanzados de ventas y productos más pedidos",
+        "setup": "—",
+        "mensual": "a convenir"
+      }
+    ],
+    "requisitos": [
+      "Número de celular dedicado y cuenta de WhatsApp Business a tu nombre.",
+      "Credenciales de tu QR bancario (BNB u otro) para el cobro dinámico por monto.",
+      "Catálogo con precios de venta al público y por mayor, y la cantidad mínima para mayoreo.",
+      "Zonas de entrega y la tarifa de delivery por cada zona (o la regla para calcularla).",
+      "Verificación de tu negocio en Meta / WhatsApp Business — te acompañamos en el trámite."
+    ],
+    "proximosPasos": [
+      "Completás un formulario corto con tu catálogo, precios (público y por mayor), zonas de envío y cómo cobrás.",
+      "Armamos y entrenamos el bot con tus datos reales y lo conectamos a tu WhatsApp Business.",
+      "Probamos juntos con pedidos reales y lo dejamos operando."
+    ],
+    "terceros": "No incluidos: el número y la cuenta de WhatsApp Business a tu nombre, los créditos de IA y la mensajería de WhatsApp Business API (se paga por conversación según volumen) y la comisión o credenciales de la pasarela de tu QR bancario.",
+    "_todo": [
+      "Anónimo: reemplazar 'nombre' con el negocio real (viene del intake).",
+      "RATIFICAR con Sergio el precio del paquete Automatizado (desde 8,900): es desarrollo nuevo (verificar comprobante + delivery por zona + QR dinámico); ajustar según zonas de envío y tipo de verificación.",
+      "Cargar catálogo/precios reales (público y mayor) + cantidad mínima mayorista tras el intake.",
+      "Definir zonas y tarifas de delivery reales.",
+      "Bloqueo #1: verificación Meta + WABA/número. Si el cliente pone su propio WhatsApp Business, se destraba por su lado.",
+      "Antes de enviar: agregar ctaWhatsapp (número ONIA) y considerar --track <token>."
+    ]
+  },
+  {
     "slug": "dentalgest",
     "nombre": "DentalGest",
     "accent": "#0aa3a3",

@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Propuesta ONIA — Tienda de AirPods</title>
+<style>
+  :root{--ink:#101827;--muted:#526172;--line:#d8e0ea;--blue:#1e5bff;--blue-dark:#1239a8;
+    --green:#0f8b62;--amber:#a75b00;--bg:#f6f8fb;--white:#fff;--accent:#2563eb;}
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:'Segoe UI',system-ui,-apple-system,Arial,Helvetica,sans-serif;color:var(--ink);background:var(--bg);}
+  .page{max-width:900px;margin:0 auto;padding:40px 28px;}
+  .hero{background:linear-gradient(135deg,#0a0f1f 0%,#111c3a 55%,#2563eb 160%);color:#fff;border-radius:18px;padding:44px 40px;margin-bottom:28px;}
+  .kicker{color:#cfe0ff;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;}
+  h1{font-size:clamp(34px,6vw,56px);line-height:1.02;margin:0 0 14px;}
+  h2{font-size:26px;margin:34px 0 14px;border-bottom:3px solid var(--accent);padding-bottom:8px;}
+  h3{font-size:18px;margin:0 0 8px;}
+  p{font-size:16px;line-height:1.5;color:var(--muted);margin:0 0 10px;}
+  .hero p{color:#e6eefb;font-size:18px;}
+  .card{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin-bottom:14px;}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  table{width:100%;border-collapse:collapse;background:var(--white);border-radius:12px;overflow:hidden;border:1px solid var(--line);}
+  th,td{padding:12px 14px;text-align:left;font-size:15px;border-bottom:1px solid var(--line);}
+  th{background:#eef3fb;color:var(--ink);font-weight:800;font-size:13px;text-transform:uppercase;letter-spacing:.05em;}
+  td.num,th.num{text-align:right;white-space:nowrap;}
+  .tag{display:inline-block;background:#eaf0ff;color:var(--blue-dark);font-size:12px;font-weight:800;padding:3px 10px;border-radius:999px;margin-bottom:8px;}
+  .tag.green{background:#e3f4ec;color:var(--green);}
+  .tag.amber{background:#fbeede;color:var(--amber);}
+  ul{margin:6px 0 0;padding-left:20px;}
+  li{font-size:15px;color:var(--muted);line-height:1.5;margin-bottom:5px;}
+  .foot{margin-top:30px;border-top:1px solid var(--line);padding-top:16px;font-size:13px;color:var(--muted);}
+  .big{font-size:20px;color:var(--ink);font-weight:800;}
+  .step{display:flex;gap:14px;align-items:flex-start;margin-bottom:12px;}
+  .step .n{background:var(--accent);color:#fff;font-weight:800;border-radius:50%;width:30px;height:30px;display:flex;align-items:center;justify-content:center;flex:0 0 30px;}
+  tr.rec td{background:#fff7ed;border-top:2px solid var(--accent);border-bottom:2px solid var(--accent);}
+  tr.rec td.num{font-size:17px;font-weight:800;}
+  .res{color:var(--accent);font-weight:700;font-size:13px;}
+  .lim{color:var(--muted);font-size:12px;}
+  .step p{margin:0;color:var(--ink);}
+  .step h3 + p{color:var(--muted);}
+  .vgrid .vcard{background:var(--white);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:12px;padding:16px 18px;}
+  .vcard h3{color:var(--ink);}
+  figure{margin:18px 0;}
+  figure img{width:100%;border-radius:14px;display:block;}
+  figcaption{font-size:13px;color:var(--muted);margin-top:6px;text-align:center;}
+  table.comp td.win{background:#e3f4ec;color:var(--ink);font-weight:600;}
+  a.cta{display:inline-block;background:var(--accent);color:#fff;font-weight:800;font-size:16px;padding:12px 22px;border-radius:10px;text-decoration:none;}
+  .cover{background:linear-gradient(135deg,#0a0f1f 0%,#111c3a 55%,#2563eb 160%);color:#fff;border-radius:18px;padding:60px 48px;min-height:88vh;display:flex;align-items:center;margin-bottom:28px;page-break-after:always;}
+  .cover p{color:#e6eefb;font-size:19px;}
+  .cover .meta{margin-top:26px;font-size:15px;color:#cfe0ff;}
+  @media print{
+    .page{max-width:100%;}body{background:#fff;}
+    .card,table,figure,.vcard,.step{page-break-inside:avoid;}
+    h2{page-break-after:avoid;}
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="hero">
+    <div class="kicker">Propuesta comercial · ONIA Inteligencia Artificial</div>
+    <h1>Chatbot de ventas en WhatsApp que responde, cobra y agenda tus pedidos solo</h1>
+    <p>Un asistente con IA que atiende a tus clientes de AirPods por mayor y menor, arma el pedido, pasa tu QR, verifica el comprobante y calcula el delivery — sin que contestes cada mensaje a mano.</p>
+  </div>
+
+  <h2>Qué problema resolvemos</h2>
+  <div class="card"><p>Vender AirPods por mayor y menor por WhatsApp significa responder lo mismo todo el día — precios, si hay stock, cómo se paga, cuánto sale el envío — y encima revisar a mano cada comprobante de pago. Se te van horas y se enfrían clientes que escriben de noche. Montamos un <b>chatbot con IA en WhatsApp</b> que responde, arma el pedido, pasa tu QR, <b>verifica el comprobante</b> y <b>calcula el costo de envío por zona</b> — 24/7, sin que toques cada chat.</p></div>
+
+  <h2>Qué incluye</h2>
+  <div class="grid">
+    <div class="card">
+      <div class="tag ">Atención + ventas 24/7</div>
+      <h3>Chatbot IA en WhatsApp</h3>
+      <ul><li>Responde precios y dudas al instante (venta al público y por mayor)</li><li>Arma y registra el pedido: producto, cantidad y total</li><li>Pasa tu QR de pago y confirma cuando el pago está verificado</li><li>Deriva a una persona cuando el caso lo necesita</li></ul>
+    </div>
+    <div class="card">
+      <div class="tag green">Cobro y envío sin trabajo manual</div>
+      <h3>Cada pedido y pago, ordenado</h3>
+      <ul><li>Verifica el comprobante de pago que envía el cliente</li><li>Calcula el costo del delivery según la zona</li><li>Cada pedido y pago queda registrado, ninguno se pierde</li><li>Reportes de lo más vendido y de tus clientes mayoristas</li></ul>
+    </div></div>
+
+  <h2>Cómo lo construimos</h2>
+  <div class="card">
+    <div class="step"><div class="n">1</div><div>
+      <h3>Levantamiento</h3><p>Relevamos tu catálogo, precios (público y por mayor), cantidad mínima mayorista, zonas de envío y cómo cobrás.</p>
+    </div></div>
+    <div class="step"><div class="n">2</div><div>
+      <h3>Entreno del bot</h3><p>Cargamos productos, precios y respuestas reales para que el bot conteste con precisión.</p>
+    </div></div>
+    <div class="step"><div class="n">3</div><div>
+      <h3>Pedido y cobro</h3><p>El bot toma el pedido, calcula el total, pasa tu QR y verifica el comprobante de pago.</p>
+    </div></div>
+    <div class="step"><div class="n">4</div><div>
+      <h3>Delivery y conexión</h3><p>Calcula el envío por zona, lo conectamos a tu WhatsApp Business y te damos el panel de reportes.</p>
+    </div></div></div>
+
+  <h2>Por qué te conviene</h2>
+  <div class="grid vgrid">
+    <div class="vcard">
+      <h3>Vendés incluso mientras dormís</h3>
+      <p>El bot atiende y arma pedidos las 24 horas — nunca más un cliente sin respuesta a medianoche.</p>
+    </div>
+    <div class="vcard">
+      <h3>Dejás de perseguir pagos</h3>
+      <p>Verifica el comprobante que manda el cliente y te avisa cuando el pago está confirmado.</p>
+    </div>
+    <div class="vcard">
+      <h3>El envío ya viene calculado</h3>
+      <p>Calcula el costo de delivery por zona automáticamente, sin ir y volver preguntando.</p>
+    </div>
+    <div class="vcard">
+      <h3>Escalás el por mayor sin caos</h3>
+      <p>Maneja precio público y mayorista y la cantidad mínima, con cada pedido ordenado y registrado.</p>
+    </div></div>
+  <h2>De hacerlo a mano a tu bot ONIA</h2>
+  <table class="comp">
+    <tr><th></th><th>Hoy, a mano</th><th>Con tu bot ONIA</th></tr>
+    <tr><td><b>Consultas fuera de horario</b></td><td>Se pierden o se responden tarde</td><td class="win">Respuesta al instante, 24/7</td></tr><tr><td><b>Tomar el pedido</b></td><td>Lo anotás a mano y con errores</td><td class="win">El bot lo arma y lo registra solo</td></tr><tr><td><b>Revisar el comprobante</b></td><td>Mirás cada captura de pago</td><td class="win">El bot verifica el comprobante</td></tr><tr><td><b>Costo de envío</b></td><td>Lo calculás en cada chat</td><td class="win">El bot lo calcula por zona</td></tr>
+  </table>
+  <h2>Paquetes — elegí el tuyo</h2>
+  <table>
+    <tr><th>Paquete</th><th>Qué incluye</th><th class="num">Precio (Bs)</th></tr>
+    <tr><td><b>Bot de Ventas</b></td><td>Responde precios y dudas 24/7 (público y por mayor), pasa tu QR y deriva a una persona<br><span class="res">→ Ninguna consulta sin responder, de día o de noche.</span><br><span class="lim">Tope: Responde y deriva: todavía no toma el pedido ni verifica pagos.</span></td><td class="num">1,900</td></tr><tr><td><b>Bot de Ventas + Pedidos</b></td><td>Lo anterior + toma y registra el pedido (producto, cantidad, mayor/menor) y calcula el total<br><span class="res">→ El pedido llega armado y registrado, sin cargarlo a mano.</span><br><span class="lim">Tope: El comprobante y el costo de envío todavía los revisás vos.</span></td><td class="num">desde 4,800</td></tr><tr class="rec"><td><b>Bot de Ventas Automatizado</b> ⭐</td><td>Lo anterior + verifica el comprobante de pago + calcula el delivery por zona + QR dinámico por monto<br><span class="res">→ Vende, cobra, verifica el pago y calcula el envío casi solo.</span><br><span class="lim">Tope: Requiere tus zonas y tarifas de envío y las credenciales de tu QR bancario.</span></td><td class="num">desde 8,900</td></tr>
+  </table>
+  <p style="margin-top:10px;">La diferencia es el salto de valor: <b>Ventas</b> = responde y no perdés clientes · <b>Ventas + Pedidos</b> = arma el pedido solo · <b>Automatizado</b> = además cobra, verifica el comprobante y calcula el envío. Recomendado: <b>Automatizado</b>. Todos incluyen el setup; la operación mensual del bot va aparte (ver add-ons). El número de WhatsApp queda a tu nombre. La atención automática en WhatsApp se activa al verificar tu cuenta en Meta — te acompañamos.</p>
+  <p style="margin-top:6px;"><b>Plazo de entrega estimado:</b> 2 a 3 semanas desde el anticipo y la entrega de contenidos.</p>
+
+  <h2>Add-ons (opcionales)</h2>
+  <table>
+    <tr><th>Add-on</th><th class="num">Setup (Bs)</th><th class="num">Mensual (Bs)</th></tr>
+    <tr><td>Operación y mejora mensual del bot</td><td class="num">—</td><td class="num">350–530</td></tr><tr><td>Integración con tu catálogo web o tienda online</td><td class="num">600</td><td class="num">—</td></tr><tr><td>Reportes avanzados de ventas y productos más pedidos</td><td class="num">—</td><td class="num">a convenir</td></tr>
+  </table>
+
+  <div class="card" style="margin-top:16px;">
+    <div class="tag amber">Importante — costos de terceros</div>
+    <p>No incluidos: el número y la cuenta de WhatsApp Business a tu nombre, los créditos de IA y la mensajería de WhatsApp Business API (se paga por conversación según volumen) y la comisión o credenciales de la pasarela de tu QR bancario.</p>
+  </div>
+
+  <h2>Requisitos a cargo del cliente</h2>
+  <div class="card">
+    <p>Para habilitar los pagos en línea, el negocio deberá contar con la
+    siguiente documentación a su nombre (lo acompañamos en cada paso):</p>
+    <ul><li>Número de celular dedicado y cuenta de WhatsApp Business a tu nombre.</li><li>Credenciales de tu QR bancario (BNB u otro) para el cobro dinámico por monto.</li><li>Catálogo con precios de venta al público y por mayor, y la cantidad mínima para mayoreo.</li><li>Zonas de entrega y la tarifa de delivery por cada zona (o la regla para calcularla).</li><li>Verificación de tu negocio en Meta / WhatsApp Business — te acompañamos en el trámite.</li></ul>
+  </div>
+  <h2>Próximos pasos</h2>
+  <div class="card">
+    <div class="step"><div class="n">1</div><div><p>Completás un formulario corto con tu catálogo, precios (público y por mayor), zonas de envío y cómo cobrás.</p></div></div>
+    <div class="step"><div class="n">2</div><div><p>Armamos y entrenamos el bot con tus datos reales y lo conectamos a tu WhatsApp Business.</p></div></div>
+    <div class="step"><div class="n">3</div><div><p>Probamos juntos con pedidos reales y lo dejamos operando.</p></div></div></div>
+  <div class="foot">
+    <p class="big">Precio reservado hasta 30 días con confirmación de pago.</p>
+    <p>ONIA — Sistemas, automatización y contenido para negocios. business@onia.com.bo</p>
+  </div>
+
+</div>
+</body>
+</html>
