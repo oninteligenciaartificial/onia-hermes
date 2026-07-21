@@ -107,8 +107,22 @@ async function getOniaCenterSessionRole(accessToken: string) {
   return normalizeRoleKey(profile?.primary_role_key);
 }
 
+const NUVIA_STORE_ORIGIN = "https://nuvia-store.vercel.app";
+
+function isCenterHost(request: NextRequest) {
+  return (request.headers.get("host") || "").includes("center.onia.com.bo");
+}
+
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+
+  // El dominio del center (center.onia.com.bo, VPS) no sirve la tienda Nuvia:
+  // cualquier /nuvia alli redirige 308 (permanente) al deploy propio de Nuvia,
+  // preservando el subpath. Solo aplica en el host del center — nunca en
+  // nuvia-store.vercel.app ni en onia-center.vercel.app, que pasan de largo.
+  if (isCenterHost(request) && (pathname === "/nuvia" || pathname.startsWith("/nuvia/"))) {
+    return NextResponse.redirect(`${NUVIA_STORE_ORIGIN}${pathname}${request.nextUrl.search}`, 308);
+  }
 
   if (!pathname.startsWith("/onia-center") || pathname.startsWith("/onia-center/login")) {
     return NextResponse.next();
@@ -142,5 +156,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/onia-center/:path*"],
+  matcher: ["/onia-center/:path*", "/nuvia", "/nuvia/:path*"],
 };
