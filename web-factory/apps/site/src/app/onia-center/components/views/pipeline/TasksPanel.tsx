@@ -1,4 +1,4 @@
-import type { RuntimeNote, RuntimeTask } from "@/lib/onia-center-store";
+import type { RuntimeNote, RuntimeTask, TeamMember } from "@/lib/onia-center-store";
 import type { CenterTone } from "@/app/onia-center/types";
 import { Badge } from "../../ui/Badge";
 import { SurfaceCard } from "../../ui/SurfaceCard";
@@ -34,16 +34,17 @@ interface TasksPanelProps {
   tasks: RuntimeTask[];
   notes: RuntimeNote[];
   canApprove: boolean;
+  team: TeamMember[];
 }
 
-export function TasksPanel({ tasks, notes, canApprove }: TasksPanelProps) {
+export function TasksPanel({ tasks, notes, canApprove, team }: TasksPanelProps) {
   const open = tasks
     .filter((task) => OPEN.includes(task.status))
     .sort((a, b) => PRIORITY_ORDER[a.priority] - PRIORITY_ORDER[b.priority]);
 
   return (
     <SurfaceCard title={`Tareas (${open.length} abiertas · ${tasks.length} total)`}>
-      <NewTaskForm />
+      <NewTaskForm canChooseAssignee={canApprove} team={team} />
       {open.length === 0 ? (
         <p className="text-sm text-muted-foreground">Sin tareas abiertas.</p>
       ) : (

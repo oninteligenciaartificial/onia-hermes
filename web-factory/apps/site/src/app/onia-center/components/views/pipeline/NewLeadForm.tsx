@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import type { RoleId } from "@/app/onia-center/types";
+import type { TeamMember } from "@/lib/onia-center-store";
+import { buildAssignees, defaultAssigneeKey } from "./assignees";
 
 const SERVICE_OPTIONS: { id: string; label: string }[] = [
   { id: "onia-motor-local-growth", label: "ONIA Motor Local Growth" },
@@ -11,20 +12,11 @@ const SERVICE_OPTIONS: { id: string; label: string }[] = [
   { id: "web-pro-onia", label: "Web Pro ONIA" },
 ];
 
-// Mismos responsables que la vista legacy (equipo/page.tsx). Solo Sergio elige;
-// para el resto el runtime asigna el lead a su propio owner.
-const ASSIGNEES: { key: string; role: RoleId; userKey: string; label: string }[] = [
-  { key: "seller_001", role: "seller", userKey: "seller_001", label: "Vendedora" },
-  { key: "sergio", role: "sergio", userKey: "sergio", label: "Sergio" },
-  { key: "arthur", role: "arthur", userKey: "arthur", label: "Arthur" },
-];
-
-const EMPTY_FORM = {
+const BASE_FORM = {
   company: "",
   contact: "",
   source: "Manual",
   serviceId: "onia-motor-local-growth",
-  ownerKey: "seller_001",
   nextAction: "",
 };
 
@@ -34,12 +26,16 @@ const LABEL_CLASS = "grid gap-1 text-xs font-medium text-muted-foreground";
 
 interface NewLeadFormProps {
   canChooseOwner: boolean;
+  /** Roster real del equipo (getOniaCenterTeam). Cada persona trae su userKey. */
+  team: TeamMember[];
 }
 
-export function NewLeadForm({ canChooseOwner }: NewLeadFormProps) {
+export function NewLeadForm({ canChooseOwner, team }: NewLeadFormProps) {
   const router = useRouter();
+  const assignees = useMemo(() => buildAssignees(team), [team]);
+  const defaultOwnerKey = useMemo(() => defaultAssigneeKey(assignees), [assignees]);
   const [open, setOpen] = useState(false);
-  const [form, setForm] = useState(EMPTY_FORM);
+  const [form, setForm] = useState({ ...BASE_FORM, ownerKey: defaultOwnerKey });
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -68,7 +64,7 @@ export function NewLeadForm({ canChooseOwner }: NewLeadFormProps) {
     setBusy(true);
     setError(null);
 
-    const assignee = ASSIGNEES.find((item) => item.key === form.ownerKey) ?? ASSIGNEES[0];
+    const assignee = assignees.find((item) => item.key === form.ownerKey) ?? assignees[0];
     const data: Record<string, unknown> = {
       company,
       contact: form.contact.trim(),
@@ -78,9 +74,10 @@ export function NewLeadForm({ canChooseOwner }: NewLeadFormProps) {
       nextAction: form.nextAction.trim(),
       createdAt: new Date().toISOString(),
     };
-    // Solo Sergio elige responsable. Para el resto de roles el runtime
-    // sobreescribe el owner con el actor, asi que no lo mandamos.
-    if (canChooseOwner) {
+    // Solo Sergio elige la PERSONA responsable; estampamos su userKey para que el
+    // scorecard separe dos personas del mismo rol (p. ej. dos vendedores). Para el
+    // resto de roles el runtime sobreescribe el owner con el actor, no lo mandamos.
+    if (canChooseOwner && assignee) {
       data.owner = assignee.role;
       data.ownerUserKey = assignee.userKey;
       data.originUserKey = assignee.userKey;
@@ -102,7 +99,7 @@ export function NewLeadForm({ canChooseOwner }: NewLeadFormProps) {
         setBusy(false);
         return;
       }
-      setForm(EMPTY_FORM);
+      setForm({ ...BASE_FORM, ownerKey: defaultOwnerKey });
       setBusy(false);
       setOpen(false);
       router.refresh();
@@ -211,7 +208,7 @@ export function NewLeadForm({ canChooseOwner }: NewLeadFormProps) {
                     disabled={busy}
                     className={FIELD_CLASS}
                   >
-                    {ASSIGNEES.map((assignee) => (
+                    {assignees.map((assignee) => (
                       <option key={assignee.key} value={assignee.key}>
                         {assignee.label}
                       </option>
@@ -220,7 +217,7 @@ export function NewLeadForm({ canChooseOwner }: NewLeadFormProps) {
                 </label>
               ) : (
                 <p className="text-xs text-muted-foreground">
-                  El lead queda asignado a tu rol automaticamente.
+                  El lead queda asignado a tu usuario automaticamente.
                 </p>
               )}
 

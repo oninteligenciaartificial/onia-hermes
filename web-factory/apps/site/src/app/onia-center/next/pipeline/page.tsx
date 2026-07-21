@@ -3,7 +3,9 @@ import {
   filterOniaCenterRuntimeForActor,
   getMissingOniaCenterConfig,
   getOniaCenterRuntime,
+  getOniaCenterTeam,
   isOniaCenterConfigured,
+  type TeamMember,
 } from "@/lib/onia-center-store";
 import { getOniaCenterActor, isSergio } from "@/lib/onia-center-auth";
 import { AppShell } from "@/app/onia-center/components/shell/AppShell";
@@ -47,6 +49,19 @@ export default async function PipelinePage() {
 
   try {
     const runtime = filterOniaCenterRuntimeForActor(await getOniaCenterRuntime(), auth.actor);
+
+    // Roster real del equipo para elegir la PERSONA responsable en los formularios
+    // (no depende de la sesion; si falla, los formularios caen a la lista minima).
+    let team: TeamMember[] = [];
+    try {
+      const members = await getOniaCenterTeam();
+      if (members.length > 0) {
+        team = members;
+      }
+    } catch {
+      // Lectura del equipo fallida: los formularios usan el respaldo estatico.
+    }
+
     return (
       <AppShell>
         <PipelineView
@@ -54,6 +69,7 @@ export default async function PipelinePage() {
           tasks={runtime.tasks}
           notes={runtime.notes}
           canApprove={isSergio(auth.actor)}
+          team={team}
         />
       </AppShell>
     );

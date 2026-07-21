@@ -1,18 +1,23 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import type { RoleId } from "@/app/onia-center/types";
+import type { TeamMember } from "@/lib/onia-center-store";
+import { buildAssignees, defaultAssigneeKey } from "./assignees";
 
-const ASSIGNEES: { role: RoleId; label: string }[] = [
-  { role: "arthur", label: "Arthur" },
-  { role: "sergio", label: "Yo" },
-];
+interface NewTaskFormProps {
+  /** Solo Sergio elige la persona; el resto se autoasigna a su propio usuario. */
+  canChooseAssignee: boolean;
+  /** Roster real del equipo (getOniaCenterTeam). Cada persona trae su userKey. */
+  team: TeamMember[];
+}
 
-export function NewTaskForm() {
+export function NewTaskForm({ canChooseAssignee, team }: NewTaskFormProps) {
   const router = useRouter();
+  const assignees = useMemo(() => buildAssignees(team), [team]);
+  const defaultKey = useMemo(() => defaultAssigneeKey(assignees), [assignees]);
   const [title, setTitle] = useState("");
-  const [assignee, setAssignee] = useState<RoleId>("arthur");
+  const [assigneeKey, setAssigneeKey] = useState(defaultKey);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -22,21 +27,30 @@ export function NewTaskForm() {
     if (!trimmed || busy) return;
     setBusy(true);
     setError(null);
+
+    const data: Record<string, unknown> = {
+      title: trimmed,
+      projectId: "project-onia-center",
+      status: "todo",
+      priority: "media",
+      evidence: "",
+    };
+    // Solo Sergio asigna a otra PERSONA: estampamos assignedUserKey para separar
+    // dos personas del mismo rol en el scorecard. Para el resto, el runtime
+    // autoasigna la tarea a su propio userKey, asi que no mandamos responsable.
+    if (canChooseAssignee) {
+      const chosen = assignees.find((item) => item.key === assigneeKey) ?? assignees[0];
+      if (chosen) {
+        data.assignedRole = chosen.role;
+        data.assignedUserKey = chosen.userKey;
+      }
+    }
+
     try {
       const response = await fetch("/api/onia-center/runtime", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({
-          entity: "task",
-          data: {
-            title: trimmed,
-            assignedRole: assignee,
-            projectId: "project-onia-center",
-            status: "todo",
-            priority: "media",
-            evidence: "",
-          },
-        }),
+        body: JSON.stringify({ entity: "task", data }),
       });
       const body = (await response.json()) as { ok?: boolean; message?: string };
       if (!response.ok || !body.ok) {
@@ -67,19 +81,21 @@ export function NewTaskForm() {
           disabled={busy}
           className="h-8 min-w-[10rem] flex-1 rounded-md border border-border bg-background px-2.5 text-sm text-foreground outline-none placeholder:text-muted-foreground focus:border-primary disabled:opacity-50"
         />
-        <select
-          value={assignee}
-          onChange={(event) => setAssignee(event.target.value as RoleId)}
-          disabled={busy}
-          aria-label="Asignar a"
-          className="h-8 rounded-md border border-border bg-card px-2 text-xs text-foreground outline-none focus:border-primary disabled:opacity-50"
-        >
-          {ASSIGNEES.map((option) => (
-            <option key={option.role} value={option.role}>
-              {option.label}
-            </option>
-          ))}
-        </select>
+        {canChooseAssignee ? (
+          <select
+            value={assigneeKey}
+            onChange={(event) => setAssigneeKey(event.target.value)}
+            disabled={busy}
+            aria-label="Asignar a"
+            className="h-8 rounded-md border border-border bg-card px-2 text-xs text-foreground outline-none focus:border-primary disabled:opacity-50"
+          >
+            {assignees.map((option) => (
+              <option key={option.key} value={option.key}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        ) : null}
         <button
           type="button"
           disabled={busy || !trimmed}
@@ -89,6 +105,9 @@ export function NewTaskForm() {
           {busy ? "Creando…" : "Crear tarea"}
         </button>
       </div>
+      {!canChooseAssignee ? (
+        <p className="mt-1.5 text-xs text-muted-foreground">La tarea queda asignada a tu usuario.</p>
+      ) : null}
       {error ? <p className="mt-1.5 text-xs text-destructive">{error}</p> : null}
     </div>
   );
