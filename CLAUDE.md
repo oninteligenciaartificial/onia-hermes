@@ -108,6 +108,19 @@ Docs internos de referencia: `PRICING_RATIONALE_INTERNO.md`,
   nunca un subconjunto parcial. Los sync de docs/contenido no pagan tsc (sólo
   corre cuando el avance a main toca la app).
 
+## Objetivo por sesión (REGLA)
+
+> Definir el objetivo al inicio y NO terminar la sesión hasta perfeccionarlo y
+> terminarlo. Especificarlo siempre para no descarrilar a otras cosas.
+
+- **Una sesión de control, muchos subagentes.** Trabajar TODO desde una sola sesión
+  orquestando subagentes; no abrir varias sesiones de chat en paralelo — a Sergio se
+  le cruza la información y no se llega al objetivo.
+- **Cada subagente aislado en su worktree/carril.** El subagente corre
+  `git branch --show-current` primero y opera con worktree explícito; el orquestador
+  (la sesión de control) mantiene el objetivo, el orden y el merge a `main`.
+- **No pasar a otra cosa** hasta que el objetivo actual esté funcional y en `main`.
+
 ## Desarrollo en paralelo — carriles (REGLA)
 
 > Trabajamos muchos frentes a la vez. El límite NO es el plan de Claude (Max) — el
