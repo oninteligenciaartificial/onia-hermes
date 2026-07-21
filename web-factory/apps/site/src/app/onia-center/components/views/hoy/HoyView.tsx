@@ -26,14 +26,22 @@ export function HoyView({
   referenceDate,
 }: HoyViewProps) {
   return (
-    <div className="grid gap-4 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
-      <div className="grid content-start gap-4">
-        <DayTimeline blocks={scheduleBlocks} referenceDate={referenceDate} />
-        <TeamWorkPanel tasks={tasks} canApprove={canApprove} />
-      </div>
-      <div className="grid content-start gap-4">
-        <ReviewQueueTile reviews={reviews} bodies={reviewBodies} canApprove={canApprove} />
-        <AgentRosterTile agents={agents} />
+    <div className="grid gap-6">
+      <header className="grid gap-1.5">
+        <h1 className="text-xl font-semibold tracking-tight text-foreground">Hoy</h1>
+        <p className="max-w-2xl text-sm leading-relaxed text-muted-foreground">
+          Tu día de un vistazo: la agenda protegida, qué necesita tu aprobación y en qué está el equipo.
+        </p>
+      </header>
+      <div className="grid items-start gap-5 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
+        <div className="grid content-start gap-5">
+          <DayTimeline blocks={scheduleBlocks} referenceDate={referenceDate} />
+          <TeamWorkPanel tasks={tasks} canApprove={canApprove} />
+        </div>
+        <div className="grid content-start gap-5">
+          <ReviewQueueTile reviews={reviews} bodies={reviewBodies} canApprove={canApprove} />
+          <AgentRosterTile agents={agents} />
+        </div>
       </div>
     </div>
   );

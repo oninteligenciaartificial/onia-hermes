@@ -33,3 +33,25 @@
   color: var(--muted-foreground);
   background: var(--muted);
 }
+
+/* Elevación suave para las tarjetas de nivel superior de la vista "Hoy".
+   Clase aditiva (opt-in): el resto de las vistas no la usa, así que no cambian. */
+.onia-center-elevated {
+  box-shadow:
+    0 1px 2px rgba(20, 31, 43, 0.04),
+    0 14px 34px -20px rgba(20, 31, 43, 0.18);
+}
+
+/* Bloque del timeline de la Agenda: transición + hover sutil. El color de cada
+   bloque llega por estilo inline (según categoría); esto solo aporta el estado. */
+.onia-center-tl-block {
+  transition:
+    filter 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+@media (hover: hover) {
+  .onia-center-tl-block:hover {
+    filter: saturate(1.06) brightness(0.985);
+  }
+}
