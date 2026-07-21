@@ -3,14 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import type { RuntimeNote, RuntimeTask } from "@/lib/onia-center-store";
-
-const STATUS_OPTIONS: { value: RuntimeTask["status"]; label: string; sergioOnly?: boolean }[] = [
-  { value: "todo", label: "Pendiente" },
-  { value: "doing", label: "En progreso" },
-  { value: "review", label: "Enviar a revision" },
-  { value: "blocked", label: "Bloqueada" },
-  { value: "done", label: "Aprobada", sergioOnly: true },
-];
+import { TaskStatusSelect } from "../../ui/TaskStatusSelect";
 
 interface TaskControlsProps {
   taskId: string;
@@ -26,30 +19,6 @@ export function TaskControls({ taskId, status, evidence, evidenceNotes, canAppro
   const [error, setError] = useState<string | null>(null);
   const [evidenceOpen, setEvidenceOpen] = useState(false);
   const [evidenceText, setEvidenceText] = useState("");
-
-  async function changeStatus(next: RuntimeTask["status"]) {
-    if (next === status || busy) return;
-    setBusy(true);
-    setError(null);
-    try {
-      const response = await fetch("/api/onia-center/runtime", {
-        method: "PATCH",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({ entity: "task", id: taskId, status: next }),
-      });
-      const body = (await response.json()) as { ok?: boolean; message?: string };
-      if (!response.ok || !body.ok) {
-        setError(body.message ?? "No se pudo actualizar la tarea.");
-        setBusy(false);
-        return;
-      }
-      setBusy(false);
-      router.refresh();
-    } catch {
-      setError("Error de red, reintenta.");
-      setBusy(false);
-    }
-  }
 
   async function attachEvidence() {
     const trimmed = evidenceText.trim();
@@ -89,22 +58,7 @@ export function TaskControls({ taskId, status, evidence, evidenceNotes, canAppro
   return (
     <div className="mt-2 grid gap-2">
       <div className="flex flex-wrap items-center gap-2">
-        <label className="text-xs text-muted-foreground" htmlFor={`task-status-${taskId}`}>
-          Estado
-        </label>
-        <select
-          id={`task-status-${taskId}`}
-          value={status}
-          disabled={busy}
-          onChange={(event) => changeStatus(event.target.value as RuntimeTask["status"])}
-          className="h-8 rounded-md border border-border bg-card px-2 text-xs text-foreground outline-none focus:border-primary disabled:opacity-50"
-        >
-          {STATUS_OPTIONS.map((option) => (
-            <option key={option.value} value={option.value} disabled={option.sergioOnly && !canApprove}>
-              {option.label}
-            </option>
-          ))}
-        </select>
+        <TaskStatusSelect taskId={taskId} status={status} canApprove={canApprove} showLabel />
         <button
           type="button"
           onClick={() => setEvidenceOpen((open) => !open)}

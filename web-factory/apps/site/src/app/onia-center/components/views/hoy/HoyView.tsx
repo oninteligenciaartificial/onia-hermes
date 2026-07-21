@@ -29,7 +29,7 @@ export function HoyView({
     <div className="grid gap-4 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
       <div className="grid content-start gap-4">
         <DayTimeline blocks={scheduleBlocks} referenceDate={referenceDate} />
-        <TeamWorkPanel tasks={tasks} />
+        <TeamWorkPanel tasks={tasks} canApprove={canApprove} />
       </div>
       <div className="grid content-start gap-4">
         <ReviewQueueTile reviews={reviews} bodies={reviewBodies} canApprove={canApprove} />

@@ -3,6 +3,7 @@ import type { RuntimeTask } from "@/lib/onia-center-store";
 import type { CenterTone } from "@/app/onia-center/types";
 import { Badge } from "../../ui/Badge";
 import { SurfaceCard } from "../../ui/SurfaceCard";
+import { TaskStatusSelect } from "../../ui/TaskStatusSelect";
 
 const OPEN: RuntimeTask["status"][] = ["todo", "doing", "review", "blocked"];
 const PRIORITY_TONE: Record<RuntimeTask["priority"], CenterTone> = {
@@ -22,9 +23,11 @@ function initials(name: string): string {
 
 interface TeamWorkPanelProps {
   tasks: RuntimeTask[];
+  /** Sergio puede cerrar tareas (done); el resto solo hasta revision. */
+  canApprove?: boolean;
 }
 
-export function TeamWorkPanel({ tasks }: TeamWorkPanelProps) {
+export function TeamWorkPanel({ tasks, canApprove = false }: TeamWorkPanelProps) {
   return (
     <SurfaceCard title="Equipo — que hace cada uno">
       <div className="grid gap-4">
@@ -48,7 +51,10 @@ export function TeamWorkPanel({ tasks }: TeamWorkPanelProps) {
                   {open.map((task) => (
                     <li key={task.id} className="flex items-center justify-between gap-2">
                       <span className="min-w-0 truncate text-sm">{task.title}</span>
-                      <Badge tone={PRIORITY_TONE[task.priority]}>{task.priority}</Badge>
+                      <div className="flex shrink-0 items-center gap-2">
+                        <Badge tone={PRIORITY_TONE[task.priority]}>{task.priority}</Badge>
+                        <TaskStatusSelect taskId={task.id} status={task.status} canApprove={canApprove} />
+                      </div>
                     </li>
                   ))}
                 </ul>
