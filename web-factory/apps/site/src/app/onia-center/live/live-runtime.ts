@@ -405,3 +405,208 @@ export async function getIntegrationConnectors(): Promise<IntegrationConnector[]
       priority: row.priority ?? "",
     }));
 }
+
+// ---------------------------------------------------------------------------
+// 5. Feed de auditoria — onia_center.audit_logs.
+//    Las corridas de agentes (action='agent_trigger'), notas de runtime y otros
+//    eventos quedan en audit_logs. El panel LEE las ultimas filas como feed real
+//    de auditoria. El filtrado por rol se hace arriba (page) con la columna
+//    sensitivity_scope, para no exponer eventos privados a roles no-Sergio.
+// ---------------------------------------------------------------------------
+
+export interface AgentRunEntry {
+  id: string;
+  action: string;
+  actorRole: string;
+  summary: string;
+  at: string;
+  sensitivityScope: string;
+  agentId: string | null;
+  agentName: string | null;
+  status: string | null;
+}
+
+type DbAuditRow = {
+  audit_key?: string;
+  action?: string;
+  actor_role_key?: string;
+  summary?: string;
+  sensitivity_scope?: string;
+  raw?: Record<string, unknown> | null;
+  created_at?: string;
+};
+
+export async function getAgentRunFeed(limit = 40): Promise<AgentRunEntry[]> {
+  const capped = Math.min(Math.max(Math.trunc(limit), 1), 100);
+  const rows = await liveRequest<DbAuditRow[]>(
+    `audit_logs?select=audit_key,action,actor_role_key,summary,sensitivity_scope,raw,created_at&order=created_at.desc&limit=${capped}`,
+  );
+  if (!rows) {
+    return [];
+  }
+
+  return rows
+    .filter((row) => Boolean(row.audit_key))
+    .map((row) => {
+      const raw = (row.raw ?? {}) as Record<string, unknown>;
+      const agentId =
+        typeof raw.agentId === "string" ? raw.agentId : typeof raw.agent === "string" ? raw.agent : null;
+      return {
+        id: row.audit_key as string,
+        action: row.action ?? "evento",
+        actorRole: row.actor_role_key ?? "",
+        summary: row.summary ?? "",
+        at: row.created_at ?? "",
+        sensitivityScope: row.sensitivity_scope ?? "internal_restricted",
+        agentId,
+        agentName: typeof raw.agentName === "string" ? raw.agentName : null,
+        status: typeof raw.status === "string" ? raw.status : null,
+      };
+    });
+}
+
+// ---------------------------------------------------------------------------
+// 6. Disparo de agentes — resolucion de webhook n8n + registro de la corrida.
+//    La URL del webhook nunca viene del request; sale de env o de
+//    integration_connectors (controlados por infra), asi el usuario solo elige
+//    QUE agente disparar, no a donde. Si no hay webhook -> null (no configurado).
+// ---------------------------------------------------------------------------
+
+function normalizeHttpUrl(value: unknown): string | null {
+  if (typeof value !== "string") {
+    return null;
+  }
+  const trimmed = value.trim();
+  return /^https?:\/\//i.test(trimmed) ? trimmed : null;
+}
+
+function agentEnvSuffix(agentId: string): string {
+  return agentId.replace(/[^a-zA-Z0-9]+/g, "_").toUpperCase();
+}
+
+function webhookFromEnvMap(agentId: string): string | null {
+  const rawMap = process.env.ONIA_CENTER_AGENT_WEBHOOKS;
+  if (!rawMap) {
+    return null;
+  }
+  try {
+    const map = JSON.parse(rawMap) as Record<string, unknown>;
+    return normalizeHttpUrl(map[agentId]) ?? normalizeHttpUrl(map[agentIdToKey(agentId)]);
+  } catch {
+    return null;
+  }
+}
+
+async function webhookFromConnectors(agentId: string): Promise<string | null> {
+  // Lectura tolerante: si la columna `raw` no existe en integration_connectors,
+  // PostgREST responde 4xx y liveRequest devuelve null (caemos a env).
+  const rows = await liveRequest<Array<{ connector_key?: string; raw?: Record<string, unknown> | null }>>(
+    "integration_connectors?select=connector_key,raw&provider=eq.n8n",
+  );
+  if (!rows) {
+    return null;
+  }
+
+  const key = agentIdToKey(agentId);
+  for (const row of rows) {
+    const raw = (row.raw ?? {}) as Record<string, unknown>;
+    const agentMap = raw.agent_webhooks;
+    if (agentMap && typeof agentMap === "object") {
+      const record = agentMap as Record<string, unknown>;
+      const mapped = normalizeHttpUrl(record[agentId]) ?? normalizeHttpUrl(record[key]);
+      if (mapped) {
+        return mapped;
+      }
+    }
+    const connectorAgentKey = typeof raw.agent_key === "string" ? raw.agent_key : row.connector_key;
+    if (connectorAgentKey === agentId || connectorAgentKey === key) {
+      const direct = normalizeHttpUrl(raw.webhook_url) ?? normalizeHttpUrl(raw.webhook);
+      if (direct) {
+        return direct;
+      }
+    }
+  }
+  return null;
+}
+
+export async function resolveAgentWebhookUrl(agentId: string): Promise<string | null> {
+  const fromEnvMap = webhookFromEnvMap(agentId);
+  if (fromEnvMap) {
+    return fromEnvMap;
+  }
+  const perAgent = normalizeHttpUrl(process.env[`ONIA_CENTER_AGENT_WEBHOOK_${agentEnvSuffix(agentId)}`]);
+  if (perAgent) {
+    return perAgent;
+  }
+  const fromConnector = await webhookFromConnectors(agentId);
+  if (fromConnector) {
+    return fromConnector;
+  }
+  return normalizeHttpUrl(process.env.ONIA_CENTER_N8N_WEBHOOK_URL);
+}
+
+async function liveWrite(path: string, body: unknown): Promise<boolean> {
+  const config = getLiveConfig();
+  if (!config) {
+    return false;
+  }
+  try {
+    const response = await fetch(`${config.url}/rest/v1/${path}`, {
+      method: "POST",
+      headers: {
+        apikey: config.serviceRoleKey,
+        authorization: `Bearer ${config.serviceRoleKey}`,
+        "content-profile": config.schema,
+        "content-type": "application/json",
+        prefer: "return=minimal",
+      },
+      body: JSON.stringify(body),
+      cache: "no-store",
+    });
+    return response.ok;
+  } catch {
+    return false;
+  }
+}
+
+export interface AgentTriggerRecord {
+  agentId: string;
+  agentName: string;
+  actorRoleKey: string;
+  actorLabel: string;
+  actorUserKey: string;
+  status: "sent" | "failed";
+  detail: string;
+  httpStatus: number | null;
+}
+
+// Registra la corrida en audit_logs con las MISMAS columnas que el store usa al
+// insertar notas (audit_key/actor_role_key/action/entity_table/entity_key/
+// sensitivity_scope/summary/raw). Best-effort: si falla, no rompe el disparo.
+export async function recordAgentTrigger(entry: AgentTriggerRecord): Promise<void> {
+  const at = new Date().toISOString();
+  const summary =
+    entry.status === "sent"
+      ? `Disparo manual: ${entry.agentName} (por ${entry.actorLabel})`
+      : `Disparo fallido: ${entry.agentName} (por ${entry.actorLabel})`;
+
+  await liveWrite("audit_logs", {
+    audit_key: `agent-trigger-${agentIdToKey(entry.agentId)}-${Date.now()}`,
+    actor_role_key: entry.actorRoleKey,
+    action: "agent_trigger",
+    entity_table: "onia_center.operating_agents",
+    entity_key: agentIdToKey(entry.agentId),
+    sensitivity_scope: "internal_restricted",
+    summary,
+    raw: {
+      agentId: entry.agentId,
+      agentName: entry.agentName,
+      status: entry.status,
+      detail: entry.detail,
+      httpStatus: entry.httpStatus,
+      triggeredBy: entry.actorUserKey,
+      actorRole: entry.actorRoleKey,
+      at,
+    },
+  });
+}
