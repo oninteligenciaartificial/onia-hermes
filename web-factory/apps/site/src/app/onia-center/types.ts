@@ -392,6 +392,32 @@ export type ClientRecord = {
 
 export type ProjectStatus = "planning" | "active" | "review" | "blocked" | "paused" | "archived";
 
+// Estado de un venture para la vista Negocio (torre de control). El tono del chip
+// lo deriva la vista desde este estado, con los semanticos del panel:
+//   live       -> verde   (vivo, ya funciona / vende)
+//   in_progress -> azul    (en curso, avanzando)
+//   attention  -> ambar   (necesita atencion: bloqueo o riesgo a resolver)
+//   built      -> neutral (construido pero todavia no vende)
+export type VentureStatus = "live" | "in_progress" | "attention" | "built";
+
+// Un venture es un frente de negocio ONIA (SaaS, servicio, marca o nucleo comun).
+// Datos curados a mano: son la foto estrategica que se revisa en el panel, no
+// runtime. `status` decide el tono del chip; `statusLabel` es el texto que se ve.
+export type VentureRecord = {
+  id: string;
+  name: string;
+  /** Rubro corto, p. ej. "SaaS dental" o "Skincare B2C". */
+  sector: string;
+  status: VentureStatus;
+  statusLabel: string;
+  /** Una linea de que es el venture. */
+  summary: string;
+  /** El proximo paso concreto para moverlo. */
+  nextStep: string;
+  /** Dominio en vivo, sin protocolo (p. ej. "dentalgest.app"). Opcional. */
+  url?: string;
+};
+
 export type ProjectRecord = {
   id: string;
   organizationId: string;

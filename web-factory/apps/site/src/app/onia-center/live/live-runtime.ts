@@ -713,3 +713,42 @@ export async function recordAgentTrigger(entry: AgentTriggerRecord): Promise<voi
     },
   });
 }
+
+// ---------------------------------------------------------------------------
+// 7. Conteo del pipeline de contenido — idea_inbox + review_queue.
+//    Numeros crudos para la torre de control: cuantas ideas esperan trabajo y
+//    cuantos borradores estan en cola de revision. El panel LEE, no escribe.
+// ---------------------------------------------------------------------------
+
+export interface ContentPipelineCounts {
+  ideasPending: number;
+  draftsPending: number;
+}
+
+// Puro y testeable: convierte las dos listas crudas (o null si no se pudo leer)
+// en los conteos. Si NINGUNA lectura funciono (sin config o error de red),
+// devuelve null para que el panel oculte el bloque en vez de mostrar ceros
+// enganosos. Si al menos una lista llego, cuenta su largo (0 es un dato valido).
+export function toContentPipelineCounts(
+  ideas: unknown[] | null,
+  drafts: unknown[] | null,
+): ContentPipelineCounts | null {
+  if (ideas === null && drafts === null) {
+    return null;
+  }
+  return {
+    ideasPending: Array.isArray(ideas) ? ideas.length : 0,
+    draftsPending: Array.isArray(drafts) ? drafts.length : 0,
+  };
+}
+
+// Ideas que aun esperan trabajo (estado inbox o queued, no reviewed/approved/
+// archived) y borradores pendientes en review_queue. El tope alto (500) cubre de
+// sobra un pipeline real de decenas; solo acota una lectura patologica.
+export async function getContentPipelineCounts(): Promise<ContentPipelineCounts | null> {
+  const [ideas, drafts] = await Promise.all([
+    liveRequest<unknown[]>("idea_inbox?select=idea_key&status=in.(inbox,queued)&limit=500"),
+    liveRequest<unknown[]>("review_queue?select=review_key&status=eq.pending&limit=500"),
+  ]);
+  return toContentPipelineCounts(ideas, drafts);
+}

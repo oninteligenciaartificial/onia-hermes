@@ -4,6 +4,7 @@ import {
   mergeLiveAgentStatus,
   parseReviewBody,
   selectLiveInfoByAgentId,
+  toContentPipelineCounts,
   type LiveAgentStatus,
 } from "./live-runtime";
 import type { OperatingAgent } from "@/app/onia-center/types";
@@ -140,5 +141,36 @@ describe("parseReviewBody", () => {
   it("returns null for non-object input", () => {
     expect(parseReviewBody(null)).toBeNull();
     expect(parseReviewBody("x")).toBeNull();
+  });
+});
+
+describe("toContentPipelineCounts", () => {
+  it("returns null when neither list could be read (no config or error)", () => {
+    expect(toContentPipelineCounts(null, null)).toBeNull();
+  });
+
+  it("counts each list length when both were read", () => {
+    expect(toContentPipelineCounts([{}, {}, {}], [{}])).toEqual({
+      ideasPending: 3,
+      draftsPending: 1,
+    });
+  });
+
+  it("treats an empty list as a real zero, not as missing data", () => {
+    expect(toContentPipelineCounts([], [])).toEqual({
+      ideasPending: 0,
+      draftsPending: 0,
+    });
+  });
+
+  it("falls back to zero for the list that failed while keeping the one that read", () => {
+    expect(toContentPipelineCounts([{}, {}], null)).toEqual({
+      ideasPending: 2,
+      draftsPending: 0,
+    });
+    expect(toContentPipelineCounts(null, [{}, {}, {}, {}])).toEqual({
+      ideasPending: 0,
+      draftsPending: 4,
+    });
   });
 });

@@ -25,6 +25,7 @@ import type {
   IntegrationConnector,
   TaskRecord,
   UserProfileRecord,
+  VentureRecord,
 } from "./types";
 
 export const repoStrategy = {
@@ -1053,6 +1054,75 @@ export const operatingProjects: ProjectRecord[] = [
     description: "Modulo reusable para conteo, evidencia visual, ubicacion, QR/codigo y diferencias.",
     nextStep: "Definir MVP de captura y exportacion CSV antes de integrarlo con TR4.",
     modules: ["inventory_camera", "exports", "audit", "mobile"],
+  },
+];
+
+// Ventures = los frentes de negocio ONIA vistos como torre de control. A diferencia
+// de operatingProjects (backlog interno del panel), esto es la foto estrategica que
+// Sergio revisa: que producto/marca esta vivo, cual avanza y cual necesita atencion.
+// Datos curados a mano desde la revision de negocio; el tono del chip lo deriva la
+// vista Negocio con los semanticos del panel (verde/azul/ambar/neutral).
+export const operatingVentures: VentureRecord[] = [
+  {
+    id: "venture-dentalgest",
+    name: "DentalGest",
+    sector: "SaaS dental",
+    status: "live",
+    statusLabel: "Vivo",
+    summary: "Sistema de gestion para clinicas dentales. 9/9 entidades del core y ya vendible.",
+    nextStep:
+      "Cerrar los 6 modulos clinicos (empezar por medical_alert), conectar el intake y cerrar el primer cliente: los 14 leads dentales son el pipeline.",
+    url: "dentalgest.app",
+  },
+  {
+    id: "venture-gestios",
+    name: "GestiOS",
+    sector: "SaaS comercio",
+    status: "attention",
+    statusLabel: "Atencion",
+    summary: "ERP de comercio para pymes. En curso, todavia no vendible.",
+    nextStep:
+      "Sprint 0: cerrar 15 tablas con RLS apagado (riesgo de seguridad) y reconciliar el core con la base de datos.",
+  },
+  {
+    id: "venture-bolivian-electric",
+    name: "Bolivian Electric",
+    sector: "Distribucion electrica B2B",
+    status: "in_progress",
+    statusLabel: "Fase 1",
+    summary: "Cliente de distribucion mayorista. ProveeGest (el producto) viene despues.",
+    nextStep:
+      "Vender ya la consultoria Fase 1 (Bs 1.900); el producto ProveeGest queda para una fase posterior.",
+  },
+  {
+    id: "venture-nuvia",
+    name: "Nuvia",
+    sector: "Skincare B2C",
+    status: "built",
+    statusLabel: "Construido",
+    summary: "Tienda de skincare importado. Construida, todavia no vende.",
+    nextStep:
+      "Decidir productos a importar y capital; mientras tanto vender el lote 001 por WhatsApp.",
+  },
+  {
+    id: "venture-servicios-onia",
+    name: "Servicios ONIA",
+    sector: "Webs, chatbots y automatizacion",
+    status: "live",
+    statusLabel: "Vivo",
+    summary:
+      "Webs, landings, chatbots, automatizaciones y auditorias. La maquina Prospector-Vendedor-Cal esta viva con 14 leads en el CRM.",
+    nextStep:
+      "Trabajar los 14 leads hasta la primera venta; el chatbot de WhatsApp espera Meta/SEPREC.",
+  },
+  {
+    id: "venture-onia-core",
+    name: "onia-core",
+    sector: "Nucleo comun de los SaaS",
+    status: "live",
+    statusLabel: "Vivo",
+    summary: "Nucleo operativo compartido de los SaaS ONIA. v0.7.x, con SIAT emitiendo manual.",
+    nextStep: "Cerrar la cobertura fiscal boliviana y adoptarlo en mas productos.",
   },
 ];
 
