@@ -42,7 +42,7 @@ function assertUnique(items, label) {
 
 assert(contract.name === "ONIA Core", "Contract name must be ONIA Core");
 assert(/^\d+\.\d+\.\d+$/.test(contract.version), "Contract version must be semver (x.y.z)");
-assert(["canonical_draft", "alpha", "beta"].includes(contract.status), "Contract status must be canonical_draft, alpha or beta");
+assert(["canonical_draft", "alpha", "beta", "stable"].includes(contract.status), "Contract status must be canonical_draft, alpha, beta or stable");
 assert(contract.policy?.installInProductRepos === false, "Product repo installation must stay disabled before beta");
 assert(contract.questions.length === 10, "ONIA Core must keep the 10 operating questions");
 assertRepoFile(contract.researchResult, "Research result");

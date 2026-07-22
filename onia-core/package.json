@@ -1,6 +1,6 @@
 {
   "name": "@onia/core",
-  "version": "0.7.1",
+  "version": "1.0.0",
   "description": "ONIA Core: contrato canonico + logica pura compartida por los SaaS de ONIA (DentalGest, GestiOS, ProveeGest, Ganadero OS).",
   "type": "module",
   "private": true,

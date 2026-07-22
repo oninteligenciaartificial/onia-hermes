@@ -68,7 +68,7 @@ describe("loadOniaCoreContract", () => {
   it("loads the canonical ONIA Core contract by default", () => {
     assert.equal(contract.name, "ONIA Core");
     assert.match(contract.version, /^\d+\.\d+\.\d+$/);
-    assert.equal(contract.status, "beta");
+    assert.equal(contract.status, "stable");
   });
 
   it("keeps the 10 operating questions and non-empty entity/capability sets", () => {

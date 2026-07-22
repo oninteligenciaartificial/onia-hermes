@@ -1,5 +1,12 @@
 # ONIA Core Changelog
 
+## 1.0.0 — CORE COMPLETO (feature-complete, adoption-ready) — 2026-07-22
+
+**El core queda TERMINADO como fundacion.** De aca en adelante el foco ya NO es desarrollar el core sino la ADOPCION en productos + la venta. Cambios al core en adelante: SOLO aditivos (nuevos modulos/rubros), nunca reescritura del contrato.
+- Version 0.7.1 -> **1.0.0**, status beta -> **stable** (package.json + validador alineados; contrato congelado, aditivo).
+- **Que cubre el core v1.0.0:** 18 entidades + 21 capabilities (14 core) = el sistema comun de control y seguimiento (tenant, roles finos, business partners, work items con SLA, aprobaciones, agenda/schedule, documentos, comentarios, vistas guardadas, intake, actividad) + **9 modulos activables**: `commerce` (catalogo/ventas/cotizaciones + maquinas de estado), `accounting` + `tax_bolivia` (doble partida + IVA/IT/IUE/RC-IVA + RCV + retenciones + 4 estados financieros + cierre de gestion, Bolivia vigente con fuentes), `invoicing` (factura electronica CUF/QR/CAEB/comprador/TCO), `payroll` (planilla Bolivia: bono antiguedad, AFP, RC-IVA, aguinaldo), `imports` (landed cost), `knowledge` (base de conocimiento), `automation` (motor de reglas + idempotencia), `dental` (rubro clinico) y `agents` (agentes 24/7 human-in-the-loop). 11 tracks verticales + 11 packs de rubro. **503 tests, 4 validadores verdes, manifest anti-drift.**
+- **Fuera del core por diseno (external_gate):** emision SIAT real (integrations/siat, 262 tests, listo pre-piloto), WhatsApp, ejecucion LLM+cron+scraping de los agentes (runtime del producto/VPS via Hermes), TR4. El core modela el contrato + la logica; las integraciones viven aparte.
+
 ## 0.7.1 + modules/agents — 2026-07-22 (agentes 24/7 human-in-the-loop, diferenciador vendible)
 
 Nuevo modulo `agents` del core: el contrato + la logica pura de los agentes autonomos que trabajan 24/7 sobre los datos de la organizacion (calificar leads, armar propuestas, seguimiento, avisos de vencimiento, scraping) como add-on activable SOBRE el core. ENFOQUE: CORE (9no modulo).

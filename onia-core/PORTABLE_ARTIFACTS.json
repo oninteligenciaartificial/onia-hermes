@@ -1,6 +1,6 @@
 {
   "note": "Generado por onia-core/portable-artifacts.mjs. No editar a mano; correr `node onia-core/portable-artifacts.mjs --write`.",
-  "coreVersion": "0.7.1",
+  "coreVersion": "1.0.0",
   "artifactCount": 24,
   "artifacts": [
     {
