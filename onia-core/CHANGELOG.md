@@ -1,5 +1,13 @@
 # ONIA Core Changelog
 
+## 0.7.1 + automation idempotencia + triggers — 2026-07-21 (perfeccionar el core, motor de automatizacion)
+
+P0 #2 de la ola "perfeccionar los universales" (habilita las automatizaciones de UX).
+- **`automation`: idempotencia anti doble-envio** — `buildDispatch` no marcaba el envio como ya hecho, asi que el cron re-evaluado o un reintento reenviaba el mismo aviso (2 recordatorios al cliente). Nuevas `dispatchIdempotencyKey(rule, event, recipient)` + `isDuplicateDispatch(key, keys)`; `message_dispatch` lleva `idempotencyKey` (regla + trigger + evento de negocio + destinatario). Mismo criterio que work_items/intake.
+- **3 triggers nuevos**: `tax_due_soon` (vencimiento fiscal por NIT, reusa `accounting.taxDueDate`), `recall_due` (reactivacion: sin volver N meses y sin cita futura), `quote_expiring` (cotizacion por vencer). `conditionMatches` ya los soporta por la convencion Max/Min.
+- **Seed corregido**: recall estaba mal-modelada como `schedule_upcoming` (asumia cita ya agendada) -> `recall_due`; cotizacion como `work_completed` -> `quote_expiring`.
+- +7 tests. Aditivo, contrato intacto. **396 tests, 4 validadores verdes.**
+
 ## 0.7.1 + payroll bono de antiguedad — 2026-07-21 (perfeccionar el core, fiscal Bolivia)
 
 Primer P0 de la ola "perfeccionar los universales" (research con fuentes oficiales).

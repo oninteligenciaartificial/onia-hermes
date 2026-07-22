@@ -74,13 +74,13 @@
       "id": "modules/automation.logic.mjs",
       "kind": "logic",
       "path": "onia-core/modules/automation.logic.mjs",
-      "sha256": "7840841c8244c3d4beb7bdf71266d4e26ae0a2f7fd3ec931157f0484bbb7a11e"
+      "sha256": "a14cf49d0a1ff0f1a7be04e76e5c7b43df801fd07f7ce744a7b6a73237694288"
     },
     {
       "id": "modules/automation.seed.json",
       "kind": "seed",
       "path": "onia-core/modules/automation.seed.json",
-      "sha256": "b2403f4af0f74bfb22f6859f5cd954b079faf6e1d0247ced12a71ecf1f2a43ca"
+      "sha256": "3ad58c7046e800494078ba271398d155d5cdbca0b89cecce985d96d3e59137ed"
     },
     {
       "id": "modules/bridge.logic.mjs",

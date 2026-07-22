@@ -60,6 +60,7 @@ create table if not exists onia_automation_message_dispatches (
   recipient text not null,
   subject text,
   rendered_body text not null,
+  idempotency_key text,
   status text not null default 'queued',
   external_message_id text,
   scheduled_for timestamptz,

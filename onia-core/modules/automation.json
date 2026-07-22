@@ -62,7 +62,7 @@
       "table": "onia_automation_message_dispatches",
       "purpose": "Registro de un mensaje saliente: que se mando, a quien, por que canal, con que estado. El ENVIO real lo hace el external_gate (Resend/Meta/n8n); este registro guarda la intencion + el resultado (misma logica que el emisor SIAT: el core prepara y registra, la integracion envia). Estado: queued -> sent -> delivered | failed (con reintentos).",
       "requiredFields": ["id", "organizationId", "channel", "recipient", "renderedBody", "status", "createdAt"],
-      "optionalFields": ["ruleId", "templateId", "channelId", "subject", "partnerId", "externalMessageId", "sentAt", "deliveredAt", "failedReason", "retryCount", "scheduledFor"],
+      "optionalFields": ["ruleId", "templateId", "channelId", "subject", "partnerId", "externalMessageId", "sentAt", "deliveredAt", "failedReason", "retryCount", "scheduledFor", "idempotencyKey"],
       "tenantScoped": true
     }
   ],
@@ -75,7 +75,10 @@
       { "id": "no_show", "note": "cita/cita marcada como no asistio" },
       { "id": "work_completed", "note": "tratamiento/pedido/trabajo completado -> pedir review o seguimiento" },
       { "id": "stock_low", "note": "insumo bajo el minimo (condition.only=critical)" },
-      { "id": "manual", "note": "disparo manual desde el panel (campana puntual)" }
+      { "id": "manual", "note": "disparo manual desde el panel (campana puntual)" },
+      { "id": "tax_due_soon", "note": "vencimiento fiscal proximo por digito NIT (condition.daysBeforeMax); reusa accounting.taxDueDate, no recalcula" },
+      { "id": "recall_due", "note": "paciente/cliente sin volver hace N meses y SIN cita futura (condition.monthsSinceLastVisitMin); recall de reactivacion real" },
+      { "id": "quote_expiring", "note": "cotizacion por vencer segun quote.validUntil (condition.daysUntilExpiryMax)" }
     ],
     "actionTypes": [
       { "id": "send_message", "note": "renderiza templateId y encola un message_dispatch por channelId (external_gate envia)" },

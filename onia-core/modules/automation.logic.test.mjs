@@ -11,6 +11,8 @@ import {
   canRetry,
   canTransitionDispatch,
   conditionMatches,
+  dispatchIdempotencyKey,
+  isDuplicateDispatch,
   evaluateTriggers,
   extractVariables,
   isDispatchTerminal,
@@ -25,6 +27,52 @@ describe("extractVariables", () => {
   });
   it("tolera espacios y puntos", () => {
     assert.deepEqual(extractVariables("{{ clinica.nombre }}"), ["clinica.nombre"]);
+  });
+});
+
+describe("idempotencia de envios (anti doble-envio)", () => {
+  const rule = { id: "r1", triggerType: "schedule_upcoming" };
+
+  it("misma regla + mismo evento + mismo destinatario => misma clave", () => {
+    const a = dispatchIdempotencyKey(rule, { dedupeId: "appt-123:24h" }, "591700");
+    const b = dispatchIdempotencyKey(rule, { dedupeId: "appt-123:24h" }, "591700");
+    assert.equal(a, b);
+  });
+
+  it("distinto evento => distinta clave", () => {
+    const a = dispatchIdempotencyKey(rule, { dedupeId: "appt-123:24h" }, "591700");
+    const c = dispatchIdempotencyKey(rule, { dedupeId: "appt-124:24h" }, "591700");
+    assert.notEqual(a, c);
+  });
+
+  it("buildDispatch incluye la idempotencyKey", () => {
+    const { dispatch } = buildDispatch(rule, { id: "t1", channel: "whatsapp", body: "Hola" }, { recipient: "591700", dedupeId: "appt-123:24h" });
+    assert.equal(dispatch.idempotencyKey, "r1:schedule_upcoming:appt-123:24h");
+  });
+
+  it("isDuplicateDispatch detecta una clave ya encolada (array o Set)", () => {
+    const key = dispatchIdempotencyKey(rule, { dedupeId: "appt-123:24h" }, "591700");
+    assert.equal(isDuplicateDispatch(key, [key]), true);
+    assert.equal(isDuplicateDispatch(key, ["otra"]), false);
+    assert.equal(isDuplicateDispatch(key, new Set([key])), true);
+  });
+});
+
+describe("triggers nuevos (tax_due_soon / recall_due / quote_expiring)", () => {
+  it("recall_due matchea por meses desde la ultima visita (Min)", () => {
+    const rule = { id: "r", active: true, triggerType: "recall_due", condition: { monthsSinceLastVisitMin: 6 } };
+    assert.equal(matchRule(rule, { type: "recall_due", context: { monthsSinceLastVisit: 7 } }), true);
+    assert.equal(matchRule(rule, { type: "recall_due", context: { monthsSinceLastVisit: 3 } }), false);
+  });
+  it("quote_expiring matchea por dias hasta el vencimiento (Max)", () => {
+    const rule = { id: "r", active: true, triggerType: "quote_expiring", condition: { daysUntilExpiryMax: 3 } };
+    assert.equal(matchRule(rule, { type: "quote_expiring", context: { daysUntilExpiry: 2 } }), true);
+    assert.equal(matchRule(rule, { type: "quote_expiring", context: { daysUntilExpiry: 5 } }), false);
+  });
+  it("tax_due_soon matchea por dias al vencimiento fiscal (Max)", () => {
+    const rule = { id: "r", active: true, triggerType: "tax_due_soon", condition: { daysBeforeMax: 3 } };
+    assert.equal(matchRule(rule, { type: "tax_due_soon", context: { daysBefore: 2 } }), true);
+    assert.equal(matchRule(rule, { type: "tax_due_soon", context: { daysBefore: 5 } }), false);
   });
 });
 

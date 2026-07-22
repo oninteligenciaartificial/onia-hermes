@@ -78,16 +78,35 @@ export function evaluateTriggers(rules = [], event) {
 }
 
 /**
+ * Clave de idempotencia de un envio: identifica de forma unica (regla + trigger +
+ * evento de negocio + destinatario) para NO encolar dos veces el mismo aviso
+ * cuando el cron re-evalua o se reintenta. `event.dedupeId` debe identificar el
+ * evento + su ventana (ej. "appt-123:24h", "invoice-9:overdue:2026-07"); si no
+ * viene, cae al recipient (menos preciso). Mismo criterio que work_items/intake.
+ */
+export function dispatchIdempotencyKey(rule, event = {}, recipient = null) {
+  const scope = event?.dedupeId ?? recipient ?? "";
+  return `${rule?.id ?? ""}:${rule?.triggerType ?? event?.type ?? ""}:${scope}`;
+}
+
+/** True si ya se encolo un envio con esta clave (dedupe ANTES de encolar). */
+export function isDuplicateDispatch(idempotencyKey, existingKeys = []) {
+  const set = existingKeys instanceof Set ? existingKeys : new Set(existingKeys);
+  return set.has(idempotencyKey);
+}
+
+/**
  * Arma el registro de envio (message_dispatch) de una regla send_message.
  * Renderiza la plantilla con vars; el status arranca en 'queued'. El envio real
  * lo hace el external_gate. Devuelve { dispatch, missing } (missing = vars que
  * faltaron; el caller decide si encolar igual o no).
  */
-export function buildDispatch(rule, template, { recipient, partnerId = null, vars = {}, now = new Date().toISOString(), scheduledFor = null } = {}) {
+export function buildDispatch(rule, template, { recipient, partnerId = null, vars = {}, now = new Date().toISOString(), scheduledFor = null, dedupeId = null } = {}) {
   const rendered = renderTemplate(template, vars);
   return {
     dispatch: {
       ruleId: rule?.id ?? null,
+      idempotencyKey: dispatchIdempotencyKey(rule, { dedupeId, type: rule?.triggerType }, recipient),
       templateId: template?.id ?? null,
       channel: template?.channel ?? null,
       channelId: rule?.channelId ?? null,
