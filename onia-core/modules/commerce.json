@@ -102,7 +102,7 @@
       "table": "onia_commerce_quotes",
       "purpose": "Cotizacion B2B a un business_partner. Su vencimiento (validUntil) alimenta el SLA del work_item core; el descuento pasa por approval_request core.",
       "requiredFields": ["id", "organizationId", "partnerId", "status", "currency", "ownerId", "createdAt"],
-      "optionalFields": ["validUntil", "total", "workItemId", "priceListId"],
+      "optionalFields": ["validUntil", "total", "workItemId", "priceListId", "sentAt", "acceptedAt", "rejectedAt", "expiredAt"],
       "tenantScoped": true
     },
     {
@@ -122,7 +122,7 @@
       "table": "onia_commerce_orders",
       "purpose": "Pedido de venta a un business_partner. Puede nacer de una cotizacion aceptada (order.quoteId) y descuenta stock por sus lineas.",
       "requiredFields": ["id", "organizationId", "partnerId", "status", "currency", "ownerId", "createdAt"],
-      "optionalFields": ["quoteId", "warehouseId", "total", "workItemId"],
+      "optionalFields": ["quoteId", "warehouseId", "total", "workItemId", "confirmedAt", "fulfilledAt", "cancelledAt"],
       "tenantScoped": true
     },
     {

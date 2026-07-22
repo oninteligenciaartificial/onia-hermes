@@ -66,3 +66,127 @@ export function isBelowReorder(stockItem) {
   }
   return Number(stockItem?.quantity ?? 0) <= Number(reorderPoint);
 }
+
+/* --- Maquina de estados: cotizacion (quote) --------------------------------
+ * draft -> sent -> accepted | rejected | expired.
+ * rejected y expired son terminales (rechazo / vencimiento); accepted es el
+ * exito y se convierte en pedido via acceptQuoteToOrder. Inmutable.
+ */
+export const QUOTE_STATES = ["draft", "sent", "accepted", "rejected", "expired"];
+
+const QUOTE_TRANSITIONS = {
+  draft: ["sent"],
+  sent: ["accepted", "rejected", "expired"],
+  accepted: [],
+  rejected: [],
+  expired: [],
+};
+
+export function canTransitionQuote(from, to) {
+  return (QUOTE_TRANSITIONS[from] ?? []).includes(to);
+}
+
+/** Aplica una transicion de cotizacion y devuelve una cotizacion nueva (no muta). */
+export function applyQuoteTransition(quote, to, { now = new Date().toISOString() } = {}) {
+  const from = quote?.status;
+  if (!canTransitionQuote(from, to)) {
+    throw new Error(`transicion de cotizacion invalida ${from} -> ${to}`);
+  }
+  return {
+    ...quote,
+    status: to,
+    sentAt: to === "sent" ? now : (quote?.sentAt ?? null),
+    acceptedAt: to === "accepted" ? now : (quote?.acceptedAt ?? null),
+    rejectedAt: to === "rejected" ? now : (quote?.rejectedAt ?? null),
+    expiredAt: to === "expired" ? now : (quote?.expiredAt ?? null),
+    updatedAt: now,
+  };
+}
+
+/* --- Maquina de estados: pedido (order) ------------------------------------
+ * draft -> confirmed -> fulfilled | cancelled. fulfilled y cancelled terminales.
+ * Inmutable.
+ */
+export const ORDER_STATES = ["draft", "confirmed", "fulfilled", "cancelled"];
+
+const ORDER_TRANSITIONS = {
+  draft: ["confirmed"],
+  confirmed: ["fulfilled", "cancelled"],
+  fulfilled: [],
+  cancelled: [],
+};
+
+export function canTransitionOrder(from, to) {
+  return (ORDER_TRANSITIONS[from] ?? []).includes(to);
+}
+
+/** Aplica una transicion de pedido y devuelve un pedido nuevo (no muta). */
+export function applyOrderTransition(order, to, { now = new Date().toISOString() } = {}) {
+  const from = order?.status;
+  if (!canTransitionOrder(from, to)) {
+    throw new Error(`transicion de pedido invalida ${from} -> ${to}`);
+  }
+  return {
+    ...order,
+    status: to,
+    confirmedAt: to === "confirmed" ? now : (order?.confirmedAt ?? null),
+    fulfilledAt: to === "fulfilled" ? now : (order?.fulfilledAt ?? null),
+    cancelledAt: to === "cancelled" ? now : (order?.cancelledAt ?? null),
+    updatedAt: now,
+  };
+}
+
+/**
+ * Convierte una cotizacion ACEPTADA en un pedido en estado draft, copiando sus
+ * lineas (quote.lines) a lineas de pedido y recomputando totales con la misma
+ * regla de commerce (computeLineTotal / computeQuoteTotal). No muta la cotizacion.
+ * Lanza si la cotizacion no esta 'accepted'.
+ */
+export function acceptQuoteToOrder(quote, { now = new Date().toISOString() } = {}) {
+  if (quote?.status !== "accepted") {
+    throw new Error(`solo una cotizacion accepted se convierte en pedido (status: ${quote?.status})`);
+  }
+  const lines = Array.isArray(quote?.lines) ? quote.lines : [];
+  const orderLines = lines.map((line) => ({
+    variantId: line?.variantId ?? null,
+    quantity: Number(line?.quantity ?? 0),
+    unitPrice: Number(line?.unitPrice ?? 0),
+    discount: line?.discount != null ? Number(line.discount) : null,
+    lineTotal: computeLineTotal(line),
+    notes: line?.notes ?? null,
+  }));
+  return {
+    status: "draft",
+    organizationId: quote?.organizationId ?? null,
+    partnerId: quote?.partnerId ?? null,
+    currency: quote?.currency ?? null,
+    ownerId: quote?.ownerId ?? null,
+    quoteId: quote?.id ?? null,
+    total: computeQuoteTotal(lines),
+    lines: orderLines,
+    createdAt: now,
+    updatedAt: now,
+  };
+}
+
+/**
+ * True si la cotizacion vencio segun validUntil (comparado con nowIso). Sin
+ * validUntil => nunca vence. Puramente por fecha; el caller decide la transicion.
+ */
+export function isQuoteExpired(quote, nowIso = new Date().toISOString()) {
+  const validUntil = quote?.validUntil;
+  if (!validUntil) return false;
+  return new Date(nowIso).getTime() > new Date(validUntil).getTime();
+}
+
+/**
+ * Saldo por cobrar (total menos la suma de amount de los pagos). Permite saldo
+ * negativo cuando hay sobrepago. Redondea a 2 decimales.
+ */
+export function paymentBalance(total, payments = []) {
+  const paid = (Array.isArray(payments) ? payments : []).reduce(
+    (sum, payment) => sum + Number(payment?.amount ?? 0),
+    0,
+  );
+  return round2(Number(total ?? 0) - paid);
+}
