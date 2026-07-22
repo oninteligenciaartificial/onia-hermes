@@ -838,143 +838,142 @@
     "nombre": "Tienda de AirPods",
     "accent": "#2563eb",
     "heroGrad": "linear-gradient(135deg,#0a0f1f 0%,#111c3a 55%,#2563eb 160%)",
-    "titulo": "Chatbot de ventas en WhatsApp que responde, cobra y agenda tus pedidos solo",
-    "subtitulo": "Un asistente con IA que atiende a tus clientes de AirPods por mayor y menor, arma el pedido, pasa tu QR, verifica el comprobante y calcula el delivery — sin que contestes cada mensaje a mano.",
-    "problema": "Vender AirPods por mayor y menor por WhatsApp significa responder lo mismo todo el día — precios, si hay stock, cómo se paga, cuánto sale el envío — y encima revisar a mano cada comprobante de pago. Se te van horas y se enfrían clientes que escriben de noche. Montamos un <b>chatbot con IA en WhatsApp</b> que responde, arma el pedido, pasa tu QR, <b>verifica el comprobante</b> y <b>calcula el costo de envío por zona</b> — 24/7, sin que toques cada chat.",
+    "titulo": "Un asistente en WhatsApp que responde a tus clientes — aunque estés en la calle",
+    "subtitulo": "Contesta al instante, da el precio de tus AirPods Pro 3 (al público y por mayor) y calcula un aproximado del delivery — para que no se te enfríe ningún cliente cuando andás en la moto y no podés responder.",
+    "problema": "Vendés AirPods Pro 3 por WhatsApp, pero andás todo el día en la calle y en la moto — y cuando no alcanzás a contestar, el cliente que preguntó el precio o el envío se enfría y se va con otro. Montamos un <b>asistente con IA en tu WhatsApp</b> que <b>responde por vos 24/7</b>: da el precio (al público y por mayor), pasa tu QR y calcula un <b>aproximado del delivery</b> tomando como base lo que cobra Yango — sin que toques el teléfono.",
     "incluye": [
       {
-        "tag": "Atención + ventas 24/7",
+        "tag": "Responde por vos 24/7",
         "tagClass": "",
-        "titulo": "Chatbot IA en WhatsApp",
+        "titulo": "Asistente con IA en WhatsApp",
         "items": [
-          "Responde precios y dudas al instante (venta al público y por mayor)",
-          "Arma y registra el pedido: producto, cantidad y total",
-          "Pasa tu QR de pago y confirma cuando el pago está verificado",
-          "Deriva a una persona cuando el caso lo necesita"
+          "Contesta al instante aunque estés en la calle o en la moto",
+          "Da el precio de los AirPods Pro 3 (al público y por mayor)",
+          "Pasa tu QR de pago cuando el cliente quiere comprar",
+          "Te deriva la conversación cuando el caso lo necesita"
         ]
       },
       {
-        "tag": "Cobro y envío sin trabajo manual",
+        "tag": "Sabe cuánto sale el envío",
         "tagClass": "green",
-        "titulo": "Cada pedido y pago, ordenado",
+        "titulo": "Delivery estimado al toque",
         "items": [
-          "Verifica el comprobante de pago que envía el cliente",
-          "Calcula el costo del delivery según la zona",
-          "Cada pedido y pago queda registrado, ninguno se pierde",
-          "Reportes de lo más vendido y de tus clientes mayoristas"
+          "Calcula un aproximado del costo de envío según la zona",
+          "Toma como base lo que cobra Yango, calibrado con tus tarifas",
+          "El cliente sabe el total (producto + envío) sin esperarte",
+          "Cada consulta queda registrada, ninguna se pierde"
         ]
       }
     ],
     "pasos": [
       {
         "titulo": "Levantamiento",
-        "detalle": "Relevamos tu catálogo, precios (público y por mayor), cantidad mínima mayorista, zonas de envío y cómo cobrás."
+        "detalle": "Relevamos tu precio (público y por mayor), tu zona y cuánto cobra Yango a las zonas donde entregás."
       },
       {
         "titulo": "Entreno del bot",
-        "detalle": "Cargamos productos, precios y respuestas reales para que el bot conteste con precisión."
+        "detalle": "Cargamos el producto, los precios y tus respuestas para que conteste como lo harías vos."
       },
       {
-        "titulo": "Pedido y cobro",
-        "detalle": "El bot toma el pedido, calcula el total, pasa tu QR y verifica el comprobante de pago."
+        "titulo": "Delivery estimado",
+        "detalle": "Calibramos el cálculo del envío con tus tarifas de referencia de Yango por zona."
       },
       {
-        "titulo": "Delivery y conexión",
-        "detalle": "Calcula el envío por zona, lo conectamos a tu WhatsApp Business y te damos el panel de reportes."
+        "titulo": "Conexión",
+        "detalle": "Lo conectamos a tu WhatsApp Business y queda respondiendo por vos 24/7."
       }
     ],
     "valor": [
       {
-        "titulo": "Vendés incluso mientras dormís",
-        "detalle": "El bot atiende y arma pedidos las 24 horas — nunca más un cliente sin respuesta a medianoche."
+        "titulo": "Responde por vos cuando no podés",
+        "detalle": "Andás en la moto o atendiendo — el bot contesta al instante y no se te escapa el cliente."
       },
       {
-        "titulo": "Dejás de perseguir pagos",
-        "detalle": "Verifica el comprobante que manda el cliente y te avisa cuando el pago está confirmado."
+        "titulo": "El cliente sabe el precio y el envío solo",
+        "detalle": "Da el precio y un aproximado del delivery sin que tengas que parar a responder."
       },
       {
-        "titulo": "El envío ya viene calculado",
-        "detalle": "Calcula el costo de delivery por zona automáticamente, sin ir y volver preguntando."
+        "titulo": "No perdés ventas de noche",
+        "detalle": "Contesta 24/7; el que escribe a las 11pm recibe respuesta y no se va a otro."
       },
       {
-        "titulo": "Escalás el por mayor sin caos",
-        "detalle": "Maneja precio público y mayorista y la cantidad mínima, con cada pedido ordenado y registrado."
+        "titulo": "Arrancás simple y crecés",
+        "detalle": "Después le podés sumar que tome el pedido, verifique el comprobante y haga seguimiento."
       }
     ],
-    "plazoEntrega": "2 a 3 semanas",
+    "plazoEntrega": "1 a 2 semanas",
     "comparativa": {
-      "titulo": "De hacerlo a mano a tu bot ONIA",
+      "titulo": "De perder clientes a responder solo",
       "columnas": ["Hoy, a mano", "Con tu bot ONIA"],
       "filas": [
-        ["Consultas fuera de horario", "Se pierden o se responden tarde", "Respuesta al instante, 24/7"],
-        ["Tomar el pedido", "Lo anotás a mano y con errores", "El bot lo arma y lo registra solo"],
-        ["Revisar el comprobante", "Mirás cada captura de pago", "El bot verifica el comprobante"],
-        ["Costo de envío", "Lo calculás en cada chat", "El bot lo calcula por zona"]
+        ["Cuando estás en la moto", "El cliente espera y se va", "El bot responde al instante"],
+        ["Preguntan el precio", "Contestás cuando podés", "Lo da en el momento (público y mayor)"],
+        ["Cuánto sale el envío", "Lo calculás cada vez", "Lo estima según la zona (base Yango)"],
+        ["Mensajes de noche", "Quedan sin responder", "Atendidos 24/7"]
       ]
     },
     "paquetes": [
       {
-        "nombre": "Bot de Ventas",
-        "incluye": "Responde precios y dudas 24/7 (público y por mayor), pasa tu QR y deriva a una persona",
-        "resultado": "Ninguna consulta sin responder, de día o de noche.",
-        "limite": "Responde y deriva: todavía no toma el pedido ni verifica pagos.",
+        "nombre": "Bot Responde",
+        "incluye": "Responde 24/7, da el precio (público y por mayor) y pasa tu QR",
+        "resultado": "Ningún cliente sin respuesta, aunque estés en la calle.",
+        "limite": "Da un precio de envío general, sin calibrar por zona.",
         "precio": "1,900",
         "recomendado": false
       },
       {
-        "nombre": "Bot de Ventas + Pedidos",
-        "incluye": "Lo anterior + toma y registra el pedido (producto, cantidad, mayor/menor) y calcula el total",
-        "resultado": "El pedido llega armado y registrado, sin cargarlo a mano.",
-        "limite": "El comprobante y el costo de envío todavía los revisás vos.",
-        "precio": "desde 4,800",
-        "recomendado": false
+        "nombre": "Bot Responde + Delivery",
+        "incluye": "Lo anterior + calcula un aproximado del envío por zona, calibrado con tus tarifas de Yango",
+        "resultado": "El cliente sabe el total (producto + envío) sin esperarte.",
+        "limite": "El envío es una estimación (base Yango), no un cobro exacto en vivo.",
+        "precio": "2,500",
+        "recomendado": true
       },
       {
-        "nombre": "Bot de Ventas Automatizado",
-        "incluye": "Lo anterior + verifica el comprobante de pago + calcula el delivery por zona + QR dinámico por monto",
-        "resultado": "Vende, cobra, verifica el pago y calcula el envío casi solo.",
-        "limite": "Requiere tus zonas y tarifas de envío y las credenciales de tu QR bancario.",
-        "precio": "desde 8,900",
-        "recomendado": true
+        "nombre": "Bot + Pedidos y Pago",
+        "incluye": "Lo anterior + toma y registra el pedido y verifica el comprobante de pago",
+        "resultado": "Además del precio y el envío, te deja el pedido y el pago listos.",
+        "limite": "Suma desarrollo: se activa cuando quieras dar ese paso.",
+        "precio": "desde 4,800",
+        "recomendado": false
       }
     ],
-    "notaPaquetes": "La diferencia es el salto de valor: <b>Ventas</b> = responde y no perdés clientes · <b>Ventas + Pedidos</b> = arma el pedido solo · <b>Automatizado</b> = además cobra, verifica el comprobante y calcula el envío. Recomendado: <b>Automatizado</b>. Todos incluyen el setup; la operación mensual del bot va aparte (ver add-ons). El número de WhatsApp queda a tu nombre. La atención automática en WhatsApp se activa al verificar tu cuenta en Meta — te acompañamos.",
+    "notaPaquetes": "La diferencia es el salto de valor: <b>Responde</b> = contesta por vos y da el precio · <b>Responde + Delivery</b> = además calcula el envío aproximado por zona · <b>Pedidos y Pago</b> = suma tomar el pedido y verificar el comprobante. Recomendado: <b>Responde + Delivery</b>. Todos incluyen el setup; la operación mensual del bot va aparte (ver add-ons). El número de WhatsApp queda a tu nombre. La atención automática en WhatsApp se activa al verificar tu cuenta en Meta — te acompañamos.",
     "addons": [
       {
         "nombre": "Operación y mejora mensual del bot",
         "setup": "—",
-        "mensual": "350–530"
+        "mensual": "150–350"
+      },
+      {
+        "nombre": "Sumar pedidos + verificación de comprobante",
+        "setup": "desde 1,900",
+        "mensual": "—"
       },
       {
         "nombre": "Integración con tu catálogo web o tienda online",
         "setup": "600",
         "mensual": "—"
-      },
-      {
-        "nombre": "Reportes avanzados de ventas y productos más pedidos",
-        "setup": "—",
-        "mensual": "a convenir"
       }
     ],
     "requisitos": [
       "Número de celular dedicado y cuenta de WhatsApp Business a tu nombre.",
-      "Credenciales de tu QR bancario (BNB u otro) para el cobro dinámico por monto.",
-      "Catálogo con precios de venta al público y por mayor, y la cantidad mínima para mayoreo.",
-      "Zonas de entrega y la tarifa de delivery por cada zona (o la regla para calcularla).",
+      "Una imagen de tu QR de pago (BNB u otro) para que el bot la envíe.",
+      "Tu precio de los AirPods Pro 3 al público y por mayor (y desde cuántas unidades es mayoreo).",
+      "Tu zona y cuánto cobra Yango a 2-3 zonas típicas donde entregás (para calibrar el cálculo).",
       "Verificación de tu negocio en Meta / WhatsApp Business — te acompañamos en el trámite."
     ],
     "proximosPasos": [
-      "Completás un formulario corto con tu catálogo, precios (público y por mayor), zonas de envío y cómo cobrás.",
-      "Armamos y entrenamos el bot con tus datos reales y lo conectamos a tu WhatsApp Business.",
-      "Probamos juntos con pedidos reales y lo dejamos operando."
+      "Nos pasás tu precio (público y por mayor), tu zona y 2-3 tarifas de Yango de referencia.",
+      "Armamos y entrenamos el bot y lo conectamos a tu WhatsApp Business.",
+      "Queda respondiendo por vos 24/7 — vos seguís en la calle tranquilo."
     ],
-    "terceros": "No incluidos: el número y la cuenta de WhatsApp Business a tu nombre, los créditos de IA y la mensajería de WhatsApp Business API (se paga por conversación según volumen) y la comisión o credenciales de la pasarela de tu QR bancario.",
+    "terceros": "No incluidos: el número y la cuenta de WhatsApp Business a tu nombre, y los créditos de IA y la mensajería de WhatsApp Business API (se paga por conversación según volumen).",
     "_todo": [
-      "Anónimo: reemplazar 'nombre' con el negocio real (viene del intake).",
-      "RATIFICAR con Sergio el precio del paquete Automatizado (desde 8,900): es desarrollo nuevo (verificar comprobante + delivery por zona + QR dinámico); ajustar según zonas de envío y tipo de verificación.",
-      "Cargar catálogo/precios reales (público y mayor) + cantidad mínima mayorista tras el intake.",
-      "Definir zonas y tarifas de delivery reales.",
-      "Bloqueo #1: verificación Meta + WABA/número. Si el cliente pone su propio WhatsApp Business, se destraba por su lado.",
+      "Anónimo: reemplazar 'nombre' con el negocio real (viene del cliente).",
+      "Alcance confirmado por el cliente (2026-07-21): 1 producto (AirPods Pro 3), SOLO responde (reactivo, anda en moto), delivery estimado tipo Yango, QR estático. Sin verificar comprobante (queda como upsell, paquete Pedidos y Pago).",
+      "Precio ratificado por Sergio: Responde + Delivery = 2.500 (recomendado; ajustado 2026-07-22 desde 2.900 para cerrar más fácil).",
+      "Falta del cliente: precio real público/mayor + cantidad mínima mayoreo; ciudad + 2-3 tarifas de Yango de referencia; respuesta a NIT / WhatsApp Business (bloqueo Meta).",
       "Antes de enviar: agregar ctaWhatsapp (número ONIA) y considerar --track <token>."
     ]
   },
