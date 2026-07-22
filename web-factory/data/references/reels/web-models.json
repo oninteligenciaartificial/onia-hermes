@@ -1,10 +1,11 @@
 {
-  "generatedAt": "2026-07-22T14:17:49.649Z",
+  "generatedAt": "2026-07-22T14:27:05.118Z",
   "policy": "Learned web-models are generation blueprints, not copies. Rebuild each with ONIA tokens and blocks; supply real client assets; never reuse third-party footage, code, copy or logos. Trend models are inspiration; client-owned assets only after rights confirmed.",
   "summary": {
     "models": 3,
     "siteTypes": 3,
-    "blocks": 15
+    "blocks": 15,
+    "motionPrimitives": 10
   },
   "blockLibrary": [
     {
@@ -68,6 +69,60 @@
       "count": 1
     }
   ],
+  "motionLibrary": {
+    "primitives": [
+      {
+        "value": "scale-zoom",
+        "count": 8
+      },
+      {
+        "value": "fade",
+        "count": 7
+      },
+      {
+        "value": "slide-in",
+        "count": 5
+      },
+      {
+        "value": "staggered-children",
+        "count": 4
+      },
+      {
+        "value": "clip-path-reveal",
+        "count": 2
+      },
+      {
+        "value": "scroll-parallax",
+        "count": 2
+      },
+      {
+        "value": "rotate",
+        "count": 1
+      },
+      {
+        "value": "spotlight-glow",
+        "count": 1
+      },
+      {
+        "value": "sticky-nav",
+        "count": 1
+      },
+      {
+        "value": "type-slam",
+        "count": 1
+      }
+    ],
+    "triggers": [
+      {
+        "value": "in-view",
+        "count": 12
+      },
+      {
+        "value": "on-load",
+        "count": 3
+      }
+    ]
+  },
   "componentLibrary": [
     {
       "value": "centered-logo-nav",

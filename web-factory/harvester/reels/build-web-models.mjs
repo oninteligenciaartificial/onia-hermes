@@ -69,19 +69,49 @@ export async function buildWebModels(options = {}) {
   const blockLibrary = new Map();
   const componentLibrary = new Map();
   const bySiteType = new Map();
+  const motionPrimitives = new Map();
+  const motionTriggers = new Map();
+  // Detect reusable motion primitives from the free-text motion specs, so the
+  // catalog surfaces the animation building blocks the factory must implement.
+  const PRIMITIVES = [
+    [/clip-?path/i, "clip-path-reveal"],
+    [/parallax/i, "scroll-parallax"],
+    [/stagger/i, "staggered-children"],
+    [/\bslam\b/i, "type-slam"],
+    [/zoom|scale/i, "scale-zoom"],
+    [/\bslide\b/i, "slide-in"],
+    [/\bfade\b/i, "fade"],
+    [/\blift\b/i, "hover-lift"],
+    [/sticky/i, "sticky-nav"],
+    [/spotlight|glow/i, "spotlight-glow"],
+    [/\brotate\b/i, "rotate"],
+  ];
   for (const m of models) {
-    for (const s of asArray(m.sections)) inc(blockLibrary, s.block);
     for (const c of asArray(m.components)) inc(componentLibrary, c);
     inc(bySiteType, m.siteType || "unclassified");
+    for (const s of asArray(m.sections)) {
+      inc(blockLibrary, s.block);
+      const mo = s.motion || {};
+      inc(motionTriggers, mo.trigger);
+      const text = `${mo.entrance || ""} ${mo.scrollLinked || ""} ${mo.hover || ""}`;
+      for (const [re, name] of PRIMITIVES) if (re.test(text)) inc(motionPrimitives, name);
+    }
   }
 
   const payload = {
     generatedAt: nowIso,
     policy:
       "Learned web-models are generation blueprints, not copies. Rebuild each with ONIA tokens and blocks; supply real client assets; never reuse third-party footage, code, copy or logos. Trend models are inspiration; client-owned assets only after rights confirmed.",
-    summary: { models: models.length, siteTypes: bySiteType.size, blocks: blockLibrary.size },
+    summary: {
+      models: models.length,
+      siteTypes: bySiteType.size,
+      blocks: blockLibrary.size,
+      motionPrimitives: motionPrimitives.size,
+    },
     /** the factory blocks the learned models need — the shopping list for packages/blocks */
     blockLibrary: top(blockLibrary),
+    /** the animation primitives the models need — the shopping list for a factory motion system */
+    motionLibrary: { primitives: top(motionPrimitives), triggers: top(motionTriggers) },
     componentLibrary: top(componentLibrary),
     bySiteType: top(bySiteType),
     models: models
@@ -130,10 +160,21 @@ These are recipes, not copies — rebuild with ONIA tokens and real client asset
 - Learned models: ${payload.summary.models}
 - Site types: ${payload.summary.siteTypes}
 - Distinct factory blocks needed: ${payload.summary.blocks}
+- Motion primitives needed: ${payload.summary.motionPrimitives}
 
 ## Block Library (what these models need in packages/blocks)
 
 ${payload.blockLibrary.length ? payload.blockLibrary.map((b) => `- \`${b.value}\` × ${b.count}`).join("\n") : "- (none yet)"}
+
+## Motion Library (the animation primitives to build — what makes these feel pro)
+
+Each model's sections carry a precise \`motion\` spec (entrance, trigger, easing
+\`[0.22, 1, 0.36, 1]\`, duration, stagger, scroll-linked, hover, reduced-motion).
+The reusable primitives across all models:
+
+${payload.motionLibrary.primitives.length ? payload.motionLibrary.primitives.map((p) => `- \`${p.value}\` × ${p.count}`).join("\n") : "- (none yet)"}
+
+Triggers: ${payload.motionLibrary.triggers.map((t) => `${t.value} (${t.count})`).join(" · ") || "-"}. Every primitive ships a reduced-motion fallback.
 
 ## Models
 

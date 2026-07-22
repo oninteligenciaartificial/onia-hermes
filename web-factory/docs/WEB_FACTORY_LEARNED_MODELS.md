@@ -1,6 +1,6 @@
 # Web Factory — Learned Models
 
-Generated: 2026-07-22T14:17:49.649Z
+Generated: 2026-07-22T14:27:05.118Z
 
 Web designs the factory has **acquired** from reels: each is a generation-ready
 blueprint (sections → blocks, tokens, interactions) to build a similar site fast.
@@ -11,6 +11,7 @@ These are recipes, not copies — rebuild with ONIA tokens and real client asset
 - Learned models: 3
 - Site types: 3
 - Distinct factory blocks needed: 15
+- Motion primitives needed: 10
 
 ## Block Library (what these models need in packages/blocks)
 
@@ -29,6 +30,25 @@ These are recipes, not copies — rebuild with ONIA tokens and real client asset
 - `scroll-story-hero` × 1
 - `seal-badge` × 1
 - `where-to-buy` × 1
+
+## Motion Library (the animation primitives to build — what makes these feel pro)
+
+Each model's sections carry a precise `motion` spec (entrance, trigger, easing
+`[0.22, 1, 0.36, 1]`, duration, stagger, scroll-linked, hover, reduced-motion).
+The reusable primitives across all models:
+
+- `scale-zoom` × 8
+- `fade` × 7
+- `slide-in` × 5
+- `staggered-children` × 4
+- `clip-path-reveal` × 2
+- `scroll-parallax` × 2
+- `rotate` × 1
+- `spotlight-glow` × 1
+- `sticky-nav` × 1
+- `type-slam` × 1
+
+Triggers: in-view (12) · on-load (3). Every primitive ships a reduced-motion fallback.
 
 ## Models
 

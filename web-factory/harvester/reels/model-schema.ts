@@ -47,6 +47,29 @@ const designTokensSchema = z.object({
   motionLevel: z.number().int().min(1).max(5).default(3),
 });
 
+/**
+ * Precise, reproducible motion for a section — the thing that makes these sites
+ * feel professional. Captured as data, not adjectives, so the factory can rebuild
+ * it exactly (with motion/react) instead of guessing "motionLevel: 4".
+ */
+const motionSpecSchema = z.object({
+  /** what enters and how: "clip-path wipe up + slow zoom", "staggered fade-up", "type slam", "none" */
+  entrance: z.string().default("none"),
+  /** when it fires */
+  trigger: z.enum(["on-load", "in-view", "scroll-linked", "none"]).default("in-view"),
+  /** cubic-bezier or named easing; the factory's editorial ease is [0.22, 1, 0.36, 1] */
+  easing: z.string().default("[0.22, 1, 0.36, 1]"),
+  durationSec: z.number().nonnegative().default(0.7),
+  /** delay between staggered children, 0 = none */
+  staggerSec: z.number().nonnegative().default(0),
+  /** scroll-linked behavior (parallax, pin, progress reveal), empty = none */
+  scrollLinked: z.string().default(""),
+  /** hover micro-interaction, empty = none */
+  hover: z.string().default(""),
+  /** REQUIRED fallback under prefers-reduced-motion */
+  reducedMotion: z.string().default("render final state, no transform"),
+});
+
 /** One section of the shown page, mapped to a factory block. */
 const modelSectionSchema = z.object({
   order: z.number().int().nonnegative(),
@@ -62,6 +85,8 @@ const modelSectionSchema = z.object({
   layout: z.string().default(""),
   /** content slots this block needs: headline, sub, cta, media, price, form ... */
   content: z.array(z.string()).default([]),
+  /** precise motion for this section — how it enters/behaves */
+  motion: motionSpecSchema.default({}),
   notes: z.string().default(""),
 });
 

@@ -18,10 +18,43 @@
     "motionLevel": 2
   },
   "sections": [
-    { "order": 0, "job": "hero", "block": "saturated-product-hero", "layout": "full-bleed", "content": ["product-name", "flavor-claim", "packshot"], "notes": "Single saturated brand-color field, oversized condensed product name ('BOLD FLAVOR'), one spotlighted packshot, one flavor claim." },
-    { "order": 1, "job": "offer", "block": "benefit-strip", "layout": "row", "content": ["benefits"], "notes": "Flavor/benefit strip." },
-    { "order": 2, "job": "proof", "block": "product-story", "layout": "split", "content": ["copy", "media"], "notes": "Short product story." },
-    { "order": 3, "job": "conversion", "block": "where-to-buy", "layout": "band", "content": ["retailers", "cta"], "notes": "Where to buy / shop." }
+    {
+      "order": 0, "job": "hero", "block": "saturated-product-hero", "layout": "full-bleed",
+      "content": ["product-name", "flavor-claim", "packshot"],
+      "motion": {
+        "entrance": "type slam: product name scales in (1.06 -> 1) + opacity; packshot fades in from below (y 24 -> 0); soft spotlight glow behind product",
+        "trigger": "on-load", "easing": "[0.22, 1, 0.36, 1]", "durationSec": 0.6, "staggerSec": 0.1, "scrollLinked": "",
+        "hover": "", "reducedMotion": "render final state: name and packshot static, static glow"
+      },
+      "notes": "Single saturated brand-color field, oversized condensed product name ('BOLD FLAVOR'), one spotlighted packshot, one flavor claim."
+    },
+    {
+      "order": 1, "job": "offer", "block": "benefit-strip", "layout": "row",
+      "content": ["benefits"],
+      "motion": {
+        "entrance": "benefits stagger in (y 16 -> 0)", "trigger": "in-view", "easing": "[0.22, 1, 0.36, 1]",
+        "durationSec": 0.5, "staggerSec": 0.08, "scrollLinked": "", "hover": "", "reducedMotion": "static"
+      },
+      "notes": "Flavor/benefit strip."
+    },
+    {
+      "order": 2, "job": "proof", "block": "product-story", "layout": "split",
+      "content": ["copy", "media"],
+      "motion": {
+        "entrance": "copy slides in from left, media from right (x ±24 -> 0)", "trigger": "in-view", "easing": "[0.22, 1, 0.36, 1]",
+        "durationSec": 0.7, "staggerSec": 0, "scrollLinked": "", "hover": "", "reducedMotion": "static, both fully visible"
+      },
+      "notes": "Short product story."
+    },
+    {
+      "order": 3, "job": "conversion", "block": "where-to-buy", "layout": "band",
+      "content": ["retailers", "cta"],
+      "motion": {
+        "entrance": "fade + slide up (y 16 -> 0)", "trigger": "in-view", "easing": "[0.22, 1, 0.36, 1]",
+        "durationSec": 0.6, "staggerSec": 0.05, "scrollLinked": "", "hover": "retailer logos slight scale (1.05)", "reducedMotion": "static"
+      },
+      "notes": "Where to buy / shop."
+    }
   ],
   "components": ["rounded-pill-labels", "circular-control-buttons", "centered-packshot-spotlight"],
   "interactions": [
