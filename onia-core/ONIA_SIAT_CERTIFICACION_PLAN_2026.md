@@ -177,7 +177,8 @@ autorización "API" del SIN hasta que haga falta).
 > desbloqueado. Modalidad de facturación ya seleccionada: COMPUTARIZADA EN LÍNEA
 > (estado PENDIENTE de habilitar). El emisor técnico avanza en
 > `hermes-content/integrations/siat/` (constantes + máquina de estados +
-> contrato de payload, 32 tests). SEPREC ⏳ en trámite (NO bloquea).
+> contrato de payload + **generador CUF VERIFICADO contra el Anexo Técnico
+> oficial**, 45 tests). SEPREC ⏳ en trámite (NO bloquea).
 >
 > **Reloj de 90 días (Art. 18.III):** el registro del sistema (paso 5) se abre
 > SOLO cuando el emisor pueda sostener la Fase 1 de pruebas — no antes.
@@ -193,7 +194,7 @@ autorización "API" del SIN hasta que haga falta).
 | 1 | Verificar en Oficina Virtual: sin marcas de riesgo tributario + actividad "software" cargada en el padrón (recomendado, no requisito formal) | Sergio | mitiga observaciones; no arranca reloj |
 | 2 | Obtener/validar credenciales SIAT en Línea del NIT | Sergio | login unificado prod↔piloto |
 | 3 | Leer RND 1021-11 compilada + anexos técnicos (XSD/WSDL/GENERACION-CUF.pdf) | dev | en paralelo |
-| 4 | Construir emisor: CUIS/CUFD/CUF, catálogos, XML+XSD, hash | dev | 🟡 arrancado (constantes + state machine, 19 tests); falta SOAP/XML/CUF real. **Cerrar ANTES de abrir el registro (paso 5).** |
+| 4 | Construir emisor: CUIS/CUFD/CUF, catálogos, XML+XSD, hash | dev | 🟡 avanzando (constantes + state machine + payload + **CUF real VERIFICADO contra el Anexo Técnico**: 10 díg. + Módulo 11 anclado al ejemplo oficial + código de control, 45 tests). Falta SOAP (CUIS/CUFD, necesita piloto/NIT) + builder XML+XSD + hash. **Cerrar ANTES de abrir el registro (paso 5).** |
 
 **Fase B — arranca el reloj de 90 días (abrir solo cuando el emisor esté listo):**
 

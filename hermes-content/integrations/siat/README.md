@@ -27,19 +27,25 @@ arquitectura, cronograma). Esto es el arranque tecnico del servicio.
   nuestro, NO depende de los WSDLs/XSD del SIN. `buildInvoicePayload` normaliza y
   deriva totales; `validateInvoicePayload` chequea presencia, items, homologacion,
   coherencia de totales y formato basico. Le da a los equipos de producto un
-  objetivo concreto (que enviar). 13 tests. Total emisor: 32 tests.
+  objetivo concreto (que enviar). 13 tests.
+- `src/cuf.mjs` — **generador del CUF VERIFICADO contra el Anexo Tecnico oficial**
+  (siatinfo.impuestos.gob.bo, verificado 2026-07-22). Resuelve el flag que
+  arrastraba el core: el numero de factura es de **10 digitos** (no 8) y el CUF
+  final concatena el **codigo de control del CUFD**. Pasos oficiales: payload de
+  53 digitos (NIT 13 + fechaHora 17 + sucursal 4 + modalidad 1 + tipoEmision 1 +
+  tipoFactura 1 + tipoDocSector 2 + nroFactura 10 + PdV 4) -> digito Modulo 11
+  (2..9 ciclico, `suma % 11`, 10->1/11->0) -> base 16 -> + codigoControl. El
+  Modulo 11 esta anclado al **ejemplo oficial del SIAT** ("12345" -> 6) como test
+  dorado. 13 tests. Total emisor: 45 tests.
 
 **Pendiente (necesita NIT / ambiente piloto / Anexo Tecnico oficial):**
 - Cliente SOAP al SIN (CUIS por sistema, CUFD diario, recepcion, validacion,
   anulacion) contra `pilotosiatservicios.impuestos.gob.bo`.
 - Builder XML por tipo de documento sector + validacion XSD + hash SHA-256
-  (computarizada) / firma XMLDSig (electronica). **Reusa el CUF del core**
-  (`onia-core/modules/invoicing.logic.mjs`: `buildCuf`/`mod11CheckDigit`/
-  `buildQrUrl`) — que HOY tiene advertencias explicitas: el ancho de
-  `invoiceNumber` (8 vs 10 segun la fuente) y el algoritmo exacto de Modulo 11
-  no estan 100% confirmados contra `GENERACION-CUF.pdf`. NO usar para emitir un
-  CUF real sin verificar el Anexo. Portarlo con la receta anti-drift
-  (`ONIA_CORE_LOGIC_PORTING_RECIPE_2026.md`).
+  (computarizada) / firma XMLDSig (electronica). Usa el **CUF verificado del
+  propio emisor** (`src/cuf.mjs`, 10 digitos + codigo de control) — NO el
+  `buildCuf` de referencia del core (8 digitos, simplificado). El builder necesita
+  el XSD oficial de cada tipo de documento sector para armar el XML.
 - Tenant registry (NIT, tokens delegados cifrados, sucursales, puntos de venta,
   catalogo homologado por organizacion) + scheduler CUFD/CUIS + contingencia.
 
