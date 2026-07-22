@@ -2,6 +2,21 @@
 
 Instrucciones de proyecto para Claude. Override sobre defaults.
 
+## Skills del proyecto (REGLA)
+
+> El repo tiene skills propias de Claude Code en `.claude/skills/` (auto-descubribles).
+> Toda sesión arranca invocando **`onia-router`**, que enruta la tarea a su carril y
+> nombra el stack de skills + subagente + docs fuente. Mapa legible + spec de repos
+> separados: `hermes-content/docs/ONIA_SKILLS_STACK_Y_SUBAGENTES_20260705.md`.
+
+- Skills ONIA propias: `onia-router` (índice), `onia-propuestas`,
+  `onia-contabilidad-bolivia`, `onia-core`, `onia-web-factory`. Envuelven conocimiento
+  propio y apuntan a las fuentes de verdad — al cambiar una regla, editar la fuente, no la skill.
+- 3 capas distintas: skills Claude Code (`.claude/skills/`, las invoca Claude Code) ·
+  subagentes (`.claude/agents/`) · skills-doc de Hermes (`hermes-content/skills/`, las lee
+  el bot del VPS).
+- Si una tarea tiene skill pública instalada (137 globales + plugins), usarla; no reinventar.
+
 ## Propuestas comerciales (REGLA)
 
 > Fuente de verdad: `hermes-content/skills/propuestas-comerciales-onia.md`

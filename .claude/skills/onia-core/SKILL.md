@@ -1,0 +1,35 @@
+---
+name: onia-core
+description: Invocar al tocar onia-core (contract.json, adapters, schema/base-schema.sql, módulos) o al adoptar el núcleo en un producto (DentaGest/GestiOS/ProveeGest/Ganadero OS). Garantiza el contrato, la sincronía de los 3 adapters y el validador verde antes de commitear.
+---
+
+# ONIA Core — núcleo operativo común
+
+Fuente de verdad: `onia-core/contract.json` (beta, congelado para adopción) +
+`onia-core/CHANGELOG.md` + docs `onia-core/*.md`. Guardián: subagente `onia-core-guardian`
+(toda modificación al core pasa por ahí). Receta de adopción: `onia-core/ONIA_CORE_INSTALL_GUIDE_2026.md`.
+
+## Qué es
+Núcleo común de los SaaS ONIA. Vive SOLO en `onia-hermes` hasta aprobar adopción.
+Core + módulos (commerce/knowledge/accounting/invoicing/payroll/dental/automation).
+
+## Reglas duras
+- **`policy.installInProductRepos = false`:** NO crear migraciones/rutas/UI dependientes del core
+  en repos producto sin plan de adopción aprobado.
+- **Validador verde SIEMPRE antes de commit:** `npm run validate:onia-core`.
+- **Cada entidad nueva exige las 3:** entrada en `contract.json`, tabla en `schema/base-schema.sql`
+  y mapeo en los **3 adapters** (el validador lo bloquea si falta alguna).
+- **Clientes nuevos → track vertical, NUNCA fork del core.** Ver `ONIA_CORE_CLIENT_ADOPTION_MAP_2026.md`.
+- **Integraciones externas (WhatsApp, SIAT, TR4) → `external_gate`:** fuera del core, entran como intake normalizado.
+- **Line endings:** onia-core fuerza LF vía `.gitattributes`; los tests de portable-artifacts hashean bytes
+  crudos (CRLF en Windows rompe 2 tests). Suite objetivo 352/352, 4 validadores verdes.
+
+## Orden de adopción
+DentaGest (beta, primer producto con adopción completa) → Bolivian Electric/ProveeGest →
+GestiOS → Ganadero OS (offline).
+
+## Al agregar/editar algo del core
+1. Delegá en `onia-core-guardian` o seguí su checklist.
+2. contract.json + base-schema.sql + 3 adapters COHERENTES.
+3. `npm run validate:onia-core` y la suite de tests verdes.
+4. Si es de Bolivia (accounting/invoicing) → cruzar con `onia-contabilidad-bolivia`.
