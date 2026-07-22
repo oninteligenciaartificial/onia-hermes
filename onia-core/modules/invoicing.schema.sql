@@ -19,6 +19,11 @@ create table if not exists onia_invoicing_invoices (
   total_in_words text,
   tco_used numeric,
   bob_total numeric,
+  buyer_name text,
+  buyer_doc_type text,
+  buyer_doc_number text,
+  buyer_doc_complement text,
+  buyer_code text,
   modality text,
   branch_code text,
   point_of_sale_code text,
@@ -58,6 +63,10 @@ create table if not exists onia_invoicing_invoice_lines (
   unit_price numeric not null,
   discount numeric,
   line_total numeric,
+  sin_product_code text,
+  product_code text,
+  economic_activity_code text,
+  unit_measure_code text,
   metadata jsonb not null default '{}'::jsonb,
   created_at timestamptz not null default now()
 );

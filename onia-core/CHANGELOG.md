@@ -1,5 +1,12 @@
 # ONIA Core Changelog
 
+## 0.7.1 + invoicing CAEB por item + datos del comprador — 2026-07-22 (perfeccionar el core, fiscal Bolivia)
+
+ENFOQUE: CORE. ULTIMO item de la columna fiscal del core (preparacion de la emision SIAT, Capa 2). Campos confirmados 2026-07-22 contra la pagina oficial del XML/XSD de la Factura de Compra y Venta (siatinfo.impuestos.gob.bo).
+- **Datos del comprador en la factura** (`validateBuyer`/`assertValidBuyer` + `BUYER_DOC_TYPES`): razon social, tipo de documento (`codigoTipoDocumentoIdentidad` 1=CI / 2=CEX / 3=PAS / 4=OD / 5=NIT), numero, complemento SEGIP, codigo de cliente. Nuevos campos `buyerName`/`buyerDocType`/`buyerDocNumber`/`buyerDocComplement`/`buyerCode` en la entidad `invoice` + schema. Los codigos de tipo de documento son una PARAMETRICA de sincronizacion DIARIA del SIAT (fuente autoritativa = web service, no hardcode).
+- **CAEB + homologacion SIN por item** (`validateInvoiceLineHomologation`, RND 102500000018): cada linea homologa al catalogo del SIN -> `codigoProductoSin` (generico del SIN), `codigoProducto` (interno), `actividadEconomica` (CAEB del Padron Nacional POR ITEM), `unidadMedida` (parametrica; 58 = servicio -> cantidad 1). Nuevos campos `sinProductCode`/`productCode`/`economicActivityCode`/`unitMeasureCode` en `invoice_line` + schema. `invoicing` -> v0.2.0.
+- El modulo VALIDA estructura, no emite ni homologa (la homologacion la hace el contribuyente contra el catalogo sincronizado; la emision real sigue `external_gate` del core). +5 tests. Aditivo, contrato intacto. **465 tests, 4 validadores verdes.** Con esto la columna fiscal del core queda al 100%.
+
 ## 0.7.1 + accounting retenciones: IT en Form. 410 aparte — 2026-07-22 (perfeccionar el core, fiscal Bolivia)
 
 ENFOQUE: CORE. Correccion de exactitud fiscal en la atribucion de formularios de retencion (las tasas y funciones ya eran correctas; no cambia ningun calculo). Verificado 2026-07-22 contra fuente oficial.

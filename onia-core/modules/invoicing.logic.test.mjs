@@ -6,8 +6,10 @@ import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 
 import {
+  BUYER_DOC_TYPES,
   CUF_FIELD_WIDTHS,
   amountToWords,
+  assertValidBuyer,
   buildCreditDebitNote,
   buildCuf,
   buildCufPayload,
@@ -20,6 +22,8 @@ import {
   integerToWords,
   isPastCancellationDeadline,
   mod11CheckDigit,
+  validateBuyer,
+  validateInvoiceLineHomologation,
 } from "./invoicing.logic.mjs";
 
 describe("moneda extranjera: TCO del BCB (RND 102600000026)", () => {
@@ -38,6 +42,60 @@ describe("moneda extranjera: TCO del BCB (RND 102600000026)", () => {
     const r = invoiceTotalInBob(100, { currency: "USD" });
     assert.equal(r.tcoUsed, 6.96);
     assert.equal(r.bobTotal, 696);
+  });
+});
+
+describe("comprador y homologacion SIN por item (RND 102500000018)", () => {
+  it("BUYER_DOC_TYPES: 1=CI ... 5=NIT (parametrica estandar, sync diaria)", () => {
+    assert.equal(BUYER_DOC_TYPES.CI, 1);
+    assert.equal(BUYER_DOC_TYPES.CEX, 2);
+    assert.equal(BUYER_DOC_TYPES.NIT, 5);
+  });
+
+  it("validateBuyer exige razon social, tipo de documento (1-5) y numero", () => {
+    assert.deepEqual(validateBuyer({ name: "ACME SRL", docType: 5, docNumber: "1234567015" }), {
+      valid: true,
+      errors: [],
+    });
+    const bad = validateBuyer({ name: "", docType: 9, docNumber: "" });
+    assert.equal(bad.valid, false);
+    assert.equal(bad.errors.length, 3);
+  });
+
+  it("assertValidBuyer lanza si faltan datos; pasa con datos completos", () => {
+    assert.throws(() => assertValidBuyer({ docType: 1 }), /comprador invalido/);
+    assert.equal(assertValidBuyer({ name: "Juan Perez", docType: 1, docNumber: "9876543" }), true);
+  });
+
+  it("homologacion de linea: exige codigoProductoSin + actividadEconomica (CAEB) + unidadMedida", () => {
+    const ok = validateInvoiceLineHomologation({
+      sinProductCode: "99100",
+      economicActivityCode: "620000",
+      unitMeasureCode: 20,
+      quantity: 3,
+    });
+    assert.deepEqual(ok, { valid: true, errors: [] });
+    const bad = validateInvoiceLineHomologation({ quantity: 3 });
+    assert.equal(bad.valid, false);
+    assert.equal(bad.errors.length, 3); // faltan los 3 codigos
+  });
+
+  it("servicios (unidad 58): la cantidad debe ser 1", () => {
+    const bad = validateInvoiceLineHomologation({
+      sinProductCode: "8",
+      economicActivityCode: "1",
+      unitMeasureCode: 58,
+      quantity: 2,
+    });
+    assert.equal(bad.valid, false);
+    assert.match(bad.errors.join(" "), /cantidad debe ser 1/);
+    const ok = validateInvoiceLineHomologation({
+      sinProductCode: "8",
+      economicActivityCode: "1",
+      unitMeasureCode: 58,
+      quantity: 1,
+    });
+    assert.equal(ok.valid, true);
   });
 });
 

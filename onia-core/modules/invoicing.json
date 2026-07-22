@@ -1,7 +1,7 @@
 {
   "module": "invoicing",
   "name": "ONIA Invoicing Module (Bolivia - Facturacion Electronica)",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "status": "draft",
   "layer": "activatable_module",
   "purpose": "Documento fiscal de venta (factura) especializado en Bolivia como add-on activable SOBRE el core. Modela el ciclo del documento (cabecera, detalle, notas de credito-debito, QR, anulacion) y prepara los datos para la emision real ante el SIN. La emision fiscal en si (llamar al SIN, obtener CUIS/CUFD, firmar) sigue siendo external_gate del core (siat); este modulo prepara y valida estructura, no emite.",
@@ -40,7 +40,7 @@
       "table": "onia_invoicing_invoices",
       "purpose": "Factura (documento fiscal de venta). Cabecera con datos legales (NIT, actividad economica, sucursal, punto de venta) y totales; los campos de la ronda SIAT (cuf/cufd/cuis/controlCode) quedan opcionales hasta la emision real.",
       "requiredFields": ["id", "organizationId", "invoiceNumber", "status", "currency", "issueDate", "partnerId", "total", "createdAt"],
-      "optionalFields": ["cuf", "cufd", "cuis", "controlCode", "authorizationNumber", "modality", "branchCode", "pointOfSaleCode", "economicActivityCode", "totalInWords", "qrUrl", "legend", "workItemId", "documentId", "quoteId", "orderId", "tcoUsed", "bobTotal"],
+      "optionalFields": ["cuf", "cufd", "cuis", "controlCode", "authorizationNumber", "modality", "branchCode", "pointOfSaleCode", "economicActivityCode", "totalInWords", "qrUrl", "legend", "workItemId", "documentId", "quoteId", "orderId", "tcoUsed", "bobTotal", "buyerName", "buyerDocType", "buyerDocNumber", "buyerDocComplement", "buyerCode"],
       "tenantScoped": true
     },
     {
@@ -48,9 +48,9 @@
       "name": "InvoiceLine",
       "capabilityId": "invoicing",
       "table": "onia_invoicing_invoice_lines",
-      "purpose": "Linea de factura: descripcion, cantidad, precio unitario y descuento. El total se deriva sumando las lineas, mismo patron que commerce (computeQuoteTotal, no se duplica la formula).",
+      "purpose": "Linea de factura: descripcion, cantidad, precio unitario y descuento. El total se deriva sumando las lineas, mismo patron que commerce (computeQuoteTotal, no se duplica la formula). Para la emision SIAT cada linea homologa el producto/servicio al catalogo del SIN: codigoProductoSin (homologado), actividadEconomica (CAEB del Padron por item) y unidadMedida (parametrica; 58 = servicio -> cantidad 1).",
       "requiredFields": ["id", "organizationId", "invoiceId", "description", "quantity", "unitPrice", "createdAt"],
-      "optionalFields": ["discount", "lineTotal"],
+      "optionalFields": ["discount", "lineTotal", "sinProductCode", "productCode", "economicActivityCode", "unitMeasureCode"],
       "tenantScoped": true
     },
     {
@@ -107,6 +107,44 @@
     "documentTypes": {
       "inScope": ["factura_compra_venta"],
       "outOfScope": ["factura_comercial_exportacion", "recibo_alquiler_bienes_inmuebles"]
+    },
+    "buyer": {
+      "verifiedAt": "2026-07-22",
+      "verificationMethod": "Campos confirmados contra la pagina oficial del XML/XSD de la Factura de Compra y Venta (siatinfo.impuestos.gob.bo). Los codigos de tipo de documento son parametrica de sincronizacion diaria del SIAT.",
+      "fieldMapping": {
+        "buyerName": "nombreRazonSocial",
+        "buyerDocType": "codigoTipoDocumentoIdentidad",
+        "buyerDocNumber": "numeroDocumento",
+        "buyerDocComplement": "complemento",
+        "buyerCode": "codigoCliente"
+      },
+      "documentTypeCatalog": [
+        { "code": 1, "abbr": "CI", "name": "Cedula de Identidad" },
+        { "code": 2, "abbr": "CEX", "name": "Cedula de Identidad de Extranjero" },
+        { "code": 3, "abbr": "PAS", "name": "Pasaporte" },
+        { "code": 4, "abbr": "OD", "name": "Otro Documento de Identidad" },
+        { "code": 5, "abbr": "NIT", "name": "Numero de Identificacion Tributaria" }
+      ],
+      "documentTypeNote": "codigoTipoDocumentoIdentidad es una PARAMETRICA de sincronizacion DIARIA del SIAT (web service); la fuente autoritativa es el catalogo vivo, no este hardcode. El mapeo 1=CI..5=NIT es el estandar historico; verificar contra la sincronizacion antes de emitir real.",
+      "complementNote": "complemento = valor del SEGIP para cedulas duplicadas; si no aplica va null.",
+      "specialBuyerCodes": [
+        { "code": "99001", "use": "Ventas a consulados, embajadas y organismos internacionales" },
+        { "code": "99002", "use": "Control Tributario" },
+        { "code": "99003", "use": "Ventas menores del dia (sin identificacion del comprador)" }
+      ],
+      "specialBuyerCodesNote": "Casos especiales: se envian con tipo de documento NIT (5) y codigo de excepcion 1. El validador del modulo (validateBuyer) cubre la factura nominativa normal; estos modos especiales los maneja el external_gate de emision."
+    },
+    "lineItemHomologation": {
+      "verifiedAt": "2026-07-22",
+      "legalBasis": "RND 102500000018 (CAEB-SIN homologado, vigente desde 05-may-2025)",
+      "fieldMapping": {
+        "sinProductCode": "codigoProductoSin",
+        "productCode": "codigoProducto",
+        "economicActivityCode": "actividadEconomica",
+        "unitMeasureCode": "unidadMedida"
+      },
+      "serviceUnitCode": 58,
+      "note": "Cada linea homologa al catalogo del SIN: codigoProductoSin (generico del SIN), codigoProducto (interno del contribuyente), actividadEconomica (CAEB registrada en el Padron Nacional, POR ITEM), unidadMedida (parametrica; 58 = unidad de servicio, y para servicios la cantidad debe ser 1). La homologacion la hace el equipo del contribuyente contra el catalogo sincronizado; el modulo valida estructura (validateInvoiceLineHomologation), no asigna el codigo."
     },
     "notes": [
       "La emision fiscal real (llamar al SIN, obtener CUIS/CUFD, firmar) es external_gate del core; este modulo modela el documento y prepara los datos para cuando esa conexion exista.",

@@ -44,6 +44,70 @@ export function invoiceTotalInBob(invoiceTotal, { currency = "BOB", dailyTco } =
   };
 }
 
+// --- Comprador y homologacion SIN por item (RND 102500000018) ---------------
+
+/**
+ * Tipo de documento de identidad del comprador (campo SIAT
+ * codigoTipoDocumentoIdentidad). Es una PARAMETRICA de sincronizacion diaria del
+ * SIAT (web service); la fuente autoritativa es el catalogo vivo, no este mapa.
+ * El mapeo 1=CI..5=NIT es el estandar historico; verificar contra la
+ * sincronizacion antes de emitir real.
+ */
+export const BUYER_DOC_TYPES = { CI: 1, CEX: 2, PAS: 3, OD: 4, NIT: 5 };
+
+/**
+ * Valida los datos minimos del comprador para una factura SIAT: razon social
+ * (nombreRazonSocial), tipo de documento (codigoTipoDocumentoIdentidad, 1-5) y
+ * numero (numeroDocumento). No emite: solo verifica estructura antes de preparar
+ * el XML. Devuelve { valid, errors[] }.
+ */
+export function validateBuyer(buyer = {}, { validTypeCodes = [1, 2, 3, 4, 5] } = {}) {
+  const errors = [];
+  if (!buyer?.name || String(buyer.name).trim() === "") {
+    errors.push("falta nombreRazonSocial del comprador");
+  }
+  const docType = Number(buyer?.docType);
+  if (!validTypeCodes.includes(docType)) {
+    errors.push(`codigoTipoDocumentoIdentidad invalido: ${buyer?.docType} (esperado ${validTypeCodes.join("/")})`);
+  }
+  if (buyer?.docNumber === undefined || buyer?.docNumber === null || String(buyer.docNumber).trim() === "") {
+    errors.push("falta numeroDocumento del comprador");
+  }
+  return { valid: errors.length === 0, errors };
+}
+
+/** Como validateBuyer pero lanza (paso previo a preparar la emision). */
+export function assertValidBuyer(buyer, options) {
+  const { valid, errors } = validateBuyer(buyer, options);
+  if (!valid) {
+    throw new Error(`comprador invalido para factura SIAT: ${errors.join("; ")}`);
+  }
+  return true;
+}
+
+/**
+ * Valida la homologacion SIN de una linea de factura: exige codigoProductoSin
+ * (homologado al catalogo del SIN), actividadEconomica (CAEB por item, del
+ * Padron Nacional) y unidadMedida (parametrica). Para servicios (unidad 58) la
+ * cantidad debe ser 1 (regla oficial del SIAT). Devuelve { valid, errors[] }.
+ */
+export function validateInvoiceLineHomologation(line = {}, { serviceUnitCode = 58 } = {}) {
+  const errors = [];
+  if (line?.sinProductCode === undefined || line?.sinProductCode === null || String(line.sinProductCode).trim() === "") {
+    errors.push("falta codigoProductoSin (homologacion al catalogo SIN)");
+  }
+  if (line?.economicActivityCode === undefined || line?.economicActivityCode === null || String(line.economicActivityCode).trim() === "") {
+    errors.push("falta actividadEconomica (CAEB por item, del Padron Nacional)");
+  }
+  if (line?.unitMeasureCode === undefined || line?.unitMeasureCode === null || String(line.unitMeasureCode).trim() === "") {
+    errors.push("falta unidadMedida (parametrica SIAT)");
+  }
+  if (Number(line?.unitMeasureCode) === serviceUnitCode && Number(line?.quantity) !== 1) {
+    errors.push("para servicios (unidad 58) la cantidad debe ser 1");
+  }
+  return { valid: errors.length === 0, errors };
+}
+
 // --- Importe en literal (numero a letras, para el pie de factura) -----------
 
 const UNITS = ["", "uno", "dos", "tres", "cuatro", "cinco", "seis", "siete", "ocho", "nueve"];
