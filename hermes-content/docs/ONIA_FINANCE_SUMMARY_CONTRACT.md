@@ -99,6 +99,44 @@ Sugerencia de UI: destacar `iva_a_pagar_bs` / `iva_saldo_favor_bs`, `iue_estimad
 `anomalies[].kind` ∈ `blocked_payment`, `pending_premium`, `pending_expense_no_evidence`,
 `delivery_blocked`. El panel puede resaltar `anomaly_count > 0` en rojo.
 
+### Ganancias por persona (`raw.earnings`) — NUEVO 2026-07-22 ⚠️ PANEL LEER
+
+> **Aviso al carril Panel:** dentro de la columna `raw jsonb` (que tu `select=*` ya trae) el
+> agente ahora deja **`raw.earnings`**: las ganancias reales de cada persona (Sergio, Arthur,
+> Camila). Es la respuesta a "¿cuánto ganó cada uno?". READ-ONLY, derivado de lo registrado.
+
+`raw.earnings` = **array**, una entrada por persona (roster base Sergio/Arthur/Camila + cualquier
+otro actor con comisión real). Forma de cada entrada:
+
+```jsonc
+raw.earnings: [
+  {
+    "person_key": "sergio",          // clave estable
+    "display_name": "Sergio",        // nombre para mostrar
+    "role": "Dueno / Direccion ONIA (invierte, gana el margen)",
+    "earned_bs": 0,                  // YA cobrado por la persona (comisiones status=paid)
+    "pending_bs": 0,                 // por cobrar (estimated + pending + approved, sin pagar)
+    "sales_count": 0                 // nº de cobros (income) distintos en que participa
+  },
+  { "person_key": "arthur", ... },
+  { "person_key": "camila", ... }
+]
+```
+
+Origen del dato: `payment_commissions.actor_role_key` + `payment_type`. **Regla clave:** la
+ganancia PERSONAL de Sergio es solo `sergio_owner_income`; el **Fondo ONIA**
+(`payment_type=fund_allocation`) es plata de la EMPRESA, **no** ganancia personal — va aparte en
+`raw.earnings_context.company_fund_bs` (y en `fund_total_bs`). No sumarlo a Sergio en la UI.
+
+`raw.earnings_context` acompaña con metadata: `{ model, generated_at, company_fund_bs,
+total_sales, note, definitions, rules_source }`. Si `total_sales === 0` (sin ventas aún), `note`
+lo dice y **todas las personas van en 0** (dato real, no estimado) — el panel puede mostrar
+"sin ventas aún" en vez de una tabla vacía.
+
+Sugerencia de UI: tabla "Ganancias del equipo" con columnas Persona · Cobrado · Por cobrar ·
+Ventas; una fila aparte "Fondo ONIA (empresa)" con `company_fund_bs`. `person_key` es la clave
+estable para ordenar/mapear avatares.
+
 ---
 
 ## 2. Agente Contenido y Media Lab → `onia_center.review_queue`
