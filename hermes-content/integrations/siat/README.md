@@ -36,16 +36,24 @@ arquitectura, cronograma). Esto es el arranque tecnico del servicio.
   tipoFactura 1 + tipoDocSector 2 + nroFactura 10 + PdV 4) -> digito Modulo 11
   (2..9 ciclico, `suma % 11`, 10->1/11->0) -> base 16 -> + codigoControl. El
   Modulo 11 esta anclado al **ejemplo oficial del SIAT** ("12345" -> 6) como test
-  dorado. 13 tests. Total emisor: 45 tests.
+  dorado. 13 tests.
+- `src/xml-builder.mjs` — **builder del XML de la factura de compra-venta +
+  huella SHA-256**. Estructura VERIFICADA 2026-07-22 contra la pagina oficial del
+  XML/XSD: 30 campos de `<cabecera>` + 11 de `<detalle>` EN ORDEN (el XSD es
+  sequence-sensitive), con manejo correcto de nillables (`<campo xsi:nil="true"/>`
+  para opcionales vacios, gotcha del SIAT). `buildInvoiceXml` arma el documento
+  por modalidad (raiz computarizada/electronica) y `sha256Hex` da la huella
+  (anclada al vector conocido de "abc"). 12 tests. Total emisor: 57 tests.
 
 **Pendiente (necesita NIT / ambiente piloto / Anexo Tecnico oficial):**
 - Cliente SOAP al SIN (CUIS por sistema, CUFD diario, recepcion, validacion,
   anulacion) contra `pilotosiatservicios.impuestos.gob.bo`.
-- Builder XML por tipo de documento sector + validacion XSD + hash SHA-256
-  (computarizada) / firma XMLDSig (electronica). Usa el **CUF verificado del
-  propio emisor** (`src/cuf.mjs`, 10 digitos + codigo de control) — NO el
-  `buildCuf` de referencia del core (8 digitos, simplificado). El builder necesita
-  el XSD oficial de cada tipo de documento sector para armar el XML.
+- Validacion del XML contra el **XSD oficial descargado** (confirmar el nombre
+  exacto del elemento raiz computarizada vs electronica y los tipos por campo) +
+  **firma XMLDSig** para la modalidad electronica en linea (la computarizada usa
+  solo la huella SHA-256, ya lista). El XML se arma con el **CUF verificado del
+  emisor** (`src/cuf.mjs`), no con el `buildCuf` de referencia del core.
+  Descargar el XSD del piloto y correr una validacion real.
 - Tenant registry (NIT, tokens delegados cifrados, sucursales, puntos de venta,
   catalogo homologado por organizacion) + scheduler CUFD/CUIS + contingencia.
 
