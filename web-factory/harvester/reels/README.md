@@ -21,18 +21,26 @@ Two lanes, one schema (`schema.ts`):
 | `prepare.mjs` | Scans a drop folder → hashes video, extracts keyframes (or registers manual frames), reads caption → **manifest**. Pure Node, zero deps. |
 | `build-reels-intelligence.mjs` | Aggregates the per-reel analyses → **reels intelligence** JSON + markdown, grouped by rubro. |
 | `ANALYZE.md` | The Claude-side vision pass: manifest → per-reel analysis JSON. |
+| `model-schema.ts` | Contract for a **web-model** — the generation-ready blueprint of a web page shown in a reel. |
+| `ACQUIRE.md` | The Claude-side acquire pass: watch the video's web-page segments → `showcasedSite` → web-model blueprint. |
+| `build-web-models.mjs` | Aggregates the blueprints → **learned-models catalog** + block library (what `packages/blocks` needs). |
 
 ## Flow
 
 ```
 drop .mp4 + caption  ->  prepare.mjs  ->  manifest (+ keyframes)
                                             |
-                              ANALYZE.md (Claude reads frames)
+                              ANALYZE.md (Claude watches frames)
                                             |
-                              analyses/<id>.json  ->  build-reels-intelligence.mjs
+                              analyses/<id>.json (showcasedSite = the web page shown)
                                             |
-                    trend: reels-intelligence.json  ->  pattern bank
-                    client: <slug>.reels.json/.md   ->  <slug>.design.json references
+                              ANALYZE ---> build-reels-intelligence.mjs -> reels intelligence -> pattern bank
+                                            |
+                              ACQUIRE.md (Claude maps the shown site to factory blocks/tokens)
+                                            |
+                              models/<id>.json  ->  build-web-models.mjs
+                                            |
+                    LEARNED MODELS catalog  ->  design:auto / generate a matching client site
 ```
 
 ## Ingest is manual by design

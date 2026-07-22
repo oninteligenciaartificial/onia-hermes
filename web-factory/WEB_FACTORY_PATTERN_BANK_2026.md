@@ -53,6 +53,12 @@ site. Pipeline and boundary: `REELS_INTELLIGENCE_RUNBOOK.md`.
 - **Client lane** feeds the client recipe: `data/clients/<slug>.reels.json` lists
   which of the client's OWN clips can become hero/proof footage — real assets
   instead of fabricated proof.
+- **Learned models** are the acquired knowledge: when a reel shows a web page, its
+  design is captured as a generation-ready blueprint (sections → factory blocks,
+  tokens, interactions) in `data/references/reels/models/` and catalogued in
+  `docs/WEB_FACTORY_LEARNED_MODELS.md`. To build a client site, match its rubro to a
+  learned model and generate from that blueprint (see `harvester/reels/ACQUIRE.md`).
+  The catalog's block library is the shopping list for `packages/blocks`.
 
 Boundary is the same as any source here: trend reels are inspiration only. Never
 reuse their footage, audio, music, copy or logos in client work. Client-owned

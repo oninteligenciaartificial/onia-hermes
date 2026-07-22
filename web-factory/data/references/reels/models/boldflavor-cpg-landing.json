@@ -1,0 +1,39 @@
+{
+  "id": "boldflavor-cpg-landing",
+  "sourceReel": "noidgroup-claude-fez-isso",
+  "name": "BOLD FLAVOR",
+  "siteType": "food-cpg",
+  "sourceUrl": "https://www.instagram.com/reel/DZ2r09Rvlei/",
+  "summary": "Punchy single-product CPG landing: one saturated brand-color field, an oversized condensed product name, a single spotlighted packshot and exactly one flavor claim — zero clutter.",
+  "designTokens": {
+    "palette": [
+      { "role": "bg", "hex": "#6f1a12", "note": "deep maroon-red brand field" },
+      { "role": "accent", "hex": "#ee6a1f", "note": "bold orange display + pill accents" },
+      { "role": "highlight", "hex": "#f2e4c9", "note": "cream product light" },
+      { "role": "text", "hex": "#201512", "note": "near-black" }
+    ],
+    "typography": { "display": "heavy condensed, uppercase", "body": "clean sans", "treatment": "bold, saturated, one big claim" },
+    "radius": "pill",
+    "density": "balanced",
+    "motionLevel": 2
+  },
+  "sections": [
+    { "order": 0, "job": "hero", "block": "saturated-product-hero", "layout": "full-bleed", "content": ["product-name", "flavor-claim", "packshot"], "notes": "Single saturated brand-color field, oversized condensed product name ('BOLD FLAVOR'), one spotlighted packshot, one flavor claim." },
+    { "order": 1, "job": "offer", "block": "benefit-strip", "layout": "row", "content": ["benefits"], "notes": "Flavor/benefit strip." },
+    { "order": 2, "job": "proof", "block": "product-story", "layout": "split", "content": ["copy", "media"], "notes": "Short product story." },
+    { "order": 3, "job": "conversion", "block": "where-to-buy", "layout": "band", "content": ["retailers", "cta"], "notes": "Where to buy / shop." }
+  ],
+  "components": ["rounded-pill-labels", "circular-control-buttons", "centered-packshot-spotlight"],
+  "interactions": [
+    { "pattern": "on-load type slam + packshot fade-in", "reducedMotionFallback": "render static" },
+    { "pattern": "subtle spotlight breathing behind product", "reducedMotionFallback": "no animation" }
+  ],
+  "buildWithOnia": [
+    "Add a saturated single-color hero block driven by the client's brand color token.",
+    "Oversized condensed product name + one spotlighted packshot + exactly one claim — resist clutter.",
+    "Pill labels/buttons; keep it to one screen of impact."
+  ],
+  "assetsNeeded": ["clean product packshot", "brand color", "one flavor/benefit claim", "optional usage/recipe idea"],
+  "bestFor": ["food-cpg", "packaged goods", "beverages", "single-product launches"],
+  "confidence": "high"
+}

@@ -1,0 +1,42 @@
+{
+  "id": "lecercle-realestate",
+  "sourceReel": "idanweb-realestate-scroll",
+  "name": "Le Cercle",
+  "siteType": "real-estate",
+  "sourceUrl": "https://www.instagram.com/reel/DZ7gUXYuXbt/",
+  "summary": "Cinematic long-scroll luxury real-estate site that alternates dark full-bleed hero moments with light editorial sections; the visitor 'walks through' the property as they scroll.",
+  "designTokens": {
+    "palette": [
+      { "role": "dark-section", "hex": "#141210", "note": "near-black cinematic bands" },
+      { "role": "light-section", "hex": "#f3efe9", "note": "cream editorial bands" },
+      { "role": "warm-imagery", "hex": "#b06a2e", "note": "amber/brown property photography" },
+      { "role": "text-on-dark", "hex": "#efe9e0", "note": "warm white" }
+    ],
+    "typography": { "display": "elegant serif", "body": "clean sans", "treatment": "editorial, generous whitespace, restrained" },
+    "radius": "rounded",
+    "density": "airy",
+    "motionLevel": 4
+  },
+  "sections": [
+    { "order": 0, "job": "hero", "block": "scroll-story-hero", "layout": "full-bleed", "content": ["headline", "sub", "cta-primary", "cta-secondary", "media"], "notes": "Dark cinematic hero: serif headline ('Live Where the Sun Meets the Sea') over a warm property photo, pill CTAs 'View Properties' + 'Book a Tour'." },
+    { "order": 1, "job": "trust", "block": "editorial-statement", "layout": "centered", "content": ["statement"], "notes": "Light band, oversized serif statement ('For those who travel like it's an art form')." },
+    { "order": 2, "job": "offer", "block": "media-feature", "layout": "full-bleed", "content": ["heading", "hero-image"], "notes": "'Our Villas' intro with a modernist villa hero image." },
+    { "order": 3, "job": "proof", "block": "property-cards", "layout": "grid-2col", "content": ["card:image", "card:name", "card:one-line-desc"], "notes": "Two-column property cards (Villa Blanca, Casa Dorada)." },
+    { "order": 4, "job": "conversion", "block": "inline-contact-form", "layout": "dark-split", "content": ["name", "email"], "notes": "'Get In Touch' form in a dark closing section." },
+    { "order": 5, "job": "footer", "block": "footer-brand", "layout": "band", "content": ["brand-mark"], "notes": "Serif brand mark 'Le Cercle'." }
+  ],
+  "components": ["pill-buttons", "rounded-corner-imagery", "sticky-nav-centered-logo", "two-column-cards", "inline-form"],
+  "interactions": [
+    { "pattern": "scrollytelling: alternating dark/light full-bleed sections reveal on scroll", "reducedMotionFallback": "render each section static, no scroll-linked reveal" },
+    { "pattern": "parallax on hero media", "reducedMotionFallback": "static hero image" }
+  ],
+  "buildWithOnia": [
+    "Compose alternating dark/light section bands with ONIA tokens (navy/cream analog per client).",
+    "Rebuild scroll reveals with the existing motion util + a mandatory reduced-motion static fallback; budget LCP/CLS for big media.",
+    "Reuse the property-cards block (photo + name + one-line desc) for units/listings.",
+    "Reuse the inline-quote-form block (the one added for Bolivian Electric) for the 'Get In Touch' closing."
+  ],
+  "assetsNeeded": ["real property photos/renders", "walkthrough or drone video", "floorplans", "brand mark"],
+  "bestFor": ["real-estate", "hospitality", "premium/luxury brand", "architecture"],
+  "confidence": "high"
+}
