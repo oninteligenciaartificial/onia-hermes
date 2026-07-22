@@ -37,7 +37,7 @@
       "table": "onia_knowledge_articles",
       "purpose": "Ficha tecnica, procedimiento o respuesta reutilizable. Puede referenciar una entidad del core (producto, partner, caso) sin acoplarse a ella.",
       "requiredFields": ["id", "organizationId", "title", "body", "status", "authorId", "createdAt"],
-      "optionalFields": ["categoryId", "tags", "relatedEntityType", "relatedEntityId"],
+      "optionalFields": ["categoryId", "tags", "slug", "publishedAt", "relatedEntityType", "relatedEntityId"],
       "tenantScoped": true
     }
   ],
