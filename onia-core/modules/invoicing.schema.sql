@@ -17,6 +17,8 @@ create table if not exists onia_invoicing_invoices (
   partner_id text not null,
   total numeric not null default 0,
   total_in_words text,
+  tco_used numeric,
+  bob_total numeric,
   modality text,
   branch_code text,
   point_of_sale_code text,

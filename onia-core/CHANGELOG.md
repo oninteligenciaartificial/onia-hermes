@@ -1,5 +1,11 @@
 # ONIA Core Changelog
 
+## 0.7.1 + invoicing TCO moneda extranjera — 2026-07-21 (perfeccionar el core, fiscal Bolivia)
+
+ENFOQUE: CORE. Fiscal P1 mas reciente (RND 102600000026, 17-jul-2026).
+- **`invoicing`: TCO del BCB en facturas de moneda extranjera** (`invoiceTotalInBob`) — desde el regimen cambiario flexible (RM 245/2026) el oficial FLOTA, y el SIAT EXIGE emitir las facturas en moneda extranjera con el TCO oficial diario del BCB (lo que se declara es el importe en Bs). Reusa `fx.officialRate` (el fix del 6.96 fijo hecho antes); factura en BOB -> TCO 1; sin TCO del dia cae al fallback historico. Nuevos campos `tcoUsed`/`bobTotal` en la entidad `invoice` + schema.
+- +3 tests. Aditivo, contrato intacto. **453 tests, 4 validadores verdes.**
+
 ## 0.7.1 + payroll fiscal P1 — 2026-07-21 (perfeccionar el core, fiscal Bolivia)
 
 ENFOQUE: CORE. Ajustes fiscales de payroll (los datos ya estaban en el config; faltaba aplicarlos y verificar).

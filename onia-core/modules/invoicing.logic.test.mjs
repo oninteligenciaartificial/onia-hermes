@@ -15,11 +15,31 @@ import {
   cancellationDeadline,
   canCancelInvoice,
   computeInvoiceTotal,
+  invoiceTotalInBob,
   decimalStringToHex,
   integerToWords,
   isPastCancellationDeadline,
   mod11CheckDigit,
 } from "./invoicing.logic.mjs";
+
+describe("moneda extranjera: TCO del BCB (RND 102600000026)", () => {
+  it("factura en USD se convierte a BOB con el TCO del dia", () => {
+    const r = invoiceTotalInBob(1000, { currency: "USD", dailyTco: 10.9 });
+    assert.equal(r.currency, "USD");
+    assert.equal(r.tcoUsed, 10.9);
+    assert.equal(r.bobTotal, 10900);
+  });
+  it("factura en BOB: TCO 1, total sin cambio", () => {
+    const r = invoiceTotalInBob(500, { currency: "BOB" });
+    assert.equal(r.tcoUsed, 1);
+    assert.equal(r.bobTotal, 500);
+  });
+  it("sin TCO del dia cae al fallback historico (6.96) sin romper", () => {
+    const r = invoiceTotalInBob(100, { currency: "USD" });
+    assert.equal(r.tcoUsed, 6.96);
+    assert.equal(r.bobTotal, 696);
+  });
+});
 
 describe("computeInvoiceTotal", () => {
   it("reutiliza la formula de commerce (cantidad*precio - descuento)", () => {

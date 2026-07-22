@@ -13,6 +13,7 @@
  * correccion futura sea un cambio de una linea, no una reescritura.
  */
 import { computeQuoteTotal } from "./commerce.logic.mjs";
+import { officialRate } from "../logic/fx.logic.mjs";
 
 export function round2(value) {
   return Math.round((Number(value) + Number.EPSILON) * 100) / 100;
@@ -21,6 +22,27 @@ export function round2(value) {
 // --- Totales (reutiliza commerce, no duplica la formula) --------------------
 
 export const computeInvoiceTotal = computeQuoteTotal;
+
+// --- Moneda extranjera: TCO del BCB (RND 102600000026) ----------------------
+
+/**
+ * Total de la factura convertido a BOB con el TCO oficial del BCB del dia de la
+ * operacion. Desde el regimen cambiario flexible (RM 245/2026) el oficial FLOTA, y
+ * el SIAT EXIGE emitir las facturas en moneda extranjera con ese TCO diario del BCB
+ * (RND 102600000026, jul-2026): lo que se declara es el importe en Bs. `dailyTco` =
+ * TCO del BCB del dia (external_gate); si falta, cae al fallback historico de
+ * fx.officialRate. Para facturas en BOB el TCO es 1 y el total no cambia.
+ */
+export function invoiceTotalInBob(invoiceTotal, { currency = "BOB", dailyTco } = {}) {
+  const total = Number(invoiceTotal ?? 0);
+  const isBob = !currency || /^(bob|bs|boliviano)/i.test(String(currency));
+  const tco = isBob ? 1 : officialRate(dailyTco);
+  return {
+    currency: isBob ? "BOB" : String(currency).toUpperCase(),
+    tcoUsed: round2(tco),
+    bobTotal: round2(total * tco),
+  };
+}
 
 // --- Importe en literal (numero a letras, para el pie de factura) -----------
 

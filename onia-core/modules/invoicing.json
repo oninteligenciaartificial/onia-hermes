@@ -40,7 +40,7 @@
       "table": "onia_invoicing_invoices",
       "purpose": "Factura (documento fiscal de venta). Cabecera con datos legales (NIT, actividad economica, sucursal, punto de venta) y totales; los campos de la ronda SIAT (cuf/cufd/cuis/controlCode) quedan opcionales hasta la emision real.",
       "requiredFields": ["id", "organizationId", "invoiceNumber", "status", "currency", "issueDate", "partnerId", "total", "createdAt"],
-      "optionalFields": ["cuf", "cufd", "cuis", "controlCode", "authorizationNumber", "modality", "branchCode", "pointOfSaleCode", "economicActivityCode", "totalInWords", "qrUrl", "legend", "workItemId", "documentId", "quoteId", "orderId"],
+      "optionalFields": ["cuf", "cufd", "cuis", "controlCode", "authorizationNumber", "modality", "branchCode", "pointOfSaleCode", "economicActivityCode", "totalInWords", "qrUrl", "legend", "workItemId", "documentId", "quoteId", "orderId", "tcoUsed", "bobTotal"],
       "tenantScoped": true
     },
     {
@@ -72,6 +72,7 @@
       "RND 102100000011 (11-ago-2021, Sistema de Facturacion compilada)",
       "RND 102600000007 (23-mar-2026, prorroga a 30-sep-2026 para grupos 9-12)",
       "RND 102500000018 (CAEB-SIN homologado, vigente desde 05-may-2025)",
+      "RND 102600000026 (jul-2026) - facturas en moneda extranjera con el TCO oficial diario del BCB",
       "Ley 453 (derechos del consumidor, leyenda obligatoria)"
     ],
     "modalities": ["electronica_en_linea", "computarizada_en_linea", "portal_web", "manual", "prevalorada"],
