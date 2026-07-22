@@ -3,15 +3,20 @@
 //   - caja: ingresos netos (income_entries) acumulados + del periodo (ultimos 30 dias)
 //   - comisiones por estado (payment_commissions)
 //   - Fondo ONIA (payment_commissions payment_type=fund_allocation)
+//   - GANANCIAS REALES POR PERSONA (Sergio, Arthur, Camila): cobrado vs por cobrar, derivadas de
+//     payment_commissions.actor_role_key + payment_type (arthur_variable/sergio_owner_income;
+//     fund_allocation = EMPRESA, no persona). Contrato panel: finance_summary.raw.earnings.
+//     Si no hay ventas -> todos en 0 (dato real, NO estimado).
 //   - riesgos: pagos bloqueados, uso premium sin aprobar, gastos pendientes sin evidencia
 //   - POSTURA FISCAL del mes (v2): IVA a pagar / saldo a favor, IT, IUE estimado, credito fiscal
 //     perdido (gastos sin factura), retenciones IUE-BE por pagos al exterior. Regimen General,
-//     sin planilla (RC-IVA N/A). Base: ONIA_OPTIMIZACION_FISCAL_PROPIA_2026.md. Es ESTIMACION
-//     (validar con contador matriculado); READ-ONLY.
+//     sin planilla (RC-IVA N/A). Fuentes legales citadas en tax_posture.legal_basis (Ley 843, DS
+//     25619; motor canonico onia-core/modules/accounting.logic.mjs). Es ESTIMACION (validar con
+//     contador matriculado); READ-ONLY.
 // Escribe UNA fila por dia en onia_center.finance_summary (upsert por summary_key), incluida la
-// columna aditiva tax_posture (contrato: ONIA_FINANCE_SUMMARY_CONTRACT.md). Pone el status del
-// agente (agent_finance_fund) en 'ready'. Telegram SOLO si hay anomalias de plata (el fiscal va
-// en la tabla/panel, no genera ping — para no romper la calma de vacaciones).
+// columna aditiva tax_posture y raw.earnings (contrato: ONIA_FINANCE_SUMMARY_CONTRACT.md). Pone el
+// status del agente (agent_finance_fund) en 'ready'. Telegram SOLO si hay anomalias de plata (el
+// fiscal/ganancias van en la tabla/panel, no generan ping — para no romper la calma de vacaciones).
 //
 // Regla dura: READ-ONLY sobre la plata. NO mueve dinero, NO aprueba pagos ni comisiones.
 //
@@ -39,6 +44,107 @@ const FISCAL = {
   iue_be: 0.125,
   vencimiento_dia: 13, // digito 0. Declara el periodo del mes anterior.
 };
+
+// Fuentes legales de la postura fiscal (vigentes; citadas para trazabilidad, NO se re-derivan
+// aca: el motor contable canonico es onia-core/modules/accounting.logic.mjs). No cambiar
+// tasas sin RND/DS que lo respalde. Base: skill onia-contabilidad-bolivia + Ley 843.
+const FISCAL_LEGAL_BASIS = {
+  iva: "Ley 843 Titulo I - IVA 13% (debito ventas - credito compras nacionales con factura)",
+  it: "Ley 843 Titulo VI - IT 3% sobre ingresos brutos del mes",
+  iue: "Ley 843 Titulo III - IUE 25% sobre utilidad neta imponible del ejercicio",
+  iue_be: "Ley 843 art. 51 - IUE Beneficiarios del Exterior: 12,5% efectivo (25% sobre base presunta 50%) al remesar servicios del exterior",
+  vencimiento_nit: "DS 25619 - vencimiento mensual por ultimo digito del NIT (digito 0 -> dia 13)",
+  iue_cierre: "Cierre de gestion sectorial; el IUE se declara 120 dias despues del cierre (servicios: cierre 31-dic)",
+  facturacion_linea_obligatoria: "2026-09-30 - facturacion en linea/electronica obligatoria (cronograma SIAT). Hoy SIAT Portal Web activo.",
+  canonical_logic: "onia-core/modules/accounting.logic.mjs (motor contable boliviano de referencia; misma alicuota)",
+  disclaimer: "Estimacion automatica, regimen general sin planilla (RC-IVA N/A). Validar con contador matriculado. Elusion legal SI, evasion NO.",
+};
+
+// --- Ganancias reales por persona (Sergio, Arthur, Camila) -------------------
+// Se derivan de payment_commissions.actor_role_key + payment_type. Cada cobro registrado por
+// income-insert.mjs reparte: arthur_variable (Arthur), sergio_owner_income (Sergio, ganancia
+// PERSONAL) y fund_allocation (Fondo ONIA = EMPRESA, NO ganancia de nadie). Modelo de centros:
+// onia_center.accounting_centers. Reglas de comision: ONIA_COLABORADORES_COMERCIALES_SIN_INVERSION_2026.md.
+// READ-ONLY: informa lo REGISTRADO, no estima ventas inexistentes (si no hay ventas -> todo en 0).
+//
+// Roster base garantizado (aunque no tengan filas todavia). actor_aliases = posibles valores de
+// actor_role_key que mapean a la persona (Camila hoy no tiene flujo de comision en income-insert;
+// se deja preparado para cuando venda -> aparecera en 0 hasta que haya cobro real).
+const PERSON_ROSTER = [
+  { person_key: "sergio", display_name: "Sergio", role: "Dueno / Direccion ONIA (invierte, gana el margen)", actor_aliases: ["sergio"] },
+  { person_key: "arthur", display_name: "Arthur", role: "Coordinador Comercial-Operativo (trial 60d, por resultado)", actor_aliases: ["arthur"] },
+  { person_key: "camila", display_name: "Camila", role: "Colaboradora Comercial - cierre (por resultado)", actor_aliases: ["camila", "seller_001"] },
+];
+// payment_type que pertenecen a la EMPRESA (fondo/reserva), NO son ganancia personal de nadie.
+const COMPANY_PAYMENT_TYPES = new Set(["fund_allocation", "reserve_allocation", "nuvia_reserve", "reserva_nuvia"]);
+// status que cuentan como YA cobrado por la persona vs. lo que le falta cobrar.
+const EARNED_STATUSES = new Set(["paid"]);
+const PENDING_STATUSES = new Set(["estimated", "pending", "approved"]);
+
+// Calcula ganancias por persona desde las comisiones. collaborators enriquece display_name/role.
+function computeEarnings(commissions, collaborators) {
+  // Indice actor_role_key -> person_key (roster base + aliases).
+  const actorToPerson = {};
+  const people = {};
+  for (const p of PERSON_ROSTER) {
+    people[p.person_key] = {
+      person_key: p.person_key,
+      display_name: p.display_name,
+      role: p.role,
+      earned_bs: 0,
+      pending_bs: 0,
+      _incomeIds: new Set(),
+    };
+    for (const a of p.actor_aliases) actorToPerson[a] = p.person_key;
+  }
+  // Enriquecer nombre/rol desde collaborators (fuente real cuando exista).
+  for (const c of collaborators || []) {
+    const pk = actorToPerson[c.user_key] || actorToPerson[c.role_key] || (people[c.user_key] ? c.user_key : null);
+    if (pk && people[pk]) {
+      if (c.display_name) people[pk].display_name = c.display_name;
+    }
+  }
+  let companyFundBs = 0;
+  for (const c of commissions || []) {
+    const amt = num(c.calculated_amount_bs);
+    const type = c.payment_type;
+    if (COMPANY_PAYMENT_TYPES.has(type)) {
+      if (EARNED_STATUSES.has(c.status) || PENDING_STATUSES.has(c.status)) companyFundBs += amt;
+      continue; // fondo de empresa, no ganancia personal
+    }
+    const actor = c.actor_role_key;
+    let pk = actorToPerson[actor];
+    if (!pk) {
+      // Persona no prevista con comision real: no la perdemos (honestidad de datos).
+      pk = actor || "desconocido";
+      if (!people[pk]) {
+        people[pk] = { person_key: pk, display_name: actor || "Desconocido", role: "Actor con comision (no en roster)", earned_bs: 0, pending_bs: 0, _incomeIds: new Set() };
+        actorToPerson[pk] = pk;
+      }
+    }
+    const person = people[pk];
+    if (EARNED_STATUSES.has(c.status)) person.earned_bs += amt;
+    else if (PENDING_STATUSES.has(c.status)) person.pending_bs += amt;
+    // blocked/discounted: ni cobrado ni por cobrar (se refleja en commissions_by_status).
+    if (c.income_id && (EARNED_STATUSES.has(c.status) || PENDING_STATUSES.has(c.status))) person._incomeIds.add(c.income_id);
+  }
+  // Orden: roster base primero (en su orden), luego extras.
+  const order = PERSON_ROSTER.map((p) => p.person_key);
+  const keys = [...order, ...Object.keys(people).filter((k) => !order.includes(k))];
+  const earnings = keys.map((k) => {
+    const p = people[k];
+    return {
+      person_key: p.person_key,
+      display_name: p.display_name,
+      role: p.role,
+      earned_bs: r2(p.earned_bs),
+      pending_bs: r2(p.pending_bs),
+      sales_count: p._incomeIds.size,
+    };
+  });
+  const totalSales = earnings.reduce((a, e) => a + e.sales_count, 0);
+  return { earnings, companyFundBs: r2(companyFundBs), totalSales };
+}
 
 function out(o) {
   process.stdout.write(JSON.stringify(o) + "\n");
@@ -131,6 +237,8 @@ function computeTaxPosture(income, expenses, monthStart, yearStart, period) {
     gastos_con_factura_bs: r2(gConFactura),
     gastos_sin_factura_bs: r2(gSinFactura),
     vencimiento_dia: FISCAL.vencimiento_dia,
+    facturacion_linea_obligatoria: "2026-09-30",
+    legal_basis: FISCAL_LEGAL_BASIS,
     notes:
       "Estimacion automatica, regimen general, sin planilla. " +
       (FISCAL.siat_emitting ? "" : "SIAT en tramite: sin debito IVA formal aun; el credito se acumula como saldo a favor. ") +
@@ -164,9 +272,9 @@ async function main() {
     if (r.delivery_status === "blocked" || r.delivery_status === "refunded") deliveryBlocked++;
   }
 
-  // --- Comisiones por estado + Fondo ONIA ---
+  // --- Comisiones por estado + Fondo ONIA + ganancias por persona ---
   const comm = await sb(
-    "payment_commissions?select=status,payment_type,calculated_amount_bs,center_key&limit=5000",
+    "payment_commissions?select=status,payment_type,calculated_amount_bs,center_key,actor_role_key,income_id&limit=5000",
     { headers: H() },
   );
   const byStatus = { estimated: 0, pending: 0, approved: 0, paid: 0, blocked: 0, discounted: 0 };
@@ -176,6 +284,16 @@ async function main() {
     byStatus[c.status] = r2((byStatus[c.status] || 0) + amt);
     if (c.payment_type === "fund_allocation") fundTotal += amt;
   }
+
+  // Personas reales (enriquecen nombre/rol). collaborators = fuente viva; tolerante a schema.
+  let collaborators = [];
+  try {
+    collaborators = await sb("collaborators?select=user_key,display_name,role_key,status&limit=500", { headers: H() });
+  } catch (_e) {
+    collaborators = [];
+  }
+  // Ganancias reales por persona (Sergio, Arthur, Camila + extras si aparecen).
+  const { earnings, companyFundBs, totalSales } = computeEarnings(comm, collaborators);
 
   // --- Gastos: todos (para la postura fiscal) + derivar pendientes/riesgo ---
   const expenses = await sb(
@@ -269,6 +387,18 @@ async function main() {
     L.push("- Bloqueado " + bs(byStatus.blocked) + " · Descontado " + bs(byStatus.discounted));
   }
   L.push("");
+  L.push("GANANCIAS POR PERSONA (lo registrado — cobrado / por cobrar):");
+  if (totalSales === 0) {
+    L.push("- Sin ventas registradas aún: todos en Bs. 0,00 (dato real, no estimado).");
+    for (const e of earnings) L.push("  · " + e.display_name + ": cobrado " + bs(e.earned_bs) + " · por cobrar " + bs(e.pending_bs));
+  } else {
+    for (const e of earnings) {
+      if (e.earned_bs === 0 && e.pending_bs === 0 && e.sales_count === 0) continue;
+      L.push("- " + e.display_name + ": cobrado " + bs(e.earned_bs) + " · por cobrar " + bs(e.pending_bs) + " · ventas " + e.sales_count);
+    }
+  }
+  L.push("  (Fondo ONIA / empresa, aparte: " + bs(companyFundBs) + " — no es ganancia personal.)");
+  L.push("");
   L.push("FISCAL (estimado, mes " + period + " — validar con contador):");
   L.push("- IVA credito del mes: " + bs(tax.iva_credito_bs) + " · saldo a favor: " + bs(tax.iva_saldo_favor_bs));
   if (tax.credito_fiscal_perdido_bs > 0) L.push("- Credito fiscal PERDIDO (gastos sin factura): " + bs(tax.credito_fiscal_perdido_bs) + " — pedi factura al NIT");
@@ -309,7 +439,28 @@ async function main() {
     breakdown,
     summary_text: text,
     tax_posture: tax,
-    raw: { agent: "finance-fund-agent-v2", generated_at_ms: Date.now() },
+    raw: {
+      agent: "finance-fund-agent-v2",
+      generated_at_ms: Date.now(),
+      // CONTRATO PANEL: ganancias reales por persona (Sergio, Arthur, Camila).
+      earnings,
+      earnings_context: {
+        model: "commission-split-v1",
+        generated_at: new Date().toISOString(),
+        company_fund_bs: companyFundBs,
+        total_sales: totalSales,
+        note: totalSales === 0
+          ? "Sin ventas registradas aún: ganancias en cero (dato real, no estimado). Se llenan al registrar cobros en Ingresos."
+          : null,
+        definitions: {
+          earned_bs: "Comisión/ingreso YA cobrado por la persona (status paid).",
+          pending_bs: "Comisión/ingreso por cobrar: estimado + pendiente + aprobado, aún sin pagar.",
+          sales_count: "Cantidad de cobros (income) distintos en que la persona participa.",
+          company_fund_bs: "Fondo ONIA (payment_type=fund_allocation): plata de la EMPRESA, no ganancia personal de Sergio.",
+        },
+        rules_source: "ONIA_COLABORADORES_COMERCIALES_SIN_INVERSION_2026.md · income-insert.mjs (reparto) · accounting_centers",
+      },
+    },
   };
   await sb("finance_summary?on_conflict=summary_key", {
     method: "POST",
@@ -331,6 +482,8 @@ async function main() {
           fund_total_bs: r2(fundTotal),
           iva_saldo_favor_bs: tax.iva_saldo_favor_bs,
           credito_fiscal_perdido_bs: tax.credito_fiscal_perdido_bs,
+          total_sales: totalSales,
+          earnings: earnings.map((e) => ({ person_key: e.person_key, earned_bs: e.earned_bs, pending_bs: e.pending_bs, sales_count: e.sales_count })),
           anomalies: anomalies.length,
           runtime: "finance-fund-agent-v2",
         },
@@ -346,6 +499,9 @@ async function main() {
     cash_period_bs: r2(cashPeriod),
     fund_total_bs: r2(fundTotal),
     commissions_by_status: byStatus,
+    earnings,
+    company_fund_bs: companyFundBs,
+    total_sales: totalSales,
     tax_posture: tax,
     anomalies,
     notify: anomalies.length > 0 || vencAlert,
