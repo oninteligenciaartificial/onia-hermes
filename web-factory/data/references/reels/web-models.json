@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-22T14:27:05.118Z",
+  "generatedAt": "2026-07-22T14:41:34.588Z",
   "policy": "Learned web-models are generation blueprints, not copies. Rebuild each with ONIA tokens and blocks; supply real client assets; never reuse third-party footage, code, copy or logos. Trend models are inspiration; client-owned assets only after rights confirmed.",
   "summary": {
     "models": 3,
@@ -282,8 +282,9 @@
   ],
   "howToUse": [
     "Match the client's rubro to a learned model in bySiteType.",
-    "Open the model JSON: use its sections[] as the composition, designTokens as the token seed, interactions with reduced-motion fallbacks.",
+    "Open the model JSON: use its sections[] as the composition, designTokens as the token seed, and each section's motion spec.",
     "Build with ONIA blocks (see blockLibrary for what each model needs); swap in the client's real palette and assets.",
+    "Add the motion with the toolkit (packages/blocks/src/motion.ts, see packages/blocks/MOTION.md): map each section's motion spec to a wf-* class. Reduced-motion is built in.",
     "Run the pre-ship checklist (real assets, hierarchy, responsive, reduced motion, Core Web Vitals) before delivery."
   ]
 }

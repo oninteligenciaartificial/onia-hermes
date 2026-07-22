@@ -133,8 +133,9 @@ export async function buildWebModels(options = {}) {
       .sort((a, b) => a.siteType.localeCompare(b.siteType) || a.name.localeCompare(b.name)),
     howToUse: [
       "Match the client's rubro to a learned model in bySiteType.",
-      "Open the model JSON: use its sections[] as the composition, designTokens as the token seed, interactions with reduced-motion fallbacks.",
+      "Open the model JSON: use its sections[] as the composition, designTokens as the token seed, and each section's motion spec.",
       "Build with ONIA blocks (see blockLibrary for what each model needs); swap in the client's real palette and assets.",
+      "Add the motion with the toolkit (packages/blocks/src/motion.ts, see packages/blocks/MOTION.md): map each section's motion spec to a wf-* class. Reduced-motion is built in.",
       "Run the pre-ship checklist (real assets, hierarchy, responsive, reduced motion, Core Web Vitals) before delivery.",
     ],
   };

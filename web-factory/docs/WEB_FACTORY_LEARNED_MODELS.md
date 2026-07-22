@@ -1,6 +1,6 @@
 # Web Factory — Learned Models
 
-Generated: 2026-07-22T14:27:05.118Z
+Generated: 2026-07-22T14:41:34.588Z
 
 Web designs the factory has **acquired** from reels: each is a generation-ready
 blueprint (sections → blocks, tokens, interactions) to build a similar site fast.
@@ -79,6 +79,7 @@ Cinematic long-scroll luxury real-estate site that alternates dark full-bleed he
 ## How To Generate From A Model
 
 1. Match the client's rubro to a learned model in bySiteType.
-2. Open the model JSON: use its sections[] as the composition, designTokens as the token seed, interactions with reduced-motion fallbacks.
+2. Open the model JSON: use its sections[] as the composition, designTokens as the token seed, and each section's motion spec.
 3. Build with ONIA blocks (see blockLibrary for what each model needs); swap in the client's real palette and assets.
-4. Run the pre-ship checklist (real assets, hierarchy, responsive, reduced motion, Core Web Vitals) before delivery.
+4. Add the motion with the toolkit (packages/blocks/src/motion.ts, see packages/blocks/MOTION.md): map each section's motion spec to a wf-* class. Reduced-motion is built in.
+5. Run the pre-ship checklist (real assets, hierarchy, responsive, reduced motion, Core Web Vitals) before delivery.
