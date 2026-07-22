@@ -1,5 +1,13 @@
 # ONIA Core Changelog
 
+## 0.7.1 + modules/agents — 2026-07-22 (agentes 24/7 human-in-the-loop, diferenciador vendible)
+
+Nuevo modulo `agents` del core: el contrato + la logica pura de los agentes autonomos que trabajan 24/7 sobre los datos de la organizacion (calificar leads, armar propuestas, seguimiento, avisos de vencimiento, scraping) como add-on activable SOBRE el core. ENFOQUE: CORE (9no modulo).
+- **Human-in-the-loop por diseno (la seguridad ES el foso vendible):** `routeAction` garantiza que NINGUNA accion sensible (contactar/publicar/cobrar/gastar/scraping) ni desconocida se auto-ejecute — todo pasa por la cola de aprobacion del core (`approval_request`). Solo acciones internas reversibles (qualify_lead/flag/prioritize/create_task/summarize/schedule_followup) con un agente `auto` se auto-ejecutan. Guardrails: acciones prohibidas (send_money/execute_payment/delete_data/modify_settings) + limite diario de acciones y de mensajes.
+- **3 entidades** (`agent`, `agent_run`, `agent_action`) + maquinas de estado de corrida y accion (inmutables) + idempotencia CROSS-RUN (no reproponer la misma accion entre corridas, dedupe sin runId) + scheduling por intervalo (`shouldRunAgent`) + puentes al core (`buildApprovalRequest`/`buildWorkItem`).
+- **La ejecucion real es external_gate**: cron + LLM + scraping + envio los corre el runtime del producto/VPS (Hermes); el core modela el contrato + el ciclo de vida + QUE pasa por aprobacion. Cae en TODO producto (11 tracks).
+- Registrado en `contract.moduleCapabilities` (capability `agents`). +38 tests + 5 conteos de modulo actualizados. Aditivo, contrato intacto. **503 tests, 4 validadores verdes.**
+
 ## 0.7.1 + invoicing CAEB por item + datos del comprador — 2026-07-22 (perfeccionar el core, fiscal Bolivia)
 
 ENFOQUE: CORE. ULTIMO item de la columna fiscal del core (preparacion de la emision SIAT, Capa 2). Campos confirmados 2026-07-22 contra la pagina oficial del XML/XSD de la Factura de Compra y Venta (siatinfo.impuestos.gob.bo).

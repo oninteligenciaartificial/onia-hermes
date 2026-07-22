@@ -186,7 +186,7 @@ npm run validate:onia-core                        # invariantes del contrato cor
 node onia-core/modules/validate-modules.mjs       # validador de modulos vendibles
 node onia-core/validate-business-tiers.mjs        # validador de niveles de tamano
 node onia-core/validate-vertical-extensions.mjs   # validador del catalogo por rubro
-node --test onia-core/*.test.mjs onia-core/logic/*.test.mjs onia-core/modules/*.test.mjs   # 465 tests
+node --test onia-core/*.test.mjs onia-core/logic/*.test.mjs onia-core/modules/*.test.mjs   # 503 tests
 node onia-core/report.mjs                         # foto de avance por vertical/producto/modulo
 node onia-core/install-plan.mjs <track|producto>   # plan de instalacion de un vertical
 node onia-core/business-diagnostic.mjs            # demo del cuestionario -> rubro+nivel+modulos
