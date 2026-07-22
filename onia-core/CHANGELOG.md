@@ -1,5 +1,12 @@
 # ONIA Core Changelog
 
+## 0.7.1 + commerce estados + knowledge logica — 2026-07-21 (perfeccionar el core, hardening)
+
+P0 #3-4 de la ola "perfeccionar los universales" (construidos en PARALELO, worktrees aislados, integrados central).
+- **`commerce` 0.3.0: maquina de estados** de cotizacion (`draft→sent→accepted|rejected|expired`) y pedido (`draft→confirmed→fulfilled|cancelled`) — antes `status` era string libre sin invariantes y cada producto lo reimplementaba. Nuevas `canTransitionQuote`/`applyQuoteTransition`, `canTransitionOrder`/`applyOrderTransition`, `acceptQuoteToOrder`, `isQuoteExpired`, `paymentBalance` (cuentas por cobrar). +28 tests.
+- **`knowledge` 0.2.0: logica pura + integridad de arbol** — era el UNICO modulo sin logica ni tests. `knowledge.logic.mjs`: maquina de estados del articulo (`draft→published→archived`), **integridad de la taxonomia** (`wouldCreateCycle`/`assertAcyclic`: una categoria no puede ser su propio ancestro — cerraba el hueco de ciclos silenciosos), `slugify`, `searchArticles` (ranking lexico; embeddings siguen external). +28 tests.
+- Ambos aditivos, contrato intacto. **444 tests, 4 validadores verdes.**
+
 ## 0.7.1 + automation idempotencia + triggers — 2026-07-21 (perfeccionar el core, motor de automatizacion)
 
 P0 #2 de la ola "perfeccionar los universales" (habilita las automatizaciones de UX).

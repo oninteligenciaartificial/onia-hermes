@@ -1,7 +1,7 @@
 {
   "module": "commerce",
   "name": "ONIA Commerce Module",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "status": "draft",
   "layer": "activatable_module",
   "purpose": "Catalogo, inventario multi-almacen y cotizaciones B2B como add-on activable SOBRE ONIA Core. Vive FUERA del core (el core no es inventario/ventas); se activa por vertical. ProveeGest/Bolivian Electric es el primer consumidor: catalogo electrico, almacenes por sucursal, listas de precio USD/BOB y cotizaciones con SLA.",

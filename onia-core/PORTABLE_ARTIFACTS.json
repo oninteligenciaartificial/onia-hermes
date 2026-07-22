@@ -1,7 +1,7 @@
 {
   "note": "Generado por onia-core/portable-artifacts.mjs. No editar a mano; correr `node onia-core/portable-artifacts.mjs --write`.",
   "coreVersion": "0.7.1",
-  "artifactCount": 22,
+  "artifactCount": 23,
   "artifacts": [
     {
       "id": "logic/approvals.logic.mjs",
@@ -92,7 +92,7 @@
       "id": "modules/commerce.logic.mjs",
       "kind": "logic",
       "path": "onia-core/modules/commerce.logic.mjs",
-      "sha256": "66e7449638bcbc4c7ea3dfb5db4dfe207a6d757165b2d7dd062f8b0d06ac78d6"
+      "sha256": "65e8307a4eab18e9ec7863e4654a605aee51be4c369909bb7cdd495d257d2ae0"
     },
     {
       "id": "modules/dental.json#clinicalConfig",
@@ -125,6 +125,12 @@
       "kind": "logic",
       "path": "onia-core/modules/invoicing.logic.mjs",
       "sha256": "25bb3dd9c95299df1d8f561fc47697197bc1c17faa5ce4987d009864569eba6b"
+    },
+    {
+      "id": "modules/knowledge.logic.mjs",
+      "kind": "logic",
+      "path": "onia-core/modules/knowledge.logic.mjs",
+      "sha256": "0cc4d17262507ae8e51bac2e8d4dced444799fa1b6dc005e634ea591f4febaad"
     },
     {
       "id": "modules/payroll.json#laborConfig",
