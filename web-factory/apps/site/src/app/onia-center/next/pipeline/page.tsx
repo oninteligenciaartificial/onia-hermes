@@ -65,7 +65,7 @@ export default async function PipelinePage() {
     }
 
     return (
-      <AppShell canSeeFinance={canSeeFinance}>
+      <AppShell canSeeFinance={canSeeFinance} actorName={auth.actor.displayName}>
         <PipelineView
           leads={runtime.leads}
           tasks={runtime.tasks}

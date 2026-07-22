@@ -83,7 +83,7 @@ export default async function AgentesPage() {
   );
 
   return (
-    <AppShell canSeeFinance={canSeeFinance}>
+    <AppShell canSeeFinance={canSeeFinance} actorName={auth.actor.displayName}>
       <AgentesView
         agents={agents}
         liveInfo={liveInfo}

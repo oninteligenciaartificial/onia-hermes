@@ -62,7 +62,7 @@ export default async function FinanzasPage() {
   const summary = await getFinanceSummary();
 
   return (
-    <AppShell canSeeFinance={canSeeFinance}>
+    <AppShell canSeeFinance={canSeeFinance} actorName={auth.actor.displayName}>
       <FinanzasView role={auth.actor.role} summary={summary} />
     </AppShell>
   );

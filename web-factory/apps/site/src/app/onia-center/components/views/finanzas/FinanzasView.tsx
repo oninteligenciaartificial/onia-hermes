@@ -16,9 +16,9 @@ export function FinanzasView({ role, summary }: FinanzasViewProps) {
   const centers = getVisibleCenters(role);
 
   return (
-    <div className="grid gap-8">
-      <header className="grid gap-1.5">
-        <h1 className="text-2xl font-semibold tracking-tight text-foreground">Finanzas</h1>
+    <div className="grid gap-6">
+      <header className="grid gap-1">
+        <h1 className="text-[22px] font-semibold tracking-tight text-foreground">Finanzas</h1>
         <p className="max-w-2xl text-sm leading-relaxed text-muted-foreground">
           Caja, Fondo ONIA, postura fiscal y lo que gana cada persona. Lo deja el agente Finanzas al correr.
         </p>

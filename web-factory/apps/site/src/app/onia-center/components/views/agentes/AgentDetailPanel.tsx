@@ -59,9 +59,15 @@ export function AgentDetailPanel({ agents, liveInfo, canTrigger }: AgentDetailPa
       title="Agentes"
       subtitle="Cada uno corre solo en su horario. Podés verlos, no hace falta dispararlos."
       action={
-        <span className="inline-flex items-center rounded-full bg-muted px-3 py-1 text-xs font-semibold tabular-nums text-muted-foreground">
-          {liveCount > 0 ? `${liveCount}/${agents.length} activos` : agents.length}
-        </span>
+        liveCount > 0 ? (
+          <span className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-semibold tabular-nums onia-center-tone-green">
+            {liveCount}/{agents.length} activos 24/7
+          </span>
+        ) : (
+          <span className="inline-flex items-center rounded-full bg-secondary px-2.5 py-1 text-[11px] font-semibold tabular-nums text-muted-foreground">
+            {agents.length}
+          </span>
+        )
       }
     >
       <div className="grid">

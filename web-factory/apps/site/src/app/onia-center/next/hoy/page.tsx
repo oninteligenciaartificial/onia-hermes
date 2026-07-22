@@ -166,7 +166,7 @@ export default async function HoyPage() {
   }
 
   return (
-    <AppShell canSeeFinance={canSeeFinance}>
+    <AppShell canSeeFinance={canSeeFinance} actorName={auth.actor.displayName}>
       <HoyView
         agents={visibleAgents}
         liveInfo={liveInfo}

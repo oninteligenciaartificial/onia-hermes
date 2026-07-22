@@ -33,6 +33,7 @@ export default async function NegocioPage() {
   let notes: RuntimeNote[] | undefined;
   let team: TeamMember[] | undefined;
   let canSeeFinance = true;
+  let actorName: string | undefined;
 
   // Personas reales del equipo + scorecard con datos reales del runtime. Si
   // falta Supabase, sesion o la lectura falla, el panel cae al roster estatico y
@@ -53,6 +54,7 @@ export default async function NegocioPage() {
       const auth = await getOniaCenterActor(await buildAuthRequest());
       if (auth.ok) {
         canSeeFinance = canActorSeeFinance(auth.actor);
+        actorName = auth.actor.displayName;
         const runtime = filterOniaCenterRuntimeForActor(await getOniaCenterRuntime(), auth.actor);
         tasks = runtime.tasks;
         leads = runtime.leads;
@@ -64,7 +66,7 @@ export default async function NegocioPage() {
   }
 
   return (
-    <AppShell canSeeFinance={canSeeFinance}>
+    <AppShell canSeeFinance={canSeeFinance} actorName={actorName}>
       <NegocioView tasks={tasks} leads={leads} notes={notes} team={team} />
     </AppShell>
   );

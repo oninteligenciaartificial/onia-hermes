@@ -24,6 +24,16 @@ interface HoyViewProps {
   referenceDate: Date;
 }
 
+function todayLabel(referenceDate: Date): string {
+  const formatted = new Intl.DateTimeFormat("es-BO", {
+    weekday: "long",
+    day: "numeric",
+    month: "short",
+    timeZone: "America/La_Paz",
+  }).format(referenceDate);
+  return `${formatted} · Bolivia`;
+}
+
 export function HoyView({
   agents,
   liveInfo,
@@ -38,35 +48,31 @@ export function HoyView({
   scheduleBlocks,
   referenceDate,
 }: HoyViewProps) {
-  const showLeft = showSchedule || showTeam;
-  const rightStack = (
-    <>
-      <ReviewQueueTile reviews={reviews} bodies={reviewBodies} canApprove={canApprove} />
-      <AgentRosterTile agents={agents} liveInfo={liveInfo} />
-    </>
-  );
-
   return (
-    <div className="grid gap-8">
-      <header className="grid gap-1.5">
-        <h1 className="text-2xl font-semibold tracking-tight text-foreground">Hoy</h1>
-        <p className="max-w-2xl text-sm leading-relaxed text-muted-foreground">
-          {headline ??
-            "Tu día de un vistazo: la agenda protegida, qué necesita tu aprobación y en qué está el equipo."}
-        </p>
-      </header>
-      {kpis && kpis.length > 0 ? <KpiStrip items={kpis} /> : null}
-      {showLeft ? (
-        <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
-          <div className="grid content-start gap-6">
-            {showSchedule ? <DayTimeline blocks={scheduleBlocks} referenceDate={referenceDate} /> : null}
-            {showTeam ? <TeamWorkPanel tasks={tasks} canApprove={canApprove} /> : null}
-          </div>
-          <div className="grid content-start gap-6">{rightStack}</div>
+    <div className="grid gap-5">
+      <header className="flex flex-wrap items-end justify-between gap-4">
+        <div className="grid gap-1">
+          <h1 className="text-[22px] font-semibold tracking-tight text-foreground">Hoy</h1>
+          <p className="max-w-2xl text-sm leading-relaxed text-muted-foreground">
+            {headline ??
+              "Tu día de un vistazo: qué necesita tu aprobación, la agenda protegida y en qué está el equipo."}
+          </p>
         </div>
-      ) : (
-        <div className="grid items-start gap-6 sm:grid-cols-2">{rightStack}</div>
-      )}
+        <span className="font-mono text-xs lowercase text-[color:var(--faint)]">{todayLabel(referenceDate)}</span>
+      </header>
+
+      {kpis && kpis.length > 0 ? <KpiStrip items={kpis} /> : null}
+
+      <div className="grid items-start gap-[18px] lg:grid-cols-[minmax(0,1.55fr)_minmax(0,1fr)]">
+        <div className="grid content-start gap-[18px]">
+          <ReviewQueueTile reviews={reviews} bodies={reviewBodies} canApprove={canApprove} />
+          {showSchedule ? <DayTimeline blocks={scheduleBlocks} referenceDate={referenceDate} /> : null}
+        </div>
+        <div className="grid content-start gap-[18px]">
+          <AgentRosterTile agents={agents} liveInfo={liveInfo} />
+          {showTeam ? <TeamWorkPanel tasks={tasks} /> : null}
+        </div>
+      </div>
     </div>
   );
 }

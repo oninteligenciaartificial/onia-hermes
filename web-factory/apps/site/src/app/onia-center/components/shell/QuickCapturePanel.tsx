@@ -58,7 +58,7 @@ export function QuickCapturePanel() {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="h-9 rounded-md border border-border bg-card px-3.5 text-sm font-medium text-foreground"
+        className="inline-flex h-9 items-center rounded-md border border-border bg-card px-3 text-[13px] font-medium text-muted-foreground transition-colors hover:border-[color:var(--faint)] hover:text-foreground"
       >
         Notas e ideas
       </button>

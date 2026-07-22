@@ -1,5 +1,5 @@
-import { getAgentTone } from "@/app/onia-center/operating-engine";
-import type { CenterTone, OperatingAgent, OperatingAgentStatus } from "@/app/onia-center/types";
+import Link from "next/link";
+import type { OperatingAgent, OperatingAgentStatus } from "@/app/onia-center/types";
 import type { LiveAgentStatus } from "@/app/onia-center/live/live-runtime";
 import { SurfaceCard } from "../../ui/SurfaceCard";
 
@@ -15,13 +15,8 @@ const STATUS_LABEL: Record<OperatingAgentStatus, string> = {
   blocked: "Bloqueado",
 };
 
-const TONE_DOT: Record<CenterTone, string> = {
-  green: "var(--center-tone-green)",
-  yellow: "var(--center-tone-yellow)",
-  red: "var(--center-tone-red)",
-  blue: "var(--center-tone-blue)",
-  neutral: "var(--muted-foreground)",
-};
+// Cuántos agentes vivos se listan en el vistazo de Hoy antes de mandar al detalle.
+const ROSTER_LIMIT = 7;
 
 function relativeWhen(iso: string | null): string | null {
   if (!iso) {
@@ -31,10 +26,9 @@ function relativeWhen(iso: string | null): string | null {
   if (Number.isNaN(date.getTime())) {
     return iso;
   }
-  const diffMs = Date.now() - date.getTime();
-  const diffMin = Math.round(diffMs / 60000);
+  const diffMin = Math.round((Date.now() - date.getTime()) / 60000);
   if (diffMin < 1) {
-    return "hace instantes";
+    return "recién";
   }
   if (diffMin < 60) {
     return `hace ${diffMin} min`;
@@ -43,79 +37,78 @@ function relativeWhen(iso: string | null): string | null {
   if (diffH < 24) {
     return `hace ${diffH} h`;
   }
-  const diffD = Math.round(diffH / 24);
-  return `hace ${diffD} d`;
+  return `hace ${Math.round(diffH / 24)} d`;
 }
 
 export function AgentRosterTile({ agents, liveInfo }: AgentRosterTileProps) {
   const activeCount = agents.filter((agent) => liveInfo?.[agent.id]?.live === true).length;
+  const shown = agents.slice(0, ROSTER_LIMIT);
+  const overflow = agents.length - shown.length;
 
   return (
     <SurfaceCard
       title="Agentes"
-      subtitle="Tu equipo autónomo, corriendo solo"
       className="onia-center-elevated"
+      contentClassName="p-1.5"
       action={
         activeCount > 0 ? (
-          <span className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold tabular-nums onia-center-tone-green">
-            <span className="relative flex h-1.5 w-1.5">
-              <span
-                className="absolute inline-flex h-full w-full rounded-full opacity-60"
-                style={{ background: "var(--center-tone-green)" }}
-              />
-              <span
-                className="relative inline-flex h-1.5 w-1.5 rounded-full"
-                style={{ background: "var(--center-tone-green)" }}
-              />
-            </span>
+          <span className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-semibold tabular-nums onia-center-tone-green">
             {activeCount} activos 24/7
           </span>
         ) : (
-          <span className="inline-flex items-center rounded-full bg-muted px-3 py-1 text-xs font-semibold tabular-nums text-muted-foreground">
+          <span className="inline-flex items-center rounded-full bg-secondary px-2.5 py-1 text-[11px] font-semibold tabular-nums text-muted-foreground">
             {agents.length}
           </span>
         )
       }
+      footer={
+        <Link
+          href="/onia-center/next/agentes"
+          className="font-semibold text-[color:var(--accent-strong)] hover:underline"
+        >
+          {overflow > 0 ? `Ver los ${agents.length} agentes →` : "Ver detalle de agentes →"}
+        </Link>
+      }
     >
       {agents.length === 0 ? (
-        <p className="text-sm text-muted-foreground">Sin agentes visibles todavía.</p>
+        <p className="px-2.5 py-3 text-sm text-muted-foreground">Sin agentes visibles todavía.</p>
       ) : (
         <div className="grid">
-          {agents.map((agent) => {
+          {shown.map((agent) => {
             const live = liveInfo?.[agent.id];
             const isLive = live?.live === true;
-            const tone: CenterTone = isLive ? "green" : getAgentTone(agent.status);
             const lastRun = relativeWhen(live?.lastRunAt ?? null);
+            const cadence = isLive
+              ? [live?.cadenceLabel, lastRun ? `última ${lastRun}` : null].filter(Boolean).join(" · ")
+              : STATUS_LABEL[agent.status];
+
             return (
               <div
                 key={agent.id}
-                className="-mx-2 flex items-start justify-between gap-3 rounded-md px-2 py-2.5 transition-colors hover:bg-muted"
+                className="grid grid-cols-[auto_1fr_auto] items-center gap-2.5 rounded-[9px] p-2.5 transition-colors hover:bg-secondary"
               >
-                <div className="flex min-w-0 items-start gap-2.5">
-                  <span
-                    className="mt-1.5 h-2 w-2 shrink-0 rounded-full"
-                    style={{ background: TONE_DOT[tone] }}
-                    aria-hidden="true"
-                  />
-                  <div className="min-w-0">
-                    <p className="text-[13px] font-medium text-foreground">{agent.name}</p>
-                    <p className="mt-0.5 text-xs leading-relaxed text-muted-foreground">{agent.mission}</p>
-                    {isLive && (live?.cadenceLabel || lastRun) ? (
-                      <p className="mt-1 text-[11px] tabular-nums text-muted-foreground">
-                        {[live?.cadenceLabel, lastRun ? `última: ${lastRun}` : null]
-                          .filter(Boolean)
-                          .join(" · ")}
-                      </p>
-                    ) : null}
-                  </div>
+                <span
+                  className="h-2 w-2 shrink-0 rounded-full"
+                  style={
+                    isLive
+                      ? { background: "var(--primary)", boxShadow: "0 0 0 3px var(--accent-wash)" }
+                      : { background: "var(--faint)" }
+                  }
+                  aria-hidden="true"
+                />
+                <div className="min-w-0">
+                  <p className="truncate text-[13px] font-medium text-foreground">{agent.name}</p>
+                  {cadence ? (
+                    <p className="truncate font-mono text-[11.5px] text-muted-foreground">{cadence}</p>
+                  ) : null}
                 </div>
                 {isLive ? (
-                  <span className="inline-flex shrink-0 items-center rounded-full px-2.5 py-0.5 text-[11px] font-semibold onia-center-tone-green">
-                    Activo 24/7
+                  <span className="inline-flex shrink-0 items-center rounded-md px-2 py-0.5 text-[10.5px] font-semibold onia-center-tone-green">
+                    Activo
                   </span>
                 ) : (
-                  <span className="inline-flex shrink-0 items-center rounded-full bg-muted px-2.5 py-0.5 text-[11px] font-medium text-muted-foreground">
-                    {STATUS_LABEL[agent.status]}
+                  <span className="inline-flex shrink-0 items-center rounded-md border border-[color:var(--line-soft)] bg-secondary px-2 py-0.5 text-[10.5px] font-medium text-[color:var(--faint)]">
+                    Prep.
                   </span>
                 )}
               </div>
