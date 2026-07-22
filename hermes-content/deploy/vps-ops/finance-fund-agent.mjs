@@ -68,12 +68,14 @@ const FISCAL_LEGAL_BASIS = {
 // READ-ONLY: informa lo REGISTRADO, no estima ventas inexistentes (si no hay ventas -> todo en 0).
 //
 // Roster base garantizado (aunque no tengan filas todavia). actor_aliases = posibles valores de
-// actor_role_key que mapean a la persona (Camila hoy no tiene flujo de comision en income-insert;
-// se deja preparado para cuando venda -> aparecera en 0 hasta que haya cobro real).
+// actor_role_key que mapean a la persona. income-insert.mjs escribe seller_commission con
+// actor_role_key = user_key del vendedor (seller_001=Camila / seller_002=Jeronimo); esos aliases
+// hacen que su comision caiga en la persona. Sin ventas -> aparecen en 0 (dato real).
 const PERSON_ROSTER = [
   { person_key: "sergio", display_name: "Sergio", role: "Dueno / Direccion ONIA (invierte, gana el margen)", actor_aliases: ["sergio"] },
   { person_key: "arthur", display_name: "Arthur", role: "Coordinador Comercial-Operativo (trial 60d, por resultado)", actor_aliases: ["arthur"] },
   { person_key: "camila", display_name: "Camila", role: "Colaboradora Comercial - cierre (por resultado)", actor_aliases: ["camila", "seller_001"] },
+  { person_key: "jeronimo", display_name: "Jeronimo", role: "Colaborador Comercial-Operativo (por resultado)", actor_aliases: ["jeronimo", "seller_002"] },
 ];
 // payment_type que pertenecen a la EMPRESA (fondo/reserva), NO son ganancia personal de nadie.
 const COMPANY_PAYMENT_TYPES = new Set(["fund_allocation", "reserve_allocation", "nuvia_reserve", "reserva_nuvia"]);
