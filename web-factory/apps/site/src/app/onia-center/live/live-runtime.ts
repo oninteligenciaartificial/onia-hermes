@@ -88,6 +88,18 @@ export interface TaxPosture {
   notes: string;
 }
 
+// Ganancia por persona del equipo. La escribe el agente Finanzas (carril infra)
+// dentro de finance_summary.raw.earnings; el panel solo LEE. Permite mostrar
+// "cuanto lleva ganado / pendiente cada colaborador" con datos reales.
+export interface PersonEarnings {
+  personKey: string;
+  displayName: string;
+  role: string;
+  earnedBs: number;
+  pendingBs: number;
+  salesCount: number;
+}
+
 export interface FinanceSummary {
   summaryKey: string;
   periodLabel: string;
@@ -102,6 +114,7 @@ export interface FinanceSummary {
   premiumPendingBs: number;
   anomalyCount: number;
   anomalies: FinanceAnomaly[];
+  earnings: PersonEarnings[];
   summaryText: string;
   taxPosture: TaxPosture | null;
 }
@@ -120,6 +133,7 @@ type DbFinanceRow = {
   premium_pending_bs?: unknown;
   anomaly_count?: unknown;
   anomalies?: unknown;
+  raw?: unknown;
   summary_text?: string;
   tax_posture?: unknown;
 };
@@ -164,6 +178,37 @@ function mapAnomalies(value: unknown): FinanceAnomaly[] {
   });
 }
 
+// Lee finance_summary.raw.earnings: lista de ganancias por persona. Tolerante:
+// si la columna raw no existe o no trae earnings, devuelve [] y el panel muestra
+// "sin ventas aun". Los montos vienen como earned_bs/pending_bs (snake_case).
+function mapEarnings(raw: unknown): PersonEarnings[] {
+  if (!raw || typeof raw !== "object" || Array.isArray(raw)) {
+    return [];
+  }
+  const list = (raw as Record<string, unknown>).earnings;
+  if (!Array.isArray(list)) {
+    return [];
+  }
+  return list
+    .map((item) => {
+      const record = (item ?? {}) as Record<string, unknown>;
+      return {
+        personKey: typeof record.person_key === "string" ? record.person_key : "",
+        displayName:
+          typeof record.display_name === "string" && record.display_name.trim() !== ""
+            ? record.display_name
+            : typeof record.person_key === "string"
+              ? record.person_key
+              : "",
+        role: typeof record.role === "string" ? record.role : "",
+        earnedBs: toNumber(record.earned_bs),
+        pendingBs: toNumber(record.pending_bs),
+        salesCount: Math.trunc(toNumber(record.sales_count)),
+      };
+    })
+    .filter((entry) => entry.displayName !== "");
+}
+
 export async function getFinanceSummary(): Promise<FinanceSummary | null> {
   const rows = await liveRequest<DbFinanceRow[]>(
     "finance_summary?select=*&order=generated_at.desc&limit=1",
@@ -187,6 +232,7 @@ export async function getFinanceSummary(): Promise<FinanceSummary | null> {
     premiumPendingBs: toNumber(row.premium_pending_bs),
     anomalyCount: Math.trunc(toNumber(row.anomaly_count)),
     anomalies: mapAnomalies(row.anomalies),
+    earnings: mapEarnings(row.raw),
     summaryText: row.summary_text ?? "",
     taxPosture: mapTaxPosture(row.tax_posture),
   };
@@ -199,9 +245,14 @@ export async function getFinanceSummary(): Promise<FinanceSummary | null> {
 //    status conocido.
 // ---------------------------------------------------------------------------
 
+// Contrato de agente "vivo" (carril infra escribe, panel lee): un agente esta
+// activo 24/7 cuando status='ready' + raw.live=true. raw.cadence_label trae el
+// horario legible ("Lun+Jue 07:40") y raw.last_run la ultima corrida real.
 export interface LiveAgentStatus {
   status: OperatingAgentStatus;
   lastRunAt: string | null;
+  live: boolean;
+  cadenceLabel: string | null;
 }
 
 const KNOWN_STATUSES: OperatingAgentStatus[] = [
@@ -214,11 +265,25 @@ const KNOWN_STATUSES: OperatingAgentStatus[] = [
 type DbAgentRow = {
   agent_key?: string;
   status?: string;
-  raw?: { last_run?: { at?: string } } | null;
+  raw?: Record<string, unknown> | null;
 };
 
 function agentIdToKey(agentId: string): string {
   return agentId.replace(/-/g, "_");
+}
+
+// raw.last_run puede llegar como string ISO o como objeto { at }. Tolerante a
+// ambos para no romper si el contrato del carril infra cambia de forma.
+function readLastRun(raw: Record<string, unknown> | null | undefined): string | null {
+  const lastRun = raw?.last_run;
+  if (typeof lastRun === "string" && lastRun.trim() !== "") {
+    return lastRun;
+  }
+  if (lastRun && typeof lastRun === "object") {
+    const at = (lastRun as Record<string, unknown>).at;
+    return typeof at === "string" && at.trim() !== "" ? at : null;
+  }
+  return null;
 }
 
 export async function getLiveAgentStatuses(): Promise<Record<string, LiveAgentStatus>> {
@@ -235,9 +300,13 @@ export async function getLiveAgentStatuses(): Promise<Record<string, LiveAgentSt
     if (!KNOWN_STATUSES.includes(row.status as OperatingAgentStatus)) {
       continue;
     }
+    const raw = row.raw ?? null;
+    const cadence = raw?.cadence_label;
     map[row.agent_key] = {
       status: row.status as OperatingAgentStatus,
-      lastRunAt: row.raw?.last_run?.at ?? null,
+      lastRunAt: readLastRun(raw),
+      live: raw?.live === true,
+      cadenceLabel: typeof cadence === "string" && cadence.trim() !== "" ? cadence : null,
     };
   }
 
@@ -255,6 +324,40 @@ export function mergeLiveAgentStatus(
     }
     return { ...agent, status: live.status };
   });
+}
+
+// Reindexa el mapa de estados vivos por agent.id (el runtime lo guarda por
+// agent_key con guiones bajos). Lo consumen la vista Hoy (roster) y Agentes
+// (detalle) para mostrar "Activo 24/7", cadencia y ultima corrida sin repetir
+// la conversion de clave en cada componente.
+export function selectLiveInfoByAgentId(
+  agents: OperatingAgent[],
+  liveStatuses: Record<string, LiveAgentStatus>,
+): Record<string, LiveAgentStatus> {
+  const out: Record<string, LiveAgentStatus> = {};
+  for (const agent of agents) {
+    const live = liveStatuses[agentIdToKey(agent.id)];
+    if (live) {
+      out[agent.id] = live;
+    }
+  }
+  return out;
+}
+
+// Cuenta los agentes realmente activos 24/7 (contrato live=true). Si el carril
+// infra aun no marca `live`, cae a contar los que estan en estado 'ready' para
+// no mostrar 0 cuando de hecho hay agentes corriendo por cron.
+export function countActiveAgents(
+  agents: OperatingAgent[],
+  liveStatuses: Record<string, LiveAgentStatus>,
+): number {
+  const liveCount = agents.filter(
+    (agent) => liveStatuses[agentIdToKey(agent.id)]?.live === true,
+  ).length;
+  if (liveCount > 0) {
+    return liveCount;
+  }
+  return agents.filter((agent) => agent.status === "ready").length;
 }
 
 // ---------------------------------------------------------------------------

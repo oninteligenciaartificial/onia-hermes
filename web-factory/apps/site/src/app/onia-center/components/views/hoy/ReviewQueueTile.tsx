@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import type { RuntimeReview } from "@/lib/onia-center-store";
 import type { ReviewBody } from "@/app/onia-center/live/live-runtime";
 import { Badge } from "../../ui/Badge";
@@ -21,8 +22,20 @@ function kindLabel(body: ReviewBody): string {
   return body.kind === "content_carousel" ? "carrusel" : "guion";
 }
 
+// Un campo etiquetado del guion: rótulo pequeño en mayúsculas + contenido con
+// aire. Da jerarquía clara (gancho vs desarrollo vs CTA) en vez de un bloque denso.
+function Field({ label, children }: { label: string; children: ReactNode }) {
+  return (
+    <div className="grid gap-1">
+      <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">{label}</p>
+      {children}
+    </div>
+  );
+}
+
 function ReviewBodyDetails({ body }: { body: ReviewBody }) {
   const label = body.kind === "content_carousel" ? "Ver carrusel" : "Ver guion";
+  const meta = [body.format, body.pillar].filter(Boolean).join(" · ");
 
   return (
     <details className="group mt-3">
@@ -41,29 +54,54 @@ function ReviewBodyDetails({ body }: { body: ReviewBody }) {
         </svg>
         {label}
       </summary>
-      <div className="mt-2.5 grid gap-2 rounded-md bg-muted/50 p-3 text-sm">
+      <div className="mt-2.5 grid gap-3.5 rounded-lg border border-border bg-muted/40 p-4">
         {body.kind === "content_script" ? (
           <>
-            {body.format || body.pillar ? (
-              <p className="text-xs text-muted-foreground">
-                {[body.format, body.pillar].filter(Boolean).join(" · ")}
-              </p>
+            {meta ? (
+              <p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">{meta}</p>
             ) : null}
-            {body.hook ? <p className="font-medium">{body.hook}</p> : null}
-            {body.body ? <p className="whitespace-pre-line leading-relaxed">{body.body}</p> : null}
-            {body.cta ? <p className="text-xs text-muted-foreground">CTA: {body.cta}</p> : null}
+            {body.hook ? (
+              <Field label="Gancho">
+                <p className="text-[15px] font-semibold leading-snug text-foreground">{body.hook}</p>
+              </Field>
+            ) : null}
+            {body.body ? (
+              <Field label="Desarrollo">
+                <p className="whitespace-pre-line text-sm leading-relaxed text-foreground/90">{body.body}</p>
+              </Field>
+            ) : null}
+            {body.cta ? (
+              <Field label="CTA">
+                <p className="text-sm font-medium leading-relaxed text-foreground">{body.cta}</p>
+              </Field>
+            ) : null}
           </>
         ) : (
           <>
-            {body.title ? <p className="font-medium">{body.title}</p> : null}
-            {body.slides && body.slides.length > 0 ? (
-              <ol className="grid list-decimal gap-1 pl-5 leading-relaxed">
-                {body.slides.map((slide, index) => (
-                  <li key={index}>{slide}</li>
-                ))}
-              </ol>
+            {body.title ? (
+              <Field label="Título">
+                <p className="text-[15px] font-semibold leading-snug text-foreground">{body.title}</p>
+              </Field>
             ) : null}
-            {body.cta ? <p className="text-xs text-muted-foreground">CTA: {body.cta}</p> : null}
+            {body.slides && body.slides.length > 0 ? (
+              <Field label={`Láminas (${body.slides.length})`}>
+                <ol className="grid gap-2">
+                  {body.slides.map((slide, index) => (
+                    <li key={index} className="flex gap-2.5">
+                      <span className="grid h-5 w-5 shrink-0 place-items-center rounded-full bg-background text-[11px] font-semibold tabular-nums text-muted-foreground">
+                        {index + 1}
+                      </span>
+                      <span className="text-sm leading-relaxed text-foreground/90">{slide}</span>
+                    </li>
+                  ))}
+                </ol>
+              </Field>
+            ) : null}
+            {body.cta ? (
+              <Field label="CTA">
+                <p className="text-sm font-medium leading-relaxed text-foreground">{body.cta}</p>
+              </Field>
+            ) : null}
           </>
         )}
       </div>
@@ -73,8 +111,7 @@ function ReviewBodyDetails({ body }: { body: ReviewBody }) {
 
 export function ReviewQueueTile({ reviews, bodies, canApprove }: ReviewQueueTileProps) {
   const pending = reviews.filter((review) => review.status === "pendiente");
-  const countClass =
-    pending.length > 0 ? "onia-center-tone-yellow" : "onia-center-tone-neutral";
+  const countClass = pending.length > 0 ? "onia-center-tone-yellow" : "onia-center-tone-neutral";
 
   return (
     <SurfaceCard

@@ -9,7 +9,7 @@ import {
   type RuntimeTask,
   type TeamMember,
 } from "@/lib/onia-center-store";
-import { getOniaCenterActor } from "@/lib/onia-center-auth";
+import { canActorSeeFinance, getOniaCenterActor } from "@/lib/onia-center-auth";
 import { AppShell } from "@/app/onia-center/components/shell/AppShell";
 import { NegocioView } from "@/app/onia-center/components/views/negocio/NegocioView";
 
@@ -32,6 +32,7 @@ export default async function NegocioPage() {
   let leads: RuntimeLead[] | undefined;
   let notes: RuntimeNote[] | undefined;
   let team: TeamMember[] | undefined;
+  let canSeeFinance = true;
 
   // Personas reales del equipo + scorecard con datos reales del runtime. Si
   // falta Supabase, sesion o la lectura falla, el panel cae al roster estatico y
@@ -51,6 +52,7 @@ export default async function NegocioPage() {
     try {
       const auth = await getOniaCenterActor(await buildAuthRequest());
       if (auth.ok) {
+        canSeeFinance = canActorSeeFinance(auth.actor);
         const runtime = filterOniaCenterRuntimeForActor(await getOniaCenterRuntime(), auth.actor);
         tasks = runtime.tasks;
         leads = runtime.leads;
@@ -62,7 +64,7 @@ export default async function NegocioPage() {
   }
 
   return (
-    <AppShell>
+    <AppShell canSeeFinance={canSeeFinance}>
       <NegocioView tasks={tasks} leads={leads} notes={notes} team={team} />
     </AppShell>
   );

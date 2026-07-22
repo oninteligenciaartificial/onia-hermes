@@ -54,9 +54,10 @@ export function AgentTriggerButton({ agentId, agentName }: AgentTriggerButtonPro
         type="button"
         disabled={busy}
         onClick={trigger}
-        className="h-7 rounded-md border border-border bg-card px-2.5 text-xs font-medium text-foreground transition-colors hover:bg-secondary disabled:opacity-50"
+        title="Opcional: el agente ya corre solo en su horario"
+        className="inline-flex h-8 items-center rounded-md border border-border bg-card px-3 text-xs font-medium text-foreground transition-colors hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/60 focus-visible:ring-offset-1 focus-visible:ring-offset-card disabled:pointer-events-none disabled:opacity-50"
       >
-        {busy ? "Disparando..." : "Disparar"}
+        {busy ? "Corriendo…" : "Correr ahora"}
       </button>
       {feedback ? <span className={`text-xs ${toneClass}`}>{feedback.text}</span> : null}
     </div>

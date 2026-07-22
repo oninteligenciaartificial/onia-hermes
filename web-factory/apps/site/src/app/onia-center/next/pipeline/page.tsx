@@ -7,7 +7,7 @@ import {
   isOniaCenterConfigured,
   type TeamMember,
 } from "@/lib/onia-center-store";
-import { getOniaCenterActor, isSergio } from "@/lib/onia-center-auth";
+import { canActorSeeFinance, getOniaCenterActor, isSergio } from "@/lib/onia-center-auth";
 import { AppShell } from "@/app/onia-center/components/shell/AppShell";
 import { PipelineView } from "@/app/onia-center/components/views/pipeline/PipelineView";
 import { EmptyState } from "@/app/onia-center/components/ui/EmptyState";
@@ -47,6 +47,8 @@ export default async function PipelinePage() {
     );
   }
 
+  const canSeeFinance = canActorSeeFinance(auth.actor);
+
   try {
     const runtime = filterOniaCenterRuntimeForActor(await getOniaCenterRuntime(), auth.actor);
 
@@ -63,7 +65,7 @@ export default async function PipelinePage() {
     }
 
     return (
-      <AppShell>
+      <AppShell canSeeFinance={canSeeFinance}>
         <PipelineView
           leads={runtime.leads}
           tasks={runtime.tasks}
@@ -76,7 +78,7 @@ export default async function PipelinePage() {
   } catch (error) {
     const message = error instanceof Error ? error.message : "Error leyendo ONIA Center.";
     return (
-      <AppShell>
+      <AppShell canSeeFinance={canSeeFinance}>
         <EmptyState title="No se pudo cargar el pipeline" body={message} />
       </AppShell>
     );
