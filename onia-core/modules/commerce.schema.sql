@@ -141,6 +141,10 @@ create table if not exists onia_commerce_quotes (
   total numeric,
   work_item_id text,
   price_list_id text,
+  sent_at timestamptz,
+  accepted_at timestamptz,
+  rejected_at timestamptz,
+  expired_at timestamptz,
   metadata jsonb not null default '{}'::jsonb,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
@@ -183,6 +187,9 @@ create table if not exists onia_commerce_orders (
   warehouse_id text,
   total numeric,
   work_item_id text,
+  confirmed_at timestamptz,
+  fulfilled_at timestamptz,
+  cancelled_at timestamptz,
   metadata jsonb not null default '{}'::jsonb,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()

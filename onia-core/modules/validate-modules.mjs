@@ -30,6 +30,7 @@ function assert(condition, message) {
 
 const coreEntityIds = new Set(contract.entities.map((entity) => entity.id));
 const capabilityById = new Map(contract.capabilities.map((capability) => [capability.id, capability]));
+const moduleCapabilityById = new Map((contract.moduleCapabilities ?? []).map((mc) => [mc.id, mc]));
 const trackIds = new Set(contract.verticalTracks.map((track) => track.id));
 const moduleLayers = new Set(["activatable_module", "vertical_extension"]);
 
@@ -72,6 +73,16 @@ for (const module of modules) {
       !capabilityById.has(capabilityId),
       `${label} provides ${capabilityId} which already exists as a core capability (use activatesCapabilities)`,
     );
+    // #20: la capability provista debe estar registrada en contract.moduleCapabilities
+    // (visible al contrato para que un track la pueda requerir), con el modulo correcto.
+    const registered = moduleCapabilityById.get(capabilityId);
+    assert(registered, `${label} provee ${capabilityId} pero NO esta registrada en contract.moduleCapabilities`);
+    if (registered) {
+      assert(
+        registered.providedByModule === module.module,
+        `${label} provee ${capabilityId} pero contract.moduleCapabilities dice que la provee ${registered.providedByModule}`,
+      );
+    }
   }
 
   // Dependencias al core: entidades reales.
@@ -133,6 +144,14 @@ for (const module of modules) {
       }
     }
   }
+}
+
+// #20 (bidireccional): cada moduleCapability registrada en el contrato debe ser
+// provista por un modulo real (si no, el registro quedo huerfano).
+const providedByAnyModule = new Set();
+for (const mod of modules) for (const cid of mod.providesCapabilities ?? []) providedByAnyModule.add(cid);
+for (const mc of contract.moduleCapabilities ?? []) {
+  assert(providedByAnyModule.has(mc.id), `contract.moduleCapabilities registra ${mc.id} pero ningun modulo lo provee`);
 }
 
 if (errors.length > 0) {

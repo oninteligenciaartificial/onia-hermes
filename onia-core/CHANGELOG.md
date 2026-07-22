@@ -1,5 +1,56 @@
 # ONIA Core Changelog
 
+## 0.7.1 + invoicing CAEB por item + datos del comprador — 2026-07-22 (perfeccionar el core, fiscal Bolivia)
+
+ENFOQUE: CORE. ULTIMO item de la columna fiscal del core (preparacion de la emision SIAT, Capa 2). Campos confirmados 2026-07-22 contra la pagina oficial del XML/XSD de la Factura de Compra y Venta (siatinfo.impuestos.gob.bo).
+- **Datos del comprador en la factura** (`validateBuyer`/`assertValidBuyer` + `BUYER_DOC_TYPES`): razon social, tipo de documento (`codigoTipoDocumentoIdentidad` 1=CI / 2=CEX / 3=PAS / 4=OD / 5=NIT), numero, complemento SEGIP, codigo de cliente. Nuevos campos `buyerName`/`buyerDocType`/`buyerDocNumber`/`buyerDocComplement`/`buyerCode` en la entidad `invoice` + schema. Los codigos de tipo de documento son una PARAMETRICA de sincronizacion DIARIA del SIAT (fuente autoritativa = web service, no hardcode).
+- **CAEB + homologacion SIN por item** (`validateInvoiceLineHomologation`, RND 102500000018): cada linea homologa al catalogo del SIN -> `codigoProductoSin` (generico del SIN), `codigoProducto` (interno), `actividadEconomica` (CAEB del Padron Nacional POR ITEM), `unidadMedida` (parametrica; 58 = servicio -> cantidad 1). Nuevos campos `sinProductCode`/`productCode`/`economicActivityCode`/`unitMeasureCode` en `invoice_line` + schema. `invoicing` -> v0.2.0.
+- El modulo VALIDA estructura, no emite ni homologa (la homologacion la hace el contribuyente contra el catalogo sincronizado; la emision real sigue `external_gate` del core). +5 tests. Aditivo, contrato intacto. **465 tests, 4 validadores verdes.** Con esto la columna fiscal del core queda al 100%.
+
+## 0.7.1 + accounting retenciones: IT en Form. 410 aparte — 2026-07-22 (perfeccionar el core, fiscal Bolivia)
+
+ENFOQUE: CORE. Correccion de exactitud fiscal en la atribucion de formularios de retencion (las tasas y funciones ya eran correctas; no cambia ningun calculo). Verificado 2026-07-22 contra fuente oficial.
+- **El IT (3%) de toda retencion combinada se declara en el Formulario 410, SEPARADO** del formulario del IUE (570) o RC-IVA (604). El config lo lumpeaba en un solo numero de formulario: bienes 8% -> 5% Form. 570 (IUE) + 3% Form. 410 (IT); alquiler/servicios 16% -> 13% Form. 604 (RC-IVA) + 3% Form. 410 (IT). Ahora cada retencion nombra AMBOS formularios (`iueForm`/`rcIvaForm` + `itForm`).
+- **IUE-BE confirmado en Form. 530 v3** (no 550): la renta de fuente boliviana se consolida en el 530 v3 (Seccion D obligatoria) y el pago individual va por la Boleta 3050 v3; el 551 v3 es para actividades parcialmente realizadas en el pais. El "530 vs 550" que arrastraba el research era falsa alarma — el 530 v3 es el correcto.
+- Fuentes: siatinfo.impuestos.gob.bo (Form. 570 IUE Retenciones, Form. 530 IUE-BE) + boliviaimpuestos.com (Form. 410 IT y tasas combinadas bienes 8% / servicios-alquiler 16%). +1 test (guard anti-regresion). Aditivo, sin cambio de calculo. **460 tests, 4 validadores verdes.**
+
+## 0.7.1 + accounting estados financieros + cierre de gestion — 2026-07-22 (perfeccionar el core, fiscal Bolivia)
+
+ENFOQUE: CORE. Fiscal P1 de `accounting`: completa los estados financieros basicos y el cierre de gestion. Todo se DERIVA de las lineas de asiento — sin cifras/fechas fiscales inciertas.
+- **Estado de Evolucion del Patrimonio (EEP)** (`equityStatement`) y **Estado de Flujo de Efectivo** (`cashFlowStatement`, metodo directo; `cashFlowIndirect` para la conciliacion operativa por el metodo indirecto) — eran los 2 estados financieros basicos que FALTABAN (ya estaban `balanceSheet` + `incomeStatement`). Con esto el modulo cubre los 4 estados computables exigidos en Bolivia (Codigo de Comercio DL 14379/1977 Art. 36-65 + Normas de Contabilidad); las notas son narrativas.
+- **Asiento de cierre de gestion** (`buildClosingEntry`) — cancela ingresos/gastos/costos contra la cuenta de resultado del ejercicio (utilidad al haber, perdida al debe); cuadra por construccion, reutiliza `ledgerByAccount`.
+- **Bloqueo de periodo cerrado** (`isPeriodClosed`/`assertPeriodOpen`/`canPostToPeriod`/`assertCanPost`) — un periodo/gestion cerrado, o una fecha fuera de su rango, ya no admite asientos nuevos (invariante que faltaba: el producto no puede contabilizar en un periodo cerrado por error).
+- +6 tests. Aditivo, contrato intacto. **459 tests, 4 validadores verdes.**
+
+## 0.7.1 + invoicing TCO moneda extranjera — 2026-07-21 (perfeccionar el core, fiscal Bolivia)
+
+ENFOQUE: CORE. Fiscal P1 mas reciente (RND 102600000026, 17-jul-2026).
+- **`invoicing`: TCO del BCB en facturas de moneda extranjera** (`invoiceTotalInBob`) — desde el regimen cambiario flexible (RM 245/2026) el oficial FLOTA, y el SIAT EXIGE emitir las facturas en moneda extranjera con el TCO oficial diario del BCB (lo que se declara es el importe en Bs). Reusa `fx.officialRate` (el fix del 6.96 fijo hecho antes); factura en BOB -> TCO 1; sin TCO del dia cae al fallback historico. Nuevos campos `tcoUsed`/`bobTotal` en la entidad `invoice` + schema.
+- +3 tests. Aditivo, contrato intacto. **453 tests, 4 validadores verdes.**
+
+## 0.7.1 + payroll fiscal P1 — 2026-07-21 (perfeccionar el core, fiscal Bolivia)
+
+ENFOQUE: CORE. Ajustes fiscales de payroll (los datos ya estaban en el config; faltaba aplicarlos y verificar).
+- **Tope de cotizacion 60 SMN** (`cotizableBase`) — en sueldos altos los aportes AFP se calculan sobre 60 SMN (Bs 198.000), no sobre el total ganado. Ley 065 de Pensiones.
+- **Credito RC-IVA "Hecho en Bolivia" +20%** (`computeHechoEnBoliviaCredit`, DS 5503 dic-2025) — el credito normal (13%) sube a 15,6% efectivo para facturas de productos/servicios hechos en Bolivia, vigente hasta 31-dic-2027.
+- **Aporte solidario patronal 3,5% CONFIRMADO** (verificado 2026-07-22: total patronal 7,21% = 3,5 solidario + 1,71 riesgo profesional + 2,0 pro-vivienda; fuente misalariobo may-2026) — resuelta la incertidumbre "3% vs 3,5%" que arrastraba el config. Sin cambio de calculo (el 3,5% era correcto).
+- +3 tests. Aditivo, contrato intacto. **450 tests, 4 validadores verdes.**
+
+## 0.7.1 + moduleCapabilities registry — 2026-07-21 (perfeccionar el core, visibilidad de caps de modulo)
+
+P0 #5 (ultimo del core) de la ola "perfeccionar los universales". ENFOQUE: CORE (contrato + validadores), no un producto.
+- **Registro `moduleCapabilities` en `contract.json`** — las 7 capabilities que PROVEEN los modulos (accounting, tax_bolivia, invoicing, payroll, automation, import_costing, dental_clinical) ahora son VISIBLES al contrato. Antes eran invisibles: un track NO podia declarar que las necesitaba (validate.mjs exigia que `requiredCapabilityIds` estuviera en `contract.capabilities`, y las provistas no lo estan). Es el hueco que dejo en evidencia el modulo `imports`.
+- **Nuevo campo opcional `requiredModuleCapabilityIds` en los tracks** — `proveegest-electrico` ya declara `import_costing` + accounting + tax_bolivia + invoicing + payroll + automation (cierra el gap concreto; el campo queda disponible para el resto de los tracks).
+- **Validacion BIDIRECCIONAL** (aditiva): `validate.mjs` valida que cada `requiredModuleCapabilityIds` de un track exista en el registro y que las module-caps no colisionen con las del core; `validate-modules.mjs` valida que cada `providesCapabilities` de un modulo este registrada con el modulo correcto, y que cada registro sea provisto por un modulo real.
+- +3 tests. Aditivo, el contrato no rompe (solo campos nuevos). **447 tests, 4 validadores verdes.**
+
+## 0.7.1 + commerce estados + knowledge logica — 2026-07-21 (perfeccionar el core, hardening)
+
+P0 #3-4 de la ola "perfeccionar los universales" (construidos en PARALELO, worktrees aislados, integrados central).
+- **`commerce` 0.3.0: maquina de estados** de cotizacion (`draft→sent→accepted|rejected|expired`) y pedido (`draft→confirmed→fulfilled|cancelled`) — antes `status` era string libre sin invariantes y cada producto lo reimplementaba. Nuevas `canTransitionQuote`/`applyQuoteTransition`, `canTransitionOrder`/`applyOrderTransition`, `acceptQuoteToOrder`, `isQuoteExpired`, `paymentBalance` (cuentas por cobrar). +28 tests.
+- **`knowledge` 0.2.0: logica pura + integridad de arbol** — era el UNICO modulo sin logica ni tests. `knowledge.logic.mjs`: maquina de estados del articulo (`draft→published→archived`), **integridad de la taxonomia** (`wouldCreateCycle`/`assertAcyclic`: una categoria no puede ser su propio ancestro — cerraba el hueco de ciclos silenciosos), `slugify`, `searchArticles` (ranking lexico; embeddings siguen external). +28 tests.
+- Ambos aditivos, contrato intacto. **444 tests, 4 validadores verdes.**
+
 ## 0.7.1 + automation idempotencia + triggers — 2026-07-21 (perfeccionar el core, motor de automatizacion)
 
 P0 #2 de la ola "perfeccionar los universales" (habilita las automatizaciones de UX).

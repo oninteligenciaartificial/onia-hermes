@@ -6,7 +6,12 @@ import {
   isOniaCenterConfigured,
   type RuntimeReview,
 } from "@/lib/onia-center-store";
-import { canActorSeeScope, getOniaCenterActor, isSergio } from "@/lib/onia-center-auth";
+import {
+  canActorSeeFinance,
+  canActorSeeScope,
+  getOniaCenterActor,
+  isSergio,
+} from "@/lib/onia-center-auth";
 import type { VisibilityScope } from "@/app/onia-center/types";
 import { getVisibleOperatingAgents } from "@/app/onia-center/operating-engine";
 import {
@@ -14,6 +19,7 @@ import {
   getIntegrationConnectors,
   getLiveAgentStatuses,
   mergeLiveAgentStatus,
+  selectLiveInfoByAgentId,
 } from "@/app/onia-center/live/live-runtime";
 import { AppShell } from "@/app/onia-center/components/shell/AppShell";
 import { AgentesView } from "@/app/onia-center/components/views/agentes/AgentesView";
@@ -54,12 +60,10 @@ export default async function AgentesPage() {
     );
   }
 
+  const canSeeFinance = canActorSeeFinance(auth.actor);
   const liveStatuses = await getLiveAgentStatuses();
   const agents = mergeLiveAgentStatus(getVisibleOperatingAgents(auth.actor.role), liveStatuses);
-  const lastRuns: Record<string, string | null> = {};
-  for (const agent of agents) {
-    lastRuns[agent.id] = liveStatuses[agent.id.replace(/-/g, "_")]?.lastRunAt ?? null;
-  }
+  const liveInfo = selectLiveInfoByAgentId(agents, liveStatuses);
 
   let reviews: RuntimeReview[] = [];
   try {
@@ -79,10 +83,10 @@ export default async function AgentesPage() {
   );
 
   return (
-    <AppShell>
+    <AppShell canSeeFinance={canSeeFinance} actorName={auth.actor.displayName}>
       <AgentesView
         agents={agents}
-        lastRuns={lastRuns}
+        liveInfo={liveInfo}
         reviews={reviews}
         integrations={integrations}
         feed={feed}

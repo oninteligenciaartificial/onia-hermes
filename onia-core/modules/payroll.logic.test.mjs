@@ -11,6 +11,8 @@ import {
   TERMINATION_REASONS,
   buildTerminationSettlement,
   buildTotalGanado,
+  computeHechoEnBoliviaCredit,
+  cotizableBase,
   computeSeniorityBonus,
   seniorityBonusPct,
   computeAfpLaboral,
@@ -73,6 +75,25 @@ describe("bono de antiguedad (DS 21060 Art. 60)", () => {
     const afpSinBono = computeAfpLaboral(5000, config.afpLaboralBreakdown).total;
     assert.ok(afpConBono > afpSinBono, "el aporte se calcula sobre el total CON bono");
     assert.equal(afpConBono, 773.92);
+  });
+});
+
+describe("tope de cotizacion (60 SMN) + credito Hecho en Bolivia (DS 5503)", () => {
+  it("cotizableBase topa el total ganado a 60 SMN (198000); sueldo normal sin tope", () => {
+    const opts = { smnBob: config.smnBob, maxMultiplier: config.maxCotizableSmnMultiplier };
+    assert.equal(cotizableBase(6000, opts), 6000);
+    assert.equal(cotizableBase(250000, opts), 198000);
+  });
+
+  it("computeHechoEnBoliviaCredit aplica el +20% (DS 5503): 1000 x 13% x 1.2 = 156", () => {
+    const { rate, hechoEnBoliviaCreditBonusRate } = config.rcIva;
+    assert.equal(computeHechoEnBoliviaCredit(1000, { rate, bonusRate: hechoEnBoliviaCreditBonusRate }), 156);
+  });
+
+  it("el credito Hecho en Bolivia reduce la retencion RC-IVA neta", () => {
+    const { rate, hechoEnBoliviaCreditBonusRate } = config.rcIva;
+    const credito = computeHechoEnBoliviaCredit(1000, { rate, bonusRate: hechoEnBoliviaCreditBonusRate });
+    assert.equal(computeRcIvaRetencionNeta(200, 20, credito), 24);
   });
 });
 

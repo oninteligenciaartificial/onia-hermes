@@ -31,6 +31,8 @@ create table if not exists onia_knowledge_articles (
   author_id text not null,
   category_id text,
   tags jsonb not null default '[]'::jsonb,
+  slug text,
+  published_at timestamptz,
   related_entity_type text,
   related_entity_id text,
   metadata jsonb not null default '{}'::jsonb,
@@ -43,6 +45,9 @@ create index if not exists onia_knowledge_articles_status_idx
 
 create index if not exists onia_knowledge_articles_category_idx
   on onia_knowledge_articles (organization_id, category_id);
+
+create index if not exists onia_knowledge_articles_slug_idx
+  on onia_knowledge_articles (organization_id, slug);
 
 create index if not exists onia_knowledge_articles_related_idx
   on onia_knowledge_articles (organization_id, related_entity_type, related_entity_id);

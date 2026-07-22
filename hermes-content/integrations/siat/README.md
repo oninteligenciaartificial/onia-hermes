@@ -27,21 +27,61 @@ arquitectura, cronograma). Esto es el arranque tecnico del servicio.
   nuestro, NO depende de los WSDLs/XSD del SIN. `buildInvoicePayload` normaliza y
   deriva totales; `validateInvoicePayload` chequea presencia, items, homologacion,
   coherencia de totales y formato basico. Le da a los equipos de producto un
-  objetivo concreto (que enviar). 13 tests. Total emisor: 32 tests.
+  objetivo concreto (que enviar). 13 tests.
+- `src/cuf.mjs` — **generador del CUF VERIFICADO contra el Anexo Tecnico oficial**
+  (siatinfo.impuestos.gob.bo, verificado 2026-07-22). Resuelve el flag que
+  arrastraba el core: el numero de factura es de **10 digitos** (no 8) y el CUF
+  final concatena el **codigo de control del CUFD**. Pasos oficiales: payload de
+  53 digitos (NIT 13 + fechaHora 17 + sucursal 4 + modalidad 1 + tipoEmision 1 +
+  tipoFactura 1 + tipoDocSector 2 + nroFactura 10 + PdV 4) -> digito Modulo 11
+  (2..9 ciclico, `suma % 11`, 10->1/11->0) -> base 16 -> + codigoControl. El
+  Modulo 11 esta anclado al **ejemplo oficial del SIAT** ("12345" -> 6) como test
+  dorado. 13 tests.
+- `src/xml-builder.mjs` — **builder del XML de la factura de compra-venta +
+  huella SHA-256**. Estructura VERIFICADA 2026-07-22 contra la pagina oficial del
+  XML/XSD: 30 campos de `<cabecera>` + 11 de `<detalle>` EN ORDEN (el XSD es
+  sequence-sensitive), con manejo correcto de nillables (`<campo xsi:nil="true"/>`
+  para opcionales vacios, gotcha del SIAT). `buildInvoiceXml` arma el documento
+  por modalidad (raiz computarizada/electronica) y `sha256Hex` da la huella
+  (anclada al vector conocido de "abc"). 12 tests.
+- `src/tenant-registry.mjs` — **registro MULTI-TENANT** (por organizacion): NIT,
+  codigoSistema, sucursales, puntos de venta, metadata del token delegado
+  (referencia al vault, NUNCA el valor en claro) y catalogo homologado.
+  `validateTenantReady` decide si un tenant puede emitir. Puro/inmutable. 40 tests.
+- `src/scheduler.mjs` — renovacion de **CUFD** (diario, 24h) y **CUIS** (renovable
+  5 dias antes de vencer); fechas siempre como parametro. 28 tests.
+- `src/contingencia.mjs` — **modo offline**: caida del SIN -> evento significativo
+  -> paquetes <=500 -> reenvio 48h; clasifica estados 901/904/908. 30 tests.
+- `src/soap-client.mjs` — **capa PURA del cliente SOAP**: builders de envelope
+  (CUIS/CUFD/recepcion/anulacion/verificarComunicacion) + parser de respuesta
+  tolerante. Operaciones y codigos VERIFICADOS 2026-07-22 contra los **WSDL v2 del
+  piloto** + doc oficial: `codigoAmbiente` 1=prod/2=piloto (al reves de lo
+  intuitivo), `codigoModalidad` 2=computarizada, archivo gzip+base64, `hashArchivo`
+  SHA-256. Auth por header HTTP `Authorization: Token X` (NO en el SOAP). El
+  transporte HTTP real queda fuera (capa aparte, necesita credenciales del piloto).
+  Los nombres exactos de wrapper/namespace van `[VERIFICAR]` contra el WSDL de tipos.
+  29 tests. **Total emisor: 184 tests.**
 
 **Pendiente (necesita NIT / ambiente piloto / Anexo Tecnico oficial):**
-- Cliente SOAP al SIN (CUIS por sistema, CUFD diario, recepcion, validacion,
-  anulacion) contra `pilotosiatservicios.impuestos.gob.bo`.
-- Builder XML por tipo de documento sector + validacion XSD + hash SHA-256
-  (computarizada) / firma XMLDSig (electronica). **Reusa el CUF del core**
-  (`onia-core/modules/invoicing.logic.mjs`: `buildCuf`/`mod11CheckDigit`/
-  `buildQrUrl`) — que HOY tiene advertencias explicitas: el ancho de
-  `invoiceNumber` (8 vs 10 segun la fuente) y el algoritmo exacto de Modulo 11
-  no estan 100% confirmados contra `GENERACION-CUF.pdf`. NO usar para emitir un
-  CUF real sin verificar el Anexo. Portarlo con la receta anti-drift
-  (`ONIA_CORE_LOGIC_PORTING_RECIPE_2026.md`).
-- Tenant registry (NIT, tokens delegados cifrados, sucursales, puntos de venta,
-  catalogo homologado por organizacion) + scheduler CUFD/CUIS + contingencia.
+- **Transporte HTTP** del cliente SOAP (POST del envelope + header
+  `Authorization: Token` + timeouts/reintentos) contra
+  `pilotosiatservicios.impuestos.gob.bo/v2` — necesita el token delegado del
+  piloto. La capa PURA (envelopes + parser de respuesta) ya esta lista en
+  `src/soap-client.mjs`; solo falta enchufarle la red y las credenciales.
+- Confirmar los `[VERIFICAR]` del SOAP (nombre exacto del wrapper del DTO,
+  targetNamespace por servicio, SOAP 1.1 vs 1.2) contra el WSDL de tipos
+  importado del piloto (`?wsdl=ServicioFacturacion.wsdl`) — devolvio 503
+  intermitente en la investigacion; reintentar.
+- Validacion del XML contra el **XSD oficial descargado** (confirmar el nombre
+  exacto del elemento raiz computarizada vs electronica y los tipos por campo) +
+  **firma XMLDSig** para la modalidad electronica en linea (la computarizada usa
+  solo la huella SHA-256, ya lista). El XML se arma con el **CUF verificado del
+  emisor** (`src/cuf.mjs`), no con el `buildCuf` de referencia del core.
+  Descargar el XSD del piloto y correr una validacion real.
+- **Store de catalogos sincronizados** (parametricas: productos/servicios,
+  unidades de medida, tipos de documento, leyendas, motivos de anulacion) —
+  sincronizacion diaria por web service (limite 1000 requests/dia). El tenant
+  registry, el scheduler CUFD/CUIS y la contingencia YA estan listos (pura logica).
 
 ## Bloqueo #1 (Sergio) — AVANZANDO 2026-07-08
 

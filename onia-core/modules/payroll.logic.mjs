@@ -72,6 +72,17 @@ export function computeCnsPatronal(totalGanado, rate) {
   return round2(Number(totalGanado ?? 0) * rate);
 }
 
+/**
+ * Base cotizable a la Gestora: el total ganado TOPADO a maxMultiplier x SMN (tope de
+ * cotizacion, Ley 065 de Pensiones = 60 SMN). En sueldos altos los aportes AFP se
+ * calculan sobre este tope, NO sobre el total. Aplicar ANTES de computeAfpLaboral/Patronal.
+ */
+export function cotizableBase(totalGanado, { smnBob, maxMultiplier } = {}) {
+  const total = Number(totalGanado ?? 0);
+  const cap = Number(smnBob ?? 0) * Number(maxMultiplier ?? 0);
+  return cap > 0 && total > cap ? round2(cap) : round2(total);
+}
+
 // --- Bono de antiguedad y total ganado ---------------------------------------
 
 /**
@@ -126,6 +137,17 @@ export function computeRcIvaRetencionBruta(base, rate = 0.13) {
 /** Compensacion automatica sin facturas: N x SMN x alicuota (N reducido de 2 a 1 por el DS 5383, mayo 2025). */
 export function computeRcIvaCompensacionAutomatica(smnBob, multiplier = 1, rate = 0.13) {
   return round2(Number(smnBob ?? 0) * multiplier * rate);
+}
+
+/**
+ * Credito RC-IVA por facturas "Hecho en Bolivia" (DS 5503, dic-2025): el credito normal
+ * (rate del monto) se incrementa un bonusRate (20%) -> 15.6% efectivo, solo para facturas
+ * de productos/servicios hechos en Bolivia. Vigente hasta 31-dic-2027. rate y bonusRate
+ * son datos del config (rcIva.rate, rcIva.hechoEnBoliviaCreditBonusRate). El resultado se
+ * suma al creditoFacturas que entra a computeRcIvaRetencionNeta.
+ */
+export function computeHechoEnBoliviaCredit(facturaAmount, { rate = 0.13, bonusRate = 0.2 } = {}) {
+  return round2(Number(facturaAmount ?? 0) * Number(rate ?? 0) * (1 + Number(bonusRate ?? 0)));
 }
 
 /** Retencion neta = bruta - compensaciones (automatica + credito de facturas), nunca negativa. */

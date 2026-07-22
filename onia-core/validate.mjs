@@ -62,6 +62,15 @@ assertUnique(contract.distributionTargets.map((target) => ({ id: target.projectI
 const questionIds = new Set(contract.questions.map((question) => question.id));
 const entityIds = new Set(contract.entities.map((entity) => entity.id));
 const capabilityIds = new Set(contract.capabilities.map((capability) => capability.id));
+// Capabilities que PROVEEN los modulos (fuera del core congelado), registradas para
+// que un track pueda declararlas via requiredModuleCapabilityIds. Deben ser distintas
+// de las del core (el lado modulo se valida en validate-modules.mjs, bidireccional).
+const moduleCapabilityIds = new Set((contract.moduleCapabilities ?? []).map((mc) => mc.id));
+for (const mc of contract.moduleCapabilities ?? []) {
+  assert(mc.id, "moduleCapability sin id en contract.moduleCapabilities");
+  assert(mc.providedByModule, `moduleCapability ${mc.id} sin providedByModule`);
+  assert(!capabilityIds.has(mc.id), `moduleCapability ${mc.id} choca con una capability del core (deben ser distintas)`);
+}
 const familyIds = new Set(contract.families.map((family) => family.id));
 const distributionProjectIds = new Set(contract.distributionTargets.map((target) => target.projectId));
 
@@ -104,6 +113,10 @@ for (const track of contract.verticalTracks) {
 
   for (const capabilityId of [...track.requiredCapabilityIds, ...track.blockedCapabilityIds]) {
     assert(capabilityIds.has(capabilityId), `${track.id} references missing capability ${capabilityId}`);
+  }
+
+  for (const capabilityId of track.requiredModuleCapabilityIds ?? []) {
+    assert(moduleCapabilityIds.has(capabilityId), `${track.id} requiere la module capability ${capabilityId} que no esta en contract.moduleCapabilities`);
   }
 
   for (const blockedCapability of getBlockedCapabilitiesForTrack(contract, track.id)) {

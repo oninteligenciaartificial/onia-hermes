@@ -4,15 +4,19 @@
  * credito-debito) SIN llamar al SIN: la emision real (CUIS/CUFD, firma) es
  * external_gate del core. Referencia canonica para portar, no duplicar.
  *
- * ADVERTENCIA (verificado 2026-07-06, investigacion cruzada de 2 fuentes): el
- * ancho exacto de invoiceNumber en el CUF (8 vs 10 digitos, segun la fuente) y
- * el algoritmo EXACTO del digito verificador Modulo 11 no estan 100%
- * confirmados contra el Anexo Tecnico oficial del SIN (GENERACION-CUF.pdf). NO
- * usar buildCuf() para emitir un CUF real sin verificar antes contra ese
- * anexo. Los anchos son configurables (CUF_FIELD_WIDTHS) para que una
- * correccion futura sea un cambio de una linea, no una reescritura.
+ * ADVERTENCIA: este buildCuf() es una REFERENCIA SIMPLIFICADA (invoiceNumber de
+ * 8 digitos, sin codigo de control), NO apta para emision real. El algoritmo REAL
+ * fue VERIFICADO contra el Anexo Tecnico oficial el 2026-07-22 (siatinfo.
+ * impuestos.gob.bo, generacion-cuf + algoritmo-modulo-11): usa invoiceNumber de
+ * 10 digitos (payload de 53), Modulo 11 con pesos 2..9 ciclicos (suma % 11, con
+ * 10->1/11->0) y concatena el codigo de control del CUFD. La version VERIFICADA y
+ * lista para emitir vive en el emisor external_gate:
+ * hermes-content/integrations/siat/src/cuf.mjs. Los anchos aca son configurables
+ * (CUF_FIELD_WIDTHS); no cambiar este de referencia por el real (rompe los tests
+ * portados). Emitir siempre por el emisor, nunca por este buildCuf().
  */
 import { computeQuoteTotal } from "./commerce.logic.mjs";
+import { officialRate } from "../logic/fx.logic.mjs";
 
 export function round2(value) {
   return Math.round((Number(value) + Number.EPSILON) * 100) / 100;
@@ -21,6 +25,91 @@ export function round2(value) {
 // --- Totales (reutiliza commerce, no duplica la formula) --------------------
 
 export const computeInvoiceTotal = computeQuoteTotal;
+
+// --- Moneda extranjera: TCO del BCB (RND 102600000026) ----------------------
+
+/**
+ * Total de la factura convertido a BOB con el TCO oficial del BCB del dia de la
+ * operacion. Desde el regimen cambiario flexible (RM 245/2026) el oficial FLOTA, y
+ * el SIAT EXIGE emitir las facturas en moneda extranjera con ese TCO diario del BCB
+ * (RND 102600000026, jul-2026): lo que se declara es el importe en Bs. `dailyTco` =
+ * TCO del BCB del dia (external_gate); si falta, cae al fallback historico de
+ * fx.officialRate. Para facturas en BOB el TCO es 1 y el total no cambia.
+ */
+export function invoiceTotalInBob(invoiceTotal, { currency = "BOB", dailyTco } = {}) {
+  const total = Number(invoiceTotal ?? 0);
+  const isBob = !currency || /^(bob|bs|boliviano)/i.test(String(currency));
+  const tco = isBob ? 1 : officialRate(dailyTco);
+  return {
+    currency: isBob ? "BOB" : String(currency).toUpperCase(),
+    tcoUsed: round2(tco),
+    bobTotal: round2(total * tco),
+  };
+}
+
+// --- Comprador y homologacion SIN por item (RND 102500000018) ---------------
+
+/**
+ * Tipo de documento de identidad del comprador (campo SIAT
+ * codigoTipoDocumentoIdentidad). Es una PARAMETRICA de sincronizacion diaria del
+ * SIAT (web service); la fuente autoritativa es el catalogo vivo, no este mapa.
+ * El mapeo 1=CI..5=NIT es el estandar historico; verificar contra la
+ * sincronizacion antes de emitir real.
+ */
+export const BUYER_DOC_TYPES = { CI: 1, CEX: 2, PAS: 3, OD: 4, NIT: 5 };
+
+/**
+ * Valida los datos minimos del comprador para una factura SIAT: razon social
+ * (nombreRazonSocial), tipo de documento (codigoTipoDocumentoIdentidad, 1-5) y
+ * numero (numeroDocumento). No emite: solo verifica estructura antes de preparar
+ * el XML. Devuelve { valid, errors[] }.
+ */
+export function validateBuyer(buyer = {}, { validTypeCodes = [1, 2, 3, 4, 5] } = {}) {
+  const errors = [];
+  if (!buyer?.name || String(buyer.name).trim() === "") {
+    errors.push("falta nombreRazonSocial del comprador");
+  }
+  const docType = Number(buyer?.docType);
+  if (!validTypeCodes.includes(docType)) {
+    errors.push(`codigoTipoDocumentoIdentidad invalido: ${buyer?.docType} (esperado ${validTypeCodes.join("/")})`);
+  }
+  if (buyer?.docNumber === undefined || buyer?.docNumber === null || String(buyer.docNumber).trim() === "") {
+    errors.push("falta numeroDocumento del comprador");
+  }
+  return { valid: errors.length === 0, errors };
+}
+
+/** Como validateBuyer pero lanza (paso previo a preparar la emision). */
+export function assertValidBuyer(buyer, options) {
+  const { valid, errors } = validateBuyer(buyer, options);
+  if (!valid) {
+    throw new Error(`comprador invalido para factura SIAT: ${errors.join("; ")}`);
+  }
+  return true;
+}
+
+/**
+ * Valida la homologacion SIN de una linea de factura: exige codigoProductoSin
+ * (homologado al catalogo del SIN), actividadEconomica (CAEB por item, del
+ * Padron Nacional) y unidadMedida (parametrica). Para servicios (unidad 58) la
+ * cantidad debe ser 1 (regla oficial del SIAT). Devuelve { valid, errors[] }.
+ */
+export function validateInvoiceLineHomologation(line = {}, { serviceUnitCode = 58 } = {}) {
+  const errors = [];
+  if (line?.sinProductCode === undefined || line?.sinProductCode === null || String(line.sinProductCode).trim() === "") {
+    errors.push("falta codigoProductoSin (homologacion al catalogo SIN)");
+  }
+  if (line?.economicActivityCode === undefined || line?.economicActivityCode === null || String(line.economicActivityCode).trim() === "") {
+    errors.push("falta actividadEconomica (CAEB por item, del Padron Nacional)");
+  }
+  if (line?.unitMeasureCode === undefined || line?.unitMeasureCode === null || String(line.unitMeasureCode).trim() === "") {
+    errors.push("falta unidadMedida (parametrica SIAT)");
+  }
+  if (Number(line?.unitMeasureCode) === serviceUnitCode && Number(line?.quantity) !== 1) {
+    errors.push("para servicios (unidad 58) la cantidad debe ser 1");
+  }
+  return { valid: errors.length === 0, errors };
+}
 
 // --- Importe en literal (numero a letras, para el pie de factura) -----------
 

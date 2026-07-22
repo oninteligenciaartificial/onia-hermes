@@ -1,16 +1,9 @@
 import { collaborators } from "@/app/onia-center/operating-source";
 import type { RuntimeTask } from "@/lib/onia-center-store";
-import type { CenterTone } from "@/app/onia-center/types";
-import { Badge } from "../../ui/Badge";
 import { SurfaceCard } from "../../ui/SurfaceCard";
-import { TaskStatusSelect } from "../../ui/TaskStatusSelect";
 
 const OPEN: RuntimeTask["status"][] = ["todo", "doing", "review", "blocked"];
-const PRIORITY_TONE: Record<RuntimeTask["priority"], CenterTone> = {
-  alta: "red",
-  media: "yellow",
-  baja: "neutral",
-};
+const PRIORITY_ORDER: Record<RuntimeTask["priority"], number> = { alta: 0, media: 1, baja: 2 };
 
 function initials(name: string): string {
   return name
@@ -23,54 +16,47 @@ function initials(name: string): string {
 
 interface TeamWorkPanelProps {
   tasks: RuntimeTask[];
-  /** Sergio puede cerrar tareas (done); el resto solo hasta revision. */
-  canApprove?: boolean;
 }
 
-export function TeamWorkPanel({ tasks, canApprove = false }: TeamWorkPanelProps) {
+/**
+ * "Equipo hoy" del mockup: una fila por colaborador con su foco actual (la tarea
+ * abierta de mayor prioridad) y el conteo de abiertas. Es un vistazo; la gestión
+ * interactiva de tareas (cambiar estado, evidencia) vive en Pipeline.
+ */
+export function TeamWorkPanel({ tasks }: TeamWorkPanelProps) {
   return (
     <SurfaceCard
-      title="Equipo — qué hace cada uno"
-      subtitle="Tareas abiertas por colaborador"
+      title="Equipo hoy"
       className="onia-center-elevated"
+      contentClassName="p-1.5"
+      action={<span className="font-mono text-xs text-[color:var(--faint)]">tareas abiertas</span>}
     >
       <div className="grid">
         {collaborators.map((collaborator) => {
-          const open = tasks.filter(
-            (task) => task.assignedRole === collaborator.role && OPEN.includes(task.status),
-          );
+          const open = tasks
+            .filter((task) => task.assignedRole === collaborator.role && OPEN.includes(task.status))
+            .sort((a, b) => PRIORITY_ORDER[a.priority] - PRIORITY_ORDER[b.priority]);
+          const focus = open[0]?.title ?? "Sin tareas asignadas";
+
           return (
             <div
               key={collaborator.id}
-              className="border-t border-border py-4 first:border-t-0 first:pt-0.5 last:pb-0"
+              className="flex items-center gap-2.5 rounded-[9px] p-2.5 transition-colors hover:bg-secondary"
             >
-              <div className="flex items-center gap-3">
-                <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-secondary text-xs font-semibold text-secondary-foreground">
-                  {initials(collaborator.displayName)}
-                </span>
-                <p className="text-sm font-medium text-foreground">{collaborator.displayName}</p>
-                <span className="ml-auto inline-flex items-center rounded-full bg-muted px-2.5 py-0.5 text-[11px] font-semibold tabular-nums text-muted-foreground">
-                  {open.length} {open.length === 1 ? "abierta" : "abiertas"}
-                </span>
+              <span className="grid h-[30px] w-[30px] shrink-0 place-items-center rounded-full border border-border bg-secondary text-xs font-semibold text-muted-foreground">
+                {initials(collaborator.displayName)}
+              </span>
+              <div className="min-w-0 flex-1">
+                <p className="text-[13px] font-medium text-foreground">{collaborator.displayName}</p>
+                <p
+                  className={`truncate text-xs ${open.length > 0 ? "text-muted-foreground" : "text-[color:var(--faint)]"}`}
+                >
+                  {focus}
+                </p>
               </div>
-              {open.length === 0 ? (
-                <p className="mt-2 pl-12 text-xs text-muted-foreground">Sin tareas asignadas ahora.</p>
-              ) : (
-                <ul className="mt-2.5 grid gap-0.5">
-                  {open.map((task) => (
-                    <li
-                      key={task.id}
-                      className="-mx-2 flex items-center justify-between gap-2.5 rounded-md px-2 py-1.5 transition-colors hover:bg-muted"
-                    >
-                      <span className="min-w-0 flex-1 truncate text-[13px] text-foreground">{task.title}</span>
-                      <div className="flex shrink-0 items-center gap-2">
-                        <Badge tone={PRIORITY_TONE[task.priority]}>{task.priority}</Badge>
-                        <TaskStatusSelect taskId={task.id} status={task.status} canApprove={canApprove} />
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              )}
+              <span className="shrink-0 font-mono text-[11px] tabular-nums text-[color:var(--faint)]">
+                {open.length > 0 ? open.length : "·"}
+              </span>
             </div>
           );
         })}

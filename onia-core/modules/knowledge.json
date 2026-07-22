@@ -1,7 +1,7 @@
 {
   "module": "knowledge",
   "name": "ONIA Knowledge Module",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "status": "draft",
   "layer": "vertical_extension",
   "purpose": "Base de conocimiento interna (fichas tecnicas, procedimientos, FAQ) como add-on activable SOBRE el core. ProveeGest la usa para conocimiento tecnico de material electrico (hojas de especificacion, compatibilidades); cualquier vertical puede activarla. Adjuntos pesados van por el document del core.",
@@ -37,7 +37,7 @@
       "table": "onia_knowledge_articles",
       "purpose": "Ficha tecnica, procedimiento o respuesta reutilizable. Puede referenciar una entidad del core (producto, partner, caso) sin acoplarse a ella.",
       "requiredFields": ["id", "organizationId", "title", "body", "status", "authorId", "createdAt"],
-      "optionalFields": ["categoryId", "tags", "relatedEntityType", "relatedEntityId"],
+      "optionalFields": ["categoryId", "tags", "slug", "publishedAt", "relatedEntityType", "relatedEntityId"],
       "tenantScoped": true
     }
   ],

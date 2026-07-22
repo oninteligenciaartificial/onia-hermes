@@ -9,7 +9,11 @@ import {
   type RuntimeTask,
   type TeamMember,
 } from "@/lib/onia-center-store";
-import { getOniaCenterActor } from "@/lib/onia-center-auth";
+import { canActorSeeFinance, getOniaCenterActor } from "@/lib/onia-center-auth";
+import {
+  getContentPipelineCounts,
+  type ContentPipelineCounts,
+} from "@/app/onia-center/live/live-runtime";
 import { AppShell } from "@/app/onia-center/components/shell/AppShell";
 import { NegocioView } from "@/app/onia-center/components/views/negocio/NegocioView";
 
@@ -32,6 +36,9 @@ export default async function NegocioPage() {
   let leads: RuntimeLead[] | undefined;
   let notes: RuntimeNote[] | undefined;
   let team: TeamMember[] | undefined;
+  let canSeeFinance = true;
+  let actorName: string | undefined;
+  let content: ContentPipelineCounts | undefined;
 
   // Personas reales del equipo + scorecard con datos reales del runtime. Si
   // falta Supabase, sesion o la lectura falla, el panel cae al roster estatico y
@@ -51,6 +58,8 @@ export default async function NegocioPage() {
     try {
       const auth = await getOniaCenterActor(await buildAuthRequest());
       if (auth.ok) {
+        canSeeFinance = canActorSeeFinance(auth.actor);
+        actorName = auth.actor.displayName;
         const runtime = filterOniaCenterRuntimeForActor(await getOniaCenterRuntime(), auth.actor);
         tasks = runtime.tasks;
         leads = runtime.leads;
@@ -59,11 +68,19 @@ export default async function NegocioPage() {
     } catch {
       // Lectura del runtime fallida: se muestran las personas sin scorecard.
     }
+
+    // Pipeline de contenido: conteos agregados (no sensibles) de ideas y
+    // borradores pendientes. Si la lectura no da datos, el bloque no se muestra.
+    try {
+      content = (await getContentPipelineCounts()) ?? undefined;
+    } catch {
+      // Lectura del pipeline fallida: la vista Negocio omite el bloque Contenido.
+    }
   }
 
   return (
-    <AppShell>
-      <NegocioView tasks={tasks} leads={leads} notes={notes} team={team} />
+    <AppShell canSeeFinance={canSeeFinance} actorName={actorName}>
+      <NegocioView tasks={tasks} leads={leads} notes={notes} team={team} content={content} />
     </AppShell>
   );
 }

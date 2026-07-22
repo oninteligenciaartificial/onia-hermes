@@ -38,6 +38,32 @@ import {
 
 const contract = loadOniaCoreContract();
 
+describe("moduleCapabilities (registro de caps provistas por modulos, #20)", () => {
+  it("registra las 7 caps provistas, cada una con providedByModule", () => {
+    const caps = contract.moduleCapabilities ?? [];
+    const ids = caps.map((c) => c.id);
+    for (const expected of ["accounting", "tax_bolivia", "invoicing", "payroll", "automation", "import_costing", "dental_clinical"]) {
+      assert.ok(ids.includes(expected), `falta module capability ${expected}`);
+    }
+    for (const c of caps) assert.ok(c.providedByModule, `${c.id} sin providedByModule`);
+  });
+
+  it("las module-capabilities son distintas de las del core (no colisionan)", () => {
+    const coreIds = new Set(contract.capabilities.map((c) => c.id));
+    for (const mc of contract.moduleCapabilities ?? []) {
+      assert.ok(!coreIds.has(mc.id), `${mc.id} colisiona con una capability del core`);
+    }
+  });
+
+  it("un track ya puede declarar las module-capabilities que necesita (proveegest-electrico -> import_costing)", () => {
+    const track = contract.verticalTracks.find((t) => t.id === "proveegest-electrico");
+    const needed = track.requiredModuleCapabilityIds ?? [];
+    assert.ok(needed.includes("import_costing"), "proveegest-electrico declara que necesita import_costing");
+    const registered = new Set((contract.moduleCapabilities ?? []).map((c) => c.id));
+    for (const id of needed) assert.ok(registered.has(id), `${id} no esta en el registro`);
+  });
+});
+
 describe("loadOniaCoreContract", () => {
   it("loads the canonical ONIA Core contract by default", () => {
     assert.equal(contract.name, "ONIA Core");

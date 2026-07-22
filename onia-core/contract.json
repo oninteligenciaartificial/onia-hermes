@@ -827,6 +827,15 @@
       }
     ]
   },
+  "moduleCapabilities": [
+    { "id": "accounting", "providedByModule": "accounting", "note": "contabilidad de doble partida (el core la deja afuera a proposito)" },
+    { "id": "tax_bolivia", "providedByModule": "accounting", "note": "IVA/IT/IUE/RC-IVA/RCV/retenciones/depreciacion, Bolivia vigente" },
+    { "id": "invoicing", "providedByModule": "invoicing", "note": "factura electronica Bolivia (CUF/QR); emision real = external_gate SIAT" },
+    { "id": "payroll", "providedByModule": "payroll", "note": "planilla Bolivia (Gestora, RC-IVA, aguinaldo, bono de antiguedad, finiquito)" },
+    { "id": "automation", "providedByModule": "automation", "note": "motor de reglas 'cuando X -> Y'; envio real = external_gate" },
+    { "id": "import_costing", "providedByModule": "imports", "note": "landed cost / costo de importacion Bolivia (DS 5646, NC2/NC6)" },
+    { "id": "dental_clinical", "providedByModule": "dental", "note": "config clinica odontologica (rubro dental)" }
+  ],
   "verticalTracks": [
     {
       "id": "gestios-general",
@@ -910,6 +919,14 @@
         "catalog_inventory",
         "quotes_b2b",
         "knowledge_base"
+      ],
+      "requiredModuleCapabilityIds": [
+        "import_costing",
+        "accounting",
+        "tax_bolivia",
+        "invoicing",
+        "payroll",
+        "automation"
       ],
       "blockedCapabilityIds": [
         "whatsapp",
