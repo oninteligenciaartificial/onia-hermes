@@ -11,8 +11,14 @@ import {
   accountBalance,
   addDays,
   assertBalanced,
+  assertCanPost,
+  assertPeriodOpen,
   assetDepreciationAsOf,
   balanceSheet,
+  buildClosingEntry,
+  canPostToPeriod,
+  cashFlowIndirect,
+  cashFlowStatement,
   accruedProvision,
   computeIt,
   computeIue,
@@ -23,10 +29,12 @@ import {
   computeWithholdingHonorarios,
   depreciationForAssetType,
   depreciationSchedule,
+  equityStatement,
   fiscalYearEnd,
   incomeStatement,
   isBalanced,
   isFullyDepreciated,
+  isPeriodClosed,
   iueDueDate,
   ivaOfRecord,
   ledgerByAccount,
@@ -140,6 +148,98 @@ describe("estados financieros", () => {
     assert.equal(bs.resultado, 500);
     assert.equal(bs.patrimonioTotal, 2500);
     assert.equal(bs.balanced, true);
+  });
+});
+
+describe("estados financieros basicos: EEP y flujo de efectivo (Bolivia)", () => {
+  const accounts = {
+    "1.1.1": { accountType: "activo" }, // Caja
+    "1.1.2": { accountType: "activo" }, // Bancos
+    "3.1.1": { accountType: "patrimonio" }, // Capital
+    "4.1.1": { accountType: "ingreso" }, // Ventas
+    "5.1.1": { accountType: "gasto" }, // Alquiler
+  };
+  const lines = [
+    { accountCode: "1.1.1", debit: 500, credit: 0 }, // aporte adicional de capital
+    { accountCode: "3.1.1", debit: 0, credit: 500 },
+    { accountCode: "1.1.2", debit: 1000, credit: 0 }, // cobro de venta (bancos)
+    { accountCode: "4.1.1", debit: 0, credit: 1000 },
+    { accountCode: "5.1.1", debit: 300, credit: 0 }, // pago de alquiler (caja)
+    { accountCode: "1.1.1", debit: 0, credit: 300 },
+  ];
+
+  it("EEP: saldo inicial + aumentos + resultado = patrimonio neto final", () => {
+    const eep = equityStatement(lines, accounts, { openingBalances: { "3.1.1": 2000 } });
+    const capital = eep.rows.find((row) => row.accountCode === "3.1.1");
+    assert.equal(capital.opening, 2000);
+    assert.equal(capital.increases, 500);
+    assert.equal(capital.decreases, 0);
+    assert.equal(capital.closing, 2500);
+    assert.equal(eep.resultado, 700); // 1000 - 300
+    assert.equal(eep.closingTotal, 3200); // 2000 + 500 + 700
+  });
+
+  it("flujo de efectivo (metodo directo): entradas - salidas = variacion del efectivo", () => {
+    const cf = cashFlowStatement(lines, { cashAccountCodes: ["1.1"], openingCash: 100 });
+    assert.equal(cf.inflows, 1500); // 500 caja + 1000 bancos
+    assert.equal(cf.outflows, 300); // 300 caja
+    assert.equal(cf.netCashFlow, 1200);
+    assert.equal(cf.endingCash, 1300);
+  });
+
+  it("flujo operativo (metodo indirecto): resultado + ajustes - Δcapital de trabajo", () => {
+    // 700 resultado + 100 depreciacion (no efectivo) - 250 aumento de CxC = 550
+    assert.equal(cashFlowIndirect({ resultado: 700, nonCashAdjustments: [100], workingCapitalChange: 250 }), 550);
+    assert.equal(cashFlowIndirect({ resultado: 700, nonCashAdjustments: 100 }), 800);
+  });
+});
+
+describe("cierre de gestion y bloqueo de periodo", () => {
+  const accounts = {
+    "3.2.1": { accountType: "patrimonio" }, // Resultado del ejercicio
+    "4.1.1": { accountType: "ingreso" }, // Ventas
+    "5.1.1": { accountType: "gasto" }, // Gastos
+    "5.2.1": { accountType: "costo" }, // Costo de ventas
+  };
+
+  it("cancela ingresos/gastos/costos contra resultado y cuadra (utilidad)", () => {
+    const lines = [
+      { accountCode: "4.1.1", debit: 0, credit: 1000 },
+      { accountCode: "5.1.1", debit: 300, credit: 0 },
+      { accountCode: "5.2.1", debit: 200, credit: 0 },
+    ];
+    const closing = buildClosingEntry(lines, accounts, { resultAccountCode: "3.2.1" });
+    assert.equal(closing.ingresos, 1000);
+    assert.equal(closing.gastosCostos, 500);
+    assert.equal(closing.resultado, 500);
+    assert.equal(isBalanced(closing.lines), true);
+    const resultLine = closing.lines.find((line) => line.accountCode === "3.2.1");
+    assert.equal(resultLine.credit, 500); // utilidad -> se acredita
+  });
+
+  it("perdida: la cuenta de resultado se debita y el asiento cuadra", () => {
+    const lines = [
+      { accountCode: "4.1.1", debit: 0, credit: 100 },
+      { accountCode: "5.1.1", debit: 400, credit: 0 },
+    ];
+    const closing = buildClosingEntry(lines, accounts, { resultAccountCode: "3.2.1" });
+    assert.equal(closing.resultado, -300);
+    assert.equal(isBalanced(closing.lines), true);
+    const resultLine = closing.lines.find((line) => line.accountCode === "3.2.1");
+    assert.equal(resultLine.debit, 300);
+  });
+
+  it("periodo cerrado no admite asientos; abierto y en rango si", () => {
+    const abierto = { name: "2026", status: "open", startDate: "2026-01-01", endDate: "2026-12-31" };
+    const cerrado = { name: "2025", status: "closed" };
+    assert.equal(isPeriodClosed(cerrado), true);
+    assert.equal(isPeriodClosed(abierto), false);
+    assert.throws(() => assertPeriodOpen(cerrado), /cerrado/);
+    assert.equal(canPostToPeriod(abierto, "2026-06-15"), true);
+    assert.equal(canPostToPeriod(abierto, "2027-01-05"), false); // fuera de rango
+    assert.equal(canPostToPeriod(cerrado, "2025-06-15"), false);
+    assert.equal(canPostToPeriod(null, "2026-06-15"), true); // sin periodo no bloquea
+    assert.throws(() => assertCanPost(cerrado, "2025-06-15"), /no se puede contabilizar/);
   });
 });
 

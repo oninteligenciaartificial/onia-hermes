@@ -56,13 +56,13 @@
       "kind": "config",
       "path": "onia-core/modules/accounting.json",
       "jsonKey": "bolivianConfig",
-      "sha256": "adc1ee6d8ac3170a2ea113e22f3f6483c6c2c7e0d9294beff18d6a68f5504e8f"
+      "sha256": "2218fed5fd747b773116951bf64f138d4ac6e8f8f9136de937b9d1cc0c44f422"
     },
     {
       "id": "modules/accounting.logic.mjs",
       "kind": "logic",
       "path": "onia-core/modules/accounting.logic.mjs",
-      "sha256": "aeb4f305cab6080cfc6de4812c415248a9c08f40f44303833954e1e903297787"
+      "sha256": "757d0786433f97cd19d368497cf6670ef168273d609b7152a2f42911c7387a8b"
     },
     {
       "id": "modules/accounting.seed.bolivia.json",

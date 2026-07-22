@@ -133,7 +133,8 @@
       "DS 21530 (reglamento IVA)",
       "DS 24051 (reglamento IUE)",
       "DS 25619 (vencimientos por ultimo digito del NIT)",
-      "RND SIAT vigentes (facturacion en linea, RCV)"
+      "RND SIAT vigentes (facturacion en linea, RCV)",
+      "Codigo de Comercio (DL 14379/1977) Art. 36-65 - obligacion de llevar contabilidad y presentar estados financieros"
     ],
     "taxes": [
       { "code": "IVA", "name": "Impuesto al Valor Agregado", "rate": 0.13, "periodicity": "mensual", "note": "13% nominal; efectiva por dentro ~14.94% sobre precio con IVA incluido (regimen historico). IVA a pagar = debito fiscal (ventas) - credito fiscal (compras). VER ivaReformWarning: la Ley 1.733 (2026) cambia este calculo." },
@@ -150,6 +151,17 @@
     "nitDueDay": { "0": 13, "1": 14, "2": 15, "3": 16, "4": 17, "5": 18, "6": 19, "7": 20, "8": 21, "9": 22 },
     "bancarizacionThresholdBob": 50000,
     "accountTypes": ["activo", "pasivo", "patrimonio", "ingreso", "gasto", "costo", "orden"],
+    "financialStatements": {
+      "basicos": [
+        "balance_general",
+        "estado_de_resultados",
+        "estado_de_evolucion_del_patrimonio",
+        "estado_de_flujo_de_efectivo",
+        "notas"
+      ],
+      "note": "Los 4 estados computables se DERIVAN de las lineas: balanceSheet + incomeStatement + equityStatement + cashFlowStatement (metodo directo, con cashFlowIndirect para la conciliacion operativa). Las notas son narrativas (fuera de la logica). Se adjuntan a la Memoria Anual junto con la declaracion anual del IUE.",
+      "legalBasis": "Codigo de Comercio (DL 14379/1977) Art. 36-65 + Normas de Contabilidad (Consejo Tecnico Nacional de Auditoria y Contabilidad)."
+    },
     "depreciationByAssetType": [
       { "assetType": "edificaciones", "usefulLifeYears": 40, "annualRate": 0.025 },
       { "assetType": "muebles_enseres", "usefulLifeYears": 10, "annualRate": 0.10 },

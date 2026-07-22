@@ -180,6 +180,172 @@ export function balanceSheet(lines = [], accounts = {}) {
   };
 }
 
+/**
+ * Estado de Evolucion del Patrimonio (EEP). Uno de los estados financieros
+ * basicos exigidos en Bolivia (Codigo de Comercio DL 14379 + Normas de
+ * Contabilidad). Por cada cuenta de patrimonio: saldo inicial + aumentos -
+ * disminuciones = saldo final; el resultado del ejercicio entra como componente
+ * propio (se capitaliza en resultados acumulados al cierre).
+ *
+ * openingBalances: { code: saldoInicialAcreedor } arrastrado del periodo anterior.
+ */
+export function equityStatement(lines = [], accounts = {}, { openingBalances = {} } = {}) {
+  const ledger = ledgerByAccount(lines);
+  const rows = [];
+  for (const [code, entry] of Object.entries(ledger)) {
+    if (accounts[code]?.accountType !== "patrimonio") {
+      continue;
+    }
+    const opening = round2(Number(openingBalances[code] ?? 0));
+    const movement = round2(entry.credit - entry.debit); // el patrimonio suma por el haber
+    rows.push({
+      accountCode: code,
+      opening,
+      increases: movement > 0 ? movement : 0,
+      decreases: movement < 0 ? round2(-movement) : 0,
+      closing: round2(opening + movement),
+    });
+  }
+  rows.sort((a, b) => (a.accountCode < b.accountCode ? -1 : a.accountCode > b.accountCode ? 1 : 0));
+  const { resultado } = incomeStatement(lines, accounts);
+  const openingTotal = round2(rows.reduce((sum, row) => sum + row.opening, 0));
+  const increasesTotal = round2(rows.reduce((sum, row) => sum + row.increases, 0));
+  const decreasesTotal = round2(rows.reduce((sum, row) => sum + row.decreases, 0));
+  return {
+    rows,
+    resultado,
+    openingTotal,
+    increasesTotal,
+    decreasesTotal,
+    // patrimonio neto final = saldos de patrimonio + resultado del ejercicio
+    closingTotal: round2(openingTotal + increasesTotal - decreasesTotal + resultado),
+  };
+}
+
+/**
+ * Estado de Flujo de Efectivo, metodo DIRECTO: variacion del efectivo y sus
+ * equivalentes (caja/bancos) en el periodo, derivada de los movimientos de esas
+ * cuentas. entradas = debe, salidas = haber. cashAccountCodes admite codigos
+ * exactos o prefijos jerarquicos (ej. "1.1" cubre "1.1.1", "1.1.2").
+ */
+export function cashFlowStatement(lines = [], { cashAccountCodes = [], openingCash = 0 } = {}) {
+  const isCash = (code) =>
+    cashAccountCodes.some((prefix) => code === prefix || String(code).startsWith(`${prefix}.`));
+  let inflows = 0;
+  let outflows = 0;
+  for (const line of lines) {
+    if (!isCash(line?.accountCode)) {
+      continue;
+    }
+    inflows += Number(line?.debit ?? 0);
+    outflows += Number(line?.credit ?? 0);
+  }
+  inflows = round2(inflows);
+  outflows = round2(outflows);
+  const netCashFlow = round2(inflows - outflows);
+  const opening = round2(Number(openingCash ?? 0));
+  return { inflows, outflows, netCashFlow, openingCash: opening, endingCash: round2(opening + netCashFlow) };
+}
+
+/**
+ * Conciliacion del flujo operativo por el metodo INDIRECTO: parte del resultado
+ * del ejercicio, suma las partidas que no movieron efectivo (depreciacion,
+ * provisiones, incobrables) y ajusta la variacion del capital de trabajo. Los
+ * ajustes se pasan EXPLICITOS (no se infieren): flujo = resultado + Σajustes -
+ * ΔcapitalTrabajo.
+ */
+export function cashFlowIndirect({ resultado = 0, nonCashAdjustments = [], workingCapitalChange = 0 } = {}) {
+  const adjustments = (Array.isArray(nonCashAdjustments) ? nonCashAdjustments : [nonCashAdjustments]).reduce(
+    (sum, value) => sum + Number(value ?? 0),
+    0,
+  );
+  return round2(Number(resultado ?? 0) + adjustments - Number(workingCapitalChange ?? 0));
+}
+
+// --- Cierre de gestion y periodos -------------------------------------------
+
+/**
+ * Asiento de cierre de gestion: cancela las cuentas de resultado (ingresos,
+ * gastos, costos) contra una cuenta de resultado del ejercicio. Los ingresos
+ * (saldo acreedor) se debitan; gastos/costos (saldo deudor) se acreditan; la
+ * diferencia (utilidad al haber, perdida al debe) va a resultAccountCode. El
+ * asiento cuadra por construccion (total debe = total haber). Reutiliza
+ * ledgerByAccount; no toca activo/pasivo/patrimonio.
+ */
+export function buildClosingEntry(lines = [], accounts = {}, { resultAccountCode = "3.2.1" } = {}) {
+  const ledger = ledgerByAccount(lines);
+  const closingLines = [];
+  let ingresos = 0;
+  let gastosCostos = 0;
+  for (const code of Object.keys(ledger).sort()) {
+    const type = accounts[code]?.accountType;
+    const net = round2(ledger[code].debit - ledger[code].credit);
+    if (type === "ingreso") {
+      const saldoAcreedor = round2(-net);
+      if (saldoAcreedor !== 0) {
+        closingLines.push({ accountCode: code, debit: saldoAcreedor, credit: 0 });
+        ingresos = round2(ingresos + saldoAcreedor);
+      }
+    } else if (type === "gasto" || type === "costo") {
+      if (net !== 0) {
+        closingLines.push({ accountCode: code, debit: 0, credit: net });
+        gastosCostos = round2(gastosCostos + net);
+      }
+    }
+  }
+  const resultado = round2(ingresos - gastosCostos);
+  if (resultado > 0) {
+    closingLines.push({ accountCode: resultAccountCode, debit: 0, credit: resultado });
+  } else if (resultado < 0) {
+    closingLines.push({ accountCode: resultAccountCode, debit: round2(-resultado), credit: 0 });
+  }
+  return { lines: closingLines, ingresos, gastosCostos, resultado };
+}
+
+/** Un periodo/gestion cerrado no admite asientos nuevos (status closed/cerrado). */
+export function isPeriodClosed(period) {
+  const status = period?.status;
+  return status === "closed" || status === "cerrado";
+}
+
+/** Exige que el periodo este abierto antes de contabilizar. */
+export function assertPeriodOpen(period) {
+  if (isPeriodClosed(period)) {
+    throw new Error(`periodo ${period?.name ?? period?.id ?? ""} cerrado: no admite asientos nuevos`);
+  }
+  return period;
+}
+
+/**
+ * Se puede contabilizar si el periodo esta abierto y la fecha del asiento cae
+ * dentro de su rango. Sin periodo definido no se bloquea (lo valida el
+ * producto). Fechas YYYY-MM-DD comparadas como texto (ISO, ordenables).
+ */
+export function canPostToPeriod(period, dateIso) {
+  if (!period) {
+    return true;
+  }
+  if (isPeriodClosed(period)) {
+    return false;
+  }
+  const date = String(dateIso ?? "").slice(0, 10);
+  if (period.startDate && date < String(period.startDate).slice(0, 10)) {
+    return false;
+  }
+  if (period.endDate && date > String(period.endDate).slice(0, 10)) {
+    return false;
+  }
+  return true;
+}
+
+/** Lanza si no se puede contabilizar en el periodo/fecha (cerrado o fuera de rango). */
+export function assertCanPost(period, dateIso) {
+  if (!canPostToPeriod(period, dateIso)) {
+    throw new Error(`no se puede contabilizar en el periodo (cerrado o fecha fuera de rango): ${dateIso}`);
+  }
+  return true;
+}
+
 // --- Impuestos Bolivia ------------------------------------------------------
 
 /** IVA contenido en un registro RCV (usa ivaAmount si viene, si no amount*rate). */

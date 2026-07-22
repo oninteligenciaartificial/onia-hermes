@@ -1,5 +1,13 @@
 # ONIA Core Changelog
 
+## 0.7.1 + accounting estados financieros + cierre de gestion — 2026-07-22 (perfeccionar el core, fiscal Bolivia)
+
+ENFOQUE: CORE. Fiscal P1 de `accounting`: completa los estados financieros basicos y el cierre de gestion. Todo se DERIVA de las lineas de asiento — sin cifras/fechas fiscales inciertas.
+- **Estado de Evolucion del Patrimonio (EEP)** (`equityStatement`) y **Estado de Flujo de Efectivo** (`cashFlowStatement`, metodo directo; `cashFlowIndirect` para la conciliacion operativa por el metodo indirecto) — eran los 2 estados financieros basicos que FALTABAN (ya estaban `balanceSheet` + `incomeStatement`). Con esto el modulo cubre los 4 estados computables exigidos en Bolivia (Codigo de Comercio DL 14379/1977 Art. 36-65 + Normas de Contabilidad); las notas son narrativas.
+- **Asiento de cierre de gestion** (`buildClosingEntry`) — cancela ingresos/gastos/costos contra la cuenta de resultado del ejercicio (utilidad al haber, perdida al debe); cuadra por construccion, reutiliza `ledgerByAccount`.
+- **Bloqueo de periodo cerrado** (`isPeriodClosed`/`assertPeriodOpen`/`canPostToPeriod`/`assertCanPost`) — un periodo/gestion cerrado, o una fecha fuera de su rango, ya no admite asientos nuevos (invariante que faltaba: el producto no puede contabilizar en un periodo cerrado por error).
+- +6 tests. Aditivo, contrato intacto. **459 tests, 4 validadores verdes.**
+
 ## 0.7.1 + invoicing TCO moneda extranjera — 2026-07-21 (perfeccionar el core, fiscal Bolivia)
 
 ENFOQUE: CORE. Fiscal P1 mas reciente (RND 102600000026, 17-jul-2026).
