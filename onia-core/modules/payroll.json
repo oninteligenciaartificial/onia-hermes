@@ -99,7 +99,8 @@
       "DS 21637 (1987) - aporte patronal CNS 10%",
       "DS 24935 (1997) - aporte Pro-Vivienda Social 2% patronal",
       "DS 0110 (2009) - indemnizacion desde 90 dias, incluye renuncia voluntaria",
-      "DS 21060 Art. 60 (29-ago-1985) - bono de antiguedad mensual, escala 2-25+ anios sobre 3 SMN"
+      "DS 21060 Art. 60 (29-ago-1985) - bono de antiguedad mensual, escala 2-25+ anios sobre 3 SMN",
+      "DS 5503 (dic-2025) - credito RC-IVA +20% por facturas 'Hecho en Bolivia' (13% -> 15.6% efectivo), hasta 31-dic-2027"
     ],
     "pensionEntity": "Gestora Publica de la Seguridad Social de Largo Plazo (reemplazo estatal de las AFP privadas BBVA Prevision/Futuro-Zurich desde mayo 2023; el sistema historico se seguia llamando 'AFP' pero ya no opera asi)",
     "smnBob": 3300,
@@ -134,7 +135,7 @@
       "proViviendaPatronal": 0.02,
       "aporteSolidarioPatronal": 0.035,
       "total": 0.0721,
-      "note": "aporteSolidarioPatronal citado como 3% en algunas fuentes y 3.5% en otras (inconsistencia entre fuentes secundarias, sin fecha de cambio precisa). Usamos 3.5% (total 7.21%) como default configurable; VERIFICAR antes de produccion."
+      "note": "aporteSolidarioPatronal 3.5%: total patronal 7.21% = 3.5 solidario + 1.71 riesgo profesional + 2.0 pro-vivienda. CONFIRMADO 2026-07-22 (misalariobo, datos may-2026). Configurable por el contador."
     },
     "aporteNacionalSolidarioBrackets": [
       { "thresholdBob": 13000, "rate": 0.0115 },

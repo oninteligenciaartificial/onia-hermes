@@ -1,5 +1,13 @@
 # ONIA Core Changelog
 
+## 0.7.1 + payroll fiscal P1 — 2026-07-21 (perfeccionar el core, fiscal Bolivia)
+
+ENFOQUE: CORE. Ajustes fiscales de payroll (los datos ya estaban en el config; faltaba aplicarlos y verificar).
+- **Tope de cotizacion 60 SMN** (`cotizableBase`) — en sueldos altos los aportes AFP se calculan sobre 60 SMN (Bs 198.000), no sobre el total ganado. Ley 065 de Pensiones.
+- **Credito RC-IVA "Hecho en Bolivia" +20%** (`computeHechoEnBoliviaCredit`, DS 5503 dic-2025) — el credito normal (13%) sube a 15,6% efectivo para facturas de productos/servicios hechos en Bolivia, vigente hasta 31-dic-2027.
+- **Aporte solidario patronal 3,5% CONFIRMADO** (verificado 2026-07-22: total patronal 7,21% = 3,5 solidario + 1,71 riesgo profesional + 2,0 pro-vivienda; fuente misalariobo may-2026) — resuelta la incertidumbre "3% vs 3,5%" que arrastraba el config. Sin cambio de calculo (el 3,5% era correcto).
+- +3 tests. Aditivo, contrato intacto. **450 tests, 4 validadores verdes.**
+
 ## 0.7.1 + moduleCapabilities registry — 2026-07-21 (perfeccionar el core, visibilidad de caps de modulo)
 
 P0 #5 (ultimo del core) de la ola "perfeccionar los universales". ENFOQUE: CORE (contrato + validadores), no un producto.
