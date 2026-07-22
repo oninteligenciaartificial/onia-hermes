@@ -60,14 +60,38 @@ arquitectura, cronograma). Esto es el arranque tecnico del servicio.
   SHA-256. Auth por header HTTP `Authorization: Token X` (NO en el SOAP). El
   transporte HTTP real queda fuera (capa aparte, necesita credenciales del piloto).
   Los nombres exactos de wrapper/namespace van `[VERIFICAR]` contra el WSDL de tipos.
-  29 tests. **Total emisor: 184 tests.**
+  29 tests.
+- `src/emission.mjs` — **ensamblador de emision (la glue)**: `assembleEmission`
+  orquesta el flujo COMPLETO payload -> CUF -> XML -> gzip+base64 -> `hashArchivo`
+  SHA-256 -> request de recepcion, reusando cuf/xml-builder/soap-client/
+  tenant-registry. Prueba que las piezas encajan punta a punta; fechas como
+  parametro (el `fechaHora` del CUF y el `<fechaEmision>` del XML calzan por
+  construccion). 17 tests.
+- `src/soap-transport.mjs` — **transporte HTTP** con `fetch` INYECTABLE (testeable
+  sin red): `postSoap` (POST + `Authorization: Token` + timeout + reintentos/backoff
+  ante red/5xx, NO ante 4xx/fault de negocio) + `classifyResponse`
+  (ok/network/server/soap_fault/business). 19 tests.
+- `src/catalog-store.mjs` — **store puro de las parametricas** sincronizadas (11
+  catalogos: productos/unidades/tipos doc/leyendas/motivos de anulacion...) +
+  `isStale` (resync diario). El store es un contenedor; los valores llegan del SIN.
+  34 tests.
+- `ONBOARDING_CLIENTE.md` — runbook operativo: los pasos EXACTOS del cliente para
+  asociar el sistema + generar su token delegado + configurar sucursales/PdV +
+  homologar catalogo (modelo Proveedor; se ata a las funciones del tenant registry).
+- `src/emitter.mjs` — **el ORQUESTADOR (API publica del emisor)**: `emitInvoice`
+  ata TODO en una sola llamada — valida el tenant -> ensambla (CUF+XML+archivo) ->
+  POSTea (transporte INYECTABLE) -> mapea el `codigoEstado` del SIN (908 validada /
+  904 observada / 901 pendiente / error rechazada) a la transicion de la maquina
+  de estados; si el transporte cae, la factura sigue en cola (no entregada). Es lo
+  que un producto llama. Testeado de punta a punta con un SIN simulado; listo para
+  el fetch real + token del piloto. 8 tests. **Total emisor: 262 tests.**
 
 **Pendiente (necesita NIT / ambiente piloto / Anexo Tecnico oficial):**
-- **Transporte HTTP** del cliente SOAP (POST del envelope + header
-  `Authorization: Token` + timeouts/reintentos) contra
-  `pilotosiatservicios.impuestos.gob.bo/v2` — necesita el token delegado del
-  piloto. La capa PURA (envelopes + parser de respuesta) ya esta lista en
-  `src/soap-client.mjs`; solo falta enchufarle la red y las credenciales.
+- **Ejecutar contra el piloto real.** El transporte (`postSoap`, con fetch +
+  reintentos + auth) ya esta construido y testeado con mock; falta correrlo de
+  verdad contra `pilotosiatservicios.impuestos.gob.bo/v2` con el **token delegado
+  real del piloto (S2)** e inyectarle el `fetch` de Node. Ahi se cierra el ciclo
+  CUIS -> CUFD -> recepcion -> validacion contra el SIN.
 - Confirmar los `[VERIFICAR]` del SOAP (nombre exacto del wrapper del DTO,
   targetNamespace por servicio, SOAP 1.1 vs 1.2) contra el WSDL de tipos
   importado del piloto (`?wsdl=ServicioFacturacion.wsdl`) — devolvio 503

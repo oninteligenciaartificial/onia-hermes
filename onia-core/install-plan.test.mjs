@@ -58,7 +58,7 @@ describe("buildInstallPlan por track (sin adapter)", () => {
     // slot del core) y ademas accounting/invoicing/payroll declaran este track
     // en su propio verticalTracks sin llenar un slot.
     const moduleIds = plan.modules.map((module) => module.module).sort();
-    assert.deepEqual(moduleIds, ["accounting", "automation", "commerce", "invoicing", "payroll"]);
+    assert.deepEqual(moduleIds, ["accounting", "agents", "automation", "commerce", "invoicing", "payroll"]);
   });
 });
 

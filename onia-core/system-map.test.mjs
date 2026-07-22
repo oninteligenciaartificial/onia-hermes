@@ -48,7 +48,7 @@ describe("buildSystemMap - capa RUBROS", () => {
 
   it("DentalGest necesita commerce/accounting/invoicing/payroll (compartidos) + dental (vertical, solo suyo) y tiene extension propia (odontograma)", () => {
     const dental = map.rubros.find((rubro) => rubro.id === "dentagest-clinical");
-    assert.deepEqual(dental.moduleIds, ["accounting", "automation", "commerce", "dental", "invoicing", "payroll"]);
+    assert.deepEqual(dental.moduleIds, ["accounting", "agents", "automation", "commerce", "dental", "invoicing", "payroll"]);
     assert.ok(dental.verticalExtensionIds.includes("odontogram_entry"));
   });
 
@@ -81,14 +81,14 @@ describe("buildSystemMap - capa REPETICION", () => {
 });
 
 describe("sharedModules / unusedModules", () => {
-  it("sharedModules(2) devuelve 7 modulos usados por 2+ rubros (todos menos dental, que es de 1 solo rubro)", () => {
+  it("sharedModules(2) devuelve 8 modulos usados por 2+ rubros (todos menos dental, que es de 1 solo rubro)", () => {
     const shared = sharedModules(map, 2).map((entry) => entry.moduleId).sort();
-    assert.deepEqual(shared, ["accounting", "automation", "commerce", "imports", "invoicing", "knowledge", "payroll"]);
+    assert.deepEqual(shared, ["accounting", "agents", "automation", "commerce", "imports", "invoicing", "knowledge", "payroll"]);
   });
 
   it("Ganadero OS Offline SI necesita commerce/accounting/invoicing/payroll (un hato compra insumos, vende ganado y es una empresa formal con contabilidad/planilla igual que las demas verticales)", () => {
     const ganadero = map.rubros.find((rubro) => rubro.id === "ganadero-offline");
-    assert.deepEqual(ganadero.moduleIds, ["accounting", "automation", "commerce", "invoicing", "payroll"]);
+    assert.deepEqual(ganadero.moduleIds, ["accounting", "agents", "automation", "commerce", "invoicing", "payroll"]);
     // Solo knowledge queda fuera: es catalogo tecnico especifico de ProveeGest,
     // no una necesidad generica de cualquier rubro.
     assert.ok(!ganadero.moduleIds.includes("knowledge"));

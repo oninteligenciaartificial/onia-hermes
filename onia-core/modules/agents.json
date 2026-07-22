@@ -1,0 +1,118 @@
+{
+  "module": "agents",
+  "name": "ONIA Agents Module (24/7 con human-in-the-loop)",
+  "version": "0.1.0",
+  "status": "draft",
+  "layer": "activatable_module",
+  "purpose": "Agentes autonomos que trabajan 24/7 sobre los datos de la organizacion (calificar leads, armar propuestas, seguimiento, avisos de vencimiento, scraping) como add-on activable SOBRE el core. Human-in-the-loop por DEFAULT: lo que un agente PROPONE pasa por la cola de aprobacion del core (approval_request), salvo que la regla permita auto-ejecutar una accion INTERNA reversible. Respeta la filosofia del core: el modulo OWNS la definicion del agente, sus corridas y las acciones/propuestas que produce; la EJECUCION real (cron, LLM, scraping, envio, publicacion) es external_gate (runtime del producto/VPS, Hermes). El core NO ejecuta: modela el CONTRATO + la LOGICA del ciclo de vida y la regla dura de ruteo por aprobacion.",
+  "coreContract": "onia-core/contract.json",
+  "schemaFile": "onia-core/modules/agents.schema.sql",
+  "installInProductRepos": false,
+  "activatesCapabilities": [],
+  "providesCapabilities": [
+    "agents"
+  ],
+  "coreDependencies": [
+    { "coreEntityId": "organization", "as": "tenant root de cada entidad del modulo (agent/agent_run/agent_action)" },
+    { "coreEntityId": "member", "as": "agent.ownerId: humano responsable del agente / quien aprueba sus acciones en la cola" },
+    { "coreEntityId": "approval_request", "as": "una accion que requiere aprobacion se mapea a un approval_request del core (human-in-the-loop); agent_action.approvalRequestId apunta a ese request" },
+    { "coreEntityId": "work_item", "as": "accion create_task / schedule_followup: la accion genera un WorkItem tipado del core; agent_action.workItemId apunta a ese item" },
+    { "coreEntityId": "business_partner", "as": "lead/cliente sobre el que el agente actua (calificar, proponer, seguir), sin aplanar el dominio del producto" }
+  ],
+  "verticalTracks": [
+    "gestios-general",
+    "dentagest-clinical",
+    "ganadero-offline",
+    "proveegest-electrico",
+    "esteticagest-clinical",
+    "vetgest-clinical",
+    "gestios-gastronomia",
+    "gestios-servicios-profesionales",
+    "gestios-educacion",
+    "proveegest-construccion",
+    "gestios-turismo"
+  ],
+  "entities": [
+    {
+      "id": "agent",
+      "name": "Agent",
+      "capabilityId": "agents",
+      "table": "onia_agents_agents",
+      "purpose": "Definicion de un agente autonomo de la organizacion. role es su rol (vendedor, prospector, finanzas, contenido, radar_normativo, soporte). autonomyLevel define cuanto puede actuar solo (suggest/semi_auto/auto). enabled lo prende/apaga. triggerType + intervalMinutes definen si corre por schedule (cron external_gate) o por evento. ownerId es el humano responsable que aprueba en la cola. capabilities lista lo que el agente puede hacer.",
+      "requiredFields": ["id", "organizationId", "name", "role", "autonomyLevel", "enabled", "createdAt"],
+      "optionalFields": ["ownerId", "triggerType", "intervalMinutes", "capabilities", "description"],
+      "tenantScoped": true
+    },
+    {
+      "id": "agent_run",
+      "name": "AgentRun",
+      "capabilityId": "agents",
+      "table": "onia_agents_runs",
+      "purpose": "Una corrida del agente (una pasada 24/7). status sigue la maquina scheduled -> running -> completed | failed; failed puede reprogramarse. startedAt/finishedAt sellan tiempos. summary + itemsProduced resumen lo que produjo. La ejecucion real la dispara el external_gate (cron+LLM); el core solo modela el ciclo de vida.",
+      "requiredFields": ["id", "organizationId", "agentId", "status", "startedAt", "createdAt"],
+      "optionalFields": ["finishedAt", "triggerId", "summary", "itemsProduced", "error"],
+      "tenantScoped": true
+    },
+    {
+      "id": "agent_action",
+      "name": "AgentAction",
+      "capabilityId": "agents",
+      "table": "onia_agents_actions",
+      "purpose": "Una accion/propuesta producida por el agente en una corrida. actionType define que propone (draft_message, qualify_lead, create_task, scrape, etc.). status sigue la maquina proposed -> pending_approval | auto_executed | discarded; pending_approval -> approved | rejected; approved -> executed. La REGLA DURA de ruteo (routeAction) decide si va a la cola humana o si puede auto-ejecutarse: SOLO acciones internas reversibles con agente 'auto' se auto-ejecutan; toda accion que contacte a un tercero, publique, cobre o gaste pasa SIEMPRE por approval_request. approvalRequestId / workItemId enlazan con el core.",
+      "requiredFields": ["id", "organizationId", "agentId", "runId", "actionType", "status", "createdAt"],
+      "optionalFields": ["targetType", "targetId", "summary", "payload", "approvalRequestId", "workItemId", "reason"],
+      "tenantScoped": true
+    }
+  ],
+  "agentsConfig": {
+    "notFinancialAdvice": true,
+    "roles": [
+      { "code": "vendedor", "name": "Vendedor" },
+      { "code": "prospector", "name": "Prospector" },
+      { "code": "finanzas", "name": "Finanzas" },
+      { "code": "contenido", "name": "Contenido" },
+      { "code": "radar_normativo", "name": "Radar Normativo" },
+      { "code": "soporte", "name": "Soporte" }
+    ],
+    "autonomyLevels": ["suggest", "semi_auto", "auto"],
+    "actionTypes": [
+      { "code": "draft_message", "requiresApproval": true, "note": "redacta un mensaje para un partner; NO lo envia (external_gate). Pasa por cola" },
+      { "code": "send_message", "requiresApproval": true, "note": "contacta a un tercero; SIEMPRE aprobacion humana, nunca auto (external_gate)" },
+      { "code": "create_proposal", "requiresApproval": true, "note": "arma una propuesta comercial para el cliente; se revisa antes de mandarla" },
+      { "code": "publish_content", "requiresApproval": true, "note": "publica contenido en un canal publico; SIEMPRE aprobacion (external_gate)" },
+      { "code": "qualify_lead", "requiresApproval": false, "note": "califica/puntua un lead sobre datos internos; interna y reversible" },
+      { "code": "flag", "requiresApproval": false, "note": "marca un registro para atencion; interna y reversible" },
+      { "code": "prioritize", "requiresApproval": false, "note": "reordena prioridad de trabajo; interna y reversible" },
+      { "code": "create_task", "requiresApproval": false, "note": "crea un WorkItem del core con dueno; interna y reversible" },
+      { "code": "summarize", "requiresApproval": false, "note": "resume actividad/registros; interna y reversible" },
+      { "code": "schedule_followup", "requiresApproval": false, "note": "agenda un seguimiento como WorkItem del core; interna y reversible" },
+      { "code": "scrape", "requiresApproval": true, "note": "toca sistemas externos (scraping); SIEMPRE aprobacion (external_gate)" }
+    ],
+    "guardrails": {
+      "maxActionsPerRun": 25,
+      "maxActionsPerDay": 100,
+      "maxMessagesPerDay": 20,
+      "prohibited": ["send_money", "execute_payment", "delete_data", "modify_settings"],
+      "externalGate": ["llm_call", "send_message", "publish_content", "scrape"]
+    },
+    "notes": [
+      "El runtime (cron + LLM + Hermes) es external_gate: el core NO ejecuta agentes, solo modela el contrato + el ciclo de vida.",
+      "NINGUNA accion que contacte a un tercero, publique, cobre o gaste se auto-ejecuta: pasa SIEMPRE por approval_request (human-in-the-loop).",
+      "SOLO acciones internas reversibles (qualify_lead / flag / prioritize / create_task / summarize / schedule_followup) pueden auto-ejecutarse, y unicamente con un agente en autonomyLevel 'auto'.",
+      "Un actionType desconocido se rutea por seguridad a pending_approval; nunca se auto-ejecuta lo que no esta en el catalogo.",
+      "prohibited son acciones que el agente NUNCA propone ni ejecuta (mover dinero, borrar datos, cambiar settings); las bloquea el guardrail."
+    ]
+  },
+  "notes": [
+    "El modulo NO redefine entidades del core; agrega entidades propias con namespace onia_agents_*.",
+    "Es la capa autonoma del core: el intake/automation reaccionan a eventos; los agents trabajan 24/7 PROPONIENDO acciones que un humano aprueba (o que se auto-ejecutan solo si son internas reversibles).",
+    "Ejecucion real = external_gate (cron, LLM, scraping, envio, publicacion): el runtime del producto/VPS/Hermes ejecuta; el core registra intencion, ciclo de vida y el ruteo por aprobacion.",
+    "No es asesoria fiscal/legal: notFinancialAdvice=true; el rol finanzas resume y prioriza, no decide inversiones ni mueve dinero."
+  ],
+  "gates": [
+    "installInProductRepos = false hasta plan de adopcion del modulo aprobado",
+    "SQL base del modulo (agents.schema.sql) se traduce a migraciones del producto, no se aplica directo",
+    "La ejecucion real (cron/LLM/scraping/envio/publicacion) pasa por external_gate con freno de gasto/aprobacion; el modulo nunca ejecuta por su cuenta",
+    "Toda accion sensible (contactar, publicar, cobrar, gastar, scraping) pasa por approval_request del core; solo acciones internas reversibles con agente 'auto' se auto-ejecutan"
+  ]
+}

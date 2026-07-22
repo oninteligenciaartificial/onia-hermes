@@ -834,7 +834,8 @@
     { "id": "payroll", "providedByModule": "payroll", "note": "planilla Bolivia (Gestora, RC-IVA, aguinaldo, bono de antiguedad, finiquito)" },
     { "id": "automation", "providedByModule": "automation", "note": "motor de reglas 'cuando X -> Y'; envio real = external_gate" },
     { "id": "import_costing", "providedByModule": "imports", "note": "landed cost / costo de importacion Bolivia (DS 5646, NC2/NC6)" },
-    { "id": "dental_clinical", "providedByModule": "dental", "note": "config clinica odontologica (rubro dental)" }
+    { "id": "dental_clinical", "providedByModule": "dental", "note": "config clinica odontologica (rubro dental)" },
+    { "id": "agents", "providedByModule": "agents", "note": "agentes 24/7 human-in-the-loop (ciclo de vida + ruteo a la cola de aprobacion + guardrails); ejecucion real (cron+LLM+scraping+envio) = external_gate (Hermes)" }
   ],
   "verticalTracks": [
     {
