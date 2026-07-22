@@ -28,6 +28,20 @@ respeta las reglas duras. Si existe una skill para la tarea, se usa (no reinvent
 | `onia-contabilidad-bolivia` | fiscal/contable Bolivia (propio + features ERP) | skills fiscales + `docs/ONIA_OPTIMIZACION_FISCAL_PROPIA_2026.md`, `integrations/siat/` |
 | `onia-core` | tocar/adoptar el núcleo | `onia-core/contract.json`, guardián + validador |
 | `onia-web-factory` | construir/rediseñar webs | design-stack, Pattern Bank, gates tsc/E2E |
+| `onia-whatsapp` | WhatsApp Business/Cloud API, Chatwoot, chatbot IA | audit WhatsApp/Meta, VPS `/opt/onia/meta-ads/` |
+| `onia-crm-ventas` | CRM/pipeline, colaboradores, comisiones | schema `onia_sales`, docs vendedores/colaboradores |
+
+## Skills públicas instaladas (auditoría 2026-07-22)
+
+Globales (`~/.claude/skills/`), disponibles en todos los proyectos. Reversibles.
+- **Supabase** (oficial): `supabase`, `supabase-postgres-best-practices` — RLS/Auth/Edge/SSR;
+  ataca "GestiOS RLS OFF en 15 tablas". `npx skills add supabase/agent-skills`
+- **Vercel/React** (oficial): `vercel-react-best-practices`, `web-design-guidelines`,
+  `vercel-optimize`, `writing-guidelines`, `vercel-composition-patterns`.
+  `npx skills add vercel-labs/agent-skills`
+- **Marketing/growth** (`coreyhaines31/marketingskills`, 41k★): `seo-audit`, `schema`, `ai-seo`,
+  `programmatic-seo`, `copywriting`, `cold-email`, `prospecting`, `pricing`, `cro`, `launch`,
+  `sales-enablement`, `competitors`, `offers`… `npx skills add coreyhaines31/marketingskills`
 
 ## Stack de proceso común (TODA sesión)
 `using-superpowers` · `brainstorming` · `make-plan`/`writing-plans` ·

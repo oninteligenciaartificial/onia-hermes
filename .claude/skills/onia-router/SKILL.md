@@ -31,12 +31,12 @@ carril, cargá su stack, respetá las reglas duras. Fuente viva del mapa complet
 | **C** propuestas (comercial) | `article-writing` `make-pdf` `slides` `document-generate` `brand` | `onia-propuestas` | `onia-propuestas` |
 | **D** DentaGest · **E** GestiOS *(repos aparte)* | `database-migrations` `postgres-patterns` `backend-patterns` `api-design` `security-review` | `dentalgest-migrations` · `onia-core-guardian` | `onia-core` |
 | **F** Bolivian Electric *(cliente, solo lectura)* | mismo stack backend | — | `onia-core` |
-| **G** infra / n8n | `n8n-workflow-patterns` `n8n-mcp-tools-expert` `n8n-node-configuration` `n8n-code-javascript` `n8n-validation-expert` `docker-patterns` `deployment-patterns` | `hermes-automation` · `onia-integrations` | — |
+| **G** infra / n8n | `n8n-workflow-patterns` `n8n-mcp-tools-expert` `n8n-node-configuration` `n8n-code-javascript` `n8n-validation-expert` `docker-patterns` `deployment-patterns` | `hermes-automation` · `onia-integrations` | `onia-whatsapp` |
 | **H** contenido · **J** video-remotion | `remotion` `remotion-video-creation` `video-editing` `banner-design` `brand` + Higgsfield MCP | `onia-creative-radar` | — |
 | **I** research/estrategia | `deep-research` `exa-search` `market-research` `iterative-retrieval` `office-hours` | — | — |
 | **K** yt-canal/meta-ads · **L** yt-ciencia-cuerpo | `article-writing` `deep-research` (L=salud/YMYL: fuentes obligatorias) + video stack | `onia-creative-radar` · `onia-integrations` | — |
 | **onia-core** | `database-migrations` `postgres-patterns` `api-design` `backend-patterns` `verification-loop` | `onia-core-guardian` | `onia-core` |
-| **comercial/CRM** | `deep-research` (prospección con señal) | `onia-crm-prospeccion` | `onia-propuestas` |
+| **comercial/CRM** | `deep-research` `prospecting` `cold-email` `sales-enablement` | `onia-crm-prospeccion` | `onia-crm-ventas` · `onia-propuestas` |
 | **fiscal / contable (propio + features ERP)** | `deep-research` (validar RND/DS vigentes) | — | `onia-contabilidad-bolivia` |
 
 ## Reglas duras que aplican SIEMPRE (de CLAUDE.md)
@@ -58,3 +58,5 @@ carril, cargá su stack, respetá las reglas duras. Fuente viva del mapa complet
 - `onia-contabilidad-bolivia` — fiscalidad boliviana propia + features contables de los ERPs.
 - `onia-core` — contrato del núcleo, adapters, adopción en productos.
 - `onia-web-factory` — construir/rediseñar webs anti-template con gates.
+- `onia-whatsapp` — WhatsApp Business/Cloud API (Meta Graph), Chatwoot, chatbot IA.
+- `onia-crm-ventas` — CRM/pipeline sobre `onia_sales`, colaboradores y comisiones.

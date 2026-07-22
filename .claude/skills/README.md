@@ -11,6 +11,8 @@ Claude Code las invoca solo cuando su `description` matchea la tarea. Arrancá s
 | `onia-contabilidad-bolivia` | fiscal/contable Bolivia (SIAT, IVA/IUE, RNDs) — propio + features ERP |
 | `onia-core` | tocar/adoptar el núcleo (contract.json, adapters, schema) |
 | `onia-web-factory` | construir/rediseñar webs (landings, panel, sitios cliente) |
+| `onia-whatsapp` | integrar/operar WhatsApp Business/Cloud API, Chatwoot, chatbot IA |
+| `onia-crm-ventas` | CRM/pipeline de ventas, colaboradores y comisiones (esquema `onia_sales`) |
 
 ## Principio
 Estas skills son **punteros + reglas + cuándo-usar**. El conocimiento de detalle vive en
