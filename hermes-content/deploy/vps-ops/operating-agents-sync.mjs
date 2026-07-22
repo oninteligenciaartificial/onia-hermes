@@ -24,11 +24,11 @@ const ROSTER = {
   agent_radar_yt: { status: "ready", cadence: "weekly", live: true, cadence_label: "Miércoles", channel: "panel" },
   agent_weekly_digest: { status: "ready", cadence: "weekly", live: true, cadence_label: "Domingo", channel: "telegram" },
   agent_auditor: { status: "ready", cadence: "weekly", live: true, cadence_label: "Semanal (GitHub Actions)", channel: "telegram" },
-  // ---- NO CABLEADOS (placeholders honestos) ----
-  agent_ceo_monthly: { status: "planned", cadence: "monthly", live: false, cadence_label: "Mensual — aún sin cablear", channel: "panel", placeholder: true },
-  agent_delivery_projects: { status: "planned", cadence: "weekly", live: false, cadence_label: "Aún sin cablear", channel: "panel", placeholder: true },
-  agent_calendar_energy: { status: "planned", cadence: "daily", live: false, cadence_label: "Diario — aún sin cablear", channel: "panel", placeholder: true },
-  agent_selfhosted_integrations: { status: "planned", cadence: "weekly", live: false, cadence_label: "Aún sin cablear", channel: "panel", placeholder: true },
+  // ---- VIVOS 24/7 (cron activo en n8n — cableados 2026-07-22) ----
+  agent_ceo_monthly: { status: "ready", cadence: "monthly", live: true, cadence_label: "Mensual (día 1)", channel: "telegram" },
+  agent_delivery_projects: { status: "ready", cadence: "weekly", live: true, cadence_label: "Semanal (lunes)", channel: "panel" },
+  agent_calendar_energy: { status: "ready", cadence: "daily", live: true, cadence_label: "Lun a Sáb (07:05)", channel: "telegram" },
+  agent_selfhosted_integrations: { status: "ready", cadence: "daily", live: true, cadence_label: "Cada 6h", channel: "panel" },
 };
 
 function out(o) {
