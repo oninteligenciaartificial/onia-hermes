@@ -1,5 +1,13 @@
 # ONIA Core Changelog
 
+## 0.7.1 + moduleCapabilities registry — 2026-07-21 (perfeccionar el core, visibilidad de caps de modulo)
+
+P0 #5 (ultimo del core) de la ola "perfeccionar los universales". ENFOQUE: CORE (contrato + validadores), no un producto.
+- **Registro `moduleCapabilities` en `contract.json`** — las 7 capabilities que PROVEEN los modulos (accounting, tax_bolivia, invoicing, payroll, automation, import_costing, dental_clinical) ahora son VISIBLES al contrato. Antes eran invisibles: un track NO podia declarar que las necesitaba (validate.mjs exigia que `requiredCapabilityIds` estuviera en `contract.capabilities`, y las provistas no lo estan). Es el hueco que dejo en evidencia el modulo `imports`.
+- **Nuevo campo opcional `requiredModuleCapabilityIds` en los tracks** — `proveegest-electrico` ya declara `import_costing` + accounting + tax_bolivia + invoicing + payroll + automation (cierra el gap concreto; el campo queda disponible para el resto de los tracks).
+- **Validacion BIDIRECCIONAL** (aditiva): `validate.mjs` valida que cada `requiredModuleCapabilityIds` de un track exista en el registro y que las module-caps no colisionen con las del core; `validate-modules.mjs` valida que cada `providesCapabilities` de un modulo este registrada con el modulo correcto, y que cada registro sea provisto por un modulo real.
+- +3 tests. Aditivo, el contrato no rompe (solo campos nuevos). **447 tests, 4 validadores verdes.**
+
 ## 0.7.1 + commerce estados + knowledge logica — 2026-07-21 (perfeccionar el core, hardening)
 
 P0 #3-4 de la ola "perfeccionar los universales" (construidos en PARALELO, worktrees aislados, integrados central).
