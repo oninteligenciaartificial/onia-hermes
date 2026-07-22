@@ -118,13 +118,13 @@
       "kind": "config",
       "path": "onia-core/modules/invoicing.json",
       "jsonKey": "siatConfig",
-      "sha256": "76bd91a65a15c26e2d247ece32ea5a54ff4475ad27b2e9b02ee803f8288d6fcb"
+      "sha256": "a4d16529264579a8ce8a6b3a1624258d9c564abc1e0edd200cd1847176df6de2"
     },
     {
       "id": "modules/invoicing.logic.mjs",
       "kind": "logic",
       "path": "onia-core/modules/invoicing.logic.mjs",
-      "sha256": "04454e82b4bc7f5715dec2c04696a4792563214d4d5f53e912c0062f5335f11b"
+      "sha256": "81529859b2fcf5db2685650bc52c8e4b770700d22b8001991bf3ed5bf7190813"
     },
     {
       "id": "modules/knowledge.logic.mjs",

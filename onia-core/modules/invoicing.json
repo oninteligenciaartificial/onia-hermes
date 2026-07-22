@@ -90,8 +90,8 @@
       "invoiceNumber": 8,
       "pointOfSale": 4
     },
-    "cufWidthNote": "invoiceNumber: 8 digitos segun la investigacion cruzada 2026-07-06 (total 51 + 1 digito verificador = 52). ONIA_SIAT_CERTIFICACION_PLAN_2026.md cito 10 digitos en una redaccion anterior -> VERIFICAR contra el Anexo Tecnico oficial GENERACION-CUF.pdf antes de generar un CUF real. Los anchos son configurables a proposito para que esa correccion sea un cambio de una linea.",
-    "checkDigitNote": "El digito verificador usa Modulo 11; el peso exacto por posicion NO esta 100% confirmado contra el Anexo Tecnico oficial. No usar buildCuf() de la logica para emitir un CUF real sin verificar antes.",
+    "cufWidthNote": "RESUELTO 2026-07-22 (Anexo Tecnico oficial, siatinfo.impuestos.gob.bo/generacion-cuf): el CUF real usa invoiceNumber de 10 digitos (payload total de 53 + 1 verificador). El buildCuf de la logica del core usa 8 (REFERENCIA simplificada, no para emision). La version verificada de 10 digitos vive en el emisor: hermes-content/integrations/siat/src/cuf.mjs.",
+    "checkDigitNote": "RESUELTO 2026-07-22 (Anexo Tecnico oficial, algoritmo-modulo-11): Modulo 11 con pesos 2..9 ciclicos de derecha a izquierda, digito = suma % 11, con 10->1 y 11->0; anclado al ejemplo oficial 12345->6. Implementado y testeado en el emisor (integrations/siat/src/cuf.mjs). El buildCuf del core sigue siendo referencia; emitir siempre por el emisor.",
     "cancellationDeadlineDayOfNextMonth": 9,
     "cancellationNote": "Anulacion posible hasta el dia 9 del mes siguiente a la emision; no anulable si la factura ya fue confirmada en RCV o declarada (F110/111); reversion de anulacion por unica vez (RND 102100000011 Art. 38).",
     "sinStatusCodes": { "pending": 901, "observed": 904, "validated": 908 },

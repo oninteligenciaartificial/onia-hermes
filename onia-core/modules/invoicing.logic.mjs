@@ -4,13 +4,16 @@
  * credito-debito) SIN llamar al SIN: la emision real (CUIS/CUFD, firma) es
  * external_gate del core. Referencia canonica para portar, no duplicar.
  *
- * ADVERTENCIA (verificado 2026-07-06, investigacion cruzada de 2 fuentes): el
- * ancho exacto de invoiceNumber en el CUF (8 vs 10 digitos, segun la fuente) y
- * el algoritmo EXACTO del digito verificador Modulo 11 no estan 100%
- * confirmados contra el Anexo Tecnico oficial del SIN (GENERACION-CUF.pdf). NO
- * usar buildCuf() para emitir un CUF real sin verificar antes contra ese
- * anexo. Los anchos son configurables (CUF_FIELD_WIDTHS) para que una
- * correccion futura sea un cambio de una linea, no una reescritura.
+ * ADVERTENCIA: este buildCuf() es una REFERENCIA SIMPLIFICADA (invoiceNumber de
+ * 8 digitos, sin codigo de control), NO apta para emision real. El algoritmo REAL
+ * fue VERIFICADO contra el Anexo Tecnico oficial el 2026-07-22 (siatinfo.
+ * impuestos.gob.bo, generacion-cuf + algoritmo-modulo-11): usa invoiceNumber de
+ * 10 digitos (payload de 53), Modulo 11 con pesos 2..9 ciclicos (suma % 11, con
+ * 10->1/11->0) y concatena el codigo de control del CUFD. La version VERIFICADA y
+ * lista para emitir vive en el emisor external_gate:
+ * hermes-content/integrations/siat/src/cuf.mjs. Los anchos aca son configurables
+ * (CUF_FIELD_WIDTHS); no cambiar este de referencia por el real (rompe los tests
+ * portados). Emitir siempre por el emisor, nunca por este buildCuf().
  */
 import { computeQuoteTotal } from "./commerce.logic.mjs";
 import { officialRate } from "../logic/fx.logic.mjs";
