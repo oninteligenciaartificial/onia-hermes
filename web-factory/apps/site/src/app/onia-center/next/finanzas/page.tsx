@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 import { getMissingOniaCenterConfig, isOniaCenterConfigured } from "@/lib/onia-center-store";
 import { canActorSeeFinance, getOniaCenterActor } from "@/lib/onia-center-auth";
-import { getFinanceSummary } from "@/app/onia-center/live/live-runtime";
+import { getCostItems, getFinanceSummary } from "@/app/onia-center/live/live-runtime";
 import { AppShell } from "@/app/onia-center/components/shell/AppShell";
 import { FinanzasView } from "@/app/onia-center/components/views/finanzas/FinanzasView";
 import { EmptyState } from "@/app/onia-center/components/ui/EmptyState";
@@ -59,11 +59,11 @@ export default async function FinanzasPage() {
     );
   }
 
-  const summary = await getFinanceSummary();
+  const [summary, costItems] = await Promise.all([getFinanceSummary(), getCostItems()]);
 
   return (
     <AppShell canSeeFinance={canSeeFinance} actorName={auth.actor.displayName}>
-      <FinanzasView role={auth.actor.role} summary={summary} />
+      <FinanzasView role={auth.actor.role} summary={summary} costItems={costItems} />
     </AppShell>
   );
 }

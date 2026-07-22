@@ -1,8 +1,9 @@
-import type { FinanceSummary } from "@/app/onia-center/live/live-runtime";
+import type { CostItem, FinanceSummary } from "@/app/onia-center/live/live-runtime";
 import type { RoleId } from "@/app/onia-center/types";
 import { getVisibleCenters } from "@/app/onia-center/engine";
 import { Badge } from "../../ui/Badge";
 import { SurfaceCard } from "../../ui/SurfaceCard";
+import { CostsCard } from "./CostsCard";
 import { EarningsCard } from "./EarningsCard";
 import { FinanceSummaryCard } from "./FinanceSummaryCard";
 import { TaxPostureCard } from "./TaxPostureCard";
@@ -10,9 +11,10 @@ import { TaxPostureCard } from "./TaxPostureCard";
 interface FinanzasViewProps {
   role: RoleId;
   summary: FinanceSummary | null;
+  costItems: CostItem[];
 }
 
-export function FinanzasView({ role, summary }: FinanzasViewProps) {
+export function FinanzasView({ role, summary, costItems }: FinanzasViewProps) {
   const centers = getVisibleCenters(role);
 
   return (
@@ -28,6 +30,7 @@ export function FinanzasView({ role, summary }: FinanzasViewProps) {
         <EarningsCard earnings={summary?.earnings ?? []} />
       </div>
       <TaxPostureCard taxPosture={summary?.taxPosture ?? null} />
+      <CostsCard costItems={costItems} />
       <SurfaceCard title="Centros contables">
         <div className="grid gap-3">
           {centers.map((center) => (

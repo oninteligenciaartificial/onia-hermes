@@ -752,3 +752,198 @@ export async function getContentPipelineCounts(): Promise<ContentPipelineCounts 
   ]);
   return toContentPipelineCounts(ideas, drafts);
 }
+
+// ---------------------------------------------------------------------------
+// 8. Costos y suscripciones — onia_center.cost_items.
+//    Cada gasto recurrente de ONIA (infra, dominios, APIs, email, tools) con su
+//    ciclo de cobro y proximo pago. Para item_key='openai_api' el raw trae el
+//    gasto IA del mes en vivo (raw.spend_usd_mtd). El panel LEE, no escribe.
+// ---------------------------------------------------------------------------
+
+const COST_CATEGORIES = ["infra", "domain", "api", "email", "tool", "other"] as const;
+export type CostCategory = (typeof COST_CATEGORIES)[number];
+
+const COST_CYCLES = ["monthly", "yearly", "usage"] as const;
+export type CostCycle = (typeof COST_CYCLES)[number];
+
+export interface CostItem {
+  itemKey: string;
+  name: string;
+  provider: string;
+  category: CostCategory;
+  amount: number | null;
+  currency: string;
+  cycle: CostCycle;
+  dueDay: number | null;
+  renewalDate: string | null;
+  status: "active" | "paused";
+  source: "detected" | "manual";
+  notes: string;
+  // Gasto IA del mes en vivo (raw.spend_usd_mtd) para cycle='usage'; null si no aplica.
+  spendUsdMtd: number | null;
+  requestsMtd: number | null;
+  // Etiqueta legible del proximo cobro ("15 ago (en 8 dias)"); null para usage.
+  nextDueLabel: string | null;
+}
+
+type DbCostRow = {
+  item_key?: string;
+  name?: string;
+  provider?: string;
+  category?: string;
+  amount?: unknown;
+  currency?: string;
+  cycle?: string;
+  due_day?: unknown;
+  renewal_date?: string | null;
+  status?: string;
+  source?: string;
+  notes?: string;
+  raw?: unknown;
+};
+
+function toNullableNumber(value: unknown): number | null {
+  if (value === null || value === undefined) {
+    return null;
+  }
+  const parsed = typeof value === "number" ? value : Number(value);
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
+function toNullableInt(value: unknown): number | null {
+  const parsed = toNullableNumber(value);
+  return parsed === null ? null : Math.trunc(parsed);
+}
+
+function toCostCategory(value: unknown): CostCategory {
+  return typeof value === "string" && (COST_CATEGORIES as readonly string[]).includes(value)
+    ? (value as CostCategory)
+    : "other";
+}
+
+function toCostCycle(value: unknown): CostCycle {
+  return value === "monthly" || value === "yearly" || value === "usage" ? value : "monthly";
+}
+
+function readCostSpend(raw: unknown): { spendUsdMtd: number | null; requestsMtd: number | null } {
+  if (!raw || typeof raw !== "object" || Array.isArray(raw)) {
+    return { spendUsdMtd: null, requestsMtd: null };
+  }
+  const record = raw as Record<string, unknown>;
+  return {
+    spendUsdMtd: toNullableNumber(record.spend_usd_mtd),
+    requestsMtd: toNullableInt(record.requests_mtd),
+  };
+}
+
+// --- Calculo del proximo pago (SSR-safe: corre en el server component) --------
+
+function daysUntil(target: Date, now: Date): number {
+  const MS_PER_DAY = 24 * 60 * 60 * 1000;
+  const a = Date.UTC(target.getFullYear(), target.getMonth(), target.getDate());
+  const b = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
+  return Math.round((a - b) / MS_PER_DAY);
+}
+
+// Clampa el dia al ultimo valido del mes (ej. due_day=31 en un mes de 30 dias).
+function clampedDay(year: number, month: number, day: number): Date {
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  return new Date(year, month, Math.min(day, daysInMonth));
+}
+
+function nextMonthlyOccurrence(dueDay: number, now: Date): Date {
+  const thisMonth = clampedDay(now.getFullYear(), now.getMonth(), dueDay);
+  if (daysUntil(thisMonth, now) >= 0) {
+    return thisMonth;
+  }
+  return clampedDay(now.getFullYear(), now.getMonth() + 1, dueDay);
+}
+
+// Parseo local de 'YYYY-MM-DD' para evitar el corrimiento de dia por zona horaria
+// que produce new Date(isoDate) (interpreta UTC medianoche).
+function parseIsoDate(value: string): Date | null {
+  const match = /^(\d{4})-(\d{2})-(\d{2})/.exec(value);
+  if (!match) {
+    return null;
+  }
+  const date = new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]));
+  return Number.isNaN(date.getTime()) ? null : date;
+}
+
+function daysPhrase(days: number): string | null {
+  if (days < 0) {
+    return null;
+  }
+  if (days === 0) {
+    return "hoy";
+  }
+  if (days === 1) {
+    return "mañana";
+  }
+  return `en ${days} días`;
+}
+
+function withDaysPhrase(label: string, days: number): string {
+  const phrase = daysPhrase(days);
+  return phrase ? `${label} (${phrase})` : label;
+}
+
+function computeNextDueLabel(
+  cycle: CostCycle,
+  dueDay: number | null,
+  renewalDate: string | null,
+  now: Date,
+): string | null {
+  if (cycle === "monthly" && dueDay !== null && dueDay >= 1 && dueDay <= 31) {
+    const date = nextMonthlyOccurrence(dueDay, now);
+    const label = date.toLocaleDateString("es-BO", { day: "numeric", month: "short" });
+    return withDaysPhrase(label, daysUntil(date, now));
+  }
+  if (cycle === "yearly" && renewalDate) {
+    const date = parseIsoDate(renewalDate);
+    if (!date) {
+      return null;
+    }
+    const label = date.toLocaleDateString("es-BO", { day: "numeric", month: "short", year: "numeric" });
+    return withDaysPhrase(label, daysUntil(date, now));
+  }
+  return null;
+}
+
+function mapCostItem(row: DbCostRow, now: Date): CostItem {
+  const cycle = toCostCycle(row.cycle);
+  const dueDay = toNullableInt(row.due_day);
+  const renewalDate =
+    typeof row.renewal_date === "string" && row.renewal_date.trim() !== "" ? row.renewal_date : null;
+  const spend = readCostSpend(row.raw);
+
+  return {
+    itemKey: row.item_key ?? "",
+    name: row.name ?? row.provider ?? (row.item_key ?? ""),
+    provider: row.provider ?? "",
+    category: toCostCategory(row.category),
+    amount: toNullableNumber(row.amount),
+    currency:
+      typeof row.currency === "string" && row.currency.trim() !== "" ? row.currency : "USD",
+    cycle,
+    dueDay,
+    renewalDate,
+    status: row.status === "paused" ? "paused" : "active",
+    source: row.source === "detected" ? "detected" : "manual",
+    notes: typeof row.notes === "string" ? row.notes : "",
+    spendUsdMtd: spend.spendUsdMtd,
+    requestsMtd: spend.requestsMtd,
+    nextDueLabel: computeNextDueLabel(cycle, dueDay, renewalDate, now),
+  };
+}
+
+export async function getCostItems(): Promise<CostItem[]> {
+  const rows = await liveRequest<DbCostRow[]>(
+    "cost_items?select=*&status=eq.active&order=category.asc",
+  );
+  if (!rows) {
+    return [];
+  }
+  const now = new Date();
+  return rows.filter((row) => row.item_key).map((row) => mapCostItem(row, now));
+}
