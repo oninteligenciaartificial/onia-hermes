@@ -29,6 +29,7 @@ const ROSTER = {
   agent_delivery_projects: { status: "ready", cadence: "weekly", live: true, cadence_label: "Semanal (lunes)", channel: "panel" },
   agent_calendar_energy: { status: "ready", cadence: "daily", live: true, cadence_label: "Lun a Sáb (07:05)", channel: "telegram" },
   agent_selfhosted_integrations: { status: "ready", cadence: "daily", live: true, cadence_label: "Cada 6h", channel: "panel" },
+  agent_ai_radar: { status: "ready", cadence: "daily", live: true, cadence_label: "Cada 1-2h", channel: "telegram" },
 };
 
 function out(o) {
