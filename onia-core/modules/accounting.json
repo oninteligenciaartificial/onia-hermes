@@ -109,7 +109,7 @@
       "name": "WithholdingRecord",
       "capabilityId": "tax_bolivia",
       "table": "onia_accounting_withholding_records",
-      "purpose": "Retencion a terceros (la empresa actua como agente de retencion): IUE+IT en compras sin factura, RC-IVA+IT en alquileres a personas naturales, RC-IVA en honorarios, o IUE-BE en remesas al exterior. Alimenta la declaracion mensual (Form. 570/604/530 segun el tipo).",
+      "purpose": "Retencion a terceros (la empresa actua como agente de retencion): IUE+IT en compras sin factura, RC-IVA+IT en alquileres a personas naturales, RC-IVA en honorarios, o IUE-BE en remesas al exterior. Alimenta la declaracion mensual, con el IT SIEMPRE en formulario aparte (Form. 570 IUE / 604 RC-IVA / 410 IT / 530 v3 IUE-BE segun el tipo).",
       "requiredFields": ["id", "organizationId", "withholdingType", "period", "date", "grossAmount", "retentionAmount", "status", "createdAt"],
       "optionalFields": ["payeeId", "payeeName", "payeeNit", "formNumber", "notes"],
       "tenantScoped": true
@@ -177,37 +177,44 @@
       "note": "Ley General del Trabajo: aguinaldo = 1 sueldo/anio (pagadero en diciembre; proporcional desde 3 meses). Indemnizacion = 1 sueldo por anio de antiguedad (proporcional). Provision mensual = sueldo * meses_por_anio / 12."
     },
     "withholdings": {
-      "verifiedAt": "2026-07-06",
+      "verifiedAt": "2026-07-22",
       "compraSinFactura": {
         "iueRate": 0.05,
         "itRate": 0.03,
         "totalRate": 0.08,
-        "form": "Formulario 570",
+        "iueForm": "Formulario 570",
+        "itForm": "Formulario 410",
+        "form": "Formulario 570 (IUE) + Formulario 410 (IT)",
         "legalBasis": "DS 24051 art. 3 (parrafo final) + DS 21532 art. 10",
-        "note": "Compras de bienes/servicios a proveedor ocasional/no inscrito, sin factura. El mas frecuente en distribuidoras/clinicas/comercios formales."
+        "note": "Compras de bienes a proveedor ocasional/no inscrito, sin factura. El IUE (5%) va en el Form. 570 y el IT (3%) en el Form. 410, en formularios SEPARADOS (no es uno solo). El mas frecuente en distribuidoras/clinicas/comercios formales."
       },
       "alquilerPersonaNatural": {
         "rcIvaRate": 0.13,
         "itRate": 0.03,
         "totalRate": 0.16,
-        "form": "Formulario 604",
-        "note": "Alquiler de inmueble a persona natural sin factura. Casi toda empresa formal alquila su local."
+        "rcIvaForm": "Formulario 604",
+        "itForm": "Formulario 410",
+        "form": "Formulario 604 (RC-IVA) + Formulario 410 (IT)",
+        "note": "Alquiler de inmueble a persona natural sin factura. El RC-IVA (13%) va en el Form. 604 y el IT (3%) en el Form. 410, por separado. Casi toda empresa formal alquila su local."
       },
       "honorariosPersonaNatural": {
         "rcIvaRate": 0.13,
-        "form": "Formulario 604",
-        "note": "Honorarios/pagos ocasionales a personas naturales sin factura, cuando el ingreso no esta alcanzado por IUE."
+        "rcIvaForm": "Formulario 604",
+        "form": "Formulario 604 (RC-IVA)",
+        "note": "Honorarios/pagos ocasionales a personas naturales sin factura, cuando el ingreso no esta alcanzado por IUE. Solo RC-IVA (13%) en el Form. 604; si el servicio ademas causa IT, el 3% va en el Form. 410 aparte."
       },
       "beneficiarioExterior": {
         "presumedBaseRate": 0.5,
         "iueRate": 0.25,
         "effectiveRate": 0.125,
         "form": "Formulario 530 v3",
+        "boletaPago": "Boleta 3050 v3",
         "legalBasis": "Ley 843 art. 51 (IUE-BE); DS 5563 puede exonerar/reducir por reinversion de utilidades",
-        "note": "Remesas a beneficiarios del exterior (proveedores/socios extranjeros). Poco frecuente en distribuidora/clinica/comercio local."
+        "note": "Remesas a beneficiarios del exterior (proveedores/socios extranjeros): renta de fuente boliviana consolidada en el Form. 530 v3 (Seccion D obligatoria: identificar cada beneficiario y el concepto); pago individualizado por la Boleta 3050 v3, a cuenta del 530. Para actividades PARCIALMENTE realizadas en el pais aplica el Form. 551 v3. Poco frecuente en distribuidora/clinica/comercio local."
       },
       "notes": [
         "compraSinFactura (8%) y alquilerPersonaNatural (16%) son los mas usados en empresas formales tipicas; honorarios y beneficiarioExterior dependen del cliente.",
+        "El componente IT (3%) de TODA retencion combinada se declara en el Formulario 410, SEPARADO del formulario del IUE (570) o RC-IVA (604). Verificado 2026-07-22 (siatinfo.impuestos.gob.bo Form. 570/530; boliviaimpuestos.com Form. 410 y tasas combinadas bienes 8% / servicios-alquiler 16%).",
         "No es asesoria fiscal; verificar el caso puntual (tipo de proveedor, monto, si corresponde retener) antes de aplicar."
       ]
     },

@@ -56,7 +56,7 @@
       "kind": "config",
       "path": "onia-core/modules/accounting.json",
       "jsonKey": "bolivianConfig",
-      "sha256": "2218fed5fd747b773116951bf64f138d4ac6e8f8f9136de937b9d1cc0c44f422"
+      "sha256": "e8f409374e7e34369fff587e7ab48c44ba615ba73292f500fd6257e09687db7c"
     },
     {
       "id": "modules/accounting.logic.mjs",

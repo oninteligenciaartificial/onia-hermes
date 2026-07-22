@@ -398,6 +398,15 @@ describe("retenciones a terceros (agente de retencion)", () => {
     assert.equal(result.withheld, 1250);
     assert.equal(result.effectiveRate, 0.125);
   });
+
+  it("el IT de toda retencion combinada se declara en el Form. 410, separado del 570/604 (verif. 2026-07-22)", () => {
+    const w = config.withholdings;
+    assert.equal(w.compraSinFactura.iueForm, "Formulario 570");
+    assert.equal(w.compraSinFactura.itForm, "Formulario 410");
+    assert.equal(w.alquilerPersonaNatural.rcIvaForm, "Formulario 604");
+    assert.equal(w.alquilerPersonaNatural.itForm, "Formulario 410");
+    assert.match(w.beneficiarioExterior.form, /530 v3/); // IUE-BE es 530 v3, no 550
+  });
 });
 
 describe("advertencia de reforma del IVA (Ley 1.733)", () => {

@@ -1,5 +1,12 @@
 # ONIA Core Changelog
 
+## 0.7.1 + accounting retenciones: IT en Form. 410 aparte — 2026-07-22 (perfeccionar el core, fiscal Bolivia)
+
+ENFOQUE: CORE. Correccion de exactitud fiscal en la atribucion de formularios de retencion (las tasas y funciones ya eran correctas; no cambia ningun calculo). Verificado 2026-07-22 contra fuente oficial.
+- **El IT (3%) de toda retencion combinada se declara en el Formulario 410, SEPARADO** del formulario del IUE (570) o RC-IVA (604). El config lo lumpeaba en un solo numero de formulario: bienes 8% -> 5% Form. 570 (IUE) + 3% Form. 410 (IT); alquiler/servicios 16% -> 13% Form. 604 (RC-IVA) + 3% Form. 410 (IT). Ahora cada retencion nombra AMBOS formularios (`iueForm`/`rcIvaForm` + `itForm`).
+- **IUE-BE confirmado en Form. 530 v3** (no 550): la renta de fuente boliviana se consolida en el 530 v3 (Seccion D obligatoria) y el pago individual va por la Boleta 3050 v3; el 551 v3 es para actividades parcialmente realizadas en el pais. El "530 vs 550" que arrastraba el research era falsa alarma — el 530 v3 es el correcto.
+- Fuentes: siatinfo.impuestos.gob.bo (Form. 570 IUE Retenciones, Form. 530 IUE-BE) + boliviaimpuestos.com (Form. 410 IT y tasas combinadas bienes 8% / servicios-alquiler 16%). +1 test (guard anti-regresion). Aditivo, sin cambio de calculo. **460 tests, 4 validadores verdes.**
+
 ## 0.7.1 + accounting estados financieros + cierre de gestion — 2026-07-22 (perfeccionar el core, fiscal Bolivia)
 
 ENFOQUE: CORE. Fiscal P1 de `accounting`: completa los estados financieros basicos y el cierre de gestion. Todo se DERIVA de las lineas de asiento — sin cifras/fechas fiscales inciertas.
