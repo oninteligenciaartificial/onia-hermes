@@ -226,3 +226,24 @@ S7 keys Tavily/fal, S8 fiscal, S9 password. Detalle en el plan maestro §(b).
   y el merge a `main` tras revisar.
 - Tareas del mismo carril (misma carpeta) → subagentes SECUENCIALES. Carriles distintos
   → en paralelo. Lo nuevo que aparezca se anota como pendiente y se retoma DESPUÉS.
+
+## Velocidad — no tardar en lo simple (REGLA)
+
+> Sergio 2026-07-22: "estás tardando demasiado en algo muy simple" (la UI del panel
+> tomó 3 rondas porque shippeé genérico e iteré, en vez de usar el método de entrada).
+
+- **Método correcto desde el PRIMER intento.** No shippear algo mediocre para iterar
+  después. UI/diseño: cargar `impeccable` + registro producto + galería/tokens de
+  web-factory ANTES de codear (ver [[web-factory-disenos-genericos]]); para diseño nuevo,
+  aprobar un mockup rápido con Sergio y recién portar fiel (no rediseñar en el panel real
+  a ciegas). Toda tarea: elegir la skill/subagente/herramienta correcta de entrada, no
+  descubrirla a la 3ª ronda.
+- **Paralelizar agresivo.** Lo independiente va en subagentes CONCURRENTES
+  (dispatching-parallel-agents), nunca en serie: research, review, y frentes distintos al
+  mismo tiempo. Serializar solo lo que comparte archivos/estado.
+- **Decidir y actuar; menos ida y vuelta.** Minimizar investigación exploratoria y
+  verificación redundante en lo de bajo riesgo. Verificación fuerte (tsc, prueba en vivo,
+  gates) SOLO para lo que toca prod / plata / `main`. Lo reversible y de bajo riesgo:
+  hacerlo y seguir.
+- **No re-hacer lo aprobado.** Diseño o plan ya aprobado por Sergio = portar fiel, no
+  reabrir. Guardar el mockup/decisión como fuente de verdad.
