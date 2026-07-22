@@ -1,0 +1,885 @@
+{
+  "generatedAt": "2026-07-21T23:44:05.302Z",
+  "lane": "trend",
+  "clientSlug": "",
+  "policy": "Reels intelligence for design decisions, not a copy source. Trend reels: inspiration only — rebuild motion/type with ONIA tokens, never reuse third-party footage, audio, music, copy or logos. Client reels: reuse the client's OWN footage only after the client confirms rights.",
+  "inputs": {
+    "analysesDir": "data/references/reels/analyses"
+  },
+  "summary": {
+    "reels": 3,
+    "rubros": 3,
+    "sitesShown": 3,
+    "avgConfidence": "3.00"
+  },
+  "showcasedSites": {
+    "count": 3,
+    "sections": [
+      {
+        "value": "'Claim special offers' pill CTA",
+        "count": 1
+      },
+      {
+        "value": "'Get In Touch' contact form (name / email) on a dark closing section",
+        "count": 1
+      },
+      {
+        "value": "'Our Villas' intro with a modernist villa hero image",
+        "count": 1
+      },
+      {
+        "value": "'SHOP CAVIAR' serif headline",
+        "count": 1
+      },
+      {
+        "value": "bento product grid: caviar tins on dark panels + product callouts ('White Sturgeon', 'Siberian Sturgeon') with 'Starts at $...' and 'click to shop'",
+        "count": 1
+      },
+      {
+        "value": "bold product hero",
+        "count": 1
+      },
+      {
+        "value": "dark cinematic hero: serif headline 'Live Where the Sun Meets the Sea' over a warm amber interior photo, pill CTAs 'View Properties' + 'Book a Tour'",
+        "count": 1
+      },
+      {
+        "value": "footer brand mark 'Le Cercle'",
+        "count": 1
+      },
+      {
+        "value": "gourmet food-photography panels (canapes, plated dishes)",
+        "count": 1
+      },
+      {
+        "value": "light editorial statement: 'For those who travel like it's an art form'",
+        "count": 1
+      },
+      {
+        "value": "nav with centered serif logo 'COSTERS' + minimal menu (Shop / About / Journal)",
+        "count": 1
+      },
+      {
+        "value": "property cards: 2-column (Villa Blanca, Casa Dorada) each photo + name + one-line description",
+        "count": 1
+      }
+    ],
+    "components": [
+      {
+        "value": "2-column property cards",
+        "count": 1
+      },
+      {
+        "value": "centered product packshot with spotlight",
+        "count": 1
+      },
+      {
+        "value": "centered-logo nav",
+        "count": 1
+      },
+      {
+        "value": "circular control buttons",
+        "count": 1
+      },
+      {
+        "value": "circular product seals/badges (PDL)",
+        "count": 1
+      },
+      {
+        "value": "editorial bento grid",
+        "count": 1
+      },
+      {
+        "value": "inline contact form",
+        "count": 1
+      },
+      {
+        "value": "pill buttons",
+        "count": 1
+      },
+      {
+        "value": "pill CTA",
+        "count": 1
+      },
+      {
+        "value": "product callout tile: name + 'Starts at $X' + click-to-shop",
+        "count": 1
+      },
+      {
+        "value": "rounded pill labels",
+        "count": 1
+      },
+      {
+        "value": "rounded-corner hero imagery",
+        "count": 1
+      },
+      {
+        "value": "sticky top nav with centered logo",
+        "count": 1
+      }
+    ],
+    "interactions": [
+      {
+        "value": "bento product grid",
+        "count": 1
+      },
+      {
+        "value": "product tiles link to shop",
+        "count": 1
+      },
+      {
+        "value": "smooth scroll walkthrough (scrollytelling): alternating dark/light full-bleed sections reveal as you scroll",
+        "count": 1
+      },
+      {
+        "value": "the 'virtually walk through the property' concept via cinematic full-bleed sections",
+        "count": 1
+      }
+    ],
+    "paletteFamilies": [
+      {
+        "value": "near-white",
+        "count": 4
+      },
+      {
+        "value": "near-black",
+        "count": 2
+      },
+      {
+        "value": "orange",
+        "count": 2
+      },
+      {
+        "value": "deep red",
+        "count": 1
+      },
+      {
+        "value": "green",
+        "count": 1
+      },
+      {
+        "value": "light orange",
+        "count": 1
+      }
+    ],
+    "reuseForFactory": [
+      {
+        "value": "2-col property cards (photo + name + one-line desc)",
+        "count": 1
+      },
+      {
+        "value": "alternating dark-cinematic <-> light-editorial section rhythm for premium real-estate",
+        "count": 1
+      },
+      {
+        "value": "centered serif-logo nav for a boutique brand",
+        "count": 1
+      },
+      {
+        "value": "circular seal/badge as a premium trust motif",
+        "count": 1
+      },
+      {
+        "value": "editorial bento grid mixing product packshots + lifestyle food photography for premium ecommerce",
+        "count": 1
+      },
+      {
+        "value": "exactly one flavor claim, no clutter",
+        "count": 1
+      },
+      {
+        "value": "high-contrast black + cream luxury palette",
+        "count": 1
+      },
+      {
+        "value": "inline 'Get In Touch' form in a dark closing section",
+        "count": 1
+      },
+      {
+        "value": "one spotlighted packshot",
+        "count": 1
+      },
+      {
+        "value": "oversized condensed product name",
+        "count": 1
+      },
+      {
+        "value": "product callout tile: name + 'Starts at $X' + click-to-shop",
+        "count": 1
+      },
+      {
+        "value": "saturated single-color hero field",
+        "count": 1
+      },
+      {
+        "value": "scroll-linked reveals — ship a reduced-motion + LCP/CLS-safe fallback",
+        "count": 1
+      },
+      {
+        "value": "serif headline + pill CTA hero over a warm property photo",
+        "count": 1
+      }
+    ]
+  },
+  "globalSignals": {
+    "paletteFamilies": [
+      {
+        "value": "near-black",
+        "count": 3
+      },
+      {
+        "value": "orange",
+        "count": 2
+      },
+      {
+        "value": "blue",
+        "count": 1
+      },
+      {
+        "value": "deep red",
+        "count": 1
+      },
+      {
+        "value": "green",
+        "count": 1
+      },
+      {
+        "value": "light orange",
+        "count": 1
+      },
+      {
+        "value": "light purple",
+        "count": 1
+      },
+      {
+        "value": "near-white",
+        "count": 1
+      },
+      {
+        "value": "purple",
+        "count": 1
+      }
+    ],
+    "motionTechniques": [
+      {
+        "value": "architectural-walkthrough-implied",
+        "count": 1
+      },
+      {
+        "value": "cinematic-device-reveal",
+        "count": 1
+      },
+      {
+        "value": "device-hero",
+        "count": 1
+      },
+      {
+        "value": "gradient-lighting",
+        "count": 1
+      },
+      {
+        "value": "made-with-ai-label",
+        "count": 1
+      },
+      {
+        "value": "pov",
+        "count": 1
+      },
+      {
+        "value": "pov-reveal",
+        "count": 1
+      },
+      {
+        "value": "product-hero",
+        "count": 1
+      },
+      {
+        "value": "scroll-storytelling-implied",
+        "count": 1
+      }
+    ],
+    "transitions": [
+      {
+        "value": "crossfade",
+        "count": 1
+      },
+      {
+        "value": "match-cut",
+        "count": 1
+      },
+      {
+        "value": "none-static-showcase",
+        "count": 1
+      },
+      {
+        "value": "slow-push",
+        "count": 1
+      },
+      {
+        "value": "smooth-camera",
+        "count": 1
+      }
+    ],
+    "pacing": [
+      {
+        "value": "medium",
+        "count": 2
+      },
+      {
+        "value": "slow",
+        "count": 1
+      }
+    ],
+    "shots": [
+      {
+        "value": "architectural-b-roll",
+        "count": 1
+      },
+      {
+        "value": "laptop-hero-moody",
+        "count": 1
+      },
+      {
+        "value": "laptop-pov",
+        "count": 1
+      },
+      {
+        "value": "laptop-screen-site",
+        "count": 1
+      },
+      {
+        "value": "lifestyle-room",
+        "count": 1
+      },
+      {
+        "value": "pov-designer-in-luxe-space",
+        "count": 1
+      },
+      {
+        "value": "product-macro-on-screen",
+        "count": 1
+      },
+      {
+        "value": "site-screen-recording-implied",
+        "count": 1
+      }
+    ],
+    "hookTypes": [
+      {
+        "value": "bold-claim",
+        "count": 1
+      },
+      {
+        "value": "pattern-interrupt",
+        "count": 1
+      },
+      {
+        "value": "pov",
+        "count": 1
+      }
+    ],
+    "moods": [
+      {
+        "value": "aspirational",
+        "count": 2
+      },
+      {
+        "value": "editorial",
+        "count": 2
+      },
+      {
+        "value": "appetizing",
+        "count": 1
+      },
+      {
+        "value": "architectural",
+        "count": 1
+      },
+      {
+        "value": "bold",
+        "count": 1
+      },
+      {
+        "value": "calm",
+        "count": 1
+      },
+      {
+        "value": "cinematic",
+        "count": 1
+      },
+      {
+        "value": "dark",
+        "count": 1
+      },
+      {
+        "value": "luxe",
+        "count": 1
+      },
+      {
+        "value": "moody",
+        "count": 1
+      },
+      {
+        "value": "premium",
+        "count": 1
+      },
+      {
+        "value": "warm",
+        "count": 1
+      }
+    ],
+    "sectionIdeas": [
+      {
+        "value": "'why a premium site' value/ROI section",
+        "count": 1
+      },
+      {
+        "value": "availability + qualified inquiry form",
+        "count": 1
+      },
+      {
+        "value": "bold product hero",
+        "count": 1
+      },
+      {
+        "value": "cinematic device-mockup hero",
+        "count": 1
+      },
+      {
+        "value": "financing or reservation process",
+        "count": 1
+      },
+      {
+        "value": "flavor/benefit strip",
+        "count": 1
+      },
+      {
+        "value": "floorplan & units",
+        "count": 1
+      },
+      {
+        "value": "gallery / rooms",
+        "count": 1
+      },
+      {
+        "value": "neighborhood / location context",
+        "count": 1
+      },
+      {
+        "value": "process brief-to-launch",
+        "count": 1
+      },
+      {
+        "value": "product story",
+        "count": 1
+      },
+      {
+        "value": "scroll-linked property walkthrough hero",
+        "count": 1
+      },
+      {
+        "value": "selected work showcase",
+        "count": 1
+      },
+      {
+        "value": "single comment-to-DM style CTA",
+        "count": 1
+      },
+      {
+        "value": "usage or recipe idea",
+        "count": 1
+      },
+      {
+        "value": "where-to-buy / shop",
+        "count": 1
+      }
+    ]
+  },
+  "byRubro": [
+    {
+      "rubro": "agency",
+      "reels": 1,
+      "paletteFamilies": [
+        {
+          "value": "blue",
+          "count": 1
+        },
+        {
+          "value": "light purple",
+          "count": 1
+        },
+        {
+          "value": "near-black",
+          "count": 1
+        },
+        {
+          "value": "purple",
+          "count": 1
+        }
+      ],
+      "motionTechniques": [
+        {
+          "value": "cinematic-device-reveal",
+          "count": 1
+        },
+        {
+          "value": "device-hero",
+          "count": 1
+        },
+        {
+          "value": "gradient-lighting",
+          "count": 1
+        }
+      ],
+      "hookTypes": [
+        {
+          "value": "bold-claim",
+          "count": 1
+        }
+      ],
+      "sectionIdeas": [
+        {
+          "value": "'why a premium site' value/ROI section",
+          "count": 1
+        },
+        {
+          "value": "cinematic device-mockup hero",
+          "count": 1
+        },
+        {
+          "value": "process brief-to-launch",
+          "count": 1
+        },
+        {
+          "value": "selected work showcase",
+          "count": 1
+        },
+        {
+          "value": "single comment-to-DM style CTA",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "rubro": "food-cpg",
+      "reels": 1,
+      "paletteFamilies": [
+        {
+          "value": "deep red",
+          "count": 1
+        },
+        {
+          "value": "light orange",
+          "count": 1
+        },
+        {
+          "value": "near-black",
+          "count": 1
+        },
+        {
+          "value": "orange",
+          "count": 1
+        }
+      ],
+      "motionTechniques": [
+        {
+          "value": "made-with-ai-label",
+          "count": 1
+        },
+        {
+          "value": "pov-reveal",
+          "count": 1
+        },
+        {
+          "value": "product-hero",
+          "count": 1
+        }
+      ],
+      "hookTypes": [
+        {
+          "value": "pattern-interrupt",
+          "count": 1
+        }
+      ],
+      "sectionIdeas": [
+        {
+          "value": "bold product hero",
+          "count": 1
+        },
+        {
+          "value": "flavor/benefit strip",
+          "count": 1
+        },
+        {
+          "value": "product story",
+          "count": 1
+        },
+        {
+          "value": "usage or recipe idea",
+          "count": 1
+        },
+        {
+          "value": "where-to-buy / shop",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "rubro": "real-estate",
+      "reels": 1,
+      "paletteFamilies": [
+        {
+          "value": "green",
+          "count": 1
+        },
+        {
+          "value": "near-black",
+          "count": 1
+        },
+        {
+          "value": "near-white",
+          "count": 1
+        },
+        {
+          "value": "orange",
+          "count": 1
+        }
+      ],
+      "motionTechniques": [
+        {
+          "value": "architectural-walkthrough-implied",
+          "count": 1
+        },
+        {
+          "value": "pov",
+          "count": 1
+        },
+        {
+          "value": "scroll-storytelling-implied",
+          "count": 1
+        }
+      ],
+      "hookTypes": [
+        {
+          "value": "pov",
+          "count": 1
+        }
+      ],
+      "sectionIdeas": [
+        {
+          "value": "availability + qualified inquiry form",
+          "count": 1
+        },
+        {
+          "value": "financing or reservation process",
+          "count": 1
+        },
+        {
+          "value": "floorplan & units",
+          "count": 1
+        },
+        {
+          "value": "gallery / rooms",
+          "count": 1
+        },
+        {
+          "value": "neighborhood / location context",
+          "count": 1
+        },
+        {
+          "value": "scroll-linked property walkthrough hero",
+          "count": 1
+        }
+      ]
+    }
+  ],
+  "recommendedWorkflow": [
+    "Pick 3-6 reels per client: one palette direction, one type/motion direction, one hook, one product-presentation idea.",
+    "Rebuild motion and kinetic type with ONIA tokens; add a reduced-motion fallback. Never embed the reel's audio/music.",
+    "Client lane: list which of the client's OWN clips can become hero/proof footage, and confirm rights before using them.",
+    "Feed selected reel ideas into data/clients/<slug>.design.json (references) before generating the site."
+  ],
+  "reels": [
+    {
+      "id": "idanweb-realestate-scroll",
+      "lane": "trend",
+      "rubro": "real-estate",
+      "handle": "@idanweb",
+      "url": "https://www.instagram.com/reel/DZ7gUXYuXbt/",
+      "frames": [],
+      "contactSheet": "",
+      "paletteFamilies": [
+        "near-white",
+        "orange",
+        "green",
+        "near-black"
+      ],
+      "pacing": "medium",
+      "hook": {
+        "type": "pov",
+        "text": "POV: client wants a premium website (for their real-estate business)"
+      },
+      "showcasedSite": {
+        "siteType": "real-estate (luxury villas) — brand 'Le Cercle'",
+        "url": "",
+        "layout": "long-scroll cinematic real-estate site that alternates dark full-bleed hero sections with light editorial sections; rounded-corner imagery, generous whitespace, sticky nav with centered logo",
+        "sections": [
+          "dark cinematic hero: serif headline 'Live Where the Sun Meets the Sea' over a warm amber interior photo, pill CTAs 'View Properties' + 'Book a Tour'",
+          "light editorial statement: 'For those who travel like it's an art form'",
+          "'Our Villas' intro with a modernist villa hero image",
+          "property cards: 2-column (Villa Blanca, Casa Dorada) each photo + name + one-line description",
+          "'Get In Touch' contact form (name / email) on a dark closing section",
+          "footer brand mark 'Le Cercle'"
+        ],
+        "components": [
+          "pill buttons",
+          "rounded-corner hero imagery",
+          "2-column property cards",
+          "sticky top nav with centered logo",
+          "inline contact form"
+        ],
+        "interactions": [
+          "smooth scroll walkthrough (scrollytelling): alternating dark/light full-bleed sections reveal as you scroll",
+          "the 'virtually walk through the property' concept via cinematic full-bleed sections"
+        ],
+        "reuseForFactory": [
+          "alternating dark-cinematic <-> light-editorial section rhythm for premium real-estate",
+          "serif headline + pill CTA hero over a warm property photo",
+          "2-col property cards (photo + name + one-line desc)",
+          "inline 'Get In Touch' form in a dark closing section",
+          "scroll-linked reveals — ship a reduced-motion + LCP/CLS-safe fallback"
+        ],
+        "captureQuality": "clear"
+      },
+      "heroDirection": "Real-estate hero as a scroll-linked walkthrough: pin a hero property visual and reveal the space section by section as the user scrolls (scrollytelling / parallax), airy luxe-neutral palette.",
+      "sectionIdeas": [
+        "scroll-linked property walkthrough hero",
+        "gallery / rooms",
+        "floorplan & units",
+        "neighborhood / location context",
+        "availability + qualified inquiry form",
+        "financing or reservation process"
+      ],
+      "assetsToRequestOrReuse": [
+        "study only - trend reel; for a REAL client this pattern needs real property photos/video/renders and a walkthrough"
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "noidgroup-claude-fez-isso",
+      "lane": "trend",
+      "rubro": "food-cpg",
+      "handle": "@_noidgroup",
+      "url": "https://www.instagram.com/reel/DZ2r09Rvlei/",
+      "frames": [],
+      "contactSheet": "",
+      "paletteFamilies": [
+        "deep red",
+        "orange",
+        "light orange",
+        "near-black"
+      ],
+      "pacing": "slow",
+      "hook": {
+        "type": "pattern-interrupt",
+        "text": "Claude fez isso (this was made by AI)"
+      },
+      "showcasedSite": {
+        "siteType": "food-cpg product landing / ad",
+        "url": "",
+        "layout": "single product-hero centered on a saturated brand-color field; rounded pill accents in the top corners; small circular controls bottom-right",
+        "sections": [
+          "bold product hero"
+        ],
+        "components": [
+          "rounded pill labels",
+          "circular control buttons",
+          "centered product packshot with spotlight"
+        ],
+        "interactions": [],
+        "reuseForFactory": [
+          "saturated single-color hero field",
+          "oversized condensed product name",
+          "one spotlighted packshot",
+          "exactly one flavor claim, no clutter"
+        ],
+        "captureQuality": "clear"
+      },
+      "heroDirection": "Food/CPG hero as one saturated brand-color field with an oversized condensed product name, a single spotlighted packshot, and ONE flavor claim — no clutter.",
+      "sectionIdeas": [
+        "bold product hero",
+        "flavor/benefit strip",
+        "product story",
+        "where-to-buy / shop",
+        "usage or recipe idea"
+      ],
+      "assetsToRequestOrReuse": [
+        "study only - trend reel, do not reuse footage/design"
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "vanity-high-end-website",
+      "lane": "trend",
+      "rubro": "agency",
+      "handle": "@vanity.llc",
+      "url": "https://www.instagram.com/reel/DbBMwhcuuYE/",
+      "frames": [],
+      "contactSheet": "",
+      "paletteFamilies": [
+        "near-black",
+        "purple",
+        "blue",
+        "light purple"
+      ],
+      "pacing": "medium",
+      "hook": {
+        "type": "bold-claim",
+        "text": "A high-end website increases your brand's perceived value and attracts higher-paying clients"
+      },
+      "showcasedSite": {
+        "siteType": "gourmet food ecommerce (luxury caviar) — brand 'COSTERS'",
+        "url": "costerscaviar.com (glimpsed in the address bar, unverified)",
+        "layout": "editorial bento product grid on a high-contrast dark + cream palette; centered serif-logo nav; panels mix moody product packshots with lifestyle gourmet food photography",
+        "sections": [
+          "nav with centered serif logo 'COSTERS' + minimal menu (Shop / About / Journal)",
+          "'SHOP CAVIAR' serif headline",
+          "bento product grid: caviar tins on dark panels + product callouts ('White Sturgeon', 'Siberian Sturgeon') with 'Starts at $...' and 'click to shop'",
+          "gourmet food-photography panels (canapes, plated dishes)",
+          "'Claim special offers' pill CTA"
+        ],
+        "components": [
+          "editorial bento grid",
+          "circular product seals/badges (PDL)",
+          "product callout tile: name + 'Starts at $X' + click-to-shop",
+          "pill CTA",
+          "centered-logo nav"
+        ],
+        "interactions": [
+          "bento product grid",
+          "product tiles link to shop"
+        ],
+        "reuseForFactory": [
+          "editorial bento grid mixing product packshots + lifestyle food photography for premium ecommerce",
+          "product callout tile: name + 'Starts at $X' + click-to-shop",
+          "circular seal/badge as a premium trust motif",
+          "centered serif-logo nav for a boutique brand",
+          "high-contrast black + cream luxury palette"
+        ],
+        "captureQuality": "clear"
+      },
+      "heroDirection": "Premium/agency hero: dark cinematic stage with a device mockup of the site under a soft colored gradient light, one value-positioning line, one CTA.",
+      "sectionIdeas": [
+        "cinematic device-mockup hero",
+        "'why a premium site' value/ROI section",
+        "selected work showcase",
+        "single comment-to-DM style CTA",
+        "process brief-to-launch"
+      ],
+      "assetsToRequestOrReuse": [
+        "study only - trend reel, do not reuse footage"
+      ],
+      "confidence": "high"
+    }
+  ]
+}

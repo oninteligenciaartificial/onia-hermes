@@ -1,0 +1,61 @@
+{
+  "id": "noidgroup-claude-fez-isso",
+  "lane": "trend",
+  "clientSlug": "",
+  "rubro": "food-cpg",
+  "source": {
+    "url": "https://www.instagram.com/reel/DZ2r09Rvlei/",
+    "handle": "@_noidgroup",
+    "localVideo": "",
+    "sha256": "",
+    "capturedAt": "2026-07-21T00:00:00.000Z"
+  },
+  "caption": "Claude fez isso. #claude (PT-BR, 12.7K likes / 2697 comments, 21 Jun)",
+  "frames": [],
+  "palette": [
+    { "role": "bg", "hex": "#6f1a12", "note": "deep maroon-red brand field (estimated from frame)" },
+    { "role": "accent", "hex": "#ee6a1f", "note": "bold orange display + pill accents" },
+    { "role": "highlight", "hex": "#f2e4c9", "note": "warm cream product light" },
+    { "role": "text", "hex": "#201512", "note": "near-black" }
+  ],
+  "typography": {
+    "style": "heavy condensed display, uppercase headline ('BOLD FLAVOR') with a thinner wide-tracked sub ('TIKKA MASALA'); editorial CPG",
+    "cases": ["uppercase", "condensed", "wide-tracking-sub"],
+    "onScreenText": ["BOLD FLAVOR", "TIKKA MASALA", "Claude fez isso."]
+  },
+  "motion": {
+    "pacing": "slow",
+    "transitions": ["none-static-showcase"],
+    "techniques": ["pov-reveal", "product-hero", "made-with-ai-label"]
+  },
+  "shots": ["laptop-pov", "product-macro-on-screen", "lifestyle-room"],
+  "productPresentation": "single product jar spotlighted center of a bold, saturated branded ad/landing shown on a laptop; warm POV lifestyle framing (desk, window light, plants)",
+  "hook": { "type": "pattern-interrupt", "text": "Claude fez isso (this was made by AI)" },
+  "mood": ["warm", "bold", "appetizing", "editorial"],
+  "showcasedSite": {
+    "present": true,
+    "siteType": "food-cpg product landing / ad",
+    "url": "",
+    "layout": "single product-hero centered on a saturated brand-color field; rounded pill accents in the top corners; small circular controls bottom-right",
+    "sections": ["bold product hero"],
+    "palette": [
+      { "role": "bg", "hex": "#6f1a12", "note": "deep maroon-red field" },
+      { "role": "accent", "hex": "#ee6a1f", "note": "bold orange display" },
+      { "role": "highlight", "hex": "#f2e4c9", "note": "cream product light" }
+    ],
+    "typography": "heavy condensed uppercase display ('BOLD FLAVOR') with a thin wide-tracked sub ('TIKKA MASALA')",
+    "components": ["rounded pill labels", "circular control buttons", "centered product packshot with spotlight"],
+    "interactions": [],
+    "reuseForFactory": ["saturated single-color hero field", "oversized condensed product name", "one spotlighted packshot", "exactly one flavor claim, no clutter"],
+    "captureQuality": "clear"
+  },
+  "webIdeas": {
+    "heroDirection": "Food/CPG hero as one saturated brand-color field with an oversized condensed product name, a single spotlighted packshot, and ONE flavor claim — no clutter.",
+    "sectionIdeas": ["bold product hero", "flavor/benefit strip", "product story", "where-to-buy / shop", "usage or recipe idea"],
+    "motionForWeb": ["on-load type slam + packshot fade-in (reduced-motion: render static)", "subtle spotlight breathing behind the product"],
+    "assetsToRequestOrReuse": ["study only - trend reel, do not reuse footage/design"],
+    "copyAngles": ["one punchy flavor claim as the headline (e.g. 'BOLD FLAVOR')", "'made with AI' build-reveal angle is itself a strong content hook ONIA can use for its OWN factory reels"]
+  },
+  "guardrails": ["trend reel: inspiration only", "rebuild type/color with ONIA tokens", "no reused footage/audio/brand", "frames viewed in-session via browser, not persisted; palette hexes are estimates"],
+  "confidence": "high"
+}

@@ -40,6 +40,24 @@ Landbook returned 403/Cloudflare in Playwright, so use it manually until access
 is solved. Smoke artifact:
 `web-factory/data/references/design-sources/gallery-examples/2026-06-24-new-sources-smoke.json`.
 
+## Reels As A Research Source
+
+The website sources above teach page structure. **Reels** (Instagram/TikTok) teach
+the current motion, color and hook language of a rubro — and, for a specific
+client, reveal their real brand (palette, footage, voice) when they have IG but no
+site. Pipeline and boundary: `REELS_INTELLIGENCE_RUNBOOK.md`.
+
+- **Trend lane** feeds this bank: read `docs/WEB_FACTORY_REELS_INTELLIGENCE_LATEST.md`
+  for palette families, motion techniques, hooks and section ideas by rubro, then
+  pick 3-6 ideas and rebuild them with ONIA tokens (reduced-motion aware).
+- **Client lane** feeds the client recipe: `data/clients/<slug>.reels.json` lists
+  which of the client's OWN clips can become hero/proof footage — real assets
+  instead of fabricated proof.
+
+Boundary is the same as any source here: trend reels are inspiration only. Never
+reuse their footage, audio, music, copy or logos in client work. Client-owned
+footage may be reused only after the client confirms rights.
+
 ## Skill Routing
 
 Use this routing before substantial Web Factory design work:
@@ -50,6 +68,7 @@ Use this routing before substantial Web Factory design work:
 | Ecommerce, catalog, PDP, cart | `web-factory-design-director` -> `web-factory-visual-intake` -> `web-factory-commerce-storefront` -> `ecommerce-motion-retention` -> `impeccable` -> browser QA |
 | Dashboard, CRM, internal app | `frontend-ui-engineering` or product UI skill -> `ui-ux-pro-max` -> `impeccable` -> browser QA |
 | Visual references from Sergio | `web-factory-visual-intake` first, then save notes under `web-factory/data/references/visual/<slug>/` |
+| Reels from Sergio or the client's IG | `REELS_INTELLIGENCE_RUNBOOK.md`: `reels:prepare` -> analyze per `harvester/reels/ANALYZE.md` -> `reels:intelligence` |
 | Motion-heavy hero or scroll story | `design-taste-frontend` + Motion docs, then reduced-motion review |
 
 Do not load every design skill for every page. Pick the route by business type and page goal.
