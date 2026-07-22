@@ -837,9 +837,37 @@ export async function createOniaCenterEntity(entity: RuntimeEntity, payload: unk
   throw new Error(`Entidad no soportada para crear: ${entity}`);
 }
 
-export async function updateOniaCenterEntityStatus(entity: RuntimeEntity, id: string, status: string, actorRole?: RoleId) {
+// Filtro de dueño para escrituras. Espeja ownerMatches (lectura): un actor
+// no-sergio solo puede escribir registros cuyo userKey estampado en `raw` sea el
+// suyo; los registros legacy sin userKey caen al match por rol, igual que la
+// lectura. Con esto dos personas del mismo rol (p.ej. dos vendedores) ya no
+// pueden hacer PATCH del registro de la otra.
+function actorScopeFilter(
+  roleColumn: "owner_role_key" | "assigned_role_key",
+  userKeyField: "ownerUserKey" | "assignedUserKey",
+  actorRole?: RoleId,
+  actorUserKey?: string,
+) {
+  if (!actorRole || actorRole === "sergio") {
+    return "";
+  }
+  const roleFilter = `&${roleColumn}=eq.${encodeURIComponent(roleToDb(actorRole))}`;
+  if (!actorUserKey) {
+    return roleFilter;
+  }
+  const personFilter = `&or=(raw->>${userKeyField}.eq.${encodeURIComponent(actorUserKey)},raw->>${userKeyField}.is.null)`;
+  return `${roleFilter}${personFilter}`;
+}
+
+export async function updateOniaCenterEntityStatus(
+  entity: RuntimeEntity,
+  id: string,
+  status: string,
+  actorRole?: RoleId,
+  actorUserKey?: string,
+) {
   if (entity === "lead") {
-    const actorFilter = actorRole && actorRole !== "sergio" ? `&owner_role_key=eq.${encodeURIComponent(roleToDb(actorRole))}` : "";
+    const actorFilter = actorScopeFilter("owner_role_key", "ownerUserKey", actorRole, actorUserKey);
     const rows = await supabaseRequest<DbLead[]>(
       `leads?lead_key=eq.${encodeURIComponent(id)}${actorFilter}&select=lead_key,company_name,public_contact,channel,source,owner_role_key,pipeline_status,suggested_service_key,private_notes,raw,created_at`,
       {
@@ -855,7 +883,7 @@ export async function updateOniaCenterEntityStatus(entity: RuntimeEntity, id: st
   }
 
   if (entity === "task") {
-    const actorFilter = actorRole && actorRole !== "sergio" ? `&assigned_role_key=eq.${encodeURIComponent(roleToDb(actorRole))}` : "";
+    const actorFilter = actorScopeFilter("assigned_role_key", "assignedUserKey", actorRole, actorUserKey);
     const rows = await supabaseRequest<DbTask[]>(
       `tasks?task_key=eq.${encodeURIComponent(id)}${actorFilter}&select=task_key,project_key,title,status,priority,assigned_role_key,evidence_required,raw,created_at`,
       {
@@ -896,7 +924,7 @@ export async function updateOniaCenterEntityStatus(entity: RuntimeEntity, id: st
     if (status === "approved") {
       body.reviewed_by_role_key = "sergio";
     }
-    const actorFilter = actorRole && actorRole !== "sergio" ? `&owner_role_key=eq.${encodeURIComponent(roleToDb(actorRole))}` : "";
+    const actorFilter = actorScopeFilter("owner_role_key", "ownerUserKey", actorRole, actorUserKey);
     const rows = await supabaseRequest<DbIdea[]>(
       `idea_inbox?idea_key=eq.${encodeURIComponent(id)}${actorFilter}&select=idea_key,title,source_type,source_url,category,summary,why_useful,target_project_key,owner_role_key,visibility_scope,review_tool,status,raw,created_at`,
       {

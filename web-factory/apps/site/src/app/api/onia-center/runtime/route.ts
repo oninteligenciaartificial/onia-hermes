@@ -208,7 +208,7 @@ export async function PATCH(request: Request) {
   }
 
   try {
-    const data = await updateOniaCenterEntityStatus(payload.entity, payload.id, payload.status, auth.actor.role);
+    const data = await updateOniaCenterEntityStatus(payload.entity, payload.id, payload.status, auth.actor.role, auth.actor.userKey);
     return NextResponse.json({ ok: true, mode: "supabase", data });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Error actualizando ONIA Center.";
