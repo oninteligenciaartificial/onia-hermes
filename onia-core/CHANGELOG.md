@@ -1,5 +1,10 @@
 # ONIA Core Changelog
 
+## 0.7.1 + payroll bono de antiguedad — 2026-07-21 (perfeccionar el core, fiscal Bolivia)
+
+Primer P0 de la ola "perfeccionar los universales" (research con fuentes oficiales).
+- **`payroll`: bono de antiguedad (DS 21060 Art. 60)** — haber MENSUAL obligatorio que FALTABA. Era P0: sin el, la planilla salia mal y arrastraba el error a los aportes AFP y al RC-IVA (el bono integra el total ganado). Escala oficial por tramos (2-4:5% · 5-7:11% · 8-10:18% · 11-14:26% · 15-19:34% · 20-24:42% · 25+:50%) sobre **3 SMN** (regimen general/productivo; servicios 1 SMN, configurable). Verificada 2026-07-21 (finiquitojusto.com + investigacion). Funciones puras nuevas: `seniorityBonusPct`, `computeSeniorityBonus`, `buildTotalGanado`. `laborConfig.seniorityBonus` con escala + base + fuente. +5 tests. Aditivo (contrato intacto). **389 tests, 4 validadores verdes.**
+
 ## 0.7.1 + modules/imports — 2026-07-21 (columna importacion/distribucion: landed cost Bolivia + tipo de cambio flotante)
 
 Modulo `imports` (costo de importacion / landed cost, Bolivia) como add-on activable SOBRE el core: provee la capability `import_costing`, tracks `proveegest-electrico`/`proveegest-construccion`. Cierra la "columna" del rubro importador/distribuidor (ProveeGest / Bolivian Electric). El core NO calcula costo de importacion; este modulo lo PROVEE. Contrato `contract.json` INTACTO (modulo fuera del core congelado).

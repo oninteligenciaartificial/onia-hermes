@@ -131,13 +131,13 @@
       "kind": "config",
       "path": "onia-core/modules/payroll.json",
       "jsonKey": "laborConfig",
-      "sha256": "39dd689a67bef6b9941a1d0255833fe2cdf53387237a1af3707edb7b6c08c917"
+      "sha256": "0e9eb3c85b3f86e022921b1019adfb301b88603dab1ae58aa24dcb7a53cbf9c5"
     },
     {
       "id": "modules/payroll.logic.mjs",
       "kind": "logic",
       "path": "onia-core/modules/payroll.logic.mjs",
-      "sha256": "e67be628fbd7b30f45d5da045981894d8430eb35a3d4d7db20f79a156d2eedd4"
+      "sha256": "2486616fe4b319f114a9a04173f68877a492b50967627bf65a3dd8d52ab1b694"
     }
   ]
 }

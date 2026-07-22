@@ -10,6 +10,9 @@ import { getModule, loadModules } from "./index.mjs";
 import {
   TERMINATION_REASONS,
   buildTerminationSettlement,
+  buildTotalGanado,
+  computeSeniorityBonus,
+  seniorityBonusPct,
   computeAfpLaboral,
   computeAfpPatronal,
   computeAguinaldoProportional,
@@ -34,6 +37,44 @@ import {
 } from "./payroll.logic.mjs";
 
 const config = getModule(loadModules(), "payroll").laborConfig;
+
+describe("bono de antiguedad (DS 21060 Art. 60)", () => {
+  const { scale } = config.seniorityBonus;
+
+  it("escala oficial por tramos de anios (0 debajo de 2)", () => {
+    assert.equal(seniorityBonusPct(1.5, scale), 0);
+    assert.equal(seniorityBonusPct(3, scale), 0.05);
+    assert.equal(seniorityBonusPct(6, scale), 0.11);
+    assert.equal(seniorityBonusPct(9, scale), 0.18);
+    assert.equal(seniorityBonusPct(12, scale), 0.26);
+    assert.equal(seniorityBonusPct(17, scale), 0.34);
+    assert.equal(seniorityBonusPct(22, scale), 0.42);
+    assert.equal(seniorityBonusPct(30, scale), 0.5);
+  });
+
+  it("limite superior EXCLUSIVO: 5 anios cae en 5-7 (11%), no en 2-4", () => {
+    assert.equal(seniorityBonusPct(5, scale), 0.11);
+  });
+
+  it("bono mensual = SMN x 3 x pct (6 anios, SMN 3300 -> Bs 1089)", () => {
+    assert.equal(config.seniorityBonus.baseSmnMultiplier, 3);
+    assert.equal(computeSeniorityBonus(6, config.smnBob, config.seniorityBonus), 1089);
+  });
+
+  it("sin derecho debajo de 2 anios -> bono 0", () => {
+    assert.equal(computeSeniorityBonus(1, config.smnBob, config.seniorityBonus), 0);
+  });
+
+  it("integra el total ganado -> sube la base de aportes AFP y RC-IVA", () => {
+    const bono = computeSeniorityBonus(6, config.smnBob, config.seniorityBonus);
+    const totalGanado = buildTotalGanado({ baseSalary: 5000, seniorityBonus: bono });
+    assert.equal(totalGanado, 6089);
+    const afpConBono = computeAfpLaboral(totalGanado, config.afpLaboralBreakdown).total;
+    const afpSinBono = computeAfpLaboral(5000, config.afpLaboralBreakdown).total;
+    assert.ok(afpConBono > afpSinBono, "el aporte se calcula sobre el total CON bono");
+    assert.equal(afpConBono, 773.92);
+  });
+});
 
 describe("aportes AFP / Gestora Publica", () => {
   it("desglose del aporte laboral suma exactamente 12.71%", () => {

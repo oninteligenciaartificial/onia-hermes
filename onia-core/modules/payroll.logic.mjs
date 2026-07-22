@@ -72,6 +72,45 @@ export function computeCnsPatronal(totalGanado, rate) {
   return round2(Number(totalGanado ?? 0) * rate);
 }
 
+// --- Bono de antiguedad y total ganado ---------------------------------------
+
+/**
+ * Porcentaje del bono de antiguedad segun anios de servicio (DS 21060 Art. 60).
+ * Escala de tramos del laborConfig (limite superior EXCLUSIVO, igual que la
+ * escala de vacaciones); 0 debajo de 2 anios (sin derecho aun).
+ */
+export function seniorityBonusPct(years, scale = []) {
+  const value = Number(years ?? 0);
+  for (const tier of scale) {
+    const withinMax = tier.maxYears === null || tier.maxYears === undefined || value < tier.maxYears;
+    if (value >= tier.minYears && withinMax) {
+      return Number(tier.pct ?? 0);
+    }
+  }
+  return 0;
+}
+
+/**
+ * Bono de antiguedad MENSUAL (DS 21060 Art. 60): SMN x baseSmnMultiplier x pct.
+ * Haber OBLIGATORIO que integra el total ganado -> por eso es base de los aportes
+ * AFP y del RC-IVA. base = 3 SMN en el regimen general/productivo; empresas de
+ * servicios usan 1 SMN. La escala y la base son datos del laborConfig, no
+ * constantes (una correccion es un cambio de dato, no de codigo).
+ */
+export function computeSeniorityBonus(years, smnBob, { scale = [], baseSmnMultiplier = 3 } = {}) {
+  const pct = seniorityBonusPct(years, scale);
+  return round2(Number(smnBob ?? 0) * Number(baseSmnMultiplier ?? 0) * pct);
+}
+
+/**
+ * Total ganado = sueldo basico + bono de antiguedad + otros haberes (horas extra,
+ * comisiones, otros bonos). Es la BASE de los aportes AFP y del RC-IVA; el bono de
+ * antiguedad se suma ACA, no despues, para que arrastre a los aportes y la retencion.
+ */
+export function buildTotalGanado({ baseSalary = 0, seniorityBonus = 0, otherEarnings = 0 } = {}) {
+  return round2(Number(baseSalary ?? 0) + Number(seniorityBonus ?? 0) + Number(otherEarnings ?? 0));
+}
+
 // --- RC-IVA dependientes -----------------------------------------------------
 
 /** Base imponible: total ganado - aporte AFP laboral - minimo no imponible (N x SMN). */

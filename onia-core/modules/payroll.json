@@ -98,7 +98,8 @@
       "DS 21531 - reglamento RC-IVA",
       "DS 21637 (1987) - aporte patronal CNS 10%",
       "DS 24935 (1997) - aporte Pro-Vivienda Social 2% patronal",
-      "DS 0110 (2009) - indemnizacion desde 90 dias, incluye renuncia voluntaria"
+      "DS 0110 (2009) - indemnizacion desde 90 dias, incluye renuncia voluntaria",
+      "DS 21060 Art. 60 (29-ago-1985) - bono de antiguedad mensual, escala 2-25+ anios sobre 3 SMN"
     ],
     "pensionEntity": "Gestora Publica de la Seguridad Social de Largo Plazo (reemplazo estatal de las AFP privadas BBVA Prevision/Futuro-Zurich desde mayo 2023; el sistema historico se seguia llamando 'AFP' pero ya no opera asi)",
     "smnBob": 3300,
@@ -107,6 +108,20 @@
       { "value": 2750, "effectiveFrom": "2025-01-01" },
       { "value": 3300, "effectiveFrom": "2026-01-01" }
     ],
+    "seniorityBonus": {
+      "baseSmnMultiplier": 3,
+      "baseNote": "Base = 3 SMN (regimen general/productivo, DS 21060 Art. 60). Empresas de servicios pueden configurar baseSmnMultiplier=1. Formula mensual: SMN x baseSmnMultiplier x pct.",
+      "scale": [
+        { "minYears": 2, "maxYears": 5, "pct": 0.05 },
+        { "minYears": 5, "maxYears": 8, "pct": 0.11 },
+        { "minYears": 8, "maxYears": 11, "pct": 0.18 },
+        { "minYears": 11, "maxYears": 15, "pct": 0.26 },
+        { "minYears": 15, "maxYears": 20, "pct": 0.34 },
+        { "minYears": 20, "maxYears": 25, "pct": 0.42 },
+        { "minYears": 25, "maxYears": null, "pct": 0.50 }
+      ],
+      "note": "Bono de antiguedad MENSUAL obligatorio desde 2 anios y 1 dia (DS 21060 Art. 60). INTEGRA el total ganado -> base de aportes AFP y RC-IVA. Escala verificada 2026-07-21 (finiquitojusto.com + investigacion). El tramo 25+ se cita 50% en las fuentes consultadas; algunas citan 59% -> verificar contra el texto oficial del DS si aparece discrepancia."
+    },
     "afpLaboralBreakdown": {
       "cuentaIndividual": 0.10,
       "primaRiesgoComun": 0.0171,
