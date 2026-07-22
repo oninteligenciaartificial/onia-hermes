@@ -43,19 +43,45 @@ arquitectura, cronograma). Esto es el arranque tecnico del servicio.
   sequence-sensitive), con manejo correcto de nillables (`<campo xsi:nil="true"/>`
   para opcionales vacios, gotcha del SIAT). `buildInvoiceXml` arma el documento
   por modalidad (raiz computarizada/electronica) y `sha256Hex` da la huella
-  (anclada al vector conocido de "abc"). 12 tests. Total emisor: 57 tests.
+  (anclada al vector conocido de "abc"). 12 tests.
+- `src/tenant-registry.mjs` — **registro MULTI-TENANT** (por organizacion): NIT,
+  codigoSistema, sucursales, puntos de venta, metadata del token delegado
+  (referencia al vault, NUNCA el valor en claro) y catalogo homologado.
+  `validateTenantReady` decide si un tenant puede emitir. Puro/inmutable. 40 tests.
+- `src/scheduler.mjs` — renovacion de **CUFD** (diario, 24h) y **CUIS** (renovable
+  5 dias antes de vencer); fechas siempre como parametro. 28 tests.
+- `src/contingencia.mjs` — **modo offline**: caida del SIN -> evento significativo
+  -> paquetes <=500 -> reenvio 48h; clasifica estados 901/904/908. 30 tests.
+- `src/soap-client.mjs` — **capa PURA del cliente SOAP**: builders de envelope
+  (CUIS/CUFD/recepcion/anulacion/verificarComunicacion) + parser de respuesta
+  tolerante. Operaciones y codigos VERIFICADOS 2026-07-22 contra los **WSDL v2 del
+  piloto** + doc oficial: `codigoAmbiente` 1=prod/2=piloto (al reves de lo
+  intuitivo), `codigoModalidad` 2=computarizada, archivo gzip+base64, `hashArchivo`
+  SHA-256. Auth por header HTTP `Authorization: Token X` (NO en el SOAP). El
+  transporte HTTP real queda fuera (capa aparte, necesita credenciales del piloto).
+  Los nombres exactos de wrapper/namespace van `[VERIFICAR]` contra el WSDL de tipos.
+  29 tests. **Total emisor: 184 tests.**
 
 **Pendiente (necesita NIT / ambiente piloto / Anexo Tecnico oficial):**
-- Cliente SOAP al SIN (CUIS por sistema, CUFD diario, recepcion, validacion,
-  anulacion) contra `pilotosiatservicios.impuestos.gob.bo`.
+- **Transporte HTTP** del cliente SOAP (POST del envelope + header
+  `Authorization: Token` + timeouts/reintentos) contra
+  `pilotosiatservicios.impuestos.gob.bo/v2` — necesita el token delegado del
+  piloto. La capa PURA (envelopes + parser de respuesta) ya esta lista en
+  `src/soap-client.mjs`; solo falta enchufarle la red y las credenciales.
+- Confirmar los `[VERIFICAR]` del SOAP (nombre exacto del wrapper del DTO,
+  targetNamespace por servicio, SOAP 1.1 vs 1.2) contra el WSDL de tipos
+  importado del piloto (`?wsdl=ServicioFacturacion.wsdl`) — devolvio 503
+  intermitente en la investigacion; reintentar.
 - Validacion del XML contra el **XSD oficial descargado** (confirmar el nombre
   exacto del elemento raiz computarizada vs electronica y los tipos por campo) +
   **firma XMLDSig** para la modalidad electronica en linea (la computarizada usa
   solo la huella SHA-256, ya lista). El XML se arma con el **CUF verificado del
   emisor** (`src/cuf.mjs`), no con el `buildCuf` de referencia del core.
   Descargar el XSD del piloto y correr una validacion real.
-- Tenant registry (NIT, tokens delegados cifrados, sucursales, puntos de venta,
-  catalogo homologado por organizacion) + scheduler CUFD/CUIS + contingencia.
+- **Store de catalogos sincronizados** (parametricas: productos/servicios,
+  unidades de medida, tipos de documento, leyendas, motivos de anulacion) —
+  sincronizacion diaria por web service (limite 1000 requests/dia). El tenant
+  registry, el scheduler CUFD/CUIS y la contingencia YA estan listos (pura logica).
 
 ## Bloqueo #1 (Sergio) — AVANZANDO 2026-07-08
 

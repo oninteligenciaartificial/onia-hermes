@@ -56,12 +56,15 @@ export const ENVIRONMENTS = {
   PILOTO: {
     id: "piloto",
     consultaHost: "https://pilotosiat.impuestos.gob.bo",
-    soapBase: "https://pilotosiatservicios.impuestos.gob.bo/v1",
+    // VERIFICADO 2026-07: el piloto vigente sirve los WSDL en /v2 (no /v1). Los WSDL
+    // respondieron: FacturacionCodigos, FacturacionSincronizacion, ServicioFacturacionComputarizada.
+    soapBase: "https://pilotosiatservicios.impuestos.gob.bo/v2",
   },
   PRODUCCION: {
     id: "produccion",
     consultaHost: "https://siat.impuestos.gob.bo", // [VERIFICAR host exacto de produccion]
-    soapBase: "https://siatservicios.impuestos.gob.bo/v1", // [VERIFICAR]
+    // Piloto usa /v2; produccion probablemente igual. [VERIFICAR version + host exactos de produccion antes de emitir real].
+    soapBase: "https://siatservicios.impuestos.gob.bo/v2",
   },
 };
 
