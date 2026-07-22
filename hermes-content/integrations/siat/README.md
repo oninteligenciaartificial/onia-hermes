@@ -78,7 +78,13 @@ arquitectura, cronograma). Esto es el arranque tecnico del servicio.
 - `ONBOARDING_CLIENTE.md` — runbook operativo: los pasos EXACTOS del cliente para
   asociar el sistema + generar su token delegado + configurar sucursales/PdV +
   homologar catalogo (modelo Proveedor; se ata a las funciones del tenant registry).
-  **Total emisor: 254 tests.**
+- `src/emitter.mjs` — **el ORQUESTADOR (API publica del emisor)**: `emitInvoice`
+  ata TODO en una sola llamada — valida el tenant -> ensambla (CUF+XML+archivo) ->
+  POSTea (transporte INYECTABLE) -> mapea el `codigoEstado` del SIN (908 validada /
+  904 observada / 901 pendiente / error rechazada) a la transicion de la maquina
+  de estados; si el transporte cae, la factura sigue en cola (no entregada). Es lo
+  que un producto llama. Testeado de punta a punta con un SIN simulado; listo para
+  el fetch real + token del piloto. 8 tests. **Total emisor: 262 tests.**
 
 **Pendiente (necesita NIT / ambiente piloto / Anexo Tecnico oficial):**
 - **Ejecutar contra el piloto real.** El transporte (`postSoap`, con fetch +
