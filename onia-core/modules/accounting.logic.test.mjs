@@ -305,6 +305,7 @@ describe("advertencia de reforma del IVA (Ley 1.733)", () => {
     const warning = getModule(loadModules(), "accounting").bolivianConfig.ivaReformWarning;
     assert.ok(warning, "ivaReformWarning present");
     assert.match(warning.law, /1\.733/);
-    assert.match(warning.impact, /NO se modifico ningun codigo/);
+    assert.match(warning.impact, /NO se modifico ninguna formula de IVA/);
+    assert.match(warning.effectiveDate, /TODAVIA NO RIGE/);
   });
 });

@@ -202,8 +202,9 @@
     "ivaReformWarning": {
       "law": "Ley N 1.733 'Ley de Alivio Tributario' (promulgada 27-mayo-2026)",
       "change": "Cambia el calculo del IVA de 'por dentro' (tasa efectiva ~14.94% sobre el precio con IVA incluido) a calculo DESAGREGADO fuera del valor neto (tasa transparente 13% real).",
-      "effectiveDate": "Desde el primer dia del mes siguiente a su reglamentacion. Reglamento NO confirmado al 2026-07-06 (verificado por subagente de investigacion).",
-      "impact": "Las formulas de IVA de este modulo (ivaOfRecord/computeIva), de invoicing (buildCuf/QR no afectados, pero el TOTAL de la factura si) y de payroll (RC-IVA) usan hoy 'iva = total * 0.13' tratando el 13% como aplicado sobre el total. Cuando el reglamento este disponible, VERIFICAR si esa formula sigue siendo correcta o si el calculo desagregado cambia la base. NO se modifico ningun codigo por esta advertencia: la mecanica exacta no esta confirmada; cambiar formulas ya probadas sin certeza seria peor que dejarlo marcado."
+      "statusAsOf": "2026-07-21",
+      "effectiveDate": "Desde el primer dia del mes siguiente a su reglamentacion. Al 2026-07-21 solo se reglamento la CONDONACION de la ley (RND 102600000019, vigente 10-jun-2026); el IVA desagregado/por-fuera 13% TODAVIA NO RIGE porque falta su DS reglamentario. Por lo tanto la formula de IVA vigente HOY sigue siendo la del 13% por dentro (efectivo ~14.94%).",
+      "impact": "Las formulas de IVA de este modulo (ivaOfRecord/computeIva), de invoicing (buildCuf/QR no afectados, pero el TOTAL de la factura si) y de payroll (RC-IVA) usan hoy 'iva = total * 0.13' tratando el 13% como aplicado sobre el total, lo cual SIGUE SIENDO CORRECTO al 2026-07-21. Cuando salga el DS que ponga en vigencia el calculo desagregado, VERIFICAR si esa formula cambia la base. NO se modifico ninguna formula de IVA: el desagregado aun no rige y cambiar formulas ya probadas sin certeza seria peor que dejarlo marcado. El modulo imports usa el mismo criterio (vatMode inside_1494 por default; outside_13 conmutable para el dia que rija)."
     },
     "notes": [
       "Tasas y fechas son DEFAULT configurables por el contador; la normativa cambia (radar RND). Esto NO es asesoria fiscal.",

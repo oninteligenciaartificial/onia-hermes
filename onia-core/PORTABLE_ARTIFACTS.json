@@ -1,7 +1,7 @@
 {
   "note": "Generado por onia-core/portable-artifacts.mjs. No editar a mano; correr `node onia-core/portable-artifacts.mjs --write`.",
   "coreVersion": "0.7.1",
-  "artifactCount": 21,
+  "artifactCount": 22,
   "artifacts": [
     {
       "id": "logic/approvals.logic.mjs",
@@ -13,7 +13,7 @@
       "id": "logic/fx.logic.mjs",
       "kind": "logic",
       "path": "onia-core/logic/fx.logic.mjs",
-      "sha256": "c120b1872dab704e123e3624f3abd61db59b80cadb038376e5097e87cefa2394"
+      "sha256": "ae446584cd6ed3155bce928b52e3e72abfa2fa32a5a5a2579074fd4432ea392b"
     },
     {
       "id": "logic/intake.logic.mjs",
@@ -56,7 +56,7 @@
       "kind": "config",
       "path": "onia-core/modules/accounting.json",
       "jsonKey": "bolivianConfig",
-      "sha256": "5cb9fd915843e87e25416efa9ad547bd00631e045121c2383005fa0b6ece4ab8"
+      "sha256": "adc1ee6d8ac3170a2ea113e22f3f6483c6c2c7e0d9294beff18d6a68f5504e8f"
     },
     {
       "id": "modules/accounting.logic.mjs",
@@ -106,6 +106,12 @@
       "kind": "logic",
       "path": "onia-core/modules/dental.logic.mjs",
       "sha256": "1bf50ab3e2e0ff08178ac9dae94557a79a1a971d083bbfa16cbf3dd823a0fc73"
+    },
+    {
+      "id": "modules/imports.logic.mjs",
+      "kind": "logic",
+      "path": "onia-core/modules/imports.logic.mjs",
+      "sha256": "1d2f4d70e2e48559a07fa0383343fa01ad0e08c9d40f1a0d54928728ea3da975"
     },
     {
       "id": "modules/invoicing.json#siatConfig",

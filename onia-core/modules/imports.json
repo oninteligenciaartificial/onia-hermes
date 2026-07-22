@@ -1,0 +1,134 @@
+{
+  "module": "imports",
+  "name": "ONIA Imports Module (Costo de Importacion / Landed Cost Bolivia)",
+  "version": "0.1.0",
+  "status": "draft",
+  "layer": "activatable_module",
+  "purpose": "La 'columna' del rubro IMPORTACION/DISTRIBUCION (ProveeGest / Bolivian Electric) como add-on activable SOBRE el core. El core NO calcula costo de importacion; este modulo lo PROVEE: subpartidas NANDINA con vigencias arancelarias, valor en aduana (DS 5646), GA, IVA de importacion (credito fiscal recuperable), costo puesto en almacen repartido por linea, y el puente a contabilidad (asiento + RCV). Reusa el modulo accounting (asiento cuadrado, credito fiscal) y el modulo commerce (variante de catalogo, kardex); la valuacion de inventario (CPP/PEPS) vive aca porque nace del landed cost. Emision fiscal SIAT y el TCO diario del BCB siguen siendo external_gate del core; este modulo calcula y prepara, no emite.",
+  "coreContract": "onia-core/contract.json",
+  "schemaFile": "onia-core/modules/imports.schema.sql",
+  "installInProductRepos": false,
+  "activatesCapabilities": [],
+  "providesCapabilities": [
+    "import_costing"
+  ],
+  "coreDependencies": [
+    { "coreEntityId": "organization", "as": "tenant root de cada entidad tenant-scoped del modulo" },
+    { "coreEntityId": "business_partner", "as": "import_shipment.supplierId (proveedor del exterior)" },
+    { "coreEntityId": "document", "as": "import_shipment.documentId (DUI, factura comercial, packing list) via storageRef" },
+    { "coreEntityId": "work_item", "as": "import_shipment.workItemId (el tramite de nacionalizacion como pendiente con SLA en el owner_dashboard)" },
+    { "coreEntityId": "approval_request", "as": "aprobacion del reprecio cuando cambia el landed cost (GA nuevo o tasa nueva) -- external al modulo" }
+  ],
+  "verticalTracks": [
+    "proveegest-electrico",
+    "proveegest-construccion"
+  ],
+  "entities": [
+    {
+      "id": "tariff_rate",
+      "name": "TariffRate",
+      "capabilityId": "import_costing",
+      "table": "onia_imports_tariff_rates",
+      "purpose": "Alicuota arancelaria de una subpartida NANDINA con VIGENCIA. gaBasePct es el GA base (fraccion, 0.10 = 10%); reductionPts la baja del DS 5646 (-5 pts = 0.05, piso 0); zeroRated el arancel cero (DS 5516/5518); iceApplies si la subpartida paga ICE. Tabla de referencia NACIONAL (mismo arancel para todos): entidad root, no tenant-scoped.",
+      "requiredFields": ["id", "nandinaCode", "gaBasePct", "validFrom", "createdAt"],
+      "optionalFields": ["reductionPts", "zeroRated", "iceApplies", "iceRate", "validTo", "source", "description"],
+      "tenantScoped": false
+    },
+    {
+      "id": "import_shipment",
+      "name": "ImportShipment",
+      "capabilityId": "import_costing",
+      "table": "onia_imports_shipments",
+      "purpose": "Embarque/DUI de importacion: numero de DUI, fecha de validacion (fija el periodo del credito fiscal), modo (maritimo/aereo/terrestre) y los costos de nivel embarque en USD (FOB, flete, seguro, carga/descarga, despacho, almacenaje, transporte interno, verificacion). Distinto de la entidad core import_batch (que es carga de DATOS, no importacion fisica).",
+      "requiredFields": ["id", "organizationId", "duiNumber", "validationDate", "mode", "fobUsd", "status", "createdAt"],
+      "optionalFields": ["freightUsd", "insuranceUsd", "loadingUnloadingUsd", "despachoUsd", "almacenajeUsd", "transporteInternoUsd", "verificacionPct", "currency", "supplierId", "supplierNit", "documentId", "workItemId"],
+      "tenantScoped": true
+    },
+    {
+      "id": "import_shipment_line",
+      "name": "ImportShipmentLine",
+      "capabilityId": "import_costing",
+      "table": "onia_imports_shipment_lines",
+      "purpose": "Linea de un embarque: subpartida NANDINA, FOB y cantidad de ESE item, con peso opcional para repartir logistica por peso. variantId enlaza (opcional) a la product_variant del modulo commerce para escribir el costo en el kardex; es referencia modulo-a-modulo, no una entidad del core.",
+      "requiredFields": ["id", "organizationId", "shipmentId", "nandinaCode", "fobUsd", "quantity", "createdAt"],
+      "optionalFields": ["variantId", "weightKg", "unitLandedCostUsd", "description"],
+      "tenantScoped": true
+    },
+    {
+      "id": "landed_cost_calculation",
+      "name": "LandedCostCalculation",
+      "capabilityId": "import_costing",
+      "table": "onia_imports_landed_cost_calculations",
+      "purpose": "Snapshot AUDITABLE de un calculo de costo puesto en almacen para un embarque: parametros usados (gaPct, vatMode, factor flete/seguro, includeVatInCost, distributeBy, TCO del dia), totales resultantes (inventario, IVA recuperable) y el desglose por linea en snapshotJson. Permite reproducir por que un producto costo lo que costo aunque las tasas cambien despues.",
+      "requiredFields": ["id", "organizationId", "shipmentId", "calculatedAt", "vatMode", "totalInventoryUsd", "totalRecoverableVatUsd", "createdAt"],
+      "optionalFields": ["gaPctSnapshot", "freightInsuranceFactor", "includeVatInCost", "distributeBy", "exchangeRateBob", "snapshotJson", "approvedByMemberId", "approvalRequestId"],
+      "tenantScoped": true
+    }
+  ],
+  "bolivianImportConfig": {
+    "notCustomsOrTaxAdvice": true,
+    "verifiedAt": "2026-07-21",
+    "customsValue": {
+      "basis": "DS 5646 (vigente 06-jul-2026), reforma del Art. 20 del DS 25870",
+      "formula": "valor_aduana = FOB + carga_descarga + freightInsuranceFactor x (flete + seguro)",
+      "freightInsuranceFactor": 0.10,
+      "note": "El factor 0.10 es DEFAULT configurable. Validar contra una DUI real post-06-jul del despachante de Bolivian Electric antes de cerrarlo (el alcance exacto del 10% flete/seguro sobre la base del GA vs IVA es la incertidumbre #1)."
+    },
+    "ga": {
+      "basis": "Arancel Aduanero de Importacion 2026 (AAI-2026) + DS 5646 (-5 pts, 06-jul-2026 a fin 2027) + DS 5516/5518 (arancel cero)",
+      "representation": "gaBasePct y reductionPts como FRACCION (0.10 = 10%, 0.05 = 5 pts). Efectivo = zeroRated ? 0 : max(0, gaBasePct - reductionPts).",
+      "note": "Las alicuotas por subpartida se cargan como tariff_rate con vigencia; el modulo NO trae la tabla NANDINA completa (falta la lista real de subpartidas del cliente)."
+    },
+    "importVat": {
+      "vatModes": { "inside_1494": 0.1494, "outside_13": 0.13 },
+      "default": "inside_1494",
+      "basis": "inside_1494 = efectivo por dentro VIGENTE HOY. outside_13 = desagregado 13% de la Ley 1733: promulgada (27-may-2026) pero AUN NO RIGE (falta su DS reglamentario, ver accounting.ivaReformWarning).",
+      "recoverable": true,
+      "note": "El IVA de importacion es CREDITO FISCAL recuperable: NO capitaliza al inventario salvo includeVatInCost=true (decision por organizacion del contador)."
+    },
+    "ice": {
+      "appliesByDefault": false,
+      "note": "ICE ad-valorem solo para bienes especificos (alcohol, tabaco, vehiculos). N/A para material electrico: apagado por default, se activa por subpartida (tariff_rate.iceApplies + iceRate)."
+    },
+    "verificacion": {
+      "coefficientOverFob": 0.01,
+      "note": "Verificacion aduanera aprox. FOB x 1%. Coeficiente DEFAULT configurable (verificacionPct por embarque); confirmar el valor real con el despachante."
+    },
+    "inventoryValuation": {
+      "allowed": ["PEPS", "CPP"],
+      "prohibited": ["UEPS"],
+      "basis": "Norma de Contabilidad 2 (NC 2): en Bolivia solo se admite PEPS (FIFO) o Costo Promedio Ponderado; UEPS (LIFO) esta prohibido."
+    },
+    "exchangeDifference": {
+      "basis": "Norma de Contabilidad 6 (NC 6): diferencia de cambio sobre partidas monetarias (CxP del exterior, prestamos USD, caja/CxC USD).",
+      "note": "El TCO diario del BCB entra como external_gate (dato del producto); ver logic/fx.logic.mjs officialRate(). Distinguir diferencia realizada (al pagar) de no realizada (al cierre)."
+    },
+    "productHomologation": {
+      "required": false,
+      "note": "Solo se confirmo LED como producto regulado; falta la lista real de subpartidas con homologacion tecnica obligatoria. product_homologation (codigo/registro) queda como validacion SIMPLE OPCIONAL; IBMETRO / catalogo tecnico NO se modelan como obligatorios (no fabricar sin la lista oficial)."
+    },
+    "legalBasis": [
+      "DS 5646 (valor en aduana + reduccion GA 5 pts, 06-jul-2026)",
+      "DS 5516 / DS 5518 (arancel cero por lista de productos / tecnologia)",
+      "Arancel Aduanero de Importacion 2026 (AAI-2026)",
+      "Ley 1733 'Ley de Alivio Tributario' (IVA desagregado, aun sin reglamentar)",
+      "RM 245/2026 + RD BCB 88/2026 (tipo de cambio oficial flotante / TCO diario)",
+      "RND 102600000026 (SIAT exige el TCO diario del BCB para facturar en moneda extranjera)",
+      "Norma de Contabilidad 2 (valuacion de inventarios: PEPS/CPP, UEPS prohibido)",
+      "Norma de Contabilidad 6 (diferencia de cambio)"
+    ]
+  },
+  "notes": [
+    "El modulo NO redefine entidades del core; agrega entidades propias con namespace onia_imports_*.",
+    "import_shipment NO es la entidad core import_batch (esa es carga de DATOS con dry-run; esta es una importacion fisica/DUI).",
+    "Reusa accounting (buildImportJournalEntry usa assertBalanced; el IVA importacion es credito fiscal 1.1.5) y commerce (import_shipment_line.variantId escribe el costo unitario en el kardex por variante).",
+    "La valuacion de inventario (CPP/PEPS) vive en este modulo porque nace del landed cost; UEPS prohibido (NC 2).",
+    "El TCO diario del BCB y la emision SIAT son external_gate del core: aca se calcula y prepara, no se emite ni se consulta el BCB."
+  ],
+  "gates": [
+    "installInProductRepos = false hasta plan de adopcion del modulo aprobado",
+    "SQL base del modulo (imports.schema.sql) se traduce a migraciones del producto, no se aplica directo",
+    "Tasas (GA, factor flete/seguro, verificacion, vatMode) se cargan como config/tariff_rate; no se hardcodean en el producto",
+    "SIAT y TCO del BCB fuera del modulo (external_gate del core)"
+  ]
+}

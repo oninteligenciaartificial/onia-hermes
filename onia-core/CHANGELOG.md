@@ -1,5 +1,17 @@
 # ONIA Core Changelog
 
+## 0.7.1 + modules/imports — 2026-07-21 (columna importacion/distribucion: landed cost Bolivia + tipo de cambio flotante)
+
+Modulo `imports` (costo de importacion / landed cost, Bolivia) como add-on activable SOBRE el core: provee la capability `import_costing`, tracks `proveegest-electrico`/`proveegest-construccion`. Cierra la "columna" del rubro importador/distribuidor (ProveeGest / Bolivian Electric). El core NO calcula costo de importacion; este modulo lo PROVEE. Contrato `contract.json` INTACTO (modulo fuera del core congelado).
+
+- 4 entidades (`tariff_rate`, `import_shipment`, `import_shipment_line`, `landed_cost_calculation`) + `imports.schema.sql` (namespace `onia_imports_*`).
+- `imports.logic.mjs` (logica pura, 31 tests): valor en aduana **DS 5646** (base = FOB + carga + 10% del flete/seguro, reforma Art. 20 DS 25870), GA con vigencias (`resolveTariffRate`: DS 5646 -5pts, DS 5516/5518 arancel cero), IVA importacion credito fiscal recuperable (`vatMode` inside_1494 ↔ outside_13 conmutable por la Ley 1733), ICE opcional, costo puesto en almacen repartido por valor/peso (`computeLandedCostUsd`), valuacion **CPP/PEPS** (UEPS prohibido, NC 2), asiento cuadrado de nacionalizacion (`buildImportJournalEntry`, reusa `assertBalanced` de accounting), mapeo a RCV (`mapImportToRcvRecord`), diferencia de cambio **NC 6** (`exchangeDifference`).
+- `bolivianImportConfig` con base legal citada, verificado 2026-07-21 con research de fuentes oficiales (Aduana, SIN, BCB, IBMETRO/IBNORCA).
+- **Correccion transversal `logic/fx.logic.mjs`** (aditiva, back-compat): el oficial 6.96 dejo de ser fijo. Nuevo `officialRate(dailyTco)` — el TCO diario del BCB flota (**RM 245/2026 + RD BCB 88/2026**, ~Bs 10.90 al 20-jul) y el SIAT lo exige para facturar en moneda extranjera (**RND 102600000026**). El 6.96 queda como fallback historico.
+- `accounting.ivaReformWarning` actualizado a 2026-07-21: la **Ley 1733** solo reglamento la condonacion (RND 102600000019, vig. 10-jun); el IVA desagregado 13% **AUN NO RIGE** (falta su DS) → las formulas de IVA vigentes siguen correctas. No se toco ninguna formula.
+- Pendiente de validacion humana (marcado, no fabricado): alcance exacto del 10% flete/seguro del DS 5646 contra una DUI real del despachante de BE; y la lista real de subpartidas electricas reguladas por IBMETRO (hoy solo LED confirmado). Homologacion tecnica / catalogo tecnico NO se modelan como obligatorios sin esa lista.
+- **8 modulos, 43 entidades. 384 tests (352+32), 4 validadores verdes.**
+
 ## 0.7.1 + modules/automation — 2026-07-09 (multi-sucursal + capa de automatizacion para cualquier negocio)
 
 Sergio: "haz lo de multisucursal" + "el core tiene que aprender a hacer

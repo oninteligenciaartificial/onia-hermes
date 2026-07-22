@@ -81,9 +81,9 @@ describe("buildSystemMap - capa REPETICION", () => {
 });
 
 describe("sharedModules / unusedModules", () => {
-  it("sharedModules(2) devuelve 6 modulos usados por 2+ rubros (todos menos dental, que es de 1 solo rubro)", () => {
+  it("sharedModules(2) devuelve 7 modulos usados por 2+ rubros (todos menos dental, que es de 1 solo rubro)", () => {
     const shared = sharedModules(map, 2).map((entry) => entry.moduleId).sort();
-    assert.deepEqual(shared, ["accounting", "automation", "commerce", "invoicing", "knowledge", "payroll"]);
+    assert.deepEqual(shared, ["accounting", "automation", "commerce", "imports", "invoicing", "knowledge", "payroll"]);
   });
 
   it("Ganadero OS Offline SI necesita commerce/accounting/invoicing/payroll (un hato compra insumos, vende ganado y es una empresa formal con contabilidad/planilla igual que las demas verticales)", () => {
@@ -94,7 +94,7 @@ describe("sharedModules / unusedModules", () => {
     assert.ok(!ganadero.moduleIds.includes("knowledge"));
   });
 
-  it("unusedModules esta vacio: los 6 modulos los usa al menos 1 rubro", () => {
+  it("unusedModules esta vacio: todos los modulos los usa al menos 1 rubro", () => {
     assert.deepEqual(unusedModules(map), []);
   });
 });
