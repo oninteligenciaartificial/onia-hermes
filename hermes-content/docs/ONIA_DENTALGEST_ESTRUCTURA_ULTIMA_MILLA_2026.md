@@ -31,14 +31,31 @@ Cada funcion clasificada. **CORE/MODULO = se construye en DentalGest pero lo her
 
 **Candidatos a PROMOVER al core (no atrapar en dental):** medical_alert + informed_consent hoy son dental, pero el patron (alerta clinica estructurada + consentimiento pre-procedimiento) sirve a **estetica / veterinaria / salud** (tracks ya previstos). -> cuando entren esas verticales, se promueven a un **MODULO clinico compartido**. Anotarlo desde ya para no rehacer.
 
-## 2. Los 4 diferenciadores que venden (el foso)
+## 2. Los diferenciadores que venden (VALIDADO con evidencia + criterio propio)
 
-Ningun sistema dental gratis/lider en Bolivia combina estos 4. Este es el pitch:
+> Correccion honesta: la primera version repetia los 4 diferenciadores que se dieron. Con investigacion de fuentes confiables (drivers de compra del dentista + evaluacion critica), el orden REAL cambia. Lo que sigue esta ordenado por lo que de verdad CIERRA la venta para una clinica chica boliviana, no por lo que suena avanzado. Evidencia completa en la seccion "diferenciadores-criticos" (abajo).
 
-1. **Facturacion SIAT nativa (el wedge #1).** Facturacion en linea es OBLIGATORIA (camino a 30-sep-2026). Ningun software dental LatAm/Bolivia la trae; hoy se resuelve con ERPs genericos feos. ONIA la trae integrada + Contador Pack. **Urgencia legal = motivo de compra, no nice-to-have.**
-2. **Agentes 24/7 con aprobacion humana (ROI demoable).** No un chatbot que contesta: un **agente que OPERA el sistema** y te pide el visto bueno (routeAction). Los 2 de mayor ROI para la demo: **Recall** (reactiva pacientes que no vuelven) y **Cobrador** (persigue saldos vencidos). Una limpieza recuperada o un saldo cobrado al mes ya paga el sistema.
-3. **Privacidad / on-premise (foso vs gratis).** El software dental gratis monetiza con **data-mining** (el paciente es el producto). ONIA vende lo opuesto: **datos no salen, no data-mining, backup cifrado del cliente, opcion on-premise** (ya construida y ensayada). Nadie combina on-prem + espanol + fiscal Bolivia.
-4. **Negocio completo (no solo fichas).** Agenda + finanzas + **fiscal Bolivia** + inventario con vencimiento + planilla + agentes en UN sistema. Los competidores tienen fichas + agenda; **fiscal boliviano + Contador Pack no los tiene NADIE en dental**.
+**El filtro:** el dentista dueno de 1-3 sillones no compra "software dental" -- compra dejar de perder plata por sillon vacio, dejar de perseguir saldos, y no tener lios con el SIAT. El odontograma lindo y la etiqueta "IA" son table-stakes, no cierran.
+
+### TOP SET (liderar el pitch con estos 4)
+
+1. **MOTOR DE INGRESOS (el cierre mas fuerte).** Reencuadrar el sistema de "gasto que guarda fichas" a "sistema que SACA plata": reactiva pacientes dormidos, corta no-shows, cobra saldos, sigue planes de tratamiento. **El sistema se paga solo.** DATO: los recordatorios automaticos bajan las faltas ~23% (estudio 1,6M citas / 64 clinicas); reactivar un paciente cuesta 5-25x menos que captar uno nuevo. [VERIFICAR magnitud en Bs al ticket boliviano.]
+2. **WhatsApp-FIRST (el canal correcto).** Agenda, recordatorio, confirmacion, factura y receta por WhatsApp -- el canal que el boliviano YA usa. Los lideres (Dentalink/Dentiqa) nacieron sobre SMS/email/portal; WhatsApp nativo es ventaja local genuina, y por aca se ataca el driver de compra #1 (no-shows).
+3. **SIAT nativo (el "por que comprar AHORA").** Facturacion en linea obligatoria (grupos 9-12 al 30-sep-2026). Es un GATILLO regulatorio ("grudge purchase") con fecha: dispara la compra. Honesto: es urgencia, no foso durable (todos lo tendran pronto) -- el valor esta en "cobras y facturas legal en el mismo acto", incluido, no aparte.
+4. **AGENTE IA 24/7 con aprobacion humana (el gancho).** Ataca la fuga #1: el ~30-35% de mensajes/llamadas que se pierden. Vender el RESULTADO ("nunca se te escapa un paciente que escribio a la 1am"), NO la palabra "IA" (que puede asustar al dentista tradicional). La aprobacion humana (routeAction) lo hace confiable.
+
+**El TONO que envuelve todo (no es un bullet, es COMO se vende):** confianza local -- **precio transparente en Bs** (vs USD opaco de los lideres), pago **QR/BCP**, **soporte humano en espanol** (el motivo #1 de abandono de la competencia es soporte que empeora). Barato de dar, decisivo para el boliviano.
+
+### Secundarios / expansion (no lideran; retienen o suben ticket)
+- **Todo-en-uno** -> es RETENCION/lock-in (la retencion sube fuerte con 4+ productos activos), no gancho dia 1. Vender "encendes lo que necesitas", no "9 modulos".
+- **Crecimiento integrado** (ONIA da web + captacion/ads + contenido) -> upsell, no cierre inicial.
+- **Velocidad "operando en un dia"** -> des-riesgador transversal (la facilidad de uso pesa MAS para el chico; activar en las primeras 24h convierte 2,3x).
+
+### Nicho / con cuidado (NO liderar)
+- **Privacidad / on-premise** -> me contradigo a mi mismo con evidencia: para la clinica chica NO mueve la aguja (prefiere cloud, no tiene TI). El reencuadre que SI vende en Bolivia es el mismo motor como **"funciona sin internet/luz" (continuidad operativa)**. Como privacidad, guardarlo de reaseguro ("tus datos son tuyos"), no de punta de lanza.
+- **IA clinica** -> siempre ASISTIVA + con aprobacion (borrador de plan, timing de recall), NUNCA diagnostico ni lectura de radiografias (YMYL/regulatorio).
+
+**[VERIFICAR] antes de vender como hecho:** penetracion exacta de WhatsApp en Bolivia; magnitudes de ingreso recalculadas al ticket odontologico boliviano en Bs; tasas reales de no-show/atricion en clinicas bolivianas; a que grupo SIAT pertenece cada clinica (define si el gatillo es hoy o inminente).
 
 ## 3. Orden de construccion (la ultima milla, por fases)
 
