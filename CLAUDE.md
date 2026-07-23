@@ -10,12 +10,36 @@ Instrucciones de proyecto para Claude. Override sobre defaults.
 > separados: `hermes-content/docs/ONIA_SKILLS_STACK_Y_SUBAGENTES_20260705.md`.
 
 - Skills ONIA propias: `onia-router` (índice), `onia-propuestas`,
-  `onia-contabilidad-bolivia`, `onia-core`, `onia-web-factory`. Envuelven conocimiento
-  propio y apuntan a las fuentes de verdad — al cambiar una regla, editar la fuente, no la skill.
+  `onia-contabilidad-bolivia`, `onia-core`, `onia-web-factory`, `ver-videos`, `editor-videos`.
+  Envuelven conocimiento propio y apuntan a las fuentes de verdad — al cambiar una regla,
+  editar la fuente, no la skill.
 - 3 capas distintas: skills Claude Code (`.claude/skills/`, las invoca Claude Code) ·
   subagentes (`.claude/agents/`) · skills-doc de Hermes (`hermes-content/skills/`, las lee
   el bot del VPS).
 - Si una tarea tiene skill pública instalada (137 globales + plugins), usarla; no reinventar.
+
+## Video — ver y editar sin editores humanos (REGLA)
+
+> El ONIA system ve, transcribe y edita video con código (método del tutorial de Santiago).
+> Dos skills propias, probadas 2026-07-23. Al mejorar reglas, editar la SKILL.md, no duplicar.
+
+- **`ver-videos`** — para "ver" cualquier video que pase Sergio o un cliente: baja/recibe →
+  audio + fotogramas (`scripts/see-video.sh`) → transcribe con timestamps (`scripts/transcribe.sh`,
+  Speaches en el VPS, gratis) → leer una MUESTRA de frames con visión → resumen con timeline.
+  **Honestidad:** reportar cobertura real (audio 100%, N de M frames), no afirmar "vi el video"
+  desde 2 cuadros. **Forzar `Systran/faster-whisper-small`** (el distil del contenedor es
+  English-only y traduce el español).
+- **`editor-videos`** — edición talking-head / vertical (TikTok/Reels/Shorts): corta silencios,
+  muletillas y trabadas (`scripts/cut-plan.mjs` + ffmpeg, pieza propia), subtítulos karaoke
+  (`embedded-captions`), overlays (`talking-head-recut`), SFX (librería HyperFrames), complementos
+  (imagen barata / Higgsfield con OK). Orquesta, no reinventa el motor.
+- **REGLA DE ORO (de Santiago):** la **tabla de cortes + preview 360p SIEMPRE se muestran a Sergio
+  ANTES de aplicar el corte**. Nunca cortar a ciegas.
+- **Gasto:** generación paga (Higgsfield, AssemblyAI, ElevenLabs) = permiso explícito caso por caso;
+  por defecto gratis (Speaches, HyperFrames, imagen barata). Ver `gasto-plataformas-validar-primero`.
+- HyperFrames (motor HTML→MP4) vive en `.agents/skills/` (talking-head-recut, embedded-captions,
+  media-use, etc.). Transcripción local `hyperframes transcribe` NO corre en Windows
+  (whisper-cpp ausente) → usar Speaches. Detalle: `hermes-content/docs` + memoria [[onia-video-hyperframes]].
 
 ## Propuestas comerciales (REGLA)
 
