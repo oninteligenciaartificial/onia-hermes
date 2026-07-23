@@ -74,7 +74,7 @@
       "id": "modules/agents.logic.mjs",
       "kind": "logic",
       "path": "onia-core/modules/agents.logic.mjs",
-      "sha256": "44a83d4074b5357ba39a46135adce115021422d0f1b934ad220cfaf9a98fa605"
+      "sha256": "2a4bcc95871e5e9473d1284fa6054b095dca93643c5451752c830c3bc019ee25"
     },
     {
       "id": "modules/automation.logic.mjs",
