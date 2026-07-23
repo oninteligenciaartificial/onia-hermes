@@ -11,7 +11,7 @@
 # Vars opcionales (env): AI_RADAR_MODEL (def gpt-4o-mini), AI_RADAR_MAX_NEW (def 40).
 set -uo pipefail
 
-MODEL="${AI_RADAR_MODEL:-gpt-4o-mini}"
+MODEL="${AI_RADAR_MODEL:-gpt-4.1-mini}"
 MAX_NEW="${AI_RADAR_MAX_NEW:-40}"
 
 # LiteLLM master key (best-effort). Si el contenedor no responde, LLM_KEY queda vacio y el agente

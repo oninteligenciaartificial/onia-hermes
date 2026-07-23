@@ -19,7 +19,7 @@ set -uo pipefail
 YTDLP_BIN="${YTDLP_BIN:-/opt/onia/yt-dlp}"
 SEARCH_N="${RADAR_SEARCH_N:-10}"
 DRY="${RADAR_DRY_RUN:-false}"
-MODEL="${RADAR_MODEL:-gpt-4o-mini}"
+MODEL="${RADAR_MODEL:-gpt-4.1-mini}"
 LIMIT="${RADAR_LIMIT:-6}"
 POOL="${RADAR_POOL:-24}"
 

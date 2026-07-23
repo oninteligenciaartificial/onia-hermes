@@ -7,7 +7,7 @@
 # Vars opcionales (env): CONTENT_AGENT_MODEL, CONTENT_AGENT_DRY_RUN.
 set -uo pipefail
 
-MODEL="${CONTENT_AGENT_MODEL:-gpt-4o-mini}"
+MODEL="${CONTENT_AGENT_MODEL:-gpt-4.1-mini}"
 DRY="${CONTENT_AGENT_DRY_RUN:-false}"
 
 MK=$(docker exec onia_selfhosted-litellm-1 printenv LITELLM_MASTER_KEY 2>/dev/null)
