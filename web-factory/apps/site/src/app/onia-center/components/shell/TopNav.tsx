@@ -8,6 +8,7 @@ type Tab = { href: string; label: string; finance?: boolean };
 const TABS: Tab[] = [
   { href: "/onia-center/next/hoy", label: "Hoy" },
   { href: "/onia-center/next/pipeline", label: "Pipeline" },
+  { href: "/onia-center/next/estudio", label: "Estudio" },
   { href: "/onia-center/next/agentes", label: "Agentes" },
   { href: "/onia-center/next/finanzas", label: "Finanzas", finance: true },
   { href: "/onia-center/next/negocio", label: "Negocio" },
