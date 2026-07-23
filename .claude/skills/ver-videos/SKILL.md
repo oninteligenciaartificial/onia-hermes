@@ -11,15 +11,31 @@ description: >
 # Ver Videos — que ONIA "vea" cualquier video
 
 ## Overview
-Claude no reproduce video nativamente. Esta skill convierte cualquier video en cosas que Claude SÍ
-lee: **audio → transcript** (lo que se dice) + **fotogramas muestreados → visión** (lo que se ve) +
-un **resumen estructurado con timeline**. Es la base de `editor-videos` y de todo research de video.
+Dos modos para que ONIA "vea" un video. **Preferí el PRIMARIO (Gemini) siempre que haya key** —
+mira el video NATIVO (imagen + audio juntos, timeline real). Sin key, cae al FALLBACK
+(frames + transcript), que es un parche: cubre el 80% pero pierde movimiento/continuidad.
 
-**Principio (honestidad):** el audio se cubre al **100%** (transcript completo); los fotogramas se
-**muestrean** repartidos por la línea de tiempo. Al reportar, decí la cobertura real
-("audio 100%, vi N de M fotogramas") — nunca afirmes "vi el video" desde 2 cuadros.
+- **PRIMARIO — Gemini nativo** (`scripts/gemini-see-video.mjs`): una llamada, mira video+audio,
+  devuelve resumen + timeline con timestamps + texto en pantalla. Gratis (Google AI Studio free tier).
+  Necesita `GEMINI_API_KEY` (gratis: aistudio.google.com/apikey). Acepta URL de YouTube directa o archivo local (File API).
+- **FALLBACK — frames + transcript** (`scripts/see-video.sh` + `scripts/transcribe.sh`): sin key,
+  con ffmpeg + Speaches. Muestrea fotogramas + transcribe.
 
-## Pipeline
+**Principio (honestidad):** con Gemini, reportá lo que devolvió (mira todo). Con el fallback, decí la
+cobertura real ("audio 100%, vi N de M fotogramas") — nunca afirmes "vi el video" desde 2 cuadros.
+
+## PRIMARIO — Ver nativo con Gemini
+```bash
+# URL de YouTube directa (cero subida) o archivo local (File API):
+GEMINI_API_KEY=... node scripts/gemini-see-video.mjs "https://youtu.be/XXXX"
+GEMINI_API_KEY=... node scripts/gemini-see-video.mjs /ruta/video.mp4
+```
+- Modelo default `gemini-2.5-flash` (override `GEMINI_MODEL`; `gemini-2.5-flash-lite` = más barato).
+- Videos largos / ahorrar cuota: `GEMINI_MEDIA_RES=low` (~100 tok/s en vez de ~300).
+- Devuelve resumen + timeline por secciones + texto en pantalla, todo con timestamps. Eso ES "ver el video".
+- Si falla (sin key, cuota, error) → usar el FALLBACK de abajo. Nunca se rompe.
+
+## FALLBACK — frames + transcript (sin key)
 1. **Conseguir el video.**
    - URL (YouTube/etc.): `yt-dlp -f 18 -o in.mp4 "<url>"` (instalar: `pip install -U yt-dlp`; formato 18 = mp4 360p, liviano y suficiente para leer). Para mejor imagen: `-f "b[height<=720]"`.
    - Archivo local o nota de Telegram: usalo directo.

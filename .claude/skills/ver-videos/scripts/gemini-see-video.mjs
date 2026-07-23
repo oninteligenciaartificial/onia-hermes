@@ -1,0 +1,98 @@
+// ver-videos — VER NATIVO con Gemini (método primario): mira el video entero
+// (imagen + audio en UNA llamada) y devuelve resumen + timeline con timestamps.
+// Fuente: ai.google.dev (generateContent con file_data; File API resumable upload).
+//
+// Uso CLI:  GEMINI_API_KEY=... node gemini-see-video.mjs <youtube-url | ruta-local.mp4>
+//   - URL de YouTube (youtube.com/youtu.be)  -> se pasa directa (cero subida).
+//   - archivo local                          -> File API (subir -> ACTIVE -> analizar).
+// Importable: geminiEnabled(), seeYouTube(url), seeLocalVideo(path).
+//
+// Env: GEMINI_API_KEY (gratis, aistudio.google.com/apikey). GEMINI_MODEL (default gemini-2.5-flash).
+//   GEMINI_MEDIA_RES=low  -> ~100 tok/s en vez de ~300 (videos largos, ahorra cuota).
+import { readFile, stat } from "node:fs/promises";
+
+const API_KEY = process.env.GEMINI_API_KEY || "";
+const MODEL = process.env.GEMINI_MODEL || "gemini-2.5-flash";
+const BASE = "https://generativelanguage.googleapis.com";
+const H = { "x-goog-api-key": API_KEY };
+
+const PROMPT = `Sos un analista de video. Mirá ESTE video completo (audio + imagen) y devolvé en español:
+1. RESUMEN (3-5 frases): de qué trata y el mensaje central.
+2. TIMELINE POR SECCIONES en orden: [MM:SS - MM:SS] Título — QUÉ SE VE (personas, texto en pantalla, producto, acción) — QUÉ SE DICE (idea del audio; citas clave entre comillas).
+3. TEXTO EN PANTALLA: transcribí literal rótulos/CTA/precios con su timestamp.
+4. CONCLUSIÓN / CTA.
+Reglas: timestamps reales MM:SS, no inventes; si algo no se distingue decilo "no se distingue en MM:SS"; reportá cobertura real; solo ese formato.`;
+
+export const geminiEnabled = () => Boolean(API_KEY);
+const isYouTube = (s) => /^https:\/\/(?:(?:www\.|m\.)?youtube\.com\/|youtu\.be\/)/.test(s);
+
+function genConfig() {
+  return process.env.GEMINI_MEDIA_RES === "low"
+    ? { generationConfig: { mediaResolution: "MEDIA_RESOLUTION_LOW" } }
+    : {};
+}
+
+async function generate(parts) {
+  const res = await fetch(`${BASE}/v1beta/models/${MODEL}:generateContent`, {
+    method: "POST",
+    headers: { ...H, "Content-Type": "application/json" },
+    body: JSON.stringify({ contents: [{ parts }], ...genConfig() }),
+  });
+  if (!res.ok) throw new Error(`Gemini ${res.status}: ${(await res.text()).slice(0, 300)}`);
+  const data = await res.json();
+  return data.candidates?.[0]?.content?.parts?.map((p) => p.text).join("") ?? "";
+}
+
+// Video ya en YouTube (público/unlisted): cero subida.
+export async function seeYouTube(url, prompt = PROMPT) {
+  return generate([{ text: prompt }, { file_data: { file_uri: url } }]);
+}
+
+// Archivo local: File API resumable -> esperar ACTIVE -> analizar.
+export async function seeLocalVideo(path, prompt = PROMPT, mimeType = "video/mp4") {
+  const numBytes = (await stat(path)).size;
+  const start = await fetch(`${BASE}/upload/v1beta/files`, {
+    method: "POST",
+    headers: {
+      ...H,
+      "X-Goog-Upload-Protocol": "resumable",
+      "X-Goog-Upload-Command": "start",
+      "X-Goog-Upload-Header-Content-Length": String(numBytes),
+      "X-Goog-Upload-Header-Content-Type": mimeType,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ file: { display_name: "onia-ver-video" } }),
+  });
+  if (!start.ok) throw new Error(`upload start ${start.status}: ${(await start.text()).slice(0, 200)}`);
+  const uploadUrl = start.headers.get("x-goog-upload-url");
+
+  const fin = await fetch(uploadUrl, {
+    method: "POST",
+    headers: { "Content-Length": String(numBytes), "X-Goog-Upload-Offset": "0", "X-Goog-Upload-Command": "upload, finalize" },
+    body: await readFile(path),
+  });
+  if (!fin.ok) throw new Error(`upload finalize ${fin.status}: ${(await fin.text()).slice(0, 200)}`);
+  const { file } = await fin.json();
+
+  let state = file.state, meta = file;
+  const t0 = Date.now();
+  while (state === "PROCESSING") {
+    if (Date.now() - t0 > 600000) throw new Error("timeout esperando ACTIVE (>10min)");
+    await new Promise((r) => setTimeout(r, 5000));
+    const g = await fetch(`${BASE}/v1beta/${file.name}`, { headers: H });
+    meta = await g.json();
+    state = meta.state;
+  }
+  if (state !== "ACTIVE") throw new Error(`archivo en estado ${state}`);
+  return generate([{ file_data: { mime_type: mimeType, file_uri: meta.uri } }, { text: prompt }]);
+}
+
+// CLI
+if (import.meta.url === `file://${process.argv[1]}` || process.argv[1]?.endsWith("gemini-see-video.mjs")) {
+  const arg = process.argv[2];
+  if (!arg) { console.error("uso: node gemini-see-video.mjs <youtube-url | ruta.mp4>"); process.exit(1); }
+  if (!API_KEY) { console.error("falta GEMINI_API_KEY (gratis en aistudio.google.com/apikey)"); process.exit(2); }
+  (isYouTube(arg) ? seeYouTube(arg) : seeLocalVideo(arg))
+    .then((txt) => { console.log(txt); })
+    .catch((e) => { console.error("ERROR:", String(e.message || e)); process.exit(1); });
+}
