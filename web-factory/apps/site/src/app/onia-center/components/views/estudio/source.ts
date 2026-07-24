@@ -3,8 +3,12 @@ import { formatBs } from "@/app/onia-center/engine";
 import {
   getVideoProjectRows,
   getVideoCutRows,
+  getHiggsfieldBalance,
+  getCostItems,
   type DbVideoProjectRow,
   type DbVideoCutRow,
+  type ProviderBalance,
+  type CostItem,
 } from "@/app/onia-center/live/live-runtime";
 
 // ============================================================================
@@ -17,8 +21,9 @@ import {
 //
 // Los readers leen Supabase (onia_center.video_projects + review_queue) vía los
 // lectores crudos de live-runtime y mapean a los view-models. Sin datos → arrays
-// vacíos (empty state), nunca seed falso. Créditos Higgsfield + gasto siguen
-// constantes hasta Fase 3 (sync real de balance).
+// vacíos (empty state), nunca seed falso. Fase 3: créditos Higgsfield (balance real
+// de provider_credits) y gasto IA (row openai_api de cost_items) son datos reales;
+// si Supabase no responde, caen a las constantes de abajo (fallback graceful).
 // ============================================================================
 
 export type EditorLane = "sergio" | "cliente" | "onia-yt" | "onia-ig" | "onia";
@@ -158,8 +163,13 @@ function creditsLabel(value: number): string {
   return creditsFormatter.format(value);
 }
 
-// TODO Fase 3: reemplazar por balance real (sync MCP Higgsfield → Supabase).
+// Fallback si Supabase no trae provider_credits (balance real). El sync
+// (higgsfield-balance-sync.mjs) escribe el balance vivo leído por el MCP Higgsfield.
 const HIGGSFIELD_CREDITS = 2354.22;
+
+// Tasa USD→Bs (oficial Bolivia). El gasto IA real vive en USD (LiteLLM); el panel
+// lo muestra en Bs para ser consistente con el resto de finanzas.
+const USD_TO_BS = 6.96;
 
 const HIGGSFIELD_ACCOUNT: HiggsfieldAccount = {
   creditsLabel: creditsLabel(HIGGSFIELD_CREDITS),
@@ -355,13 +365,61 @@ export async function getCutQueue(): Promise<CutReview[]> {
   return cuts.filter((c) => c.review_key).map(mapCut);
 }
 
+// Créditos + plan reales de provider_credits; si no hay fila (sync aún no corrió o
+// Supabase no responde) cae a la constante de fallback. El plan vacío también cae.
+function resolveHiggsfield(balance: ProviderBalance | null): { credits: number; plan: string } {
+  if (!balance) {
+    return { credits: HIGGSFIELD_CREDITS, plan: HIGGSFIELD_ACCOUNT.plan };
+  }
+  return {
+    credits: balance.credits,
+    plan: balance.plan !== "" ? balance.plan : HIGGSFIELD_ACCOUNT.plan,
+  };
+}
+
+// Gasto IA real del mes: row openai_api de cost_items (raw.spend_usd_mtd, escrito por
+// ai-spend-sync desde LiteLLM). Devuelve las etiquetas ya en Bs. Si no hay dato real,
+// null → el consumidor mantiene el fallback constante sin romper.
+function resolveAiSpend(costs: CostItem[]): { monthLabel: string; hint: string } | null {
+  const row = costs.find((item) => item.itemKey === "openai_api");
+  if (!row || row.spendUsdMtd === null) {
+    return null;
+  }
+  const monthBs = row.spendUsdMtd * USD_TO_BS;
+  const requests = row.requestsMtd;
+  return {
+    monthLabel: formatBs(monthBs, { compact: true }),
+    // No hay desglose diario en LiteLLM; el hint muestra un dato real (llamadas del mes).
+    hint: requests !== null ? `${requests} llamadas · IA propia` : "IA propia · LiteLLM",
+  };
+}
+
 export async function getHiggsfieldAccount(): Promise<HiggsfieldAccount> {
-  return HIGGSFIELD_ACCOUNT; // TODO Fase 3: balance real
+  const balance = await getHiggsfieldBalance();
+  const { credits, plan } = resolveHiggsfield(balance);
+  return {
+    ...HIGGSFIELD_ACCOUNT,
+    creditsLabel: creditsLabel(credits),
+    plan,
+  };
 }
 
 export async function getStudioOverview(): Promise<StudioOverview> {
-  const [projects, cuts] = await Promise.all([getVideoProjectRows(), getVideoCutRows()]);
+  const [projects, cuts, balance, costs] = await Promise.all([
+    getVideoProjectRows(),
+    getVideoCutRows(),
+    getHiggsfieldBalance(),
+    getCostItems(),
+  ]);
   const count = (s: string) => projects.filter((p) => p.status === s).length;
+
+  const { credits, plan } = resolveHiggsfield(balance);
+  const higgsfieldCreditsLabel = creditsLabel(credits);
+
+  // Gasto IA real (Bs); fallback a la constante previa si no hay dato en cost_items.
+  const aiSpend = resolveAiSpend(costs);
+  const spendMonthLabel = aiSpend ? aiSpend.monthLabel : formatBs(1240, { compact: true });
+  const spendHintLabel = aiSpend ? aiSpend.hint : `hoy ${formatBs(42.8)}`;
 
   const cutQueue = cuts.length;
   const videosReady = count("ready");
@@ -383,17 +441,17 @@ export async function getStudioOverview(): Promise<StudioOverview> {
   ];
 
   return {
-    headerCreditsLabel: creditsLabel(HIGGSFIELD_CREDITS),
+    headerCreditsLabel: higgsfieldCreditsLabel,
     headerCreditUnit: "cr",
-    plan: "ultra",
-    spendMonthLabel: formatBs(1240, { compact: true }),
-    spendTodayLabel: `hoy ${formatBs(42.8)}`,
+    plan,
+    spendMonthLabel,
+    spendTodayLabel: spendHintLabel,
     pipeline,
     kpis: {
-      higgsfieldCreditsLabel: creditsLabel(HIGGSFIELD_CREDITS),
-      higgsfieldUsedLabel: "plan ultra · Fase 3",
-      spendMonthLabel: formatBs(1240, { compact: true }),
-      spendTodayLabel: `hoy ${formatBs(42.8)}`,
+      higgsfieldCreditsLabel,
+      higgsfieldUsedLabel: `plan ${plan}`,
+      spendMonthLabel,
+      spendTodayLabel: spendHintLabel,
       cutQueue,
       videosReady,
       videosReadyHint: "listos p/ publicar",

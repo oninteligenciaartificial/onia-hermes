@@ -995,3 +995,34 @@ export async function getVideoCutRows(): Promise<DbVideoCutRow[]> {
   );
   return rows ?? [];
 }
+
+// ---------------------------------------------------------------------------
+// 9. Balance de créditos de proveedores generativos — onia_center.provider_credits.
+//    Una sesión Claude Code con el MCP de Higgsfield lee el balance vivo y lo
+//    escribe (higgsfield-balance-sync.mjs); el panel LEE. Ante fallo/sin fila
+//    devuelve null y el consumidor cae a la constante (fallback graceful).
+// ---------------------------------------------------------------------------
+
+export interface ProviderBalance {
+  credits: number;
+  plan: string;
+}
+
+type DbProviderCreditsRow = {
+  credits?: unknown;
+  plan?: unknown;
+};
+
+export async function getHiggsfieldBalance(): Promise<ProviderBalance | null> {
+  const rows = await liveRequest<DbProviderCreditsRow[]>(
+    "provider_credits?select=credits,plan&provider=eq.higgsfield&limit=1",
+  );
+  const row = rows?.[0];
+  if (!row) {
+    return null;
+  }
+  return {
+    credits: toNumber(row.credits),
+    plan: typeof row.plan === "string" && row.plan.trim() !== "" ? row.plan : "",
+  };
+}
