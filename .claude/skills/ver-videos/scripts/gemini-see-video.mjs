@@ -12,7 +12,9 @@
 import { readFile, stat } from "node:fs/promises";
 
 const API_KEY = process.env.GEMINI_API_KEY || "";
-const MODEL = process.env.GEMINI_MODEL || "gemini-2.5-flash";
+// gemini-flash-latest = alias al flash actual (no se deprecia; las cuentas nuevas ya no
+// tienen gemini-2.5-flash). Override con GEMINI_MODEL (ej. gemini-3.6-flash, gemini-flash-lite-latest).
+const MODEL = process.env.GEMINI_MODEL || "gemini-flash-latest";
 const BASE = "https://generativelanguage.googleapis.com";
 const H = { "x-goog-api-key": API_KEY };
 

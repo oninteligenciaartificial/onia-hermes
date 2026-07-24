@@ -30,7 +30,7 @@ cobertura real ("audio 100%, vi N de M fotogramas") — nunca afirmes "vi el vid
 GEMINI_API_KEY=... node scripts/gemini-see-video.mjs "https://youtu.be/XXXX"
 GEMINI_API_KEY=... node scripts/gemini-see-video.mjs /ruta/video.mp4
 ```
-- Modelo default `gemini-2.5-flash` (override `GEMINI_MODEL`; `gemini-2.5-flash-lite` = más barato).
+- Modelo default `gemini-flash-latest` (alias al flash actual; las cuentas nuevas ya NO tienen `gemini-2.5-flash`). Override `GEMINI_MODEL` (ej. `gemini-3.6-flash`, `gemini-flash-lite-latest`). **PROBADO 2026-07-24**: vio el tutorial de Santiago (28 min) entero por URL de YouTube con timestamps.
 - Videos largos / ahorrar cuota: `GEMINI_MEDIA_RES=low` (~100 tok/s en vez de ~300).
 - Devuelve resumen + timeline por secciones + texto en pantalla, todo con timestamps. Eso ES "ver el video".
 - Si falla (sin key, cuota, error) → usar el FALLBACK de abajo. Nunca se rompe.
