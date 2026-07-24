@@ -24,6 +24,10 @@ finalizado. Esta skill **orquesta**, no reinventa el motor:
 ## ⭐ REGLA DE ORO (de Santiago) — nunca cortar a ciegas
 **La tabla de cortes + un preview 360p SIEMPRE se muestran a Sergio ANTES de aplicar el corte.**
 Formato de la tabla: `# | Me quedo con | Tiro | Por qué`. Se aplica el corte recién con su OK.
+Operativamente: el pipeline **publica el corte como review PENDIENTE** en la cola de aprobación del
+panel (`scripts/publish-cut-review.mjs` → `video_projects` status `cut_review` + `review_queue`
+`video_cut`) y **se detiene ahí**. El ffmpeg del corte corre recién cuando Sergio **aprueba** en
+ONIA Center → Estudio de Contenido (Fase 5).
 
 ## 💸 Regla de gasto
 Generación paga (Higgsfield, AssemblyAI, ElevenLabs) = **permiso explícito de Sergio caso por
@@ -40,21 +44,32 @@ HyperFrames (render + SFX), imagen barata. Validar la idea antes de generar.
 3. **Cut-list.** `node scripts/cut-plan.mjs scripts/segments.json > scripts/cutplan.json`
    → detecta silencios largos (gap > umbral), muletillas y repeticiones → imprime la **tabla**
    (`# | Me quedo con | Tiro | Por qué`) + `keep[]` (segmentos a conservar) + el filtro ffmpeg.
-   **Mostrar la tabla a Sergio + armar preview 360p. Esperar OK.** (Regla de oro.)
-4. **Aplicar el corte.** ffmpeg concat de los `keep[]` → `renders/cut.mp4` (ver cut-plan.mjs, imprime el comando exacto).
-5. **Subtítulos karaoke.** Delegar en `embedded-captions` sobre `renders/cut.mp4`
+4. **Publicar la review a la cola de aprobación del panel.** (Regla de oro, materializada.)
+   `node scripts/publish-cut-review.mjs --cutplan scripts/cutplan.json --title "…" --video-key <slug> [--lane sergio] [--format vertical] [--aspect 9:16] [--preview-url <url>]`
+   → genera el SQL de UPSERT para `video_projects` (status **`cut_review`**) + `review_queue`
+   (`source_type='video_cut'`, `status='pending'`, `reviewer_role_key='sergio'`, `sensitive=true`).
+   Por defecto es **DRY-RUN** (imprime el SQL; `--out file.sql` lo guarda). El orquestador aplica
+   ese SQL por SSH a `supabase-db` — la skill **nunca escribe a producción**. Con esto la pieza
+   aparece en **ONIA Center → Estudio de Contenido** como corte PENDIENTE de tu OK, con la tabla
+   keep/cut y el preview 360p. **El pipeline queda esperando acá: NO corta.**
+5. **Aplicar el corte — SOLO tras aprobar Sergio en el panel (Fase 5).** Recién con el OK en la cola
+   de aprobación se ejecuta el ffmpeg concat de los `keep[]` → `renders/cut.mp4` (ver cut-plan.mjs,
+   imprime el comando exacto). **Nunca cortar a ciegas ni antes del OK.**
+6. **Subtítulos karaoke.** Delegar en `embedded-captions` sobre `renders/cut.mp4`
    (identidad `anchor`/rail por defecto; embed solo en el pico). Estilo Santiago: MAYÚSCULAS,
    Space Grotesk Bold, highlight naranja `#FF7A00`.
-6. **Overlays / gráficos.** Delegar en `talking-head-recut` (intro, lower-thirds, mockups desaturados).
-7. **SFX + música.** Eventos de la librería HyperFrames (`assets/sfx` del repo) sincronizados a los cortes/CTA. Bajarla con la skill `media-use` si no está.
-8. **Complementos.** `image-gen` MCP o modelo barato (ej. Gemini Flash-Lite Image) para mascot/thumbnails; Higgsfield (créditos 2354, [[higgsfield-models-roster]]) solo con OK.
-9. **Verificar + exportar.** Revisar frames en tiempos clave (sync, color, fades) → `renders/final.mp4`.
+7. **Overlays / gráficos.** Delegar en `talking-head-recut` (intro, lower-thirds, mockups desaturados).
+8. **SFX + música.** Eventos de la librería HyperFrames (`assets/sfx` del repo) sincronizados a los cortes/CTA. Bajarla con la skill `media-use` si no está.
+9. **Complementos.** `image-gen` MCP o modelo barato (ej. Gemini Flash-Lite Image) para mascot/thumbnails; Higgsfield (créditos 2354, [[higgsfield-models-roster]]) solo con OK.
+10. **Verificar + exportar.** Revisar frames en tiempos clave (sync, color, fades) → `renders/final.mp4`.
 
 ## Quick reference
 | Necesito | Herramienta | Costo |
 | --- | --- | --- |
 | Transcript + timestamps | `ver-videos` → Speaches | gratis |
-| Cortar silencios/muletillas | `scripts/cut-plan.mjs` + ffmpeg | gratis |
+| Cut-list (tabla de cortes) | `scripts/cut-plan.mjs` | gratis |
+| Publicar el corte al panel para tu OK | `scripts/publish-cut-review.mjs` (DRY-RUN → SQL) | gratis |
+| Aplicar el corte (tras OK) | ffmpeg concat de `keep[]` | gratis |
 | Subtítulos karaoke | `embedded-captions` | gratis (local) |
 | Overlays / lower-thirds / mockups | `talking-head-recut` | gratis (local) |
 | SFX / música | librería HyperFrames | gratis |
@@ -62,7 +77,10 @@ HyperFrames (render + SFX), imagen barata. Validar la idea antes de generar.
 | Video generativo / avatar | Higgsfield | **pago → OK Sergio** |
 
 ## Common mistakes
-- **Cortar sin mostrar la tabla + preview** (viola la regla de oro).
+- **Cortar sin publicar la review + mostrar la tabla + preview** (viola la regla de oro). Correr
+  `publish-cut-review.mjs` y esperar el OK de Sergio en el panel; el ffmpeg del corte va DESPUÉS.
+- **Aplicar el SQL a producción desde la skill.** La skill es DRY-RUN (imprime SQL); lo aplica el
+  orquestador por SSH a `supabase-db`.
 - **Subtitular todo como embed** — la mayoría va al rail; embed solo el pico (ver `embedded-captions`).
 - **Gastar en Higgsfield/AssemblyAI sin OK.** Default gratis.
 - Usar el modelo distil en Speaches para español (traduce a inglés) — forzar `faster-whisper-small`.
