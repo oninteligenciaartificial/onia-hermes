@@ -1,32 +1,38 @@
 import type { CenterTone } from "@/app/onia-center/types";
 import { formatBs } from "@/app/onia-center/engine";
+import {
+  getVideoProjectRows,
+  getVideoCutRows,
+  type DbVideoProjectRow,
+  type DbVideoCutRow,
+} from "@/app/onia-center/live/live-runtime";
 
 // ============================================================================
-// Estudio de Contenido — seed de Fase 1 (sin DB).
+// Estudio de Contenido — datos reales (Fase 2).
 //
 // Modela el editor de video de ONIA: ver → transcribir → cortar → tu OK →
 // render → publicar. La "regla de oro" (la tabla de cortes se aprueba antes de
-// aplicar) es el centro del producto, así que el modelo la representa entera:
-// cada CutReview trae los segmentos keep/cut con motivo y texto.
+// aplicar) es el centro del producto: cada CutReview trae los segmentos
+// keep/cut con motivo y texto, leídos de review_queue (source_type=video_cut).
 //
-// Cada reader es async (paridad con getFinanceSummary/getVideoLabSnapshot) para
-// que en Fase 2 se cambie el cuerpo por una lectura real sin tocar la vista.
+// Los readers leen Supabase (onia_center.video_projects + review_queue) vía los
+// lectores crudos de live-runtime y mapean a los view-models. Sin datos → arrays
+// vacíos (empty state), nunca seed falso. Créditos Higgsfield + gasto siguen
+// constantes hasta Fase 3 (sync real de balance).
 // ============================================================================
 
 export type EditorLane = "sergio" | "cliente" | "onia-yt" | "onia-ig" | "onia";
 
-// Estados del pipeline del editor (6). Mapean 1:1 a los pasos de EditorFlow.
 export type EditorProjectStatus =
-  | "intake" // Recibir / Subir
-  | "transcribe" // Transcribir
-  | "cutlist" // Cut-list · tu OK (compuerta)
-  | "captions" // Subtítulos
-  | "render" // Render
-  | "published"; // Publicado
+  | "intake"
+  | "transcribe"
+  | "cutlist"
+  | "captions"
+  | "render"
+  | "published";
 
 export type EditorProjectAction = {
   label: string;
-  // gate = abre el rail de cortes (ámbar); primary = acción viva; muted = ver algo cerrado.
   kind: "gate" | "primary" | "muted";
 };
 
@@ -57,7 +63,6 @@ export type HiggsfieldGeneration = {
   credits: number;
 };
 
-// paga = consume créditos y pide tu OK (ámbar); free = no cobra cuando aplica (esmeralda).
 export type HiggsfieldFunctionCost = "paga" | "free";
 
 export type HiggsfieldFunctionIcon =
@@ -95,7 +100,6 @@ export type CutSegment = {
   decision: CutDecision;
   reason: string;
   text: string;
-  // Texto completo (sin truncar): se muestra en modo foco y como title del recorte.
   fullText?: string;
   weight: number;
 };
@@ -115,7 +119,6 @@ export type CutReview = {
   detected: number;
   keepBlocks: number;
   segments: CutSegment[];
-  // true = trae preview + segmentos completos; false = solo resumen (aún en cola).
   detail: boolean;
 };
 
@@ -151,98 +154,12 @@ export type StudioOverview = {
 };
 
 const creditsFormatter = new Intl.NumberFormat("es-BO", { maximumFractionDigits: 0 });
-
 function creditsLabel(value: number): string {
   return creditsFormatter.format(value);
 }
 
+// TODO Fase 3: reemplazar por balance real (sync MCP Higgsfield → Supabase).
 const HIGGSFIELD_CREDITS = 2354.22;
-
-const EDITOR_PROJECTS: EditorProject[] = [
-  {
-    id: "p-siat",
-    title: "3 errores al facturar en Bolivia",
-    rawLabel: "sergio-reel-siat.mov · talking-head 9:16",
-    lane: "sergio",
-    laneLabel: "Sergio",
-    status: "cutlist",
-    statusLabel: "Cut-list · tu OK",
-    tone: "yellow",
-    durationFromLabel: "1:48",
-    durationToLabel: "1:12",
-    deltaLabel: "−33%",
-    credits: 0,
-    action: { label: "Ver cortes", kind: "gate" },
-    cutReviewId: "cr-siat",
-  },
-  {
-    id: "p-cafeluna",
-    title: "Café Luna · promo apertura",
-    rawLabel: "cafeluna-crudo.mp4 · 16:9",
-    lane: "cliente",
-    laneLabel: "Cliente",
-    status: "render",
-    statusLabel: "Render",
-    tone: "blue",
-    durationFromLabel: "0:34",
-    durationToLabel: "0:28",
-    credits: 45,
-    action: { label: "Abrir", kind: "primary" },
-  },
-  {
-    id: "p-onia-ep4",
-    title: "ONIA Automatiza · ep.004",
-    rawLabel: "faceless · guion aprobado",
-    lane: "onia-yt",
-    laneLabel: "ONIA · YT",
-    status: "captions",
-    statusLabel: "Subtítulos",
-    tone: "neutral",
-    durationFromLabel: "6:20",
-    durationToLabel: "5:48",
-    credits: 0,
-    action: { label: "Abrir", kind: "primary" },
-  },
-  {
-    id: "p-lucia",
-    title: "Lucía · lifestyle Soul",
-    rawLabel: "lucia-soul-set2 · 9:16",
-    lane: "onia-ig",
-    laneLabel: "ONIA · IG",
-    status: "transcribe",
-    statusLabel: "Transcribir",
-    tone: "neutral",
-    durationToLabel: "0:22",
-    credits: 36,
-    action: { label: "Abrir", kind: "primary" },
-  },
-  {
-    id: "p-dentalgest",
-    title: "DentalGest · demo producto",
-    rawLabel: "product-launch · publicado",
-    lane: "cliente",
-    laneLabel: "Cliente",
-    status: "published",
-    statusLabel: "Publicado",
-    tone: "green",
-    durationFromLabel: "1:15",
-    durationToLabel: "0:58",
-    credits: 120,
-    action: { label: "Ver publicado", kind: "muted" },
-  },
-  {
-    id: "p-ganadero",
-    title: "Ganadero OS · teaser",
-    rawLabel: "sin crudo aún",
-    lane: "onia",
-    laneLabel: "ONIA",
-    status: "intake",
-    statusLabel: "Recibir",
-    tone: "neutral",
-    credits: null,
-    action: { label: "Subir crudo", kind: "primary" },
-  },
-];
 
 const HIGGSFIELD_ACCOUNT: HiggsfieldAccount = {
   creditsLabel: creditsLabel(HIGGSFIELD_CREDITS),
@@ -252,27 +169,9 @@ const HIGGSFIELD_ACCOUNT: HiggsfieldAccount = {
   usedFraction: 0.095,
   capacityHint: "Alcanza para ~52 videos kling o ~65 imágenes Soul.",
   recent: [
-    {
-      id: "gen-cafeluna-broll",
-      title: "Café Luna · b-roll kling",
-      kind: "video",
-      meta: "video · hace 3 h · usado",
-      credits: 45,
-    },
-    {
-      id: "gen-lucia-soul",
-      title: "Lucía Soul · retrato set 2",
-      kind: "image",
-      meta: "imagen · ayer · aprobado",
-      credits: 36,
-    },
-    {
-      id: "gen-onia-sting",
-      title: "ONIA · logo sting",
-      kind: "effect",
-      meta: "video · hace 3 d",
-      credits: 30,
-    },
+    { id: "gen-cafeluna-broll", title: "Café Luna · b-roll kling", kind: "video", meta: "video · hace 3 h · usado", credits: 45 },
+    { id: "gen-lucia-soul", title: "Lucía Soul · retrato set 2", kind: "image", meta: "imagen · ayer · aprobado", credits: 36 },
+    { id: "gen-onia-sting", title: "ONIA · logo sting", kind: "effect", meta: "video · hace 3 d", credits: 30 },
   ],
   functions: [
     { id: "fn-image", name: "Generar imagen", desc: "Soul · recraft · referencias", cost: "paga", icon: "image" },
@@ -284,157 +183,224 @@ const HIGGSFIELD_ACCOUNT: HiggsfieldAccount = {
   ],
 };
 
-const CUT_QUEUE: CutReview[] = [
-  {
-    id: "cr-siat",
-    projectId: "p-siat",
-    lane: "sergio",
-    laneLabel: "Sergio",
-    title: 'Reel "3 errores al facturar en Bolivia"',
-    aspect: "9:16",
-    origLabel: "1:48",
-    finalLabel: "1:12",
-    previewLabel: "Preview 360p · cut.mp4",
-    timeLabel: "0:00 / 1:12",
-    trimLabel: "−36 s",
-    detected: 12,
-    keepBlocks: 4,
-    detail: true,
-    segments: [
-      {
-        index: 1,
-        timeLabel: "00:00–00:14",
-        decision: "keep",
-        reason: "Hook fuerte",
-        text: "“Si facturás mal, el SIAT…”",
-        fullText: "Si facturás mal en Bolivia, el SIAT te observa la factura y te cae la multa.",
-        weight: 14,
-      },
-      { index: 2, timeLabel: "00:14–00:18", decision: "cut", reason: "Silencio 4,2 s", text: "—", weight: 4 },
-      {
-        index: 3,
-        timeLabel: "00:18–00:40",
-        decision: "keep",
-        reason: "Error #1",
-        text: "“…no validar el NIT.”",
-        fullText: "El error número uno es no validar el NIT del cliente antes de emitir.",
-        weight: 22,
-      },
-      {
-        index: 4,
-        timeLabel: "00:40–00:43",
-        decision: "cut",
-        reason: "Muletilla",
-        text: "“eh, este, o sea…”",
-        fullText: "eh, este, o sea… (muletilla)",
-        weight: 3,
-      },
-      {
-        index: 5,
-        timeLabel: "00:43–01:01",
-        decision: "keep",
-        reason: "Error #2",
-        text: "“…la fecha límite.”",
-        fullText: "Segundo error: pasarse de la fecha límite de emisión de la factura.",
-        weight: 18,
-      },
-      {
-        index: 6,
-        timeLabel: "01:01–01:06",
-        decision: "cut",
-        reason: "Repetición",
-        text: "“la fecha, la fecha…”",
-        fullText: "la fecha límite, la fecha… (repetición)",
-        weight: 5,
-      },
-      {
-        index: 7,
-        timeLabel: "01:06–01:19",
-        decision: "keep",
-        reason: "CTA",
-        text: "“Escribime y te paso la guía.”",
-        fullText: "Escribime y te paso la guía completa gratis para facturar sin errores.",
-        weight: 13,
-      },
-    ],
-  },
-  {
-    id: "cr-onia-ep3",
-    projectId: "p-onia-ep3",
-    lane: "onia-yt",
-    laneLabel: "ONIA · YT",
-    title: "ONIA Automatiza · ep.003",
-    aspect: "16:9",
-    origLabel: "6:52",
-    finalLabel: "6:04",
-    previewLabel: "Preview 360p · cut.mp4",
-    timeLabel: "0:00 / 6:04",
-    trimLabel: "−48 s",
-    detected: 9,
-    keepBlocks: 5,
-    detail: false,
-    segments: [],
-  },
-  {
-    id: "cr-lucia-set1",
-    projectId: "p-lucia-set1",
-    lane: "onia-ig",
-    laneLabel: "ONIA · IG",
-    title: "Lucía · set 1 corte largo",
-    aspect: "9:16",
-    origLabel: "0:41",
-    finalLabel: "0:24",
-    previewLabel: "Preview 360p · cut.mp4",
-    timeLabel: "0:00 / 0:24",
-    trimLabel: "−17 s",
-    detected: 7,
-    keepBlocks: 3,
-    detail: false,
-    segments: [],
-  },
-];
+// --- helpers de mapeo raw DB → view-model ---------------------------------
 
-const STUDIO_OVERVIEW: StudioOverview = {
-  headerCreditsLabel: creditsLabel(HIGGSFIELD_CREDITS),
-  headerCreditUnit: "cr",
-  plan: "ultra",
-  spendMonthLabel: formatBs(1240, { compact: true }),
-  spendTodayLabel: `hoy ${formatBs(42.8)}`,
-  pipeline: [
-    { index: 1, name: "Recibir / Subir", tool: "yt-dlp · Telegram · ffprobe", count: "2 crudos en espera", state: "done" },
-    { index: 2, name: "Transcribir", tool: "Speaches · faster-whisper-small", count: "1 en proceso", state: "done" },
-    { index: 3, name: "Cut-list", tool: "cut-plan.mjs · regla de oro", count: "3 esperando tu OK", state: "active", gate: true },
-    { index: 4, name: "Subtítulos", tool: "embedded-captions · karaoke", count: "1 en cola", state: "todo" },
-    { index: 5, name: "Render", tool: "HyperFrames · SFX", count: "2 renderizando", state: "todo" },
-    { index: 6, name: "Publicar", tool: "handoff n8n · redes", count: "4 listos p/ publicar", state: "todo" },
-  ],
-  kpis: {
-    higgsfieldCreditsLabel: creditsLabel(HIGGSFIELD_CREDITS),
-    higgsfieldUsedLabel: "plan ultra · 246 usados",
-    spendMonthLabel: formatBs(1240, { compact: true }),
-    spendTodayLabel: `hoy ${formatBs(42.8)}`,
-    cutQueue: 3,
-    videosReady: 4,
-    videosReadyHint: "listos p/ publicar",
-    inProcess: 2,
-    inProcessHint: "render · ~4 min",
-    savingsLabel: formatBs(9600, { compact: true }),
-    savingsHint: "estimado · mes",
-  },
+function toNum(v: unknown): number | undefined {
+  if (v === null || v === undefined || v === "") return undefined;
+  const n = typeof v === "number" ? v : Number(v);
+  return Number.isFinite(n) ? n : undefined;
+}
+
+function fmtDur(sec?: number): string | undefined {
+  if (sec === undefined || sec <= 0) return undefined;
+  const m = Math.floor(sec / 60);
+  const s = Math.round(sec % 60);
+  return `${m}:${String(s).padStart(2, "0")}`;
+}
+
+function clockLabel(sec?: number): string {
+  const x = Math.max(0, Math.round(sec ?? 0));
+  return `${String(Math.floor(x / 60)).padStart(2, "0")}:${String(x % 60).padStart(2, "0")}`;
+}
+
+function deltaLabel(dur?: number, final?: number): string | undefined {
+  if (!dur || !final || dur <= 0 || final <= 0 || final >= dur) return undefined;
+  return `−${Math.round((1 - final / dur) * 100)}%`;
+}
+
+type StatusInfo = { status: EditorProjectStatus; label: string; tone: CenterTone; action: EditorProjectAction };
+
+function statusInfo(db?: string): StatusInfo {
+  switch (db) {
+    case "intake":
+      return { status: "intake", label: "Recibir", tone: "neutral", action: { label: "Subir crudo", kind: "primary" } };
+    case "transcribing":
+      return { status: "transcribe", label: "Transcribir", tone: "neutral", action: { label: "Abrir", kind: "primary" } };
+    case "cut_review":
+      return { status: "cutlist", label: "Cut-list · tu OK", tone: "yellow", action: { label: "Ver cortes", kind: "gate" } };
+    case "approved":
+      return { status: "render", label: "Aprobado", tone: "blue", action: { label: "Abrir", kind: "primary" } };
+    case "rendering":
+      return { status: "render", label: "Render", tone: "blue", action: { label: "Abrir", kind: "primary" } };
+    case "captioning":
+      return { status: "captions", label: "Subtítulos", tone: "neutral", action: { label: "Abrir", kind: "primary" } };
+    case "ready":
+      return { status: "published", label: "Listo", tone: "green", action: { label: "Abrir", kind: "primary" } };
+    case "published":
+      return { status: "published", label: "Publicado", tone: "green", action: { label: "Ver publicado", kind: "muted" } };
+    case "blocked":
+      return { status: "intake", label: "Bloqueado", tone: "yellow", action: { label: "Ver", kind: "muted" } };
+    default:
+      return { status: "intake", label: "Recibir", tone: "neutral", action: { label: "Abrir", kind: "primary" } };
+  }
+}
+
+const FINE_LANES = new Set(["sergio", "cliente", "onia-yt", "onia-ig", "onia"]);
+const BASE_LANE: Record<string, { lane: EditorLane; laneLabel: string }> = {
+  sergio: { lane: "sergio", laneLabel: "Sergio" },
+  client: { lane: "cliente", laneLabel: "Cliente" },
+  onia: { lane: "onia", laneLabel: "ONIA" },
 };
 
-export async function getStudioOverview(): Promise<StudioOverview> {
-  return STUDIO_OVERVIEW;
+function laneInfo(dbLane?: string, raw?: Record<string, unknown> | null): { lane: EditorLane; laneLabel: string } {
+  const rawLane = raw && typeof raw.lane === "string" ? raw.lane : undefined;
+  const rawLabel = raw && typeof raw.lane_label === "string" ? raw.lane_label : undefined;
+  const base = BASE_LANE[dbLane ?? "onia"] ?? BASE_LANE.onia;
+  const lane = (rawLane && FINE_LANES.has(rawLane) ? rawLane : base.lane) as EditorLane;
+  return { lane, laneLabel: rawLabel ?? base.laneLabel };
 }
+
+function strField(raw: Record<string, unknown> | null | undefined, key: string): string | undefined {
+  return raw && typeof raw[key] === "string" ? (raw[key] as string) : undefined;
+}
+
+function mapProject(row: DbVideoProjectRow, cutKeyByVideo: Map<string, string>): EditorProject {
+  const info = statusInfo(row.status);
+  const { lane, laneLabel } = laneInfo(row.lane, row.raw);
+  const dur = toNum(row.duration_seconds);
+  const final = toNum(row.final_seconds);
+  const key = row.video_key ?? "";
+  const rawLabel =
+    strField(row.raw, "raw_label") ??
+    (row.source_url ? row.source_url.split("/").pop() ?? "" : row.format ?? "");
+  return {
+    id: key,
+    title: row.title ?? key,
+    rawLabel,
+    lane,
+    laneLabel,
+    status: info.status,
+    statusLabel: info.label,
+    tone: info.tone,
+    durationFromLabel: fmtDur(dur),
+    durationToLabel: fmtDur(final),
+    deltaLabel: deltaLabel(dur, final),
+    credits: toNum(row.credits_est) ?? null,
+    action: info.action,
+    cutReviewId: info.status === "cutlist" ? cutKeyByVideo.get(key) : undefined,
+  };
+}
+
+// Contrato del raw de review_queue (source_type=video_cut) que escribe el pipeline (Fase 4).
+type RawCutSegment = {
+  index?: number;
+  from?: number;
+  to?: number;
+  decision?: string;
+  reason?: string;
+  text?: string;
+  full_text?: string;
+  weight?: number;
+};
+type RawCutBody = {
+  aspect?: string;
+  lane?: string;
+  lane_label?: string;
+  orig_seconds?: number;
+  final_seconds?: number;
+  preview_url?: string;
+  detected?: number;
+  keep_blocks?: number;
+  trim_seconds?: number;
+  segments?: RawCutSegment[];
+};
+
+function mapCut(row: DbVideoCutRow): CutReview {
+  const raw = (row.raw ?? {}) as RawCutBody;
+  const segs = Array.isArray(raw.segments) ? raw.segments : [];
+  const orig = toNum(raw.orig_seconds);
+  const final = toNum(raw.final_seconds);
+  const trim = toNum(raw.trim_seconds) ?? (orig !== undefined && final !== undefined ? orig - final : undefined);
+  const { lane, laneLabel } = laneInfo(raw.lane, raw as Record<string, unknown>);
+  return {
+    id: row.review_key ?? "",
+    projectId: row.source_key ?? "",
+    lane,
+    laneLabel,
+    title: row.title ?? "Corte de video",
+    aspect: typeof raw.aspect === "string" ? raw.aspect : "9:16",
+    origLabel: fmtDur(orig) ?? "—",
+    finalLabel: fmtDur(final) ?? "—",
+    previewLabel: "Preview 360p · cut.mp4",
+    timeLabel: `0:00 / ${fmtDur(final) ?? "0:00"}`,
+    trimLabel: trim !== undefined ? `−${Math.round(trim)} s` : "—",
+    detected: toNum(raw.detected) ?? segs.length,
+    keepBlocks: toNum(raw.keep_blocks) ?? segs.filter((s) => s.decision === "keep").length,
+    detail: segs.length > 0,
+    segments: segs.map((s, i) => ({
+      index: toNum(s.index) ?? i + 1,
+      timeLabel: `${clockLabel(toNum(s.from))}–${clockLabel(toNum(s.to))}`,
+      decision: s.decision === "cut" ? "cut" : "keep",
+      reason: typeof s.reason === "string" ? s.reason : "",
+      text: typeof s.text === "string" ? s.text : "",
+      fullText: typeof s.full_text === "string" ? s.full_text : undefined,
+      weight: toNum(s.weight) ?? Math.max(1, Math.round((toNum(s.to) ?? 0) - (toNum(s.from) ?? 0))),
+    })),
+  };
+}
+
+// --- readers (Promise.all en next/estudio/page.tsx) ------------------------
 
 export async function getEditorProjects(): Promise<EditorProject[]> {
-  return EDITOR_PROJECTS;
-}
-
-export async function getHiggsfieldAccount(): Promise<HiggsfieldAccount> {
-  return HIGGSFIELD_ACCOUNT;
+  const [projects, cuts] = await Promise.all([getVideoProjectRows(), getVideoCutRows()]);
+  const cutKeyByVideo = new Map<string, string>();
+  for (const c of cuts) {
+    if (c.source_key && c.review_key) cutKeyByVideo.set(c.source_key, c.review_key);
+  }
+  return projects.filter((r) => r.video_key).map((r) => mapProject(r, cutKeyByVideo));
 }
 
 export async function getCutQueue(): Promise<CutReview[]> {
-  return CUT_QUEUE;
+  const cuts = await getVideoCutRows();
+  return cuts.filter((c) => c.review_key).map(mapCut);
+}
+
+export async function getHiggsfieldAccount(): Promise<HiggsfieldAccount> {
+  return HIGGSFIELD_ACCOUNT; // TODO Fase 3: balance real
+}
+
+export async function getStudioOverview(): Promise<StudioOverview> {
+  const [projects, cuts] = await Promise.all([getVideoProjectRows(), getVideoCutRows()]);
+  const count = (s: string) => projects.filter((p) => p.status === s).length;
+
+  const cutQueue = cuts.length;
+  const videosReady = count("ready");
+  const inProcess = count("rendering") + count("captioning") + count("transcribing");
+
+  const intakeN = count("intake");
+  const transN = count("transcribing");
+  const capN = count("captioning");
+  const renderN = count("rendering") + count("approved");
+  const pubN = count("published") + count("ready");
+
+  const pipeline: EditorStage[] = [
+    { index: 1, name: "Recibir / Subir", tool: "yt-dlp · Telegram · ffprobe", count: `${intakeN} en intake`, state: intakeN > 0 ? "active" : "done" },
+    { index: 2, name: "Transcribir", tool: "Speaches · faster-whisper-small", count: `${transN} en proceso`, state: transN > 0 ? "active" : "todo" },
+    { index: 3, name: "Cut-list", tool: "cut-plan.mjs · regla de oro", count: `${cutQueue} esperando tu OK`, state: cutQueue > 0 ? "active" : "todo", gate: true },
+    { index: 4, name: "Subtítulos", tool: "embedded-captions · karaoke", count: `${capN} en cola`, state: capN > 0 ? "active" : "todo" },
+    { index: 5, name: "Render", tool: "HyperFrames · SFX", count: `${renderN} renderizando`, state: renderN > 0 ? "active" : "todo" },
+    { index: 6, name: "Publicar", tool: "handoff n8n · redes", count: `${pubN} listos`, state: pubN > 0 ? "done" : "todo" },
+  ];
+
+  return {
+    headerCreditsLabel: creditsLabel(HIGGSFIELD_CREDITS),
+    headerCreditUnit: "cr",
+    plan: "ultra",
+    spendMonthLabel: formatBs(1240, { compact: true }),
+    spendTodayLabel: `hoy ${formatBs(42.8)}`,
+    pipeline,
+    kpis: {
+      higgsfieldCreditsLabel: creditsLabel(HIGGSFIELD_CREDITS),
+      higgsfieldUsedLabel: "plan ultra · Fase 3",
+      spendMonthLabel: formatBs(1240, { compact: true }),
+      spendTodayLabel: `hoy ${formatBs(42.8)}`,
+      cutQueue,
+      videosReady,
+      videosReadyHint: "listos p/ publicar",
+      inProcess,
+      inProcessHint: "en proceso",
+      savingsLabel: formatBs(9600, { compact: true }),
+      savingsHint: "estimado · mes",
+    },
+  };
 }
