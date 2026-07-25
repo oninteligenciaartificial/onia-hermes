@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { WA_URL, APP_URL } from "@/lib/site";
 import { HeroBoard } from "./hero-board";
 import styles from "./hero.module.css";
@@ -34,6 +35,9 @@ export function Hero() {
               <span className="btn-dot" aria-hidden />
               Hablanos por WhatsApp
             </a>
+            <Link href="/empezar" className="btn btn-ghost">
+              Empezá ahora
+            </Link>
             <a href={APP_URL} className="btn btn-ghost">
               Entrar a la app
             </a>
