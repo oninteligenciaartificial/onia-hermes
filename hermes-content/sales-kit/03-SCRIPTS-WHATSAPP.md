@@ -16,7 +16,7 @@ Hola [Nombre], soy Sergio de ONIA — hablamos hace un tiempo por el sistema par
 En ese momento me dijiste que te quedaba corto, y tenías razón. Te escribo porque cambió bastante:
 
 1. Ahora tiene un agente que trabaja solo: cuando un paciente falta, te propone la reprogramación por WhatsApp y vos aprobás con un click. Llena el hueco, no manda recorditos.
-2. Factura SIAT en línea incluida en todos los planes (desde el 1 de octubre solo se factura en línea — dato del SIN).
+2. Factura SIAT incluida en los 3 planes, sin costo aparte (desde el 1 de octubre solo se factura en línea; igual podés cumplir gratis tipeando en el portal del SIN — lo nuestro es que no tengas que tipear).
 3. Odontograma, historial y consentimientos en la ficha del paciente.
 
 ¿Te muestro en 20 min lo que cambió? La cuenta la hacemos con los números de tu clínica.
@@ -27,9 +27,19 @@ Variante si la objeción fue "ustedes son muy chicos":
 ```
 Hola [Nombre], Sergio de ONIA. Hace un tiempo hablamos por el sistema para [Clínica] y quedó ahí — con razón, estábamos arrancando.
 
-Hoy el sistema factura SIAT en línea, tiene un agente que reprograma citas por WhatsApp solo (vos aprobás cada mensaje), y estamos cerrando las primeras clínicas de Santa Cruz con implementación regalada, justamente porque somos los primeros en resolver esto acá.
+Hoy el sistema tiene un agente que reprograma citas por WhatsApp solo (vos aprobás cada mensaje antes de que salga), la factura SIAT va incluida en todos los planes sin costo aparte, y a las primeras clínicas de Santa Cruz que arranquen les regalamos la implementación completa. Chicos seguimos siendo — la diferencia es que me tenés a mí directo, no a un call center.
 
 ¿20 minutos esta semana para que lo veas andando? Si no te convence, quedamos como amigos.
+```
+
+Variante si el lead quedó en silencio sin objeción clara:
+
+```
+Hola [Nombre], Sergio de ONIA — hace un tiempo hablamos por el sistema para [Clínica] y quedó ahí, seguro por las mil cosas de la clínica.
+
+Te escribo porque desde entonces cambió bastante: ahora tiene un agente que, cuando un paciente falta, te propone reprogramarlo por WhatsApp y vos aprobás con un click — llena el hueco, no manda recorditos. Y la factura SIAT va incluida en todos los planes, sin costo aparte.
+
+¿Te muestro en 20 minutos con los números de tu clínica? Decime qué día te queda y coordino yo.
 ```
 
 ## (b) Primer contacto frío a clínica
@@ -45,7 +55,7 @@ Una pregunta corta: ¿cuántos pacientes les faltaron sin avisar el mes pasado? 
 Si responden con interés:
 
 ```
-Buenísimo. Es un sistema que se llama DentalGest: agenda, ficha con odontograma, factura SIAT en línea incluida, y un agente que cuando alguien falta le propone reprogramar por WhatsApp — ustedes aprueban cada mensaje antes de que salga.
+Buenísimo. Es un sistema que se llama DentalGest: agenda, ficha con odontograma, factura SIAT incluida sin costo aparte, y un agente que cuando alguien falta le propone reprogramar por WhatsApp — ustedes aprueban cada mensaje antes de que salga.
 
 ¿Cuándo les queda bien una demo de 20 min: [día 1] o [día 2]? Puedo ir a la clínica o por videollamada.
 ```
@@ -70,7 +80,7 @@ A los 3–4 días del anterior. Es el ÚLTIMO mensaje de venta; si no responde, 
 ```
 [Nombre], último mensaje y no te persigo más 🙂
 
-Sé que la clínica no te deja tiempo ni para almorzar. Te dejo lo esencial en una línea: DentalGest te recupera las citas que hoy se pierden solas, y la factura en línea del SIN (obligatoria desde el 1 de octubre) sale del mismo sistema sin tipear dos veces.
+Sé que la clínica no te deja tiempo ni para almorzar. Te dejo lo esencial en una línea: DentalGest te recupera las citas que hoy se pierden solas. Y desde el 1 de octubre solo se factura en línea — podés cumplir gratis tipeando en el portal del SIN, o hacer que la factura salga sola del mismo sistema donde ya está la cita y el paciente.
 
 Si querés retomarlo, respondé DEMO y coordinamos. Si no es el momento, todo bien — te voy a mandar cada tanto algo útil del rubro, sin venderte nada.
 ```

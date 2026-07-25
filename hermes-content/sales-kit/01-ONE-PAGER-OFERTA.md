@@ -71,7 +71,7 @@ La competencia cobra la implementación y migración de datos entre **Bs 2.274 y
 
 - **Cobro trimestral adelantado por QR** (3 meses por vez, un solo pago).
 - **Precio de lanzamiento respetado 12 meses** a quien cierre en esta fase. Después, ajuste semestral indexado al tipo de cambio oficial del BCB o al IPC del INE (el mayor) — te lo decimos de frente: en un país donde el dólar se movió 63% en un mes, nadie serio te promete precio congelado de por vida.
-- **Costos por uso de terceros van aparte**: conversaciones de WhatsApp API (Meta) sobre el cupo, dominio y hosting si tomás web.
+- **Costos por uso de terceros van aparte**: conversaciones de WhatsApp API (Meta) sobre el cupo, dominio y hosting si tomás web (van a tu nombre, nunca en nuestro precio).
 - Tus datos son tuyos: exportables cuando quieras.
 
 **Siguiente paso:** demo de 20 minutos en tu clínica o por videollamada. Traé tu número de citas perdidas del mes pasado — la cuenta la hacemos con TUS números.
@@ -99,7 +99,7 @@ La cuenta: Pro cuesta lo mismo que DOS ajustes de ortodoncia (Bs 300-350 c/u). S
 
 🎁 Cerrando en esta fase de lanzamiento: *implementación y migración de datos GRATIS* (la competencia la cobra Bs 2.274-9.096).
 
-Dato: desde el 1 de octubre solo se factura en línea (plazo del SIN). Podés cumplir gratis tipeando en el portal del SIN — nosotros hacemos que no tengas que tipear.
+Dato: desde el 1 de octubre solo se factura en línea (plazo del SIN). Podés cumplir gratis tipeando en el portal del SIN — nosotros hacemos que no tengas que tipear (nuestro emisor está en homologación ante el SIN; el estado real te lo contamos de frente en la demo).
 
 ¿Te muestro en 20 min con los números de TU clínica? Respondé DEMO y coordinamos.
 ```

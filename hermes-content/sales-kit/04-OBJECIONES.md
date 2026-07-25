@@ -16,7 +16,7 @@ Detrás: lo vio en una versión anterior. Es la objeción más fácil — cambi�
 
 Detrás: cree que es para clínicas grandes / que no lo va a amortizar.
 
-> "Al revés — cuanto más chica la clínica, más duele cada silla vacía. Hacé la cuenta conmigo: el plan Pro cuesta Bs 750, lo mismo que **dos ajustes de ortodoncia**. Si el agente te recupera dos citas al mes, ya se pagó. Y si aun así te queda grande, hay un plan de entrada a Bs 320 — tres consultas — que te ordena la clínica y ya trae la factura SIAT."
+> "Al revés — cuanto más chica la clínica, más duele cada silla vacía. Hacé la cuenta conmigo: el plan Pro cuesta Bs 750, lo mismo que **dos ajustes de ortodoncia**. Si el agente te recupera dos citas al mes, ya se pagó. Y si aun así te queda grande, hay un plan de entrada a Bs 320 — lo que cobrás por tres consultas — que te ordena la clínica y ya trae la factura SIAT."
 
 (El Básico se menciona SOLO acá, como downsell. Nunca abrir con él.)
 
@@ -24,7 +24,7 @@ Detrás: cree que es para clínicas grandes / que no lo va a amortizar.
 
 Detrás: miedo a apostar por un proveedor nuevo. NO inventar clientes ni testimonios — jamás.
 
-> "Te lo contesto derecho: estamos arrancando con las primeras clínicas de Santa Cruz, y por eso mismo te conviene. Uno: la **implementación va regalada** — eso la competencia lo cobra entre Bs 2.274 y 9.096. Dos: el **precio es de lanzamiento** y te lo respeto 12 meses. Tres: me tenés a mí directo, no a un call center en otro país. Y tus datos son tuyos: si un día te querés ir, te los llevás exportados. El riesgo te lo saco yo, no vos."
+> "Te lo contesto derecho: estamos arrancando — serías de las primeras clínicas de Santa Cruz. Y justamente por eso te conviene. Uno: la **implementación va regalada** — eso la competencia lo cobra entre Bs 2.274 y 9.096. Dos: el **precio es de lanzamiento** y te lo respeto 12 meses. Tres: me tenés a mí directo, no a un call center en otro país. Y tus datos son tuyos: si un día te querés ir, te los llevás exportados. El riesgo te lo saco yo, no vos."
 
 ## 3. "Ya uso cuaderno/Excel y me va bien"
 
