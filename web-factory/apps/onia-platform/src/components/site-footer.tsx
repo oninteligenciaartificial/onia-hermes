@@ -42,11 +42,11 @@ export function SiteFooter() {
 
           <nav aria-label="Mapa del sitio" className={styles.col}>
             <p className={styles.colTitle}>Sitio</p>
-            <a href="#como-funciona">Cómo funciona</a>
-            <a href="#rubros">Rubros</a>
-            <a href="#modulos">Módulos</a>
-            <a href="#bolivia">Hecho para Bolivia</a>
-            <a href="#preguntas">Preguntas</a>
+            <a href="/#como-funciona">Cómo funciona</a>
+            <a href="/#rubros">Rubros</a>
+            <a href="/#modulos">Módulos</a>
+            <a href="/#bolivia">Hecho para Bolivia</a>
+            <a href="/#preguntas">Preguntas</a>
           </nav>
 
           <nav aria-label="Productos" className={styles.col}>
@@ -78,6 +78,10 @@ export function SiteFooter() {
             El portal del SIN es gratuito y siempre podés facturar ahí — Onia
             te ahorra el tipeo, no te vende una obligación.
           </p>
+          <nav aria-label="Legal" className={styles.legalNav}>
+            <a href="/terminos">Términos y Condiciones</a>
+            <a href="/privacidad">Política de Privacidad</a>
+          </nav>
           <p className="mono">© 2026 Onia</p>
         </div>
       </div>

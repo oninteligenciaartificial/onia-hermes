@@ -89,6 +89,22 @@
   color: var(--ink-faint);
 }
 
+.legalNav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.1rem;
+}
+
+.legalNav a {
+  color: var(--ink-faint);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.legalNav a:hover {
+  color: var(--ink);
+}
+
 @media (min-width: 900px) {
   .legal {
     flex-direction: row;
