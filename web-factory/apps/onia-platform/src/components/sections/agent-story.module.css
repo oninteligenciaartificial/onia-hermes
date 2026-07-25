@@ -131,6 +131,11 @@
   background: var(--danger-soft);
 }
 
+/* AA medido: ink-faint sobre danger-soft da 4.05:1 en claro — sube a ink-soft */
+.slotHole .slotTime {
+  color: var(--ink-soft);
+}
+
 .slotTime {
   font-size: 0.68rem;
   color: var(--ink-faint);
