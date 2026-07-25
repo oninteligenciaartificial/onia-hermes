@@ -3,6 +3,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { Hero } from "@/components/sections/hero";
 import { HowItWorks } from "@/components/sections/how-it-works";
 import { Rubros } from "@/components/sections/rubros";
+import { Modules } from "@/components/sections/modules";
 
 export default function Home() {
   return (
@@ -15,6 +16,7 @@ export default function Home() {
         <Hero />
         <HowItWorks />
         <Rubros />
+        <Modules />
       </main>
       <SiteFooter />
     </>
