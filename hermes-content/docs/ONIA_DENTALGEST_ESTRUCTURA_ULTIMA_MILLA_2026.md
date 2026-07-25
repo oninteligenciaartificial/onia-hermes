@@ -66,6 +66,21 @@ Ordenado por impacto de venta + dependencias:
 - **Fase 3 - Privacidad + ultima milla UI:** empaquetar el **on-premise + politica de privacidad** como argumento de venta; collab en factura; form de alerta medica; SavedView en mas listas.
 - **Fase 4 - Delices dentales:** treatment_plan + informed_consent primero (venta/legal), luego perio_chart / dental_lab_case / tooth_image.
 
+### Estado de ejecucion (2026-07-23) — Fase Agentes ARRANCADA
+
+Se prioriza la **Fase Agentes (motor de ingresos)** como primer entregable demoable (el diferenciador #1 validado). Estado:
+
+- **Paso 1 HECHO — motor reusable en el core (en `main`, commit `0b4bc667`, core 503->519 tests).** `onia-core/modules/agents.logic.mjs` ya trae el cerebro: `evaluateRecallCandidates` (reactivacion), `evaluateCollectorCandidates` (cobranza, moneda BOB), `planAgentRun` (orquesta candidatos->acciones: dedupe cross/intra-run, tope por corrida, guardrails, `routeAction`). `draft_message` SIEMPRE a la cola de aprobacion. Generico (dental/estetica/veterinaria/gestios): se construyo en el core a proposito porque VUELVE a todo SaaS.
+- **Paso 2 EN CURSO — adapter en el repo DentalGest** (worktree `feat/onia-agents-adapter`). Mapa de integracion real (auditado):
+  - **Recall:** derivar `lastVisitAt` de `Appointment.dateTime` con `status=COMPLETADA`; `hasFutureAppointment` = existe cita futura PENDIENTE/CONFIRMADA; opt-out = `Patient.emailOptOut` (proxy; no hay opt-out WhatsApp); sin `lastContactedAt` (el dedupe de la cola cubre el cooldown).
+  - **Cobrador:** factura **bespoke `Invoice`** (la del core `OniaInvoicingInvoice` no tiene `dueDate`/saldo); `balanceDue = total - Σpagos`; "vencido" por `dueDate < now` sobre ENVIADA/COBRO_MANUAL (NO por estado VENCIDA, que solo marca n8n).
+  - **Cola:** `OniaCoreApprovalRequest` (generica del core) + `lib/onia-core/collab.ts`; el borrador va en `metadata.draftBody`. `requestedByProfileId` es NOT NULL -> se usa el Profile admin de la org.
+  - **Runner:** patron del cron `onia-core-workitems` + `lib/onia-core/generators.ts` (ya escanea Appointment/Invoice y encola con dedupe). Cliente WhatsApp `lib/whatsapp.ts` YA existe; envio = STUB hasta token S6.
+- **DECISION (criterio propio): dos caminos.**
+  - **MINIMO (ahora, sin migracion):** reusa la cola de aprobacion como registro; el dedupe pending = idempotencia; NO crea tablas => NO dispara el gate de adopcion (`installInProductRepos:false`) ni toca la DB desplegada. Demoable ya. Es subconjunto ESTRICTO del completo (nada se tira).
+  - **COMPLETO (fase 2, requiere OK de Sergio):** migrar `onia_agents_*` (agent/agent_run/agent_action) => historial de corridas real ("agente corrio 6am, propuso 12, aprobaste 8") + idempotencia por `agentActionKey`. Migrar la DB desplegada de un cliente = decision de negocio, no se hace autonomo.
+- **El pitch NO depende del token WhatsApp (S6):** el demo es "el agente encontro N pacientes que no volvieron / con saldo vencido y ya redacto los mensajes — esperan tu OK". Borrador + cola de aprobacion = 100% demoable hoy; el envio se cablea en S6.
+
 ## 4. La decision grande (de Sergio)
 
 El schema de DentalGest tiene **los dos mundos**: la factura bespoke Invoice (que usa la app hoy) y la del core OniaInvoicingInvoice (dormida, pero con TODOS los campos SIAT). Recomendacion de la auditoria:
