@@ -19,7 +19,7 @@
   /* tinta */
   --ink: oklch(23% 0.02 65);
   --ink-soft: oklch(41% 0.017 65);
-  --ink-faint: oklch(55% 0.014 70);
+  --ink-faint: oklch(52% 0.014 70); /* >=4.5:1 sobre --bg (AA texto chico) */
   --line: oklch(85.5% 0.016 82);
   --line-soft: oklch(90% 0.012 85);
 
