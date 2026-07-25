@@ -85,6 +85,7 @@ HyperFrames (render + SFX), imagen barata. Validar la idea antes de generar.
 | Cut-list (tabla de cortes) | `scripts/cut-plan.mjs` | gratis |
 | Publicar el corte al panel para tu OK | `scripts/publish-cut-review.mjs` (DRY-RUN → SQL) | gratis |
 | Aplicar el corte (tras OK) | `scripts/render-approved.mjs` (worker LOCAL, DRY-RUN → ffmpeg + SQL) | gratis |
+| **Narración / voz** (Lucía = **Marcela**) | `scripts/tts-elevenlabs.mjs` (ElevenLabs `eleven_multilingual_v2`) | plan starter ~69k chars/mes |
 | Subtítulos karaoke (word-level) | `scripts/karaoke-captions.mjs` (.ass + ffmpeg) | gratis (local) |
 | Mockups / tarjetas de dato / marcos | `scripts/make-mockup.mjs` (HTML+CSS → PNG alpha) | gratis (local) |
 | Montar overlays con timing y fade | `scripts/overlay-visuals.mjs` | gratis (local) |
