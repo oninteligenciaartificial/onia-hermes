@@ -62,10 +62,18 @@ HyperFrames (render + SFX), imagen barata. Validar la idea antes de generar.
    el VPS) y **aun así solo imprime el SQL** — la escritura a producción la aplica el orquestador por
    SSH a `supabase-db`. El render corre en la máquina de Sergio / la sesión Claude Code, **nunca en el
    VPS**. **Nunca cortar a ciegas ni antes del OK.**
-6. **Subtítulos karaoke.** Delegar en `embedded-captions` sobre `renders/cut.mp4`
-   (identidad `anchor`/rail por defecto; embed solo en el pico). Estilo Santiago: MAYÚSCULAS,
-   Space Grotesk Bold, highlight naranja `#FF7A00`.
-7. **Overlays / gráficos.** Delegar en `talking-head-recut` (intro, lower-thirds, mockups desaturados).
+6. **Subtítulos karaoke** (pieza propia, PROBADA). `node scripts/karaoke-captions.mjs --segments scripts/segments.json --video renders/cut.mp4 --out renders/karaoke.mp4 [--fix "Fergio=Sergio"]`
+   → agrupa en frases de ≤4 palabras/1.6s y genera un **.ass** con la palabra activa resaltada
+   (base blanco + activa amarillo, Arial Black escalado al alto del video, MarginV 220 en 9:16 para
+   no tapar la cara), y lo quema con ffmpeg. Imprime la tabla de frases (mostrar a Sergio).
+   Flags: `--words-per-line --margin-v --font-size --outline --base-color --active-color --dry-run`.
+   Alternativa cinematográfica (matte de la persona, embed detrás del sujeto): `embedded-captions`.
+7. **Apoyos visuales — mockups con código** (piezas propias, PROBADAS; el método de Santiago).
+   `node scripts/make-mockup.mjs --template <browser|phone|stat|quote|custom> --out assets/x.png …`
+   → PNG con fondo TRANSPARENTE renderizado de HTML/CSS con Playwright (acento `--accent`, default `#FF7A00`).
+   `node scripts/overlay-visuals.mjs --video in.mp4 --plan overlay-plan.json --out out.mp4`
+   → superpone los PNG con timing y fade (`{overlays:[{asset,start,end,position,scale,fade}]}`); `--dry-run` imprime el ffmpeg.
+   Para overlays animados/kinéticos más elaborados: `talking-head-recut` (HyperFrames).
 8. **SFX + música.** Eventos de la librería HyperFrames (`assets/sfx` del repo) sincronizados a los cortes/CTA. Bajarla con la skill `media-use` si no está.
 9. **Complementos.** `image-gen` MCP o modelo barato (ej. Gemini Flash-Lite Image) para mascot/thumbnails; Higgsfield (créditos 2354, [[higgsfield-models-roster]]) solo con OK.
 10. **Verificar + exportar.** Revisar frames en tiempos clave (sync, color, fades) → `renders/final.mp4`.
@@ -77,7 +85,11 @@ HyperFrames (render + SFX), imagen barata. Validar la idea antes de generar.
 | Cut-list (tabla de cortes) | `scripts/cut-plan.mjs` | gratis |
 | Publicar el corte al panel para tu OK | `scripts/publish-cut-review.mjs` (DRY-RUN → SQL) | gratis |
 | Aplicar el corte (tras OK) | `scripts/render-approved.mjs` (worker LOCAL, DRY-RUN → ffmpeg + SQL) | gratis |
-| Subtítulos karaoke | `embedded-captions` | gratis (local) |
+| Subtítulos karaoke (word-level) | `scripts/karaoke-captions.mjs` (.ass + ffmpeg) | gratis (local) |
+| Mockups / tarjetas de dato / marcos | `scripts/make-mockup.mjs` (HTML+CSS → PNG alpha) | gratis (local) |
+| Montar overlays con timing y fade | `scripts/overlay-visuals.mjs` | gratis (local) |
+| Cargar una campaña como video_projects | `scripts/seed-campaign.mjs` (DRY-RUN → SQL) | gratis |
+| Subtítulos cinematográficos (embed detrás del sujeto) | `embedded-captions` | gratis (local) |
 | Overlays / lower-thirds / mockups | `talking-head-recut` | gratis (local) |
 | SFX / música | librería HyperFrames | gratis |
 | Imágenes / b-roll / mascot | `image-gen` MCP / modelo barato | ~gratis |

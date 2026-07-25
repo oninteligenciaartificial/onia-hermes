@@ -302,7 +302,8 @@ async function tplPhone(width) {
   .btn.p { top: calc(300*var(--u)); height: calc(190*var(--u)); }
   .ph-empty { height: 100%; display: flex; flex-direction: column; justify-content: flex-end;
               gap: calc(14*var(--u)); padding: calc(74*var(--u)) calc(56*var(--u)) calc(96*var(--u));
-              background: radial-gradient(120% 70% at 50% 0%, color-mix(in oklab, var(--accent) 22%, transparent), transparent 62%); }
+              /* el glow acompaña al texto (abajo), no un vacío negro con luz arriba */
+              background: radial-gradient(130% 62% at 50% 100%, color-mix(in oklab, var(--accent) 26%, transparent), transparent 66%); }
   .ph-empty h1 { font-size: calc(72*var(--u)); font-weight: 800; letter-spacing: -.035em; line-height: 1.04; }
   .ph-empty p { font-size: calc(34*var(--u)); color: var(--muted); font-weight: 500; }
   `;
