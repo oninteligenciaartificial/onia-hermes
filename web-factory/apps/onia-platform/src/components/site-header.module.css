@@ -17,22 +17,9 @@
 
 .brand {
   display: inline-flex;
-  align-items: baseline;
-  gap: 0.55rem;
-  font-family: var(--font-display), sans-serif;
-  font-weight: 700;
-  font-size: 1.3rem;
-  letter-spacing: -0.02em;
+  align-items: center;
+  gap: 0.7rem;
   text-decoration: none;
-}
-
-.brandDot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: var(--accent);
-  box-shadow: 0 0 0 4px var(--accent-glow);
-  align-self: center;
 }
 
 .tagline {

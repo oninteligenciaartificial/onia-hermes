@@ -36,10 +36,8 @@
 }
 
 .brand {
-  font-family: var(--font-display), sans-serif;
-  font-weight: 700;
-  font-size: 1.6rem;
-  letter-spacing: -0.02em;
+  display: inline-flex;
+  align-items: center;
 }
 
 .blurb {

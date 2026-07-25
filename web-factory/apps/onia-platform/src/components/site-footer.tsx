@@ -1,5 +1,6 @@
 "use client";
 
+import { BrandWordmark } from "@/components/brand-wordmark";
 import { DisplayToggle } from "@/components/ui/display-toggle";
 import { APP_URL, DENTALGEST_URL, WA_URL } from "@/lib/site";
 import styles from "./site-footer.module.css";
@@ -29,7 +30,9 @@ export function SiteFooter() {
 
         <div className={styles.grid}>
           <div>
-            <p className={styles.brand}>Onia</p>
+            <div className={styles.brand}>
+              <BrandWordmark height={22} />
+            </div>
             <p className={styles.blurb}>
               El sistema con IA que maneja tu negocio completo. Elegís tu
               rubro, tu cuenta queda lista, y encendés módulos cuando los
