@@ -24,10 +24,28 @@ const jetbrainsMono = JetBrains_Mono({
   preload: false,
 });
 
+const SITE_TITLE = "DentalGest — Gestión de clínicas dentales en Bolivia";
+const SITE_DESCRIPTION =
+  "Agenda, historias clínicas, facturación SIAT y un agente que reprograma a los pacientes que te fallan — todo por WhatsApp, sin planillas ni cuaderno.";
+
 export const metadata: Metadata = {
-  title: "DentalGest — Gestión de clínicas dentales en Bolivia",
-  description:
-    "Agenda, historias clínicas, facturación SIAT y un agente que reprograma a los pacientes que te fallan — todo por WhatsApp, sin planillas ni cuaderno.",
+  title: SITE_TITLE,
+  description: SITE_DESCRIPTION,
+  // OG sin imagen a proposito: la imagen sera una captura REAL del sistema
+  // cuando exista (regla: nunca mockups falsos). WhatsApp arma el preview
+  // del link con estos tags.
+  openGraph: {
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    type: "website",
+    locale: "es_BO",
+    siteName: "DentalGest",
+  },
+  twitter: {
+    card: "summary",
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+  },
 };
 
 export const viewport: Viewport = {
