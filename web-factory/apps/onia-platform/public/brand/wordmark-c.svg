@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 164" role="img" aria-label="onia">
+  <title>onia — wordmark C: cursor</title>
+  <desc>Minuscula geometrica monolinea. Tras la a, un bloque verde a nivel de linea base: cursor de terminal, el sistema espera tu orden.</desc>
+  <style>
+    .ink { stroke: #141A17; }
+    .dot { fill: #141A17; }
+    .led { fill: #089868; }
+    @media (prefers-color-scheme: dark) {
+      .ink { stroke: #ECEFED; }
+      .dot { fill: #ECEFED; }
+      .led { fill: #4DBD8C; }
+    }
+  </style>
+  <g class="ink" fill="none" stroke-width="16" stroke-linecap="round">
+    <circle cx="64" cy="100" r="32"/>
+    <path d="M136 132 V92 A24 24 0 0 1 184 92 V132"/>
+    <path d="M224 132 V68"/>
+    <circle cx="296" cy="100" r="32"/>
+    <path d="M328 68 V132"/>
+  </g>
+  <circle class="dot" cx="224" cy="34" r="10"/>
+  <rect class="led" x="356" y="120" width="20" height="20" rx="2"/>
+</svg>

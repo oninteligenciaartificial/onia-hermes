@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 220" role="img" aria-label="OnIA">
+  <!-- Recreacion vectorial del logo recibido 2026-07-26: "On" negro + "IA" verde, italica pesada, subrayado verde.
+       Reemplazar por el vector original del disenador cuando exista. -->
+  <g transform="skewX(-8)" font-family="'Archivo Black','Arial Black',Arial,sans-serif" font-weight="900" font-size="150" letter-spacing="-4">
+    <text x="60" y="150" fill="#111111">On</text>
+    <text x="318" y="150" fill="#3EA639">IA</text>
+  </g>
+  <rect x="52" y="178" width="500" height="10" rx="5" fill="#3EA639" transform="skewX(-8)" />
+</svg>

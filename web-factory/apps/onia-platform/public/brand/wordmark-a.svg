@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 164" role="img" aria-label="onia">
+  <title>onia — wordmark A: led</title>
+  <desc>Minuscula geometrica monolinea. El punto de la i es un cuadrado verde: un modulo encendido.</desc>
+  <style>
+    .ink { stroke: #141A17; }
+    .led { fill: #089868; }
+    @media (prefers-color-scheme: dark) {
+      .ink { stroke: #ECEFED; }
+      .led { fill: #4DBD8C; }
+    }
+  </style>
+  <g class="ink" fill="none" stroke-width="16" stroke-linecap="round">
+    <circle cx="64" cy="100" r="32"/>
+    <path d="M136 132 V92 A24 24 0 0 1 184 92 V132"/>
+    <path d="M224 132 V68"/>
+    <circle cx="296" cy="100" r="32"/>
+    <path d="M328 68 V132"/>
+  </g>
+  <rect class="led" x="214" y="24" width="20" height="20" rx="2"/>
+</svg>
