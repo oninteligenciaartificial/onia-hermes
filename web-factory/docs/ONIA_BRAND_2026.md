@@ -1,5 +1,9 @@
 # ONIA — Identidad visual v1 (2026)
 
+> **SUPERSEDED (2026-07-25):** la fuente de verdad de la marca es ahora
+> `ONIA_BRAND_IDENTITY_2026.md` (mismo directorio). Este doc queda de archivo como memoria
+> de la evaluacion v1 (candidatos A/B/C y spec de retheme, ya ejecutado). No editar aca.
+
 > Fuente de verdad de la marca ONIA. Blanco, negro y verde. Agencia seria, minimalista, con caracter.
 > Estado: v1 aprobable. Sergio va a pasar SU logo despues — los wordmarks de este doc son la
 > base minimalista para comparar y rediseñar sobre ella, no la version final grabada en piedra.
