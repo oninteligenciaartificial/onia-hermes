@@ -2,6 +2,12 @@
   "version": "0.0.1",
   "configurations": [
     {
+      "name": "dentalgest-landing",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["-C", "web-factory", "--filter", "dentalgest-landing", "dev", "-p", "3199"],
+      "port": 3199
+    },
+    {
       "name": "site",
       "runtimeExecutable": "pnpm",
       "runtimeArgs": ["-C", "web-factory", "--filter", "site", "dev"],
