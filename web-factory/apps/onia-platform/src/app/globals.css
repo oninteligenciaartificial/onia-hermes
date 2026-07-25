@@ -2,7 +2,8 @@
  * ONIA Platform — tokens y base.
  *
  * Direccion: "diagrama de producto editorial". Blanco, negro y verde
- * (ONIA_BRAND_2026.md): el verde es el color del ENCENDIDO (semantico:
+ * (web-factory/docs/ONIA_BRAND_IDENTITY_2026.md): el verde es el color del
+ * ENCENDIDO (semantico:
  * solo marca lo que esta vivo/activo/aprobado, nunca decora). Neutros con
  * sesgo verdoso imperceptible — nunca #000 puro. Rojo suave = hueco/cancelado.
  * Display: Bricolage Grotesque · Body: DM Sans · Datos: Spline Sans Mono.
@@ -11,7 +12,7 @@
 :root {
   color-scheme: light;
 
-  /* escala verde ONIA (ONIA_BRAND_2026.md §1.1 candidato A) — fuente unica */
+  /* escala verde ONIA (ONIA_BRAND_IDENTITY_2026.md §1.2) — fuente unica */
   --verde-50: #EDFBF3;
   --verde-100: #D5F4E3;
   --verde-200: #B2EACD;
