@@ -5,7 +5,7 @@ import { loadLegalDoc } from "@/lib/legal";
 export const metadata: Metadata = {
   title: "Términos y Condiciones — Onia",
   description:
-    "Términos y Condiciones de uso de la plataforma Onia (borrador v1, pendiente de revisión por abogado): servicio, planes y pagos en Bs, datos del cliente, agentes IA con aprobación humana y jurisdicción en Bolivia.",
+    "Términos y Condiciones de uso de la plataforma Onia (borrador, pendiente de revisión por abogado): servicio, planes y pagos en Bs, datos del cliente, agentes IA con aprobación humana y jurisdicción en Bolivia.",
   robots: { index: false },
 };
 

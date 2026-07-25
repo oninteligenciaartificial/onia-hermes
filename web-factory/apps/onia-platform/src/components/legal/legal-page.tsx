@@ -42,7 +42,7 @@ export function LegalPage({ doc }: { doc: LegalDoc }) {
                 {formatLegalDate(doc.meta.updatedAt)}
               </p>
               <div className={styles.draft} role="note">
-                <span className={styles.draftTag}>Borrador v1</span>
+                <span className={styles.draftTag}>Borrador v{doc.meta.version}</span>
                 <p className={styles.draftText}>
                   Pendiente de revisión por abogado. Este documento es un
                   borrador de trabajo: no constituye asesoría legal y puede
