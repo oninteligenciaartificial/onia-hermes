@@ -1,0 +1,108 @@
+# Scripts de WhatsApp — DentalGest
+
+> Copiar, reemplazar [corchetes], pegar. Voseo, directo, sin muros de texto.
+> Regla: un mensaje = una idea + una pregunta. Nunca mandar 4 mensajes seguidos sin respuesta.
+> Kit de venta v1 · 2026-07-25
+
+---
+
+## (a) Re-apertura de warm leads (llamaron antes y no cerraron)
+
+Contexto: dijeron "está muy básico" o "somos muy pequeños". El mensaje RECONOCE eso y muestra qué cambió. No hacer como si fuera el primer contacto.
+
+```
+Hola [Nombre], soy Sergio de ONIA — hablamos hace un tiempo por el sistema para [Clínica].
+
+En ese momento me dijiste que te quedaba corto, y tenías razón. Te escribo porque cambió bastante:
+
+1. Ahora tiene un agente que trabaja solo: cuando un paciente falta, te propone la reprogramación por WhatsApp y vos aprobás con un click. Llena el hueco, no manda recorditos.
+2. Factura SIAT en línea incluida en todos los planes (desde el 1 de octubre solo se factura en línea — dato del SIN).
+3. Odontograma, historial y consentimientos en la ficha del paciente.
+
+¿Te muestro en 20 min lo que cambió? La cuenta la hacemos con los números de tu clínica.
+```
+
+Variante si la objeción fue "ustedes son muy chicos":
+
+```
+Hola [Nombre], Sergio de ONIA. Hace un tiempo hablamos por el sistema para [Clínica] y quedó ahí — con razón, estábamos arrancando.
+
+Hoy el sistema factura SIAT en línea, tiene un agente que reprograma citas por WhatsApp solo (vos aprobás cada mensaje), y estamos cerrando las primeras clínicas de Santa Cruz con implementación regalada, justamente porque somos los primeros en resolver esto acá.
+
+¿20 minutos esta semana para que lo veas andando? Si no te convence, quedamos como amigos.
+```
+
+## (b) Primer contacto frío a clínica
+
+```
+Hola, ¿hablo con [Clínica]? Soy Sergio de ONIA, acá en Santa Cruz.
+
+Trabajo con clínicas dentales en una sola cosa: los pacientes que faltan sin avisar y los huecos que dejan en la agenda.
+
+Una pregunta corta: ¿cuántos pacientes les faltaron sin avisar el mes pasado? Si la respuesta es "no sé exacto, pero varios", tengo algo que mostrarles en 20 minutos.
+```
+
+Si responden con interés:
+
+```
+Buenísimo. Es un sistema que se llama DentalGest: agenda, ficha con odontograma, factura SIAT en línea incluida, y un agente que cuando alguien falta le propone reprogramar por WhatsApp — ustedes aprueban cada mensaje antes de que salga.
+
+¿Cuándo les queda bien una demo de 20 min: [día 1] o [día 2]? Puedo ir a la clínica o por videollamada.
+```
+
+## (c) Seguimiento post-demo (24 horas después)
+
+```
+[Nombre], gracias por el tiempo de ayer.
+
+Te dejo la cuenta que hicimos, por escrito:
+• [N] faltas al mes × Bs [ticket] = Bs [total] que se van en huecos
+• DentalGest Pro: Bs 750/mes — se paga recuperando 2 de esas citas
+• Cerrando esta semana: implementación y carga de tus pacientes GRATIS (la competencia la cobra Bs 2.274–9.096)
+
+¿Arrancamos el [día concreto]? Ese día cargamos tus pacientes y activamos el primer trimestre por QR.
+```
+
+## (d) Seguimiento sin respuesta (UNO solo — después, nutrición)
+
+A los 3–4 días del anterior. Es el ÚLTIMO mensaje de venta; si no responde, pasa a nutrición.
+
+```
+[Nombre], último mensaje y no te persigo más 🙂
+
+Sé que la clínica no te deja tiempo ni para almorzar. Te dejo lo esencial en una línea: DentalGest te recupera las citas que hoy se pierden solas, y la factura en línea del SIN (obligatoria desde el 1 de octubre) sale del mismo sistema sin tipear dos veces.
+
+Si querés retomarlo, respondé DEMO y coordinamos. Si no es el momento, todo bien — te voy a mandar cada tanto algo útil del rubro, sin venderte nada.
+```
+
+Nutrición (cada 3–4 semanas, NO es venta — mantiene la puerta abierta):
+
+```
+[Nombre], dato corto del rubro: [novedad útil — ej. "el SIN publicó X sobre facturación en línea" / "tip: medí tus faltas de este mes, es un número que toda clínica debería conocer"]. Sin compromiso, solo para que lo tengas. Cualquier cosa, acá estoy.
+```
+
+## (e) Respuesta al que escribe "DEMO" (calificación en 3 mensajes)
+
+**Mensaje 1 — nombre y tamaño:**
+
+```
+¡Buenísimo! Para prepararte la demo con datos que te sirvan, 2 preguntas rápidas:
+
+¿Cómo se llama tu clínica y cuántos profesionales/sillones son?
+```
+
+**Mensaje 2 — situación actual (califica el plan):**
+
+```
+Perfecto. ¿Y hoy cómo manejan la agenda y las fichas: cuaderno, Excel o algún sistema? ¿Y ya están facturando en línea o todavía con talonario?
+```
+
+**Mensaje 3 — agendar con opciones cerradas:**
+
+```
+Listo, con eso armo la demo para tu caso. Son 20 minutos y hacemos la cuenta con TUS números de citas perdidas.
+
+¿Cuándo te queda mejor: [día 1] a las [hora] o [día 2] a las [hora]? Puede ser en tu clínica o por videollamada.
+```
+
+> Guía de calificación: 1 sillón + cuaderno → demo enfocada en orden + SIAT (posible Básico como downsell, el Pro se cotiza primero igual). 2+ profesionales o mucho WhatsApp → demo enfocada en el agente + mencionar Full recién en la demo. Talonario y sin apuro → el gancho es timing del 1-oct, sin miedo.
