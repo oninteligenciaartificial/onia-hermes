@@ -55,3 +55,14 @@ Lo que cubren los carriles C0-C7 (ver `ONIA_CARRILES_PROMPTS`):
 **Resultado: 2 sesiones activas + Arthur, no 7.** Los subagentes dan la velocidad DENTRO de cada sesión.
 
 **Lo que NO se puede colapsar en subagentes paralelos:** la cadena de la app (C1→C2→C3 comparte archivos → serial); la infra (C5 necesita código en `main` + secrets S3/S6); los bloqueos humanos (S1/S2/S6 = solo Sergio). Arthur es humano, no subagente.
+
+## 6. Nuevas ideas propuestas (criterio propio — Sergio decide cuáles)
+
+Marcadas AHORA (suman al objetivo actual sin dispersar) vs PARK (capturar, no perseguir hasta validar).
+
+1. **Facturador SIAT gratis/barato como cuña masiva [AHORA-evaluar].** Ofrecer un facturador electrónico standalone gratis o muy barato (usa el emisor que ya existe) como imán: toda PyME boliviana está OBLIGADA por ley con fecha → los captás con el facturador, y les vendés encima el ERP + agentes. Convierte el mandato legal en un embudo masivo. Es la jugada de land-grab más potente que tenés; el costo marginal de emitir es bajo. Riesgo: soporte fiscal a muchos gratis → limitar el free (N facturas/mes) y usarlo puro como puerta de entrada.
+2. **Contadores como canal de distribución [AHORA].** En Bolivia el contador es el gatekeeper de la PyME. El Contador Pack (RCV, calendario NIT) le facilita la vida → que recomiende Onia a su cartera. Comisión por referido. B2B2B: un contador trae 10-30 negocios.
+3. **ONIA se vende a sí misma con sus propios agentes [AHORA].** Dogfood: el agente Vendedor (ya vive en onia-center) hace la primera respuesta/calificación de leads de ONIA por WhatsApp; Sergio cierra. Prueba viva del producto + apalanca al fundador solo. "Mirá, este agente que te vendo es el que me atendió a mí."
+4. **Demo tenant instantáneo ("probá una clínica en 10 min") [AHORA].** Un click siembra una clínica demo con datos realistas → el prospecto VE el sistema andando (factura, agenda, agente en /pending). Mata el "muy básico" y acelera el cierre. Reusa `demo-seed.ts` que ya existe.
+5. **Cohorte fundador con precio de por vida [AHORA].** Los primeros N clientes quedan al precio de lanzamiento para siempre → urgencia + retención + testimonios. Ya alineado con la estrategia de precios por cohortes.
+6. **Contenido = curso = marketing (una producción, tres usos) [PARK-compose].** Cada pieza de Higgsfield doble como lección de curso y driver de demo. Cuando entren los cursos, la producción de contenido ya alimenta el embudo sin trabajo extra. Compone el futuro sin distraer ahora.
