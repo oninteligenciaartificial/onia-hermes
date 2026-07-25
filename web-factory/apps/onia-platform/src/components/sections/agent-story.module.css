@@ -1,0 +1,359 @@
+.section {
+  overflow: clip;
+}
+
+.title {
+  max-width: 22ch;
+}
+
+.stickyFrame {
+  display: grid;
+  align-items: center;
+}
+
+.storyGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  gap: clamp(2rem, 4vw, 4.5rem);
+  align-items: center;
+}
+
+/* ---- linea de tiempo ---- */
+
+.timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 1.9rem;
+  position: relative;
+}
+
+.timeline::before {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 12px;
+  bottom: 12px;
+  width: 1.5px;
+  background: var(--line);
+}
+
+.act {
+  position: relative;
+  padding-left: 2rem;
+  opacity: 0.38;
+  transition: opacity 0.35s ease;
+}
+
+.act::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 8px;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: var(--line);
+  border: 2px solid var(--bg);
+}
+
+.actActive {
+  opacity: 1;
+}
+
+.actActive::before {
+  background: var(--accent);
+  box-shadow: 0 0 0 4px var(--accent-glow);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .act {
+    transition: none;
+  }
+}
+
+.actTime {
+  font-size: 1.3rem;
+  font-weight: 500;
+  color: var(--accent-ink);
+  letter-spacing: 0.04em;
+}
+
+.actText {
+  margin-top: 0.4em;
+  color: var(--ink-soft);
+  font-size: 0.97rem;
+  max-width: 44ch;
+}
+
+/* ---- maqueta del caso ---- */
+
+.stage {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  gap: 1rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  padding: clamp(1rem, 2vw, 1.5rem);
+}
+
+.colLabel {
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-bottom: 0.5rem;
+}
+
+.agendaCol {
+  display: grid;
+  gap: 0.55rem;
+  align-content: start;
+}
+
+.slot {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 0.5rem 0.7rem;
+  background: var(--surface-dim);
+  min-height: 3em;
+}
+
+.slotHole {
+  border-style: dashed;
+  border-color: color-mix(in oklab, var(--danger) 55%, var(--line));
+  background: var(--danger-soft);
+}
+
+.slotTime {
+  font-size: 0.68rem;
+  color: var(--ink-faint);
+  flex: none;
+}
+
+.slotWell {
+  position: relative;
+  display: grid;
+  flex: 1;
+}
+
+.slotWell .slotChip {
+  grid-area: 1 / 1;
+  justify-self: start;
+}
+
+.slotChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border-radius: 999px;
+  padding: 0.28em 0.85em;
+  background: var(--surface);
+  border: 1px solid var(--line);
+}
+
+.chipCancelled {
+  text-decoration: line-through;
+  text-decoration-thickness: 1.5px;
+}
+
+.chipNew {
+  background: var(--ok-soft);
+  border-color: color-mix(in oklab, var(--ok) 45%, transparent);
+  color: var(--ink);
+}
+
+.waitlist {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.waitlist li {
+  font-size: 0.78rem;
+  border: 1px dashed var(--line);
+  border-radius: 999px;
+  padding: 0.28em 0.8em;
+  color: var(--ink-soft);
+}
+
+.waitHot {
+  border-style: solid !important;
+  border-color: var(--accent) !important;
+  background: var(--accent-soft);
+  color: var(--accent-ink) !important;
+}
+
+/* ---- feed ---- */
+
+.feedCol {
+  display: grid;
+  gap: 0.8rem;
+  align-content: start;
+}
+
+.waBubble {
+  justify-self: start;
+  display: grid;
+  gap: 0.2rem;
+  background: var(--ok-soft);
+  border: 1px solid color-mix(in oklab, var(--ok) 35%, transparent);
+  border-radius: 14px 14px 14px 4px;
+  padding: 0.6rem 0.9rem;
+  font-size: 0.88rem;
+  max-width: 30ch;
+}
+
+.waTime {
+  font-size: 0.62rem;
+  color: var(--ink-faint);
+}
+
+.agentCard {
+  border: 1px solid color-mix(in oklab, var(--accent) 45%, var(--line));
+  border-radius: var(--radius);
+  background: var(--surface-dim);
+  box-shadow: 0 0 0 1px var(--accent-glow);
+  padding: 0.85rem 1rem;
+  display: grid;
+  gap: 0.55rem;
+}
+
+.agentHead {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent-ink);
+}
+
+.agentNode {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 4px var(--accent-glow);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .agentNode {
+    animation: node-pulse 1.8s ease-in-out infinite;
+  }
+}
+
+@keyframes node-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.72);
+  }
+}
+
+.agentText {
+  font-size: 0.92rem;
+  font-weight: 550;
+}
+
+.agentActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.approveBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  border: 1.5px solid var(--ok);
+  color: var(--ok);
+  border-radius: 999px;
+  padding: 0.4em 1em;
+  font-weight: 650;
+  font-size: 0.85rem;
+}
+
+.approveDone {
+  background: var(--ok);
+  color: var(--surface);
+}
+
+.statusPill {
+  font-size: 0.64rem;
+  letter-spacing: 0.06em;
+  color: var(--accent-ink);
+  background: var(--accent-soft);
+  border: 1px solid color-mix(in oklab, var(--accent) 45%, transparent);
+  border-radius: 999px;
+  padding: 0.3em 0.8em;
+}
+
+.statusOk {
+  color: var(--ok);
+  background: var(--ok-soft);
+  border-color: color-mix(in oklab, var(--ok) 45%, transparent);
+}
+
+/* ---- apilado ---- */
+
+.stacked {
+  display: grid;
+  gap: 3rem;
+  margin-top: 3rem;
+}
+
+.stackedAct {
+  display: grid;
+  gap: 1.3rem;
+}
+
+.stackedAct .act {
+  padding-left: 0;
+}
+
+.stackedAct .act::before {
+  display: none;
+}
+
+@media (max-width: 560px) {
+  .stage {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---- cierre ---- */
+
+.closing {
+  margin-top: 3.5rem;
+  display: grid;
+  gap: 1.6rem;
+  max-width: 62ch;
+}
+
+.closing strong {
+  color: var(--accent-ink);
+}
+
+.aside {
+  font-size: 0.85rem;
+  color: var(--ink-faint);
+  border-left: 3px solid var(--line);
+  padding-left: 1rem;
+  max-width: 56ch;
+}
