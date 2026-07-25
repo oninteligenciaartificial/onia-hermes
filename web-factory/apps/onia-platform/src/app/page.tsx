@@ -1,6 +1,8 @@
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Hero } from "@/components/sections/hero";
+import { HowItWorks } from "@/components/sections/how-it-works";
+import { Rubros } from "@/components/sections/rubros";
 
 export default function Home() {
   return (
@@ -11,6 +13,8 @@ export default function Home() {
       <SiteHeader />
       <main id="contenido">
         <Hero />
+        <HowItWorks />
+        <Rubros />
       </main>
       <SiteFooter />
     </>
