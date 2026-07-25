@@ -3,7 +3,8 @@
 > Fuente de verdad de la marca ONIA. Blanco, negro y verde. Agencia seria, minimalista, con caracter.
 > Estado: v1 aprobable. Sergio va a pasar SU logo despues — los wordmarks de este doc son la
 > base minimalista para comparar y rediseñar sobre ella, no la version final grabada en piedra.
-> Assets: `web-factory/apps/onia-platform/public/brand/` (wordmark-a/b/c.svg + favicon.svg).
+> Assets: `web-factory/apps/onia-platform/public/brand/` (wordmark-a/b/c.svg + favicon.svg +
+> onia-logo.svg = recreacion preliminar del logo de Sergio, pendiente el vector original).
 
 ## 0. Que se conserva y que se reemplaza
 
@@ -32,10 +33,11 @@ Tres colores. Nada mas.
 Regla de proporcion orientativa: **~90% blanco · ~9% negro · ~1% verde.** El verde vale porque
 es escaso.
 
-### 1.1 El verde — dos candidatos
+### 1.1 El verde — tres candidatos evaluados
 
-Ambos son verdes profundos "de agencia", no verde lima startup. Hex calculado desde OKLCH con
-clamp de gamut; los valores OKLCH listados son los reales del hex final.
+A y B son verdes profundos "de agencia", no verde lima startup; C es el verde del logo
+recibido, evaluado para UI. Hex calculado desde OKLCH con clamp de gamut; los valores OKLCH
+listados son los reales del hex final.
 
 **Candidato A — Esmeralda profunda (hue 162) ← RECOMENDADO**
 
@@ -66,6 +68,22 @@ clamp de gamut; los valores OKLCH listados son los reales del hex final.
 | 700 | `#275235` | oklch(39.9% 0.069 153) |
 | 800 | `#1D4128` | oklch(34.1% 0.061 152) |
 | 900 | `#15311D` | oklch(28.5% 0.05 151) |
+
+**Candidato C — Verde del logo (`#3EA639`, ≈ oklch(63% 0.18 138))**
+
+La recreacion del logo que paso Sergio (`public/brand/onia-logo.svg`: "On" tinta + "IA"
+verde, italica pesada, subrayado verde) usa un verde cesped mas claro y amarillo. Evaluado
+como acento de sistema:
+
+| Par | Ratio | Veredicto |
+|---|---|---|
+| `#3EA639` sobre blanco `#FFFFFF` | **3.13:1** | FALLA AA texto normal — solo UI/texto grande |
+| `#3EA639` sobre tinta `#0C110F` | **6.09:1** | AA ✓ |
+
+Veredicto C: es el verde DE LA PIEZA DE LOGO, no del sistema. Vive dentro del SVG del logo
+(autocontenido, no se toca) pero NO entra como token de UI: no aguanta texto chico sobre
+blanco, y puesto al lado de la esmeralda se ve "recreativo", no institucional. Un solo verde
+de sistema en la interfaz; el logo es arte propio.
 
 **Recomendacion: Candidato A (Esmeralda profunda, base `#027650`).**
 Razones:
@@ -238,6 +256,26 @@ Reglas:
 - Mezclar el ambar viejo con el verde nuevo durante la migracion: se migra por seccion
   completa, no conviven en una misma vista.
 
+### 3.1 Espaciado, radios y bordes (el "minimal serio" en numeros)
+
+El layout actual ya es correcto; el retheme CONSERVA estos valores de sistema (cambiarlos
+seria rehacer layout, fuera de alcance):
+
+- **Ritmo de seccion:** `--space-section: clamp(4.5rem, 3rem + 6vw, 9rem)`. El blanco extra
+  ES el minimalismo; nunca comprimir secciones para "que entre mas". Header fijo
+  `--header-h: 60px`.
+- **Radios — dos valores y pill:** `--radius: 14px` (cards, inputs, chips de escena) y
+  `--radius-lg: 22px` (escenas, bloques grandes). Pill `999px` SOLO en botones y badges.
+  Nunca tres radios distintos en un mismo componente; nunca radios nuevos ad-hoc.
+- **Bordes:** 1px solido `--line` para estructura (tablas, recibos, diagramas — estetica de
+  documento tecnico); `--line-soft` para divisores internos. Dashed SOLO significa "todavia
+  no" (badge-soon, huecos de agenda). Prohibido borde de gradiente y borde de 2px+ decorativo.
+- **Sombras — dos niveles:** `--shadow-card` y `--shadow-pop`, nada mas. Con el retheme
+  pierden el tinte marron y pasan a sombra neutra fria (valores exactos en Apendice A).
+  Prohibida sombra de color; el unico halo permitido es `--accent-glow` en el LED.
+- **Grosor del verde:** el verde aparece en trazos finos — borde 1px, barra 2–3px, dot
+  8–10px, texto acento. Nunca en areas grandes (ver regla de proporcion §1).
+
 ---
 
 ## 4. Tono verbal (5 lineas)
@@ -285,25 +323,189 @@ bien en pestañas claras y oscuras sin variantes.
 
 ---
 
-## Apendice A — Migracion de tokens del sitio (guia, NO ejecutada en esta sesion)
+## 6. Integracion del logo (cuando llegue el definitivo)
 
-Mapeo 1:1 contra `web-factory/apps/onia-platform/src/app/globals.css` de hoy:
+Existe una recreacion vectorial preliminar en `public/brand/onia-logo.svg`; se reemplaza por
+el vector original apenas exista. Mientras tanto la web usa el wordmark placeholder (§5).
+Estas reglas estan pensadas para que recibir el logo sea SOLO reemplazar archivos — cero
+cambios de codigo ni de layout.
 
-| Token actual (ambar/papel calido) | Nuevo valor (este doc) |
-|---|---|
-| `--bg` oklch(96.8% 0.013 88) | `#F9FBFA` |
-| `--surface` | `#FFFFFF` |
-| `--ink` oklch(23% 0.02 65) | `#141A17` |
-| `--accent` (ambar 72) | `--verde` `#027650` |
-| `--accent-strong` | `#016141` |
-| `--accent-ink` | `#004D32` |
-| `--accent-soft` | `#D5F4E3` |
-| `--accent-glow` | rgb(8 152 104 / .30) |
-| `--ok` (verde semaforico aparte) | SE UNIFICA con la escala verde (600 claro / 400 oscuro) |
-| `--danger` | se mantiene rojo suave actual (unico color fuera de la triada, solo errores) |
-| tema oscuro (marrones 72-76) | neutros `tinta-*` de §1.2 |
+### 6.1 Archivos contrato (paths fijos)
 
-El `--wa` (WhatsApp) se mantiene solo dentro del boton de WhatsApp, que es marca de terceros.
+| Path | Rol | Requisito |
+|---|---|---|
+| `public/brand/logo.svg` | logo principal (header, footer) | SVG con variantes internas via `prefers-color-scheme` (como los wordmarks §5) o `currentColor` |
+| `public/brand/logo-dark.svg` | opcional, solo si el SVG no auto-adapta | mismo viewBox que `logo.svg` |
+| `public/brand/favicon.svg` | favicon | debe leer a 16px; si el logo no lee, se queda el led actual |
+
+El componente de header referencia el path, no el contenido: swap de archivo = swap de marca.
+
+### 6.2 Zonas y tamanos
+
+- **Header:** alto de logo 24–28px (entra en `--header-h: 60px` con aire). Zona de respeto =
+  altura de la "o" (x-height) en los 4 lados; nada la invade — ni nav, ni badge, ni borde.
+- **Footer:** mismo asset a 20–24px. Variante silenciosa (tinta 100%, sin verde) aceptable.
+- **Hero / docs / propuestas:** maximo 40px de alto en web. El logo nunca es el heroe; el
+  titular si.
+- **Minimo absoluto:** 18px de alto en pantalla. Por debajo, usar solo el simbolo (favicon).
+
+### 6.3 Variantes de color (el logo se adapta al tema, no al reves)
+
+| Fondo | Tinta del logo | Verde del logo |
+|---|---|---|
+| papel / blanco | `#141A17` | su verde propio (dentro del SVG) |
+| tinta (tema oscuro) | `#ECEFED` | el verde sube de LUZ, no de saturacion (ref: 400 `#4DBD8C`) |
+| verde-600 (bloque invertido) | blanco monocromo, sin verde | — |
+
+- Nunca: logo sobre foto ruidosa, logo con sombra o glow, logo estirado, logo en gris.
+- Si el logo definitivo trae SU verde (`#3EA639` u otro), ese verde vive DENTRO del SVG
+  (ver §1.1 candidato C). Los tokens de UI no cambian: interfaz = escala A. Un solo verde
+  de sistema.
+
+---
+
+## Apendice A — SPEC de retheme (papel calido/ambar → blanco/negro/verde)
+
+Guia de aplicacion para el builder. NO ejecutada en esta sesion. Alcance EXACTO: **solo
+valores de tokens.** Prohibido tocar layout, markup, `src/motion/**` (springs/duraciones/
+eases quedan identicos) o la estructura de los `*.module.css`. El retheme completo son 3
+archivos:
+
+1. `src/app/globals.css` — bloques de tokens de A.2 y A.3, listos para pegar.
+2. `src/app/layout.tsx` — `themeColor`: light `#f7f4ea` → `#F9FBFA`, dark `#1c1915` → `#0C110F`.
+3. Favicon — cablear `public/brand/favicon.svg` (p.ej. copiarlo como `src/app/icon.svg`).
+
+**Auditoria previa (2026-07-25):** todos los colores de componentes fluyen por `var(--*)`.
+No existe hex/oklch ambar hardcodeado fuera de `globals.css` + `layout.tsx`; las unicas
+excepciones son 3 sombras negras neutras en `modules/display-toggle/ghost-cursor.module.css`,
+que quedan igual. Por eso el swap de valores re-tematiza el sitio entero sin tocar un solo
+componente ni animacion.
+
+### A.1 Decision clave: se conservan los NOMBRES de tokens
+
+Los componentes referencian `--accent*` (~90 usos en ~15 archivos); renombrar a `--verde*`
+obligaria a tocarlos todos. Se conservan los nombres viejos y cambian los VALORES: la escala
+cruda `--verde-*` entra como fuente y los nombres existentes apuntan a ella via `var()`.
+
+Mapeo semantico basado en auditoria de uso real (no a ojo):
+
+| Token | Uso real auditado | Claro | Oscuro |
+|---|---|---|---|
+| `--accent` | 35 usos, TODOS fills/borders/LEDs — cero texto chico | verde-500 `#089868` (señal) | verde-400 `#4DBD8C` |
+| `--accent-ink` | 23 usos, texto acento (kicker, labels) sobre `--bg` y sobre `--accent-soft` | verde-700 `#016141` (7.25:1 / 6.41:1) | verde-300 `#86D9B0` |
+| `--accent-strong` | focus ring, hover | verde-700 `#016141` | verde-300 `#86D9B0` |
+| `--accent-soft` | fondos chip/badge/::selection | verde-100 `#D5F4E3` | verde-900 `#013925` |
+| `--accent-glow` | halo del LED | `rgb(8 152 104 / 0.30)` | `rgb(77 189 140 / 0.25)` |
+| `--ok` | verde "aprobado" — SE UNIFICA con la escala | verde-600 `#027650` | verde-400 `#4DBD8C` |
+| `--ok-soft` | fondo de aprobado | verde-50 `#EDFBF3` | verde-900 `#013925` |
+| `--danger` / `--danger-soft` | errores/huecos | SIN CAMBIO (unico color fuera de la triada) | SIN CAMBIO |
+| `--wa` | boton WhatsApp (marca de terceros) | SIN CAMBIO | SIN CAMBIO |
+
+Nota: `--accent` mapea a **500 (señal)**, no a 600 — la auditoria muestra que `--accent`
+nunca pinta texto chico, y un 600 oscuro apagaria los LEDs/toggles que son la firma visual
+del sitio. Si algun dia un componente pone TEXTO sobre fondo `--accent`, ese texto va en
+`--ink` (4.79:1 sobre 500); blanco sobre 500 falla AA (3.68:1). El CTA primario queda como esta hoy:
+fondo `--ink` + led verde (`.btn-wa`) — mas "agencia seria" que un boton verde gigante.
+
+### A.2 Bloque claro — pegar en `:root` (reemplaza papel/tinta/encendido/semanticos/sombras)
+
+```css
+:root {
+  color-scheme: light;
+
+  /* escala verde ONIA (§1.1 candidato A) — fuente unica */
+  --verde-50: #EDFBF3;  --verde-100: #D5F4E3; --verde-200: #B2EACD;
+  --verde-300: #86D9B0; --verde-400: #4DBD8C; --verde-500: #089868;
+  --verde-600: #027650; --verde-700: #016141; --verde-800: #004D32;
+  --verde-900: #013925;
+
+  /* papel */
+  --bg: #F9FBFA;
+  --bg-deep: #F3F5F4;
+  --surface: #FFFFFF;
+  --surface-dim: #F3F5F4;
+
+  /* tinta */
+  --ink: #141A17;
+  --ink-soft: #424A46;
+  --ink-faint: #69716D; /* 4.83:1 sobre --bg — AA texto chico OK */
+  --line: #D4D9D6;
+  --line-soft: #E2E5E3;
+
+  /* encendido (verde ONIA) — mismos nombres, valores nuevos */
+  --accent: var(--verde-500);
+  --accent-strong: var(--verde-700);
+  --accent-ink: var(--verde-700);
+  --accent-soft: var(--verde-100);
+  --accent-glow: rgb(8 152 104 / 0.30);
+
+  /* semanticos */
+  --ok: var(--verde-600);
+  --ok-soft: var(--verde-50);
+  --danger: oklch(60% 0.14 28);
+  --danger-soft: oklch(93.5% 0.04 28);
+  --wa: oklch(56% 0.13 155);
+
+  /* sombras: de marron calido a neutro frio */
+  --shadow-card:
+    0 1px 2px oklch(25% 0.01 165 / 0.06),
+    0 14px 36px -14px oklch(25% 0.02 165 / 0.18);
+  --shadow-pop:
+    0 2px 4px oklch(25% 0.01 165 / 0.09),
+    0 24px 56px -20px oklch(25% 0.025 165 / 0.26);
+
+  /* tipografia, --space-section, --radius, --radius-lg, --header-h: SIN CAMBIOS */
+}
+```
+
+### A.3 Bloque oscuro — pegar DOS veces (en `[data-theme="dark"]` y en el media query, como hoy)
+
+```css
+  color-scheme: dark;
+  --bg: #0C110F;
+  --bg-deep: #070B0A;
+  --surface: #141A18;
+  --surface-dim: #101513;
+  --ink: #ECEFED;
+  --ink-soft: #B3B9B5;
+  --ink-faint: #8D9490; /* 6.14:1 sobre --bg — AA OK */
+  --line: #28302D;
+  --line-soft: #1E2522;
+  /* encendido: en oscuro el verde sube de LUZ, no de saturacion */
+  --accent: var(--verde-400);
+  --accent-strong: var(--verde-300);
+  --accent-ink: var(--verde-300);
+  --accent-soft: var(--verde-900);
+  --accent-glow: rgb(77 189 140 / 0.25);
+  --ok: var(--verde-400);
+  --ok-soft: var(--verde-900);
+  --danger: oklch(69% 0.13 30);
+  --danger-soft: oklch(29.5% 0.045 30);
+  --wa: oklch(72% 0.14 155);
+  /* sombras oscuras: ya son negras neutras hoy — SIN CAMBIO */
+```
+
+### A.4 Lo que NO cambia (lista dura)
+
+- Tipografia (§2): fuentes, pesos, clamps de tamaño.
+- `--space-section`, `--radius`, `--radius-lg`, `--header-h` (§3.1).
+- `src/motion/**` completo: springs, duraciones, eases, distancias, stagger.
+- Estructura y layout de todos los `*.module.css` (solo heredan los valores nuevos).
+- `--danger*` (rojo suave) y `--wa` (WhatsApp, marca de terceros, solo en su boton).
+- Sombras negras hardcodeadas de `modules/display-toggle/ghost-cursor.module.css`.
+- Copy y compliance C7 (portal SIN gratis de frente, cero "por ley", precios "desde
+  Bs 320/mes lanzamiento"): el retheme es visual, no toca una palabra.
+
+### A.5 Checklist de verificacion post-swap
+
+- [ ] `tsc --noEmit` verde (solo `layout.tsx` toca TS).
+- [ ] Grep en `globals.css`: cero `oklch(` con hue 55–90 restante (ambar fuera).
+- [ ] Vista clara: kicker legible (700), LEDs vivos (500), badges AA, sombras sin tinte marron.
+- [ ] Vista oscura: texto acento 300/400 sobre tinta, fondos `tinta-*` (nada marron 72–76).
+- [ ] `::selection` y `:focus-visible` en verde.
+- [ ] `themeColor` actualizado + favicon led en la pestaña.
+- [ ] Migracion por seccion COMPLETA: ambar y verde jamas conviven en una vista (§3 NO).
+- [ ] Reduced-motion y performance intactos (no se toco motion; presupuesto <150kb igual).
 
 ## Apendice B — Metodo de verificacion
 
