@@ -4,6 +4,7 @@ import { Hero } from "@/components/sections/hero";
 import { HowItWorks } from "@/components/sections/how-it-works";
 import { Rubros } from "@/components/sections/rubros";
 import { Modules } from "@/components/sections/modules";
+import { Bolivia } from "@/components/sections/bolivia";
 
 export default function Home() {
   return (
@@ -17,6 +18,7 @@ export default function Home() {
         <HowItWorks />
         <Rubros />
         <Modules />
+        <Bolivia />
       </main>
       <SiteFooter />
     </>
