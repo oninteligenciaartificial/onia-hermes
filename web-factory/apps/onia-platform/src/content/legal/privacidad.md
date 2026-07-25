@@ -2,7 +2,7 @@
 title: "Política de Privacidad"
 slug: "privacidad"
 status: "borrador"
-version: "0.1"
+version: "0.2"
 updatedAt: "2026-07-25"
 ---
 
@@ -34,7 +34,8 @@ de datos firmado con cada cliente, en especial en salud.]
 
 ## 2. Qué datos recogemos
 
-2.1. **Datos de cuenta:** nombre y datos de contacto tuyos y de tus usuarios,
+2.1. **Datos de cuenta:** nombre y datos de contacto tuyos y de tus usuarios —
+incluido el **número de WhatsApp** que uses para comunicarte con Onia —,
 credenciales de acceso (contraseñas almacenadas con hash, nunca en claro), datos
 de facturación (NIT/CI, razón social) e historial de pagos.
 
@@ -156,10 +157,20 @@ datos. Onia te da las herramientas para atenderlas (buscar, corregir, exportar o
 eliminar un registro). Si una persona contacta a Onia directamente, la
 derivaremos a tu negocio y te avisaremos.
 
-9.3. Sin perjuicio de lo anterior, las personas conservan los derechos y
-acciones que les reconoce la normativa boliviana aplicable en materia de
-privacidad y protección de datos. [REVISAR ABOGADO: redacción sobre las vías
-constitucionales y legales vigentes.]
+9.3. **El marco boliviano, con honestidad.** A la fecha de este borrador,
+Bolivia **no cuenta con una ley integral y específica de protección de datos
+personales**. La protección vigente nace de la Constitución Política del
+Estado — que reconoce el derecho a la privacidad (art. 21) y la **Acción de
+Protección de Privacidad** (art. 130), por la cual cualquier persona puede
+pedir conocer, objetar o lograr la eliminación o rectificación de sus datos —,
+de normas sectoriales dispersas y de anteproyectos de ley aún en discusión.
+Por eso esta Política no invoca una ley que no existe: **a falta de ley
+específica, adoptamos por contrato** los principios reconocidos
+internacionalmente (licitud, finalidad, minimización, seguridad, transparencia
+y derechos del titular), y Onia se compromete a adecuar esta Política a la ley
+boliviana de protección de datos cuando se promulgue. Las personas conservan
+en todo caso los derechos y acciones constitucionales mencionados. [REVISAR
+ABOGADO: confirmar el estado normativo al momento de publicar.]
 
 ## 10. Menores de edad
 

@@ -2,7 +2,7 @@
 title: "Términos y Condiciones"
 slug: "terminos"
 status: "borrador"
-version: "0.1"
+version: "0.2"
 updatedAt: "2026-07-25"
 ---
 
@@ -30,11 +30,14 @@ tuya.
 1.2. **Qué NO es el servicio.** Onia no es, no reemplaza y no incluye:
 
 - **Asesoría tributaria, contable ni fiscal.** Los reportes y recordatorios que
-  la plataforma genere son apoyo operativo. Sos el único responsable de tus
-  declaraciones, facturación y obligaciones ante las autoridades. El Servicio de
-  Impuestos Nacionales ofrece un portal web gratuito para facturar; usar Onia es
-  una decisión de comodidad y productividad, no una obligación. Recomendamos
-  validar todo con tu contador.
+  la plataforma genere son apoyo operativo. Onia **prepara, no presenta**: la
+  plataforma te ayuda a ordenar información y preparar borradores, pero toda
+  declaración, presentación o emisión ante el Servicio de Impuestos Nacionales
+  (SIN) la hacés vos como contribuyente, con tu propio NIT y tus propias
+  credenciales, de cuyo uso y custodia sos el único responsable. El SIN ofrece
+  un portal web gratuito para facturar; usar Onia es una decisión de comodidad
+  y productividad, no una obligación. Recomendamos validar todo con tu
+  contador.
 - **Asesoría ni práctica médica u odontológica.** En los verticales de salud, la
   plataforma solo organiza información. Todo acto clínico es responsabilidad
   exclusiva de los profesionales de tu negocio.
@@ -42,6 +45,16 @@ tuya.
 
 1.3. Las sugerencias generadas por IA (textos, montos, resúmenes) son borradores
 que pueden contener errores. Debés revisarlas antes de aprobarlas o usarlas.
+
+1.4. **Facturación electrónica.** Si tu plan incluye funciones de facturación,
+la emisión de facturas a través de la plataforma está **sujeta a que el sistema
+cuente con la homologación o autorización que exija el SIN** para la modalidad
+correspondiente, y a que vos cumplás tus requisitos como contribuyente (NIT
+activo, modalidad habilitada, credenciales vigentes). Mientras esa homologación
+no esté vigente, la plataforma solo **prepara** la información de tus ventas —
+no emite facturas en tu nombre. El portal web gratuito del SIN está siempre
+disponible para emitir tus facturas directamente. [REVISAR ABOGADO: estado de
+homologación al momento de publicar.]
 
 ## 2. Tu cuenta y tu responsabilidad
 
@@ -85,11 +98,16 @@ se confirma al vencimiento:
 [REVISAR ABOGADO: plazos exactos de gracia, suspensión y terminación por mora.]
 
 3.5. **Ajuste de precios.** Por la volatilidad cambiaria e inflacionaria, los
-precios en Bs no son fijos de por vida. Onia puede ajustarlos periódicamente,
-avisando con al menos **30 días** de anticipación; el nuevo precio rige recién
-desde la **siguiente renovación** (nunca dentro de un período ya pagado). Si no
-aceptás el nuevo precio, podés no renovar sin penalidad. [REVISAR ABOGADO:
-mecánica y exigibilidad de la cláusula de ajuste.]
+precios en Bs no son fijos de por vida — en especial los precios de
+lanzamiento. Onia puede ajustar los precios **como máximo una vez por
+semestre**, en un porcentaje de hasta la variación acumulada del semestre
+anterior que resulte **mayor** entre: (a) el tipo de cambio oficial publicado
+por el **Banco Central de Bolivia (BCB)**, y (b) el **Índice de Precios al
+Consumidor** publicado por el **Instituto Nacional de Estadística (INE)**. Todo
+ajuste se avisa con al menos **30 días** de anticipación y rige recién desde la
+**siguiente renovación** (nunca dentro de un período ya pagado). Si no aceptás
+el nuevo precio, podés no renovar sin penalidad. [REVISAR ABOGADO: mecánica y
+exigibilidad de la cláusula de ajuste indexada.]
 
 3.6. **Costos de terceros excluidos.** Salvo pacto expreso, no están incluidos en
 el precio: dominio y hosting web del cliente, comisiones de pasarelas de pago,
