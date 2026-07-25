@@ -5,6 +5,9 @@ import { HowItWorks } from "@/components/sections/how-it-works";
 import { Rubros } from "@/components/sections/rubros";
 import { Modules } from "@/components/sections/modules";
 import { Bolivia } from "@/components/sections/bolivia";
+import { AgentStory } from "@/components/sections/agent-story";
+import { Doors } from "@/components/sections/doors";
+import { Faq } from "@/components/sections/faq";
 
 export default function Home() {
   return (
@@ -19,6 +22,9 @@ export default function Home() {
         <Rubros />
         <Modules />
         <Bolivia />
+        <AgentStory />
+        <Doors />
+        <Faq />
       </main>
       <SiteFooter />
     </>
