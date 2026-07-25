@@ -53,8 +53,15 @@ HyperFrames (render + SFX), imagen barata. Validar la idea antes de generar.
    aparece en **ONIA Center → Estudio de Contenido** como corte PENDIENTE de tu OK, con la tabla
    keep/cut y el preview 360p. **El pipeline queda esperando acá: NO corta.**
 5. **Aplicar el corte — SOLO tras aprobar Sergio en el panel (Fase 5).** Recién con el OK en la cola
-   de aprobación se ejecuta el ffmpeg concat de los `keep[]` → `renders/cut.mp4` (ver cut-plan.mjs,
-   imprime el comando exacto). **Nunca cortar a ciegas ni antes del OK.**
+   de aprobación, el **worker de render LOCAL** aplica el corte:
+   `node scripts/render-approved.mjs --video raw/<crudo>.mp4 --cutplan scripts/cutplan.json --video-key <slug> [--out-dir renders]`
+   → reconstruye el filtro ffmpeg EXACTO desde `keep[]` (select/aselect + setpts, igual que
+   cut-plan.mjs) → `renders/cut.mp4`. Por DEFECTO es **DRY-RUN**: imprime el comando ffmpeg + el SQL
+   de UPDATE (`video_projects` status→**`ready`** + `render_url`; `review_queue` del `video_cut`
+   → `approved`). Con **`--apply`** corre el ffmpeg **LOCAL de verdad** (permitido: es local, nunca
+   el VPS) y **aun así solo imprime el SQL** — la escritura a producción la aplica el orquestador por
+   SSH a `supabase-db`. El render corre en la máquina de Sergio / la sesión Claude Code, **nunca en el
+   VPS**. **Nunca cortar a ciegas ni antes del OK.**
 6. **Subtítulos karaoke.** Delegar en `embedded-captions` sobre `renders/cut.mp4`
    (identidad `anchor`/rail por defecto; embed solo en el pico). Estilo Santiago: MAYÚSCULAS,
    Space Grotesk Bold, highlight naranja `#FF7A00`.
@@ -69,7 +76,7 @@ HyperFrames (render + SFX), imagen barata. Validar la idea antes de generar.
 | Transcript + timestamps | `ver-videos` → Speaches | gratis |
 | Cut-list (tabla de cortes) | `scripts/cut-plan.mjs` | gratis |
 | Publicar el corte al panel para tu OK | `scripts/publish-cut-review.mjs` (DRY-RUN → SQL) | gratis |
-| Aplicar el corte (tras OK) | ffmpeg concat de `keep[]` | gratis |
+| Aplicar el corte (tras OK) | `scripts/render-approved.mjs` (worker LOCAL, DRY-RUN → ffmpeg + SQL) | gratis |
 | Subtítulos karaoke | `embedded-captions` | gratis (local) |
 | Overlays / lower-thirds / mockups | `talking-head-recut` | gratis (local) |
 | SFX / música | librería HyperFrames | gratis |
