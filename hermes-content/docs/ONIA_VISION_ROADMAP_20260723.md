@@ -56,6 +56,21 @@ Lo que cubren los carriles C0-C7 (ver `ONIA_CARRILES_PROMPTS`):
 
 **Lo que NO se puede colapsar en subagentes paralelos:** la cadena de la app (C1→C2→C3 comparte archivos → serial); la infra (C5 necesita código en `main` + secrets S3/S6); los bloqueos humanos (S1/S2/S6 = solo Sergio). Arthur es humano, no subagente.
 
+## 5-bis. El gradiente self-serve (decisión de modelo, 2026-07-25)
+
+**Pregunta de Sergio:** ¿la plataforma la operamos nosotros (Dapta done-for-you) o el cliente solo (Hostinger self-serve)? **Respuesta: es EL MISMO flujo (wizard: rubro → tamaño → "¿qué te falta?" → recomendación → provisión); lo que cambia con el tiempo es quién lo opera.**
+
+| Etapa | Quién opera el wizard | Cuándo |
+|---|---|---|
+| **Concierge** | Sergio lo llena CON el cliente en la demo | AHORA (valida con runway corto; Bolivia B2B cierra con confianza+WhatsApp+QR, no con auto-pago) |
+| **Asistido** | El cliente lo llena solo; un humano revisa y activa | Tras primeros clientes pagando |
+| **Self-serve total (Hostinger)** | Todo solo: se provisiona el sistema + Web Factory le genera la web + pago QR | Destino; sin fecha hasta volumen |
+
+- `provisionOrganization()` (C1) es UNA función para las tres etapas → cero rework al graduar.
+- **El movimiento Hostinger que SÍ aplica YA: demo tenant instantáneo** — botón "probá una clínica de ejemplo en 2 min" (reusa `demo-seed.ts`), self-serve para convencerse, asistido para cerrar. Entra como ítem barato de C2/C3.
+- **El recomendador** ("no tengo web/chatbot" → sugiere add-ons) = el motor de expansión ya previsto: un agente que lee las respuestas del wizard y la cuenta. Config + prompt, no ingeniería pesada.
+- El wizard self-serve de la puerta = evolución del `/setup` existente, no una pieza nueva.
+
 ## 6. Nuevas ideas propuestas (criterio propio — Sergio decide cuáles)
 
 Marcadas AHORA (suman al objetivo actual sin dispersar) vs PARK (capturar, no perseguir hasta validar).
