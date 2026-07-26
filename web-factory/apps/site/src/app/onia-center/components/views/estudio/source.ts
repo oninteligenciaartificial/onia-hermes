@@ -58,16 +58,6 @@ export type EditorProject = {
   cutReviewId?: string;
 };
 
-export type HiggsfieldGenerationKind = "video" | "image" | "effect";
-
-export type HiggsfieldGeneration = {
-  id: string;
-  title: string;
-  kind: HiggsfieldGenerationKind;
-  meta: string;
-  credits: number;
-};
-
 export type HiggsfieldFunctionCost = "paga" | "free";
 
 export type HiggsfieldFunctionIcon =
@@ -86,14 +76,13 @@ export type HiggsfieldFunction = {
   icon: HiggsfieldFunctionIcon;
 };
 
+// Sólo lo que existe de verdad: saldo y plan salen de provider_credits. Consumo
+// del mes, fecha de renovación e historial de generaciones NO están en la DB, así
+// que no viven acá (ver nota en HiggsfieldPanel). `functions` no es telemetría:
+// es el catálogo estático de qué sabe hacer el motor y cuáles cobran.
 export type HiggsfieldAccount = {
   creditsLabel: string;
   plan: string;
-  usedThisMonth: number;
-  renewsInDays: number;
-  usedFraction: number;
-  capacityHint: string;
-  recent: HiggsfieldGeneration[];
   functions: HiggsfieldFunction[];
 };
 
@@ -167,31 +156,27 @@ function creditsLabel(value: number): string {
 // (higgsfield-balance-sync.mjs) escribe el balance vivo leído por el MCP Higgsfield.
 const HIGGSFIELD_CREDITS = 2354.22;
 
-// Tasa USD→Bs (oficial Bolivia). El gasto IA real vive en USD (LiteLLM); el panel
-// lo muestra en Bs para ser consistente con el resto de finanzas.
-const USD_TO_BS = 6.96;
+// El gasto IA se factura en USD (LiteLLM/OpenAI) y se muestra en USD. No se
+// convierte a Bs: la tasa quedó obsoleta con la flotación (26-jun-2026) y pegarla
+// al panel de créditos daba a entender que cada video es plata nueva saliendo.
+const usdFormatter = new Intl.NumberFormat("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+function formatUsd(value: number): string {
+  return `US$ ${usdFormatter.format(value)}`;
+}
 
-const HIGGSFIELD_ACCOUNT: HiggsfieldAccount = {
-  creditsLabel: creditsLabel(HIGGSFIELD_CREDITS),
-  plan: "ultra",
-  usedThisMonth: 246,
-  renewsInDays: 12,
-  usedFraction: 0.095,
-  capacityHint: "Alcanza para ~52 videos kling o ~65 imágenes Soul.",
-  recent: [
-    { id: "gen-cafeluna-broll", title: "Café Luna · b-roll kling", kind: "video", meta: "video · hace 3 h · usado", credits: 45 },
-    { id: "gen-lucia-soul", title: "Lucía Soul · retrato set 2", kind: "image", meta: "imagen · ayer · aprobado", credits: 36 },
-    { id: "gen-onia-sting", title: "ONIA · logo sting", kind: "effect", meta: "video · hace 3 d", credits: 30 },
-  ],
-  functions: [
-    { id: "fn-image", name: "Generar imagen", desc: "Soul · recraft · referencias", cost: "paga", icon: "image" },
-    { id: "fn-video", name: "Generar video", desc: "kling turbo · motion control", cost: "paga", icon: "video" },
-    { id: "fn-virality", name: "Virality predictor", desc: "score antes de publicar", cost: "paga", icon: "trend" },
-    { id: "fn-shorts", name: "Auto-shorts", desc: "personal clipper · largo → clips", cost: "paga", icon: "shorts" },
-    { id: "fn-reframe", name: "Reframe", desc: "16:9 ↔ 9:16 con tracking", cost: "paga", icon: "reframe" },
-    { id: "fn-upscale", name: "Upscale", desc: "sube resolución · no cobra al aplicar", cost: "free", icon: "upscale" },
-  ],
-};
+// Plan de respaldo si provider_credits no trae el campo.
+const HIGGSFIELD_FALLBACK_PLAN = "ultra";
+
+// Catálogo estático del motor: qué sabe hacer Higgsfield y qué cobra. No es un
+// dato de cuenta (no se lee de la DB porque no cambia con el saldo).
+const HIGGSFIELD_FUNCTIONS: HiggsfieldFunction[] = [
+  { id: "fn-image", name: "Generar imagen", desc: "Soul · recraft · referencias", cost: "paga", icon: "image" },
+  { id: "fn-video", name: "Generar video", desc: "kling turbo · motion control", cost: "paga", icon: "video" },
+  { id: "fn-virality", name: "Virality predictor", desc: "score antes de publicar", cost: "paga", icon: "trend" },
+  { id: "fn-shorts", name: "Auto-shorts", desc: "personal clipper · largo → clips", cost: "paga", icon: "shorts" },
+  { id: "fn-reframe", name: "Reframe", desc: "16:9 ↔ 9:16 con tracking", cost: "paga", icon: "reframe" },
+  { id: "fn-upscale", name: "Upscale", desc: "sube resolución · no cobra al aplicar", cost: "free", icon: "upscale" },
+];
 
 // --- helpers de mapeo raw DB → view-model ---------------------------------
 
@@ -369,26 +354,25 @@ export async function getCutQueue(): Promise<CutReview[]> {
 // Supabase no responde) cae a la constante de fallback. El plan vacío también cae.
 function resolveHiggsfield(balance: ProviderBalance | null): { credits: number; plan: string } {
   if (!balance) {
-    return { credits: HIGGSFIELD_CREDITS, plan: HIGGSFIELD_ACCOUNT.plan };
+    return { credits: HIGGSFIELD_CREDITS, plan: HIGGSFIELD_FALLBACK_PLAN };
   }
   return {
     credits: balance.credits,
-    plan: balance.plan !== "" ? balance.plan : HIGGSFIELD_ACCOUNT.plan,
+    plan: balance.plan !== "" ? balance.plan : HIGGSFIELD_FALLBACK_PLAN,
   };
 }
 
 // Gasto IA real del mes: row openai_api de cost_items (raw.spend_usd_mtd, escrito por
-// ai-spend-sync desde LiteLLM). Devuelve las etiquetas ya en Bs. Si no hay dato real,
-// null → el consumidor mantiene el fallback constante sin romper.
+// ai-spend-sync desde LiteLLM). Devuelve las etiquetas en USD, la moneda en que se
+// factura. Si no hay dato real, null → el consumidor mantiene el fallback sin romper.
 function resolveAiSpend(costs: CostItem[]): { monthLabel: string; hint: string } | null {
   const row = costs.find((item) => item.itemKey === "openai_api");
   if (!row || row.spendUsdMtd === null) {
     return null;
   }
-  const monthBs = row.spendUsdMtd * USD_TO_BS;
   const requests = row.requestsMtd;
   return {
-    monthLabel: formatBs(monthBs, { compact: true }),
+    monthLabel: formatUsd(row.spendUsdMtd),
     // No hay desglose diario en LiteLLM; el hint muestra un dato real (llamadas del mes).
     hint: requests !== null ? `${requests} llamadas · IA propia` : "IA propia · LiteLLM",
   };
@@ -398,9 +382,9 @@ export async function getHiggsfieldAccount(): Promise<HiggsfieldAccount> {
   const balance = await getHiggsfieldBalance();
   const { credits, plan } = resolveHiggsfield(balance);
   return {
-    ...HIGGSFIELD_ACCOUNT,
     creditsLabel: creditsLabel(credits),
     plan,
+    functions: HIGGSFIELD_FUNCTIONS,
   };
 }
 
@@ -416,10 +400,10 @@ export async function getStudioOverview(): Promise<StudioOverview> {
   const { credits, plan } = resolveHiggsfield(balance);
   const higgsfieldCreditsLabel = creditsLabel(credits);
 
-  // Gasto IA real (Bs); fallback a la constante previa si no hay dato en cost_items.
+  // Gasto IA real (USD); fallback a la constante previa si no hay dato en cost_items.
   const aiSpend = resolveAiSpend(costs);
-  const spendMonthLabel = aiSpend ? aiSpend.monthLabel : formatBs(1240, { compact: true });
-  const spendHintLabel = aiSpend ? aiSpend.hint : `hoy ${formatBs(42.8)}`;
+  const spendMonthLabel = aiSpend ? aiSpend.monthLabel : formatUsd(178.16);
+  const spendHintLabel = aiSpend ? aiSpend.hint : `hoy ${formatUsd(6.15)}`;
 
   const cutQueue = cuts.length;
   const videosReady = count("ready");

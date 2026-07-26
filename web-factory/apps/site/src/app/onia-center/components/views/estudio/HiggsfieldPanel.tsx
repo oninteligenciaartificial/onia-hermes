@@ -7,7 +7,7 @@ import {
   Video,
   type LucideIcon,
 } from "lucide-react";
-import type { HiggsfieldAccount, HiggsfieldFunction, HiggsfieldFunctionIcon, HiggsfieldGenerationKind } from "./source";
+import type { HiggsfieldAccount, HiggsfieldFunction, HiggsfieldFunctionIcon } from "./source";
 import { SurfaceCard } from "../../ui/SurfaceCard";
 
 interface HiggsfieldPanelProps {
@@ -21,12 +21,6 @@ const FN_ICON: Record<HiggsfieldFunctionIcon, LucideIcon> = {
   shorts: Scissors,
   reframe: Ratio,
   upscale: Maximize2,
-};
-
-const GEN_THUMB: Record<HiggsfieldGenerationKind, string> = {
-  video: "🎞️",
-  image: "🖼️",
-  effect: "✨",
 };
 
 function FunctionButton({ fn }: { fn: HiggsfieldFunction }) {
@@ -79,58 +73,21 @@ export function HiggsfieldPanel({ account }: HiggsfieldPanelProps) {
       }
       contentClassName="p-0"
     >
-      <div className="grid md:grid-cols-[1fr_1px_1fr]">
-        <div className="p-[18px]">
-          <p className="mb-2.5 text-[10.5px] font-semibold uppercase tracking-[0.04em] text-[color:var(--faint)]">Balance</p>
-          <p className="flex items-baseline gap-2">
-            <span className="text-[30px] font-bold tracking-[-0.02em] tabular-nums" style={{ color: "var(--accent-strong)" }}>
-              {account.creditsLabel}
-            </span>
-            <span className="text-xs font-semibold text-[color:var(--faint)]">créditos · plan {account.plan}</span>
-          </p>
-          <p className="mt-1.5 text-[11.5px] text-muted-foreground">{account.capacityHint}</p>
-          <div className="mt-3 h-[7px] overflow-hidden rounded-full border border-border bg-[color:var(--surface-2)]">
-            <span
-              className="block h-full rounded-full bg-primary"
-              style={{ width: `${Math.round(account.usedFraction * 100)}%` }}
-              aria-hidden="true"
-            />
-          </div>
-          <div className="mt-1.5 flex justify-between text-[10.5px] tabular-nums text-[color:var(--faint)]">
-            <span>Usado mes: {account.usedThisMonth} cr</span>
-            <span>Renueva en {account.renewsInDays} d</span>
-          </div>
-        </div>
-
-        <div className="hidden bg-[color:var(--line-soft)] md:block" aria-hidden="true" />
-
-        <div className="border-t border-[color:var(--line-soft)] p-[18px] md:border-t-0">
-          <p className="mb-2.5 text-[10.5px] font-semibold uppercase tracking-[0.04em] text-[color:var(--faint)]">
-            Generaciones recientes
-          </p>
-          <ul className="grid">
-            {account.recent.map((gen) => (
-              <li
-                key={gen.id}
-                className="flex items-center gap-2.5 border-t border-[color:var(--line-soft)] py-2 first:border-t-0 first:pt-0.5"
-              >
-                <span
-                  className="grid h-[34px] w-[34px] shrink-0 place-items-center rounded-lg border border-border bg-[color:var(--surface-2)] text-sm"
-                  aria-hidden="true"
-                >
-                  {GEN_THUMB[gen.kind]}
-                </span>
-                <span className="min-w-0 flex-1">
-                  <span className="block truncate text-xs font-semibold text-foreground">{gen.title}</span>
-                  <span className="block text-[10.5px] tabular-nums text-[color:var(--faint)]">{gen.meta}</span>
-                </span>
-                <span className="whitespace-nowrap text-[11px] font-semibold tabular-nums text-muted-foreground">
-                  {gen.credits} cr
-                </span>
-              </li>
-            ))}
-          </ul>
-        </div>
+      {/* Sólo saldo y plan: es lo único que el sync trae de verdad (provider_credits).
+          Consumo del mes, renovación e historial de generaciones no están en la DB —
+          no se dibujan barras ni listas inventadas; se dice que faltan. */}
+      <div className="p-[18px]">
+        <p className="mb-2.5 text-[10.5px] font-semibold uppercase tracking-[0.04em] text-[color:var(--faint)]">Balance</p>
+        <p className="flex items-baseline gap-2">
+          <span className="text-[30px] font-bold tracking-[-0.02em] tabular-nums" style={{ color: "var(--accent-strong)" }}>
+            {account.creditsLabel}
+          </span>
+          <span className="text-xs font-semibold text-[color:var(--faint)]">créditos · plan {account.plan}</span>
+        </p>
+        <p className="mt-2 text-[11px] text-[color:var(--faint)]">
+          Consumo del mes, fecha de renovación e historial de generaciones: sin datos todavía — el sync sólo trae saldo y
+          plan.
+        </p>
       </div>
 
       <div
