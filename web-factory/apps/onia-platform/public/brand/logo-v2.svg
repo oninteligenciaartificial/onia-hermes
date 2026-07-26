@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 130" role="img" aria-label="onia">
+  <title>onia — logo v2 (wordmark sólido)</title>
+  <desc>Wordmark "onia" en peso pesado con terminaciones rectas y punto cuadrado verde señal: el opuesto exacto del wordmark ultrafino de onia.com (swimwear). Sin isotipo. Verde señal #00D26A usado solo como estado.</desc>
+  <style>
+    .ink { stroke: #101312; }
+    @media (prefers-color-scheme: dark) { .ink { stroke: #F2F5F3; } }
+  </style>
+  <g class="ink" fill="none" stroke-width="30" stroke-linecap="butt">
+    <circle cx="40" cy="80" r="25"/>
+    <path d="M104 120 V80 A25 25 0 0 1 154 80 V120"/>
+    <path d="M193 40 V120"/>
+    <circle cx="257" cy="80" r="25"/>
+    <path d="M282 40 V120"/>
+  </g>
+  <rect x="178" y="0" width="30" height="30" fill="#00D26A"/>
+</svg>
