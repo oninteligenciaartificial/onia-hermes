@@ -1,0 +1,34 @@
+# docker-compose.kong-override.yml — expone Kong como https://api.dentalgest.app via Traefik
+# Destino: /opt/dentalgest-supabase/supabase/docker/docker-compose.override.yml (Fase 2.3)
+#
+# NO edita el docker-compose.yml oficial del stack: docker compose mergea este override solo.
+# Kong sigue ademas en 127.0.0.1:55321 (uso interno/tunel). Postgres NO se toca: jamas publico.
+# El browser necesita Auth + Realtime (websocket) + Storage signed URLs → este es el MINIMO publico.
+#
+# <CERT_RESOLVER> y <RED_TRAEFIK>: mismos valores confirmados que en docker-compose.app.yml.
+
+services:
+  kong:
+    networks:
+      - default
+      - traefik
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.dentalgest-api.rule=Host(`api.dentalgest.app`)
+      - traefik.http.routers.dentalgest-api.entrypoints=websecure
+      - traefik.http.routers.dentalgest-api.tls=true
+      - traefik.http.routers.dentalgest-api.tls.certresolver=<CERT_RESOLVER>
+      - traefik.http.services.dentalgest-api.loadbalancer.server.port=8000
+      # Websockets (Realtime) pasan solos por Traefik v2+; no requieren middleware extra.
+      - traefik.docker.network=<RED_TRAEFIK>
+
+networks:
+  traefik:
+    external: true
+    name: <RED_TRAEFIK>
+
+# Verificacion post-up (Fase 2.3):
+#   curl -s -o /dev/null -w '%{http_code}' https://api.dentalgest.app/rest/v1/                  → 401 (sin apikey)
+#   curl -s -o /dev/null -w '%{http_code}' -H "apikey: $ANON_KEY" https://api.dentalgest.app/rest/v1/  → 200
+#   curl -s https://api.dentalgest.app/auth/v1/health                                          → {"date":...}
+# Studio/Meta NO se exponen: siguen solo por tunel SSH.
