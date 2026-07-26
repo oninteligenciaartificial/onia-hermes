@@ -2,14 +2,15 @@
  * Constantes del sitio ONIA Platform.
  *
  * PLACEHOLDERS deliberados (ver README-CARRIL / plan de arranque):
- * - WA_PHONE: el numero real de WhatsApp Business esta pendiente; al tenerlo
- *   se cambia SOLO aca y todos los CTAs del sitio quedan al dia.
  * - APP_URL / DENTALGEST_URL: dominios segun la arquitectura decidida
  *   (onia.com.bo = este sitio, app.onia.com.bo = la app,
  *   dentalgest.app = embudo dental).
  */
 
-export const WA_PHONE = "PLACEHOLDER";
+// Numero real de WhatsApp del negocio, confirmado por Sergio 2026-07-26.
+// Es el mismo que figura en el portfolio de Meta y en el pie legal: si cambia,
+// hay que cambiarlo en los tres lados o la verificacion de Meta deja de cruzar.
+export const WA_PHONE = "59178491375";
 
 export function waLink(text: string): string {
   return `https://wa.me/${WA_PHONE}?text=${encodeURIComponent(text)}`;

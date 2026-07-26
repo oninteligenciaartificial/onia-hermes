@@ -83,6 +83,18 @@ export function SiteFooter() {
             <a href="/privacidad">Política de Privacidad</a>
           </nav>
           <p className="mono">© 2026 Onia</p>
+          {/* Identidad legal. La usa la verificación de negocio de Meta, que cruza
+              el sitio contra el documento (SEPREC). El domicilio fiscal es
+              particular: NO se publica — va solo en el formulario privado. */}
+          <address className={styles.legalId}>
+            OniaAgency
+            <span aria-hidden> · </span>NIT 5371375010
+            <span aria-hidden> · </span>Santa Cruz de la Sierra, Bolivia
+            <span aria-hidden> · </span>
+            <a href="tel:+59178491375">+591 78491375</a>
+            <span aria-hidden> · </span>
+            <a href="mailto:business@onia.com.bo">business@onia.com.bo</a>
+          </address>
         </div>
       </div>
     </footer>
