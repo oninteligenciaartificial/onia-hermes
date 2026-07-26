@@ -1,5 +1,5 @@
 // ONIA — Chatbot propio: pruebas del motor y de los guardrails.
-//   node --test hermes-content/deploy/vps-ops/bot/
+//   node --test "hermes-content/deploy/vps-ops/bot/*.test.mjs"
 // Cubre lo que la spec marca como no negociable: calificacion, descarte cortes,
 // 2 malentendidos -> handoff, opt-out, silencio ante un humano, los 6 codigos de guardrail,
 // el auto-test del texto seguro, que los regex no lleven /g, y el follow-up unico.

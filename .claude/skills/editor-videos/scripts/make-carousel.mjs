@@ -29,6 +29,20 @@
 //   · **texto** dentro de title/body → resaltado en acento (chip en el slide CTA)
 //   · "image": ruta a un PNG/JPG → se incrusta como data URI (reemplaza al placeholder)
 //
+// Campos extra para HISTORIAS (todos opcionales; si no están, el slide no cambia —
+// por eso los carruseles ya generados siguen saliendo byte a byte iguales):
+//   · "stamp":   "Simulación con datos de demo"  → píldora de acento arriba del titular.
+//                Rotular SIEMPRE las capturas de demo: no se muestra data de cliente real.
+//   · "counter": { "pre":"Faltan", "value":"~60", "unit":"días" } → número gigante.
+//                pre + value/unit + title arman UNA frase leída de arriba abajo.
+//   · "poll":    { "options":["a","b","c"], "hint":"..." } → maqueta de la encuesta.
+//                El sticker que vota es el NATIVO de IG: esto reserva la zona y fija el copy.
+//   · "collage": ["a.png","b.png", ...] → grilla 2×2 con piezas ya publicadas (recap).
+//   · "sticker": "Sticker de link"  |  { "label":"...", "hint":"..." }  |  [ ... ]
+//                → zona punteada donde va el sticker nativo (link / preguntas / encuesta).
+//   En `--format story` el lienzo respeta las ZONAS SEGURAS de IG (cabecera de perfil
+//   arriba, barra de respuesta abajo): nada de marca, etiqueta IA ni copy queda tapado.
+//
 // Reglas duras de este script:
 //   · SELF-CONTAINED: cero recursos externos (ni CDN, ni fuentes remotas). Si el HTML
 //     pidiera red, el render se aborta → el PNG nunca depende de internet.
@@ -74,6 +88,10 @@ if (!Array.isArray(plan.slides) || plan.slides.length === 0) fail("el plan no ti
 
 const FORMATS = { post: [1080, 1350], story: [1080, 1920], square: [1080, 1080] };
 if (!FORMATS[FORMAT]) fail(`--format desconocido "${FORMAT}" (usá: ${Object.keys(FORMATS).join(" | ")})`);
+// Historia = pantalla completa con chrome de IG encima: la cabecera de perfil come el
+// tope y la barra de respuesta el pie. El lienzo se achica a la zona segura en vez de
+// confiar en que "más o menos entra".
+const STORY = FORMAT === "story";
 const W = Math.round(Number(flag("width", "0")) || FORMATS[FORMAT][0]);
 const H = Math.round(Number(flag("height", "0")) || FORMATS[FORMAT][1]);
 if (W < 320 || H < 320) fail(`tamaño inválido ${W}x${H}`);
@@ -199,6 +217,13 @@ function css() {
         color: var(--text-3); border: 1px solid var(--hairline); border-radius: 999px;
         padding: calc(11*var(--u)) calc(22*var(--u)); white-space: nowrap; }
 
+  /* --- historia: zonas seguras de IG -------------------------------------- */
+  /* Arriba vive la fila de perfil, abajo la barra de respuesta: si el copy llega
+     al borde, IG lo tapa. Se recorta el lienzo útil, no el tamaño de letra. */
+  .slide[data-story] { padding: calc(212*var(--u)) calc(84*var(--u)) calc(248*var(--u)); }
+  .slide[data-story] .ai { font-size: calc(23*var(--u)); color: var(--text-2); }
+  .slide[data-story] .main { padding: calc(46*var(--u)) 0 calc(38*var(--u)); }
+
   /* --- cuerpo ------------------------------------------------------------ */
   .main { position: relative; z-index: 2; flex: 1 1 auto; min-height: 0;
           display: flex; flex-direction: column;
@@ -226,6 +251,57 @@ function css() {
            max-width: calc(880*var(--u)); }
   .hl { color: var(--accent); font-weight: 800; }
 
+  /* --- rótulo de honestidad (stamp) --------------------------------------- */
+  /* Toda captura de demo se rotula. Va en acento sólido, no en gris de pie de
+     página: si hay que aclarar que es simulación, se lee antes que el titular. */
+  .stamp { align-self: flex-start; display: inline-flex; align-items: center; gap: calc(13*var(--u));
+           font-size: calc(27*var(--u)); font-weight: 800; letter-spacing: .11em; text-transform: uppercase;
+           color: #080A0E; background: var(--accent); border-radius: 999px;
+           padding: calc(13*var(--u)) calc(26*var(--u)); }
+  .stamp i { width: calc(13*var(--u)); height: calc(13*var(--u)); border-radius: 999px;
+             background: rgba(8,10,14,.72); flex: 0 0 auto; }
+
+  /* --- contador (countdown) ----------------------------------------------- */
+  /* El número escala con --fs → el auto-ajuste lo achica junto al titular y nunca
+     desborda. pre + número + titular se leen como una sola frase. */
+  .cpre { font-size: calc(var(--fb)*var(--u)); font-weight: 700; letter-spacing: .04em;
+          color: var(--text-2); }
+  .counter { display: flex; align-items: baseline; gap: calc(40*var(--u)); flex-wrap: wrap;
+             margin: calc(-10*var(--u)) 0 calc(-14*var(--u)); }
+  .counter .n { font-size: calc(var(--fs)*2.55*var(--u)); font-weight: 800; line-height: .84;
+                letter-spacing: -.06em; color: var(--accent); font-variant-numeric: tabular-nums; }
+  .counter .cu { font-size: calc(var(--fs)*.86*var(--u)); font-weight: 800; line-height: 1;
+                 letter-spacing: -.03em; color: var(--text); }
+
+  /* --- encuesta + zonas de sticker nativo --------------------------------- */
+  /* El voto lo toma el sticker NATIVO de IG (por eso la historia convierte). Acá se
+     reserva la zona y se congela el copy de las opciones para que no se improvise. */
+  .zone { border: calc(3*var(--u)) dashed color-mix(in oklab, var(--accent) 58%, transparent);
+          border-radius: calc(36*var(--u)); padding: calc(30*var(--u)) calc(30*var(--u));
+          display: flex; flex-direction: column; gap: calc(18*var(--u));
+          background: ${dark ? "rgba(255,255,255,.035)" : "rgba(10,12,17,.028)"}; }
+  .zone .zt { font-size: calc(24*var(--u)); font-weight: 800; letter-spacing: .16em;
+              text-transform: uppercase; color: var(--accent); }
+  .zone .zh { font-size: calc(28*var(--u)); font-weight: 500; line-height: 1.3; color: var(--text-3); }
+  .opts { display: flex; flex-direction: column; gap: calc(15*var(--u)); }
+  .opt { font-size: calc(41*var(--u)); font-weight: 700; letter-spacing: -.01em; text-align: center;
+         color: var(--text); border-radius: calc(26*var(--u));
+         padding: calc(24*var(--u)) calc(22*var(--u));
+         background: ${dark ? "rgba(255,255,255,.10)" : "rgba(10,12,17,.06)"};
+         border: 1px solid var(--hairline); }
+
+  /* --- collage de recap ---------------------------------------------------- */
+  /* La grilla ABSORBE el lienzo que sobra (flex:1) en vez de imponer su alto: el
+     texto manda y el collage se acomoda, así el recap nunca desborda la historia. */
+  .collage { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr;
+             gap: calc(16*var(--u)); flex: 1 1 auto; min-height: calc(430*var(--u)); }
+  .collage figure { position: relative; min-height: 0; overflow: hidden;
+                    border-radius: calc(26*var(--u)); border: 1px solid var(--hairline);
+                    background: var(--ink-2); }
+  /* contain, no cover: el recap muestra piezas de TEXTO — recortarlas parte frases a
+     la mitad y el recap deja de leerse. Mejor miniatura completa con aire. */
+  .collage img { display: block; width: 100%; height: 100%; object-fit: contain; }
+
   /* --- portada a sangre (foto o placeholder) ------------------------------ */
   /* La foto NO va en una cajita: ocupa el lienzo entero y el titular se apoya
      sobre el degradado. Es lo que hace que la portada frene el scroll. */
@@ -245,6 +321,12 @@ function css() {
                    text-transform: uppercase; color: var(--accent); }
   .cover.ph .hint { font-size: calc(25*var(--u)); font-weight: 500; color: var(--text-3);
                     letter-spacing: .02em; max-width: calc(660*var(--u)); text-wrap: balance; }
+  /* En historia el hueco de la captura vive ARRIBA del bloque de texto (que se ancla
+     al 58% inferior), no debajo de la cabecera de perfil de IG. */
+  .slide[data-story] .cover.ph .phbox {
+    top: calc(300*var(--u)); left: calc(84*var(--u)); right: calc(84*var(--u));
+    bottom: calc(1120*var(--u)); justify-content: center;
+    padding: calc(40*var(--u)) calc(44*var(--u)); }
 
   /* --- cierre (CTA) ------------------------------------------------------- */
   .slide[data-kind="cta"] .stack { justify-content: center; }
@@ -294,7 +376,11 @@ async function slideHtml(slide, i, total) {
   const kind = slide.kind || (i === 0 ? "hook" : i === total - 1 ? "cta" : "body");
   if (!SCALE[kind]) fail(`slide ${i + 1}: kind desconocido "${kind}" (hook | body | cta)`);
   if (!slide.title) fail(`slide ${i + 1}: falta "title"`);
-  const sc = SCALE[kind];
+  // Con contador, el número ES el titular: si el texto de la cola crece hasta el techo
+  // normal los dos compiten y la pieza se lee como un muro. Se le baja el techo.
+  const sc = slide.counter
+    ? { ...SCALE[kind], fs: Math.min(SCALE[kind].fs, 84), fsMax: Math.min(SCALE[kind].fsMax, 96) }
+    : SCALE[kind];
 
   const num = String(i + 1).padStart(2, "0");
   const pct = ((i + 1) / total) * 100;
@@ -302,6 +388,55 @@ async function slideHtml(slide, i, total) {
   const kicker = slide.kicker ? `<div class="kicker"><i></i>${esc(slide.kicker)}</div>` : "";
   const title = `<div class="title">${rich(slide.title)}</div>`;
   const copy = slide.body ? `<div class="copy">${rich(slide.body)}</div>` : "";
+
+  // rótulo de honestidad (capturas de demo)
+  const stamp = slide.stamp ? `<div class="stamp"><i></i>${esc(slide.stamp)}</div>` : "";
+
+  // contador: "pre" arriba, número gigante, y el titular cierra la frase
+  let counter = "";
+  if (slide.counter) {
+    const c = slide.counter;
+    if (!c.value) fail(`slide ${i + 1}: "counter" necesita "value"`);
+    counter =
+      (c.pre ? `<div class="cpre">${rich(c.pre)}</div>` : "") +
+      `<div class="counter"><span class="n">${esc(c.value)}</span>` +
+      (c.unit ? `<span class="cu">${esc(c.unit)}</span>` : "") +
+      `</div>`;
+  }
+
+  // encuesta: maqueta + zona reservada para el sticker nativo de IG
+  let poll = "";
+  if (slide.poll) {
+    const opts = slide.poll.options;
+    if (!Array.isArray(opts) || opts.length === 0) fail(`slide ${i + 1}: "poll" necesita "options" (array)`);
+    poll =
+      `<div class="zone"><div class="zt">${esc(slide.poll.label || "Sticker de encuesta")}</div>` +
+      `<div class="opts">${opts.map((o) => `<div class="opt">${esc(o)}</div>`).join("")}</div>` +
+      `<div class="zh">${esc(slide.poll.hint || "pegá el sticker NATIVO de IG encima, con estas opciones exactas")}</div></div>`;
+  }
+
+  // collage de recap (2×2 con piezas ya publicadas)
+  let collage = "";
+  if (slide.collage) {
+    if (!Array.isArray(slide.collage) || slide.collage.length === 0)
+      fail(`slide ${i + 1}: "collage" debe ser un array de rutas de imagen`);
+    const figs = [];
+    for (const src of slide.collage) figs.push(`<figure><img src="${await dataUri(src)}" alt=""></figure>`);
+    collage = `<div class="collage">${figs.join("")}</div>`;
+  }
+
+  // zonas de sticker nativo (link / preguntas / …)
+  const stickerList = slide.sticker == null ? [] : Array.isArray(slide.sticker) ? slide.sticker : [slide.sticker];
+  const stickers = stickerList
+    .map((s) => {
+      const st = typeof s === "string" ? { label: s } : s || {};
+      if (!st.label) fail(`slide ${i + 1}: cada "sticker" necesita "label"`);
+      return (
+        `<div class="zone"><div class="zt">${esc(st.label)}</div>` +
+        `<div class="zh">${esc(st.hint || "pegá el sticker NATIVO de IG en esta zona")}</div></div>`
+      );
+    })
+    .join("");
 
   // portada a sangre: la foto (o su placeholder) es el fondo del slide, no una cajita
   let cover = "";
@@ -313,11 +448,12 @@ async function slideHtml(slide, i, total) {
   }
 
   // Sin kicker, el filete de acento sostiene el titular: ningún slide queda sin ancla de marca.
-  const anchor = kicker || `<div class="rule"></div>`;
+  // Con contador, el número YA es el ancla — meterle además el filete ensucia la jerarquía.
+  const anchor = kicker || (counter ? "" : `<div class="rule"></div>`);
   const inner =
     kind === "cta"
-      ? `<div class="cta">${kicker}${title}${copy}${BADGE}</div>`
-      : `${anchor}${title}${copy}`;
+      ? `<div class="cta">${kicker}${title}${copy}${BADGE}</div>${collage}${poll}${stickers}`
+      : `${stamp}${anchor}${counter}${title}${copy}${collage}${poll}${stickers}`;
 
   const ghost = kind === "body" ? `<div class="ghost">${num}</div>` : "";
   const note = slide.footnote ? `<div class="note">${rich(slide.footnote)}</div>` : `<div class="note"></div>`;
@@ -326,7 +462,7 @@ async function slideHtml(slide, i, total) {
       ? `<div class="nav">${HANDLE ? esc(HANDLE) : ""}</div>`
       : `<div class="nav"><span class="cur">${num}</span>/${String(total).padStart(2, "0")}${ARROW}</div>`;
 
-  return `<section class="slide" data-kind="${kind}"${cover ? ' data-cover="1"' : ""} data-fit="${sc.fsMin},${sc.fsMax},${sc.fbMin}"
+  return `<section class="slide" data-kind="${kind}"${cover ? ' data-cover="1"' : ""}${STORY ? ' data-story="1"' : ""} data-fit="${sc.fsMin},${sc.fsMax},${sc.fbMin}"
     style="--fs:${sc.fs};--fb:${sc.fb}">
     ${cover}${ghost}
     <header class="bar">
