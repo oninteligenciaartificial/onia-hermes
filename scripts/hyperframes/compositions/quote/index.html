@@ -2,7 +2,7 @@
 <html
   lang="es"
   data-composition-variables='[
-    {"id":"text","type":"string","label":"Texto","default":"Tu equipo, atendiendo mientras vos dormis"},
+    {"id":"text","type":"string","label":"Texto","default":"Tu equipo, atendiendo mientras vos dormís"},
     {"id":"attribution","type":"string","label":"Atribucion","default":""},
     {"id":"revealBy","type":"enum","label":"Revelado","default":"word","options":[{"value":"word","label":"Por palabra"},{"value":"line","label":"Por linea"}]},
     {"id":"accent","type":"color","label":"Acento","default":"#FF7A00"}
@@ -13,6 +13,16 @@
     <title>ONIA · Quote</title>
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
     <style>
+      /* Remotion aplica `box-sizing: border-box` de fabrica; replicarlo aca es
+         lo que hace que anchos y paddings caigan en el MISMO pixel que la
+         baseline. (Asumir content-box ensanchaba las tarjetas y sacaba a Quote
+         y LowerThird fuera del lienzo.) */
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
       html,
       body {
         margin: 0;
@@ -64,14 +74,6 @@
       .card {
         position: relative;
         width: 100%;
-        /* BUG FIX respecto del original de Remotion: alli la tarjeta declara
-           `width: width - stagePad*2` en content-box, asi que los 166u de padding
-           se SUMAN y la tarjeta se sale 124px del lienzo por la derecha — la
-           palabra "mientras" quedaba pisando el borde. La intencion evidente del
-           autor era ocupar exactamente el area con padding. `hyperframes check`
-           lo detecto (panel_out_of_canvas + canvas_overflow + 24 fallos de
-           contraste, porque el texto caia fuera de la tarjeta). */
-        box-sizing: border-box;
         border-radius: calc(var(--u) * 34);
         background: linear-gradient(158deg, var(--ink2) 0%, var(--ink) 62%);
         border: 1px solid var(--hairline);

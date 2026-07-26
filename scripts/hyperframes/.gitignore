@@ -1,4 +1,8 @@
+# Salida de render: son ~460 PNG (~45 MB) por pasada y se regeneran en ~20s por
+# composicion con `node render.mjs` (el render es determinista). No van a git:
+# el autosync los volveria a subir enteros en cada iteracion.
 .build/
 renders/
 snapshots/
 out/
+assets/*/

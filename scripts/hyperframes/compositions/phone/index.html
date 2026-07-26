@@ -2,7 +2,7 @@
 <html
   lang="es"
   data-composition-variables='[
-    {"id":"title","type":"string","label":"Titulo","default":"Reserva tu cita"},
+    {"id":"title","type":"string","label":"Titulo","default":"Reservá tu cita"},
     {"id":"subtitle","type":"string","label":"Subtitulo","default":"en 2 toques"},
     {"id":"image","type":"string","label":"Captura (ruta)","default":""},
     {"id":"accent","type":"color","label":"Acento","default":"#FF7A00"}
@@ -13,6 +13,16 @@
     <title>ONIA · Phone</title>
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
     <style>
+      /* Remotion aplica `box-sizing: border-box` de fabrica; replicarlo aca es
+         lo que hace que anchos y paddings caigan en el MISMO pixel que la
+         baseline. (Asumir content-box ensanchaba las tarjetas y sacaba a Quote
+         y LowerThird fuera del lienzo.) */
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
       html,
       body {
         margin: 0;
@@ -159,7 +169,7 @@
               <div class="notch"></div>
               <img id="phone-image" alt="" hidden />
               <div class="placeholder" id="phone-placeholder">
-                <h1 id="phone-title">Reserva tu cita</h1>
+                <h1 id="phone-title">Reservá tu cita</h1>
                 <p id="phone-subtitle">en 2 toques</p>
               </div>
             </div>

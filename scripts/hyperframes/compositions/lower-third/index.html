@@ -4,7 +4,7 @@
   data-composition-variables='[
     {"id":"eyebrow","type":"string","label":"Antetitulo","default":"ONIA"},
     {"id":"title","type":"string","label":"Titulo","default":"Dental Gest"},
-    {"id":"subtitle","type":"string","label":"Subtitulo","default":"gestion de clinicas dentales"},
+    {"id":"subtitle","type":"string","label":"Subtitulo","default":"gestión de clínicas dentales"},
     {"id":"accent","type":"color","label":"Acento","default":"#FF7A00"}
   ]'
 >
@@ -13,6 +13,16 @@
     <title>ONIA · LowerThird</title>
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
     <style>
+      /* Remotion aplica `box-sizing: border-box` de fabrica; replicarlo aca es
+         lo que hace que anchos y paddings caigan en el MISMO pixel que la
+         baseline. (Asumir content-box ensanchaba las tarjetas y sacaba a Quote
+         y LowerThird fuera del lienzo.) */
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
       html,
       body {
         margin: 0;
@@ -66,11 +76,6 @@
       .plate {
         position: relative;
         width: 100%;
-        /* BUG FIX respecto del original de Remotion: mismo caso que Quote — en
-           content-box los 44u de padding horizontal se suman al ancho y la placa
-           se sale ~49px del lienzo por la derecha (se comia la esquina
-           redondeada). Detectado por `hyperframes check` (panel_out_of_canvas). */
-        box-sizing: border-box;
         border-radius: calc(var(--u) * 26);
         background: linear-gradient(158deg, var(--ink2) 0%, var(--ink) 62%);
         border: 1px solid var(--hairline);
@@ -152,7 +157,7 @@
             <div class="textblock" id="lt-text">
               <div class="eyebrow" id="lt-eyebrow"><i></i><span></span></div>
               <div class="title" id="lt-title">Dental Gest</div>
-              <div class="subtitle" id="lt-subtitle">gestion de clinicas dentales</div>
+              <div class="subtitle" id="lt-subtitle">gestión de clínicas dentales</div>
             </div>
           </div>
         </div>
