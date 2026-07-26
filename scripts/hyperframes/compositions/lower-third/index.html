@@ -85,13 +85,19 @@
         opacity: 0;
       }
 
+      /* Regla de acento al pie, alineada con el texto, que se dibuja de izquierda
+         a derecha. Antes era una franja vertical en el borde izquierdo: patron
+         prohibido por las reglas de diseno de la casa (side-stripe border), lee a
+         plantilla de alerta y no a pieza disenada. Las tarjetas ya lo abandonaron;
+         el lower-third quedaba como la ultima que lo usaba. */
       .bar {
         position: absolute;
-        left: 0;
-        top: 0;
-        bottom: 0;
-        width: calc(var(--u) * 10);
-        background: linear-gradient(180deg, var(--accent), var(--accent-deep));
+        left: calc(var(--u) * 44);
+        bottom: calc(var(--u) * 16);
+        height: calc(var(--u) * 7);
+        width: calc(var(--u) * 150);
+        border-radius: 999px;
+        background: linear-gradient(90deg, var(--accent), var(--accent-deep));
         clip-path: inset(0 calc(var(--wipe) * 1%) 0 0);
       }
 

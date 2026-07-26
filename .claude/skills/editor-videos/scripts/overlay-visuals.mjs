@@ -214,11 +214,18 @@ overlays.forEach((ov, i) => {
         `overlay-visuals: AVISO overlays[${i}] la secuencia dura ${num(seqDur)}s pero la ventana pide ${num(dur)}s (se corta o se corta antes).`,
       );
     }
+    // -itsoffset CORRE la secuencia hasta su ventana. Sin esto la secuencia se
+    // decodifica desde su PTS 0 mientras `enable` solo la muestra en [start,end]:
+    // al llegar a `start` la secuencia ya avanzó (o ya terminó) y el apoyo se ve
+    // recortado por el medio, o directamente NO SE VE. Con el offset, el frame 0
+    // de la secuencia cae exactamente en `start`, que es lo que pide el plan.
     inputs.push(
       "-framerate",
       String(num(fps)),
       "-start_number",
       String(seq.startNumber),
+      "-itsoffset",
+      String(num(start)),
       "-t",
       String(num(end + 0.2)),
       "-i",
