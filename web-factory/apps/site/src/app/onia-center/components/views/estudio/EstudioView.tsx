@@ -25,7 +25,7 @@ function buildKpis(kpis: StudioOverview["kpis"]): KpiItem[] {
     { key: "cola", label: "En cola de corte", value: String(kpis.cutQueue), hint: "Necesitan tu OK", tone: "yellow" },
     { key: "listos", label: "Videos listos", value: String(kpis.videosReady), hint: kpis.videosReadyHint, tone: "green" },
     { key: "proceso", label: "En proceso", value: String(kpis.inProcess), hint: kpis.inProcessHint, tone: "blue" },
-    { key: "ahorro", label: "Ahorro vs editor", value: kpis.savingsLabel, hint: kpis.savingsHint, tone: "green" },
+    { key: "publicados", label: "Publicados", value: String(kpis.published), hint: kpis.publishedHint, tone: "green" },
   ];
 }
 

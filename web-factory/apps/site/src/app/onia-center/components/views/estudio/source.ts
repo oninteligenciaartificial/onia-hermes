@@ -1,5 +1,4 @@
 import type { CenterTone } from "@/app/onia-center/types";
-import { formatBs } from "@/app/onia-center/engine";
 import {
   getVideoProjectRows,
   getVideoCutRows,
@@ -142,19 +141,19 @@ export type StudioOverview = {
     videosReadyHint: string;
     inProcess: number;
     inProcessHint: string;
-    savingsLabel: string;
-    savingsHint: string;
+    published: number;
+    publishedHint: string;
   };
 };
 
-const creditsFormatter = new Intl.NumberFormat("es-BO", { maximumFractionDigits: 0 });
-function creditsLabel(value: number): string {
-  return creditsFormatter.format(value);
-}
+// Marcador de dato ausente. Regla de la casa: no fabricar — si el sync no trajo el
+// dato, se muestra el hueco, no un número plausible.
+const NO_DATA = "—";
 
-// Fallback si Supabase no trae provider_credits (balance real). El sync
-// (higgsfield-balance-sync.mjs) escribe el balance vivo leído por el MCP Higgsfield.
-const HIGGSFIELD_CREDITS = 2354.22;
+const creditsFormatter = new Intl.NumberFormat("es-BO", { maximumFractionDigits: 0 });
+function creditsLabel(value: number | null): string {
+  return value === null ? NO_DATA : creditsFormatter.format(value);
+}
 
 // El gasto IA se factura en USD (LiteLLM/OpenAI) y se muestra en USD. No se
 // convierte a Bs: la tasa quedó obsoleta con la flotación (26-jun-2026) y pegarla
@@ -350,11 +349,13 @@ export async function getCutQueue(): Promise<CutReview[]> {
   return cuts.filter((c) => c.review_key).map(mapCut);
 }
 
-// Créditos + plan reales de provider_credits; si no hay fila (sync aún no corrió o
-// Supabase no responde) cae a la constante de fallback. El plan vacío también cae.
-function resolveHiggsfield(balance: ProviderBalance | null): { credits: number; plan: string } {
+// Créditos + plan reales de provider_credits. Si no hay fila (el sync aún no corrió o
+// Supabase no responde) NO se inventa un saldo: credits = null y la vista muestra "—".
+// Un saldo viejo pintado como actual es peor que no mostrar nada — se decide gastar
+// créditos mirando ese número.
+function resolveHiggsfield(balance: ProviderBalance | null): { credits: number | null; plan: string } {
   if (!balance) {
-    return { credits: HIGGSFIELD_CREDITS, plan: HIGGSFIELD_FALLBACK_PLAN };
+    return { credits: null, plan: HIGGSFIELD_FALLBACK_PLAN };
   }
   return {
     credits: balance.credits,
@@ -402,8 +403,9 @@ export async function getStudioOverview(): Promise<StudioOverview> {
 
   // Gasto IA real (USD); fallback a la constante previa si no hay dato en cost_items.
   const aiSpend = resolveAiSpend(costs);
-  const spendMonthLabel = aiSpend ? aiSpend.monthLabel : formatUsd(178.16);
-  const spendHintLabel = aiSpend ? aiSpend.hint : `hoy ${formatUsd(6.15)}`;
+  // Sin fila en cost_items no se inventa un gasto: se muestra el hueco.
+  const spendMonthLabel = aiSpend ? aiSpend.monthLabel : NO_DATA;
+  const spendHintLabel = aiSpend ? aiSpend.hint : "sin dato de cost_items";
 
   const cutQueue = cuts.length;
   const videosReady = count("ready");
@@ -441,8 +443,12 @@ export async function getStudioOverview(): Promise<StudioOverview> {
       videosReadyHint: "listos p/ publicar",
       inProcess,
       inProcessHint: "en proceso",
-      savingsLabel: formatBs(9600, { compact: true }),
-      savingsHint: "estimado · mes",
+      // Antes acá vivía "Ahorro vs editor: Bs 9.600 · estimado". Era una constante
+      // inventada: ni el ahorro ni la tarifa de un editor existen en ninguna tabla.
+      // Se reemplaza por un conteo real de video_projects. Si algun dia se quiere
+      // medir ahorro, primero hay que guardar la tarifa de referencia en la DB.
+      published: count("published"),
+      publishedHint: "publicados",
     },
   };
 }
