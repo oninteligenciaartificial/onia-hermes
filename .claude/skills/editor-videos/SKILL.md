@@ -3,10 +3,12 @@ name: editor-videos
 description: >
   Use when editing, cutting, or producing a talking-head / vertical (TikTok, Reels, Shorts) or
   landscape video: removing long silences, filler words ("eh", "este", "o sea") and retakes;
-  adding burned karaoke subtitles; graphic overlays / lower-thirds; SFX and music; b-roll,
-  images or mockups; or turning raw footage into a finished clip. The ONIA "sin editores
-  humanos" pipeline (método Santiago). Trigger: "editá este video", "cortá los silencios",
-  "ponle subtítulos", "hacelo para TikTok".
+  adding burned karaoke subtitles; graphic overlays / lower-thirds; SFX and music with ducking;
+  transitions between cuts or clips; blurring / censoring faces to protect third parties'
+  identity; b-roll, images or mockups; or turning raw footage into a finished clip. The ONIA
+  "sin editores humanos" pipeline (método Santiago). Trigger: "editá este video", "cortá los
+  silencios", "ponle subtítulos", "hacelo para TikTok", "ponele efectos de sonido",
+  "censurá/difuminá las caras", "ponele transiciones".
 ---
 
 # Editor de Videos ONIA — edición 100% con código, sin editores humanos
@@ -74,9 +76,27 @@ HyperFrames (render + SFX), imagen barata. Validar la idea antes de generar.
    `node scripts/overlay-visuals.mjs --video in.mp4 --plan overlay-plan.json --out out.mp4`
    → superpone los PNG con timing y fade (`{overlays:[{asset,start,end,position,scale,fade}]}`); `--dry-run` imprime el ffmpeg.
    Para overlays animados/kinéticos más elaborados: `talking-head-recut` (HyperFrames).
-8. **SFX + música.** Eventos de la librería HyperFrames (`assets/sfx` del repo) sincronizados a los cortes/CTA. Bajarla con la skill `media-use` si no está.
-9. **Complementos.** `image-gen` MCP o modelo barato (ej. Gemini Flash-Lite Image) para mascot/thumbnails; Higgsfield (créditos 2354, [[higgsfield-models-roster]]) solo con OK.
-10. **Verificar + exportar.** Revisar frames en tiempos clave (sync, color, fades) → `renders/final.mp4`.
+8. **SFX — efectos de sonido** (pieza propia, PROBADA). `node scripts/sfx.mjs --video renders/cut.mp4 --plan scripts/sfx-plan.json --out renders/sfx.mp4`
+   → mezcla los efectos en el tiempo exacto con **ducking**: la voz baja ~5 dB con rampa
+   mientras suena el efecto y vuelve (medido: −4.8/−5.0 dB dentro de la ventana, 0.0 dB fuera).
+   Plan: `{sfx:[{asset,at,gain,duck}]}` — `asset` es una ruta O el nombre de un cue de la librería.
+   Una sola pasada de `filter_complex` (adelay + amix, `normalize=0`); el video se copia (`-c:v copy`).
+   Flags: `--lib --gain --duck-db --duck-attack --duck-release --duck-max --duck-mode expr|sidechain --list-lib --dry-run`.
+   Librería: la de HyperFrames (21 cues, `manifest.json` presente; **los .mp3 NO están versionados**)
+   + 3 placeholders sintetizados con ffmpeg en `assets/sfx/`. Ver `assets/sfx/README.md`.
+9. **Censurar caras** (pieza propia, PROBADA). `node scripts/blur-faces.mjs --video in.mp4 --out out.mp4 [--mode blur|pixelate|box]`
+   → protege la identidad de terceros (pacientes, gente en la calle). Detección con **YuNet**
+   (`scripts/blur-faces-detect.py`, OpenCV) + seguimiento + **relleno hacia adelante**.
+   **Siempre imprime cuántos frames tuvieron detección y cuáles NO**, y los tramos sin cubrir.
+   `--manual regiones.json` funciona SIN OpenCV (salida garantizada cuando la detección falla).
+   Flags: `--padding --every --hold --lead --score --strength --report --also-detect --dry-run`.
+   ⚠ **No es garantía de anonimato — revisar el render antes de publicar.**
+10. **Transiciones** (pieza propia, PROBADA). `node scripts/transitions.mjs --video renders/cut.mp4 --cutplan scripts/cutplan.json --out renders/tr.mp4`
+    → `xfade` (video) + `acrossfade` (audio) en las costuras del corte, leyendo `keep[]` del cutplan.
+    También `--clips a.mp4 b.mp4 …` (unir clips) y `--seams 3.2,7.8` (a mano).
+    Set acotado: `fade dissolve wipeleft wiperight slideup slidedown circleopen`. Default 0.3s.
+11. **Complementos.** `image-gen` MCP o modelo barato (ej. Gemini Flash-Lite Image) para mascot/thumbnails; Higgsfield (créditos 2354, [[higgsfield-models-roster]]) solo con OK.
+12. **Verificar + exportar.** Revisar frames en tiempos clave (sync, color, fades) → `renders/final.mp4`.
 
 ## Quick reference
 | Necesito | Herramienta | Costo |
@@ -89,12 +109,48 @@ HyperFrames (render + SFX), imagen barata. Validar la idea antes de generar.
 | Subtítulos karaoke (word-level) | `scripts/karaoke-captions.mjs` (.ass + ffmpeg) | gratis (local) |
 | Mockups / tarjetas de dato / marcos | `scripts/make-mockup.mjs` (HTML+CSS → PNG alpha) | gratis (local) |
 | Montar overlays con timing y fade | `scripts/overlay-visuals.mjs` | gratis (local) |
+| **Efectos de sonido + ducking** | `scripts/sfx.mjs` | gratis (local) |
+| **Censurar / difuminar caras** | `scripts/blur-faces.mjs` (+ `blur-faces-detect.py`, OpenCV/YuNet) | gratis (local) |
+| **Transiciones entre bloques o clips** | `scripts/transitions.mjs` (xfade + acrossfade) | gratis (local) |
 | Cargar una campaña como video_projects | `scripts/seed-campaign.mjs` (DRY-RUN → SQL) | gratis |
 | Subtítulos cinematográficos (embed detrás del sujeto) | `embedded-captions` | gratis (local) |
 | Overlays / lower-thirds / mockups | `talking-head-recut` | gratis (local) |
 | SFX / música | librería HyperFrames | gratis |
 | Imágenes / b-roll / mascot | `image-gen` MCP / modelo barato | ~gratis |
 | Video generativo / avatar | Higgsfield | **pago → OK Sergio** |
+
+## ⚠ Censurar caras — lo que NO se puede prometer
+`blur-faces.mjs` protege identidad de terceros, así que **la seguridad va antes que la prolijidad**:
+mejor difuminar de más que destapar una cara un frame. Reglas de la casa:
+
+- **La detección automática NO es garantía de anonimato. Nunca decirle a nadie que lo es.**
+  Siempre revisar el render completo antes de publicar.
+- El script imprime **cuántos frames muestreados tuvieron cara y cuántos no**, la **cobertura
+  temporal** y los **tramos SIN tapar**. Ese bloque se lee, no se saltea.
+- Si el detector no encuentra NADA, el script **falla y no genera archivo** — sacar un video sin
+  censurar creyendo que está censurado es peor que no tener salida.
+- Cuando la detección falla (cara de perfil, muy chica, tapada, video degradado): `--manual
+  regiones.json` (`{regions:[{x,y,w,h,start,end}]}`). No necesita OpenCV ni el modelo.
+- Fuerza de tapado: `box` (rectángulo sólido) es el único **irreversible**; `pixelate` (8 bloques
+  a lo ancho) es fuerte; `blur` es el default y el más prolijo. Para material sensible de verdad
+  → `box` o `pixelate`.
+- Detector: **YuNet** (`assets/models/face_detection_yunet_2023mar.onnx`, 232 KB, opencv_zoo
+  oficial). OpenCV 5 **eliminó** `CascadeClassifier` y el DNN Caffe → haar y el res10 SSD ya no
+  existen ahí. Requisito: `python -m pip install opencv-python`.
+
+## Transiciones — cuándo usar cuál
+Duración corta siempre (**200–400 ms**; arriba de 0.5s se ve amateur y el script avisa).
+Cada transición **acorta** el video su propia duración: los dos bloques se solapan.
+
+| Transición | Cuándo |
+| --- | --- |
+| `fade` | Default. Neutra, sirve siempre; ante la duda, esta. |
+| `dissolve` | Salto de tema de golpe; más sucia/orgánica. |
+| `wipeleft` | Avanzar: "y el siguiente punto es…". |
+| `wiperight` | Volver a algo ya dicho. |
+| `slideup` | La mejor en 9:16 — es el gesto del feed. Ideal para listas. |
+| `slidedown` | Poco: en vertical se lee como "deshacer". |
+| `circleopen` | **Reservar para el remate / CTA final.** |
 
 ## Common mistakes
 - **Cortar sin publicar la review + mostrar la tabla + preview** (viola la regla de oro). Correr
@@ -104,6 +160,11 @@ HyperFrames (render + SFX), imagen barata. Validar la idea antes de generar.
 - **Subtitular todo como embed** — la mayoría va al rail; embed solo el pico (ver `embedded-captions`).
 - **Gastar en Higgsfield/AssemblyAI sin OK.** Default gratis.
 - Usar el modelo distil en Speaches para español (traduce a inglés) — forzar `faster-whisper-small`.
+- **Prometer que las caras quedaron anónimas** sin haber mirado el render. La detección falla; el
+  bloque "HONESTIDAD" del script dice exactamente dónde. Cubrir los huecos con `--manual`.
+- **Mezclar SFX sin ducking** (`duck:false` en todo): el efecto compite con la voz y suena pegoteado.
+- `amix` sin `normalize=0`: divide entre N y todos los efectos quedan mucho más bajos que el plan.
+- Transiciones largas (>0.5s) o `circleopen` en cada costura: se ve amateur. Corto y `fade` por defecto.
 - HyperFrames no determinista (`Math.random`/`Date.now`) → render roto. Solo lógica determinista.
 
 ## Relacionadas
