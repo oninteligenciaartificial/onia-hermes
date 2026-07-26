@@ -44,6 +44,7 @@ import { pathToFileURL } from "node:url";
 import { createBotConfig, DEFAULT_CONFIG } from "./config.mjs";
 import { createState, step, markHumanTakeover, LLM_PENDING } from "./bot-engine.mjs";
 import { createStore } from "./persistence.mjs";
+import { getAvailableSlots as getAvailableSlotsFromCalcom } from "./calcom-availability.mjs";
 
 // ---------------------------------------------------------------------------
 // Entrada
