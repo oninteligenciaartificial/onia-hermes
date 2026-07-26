@@ -1,0 +1,279 @@
+// ONIA — Chatbot propio (el que atiende "DEMO"): ADAPTADOR DE CANAL para CHATWOOT.
+//
+// Traduce el webhook de Chatwoot (`message_created` · `conversation_created`) al contrato que ya
+// consume run-turn.mjs, corre el turno con el MOTOR SIN CAMBIOS (bot-engine.mjs) y postea la
+// respuesta de vuelta a la conversación vía la API de Chatwoot. Mismo patrón que el resto de
+// hermes-content/deploy/vps-ops/bot/*.mjs: TOLERANTE POR CONTRATO, nunca tira, exit 0 siempre.
+//
+// FORMAS REALES DEL WEBHOOK (capturadas en vivo contra la cuenta 2 de Chatwoot el 2026-07-26,
+// con webhook.site como receptor de prueba — no son una suposición de la doc oficial):
+//   message_created:      { event, id (=id del MENSAJE), content, message_type: "incoming"|
+//                           "outgoing"|..., private, created_at (ISO), sender, inbox, account,
+//                           conversation: { id (=id de la CONVERSACION), contact_inbox, ... } }
+//   conversation_created: el payload ES la conversación: { event, id (=id de la CONVERSACION),
+//                           messages: [...] (vacio si se creo sin mensaje inicial), ... }. Los
+//                           mensajes anidados en `conversation.messages[]` (de CUALQUIER evento)
+//                           usan `message_type` NUMERICO (0=incoming, 1=outgoing) y `created_at`
+//                           en epoch-segundos, a diferencia del nivel superior (string + ISO).
+//
+// REGLA DE ORO (la mas facil de romper, spec del pedido): ignorar TODO mensaje `outgoing` o
+// `private`. Si no, la respuesta que el bot postea dispara su PROPIO webhook de vuelta
+// (Chatwoot manda message_created para TODO mensaje, entrante y saliente) y el bot termina
+// "contestandose a si mismo" en loop infinito. Probado explicitamente mas abajo.
+//
+// IDEMPOTENCIA: no hace falta una tabla nueva. El `message_key` que se arma aca
+// (`chatwoot:<conversationId>:<messageId>`) es EL MISMO dedup que ya usa run-turn.mjs vía
+// `store.claimInbound` (bot_messages.message_key unique). Si Chatwoot reintenta el webhook,
+// runTurn() devuelve `duplicate:true` y `send:[]`: este adaptador simplemente no postea nada.
+//
+// ENTRADA (stdin, invocado igual que run-turn.mjs vía SSH/docker exec desde n8n): el JSON crudo
+// del webhook de Chatwoot, una linea.
+// SALIDA (stdout): una linea JSON { ok, skipped, reason?, duplicate, sent: [{text, posted}], warnings }
+//
+// Config (NO son secretos — son la URL pública y el id de cuenta de Chatwoot, iguales para
+// cualquiera que abra la instancia):
+//   CHATWOOT_BASE_URL     default "https://onia-chatbot-chatwoot.hqdqgh.easypanel.host"
+//   CHATWOOT_ACCOUNT_ID   default "2"
+// Secreto (NUNCA hardcodear, NUNCA loguear el valor):
+//   CHATWOOT_API_TOKEN    token de acceso de la API (de la cuenta 2, user_id=2). Se lee del
+//                         entorno en runtime; en n8n va como credencial "Header Auth"/env del
+//                         contenedor onia-center, igual que LITELLM_KEY (ver N8N_WORKFLOW.md).
+//
+// Spec: hermes-content/docs/ONIA_CHATBOT_PROPIO_SPEC_20260725.md
+// Workflow n8n: hermes-content/deploy/vps-ops/bot/N8N_WORKFLOW.md (Chatwoot)
+
+import { pathToFileURL } from "node:url";
+
+import { runTurn as realRunTurn } from "./run-turn.mjs";
+
+const ENV_BASE_URL = () => process.env.CHATWOOT_BASE_URL || "https://onia-chatbot-chatwoot.hqdqgh.easypanel.host";
+const ENV_ACCOUNT_ID = () => process.env.CHATWOOT_ACCOUNT_ID || "2";
+const ENV_TOKEN = () => process.env.CHATWOOT_API_TOKEN || process.env.CHATWOOT_TOKEN || "";
+
+// ---------------------------------------------------------------------------
+// Helpers puros
+// ---------------------------------------------------------------------------
+
+/** message_type llega como string arriba ("incoming"/"outgoing") pero numerico adentro de conversation.messages[] (0/1). */
+export function normalizeMessageType(value) {
+  if (value === "incoming" || value === 0 || value === "0") return "incoming";
+  if (value === "outgoing" || value === 1 || value === "1") return "outgoing";
+  return value === undefined || value === null ? "" : String(value);
+}
+
+/** created_at llega como ISO arriba, pero como epoch-segundos adentro de conversation.messages[]. */
+export function toIsoFlexible(value) {
+  if (value === undefined || value === null || value === "") return null;
+  if (typeof value === "number") return new Date(value * 1000).toISOString();
+  if (typeof value === "string" && /^\d+$/.test(value)) return new Date(Number(value) * 1000).toISOString();
+  const ms = Date.parse(value);
+  return Number.isFinite(ms) ? new Date(ms).toISOString() : null;
+}
+
+/** El nombre para mostrar: el contacto, o su identifier si no puso nombre. Nunca se inventa. */
+function displayNameOf(sender) {
+  if (!sender || typeof sender !== "object") return null;
+  return sender.name || sender.identifier || null;
+}
+
+/** kind: text | voice | attachment — solo cuando NO hay texto y SI hay adjuntos (igual que Telegram). */
+function kindOf(text, attachments) {
+  if (text) return "text";
+  const list = Array.isArray(attachments) ? attachments : [];
+  if (list.length === 0) return "text";
+  const fileType = String(list[0]?.file_type || "").toLowerCase();
+  return fileType === "audio" ? "voice" : "attachment";
+}
+
+function buildTurn({ conversationId, messageId, content, attachments, sender, createdAtIso }) {
+  const text = String(content || "").trim();
+  return {
+    skip: false,
+    turn: {
+      channel: "chatwoot",
+      contact_ref: String(conversationId),
+      display_name: displayNameOf(sender),
+      kind: kindOf(text, attachments),
+      text,
+      message_key: `chatwoot:${conversationId}:${messageId}`,
+      received_at: createdAtIso || new Date().toISOString(),
+    },
+    meta: { conversationId: String(conversationId), messageId: String(messageId) },
+  };
+}
+
+function fromMessageCreated(payload) {
+  const conversationId = payload?.conversation?.id ?? payload?.conversation_id ?? null;
+  if (!conversationId) return { skip: true, reason: "sin_conversation_id" };
+  if (payload.private === true) return { skip: true, reason: "nota_privada" };
+  const type = normalizeMessageType(payload.message_type);
+  if (type !== "incoming") return { skip: true, reason: `mensaje_no_entrante:${type || "desconocido"}` };
+  const messageId = payload.id;
+  if (!messageId) return { skip: true, reason: "sin_message_id" };
+  return buildTurn({
+    conversationId,
+    messageId,
+    content: payload.content,
+    attachments: payload.attachments,
+    sender: payload.sender,
+    createdAtIso: toIsoFlexible(payload.created_at),
+  });
+}
+
+function fromConversationCreated(payload) {
+  const conversationId = payload?.id ?? null;
+  if (!conversationId) return { skip: true, reason: "sin_conversation_id" };
+  const messages = Array.isArray(payload.messages) ? payload.messages : [];
+  const first = messages[0];
+  // Conversacion recien creada, todavia sin mensaje: no hay nada que contestar. El mensaje real
+  // llega en su PROPIO evento message_created a continuacion (Chatwoot manda los dos).
+  if (!first) return { skip: true, reason: "conversacion_sin_mensajes_todavia" };
+  if (first.private === true) return { skip: true, reason: "nota_privada" };
+  const type = normalizeMessageType(first.message_type);
+  if (type !== "incoming") return { skip: true, reason: `mensaje_no_entrante:${type || "desconocido"}` };
+  if (!first.id) return { skip: true, reason: "sin_message_id" };
+  return buildTurn({
+    conversationId,
+    messageId: first.id,
+    content: first.content,
+    attachments: first.attachments,
+    sender: first.sender,
+    createdAtIso: toIsoFlexible(first.created_at),
+  });
+}
+
+/**
+ * Webhook crudo de Chatwoot -> { skip:true, reason } | { skip:false, turn, meta }.
+ * PURO: no toca red, no llama al motor. Es lo primero que corre y lo mas facil de testear.
+ */
+export function parseChatwootWebhook(payload) {
+  const event = payload?.event;
+  if (event === "message_created") return fromMessageCreated(payload);
+  if (event === "conversation_created") return fromConversationCreated(payload);
+  return { skip: true, reason: `evento_no_manejado:${event || "desconocido"}` };
+}
+
+// ---------------------------------------------------------------------------
+// Cliente de Chatwoot — TOLERANTE POR CONTRATO (nunca tira), mismo patron que persistence.mjs
+// ---------------------------------------------------------------------------
+
+/**
+ * @param {object} [options] { baseUrl, accountId, token, fetch, timeoutMs }
+ * @returns cliente tolerante. `client.enabled === false` => sin token/config: no manda nada.
+ */
+export function createChatwootClient(options = {}) {
+  const baseUrl = String(options.baseUrl ?? ENV_BASE_URL()).replace(/\/+$/, "");
+  const accountId = String(options.accountId ?? ENV_ACCOUNT_ID());
+  const token = String(options.token ?? ENV_TOKEN());
+  const doFetch = options.fetch || globalThis.fetch;
+  const timeoutMs = Number(options.timeoutMs) > 0 ? Number(options.timeoutMs) : 8000;
+  const enabled = Boolean(baseUrl && accountId && token && typeof doFetch === "function");
+  const warnings = [];
+
+  async function sendMessage(conversationId, text) {
+    const trimmed = String(text || "").trim();
+    if (!trimmed) return null;
+    if (!enabled) {
+      warnings.push("chatwoot: sin token/config (modo sin envío)");
+      return null;
+    }
+    try {
+      const res = await doFetch(`${baseUrl}/api/v1/accounts/${accountId}/conversations/${conversationId}/messages`, {
+        method: "POST",
+        headers: { api_access_token: token, "Content-Type": "application/json" },
+        body: JSON.stringify({ content: trimmed, message_type: "outgoing" }),
+        signal: AbortSignal.timeout ? AbortSignal.timeout(timeoutMs) : undefined,
+      });
+      const raw = await res.text();
+      if (!res.ok) {
+        warnings.push(`chatwoot: HTTP ${res.status} ${raw.slice(0, 160)}`);
+        return null;
+      }
+      try {
+        return JSON.parse(raw);
+      } catch {
+        return {};
+      }
+    } catch (error) {
+      warnings.push(`chatwoot: ${error?.message || error}`);
+      return null;
+    }
+  }
+
+  return { enabled, warnings, sendMessage };
+}
+
+// ---------------------------------------------------------------------------
+// Orquestacion de un webhook
+// ---------------------------------------------------------------------------
+
+/**
+ * @param {object} payload  webhook crudo de Chatwoot
+ * @param {object} [deps]   { client?, runTurn?, ...opciones de createChatwootClient/runTurn }
+ * @returns {Promise<object>} { ok, skipped, reason?, duplicate, sent:[{text,posted}], warnings }
+ */
+export async function runChatwootTurn(payload, deps = {}) {
+  const parsed = parseChatwootWebhook(payload);
+  if (parsed.skip) {
+    return { ok: true, skipped: true, reason: parsed.reason, duplicate: false, sent: [], warnings: [] };
+  }
+
+  const runTurnFn = typeof deps.runTurn === "function" ? deps.runTurn : realRunTurn;
+  const turnResult = await runTurnFn(parsed.turn, deps);
+
+  const client = deps.client || createChatwootClient(deps);
+  const sent = [];
+  if (turnResult && turnResult.ok !== false && Array.isArray(turnResult.send)) {
+    for (const reply of turnResult.send) {
+      if (!reply?.text) continue;
+      // eslint-disable-next-line no-await-in-loop -- el orden de los mensajes importa (disclosure antes que cuerpo)
+      const posted = await client.sendMessage(parsed.meta.conversationId, reply.text);
+      sent.push({ text: reply.text, posted: Boolean(posted) });
+    }
+  }
+
+  return {
+    ok: Boolean(turnResult && turnResult.ok !== false),
+    skipped: false,
+    duplicate: Boolean(turnResult && turnResult.duplicate),
+    conversationId: parsed.meta.conversationId,
+    messageId: parsed.meta.messageId,
+    sent,
+    warnings: [...(client.warnings || []), ...((turnResult && turnResult.warnings) || [])],
+  };
+}
+
+// ---------------------------------------------------------------------------
+// main — solo cuando se ejecuta como binario, no cuando lo importa un test
+// ---------------------------------------------------------------------------
+
+function readStdin() {
+  return new Promise((resolve) => {
+    if (process.stdin.isTTY) return resolve("");
+    let data = "";
+    process.stdin.setEncoding("utf8");
+    process.stdin.on("data", (chunk) => {
+      data += chunk;
+    });
+    process.stdin.on("end", () => resolve(data));
+    process.stdin.on("error", () => resolve(data));
+  });
+}
+
+export async function main() {
+  try {
+    const raw = (await readStdin()).trim();
+    if (!raw) throw new Error("sin payload: mandá el webhook de Chatwoot por stdin");
+    const payload = JSON.parse(raw);
+    const result = await runChatwootTurn(payload);
+    process.stdout.write(`${JSON.stringify(result)}\n`);
+  } catch (error) {
+    // Falla hacia el silencio: n8n no reintenta con un error, y no se manda nada dos veces.
+    process.stdout.write(
+      `${JSON.stringify({ ok: false, skipped: false, duplicate: false, sent: [], error: String(error?.message || error).slice(0, 300) })}\n`,
+    );
+  }
+}
+
+const invokedDirectly = Boolean(process.argv[1]) && import.meta.url === pathToFileURL(process.argv[1]).href;
+if (invokedDirectly) main();

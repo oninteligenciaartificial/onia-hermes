@@ -104,6 +104,25 @@ function parseEnvSlots() {
   });
 }
 
+/**
+ * Config REAL de producción: como buildConfig(), pero si nadie fijó horarios a mano (ni el
+ * turno trae `slots`, ni ONIA_BOT_SLOTS) intenta traer disponibilidad real de Cal.com ANTES de
+ * caer al placeholder DEMO_SLOTS (spec §9.1). Sólo la usa runTurn() cuando no le inyectan
+ * `deps.config` (o sea: producción real, nunca los tests — todos inyectan config explícito).
+ * Tolerante por contrato: si Cal.com no responde, se queda con buildConfig(input) tal cual.
+ */
+export async function resolveConfig(input, deps = {}) {
+  const config = buildConfig(input);
+  const explicitSlots = Array.isArray(input.slots) && input.slots.length > 0;
+  const envSlots = Boolean(String(process.env.ONIA_BOT_SLOTS || "").trim());
+  if (explicitSlots || envSlots) return config; // horario ya fijado a mano: no se pisa
+
+  const getSlots = typeof deps.getAvailableSlots === "function" ? deps.getAvailableSlots : getAvailableSlotsFromCalcom;
+  const live = await getSlots({ nowIso: input.received_at || input.receivedAt }, deps);
+  if (!live || !Array.isArray(live.slots) || live.slots.length === 0) return config;
+  return createBotConfig({ slots: live.slots, dryRun: config.dryRun });
+}
+
 // ---------------------------------------------------------------------------
 // LLM (unica rama off-guion). Corre en LiteLLM, ya desplegado. Si no hay key: texto seguro.
 // ---------------------------------------------------------------------------
@@ -240,7 +259,7 @@ function buildResponse({ state, stageBefore, config, replies, result, applied, s
  */
 export async function runTurn(input, deps = {}) {
   const nowIso = deps.nowIso || new Date().toISOString();
-  const config = deps.config || buildConfig(input);
+  const config = deps.config || (await resolveConfig(input, deps));
   const seed = seedFrom(input);
   const store = deps.store || createStore();
   const llm = typeof deps.llm === "function" ? deps.llm : askLiteLLM;

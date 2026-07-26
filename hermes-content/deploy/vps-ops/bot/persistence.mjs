@@ -37,7 +37,7 @@ export const PIPELINE_STATUSES = Object.freeze([
 ]);
 
 /** CHECK de bot_conversations.channel. */
-export const CHANNELS = Object.freeze(["sim", "telegram", "whatsapp", "instagram"]);
+export const CHANNELS = Object.freeze(["sim", "telegram", "whatsapp", "instagram", "chatwoot"]);
 
 /** onia_center.leads.channel es texto libre; estas son las etiquetas que usa el panel. */
 const CHANNEL_LABEL = Object.freeze({
@@ -45,6 +45,7 @@ const CHANNEL_LABEL = Object.freeze({
   telegram: "Telegram",
   whatsapp: "WhatsApp",
   instagram: "Instagram",
+  chatwoot: "Chatwoot",
 });
 
 const PRIORITIES = Object.freeze(["alta", "media", "baja"]);

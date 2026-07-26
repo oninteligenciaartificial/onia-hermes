@@ -37,6 +37,7 @@ import { pathToFileURL } from "node:url";
 import { DEFAULT_CONFIG, createBotConfig, slotsPending } from "./config.mjs";
 import { buildFollowUp, followUpDue } from "./bot-engine.mjs";
 import { createStore, stateFromRow } from "./persistence.mjs";
+import { getAvailableSlots as getAvailableSlotsFromCalcom } from "./calcom-availability.mjs";
 
 /** Estados donde el follow-up tiene sentido (mismos que el barrido en SQL). */
 export const FOLLOWUP_STAGES = Object.freeze(["esperando_calificacion", "esperando_horario"]);
@@ -92,6 +93,24 @@ export function buildConfig(args = {}) {
   const slots = parseSlotsSpec(args.slots || process.env.ONIA_BOT_SLOTS || "");
   if (slots) overrides.slots = slots;
   return Object.keys(overrides).length ? createBotConfig(overrides) : DEFAULT_CONFIG;
+}
+
+/**
+ * Config REAL del barrido en producción: como buildConfig(), pero si nadie fijó los 2 horarios
+ * a mano (ni `--slots`, ni ONIA_BOT_SLOTS) intenta traer disponibilidad real de Cal.com antes de
+ * caer al placeholder DEMO_SLOTS (spec §9.1) — así el follow-up M3 deja de estar bloqueado por
+ * un horario dictado a mano. Sólo la usa main() (el binario real); las 91 pruebas existentes
+ * siguen usando buildConfig() sincrono e inyectable, sin red.
+ */
+export async function resolveConfig(args = {}, deps = {}) {
+  const config = buildConfig(args);
+  const explicit = Boolean(args.slots || process.env.ONIA_BOT_SLOTS);
+  if (explicit) return config; // Sergio (o el operador) ya fijó los horarios a mano: no se pisa
+
+  const getSlots = typeof deps.getAvailableSlots === "function" ? deps.getAvailableSlots : getAvailableSlotsFromCalcom;
+  const live = await getSlots({ nowIso: deps.nowIso }, deps);
+  if (!live || !Array.isArray(live.slots) || live.slots.length === 0) return config;
+  return createBotConfig({ slots: live.slots, dryRun: config.dryRun });
 }
 
 // ---------------------------------------------------------------------------
@@ -300,7 +319,7 @@ export async function main(argv = process.argv.slice(2)) {
     // UNICO Date.now() del archivo, y en el borde: si no vino --now, se sella aca y viaja como
     // parametro. La logica de adentro nunca mira el reloj.
     const nowIso = args.now || new Date().toISOString();
-    const config = buildConfig(args);
+    const config = await resolveConfig(args, { nowIso });
     const result = await runFollowUpSweep({ nowIso, emit: args.emit, limit: args.limit }, { config });
     const asJson = args.emit || args.json;
     process.stdout.write(`${asJson ? JSON.stringify(result) : renderHuman(result)}\n`);

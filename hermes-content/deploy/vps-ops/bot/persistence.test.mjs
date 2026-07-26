@@ -469,7 +469,7 @@ test("claves deterministas: el mismo prospecto no genera dos leads", () => {
 });
 
 test("safeChannel respeta el CHECK de la tabla", () => {
-  for (const channel of ["sim", "telegram", "whatsapp", "instagram"]) assert.equal(safeChannel(channel), channel);
+  for (const channel of ["sim", "telegram", "whatsapp", "instagram", "chatwoot"]) assert.equal(safeChannel(channel), channel);
   assert.equal(safeChannel("tiktok"), "sim");
 });
 

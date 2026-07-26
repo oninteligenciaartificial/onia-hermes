@@ -13,7 +13,7 @@ create table if not exists onia_center.bot_conversations (
   id uuid primary key default gen_random_uuid(),
   conversation_key text not null unique,          -- '<channel>:<contact_ref>'
   channel text not null default 'sim' check (
-    channel in ('sim', 'telegram', 'whatsapp', 'instagram')
+    channel in ('sim', 'telegram', 'whatsapp', 'instagram', 'chatwoot')
   ),
   contact_ref text not null,                      -- chat_id (telegram) | wa_id ult. 8 digitos | ig id
   display_name text,

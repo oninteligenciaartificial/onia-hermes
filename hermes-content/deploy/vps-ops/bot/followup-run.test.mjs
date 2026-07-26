@@ -25,6 +25,7 @@ import {
   parseArgs,
   parseSlotsSpec,
   renderHuman,
+  resolveConfig,
   runFollowUpSweep,
   skipReason,
 } from "./followup-run.mjs";
@@ -398,6 +399,37 @@ test("parseSlotsSpec / buildConfig: los horarios entran por CLI o por env, sin i
   ]);
   assert.equal(buildConfig({}), DEFAULT_CONFIG, "sin overrides no se clona el config");
   assert.equal(buildConfig({ slots: "jueves 15:00|viernes 10:00" }).slots[0].label, "jueves 15:00");
+});
+
+// ---------------------------------------------------------------------------
+// 7. resolveConfig: Cal.com destraba el placeholder de los 2 horarios, solo en main() real
+// ---------------------------------------------------------------------------
+
+test("resolveConfig: con --slots explicito NO llama a Cal.com", async () => {
+  let called = false;
+  const getAvailableSlots = async () => {
+    called = true;
+    return { slots: [], source: "calcom", warnings: [] };
+  };
+  const config = await resolveConfig({ slots: "jueves 15:00@2026-07-30T19:00:00Z|viernes 10:00" }, { getAvailableSlots });
+  assert.equal(called, false);
+  assert.equal(config.slots[0].label, "jueves 15:00");
+});
+
+test("resolveConfig: sin --slots ni ONIA_BOT_SLOTS, si Cal.com responde reemplaza el placeholder", async () => {
+  const live = [
+    { key: "A", label: "lun 27/07 14:00", startAt: "2026-07-27T18:00:00Z", pending: false },
+    { key: "B", label: "lun 27/07 16:00", startAt: "2026-07-27T20:00:00Z", pending: false },
+  ];
+  const getAvailableSlots = async () => ({ slots: live, source: "calcom", warnings: [] });
+  const config = await resolveConfig({}, { getAvailableSlots, nowIso: NOW });
+  assert.deepEqual(config.slots, live);
+});
+
+test("resolveConfig: si Cal.com no responde, cae al DEFAULT_CONFIG (placeholder) sin tirar", async () => {
+  const getAvailableSlots = async () => ({ slots: null, source: "error", warnings: ["calcom: caido"] });
+  const config = await resolveConfig({}, { getAvailableSlots });
+  assert.equal(config, DEFAULT_CONFIG);
 });
 
 test("skipReason nombra el motivo exacto (es lo que Sergio lee en el dry-run)", () => {
