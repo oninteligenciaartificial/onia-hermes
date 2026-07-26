@@ -148,6 +148,14 @@ Plataforma horizontal por créditos (Dapta clone) · granja de celulares · TikT
 - **Ventas**: warm leads, demos, cierres, contadores-canal. (Camila entra SOLO en cierre cuando haya volumen.)
 - **Decisiones de negocio**: naming, precios, gasto, contratos.
 
+### El principio que define el carril de Arthur
+
+Sergio construye la **oferta** (plataforma, producto, fiscal) y **cierra ventas**. El cuello de
+botella real no es oferta — es **demanda** (0 clientes con todo construido). Entonces Arthur
+no complementa construyendo más producto: **complementa generando demanda**. Su carril es el
+motor que llena el embudo que Sergio cierra. Métrica única: **demos agendadas atribuibles**
+(también es su forma de pago, decidida 2026-07-26).
+
 ### Arthur — carril CONTENIDO (Higgsfield + fábrica de video)
 Paquete concreto (usa lo ya construido, no construye plataforma):
 1. **Producción Higgsfield/Reels**: sacar adelante la serie "Radar IA" (ep.001 espera aprobación), banco de contenido para DentalGest ("Clínicas Sin Pacientes Perdidos") y material de demo.
