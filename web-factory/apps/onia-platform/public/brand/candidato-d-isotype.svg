@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" role="img" aria-label="onia">
+  <title>onia — candidato D, isotipo</title>
+  <desc>La "o" cuadrada del wordmark con la barra verde vertical adentro: el boton de encendido (circulo + barra, IEC). Mismos dos primitivos del lockup (anillo cuadrado + barra ON #3EA639).</desc>
+  <style>
+    .ink { fill: #141A17; }
+    @media (prefers-color-scheme: dark) {
+      .ink { fill: #ECEFED; }
+    }
+  </style>
+  <path class="ink" fill-rule="evenodd" d="M22 4 H58 A18 18 0 0 1 76 22 V58 A18 18 0 0 1 58 76 H22 A18 18 0 0 1 4 58 V22 A18 18 0 0 1 22 4 Z M26 20 Q20 20 20 26 V54 Q20 60 26 60 H54 Q60 60 60 54 V26 Q60 20 54 20 Z"/>
+  <rect x="32" y="24" width="16" height="32" rx="4" fill="#3EA639"/>
+</svg>
