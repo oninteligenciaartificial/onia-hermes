@@ -38,17 +38,23 @@ export const Card: React.FC<CardProps> = ({
         ...style,
       }}
     >
-      {/* riel de acento */}
+      {/* Regla de acento: barra CORTA al pie, alineada con el texto, que se dibuja
+          de izquierda a derecha al entrar. Antes era una franja vertical de 12px en
+          el borde izquierdo — patrón prohibido por las reglas de diseño de la casa
+          (side-stripe border): lee a plantilla de alerta, no a pieza diseñada. Una
+          regla tipográfica corta hace el mismo trabajo de acento y de entrada
+          animada, pero es un recurso editorial deliberado. */}
       <div
         style={{
           position: "absolute",
-          left: 0,
-          top: 0,
-          bottom: 0,
-          width: u(width, 12),
-          transformOrigin: "top",
-          transform: `scaleY(${railProgress})`,
-          background: `linear-gradient(180deg, ${t.accent}, ${t.accentDeep})`,
+          left: u(width, 84),
+          bottom: u(width, 30),
+          width: u(width, 132),
+          height: u(width, 7),
+          borderRadius: u(width, 7),
+          transformOrigin: "left",
+          transform: `scaleX(${railProgress})`,
+          background: `linear-gradient(90deg, ${t.accent}, ${t.accentDeep})`,
         }}
       />
       {/* filo superior de luz — separa "diseñado" de "div con sombra" */}
