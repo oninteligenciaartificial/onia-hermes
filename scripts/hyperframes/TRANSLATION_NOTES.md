@@ -193,13 +193,38 @@ mostrando el tramo equivocado del clip (su t=1.0…3.0, no su comienzo).
 
 ## 6. Evaluación
 
-### 6.1 Corpus del skill (T1–T4)
+### 6.1 Corpus del skill (T1–T4) — corrido completo
 
-Ver `hyperframes check` + el informe en el reporte de la sesión. T4 (escape
-hatch, 8 casos de lint) pasa 8/8. T1–T3 requieren descargar el
-`chrome-headless-shell` propio de cada fixture y apuntar `run.sh` a un CLI
-compilado en `packages/cli/dist/cli.js` (asume estar dentro del monorepo de
-HyperFrames, no de un consumidor).
+| Tier | Forma | mean medido | umbral | baseline del skill | veredicto |
+| ---- | ----- | ----------- | ------ | ------------------ | --------- |
+| T1 | fade-in de un elemento | **0.9662** | 0.95 | 0.974 | pasa |
+| T2 | multi-escena + spring + audio + imagen | **0.9839** | 0.95 | 0.985 | pasa |
+| T3 | data-driven + subcomponentes + contador | **0.9448** | 0.90 | 0.953 | pasa |
+| T4 | escape hatch (8 casos de lint) | **8/8** | — | 8/8 | pasa |
+
+Los −0.008 de T1 y T3 contra la baseline documentada son deriva de máquina/fuente
+— el propio `eval.md` avisa que los fixtures re-renderizados en otro hardware
+derivan ~0.01. **Las 4 tiers pasan su umbral.**
+
+#### Fricciones para correr el corpus fuera del monorepo de HyperFrames
+
+Ninguna es del porte; quedan anotadas para el próximo que lo corra en Windows:
+
+1. **`MAX_PATH`.** Corriendo desde `.agents/skills/…` dentro del worktree, la ruta
+   del `chrome-headless-shell.exe` de cada fixture da **280 caracteres** (límite
+   260, long paths deshabilitado). `spawn` de Node devuelve ENOENT aunque el .exe
+   exista y corra a mano. Se resolvió copiando el skill a `C:\hf\s` (ruta de 162).
+2. **`run.sh` asume el monorepo:** busca el CLI en `$REPO_ROOT/packages/cli/dist/cli.js`
+   con `REPO_ROOT = <skill>/../..`. Desde un consumidor no existe. Se resolvió con
+   un forwarder de una línea a la copia de npx.
+3. **`python3` no existe en este Windows** (el alias del Store lo intercepta y no
+   se puede pisar por PATH porque la ruta lleva `C:` y el `:` parte el PATH).
+   `render_diff.sh`, `run.sh` y `lint_source.py` lo invocan.
+4. **El `cp -r` pierde el bit de ejecución**, y `run.sh` invoca `$DIFF` directo;
+   sin +x se va por la rama de error y reporta `fail` con un SSIM que en realidad
+   pasa (le pasó a T1: reportó fail con 0.9662 contra umbral 0.95). Los números
+   de arriba salen de correr `render_diff.sh` a mano, que devuelve `pass: true`
+   y exit 0 en las tres tiers.
 
 ### 6.2 Las 5 composiciones ONIA — SSIM vs baseline Remotion
 
@@ -244,4 +269,24 @@ Lectura del residuo:
    (lee a plantilla de alerta). LowerThird nunca se actualizó. Se portó **fiel**
    (con su wipe animado, que es un recurso distinto de una franja estática), pero
    habría que decidir si se corrige igual que las tarjetas.
-4. **Baja de `scripts/remotion/`.** Ver el reporte de la sesión.
+4. **Baja de `scripts/remotion/`.** Recomendación: **conservarlo por ahora**, no
+   darlo de baja en esta sesión. Motivo: es el único baseline contra el cual se
+   pueden medir estas desviaciones, y la decisión de tipografía (§3.1) sigue
+   abierta. Darlo de baja cuando (a) se resuelva la tipografía y (b) un reel real
+   salga publicado con los apoyos de HyperFrames. `scripts/remotion/baseline/`
+   sí es descartable: es build output regenerable.
+
+---
+
+## Anexo — qué se corrió de verdad
+
+| Paso | Comando | Resultado |
+| ---- | ------- | --------- |
+| Lint fuente | `lint_source.py scripts/remotion/src` | 0 blockers, 2 warnings |
+| Gate por composición | `npx hyperframes check` ×5 | 5/5 `Check passed` |
+| Render | `render.mjs --comp <X> --format png-sequence` ×5 | 462 frames PNG RGBA |
+| Alpha | `ffprobe` + `alphaextract,signalstats` | `pix_fmt=rgba`, alpha 0→255 |
+| Integración | `overlay-visuals.mjs` con secuencia HF | compone con alpha real, sin tocar el script |
+| Paridad | `render.mjs --width 1400 --duration 2 --theme light --props {image}` | 60 frames 1400x760, imagen y tema aplicados |
+| SSIM 5 comps | `render_diff.sh` sobre PNG→x264 CRF 0 | ver §6.2 |
+| Corpus | `run.sh` (T4) + `render_diff.sh` a mano (T1–T3) | 4/4 pasan, ver §6.1 |
