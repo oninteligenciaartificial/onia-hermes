@@ -84,3 +84,28 @@ node scripts/generate-brand-icons.mjs
 
 Genera `favicon-32.png`, `apple-touch-icon-180.png` y copia `src/app/apple-icon.png` a
 partir de `public/brand/favicon.svg` (fuente de verdad del ícono).
+
+---
+
+## Candidato D — "la ia encendida" (ESTADO: propuesta, 2026-07-26)
+
+Propuesta PARALELA al v1 (no lo reemplaza; nada de la web cambia). Concepto en 3 líneas:
+
+1. **"onia" en bloques sólidos pesados** (sello/estampa, no monolínea): la otra personalidad
+   de la misma alma — v1 es línea liviana y técnica, D es masa y presencia.
+2. **Dos tonos con significado: "on" en tinta + "ia" en verde `#3EA639`** — la ia es la parte
+   encendida del sistema. Retoma el ADN del logo ORIGINAL de Sergio (On negro + IA verde)
+   que el v1 había dejado de lado, reinterpretado en la minúscula geométrica minimal.
+3. **Isotipo: la "i" verde dentro de la "o"** — anillo + barra vertical = el símbolo de
+   encendido (⏻). "Encendé tu negocio" hecho marca.
+
+| Archivo (`public/brand/`) | Rol |
+|---|---|
+| `candidato-d.svg` | Lockup (viewBox `0 0 318 116`). Tinta auto-adapta vía `prefers-color-scheme`; verde fijo. |
+| `candidato-d-dark.svg` | Colores fijos para fondo negro. |
+| `candidato-d-isotype.svg` | Símbolo: anillo + barra verde = botón de encendido. |
+| `compare.html` | Comparativa lado a lado v1 vs D: claro/oscuro, isotipos 16/32/64, negativo mono. |
+
+Si Sergio lo elige: swap por contrato §4.1 (renombrar a `logo.svg`/`logo-dark.svg`/
+`isotype.svg`, rehacer favicon desde el isotipo D, actualizar `brand-wordmark.tsx` con el
+mismo arte inlineado). Si no, queda de archivo como los candidatos A/B.

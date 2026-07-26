@@ -1,21 +1,20 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 316 116" role="img" aria-label="onia">
-  <title>onia — candidato D "bloques" (lockup)</title>
-  <desc>Wordmark "onia" en bloques solidos de reticula cuadrada (no monolinea): letras-modulo con terminales planas, registro industrial/sello. La "a" se construye en dos modulos: el cuerpo tinta queda ABIERTO (incompleto) y el asta verde #3EA639 lo completa — la barra ON del interruptor (IEC |): sin la ia encendida el sistema esta incompleto. Propuesta paralela al v1, 2026-07-26. Verde autocontenido, no token de UI (ONIA_BRAND_IDENTITY_2026.md §1.4).</desc>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 318 116" role="img" aria-label="onia">
+  <title>onia — candidato D "la ia encendida" (lockup)</title>
+  <desc>Wordmark "onia" en bloques solidos pesados (sello, no monolinea) con el dos-tonos del logo original de Sergio reinterpretado: "on" en tinta + "ia" en verde #3EA639 — la ia es la parte encendida del sistema. Punto de la i cuadrado (el modulo). Propuesta paralela al v1, 2026-07-26. Verde autocontenido, no token de UI (ONIA_BRAND_IDENTITY_2026.md §1.4).</desc>
   <style>
     .ink { fill: #141A17; }
     @media (prefers-color-scheme: dark) {
       .ink { fill: #ECEFED; }
     }
   </style>
-  <!-- o : anillo cuadrado 72x72, pared 20 -->
-  <path class="ink" fill-rule="evenodd" d="M18 36 H54 A18 18 0 0 1 72 54 V90 A18 18 0 0 1 54 108 H18 A18 18 0 0 1 0 90 V54 A18 18 0 0 1 18 36 Z M26 56 Q20 56 20 62 V82 Q20 88 26 88 H46 Q52 88 52 82 V62 Q52 56 46 56 Z"/>
-  <!-- n : arco cuadrado 64x72, astas planas en la base -->
-  <path class="ink" d="M96 108 V54 Q96 36 114 36 H142 Q160 36 160 54 V108 H140 V62 Q140 56 134 56 H122 Q116 56 116 62 V108 Z"/>
-  <!-- i : asta + punto cuadrado -->
-  <rect class="ink" x="184" y="36" width="20" height="72" rx="4"/>
-  <rect class="ink" x="184" y="0" width="20" height="20" rx="4"/>
-  <!-- a : cuerpo abierto (modulo incompleto) -->
-  <path class="ink" d="M288 36 H246 A18 18 0 0 0 228 54 V90 A18 18 0 0 0 246 108 H288 V88 H254 Q248 88 248 82 V62 Q248 56 254 56 H288 Z"/>
-  <!-- a : asta (modulo encendido — barra ON que completa la letra) -->
-  <rect x="296" y="36" width="20" height="72" rx="4" fill="#3EA639"/>
+  <!-- o (tinta) : anillo solido R36, pared 22 -->
+  <path class="ink" fill-rule="evenodd" d="M72 72 A36 36 0 1 1 0 72 A36 36 0 1 1 72 72 Z M50 72 A14 14 0 1 0 22 72 A14 14 0 1 0 50 72 Z"/>
+  <!-- n (tinta) : arco solido, astas planas en la base -->
+  <path class="ink" d="M96 108 V70 A34 34 0 0 1 164 70 V108 H142 V70 A12 12 0 0 0 118 70 V108 Z"/>
+  <!-- i (verde) : asta + punto cuadrado — el modulo encendido -->
+  <rect x="188" y="36" width="22" height="72" rx="5" fill="#3EA639"/>
+  <rect x="188" y="0" width="22" height="22" rx="5" fill="#3EA639"/>
+  <!-- a (verde) : anillo + asta fusionada -->
+  <path fill-rule="evenodd" d="M306 72 A36 36 0 1 1 234 72 A36 36 0 1 1 306 72 Z M292 72 A14 14 0 1 0 264 72 A14 14 0 1 0 292 72 Z" fill="#3EA639"/>
+  <rect x="296" y="36" width="22" height="72" rx="5" fill="#3EA639"/>
 </svg>
