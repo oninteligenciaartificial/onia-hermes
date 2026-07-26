@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="onia">
+  <title>onia — favicon candidato E</title>
+  <desc>El canal full-bleed: baldosa verde partida por el canal diagonal, que muestra la base tinta. El isotipo E ya ES casi un app icon (superelipse); aca la baldosa toma su lugar. Colores fijos.</desc>
+  <defs>
+    <clipPath id="canal-e-fav">
+      <rect x="-30" y="-30" width="57.75" height="124" transform="rotate(24 32 32)"/>
+      <rect x="36.25" y="-30" width="57.75" height="124" transform="rotate(24 32 32)"/>
+    </clipPath>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="#0C110F"/>
+  <rect width="64" height="64" rx="14" fill="#3EA639" clip-path="url(#canal-e-fav)"/>
+</svg>

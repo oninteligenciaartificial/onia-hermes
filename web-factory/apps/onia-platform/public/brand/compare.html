@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>onia — v1 vs candidato D · comparativa</title>
+<title>onia — elegir isotipo · E / F / G</title>
 <link rel="icon" href="./favicon.svg">
 <style>
   :root {
@@ -17,31 +17,35 @@
     background: var(--papel); color: var(--ink);
     padding: 48px 24px 96px; line-height: 1.5;
   }
-  main { max-width: 1120px; margin: 0 auto; }
+  main { max-width: 1280px; margin: 0 auto; }
   h1 { font-size: 1.6rem; letter-spacing: -0.02em; }
   .meta { color: var(--ink-soft); font-size: 0.9rem; margin-top: 4px; }
-  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 32px; }
-  @media (max-width: 860px) { .cols { grid-template-columns: 1fr; } }
-  .colhead { padding: 0 4px 8px; }
-  .colhead b { font-size: 1.05rem; }
-  .colhead p { font-size: 0.85rem; color: var(--ink-soft); margin-top: 2px; }
+  .fixed {
+    margin-top: 28px; border: 1px solid var(--line); border-radius: 14px;
+    background: #FFFFFF; padding: 28px; display: flex; flex-direction: column;
+    gap: 14px; align-items: center;
+  }
+  .fixed p { font-size: 0.82rem; color: var(--ink-soft); }
   h2 {
     font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.08em;
     color: var(--ink-soft); margin: 40px 0 12px; padding-top: 14px;
     border-top: 1px solid var(--line); grid-column: 1 / -1;
   }
-  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
-  @media (max-width: 860px) { .grid { grid-template-columns: 1fr; } }
+  .grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+  @media (max-width: 980px) { .grid { grid-template-columns: 1fr; } }
+  .colhead { padding: 0 4px 4px; }
+  .colhead b { font-size: 1rem; }
+  .colhead p { font-size: 0.82rem; color: var(--ink-soft); margin-top: 2px; }
   .panel {
-    border: 1px solid var(--line); border-radius: 14px; padding: 36px 28px;
-    display: flex; flex-direction: column; gap: 20px;
+    border: 1px solid var(--line); border-radius: 14px; padding: 28px 20px;
+    display: flex; flex-direction: column; gap: 16px;
     align-items: center; justify-content: center; min-height: 150px;
   }
   .panel.light { background: #FFFFFF; }
   .panel.dark  { background: var(--tinta); border-color: var(--tinta-linea); color: var(--texto-dark); }
   .panel.green { background: var(--verde-logo); border-color: var(--verde-logo); color: #fff; }
-  .cap { font-size: 0.75rem; letter-spacing: 0.05em; opacity: 0.6; font-family: ui-monospace, monospace; }
-  .strip { display: flex; align-items: flex-end; gap: 32px; flex-wrap: wrap; }
+  .cap { font-size: 0.72rem; letter-spacing: 0.05em; opacity: 0.6; font-family: ui-monospace, monospace; text-align: center; }
+  .strip { display: flex; align-items: flex-end; gap: 26px; flex-wrap: wrap; justify-content: center; }
   .strip figure { display: flex; flex-direction: column; align-items: center; gap: 10px; }
   .strip figcaption { font-size: 0.72rem; color: var(--ink-soft); font-family: ui-monospace, monospace; }
   svg { display: block; }
@@ -49,111 +53,220 @@
 </head>
 <body>
 <main>
-  <h1>onia — v1 vs candidato D</h1>
-  <p class="meta">Elegir en 10 segundos · mismo verde <code>#3EA639</code>, dos personalidades · 2026-07-26</p>
+  <h1>onia — elegir isotipo</h1>
+  <p class="meta">Wordmark v1 aprobado (no se toca) + 3 isotipos abstractos candidatos · verde <code>#3EA639</code> · sin metáforas de encendido · 2026-07-26</p>
 
-  <div class="cols">
-    <div class="colhead">
-      <b>v1 — "cursor" (entregado)</b>
-      <p>Monolínea liviana + bloque cursor: el sistema encendido espera tu orden.</p>
-    </div>
-    <div class="colhead">
-      <b>Candidato D — "la ia encendida" (propuesta)</b>
-      <p>Bloques sólidos pesados, dos tonos: "on" tinta + "ia" verde — la ia es la parte encendida. Retoma el ADN del logo original.</p>
-    </div>
+  <div class="fixed">
+    <svg viewBox="0 0 312 116" height="58" width="156" role="img" aria-label="onia wordmark v1">
+      <g fill="none" stroke="#141A17" stroke-width="16" stroke-linecap="round">
+        <circle cx="40" cy="76" r="32"/><path d="M112 108 V68 A24 24 0 0 1 160 68 V108"/>
+        <path d="M200 108 V44"/><circle cx="272" cy="76" r="32"/><path d="M304 44 V108"/>
+      </g>
+      <circle cx="200" cy="10" r="10" fill="#141A17"/>
+    </svg>
+    <p><b>Aprobado — wordmark v1</b> (monolínea, <code>wordmark.svg</code>). Acá se elige SOLO el símbolo que lo acompaña.</p>
   </div>
 
   <div class="grid">
-    <h2>Lockup — claro</h2>
-    <div class="panel light">
-      <svg viewBox="0 0 352 116" height="66" width="200" role="img" aria-label="onia v1">
-        <g fill="none" stroke="#141A17" stroke-width="16" stroke-linecap="round">
-          <circle cx="40" cy="76" r="32"/><path d="M112 108 V68 A24 24 0 0 1 160 68 V108"/>
-          <path d="M200 108 V44"/><circle cx="272" cy="76" r="32"/><path d="M304 44 V108"/>
-        </g>
-        <circle cx="200" cy="10" r="10" fill="#141A17"/>
-        <rect x="332" y="96" width="20" height="20" rx="2" fill="#3EA639"/>
-      </svg>
-      <span class="cap">v1 · logo.svg</span>
+    <h2>Los 3 candidatos</h2>
+    <div class="colhead">
+      <b>E — "canal"</b>
+      <p>Superelipse sólida partida por un canal diagonal a 24°: la plataforma sólida atravesada por el flujo que la automatiza. Masa + vacío, familia Ramp/Stripe.</p>
     </div>
-    <div class="panel light">
-      <svg viewBox="0 0 318 116" height="66" width="181" role="img" aria-label="onia candidato D">
-        <path fill-rule="evenodd" fill="#141A17" d="M72 72 A36 36 0 1 1 0 72 A36 36 0 1 1 72 72 Z M50 72 A14 14 0 1 0 22 72 A14 14 0 1 0 50 72 Z"/>
-        <path fill="#141A17" d="M96 108 V70 A34 34 0 0 1 164 70 V108 H142 V70 A12 12 0 0 0 118 70 V108 Z"/>
-        <rect x="188" y="36" width="22" height="72" rx="5" fill="#3EA639"/>
-        <rect x="188" y="0" width="22" height="22" rx="5" fill="#3EA639"/>
-        <path fill-rule="evenodd" fill="#3EA639" d="M306 72 A36 36 0 1 1 234 72 A36 36 0 1 1 306 72 Z M292 72 A14 14 0 1 0 264 72 A14 14 0 1 0 292 72 Z"/>
-        <rect x="296" y="36" width="22" height="72" rx="5" fill="#3EA639"/>
-      </svg>
-      <span class="cap">D · candidato-d.svg</span>
+    <div class="colhead">
+      <b>F — "campo modular"</b>
+      <p>Tres cuadrados en tinta + un círculo verde que se desplaza fuera del grid: los módulos (ERPs) y la inteligencia de naturaleza distinta que se mueve sola.</p>
+    </div>
+    <div class="colhead">
+      <b>G — "órbita"</b>
+      <p>Dos arcos de radios DISTINTOS que se persiguen (210° c/u, desfasados 180°): orquestación en movimiento continuo, 24/7. Dos radios, cero barras.</p>
     </div>
 
-    <h2>Lockup — oscuro</h2>
-    <div class="panel dark">
-      <svg viewBox="0 0 352 116" height="66" width="200" role="img" aria-label="onia v1 oscuro">
-        <g fill="none" stroke="#ECEFED" stroke-width="16" stroke-linecap="round">
-          <circle cx="40" cy="76" r="32"/><path d="M112 108 V68 A24 24 0 0 1 160 68 V108"/>
-          <path d="M200 108 V44"/><circle cx="272" cy="76" r="32"/><path d="M304 44 V108"/>
-        </g>
-        <circle cx="200" cy="10" r="10" fill="#ECEFED"/>
-        <rect x="332" y="96" width="20" height="20" rx="2" fill="#3EA639"/>
+    <h2>Isotipo — claro</h2>
+    <div class="panel light">
+      <svg viewBox="0 0 100 100" width="96" height="96" role="img" aria-label="isotipo E claro">
+        <defs><clipPath id="e-lt"><rect x="-40" y="-40" width="83.5" height="180" transform="rotate(24 50 50)"/><rect x="56.5" y="-40" width="83.5" height="180" transform="rotate(24 50 50)"/></clipPath></defs>
+        <path clip-path="url(#e-lt)" fill="#3EA639" d="M92 50C92 88.2 88.2 92 50 92C11.8 92 8 88.2 8 50C8 11.8 11.8 8 50 8C88.2 8 92 11.8 92 50Z"/>
       </svg>
-      <span class="cap">v1 · logo-dark.svg</span>
+      <span class="cap">E · isotipo-e.svg</span>
     </div>
-    <div class="panel dark">
-      <svg viewBox="0 0 318 116" height="66" width="181" role="img" aria-label="onia candidato D oscuro">
-        <path fill-rule="evenodd" fill="#ECEFED" d="M72 72 A36 36 0 1 1 0 72 A36 36 0 1 1 72 72 Z M50 72 A14 14 0 1 0 22 72 A14 14 0 1 0 50 72 Z"/>
-        <path fill="#ECEFED" d="M96 108 V70 A34 34 0 0 1 164 70 V108 H142 V70 A12 12 0 0 0 118 70 V108 Z"/>
-        <rect x="188" y="36" width="22" height="72" rx="5" fill="#3EA639"/>
-        <rect x="188" y="0" width="22" height="22" rx="5" fill="#3EA639"/>
-        <path fill-rule="evenodd" fill="#3EA639" d="M306 72 A36 36 0 1 1 234 72 A36 36 0 1 1 306 72 Z M292 72 A14 14 0 1 0 264 72 A14 14 0 1 0 292 72 Z"/>
-        <rect x="296" y="36" width="22" height="72" rx="5" fill="#3EA639"/>
+    <div class="panel light">
+      <svg viewBox="0 0 108 108" width="96" height="96" role="img" aria-label="isotipo F claro">
+        <g fill="#141A17"><rect width="42" height="42" rx="8"/><rect x="58" width="42" height="42" rx="8"/><rect y="58" width="42" height="42" rx="8"/></g>
+        <circle cx="86" cy="86" r="22" fill="#3EA639"/>
       </svg>
-      <span class="cap">D · candidato-d-dark.svg</span>
+      <span class="cap">F · isotipo-f.svg</span>
+    </div>
+    <div class="panel light">
+      <svg viewBox="0 0 100 100" width="96" height="96" role="img" aria-label="isotipo G claro">
+        <g fill="none"><path stroke="#141A17" stroke-width="12" d="M83.34 30.75A38.5 38.5 0 1 1 11.5 50"/><path stroke="#3EA639" stroke-width="11.5" d="M33.98 59.25A18.5 18.5 0 1 1 68.5 50"/></g>
+      </svg>
+      <span class="cap">G · isotipo-g.svg</span>
     </div>
 
-    <h2>Isotipo + tamaños 16 / 32 / 64</h2>
+    <h2>Isotipo — oscuro</h2>
+    <div class="panel dark">
+      <svg viewBox="0 0 100 100" width="96" height="96" role="img" aria-label="isotipo E oscuro">
+        <defs><clipPath id="e-dk"><rect x="-40" y="-40" width="83.5" height="180" transform="rotate(24 50 50)"/><rect x="56.5" y="-40" width="83.5" height="180" transform="rotate(24 50 50)"/></clipPath></defs>
+        <path clip-path="url(#e-dk)" fill="#3EA639" d="M92 50C92 88.2 88.2 92 50 92C11.8 92 8 88.2 8 50C8 11.8 11.8 8 50 8C88.2 8 92 11.8 92 50Z"/>
+      </svg>
+      <span class="cap">E · el verde vive solo sobre oscuro</span>
+    </div>
+    <div class="panel dark">
+      <svg viewBox="0 0 108 108" width="96" height="96" role="img" aria-label="isotipo F oscuro">
+        <g fill="#ECEFED"><rect width="42" height="42" rx="8"/><rect x="58" width="42" height="42" rx="8"/><rect y="58" width="42" height="42" rx="8"/></g>
+        <circle cx="86" cy="86" r="22" fill="#3EA639"/>
+      </svg>
+      <span class="cap">F · tinta → papel, verde fijo</span>
+    </div>
+    <div class="panel dark">
+      <svg viewBox="0 0 100 100" width="96" height="96" role="img" aria-label="isotipo G oscuro">
+        <g fill="none"><path stroke="#ECEFED" stroke-width="12" d="M83.34 30.75A38.5 38.5 0 1 1 11.5 50"/><path stroke="#3EA639" stroke-width="11.5" d="M33.98 59.25A18.5 18.5 0 1 1 68.5 50"/></g>
+      </svg>
+      <span class="cap">G · tinta → papel, verde fijo</span>
+    </div>
+
+    <h2>Monocromo — tinta pura (el gate: sin color debe seguir siendo él)</h2>
+    <div class="panel light">
+      <svg viewBox="0 0 100 100" width="96" height="96" role="img" aria-label="isotipo E mono">
+        <defs><clipPath id="e-mono"><rect x="-40" y="-40" width="83.5" height="180" transform="rotate(24 50 50)"/><rect x="56.5" y="-40" width="83.5" height="180" transform="rotate(24 50 50)"/></clipPath></defs>
+        <path clip-path="url(#e-mono)" fill="#141A17" d="M92 50C92 88.2 88.2 92 50 92C11.8 92 8 88.2 8 50C8 11.8 11.8 8 50 8C88.2 8 92 11.8 92 50Z"/>
+      </svg>
+      <span class="cap">E mono</span>
+    </div>
+    <div class="panel light">
+      <svg viewBox="0 0 108 108" width="96" height="96" role="img" aria-label="isotipo F mono">
+        <g fill="#141A17"><rect width="42" height="42" rx="8"/><rect x="58" width="42" height="42" rx="8"/><rect y="58" width="42" height="42" rx="8"/><circle cx="86" cy="86" r="22"/></g>
+      </svg>
+      <span class="cap">F mono · el círculo se distingue por silueta</span>
+    </div>
+    <div class="panel light">
+      <svg viewBox="0 0 100 100" width="96" height="96" role="img" aria-label="isotipo G mono">
+        <g fill="none" stroke="#141A17"><path stroke-width="12" d="M83.34 30.75A38.5 38.5 0 1 1 11.5 50"/><path stroke-width="11.5" d="M33.98 59.25A18.5 18.5 0 1 1 68.5 50"/></g>
+      </svg>
+      <span class="cap">G mono</span>
+    </div>
+
+    <h2>Negativo — blanco sobre verde (§4.3: sobre verde, sin verde)</h2>
+    <div class="panel green">
+      <svg viewBox="0 0 100 100" width="88" height="88" role="img" aria-label="isotipo E negativo">
+        <defs><clipPath id="e-neg"><rect x="-40" y="-40" width="83.5" height="180" transform="rotate(24 50 50)"/><rect x="56.5" y="-40" width="83.5" height="180" transform="rotate(24 50 50)"/></clipPath></defs>
+        <path clip-path="url(#e-neg)" fill="#FFFFFF" d="M92 50C92 88.2 88.2 92 50 92C11.8 92 8 88.2 8 50C8 11.8 11.8 8 50 8C88.2 8 92 11.8 92 50Z"/>
+      </svg>
+      <span class="cap">E negativo</span>
+    </div>
+    <div class="panel green">
+      <svg viewBox="0 0 108 108" width="88" height="88" role="img" aria-label="isotipo F negativo">
+        <g fill="#FFFFFF"><rect width="42" height="42" rx="8"/><rect x="58" width="42" height="42" rx="8"/><rect y="58" width="42" height="42" rx="8"/><circle cx="86" cy="86" r="22"/></g>
+      </svg>
+      <span class="cap">F negativo</span>
+    </div>
+    <div class="panel green">
+      <svg viewBox="0 0 100 100" width="88" height="88" role="img" aria-label="isotipo G negativo">
+        <g fill="none" stroke="#FFFFFF"><path stroke-width="12" d="M83.34 30.75A38.5 38.5 0 1 1 11.5 50"/><path stroke-width="11.5" d="M33.98 59.25A18.5 18.5 0 1 1 68.5 50"/></g>
+      </svg>
+      <span class="cap">G negativo</span>
+    </div>
+
+    <h2>Tamaños 16 / 32 / 64 (el archivo real, sin trampa)</h2>
     <div class="panel light">
       <div class="strip">
-        <figure><img src="./isotype.svg" width="16" height="16" alt=""><figcaption>16</figcaption></figure>
-        <figure><img src="./isotype.svg" width="32" height="32" alt=""><figcaption>32</figcaption></figure>
-        <figure><img src="./isotype.svg" width="64" height="64" alt=""><figcaption>64</figcaption></figure>
+        <figure><img src="./isotipo-e.svg" width="16" height="16" alt=""><figcaption>16</figcaption></figure>
+        <figure><img src="./isotipo-e.svg" width="32" height="32" alt=""><figcaption>32</figcaption></figure>
+        <figure><img src="./isotipo-e.svg" width="64" height="64" alt=""><figcaption>64</figcaption></figure>
       </div>
-      <span class="cap">v1 · isotype.svg — la o + cursor</span>
+      <span class="cap">E</span>
     </div>
     <div class="panel light">
       <div class="strip">
-        <figure><img src="./candidato-d-isotype.svg" width="16" height="16" alt=""><figcaption>16</figcaption></figure>
-        <figure><img src="./candidato-d-isotype.svg" width="32" height="32" alt=""><figcaption>32</figcaption></figure>
-        <figure><img src="./candidato-d-isotype.svg" width="64" height="64" alt=""><figcaption>64</figcaption></figure>
+        <figure><img src="./isotipo-f.svg" width="16" height="16" alt=""><figcaption>16</figcaption></figure>
+        <figure><img src="./isotipo-f.svg" width="32" height="32" alt=""><figcaption>32</figcaption></figure>
+        <figure><img src="./isotipo-f.svg" width="64" height="64" alt=""><figcaption>64</figcaption></figure>
       </div>
-      <span class="cap">D · candidato-d-isotype.svg — la i en la o = encendido</span>
+      <span class="cap">F</span>
+    </div>
+    <div class="panel light">
+      <div class="strip">
+        <figure><img src="./isotipo-g.svg" width="16" height="16" alt=""><figcaption>16</figcaption></figure>
+        <figure><img src="./isotipo-g.svg" width="32" height="32" alt=""><figcaption>32</figcaption></figure>
+        <figure><img src="./isotipo-g.svg" width="64" height="64" alt=""><figcaption>64</figcaption></figure>
+      </div>
+      <span class="cap">G</span>
     </div>
 
-    <h2>Negativo — monocromo blanco (§4.3: sobre verde, sin verde)</h2>
-    <div class="panel green">
-      <svg viewBox="0 0 352 116" height="52" width="158" role="img" aria-label="onia v1 negativo">
-        <g fill="none" stroke="#FFFFFF" stroke-width="16" stroke-linecap="round">
-          <circle cx="40" cy="76" r="32"/><path d="M112 108 V68 A24 24 0 0 1 160 68 V108"/>
-          <path d="M200 108 V44"/><circle cx="272" cy="76" r="32"/><path d="M304 44 V108"/>
-        </g>
-        <circle cx="200" cy="10" r="10" fill="#FFFFFF"/>
-        <rect x="332" y="96" width="20" height="20" rx="2" fill="#FFFFFF"/>
-      </svg>
-      <span class="cap">v1 mono</span>
+    <h2>Favicon — baldosa de prueba en pestaña (16 / 32 / 64)</h2>
+    <div class="panel light">
+      <div class="strip">
+        <figure><img src="./favicon-e.svg" width="16" height="16" alt=""><figcaption>16</figcaption></figure>
+        <figure><img src="./favicon-e.svg" width="32" height="32" alt=""><figcaption>32</figcaption></figure>
+        <figure><img src="./favicon-e.svg" width="64" height="64" alt=""><figcaption>64</figcaption></figure>
+      </div>
+      <span class="cap">favicon-e.svg · baldosa verde full-bleed + canal</span>
     </div>
-    <div class="panel green">
-      <svg viewBox="0 0 318 116" height="52" width="143" role="img" aria-label="onia candidato D negativo">
-        <g fill="#FFFFFF">
-          <path fill-rule="evenodd" d="M72 72 A36 36 0 1 1 0 72 A36 36 0 1 1 72 72 Z M50 72 A14 14 0 1 0 22 72 A14 14 0 1 0 50 72 Z"/>
-          <path d="M96 108 V70 A34 34 0 0 1 164 70 V108 H142 V70 A12 12 0 0 0 118 70 V108 Z"/>
-          <rect x="188" y="36" width="22" height="72" rx="5"/>
-          <rect x="188" y="0" width="22" height="22" rx="5"/>
-          <path fill-rule="evenodd" d="M306 72 A36 36 0 1 1 234 72 A36 36 0 1 1 306 72 Z M292 72 A14 14 0 1 0 264 72 A14 14 0 1 0 292 72 Z"/>
-          <rect x="296" y="36" width="22" height="72" rx="5"/>
+    <div class="panel light">
+      <div class="strip">
+        <figure><img src="./favicon-f.svg" width="16" height="16" alt=""><figcaption>16</figcaption></figure>
+        <figure><img src="./favicon-f.svg" width="32" height="32" alt=""><figcaption>32</figcaption></figure>
+        <figure><img src="./favicon-f.svg" width="64" height="64" alt=""><figcaption>64</figcaption></figure>
+      </div>
+      <span class="cap">favicon-f.svg · baldosa tinta + campo modular</span>
+    </div>
+    <div class="panel light">
+      <div class="strip">
+        <figure><img src="./favicon-g.svg" width="16" height="16" alt=""><figcaption>16</figcaption></figure>
+        <figure><img src="./favicon-g.svg" width="32" height="32" alt=""><figcaption>32</figcaption></figure>
+        <figure><img src="./favicon-g.svg" width="64" height="64" alt=""><figcaption>64</figcaption></figure>
+      </div>
+      <span class="cap">favicon-g.svg · baldosa tinta + órbita</span>
+    </div>
+
+    <h2>Lockup completo — wordmark v1 aprobado + isotipo candidato</h2>
+    <div class="panel light">
+      <svg viewBox="0 0 424 116" height="56" width="205" role="img" aria-label="lockup E + onia">
+        <defs><clipPath id="e-lock"><rect x="-40" y="-40" width="83.5" height="180" transform="rotate(24 50 50)"/><rect x="56.5" y="-40" width="83.5" height="180" transform="rotate(24 50 50)"/></clipPath></defs>
+        <g transform="translate(0 36) scale(0.952) translate(-8 -8)">
+          <path clip-path="url(#e-lock)" fill="#3EA639" d="M92 50C92 88.2 88.2 92 50 92C11.8 92 8 88.2 8 50C8 11.8 11.8 8 50 8C88.2 8 92 11.8 92 50Z"/>
+        </g>
+        <g transform="translate(112 0)">
+          <g fill="none" stroke="#141A17" stroke-width="16" stroke-linecap="round">
+            <circle cx="40" cy="76" r="32"/><path d="M112 108 V68 A24 24 0 0 1 160 68 V108"/>
+            <path d="M200 108 V44"/><circle cx="272" cy="76" r="32"/><path d="M304 44 V108"/>
+          </g>
+          <circle cx="200" cy="10" r="10" fill="#141A17"/>
         </g>
       </svg>
-      <span class="cap">D mono (el dos-tonos colapsa a blanco)</span>
+      <span class="cap">E + onia</span>
+    </div>
+    <div class="panel light">
+      <svg viewBox="0 0 424 116" height="56" width="205" role="img" aria-label="lockup F + onia">
+        <g transform="translate(0 36) scale(0.741)">
+          <g fill="#141A17"><rect width="42" height="42" rx="8"/><rect x="58" width="42" height="42" rx="8"/><rect y="58" width="42" height="42" rx="8"/></g>
+          <circle cx="86" cy="86" r="22" fill="#3EA639"/>
+        </g>
+        <g transform="translate(112 0)">
+          <g fill="none" stroke="#141A17" stroke-width="16" stroke-linecap="round">
+            <circle cx="40" cy="76" r="32"/><path d="M112 108 V68 A24 24 0 0 1 160 68 V108"/>
+            <path d="M200 108 V44"/><circle cx="272" cy="76" r="32"/><path d="M304 44 V108"/>
+          </g>
+          <circle cx="200" cy="10" r="10" fill="#141A17"/>
+        </g>
+      </svg>
+      <span class="cap">F + onia</span>
+    </div>
+    <div class="panel light">
+      <svg viewBox="0 0 424 116" height="56" width="205" role="img" aria-label="lockup G + onia">
+        <g transform="translate(0 36) scale(0.899) translate(-5.5 -5.5)">
+          <g fill="none"><path stroke="#141A17" stroke-width="12" d="M83.34 30.75A38.5 38.5 0 1 1 11.5 50"/><path stroke="#3EA639" stroke-width="11.5" d="M33.98 59.25A18.5 18.5 0 1 1 68.5 50"/></g>
+        </g>
+        <g transform="translate(112 0)">
+          <g fill="none" stroke="#141A17" stroke-width="16" stroke-linecap="round">
+            <circle cx="40" cy="76" r="32"/><path d="M112 108 V68 A24 24 0 0 1 160 68 V108"/>
+            <path d="M200 108 V44"/><circle cx="272" cy="76" r="32"/><path d="M304 44 V108"/>
+          </g>
+          <circle cx="200" cy="10" r="10" fill="#141A17"/>
+        </g>
+      </svg>
+      <span class="cap">G + onia</span>
     </div>
   </div>
 </main>

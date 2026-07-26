@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="onia">
+  <title>onia — favicon candidato G</title>
+  <desc>Baldosa tinta redondeada con el isotipo G "orbita": arco exterior papel + arco interior verde, radios distintos. Prueba de pestana — colores fijos.</desc>
+  <rect width="64" height="64" rx="14" fill="#0C110F"/>
+  <g transform="translate(32 32) scale(0.52) translate(-50 -50)" fill="none">
+    <path stroke="#ECEFED" stroke-width="12" d="M83.34 30.75A38.5 38.5 0 1 1 11.5 50"/>
+    <path stroke="#3EA639" stroke-width="11.5" d="M33.98 59.25A18.5 18.5 0 1 1 68.5 50"/>
+  </g>
+</svg>

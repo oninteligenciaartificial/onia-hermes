@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 108 108" role="img" aria-label="onia">
+  <title>onia — isotipo F "campo modular"</title>
+  <desc>Grid 2x2: tres cuadrados en tinta + un circulo verde desplazado en diagonal fuera del grid — la plataforma modular (los ERPs) y la inteligencia de naturaleza distinta que se mueve sola. La anomalia unica es la firma. Tinta auto-adapta via prefers-color-scheme; verde #3EA639 fijo; en mono el circulo se distingue por silueta.</desc>
+  <style>
+    .ink { fill: #141A17; }
+    @media (prefers-color-scheme: dark) { .ink { fill: #ECEFED; } }
+  </style>
+  <rect class="ink" x="0" y="0" width="42" height="42" rx="8"/>
+  <rect class="ink" x="58" y="0" width="42" height="42" rx="8"/>
+  <rect class="ink" x="0" y="58" width="42" height="42" rx="8"/>
+  <circle cx="86" cy="86" r="22" fill="#3EA639"/>
+</svg>
