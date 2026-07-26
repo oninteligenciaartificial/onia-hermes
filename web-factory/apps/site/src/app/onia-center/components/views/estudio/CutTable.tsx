@@ -26,7 +26,7 @@ export function CutTable({ segments, truncateText = true }: CutTableProps) {
           const isCut = seg.decision === "cut";
           return (
             <tr
-              key={seg.index}
+              key={`${seg.index}-${seg.timeLabel}`}
               className={`border-b border-[color:var(--line-soft)] transition-colors last:border-b-0 hover:bg-secondary ${
                 isCut ? "text-muted-foreground" : ""
               }`}

@@ -26,12 +26,16 @@ export function CutPreview({ review }: CutPreviewProps) {
           >
             {review.previewLabel}
           </span>
+          {/* Sin reproductor todavía (el preview 360p aún no se sirve al panel): el
+              botón queda deshabilitado en vez de aparentar que reproduce. */}
           <button
             type="button"
-            aria-label="Reproducir preview del corte"
-            className="grid h-[46px] w-[46px] place-items-center rounded-full bg-white/90 shadow-lg transition-transform hover:scale-105 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--ring)]"
+            disabled
+            aria-label="Reproducir preview del corte (todavía no disponible)"
+            title="El preview 360p todavía no se reproduce desde el panel"
+            className="grid h-[46px] w-[46px] cursor-not-allowed place-items-center rounded-full bg-white/60 shadow-lg"
           >
-            <Play size={16} className="ml-0.5" style={{ color: "oklch(0.28 0.02 250)" }} aria-hidden="true" />
+            <Play size={16} className="ml-0.5" style={{ color: "oklch(0.28 0.02 250 / 0.55)" }} aria-hidden="true" />
           </button>
           <span
             className="absolute bottom-2.5 right-2.5 rounded-md px-2 py-0.5 text-[10.5px] font-semibold tabular-nums text-white"
@@ -50,7 +54,7 @@ export function CutPreview({ review }: CutPreviewProps) {
         >
           {review.segments.map((seg) => (
             <span
-              key={seg.index}
+              key={`${seg.index}-${seg.timeLabel}`}
               style={{
                 flex: seg.weight,
                 background: seg.decision === "keep" ? "var(--primary)" : CUT_FILL,
