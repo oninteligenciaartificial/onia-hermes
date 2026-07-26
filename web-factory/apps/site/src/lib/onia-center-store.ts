@@ -99,6 +99,19 @@ export type RuntimeSnapshot = {
 
 export type RuntimeEntity = "lead" | "task" | "review" | "note" | "idea" | "codex_job";
 
+// Persona real del equipo, derivada de onia_center.user_profiles + su membresia
+// activa. userKey casa con assignedUserKey / ownerUserKey / actorUserKey del
+// runtime para calcular el scorecard por persona.
+export type TeamMember = {
+  userKey: string;
+  displayName: string;
+  role: RoleId;
+  status: "active" | "invited" | "blocked";
+  accessNote: string;
+  organizationKeys: string[];
+  canViewSensitive: boolean;
+};
+
 type SupabaseConfig = {
   url: string;
   serviceRoleKey: string;
@@ -166,6 +179,22 @@ type DbIdea = {
 };
 
 type DbCodexJobLog = DbNote;
+
+type DbUserProfileRow = {
+  user_key: string;
+  display_name: string;
+  primary_role_key: string;
+  status: "active" | "invited" | "blocked";
+  access_note: string | null;
+};
+
+type DbMembershipRow = {
+  organization_key: string;
+  user_key: string;
+  role_key: string;
+  can_view_sensitive: boolean;
+  status: string;
+};
 
 const serviceIdToKey: Record<string, string> = {
   "onia-motor-local-growth": "onia_motor_local_growth",
@@ -627,6 +656,45 @@ export async function getOniaCenterRuntime(): Promise<RuntimeSnapshot> {
   };
 }
 
+// Lee las personas reales del equipo desde onia_center. Fuente de verdad =
+// user_profiles activos; se conserva solo a quien tiene al menos una membresia
+// activa en alguna organizacion ONIA (eso define "el equipo"). No se asume a que
+// organizacion concreta pertenece cada rol: basta con ser miembro activo del
+// workspace. Usa service role igual que getOniaCenterRuntime, no depende de la
+// sesion del usuario.
+export async function getOniaCenterTeam(): Promise<TeamMember[]> {
+  const [profiles, memberships] = await Promise.all([
+    supabaseRequest<DbUserProfileRow[]>(
+      "user_profiles?status=eq.active&select=user_key,display_name,primary_role_key,status,access_note&order=display_name.asc",
+    ),
+    supabaseRequest<DbMembershipRow[]>(
+      "organization_memberships?status=eq.active&select=organization_key,user_key,role_key,can_view_sensitive,status",
+    ),
+  ]);
+
+  const membershipsByUser = new Map<string, DbMembershipRow[]>();
+  for (const membership of memberships) {
+    const list = membershipsByUser.get(membership.user_key) ?? [];
+    list.push(membership);
+    membershipsByUser.set(membership.user_key, list);
+  }
+
+  return profiles
+    .filter((profile) => membershipsByUser.has(profile.user_key))
+    .map((profile) => {
+      const memberOf = membershipsByUser.get(profile.user_key) ?? [];
+      return {
+        userKey: profile.user_key,
+        displayName: profile.display_name,
+        role: roleFromDb(profile.primary_role_key),
+        status: profile.status,
+        accessNote: profile.access_note ?? "",
+        organizationKeys: memberOf.map((membership) => membership.organization_key),
+        canViewSensitive: memberOf.some((membership) => membership.can_view_sensitive),
+      };
+    });
+}
+
 export async function createOniaCenterEntity(entity: RuntimeEntity, payload: unknown) {
   if (entity === "lead") {
     const lead = payload as RuntimeLead;
@@ -769,9 +837,53 @@ export async function createOniaCenterEntity(entity: RuntimeEntity, payload: unk
   throw new Error(`Entidad no soportada para crear: ${entity}`);
 }
 
-export async function updateOniaCenterEntityStatus(entity: RuntimeEntity, id: string, status: string, actorRole?: RoleId) {
+// Filtro de dueño para escrituras. Espeja ownerMatches (lectura): un actor
+// no-sergio solo puede escribir registros cuyo userKey estampado en `raw` sea el
+// suyo; los registros legacy sin userKey caen al match por rol, igual que la
+// lectura. Con esto dos personas del mismo rol (p.ej. dos vendedores) ya no
+// pueden hacer PATCH del registro de la otra.
+function actorScopeFilter(
+  roleColumn: "owner_role_key" | "assigned_role_key",
+  userKeyField: "ownerUserKey" | "assignedUserKey",
+  actorRole?: RoleId,
+  actorUserKey?: string,
+) {
+  if (!actorRole || actorRole === "sergio") {
+    return "";
+  }
+  const roleFilter = `&${roleColumn}=eq.${encodeURIComponent(roleToDb(actorRole))}`;
+  if (!actorUserKey) {
+    return roleFilter;
+  }
+  const personFilter = `&or=(raw->>${userKeyField}.eq.${encodeURIComponent(actorUserKey)},raw->>${userKeyField}.is.null)`;
+  return `${roleFilter}${personFilter}`;
+}
+
+export async function updateOniaCenterEntityStatus(
+  entity: RuntimeEntity,
+  id: string,
+  status: string,
+  actorRole?: RoleId,
+  actorUserKey?: string,
+) {
+  if (entity === "lead") {
+    const actorFilter = actorScopeFilter("owner_role_key", "ownerUserKey", actorRole, actorUserKey);
+    const rows = await supabaseRequest<DbLead[]>(
+      `leads?lead_key=eq.${encodeURIComponent(id)}${actorFilter}&select=lead_key,company_name,public_contact,channel,source,owner_role_key,pipeline_status,suggested_service_key,private_notes,raw,created_at`,
+      {
+        method: "PATCH",
+        headers: { prefer: "return=representation" },
+        body: JSON.stringify({ pipeline_status: leadStatusToDb[status as RuntimeLead["status"]] ?? status }),
+      },
+    );
+    if (!rows[0]) {
+      throw new Error("Lead no encontrado o no asignado al usuario actual.");
+    }
+    return mapLead(rows[0]);
+  }
+
   if (entity === "task") {
-    const actorFilter = actorRole && actorRole !== "sergio" ? `&assigned_role_key=eq.${encodeURIComponent(roleToDb(actorRole))}` : "";
+    const actorFilter = actorScopeFilter("assigned_role_key", "assignedUserKey", actorRole, actorUserKey);
     const rows = await supabaseRequest<DbTask[]>(
       `tasks?task_key=eq.${encodeURIComponent(id)}${actorFilter}&select=task_key,project_key,title,status,priority,assigned_role_key,evidence_required,raw,created_at`,
       {
@@ -812,7 +924,7 @@ export async function updateOniaCenterEntityStatus(entity: RuntimeEntity, id: st
     if (status === "approved") {
       body.reviewed_by_role_key = "sergio";
     }
-    const actorFilter = actorRole && actorRole !== "sergio" ? `&owner_role_key=eq.${encodeURIComponent(roleToDb(actorRole))}` : "";
+    const actorFilter = actorScopeFilter("owner_role_key", "ownerUserKey", actorRole, actorUserKey);
     const rows = await supabaseRequest<DbIdea[]>(
       `idea_inbox?idea_key=eq.${encodeURIComponent(id)}${actorFilter}&select=idea_key,title,source_type,source_url,category,summary,why_useful,target_project_key,owner_role_key,visibility_scope,review_tool,status,raw,created_at`,
       {

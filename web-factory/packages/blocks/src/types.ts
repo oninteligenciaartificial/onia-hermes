@@ -25,6 +25,8 @@ export type SiteClient = {
   beneficios?: string[];
   credenciales?: string[];
   proceso?: Array<{ titulo: string; desc: string }>;
+  procesoKicker?: string;
+  procesoTitulo?: string;
   faq?: Array<{ pregunta: string; respuesta: string }>;
   cta: {
     texto: string;

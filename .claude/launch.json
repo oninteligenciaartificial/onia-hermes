@@ -2,10 +2,23 @@
   "version": "0.0.1",
   "configurations": [
     {
+      "name": "onia-platform",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["-C", "web-factory", "--filter", "onia-platform", "dev", "-p", "3198"],
+      "port": 3198
+    },
+    {
+      "name": "dentalgest-landing",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["-C", "web-factory", "--filter", "dentalgest-landing", "dev", "-p", "3199"],
+      "port": 3199
+    },
+    {
       "name": "site",
       "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["-C", "web-factory", "--filter", "site", "dev", "--port", "3277"],
-      "port": 3277
+      "runtimeArgs": ["-C", "web-factory", "--filter", "site", "dev"],
+      "port": 3277,
+      "autoPort": true
     },
     {
       "name": "web-factory-out",

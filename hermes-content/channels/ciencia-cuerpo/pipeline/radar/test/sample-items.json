@@ -1,0 +1,61 @@
+{
+  "note": "Items RSS de muestra para validar el radar OFFLINE (sin red). Mezcla on-brand, YMYL-sensible y off-brand para probar scoring, flag y filtro.",
+  "items": [
+    {
+      "title": "Brain study reveals why task-switching hurts attention and focus",
+      "summary": "Researchers mapped the cognitive control networks that make multitasking so costly for sustained attention.",
+      "link": "https://example.org/attention-task-switching",
+      "pubDate": "2026-07-09",
+      "publisher": "ScienceDaily - Mind & Brain"
+    },
+    {
+      "title": "How disrupted circadian rhythm and poor sleep drain your energy",
+      "summary": "A new review links melatonin timing and the glymphatic system to next-day fatigue.",
+      "link": "https://example.org/circadian-sleep-energy",
+      "pubDate": "2026-07-08",
+      "publisher": "Neuroscience News"
+    },
+    {
+      "title": "Dopamine drives motivation: why we start tasks and then quit",
+      "summary": "Study separates anticipation dopamine from reward dopamine in the striatum.",
+      "link": "https://example.org/dopamine-motivation",
+      "pubDate": "2026-07-07",
+      "publisher": "ScienceDaily - Psychology"
+    },
+    {
+      "title": "Experimental drug shrinks tumors in early cancer clinical trial",
+      "summary": "A new medication reduced tumor size in patients; treatment still under study.",
+      "link": "https://example.org/cancer-drug-trial",
+      "pubDate": "2026-07-09",
+      "publisher": "ScienceDaily - Health & Medicine"
+    },
+    {
+      "title": "The basal ganglia and how a habit gets automated in the brain",
+      "summary": "Signal-routine-reward loop explains why habits stick and are hard to break.",
+      "link": "https://example.org/habit-basal-ganglia",
+      "pubDate": "2026-07-06",
+      "publisher": "Neuroscience News"
+    },
+    {
+      "title": "Astronomers detect a new exoplanet orbiting a distant star",
+      "summary": "The rocky world sits in the habitable zone of a red dwarf.",
+      "link": "https://example.org/exoplanet",
+      "pubDate": "2026-07-09",
+      "publisher": "ScienceDaily - Space"
+    },
+    {
+      "title": "How the hippocampus encodes memory through synaptic plasticity",
+      "summary": "Long-term potentiation physically strengthens neuron connections during learning.",
+      "link": "https://example.org/memory-plasticity",
+      "pubDate": "2026-07-05",
+      "publisher": "ScienceDaily - Mind & Brain"
+    },
+    {
+      "title": "Gut microbiome shapes mood via the gut-brain axis, diet study finds",
+      "summary": "Changes in gut bacteria altered anxiety-like behavior through the vagus nerve.",
+      "link": "https://example.org/gut-brain-mood",
+      "pubDate": "2026-07-08",
+      "publisher": "ScienceDaily - Health & Medicine"
+    }
+  ]
+}

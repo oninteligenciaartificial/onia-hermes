@@ -2,8 +2,9 @@
   "projectId": "gestios",
   "projectName": "GestiOS",
   "repoPath": "C:\\dev\\proyectos\\Gestios",
-  "status": "mapped_not_installed",
-  "adoptionRule": "Do not install until ONIA Core beta. GestiOS must adopt the core without becoming the owner of the core.",
+  "status": "installing",
+  "adoptionPlan": "onia-core/ONIA_CORE_GESTIOS_ADOPTION_PLAN_2026.md",
+  "adoptionRule": "GestiOS must adopt the core without becoming the owner of the core. A prior attempt to fork the contract directly into the GestiOS repo was reverted (commit 3d8aec4) -- never copy contract.json into the product repo, only reference it.",
   "businessRole": "General business organization system for small and medium companies.",
   "entityMappings": [
     {
@@ -210,6 +211,26 @@
       "capabilityId": "channels",
       "status": "missing",
       "evidence": []
+    },
+    {
+      "capabilityId": "catalog_inventory",
+      "status": "exists",
+      "evidence": [
+        "Product",
+        "ProductVariant",
+        "Product.stock",
+        "Product.minStock",
+        "PurchaseOrderItem"
+      ]
+    },
+    {
+      "capabilityId": "sales_cash",
+      "status": "exists",
+      "evidence": [
+        "Order",
+        "OrderItem",
+        "Invoice"
+      ]
     }
   ],
   "blockedUntil": [

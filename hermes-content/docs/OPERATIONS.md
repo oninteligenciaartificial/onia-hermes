@@ -145,3 +145,53 @@ Files live in:
 ```
 
 If a URL returns HTML instead of image/video, use the `:8099` asset URL.
+
+## Troubleshooting
+
+### `ig-publish` is not recognized
+Run it on the VPS, not on Windows.
+
+### Graph API says token is invalid
+Regenerate a Meta Page Access Token with:
+- `pages_show_list`
+- `pages_read_engagement`
+- `instagram_basic`
+- `instagram_content_publish`
+
+Use the long-lived user token only to request the Page token:
+
+```text
+/1140384625819526?fields=name,id,access_token,instagram_business_account{id,username}
+```
+
+Then put the returned Page `access_token` in `META_LONG_LIVED_TOKEN` and
+redeploy with `npm run deploy:instagram`.
+
+If `ig-publish healthcheck` reports `type: PAGE` and `is_valid: true`, the
+token works. If `expires_at` is present and not `0`, rotate before that date.
+
+### Graph API cannot download media
+The URL must be public, direct, and return the correct content type:
+- image: `image/jpeg` or `image/png`
+- video: valid downloadable `.mp4`
+
+Verify:
+
+```bash
+curl -I "PUBLIC_URL"
+```
+
+### Asset URL returns HTML
+Use the asset server on port `8099`, not the Easypanel/Traefik root:
+
+```text
+http://187.77.16.63:8099/file.png
+```
+
+### `carousel-generator` cannot find `OPENAI_API_KEY`
+Set `OPENAI_API_KEY` in `/root/.hermes/.env` by running:
+
+```powershell
+$env:OPENAI_API_KEY="sk-..."
+npm run deploy:hermes-content
+```

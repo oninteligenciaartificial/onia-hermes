@@ -2,6 +2,45 @@
 
 Instrucciones de proyecto para Claude. Override sobre defaults.
 
+## Skills del proyecto (REGLA)
+
+> El repo tiene skills propias de Claude Code en `.claude/skills/` (auto-descubribles).
+> Toda sesión arranca invocando **`onia-router`**, que enruta la tarea a su carril y
+> nombra el stack de skills + subagente + docs fuente. Mapa legible + spec de repos
+> separados: `hermes-content/docs/ONIA_SKILLS_STACK_Y_SUBAGENTES_20260705.md`.
+
+- Skills ONIA propias: `onia-router` (índice), `onia-propuestas`,
+  `onia-contabilidad-bolivia`, `onia-core`, `onia-web-factory`, `ver-videos`, `editor-videos`.
+  Envuelven conocimiento propio y apuntan a las fuentes de verdad — al cambiar una regla,
+  editar la fuente, no la skill.
+- 3 capas distintas: skills Claude Code (`.claude/skills/`, las invoca Claude Code) ·
+  subagentes (`.claude/agents/`) · skills-doc de Hermes (`hermes-content/skills/`, las lee
+  el bot del VPS).
+- Si una tarea tiene skill pública instalada (137 globales + plugins), usarla; no reinventar.
+
+## Video — ver y editar sin editores humanos (REGLA)
+
+> El ONIA system ve, transcribe y edita video con código (método del tutorial de Santiago).
+> Dos skills propias, probadas 2026-07-23. Al mejorar reglas, editar la SKILL.md, no duplicar.
+
+- **`ver-videos`** — para "ver" cualquier video que pase Sergio o un cliente: baja/recibe →
+  audio + fotogramas (`scripts/see-video.sh`) → transcribe con timestamps (`scripts/transcribe.sh`,
+  Speaches en el VPS, gratis) → leer una MUESTRA de frames con visión → resumen con timeline.
+  **Honestidad:** reportar cobertura real (audio 100%, N de M frames), no afirmar "vi el video"
+  desde 2 cuadros. **Forzar `Systran/faster-whisper-small`** (el distil del contenedor es
+  English-only y traduce el español).
+- **`editor-videos`** — edición talking-head / vertical (TikTok/Reels/Shorts): corta silencios,
+  muletillas y trabadas (`scripts/cut-plan.mjs` + ffmpeg, pieza propia), subtítulos karaoke
+  (`embedded-captions`), overlays (`talking-head-recut`), SFX (librería HyperFrames), complementos
+  (imagen barata / Higgsfield con OK). Orquesta, no reinventa el motor.
+- **REGLA DE ORO (de Santiago):** la **tabla de cortes + preview 360p SIEMPRE se muestran a Sergio
+  ANTES de aplicar el corte**. Nunca cortar a ciegas.
+- **Gasto:** generación paga (Higgsfield, AssemblyAI, ElevenLabs) = permiso explícito caso por caso;
+  por defecto gratis (Speaches, HyperFrames, imagen barata). Ver `gasto-plataformas-validar-primero`.
+- HyperFrames (motor HTML→MP4) vive en `.agents/skills/` (talking-head-recut, embedded-captions,
+  media-use, etc.). Transcripción local `hyperframes transcribe` NO corre en Windows
+  (whisper-cpp ausente) → usar Speaches. Detalle: `hermes-content/docs` + memoria [[onia-video-hyperframes]].
+
 ## Propuestas comerciales (REGLA)
 
 > Fuente de verdad: `hermes-content/skills/propuestas-comerciales-onia.md`
@@ -98,6 +137,28 @@ Docs internos de referencia: `PRICING_RATIONALE_INTERNO.md`,
   cuando es seguro (avance lineal). Así `main` queda al día solo y todos los
   dispositivos sincronizan con `git pull` en `main`. Si `main` divergió (no es
   FF), no fuerza nada: queda merge manual.
+- **REGLA DURA — `main` SIEMPRE compila; nunca imports colgando en `main`.** Antes
+  de hacer FF de `main`, si el avance toca `web-factory/apps/site/**`, el autosync
+  corre `tsc --noEmit` en `apps/site`. Si no compila (ej. un árbol de rebuild a
+  medio mergear que importa archivos que aún no llegaron), **NO avanza `main`**
+  (la rama de trabajo igual se pushea; el WIP vive en su rama). Esto evita romper
+  el deploy de Vercel y el auto-deploy del VPS que buildean `main`. Al terminar un
+  carril de código, mergear a `main` como **un solo árbol coherente que compila**,
+  nunca un subconjunto parcial. Los sync de docs/contenido no pagan tsc (sólo
+  corre cuando el avance a main toca la app).
+
+## Objetivo por sesión (REGLA)
+
+> Definir el objetivo al inicio y NO terminar la sesión hasta perfeccionarlo y
+> terminarlo. Especificarlo siempre para no descarrilar a otras cosas.
+
+- **Una sesión de control, muchos subagentes.** Trabajar TODO desde una sola sesión
+  orquestando subagentes; no abrir varias sesiones de chat en paralelo — a Sergio se
+  le cruza la información y no se llega al objetivo.
+- **Cada subagente aislado en su worktree/carril.** El subagente corre
+  `git branch --show-current` primero y opera con worktree explícito; el orquestador
+  (la sesión de control) mantiene el objetivo, el orden y el merge a `main`.
+- **No pasar a otra cosa** hasta que el objetivo actual esté funcional y en `main`.
 
 ## Desarrollo en paralelo — carriles (REGLA)
 
@@ -106,7 +167,8 @@ Docs internos de referencia: `PRICING_RATIONALE_INTERNO.md`,
 > eso y corrés TODOS los carriles no bloqueados en paralelo.
 
 Fuentes (no duplicar; editar estas, no crear otras):
-- Asignación + prompts copy-paste: `hermes-content/docs/ONIA_SESION_KICKOFFS_20260705.md`.
+- **Arranque actual (foco + prompts, EMPEZAR AQUÍ): `hermes-content/docs/ONIA_PLAN_ARRANQUE_LIMPIO_20260718.md`.**
+- Asignación + prompts copy-paste (histórico): `hermes-content/docs/ONIA_SESION_KICKOFFS_20260705.md`.
 - Backlog e ítems (P/R/M/S): `hermes-content/docs/ONIA_PROXIMA_SESION_PLAN_20260705.md`.
 - Dueño de archivos por carril: `COORDINATION_MANIFEST.md` (sección "Modelo de carriles").
 - Stack de skills + reglas de subagentes: `hermes-content/docs/ONIA_SKILLS_STACK_Y_SUBAGENTES_20260705.md`.
@@ -124,6 +186,10 @@ Carriles = 1 sesión = 1 worktree = 1 rama = 1 carpeta/repo:
 - **H** `contenido-higgsfield` → onia-hermes `hermes-content/references` + skills(video/IG) + scripts(video/ig) + `.hermes/video-lab` (producción continua)
 - **I** `research-estrategia` → onia-hermes `hermes-content/docs/research/**` (analizar productos ganadores + validar ventures; NO codea, entrega decisión)
 - **J** `video-remotion` → onia-hermes `scripts/remotion`|`apps/video` (video programático React; distinto de H generativo)
+- **K** `yt-canal` → onia-hermes `hermes-content/channels/onia-automatiza/**` (canal YT faceless "ONIA Automatiza" ES; reusa content-engine/Higgsfield sin editarlos, upload→handoff a n8n; plan en `docs/research/ONIA_YT_CANAL_ONIA_AUTOMATIZA_20260706.md`)
+- **onia-center-rebuild** (carril A, sesión fresca) → el panel es un MONOLITO (~14k líneas en 4 archivos: page.tsx/operating-workspace.tsx/operating-source.ts/onia-center.css). NO rediseñar en su lugar (ningún agente puede con 14k líneas → se pierde y rompe). Reconstruir en componentes chicos (`src/app/onia-center/components/**`, ~100-200 líneas c/u) reusando la data (lib/onia-center-store + api/onia-center), AL LADO de prod, y swap al final. Conservar agentes Vendedor/Día + cola de aprobación.
+- **docs-hygiene diaria** (carril infra) → `scripts/docs-hygiene.mjs` + cron diario: auto-borra SOLO duplicados de raíz IDÉNTICOS a su copia en `hermes-content/docs/`, flaggea el resto (divergentes/superseded) a Sergio por Telegram. Mantiene el repo ordenado para que las sesiones no se pierdan con docs viejos/duplicados. Regla: `hermes-content/docs/` es la fuente, la raíz sin gemelos.
+- **L** `yt-ciencia-cuerpo` → onia-hermes `hermes-content/channels/ciencia-cuerpo/**` (canal YT faceless "La Ciencia de tu Cuerpo" ES, educativo/salud, CPM alto; reusa content-engine/Higgsfield sin editarlos; SALUD=YMYL: cero consejo médico, todo con fuentes, el foso es el guion; plan en `docs/research/ONIA_YT_CANAL_CIENCIA_CUERPO_20260707.md`)
 - **Core** `onia-core` → `onia-core/**` (CONGELADO; solo bajo adopción aprobada)
 
 Reglas duras:
@@ -131,6 +197,13 @@ Reglas duras:
 - Dentro de onia-hermes: cada carril su carpeta; **AVISAR** antes de tocar los 4
   raíz de web-factory (`next.config.ts`, `layout.tsx`, `globals.css`, `package.json`).
 - Infra (G) = UN solo dueño a la vez.
+- **`main` siempre debe compilar.** El auto-sync hace FF de `main`: nunca dejar que
+  arrastre WIP parcial (si un archivo nuevo importa otro archivo nuevo, van los DOS
+  o ninguno). Rebuild entra a `main` solo como merge COMPLETO con `tsc --noEmit`
+  verde en `web-factory/apps/site` (ojo casing de imports: Linux distingue). `main`
+  alimenta el deploy real (VPS) Y el Vercel `onia-center`; roto, rompe ambos y
+  spamea "Failed preview deployment". Detalle + incidente ref:
+  `COORDINATION_MANIFEST.md` → "no filtrar WIP parcial a main".
 - Correr todo en paralelo; lo único que se estagia son DEPENDENCIAS reales, no cupo:
   P3 tras P2 · R5 tras R1 · M1 deploya tras A/C en main · M2 no re-publica el n8n
   `ONIADailyBrief001` hasta M1 · H publica IG tras token (S6).
@@ -142,3 +215,59 @@ Reglas duras:
 Bloqueos humanos de Sergio (hacer apenas se pueda; destraban lo comercial): S1
 precios, S2 NIT SIAT, S3 secret intake n8n, S4 columnas TR4, S5 Meta, S6 token IG,
 S7 keys Tavily/fal, S8 fiscal, S9 password. Detalle en el plan maestro §(b).
+
+## Cuándo separar un repo (REGLA)
+
+> El cerebro va junto; los productos con cliente van aparte. Separás por dueño +
+> ciclo de vida + acceso, NUNCA por cantidad ni por "ordenar el desorden".
+
+- **Junto en onia-hermes:** el cerebro (`hermes-content`: docs, skills, memoria,
+  propuestas), el core y la orquestación. Se lee a sí mismo (Hermes, agentes,
+  memoria); fragmentarlo multiplica la sincronización manual (lección `onia-core`,
+  que hubo que mergear a mano para que DentaGest lo leyera).
+- **Separado (repo propio):** un producto SOLO cuando cumple las TRES — (1) cliente
+  real, (2) deploy y ciclo de release propio, (3) el cliente NO debe ver el cerebro.
+  Correctos hoy: DentaGest, GestiOS, Bolivian Electric. Colaboradores = repo saneado
+  `onia-hermes-collab` (separación por acceso).
+- **NO separar por sensación de desorden.** El cruce se arregla con disciplina de
+  cierre (mergear + cerrar sesión) y el tablero de carriles, no partiendo repos.
+- **Candidato futuro (no ahora):** sacar `onia-center` de `web-factory` cuando pese
+  demasiado y ya no comparta packages — con motivo medible, no preventivo.
+
+## Objetivo por sesión — no descarrilar (REGLA)
+
+> Sergio 2026-07-20: separar el trabajo en muchas sesiones mezcla la información y se
+> pierde el objetivo. Se orquesta desde UNA sesión de control con subagentes.
+
+- **Definir el objetivo al inicio de cada sesión, escrito y explícito.** Todo lo que no
+  sirve a ese objetivo se pospone (se anota como pendiente), no se hace.
+- **No terminar la sesión hasta perfeccionar y terminar ese objetivo.** Nada a medias,
+  nada de saltar a otra cosa.
+- **Orquestar con subagentes desde la sesión de control** en vez de abrir muchas
+  sesiones que se cruzan. Cada subagente trabaja en su worktree/carril con ruta
+  explícita, verifica `git branch --show-current`, y hace gates + commit COHERENTES en
+  su propio árbol (nunca mezcla árboles). El orquestador mantiene el objetivo, el orden
+  y el merge a `main` tras revisar.
+- Tareas del mismo carril (misma carpeta) → subagentes SECUENCIALES. Carriles distintos
+  → en paralelo. Lo nuevo que aparezca se anota como pendiente y se retoma DESPUÉS.
+
+## Velocidad — no tardar en lo simple (REGLA)
+
+> Sergio 2026-07-22: "estás tardando demasiado en algo muy simple" (la UI del panel
+> tomó 3 rondas porque shippeé genérico e iteré, en vez de usar el método de entrada).
+
+- **Método correcto desde el PRIMER intento.** No shippear algo mediocre para iterar
+  después. UI/diseño: cargar `impeccable` + registro producto + galería/tokens de
+  web-factory ANTES de codear (ver [[web-factory-disenos-genericos]]); para diseño nuevo,
+  aprobar un mockup rápido con Sergio y recién portar fiel (no rediseñar en el panel real
+  a ciegas). Toda tarea: elegir la skill/subagente/herramienta correcta de entrada, no
+  descubrirla a la 3ª ronda.
+- **Paralelizar agresivo.** Lo independiente va en subagentes CONCURRENTES
+  (dispatching-parallel-agents), nunca en serie: research, review, y frentes distintos al
+  mismo tiempo. Serializar solo lo que comparte archivos/estado.
+- **Decidir y actuar; menos ida y vuelta.** Minimizar investigación exploratoria y
+  verificación redundante en lo de bajo riesgo. Verificación fuerte (tsc, prueba en vivo,
+  gates) SOLO para lo que toca prod / plata / `main`. Lo reversible y de bajo riesgo:
+  hacerlo y seguir.
+- **No re-hacer lo aprobado.** Diseño o plan ya aprobado por Sergio = portar fiel, no
+  reabrir. Guardar el mockup/decisión como fuente de verdad.

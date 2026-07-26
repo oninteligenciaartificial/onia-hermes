@@ -42,18 +42,40 @@ Profesional, incluido en Empresa).
 
 ### 2.1 Legales — ONIA como empresa proveedora
 
-| # | Requisito | Fuente |
+> **CONFIRMADO 2026-07-08 (subagente, fuentes oficiales): el SEPREC NO es
+> requisito para registrar el sistema de facturación.** La RND 102100000011
+> **Art. 19** (requisitos de acreditación del proveedor) exige 4 cosas y
+> ninguna es la matrícula de comercio: (a) inscrito en el RNC/Padrón y en
+> **Régimen General**; (b) **domicilio fiscal** en el país; (c) información
+> actualizada en el RNC; (d) sin marcas de riesgo tributario activas. ONIA,
+> con el NIT activo, **puede iniciar el registro del sistema YA**, con el
+> SEPREC en trámite. Fuente: [PDF RND compilada 16/06/2025](https://www.impuestos.gob.bo/wp-content/uploads/2025/10/RND11.pdf)
+> Art. 19 + [Proceso de autorización SIAT](https://siatinfo.impuestos.gob.bo/index.php/facturacion-en-linea/autorizacion-de-sistemas/proceso-de-autorizacion).
+>
+> **Plazo crítico (Art. 18.III): 90 días** (prorrogables 60 por única vez) para
+> concluir la autorización —incluidas pruebas e inspección— desde que se abre
+> la solicitud; si no, se cancela de oficio. **Implicación de secuencia: no
+> abrir el registro del sistema hasta tener el emisor técnico listo para
+> sostener la Fase 1 de pruebas** (el reloj corre desde el registro).
+>
+> ADSIB→AGETIC (DS 5519, competencias trasladadas 15-ene-2026): solo afecta la
+> modalidad **Electrónica en Línea** (firma digital). La modalidad recomendada
+> **Computarizada en Línea** usa CUIS/CUFD + hash SHA-256, sin firma digital →
+> el reordenamiento institucional NO bloquea a ONIA.
+
+| # | Requisito | Estado / Fuente |
 |---|---|---|
-| 1 | **NIT activo** del solicitante | siatinfo/proceso-de-autorizacion |
-| 2 | **Obligación tributaria IVA** vigente | idem |
-| 3 | Sin marcas de control ni contravenciones | idem |
-| 4 | Relación contractual con cada cliente; tipo de servicio declarado al asociar: licencia, alquiler, servicio web (SOAP/REST) o facturación por terceros | siatinfo/asociacion-de-sistemas |
-| 5 | Autorización del sistema: vigencia 3 años; renovar antes del vencimiento con las pruebas vigentes | RND 1021-11 Art. 20 (Lexivox) |
-| 6 | Responsabilidad: el cliente (sujeto pasivo) responde por el tributo; el proveedor responde por incumplimientos de emisión atribuibles al sistema | RND 1021-11 Art. 34 (Lexivox) |
-| 7 | Inhabilitación: NIT inactivo del titular → baja del sistema; a proveedores con múltiples clientes se les da aviso de 30 días | RND 1021-11 Art. 23 (Lexivox) |
-| 8 | Sanciones formales: 500 UFV por obligación formal incumplida | RND 102000000036 |
-| 9 | Actividad económica "desarrollo de software/informática" registrada en el padrón del NIT ONIA | [VERIFICAR — el proceso no lista actividad específica, pero el rubro debe ser coherente] |
-| 10 | Inscripción SEPREC (matrícula de comercio; unipersonal Bs 130) + NIT vía MASI (CI + factura de luz ≤60 días) | seprec.gob.bo / boliviaimpuestos.com |
+| 1 | **NIT activo** en Régimen General (Art. 19.a) | ✅ ONIA lo tiene · [PDF RND Art.19](https://www.impuestos.gob.bo/wp-content/uploads/2025/10/RND11.pdf) |
+| 2 | **Domicilio fiscal** en el país (Art. 19.b) | Art. 19.b |
+| 3 | **Información actualizada en el RNC** (Art. 19.c) | Art. 19.c |
+| 4 | **Sin marcas de riesgo tributario activas** (Art. 19.d) | Art. 19.d — verificar en Oficina Virtual |
+| 5 | **Obligación tributaria IVA vigente** (operativo del portal) | siatinfo/proceso-de-autorizacion |
+| 6 | Tipo de autorización = **Proveedor** (no "propio"); "propio" y "proveedor" son autorizaciones DISTINTAS (Art. 19.II) | Art. 18/19.II |
+| 7 | Autorización del sistema: vigencia 3 años; renovar con pruebas vigentes | RND Art. 20 |
+| 8 | Relación contractual con cada cliente + tipo de servicio declarado al asociar (licencia/alquiler/servicio web/facturación por terceros) | siatinfo/asociacion-de-sistemas |
+| 9 | Responsabilidad: el cliente responde por el tributo; el proveedor por fallas de emisión del sistema | RND Art. 34 |
+| 10 | Actividad económica "software/servicios informáticos" en el padrón del NIT | **RECOMENDADO, no requisito formal**: Art. 19 NO lo exige para sistemas (sí para imprentas, Art. 61) — pero refuerza "info actualizada en RNC" y evita observación. Cargarla igual por la propia obligación IVA de ONIA. Flujo exacto de alta de actividad 2026: NO CONFIRMADO, verificar en Oficina Virtual del SIN |
+| 11 | ~~Inscripción SEPREC~~ | **NO bloquea el registro del sistema** (Art. 19 no la pide). SEPREC y NIT se tramitan en cualquier orden; ONIA con NIT + SEPREC en trámite es situación normal y permitida |
 
 ### 2.2 Técnicos — el sistema
 
@@ -145,19 +167,46 @@ autorización "API" del SIN hasta que haga falta).
 
 ## 4. Checklist del trámite (orden, responsable, duración estimada)
 
-| # | Paso | Resp. | Duración | Nota |
-|---|---|---|---|---|
-| 0 | **NIT ONIA**: SEPREC + MASI + actividad software — **BLOQUEO ACTUAL #1** | Sergio | 1-2 sem [ESTIMADO] | sin NIT no se puede ni solicitar |
-| 1 | Credenciales SIAT en línea del NIT ONIA | Sergio | 1 día | |
-| 2 | Leer RND 1021-11 compilada + anexos técnicos (XSD/WSDL) | dev | 3 días | en paralelo a 0 |
-| 3 | Registrar sistema en "Gestión de Autorización de Sistemas": tipo proveedor, modalidad computarizada, doc sector compra-venta (+salud para dental [VERIFICAR doc sector clínicas]) | Sergio+dev | 1 día | requiere 0-1 |
-| 4 | Construir emisor: CUIS/CUFD/CUF, catálogos, XML+XSD, hash | dev | 3 sem | arranca sin NIT (specs públicas) |
-| 5 | Fase 1 en piloto: etapas I-VII y XI (≈1.200 operaciones) | dev | 2 sem | requiere 3 |
-| 6 | Funcionalidades de inspección (leyendas, medios pago, contingencia auto) | dev | 1 sem | solapa con 5 |
-| 7 | Solicitar y pasar Fase 2 inspección | Sergio+dev | 1-3 sem [ESTIMADO — agenda del SIN no publicada] | |
-| 8 | Fase 3 piloto con 1 clínica DentalGest real (asociación + token + homologación + carga) | dev+cliente | 2 sem | |
-| 9 | Declaración jurada de inicio de operaciones → PRODUCCIÓN | Sergio | 1 día | |
-| 10 | Onboarding runbook por cliente (asociación, token, homologación) | dev | continuo | |
+> **Estado 2026-07-09 — Fase A CUMPLIDA (padrón verificado):** NIT `5371375010`
+> (empresa unipersonal, Gerencia Distrital Santa Cruz II), Régimen General,
+> ACTIVO, sin marcas de suspensión, IVA vigente. **Actividad económica de
+> software CONFIRMADA y es la PRIMARIA** (4651200 venta de programas de
+> informática; complementarias 6209920 servicios en la nube, 6312000 portales
+> web, 8549100 enseñanza informática, 7310100 publicidad digital). Todos los
+> requisitos del Art. 19 cumplidos → el registro del sistema como Proveedor está
+> desbloqueado. Modalidad de facturación ya seleccionada: COMPUTARIZADA EN LÍNEA
+> (estado PENDIENTE de habilitar). El emisor técnico avanza en
+> `hermes-content/integrations/siat/` (constantes + máquina de estados +
+> contrato de payload + **generador CUF VERIFICADO contra el Anexo Técnico
+> oficial**, 45 tests). SEPREC ⏳ en trámite (NO bloquea).
+>
+> **Reloj de 90 días (Art. 18.III):** el registro del sistema (paso 5) se abre
+> SOLO cuando el emisor pueda sostener la Fase 1 de pruebas — no antes.
+>
+> **⚠️ Nota del contador:** desde 03/06/2026 las obligaciones IVA/IT/RC-IVA
+> corren; primera declaración vence 13/08/2026 (aunque sea sin movimiento).
+
+**Fase A — sin arrancar el reloj de 90 días (se puede YA, con el NIT):**
+
+| # | Paso | Resp. | Nota |
+|---|---|---|---|
+| 0 | NIT activo en Régimen General | Sergio | ✅ obtenido |
+| 1 | Verificar en Oficina Virtual: sin marcas de riesgo tributario + actividad "software" cargada en el padrón (recomendado, no requisito formal) | Sergio | mitiga observaciones; no arranca reloj |
+| 2 | Obtener/validar credenciales SIAT en Línea del NIT | Sergio | login unificado prod↔piloto |
+| 3 | Leer RND 1021-11 compilada + anexos técnicos (XSD/WSDL/GENERACION-CUF.pdf) | dev | en paralelo |
+| 4 | Construir emisor: CUIS/CUFD/CUF, catálogos, XML+XSD, hash | dev | 🟡 avanzando (constantes + state machine + payload + **CUF real VERIFICADO contra el Anexo Técnico**: 10 díg. + Módulo 11 anclado al ejemplo oficial + código de control, 45 tests). Falta SOAP (CUIS/CUFD, necesita piloto/NIT) + builder XML+XSD + hash. **Cerrar ANTES de abrir el registro (paso 5).** |
+
+**Fase B — arranca el reloj de 90 días (abrir solo cuando el emisor esté listo):**
+
+| # | Paso | Resp. | Nota |
+|---|---|---|---|
+| 5 | Registrar sistema en "Gestión de Autorización de Sistemas": tipo **Proveedor**, modalidad **Computarizada en Línea**, doc sector compra-venta (+salud para dental [VERIFICAR doc sector clínicas]). Devuelve código de sistema + parámetros | Sergio+dev | **arranca los 90 días** |
+| 6 | Fase 1 en piloto: etapas I-VII y XI (≈1.200 operaciones) | dev | 2 sem, requiere 5 |
+| 7 | Funcionalidades de inspección (leyendas, medios pago, contingencia auto) | dev | 1 sem, solapa con 6 |
+| 8 | Solicitar y pasar Fase 2 inspección (SIN, presencial o virtual) | Sergio+dev | 1-3 sem [agenda del SIN no publicada] |
+| 9 | Fase 3 piloto con 1 clínica DentalGest real (asociación + token + homologación + carga) | dev+cliente | 2 sem |
+| 10 | Declaración jurada de inicio de operaciones → PRODUCCIÓN | Sergio | 1 día |
+| 11 | Onboarding runbook por cliente (asociación, token, homologación) | dev | continuo |
 
 No hay SLA oficial publicado por fase; el total 2-3 meses coincide con lo
 presupuestado en la estrategia fiscal. La agenda de inspección del SIN cerca

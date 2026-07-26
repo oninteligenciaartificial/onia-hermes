@@ -124,16 +124,27 @@ function renderComparativa(comp) {
   </table>`;
 }
 
-function renderProximosPasos(pasos, cta) {
+// Link de agenda de ONIA (Cal.com). Cada propuesta invita a reservar una llamada;
+// override por cliente con c.ctaAgenda = { url, texto }.
+const CAL_LINK = 'https://cal.onia.com.bo';
+
+function renderProximosPasos(pasos, cta, agenda) {
   if (!pasos || !pasos.length) return '';
   const steps = pasos.map((p, i) => `
     <div class="step"><div class="n">${i + 1}</div><div><p>${esc(p)}</p></div></div>`).join('');
-  const btn = cta && cta.url
-    ? `<p style="margin-top:14px;"><a class="cta" href="${esc(cta.url)}">${esc(cta.texto || 'Escribinos por WhatsApp')}</a></p>`
+  const waBtn = cta && cta.url
+    ? `<a class="cta" href="${esc(cta.url)}">${esc(cta.texto || 'Escribinos por WhatsApp')}</a>`
+    : '';
+  const agendaUrl = (agenda && agenda.url) || CAL_LINK;
+  const agendaBtn = agendaUrl
+    ? `<a class="cta" href="${esc(agendaUrl)}">${esc((agenda && agenda.texto) || 'Agendá una llamada')}</a>`
+    : '';
+  const btns = (waBtn || agendaBtn)
+    ? `<p style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;">${waBtn}${agendaBtn}</p>`
     : '';
   return `
   <h2>Próximos pasos</h2>
-  <div class="card">${steps}${btn}</div>`;
+  <div class="card">${steps}${btns}</div>`;
 }
 
 function renderPortada(p, nombre) {
@@ -281,7 +292,7 @@ ${renderValor(c.valor)}${renderCasos(c.casos)}${renderComparativa(c.comparativa)
     <div class="tag amber">Importante — costos de terceros</div>
     <p>${c.terceros}</p>
   </div>
-${renderRequisitos(c.requisitos)}${renderProximosPasos(c.proximosPasos, c.ctaWhatsapp)}
+${renderRequisitos(c.requisitos)}${renderProximosPasos(c.proximosPasos, c.ctaWhatsapp, c.ctaAgenda)}
   <div class="foot">
     <p class="big">Precio reservado hasta 30 días con confirmación de pago.</p>
     <p>ONIA — Sistemas, automatización y contenido para negocios. business@onia.com.bo</p>

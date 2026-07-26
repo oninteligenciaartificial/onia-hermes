@@ -1,0 +1,160 @@
+{
+  "module": "commerce",
+  "name": "ONIA Commerce Module",
+  "version": "0.3.0",
+  "status": "draft",
+  "layer": "activatable_module",
+  "purpose": "Catalogo, inventario multi-almacen y cotizaciones B2B como add-on activable SOBRE ONIA Core. Vive FUERA del core (el core no es inventario/ventas); se activa por vertical. ProveeGest/Bolivian Electric es el primer consumidor: catalogo electrico, almacenes por sucursal, listas de precio USD/BOB y cotizaciones con SLA.",
+  "coreContract": "onia-core/contract.json",
+  "schemaFile": "onia-core/modules/commerce.schema.sql",
+  "installInProductRepos": false,
+  "activatesCapabilities": [
+    "catalog_inventory",
+    "quotes_b2b",
+    "sales_cash"
+  ],
+  "coreDependencies": [
+    { "coreEntityId": "organization", "as": "tenant root de cada entidad del modulo" },
+    { "coreEntityId": "area", "as": "warehouse.areaId (sucursal logica del core)" },
+    { "coreEntityId": "business_partner", "as": "quote.partnerId (cliente empresa / proveedor)" },
+    { "coreEntityId": "work_item", "as": "quote.workItemId (cotizacion como pendiente con SLA en el owner_dashboard)" },
+    { "coreEntityId": "approval_request", "as": "aprobacion de descuento sobre linea o cotizacion (external al modulo)" },
+    { "coreEntityId": "document", "as": "proforma/PDF de la cotizacion via storageRef" }
+  ],
+  "verticalTracks": [
+    "proveegest-electrico"
+  ],
+  "entities": [
+    {
+      "id": "product",
+      "name": "Product",
+      "capabilityId": "catalog_inventory",
+      "table": "onia_commerce_products",
+      "purpose": "Item del catalogo (material electrico, panel, accesorio). El precio no vive aca sino en price_list.",
+      "requiredFields": ["id", "organizationId", "sku", "name", "unit", "active", "createdAt"],
+      "optionalFields": ["category", "brand", "description", "nandinaCode"],
+      "tenantScoped": true
+    },
+    {
+      "id": "product_variant",
+      "name": "ProductVariant",
+      "capabilityId": "catalog_inventory",
+      "table": "onia_commerce_product_variants",
+      "purpose": "Variante vendible de un producto (medida, voltaje, presentacion). El stock y el precio se llevan por variante.",
+      "requiredFields": ["id", "organizationId", "productId", "sku", "active", "createdAt"],
+      "optionalFields": ["attributes", "barcode"],
+      "tenantScoped": true
+    },
+    {
+      "id": "warehouse",
+      "name": "Warehouse",
+      "capabilityId": "catalog_inventory",
+      "table": "onia_commerce_warehouses",
+      "purpose": "Almacen/deposito por sucursal. Se enlaza a un area del core para reutilizar el ruteo por sucursal.",
+      "requiredFields": ["id", "organizationId", "name", "active", "createdAt"],
+      "optionalFields": ["areaId", "address"],
+      "tenantScoped": true
+    },
+    {
+      "id": "stock_item",
+      "name": "StockItem",
+      "capabilityId": "catalog_inventory",
+      "table": "onia_commerce_stock_items",
+      "purpose": "Existencia de una variante en un almacen. Cantidad y punto de reorden para alertas de stock critico.",
+      "requiredFields": ["id", "organizationId", "warehouseId", "variantId", "quantity", "createdAt"],
+      "optionalFields": ["reorderPoint", "unitCost"],
+      "tenantScoped": true
+    },
+    {
+      "id": "stock_movement",
+      "name": "StockMovement",
+      "capabilityId": "catalog_inventory",
+      "table": "onia_commerce_stock_movements",
+      "purpose": "Movimiento auditable de stock (entrada, salida, ajuste, transferencia). Referencia opcional a la entidad que lo origino (cotizacion, pedido, importacion).",
+      "requiredFields": ["id", "organizationId", "stockItemId", "movementType", "quantity", "createdAt"],
+      "optionalFields": ["reason", "relatedEntityType", "relatedEntityId", "actorId"],
+      "tenantScoped": true
+    },
+    {
+      "id": "price_list",
+      "name": "PriceList",
+      "capabilityId": "catalog_inventory",
+      "table": "onia_commerce_price_lists",
+      "purpose": "Lista de precios por moneda (USD/BOB) con vigencia. Habilita el repricing por tipo de cambio sin tocar el catalogo.",
+      "requiredFields": ["id", "organizationId", "name", "currency", "active", "createdAt"],
+      "optionalFields": ["validFrom", "validTo"],
+      "tenantScoped": true
+    },
+    {
+      "id": "price_list_item",
+      "name": "PriceListItem",
+      "capabilityId": "catalog_inventory",
+      "table": "onia_commerce_price_list_items",
+      "purpose": "Precio de una variante dentro de una lista, con cantidad minima opcional para escalas B2B.",
+      "requiredFields": ["id", "organizationId", "priceListId", "variantId", "price", "createdAt"],
+      "optionalFields": ["minQuantity"],
+      "tenantScoped": true
+    },
+    {
+      "id": "quote",
+      "name": "Quote",
+      "capabilityId": "quotes_b2b",
+      "table": "onia_commerce_quotes",
+      "purpose": "Cotizacion B2B a un business_partner. Su vencimiento (validUntil) alimenta el SLA del work_item core; el descuento pasa por approval_request core.",
+      "requiredFields": ["id", "organizationId", "partnerId", "status", "currency", "ownerId", "createdAt"],
+      "optionalFields": ["validUntil", "total", "workItemId", "priceListId", "sentAt", "acceptedAt", "rejectedAt", "expiredAt"],
+      "tenantScoped": true
+    },
+    {
+      "id": "quote_line",
+      "name": "QuoteLine",
+      "capabilityId": "quotes_b2b",
+      "table": "onia_commerce_quote_lines",
+      "purpose": "Linea de una cotizacion: variante, cantidad, precio unitario y descuento.",
+      "requiredFields": ["id", "organizationId", "quoteId", "variantId", "quantity", "unitPrice", "createdAt"],
+      "optionalFields": ["discount", "lineTotal", "notes"],
+      "tenantScoped": true
+    },
+    {
+      "id": "order",
+      "name": "Order",
+      "capabilityId": "sales_cash",
+      "table": "onia_commerce_orders",
+      "purpose": "Pedido de venta a un business_partner. Puede nacer de una cotizacion aceptada (order.quoteId) y descuenta stock por sus lineas.",
+      "requiredFields": ["id", "organizationId", "partnerId", "status", "currency", "ownerId", "createdAt"],
+      "optionalFields": ["quoteId", "warehouseId", "total", "workItemId", "confirmedAt", "fulfilledAt", "cancelledAt"],
+      "tenantScoped": true
+    },
+    {
+      "id": "order_line",
+      "name": "OrderLine",
+      "capabilityId": "sales_cash",
+      "table": "onia_commerce_order_lines",
+      "purpose": "Linea de un pedido: variante, cantidad, precio unitario y descuento.",
+      "requiredFields": ["id", "organizationId", "orderId", "variantId", "quantity", "unitPrice", "createdAt"],
+      "optionalFields": ["discount", "lineTotal", "notes"],
+      "tenantScoped": true
+    },
+    {
+      "id": "payment",
+      "name": "Payment",
+      "capabilityId": "sales_cash",
+      "table": "onia_commerce_payments",
+      "purpose": "Cobro/caja contra un pedido o partner. Metodo, monto, moneda y estado; base para cuentas por cobrar.",
+      "requiredFields": ["id", "organizationId", "amount", "currency", "method", "status", "createdAt"],
+      "optionalFields": ["orderId", "partnerId", "receivedAt", "reference"],
+      "tenantScoped": true
+    }
+  ],
+  "notes": [
+    "El modulo NO redefine entidades del core; agrega entidades propias con namespace onia_commerce_*.",
+    "Landed cost / aranceles (CIF->GA->IVA import) es un modulo aparte, no entra aca (ver ONIA_IMPORT_LANDED_COST_MODULE_2026.md).",
+    "Ventas/caja (capability sales_cash): order, order_line y payment; el pedido puede nacer de una cotizacion aceptada (order.quoteId).",
+    "El repricing por tipo de cambio se hace creando/actualizando price_list, siempre con approval_request para el cambio sensible."
+  ],
+  "gates": [
+    "installInProductRepos = false hasta plan de adopcion del modulo aprobado",
+    "SQL base del modulo (commerce.schema.sql) se traduce a migraciones del producto, no se aplica directo",
+    "SIAT/facturacion fiscal fuera del modulo (external_gate del core)"
+  ]
+}

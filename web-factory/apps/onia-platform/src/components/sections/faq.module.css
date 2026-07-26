@@ -1,0 +1,99 @@
+.section {
+  background: var(--bg-deep);
+  border-top: 1px solid var(--line-soft);
+}
+
+.list {
+  display: grid;
+  gap: 0.7rem;
+  margin-top: 2.6rem;
+  max-width: 46rem;
+}
+
+.itemWrap {
+  display: grid;
+}
+
+.item {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  padding: 0;
+}
+
+.item[open] {
+  border-color: color-mix(in oklab, var(--accent) 40%, var(--line));
+  box-shadow: 0 0 0 1px var(--accent-glow);
+}
+
+.q {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  cursor: pointer;
+  list-style: none;
+  padding: 1.05rem 1.25rem;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.q::-webkit-details-marker {
+  display: none;
+}
+
+/* marcador: un "+" que rota a "x" — el lenguaje del interruptor */
+.marker {
+  position: relative;
+  flex: none;
+  width: 16px;
+  height: 16px;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.marker::before,
+.marker::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--accent-ink);
+  transform: translateY(-50%);
+}
+
+.marker::after {
+  transform: translateY(-50%) rotate(90deg);
+}
+
+.item[open] .marker {
+  transform: rotate(45deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marker {
+    transition: none;
+  }
+}
+
+.a {
+  padding: 0 1.25rem 1.15rem;
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+  max-width: 60ch;
+}
+
+.a a,
+.more a {
+  color: var(--accent-ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.more {
+  margin-top: 2rem;
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+}

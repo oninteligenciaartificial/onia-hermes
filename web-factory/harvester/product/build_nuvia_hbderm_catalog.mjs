@@ -65,7 +65,11 @@ function titleWord(word) {
     "FILORGA",
     "FILLMED",
   ]);
-  const cleaned = word.replace(/[“”]/g, '"');
+  // Algunos productos del proveedor traen el codigo de variante entre corchetes
+  // literales (ej. "[C20] BIOTIC", "[CERA] BIOTIC"). Se desenvuelve el corchete
+  // y se aplica el mismo casing al contenido, en vez de dejarlo tal cual.
+  const bracketMatch = word.match(/^\[(.+)\]$/);
+  const cleaned = (bracketMatch ? bracketMatch[1] : word).replace(/[“”]/g, '"');
   const upper = cleaned.toUpperCase();
 
   if (keepUpper.has(upper) || /\d/.test(cleaned)) {

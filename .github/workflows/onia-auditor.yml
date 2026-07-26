@@ -1,0 +1,72 @@
+name: ONIA Auditor de Codigo
+
+# Agente Auditor: escanea el repo FRESCO (checkout completo), detecta deuda tecnica
+# (pendientes, catch vacios, archivos gigantes, any, ts-ignore) de forma determinista,
+# sintetiza con LiteLLM en el VPS una recomendacion priorizada y deja UNA idea en el Jarvis
+# (onia_center.idea_inbox). Avisa a Sergio por Telegram. Solo LECTURA: no toca codigo.
+# - Semanal (lunes 07:00 La Paz) + manual (workflow_dispatch).
+
+on:
+  schedule:
+    - cron: "0 11 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: onia-auditor
+  cancel-in-progress: false
+
+jobs:
+  audit:
+    name: Escanear repo + reportar al Jarvis
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout (repo completo y fresco)
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Escanear (determinista, sin deps)
+        run: |
+          node scripts/onia-auditor-scan.mjs > /tmp/audit.json
+          echo "Resumen del escaneo:"
+          node -e "const j=require('/tmp/audit.json');console.log(JSON.stringify(j.totals))"
+          base64 -w0 /tmp/audit.json > /tmp/audit.b64
+
+      - name: Escribir SSH key del VPS
+        env:
+          KEY: ${{ secrets.ONIA_VPS_SSH_KEY }}
+        run: |
+          printf '%s\n' "$KEY" > /tmp/vps_key
+          chmod 600 /tmp/vps_key
+
+      - name: Escribir hallazgos al Jarvis (VPS) + sintesis LiteLLM
+        env:
+          VPS: "root@187.77.16.63"
+        run: |
+          scp -i /tmp/vps_key -o StrictHostKeyChecking=no \
+            hermes-content/deploy/vps-ops/auditor-write.mjs /tmp/audit.b64 "$VPS":/opt/onia/
+          ssh -i /tmp/vps_key -o StrictHostKeyChecking=no "$VPS" '
+            MK=$(docker exec onia_selfhosted-litellm-1 printenv LITELLM_MASTER_KEY 2>/dev/null || true)
+            B64=$(cat /opt/onia/audit.b64)
+            docker exec \
+              -e LITELLM_BASE="http://onia_selfhosted-litellm-1:4000/v1" \
+              -e LITELLM_KEY="$MK" \
+              -e AUDIT_B64="$B64" \
+              -i onia-center node - < /opt/onia/auditor-write.mjs
+          ' > /tmp/audit-result.json
+          echo "Resultado del write:"
+          cat /tmp/audit-result.json
+
+      - name: Avisar a Sergio (Telegram)
+        if: always()
+        env:
+          TG_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TG_CHAT: ${{ secrets.TELEGRAM_SERGIO_CHAT_ID }}
+        run: node scripts/onia-auditor-notify.mjs /tmp/audit-result.json

@@ -17,6 +17,7 @@
  */
 
 const { execSync } = require('child_process');
+const path = require('path');
 
 function git(cmd) {
   return execSync(`git ${cmd}`, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }).trim();
@@ -25,6 +26,24 @@ function git(cmd) {
 function tryGit(cmd) {
   try {
     return { ok: true, out: git(cmd) };
+  } catch (e) {
+    return { ok: false, out: (e.stdout || '') + (e.stderr || e.message || '') };
+  }
+}
+
+function repoRoot() {
+  const r = tryGit('rev-parse --show-toplevel');
+  return r.ok && r.out ? r.out : process.cwd();
+}
+
+// Verifica que la app Next compile (tsc --noEmit) antes de dejar avanzar main.
+// Regla: main SIEMPRE compila. Si tsc no puede correr (sin deps) también devuelve
+// no-ok, y el llamador trata "no verificable" como "no avanzar main" (seguro).
+function appCompiles() {
+  const appDir = path.join(repoRoot(), 'web-factory', 'apps', 'site');
+  try {
+    execSync('npx tsc --noEmit', { cwd: appDir, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] });
+    return { ok: true, out: '' };
   } catch (e) {
     return { ok: false, out: (e.stdout || '') + (e.stderr || e.message || '') };
   }
@@ -72,11 +91,30 @@ function main() {
   if (branch.out !== 'main') {
     tryGit('fetch origin main');
     const ff = tryGit(`merge-base --is-ancestor origin/main ${branch.out}`);
-    if (ff.ok) {
-      const toMain = tryGit(`push origin ${branch.out}:main`);
-      console.log(toMain.ok ? '[autosync] main al día (fast-forward)' : '[autosync] FF a main omitido: ' + toMain.out.slice(0, 200));
-    } else {
+    if (!ff.ok) {
       console.log('[autosync] main divergió de la rama; no es fast-forward, merge manual pendiente');
+    } else {
+      // Guard (regla: NUNCA dejar imports colgando / main SIEMPRE compila): si el
+      // avance a main toca la app Next, verificar tsc --noEmit antes del FF. Un
+      // árbol a medio mergear (imports a archivos que no llegaron) rompía Vercel y
+      // el auto-deploy del VPS. La rama de trabajo ya se pusheó arriba; acá sólo
+      // protegemos main. tsc sólo corre cuando realmente tocaría main con cambios
+      // de app, así los sync de docs/contenido siguen siendo instantáneos.
+      const appDiff = tryGit(`diff --name-only origin/main..${branch.out} -- web-factory/apps/site`);
+      const appChanged = appDiff.ok && appDiff.out.trim() !== '';
+      let safe = true;
+      if (appChanged) {
+        const check = appCompiles();
+        safe = check.ok;
+        if (!safe) {
+          const firstError = check.out.split('\n').map((l) => l.trim()).filter(Boolean)[0] || '';
+          console.log('[autosync] FF a main BLOQUEADO: apps/site no compila (tsc). Rama pusheada, main SIN avanzar. ' + firstError.slice(0, 200));
+        }
+      }
+      if (safe) {
+        const toMain = tryGit(`push origin ${branch.out}:main`);
+        console.log(toMain.ok ? '[autosync] main al día (fast-forward)' : '[autosync] FF a main omitido: ' + toMain.out.slice(0, 200));
+      }
     }
   }
 }

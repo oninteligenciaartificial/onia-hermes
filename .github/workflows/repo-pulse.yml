@@ -1,0 +1,56 @@
+name: Repo Pulse
+
+# Genera un resumen diario de actividad del repo (commits por carril, tipos,
+# carriles sin actividad reciente) y lo sube al VPS para que los bots de n8n
+# (Briefing diario + Reporte Sergio/Arthur) lo lean con un simple `cat`. El
+# checkout de Actions ya tiene git + todas las ramas, asi que no hace falta
+# ningun token nuevo: reusa el mismo ONIA_VPS_SSH_KEY del deploy.
+
+on:
+  schedule:
+    - cron: "0 10 * * *" # 06:00 America/La_Paz (UTC-4), antes del Briefing 06:45
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+concurrency:
+  group: repo-pulse
+  cancel-in-progress: true
+
+jobs:
+  pulse:
+    name: Compute + deliver repo pulse
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout (historial completo, todas las ramas)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Fetch de todas las ramas remotas
+        run: git fetch origin '+refs/heads/*:refs/remotes/origin/*' --prune
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Calcular repo pulse
+        run: node scripts/repo-pulse.mjs > repo-pulse.json
+
+      - name: Escribir llave SSH del VPS
+        env:
+          KEY: ${{ secrets.ONIA_VPS_SSH_KEY }}
+        run: |
+          printf '%s\n' "$KEY" > /tmp/vps_key
+          chmod 600 /tmp/vps_key
+
+      - name: Subir al VPS
+        env:
+          VPS_HOST: "187.77.16.63"
+          VPS_USER: "root"
+        run: |
+          ssh -i /tmp/vps_key -o StrictHostKeyChecking=no "$VPS_USER@$VPS_HOST" "mkdir -p /opt/onia/state"
+          scp -i /tmp/vps_key -o StrictHostKeyChecking=no repo-pulse.json "$VPS_USER@$VPS_HOST:/opt/onia/state/repo-pulse-latest.json"

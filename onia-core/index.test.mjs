@@ -1,0 +1,331 @@
+/*
+ * Unit tests for the ONIA Core contract helpers (index.mjs) plus an
+ * integration check that the shipped contract still passes validate.mjs.
+ *
+ * Dependency-free: uses the built-in node:test runner and node:assert.
+ * Run: node --test onia-core/index.test.mjs
+ *   or: node onia-core/index.test.mjs
+ *
+ * These tests lock the core contract surface while it is CONGELADO para
+ * adopcion: if an invariant here breaks, a contract change slipped in and
+ * must be reviewed on purpose (not by accident during product adoption).
+ */
+import { spawnSync } from "node:child_process";
+import { readFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
+import assert from "node:assert/strict";
+import { describe, it } from "node:test";
+
+import {
+  getAnsweredQuestionIds,
+  getBlockedCapabilitiesForTrack,
+  getCapabilitiesByLayer,
+  getCapability,
+  getCoreCapabilityIds,
+  getCoreEntityIds,
+  getDistributionTarget,
+  getEntity,
+  getOrphanEntityIds,
+  getTrackReadiness,
+  getUnansweredQuestions,
+  getVerticalPack,
+  getVerticalPackByRubro,
+  getVerticalPacks,
+  getVerticalTrack,
+  isCoreCapability,
+  loadOniaCoreContract,
+} from "./index.mjs";
+
+const contract = loadOniaCoreContract();
+
+describe("moduleCapabilities (registro de caps provistas por modulos, #20)", () => {
+  it("registra las 7 caps provistas, cada una con providedByModule", () => {
+    const caps = contract.moduleCapabilities ?? [];
+    const ids = caps.map((c) => c.id);
+    for (const expected of ["accounting", "tax_bolivia", "invoicing", "payroll", "automation", "import_costing", "dental_clinical"]) {
+      assert.ok(ids.includes(expected), `falta module capability ${expected}`);
+    }
+    for (const c of caps) assert.ok(c.providedByModule, `${c.id} sin providedByModule`);
+  });
+
+  it("las module-capabilities son distintas de las del core (no colisionan)", () => {
+    const coreIds = new Set(contract.capabilities.map((c) => c.id));
+    for (const mc of contract.moduleCapabilities ?? []) {
+      assert.ok(!coreIds.has(mc.id), `${mc.id} colisiona con una capability del core`);
+    }
+  });
+
+  it("un track ya puede declarar las module-capabilities que necesita (proveegest-electrico -> import_costing)", () => {
+    const track = contract.verticalTracks.find((t) => t.id === "proveegest-electrico");
+    const needed = track.requiredModuleCapabilityIds ?? [];
+    assert.ok(needed.includes("import_costing"), "proveegest-electrico declara que necesita import_costing");
+    const registered = new Set((contract.moduleCapabilities ?? []).map((c) => c.id));
+    for (const id of needed) assert.ok(registered.has(id), `${id} no esta en el registro`);
+  });
+});
+
+describe("loadOniaCoreContract", () => {
+  it("loads the canonical ONIA Core contract by default", () => {
+    assert.equal(contract.name, "ONIA Core");
+    assert.match(contract.version, /^\d+\.\d+\.\d+$/);
+    assert.equal(contract.status, "stable");
+  });
+
+  it("keeps the 10 operating questions and non-empty entity/capability sets", () => {
+    assert.equal(contract.questions.length, 10);
+    assert.ok(contract.entities.length > 0);
+    assert.ok(contract.capabilities.length > 0);
+  });
+
+  it("accepts an explicit fileUrl", () => {
+    const explicit = loadOniaCoreContract(new URL("./contract.json", import.meta.url));
+    assert.equal(explicit.name, contract.name);
+    assert.equal(explicit.version, contract.version);
+  });
+});
+
+describe("getCapabilitiesByLayer", () => {
+  it("returns only capabilities of the requested layer", () => {
+    const core = getCapabilitiesByLayer(contract, "core");
+    assert.ok(core.length > 0);
+    assert.ok(core.every((capability) => capability.layer === "core"));
+
+    const external = getCapabilitiesByLayer(contract, "external_gate");
+    const externalIds = external.map((capability) => capability.id);
+    assert.deepEqual([...externalIds].sort(), ["siat", "tr4_adapter", "whatsapp"]);
+  });
+
+  it("partitions every capability into exactly one layer", () => {
+    const layers = ["core", "activatable_module", "vertical_extension", "external_gate"];
+    const total = layers.reduce(
+      (sum, layer) => sum + getCapabilitiesByLayer(contract, layer).length,
+      0,
+    );
+    assert.equal(total, contract.capabilities.length);
+  });
+
+  it("returns an empty array for an unknown layer", () => {
+    assert.deepEqual(getCapabilitiesByLayer(contract, "does_not_exist"), []);
+  });
+});
+
+describe("getCapability / isCoreCapability", () => {
+  it("finds a capability by id", () => {
+    assert.equal(getCapability(contract, "tenant")?.layer, "core");
+  });
+
+  it("returns undefined for a missing capability", () => {
+    assert.equal(getCapability(contract, "nope"), undefined);
+  });
+
+  it("flags core vs non-core capabilities", () => {
+    assert.equal(isCoreCapability(contract, "tenant"), true);
+    assert.equal(isCoreCapability(contract, "whatsapp"), false);
+    assert.equal(isCoreCapability(contract, "catalog_inventory"), false);
+  });
+
+  it("treats a missing capability as not core", () => {
+    assert.equal(isCoreCapability(contract, "missing"), false);
+  });
+});
+
+describe("getVerticalTrack / getDistributionTarget", () => {
+  it("looks up an existing vertical track", () => {
+    const track = getVerticalTrack(contract, "dentagest-clinical");
+    assert.equal(track?.familyId, "DENTALGEST");
+  });
+
+  it("returns undefined for a missing track", () => {
+    assert.equal(getVerticalTrack(contract, "ghost-track"), undefined);
+  });
+
+  it("looks up a distribution target by projectId", () => {
+    assert.equal(getDistributionTarget(contract, "dentagest")?.status, "installing");
+  });
+
+  it("returns undefined for a missing distribution target", () => {
+    assert.equal(getDistributionTarget(contract, "ghost-project"), undefined);
+  });
+});
+
+describe("getBlockedCapabilitiesForTrack", () => {
+  it("resolves blocked capability ids to external-gate capabilities", () => {
+    const blocked = getBlockedCapabilitiesForTrack(contract, "proveegest-electrico");
+    assert.ok(blocked.length > 0);
+    assert.ok(blocked.every((capability) => capability.layer === "external_gate"));
+  });
+
+  it("returns an empty array for a missing track", () => {
+    assert.deepEqual(getBlockedCapabilitiesForTrack(contract, "ghost-track"), []);
+  });
+});
+
+describe("getEntity / getCoreEntityIds", () => {
+  it("finds an entity by id", () => {
+    assert.equal(getEntity(contract, "work_item")?.name, "WorkItem");
+  });
+
+  it("returns undefined for a missing entity", () => {
+    assert.equal(getEntity(contract, "unicorn"), undefined);
+  });
+
+  it("lists every entity id", () => {
+    const ids = getCoreEntityIds(contract);
+    assert.equal(ids.length, contract.entities.length);
+    assert.ok(ids.includes("work_item"));
+    assert.ok(ids.includes("communication_channel"));
+  });
+});
+
+describe("getCoreCapabilityIds", () => {
+  it("returns only core-layer capability ids", () => {
+    const coreIds = getCoreCapabilityIds(contract);
+    assert.ok(coreIds.includes("tenant"));
+    assert.ok(coreIds.includes("channels"));
+    assert.ok(!coreIds.includes("catalog_inventory"));
+    assert.ok(!coreIds.includes("whatsapp"));
+    assert.equal(coreIds.length, getCapabilitiesByLayer(contract, "core").length);
+  });
+});
+
+describe("getAnsweredQuestionIds / getUnansweredQuestions", () => {
+  it("core capabilities answer all 10 operating questions", () => {
+    const answered = getAnsweredQuestionIds(contract, "core");
+    assert.equal(answered.size, contract.questions.length);
+    assert.deepEqual(getUnansweredQuestions(contract, "core"), []);
+  });
+
+  it("a narrower layer leaves some questions unanswered", () => {
+    const unanswered = getUnansweredQuestions(contract, "external_gate");
+    assert.ok(unanswered.length > 0);
+    assert.ok(unanswered.every((question) => question.id));
+  });
+});
+
+describe("getOrphanEntityIds", () => {
+  it("has no entity left unreferenced by a capability", () => {
+    assert.deepEqual(getOrphanEntityIds(contract), []);
+  });
+});
+
+describe("getTrackReadiness", () => {
+  it("summarizes readiness for a known track", () => {
+    const track = getVerticalTrack(contract, "dentagest-clinical");
+    const readiness = getTrackReadiness(contract, "dentagest-clinical");
+
+    assert.equal(readiness?.trackId, "dentagest-clinical");
+    assert.equal(readiness?.status, track.status);
+    assert.equal(readiness?.requiredCount, track.requiredCapabilityIds.length);
+    assert.equal(readiness?.blockedCount, track.blockedCapabilityIds.length);
+    // Every required capability is either core or module; the two must add up.
+    assert.equal(readiness?.coreCount + readiness?.moduleCount, readiness?.requiredCount);
+    // DentalGest pulls in sales_cash, a non-core activatable module.
+    assert.ok(readiness?.moduleCount >= 1);
+  });
+
+  it("returns null for a missing track", () => {
+    assert.equal(getTrackReadiness(contract, "ghost-track"), null);
+  });
+});
+
+describe("verticalPacks", () => {
+  it("gives every vertical track exactly one pack (track<->pack bijection)", () => {
+    const packs = getVerticalPacks(contract);
+    assert.equal(packs.length, contract.verticalTracks.length);
+
+    const trackIds = contract.verticalTracks.map((track) => track.id).sort();
+    const packTrackIds = packs.map((pack) => pack.trackId).sort();
+    assert.deepEqual(packTrackIds, trackIds);
+  });
+
+  it("looks up a pack by track id", () => {
+    assert.equal(getVerticalPack(contract, "dentagest-clinical")?.rubro, "salud_dental");
+    assert.equal(getVerticalPack(contract, "ghost-track"), undefined);
+  });
+
+  it("looks up a pack by rubro", () => {
+    assert.equal(getVerticalPackByRubro(contract, "distribucion_b2b")?.trackId, "proveegest-electrico");
+    assert.equal(getVerticalPackByRubro(contract, "ghost-rubro"), undefined);
+  });
+
+  it("every pack carries non-empty rubro vocabulary, checklists and kpis", () => {
+    for (const pack of getVerticalPacks(contract)) {
+      assert.ok(pack.vocabulary.workItemTypes.length > 0, `${pack.id} workItemTypes`);
+      assert.ok(Array.isArray(pack.vocabulary.partnerTypes), `${pack.id} partnerTypes`);
+      assert.ok(Array.isArray(pack.vocabulary.areas), `${pack.id} areas`);
+      assert.ok(pack.checklists.length > 0, `${pack.id} checklists`);
+      assert.ok(pack.kpis.length > 0, `${pack.id} kpis`);
+    }
+  });
+
+  it("every pack rubro exists in the vertical factory roadmap", () => {
+    const rubros = new Set(contract.verticalFactory.roadmapRubros.map((entry) => entry.rubro));
+    for (const pack of getVerticalPacks(contract)) {
+      assert.ok(rubros.has(pack.rubro), `${pack.id} rubro ${pack.rubro} not in roadmap`);
+    }
+  });
+
+  it("every pack intake channel exists in the intake policy", () => {
+    const channelIds = new Set(contract.intakePolicy.channels.map((channel) => channel.id));
+    for (const pack of getVerticalPacks(contract)) {
+      assert.ok(pack.intakeChannels.length > 0, `${pack.id} intakeChannels`);
+      for (const channelId of pack.intakeChannels) {
+        assert.ok(channelIds.has(channelId), `${pack.id} channel ${channelId}`);
+      }
+    }
+  });
+
+  it("pack kpis stay in sync with the owner dashboard vertical extension", () => {
+    const extensions = contract.readModels.owner_dashboard.verticalExtensions;
+    for (const pack of getVerticalPacks(contract)) {
+      if (extensions[pack.trackId]) {
+        assert.deepEqual(pack.kpis, extensions[pack.trackId], `${pack.id} kpis vs dashboard`);
+      }
+    }
+  });
+
+  it("no pack feeds a gated intake channel that its own track blocks", () => {
+    const channelsById = new Map(contract.intakePolicy.channels.map((channel) => [channel.id, channel]));
+    for (const pack of getVerticalPacks(contract)) {
+      const track = getVerticalTrack(contract, pack.trackId);
+      const blocked = new Set(track.blockedCapabilityIds);
+      for (const channelId of pack.intakeChannels) {
+        const gate = channelsById.get(channelId)?.gate ?? "";
+        if (gate.startsWith("external_gate ")) {
+          const gatedCapabilityId = gate.slice("external_gate ".length).trim();
+          assert.ok(
+            !blocked.has(gatedCapabilityId),
+            `${pack.id} channel ${channelId} gated by blocked ${gatedCapabilityId}`,
+          );
+        }
+      }
+    }
+  });
+});
+
+describe("@onia/core package.json", () => {
+  const pkg = JSON.parse(readFileSync(new URL("./package.json", import.meta.url), "utf8"));
+
+  it("declares the @onia/core package with a version that tracks the contract", () => {
+    assert.equal(pkg.name, "@onia/core");
+    assert.equal(pkg.type, "module");
+    assert.equal(pkg.version, contract.version);
+  });
+
+  it("exposes the core, logic and modules entry points", () => {
+    assert.equal(pkg.exports["."], "./index.mjs");
+    assert.equal(pkg.exports["./logic"], "./logic/index.mjs");
+    assert.ok(pkg.exports["./modules"], "modules entry point");
+    assert.ok(pkg.exports["./contract"], "contract entry point");
+  });
+});
+
+describe("validator integration", () => {
+  it("the shipped contract passes validate.mjs (exit 0)", () => {
+    const validatePath = fileURLToPath(new URL("./validate.mjs", import.meta.url));
+    const result = spawnSync(process.execPath, [validatePath], { encoding: "utf8" });
+
+    assert.equal(result.status, 0, result.stderr || result.stdout);
+    assert.match(result.stdout, /ONIA Core contract OK/);
+  });
+});

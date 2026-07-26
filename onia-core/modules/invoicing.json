@@ -1,0 +1,167 @@
+{
+  "module": "invoicing",
+  "name": "ONIA Invoicing Module (Bolivia - Facturacion Electronica)",
+  "version": "0.2.0",
+  "status": "draft",
+  "layer": "activatable_module",
+  "purpose": "Documento fiscal de venta (factura) especializado en Bolivia como add-on activable SOBRE el core. Modela el ciclo del documento (cabecera, detalle, notas de credito-debito, QR, anulacion) y prepara los datos para la emision real ante el SIN. La emision fiscal en si (llamar al SIN, obtener CUIS/CUFD, firmar) sigue siendo external_gate del core (siat); este modulo prepara y valida estructura, no emite.",
+  "coreContract": "onia-core/contract.json",
+  "schemaFile": "onia-core/modules/invoicing.schema.sql",
+  "installInProductRepos": false,
+  "activatesCapabilities": [],
+  "providesCapabilities": [
+    "invoicing"
+  ],
+  "coreDependencies": [
+    { "coreEntityId": "organization", "as": "tenant root de cada entidad del modulo" },
+    { "coreEntityId": "business_partner", "as": "invoice.partnerId (comprador)" },
+    { "coreEntityId": "work_item", "as": "factura observada (estado SIN 904) -> WorkItem con dueno" },
+    { "coreEntityId": "approval_request", "as": "anulacion de factura -> aprobacion (external al modulo)" },
+    { "coreEntityId": "document", "as": "XML/representacion grafica de la factura via storageRef" }
+  ],
+  "verticalTracks": [
+    "gestios-general",
+    "dentagest-clinical",
+    "ganadero-offline",
+    "proveegest-electrico",
+    "esteticagest-clinical",
+    "vetgest-clinical",
+    "gestios-gastronomia",
+    "gestios-servicios-profesionales",
+    "gestios-educacion",
+    "proveegest-construccion",
+    "gestios-turismo"
+  ],
+  "entities": [
+    {
+      "id": "invoice",
+      "name": "Invoice",
+      "capabilityId": "invoicing",
+      "table": "onia_invoicing_invoices",
+      "purpose": "Factura (documento fiscal de venta). Cabecera con datos legales (NIT, actividad economica, sucursal, punto de venta) y totales; los campos de la ronda SIAT (cuf/cufd/cuis/controlCode) quedan opcionales hasta la emision real.",
+      "requiredFields": ["id", "organizationId", "invoiceNumber", "status", "currency", "issueDate", "partnerId", "total", "createdAt"],
+      "optionalFields": ["cuf", "cufd", "cuis", "controlCode", "authorizationNumber", "modality", "branchCode", "pointOfSaleCode", "economicActivityCode", "totalInWords", "qrUrl", "legend", "workItemId", "documentId", "quoteId", "orderId", "tcoUsed", "bobTotal", "buyerName", "buyerDocType", "buyerDocNumber", "buyerDocComplement", "buyerCode"],
+      "tenantScoped": true
+    },
+    {
+      "id": "invoice_line",
+      "name": "InvoiceLine",
+      "capabilityId": "invoicing",
+      "table": "onia_invoicing_invoice_lines",
+      "purpose": "Linea de factura: descripcion, cantidad, precio unitario y descuento. El total se deriva sumando las lineas, mismo patron que commerce (computeQuoteTotal, no se duplica la formula). Para la emision SIAT cada linea homologa el producto/servicio al catalogo del SIN: codigoProductoSin (homologado), actividadEconomica (CAEB del Padron por item) y unidadMedida (parametrica; 58 = servicio -> cantidad 1).",
+      "requiredFields": ["id", "organizationId", "invoiceId", "description", "quantity", "unitPrice", "createdAt"],
+      "optionalFields": ["discount", "lineTotal", "sinProductCode", "productCode", "economicActivityCode", "unitMeasureCode"],
+      "tenantScoped": true
+    },
+    {
+      "id": "credit_debit_note",
+      "name": "CreditDebitNote",
+      "capabilityId": "invoicing",
+      "table": "onia_invoicing_credit_debit_notes",
+      "purpose": "Nota de Credito o Debito: anula o ajusta (total o parcial) una factura ya emitida. Referencia el CUF original; numeracion propia.",
+      "requiredFields": ["id", "organizationId", "noteType", "number", "originalInvoiceCuf", "date", "amount", "createdAt"],
+      "optionalFields": ["reason", "originalInvoiceId"],
+      "tenantScoped": true
+    }
+  ],
+  "siatConfig": {
+    "notFinancialAdvice": true,
+    "verifiedAt": "2026-07-06",
+    "verificationMethod": "Investigacion cruzada de 2+ fuentes independientes (siatinfo.impuestos.gob.bo oficial + analisis tecnico jc-mouse.net) mas el plan interno ONIA_SIAT_CERTIFICACION_PLAN_2026.md (RND citadas). Ver notes para lo NO confirmado.",
+    "legalBasis": [
+      "RND 102100000011 (11-ago-2021, Sistema de Facturacion compilada)",
+      "RND 102600000007 (23-mar-2026, prorroga a 30-sep-2026 para grupos 9-12)",
+      "RND 102500000018 (CAEB-SIN homologado, vigente desde 05-may-2025)",
+      "RND 102600000026 (jul-2026) - facturas en moneda extranjera con el TCO oficial diario del BCB",
+      "Ley 453 (derechos del consumidor, leyenda obligatoria)"
+    ],
+    "modalities": ["electronica_en_linea", "computarizada_en_linea", "portal_web", "manual", "prevalorada"],
+    "onlineModalities": ["electronica_en_linea", "computarizada_en_linea", "portal_web"],
+    "recommendedStartModality": "computarizada_en_linea",
+    "modalityNote": "Computarizada en linea NO requiere certificado digital del contribuyente (usa CUIS/CUFD + hash del XML); Electronica en linea SI requiere firma digital (AGETIC, tras cierre de ADSIB por DS 5519). Empezar por Computarizada reduce friccion de onboarding.",
+    "cufFieldWidths": {
+      "nit": 13,
+      "dateTime": 17,
+      "branch": 4,
+      "modality": 1,
+      "emissionType": 1,
+      "invoiceType": 1,
+      "docSectorType": 2,
+      "invoiceNumber": 8,
+      "pointOfSale": 4
+    },
+    "cufWidthNote": "RESUELTO 2026-07-22 (Anexo Tecnico oficial, siatinfo.impuestos.gob.bo/generacion-cuf): el CUF real usa invoiceNumber de 10 digitos (payload total de 53 + 1 verificador). El buildCuf de la logica del core usa 8 (REFERENCIA simplificada, no para emision). La version verificada de 10 digitos vive en el emisor: hermes-content/integrations/siat/src/cuf.mjs.",
+    "checkDigitNote": "RESUELTO 2026-07-22 (Anexo Tecnico oficial, algoritmo-modulo-11): Modulo 11 con pesos 2..9 ciclicos de derecha a izquierda, digito = suma % 11, con 10->1 y 11->0; anclado al ejemplo oficial 12345->6. Implementado y testeado en el emisor (integrations/siat/src/cuf.mjs). El buildCuf del core sigue siendo referencia; emitir siempre por el emisor.",
+    "cancellationDeadlineDayOfNextMonth": 9,
+    "cancellationNote": "Anulacion posible hasta el dia 9 del mes siguiente a la emision; no anulable si la factura ya fue confirmada en RCV o declarada (F110/111); reversion de anulacion por unica vez (RND 102100000011 Art. 38).",
+    "sinStatusCodes": { "pending": 901, "observed": 904, "validated": 908 },
+    "qr": {
+      "pilotHost": "https://pilotosiat.impuestos.gob.bo",
+      "path": "/consulta/QR",
+      "params": ["nit", "cuf", "numero", "t"],
+      "sizeRoll": 1,
+      "sizeHalfSheet": 2,
+      "note": "Host de piloto/pruebas; produccion usa un host distinto (verificar antes de emitir real). Estructura de query confirmada por fuente oficial."
+    },
+    "legend": "Este documento es la Representacion Grafica de un Documento Fiscal Digital emitido en una modalidad de facturacion en linea",
+    "documentTypes": {
+      "inScope": ["factura_compra_venta"],
+      "outOfScope": ["factura_comercial_exportacion", "recibo_alquiler_bienes_inmuebles"]
+    },
+    "buyer": {
+      "verifiedAt": "2026-07-22",
+      "verificationMethod": "Campos confirmados contra la pagina oficial del XML/XSD de la Factura de Compra y Venta (siatinfo.impuestos.gob.bo). Los codigos de tipo de documento son parametrica de sincronizacion diaria del SIAT.",
+      "fieldMapping": {
+        "buyerName": "nombreRazonSocial",
+        "buyerDocType": "codigoTipoDocumentoIdentidad",
+        "buyerDocNumber": "numeroDocumento",
+        "buyerDocComplement": "complemento",
+        "buyerCode": "codigoCliente"
+      },
+      "documentTypeCatalog": [
+        { "code": 1, "abbr": "CI", "name": "Cedula de Identidad" },
+        { "code": 2, "abbr": "CEX", "name": "Cedula de Identidad de Extranjero" },
+        { "code": 3, "abbr": "PAS", "name": "Pasaporte" },
+        { "code": 4, "abbr": "OD", "name": "Otro Documento de Identidad" },
+        { "code": 5, "abbr": "NIT", "name": "Numero de Identificacion Tributaria" }
+      ],
+      "documentTypeNote": "codigoTipoDocumentoIdentidad es una PARAMETRICA de sincronizacion DIARIA del SIAT (web service); la fuente autoritativa es el catalogo vivo, no este hardcode. El mapeo 1=CI..5=NIT es el estandar historico; verificar contra la sincronizacion antes de emitir real.",
+      "complementNote": "complemento = valor del SEGIP para cedulas duplicadas; si no aplica va null.",
+      "specialBuyerCodes": [
+        { "code": "99001", "use": "Ventas a consulados, embajadas y organismos internacionales" },
+        { "code": "99002", "use": "Control Tributario" },
+        { "code": "99003", "use": "Ventas menores del dia (sin identificacion del comprador)" }
+      ],
+      "specialBuyerCodesNote": "Casos especiales: se envian con tipo de documento NIT (5) y codigo de excepcion 1. El validador del modulo (validateBuyer) cubre la factura nominativa normal; estos modos especiales los maneja el external_gate de emision."
+    },
+    "lineItemHomologation": {
+      "verifiedAt": "2026-07-22",
+      "legalBasis": "RND 102500000018 (CAEB-SIN homologado, vigente desde 05-may-2025)",
+      "fieldMapping": {
+        "sinProductCode": "codigoProductoSin",
+        "productCode": "codigoProducto",
+        "economicActivityCode": "actividadEconomica",
+        "unitMeasureCode": "unidadMedida"
+      },
+      "serviceUnitCode": 58,
+      "note": "Cada linea homologa al catalogo del SIN: codigoProductoSin (generico del SIN), codigoProducto (interno del contribuyente), actividadEconomica (CAEB registrada en el Padron Nacional, POR ITEM), unidadMedida (parametrica; 58 = unidad de servicio, y para servicios la cantidad debe ser 1). La homologacion la hace el equipo del contribuyente contra el catalogo sincronizado; el modulo valida estructura (validateInvoiceLineHomologation), no asigna el codigo."
+    },
+    "notes": [
+      "La emision fiscal real (llamar al SIN, obtener CUIS/CUFD, firmar) es external_gate del core; este modulo modela el documento y prepara los datos para cuando esa conexion exista.",
+      "Los campos exactos del archivo RCV (columna por columna) NO estan confirmados; no inventarlos. El modulo accounting ya modela rcv_record de forma generica (invoiceNumber/authorizationCode/controlCode/nit/amount/ivaAmount) sin asumir el formato exacto del anexo.",
+      "Factura Comercial de Exportacion y Recibo de Alquiler de Bienes Inmuebles son tipos de documento distintos, fuera de alcance (este modulo cubre B2B/servicios/comercio general).",
+      "Esto no es asesoria legal/fiscal. Verificar contra el Anexo Tecnico oficial (GENERACION-CUF.pdf, siatinfo.impuestos.gob.bo) antes de conectar a emision real."
+    ]
+  },
+  "notes": [
+    "El modulo NO redefine entidades del core; agrega entidades propias con namespace onia_invoicing_*.",
+    "invoice_line reutiliza el calculo de totales de commerce (computeQuoteTotal); no duplica la formula.",
+    "La emision fiscal real (SIAT) queda en el external_gate del core; este modulo prepara/valida estructura y datos, no emite."
+  ],
+  "gates": [
+    "installInProductRepos = false hasta plan de adopcion del modulo aprobado",
+    "SQL base del modulo (invoicing.schema.sql) se traduce a migraciones del producto, no se aplica directo",
+    "El algoritmo de digito verificador (Modulo 11) y los anchos de campo del CUF deben verificarse contra el Anexo Tecnico oficial antes de usarse para emision real",
+    "Los campos exactos del archivo RCV no estan confirmados columna por columna; no asumirlos sin el Anexo Tecnico oficial"
+  ]
+}

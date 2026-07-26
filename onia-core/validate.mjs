@@ -42,7 +42,7 @@ function assertUnique(items, label) {
 
 assert(contract.name === "ONIA Core", "Contract name must be ONIA Core");
 assert(/^\d+\.\d+\.\d+$/.test(contract.version), "Contract version must be semver (x.y.z)");
-assert(["canonical_draft", "alpha", "beta"].includes(contract.status), "Contract status must be canonical_draft, alpha or beta");
+assert(["canonical_draft", "alpha", "beta", "stable"].includes(contract.status), "Contract status must be canonical_draft, alpha, beta or stable");
 assert(contract.policy?.installInProductRepos === false, "Product repo installation must stay disabled before beta");
 assert(contract.questions.length === 10, "ONIA Core must keep the 10 operating questions");
 assertRepoFile(contract.researchResult, "Research result");
@@ -62,6 +62,15 @@ assertUnique(contract.distributionTargets.map((target) => ({ id: target.projectI
 const questionIds = new Set(contract.questions.map((question) => question.id));
 const entityIds = new Set(contract.entities.map((entity) => entity.id));
 const capabilityIds = new Set(contract.capabilities.map((capability) => capability.id));
+// Capabilities que PROVEEN los modulos (fuera del core congelado), registradas para
+// que un track pueda declararlas via requiredModuleCapabilityIds. Deben ser distintas
+// de las del core (el lado modulo se valida en validate-modules.mjs, bidireccional).
+const moduleCapabilityIds = new Set((contract.moduleCapabilities ?? []).map((mc) => mc.id));
+for (const mc of contract.moduleCapabilities ?? []) {
+  assert(mc.id, "moduleCapability sin id en contract.moduleCapabilities");
+  assert(mc.providedByModule, `moduleCapability ${mc.id} sin providedByModule`);
+  assert(!capabilityIds.has(mc.id), `moduleCapability ${mc.id} choca con una capability del core (deben ser distintas)`);
+}
 const familyIds = new Set(contract.families.map((family) => family.id));
 const distributionProjectIds = new Set(contract.distributionTargets.map((target) => target.projectId));
 
@@ -106,6 +115,10 @@ for (const track of contract.verticalTracks) {
     assert(capabilityIds.has(capabilityId), `${track.id} references missing capability ${capabilityId}`);
   }
 
+  for (const capabilityId of track.requiredModuleCapabilityIds ?? []) {
+    assert(moduleCapabilityIds.has(capabilityId), `${track.id} requiere la module capability ${capabilityId} que no esta en contract.moduleCapabilities`);
+  }
+
   for (const blockedCapability of getBlockedCapabilitiesForTrack(contract, track.id)) {
     assert(blockedCapability.layer === "external_gate", `${track.id} blocks non-external gate ${blockedCapability.id}`);
   }
@@ -113,7 +126,7 @@ for (const track of contract.verticalTracks) {
 
 // Misma doble llave que los adapters: solo proyectos aprobados pueden salir
 // de hold_until_beta en distributionTargets.
-const TARGET_ADOPTION_APPROVED = new Set(["dentagest", "bolivian-electric"]);
+const TARGET_ADOPTION_APPROVED = new Set(["dentagest", "bolivian-electric", "gestios"]);
 
 for (const target of contract.distributionTargets) {
   const allowed = TARGET_ADOPTION_APPROVED.has(target.projectId)
@@ -155,6 +168,71 @@ if (contract.verticalFactory) {
   assert(contract.verticalFactory.roadmapRubros?.length > 0, "verticalFactory must define roadmapRubros");
   for (const rubro of contract.verticalFactory.roadmapRubros ?? []) {
     assert(rubro.rubro && rubro.vertical && rubro.estado, "each roadmap rubro needs rubro, vertical and estado");
+  }
+}
+
+// verticalPacks: cada track vertical trae un pack de rubro (vocabulario,
+// checklists, KPIs e intake). Onboardear un rubro nuevo = agregar track + pack
+// (datos), no codigo de core. La biyeccion track<->pack evita packs huerfanos y
+// verticales sin pack.
+assert(Array.isArray(contract.verticalPacks), "verticalPacks must be an array");
+if (Array.isArray(contract.verticalPacks)) {
+  assertUnique(contract.verticalPacks, "verticalPacks");
+
+  const tracksById = new Map(contract.verticalTracks.map((track) => [track.id, track]));
+  const rubroIds = new Set((contract.verticalFactory?.roadmapRubros ?? []).map((entry) => entry.rubro));
+  const channelsById = new Map((contract.intakePolicy?.channels ?? []).map((channel) => [channel.id, channel]));
+  const dashboardExtensions = contract.readModels?.owner_dashboard?.verticalExtensions ?? {};
+  const packedTrackIds = new Set();
+
+  for (const pack of contract.verticalPacks) {
+    assert(pack.id, "verticalPack needs id");
+    assert(tracksById.has(pack.trackId), `verticalPack ${pack.id} references missing track ${pack.trackId}`);
+    assert(!packedTrackIds.has(pack.trackId), `verticalPack ${pack.id} duplicates track ${pack.trackId}`);
+    packedTrackIds.add(pack.trackId);
+
+    assert(rubroIds.has(pack.rubro), `verticalPack ${pack.id} references missing rubro ${pack.rubro}`);
+
+    assert(
+      Array.isArray(pack.vocabulary?.workItemTypes) && pack.vocabulary.workItemTypes.length > 0,
+      `verticalPack ${pack.id} needs vocabulary.workItemTypes`,
+    );
+    assert(Array.isArray(pack.vocabulary?.partnerTypes), `verticalPack ${pack.id} needs vocabulary.partnerTypes array`);
+    assert(Array.isArray(pack.vocabulary?.areas), `verticalPack ${pack.id} needs vocabulary.areas array`);
+    assert(Array.isArray(pack.checklists) && pack.checklists.length > 0, `verticalPack ${pack.id} needs at least one checklist`);
+    assert(Array.isArray(pack.kpis) && pack.kpis.length > 0, `verticalPack ${pack.id} needs at least one kpi`);
+    assert(
+      Array.isArray(pack.intakeChannels) && pack.intakeChannels.length > 0,
+      `verticalPack ${pack.id} needs at least one intake channel`,
+    );
+
+    const blockedCapabilityIds = new Set(tracksById.get(pack.trackId)?.blockedCapabilityIds ?? []);
+    for (const channelId of pack.intakeChannels ?? []) {
+      const channel = channelsById.get(channelId);
+      assert(channel, `verticalPack ${pack.id} references missing intake channel ${channelId}`);
+      // Un canal con compuerta external_gate no puede alimentar un vertical que
+      // bloquea esa capability (ej: intake WhatsApp en un track que gatea whatsapp).
+      const gate = channel?.gate ?? "";
+      if (gate.startsWith("external_gate ")) {
+        const gatedCapabilityId = gate.slice("external_gate ".length).trim();
+        assert(
+          !blockedCapabilityIds.has(gatedCapabilityId),
+          `verticalPack ${pack.id} usa canal "${channelId}" con compuerta ${gatedCapabilityId}, pero el track ${pack.trackId} bloquea esa capability`,
+        );
+      }
+    }
+
+    const dashboardKpis = dashboardExtensions[pack.trackId];
+    if (dashboardKpis) {
+      assert(
+        JSON.stringify(dashboardKpis) === JSON.stringify(pack.kpis),
+        `verticalPack ${pack.id} kpis must match owner_dashboard.verticalExtensions[${pack.trackId}]`,
+      );
+    }
+  }
+
+  for (const track of contract.verticalTracks) {
+    assert(packedTrackIds.has(track.id), `verticalTrack ${track.id} has no verticalPack`);
   }
 }
 
@@ -200,7 +278,7 @@ assertUnique(adapters.map(({ adapter }) => ({ id: adapter.projectId })), "adapte
 
 // Doble llave de adopcion: solo los proyectos listados aqui pueden estar en
 // estado "installing" (cambiar esta lista + el adapter juntos, a proposito).
-const ADOPTION_APPROVED = new Set(["dentagest", "bolivian-electric"]);
+const ADOPTION_APPROVED = new Set(["dentagest", "bolivian-electric", "gestios"]);
 
 for (const { file, adapter } of adapters) {
   assert(distributionProjectIds.has(adapter.projectId), `${file} references project outside distributionTargets`);

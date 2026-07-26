@@ -52,7 +52,6 @@
   border-right: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.onia-back-link,
 .onia-brand,
 .onia-nav a,
 .onia-role-switcher button,
@@ -63,22 +62,9 @@
 .onia-service-card__top,
 .onia-blocker,
 .onia-rule-strip,
-.onia-premium-list article,
-.onia-footer span {
+.onia-premium-list article {
   display: flex;
   align-items: center;
-}
-
-.onia-back-link {
-  gap: 7px;
-  min-height: 34px;
-  color: #b8c4c1;
-  font-size: 12px;
-  font-weight: 800;
-}
-
-.onia-back-link svg {
-  transform: rotate(180deg);
 }
 
 .onia-brand {
@@ -99,8 +85,41 @@
 }
 
 .onia-brand > span {
+  position: relative;
   color: #081c13;
   background: #55d79d;
+}
+
+/* Punto que solo aparece y pulsa cuando hay algo REAL esperando tu aprobacion
+   (propuestas del agente Vendedor). Senal, no decoracion: sin pendientes, no
+   se renderiza nada. */
+.onia-signal-dot {
+  position: absolute;
+  top: -3px;
+  right: -3px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--onia-yellow);
+  box-shadow: 0 0 0 2px #15202b;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .onia-signal-dot {
+    animation: onia-signal-pulse 2.2s ease-in-out infinite;
+  }
+}
+
+@keyframes onia-signal-pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.55;
+    transform: scale(0.82);
+  }
 }
 
 .onia-brand strong,
@@ -231,6 +250,20 @@
   color: rgba(7, 29, 20, 0.72);
 }
 
+/* "Mas" = grupo secundario (overflow): separado y mas discreto que los primarios,
+   para que la jerarquia sea obvia (lo importante arriba, lo demas guardado).
+   Se marca por clase (.is-mas), no por posicion, para no depender de que "Mas"
+   sea el ultimo grupo visible en todos los roles. */
+.onia-nav-group.is-mas {
+  margin-top: 8px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.onia-nav-group.is-mas > summary {
+  color: rgba(238, 245, 242, 0.4);
+}
+
 .onia-role-switcher {
   gap: 8px;
   margin-top: auto;
@@ -279,6 +312,39 @@
   margin-bottom: 14px;
 }
 
+/* Aviso: este despliegue no tiene Supabase (ej. Vercel, que no puede alcanzar
+   la red privada del VPS). Solo aparece cuando falta la config; nunca en el
+   VPS real. Tono aviso (amarillo), no error. */
+.onia-wrong-deployment-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 16px;
+  padding: 12px 14px;
+  border-radius: var(--onia-radius);
+  background: var(--onia-yellow-soft);
+  color: var(--onia-yellow);
+}
+
+.onia-wrong-deployment-banner strong {
+  display: block;
+  color: var(--onia-ink);
+  font-size: 13px;
+}
+
+.onia-wrong-deployment-banner p {
+  margin: 3px 0 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--onia-muted);
+}
+
+.onia-wrong-deployment-banner a {
+  color: var(--onia-yellow);
+  font-weight: 800;
+  text-decoration: underline;
+}
+
 .onia-hero h1,
 .onia-hero p,
 .onia-section-heading h2,
@@ -309,6 +375,16 @@
   color: var(--onia-muted);
   font-size: 15px;
   line-height: 1.5;
+}
+
+/* Resumen hablado: numeros reales, tono de asistente. Visible en cualquier
+   vista (la idea es saber el estado sin tener que ir a buscarlo). */
+.onia-hero .onia-voice-briefing {
+  margin-top: 6px;
+  color: var(--onia-green);
+  font-size: 13px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
 }
 
 .onia-active-module {
@@ -616,6 +692,7 @@
   font-size: 27px;
   line-height: 1.06;
   letter-spacing: 0;
+  font-variant-numeric: tabular-nums;
 }
 
 .onia-metric small {
@@ -1358,29 +1435,6 @@
   background: var(--onia-neutral-soft);
 }
 
-.onia-footer {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 16px;
-}
-
-.onia-footer span {
-  gap: 8px;
-  min-height: 38px;
-  padding: 0 11px;
-  border: 1px solid var(--onia-line);
-  border-radius: var(--onia-radius);
-  color: #34414e;
-  background: rgba(255, 255, 255, 0.72);
-  font-size: 12px;
-  font-weight: 800;
-}
-
-.onia-footer svg {
-  color: var(--onia-green);
-}
-
 .onia-live-workspace {
   margin-bottom: 16px;
   padding: 18px;
@@ -1565,9 +1619,191 @@
   grid-area: evidence;
 }
 
-.onia-calendar-timeline.is-compact {
+/* Vista "Hoy": timeline visual de la agenda (grilla proporcional al horario,
+   no una lista plana). Clases propias (no .onia-calendar-timeline/-block) para
+   no tocar la pestana "Calendario" completa, que reusa esas otras clases. */
+.onia-day-timeline {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr);
+  gap: 3px 10px;
   max-height: 440px;
-  overflow: auto;
+  padding: 2px 2px 2px 0;
+  overflow-y: auto;
+}
+
+.onia-day-timeline-hour {
+  grid-column: 1;
+  align-self: start;
+  transform: translateY(-6px);
+  color: var(--onia-faint);
+  font-size: 10px;
+  font-weight: 800;
+  text-align: right;
+}
+
+.onia-day-timeline-block {
+  display: flex;
+  flex-direction: column;
+  grid-column: 2;
+  gap: 2px;
+  min-height: 0;
+  padding: 6px 10px;
+  overflow: hidden;
+  border-radius: var(--onia-radius);
+  background: var(--onia-neutral-soft);
+  color: #554b3a;
+}
+
+.onia-day-timeline-block span {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10px;
+  font-weight: 800;
+  opacity: 0.8;
+}
+
+.onia-day-timeline-block strong {
+  overflow: hidden;
+  color: var(--onia-ink);
+  font-size: 12px;
+  line-height: 1.25;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.onia-day-timeline-block.is-sales {
+  background: var(--onia-yellow-soft);
+  color: var(--onia-yellow);
+}
+
+.onia-day-timeline-block.is-deep_work {
+  background: var(--onia-green-soft);
+  color: #153f30;
+}
+
+.onia-day-timeline-block.is-meetings {
+  background: var(--onia-blue-soft);
+  color: var(--onia-blue);
+}
+
+/* Variante grande de la pestana "Calendario" completa: mas alto, sin truncar
+   texto (nota, comando Telegram, franja de dias por bloque). */
+.onia-day-timeline--full {
+  grid-template-columns: 56px minmax(0, 1fr);
+  max-height: none;
+}
+
+.onia-day-timeline--full .onia-day-timeline-hour {
+  font-size: 11px;
+}
+
+.onia-day-timeline--full .onia-day-timeline-block {
+  gap: 4px;
+  padding: 8px 12px;
+  overflow: visible;
+}
+
+.onia-day-timeline--full .onia-day-timeline-block strong {
+  overflow: visible;
+  font-size: 13px;
+  white-space: normal;
+}
+
+.onia-day-timeline--full .onia-day-timeline-block > small {
+  opacity: 0.8;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.onia-day-timeline--full .onia-day-timeline-block p {
+  margin: 0;
+  font-size: 11px;
+  line-height: 1.4;
+  opacity: 0.85;
+}
+
+.onia-day-timeline--full .onia-day-timeline-block em {
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 800;
+  opacity: 0.8;
+}
+
+.onia-weekday-strip {
+  display: flex;
+  gap: 4px;
+  margin: 2px 0;
+}
+
+/* Selector con 2 clases a proposito (mas especifico que ".onia-day-timeline-block
+   span") para no depender del orden de aparicion en el archivo. */
+.onia-weekday-strip .onia-weekday-chip {
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.55);
+  font-size: 9px;
+  font-weight: 800;
+  opacity: 0.55;
+}
+
+.onia-weekday-strip .onia-weekday-chip.is-active {
+  background: rgba(255, 255, 255, 0.9);
+  opacity: 1;
+}
+
+/* Lista "Tareas del dia": numero de prioridad al frente (nunca solo color,
+   siempre acompanado del texto "prioridad X"), la primera tarea destacada. */
+.onia-daily-task-list > div {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+}
+
+.onia-daily-task-list > div.is-top-priority {
+  border-color: var(--onia-green);
+  background: var(--onia-green-soft);
+}
+
+.onia-task-rank {
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--onia-neutral-soft);
+  color: #554b3a;
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.onia-task-rank.is-alta {
+  background: var(--onia-red-soft);
+  color: var(--onia-red);
+}
+
+.onia-task-rank.is-media {
+  background: var(--onia-yellow-soft);
+  color: var(--onia-yellow);
+}
+
+.onia-task-rank.is-baja {
+  background: var(--onia-blue-soft);
+  color: var(--onia-blue);
+}
+
+.onia-task-body {
+  display: grid;
+  min-width: 0;
+  gap: 3px;
+}
+
+.onia-daily-task-list select {
+  flex: 0 0 auto;
 }
 
 .onia-quick-note {
@@ -2565,6 +2801,10 @@
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
+.onia-agent-columns.is-single {
+  grid-template-columns: 1fr;
+}
+
 .onia-agent-columns div {
   min-height: 86px;
   padding: 10px;
@@ -2668,17 +2908,20 @@
     gap: 12px;
   }
 
+  /* Mobile: nav como acordeon vertical limpio (no scroll horizontal de acordeones).
+     Primarios visibles, "Mas" colapsado. Se acota la altura para que el contenido
+     quede a mano (Sergio entra desde el celular). */
   .onia-nav {
     display: flex;
-    gap: 8px;
-    overflow-x: auto;
-    padding-bottom: 4px;
-    scroll-snap-type: x proximity;
+    flex-direction: column;
+    gap: 12px;
+    max-height: 46vh;
+    overflow-y: auto;
+    overscroll-behavior: contain;
   }
 
   .onia-nav a {
-    min-width: 132px;
-    scroll-snap-align: start;
+    min-height: 44px;
   }
 
   .onia-role-switcher {

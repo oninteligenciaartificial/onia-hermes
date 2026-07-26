@@ -1,0 +1,11 @@
+{
+  "name": "@onia/siat-emitter",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Emisor fiscal SIAT (Bolivia) como servicio compartido de la factory ONIA. External_gate del core: emite y persiste el resultado; el core nunca factura por si mismo.",
+  "license": "UNLICENSED",
+  "scripts": {
+    "test": "node --test test/*.test.mjs"
+  }
+}

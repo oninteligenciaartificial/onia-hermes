@@ -5,7 +5,13 @@ Workflows autónomos corriendo en el n8n del VPS
 de n8n** (no por el navegador — la sesión web expira y da "Autosave failed:
 Unauthorized"; el MCP tiene su propia auth). Todos usan la credencial SSH
 `ONIA VPS SSH` (id `4XKauEX3b6cqaDhW`, sshPrivateKey) para llegar al VPS y avisan
-a Sergio por Telegram vía `$env.TELEGRAM_BOT_TOKEN` / `$env.TELEGRAM_SERGIO_CHAT_ID`.
+a Sergio por Telegram con la credencial n8n `telegramApi` (token) y el **chat ID
+hardcodeado** `6830070978` en el nodo. REGLA: **no usar `$env`** en nodos n8n (este
+plan Easypanel puede perder las vars en un redeploy) — chat IDs hardcodeados. Los
+webhooks (Nuevo Lead / Nuvia / Propuesta) validan el `secret` **server-side**: un nodo
+SSH previo corre `/opt/onia/check-secret.sh` que compara contra
+`ONIA_CENTER_INTERNAL_API_KEY` (leída del contenedor onia-center) y devuelve solo
+`{authorized:true|false}` — la key nunca entra a n8n, sin `$env`.
 
 ## Workflows activos
 
@@ -18,7 +24,12 @@ a Sergio por Telegram vía `$env.TELEGRAM_BOT_TOKEN` / `$env.TELEGRAM_SERGIO_CHA
 | ONIA - Prospeccion diaria | `jspfoUsjQfQ1VXY4` | Lun-Vie 09:00 | Nudge: rota rubro+ciudad y manda el prompt de prospección (no contacta, no inventa) | Diario |
 | ONIA - Generar Propuesta (oficial) | `rwQuwSvd29bV34EY` | Webhook on-demand | `POST /webhook/generar-propuesta` `{slug,secret}`: corre el generador oficial + PDF (chromium VPS) por SSH y manda el PDF a Sergio para revisar antes de enviar al cliente | PDF por propuesta |
 | ONIA - Agente Vendedor (borradores) | `C96NmbalLhaTEf0G` | Lun-Sab 08:30 | SSH `docker exec onia-center sales-agent.mjs`: lee leads del CRM, califica+redacta con LiteLLM, deja SOLO borradores (tarea + review_queue pending/sensitive/reviewer=sergio). NO envia | Solo si hay borradores |
+| ONIA - Nuevo Lead (speed-to-lead) | `WA6VkNu5OHo6Npem` | Webhook on-demand | `POST /webhook/nuevo-lead` `{secret,company,contact,channel,message}`: crea el lead + califica + redacta la primera respuesta (borrador) al toque. Bridge inbound (formulario/WhatsApp/Hermes) -> CRM -> Vendedor. NO envia | Por lead |
 | ONIA - Nuvia Sourcing Score (v1) | `ECC1THa2kTmOGepY` | Webhook on-demand | `POST /webhook/nuvia-candidato` `{secret,candidates[]}`: score ONIA-Bolivia (flete/arancel/demanda/precio) por SSH, upsert en `nuvia_sourcing_candidates`. Read-only, sin contacto ni pago | Por lote |
+| ONIA - Reporte diario Sergio + Arthur | `xQaO3Sfsl9XzMiid` | Lun-Sab 07:00 | SSH `arthur-report.mjs`: tareas del dia para Sergio y Arthur (obligaciones acuerdo 60d + CRM vivo) + verificacion de ganancias de Arthur (payment_commissions por estado + progreso trial). Determinista, solo suma lo registrado. Agrega repo pulse + docs hygiene (duplicados raiz/docs) al texto | Diario |
+| ONIA Center - Briefing diario operativo | `ONIADailyBrief001` | Lun-Sab 06:45 | Lee el repo pulse (SSH cat) -> SSH `briefing-run.sh` -> `briefing-run.mjs` (docker exec onia-center): genera+registra el plan diario por rol (Sergio/Arthur/seller), deduplicado, con seccion de actividad de repo. La `ONIA_CENTER_INTERNAL_API_KEY` se lee del contenedor, sin `$env` | Plan diario + repo |
+| ONIA - Agente Finanzas y Fondo ONIA | `oKSTNdvS58ixBgnl` | Lun-Sab 07:15 | SSH `finance-fund-agent.mjs` (docker exec onia-center): agrega caja + ingresos 30d + comisiones por estado + Fondo ONIA en `onia_center.finance_summary` (upsert diario) + pone `agent_finance_fund` en `ready`. Determinista, READ-ONLY sobre la plata | Solo si hay anomalias |
+| ONIA - Agente Contenido y Media Lab | `nZkaXaZVKzgtwUqU` | Lun-Sab 07:20 | SSH `content-media-agent.mjs` (docker exec onia-center): elige pilar/idea, redacta con LiteLLM SOLO texto (guion "que grabar hoy" + carruseles), deja borradores en `review_queue` (pending/sensitive/reviewer=sergio) + pone `agent_content_media` en `ready`. Higgsfield NO automatico. **Reemplaza a "Guiones Diarios" (`NDXLJiR00ciQx72V`, archivado 2026-07-09).** | Guion completo + carruseles |
 
 Los 5 crones fueron probados end-to-end antes de activar (ejecución real + Telegram
 recibido). El de propuestas (webhook) se probó con slug real (`bench`), secret
@@ -27,10 +38,57 @@ inválido (401) e inyección de slug (401) — 3/3 ejecuciones OK.
 ## Auditoría de autonomía + limpieza (2026-07-05, sesión infra)
 
 - **Autonomía:** escaneado el export completo de workflows. **Todos los workflows
-  ACTIVOS son autónomos** — no dependen del laptop de Sergio. El briefing usa
-  `http://onia-center:3012` (docker-interno, siempre-on), no localhost. Las únicas
-  dependencias locales (`127.0.0.1:3031` propuestas viejo, `SearXNG`) vivían en
-  workflows **inactivos**.
+  ACTIVOS son autónomos** — no dependen del laptop de Sergio. El briefing llama al
+  endpoint `onia-center` desde **dentro del contenedor** (docker-interno, siempre-on),
+  no localhost. Las únicas dependencias locales (`127.0.0.1:3031` propuestas viejo,
+  `SearXNG`) vivían en workflows **inactivos**.
+- **Briefing sin `$env` (2026-07-06):** el `ONIADailyBrief001` usaba `$env`
+  (`ONIA_CENTER_BASE_URL`, `ONIA_CENTER_INTERNAL_API_KEY`, `TELEGRAM_BOT_TOKEN`,
+  `TELEGRAM_SERGIO_CHAT_ID`) en nodos HTTP crudos. Refactorizado: el HTTP con la key
+  interna -> nodo **SSH** que corre `briefing-run.sh` -> `briefing-run.mjs` dentro de
+  onia-center (la key se lee del contenedor, nunca entra a n8n); el HTTP de Telegram
+  con `$env.TELEGRAM_BOT_TOKEN` -> nodo **Telegram con credencial** `telegramApi` +
+  chat ID hardcodeado; eliminado el IF `Telegram configurado?` (chequeaba `$env`).
+  Probado en vivo (ejecución manual: briefing commit OK, Telegram `message_id` 767).
+- **Repo pulse (2026-07-06):** los bots de plan diario (Briefing + Reporte Sergio/Arthur)
+  ahora leen el repo. Mecanismo sin secrets nuevos: `.github/workflows/repo-pulse.yml`
+  (cron 06:00 La Paz + `workflow_dispatch`) corre `scripts/repo-pulse.mjs` en el checkout
+  de Actions (git log --all sobre historial completo + todas las ramas, clasifica cada
+  commit por carril con rutas reales del repo, detecta carriles sin actividad >=3 dias) y
+  sube el JSON al VPS por SSH reusando `ONIA_VPS_SSH_KEY` (el mismo del deploy) a
+  `/opt/onia/state/repo-pulse-latest.json`. Los workflows n8n solo hacen `cat` de ese
+  archivo (nodo SSH "Leer repo pulse", sin tocar GitHub desde el VPS) y agregan una
+  seccion "Repo (ultimas Nh): X commits. Carriles activos: ..." al texto de Telegram.
+  Probado en vivo: Action corrida por `workflow_dispatch` (verde, JSON en el VPS),
+  ambos workflows n8n republicados y probados (`message_id` 769 Briefing, 770 Reporte).
+- **Docs hygiene (2026-07-06):** agente de limpieza diaria de docs (carril G). Fuente
+  de verdad `hermes-content/docs/`; la raiz no deberia tener gemelos. Mismo mecanismo
+  sin secrets nuevos que repo pulse: `.github/workflows/docs-hygiene-daily.yml` (cron
+  06:10 La Paz + `workflow_dispatch` con input `apply` true/false) corre
+  `scripts/docs-hygiene.mjs`, que detecta duplicados raiz<->docs/ por hash de
+  contenido (identico byte-a-byte, cualquier nombre) y por nombre (exacto o "fuzzy":
+  mismo tema con prefijo distinto, ej. `HERMES_OPERATIONS.md` <-> `OPERATIONS.md`).
+  Con `--apply` borra (git rm + commit local; el push lo hace el workflow) SOLO los
+  identicos byte-a-byte — nunca toca `hermes-content/docs/`, nunca borra divergentes
+  ni "nuevos en raiz". El JSON completo sube al VPS por SSH a
+  `/opt/onia/state/docs-hygiene-latest.json`; el nodo SSH "Leer docs hygiene" (cat,
+  igual que repo pulse) lo agrega al Reporte Sergio+Arthur con la seccion "Docs
+  (limpieza diaria)": conteos + top divergentes (posible fusion pendiente) + top
+  nuevos en raiz (deberian moverse a docs/). 18 tests (`node --test
+  scripts/docs-hygiene.test.mjs`, unitarios + fixture git real). Estado real del repo
+  al construirlo (2026-07-06): 0 identicos (ya limpiados en `f9a6a4db`), 18
+  divergentes (incluye el patron `HERMES_*` vs su version en docs/) y 19 nuevos en
+  raiz — quedan listados en el primer reporte para que Sergio decida cuales fusionar
+  y cuales archivar.
+  Republicado y probado en vivo (`update_workflow` + `publish_workflow` +
+  `execute_workflow` production): `message_id` 774 (Telegram real a Sergio, con la
+  seccion "Docs (limpieza diaria)" ya incluida). Ese primer envio expuso un bug real
+  del nodo Telegram: sin `parse_mode` seteado, Telegram parseaba el texto como
+  Markdown legacy y se comia los "_" de los nombres de archivo (`HERMES_OPERATIONS.md`
+  llegaba como `HERMESOPERATIONS.md`). Fix: `parse_mode: 'HTML'` en "Enviar a Sergio"
+  (HTML no toca "_") + separador `relPath <-> twin` cambiado a `relPath vs twin` (un
+  `<->` crudo es inseguro en HTML). Re-probado en vivo: `message_id` 775, nombres de
+  archivo intactos.
 - **Propuestas:** el pipeline viejo (`FGqyNTrQfMIFiVG2`) apuntaba a `127.0.0.1:3031`
   (inalcanzable desde el contenedor n8n) y usaba un generador ad-hoc. Reemplazado
   por `ONIA - Generar Propuesta (oficial)` (arriba), que corre el generador oficial
@@ -71,6 +129,52 @@ master key de LiteLLM se lee de su contenedor y se inyecta. Scripts en
   **Falta un VPS worker dedicado** para el sourcing autónomo; hoy el webhook recibe
   candidatos (de Hermes/manual/otra fuente) y los scorea. Ver research doc
   `hermes-content/docs/research/ONIA_RESEARCH_AGENTE_IMPORTACION_NUVIA_20260705.md`.
+
+## Agentes Contenido + Finanzas (2026-07-09, sesion infra)
+
+Dos runtimes nuevos con el mismo patron Agente Vendedor (cron -> SSH -> `docker exec
+onia-center node <script>` -> escribe a Supabase + status del agente `ready` -> Telegram;
+NO ejecuta ni gasta sin aprobacion). Ambos probados en vivo con `execute_workflow`
+(contenido: 3 borradores + Telegram `message_id` 835; finanzas: `finance_summary` escrito,
+sin Telegram por no haber anomalias — comportamiento correcto).
+
+- **Agente Contenido y Media Lab** (`nZkaXaZVKzgtwUqU`): `content-media-agent.mjs` +
+  `content-media-agent-run.sh`. Reusa la rotacion de pilares de "Guiones Diarios" + lee
+  `idea_inbox`; LiteLLM `gpt-4o-mini` redacta SOLO texto (1 guion + 1-2 carruseles) y deja
+  cada pieza en `review_queue` (`source_type=project`, `source_key=project-content`,
+  `raw.agent=content-media-agent-v1`, `raw.kind=content_script|content_carousel`). Dedupe por
+  fecha (no re-genera si ya hay borradores de hoy). La generacion PESADA (Higgsfield) NO es
+  automatica: el agente propone texto, no gasta creditos (gasto-validar-primero). El Telegram
+  manda el GUION COMPLETO + carruseles (gancho/desarrollo/CTA/texto en pantalla/prompt
+  visual/voz-tono + slides), asi que **reemplaza al viejo "Guiones Diarios"**
+  (`NDXLJiR00ciQx72V`), archivado 2026-07-09 para no mandar dos mensajes de contenido. Probado
+  con guion completo: Telegram `message_id` 838.
+- **Agente Finanzas y Fondo ONIA** (`oKSTNdvS58ixBgnl`): `finance-fund-agent.mjs` +
+  `finance-fund-agent-run.sh`. Determinista (sin LLM), READ-ONLY sobre la plata. Agrega caja
+  (income_entries), comisiones por estado (payment_commissions), Fondo ONIA (fund_allocation)
+  y riesgos (pagos bloqueados, uso premium sin aprobar, gastos pendientes sin evidencia) en
+  `onia_center.finance_summary` (tabla nueva, migracion
+  `20260709_onia_center_finance_summary.sql`, upsert 1 fila/dia). Telegram SOLO si hay
+  anomalias. **Punto de coordinacion con el panel:** el panel LEE la fila mas reciente de
+  `finance_summary` — contrato en `ONIA_FINANCE_SUMMARY_CONTRACT.md`.
+
+## Building in Public + pausa por vacaciones (2026-07-10, sesion infra)
+
+**Agente Building in Public** (`XRS9fWY4yFMQQftF`, **DESACTIVADO**): `building-public-agent.mjs`
++ `building-public-agent-run.sh`. Lee el repo-pulse (commits por carril,
+`/opt/onia/state/repo-pulse-latest.json`), escribe `onia_center.dev_pulse` (visibilidad de
+"estamos construyendo todo el tiempo" — nombres reales de carril, interno/sergio_private) y
+redacta con LiteLLM contenido building-in-public **SANITIZADO** (allowlist carril->tema publico;
+clientes como Bolivian Electric se DESCARTAN) en `review_queue` (`raw.agent=building-public-agent-v1`).
+Migracion `20260710_onia_center_dev_pulse.sql`. Cron Lunes 07:25 (semanal). Creado inactivo a
+pedido de Sergio (vacaciones); runtime probado en vivo (224 commits/72h -> dev_pulse + 2
+borradores sanitizados). **Activar con `publish_workflow` al volver.**
+
+**Pausa por vacaciones (2026-07-10):** desactivados (`unpublish_workflow`) mientras Sergio no
+puede aprobar borradores: Agente Contenido (`nZkaXaZVKzgtwUqU`), Agente Vendedor
+(`C96NmbalLhaTEf0G`), Prospeccion diaria (`jspfoUsjQfQ1VXY4`). **Siguen activos** (read-only o
+sin necesitar a Sergio): Agente Finanzas (`oKSTNdvS58ixBgnl`, solo avisa por anomalias), backup,
+healthcheck, VPS radar, tipo de cambio, etc. Reactivar con `publish_workflow` al volver.
 
 ## Scripts de ops (en el VPS bajo /opt/onia/)
 

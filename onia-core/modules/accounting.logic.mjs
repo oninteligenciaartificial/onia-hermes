@@ -1,0 +1,567 @@
+/*
+ * Logica contable pura del modulo accounting (Bolivia). Referencia canonica que
+ * los productos portan. Sin estado, sin IO. Doble partida, libro mayor y balance
+ * de comprobacion derivados de las lineas, e impuestos bolivianos (IVA/IT/IUE)
+ * con vencimientos por digito NIT y cierre de gestion por sector.
+ *
+ * Las alicuotas por defecto son las vigentes (IVA 13%, IT 3%, IUE 25%) pero se
+ * pasan como parametro porque la normativa cambia. Esto NO es asesoria fiscal.
+ */
+
+export function round2(value) {
+  return Math.round((Number(value) + Number.EPSILON) * 100) / 100;
+}
+
+function pad2(value) {
+  return String(value).padStart(2, "0");
+}
+
+// --- Doble partida ----------------------------------------------------------
+
+/** Suma de debe y haber de un conjunto de lineas de asiento. */
+export function sumDebitCredit(lines = []) {
+  let debit = 0;
+  let credit = 0;
+  for (const line of lines) {
+    debit += Number(line?.debit ?? 0);
+    credit += Number(line?.credit ?? 0);
+  }
+  return { debit: round2(debit), credit: round2(credit) };
+}
+
+/** Un asiento cuadra cuando la suma del debe es igual a la del haber. */
+export function isBalanced(lines = []) {
+  const { debit, credit } = sumDebitCredit(lines);
+  return debit === credit;
+}
+
+/** Exige que el asiento cuadre antes de contabilizarlo (post). */
+export function assertBalanced(lines = []) {
+  const { debit, credit } = sumDebitCredit(lines);
+  if (debit !== credit) {
+    throw new Error(`asiento descuadrado: debe ${debit} != haber ${credit}`);
+  }
+  return lines;
+}
+
+// --- Libro mayor y balance de comprobacion ----------------------------------
+
+/** Mayor: agrega las lineas por cuenta -> { code: { debit, credit, balance } }. */
+export function ledgerByAccount(lines = []) {
+  const ledger = {};
+  for (const line of lines) {
+    const code = line?.accountCode;
+    if (!code) {
+      continue;
+    }
+    if (!ledger[code]) {
+      ledger[code] = { debit: 0, credit: 0, balance: 0 };
+    }
+    ledger[code].debit += Number(line?.debit ?? 0);
+    ledger[code].credit += Number(line?.credit ?? 0);
+  }
+  for (const code of Object.keys(ledger)) {
+    const account = ledger[code];
+    account.debit = round2(account.debit);
+    account.credit = round2(account.credit);
+    account.balance = round2(account.debit - account.credit);
+  }
+  return ledger;
+}
+
+/** Saldo de una cuenta (debe - haber). */
+export function accountBalance(lines = [], accountCode) {
+  const ledger = ledgerByAccount(lines);
+  return ledger[accountCode]?.balance ?? 0;
+}
+
+/** Balance de comprobacion: filas por cuenta + totales + si cuadra. */
+export function trialBalance(lines = []) {
+  const ledger = ledgerByAccount(lines);
+  const rows = Object.keys(ledger)
+    .sort()
+    .map((accountCode) => ({
+      accountCode,
+      debit: ledger[accountCode].debit,
+      credit: ledger[accountCode].credit,
+    }));
+  const totalDebit = round2(rows.reduce((sum, row) => sum + row.debit, 0));
+  const totalCredit = round2(rows.reduce((sum, row) => sum + row.credit, 0));
+  return { rows, totalDebit, totalCredit, balanced: totalDebit === totalCredit };
+}
+
+/**
+ * Libro auxiliar (libro menor): agrupa las lineas por un campo (partnerId por
+ * defecto: mayor por cliente/proveedor), opcionalmente filtrando por cuenta.
+ * Devuelve { clave: { debit, credit, balance } }.
+ */
+export function subsidiaryLedger(lines = [], { accountCode, by = "partnerId" } = {}) {
+  const scoped = accountCode ? lines.filter((line) => line?.accountCode === accountCode) : lines;
+  const auxiliary = {};
+  for (const line of scoped) {
+    const key = line?.[by] ?? "sin_asignar";
+    if (!auxiliary[key]) {
+      auxiliary[key] = { debit: 0, credit: 0, balance: 0 };
+    }
+    auxiliary[key].debit += Number(line?.debit ?? 0);
+    auxiliary[key].credit += Number(line?.credit ?? 0);
+  }
+  for (const key of Object.keys(auxiliary)) {
+    const entry = auxiliary[key];
+    entry.debit = round2(entry.debit);
+    entry.credit = round2(entry.credit);
+    entry.balance = round2(entry.debit - entry.credit);
+  }
+  return auxiliary;
+}
+
+// --- Estados financieros ----------------------------------------------------
+
+/**
+ * Estado de resultados. `accounts` mapea code -> { accountType }. Ingresos por
+ * (haber - debe), gastos/costos por (debe - haber). resultado = ingresos -
+ * gastos - costos.
+ */
+export function incomeStatement(lines = [], accounts = {}) {
+  const ledger = ledgerByAccount(lines);
+  let ingresos = 0;
+  let gastos = 0;
+  let costos = 0;
+  for (const [code, entry] of Object.entries(ledger)) {
+    const type = accounts[code]?.accountType;
+    const net = entry.debit - entry.credit;
+    if (type === "ingreso") {
+      ingresos += -net;
+    } else if (type === "gasto") {
+      gastos += net;
+    } else if (type === "costo") {
+      costos += net;
+    }
+  }
+  ingresos = round2(ingresos);
+  gastos = round2(gastos);
+  costos = round2(costos);
+  return { ingresos, gastos, costos, resultado: round2(ingresos - gastos - costos) };
+}
+
+/**
+ * Balance general (estado de situacion patrimonial). Activo por (debe - haber);
+ * pasivo y patrimonio por (haber - debe). El resultado del ejercicio suma al
+ * patrimonio. balanced verifica activo = pasivo + patrimonio + resultado.
+ */
+export function balanceSheet(lines = [], accounts = {}) {
+  const ledger = ledgerByAccount(lines);
+  const { resultado } = incomeStatement(lines, accounts);
+  let activo = 0;
+  let pasivo = 0;
+  let patrimonio = 0;
+  for (const [code, entry] of Object.entries(ledger)) {
+    const type = accounts[code]?.accountType;
+    const net = entry.debit - entry.credit;
+    if (type === "activo") {
+      activo += net;
+    } else if (type === "pasivo") {
+      pasivo += -net;
+    } else if (type === "patrimonio") {
+      patrimonio += -net;
+    }
+  }
+  activo = round2(activo);
+  pasivo = round2(pasivo);
+  patrimonio = round2(patrimonio);
+  const patrimonioTotal = round2(patrimonio + resultado);
+  return {
+    activo,
+    pasivo,
+    patrimonio,
+    resultado,
+    patrimonioTotal,
+    balanced: activo === round2(pasivo + patrimonioTotal),
+  };
+}
+
+/**
+ * Estado de Evolucion del Patrimonio (EEP). Uno de los estados financieros
+ * basicos exigidos en Bolivia (Codigo de Comercio DL 14379 + Normas de
+ * Contabilidad). Por cada cuenta de patrimonio: saldo inicial + aumentos -
+ * disminuciones = saldo final; el resultado del ejercicio entra como componente
+ * propio (se capitaliza en resultados acumulados al cierre).
+ *
+ * openingBalances: { code: saldoInicialAcreedor } arrastrado del periodo anterior.
+ */
+export function equityStatement(lines = [], accounts = {}, { openingBalances = {} } = {}) {
+  const ledger = ledgerByAccount(lines);
+  const rows = [];
+  for (const [code, entry] of Object.entries(ledger)) {
+    if (accounts[code]?.accountType !== "patrimonio") {
+      continue;
+    }
+    const opening = round2(Number(openingBalances[code] ?? 0));
+    const movement = round2(entry.credit - entry.debit); // el patrimonio suma por el haber
+    rows.push({
+      accountCode: code,
+      opening,
+      increases: movement > 0 ? movement : 0,
+      decreases: movement < 0 ? round2(-movement) : 0,
+      closing: round2(opening + movement),
+    });
+  }
+  rows.sort((a, b) => (a.accountCode < b.accountCode ? -1 : a.accountCode > b.accountCode ? 1 : 0));
+  const { resultado } = incomeStatement(lines, accounts);
+  const openingTotal = round2(rows.reduce((sum, row) => sum + row.opening, 0));
+  const increasesTotal = round2(rows.reduce((sum, row) => sum + row.increases, 0));
+  const decreasesTotal = round2(rows.reduce((sum, row) => sum + row.decreases, 0));
+  return {
+    rows,
+    resultado,
+    openingTotal,
+    increasesTotal,
+    decreasesTotal,
+    // patrimonio neto final = saldos de patrimonio + resultado del ejercicio
+    closingTotal: round2(openingTotal + increasesTotal - decreasesTotal + resultado),
+  };
+}
+
+/**
+ * Estado de Flujo de Efectivo, metodo DIRECTO: variacion del efectivo y sus
+ * equivalentes (caja/bancos) en el periodo, derivada de los movimientos de esas
+ * cuentas. entradas = debe, salidas = haber. cashAccountCodes admite codigos
+ * exactos o prefijos jerarquicos (ej. "1.1" cubre "1.1.1", "1.1.2").
+ */
+export function cashFlowStatement(lines = [], { cashAccountCodes = [], openingCash = 0 } = {}) {
+  const isCash = (code) =>
+    cashAccountCodes.some((prefix) => code === prefix || String(code).startsWith(`${prefix}.`));
+  let inflows = 0;
+  let outflows = 0;
+  for (const line of lines) {
+    if (!isCash(line?.accountCode)) {
+      continue;
+    }
+    inflows += Number(line?.debit ?? 0);
+    outflows += Number(line?.credit ?? 0);
+  }
+  inflows = round2(inflows);
+  outflows = round2(outflows);
+  const netCashFlow = round2(inflows - outflows);
+  const opening = round2(Number(openingCash ?? 0));
+  return { inflows, outflows, netCashFlow, openingCash: opening, endingCash: round2(opening + netCashFlow) };
+}
+
+/**
+ * Conciliacion del flujo operativo por el metodo INDIRECTO: parte del resultado
+ * del ejercicio, suma las partidas que no movieron efectivo (depreciacion,
+ * provisiones, incobrables) y ajusta la variacion del capital de trabajo. Los
+ * ajustes se pasan EXPLICITOS (no se infieren): flujo = resultado + Σajustes -
+ * ΔcapitalTrabajo.
+ */
+export function cashFlowIndirect({ resultado = 0, nonCashAdjustments = [], workingCapitalChange = 0 } = {}) {
+  const adjustments = (Array.isArray(nonCashAdjustments) ? nonCashAdjustments : [nonCashAdjustments]).reduce(
+    (sum, value) => sum + Number(value ?? 0),
+    0,
+  );
+  return round2(Number(resultado ?? 0) + adjustments - Number(workingCapitalChange ?? 0));
+}
+
+// --- Cierre de gestion y periodos -------------------------------------------
+
+/**
+ * Asiento de cierre de gestion: cancela las cuentas de resultado (ingresos,
+ * gastos, costos) contra una cuenta de resultado del ejercicio. Los ingresos
+ * (saldo acreedor) se debitan; gastos/costos (saldo deudor) se acreditan; la
+ * diferencia (utilidad al haber, perdida al debe) va a resultAccountCode. El
+ * asiento cuadra por construccion (total debe = total haber). Reutiliza
+ * ledgerByAccount; no toca activo/pasivo/patrimonio.
+ */
+export function buildClosingEntry(lines = [], accounts = {}, { resultAccountCode = "3.2.1" } = {}) {
+  const ledger = ledgerByAccount(lines);
+  const closingLines = [];
+  let ingresos = 0;
+  let gastosCostos = 0;
+  for (const code of Object.keys(ledger).sort()) {
+    const type = accounts[code]?.accountType;
+    const net = round2(ledger[code].debit - ledger[code].credit);
+    if (type === "ingreso") {
+      const saldoAcreedor = round2(-net);
+      if (saldoAcreedor !== 0) {
+        closingLines.push({ accountCode: code, debit: saldoAcreedor, credit: 0 });
+        ingresos = round2(ingresos + saldoAcreedor);
+      }
+    } else if (type === "gasto" || type === "costo") {
+      if (net !== 0) {
+        closingLines.push({ accountCode: code, debit: 0, credit: net });
+        gastosCostos = round2(gastosCostos + net);
+      }
+    }
+  }
+  const resultado = round2(ingresos - gastosCostos);
+  if (resultado > 0) {
+    closingLines.push({ accountCode: resultAccountCode, debit: 0, credit: resultado });
+  } else if (resultado < 0) {
+    closingLines.push({ accountCode: resultAccountCode, debit: round2(-resultado), credit: 0 });
+  }
+  return { lines: closingLines, ingresos, gastosCostos, resultado };
+}
+
+/** Un periodo/gestion cerrado no admite asientos nuevos (status closed/cerrado). */
+export function isPeriodClosed(period) {
+  const status = period?.status;
+  return status === "closed" || status === "cerrado";
+}
+
+/** Exige que el periodo este abierto antes de contabilizar. */
+export function assertPeriodOpen(period) {
+  if (isPeriodClosed(period)) {
+    throw new Error(`periodo ${period?.name ?? period?.id ?? ""} cerrado: no admite asientos nuevos`);
+  }
+  return period;
+}
+
+/**
+ * Se puede contabilizar si el periodo esta abierto y la fecha del asiento cae
+ * dentro de su rango. Sin periodo definido no se bloquea (lo valida el
+ * producto). Fechas YYYY-MM-DD comparadas como texto (ISO, ordenables).
+ */
+export function canPostToPeriod(period, dateIso) {
+  if (!period) {
+    return true;
+  }
+  if (isPeriodClosed(period)) {
+    return false;
+  }
+  const date = String(dateIso ?? "").slice(0, 10);
+  if (period.startDate && date < String(period.startDate).slice(0, 10)) {
+    return false;
+  }
+  if (period.endDate && date > String(period.endDate).slice(0, 10)) {
+    return false;
+  }
+  return true;
+}
+
+/** Lanza si no se puede contabilizar en el periodo/fecha (cerrado o fuera de rango). */
+export function assertCanPost(period, dateIso) {
+  if (!canPostToPeriod(period, dateIso)) {
+    throw new Error(`no se puede contabilizar en el periodo (cerrado o fecha fuera de rango): ${dateIso}`);
+  }
+  return true;
+}
+
+// --- Impuestos Bolivia ------------------------------------------------------
+
+/** IVA contenido en un registro RCV (usa ivaAmount si viene, si no amount*rate). */
+export function ivaOfRecord(record, rate = 0.13) {
+  if (record?.ivaAmount !== undefined && record?.ivaAmount !== null) {
+    return round2(record.ivaAmount);
+  }
+  return round2(Number(record?.amount ?? 0) * rate);
+}
+
+/**
+ * IVA del periodo desde el RCV: debito fiscal (ventas) - credito fiscal (compras)
+ * - saldo a favor previo. Devuelve lo que se paga y el nuevo saldo a favor.
+ */
+export function computeIva(rcvRecords = [], { rate = 0.13, previousBalance = 0 } = {}) {
+  let debito = 0;
+  let credito = 0;
+  for (const record of rcvRecords) {
+    if (record?.kind === "venta") {
+      debito += ivaOfRecord(record, rate);
+    } else if (record?.kind === "compra") {
+      credito += ivaOfRecord(record, rate);
+    }
+  }
+  debito = round2(debito);
+  credito = round2(credito);
+  const net = round2(debito - credito - Number(previousBalance ?? 0));
+  return {
+    debito,
+    credito,
+    net,
+    payable: net > 0 ? net : 0,
+    balanceForward: net < 0 ? round2(-net) : 0,
+  };
+}
+
+/** Impuesto a las Transacciones: 3% sobre ingresos brutos. */
+export function computeIt(grossIncome, rate = 0.03) {
+  return round2(Math.max(0, Number(grossIncome ?? 0)) * rate);
+}
+
+/** IUE: 25% sobre la utilidad neta imponible (0 si hay perdida). */
+export function computeIue(netTaxableProfit, rate = 0.25) {
+  return round2(Math.max(0, Number(netTaxableProfit ?? 0)) * rate);
+}
+
+/** Bancarizacion: operaciones iguales o mayores al umbral deben bancarizarse. */
+export function requiresBankization(amount, threshold = 50000) {
+  return Number(amount ?? 0) >= threshold;
+}
+
+// --- Vencimientos y cierre de gestion ---------------------------------------
+
+/**
+ * Vencimiento de una declaracion mensual por ultimo digito del NIT (DS 25619):
+ * el dia cae en el mes SIGUIENTE al periodo. period = 'YYYY-MM'.
+ */
+export function taxDueDate(nit, period, config) {
+  const lastDigit = String(nit ?? "").trim().slice(-1);
+  const dueDay = config?.nitDueDay?.[lastDigit];
+  if (dueDay === undefined) {
+    throw new Error(`sin dia de vencimiento para el digito NIT ${lastDigit}`);
+  }
+  const [year, month] = String(period).split("-").map(Number);
+  let nextMonth = month + 1;
+  let nextYear = year;
+  if (nextMonth > 12) {
+    nextMonth = 1;
+    nextYear += 1;
+  }
+  return `${nextYear}-${pad2(nextMonth)}-${pad2(dueDay)}`;
+}
+
+/** Cierre de gestion (IUE) por sector, desde bolivianConfig. Devuelve YYYY-MM-DD. */
+export function fiscalYearEnd(sector, year, config) {
+  const entry = (config?.fiscalYearEndBySector ?? []).find((item) => item.sector === sector);
+  if (!entry) {
+    throw new Error(`sin cierre de gestion definido para el sector ${sector}`);
+  }
+  return `${year}-${entry.monthDay}`;
+}
+
+/** Suma dias a una fecha ISO (YYYY-MM-DD) en UTC. */
+export function addDays(isoDate, days) {
+  const date = new Date(`${isoDate}T00:00:00Z`);
+  date.setUTCDate(date.getUTCDate() + Number(days));
+  return date.toISOString().slice(0, 10);
+}
+
+/** Vencimiento del IUE: 120 dias despues del cierre de gestion. */
+export function iueDueDate(fiscalYearEndDate, days = 120) {
+  return addDays(fiscalYearEndDate, days);
+}
+
+// --- Depreciacion (linea recta) y ajustes de cierre -------------------------
+
+/** Depreciacion de linea recta: (costo - valor residual) / vida util. */
+export function straightLineDepreciation(cost, usefulLifeYears, { salvageValue = 0 } = {}) {
+  const depreciableBase = Math.max(0, Number(cost ?? 0) - Number(salvageValue ?? 0));
+  const years = Number(usefulLifeYears ?? 0);
+  const annual = years > 0 ? depreciableBase / years : 0;
+  return {
+    depreciableBase: round2(depreciableBase),
+    annual: round2(annual),
+    monthly: round2(annual / 12),
+  };
+}
+
+/**
+ * Depreciacion acumulada y valor en libros a `periodsElapsed` periodos.
+ * La acumulada nunca supera la base depreciable.
+ */
+export function depreciationSchedule(
+  cost,
+  usefulLifeYears,
+  periodsElapsed,
+  { salvageValue = 0, periodsPerYear = 12 } = {},
+) {
+  const { depreciableBase, annual } = straightLineDepreciation(cost, usefulLifeYears, { salvageValue });
+  const perPeriod = periodsPerYear > 0 ? annual / periodsPerYear : 0;
+  const accumulated = Math.min(depreciableBase, perPeriod * Number(periodsElapsed ?? 0));
+  return {
+    perPeriod: round2(perPeriod),
+    accumulated: round2(accumulated),
+    netBookValue: round2(Number(cost ?? 0) - accumulated),
+  };
+}
+
+/** Depreciacion segun el tipo de activo (usa depreciationByAssetType del config). */
+export function depreciationForAssetType(cost, assetType, config, options = {}) {
+  const entry = (config?.depreciationByAssetType ?? []).find((item) => item.assetType === assetType);
+  if (!entry) {
+    throw new Error(`sin vida util definida para el tipo de activo ${assetType}`);
+  }
+  return straightLineDepreciation(cost, entry.usefulLifeYears, options);
+}
+
+/** Provision mensual de un beneficio (aguinaldo/indemnizacion): sueldo * meses/12. */
+export function monthlyProvision(monthlySalary, monthsPerYear = 1) {
+  return round2((Number(monthlySalary ?? 0) * Number(monthsPerYear ?? 1)) / 12);
+}
+
+/** Beneficio devengado a `monthsWorked` meses: sueldo * meses_por_anio * meses/12. */
+export function accruedProvision(monthlySalary, monthsWorked, monthsPerYear = 1) {
+  return round2((Number(monthlySalary ?? 0) * Number(monthsPerYear ?? 1) * Number(monthsWorked ?? 0)) / 12);
+}
+
+// --- Activo fijo (registro individual) ---------------------------------------
+
+/**
+ * Meses COMPLETOS entre dos fechas ISO (UTC): si el dia de fin es anterior al
+ * dia de inicio, ese ultimo mes calendario todavia no se completo por dia.
+ * Duplicado a proposito (mismo criterio que round2 en cada *.logic.mjs): cada
+ * modulo se mantiene autocontenido, sin depender de otro para una utilidad chica.
+ */
+export function monthsBetween(startIso, endIso) {
+  const start = new Date(`${String(startIso).slice(0, 10)}T00:00:00Z`);
+  const end = new Date(`${String(endIso).slice(0, 10)}T00:00:00Z`);
+  let months = (end.getUTCFullYear() - start.getUTCFullYear()) * 12 + (end.getUTCMonth() - start.getUTCMonth());
+  if (end.getUTCDate() < start.getUTCDate()) {
+    months -= 1;
+  }
+  return months;
+}
+
+/**
+ * Depreciacion acumulada y valor en libros de un activo REGISTRADO, a la fecha
+ * dada. Se deriva de acquisitionDate/acquisitionCost/assetType (no se guarda
+ * duplicado); reutiliza depreciationSchedule.
+ */
+export function assetDepreciationAsOf(asset, asOfIso, config) {
+  const entry = (config?.depreciationByAssetType ?? []).find((item) => item.assetType === asset?.assetType);
+  if (!entry) {
+    throw new Error(`sin vida util definida para el tipo de activo ${asset?.assetType}`);
+  }
+  const periodsElapsed = monthsBetween(asset?.acquisitionDate, asOfIso);
+  return depreciationSchedule(asset?.acquisitionCost, entry.usefulLifeYears, periodsElapsed, {
+    salvageValue: asset?.salvageValue ?? 0,
+  });
+}
+
+/** True si el activo ya esta totalmente depreciado (valor en libros <= 0) a la fecha dada. */
+export function isFullyDepreciated(asset, asOfIso, config) {
+  return assetDepreciationAsOf(asset, asOfIso, config).netBookValue <= 0;
+}
+
+// --- Retenciones a terceros (agente de retencion) ----------------------------
+
+/** Retencion combinada IUE+IT sobre compras de bienes/servicios sin factura. */
+export function computeWithholdingCompraSinFactura(grossAmount, { iueRate = 0.05, itRate = 0.03 } = {}) {
+  const amount = Number(grossAmount ?? 0);
+  const iue = round2(amount * iueRate);
+  const it = round2(amount * itRate);
+  return { iue, it, total: round2(iue + it) };
+}
+
+/** Retencion combinada RC-IVA+IT sobre alquileres a personas naturales sin factura. */
+export function computeWithholdingAlquiler(grossAmount, { rcIvaRate = 0.13, itRate = 0.03 } = {}) {
+  const amount = Number(grossAmount ?? 0);
+  const rcIva = round2(amount * rcIvaRate);
+  const it = round2(amount * itRate);
+  return { rcIva, it, total: round2(rcIva + it) };
+}
+
+/** Retencion RC-IVA sobre honorarios/pagos ocasionales a personas naturales sin factura. */
+export function computeWithholdingHonorarios(grossAmount, rate = 0.13) {
+  return round2(Number(grossAmount ?? 0) * rate);
+}
+
+/**
+ * Retencion IUE-Beneficiarios del Exterior: alicuota IUE sobre una base
+ * presunta (por defecto 50% del monto remesado) -> 25% x 50% = 12.5% efectivo.
+ */
+export function computeWithholdingBeneficiarioExterior(remittedAmount, { presumedBaseRate = 0.5, iueRate = 0.25 } = {}) {
+  const amount = Number(remittedAmount ?? 0);
+  const base = round2(amount * presumedBaseRate);
+  const withheld = round2(base * iueRate);
+  return { base, withheld, effectiveRate: presumedBaseRate * iueRate };
+}

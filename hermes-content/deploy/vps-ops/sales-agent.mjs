@@ -16,6 +16,15 @@ const LLM_KEY = process.env.LITELLM_KEY || "";
 const MODEL = process.env.SALES_AGENT_MODEL || "gpt-4o-mini";
 const LIMIT = Math.max(1, Math.min(20, parseInt(process.env.SALES_AGENT_LIMIT || "8", 10)));
 const DRY_RUN = process.env.SALES_AGENT_DRY_RUN === "true";
+const CAL_LINK = process.env.SALES_AGENT_CAL_LINK || "https://cal.onia.com.bo";
+
+// Garantiza que todo seguimiento invite a agendar en Cal (si el LLM no lo incluyo).
+function withCalLink(msg) {
+  const text = String(msg || "");
+  if (!CAL_LINK) return text;
+  if (text.includes("cal.onia.com.bo") || text.includes(CAL_LINK)) return text;
+  return (text + "\n\nAgenda una llamada corta cuando te quede comodo: " + CAL_LINK).slice(0, 4000);
+}
 
 const CLOSED = new Set(["ganado", "perdido", "cerrado", "descartado", "won", "lost", "closed"]);
 const PRIORITY = new Set(["alta", "media", "baja"]);
@@ -48,7 +57,8 @@ async function qualifyLead(lead) {
     "Sos el asistente de ventas de ONIA (agencia de IA/automatizacion en Bolivia). " +
     "Calificas leads y redactas seguimientos en espanol rioplatense-boliviano, claros y humanos. " +
     "REGLA DURA: nunca prometas precios, descuentos ni plazos concretos — eso lo aprueba Sergio. " +
-    "El mensaje debe mover al lead a una llamada/reunion o a pedir mas contexto, sin cerrar numeros. " +
+    "El mensaje debe mover al lead a AGENDAR una llamada corta en " + CAL_LINK + " (link de agenda de ONIA), " +
+    "o a pedir mas contexto, sin cerrar numeros. Cerra invitando a reservar un horario en ese link. " +
     "Responde SOLO con JSON valido, sin markdown.";
   const user =
     "Lead:\n" +
@@ -90,7 +100,7 @@ async function qualifyLead(lead) {
     qualification: String(parsed.qualification || "cold"),
     priority,
     next_action: String(parsed.next_action || "Contactar para agendar llamada").slice(0, 400),
-    followup_message: String(parsed.followup_message || "").slice(0, 4000),
+    followup_message: withCalLink(String(parsed.followup_message || "").slice(0, 3800)),
     proposal_outline: parsed.proposal_outline ? String(parsed.proposal_outline).slice(0, 4000) : null,
   };
 }

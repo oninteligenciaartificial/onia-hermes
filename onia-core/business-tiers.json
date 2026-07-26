@@ -1,0 +1,171 @@
+{
+  "name": "ONIA Business Tiers",
+  "version": "0.1.0",
+  "sourceOfTruth": "onia-core/ONIA_CATALOGO_COMERCIAL_2026.md (seccion 2-3, precios de lista v2 2026-07-04)",
+  "purpose": "Convierte el empaquetado comercial YA DECIDIDO (planes pymes + Empresarial) en datos validables: que capabilities del core, que modulos y que limites trae cada nivel de tamano de negocio. No inventa una segmentacion paralela: es el mismo catalogo de precios, referenciado a ids reales de contract.json y de modules/.",
+  "families": [
+    {
+      "id": "pyme",
+      "name": "Planes pymes",
+      "currency": "BOB",
+      "billingNote": "mensual o anual x10 (2 meses gratis)",
+      "appliesToVerticalTracks": ["dentagest-clinical", "gestios-general", "ganadero-offline", "esteticagest-clinical", "vetgest-clinical", "gestios-gastronomia", "gestios-servicios-profesionales", "gestios-educacion", "gestios-turismo"]
+    },
+    {
+      "id": "empresarial",
+      "name": "ONIA Empresarial",
+      "currency": "USD",
+      "billingNote": "implementacion unica + suscripcion mensual o anual",
+      "appliesToVerticalTracks": ["proveegest-electrico", "proveegest-construccion"]
+    }
+  ],
+  "tiers": [
+    {
+      "id": "ordenado",
+      "familyId": "pyme",
+      "name": "Ordenado",
+      "promise": "Sabes que pasa",
+      "priceMonthlyBob": 390,
+      "limits": { "maxUsers": 3, "maxSucursales": 1, "maxBridges": 0 },
+      "coreCapabilities": [
+        "tenant", "team_roles", "relationships", "partners",
+        "work_items", "evidence_activity", "alerts_reports", "scheduling"
+      ],
+      "modules": [],
+      "unlockedExternalGates": [],
+      "notes": [
+        "Panel del dueno + pendientes con responsable, agenda + clientes + historial.",
+        "Sin canales/intake automatico, sin roles finos, sin comentarios/documentos, sin inventario."
+      ]
+    },
+    {
+      "id": "profesional",
+      "familyId": "pyme",
+      "name": "Profesional",
+      "promise": "Ningun cliente se escapa",
+      "priceMonthlyBob": 890,
+      "limits": { "maxUsers": 8, "maxSucursales": 1, "maxBridges": 0 },
+      "coreCapabilities": [
+        "tenant", "team_roles", "relationships", "partners",
+        "work_items", "evidence_activity", "alerts_reports", "scheduling",
+        "channels", "permissions", "collaboration", "saved_reporting"
+      ],
+      "modules": [
+        { "id": "accounting", "focus": "tax_bolivia (Contador Pack): RCV + vencimientos por digito NIT + radar normativo. Sin doble partida formal." },
+        { "id": "commerce", "focus": "catalog_inventory basico: stock y minimos -> pendiente de reponer. Sin kardex ni lotes." }
+      ],
+      "unlockedExternalGates": [],
+      "notes": [
+        "Suma canales->intake automatico, roles finos (caja no ve lo clinico, etc.), comentarios+documentos.",
+        "Contador Pack INCLUIDO. Inventario basico INCLUIDO."
+      ]
+    },
+    {
+      "id": "empresa",
+      "familyId": "pyme",
+      "name": "Empresa",
+      "promise": "Controlas sin estar encima",
+      "priceMonthlyBob": 1990,
+      "limits": { "maxUsers": 20, "maxSucursales": 3, "maxBridges": 0 },
+      "coreCapabilities": [
+        "tenant", "team_roles", "relationships", "partners",
+        "work_items", "evidence_activity", "alerts_reports", "scheduling",
+        "channels", "permissions", "collaboration", "saved_reporting",
+        "approvals", "data_ops"
+      ],
+      "modules": [
+        { "id": "accounting", "focus": "tax_bolivia (Contador Pack). Doble partida completa disponible, no es la funcion titular del nivel." },
+        { "id": "commerce", "focus": "catalog_inventory + sales_cash completo: multi-almacen, lotes/vencimientos, kardex promedio ponderado, conteos fisicos." },
+        { "id": "invoicing", "focus": "facturacion SIAT en linea." }
+      ],
+      "unlockedExternalGates": ["whatsapp", "siat"],
+      "notes": [
+        "Suma inventario detallado, aprobaciones+SLA+escalamiento, multi-sucursal (hasta 3).",
+        "Bot WhatsApp INCLUIDO*. Facturacion SIAT en linea INCLUIDO* (* costos por uso de terceros van aparte)."
+      ]
+    },
+    {
+      "id": "e1",
+      "familyId": "empresarial",
+      "name": "E1",
+      "scaleNote": "1 empresa, hasta 3 sucursales, 1 puente",
+      "implementationUsd": 4900,
+      "subscriptionMonthlyUsd": 490,
+      "limits": { "maxUsers": null, "maxSucursales": 3, "maxBridges": 1 },
+      "coreCapabilities": [
+        "tenant", "team_roles", "relationships", "partners",
+        "work_items", "evidence_activity", "alerts_reports", "scheduling",
+        "channels", "permissions", "collaboration", "saved_reporting",
+        "approvals", "data_ops"
+      ],
+      "modules": [
+        { "id": "accounting", "focus": "doble partida completa (libro diario/mayor, estados financieros) + tax_bolivia (retenciones, activo fijo)." },
+        { "id": "commerce", "focus": "catalog_inventory + sales_cash + quotes_b2b completo." },
+        { "id": "invoicing", "focus": "facturacion SIAT en linea." },
+        { "id": "payroll", "focus": "planilla completa (AFP/Gestora, RC-IVA, aguinaldo, indemnizacion, finiquito)." },
+        { "id": "knowledge", "focus": "base de conocimiento tecnica del rubro." }
+      ],
+      "unlockedExternalGates": ["whatsapp", "siat", "tr4_adapter"],
+      "notes": [
+        "El modelo Bolivian Electric productizado. TODO incluido, infraestructura dedicada, 1 puente de solo-lectura a sistemas propios (patron TR4)."
+      ]
+    },
+    {
+      "id": "e2",
+      "familyId": "empresarial",
+      "name": "E2",
+      "scaleNote": "multi-sucursal amplio, 2+ puentes, reprecios",
+      "implementationUsd": 8900,
+      "subscriptionMonthlyUsd": 790,
+      "limits": { "maxUsers": null, "maxSucursales": null, "maxBridges": 2 },
+      "coreCapabilities": [
+        "tenant", "team_roles", "relationships", "partners",
+        "work_items", "evidence_activity", "alerts_reports", "scheduling",
+        "channels", "permissions", "collaboration", "saved_reporting",
+        "approvals", "data_ops"
+      ],
+      "modules": [
+        { "id": "accounting", "focus": "doble partida completa + tax_bolivia + tipo de cambio (fx) para reprecios USD/BOB." },
+        { "id": "commerce", "focus": "catalog_inventory + sales_cash + quotes_b2b completo, multi-sucursal amplio." },
+        { "id": "invoicing", "focus": "facturacion SIAT en linea." },
+        { "id": "payroll", "focus": "planilla completa." },
+        { "id": "knowledge", "focus": "base de conocimiento tecnica del rubro." }
+      ],
+      "unlockedExternalGates": ["whatsapp", "siat", "tr4_adapter"],
+      "notes": [
+        "Igual que E1 pero sin tope de sucursales, 2+ puentes, y reprecios automaticos por tipo de cambio (VRD+spread bancario)."
+      ]
+    },
+    {
+      "id": "e3",
+      "familyId": "empresarial",
+      "name": "E3",
+      "scaleNote": "a medida: integraciones profundas, modulos propios",
+      "implementationUsd": 14900,
+      "subscriptionMonthlyUsd": 1190,
+      "limits": { "maxUsers": null, "maxSucursales": null, "maxBridges": null },
+      "coreCapabilities": [
+        "tenant", "team_roles", "relationships", "partners",
+        "work_items", "evidence_activity", "alerts_reports", "scheduling",
+        "channels", "permissions", "collaboration", "saved_reporting",
+        "approvals", "data_ops"
+      ],
+      "modules": [
+        { "id": "accounting", "focus": "doble partida completa + tax_bolivia + fx." },
+        { "id": "commerce", "focus": "catalog_inventory + sales_cash + quotes_b2b completo." },
+        { "id": "invoicing", "focus": "facturacion SIAT en linea." },
+        { "id": "payroll", "focus": "planilla completa." },
+        { "id": "knowledge", "focus": "base de conocimiento tecnica del rubro." }
+      ],
+      "unlockedExternalGates": ["whatsapp", "siat", "tr4_adapter"],
+      "notes": [
+        "Todo lo de E2 sin limite de puentes, mas desarrollo a medida (modulos propios fuera del catalogo estandar) segun contrato especifico."
+      ]
+    }
+  ],
+  "sourceNotes": [
+    "Precios de LISTA v2 (2026-07-04); los de lanzamiento vigentes (Dental 320/750/1500, GestiOS 350-1250) quedan congelados 12 meses para quien cierre antes del 31-jul-2026 -- ver PRICING_RATIONALE_INTERNO.md (fuera de onia-core).",
+    "El mapeo capability/modulo por nivel es una traduccion tecnica del catalogo comercial a datos validables; si el catalogo cambia (precios, features por nivel), este archivo debe actualizarse junto con el.",
+    "No es una segmentacion legal/fiscal boliviana (micro/pequena/mediana/grande empresa) sino la propia segmentacion comercial de ONIA, ya decidida y precia."
+  ]
+}

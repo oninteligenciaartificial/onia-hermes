@@ -1,0 +1,72 @@
+{
+  "id": "nuvia-isdin-fusion-water-spf50-001",
+  "meta": {
+    "fps": 30,
+    "width": 1080,
+    "height": 1920,
+    "totalDurationInFrames": 660,
+    "platform": "youtube_short",
+    "lane": "client",
+    "status": "rendered_v1",
+    "notes": "Rendered v1 out/nuvia-isdin-fusion-water-spf50-001.mp4 (22s, voz Elena seed_audio, presentadora Mara soul_2). Product imagery is reference-only until owned/approved media exists. Nothing publishes without approval."
+  },
+  "brand": {
+    "name": "Nuvia",
+    "logo": "brand/nuvia-logo-wide.png",
+    "tagline": "Protege limpia tu piel",
+    "colors": {
+      "navy": "#0F2D52",
+      "teal": "#00A7A0",
+      "gold": "#F5B400",
+      "coral": "#FF6B6B",
+      "cream": "#FFFBF4",
+      "ink": "#0B1622"
+    }
+  },
+  "product": {
+    "name": "ISDIN Fusion Water Magic SPF 50",
+    "shortName": "Fusion Water SPF 50",
+    "brand": "ISDIN",
+    "size": "50 ml",
+    "category": "Proteccion solar",
+    "price": "Bs. 201",
+    "promoLabel": "-10% este mes",
+    "promoPrice": "Bs. 181",
+    "image": "product/isdin-fusion-water.png",
+    "benefits": ["SPF 50 diario", "Textura agua", "Acabado no graso", "No comedogenico"]
+  },
+  "cta": {
+    "headline": "Conseguilo en Nuvia",
+    "sub": "Consulta disponibilidad y te lo llevamos",
+    "handle": "@nuvia"
+  },
+  "audio": { "voice": "audio/vo.mp3", "music": null },
+  "scenes": [
+    { "id": "hook", "from": 0, "durationInFrames": 120, "image": "mara/hook.png", "kind": "presenter", "kenBurns": "in" },
+    { "id": "problem", "from": 120, "durationInFrames": 120, "image": "mara/problem.png", "kind": "presenter", "kenBurns": "out" },
+    { "id": "product", "from": 240, "durationInFrames": 240, "image": null, "kind": "product", "kenBurns": "in" },
+    { "id": "cta", "from": 480, "durationInFrames": 180, "image": "mara/cta.png", "kind": "cta", "kenBurns": "out" }
+  ],
+  "subtitles": [
+    { "text": "En altura, el sol pega mas fuerte.", "from": 6, "to": 62 },
+    { "text": "Y tu piel lo siente todos los dias.", "from": 62, "to": 120 },
+    { "text": "Muchos no usan protector diario...", "from": 126, "to": 190 },
+    { "text": "porque los sienten pesados y grasosos.", "from": 190, "to": 240 },
+    { "text": "ISDIN Fusion Water Magic SPF 50.", "from": 246, "to": 320 },
+    { "text": "Textura agua: se absorbe al toque.", "from": 320, "to": 392 },
+    { "text": "No deja la cara grasosa.", "from": 392, "to": 436 },
+    { "text": "Proteccion alta, para todos los dias.", "from": 436, "to": 480 },
+    { "text": "Lo conseguis en Nuvia.", "from": 486, "to": 560 },
+    { "text": "Consulta disponibilidad y te lo llevamos.", "from": 560, "to": 654 }
+  ],
+  "voiceover": {
+    "language": "es",
+    "style": "warm, close, believable UGC creator, natural Latin American Spanish, no infomercial energy",
+    "lines": [
+      "En altura, el sol pega mas fuerte. Y tu piel lo siente todos los dias.",
+      "Muchos no usan protector diario porque los sienten pesados y grasosos.",
+      "ISDIN Fusion Water Magic SPF 50: textura agua, se absorbe al toque y no deja la cara grasosa. Proteccion alta, para todos los dias.",
+      "Lo conseguis en Nuvia. Consulta disponibilidad y te lo llevamos."
+    ]
+  }
+}

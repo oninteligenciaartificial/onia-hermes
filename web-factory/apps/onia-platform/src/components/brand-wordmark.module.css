@@ -1,0 +1,10 @@
+.wordmark {
+  display: block;
+  color: var(--ink);
+  height: auto; /* la altura la fija el atributo del SVG */
+}
+
+/* el punto de la "i" es un modulo encendido — verde señal, nunca decorativo */
+.led {
+  fill: var(--accent);
+}

@@ -1,0 +1,245 @@
+{
+  "module": "accounting",
+  "name": "ONIA Accounting Module (Bolivia)",
+  "version": "0.2.0",
+  "status": "draft",
+  "layer": "activatable_module",
+  "purpose": "Contabilidad de doble partida especializada en Bolivia como add-on activable SOBRE el core. El core NO lleva contabilidad (asi lo manda el gap audit); este modulo la PROVEE: plan de cuentas, asientos (libro diario), libro mayor derivado de las lineas, periodos/gestion, y los impuestos bolivianos (IVA, IT, IUE, RC-IVA) con RCV y vencimientos por digito NIT. La emision fiscal real (SIAT) sigue siendo external_gate del core; este modulo prepara y declara, no emite.",
+  "coreContract": "onia-core/contract.json",
+  "schemaFile": "onia-core/modules/accounting.schema.sql",
+  "installInProductRepos": false,
+  "activatesCapabilities": [],
+  "providesCapabilities": [
+    "accounting",
+    "tax_bolivia"
+  ],
+  "coreDependencies": [
+    { "coreEntityId": "organization", "as": "tenant root de cada entidad del modulo" },
+    { "coreEntityId": "member", "as": "journal_entry.createdBy (quien registra el asiento)" },
+    { "coreEntityId": "business_partner", "as": "journal_entry_line.partnerId y rcv_record (cliente/proveedor de la factura)" },
+    { "coreEntityId": "document", "as": "respaldo del asiento (factura, comprobante) via document core" },
+    { "coreEntityId": "approval_request", "as": "aprobacion de asientos de ajuste/cierre sensibles (external al modulo)" }
+  ],
+  "verticalTracks": [
+    "gestios-general",
+    "dentagest-clinical",
+    "ganadero-offline",
+    "proveegest-electrico",
+    "esteticagest-clinical",
+    "vetgest-clinical",
+    "gestios-gastronomia",
+    "gestios-servicios-profesionales",
+    "gestios-educacion",
+    "proveegest-construccion",
+    "gestios-turismo"
+  ],
+  "entities": [
+    {
+      "id": "account",
+      "name": "Account",
+      "capabilityId": "accounting",
+      "table": "onia_accounting_accounts",
+      "purpose": "Cuenta del plan de cuentas (PCGA Bolivia). Codigo jerarquico, tipo y naturaleza (deudora/acreedora).",
+      "requiredFields": ["id", "organizationId", "code", "name", "accountType", "nature", "level", "active", "createdAt"],
+      "optionalFields": ["parentCode", "isPostable"],
+      "tenantScoped": true
+    },
+    {
+      "id": "fiscal_period",
+      "name": "FiscalPeriod",
+      "capabilityId": "accounting",
+      "table": "onia_accounting_fiscal_periods",
+      "purpose": "Gestion/periodo contable. En Bolivia el cierre de gestion depende del sector (marzo/junio/septiembre/diciembre). Un periodo cerrado no admite asientos nuevos.",
+      "requiredFields": ["id", "organizationId", "name", "startDate", "endDate", "status", "createdAt"],
+      "optionalFields": ["closedAt", "sector"],
+      "tenantScoped": true
+    },
+    {
+      "id": "journal_entry",
+      "name": "JournalEntry",
+      "capabilityId": "accounting",
+      "table": "onia_accounting_journal_entries",
+      "purpose": "Asiento contable (cabecera del libro diario): fecha, glosa, tipo (apertura/diario/ajuste/cierre) y estado. La suma debe = suma haber de sus lineas.",
+      "requiredFields": ["id", "organizationId", "entryNumber", "date", "glosa", "entryType", "status", "createdBy", "createdAt"],
+      "optionalFields": ["periodId", "sourceType", "sourceId", "postedAt"],
+      "tenantScoped": true
+    },
+    {
+      "id": "journal_entry_line",
+      "name": "JournalEntryLine",
+      "capabilityId": "accounting",
+      "table": "onia_accounting_journal_entry_lines",
+      "purpose": "Partida de un asiento: cuenta, debe y haber. El libro mayor se deriva agregando estas lineas por cuenta.",
+      "requiredFields": ["id", "organizationId", "entryId", "accountCode", "debit", "credit", "createdAt"],
+      "optionalFields": ["description", "partnerId", "costCenter"],
+      "tenantScoped": true
+    },
+    {
+      "id": "tax_rate",
+      "name": "TaxRate",
+      "capabilityId": "tax_bolivia",
+      "table": "onia_accounting_tax_rates",
+      "purpose": "Configuracion de un impuesto boliviano (IVA/IT/IUE/RC-IVA): alicuota y periodicidad. Editable por el contador porque la normativa cambia.",
+      "requiredFields": ["id", "organizationId", "taxCode", "name", "rate", "periodicity", "active", "createdAt"],
+      "optionalFields": ["legalBasis", "validFrom", "validTo"],
+      "tenantScoped": true
+    },
+    {
+      "id": "tax_declaration",
+      "name": "TaxDeclaration",
+      "capabilityId": "tax_bolivia",
+      "table": "onia_accounting_tax_declarations",
+      "purpose": "Declaracion jurada de un impuesto por periodo: base imponible, impuesto determinado, saldo y vencimiento (por digito NIT). Estado pendiente/presentada/pagada.",
+      "requiredFields": ["id", "organizationId", "taxCode", "period", "status", "dueDate", "taxBase", "taxAmount", "createdAt"],
+      "optionalFields": ["filedAt", "formNumber", "previousBalance", "netPayable"],
+      "tenantScoped": true
+    },
+    {
+      "id": "rcv_record",
+      "name": "RcvRecord",
+      "capabilityId": "tax_bolivia",
+      "table": "onia_accounting_rcv_records",
+      "purpose": "Registro de Compras y Ventas (RCV) que alimenta el IVA: factura, autorizacion/CUF, NIT, importe e IVA. kind = venta (debito fiscal) o compra (credito fiscal).",
+      "requiredFields": ["id", "organizationId", "kind", "period", "invoiceNumber", "nit", "date", "amount", "ivaAmount", "createdAt"],
+      "optionalFields": ["authorizationCode", "controlCode", "partnerId", "partnerName"],
+      "tenantScoped": true
+    },
+    {
+      "id": "withholding_record",
+      "name": "WithholdingRecord",
+      "capabilityId": "tax_bolivia",
+      "table": "onia_accounting_withholding_records",
+      "purpose": "Retencion a terceros (la empresa actua como agente de retencion): IUE+IT en compras sin factura, RC-IVA+IT en alquileres a personas naturales, RC-IVA en honorarios, o IUE-BE en remesas al exterior. Alimenta la declaracion mensual, con el IT SIEMPRE en formulario aparte (Form. 570 IUE / 604 RC-IVA / 410 IT / 530 v3 IUE-BE segun el tipo).",
+      "requiredFields": ["id", "organizationId", "withholdingType", "period", "date", "grossAmount", "retentionAmount", "status", "createdAt"],
+      "optionalFields": ["payeeId", "payeeName", "payeeNit", "formNumber", "notes"],
+      "tenantScoped": true
+    },
+    {
+      "id": "fixed_asset",
+      "name": "FixedAsset",
+      "capabilityId": "accounting",
+      "table": "onia_accounting_fixed_assets",
+      "purpose": "Registro de un activo fijo individual (Libro de Activos Fijos): codigo, fecha y costo de adquisicion, vida util (DS 24051 Art. 22), baja. La depreciacion acumulada y el valor en libros se DERIVAN de la fecha de adquisicion (assetDepreciationAsOf), no se guardan duplicados.",
+      "requiredFields": ["id", "organizationId", "assetCode", "name", "assetType", "acquisitionDate", "acquisitionCost", "status", "createdAt"],
+      "optionalFields": ["serialNumber", "areaId", "salvageValue", "disposalDate", "disposalAmount"],
+      "tenantScoped": true
+    }
+  ],
+  "bolivianConfig": {
+    "currency": "BOB",
+    "notFinancialAdvice": true,
+    "legalBasis": [
+      "Ley 843 (Reforma Tributaria)",
+      "DS 21530 (reglamento IVA)",
+      "DS 24051 (reglamento IUE)",
+      "DS 25619 (vencimientos por ultimo digito del NIT)",
+      "RND SIAT vigentes (facturacion en linea, RCV)",
+      "Codigo de Comercio (DL 14379/1977) Art. 36-65 - obligacion de llevar contabilidad y presentar estados financieros"
+    ],
+    "taxes": [
+      { "code": "IVA", "name": "Impuesto al Valor Agregado", "rate": 0.13, "periodicity": "mensual", "note": "13% nominal; efectiva por dentro ~14.94% sobre precio con IVA incluido (regimen historico). IVA a pagar = debito fiscal (ventas) - credito fiscal (compras). VER ivaReformWarning: la Ley 1.733 (2026) cambia este calculo." },
+      { "code": "IT", "name": "Impuesto a las Transacciones", "rate": 0.03, "periodicity": "mensual", "note": "3% sobre ingresos brutos; compensable con el IUE del ejercicio siguiente." },
+      { "code": "IUE", "name": "Impuesto sobre las Utilidades de las Empresas", "rate": 0.25, "periodicity": "anual", "note": "25% sobre la utilidad neta imponible; se paga hasta 120 dias despues del cierre de gestion." },
+      { "code": "RC_IVA", "name": "Regimen Complementario al IVA", "rate": 0.13, "periodicity": "variable", "note": "Dependientes/personas; normalmente fuera del alcance de la contabilidad de empresa." }
+    ],
+    "fiscalYearEndBySector": [
+      { "sector": "industriales_petroleras", "monthDay": "03-31" },
+      { "sector": "agropecuarias_agroindustriales_gomeras_castaneras", "monthDay": "06-30" },
+      { "sector": "mineras", "monthDay": "09-30" },
+      { "sector": "comerciales_servicios_bancos_seguros_otras", "monthDay": "12-31" }
+    ],
+    "nitDueDay": { "0": 13, "1": 14, "2": 15, "3": 16, "4": 17, "5": 18, "6": 19, "7": 20, "8": 21, "9": 22 },
+    "bancarizacionThresholdBob": 50000,
+    "accountTypes": ["activo", "pasivo", "patrimonio", "ingreso", "gasto", "costo", "orden"],
+    "financialStatements": {
+      "basicos": [
+        "balance_general",
+        "estado_de_resultados",
+        "estado_de_evolucion_del_patrimonio",
+        "estado_de_flujo_de_efectivo",
+        "notas"
+      ],
+      "note": "Los 4 estados computables se DERIVAN de las lineas: balanceSheet + incomeStatement + equityStatement + cashFlowStatement (metodo directo, con cashFlowIndirect para la conciliacion operativa). Las notas son narrativas (fuera de la logica). Se adjuntan a la Memoria Anual junto con la declaracion anual del IUE.",
+      "legalBasis": "Codigo de Comercio (DL 14379/1977) Art. 36-65 + Normas de Contabilidad (Consejo Tecnico Nacional de Auditoria y Contabilidad)."
+    },
+    "depreciationByAssetType": [
+      { "assetType": "edificaciones", "usefulLifeYears": 40, "annualRate": 0.025 },
+      { "assetType": "muebles_enseres", "usefulLifeYears": 10, "annualRate": 0.10 },
+      { "assetType": "maquinaria", "usefulLifeYears": 8, "annualRate": 0.125 },
+      { "assetType": "equipos_instalaciones", "usefulLifeYears": 8, "annualRate": 0.125 },
+      { "assetType": "vehiculos", "usefulLifeYears": 5, "annualRate": 0.20 },
+      { "assetType": "equipos_computacion", "usefulLifeYears": 4, "annualRate": 0.25 },
+      { "assetType": "herramientas", "usefulLifeYears": 4, "annualRate": 0.25 }
+    ],
+    "laborProvisions": {
+      "aguinaldoMonthsPerYear": 1,
+      "indemnizacionMonthsPerYear": 1,
+      "note": "Ley General del Trabajo: aguinaldo = 1 sueldo/anio (pagadero en diciembre; proporcional desde 3 meses). Indemnizacion = 1 sueldo por anio de antiguedad (proporcional). Provision mensual = sueldo * meses_por_anio / 12."
+    },
+    "withholdings": {
+      "verifiedAt": "2026-07-22",
+      "compraSinFactura": {
+        "iueRate": 0.05,
+        "itRate": 0.03,
+        "totalRate": 0.08,
+        "iueForm": "Formulario 570",
+        "itForm": "Formulario 410",
+        "form": "Formulario 570 (IUE) + Formulario 410 (IT)",
+        "legalBasis": "DS 24051 art. 3 (parrafo final) + DS 21532 art. 10",
+        "note": "Compras de bienes a proveedor ocasional/no inscrito, sin factura. El IUE (5%) va en el Form. 570 y el IT (3%) en el Form. 410, en formularios SEPARADOS (no es uno solo). El mas frecuente en distribuidoras/clinicas/comercios formales."
+      },
+      "alquilerPersonaNatural": {
+        "rcIvaRate": 0.13,
+        "itRate": 0.03,
+        "totalRate": 0.16,
+        "rcIvaForm": "Formulario 604",
+        "itForm": "Formulario 410",
+        "form": "Formulario 604 (RC-IVA) + Formulario 410 (IT)",
+        "note": "Alquiler de inmueble a persona natural sin factura. El RC-IVA (13%) va en el Form. 604 y el IT (3%) en el Form. 410, por separado. Casi toda empresa formal alquila su local."
+      },
+      "honorariosPersonaNatural": {
+        "rcIvaRate": 0.13,
+        "rcIvaForm": "Formulario 604",
+        "form": "Formulario 604 (RC-IVA)",
+        "note": "Honorarios/pagos ocasionales a personas naturales sin factura, cuando el ingreso no esta alcanzado por IUE. Solo RC-IVA (13%) en el Form. 604; si el servicio ademas causa IT, el 3% va en el Form. 410 aparte."
+      },
+      "beneficiarioExterior": {
+        "presumedBaseRate": 0.5,
+        "iueRate": 0.25,
+        "effectiveRate": 0.125,
+        "form": "Formulario 530 v3",
+        "boletaPago": "Boleta 3050 v3",
+        "legalBasis": "Ley 843 art. 51 (IUE-BE); DS 5563 puede exonerar/reducir por reinversion de utilidades",
+        "note": "Remesas a beneficiarios del exterior (proveedores/socios extranjeros): renta de fuente boliviana consolidada en el Form. 530 v3 (Seccion D obligatoria: identificar cada beneficiario y el concepto); pago individualizado por la Boleta 3050 v3, a cuenta del 530. Para actividades PARCIALMENTE realizadas en el pais aplica el Form. 551 v3. Poco frecuente en distribuidora/clinica/comercio local."
+      },
+      "notes": [
+        "compraSinFactura (8%) y alquilerPersonaNatural (16%) son los mas usados en empresas formales tipicas; honorarios y beneficiarioExterior dependen del cliente.",
+        "El componente IT (3%) de TODA retencion combinada se declara en el Formulario 410, SEPARADO del formulario del IUE (570) o RC-IVA (604). Verificado 2026-07-22 (siatinfo.impuestos.gob.bo Form. 570/530; boliviaimpuestos.com Form. 410 y tasas combinadas bienes 8% / servicios-alquiler 16%).",
+        "No es asesoria fiscal; verificar el caso puntual (tipo de proveedor, monto, si corresponde retener) antes de aplicar."
+      ]
+    },
+    "ivaReformWarning": {
+      "law": "Ley N 1.733 'Ley de Alivio Tributario' (promulgada 27-mayo-2026)",
+      "change": "Cambia el calculo del IVA de 'por dentro' (tasa efectiva ~14.94% sobre el precio con IVA incluido) a calculo DESAGREGADO fuera del valor neto (tasa transparente 13% real).",
+      "statusAsOf": "2026-07-21",
+      "effectiveDate": "Desde el primer dia del mes siguiente a su reglamentacion. Al 2026-07-21 solo se reglamento la CONDONACION de la ley (RND 102600000019, vigente 10-jun-2026); el IVA desagregado/por-fuera 13% TODAVIA NO RIGE porque falta su DS reglamentario. Por lo tanto la formula de IVA vigente HOY sigue siendo la del 13% por dentro (efectivo ~14.94%).",
+      "impact": "Las formulas de IVA de este modulo (ivaOfRecord/computeIva), de invoicing (buildCuf/QR no afectados, pero el TOTAL de la factura si) y de payroll (RC-IVA) usan hoy 'iva = total * 0.13' tratando el 13% como aplicado sobre el total, lo cual SIGUE SIENDO CORRECTO al 2026-07-21. Cuando salga el DS que ponga en vigencia el calculo desagregado, VERIFICAR si esa formula cambia la base. NO se modifico ninguna formula de IVA: el desagregado aun no rige y cambiar formulas ya probadas sin certeza seria peor que dejarlo marcado. El modulo imports usa el mismo criterio (vatMode inside_1494 por default; outside_13 conmutable para el dia que rija)."
+    },
+    "notes": [
+      "Tasas y fechas son DEFAULT configurables por el contador; la normativa cambia (radar RND). Esto NO es asesoria fiscal.",
+      "El IVA se declara con el Libro de Compras y Ventas (RCV) en el portal SIAT.",
+      "La emision fiscal en linea (factura SIAT) es external_gate del core, no de este modulo: aca se prepara y declara, no se emite.",
+      "Ver ivaReformWarning: hay un cambio legal 2026 pendiente de reglamentacion que puede afectar el calculo del IVA en todo el core."
+    ]
+  },
+  "notes": [
+    "El modulo NO redefine entidades del core; agrega entidades propias con namespace onia_accounting_*.",
+    "El libro mayor y el balance de comprobacion se DERIVAN de journal_entry_line (no se guardan duplicados).",
+    "La emision fiscal real (SIAT) queda en el external_gate del core; este modulo prepara/declara."
+  ],
+  "gates": [
+    "installInProductRepos = false hasta plan de adopcion del modulo aprobado",
+    "SQL base del modulo (accounting.schema.sql) se traduce a migraciones del producto, no se aplica directo",
+    "Tasas/fechas se cargan como tax_rate configurables; no se hardcodean en el producto"
+  ]
+}

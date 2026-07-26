@@ -31,6 +31,37 @@ tocar los 4 archivos raíz de web-factory (`next.config.ts`, `layout.tsx`,
 `globals.css`, `package.json`). Infra (G) = un solo dueño a la vez; nadie más
 toca n8n/VPS/DB mientras G trabaja.
 
+> **Carril L (canal YT) = rama propia `yt-maquina-humana`** (2026-07-10). Canal
+> "Máquina Humana" (marca pública; ex "La Ciencia de tu Cuerpo"), dueño de
+> `hermes-content/channels/ciencia-cuerpo/**` (slug interno se mantiene — renombrarlo
+> solo rompe referencias). **NO confundir con el panel (carril A, rama
+> `claude/vibrant-ritchie-9304f8`): son carpetas Y ramas distintas — el canal nunca
+> comparte rama con el panel.** Incidente 2026-07-10: el build del canal se estaba
+> commiteando en la rama del panel; se separó a rama propia (archivos disjuntos, sin
+> conflicto). El loop autónomo semanal del canal se hand-off a n8n/infra, no queda local.
+
+### Regla dura — no filtrar WIP parcial a `main` (build coherente)
+
+`main` alimenta DOS deploys: el auto-deploy real al VPS (`center.onia.com.bo`,
+GitHub Action que buildea `main`) y el proyecto Vercel `onia-center` (vestigial,
+`live:false`, buildea cada push de cada rama). Un `main` que no compila rompe el
+deploy real Y spamea emails "Failed preview deployment" de Vercel.
+
+- El auto-sync hace fast-forward de `main`. NUNCA dejes que arrastre un
+  subconjunto incoherente: si un archivo nuevo importa otro archivo nuevo, van
+  los DOS a `main` (o ninguno), jamás uno solo.
+- Sesiones de rebuild (árboles de componentes nuevos, ej. carril A
+  `onia-center-rebuild`): el rebuild entra a `main` SOLO como un merge COMPLETO y
+  COHERENTE que pasa `tsc --noEmit` en `web-factory/apps/site`. Nada de commits
+  sueltos del rebuild colándose a `main` por auto-sync.
+- Antes de cualquier merge/swap a `main`: `tsc --noEmit` verde en tu rama. Ojo
+  con el casing de imports (Linux distingue mayúsculas; Windows no → compila
+  local pero rompe en el build).
+- Incidente de referencia (2026-07-09/10): 3 archivos del rebuild
+  (`onia-center/components/views/hoy/AgentRosterTile.tsx`, `components/shell/TopNav.tsx`,
+  `styles/tokens.css`) llegaron a `main` sin `components/ui/*` que importan → tsc
+  rojo → ambos deploys rotos + lluvia de emails. Arreglado en `a771e5b0`.
+
 ## Ownership split
 
 ### Session A: Instagram, assets, dashboard, publishing
@@ -410,6 +441,10 @@ Session B should not edit publishing scripts unless coordinating first.
 - Nuvia local preview stability runbook lives in `web-factory/NUVIA_LOCAL_PREVIEW_RUNBOOK.md`.
 - Nuvia price automation runbook lives in `web-factory/docs/NUVIA_PRICE_AUTOMATION.md`.
 - Nuvia product harvester scripts live in `web-factory/harvester/product/`.
+- Nuvia app code lives in `web-factory/apps/site` (routes `src/app/nuvia/**`, same
+  Next.js app as onia-center/vendedores). Deploys as its OWN Vercel project
+  `nuvia-store` (domain `nuvia-store.vercel.app`), same repo/commit as the
+  `onia-center` project — see `hermes-content/docs/ONIA_NUVIA_DOMINIO_PROPIO_20260706.md`.
 - Global Web Factory design stack lives in `C:\Users\PC\.codex\design-stack\DESIGN_STACK.md`; project usage notes live in `web-factory/DESIGN_STACK.md`.
 - Use Spanish names for Hermes skills.
 - Use English uppercase names for repo-level operational docs.

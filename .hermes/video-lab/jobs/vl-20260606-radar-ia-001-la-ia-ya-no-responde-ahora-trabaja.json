@@ -9,14 +9,15 @@
   "offer": "",
   "style": "cinematic tech newsroom, operator dashboard, modern motion graphics, anti-hype",
   "model_recommendation": "Higgsfield stills/video or Kling for motion graphics, then CapCut/Canva overlays",
-  "approval_state": "waiting_approval",
-  "state": "waiting_approval",
+  "approval_state": "approved_for_generation",
+  "state": "assets_generated",
+  "generation_state": "storyboard_and_motion_generated",
   "created_at": "2026-06-06T00:00:00Z",
-  "updated_at": "2026-06-06T00:00:00Z",
+  "updated_at": "2026-07-05T12:30:00Z",
   "published_id": null,
   "video_url": null,
   "error": null,
-  "next_action": "approve_brief",
+  "next_action": "review_assets_and_choose_assembly_path",
   "hook": "La noticia no es que la IA sea mas lista. La noticia es que ahora empieza a trabajar dentro de tus herramientas.",
   "script": [
     "La noticia no es que la IA sea mas lista.",
@@ -45,14 +46,35 @@
   ],
   "visual_style": "vertical 9:16 cinematic tech newsroom + operator dashboard + motion graphics, no logos, no fake UI, no private data",
   "higgsfield_prompt": "Create a vertical 9:16 premium AI news short for a fictional channel called Radar IA. Style: cinematic tech newsroom, operator dashboard, modern motion graphics, realistic but slightly animated, clean high-contrast lighting. Show abstract AI agents connecting to generic app panels, workflow nodes, dashboards, reports, risk alerts and a five-step process checklist. No real logos, no fake product UI, no private data, no celebrity likeness, no distorted generated text. Leave clean areas for editor-added Spanish text. Fast but smooth camera, high retention first frame, blue and lime signal accents on graphite black background.",
-  "caption": "La IA ya no solo responde. Ahora trabaja.",
+  "negative_prompt": "No real logos, no fake screenshots, no private data, no celebrity faces, no robotic humanoid cliche, no scary AI apocalypse visuals, no unreadable text, no distorted UI, no crypto style, no exaggerated guru thumbnails, no job-loss fearmongering.",
+  "caption": "La IA ya no solo responde. Ahora trabaja.\n\nEl cambio no es que sea mas lista: es que empieza a ejecutar tareas dentro de tus herramientas (analisis, reportes, sitios, seguimiento) en vez de solo contestar preguntas.\n\nPero un agente sobre un proceso roto solo automatiza el caos mas rapido. Primero ordenas el proceso en pasos claros; despues le pasas las tareas repetibles a la IA, sin decisiones sensibles.\n\nComenta el proceso que quieres automatizar y lo convertimos en un radar.\n\n#InteligenciaArtificial #AgentesIA #AutomatizacionDeNegocios #IAparaEmpresas #RadarIA",
   "platform_copy": {
+    "instagram_caption": "La IA ya no solo responde. Ahora trabaja.\n\nEl cambio no es que sea mas lista: es que empieza a ejecutar tareas dentro de tus herramientas (analisis, reportes, sitios, seguimiento) en vez de solo contestar preguntas.\n\nPero un agente sobre un proceso roto solo automatiza el caos mas rapido. Primero ordenas el proceso en pasos claros; despues le pasas las tareas repetibles a la IA, sin decisiones sensibles.\n\nComenta el proceso que quieres automatizar y lo convertimos en un radar.\n\n#InteligenciaArtificial #AgentesIA #AutomatizacionDeNegocios #IAparaEmpresas #RadarIA",
+    "tiktok_description": "La IA paso de responder a ejecutar tareas dentro de tus apps. Que proceso automatizarias primero?\n#ia #automatizacion #agentesia #radaria",
     "youtube_title": "La IA ya no solo responde. Ahora trabaja.",
     "youtube_description": "OpenAI, Google, Microsoft y Anthropic estan empujando la IA hacia agentes y workflows. La tendencia no es solo chatbots mejores: es IA conectada a procesos reales.\n\nFuentes: OpenAI News, Google AI Blog, Microsoft Work Trend Index 2026, Anthropic News.\n\nContenido educativo. Algunas visuales pueden ser generadas con IA.",
     "youtube_tags": "inteligencia artificial, noticias ia, agentes ia, openai codex, gemini, claude, microsoft copilot, automatizacion, ia para negocios, radar ia",
+    "linkedin_copy": "La conversacion sobre IA cambio de \"que tan inteligente es\" a \"que trabajo hace dentro de la operacion\".\n\nOpenAI lleva Codex mas alla del codigo, Google habla de una era agentica, Microsoft dice que el reto ya no es usar IA sino redisenar como trabaja la empresa, y Anthropic empuja workflows con subagentes. El patron es uno: el chatbot que respondia preguntas se esta volviendo operador.\n\nEl mecanismo practico: elegi un proceso repetido, escribilo en cinco pasos y marca donde una IA puede ejecutar sin tomar decisiones sensibles. Un agente sobre un proceso roto solo automatiza el caos mas rapido.\n\nQue proceso de tu operacion seria el primero en volverse radar?",
     "cta": "Comenta el proceso que quieres automatizar y lo convertimos en un radar."
   },
   "publish_window": "cuando Sergio apruebe brief, generacion y revision final",
   "cta": "Comenta el proceso que quieres automatizar y lo convertimos en un radar.",
-  "reuse_notes": "Convertir en serie diaria Radar IA: que paso, por que importa, que haces hoy."
+  "reuse_notes": "Convertir en serie diaria Radar IA: que paso, por que importa, que haces hoy.",
+  "assets": {
+    "dir": "hermes-content/references/radar-ia/video-001",
+    "round_doc": "20260705-radar-ia-001-storyboard-round-01.md",
+    "storyboard_stills": [
+      {"beat": "0-2s hook", "file": "20260705-radar-ia-001-frame-01-hero-signal.png", "higgsfield_job": "c57dc479-ec10-42b2-a6c5-e77b42f8b291"},
+      {"beat": "2-5s ahora trabaja", "file": "20260705-radar-ia-001-frame-02-agent-apps.png", "higgsfield_job": "ff50820c-ffd3-4e02-960a-57ce4350d6da"},
+      {"beat": "22-34s ejecuta", "file": "20260705-radar-ia-001-frame-03-dashboard.png", "higgsfield_job": "86c46998-ec97-4fa1-becb-c80cc2706c4e"},
+      {"beat": "45-58s haz esto hoy", "file": "20260705-radar-ia-001-frame-04-checklist.png", "higgsfield_job": "45c8f38c-227e-4a3d-b58b-44ea4d5e87a6"}
+    ],
+    "motion_clips": [
+      {"beat": "hook", "file": "20260705-radar-ia-001-clip-01-hero-signal.mp4", "higgsfield_job": "263887f4-c6b5-4ee9-b30e-4345c01b50e5"},
+      {"beat": "ahora trabaja", "file": "20260705-radar-ia-001-clip-02-agent-apps.mp4", "higgsfield_job": "b7f07499-0c5a-4407-bc47-a93c79bf6026"},
+      {"beat": "ejecuta", "file": "20260705-radar-ia-001-clip-03-dashboard.mp4", "higgsfield_job": "9a8d26e6-72b3-47f2-ab54-c25a7e418d57"},
+      {"beat": "haz esto hoy", "file": "20260705-radar-ia-001-clip-04-checklist.mp4", "higgsfield_job": "48e19429-b2b0-4aad-896c-a1f1a72d850d"}
+    ],
+    "assembly_recommendation": "Path A: corte ~24s sin voz (4 clips + overlays + musica), publicable sin la voz gated."
+  }
 }

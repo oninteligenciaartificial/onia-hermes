@@ -1,0 +1,153 @@
+.title {
+  max-width: 16ch;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.2rem;
+  margin-top: 2.8rem;
+}
+
+@media (min-width: 860px) {
+  .grid {
+    grid-template-columns: 55fr 45fr;
+  }
+}
+
+.door {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  padding: clamp(1.6rem, 3vw, 2.4rem);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.9rem;
+  min-height: 20rem;
+}
+
+.doorMain {
+  background: var(--surface);
+  border-color: color-mix(in oklab, var(--accent) 45%, var(--line));
+  box-shadow: 0 0 0 1px var(--accent-glow), var(--shadow-card);
+}
+
+.doorTag {
+  font-size: 0.66rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.doorMain .doorTag {
+  color: var(--accent-ink);
+}
+
+.doorTitle {
+  font-size: clamp(1.5rem, 1.2rem + 1.2vw, 2.1rem);
+}
+
+.doorBody {
+  color: var(--ink-soft);
+  max-width: 42ch;
+}
+
+.doorCta {
+  margin-top: 0.6rem;
+}
+
+.doorMicro {
+  font-size: 0.82rem;
+  color: var(--ink-faint);
+}
+
+/* ---- previews en hover (transform/opacity only) ---- */
+
+.waPreview {
+  position: absolute;
+  right: 1.4rem;
+  bottom: 1.2rem;
+  background: var(--ok-soft);
+  border: 1px solid color-mix(in oklab, var(--ok) 40%, transparent);
+  border-radius: 14px 14px 4px 14px;
+  padding: 0.5rem 0.9rem;
+  font-size: 0.82rem;
+  opacity: 0;
+  transform: translateY(10px) scale(0.94);
+  transition: opacity 0.3s ease, transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+
+.door:hover .waPreview,
+.door:focus-within .waPreview {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.demoPreview {
+  position: absolute;
+  right: 1.4rem;
+  bottom: 1.2rem;
+  width: 92px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5px;
+  opacity: 0.35;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.door:hover .demoPreview,
+.door:focus-within .demoPreview {
+  opacity: 1;
+}
+
+.demoTile {
+  height: 26px;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+  background: var(--surface-dim);
+}
+
+.demoTile:first-child {
+  background: var(--accent-soft);
+  border-color: color-mix(in oklab, var(--accent) 40%, transparent);
+}
+
+.demoCursor {
+  position: absolute;
+  top: 8px;
+  left: 10px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--ink);
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .door:hover .demoCursor,
+  .door:focus-within .demoCursor {
+    opacity: 0.8;
+    animation: demo-tour 2.6s ease-in-out infinite;
+  }
+}
+
+@keyframes demo-tour {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  30% {
+    transform: translate(48px, 4px);
+  }
+  60% {
+    transform: translate(44px, 34px);
+  }
+  85% {
+    transform: translate(4px, 30px);
+  }
+}

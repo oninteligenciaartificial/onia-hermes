@@ -1,13 +1,21 @@
 {
   "country": "Bolivia",
   "business": "ONIA",
-  "status": "template_pending_user_data",
-  "disclaimer": "Plantilla operativa. Validar fechas y obligaciones con contador o fuente oficial antes de activar alertas.",
+  "status": "regime_confirmed_pending_nit_and_dates",
+  "disclaimer": "Config operativa. Regimen confirmado por Sergio 2026-07-10. Fechas de vencimiento pendientes del ultimo digito de NIT + calendario SIN vigente. Validar cierre IUE/EEFF con contador matriculado antes de presentar.",
+  "confirmed_2026_07_10": {
+    "tax_regime": "General",
+    "employees_on_payroll": false,
+    "rc_iva_applies": false,
+    "siat_invoicing_status": "activo_portal_web",
+    "external_accountant": "none_yet_onia_prepares",
+    "note": "Sin planilla (socios/honorarios). ONIA prepara todo (RCV, deducciones, calendario, optimizacion); un contador matriculado valida/firma el IUE anual. Prioridad: completar emision SIAT + capturar credito fiscal en compras desde ya (saldo a favor)."
+  },
   "taxpayer": {
     "nit": "",
     "nit_last_digit": "",
-    "tax_regime": "",
-    "responsible_person": "",
+    "tax_regime": "General",
+    "responsible_person": "Sergio",
     "alert_channels": ["Telegram"],
     "timezone": "America/La_Paz"
   },
@@ -16,35 +24,36 @@
     {
       "name": "IVA",
       "frequency": "monthly",
-      "due_rule": "Pendiente: completar segun terminacion de NIT y calendario vigente.",
-      "applies": null,
-      "confirmed": false
+      "applies": true,
+      "due_rule": "Mensual, dia 13 del mes siguiente (ultimo digito NIT 0; Calendario Tributario 2026 SIN). Declara el periodo anterior. Formulario 200.",
+      "confirmed": true
     },
     {
       "name": "IT",
       "frequency": "monthly",
-      "due_rule": "Pendiente: completar segun terminacion de NIT y calendario vigente.",
-      "applies": null,
-      "confirmed": false
+      "applies": true,
+      "due_rule": "Mensual, dia 13 del mes siguiente (digito 0). Se compensa con IUE pagado. Formulario 400.",
+      "confirmed": true
     },
     {
       "name": "RC-IVA",
       "frequency": "monthly",
-      "due_rule": "Pendiente: confirmar si aplica y completar calendario vigente.",
-      "applies": null,
-      "confirmed": false
+      "applies": false,
+      "due_rule": "No aplica: ONIA no tiene empleados en planilla (2026-07-10). Reevaluar si contrata.",
+      "confirmed": true
     },
     {
       "name": "IUE",
       "frequency": "annual",
-      "due_rule": "Pendiente: completar segun cierre fiscal y calendario vigente.",
-      "applies": null,
+      "applies": true,
+      "due_rule": "Pendiente: anual segun cierre fiscal + calendario. Requiere EEFF validados por contador matriculado.",
       "confirmed": false
     }
   ],
   "n8n": {
     "recommended": true,
     "workflow_name": "ONIA - Recordatorios fiscales",
-    "manual_approval_required": false
+    "manual_approval_required": false,
+    "status": "blocked_on_nit_last_digit"
   }
 }

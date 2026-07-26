@@ -25,6 +25,7 @@ import type {
   IntegrationConnector,
   TaskRecord,
   UserProfileRecord,
+  VentureRecord,
 } from "./types";
 
 export const repoStrategy = {
@@ -398,6 +399,102 @@ export const higgsfieldQuietRule: HiggsfieldQuietRule = {
 };
 
 export const operatingAgents: OperatingAgent[] = [
+  {
+    id: "agent-prospector",
+    name: "Agente Prospector",
+    mission: "Descubre negocios reales de Bolivia por rubro y ciudad (OpenStreetMap) y deja como prospectos en el CRM los que no tienen web.",
+    ownerRole: "sergio",
+    visibility: "internal_restricted",
+    cadence: "weekly",
+    status: "ready",
+    monthlyOutcome: "CRM alimentado con prospectos calificados y con hueco digital, listos para vender landing y chatbot.",
+    inputs: ["rubro", "ciudad", "OpenStreetMap/Overpass", "catalogo de servicios"],
+    outputs: ["leads nuevos en el CRM", "servicio sugerido", "por que es buen prospecto"],
+    actions: [
+      "Buscar negocios por rubro y ciudad",
+      "Priorizar los que no tienen web",
+      "Sugerir el servicio ONIA que encaja",
+      "Dejar el lead como borrador (no contacta)",
+    ],
+    blockedBy: [],
+    nextAction: "Sumar rubros (estetica, gastronomia) y opcionalmente contacto real via Google Maps (con aprobacion de gasto).",
+    safetyRule: "No contacta a nadie; solo deja prospectos publicos para que Sergio o Camila decidan.",
+    connectorIds: ["connector-supabase-onia-center", "connector-litellm-gateway", "connector-n8n-ops"],
+    toolPreference: ["n8n", "manual"],
+    route: "/onia-center#agentes",
+  },
+  {
+    id: "agent-radar-yt",
+    name: "Agente Radar YT",
+    mission: "Mira tendencias de YouTube (gratis, sin API key) y destila angulos y ganchos propios como ideas de contenido para ONIA y Lucia.",
+    ownerRole: "sergio",
+    visibility: "internal_restricted",
+    cadence: "weekly",
+    status: "ready",
+    monthlyOutcome: "Cola de ideas de contenido con traccion real, sin copiar identidad ajena, listas para aprobar y producir.",
+    inputs: ["busquedas YouTube (yt-dlp)", "pilares de contenido ONIA", "vistas y canal"],
+    outputs: ["ideas de contenido en el panel", "angulo y formato sugerido", "video que inspiro"],
+    actions: [
+      "Buscar videos con traccion en el nicho",
+      "Extraer estructura y gancho (no copiar)",
+      "Redactar 3 a 6 ideas propias",
+      "Dejarlas en Ideas para aprobar",
+    ],
+    blockedBy: [],
+    nextAction: "Conectar el loop: idea aprobada a produccion de video (Higgsfield, con aprobacion de gasto).",
+    safetyRule: "Solo texto; no genera video ni publica; nada sale sin aprobacion de Sergio.",
+    connectorIds: ["connector-supabase-onia-center", "connector-litellm-gateway", "connector-speaches-stt"],
+    toolPreference: ["n8n", "manual"],
+    route: "/onia-center#agentes",
+  },
+  {
+    id: "agent-auditor",
+    name: "Agente Auditor de codigo",
+    mission: "Escanea los repos de ONIA y prioriza la deuda tecnica: pendientes, catch vacios, archivos gigantes, tipos any.",
+    ownerRole: "sergio",
+    visibility: "internal_restricted",
+    cadence: "weekly",
+    status: "ready",
+    monthlyOutcome: "Deuda tecnica visible y priorizada cada semana, para atacar lo que importa sin frenar el desarrollo.",
+    inputs: ["repo completo (GitHub Actions)", "reglas de calidad ONIA"],
+    outputs: ["idea de auditoria en el panel", "top 3 de que atacar primero", "puntaje de deuda"],
+    actions: [
+      "Escanear el repo fresco",
+      "Detectar deuda tecnica de forma determinista",
+      "Sintetizar recomendacion priorizada",
+      "Dejar la idea en el panel",
+    ],
+    blockedBy: [],
+    nextAction: "Opcional: sintesis mas profunda con Claude (usa ANTHROPIC_TOKEN, con aprobacion de gasto).",
+    safetyRule: "Solo lectura; no toca codigo, solo reporta.",
+    connectorIds: ["connector-supabase-onia-center", "connector-n8n-ops"],
+    toolPreference: ["codex", "manual"],
+    route: "/onia-center#agentes",
+  },
+  {
+    id: "agent-weekly-digest",
+    name: "Agente Digest semanal",
+    mission: "Agrega la actividad de la semana del panel (leads, ideas, borradores, caja) en un solo mensaje para Sergio los domingos.",
+    ownerRole: "sergio",
+    visibility: "internal_restricted",
+    cadence: "weekly",
+    status: "ready",
+    monthlyOutcome: "Un resumen semanal claro en vez de pings sueltos: que entro, que espera revision, en que esta la plata.",
+    inputs: ["leads del CRM", "ideas pendientes", "cola de aprobacion", "resumen de finanzas"],
+    outputs: ["resumen semanal a Telegram"],
+    actions: [
+      "Contar leads nuevos de la semana",
+      "Contar ideas y borradores para revisar",
+      "Revisar anomalias de caja",
+      "Enviar el resumen el domingo",
+    ],
+    blockedBy: [],
+    nextAction: "Sumar metricas de conversion cuando haya ventas cerradas.",
+    safetyRule: "Solo lectura; agrega y avisa, no ejecuta nada.",
+    connectorIds: ["connector-supabase-onia-center", "connector-n8n-ops"],
+    toolPreference: ["n8n", "manual"],
+    route: "/onia-center#agentes",
+  },
   {
     id: "agent-ceo-monthly",
     name: "Agente CEO mensual",
@@ -960,6 +1057,75 @@ export const operatingProjects: ProjectRecord[] = [
   },
 ];
 
+// Ventures = los frentes de negocio ONIA vistos como torre de control. A diferencia
+// de operatingProjects (backlog interno del panel), esto es la foto estrategica que
+// Sergio revisa: que producto/marca esta vivo, cual avanza y cual necesita atencion.
+// Datos curados a mano desde la revision de negocio; el tono del chip lo deriva la
+// vista Negocio con los semanticos del panel (verde/azul/ambar/neutral).
+export const operatingVentures: VentureRecord[] = [
+  {
+    id: "venture-dentalgest",
+    name: "DentalGest",
+    sector: "SaaS dental",
+    status: "live",
+    statusLabel: "Vivo",
+    summary: "Sistema de gestion para clinicas dentales. 9/9 entidades del core y ya vendible.",
+    nextStep:
+      "Cerrar los 6 modulos clinicos (empezar por medical_alert), conectar el intake y cerrar el primer cliente: los 14 leads dentales son el pipeline.",
+    url: "dentalgest.app",
+  },
+  {
+    id: "venture-gestios",
+    name: "GestiOS",
+    sector: "SaaS comercio",
+    status: "attention",
+    statusLabel: "Atencion",
+    summary: "ERP de comercio para pymes. En curso, todavia no vendible.",
+    nextStep:
+      "Sprint 0: cerrar 15 tablas con RLS apagado (riesgo de seguridad) y reconciliar el core con la base de datos.",
+  },
+  {
+    id: "venture-bolivian-electric",
+    name: "Bolivian Electric",
+    sector: "Distribucion electrica B2B",
+    status: "in_progress",
+    statusLabel: "Fase 1",
+    summary: "Cliente de distribucion mayorista. ProveeGest (el producto) viene despues.",
+    nextStep:
+      "Vender ya la consultoria Fase 1 (Bs 1.900); el producto ProveeGest queda para una fase posterior.",
+  },
+  {
+    id: "venture-nuvia",
+    name: "Nuvia",
+    sector: "Skincare B2C",
+    status: "built",
+    statusLabel: "Construido",
+    summary: "Tienda de skincare importado. Construida, todavia no vende.",
+    nextStep:
+      "Decidir productos a importar y capital; mientras tanto vender el lote 001 por WhatsApp.",
+  },
+  {
+    id: "venture-servicios-onia",
+    name: "Servicios ONIA",
+    sector: "Webs, chatbots y automatizacion",
+    status: "live",
+    statusLabel: "Vivo",
+    summary:
+      "Webs, landings, chatbots, automatizaciones y auditorias. La maquina Prospector-Vendedor-Cal esta viva con 14 leads en el CRM.",
+    nextStep:
+      "Trabajar los 14 leads hasta la primera venta; el chatbot de WhatsApp espera Meta/SEPREC.",
+  },
+  {
+    id: "venture-onia-core",
+    name: "onia-core",
+    sector: "Nucleo comun de los SaaS",
+    status: "live",
+    statusLabel: "Vivo",
+    summary: "Nucleo operativo compartido de los SaaS ONIA. v0.7.x, con SIAT emitiendo manual.",
+    nextStep: "Cerrar la cobertura fiscal boliviana y adoptarlo en mas productos.",
+  },
+];
+
 export const operatingProjectModules: ProjectModuleRecord[] = [
   {
     id: "module-gestios-core-contract",
@@ -1182,20 +1348,65 @@ export const operatingTasks: TaskRecord[] = [
   },
 ];
 
+// Equipo real de ONIA. userKey casa con las claves que ya escribe la vista
+// /equipo (sergio / arthur / seller_001) y el runtime; para separar a los dos
+// comerciales del mismo rol "seller" se reserva seller_002 (Jeronimo). Datos
+// base: rol, estado y trabajo permitido. CI, contacto y comision se cargan
+// despues, no se inventan aca.
 export const collaborators: CollaboratorRecord[] = [
   {
     id: "collab-arthur",
     userId: "user-arthur",
+    userKey: "arthur",
     displayName: "Arthur",
+    title: "Operativo senior / coordinador",
     role: "arthur",
     status: "trial",
-    allowedWork: ["leads", "briefs", "tareas asignadas", "contenido", "Bolivian permitido", "entregables revisables"],
+    allowedWork: ["coordinacion de equipo", "leads", "briefs", "tareas asignadas", "contenido", "Bolivian permitido", "entregables revisables"],
     restrictions: [
       "No ve capital privado",
       "No ve deuda exacta",
       "No aprueba pagos",
       "No aprueba descuentos",
       "No usa TR4 real sin permiso",
+      "No pide credenciales",
+      "No actua como socio",
+    ],
+  },
+  {
+    id: "collab-jeronimo",
+    userId: "user-jeronimo",
+    userKey: "seller_002",
+    displayName: "Jeronimo",
+    title: "Comercial-operativo (vende + produce contenido)",
+    role: "seller",
+    status: "trial",
+    allowedWork: ["leads", "seguimiento comercial", "llamadas", "contenido", "briefs"],
+    restrictions: [
+      "No ve capital privado",
+      "No ve caja completa",
+      "No aprueba pagos",
+      "No aprueba descuentos",
+      "No aprueba su propia comision",
+      "No pide credenciales",
+      "No actua como socio",
+    ],
+  },
+  {
+    id: "collab-camila",
+    userId: "user-camila",
+    userKey: "seller_001",
+    displayName: "Camila",
+    title: "Vendedora (solo vende)",
+    role: "seller",
+    status: "trial",
+    allowedWork: ["leads", "seguimiento comercial", "llamadas"],
+    restrictions: [
+      "No ve capital privado",
+      "No ve caja completa",
+      "No aprueba pagos",
+      "No aprueba descuentos",
+      "No aprueba su propia comision",
       "No pide credenciales",
       "No actua como socio",
     ],

@@ -195,6 +195,14 @@
       ]
     },
     {
+      "capabilityId": "catalog_inventory",
+      "status": "exists_partial",
+      "evidence": [
+        "InventoryItem",
+        "InventoryMovement"
+      ]
+    },
+    {
       "capabilityId": "partners",
       "status": "installed_partial",
       "evidence": [
