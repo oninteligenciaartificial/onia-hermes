@@ -24,9 +24,9 @@
 //
 // El audio se COPIA (-c:a copy): nunca se re-encodea la voz de Sergio.
 // Determinista: sin Date.now / Math.random. Sin dependencias externas.
-import { existsSync, mkdirSync, readFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { spawnSync } from "node:child_process";
-import { dirname, resolve } from "node:path";
+import { dirname, join, resolve } from "node:path";
 
 // ---- args ------------------------------------------------------------------
 const argv = process.argv.slice(2);
@@ -111,6 +111,39 @@ function place(pos, mx, my) {
   return { x: hit[0], y: hit[1] };
 }
 
+// ---- secuencias PNG (apoyos ANIMADOS de scripts/remotion) -------------------
+// Motivo: el WebM con alpha (vp8/vp9 + yuva420p) que produce scripts/remotion/render.mjs
+// es correcto del lado del encoder (Remotion/Chromium graba el canal alpha real,
+// verificado con side_data "Matroska BlockAdditional"), pero el ffmpeg local de
+// Windows (gyan.dev essentials build) NO decodifica ese alpha al leerlo de vuelta
+// (probado: alpha siempre 255 al reconvertir, incluso con -c:v libvpx explícito).
+// Por eso `render.mjs --format png-sequence` es la salida recomendada para este
+// pipeline: cada frame es un PNG con alpha real (no depende del decoder VP8), y
+// overlay-visuals.mjs lo consume acá como secuencia numerada de imágenes.
+function isDirAsset(path) {
+  return statSync(path).isDirectory();
+}
+// Detecta el patrón numerado (prefijo, ancho de ceros, extensión) a partir del
+// primer archivo — no asumimos "element-%02d.png" a mano: Remotion podría
+// cambiar el padding según la cantidad de frames.
+function resolveSequence(dir) {
+  const files = readdirSync(dir)
+    .filter((f) => /\.(png|jpg|jpeg|webp)$/i.test(f))
+    .sort();
+  if (!files.length) fail(`la carpeta de secuencia está vacía: ${dir}`);
+  const m = files[0].match(/^(.*?)(\d+)(\.\w+)$/);
+  if (!m) fail(`no reconozco el patrón de nombres en ${dir} (esperaba algo tipo element-00.png)`);
+  const [, prefix, digits, ext] = m;
+  const width = digits.length;
+  const startNumber = parseInt(digits, 10);
+  return {
+    pattern: join(dir, `${prefix}%0${width}d${ext}`),
+    startNumber,
+    count: files.length,
+    sample: join(dir, files[0]),
+  };
+}
+
 // ---- construir el filter_complex -------------------------------------------
 const num = (v) => Math.round(Number(v) * 1000) / 1000; // 3 decimales: determinista y legible
 const chains = [];
@@ -149,10 +182,15 @@ overlays.forEach((ov, i) => {
     fade = maxFade;
   }
 
+  // apoyo ANIMADO (carpeta = secuencia PNG de scripts/remotion/render.mjs
+  // --format png-sequence) vs. apoyo estático (PNG suelto de make-mockup.mjs).
+  const isSequence = isDirAsset(asset);
+  const seq = isSequence ? resolveSequence(asset) : null;
+
   // scale: el plan habla en fracción del ANCHO DEL VIDEO (lo que uno espera al
   // escribir 0.7), pero el filtro se escribe como iw*K sobre el PNG. K se calcula
   // con el ancho real del asset (ffprobe) → 0.7 = 70% del ancho del video, siempre.
-  const [aw, ah] = probe(asset, "v:0").map(Number);
+  const [aw, ah] = probe(seq ? seq.sample : asset, "v:0").map(Number);
   if (!Number.isFinite(aw) || !aw) fail(`overlays[${i}]: no pude leer el tamaño de ${asset}`);
   const targetW = Math.round(bw * scale);
   const k = num(targetW / aw);
@@ -165,13 +203,36 @@ overlays.forEach((ov, i) => {
   const pos = ov.position || "center";
   const p = ov.x !== undefined && ov.y !== undefined ? { x: String(ov.x), y: String(ov.y) } : place(pos, mx, my);
 
-  // El PNG entra LOOPEADO (-loop 1) para que fade tenga frames sobre los que trabajar:
-  // un PNG suelto es UN frame y el alpha nunca animaría.
-  // `-t` es OBLIGATORIO: con el loop infinito, overlay (eof_action=repeat) sigue
-  // emitiendo frames repitiendo el último del base y el render NO TERMINA NUNCA
-  // (probado: 84 MB y subiendo sobre un reel de 38s). Acotar cada PNG a su ventana
-  // deja todos los inputs finitos → el grafo termina solo.
-  inputs.push("-loop", "1", "-framerate", String(num(fps)), "-t", String(num(end + 0.2)), "-i", asset);
+  if (isSequence) {
+    // Secuencia real: NO se loopea (cada frame ya es distinto). `-framerate`
+    // asume que el clip se renderizó al mismo fps que el video base (igual
+    // criterio que usa scripts/remotion — ver su README). `-t` acota por las
+    // dudas (si el clip quedó más largo que la ventana del overlay).
+    const seqDur = seq.count / fps;
+    if (Math.abs(seqDur - dur) > 0.15) {
+      console.error(
+        `overlay-visuals: AVISO overlays[${i}] la secuencia dura ${num(seqDur)}s pero la ventana pide ${num(dur)}s (se corta o se corta antes).`,
+      );
+    }
+    inputs.push(
+      "-framerate",
+      String(num(fps)),
+      "-start_number",
+      String(seq.startNumber),
+      "-t",
+      String(num(end + 0.2)),
+      "-i",
+      seq.pattern,
+    );
+  } else {
+    // El PNG entra LOOPEADO (-loop 1) para que fade tenga frames sobre los que trabajar:
+    // un PNG suelto es UN frame y el alpha nunca animaría.
+    // `-t` es OBLIGATORIO: con el loop infinito, overlay (eof_action=repeat) sigue
+    // emitiendo frames repitiendo el último del base y el render NO TERMINA NUNCA
+    // (probado: 84 MB y subiendo sobre un reel de 38s). Acotar cada PNG a su ventana
+    // deja todos los inputs finitos → el grafo termina solo.
+    inputs.push("-loop", "1", "-framerate", String(num(fps)), "-t", String(num(end + 0.2)), "-i", asset);
+  }
 
   // format=rgba ANTES del fade: sin canal alpha, fade:alpha=1 no tiene qué animar.
   const steps = [`format=rgba`, `scale=iw*${k}:-2`];

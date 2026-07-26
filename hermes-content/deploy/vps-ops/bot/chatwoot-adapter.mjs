@@ -222,10 +222,18 @@ export async function runChatwootTurn(payload, deps = {}) {
   const turnResult = await runTurnFn(parsed.turn, deps);
 
   const client = deps.client || createChatwootClient(deps);
+  // Mismo "encendido en dos pasos" que Telegram (N8N_WORKFLOW.md §4.6): con ONIA_BOT_DRY_RUN=true
+  // (el default) el motor SI calcula la respuesta real, pero acá no se postea nada a Chatwoot —
+  // sólo se reporta qué se habría mandado. Recién con dryRun:false se llama a la API de verdad.
+  const dryRun = Boolean(turnResult && turnResult.dryRun);
   const sent = [];
   if (turnResult && turnResult.ok !== false && Array.isArray(turnResult.send)) {
     for (const reply of turnResult.send) {
       if (!reply?.text) continue;
+      if (dryRun) {
+        sent.push({ text: reply.text, posted: false, reason: "dry_run" });
+        continue;
+      }
       // eslint-disable-next-line no-await-in-loop -- el orden de los mensajes importa (disclosure antes que cuerpo)
       const posted = await client.sendMessage(parsed.meta.conversationId, reply.text);
       sent.push({ text: reply.text, posted: Boolean(posted) });

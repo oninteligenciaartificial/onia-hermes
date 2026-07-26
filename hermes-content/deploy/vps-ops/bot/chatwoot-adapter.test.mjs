@@ -35,7 +35,11 @@ import {
 import { createBotConfig } from "./config.mjs";
 import { leadKeyFor } from "./persistence.mjs";
 
+// dryRun:false a proposito: estas pruebas verifican el envio REAL (posted:true). El gate de
+// dry-run tiene su propia prueba dedicada mas abajo (misma logica de "encendido en dos pasos"
+// que Telegram, ver N8N_WORKFLOW.md §4.6).
 const CONFIG = createBotConfig({
+  dryRun: false,
   slots: [
     { key: "A", label: "jueves 15:00", startAt: "2026-07-30T19:00:00Z", pending: false },
     { key: "B", label: "viernes 10:00", startAt: "2026-07-31T14:00:00Z", pending: false },
@@ -346,6 +350,19 @@ test("si el motor devuelve ok:false, no se postea nada", async () => {
 
   assert.equal(result.ok, false);
   assert.equal(calls.length, 0);
+});
+
+test("encendido en dos pasos (igual que Telegram): con dryRun:true el motor calcula la respuesta real, pero NO se postea", async () => {
+  const { calls, client } = fakeClient();
+  const fakeRunTurn = async () => ({ ok: true, duplicate: false, dryRun: true, send: [{ text: "M0 de verdad" }] });
+
+  const result = await runChatwootTurn(incomingFixture(), { runTurn: fakeRunTurn, client });
+
+  assert.equal(calls.length, 0, "nada llega a la API real de Chatwoot en dry-run");
+  assert.equal(result.sent.length, 1, "pero se reporta que se HABRIA mandado, para leerlo en el panel");
+  assert.equal(result.sent[0].posted, false);
+  assert.equal(result.sent[0].reason, "dry_run");
+  assert.equal(result.sent[0].text, "M0 de verdad");
 });
 
 // ---------------------------------------------------------------------------
