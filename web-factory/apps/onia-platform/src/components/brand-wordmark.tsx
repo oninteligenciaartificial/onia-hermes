@@ -1,25 +1,24 @@
 import styles from "./brand-wordmark.module.css";
 
 /**
- * Wordmark "onia" — placeholder de marca (web-factory/docs/ONIA_BRAND_IDENTITY_2026.md §4,
- * variante "led").
+ * Logo onia v1 — candidato C aprobado por Sergio (2026-07-26).
+ * Fuente de verdad del dibujo: `public/brand/logo.svg` (mismo arte, mismo
+ * viewBox). Espec: web-factory/docs/ONIA_LOGO_SPEC_20260726.md.
  *
- * Es el MISMO dibujo que `public/brand/wordmark-a.svg`, inlineado para que
- * siga el toggle manual de tema (`data-theme`): la tinta usa `currentColor`
- * y el led usa `var(--accent)` — un SVG referenciado por <img> solo puede
- * reaccionar a `prefers-color-scheme`, no al toggle.
+ * Va INLINEADO (no `<img src="/brand/logo.svg">`) para que la tinta siga el
+ * toggle manual de tema (`data-theme`) via `currentColor` — un SVG externo
+ * solo reacciona a `prefers-color-scheme`.
  *
- * CONTRATO DE SWAP (ONIA_BRAND_IDENTITY_2026.md §4.1): cuando Sergio pase SU logo,
- * se guarda en `public/brand/logo.svg` y este componente pasa a
- * `<img src="/brand/logo.svg" ... />` (o se actualiza el path aca).
- * Nada mas del sitio cambia.
+ * El cursor verde usa el verde PROPIO del logo (#3EA639, autocontenido en
+ * `.cursor` del module.css). NO es token de UI (ONIA_BRAND_IDENTITY_2026.md
+ * §1.4): el verde del sistema sigue siendo la escala esmeralda.
  */
 export function BrandWordmark({ height = 26 }: { height?: number }) {
   return (
     <svg
-      viewBox="0 0 360 164"
+      viewBox="0 0 352 116"
       height={height}
-      width={(height * 360) / 164}
+      width={(height * 352) / 116}
       role="img"
       aria-label="onia"
       className={styles.wordmark}
@@ -30,13 +29,14 @@ export function BrandWordmark({ height = 26 }: { height?: number }) {
         strokeWidth="16"
         strokeLinecap="round"
       >
-        <circle cx="64" cy="100" r="32" />
-        <path d="M136 132 V92 A24 24 0 0 1 184 92 V132" />
-        <path d="M224 132 V68" />
-        <circle cx="296" cy="100" r="32" />
-        <path d="M328 68 V132" />
+        <circle cx="40" cy="76" r="32" />
+        <path d="M112 108 V68 A24 24 0 0 1 160 68 V108" />
+        <path d="M200 108 V44" />
+        <circle cx="272" cy="76" r="32" />
+        <path d="M304 44 V108" />
       </g>
-      <rect className={styles.led} x="214" y="24" width="20" height="20" rx="2" />
+      <circle fill="currentColor" cx="200" cy="10" r="10" />
+      <rect className={styles.cursor} x="332" y="96" width="20" height="20" rx="2" />
     </svg>
   );
 }

@@ -4,7 +4,9 @@
   height: auto; /* la altura la fija el atributo del SVG */
 }
 
-/* el punto de la "i" es un modulo encendido — verde señal, nunca decorativo */
-.led {
-  fill: var(--accent);
+/* Cursor del logo: verde PROPIO de la marca (#3EA639), autocontenido.
+   NO usar tokens --accent/--verde-* aca: el verde del logo vive dentro del
+   logo (ONIA_BRAND_IDENTITY_2026.md §1.4). Sobre tinta oscura rinde 6.1:1. */
+.cursor {
+  fill: #3ea639;
 }
