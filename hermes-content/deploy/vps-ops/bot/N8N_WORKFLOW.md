@@ -5,7 +5,8 @@
 > Nada de acá toca n8n todavía.
 >
 > Fase 3 del plan: `hermes-content/docs/ONIA_CHATBOT_PROPIO_SPEC_20260725.md` §6 (Vía B) y §8.
-> Motor: `hermes-content/deploy/vps-ops/bot/` · Ejecutor: `run-turn.sh` → `run-turn.mjs`.
+> Motor: `hermes-content/deploy/vps-ops/bot/` · Ejecutor del turno: `run-turn.sh` → `run-turn.mjs` ·
+> Cron del follow-up: `followup-run.sh` → `followup-run.mjs`.
 
 ---
 
@@ -56,9 +57,10 @@ menos viajando por n8n.
    (tablas `onia_center.bot_conversations` y `onia_center.bot_messages`). **Sin esto el bot igual
    responde**, pero no recuerda nada entre mensajes: cada mensaje arranca en `nuevo`.
 2. **Código** en `/opt/onia/bot/`: los `.mjs` de `hermes-content/deploy/vps-ops/bot/`
-   (`bot-engine`, `config`, `guardrails`, `intents`, `persistence`, `run-turn`) más `run-turn.sh`,
-   con `chmod +x /opt/onia/bot/run-turn.sh`. El wrapper copia los `.mjs` al contenedor solo, y sólo
-   cuando cambian (compara un md5 contra `/tmp/onia-bot/.stamp`).
+   (`bot-engine`, `config`, `guardrails`, `intents`, `persistence`, `run-turn`, `followup-run`) más
+   `run-turn.sh` y `followup-run.sh`, con `chmod +x` en los dos. Los wrappers copian los `.mjs` al
+   contenedor solos, y sólo cuando cambian (comparan un md5 contra `/tmp/onia-bot/.stamp`; comparten
+   la misma carpeta y el mismo sello).
 3. Prueba en seco desde el VPS, sin tocar n8n:
 
    ```bash
@@ -183,21 +185,115 @@ additionalFields: { appendAttribution: false, disable_web_page_preview: true }
 
 ---
 
-## 5. Workflow B — `ONIA - Chatbot Demo: follow-up único` (pendiente)
+## 5. Workflow B — `ONIA - Chatbot Demo: follow-up único`
 
-**No está construido y no lo invento acá.** Falta la pieza `followup-run.mjs` (no existe todavía).
-Lo que ya está resuelto en `persistence.mjs` y hay que cablear:
+**El script ya existe:** `followup-run.mjs` + `followup-run.sh`. Une lo que ya estaba en
+`persistence.mjs` y en el motor:
 
 - `store.sweepFollowUpCandidates(nowIso)` — el barrido: `followup_step = 0`, sin humano, sin opt-out,
   estado `esperando_calificacion` o `esperando_horario`, y `last_inbound_at` entre **22 h y 7 días**.
-- `store.reserveFollowUp(key)` — **la reserva CAS, ANTES de enviar**. Si devuelve `false`, no se manda
-  nada. Preferimos perder un follow-up a mandar dos: un duplicado quema el quality rating del número.
+- `store.reserveFollowUp(key, paso)` — **la reserva CAS, ANTES de enviar**. Si devuelve `false`, no se
+  manda nada. Preferimos perder un follow-up a mandar dos: un duplicado quema el quality rating del
+  número.
 - `buildFollowUp(state, nowIso, config)` de `bot-engine.mjs` — arma el texto **M3**.
 
-Diseño del workflow cuando exista el script: `scheduleTrigger` cada hora → SSH
-`bash /opt/onia/bot/followup-run.sh` → Code (parsear) → Telegram (un mensaje por candidata reservada).
 **Las 22 h no son negociables**: mantienen el mensaje dentro de la ventana de servicio de 24 h de
-Meta, así que en WhatsApp no hace falta plantilla HSM aprobada.
+Meta, así que en WhatsApp no hace falta plantilla HSM aprobada ni cuesta un mensaje *utility*.
+
+### 5.1 Nodos, en orden
+
+| # | Nodo | Tipo | Qué hace |
+|---|---|---|---|
+| 1 | `Cada hora` | `n8n-nodes-base.scheduleTrigger` (`hours`, cada 1 h) | Dispara el barrido |
+| 2 | `Barrer follow-ups (VPS)` | `n8n-nodes-base.ssh` | Corre el script con `--emit`. Credencial `ONIA VPS SSH` |
+| 3 | `Leer candidatas` | `n8n-nodes-base.code` | Parsea el stdout y **explota `send[]` en un item por conversación** |
+| 4 | `¿Hay follow-up?` | `n8n-nodes-base.if` | `{{ $json.enviar }}` — si es `false`, no se manda nada |
+| 5 | `Mandar follow-up` | `n8n-nodes-base.telegram` (`sendMessage`) | Credencial `ONIA Demo Bot`, `chatId` = `contactRef` |
+
+**La reserva ya la hizo el paso 2, no n8n.** Cuando el JSON llega al nodo 3, cada item de `send[]`
+tiene `reserved: true` y su fila ya está en `bot_messages`: si el workflow se reintenta, el barrido
+siguiente ya no la devuelve (`followup_step = 1`). Por eso el nodo 5 **no** debe tener reintentos
+automáticos con `alwaysOutputData`: un reintento del envío sí duplicaría el mensaje.
+
+### 5.2 Nodo 2 — `Barrer follow-ups (VPS)` (SSH) — comando exacto
+
+```
+resource: command · operation: execute · authentication: privateKey
+cwd: /root
+command: bash /opt/onia/bot/followup-run.sh --emit
+```
+
+El wrapper sella el `--now` con `date -u` y se lo pasa al script como parámetro: la lógica nunca mira
+el reloj, así que un barrido se puede reproducir tal cual con
+`bash /opt/onia/bot/followup-run.sh --now 2026-07-28T14:05:00Z`.
+
+Los 2 horarios de demo viajan por env, igual que en el Workflow A. Cuando Sergio los defina:
+
+```
+command: ONIA_BOT_SLOTS='jue 31/07 15:00@2026-07-30T19:00:00Z|vie 01/08 10:00@2026-07-31T14:00:00Z' ONIA_BOT_DRY_RUN=false bash /opt/onia/bot/followup-run.sh --emit
+```
+
+> **Sin los horarios definidos el follow-up NO sale**: M3 ofrece dos opciones, y mandar
+> "HORARIO A (pendiente de definir)" a un prospecto real es peor que perder el mensaje. El script
+> devuelve esas conversaciones en `skipped` con motivo `slots_sin_definir` y **no gasta la reserva**
+> (el `followup_step` queda en 0, así que salen apenas haya horarios).
+
+### 5.3 Nodo 3 — `Leer candidatas` (Code, runOnceForAllItems)
+
+```js
+const raw = ($input.first().json.stdout || '').trim();
+let r;
+try { r = JSON.parse(raw.split('\n').pop()); }
+catch (e) { r = { ok: false, send: [], skipped: [], error: 'stdout ilegible' }; }
+
+const enviar = Boolean(r.ok) && Array.isArray(r.send) && r.send.length > 0;
+if (!enviar) {
+  // Lo normal es que no haya candidatas: no es un error, no hay que avisar nada.
+  return [{ json: { enviar: false, scanned: r.scanned || 0, skipped: r.skipped || [], error: r.error || null } }];
+}
+// Un item por conversación. `reserved: true` = el CAS ya la tomó; esto es lo único que se manda.
+return r.send
+  .filter((m) => m.reserved === true)
+  .map((m) => ({ json: { enviar: true, chatId: m.contactRef, text: m.text, conversationKey: m.conversationKey } }));
+```
+
+### 5.4 Nodo 5 — `Mandar follow-up` (Telegram)
+
+```
+resource: message · operation: sendMessage
+chatId: ={{ $json.chatId }}
+text:   ={{ $json.text }}
+additionalFields: { appendAttribution: false, disable_web_page_preview: true }
+retryOnFail: false
+```
+
+`parse_mode` vacío, por lo mismo que el nodo 9 del Workflow A (§4.5).
+
+### 5.5 Encendido en dos pasos
+
+1. **En seco:** correr a mano `bash /opt/onia/bot/followup-run.sh` (sin `--emit`) y leer la tabla. No
+   reserva ni escribe nada: sólo dice a quién le mandaría, qué texto y hace cuántas horas que está
+   callado. Ejemplo real de salida:
+
+   ```text
+   ONIA — follow-up M3 (22 h) · modo dry-run · dryRun
+   ahora: 2026-07-28T14:05:00Z · candidatas del barrido: 4
+
+   MANDARIA (1)
+     telegram:777 [telegram] Ana Quiroga — esperando_horario, callado hace 24 h
+         | ¡Hola de nuevo! Te escribí ayer por la demo de DentalGest y quedó a medias — sé que la clínica no para.
+         |
+         | Te dejo dos opciones nuevas por si te sirven: **jue 30/07 15:00** o **vie 31/07 10:00**.
+         | Si preferís que te escriba en otro momento, decime "después" y no te molesto más.
+
+   NO SE MANDA (3)
+     telegram:812 — demasiado_pronto:17.4h
+     telegram:900 — opt_out
+     whatsapp:59178491375 — humano_a_cargo
+   ```
+
+2. **Encender:** activar el workflow con el nodo 5 habilitado y `ONIA_BOT_DRY_RUN=false` en el
+   comando del nodo 2 (así `bot_messages` registra `delivery_status='sent'` en vez de `'skipped'`).
 
 ---
 
@@ -325,8 +421,9 @@ Con el nodo de envío ya activo, escribirle al bot desde el Telegram de Sergio:
 | 4 | `cuanto cuesta?` (en otra conversación) | **M4**: nunca una cifra |
 | 5 | `STOP` | **M6** y después silencio total. Sólo `DEMO` reabre |
 | 6 | Reenviar el mismo mensaje | **No se duplica**: el segundo turno devuelve `duplicate: true` |
+| 7 | Dejar el caso 1 sin responder 22 h y correr el Workflow B dos veces | Llega **M3 una sola vez**. El segundo barrido no devuelve nada (`followup_step = 1`) |
 
-Los 6 casos ya están cubiertos por las 65 pruebas de
+Los 7 casos ya están cubiertos por las 91 pruebas de
 `node --test "hermes-content/deploy/vps-ops/bot/*.test.mjs"`. Esta tabla verifica el **cableado**, no
 el motor.
 
@@ -337,8 +434,7 @@ el motor.
 | Bloqueo | Quién | Sin eso |
 |---|---|---|
 | Token de BotFather | **Sergio (5 min)** | No hay Fase 3 |
-| Los 2 horarios fijos de demo | **Sergio** | El bot ofrece `HORARIO A/B (pendiente de definir)` y `scheduled_at` queda `null` |
-| Aplicar la migración `20260725_...bot_conversations.sql` | carril infra | El bot no recuerda nada entre mensajes |
-| Copiar `/opt/onia/bot/` al VPS | carril infra | El nodo SSH falla |
-| `followup-run.mjs` | pendiente (§5) | No hay follow-up |
+| Los 2 horarios fijos de demo | **Sergio** | El bot ofrece `HORARIO A/B (pendiente de definir)`, `scheduled_at` queda `null` y **el follow-up M3 no sale** (§5.2) |
+| Aplicar la migración `20260725_...bot_conversations.sql` | carril infra | El bot no recuerda nada entre mensajes **ni hay follow-up** (el barrido no tiene de dónde leer) |
+| Copiar `/opt/onia/bot/` al VPS | carril infra | Los dos nodos SSH fallan |
 | Verificación de Meta / WABA | Meta | No hay WhatsApp (y no hace falta para probar) |
