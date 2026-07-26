@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Plus } from "lucide-react";
+import { Check, Plus } from "lucide-react";
 import type { CutReview, EditorProject, HiggsfieldAccount, StudioOverview } from "./source";
 import { KpiStrip, type KpiItem } from "../hoy/KpiStrip";
 import { EditorFlow } from "./EditorFlow";
@@ -58,9 +58,19 @@ export function EstudioView({ overview, projects, higgsfield, cutQueue }: Estudi
     }
   };
 
-  if (!activeReview) {
-    return null;
-  }
+  // La vista NUNCA se apaga entera: sin cortes pendientes (el estado deseado) el
+  // riel de aprobación se reemplaza por su estado vacío y todo lo demás sigue.
+  const rail = activeReview ? (
+    <CutApprovalRail
+      review={activeReview}
+      waitingCount={waitingCount}
+      focus={focus}
+      onOpenFocus={openQueue}
+      onExitFocus={() => setFocusedId(null)}
+    />
+  ) : (
+    <EmptyCutRail />
+  );
 
   return (
     <div className="grid gap-5">
@@ -98,9 +108,13 @@ export function EstudioView({ overview, projects, higgsfield, cutQueue }: Estudi
             <span className="text-[19px] font-bold tabular-nums text-foreground">{overview.spendMonthLabel}</span>
             <span className="text-[11px] text-muted-foreground">{overview.spendTodayLabel}</span>
           </div>
+          {/* Sin handler todavía (la carga de crudos llega con el intake): va deshabilitado
+              para que no aparente funcionar. */}
           <button
             type="button"
-            className="inline-flex items-center gap-2 self-stretch rounded-xl bg-primary px-5 text-[13.5px] font-semibold text-primary-foreground shadow-[var(--panel-shadow-sm)] transition-[filter,transform] hover:-translate-y-px hover:brightness-[1.06] active:translate-y-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--ring)]"
+            disabled
+            title="Disponible cuando el intake de crudos esté conectado"
+            className="inline-flex cursor-not-allowed items-center gap-2 self-stretch rounded-xl bg-primary px-5 text-[13.5px] font-semibold text-primary-foreground opacity-50 shadow-[var(--panel-shadow-sm)]"
           >
             <Plus size={15} aria-hidden="true" />
             Nuevo video
@@ -114,13 +128,7 @@ export function EstudioView({ overview, projects, higgsfield, cutQueue }: Estudi
 
       {focus ? (
         <div className="grid gap-5">
-          <CutApprovalRail
-            review={activeReview}
-            waitingCount={waitingCount}
-            focus
-            onOpenFocus={openQueue}
-            onExitFocus={() => setFocusedId(null)}
-          />
+          {rail}
           <VideoProjectsTable projects={projects} onOpenCuts={openCuts} />
           <HiggsfieldPanel account={higgsfield} />
         </div>
@@ -132,18 +140,32 @@ export function EstudioView({ overview, projects, higgsfield, cutQueue }: Estudi
             <VideoProjectsTable projects={projects} onOpenCuts={openCuts} />
             <HiggsfieldPanel account={higgsfield} />
           </div>
-          <div className="order-1 lg:order-2 lg:sticky lg:top-4">
-            <CutApprovalRail
-              review={activeReview}
-              waitingCount={waitingCount}
-              focus={false}
-              onOpenFocus={openQueue}
-              onExitFocus={() => setFocusedId(null)}
-            />
-          </div>
+          <div className="order-1 lg:order-2 lg:sticky lg:top-4">{rail}</div>
         </div>
       )}
     </div>
+  );
+}
+
+// Cola vacía = al día, no error. Verde y en positivo, en el mismo lugar donde iría
+// el riel de aprobación, para que se distinga de "el panel se rompió".
+function EmptyCutRail() {
+  return (
+    <section
+      className="grid gap-2 rounded-2xl border border-border bg-card px-[18px] py-8 text-center shadow-[var(--panel-shadow-sm)]"
+      aria-label="Aprobación de cortes"
+    >
+      <span
+        className="mx-auto grid h-9 w-9 place-items-center rounded-full border border-border"
+        style={{ background: "var(--surface-2)", color: "var(--center-tone-green)" }}
+      >
+        <Check size={17} aria-hidden="true" />
+      </span>
+      <h2 className="text-[14px] font-bold tracking-[-0.015em] text-foreground">Sin cortes pendientes</h2>
+      <p className="mx-auto max-w-[38ch] text-[11.5px] leading-relaxed text-muted-foreground">
+        Estás al día: no hay nada esperando tu OK. El editor avisa acá cuando haya un corte listo para revisar.
+      </p>
+    </section>
   );
 }
 
