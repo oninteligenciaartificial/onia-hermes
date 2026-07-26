@@ -11,6 +11,9 @@ import { tokens, u, FONT_STACK, ThemeMode } from "../lib/tokens";
 import { useEnterExit } from "../lib/motion";
 
 export interface PhoneProps {
+  // Índice requerido por <Composition>: sin schema Zod, Remotion pide que las
+  // props satisfagan Record<string, unknown>.
+  [key: string]: unknown;
   title?: string;
   subtitle?: string;
   image?: string;
@@ -66,7 +69,7 @@ export const Phone: React.FC<PhoneProps> = (props) => {
       <div
         style={{
           position: "relative",
-          width: u(width, 1000),
+          width: width - stagePad * 2,
           padding: u(width, 26),
           borderRadius: u(width, 112),
           background: "linear-gradient(150deg, #2A2E37 0%, #0B0D12 46%, #23262E 100%)",

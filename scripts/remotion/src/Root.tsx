@@ -25,7 +25,7 @@ interface TimingDefaults {
   height: number;
 }
 
-function metadataFor<T extends WithTiming>(defaults: TimingDefaults): CalculateMetadataFunction<T> {
+function metadataFor<T extends WithTiming & Record<string, unknown>>(defaults: TimingDefaults): CalculateMetadataFunction<T> {
   return ({ props }) => {
     const fps = props.fps ?? defaults.fps;
     const durationInSeconds = props.durationInSeconds ?? defaults.durationInSeconds;

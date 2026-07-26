@@ -29,6 +29,7 @@ import {
   createChatwootClient,
   normalizeMessageType,
   parseChatwootWebhook,
+  readPayload,
   runChatwootTurn,
   toIsoFlexible,
 } from "./chatwoot-adapter.mjs";
@@ -201,6 +202,23 @@ test("normalizeMessageType acepta string y numerico; toIsoFlexible acepta ISO y 
   assert.equal(toIsoFlexible(1785079449), "2026-07-26T15:24:09.000Z");
   assert.equal(toIsoFlexible(null), null);
   assert.equal(toIsoFlexible("no-es-fecha"), null);
+});
+
+const noStdin = { readStdin: async () => "" };
+
+test("readPayload: sin stdin (nodo SSH de n8n) cae a CHATWOOT_WEBHOOK_B64", async () => {
+  const payload = { event: "message_created", id: 1 };
+  process.env.CHATWOOT_WEBHOOK_B64 = Buffer.from(JSON.stringify(payload)).toString("base64");
+  try {
+    const parsed = await readPayload(noStdin);
+    assert.deepEqual(parsed, payload);
+  } finally {
+    delete process.env.CHATWOOT_WEBHOOK_B64;
+  }
+});
+
+test("readPayload: sin stdin y sin CHATWOOT_WEBHOOK_B64, tira un error claro (lo atrapa main())", async () => {
+  await assert.rejects(() => readPayload(noStdin), /sin payload/);
 });
 
 // ---------------------------------------------------------------------------

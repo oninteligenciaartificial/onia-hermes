@@ -15,10 +15,9 @@
 #   echo '{"event":"message_created","id":13,"content":"DEMO","message_type":"incoming", ...}' \
 #     | ./chatwoot-adapter.sh
 #
-# n8n (nodo SSH): igual que run-turn.sh, pasando el body del webhook por stdin del nodo SSH si
-# el nodo lo soporta, o en base64 por variable si no (agregar CHATWOOT_TURN_B64 el dia que haga
-# falta — hoy el nodo Webhook de n8n SI puede pasar stdin a un SSH node via `$json` -> Execute
-# Command con stdin redirigido, ver N8N_WORKFLOW.md).
+# n8n (nodo SSH, que NO tiene stdin): el webhook crudo viaja en base64 por variable, igual que
+# BOT_TURN_B64 en run-turn.sh — ver N8N_WORKFLOW.md (seccion Chatwoot).
+#   CHATWOOT_WEBHOOK_B64='<base64 del body del webhook>' bash /opt/onia/bot/chatwoot-adapter.sh < /dev/null
 #
 # Secretos: el token de la API de Chatwoot se lee de SU PROPIA base (nunca hardcodeado, nunca
 # en $env de n8n) — mismo patron que la master key de LiteLLM en run-turn.sh.
@@ -72,6 +71,7 @@ docker exec \
   -e CHATWOOT_BASE_URL="${CHATWOOT_BASE_URL:-http://onia-chatbot_chatwoot:3000}" \
   -e CHATWOOT_ACCOUNT_ID="${CHATWOOT_ACCOUNT_ID:-2}" \
   -e CHATWOOT_API_TOKEN="$CW_TOKEN" \
+  -e CHATWOOT_WEBHOOK_B64="${CHATWOOT_WEBHOOK_B64:-}" \
   -i "$CONTAINER" node "$DEST/chatwoot-adapter.mjs"
 
 exit 0

@@ -10,6 +10,9 @@ import { tokens, u, FONT_STACK, ThemeMode, cardShadow } from "../lib/tokens";
 import { useEnterExit } from "../lib/motion";
 
 export interface LowerThirdProps {
+  // Índice requerido por <Composition>: sin schema Zod, Remotion pide que las
+  // props satisfagan Record<string, unknown>.
+  [key: string]: unknown;
   eyebrow?: string;
   title: string;
   subtitle?: string;
@@ -57,7 +60,7 @@ export const LowerThird: React.FC<LowerThirdProps> = (props) => {
       <div
         style={{
           position: "relative",
-          width: u(width, 992),
+          width: width - stagePad * 2,
           borderRadius: u(width, 26),
           background: `linear-gradient(158deg, ${t.ink2} 0%, ${t.ink} 62%)`,
           border: `1px solid ${t.hairline}`,

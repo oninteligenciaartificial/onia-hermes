@@ -268,11 +268,24 @@ function readStdin() {
   });
 }
 
+/**
+ * Igual que run-turn.mjs: el nodo SSH de n8n no tiene stdin, asi que el webhook tambien puede
+ * viajar en base64 por variable. `deps.readStdin` es inyectable para test (el real bloquea
+ * esperando EOF de un stdin real, que en un runner de tests puede no llegar nunca).
+ */
+export async function readPayload(deps = {}) {
+  const readStdinFn = typeof deps.readStdin === "function" ? deps.readStdin : readStdin;
+  const fromEnv = process.env.CHATWOOT_WEBHOOK_B64
+    ? Buffer.from(process.env.CHATWOOT_WEBHOOK_B64, "base64").toString("utf8")
+    : "";
+  const raw = (await readStdinFn()).trim() || fromEnv.trim();
+  if (!raw) throw new Error("sin payload: mandá el webhook de Chatwoot por stdin o CHATWOOT_WEBHOOK_B64");
+  return JSON.parse(raw);
+}
+
 export async function main() {
   try {
-    const raw = (await readStdin()).trim();
-    if (!raw) throw new Error("sin payload: mandá el webhook de Chatwoot por stdin");
-    const payload = JSON.parse(raw);
+    const payload = await readPayload();
     const result = await runChatwootTurn(payload);
     process.stdout.write(`${JSON.stringify(result)}\n`);
   } catch (error) {

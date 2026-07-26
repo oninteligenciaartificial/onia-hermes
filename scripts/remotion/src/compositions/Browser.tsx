@@ -13,6 +13,9 @@ import { tokens, u, FONT_STACK, ThemeMode, cardShadow } from "../lib/tokens";
 import { useEnterExit } from "../lib/motion";
 
 export interface BrowserProps {
+  // Índice requerido por <Composition>: sin schema Zod, Remotion pide que las
+  // props satisfagan Record<string, unknown>.
+  [key: string]: unknown;
   urlLabel?: string;
   title?: string;
   subtitle?: string;
@@ -73,7 +76,7 @@ export const Browser: React.FC<BrowserProps> = (props) => {
       <div
         style={{
           position: "relative",
-          width: u(width, 1000),
+          width: width - stagePad * 2,
           borderRadius: u(width, 34),
           background: `linear-gradient(158deg, ${t.ink2} 0%, ${t.ink} 62%)`,
           border: `1px solid ${t.hairline}`,

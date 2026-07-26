@@ -1,12 +1,176 @@
-# ONIA — Chatbot propio por TELEGRAM: diseño del workflow de n8n
+# ONIA — Chatbot propio: workflows de n8n (Chatwoot + diseño histórico de Telegram)
 
-> **Estado: DISEÑO, no creado.** La infra de n8n/VPS la tiene otra sesión (carril G, un solo dueño).
-> Este documento es lo que hay que crear, con los nodos exactos, las credenciales y el JSON.
-> Nada de acá toca n8n todavía.
+> **ACTUALIZACIÓN 2026-07-26 — Sergio corrigió el canal: es CHATWOOT, no Telegram.**
+> Chatwoot ya corre en el VPS (Docker, activo) y es donde se centraliza la atención — no tiene
+> sentido un bot de prueba paralelo por Telegram. Todo lo de la §10 en adelante (Chatwoot) está
+> **CREADO Y PROBADO EN VIVO** (workflow de n8n `bJhSGHPYsaICEeKm`, `active:false` a propósito —
+> falta el OK de Sergio para activarlo). Las §0-9 (Telegram) quedan como diseño histórico/de
+> referencia: siguen siendo válidas como patrón (mismo motor, mismo `run-turn.sh`) pero NO son el
+> camino que se está siguiendo ahora. Empezar por **§10**.
 >
 > Fase 3 del plan: `hermes-content/docs/ONIA_CHATBOT_PROPIO_SPEC_20260725.md` §6 (Vía B) y §8.
 > Motor: `hermes-content/deploy/vps-ops/bot/` · Ejecutor del turno: `run-turn.sh` → `run-turn.mjs` ·
-> Cron del follow-up: `followup-run.sh` → `followup-run.mjs`.
+> Cron del follow-up: `followup-run.sh` → `followup-run.mjs` · Adaptador Chatwoot:
+> `chatwoot-adapter.sh` → `chatwoot-adapter.mjs` · Disponibilidad real: `calcom-availability.mjs`.
+
+---
+
+## 10. CHATWOOT — el canal real (creado y probado en vivo, 2026-07-26)
+
+### 10.0 Por qué Chatwoot y no Telegram
+
+Chatwoot (`onia-chatbot_chatwoot`, v4.12.1) ya corre en el VPS vía Docker, con Postgres+Redis
+propios, cuenta 2 "OnIA Agency" y user 2 (Sergio). Es la herramienta de atención centralizada
+real — un bot de prueba en Telegram hubiera sido un canal paralelo que después había que migrar.
+El motor (`bot-engine.mjs`) es 100% agnóstico del canal por diseño: lo único nuevo es el
+adaptador (`chatwoot-adapter.mjs`) que traduce el webhook y postea la respuesta.
+
+**Diferencia clave con el diseño de Telegram (§0-9):** en Telegram, n8n tenía que mandar el
+mensaje él mismo (nodo `telegram: sendMessage`). Acá el adaptador **ya postea la respuesta a la
+API de Chatwoot por su cuenta** (requisito del pedido), así que el workflow de n8n es más chico:
+sólo recibe el webhook, arma el turno y corre el adaptador — no hace falta un nodo de envío
+aparte.
+
+### 10.1 Infra verificada (2026-07-26)
+
+- Chatwoot: `https://onia-chatbot-chatwoot.hqdqgh.easypanel.host`, cuenta `2`, user `2`
+  (`oninteligenciaartificial@gmail.com`).
+- **Inbox creado:** `ONIA Demo` (id **3**, `channel_type: Channel::Api`), vía
+  `POST /api/v1/accounts/2/inboxes` con `channel:{type:"api", webhook_url:...}`. Verificado
+  contra la base (`onia-chatbot_chatwoot-db`, tabla `inboxes`).
+- **Token de la API:** ya existía uno para el user 2 en `access_tokens` (owner_id=2). Se lee en
+  runtime desde el propio Postgres de Chatwoot — **nunca se pegó en ningún archivo del repo ni
+  en una credencial de n8n**.
+- **n8n:** `WEBHOOK_URL` del contenedor es `https://n8n-sergio-n8n.hqdqgh.easypanel.host`. La
+  credencial SSH ya existía (`ONIA VPS SSH`, id `4XKauEX3b6cqaDhW`) — se reusa, no hizo falta
+  crear ninguna credencial nueva.
+- **Cal.com:** ya corre en el VPS (`onia-calcom-calcom-1`) con usuario `onia`, event-type
+  `demo-onia` (45 min, visible) y un Schedule "ONIA Comercial Base" (lun-sáb, con disponibilidad
+  real). Ver §10.4.
+
+### 10.2 El adaptador: `chatwoot-adapter.mjs` + `chatwoot-adapter.sh`
+
+Mismo patrón que `run-turn.sh`/`run-turn.mjs`: el `.sh` sincroniza el código al contenedor
+`onia-center` (comparando un stamp, igual que los demás) y corre el `.mjs` adentro, que:
+
+1. **Traduce el webhook** (`parseChatwootWebhook`): soporta `message_created` y
+   `conversation_created` (las 2 formas reales del webhook, capturadas en vivo el 2026-07-26 con
+   `webhook.site` como receptor de prueba — `message_type` es STRING arriba ("incoming"/
+   "outgoing") pero NUMÉRICO adentro de `conversation.messages[]` (0/1), y `created_at` es ISO
+   arriba pero epoch-segundos adentro; el parser normaliza los dos casos).
+2. **REGLA DE ORO — ignora saliente y notas privadas.** Si no, el propio mensaje que el bot
+   postea dispara su PROPIO webhook de vuelta (Chatwoot manda `message_created` para TODO
+   mensaje) y el bot se contesta a sí mismo en loop infinito. Es lo primero que se testeó
+   (21 pruebas en `chatwoot-adapter.test.mjs`) y lo primero que se probó EN VIVO (§10.5).
+3. **Corre el turno con `runTurn()` sin cambios** (mismo motor, misma persistencia).
+4. **Postea la respuesta** con `POST /api/v1/accounts/{id}/conversations/{id}/messages`
+   (`message_type: "outgoing"`).
+5. **Idempotencia:** NO hace falta tabla nueva. El `message_key` que arma el adaptador
+   (`chatwoot:<conversationId>:<messageId>`) es el MISMO dedup que ya usa `run-turn.mjs` vía
+   `bot_messages.message_key` (unique). Si Chatwoot reintenta el webhook, `runTurn()` devuelve
+   `duplicate:true` y el adaptador no postea una segunda vez. Probado en vivo (§10.5).
+6. **"Encendido en dos pasos", igual que Telegram:** con `ONIA_BOT_DRY_RUN=true` (el default del
+   `.sh`) el motor calcula la respuesta real (y la guarda en `bot_messages` con
+   `delivery_status='skipped'`) pero el adaptador **NO llama a la API de Chatwoot** — devuelve
+   `sent:[{text, posted:false, reason:"dry_run"}]`. Recién con `ONIA_BOT_DRY_RUN=false` postea de
+   verdad. Mismo interruptor que ya usa todo el resto del bot, sin nodo aparte en n8n.
+
+### 10.3 Secretos — cómo se cargan (ninguno en el repo)
+
+| Secreto | Dónde vive | Cómo se carga |
+|---|---|---|
+| Token de la API de Chatwoot | Postgres de `onia-chatbot_chatwoot-db`, tabla `access_tokens` | `chatwoot-adapter.sh` lo lee con `docker exec <chatwoot-db> psql ...` en CADA corrida (mismo patrón que la master key de LiteLLM en `run-turn.sh`). Si el token rota desde la UI de Chatwoot, se levanta solo. |
+| Credencial SSH del VPS | n8n Credentials → `ONIA VPS SSH` (`4XKauEX3b6cqaDhW`) | Ya existía, se reusa tal cual. |
+| `CHATWOOT_BASE_URL` / `CHATWOOT_ACCOUNT_ID` | Env del wrapper (`chatwoot-adapter.sh`) | NO son secretos (URL pública + id de cuenta). Default a la URL pública; el wrapper los pisa con los hostnames internos de Docker (`http://onia-chatbot_chatwoot:3000`) para no salir a internet. |
+| `CALCOM_BASE_URL` / `_EVENT_TYPE_SLUG` / `_USERNAME` | Idem | Tampoco son secretos (slug/usuario públicos de la página de reserva). |
+
+### 10.4 Cal.com destraba el bloqueo de los 2 horarios (investigación pedida, resuelta)
+
+`DEMO_SLOTS` en `config.mjs` seguía siendo el placeholder "pendiente de definir" — se esperaba
+que Sergio dictara 2 horarios fijos. Se investigó si Cal.com (ya corriendo en el VPS) podía
+resolverlo: **sí**. Hay un usuario `onia`, un event-type `demo-onia` (45 min, visible) y un
+Schedule "ONIA Comercial Base" con disponibilidad real (lun-sáb). El endpoint que usa la propia
+página de reserva de Cal.com para mostrarle horarios a un visitante anónimo
+(`/api/trpc/slots/getSchedule`) es **público — no hace falta API key** (se verificó en vivo
+contra `https://cal.onia.com.bo`, y también por la red interna de Docker vía `http://calcom:3000`,
+ambas alcanzables desde el contenedor `onia-center`).
+
+Se implementó `calcom-availability.mjs` → `getAvailableSlots()`: trae los horarios reales,
+elige 2 con al menos 2h de separación (para no ofrecer "14:00" y "14:15" como si fueran
+opciones distintas) y los devuelve en el mismo shape que `config.slots`. `run-turn.mjs` y
+`followup-run.mjs` lo llaman automáticamente (vía un `resolveConfig()` nuevo en cada uno) **sólo
+cuando nadie fijó un horario a mano** (ni el turno trae `slots`, ni hay `ONIA_BOT_SLOTS` en el
+entorno) — si alguien lo fija a mano, eso manda siempre. Si Cal.com no responde (caído, sin
+horarios, timeout de 4s), cae al placeholder `DEMO_SLOTS` sin tirar: el bot nunca se queda mudo.
+
+**Probado en vivo (§10.5): el bot ofreció "lun 27/07 14:00" y "lun 27/07 16:00" — horarios REALES
+de Cal.com, no el placeholder.** El bloqueo humano de los 2 horarios queda resuelto sin que
+Sergio tenga que dictarlos: agenda real, no dos horarios inventados.
+
+### 10.5 Prueba real punta a punta (evidencia, no simulada)
+
+Contra la cuenta 2 de Chatwoot real, inbox `ONIA Demo` (id 3), conversación id **3**, contacto
+"Prospecto Prueba ONIA 3":
+
+| # | Acción | Resultado real |
+|---|---|---|
+| 1 | `POST .../conversations/3/messages` con `"DEMO"` (`incoming`) | Webhook real capturado → `chatwoot-adapter.sh` (dry-run) calculó **M0** + M7 (fuera de horario). `bot_conversations` quedó en `esperando_calificacion`. |
+| 2 | `POST .../conversations/3/messages` con `"es mia, 2 sillones, la paz"` | `chatwoot-adapter.sh` con `ONIA_BOT_DRY_RUN=false`: calificó, **ofreció los 2 horarios REALES de Cal.com** ("lun 27/07 14:00" / "lun 27/07 16:00"), creó el lead (`bot-chatwoot-3`, pipeline `Contactado`) y **posteó la respuesta de verdad** (mensaje id 17, `message_type:1`, confirmado con `GET .../conversations/3/messages`). |
+| 3 | Se capturó el webhook que Chatwoot manda por su PROPIO mensaje 17 (el eco) y se lo volvió a pasar al adaptador | `{"skipped":true,"reason":"mensaje_no_entrante:outgoing"}` — **no llamó al motor, no posteó nada. Sin loop.** |
+| 4 | Se reenvió el MISMO webhook del paso 2 (simulando un reintento de Chatwoot) | `{"duplicate":true,"sent":[]}` — **no se mandó dos veces.** `GET .../conversations/3/messages` sigue con exactamente 3 mensajes (15, 16, 17). |
+
+Estado final verificado en la base (`onia_center.bot_conversations`, `conversation_key =
+'chatwoot:3'`): `bot_stage='esperando_horario'`, `qualification={ownsClinic:true, chairs:2,
+city:'La Paz'}`, `slots_offered` con los 2 horarios reales de Cal.com, `lead_key='bot-chatwoot-3'`.
+En `onia_center.leads`: `pipeline_status='Contactado'`. Esta conversación de prueba queda visible
+en el panel de Chatwoot (cuenta 2, inbox "ONIA Demo") para que Sergio la vea con sus propios ojos.
+
+### 10.6 El workflow de n8n (creado, `active:false`)
+
+Creado vía la API de n8n (`POST /api/v1/workflows`) con el API key existente
+`api-key-codex` (n8n Credentials no expone MCP en este entorno; se usó la REST API pública
+directamente, sin tocar ninguna credencial nueva).
+
+- **id:** `bJhSGHPYsaICEeKm` · **nombre:** `ONIA - Chatbot Demo (Chatwoot)` · **active: false**
+  (a propósito — falta el OK de Sergio, punto 4 del pedido).
+
+| # | Nodo | Tipo | Qué hace |
+|---|---|---|---|
+| 1 | `Webhook Chatwoot` | `n8n-nodes-base.webhook` v2 | `POST`, path `onia-chatbot-demo`, `responseMode: onReceived` (responde 200 al toque, no bloquea a Chatwoot) |
+| 2 | `Normalizar webhook` | `n8n-nodes-base.code` v2 | `Buffer.from(JSON.stringify($json.body)).toString('base64')` — arma `b64` |
+| 3 | `Correr adaptador (VPS)` | `n8n-nodes-base.ssh` v1 | `CHATWOOT_WEBHOOK_B64='{{ $json.b64 }}' bash /opt/onia/bot/chatwoot-adapter.sh < /dev/null`. Credencial `ONIA VPS SSH` (`4XKauEX3b6cqaDhW`, YA EXISTÍA) |
+| 4 | `Leer resultado` | `n8n-nodes-base.code` v2 | Parsea el stdout a JSON, sólo para verlo legible en la ejecución de n8n (el adaptador ya posteó la respuesta el solo) |
+
+Conexiones: `Webhook Chatwoot → Normalizar webhook → Correr adaptador (VPS) → Leer resultado`.
+
+**Inbox de Chatwoot ya apunta a la URL de producción:**
+`webhook_url = https://n8n-sergio-n8n.hqdqgh.easypanel.host/webhook/onia-chatbot-demo`
+(no va a responder nada hasta que el workflow esté activo — Chatwoot reintenta webhooks fallidos
+sin problema, no rompe nada mientras tanto).
+
+**El código YA está copiado en el VPS** (`/opt/onia/bot/*.mjs` + `*.sh`, con `chmod +x` en los
+`.sh`) — el nodo SSH ya puede correr `chatwoot-adapter.sh` apenas se active.
+
+### 10.7 Para activar (falta el OK de Sergio)
+
+1. Activar el workflow: `PATCH /api/v1/workflows/bJhSGHPYsaICEeKm/activate` o el toggle en la UI
+   de n8n.
+2. Primer día en seco: dejarlo con `ONIA_BOT_DRY_RUN=true` (default del `.sh` — no hace falta
+   tocar nada) y mirar `bot_messages`/el panel un rato antes de pasar a `false`.
+3. Encender de verdad: cambiar el comando del nodo 3 a
+   `ONIA_BOT_DRY_RUN=false CHATWOOT_WEBHOOK_B64='{{ $json.b64 }}' bash /opt/onia/bot/chatwoot-adapter.sh < /dev/null`.
+4. Mandar un WhatsApp/mensaje real al inbox conectado (o escribir en el widget si se agrega uno)
+   y confirmar en el panel de Chatwoot que el bot contesta.
+
+### 10.8 Lo que sigue bloqueado / pendiente (Chatwoot)
+
+| Bloqueo | Quién | Sin eso |
+|---|---|---|
+| Activar el workflow de n8n | **Sergio (1 clic)** | El bot no procesa webhooks reales todavía |
+| Decidir el canal REAL detrás del inbox (WhatsApp Business API cuando Meta lo apruebe, o un widget web mientras tanto) | Sergio + verificación de Meta (bloqueo ya conocido, ver `CLAUDE.md` §S5) | El inbox "ONIA Demo" hoy es tipo API (para pruebas); WhatsApp real es OTRO inbox en la MISMA cuenta de Chatwoot, mismo adaptador (Chatwoot normaliza el webhook de WhatsApp al mismo shape) |
+| Nada más — Cal.com, la migración, el token de Chatwoot y la credencial SSH ya están resueltos | — | — |
+
+---
 
 ---
 

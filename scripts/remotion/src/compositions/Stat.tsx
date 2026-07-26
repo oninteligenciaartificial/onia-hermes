@@ -11,6 +11,9 @@ import { tokens, u, FONT_STACK, ThemeMode } from "../lib/tokens";
 import { useEnterExit, useCountUp, isPureNumber, formatBolivianNumber } from "../lib/motion";
 
 export interface StatProps {
+  // Índice requerido por <Composition>: sin schema Zod, Remotion pide que las
+  // props satisfagan Record<string, unknown>.
+  [key: string]: unknown;
   value: string;
   label?: string;
   eyebrow?: string;
@@ -79,8 +82,8 @@ export const Stat: React.FC<StatProps> = (props) => {
           opacity: card.opacity,
           transform: `translateY(${cardTranslate}px) scale(${cardScale})`,
           width: "max-content",
-          minWidth: u(width, 560),
-          maxWidth: u(width, 1000),
+          minWidth: Math.min(u(width, 560), width - stagePad * 2),
+          maxWidth: width - stagePad * 2,
           padding: `${u(width, 62)}px ${u(width, 80)}px ${u(width, 58)}px ${u(width, 84)}px`,
         }}
       >

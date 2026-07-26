@@ -14,6 +14,9 @@ import { EASE_OUT_EXPO } from "../lib/easing";
 import { splitLines, splitWords } from "../lib/text";
 
 export interface QuoteProps {
+  // Índice requerido por <Composition>: sin schema Zod, Remotion pide que las
+  // props satisfagan Record<string, unknown>.
+  [key: string]: unknown;
   text?: string;
   attribution?: string;
   accent?: string;
@@ -135,7 +138,7 @@ export const Quote: React.FC<QuoteProps> = (props) => {
         style={{
           opacity: card.opacity,
           transform: `translateY(${cardTranslate}px) scale(${cardScale})`,
-          width: u(width, 1000),
+          width: width - stagePad * 2,
           padding: `${u(width, 78)}px ${u(width, 80)}px ${u(width, 66)}px ${u(width, 86)}px`,
         }}
       >
