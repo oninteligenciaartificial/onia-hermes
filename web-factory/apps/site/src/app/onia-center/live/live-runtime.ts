@@ -49,11 +49,16 @@ async function liveRequest<T>(path: string): Promise<T | null> {
     });
 
     if (!response.ok) {
+      // Degradación elegante: el panel sigue mostrando su estado vacío. Pero una
+      // caída no puede verse igual que "no hay nada", así que queda en el log del
+      // servidor con endpoint + status para poder distinguirla.
+      console.error(`[onia-center/live] ${path} → HTTP ${response.status}`);
       return null;
     }
 
     return (await response.json()) as T;
-  } catch {
+  } catch (error) {
+    console.error(`[onia-center/live] ${path} → ${error instanceof Error ? error.message : String(error)}`);
     return null;
   }
 }
