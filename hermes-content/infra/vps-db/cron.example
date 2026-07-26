@@ -1,0 +1,11 @@
+# cron.example — crontab root del VPS para backups DentalGest (Fase 1 del runbook).
+# Instalar con: crontab -e  (el VPS corre en UTC; La Paz = UTC-4)
+
+# Backup diario 03:30 America/La_Paz (= 07:30 UTC): dump + storage + sha256 + R2 + poda
+30 7 * * * /root/bin/backup-dentalgest.sh >> /var/log/dentalgest-backup.log 2>&1
+
+# Prueba de restore mensual (dia 1, 04:30 La Paz = 08:30 UTC): postgres efimero + counts + Telegram
+30 8 1 * * /root/bin/verify-restore.sh >> /var/log/dentalgest-backup.log 2>&1
+
+# Rotacion del log (opcional, o usar logrotate):
+# 0 9 1 * * tail -n 2000 /var/log/dentalgest-backup.log > /tmp/dgb.log && mv /tmp/dgb.log /var/log/dentalgest-backup.log
