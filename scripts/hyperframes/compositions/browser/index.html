@@ -1,0 +1,443 @@
+<!doctype html>
+<html
+  lang="es"
+  data-composition-variables='[
+    {"id":"urlLabel","type":"string","label":"URL","default":"onia.com.bo"},
+    {"id":"title","type":"string","label":"Titulo","default":"Tu web, andando"},
+    {"id":"subtitle","type":"string","label":"Subtitulo","default":"hecha con ONIA"},
+    {"id":"image","type":"string","label":"Captura (ruta)","default":""},
+    {"id":"accent","type":"color","label":"Acento","default":"#FF7A00"}
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <title>ONIA · Browser</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        width: 1100px;
+        height: 760px;
+        overflow: hidden;
+        background: transparent;
+      }
+
+      #stage {
+        position: relative;
+        width: 1100px;
+        height: 760px;
+        --stage-w: 1100;
+        --stage-h: 760;
+        --u: calc(var(--stage-w) / 1000 * 1px);
+        --accent: #ff7a00;
+        --accent-deep: color-mix(in srgb, var(--accent) 62%, #000000);
+        --ink: #0a0c11;
+        --ink2: #15181f;
+        --ink-text: #f6f8fb;
+        --muted: rgba(246, 248, 251, 0.6);
+        --hairline: rgba(255, 255, 255, 0.11);
+        --gloss: rgba(255, 255, 255, 0.09);
+        --shadow:
+          0 calc(var(--u) * 46) calc(var(--u) * 96) calc(var(--u) * -24) rgba(0, 0, 0, 0.62),
+          0 calc(var(--u) * 10) calc(var(--u) * 26) rgba(0, 0, 0, 0.32);
+        /* wipe de revelado de la captura: 100 = tapada, 0 = descubierta */
+        --reveal: 100;
+        font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      }
+      #stage[data-theme="light"] {
+        --ink: #ffffff;
+        --ink2: #f4f5f7;
+        --ink-text: #0b0d12;
+        --muted: rgba(11, 13, 18, 0.58);
+        --hairline: rgba(11, 13, 18, 0.1);
+        --gloss: rgba(255, 255, 255, 0.85);
+      }
+
+      .fill {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        padding: calc(var(--u) * 40);
+      }
+
+      .window {
+        position: relative;
+        width: 100%;
+        border-radius: calc(var(--u) * 34);
+        background: linear-gradient(158deg, var(--ink2) 0%, var(--ink) 62%);
+        border: 1px solid var(--hairline);
+        box-shadow: var(--shadow);
+        overflow: hidden;
+        opacity: 0;
+      }
+
+      .chromebar {
+        display: flex;
+        align-items: center;
+        gap: calc(var(--u) * 20);
+        padding: calc(var(--u) * 24) calc(var(--u) * 28);
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.02));
+        border-bottom: 1px solid var(--hairline);
+        opacity: 0;
+      }
+
+      .dots {
+        display: flex;
+        gap: calc(var(--u) * 12);
+        flex: 0 0 auto;
+      }
+      .dots span {
+        display: block;
+        width: calc(var(--u) * 20);
+        height: calc(var(--u) * 20);
+        border-radius: 999px;
+        transform: scale(0);
+      }
+      .dots span:nth-child(1) {
+        background: #ff5f57;
+      }
+      .dots span:nth-child(2) {
+        background: #febc2e;
+      }
+      .dots span:nth-child(3) {
+        background: #28c840;
+      }
+
+      .pill {
+        flex: 1 1 auto;
+        display: flex;
+        align-items: center;
+        gap: calc(var(--u) * 12);
+        height: calc(var(--u) * 50);
+        padding: 0 calc(var(--u) * 22);
+        border-radius: 999px;
+        background: rgba(0, 0, 0, 0.34);
+        border: 1px solid var(--hairline);
+        font-size: calc(var(--u) * 25);
+        font-weight: 600;
+        color: var(--muted);
+        letter-spacing: -0.01em;
+        overflow: hidden;
+        white-space: nowrap;
+        opacity: 0;
+      }
+      .pill b {
+        color: var(--ink-text);
+        font-weight: 700;
+      }
+
+      .screen {
+        position: relative;
+        background: var(--ink);
+        height: calc(var(--stage-h) * 1px - var(--u) * 130);
+        min-height: calc(var(--u) * 420);
+        /* wipe de abajo hacia arriba — nunca layout */
+        clip-path: inset(calc(var(--reveal) * 1%) 0 0 0);
+      }
+      .screen img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .placeholder {
+        padding: calc(var(--u) * 96) calc(var(--u) * 72);
+        min-height: calc(var(--u) * 420);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: calc(var(--u) * 18);
+        background: radial-gradient(
+          120% 100% at 0% 0%,
+          color-mix(in oklab, var(--accent) 14%, transparent),
+          transparent 60%
+        );
+      }
+      .placeholder h1 {
+        font-size: calc(var(--u) * 70);
+        font-weight: 800;
+        letter-spacing: -0.035em;
+        line-height: 1.02;
+        color: var(--ink-text);
+        margin: 0;
+      }
+      .placeholder p {
+        font-size: calc(var(--u) * 31);
+        font-weight: 500;
+        color: var(--muted);
+        margin: 0;
+      }
+      .bars {
+        display: flex;
+        gap: calc(var(--u) * 14);
+        margin-top: calc(var(--u) * 28);
+      }
+      .bars i {
+        display: block;
+        height: calc(var(--u) * 12);
+        border-radius: 999px;
+      }
+      .bars i:nth-child(1) {
+        width: calc(var(--u) * 150);
+        background: var(--accent);
+      }
+      .bars i:nth-child(2) {
+        width: calc(var(--u) * 96);
+        background: var(--hairline);
+      }
+      .bars i:nth-child(3) {
+        width: calc(var(--u) * 58);
+        background: var(--hairline);
+      }
+
+      [hidden] {
+        display: none !important;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="stage"
+      data-composition-id="browser"
+      data-theme="dark"
+      data-start="0"
+      data-duration="3.2"
+      data-fps="30"
+      data-width="1100"
+      data-height="760"
+    >
+      <div id="browser-clip" class="clip" data-start="0" data-duration="3.2" data-track-index="0">
+        <div class="fill">
+          <div class="window" id="browser-window">
+            <div class="chromebar" id="browser-chrome">
+              <div class="dots" id="browser-dots">
+                <span></span><span></span><span></span>
+              </div>
+              <div class="pill" id="browser-pill">
+                <svg
+                  width="19"
+                  height="19"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.4"
+                  stroke-linecap="round"
+                  style="width: calc(var(--u) * 19); height: calc(var(--u) * 19); flex: 0 0 auto"
+                >
+                  <rect x="4.5" y="10.5" width="15" height="10.5" rx="2.4" />
+                  <path d="M8 10.5V7.6a4 4 0 0 1 8 0v2.9" />
+                </svg>
+                <b id="browser-url">onia.com.bo</b>
+              </div>
+            </div>
+            <!-- la captura desborda el alto de la ventana a proposito (mismo
+                 calculo que el original): el overflow:hidden de .window recorta -->
+            <div class="screen" id="browser-screen" data-layout-allow-overflow>
+              <img id="browser-image" alt="" hidden />
+              <div class="placeholder" id="browser-placeholder">
+                <h1 id="browser-title">Tu web, andando</h1>
+                <p id="browser-subtitle">hecha con ONIA</p>
+                <div class="bars"><i></i><i></i><i></i></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <script>
+        // ============================================================
+        // ONIA · Browser — port de src/compositions/Browser.tsx
+        // Ventana de navegador que entra con una captura adentro.
+        // ============================================================
+        (function () {
+          "use strict";
+
+          function cubicBezier(x1, y1, x2, y2) {
+            var cx = 3 * x1,
+              bx = 3 * (x2 - x1) - cx,
+              ax = 1 - cx - bx;
+            var cy = 3 * y1,
+              by = 3 * (y2 - y1) - cy,
+              ay = 1 - cy - by;
+            function sampleX(t) {
+              return ((ax * t + bx) * t + cx) * t;
+            }
+            function sampleY(t) {
+              return ((ay * t + by) * t + cy) * t;
+            }
+            function sampleDX(t) {
+              return (3 * ax * t + 2 * bx) * t + cx;
+            }
+            return function (x) {
+              if (x <= 0) return 0;
+              if (x >= 1) return 1;
+              var t = x,
+                i,
+                d,
+                dx;
+              for (i = 0; i < 8; i++) {
+                d = sampleX(t) - x;
+                if (Math.abs(d) < 1e-7) return sampleY(t);
+                dx = sampleDX(t);
+                if (Math.abs(dx) < 1e-7) break;
+                t -= d / dx;
+              }
+              var lo = 0,
+                hi = 1;
+              t = x;
+              while (hi - lo > 1e-7) {
+                if (sampleX(t) < x) lo = t;
+                else hi = t;
+                t = (hi + lo) / 2;
+              }
+              return sampleY(t);
+            };
+          }
+          gsap.registerEase("oniaOutExpo", cubicBezier(0.16, 1, 0.3, 1));
+          gsap.registerEase("oniaOutQuart", cubicBezier(0.25, 1, 0.5, 1));
+
+          var stage = document.getElementById("stage");
+          var FPS = Number(stage.dataset.fps) || 30;
+          var DUR = Number(stage.dataset.duration) || 3.2;
+          var TOTAL = Math.max(1, Math.round(DUR * FPS));
+          document.getElementById("browser-clip").dataset.duration = String(DUR);
+
+          function enterExit(o) {
+            o = o || {};
+            var delay = o.delayFrames || 0;
+            var enterF = Math.max(1, Math.round(((o.enterMs || 280) / 1000) * FPS));
+            var exitF = Math.max(1, Math.round(((o.exitMs || 200) / 1000) * FPS));
+            var exitStart = Math.max(delay + enterF, TOTAL - exitF);
+            return {
+              enterAt: delay / FPS,
+              enterDur: enterF / FPS,
+              exitAt: exitStart / FPS,
+              exitDur: Math.max(1, TOTAL - exitStart) / FPS,
+            };
+          }
+
+          function readVars() {
+            var decls = [];
+            try {
+              decls = JSON.parse(document.documentElement.dataset.compositionVariables || "[]");
+            } catch (e) {
+              decls = [];
+            }
+            var out = {};
+            for (var i = 0; i < decls.length; i++) out[decls[i].id] = decls[i].default;
+            var live =
+              window.__hyperframes && typeof window.__hyperframes.getVariables === "function"
+                ? window.__hyperframes.getVariables()
+                : null;
+            if (live) {
+              for (var k in out) {
+                if (live[k] !== undefined && live[k] !== null) out[k] = live[k];
+              }
+            }
+            return out;
+          }
+
+          // ---- contenido ------------------------------------------------------
+          var V = readVars();
+          var elWindow = document.getElementById("browser-window");
+          var elChrome = document.getElementById("browser-chrome");
+          var elPill = document.getElementById("browser-pill");
+          var dots = document.getElementById("browser-dots").children;
+          var elImage = document.getElementById("browser-image");
+          var elPlaceholder = document.getElementById("browser-placeholder");
+
+          document.getElementById("browser-url").textContent = String(V.urlLabel || "");
+          document.getElementById("browser-title").textContent = String(V.title || "");
+          document.getElementById("browser-subtitle").textContent = String(V.subtitle || "");
+
+          var image = String(V.image || "");
+          if (image) {
+            elImage.src = image;
+            elImage.hidden = false;
+            elPlaceholder.hidden = true;
+          }
+
+          // ---- timeline -------------------------------------------------------
+          var tl = gsap.timeline({ paused: true });
+
+          // Ventana: pop sutil (scale 0.94 -> 1) + subida.
+          var win = enterExit({ enterMs: 300 });
+          var WIN_Y = "calc(var(--u) * 22)";
+          tl.fromTo(
+            elWindow,
+            { opacity: 0, y: WIN_Y, scale: 0.94 },
+            { opacity: 1, y: 0, scale: 1, duration: win.enterDur, ease: "oniaOutExpo" },
+            win.enterAt,
+          );
+          tl.to(
+            elWindow,
+            { opacity: 0, y: WIN_Y, scale: 0.94, duration: win.exitDur, ease: "oniaOutQuart" },
+            win.exitAt,
+          );
+
+          // Barra de chrome.
+          var chrome = enterExit({ delayFrames: 4, enterMs: 220 });
+          tl.fromTo(
+            elChrome,
+            { opacity: 0 },
+            { opacity: 1, duration: chrome.enterDur, ease: "oniaOutExpo" },
+            chrome.enterAt,
+          );
+          tl.to(
+            elChrome,
+            { opacity: 0, duration: chrome.exitDur, ease: "oniaOutQuart" },
+            chrome.exitAt,
+          );
+
+          // Los 3 dots son elementos SIMILARES: comparten una sola intencion de
+          // ease+duracion y se escalonan con huecos que SE ACHICAN (x0.84), como
+          // pide motion-doctrine. El original de Remotion le daba al dot 1 una
+          // duracion distinta (220ms) que a los dots 2-3 (200ms) y ademas
+          // agrandaba el hueco (4->6->9 frames) en vez de achicarlo.
+          var dotM = enterExit({ delayFrames: 4, enterMs: 200 });
+          var dotAt = dotM.enterAt;
+          var dotGap = 2 / FPS;
+          for (var i = 0; i < dots.length; i++) {
+            tl.to(dots[i], { scale: 1, duration: dotM.enterDur, ease: "oniaOutExpo" }, dotAt);
+            dotAt += dotGap;
+            dotGap *= 0.84;
+          }
+          // La pill de URL entra con el ultimo dot (misma cadena de cascada).
+          var pillAt = dotAt - dotGap / 0.84;
+          tl.fromTo(
+            elPill,
+            { opacity: 0 },
+            { opacity: 1, duration: dotM.enterDur, ease: "oniaOutExpo" },
+            pillAt,
+          );
+          tl.to(elPill, { opacity: 0, duration: dotM.exitDur, ease: "oniaOutQuart" }, dotM.exitAt);
+
+          // Captura: wipe de abajo hacia arriba via clip-path (nunca layout).
+          // Se tweenea la custom property --reveal (permitida por el allowlist);
+          // el proxy garantiza que GSAP no le agregue unidades.
+          var reveal = enterExit({ delayFrames: 7, enterMs: 300, exitMs: 180 });
+          var wipe = { v: 100 };
+          tl.to(
+            wipe,
+            {
+              v: 0,
+              duration: reveal.enterDur,
+              ease: "oniaOutExpo",
+              onUpdate: function () {
+                stage.style.setProperty("--reveal", wipe.v);
+              },
+            },
+            reveal.enterAt,
+          );
+
+          window.__timelines = window.__timelines || {};
+          window.__timelines["browser"] = tl;
+        })();
+      </script>
+    </div>
+  </body>
+</html>

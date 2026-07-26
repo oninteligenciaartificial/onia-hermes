@@ -1,0 +1,463 @@
+<!doctype html>
+<html
+  lang="es"
+  data-composition-variables='[
+    {"id":"value","type":"string","label":"Valor","default":"6"},
+    {"id":"label","type":"string","label":"Etiqueta","default":"DOCTORES"},
+    {"id":"eyebrow","type":"string","label":"Antetitulo","default":""},
+    {"id":"sublabel","type":"string","label":"Subetiqueta","default":""},
+    {"id":"accent","type":"color","label":"Acento","default":"#FF7A00"}
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <title>ONIA · Stat</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      /* Sin reset de box-sizing a proposito: Remotion no inyecta uno, asi que
+         todo es content-box. Cambiarlo mueve el ancho de la tarjeta. */
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        width: 900px;
+        height: 640px;
+        overflow: hidden;
+        background: transparent;
+      }
+
+      #stage {
+        position: relative;
+        width: 900px;
+        height: 640px;
+        /* --stage-w lo reescribe render.mjs junto con data-width/height.
+           1 unidad = width/1000, misma convencion que u() en tokens.ts. */
+        --stage-w: 900;
+        --u: calc(var(--stage-w) / 1000 * 1px);
+        /* --accent lo pisa el runtime desde data-composition-variables. */
+        --accent: #ff7a00;
+        --accent-deep: color-mix(in srgb, var(--accent) 62%, #000000);
+        --ink: #0a0c11;
+        --ink2: #15181f;
+        --ink-text: #f6f8fb;
+        --muted: rgba(246, 248, 251, 0.6);
+        --hairline: rgba(255, 255, 255, 0.11);
+        --gloss: rgba(255, 255, 255, 0.09);
+        --shadow:
+          0 calc(var(--u) * 46) calc(var(--u) * 96) calc(var(--u) * -24) rgba(0, 0, 0, 0.62),
+          0 calc(var(--u) * 10) calc(var(--u) * 26) rgba(0, 0, 0, 0.32);
+        font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      }
+      #stage[data-theme="light"] {
+        --ink: #ffffff;
+        --ink2: #f4f5f7;
+        --ink-text: #0b0d12;
+        --muted: rgba(11, 13, 18, 0.58);
+        --hairline: rgba(11, 13, 18, 0.1);
+        --gloss: rgba(255, 255, 255, 0.85);
+      }
+
+      /* equivalente de <AbsoluteFill> (position absolute + flex column) */
+      .fill {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        padding: calc(var(--u) * 52);
+      }
+
+      .card {
+        position: relative;
+        border-radius: calc(var(--u) * 34);
+        background: linear-gradient(158deg, var(--ink2) 0%, var(--ink) 62%);
+        border: 1px solid var(--hairline);
+        box-shadow: var(--shadow);
+        overflow: hidden;
+        width: max-content;
+        min-width: min(calc(var(--u) * 560), 100%);
+        max-width: 100%;
+        padding: calc(var(--u) * 62) calc(var(--u) * 80) calc(var(--u) * 58) calc(var(--u) * 84);
+        opacity: 0;
+      }
+
+      /* Regla de acento: barra CORTA al pie, se dibuja de izquierda a derecha.
+         NO es una franja vertical en el borde izquierdo — ese patron (side-stripe)
+         esta prohibido por las reglas de diseno de la casa: lee a plantilla de
+         alerta, no a pieza disenada. */
+      .rail {
+        position: absolute;
+        left: calc(var(--u) * 84);
+        bottom: calc(var(--u) * 30);
+        width: calc(var(--u) * 132);
+        height: calc(var(--u) * 7);
+        border-radius: calc(var(--u) * 7);
+        transform-origin: left;
+        transform: scaleX(0);
+        background: linear-gradient(90deg, var(--accent), var(--accent-deep));
+      }
+
+      /* filo superior de luz — separa "disenado" de "div con sombra" */
+      .gloss {
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        pointer-events: none;
+        border-top: 1px solid var(--gloss);
+        -webkit-mask-image: linear-gradient(#000, transparent 42%);
+        mask-image: linear-gradient(#000, transparent 42%);
+      }
+
+      /* halo detras del numero: profundidad sin ensuciar */
+      .halo {
+        position: absolute;
+        z-index: 0;
+        right: calc(var(--u) * -90);
+        top: calc(var(--u) * -120);
+        width: calc(var(--u) * 430);
+        height: calc(var(--u) * 430);
+        border-radius: 999px;
+        opacity: 0;
+        background: radial-gradient(
+          circle,
+          color-mix(in oklab, var(--accent) 26%, transparent),
+          transparent 68%
+        );
+      }
+
+      .eyebrow,
+      .label,
+      .sublabel {
+        position: relative;
+        z-index: 1;
+        opacity: 0;
+        visibility: hidden;
+      }
+
+      .eyebrow {
+        display: flex;
+        align-items: center;
+        gap: calc(var(--u) * 14);
+        font-size: calc(var(--u) * 26);
+        font-weight: 700;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+      .eyebrow i {
+        display: block;
+        width: calc(var(--u) * 14);
+        height: calc(var(--u) * 14);
+        border-radius: 999px;
+        background: var(--accent);
+        box-shadow: 0 0 calc(var(--u) * 22) var(--accent);
+      }
+
+      .value {
+        position: relative;
+        z-index: 1;
+        font-size: calc(var(--u) * 268);
+        font-weight: 800;
+        line-height: 0.94;
+        letter-spacing: -0.045em;
+        font-variant-numeric: tabular-nums;
+        white-space: nowrap;
+        width: max-content;
+        color: var(--ink-text);
+      }
+      .value[data-has-eyebrow="1"] {
+        margin-top: calc(var(--u) * 24);
+      }
+
+      .label {
+        margin-top: calc(var(--u) * 22);
+        font-size: calc(var(--u) * 38);
+        font-weight: 800;
+        letter-spacing: 0.13em;
+        text-transform: uppercase;
+        color: var(--accent);
+      }
+
+      .sublabel {
+        margin-top: calc(var(--u) * 12);
+        font-size: calc(var(--u) * 31);
+        font-weight: 500;
+        letter-spacing: -0.01em;
+        color: var(--muted);
+      }
+
+      [hidden] {
+        display: none !important;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="stage"
+      data-composition-id="stat"
+      data-theme="dark"
+      data-start="0"
+      data-duration="3"
+      data-fps="30"
+      data-width="900"
+      data-height="640"
+    >
+      <div id="stat-clip" class="clip" data-start="0" data-duration="3" data-track-index="0">
+        <div class="fill">
+          <div class="card" id="stat-card">
+            <div class="rail" id="stat-rail"></div>
+            <div class="gloss"></div>
+            <!-- el halo desborda la tarjeta a proposito: el overflow:hidden de
+                 .card lo recorta y deja el glow en la esquina superior derecha -->
+            <div class="halo" id="stat-halo" data-layout-allow-overflow></div>
+            <div class="eyebrow" id="stat-eyebrow"><i></i><span></span></div>
+            <div class="value" id="stat-value">0</div>
+            <div class="label" id="stat-label"></div>
+            <div class="sublabel" id="stat-sublabel"></div>
+          </div>
+        </div>
+      </div>
+
+      <script>
+        // ============================================================
+        // ONIA · Stat — port de scripts/remotion/src/compositions/Stat.tsx
+        // Tarjeta de dato con numero que cuenta hacia arriba.
+        // ============================================================
+        (function () {
+          "use strict";
+
+          // ---- helpers portados de src/lib/{easing,motion,tokens}.ts ----------
+          // Solver de cubic-bezier unitaria (mismo contrato que Easing.bezier de
+          // Remotion / cubic-bezier() de CSS). Newton-Raphson + biseccion.
+          function cubicBezier(x1, y1, x2, y2) {
+            var cx = 3 * x1,
+              bx = 3 * (x2 - x1) - cx,
+              ax = 1 - cx - bx;
+            var cy = 3 * y1,
+              by = 3 * (y2 - y1) - cy,
+              ay = 1 - cy - by;
+            function sampleX(t) {
+              return ((ax * t + bx) * t + cx) * t;
+            }
+            function sampleY(t) {
+              return ((ay * t + by) * t + cy) * t;
+            }
+            function sampleDX(t) {
+              return (3 * ax * t + 2 * bx) * t + cx;
+            }
+            return function (x) {
+              if (x <= 0) return 0;
+              if (x >= 1) return 1;
+              var t = x,
+                i,
+                d,
+                dx;
+              for (i = 0; i < 8; i++) {
+                d = sampleX(t) - x;
+                if (Math.abs(d) < 1e-7) return sampleY(t);
+                dx = sampleDX(t);
+                if (Math.abs(dx) < 1e-7) break;
+                t -= d / dx;
+              }
+              var lo = 0,
+                hi = 1;
+              t = x;
+              while (hi - lo > 1e-7) {
+                if (sampleX(t) < x) lo = t;
+                else hi = t;
+                t = (hi + lo) / 2;
+              }
+              return sampleY(t);
+            };
+          }
+          // MISMA curva que --ease-out-expo de los tokens de web-factory
+          // (cubic-bezier(0.16, 1, 0.3, 1)) — es marca, no decoracion.
+          gsap.registerEase("oniaOutExpo", cubicBezier(0.16, 1, 0.3, 1));
+          gsap.registerEase("oniaOutQuart", cubicBezier(0.25, 1, 0.5, 1));
+
+          var stage = document.getElementById("stage");
+          var FPS = Number(stage.dataset.fps) || 30;
+          var DUR = Number(stage.dataset.duration) || 3;
+          var TOTAL = Math.max(1, Math.round(DUR * FPS)); // durationInFrames
+          // el clip cubre toda la composicion (se re-lee del DOM vivo)
+          document.getElementById("stat-clip").dataset.duration = String(DUR);
+
+          // useEnterExit() de src/lib/motion.ts, en segundos.
+          function enterExit(o) {
+            o = o || {};
+            var delay = o.delayFrames || 0;
+            var enterF = Math.max(1, Math.round(((o.enterMs || 280) / 1000) * FPS));
+            var exitF = Math.max(1, Math.round(((o.exitMs || 200) / 1000) * FPS));
+            var exitStart = Math.max(delay + enterF, TOTAL - exitF);
+            return {
+              enterAt: delay / FPS,
+              enterDur: enterF / FPS,
+              exitAt: exitStart / FPS,
+              exitDur: Math.max(1, TOTAL - exitStart) / FPS,
+            };
+          }
+
+          function isPureNumber(v) {
+            return /^\d+(\.\d+)?$/.test(String(v).trim());
+          }
+          // separador de miles "." (convencion boliviana), sin Intl
+          function formatBolivianNumber(value, decimals) {
+            var fixed = value.toFixed(decimals);
+            var parts = fixed.split(".");
+            var intPart = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            return parts[1] ? intPart + "," + parts[1] : intPart;
+          }
+
+          function readVars() {
+            var decls = [];
+            try {
+              decls = JSON.parse(document.documentElement.dataset.compositionVariables || "[]");
+            } catch (e) {
+              decls = [];
+            }
+            var out = {};
+            for (var i = 0; i < decls.length; i++) out[decls[i].id] = decls[i].default;
+            var live =
+              window.__hyperframes && typeof window.__hyperframes.getVariables === "function"
+                ? window.__hyperframes.getVariables()
+                : null;
+            if (live) {
+              for (var k in out) {
+                if (live[k] !== undefined && live[k] !== null) out[k] = live[k];
+              }
+            }
+            return out;
+          }
+
+          // ---- contenido ------------------------------------------------------
+          var V = readVars();
+          var elCard = document.getElementById("stat-card");
+          var elRail = document.getElementById("stat-rail");
+          var elHalo = document.getElementById("stat-halo");
+          var elEyebrow = document.getElementById("stat-eyebrow");
+          var elValue = document.getElementById("stat-value");
+          var elLabel = document.getElementById("stat-label");
+          var elSublabel = document.getElementById("stat-sublabel");
+
+          var eyebrow = String(V.eyebrow || "");
+          var label = String(V.label || "");
+          var sublabel = String(V.sublabel || "");
+          var value = String(V.value == null ? "" : V.value);
+
+          elEyebrow.querySelector("span").textContent = eyebrow;
+          elLabel.textContent = label;
+          elSublabel.textContent = sublabel;
+          if (!eyebrow) elEyebrow.hidden = true;
+          if (!label) elLabel.hidden = true;
+          if (!sublabel) elSublabel.hidden = true;
+          if (eyebrow) elValue.dataset.hasEyebrow = "1";
+
+          // Tamano de fuente por longitud del valor MOSTRADO: mientras cuenta,
+          // "1.200" encoge respecto de "6" (mismo criterio que make-mockup.mjs).
+          function fontStepFor(n) {
+            return n <= 1 ? 268 : n <= 2 ? 240 : n <= 3 ? 208 : n <= 5 ? 176 : n <= 7 ? 146 : 112;
+          }
+          function paintValue(text) {
+            elValue.textContent = text;
+            elValue.style.fontSize = "calc(var(--u) * " + fontStepFor(text.length) + ")";
+          }
+
+          var pure = isPureNumber(value);
+          var decimals = pure && value.indexOf(".") >= 0 ? value.split(".")[1].length : 0;
+          var target = pure ? Number(value) : 0;
+          paintValue(pure ? formatBolivianNumber(0, decimals) : value);
+
+          // ---- timeline -------------------------------------------------------
+          var tl = gsap.timeline({ paused: true });
+
+          // Tarjeta: sube y aparece; en la salida vuelve por el mismo vector.
+          var card = enterExit();
+          var CARD_Y = "calc(var(--u) * 26)";
+          tl.fromTo(
+            elCard,
+            { opacity: 0, y: CARD_Y, scale: 0.97 },
+            { opacity: 1, y: 0, scale: 1, duration: card.enterDur, ease: "oniaOutExpo" },
+            card.enterAt,
+          );
+          tl.to(
+            elCard,
+            {
+              opacity: 0,
+              y: CARD_Y,
+              scale: 0.97,
+              duration: card.exitDur,
+              ease: "oniaOutQuart",
+            },
+            card.exitAt,
+          );
+
+          // Riel de acento: se dibuja izquierda->derecha y NO se retrae en la
+          // salida (railProgress = card.enter en el original) — se va con la
+          // opacidad de la tarjeta.
+          tl.to(elRail, { scaleX: 1, duration: card.enterDur, ease: "oniaOutExpo" }, card.enterAt);
+
+          // Halo: entra mas lento y se queda (sin salida propia; hereda el fade
+          // de la tarjeta). Un exit propio aca seria un exit/entry de 43%, muy
+          // por debajo del ~75% que pide motion-doctrine.
+          var halo = enterExit({ enterMs: 460 });
+          tl.to(elHalo, { opacity: 0.55, duration: halo.enterDur, ease: "oniaOutExpo" }, halo.enterAt);
+
+          // Contador: power-curve de salida, sin overshoot. "Sequenced UI life"
+          // (motion-doctrine): el numero tickea, no es wobble decorativo.
+          if (pure) {
+            var countF = Math.max(1, Math.round((640 / 1000) * FPS));
+            var counter = { v: 0 };
+            tl.to(
+              counter,
+              {
+                v: target,
+                duration: countF / FPS,
+                ease: "oniaOutExpo",
+                onUpdate: function () {
+                  paintValue(formatBolivianNumber(counter.v, decimals));
+                },
+              },
+              0,
+            );
+          }
+
+          // Cascada de texto (waterfall entry, cut-the-curve §6):
+          //  · opacidad BINARIA en la entrada (nunca fade) — la velocidad la
+          //    lleva el recorrido, no la opacidad;
+          //  · los huecos SE ACHICAN (x0.84), nunca iguales;
+          //  · una sola direccion para toda la cascada.
+          // El original de Remotion movia los 3 bloques a la vez con el mismo
+          // `cascade` (delay 5f) — no era cascada pese al comentario.
+          var cascade = enterExit({ delayFrames: 5 });
+          var group = [];
+          if (eyebrow) group.push(elEyebrow);
+          if (label) group.push(elLabel);
+          if (sublabel) group.push(elSublabel);
+
+          var TXT_X = "calc(var(--u) * 14)";
+          var gap = 3 / FPS; // 3 frames entre el 1ro y el 2do
+          var at = cascade.enterAt;
+          for (var g = 0; g < group.length; g++) {
+            tl.set(group[g], { autoAlpha: 1 }, at);
+            tl.fromTo(
+              group[g],
+              { x: TXT_X },
+              { x: 0, duration: cascade.enterDur, ease: "oniaOutExpo" },
+              at,
+            );
+            // salida: el grupo acompana a la tarjeta
+            tl.to(
+              group[g],
+              { autoAlpha: 0, x: TXT_X, duration: cascade.exitDur, ease: "oniaOutQuart" },
+              cascade.exitAt,
+            );
+            at += gap;
+            gap *= 0.84;
+          }
+
+          window.__timelines = window.__timelines || {};
+          window.__timelines["stat"] = tl;
+        })();
+      </script>
+    </div>
+  </body>
+</html>
