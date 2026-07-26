@@ -23,25 +23,25 @@
       "source": "heygen-com/hyperframes",
       "sourceType": "github",
       "skillPath": "skills/embedded-captions/SKILL.md",
-      "computedHash": "5cf99e184818ef547db224c59c4a68e0bc01da149c8b04aadb75f16b891a86d8"
+      "computedHash": "d39a0c2ee3636f620a7c9018805dbd7f79900e93c9ca0bca6eacee513761feab"
     },
     "faceless-explainer": {
       "source": "heygen-com/hyperframes",
       "sourceType": "github",
       "skillPath": "skills/faceless-explainer/SKILL.md",
-      "computedHash": "5013dc9f544e385b11a857acde0888b74ee4963bb6c3698d130e4848be30c060"
+      "computedHash": "3d42310e8dd3f01a6fa80267b301462380c8ee0f25a9da54e8f24bca513b96f6"
     },
     "figma": {
       "source": "heygen-com/hyperframes",
       "sourceType": "github",
       "skillPath": "skills/figma/SKILL.md",
-      "computedHash": "d7afc3b675a52d40c7883e9c7b72b68a280b89270b6609b15cecc216241b6bf3"
+      "computedHash": "4dbed0611fba3ce6418a445c2cf0d3f056927c56e8b3ea91d1313f55c50be1f3"
     },
     "general-video": {
       "source": "heygen-com/hyperframes",
       "sourceType": "github",
       "skillPath": "skills/general-video/SKILL.md",
-      "computedHash": "1194ac1ea4e0c90dad61f189c621d60adc26bad0c9b7b24bf003aa32ab01507c"
+      "computedHash": "3dfc5966832f544b11a0b59a585161015eb3f67151b8cb9093ad4b415b2c0dc8"
     },
     "hyperframes": {
       "source": "heygen-com/hyperframes",
@@ -89,7 +89,7 @@
       "source": "heygen-com/hyperframes",
       "sourceType": "github",
       "skillPath": "skills/media-use/SKILL.md",
-      "computedHash": "c2533cda22f6d20c143b5e6e247b2d2fe0e3ca4de8d94c72a4cdbcf2f35e5adc"
+      "computedHash": "d013cc91bfa7e5e66067724bc93096a9d2c98ee01f347f795cee9459651d8208"
     },
     "motion-doctrine": {
       "source": "heygen-com/hyperframes",
@@ -119,7 +119,7 @@
       "source": "heygen-com/hyperframes",
       "sourceType": "github",
       "skillPath": "skills/pr-to-video/SKILL.md",
-      "computedHash": "2b9c1d44c2d9ee3212c91b5f05cde06cd7309b6d7b422e1248ab483a9e2a0b0b"
+      "computedHash": "8d101fe1a58b4667f642692b6d8139024f8c51242db028a7f8f3f1a6235fe67a"
     },
     "product-launch-video": {
       "source": "heygen-com/hyperframes",
