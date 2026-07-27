@@ -13,6 +13,42 @@
     <title>ONIA · LowerThird</title>
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
     <style>
+      /* ---- Tipografia OFICIAL de marca (ONIA_BRAND_IDENTITY_2026.md §2) -----
+         El trio se AUTOHOSPEDA: los .woff2 viven versionados en
+         hermes-content/brand/fonts/ (con su OFL al lado) y el compilador los
+         embebe como data URI. Nada de Google Fonts en tiempo de render y nada
+         de depender de fuentes instaladas en el sistema — por eso el frame sale
+         identico en Windows (Sergio) y en Linux (VPS).
+
+         Los .woff2 estan DENTRO de la composicion (fonts/) y no referenciados
+         a la carpeta canonica: HyperFrames sirve cada composicion con su propia
+         carpeta como raiz y rechaza por lint todo asset con "../" por encima
+         (invalid_parent_traversal_in_asset_path). Las copias las reparte
+         `hermes-content/brand/fonts/build-onia-fonts.py` — no se tocan a mano,
+         se regeneran; asi no derivan de la fuente.
+
+         Los ejes vienen recortados de fabrica (ver build-onia-fonts.py):
+         Bricolage llega con wght 500-700 y wdth fijo en 100, asi que el peso
+         800 y los cortes ultra-condensed que el brand system prohibe no
+         existen ni por accidente.
+
+         font-display: block y no swap — el renderer debe ESPERAR a la fuente;
+         un swap pintaria los primeros frames con la fallback. */
+      @font-face {
+        font-family: "Bricolage Grotesque";
+        src: url("fonts/BricolageGrotesque-var-latin.woff2") format("woff2");
+        font-weight: 500 700;
+        font-style: normal;
+        font-display: block;
+      }
+      @font-face {
+        font-family: "DM Sans";
+        src: url("fonts/DMSans-var-latin.woff2") format("woff2");
+        font-weight: 400 500;
+        font-style: normal;
+        font-display: block;
+      }
+
       /* Remotion aplica `box-sizing: border-box` de fabrica; replicarlo aca es
          lo que hace que anchos y paddings caigan en el MISMO pixel que la
          baseline. (Asumir content-box ensanchaba las tarjetas y sacaba a Quote
@@ -53,7 +89,11 @@
           0 calc(var(--u) * 10) calc(var(--u) * 26) rgba(0, 0, 0, 0.32);
         /* wipe del riel de acento: 100 = tapado, 0 = descubierto */
         --wipe: 100;
-        font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        /* Roles del trio: display = titulares y etiquetas · body = texto de
+           apoyo. Esta composicion no muestra cifras, asi que no carga el mono. */
+        --font-display: "Bricolage Grotesque", sans-serif;
+        --font-body: "DM Sans", sans-serif;
+        font-family: var(--font-body);
       }
       #stage[data-theme="light"] {
         --ink: #ffffff;
@@ -109,6 +149,7 @@
         display: flex;
         align-items: center;
         gap: calc(var(--u) * 12);
+        font-family: var(--font-display);
         font-size: calc(var(--u) * 22);
         font-weight: 700;
         letter-spacing: 0.18em;
@@ -125,9 +166,12 @@
         flex: 0 0 auto;
       }
 
+      /* Titular de tarjeta = display. Peso 700 y no 800: el brand system
+         prohibe el 800 de Bricolage (y el archivo ni lo trae). */
       .title {
+        font-family: var(--font-display);
         font-size: calc(var(--u) * 54);
-        font-weight: 800;
+        font-weight: 700;
         letter-spacing: -0.03em;
         line-height: 1.05;
         color: var(--ink-text);
