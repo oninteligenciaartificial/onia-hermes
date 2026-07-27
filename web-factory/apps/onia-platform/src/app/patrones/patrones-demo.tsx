@@ -93,6 +93,18 @@ export function PatronesDemo() {
         </header>
 
         <section className={styles.section}>
+          <p className={styles.tag}>0 · Titular grande (.display)</p>
+          <div className={styles.displayDemo}>
+            <h2 className="display">
+              Tu negocio, <em>ordenado</em>
+            </h2>
+            <p className={styles.displayNote}>
+              Archivo variable, ancho comprimido al 76%. Uno por pantalla, máximo 4-5 palabras.
+            </p>
+          </div>
+        </section>
+
+        <section className={styles.section}>
           <p className={styles.tag}>1 · Marquee</p>
           <Marquee className={styles.marquee} trackClassName={styles.marqueeTrack} duration={26}>
             {["SIAT", "WhatsApp", "QR Simple", "Agenda", "Facturación", "Agentes"].map((t) => (
