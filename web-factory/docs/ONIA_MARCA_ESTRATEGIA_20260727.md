@@ -162,6 +162,56 @@ Las dos únicas cosas que le duelen a un dentista. Sin metáfora, sin marca.
 va a multar". El SIN tiene portal gratuito. La honestidad acá es la diferencia entre ser
 el proveedor de confianza o uno más de los que asustan para vender.
 
+## 5-bis. El juego ON·IA — cómo se arma (decisión Sergio, 2026-07-27)
+
+**El nombre es "Onia". Una palabra, siempre.** El juego ON+IA es un **recurso
+narrativo**, no una forma de la marca. Se explica hablando; no se escribe partido.
+
+### La regla de una línea
+> **Se dice partido. Se escribe junto. Siempre.**
+
+### Las dos capas
+
+| | **Capa marca** (lo que se registra y se firma) | **Capa relato** (lo que se cuenta) |
+|---|---|---|
+| Qué es | `Onia` — una palabra | "ON + IA: tu negocio encendido, con inteligencia artificial" |
+| Dónde vive | Logo, dominio, handles, facturas, contratos, registro SENAPI, footer legal, app stores | Explicación del nombre en la web, guion de demo, video de marca, pitch, primer mensaje de WhatsApp |
+| Se registra | **SÍ** — denominativa + mixta, clase 42 | **NO.** No se reclama, no se registra, no se defiende |
+| Cómo se escribe | `Onia` / `onia` | En prosa: *"Onia viene de ON —encendido— y de IA."* |
+
+### Prohibido escribir la marca como
+`ON-IA` · `OnIA` · `on.ia` · `ON IA` · `Onia (ON+IA)` en el logo o en el nombre legal.
+Cada una de esas formas rompe la búsqueda ("onia" deja de encontrarte), confunde el
+registro y contradice el nombre legal **OniaAgency**.
+
+**Única excepción controlada:** en UNA pieza de contenido dedicada a explicar el
+nombre, se puede destacar tipográficamente el `ia` final del wordmark por un momento
+—como recurso editorial de esa pieza— y volver al wordmark normal. Nunca en el logo
+permanente.
+
+### Por qué el juego vale (y por eso se conserva)
+- `ON` es universal en inglés y ya significa *encendido* — el estado que vende el producto.
+- `IA` es inteligencia artificial en español, portugués, francés e italiano.
+- **El nombre lleva su propio pitch en los dos idiomas de los dos mercados** (LatAm hoy,
+  global después). Eso resuelve gratis la pregunta "¿por qué se llama así?", que toda
+  marca nueva tiene que contestar.
+- Y encaja con el gesto de marca: el cuadrado es el indicador de *encendido*.
+
+### El app icon "on" NO es la marca partida
+Es una **abreviatura visual del wordmark**, igual que `nu` es Nubank o `fb` fue Facebook.
+Regla operativa que se deriva de esto (co-presentación, Ehrenberg-Bass): **donde aparece
+el ícono solo, el nombre "Onia" tiene que estar cerca en texto** — nombre de la app,
+handle, firma, título de la ficha. Así se enseña la asociación ícono→marca. Si el ícono
+viaja solo y sin nombre, la gente aprende "On", no "Onia".
+
+⚠️ **Y por eso el ícono no puede ser negro con letra clara:** ese es exactamente el app
+icon de **On (On AG, ONON en NYSE)**, marca notoria de calzado. Clase distinta (25 vs 42)
+→ sin conflicto de registro, pero las marcas notorias tienen protección ampliada más allá
+de su clase (art. 136-h Decisión 486) y, sobre todo, copiar el asset de una marca de esa
+escala destruye la única palanca que tiene una marca desconocida: la unicidad.
+**Solución: el mismo "on", con esquema de color propio** (On es monocromo estricto,
+nunca usa color).
+
 ## 6. Qué NO hacer
 
 1. **El color nunca decora.** Nada de fondos de sección, degradados, líneas, íconos ni
