@@ -211,17 +211,22 @@
         box-shadow: 0 0 calc(var(--u) * 22) var(--accent);
       }
 
-      /* La cifra grande va en MONO (registro "dato", no "titular"): ademas de
-         ser lo que manda el brand system para cifras, el ancho fijo es lo que
-         mantiene quieto el contador mientras cuenta — con una proporcional el
-         numero baila de ancho en cada tick. Ver el reporte: se renderizo
-         tambien la variante en Bricolage para elegir a ojo. */
+      /* La cifra grande va en DISPLAY (Bricolage), no en mono. El brand system
+         manda el mono para cifras, pero define ese rol como "recibos, tablas,
+         montos, terminal" — dato dentro de un sistema. Un numero heroe de 268u
+         en un reel no es una celda de tabla: es el titular del cuadro, y lo mira
+         alguien en un telefono durante 3 segundos. En mono se ve fino y se cae a
+         ese tamano; el propio doc dice que Bricolage "es EL caracter de la marca".
+         Se renderizaron las dos variantes y se comparo a ojo (output/tipografia-marca/).
+         El desempate tecnico que se creia tener NO existe: Bricolage tambien trae
+         `tnum`, asi que con el `tabular-nums` de abajo el contador queda igual de
+         quieto en las dos. Volver a mono = cambiar esta linea. */
       .value {
         position: relative;
         z-index: 1;
-        font-family: var(--font-mono);
+        font-family: var(--font-display);
         font-size: calc(var(--u) * 268);
-        font-weight: 500;
+        font-weight: 700;
         line-height: 0.94;
         letter-spacing: -0.045em;
         font-variant-numeric: tabular-nums;
