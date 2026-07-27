@@ -111,6 +111,7 @@ default.
 
 ---
 
-Relacionado: `MOTION_PATTERN_BANK_2026.md` (los patrones de scroll del mismo teardown) ·
+Relacionado: `MOTION_PATTERN_BANK_2026.md` — patrones **P15-P18** (ScrollList, Marquee,
+Coverflow, BleedWordmark), del mismo teardown de Fanvue ·
 `ONIA_MARCA_ESTRATEGIA_20260727.md` (la tipografía del logo, que es otra decisión) ·
 `WEB_FACTORY_DESIGN_INTELLIGENCE_LATEST.md`.

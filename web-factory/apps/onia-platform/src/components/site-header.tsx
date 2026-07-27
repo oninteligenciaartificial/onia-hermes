@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { BrandWordmark } from "@/components/brand-wordmark";
+import { BrandLogo } from "@/components/brand-logo";
 import { APP_URL, WA_URL } from "@/lib/site";
 import styles from "./site-header.module.css";
 
@@ -75,7 +75,7 @@ export function SiteHeader() {
     <header className={styles.header}>
       <div className={`container ${styles.inner}`}>
         <a href="/" className={styles.brand} aria-label="Onia — inicio">
-          <BrandWordmark height={26} />
+          <BrandLogo height={26} />
           <span className={styles.tagline}>El sistema con IA para tu negocio</span>
         </a>
 

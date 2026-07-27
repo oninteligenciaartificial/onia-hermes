@@ -1,9 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="onia">
-  <title>onia — favicon</title>
-  <desc>Baldosa tinta redondeada con el isotipo (o + cursor verde). Copia de public/brand/favicon.svg — Next la sirve como favicon por file convention.</desc>
-  <rect width="64" height="64" rx="14" fill="#0C110F"/>
-  <g transform="translate(32 32) scale(0.475) translate(-40 -40)">
-    <circle cx="40" cy="40" r="32" fill="none" stroke="#ECEFED" stroke-width="16"/>
-    <rect x="30" y="30" width="20" height="20" rx="2" fill="#3EA639"/>
-  </g>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-292 -1085 1657 1657" role="img" aria-label="onia"><rect x="-292" y="-1085" width="1657" height="1657" fill="#12100E"/><g fill="#00D26A"><path d="M287.9 12.0Q213.2 12.0 153.1 -20.9Q93.0 -53.8 57.9 -112.7Q22.7 -171.7 22.7 -248.0Q22.7 -325.3 57.9 -383.8Q93.1 -442.2 153.7 -475.1Q214.3 -508.0 288.1 -508.0Q362.9 -508.0 422.9 -475.1Q483.0 -442.2 518.1 -383.8Q553.3 -325.3 553.3 -248.0Q553.3 -171.7 518.1 -112.7Q482.9 -53.8 422.8 -20.9Q362.7 12.0 287.9 12.0Z"/><path d="M560.8 0.0V-496.0H692.8V-421.5Q716.9 -461.3 758.8 -484.7Q800.7 -508.0 856.6 -508.0Q949.7 -508.0 1000.0 -449.4Q1050.3 -390.7 1050.3 -278.8V0.0H918.3V-266.4Q918.3 -329.8 892.7 -363.2Q867.1 -396.5 812.7 -396.5Q760.6 -396.5 726.7 -359.5Q692.8 -322.4 692.8 -256.1V0.0Z"/></g><rect x="180.4" y="-355.6" width="215.2" height="215.2" fill="#12100E"/></svg>

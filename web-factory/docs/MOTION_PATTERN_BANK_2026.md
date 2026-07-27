@@ -233,6 +233,179 @@ return <m.img ref={ref} style={{ y }} width={960} height={640} alt="…" />;
 - **Cuando si:** SOLO si P3 (sticky+scrub) demostrablemente no alcanza. **Cuando no:** por defecto — es la escalada, no el default.
 - **Reglas de uso:** `npm i gsap @gsap/react` EN ESA app; `useGSAP` con `scope` (cleanup automatico); `gsap.matchMedia` con branch `(prefers-reduced-motion: no-preference)`; plugins por `await import("gsap/ScrollTrigger")`; `ScrollTrigger.refresh()` tras cargar media; nunca pinear dentro de un ancestro con transform. Costo: ~46–50 kb gzip — se paga solo si la seccion lo justifica.
 
+### P15 — ScrollList: item activo sincronizado con scroll
+
+- **Comunica:** mientras scrolleás, UN rubro/modulo a la vez se enciende; su panel (imagen/captura real del sistema) cambia al costado sin click del usuario (determinista, scroll controla todo).
+- **Cuando si:** la primera pasada narrativa de ONIA Platform (6 rubros → 6 vistas del tablero de control). Distinto del selector por click (P8, rubro/módulos): este se ENCIENDEN solos. **Cuando no:** si el usuario debe elegir activamente (es un selector, no una narrativa).
+- **Origen:** patrón "Built for every niche" de Fanvue (allá son categorías de creador; acá traducimos a rubros del producto).
+- **Kit:** `<ScrollList>` (`scroll-list.tsx`).
+
+```tsx
+const rubros = [
+  {
+    id: "dental",
+    label: "Dental",
+    panel: <CapturaReal rubro="dental" />,
+  },
+  // ... más rubros
+];
+
+<ScrollList
+  items={rubros}
+  perItem={1.1}
+  className="scroll-scene"
+  stickyClassName="sticky-wrap"
+  listClassName="rubro-list"
+  panelClassName="rubro-panel"
+  dimOpacity={0.28}
+/>
+```
+
+**Props:**
+- `items`: array de `{ id, label, panel }`. El `panel` es el ReactNode que se muestra cuando el item está activo.
+- `perItem`: viewports de scroll por item (0.9–1.4 razonable; default 1.1).
+- `dimOpacity`: opacidad de items inactivos (0.0–1.0; default 0.28).
+- `className`, `stickyClassName`, `listClassName`, `panelClassName`: clases CSS para customizar.
+
+**Comportamiento:**
+- El contenedor tiene altura `items.length * perItem * 100vh` (crece con el scroll).
+- Mientras scrolleás, un listener en `scrollYProgress` calcula qué item está activo (`floor(progress * n)`).
+- El item activo: opacidad 1, x=0 (nada desplazado), todos los demás: opacidad dimOpacity, x=-4px.
+- El panel del activo: opacity 1 scale 1; inactivos opacity 0 scale 0.97 (transiciones con `springs.gentle`).
+- El wrapper `.sticky` queda `position: sticky; top: 0` mientras la escena dura.
+
+**Accesibilidad:** items inactivos llevan `aria-hidden={true}`; la lista es semantica `<ul><li>`.
+
+**Reduced-motion:** lista estática con todos los items visibles al 100%, sin pin, sin scrub. El panel del primero se muestra solo.
+
+- **Costo:** 0 kb marginal.
+
+### P16 — Marquee: cinta infinita horizontal
+
+- **Comunica:** abundancia, linaje — logos de prensa/clientes/integraciones en movimiento continuo.
+- **Cuando si:** SOLO con logos/marcas REALES y verificables. **Cuando no:** NUNCA relleno (logos de herramientas que usamos, marcas ajenas, placeholders). Una web con marquee falso se ve barata.
+- **Kit:** `<Marquee>` (`marquee.tsx`).
+
+```tsx
+<Marquee duration={26} className="marquee-wrap" trackClassName="marquee-track">
+  {["Logo1", "Logo2", "Logo3"].map((name) => (
+    <div key={name} className="logo-chip">{name}</div>
+  ))}
+</Marquee>
+```
+
+**Props:**
+- `children`: ReactNode que se repite. Duplicación interna automática.
+- `duration`: segundos por vuelta completa (default 32; más alto = más lento).
+- `reverse`: boolean para invertir dirección (default false).
+- `className`, `trackClassName`: clases CSS.
+
+**Comportamiento:**
+- El contenedor tiene `overflow: hidden`.
+- La pista (track) tiene `display: flex; width: max-content`.
+- Motion anima `x` de 0% → -50% (o -50% → 0% si `reverse`), infinito lineal.
+- El contenido se copia internamente (`aria-hidden=true` en la copia).
+- El loop es invisible gracias al desplazamiento exacto de -50%.
+
+**Reduced-motion:** `overflow-x: auto` manual (sin animacion).
+
+- **Costo:** 0 kb marginal.
+
+### P17 — Coverflow: carrusel 3D con perspectiva
+
+- **Comunica:** "estos son casos REALES" — tarjeta central grande y viva; laterales rotadas de contexto. El usuario navega con botones (1 tap = siguiente caso).
+- **Cuando si:** testimonios/casos de clientes REALES que pagan. **Cuando no:** placeholder ("Ejemplos reservados para casos reales" = honesto; pero si la web vive sin casos, no shippea esta seccion).
+- **Origen:** patrón "Creators" de Fanvue.
+- **Kit:** `<Coverflow>` (`coverflow.tsx`).
+
+```tsx
+const casos = [
+  {
+    id: "clinica-santa-rosa",
+    content: <CaseImage />,
+    caption: (
+      <>
+        <b>Clínica Santa Rosa</b>
+        <span>Gestión de 150+ citas/mes, integrado con SIAT</span>
+      </>
+    ),
+  },
+  // ... más casos
+];
+
+<Coverflow
+  items={casos}
+  className="cover-wrap"
+  stageClassName="cover-stage"
+  cardClassName="cover-card"
+  captionClassName="cover-caption"
+  controlsClassName="cover-controls"
+  tilt={22}
+  spread={78}
+  labels={{ prev: "Anterior", next: "Siguiente" }}
+/>
+```
+
+**Props:**
+- `items`: array de `{ id, content, caption? }`. El `content` es el ReactNode visible (imagen/captura); `caption` opcional, solo para la tarjeta activa.
+- `tilt`: grados de rotación Y de las tarjetas laterales (default 22; controla cuánto giran).
+- `spread`: desplazamiento lateral en % del ancho de la tarjeta (default 78; controla el espacio entre tarjetas).
+- `labels`: `{ prev: string; next: string }` para aria-labels de los botones.
+- `className`, `stageClassName`, `cardClassName`, `captionClassName`, `controlsClassName`: clases CSS.
+
+**Comportamiento:**
+- El stage tiene `perspective: 1400; display: grid; place-items: center`.
+- Cada tarjeta calcula su distancia circular al índice activo (`d = i - index`; acotado a ±n/2 para loop).
+- Tarjeta activa (d=0): `rotateY: 0; scale: 1; opacity: 1; zIndex: 10`.
+- Tarjetas adyacentes (d=±1): rotadas ±22°, scaled 0.86, opacidad 0.45, desplazadas laterales.
+- Tarjetas lejanas (d>±2): opacidad 0, z-index decreciente (no visibles).
+- Botones prev/next ciclean el índice: `(index - 1 + n) % n` y `(index + 1) % n`.
+
+**Accesibilidad:** tarjetas inactivas llevan `aria-hidden=true`; botones tienen aria-labels.
+
+**Reduced-motion:** grilla estática con `display: flex; gap: 16; overflow-x: auto` — sin rotacion ni transiciones, solo scroll manual.
+
+- **Costo:** 0 kb marginal.
+
+### P18 — BleedWordmark: palabra gigante que se sale del borde
+
+- **Comunica:** presencia, escala — cierre de página. El nombre de la marca gigante, cortado por el borde inferior, con un suave parallax (6% máximo).
+- **Cuando si:** UNA SOLA VEZ por página, siempre al final (footer/remate). **Cuando no:** multi-uso, mid-page, o como decoracion.
+- **Origen:** cierre de la landing de Fanvue.
+- **Kit:** `<BleedWordmark>` (`bleed-wordmark.tsx`).
+
+```tsx
+<BleedWordmark
+  text="onia"
+  className="bleed-wrap"
+  shift={6}
+/>
+```
+
+**Props:**
+- `text`: string a renderizar (default "onia"). Reemplaza el texto, no agrega clase.
+- `shift`: parallax en % (cuánto sube mientras scrolleás de abajo; default 6; rango sano: 3–8%).
+- `className`: clase CSS del contenedor.
+
+**Comportamiento:**
+- Contenedor tiene `overflow: hidden` (el recorte).
+- El `<p>` tiene:
+  - `fontSize: clamp(5rem, 26vw, 22rem)` — responsive desde 5rem hasta 22rem.
+  - `lineHeight: 0.78` — líneas tocadas, bloque compacto.
+  - `fontWeight: 560` — peso medio-alto (tipo Archivo Variable).
+  - `letterSpacing: -0.03em` — tracking negativo, comprime.
+  - `marginBottom: "-0.18em"` — la mitad inferior de la caja queda fuera (el "bleed").
+- Motion anima `y` desde `+6%` (cuando el elemento entra al viewport) a `0%` (cuando sale por abajo).
+- Offset: `["start end", "end end"]` — comienza a animar cuando el elemento está visible al fondo.
+
+**Accesibilidad:** el texto es real (seleccionable, indexable); se recorta con overflow CSS, nunca es una imagen. `aria-hidden=false` para que los lectores de pantalla lo lean.
+
+**Reduced-motion:** sin parallax (y=0%), mismo recorte visual.
+
+- **Costo:** 0 kb marginal.
+
+**Nota sobre tipografía:** todos estos patrones usan las familias tipográficas del sistema. Ver `TIPOGRAFIA_SISTEMA_20260727.md` para detalles de tokens, la clase `.display` (usar en titulares grandes), y la escala responsiva con `clamp()`.
+
 ---
 
 ## 3) Direccion (reglas ANTI-IA — obligatorias, del research anti-generico)
