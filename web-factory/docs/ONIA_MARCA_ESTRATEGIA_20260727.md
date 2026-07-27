@@ -162,6 +162,36 @@ Las dos únicas cosas que le duelen a un dentista. Sin metáfora, sin marca.
 va a multar". El SIN tiene portal gratuito. La honestidad acá es la diferencia entre ser
 el proveedor de confianza o uno más de los que asustan para vender.
 
+## 4-bis. Color del wordmark — qué versión va en cada fondo
+
+**Los tres colores del sistema:**
+
+| Color | Hex | Para qué |
+|---|---|---|
+| **Tinta** | `#12100E` | El wordmark. Negro cálido, nunca `#000000` |
+| **Claro** | `#F4F6F4` | El wordmark en negativo |
+| **Verde señal** | `#00D26A` | **Solo el punto.** Nunca el wordmark |
+
+**La regla:** el wordmark es de **UN solo color**. Lo único que cambia es el punto.
+
+| Fondo | Wordmark | Punto | Archivo |
+|---|---|---|---|
+| Blanco / crema / gris claro | tinta `#12100E` | verde | `onia-logo.svg` |
+| Oscuro (tinta, negro) | claro `#F4F6F4` | verde | `onia-logo-dark.svg` |
+| **Verde** `#00D26A` | tinta | **tinta** — el verde ya es el fondo | `onia-logo-mono.svg` |
+| Foto o color medio | claro | verde | `onia-logo-dark.svg` (sobre zona oscura de la foto) |
+| Una sola tinta (sello, bordado, grabado, serigrafía) | tinta | tinta | `onia-logo-mono.svg` |
+
+**Prohibido:**
+1. **El wordmark en verde.** Contraste 1,9:1 sobre blanco — ilegible, y es la marca visual del SaaS barato de LatAm.
+2. **El punto en otro color.** El verde es el activo distintivo; cambiarlo lo anula.
+3. **Punto verde sobre fondo verde.** El gesto desaparece; ahí va todo en tinta.
+4. **Degradados, sombras, contornos o glow** en cualquier versión.
+
+**Sobre fotos:** el logo va siempre sobre una zona lisa y oscura de la imagen, en versión
+clara. Si no hay zona limpia, se pone una barra o un bloque de color sólido detrás —
+nunca se baja la opacidad del logo.
+
 ## 5-bis. El juego ON·IA — cómo se arma (decisión Sergio, 2026-07-27)
 
 **El nombre es "Onia". Una palabra, siempre.** El juego ON+IA es un **recurso
