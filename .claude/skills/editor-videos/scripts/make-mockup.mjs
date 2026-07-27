@@ -27,8 +27,9 @@
 //   · Sin dependencias nuevas: playwright se resuelve desde el workspace del panel.
 import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { existsSync } from "node:fs";
-import { dirname, extname, resolve } from "node:path";
+import { dirname, extname, resolve, join } from "node:path";
 import { createRequire } from "node:module";
+import { fileURLToPath } from "node:url";
 
 // playwright vive en el workspace de la app del panel (no instalamos nada nuevo)
 const require = createRequire("C:/dev/proyectos/onia-hermes/web-factory/apps/site/package.json");
@@ -106,6 +107,32 @@ async function dataUri(file) {
   const buf = await readFile(abs);
   return `data:${mime};base64,${buf.toString("base64")}`;
 }
+// ---- tipografia de marca → @font-face con data URI --------------------------
+// Trio oficial de ONIA_BRAND_IDENTITY_2026 §2. Van EMBEBIDAS como data URI por
+// la misma razon que las imagenes: este script bloquea toda request de red, y
+// ademas asi el PNG sale identico en Windows y en el VPS sin depender de que la
+// fuente este instalada en el sistema. Antes se usaba el stack del sistema
+// ("Segoe UI"), que es justamente lo que hacia que un reel mezclando apoyos
+// estaticos y animados mostrara DOS tipografias distintas.
+const FONTS_DIR = resolve(fileURLToPath(new URL("../../../../", import.meta.url)), "hermes-content/brand/fonts");
+const BRAND_FONTS = [
+  ["Bricolage Grotesque", "BricolageGrotesque-var-latin.woff2", "500 700"],
+  ["DM Sans", "DMSans-var-latin.woff2", "400 500"],
+  ["Spline Sans Mono", "SplineSansMono-var-latin.woff2", "400 500"],
+];
+const fontFaceCss = (
+  await Promise.all(
+    BRAND_FONTS.map(async ([family, file, weight]) => {
+      const abs = join(FONTS_DIR, file);
+      if (!existsSync(abs)) {
+        fail(`falta la fuente de marca ${file} en ${FONTS_DIR} — corré hermes-content/brand/fonts/build-onia-fonts.py`);
+      }
+      const b64 = (await readFile(abs)).toString("base64");
+      return `@font-face{font-family:"${family}";src:url(data:font/woff2;base64,${b64}) format("woff2");font-weight:${weight};font-style:normal;font-display:block}`;
+    }),
+  )
+).join("\n");
+
 const esc = (s) =>
   String(s ?? "")
     .replace(/&/g, "&amp;")
@@ -119,9 +146,17 @@ const esc = (s) =>
 function baseCss(width) {
   const dark = THEME !== "light";
   return `
+  ${fontFaceCss}
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
     --u: ${(width / 1000).toFixed(4)}px;
+    /* Roles del trio: display = titulares y etiquetas · body = texto de apoyo
+       · mono = cifras y URLs. Mismos roles que las composiciones animadas de
+       scripts/hyperframes, para que un reel que mezcla apoyos estaticos y
+       animados se lea como UNA sola pieza. */
+    --font-display: "Bricolage Grotesque", sans-serif;
+    --font-body: "DM Sans", sans-serif;
+    --font-mono: "Spline Sans Mono", monospace;
     --accent: ${ACCENT};
     --ink:      ${dark ? "#0A0C11" : "#FFFFFF"};
     --ink-2:    ${dark ? "#15181F" : "#F4F5F7"};
@@ -135,7 +170,7 @@ function baseCss(width) {
   /* fondo transparente de punta a punta: omitBackground conserva el alpha */
   html, body { background: transparent; }
   body {
-    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-family: var(--font-body);
     color: var(--text);
     -webkit-font-smoothing: antialiased;
     text-rendering: geometricPrecision;
@@ -161,6 +196,7 @@ function baseCss(width) {
   .rail { position: absolute; left: 0; top: 0; bottom: 0; width: calc(12*var(--u));
           background: linear-gradient(180deg, var(--accent), color-mix(in oklab, var(--accent) 62%, #000)); }
   .eyebrow { display: flex; align-items: center; gap: calc(14*var(--u));
+             font-family: var(--font-display);
              font-size: calc(26*var(--u)); font-weight: 700; letter-spacing: .18em;
              text-transform: uppercase; color: var(--muted); }
   .eyebrow i { width: calc(14*var(--u)); height: calc(14*var(--u)); border-radius: 999px;
@@ -190,13 +226,15 @@ function tplStat(width) {
           padding: calc(62*var(--u)) calc(80*var(--u)) calc(58*var(--u)) calc(84*var(--u)); }
   ${HEIGHT ? `.stat { height: ${HEIGHT}px; display: flex; flex-direction: column; justify-content: center; }` : ""}
   .stat .value {
-    font-size: calc(var(--fs)*var(--u)); font-weight: 800; line-height: .94;
+    font-family: var(--font-mono);
+    font-size: calc(var(--fs)*var(--u)); font-weight: 500; line-height: .94;
     letter-spacing: -.045em; font-variant-numeric: tabular-nums;
     margin-top: ${TITLE ? "calc(24*var(--u))" : "0"}; white-space: nowrap; width: max-content;
     background: linear-gradient(180deg, var(--text) 78%, color-mix(in oklab, var(--text) 72%, var(--ink)));
     -webkit-background-clip: text; -webkit-text-fill-color: transparent;
   }
-  .stat .label { margin-top: calc(22*var(--u)); font-size: calc(38*var(--u)); font-weight: 800;
+  .stat .label { margin-top: calc(22*var(--u)); font-family: var(--font-display);
+                 font-size: calc(38*var(--u)); font-weight: 700;
                  letter-spacing: .13em; text-transform: uppercase; color: var(--accent); }
   .stat .sub { margin-top: calc(12*var(--u)); font-size: calc(31*var(--u)); font-weight: 500;
                letter-spacing: -.01em; color: var(--muted); }
@@ -241,9 +279,10 @@ async function tplBrowser(width) {
   .url { flex: 1 1 auto; display: flex; align-items: center; gap: calc(12*var(--u));
          height: calc(50*var(--u)); padding: 0 calc(22*var(--u)); border-radius: 999px;
          background: rgba(0,0,0,.34); border: 1px solid var(--hairline);
-         font-size: calc(25*var(--u)); font-weight: 600; color: var(--muted);
+         font-family: var(--font-mono);
+         font-size: calc(25*var(--u)); font-weight: 400; color: var(--muted);
          letter-spacing: -.01em; overflow: hidden; white-space: nowrap; }
-  .url b { color: var(--text); font-weight: 700; }
+  .url b { color: var(--text); font-weight: 500; }
   .lock { width: calc(19*var(--u)); height: calc(19*var(--u)); flex: 0 0 auto; opacity: .8; }
   .stack { display: flex; gap: calc(9*var(--u)); flex: 0 0 auto; }
   .stack i { width: calc(26*var(--u)); height: calc(3*var(--u)); border-radius: 999px; background: var(--muted); opacity: .7; }
@@ -252,7 +291,8 @@ async function tplBrowser(width) {
   .empty { padding: calc(96*var(--u)) calc(72*var(--u)); min-height: calc(520*var(--u));
            display: flex; flex-direction: column; justify-content: center; gap: calc(18*var(--u));
            background: radial-gradient(120% 100% at 0% 0%, color-mix(in oklab, var(--accent) 14%, transparent), transparent 60%); }
-  .empty h1 { font-size: calc(70*var(--u)); font-weight: 800; letter-spacing: -.035em; line-height: 1.02; }
+  .empty h1 { font-family: var(--font-display);
+              font-size: calc(70*var(--u)); font-weight: 700; letter-spacing: -.035em; line-height: 1.02; }
   .empty p  { font-size: calc(31*var(--u)); font-weight: 500; color: var(--muted); }
   .empty .bars { display: flex; gap: calc(14*var(--u)); margin-top: calc(28*var(--u)); }
   .empty .bars i { height: calc(12*var(--u)); border-radius: 999px; background: var(--hairline); }
@@ -304,7 +344,8 @@ async function tplPhone(width) {
               gap: calc(14*var(--u)); padding: calc(74*var(--u)) calc(56*var(--u)) calc(96*var(--u));
               /* el glow acompaña al texto (abajo), no un vacío negro con luz arriba */
               background: radial-gradient(130% 62% at 50% 100%, color-mix(in oklab, var(--accent) 26%, transparent), transparent 66%); }
-  .ph-empty h1 { font-size: calc(72*var(--u)); font-weight: 800; letter-spacing: -.035em; line-height: 1.04; }
+  .ph-empty h1 { font-family: var(--font-display);
+                 font-size: calc(72*var(--u)); font-weight: 700; letter-spacing: -.035em; line-height: 1.04; }
   .ph-empty p { font-size: calc(34*var(--u)); color: var(--muted); font-weight: 500; }
   `;
   const inner = img
@@ -327,14 +368,16 @@ function tplQuote(width) {
            ${HEIGHT ? `height: ${HEIGHT}px; display: flex; flex-direction: column; justify-content: center;` : ""} }
   /* z-index: la comilla es textura, va DETRÁS del texto (ver nota de pintado en .stat) */
   .quote .mark { position: absolute; z-index: 0; left: calc(34*var(--u)); top: calc(-46*var(--u));
-                 font-size: calc(320*var(--u)); line-height: 1; font-weight: 800;
+                 font-family: var(--font-display);
+                 font-size: calc(320*var(--u)); line-height: 1; font-weight: 700;
                  color: color-mix(in oklab, var(--accent) 30%, transparent); pointer-events: none; }
-  .quote p { position: relative; z-index: 1; font-size: calc(62*var(--u)); font-weight: 700;
+  .quote p { position: relative; z-index: 1; font-family: var(--font-display);
+             font-size: calc(62*var(--u)); font-weight: 700;
              line-height: 1.16; letter-spacing: -.03em; text-wrap: balance; }
   .quote .who { position: relative; z-index: 1; }
   .quote p em { font-style: normal; color: var(--accent); }
   .quote .who { display: flex; align-items: center; gap: calc(18*var(--u)); margin-top: calc(40*var(--u));
-                font-size: calc(29*var(--u)); font-weight: 600; color: var(--muted); letter-spacing: -.01em; }
+                font-size: calc(29*var(--u)); font-weight: 500; color: var(--muted); letter-spacing: -.01em; }
   .quote .who i { width: calc(58*var(--u)); height: calc(4*var(--u)); border-radius: 999px; background: var(--accent); }
   `;
   const body = `<div class="card quote">

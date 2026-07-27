@@ -9,7 +9,7 @@
 // Uso:
 //   node karaoke-captions.mjs --segments <segments.json> --video <in.mp4> [--out final.mp4]
 //     [--ass-out x.ass] [--srt-out x.srt] [--words-per-line 4] [--max-dur 1.6] [--gap-break 0.6]
-//     [--margin-v 220] [--font-size N] [--font "Arial Black"] [--outline 4] [--shadow 2]
+//     [--margin-v 220] [--font-size N] [--font "Bricolage Grotesque"] [--outline 4] [--shadow 2]
 //     [--active-color "#FFFF00"] [--base-color "#FFFFFF"] [--fix "Fergio=Sergio,otro=cosa"]
 //     [--no-upper] [--dry-run]
 //
@@ -18,10 +18,11 @@
 //
 // Por DEFECTO QUEMA el video (es local y gratis). --dry-run solo escribe el .ass e imprime el ffmpeg.
 // Determinista: sin Date.now / Math.random.
-import { readFile, writeFile, mkdir } from "node:fs/promises";
+import { readFile, writeFile, mkdir, copyFile } from "node:fs/promises";
 import { existsSync, statSync } from "node:fs";
 import { spawnSync } from "node:child_process";
 import { dirname, join, basename, extname, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 
 // ---------------------------------------------------------------- flags
 const args = process.argv.slice(2);
@@ -46,7 +47,18 @@ const MAX_DUR = Number(flag("max-dur", "1.6"));         // s: largo máximo de u
 const GAP_BREAK = Number(flag("gap-break", "0.6"));     // s: pausa que corta frase (no dejar el sub colgado)
 const MARGIN_V = Number(flag("margin-v", "220"));       // px desde abajo (220 = no tapa la cara en 1080x1920)
 const MARGIN_H = Number(flag("margin-h", "80"));
-const FONT = flag("font", "Arial Black");
+// Tipografia de marca (ONIA_BRAND_IDENTITY_2026 §2): el subtitulo es el
+// TITULAR del video vertical, asi que va en la display de la marca. Antes era
+// "Arial Black", que ademas de no ser de marca depende de que la fuente este
+// instalada en la maquina — en el VPS no esta y libass caia a otra cosa.
+const FONT = flag("font", "Bricolage Grotesque");
+// Archivo de la fuente para libass. ffmpeg NO lee woff2 y no sabe elegir una
+// instancia de un variable, por eso se versiona una estatica de peso 700.
+const BRAND_FONT_FILE = resolve(
+  fileURLToPath(new URL("../../../../", import.meta.url)),
+  "hermes-content/brand/fonts/BricolageGrotesque-Bold.ttf",
+);
+const FONTS_SUBDIR = "_fonts"; // relativo al .ass; se le pasa a libass por fontsdir
 const UPPER = !has("no-upper");
 const DRY = has("dry-run");
 const FIX = flag("fix", "");
@@ -92,7 +104,11 @@ const audioCodec = (probe("stream=codec_name", "a:0") || [])[0] || null;
 const FONT_SIZE = Math.round(Number(flag("font-size", String(Math.max(18, Math.round(H * 0.0375))))));
 const OUTLINE = Number(flag("outline", String(Math.max(2, Math.round(FONT_SIZE / 18)))));   // 4 @ 72px
 const SHADOW = Number(flag("shadow", String(Math.max(1, Math.round(FONT_SIZE / 36)))));     // 2 @ 72px
-// Arial Black ya es peso black: no pedir bold sintético encima (queda pastoso).
+// Bold=-1 pide una cara bold REAL. La estática que enviamos ya está marcada como
+// Bold (usWeightClass 700 + fsSelection), así que libass la matchea y NO aplica
+// engorde sintético — el trazo es el dibujo real del peso 700 del tipógrafo.
+// Las fuentes que YA son black/heavy (Arial Black) van con 0: pedirles bold
+// encima las deja pastosas.
 const BOLD = /black|heavy/i.test(FONT) ? 0 : -1;
 
 // ---------------------------------------------------------------- datos
@@ -253,12 +269,32 @@ if (SRT_OUT) {
 // "C:\..." dentro del filtro subtitles= en Windows (los dos puntos y el backslash lo rompen).
 const assDir = dirname(ASS_OUT), assName = basename(ASS_OUT);
 const audioArgs = audioCodec && /^(aac|mp3|opus)$/.test(audioCodec) ? ["-c:a", "copy"] : ["-c:a", "aac", "-b:a", "192k"];
-const ffArgs = ["-y", "-hide_banner", "-i", VIDEO, "-vf", `subtitles=${assName}`,
+
+// La fuente se COPIA junto al .ass y se le pasa a libass por `fontsdir`. Sin
+// esto libass la busca en las fuentes INSTALADAS del sistema: en Windows
+// encontraba una cosa y en el VPS otra (o ninguna), y el subtítulo cambiaba de
+// dibujo según la máquina. Con fontsdir el archivo viaja con el render.
+// Va en un subdirectorio relativo a propósito: cwd de ffmpeg ya es assDir, así
+// se esquiva el escapado de rutas absolutas de Windows dentro del filtro (los
+// dos puntos de "C:" y las barras invertidas lo rompen).
+const fontsDirAbs = join(assDir, FONTS_SUBDIR);
+if (!DRY) {
+  if (!existsSync(BRAND_FONT_FILE)) {
+    console.error(`no existe la fuente de marca: ${BRAND_FONT_FILE}\ncorré: python hermes-content/brand/fonts/build-onia-fonts.py`);
+    process.exit(1);
+  }
+  await mkdir(fontsDirAbs, { recursive: true });
+  await copyFile(BRAND_FONT_FILE, join(fontsDirAbs, basename(BRAND_FONT_FILE)));
+}
+
+const vf = `subtitles=${assName}:fontsdir=${FONTS_SUBDIR}`;
+const ffArgs = ["-y", "-hide_banner", "-i", VIDEO, "-vf", vf,
   "-c:v", "libx264", "-preset", "veryfast", "-crf", "20", "-pix_fmt", "yuv420p",
   ...audioArgs, "-movflags", "+faststart", OUT];
 // Versión copy-paste (path del .ass escapado como lo quiere el filtro: / y \: )
 const assFilterPath = ASS_OUT.replace(/\\/g, "/").replace(/:/g, "\\:");
-const ffPrintable = `ffmpeg -y -i "${VIDEO}" -vf "subtitles=${assFilterPath}" -c:v libx264 -preset veryfast -crf 20 -pix_fmt yuv420p ${audioArgs.join(" ")} -movflags +faststart "${OUT}"`;
+const fontsFilterPath = fontsDirAbs.replace(/\\/g, "/").replace(/:/g, "\\:");
+const ffPrintable = `ffmpeg -y -i "${VIDEO}" -vf "subtitles=${assFilterPath}:fontsdir=${fontsFilterPath}" -c:v libx264 -preset veryfast -crf 20 -pix_fmt yuv420p ${audioArgs.join(" ")} -movflags +faststart "${OUT}"`;
 
 // ---------------------------------------------------------------- resumen (REGLA DE ORO: mostrar antes)
 const fmt = (s) => `${String(Math.floor(s / 60)).padStart(2, "0")}:${(s % 60).toFixed(2).padStart(5, "0")}`;
