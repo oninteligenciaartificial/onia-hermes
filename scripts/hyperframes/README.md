@@ -86,6 +86,26 @@ la geometría y renderiza. La fuente de verdad es el `index.html`.
    `--ease-out-expo` de web-factory). No sustituir por `power4.out`.
 5. El acento de las tarjetas es una **regla horizontal corta al pie**, nunca una
    franja vertical en el borde izquierdo (patrón prohibido por diseño).
+6. **La tipografía es la de marca y se autohospeda.** El trío
+   (`ONIA_BRAND_IDENTITY_2026.md` §2) es Bricolage Grotesque para titulares y
+   etiquetas, DM Sans para texto de apoyo y Spline Sans Mono para cifras y URLs.
+   Se usan por token (`var(--font-display)` / `--font-body` / `--font-mono`),
+   nunca escribiendo el nombre de la familia suelto, y **jamás** una fuente del
+   sistema (`system-ui`, `Segoe UI`): el renderer las aliasea a Roboto y el frame
+   pasa a depender de la máquina.
+   - Los `.woff2` viven en `compositions/<slug>/fonts/` y **no se editan a
+     mano**: los reparte `hermes-content/brand/fonts/build-onia-fonts.py`, que es
+     la fuente única. Tienen que estar adentro de la composición porque
+     HyperFrames sirve cada una con su carpeta como raíz y rechaza por lint los
+     assets con `../` por encima.
+   - Peso máximo de Bricolage: **700**. El 800 está prohibido por marca y ni
+     siquiera existe en el archivo (los ejes vienen recortados).
+   - `render.mjs` copia `fonts/` al proyecto temporal. Si algún día se toca esa
+     copia, el render **no falla**: el file server tira 404 y el frame sale con
+     una fuente del sistema, en silencio. Se detecta mirando el log del
+     compilador — tiene que decir `Embedded local font file: fonts/…`.
+     `hyperframes check` NO lo detecta (corre dentro de la composición, donde
+     `fonts/` sí existe).
 
 ---
 

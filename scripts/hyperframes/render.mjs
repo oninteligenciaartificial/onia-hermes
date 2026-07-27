@@ -158,6 +158,27 @@ const buildDir = resolve(__dirname, ".build", slug);
 rmSync(buildDir, { recursive: true, force: true });
 mkdirSync(buildDir, { recursive: true });
 
+// Las fuentes de marca tienen que VIAJAR al proyecto temporal. El @font-face de
+// la composicion las pide como "fonts/...", relativo a la raiz del proyecto, y
+// la raiz durante el render es buildDir — no la carpeta de la composicion.
+//
+// Sin esta copia el render arrancaba igual pero el file server devolvia
+// "404 /fonts/BricolageGrotesque-var-latin.woff2" y el frame salia con una
+// fuente del sistema: exactamente el no-determinismo que la tipografia
+// autohospedada viene a eliminar, y encima MUDO. `hyperframes check` no lo
+// detecta porque corre dentro de la composicion, donde fonts/ si existe.
+// Por eso se falla fuerte si el HTML pide fonts/ y la carpeta no esta.
+const fontsSrc = join(dirname(srcHtml), "fonts");
+if (html.includes('url("fonts/')) {
+  if (!existsSync(fontsSrc)) {
+    fail(
+      `${COMP} referencia fonts/ pero no existe ${fontsSrc}\n` +
+        "  corre: python hermes-content/brand/fonts/build-onia-fonts.py",
+    );
+  }
+  cpSync(fontsSrc, join(buildDir, "fonts"), { recursive: true });
+}
+
 // La imagen se COPIA al proyecto (self-contained) en vez de viajar como data URI:
 // una captura de 2 MB en base64 no entra en la linea de comandos de Windows.
 const MIME_EXT = [".png", ".jpg", ".jpeg", ".webp", ".gif", ".avif"];
