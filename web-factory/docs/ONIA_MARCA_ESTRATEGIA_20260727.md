@@ -63,13 +63,28 @@ criterio de layout, necesita una unidad.
 **negro cálido**, no blanco. En claro el verde solo funciona como marca pequeña junto
 a una palabra. **El botón "Aprobar" es verde con texto negro cálido**, nunca blanco.
 
-### 2.4 El avatar de WhatsApp NO es verde
+### 2.4 El tile 1:1 — DECIDIDO: fondo verde, logo negro
 
-`#00D26A` (matiz ~150°) y el verde de WhatsApp `#25D366` (~142°) están a 8°. A 40px
-son el mismo color — y WhatsApp es el canal de venta real.
+> **Corrección 2026-07-27, ratificada por Sergio.** Esta sección decía antes lo
+> contrario ("tile negro, nunca verde"). Ese texto hizo que se regeneraran los
+> iconos en tinta, contra la marca que Sergio ya tenía publicada. Se revirtió.
+> **Vale lo de abajo. No re-litigar.**
 
-**Regla:** el tile 1:1 (avatar, favicon, perfil) es **negro cálido con el cuadrado
-adentro** (~28% del ancho). Nunca tile verde lleno.
+**Regla:** el tile 1:1 (avatar, favicon, perfil, app icon) es **fondo verde
+`#00D26A` con el logo en negro cálido `#12100E`**.
+
+Archivos: `onia-icon.svg` (cuadrado), `onia-icon-rounded.svg` (favicon, apple-touch),
+`onia-icon-circle.svg` (avatares de redes). Los genera `scripts/export-icons.mjs`.
+
+**Ya está en uso público:** es el avatar de Instagram desde el 2026-07-27. Cambiarlo
+ahora rompería el reconocimiento que ya empezó a acumularse — que es justamente lo
+único que un logo tiene que hacer.
+
+**La objeción que existía, y por qué no gana:** `#00D26A` (matiz ~150°) y el verde de
+WhatsApp `#25D366` (~142°) están a 8°, así que a 40px el tile puede leerse como
+"un chat más". Es un riesgo real pero acotado: lo resuelve el contraste del logo negro
+adentro, no cambiar el fondo. Si algún día se mide que el avatar no se distingue en la
+lista de WhatsApp, la salida es **oscurecer o saturar el verde del tile**, no invertirlo.
 
 ### 2.5 Regla del 2%
 
@@ -82,7 +97,7 @@ Un acento que aparece en todas partes deja de ser acento.
 | Superficie | Dónde | Significa | Regla |
 |---|---|---|---|
 | Logo | Tittle de la i | El origen | Nunca se toca ni se recolorea |
-| Avatar/favicon | Tile negro, cuadrado adentro | Presencia | Único lugar donde va solo |
+| Avatar/favicon | **Tile verde, logo negro** (§2.4) | Presencia | Único lugar donde va solo |
 | Post/carrusel | Inicio de cada línea de resultado | "Se hizo solo" | Máx. 5 por pieza |
 | Video vertical | **Una sola vez**, en el resultado | El clímax | Nunca en la intro |
 | Propuesta/PDF | Bullets de "qué hace Onia" | Automático vs manual | Lo manual va con guion |
