@@ -21,6 +21,15 @@
       "autoPort": true
     },
     {
+      "name": "dentagest",
+      "runtimeExecutable": "cmd",
+      "runtimeArgs": [
+        "/c",
+        "cd /d C:\\dev\\proyectos\\DentaGest\\dental-saas && npm run dev -- --port 3210"
+      ],
+      "port": 3210
+    },
+    {
       "name": "web-factory-out",
       "runtimeExecutable": "node",
       "runtimeArgs": ["web-factory/scripts/serve-out.mjs", "4330"],
