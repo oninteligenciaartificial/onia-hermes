@@ -155,13 +155,31 @@ TikTok una vez cada 30 días. Lo único caro de cambiar es el nombre de marca.
 que confíe sus datos tributarios, un `.com.bo` con la matrícula SEPREC en el pie **genera
 confianza**. Es un activo de venta, no un techo.
 
-| Dominio | Estado | Acción |
-|---|---|---|
-| `onia.com` | ❌ Onia LLC (swimwear), marca USPTO registrada | Descartar |
-| `onia.ai` | ❌ empresa de agentes de voz (Virginia) | Descartar |
-| **`onia.app`** | ⏳ **expira 2026-10-20** | **Contratar backorder ANTES.** Único tiro realista |
-| `onia.bo` | parece libre en NIC.bo | Comprar, es barato, redirige |
-| `onia.co` / `onia.io` | sin verificar | Plan B si cae el backorder |
+Verificado en vivo el 2026-07-27 por RDAP, WHOIS puerto 43 y DNS:
+
+| Dominio | Estado | Precio real | Acción |
+|---|---|---|---|
+| **`onia.bo`** | ✅ **LIBRE** — WHOIS oficial devuelve "Nombre de dominio no registrado" (verificado con control: `onia.com.bo` sí devuelve ficha de titular) | **Bs 980/año** | 🥇 **COMPRAR YA** |
+| `onia.com.bo` | suyo, activo en Vercel | Bs 280/año | mantener |
+| **`oniahq.com`** | ✅ libre (RDAP Verisign 404, sin DNS) | año 1 $0,01 · **renovación $19,99/año** · Hostinger vende **máx. 3 años → ~$40 upfront, no $0,01** | 🥈 opcional |
+| `onia.app` | registrado en **Registrar.eu**, vence **2026-10-20** | — | 🥉 **vigilancia pasiva, NO gastar** |
+| `onia.co` | registrado y **parkeado** (lander GoDaddy/Afternic), vence 2027-03 | reventa 4 cifras | descartar |
+| `onia.io` | registrado y **parkeado**, vence 2027-11 | reventa 4 cifras | descartar |
+| `onia.com` | Onia LLC (swimwear) — Shopify, **vence 2033** | — | cerrado |
+| `onia.ai` | agentes de voz (Virginia), vence 2027 | — | cerrado |
+
+**`onia.bo` no exige presencia legal boliviana** — NIC Bolivia solo restringe `gob.bo`, `edu.bo`,
+`int.bo` y `mil.bo`. Con la matrícula SEPREC califican de sobra.
+Fuentes: [nic.bo whois](https://nic.bo/whois.php) · [precios nic.bo](https://nic.bo/index.php#precios) · [Hostinger .com](https://www.hostinger.com/tld/com-domain)
+
+> ⚠️ **Corrección sobre `onia.app`: el backorder NO conviene.** El dominio está en
+> **Registrar.eu**, que **no es partner de las plataformas de subasta de expirados**
+> (GoDaddy Auctions, NameJet, SnapNames) → lo más probable es que caiga al **drop público**,
+> no a subasta, y el drop real no es el 20-oct sino **~19-26 de diciembre de 2026** (ciclo
+> `.app`: ~30 días de gracia + ~30 de redención + 5 de pending delete ≈ 65 días; ventanas
+> **NO VERIFICADAS** en la política oficial de Google Registry). Un dominio de 4 letras tiene
+> competencia alta: probabilidad **baja** y costo que puede escalar a cientos de USD.
+> **Con 11 semanas de runway, no poner plata ahí.** Vigilancia pasiva hasta diciembre.
 
 > **Cambiar de dominio es un redirect.** Twitter → x.com, Facebook → meta.com, sin perder
 > nada. Por eso el TLD **no debe manejar la decisión de marca**. La causalidad va al revés:
@@ -340,8 +358,9 @@ un nombre propio de plataforma, siempre como "X by Onia", nunca standalone.
 | 4 | Instagram `@oniaagency` → **`@oniahq`** + bio "Plataforma", no "Agencia" | — | pendiente |
 | 5 | TikTok `onia.bo` → `oniahq` | Sergio | pendiente (1 cambio / 30 días) |
 | 6 | Business Portfolio Meta → nombre legal `OniaAgency` exacto | Sergio | **bloquea la verificación** |
-| 7 | Backorder de `onia.app` (expira 20-oct-2026) | Sergio | 12 semanas |
-| 8 | Comprar `onia.bo` en NIC.bo | Sergio | barato, redirige |
+| 7 | **Comprar `onia.bo`** en nic.bo — **Bs 980/año, libre HOY** | Sergio | 🥇 el único gasto irreversible que vale |
+| 8 | `oniahq.com` — opcional, ~$40 upfront (3 años) | Sergio | 🥈 no cambia ninguna venta esta semana |
+| 8b | `onia.app` — **vigilancia pasiva, sin gastar**. Drop real ~19-26-dic-2026 | Sergio | 🥉 |
 | 9 | Búsqueda SENAPI PI-112 "ONIA" clase 42 (Bs 75) | Sergio | P0 antes de gastar en registro |
 | 10 | Wordmark Dirección 1 "ia en tinta" (1 SVG + 1 token) | Claude | horas, no días |
 
