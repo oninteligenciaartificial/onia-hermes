@@ -44,7 +44,7 @@ const BROWSER_CANDIDATES = [
 ];
 
 const ACCOUNTS = {
-  onia: { handle: '@oniaagency', name: 'ONIA', personal: false },
+  onia: { handle: '@oniahq', name: 'ONIA', personal: false },
   arthur: { handle: '@arthur', name: 'Arthur', personal: true },
   sergio: { handle: '@sergio', name: 'Sergio', personal: true },
   nuvia: { handle: '@nuvia.bo', name: 'Nuvia', personal: false },
