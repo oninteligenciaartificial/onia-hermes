@@ -72,12 +72,34 @@ Página objetivo: **`1140384625819526`** (hoy "Onia Marketing", categoría "Agen
 | # | Paso | Clic exacto | Qué escribir |
 |---|---|---|---|
 | **A1** | Confirmar que el **tipo de Página** es **Negocio**, no Creador | Página → **Configuración** → **Tipo de página** (Meta consolidó Páginas en Negocio/Creador a fines de 2025) | dejar **Negocio**. ⚠️ Solo se puede cambiar **1 vez cada 7 días** — si está en Creador, cambialo YA y esperá antes de tocar otra cosa |
-| **A2** | **Renombrar la Página** | Meta Business Suite → **Configuración** → **Información de la página** → **Nombre** → Editar → Guardar | escribir exactamente: `OniaAgency` |
+| **A2** | ~~**Renombrar la Página**~~ ✅ **HECHO 2026-07-27** | Ruta REAL (la de acá abajo no existe): `facebook.com/settings/?tab=pages` → **Configuración de la página** → **Nombre** → Editar → Revisar cambio → pide **contraseña** → Solicitar cambio | quedó en **`Onia`**, NO `OniaAgency` — ver nota abajo |
 | **A3** | **Cambiar la categoría** (sacar "Agencia de marketing" del primer lugar) | misma pantalla → **Categorías** → borrar la actual, escribir y elegir del desplegable (hasta **3**, en orden de prioridad) | 1) `Empresa de software` · 2) `Servicio de tecnología de la información` · 3) `Agencia de publicidad` |
 | **A4** | **Cargar el teléfono de la Página** | misma pantalla → **Información de contacto** → Teléfono | `+591 78491375` |
 | **A5** | **Cambiar el email de la Página** | misma pantalla → **Información de contacto** → Email | `business@onia.com.bo` (reemplaza `onia.agency.bo@gmail.com`) |
 | **A6** | **Cargar dirección y sitio web de la Página** | misma pantalla → Dirección / Sitio web | Calle Tulipanes Nro. 9, Zona Norte, Santa Cruz de la Sierra, Bolivia · `https://onia.com.bo` |
 | **A7** | **Descripción corta** (acá va el descriptor comercial, NO en el nombre) | misma pantalla → Descripción | `Sistemas con IA, automatización y chatbots para negocios en Bolivia.` |
+
+> ⛔ **CORREGIDO 2026-07-27 — el bloque de abajo estaba equivocado y se anula.**
+> Fuente que manda: `ONIA_ARQUITECTURA_MARCA_Y_RUTA_GLOBAL_20260727.md` §1 y §7.
+>
+> **El nombre de la Página es `Onia`, no `OniaAgency`.** La razón social va SOLO en:
+> facturas, contratos, SIAT, banco, el **nombre legal declarado en el formulario de
+> verificación** y el **nombre del portfolio**. NO va en la Página, el handle, el wordmark
+> ni el dominio. Son capas distintas y está previsto que no coincidan (razón social de
+> Google = *Google LLC*; de Instagram = *Meta Platforms, Inc.*).
+>
+> El razonamiento viejo ("cuatro coincidencias exactas") sobre-corregía: Meta **nunca pide
+> que la Página coincida** con el registro — solo el portfolio y el formulario. Poner la
+> razón social en la Página no sumaba nada frente al revisor y sí le ponía techo de
+> "agencia de servicios" a una marca que vende plataforma, marketing y productos.
+>
+> **Dato verificado en pantalla el 2026-07-27:** el diálogo de confirmación de Facebook
+> dice textual *"no podrás volver a cambiarle el nombre durante los 60 días siguientes"*,
+> y que la revisión tarda **hasta 3 días**. O sea que **el "60 días" SÍ aplica a Páginas** —
+> la nota de abajo que lo desmentía era incorrecta. Próxima ventana de cambio: ~25-sep-2026.
+
+<details>
+<summary>Razonamiento original del 26-jul (anulado, se conserva por trazabilidad)</summary>
 
 **Por qué el nombre de Página es `OniaAgency` y no `ONIA · Sistemas con IA para tu negocio`** — cambio de criterio respecto del doc del 25/07, con motivo:
 
@@ -88,6 +110,11 @@ Página objetivo: **`1140384625819526`** (hoy "Onia Marketing", categoría "Agen
 Si igual querés descriptor en el nombre, la única variante segura es `OniaAgency - Sistemas con IA` (guion común, sin punto medio). **No** uses `ONIA` a secas: no coincide con ningún papel.
 
 > ⚠️ **Hay enfriamiento entre cambios de nombre de Página** y Meta no publica la cifra. Ignorá el "60 días" que circula: esa regla es de perfiles personales. Hacé A2 una vez y no lo toques más.
+
+</details>
+
+**El punto 2 sigue vigente:** nada de `·` ni símbolos decorativos en el nombre de Página.
+`Onia` a secas los evita por completo.
 
 ### Fase B — Portfolio (Sergio · ~10 min)
 
@@ -206,11 +233,14 @@ Es el error que más verificaciones rebota:
 
 | Campo | Dónde vive | Qué debe decir | Valor ONIA |
 |---|---|---|---|
-| **Nombre del portfolio** | Config. del negocio → Información del negocio | el nombre **público** de la marca | `OniaAgency` ✅ ya está |
+| **Nombre del portfolio** | Config. del negocio → Información del negocio | debe **coincidir con el certificado** | `OniaAgency` ⚠️ hoy dice "OnIA Agency" con espacio → **corregir** |
 | **Nombre legal del negocio** | dentro del formulario de verificación | **exacto del registro oficial** | `OniaAgency` |
-| **Nombre de la Página** | Business Suite → Config. de la Página | describe el negocio, cumple normas de nombres | `OniaAgency` (paso A2) |
+| **Nombre de la Página** | `facebook.com/settings/?tab=pages` → Configuración de la página → Nombre | la **marca**, no la razón social | `Onia` ✅ hecho 2026-07-27 |
 
-Meta **nunca** pide que los tres sean iguales. En ONIA los hacemos iguales **a propósito**, porque la denominación del SEPREC ya es el nombre comercial. Es el camino de menor fricción para el revisor.
+Meta **nunca** pide que los tres sean iguales — solo que el **portfolio** y el **formulario**
+coincidan con el certificado. La Página es marca, no documento (ver
+`ONIA_ARQUITECTURA_MARCA_Y_RUTA_GLOBAL_20260727.md` §0). Igualar los tres era una
+sobre-corrección: no sumaba ante el revisor y le ponía techo de "agencia" a la marca.
 
 ### 3.3 Qué documento subir
 
