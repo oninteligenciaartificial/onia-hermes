@@ -188,10 +188,130 @@ Y LatAm no es un premio consuelo: son ~650M de personas con el mismo problema
 **El gate de la fase 1 no es tiempo, es plata:** no se abre país nuevo sin el vertical #1
 con clientes pagando y margen. Igual que el gate del vertical #2.
 
-**Criterio para elegir el país 1** (a investigar cuando toque, no ahora): régimen de
-facturación electrónica obligatorio y reciente + WhatsApp como canal dominante + ausencia
-de Bsale/Alegra. Candidatos a evaluar: Paraguay, Perú, Ecuador. **No verificado — requiere
-research propio antes de comprometer.**
+### País 1: hipótesis principal = **Paraguay** (research 2026-07-27, parcial)
+
+| País | Ventana de demanda forzada | Bsale | Alegra | Veredicto |
+|---|---|---|---|---|
+| **Paraguay** | **SIFEN/e-Kuatia sigue incorporando grupos hasta 2027** | ❌ no opera | ❌ no opera | ✅ hipótesis principal |
+| Perú | **cerrada** — RS 000075-2026/SUNAT convirtió en emisor electrónico automático a todos el 1-jun-2026 | ✅ opera | ✅ opera | ❌ tarde y disputado |
+| Ecuador | **cerrada** — RIMPE Emprendedor obligado desde 2022; Negocio Popular queda fuera del mandato | ❌ | ❌ | ❌ el mandato ya pasó |
+| Rep. Dominicana | Ley 32-23, micro/pequeños prorrogados a 15-nov-2026 | — | ✅ opera | huso y distancia desfavorables |
+
+**Las tres razones de Paraguay:**
+1. Es el único donde la ventana sigue abierta **en 2027**, que es el año objetivo.
+2. **Ni Bsale ni Alegra operan ahí** (verificado en los selectores de país de sus sitios).
+   Perú tiene a los dos encima.
+3. **`e-Kuatia'i`, la herramienta gratuita del Estado, está capada a contribuyentes con
+   UN local y UN punto de venta.** Toda clínica con dos sillones o ferretería con sucursal
+   queda fuera del gratis. Es la misma brecha que el Portal Web del SIN en Bolivia, donde
+   el pitch ya está construido y probado.
+
+**Verificado contra fuentes oficiales del DNIT (2026-07-27):**
+
+| Dato | Valor | Fuente |
+|---|---|---|
+| Calendario vigente | **7 cortes pendientes**: 01-sep-2026 (G17, G20) · 01-dic-2026 (G18, G21) · 02-mar-2027 (G22) · 01-jun-2027 (G23) · **01-sep-2027 (G24, último hito conocido)** | [RG DNIT 21/2024](https://www.dnit.gov.py/en/web/portal-institucional/w/resolucion-general-dnit-n-21/24) · [RG DNIT 52/2026](https://www.dnit.gov.py/web/portal-institucional/w/dnit-designa-nuevos-facturadores-electr%C3%B3nicos) |
+| Penetración actual | **44.923 facturadores electrónicos** sobre **877.133 contribuyentes activos = ~5%** | [Última Hora](https://www.ultimahora.com/dnit-incorporo-a-5-961-emisores-electronicos-en-menos-de-dos-meses) · [ABC](https://www.abc.com.py/economia/2026/07/27/dnit-registra-1315787-contribuyentes-pero-casi-1-de-cada-3-con-suspension-temporal/) |
+| Objetivo B2B | **93.507 personas jurídicas activas** | ídem |
+| Efecto de cada corte | el timbrado de documentos preimpresos **pierde vigencia al día siguiente** | RG 52/2026 |
+| `e-Kuatia'i` (gratis) | solo pequeños contribuyentes, **1 establecimiento + 1 punto de expedición**. *"Medianos y grandes contribuyentes no pueden acceder"* | [DNIT](https://www.dnit.gov.py/en/web/e-kuatia/ekuatia-i) |
+
+> ⭐ **El hallazgo que más cambia la ecuación: en Paraguay NO hay homologación de proveedores.**
+> Cita textual del FAQ del DNIT: *"la DNIT **no autoriza** a Proveedores de Servicios
+> Tecnológicos para prestar servicios de Facturación Electrónica en el SIFEN"*. Y su página
+> de desarrollo reconoce el mercado de desarrolladores *"nacional **e internacional**"*.
+> El sujeto obligado es siempre el contribuyente paraguayo, no su proveedor de software.
+> Las especificaciones son públicas (Manual Técnico v150) y hay librerías open source
+> publicadas por el propio DNIT.
+> **Contraste con Bolivia:** acá la homologación del sistema ante el SIN es la ruta crítica
+> y está bloqueada por el NIT. En Paraguay ese gate **no existe**.
+> ⚠️ Ojo: varios blogs de vendors afirman que el software debe estar "certificado por la
+> DNIT". **Es falso** y contradice la fuente oficial. No repetirlo.
+>
+> Fuentes: [DNIT FAQ](https://www.dnit.gov.py/en/web/e-kuatia/preguntas-frecuentes) ·
+> [DNIT Desarrollo de Software](https://www.dnit.gov.py/web/e-kuatia/desarrollo-de-software)
+
+**Conflicto de calendario resuelto.** Dos investigaciones se contradijeron sobre Paraguay:
+una decía que el calendario cierra en dic-2026 (G18), otra que sigue hasta sep-2027 (G24).
+**Gana la segunda:** la primera leyó solo la RG DNIT 21/2024; la **RG DNIT 52/2026
+(06-may-2026) agrega los grupos 19-24 y modifica parcialmente la 21/2024**, extendiendo el
+mandato hasta el **01-sep-2027**. Confirmado por la página oficial del DNIT y por
+[VATupdate](https://www.vatupdate.com/2026/05/23/paraguay-extends-sifen-e-invoicing-mandate-to-september-2027/).
+
+### Contendiente serio: República Dominicana
+
+| | Paraguay | **Rep. Dominicana** |
+|---|---|---|
+| Mandato | grupos hasta **01-sep-2027** | **micro/pequeños 15-nov-2026**, prorrogados desde may-2026 (Aviso 06-26); **2027 = año de sanción**, no de gracia |
+| Adopción | 44.923 emisores / 877.133 activos (~5%) | **23.686 → 76.762 emisores entre ene y jul-2026**; MIPYMES = 98% del tejido |
+| Herramienta gratis del Estado | e-Kuatia'i: 1 local + 1 punto de expedición | Facturador Gratuito: **~150 facturas/mes y solo pesos**; lo usa el 54% |
+| Palanca legal | — | ⭐ **Art. 40 Párrafo IV Ley 32-23: quien usa el facturador gratuito PIERDE el incentivo fiscal** (RD$25.000 micro / RD$75.000 pequeños). *La ley te paga por NO usar la herramienta del Estado.* |
+| Huso horario | UTC-3 (1h) | **UTC-4 todo el año = idéntico a Bolivia** |
+| Alegra | ❌ ausente | ✅ **presente** (vía Alanube) |
+| Homologación de proveedor | **no existe** | PSFE requerido |
+
+Panamá aparece como opción B por una mecánica distinta: la Resolución 201-6299 (vigente
+01-ene-2026) capó el facturador gratuito en **B/.36.000/año y 100 documentos/mes**, expulsando
+a +18.000 usuarios. No es una fecha que pasa: es un **umbral permanente** que genera clientes
+nuevos todos los años.
+
+### ⛔ El hallazgo que obliga a corregir la tesis
+
+**"Facturación electrónica + agentes IA + WhatsApp" YA NO es un diferencial defendible.**
+Verificado en los sitios de los propios competidores (2026-07-27):
+
+| Producto | País | Qué vende | Precio |
+|---|---|---|---|
+| **TaxCore SIFEN** | Paraguay | SIFEN + *"agente con IA responde, cotiza y cierra ventas en WhatsApp 24/7"* | tier Pro+IA **$199–299/mes** |
+| Facturazzi | Paraguay | facturación IA "manos libres" + copiloto de voz | ₲159k–359k/mes |
+| FacturaIA | Ecuador | asistente IA **que vive en WhatsApp**, factura al SRI en <2 min | **$14,99/mes** |
+| Zentry | Ecuador | IA en lenguaje natural, emisión y cobro desde WhatsApp | $32,99–60,24 |
+| Alegra Bot | México | 38 funcionalidades IA, facturar por WhatsApp y por voz | incluido |
+| Siigo | CO/EC/MX/PE | facturación por WhatsApp y por **mensaje de voz** | — |
+| **CUCU** | **BOLIVIA** | SIAT API + **MCP server para agentes IA** + agentes WhatsApp/Telegram | Bs 252–1.200/mes |
+| **Rimay** | **BOLIVIA** | inbox WhatsApp+IG+Telegram + SIAT + pagos QR | desde **Bs 290/mes** |
+
+Y **Meta Business Agent** se habilitó en Colombia el 01-jul-2026 a **$2 USD por millón de
+tokens** (~$0,04 por conversación): la capa de "agente IA en WhatsApp" se commoditiza en meses.
+
+**Pero el mismo research trae la contracara, y es buena:**
+
+| Mercado | Saturación | Piso de precio |
+|---|---|---|
+| **Bolivia** | **el MENOS saturado.** Alegra ❌ · Bsale ❌ · Siigo ❌ · YoFacturo en lista de espera | **Bs 290–1.200/mes (~$25–105)** |
+| Paraguay | medio | ~$10 (y e-Kuatia'i gratis) |
+| Perú | saturado (NubeFacT es OSE+PSE, Alegra 75.000 PyMEs, Bsale creciendo) | S/34 (~$9) |
+| Ecuador | **guerra de precios** — 10+ proveedores, 3 ya con IA+WhatsApp, SRI factura gratis | **$8/mes; Quipuy $6/AÑO** |
+
+> **Bolivia sostiene precios 2 a 10 veces más altos que Ecuador por la misma categoría.**
+> Expandirse a Ecuador o Perú sería mudarse de un mercado de $25–105/mes a uno de $8–14/mes
+> con más competidores. **Eso refuerza el gate de la fase 1: profundidad en Bolivia antes que
+> amplitud.** Y obliga a que el foso sea otra cosa: vertical real (dental, ferretería), agentes
+> que hacen trabajo comercial (cobrar, reprogramar, vender) más allá de emitir, o distribución.
+> Emitir facturas por WhatsApp con IA ya lo hace medio continente.
+
+### WhatsApp: el dato que faltaba, y un agujero incómodo
+
+DataReportal **no publica WhatsApp** para ningún país de la región (Meta no vende publicidad
+ahí, así que no hay "advertising reach"). Los datos duros están en los institutos nacionales:
+
+| País | Dato | Fuente |
+|---|---|---|
+| **Paraguay** | **97,5%** de los usuarios de internet usa mensajería — **por encima de redes sociales (84,7%)** | [INE Paraguay, EPHC 2024](https://www.ine.gov.py/noticias/2436/8-de-cada-10-personas-utiliza-internet-en-paraguay) |
+| **Perú** | **98,6%** de quienes usan mensajería usan WhatsApp | [OSIPTEL ERESTEL 2025](https://www.peruinforma.com/erestel-2025-cuales-son-las-herramientas-y-servicios-digitales-que-mas-usan-los-peruanos/) |
+| **BOLIVIA** | **91%, y SEGUNDO detrás de Facebook (94%)** — dato de **diciembre de 2016** | [AGETIC 2016](https://www.lostiempos.com/tendencias/tecnologia/20170701/facebook-whatsapp-redes-sociales-mas-usadas-bolivia) |
+
+> ⚠️ **Premisa propia sin respaldo.** "WhatsApp es el canal dominante en Bolivia" aparece como
+> supuesto en varios docs de estrategia. **El único estudio con metodología publicada es de
+> dic-2016 y ahí WhatsApp iba SEGUNDO.** No hay fuente verificable de 2024-2026. La tesis
+> WhatsApp-first del producto se apoya en una premisa no verificada — conviene medirlo con
+> datos propios (tasa de respuesta real de los chatbots) en vez de citar una cifra que no existe.
+
+> ⚠️ **Nada de esto es decisión tomada.** Sigue sin verificar, en orden de riesgo:
+> (a) **si "ONIA" está registrada en clase 42** en Paraguay (DINAPI) o RD — eso puede tirar
+> abajo la elección de país; (b) retenciones a no domiciliados, IVA a servicios digitales del
+> exterior, y si hace falta entidad local; (c) tasa de informalidad por país (en Panamá el 70%
+> de las microempresas es informal → recorta el mercado real).
 
 ---
 
