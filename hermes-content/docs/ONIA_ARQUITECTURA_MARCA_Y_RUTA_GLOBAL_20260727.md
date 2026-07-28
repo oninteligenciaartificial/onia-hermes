@@ -355,8 +355,9 @@ un nombre propio de plataforma, siempre como "X by Onia", nunca standalone.
 | 1 | Página FB "Onia Marketing" → **`Onia`** | Sergio (pide contraseña) | diálogo abierto, esperando |
 | 2 | Categoría FB: sacar "Agencia de marketing" | — | pendiente |
 | 3 | Usuario FB → `oniahq` | — | pendiente (hoy no tiene usuario) |
-| 4 | Instagram `@oniaagency` → **`@oniahq`** + bio "Plataforma", no "Agencia" | — | pendiente |
-| 5 | TikTok `onia.bo` → `oniahq` | Sergio | pendiente (1 cambio / 30 días) |
+| 4 | Instagram `@oniaagency` → **`@oniahq`** | Sergio | ✅ **HECHO 2026-07-27** (falta revisar que la bio diga "Plataforma", no "Agencia") |
+| 5 | TikTok `onia.bo` → `oniahq` | Sergio | ✅ **HECHO 2026-07-27** |
+| 5b | Repo: `@oniaagency` → `@oniahq` en `carousel_render.js`, su test, `carruseles-onia.md` e `IG_USERNAME` | Claude | ✅ hecho, 23/23 tests verdes (`2272edc2`) |
 | 6 | Business Portfolio Meta → nombre legal `OniaAgency` exacto | Sergio | **bloquea la verificación** |
 | 7 | **Comprar `onia.bo`** en nic.bo — **Bs 980/año, libre HOY** | Sergio | 🥇 el único gasto irreversible que vale |
 | 8 | `oniahq.com` — opcional, ~$40 upfront (3 años) | Sergio | 🥈 no cambia ninguna venta esta semana |
