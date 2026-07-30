@@ -5,7 +5,7 @@ Acá viven **dos piezas distintas** de la misma familia visual:
 1. **El marcador** (esta primera mitad) — la placa chica de esquina que va
    encima del video en **todos** los clips de la serie.
 2. **El tablero de objetivos** ([saltar ahí](#el-tablero-de-objetivos--la-tabla-grande-del-cierre))
-   — la tabla grande con los 18 objetivos, que va **al final** del video
+   — la tabla grande con los 12 objetivos, que va **al final** del video
    semanal de YouTube y en el resumen de fin de semana.
 
 ---
@@ -132,19 +132,36 @@ ffmpeg -i ENTRADA.mp4 -framerate 30 -start_number 1 -i .hermes/video-lab/overlay
 # El tablero de objetivos — la tabla grande del cierre
 
 El marcador de arriba dice **dónde vamos hoy**. El tablero dice **qué falta**:
-las 18 filas del año, cada una con su meta, el valor de hoy y si está cumplida.
-Va **al final del video semanal de YouTube** y en el resumen de fin de semana —
-ocupa el cuadro entero, no es una placa de esquina.
+las 12 filas del semestre, cada una con su meta, el valor de hoy y si está
+cumplida. Va **al final del video semanal de YouTube** y en el resumen de fin de
+semana — ocupa el cuadro entero, no es una placa de esquina.
 
-Arriba lleva el contador general (**«7 de 18 cumplidos»**) y una barra que se
+Arriba lleva el contador general (**«4 de 12 cumplidos»**) y una barra que se
 llena con esa fracción. De un vistazo se ve cuántas van.
 
 |                      | Full (16:9)              | Full vertical (9:16)          |
 | -------------------- | ------------------------ | ----------------------------- |
 | Tamaño               | 1920 × 1080              | 1080 × 1920                   |
 | Para                 | YouTube                  | TikTok · Reels · Shorts       |
-| Cómo acomoda 18 filas| 2 columnas de 9          | 1 columna de 18               |
+| Cómo acomoda 12 filas| 2 columnas de 6          | 1 columna de 12               |
 | Nombre en el comando | `ScoreboardFull`         | `ScoreboardFullVertical`      |
+
+Las 12 metas (cerradas por Sergio el 2026-07-30):
+
+| # | Categoría   | Objetivo                               | Meta                         |
+|---|-------------|----------------------------------------|------------------------------|
+| 1 | Fiscal      | Homologación SIAT                      | aprobada antes del 15-sep    |
+| 2 | Negocio     | MRR                                    | USD 5.000                    |
+| 3 | Clientes    | Clientes activos                       | 50                           |
+| 4 | Ventas      | Llamadas y demos con dueños de negocio | 250                          |
+| 5 | Expansión   | Clientes internacionales               | 3                            |
+| 6 | Retención   | Churn mensual                          | menor a 5%                   |
+| 7 | Negocio     | Caja neutra personal                   | sí                           |
+| 8 | Empresa     | Primera oficina                        | MRR = 3x alquiler            |
+| 9 | Aprendizaje | Aprender a programar SIN IA            | 15 programas escritos a mano |
+|10 | TikTok      | Videos publicados                      | 155                          |
+|11 | TikTok      | Seguidores                             | 20.000                       |
+|12 | YouTube     | Resúmenes semanales                    | 22                           |
 
 Muestras: [`muestra/objetivos-full.png`](muestra/objetivos-full.png) ·
 [`muestra/objetivos-full-vertical.png`](muestra/objetivos-full-vertical.png).
@@ -157,13 +174,13 @@ propio; el marcador sigue usando `serie-estado.json`).
 Cada objetivo lleva **dos líneas**: cuánto va hoy y en qué estado está.
 
 ```json
-  "clinicas": "12",
-  "clinicasEstado": "progreso",
+  "clientes": "12",
+  "clientesEstado": "progreso",
 ```
 
 | Estado      | Cómo se ve                          | Qué significa            |
 | ----------- | ----------------------------------- | ------------------------ |
-| `cumplido`  | disco verde lleno con tilde         | listo, cuenta en «X de 18» |
+| `cumplido`  | disco verde lleno con tilde         | listo, cuenta en «X de 12» |
 | `progreso`  | anillo verde medio lleno            | arrancado, no terminado  |
 | `pendiente` | anillo gris vacío (y la fila apagada) | sin empezar            |
 
@@ -171,7 +188,7 @@ Cada objetivo lleva **dos líneas**: cuánto va hoy y en qué estado está.
   reconozca cae en `pendiente` — nunca inventa avance.
 - También valen `hecho` / `listo` (= cumplido) y `en curso` / `en progreso`
   (= progreso). Mayúsculas y tildes dan igual.
-- Los números van **sin puntos**: escribís `25000` y sale `25.000`.
+- Los números van **sin puntos**: escribís `20000` y sale `20.000`.
 - El valor de hoy puede ser texto (`"en trámite"`, `"4,2%"`, `"28-nov-2026"`).
 
 **Las metas y los nombres de los objetivos NO están en el JSON**: son el
@@ -179,10 +196,14 @@ compromiso del año y viven dentro de la composición (`ROWS`, en el `<script>`)
 Si cambia una meta, se cambia ahí — en los **dos** archivos, el `full` y el
 `full-vertical`.
 
-Las dos metas binarias (`NIT desbloqueado`, `Caja neutra personal`) dicen
-**«hecho»** y no un tilde: las fuentes de marca vienen recortadas al alfabeto
-latino y un emoji saldría como cuadradito vacío. El tilde de verdad es el que
-está dibujado en la marca de estado, que es un SVG.
+La meta binaria (`Caja neutra personal`) dice **«sí»** y no un tilde: las fuentes
+de marca vienen recortadas al alfabeto latino y un emoji saldría como cuadradito
+vacío. El tilde de verdad es el que está dibujado en la marca de estado, que es
+un SVG.
+
+Las claves del JSON **no siempre se llaman igual que el objetivo**: la fila de
+aprendizaje usa `python` y la de resúmenes de YouTube usa `ytVideos`. La lista
+autoritativa es `ROWS` dentro de cada composición.
 
 ## Paso 2 — Generarlo
 
@@ -198,9 +219,9 @@ Para **TikTok / Reels / Shorts**:
 node scripts/hyperframes/render.mjs --comp ScoreboardFullVertical --out .hermes/video-lab/objetivos/vertical --props-file scripts/hyperframes/data/serie-objetivos.json --duration 10
 ```
 
-`--duration` son los segundos que se ve el tablero. **Son 18 filas para leer:
-menos de 8 segundos no alcanza.** El default de la composición es 8; para el
-cierre de un video de YouTube, 10-12 va mejor. Alargarlo no alarga la animación,
+`--duration` son los segundos que se ve el tablero. **Son 12 filas para leer:
+menos de 7 segundos no alcanza.** El default de la composición es 8; para el
+cierre de un video de YouTube, 10 va cómodo. Alargarlo no alarga la animación,
 alarga el rato que se queda quieto.
 
 Sale una carpeta de PNGs con fondo transparente, igual que el marcador — se pega
@@ -212,13 +233,24 @@ sobre el video con el mismo `ffmpeg` del Paso 3 de arriba.
   grande de la misma pieza, no un diseño nuevo.
 - **Fila de dos líneas.** Arriba: estado + categoría + objetivo. Abajo: `meta X`
   a la izquierda y `hoy Y` a la derecha. Las dos líneas comparten la sangría de
-  la marca y la categoría, así que `meta` y `hoy` quedan alineados en todas las
-  filas: se lee como tabla, no como lista.
+  la marca de estado, así que `meta` y `hoy` arrancan bajo la categoría y quedan
+  alineados en todas las filas: se lee como tabla, no como lista.
+  (En el tablero de 18 esa sangría incluía además la columna de categoría. Con
+  la tipografía más grande de 12 filas, esos ~150 px de más dejaban sin aire el
+  peor caso de la fila SIAT — `meta aprobada antes del 15-sep` +
+  `hoy aprobada el 12-sep-2026` — así que la sangría se acortó.)
 - **El estado se ve por forma Y por color**, y hay leyenda al pie. Las filas
   pendientes se apagan (texto en gris) para que las cumplidas salten.
-- **En 16:9 van 2 columnas de 9.** A una sola columna cada fila quedaría de 38 px
-  de alto y con 1.600 px de aire muerto al medio. En 9:16 al revés: el cuadro da
-  1.530 px de alto útil, así que entran las 18 en una columna con 85 px por fila.
+- **En 16:9 van 2 columnas de 6.** A una sola columna cada fila quedaría de 54 px
+  de alto — menos que las 65 px del tablero de 18 — y habría que ACHICAR la
+  tipografía, justo lo contrario de lo que pide un tablero más corto; además
+  cada fila mediría 1.690 px y el ojo viajaría la pantalla entera desde el
+  objetivo hasta el `hoy`. Con 6+6 la fila pasa de 65 a 104 px, la tipografía
+  sube ~30% (objetivo 20 → 26 px) y, al ser par, las dos columnas terminan a la
+  misma altura: no queda ningún hueco.
+  En 9:16 al revés: el cuadro da ~1.610 px de alto útil, así que las 12 entran
+  en una columna con ~128 px por fila (el tablero de 18 tenía 85) y el objetivo
+  sube de 22 a 31 px, para que se lea en un teléfono sin acercar la cara.
 - **El verde es semántico**: marca lo cumplido y llena la barra de progreso. No
   se usa de adorno.
 
@@ -287,17 +319,17 @@ Los `.woff2` se reparten desde `hermes-content/brand/fonts/build-onia-fonts.py`
 mano**, se regeneran. Si falta la carpeta, el render no falla — sale con una
 fuente del sistema y **en silencio**.
 
-Estado de los gates al construir el tablero (las dos variantes, `v0.7.85`):
+Estado de los gates del tablero de 12 (las dos variantes, `v0.7.85`):
 
 ```
 Layout     0 issues across 9 sample(s)
 Motion     0 errors, 0 warnings
-Contrast   504/504 text checks pass WCAG AA
+Contrast   360/360 text checks pass WCAG AA
 ```
 
-Verificado además con los 18 valores en su máximo (MRR `Bs 125.000 / USD 10.995`,
-60.000 seguidores, 155 videos, fechas largas): mismos gates en verde y nada se
-desborda — ver `muestra/prueba-ancho-objetivos-*.png`.
+Verificado además con los 12 valores en su máximo y las 12 en `cumplido` (MRR
+`USD 10.995`, 60.000 seguidores, 155 videos, `aprobada el 12-sep-2026`): nada se
+desborda ni en 16:9 ni en 9:16 — ver `muestra/prueba-ancho-objetivos-*.png`.
 
 Queda un aviso (no error) de `composition_file_too_large`: el archivo pasa las
 300 líneas contando los comentarios. Se deja así a propósito — las demás
