@@ -1,6 +1,6 @@
-# Onia — Bitácora de los 153 días
+# Onia — Bitácora de los 155 días
 
-> **Documento vivo.** Del 1-ago al 31-dic-2026. Acá se registra TODO: lo que salió bien,
+> **Documento vivo.** Del 30-jul al 31-dic-2026. Acá se registra TODO: lo que salió bien,
 > lo que salió mal, los números reales y las decisiones. Es la fuente del guion de cada
 > episodio y la única memoria confiable de la serie.
 >
@@ -48,7 +48,7 @@
 | 7 | Negocio | **Caja neutra personal** | sí | — | ⬜ |
 | 8 | Empresa | **Primera oficina** | MRR = 3× alquiler | — | ⬜ |
 | 9 | Aprendizaje | **Aprender a programar SIN IA** | 15 programas escritos a mano | 0 | ⬜ |
-| 10 | TikTok | **Videos publicados** | 153 | 0 | ⬜ |
+| 10 | TikTok | **Videos publicados** | 155 | 0 | ⬜ |
 | 11 | TikTok | **Seguidores** | 20.000 | — | ⬜ |
 | 12 | YouTube | **Resúmenes semanales** | 22 | 0 | ⬜ |
 
@@ -104,11 +104,14 @@ Leyenda: ⬜ pendiente · 🟡 en progreso · ✅ cumplido · ❌ caído (con mo
 
 ## 2. Los tres relojes
 
+> **Día 1 = jueves 30 de julio de 2026** (Sergio sube el primer TikTok hoy).
+> **Día 155 = 31 de diciembre de 2026.** Verificado: del 30-jul inclusive al 31-dic son 155 días.
+
 | Reloj | Fecha | Por qué importa |
 |---|---|---|
 | ⏰ **SIAT** | **30-sep-2026** | Sin homologación no hay producto vendible. Es la ventana del país entero |
 | 💸 **Runway** | **~mediados de octubre** | Cae casi el mismo día que el SIAT. Ese choque es el pico de la serie |
-| 🎬 **Serie** | **31-dic-2026** | Día 153 de 153 |
+| 🎬 **Serie** | **31-dic-2026** | Día 155 de 155 |
 
 ---
 
@@ -131,10 +134,17 @@ Formato:
 | `código` | Bloques de 90 min en código de producción | 1 |
 | `soporte` | Tickets abiertos al cerrar el día | 0 |
 
+### Julio 2026
+
+```
+2026-07-30 | DÍA 1 de 155 | conv _ | demos _ | grab _ | código _ | soporte _ | Primer TikTok publicado. Arranca la serie.
+2026-07-31 | DÍA 2 de 155 |
+```
+
 ### Agosto 2026
 
 ```
-(pendiente de arranque el 2026-08-01)
+2026-08-01 | DÍA 3 de 155 |
 ```
 
 ### Septiembre 2026
@@ -166,7 +176,7 @@ Formato:
 Plantilla a copiar:
 
 ```markdown
-### Semana N (2026-MM-DD a 2026-MM-DD) · Días X-Y de 153
+### Semana N (2026-MM-DD a 2026-MM-DD) · Días X-Y de 155
 
 **Números**
 | Métrica | Esta semana | Semana pasada | Δ |
@@ -213,7 +223,7 @@ Plantilla a copiar:
 | 🦷 Cliente #10 del mismo rubro | | | Habilita el vertical #2 |
 | 🌎 Primer cliente internacional | | | |
 | 🏢 Primera oficina | | | Gatillo: MRR = 3× alquiler, 2 meses |
-| 📊 Episodio 153 — el cierre | | | |
+| 📊 Episodio 155 — el cierre | | | |
 
 ---
 
@@ -227,7 +237,7 @@ Plantilla a copiar:
 | 2026-07-27 | Marca única `Onia`, producto `Onia Platform`, handle `@oniahq` | 15 nombres alternativos verificados, 15 quemados. El espacio está agotado | Sergio |
 | 2026-07-27 | Un solo vertical (dental) y un solo país (Bolivia) para la fase 1 | Bolivia es el mercado menos saturado y cobra 2-10× más que Ecuador | Sergio |
 | 2026-07-27 | Meta $5.000 MRR con forma barbell, no 30 clientes uniformes | Con 30 iguales da $1.500. Con 5 anclas + base, cierra | Sergio |
-| 2026-07-27 | TikTok diario (153/153), pero se elimina el "sin fallar" | El contador exige diario; la culpa es lo que mata la serie | Sergio |
+| 2026-07-27 | TikTok diario (155/155), pero se elimina el "sin fallar" | El contador exige diario; la culpa es lo que mata la serie | Sergio |
 | | | | |
 
 ---
