@@ -222,6 +222,9 @@ function readBody(req, maxBytes) {
       if (bytes > maxBytes) {
         aborted = true;
         resolve({ tooLarge: true, body: "" });
+        // Cortar el socket. Sin esto seguimos recibiendo (y descartando) todo lo que el cliente
+        // quiera mandar: el corte de RAM protege el buffer, no el ancho de banda ni el socket.
+        req.destroy();
         return;
       }
       data += chunk;
@@ -236,7 +239,22 @@ function readBody(req, maxBytes) {
 }
 
 function writeJson(res, status, payload) {
-  const body = JSON.stringify(payload);
+  // El stringify va protegido aunque el call site tenga su propio try: `payload` es lo que
+  // devuelve runChatwootTurn, que no se controla desde este archivo. Una referencia circular o
+  // un BigInt tiraría de forma sincrona dentro de un handler `async` -> unhandled rejection ->
+  // proceso caido -> el bot queda mudo para TODOS hasta reinicio manual. Es peor que el
+  // problema que este archivo existe para evitar.
+  let body;
+  try {
+    body = JSON.stringify(payload);
+  } catch (error) {
+    status = 200; // 200 a proposito: un 500 hace que Chatwoot reintente y duplique la respuesta.
+    body = JSON.stringify({
+      ok: false,
+      error: "serializacion_fallida",
+      reason: String(error?.message || error).slice(0, 200),
+    });
+  }
   res.writeHead(status, {
     "content-type": "application/json; charset=utf-8",
     "content-length": Buffer.byteLength(body),
@@ -257,6 +275,12 @@ export function createWebhookServer(deps = {}) {
   const log = typeof deps.log === "function" ? deps.log : (line) => process.stdout.write(`${line}\n`);
 
   return createServer(async (req, res) => {
+    // Defensa en profundidad: si el cliente corta a mitad de la respuesta, un evento `error`
+    // sin listener escala a excepcion no capturada y mata el proceso. Misma familia de riesgo
+    // que el stringify de writeJson.
+    res.on("error", () => {});
+    req.on("error", () => {});
+
     const url = String(req.url || "/");
 
     if (req.method === "GET" && url.split("?")[0].replace(/\/+$/, "") === "/health") {
@@ -312,6 +336,21 @@ export function main(deps = {}) {
   const config = deps.config || getServerConfig();
   const server = createWebhookServer({ ...deps, config });
   const health = getHealthStatus(config, deps.n8nConfig || getN8nEventConfig());
+
+  // Timeouts explicitos en vez del default de Node: un cliente que abre el socket y no manda
+  // nada no puede quedarse colgado ocupando un handle.
+  server.requestTimeout = 30_000;
+  server.headersTimeout = 20_000;
+
+  // Red final: NADA puede tumbar este proceso. Si el bot se cae, queda mudo para todos los
+  // prospectos hasta que alguien lo reinicie a mano — y nadie se entera hasta que un cliente
+  // se queja. Preferimos un proceso vivo con un error logueado.
+  process.on("uncaughtException", (error) => {
+    process.stdout.write(`[onia-webhook] excepcion no capturada (proceso sigue vivo): ${String(error?.stack || error)}\n`);
+  });
+  process.on("unhandledRejection", (reason) => {
+    process.stdout.write(`[onia-webhook] promesa rechazada sin catch (proceso sigue vivo): ${String(reason)}\n`);
+  });
 
   server.listen(config.port, () => {
     process.stdout.write(`[onia-webhook] escuchando en :${config.port}${WEBHOOK_PATH}\n`);
