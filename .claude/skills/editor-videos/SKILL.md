@@ -159,6 +159,19 @@ HyperFrames (render + SFX), imagen barata. Validar la idea antes de generar.
     modelo obedece el estilo "más o menos", y ese "más o menos" cambia entre una imagen y la
     siguiente — con 155 videos eso deja de ser una serie. La retícula, el contraste y el grano
     los pone el script, iguales siempre. Presets: `diario` · `grabado` · `limpio`.
+
+    **Qué modelo usar (medido 2026-07-30, mismo prompt y mismo tratamiento):**
+
+    | Modelo | Costo | Resultado |
+    | --- | --- | --- |
+    | `recraft_v4_1` | 1.25 cr | **El default.** Entiende la dirección editorial: luz dura, grano, época. Desvío tonal 106. |
+    | `z_image` | 0.15 cr | 8× más barato pero devuelve foto de stock moderna: ignora "1960s press photograph". Desvío tonal 78 y **ningún preset lo rescata** (probado con `grabado` y con `normalize`: 78.8 y 78.5). |
+    | Gemini (gratis) | — | **No existe:** el free tier de los modelos de imagen es `limit: 0`, hace falta facturación en el proyecto de Google. La *lectura* de video sí es gratis. |
+
+    El código pone la trama; **la luz y la época las pone el modelo** y ahí el barato no llega.
+    La forma de gastar poco NO es bajar de modelo: es **generar menos imágenes** — la mayoría de
+    los apoyos son tarjetas dibujadas en código (gratis) y la ilustración se reserva para 1 o 2
+    momentos por video. A 1-2 por pieza, la serie de 155 entra en ~300 créditos.
 13. **Master de audio — SIEMPRE el último paso** (pieza propia, PROBADA).
     `node scripts/master.mjs --video renders/final.mp4 --out final/<slug>.mp4 [--fade-out 0.4]`
     → loudnorm de DOS pasadas a **−14 LUFS / −1.5 dBTP** (lo que normalizan TikTok, Reels y
