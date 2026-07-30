@@ -84,7 +84,7 @@
         --stage-h: 1920;
         --u: calc(var(--stage-w) / 1000 * 1px);
         /* --accent lo pisa el runtime desde data-composition-variables. */
-        --accent: #ff7a00;
+        --accent: #00d26a;
         /* --accent-ink = el acento cuando es TEXTO. En oscuro es el acento puro
            (7,4:1 contra la placa). En claro el naranja puro da 2,6:1 contra
            blanco y reprobaria AA, asi que se hunde. */
@@ -494,6 +494,9 @@
 
           // ---- contenido ------------------------------------------------------
           var V = readVars();
+          // El acento tiene que LLEGAR a la imagen: antes solo habia un comentario
+          // diciendo que "lo pisa el runtime" y nadie leia V.accent, asi que ganaba el CSS.
+          if (V.accent) stage.style.setProperty("--accent", String(V.accent));
           var elPlate = document.getElementById("sb-plate");
           var elEyebrow = document.getElementById("sb-eyebrow");
           var elDay = document.getElementById("sb-day");

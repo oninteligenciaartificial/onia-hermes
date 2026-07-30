@@ -422,6 +422,9 @@
           }
 
           var V = readVars();
+          // El acento tiene que LLEGAR a la imagen: antes solo habia un comentario
+          // diciendo que "lo pisa el runtime" y nadie leia V.accent, asi que ganaba el CSS.
+          if (V.accent) stage.style.setProperty("--accent", String(V.accent));
           var eyebrow = String(V.eyebrow || "");
           var elEyebrow = document.getElementById("sf-eyebrow");
           elEyebrow.querySelector("span").textContent = eyebrow;

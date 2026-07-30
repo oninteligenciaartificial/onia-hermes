@@ -71,7 +71,7 @@
         --stage-w: 1920;
         --stage-h: 1080;
         --u: calc(var(--stage-w) / 1000 * 1px);
-        --accent: #ff7a00;
+        --accent: #00d26a;
         /* El acento cuando es TEXTO — ver nota en la variante vertical. */
         --accent-ink: var(--accent);
         --ink: #0a0c11;
@@ -479,6 +479,9 @@
 
           // ---- contenido ------------------------------------------------------
           var V = readVars();
+          // El acento tiene que LLEGAR a la imagen: antes solo habia un comentario
+          // diciendo que "lo pisa el runtime" y nadie leia V.accent, asi que ganaba el CSS.
+          if (V.accent) stage.style.setProperty("--accent", String(V.accent));
           var elPlate = document.getElementById("sb-plate");
           var elEyebrow = document.getElementById("sb-eyebrow");
           var elDay = document.getElementById("sb-day");
