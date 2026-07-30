@@ -91,6 +91,49 @@ desploma.
 vende "ahorrás tiempo" (donde el precio se ve caro): se vende **"recuperás pacientes"** (donde
 se ve barato).
 
+## 4-bis. Contra qué competimos, con datos verificados
+
+De `ONIA_PRECIOS_COMPETENCIA_20260730.md` (32 precios con URL, consultados 2026-07-30).
+
+| | Precio | Qué es |
+|---|---|---|
+| **El cero** | Bs 0 | **Portal Web del SIN.** Gratis y cumple la ley. Es el competidor real |
+| **Piso publicado en Bolivia** | **Bs 85/mes** | Sintic — SIAT con facturas ilimitadas. Sin agenda, sin ficha |
+| **Techo publicado en Bolivia** | **Bs 1.000/mes** | administraTe Premium, con 5 h semanales de consultoría incluidas |
+| **Dentiqa** (dental, lista Bolivia) | USD 89-249 (≈ **Bs 1.058-2.961**) | Agenda, odontograma, historia, chatbot IA. **Sin facturación fiscal de ningún país** |
+| **Clinera.io** (el comparable más cercano) | USD 279-479 + 450 de setup (≈ **Bs 3.317-5.695**) | Mismo concepto: agentes IA con créditos, multi-sucursal |
+
+### El hallazgo que vale más que todos los precios
+
+> **No existe UN SOLO software que cruce agenda + ficha clínica + facturación SIAT.**
+>
+> Los que tienen SIAT (Sintic, administraTe, Emizor) son facturadores o ERPs genéricos: no
+> tienen agenda ni ficha. Los que tienen agenda y ficha (Dentiqa, Doctocliq) **no facturan en
+> Bolivia** — Doctocliq excluye a Bolivia explícitamente de su lista de facturación electrónica.
+>
+> **Ese cruce es el espacio de Onia.** No es una ventaja de features: es una categoría que
+> nadie ocupa.
+
+### Cómo calibra nuestro precio
+
+Bs 320-1.500 queda **por encima del rango publicado boliviano** (85-1.000) y **muy por debajo
+del comparable regional** (Dentiqa desde Bs 1.058, Clinera desde Bs 3.317).
+
+**Eso está bien, y hay que saber defenderlo:** contra el software boliviano competimos con
+algo que ellos no tienen (agenda + clínica + agentes); contra el regional, con algo que ellos
+no tienen (**la ley boliviana**) y a un tercio del precio.
+
+**El riesgo del dato:** ningún precio boliviano en Bs tiene fecha de vigencia verificable. Si
+Sintic o administraTe fijaron tarifa antes de junio 2026, hoy están cobrando ~41% menos en
+dólares sin haberlo decidido. **Ese piso puede subir solo** — no conviene anclarse a él.
+
+### El número que falta y hay que producir
+
+**Cuánto tarda cargar una factura a mano en el Portal del SIN.** No lo publica nadie, ni el SIN
+ni terceros. Es el argumento central contra el competidor gratuito y **se produce
+cronometrándolo con una cuenta propia** — que Onia ya tiene. Una tarde de trabajo, y pasa a ser
+un dato propio que nadie más puede citar.
+
 ## 5. El eje de cobro — la decisión más importante
 
 No es lo mismo qué precio, que **por qué unidad**. El eje decide si Onia crece cuando el cliente
