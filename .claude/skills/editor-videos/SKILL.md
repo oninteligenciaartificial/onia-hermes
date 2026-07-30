@@ -56,9 +56,23 @@ HyperFrames (render + SFX), imagen barata. Validar la idea antes de generar.
 2. **Transcribir con timestamps.** Usar `ver-videos` → `scripts/transcribe.sh <audio>` (Speaches,
    gratis, `verbose_json` → `segments[]` + `words[]`). **Forzar `faster-whisper-small`** (el distil
    del contenedor es English-only y traduce el español). Guardar como `scripts/segments.json`.
-3. **Cut-list.** `node scripts/cut-plan.mjs scripts/segments.json > scripts/cutplan.json`
+3. **Cut-list.** `node scripts/cut-plan.mjs scripts/segments.json --video raw/<crudo>.mp4`
+   ⚠ **`--video` NO es opcional en la práctica.** El silencio se mide en el AUDIO
+   (`silencedetect`), no en los huecos del transcript: Whisper devuelve segmentos CONTIGUOS y
+   las pausas quedan DENTRO de un segmento. Medido 2026-07-30 sobre un clip real de 15s con
+   3.16s de silencio (21%): sin `--video` el plan reportaba **0.00s** y no cortaba nada; con
+   `--video` corta 2.58s. Flags: `--noise -32dB --min-sil 0.45 --pad 0.08 --min-keep 0.35`.
+   (referencia vieja del comando, mismo JSON de salida)
    → detecta silencios largos (gap > umbral), muletillas y repeticiones → imprime la **tabla**
    (`# | Me quedo con | Tiro | Por qué`) + `keep[]` (segmentos a conservar) + el filtro ffmpeg.
+3b. **PREVIEW + costuras** (la otra mitad de la regla de oro, PROBADA).
+   `node scripts/preview.mjs --video raw/<crudo>.mp4 --cutplan scripts/cutplan.json --out-dir renders`
+   → `renders/preview-360.mp4` (el corte YA aplicado, 360p, rápido: se mira y se ESCUCHA antes de
+   gastar un render bueno) + `renders/costuras.jpg` (el cuadro antes y después de cada empalme,
+   uno al lado del otro — ahí se ve si el corte se comió una sílaba). Usa el MISMO filtro que el
+   render final, así lo que se aprueba es lo que sale.
+   **Esto funciona con el panel caído**; el paso 4 (cola de aprobación) es el camino operativo
+   cuando el panel está vivo, no un requisito para cumplir la regla.
 4. **Publicar la review a la cola de aprobación del panel.** (Regla de oro, materializada.)
    `node scripts/publish-cut-review.mjs --cutplan scripts/cutplan.json --title "…" --video-key <slug> [--lane sergio] [--format vertical] [--aspect 9:16] [--preview-url <url>]`
    → genera el SQL de UPSERT para `video_projects` (status **`cut_review`**) + `review_queue`
@@ -136,7 +150,13 @@ HyperFrames (render + SFX), imagen barata. Validar la idea antes de generar.
     En 9:16 usar `--anchor top` (ahí está la cara). Máx 2.0× (arriba se pixela); el script lo bloquea.
     **Va ANTES de los apoyos y los subtítulos** — si no, se zoomean el mockup y el texto.
 12. **Complementos.** `image-gen` MCP o modelo barato (ej. Gemini Flash-Lite Image) para mascot/thumbnails; Higgsfield (créditos 2354, [[higgsfield-models-roster]]) solo con OK.
-13. **Verificar + exportar.** Revisar frames en tiempos clave (sync, color, fades) → `renders/final.mp4`.
+13. **Master de audio — SIEMPRE el último paso** (pieza propia, PROBADA).
+    `node scripts/master.mjs --video renders/final.mp4 --out final/<slug>.mp4 [--fade-out 0.4]`
+    → loudnorm de DOS pasadas a **−14 LUFS / −1.5 dBTP** (lo que normalizan TikTok, Reels y
+    YouTube) y **re-mide la salida** para reportar dónde quedó. Medido: el material salía a
+    −20 LUFS → el video sonaba 6 dB más bajo que el de al lado en el feed. El video se copia
+    (`-c:v copy`): masterizar el audio no re-encodea la imagen.
+14. **Verificar + exportar.** Revisar frames en tiempos clave (sync, color, fades) → `final/<slug>.mp4`.
 
 ### Orden del render (importa)
 `cut → zoom → apoyos → subtítulos → SFX`. El zoom recorta y reescala el CUADRO: todo lo que se
@@ -147,7 +167,9 @@ y se ve amateur.
 | Necesito | Herramienta | Costo |
 | --- | --- | --- |
 | Transcript + timestamps | `ver-videos` → Speaches | gratis |
-| Cut-list (tabla de cortes) | `scripts/cut-plan.mjs` | gratis |
+| Cut-list (tabla de cortes) | `scripts/cut-plan.mjs` **con `--video`** | gratis |
+| **Preview 360p + tira de costuras** | `scripts/preview.mjs` | gratis (local) |
+| **Master de audio (−14 LUFS)** | `scripts/master.mjs` | gratis (local) |
 | Publicar el corte al panel para tu OK | `scripts/publish-cut-review.mjs` (DRY-RUN → SQL) | gratis |
 | Aplicar el corte (tras OK) | `scripts/render-approved.mjs` (worker LOCAL, DRY-RUN → ffmpeg + SQL) | gratis |
 | **Narración / voz** (Lucía = **Marcela**) | `scripts/tts-elevenlabs.mjs` (ElevenLabs `eleven_multilingual_v2`) | plan starter ~69k chars/mes |
@@ -201,6 +223,10 @@ Cada transición **acorta** el video su propia duración: los dos bloques se sol
 | `circleopen` | **Reservar para el remate / CTA final.** |
 
 ## Common mistakes
+- **Correr `cut-plan.mjs` sin `--video`.** Mide el silencio en los huecos del transcript, que en
+  un talking-head real son CERO: sale una cut-list que no corta nada y parece que "no había
+  silencios". Si el panel está caído, el preview igual se genera local (`preview.mjs`).
+- **Publicar sin masterizar el audio.** Sale a −20 LUFS y en el feed suena bajo contra todo lo demás.
 - **Cortar sin publicar la review + mostrar la tabla + preview** (viola la regla de oro). Correr
   `publish-cut-review.mjs` y esperar el OK de Sergio en el panel; el ffmpeg del corte va DESPUÉS.
 - **Aplicar el SQL a producción desde la skill.** La skill es DRY-RUN (imprime SQL); lo aplica el
