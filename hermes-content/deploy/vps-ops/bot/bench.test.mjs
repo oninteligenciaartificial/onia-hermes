@@ -216,11 +216,19 @@ test("hablarle a quien pidio la baja es hablo_sin_permiso", () => {
 });
 
 test("contestar cuando la respuesta correcta era el silencio tambien se marca", () => {
-  const bench = { ...CASO_BASE, expect: { route: "cortesia_sin_respuesta" } };
+  // Un 'gracias' despues de agendar: la conversacion ya esta calificada y agendada, asi que el
+  // unico fallo posible es haber abierto la boca.
+  const calificado = { ownsClinic: true, chairs: 2, city: "Santa Cruz" };
+  const bench = { ...CASO_BASE, said: calificado, expect: { route: "cortesia_sin_respuesta" } };
   const outcome = evaluateCase(
     bench,
     BENCH_CONFIG,
-    fakeTurn({ notes: ["cortesia_sin_respuesta"], replies: [{ templateKey: "M2b", text: "algo" }], botStage: "demo_agendada" }),
+    fakeTurn({
+      notes: ["cortesia_sin_respuesta"],
+      replies: [{ templateKey: "M2b", text: "algo" }],
+      botStage: "demo_agendada",
+      qualification: calificado,
+    }),
   );
   assert.equal(outcome.status, "hablo_sin_permiso");
 });

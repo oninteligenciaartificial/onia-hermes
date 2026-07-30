@@ -12,6 +12,9 @@
   "clientes": "0",
   "clientesEstado": "pendiente",
 
+  "llamadas": "0",
+  "llamadasEstado": "pendiente",
+
   "internacionales": "0",
   "internacionalesEstado": "pendiente",
 
@@ -27,8 +30,8 @@
   "oficina": "no",
   "oficinaEstado": "pendiente",
 
-  "cobrador": "sin empezar",
-  "cobradorEstado": "pendiente",
+  "python": "0",
+  "pythonEstado": "pendiente",
 
   "tiktokVideos": "0",
   "tiktokVideosEstado": "pendiente",

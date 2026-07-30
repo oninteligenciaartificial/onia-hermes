@@ -268,8 +268,11 @@ export function evaluateCase(bench, config = BENCH_CONFIG, observed = runConvers
   const route = routeProblem(expected, actual);
   if (route) problems.push(route);
 
-  // 3. Que datos quedaron guardados.
-  for (const problem of data) problems.push({ kind: "dato_mal_extraido", detail: problem.detail });
+  // 3. Que datos quedaron guardados. `subkind` viaja al resumen: contar "perdidos" e
+  //    "inventados" leyendo el texto del detalle seria contar el mensaje, no el hecho.
+  for (const problem of data) {
+    problems.push({ kind: "dato_mal_extraido", subkind: problem.kind, detail: problem.detail });
+  }
 
   // 4. Re-preguntar lo que el prospecto ya contesto.
   const asked = fieldsAsked(last.result.replies, config);
@@ -333,10 +336,8 @@ export function summarizeOutcomes(outcomes) {
     byStatus[outcome.status] += 1;
     for (const problem of outcome.problems) {
       byProblem[problem.kind] += 1;
-      if (problem.kind === "dato_mal_extraido") {
-        if (problem.detail.includes("no quedo guardado")) datosPerdidos += 1;
-        if (problem.detail.includes("nunca lo dijo")) datosInventados += 1;
-      }
+      if (problem.subkind === "perdido") datosPerdidos += 1;
+      if (problem.subkind === "inventado") datosInventados += 1;
     }
     for (const tag of outcome.tags) {
       const bucket = byTag[tag] || { total: 0, hits: 0 };
@@ -512,5 +513,8 @@ async function main() {
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
-  main();
+  main().catch((error) => {
+    console.error(`El banco no pudo correr: ${error && error.stack ? error.stack : error}`);
+    process.exit(1);
+  });
 }
