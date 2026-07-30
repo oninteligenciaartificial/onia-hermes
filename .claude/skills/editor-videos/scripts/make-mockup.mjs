@@ -395,7 +395,25 @@ async function tplCustom(width) {
   const w = width || 1000;
   if (!HTML_FILE) fail("--template custom necesita --html-file <archivo.html>");
   if (!existsSync(HTML_FILE)) fail(`no existe --html-file ${HTML_FILE}`);
-  const raw = await readFile(HTML_FILE, "utf8");
+  let raw = await readFile(HTML_FILE, "utf8");
+  // {{IMAGE}} → data URI de --image. Sin esto había que pegar el base64 a mano en el
+  // HTML (el render es self-contained: una <img src="archivo.jpg"> se bloquea).
+  if (raw.includes("{{IMAGE}}")) {
+    if (!IMAGE) fail("el HTML usa {{IMAGE}} pero no pasaste --image <archivo>");
+    raw = raw.split("{{IMAGE}}").join(await dataUri(IMAGE));
+  } else if (IMAGE) {
+    console.error("make-mockup: AVISO --image ignorado (el HTML no tiene {{IMAGE}})");
+  }
+  // Los mismos flags de las plantillas internas sirven en el HTML propio: así una
+  // plantilla custom se reusa con otro texto sin editar el archivo. Escapado para
+  // que un & o un < en el texto no rompa el HTML.
+  const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  for (const [token, valor] of [
+    ["{{TITLE}}", TITLE], ["{{SUBTITLE}}", SUBTITLE], ["{{VALUE}}", VALUE],
+    ["{{LABEL}}", LABEL], ["{{ACCENT}}", ACCENT], ["{{URL_LABEL}}", URL_LABEL],
+  ]) {
+    if (raw.includes(token)) raw = raw.split(token).join(esc(valor));
+  }
   // Si el archivo ya es un documento completo, se usa tal cual (el autor manda);
   // solo se fuerza el fondo transparente para no perder el alpha.
   if (/<html[\s>]/i.test(raw)) {
@@ -465,16 +483,39 @@ try {
 
   // Ajustar el viewport al contenido real y capturar SOLO el #stage → PNG ajustado
   // al mockup (con margen para la sombra), sin kilos de transparente al costado.
-  const box = await p.evaluate((sel) => {
-    const el = document.querySelector(sel);
-    const r = el.getBoundingClientRect();
-    return { w: Math.ceil(r.width), h: Math.ceil(r.height) };
-  }, selector);
-  await p.setViewportSize({ width: Math.max(box.w, 32), height: Math.max(box.h, 32) });
+  const medir = () =>
+    p.evaluate((sel) => {
+      const el = document.querySelector(sel);
+      if (!el) return null;
+      const r = el.getBoundingClientRect();
+      return {
+        x: Math.max(0, Math.floor(r.x)),
+        y: Math.max(0, Math.floor(r.y)),
+        w: Math.ceil(r.width),
+        h: Math.ceil(r.height),
+      };
+    }, selector);
 
-  const el = await p.$(selector);
-  if (!el) fail(`no encontré ${selector} en el HTML`);
-  const png = await el.screenshot({ omitBackground: true, type: "png", animations: "disabled" });
+  let box = await medir();
+  if (!box) fail(`no encontré ${selector} en el HTML`);
+  // el resize reflowea: hay que volver a medir o el clip queda corrido
+  await p.setViewportSize({ width: Math.max(box.x + box.w, 32), height: Math.max(box.y + box.h, 32) });
+  box = await medir();
+  await p.setViewportSize({ width: Math.max(box.x + box.w, 32), height: Math.max(box.y + box.h, 32) });
+  box = await medir();
+
+  // Se captura la PÁGINA recortada al box, NO el elemento. Motivo (medido 2026-07-30):
+  // cuando el elemento capturado tiene `transform` (un recorte de diario rotado, por
+  // ejemplo), Chromium devuelve el lienzo a 2x pero PINTA el contenido a 1x → el apoyo
+  // salía a mitad de tamaño, pegado arriba a la izquierda, y overlay-visuals.mjs lo
+  // escalaba mal. `filter` y `clip-path` no tienen el problema; `transform` sí.
+  // Con clip de página el 2x se respeta siempre. Verificado en las 5 plantillas.
+  const png = await p.screenshot({
+    omitBackground: true,
+    type: "png",
+    animations: "disabled",
+    clip: { x: box.x, y: box.y, width: box.w, height: box.h },
+  });
   await writeFile(resolve(OUT), png);
 
   console.log(

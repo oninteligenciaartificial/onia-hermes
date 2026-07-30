@@ -86,6 +86,14 @@ HyperFrames (render + SFX), imagen barata. Validar la idea antes de generar.
 7. **Apoyos visuales — mockups con código** (piezas propias, PROBADAS; el método de Santiago).
    `node scripts/make-mockup.mjs --template <browser|phone|stat|quote|custom> --out assets/x.png …`
    → PNG con fondo TRANSPARENTE renderizado de HTML/CSS con Playwright (acento `--accent`, default `#FF7A00`).
+   **Look editorial / recorte de diario** (el del reel): `--template custom --html-file assets/html/recorte-diario.html
+   --image foto.jpg --title "…" --label "…"`. El HTML propio acepta los tokens `{{IMAGE}}` (se
+   incrusta como data URI; el render es self-contained y bloquea la red), `{{TITLE}} {{SUBTITLE}}
+   {{LABEL}} {{VALUE}} {{ACCENT}}` — así una plantilla se reusa con otro texto sin editarla.
+   Recetas que hacen el look, todas en CSS: retícula de diario = `radial-gradient` de puntos con
+   `mix-blend-mode:multiply` sobre la foto en `grayscale(1) contrast(1.45)`; borde de recorte =
+   `clip-path: polygon(...)` con puntos irregulares FIJOS; papel = dos `repeating-linear-gradient`;
+   sello = borde + rotación + `multiply`.
    Apoyo **animado** (contar un número, revelar texto): `scripts/hyperframes/render.mjs` (motor de la casa,
    default) o `scripts/remotion/render.mjs` — las MISMAS 5 composiciones en los dos motores
    (`Stat · Browser · Phone · Quote · LowerThird`), salida secuencia PNG con alpha.
@@ -211,6 +219,11 @@ Cada transición **acorta** el video su propia duración: los dos bloques se sol
   de estar pegado a la voz. Y si el cue se repite ("vez", "sistema"), a ojo dispara en la aparición
   equivocada — el macheo monotónico existe para eso.
 - **Zoomear DESPUÉS de quemar texto**: se agranda el subtítulo/mockup y se ve amateur. El zoom va antes.
+- **Poner `transform` en el `#stage` de un HTML custom.** Chromium devuelve el lienzo a 2× pero
+  PINTA el contenido a 1× → el apoyo sale a mitad de tamaño arriba a la izquierda, y
+  `overlay-visuals.mjs` lo escala mal (medido 2026-07-30: `filter` y `clip-path` NO tienen el
+  problema, `transform` sí). La rotación va en un HIJO; `#stage` queda limpio. `make-mockup.mjs` ya
+  captura por clip de página para no depender de eso, pero la regla vale igual.
 - **Mezclar SFX sin ducking** (`duck:false` en todo): el efecto compite con la voz y suena pegoteado.
 - `amix` sin `normalize=0`: divide entre N y todos los efectos quedan mucho más bajos que el plan.
 - Transiciones largas (>0.5s) o `circleopen` en cada costura: se ve amateur. Corto y `fade` por defecto.
