@@ -1,0 +1,585 @@
+<!doctype html>
+<html
+  lang="es"
+  data-composition-variables='[
+    {"id":"dia","type":"string","label":"Dia actual","default":"47"},
+    {"id":"diasTotal","type":"string","label":"Dias totales","default":"155"},
+    {"id":"mrrBs","type":"string","label":"MRR en Bs","default":"8400"},
+    {"id":"mrrUsd","type":"string","label":"MRR en USD","default":"739"},
+    {"id":"clientes","type":"string","label":"Clientes pagando","default":"6"},
+    {"id":"runwaySemanas","type":"string","label":"Runway (semanas)","default":"9"},
+    {"id":"eyebrow","type":"string","label":"Antetitulo","default":"155 DÍAS EN PÚBLICO"},
+    {"id":"accent","type":"color","label":"Acento","default":"#FF7A00"}
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <title>ONIA · Scoreboard horizontal</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      /* ---- Tipografia OFICIAL de marca (ONIA_BRAND_IDENTITY_2026.md §2) -----
+         Mismo contrato que la variante vertical: el trio se AUTOHOSPEDA desde
+         fonts/ (reparto de `hermes-content/brand/fonts/build-onia-fonts.py`,
+         entrada "scoreboard/horizontal"). HyperFrames sirve cada composicion con
+         su carpeta como raiz y rechaza por lint los assets con "../" por encima,
+         por eso cada orientacion lleva su propia copia.
+
+         Bricolage llega con wght 500-700: el peso 800 que el brand system
+         prohibe no existe ni por accidente. */
+      @font-face {
+        font-family: "Bricolage Grotesque";
+        src: url("fonts/BricolageGrotesque-var-latin.woff2") format("woff2");
+        font-weight: 500 700;
+        font-style: normal;
+        font-display: block;
+      }
+      @font-face {
+        font-family: "DM Sans";
+        src: url("fonts/DMSans-var-latin.woff2") format("woff2");
+        font-weight: 400 500;
+        font-style: normal;
+        font-display: block;
+      }
+      @font-face {
+        font-family: "Spline Sans Mono";
+        src: url("fonts/SplineSansMono-var-latin.woff2") format("woff2");
+        font-weight: 400 500;
+        font-style: normal;
+        font-display: block;
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: transparent;
+      }
+
+      #stage {
+        position: relative;
+        width: 1920px;
+        height: 1080px;
+        --stage-w: 1920;
+        --stage-h: 1080;
+        --u: calc(var(--stage-w) / 1000 * 1px);
+        --accent: #ff7a00;
+        --accent-deep: color-mix(in srgb, var(--accent) 62%, #000000);
+        /* El acento cuando es TEXTO — ver nota en la variante vertical. */
+        --accent-ink: var(--accent);
+        --ink: #0a0c11;
+        --ink2: #15181f;
+        --ink-text: #f6f8fb;
+        --muted: rgba(246, 248, 251, 0.6);
+        --hairline: rgba(255, 255, 255, 0.11);
+        --track: rgba(255, 255, 255, 0.14);
+        --gloss: rgba(255, 255, 255, 0.09);
+        --shadow:
+          0 calc(var(--u) * 26) calc(var(--u) * 60) calc(var(--u) * -16) rgba(0, 0, 0, 0.7),
+          0 calc(var(--u) * 7) calc(var(--u) * 18) rgba(0, 0, 0, 0.38);
+        /* wipe de la barra: 100 = tapada, 0 = descubierta (clip-path). */
+        --wipe: 100;
+        --font-display: "Bricolage Grotesque", sans-serif;
+        --font-body: "DM Sans", sans-serif;
+        --font-mono: "Spline Sans Mono", monospace;
+        font-family: var(--font-body);
+      }
+      #stage[data-theme="light"] {
+        --ink: #ffffff;
+        --ink2: #f4f5f7;
+        --ink-text: #0b0d12;
+        --muted: rgba(11, 13, 18, 0.6);
+        --hairline: rgba(11, 13, 18, 0.12);
+        --track: rgba(11, 13, 18, 0.14);
+        --gloss: rgba(255, 255, 255, 0.85);
+        --accent-ink: color-mix(in srgb, var(--accent) 62%, #000000);
+      }
+
+      /* En 16:9 el marcador va ABAJO A LA IZQUIERDA (zona de placa clasica).
+         El margen inferior de 108px deja libre la barra de controles de YouTube,
+         que sube unos 80px cuando el espectador mueve el mouse. */
+      .fill {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        align-items: flex-start;
+        padding: 0 calc(var(--u) * 56) calc(var(--u) * 56);
+      }
+
+      /* LEGIBILIDAD SOBRE CUALQUIER FONDO: la placa es OPACA.
+         No es un rectangulo negro al 50% — a esa translucidez el contraste del
+         texto depende del plano de atras y una pared blanca lo arruina. Fondo
+         solido + filo de luz + sombra: el texto siempre cae sobre el MISMO
+         color. Tampoco es glassmorphism: no hay backdrop-filter. */
+      .plate {
+        position: relative;
+        width: max-content;
+        max-width: 100%;
+        border-radius: calc(var(--u) * 15);
+        background: linear-gradient(158deg, var(--ink2) 0%, var(--ink) 62%);
+        border: 1px solid var(--hairline);
+        box-shadow: var(--shadow);
+        overflow: hidden;
+        padding: calc(var(--u) * 24) calc(var(--u) * 30) calc(var(--u) * 26);
+        opacity: 0;
+      }
+
+      .gloss {
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        pointer-events: none;
+        border-top: 1px solid var(--gloss);
+        -webkit-mask-image: linear-gradient(#000, transparent 42%);
+        mask-image: linear-gradient(#000, transparent 42%);
+      }
+
+      .eyebrow {
+        display: flex;
+        align-items: center;
+        gap: calc(var(--u) * 8);
+        font-family: var(--font-display);
+        font-size: calc(var(--u) * 12);
+        font-weight: 700;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: calc(var(--u) * 14);
+      }
+      .eyebrow i {
+        display: block;
+        width: calc(var(--u) * 7);
+        height: calc(var(--u) * 7);
+        border-radius: 999px;
+        background: var(--accent);
+        flex: 0 0 auto;
+      }
+
+      /* Dos bloques de igual jerarquia separados por un filete a toda altura:
+         a la izquierda el ANCLA de la serie (el contador y su barra), a la
+         derecha el TABLERO (las tres lecturas). */
+      .body {
+        display: flex;
+        align-items: stretch;
+      }
+
+      .anchor {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        width: calc(var(--u) * 300);
+        flex: 0 0 auto;
+      }
+
+      /* El contador se lee como FRACCION (47 / 155), no como numero heroe: el
+         "/ 155" pesa dos tercios del 47 en vez de ser una etiqueta minuscula.
+         El patron "cifra gigante + label chiquito" esta prohibido por las
+         reglas de diseno de la casa. */
+      .day {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: calc(var(--u) * 14);
+      }
+      .day-left {
+        display: flex;
+        align-items: baseline;
+        gap: calc(var(--u) * 9);
+        min-width: 0;
+      }
+      .day-k {
+        font-family: var(--font-display);
+        font-size: calc(var(--u) * 13);
+        font-weight: 700;
+        letter-spacing: 0.18em;
+        color: var(--muted);
+      }
+      .day-n {
+        font-family: var(--font-mono);
+        font-size: calc(var(--u) * 30);
+        font-weight: 500;
+        line-height: 1;
+        letter-spacing: -0.02em;
+        font-variant-numeric: tabular-nums;
+        color: var(--ink-text);
+      }
+      .day-of {
+        font-family: var(--font-mono);
+        font-size: calc(var(--u) * 20);
+        font-weight: 400;
+        line-height: 1;
+        font-variant-numeric: tabular-nums;
+        color: var(--muted);
+        white-space: nowrap;
+      }
+      .pct {
+        font-family: var(--font-mono);
+        font-size: calc(var(--u) * 17);
+        font-weight: 500;
+        line-height: 1;
+        font-variant-numeric: tabular-nums;
+        color: var(--accent-ink);
+        white-space: nowrap;
+      }
+
+      /* La barra ES el acento de la pieza: color semantico (dias quemados de
+         155), no decorativo. Nunca una franja vertical en el borde — ese patron
+         esta prohibido. */
+      .track {
+        position: relative;
+        margin-top: calc(var(--u) * 16);
+        height: calc(var(--u) * 5);
+        border-radius: 999px;
+        background: var(--track);
+        overflow: hidden;
+      }
+      .track-fill {
+        position: absolute;
+        inset: 0;
+        border-radius: 999px;
+        background: linear-gradient(90deg, var(--accent-deep), var(--accent));
+        clip-path: inset(0 calc(var(--wipe) * 1%) 0 0);
+      }
+
+      .readouts {
+        display: flex;
+        align-items: center;
+        border-left: 1px solid var(--hairline);
+        padding-left: calc(var(--u) * 32);
+        margin-left: calc(var(--u) * 32);
+      }
+      .cell {
+        min-width: calc(var(--u) * 145);
+      }
+      .cell + .cell {
+        border-left: 1px solid var(--hairline);
+        padding-left: calc(var(--u) * 26);
+        margin-left: calc(var(--u) * 26);
+      }
+      .r-k {
+        font-family: var(--font-display);
+        font-size: calc(var(--u) * 11);
+        font-weight: 700;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+      .r-v {
+        margin-top: calc(var(--u) * 8);
+        font-family: var(--font-mono);
+        font-size: calc(var(--u) * 20);
+        font-weight: 500;
+        line-height: 1;
+        letter-spacing: -0.02em;
+        font-variant-numeric: tabular-nums;
+        color: var(--ink-text);
+        white-space: nowrap;
+      }
+      .r-s {
+        margin-top: calc(var(--u) * 7);
+        font-family: var(--font-mono);
+        font-size: calc(var(--u) * 11.5);
+        font-weight: 400;
+        line-height: 1;
+        font-variant-numeric: tabular-nums;
+        color: var(--muted);
+        white-space: nowrap;
+      }
+
+      [hidden] {
+        display: none !important;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="stage"
+      data-composition-id="scoreboard-horizontal"
+      data-theme="dark"
+      data-start="0"
+      data-duration="6"
+      data-fps="30"
+      data-width="1920"
+      data-height="1080"
+    >
+      <div id="sb-clip" class="clip" data-start="0" data-duration="6" data-track-index="0">
+        <div class="fill">
+          <div class="plate" id="sb-plate">
+            <div class="gloss"></div>
+
+            <div class="eyebrow" id="sb-eyebrow"><i></i><span></span></div>
+
+            <div class="body">
+              <div class="anchor">
+                <div class="day">
+                  <div class="day-left">
+                    <span class="day-k">DÍA</span>
+                    <span class="day-n" id="sb-day">0</span>
+                    <span class="day-of" id="sb-of">/ 155</span>
+                  </div>
+                  <span class="pct" id="sb-pct">0%</span>
+                </div>
+                <div class="track">
+                  <div class="track-fill" id="sb-fill"></div>
+                </div>
+              </div>
+
+              <div class="readouts">
+                <div class="cell" id="sb-cell-mrr">
+                  <div class="r-k">MRR</div>
+                  <div class="r-v" id="sb-mrr">Bs 0</div>
+                  <div class="r-s" id="sb-mrr-usd">USD 0</div>
+                </div>
+                <div class="cell" id="sb-cell-cli">
+                  <div class="r-k">CLIENTES</div>
+                  <div class="r-v" id="sb-cli">0</div>
+                  <div class="r-s">pagando</div>
+                </div>
+                <div class="cell" id="sb-cell-run">
+                  <div class="r-k">RUNWAY</div>
+                  <div class="r-v" id="sb-run">0</div>
+                  <div class="r-s">semanas</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <script>
+        // ============================================================
+        // ONIA · Scoreboard horizontal (1920x1080) — marcador de la serie
+        // documental de 155 dias, variante YouTube. Misma logica y mismos
+        // datos que la vertical; cambia la composicion del cuadro.
+        // Datos: scripts/hyperframes/data/serie-estado.json
+        // ============================================================
+        (function () {
+          "use strict";
+
+          function cubicBezier(x1, y1, x2, y2) {
+            var cx = 3 * x1,
+              bx = 3 * (x2 - x1) - cx,
+              ax = 1 - cx - bx;
+            var cy = 3 * y1,
+              by = 3 * (y2 - y1) - cy,
+              ay = 1 - cy - by;
+            function sampleX(t) {
+              return ((ax * t + bx) * t + cx) * t;
+            }
+            function sampleY(t) {
+              return ((ay * t + by) * t + cy) * t;
+            }
+            function sampleDX(t) {
+              return (3 * ax * t + 2 * bx) * t + cx;
+            }
+            return function (x) {
+              if (x <= 0) return 0;
+              if (x >= 1) return 1;
+              var t = x,
+                i,
+                d,
+                dx;
+              for (i = 0; i < 8; i++) {
+                d = sampleX(t) - x;
+                if (Math.abs(d) < 1e-7) return sampleY(t);
+                dx = sampleDX(t);
+                if (Math.abs(dx) < 1e-7) break;
+                t -= d / dx;
+              }
+              var lo = 0,
+                hi = 1;
+              t = x;
+              while (hi - lo > 1e-7) {
+                if (sampleX(t) < x) lo = t;
+                else hi = t;
+                t = (hi + lo) / 2;
+              }
+              return sampleY(t);
+            };
+          }
+          // MISMA curva que --ease-out-expo de web-factory. Salida exponencial
+          // sin rebote: bounce.out / elastic.out prohibidos por motion-doctrine.
+          gsap.registerEase("oniaOutExpo", cubicBezier(0.16, 1, 0.3, 1));
+          gsap.registerEase("oniaOutQuart", cubicBezier(0.25, 1, 0.5, 1));
+
+          var stage = document.getElementById("stage");
+          var FPS = Number(stage.dataset.fps) || 30;
+          var DUR = Number(stage.dataset.duration) || 6;
+          var TOTAL = Math.max(1, Math.round(DUR * FPS));
+          document.getElementById("sb-clip").dataset.duration = String(DUR);
+
+          // La salida se ancla al FINAL: alargar --duration alarga el SOSTEN.
+          function enterExit(o) {
+            o = o || {};
+            var delay = o.delayFrames || 0;
+            var enterF = Math.max(1, Math.round(((o.enterMs || 320) / 1000) * FPS));
+            var exitF = Math.max(1, Math.round(((o.exitMs || 240) / 1000) * FPS));
+            var exitStart = Math.max(delay + enterF, TOTAL - exitF);
+            return {
+              enterAt: delay / FPS,
+              enterDur: enterF / FPS,
+              exitAt: exitStart / FPS,
+              exitDur: Math.max(1, TOTAL - exitStart) / FPS,
+            };
+          }
+
+          function isPureNumber(v) {
+            return /^-?\d+(\.\d+)?$/.test(String(v).trim());
+          }
+          function formatBolivianNumber(value, decimals) {
+            var fixed = Math.abs(value).toFixed(decimals);
+            var parts = fixed.split(".");
+            var intPart = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            var body = parts[1] ? intPart + "," + parts[1] : intPart;
+            return (value < 0 ? "-" : "") + body;
+          }
+          function display(v) {
+            var s = String(v == null ? "" : v).trim();
+            return isPureNumber(s) ? formatBolivianNumber(Number(s), 0) : s;
+          }
+          function num(v, def) {
+            var s = String(v == null ? "" : v).trim();
+            return isPureNumber(s) ? Number(s) : def;
+          }
+
+          function readVars() {
+            var decls = [];
+            try {
+              decls = JSON.parse(document.documentElement.dataset.compositionVariables || "[]");
+            } catch (e) {
+              decls = [];
+            }
+            var out = {};
+            for (var i = 0; i < decls.length; i++) out[decls[i].id] = decls[i].default;
+            var live =
+              window.__hyperframes && typeof window.__hyperframes.getVariables === "function"
+                ? window.__hyperframes.getVariables()
+                : null;
+            if (live) {
+              for (var k in out) {
+                if (live[k] !== undefined && live[k] !== null) out[k] = live[k];
+              }
+            }
+            return out;
+          }
+
+          // ---- contenido ------------------------------------------------------
+          var V = readVars();
+          var elPlate = document.getElementById("sb-plate");
+          var elEyebrow = document.getElementById("sb-eyebrow");
+          var elDay = document.getElementById("sb-day");
+          var elOf = document.getElementById("sb-of");
+          var elPct = document.getElementById("sb-pct");
+          var elMrr = document.getElementById("sb-mrr");
+          var elMrrUsd = document.getElementById("sb-mrr-usd");
+          var elCli = document.getElementById("sb-cli");
+          var elRun = document.getElementById("sb-run");
+
+          var eyebrow = String(V.eyebrow || "");
+          elEyebrow.querySelector("span").textContent = eyebrow;
+          if (!eyebrow) elEyebrow.hidden = true;
+
+          var dia = Math.max(0, num(V.dia, 0));
+          var total = Math.max(1, num(V.diasTotal, 155));
+          var ratio = Math.max(0, Math.min(1, dia / total));
+
+          elOf.textContent = "/ " + display(V.diasTotal);
+          elMrr.textContent = "Bs " + display(V.mrrBs);
+          // "USD" y no el simbolo ≈: el subset latin de las fuentes de marca no
+          // trae U+2248 y saldria un tofu.
+          elMrrUsd.textContent = "USD " + display(V.mrrUsd);
+          elCli.textContent = display(V.clientes);
+          elRun.textContent = display(V.runwaySemanas);
+
+          // ---- timeline -------------------------------------------------------
+          // Ruta de movimiento sostenido: "sequenced UI life" (motion-doctrine).
+          // Arranca como instrumento (la barra se llena, el dia y el porcentaje
+          // tickean con ella) y despues SE QUEDA QUIETO. Nada de idle wobble:
+          // es un HUD que se lee mientras corre el video.
+          var tl = gsap.timeline({ paused: true });
+
+          // La placa esta anclada ABAJO, asi que entra DESDE abajo: el vector
+          // sale del borde mas cercano y vuelve por el mismo camino a la salida.
+          var plate = enterExit({ enterMs: 320, exitMs: 240 }); // salida = 75% de la entrada
+          var PLATE_Y = "calc(var(--u) * 14)";
+          tl.fromTo(
+            elPlate,
+            { opacity: 0, y: PLATE_Y },
+            { opacity: 1, y: 0, duration: plate.enterDur, ease: "oniaOutExpo" },
+            plate.enterAt,
+          );
+          tl.to(
+            elPlate,
+            { opacity: 0, y: PLATE_Y, duration: plate.exitDur, ease: "oniaOutQuart" },
+            plate.exitAt,
+          );
+
+          // Barra + contador + porcentaje: UN SOLO gesto de 700ms, atado al
+          // mismo progreso. Por eso se lee como instrumento y no como tres
+          // adornos que casualmente coinciden. 700ms < 800ms (tope de entrada).
+          var RUN_MS = 700;
+          var runF = Math.max(1, Math.round((RUN_MS / 1000) * FPS));
+          var boot = { p: 0 };
+          tl.to(
+            boot,
+            {
+              p: 1,
+              duration: runF / FPS,
+              ease: "oniaOutExpo",
+              onUpdate: function () {
+                var p = boot.p;
+                stage.style.setProperty("--wipe", 100 - ratio * p * 100);
+                elDay.textContent = formatBolivianNumber(dia * p, 0);
+                elPct.textContent = Math.round(ratio * p * 100) + "%";
+              },
+            },
+            4 / FPS,
+          );
+
+          // Cascada de las tres lecturas (waterfall entry, cut-the-curve §6):
+          // opacidad BINARIA en la entrada, huecos que SE ACHICAN (x0.84) y una
+          // sola direccion. Escalonado total 184ms (tope: 500ms).
+          var cells = [
+            document.getElementById("sb-cell-mrr"),
+            document.getElementById("sb-cell-cli"),
+            document.getElementById("sb-cell-run"),
+          ];
+          var cascade = enterExit({ delayFrames: 6, enterMs: 300, exitMs: 220 });
+          var CELL_X = "calc(var(--u) * 10)";
+          var gap = 3 / FPS;
+          var at = cascade.enterAt;
+          for (var g = 0; g < cells.length; g++) {
+            gsap.set(cells[g], { autoAlpha: 0 });
+            tl.set(cells[g], { autoAlpha: 1 }, at);
+            tl.fromTo(
+              cells[g],
+              { x: CELL_X },
+              { x: 0, duration: cascade.enterDur, ease: "oniaOutExpo" },
+              at,
+            );
+            tl.to(
+              cells[g],
+              { autoAlpha: 0, x: CELL_X, duration: cascade.exitDur, ease: "oniaOutQuart" },
+              cascade.exitAt,
+            );
+            at += gap;
+            gap *= 0.84;
+          }
+
+          window.__timelines = window.__timelines || {};
+          window.__timelines["scoreboard-horizontal"] = tl;
+        })();
+      </script>
+    </div>
+  </body>
+</html>

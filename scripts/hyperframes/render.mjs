@@ -50,12 +50,16 @@ const fail = (msg) => {
 };
 
 // nombre publico -> carpeta de la composicion (= data-composition-id)
+// Scoreboard lleva subcarpeta por orientacion: son DOS composiciones (cada una
+// con su geometria congelada y su propio fonts/), no una con dos tamanos.
 const COMPS = {
   Stat: "stat",
   Browser: "browser",
   Phone: "phone",
   Quote: "quote",
   LowerThird: "lower-third",
+  Scoreboard: "scoreboard/vertical",
+  ScoreboardWide: "scoreboard/horizontal",
 };
 const COMP_NAMES = Object.keys(COMPS);
 
