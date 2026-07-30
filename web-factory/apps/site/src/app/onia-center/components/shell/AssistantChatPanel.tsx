@@ -30,7 +30,7 @@ const WELCOME: ChatMessage = {
   id: "welcome",
   role: "system",
   tone: "info",
-  text: "Preguntá sobre leads, tareas, servicios o precios de ONIA Center. Solo veo lo que permite tu rol.",
+  text: "Preguntá sobre leads, tareas, servicios o precios de Onia Center. Solo veo lo que permite tu rol.",
 };
 
 export function AssistantChatPanel() {
@@ -167,19 +167,19 @@ export function AssistantChatPanel() {
             strokeLinejoin="round"
           />
         </svg>
-        ONIA Bot
+        Onia Bot
       </button>
 
       {open ? (
         <div
           role="dialog"
           aria-modal="false"
-          aria-label="Asistente ONIA Bot"
+          aria-label="Asistente Onia Bot"
           className="absolute right-0 top-[calc(100%+0.5rem)] z-40 flex w-[min(92vw,380px)] flex-col rounded-lg border border-border bg-card shadow-lg"
         >
           <div className="flex items-center justify-between border-b border-border px-4 py-3">
             <div>
-              <p className="text-sm font-semibold text-card-foreground">ONIA Bot</p>
+              <p className="text-sm font-semibold text-card-foreground">Onia Bot</p>
               <p className="text-xs text-muted-foreground">Asistente interno · respeta tu rol</p>
             </div>
             <button
@@ -238,7 +238,7 @@ export function AssistantChatPanel() {
               onChange={(event) => setQuestion(event.target.value)}
               onKeyDown={handleKeyDown}
               rows={2}
-              placeholder="Preguntá algo sobre ONIA Center…"
+              placeholder="Preguntá algo sobre Onia Center…"
               className="w-full resize-none rounded-md border border-border bg-background p-2.5 text-sm outline-none focus:border-ring"
             />
             <div className="mt-2 flex items-center justify-between">

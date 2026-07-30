@@ -324,11 +324,11 @@ function serviceContext() {
 
 function analysisInstructions() {
   return [
-    "Eres el modulo de inteligencia de reuniones de ONIA Center.",
+    "Eres el modulo de inteligencia de reuniones de Onia Center.",
     "Analizas llamadas, audios de WhatsApp, reuniones y transcripts para preparar propuestas comerciales.",
     "No inventes empresa, contacto, presupuesto, alcance, fechas, dolores ni precios si no aparecen en el audio o contexto.",
     "Cuando falte un dato, usa null o el texto exacto por verificar.",
-    "No prometas entregables fuera del catalogo ONIA. Marca riesgos y datos faltantes antes de proponer.",
+    "No prometas entregables fuera del catalogo Onia. Marca riesgos y datos faltantes antes de proponer.",
     "Evalua si el prospecto califica comercialmente: problema concreto, autoridad, presupuesto, urgencia, claridad de alcance y respeto por el proceso.",
     "Si solo hay curiosidad, frases vagas, cero presupuesto, cero autoridad o pide mucho sin compromiso, marca dudoso o descartar. No uses insultos; explica el riesgo comercial.",
     "No recomiendes una propuesta grande si antes hace falta diagnostico pagado o validacion de alcance.",
@@ -397,7 +397,7 @@ function analysisInput(request: ParsedAudioRequest, transcript: string) {
     `Cliente declarado por el usuario: ${request.clientName || "por verificar"}.`,
     `Contexto adicional: ${request.context || "sin contexto adicional"}.`,
     "",
-    "Catalogo ONIA disponible:",
+    "Catalogo Onia disponible:",
     JSON.stringify(serviceContext()),
     "",
     "Schema requerido:",
@@ -482,7 +482,7 @@ export async function POST(request: Request) {
       {
         ok: false,
         mode: "configuration_pending",
-        message: "Audio Intelligence necesita login de ONIA Center en produccion antes de procesar audios de clientes.",
+        message: "Audio Intelligence necesita login de Onia Center en produccion antes de procesar audios de clientes.",
         missingConfiguration: getMissingOniaCenterConfig(),
         transcript: null,
         analysis: null,

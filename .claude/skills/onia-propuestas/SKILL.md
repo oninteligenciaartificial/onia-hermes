@@ -1,9 +1,9 @@
 ---
 name: onia-propuestas
-description: Invocar cuando Sergio pida crear, cotizar, perfeccionar o enviar una propuesta comercial, cotización, presupuesto o pitch a un cliente de ONIA (web, tienda, sistema/SaaS, automatización, add-on). Aplica el generador oficial y las reglas de pricing/valor de ONIA; nunca escribir HTML de propuesta a mano.
+description: Invocar cuando Sergio pida crear, cotizar, perfeccionar o enviar una propuesta comercial, cotización, presupuesto o pitch a un cliente de Onia (web, tienda, sistema/SaaS, automatización, add-on). Aplica el generador oficial y las reglas de pricing/valor de Onia; nunca escribir HTML de propuesta a mano.
 ---
 
-# ONIA — Propuestas comerciales
+# Onia — Propuestas comerciales
 
 Fuente de verdad completa: `hermes-content/skills/propuestas-comerciales-onia.md`.
 Para delegar el armado en paralelo: subagente `onia-propuestas`.
@@ -38,10 +38,10 @@ Cliente nuevo = agregar objeto a `clientes.json` y correr el generador.
 ## Pricing (fuente de verdad: PRICING_RATIONALE_INTERNO.md §0)
 - **Lanzamiento vigente (fase sin portafolio):** Landing **790** / Web Pro **1.500**.
 - **Premium (objetivo con 3-5 casos):** Landing **2.000** / Web Pro **4.500**.
-- **SaaS DentalGest ratificado:** planes **390 / 890 / 1.990** lista (320/750/1.500 lanzamiento) +
+- **SaaS Onia Dental ratificado:** planes **390 / 890 / 1.990** lista (320/750/1.500 lanzamiento) +
   Grupo Clínico 3.900/2.900 + chatbot como add-on N1/N2/N3. Anual = 10x. Ver
   `onia-core/ONIA_CATALOGO_COMERCIAL_2026.md`.
-- El margen vive en lo recurrente (Cuidado Web / GestiOS / videos). Cobrar automatización y resultado.
+- El margen vive en lo recurrente (Cuidado Web / Onia Comercio / videos). Cobrar automatización y resultado.
 
 ## Enviar = acción externa → requiere aprobación
 Generar y preparar es libre. **ENVIAR** una propuesta a un cliente necesita OK explícito de Sergio

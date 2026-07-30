@@ -80,7 +80,7 @@ function monthlyEstimate(costItems: CostItem[]): { total: number; missing: numbe
 export function CostsCard({ costItems }: CostsCardProps) {
   if (costItems.length === 0) {
     return (
-      <SurfaceCard title="Costos y Suscripciones" subtitle="En qué gasta ONIA y cuándo se cobra">
+      <SurfaceCard title="Costos y Suscripciones" subtitle="En qué gasta Onia y cuándo se cobra">
         <p className="text-sm text-muted-foreground">
           Sin costos registrados aún. Cuando se detecten o carguen suscripciones (infra, dominios,
           APIs), aparecen acá con su monto, ciclo y próximo pago.
@@ -94,7 +94,7 @@ export function CostsCard({ costItems }: CostsCardProps) {
   return (
     <SurfaceCard
       title="Costos y Suscripciones"
-      subtitle="En qué gasta ONIA y cuándo se cobra"
+      subtitle="En qué gasta Onia y cuándo se cobra"
       footer={
         <span>
           Total mensual estimado:{" "}

@@ -36,7 +36,7 @@ node scripts/hyperframes/render.mjs --comp Quote --out assets/cita \
 | `--out` | — | carpeta si `png-sequence`; archivo si no |
 | `--props` / `--props-file` | `{}` | mismo objeto que los `defaultProps` de antes |
 | `--width` `--height` `--duration` `--fps` | los del HTML | `--duration` en segundos; `--fps` sólo 24/30/60 |
-| `--accent` `--theme` | `#FF7A00` · `dark` | overrides sueltos, ganan sobre `--props` |
+| `--accent` `--theme` | `#00D26A` · `dark` | overrides sueltos, ganan sobre `--props` |
 | `--format` | `png-sequence` | `png-sequence` · `webm` · `mov` · `mp4` |
 | `--quality` | `high` | `draft` para iterar |
 | `--keep-build` | off | conserva el proyecto temporal en `.build/` |

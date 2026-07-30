@@ -22,19 +22,19 @@ export default function OperacionPage() {
               title="Regla madre"
               description="Lo que no esta registrado no se considera hecho."
               items={[
-                "ONIA Center o Notion es la fuente oficial.",
-                "Todo ingreso debe tener centro: ONIA, Nuvia, Media o Caja/Fondo.",
+                "Onia Center o Notion es la fuente oficial.",
+                "Todo ingreso debe tener centro: Onia, Nuvia, Media o Caja/Fondo.",
                 "Todo gasto debe tener responsable, comprobante y motivo.",
                 "Toda comision requiere cobro real, evidencia y aprobacion.",
               ]}
             />
             <OperatingBlock
               title="Caja roja"
-              description="Cuando Sergio/ONIA activa caja roja, se deja de experimentar."
+              description="Cuando Sergio/Onia activa caja roja, se deja de experimentar."
               items={[
                 "Congelar herramientas nuevas y compras no criticas.",
                 "Priorizar ventas cobrables, entregas pendientes y seguimiento.",
-                "No repartir si Fondo ONIA no cubre herramientas criticas.",
+                "No repartir si Fondo Onia no cubre herramientas criticas.",
                 "Nuvia no usa Higgsfield/pauta si rompe margen minimo.",
               ]}
             />

@@ -51,9 +51,9 @@ export function OperationSection({
 }) {
   const snapshotItems = [
     { label: "Duracion", value: snapshot.trial, detail: "Desde firma/aceptacion; revision formal al dia 60" },
-    { label: "Deuda previa", value: snapshot.debt, detail: "A cargo de Sergio/ONIA; Arthur no paga" },
+    { label: "Deuda previa", value: snapshot.debt, detail: "A cargo de Sergio/Onia; Arthur no paga" },
     { label: "Capital interno", value: snapshot.operatingCashAfterDebt, detail: snapshot.runway },
-    { label: "Meta operativa", value: snapshot.monthlyNetTarget, detail: "Ventas reales, evidencia y Fondo ONIA" },
+    { label: "Meta operativa", value: snapshot.monthlyNetTarget, detail: "Ventas reales, evidencia y Fondo Onia" },
   ];
 
   return (
@@ -62,7 +62,7 @@ export function OperationSection({
         id="operacion-resumen"
         label="Caja y supervivencia"
         title="Tablero base de 60 dias"
-        description="ONIA no puede repartir como si todo fuera utilidad. Primero se protege caja, deuda, herramientas y continuidad."
+        description="Onia no puede repartir como si todo fuera utilidad. Primero se protege caja, deuda, herramientas y continuidad."
         icon={Gauge}
         density="compact"
       >
@@ -78,7 +78,7 @@ export function OperationSection({
 
         <div className="seller-operation-ledger">
           <div>
-            <span>Inversion Sergio/ONIA</span>
+            <span>Inversion Sergio/Onia</span>
             <strong>{snapshot.initialInvestment}</strong>
           </div>
           <div>
@@ -104,7 +104,7 @@ export function OperationSection({
         id="centros-operativos"
         label="Centros separados"
         title="Donde vive cada peso"
-        description="Cada ingreso o gasto debe caer en un centro. Si se mezcla ONIA, Nuvia y media, las comisiones se vuelven imposibles de defender."
+        description="Cada ingreso o gasto debe caer en un centro. Si se mezcla Onia, Nuvia y media, las comisiones se vuelven imposibles de defender."
         icon={Landmark}
         density="compact"
       >

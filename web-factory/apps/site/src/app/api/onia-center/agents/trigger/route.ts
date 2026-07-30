@@ -17,7 +17,7 @@ function configurationPendingResponse() {
     {
       ok: false,
       mode: "configuration_pending",
-      message: "ONIA Center aun no tiene Supabase server-side configurado.",
+      message: "Onia Center aun no tiene Supabase server-side configurado.",
       missingConfiguration: getMissingOniaCenterConfig(),
       data: null,
     },

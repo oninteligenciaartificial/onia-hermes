@@ -41,7 +41,7 @@ export const repoStrategy = {
 } as const;
 
 // Agenda operativa de trabajo. La rutina personal (levantarse, almuerzo, gym,
-// vida personal, apagar, dormir) NO vive en el panel: ONIA Center muestra solo
+// vida personal, apagar, dormir) NO vive en el panel: Onia Center muestra solo
 // bloques de trabajo accionables. Los limites personales los protege la
 // automatizacion de agenda, no esta vista.
 export const sergioStrictScheduleBlocks: SergioScheduleBlock[] = [
@@ -67,7 +67,7 @@ export const sergioStrictScheduleBlocks: SergioScheduleBlock[] = [
     category: "sales",
     strictness: "fixed",
     meetingPolicy: "emergency_only",
-    command: "Seguimientos ONIA hoy",
+    command: "Seguimientos Onia hoy",
     note: "Sin scroll ni generacion de video. Solo leads, llamadas, propuestas y proximas acciones.",
     visibility: "sergio_private",
   },
@@ -80,7 +80,7 @@ export const sergioStrictScheduleBlocks: SergioScheduleBlock[] = [
     category: "deep_work",
     strictness: "preferred",
     meetingPolicy: "blocked",
-    note: "Construir ONIA Center, clientes o entregas. Bloque corto para evitar saturacion.",
+    note: "Construir Onia Center, clientes o entregas. Bloque corto para evitar saturacion.",
     visibility: "sergio_private",
   },
   {
@@ -140,7 +140,7 @@ export const sergioMeetingWindows: SergioMeetingWindow[] = [
     dayPattern: "Lunes a sabado",
     start: "14:00",
     end: "20:00",
-    title: "ONIA: Sergio y Arthur",
+    title: "Onia: Sergio y Arthur",
     allowedFor: ["webs", "DentalGest", "GestiOS", "automatizaciones", "asesorias sin cobro inicial", "cliente activo", "cierre de propuesta"],
     bufferMinutes: 15,
     bookingRule: "Cal self-hosted abre esta ventana; Google Calendar bloquea dias u horas no disponibles. Minimo 4 horas de anticipacion.",
@@ -158,10 +158,10 @@ export const sergioMeetingWindows: SergioMeetingWindow[] = [
 ];
 
 export const commercialBookingPolicy = {
-  mode: "Cal.com self-hosted controlado desde ONIA Center",
+  mode: "Cal.com self-hosted controlado desde Onia Center",
   publicLinkStatus: "Produccion activa en cal.onia.com.bo/onia",
   calAccountEmail: "business@onia.com.bo",
-  publicDisplayName: "ONIA | Agenda Comercial",
+  publicDisplayName: "Onia | Agenda Comercial",
   publicBookingUrl: "https://cal.onia.com.bo/onia",
   adminLoginUrl: "https://cal.onia.com.bo/auth/login",
   googleCalendarId: "oninteligenciaartificial@gmail.com",
@@ -173,8 +173,8 @@ export const commercialBookingPolicy = {
   profileAvatar: {
     imageUrl: "/assets/onia/onia-logo-avatar.png",
     publicAssetUrl: "https://center.onia.com.bo/assets/onia/onia-logo-avatar.png",
-    alt: "Logo ONIA para foto de perfil comercial",
-    configureFrom: "ONIA Center > Agenda Sergio > Cal.com comercial > Perfil publico",
+    alt: "Logo Onia para foto de perfil comercial",
+    configureFrom: "Onia Center > Agenda Sergio > Cal.com comercial > Perfil publico",
     calProfileTarget: "Usar esta imagen como foto de perfil/avatar de la cuenta business@onia.com.bo en Cal.",
   },
   oniaCenterControl: {
@@ -193,7 +193,7 @@ export const commercialBookingPolicy = {
     ],
   },
   configurationRule:
-    "ONIA Center es el panel operativo: aqui se ve que cambiar y desde aqui se entra a Cal. Los cambios reales de tipos, horarios, calendarios y perfil se aplican en Cal self-hosted hasta construir escritura directa con auditoria.",
+    "Onia Center es el panel operativo: aqui se ve que cambiar y desde aqui se entra a Cal. Los cambios reales de tipos, horarios, calendarios y perfil se aplican en Cal self-hosted hasta construir escritura directa con auditoria.",
   approvalPolicy: "Toda reserva queda pendiente de aceptar; el correo formal sale despues de aceptar por Telegram.",
   configurationActions: [
     {
@@ -215,21 +215,21 @@ export const commercialBookingPolicy = {
       label: "Configurar horarios",
       url: "https://cal.onia.com.bo/availability",
       scope: "Ventanas disponibles, bloqueos rapidos, buffers y excepciones por dia.",
-      ownerRule: "Sergio controla ONIA; la vendedora solo su disponibilidad cuando tenga cuenta separada.",
+      ownerRule: "Sergio controla Onia; la vendedora solo su disponibilidad cuando tenga cuenta separada.",
     },
     {
       id: "admin-calendars",
       label: "Conectar calendario",
       url: "https://cal.onia.com.bo/settings/my-account/calendars",
       scope: "Google Calendar operativo, conflictos y escritura de eventos aprobados.",
-      ownerRule: "Solo Sergio o admin tecnico ONIA.",
+      ownerRule: "Solo Sergio o admin tecnico Onia.",
     },
     {
       id: "admin-profile",
       label: "Perfil publico",
       url: "https://cal.onia.com.bo/settings/my-account/profile",
-      scope: "Logo ONIA, nombre publico, zona horaria y datos visibles.",
-      ownerRule: "Solo Sergio o admin tecnico ONIA.",
+      scope: "Logo Onia, nombre publico, zona horaria y datos visibles.",
+      ownerRule: "Solo Sergio o admin tecnico Onia.",
     },
   ],
   eventTypes: [
@@ -241,7 +241,7 @@ export const commercialBookingPolicy = {
       bookingWindow: "14 dias hacia adelante",
       publicUrl: "https://cal.onia.com.bo/onia/consulta-inicial",
       visibility: "Visible en pagina publica",
-      projectFit: "Primer contacto para cotizar, validar necesidad y decidir si ONIA puede ayudar.",
+      projectFit: "Primer contacto para cotizar, validar necesidad y decidir si Onia puede ayudar.",
       projectTypes: [
         "Paginas web, landing o ecommerce simple",
         "DentalGest o GestiOS como primer interes",
@@ -251,12 +251,12 @@ export const commercialBookingPolicy = {
       whenToUse: "Usarla cuando el cliente todavia no esta calificado o solo quiere saber si vale la pena avanzar.",
       whenNotUse: "No usar para soporte, capacitacion, auditoria tecnica profunda ni clientes activos.",
       ownerRule: "Vendedora primero; Sergio o Arthur si es lead alto valor o requiere decision tecnica.",
-      oniaCenterRule: "ONIA Center debe crear lead, servicio de interes, responsable y proxima accion antes de aceptar la reunion.",
+      oniaCenterRule: "Onia Center debe crear lead, servicio de interes, responsable y proxima accion antes de aceptar la reunion.",
       enabled: true,
     },
     {
       id: "demo-onia",
-      label: "Demo / diagnostico - solucion ONIA",
+      label: "Demo / diagnostico - solucion Onia",
       durationMinutes: 45,
       minimumNotice: "8 horas",
       bookingWindow: "21 dias hacia adelante",
@@ -267,12 +267,12 @@ export const commercialBookingPolicy = {
         "Demo DentalGest o GestiOS",
         "Revision de propuesta web/ecommerce",
         "Automatizacion, chatbot WhatsApp o sistema interno",
-        "Contenido con IA, publicidad con IA o paquete comercial ONIA",
+        "Contenido con IA, publicidad con IA o paquete comercial Onia",
       ],
       whenToUse: "Usarla cuando ya hay dolor, presupuesto probable, decisor o una propuesta que puede cerrarse.",
       whenNotUse: "No usar para curiosos sin necesidad clara ni para clientes activos que necesitan seguimiento largo.",
       ownerRule: "Asignar por servicio, disponibilidad y nivel tecnico.",
-      oniaCenterRule: "ONIA Center debe mostrar servicio sugerido, precio base, notas de llamada y si toma Sergio, Arthur o vendedora.",
+      oniaCenterRule: "Onia Center debe mostrar servicio sugerido, precio base, notas de llamada y si toma Sergio, Arthur o vendedora.",
       enabled: true,
     },
     {
@@ -290,10 +290,10 @@ export const commercialBookingPolicy = {
         "Seguimiento postventa y decisiones de proyecto",
         "Cierre tecnico/comercial de una propuesta ya trabajada",
       ],
-      whenToUse: "Usarla cuando el cliente ya tiene contexto, pago, propuesta avanzada o trabajo activo con ONIA.",
+      whenToUse: "Usarla cuando el cliente ya tiene contexto, pago, propuesta avanzada o trabajo activo con Onia.",
       whenNotUse: "No publicarla para prospectos frios; una hora completa solo se entrega cuando el proyecto lo justifica.",
       ownerRule: "Sergio/Arthur para clientes activos; vendedora solo seguimiento comercial asignado.",
-      oniaCenterRule: "ONIA Center debe exigir proyecto asociado, objetivo de la reunion y evidencia de pago/propuesta/seguimiento.",
+      oniaCenterRule: "Onia Center debe exigir proyecto asociado, objetivo de la reunion y evidencia de pago/propuesta/seguimiento.",
       enabled: true,
     },
     {
@@ -304,11 +304,11 @@ export const commercialBookingPolicy = {
       bookingWindow: "30 dias hacia adelante",
       publicUrl: "",
       visibility: "Desactivada y no publica",
-      projectFit: "Reservada para fase futura cuando ONIA cobre asesorias/auditorias con precio definido.",
-      projectTypes: ["Auditorias futuras con precio definido", "Diagnosticos pagados cuando ONIA tenga oferta cerrada"],
+      projectFit: "Reservada para fase futura cuando Onia cobre asesorias/auditorias con precio definido.",
+      projectTypes: ["Auditorias futuras con precio definido", "Diagnosticos pagados cuando Onia tenga oferta cerrada"],
       whenToUse: "No usar en fase inicial.",
       whenNotUse: "No prometer asesorias pagadas hasta aprobar precio, alcance, comision y responsable.",
-      ownerRule: "Desactivada por ahora porque ONIA aun no cobrara asesorias pagadas en fase inicial.",
+      ownerRule: "Desactivada por ahora porque Onia aun no cobrara asesorias pagadas en fase inicial.",
       oniaCenterRule: "Mantener desactivada hasta que Sergio apruebe precio, margen, comision y entregable.",
       enabled: false,
     },
@@ -326,13 +326,13 @@ export const commercialBookingPolicy = {
     "Quien debe tomar la reunion: Sergio, Arthur, vendedora o cualquiera disponible",
     "Urgencia: esta semana, este mes o exploratorio",
     "Eres dueno, socio, encargado o solo estas consultando",
-    "Como conociste a ONIA",
-    "Aceptas que ONIA te contacte por WhatsApp para seguimiento",
+    "Como conociste a Onia",
+    "Aceptas que Onia te contacte por WhatsApp para seguimiento",
   ],
   routingRules: [
-    "Toda reserva crea lead en ONIA Center en estado reunion_agendada_pendiente.",
+    "Toda reserva crea lead en Onia Center en estado reunion_agendada_pendiente.",
     "Telegram notifica con acciones: aceptar, cancelar, reasignar a Sergio, reasignar a Arthur o reasignar a vendedora.",
-    "Aunque Cal registre la reserva, ONIA la trata como solicitud hasta que Sergio/equipo la acepte por Telegram o ONIA Center.",
+    "Aunque Cal registre la reserva, Onia la trata como solicitud hasta que Sergio/equipo la acepte por Telegram o Onia Center.",
     "Sergio recibe todas las notificaciones; Arthur recibe las de equipo, tecnica, clientes activos o asignadas; vendedora recibe solo las propias o comerciales asignadas.",
     "El correo final de confirmacion al cliente se envia despues de aceptar la reserva por Telegram.",
     "La vendedora atiende webs, DentalGest, GestiOS, automatizaciones simples y asesorias que Sergio no pueda tomar.",
@@ -413,7 +413,7 @@ export const operatingAgents: OperatingAgent[] = [
     actions: [
       "Buscar negocios por rubro y ciudad",
       "Priorizar los que no tienen web",
-      "Sugerir el servicio ONIA que encaja",
+      "Sugerir el servicio Onia que encaja",
       "Dejar el lead como borrador (no contacta)",
     ],
     blockedBy: [],
@@ -426,13 +426,13 @@ export const operatingAgents: OperatingAgent[] = [
   {
     id: "agent-radar-yt",
     name: "Agente Radar YT",
-    mission: "Mira tendencias de YouTube (gratis, sin API key) y destila angulos y ganchos propios como ideas de contenido para ONIA y Lucia.",
+    mission: "Mira tendencias de YouTube (gratis, sin API key) y destila angulos y ganchos propios como ideas de contenido para Onia y Lucia.",
     ownerRole: "sergio",
     visibility: "internal_restricted",
     cadence: "weekly",
     status: "ready",
     monthlyOutcome: "Cola de ideas de contenido con traccion real, sin copiar identidad ajena, listas para aprobar y producir.",
-    inputs: ["busquedas YouTube (yt-dlp)", "pilares de contenido ONIA", "vistas y canal"],
+    inputs: ["busquedas YouTube (yt-dlp)", "pilares de contenido Onia", "vistas y canal"],
     outputs: ["ideas de contenido en el panel", "angulo y formato sugerido", "video que inspiro"],
     actions: [
       "Buscar videos con traccion en el nicho",
@@ -450,13 +450,13 @@ export const operatingAgents: OperatingAgent[] = [
   {
     id: "agent-auditor",
     name: "Agente Auditor de codigo",
-    mission: "Escanea los repos de ONIA y prioriza la deuda tecnica: pendientes, catch vacios, archivos gigantes, tipos any.",
+    mission: "Escanea los repos de Onia y prioriza la deuda tecnica: pendientes, catch vacios, archivos gigantes, tipos any.",
     ownerRole: "sergio",
     visibility: "internal_restricted",
     cadence: "weekly",
     status: "ready",
     monthlyOutcome: "Deuda tecnica visible y priorizada cada semana, para atacar lo que importa sin frenar el desarrollo.",
-    inputs: ["repo completo (GitHub Actions)", "reglas de calidad ONIA"],
+    inputs: ["repo completo (GitHub Actions)", "reglas de calidad Onia"],
     outputs: ["idea de auditoria en el panel", "top 3 de que atacar primero", "puntaje de deuda"],
     actions: [
       "Escanear el repo fresco",
@@ -503,17 +503,17 @@ export const operatingAgents: OperatingAgent[] = [
     visibility: "sergio_private",
     cadence: "monthly",
     status: "prepared_pending_connection",
-    monthlyOutcome: "Plan mensual ONIA con 3 metas, backlog priorizado, riesgos y decisiones que solo Sergio aprueba.",
+    monthlyOutcome: "Plan mensual Onia con 3 metas, backlog priorizado, riesgos y decisiones que solo Sergio aprueba.",
     inputs: ["Dashboard CEO", "finanzas", "servicios", "proyectos", "ideas", "calendario Sergio"],
     outputs: ["plan mensual", "prioridades semanales", "bloqueos Sergio", "decisiones pendientes"],
     actions: [
       "Revisar ventas netas vs meta",
       "Ordenar proyectos por caja, entrega y riesgo",
-      "Crear tareas del mes en ONIA Center",
+      "Crear tareas del mes en Onia Center",
       "Marcar decisiones privadas para Sergio",
     ],
     blockedBy: ["Supabase real", "Auth/RLS", "IA gateway o ejecucion manual"],
-    nextAction: "Activar briefing mensual manual dentro de ONIA Center y luego programarlo con n8n.",
+    nextAction: "Activar briefing mensual manual dentro de Onia Center y luego programarlo con n8n.",
     safetyRule: "Puede recomendar; no cambia precios, pagos, gastos ni estrategia privada sin aprobacion Sergio.",
     connectorIds: ["connector-supabase-onia-center", "connector-n8n-ops", "connector-litellm-gateway"],
     toolPreference: ["codex", "claude", "local_model", "manual"],
@@ -527,7 +527,7 @@ export const operatingAgents: OperatingAgent[] = [
     visibility: "internal_restricted",
     cadence: "weekly",
     status: "planned",
-    monthlyOutcome: "Pipeline semanal con acciones para vender ONIA Motor Local Growth, DentalGest, GestiOS y webs.",
+    monthlyOutcome: "Pipeline semanal con acciones para vender Onia Motor Local Growth, DentalGest, GestiOS y webs.",
     inputs: ["leads", "notas", "catalogo de servicios", "calendario", "evidencias"],
     outputs: ["seguimientos", "demos sugeridas", "tareas de vendedor", "alertas sin proxima accion"],
     actions: [
@@ -593,8 +593,8 @@ export const operatingAgents: OperatingAgent[] = [
   },
   {
     id: "agent-finance-fund",
-    name: "Agente Finanzas y Fondo ONIA",
-    mission: "Vigilar caja, Fondo ONIA, gastos, comisiones y uso premium durante el mes.",
+    name: "Agente Finanzas y Fondo Onia",
+    mission: "Vigilar caja, Fondo Onia, gastos, comisiones y uso premium durante el mes.",
     ownerRole: "sergio",
     visibility: "sergio_private",
     cadence: "weekly",
@@ -605,7 +605,7 @@ export const operatingAgents: OperatingAgent[] = [
     actions: [
       "Detectar gasto sin centro",
       "Bloquear pagos sin evidencia",
-      "Calcular Fondo ONIA",
+      "Calcular Fondo Onia",
       "Alertar si Higgsfield o IA premium no tiene brief aprobado",
     ],
     blockedBy: ["Supabase real", "ingresos reales", "gastos reales"],
@@ -642,7 +642,7 @@ export const operatingAgents: OperatingAgent[] = [
   {
     id: "agent-selfhosted-integrations",
     name: "Agente Self-hosted e Integraciones",
-    mission: "Mantener lista de conexiones faltantes y proponer el siguiente conector que mas desbloquea ONIA.",
+    mission: "Mantener lista de conexiones faltantes y proponer el siguiente conector que mas desbloquea Onia.",
     ownerRole: "sergio",
     visibility: "sergio_private",
     cadence: "weekly",
@@ -676,7 +676,7 @@ export const agentMonthlyPlans: AgentMonthlyPlan[] = [
     status: "planned",
     responsibleRole: "sergio",
     dueWindow: "Inicio de cada mes y revision cada lunes",
-    expectedEvidence: "Plan mensual aprobado en ONIA Center con tareas generadas.",
+    expectedEvidence: "Plan mensual aprobado en Onia Center con tareas generadas.",
     blockedUntil: "Supabase real/Auth/RLS para multiusuario",
     visibleTo: ["sergio_private"],
   },
@@ -684,7 +684,7 @@ export const agentMonthlyPlans: AgentMonthlyPlan[] = [
     id: "plan-sales-202606",
     agentId: "agent-sales-crm",
     monthLabel: "Rolling 30 dias",
-    title: "Crear rutina semanal de seguimiento para vender ONIA Motor Local Growth y SaaS",
+    title: "Crear rutina semanal de seguimiento para vender Onia Motor Local Growth y SaaS",
     projectId: "project-onia-center",
     priority: "alta",
     status: "waiting_connection",
@@ -712,7 +712,7 @@ export const agentMonthlyPlans: AgentMonthlyPlan[] = [
     id: "plan-finance-202606",
     agentId: "agent-finance-fund",
     monthLabel: "Rolling 30 dias",
-    title: "Reporte semanal de caja, Fondo ONIA y pagos bloqueados",
+    title: "Reporte semanal de caja, Fondo Onia y pagos bloqueados",
     projectId: "project-onia-center",
     priority: "alta",
     status: "planned",
@@ -753,7 +753,7 @@ export const agentMonthlyPlans: AgentMonthlyPlan[] = [
 export const calendarConnectorPlans: CalendarConnectorPlan[] = [
   {
     id: "calendar-google-private",
-    name: "Google Calendar ONIA",
+    name: "Google Calendar Onia",
     connectorId: "connector-google-calendar",
     provider: "google_calendar",
     status: "config_pending",
@@ -765,9 +765,9 @@ export const calendarConnectorPlans: CalendarConnectorPlan[] = [
       "GOOGLE_CALENDAR_ID",
     ],
     protectedBlocks: ["Google Calendar oninteligenciaartificial@gmail.com", "gym", "novia", "dormir", "shutdown", "trabajo profundo", "plan CEO"],
-    eventTypes: ["consulta inicial", "demo ONIA", "reunion proyecto", "auditoria pagada", "cliente activo"],
-    writePolicy: "Solo n8n server-side puede crear eventos aprobados; ONIA Center no expone tokens al navegador.",
-    n8nWorkflow: "ONIA - Agenda: Crear Evento",
+    eventTypes: ["consulta inicial", "demo Onia", "reunion proyecto", "auditoria pagada", "cliente activo"],
+    writePolicy: "Solo n8n server-side puede crear eventos aprobados; Onia Center no expone tokens al navegador.",
+    n8nWorkflow: "Onia - Agenda: Crear Evento",
     nextAction: "Conectar OAuth del calendario oninteligenciaartificial@gmail.com y cargar refresh token en entorno seguro.",
     safetyRule: "No abrir calendario completo a clientes ni colaboradores.",
     visibility: "sergio_private",
@@ -781,11 +781,11 @@ export const calendarConnectorPlans: CalendarConnectorPlan[] = [
     direction: "write",
     requiredEnv: ["CALCOM_BASE_URL", "CALCOM_PUBLIC_LINK", "N8N_CALCOM_BOOKING_WEBHOOK_URL"],
     protectedBlocks: ["domingo cerrado", "Google Calendar blockers", "buffers", "dias no disponibles"],
-    eventTypes: ["consulta inicial 20 min", "demo ONIA 45 min", "reunion proyecto 60 min", "auditoria pagada 60 min desactivada"],
+    eventTypes: ["consulta inicial 20 min", "demo Onia 45 min", "reunion proyecto 60 min", "auditoria pagada 60 min desactivada"],
     writePolicy: "Cal self-hosted ofrece lunes a sabado 14:00-20:00; cada booking entra a n8n/Telegram para aceptar, cancelar o reasignar antes de contar como reunion operativa.",
-    n8nWorkflow: "ONIA - Agenda: Cal.com Booking",
-    nextAction: "Mantener event types, formulario, disponibilidad, logo de perfil y webhook desde ONIA Center como panel operativo.",
-    safetyRule: "No aceptar reuniones fuera de ventana ni sin lead creado en ONIA Center.",
+    n8nWorkflow: "Onia - Agenda: Cal.com Booking",
+    nextAction: "Mantener event types, formulario, disponibilidad, logo de perfil y webhook desde Onia Center como panel operativo.",
+    safetyRule: "No aceptar reuniones fuera de ventana ni sin lead creado en Onia Center.",
     visibility: "sergio_private",
   },
   {
@@ -799,14 +799,14 @@ export const calendarConnectorPlans: CalendarConnectorPlan[] = [
     protectedBlocks: ["modo enfoque", "modo gym", "modo novia", "shutdown"],
     eventTypes: ["briefing diario", "plan semanal", "cierre Sergio", "alerta de sobrecarga"],
     writePolicy: "n8n resume y notifica; no crea tareas sensibles sin regla registrada.",
-    n8nWorkflow: "ONIA - Agenda: Briefing Diario",
+    n8nWorkflow: "Onia - Agenda: Briefing Diario",
     nextAction: "Importar workflow minimo y conectar salida Telegram.",
     safetyRule: "Telegram es control, no aprobacion implicita para publicar o contactar.",
     visibility: "sergio_private",
   },
   {
     id: "calendar-onia-center-tasks",
-    name: "Tareas ONIA Center hacia calendario",
+    name: "Tareas Onia Center hacia calendario",
     connectorId: "connector-supabase-onia-center",
     provider: "onia_center",
     status: "planned",
@@ -824,7 +824,7 @@ export const calendarConnectorPlans: CalendarConnectorPlan[] = [
 export const operatingOrganizations: OrganizationRecord[] = [
   {
     id: "org-onia",
-    name: "ONIA",
+    name: "Onia",
     kind: "internal",
     visibility: "sergio_private",
     ownerRole: "sergio",
@@ -834,7 +834,7 @@ export const operatingOrganizations: OrganizationRecord[] = [
   },
   {
     id: "org-onia-collab",
-    name: "ONIA Collab Intake",
+    name: "Onia Collab Intake",
     kind: "collab",
     visibility: "collab_safe",
     ownerRole: "sergio",
@@ -902,7 +902,7 @@ export const operatingClients: ClientRecord[] = [
   {
     id: "client-onia-internal",
     organizationId: "org-onia",
-    name: "ONIA interno",
+    name: "Onia interno",
     industry: "operacion interna",
     city: "Bolivia",
     status: "active",
@@ -926,13 +926,13 @@ export const operatingProjects: ProjectRecord[] = [
     id: "project-onia-center",
     organizationId: "org-onia",
     clientId: "client-onia-internal",
-    name: "ONIA Center",
+    name: "Onia Center",
     productLine: "onia-center",
     status: "active",
     priority: "alta",
     ownerRole: "sergio",
     privateStrategy: true,
-    description: "Sistema operativo interno para ejecutar, registrar y mostrar la operacion ONIA.",
+    description: "Sistema operativo interno para ejecutar, registrar y mostrar la operacion Onia.",
     nextStep: "Completar core de organizaciones, usuarios, proyectos, tareas, revision y adaptadores.",
     modules: ["dashboard", "crm", "tasks", "projects", "collab_review", "audit", "adapters"],
   },
@@ -945,8 +945,8 @@ export const operatingProjects: ProjectRecord[] = [
     priority: "media",
     ownerRole: "sergio",
     privateStrategy: false,
-    description: "Vertical dental separado. ONIA Center solo gestiona seguimiento interno y ventas.",
-    nextStep: "Registrar tareas comerciales y soporte sin mezclar logica clinica dentro de ONIA Center.",
+    description: "Vertical dental separado. Onia Center solo gestiona seguimiento interno y ventas.",
+    nextStep: "Registrar tareas comerciales y soporte sin mezclar logica clinica dentro de Onia Center.",
     modules: ["crm", "tasks", "sales", "support"],
   },
   {
@@ -979,14 +979,14 @@ export const operatingProjects: ProjectRecord[] = [
   {
     id: "project-webs",
     organizationId: "org-onia",
-    name: "Webs ONIA / Web Factory",
+    name: "Webs Onia / Web Factory",
     productLine: "webs",
     status: "active",
     priority: "alta",
     ownerRole: "sergio",
     privateStrategy: false,
     description: "Landing, paginas y web profesional con limites claros antes de convertirse en sistema.",
-    nextStep: "Unificar leads, diagnosticos y alcance desde ONIA Center.",
+    nextStep: "Unificar leads, diagnosticos y alcance desde Onia Center.",
     modules: ["crm", "briefs", "delivery", "evidence"],
   },
   {
@@ -1032,7 +1032,7 @@ export const operatingProjects: ProjectRecord[] = [
   {
     id: "project-content",
     organizationId: "org-onia",
-    name: "Contenido ONIA",
+    name: "Contenido Onia",
     productLine: "content",
     status: "active",
     priority: "media",
@@ -1057,7 +1057,7 @@ export const operatingProjects: ProjectRecord[] = [
   },
 ];
 
-// Ventures = los frentes de negocio ONIA vistos como torre de control. A diferencia
+// Ventures = los frentes de negocio Onia vistos como torre de control. A diferencia
 // de operatingProjects (backlog interno del panel), esto es la foto estrategica que
 // Sergio revisa: que producto/marca esta vivo, cual avanza y cual necesita atencion.
 // Datos curados a mano desde la revision de negocio; el tono del chip lo deriva la
@@ -1106,7 +1106,7 @@ export const operatingVentures: VentureRecord[] = [
   },
   {
     id: "venture-servicios-onia",
-    name: "Servicios ONIA",
+    name: "Servicios Onia",
     sector: "Webs, chatbots y automatizacion",
     status: "live",
     statusLabel: "Vivo",
@@ -1121,7 +1121,7 @@ export const operatingVentures: VentureRecord[] = [
     sector: "Nucleo comun de los SaaS",
     status: "live",
     statusLabel: "Vivo",
-    summary: "Nucleo operativo compartido de los SaaS ONIA. v0.7.x, con SIAT emitiendo manual.",
+    summary: "Nucleo operativo compartido de los SaaS Onia. v0.7.x, con SIAT emitiendo manual.",
     nextStep: "Cerrar la cobertura fiscal boliviana y adoptarlo en mas productos.",
   },
 ];
@@ -1348,7 +1348,7 @@ export const operatingTasks: TaskRecord[] = [
   },
 ];
 
-// Equipo real de ONIA. userKey casa con las claves que ya escribe la vista
+// Equipo real de Onia. userKey casa con las claves que ya escribe la vista
 // /equipo (sergio / arthur / seller_001) y el runtime; para separar a los dos
 // comerciales del mismo rol "seller" se reserva seller_002 (Jeronimo). Datos
 // base: rol, estado y trabajo permitido. CI, contacto y comision se cargan
@@ -1530,7 +1530,7 @@ export const contentAssets: ContentAsset[] = [
   {
     id: "content-onia-growth",
     projectId: "project-content",
-    title: "Pieza comercial ONIA Motor Local Growth",
+    title: "Pieza comercial Onia Motor Local Growth",
     channel: "instagram",
     status: "idea",
     publicSafe: true,
@@ -1625,7 +1625,7 @@ export const externalAdapters: ExternalAdapter[] = [
   },
   {
     id: "adapter-notion",
-    name: "Notion ONIA",
+    name: "Notion Onia",
     systemType: "notion",
     organizationId: "org-onia",
     projectId: "project-onia-center",
@@ -1676,7 +1676,7 @@ export const externalAdapters: ExternalAdapter[] = [
     mode: "api",
     status: "audit_required",
     writeAllowed: false,
-    rule: "Agenda ONIA en oninteligenciaartificial@gmail.com. Lectura/escritura solo server-side y con ventanas permitidas.",
+    rule: "Agenda Onia en oninteligenciaartificial@gmail.com. Lectura/escritura solo server-side y con ventanas permitidas.",
   },
   {
     id: "adapter-camera",
@@ -1694,7 +1694,7 @@ export const externalAdapters: ExternalAdapter[] = [
 export const integrationConnectors: IntegrationConnector[] = [
   {
     id: "connector-supabase-onia-center",
-    name: "Supabase privado ONIA Center",
+    name: "Supabase privado Onia Center",
     provider: "Supabase self-hosted",
     category: "data",
     status: "config_pending",
@@ -1726,7 +1726,7 @@ export const integrationConnectors: IntegrationConnector[] = [
   },
   {
     id: "connector-cal-booking",
-    name: "Cal.com booking ONIA",
+    name: "Cal.com booking Onia",
     provider: "Cal.com self-hosted",
     category: "calendar",
     status: "config_pending",
@@ -1745,11 +1745,11 @@ export const integrationConnectors: IntegrationConnector[] = [
     ],
     missing: [
       "Validar SMTP real en Cal self-hosted",
-      "Validar event types y formulario contra ONIA Center",
+      "Validar event types y formulario contra Onia Center",
       "Webhook n8n importado",
       "Google Calendar oninteligenciaartificial@gmail.com conectado",
     ],
-    nextAction: "Mantener Cal self-hosted desde ONIA Center: reservas, tipos, disponibilidad, perfil/logo y BOOKING_CREATED hacia n8n.",
+    nextAction: "Mantener Cal self-hosted desde Onia Center: reservas, tipos, disponibilidad, perfil/logo y BOOKING_CREATED hacia n8n.",
     safetyRule: "Cal solo abre disponibilidad comercial; Google Calendar bloquea dias u horas no disponibles y Telegram permite aceptar/cancelar/reasignar.",
     docs: ["hermes-content/deploy/calcom/README.md", "hermes-content/skills/agenda-calendario.md"],
     visibility: "sergio_private",
@@ -1757,7 +1757,7 @@ export const integrationConnectors: IntegrationConnector[] = [
   },
   {
     id: "connector-google-calendar",
-    name: "Google Calendar ONIA",
+    name: "Google Calendar Onia",
     provider: "Google Calendar API",
     category: "calendar",
     status: "config_pending",
@@ -1793,7 +1793,7 @@ export const integrationConnectors: IntegrationConnector[] = [
   },
   {
     id: "connector-n8n-ops",
-    name: "n8n automatizaciones ONIA",
+    name: "n8n automatizaciones Onia",
     provider: "n8n self-hosted",
     category: "automation",
     status: "config_pending",
@@ -1803,10 +1803,10 @@ export const integrationConnectors: IntegrationConnector[] = [
     requiredEnv: ["N8N_BASE_URL", "N8N_API_KEY"],
     optionalEnv: ["N8N_WEBHOOK_BASE_URL"],
     currentState:
-      "n8n corre en VPS segun manifest. El briefing diario ONIA Center ya tiene endpoint y workflow importable; falta cargar env vars e importarlo en la instancia canonica.",
+      "n8n corre en VPS segun manifest. El briefing diario Onia Center ya tiene endpoint y workflow importable; falta cargar env vars e importarlo en la instancia canonica.",
     prepared: [
       "Runbooks y workflows de referencia",
-      "Workflow diario ONIA Center para Sergio, Arthur y vendedoras",
+      "Workflow diario Onia Center para Sergio, Arthur y vendedoras",
       "Endpoint interno /api/onia-center/briefings/daily",
       "Comandos Telegram definidos",
       "Healthcheck n8n MCP en package scripts",
@@ -1831,7 +1831,7 @@ export const integrationConnectors: IntegrationConnector[] = [
   },
   {
     id: "connector-litellm-gateway",
-    name: "Gateway IA ONIA",
+    name: "Gateway IA Onia",
     provider: "LiteLLM + Open WebUI",
     category: "ai",
     status: "config_pending",
@@ -1840,7 +1840,7 @@ export const integrationConnectors: IntegrationConnector[] = [
     requiredEnv: ["LITELLM_BASE_URL", "LITELLM_MASTER_KEY"],
     optionalEnv: ["OPENWEBUI_BASE_URL"],
     currentState:
-      "El kit self-hosted define LiteLLM/Open WebUI. ONIA Center todavia no tiene endpoint de inferencia conectado.",
+      "El kit self-hosted define LiteLLM/Open WebUI. Onia Center todavia no tiene endpoint de inferencia conectado.",
     prepared: [
       "Arquitectura de gateway self-hosted",
       "Uso de reviewTool self_hosted en Ideas Inbox",
@@ -1859,7 +1859,7 @@ export const integrationConnectors: IntegrationConnector[] = [
   },
   {
     id: "connector-openai-api",
-    name: "OpenAI API para ONIA Bot",
+    name: "OpenAI API para Onia Bot",
     provider: "OpenAI Responses API",
     category: "ai",
     status: "config_pending",
@@ -1868,9 +1868,9 @@ export const integrationConnectors: IntegrationConnector[] = [
     requiredEnv: ["ONIA_ASSISTANT_PROVIDER", "OPENAI_ONIA_CENTER_API_KEY"],
     optionalEnv: ["OPENAI_API_KEY", "OPENAI_ONIA_CENTER_MODEL", "ONIA_ASSISTANT_MAX_OUTPUT_TOKENS"],
     currentState:
-      "ONIA Center ya puede usar /api/onia-center/assistant con ONIA_ASSISTANT_PROVIDER=openai. Falta cargar la API key en entorno seguro.",
+      "Onia Center ya puede usar /api/onia-center/assistant con ONIA_ASSISTANT_PROVIDER=openai. Falta cargar la API key en entorno seguro.",
     prepared: [
-      "Endpoint server-side con autentificacion ONIA Center",
+      "Endpoint server-side con autentificacion Onia Center",
       "Snapshot filtrado por rol antes de enviar contexto",
       "store:false para no guardar respuestas por defecto",
       "Modelo y limite de salida configurables por env",
@@ -1890,7 +1890,7 @@ export const integrationConnectors: IntegrationConnector[] = [
   },
   {
     id: "connector-codex-queue",
-    name: "Codex Queue ONIA Center",
+    name: "Codex Queue Onia Center",
     provider: "Codex manual ahora / codex exec o GitHub Action despues",
     category: "ai",
     status: "ready",
@@ -1900,7 +1900,7 @@ export const integrationConnectors: IntegrationConnector[] = [
     requiredEnv: [],
     optionalEnv: ["OPENAI_API_KEY", "CODEX_HOME", "GITHUB_TOKEN"],
     currentState:
-      "ONIA Center tiene una cola para preparar trabajos tecnicos con prompt copiable. La ejecucion sigue manual hasta activar un runner seguro.",
+      "Onia Center tiene una cola para preparar trabajos tecnicos con prompt copiable. La ejecucion sigue manual hasta activar un runner seguro.",
     prepared: [
       "Prompt builder por job",
       "Repo/rutas/aceptacion/validacion/evidencia",
@@ -1931,7 +1931,7 @@ export const integrationConnectors: IntegrationConnector[] = [
     requiredEnv: ["OLLAMA_BASE_URL"],
     optionalEnv: ["ONIA_LOCAL_MODEL_DEFAULT", "ONIA_LOCAL_MODEL_EMBEDDING"],
     currentState:
-      "Sergio confirma que ahora no puede operar modelos locales. ONIA Center queda preparado, pero el proveedor activo sera OpenAI API.",
+      "Sergio confirma que ahora no puede operar modelos locales. Onia Center queda preparado, pero el proveedor activo sera OpenAI API.",
     prepared: [
       "Ruta conceptual para revisar ideas con modelo local",
       "Separacion de sensibilidad por rol",
@@ -1959,18 +1959,18 @@ export const integrationConnectors: IntegrationConnector[] = [
     requiredEnv: ["ONIA_ASSISTANT_PROVIDER", "DIFY_BASE_URL", "DIFY_ONIA_CENTER_API_KEY"],
     optionalEnv: ["DIFY_API_KEY", "DIFY_ONIA_APP_ID"],
     currentState:
-      "ONIA Center ya tiene endpoint server-side /api/onia-center/assistant. Dify sigue pendiente de despliegue/configuracion segura.",
+      "Onia Center ya tiene endpoint server-side /api/onia-center/assistant. Dify sigue pendiente de despliegue/configuracion segura.",
     prepared: [
       "Decision previa: usar Dify para apps RAG/agents cuando haya recursos",
       "Fuentes canonicas de Hermes documentadas",
       "Separacion entre memoria privada y colaborativa",
-      "Endpoint ONIA Bot envia solo snapshot filtrado por rol",
+      "Endpoint Onia Bot envia solo snapshot filtrado por rol",
     ],
     missing: [
       "Servidor con RAM suficiente",
       "Dify desplegado y protegido",
       "Dataset saneado por sensibilidad",
-      "API key de app Dify para ONIA Center",
+      "API key de app Dify para Onia Center",
     ],
     nextAction:
       "Mantener como fase RAG/workflows. Ahora operar con ONIA_ASSISTANT_PROVIDER=openai hasta desplegar Dify.",
@@ -1990,7 +1990,7 @@ export const integrationConnectors: IntegrationConnector[] = [
     requiredEnv: ["REMOTION_RENDER_ENDPOINT"],
     optionalEnv: ["REMOTION_STORAGE_PATH", "REMOTION_WEBHOOK_SECRET"],
     currentState:
-      "ONIA tiene Video Lab y prompts, pero no existe todavia un modulo Remotion conectado a ONIA Center.",
+      "Onia tiene Video Lab y prompts, pero no existe todavia un modulo Remotion conectado a Onia Center.",
     prepared: [
       "Sistema de ideas y briefs",
       "Reglas de aprobacion para video",
@@ -1998,7 +1998,7 @@ export const integrationConnectors: IntegrationConnector[] = [
     ],
     missing: [
       "App/worker Remotion",
-      "Plantillas de video ONIA/Nuvia/clientes",
+      "Plantillas de video Onia/Nuvia/clientes",
       "Storage para assets y renders",
       "Cola de aprobacion antes de publicar",
     ],
@@ -2011,7 +2011,7 @@ export const integrationConnectors: IntegrationConnector[] = [
   {
     id: "connector-web-factory-auto",
     name: "Formulario cliente + Web Factory",
-    provider: "ONIA Web Factory",
+    provider: "Onia Web Factory",
     category: "web_factory",
     status: "prepared_pending_connection",
     selfHosted: false,
@@ -2021,7 +2021,7 @@ export const integrationConnectors: IntegrationConnector[] = [
     currentState:
       "Web Factory y /onia-center/web-factory leen recetas, referencias, codigo revisable y previews internos; falta intake publico controlado.",
     prepared: [
-      "Proyecto Webs ONIA activo",
+      "Proyecto Webs Onia activo",
       "Ideas, leads y tareas vinculables",
       "Contextos Nuvia/Web Factory reutilizables",
       "Modulo interno /onia-center/web-factory operativo",
@@ -2033,7 +2033,7 @@ export const integrationConnectors: IntegrationConnector[] = [
       "Webhook y checklist antes de entregar",
     ],
     nextAction: "Crear intake publico controlado que genere lead, brief, tarea y preview Web Factory con revision.",
-    safetyRule: "El cliente no activa deploy ni cobro automatico; ONIA revisa alcance y precio primero.",
+    safetyRule: "El cliente no activa deploy ni cobro automatico; Onia revisa alcance y precio primero.",
     docs: ["web-factory/docs/WEB_FACTORY_OPERATING_RUNBOOK_20260625.md", "web-factory/DESIGN_STACK.md", "PROJECTS_ORCHESTRATION.md"],
     visibility: "internal_restricted",
     priority: "alta",
@@ -2049,7 +2049,7 @@ export const integrationConnectors: IntegrationConnector[] = [
     requiredEnv: [],
     optionalEnv: ["HIGGSFIELD_API_KEY"],
     currentState:
-      "Modo manual por defecto para evitar gasto de tokens. ONIA Center registra uso premium por centro.",
+      "Modo manual por defecto para evitar gasto de tokens. Onia Center registra uso premium por centro.",
     prepared: [
       "Regla quiet mode",
       "Politica de uso premium",
@@ -2134,10 +2134,10 @@ export const integrationConnectors: IntegrationConnector[] = [
     requiredEnv: ["UPTIME_KUMA_BASE_URL"],
     optionalEnv: ["UPTIME_KUMA_API_KEY"],
     currentState:
-      "Uptime Kuma esta en el stack self-hosted privado, pero ONIA Center no consume su estado.",
+      "Uptime Kuma esta en el stack self-hosted privado, pero Onia Center no consume su estado.",
     prepared: [
       "Servicio privado definido en stack",
-      "Modelo de alertas operativas en ONIA Center",
+      "Modelo de alertas operativas en Onia Center",
     ],
     missing: [
       "URL/tunnel privado",
@@ -2185,7 +2185,7 @@ export const integrationConnectors: IntegrationConnector[] = [
 export const featureReadinessItems: FeatureReadinessItem[] = [
   {
     id: "feature-gestios-core",
-    title: "GestiOS Core como base inicial ONIA",
+    title: "GestiOS Core como base inicial Onia",
     module: "crm",
     status: "planned",
     ownerRole: "sergio",
@@ -2194,7 +2194,7 @@ export const featureReadinessItems: FeatureReadinessItem[] = [
     prepared: [
       "Blueprint core inicial",
       "Auditoria DentalGest/GestiOS/Ganadero/Bolivian",
-      "Regla ONIA Center controla y GestiOS ejecuta",
+      "Regla Onia Center controla y GestiOS ejecuta",
       "ProveeGest definido como vertical validable",
     ],
     missing: [
@@ -2216,7 +2216,7 @@ export const featureReadinessItems: FeatureReadinessItem[] = [
     privateOnly: false,
     dependsOn: ["connector-supabase-onia-center"],
     prepared: [
-      "Formularios en ONIA Center",
+      "Formularios en Onia Center",
       "Fallback local",
       "Filtros por rol",
       "Snapshot exportable",
@@ -2224,7 +2224,7 @@ export const featureReadinessItems: FeatureReadinessItem[] = [
     missing: ["Supabase real para multiusuario", "Auth real por usuario"],
     nextAction: "Usarlo hoy en modo local y conectar Supabase para que deje de depender del navegador.",
     route: "/onia-center#uso-diario",
-    evidenceRule: "Lo que no este en ONIA Center, Notion o evidencia aprobada no cuenta para pagos ni cierres.",
+    evidenceRule: "Lo que no este en Onia Center, Notion o evidencia aprobada no cuenta para pagos ni cierres.",
   },
   {
     id: "feature-ideas-inbox",
@@ -2328,7 +2328,7 @@ export const featureReadinessItems: FeatureReadinessItem[] = [
   },
   {
     id: "feature-remotion-editor",
-    title: "Editor de video Remotion dentro de ONIA Center",
+    title: "Editor de video Remotion dentro de Onia Center",
     module: "video_editor",
     status: "planned",
     ownerRole: "sergio",
@@ -2359,7 +2359,7 @@ export const featureReadinessItems: FeatureReadinessItem[] = [
     privateOnly: false,
     dependsOn: ["connector-web-factory-auto", "connector-supabase-onia-center", "connector-openai-api"],
     prepared: [
-      "Proyecto Webs ONIA",
+      "Proyecto Webs Onia",
       "CRM y tareas",
       "Web Factory existente",
       "Modulo interno /onia-center/web-factory",

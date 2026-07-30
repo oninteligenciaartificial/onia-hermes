@@ -122,14 +122,14 @@ type RuntimeApiResponse<T = RuntimeSnapshot> = {
 type TeamEntity = "lead" | "task" | "note" | "idea";
 
 const serviceOptions = [
-  { id: "onia-motor-local-growth", label: "ONIA Motor Local Growth" },
+  { id: "onia-motor-local-growth", label: "Onia Motor Local Growth" },
   { id: "onia-motor-local-starter", label: "Motor Local Starter" },
   { id: "onia-motor-local-pro", label: "Motor Local Pro" },
-  { id: "web-pro-onia", label: "Web Pro ONIA" },
+  { id: "web-pro-onia", label: "Web Pro Onia" },
 ];
 
 const projectOptions = [
-  { id: "project-webs", label: "Webs ONIA" },
+  { id: "project-webs", label: "Webs Onia" },
   { id: "project-chatbots", label: "Chatbots" },
   { id: "project-automations", label: "Automatizaciones" },
   { id: "project-dentagest", label: "DentalGest" },
@@ -179,7 +179,7 @@ function statusLabel(value: string) {
 async function parseJson<T>(response: Response) {
   const body = (await response.json()) as T;
   if (!response.ok) {
-    const message = typeof body === "object" && body && "message" in body ? String(body.message) : "Error de ONIA Center.";
+    const message = typeof body === "object" && body && "message" in body ? String(body.message) : "Error de Onia Center.";
     throw new Error(message);
   }
   return body;
@@ -237,7 +237,7 @@ export default function OniaCenterTeamPage() {
 
   useEffect(() => {
     loadRuntime().catch((error) => {
-      const message = error instanceof Error ? error.message : "No se pudo cargar ONIA Center.";
+      const message = error instanceof Error ? error.message : "No se pudo cargar Onia Center.";
       setNotice(message);
       if (message.toLowerCase().includes("sesion") || message.toLowerCase().includes("auth")) {
         window.location.href = "/onia-center/login?next=/onia-center/equipo&reason=auth_required";
@@ -261,7 +261,7 @@ export default function OniaCenterTeamPage() {
 
   async function createEntity(entity: TeamEntity, data: unknown) {
     setIsSaving(true);
-    setNotice("Guardando en ONIA Center...");
+    setNotice("Guardando en Onia Center...");
     try {
       await fetch("/api/onia-center/runtime", {
         method: "POST",
@@ -387,7 +387,7 @@ export default function OniaCenterTeamPage() {
             <ShieldCheck size={22} />
           </span>
           <div>
-            <strong>ONIA Center</strong>
+            <strong>Onia Center</strong>
             <small>Vista equipo segura</small>
           </div>
         </div>
@@ -424,7 +424,7 @@ export default function OniaCenterTeamPage() {
       <section className="onia-center-main">
         <header className="onia-hero">
           <div>
-            <span className="onia-eyebrow">ONIA Center / Equipo</span>
+            <span className="onia-eyebrow">Onia Center / Equipo</span>
             <h1>Trabajo registrable sin datos privados</h1>
             <p>
               Esta vista usa solo APIs filtradas por rol. No carga capital Sergio, deuda exacta, caja completa,
@@ -553,7 +553,7 @@ export default function OniaCenterTeamPage() {
               <strong>Agenda comercial</strong>
             </div>
             <p className="onia-team-helper">
-              Las llamadas se registran como solicitud interna. Cal/Google Calendar se confirma despues desde Sergio/ONIA.
+              Las llamadas se registran como solicitud interna. Cal/Google Calendar se confirma despues desde Sergio/Onia.
             </p>
             <div className="onia-live-list">
               {runtime.leads.filter((lead) => lead.meetingWindow || lead.meetingStatus === "solicitada").length ? (
@@ -820,7 +820,7 @@ export default function OniaCenterTeamPage() {
               {runtime.notes.length ? runtime.notes.map((note) => (
                 <div key={note.id}>
                   <strong>{note.title}</strong>
-                  <span>{note.kind} / {note.actorRole ? roleLabels[note.actorRole] : "ONIA"}</span>
+                  <span>{note.kind} / {note.actorRole ? roleLabels[note.actorRole] : "Onia"}</span>
                   <small>{note.detail || note.linkedTo}</small>
                 </div>
               )) : <div><strong>Sin notas visibles</strong><small>Registra llamadas, bloqueos o avances.</small></div>}

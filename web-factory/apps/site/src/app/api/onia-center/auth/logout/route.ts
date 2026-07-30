@@ -7,7 +7,7 @@ export async function POST() {
   const response = NextResponse.json({
     ok: true,
     mode: "logged_out",
-    message: "Sesion ONIA Center cerrada.",
+    message: "Sesion Onia Center cerrada.",
   });
 
   response.cookies.set("onia_center_access_token", "", {

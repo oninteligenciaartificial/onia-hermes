@@ -1,6 +1,6 @@
-# ONIA - Colaboradores Comerciales sin inversion 2026
+# Onia - Colaboradores Comerciales sin inversion 2026
 
-Estado: canonico interno Sergio/ONIA.
+Estado: canonico interno Sergio/Onia.
 Fecha: 2026-07-18.
 Uso: sistema para incorporar y administrar colaboradores comerciales que NO
 aportan capital, pagados 100% por resultado, en prueba de 60 dias por fases.
@@ -25,8 +25,8 @@ Fase 2 (dia 31-60) = Plan B. Solo si pasan el filtro. Suma base recuperable y
                      premia la produccion propia.
 ```
 
-Regla que ordena todo: primero ONIA vive, despues se reparte. No aportan capital,
-no son socios, no son empleados. Ganan cuando ONIA cobra.
+Regla que ordena todo: primero Onia vive, despues se reparte. No aportan capital,
+no son socios, no son empleados. Ganan cuando Onia cobra.
 
 ## 1. Encuadre y nivel
 
@@ -35,7 +35,7 @@ no son socios, no son empleados. Ganan cuando ONIA cobra.
   Nivel 2: Arthur ya es el coordinador; no hay tres coordinadores.
 - Coordinacion diaria: Arthur (si esta activo) o Sergio. Sergio aprueba dinero,
   precios, descuentos, contactos sensibles y comisiones.
-- No son socios de ONIA, no participan de DentalGest, GestiOS, Hermes, Web
+- No son socios de Onia, no participan de Onia Dental, Onia Comercio, Hermes, Web
   Factory ni Nuvia salvo comision por venta aprobada.
 - No son empleados formales. Ver seccion 10 (riesgo laboral).
 
@@ -50,7 +50,7 @@ cobrada = una comision. Sin cobro + CRM completo, no hay pago.
 
 | Servicio | Comision colaborador | Regla |
 |---|---:|---|
-| DentalGest / GestiOS mensual | 35% | Solo sobre el primer pago neto |
+| Onia Dental / Onia Comercio mensual | 35% | Solo sobre el primer pago neto |
 | Add-on mensual aprobado | 35% | Solo sobre el primer pago neto |
 | Pagina web (vende o produce) | 12% | Sobre pago neto cobrado |
 | Auditoria / diagnostico / n8n / conector | 10% | Sobre neto cobrado |
@@ -65,14 +65,14 @@ cobrada = una comision. Sin cobro + CRM completo, no hay pago.
 
 | Servicio | Comision colaborador | Cambia vs Fase 1 |
 |---|---:|---|
-| DentalGest / GestiOS mensual | 35% | igual |
+| Onia Dental / Onia Comercio mensual | 35% | igual |
 | Pagina web - solo la vende | 12% | igual |
 | Pagina web - vende Y produce completa | 18% | premia producir, no solo vender |
 | Auditoria / diagnostico / n8n | 10% | igual |
 
 - Base recuperable: Bs. 400/mes, tope 2 meses, solo si cumplio >=80% del piso.
   Es adelanto, no sueldo: se descuenta contra las comisiones que genere. Si
-  vende, no le cuesta nada extra a ONIA; si cumple el piso pero no vende, el
+  vende, no le cuesta nada extra a Onia; si cumple el piso pero no vende, el
   riesgo maximo expuesto es Bs. 400/mes por persona.
 - Bonos activos (seccion 9).
 - Escalera: 4 semanas verdes seguidas suben la comision web de 12% a 15% de forma
@@ -85,7 +85,7 @@ Se pasa a Plan B al dia 31 solo si en los primeros 30 dias:
 1. Logro 3 de 4 semanas verdes (>=80% del piso sin fallar los innegociables).
 2. Consiguio al menos 1 venta cobrada, o pipeline real (propuestas enviadas +
    seguimientos vivos registrados).
-3. Mantuvo CRM / ONIA Center ordenado.
+3. Mantuvo CRM / Onia Center ordenado.
 
 Si no cumple: sigue en Plan A otros 30 dias o sale de la prueba. Ningun ascenso
 es por calendario; se gana con evidencia.
@@ -96,10 +96,10 @@ es por calendario; se gana con evidencia.
 1. Cobro real confirmado y registrado.
 2. - costos directos externos del cliente.
 3. - comision del colaborador segun tabla (solo sobre lo cobrado).
-4. Lo restante queda en ONIA: Fondo ONIA, entrega, herramientas, utilidad.
+4. Lo restante queda en Onia: Fondo Onia, entrega, herramientas, utilidad.
 ```
 
-La comision baja (10%-35%) ya deja a ONIA por delante, porque ONIA paga entrega,
+La comision baja (10%-35%) ya deja a Onia por delante, porque Onia paga entrega,
 soporte, herramientas, mantenimiento y riesgo de cancelacion.
 
 ### Cierres y pagos
@@ -119,7 +119,7 @@ Cuota diaria minima:
 - 10 mensajes bien personalizados
 - 5 seguimientos
 - 1 a 2 demos u oportunidades agendadas
-- CRM / ONIA Center actualizado al cierre del dia
+- CRM / Onia Center actualizado al cierre del dia
 
 Scorecard semanal:
 
@@ -131,14 +131,14 @@ Scorecard semanal:
 | Llamadas o audios comerciales | 8 |
 | Reuniones o demos agendadas | 3 |
 | Propuestas / auditorias / diagnosticos enviados | 3 |
-| CRM / ONIA Center actualizado (viernes) | 100% |
+| CRM / Onia Center actualizado (viernes) | 100% |
 | Reporte semanal | 1 |
 
 - Semana aprobada = >=80% del total y sin fallar los tres innegociables: CRM al
   dia, seguimientos, reporte semanal. Fallar uno invalida la semana.
 - Consecuencias: 1 semana fallida = feedback; 2 semanas = variable mas bajo y
   baja de responsabilidad; 3 semanas seguidas = pausa o salida.
-- Regla dura: si no esta registrado en ONIA Center, no cuenta para pago,
+- Regla dura: si no esta registrado en Onia Center, no cuenta para pago,
   seguimiento, cierre ni evaluacion.
 
 ## 4. Territorio y anti-colision (dos personas, no una)
@@ -152,11 +152,11 @@ Scorecard semanal:
   campos (origen / contacto / seguimiento / cierre / brief / produccion / QA), no
   por percepcion.
 
-## 5. Registro obligatorio - ONIA Center
+## 5. Registro obligatorio - Onia Center
 
-Fuente de verdad operativa: ONIA Center `/onia-center/equipo` (vista segura por
+Fuente de verdad operativa: Onia Center `/onia-center/equipo` (vista segura por
 rol) sobre el schema Supabase `onia_sales`. Mientras el panel termina de cablear
-el scorecard y los pagos, Notion -> CRM Vendedores ONIA es respaldo.
+el scorecard y los pagos, Notion -> CRM Vendedores Onia es respaldo.
 
 Se registra: leads, contactos, seguimientos, notas de llamada, demos, propuestas,
 cobros, evidencia de entrega, scorecard y comisiones. La vista de equipo NO
@@ -210,13 +210,13 @@ Obligaciones de servicio (SLA):
 
 ## 9. Bonos por sobresaliente
 
-Activos en ambas fases, pagados solo con semaforo en verde (Fondo ONIA ya cubrio
+Activos en ambas fases, pagados solo con semaforo en verde (Fondo Onia ya cubrio
 herramientas y reserva):
 
 | Bono | Se gatilla | Recompensa |
 |---|---|---:|
 | Meta mensual | mas de 4 ventas cobradas en el mes | Bs. 250 |
-| Recurrencia SaaS | cada DentalGest/GestiOS que llega a 30 dias activo | Bs. 120 |
+| Recurrencia SaaS | cada Onia Dental/Onia Comercio que llega a 30 dias activo | Bs. 120 |
 | Calidad | mes completo sin reclamos ni rescates de Sergio | Bs. 150 |
 | Discrecional | algo excepcional que Sergio reconozca | definido por Sergio |
 

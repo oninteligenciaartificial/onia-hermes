@@ -15,7 +15,7 @@ export function IncomeSection({ incomes }: { incomes: Income[] }) {
       id="ingresos"
       label="Cobros"
       title="Ingresos y comisiones"
-      description="La comision estimada no es pago aprobado. ONIA valida cobro real, datos completos y margen antes de pagar."
+      description="La comision estimada no es pago aprobado. Onia valida cobro real, datos completos y margen antes de pagar."
       icon={Banknote}
       density="compact"
     >

@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
       {
         ok: false,
         mode: "configuration_pending",
-        message: "Falta configuracion Auth para refrescar la sesion de ONIA Center.",
+        message: "Falta configuracion Auth para refrescar la sesion de Onia Center.",
         missingConfiguration: getMissingOniaCenterAuthConfig({ requireAnon: true }),
       },
       { status: 200 },
@@ -43,7 +43,7 @@ export async function POST(request: NextRequest) {
 
   if (!refreshToken) {
     return NextResponse.json(
-      { ok: false, mode: "auth_required", message: "No hay sesion de ONIA Center para refrescar." },
+      { ok: false, mode: "auth_required", message: "No hay sesion de Onia Center para refrescar." },
       { status: 401 },
     );
   }
@@ -73,7 +73,7 @@ export async function POST(request: NextRequest) {
   if (!authResponse.ok) {
     // Refresh token vencido o revocado: limpiar la sesion para forzar re-login.
     const response = NextResponse.json(
-      { ok: false, mode: "auth_error", message: "La sesion de ONIA Center expiro. Inicia sesion nuevamente." },
+      { ok: false, mode: "auth_error", message: "La sesion de Onia Center expiro. Inicia sesion nuevamente." },
       { status: 401 },
     );
     response.cookies.set("onia_center_access_token", "", cookieOptions(0));

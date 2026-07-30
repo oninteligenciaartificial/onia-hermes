@@ -65,7 +65,7 @@ export async function POST(request: Request) {
       {
         ok: false,
         mode: "configuration_pending",
-        message: "ONIA Center necesita Supabase server-side antes de ejecutar mantenimiento.",
+        message: "Onia Center necesita Supabase server-side antes de ejecutar mantenimiento.",
         missingConfiguration: getMissingOniaCenterConfig(),
         data: null,
       },

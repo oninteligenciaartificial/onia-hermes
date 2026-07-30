@@ -1,4 +1,4 @@
-# ONIA — Catálogo de precios oficial 2026
+# Onia — Catálogo de precios oficial 2026
 
 Fecha: 2026-07-04.
 Estado: precios de arranque vigentes (Kit Comercial Interno, junio/julio 2026).
@@ -6,7 +6,7 @@ Fuente de verdad de precios y comisiones de la vendedora.
 El cotizador del panel (`/vendedores/cotizador`) lee estos mismos precios.
 
 > Comisión de la vendedora = **porcentaje fijo del PRIMER PAGO** (una sola vez).
-> Los pagos siguientes son de ONIA. El modelo de colaborador de Arthur (skim +
+> Los pagos siguientes son de Onia. El modelo de colaborador de Arthur (skim +
 > escala de intervención) es SEPARADO y vive en
 > `docs/ONIA_ACUERDO_ARTHUR_FUENTES_60_DIAS_2026.md`; no aplica a la vendedora.
 
@@ -17,7 +17,7 @@ No hay precio fijo de lista: **cada proyecto se cotiza aparte**. Esta tabla es e
 componentes y ajustando por alcance real, bajo estas reglas:
 
 1. **El catálogo es el PISO.** No cotizar por debajo sin aprobación de Sergio.
-2. **No improvisar precios.** Descuentos en DentalGest / Gesti-OS requieren
+2. **No improvisar precios.** Descuentos en Onia Dental / Onia Comercio requieren
    aprobación.
 3. **Todo proyecto sale con un mensual pegado** (Cuidado Web / SaaS / add-on).
 4. **Se cobra resultado y automatización, no horas ni páginas.**
@@ -27,21 +27,21 @@ componentes y ajustando por alcance real, bajo estas reglas:
 7. **Asesorías no se cobran por ahora:** auditoría y diagnóstico son gancho gratis.
 8. **Sergio aprueba** precio final, descuentos y alcance antes de enviar.
 
-## 1. SaaS (DentalGest / Gesti-OS) — recurrente
+## 1. SaaS (Onia Dental / Onia Comercio) — recurrente
 
-Recurrencia de ONIA. Comisión vendedora: **35% del primer mes**, una vez.
+Recurrencia de Onia. Comisión vendedora: **35% del primer mes**, una vez.
 
 | Producto | Precio Bs/mes | Comisión vendedora (35%) |
 |---|---:|---:|
-| DentalGest Básico | 320 | 112 |
-| DentalGest Profesional | 750 | 262,50 |
-| DentalGest Clínica | 1.500 | 525 |
-| Gesti-OS Básico | 350 | 122,50 |
-| Gesti-OS Crecer | 530 | 185,50 |
-| Gesti-OS Pro | 800 | 280 |
-| Gesti-OS Empresarial | 1.250 | 437,50 |
+| Onia Dental Básico | 320 | 112 |
+| Onia Dental Profesional | 750 | 262,50 |
+| Onia Dental Clínica | 1.500 | 525 |
+| Onia Comercio Básico | 350 | 122,50 |
+| Onia Comercio Crecer | 530 | 185,50 |
+| Onia Comercio Pro | 800 | 280 |
+| Onia Comercio Empresarial | 1.250 | 437,50 |
 
-Onboarding SaaS (una vez): DentalGest **290 / 690 / 1.490** según alcance —
+Onboarding SaaS (una vez): Onia Dental **290 / 690 / 1.490** según alcance —
 comisión **10%**.
 
 ## 2. Páginas web y captación (pago único)
@@ -50,7 +50,7 @@ comisión **10%**.
 |---|---:|---:|
 | Landing de Captación | 790 | 79 (10%) |
 | Web Profesional | 1.500 | 180 (12%) |
-| Web Pro ONIA | 2.900 | 348 (12%) |
+| Web Pro Onia | 2.900 | 348 (12%) |
 
 Cuidado Web (mensual, comisión 10% del primer mes):
 
@@ -82,13 +82,13 @@ Add-ons (se venden después del primer cierre):
 
 | Add-on | Precio Bs | Nota |
 |---|---:|---|
-| WhatsApp operativo DentalGest | 650 inst. + 350/mes + Meta | Requiere aprobación |
-| Agenda pública DentalGest | 150/mes | |
-| Usuario extra DentalGest | 70/mes | |
-| Insumos DentalGest | 80/mes | |
-| WhatsApp Gesti-OS | 280/mes + excedentes | Requiere aprobación |
-| QR / cobro Gesti-OS | 105/mes | Validar proveedor |
-| E-commerce Gesti-OS (PRO+) | 140/mes | |
+| WhatsApp operativo Onia Dental | 650 inst. + 350/mes + Meta | Requiere aprobación |
+| Agenda pública Onia Dental | 150/mes | |
+| Usuario extra Onia Dental | 70/mes | |
+| Insumos Onia Dental | 80/mes | |
+| WhatsApp Onia Comercio | 280/mes + excedentes | Requiere aprobación |
+| QR / cobro Onia Comercio | 105/mes | Validar proveedor |
+| E-commerce Onia Comercio (PRO+) | 140/mes | |
 | CRM / formulario a n8n | 790 setup | |
 | Conexión canal social (IG/TikTok) | 690 setup | Sin prometer aprobación automática |
 | Integración extra entre sistemas | desde 1.900 | Diagnóstico + alcance escrito |
@@ -112,17 +112,17 @@ fotos profesionales. Dominio y hosting a nombre del cliente.
 
 - Se paga **una sola vez** por cliente y por sistema, sobre el **primer pago
   neto real y comprobado** (primer mes de SaaS, enganche, anticipo o setup).
-- Los pagos siguientes (mensualidad, renovación, mantenimiento) son de ONIA.
+- Los pagos siguientes (mensualidad, renovación, mantenimiento) son de Onia.
 - La vendedora lidera llamadas y seguimiento; Sergio entra en casos importantes,
   objeciones técnicas o cierres grandes.
 - Las comisiones pueden subir con ventas reales cobradas y buen desempeño, pero
   no suben automáticamente.
 
-Ejemplo: vende DentalGest Profesional, el cliente paga el primer mes de Bs. 750
-→ comisión Bs. 262,50 una sola vez. Los meses siguientes son de ONIA.
+Ejemplo: vende Onia Dental Profesional, el cliente paga el primer mes de Bs. 750
+→ comisión Bs. 262,50 una sola vez. Los meses siguientes son de Onia.
 
 ## 8. Plan de subida de precios
 
-Cuando ONIA tenga 3-5 casos con resultados en portafolio, se sube la línea de
+Cuando Onia tenga 3-5 casos con resultados en portafolio, se sube la línea de
 webs (Landing → 2.000, Web Pro → 4.500) y se agregan módulos del Core. Los precios
 de arriba son de arranque para vender ahora, no permanentes.

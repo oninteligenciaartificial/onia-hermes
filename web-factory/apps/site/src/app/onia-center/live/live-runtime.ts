@@ -760,7 +760,7 @@ export async function getContentPipelineCounts(): Promise<ContentPipelineCounts 
 
 // ---------------------------------------------------------------------------
 // 8. Costos y suscripciones — onia_center.cost_items.
-//    Cada gasto recurrente de ONIA (infra, dominios, APIs, email, tools) con su
+//    Cada gasto recurrente de Onia (infra, dominios, APIs, email, tools) con su
 //    ciclo de cobro y proximo pago. Para item_key='openai_api' el raw trae el
 //    gasto IA del mes en vivo (raw.spend_usd_mtd). El panel LEE, no escribe.
 // ---------------------------------------------------------------------------

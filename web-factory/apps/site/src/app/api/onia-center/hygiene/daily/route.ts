@@ -146,7 +146,7 @@ async function commitReport(report: HygieneReport, snapshot: RuntimeSnapshot) {
   const createdCodexJobs = [];
   const skipped = [];
 
-  const noteTitle = "Higiene diaria: resumen proyectos ONIA";
+  const noteTitle = "Higiene diaria: resumen proyectos Onia";
   if (!titleExists(snapshot, noteTitle)) {
     const note = await createOniaCenterEntity("note", {
       kind: "nota",
@@ -223,7 +223,7 @@ export async function POST(request: Request) {
       {
         ok: false,
         mode: "configuration_pending",
-        message: "ONIA Center necesita Supabase server-side antes de registrar higiene diaria.",
+        message: "Onia Center necesita Supabase server-side antes de registrar higiene diaria.",
         missingConfiguration: getMissingOniaCenterConfig(),
         data: null,
       },
@@ -249,7 +249,7 @@ export async function POST(request: Request) {
     return NextResponse.json({
       ok: true,
       mode: payload.commit ? "hygiene_committed" : "hygiene_dry_run",
-      message: payload.commit ? "Higiene diaria registrada en ONIA Center." : "Higiene diaria validada en modo prueba.",
+      message: payload.commit ? "Higiene diaria registrada en Onia Center." : "Higiene diaria validada en modo prueba.",
       data: {
         generatedAt: payload.report.generatedAt,
         totals: payload.report.totals,

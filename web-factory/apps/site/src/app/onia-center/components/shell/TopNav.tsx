@@ -24,7 +24,7 @@ export function TopNav({ canSeeFinance = true }: TopNavProps) {
   const tabs = TABS.filter((tab) => (tab.finance ? canSeeFinance : true));
 
   return (
-    <nav aria-label="Secciones de ONIA Center" className="flex gap-0.5">
+    <nav aria-label="Secciones de Onia Center" className="flex gap-0.5">
       {tabs.map((tab) => {
         const active = pathname === tab.href;
         return (

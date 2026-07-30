@@ -12,8 +12,8 @@ const readexPro = Readex_Pro({
 });
 
 export const metadata: Metadata = {
-  title: "ONIA Center",
-  description: "Panel operativo de ONIA para servicios self-hosted, migracion, requisitos y control de riesgos.",
+  title: "Onia Center",
+  description: "Panel operativo de Onia para servicios self-hosted, migracion, requisitos y control de riesgos.",
 };
 
 export default function RootLayout({

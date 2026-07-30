@@ -211,7 +211,7 @@ export async function getOniaCenterActor(request: Request): Promise<OniaCenterAu
       ok: false,
       code: "configuration_pending",
       status: 200,
-      message: "ONIA Center aun no tiene Supabase server-side configurado.",
+      message: "Onia Center aun no tiene Supabase server-side configurado.",
       missingConfiguration: getMissingOniaCenterAuthConfig(),
     };
   }
@@ -222,7 +222,7 @@ export async function getOniaCenterActor(request: Request): Promise<OniaCenterAu
       ok: false,
       code: "auth_required",
       status: 401,
-      message: "Supabase esta configurado, pero falta sesion de usuario ONIA Center.",
+      message: "Supabase esta configurado, pero falta sesion de usuario Onia Center.",
     };
   }
 
@@ -235,7 +235,7 @@ export async function getOniaCenterActor(request: Request): Promise<OniaCenterAu
       ok: false,
       code: "auth_error",
       status: 401,
-      message: `Sesion ONIA Center invalida o expirada. ${detail}`,
+      message: `Sesion Onia Center invalida o expirada. ${detail}`,
     };
   }
 
@@ -259,7 +259,7 @@ export async function getOniaCenterActor(request: Request): Promise<OniaCenterAu
       ok: false,
       code: "forbidden",
       status: 403,
-      message: "Usuario autenticado sin perfil activo en ONIA Center.",
+      message: "Usuario autenticado sin perfil activo en Onia Center.",
     };
   }
 
@@ -317,7 +317,7 @@ export function isSergio(actor: OniaCenterActor) {
   return actor.role === "sergio";
 }
 
-// Finanzas del equipo (caja, Fondo ONIA, ganancias por persona) viven en el
+// Finanzas del equipo (caja, Fondo Onia, ganancias por persona) viven en el
 // scope internal_restricted. Reusa la matriz de canActorSeeScope como fuente
 // unica de verdad: sergio/area/arthur -> true; seller/freelancer -> false. Con
 // esto la pestana y la ruta de Finanzas se ocultan a Camila (seller) sin

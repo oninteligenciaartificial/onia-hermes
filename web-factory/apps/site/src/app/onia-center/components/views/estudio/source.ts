@@ -13,7 +13,7 @@ import {
 // ============================================================================
 // Estudio de Contenido — datos reales (Fase 2).
 //
-// Modela el editor de video de ONIA: ver → transcribir → cortar → tu OK →
+// Modela el editor de video de Onia: ver → transcribir → cortar → tu OK →
 // render → publicar. La "regla de oro" (la tabla de cortes se aprueba antes de
 // aplicar) es el centro del producto: cada CutReview trae los segmentos
 // keep/cut con motivo y texto, leídos de review_queue (source_type=video_cut).
@@ -233,7 +233,7 @@ const FINE_LANES = new Set(["sergio", "cliente", "onia-yt", "onia-ig", "onia"]);
 const BASE_LANE: Record<string, { lane: EditorLane; laneLabel: string }> = {
   sergio: { lane: "sergio", laneLabel: "Sergio" },
   client: { lane: "cliente", laneLabel: "Cliente" },
-  onia: { lane: "onia", laneLabel: "ONIA" },
+  onia: { lane: "onia", laneLabel: "Onia" },
 };
 
 function laneInfo(dbLane?: string, raw?: Record<string, unknown> | null): { lane: EditorLane; laneLabel: string } {

@@ -23,7 +23,7 @@ export function VenturesPanel() {
   return (
     <SurfaceCard
       title="Productos y ventures"
-      subtitle="El estado real de cada frente ONIA: que esta vivo, que avanza y que necesita tu atencion."
+      subtitle="El estado real de cada frente Onia: que esta vivo, que avanza y que necesita tu atencion."
       action={
         <span className="inline-flex items-center gap-1.5 rounded-full bg-[color:var(--accent-wash)] px-2.5 py-1 text-[11px] font-semibold text-[color:var(--accent-strong)]">
           <span

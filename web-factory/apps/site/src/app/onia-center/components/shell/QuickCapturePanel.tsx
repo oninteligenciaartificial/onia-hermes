@@ -80,7 +80,7 @@ export function QuickCapturePanel() {
             </button>
             <h2 className="text-lg font-medium text-card-foreground">Captura rapida</h2>
             <p className="mt-1 text-sm text-muted-foreground">
-              Anota algo para no perderlo. Queda como nota interna en ONIA Center.
+              Anota algo para no perderlo. Queda como nota interna en Onia Center.
             </p>
             <textarea
               value={text}

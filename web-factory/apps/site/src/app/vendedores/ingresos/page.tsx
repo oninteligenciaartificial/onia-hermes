@@ -15,7 +15,7 @@ export default function IngresosPage() {
               items={[
                 "Primer pago cobrado y comprobado.",
                 "Servicio y cliente correctamente identificados.",
-                "Monto neto validado por ONIA.",
+                "Monto neto validado por Onia.",
                 "Datos completos y margen sin riesgo.",
               ]}
             />

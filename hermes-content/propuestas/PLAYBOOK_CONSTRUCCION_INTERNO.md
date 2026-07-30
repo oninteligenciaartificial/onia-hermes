@@ -1,7 +1,7 @@
 # Playbook de construcción — INTERNO (cómo armamos cada proyecto)
 
 Última actualización: 2026-06-10
-Documento interno ONIA. Confidencial. Paso a paso real de entrega por cliente.
+Documento interno Onia. Confidencial. Paso a paso real de entrega por cliente.
 
 > Regla transversal: todo se arma sobre la librería de plantillas
 > (ver `ESTRATEGIA_PLANTILLAS_WEB_INTERNO.md`). El cliente NUNCA sabe que es
@@ -75,8 +75,8 @@ Tiempo objetivo con plantilla: ~5 días (paquete Captación).
 - Plan de pauta: dónde invertir, mensajes, segmentación.
 - Entregable: documento de diagnóstico + plan (no garantiza ventas).
 
-### Paso 3 — CRM + embudo (Días 4–5) — GestiOS + n8n
-- Configurar GestiOS (o CRM) con estados del embudo.
+### Paso 3 — CRM + embudo (Días 4–5) — Onia Comercio + n8n
+- Configurar Onia Comercio (o CRM) con estados del embudo.
 - Clonar flujo base `form→crm`: formulario web / WhatsApp → registra prospecto.
 - Asignar estados, responsables y recordatorios de seguimiento.
 - Reportes de conversión (cuántos entran, dónde se traban).
@@ -88,7 +88,7 @@ Tiempo objetivo con plantilla: ~5 días (paquete Captación).
 - [ ] Recordatorios de seguimiento activos
 - [ ] Documento de diagnóstico + plan entregado
 - [ ] Cliente capacitado en el CRM
-- [ ] Mensual activo (GestiOS / Cuidado Web)
+- [ ] Mensual activo (Onia Comercio / Cuidado Web)
 
 ---
 

@@ -1,5 +1,5 @@
-// Catalogo de cotizacion ONIA — fuente: Kit Comercial Interno (vendedora) + ONIA_CATALOGO_PRECIOS_2026.md
-// Comision = porcentaje fijo del PRIMER PAGO (una sola vez). Los pagos siguientes son de ONIA.
+// Catalogo de cotizacion Onia — fuente: Kit Comercial Interno (vendedora) + ONIA_CATALOGO_PRECIOS_2026.md
+// Comision = porcentaje fijo del PRIMER PAGO (una sola vez). Los pagos siguientes son de Onia.
 
 export type QuoteKind = "oneoff" | "monthly";
 
@@ -27,16 +27,16 @@ export interface QuoteGroup {
 export const quoteGroups: QuoteGroup[] = [
   {
     id: "saas",
-    title: "SaaS (DentalGest / Gesti-OS)",
-    hint: "Recurrente de ONIA. Comision de la vendedora: 35% del primer mes, una vez.",
+    title: "SaaS (Onia Dental / Onia Comercio)",
+    hint: "Recurrente de Onia. Comision de la vendedora: 35% del primer mes, una vez.",
     components: [
-      { id: "dentalgest-basico", label: "DentalGest Basico", price: 320, kind: "monthly", category: "saas", commissionRate: 0.35 },
-      { id: "dentalgest-pro", label: "DentalGest Profesional", price: 750, kind: "monthly", category: "saas", commissionRate: 0.35 },
-      { id: "dentalgest-clinica", label: "DentalGest Clinica", price: 1500, kind: "monthly", category: "saas", commissionRate: 0.35 },
-      { id: "gestios-basico", label: "Gesti-OS Basico", price: 350, kind: "monthly", category: "saas", commissionRate: 0.35 },
-      { id: "gestios-crecer", label: "Gesti-OS Crecer", price: 530, kind: "monthly", category: "saas", commissionRate: 0.35 },
-      { id: "gestios-pro", label: "Gesti-OS Pro", price: 800, kind: "monthly", category: "saas", commissionRate: 0.35 },
-      { id: "gestios-empresarial", label: "Gesti-OS Empresarial", price: 1250, kind: "monthly", category: "saas", commissionRate: 0.35 },
+      { id: "dentalgest-basico", label: "Onia Dental Basico", price: 320, kind: "monthly", category: "saas", commissionRate: 0.35 },
+      { id: "dentalgest-pro", label: "Onia Dental Profesional", price: 750, kind: "monthly", category: "saas", commissionRate: 0.35 },
+      { id: "dentalgest-clinica", label: "Onia Dental Clinica", price: 1500, kind: "monthly", category: "saas", commissionRate: 0.35 },
+      { id: "gestios-basico", label: "Onia Comercio Basico", price: 350, kind: "monthly", category: "saas", commissionRate: 0.35 },
+      { id: "gestios-crecer", label: "Onia Comercio Crecer", price: 530, kind: "monthly", category: "saas", commissionRate: 0.35 },
+      { id: "gestios-pro", label: "Onia Comercio Pro", price: 800, kind: "monthly", category: "saas", commissionRate: 0.35 },
+      { id: "gestios-empresarial", label: "Onia Comercio Empresarial", price: 1250, kind: "monthly", category: "saas", commissionRate: 0.35 },
     ],
   },
   {
@@ -44,17 +44,17 @@ export const quoteGroups: QuoteGroup[] = [
     title: "Onboarding / setup SaaS",
     hint: "Configuracion, migracion ligera y capacitacion. Comision 10%.",
     components: [
-      { id: "onboarding-dental", label: "Onboarding DentalGest (290 / 690 / 1.490 segun alcance)", price: 690, kind: "oneoff", category: "onboarding", commissionRate: 0.1, note: "Elegi el precio segun alcance: 290 basico, 690 medio, 1.490 completo." },
+      { id: "onboarding-dental", label: "Onboarding Onia Dental (290 / 690 / 1.490 segun alcance)", price: 690, kind: "oneoff", category: "onboarding", commissionRate: 0.1, note: "Elegi el precio segun alcance: 290 basico, 690 medio, 1.490 completo." },
     ],
   },
   {
     id: "web",
     title: "Paginas web y captacion",
-    hint: "Pago unico. Comision: Landing 10%, Web Profesional y Web Pro ONIA 12%.",
+    hint: "Pago unico. Comision: Landing 10%, Web Profesional y Web Pro Onia 12%.",
     components: [
       { id: "landing", label: "Landing de Captacion", price: 790, kind: "oneoff", category: "web", commissionRate: 0.1 },
       { id: "web-profesional", label: "Web Profesional", price: 1500, kind: "oneoff", category: "web", commissionRate: 0.12 },
-      { id: "web-pro-onia", label: "Web Pro ONIA", price: 2900, kind: "oneoff", category: "web", commissionRate: 0.12 },
+      { id: "web-pro-onia", label: "Web Pro Onia", price: 2900, kind: "oneoff", category: "web", commissionRate: 0.12 },
     ],
   },
   {
@@ -93,14 +93,14 @@ export const quoteGroups: QuoteGroup[] = [
     title: "Add-ons",
     hint: "Se venden despues del primer cierre. Terceros los paga el cliente.",
     components: [
-      { id: "wa-operativo-dental-setup", label: "WhatsApp operativo DentalGest (instalacion + Meta)", price: 650, kind: "oneoff", category: "addon", commissionRate: 0.1, needsApproval: true, note: "650 inst. + 350/mes + costos Meta. Requiere aprobacion." },
-      { id: "wa-operativo-dental-mes", label: "WhatsApp operativo DentalGest (mensual)", price: 350, kind: "monthly", category: "addon", commissionRate: 0, needsApproval: true },
-      { id: "agenda-publica", label: "Agenda publica DentalGest", price: 150, kind: "monthly", category: "addon", commissionRate: 0.1 },
-      { id: "usuario-extra", label: "Usuario extra DentalGest", price: 70, kind: "monthly", category: "addon", commissionRate: 0.1 },
-      { id: "insumos-dental", label: "Insumos DentalGest", price: 80, kind: "monthly", category: "addon", commissionRate: 0.1 },
-      { id: "wa-gestios", label: "WhatsApp Gesti-OS (+ excedentes)", price: 280, kind: "monthly", category: "addon", commissionRate: 0.1, needsApproval: true },
-      { id: "qr-gestios", label: "QR / cobro Gesti-OS", price: 105, kind: "monthly", category: "addon", commissionRate: 0.1 },
-      { id: "ecommerce-gestios", label: "E-commerce Gesti-OS (PRO+)", price: 140, kind: "monthly", category: "addon", commissionRate: 0.1 },
+      { id: "wa-operativo-dental-setup", label: "WhatsApp operativo Onia Dental (instalacion + Meta)", price: 650, kind: "oneoff", category: "addon", commissionRate: 0.1, needsApproval: true, note: "650 inst. + 350/mes + costos Meta. Requiere aprobacion." },
+      { id: "wa-operativo-dental-mes", label: "WhatsApp operativo Onia Dental (mensual)", price: 350, kind: "monthly", category: "addon", commissionRate: 0, needsApproval: true },
+      { id: "agenda-publica", label: "Agenda publica Onia Dental", price: 150, kind: "monthly", category: "addon", commissionRate: 0.1 },
+      { id: "usuario-extra", label: "Usuario extra Onia Dental", price: 70, kind: "monthly", category: "addon", commissionRate: 0.1 },
+      { id: "insumos-dental", label: "Insumos Onia Dental", price: 80, kind: "monthly", category: "addon", commissionRate: 0.1 },
+      { id: "wa-gestios", label: "WhatsApp Onia Comercio (+ excedentes)", price: 280, kind: "monthly", category: "addon", commissionRate: 0.1, needsApproval: true },
+      { id: "qr-gestios", label: "QR / cobro Onia Comercio", price: 105, kind: "monthly", category: "addon", commissionRate: 0.1 },
+      { id: "ecommerce-gestios", label: "E-commerce Onia Comercio (PRO+)", price: 140, kind: "monthly", category: "addon", commissionRate: 0.1 },
       { id: "crm-n8n", label: "CRM / formulario a n8n", price: 790, kind: "oneoff", category: "addon", commissionRate: 0.1 },
       { id: "conexion-social", label: "Conexion canal social (IG / TikTok)", price: 690, kind: "oneoff", category: "addon", commissionRate: 0.1 },
       { id: "integracion-extra", label: "Integracion extra entre sistemas", price: 1900, kind: "oneoff", category: "addon", commissionRate: 0.1, note: "Desde 1.900. Requiere diagnostico y alcance escrito." },
@@ -110,13 +110,13 @@ export const quoteGroups: QuoteGroup[] = [
 
 // Ganchos gratis para abrir la venta (NO se cobran por ahora).
 export const freeHooks: string[] = [
-  "Auditoria Express: revision corta, 3 problemas + 3 acciones + siguiente oferta ONIA sugerida.",
+  "Auditoria Express: revision corta, 3 problemas + 3 acciones + siguiente oferta Onia sugerida.",
   "Diagnostico + Plan: sesion mas profunda, mapa del proceso y presupuesto recomendado.",
 ];
 
 export const quoteRules: string[] = [
   "Comision = solo el primer pago neto real y comprobado (primer mes, enganche, anticipo o setup). No es recurrente.",
-  "No improvisar precios. Descuentos en DentalGest / Gesti-OS requieren aprobacion de Sergio.",
+  "No improvisar precios. Descuentos en Onia Dental / Onia Comercio requieren aprobacion de Sergio.",
   "La vendedora lidera llamadas y seguimiento. Sergio entra en casos importantes o cierres complejos.",
   "Prometer solo alcance confirmado. WhatsApp conversacional u operativo: sujeto a validacion Meta y costos de mensajeria.",
   "Terceros los paga el cliente: dominio, hosting, pasarela, QR, Meta, IA, pauta, migracion grande.",

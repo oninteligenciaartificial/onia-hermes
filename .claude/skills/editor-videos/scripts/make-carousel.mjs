@@ -15,7 +15,7 @@
 //
 // Plan JSON:
 //   {
-//     "brand":  "ONIA · DentalGest",          // barra superior
+//     "brand":  "Onia Dental",                   // barra superior
 //     "handle": "@lu.antelo",                 // pie del slide de cierre (opcional)
 //     "aiLabel":"Contenido creado con IA",    // etiqueta IA (obligatoria en campaña)
 //     "accent": "#FF7A00",
@@ -99,7 +99,7 @@ if (W < 320 || H < 320) fail(`tamaño inválido ${W}x${H}`);
 const ACCENT = flag("accent", plan.accent || "#FF7A00");
 if (!/^#[0-9a-fA-F]{3,8}$/.test(ACCENT)) fail(`--accent debe ser hex (#RRGGBB), recibí "${ACCENT}"`);
 const THEME = flag("theme", plan.theme || "dark");
-const BRAND = plan.brand ?? "ONIA";
+const BRAND = plan.brand ?? "Onia";
 const HANDLE = plan.handle ?? "";
 const AI_LABEL = plan.aiLabel ?? "";
 

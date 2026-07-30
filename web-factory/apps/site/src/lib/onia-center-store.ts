@@ -658,7 +658,7 @@ export async function getOniaCenterRuntime(): Promise<RuntimeSnapshot> {
 
 // Lee las personas reales del equipo desde onia_center. Fuente de verdad =
 // user_profiles activos; se conserva solo a quien tiene al menos una membresia
-// activa en alguna organizacion ONIA (eso define "el equipo"). No se asume a que
+// activa en alguna organizacion Onia (eso define "el equipo"). No se asume a que
 // organizacion concreta pertenece cada rol: basta con ser miembro activo del
 // workspace. Usa service role igual que getOniaCenterRuntime, no depende de la
 // sesion del usuario.
@@ -758,7 +758,7 @@ export async function createOniaCenterEntity(entity: RuntimeEntity, payload: unk
 
   if (entity === "note") {
     const note = payload as RuntimeNote & { author?: string; body?: string };
-    const summary = note.title || note.body || note.detail || "Nota ONIA Center";
+    const summary = note.title || note.body || note.detail || "Nota Onia Center";
     const sensitivityScope =
       note.visibility === "team_safe"
         ? "collab_safe"

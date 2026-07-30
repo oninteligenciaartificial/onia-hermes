@@ -21,7 +21,7 @@ function formatBs(value: number): string {
   return `Bs ${value.toLocaleString("es-BO", { maximumFractionDigits: 2 })}`;
 }
 
-// Cotizacion client-facing con el diseño del generador ONIA. Sin comision ni datos internos.
+// Cotizacion client-facing con el diseño del generador Onia. Sin comision ni datos internos.
 function buildClientQuoteHtml(lines: QuoteLine[], oneoff: number, monthly: number): string {
   const esc = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const fecha = new Date().toLocaleDateString("es-BO", { year: "numeric", month: "long", day: "numeric" });
@@ -37,7 +37,7 @@ function buildClientQuoteHtml(lines: QuoteLine[], oneoff: number, monthly: numbe
     ? `<h2>Mensual</h2><table><thead><tr><th>Concepto</th><th class="num">Precio</th></tr></thead><tbody>${monthlyRows}<tr class="total"><td>Total mensual</td><td class="num">${formatBs(monthly)}/mes</td></tr></tbody></table>`
     : "";
 
-  return `<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Cotización ONIA</title><style>
+  return `<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Cotización Onia</title><style>
   :root{--ink:#101827;--muted:#526172;--line:#d8e0ea;--blue:#1e5bff;--green:#0f8b62;--bg:#f6f8fb;--white:#fff;}
   *{box-sizing:border-box;}
   body{margin:0;font-family:Arial,Helvetica,sans-serif;color:var(--ink);background:var(--bg);}
@@ -59,14 +59,14 @@ function buildClientQuoteHtml(lines: QuoteLine[], oneoff: number, monthly: numbe
   @media print{.actions{display:none;}body{background:#fff;}}
   </style></head><body><div class="wrap">
   <div class="actions"><button onclick="window.print()">Imprimir / Guardar PDF</button></div>
-  <div class="brand">ONIA</div>
+  <div class="brand">Onia</div>
   <h1>Cotización</h1>
   <div class="meta">Fecha: ${fecha}</div>
-  <p>Propuesta de servicios ONIA. Precios de arranque, válidos 30 días. El anticipo reserva el precio y la fecha de inicio.</p>
+  <p>Propuesta de servicios Onia. Precios de arranque, válidos 30 días. El anticipo reserva el precio y la fecha de inicio.</p>
   ${oneoffTable}
   ${monthlyTable}
   <div class="note"><strong>No incluido (lo paga el cliente):</strong> dominio, hosting, correo, comisión de pasarela, QR/banco, mensajería y plantillas de Meta/WhatsApp, créditos de IA, pauta publicitaria, migración masiva y fotos profesionales. Dominio y hosting van a nombre del cliente.</div>
-  <div class="foot">Cotización referencial sujeta a alcance confirmado. WhatsApp automático requiere validación de Meta. ONIA — Inteligencia Artificial aplicada a tu negocio.</div>
+  <div class="foot">Cotización referencial sujeta a alcance confirmado. WhatsApp automático requiere validación de Meta. Onia — Inteligencia Artificial aplicada a tu negocio.</div>
   </div></body></html>`;
 }
 
@@ -74,7 +74,7 @@ interface Totals {
   clientOneoff: number;
   clientMonthly: number;
   commission: number;
-  oniaFirst: number; // primer cobro que queda a ONIA (unico + primer mes - comision)
+  oniaFirst: number; // primer cobro que queda a Onia (unico + primer mes - comision)
   oniaMonthly: number; // recurrente completo desde el mes 2
 }
 
@@ -237,7 +237,7 @@ export function QuoteBuilder() {
             <small>una vez, sobre el primer pago</small>
           </article>
           <article className="seller-quote-card is-onia">
-            <span>Queda en ONIA</span>
+            <span>Queda en Onia</span>
             <strong>{formatBs(totals.oniaFirst)}</strong>
             <small>primer cobro (unico + 1er mes - comision)</small>
             {totals.oniaMonthly > 0 ? <p>luego {formatBs(totals.oniaMonthly)}/mes completo</p> : null}
@@ -254,7 +254,7 @@ export function QuoteBuilder() {
             <strong>{formatBs(totals.clientOneoff + totals.clientMonthly)}</strong>
           </div>
           <div>
-            <span>Recurrente ONIA (desde mes 2)</span>
+            <span>Recurrente Onia (desde mes 2)</span>
             <strong>{formatBs(totals.oniaMonthly)}/mes</strong>
           </div>
         </div>
