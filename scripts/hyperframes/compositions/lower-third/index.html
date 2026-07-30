@@ -1,0 +1,385 @@
+<!doctype html>
+<html
+  lang="es"
+  data-composition-variables='[
+    {"id":"eyebrow","type":"string","label":"Antetitulo","default":"ONIA"},
+    {"id":"title","type":"string","label":"Titulo","default":"Dental Gest"},
+    {"id":"subtitle","type":"string","label":"Subtitulo","default":"gestión de clínicas dentales"},
+    {"id":"accent","type":"color","label":"Acento","default":"#FF7A00"}
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <title>ONIA · LowerThird</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      /* ---- Tipografia OFICIAL de marca (ONIA_BRAND_IDENTITY_2026.md §2) -----
+         El trio se AUTOHOSPEDA: los .woff2 viven versionados en
+         hermes-content/brand/fonts/ (con su OFL al lado) y el compilador los
+         embebe como data URI. Nada de Google Fonts en tiempo de render y nada
+         de depender de fuentes instaladas en el sistema — por eso el frame sale
+         identico en Windows (Sergio) y en Linux (VPS).
+
+         Los .woff2 estan DENTRO de la composicion (fonts/) y no referenciados
+         a la carpeta canonica: HyperFrames sirve cada composicion con su propia
+         carpeta como raiz y rechaza por lint todo asset con "../" por encima
+         (invalid_parent_traversal_in_asset_path). Las copias las reparte
+         `hermes-content/brand/fonts/build-onia-fonts.py` — no se tocan a mano,
+         se regeneran; asi no derivan de la fuente.
+
+         Los ejes vienen recortados de fabrica (ver build-onia-fonts.py):
+         Bricolage llega con wght 500-700 y wdth fijo en 100, asi que el peso
+         800 y los cortes ultra-condensed que el brand system prohibe no
+         existen ni por accidente.
+
+         font-display: block y no swap — el renderer debe ESPERAR a la fuente;
+         un swap pintaria los primeros frames con la fallback. */
+      @font-face {
+        font-family: "Bricolage Grotesque";
+        src: url("fonts/BricolageGrotesque-var-latin.woff2") format("woff2");
+        font-weight: 500 700;
+        font-style: normal;
+        font-display: block;
+      }
+      @font-face {
+        font-family: "DM Sans";
+        src: url("fonts/DMSans-var-latin.woff2") format("woff2");
+        font-weight: 400 500;
+        font-style: normal;
+        font-display: block;
+      }
+
+      /* Remotion aplica `box-sizing: border-box` de fabrica; replicarlo aca es
+         lo que hace que anchos y paddings caigan en el MISMO pixel que la
+         baseline. (Asumir content-box ensanchaba las tarjetas y sacaba a Quote
+         y LowerThird fuera del lienzo.) */
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        width: 1080px;
+        height: 300px;
+        overflow: hidden;
+        background: transparent;
+      }
+
+      #stage {
+        position: relative;
+        width: 1080px;
+        height: 300px;
+        --stage-w: 1080;
+        --stage-h: 300;
+        --u: calc(var(--stage-w) / 1000 * 1px);
+        --accent: #ff7a00;
+        --accent-deep: color-mix(in srgb, var(--accent) 62%, #000000);
+        --ink: #0a0c11;
+        --ink2: #15181f;
+        --ink-text: #f6f8fb;
+        --muted: rgba(246, 248, 251, 0.6);
+        --hairline: rgba(255, 255, 255, 0.11);
+        --gloss: rgba(255, 255, 255, 0.09);
+        --shadow:
+          0 calc(var(--u) * 46) calc(var(--u) * 96) calc(var(--u) * -24) rgba(0, 0, 0, 0.62),
+          0 calc(var(--u) * 10) calc(var(--u) * 26) rgba(0, 0, 0, 0.32);
+        /* wipe del riel de acento: 100 = tapado, 0 = descubierto */
+        --wipe: 100;
+        /* Roles del trio: display = titulares y etiquetas · body = texto de
+           apoyo. Esta composicion no muestra cifras, asi que no carga el mono. */
+        --font-display: "Bricolage Grotesque", sans-serif;
+        --font-body: "DM Sans", sans-serif;
+        font-family: var(--font-body);
+      }
+      #stage[data-theme="light"] {
+        --ink: #ffffff;
+        --ink2: #f4f5f7;
+        --ink-text: #0b0d12;
+        --muted: rgba(11, 13, 18, 0.58);
+        --hairline: rgba(11, 13, 18, 0.1);
+        --gloss: rgba(255, 255, 255, 0.85);
+      }
+
+      .fill {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        padding: calc(var(--u) * 44);
+      }
+
+      .plate {
+        position: relative;
+        width: 100%;
+        border-radius: calc(var(--u) * 26);
+        background: linear-gradient(158deg, var(--ink2) 0%, var(--ink) 62%);
+        border: 1px solid var(--hairline);
+        box-shadow: var(--shadow);
+        overflow: hidden;
+        padding: calc(var(--u) * 34) calc(var(--u) * 44);
+        opacity: 0;
+      }
+
+      /* Regla de acento al pie, alineada con el texto, que se dibuja de izquierda
+         a derecha. Antes era una franja vertical en el borde izquierdo: patron
+         prohibido por las reglas de diseno de la casa (side-stripe border), lee a
+         plantilla de alerta y no a pieza disenada. Las tarjetas ya lo abandonaron;
+         el lower-third quedaba como la ultima que lo usaba. */
+      .bar {
+        position: absolute;
+        left: calc(var(--u) * 44);
+        bottom: calc(var(--u) * 16);
+        height: calc(var(--u) * 7);
+        width: calc(var(--u) * 150);
+        border-radius: 999px;
+        background: linear-gradient(90deg, var(--accent), var(--accent-deep));
+        clip-path: inset(0 calc(var(--wipe) * 1%) 0 0);
+      }
+
+      .textblock {
+        opacity: 0;
+      }
+
+      .eyebrow {
+        display: flex;
+        align-items: center;
+        gap: calc(var(--u) * 12);
+        font-family: var(--font-display);
+        font-size: calc(var(--u) * 22);
+        font-weight: 700;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--accent);
+        margin-bottom: calc(var(--u) * 8);
+      }
+      .eyebrow i {
+        display: block;
+        width: calc(var(--u) * 12);
+        height: calc(var(--u) * 12);
+        border-radius: 999px;
+        background: var(--accent);
+        flex: 0 0 auto;
+      }
+
+      /* Titular de tarjeta = display. Peso 700 y no 800: el brand system
+         prohibe el 800 de Bricolage (y el archivo ni lo trae). */
+      .title {
+        font-family: var(--font-display);
+        font-size: calc(var(--u) * 54);
+        font-weight: 700;
+        letter-spacing: -0.03em;
+        line-height: 1.05;
+        color: var(--ink-text);
+      }
+
+      .subtitle {
+        margin-top: calc(var(--u) * 8);
+        font-size: calc(var(--u) * 27);
+        font-weight: 500;
+        color: var(--muted);
+      }
+
+      [hidden] {
+        display: none !important;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="stage"
+      data-composition-id="lower-third"
+      data-theme="dark"
+      data-start="0"
+      data-duration="2.6"
+      data-fps="30"
+      data-width="1080"
+      data-height="300"
+    >
+      <div id="lt-clip" class="clip" data-start="0" data-duration="2.6" data-track-index="0">
+        <div class="fill">
+          <div class="plate" id="lt-plate">
+            <div class="bar" id="lt-bar"></div>
+            <div class="textblock" id="lt-text">
+              <div class="eyebrow" id="lt-eyebrow"><i></i><span></span></div>
+              <div class="title" id="lt-title">Dental Gest</div>
+              <div class="subtitle" id="lt-subtitle">gestión de clínicas dentales</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <script>
+        // ============================================================
+        // ONIA · LowerThird — port de src/compositions/LowerThird.tsx
+        // Placa inferior que entra y sale (la salida baja mas rapido).
+        // ============================================================
+        (function () {
+          "use strict";
+
+          function cubicBezier(x1, y1, x2, y2) {
+            var cx = 3 * x1,
+              bx = 3 * (x2 - x1) - cx,
+              ax = 1 - cx - bx;
+            var cy = 3 * y1,
+              by = 3 * (y2 - y1) - cy,
+              ay = 1 - cy - by;
+            function sampleX(t) {
+              return ((ax * t + bx) * t + cx) * t;
+            }
+            function sampleY(t) {
+              return ((ay * t + by) * t + cy) * t;
+            }
+            function sampleDX(t) {
+              return (3 * ax * t + 2 * bx) * t + cx;
+            }
+            return function (x) {
+              if (x <= 0) return 0;
+              if (x >= 1) return 1;
+              var t = x,
+                i,
+                d,
+                dx;
+              for (i = 0; i < 8; i++) {
+                d = sampleX(t) - x;
+                if (Math.abs(d) < 1e-7) return sampleY(t);
+                dx = sampleDX(t);
+                if (Math.abs(dx) < 1e-7) break;
+                t -= d / dx;
+              }
+              var lo = 0,
+                hi = 1;
+              t = x;
+              while (hi - lo > 1e-7) {
+                if (sampleX(t) < x) lo = t;
+                else hi = t;
+                t = (hi + lo) / 2;
+              }
+              return sampleY(t);
+            };
+          }
+          gsap.registerEase("oniaOutExpo", cubicBezier(0.16, 1, 0.3, 1));
+          gsap.registerEase("oniaOutQuart", cubicBezier(0.25, 1, 0.5, 1));
+
+          var stage = document.getElementById("stage");
+          var FPS = Number(stage.dataset.fps) || 30;
+          var DUR = Number(stage.dataset.duration) || 2.6;
+          var TOTAL = Math.max(1, Math.round(DUR * FPS));
+          document.getElementById("lt-clip").dataset.duration = String(DUR);
+
+          function enterExit(o) {
+            o = o || {};
+            var delay = o.delayFrames || 0;
+            var enterF = Math.max(1, Math.round(((o.enterMs || 280) / 1000) * FPS));
+            var exitF = Math.max(1, Math.round(((o.exitMs || 200) / 1000) * FPS));
+            var exitStart = Math.max(delay + enterF, TOTAL - exitF);
+            return {
+              enterAt: delay / FPS,
+              enterDur: enterF / FPS,
+              exitAt: exitStart / FPS,
+              exitDur: Math.max(1, TOTAL - exitStart) / FPS,
+            };
+          }
+
+          function readVars() {
+            var decls = [];
+            try {
+              decls = JSON.parse(document.documentElement.dataset.compositionVariables || "[]");
+            } catch (e) {
+              decls = [];
+            }
+            var out = {};
+            for (var i = 0; i < decls.length; i++) out[decls[i].id] = decls[i].default;
+            var live =
+              window.__hyperframes && typeof window.__hyperframes.getVariables === "function"
+                ? window.__hyperframes.getVariables()
+                : null;
+            if (live) {
+              for (var k in out) {
+                if (live[k] !== undefined && live[k] !== null) out[k] = live[k];
+              }
+            }
+            return out;
+          }
+
+          // ---- contenido ------------------------------------------------------
+          var V = readVars();
+          var elPlate = document.getElementById("lt-plate");
+          var elText = document.getElementById("lt-text");
+          var elEyebrow = document.getElementById("lt-eyebrow");
+          var elSubtitle = document.getElementById("lt-subtitle");
+
+          var eyebrow = String(V.eyebrow || "");
+          var subtitle = String(V.subtitle || "");
+          elEyebrow.querySelector("span").textContent = eyebrow;
+          document.getElementById("lt-title").textContent = String(V.title || "");
+          elSubtitle.textContent = subtitle;
+          if (!eyebrow) elEyebrow.hidden = true;
+          if (!subtitle) elSubtitle.hidden = true;
+
+          // ---- timeline -------------------------------------------------------
+          var tl = gsap.timeline({ paused: true });
+
+          var plate = enterExit({ enterMs: 300, exitMs: 200 });
+          var PLATE_Y = "calc(var(--u) * 20)";
+          tl.fromTo(
+            elPlate,
+            { opacity: 0, y: PLATE_Y },
+            { opacity: 1, y: 0, duration: plate.enterDur, ease: "oniaOutExpo" },
+            plate.enterAt,
+          );
+          tl.to(
+            elPlate,
+            { opacity: 0, y: PLATE_Y, duration: plate.exitDur, ease: "oniaOutQuart" },
+            plate.exitAt,
+          );
+
+          // Riel de acento: wipe izquierda->derecha via clip-path.
+          var bar = enterExit({ enterMs: 260, exitMs: 180 });
+          var wipe = { v: 100 };
+          tl.to(
+            wipe,
+            {
+              v: 0,
+              duration: bar.enterDur,
+              ease: "oniaOutExpo",
+              onUpdate: function () {
+                stage.style.setProperty("--wipe", wipe.v);
+              },
+            },
+            bar.enterAt,
+          );
+
+          // Texto: entra deslizandose desde la izquierda; a la salida baja y se
+          // va hacia la derecha (vector distinto al de entrada — es la intencion
+          // del original: "entra y sale", no un espejo).
+          var text = enterExit({ delayFrames: 3, enterMs: 260, exitMs: 200 });
+          tl.fromTo(
+            elText,
+            { opacity: 0, x: "calc(var(--u) * -12)", y: 0 },
+            { opacity: 1, x: 0, y: 0, duration: text.enterDur, ease: "oniaOutExpo" },
+            text.enterAt,
+          );
+          tl.to(
+            elText,
+            {
+              opacity: 0,
+              x: "calc(var(--u) * 10)",
+              y: "calc(var(--u) * 8)",
+              duration: text.exitDur,
+              ease: "oniaOutQuart",
+            },
+            text.exitAt,
+          );
+
+          window.__timelines = window.__timelines || {};
+          window.__timelines["lower-third"] = tl;
+        })();
+      </script>
+    </div>
+  </body>
+</html>

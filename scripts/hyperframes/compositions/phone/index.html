@@ -1,0 +1,372 @@
+<!doctype html>
+<html
+  lang="es"
+  data-composition-variables='[
+    {"id":"title","type":"string","label":"Titulo","default":"Reservá tu cita"},
+    {"id":"subtitle","type":"string","label":"Subtitulo","default":"en 2 toques"},
+    {"id":"image","type":"string","label":"Captura (ruta)","default":""},
+    {"id":"accent","type":"color","label":"Acento","default":"#FF7A00"}
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <title>ONIA · Phone</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      /* ---- Tipografia OFICIAL de marca (ONIA_BRAND_IDENTITY_2026.md §2) -----
+         El trio se AUTOHOSPEDA: los .woff2 viven versionados en
+         hermes-content/brand/fonts/ (con su OFL al lado) y el compilador los
+         embebe como data URI. Nada de Google Fonts en tiempo de render y nada
+         de depender de fuentes instaladas en el sistema — por eso el frame sale
+         identico en Windows (Sergio) y en Linux (VPS).
+
+         Los .woff2 estan DENTRO de la composicion (fonts/) y no referenciados
+         a la carpeta canonica: HyperFrames sirve cada composicion con su propia
+         carpeta como raiz y rechaza por lint todo asset con "../" por encima
+         (invalid_parent_traversal_in_asset_path). Las copias las reparte
+         `hermes-content/brand/fonts/build-onia-fonts.py` — no se tocan a mano,
+         se regeneran; asi no derivan de la fuente.
+
+         Los ejes vienen recortados de fabrica (ver build-onia-fonts.py):
+         Bricolage llega con wght 500-700 y wdth fijo en 100, asi que el peso
+         800 y los cortes ultra-condensed que el brand system prohibe no
+         existen ni por accidente.
+
+         font-display: block y no swap — el renderer debe ESPERAR a la fuente;
+         un swap pintaria los primeros frames con la fallback. */
+      @font-face {
+        font-family: "Bricolage Grotesque";
+        src: url("fonts/BricolageGrotesque-var-latin.woff2") format("woff2");
+        font-weight: 500 700;
+        font-style: normal;
+        font-display: block;
+      }
+      @font-face {
+        font-family: "DM Sans";
+        src: url("fonts/DMSans-var-latin.woff2") format("woff2");
+        font-weight: 400 500;
+        font-style: normal;
+        font-display: block;
+      }
+
+      /* Remotion aplica `box-sizing: border-box` de fabrica; replicarlo aca es
+         lo que hace que anchos y paddings caigan en el MISMO pixel que la
+         baseline. (Asumir content-box ensanchaba las tarjetas y sacaba a Quote
+         y LowerThird fuera del lienzo.) */
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        width: 640px;
+        height: 1200px;
+        overflow: hidden;
+        background: transparent;
+      }
+
+      #stage {
+        position: relative;
+        width: 640px;
+        height: 1200px;
+        --stage-w: 640;
+        --stage-h: 1200;
+        --u: calc(var(--stage-w) / 1000 * 1px);
+        --accent: #ff7a00;
+        --accent-deep: color-mix(in srgb, var(--accent) 62%, #000000);
+        --ink: #0a0c11;
+        --ink2: #15181f;
+        --ink-text: #f6f8fb;
+        --muted: rgba(246, 248, 251, 0.6);
+        --hairline: rgba(255, 255, 255, 0.11);
+        --gloss: rgba(255, 255, 255, 0.09);
+        /* Roles del trio: display = titulares y etiquetas · body = texto de
+           apoyo. Esta composicion no muestra cifras, asi que no carga el mono. */
+        --font-display: "Bricolage Grotesque", sans-serif;
+        --font-body: "DM Sans", sans-serif;
+        font-family: var(--font-body);
+      }
+      #stage[data-theme="light"] {
+        --ink: #ffffff;
+        --ink2: #f4f5f7;
+        --ink-text: #0b0d12;
+        --muted: rgba(11, 13, 18, 0.58);
+        --hairline: rgba(11, 13, 18, 0.1);
+        --gloss: rgba(255, 255, 255, 0.85);
+      }
+
+      .fill {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: calc(var(--u) * 40);
+      }
+
+      .phone {
+        position: relative;
+        width: 100%;
+        padding: calc(var(--u) * 26);
+        border-radius: calc(var(--u) * 112);
+        background: linear-gradient(150deg, #2a2e37 0%, #0b0d12 46%, #23262e 100%);
+        opacity: 0;
+      }
+
+      .sidebtn {
+        position: absolute;
+        right: calc(var(--u) * -5);
+        top: calc(var(--u) * 300);
+        height: calc(var(--u) * 190);
+        width: calc(var(--u) * 9);
+        border-radius: 999px;
+        background: linear-gradient(180deg, #3a3f4a, #15181f);
+      }
+
+      .screen {
+        position: relative;
+        border-radius: calc(var(--u) * 90);
+        overflow: hidden;
+        background: var(--ink);
+        border: 1px solid rgba(0, 0, 0, 0.6);
+        height: calc(var(--stage-h) * 1px - var(--u) * 200);
+      }
+
+      .notch {
+        position: absolute;
+        left: 50%;
+        top: calc(var(--u) * 26);
+        transform: translateX(-50%);
+        width: calc(var(--u) * 300);
+        height: calc(var(--u) * 76);
+        border-radius: 999px;
+        background: #05070a;
+        z-index: 2;
+        box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.05);
+      }
+
+      .screen img {
+        display: block;
+        width: 100%;
+        height: calc(100% + var(--u) * 96);
+        object-fit: cover;
+      }
+
+      .placeholder {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        gap: calc(var(--u) * 14);
+        padding: calc(var(--u) * 74) calc(var(--u) * 56) calc(var(--u) * 96);
+        background: radial-gradient(
+          130% 62% at 50% 100%,
+          color-mix(in oklab, var(--accent) 26%, transparent),
+          transparent 66%
+        );
+      }
+      /* Titular de tarjeta = display. Peso 700 y no 800: el brand system
+         prohibe el 800 de Bricolage (y el archivo ni lo trae). */
+      .placeholder h1 {
+        font-family: var(--font-display);
+        font-size: calc(var(--u) * 72);
+        font-weight: 700;
+        letter-spacing: -0.035em;
+        line-height: 1.04;
+        color: var(--ink-text);
+        margin: 0;
+      }
+      .placeholder p {
+        font-size: calc(var(--u) * 34);
+        color: var(--muted);
+        font-weight: 500;
+        margin: 0;
+      }
+
+      [hidden] {
+        display: none !important;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="stage"
+      data-composition-id="phone"
+      data-theme="dark"
+      data-start="0"
+      data-duration="3.2"
+      data-fps="30"
+      data-width="640"
+      data-height="1200"
+    >
+      <div id="phone-clip" class="clip" data-start="0" data-duration="3.2" data-track-index="0">
+        <div class="fill">
+          <div class="phone" id="phone-frame">
+            <div class="sidebtn"></div>
+            <div class="screen">
+              <div class="notch"></div>
+              <img id="phone-image" alt="" hidden />
+              <div class="placeholder" id="phone-placeholder">
+                <h1 id="phone-title">Reservá tu cita</h1>
+                <p id="phone-subtitle">en 2 toques</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <script>
+        // ============================================================
+        // ONIA · Phone — port de src/compositions/Phone.tsx
+        // Mockup de celular con contenido que se desliza.
+        // ============================================================
+        (function () {
+          "use strict";
+
+          function cubicBezier(x1, y1, x2, y2) {
+            var cx = 3 * x1,
+              bx = 3 * (x2 - x1) - cx,
+              ax = 1 - cx - bx;
+            var cy = 3 * y1,
+              by = 3 * (y2 - y1) - cy,
+              ay = 1 - cy - by;
+            function sampleX(t) {
+              return ((ax * t + bx) * t + cx) * t;
+            }
+            function sampleY(t) {
+              return ((ay * t + by) * t + cy) * t;
+            }
+            function sampleDX(t) {
+              return (3 * ax * t + 2 * bx) * t + cx;
+            }
+            return function (x) {
+              if (x <= 0) return 0;
+              if (x >= 1) return 1;
+              var t = x,
+                i,
+                d,
+                dx;
+              for (i = 0; i < 8; i++) {
+                d = sampleX(t) - x;
+                if (Math.abs(d) < 1e-7) return sampleY(t);
+                dx = sampleDX(t);
+                if (Math.abs(dx) < 1e-7) break;
+                t -= d / dx;
+              }
+              var lo = 0,
+                hi = 1;
+              t = x;
+              while (hi - lo > 1e-7) {
+                if (sampleX(t) < x) lo = t;
+                else hi = t;
+                t = (hi + lo) / 2;
+              }
+              return sampleY(t);
+            };
+          }
+          gsap.registerEase("oniaOutExpo", cubicBezier(0.16, 1, 0.3, 1));
+          gsap.registerEase("oniaOutQuart", cubicBezier(0.25, 1, 0.5, 1));
+
+          var stage = document.getElementById("stage");
+          var FPS = Number(stage.dataset.fps) || 30;
+          var DUR = Number(stage.dataset.duration) || 3.2;
+          var TOTAL = Math.max(1, Math.round(DUR * FPS));
+          document.getElementById("phone-clip").dataset.duration = String(DUR);
+
+          function enterExit(o) {
+            o = o || {};
+            var delay = o.delayFrames || 0;
+            var enterF = Math.max(1, Math.round(((o.enterMs || 280) / 1000) * FPS));
+            var exitF = Math.max(1, Math.round(((o.exitMs || 200) / 1000) * FPS));
+            var exitStart = Math.max(delay + enterF, TOTAL - exitF);
+            return {
+              enterAt: delay / FPS,
+              enterDur: enterF / FPS,
+              exitAt: exitStart / FPS,
+              exitDur: Math.max(1, TOTAL - exitStart) / FPS,
+            };
+          }
+
+          function readVars() {
+            var decls = [];
+            try {
+              decls = JSON.parse(document.documentElement.dataset.compositionVariables || "[]");
+            } catch (e) {
+              decls = [];
+            }
+            var out = {};
+            for (var i = 0; i < decls.length; i++) out[decls[i].id] = decls[i].default;
+            var live =
+              window.__hyperframes && typeof window.__hyperframes.getVariables === "function"
+                ? window.__hyperframes.getVariables()
+                : null;
+            if (live) {
+              for (var k in out) {
+                if (live[k] !== undefined && live[k] !== null) out[k] = live[k];
+              }
+            }
+            return out;
+          }
+
+          // ---- contenido ------------------------------------------------------
+          var V = readVars();
+          var elPhone = document.getElementById("phone-frame");
+          var elImage = document.getElementById("phone-image");
+          var elPlaceholder = document.getElementById("phone-placeholder");
+
+          document.getElementById("phone-title").textContent = String(V.title || "");
+          document.getElementById("phone-subtitle").textContent = String(V.subtitle || "");
+
+          var image = String(V.image || "");
+          if (image) {
+            elImage.src = image;
+            elImage.hidden = false;
+            elPlaceholder.hidden = true;
+          }
+
+          // ---- timeline -------------------------------------------------------
+          var tl = gsap.timeline({ paused: true });
+
+          // El telefono entra desde abajo.
+          var frameMotion = enterExit({ enterMs: 300 });
+          var PHONE_Y = "calc(var(--u) * 34)";
+          tl.fromTo(
+            elPhone,
+            { opacity: 0, y: PHONE_Y },
+            { opacity: 1, y: 0, duration: frameMotion.enterDur, ease: "oniaOutExpo" },
+            frameMotion.enterAt,
+          );
+          tl.to(
+            elPhone,
+            { opacity: 0, y: PHONE_Y, duration: frameMotion.exitDur, ease: "oniaOutQuart" },
+            frameMotion.exitAt,
+          );
+
+          // Deriva continua de la captura: NO es un loop ni un vaiven — es un
+          // recorrido lineal en una sola direccion, un feed que scrollea solo.
+          // Ruta de motion-doctrine: "sequenced UI life" (el producto se comporta
+          // en el tiempo), no idle wobble.
+          // Solo aplica a la captura real, igual que el original: el placeholder
+          // esta anclado abajo y derivarlo lo sacaria de cuadro.
+          if (image) {
+            var driftEnd = Math.max(1, TOTAL - 6);
+            tl.fromTo(
+              elImage,
+              { yPercent: 0 },
+              { yPercent: -8, duration: driftEnd / FPS, ease: "none" },
+              0,
+            );
+          }
+
+          window.__timelines = window.__timelines || {};
+          window.__timelines["phone"] = tl;
+        })();
+      </script>
+    </div>
+  </body>
+</html>

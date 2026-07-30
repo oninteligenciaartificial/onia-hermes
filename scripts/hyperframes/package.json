@@ -1,0 +1,10 @@
+{
+  "name": "onia-hyperframes",
+  "private": true,
+  "type": "module",
+  "description": "Apoyos visuales ANIMADOS de ONIA (HyperFrames) — reemplazo del PNG estatico de make-mockup.mjs para overlay-visuals.mjs. Fondo transparente (secuencia PNG RGBA).",
+  "scripts": {
+    "render": "node render.mjs",
+    "check": "node scripts/check-all.mjs"
+  }
+}
