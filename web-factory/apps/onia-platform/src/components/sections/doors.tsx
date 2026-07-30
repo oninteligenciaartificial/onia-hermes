@@ -1,7 +1,7 @@
 "use client";
 
 import * as m from "motion/react-m";
-import { PressableCta, easeOutExpo, viewportOnce } from "@/motion";
+import { PressableCta, easeOutExpo } from "@/motion";
 import { useRubro } from "@/components/rubro-context";
 import { APP_URL, waLink } from "@/lib/site";
 import { rubroPlanes } from "@/lib/pricing";
@@ -10,18 +10,25 @@ import styles from "./doors.module.css";
 
 /**
  * Seccion g — los dos caminos de compra. Deliberadamente NO simetricos
- * (55/45): la puerta de hablar con nosotros es la principal, la de arrancar
- * solo es la secundaria. Cada panel se "abre" con clip-path al entrar al
- * viewport y el hover PREVISUALIZA lo que hay detras: el mensaje real que va a
+ * (55/45): la puerta de hablar con nosotros es la principal —y ademas lleva el
+ * formulario de reunion—, la de arrancar solo es la secundaria. Cada panel
+ * entra con fade+rise y muestra lo que hay detras: el mensaje exacto que va a
  * salir por WhatsApp (con el rubro que el visitante eligio mas arriba) o el
  * cursor recorriendo el tablero.
  */
 
+/**
+ * Reveal de la puerta. Sin clip-path: la version anterior arrancaba en
+ * `inset(0% 0% 100% 0%)` (puerta cerrada) y si el whileInView no disparaba, la
+ * seccion de compra entera quedaba INVISIBLE. Es la regla de la casa: ningun
+ * contenido depende de que una animacion corra. Fade + rise, y con
+ * `amount: 0.1` porque la puerta 1 es mas alta que el viewport en movil.
+ */
 const openDoor = (delay: number) => ({
-  initial: { clipPath: "inset(0% 0% 100% 0%)", opacity: 0 },
-  whileInView: { clipPath: "inset(0% 0% 0% 0%)", opacity: 1 },
-  viewport: viewportOnce,
-  transition: { duration: 0.8, ease: easeOutExpo, delay },
+  initial: { opacity: 0, y: 24 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true, amount: 0.1 } as const,
+  transition: { duration: 0.6, ease: easeOutExpo, delay },
 });
 
 export function Doors() {
@@ -71,7 +78,8 @@ export function Doors() {
             <AgendaForm />
           </m.div>
 
-          {/* puerta secundaria: por tu cuenta */}
+          {/* columna 2: la puerta secundaria + que pasa despues de escribir */}
+          <div className={styles.col}>
           <m.div className={styles.door} {...openDoor(0.12)}>
             <p className={`mono ${styles.doorTag}`}>Puerta 2 · por tu cuenta</p>
             <h3 className={styles.doorTitle}>Empezá solo</h3>
@@ -103,6 +111,30 @@ export function Doors() {
               <span className={styles.demoCursor} />
             </span>
           </m.div>
+
+          {/* que pasa despues: saca la incertidumbre justo en el momento de
+              decidir. Los tres pasos son los del kit de venta, no promesas
+              nuevas — y no hay SLA prometido (no lo tenemos). */}
+          <m.aside className={styles.despues} {...openDoor(0.24)}>
+            <p className={`mono ${styles.despuesTag}`}>Qué pasa después</p>
+            <ol className={styles.pasos}>
+              <li>
+                <span className={`mono ${styles.pasoNum}`}>1</span>
+                Te respondemos por WhatsApp y buscamos un rato de 20 minutos.
+              </li>
+              <li>
+                <span className={`mono ${styles.pasoNum}`}>2</span>
+                Te mostramos el sistema andando y hacemos la cuenta con tus
+                números, no con los nuestros.
+              </li>
+              <li>
+                <span className={`mono ${styles.pasoNum}`}>3</span>
+                Si te cierra, dejamos tu cuenta lista con tus datos cargados. Si
+                no, te decimos qué te conviene hacer igual.
+              </li>
+            </ol>
+          </m.aside>
+          </div>
         </div>
       </div>
     </section>

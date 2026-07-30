@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { WA_URL, APP_URL } from "@/lib/site";
+import { WA_URL } from "@/lib/site";
 import { HeroBoard } from "./hero-board";
 import styles from "./hero.module.css";
 
@@ -35,18 +35,18 @@ export function Hero() {
               <span className="btn-dot" aria-hidden />
               Hablanos por WhatsApp
             </a>
-            <Link href="/empezar" className="btn btn-ghost">
-              Empezá ahora
-            </Link>
-            <a href={APP_URL} className="btn btn-ghost">
-              Entrar a la app
+            <a href="#precios" className="btn btn-ghost">
+              Ver planes y precios
             </a>
+            <Link href="/empezar" className="btn btn-ghost">
+              Empezá solo
+            </Link>
           </div>
 
           <p className={styles.micro}>
-            Disponible hoy: <strong>DentalGest</strong>, para clínicas
-            dentales — desde Bs 320/mes, precios de lanzamiento. Más rubros en
-            camino.
+            Disponible hoy: el <strong>pack dental</strong>, para clínicas y
+            consultorios — desde Bs 320/mes, precio de lanzamiento y publicado.
+            El siguiente pack es importadora.
           </p>
         </div>
 

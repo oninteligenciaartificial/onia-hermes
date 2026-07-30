@@ -11,8 +11,8 @@ const NAV = [
   { href: "/#como-funciona", label: "Cómo funciona" },
   { href: "/#rubros", label: "Rubros" },
   { href: "/#modulos", label: "Módulos" },
-  { href: "/#bolivia", label: "Bolivia" },
-  { href: "/#preguntas", label: "Preguntas" },
+  { href: "/#precios", label: "Precios" },
+  { href: "/#preguntas", label: "Objeciones" },
 ] as const;
 
 function ThemeToggle() {

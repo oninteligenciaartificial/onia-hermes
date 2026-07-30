@@ -5,12 +5,13 @@ import { useInView, useReducedMotion } from "motion/react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { RefObject } from "react";
 import { ModulePower, PressableCta, Reveal, springs } from "@/motion";
-import { APP_URL, DENTALGEST_URL } from "@/lib/site";
+import { APP_URL } from "@/lib/site";
 import {
   FALTA_COPY,
   FALTA_TAG,
   HOY_EXISTE,
   NOTA_CUADERNO,
+  NOTA_DOWNSELL,
   NOTA_FACTURACION,
   PLAN_INCLUYE,
   PRECIO_COPY,
@@ -182,6 +183,13 @@ function VarianteDental({ rec, plan, url, waHref, onReset, h1Ref }: VarianteDent
         {rec.notas.includes("facturacion-incluida") ? (
           <p className={styles.planNote}>{NOTA_FACTURACION}</p>
         ) : null}
+        {rec.notas.includes("downsell-basico") ? (
+          <p className={styles.planNote}>{NOTA_DOWNSELL}</p>
+        ) : null}
+        <p className={styles.planNote}>
+          <a href="/#precios">Ver los tres planes con todo lo que incluyen</a> —
+          los precios están publicados, no hay que pedirlos.
+        </p>
       </m.section>
 
       {rec.faltan.length > 0 ? (
@@ -260,9 +268,10 @@ function VarianteProximamente({
         Tu rubro está en construcción — sin humo.
       </h1>
       <p className={styles.sub}>
-        {arm.nombre} se está armando sobre el mismo motor que ya corre en
-        DentalGest. No vendemos lo que no existe: anotate y te avisamos apenas
-        esté — con tu caso ya anotado, para que no repitas nada.
+        {arm.nombre} se está armando sobre el mismo motor que ya corre en el
+        pack dental. No vendemos lo que no existe ni le ponemos precio a lo que
+        no está listo: anotate y te avisamos apenas esté, con tu caso ya
+        registrado para que no repitas nada.
       </p>
 
       {/* ensamblaje a medio armar — patrón aBlock/aGhost de rubros.tsx */}
@@ -318,7 +327,7 @@ function VarianteProximamente({
       <CierreCtas
         waHref={waHref}
         waLabel="Anotarme — avísenme cuando esté"
-        secundario={{ label: "Ver el rubro que ya anda", href: DENTALGEST_URL }}
+        secundario={{ label: "Ver el pack que ya anda", href: "/#rubros" }}
         micro="Responde una persona, no un menú."
         onReset={onReset}
       />

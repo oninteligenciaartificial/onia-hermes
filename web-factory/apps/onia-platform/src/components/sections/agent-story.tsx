@@ -143,11 +143,21 @@ function Stage({ act }: { act: number }) {
                 ¿Aprobás?
               </p>
               <span className={styles.agentActions}>
+                {/* BUG ARREGLADO 2026-07-30: un spring NO admite 3 keyframes
+                    (Motion tira "Only two keyframes currently supported with
+                    spring"). La excepcion mataba el loop de animacion y TODO
+                    lo que venia despues en la pagina (precios, objeciones,
+                    puertas) se quedaba invisible en opacity 0. El rebote de
+                    aprobacion va con tween, que si acepta keyframes. */}
                 <m.span
                   className={`${styles.approveBtn} ${approved ? styles.approveDone : ""}`}
                   initial={false}
                   animate={{ scale: approved ? [1, 0.9, 1] : 1 }}
-                  transition={springs.snappy}
+                  transition={
+                    approved
+                      ? { duration: 0.3, times: [0, 0.35, 1], ease: "easeOut" }
+                      : springs.snappy
+                  }
                 >
                   {approved ? "Aprobada" : "Aprobar"}
                   {approved ? (

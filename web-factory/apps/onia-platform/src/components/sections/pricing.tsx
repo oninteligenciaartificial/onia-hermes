@@ -49,9 +49,10 @@ export function Pricing() {
           <p className="kicker">Precios</p>
           <h2 className="h2">El precio está acá. No hay que llamar para saberlo.</h2>
           <p className="lead">
-            Una suscripción mensual por negocio, sin permanencia y sin letra
-            chica. Lo que sube de nivel no es la cantidad de pantallas: es
-            cuánto trabajo deja de ser tuyo.
+            Una suscripción por negocio, con el precio de lanzamiento a la
+            vista y la letra chica escrita abajo en vez de escondida. Lo que
+            sube de nivel no es la cantidad de pantallas: es cuánto trabajo
+            deja de ser tuyo.
           </p>
         </Reveal>
 
@@ -116,12 +117,14 @@ export function Pricing() {
         </div>
 
         <AnimatePresence mode="wait" initial={false}>
+          {/* la salida va con tween corto a proposito: con mode="wait" el
+              spring de salida sumaba ~1s antes de ver el rubro nuevo, y elegir
+              rubro es una decision de compra, no una transicion de lujo */}
           <m.div
             key={actual.id}
             initial={{ opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            transition={springs.gentle}
+            animate={{ opacity: 1, y: 0, transition: springs.gentle }}
+            exit={{ opacity: 0, y: -8, transition: { duration: 0.14, ease: "easeOut" } }}
           >
             {actual.planes ? (
               <Escalera rubro={actual} planes={actual.planes} ciclo={ciclo} />
