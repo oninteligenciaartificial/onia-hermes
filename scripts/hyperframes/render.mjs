@@ -60,6 +60,8 @@ const COMPS = {
   LowerThird: "lower-third",
   Scoreboard: "scoreboard/vertical",
   ScoreboardWide: "scoreboard/horizontal",
+  ScoreboardFull: "scoreboard/full",
+  ScoreboardFullVertical: "scoreboard/full-vertical",
 };
 const COMP_NAMES = Object.keys(COMPS);
 
