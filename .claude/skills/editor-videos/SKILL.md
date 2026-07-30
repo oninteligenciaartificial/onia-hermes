@@ -72,7 +72,7 @@ HyperFrames (render + SFX), imagen barata. Validar la idea antes de generar.
    Alternativa cinematográfica (matte de la persona, embed detrás del sujeto): `embedded-captions`.
 7. **Apoyos visuales — mockups con código** (piezas propias, PROBADAS; el método de Santiago).
    `node scripts/make-mockup.mjs --template <browser|phone|stat|quote|custom> --out assets/x.png …`
-   → PNG con fondo TRANSPARENTE renderizado de HTML/CSS con Playwright (acento `--accent`, default `#FF7A00`).
+   → PNG con fondo TRANSPARENTE renderizado de HTML/CSS con Playwright (acento `--accent`, default `#00D26A`, el verde de marca).
    `node scripts/overlay-visuals.mjs --video in.mp4 --plan overlay-plan.json --out out.mp4`
    → superpone los PNG con timing y fade (`{overlays:[{asset,start,end,position,scale,fade}]}`); `--dry-run` imprime el ffmpeg.
    Para overlays animados/kinéticos más elaborados: `talking-head-recut` (HyperFrames).

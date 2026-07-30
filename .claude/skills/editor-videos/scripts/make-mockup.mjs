@@ -73,7 +73,7 @@ const WIDTH_IN = Number(pick("width", "0")) || 0;
 const WIDTH = WIDTH_IN > 0 ? Math.max(200, Math.round(WIDTH_IN)) : 0; // 0 = ancho default de la plantilla
 const HEIGHT_IN = Number(pick("height", "0")) || 0;
 const HEIGHT = HEIGHT_IN > 0 ? Math.round(HEIGHT_IN) : 0; // 0 = alto por contenido
-const ACCENT = pick("accent", "#FF7A00"); // naranja estilo Santiago
+const ACCENT = pick("accent", "#00D26A"); // verde de marca ONIA
 const THEME = pick("theme", "dark"); // dark = tarjeta oscura (pega sobre video claro) | light
 const TITLE = pick("title", pick("text", ""));
 const SUBTITLE = pick("subtitle", pick("sublabel", ""));
@@ -240,7 +240,7 @@ function tplStat(width) {
                letter-spacing: -.01em; color: var(--muted); }
   /* halo de acento DETRÁS del número: profundidad sin ensuciar.
      z-index explícito: un absolute con z-index:auto pinta ENCIMA del texto en flujo
-     (orden de pintado CSS) y le teñía los glifos de naranja. */
+     (orden de pintado CSS) y le teñía los glifos con el color de acento. */
   .stat::before { content: ""; position: absolute; z-index: 0;
     right: calc(-90*var(--u)); top: calc(-120*var(--u));
     width: calc(430*var(--u)); height: calc(430*var(--u)); border-radius: 999px;
