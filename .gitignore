@@ -22,6 +22,10 @@ __pycache__/
 dist/
 build/
 *.log
+# Secuencias PNG del marcador de la serie: ~8 MB por render y se regeneran con
+# `node scripts/hyperframes/render.mjs --comp Scoreboard`. Son 155 dias: si se
+# suben, el repo se llena de artefactos reconstruibles.
+.hermes/video-lab/overlay/
 
 # OS
 .DS_Store
