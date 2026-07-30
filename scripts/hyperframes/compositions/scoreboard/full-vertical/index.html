@@ -19,12 +19,10 @@
     {"id":"churnEstado","type":"string","label":"Churn — estado","default":"pendiente"},
     {"id":"caja","type":"string","label":"Caja neutra personal","default":"no"},
     {"id":"cajaEstado","type":"string","label":"Caja neutra — estado","default":"pendiente"},
-    {"id":"contratacion","type":"string","label":"Primera contratacion","default":"no"},
-    {"id":"contratacionEstado","type":"string","label":"Contratacion — estado","default":"pendiente"},
     {"id":"oficina","type":"string","label":"Primera oficina","default":"no"},
     {"id":"oficinaEstado","type":"string","label":"Oficina — estado","default":"pendiente"},
-    {"id":"python","type":"string","label":"Programas propios en Python","default":"0"},
-    {"id":"pythonEstado","type":"string","label":"Python — estado","default":"pendiente"},
+    {"id":"python","type":"string","label":"Programas escritos a mano","default":"0"},
+    {"id":"pythonEstado","type":"string","label":"Programar sin IA — estado","default":"pendiente"},
     {"id":"tiktokVideos","type":"string","label":"TikTok videos","default":"0"},
     {"id":"tiktokVideosEstado","type":"string","label":"TikTok videos — estado","default":"pendiente"},
     {"id":"tiktokSeguidores","type":"string","label":"TikTok seguidores","default":"0"},
@@ -155,7 +153,7 @@
         border: 1px solid var(--hairline);
         box-shadow: var(--shadow);
         overflow: hidden;
-        padding: calc(var(--u) * 28) calc(var(--u) * 26) calc(var(--u) * 26);
+        padding: calc(var(--u) * 30) calc(var(--u) * 26) calc(var(--u) * 28);
         opacity: 0;
       }
 
@@ -200,7 +198,7 @@
       .title {
         margin: calc(var(--u) * 8) 0 0;
         font-family: var(--font-display);
-        font-size: calc(var(--u) * 44);
+        font-size: calc(var(--u) * 46);
         font-weight: 700;
         line-height: 1.05;
         letter-spacing: 0.04em;
@@ -210,7 +208,7 @@
 
       /* Contador general. No es "cifra gigante + label chiquito": las palabras
          pesan 60% de los digitos y forman una frase que se lee entera
-         ("4 de 13 cumplidos"). */
+         ("4 de 12 cumplidos"). */
       .counter {
         display: flex;
         align-items: baseline;
@@ -219,7 +217,7 @@
       }
       .cnt-n {
         font-family: var(--font-mono);
-        font-size: calc(var(--u) * 36);
+        font-size: calc(var(--u) * 38);
         font-weight: 500;
         line-height: 1;
         letter-spacing: -0.02em;
@@ -228,7 +226,7 @@
       }
       .cnt-t {
         font-family: var(--font-mono);
-        font-size: calc(var(--u) * 36);
+        font-size: calc(var(--u) * 38);
         font-weight: 400;
         line-height: 1;
         letter-spacing: -0.02em;
@@ -237,17 +235,17 @@
       }
       .cnt-w {
         font-family: var(--font-body);
-        font-size: calc(var(--u) * 20);
+        font-size: calc(var(--u) * 21);
         font-weight: 400;
         line-height: 1;
         color: var(--muted);
       }
 
-      /* La barra ES el acento: color semantico (objetivos cumplidos de 13), no
+      /* La barra ES el acento: color semantico (objetivos cumplidos de 12), no
          decorativo. Nunca una franja vertical en el borde — patron prohibido. */
       .track {
         position: relative;
-        margin-top: calc(var(--u) * 12);
+        margin-top: calc(var(--u) * 13);
         height: calc(var(--u) * 8);
         border-radius: 999px;
         background: var(--track);
@@ -265,17 +263,17 @@
       }
 
       /* ---- tabla --------------------------------------------------------- */
-      /* En 9:16 las 13 filas entran COMODAS en UNA sola columna: el cuadro deja
-         ~1.620px de alto util, o sea ~124px por fila (el tablero de 18 tenia
+      /* En 9:16 las 12 filas entran COMODAS en UNA sola columna: el cuadro deja
+         ~1.610px de alto util, o sea ~128px por fila (el tablero de 18 tenia
          85px). Ese aire es lo que se gasta en tipografia mas grande: el
-         objetivo pasa de 22 a 29px y el "hoy" de 20 a 26px, para que se lea en
+         objetivo pasa de 22 a 31px y el "hoy" de 20 a 27px, para que se lea en
          un telefono sin acercar la cara.
          Partirlo en dos columnas dejaria 460px de ancho por columna y habria
-         que recortar los objetivos largos ("Aprender Python: programas propios
-         funcionando"). */
+         que recortar los objetivos largos ("Llamadas y demos con dueños de
+         negocio"). */
       .grid {
         display: flex;
-        margin-top: calc(var(--u) * 16);
+        margin-top: calc(var(--u) * 18);
       }
       .col {
         flex: 1 1 0;
@@ -288,10 +286,10 @@
          todas las filas: el bloque se lee como tabla.
          La sangria NO incluye la columna de categoria (como si lo hacia el
          tablero de 18). Con la tipografia mas grande, ese sangrado extra de
-         ~160px dejaba sin aire el peor caso de la fila SIAT
+         ~170px dejaba sin aire el peor caso de la fila SIAT
          ("meta aprobada antes del 15-sep" + "hoy aprobada el 12-sep-2026"). */
       .row {
-        padding: calc(var(--u) * 21) 0;
+        padding: calc(var(--u) * 24) 0;
       }
       .row + .row {
         border-top: 1px solid var(--hairline);
@@ -299,15 +297,15 @@
       .row-top {
         display: flex;
         align-items: center;
-        gap: calc(var(--u) * 13);
+        gap: calc(var(--u) * 14);
       }
       .row-bot {
         display: flex;
         align-items: baseline;
         justify-content: space-between;
-        gap: calc(var(--u) * 22);
+        gap: calc(var(--u) * 24);
         margin-top: calc(var(--u) * 7);
-        padding-left: calc(var(--u) * 33 + var(--u) * 13);
+        padding-left: calc(var(--u) * 34 + var(--u) * 14);
       }
 
       /* Estado dibujado, no emoji: el subset latin de las fuentes de marca no
@@ -316,8 +314,8 @@
          (progreso), anillo vacio (pendiente). */
       .mark {
         flex: 0 0 auto;
-        width: calc(var(--u) * 33);
-        height: calc(var(--u) * 33);
+        width: calc(var(--u) * 34);
+        height: calc(var(--u) * 34);
         display: block;
       }
       .mark svg {
@@ -356,9 +354,9 @@
 
       .cat {
         flex: 0 0 auto;
-        width: calc(var(--u) * 148);
+        width: calc(var(--u) * 158);
         font-family: var(--font-display);
-        font-size: calc(var(--u) * 16);
+        font-size: calc(var(--u) * 17);
         font-weight: 700;
         letter-spacing: 0.14em;
         text-transform: uppercase;
@@ -370,7 +368,7 @@
         flex: 1 1 auto;
         min-width: 0;
         font-family: var(--font-body);
-        font-size: calc(var(--u) * 27);
+        font-size: calc(var(--u) * 29);
         font-weight: 500;
         line-height: 1.2;
         color: var(--ink-text);
@@ -387,12 +385,12 @@
       .kv {
         display: flex;
         align-items: baseline;
-        gap: calc(var(--u) * 11);
+        gap: calc(var(--u) * 12);
         min-width: 0;
       }
       .kv-k {
         font-family: var(--font-display);
-        font-size: calc(var(--u) * 14);
+        font-size: calc(var(--u) * 15);
         font-weight: 700;
         letter-spacing: 0.16em;
         text-transform: uppercase;
@@ -401,7 +399,7 @@
       }
       .kv-meta {
         font-family: var(--font-body);
-        font-size: calc(var(--u) * 21);
+        font-size: calc(var(--u) * 22);
         font-weight: 400;
         line-height: 1.15;
         color: var(--muted);
@@ -409,7 +407,7 @@
       }
       .kv-act {
         font-family: var(--font-mono);
-        font-size: calc(var(--u) * 24);
+        font-size: calc(var(--u) * 25);
         font-weight: 500;
         line-height: 1.15;
         letter-spacing: -0.01em;
@@ -429,8 +427,8 @@
         display: flex;
         align-items: center;
         gap: calc(var(--u) * 26);
-        margin-top: calc(var(--u) * 13);
-        padding-top: calc(var(--u) * 12);
+        margin-top: calc(var(--u) * 15);
+        padding-top: calc(var(--u) * 13);
         border-top: 1px solid var(--hairline);
       }
       .lg {
@@ -475,7 +473,7 @@
               <div class="counter">
                 <span class="cnt-n" id="ob-done">0</span>
                 <span class="cnt-w">de</span>
-                <span class="cnt-t" id="ob-total">13</span>
+                <span class="cnt-t" id="ob-total">12</span>
                 <span class="cnt-w">cumplidos</span>
               </div>
             </div>
@@ -611,14 +609,19 @@
             return out;
           }
 
-          // ---- las 13 filas ---------------------------------------------------
-          // Metas cerradas por Sergio el 2026-07-30: el tablero pasa de 18 a 13.
+          // ---- las 12 filas ---------------------------------------------------
+          // Metas cerradas por Sergio el 2026-07-30: el tablero pasa de 18 a 12.
           // Salieron "NIT desbloqueado" (ya estaba resuelto antes del semestre),
-          // "Suscriptores de YouTube", "Leads del contenido" y "Entrevistas con
-          // los que NO compraron"; Anclas / Clinicas / Webs se colapsaron en un
-          // solo numero ("Clientes activos 50"); entro "Llamadas y demos" como
-          // fila de VENTAS; y la fila de Python dejo de ser "Worker Cobrador IA
-          // en produccion" para ser APRENDIZAJE (15 programas propios andando).
+          // "Suscriptores de YouTube", "Leads del contenido", "Entrevistas con
+          // los que NO compraron" y "Primera contratacion"; Anclas / Clinicas /
+          // Webs se colapsaron en un solo numero ("Clientes activos 50"); entro
+          // "Llamadas y demos" como fila de VENTAS; y la fila de aprendizaje
+          // dejo de ser "Worker Cobrador IA en produccion" para ser "Aprender a
+          // programar SIN IA" (15 programas escritos a mano).
+          //
+          // El "SIN IA" va en VERSALITA a proposito: es el filo del objetivo, no
+          // un detalle. Mismo recurso que usaba "los que NO compraron" en el
+          // tablero de 18.
           //
           // Categoria, objetivo y META son FIJOS (viven aca, no en el JSON): la
           // meta es el compromiso del ano y no cambia semana a semana. Del JSON
@@ -635,9 +638,8 @@
             { cat: "Expansión", obj: "Clientes internacionales", meta: "3", key: "internacionales" },
             { cat: "Retención", obj: "Churn mensual", meta: "menor a 5%", key: "churn" },
             { cat: "Negocio", obj: "Caja neutra personal", meta: "sí", key: "caja" },
-            { cat: "Equipo", obj: "Primera contratación", meta: "antes del 30-nov", key: "contratacion" },
             { cat: "Empresa", obj: "Primera oficina", meta: "MRR = 3x alquiler", key: "oficina" },
-            { cat: "Aprendizaje", obj: "Aprender Python: programas propios funcionando", meta: "15", key: "python" },
+            { cat: "Aprendizaje", obj: "Aprender a programar SIN IA", meta: "15 programas escritos a mano", key: "python" },
             { cat: "TikTok", obj: "Videos publicados", meta: "155", key: "tiktokVideos" },
             { cat: "TikTok", obj: "Seguidores", meta: "20.000", key: "tiktokSeguidores" },
             { cat: "YouTube", obj: "Resúmenes semanales", meta: "22", key: "ytVideos" },
@@ -746,8 +748,8 @@
           // ---- timeline -------------------------------------------------------
           // Ruta de movimiento sostenido: "sequenced UI life" + "staged reveals"
           // (motion-doctrine). El tablero arranca como instrumento — la barra se
-          // llena y el contador tickea con ella — y las 13 filas caen en cascada.
-          // Despues SE QUEDA QUIETO: son 13 filas para leer, y moverlas mientras
+          // llena y el contador tickea con ella — y las 12 filas caen en cascada.
+          // Despues SE QUEDA QUIETO: son 12 filas para leer, y moverlas mientras
           // se leen seria ruido. Nada de idle wobble.
           var tl = gsap.timeline({ paused: true });
           var elPlate = document.getElementById("ob-plate");
@@ -789,10 +791,10 @@
             4 / FPS,
           );
 
-          // Cascada de las 13 filas + la leyenda (waterfall entry,
+          // Cascada de las 12 filas + la leyenda (waterfall entry,
           // cut-the-curve §6): opacidad BINARIA en la entrada, huecos que SE
           // ACHICAN (x0.84) y una sola direccion para toda la cascada.
-          // Escalonado total = suma de 2*0.84^k, k=0..13 ~= 380ms < 500ms.
+          // Escalonado total = suma de 2*0.84^k, k=0..12 ~= 373ms < 500ms.
           var wave = rowEls.concat([elLegend]);
           var cascade = enterExit({ delayFrames: 6, enterMs: 300, exitMs: 220 });
           var ROW_X = "calc(var(--u) * 16)";
