@@ -1,4 +1,4 @@
-# Onia — Plan de 155 días (1-ago → 31-dic-2026): crítica y rediseño
+# Onia — Plan de 153 días (1-ago → 31-dic-2026): crítica y rediseño
 
 > 2026-07-27. Sergio pidió un consejo directivo (CEO, CTO, PM, arquitecto, creador de
 > contenido, inversionista, cliente) sobre su plan de documentar públicamente la
@@ -165,7 +165,7 @@ Si te agarra por sorpresa, es el capítulo donde se acaba la serie.
 | 2 | **Un solo vertical: dental.** Ferreterías queda gateado | Onia Dental está ~90% listo; abrir dos verticales duplica soporte y no duplica ventas |
 | 3 | **MRR pasa de objetivo a resultado.** El objetivo es *clientes que renuevan* | Con 0 clientes, MRR es rezagado; lo que se controla son las conversaciones |
 | 4 | **Objetivos en tres escenarios** (base / bueno / excelente), no un número único | Un número único te hace mentir o rendirte. Tres te hacen aprender |
-| 5 | **TikTok diario SÍ (155 de 155), pero se elimina el "sin fallar"** | El contador "Día X de 155" solo funciona si es diario. Con el sistema de batching de §16 (~7 h/semana) el diario da. Lo que se elimina es el "sin fallar": **un día perdido se recupera con doble al día siguiente, no es un fracaso**. La culpa es lo que mata la serie, no el hueco |
+| 5 | **TikTok diario SÍ (153 de 153), pero se elimina el "sin fallar"** | El contador "Día X de 153" solo funciona si es diario. Con el sistema de batching de §16 (~7 h/semana) el diario da. Lo que se elimina es el "sin fallar": **un día perdido se recupera con doble al día siguiente, no es un fracaso**. La culpa es lo que mata la serie, no el hueco |
 | 6 | **Aprender programando sobre el stack real, no fundamentos de Python** | Aprendés más shippeando una feature de Next que haciendo ejercicios |
 | 7 | **La oficina se reemplaza por la primera contratación** | Un par de manos multiplica; un cuarto vacío no |
 | 8 | **Consentimiento escrito antes de grabar a cualquier cliente** | Sin esto, el primer episodio con un cliente real puede costarte el cliente |
@@ -258,7 +258,7 @@ condición del plan — y es mejor historia que "contraté cuando me sentí cóm
 | 7 | Primera contratación | antes del 30-nov |
 | 8 | Primera oficina | MRR = 3× alquiler |
 | 9 | Worker Cobrador IA en Python | en producción |
-| 10 | TikToks publicados | **155** (1 por día) |
+| 10 | TikToks publicados | **153** (1 por día) |
 | 11 | Seguidores TikTok | **20.000** |
 | 12 | YouTube: resúmenes semanales | 22 |
 
@@ -307,7 +307,7 @@ sea que solo cerraba si todos compraban el más caro). **Con 50 cierra con una m
 |---|---|---|---|
 | TikTok | 8.000 | **25.000** | 60.000 |
 | YouTube | 1.000 | **2.500** | 5.000 |
-| **TikToks publicados** (1 por día) | 140 | **155 de 155** | 155 |
+| **TikToks publicados** (1 por día) | 140 | **153 de 153** | 153 |
 | YouTube publicados | 15 | **22** (1/semana) | 22 |
 | **Leads calificados que llegaron del contenido** | 5 | **25** | 60 |
 | Un video sobre 500k vistas | — | **✅** | 3 |
@@ -447,7 +447,7 @@ Regla dura. Escribila y no la negocies a mitad de camino.
 ```
 
 **Reglas:** nada de "sígueme"; el cierre abierto retiene más que cualquier CTA. Un formato
-recurrente ancla la serie: **"Día 47 de 155"** en pantalla desde el primer video — convierte
+recurrente ancla la serie: **"Día 47 de 153"** en pantalla desde el primer video — convierte
 videos sueltos en una serie que da ansiedad no seguir.
 
 ---
@@ -482,11 +482,11 @@ episodio anterior. Confiá en que el que llegó, llegó.
 
 ---
 
-## 12. Cómo lograr que la sigan 155 días
+## 12. Cómo lograr que la sigan 153 días
 
 Siete mecanismos, en orden de potencia:
 
-1. **El contador visible.** "Día 47 de 155" en todos los formatos. Una serie con final
+1. **El contador visible.** "Día 47 de 153" en todos los formatos. Una serie con final
    anunciado se sigue; un feed infinito se abandona.
 2. **Compromisos verificables.** Cerrá cada episodio con algo comprobable: *"para el 15 de
    agosto tengo que tener 3 clínicas en demo"*. Después mostrá si se cumplió o no. **La
@@ -564,7 +564,7 @@ Cinco decisiones, y son todas de fondo, no de estética:
 | 🤝 **La primera contratación** | Reemplaza a la oficina como "ya somos empresa" | nov |
 | 🦷 **El cliente #10 del mismo rubro** | Prueba que el modelo se repite. Es el hito que habilita el vertical #2 | nov-dic |
 | 🌎 **Primer cliente fuera de Bolivia** | Si llega solo, es episodio. Si hay que salir a buscarlo, no es todavía | dic (si pasa) |
-| 📊 **Episodio 155 — el cierre** | Todos los números, cumplidos e incumplidos | 31-dic |
+| 📊 **Episodio 153 — el cierre** | Todos los números, cumplidos e incumplidos | 31-dic |
 
 ---
 
@@ -658,7 +658,7 @@ hilo de X. Cambia el formato, no el contenido.
 |---|---|
 | **Empresa** | 15-25 clientes · **cliente #10 del mismo rubro** (habilita el vertical #2) · Paraguay validado **en papel**, sin vender todavía |
 | **Producto** | Onia Comercio listo para el primer piloto de ferretería en enero |
-| **Contenido** | Episodio 155 con todos los números · plan público 2027 |
+| **Contenido** | Episodio 153 con todos los números · plan público 2027 |
 | **Decisión** | Con el gate cumplido: **vertical #2 (comercio) o país #2 (Paraguay)**. Uno, no los dos |
 
 ### Los tres gates que no se negocian
@@ -673,7 +673,7 @@ hilo de X. Cambia el formato, no el contenido.
 
 Si tuvieras que tirar el resto:
 
-> **El objetivo de los próximos 155 días es conseguir 8 clientes que renueven en Santa Cruz,
+> **El objetivo de los próximos 153 días es conseguir 8 clientes que renueven en Santa Cruz,
 > con la homologación SIAT aprobada. Nada más.**
 >
 > La serie documenta ese intento con honestidad, incluidos los fracasos.

@@ -1,4 +1,4 @@
-# Onia — Bitácora de los 155 días
+# Onia — Bitácora de los 153 días
 
 > **Documento vivo.** Del 1-ago al 31-dic-2026. Acá se registra TODO: lo que salió bien,
 > lo que salió mal, los números reales y las decisiones. Es la fuente del guion de cada
@@ -27,7 +27,7 @@
 
 ---
 
-## 1. Estado de los 13 objetivos
+## 1. Estado de los 12 objetivos
 
 > Se actualiza los domingos. Es la misma tabla que sale en pantalla al final del video
 > semanal (composición `ScoreboardFull`) y la que alimenta `scripts/hyperframes/data/serie-objetivos.json`.
@@ -46,14 +46,17 @@
 | 5 | Expansión | **Clientes internacionales** | 3 | 0 | ⬜ |
 | 6 | Retención | **Churn mensual** | menor a 5% | — | ⬜ |
 | 7 | Negocio | **Caja neutra personal** | sí | — | ⬜ |
-| 8 | Equipo | **Primera contratación** | antes del 30-nov | — | ⬜ |
-| 9 | Empresa | **Primera oficina** | MRR = 3× alquiler | — | ⬜ |
-| 10 | Aprendizaje | **Aprender Python: programas propios funcionando** | 15 | 0 | ⬜ |
-| 11 | TikTok | **Videos publicados** | 155 | 0 | ⬜ |
-| 12 | TikTok | **Seguidores** | 20.000 | — | ⬜ |
-| 13 | YouTube | **Resúmenes semanales** | 22 | 0 | ⬜ |
+| 8 | Empresa | **Primera oficina** | MRR = 3× alquiler | — | ⬜ |
+| 9 | Aprendizaje | **Aprender a programar SIN IA** | 15 programas escritos a mano | 0 | ⬜ |
+| 10 | TikTok | **Videos publicados** | 153 | 0 | ⬜ |
+| 11 | TikTok | **Seguidores** | 20.000 | — | ⬜ |
+| 12 | YouTube | **Resúmenes semanales** | 22 | 0 | ⬜ |
 
-**Progreso: 0 de 13.**
+**Progreso: 0 de 12.**
+
+> **Eliminada la "primera contratación"** (2026-07-30, decisión de Sergio). Sigue siendo real
+> que 50 clientes no los soporta una persona sola — pero deja de ser objetivo del tablero y
+> pasa a ser una consecuencia que va a aparecer cuando el soporte apriete.
 
 ### De dónde sale cada número
 
@@ -66,11 +69,18 @@ Con 200 demos y la misma tasa salen 40 clientes, no 50. **Es el único objetivo 
 que es puro esfuerzo propio** — no depende del SIN, ni del algoritmo, ni de que el cliente
 diga que sí. Es el que se mueve todos los días y el que produce a todos los demás.
 
-**Python = 15 programas propios funcionando.** La meta es **aprender a programar**, no
-entregar un artefacto. Un programa que corre y hace algo real vale más que 40 horas de
-tutorial. Con 3 h/semana × 22 semanas (~66 h) dan 15 programas chicos que funcionen.
+**Aprender a programar SIN IA = 15 programas escritos a mano.** El "sin IA" no es un detalle:
+es el objetivo. Escribir el código uno mismo, con documentación y errores propios, sin
+autocompletado que piense por vos. Un programa que corre y hace algo real vale más que 40
+horas de tutorial. Con 3 h/semana × 22 semanas (~66 h) dan 15 programas chicos que funcionen.
+
+**Por qué es el mejor objetivo del tablero:** es el único que construye una capacidad que
+no se puede comprar ni delegar. Y narrativamente es la mejor historia que tenés —
+*el chico que construye una empresa de IA aprendiendo a programar sin IA.* Además tiene un
+efecto práctico: el día que la IA escriba algo mal, vas a poder darte cuenta. Hoy no.
+
 El worker del Cobrador IA deja de ser la meta y pasa a ser **la graduación**: el programa
-número 15, el que corre en producción.
+número 15, el primero que corre en producción.
 
 **Churn < 5%.** Es el % de clientes que se van cada mes. Con 50 clientes y 10% se van 5 por
 mes: hay que vender 5 nuevos **solo para quedarse igual**. Importa más que el MRR porque el
@@ -98,7 +108,7 @@ Leyenda: ⬜ pendiente · 🟡 en progreso · ✅ cumplido · ❌ caído (con mo
 |---|---|---|
 | ⏰ **SIAT** | **30-sep-2026** | Sin homologación no hay producto vendible. Es la ventana del país entero |
 | 💸 **Runway** | **~mediados de octubre** | Cae casi el mismo día que el SIAT. Ese choque es el pico de la serie |
-| 🎬 **Serie** | **31-dic-2026** | Día 155 de 155 |
+| 🎬 **Serie** | **31-dic-2026** | Día 153 de 153 |
 
 ---
 
@@ -156,7 +166,7 @@ Formato:
 Plantilla a copiar:
 
 ```markdown
-### Semana N (2026-MM-DD a 2026-MM-DD) · Días X-Y de 155
+### Semana N (2026-MM-DD a 2026-MM-DD) · Días X-Y de 153
 
 **Números**
 | Métrica | Esta semana | Semana pasada | Δ |
@@ -203,7 +213,7 @@ Plantilla a copiar:
 | 🦷 Cliente #10 del mismo rubro | | | Habilita el vertical #2 |
 | 🌎 Primer cliente internacional | | | |
 | 🏢 Primera oficina | | | Gatillo: MRR = 3× alquiler, 2 meses |
-| 📊 Episodio 155 — el cierre | | | |
+| 📊 Episodio 153 — el cierre | | | |
 
 ---
 
@@ -217,7 +227,7 @@ Plantilla a copiar:
 | 2026-07-27 | Marca única `Onia`, producto `Onia Platform`, handle `@oniahq` | 15 nombres alternativos verificados, 15 quemados. El espacio está agotado | Sergio |
 | 2026-07-27 | Un solo vertical (dental) y un solo país (Bolivia) para la fase 1 | Bolivia es el mercado menos saturado y cobra 2-10× más que Ecuador | Sergio |
 | 2026-07-27 | Meta $5.000 MRR con forma barbell, no 30 clientes uniformes | Con 30 iguales da $1.500. Con 5 anclas + base, cierra | Sergio |
-| 2026-07-27 | TikTok diario (155/155), pero se elimina el "sin fallar" | El contador exige diario; la culpa es lo que mata la serie | Sergio |
+| 2026-07-27 | TikTok diario (153/153), pero se elimina el "sin fallar" | El contador exige diario; la culpa es lo que mata la serie | Sergio |
 | | | | |
 
 ---
