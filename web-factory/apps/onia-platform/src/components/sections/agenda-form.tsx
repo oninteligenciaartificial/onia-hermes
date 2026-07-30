@@ -4,7 +4,7 @@ import { useId, useState } from "react";
 import type { FormEvent } from "react";
 import { PressableCta } from "@/motion";
 import { useRubro } from "@/components/rubro-context";
-import { waLink } from "@/lib/site";
+import { CAL_DEMO_URL, calLink } from "@/lib/site";
 import { RUBROS_PLANES, rubroPlanes } from "@/lib/pricing";
 import type { RubroId } from "@/lib/pricing";
 import styles from "./doors.module.css";
@@ -12,13 +12,15 @@ import styles from "./doors.module.css";
 /**
  * Formulario minimo para pedir una reunion.
  *
- * HONESTIDAD DE INGENIERIA: todavia NO hay herramienta de agenda ni endpoint
- * conectado, asi que el formulario no finge que "envia" nada. Lo que hace es
- * armar el mensaje con los datos y abrir WhatsApp para que la persona lo mande
- * ella misma — destino real, verificable, sin simulacion.
+ * Destino REAL: Cal.com propio (self-hosted en el VPS, cuenta `onia`), evento
+ * "demo-onia" de 45 min. Verificado 2026-07-30: responde 200 en publico.
  *
- * Cuando exista agenda (Cal.com u otra) o un endpoint propio, se cambia el
- * submit por un POST y este comentario deja de aplicar.
+ * Los datos que la persona escribe se pasan a Cal.com por querystring, asi que
+ * NO los vuelve a tipear: llega a la pantalla de horarios con el nombre puesto
+ * y el negocio/rubro/telefono en las notas, y elige el horario ahi.
+ *
+ * Sigue sin haber simulacion: el formulario no dice "enviado" — abre el
+ * calendario y la reserva la confirma la persona.
  */
 
 type Campos = {
@@ -40,14 +42,16 @@ function validar(c: Campos): Errores {
   return e;
 }
 
-function mensaje(c: Campos, rubro: RubroId): string {
+/**
+ * Lo que viaja en las notas de la reserva, para llegar a la demo sabiendo de
+ * quien se trata en vez de gastar los primeros minutos preguntando lo basico.
+ */
+function notas(c: Campos, rubro: RubroId): string {
   return [
-    "Hola, quiero coordinar una reunión para ver Onia.",
-    `Nombre: ${c.nombre.trim()}`,
     `Negocio: ${c.negocio.trim()}`,
     `Rubro: ${rubroPlanes(rubro).mensaje}`,
-    `Mi WhatsApp: ${c.whatsapp.trim()}`,
-  ].join("\n");
+    `WhatsApp: ${c.whatsapp.trim()}`,
+  ].join(" · ");
 }
 
 export function AgendaForm() {
@@ -67,7 +71,11 @@ export function AgendaForm() {
     setErrores(errs);
     if (Object.keys(errs).length > 0) return;
     setAbierto(true);
-    window.open(waLink(mensaje(campos, rubro)), "_blank", "noopener,noreferrer");
+    const url = calLink(CAL_DEMO_URL, {
+      name: campos.nombre.trim(),
+      notes: notas(campos, rubro),
+    });
+    window.open(url, "_blank", "noopener,noreferrer");
   }
 
   return (
@@ -125,14 +133,14 @@ export function AgendaForm() {
       <PressableCta className={styles.formCta}>
         <button type="submit" className="btn btn-wa">
           <span className="btn-dot" aria-hidden />
-          Coordinar la reunión
+          Elegir horario para la demo
         </button>
       </PressableCta>
 
       <p className={styles.formNota} role="status">
         {abierto
-          ? "Se abrió WhatsApp con tus datos escritos. Tocá enviar ahí y coordinamos el horario."
-          : "No tenemos agenda automática todavía: al tocar el botón se abre WhatsApp con tus datos ya escritos y el horario lo cerramos ahí. Nada se envía sin que vos lo mandes."}
+          ? "Se abrió nuestra agenda con tus datos cargados. Elegí el horario que te sirva y queda confirmado."
+          : "Se abre nuestra agenda con tus datos ya cargados: elegís el horario y listo. Son 45 minutos, por videollamada. Si preferís hablar antes, escribinos por WhatsApp acá arriba."}
       </p>
     </form>
   );

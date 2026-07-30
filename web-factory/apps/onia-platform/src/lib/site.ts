@@ -39,3 +39,35 @@ export const WA_TEXT_PROVEEDORES =
 
 export const APP_URL = "https://app.onia.com.bo";
 export const DENTALGEST_URL = "https://dentalgest.app";
+
+/**
+ * Agenda propia (Cal.com self-hosted en el VPS, cuenta `onia`).
+ * Verificado 2026-07-30: los dos enlaces responden 200 en publico.
+ *
+ * - `demo`: "Demo / diagnostico - solucion ONIA", 45 min. Es el CTA principal:
+ *   quien ya vio precios y quiere ver el sistema.
+ * - `consulta`: "Consulta comercial - proyecto nuevo", 20 min. Para el que
+ *   todavia no sabe si le sirve y no le vamos a pedir 45 minutos de entrada.
+ *
+ * Los otros dos tipos de evento del calendario (auditoria-pagada,
+ * reunion-proyecto) estan ocultos a proposito: no son de captacion.
+ */
+const CAL_BASE = process.env.NEXT_PUBLIC_CAL_BASE ?? "https://cal.onia.com.bo/onia";
+
+export const CAL_DEMO_URL = `${CAL_BASE}/demo-onia`;
+export const CAL_CONSULTA_URL = `${CAL_BASE}/consulta-inicial`;
+
+/**
+ * Enlace de agenda con los datos ya cargados, para que la persona no
+ * los vuelva a tipear tras haberlos escrito en el formulario.
+ */
+export function calLink(
+  url: string,
+  data?: { name?: string; notes?: string }
+): string {
+  const params = new URLSearchParams();
+  if (data?.name) params.set("name", data.name);
+  if (data?.notes) params.set("notes", data.notes);
+  const qs = params.toString();
+  return qs ? `${url}?${qs}` : url;
+}
