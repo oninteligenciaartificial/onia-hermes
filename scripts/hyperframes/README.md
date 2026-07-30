@@ -32,7 +32,7 @@ node scripts/hyperframes/render.mjs --comp Quote --out assets/cita \
 
 | Flag | Default | Notas |
 | ---- | ------- | ----- |
-| `--comp` | — | `Stat` · `Browser` · `Phone` · `Quote` · `LowerThird` |
+| `--comp` | — | `Stat` · `Browser` · `Phone` · `Quote` · `LowerThird` · `Scoreboard` · `ScoreboardWide` |
 | `--out` | — | carpeta si `png-sequence`; archivo si no |
 | `--props` / `--props-file` | `{}` | mismo objeto que los `defaultProps` de antes |
 | `--width` `--height` `--duration` `--fps` | los del HTML | `--duration` en segundos; `--fps` sólo 24/30/60 |
@@ -124,11 +124,35 @@ los números de SSIM contra esa baseline están en
 scripts/hyperframes/
 ├── render.mjs                 CLI (paridad con scripts/remotion/render.mjs)
 ├── TRANSLATION_NOTES.md       qué se perdió, qué se desvió y por qué
+├── data/
+│   └── serie-estado.json      números vivos de la serie de 155 días
 ├── compositions/
 │   ├── stat/index.html        tarjeta de dato con contador
 │   ├── browser/index.html     ventana de navegador con wipe de captura
 │   ├── phone/index.html       mockup de celular con deriva de pantalla
 │   ├── quote/index.html       revelado tipográfico palabra por palabra
-│   └── lower-third/index.html placa inferior que entra y sale
+│   ├── lower-third/index.html placa inferior que entra y sale
+│   └── scoreboard/            marcador de la serie documental (155 días)
+│       ├── README.md          cómo actualizar los datos y quemarlo al video
+│       ├── vertical/          1080x1920 · TikTok/Reels/Shorts
+│       ├── horizontal/        1920x1080 · YouTube
+│       └── muestra/           PNGs de referencia
 └── .build/                    proyecto temporal por render (gitignored)
 ```
+
+---
+
+## Marcador de la serie (Scoreboard)
+
+Las únicas composiciones que **no** son un apoyo suelto: son el ancla común de
+todos los videos de la serie de 155 días (DÍA n/155 · MRR · CLIENTES · RUNWAY).
+Los datos salen de `data/serie-estado.json`, no del comando.
+
+```bash
+node scripts/hyperframes/render.mjs --comp Scoreboard \
+  --out .hermes/video-lab/overlay/vertical \
+  --props-file scripts/hyperframes/data/serie-estado.json --duration 6
+```
+
+Instrucciones completas (actualizar el JSON, quemarlo con ffmpeg, reglas de
+diseño): [`compositions/scoreboard/README.md`](compositions/scoreboard/README.md).
