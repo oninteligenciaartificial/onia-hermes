@@ -331,7 +331,23 @@ function handoffResult(ctx, base, reason, leadingReplies = []) {
 
 /** Respuesta off-guion (precio / SIAT / archivo): cuerpo fijo + la pregunta pendiente del embudo. */
 function composeWithFunnel(ctx, base, bodyKey, reason) {
-  const { config, prev } = ctx;
+  const { config, prev, msg } = ctx;
+  const intake = base.botStage === "nuevo" || base.botStage === "esperando_calificacion";
+
+  // El mismo mensaje trajo la pregunta Y los 3 datos: se contesta y se sigue al horario. Volver
+  // a pedir lo que el prospecto acaba de contestar es lo que hace parecer que el bot no lee.
+  if (intake && missingFields(base.qualification, config).length === 0 && !intents.isDisqualified(msg.norm, base.qualification)) {
+    const staged = {
+      ...base,
+      botStage: "esperando_calificacion",
+      optInAt: base.optInAt || msg.receivedAt,
+      optInSource: base.optInSource || "inbound_demo",
+    };
+    const leading = base.botStage === "nuevo"
+      ? [say("M0_DISCLOSURE", staged, config), say(bodyKey, staged, config)]
+      : [say(bodyKey, staged, config)];
+    return qualifiedResult(ctx, staged, leading, [reason]);
+  }
 
   // En 'nuevo' el disclosure manda (D2, sin excepción): primero M0, despues el cuerpo.
   if (base.botStage === "nuevo") {
@@ -377,8 +393,11 @@ export function step(state, incoming, options = {}) {
   if (state.humanTookOver) return finalize(ctx, base, [], [], ["silencio:humano_a_cargo"]);
 
   // --- Barrera 2: opt-out previo. Solo el disparador DEMO puede reabrir (lo dice M6).
+  // El opt-out le gana SIEMPRE al disparador: "ya no me mandes mas info" trae la palabra "info"
+  // (disparador de demo) pero esta REFORZANDO la baja. Reabrirle el guion es escribirle a quien
+  // ya dijo basta dos veces — riesgo de politica de Meta, no un detalle de UX.
   if (state.optOutAt) {
-    if (!intents.isDemoTrigger(msg.norm, config)) {
+    if (intents.isOptOut(msg.norm) || !intents.isDemoTrigger(msg.norm, config)) {
       return finalize(ctx, base, [], [], ["silencio:opt_out"]);
     }
     const next = {
@@ -408,9 +427,20 @@ export function step(state, incoming, options = {}) {
 
   if (!msg.hasText) return finalize(ctx, base, [], [], ["sin_texto"]);
 
+  // --- Captura ANTES de rutear (regla de oro §2.1). Un mensaje real trae las tres respuestas y
+  // una pregunta en la misma linea ("es mia, tengo 2 sillones, estoy en santa cruz. cuanto
+  // sale?"). Si la intencion cortara antes, los 3 datos se tiran y el bot los vuelve a pedir:
+  // parece que no lee. Los datos se guardan igual; la pregunta se contesta igual.
+  const intake = base.botStage === "nuevo" || base.botStage === "esperando_calificacion";
+  const found = intake ? intents.parseQualification(msg.norm, base.qualification) : {};
+  const withData = Object.keys(found).length
+    ? { ...base, qualification: { ...base.qualification, ...found } }
+    : base;
+  ctx.found = found;
+
   // --- Router determinista (spec §5.2 paso 9): opt-out > queja > precio > SIAT > clinico > estado.
   if (intents.isOptOut(msg.norm)) {
-    const next = { ...base, botStage: "opt_out", optOutAt: msg.receivedAt };
+    const next = { ...withData, botStage: "opt_out", optOutAt: msg.receivedAt };
     return finalize(
       ctx,
       next,
@@ -420,27 +450,30 @@ export function step(state, incoming, options = {}) {
     );
   }
 
-  if (intents.isComplaint(msg.norm)) return handoffResult(ctx, base, "queja_o_desconfianza");
+  if (intents.isComplaint(msg.norm)) return handoffResult(ctx, withData, "queja_o_desconfianza");
 
-  if (intents.isPriceQuestion(msg.norm)) return composeWithFunnel(ctx, base, "M4_BODY", "pregunta_precio");
+  if (intents.isPriceQuestion(msg.norm)) return composeWithFunnel(ctx, withData, "M4_BODY", "pregunta_precio");
 
-  if (intents.isSiatQuestion(msg.norm)) return composeWithFunnel(ctx, base, "M_SIAT_BODY", "pregunta_siat");
+  if (intents.isSiatQuestion(msg.norm)) return composeWithFunnel(ctx, withData, "M_SIAT_BODY", "pregunta_siat");
 
-  if (intents.isClinicalOrLegal(msg.norm)) return handoffResult(ctx, base, "consulta_clinica_o_legal");
+  if (intents.isClinicalOrLegal(msg.norm)) return handoffResult(ctx, withData, "consulta_clinica_o_legal");
 
-  if (intents.isProductDetail(msg.norm)) return handoffResult(ctx, base, "detalle_tecnico_de_producto");
+  if (intents.isProductDetail(msg.norm)) return handoffResult(ctx, withData, "detalle_tecnico_de_producto");
+
+  // Pidio un humano con todas las letras (N3): el bot no puede contestarlo el mismo.
+  if (intents.wantsHuman(msg.norm)) return handoffResult(ctx, withData, "pidio_hablar_con_humano");
 
   // --- Rama por estado.
-  switch (base.botStage) {
+  switch (withData.botStage) {
     case "nuevo":
-      return handleNuevo(ctx, base);
+      return handleNuevo(ctx, withData);
     case "esperando_calificacion":
-      return handleCalificacion(ctx, base);
+      return handleCalificacion(ctx, withData);
     case "calificado":
     case "esperando_horario":
-      return handleHorario(ctx, base);
+      return handleHorario(ctx, withData);
     case "demo_agendada":
-      return handleAgendada(ctx, base);
+      return handleAgendada(ctx, withData);
     case "descartado":
       return intents.isDemoTrigger(msg.norm, config)
         ? handleNuevo(ctx, { ...base, botStage: "nuevo", qualification: {}, offScriptCount: 0, qualifyAsks: 0 })
@@ -461,8 +494,8 @@ export function step(state, incoming, options = {}) {
 
 function handleNuevo(ctx, base) {
   const { config, prev, msg } = ctx;
-  const found = intents.parseQualification(msg.norm, base.qualification);
-  const qualification = { ...base.qualification, ...found };
+  // La calificacion ya se capturo en step(), antes del router: aca solo se decide con ella.
+  const qualification = base.qualification;
   const optIn = { optInAt: base.optInAt || msg.receivedAt, optInSource: base.optInSource || "inbound_demo" };
 
   // El primer mensaje ya trajo los 3 datos: disclosure + oferta de horarios, sin re-preguntar.
@@ -477,8 +510,8 @@ function handleNuevo(ctx, base) {
 
 function handleCalificacion(ctx, base) {
   const { config, prev, msg } = ctx;
-  const found = intents.parseQualification(msg.norm, base.qualification);
-  const qualification = { ...base.qualification, ...found };
+  const found = ctx.found || {};
+  const qualification = base.qualification;
 
   // Descarte suave: claramente no es el publico (o dijo que trabaja en la clinica de otro).
   if (intents.isDisqualified(msg.norm, qualification)) {
@@ -516,7 +549,7 @@ function handleCalificacion(ctx, base) {
 }
 
 /** Paso por `calificado` -> ofrece los 2 horarios y queda en `esperando_horario` (spec §2.1). */
-function qualifiedResult(ctx, base, leadingReplies = []) {
+function qualifiedResult(ctx, base, leadingReplies = [], leadingNotes = []) {
   const { config, prev } = ctx;
   const next = {
     ...base,
@@ -541,17 +574,26 @@ function qualifiedResult(ctx, base, leadingReplies = []) {
       },
     },
   ];
-  return finalize(ctx, next, [...leadingReplies, say("M1b", next, config)], effects, ["calificado"]);
+  // La ruta principal va PRIMERA en notes: si el turno arranco contestando el precio, esa es la
+  // rama que tomo, y `calificado` es lo que ademas logro.
+  return finalize(ctx, next, [...leadingReplies, say("M1b", next, config)], effects, [...leadingNotes, "calificado"]);
 }
 
 function handleHorario(ctx, base) {
   const { config, prev, msg } = ctx;
   const slots = activeSlots(base, config);
 
-  if (intents.noSlotWorks(msg.norm)) return handoffResult(ctx, base, "ningun_horario_le_sirve");
-
+  // Primero se busca la ELECCION: "el jueves no puedo, el viernes si" esta eligiendo el viernes,
+  // y leerlo como "no le sirve ninguno" tira una demo que el prospecto ya acepto.
   const chosen = intents.detectSlotChoice(msg.norm, slots);
-  if (!chosen) return offScriptResult(ctx, base);
+  if (!chosen) {
+    if (intents.noSlotWorks(msg.norm)) return handoffResult(ctx, base, "ningun_horario_le_sirve");
+    // Puso SU fecha/hora sobre la mesa sin elegir A ni B ("puedo el jueves a la 1", "el primero
+    // de agosto viajo"): eso lo coordina un humano. Agendarle uno de los nuestros y decirle
+    // "listo, agendado" es mandarlo a una reunion a la que nunca dijo que iba.
+    if (intents.proposesOwnTime(msg.norm)) return handoffResult(ctx, base, "propone_otro_horario");
+    return offScriptResult(ctx, base);
+  }
 
   const next = {
     ...base,
