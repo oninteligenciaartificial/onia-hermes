@@ -1,0 +1,55 @@
+<!doctype html>
+<!--
+  Apoyo visual de la SERIE de 155 días. Placa oscura + acento verde de marca: la misma
+  familia visual que el marcador (scoreboard), no el beige del recorte de diario — mezclar
+  las dos paletas en una pieza se ve como dos videos pegados.
+
+  Uso:
+    node make-mockup.mjs --template custom --html-file assets/html/apoyo-serie.html \
+      --image assets/ilu-tratada.png --out assets/apoyo.png --width 860 \
+      --label "ODONTOGRAMA" --title "para dentistas" --accent "#00D26A"
+
+  Tokens: {{IMAGE}} {{LABEL}} {{TITLE}} {{ACCENT}}.
+  La imagen entra YA tratada por illustration-style.mjs (blanco y negro + retícula):
+  acá solo se enmarca. El texto va en código, nunca generado ("IA erra letra").
+  El transform vive en .card (un HIJO): en #stage haría que Chromium pinte a 1x en un
+  lienzo 2x.
+-->
+<html><head><meta charset="utf-8"><style>
+  :root { --acento: {{ACCENT}}; }
+  body { margin:0; background:transparent;
+         font-family:"DM Sans","Segoe UI",system-ui,sans-serif; }
+  #stage { display:inline-block; padding:20px 24px; }
+
+  .card { position:relative; width:820px; box-sizing:border-box;
+    background:linear-gradient(180deg,#15181f 0%, #0a0c11 62%);
+    border:1px solid rgba(255,255,255,.11);
+    border-radius:18px; padding:16px 16px 14px;
+    box-shadow:0 26px 60px -16px rgba(0,0,0,.72), 0 7px 18px rgba(0,0,0,.4);
+    transform:rotate(-0.6deg); }
+  /* filo de luz: lo mismo que hace legible la placa del marcador sobre cualquier fondo */
+  .card::before { content:""; position:absolute; left:0; right:0; top:0; height:1px;
+    background:linear-gradient(90deg, transparent, rgba(255,255,255,.09), transparent); }
+
+  .foto { position:relative; overflow:hidden; border-radius:12px;
+    border:1px solid rgba(255,255,255,.10); background:#fff; }
+  .foto img { display:block; width:100%; height:auto; }
+  /* velo inferior para que la etiqueta apoye sobre algo, no sobre el dibujo */
+  .foto::after { content:""; position:absolute; left:0; right:0; bottom:0; height:38%;
+    background:linear-gradient(180deg, transparent, rgba(6,8,12,.92)); }
+
+  .pie { position:absolute; left:32px; right:32px; bottom:30px;
+         display:flex; align-items:baseline; gap:14px; }
+  .label { font-weight:700; font-size:27px; letter-spacing:.20em; text-transform:uppercase;
+           color:var(--acento); }
+  .title { font-size:23px; color:rgba(246,248,251,.72); }
+  /* sin texto, no se dibuja: nada de barras vacías */
+  .label:empty, .title:empty { display:none; }
+</style></head><body>
+  <div id="stage">
+    <div class="card">
+      <div class="foto"><img src="{{IMAGE}}" alt=""></div>
+      <div class="pie"><span class="label">{{LABEL}}</span><span class="title">{{TITLE}}</span></div>
+    </div>
+  </div>
+</body></html>

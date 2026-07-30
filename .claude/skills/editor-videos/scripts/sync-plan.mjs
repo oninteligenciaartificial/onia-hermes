@@ -128,6 +128,8 @@ export function buildOverlays(words, beats, opts = {}) {
       until: beat.until ?? null,
       position: beat.position ?? "center",
       scale: beat.scale,
+      marginX: beat.marginX,
+      marginY: beat.marginY,
       fade: Number(beat.fade ?? fade),
     });
   });
@@ -173,6 +175,10 @@ export function buildOverlays(words, beats, opts = {}) {
       fade: r.fade,
     };
     if (r.scale !== undefined) ov.scale = Number(r.scale);
+    // los márgenes viajan tal cual a overlay-visuals: en 9:16 un apoyo "top" con el
+    // margen por defecto le cae en la frente al que habla, y hay que poder subirlo.
+    if (r.marginX !== undefined) ov.marginX = Number(r.marginX);
+    if (r.marginY !== undefined) ov.marginY = Number(r.marginY);
     if (r.cue) ov.cue = r.cue;
     return ov;
   });
