@@ -199,20 +199,99 @@ Si te agarra por sorpresa, es el capítulo donde se acaba la serie.
 | **7** | **Escribir código de producción todas las semanas, en el stack real** | Aprender programando lo que se vende, no ejercicios. Track de Python acotado a 3 h/semana para datos y automatizaciones |
 | **8** | **Criterio de corte escrito antes del 1-ago** | "Si al 31-oct no tengo N clientes pagando, hago X." Decidilo con la cabeza fría |
 
-### Los objetivos, en tres escenarios
+### 4.bis — CORRECCIÓN: los $5.000 SÍ se alcanzan. Con otra forma de plan.
 
-| | Base (esto es éxito) | Bueno | Excelente |
+> **Corrección a §1.1 (2026-07-27, tras push-back de Sergio).** La crítica aritmética
+> era correcta pero incompleta: **asumía 30 clientes uniformes comprando solo el asiento
+> de SaaS.** Ese es el error. Con la mezcla real de lo que ONIA vende, el número cierra.
+> El problema nunca fue la ambición: era la **forma** del plan.
+
+**Lo que se me había pasado — y es la palanca más importante del semestre:**
+
+1. **ONIA no vende un asiento, vende un stack.** Una clínica no paga solo Bs 750 del plan
+   Pro: paga plan + chatbot IA + cuidado web. El ARPU real no es Bs 567, es **Bs 1.000-1.400**.
+2. **El chatbot y las automatizaciones NO necesitan integración fiscal.** El módulo que no
+   viaja entre países es el emisor SIAT. **El chatbot viaja completo.** Bolivian Electric ya
+   lo prueba: WhatsApp WABA → Chatwoot → webhook, sin tocar un solo impuesto. **Eso significa
+   que ONIA SÍ puede vender fuera de Bolivia desde el día 1** — solo que vende chatbot y
+   automatización, no facturación.
+3. **Existe un ticket alto que ya está construido y probado.** Una empresa mediana con
+   chatbot + automatizaciones + soporte no paga Bs 750: paga **miles por mes**.
+
+### La forma correcta: barbell (pocos grandes + base recurrente)
+
+```
+5 ANCLAS      empresas medianas: chatbot IA + automatización + soporte
+              5 × Bs 6.000/mes                        = Bs 30.000
+
+25 CLÍNICAS   Onia Dental full stack (plan + chatbot + cuidado)
+              25 × Bs 1.000/mes                       = Bs 25.000
+
+10 WEBS       con cuidado web mensual
+              10 × Bs 300/mes                         = Bs  3.000
+                                                        ----------
+                                          TOTAL       = Bs 58.000/mes
+                                                      = USD 5.100  ✅
+```
+
+**40 clientes en 5 meses = 8 por mes.** Exigente, pero no absurdo — sobre todo porque las
+anclas son 5 ventas, no 50, y las webs se cierran una vez y dejan recurrente.
+
+**La consecuencia honesta:** 40 clientes **NO los soporta una persona**. Este plan
+*requiere* la segunda persona hacia octubre. Eso deja de ser un lujo y pasa a ser una
+condición del plan — y es mejor historia que "contraté cuando me sentí cómodo".
+
+### Objetivos definitivos — dos tableros separados
+
+**No se mezclan.** Mezclarlos es lo que corrompe las decisiones de negocio.
+
+#### 🏢 Tablero EMPRESA
+
+| | Base | **Meta de la serie** | Techo |
 |---|---|---|---|
-| Clientes pagando al 31-dic | **8** | 15 | 25 |
-| MRR | ~Bs 4.500 (~$400) | ~Bs 8.500 (~$750) | ~Bs 14.000 (~$1.230) |
-| Churn mensual | <10% | <5% | <3% |
-| Homologación SIAT | ✅ | ✅ | ✅ |
-| Segunda persona | — | ✅ | ✅ |
-| Países | 1 | 1 | 1 (+ 1 validado en papel) |
+| **MRR al 31-dic** | Bs 20.000 (~$1.750) | **Bs 56.850 = USD 5.000** | $7.000 |
+| Anclas (empresas medianas) | 2 | **5** | 8 |
+| Clínicas en Onia Dental | 10 | **25** | 35 |
+| **Churn mensual** | <10% | **<5%** | <3% |
+| **Homologación SIAT** | ✅ obligatorio | ✅ | ✅ |
+| **Clientes internacionales** (chatbot, sin fiscal) | 0 | **2** | 4 |
+| Segunda persona | — | **✅ antes del 30-nov** | +2 |
+| Caja neutra personal | ✅ | ✅ oct | ✅ sep |
 
-> **8 clientes que renuevan valen más que 30 que se van.** Con 8 clientes pagando y churn
-> bajo tenés un negocio real y una máquina que se puede repetir. Con 30 y churn del 20%
-> tenés un trabajo agotador que se apaga solo.
+#### 🎬 Tablero SERIE
+
+| | Base | **Meta** | Techo |
+|---|---|---|---|
+| TikTok | 8.000 | **25.000** | 60.000 |
+| YouTube | 1.000 | **2.500** | 5.000 |
+| Videos publicados | 120 | **155** | 155 |
+| **Leads calificados que llegaron del contenido** | 5 | **25** | 60 |
+| Un video sobre 500k vistas | — | **✅** | 3 |
+
+> **Regla dura:** cuando los dos tableros se contradigan, **gana Empresa.** Si un episodio
+> pide un cliente y el cliente pide que no lo filmes, se filma otra cosa.
+
+### Los hitos que sí se conservan, con gatillo
+
+Tenías razón: la oficina y la contratación son buenos hitos. Lo que fallaba era hacerlos
+por calendario en vez de por mérito. Con gatillo, **se ganan en cámara** — que es mejor
+televisión que alquilar un cuarto en el mes 1.
+
+| Hito | Gatillo | Por qué así |
+|---|---|---|
+| 🏢 **Primera oficina** | cuando el MRR cubra **3× el alquiler** durante 2 meses seguidos | Deja de ser un gasto y pasa a ser una consecuencia. Y el episodio es mucho mejor |
+| 🤝 **Primera contratación** | cuando el soporte pase de **10 h/semana** | El plan de $5.000 la vuelve obligatoria, no opcional |
+| 🌎 **Cliente internacional** | chatbot/automatización, **sin módulo fiscal** | Es lo que sí viaja. Episodio especial garantizado |
+
+### Python, en su lugar correcto
+
+No lo elimino: lo apunto. En vez de "fundamentos", el objetivo es un artefacto real:
+
+> **Escribir y desplegar a producción un servicio propio en Python que haga trabajo del
+> negocio** — el worker del Cobrador IA, o el que persigue no-shows. Python es la
+> herramienta correcta para eso (datos, colas, agentes), no para la app en Next.
+
+Es concreto, es filmable, corre en producción, y no mete un segundo stack en el frontend.
 
 ---
 
