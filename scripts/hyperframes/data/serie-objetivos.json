@@ -6,20 +6,11 @@
   "siat": "sin iniciar",
   "siatEstado": "pendiente",
 
-  "nit": "desbloqueado",
-  "nitEstado": "cumplido",
-
   "mrr": "USD 739",
   "mrrEstado": "progreso",
 
-  "anclas": "0",
-  "anclasEstado": "pendiente",
-
-  "clinicas": "0",
-  "clinicasEstado": "pendiente",
-
-  "webs": "0",
-  "websEstado": "pendiente",
+  "clientes": "0",
+  "clientesEstado": "pendiente",
 
   "internacionales": "0",
   "internacionalesEstado": "pendiente",
@@ -46,14 +37,5 @@
   "tiktokSeguidoresEstado": "pendiente",
 
   "ytVideos": "0",
-  "ytVideosEstado": "pendiente",
-
-  "ytSubs": "0",
-  "ytSubsEstado": "pendiente",
-
-  "leads": "0",
-  "leadsEstado": "pendiente",
-
-  "entrevistas": "0",
-  "entrevistasEstado": "pendiente"
+  "ytVideosEstado": "pendiente"
 }
