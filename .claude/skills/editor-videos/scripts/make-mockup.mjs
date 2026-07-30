@@ -411,6 +411,7 @@ async function tplCustom(width) {
   for (const [token, valor] of [
     ["{{TITLE}}", TITLE], ["{{SUBTITLE}}", SUBTITLE], ["{{VALUE}}", VALUE],
     ["{{LABEL}}", LABEL], ["{{ACCENT}}", ACCENT], ["{{URL_LABEL}}", URL_LABEL],
+    ["{{SELLO}}", pick("sello", "")],
   ]) {
     if (raw.includes(token)) raw = raw.split(token).join(esc(valor));
   }

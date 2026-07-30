@@ -149,7 +149,17 @@ HyperFrames (render + SFX), imagen barata. Validar la idea antes de generar.
     o el dato fuerte (`--plan zooms.json` con `{zooms:[{start,end,from,to,anchor}]}`).
     En 9:16 usar `--anchor top` (ahí está la cara). Máx 2.0× (arriba se pixela); el script lo bloquea.
     **Va ANTES de los apoyos y los subtítulos** — si no, se zoomean el mockup y el texto.
-12. **Complementos.** `image-gen` MCP o modelo barato (ej. Gemini Flash-Lite Image) para mascot/thumbnails; Higgsfield (créditos 2354, [[higgsfield-models-roster]]) solo con OK.
+12. **Ilustraciones — el modelo pone el CONTENIDO, el código pone el ESTILO** (PROBADO).
+    Generar con Higgsfield `recraft_v4_1` (**1.25 créditos** por imagen a 1k, preflight con
+    `get_cost:true`; saldo y modelo en [[higgsfield-models-roster]]) → tratar SIEMPRE con
+    `node scripts/illustration-style.mjs --image bruta.png --out assets/ilu.png --preset diario`
+    → montar en el marco de papel con `make-mockup.mjs --template custom --html-file
+    assets/html/recorte-diario.html --image assets/ilu.png --title "…" --sello "día 1"`.
+    **Por qué el paso del medio no se saltea:** pedirle "1960s newspaper, coarse halftone" a
+    recraft devuelve una foto en blanco y negro LIMPIA, sin retícula (medido 2026-07-30). El
+    modelo obedece el estilo "más o menos", y ese "más o menos" cambia entre una imagen y la
+    siguiente — con 155 videos eso deja de ser una serie. La retícula, el contraste y el grano
+    los pone el script, iguales siempre. Presets: `diario` · `grabado` · `limpio`.
 13. **Master de audio — SIEMPRE el último paso** (pieza propia, PROBADA).
     `node scripts/master.mjs --video renders/final.mp4 --out final/<slug>.mp4 [--fade-out 0.4]`
     → loudnorm de DOS pasadas a **−14 LUFS / −1.5 dBTP** (lo que normalizan TikTok, Reels y
@@ -186,6 +196,7 @@ y se ve amateur.
 | Subtítulos cinematográficos (embed detrás del sujeto) | `embedded-captions` | gratis (local) |
 | Overlays / lower-thirds / mockups | `talking-head-recut` | gratis (local) |
 | SFX / música | librería HyperFrames | gratis |
+| **Ilustración en el estilo de la serie** | Higgsfield `recraft_v4_1` → `scripts/illustration-style.mjs` | **1.25 cr/imagen** |
 | Imágenes / b-roll / mascot | `image-gen` MCP / modelo barato | ~gratis |
 | Video generativo / avatar | Higgsfield | **pago → OK Sergio** |
 
@@ -232,7 +243,11 @@ Cada transición **acorta** el video su propia duración: los dos bloques se sol
 - **Aplicar el SQL a producción desde la skill.** La skill es DRY-RUN (imprime SQL); lo aplica el
   orquestador por SSH a `supabase-db`.
 - **Subtitular todo como embed** — la mayoría va al rail; embed solo el pico (ver `embedded-captions`).
-- **Gastar en Higgsfield/AssemblyAI sin OK.** Default gratis.
+- **Gastar en Higgsfield/AssemblyAI sin OK.** Default gratis. Con OK: preflight `get_cost` y reportar lo gastado.
+- **Confiar el ESTILO al modelo de imagen.** Obedece el pedido "más o menos" y ese margen cambia
+  entre imagen e imagen: a los 155 videos no hay serie. El estilo lo fija `illustration-style.mjs`.
+- **Poner el sello sobre la foto** en el recorte de diario: usa `multiply` y sobre un plano oscuro
+  desaparece (queda un recuadro rojo vacío). Va sobre el papel.
 - Usar el modelo distil en Speaches para español (traduce a inglés) — forzar `faster-whisper-small`.
 - **Prometer que las caras quedaron anónimas** sin haber mirado el render. La detección falla; el
   bloque "HONESTIDAD" del script dice exactamente dónde. Cubrir los huecos con `--manual`.

@@ -9,7 +9,9 @@
       --image capturas/foto.jpg --out assets/recorte.png --width 960 \
       --title "Sin editor. Sin excusas." --subtitle "15 s · 0 humanos" --label "Onia · método de edición"
 
-  Tokens que reemplaza make-mockup: {{IMAGE}} {{TITLE}} {{SUBTITLE}} {{LABEL}} {{VALUE}} {{ACCENT}}.
+  Tokens que reemplaza make-mockup: {{IMAGE}} {{TITLE}} {{SUBTITLE}} {{LABEL}} {{VALUE}} {{SELLO}} {{ACCENT}}.
+  El sello (--sello) va sobre el PAPEL, no sobre la foto: usa multiply y sobre un plano
+  oscuro desaparece. Sin --sello no se dibuja.
   OJO con el transform: si lo ponés en #stage, Chromium pinta a 1x dentro de un lienzo 2x.
   Por eso acá la rotación va en .hoja (un HIJO), nunca en #stage.
 -->
@@ -54,10 +56,12 @@
   .pie b { font-family:"Arial Narrow",Arial,sans-serif; letter-spacing:.12em; text-transform:uppercase; }
 
   /* SELLO: tinta sobre papel — multiply + rotación propia */
-  .sello { position:absolute; right:40px; bottom:74px; transform:rotate(-13deg);
+  .sello { position:absolute; right:34px; top:26px; transform:rotate(-11deg);
     border:5px solid #B3271E; color:#B3271E; padding:8px 18px 10px; border-radius:6px;
     font-family:"Arial Narrow",Arial,sans-serif; font-weight:700; font-size:38px;
     letter-spacing:.16em; text-transform:uppercase; opacity:.82; mix-blend-mode:multiply; }
+  /* sin texto no hay sello: nada de recuadro rojo vacio */
+  .sello:empty { display:none; }
 </style></head><body>
   <div id="stage">
     <div class="hoja">
@@ -65,7 +69,7 @@
       <h1>{{TITLE}}</h1>
       <div class="foto"><img src="{{IMAGE}}" alt=""></div>
       <div class="pie"><b>{{SUBTITLE}}</b><span>{{VALUE}}</span></div>
-      <div class="sello">verificado</div>
+      <div class="sello">{{SELLO}}</div>
     </div>
   </div>
 </body></html>
