@@ -7,16 +7,10 @@
     {"id":"accent","type":"color","label":"Acento","default":"#00D26A"},
     {"id":"siat","type":"string","label":"Homologacion SIAT","default":"sin iniciar"},
     {"id":"siatEstado","type":"string","label":"Homologacion SIAT — estado","default":"pendiente"},
-    {"id":"nit","type":"string","label":"NIT desbloqueado","default":"desbloqueado"},
-    {"id":"nitEstado","type":"string","label":"NIT — estado","default":"cumplido"},
     {"id":"mrr","type":"string","label":"MRR","default":"USD 739"},
     {"id":"mrrEstado","type":"string","label":"MRR — estado","default":"progreso"},
-    {"id":"anclas","type":"string","label":"Anclas","default":"0"},
-    {"id":"anclasEstado","type":"string","label":"Anclas — estado","default":"pendiente"},
-    {"id":"clinicas","type":"string","label":"Clinicas en Onia Dental","default":"0"},
-    {"id":"clinicasEstado","type":"string","label":"Clinicas — estado","default":"pendiente"},
-    {"id":"webs","type":"string","label":"Webs con mensual","default":"0"},
-    {"id":"websEstado","type":"string","label":"Webs — estado","default":"pendiente"},
+    {"id":"clientes","type":"string","label":"Clientes activos","default":"0"},
+    {"id":"clientesEstado","type":"string","label":"Clientes activos — estado","default":"pendiente"},
     {"id":"internacionales","type":"string","label":"Clientes internacionales","default":"0"},
     {"id":"internacionalesEstado","type":"string","label":"Internacionales — estado","default":"pendiente"},
     {"id":"churn","type":"string","label":"Churn mensual","default":"sin medir"},
@@ -33,14 +27,8 @@
     {"id":"tiktokVideosEstado","type":"string","label":"TikTok videos — estado","default":"pendiente"},
     {"id":"tiktokSeguidores","type":"string","label":"TikTok seguidores","default":"0"},
     {"id":"tiktokSeguidoresEstado","type":"string","label":"TikTok seguidores — estado","default":"pendiente"},
-    {"id":"ytVideos","type":"string","label":"YouTube videos","default":"0"},
-    {"id":"ytVideosEstado","type":"string","label":"YouTube videos — estado","default":"pendiente"},
-    {"id":"ytSubs","type":"string","label":"YouTube suscriptores","default":"0"},
-    {"id":"ytSubsEstado","type":"string","label":"YouTube suscriptores — estado","default":"pendiente"},
-    {"id":"leads","type":"string","label":"Leads del contenido","default":"0"},
-    {"id":"leadsEstado","type":"string","label":"Leads — estado","default":"pendiente"},
-    {"id":"entrevistas","type":"string","label":"Entrevistas a los que no compraron","default":"0"},
-    {"id":"entrevistasEstado","type":"string","label":"Entrevistas — estado","default":"pendiente"}
+    {"id":"ytVideos","type":"string","label":"YouTube resumenes semanales","default":"0"},
+    {"id":"ytVideosEstado","type":"string","label":"YouTube resumenes — estado","default":"pendiente"}
   ]'
 >
   <head>
@@ -165,7 +153,7 @@
         border: 1px solid var(--hairline);
         box-shadow: var(--shadow);
         overflow: hidden;
-        padding: calc(var(--u) * 27.8) calc(var(--u) * 26) calc(var(--u) * 24);
+        padding: calc(var(--u) * 30) calc(var(--u) * 26) calc(var(--u) * 28);
         opacity: 0;
       }
 
@@ -190,9 +178,9 @@
       .eyebrow {
         display: flex;
         align-items: center;
-        gap: calc(var(--u) * 11);
+        gap: calc(var(--u) * 12);
         font-family: var(--font-display);
-        font-size: calc(var(--u) * 19.4);
+        font-size: calc(var(--u) * 22);
         font-weight: 700;
         letter-spacing: 0.2em;
         text-transform: uppercase;
@@ -200,17 +188,17 @@
       }
       .eyebrow i {
         display: block;
-        width: calc(var(--u) * 11.1);
-        height: calc(var(--u) * 11.1);
+        width: calc(var(--u) * 12.5);
+        height: calc(var(--u) * 12.5);
         border-radius: 999px;
         background: var(--accent);
         flex: 0 0 auto;
       }
 
       .title {
-        margin: calc(var(--u) * 7.4) 0 0;
+        margin: calc(var(--u) * 8) 0 0;
         font-family: var(--font-display);
-        font-size: calc(var(--u) * 40.7);
+        font-size: calc(var(--u) * 46);
         font-weight: 700;
         line-height: 1.05;
         letter-spacing: 0.04em;
@@ -220,16 +208,16 @@
 
       /* Contador general. No es "cifra gigante + label chiquito": las palabras
          pesan 60% de los digitos y forman una frase que se lee entera
-         ("7 de 18 cumplidos"). */
+         ("4 de 12 cumplidos"). */
       .counter {
         display: flex;
         align-items: baseline;
-        gap: calc(var(--u) * 8);
+        gap: calc(var(--u) * 9);
         white-space: nowrap;
       }
       .cnt-n {
         font-family: var(--font-mono);
-        font-size: calc(var(--u) * 33.3);
+        font-size: calc(var(--u) * 38);
         font-weight: 500;
         line-height: 1;
         letter-spacing: -0.02em;
@@ -238,7 +226,7 @@
       }
       .cnt-t {
         font-family: var(--font-mono);
-        font-size: calc(var(--u) * 33.3);
+        font-size: calc(var(--u) * 38);
         font-weight: 400;
         line-height: 1;
         letter-spacing: -0.02em;
@@ -247,18 +235,18 @@
       }
       .cnt-w {
         font-family: var(--font-body);
-        font-size: calc(var(--u) * 18.5);
+        font-size: calc(var(--u) * 21);
         font-weight: 400;
         line-height: 1;
         color: var(--muted);
       }
 
-      /* La barra ES el acento: color semantico (objetivos cumplidos de 18), no
+      /* La barra ES el acento: color semantico (objetivos cumplidos de 12), no
          decorativo. Nunca una franja vertical en el borde — patron prohibido. */
       .track {
         position: relative;
-        margin-top: calc(var(--u) * 11.1);
-        height: calc(var(--u) * 6.5);
+        margin-top: calc(var(--u) * 13);
+        height: calc(var(--u) * 8);
         border-radius: 999px;
         background: var(--track);
         overflow: hidden;
@@ -275,13 +263,14 @@
       }
 
       /* ---- tabla --------------------------------------------------------- */
-      /* En 9:16 las 18 filas entran en UNA sola columna: el cuadro deja
-         ~1.530px de alto util, o sea ~85px por fila. Partirlo en dos columnas
-         de 9 dejaria 460px de ancho por columna y habria que recortar los
-         objetivos largos (Entrevistas con los que NO compraron). */
+      /* En 9:16 las 12 filas entran COMODAS en UNA sola columna: el cuadro deja
+         ~1.610px de alto util, o sea ~128px por fila (el tablero de 18 tenia
+         85px). Ese aire es lo que se gasta en tipografia mas grande: el
+         objetivo pasa de 22 a 31px y el "hoy" de 20 a 27px, para que se lea en
+         un telefono sin acercar la cara. */
       .grid {
         display: flex;
-        margin-top: calc(var(--u) * 14.8);
+        margin-top: calc(var(--u) * 18);
       }
       .col {
         flex: 1 1 0;
@@ -289,11 +278,15 @@
       }
 
       /* Fila de DOS lineas: arriba quien es el objetivo, abajo el par
-         meta / hoy. Las dos lineas comparten la sangria de la marca + la
-         categoria, asi que meta y hoy quedan alineados en todas las filas y el
-         bloque se lee como tabla. */
+         meta / hoy. Las dos lineas comparten la sangria de la MARCA de estado,
+         asi que meta y hoy arrancan bajo la categoria y quedan alineados en
+         todas las filas: el bloque se lee como tabla.
+         La sangria NO incluye la columna de categoria (como si lo hacia el
+         tablero de 18). Con la tipografia mas grande, ese sangrado extra de
+         ~170px dejaba sin aire el peor caso de la fila SIAT
+         ("meta aprobada antes del 15-sep" + "hoy aprobada el 12-sep-2026"). */
       .row {
-        padding: calc(var(--u) * 12) 0;
+        padding: calc(var(--u) * 24) 0;
       }
       .row + .row {
         border-top: 1px solid var(--hairline);
@@ -301,15 +294,15 @@
       .row-top {
         display: flex;
         align-items: center;
-        gap: calc(var(--u) * 12);
+        gap: calc(var(--u) * 14);
       }
       .row-bot {
         display: flex;
         align-items: baseline;
         justify-content: space-between;
-        gap: calc(var(--u) * 20);
-        margin-top: calc(var(--u) * 4.6);
-        padding-left: calc(var(--u) * 24 + var(--u) * 12 + var(--u) * 109 + var(--u) * 12);
+        gap: calc(var(--u) * 24);
+        margin-top: calc(var(--u) * 7);
+        padding-left: calc(var(--u) * 34 + var(--u) * 14);
       }
 
       /* Estado dibujado, no emoji: el subset latin de las fuentes de marca no
@@ -318,8 +311,8 @@
          (progreso), anillo vacio (pendiente). */
       .mark {
         flex: 0 0 auto;
-        width: calc(var(--u) * 24);
-        height: calc(var(--u) * 24);
+        width: calc(var(--u) * 34);
+        height: calc(var(--u) * 34);
         display: block;
       }
       .mark svg {
@@ -358,9 +351,9 @@
 
       .cat {
         flex: 0 0 auto;
-        width: calc(var(--u) * 109);
+        width: calc(var(--u) * 158);
         font-family: var(--font-display);
-        font-size: calc(var(--u) * 12);
+        font-size: calc(var(--u) * 17);
         font-weight: 700;
         letter-spacing: 0.14em;
         text-transform: uppercase;
@@ -372,7 +365,7 @@
         flex: 1 1 auto;
         min-width: 0;
         font-family: var(--font-body);
-        font-size: calc(var(--u) * 20.4);
+        font-size: calc(var(--u) * 29);
         font-weight: 500;
         line-height: 1.2;
         color: var(--ink-text);
@@ -389,12 +382,12 @@
       .kv {
         display: flex;
         align-items: baseline;
-        gap: calc(var(--u) * 9);
+        gap: calc(var(--u) * 12);
         min-width: 0;
       }
       .kv-k {
         font-family: var(--font-display);
-        font-size: calc(var(--u) * 11.1);
+        font-size: calc(var(--u) * 15);
         font-weight: 700;
         letter-spacing: 0.16em;
         text-transform: uppercase;
@@ -403,7 +396,7 @@
       }
       .kv-meta {
         font-family: var(--font-body);
-        font-size: calc(var(--u) * 15.7);
+        font-size: calc(var(--u) * 22);
         font-weight: 400;
         line-height: 1.15;
         color: var(--muted);
@@ -411,7 +404,7 @@
       }
       .kv-act {
         font-family: var(--font-mono);
-        font-size: calc(var(--u) * 18.5);
+        font-size: calc(var(--u) * 25);
         font-weight: 500;
         line-height: 1.15;
         letter-spacing: -0.01em;
@@ -430,22 +423,22 @@
       .legend {
         display: flex;
         align-items: center;
-        gap: calc(var(--u) * 24);
-        margin-top: calc(var(--u) * 13);
-        padding-top: calc(var(--u) * 11.1);
+        gap: calc(var(--u) * 26);
+        margin-top: calc(var(--u) * 15);
+        padding-top: calc(var(--u) * 13);
         border-top: 1px solid var(--hairline);
       }
       .lg {
         display: flex;
         align-items: center;
-        gap: calc(var(--u) * 11);
+        gap: calc(var(--u) * 12);
         font-family: var(--font-body);
-        font-size: calc(var(--u) * 13);
+        font-size: calc(var(--u) * 15);
         color: var(--muted);
       }
       .lg .mark {
-        width: calc(var(--u) * 16.7);
-        height: calc(var(--u) * 16.7);
+        width: calc(var(--u) * 19);
+        height: calc(var(--u) * 19);
       }
 
       [hidden] {
@@ -477,7 +470,7 @@
               <div class="counter">
                 <span class="cnt-n" id="ob-done">0</span>
                 <span class="cnt-w">de</span>
-                <span class="cnt-t" id="ob-total">18</span>
+                <span class="cnt-t" id="ob-total">12</span>
                 <span class="cnt-w">cumplidos</span>
               </div>
             </div>
@@ -585,7 +578,7 @@
             var body = parts[1] ? intPart + "," + parts[1] : intPart;
             return (value < 0 ? "-" : "") + body;
           }
-          // Sergio puede escribir 25000 o "25.000": si es numero puro lo
+          // Sergio puede escribir 20000 o "20.000": si es numero puro lo
           // formatea la composicion, si no se imprime tal cual.
           function display(v) {
             var s = String(v == null ? "" : v).trim();
@@ -613,33 +606,33 @@
             return out;
           }
 
-          // ---- las 18 filas ---------------------------------------------------
+          // ---- las 12 filas ---------------------------------------------------
+          // Metas cerradas por Sergio el 2026-07-30: el tablero pasa de 18 a 12.
+          // Salieron "NIT desbloqueado" (ya estaba resuelto antes del semestre),
+          // "Suscriptores de YouTube", "Leads del contenido" y "Entrevistas con
+          // los que NO compraron"; y Anclas / Clinicas / Webs se colapsaron en un
+          // solo numero: "Clientes activos 50".
+          //
           // Categoria, objetivo y META son FIJOS (viven aca, no en el JSON): la
           // meta es el compromiso del ano y no cambia semana a semana. Del JSON
           // sale solo el par valor de hoy + estado, por la clave `key`.
           //
-          // Las dos metas binarias dicen "hecho" y no un tilde: el subset latin
+          // La meta binaria de la caja dice "si" y no un tilde: el subset latin
           // de las fuentes de marca no trae U+2705 y saldria un tofu. El tilde
           // dibujado vive en la marca de estado, que es SVG.
           var ROWS = [
             { cat: "Fiscal", obj: "Homologación SIAT", meta: "aprobada antes del 15-sep", key: "siat" },
-            { cat: "Fiscal", obj: "NIT desbloqueado", meta: "hecho", key: "nit" },
             { cat: "Negocio", obj: "MRR", meta: "USD 5.000", key: "mrr" },
-            { cat: "Clientes", obj: "Anclas (empresas medianas)", meta: "5", key: "anclas" },
-            { cat: "Clientes", obj: "Clínicas en Onia Dental", meta: "25", key: "clinicas" },
-            { cat: "Clientes", obj: "Webs con mensual", meta: "10", key: "webs" },
-            { cat: "Expansión", obj: "Clientes internacionales", meta: "2", key: "internacionales" },
+            { cat: "Clientes", obj: "Clientes activos", meta: "50", key: "clientes" },
+            { cat: "Expansión", obj: "Clientes internacionales", meta: "3", key: "internacionales" },
             { cat: "Retención", obj: "Churn mensual", meta: "menor a 5%", key: "churn" },
-            { cat: "Negocio", obj: "Caja neutra personal", meta: "hecho", key: "caja" },
-            { cat: "Equipo", obj: "Primera contratación", meta: "30-nov", key: "contratacion" },
+            { cat: "Negocio", obj: "Caja neutra personal", meta: "sí", key: "caja" },
+            { cat: "Equipo", obj: "Primera contratación", meta: "antes del 30-nov", key: "contratacion" },
             { cat: "Empresa", obj: "Primera oficina", meta: "MRR = 3x alquiler", key: "oficina" },
             { cat: "Aprendizaje", obj: "Worker Cobrador IA en Python", meta: "en producción", key: "cobrador" },
             { cat: "TikTok", obj: "Videos publicados", meta: "155", key: "tiktokVideos" },
-            { cat: "TikTok", obj: "Seguidores", meta: "25.000", key: "tiktokSeguidores" },
-            { cat: "YouTube", obj: "Videos publicados", meta: "22", key: "ytVideos" },
-            { cat: "YouTube", obj: "Suscriptores", meta: "2.500", key: "ytSubs" },
-            { cat: "Serie", obj: "Leads que llegaron del contenido", meta: "25", key: "leads" },
-            { cat: "Producto", obj: "Entrevistas con los que NO compraron", meta: "10", key: "entrevistas" },
+            { cat: "TikTok", obj: "Seguidores", meta: "20.000", key: "tiktokSeguidores" },
+            { cat: "YouTube", obj: "Resúmenes semanales", meta: "22", key: "ytVideos" },
           ];
 
           // "En progreso" / "EN PROGRESO" / "en curso" son lo mismo. Cualquier
@@ -745,8 +738,8 @@
           // ---- timeline -------------------------------------------------------
           // Ruta de movimiento sostenido: "sequenced UI life" + "staged reveals"
           // (motion-doctrine). El tablero arranca como instrumento — la barra se
-          // llena y el contador tickea con ella — y las 18 filas caen en cascada.
-          // Despues SE QUEDA QUIETO: son 18 filas para leer, y moverlas mientras
+          // llena y el contador tickea con ella — y las 12 filas caen en cascada.
+          // Despues SE QUEDA QUIETO: son 12 filas para leer, y moverlas mientras
           // se leen seria ruido. Nada de idle wobble.
           var tl = gsap.timeline({ paused: true });
           var elPlate = document.getElementById("ob-plate");
@@ -788,10 +781,10 @@
             4 / FPS,
           );
 
-          // Cascada de las 18 filas + la leyenda (waterfall entry,
+          // Cascada de las 12 filas + la leyenda (waterfall entry,
           // cut-the-curve §6): opacidad BINARIA en la entrada, huecos que SE
           // ACHICAN (x0.84) y una sola direccion para toda la cascada.
-          // Escalonado total = suma de 2*0.84^k, k=0..17 ~= 396ms < 500ms.
+          // Escalonado total = suma de 2*0.84^k, k=0..12 ~= 373ms < 500ms.
           var wave = rowEls.concat([elLegend]);
           var cascade = enterExit({ delayFrames: 6, enterMs: 300, exitMs: 220 });
           var ROW_X = "calc(var(--u) * 16)";

@@ -227,14 +227,21 @@ function routeProblem(expected, actual) {
     const kind = INTENT_HANDOFF_REASONS.has(actual.reason) ? "intent_falso_positivo" : "handoff_de_mas";
     return { kind, detail };
   }
-  if (INTENT_ROUTES.has(expected.route)) return { kind: "intent_missed", detail };
+  // El falso positivo se juzga ANTES que el "no la vio": cuando el bot dispara una deteccion
+  // que no correspondia (un opt-out sobre "no me interesa el precio"), lo que define el dano
+  // es lo que hizo de mas, no lo que dejo de hacer.
   if (INTENT_ROUTES.has(actual.route)) return { kind: "intent_falso_positivo", detail };
+  if (INTENT_ROUTES.has(expected.route)) return { kind: "intent_missed", detail };
   return { kind: "estado_incorrecto", detail };
 }
 
-/** Evalua un caso contra el motor real. Devuelve TODOS los problemas; el status es el peor. */
-export function evaluateCase(bench, config = BENCH_CONFIG) {
-  const observed = runConversation(bench, config);
+/**
+ * Evalua un caso contra el motor real. Devuelve TODOS los problemas; el status es el peor.
+ * `observed` existe SOLO para poder testear al juez con turnos sinteticos: si el juez se
+ * probara con la salida real del bot, sus tests dirian lo que el bot hace hoy y se pondrian
+ * en rojo el dia que el bot mejore. En produccion siempre se corre con el motor real.
+ */
+export function evaluateCase(bench, config = BENCH_CONFIG, observed = runConversation(bench, config)) {
   const last = observed[observed.length - 1];
   const state = last.result.nextState;
   const expected = { route: bench.expect.route, reason: bench.expect.reason || null };
