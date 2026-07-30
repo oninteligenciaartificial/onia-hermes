@@ -172,6 +172,80 @@ sin problema, no rompe nada mientras tanto).
 
 ---
 
+## 10.9 n8n SALE del camino crítico (2026-07-30) — `webhook-server.mjs`
+
+**El problema que se arregló.** El camino de §10.6 tenía a n8n ADENTRO de la ruta de respuesta:
+
+```
+Chatwoot -> n8n -> SSH -> chatwoot-adapter.sh -> md5sum de *.mjs + docker cp + docker exec
+         -> node (arranque en frío) -> runTurn -> API de Chatwoot
+```
+
+n8n caído o trabado = **bot mudo**. Y con el VPS al 240% de carga (load 9,6 sobre 4 núcleos,
+swap al 80%) cada salto se paga en latencia real, en CADA mensaje.
+
+**El camino nuevo** (mismo patrón que Bolivian Electric ya tiene probado en producción,
+`apps/web/app/api/chatwoot/webhook/route.ts`):
+
+```
+Chatwoot -> webhook-server.mjs (proceso CALIENTE) -> runChatwootTurn -> API de Chatwoot
+         -> n8n fire-and-forget, DESPUÉS de responder, sin esperarlo
+```
+
+n8n caído ahora = se pierde una fila de analítica. El prospecto ya fue atendido.
+
+**Por qué un servidor propio y no una ruta en `web-factory/apps/site`** (se evaluaron las dos):
+el motor son `.mjs` sueltos fuera de `apps/site`, y `apps/site` deploya TAMBIÉN a Vercel, donde
+`onia_selfhosted-litellm-1`, `onia-chatbot_chatwoot` y `calcom` no resuelven — la ruta quedaría
+pública y muerta por dentro. Además obligaría a tocar `next.config.ts` (archivo raíz de carril
+compartido) y arriesgaría el `tsc --noEmit` que gatea el FF de `main`.
+
+**Bonus de seguridad:** el servidor corre DENTRO del contenedor `onia-center`, que comparte la
+red docker `easypanel` con Chatwoot. El webhook viaja por `http://onia-center:3020/...` y
+**nunca sale a internet**: sin puerto expuesto, sin TLS, sin dominio.
+
+### Piezas nuevas
+
+| Archivo | Qué hace |
+|---|---|
+| `webhook-security.mjs` | Autenticación del webhook: HMAC (`x-chatwoot-timestamp` + `x-chatwoot-signature`, con ventana anti-replay) **y** secreto en la ruta. **FAIL-CLOSED**: sin ningún secreto configurado responde 503, no procesa. |
+| `message-dedup.mjs` | Dedup en memoria por `chatwoot:<conv>:<msg>`, TTL 10 min, cota 5.000. Filtro barato ANTES de tocar Supabase; **no reemplaza** al dedup durable de `bot_messages.message_key`, lo precede. |
+| `n8n-event.mjs` | Evento redactado a n8n. Nunca tira, nunca bloquea, timeout propio. Sin teléfonos, sin emails, sin el id crudo de conversación. |
+| `webhook-server.mjs` | El servidor `node:http`. Orquesta: auth → parse → dedup → turno → 200 → n8n desacoplado. |
+| `webhook-server.sh` | Lo levanta en el contenedor (`start\|stop\|restart\|status\|logs`). |
+| `webhook.env.example` | Plantilla de secretos. El archivo real vive en `/opt/onia/bot/webhook.env`, chmod 600, **fuera de git**. |
+
+### Dos mecanismos de autenticación, y por qué
+
+La firma HMAC es el esquema de BE. Pero la propia doc de BE la describe como *opcional*, o sea
+que allá tampoco se confirmó que esta versión de Chatwoot mande los headers. Si no los mandara y
+la firma fuera lo único, el endpoint quedaría abierto o el bot quedaría mudo. Por eso **el
+secreto en la RUTA es el piso garantizado** (Chatwoot deja poner un `webhook_url` arbitrario, así
+que el secreto viaja en el path) y la firma suma frescura anti-replay cuando está disponible.
+Alcanza con UNO de los dos.
+
+**Diferencia deliberada con BE:** BE hace `if (!secret) return true` — su propio go-live lo marca
+con ⚠️ "vacío = el endpoint acepta webhooks sin firma (spoofable)". Acá eso NO se copió: sin
+secreto es 503, y el bypass necesita `ONIA_CHATWOOT_ALLOW_UNSIGNED=true` explícito (sólo local).
+
+### Regla de los códigos de estado
+
+Salvo auth (401/503) y JSON roto (400), **todo devuelve 2xx**, incluido un error interno del
+motor. Chatwoot reintrega los no-2xx: un 500 nuestro se traduce en que el prospecto recibe la
+misma respuesta dos veces. Si el motor tira, además se **libera** la clave de dedup, para que un
+reintento legítimo pueda procesarse (si no, el mensaje quedaría descartado 10 minutos sin que
+nadie le haya contestado nunca).
+
+### El rol que le queda a n8n
+
+Ya no responde mensajes. Recibe un evento `chatbot_turn` redactado (etapa antes/después,
+cantidad de respuestas, dry-run sí/no) para tablero y alertas. El secreto viaja en el header
+`x-onia-webhook-secret` y en n8n se valida con una credencial **"Header Auth"** — el plan VPS no
+soporta `$env` en los nodos. El workflow viejo (`bJhSGHPYsaICEeKm`) queda como respaldo: si el
+servidor se cae, se puede reactivar y el bot vuelve a contestar por el camino lento.
+
+---
+
 ---
 
 ## 0. Por qué Telegram y no WhatsApp

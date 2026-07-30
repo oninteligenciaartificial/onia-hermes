@@ -246,6 +246,12 @@ export async function runChatwootTurn(payload, deps = {}) {
     duplicate: Boolean(turnResult && turnResult.duplicate),
     conversationId: parsed.meta.conversationId,
     messageId: parsed.meta.messageId,
+    // Aditivo (no rompe a nadie): el servidor de webhook los manda a n8n como analítica
+    // redactada. Saber que una conversación pasó de `nuevo` a `esperando_horario` es la
+    // señal útil; el texto del prospecto no sale del sistema.
+    stageBefore: (turnResult && turnResult.stageBefore) || null,
+    stageAfter: (turnResult && turnResult.stageAfter) || null,
+    dryRun: Boolean(turnResult && turnResult.dryRun),
     sent,
     warnings: [...(client.warnings || []), ...((turnResult && turnResult.warnings) || [])],
   };
