@@ -21,7 +21,7 @@
 
 /** Mensaje que entrega los 3 datos de calificacion de una sola vez, bien escrito. */
 const CALIFICA = "es mia, tengo 2 sillones y estoy en santa cruz";
-const CALIFICADO = { ownsClinic: true, chairs: 2, city: "Santa Cruz" };
+const CALIFICADO = Object.freeze({ ownsClinic: true, chairs: 2, city: "Santa Cruz" });
 
 export const BENCH_CASES = Object.freeze([
   // =========================================================================

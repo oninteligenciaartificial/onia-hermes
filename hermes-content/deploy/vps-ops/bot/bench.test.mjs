@@ -15,12 +15,17 @@
 
 import test from "node:test";
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 
+import { STAGES } from "./bot-engine.mjs";
 import { createBotConfig } from "./config.mjs";
 import { normalize } from "./guardrails.mjs";
 import {
+  ADVANCED_STAGES,
   ALL_STATUSES,
   BENCH_CONFIG,
+  INTENT_HANDOFF_REASONS,
+  PRIMARY_ROUTES,
   benchClock,
   evaluateCase,
   fieldsAsked,
@@ -284,7 +289,7 @@ test("summarizeOutcomes cuenta sin maquillar y separa casos de problemas", () =>
       status: "dato_mal_extraido",
       tags: ["x"],
       problems: [
-        { kind: "dato_mal_extraido", detail: "chairs: el prospecto lo dijo (2) y no quedo guardado" },
+        { kind: "dato_mal_extraido", subkind: "perdido", detail: "chairs: el prospecto lo dijo (2) y no quedo guardado" },
         { kind: "repregunta_lo_dicho", detail: "vuelve a pedir chairs" },
       ],
     },
@@ -337,6 +342,28 @@ test("el banco entero corre y cada caso cae en un estado conocido de la taxonomi
   assert.equal(outcomes.length >= 40, true, "un banco chico no mide nada");
   assert.equal(outcomes.length <= 60, true);
   for (const outcome of outcomes) assert.equal(ALL_STATUSES.includes(outcome.status), true, outcome.id);
+});
+
+test("las rutas y motivos que el banco clasifica siguen existiendo en el motor", () => {
+  // PRIMARY_ROUTES / INTENT_HANDOFF_REASONS son los codigos que bot-engine.mjs escribe en
+  // `notes`. Si alguien renombra un motivo, sin este test el banco no lo reconoceria y el
+  // reporte diria "el bot empeoro" cuando el que quedo viejo es el juez.
+  const engine = readFileSync(new URL("./bot-engine.mjs", import.meta.url), "utf8");
+  for (const route of PRIMARY_ROUTES) {
+    assert.equal(engine.includes(`"${route}`) || engine.includes(`\`${route}`), true, `el motor ya no emite la ruta ${route}`);
+  }
+  for (const reason of INTENT_HANDOFF_REASONS) {
+    assert.equal(engine.includes(`"${reason}"`), true, `el motor ya no emite el motivo ${reason}`);
+  }
+  for (const stage of ADVANCED_STAGES) {
+    assert.equal(STAGES.includes(stage), true, `${stage} no es un estado del motor`);
+  }
+});
+
+test("callarse por el motivo equivocado NO se acusa como 'hablo sin permiso'", () => {
+  // El bot no emitio una sola respuesta: el fallo es de rama, no de haber abierto la boca.
+  const bench = { ...CASO_BASE, expect: { route: "silencio", reason: "opt_out" } };
+  assert.equal(statusOf(bench, fakeTurn({ notes: ["silencio:handoff_en_curso"] })), "estado_incorrecto");
 });
 
 test("la huella del codigo medido se DERIVA de los imports (incluye lo que el banco no importa directo)", () => {

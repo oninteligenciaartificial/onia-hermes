@@ -53,10 +53,10 @@ export function benchClock(index) {
  * cuales se usaron: un numero que no dice contra que se midio no se puede reproducir.
  */
 export const BENCH_CONFIG = createBotConfig({
-  slots: [
-    { key: "A", label: "jueves 15:00", startAt: "2026-07-30T19:00:00Z", pending: false },
-    { key: "B", label: "viernes 10:00", startAt: "2026-07-31T14:00:00Z", pending: false },
-  ],
+  slots: Object.freeze([
+    Object.freeze({ key: "A", label: "jueves 15:00", startAt: "2026-07-30T19:00:00Z", pending: false }),
+    Object.freeze({ key: "B", label: "viernes 10:00", startAt: "2026-07-31T14:00:00Z", pending: false }),
+  ]),
 });
 
 // ---------------------------------------------------------------------------
@@ -125,17 +125,21 @@ export const PRIMARY_ROUTES = Object.freeze([
 ]);
 
 /** Rutas que nacen de una DETECCION (regex), no del estado: aca viven los falsos positivos. */
-const INTENT_ROUTES = new Set(["opt_out", "pregunta_precio", "pregunta_siat", "descartado", "reabierto_por_demo"]);
+export const INTENT_ROUTES = new Set(["opt_out", "pregunta_precio", "pregunta_siat", "descartado", "reabierto_por_demo"]);
 
-/** Handoffs disparados por una deteccion (vs. los que salen del flujo, como "no le sirve el horario"). */
-const INTENT_HANDOFF_REASONS = new Set([
+/**
+ * Handoffs disparados por una deteccion (vs. los que salen del flujo, como "no le sirve el
+ * horario"). Estos strings son los que emite bot-engine.mjs: bench.test.mjs verifica que sigan
+ * existiendo en el motor, para que renombrar un motivo no se lea como "el bot empeoro".
+ */
+export const INTENT_HANDOFF_REASONS = new Set([
   "queja_o_desconfianza",
   "consulta_clinica_o_legal",
   "detalle_tecnico_de_producto",
 ]);
 
 /** Estados en los que el bot YA dio por buena la calificacion. */
-const ADVANCED_STAGES = new Set(["calificado", "esperando_horario", "demo_agendada", "demo_realizada"]);
+export const ADVANCED_STAGES = new Set(["calificado", "esperando_horario", "demo_agendada", "demo_realizada"]);
 
 // ---------------------------------------------------------------------------
 // Lectura del turno (todo sale de lo que devolvio step(), nada se recalcula)
@@ -221,7 +225,11 @@ function routeProblem(expected, actual) {
 
   const detail = `esperaba ${expected.route}${expected.reason ? `:${expected.reason}` : ""}, tomo ${actual.route}${actual.reason ? `:${actual.reason}` : ""}`;
 
-  if (expected.route === "silencio") return { kind: "hablo_sin_permiso", detail };
+  // Se callo, pero por otro motivo: no hablo de mas, se equivoco de rama. Etiquetarlo
+  // "hablo sin permiso" seria acusarlo de algo que no hizo en un turno sin una sola respuesta.
+  if (expected.route === "silencio" && actual.route !== "silencio") {
+    return { kind: "hablo_sin_permiso", detail };
+  }
   if (expected.route === "handoff" && actual.route !== "handoff") return { kind: "handoff_de_menos", detail };
   if (actual.route === "handoff" && expected.route !== "handoff") {
     const kind = INTENT_HANDOFF_REASONS.has(actual.reason) ? "intent_falso_positivo" : "handoff_de_mas";
