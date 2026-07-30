@@ -140,12 +140,17 @@ ROLE_FILES = {
     "mono": ("SplineSansMono-var-latin.woff2", "OFL-SplineSansMono.txt"),
 }
 # Solo los roles que cada composicion USA de verdad (no cargar peso muerto).
+# La clave es la RUTA de la composicion relativa a compositions/ — puede llevar
+# subcarpeta (scoreboard tiene una composicion por orientacion, cada una con su
+# propia raiz de servido y por lo tanto su propio fonts/).
 NEEDS = {
     "stat": ("display", "body", "mono"),      # cifra en mono
     "browser": ("display", "body", "mono"),   # la URL va en mono
     "phone": ("display", "body"),
     "quote": ("display", "body"),
     "lower-third": ("display", "body"),
+    "scoreboard/vertical": ("display", "body", "mono"),    # marcador de la serie
+    "scoreboard/horizontal": ("display", "body", "mono"),  # idem, 16:9
 }
 
 
