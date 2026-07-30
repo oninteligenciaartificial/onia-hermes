@@ -82,7 +82,9 @@ const RE_PRODUCTO_DETALLE = /\bse conecta con\b|\bse integra con\b|\bcompatible 
 // Pedir hablar con una persona es el pedido de handoff mas claro que existe (N3).
 const RE_PIDE_HUMANO = /\b(?:hablar|hablo|charlar|conversar|comunicarme|contactarme) con (?:una persona|alguien|un humano|una humana|un asesor|una asesora|un vendedor|una vendedora|sergio|un encargado)\b|\bquiero hablar con\b|\bme pasas con\b|\bpasame con\b|\bhay (?:alguien|algun humano)\b|\bpersona real\b|\bun humano\b/;
 
-const RE_SIN_SLOT = /\bningun[oa]?\b|\bno me sirve\b|\bninguna de las dos\b|\bno me va\b|\botro horario\b|\botro dia\b|\botra fecha\b|\bmas tarde\b|\bmas adelante\b/;
+// "no le sirve ninguno". Se consulta DESPUES de detectSlotChoice: "el jueves no puedo, el
+// viernes si" ya quedo resuelto como eleccion del viernes y nunca llega hasta aca.
+const RE_SIN_SLOT = /\bningun[oa]?\b|\bno me sirve\b|\bninguna de las dos\b|\bno me va\b|\bno puedo\b|\botro horario\b|\botro dia\b|\botra fecha\b|\bmas tarde\b|\bmas adelante\b/;
 
 export function isOptOut(norm) {
   return RE_OPT_OUT.test(norm);
