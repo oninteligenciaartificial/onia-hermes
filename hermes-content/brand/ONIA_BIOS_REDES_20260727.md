@@ -1,4 +1,4 @@
-# Onia — Bios de redes (IG / Facebook)
+# Onia - Bios de redes (IG / Facebook)
 
 Fecha de captura del research: **2026-07-30**. Todas las bios de la sección 1 fueron
 leídas del perfil real ese día (no de memoria ni de artículos de terceros). Las bios
@@ -7,6 +7,9 @@ cambian: si esto se relee dentro de meses, re-verificar antes de citar.
 Método: perfiles de Instagram y Facebook leídos con navegador (texto del perfil y
 `meta[property="og:description"]`); perfiles de X leídos vía `og:description`; sitios
 leídos por fetch directo (H1 + subtítulo). Donde no pude verificar, dice NO VERIFICADO.
+
+Nota: el documento no usa em dashes salvo dentro de dos citas textuales (Ramp en IG y el
+subtítulo de stripe.com), donde se preserva el carácter original por exactitud.
 
 ---
 
@@ -68,7 +71,7 @@ No escriben tres textos, escriben uno y lo repiten.
 
 | Marca | URL | H1 | Subtítulo |
 |---|---|---|---|
-| Stripe | [stripe.com](https://stripe.com/) | `Financial infrastructure to grow your revenue.` | `Accept payments, offer financial services, and implement custom revenue models-from your first transaction to your billionth.` |
+| Stripe | [stripe.com](https://stripe.com/) | `Financial infrastructure to grow your revenue.` | `Accept payments, offer financial services, and implement custom revenue models—from your first transaction to your billionth.` |
 | Linear | [linear.app](https://linear.app/) | `The product development system for teams and agents` | `Purpose-built for planning and building products. Designed for the AI era.` |
 | Notion | [notion.com](https://www.notion.com/) | `Where teams and agents Think together.` | `Capture context, find answers, and automate tasks with AI built for your team.` |
 | Vercel | [vercel.com](https://vercel.com/) | `Agentic Infrastructure` | (headline animado, sin sub fijo) |
@@ -144,7 +147,7 @@ cuentan. Todas por debajo del techo.
 
 ### 3.1 Instagram (máx. 150)
 
-**Opción A — "lista que colapsa" (patrón Kavak) · 115 caracteres**
+**Opción A - "lista que colapsa" (patrón Kavak) · 115 caracteres**
 
 ```
 Facturá al SIAT, agendá y cobrá sin tipear una sola línea.
@@ -153,7 +156,7 @@ Sistemas con IA para negocios en Bolivia 🇧🇴
 ```
 > 115 caracteres · 21 palabras · 3 líneas · 2 emojis
 
-**Opción B — "nosotros hacemos el trabajo" (patrón Ramp) · 125 caracteres**
+**Opción B - "nosotros hacemos el trabajo" (patrón Ramp) · 125 caracteres**
 
 ```
 Hacemos el trabajo repetitivo de tu negocio: facturas al SIAT, agenda, cobranzas y un WhatsApp que atiende 24/7.
@@ -161,7 +164,7 @@ Hacemos el trabajo repetitivo de tu negocio: facturas al SIAT, agenda, cobranzas
 ```
 > 125 caracteres · 20 palabras · 2 líneas · 1 emoji
 
-**Opción C — "tres viñetas escaneables" (patrón Supabase) · 117 caracteres**
+**Opción C - "tres viñetas escaneables" (patrón Supabase) · 117 caracteres**
 
 ```
 ⚡ La plataforma con IA para negocios bolivianos
@@ -176,19 +179,19 @@ cortas y dicen más.
 
 ### 3.2 Facebook, descripción corta (máx. 255)
 
-**Opción A — 214 caracteres**
+**Opción A - 214 caracteres**
 
 ```
 Onia hace el trabajo repetitivo de tu negocio. Facturá al SIAT sin tipear, ordená la agenda, cobrá a tiempo y dejá que tu WhatsApp atienda 24/7 con tu aprobación. Packs listos para clínicas y comercios. onia.com.bo
 ```
 
-**Opción B — 215 caracteres**
+**Opción B - 215 caracteres**
 
 ```
 La plataforma con IA para negocios bolivianos. Facturación al SIAT sin tipear, agenda, cobranzas y un WhatsApp que atiende 24/7 y no responde nada sin que vos lo apruebes. Escribinos y te la mostramos con tus datos.
 ```
 
-**Opción C — 219 caracteres**
+**Opción C - 219 caracteres**
 
 ```
 Facturá al SIAT, agendá y cobrá sin tipear una sola línea. Onia arma el sistema de tu negocio con IA y deja tu WhatsApp atendiendo 24/7. Packs listos: Onia Dental para clínicas, Onia Comercio para ferreterías y tiendas.
@@ -210,7 +213,7 @@ Onia es una empresa boliviana de software con IA. Onia Platform hace el trabajo 
 
 Por qué A y no las otras:
 
-- **Cumple el bullet 3, que es el que hoy rompe la bio actual.** `Facturá al SIaT, agendá y
+- **Cumple el bullet 3, que es el que hoy rompe la bio actual.** `Facturá al SIAT, agendá y
   cobrá sin tipear una sola línea` es exactamente la jugada de Kavak: tres verbos del
   cliente que colapsan en UNA promesa (`sin tipear una sola línea`). La bio actual enumera
   y se queda enumerando.
