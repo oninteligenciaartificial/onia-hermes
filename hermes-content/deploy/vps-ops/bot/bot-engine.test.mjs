@@ -273,7 +273,7 @@ test("fuera de horario se APENDEA el aviso, no reemplaza la respuesta", () => {
 
 const CASOS = [
   ["declara_precio", "Claro, el plan Pro cuesta 750 Bs al mes."],
-  ["promete_siat", "Sí, DentalGest ya emite factura al SIAT y está homologado."],
+  ["promete_siat", "Sí, Onia Dental ya emite factura al SIAT y está homologado."],
   ["promete_feature", "Se integra con tu impresora de radiografías y te garantizo que no falla."],
   ["finge_humano", "Soy Sergio, te llamo ahora mismo."],
   ["cifra_inventada", "El 80% de las clínicas que usan el sistema ahorra tiempo."],

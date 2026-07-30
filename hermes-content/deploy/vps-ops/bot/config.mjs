@@ -27,7 +27,7 @@ export const DEMO_SLOTS = Object.freeze([
 export const SCRIPT = Object.freeze({
   // M0 — bienvenida + disclosure + las 3 preguntas juntas.
   M0: [
-    "¡Hola! Soy el asistente automático de ONIA — sí, un bot, los mismos que hacen a Lucía 🙂",
+    "¡Hola! Soy el asistente automático de Onia — sí, un bot, los mismos que hacen a Lucía 🙂",
     "Gracias por escribir. Te agendo la demo en 2 minutos, pero primero quiero saber si te va a servir de verdad.",
     "",
     "Contame tres cosas rápidas:",
@@ -40,7 +40,7 @@ export const SCRIPT = Object.freeze({
   // el primer mensaje YA trae los 3 datos: el disclosure es innegociable (D2) pero preguntar lo
   // que el prospecto acaba de contestar hace quedar mal al producto.
   M0_DISCLOSURE: [
-    "¡Hola! Soy el asistente automático de ONIA — sí, un bot, los mismos que hacen a Lucía 🙂",
+    "¡Hola! Soy el asistente automático de Onia — sí, un bot, los mismos que hacen a Lucía 🙂",
     "Gracias por escribir.",
   ].join("\n"),
 
@@ -134,8 +134,8 @@ export const DEFAULT_CONFIG = Object.freeze({
   tenant: "onia",
 
   identity: Object.freeze({
-    botName: "el asistente automático de ONIA",
-    productName: "DentalGest",
+    botName: "el asistente automático de Onia",
+    productName: "Onia Dental",
     humanName: "Sergio",
     tone: "voseo-boliviano-informal",
   }),

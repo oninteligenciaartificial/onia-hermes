@@ -307,7 +307,7 @@ test("el mensaje del dry-run es M3 con los 2 horarios, y no lleva ninguna cifra"
   assert.equal(result.send[0].replySource, "script", "texto fijo: no pasa por el LLM");
   assert.match(text, /jueves 15:00/);
   assert.match(text, /viernes 10:00/);
-  assert.match(text, /DentalGest/);
+  assert.match(text, /Onia Dental/);
   assert.ok(!/\d+\s*(bs|bolivianos|\$)/i.test(text), "el follow-up no cotiza");
   assert.ok(!text.includes("{{"), "todas las variables renderizadas");
 });
