@@ -43,7 +43,7 @@ Ruta operativa principal para ventas:
 http://localhost:3010/vendedores
 ```
 
-## ONIA Panel de Vendedores
+## Onia Panel de Vendedores
 
 El Sales Desk vive dentro del Control Tower en `/vendedores`.
 

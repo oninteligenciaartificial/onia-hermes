@@ -3,7 +3,7 @@
 Fecha: 2026-07-07.
 Estado: plan de adopcion APROBADO por Sergio (2026-07-07) — segundo producto en
 adoptar el core, despues de DentalGest.
-Owner: ONIA / Hermes.
+Owner: Onia / Hermes.
 Contrato base: `onia-core/contract.json` v0.6.2 (beta, core completo: 18
 entidades, 5 modulos vendibles validados con logica Bolivia real).
 Repo destino: `C:\dev\proyectos\Gestios`.

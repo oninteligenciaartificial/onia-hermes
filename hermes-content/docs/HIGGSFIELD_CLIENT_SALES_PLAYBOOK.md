@@ -1,12 +1,12 @@
 # Higgsfield Client Sales Playbook
 
 ## Objetivo
-Vender contenido y sistemas comerciales con IA a negocios locales usando ONIA como operador, Hermes como cerebro, Higgsfield como motor visual y ElevenLabs como audio cuando haga falta.
+Vender contenido y sistemas comerciales con IA a negocios locales usando Onia como operador, Hermes como cerebro, Higgsfield como motor visual y ElevenLabs como audio cuando haga falta.
 
 La prioridad comercial es recuperar la inversion inicial de herramientas con una venta del **Pack ventas IA**.
 
 Contexto actual:
-- Higgsfield CLI autenticado en cuenta ONIA.
+- Higgsfield CLI autenticado en cuenta Onia.
 - Plan Higgsfield Ultra con 3000 creditos al momento de validacion.
 - Codex Pro e Higgsfield ya pagados como herramientas de produccion.
 - Objetivo inmediato: cerrar al menos 1 cliente para recuperar 1400 Bs.
@@ -48,7 +48,7 @@ Te ayudamos a crear 4 videos cortos para atraer interesados y un flujo simple pa
 ```
 
 ### Objetivo
-Recuperar la inversion con 1 venta y crear un caso operativo para mostrar en ONIA.
+Recuperar la inversion con 1 venta y crear un caso operativo para mostrar en Onia.
 
 ## 2. Ofertas Escalonadas
 
@@ -108,7 +108,7 @@ Uso:
 
 ## 3. Nichos Locales y Angulos
 
-| Nicho | Dolor | Oferta ONIA | Angulo principal |
+| Nicho | Dolor | Oferta Onia | Angulo principal |
 |---|---|---|---|
 | Restaurantes/cafes | No llenan mesas en dias flojos, promocionan sin sistema | Videos de oferta + WhatsApp/reservas | "Haz que la gente vea el plato y reserve facil" |
 | Clinicas/esteticas | Consultas perdidas, poca confianza, seguimiento manual | Videos de confianza + flujo de consultas | "Mas consultas ordenadas, menos mensajes perdidos" |
@@ -314,7 +314,7 @@ Hola, creo que tu negocio podria vender mas confianza si apareces mas como funda
 
 ## 5. Prompts Higgsfield
 
-### Regla nueva: Prompt Engineering ONIA
+### Regla nueva: Prompt Engineering Onia
 
 No usar prompts genericos tipo "haz un anuncio bonito". Cada prompt de UGC debe
 contener estas 10 piezas:
@@ -355,7 +355,7 @@ Para Higgsfield Marketing Studio, preferir:
 - `wild_card` solo para exploracion creativa, no entrega final.
 
 El audio generado de Higgsfield puede servir para borrador, pero por defecto
-ONIA debe usar `generate_audio=false` y manejar voz con ElevenLabs o edicion
+Onia debe usar `generate_audio=false` y manejar voz con ElevenLabs o edicion
 propia cuando la pieza sea para cliente.
 
 ### Base UGC 9:16
@@ -412,7 +412,7 @@ Usar estos bloques para que cada video salga mas consistente:
 | `practical_friend` | Amigo/a practico/a | ecommerce, servicios, gym | recomienda como amigo, casual, sin tono vendedor |
 | `trusted_operator` | Operador/a confiable | clinicas, esteticas, SaaS | explica pasos, calmo, profesional, sin hype |
 | `local_explorer` | Explorador/a local | restaurantes, turismo, inmobiliaria | descubre lugar, camina, muestra ambiente |
-| `founder_builder` | Fundador/a en proceso | marca personal, ONIA, SaaS | honesto, escritorio, building in public |
+| `founder_builder` | Fundador/a en proceso | marca personal, Onia, SaaS | honesto, escritorio, building in public |
 
 | ID | Escenografia | Mejor para | Direccion |
 |---|---|---|---|

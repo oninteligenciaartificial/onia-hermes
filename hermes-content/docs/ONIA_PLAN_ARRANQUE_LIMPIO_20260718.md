@@ -1,4 +1,4 @@
-# ONIA - Plan de arranque limpio 2026-07-18
+# Onia - Plan de arranque limpio 2026-07-18
 
 Estado: punto de entrada actual tras cerrar todas las sesiones.
 Fecha: 2026-07-18.
@@ -7,7 +7,7 @@ descarrilar. Reemplaza como foco a los kickoffs del 2026-07-05.
 
 ## Objetivo (el norte - no descarrilar)
 
-ONIA vive de CAJA. El objetivo AHORA no es construir features: es **conseguir
+Onia vive de CAJA. El objetivo AHORA no es construir features: es **conseguir
 clientes que paguen** con los productos que YA existen, montando el motor de ventas:
 los 2 colaboradores + el panel que los administra. Filtro para toda tarea: **¿ayuda
 a vender o cobrar en las próximas semanas?** Si no, va a la pausa.

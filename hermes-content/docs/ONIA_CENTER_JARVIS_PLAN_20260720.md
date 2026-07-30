@@ -1,6 +1,6 @@
-# ONIA Center - Plan del Jarvis (construcción) 2026-07-20
+# Onia Center - Plan del Jarvis (construcción) 2026-07-20
 
-Estado: orden de construcción para dejar el ONIA Center operativo como el "Jarvis".
+Estado: orden de construcción para dejar el Onia Center operativo como el "Jarvis".
 Fecha: 2026-07-20.
 Uso: es lo PRIMERO que se cierra; desde acá se administra todo lo demás.
 
@@ -21,7 +21,7 @@ disparar/auditar agentes.
 
 ## Orden de construcción - Fase 1 (Jarvis operativo)
 
-El ONIA Center es UN carril (toca `src/app/onia-center/**`). Las tareas van
+El Onia Center es UN carril (toca `src/app/onia-center/**`). Las tareas van
 **SECUENCIALES** en la sesión del carril A (worktree `onia-center-fase2`) — no se
 paralelizan porque todas tocan la misma carpeta. Dentro de esa sesión sí se pueden
 usar subagentes (uno construye, code-reviewer revisa), pero de a uno.

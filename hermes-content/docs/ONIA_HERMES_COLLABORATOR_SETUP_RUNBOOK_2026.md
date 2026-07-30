@@ -1,9 +1,9 @@
-# ONIA Hermes Collaborator Setup Runbook 2026
+# Onia Hermes Collaborator Setup Runbook 2026
 
 Estado: borrador operativo interno
 Fecha: 2026-06-21
 Uso: paso a paso para crear un espacio colaborativo para Arthur, permitir que
-aporte a ONIA/Bolivian y luego ingresar lo aprobado al sistema interno de ONIA
+aporte a ONIA/Bolivian y luego ingresar lo aprobado al sistema interno de Onia
 sin exponer memoria privada.
 
 ## Veredicto
@@ -16,7 +16,7 @@ Se debe crear un repo colaborativo separado:
 onia-hermes-collab
 ```
 
-Ese repo funciona como bandeja de entrada saneada. El sistema interno de ONIA
+Ese repo funciona como bandeja de entrada saneada. El sistema interno de Onia
 solo absorbe resumenes, tareas, briefs y codigo revisado.
 
 ## Resultado esperado
@@ -27,7 +27,7 @@ Al terminar este setup:
 - Arthur no ve finanzas, acuerdos, memoria privada ni estrategia familiar.
 - Sergio revisa todo antes de ingresarlo a Hermes/ONIA.
 - Las tareas de Bolivian se entregan por paquetes seguros.
-- El sistema interno de ONIA recibe solo informacion aprobada y saneada.
+- El sistema interno de Onia recibe solo informacion aprobada y saneada.
 
 ## Fase 0 - Reglas antes de crear nada
 
@@ -460,7 +460,7 @@ Alcance:
 - no tocar TR4 real;
 - no pedir credenciales.
 
-### Tarea 4 - Leads ONIA
+### Tarea 4 - Leads Onia
 
 Archivo:
 
@@ -472,10 +472,10 @@ Alcance:
 
 - 5 leads con fuente publica;
 - dolor probable;
-- oferta ONIA sugerida;
+- oferta Onia sugerida;
 - siguiente accion.
 
-## Fase 8 - Ingestion al sistema interno de ONIA
+## Fase 8 - Ingestion al sistema interno de Onia
 
 Cada semana:
 
@@ -508,7 +508,7 @@ Riesgos:
 Siguiente accion:
 ```
 
-## Fase 9 - Meterlo al sistema interno de ONIA
+## Fase 9 - Meterlo al sistema interno de Onia
 
 Hay tres entradas internas:
 
@@ -533,7 +533,7 @@ No entra:
 Entrar en:
 
 - GestiOS;
-- ONIA Panel de Vendedores;
+- Onia Panel de Vendedores;
 - issues del repo de producto;
 - tareas internas.
 

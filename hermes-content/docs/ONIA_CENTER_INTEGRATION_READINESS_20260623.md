@@ -1,9 +1,9 @@
-# ONIA Center Integration Readiness 2026-06-23
+# Onia Center Integration Readiness 2026-06-23
 
 ## Decision
 
-ONIA Center debe seguir dentro de `onia-hermes` durante esta fase. Hermes sigue
-como cerebro privado; ONIA Center ejecuta, registra y muestra la operacion; el
+Onia Center debe seguir dentro de `onia-hermes` durante esta fase. Hermes sigue
+como cerebro privado; Onia Center ejecuta, registra y muestra la operacion; el
 repo `onia-hermes-collab` queda como entrada revisable para Arthur y futuros
 colaboradores.
 
@@ -40,7 +40,7 @@ Preparado pero pendiente de conexion:
 - Remotion para editor de video interno.
 - Web Factory intake para generar briefs/previews web.
 - GitHub importer para `onia-hermes-collab`.
-- Uptime Kuma para estado operativo dentro de ONIA Center.
+- Uptime Kuma para estado operativo dentro de Onia Center.
 
 Bloqueado por seguridad/operacion:
 
@@ -76,7 +76,7 @@ Funcion:
 
 ## Orden correcto para activar
 
-1. Supabase ONIA Center
+1. Supabase Onia Center
    - Aplicar migraciones.
    - Cargar `ONIA_CENTER_SUPABASE_URL`.
    - Cargar `ONIA_CENTER_SUPABASE_SERVICE_ROLE_KEY` solo server-side.
@@ -90,7 +90,7 @@ Funcion:
 
 3. Cal + n8n
    - Desplegar Cal.
-   - Crear eventos: consulta inicial, demo ONIA, reunion proyecto, auditoria pagada.
+   - Crear eventos: consulta inicial, demo Onia, reunion proyecto, auditoria pagada.
    - Webhook Cal -> n8n -> Google Calendar -> Telegram -> Supabase.
 
 4. IA gateway
@@ -107,7 +107,7 @@ Funcion:
 6. Web Factory automatico
    - Crear formulario cliente.
    - Generar lead + brief + tarea + preview interna.
-   - ONIA revisa alcance/precio antes de enviar.
+   - Onia revisa alcance/precio antes de enviar.
 
 7. Collab importer
    - Leer `onia-hermes-collab` con GitHub token de scope minimo.
@@ -128,11 +128,11 @@ Funcion:
 - UI especifica para Media Lab/Remotion.
 - Intake publico Web Factory.
 - Importador GitHub collab.
-- Monitoreo visible en ONIA Center.
+- Monitoreo visible en Onia Center.
 
 ## Regla de seguridad
 
-ONIA Center no debe exponer:
+Onia Center no debe exponer:
 
 - capital privado Sergio;
 - deuda exacta;

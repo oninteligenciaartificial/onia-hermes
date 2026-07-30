@@ -1,6 +1,6 @@
 # Bolivian Electric Tuesday Audit Questions 2026
 
-Estado: guia interna ONIA para visita y entrevistas
+Estado: guia interna Onia para visita y entrevistas
 Fecha de visita objetivo: martes 2026-06-23
 Uso: levantar puntos debiles, oportunidades de ahorro, mejoras con IA,
 automatizacion, web, experiencia de cliente y operacion interna.
@@ -8,7 +8,7 @@ No enviar completo al equipo. Usarlo como libreta de campo.
 
 ## Objetivo
 
-Entrar a Bolivian Electric como familia y como ONIA, pero con metodo. La meta no
+Entrar a Bolivian Electric como familia y como Onia, pero con metodo. La meta no
 es criticar a nadie ni prometer que IA arregla todo. La meta es entender como
 trabaja cada area, donde se pierde tiempo, dinero, ventas, control y claridad,
 y luego proponer mejoras concretas.
@@ -817,7 +817,7 @@ Por ser empresa familiar, Sergio tiene una oportunidad especial, pero tambien un
 riesgo: si entra sin rol claro, puede terminar haciendo favores, soporte y
 contenido sin autoridad ni estructura.
 
-La forma correcta de proteger el futuro familiar y el valor de ONIA es:
+La forma correcta de proteger el futuro familiar y el valor de Onia es:
 
 1. Diagnosticar con respeto.
 2. Mostrar evidencia.

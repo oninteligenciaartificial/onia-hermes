@@ -1,6 +1,6 @@
 # Video Lab
 
-Hermes Video Lab coordinates video creation for Sergio, ONIA, and clients.
+Hermes Video Lab coordinates video creation for Sergio, Onia, and clients.
 Hermes is the brain. Higgsfield or any other generator is only the rendering
 engine.
 
@@ -36,11 +36,11 @@ Best formats:
 - Screen recordings.
 - Work-in-progress videos.
 - Day-in-the-life clips.
-- Lessons from building ONIA.
+- Lessons from building Onia.
 
 Do not over-polish Sergio content. It should feel real.
 
-### ONIA
+### Onia
 
 Purpose: authority, education, demand generation, product proof.
 
@@ -152,7 +152,7 @@ Avatar Sergio:
 Crea avatar Sergio: Tengo 16 anos y estoy construyendo ONIA como sistema real | black_operator_basic
 ```
 
-ONIA:
+Onia:
 
 ```text
 Genera Reel ONIA: WhatsApp leads que se pierden por falta de seguimiento | generar leads para auditoria de automatizacion
@@ -249,7 +249,7 @@ Hermes debe extraer:
 - recursos visuales utiles;
 - CTA;
 - riesgos de copia;
-- escenas originales equivalentes para Sergio, ONIA o cliente.
+- escenas originales equivalentes para Sergio, Onia o cliente.
 
 Operational commands:
 
@@ -320,7 +320,7 @@ dashboard for deeper review, logs and batches.
 - Never publish generated videos automatically in phase 1.
 - Videos with Sergio's face always require explicit approval.
 - Client videos always require explicit approval.
-- Generic ONIA B-roll may become semi-automatic later.
+- Generic Onia B-roll may become semi-automatic later.
 
 ## Captions and Descriptions
 
@@ -355,7 +355,7 @@ Rules:
 - One CTA only.
 - Do not use fake urgency, invented results, medical guarantees or client data.
 - For Sergio, write in first person and keep it founder-led.
-- For ONIA, write educational and conversion-oriented.
+- For Onia, write educational and conversion-oriented.
 - For clients, use only approved offers and claims.
 
 ## Higgsfield Integration Plan
@@ -507,14 +507,14 @@ Personalidad por cuenta:
 
 - Sergio: fundador informal, practico, honesto, construyendo en publico, sin
   tono de guru y sin promesas infladas.
-- ONIA: claro, estrategico, educativo, orientado a sistemas y conversion.
+- Onia: claro, estrategico, educativo, orientado a sistemas y conversion.
 - Cliente: seguro para marca, simple, centrado en beneficio y aprobado por el
   negocio.
 
 Horarios base, hora Bolivia:
 
 - Sergio: 8:00-9:30, 12:00-13:30 o 19:00-21:00.
-- ONIA: 9:00-11:00 o 15:00-17:30.
+- Onia: 9:00-11:00 o 15:00-17:30.
 - Clientes: 11:00-13:00 o 18:00-20:30.
 
 Reglas rapidas:

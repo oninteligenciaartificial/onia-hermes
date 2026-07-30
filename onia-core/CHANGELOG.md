@@ -230,7 +230,7 @@ declarativo y configurable por rubro.
     necesita modulo nuevo, solo nuevas plantillas de `knowledge_article`.
   - `educacion` y `turismo_hoteleria`: **sin entidades**, a proposito. Ambas
     investigaciones concluyeron independientemente que no hay cliente real
-    todavia (mismo criterio #1 de priorizacion que ya uso ONIA para DentalGest/
+    todavia (mismo criterio #1 de priorizacion que ya uso Onia para DentalGest/
     Bolivian Electric) y que construir sus entidades (Student/Enrollment para
     educacion; Room/Booking/SeasonalRate para turismo, esta ultima candidata a
     MODULO reusable, no extension de un rubro, por ser un patron generico de
@@ -272,7 +272,7 @@ declarativo y configurable por rubro.
   producto lo adopta traduciendolo a su propia migracion). Antes, "especifico
   de un rubro" significaba "sin blueprint, cada producto lo inventa desde
   cero"; ahora puede significar "blueprint reusable, pero solo relevante para
-  ese rubro" — util si ONIA vende el mismo vertical a mas de un cliente
+  ese rubro" — util si Onia vende el mismo vertical a mas de un cliente
   (la estrategia de fabrica de verticales, `ONIA_VERTICAL_FACTORY_STRATEGY_2026.md`,
   siempre asumio esto).
 - 6 entidades, las mismas marcadas `status: "gap"` en `vertical-extensions.json`
@@ -379,7 +379,7 @@ declarativo y configurable por rubro.
      la capability subyacente (`catalog_inventory`/`sales_cash`) en
      `requiredCapabilityIds` de esos 3 tracks, asi que quedaba invisible pese
      a que la capa de tiers ya lo daba por hecho.
-  2. Se leyo el `schema.prisma` REAL de GestiOS (producto propio de ONIA,
+  2. Se leyo el `schema.prisma` REAL de GestiOS (producto propio de Onia,
      `C:\dev\proyectos\Gestios`, solo lectura): `Product`/`ProductVariant` con
      `stock`/`minStock`/`PurchaseOrderItem` (inventario real, no un mock) y
      `Order`/`OrderItem`/`Invoice` (ventas reales) — GestiOS es literalmente
@@ -447,7 +447,7 @@ declarativo y configurable por rubro.
 
 - El catalogo dental se VERIFICO leyendo `prisma/schema.prisma` real de
   DentaGest (C:\dev\proyectos\DentaGest\dental-saas, solo lectura — DentaGest
-  es producto propio de ONIA, no un cliente externo, a diferencia de
+  es producto propio de Onia, no un cliente externo, a diferencia de
   Bolivian Electric). Corrige 3 cosas que el research generico no podia saber:
   1. El odontograma real (`ToothRecord`) es una tabla por DIENTE, no por
      diente+superficie (oclusal/mesial/distal/etc.) como recomienda el
@@ -481,7 +481,7 @@ declarativo y configurable por rubro.
   empaquetado comercial YA DECIDIDO (`ONIA_CATALOGO_COMERCIAL_2026.md`
   seccion 2-3: Ordenado/Profesional/Empresa en BOB + Empresarial E1/E2/E3 en
   USD) en datos validables — NO se inventa una segmentacion paralela (ej.
-  micro/pequena/mediana/grande legal boliviana), se usa la que ONIA ya
+  micro/pequena/mediana/grande legal boliviana), se usa la que Onia ya
   decidio y cobra. Cada nivel declara sus `coreCapabilities`, `modules` (con
   nota de "focus" cuando el modulo se usa parcialmente, ej. accounting =
   "solo tax_bolivia" en Profesional) y `limits` (maxUsers/maxSucursales/

@@ -40,17 +40,17 @@ No guardar datos de tarjeta, tokens, contrasenas ni comprobantes sensibles en es
 
 | Date defined | Capital | Amount Bs | Source | Recovery rule |
 |---|---|---:|---|---|
-| 2026-06-21 | Capital de arranque Sergio/ONIA | 15000.00 | Aporte reportado por Sergio, con objetivo interno de devolver a fuente familiar | Se recupera desde excedente de Fondo ONIA despues de herramientas, apps, caja chica, reserva minima y gastos criticos. No es deuda de Arthur ni se descuenta de sus comisiones aprobadas. |
+| 2026-06-21 | Capital de arranque Sergio/ONIA | 15000.00 | Aporte reportado por Sergio, con objetivo interno de devolver a fuente familiar | Se recupera desde excedente de Fondo Onia despues de herramientas, apps, caja chica, reserva minima y gastos criticos. No es deuda de Arthur ni se descuenta de sus comisiones aprobadas. |
 
 ## Notes
 
 - Antes de preguntar por gastos, revisar Notion `Finanzas & Gastos` y `SaaS & Herramientas`.
 - Si un gasto se confirma en conversacion, registrarlo en Notion y reflejarlo aqui si afecta precios o margenes.
 - Asociar Codex Pro a produccion, automatizacion y desarrollo.
-- Asociar Higgsfield a Video Lab, UGC, ONIA y contenido de clientes.
-- Solo existe un Fondo ONIA. ONIA Media y Nuvia pueden aportar porcentajes a ese fondo, pero no crean fondos separados salvo decision escrita posterior.
-- Durante la prueba Arthur/ONIA de 60 dias, ONIA Servicios usa Fondo ONIA protegido de 40%; Arthur sin capital ONIA tiene techo de 50% solo si vende y entrega todo aprobado sin rescate. Sergio/riesgo base es 10% y sube si Sergio corrige, reestructura, termina o rescata.
+- Asociar Higgsfield a Video Lab, UGC, Onia y contenido de clientes.
+- Solo existe un Fondo Onia. Onia Media y Nuvia pueden aportar porcentajes a ese fondo, pero no crean fondos separados salvo decision escrita posterior.
+- Durante la prueba Arthur/ONIA de 60 dias, Onia Servicios usa Fondo Onia protegido de 40%; Arthur sin capital Onia tiene techo de 50% solo si vende y entrega todo aprobado sin rescate. Sergio/riesgo base es 10% y sube si Sergio corrige, reestructura, termina o rescata.
 - El plan detallado de uso del capital vive en `hermes-content/docs/ONIA_INTERNAL_CAPITAL_ALLOCATION_2026.md` y es privado Sergio/ONIA. No debe aparecer en PDF de Arthur ni vistas de colaborador.
-- La contabilidad operativa ONIA/Nuvia/Sergio vive en `hermes-content/docs/ONIA_NUVIA_ACCOUNTING_MODEL_2026.md`. Regla base: costos primero, Fondo ONIA, caja chica y Reserva Nuvia despues; pagos operativos solo si fueron presupuestados; finalmente utilidad/retiro Sergio.
-- La politica de recuperacion de capital, aportes de Arthur a apps/gastos mensuales y uso del excedente del Fondo ONIA vive en `hermes-content/docs/ONIA_CAPITAL_RECOVERY_AND_ARTHUR_INVESTMENT_POLICY_2026.md`. Regla base: el 40% Fondo ONIA primero cubre operacion, caja chica y reserva; solo el excedente recupera capital.
+- La contabilidad operativa ONIA/Nuvia/Sergio vive en `hermes-content/docs/ONIA_NUVIA_ACCOUNTING_MODEL_2026.md`. Regla base: costos primero, Fondo Onia, caja chica y Reserva Nuvia despues; pagos operativos solo si fueron presupuestados; finalmente utilidad/retiro Sergio.
+- La politica de recuperacion de capital, aportes de Arthur a apps/gastos mensuales y uso del excedente del Fondo Onia vive en `hermes-content/docs/ONIA_CAPITAL_RECOVERY_AND_ARTHUR_INVESTMENT_POLICY_2026.md`. Regla base: el 40% Fondo Onia primero cubre operacion, caja chica y reserva; solo el excedente recupera capital.
 - Revisar pendientes posibles: ElevenLabs, Canva, dominios, Meta Ads, n8n/EasyPanel u otros.

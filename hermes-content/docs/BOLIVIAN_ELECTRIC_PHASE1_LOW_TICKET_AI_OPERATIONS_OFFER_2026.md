@@ -1,8 +1,8 @@
 # Bolivian Electric Phase 1 Low Ticket AI Operations Offer 2026
 
-Estado: borrador interno ONIA
+Estado: borrador interno Onia
 Fecha: 2026-06-20
-Uso: oferta de entrada para que Bolivian Electric acepte trabajar con ONIA sin
+Uso: oferta de entrada para que Bolivian Electric acepte trabajar con Onia sin
 sentir que se les esta vendiendo un sistema grande desde el primer dia.
 
 ## Veredicto
@@ -23,7 +23,7 @@ Esto permite:
 - mostrar resultados pequenos rapido;
 - abrir una Fase 2 mas grande con evidencia.
 
-## Posicion de Sergio / ONIA
+## Posicion de Sergio / Onia
 
 Propuesta de rol:
 
@@ -72,13 +72,13 @@ Ejemplos:
 - limpieza masiva de datos;
 - integraciones con sistema actual u otros sistemas si requieren proveedor externo.
 
-ONIA solo incluye trabajo intelectual, diagnostico, capacitacion, prototipos y
+Onia solo incluye trabajo intelectual, diagnostico, capacitacion, prototipos y
 documentacion dentro del alcance acordado.
 
 ## Menu de precios por modulos
 
 Estos precios son de entrada para Bolivian Electric. No deben publicarse como
-precios generales permanentes de ONIA.
+precios generales permanentes de Onia.
 
 Regla:
 

@@ -1,4 +1,4 @@
-# ONIA — Arquitectura de marca y ruta realista a global
+# Onia — Arquitectura de marca y ruta realista a global
 
 > 2026-07-27. Doc de CIERRE, no de exploración. Consolida la decisión de naming que se
 > reabrió tres veces (26-jul dos veces, 27-jul una) y define las cuatro capas para que
@@ -66,7 +66,7 @@ Se verificaron **15 candidatos, 15 quemados**:
 
 Colisiones directas en la MISMA categoría (verificado 2026-07-27):
 
-- **Auria** → [Auria Software](https://www.crunchbase.com/organization/auria-software): *"plataformas de IA generativa para automatizar procesos de negocio"*. Es el pitch de ONIA palabra por palabra.
+- **Auria** → [Auria Software](https://www.crunchbase.com/organization/auria-software): *"plataformas de IA generativa para automatizar procesos de negocio"*. Es el pitch de Onia palabra por palabra.
 - **Nomia** → [nomia.com](https://nomia.com/about): plataforma de IA para empresas, £434M de facturación.
 - **Sovra** → [sovra.com](https://www.sovra.com/partners/): plataforma respaldada por KKR, 7.000 agencias. Más `sovraai.com` y `sovra.network`.
 - **Sereno** → [SerenoVolante](https://www.serenovolante.com/) (India, IA empresarial) + [Sereno Cloud](https://www.serenoclouds.com/ai/ai-data-science-platform/).

@@ -1,6 +1,6 @@
 # ONIA Core — Receta de adopción de lógica (anti-drift)
 
-Fecha: 2026-07-08. Owner: ONIA / Hermes.
+Fecha: 2026-07-08. Owner: Onia / Hermes.
 
 ## Por qué se PORTA, no se importa
 

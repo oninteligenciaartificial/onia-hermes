@@ -1,10 +1,10 @@
-# ONIA Center Daily n8n Briefing Runbook 2026
+# Onia Center Daily n8n Briefing Runbook 2026
 
 Fecha: 2026-06-28.
 
 ## Objetivo
 
-Crear una automatizacion diaria para que ONIA Center genere tareas concretas por rol, respete el calendario de Sergio y deje evidencia operacional.
+Crear una automatizacion diaria para que Onia Center genere tareas concretas por rol, respete el calendario de Sergio y deje evidencia operacional.
 
 El workflow no aprueba pagos, descuentos, comisiones, gastos, uso premium, publicaciones ni contacto sensible. Solo agenda, registra y avisa.
 
@@ -24,7 +24,7 @@ POST /api/onia-center/briefings/daily
 
 Funciones:
 
-- lee datos reales de ONIA Center;
+- lee datos reales de Onia Center;
 - genera plan diario para Sergio, Arthur y vendedoras;
 - usa el calendario estricto de Sergio como guardrail;
 - crea tareas y notas si `commit=true`;
@@ -70,7 +70,7 @@ Regla: no usar modelo fuerte para notas, tareas, resumen simple, preguntas de ve
 
 ## Variables requeridas
 
-En ONIA Center / Vercel / entorno local:
+En Onia Center / Vercel / entorno local:
 
 ```env
 ONIA_CENTER_BASE_URL=http://localhost:3012
@@ -125,7 +125,7 @@ Estado MCP 2026-06-29:
 
 Validacion adicional 2026-06-29:
 
-- Conectividad desde contenedor n8n a ONIA Center:
+- Conectividad desde contenedor n8n a Onia Center:
   `http://onia-center:3012/onia-center/login -> 200`.
 - El endpoint diario rechaza llamadas sin token interno con `401 unauthorized`.
 - Dry-run con token interno desde n8n:
@@ -143,7 +143,7 @@ Correccion operativa 2026-06-30:
   - `seller_safe -> seller_basic`
   - Sergio mantiene `sergio_private`
   - fallback interno mantiene `internal_restricted`
-- ONIA Center se reconstruyo en VPS desde `/opt/onia-center-src/web-factory`
+- Onia Center se reconstruyo en VPS desde `/opt/onia-center-src/web-factory`
   con `ONIA_STANDALONE_BUILD=true` y se promovio a
   `/opt/onia-center/runtime-next`.
 - Backup previo del runtime:
@@ -162,9 +162,9 @@ Lunes a sabado 06:45 America/La_Paz
 Flujo:
 
 1. Schedule Trigger.
-2. HTTP POST a ONIA Center.
-3. ONIA Center genera tareas por rol.
-4. ONIA Center crea tareas y notas si `commit=true`.
+2. HTTP POST a Onia Center.
+3. Onia Center genera tareas por rol.
+4. Onia Center crea tareas y notas si `commit=true`.
 5. n8n prepara resumen para Telegram.
 6. Si Telegram esta configurado, envia resumen a Sergio.
 7. Prepara bloques de calendario protegidos, sin escribir en Google Calendar todavia.
@@ -206,13 +206,13 @@ Freelancer:
 
 ## Calendario
 
-ONIA Center ya devuelve bloques protegidos desde el calendario estricto de Sergio.
+Onia Center ya devuelve bloques protegidos desde el calendario estricto de Sergio.
 
 Ahora:
 
 - n8n no escribe Google Calendar;
 - Telegram informa tareas y ventanas;
-- ONIA Center registra tareas.
+- Onia Center registra tareas.
 
 Siguiente fase:
 
@@ -223,7 +223,7 @@ Siguiente fase:
 
 ## Prueba local
 
-1. Levantar ONIA Center:
+1. Levantar Onia Center:
 
 ```powershell
 npm run onia-center:local
@@ -276,7 +276,7 @@ ONIA_DAILY_BRIEFING_MODEL=<modelo-local>
 
 ## Criterios de operacion
 
-- Si no queda en ONIA Center, no cuenta.
+- Si no queda en Onia Center, no cuenta.
 - Si no hay evidencia, no cuenta para comision.
 - Si n8n falla, debe avisar y no duplicar tareas.
 - Si falta Supabase, el endpoint no escribe.
@@ -288,5 +288,5 @@ ONIA_DAILY_BRIEFING_MODEL=<modelo-local>
 - Revisar la primera ejecucion real programada y confirmar que crea tareas/notas sin duplicados.
 - Importar/migrar workflow a la instancia canonica `n8n_n8n` cuando vuelva a estar escalada y estable.
 - Conectar Google Calendar OAuth.
-- Conectar Cal self-hosted hacia n8n y ONIA Center.
+- Conectar Cal self-hosted hacia n8n y Onia Center.
 - Agregar alerta de fallo si el workflow no puede crear el briefing o no puede enviar Telegram.

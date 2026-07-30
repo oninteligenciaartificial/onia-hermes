@@ -1,7 +1,7 @@
-# ONIA Meeting Intelligence System 2026
+# Onia Meeting Intelligence System 2026
 
 Estado: decision tecnica y runbook inicial para implementar captura,
-transcripcion y analisis de reuniones/audios comerciales en ONIA.
+transcripcion y analisis de reuniones/audios comerciales en Onia.
 
 Fecha de investigacion: 2026-06-26.
 
@@ -32,7 +32,7 @@ Deploy inicial ejecutado:
 
 ## Decision
 
-La mejor opcion para ONIA no es instalar solo Whisper ni una app aislada.
+La mejor opcion para Onia no es instalar solo Whisper ni una app aislada.
 
 La opcion recomendada es:
 
@@ -43,7 +43,7 @@ La opcion recomendada es:
 3. WhisperX ASR como motor premium para reuniones donde importa separar
    hablantes, extraer timestamps y preparar propuestas con mejor contexto.
 
-Implementacion en el stack ONIA:
+Implementacion en el stack Onia:
 
 - `meeting-lite`: Speakr + Speaches CPU. Es el primer paso recomendado.
 - `meeting-gpu`: Speakr + WhisperX ASR. Es la mejor calidad, pero debe correr
@@ -55,7 +55,7 @@ Speakr resuelve la parte de producto: UI, usuarios, grabaciones, uploads,
 busqueda, resumen, chat sobre grabaciones, webhooks y uso de motores externos.
 WhisperX y Speaches resuelven la parte de motor.
 
-Para ONIA, esto importa porque el valor no es "transcribir". El valor es:
+Para Onia, esto importa porque el valor no es "transcribir". El valor es:
 
 - convertir reuniones en propuestas;
 - detectar necesidad, objeciones, presupuesto, urgencia y proximo paso;
@@ -73,23 +73,23 @@ Snapshot GitHub al 2026-06-26:
 | [ggml-org/whisper.cpp](https://github.com/ggml-org/whisper.cpp) | CPU/local extremo | 51k+ stars | MIT. Excelente motor local, menos completo para flujo de reuniones/propuestas. |
 | [SYSTRAN/faster-whisper](https://github.com/SYSTRAN/faster-whisper) | Motor rapido Whisper | 23k+ stars | MIT. Base practica para APIs como Speaches. |
 | [m-bain/whisperX](https://github.com/m-bain/whisperX) | Diarizacion/timestamps | 22k+ stars | BSD-2. Mejor para reuniones con varios hablantes, pero pide GPU para buena experiencia. |
-| [murtaza-nasir/speakr](https://github.com/murtaza-nasir/speakr) | Producto interno | 3.4k+ stars | AGPL-3. Bueno para uso interno; cuidado si ONIA lo modifica y lo ofrece como servicio a terceros. |
+| [murtaza-nasir/speakr](https://github.com/murtaza-nasir/speakr) | Producto interno | 3.4k+ stars | AGPL-3. Bueno para uso interno; cuidado si Onia lo modifica y lo ofrece como servicio a terceros. |
 | [speaches-ai/speaches](https://github.com/speaches-ai/speaches) | API local STT/TTS | 3.4k+ stars | MIT. Muy util como capa compatible con OpenAI. |
-| [pluja/whishper](https://github.com/pluja/whishper) | UI local de transcripcion | 3k+ stars | AGPL-3. Buena UI, pero menos orientada a meeting intelligence/automatizacion ONIA. |
+| [pluja/whishper](https://github.com/pluja/whishper) | UI local de transcripcion | 3k+ stars | AGPL-3. Buena UI, pero menos orientada a meeting intelligence/automatizacion Onia. |
 | [rishikanthc/Scriberr](https://github.com/rishikanthc/Scriberr) | App self-hosted simple | 2.7k+ stars | MIT. Interesante, pero menos alineada que Speakr para colaboracion y webhooks. |
 
 Lectura de foros:
 
 - En self-hosted, WhisperX aparece como opcion fuerte cuando se necesita
   diarizacion, pero la comunidad marca limites con multiples hablantes,
-  acentos, ruido y audio dificil. Esto confirma que ONIA necesita revision
+  acentos, ruido y audio dificil. Esto confirma que Onia necesita revision
   humana antes de enviar propuestas.
 - HN y foros tecnicos repiten el mismo tradeoff: diarizacion local funciona,
   pero consume GPU y mantenimiento. Por eso `meeting-gpu` debe ir separado del
   VPS principal si el audit muestra poca RAM.
 - Speakr fue presentado en r/selfhosted como alternativa tipo Otter.ai que
   mantiene la infraestructura propia y agrego foco colaborativo. Eso calza con
-  ONIA mejor que una herramienta solo CLI.
+  Onia mejor que una herramienta solo CLI.
 
 Fuentes utiles:
 
@@ -102,7 +102,7 @@ Fuentes utiles:
 - WhisperX self-hosted discussion: https://www.reddit.com/r/selfhosted/comments/1pplpz8/is_whisperx_the_best_selfhosted_transcription/
 - HN self-hosted diarization discussion: https://news.ycombinator.com/item?id=40483878
 
-## Arquitectura ONIA
+## Arquitectura Onia
 
 ```text
 Google Meet / Zoom / llamada / WhatsApp audio / Telegram audio
@@ -114,26 +114,26 @@ Google Meet / Zoom / llamada / WhatsApp audio / Telegram audio
   -> propuesta HTML + resumen interno + follow-up CRM
 ```
 
-Modulo ONIA Center implementado:
+Modulo Onia Center implementado:
 
 - UI: `/onia-center`, modulo `Audio IA`.
 - API: `web-factory/apps/site/src/app/api/onia-center/audio-intelligence/route.ts`.
 - Entrada: archivo de audio, audio de WhatsApp descargado o transcript pegado.
 - Salida: diagnostico comercial, objeciones, datos faltantes, nota CRM,
   transcript y borrador de propuesta.
-- Uso diario: ONIA Center es la pantalla principal. Speakr queda como backend
+- Uso diario: Onia Center es la pantalla principal. Speakr queda como backend
   privado/biblioteca para uploads, busqueda o revision manual.
 - Login: no hace falta iniciar sesion en Speakr para preparar propuestas desde
-  ONIA Center. En produccion, ONIA Center debe exigir sesion porque procesa
+  Onia Center. En produccion, Onia Center debe exigir sesion porque procesa
   audios y datos sensibles de clientes.
 - Seguridad: la pantalla no guarda audio crudo por si sola; procesa y devuelve
   transcript/analisis para revision humana.
 
 Actualizacion operativa 2026-06-29:
 
-- ONIA Center quedo conectado a Speaches por red Docker interna.
+- Onia Center quedo conectado a Speaches por red Docker interna.
 - Variable activa: `ONIA_AUDIO_STT_BASE_URL=http://speaches:8000/v1`.
-- ONIA Center debe correr en las redes `easypanel`, `supabase_default` y
+- Onia Center debe correr en las redes `easypanel`, `supabase_default` y
   `onia_selfhosted_onia_internal`.
 - Validacion: `/api/onia-center/audio-intelligence` devuelve
   `sttReachable=true`, `Speaches local responde`, fallback OpenAI configurado
@@ -142,7 +142,7 @@ Actualizacion operativa 2026-06-29:
 Flujo minimo rentable:
 
 1. Sergio graba una reunion con consentimiento o guarda el audio.
-2. Sube el audio a ONIA Center Audio IA, a Speakr o ejecuta
+2. Sube el audio a Onia Center Audio IA, a Speakr o ejecuta
    `scripts/procesa-audio-cliente.js`.
 3. Hermes genera transcript.
 4. Hermes analiza oportunidad y prepara propuesta.
@@ -156,7 +156,7 @@ Decision operativa:
 
 - MVP recomendado: OBS Studio local en Windows.
 - Alternativa simple para audio de computadora: Audacity con WASAPI loopback.
-- Automatizacion posterior: bot open source solo cuando ONIA tenga volumen real
+- Automatizacion posterior: bot open source solo cuando Onia tenga volumen real
   de reuniones, reglas de consentimiento y cuenta operativa separada.
 
 ### Opcion recomendada ahora: OBS Studio
@@ -205,11 +205,11 @@ en una sola operacion. Para llamadas comerciales reales, OBS sigue siendo mejor.
 
 ### Bots open source evaluados
 
-| Opcion | Uso | Recomendacion ONIA |
+| Opcion | Uso | Recomendacion Onia |
 |---|---|---|
 | `screenappai/meeting-bot` | Bot TypeScript/Node/Docker para entrar y grabar Google Meet, Teams y Zoom. | Interesante para fase 2. MIT, pero aun joven; probar en entorno aislado antes de usar con clientes. |
 | `meetingbot/meetingbot` | Infra open source para enviar bots a Meet/Teams/Zoom con Terraform/AWS. | Potente, pero mas pesado. No recomendado para MVP local por costo operativo. |
-| `jitsi/jibri` | Grabacion/streaming de conferencias Jitsi Meet. | Mejor si ONIA decide usar reuniones propias en Jitsi. Requiere instalacion completa de Jitsi y maquina/VM separada. |
+| `jitsi/jibri` | Grabacion/streaming de conferencias Jitsi Meet. | Mejor si Onia decide usar reuniones propias en Jitsi. Requiere instalacion completa de Jitsi y maquina/VM separada. |
 
 Decision tecnica:
 
@@ -325,7 +325,7 @@ El deploy remoto genera secretos de Speakr en `/opt/onia-selfhosted/.env`:
 
 No pegar valores reales en docs ni en chat.
 
-En `web-factory/apps/site/.env.local` o variables del deploy de ONIA Center:
+En `web-factory/apps/site/.env.local` o variables del deploy de Onia Center:
 
 ```bash
 # Transcripcion open source por Speaches, con default local si el servicio corre
@@ -358,7 +358,7 @@ Decision de costo:
 
 ## PDFs de propuesta desde Audio IA
 
-El boton `Generar PDF` en ONIA Center usa una version imprimible del analisis de
+El boton `Generar PDF` en Onia Center usa una version imprimible del analisis de
 Audio IA. La estructura sigue el piso visual del generador de propuestas:
 
 - portada oscura con titulo grande;
@@ -415,14 +415,14 @@ como provisional y no como canonico.
 - El boton `Generar PDF` produce una version imprimible de la propuesta interna.
   Usar `Guardar como PDF` en el navegador y revisar el archivo antes de enviarlo
   al cliente.
-- Si ONIA convierte esto en producto para terceros, revisar AGPL de Speakr y
+- Si Onia convierte esto en producto para terceros, revisar AGPL de Speakr y
   usar Speaches/WhisperX o licencia comercial si corresponde.
 
 ## Lo que falta decidir
 
-1. Si el canal inicial sera upload manual en ONIA Center, Telegram o WhatsApp
+1. Si el canal inicial sera upload manual en Onia Center, Telegram o WhatsApp
    Business API.
 2. Politica de retencion: por defecto sugerido, borrar audio crudo a los 90
    dias y conservar transcript/resumen solo si es necesario para CRM.
-3. Worker GPU + `HF_TOKEN` para pasar a `meeting-gpu` cuando ONIA quiera
+3. Worker GPU + `HF_TOKEN` para pasar a `meeting-gpu` cuando Onia quiera
    diarizacion open source de mejor calidad.

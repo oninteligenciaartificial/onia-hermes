@@ -2,11 +2,11 @@
 
 Fecha: 2026-07-03.
 Estado: investigacion de proyectos externos y modelos aplicables.
-Owner: ONIA / Hermes.
+Owner: Onia / Hermes.
 
 Objetivo: identificar proyectos open source (GitHub) y modelos (Hugging Face)
 que aceleren ONIA Core beta y los verticales, sin reinventar piezas probadas.
-Regla del workflow ONIA: buscar implementaciones existentes antes de escribir
+Regla del workflow Onia: buscar implementaciones existentes antes de escribir
 codigo nuevo.
 
 ## GitHub — patrones para robar (no dependencias, referencias de diseno)
@@ -29,9 +29,9 @@ que ONIA Core beta todavia tiene abiertas (campos custom, saved views,
 aprobaciones). Antes de disenar el read-model del panel del dueno, revisar como
 Plane serializa vistas y como Twenty define su capa de metadata.
 
-## Hugging Face — modelos aplicables a los flujos ONIA
+## Hugging Face — modelos aplicables a los flujos Onia
 
-| Modelo | Uso ONIA |
+| Modelo | Uso Onia |
 |---|---|
 | [openai/whisper-large-v3](https://huggingface.co/openai/whisper-large-v3) (o turbo, 6x mas rapido) | Transcripcion de llamadas y reuniones en espanol. Alimenta las skills existentes `analiza-llamada` e `inteligencia-reuniones-onia`. |
 | [m-bain/whisperX](https://github.com/m-bain/whisperx) | Diarizacion (quien hablo) + timestamps por palabra. Mejora actas de reuniones y analisis de llamadas de venta. |
@@ -47,16 +47,16 @@ como servicio alrededor del core, igual que las integraciones gated.
 
 Fuentes verificadas con `gh repo view` (stars reales, no listas de blogs):
 
-| Repo | Stars | Que aporta a ONIA |
+| Repo | Stars | Que aporta a Onia |
 |---|---|---|
 | [obra/superpowers](https://github.com/obra/superpowers) | 245k | Framework de skills agentic (brainstorm -> spec -> plan -> TDD -> review). YA instalado en este entorno; usarlo al construir DentalGest beta. |
 | [anthropics/skills](https://github.com/anthropics/skills) | 158k | Repo oficial de Agent Skills (docx, pdf, xlsx, pptx...). Base para generar propuestas y reportes de clientes. |
 | [hesreallyhim/awesome-claude-code](https://github.com/hesreallyhim/awesome-claude-code) | 48k | Indice curado de skills/agents/tooling. Primera parada al buscar skill para una tarea nueva. |
-| [wshobson/agents](https://github.com/wshobson/agents) | 37k | Marketplace multi-harness de plugins (Claude Code, Codex, Cursor...). Referencia si ONIA publica skills propias. |
+| [wshobson/agents](https://github.com/wshobson/agents) | 37k | Marketplace multi-harness de plugins (Claude Code, Codex, Cursor...). Referencia si Onia publica skills propias. |
 | [davila7/claude-code-templates](https://github.com/davila7/claude-code-templates) | 28k | CLI de configuracion y monitoreo de Claude Code. |
 | [VoltAgent/awesome-claude-code-subagents](https://github.com/VoltAgent/awesome-claude-code-subagents) | 23k | 100+ subagentes especializados listos para adaptar. |
 
-Aplicacion ONIA:
+Aplicacion Onia:
 
 1. Skills de documento (anthropics/skills: docx/pdf/xlsx) -> reportes
    exportables del panel del dueno y propuestas por rubro.

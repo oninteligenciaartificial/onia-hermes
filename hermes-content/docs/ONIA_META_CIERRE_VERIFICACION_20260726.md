@@ -1,4 +1,4 @@
-# ONIA — Cierre de Meta: verificación de negocio, ejecutable paso a paso
+# Onia — Cierre de Meta: verificación de negocio, ejecutable paso a paso
 
 **Fecha:** 2026-07-26 · **Frente:** M (Meta / cuentas) · **Portfolio:** `1451773736711697` "OniaAgency"
 **Estado hoy:** datos legales cargados y coincidiendo con el SEPREC · **Verificación: Sin verificar**
@@ -33,9 +33,9 @@ Calle Tulipanes Nro. 9, Zona Norte — Santa Cruz de la Sierra, Bolivia
 +591 78491375 — business@onia.com.bo
 ```
 
-**Dueño del arreglo:** NO es esta sesión. El sitio público vive en el carril **ONIA Platform (Sesión B, rama `claude/git-status-935f47`, `web-factory/apps/onia-platform/**`)**. Este doc lo declara como **entrega bloqueante de la Sesión B** y el orquestador lo tiene que pedir ahí. Yo no lo toco (regla de carriles).
+**Dueño del arreglo:** NO es esta sesión. El sitio público vive en el carril **Onia Platform (Sesión B, rama `claude/git-status-935f47`, `web-factory/apps/onia-platform/**`)**. Este doc lo declara como **entrega bloqueante de la Sesión B** y el orquestador lo tiene que pedir ahí. Yo no lo toco (regla de carriles).
 
-**Decisión que hay que tomar antes de seguir — el teléfono.** Hay dos números ONIA circulando (`78491375` en Meta, `75470140` en el sitio y en todas las propuestas). Elegí uno y que sea el mismo en los tres lugares (SEPREC no trae teléfono, así que acá mandás vos):
+**Decisión que hay que tomar antes de seguir — el teléfono.** Hay dos números Onia circulando (`78491375` en Meta, `75470140` en el sitio y en todas las propuestas). Elegí uno y que sea el mismo en los tres lugares (SEPREC no trae teléfono, así que acá mandás vos):
 
 - **Recomendado: `+591 78491375`.** Ya está cargado en el portfolio, tiene WhatsApp y es el que va a colgar del chatbot. Cambiarlo en el portfolio **después** de enviar dispara re-verificación; cambiarlo en el sitio es gratis.
 - Si preferís `75470140` porque ya está en propuestas y en el generador: cambialo **ahora** en el portfolio, **antes** de enviar, y actualizá el sitio igual.
@@ -172,7 +172,7 @@ Si en E1 aparece **"No apto para verificación" (*Ineligible for verification*)*
 |---|---|
 | **F1** | Confirmar en WhatsApp Manager que el cap de números subió de **2 → 20** |
 | **F2** | Crear la app de Meta de Lucía (**§6**) — esto NO depende de la verificación, se puede hacer antes |
-| **F3** | Crear la WABA propia de ONIA (**§7**) |
+| **F3** | Crear la WABA propia de Onia (**§7**) |
 | **F4** | Crear el 2º y **último** portfolio "ONIA Personas" (ver `ONIA_META_VERIFICACION_CHECKLIST_20260725.md` §6) |
 
 ### Resumen imprimible
@@ -231,7 +231,7 @@ Copiar y pegar. **No reescribir, no "mejorar", no traducir.**
 
 Es el error que más verificaciones rebota:
 
-| Campo | Dónde vive | Qué debe decir | Valor ONIA |
+| Campo | Dónde vive | Qué debe decir | Valor Onia |
 |---|---|---|---|
 | **Nombre del portfolio** | Config. del negocio → Información del negocio | debe **coincidir con el certificado** | `OniaAgency` ⚠️ hoy dice "OnIA Agency" con espacio → **corregir** |
 | **Nombre legal del negocio** | dentro del formulario de verificación | **exacto del registro oficial** | `OniaAgency` |
@@ -274,9 +274,9 @@ Meta pide dos cosas: (1) *"Ensure your business is a legal entity"* y (2) *"Demo
 
 ## 4. Motivos de rechazo documentados y cómo los evitamos
 
-Chequeá esta tabla completa antes de apretar enviar. La columna "Estado ONIA" es lo que hay que poder tildar.
+Chequeá esta tabla completa antes de apretar enviar. La columna "Estado Onia" es lo que hay que poder tildar.
 
-| # | Motivo de rechazo | Cómo se manifiesta | Cómo lo evitamos | Estado ONIA |
+| # | Motivo de rechazo | Cómo se manifiesta | Cómo lo evitamos | Estado Onia |
 |---|---|---|---|---|
 | 1 | **Nombre legal no coincide** con el documento o con lo cargado en Business Manager | el más frecuente | `OniaAgency` idéntico en SEPREC, portfolio, formulario, Página y footer del sitio | ⬜ tildar tras A2 + §0 |
 | 2 | **Documento no aceptado o auto-declarado** | Formulario 200, declaraciones juradas | Solo SEPREC (+ NIT del SIN como refuerzo) | ⬜ |
@@ -404,7 +404,7 @@ POST https://graph.instagram.com/v23.0/<IG_ID>/media_publish
 | Hosting del media | la URL tiene que ser **pública y accesible** en el momento de publicar. Nada de `localhost` ni de un bucket privado |
 | Reels | hay que **poletear el `status_code` del contenedor** hasta `FINISHED` antes de `media_publish`, o falla |
 | No soportado | filtros, etiquetas de producto, búsqueda por hashtag, partnership ads |
-| **Etiqueta de IA** | política ONIA ya vigente: el contenido de Lucía se publica **declarado como IA**. No se esconde. Ver memoria `[[ai-influencers-account-ops]]` |
+| **Etiqueta de IA** | política Onia ya vigente: el contenido de Lucía se publica **declarado como IA**. No se esconde. Ver memoria `[[ai-influencers-account-ops]]` |
 
 ### 6.3 Enlaces oficiales
 
@@ -416,11 +416,11 @@ POST https://graph.instagram.com/v23.0/<IG_ID>/media_publish
 
 ---
 
-## 7. Después: la WABA propia de ONIA
+## 7. Después: la WABA propia de Onia
 
-**Aclaración que cambia el plan y conviene entender bien:** para **tus propios números** y para números que vivan **bajo el portfolio de ONIA**, **no hace falta App Review**. Alcanza con Cloud API + system user token. App Review / Advanced Access hace falta **solo** para ser **Tech Provider con Embedded Signup de marca ONIA**, donde el cliente onboardea su propia WABA desde tu web. `[CONFIANZA ALTA, pero validalo con un número real antes de venderlo así]`
+**Aclaración que cambia el plan y conviene entender bien:** para **tus propios números** y para números que vivan **bajo el portfolio de Onia**, **no hace falta App Review**. Alcanza con Cloud API + system user token. App Review / Advanced Access hace falta **solo** para ser **Tech Provider con Embedded Signup de marca Onia**, donde el cliente onboardea su propia WABA desde tu web. `[CONFIANZA ALTA, pero validalo con un número real antes de venderlo así]`
 
-O sea: **con la verificación aprobada y sin App Review, ONIA puede operar hasta 20 números** — el propio + los de clientes que acepten vivir bajo el portfolio de ONIA. Ese es el camino corto al negocio de chatbots. El Tech Provider propio es la fase 2.
+O sea: **con la verificación aprobada y sin App Review, Onia puede operar hasta 20 números** — el propio + los de clientes que acepten vivir bajo el portfolio de Onia. Ese es el camino corto al negocio de chatbots. El Tech Provider propio es la fase 2.
 
 ### 7.1 Decisión previa: qué número usa el bot
 
@@ -428,7 +428,7 @@ O sea: **con la verificación aprobada y sin App Review, ONIA puede operar hasta
 
 | Opción | Qué pasa | Cuándo elegirla |
 |---|---|---|
-| **A. Coexistencia** ✅ recomendada | Seguís usando la app de WhatsApp Business en el teléfono **Y** el número queda conectado a la API. Sincroniza contactos y chats recientes. Requiere **WhatsApp Business app v2.24.17 o superior** y cuenta de **Business** (no personal). **Bolivia NO está en la lista de países no soportados** (los excluidos son AU, JP, NG, PH, RU, KR, ZA, TR, CH, y todo EEE/UE/UK) | El número público de ONIA, que Sergio necesita seguir usando a mano |
+| **A. Coexistencia** ✅ recomendada | Seguís usando la app de WhatsApp Business en el teléfono **Y** el número queda conectado a la API. Sincroniza contactos y chats recientes. Requiere **WhatsApp Business app v2.24.17 o superior** y cuenta de **Business** (no personal). **Bolivia NO está en la lista de países no soportados** (los excluidos son AU, JP, NG, PH, RU, KR, ZA, TR, CH, y todo EEE/UE/UK) | El número público de Onia, que Sergio necesita seguir usando a mano |
 | **B. Migración completa** | Borrás la cuenta de WhatsApp del teléfono y registrás el número en Cloud API. **Se pierde el historial** y no podés volver a usar la app con ese número salvo que lo des de baja de la API | Solo si el número es exclusivo del bot |
 | **C. Número nuevo dedicado** | SIM nueva (no VoIP), solo para el bot. Cero riesgo sobre el número comercial | Si querés el teléfono de Sergio intacto. Costo: una SIM y que el número nuevo no tiene reputación |
 
@@ -451,7 +451,7 @@ O sea: **con la verificación aprobada y sin App Review, ONIA puede operar hasta
 | 11 | **Plantillas iniciales** cargadas y aprobadas | ver `ONIA_CHATBOT_PROPIO_SPEC_20260725.md` |
 | 12 | **Confirmar el cap 2 → 20** | WhatsApp Manager. Si no subió, la verificación no impactó a esa WABA → revisar de qué portfolio cuelga |
 
-**Regla ONIA de tokens (del playbook, no la repito por gusto):** **un regular system user por cliente**, con solo los activos de ese cliente asignados. El admin system user solo para asignar permisos, con custodia especial. Meta, textual: *"Create one system user for each type of access you need... if a system user token is compromised, it has limited scope and can't compromise more permissions."*
+**Regla Onia de tokens (del playbook, no la repito por gusto):** **un regular system user por cliente**, con solo los activos de ese cliente asignados. El admin system user solo para asignar permisos, con custodia especial. Meta, textual: *"Create one system user for each type of access you need... if a system user token is compromised, it has limited scope and can't compromise more permissions."*
 
 ### 7.3 Enlaces oficiales
 
@@ -488,9 +488,9 @@ O sea: **con la verificación aprobada y sin App Review, ONIA puede operar hasta
 
 | # | Pendiente | Dueño |
 |---|---|---|
-| 1 | **Footer legal en `onia.com.bo`** con nombre legal, NIT, dirección y teléfono | **Sesión B — ONIA Platform**. Bloquea el envío |
+| 1 | **Footer legal en `onia.com.bo`** con nombre legal, NIT, dirección y teléfono | **Sesión B — Onia Platform**. Bloquea el envío |
 | 2 | Decidir el teléfono único (`78491375` vs `75470140`) y unificarlo en sitio + propuestas + generador | Sergio decide; la propagación al generador es de esta sesión |
 | 3 | Email en las propuestas y el generador: siguen con gmail y con `75470140` | esta sesión, después de (2) |
 | 4 | ¿Meta exige código postal para Bolivia? | se ve al llenar el formulario. Anotarlo acá |
 | 5 | ¿Cuántos reintentos permite Meta realmente? | Meta no lo publica. Anotar lo que muestre la UI si llega a rechazar |
-| 6 | Confirmar que sin App Review se pueden operar 20 números de clientes bajo el portfolio de ONIA | validar con el 2º número real antes de venderlo así |
+| 6 | Confirmar que sin App Review se pueden operar 20 números de clientes bajo el portfolio de Onia | validar con el 2º número real antes de venderlo así |

@@ -1,8 +1,8 @@
-# ONIA Ecosystem Inventory 2026-07-04
+# Onia Ecosystem Inventory 2026-07-04
 
 Fecha: 2026-07-04.
 Estado: mapa de capacidades del ecosistema completo (auditoria por subagente).
-Owner: ONIA / Hermes.
+Owner: Onia / Hermes.
 
 ## Repos y estado
 
@@ -12,7 +12,7 @@ Owner: ONIA / Hermes.
 | DentaGest/dental-saas | Next.js 16 + Prisma 7 + Supabase | 🟢 Produccion | Core instalado 9/9 + wizard + intake + Contador Pack |
 | Gestios | Next.js 16 + Prisma 7 + Supabase | 🟢 Produccion (gestioshq.app), 411 tests | POS, inventario, ordenes, CRM |
 | Bolivian Electric OS | Next.js monorepo + n8n | 🟢 MVP | CRM gerencial + WhatsApp comercial |
-| WEB ONIA | Next.js estatico | 🟢 Produccion | Landing + captacion |
+| WEB Onia | Next.js estatico | 🟢 Produccion | Landing + captacion |
 | **Ganaderos-Os** | Next.js + Prisma | 🔴 **RIESGO: sin commits/historia git** | Decidir: sprint de recuperacion o pausa formal |
 | dentalgest-video | Remotion | 🟡 Minimo | Mover artifacts a storage, no necesita git |
 | onia-hermes-collab | Docs | 🟡 Referencia | Consolidar en onia-hermes |

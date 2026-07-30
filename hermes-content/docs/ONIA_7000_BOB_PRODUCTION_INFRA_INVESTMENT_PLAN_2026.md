@@ -1,9 +1,9 @@
-# ONIA 7000 BOB Production and Infrastructure Investment Plan 2026
+# Onia 7000 BOB Production and Infrastructure Investment Plan 2026
 
-Estado: borrador interno ONIA
+Estado: borrador interno Onia
 Fecha: 2026-06-20
 Uso: decidir como invertir Bs. 7.000 disponibles para potenciar produccion,
-infraestructura y capacidad comercial de ONIA.
+infraestructura y capacidad comercial de Onia.
 
 ## Veredicto
 
@@ -11,7 +11,7 @@ Con Bs. 7.000 no conviene comprar muchas herramientas ni contratar desarrollo
 grande. Conviene comprar capacidad de ejecucion: produccion de piezas vendibles,
 infraestructura estable, evidencia comercial y una reserva para no ahogarse.
 
-La prioridad no es "tener mas software". La prioridad es que ONIA pueda:
+La prioridad no es "tener mas software". La prioridad es que Onia pueda:
 
 1. producir mas rapido;
 2. vender mejor;
@@ -46,7 +46,7 @@ Deuda operativa reportada: Bs. 2.414,49.
 
 Lectura:
 
-- ONIA ya tiene herramientas caras para desarrollo y video.
+- Onia ya tiene herramientas caras para desarrollo y video.
 - La inversion nueva no debe duplicar esas capacidades.
 - Primero hay que exprimir lo que ya se paga.
 - Si no se protege caja, Bs. 7.000 desaparece en menos de 2-3 meses.
@@ -89,9 +89,9 @@ Razon:
   la grafica no se cambia como en una torre;
 - una grafica decente en Bolivia puede consumir una parte demasiado grande del
   presupuesto sin crear ventas inmediatas;
-- ONIA ya paga herramientas fuertes de produccion y video, especialmente Codex
+- Onia ya paga herramientas fuertes de produccion y video, especialmente Codex
   Pro e Higgsfield Ultra;
-- el cuello de botella actual de ONIA es oferta, evidencia, ventas,
+- el cuello de botella actual de Onia es oferta, evidencia, ventas,
   documentacion, seguimiento y estabilidad operativa, no solamente potencia GPU.
 
 La compra de hardware solo tendria sentido si cumple una de estas condiciones:
@@ -99,7 +99,7 @@ La compra de hardware solo tendria sentido si cumple una de estas condiciones:
 1. ya hay al menos un cliente pagado que exige produccion local de video/IA;
 2. ya se validaron 10 trabajos repetibles donde la GPU reduce costo real;
 3. se compra una PC de escritorio completa, no una pieza aislada;
-4. la compra no deja a ONIA sin caja para herramientas, internet, soporte y
+4. la compra no deja a Onia sin caja para herramientas, internet, soporte y
    prospeccion.
 
 ### Ruta recomendada
@@ -108,7 +108,7 @@ No comprar ahora:
 
 - usar Higgsfield, Codex, herramientas cloud y el VPS actual para generar
   demos, propuestas y sistemas vendibles;
-- reservar una bolsa de "workstation ONIA" solo despues de cerrar un piloto
+- reservar una bolsa de "workstation Onia" solo despues de cerrar un piloto
   pagado;
 - si entra el primer pago serio por Bolivian Electric u otro cliente, separar
   20%-30% de utilidad para hardware.
@@ -133,7 +133,7 @@ Compra de GPU/PC despues:
 | Laptop nueva gamer/creator | solo si tambien mejora movilidad y garantia | no comprar solo por GPU |
 
 Nota tecnica: ComfyUI documenta que Wan2.2 5B puede correr con 8GB VRAM usando
-offloading, pero eso no significa que 8GB sea la mejor compra para ONIA. Para
+offloading, pero eso no significa que 8GB sea la mejor compra para Onia. Para
 trabajar mas comodo, 16GB VRAM es una meta mas razonable si se arma una torre.
 
 ### Decision practica
@@ -171,11 +171,11 @@ Asignar: Bs. 1.500.
 
 Objetivo:
 
-- convertir ONIA en algo mas vendible en 30 dias.
+- convertir Onia en algo mas vendible en 30 dias.
 
 Usos recomendados:
 
-- 1 deck serio de ONIA consultoria/automatizacion;
+- 1 deck serio de Onia consultoria/automatizacion;
 - 1 caso interno visual: Bolivian Electric como mapa de oportunidad, sin datos
   sensibles;
 - 3 demos grabadas cortas:
@@ -197,7 +197,7 @@ Asignar: Bs. 1.200.
 
 Objetivo:
 
-- que la base tecnica de ONIA no sea fragil.
+- que la base tecnica de Onia no sea fragil.
 
 Estado actual:
 
@@ -274,7 +274,7 @@ Contratar tareas cerradas, no compromisos abiertos.
 
 Ejemplos buenos:
 
-- "Pulir deck de 12 slides para consultoria ONIA."
+- "Pulir deck de 12 slides para consultoria Onia."
 - "Editar 10 clips de 30-45s desde estas grabaciones."
 - "Auditar VPS y entregar checklist sin tocar produccion."
 
@@ -312,7 +312,7 @@ Entregables:
 
 - revisar caja y gastos activos;
 - decidir que herramientas se mantienen;
-- deck ONIA consultoria/automatizacion;
+- deck Onia consultoria/automatizacion;
 - plantilla de diagnostico;
 - lista de 20 prospectos de alta probabilidad;
 - preparar auditoria Bolivian Electric como caso interno.
@@ -379,7 +379,7 @@ Entregables:
 ## Decision sobre Bolivian Electric
 
 Bolivian Electric puede ser caso grande, pero no debe absorber los Bs. 7.000 de
-ONIA. Ese dinero debe fortalecer ONIA para poder atender Bolivian Electric y a
+Onia. Ese dinero debe fortalecer Onia para poder atender Bolivian Electric y a
 otros clientes.
 
 Regla:
@@ -418,7 +418,7 @@ falta de oferta, prospeccion o seguimiento.
 
 ## Veredicto final
 
-La mejor inversion no es comprar mas tecnologia. Es convertir ONIA en una
+La mejor inversion no es comprar mas tecnologia. Es convertir Onia en una
 operacion que vende, produce y entrega con evidencia.
 
 Orden recomendado:

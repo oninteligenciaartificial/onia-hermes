@@ -1,4 +1,4 @@
-# ONIA Git Change Grouping 2026-06-23
+# Onia Git Change Grouping 2026-06-23
 
 Estado: guia operativa local
 Uso: separar commits seguros en `C:\dev\proyectos\onia-hermes`.
@@ -12,7 +12,7 @@ git add .
 git add -A
 ```
 
-El repo mezcla estrategia Bolivian, ONIA Center, Nuvia, finanzas, Arthur y
+El repo mezcla estrategia Bolivian, Onia Center, Nuvia, finanzas, Arthur y
 assets generados. Si se sube todo junto, despues sera dificil revisar, revertir
 o explicar que cambio pertenece a cada proyecto.
 
@@ -37,7 +37,7 @@ Lectura:
 ### Commit 1 - Bolivian Electric estrategia y propuestas
 
 Objetivo: dejar listo el paquete comercial/estrategico de Bolivian sin tocar
-codigo de ONIA Center ni Nuvia.
+codigo de Onia Center ni Nuvia.
 
 Archivos:
 
@@ -59,7 +59,7 @@ Nota: `COORDINATION_MANIFEST.md` tambien se actualiza con archivos nuevos, pero
 conviene stagearlo por hunks o en un commit de registro canonico si incluye
 entradas de otros frentes.
 
-### Commit 2 - Registro canonico de documentos ONIA
+### Commit 2 - Registro canonico de documentos Onia
 
 Objetivo: registrar docs nuevos en el manifiesto sin mezclar contenido de
 producto.
@@ -74,7 +74,7 @@ git commit -m "docs: register ONIA canonical documents"
 Si quieres precision maxima, usar `git add -p COORDINATION_MANIFEST.md` para
 separar hunks de Bolivian, Nuvia y modelo operativo.
 
-### Commit 3 - Finanzas, precios y modelo operativo ONIA
+### Commit 3 - Finanzas, precios y modelo operativo Onia
 
 Objetivo: agrupar reglas internas de caja, precios, sostenibilidad y catalogo
 de servicios.
@@ -122,7 +122,7 @@ git commit -m "docs: update Arthur collaborator agreement"
 Riesgo: el PDF debe revisarse antes de subir si contiene datos personales o
 condiciones que todavia no esten aprobadas.
 
-### Commit 5 - Panel de vendedores ONIA
+### Commit 5 - Panel de vendedores Onia
 
 Objetivo: agrupar manual/documentacion y referencia JSON del panel de vendedores.
 
@@ -140,9 +140,9 @@ Commit sugerido:
 git commit -m "docs: update ONIA vendor panel model"
 ```
 
-### Commit 6 - ONIA Center sistema interno
+### Commit 6 - Onia Center sistema interno
 
-Objetivo: agrupar schema, validacion, store, API y UI de ONIA Center.
+Objetivo: agrupar schema, validacion, store, API y UI de Onia Center.
 
 Archivos base:
 
@@ -170,7 +170,7 @@ git diff -- web-factory/apps/site/src/app/layout.tsx
 git diff -- web-factory/apps/site/src/app/page.tsx
 ```
 
-Si esos archivos mezclan Nuvia y ONIA Center, usar `git add -p`.
+Si esos archivos mezclan Nuvia y Onia Center, usar `git add -p`.
 
 Commit sugerido:
 
@@ -247,7 +247,7 @@ storage externo y commitear solo manifest/metadata.
 3. Commit finanzas/modelo operativo.
 4. Commit Arthur.
 5. Commit vendedores.
-6. Commit ONIA Center.
+6. Commit Onia Center.
 7. Commit Nuvia tooling/web.
 8. Commit Nuvia assets solo si el peso es aceptable.
 

@@ -2,7 +2,7 @@
 
 Fecha: 2026-07-03.
 Estado: diseno canonico del read-model owner_dashboard y la politica de intake.
-Owner: ONIA / Hermes.
+Owner: Onia / Hermes.
 
 Contrato: `contract.json > readModels.owner_dashboard` y `> intakePolicy`.
 Este doc es el detalle de implementacion; el contrato es la fuente de verdad.

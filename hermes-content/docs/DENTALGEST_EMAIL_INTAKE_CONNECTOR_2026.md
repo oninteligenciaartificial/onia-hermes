@@ -15,7 +15,7 @@
 
 Fecha: 2026-07-03.
 Estado: workflow listo para importar; requiere 2 credenciales en n8n UI.
-Owner: ONIA / Hermes.
+Owner: Onia / Hermes.
 
 ## Que hace
 
@@ -41,7 +41,7 @@ Garantias que ya da el endpoint (no las implementa n8n):
 
 `hermes-content/deploy/n8n/workflows/dentalgest-email-intake.json`
 
-## Pasos de activacion (n8n UI del VPS ONIA, ~10 min)
+## Pasos de activacion (n8n UI del VPS Onia, ~10 min)
 
 1. **Credencial IMAP** (Credentials > New > IMAP): buzon de la clinica
    (host, usuario, password de aplicacion). Nombrarla

@@ -1,10 +1,10 @@
-# Bolivian Electric - ONIA Managed Bridge
+# Bolivian Electric - Onia Managed Bridge
 
 Fecha: 2026-06-29
 
 ## Decision
 
-ONIA puede avanzar con un puente administrado para Bolivian Electric: VPS dedicado pagado o administrado por ONIA, n8n self-hosted para Bolivian, Chatwoot Cloud dedicado y APIs de IA administradas por ONIA mientras se prepara propiedad final del cliente.
+Onia puede avanzar con un puente administrado para Bolivian Electric: VPS dedicado pagado o administrado por Onia, n8n self-hosted para Bolivian, Chatwoot Cloud dedicado y APIs de IA administradas por Onia mientras se prepara propiedad final del cliente.
 
 La clave es que el puente sea dedicado a Bolivian, medible, exportable y con plan de traspaso.
 
@@ -13,16 +13,16 @@ La clave es que el puente sea dedicado a Bolivian, medible, exportable y con pla
 - Evita esperar indefinidamente al servidor interno del cliente.
 - Permite probar WhatsApp + Chatwoot + n8n con infraestructura controlada.
 - Reduce friccion tecnica con el area de sistemas.
-- Permite vender soporte mensual real de ONIA.
+- Permite vender soporte mensual real de Onia.
 - Mantiene el sistema interno de Bolivian sin tocar al inicio.
 
 ## Limites
 
-No convertir el puente en una mezcla informal de cuentas ONIA:
+No convertir el puente en una mezcla informal de cuentas Onia:
 
 - no usar n8n compartido con datos reales;
 - no mezclar Chatwoot de otros clientes;
-- no poner WABA/numero bajo propiedad de ONIA;
+- no poner WABA/numero bajo propiedad de Onia;
 - no usar API keys personales sin rotacion;
 - no conectar base productiva sin usuario read-only.
 
@@ -42,10 +42,10 @@ Meta/WABA Bolivian
 
 | Componente | Decision puente |
 | --- | --- |
-| VPS | Dedicado a Bolivian, pagado por ONIA o facturado aparte |
+| VPS | Dedicado a Bolivian, pagado por Onia o facturado aparte |
 | n8n | Self-hosted con Docker Compose + PostgreSQL |
 | Chatwoot | Cloud dedicado para Bolivian |
-| OpenAI | API ONIA con tracking por cliente o cuenta tecnica Bolivian |
+| OpenAI | API Onia con tracking por cliente o cuenta tecnica Bolivian |
 | Meta | Siempre propiedad de Bolivian |
 | Email tecnico | Gmail temporal solo si no existe dominio; migrar a dominio |
 
@@ -112,7 +112,7 @@ Runbook tecnico del cliente:
 
 - `C:\dev\clientes\Bolivian Electric\docs\operations\bolivian-vps-n8n-deployment.md`
 
-## Oferta comercial ONIA
+## Oferta comercial Onia
 
 Separar cobros:
 
@@ -135,7 +135,7 @@ No vender consumo ilimitado ni prometer coexistencia WhatsApp hasta probar el fl
 4. Regenerar API keys.
 5. Actualizar variables en VPS/n8n/backend.
 6. Revocar llaves antiguas.
-7. Mantener ONIA como admin tecnico bajo soporte.
+7. Mantener Onia como admin tecnico bajo soporte.
 
 ## Referencias internas
 

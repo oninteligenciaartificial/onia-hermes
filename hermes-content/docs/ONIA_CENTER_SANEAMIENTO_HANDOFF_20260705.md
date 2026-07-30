@@ -1,4 +1,4 @@
-# ONIA Center — Saneamiento y rediseño del panel (HANDOFF)
+# Onia Center — Saneamiento y rediseño del panel (HANDOFF)
 
 Fecha: 2026-07-05. Rama de trabajo: `claude/dreamy-cartwright-dda93b`.
 Objetivo global: que Sergio entre a `center.onia.com.bo/onia-center` y vea SOLO
@@ -37,7 +37,7 @@ vacíos.
 >   import `Mic`); el widget sigue en operating-workspace.tsx, se reactiva
 >   re-agregando el item. "Esconder hasta usarlo".
 > - `operatingProjects`/`operatingTasks`: REVISADOS, se CONSERVAN. Son el
->   portafolio/roadmap real de ONIA (no spam) y alimentan el summary operativo y
+>   portafolio/roadmap real de Onia (no spam) y alimentan el summary operativo y
 >   las vistas de proyectos vía operating-engine. Ya no se filtran a la lista de
 >   tareas vivas (eso era `starterTasks`, ahora removido), así que no simulan
 >   tareas de usuario.
@@ -76,7 +76,7 @@ Persistencia real: Supabase self-hosted, schema `onia_center`, tabla `tasks`
 ### IMPORTANTE — otra sesión ya arregló `briefings/daily` en `main`
 Commit `3d87f093` (en `main`) resolvió el mismo bug con `basePlanTitle()` +
 dedup por título base (mantiene UN prefijo `[Plan <fecha>]`, no lo apila). Ese
-mismo commit **también empezó Fase 2/3**: el inicio "Hoy en ONIA" en
+mismo commit **también empezó Fase 2/3**: el inicio "Hoy en Onia" en
 operating-workspace.tsx ahora sólo muestra bloques operativos
 (planning/sales/deep_work/meetings/admin), NO la rutina personal, y oculta las
 tarjetas de métricas en 0 (leads/ideas/audio). → No re-hacer eso.

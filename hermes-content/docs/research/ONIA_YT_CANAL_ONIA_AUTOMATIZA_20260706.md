@@ -24,7 +24,7 @@ Producir en ES lo que ya está probado que gana en EN.
 - **Regla de oro:** *outlier en 1of10 dentro de un nicho <20K canales en español* =
   tema casi seguro.
 
-## Nichos que ganan (2025-26) que ONIA puede hacer
+## Nichos que ganan (2025-26) que Onia puede hacer
 AI tools/tech news (CPM $12–18, abierto en ES), Digital Marketing/SaaS ($12–18),
 software tutoriales ($12–18). Ingresos faceless reportados a ~500K views/mes:
 SaaS/reviews $5–15K, AI tools $6–16K (referencia optimista, no garantía).
@@ -33,7 +33,7 @@ SaaS/reviews $5–15K, AI tools $6–16K (referencia optimista, no garantía).
 Se **desmonetiza/elimina** el contenido faceless IA masivo/templado (caso real: canal
 83K subs eliminado entero). Se PERMITE IA con **valor humano**: ángulo/análisis propio,
 fuentes citadas, variedad real entre videos, toggle "hecho con IA" activado al subir.
-**Ventaja ONIA:** el canal es motor de captación al producto, NO vive del AdSense →
+**Ventaja Onia:** el canal es motor de captación al producto, NO vive del AdSense →
 puede invertir en originalidad (lo único que sobrevive la política).
 
 ## Cómo automatizar la subida

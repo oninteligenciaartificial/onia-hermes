@@ -1,15 +1,15 @@
 # Bolivian Electric First Big Project Readiness Plan 2026
 
-Estado: borrador interno ONIA
+Estado: borrador interno Onia
 Fecha: 2026-06-20
 Uso: decidir si Bolivian Electric conviene como primer proyecto grande y que rol
-debe tomar Sergio/ONIA. No usar este documento como presupuesto interno de ONIA.
+debe tomar Sergio/ONIA. No usar este documento como presupuesto interno de Onia.
 
 ## Veredicto
 
 Si es buena idea como primer proyecto grande, pero solo si se maneja como
 programa por fases y no como "voy a construir todo". Bolivian Electric puede ser
-el mejor caso real de ONIA porque combina ventas, inventario, importaciones,
+el mejor caso real de Onia porque combina ventas, inventario, importaciones,
 contabilidad, web, marketing, atencion al cliente, sucursales, servidores y
 equipo humano.
 
@@ -28,12 +28,12 @@ mejora continua. No intentar reemplazar sistema actual ni construir un ERP compl
 ## Aclaracion de presupuesto
 
 Este documento ya no asume un monto de inversion para Bolivian Electric. El
-presupuesto personal/interno de ONIA debe manejarse en un plan separado.
+presupuesto personal/interno de Onia debe manejarse en un plan separado.
 
 Regla:
 
 - Bolivian Electric se evalua por alcance, autoridad y pilotos medibles.
-- La inversion interna de ONIA no debe confundirse con presupuesto del cliente.
+- La inversion interna de Onia no debe confundirse con presupuesto del cliente.
 - Si Bolivian Electric decide financiar pilotos, se cotiza aparte por fase.
 
 ## Riesgo principal
@@ -427,7 +427,7 @@ formalizamos un programa mensual de mejora operativa con ONIA.
 
 ## Decision final
 
-Bolivian Electric si puede ser el primer gran caso de ONIA. Pero el producto no
+Bolivian Electric si puede ser el primer gran caso de Onia. Pero el producto no
 debe ser "chatbot". El producto debe ser:
 
 ```text

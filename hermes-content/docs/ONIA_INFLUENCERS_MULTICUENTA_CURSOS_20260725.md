@@ -1,9 +1,9 @@
-# ONIA — Influencers IA, multi-cuenta y cursos (research 2026-07-25)
+# Onia — Influencers IA, multi-cuenta y cursos (research 2026-07-25)
 
 > Investigación con fuentes (4 agentes). Decisiones de Sergio pendientes al final.
 
-# Plan ONIA: Lucía, "granja" de modelos y cursos
-**Para Sergio · 25-jul-2026 · Estratega ONIA**
+# Plan Onia: Lucía, "granja" de modelos y cursos
+**Para Sergio · 25-jul-2026 · Estratega Onia**
 Tipo de cambio usado: paralelo Bs 11,75/USD (oficial BCB Bs 10,90). Todo lo marcado `[NO CONFIRMADO]` hay que probarlo antes de apostarle plata.
 
 ---
@@ -11,7 +11,7 @@ Tipo de cambio usado: paralelo Bs 11,75/USD (oficial BCB Bs 10,90). Todo lo marc
 ## 0. Veredicto en 6 líneas
 
 1. **La cuenta de Lucía se puede montar esta semana y publicar por API sin App Review.** El bloqueo S6 (token IG) estaba mal diagnosticado: existe la ruta *Instagram API with Instagram Login*, que NO necesita Página de Facebook y sí publica Reels. Eso lo destraba hoy.
-2. **La granja de celulares es mala idea para ONIA, y lo digo con argumento:** cuesta USD 260-400/mes + upfront, y existe para esconder algo. Nosotros no tenemos nada que esconder porque nuestras modelos son marcas propias declaradas como IA. El equivalente legítimo cuesta USD 0-55/mes y da el mismo resultado.
+2. **La granja de celulares es mala idea para Onia, y lo digo con argumento:** cuesta USD 260-400/mes + upfront, y existe para esconder algo. Nosotros no tenemos nada que esconder porque nuestras modelos son marcas propias declaradas como IA. El equivalente legítimo cuesta USD 0-55/mes y da el mismo resultado.
 3. **El riesgo real no es el baneo: es el shadowban por contenido plantillado.** Si 5 modelos publican la misma plantilla con distinta cara, nadie las banea - simplemente dejan de distribuirlas. Pagás la infra y no vendés nada.
 4. **Cursos: no cobrar nada todavía.** El dato es inequívoco: sin 1.000 emails, el primer lanzamiento rinde ~cero y el costo del fracaso son 8 meses de parálisis. Fase 0 gratis primero.
 5. **Push-back honesto: Lucía NO es el camino corto a vender DentalGest.** Su audiencia (lifestyle, Santa Cruz, 26) no compra software dental. Lucía sirve al negocio de **cursos** y como caso vivo. Quien vende DentalGest es Sergio con casos reales y el reto en público.
@@ -32,7 +32,7 @@ Leyenda de dueño: **[S]** = solo Sergio (humano, irreemplazable) · **[C]** = l
 | 3 | Crear la cuenta de Instagram **a mano, desde un teléfono real** | **[S]** | Crear cuentas por medios automatizados es **violación explícita** de los Terms of Use de Instagram. **Yo no voy a hacer este paso ni con computer-use.** Es la línea que no se cruza. |
 | 4 | Convertir a **cuenta Profesional → Creator** | **[S]** | Requisito duro de la API. Personal no accede a Content Publishing. |
 | 5 | Activar el label **"AI creator"** en el perfil | **[S]** | Opt-in, rollout mayo-2026. Es el escudo reputacional y regulatorio más barato que existe. `[NO CONFIRMADO por Meta oficialmente - solo prensa secundaria. Si no aparece en la app, saltar a la Bio del paso 6.]` |
-| 6 | Bio y nombre visible | **[C]** redacto, **[S]** aprueba | Línea 1 declara IA. Borrador: *"Personaje digital creado con IA por ONIA · Santa Cruz · Automatizo contenido y te muestro cómo"* + link. Esto es lo que convierte la operación de "conducta inauténtica" a "marca". |
+| 6 | Bio y nombre visible | **[C]** redacto, **[S]** aprueba | Línea 1 declara IA. Borrador: *"Personaje digital creado con IA por Onia · Santa Cruz · Automatizo contenido y te muestro cómo"* + link. Esto es lo que convierte la operación de "conducta inauténtica" a "marca". |
 | 7 | Link en bio | **[C]** | Landing propia con web-factory (activo que ya existe) → captura de email. **No** mandar directo a DentalGest: la audiencia de Lucía no compra software dental. |
 | 8 | 3-5 posts orgánicos publicados **a mano** antes de conectar nada automático | **[S+C]** | Yo produzco el contenido (Higgsfield Soul + `editor-videos`), vos lo subís desde el teléfono. Genera histórico de comportamiento humano. |
 
@@ -42,7 +42,7 @@ Leyenda de dueño: **[S]** = solo Sergio (humano, irreemplazable) · **[C]** = l
 |---|---|---|---|
 | 9 | Alta TikTok con el mismo email dedicado | **[S]** | **Cuenta personal, no Business**, por si algún día se quiere monetización nativa. Ojo: Creator Rewards **no está en Bolivia** (solo US, UK, DE, JP, KR, FR, MX, BR). El ingreso de Lucía nunca va a venir de payouts de plataforma. |
 | 10 | Etiquetar como IA **cada** video realista | **[S+C]** | In-app: setting AIGC. Por API: campo `is_aigc: true`. No es opcional: TikTok lee C2PA y etiqueta solo. Y activar la etiqueta **no baja el alcance** (dicho por TikTok). |
-| 11 | Commercial Content Disclosure → **"Your Brand"** cuando promociona ONIA | **[S+C]** | Si no se declara, el video queda **inelegible para el For You Feed**. |
+| 11 | Commercial Content Disclosure → **"Your Brand"** cuando promociona Onia | **[S+C]** | Si no se declara, el video queda **inelegible para el For You Feed**. |
 
 ### Bloque C - Publicación por API (el desbloqueo real)
 
@@ -56,15 +56,15 @@ Leyenda de dueño: **[S]** = solo Sergio (humano, irreemplazable) · **[C]** = l
 | 15 | Guardar el token como **credencial n8n tipo Header Auth** | **[C]** | 20 min. Regla del proyecto: nada de `$env` en el plan VPS. |
 | 16 | Workflow n8n de publicación + hosting del media en el VPS (URL pública) | **[C]** | medio día. **Imágenes en JPEG obligatorio.** |
 | 17 | Guard de rate limit sobre `content_publishing_limit` | **[C]** | La doc oficial dice **100 posts/24h por cuenta**; mucha fuente de terceros repite 25. Programo el guard en **25** para estar del lado seguro. Vamos a usar 1-3. |
-| 18 | Cola de aprobación en ONIA Center (preview + copy + label IA antes de publicar) | **[C]** | 1 día. **Gate humano obligatorio**, misma regla de oro que `editor-videos`. Es lo que evita que un batch mal generado queme la cuenta. |
+| 18 | Cola de aprobación en Onia Center (preview + copy + label IA antes de publicar) | **[C]** | 1 día. **Gate humano obligatorio**, misma regla de oro que `editor-videos`. Es lo que evita que un batch mal generado queme la cuenta. |
 
-> **Por qué esto importa:** el App Review + Business Verification (que tarda semanas) **solo se exige si la app sirve a cuentas de terceros**. Mientras publiquemos en cuentas propias, Standard Access alcanza. Si algún día ONIA publica para clientes, ahí sí: Business Verification 48h-3 días hábiles con NIT + constitución + ID.
+> **Por qué esto importa:** el App Review + Business Verification (que tarda semanas) **solo se exige si la app sirve a cuentas de terceros**. Mientras publiquemos en cuentas propias, Standard Access alcanza. Si algún día Onia publica para clientes, ahí sí: Business Verification 48h-3 días hábiles con NIT + constitución + ID.
 
 **TikTok - ruta larga. Tiempo: 2-4 semanas y puede salir mal.**
 
 | # | Paso | Dueño | Detalle |
 |---|---|---|---|
-| 19 | **Decisión:** NO pelear la auditoría propia | **[S]** decide | La auditoría de TikTok **rechaza herramientas internas/privadas** (exige caso de uso para audiencia amplia). Un panel propio de ONIA para nuestras cuentas es candidato a rechazo. Sin auditoría, todo post directo sale `SELF_ONLY` (solo lo ve el creador): inútil. |
+| 19 | **Decisión:** NO pelear la auditoría propia | **[S]** decide | La auditoría de TikTok **rechaza herramientas internas/privadas** (exige caso de uso para audiencia amplia). Un panel propio de Onia para nuestras cuentas es candidato a rechazo. Sin auditoría, todo post directo sale `SELF_ONLY` (solo lo ve el creador): inútil. |
 | 20 | Plan A: **publicación manual en TikTok** los primeros meses | **[S]** | 2 minutos por video. No perder semanas peleando el audit. |
 | 21 | Plan B: publicar vía herramienta **ya auditada** (Upload-Post free / Postiz self-hosted / Blotato) | **[C]** | Ellos ya pasaron el audit; nosotros orquestamos desde n8n. |
 
@@ -86,9 +86,9 @@ Mitigación (no eliminación) del riesgo:
 
 > **No construir para esconderse. Construir para ser auditable.**
 
-Cada modelo de ONIA es una **marca propia declarada como IA**, no una persona falsa. Con eso todo el stack de evasión (granja de celulares, cloud phones, antidetect, proxies móviles) se vuelve **innecesario**, porque su única función sería esconder algo que no hay que esconder.
+Cada modelo de Onia es una **marca propia declarada como IA**, no una persona falsa. Con eso todo el stack de evasión (granja de celulares, cloud phones, antidetect, proxies móviles) se vuelve **innecesario**, porque su única función sería esconder algo que no hay que esconder.
 
-La línea roja de Meta no es "muchas cuentas coordinadas". Es literal: *"redes que dependen de identidades falsas para engañar sobre **quién está detrás y qué está haciendo**"*. Cinco cuentas que dicen "soy IA, me hizo ONIA" no son eso. Cinco cuentas que se presentan como cinco chicas cruceñas independientes que casualmente recomiendan DentalGest **sí son conducta inauténtica coordinada de manual**.
+La línea roja de Meta no es "muchas cuentas coordinadas". Es literal: *"redes que dependen de identidades falsas para engañar sobre **quién está detrás y qué está haciendo**"*. Cinco cuentas que dicen "soy IA, me hizo Onia" no son eso. Cinco cuentas que se presentan como cinco chicas cruceñas independientes que casualmente recomiendan DentalGest **sí son conducta inauténtica coordinada de manual**.
 
 ### 2.2 Las 4 capas
 
@@ -102,7 +102,7 @@ Un email dedicado por modelo (Zoho catch-all), un chip boliviano real por modelo
 - **TikTok Business Center** para las cuentas de TikTok: es el equivalente oficial, gratuito y explícitamente permitido de la "granja".
 
 **Capa 3 - Publicación**
-n8n en el VPS → capa de publicación (Postiz self-hosted / Upload-Post / Blotato) → Supabase → cola de aprobación en ONIA Center. Gate humano antes de cada publicación.
+n8n en el VPS → capa de publicación (Postiz self-hosted / Upload-Post / Blotato) → Supabase → cola de aprobación en Onia Center. Gate humano antes de cada publicación.
 
 **Capa 4 - Producción (nuestra ventaja real)**
 Higgsfield Soul por modelo + ElevenLabs por modelo + `editor-videos`/HyperFrames. **Regla anti-plantilla: guion propio, ángulo propio y nicho propio por modelo.**
@@ -128,10 +128,10 @@ Ahorro: **USD 3.100-4.500/año ≈ Bs 36.400-52.900/año.**
 
 | Práctica | Por qué NO |
 |---|---|
-| **Granja de celulares / cloud phones / antidetect / proxies móviles** | Es infraestructura de **evasión**. ONIA no tiene nada que evadir. Cuesta 10x y suma riesgo. Además, UK ya está tipificando los dispositivos multi-SIM (5+) con **multa ilimitada**: la dirección regulatoria es clara. |
+| **Granja de celulares / cloud phones / antidetect / proxies móviles** | Es infraestructura de **evasión**. Onia no tiene nada que evadir. Cuesta 10x y suma riesgo. Además, UK ya está tipificando los dispositivos multi-SIM (5+) con **multa ilimitada**: la dirección regulatoria es clara. |
 | **Crear cuentas de forma automatizada** | Violación **explícita** de los Terms of Use de Instagram. No hay lectura amable. |
 | **Bots de likes/follows/comentarios, pods, engagement comprado** | Prohibido explícito por Meta y TikTok. Es la causa #1 de baneo real. TikTok bloqueó >2.000 millones de cuentas spam en 2024. |
-| **Que las modelos de ONIA se sigan/comenten entre sí** | Eso **es** conducta inauténtica coordinada. Es el ejemplo del manual. Cero interacción cruzada. |
+| **Que las modelos de Onia se sigan/comenten entre sí** | Eso **es** conducta inauténtica coordinada. Es el ejemplo del manual. Cero interacción cruzada. |
 | **Compartir dispositivo / IP / teléfono / patrón de email entre cuentas** | **Chain ban**: cuando una cae, Meta detecta las vinculadas por fingerprint y las arrastra. Perdés 5 activos por el error de 1. `[Fuentes de vendedores de antidetect, sesgo alto, pero coincidentes entre competidores.]` |
 | **Presentar a una modelo como humana real** | Meta Inauthentic Behavior + TikTok AIGC + EU AI Act art. 50 (aplicable 2-ago-2026) + mata la marca cuando se descubre. |
 | **Que Lucía diga "yo uso DentalGest y me encanta"** | **FTC 16 CFR 465**: testimonio de alguien que no existe. Hasta **USD 51.744 por violación**. Regla operativa: **Lucía presenta y demuestra, NO testimonia como usuaria.** |
@@ -150,13 +150,13 @@ The Clueless factura **~EUR 10.000/mes** con Aitana López (400k seguidores) **y
 
 **NO vender:** "Curso de IA", "aprendé n8n", "agentes de IA". Ese espacio ya lo ocupan Imperio Agéntico (**3.100 miembros × USD 59/mes ≈ USD 180.000/mes bruto**, en español) y Veltim (partner verificado de n8n). Entrar ahí es competir sin foso.
 
-**NO vender jamás:** "cómo montar tu granja", "cómo manejar 50 cuentas sin que te baneen". Es vender un método de evasión de ToS. Tus alumnos van a perder cuentas y el reclamo viene contra ONIA.
+**NO vender jamás:** "cómo montar tu granja", "cómo manejar 50 cuentas sin que te baneen". Es vender un método de evasión de ToS. Tus alumnos van a perder cuentas y el reclamo viene contra Onia.
 
 **SÍ vender el foso real:**
 
 > **"Granja de Contenido IA"** - operar varias cuentas de modelo IA **declarada** desde un solo panel, con video editado por código y agentes que atienden por WhatsApp.
 
-Tres pilares que **ya existen** en ONIA, no hay que inventar nada:
+Tres pilares que **ya existen** en Onia, no hay que inventar nada:
 1. **Crear la modelo** - Higgsfield Soul consistente + voz ElevenLabs + posicionamiento (Lucía es el caso vivo).
 2. **Producir sin editor humano** - transcribir con Speaches gratis, cortar silencios y muletillas, karaoke, overlays. Todo por código. **Esto casi nadie lo enseña y es 100% legítimo.**
 3. **Operar en escala legal** - Business Portfolio, TikTok Business Center, n8n, cola de aprobación, compliance (AIGC / AI-info / EU AI Act / FTC) **como feature de venta, no como letra chica**.
@@ -172,7 +172,7 @@ Avatar específico (contra el error del 68% que apunta a "todos los interesados 
 | **2** (mes 4+) | Comunidad mensual "Granja de Contenido IA" | **USD 29/mes**, sube a 49 a los 300 miembros | Bs 341/mes | **MRR** |
 | **3** (mes 9+) | Implementación hecha con vos (grupo de 8, 6 semanas) | USD 497-997 | Bs 5.840-11.715 | Margen alto sobre los que ya están adentro |
 
-**Por qué USD 29 y no 59:** ONIA no tiene marca en este nicho todavía. Veltim cobra 30 con 72 miembros; Imperio cobra 59 con 3.100. Entramos en el piso observable y subimos escalonado con prueba social pública ("el precio sube a 49 en el miembro 300"). Es urgencia honesta y comprobada en el nicho.
+**Por qué USD 29 y no 59:** Onia no tiene marca en este nicho todavía. Veltim cobra 30 con 72 miembros; Imperio cobra 59 con 3.100. Entramos en el piso observable y subimos escalonado con prueba social pública ("el precio sube a 49 en el miembro 300"). Es urgencia honesta y comprobada en el nicho.
 
 **Ancla de precio para justificarlo:** implementar un agente de WhatsApp con IA le cuesta a una PyME USD 130-830/mes de servicio. La comunidad enseña a construirlo por USD 29/mes. La comparación se vende sola.
 
@@ -231,11 +231,11 @@ Neto por miembro a USD 29 = 29 − 2,87 − 0,50 = **USD 25,63**
 | **Lucía (@lu.antelo)** | Caso vivo del pilar 1. Cada iteración = una lección del módulo "crear la modelo" |
 | **`editor-videos`** (cortes, karaoke, overlays) | Módulo 2 completo. Los propios videos del canal se editan con él y se muestra el proceso |
 | **`ver-videos` + Speaches en VPS** | Lección "transcribir gratis sin GPU" - diferenciador real vs cursos que recetan AssemblyAI pago |
-| **11 agentes n8n vivos + ONIA Center** | Módulo 3 + plantillas descargables (el activo #1 que pide la gente en comunidades) |
+| **11 agentes n8n vivos + Onia Center** | Módulo 3 + plantillas descargables (el activo #1 que pide la gente en comunidades) |
 | **Canales YT "ONIA Automatiza" y "Ciencia de tu Cuerpo"** | Segunda granja demostrada: prueba de que el sistema replica, no fue suerte |
 | **Pricing y propuestas de web-factory** | Módulo bonus: cómo cobrar esto como servicio (donde está la plata del alumno) |
 
-**El bucle:** cada semana ONIA produce contenido igual → 1 pieza pública (embudo) + 1 lección privada (retención) del **mismo material**. El curso termina pagando la producción de contenido que hoy es puro costo.
+**El bucle:** cada semana Onia produce contenido igual → 1 pieza pública (embudo) + 1 lección privada (retención) del **mismo material**. El curso termina pagando la producción de contenido que hoy es puro costo.
 
 ---
 
@@ -244,7 +244,7 @@ Neto por miembro a USD 29 = 29 − 2,87 − 0,50 = **USD 25,63**
 ### AHORA (esta semana) - no compite con DentalGest, lo refuerza
 
 1. **Reto "0 a 5K" de Sergio en público, 3 piezas/semana.** Es el único activo que sirve a los tres frentes: da credibilidad B2B para DentalGest en Bolivia, tráfico para Lucía y audiencia para el curso. **Costo: 0. Tiempo: ~2h/semana tuyas + yo produzco.**
-2. **Landing de captura de emails** con web-factory + contador de suscriptores en ONIA Center. **La métrica que gobierna todo el plan es "suscriptores", no "seguidores".** Lo hago yo.
+2. **Landing de captura de emails** con web-factory + contador de suscriptores en Onia Center. **La métrica que gobierna todo el plan es "suscriptores", no "seguidores".** Lo hago yo.
 3. **Registro como exportador de servicios** (Padrón). Trámite tuyo, destraba cobrar legal después.
 
 ### PRÓXIMAS 2-3 SEMANAS - barato y automatizable
@@ -343,7 +343,7 @@ Neto por miembro a USD 29 = 29 − 2,87 − 0,50 = **USD 25,63**
 ### ¿Sirve VoIP? ¿Un número por cuenta?
 **[NO DOCUMENTADO]** — Ni Meta ni TikTok publican una policy de "prohibido VoIP". Lo que sí está publicado y es lo que importa: Instagram prohíbe "crear cuentas por medios automatizados sin permiso expreso" y "comprar, vender o transferir cualquier aspecto de tu cuenta" ([Terms of Use](https://help.instagram.com/termsofuse)) **[OFICIAL]**; TikTok prohíbe "usar automatización para registrar u operar cuentas en bloque" **[OFICIAL]**.
 
-Recomendación honesta para ONIA: **no armar el problema**. Un email real por modelo (Zoho catch-all ya lo tienen), y un número real móvil por modelo solo cuando la plataforma lo exija (IG deja arrancar con email). Los servicios de SMS descartables y los pools VoIP son exactamente la señal que alimenta el clustering antifraude.
+Recomendación honesta para Onia: **no armar el problema**. Un email real por modelo (Zoho catch-all ya lo tienen), y un número real móvil por modelo solo cuando la plataforma lo exija (IG deja arrancar con email). Los servicios de SMS descartables y los pools VoIP son exactamente la señal que alimenta el clustering antifraude.
 
 ---
 
@@ -370,13 +370,13 @@ Recomendación honesta para ONIA: **no armar el problema**. Un email real por mo
 ### Regulación fuera de plataforma
 - **FTC (EE.UU.)** — los Endorsement Guides de 2023 **incorporan expresamente a los influencers virtuales** ("computer-generated fictional characters") a la definición de endorser: si hay conexión material con la marca, hay que declararla. → [FTC — Endorsements, Influencers and Reviews](https://www.ftc.gov/business-guidance/advertising-marketing/endorsements-influencers-reviews) · [comunicado revisión 2023](https://www.ftc.gov/news-events/news/press-releases/2023/06/federal-trade-commission-announces-updated-advertising-guides-combat-deceptive-reviews-endorsements) **[OFICIAL]**
 - **UE — AI Act art. 50**, aplicable **2 de agosto de 2026**: quien despliega IA para crear deepfakes debe declararlo al primer contacto, de forma clara; los proveedores de generativa deben marcar los outputs en formato legible por máquina. Aplica si se dirige contenido a usuarios de la UE. → [Comisión Europea — FAQ art. 50](https://digital-strategy.ec.europa.eu/en/faqs/transparency-obligations-under-article-50-ai-act) · [texto art. 50](https://artificialintelligenceact.eu/article/50/) **[OFICIAL]**
-- Bolivia: sin norma específica de disclosure de IA al día de hoy. La exposición real de ONIA es FTC (si vende cursos a EE.UU.) y AI Act (si el contenido apunta a la UE).
+- Bolivia: sin norma específica de disclosure de IA al día de hoy. La exposición real de Onia es FTC (si vende cursos a EE.UU.) y AI Act (si el contenido apunta a la UE).
 
 ---
 
 ## 3. Qué hace que baneen una cuenta así
 
-Ordenado por riesgo real para el caso de ONIA:
+Ordenado por riesgo real para el caso de Onia:
 
 | # | Patrón | Estado | Fuente |
 |---|---|---|---|
@@ -401,11 +401,11 @@ Ordenado por riesgo real para el caso de ONIA:
 - **TikTok** — Branded Content permitido: hay que activar el **Commercial Content Disclosure toggle** al publicar. Dos modos: *Your Brand* (aparece "Promotional content") y *Branded Content* (aparece "Paid partnership"). Si no se declara, **el video queda inelegible para el For You Feed** — te avisan y tenés 24 h para corregir. Activarlo **no afecta** la recomendación. → [Branded Content Policy](https://www.tiktok.com/legal/page/global/bc-policy/en) · [Commercial Content Disclosure para creadores](https://ads.tiktok.com/help/article/about-the-content-disclosure-setting-for-creators) **[OFICIAL]**
 - **Instagram/Meta** — hay que usar la herramienta **Paid Partnership label** y cumplir "todas las leyes aplicables, incluyendo las disclosures necesarias para indicar la naturaleza comercial del contenido". → [Branded Content Policies IG](https://help.instagram.com/1695974997209192) · [Branded Content — Advertising Standards](https://transparency.meta.com/policies/ad-standards/product-format-specific-policies/branded-content/) **[OFICIAL]**
 
-### Dos frenos concretos para ONIA
-1. **Regla IG de branded content**: un creador *"no puede aceptar nada de valor por publicar contenido que no lo presente a él mismo o en cuya creación no participó"* ([política IG de branded content](https://help.instagram.com/1695974997209192)) **[OFICIAL]**. Lucía promocionando **producto propio de ONIA** no toca esta regla (es contenido de marca propia, `brand_organic` / "Your Brand"). Lucía cobrando de un tercero para promocionar producto de tercero **sí** entra en zona gris. → *Lucía debe vender ONIA, no alquilarse a terceros.*
+### Dos frenos concretos para Onia
+1. **Regla IG de branded content**: un creador *"no puede aceptar nada de valor por publicar contenido que no lo presente a él mismo o en cuya creación no participó"* ([política IG de branded content](https://help.instagram.com/1695974997209192)) **[OFICIAL]**. Lucía promocionando **producto propio de Onia** no toca esta regla (es contenido de marca propia, `brand_organic` / "Your Brand"). Lucía cobrando de un tercero para promocionar producto de tercero **sí** entra en zona gris. → *Lucía debe vender Onia, no alquilarse a terceros.*
 2. **Creator Rewards de TikTok no está en Bolivia** (US, UK, DE, JP, KR, FR, MX, BR; 10k seguidores + 100k views/30d; **cuenta personal**, 18+; excluye Business Accounts) → [TikTok Creator Academy — eligibility](https://www.tiktok.com/creator-academy/article/eligibility) **[OFICIAL]**. Además el contenido "no original o con mínimo aporte propio" queda inelegible.
 
-**Conclusión de monetización:** el ingreso de Lucía es **tráfico a producto ONIA + cursos**, no payout de plataforma. Eso además elimina el conflicto de branded content de terceros y hace irrelevante la geografía del programa de recompensas.
+**Conclusión de monetización:** el ingreso de Lucía es **tráfico a producto Onia + cursos**, no payout de plataforma. Eso además elimina el conflicto de branded content de terceros y hace irrelevante la geografía del programa de recompensas.
 
 ---
 
@@ -418,7 +418,7 @@ Ordenado por riesgo real para el caso de ONIA:
 - **App Review**: *"no se requiere si tu app sirve solo a un negocio que vos poseés o administrás, con Standard Access"*. Advanced Access + App Review + Business Verification se exige al servir a terceros. → [App Review](https://developers.facebook.com/docs/instagram-platform/app-review/)
 - **Límite**: **100 posts publicados por API cada 24 h** por cuenta (el carrusel cuenta como 1). Chequeable en `content_publishing_limit`.
 - **Formatos**: imagen (solo **JPEG**), video, Reels, Stories, carrusel (hasta 10). Sin filtros, sin shopping tags. El media debe estar en un servidor público al momento de publicar.
-- **Tiempos**: Business Verification ~48 h a 3 días hábiles ([Meta Business Help](https://www.facebook.com/business/help/1095661473946872)); App Review es variable y hay reportes de semanas en el foro de developers. **Si ONIA se queda en Standard Access sobre sus propias cuentas, esto no aplica.**
+- **Tiempos**: Business Verification ~48 h a 3 días hábiles ([Meta Business Help](https://www.facebook.com/business/help/1095661473946872)); App Review es variable y hay reportes de semanas en el foro de developers. **Si Onia se queda en Standard Access sobre sus propias cuentas, esto no aplica.**
 - **Documentos de Business Verification** (por si escalan a Advanced): NIT/tax ID, prueba de identidad y documento de constitución con la razón social. → [documentos requeridos](https://www.facebook.com/business/help/193400874040813)
 - ⚠️ **No encontré un campo de disclosure de IA en la API de publicación de IG.** Ausencia de evidencia, no evidencia de ausencia — pero planificar el disclosure por otra vía (label de perfil + C2PA en el archivo + copy).
 
@@ -430,15 +430,15 @@ Ordenado por riesgo real para el caso de ONIA:
 - **Campos de `post_info`** (Direct Post): `title`, `privacy_level`, `disable_duet/stitch/comment`, `video_cover_timestamp_ms`, y los tres que importan acá → **`is_aigc`** ("set to true if the video is AI generated content"), **`brand_content_toggle`** (paid partnership), **`brand_organic_toggle`** (marca propia). → [Direct Post reference](https://developers.tiktok.com/doc/content-posting-api-reference-direct-post)
 - **Requisitos de UX que audita TikTok** (no son opcionales, el audit los mira): consultar `creator_info` antes de postear y mostrar el nickname; bloquear si el creador llegó a su cap diario; **privacy_level sin valor por defecto**; checkboxes de interacción sin marcar por defecto; preview obligatorio antes de subir; consentimiento expreso del usuario; sin watermarks promocionales; y la leyenda antes del botón de publicar: *"By posting, you agree to TikTok's Music Usage Confirmation"* (o + Branded Content Policy si aplica). → [Content Sharing Guidelines](https://developers.tiktok.com/doc/content-sharing-guidelines)
 
-> **Implicancia para la "granja de N modelos":** TikTok pone un cap de **creadores activos por client**, no por cuenta. Escalar a 5-10 modelos con una sola app auditada obliga a declarar ese volumen en el formulario de audit desde el arranque. Instagram, en cambio, es 100 posts/24h **por cuenta** y sin App Review si son cuentas propias → **Instagram escala más barato que TikTok en el modelo de ONIA.**
+> **Implicancia para la "granja de N modelos":** TikTok pone un cap de **creadores activos por client**, no por cuenta. Escalar a 5-10 modelos con una sola app auditada obliga a declarar ese volumen en el formulario de audit desde el arranque. Instagram, en cambio, es 100 posts/24h **por cuenta** y sin App Review si son cuentas propias → **Instagram escala más barato que TikTok en el modelo de Onia.**
 
 ---
 
 ## 6. CHECKLIST OPERATIVO — Lucía bien montada y publicando
 
 ### Fase 0 — Identidad y disclosure (antes de tocar código)
-- [ ] **Decidir y escribir la política de disclosure de ONIA** en una línea, y respetarla en las N modelos: "personaje digital creado con IA por ONIA". Ya está alineado con la memoria [[lucia-influencer-posicionamiento]] ("es IA no se esconde") — formalizarlo.
-- [ ] Bio de @lu.antelo con la declaración explícita ("Personaje digital / IA · creado por ONIA") + link a producto.
+- [ ] **Decidir y escribir la política de disclosure de Onia** en una línea, y respetarla en las N modelos: "personaje digital creado con IA por Onia". Ya está alineado con la memoria [[lucia-influencer-posicionamiento]] ("es IA no se esconde") — formalizarlo.
+- [ ] Bio de @lu.antelo con la declaración explícita ("Personaje digital / IA · creado por Onia") + link a producto.
 - [ ] **Nunca** usar nombre, cara, voz o semejanza de una persona real identificable, ni testimonios atribuidos a humanos, ni figuras públicas endorsando. Es la única línea que cierra cuentas por policy escrita.
 
 ### Fase 1 — Cuenta Instagram
@@ -447,13 +447,13 @@ Ordenado por riesgo real para el caso de ONIA:
 - [ ] Activar el **label "AI creator"** en Configuración del perfil (opt-in, mayo 2026). Es el escudo reputacional y regulatorio más barato que existe.
 - [ ] Publicar 3-5 posts orgánicos **a mano** antes de conectar nada automático (histórico de comportamiento humano).
 - [ ] **NO** comprar seguidores, no usar pods, no automatizar likes/follows/comentarios. Nunca. Ni una vez.
-- [ ] **NO** hacer que las modelos de ONIA se sigan/comenten entre ellas.
+- [ ] **NO** hacer que las modelos de Onia se sigan/comenten entre ellas.
 - [ ] Preparar plan B para el video-selfie: si IG lo pide, la cuenta probablemente se pierde. Mitigación: **backup completo del contenido**, username secundario reservado, y no concentrar todo el funnel comercial en una sola cuenta.
 
 ### Fase 2 — Cuenta TikTok
 - [ ] Alta con email dedicado (teléfono solo si lo exige). **Cuenta personal**, no Business, si algún día se quiere monetización nativa.
 - [ ] Etiquetar como IA **cada** video realista (in-app: setting de AI-generated content; por API: `is_aigc: true`).
-- [ ] Activar Commercial Content Disclosure → **"Your Brand"** cuando promociona DentalGest/webs/cursos de ONIA.
+- [ ] Activar Commercial Content Disclosure → **"Your Brand"** cuando promociona DentalGest/webs/cursos de Onia.
 
 ### Fase 3 — Publicación por API (el desbloqueo real)
 **Instagram — ruta corta, sin App Review:**
@@ -463,7 +463,7 @@ Ordenado por riesgo real para el caso de ONIA:
 - [ ] Alojar el media en URL pública (el VPS 187.77.16.63 ya sirve). **Imágenes en JPEG obligatorio.**
 - [ ] Guardar el token como **credencial n8n Header Auth** (regla del proyecto: nada de `$env` en el plan VPS).
 - [ ] Monitorear `content_publishing_limit` (tope 100/24 h) — ponerle un guard en el workflow.
-- [ ] Solo escalar a Advanced Access + Business Verification (NIT + constitución + ID) si algún día ONIA publica para cuentas de clientes.
+- [ ] Solo escalar a Advanced Access + Business Verification (NIT + constitución + ID) si algún día Onia publica para cuentas de clientes.
 
 **TikTok — ruta larga, empezar YA porque el audit es el cuello de botella:**
 - [ ] Registrar app, agregar Content Posting API, habilitar **Direct Post**, solicitar `video.publish`.
@@ -474,14 +474,14 @@ Ordenado por riesgo real para el caso de ONIA:
 
 ### Fase 4 — Escala a varias modelos (la "granja")
 - [ ] **Un email + una identidad + una historia por modelo.** Nada compartido salvo la infraestructura de publicación.
-- [ ] Cero interacción cruzada entre cuentas de ONIA (es la señal #1 de red coordinada).
+- [ ] Cero interacción cruzada entre cuentas de Onia (es la señal #1 de red coordinada).
 - [ ] Contenido genuinamente distinto por modelo — la regla de Original Content de IG castiga lo templated y el 30-day recovery window es real.
-- [ ] Registrar en el panel ONIA Center: cuenta, credencial, cap diario, estado de audit, último post. Un solo lugar de control (ya es el patrón de los 11 agentes vivos).
+- [ ] Registrar en el panel Onia Center: cuenta, credencial, cap diario, estado de audit, último post. Un solo lugar de control (ya es el patrón de los 11 agentes vivos).
 - [ ] **[NO DOCUMENTADO pero prudente]** salida de red estable y separada por cuenta; evitar rotación agresiva de IP, que se parece más a evasión que a operación normal.
 
 ### Fase 5 — Cursos (el producto que Sergio quiere vender)
 - [ ] El curso puede enseñar **todo esto** sin problema: no hay policy que prohíba enseñar a crear personajes IA declarados.
-- [ ] **No** enseñar ni vender: compra de seguidores, bots de engagement, evasión de baneos, granjas de cuentas automatizadas. Eso sí es violación explícita de ambas plataformas y, si el curso lo promete, expone a ONIA por facilitación.
+- [ ] **No** enseñar ni vender: compra de seguidores, bots de engagement, evasión de baneos, granjas de cuentas automatizadas. Eso sí es violación explícita de ambas plataformas y, si el curso lo promete, expone a Onia por facilitación.
 - [ ] Si se vende a EE.UU.: cumplir FTC (disclosure de conexión material en todo contenido promocional de Lucía). Si a la UE: prever AI Act art. 50 desde **2-ago-2026**.
 
 ---
@@ -532,7 +532,7 @@ Ordenado por riesgo real para el caso de ONIA:
 
 # Anexo B — Granja / multi-cuenta
 
-# Granjas de contenido y operación multi-cuenta: qué es real, qué te banea, y qué arquitectura le sirve a ONIA
+# Granjas de contenido y operación multi-cuenta: qué es real, qué te banea, y qué arquitectura le sirve a Onia
 
 **Fecha de investigación:** 2026-07-25 · **Todos los precios son los publicados a julio 2026.**
 
@@ -543,10 +543,10 @@ Ordenado por riesgo real para el caso de ONIA:
 ## 0. Veredicto en 6 líneas (leé esto aunque no leas el resto)
 
 1. **Una "granja de contenido" es una arquitectura de EVASIÓN, no de escala.** Existe para operar cuentas que la plataforma no te dejaría operar de otra forma: cuentas que fingen ser personas distintas, en dispositivos distintos, en países distintos.
-2. **ONIA no necesita nada de eso**, porque sus personas virtuales van a ser **marcas propias declaradas como IA**. Marcas propias = cuentas profesionales legítimas = **API oficial**. Meta y TikTok tienen productos *diseñados* para gestionar decenas de cuentas de marca desde un solo lugar.
+2. **Onia no necesita nada de eso**, porque sus personas virtuales van a ser **marcas propias declaradas como IA**. Marcas propias = cuentas profesionales legítimas = **API oficial**. Meta y TikTok tienen productos *diseñados* para gestionar decenas de cuentas de marca desde un solo lugar.
 3. **Lo que te banea no es "tener varias cuentas".** Es: fingir ser personas reales, engagement falso/bots, evadir enforcement, y redes coordinadas que ocultan quién está detrás.
 4. **El riesgo de la granja es de contagio:** si compartís device fingerprint / IP / teléfono / patrón de email entre cuentas y una cae, arrastra a las demás (chain ban). Perdés 5 activos por el error de 1.
-5. **Costo real:** granja ≈ **USD 150-250/mes recurrente + USD 250-1.500 upfront + trabajo manual humano** y riesgo de pérdida total. Arquitectura por API oficial para 3-5 personas ≈ **USD 0-70/mes** sobre la infra que ONIA ya tiene (VPS + n8n).
+5. **Costo real:** granja ≈ **USD 150-250/mes recurrente + USD 250-1.500 upfront + trabajo manual humano** y riesgo de pérdida total. Arquitectura por API oficial para 3-5 personas ≈ **USD 0-70/mes** sobre la infra que Onia ya tiene (VPS + n8n).
 6. **Para el curso: enseñar granjas es enseñar a violar ToS y, en UK, algo que están tipificando como delito.** El curso vendible y defendible es otro (§7).
 
 ---
@@ -630,7 +630,7 @@ Fuentes: https://dataimpulse.com/blog/best-mobile-proxies/ · https://spyderprox
 | Upfront si es hardware físico | USD 250 – 1.500 |
 | Mano de obra humana operando perfiles | no automatizable del todo |
 
-Y todo eso **sin publicar un solo video más** que el que ONIA puede publicar por API oficial gratis.
+Y todo eso **sin publicar un solo video más** que el que Onia puede publicar por API oficial gratis.
 
 ---
 
@@ -659,7 +659,7 @@ Fuente: https://transparency.meta.com/policies/community-standards/authentic-ide
 **TikTok sobre múltiples cuentas:** "los usuarios pueden tener múltiples cuentas para propósitos como contenido de fans o expresión creativa, pero no pueden usarlas para engañar a otros o violar las reglas."
 Fuente: https://www.tiktok.com/creator-academy/article/integrity-authenticity-on-tiktok
 
-**Conclusión de esta sub-sección: 5 personas virtuales de ONIA, declaradas como IA, con cuenta profesional, en un Business Portfolio propio, es un uso 100% dentro de las reglas.** No hace falta esconder nada.
+**Conclusión de esta sub-sección: 5 personas virtuales de Onia, declaradas como IA, con cuenta profesional, en un Business Portfolio propio, es un uso 100% dentro de las reglas.** No hace falta esconder nada.
 
 ### 2.2 Lo que te BANEA (citas de política)
 
@@ -675,7 +675,7 @@ Prohibido explícitamente:
 
 Meta define CIB como "cualquier red coordinada de cuentas, Páginas y Grupos que depende centralmente de cuentas falsas para engañar a Facebook y a las personas sobre **quién está detrás y qué está haciendo**".
 
-**Leé bien la línea roja:** el problema NO es "muchas cuentas coordinadas". El problema es **muchas cuentas coordinadas que ocultan quién está detrás**. Si ONIA opera 5 personas virtuales y en cada bio dice "personaje IA de ONIA", eso no es CIB. Si opera 5 cuentas que se presentan como 5 chicas cruceñas independientes que casualmente recomiendan DentalGest, **eso sí es CIB de manual**.
+**Leé bien la línea roja:** el problema NO es "muchas cuentas coordinadas". El problema es **muchas cuentas coordinadas que ocultan quién está detrás**. Si Onia opera 5 personas virtuales y en cada bio dice "personaje IA de Onia", eso no es CIB. Si opera 5 cuentas que se presentan como 5 chicas cruceñas independientes que casualmente recomiendan DentalGest, **eso sí es CIB de manual**.
 
 **TikTok — Integridad y autenticidad:**
 - No permite manipular señales de engagement: **bots, scripts u otros medios** para distribuir contenido o interacciones en masa y **inflar artificialmente vistas, likes, comentarios, shares**
@@ -697,13 +697,13 @@ Fuentes: https://help.instagram.com/740480200552298/ · https://www.spurnow.com/
 - **Meta**: la etiqueta "AI info" pasó a **obligatoria en anuncios** de Facebook e Instagram en 2026; Meta detecta vía **C2PA** y etiqueta sola. Contenido IA no declarado es causa activa de rechazo de anuncio: 1ª violación mata el anuncio + strike, 2ª en 90 días = hold de 24h, 3ª puede llevar a suspensión.
   Fuentes: https://transparency.meta.com/governance/tracking-impact/labeling-ai-content/ · https://about.fb.com/news/2024/04/metas-approach-to-labeling-ai-generated-content-and-manipulated-media/ · https://commonthreadco.com/blogs/coachs-corner/meta-ai-ad-labels-mandatory-disclosure-ecommerce-2026
 
-**Regulación fuera de plataforma (importa si ONIA vende a clientes de EU/US):**
+**Regulación fuera de plataforma (importa si Onia vende a clientes de EU/US):**
 - **EU AI Act, Artículo 50**: quien despliega un sistema que genera o manipula imagen/audio/video que constituye deepfake **debe divulgar que fue generado artificialmente**. Aplica desde **2 de agosto de 2026** (el Consejo anunció una fecha revisada de 2 de diciembre de 2026 para ciertas obligaciones). Obras evidentemente artísticas/ficcionales tienen una obligación atenuada, pero **no exenta**.
   Fuentes: https://artificialintelligenceact.eu/article/50/ · https://digital-strategy.ec.europa.eu/en/faqs/transparency-obligations-under-article-50-ai-act
 - **FTC, 16 CFR Part 465** (vigente desde 21-oct-2024): prohíbe reviews/testimonios que tergiversen ser de **alguien que no existe** — explícitamente incluye **reviews generadas por IA** — o de alguien sin experiencia real con el producto. Multas de hasta **USD 51.744 por violación**.
   Fuentes: https://www.ftc.gov/business-guidance/resources/consumer-reviews-testimonials-rule-questions-answers · https://www.ecfr.gov/current/title-16/chapter-I/subchapter-D/part-465
 
-> **Consecuencia directa para ONIA:** una persona virtual que dice "yo uso DentalGest y me encanta" es, bajo la regla FTC, un **testimonio de alguien que no existe**. Lucía puede *presentar*, *explicar*, *demostrar* — no puede *testimoniar como usuaria*. Esa distinción vale plata.
+> **Consecuencia directa para Onia:** una persona virtual que dice "yo uso DentalGest y me encanta" es, bajo la regla FTC, un **testimonio de alguien que no existe**. Lucía puede *presentar*, *explicar*, *demostrar* — no puede *testimoniar como usuaria*. Esa distinción vale plata.
 
 ### 2.3 Riesgo nuevo: penalización de CONTENIDO, no de cuenta
 
@@ -722,7 +722,7 @@ Esto es lo que mata a las granjas modernas, más que el baneo:
 
 ### 3.1 Publicar por API oficial
 
-**Instagram** — hay dos caminos y ONIA está mirando el equivocado:
+**Instagram** — hay dos caminos y Onia está mirando el equivocado:
 
 | | Instagram API **con Facebook Login** | Instagram API **con Instagram Login** |
 |---|---|---|
@@ -736,7 +736,7 @@ Fuente primaria: https://developers.facebook.com/docs/instagram-platform/overvie
 **Límite de publicación:** la documentación oficial de Meta hoy dice **"100 API-published posts en una ventana móvil de 24 horas"**, y los carruseles cuentan como un solo post. Muchísimas fuentes de terceros siguen repitiendo el viejo límite de 25 — **hay discrepancia y la doc oficial manda**. Podés consultar el uso actual con el endpoint `IG User Content Publishing Limit`.
 Fuente primaria: https://developers.facebook.com/docs/instagram-platform/content-publishing/ · discrepancia documentada en https://www.ayrshare.com/solutions/instagram-graph-api-error-9-the-25-post-daily-limit-how-to-fix-it/
 
-> **Esto destraba el bloqueo actual de ONIA.** Si el problema es que Lucía no tiene Página de Facebook o el flujo con Business Login se trabó: existe el camino **Instagram Login sin Página de Facebook**, y sí publica Reels. El bloqueo es de setup, no de plataforma.
+> **Esto destraba el bloqueo actual de Onia.** Si el problema es que Lucía no tiene Página de Facebook o el flujo con Business Login se trabó: existe el camino **Instagram Login sin Página de Facebook**, y sí publica Reels. El bloqueo es de setup, no de plataforma.
 
 **TikTok Content Posting API** — más duro:
 - Requiere **auditoría** separada del alta de developer. Hasta pasarla, **todo post directo sale como `SELF_ONLY`** (solo lo ve el creador)
@@ -746,7 +746,7 @@ Fuente primaria: https://developers.facebook.com/docs/instagram-platform/content
 - **~15 posts/día por creador**, compartido entre todos los clientes API que usen Direct Post
 Fuentes: https://www.postpeer.dev/blog/best-tiktok-posting-api · https://www.getphyllo.com/post/tiktok-api-rate-limits-in-2026-quotas-errors-workarounds · https://www.netrows.com/blog/tiktok-content-posting-api-guide-2026
 
-> **Ojo con el criterio de auditoría de TikTok:** "no herramientas internas/privadas". Un panel propio de ONIA para publicar sus propias cuentas **puede ser rechazado**. Plan B honesto: publicar TikTok vía una herramienta ya auditada (Metricool, Publer, Blotato, Upload-Post) en lugar de pelear la auditoría propia.
+> **Ojo con el criterio de auditoría de TikTok:** "no herramientas internas/privadas". Un panel propio de Onia para publicar sus propias cuentas **puede ser rechazado**. Plan B honesto: publicar TikTok vía una herramienta ya auditada (Metricool, Publer, Blotato, Upload-Post) en lugar de pelear la auditoría propia.
 
 ### 3.2 Herramientas de gestión multi-marca — precios y límites reales 2026
 
@@ -759,17 +759,17 @@ Fuentes: https://www.postpeer.dev/blog/best-tiktok-posting-api · https://www.ge
 | **Hootsuite** | Professional USD 99/mes anual (USD 149 mensual); Team USD 249/mes anual | Por usuario, ~10 cuentas sociales | **Descartado: caro y no aporta nada aquí.** |
 | **Blotato** | Starter USD 29/mes (20 cuentas sociales, API completa), Creator USD 97, Agency USD 499 | 20 cuentas ya en el plan base | Muy buena relación cuenta/precio + API para n8n. |
 | **Ayrshare** | Premium USD 149/mes (1 perfil); Business desde USD 599/mes (30 perfiles), USD 2,49–8,99 por perfil extra | Escala a 500+ perfiles a ~USD 1,99 c/u | **Sobredimensionado y carísimo para 5 personas.** Es para SaaS que revenden publicación. |
-| **Upload-Post** | Free tier | 10+ plataformas | **Integración nativa n8n y Make.** Candidato fuerte para ONIA. |
-| **Postiz** (open source) | **Self-hosted gratis**; cloud desde USD 29/mes (5 cuentas) / USD 39 (10 canales, posts ilimitados) | 30+ plataformas | Único totalmente open source. Corre en el VPS que ONIA ya tiene. |
+| **Upload-Post** | Free tier | 10+ plataformas | **Integración nativa n8n y Make.** Candidato fuerte para Onia. |
+| **Postiz** (open source) | **Self-hosted gratis**; cloud desde USD 29/mes (5 cuentas) / USD 39 (10 canales, posts ilimitados) | 30+ plataformas | Único totalmente open source. Corre en el VPS que Onia ya tiene. |
 | **Mixpost** | Lite **self-hosted gratis**; Pro licencia one-time sin suscripción | Pagás solo tu servidor | Sin costo recurrente. |
 
 Fuentes: https://socialk.it/en/pricing/metricool · https://schedpilot.com/metricool-pricing-how-much-does-it-really-cost/ · https://socialk.it/en/pricing/publer · https://www.blotato.com/blog/buffer-pricing · https://www.ayrshare.com/pricing/ · https://www.blotato.com/pricing · https://mixpost.app/blog/why-open-source-social-media-management-tools-are-perfect-for-startups · https://www.blotato.com/blog/best-social-media-api-tools · https://prestyj.com/blog/hidden-costs-of-hootsuite-buffer-later-at-scale-2026
 
-### 3.3 n8n + APIs (lo que ONIA ya tiene)
+### 3.3 n8n + APIs (lo que Onia ya tiene)
 
-ONIA ya corre n8n self-hosted en el VPS. Costo marginal de publicar por API desde ahí: **USD 0**. La restricción conocida del plan VPS (sin `$env`) se resuelve con credenciales n8n tipo Header Auth, que es lo que ya usan.
+Onia ya corre n8n self-hosted en el VPS. Costo marginal de publicar por API desde ahí: **USD 0**. La restricción conocida del plan VPS (sin `$env`) se resuelve con credenciales n8n tipo Header Auth, que es lo que ya usan.
 
-El patrón sensato: **n8n orquesta → llama a Upload-Post / Postiz self-hosted / Blotato → esas herramientas tienen las apps auditadas** ante TikTok/Meta. Así ONIA no tiene que pasar la auditoría de TikTok por su cuenta ni mantener el OAuth de 5 cuentas × 3 plataformas.
+El patrón sensato: **n8n orquesta → llama a Upload-Post / Postiz self-hosted / Blotato → esas herramientas tienen las apps auditadas** ante TikTok/Meta. Así Onia no tiene que pasar la auditoría de TikTok por su cuenta ni mantener el OAuth de 5 cuentas × 3 plataformas.
 
 ---
 
@@ -785,7 +785,7 @@ El patrón sensato: **n8n orquesta → llama a Upload-Post / Postiz self-hosted 
 
 Fuentes: https://en.wikipedia.org/wiki/Aitana_L%C3%B3pez · https://www.forbes.com/sites/lesliekatz/2023/11/24/this-ai-generated-influencer-can-pull-in-10000-euros-a-month/ · https://apob.ai/blog/ai-influencer-aitana-lopez/ · https://www.theclueless.ai/ · https://www.fastcompany.com/91546466/she-has-400000-instagram-followers-and-major-brand-deals-shes-also-ai (403 al fetch automático; citado vía índice de búsqueda)
 
-> **El dato incómodo: 11 personas para 1 influencer, ~€10k/mes.** Eso es ~€900/mes de facturación por persona del equipo. Es un negocio de **agencia creativa**, no una máquina de imprimir dinero. Cualquiera que te venda "5 influencers IA en automático" está omitiendo esto. La ventaja real de ONIA es que **automatiza con código lo que The Clueless hace a mano** — pero el guion, la estrategia y la relación comercial siguen siendo humanos.
+> **El dato incómodo: 11 personas para 1 influencer, ~€10k/mes.** Eso es ~€900/mes de facturación por persona del equipo. Es un negocio de **agencia creativa**, no una máquina de imprimir dinero. Cualquiera que te venda "5 influencers IA en automático" está omitiendo esto. La ventaja real de Onia es que **automatiza con código lo que The Clueless hace a mano** — pero el guion, la estrategia y la relación comercial siguen siendo humanos.
 
 ### Fanvue (plataforma de suscripción, admite creadores IA)
 
@@ -824,30 +824,30 @@ Más común que el baneo y **mucho peor de diagnosticar**, porque no hay notific
 - Instagram: exclusión de recomendaciones por contenido no original (§2.3)
 - YouTube: expulsión del YPP por contenido "inauthentic"
 
-### 5.3 El riesgo específico que ONIA debe temer más
+### 5.3 El riesgo específico que Onia debe temer más
 
 No es perder a Lucía. **Es perder el Business Portfolio.**
 
-Si ONIA mete en un solo Business Portfolio: las 5 personas virtuales + la Página de DentalGest + la cuenta publicitaria `act_1073680778314945` que vende software... y una persona virtual recibe strikes por contenido IA no declarado → **el radio de explosión incluye el motor comercial que paga las cuentas**. Meta escala restricciones a nivel portfolio, y **cada persona solo puede crear 2 portfolios**, así que no hay reemplazo infinito.
+Si Onia mete en un solo Business Portfolio: las 5 personas virtuales + la Página de DentalGest + la cuenta publicitaria `act_1073680778314945` que vende software... y una persona virtual recibe strikes por contenido IA no declarado → **el radio de explosión incluye el motor comercial que paga las cuentas**. Meta escala restricciones a nivel portfolio, y **cada persona solo puede crear 2 portfolios**, así que no hay reemplazo infinito.
 
 ---
 
-## 6. ARQUITECTURA RECOMENDADA PARA ONIA (3-5 personas virtuales)
+## 6. ARQUITECTURA RECOMENDADA PARA Onia (3-5 personas virtuales)
 
 ### 6.1 Principio de diseño
 
 > **No construyas para esconderte. Construí para ser auditable.**
-> Cada persona virtual de ONIA es una **marca propia declarada como IA**, no una persona falsa. Con eso, todo el stack de evasión (granja, cloud phones, antidetect, proxies) se vuelve **innecesario** — y su única función pasaría a ser esconder algo que no hay que esconder.
+> Cada persona virtual de Onia es una **marca propia declarada como IA**, no una persona falsa. Con eso, todo el stack de evasión (granja, cloud phones, antidetect, proxies) se vuelve **innecesario** — y su única función pasaría a ser esconder algo que no hay que esconder.
 
-Esto ya está alineado con la política interna de ONIA ("es IA no se esconde"). La investigación la respalda: es la única postura que sobrevive a TikTok AIGC, Meta AI-info, EU AI Act art. 50 y FTC 16 CFR 465 al mismo tiempo.
+Esto ya está alineado con la política interna de Onia ("es IA no se esconde"). La investigación la respalda: es la única postura que sobrevive a TikTok AIGC, Meta AI-info, EU AI Act art. 50 y FTC 16 CFR 465 al mismo tiempo.
 
 ### 6.2 Capas
 
 **Capa 1 — Identidad (una sola vez, manual, humano)**
-- 1 dominio propio con catch-all (ONIA ya lo tiene con Zoho) → 1 email dedicado por persona: `lucia@`, `<persona2>@`, etc. **No** aliases del mismo buzón visible, **no** el Gmail personal de Sergio
+- 1 dominio propio con catch-all (Onia ya lo tiene con Zoho) → 1 email dedicado por persona: `lucia@`, `<persona2>@`, etc. **No** aliases del mismo buzón visible, **no** el Gmail personal de Sergio
 - Cada cuenta se crea **a mano, desde un teléfono real, con SIM real boliviana**. Sin automatización de creación (viola ToS de Instagram explícitamente)
 - Cada cuenta se convierte a **Professional (Creator o Business)** desde el día 1
-- **Bio obligatoria** de cada persona: identificarse como personaje IA de ONIA, en el nombre visible o en la primera línea de bio. Esto es lo que convierte la operación de "CIB" a "marca"
+- **Bio obligatoria** de cada persona: identificarse como personaje IA de Onia, en el nombre visible o en la primera línea de bio. Esto es lo que convierte la operación de "CIB" a "marca"
 - Habilitar el label AIGC / AI-info al publicar, siempre
 
 **Capa 2 — Gobernanza de plataforma (lo que reemplaza a la granja)**
@@ -857,12 +857,12 @@ Esto ya está alineado con la política interna de ONIA ("es IA no se esconde").
 - **TikTok Business Center**: las 5 cuentas TikTok, con permiso "Manage account". Es el equivalente oficial y gratuito de la granja, para TikTok.
 
 **Capa 3 — Publicación (API oficial, cero evasión)**
-- **Instagram**: camino **"Instagram API con Instagram Login"** — no requiere Página de Facebook y sí publica Reels. Esto **destraba el bloqueo actual de ONIA**. Límite oficial: 100 posts/24h por cuenta; ONIA va a usar 1-3.
+- **Instagram**: camino **"Instagram API con Instagram Login"** — no requiere Página de Facebook y sí publica Reels. Esto **destraba el bloqueo actual de Onia**. Límite oficial: 100 posts/24h por cuenta; Onia va a usar 1-3.
 - **TikTok**: **no** pelear la auditoría propia (2-4 semanas, rechaza herramientas internas). Publicar vía una herramienta ya auditada.
-- **Orquestación**: n8n en el VPS → llama a la capa de publicación → escribe estado en Supabase → cola de aprobación en ONIA Center.
+- **Orquestación**: n8n en el VPS → llama a la capa de publicación → escribe estado en Supabase → cola de aprobación en Onia Center.
 - **Gate humano obligatorio antes de publicar** (misma regla de oro que ya tiene `editor-videos`: tabla de cortes + preview antes de aplicar). Aquí: preview + copy + label IA revisados por Sergio antes de que salga. Esto no es burocracia — es lo que evita que un batch mal generado queme 5 cuentas de una.
 
-**Capa 4 — Producción (lo que ONIA ya tiene y es su verdadera ventaja)**
+**Capa 4 — Producción (lo que Onia ya tiene y es su verdadera ventaja)**
 - Higgsfield Soul → imagen consistente por persona
 - ElevenLabs → voz por persona
 - `editor-videos` / HyperFrames → corte, karaoke, overlays, mockups **con código**
@@ -873,7 +873,7 @@ Esto ya está alineado con la política interna de ONIA ("es IA no se esconde").
 | Ítem | Costo | Nota |
 |---|---|---|
 | VPS + n8n | **USD 0** marginal | ya existe |
-| Capa de publicación — **Opción A: Postiz self-hosted** | **USD 0** | corre en el VPS de ONIA, open source, 30+ plataformas |
+| Capa de publicación — **Opción A: Postiz self-hosted** | **USD 0** | corre en el VPS de Onia, open source, 30+ plataformas |
 | Capa de publicación — **Opción B: Upload-Post free tier** | **USD 0** | integración nativa n8n, 10+ plataformas |
 | Capa de publicación — **Opción C: Blotato Starter** | **USD 29/mes** | 20 cuentas + API, la más cómoda |
 | Analítica multi-marca — Metricool Starter (5 marcas) | **USD 20-25/mes** | opcional pero recomendado: el modelo "1 marca = 1 persona" calza exacto |
@@ -891,7 +891,7 @@ Ahorro: **~USD 3.000–4.500/año**, con menos riesgo y más defendible ante un 
 
 | ❌ No hacer | Por qué |
 |---|---|
-| **Granja de celulares / cloud phones / antidetect / proxies móviles** | Es infraestructura de evasión. ONIA no tiene nada que evadir. Cuesta 10x y suma riesgo penal-reputacional |
+| **Granja de celulares / cloud phones / antidetect / proxies móviles** | Es infraestructura de evasión. Onia no tiene nada que evadir. Cuesta 10x y suma riesgo penal-reputacional |
 | **Crear cuentas de forma automatizada** | Violación explícita de los Terms of Use de Instagram |
 | **Bots de likes/follows/comentarios, pods, engagement comprado** | Prohibido explícitamente por TikTok y Meta. Es la causa #1 de baneo real |
 | **Que las personas virtuales interactúen entre sí para inflarse** | Eso ES coordinated inauthentic behavior. Es literalmente el ejemplo del manual |
@@ -907,11 +907,11 @@ Ahorro: **~USD 3.000–4.500/año**, con menos riesgo y más defendible ante un 
 ## 7. Sobre vender el CURSO (honestidad brutal)
 
 **Lo que NO se puede vender sin riesgo:**
-- "Cómo montar tu granja de contenido" / "cómo manejar 50 cuentas sin que te baneen" → estás **vendiendo un método de evasión de ToS**. Tres problemas: (a) TikTok prohíbe explícitamente "el comercio de servicios que inflan engagement o engañan al sistema de recomendación"; (b) UK está tipificando la infraestructura multi-SIM con multa ilimitada, y esa dirección regulatoria se propaga; (c) si tus alumnos pierden cuentas siguiendo tu método — y las van a perder — el reclamo es contra ONIA.
+- "Cómo montar tu granja de contenido" / "cómo manejar 50 cuentas sin que te baneen" → estás **vendiendo un método de evasión de ToS**. Tres problemas: (a) TikTok prohíbe explícitamente "el comercio de servicios que inflan engagement o engañan al sistema de recomendación"; (b) UK está tipificando la infraestructura multi-SIM con multa ilimitada, y esa dirección regulatoria se propaga; (c) si tus alumnos pierden cuentas siguiendo tu método — y las van a perder — el reclamo es contra Onia.
 - Cualquier módulo que enseñe a hacer pasar una IA por persona real.
 
 **Lo que SÍ se puede vender, es más caro y nadie más lo tiene:**
-1. **"Editar video con código, sin editores humanos"** — este es el activo diferencial real de ONIA. Transcripción, corte de silencios y muletillas, karaoke word-level, overlays, mockups. Casi nadie enseña esto y es 100% legítimo.
+1. **"Editar video con código, sin editores humanos"** — este es el activo diferencial real de Onia. Transcripción, corte de silencios y muletillas, karaoke word-level, overlays, mockups. Casi nadie enseña esto y es 100% legítimo.
 2. **"Persona virtual declarada: cómo montarla, cómo cumplir, cómo monetizar"** — con el módulo de compliance (AIGC, AI-info, EU AI Act, FTC) como **feature de venta**, no como letra chica. En 2026 el diferencial no es "cómo hacer una IA guapa", es "cómo hacerla sin que te la bajen".
 3. **"Operación multi-marca por API oficial + n8n"** — Business Portfolio, TikTok Business Center, cola de aprobación, panel. Esto es lo que le sirve a una agencia con 10 clientes, que es quien tiene plata para pagar el curso.
 
@@ -978,7 +978,7 @@ Y el argumento comercial que cierra la venta, con las cifras de arriba: *The Clu
 
 # Anexo C — Cursos
 
-# Negocio de CURSOS para ONIA — investigación con fuentes (jul-2026)
+# Negocio de CURSOS para Onia — investigación con fuentes (jul-2026)
 
 > Cobertura honesta: 22 búsquedas + 8 fetch directos. Lo marcado **[oficial]** viene de la fuente primaria (Stripe, Hotmart Help, Whop Docs, Skool). Lo marcado **[secundario]** viene de blogs de comparativa o notas de prensa y puede tener sesgo comercial — lo señalo donde importa. Los precios de comunidades en español son **observados en vivo hoy** (páginas públicas de Skool).
 
@@ -989,7 +989,7 @@ Y el argumento comercial que cierra la venta, con las cifras de arriba: *The Clu
 ### 1.1 El mercado existe y LatAm es el epicentro
 
 - Hotmart superó **USD 10.000 millones de GMV** en su ecosistema (2024) y reportó **+250.000 productores activos** globales en 2025. En LatAm hispana acumula **8,7 millones de compradores**; más de **21.000 personas registraron ventas activas** en el último año recomendando productos digitales. LatAm lidera el crecimiento global de creator economy con **+40% de ingresos**, y **el 60% vendía a otros países sin saberlo**. — [DPL News](https://dplnews.com/economia-de-creadores-en-latinoamerica-se-multiplicara-por-9-hacia-2033/) · [Alto Nivel](https://altonivel.com.mx/economia-de-creadores-el-mercado-que-promete-multiplicarse-por-nueve-hacia-2033-segun-hotmart/) · [Insider Latam](https://insiderlatam.com/marisol-perez-chow-de-hotmart-por-que-latam-es-el-epicentro-del-crecimiento-de-la-economia-de-creadores/)
-- Lectura para ONIA: **21.000 vendedores activos sobre 8,7M de compradores** es un mercado con demanda mucho mayor que oferta *seria*. La mayoría de la oferta es reventa de afiliados, no sistema propio.
+- Lectura para Onia: **21.000 vendedores activos sobre 8,7M de compradores** es un mercado con demanda mucho mayor que oferta *seria*. La mayoría de la oferta es reventa de afiliados, no sistema propio.
 
 ### 1.2 Precios REALES observables (no teóricos)
 
@@ -1005,7 +1005,7 @@ Y el argumento comercial que cierra la venta, con las cifras de arriba: *The Clu
 | Mediana nicho "negocios y marketing" | **USD 247** | idem |
 | Mediana nicho "coaching y consultoría" | **USD 531** | idem |
 
-**Comunidades en español de IA/automatización — precios vivos HOY (esto es el comparable real de ONIA):**
+**Comunidades en español de IA/automatización — precios vivos HOY (esto es el comparable real de Onia):**
 
 | Comunidad | Precio | Miembros | Fuente |
 |---|---|---|---|
@@ -1014,7 +1014,7 @@ Y el argumento comercial que cierra la venta, con las cifras de arriba: *The Clu
 | Brayan Developer N8N \| IA | USD 13 promo (normal USD 50) | — | [skool.com/brayandeveloper](https://www.skool.com/brayandeveloper-5872/about) |
 | Curso "Experto Automatización IA + n8n" (Argentina, 6 meses) | **USD 249** one-time | — | [aprender21.com.ar](https://www.aprender21.com.ar/programacion-1/cursos-inteligencia-artificial/experto-automatizacion-ia.php) |
 
-> **Dato clave**: Imperio Agéntico a 3.100 miembros × USD 59 ≈ **USD 180.000/mes bruto** en español, con precio escalonado por prueba social (sube el precio cuando crece). Ese es el techo demostrado del nicho hispano de IA/agentes hoy. Y es exactamente el nicho donde ONIA ya opera.
+> **Dato clave**: Imperio Agéntico a 3.100 miembros × USD 59 ≈ **USD 180.000/mes bruto** en español, con precio escalonado por prueba social (sube el precio cuando crece). Ese es el techo demostrado del nicho hispano de IA/agentes hoy. Y es exactamente el nicho donde Onia ya opera.
 
 **Benchmarks de ingreso por miembro (Skool):** ARPU típico **USD 19–49/mes**; top **USD 200–450/mes**. El rango donde aterrizan la mayoría de comunidades rentables es **USD 29–99/mes**. — [Communipass, Skool Revenue Benchmarks 2026](https://communipass.com/blog/skool-revenue-benchmarks-2026/) **[secundario]**
 
@@ -1049,7 +1049,7 @@ Caso con números (Communipass **[secundario, un solo caso]**): reto de 14 días
 | **Whop** | **USD 0** | 2,7% + 0,30 doméstico; **+1,5% internacional +~1% conversión** → hasta 5,2% + 0,30; efectivo real ~6–7% | Sí |
 | **Teachable** | USD 39/mes Starter (**7,5% platform fee**) → USD 89 Builder (0%) | + ~2,9% + 0,30 procesamiento | Sí |
 | **Kajabi** | **USD 179–499/mes** | 0% plataforma; Kajabi Payments 2,9%+0,30 (+0,7% en suscripciones, +1,5% tarjetas internacionales) → efectivo ~3,6% | Sí |
-| **Propio** (Next+Supabase+n8n, lo que ONIA ya tiene) | ~USD 0 marginal (VPS ya pago) | QR Simple: **0%**; Circle.bo ~3% + fijo | Sí (hay que construirlo) |
+| **Propio** (Next+Supabase+n8n, lo que Onia ya tiene) | ~USD 0 marginal (VPS ya pago) | QR Simple: **0%**; Circle.bo ~3% + fijo | Sí (hay que construirlo) |
 
 Fuentes: [Hotmart pricing oficial](https://www.hotmart.com/es-ES/pricing) · [Hotmart Help – tarifas](https://help.hotmart.com/es/article/208298448/-cuales-son-las-tarifas-cobradas-por-hotmart-) · [Kursopro comisiones Hotmart](https://kursopro.com/blog/emprendimiento/comisiones-hotmart/) · [Kourses Skool pricing](https://kourses.com/skool-pricing/) · [Ruzuku Whop pricing](https://www.ruzuku.com/learn/articles/whop-pricing) · [whatpayment Whop fees](https://www.whatpayment.com/en/guides/whop-fees-explained/) · [Kourses Kajabi vs Teachable](https://kourses.com/kajabi-vs-teachable-2/) · [Kiero – pasarelas Bolivia](https://kiero.io/blog/tienda-online/8-pasarelas-de-pago-en-bolivia-efectivas-y-eficientes/)
 
@@ -1083,7 +1083,7 @@ Esto decide la plataforma, no las features.
 - **Exportación de servicios está exenta de IVA e IT** si te registrás como exportador en el Padrón Nacional de Contribuyentes — aplica a servicios informáticos prestados al exterior. Factura comercial de exportación, sin IVA ni IT. — [Bolivia Impuestos](https://boliviaimpuestos.com/factura-comercial-de-exportacion-en-bolivia/) · [SIAT – IVA/IT/IUE](https://siatinfo.impuestos.gob.bo/index.php/impuesto-asunto/iva-it-e-iue)
 - Venta doméstica: IVA 13% sobre monto inclusivo (**~14,94% efectivo**) + IT 3% (acreditable contra IUE).
 - **Régimen SIETE-RG para emprendedores**: hasta **Bs 400.000 anuales**, pago único bimestral del **5%** que consolida IVA + IT + IUE. Encaja perfecto con el arranque de un curso. — [Morgana Tec – Guía Tributaria Bolivia 2026](https://www.morganatec.com/post/gu%C3%ADa-tributaria-bolivia-2026-cambios-clave-en-el-iva-siat-en-l%C3%ADnea-y-facturaci%C3%B3n-digital)
-- Recordatorio del contexto ONIA: facturación electrónica obligatoria desde 30-sep-2026 → el curso nace ya facturando bien o nace mal.
+- Recordatorio del contexto Onia: facturación electrónica obligatoria desde 30-sep-2026 → el curso nace ya facturando bien o nace mal.
 
 ---
 
@@ -1092,13 +1092,13 @@ Esto decide la plataforma, no las features.
 ### 3.1 El mecanismo, con números
 
 - **Justin Welsh**: ex-ejecutivo, salió en 2019, **USD 7,5M+ acumulados**, ~853.000 seguidores en LinkedIn, **una sola persona**, márgenes >80%, USD 3–5M/año. LinkedIn es el embudo entero. Es "el ejemplo más claro de una audiencia que no castiga la venta constante, porque la venta va envuelta en lecciones usables". — [magicpost.in](https://magicpost.in/blog/who-is-justin-welsh) · [justinwelsh.me](https://www.justinwelsh.me/newsletter/my-10m-journey)
-- **Su embudo de 4 fases** (el marco que aplica directo a ONIA): *ser descubierto → generar confianza → establecer relación → monetizar*. Si nadie sabe que existís y sobre qué hablás, nadie pasa a la fase siguiente. — [mistakeshappen.substack.com](https://mistakeshappen.substack.com/p/build-in-public-3-sistemas-generacion-contenido)
+- **Su embudo de 4 fases** (el marco que aplica directo a Onia): *ser descubierto → generar confianza → establecer relación → monetizar*. Si nadie sabe que existís y sobre qué hablás, nadie pasa a la fase siguiente. — [mistakeshappen.substack.com](https://mistakeshappen.substack.com/p/build-in-public-3-sistemas-generacion-contenido)
 - **Marc Lou**: modelo "portfolio indie" — construir rápido, distribuir en público, apilar productos. Su apalancamiento real fue la combinación de construir rápido + compartir con transparencia qué funcionó y qué no. — [startupik.com](https://startupik.com/marc-lou-building-startups-in-public-and-the-rise-of-indie-founders/) · [indieai.directory](https://indieai.directory/blog/marc-lou-81683-february-2026-income-breakdown/)
 - **Referente en español**: Romuald Fons construía en público sitios web desde cero para enseñar a hacer webs que ganan dinero por afiliación, "mostrando el proceso sin trucos", desde los 10K seguidores. — [CETIEM](https://cetiem.com/build-in-public/)
 
-### 3.2 Traducción directa a ONIA
+### 3.2 Traducción directa a Onia
 
-El reto **"0 a 5K" de Sergio** y **Lucía** no son marketing del curso: **son el curso**. Cada episodio del reto es simultáneamente (a) contenido de descubrimiento, (b) prueba de que el sistema funciona, y (c) una lección del classroom. Es el mismo activo cobrado dos veces. Lo que Fons hizo con webs de afiliación, ONIA lo hace con una granja de influencers IA — con la ventaja de que el proceso es *visualmente* más interesante y el sistema de edición por código ya está construido.
+El reto **"0 a 5K" de Sergio** y **Lucía** no son marketing del curso: **son el curso**. Cada episodio del reto es simultáneamente (a) contenido de descubrimiento, (b) prueba de que el sistema funciona, y (c) una lección del classroom. Es el mismo activo cobrado dos veces. Lo que Fons hizo con webs de afiliación, Onia lo hace con una granja de influencers IA — con la ventaja de que el proceso es *visualmente* más interesante y el sistema de edición por código ya está construido.
 
 ---
 
@@ -1119,25 +1119,25 @@ El reto **"0 a 5K" de Sergio** y **Lucía** no son marketing del curso: **son el
 
 1. **Ingreso predecible vs cacería permanente.** "Optar por pago único te obliga a estar siempre captando clientes en lugar de reteniéndolos." — [recurrentes.com](https://recurrentes.com/articulo/tipo-de-pago/)
 2. **Finaliza más gente → menos reembolsos → más boca a boca.** Comunidad: 65,5% vs 42,6% de finalización, y **~2x más ingreso por creador**. — [Ruzuku](https://www.ruzuku.com/learn/articles/state-of-online-courses-2026)
-3. **Barrera de entrada baja.** USD 29/mes se decide sin pensar; USD 497 requiere una carta de ventas y confianza que ONIA todavía no tiene acumulada.
-4. **Para ONIA específicamente**: el conocimiento *se degrada cada 60 días* (Higgsfield, ElevenLabs, n8n, la API de Instagram cambian). Un curso grabado envejece y genera reembolsos; una comunidad convierte esa volatilidad de pasivo en **el motivo de la suscripción**.
+3. **Barrera de entrada baja.** USD 29/mes se decide sin pensar; USD 497 requiere una carta de ventas y confianza que Onia todavía no tiene acumulada.
+4. **Para Onia específicamente**: el conocimiento *se degrada cada 60 días* (Higgsfield, ElevenLabs, n8n, la API de Instagram cambian). Un curso grabado envejece y genera reembolsos; una comunidad convierte esa volatilidad de pasivo en **el motivo de la suscripción**.
 5. **El riesgo real de la membresía es el churn**: exige contenido y soporte continuados, medir cohortes, churn voluntario vs involuntario y retención a 30/60/90 días. — [klasoo](https://www.klasoo.com/suscripciones-y-membresias-ingresos-recurrentes-para-creadores-de-cursos-online/)
 
 ---
 
-## 5) PROPUESTA CONCRETA PARA ONIA
+## 5) PROPUESTA CONCRETA PARA Onia
 
 ### 5.1 Qué vender (y qué NO)
 
 **NO vender**: "Curso de IA", "aprende n8n", "agentes de IA". Ese espacio ya lo ocupan Imperio Agéntico (3.100 miembros) y Veltim (partner verificado de n8n). Entrar ahí es competir sin foso.
 
-**SÍ vender el foso real de ONIA — lo único que casi nadie puede enseñar porque casi nadie lo construyó:**
+**SÍ vender el foso real de Onia — lo único que casi nadie puede enseñar porque casi nadie lo construyó:**
 
 > ### 🎯 **"Granja de Contenido IA"** — cómo operar VARIAS cuentas de influencer IA desde un solo panel, con video editado por código y agentes que atienden por WhatsApp.
 
 Los tres pilares (que ya existen, no hay que inventarlos):
 1. **Crear la modelo** — Higgsfield Soul consistente + voz ElevenLabs + posicionamiento (Lucía es el caso vivo).
-2. **Producir sin editor humano** — transcribir, cortar silencios/muletillas, subtítulos karaoke, overlays, todo por código (el sistema ONIA ya probado).
+2. **Producir sin editor humano** — transcribir, cortar silencios/muletillas, subtítulos karaoke, overlays, todo por código (el sistema Onia ya probado).
 3. **Operar en escala** — varias cuentas/chips desde un panel, n8n orquestando, agente que responde WhatsApp y califica.
 
 Avatar específico (contra el error del 68%): **el emprendedor o agencia chica de LatAm que ya intentó hacer contenido y se ahogó en la edición.** No "interesados en IA".
@@ -1153,7 +1153,7 @@ Avatar específico (contra el error del 68%): **el emprendedor o agencia chica d
 
 **Ancla de precio para justificar los USD 29:** implementar un agente de WhatsApp con IA cuesta a una PyME **USD 130–830/mes** de servicio, o desde **EUR 5.000** a medida ([Javadex](https://www.javadex.es/blog/agente-ia-whatsapp-business-empresa-precio-2026) · [Aurora Inbox](https://www.aurorainbox.com/2026/05/25/cuanto-cuesta-automatizar-whatsapp-ia-2026/)). La comunidad enseña a construirlo por USD 29/mes. La comparación se vende sola.
 
-**Por qué USD 29 y no USD 59:** ONIA no tiene marca en este nicho todavía. Veltim cobra 30 con 72 miembros; Imperio cobra 59 con 3.100. Entrar en el piso del rango observable y **subir escalonado con prueba social pública** ("el precio sube a 49 en el miembro 300") — es un mecanismo de urgencia comprobado en el nicho y honesto.
+**Por qué USD 29 y no USD 59:** Onia no tiene marca en este nicho todavía. Veltim cobra 30 con 72 miembros; Imperio cobra 59 con 3.100. Entrar en el piso del rango observable y **subir escalonado con prueba social pública** ("el precio sube a 49 en el miembro 300") — es un mecanismo de urgencia comprobado en el nicho y honesto.
 
 ### 5.3 Plataforma: dos carriles de cobro
 
@@ -1161,14 +1161,14 @@ Avatar específico (contra el error del 68%): **el emprendedor o agencia chica d
 - Única plataforma verificada que **cobra en 22 monedas locales** y **paga a un boliviano** (HotPay International o Payoneer) **[oficial]**.
 - Soporta **suscripción recurrente nativa** — la comunidad se cobra ahí. — [Hotmart Help – suscripciones](https://help.hotmart.com/es/article/115002364191/suscripcion-todo-lo-que-necesitas-saber-para-crear-y-configurar-suscripcion)
 - Costo real: 9,9% + 0,50 → sobre USD 29 se van **USD 3,37**, quedan **USD 25,63** netos.
-- **No usar el reproductor de Hotmart** (+USD 1,49/venta). Video en el VPS de ONIA o Bunny.
+- **No usar el reproductor de Hotmart** (+USD 1,49/venta). Video en el VPS de Onia o Bunny.
 
 **Carril B — Bolivianos: QR SIMPLE, comisión 0**
-- Cobro en Bs por QR/transferencia, acceso otorgado automáticamente por **n8n → Supabase** (ONIA ya tiene ambos corriendo). 0% de comisión vs 9,9% de Hotmart.
+- Cobro en Bs por QR/transferencia, acceso otorgado automáticamente por **n8n → Supabase** (Onia ya tiene ambos corriendo). 0% de comisión vs 9,9% de Hotmart.
 
 **La "casa" de la comunidad:** Skool es el mejor producto de comunidad pero **no puede cobrar con cuenta boliviana** (Stripe). Dos salidas:
 - **(a) Recomendada ahora:** Skool **gratis** como casa (USD 9/mes plan Hobby), cobro por fuera (Hotmart/QR) y alta/baja de miembros vía n8n. Cero fricción técnica, arranca esta semana.
-- **(b) A 6 meses:** migrar la casa a **panel propio** (Next.js + Supabase, stack que ONIA ya domina y ya tiene desplegado) → 0% de comisión, dato propio, y **el panel mismo se vuelve demo de venta de DentalGest/web-factory**.
+- **(b) A 6 meses:** migrar la casa a **panel propio** (Next.js + Supabase, stack que Onia ya domina y ya tiene desplegado) → 0% de comisión, dato propio, y **el panel mismo se vuelve demo de venta de DentalGest/web-factory**.
 - **Verificar en paralelo:** abrir cuenta en **Whop** y comprobar en el modal de payout si Bolivia habilita banco o cripto. Si habilita, es la mejor economía sin costo fijo. **No confirmado — hay que probarlo.**
 
 **Descartados y por qué:** Kajabi (USD 179–499/mes fijos, suicida sin ingresos), Teachable (7,5% en Starter y cobro vía Stripe), Skool como cobrador (Stripe), PayPal (imposible en Bolivia).
@@ -1183,11 +1183,11 @@ Cero producción nueva. Todo es re-uso del carril H/K/L que ya está corriendo:
 | Lucía (@lu.antelo) | **Caso vivo** del pilar 1. Cada iteración = una lección del módulo "crear la modelo" |
 | Sistema `editor-videos` (cortes, karaoke, overlays) | **Módulo 2 completo**. Los propios videos del canal se editan con él y se muestra el proceso |
 | Skill `ver-videos` + Speaches en VPS | Lección "transcribir gratis sin GPU" — diferenciador real vs cursos que recetan AssemblyAI pago |
-| Agentes de ONIA Center + n8n (11 workflows vivos) | Módulo 3 + plantillas descargables (el activo #1 que pide la gente en Skool) |
+| Agentes de Onia Center + n8n (11 workflows vivos) | Módulo 3 + plantillas descargables (el activo #1 que pide la gente en Skool) |
 | Canales YT "ONIA Automatiza" y "Ciencia de tu Cuerpo" | **Segunda granja demostrada** — prueba de que el sistema replica, no es suerte |
 | Propuestas/pricing de web-factory | Módulo bonus: cómo cobrar esto como servicio (donde está la plata del alumno) |
 
-**Bucle**: cada semana ONIA produce contenido igual → 1 pieza pública (embudo) + 1 lección privada (retención) del **mismo material**. El costo marginal del negocio de cursos tiende a cero, y el curso **paga la producción de contenido** que hoy es puro costo.
+**Bucle**: cada semana Onia produce contenido igual → 1 pieza pública (embudo) + 1 lección privada (retención) del **mismo material**. El costo marginal del negocio de cursos tiende a cero, y el curso **paga la producción de contenido** que hoy es puro costo.
 
 ### 5.5 Economía y umbrales (con números, no ilusiones)
 
@@ -1209,7 +1209,7 @@ Cero producción nueva. Todo es re-uso del carril H/K/L que ya está corriendo:
 2. **Abrir Hotmart como productor + vincular Payoneer** (el link de datos financieros recién aparece tras la primera venta — hacer una venta de prueba de USD 5 a uno mismo).
 3. **Abrir Whop y verificar el modal de payout para Bolivia** (banco o cripto). 20 minutos, decide si se ahorra el 9,9%.
 4. **Publicar la landing de captura de emails** con web-factory (activo que ya existe) y arrancar el reto "0 a 5K" documentado 3x/semana.
-5. **Instrumentar el conteo de la lista en ONIA Center** — la métrica que gobierna todo el plan es "suscriptores", no "seguidores".
+5. **Instrumentar el conteo de la lista en Onia Center** — la métrica que gobierna todo el plan es "suscriptores", no "seguidores".
 
 ---
 

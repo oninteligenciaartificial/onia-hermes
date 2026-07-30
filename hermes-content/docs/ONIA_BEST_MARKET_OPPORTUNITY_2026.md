@@ -1,14 +1,14 @@
-# ONIA Best Market Opportunity 2026
+# Onia Best Market Opportunity 2026
 
 Fecha: 2026-06-05
 
-Objetivo: reevaluar la estrategia de contenido/canal para ONIA despues de detectar saturacion en el mercado generico de IA, CRM y automatizacion.
+Objetivo: reevaluar la estrategia de contenido/canal para Onia despues de detectar saturacion en el mercado generico de IA, CRM y automatizacion.
 
 ## Veredicto ejecutivo
 
 Sergio tiene razon: el mercado de contenido generico sobre "IA + CRM + automatizacion para negocios" esta muy lleno.
 
-La mejor opcion para ONIA no es competir como otro canal de herramientas IA. La mejor opcion es:
+La mejor opcion para Onia no es competir como otro canal de herramientas IA. La mejor opcion es:
 
 ```text
 ONIA Vertical Authority Engine:
@@ -33,7 +33,7 @@ Nombre de sistema editorial recomendado:
 Clinicas Sin Pacientes Perdidos
 ```
 
-Este no tiene que ser la marca legal. Puede ser una serie, playlist, landing y campana dentro de ONIA.
+Este no tiene que ser la marca legal. Puede ser una serie, playlist, landing y campana dentro de Onia.
 
 ## Por que cambiar
 
@@ -45,18 +45,18 @@ Problemas:
 - El contenido se vuelve generico rapido.
 - Es dificil diferenciar si no hay un producto propio claro.
 - El mercado USA tiene mas RPM, pero tambien mas competencia y menos ventaja local.
-- ONIA ya tiene activos comerciales reales en Bolivia/LatAm que un canal generico no aprovecha.
+- Onia ya tiene activos comerciales reales en Bolivia/LatAm que un canal generico no aprovecha.
 
 Mejor enfoque:
 
 - No vender conocimiento generico.
 - Vender una solucion vertical.
 - Usar contenido como prueba, diagnostico y captacion.
-- Conectar cada pieza con una oferta de ONIA.
+- Conectar cada pieza con una oferta de Onia.
 
 ## Evidencia local
 
-ONIA ya tiene:
+Onia ya tiene:
 
 - DentalGest: SaaS vertical para clinicas dentales.
 - 50 leads dentales investigados, 29 de prioridad alta.
@@ -83,9 +83,9 @@ Interpretacion:
 - La oportunidad no esta en decir "tenemos IA".
 - La oportunidad esta en adaptar la solucion a clinicas locales, idioma, seguimiento comercial, implementacion humana y oferta completa.
 
-## Ranking de oportunidades para ONIA
+## Ranking de oportunidades para Onia
 
-| Ranking | Oportunidad | Fit ONIA | Saturacion | Monetizacion | Velocidad | Decision |
+| Ranking | Oportunidad | Fit Onia | Saturacion | Monetizacion | Velocidad | Decision |
 |---:|---|---|---|---|---|---|
 | 1 | Clinicas dentales: agenda, WhatsApp, seguimiento, no-shows, presupuestos | Muy alto | Media | Muy alta | Alta | Usar primero |
 | 2 | Clinicas esteticas / salud privada por cita | Alto | Media | Alta | Media | Test despues |
@@ -109,22 +109,22 @@ Clinicas Sin Pacientes Perdidos
 Ayudamos a clinicas dentales a ordenar consultas, citas, presupuestos y seguimiento para que ningun paciente potencial quede perdido entre WhatsApp, Instagram, llamadas y hojas sueltas.
 ```
 
-### Oferta ONIA conectada
+### Oferta Onia conectada
 
 1. Auditoria Express de pacientes perdidos.
 2. Demo DentalGest.
 3. Landing o web de captacion.
 4. CRM/agenda/seguimiento.
 5. Videos Higgsfield educativos por tratamiento.
-6. Implementacion ONIA.
+6. Implementacion Onia.
 7. Retainer de seguimiento, contenido y reportes.
 
 ### Por que es mejor que canal general
 
-- ONIA ya tiene producto: DentalGest.
-- ONIA ya tiene leads.
-- ONIA ya tiene precios.
-- ONIA puede vender en Bolivia/LatAm sin competir por RPM USA.
+- Onia ya tiene producto: DentalGest.
+- Onia ya tiene leads.
+- Onia ya tiene precios.
+- Onia puede vender en Bolivia/LatAm sin competir por RPM USA.
 - El contenido se convierte en ventas, no solo vistas.
 - Cada pieza puede llevar a auditoria/demo.
 - La diferencia no es la IA; es entender clinicas dentales y seguimiento real.
@@ -205,7 +205,7 @@ Puede vivir como:
 
 - playlist de YouTube;
 - serie de Instagram/Reels;
-- landing en Web ONIA;
+- landing en Web Onia;
 - newsletter corta para clinicas;
 - deck de ventas;
 - demo library.
@@ -216,7 +216,7 @@ Cuando haya traccion:
 
 ## Ventaja defensible
 
-ONIA no debe competir con creadores de IA. Debe competir con el desorden operativo de clinicas locales.
+Onia no debe competir con creadores de IA. Debe competir con el desorden operativo de clinicas locales.
 
 Ventajas:
 
@@ -380,7 +380,7 @@ Una agenda te dice quien viene. Un CRM te dice quien pregunto, que queria, que s
 
 ## Decision final
 
-La mejor opcion para ONIA es pausar la idea de canal generico independiente y ejecutar primero una estrategia vertical:
+La mejor opcion para Onia es pausar la idea de canal generico independiente y ejecutar primero una estrategia vertical:
 
 ```text
 ONIA / DentalGest / Clinicas Sin Pacientes Perdidos

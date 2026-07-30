@@ -1,4 +1,4 @@
-# ONIA - Automatizaciones n8n en vivo (2026-07-04)
+# Onia - Automatizaciones n8n en vivo (2026-07-04)
 
 Workflows autónomos corriendo en el n8n del VPS
 (`https://n8n-sergio-n8n.hqdqgh.easypanel.host`), creados/gestionados por el **MCP
@@ -151,7 +151,7 @@ sin Telegram por no haber anomalias — comportamiento correcto).
   con guion completo: Telegram `message_id` 838.
 - **Agente Finanzas y Fondo ONIA** (`oKSTNdvS58ixBgnl`): `finance-fund-agent.mjs` +
   `finance-fund-agent-run.sh`. Determinista (sin LLM), READ-ONLY sobre la plata. Agrega caja
-  (income_entries), comisiones por estado (payment_commissions), Fondo ONIA (fund_allocation)
+  (income_entries), comisiones por estado (payment_commissions), Fondo Onia (fund_allocation)
   y riesgos (pagos bloqueados, uso premium sin aprobar, gastos pendientes sin evidencia) en
   `onia_center.finance_summary` (tabla nueva, migracion
   `20260709_onia_center_finance_summary.sql`, upsert 1 fila/dia). Telegram SOLO si hay

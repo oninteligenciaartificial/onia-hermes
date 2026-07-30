@@ -1,4 +1,4 @@
-# ONIA — Plan Ejecutable: Certificación SIAT como Sistema PROVEEDOR (2026)
+# Onia — Plan Ejecutable: Certificación SIAT como Sistema PROVEEDOR (2026)
 
 Fecha: 2026-07-05. Estado: plan ejecutable de la Capa 2 de
 `ONIA_FISCAL_CONTABILIDAD_STRATEGY_2026.md`.
@@ -6,21 +6,21 @@ Deadline de mercado: **30-sep-2026** — RND 102600000007 (25-mar-2026) prorroga
 hasta esa fecha la obligación de facturar EN LÍNEA para los grupos 9º-12º
 (el último tramo del padrón). Cada semana que pasa, miles de NITs buscan
 sistema autorizado: la cuenta regresiva ES el pitch.
-Owner: Sergio (legal/trámite) + dev ONIA (ingeniería).
+Owner: Sergio (legal/trámite) + dev Onia (ingeniería).
 
 ## 1. Resumen ejecutivo
 
-Certificar UN sistema ONIA ante el SIN como **Sistema Informático de
+Certificar UN sistema Onia ante el SIN como **Sistema Informático de
 Facturación de PROVEEDOR** (RND 102100000011, Art. 17: "sistema desarrollado
 por un tercero y autorizado por la Administración Tributaria" para uso de
 otros contribuyentes vía relación contractual).
 
 | | Proveedor (elegido) | Por-cliente (sistema propio de cada NIT) |
 |---|---|---|
-| Trámites | 1 certificación ONIA | 1 trámite completo POR cliente (fases 1-3) |
+| Trámites | 1 certificación Onia | 1 trámite completo POR cliente (fases 1-3) |
 | Alta de cliente | Asociación + confirmación + token delegado (días) | Semanas de pruebas por NIT |
 | Escala | N clientes, todos los verticales | No escala |
-| Titular ante el SIN | ONIA (sistema); el cliente sigue siendo el emisor | Cada cliente |
+| Titular ante el SIN | Onia (sistema); el cliente sigue siendo el emisor | Cada cliente |
 
 El SIN contempla explícitamente el escenario SaaS: "el proveedor factura por
 el contribuyente" con credenciales/token delegado (siatanexo, Sistema
@@ -40,14 +40,14 @@ Profesional, incluido en Empresa).
 
 ## 2. Requisitos exactos (fuente citada; lo no confirmado = [VERIFICAR])
 
-### 2.1 Legales — ONIA como empresa proveedora
+### 2.1 Legales — Onia como empresa proveedora
 
 > **CONFIRMADO 2026-07-08 (subagente, fuentes oficiales): el SEPREC NO es
 > requisito para registrar el sistema de facturación.** La RND 102100000011
 > **Art. 19** (requisitos de acreditación del proveedor) exige 4 cosas y
 > ninguna es la matrícula de comercio: (a) inscrito en el RNC/Padrón y en
 > **Régimen General**; (b) **domicilio fiscal** en el país; (c) información
-> actualizada en el RNC; (d) sin marcas de riesgo tributario activas. ONIA,
+> actualizada en el RNC; (d) sin marcas de riesgo tributario activas. Onia,
 > con el NIT activo, **puede iniciar el registro del sistema YA**, con el
 > SEPREC en trámite. Fuente: [PDF RND compilada 16/06/2025](https://www.impuestos.gob.bo/wp-content/uploads/2025/10/RND11.pdf)
 > Art. 19 + [Proceso de autorización SIAT](https://siatinfo.impuestos.gob.bo/index.php/facturacion-en-linea/autorizacion-de-sistemas/proceso-de-autorizacion).
@@ -61,11 +61,11 @@ Profesional, incluido en Empresa).
 > ADSIB→AGETIC (DS 5519, competencias trasladadas 15-ene-2026): solo afecta la
 > modalidad **Electrónica en Línea** (firma digital). La modalidad recomendada
 > **Computarizada en Línea** usa CUIS/CUFD + hash SHA-256, sin firma digital →
-> el reordenamiento institucional NO bloquea a ONIA.
+> el reordenamiento institucional NO bloquea a Onia.
 
 | # | Requisito | Estado / Fuente |
 |---|---|---|
-| 1 | **NIT activo** en Régimen General (Art. 19.a) | ✅ ONIA lo tiene · [PDF RND Art.19](https://www.impuestos.gob.bo/wp-content/uploads/2025/10/RND11.pdf) |
+| 1 | **NIT activo** en Régimen General (Art. 19.a) | ✅ Onia lo tiene · [PDF RND Art.19](https://www.impuestos.gob.bo/wp-content/uploads/2025/10/RND11.pdf) |
 | 2 | **Domicilio fiscal** en el país (Art. 19.b) | Art. 19.b |
 | 3 | **Información actualizada en el RNC** (Art. 19.c) | Art. 19.c |
 | 4 | **Sin marcas de riesgo tributario activas** (Art. 19.d) | Art. 19.d — verificar en Oficina Virtual |
@@ -74,8 +74,8 @@ Profesional, incluido en Empresa).
 | 7 | Autorización del sistema: vigencia 3 años; renovar con pruebas vigentes | RND Art. 20 |
 | 8 | Relación contractual con cada cliente + tipo de servicio declarado al asociar (licencia/alquiler/servicio web/facturación por terceros) | siatinfo/asociacion-de-sistemas |
 | 9 | Responsabilidad: el cliente responde por el tributo; el proveedor por fallas de emisión del sistema | RND Art. 34 |
-| 10 | Actividad económica "software/servicios informáticos" en el padrón del NIT | **RECOMENDADO, no requisito formal**: Art. 19 NO lo exige para sistemas (sí para imprentas, Art. 61) — pero refuerza "info actualizada en RNC" y evita observación. Cargarla igual por la propia obligación IVA de ONIA. Flujo exacto de alta de actividad 2026: NO CONFIRMADO, verificar en Oficina Virtual del SIN |
-| 11 | ~~Inscripción SEPREC~~ | **NO bloquea el registro del sistema** (Art. 19 no la pide). SEPREC y NIT se tramitan en cualquier orden; ONIA con NIT + SEPREC en trámite es situación normal y permitida |
+| 10 | Actividad económica "software/servicios informáticos" en el padrón del NIT | **RECOMENDADO, no requisito formal**: Art. 19 NO lo exige para sistemas (sí para imprentas, Art. 61) — pero refuerza "info actualizada en RNC" y evita observación. Cargarla igual por la propia obligación IVA de Onia. Flujo exacto de alta de actividad 2026: NO CONFIRMADO, verificar en Oficina Virtual del SIN |
+| 11 | ~~Inscripción SEPREC~~ | **NO bloquea el registro del sistema** (Art. 19 no la pide). SEPREC y NIT se tramitan en cualquier orden; Onia con NIT + SEPREC en trámite es situación normal y permitida |
 
 ### 2.2 Técnicos — el sistema
 
@@ -218,7 +218,7 @@ del deadline es el riesgo de calendario más real.
 |---|---|---|
 | S1 | 07-12 jul | Sergio: inicia SEPREC+NIT. Dev: RND+XSD/WSDL leídos; diseño emitter + contrato API interna |
 | S2 | 13-19 jul | Cliente SOAP piloto: CUIS/CUFD; generador CUF con tests (mod 11/base 16); schema multi-tenant |
-| S3 | 20-26 jul | Sincronización catálogos; builder XML compra-venta + validación XSD + hash; **NIT ONIA emitido** |
+| S3 | 20-26 jul | Sincronización catálogos; builder XML compra-venta + validación XSD + hash; **NIT Onia emitido** |
 | S4 | 27 jul-02 ago | Registro del sistema (código de sistema piloto); Fase 1 etapas I-III (CUIS 2, catálogos 50, CUFD 100) |
 | S5 | 03-09 ago | Fase 1 etapa IV: 500 emisiones online/offline; representación gráfica (PDF + rollo) |
 | S6 | 10-16 ago | Fase 1 etapas V-VII y XI: eventos, paquetes, 250 anulaciones, 98 reversiones; contingencia automática |
@@ -237,7 +237,7 @@ con producción en S12-S13. Si se corre más, opera el plan B.
 
 | Riesgo | Prob. | Mitigación |
 |---|---|---|
-| NIT ONIA demora (bloqueo #1) | media | iniciar S1; TODO el desarrollo (pasos 2,4,6) avanza sin NIT; plan B-a |
+| NIT Onia demora (bloqueo #1) | media | iniciar S1; TODO el desarrollo (pasos 2,4,6) avanza sin NIT; plan B-a |
 | Agenda de inspección del SIN saturada por el rush del deadline | alta | solicitar Fase 2 apenas termine Fase 1; pedir modalidad virtual |
 | Cambios normativos (nueva RND, versionamiento de servicios) | media | radar RND semanal ya vivo en n8n → WorkItem |
 | Carga/estabilidad del piloto SIN en agosto-sep | media | reintentos+cola; ventanas nocturnas para lotes de prueba |
@@ -248,13 +248,13 @@ con producción en S12-S13. Si se corre más, opera el plan B.
 - **B-a. Sistema PROPIO del cliente piloto (computarizada en línea)**: la
   clínica (titular NIT) registra NUESTRO software como sistema de uso propio
   y pasa las mismas fases 1-3 con nuestro acompañamiento. SÍ aplica: no
-  requiere NIT ONIA, valida el motor completo con un NIT real y deja un
+  requiere NIT Onia, valida el motor completo con un NIT real y deja un
   cliente facturando legal. NO escala (cada cliente repetiría su trámite):
   usarlo solo con 1-2 clientes fundadores, migrarlos por asociación cuando
   salga la certificación proveedor.
 - **B-b. Portal Web en Línea (gratuito del SIN)**: puente operativo para
   clientes de muy bajo volumen — facturan manual en el portal mientras
-  esperan el onboarding; ONIA les da el resto del sistema (agenda, cobros,
+  esperan el onboarding; Onia les da el resto del sistema (agenda, cobros,
   RCV del Contador Pack).
 - **B-c. Reventa/white-label de un proveedor ya autorizado** (Emizor,
   GuruSoft, Sintic…): último recurso para no perder ventas del deadline;
@@ -263,7 +263,7 @@ con producción en S12-S13. Si se corre más, opera el plan B.
 Competencia (proveedores activos visibles): Emizor, Gosocket, GuruSoft,
 EDICOM, Sintic, EERPBO, YoFacturo, Facturación Fácil, NWC, Growing Cloud.
 La "Lista de Proveedores v2.0" oficial se consulta dentro del portal SIAT
-(con login); precios públicos escasos — ventaja ONIA: la facturación viene
+(con login); precios públicos escasos — ventaja Onia: la facturación viene
 DENTRO del sistema de gestión del rubro, no como app suelta.
 
 ## 7. Fuentes

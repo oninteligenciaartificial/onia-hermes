@@ -3,7 +3,7 @@
 Fecha: 2026-07-03.
 Estado: plan de adopcion propuesto — requiere aprobacion de Sergio para tocar
 el repo producto.
-Owner: ONIA / Hermes.
+Owner: Onia / Hermes.
 Contrato base: `onia-core/contract.json` v0.3.x (beta).
 Repo destino: `C:\dev\proyectos\DentaGest\dental-saas`.
 
@@ -183,7 +183,7 @@ agregan tablas core.
 > respuestas configuran solo: canales con ruteo, roles finos del equipo,
 > tipos de pendiente, partners, reglas de aprobacion con umbral de descuento,
 > SavedViews del panel del dueno, y si hay datos para importar crea un
-> pendiente prioritario "Coordinar carga inicial con ONIA" (= gancho de la
+> pendiente prioritario "Coordinar carga inicial con Onia" (= gancho de la
 > implementacion pagada). Dashboard muestra "Completar configuracion inicial"
 > hasta que se haga. Guardado idempotente (re-ejecutable). 173 tests.
 > **Falta del sprint:** ImportBatch dry-run real (la carga guiada se coordina

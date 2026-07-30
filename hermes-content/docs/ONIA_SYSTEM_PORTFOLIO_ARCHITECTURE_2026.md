@@ -2,12 +2,12 @@
 
 Estado: borrador canonico interno
 Fecha: 2026-06-20
-Uso: definir que hace cada sistema de ONIA, donde pertenece cada modulo y como
+Uso: definir que hace cada sistema de Onia, donde pertenece cada modulo y como
 evitar funciones repetidas al vender soluciones a empresas distintas.
 
 ## Veredicto
 
-ONIA no debe construir un sistema aislado para cada cliente desde cero.
+Onia no debe construir un sistema aislado para cada cliente desde cero.
 Tampoco debe meter todos los rubros en una sola aplicacion confusa.
 
 Decision recomendada:
@@ -29,7 +29,7 @@ Pero por dentro debe construirse como parte de:
 GestiOS Empresas / ONIA Operaciones
 ```
 
-Asi Bolivian recibe algo hecho a su medida, y ONIA gana una plataforma vendible
+Asi Bolivian recibe algo hecho a su medida, y Onia gana una plataforma vendible
 a importadoras, distribuidoras, ferreterias, repuestos, almacenes y empresas
 familiares.
 
@@ -45,17 +45,17 @@ Personalizar configuracion, flujos, nombres, reportes, roles e integraciones.
 No duplicar logica central ni copiar/pegar sistemas completos.
 ```
 
-## Capas del portafolio ONIA
+## Capas del portafolio Onia
 
 | Capa | Que es | Quien la usa | Se vende? |
 |---|---|---|---|
 | Hermes | cerebro interno, memoria, orquestacion, docs, aprobaciones | ONIA/Sergio | no como app directa |
-| ONIA Core | base multiempresa: usuarios, roles, tareas, clientes, reportes | productos ONIA | si, como sistema |
+| ONIA Core | base multiempresa: usuarios, roles, tareas, clientes, reportes | productos Onia | si, como sistema |
 | GestiOS | primera implementacion de ONIA Core para empresas operativas | clientes pyme/empresa | si, como producto |
 | Modulos operativos | CRM, inventario, dashboard, conocimiento, contenido, gastos | empresas segun necesidad | si, como add-ons |
 | Verticales | DentalGest, Bolivian Electric OS, Ganadero OS, etc. | rubros concretos | si, por industria |
 | Adaptadores | TR4, WhatsApp, Excel, APIs, Meta, SIAT si aplica | cliente especifico | se cotiza aparte |
-| Servicios ONIA | diagnostico, capacitacion, implementacion, contenido | cliente humano/equipo | si, siempre |
+| Servicios Onia | diagnostico, capacitacion, implementacion, contenido | cliente humano/equipo | si, siempre |
 
 ## Sistemas y responsabilidades
 
@@ -63,7 +63,7 @@ No duplicar logica central ni copiar/pegar sistemas completos.
 
 Rol:
 
-- centro de mando interno de ONIA;
+- centro de mando interno de Onia;
 - documenta, coordina, decide, prepara mensajes, planes y propuestas;
 - ayuda a Sergio a dirigir proyectos y clientes.
 
@@ -83,7 +83,7 @@ No debe hacer:
 - almacenar datos operativos sensibles de clientes sin arquitectura clara;
 - ser vendido como "el sistema del cliente" sin empaquetarlo.
 
-### 2. GestiOS Empresas / ONIA Operaciones
+### 2. GestiOS Empresas / Onia Operaciones
 
 Rol:
 
@@ -172,11 +172,11 @@ No debe hacer al inicio:
 
 Rol:
 
-- puente entre TR4 y la capa ONIA.
+- puente entre TR4 y la capa Onia.
 
 Etapas posibles:
 
-1. Exportacion manual: TR4 -> Excel/CSV/PDF -> ONIA.
+1. Exportacion manual: TR4 -> Excel/CSV/PDF -> Onia.
 2. Importador asistido: cargar reportes de TR4 y normalizarlos.
 3. Scraping controlado: solo si hay permiso, estabilidad y reglas claras.
 4. API/base de datos: solo si TR4 lo permite y la empresa aprueba.
@@ -214,7 +214,7 @@ No debe hacer:
 - modificar TR4 sin adaptador aprobado;
 - funcionar offline completo en MVP salvo que se cotice.
 
-### 7. Content Engine ONIA
+### 7. Content Engine Onia
 
 Rol:
 
@@ -261,7 +261,7 @@ No debe hacer:
 - exponer informacion sensible sin permisos;
 - reemplazar supervision humana en decisiones importantes.
 
-### 9. Web ONIA / Web Factory
+### 9. Web Onia / Web Factory
 
 Rol:
 
@@ -435,7 +435,7 @@ Objetivo:
 - ver que usan realmente;
 - detectar que hacen fuera de TR4;
 - identificar datos exportables;
-- definir si ONIA complementa, importa o integra.
+- definir si Onia complementa, importa o integra.
 
 ### Fase 1 - Diagnostico + capacitacion + mini piloto
 
@@ -451,7 +451,7 @@ Modulo recomendado:
 - base de conocimiento + seguimiento comercial;
 - o inventario camara discovery si almacen duele mas.
 
-### Fase 2 - Capa operativa ONIA
+### Fase 2 - Capa operativa Onia
 
 Objetivo:
 
@@ -526,7 +526,7 @@ Objetivo:
 - flujo de venta;
 - mensaje de presentacion.
 
-### Domingo - Revision ONIA
+### Domingo - Revision Onia
 
 - decidir que se vende;
 - decidir que se construye;

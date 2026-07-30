@@ -1,6 +1,6 @@
 # Hermes Product Bridge — DentalGest (2026)
 
-Runbook del puente entre el gateway Telegram de ONIA (Hermes) y los productos
+Runbook del puente entre el gateway Telegram de Onia (Hermes) y los productos
 ONIA Core. Primer producto conectado: DentalGest. Comandos: `/dentalgest` y
 `/tarea`.
 

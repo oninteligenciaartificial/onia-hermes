@@ -1,13 +1,13 @@
-# ONIA cierre de dia - 2026-06-23
+# Onia cierre de dia - 2026-06-23
 
 ## Operativo validado hoy
 
 | Frente | Estado | Evidencia |
 |---|---|---|
-| ONIA Center | Operativo a nivel codigo/build | `npm run validate:onia-center` paso. `npm run build` paso en `web-factory/apps/site`. |
-| Dashboard/operacion ONIA Center | Listo para seguir usando en local/desarrollo | El build incluye `/onia-center`, `/vendedores` y rutas Nuvia. |
-| Modelo operativo ONIA Center | Listo en repo | Validacion reporto servicios, operacion, ideas/accesos y calendario Sergio. |
-| ONIA Motor Local Growth | Servicio prioritario cargado | Validacion confirma setup Bs. 2.900, mensualidad Bs. 1.900, Fondo ONIA 40%. |
+| Onia Center | Operativo a nivel codigo/build | `npm run validate:onia-center` paso. `npm run build` paso en `web-factory/apps/site`. |
+| Dashboard/operacion Onia Center | Listo para seguir usando en local/desarrollo | El build incluye `/onia-center`, `/vendedores` y rutas Nuvia. |
+| Modelo operativo Onia Center | Listo en repo | Validacion reporto servicios, operacion, ideas/accesos y calendario Sergio. |
+| Onia Motor Local Growth | Servicio prioritario cargado | Validacion confirma setup Bs. 2.900, mensualidad Bs. 1.900, Fondo Onia 40%. |
 | Calendario Sergio privado | Listo en codigo y migraciones | Validacion confirma 4 tablas privadas del calendario. |
 | AlfredHQ / Telegram personal | Listo en repo | Comandos personales y modo Higgsfield silencioso quedaron documentados y en router local. |
 | Propuesta de gastos Bs. 15.000 | Lista y subida | Markdown y PDF actualizados como lista literal de gastos. |
@@ -26,10 +26,10 @@
 
 | Pendiente | Prioridad | Motivo |
 |---|---|---|
-| Aplicar migraciones ONIA Center en Supabase real | Alta | El repo esta listo, pero la base productiva debe recibir schema/seed/RLS. |
+| Aplicar migraciones Onia Center en Supabase real | Alta | El repo esta listo, pero la base productiva debe recibir schema/seed/RLS. |
 | Reimportar o actualizar workflow n8n programado | Alta | El repo ya cambio Higgsfield a manual/silencioso; falta confirmar n8n vivo. |
 | Activar auth/roles reales para equipo | Alta | Arthur/vendedores no deben ver capital, deuda ni estrategia privada. |
-| Conectar ONIA Center a datos reales de Supabase | Alta | Hoy compila y valida estructura; falta operacion con DB real y usuarios. |
+| Conectar Onia Center a datos reales de Supabase | Alta | Hoy compila y valida estructura; falta operacion con DB real y usuarios. |
 | Backups del servidor local/self-hosted | Alta | No mover datos criticos sin backup diario y copia externa. |
 | Revisar visualmente cutouts Nuvia por lote | Media | Los PNG no estan corruptos, pero falta QA visual de calidad comercial. |
 | Confirmar costos proveedor Nuvia | Alta | No comprar inventario ni prometer margen sin costo real. |

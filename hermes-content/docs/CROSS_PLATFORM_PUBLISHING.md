@@ -1,4 +1,4 @@
-# Cross-Platform Publishing - ONIA / Hermes
+# Cross-Platform Publishing - Onia / Hermes
 
 ## Purpose
 
@@ -219,7 +219,7 @@ Sergio:
 - no guru tone;
 - CTA: "escribeme tu rubro", "demo", "te muestro el sistema".
 
-ONIA:
+Onia:
 
 - educational;
 - systems and conversion language;

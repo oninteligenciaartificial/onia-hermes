@@ -7,7 +7,7 @@ Use AlfredHQ as the personal operating bot for now. Do not create a second bot y
 Reason:
 
 - The current issue is scheduled commands pushing Video Lab/Higgsfield noise, not the bot identity.
-- One bot keeps ONIA operations, agenda and personal reminders in one controlled inbox.
+- One bot keeps Onia operations, agenda and personal reminders in one controlled inbox.
 - A second bot adds credentials, routing, monitoring and maintenance before the process is stable.
 
 Create a new bot only if AlfredHQ becomes shared with team members, if Sergio wants a separate personal Telegram channel, or if the router cannot enforce private/quiet commands safely.
@@ -21,7 +21,7 @@ Priority order:
 1. Sleep and health.
 2. Gym and personal life blocks.
 3. Sales and client delivery.
-4. ONIA Center/system work.
+4. Onia Center/system work.
 5. Content and Video Lab.
 6. Higgsfield generation.
 
@@ -32,7 +32,7 @@ Priority order:
 | 06:30-07:00 | Wake/reset | No phone, no meetings. |
 | 07:00-07:30 | CEO plan | Cash, sales and 3 priorities. |
 | 08:30-10:30 | Sales/CRM | Leads, calls, proposals, followups. |
-| 10:45-11:30 | Deep work short | ONIA Center, delivery or client work. |
+| 10:45-11:30 | Deep work short | Onia Center, delivery or client work. |
 | 11:30-12:30 | Meeting window 1 | Demos, diagnostics, paid meetings. |
 | 12:30-13:15 | Lunch/reset | No meetings. |
 | 13:15-15:15 | Delivery/build | No calls unless urgent paid client. |
@@ -98,8 +98,8 @@ New rule:
 
 ## Implementation Status
 
-- ONIA Center UI: `web-factory/apps/site/src/app/onia-center/operating-workspace.tsx`
-- ONIA Center source data: `web-factory/apps/site/src/app/onia-center/operating-source.ts`
+- Onia Center UI: `web-factory/apps/site/src/app/onia-center/operating-workspace.tsx`
+- Onia Center source data: `web-factory/apps/site/src/app/onia-center/operating-source.ts`
 - Supabase schema: `supabase/migrations/20260623_onia_center_sergio_calendar.sql`
 - Supabase seed: `supabase/migrations/20260623_onia_center_sergio_calendar_seed.sql`
 - Telegram router: `scripts/hermes_command_center.py`

@@ -1,4 +1,4 @@
-# ONIA Nuvia Accounting Model 2026
+# Onia Nuvia Accounting Model 2026
 
 Estado: interno Sergio/ONIA.
 Fecha: 2026-06-21.
@@ -6,7 +6,7 @@ Visibilidad: privado Sergio/ONIA. No enviar completo a Arthur.
 
 ## Veredicto
 
-ONIA y Nuvia no pueden sobrevivir si todo se reparte como ganancia antes de
+Onia y Nuvia no pueden sobrevivir si todo se reparte como ganancia antes de
 recuperar costos, capital, herramientas y reservas.
 
 Decision operativa:
@@ -16,7 +16,7 @@ Primero costos. Luego supervivencia ONIA/Nuvia. Luego pagos operativos
 presupuestados, si existen. Luego utilidad y ganancia de Sergio como dueno.
 ```
 
-Arthur se maneja como colaborador comercial-operativo en ONIA general. En
+Arthur se maneja como colaborador comercial-operativo en Onia general. En
 Nuvia, su ganancia financiera depende del capital real por lote/campana. La
 unica excepcion historica es su aporte de Bs. 300 al primer lote de productos
 de Nuvia, que se respeta solo para ese lote.
@@ -25,14 +25,14 @@ de Nuvia, que se respeta solo para ese lote.
 
 | Centro | Para que sirve | Responsable |
 |---|---|---|
-| ONIA Servicios | Webs, automatizaciones, consultoria, SaaS, sistemas, auditorias. | Sergio |
-| Fondo ONIA | Herramientas, apps, IA, VPS, caja critica y recuperacion de capital. | Sergio |
+| Onia Servicios | Webs, automatizaciones, consultoria, SaaS, sistemas, auditorias. | Sergio |
+| Fondo Onia | Herramientas, apps, IA, VPS, caja critica y recuperacion de capital. | Sergio |
 | Capital Sergio/ONIA | Aporte de Bs. 15.000, deuda, reservas y compras aprobadas. | Sergio |
-| Capital Arthur Recuperable | Apps o gastos mensuales ONIA pagados por Arthur con aprobacion de Sergio. | Sergio aprueba |
+| Capital Arthur Recuperable | Apps o gastos mensuales Onia pagados por Arthur con aprobacion de Sergio. | Sergio aprueba |
 | Nuvia | Producto, inventario, empaque, ventas, campanas y reparto Nuvia. | Sergio |
 | Reserva Nuvia | Reposicion, empaques, devoluciones, muestras y logistica futura. | Sergio |
-| ONIA Media | Videos, filmaciones, canales, activos publicitarios y contenido. | Sergio |
-| Sergio ingreso dueno | Ganancia/retiro de Sergio despues de proteger ONIA. | Sergio |
+| Onia Media | Videos, filmaciones, canales, activos publicitarios y contenido. | Sergio |
+| Sergio ingreso dueno | Ganancia/retiro de Sergio despues de proteger Onia. | Sergio |
 | Arthur pago operativo | Pago fijo aprobado antes por trabajo real, cierre, seguimiento o lote 001. | Sergio aprueba |
 
 Regla:
@@ -57,7 +57,7 @@ Cada ingreso, gasto o inversion debe guardar:
 10. comprobante o nota;
 11. estado: pendiente, aprobado, pagado, recuperado, perdido o cerrado.
 
-## Orden de caja ONIA Servicios
+## Orden de caja Onia Servicios
 
 Usar para webs, auditorias, automatizaciones, sistemas, consultoria y SaaS.
 
@@ -80,16 +80,16 @@ Durante la prueba de 60 dias:
 
 | Concepto | Regla |
 |---|---|
-| Fondo ONIA Servicios | 40% del ingreso neto operativo cuando aplica el acuerdo Arthur. |
+| Fondo Onia Servicios | 40% del ingreso neto operativo cuando aplica el acuerdo Arthur. |
 | Arthur | 0% a 50% segun participacion real, evidencia y nivel de rescate de Sergio. |
 | Sergio | Minimo 10% cuando Arthur hace todo aprobado; sube si Sergio vende, corrige, dirige, rescata o termina. |
 
-Sergio puede recibir utilidad del proyecto solo despues de registrar Fondo ONIA,
+Sergio puede recibir utilidad del proyecto solo despues de registrar Fondo Onia,
 costos y pagos variables aprobados.
 
 La recuperacion del capital Sergio/ONIA y de aportes operativos Arthur se
 calcula con la politica canonica de
-`ONIA_CAPITAL_RECOVERY_AND_ARTHUR_INVESTMENT_POLICY_2026.md`. El 40% Fondo ONIA
+`ONIA_CAPITAL_RECOVERY_AND_ARTHUR_INVESTMENT_POLICY_2026.md`. El 40% Fondo Onia
 no es dinero libre: primero cubre herramientas, caja chica y reserva minima; solo
 el excedente se usa para recuperar capital.
 
@@ -240,7 +240,7 @@ Nuvia necesita dos protecciones:
 
 | Fondo | Porcentaje | Para que sirve |
 |---|---:|---|
-| Fondo ONIA | 20% del margen real | Paga uso de marca, sistema, herramientas, direccion, Higgsfield y ONIA Center. |
+| Fondo Onia | 20% del margen real | Paga uso de marca, sistema, herramientas, direccion, Higgsfield y Onia Center. |
 | Caja chica Nuvia | Monto fijo por cierre | Bolsas extra, transporte menor, cambios, entregas pequenas, imprevistos y supervivencia. |
 | Reserva Nuvia bootstrap | 20% del margen real | Recomprar producto, bolsas, transporte, devoluciones y muestras mientras Nuvia no vive sola. |
 | Reserva Nuvia estable | 10% del margen real | Mantener reposicion cuando Nuvia ya tiene caja propia. |
@@ -272,7 +272,7 @@ Nuvia puede pasar de reserva bootstrap a reserva estable solo cuando cumpla:
 3. no depender de capital nuevo Sergio para comprar producto;
 4. stock critico cubierto;
 5. sin gastos premium sin recuperar;
-6. ventas registradas en ONIA Center.
+6. ventas registradas en Onia Center.
 
 ## Cuando Nuvia vive sola
 
@@ -303,7 +303,7 @@ Despues de ese punto:
 - Arthur puede ganar mejor si aporta capital real, opera un rol aprobado o se
   define un pago fijo por tarea rentable;
 - se pueden probar campañas con presupuesto de Nuvia, no con caja ciega de
-  ONIA.
+  Onia.
 
 ## Diferencia entre capital, utilidad y variable
 
@@ -312,8 +312,8 @@ Para evitar malentendidos:
 | Concepto | Que significa | Quien lo recibe |
 |---|---|---|
 | Devolucion de capital | Recuperar lo que alguien puso para comprar producto, pauta o costo directo aprobado. | Quien puso ese dinero. |
-| Fondo ONIA | Porcion para sostener herramientas, apps, IA, VPS, caja y recuperacion de capital ONIA. | ONIA/Sergio controla. |
-| Aporte operativo recuperable | Apps, IA, VPS o gasto mensual ONIA pagado por Arthur con aprobacion previa. | Arthur recupera solo desde excedente Fondo ONIA. |
+| Fondo Onia | Porcion para sostener herramientas, apps, IA, VPS, caja y recuperacion de capital Onia. | ONIA/Sergio controla. |
+| Aporte operativo recuperable | Apps, IA, VPS o gasto mensual Onia pagado por Arthur con aprobacion previa. | Arthur recupera solo desde excedente Fondo Onia. |
 | Reserva Nuvia | Caja para recomprar producto, empaques, devoluciones, muestras y logistica. | Nuvia, control Sergio. |
 | Pago operativo presupuestado | Pago fijo por tarea de venta, seguimiento, contenido o entrega, incluido como costo antes de vender. | Arthur u operador aprobado. |
 | Utilidad inversionista | Ganancia despues de costos, fondos, caja chica y pagos operativos presupuestados. | Segun quien puso capital real. |
@@ -342,15 +342,15 @@ Reglas:
 
 1. Arthur conserva derecho economico sobre su aporte de Bs. 300 solo en el Lote
    Nuvia 001.
-2. Ese aporte no le da propiedad sobre ONIA, herramientas, marca, Higgsfield,
+2. Ese aporte no le da propiedad sobre Onia, herramientas, marca, Higgsfield,
    Meta Ads, canales, sistemas ni futuros lotes.
 3. Si el Lote 001 se vende sin pauta nueva ni costos premium pagados por
    Sergio/ONIA, la utilidad distribuible puede repartirse 50% Sergio y 50%
-   Arthur despues de Fondo ONIA, caja chica y Reserva Nuvia.
+   Arthur despues de Fondo Onia, caja chica y Reserva Nuvia.
 4. Si Sergio/ONIA paga Meta Ads, Higgsfield, produccion, transporte adicional o
    costos nuevos para vender el Lote 001, esos costos se recuperan primero.
 5. Si Arthur no cofinancia esos costos nuevos, el reparto del Lote 001
-   financiado por ONIA pasa a una regla protegida: Sergio/ONIA 70% y Arthur 30%
+   financiado por Onia pasa a una regla protegida: Sergio/ONIA 70% y Arthur 30%
    de utilidad distribuible, salvo acuerdo escrito por campana.
 6. Si Arthur cofinancia 50% de producto, pauta y costos directos de una campana
    del Lote 001, puede volver a 50% de utilidad distribuible de esa campana.
@@ -363,9 +363,9 @@ Desde el siguiente lote, la regla cambia.
 |---|---|
 | Sergio/ONIA paga 100% producto/campana | Arthur no es socio financiero; solo puede tener pago fijo preaprobado como costo directo. |
 | Sergio/ONIA paga producto y Arthur trabaja | Arthur no cobra bono porcentual en bootstrap; su trabajo se paga como costo fijo aprobado si el margen lo permite. |
-| Sergio y Arthur pagan 50/50 producto, pauta y costos | Puede haber reparto hasta 50/50 despues de Fondo ONIA, caja chica y Reserva Nuvia. |
+| Sergio y Arthur pagan 50/50 producto, pauta y costos | Puede haber reparto hasta 50/50 despues de Fondo Onia, caja chica y Reserva Nuvia. |
 | Arthur pone menos de 50% de costos directos | Su participacion financiera se calcula proporcionalmente. |
-| ONIA pone herramientas, pauta o produccion premium | ONIA recupera primero y conserva control de reparto. |
+| Onia pone herramientas, pauta o produccion premium | Onia recupera primero y conserva control de reparto. |
 
 ## Pagos operativos en Nuvia
 
@@ -408,7 +408,7 @@ capital. El trabajo operativo se paga solo si fue costo aprobado antes de vender
 ### Caso A - Sergio financia 100%, Arthur no trabaja
 
 Arthur cobra 0%. Sergio/ONIA recupera capital y recibe utilidad despues de
-Fondo ONIA y Reserva Nuvia.
+Fondo Onia y Reserva Nuvia.
 
 ### Caso B - Sergio financia 100%, Arthur apoya poco
 
@@ -432,7 +432,7 @@ reserva propia y margen real probado.
 
 ### Caso E - Sergio pone 80% y Arthur 20%
 
-Se recupera capital 80/20. Luego, despues de Fondo ONIA y Reserva Nuvia:
+Se recupera capital 80/20. Luego, despues de Fondo Onia y Reserva Nuvia:
 
 - si Arthur no trabaja: utilidad de inversionistas 80/20;
 - si Arthur trabaja: puede tener pago fijo preaprobado como costo directo, y el
@@ -444,7 +444,7 @@ Se recupera capital 80/20. Luego, despues de Fondo ONIA y Reserva Nuvia:
 Puede existir reparto 50/50 de utilidad de inversionistas si ambos pusieron
 50% de producto, pauta y costos directos. Si uno trabaja mas, se puede acordar
 pago fijo operativo antes de la campana, pero ese pago entra como costo directo
-antes del margen. El Fondo ONIA, caja chica Nuvia y Reserva Nuvia siempre se
+antes del margen. El Fondo Onia, caja chica Nuvia y Reserva Nuvia siempre se
 descuentan antes de repartir utilidad.
 
 ### Caso G - Arthur pone capital pero no cumple trabajo
@@ -489,8 +489,8 @@ Venta - costos - pauta ONIA - herramientas premium = margen operativo
 
 Luego:
 
-- ONIA recupera pauta y costos primero;
-- Fondo ONIA recibe 20% de la ganancia bruta real;
+- Onia recupera pauta y costos primero;
+- Fondo Onia recibe 20% de la ganancia bruta real;
 - caja chica Nuvia se separa antes de repartir;
 - Reserva Nuvia recibe 20% en bootstrap o 10% cuando Nuvia viva sola;
 - Arthur no gana bono porcentual; solo pago fijo si fue presupuestado antes;
@@ -503,7 +503,7 @@ Si Arthur paga 50% de producto, pauta y costos directos aprobados:
 - ambos recuperan segun lo que pusieron;
 - ambos absorben perdida segun lo que pusieron;
 - utilidad distribuible puede repartirse hasta 50/50;
-- Fondo ONIA y Reserva Nuvia igual se descuentan antes.
+- Fondo Onia y Reserva Nuvia igual se descuentan antes.
 
 ### La campana pierde
 
@@ -519,13 +519,13 @@ Si Arthur cofinancio:
 
 ## Ingreso de Sergio como dueno
 
-Sergio debe ganar, pero sin matar ONIA.
+Sergio debe ganar, pero sin matar Onia.
 
 Orden:
 
 1. cubrir costos directos;
 2. cubrir herramientas y operacion;
-3. alimentar Fondo ONIA;
+3. alimentar Fondo Onia;
 4. alimentar Reserva Nuvia cuando sea Nuvia;
 5. recuperar capital Sergio/ONIA;
 6. pagar costos operativos presupuestados;
@@ -568,10 +568,10 @@ de pagar costos criticos de ONIA.
 
 ### Fin de mes
 
-- cerrar ONIA Servicios;
+- cerrar Onia Servicios;
 - cerrar Nuvia por lote/campana;
-- cerrar ONIA Media;
-- separar Fondo ONIA;
+- cerrar Onia Media;
+- separar Fondo Onia;
 - separar Reserva Nuvia;
 - calcular recuperacion o reparto Arthur si corresponde;
 - calcular retiro Sergio si corresponde;
@@ -587,7 +587,7 @@ de pagar costos criticos de ONIA.
 | Producto lote 001 | -Bs. 600 |
 | Bolsas/transporte | -Bs. 100 |
 | Margen operativo | Bs. 500 |
-| Fondo ONIA 20% | -Bs. 100 |
+| Fondo Onia 20% | -Bs. 100 |
 | Caja chica Nuvia | -Bs. 50 |
 | Reserva Nuvia bootstrap 20% | -Bs. 100 |
 | Utilidad distribuible | Bs. 250 |
@@ -597,17 +597,17 @@ de pagar costos criticos de ONIA.
 Ademas, cada uno recupera su capital de producto cuando el lote se repone/cierra
 segun registro.
 
-### Lote 001 con pauta pagada por ONIA
+### Lote 001 con pauta pagada por Onia
 
 | Concepto | Monto |
 |---|---:|
 | Ventas cobradas | Bs. 2.000 |
 | Producto lote 001 | -Bs. 600 |
 | Bolsas/transporte | -Bs. 150 |
-| Meta Ads pagado por ONIA | -Bs. 300 |
+| Meta Ads pagado por Onia | -Bs. 300 |
 | Produccion/Higgsfield prorrateado | -Bs. 150 |
 | Margen operativo | Bs. 800 |
-| Fondo ONIA 20% | -Bs. 160 |
+| Fondo Onia 20% | -Bs. 160 |
 | Caja chica Nuvia | -Bs. 50 |
 | Reserva Nuvia bootstrap 20% | -Bs. 160 |
 | Utilidad distribuible | Bs. 430 |
@@ -625,7 +625,7 @@ porque puso pauta, herramientas, produccion y riesgo adicional.
 | Devolucion capital producto Sergio | -Bs. 2.000 |
 | Empaque/logistica | -Bs. 250 |
 | Ganancia bruta real | Bs. 1.750 |
-| Fondo ONIA 20% | -Bs. 350 |
+| Fondo Onia 20% | -Bs. 350 |
 | Caja chica Nuvia | -Bs. 100 |
 | Reserva Nuvia bootstrap 20% | -Bs. 350 |
 | Utilidad distribuible | Bs. 950 |
@@ -635,7 +635,7 @@ Resultado Sergio:
 
 - recupera Bs. 2.000 de capital;
 - gana Bs. 950;
-- ONIA recibe Bs. 350;
+- Onia recibe Bs. 350;
 - Nuvia guarda Bs. 350 de reserva y Bs. 100 de caja chica.
 
 Arthur recibe Bs. 0 porque no puso capital. Si su trabajo de cierre se quiere
@@ -650,7 +650,7 @@ pagar, debe aprobarse como costo fijo antes de vender.
 | Empaque/logistica | -Bs. 250 |
 | Pago fijo Arthur aprobado antes | -Bs. 150 |
 | Ganancia bruta real | Bs. 1.600 |
-| Fondo ONIA 20% | -Bs. 320 |
+| Fondo Onia 20% | -Bs. 320 |
 | Caja chica Nuvia | -Bs. 100 |
 | Reserva Nuvia bootstrap 20% | -Bs. 320 |
 | Utilidad distribuible | Bs. 860 |
@@ -664,17 +664,17 @@ no como porcentaje de utilidad.
 
 Usar estas preguntas para cerrar la contabilidad sin pelear.
 
-1. Confirmas que en ONIA general eres colaborador/empleado variable y no socio
-   propietario de ONIA?
+1. Confirmas que en Onia general eres colaborador/empleado variable y no socio
+   propietario de Onia?
 2. Confirmas que tus Bs. 300 invertidos aplican solo al Lote Nuvia 001 y no a
-   futuros productos, herramientas, marca, campañas, sistemas ni ONIA Media?
-3. Para el Lote Nuvia 001, si se vende sin pauta nueva pagada por ONIA,
-   aceptas que se descuenten costos, 20% Fondo ONIA, caja chica y 20% Reserva
+   futuros productos, herramientas, marca, campañas, sistemas ni Onia Media?
+3. Para el Lote Nuvia 001, si se vende sin pauta nueva pagada por Onia,
+   aceptas que se descuenten costos, 20% Fondo Onia, caja chica y 20% Reserva
    Nuvia bootstrap antes de repartir?
 4. Si ONIA/Sergio paga Meta Ads, Higgsfield, produccion o costos nuevos para
    vender Nuvia, quieres cofinanciar 50% de esos costos o prefieres ganar como
    operador con pago fijo preaprobado solo si el margen lo permite?
-5. Si no cofinancias pauta/costos nuevos, aceptas que ONIA recupere primero y
+5. Si no cofinancias pauta/costos nuevos, aceptas que Onia recupere primero y
    que tu porcentaje baje porque Sergio esta asumiendo el riesgo?
 6. Para futuros lotes, quieres poner capital 50/50 real o prefieres no poner
    dinero y apoyar sin porcentaje de utilidad?
@@ -683,7 +683,7 @@ Usar estas preguntas para cerrar la contabilidad sin pelear.
    entregar productos o registrar CRM?
 8. Aceptas que no hay reparto Nuvia si no existe margen positivo despues de
    producto, bolsas, transporte, pauta, herramientas y costos directos?
-9. Aceptas que todo debe estar en ONIA Center/CRM para contar como venta,
+9. Aceptas que todo debe estar en Onia Center/CRM para contar como venta,
    gasto, cierre, comision o reparto?
 10. Prefieres cierre de Nuvia quincenal informativo y pago mensual, o pago
     quincenal solo cuando el lote/campana ya este cerrado y sin reclamos?

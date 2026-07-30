@@ -1,8 +1,8 @@
-# ONIA Center Monthly Agents and Calendar Control 2026-06-23
+# Onia Center Monthly Agents and Calendar Control 2026-06-23
 
 ## Decision
 
-ONIA Center debe tener agentes operativos internos que organicen el mes, pero
+Onia Center debe tener agentes operativos internos que organicen el mes, pero
 no deben actuar como autorizacion automatica.
 
 Los agentes pueden:
@@ -31,7 +31,7 @@ Los agentes no pueden:
 - Agente Ventas y CRM: leads, demos, seguimientos y tareas comerciales.
 - Agente Entrega y Proyectos: DentalGest, GestiOS, Webs, Bolivian, chatbots y automatizaciones.
 - Agente Calendario y Energia Sergio: levantarse, deep work, ventas, gym, novia, descanso y ventanas de reunion.
-- Agente Finanzas y Fondo ONIA: caja, Fondo ONIA, pagos bloqueados, gastos y uso premium.
+- Agente Finanzas y Fondo Onia: caja, Fondo Onia, pagos bloqueados, gastos y uso premium.
 - Agente Contenido y Media Lab: ideas, guiones, Remotion e Higgsfield manual.
 - Agente Self-hosted e Integraciones: Supabase, Cal, n8n, IA local, Dify, monitoring y collab.
 
@@ -93,7 +93,7 @@ Solo nombres, no valores:
 
 ## Orden de activacion
 
-1. Aplicar migraciones de ONIA Center en Supabase real.
+1. Aplicar migraciones de Onia Center en Supabase real.
 2. Crear usuarios reales y RLS por roles/memberships.
 3. Conectar Google Calendar server-side.
 4. Desplegar Cal y abrir solo ventanas permitidas.
@@ -120,7 +120,7 @@ No se deben abrir a clientes:
 Preparado:
 
 - modelo en TypeScript;
-- UI de agentes en ONIA Center;
+- UI de agentes en Onia Center;
 - migraciones y seed;
 - Google Calendar como conector explicito;
 - planes de sincronizacion calendario;
@@ -133,5 +133,5 @@ Pendiente:
 - Google OAuth;
 - Cal deploy final;
 - workflows n8n;
-- Telegram bot operativo conectado a ONIA Center;
+- Telegram bot operativo conectado a Onia Center;
 - endpoint IA para generar tareas desde agentes.

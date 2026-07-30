@@ -1,8 +1,8 @@
-# ONIA Deployment Models 2026
+# Onia Deployment Models 2026
 
 Fecha: 2026-07-03.
 Estado: modelos canonicos de entrega y plan de escala.
-Owner: ONIA / Hermes.
+Owner: Onia / Hermes.
 Responde: "como funcionaria en una empresa que quiera el sistema local?" y
 "como hosteo todo si ya tenemos muchos usuarios?" (Sergio, 2026-07-03).
 
@@ -27,7 +27,7 @@ ONIA administra por SSH; el cliente paga su VPS + gestion mensual a ONIA
 
 - Ya probado con Bolivian Electric (srv1793230). Para empresas medianas que
   quieren SU infraestructura sin operar nada.
-- Los datos quedan en el VPS del cliente; ONIA cobra la gestion (margen
+- Los datos quedan en el VPS del cliente; Onia cobra la gestion (margen
   recurrente sin costo de infra propio).
 
 ### Modelo C — On-premise / local (empresas que exigen todo adentro)
@@ -41,12 +41,12 @@ Servidor local de la empresa (o mini-PC/NUC) con Docker
 
 - El artefacto ya esta construido: el `docker-compose.selfhost` + la
   migracion de namespace (`dentalgest` schema) se hicieron exactamente para
-  esto, y hay un stack de ensayo corriendo en el VPS ONIA
+  esto, y hay un stack de ensayo corriendo en el VPS Onia
   (dentalgest-staging-supabase, healthy).
 - Como se vende: licencia anual + instalacion pagada + plan de soporte.
   Actualizaciones: `git pull + docker compose up` via tunel de soporte, en
   ventana acordada. Backups: script diario a disco externo + copia cifrada
-  opcional a storage ONIA.
+  opcional a storage Onia.
 - Requisito minimo cliente: una maquina con Docker (Linux ideal, pero
   Windows con Docker Desktop funciona para equipos chicos).
 - Integracion con sistemas locales del cliente (ej. TR4 de BE): al estar en
@@ -78,7 +78,7 @@ Reglas que ya estan decididas y aplican a cualquier etapa:
 1. **1 proyecto/DB por PRODUCTO, jamas por cliente** — 100 clinicas = 1 DB.
 2. **Cloud para velocidad de venta, selfhost para margen** (trigger: ~50
    orgs o US$100/mes por producto).
-3. El VPS ONIA actual (4 vCPU/15GB) es la plataforma interna, NO el hosting
+3. El VPS Onia actual (4 vCPU/15GB) es la plataforma interna, NO el hosting
    de productos con muchos usuarios: cuando un producto pegue, VPS propio
    dedicado para ese producto.
 4. Antes de mover cualquier DB de clientes: ensayo de backup+restore

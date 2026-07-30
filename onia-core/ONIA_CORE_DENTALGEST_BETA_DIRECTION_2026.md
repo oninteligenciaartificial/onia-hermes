@@ -2,7 +2,7 @@
 
 Fecha: 2026-06-29.
 Estado: decision de producto para beta inicial.
-Owner: ONIA / Hermes.
+Owner: Onia / Hermes.
 
 ## Respuestas de Sergio
 
@@ -123,7 +123,7 @@ El modelo correcto es ambos:
 2. Implementacion pagada:
    - cubre configuracion, carga inicial, capacitacion y adaptacion;
    - protege margen;
-   - evita que ONIA regale consultoria.
+   - evita que Onia regale consultoria.
 
 Oferta recomendada:
 

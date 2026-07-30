@@ -1,9 +1,9 @@
-# ONIA n8n / Telegram Cleanup - 2026-06-30
+# Onia n8n / Telegram Cleanup - 2026-06-30
 
 ## Objetivo
 
 Reducir ruido, gasto de tokens y automatizaciones heredadas en Telegram/n8n sin
-romper flujos utiles para ONIA Center, calendario, ventas ni clientes.
+romper flujos utiles para Onia Center, calendario, ventas ni clientes.
 
 Esta auditoria es de estado real observado en n8n el 2026-06-30. No se
 desactivo nada automaticamente durante la revision.
@@ -12,7 +12,7 @@ desactivo nada automaticamente durante la revision.
 
 Mantener un stack minimo:
 
-1. ONIA Center crea el plan diario y tareas por rol.
+1. Onia Center crea el plan diario y tareas por rol.
 2. Cal.com crea reuniones y avisa por Telegram.
 3. Google Calendar envia recordatorios proximos.
 4. n8n monitoriza fallos.
@@ -24,14 +24,14 @@ Pausar temporalmente:
 1. Empujes diarios de Video Lab / Higgsfield.
 2. Radar creativo diario con OpenAI web search.
 3. Demos diarias de clima/tip si no se estan usando para ventas.
-4. Briefings duplicados de agenda si ONIA Center ya envia el plan del dia.
-5. Flujos heredados de prueba o UDIA que no aportan a ONIA actual.
+4. Briefings duplicados de agenda si Onia Center ya envia el plan del dia.
+5. Flujos heredados de prueba o UDIA que no aportan a Onia actual.
 
 ## Mantener Activo
 
 | Workflow | ID | Motivo | Condicion |
 |---|---|---|---|
-| ONIA Center - Briefing diario operativo | `ONIADailyBrief001` | Es el flujo principal: crea tareas por rol en ONIA Center y notifica por Telegram. | Mantener. |
+| ONIA Center - Briefing diario operativo | `ONIADailyBrief001` | Es el flujo principal: crea tareas por rol en Onia Center y notifica por Telegram. | Mantener. |
 | ONIA - Agenda: Cal.com Booking | `X6gd3EBW7Y3z9xTg` | Convierte reservas Cal.com en eventos de Google Calendar y avisa a Sergio/Arthur. | Mantener, pero agregar validacion de webhook. |
 | ONIA - Agenda: Recordatorios | `uwqJDGwkkWJaFtLU` | Recordatorios de eventos proximos cada 30 minutos. | Mantener si no molesta; reducir frecuencia si hay ruido. |
 | ONIA - Monitor de Salud n8n | `drFWP7nttzvtZzso` | Avisa fallos reales de automatizaciones. | Mantener. |
@@ -42,7 +42,7 @@ Pausar temporalmente:
 ## Pausar Ahora
 
 Estos flujos son candidatos a `unpublish` temporal porque generan ruido, costo o
-errores y no son necesarios para operar ONIA Center hoy.
+errores y no son necesarios para operar Onia Center hoy.
 
 | Workflow | ID | Motivo |
 |---|---|---|
@@ -98,7 +98,7 @@ Afecta:
   ejecutar `hermes-command`.
 
 Recomendacion: reemplazar password SSH por credencial SSH key o eliminar la
-dependencia de SSH llamando endpoints internos de ONIA Center cuando sea
+dependencia de SSH llamando endpoints internos de Onia Center cuando sea
 posible.
 
 ### 2. Telegram Command Center no escucha Telegram directo
@@ -114,10 +114,10 @@ Mientras SSH falle, el command center no es confiable.
 ### 3. Flujos de IA diarios sin registro operativo
 
 Radar creativo y prospeccion diaria generan reportes por Telegram, pero no
-garantizan registro en ONIA Center/CRM. Si no se registran y se llaman, se
+garantizan registro en Onia Center/CRM. Si no se registran y se llaman, se
 vuelven ruido.
 
-Regla recomendada: todo reporte de prospeccion debe crear lead/tarea en ONIA
+Regla recomendada: todo reporte de prospeccion debe crear lead/tarea en Onia
 Center o no ejecutarse automaticamente.
 
 ### 4. Webhook Cal.com sin firma
@@ -130,7 +130,7 @@ produccion estricta.
 
 Activo:
 
-- ONIA Center briefing diario.
+- Onia Center briefing diario.
 - Cal.com booking.
 - Recordatorios de calendario.
 - Monitor de salud n8n.
@@ -162,10 +162,10 @@ Si Sergio confirma, ejecutar:
    - `GnmIyrHWb1mO5eNy`
    - `qdAEP9seSxp5whXh`
 2. Probar que siguen activos:
-   - ONIA Center briefing.
+   - Onia Center briefing.
    - Cal.com booking.
    - Recordatorios.
    - Monitor de salud.
 3. Corregir SSH o reemplazarlo por endpoints internos.
-4. Registrar en ONIA Center cualquier lead/tarea generado por prospeccion.
+4. Registrar en Onia Center cualquier lead/tarea generado por prospeccion.
 

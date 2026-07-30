@@ -108,7 +108,7 @@ Antes de recibir datos:
 - Responsable interno asignado.
 - Responsable tecnico de servidores asignado.
 - Alcance autorizado: que tablas, reportes o modulos se pueden revisar.
-- Confirmacion de que ONIA puede recibir, procesar y almacenar esa informacion
+- Confirmacion de que Onia puede recibir, procesar y almacenar esa informacion
   para implementar el CRM.
 
 No aceptar contrasenas personales ni accesos prestados.
@@ -225,7 +225,7 @@ Acciones:
 - Acceso por VPN o IP permitida.
 - Ejecutar sync fuera de horario critico.
 - Guardar logs.
-- Nunca escribir al sistema actual desde ONIA en esta fase.
+- Nunca escribir al sistema actual desde Onia en esta fase.
 
 Resultado:
 
@@ -245,7 +245,7 @@ Solo despues de aprobacion:
 
 Para fase 1:
 
-- CRM ONIA en entorno controlado.
+- CRM Onia en entorno controlado.
 - Base de datos separada.
 - Datos importados por archivo aprobado.
 - Acceso solo para gerencia.

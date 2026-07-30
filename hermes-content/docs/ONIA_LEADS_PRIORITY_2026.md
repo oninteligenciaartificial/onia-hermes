@@ -1,4 +1,4 @@
-# ONIA Leads Priority 2026
+# Onia Leads Priority 2026
 
 Fuente principal: `hermes-content/references/prospectos-clinicas-bolivia-2026.csv`.
 
@@ -22,7 +22,7 @@ Estado: cartera inicial investigada. No contactar sin aprobacion explicita.
 | DentalGest Clinica | Bs. 525 |
 | Landing | Bs. 79 |
 | Web Profesional | Bs. 180 |
-| Web Pro ONIA | Bs. 348 |
+| Web Pro Onia | Bs. 348 |
 | Auditoria Express | Bs. 25 |
 | Diagnostico + Plan | Bs. 69 |
 | Automatizacion simple n8n | Bs. 79 |
@@ -35,7 +35,7 @@ Estado: cartera inicial investigada. No contactar sin aprobacion explicita.
 | 2 | Odontoking Clinica Dental | Santa Cruz | Web y marca clara | Puede mejorar embudo y seguimiento | DentalGest Profesional | Web optimizada + CRM | Bs. 262,50 + upsell |
 | 3 | Odontolaser | Santa Cruz | Web, Facebook y tratamientos tecnologicos | Tratamientos especializados requieren seguimiento | DentalGest Profesional | Diagnostico + Plan | Bs. 262,50 + Bs. 69 |
 | 4 | Paz Dental | Santa Cruz | Web, Facebook, zona Equipetrol | Alto valor por paciente | DentalGest Profesional | Landing de tratamientos | Bs. 262,50 + upsell |
-| 5 | Estetic Dent Santa Cruz | Santa Cruz | Web estetica y autoridad profesional | Embudos por tratamiento estetico | DentalGest Profesional | Web Pro ONIA | Bs. 262,50 + Bs. 348 |
+| 5 | Estetic Dent Santa Cruz | Santa Cruz | Web estetica y autoridad profesional | Embudos por tratamiento estetico | DentalGest Profesional | Web Pro Onia | Bs. 262,50 + Bs. 348 |
 | 6 | CEO Clinica de Odontologia Especializada | Santa Cruz | Web y especialidad | Ortodoncia/odontopediatria con consultas repetitivas | DentalGest Profesional | Web + contenido educativo manual | Bs. 262,50 + upsell |
 | 7 | Clinica Dental Cortez | La Paz | Web y email publico | Captacion web y seguimiento de citas | DentalGest Profesional | Landing | Bs. 262,50 + Bs. 79 |
 | 8 | Clinica Dental Love | La Paz | Marca clara y email con dominio | Integrar redes, agenda y seguimiento | DentalGest Profesional | Diagnostico + Plan | Bs. 262,50 + Bs. 69 |

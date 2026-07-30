@@ -2,7 +2,7 @@
 
 Fecha: 2026-06-29.
 Estado: auditoria de brechas para ONIA Core alpha.
-Owner: ONIA / Hermes.
+Owner: Onia / Hermes.
 
 > Actualizacion 2026-07-03: las 8 piezas transversales recomendadas
 > (BusinessPartner, RoleAssignment, Comment, Document, ApprovalRequest,
@@ -47,7 +47,7 @@ Fuentes externas principales:
 - ServiceNow CSM: https://www.servicenow.com/products/customer-service-management.html
 - Microsoft Dataverse security roles: https://learn.microsoft.com/en-us/power-platform/admin/database-security
 
-Fuentes locales ONIA:
+Fuentes locales Onia:
 
 - `onia-core/contract.json`
 - `onia-core/adapters/gestios.json`
@@ -151,9 +151,9 @@ Estas piezas son transversales y no contaminan el rubro:
 | Animales, potreros, sanidad, reproduccion | Ganadero OS. |
 | Cotizaciones tecnicas B2B | ProveeGest. |
 | Chatbots | Add-on sobre procesos y datos ya ordenados. |
-| Marketing/video IA | Servicio ONIA, no core del sistema operativo. |
+| Marketing/video IA | Servicio Onia, no core del sistema operativo. |
 
-## Comparacion con sistemas ONIA actuales
+## Comparacion con sistemas Onia actuales
 
 ### GestiOS
 

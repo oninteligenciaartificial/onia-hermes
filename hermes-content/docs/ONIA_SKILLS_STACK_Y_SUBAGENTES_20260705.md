@@ -1,15 +1,15 @@
-# ONIA — Stack de skills + reglas de subagentes
+# Onia — Stack de skills + reglas de subagentes
 
 > Creado 2026-07-05 · **Actualizado 2026-07-22** (auditoría completa + skills propias del repo).
 > Índice operativo vivo = skill **`onia-router`** (`.claude/skills/onia-router/SKILL.md`).
 > Este doc es la versión legible + la spec para los repos separados.
 
-## Las 3 capas de "skills" en ONIA (no confundir)
+## Las 3 capas de "skills" en Onia (no confundir)
 
 1. **Skills de Claude Code** (`.claude/skills/`) — las que Claude Code auto-descubre e
-   invoca al trabajar en el repo. Incluyen las **propias de ONIA** (abajo) + las ~137
+   invoca al trabajar en el repo. Incluyen las **propias de Onia** (abajo) + las ~137
    globales del usuario + plugins.
-2. **Subagentes** (`.claude/agents/`) — 9 agentes ONIA para delegar (onia-orchestrator,
+2. **Subagentes** (`.claude/agents/`) — 9 agentes Onia para delegar (onia-orchestrator,
    onia-propuestas, onia-core-guardian, dentalgest-migrations, hermes-automation,
    onia-integrations, onia-crm-prospeccion, onia-creative-radar, web-factory-builder).
 3. **Skills-doc de Hermes** (`hermes-content/skills/`) — 38 docs operativos que lee el
@@ -20,7 +20,7 @@
 Toda sesión arranca invocando **`onia-router`**: identifica el carril, carga el stack y
 respeta las reglas duras. Si existe una skill para la tarea, se usa (no reinventar).
 
-## Skills ONIA propias (este repo, `.claude/skills/`)
+## Skills Onia propias (este repo, `.claude/skills/`)
 | Skill | Cuándo | Apunta a |
 |---|---|---|
 | `onia-router` | inicio de toda sesión; "¿qué skill/agente uso?" | este doc, CLAUDE.md, COORDINATION_MANIFEST |
@@ -78,7 +78,7 @@ cada uno, crear su `.claude/skills/` con:
   `security-review`) + frontend (`impeccable`, `frontend-design`). Subagente
   `dentalgest-migrations`. Regla: es producto PROPIO de ONIA → se puede leer el cerebro.
 - **GestiOS** (carril E): igual que DentaGest + reconciliación core↔Prisma (Sprint 0).
-- **Bolivian Electric** (carril F): CLIENTE — solo el stack backend, sin cerebro ONIA,
+- **Bolivian Electric** (carril F): CLIENTE — solo el stack backend, sin cerebro Onia,
   y no exponer skills internas/comerciales. Solo lectura salvo pedido explícito.
 
 Copiar allá el bloque de proceso común + la skill de dominio; NO copiar `onia-propuestas`

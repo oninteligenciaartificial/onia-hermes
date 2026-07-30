@@ -1,8 +1,8 @@
-# ONIA Center AI Assistant Runbook 2026
+# Onia Center AI Assistant Runbook 2026
 
 ## Decision actual
 
-Sergio confirma el 2026-06-26 que ONIA no puede operar modelos locales por
+Sergio confirma el 2026-06-26 que Onia no puede operar modelos locales por
 ahora. El proveedor inmediato del bot interno sera OpenAI API. Dify queda como
 fase posterior para RAG, knowledge base y workflows cuando tenga despliegue
 protegido.
@@ -16,7 +16,7 @@ OPENAI_ONIA_CENTER_MODEL=gpt-5.4-mini
 ONIA_ASSISTANT_MAX_OUTPUT_TOKENS=900
 ```
 
-`OPENAI_API_KEY` tambien funciona como fallback, pero para ONIA Center es mejor
+`OPENAI_API_KEY` tambien funciona como fallback, pero para Onia Center es mejor
 usar `OPENAI_ONIA_CENTER_API_KEY` y separar gastos/rotacion por sistema.
 
 El endpoint usa OpenAI Responses API con `store:false`, contexto filtrado por
@@ -30,8 +30,8 @@ workflows y RAG. En vez de programar todo el comportamiento del asistente dentro
 del frontend, Dify permite configurar una app de chat con instrucciones, modelo,
 herramientas, knowledge base, logs y API.
 
-Para ONIA, Dify debe usarse como capa de orquestacion del asistente, no como
-base de datos privada. ONIA Center sigue siendo el sistema operativo; Supabase
+Para Onia, Dify debe usarse como capa de orquestacion del asistente, no como
+base de datos privada. Onia Center sigue siendo el sistema operativo; Supabase
 guarda datos operativos; Hermes conserva memoria privada.
 
 Fuentes oficiales:
@@ -43,7 +43,7 @@ Fuentes oficiales:
 
 ## Estado implementado
 
-ONIA Center ya tiene el endpoint:
+Onia Center ya tiene el endpoint:
 
 ```txt
 POST /api/onia-center/assistant
@@ -72,10 +72,10 @@ DIFY_API_KEY=...
 
 ## Regla de privacidad
 
-El endpoint no envia todo ONIA a Dify. Primero autentica al usuario, obtiene el
+El endpoint no envia todo Onia a Dify. Primero autentica al usuario, obtiene el
 rol real y arma un snapshot filtrado:
 
-- Sergio: vista completa permitida por ONIA Center.
+- Sergio: vista completa permitida por Onia Center.
 - Arthur: solo operacion asignada, servicios, tareas, leads y aportes seguros.
 - Vendedor: solo leads/tareas/notas visibles, catalogo vendedor y comisiones
   propias estimadas.
@@ -116,7 +116,7 @@ Variables que recibira Dify:
 
 ## Prueba esperada
 
-1. Iniciar ONIA Center.
+1. Iniciar Onia Center.
 2. Iniciar sesion.
 3. Abrir `/onia-center?view=asistente`.
 4. Preguntar: `Que vendo primero?`

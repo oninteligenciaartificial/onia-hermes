@@ -1,4 +1,4 @@
-# Subtítulos ONIA — `embedded-captions` (HyperFrames) vs `karaoke-captions.mjs` (propio)
+# Subtítulos Onia — `embedded-captions` (HyperFrames) vs `karaoke-captions.mjs` (propio)
 
 **Fecha:** 2026-07-26 · **Carril:** editor-videos · **Rama:** `claude/onia-colaboradores-sin-inversion-d69b19`
 **Método:** los DOS caminos corridos de verdad sobre EL MISMO video, con LOS MISMOS timestamps de palabra.
@@ -11,7 +11,7 @@ No es lectura de README: hay renders y cuadros.
 > **Se queda el script propio (`karaoke-captions.mjs`).** `embedded-captions` no reemplaza al karaoke:
 > el highlight por palabra activa —la razón de existir del script— **no existe en ningún compilador vivo
 > de la skill** (quedó solo como prosa en el modo Standard RETIRADO). Además cuesta ~210× más tiempo
-> por pieza y sus temas están tuneados para 16:9, no para el vertical de ONIA.
+> por pieza y sus temas están tuneados para 16:9, no para el vertical de Onia.
 
 `embedded-captions` **sí** se adopta para lo que el propio NO hace: el **hero incrustado detrás del
 sujeto** (matting) en piezas donde la toma deja aire. En este clip no lo dejaba (ver §3.4).
@@ -48,7 +48,7 @@ Todos en `hermes-content/docs/assets/captions-bench-20260726/`:
 
 | Archivo | Qué muestra |
 |---|---|
-| `01-side-by-side.jpg` | **La comparación principal.** 4 momentos (2.5 / 6.5 / 11.6 / 13.5 s), izquierda HyperFrames `anchor`, derecha karaoke ONIA |
+| `01-side-by-side.jpg` | **La comparación principal.** 4 momentos (2.5 / 6.5 / 11.6 / 13.5 s), izquierda HyperFrames `anchor`, derecha karaoke Onia |
 | `02-sync-onia.jpg` | Tira de sincronía del propio: 5.62 / 5.85 / 6.10 / 6.30 / 6.55 s |
 | `03-sync-hyperframes.jpg` | La MISMA tira en HyperFrames |
 | `04-hyperframes-rail-clipped.jpg` | Render final HF a resolución completa: el rail sale del cuadro ("**e**stoy" cortada) |
@@ -86,7 +86,7 @@ que asumíamos no aplica a esta skill.
 
 #### Costo por pieza (15 s de video, medido)
 
-| | HyperFrames `embedded-captions` | ONIA `karaoke-captions.mjs` |
+| | HyperFrames `embedded-captions` | Onia `karaoke-captions.mjs` |
 |---|---|---|
 | Matting (`remove-background`, CPU) | **338.5 s** | — |
 | Transcripción | ~300 s (WhisperX, en paralelo con el matte) | reusa `segments.json` de Speaches |
@@ -103,7 +103,7 @@ YT, reels) eso no es un detalle: es el presupuesto de la sesión.
 
 Mismos timestamps, mismos 5 instantes (`02-sync-onia.jpg` vs `03-sync-hyperframes.jpg`):
 
-| t | Palabra hablada | ONIA propio | HyperFrames `anchor` |
+| t | Palabra hablada | Onia propio | HyperFrames `anchor` |
 |---|---|---|---|
 | 5.62 | ESTOY (5.572–5.752) | frase completa, **ESTOY en amarillo** | solo aparece "stoy" |
 | 5.85 | INTENTANDO (5.772–6.173) | **INTENTANDO en amarillo** | "stoy intentando" |
@@ -154,7 +154,7 @@ Verificado: re-corrió WhisperX. **No usar el camino B para esta skill.**
 Conclusión: **la transcripción NO es el problema**. Speaches sigue siendo la fuente y ambos caminos la
 consumen con un rename de 3 campos. La decisión se juega en el render, no en el ASR.
 
-### 3.4 Hallazgo extra que decide el caso de uso: el vertical de ONIA no deja aire para el hero
+### 3.4 Hallazgo extra que decide el caso de uso: el vertical de Onia no deja aire para el hero
 
 `safe-zones.cjs` sobre nuestro clip:
 
@@ -194,7 +194,7 @@ metraje. Se nota comparando los cuadros.
 2. **Modo Cinematic** (`cinematic.json` → `make-cinematic.cjs`). Es puro embed detrás del sujeto y
    `safe-zones` ya dictaminó `verdict FG` sobre este metraje: no hay dónde incrustar. Probarlo pide
    metraje con aire (plano medio/abierto), que no tenemos a mano.
-3. **`anchor` en 16:9 con sujeto chico**, que es su terreno. Toda mi evidencia es del vertical de ONIA.
+3. **`anchor` en 16:9 con sujeto chico**, que es su terreno. Toda mi evidencia es del vertical de Onia.
    Es posible —y creíble— que en 16:9 se vea muy bien. No lo probé.
 4. **Speaches real (VPS).** El VPS está al 88% de swap y ocupado por otra sesión (regla de la tarea), así
    que generé los timestamps localmente con WhisperX y los convertí AL shape exacto de Speaches

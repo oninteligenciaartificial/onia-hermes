@@ -1,4 +1,4 @@
-# ONIA — Checklist ejecutable: terminar Meta y enviar la verificación
+# Onia — Checklist ejecutable: terminar Meta y enviar la verificación
 
 **Fecha:** 2026-07-25 · **Portfolio:** `1451773736711697` ("OniaAgency") · **Estado:** Sin verificar
 **Playbook completo (por qué de cada cosa):** `ONIA_META_Y_CHATBOT_PRODUCTO_20260725.md`
@@ -47,7 +47,7 @@ Nota de contexto interno (no va a Meta): Sergio tiene 16 años y opera el día a
 
 **Activos que NO se tocan:**
 - Ad account `act_1073680778314945` — **no se puede mover entre portfolios** (regla dura de Meta). Por eso este portfolio es, definitivamente, **el comercial**.
-- WABA `398983206624133` (Bolivian Electric) — vive bajo el portfolio del **cliente** (Bolivian Group SRL), no bajo el de ONIA. **No consume los 2 números de ONIA.** Verificado hoy.
+- WABA `398983206624133` (Bolivian Electric) — vive bajo el portfolio del **cliente** (Bolivian Group SRL), no bajo el de Onia. **No consume los 2 números de Onia.** Verificado hoy.
 
 ---
 
@@ -80,7 +80,7 @@ Ruta base: `business.facebook.com` → menú **Configuración del negocio** (⚙
 
 | # | Paso | Dueño |
 |---|---|---|
-| C1 | `https://onia.com.bo` carga, es HTTPS, sin links rotos, con el nombre ONIA visible | **agente** (código/deploy) |
+| C1 | `https://onia.com.bo` carga, es HTTPS, sin links rotos, con el nombre Onia visible | **agente** (código/deploy) |
 | C2 | Abrir el sitio desde un celular sin sesión y confirmar que carga | **Sergio** |
 
 Motivo: Meta rechaza textualmente por *"a website that fails to load, is not HTTPS compliant... or contains a link that leads to an error message"*.
@@ -117,7 +117,7 @@ Meta, textual: *"two-factor authentication is a requirement for business portfol
 Antes de activarlo, asegurar que Sergio y Leslie ya tengan 2FA en su cuenta personal de Facebook, o quedan bloqueados fuera del portfolio.
 
 ### 3.2 — Segundo administrador con control total: **Leslie**
-Hoy, si Sergio pierde su cuenta de Facebook, ONIA pierde el ad account, la Página y el camino a las WABA. Meta recomienda explícitamente tener más de un control total.
+Hoy, si Sergio pierde su cuenta de Facebook, Onia pierde el ad account, la Página y el camino a las WABA. Meta recomienda explícitamente tener más de un control total.
 
 **Recomendado: Leslie (MERCADO MORENO LESLIE)** — es la propietaria legal en el SEPREC y la representante legal que va en el formulario. Que la titular legal también tenga control total del portfolio **es coherencia, no burocracia**: si Meta pide demostrar que quien administra representa al negocio, la titular ya está adentro.
 
@@ -187,7 +187,7 @@ Elegir **verificación de dominio** (meta tag en el `<head>` de `onia.com.bo` o 
 | **Límite de mensajería** | **250 → 2.000 destinatarios/día** de salto directo (de ahí escala solo en ~6 h) |
 | **Advanced Access en Meta for Developers** | *"Verification is required to obtain Advanced Access for any permission"* → **sin esto no existe el camino de Tech Provider propio** (`whatsapp_business_messaging` + `whatsapp_business_management`) |
 | **Daily spending limit del ad account** | Meta lo sube más rápido a cuentas verificadas |
-| **Verificar clientes como partner** | Los clientes de ONIA saltan directo a 2.000 de límite |
+| **Verificar clientes como partner** | Los clientes de Onia saltan directo a 2.000 de límite |
 
 **Lo que NO desbloquea:** el badge azul. *"Verifying your business... is different from Meta Verified for businesses and won't give you a verified badge."* No comprar Meta Verified creyendo que resuelve esto.
 
@@ -204,7 +204,7 @@ Meta permite que **una persona cree hasta 2 portfolios**. Sergio ya gastó 1 (`O
 | Rol | **Comercial**: todo lo que factura | **Personas IA**: contenido sintético |
 | Ad account | `act_1073680778314945` (no se puede mover, se queda acá) | ninguno del comercial; si hace falta, uno nuevo y chico |
 | Páginas | `ONIA · Sistemas con IA para tu negocio` | Página de Lucía Antelo |
-| Instagram | IG de ONIA | `@lu.antelo` y futuras personas IA |
+| Instagram | IG de Onia | `@lu.antelo` y futuras personas IA |
 | WABAs de clientes | todas acá | ninguna |
 | App de Meta (Tech Provider) | acá, nunca del otro lado | ninguna |
 | Verificación de negocio | ✅ sí, prioridad 1 | no hace falta |
@@ -228,17 +228,17 @@ Al intentar renombrar el portfolio a `ONIA Agency` (con espacio), Meta devolvió
 ### 7.2 Son TRES campos distintos, no uno
 El error más común y el que hace rebotar verificaciones:
 
-| Campo | Dónde vive | Qué debe decir | Valor ONIA |
+| Campo | Dónde vive | Qué debe decir | Valor Onia |
 |---|---|---|---|
 | **Nombre del portfolio** | Configuración del negocio → Información del negocio | el nombre **público** de la marca (*"should match the public name of your business"*) | `OniaAgency` ✅ |
 | **Nombre legal del negocio** | dentro del formulario de verificación | **exacto del registro oficial**, carácter por carácter | `OniaAgency` (a cargar) |
 | **Nombre de la Página** | Meta Business Suite → Configuración de la Página | describe el negocio, cumple normas de nombres de Página | `ONIA · Sistemas con IA para tu negocio` (a cargar) |
 
-**Meta nunca pide que los tres sean iguales.** Se pueden y se deben tratar por separado. En el caso de ONIA, portfolio y nombre legal coinciden por conveniencia (ver 7.1), pero la Página lleva descriptor comercial a propósito: "Onia Marketing" encasillaba en marketing cuando lo que se vende es automatización y SaaS.
+**Meta nunca pide que los tres sean iguales.** Se pueden y se deben tratar por separado. En el caso de Onia, portfolio y nombre legal coinciden por conveniencia (ver 7.1), pero la Página lleva descriptor comercial a propósito: "Onia Marketing" encasillaba en marketing cuando lo que se vende es automatización y SaaS.
 
 ### 7.3 Otros hechos confirmados hoy
 - El **ad account no se mueve**: cualquier plan que asumiera "muevo el ad account a un portfolio nuevo" está muerto. `OniaAgency` **es** el portfolio comercial, definitivo.
-- La **WABA de Bolivian Electric vive bajo el portfolio del cliente** (Bolivian Group SRL) → ONIA arranca con los **2 números libres**, no con 1. Buena noticia para el cap.
+- La **WABA de Bolivian Electric vive bajo el portfolio del cliente** (Bolivian Group SRL) → Onia arranca con los **2 números libres**, no con 1. Buena noticia para el cap.
 - **Editar datos del negocio después de verificar = re-verificación.** Por eso todos los renombres y cargas de datos van **antes** del envío, no después.
 
 ---

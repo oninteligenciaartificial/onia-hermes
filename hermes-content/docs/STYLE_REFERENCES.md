@@ -1,4 +1,4 @@
-# Style References for ONIA
+# Style References for Onia
 
 ## Purpose
 Hermes uses Pinterest and professional references as inspiration, not as source material to copy.
@@ -23,12 +23,12 @@ Hermes uses Pinterest and professional references as inspiration, not as source 
 - "Antes/despues de un proceso con IA."
 - "Checklist para saber si tu negocio esta listo para automatizar."
 
-## ONIA quality bar
+## Onia quality bar
 - Clear Spanish.
 - Practical business value.
 - One idea per slide.
 - Professional visuals.
-- ONIA green as accent, not full palette.
+- Onia green as accent, not full palette.
 - Useful for Bolivian businesses, clinics, SaaS, automation, CRM, WhatsApp, Instagram and sales.
 
 ## Good reference types
@@ -55,10 +55,10 @@ For each carousel, extract:
 - visual hierarchy;
 - CTA mechanism;
 - caption strategy;
-- ONIA adaptation ideas;
+- Onia adaptation ideas;
 - exact elements that must not be copied.
 
-Do not save third-party carousel images as ONIA assets unless Sergio provides
+Do not save third-party carousel images as Onia assets unless Sergio provides
 explicit usage rights. Use them as analysis references only.
 
 ## Bad reference types
@@ -118,7 +118,7 @@ Use creator videos as structural inspiration only. Extract:
 - subtitle style;
 - proof mechanism;
 - CTA;
-- what ONIA can adapt;
+- what Onia can adapt;
 - what must not be copied.
 
 Never copy a creator's exact words, face, brand, edit sequence, music, captions
@@ -132,7 +132,7 @@ Reference pattern:
 - Rhythm: one mistake per slide
 - CTA: "Comenta AUDITORIA"
 
-ONIA adaptation:
+Onia adaptation:
 - Title: "5 errores que hacen que tu clinica pierda pacientes por WhatsApp"
 - Audience: clinicas dentales en Bolivia
 - Slides:

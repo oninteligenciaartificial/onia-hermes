@@ -2,7 +2,7 @@
 
 Estado: orden operativo canonico.
 Fecha: 2026-06-28.
-Owner: ONIA / Hermes.
+Owner: Onia / Hermes.
 Uso: convertir la decision de ONIA Core en una secuencia ejecutable para
 GestiOS, ProveeGest, DentalGest, Ganadero OS y clientes piloto.
 
@@ -10,7 +10,7 @@ Fuente tecnica canonica: `onia-core/`.
 
 ## Veredicto
 
-ONIA no debe construir un ERP universal desde cero.
+Onia no debe construir un ERP universal desde cero.
 
 La ruta correcta es construir ONIA Core como sistema de organizacion operativa
 canonico dentro de Hermes, no dentro de un producto especifico. Despues se
@@ -65,7 +65,7 @@ core por proyecto ahora duplicaria trabajo y subiria el riesgo comercial.
 
 | Sistema | Rol correcto | Lo que no debe hacer ahora |
 |---|---|---|
-| ONIA Center | Control interno, backlog, readiness, evidencia, aprobaciones, prioridades y seguimiento de ONIA | Operar el negocio diario del cliente o guardar datos sensibles sin alcance |
+| Onia Center | Control interno, backlog, readiness, evidencia, aprobaciones, prioridades y seguimiento de Onia | Operar el negocio diario del cliente o guardar datos sensibles sin alcance |
 | ONIA Core | Sistema de organizacion empresarial: tenant, equipo, roles, responsables, contactos, tareas, solicitudes, estados, evidencia, reportes, auditoria y modulos activables | Vivir primero dentro de un producto o convertirse en ERP/POS/inventario generico |
 | GestiOS | Futuro adoptante de ONIA Core para pymes y empresas operativas | Ser confundido con el nombre del core |
 | ProveeGest | Vertical B2B sobre ONIA Core para importadoras, mayoristas y distribuidoras | Ser repo nuevo antes de validar el core |
@@ -355,7 +355,7 @@ El core inicial esta listo para abrir ProveeGest cuando:
 
 ## Decision final
 
-El core inicial de ONIA se construye asi:
+El core inicial de Onia se construye asi:
 
 ```text
 1. Documentar orden y contrato.

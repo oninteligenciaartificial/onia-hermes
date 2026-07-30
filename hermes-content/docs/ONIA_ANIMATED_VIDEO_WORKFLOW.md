@@ -1,4 +1,4 @@
-# ONIA Animated Video Workflow
+# Onia Animated Video Workflow
 
 ## Objetivo
 
@@ -41,7 +41,7 @@ Fuentes oficiales revisadas:
 - `https://help.invideo.io/en/articles/14755439-agents-models-on-invideo`
 - `https://openai.com/index/invideo-ai/`
 
-Principios utiles para ONIA:
+Principios utiles para Onia:
 
 - trabajar como director creativo, no como prompt suelto;
 - cargar contexto del proyecto antes de generar;
@@ -56,10 +56,10 @@ Riesgo comercial:
 
 - Agent One puede acelerar el storyboard y la produccion, pero usa creditos por
   modelo, duracion, resolucion y regeneraciones.
-- Para ONIA, nunca dejarlo en modo "generar siempre" en trabajos de cliente.
+- Para Onia, nunca dejarlo en modo "generar siempre" en trabajos de cliente.
 - Usar primero aprobacion de brief/storyboard y despues generar video.
 
-Decision ONIA:
+Decision Onia:
 
 - Higgsfield/Supercomputer sigue como estudio principal por la suscripcion Ultra
   ya pagada.
@@ -68,7 +68,7 @@ Decision ONIA:
 - Si Sergio compra o prueba InVideo, Hermes debe preparar primero Context,
   Prompt Guides, Review Agent, Knowledge Bank y control de creditos.
 
-## Workflow Agent One adaptado a ONIA
+## Workflow Agent One adaptado a Onia
 
 Usar este orden:
 
@@ -106,7 +106,7 @@ CTA simple, claims seguros, personaje consistente, texto legible, sin copia de
 creadores ni marcas, y sin gasto de creditos innecesario.
 ```
 
-## Flujo ONIA
+## Flujo Onia
 
 ### 1. Direccion
 
@@ -295,7 +295,7 @@ Style:
 premium stop-motion clay / miniature commercial / warm cinematic light.
 ```
 
-## Primer video recomendado para ONIA
+## Primer video recomendado para Onia
 
 Titulo:
 

@@ -1,7 +1,7 @@
 # ONIA Core Distribution Plan 2026
 
 Estado: alpha, hold until beta.
-Owner: ONIA / Hermes.
+Owner: Onia / Hermes.
 
 ## Decision
 

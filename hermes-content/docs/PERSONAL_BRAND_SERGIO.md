@@ -1,15 +1,15 @@
 # Personal Brand: Sergio
 
-Sergio's personal brand is separate from ONIA.
+Sergio's personal brand is separate from Onia.
 
-ONIA is the system and the commercial proof. Sergio is the face, operator,
+Onia is the system and the commercial proof. Sergio is the face, operator,
 builder, and narrator.
 
 ## Content Role
 
 Sergio should build trust by showing:
 
-- how ONIA is being built
+- how Onia is being built
 - what decisions are being made
 - what problems appear in real businesses
 - what automation actually looks like behind the scenes
@@ -25,7 +25,7 @@ Sergio should build trust by showing:
 
 Good Sergio posts:
 
-- "Estoy construyendo esto en ONIA..."
+- "Estoy construyendo esto en Onia..."
 - "Hoy aprendi esto automatizando Instagram..."
 - "Este error casi rompe el flujo..."
 - "Asi pienso una automatizacion antes de programarla..."
@@ -56,11 +56,11 @@ Use them for:
 
 ## Carruseles
 
-Sergio can post carousels, but less frequently than ONIA.
+Sergio can post carousels, but less frequently than Onia.
 
 Use personal carousels for:
 
-- lessons from building ONIA
+- lessons from building Onia
 - founder reflections
 - simple frameworks
 - "how I think about..." posts
@@ -74,7 +74,7 @@ Preferred structure:
 
 1. Hook in first 2 seconds.
 2. One clear idea.
-3. Specific example from ONIA or a client.
+3. Specific example from Onia or a client.
 4. Practical lesson.
 5. Soft CTA.
 

@@ -1,8 +1,8 @@
-# ONIA — Sistema de Video Multi-Escena de Sergio (Founder Content)
+# Onia — Sistema de Video Multi-Escena de Sergio (Founder Content)
 
 **Versión:** 1.0
 **Actualizado:** 2026-06-13
-**Responsable:** Hermes / ONIA
+**Responsable:** Hermes / Onia
 **Relacionado:** `MODEL_VIDEO_PRODUCTION_SYSTEM.md` (Mara Vale), memoria `[[hermes-vps-config]]`, `[[sergio-onia-soul]]`
 
 ---
@@ -23,7 +23,7 @@ El talking-head (wan2_7 lip-sync) sigue existiendo pero **solo como UNA toma** d
 
 ## 1. ANATOMÍA DE UN VIDEO MULTI-ESCENA (15-30s)
 
-Estructura tipo para founder content ONIA (TikTok/Reels 9:16):
+Estructura tipo para founder content Onia (TikTok/Reels 9:16):
 
 ```
 [0-3s]   HOOK        Toma A — talking-head (wan2_7 lip-sync) o b-roll fuerte
@@ -181,7 +181,7 @@ Negativos siempre en prompt: `no identity drift, no different face, no text, no 
 
 ---
 
-## 7. REGLAS DE CONTENIDO (founder / ONIA)
+## 7. REGLAS DE CONTENIDO (founder / Onia)
 
 ```
 ✅ PERMITIDO:

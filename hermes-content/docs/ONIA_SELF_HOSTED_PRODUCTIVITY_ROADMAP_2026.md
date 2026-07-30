@@ -1,4 +1,4 @@
-# ONIA Self-hosted Productivity Roadmap 2026
+# Onia Self-hosted Productivity Roadmap 2026
 
 Estado: plan operativo para convertir el stack self-hosted en funciones reales
 de productividad. No contiene secretos.
@@ -6,9 +6,9 @@ Actualizado: 2026-06-25 America/Caracas.
 
 ## Diagnostico
 
-ONIA ya tiene una base util: Supabase, n8n, Cal.com, Chatwoot, SearXNG,
+Onia ya tiene una base util: Supabase, n8n, Cal.com, Chatwoot, SearXNG,
 LiteLLM, Open WebUI, Stirling PDF y Uptime Kuma. El error seria instalar mas
-paneles sin que ONIA Center los convierta en procesos.
+paneles sin que Onia Center los convierta en procesos.
 
 La regla es:
 
@@ -25,24 +25,24 @@ Firecrawl/Crawl4AI/SearXNG investigan fuentes.
 
 | Funcion | Para que sirve | Stack | Salida esperada |
 |---|---|---|---|
-| Inbox universal de ideas | Guardar reels, links, notas y audios para revisar despues | ONIA Center + Supabase + Telegram + n8n | Idea clasificada por proyecto, prioridad y siguiente accion |
-| Agenda Sergio estricta | Evitar reuniones en gym, descanso, foco, novia y bloques de trabajo | ONIA Center + Cal.com + Google Calendar + n8n | Disponibilidad real y alertas antes de romper rutina |
-| CRM de ventas ONIA | No perder leads, seguimientos ni llamadas | ONIA Center + Supabase + n8n + Chatwoot | Pipeline con responsable, proxima accion y evidencia |
-| Centro de tareas mensual | Agentes internos proponen tareas del mes y semana | ONIA Center + Supabase + LiteLLM | Tareas por proyecto, responsable, fecha y estado |
+| Inbox universal de ideas | Guardar reels, links, notas y audios para revisar despues | Onia Center + Supabase + Telegram + n8n | Idea clasificada por proyecto, prioridad y siguiente accion |
+| Agenda Sergio estricta | Evitar reuniones en gym, descanso, foco, novia y bloques de trabajo | Onia Center + Cal.com + Google Calendar + n8n | Disponibilidad real y alertas antes de romper rutina |
+| CRM de ventas Onia | No perder leads, seguimientos ni llamadas | Onia Center + Supabase + n8n + Chatwoot | Pipeline con responsable, proxima accion y evidencia |
+| Centro de tareas mensual | Agentes internos proponen tareas del mes y semana | Onia Center + Supabase + LiteLLM | Tareas por proyecto, responsable, fecha y estado |
 | Auditor web rapido | Investigar web de prospecto y recomendar oferta | Firecrawl/Crawl4AI + SearXNG + n8n + Supabase | Diagnostico, riesgos, propuesta y checklist de venta |
-| Formulario cliente a proyecto | Intake para webs, bots y automatizaciones | ONIA Center forms + Supabase + n8n | Brief estructurado, cotizacion inicial y tareas |
+| Formulario cliente a proyecto | Intake para webs, bots y automatizaciones | Onia Center forms + Supabase + n8n | Brief estructurado, cotizacion inicial y tareas |
 | Alertas operativas | Avisar caidas, errores y pendientes criticos | Uptime Kuma + n8n + Telegram | Mensajes accionables, no ruido |
 
 ## Funciones P1 para escalar venta y entrega
 
 | Funcion | Para que sirve | Stack | Nota |
 |---|---|---|---|
-| Generador de landings/webs | Crear brief, copy, sitemap y primera version desde formulario | ONIA Center + Supabase + web-factory + Firecrawl | Requiere aprobacion humana antes de publicar |
-| Centro de video Remotion | Subir assets, elegir guion y renderizar piezas | ONIA Center + Remotion worker + Supabase Storage | Worker local/servidor con cola; no quemar tokens sin aprobacion |
-| Higgsfield controlado | Crear prompts, costos, aprobaciones y resultados | ONIA Center + n8n + Supabase | Solo si hay presupuesto por pieza/campana |
-| Propuestas y PDFs | Generar/editar propuestas, contratos y reportes | Stirling PDF + plantillas ONIA | Ideal para vendedores |
+| Generador de landings/webs | Crear brief, copy, sitemap y primera version desde formulario | Onia Center + Supabase + web-factory + Firecrawl | Requiere aprobacion humana antes de publicar |
+| Centro de video Remotion | Subir assets, elegir guion y renderizar piezas | Onia Center + Remotion worker + Supabase Storage | Worker local/servidor con cola; no quemar tokens sin aprobacion |
+| Higgsfield controlado | Crear prompts, costos, aprobaciones y resultados | Onia Center + n8n + Supabase | Solo si hay presupuesto por pieza/campana |
+| Propuestas y PDFs | Generar/editar propuestas, contratos y reportes | Stirling PDF + plantillas Onia | Ideal para vendedores |
 | Chatbot comercial interno | Responder dudas de servicios/precios sin exponer finanzas privadas | Open WebUI/Dify + Supabase docs | Base de conocimiento filtrada por rol |
-| Dashboard vendedor | Tareas, leads, objeciones, ingresos y notas | ONIA Center + Supabase RLS | Vendedor no ve utilidad interna ni capital |
+| Dashboard vendedor | Tareas, leads, objeciones, ingresos y notas | Onia Center + Supabase RLS | Vendedor no ve utilidad interna ni capital |
 
 ## Funciones P2 cuando haya uso real
 
@@ -59,7 +59,7 @@ Firecrawl/Crawl4AI/SearXNG investigan fuentes.
 
 Firecrawl entra como capacidad P1 gated, no como servicio permanente.
 
-Uso ONIA:
+Uso Onia:
 
 - Auditorias web de prospectos.
 - Extraccion de copy, estructura, FAQs y servicios de sitios publicos.
@@ -90,12 +90,12 @@ cd /opt/onia-selfhosted
 | `idea.capture.telegram` | Mensaje Telegram con link/nota | Guarda en Supabase, clasifica y agenda revision |
 | `lead.audit.requested` | Nuevo lead con web | SearXNG/Firecrawl, resumen, score y siguiente accion |
 | `meeting.booked` | Cal.com webhook | Crea tarea, contexto de cliente y recordatorio |
-| `client.form.submitted` | Formulario ONIA Center | Crea proyecto, checklist y brief |
+| `client.form.submitted` | Formulario Onia Center | Crea proyecto, checklist y brief |
 | `daily.sergio.plan` | Cron diario | Resume agenda, foco, ventas y tareas criticas |
 | `video.job.requested` | Nueva solicitud de video | Estima costo, pide aprobacion y bloquea tokens hasta aprobar |
 | `service.health.alert` | Uptime Kuma webhook | Envia alerta por Telegram con runbook |
 
-## Modelo de datos minimo en ONIA Center
+## Modelo de datos minimo en Onia Center
 
 | Tabla | Uso |
 |---|---|
@@ -123,7 +123,7 @@ cd /opt/onia-selfhosted
 ## Orden de ejecucion
 
 1. Dejar el stack estable: healthchecks, backups, restart policies y runbook.
-2. Crear en ONIA Center el Inbox de ideas y agenda Sergio.
+2. Crear en Onia Center el Inbox de ideas y agenda Sergio.
 3. Conectar Cal.com y Google Calendar por n8n.
 4. Crear workflow `idea.capture.telegram`.
 5. Crear workflow `lead.audit.requested` usando SearXNG primero y Firecrawl solo

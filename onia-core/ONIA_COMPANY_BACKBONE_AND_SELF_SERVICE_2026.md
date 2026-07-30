@@ -1,9 +1,9 @@
-# ONIA Company Backbone and Self-Service 2026
+# Onia Company Backbone and Self-Service 2026
 
 Fecha: 2026-07-03.
 Estado: diseno canonico — columna vertebral comun de toda empresa, configurador
 por empresa y venta self-service.
-Owner: ONIA / Hermes.
+Owner: Onia / Hermes.
 Contrato: `contract.json` v0.4.0 (`communication_channel`, capability
 `channels`, canal `email_shared`, seccion `channels` del owner_dashboard).
 
@@ -126,7 +126,7 @@ tenga 1 caso de exito operando (regla de la vertical factory).
 ## 4. Orden de ejecucion
 
 1. Sprint 1-2 DentalGest (core en producto) — en curso.
-2. Conector email->intake en n8n (piloto con ONIA misma, luego BE).
+2. Conector email->intake en n8n (piloto con Onia misma, luego BE).
 3. Landing + checkout DentalGest (self-service piloto).
 4. Wizard onboarding (cuestionario 7 preguntas).
 5. Replicar para ProveeGest con BE como caso de exito.

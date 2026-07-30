@@ -1,10 +1,10 @@
-# ONIA Center AI Model Routing 2026
+# Onia Center AI Model Routing 2026
 
 Fecha: 2026-06-28.
 
 ## Estado verificado
 
-ONIA Center esta activo en local:
+Onia Center esta activo en local:
 
 - App: `http://localhost:3012/onia-center`
 - Supabase tunnel: `127.0.0.1:54321`
@@ -20,20 +20,20 @@ Conclusion: billing/API ya funcionan y el proyecto tiene acceso al modelo mini y
 
 ## Decision principal
 
-No usar un solo modelo para todo ONIA Center.
+No usar un solo modelo para todo Onia Center.
 
 Usar `gpt-5.4-mini` como modelo operativo diario y `gpt-5.5` solo para tareas que realmente requieren razonamiento fuerte, estrategia, codigo o propuestas complejas.
 
-Esto protege caja: ONIA necesita velocidad y bajo costo para uso diario, pero calidad alta cuando una respuesta puede cambiar una venta, una entrega, una decision financiera o una arquitectura.
+Esto protege caja: Onia necesita velocidad y bajo costo para uso diario, pero calidad alta cuando una respuesta puede cambiar una venta, una entrega, una decision financiera o una arquitectura.
 
 ## Routing recomendado
 
 | Modulo | Uso | Modelo recomendado | Motivo |
 |---|---|---|---|
-| ONIA Bot interno diario | Preguntas sobre clientes, servicios, tareas, notas, comisiones propias visibles | `gpt-5.4-mini` | Buen balance costo/latencia/calidad. Suficiente para operacion diaria. |
+| Onia Bot interno diario | Preguntas sobre clientes, servicios, tareas, notas, comisiones propias visibles | `gpt-5.4-mini` | Buen balance costo/latencia/calidad. Suficiente para operacion diaria. |
 | Agente Ventas y CRM | Siguientes pasos, resumen de leads, objeciones, tareas comerciales | `gpt-5.4-mini` | Alto volumen; no debe consumir modelo caro por cada pregunta. |
 | Agente CEO mensual | Plan mensual, priorizacion, riesgos, caja, decisiones privadas | `gpt-5.5` | Requiere razonamiento fuerte y contexto cruzado. Debe correr pocas veces. |
-| Finanzas/Fondo ONIA | Alertas, centros contables, pagos bloqueados, uso premium | `gpt-5.4-mini` para alertas, `gpt-5.5` para revision mensual | La regla financiera debe venir de datos/calculos; el modelo solo explica y revisa. |
+| Finanzas/Fondo Onia | Alertas, centros contables, pagos bloqueados, uso premium | `gpt-5.4-mini` para alertas, `gpt-5.5` para revision mensual | La regla financiera debe venir de datos/calculos; el modelo solo explica y revisa. |
 | Audio Intelligence | Analizar llamada/transcript y preparar propuesta | `gpt-5.4-mini` por defecto; `gpt-5.5` solo con escalamiento manual | Buen balance costo/calidad. La propuesta sigue siendo borrador interno con revision humana. |
 | Transcripcion de audio | Audio a texto | Speaches local con `Systran/faster-distil-whisper-large-v3`; fallback `gpt-4o-mini-transcribe`; `gpt-4o-transcribe` solo si falla calidad | Primero open source/local. El fallback oficial cuesta aprox. USD 0.003/min y mantiene el flujo vivo si el tunel local cae. |
 | Ideas Inbox/Reels | Clasificar idea, resumir link, crear tareas | `gpt-5.4-mini` | Volumen alto y riesgo bajo. |
@@ -72,7 +72,7 @@ ONIA_EMBEDDING_MODEL=text-embedding-3-small
 
 No guardar estos valores como secretos; los modelos no son secretos. Las API keys si son secretas y deben quedar solo en `.env.local`, Vercel, VPS o secret manager.
 
-## Mejoras necesarias en ONIA Center
+## Mejoras necesarias en Onia Center
 
 1. Model Router server-side
    - Crear una utilidad `onia-ai-router` que elija modelo por `taskType`.
@@ -80,7 +80,7 @@ No guardar estos valores como secretos; los modelos no son secretos. Las API key
    - Bloquear `gpt-5.5` para vendedores/freelancers salvo flujo aprobado.
 
 2. Presupuesto y limites
-   - Definir limite mensual OpenAI para ONIA Center.
+   - Definir limite mensual OpenAI para Onia Center.
    - Alertar cuando el gasto estimado supere umbrales.
    - Registrar uso premium igual que Higgsfield.
 

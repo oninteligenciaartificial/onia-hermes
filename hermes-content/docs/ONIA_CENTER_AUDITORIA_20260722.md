@@ -1,4 +1,4 @@
-# ONIA Center — Auditoría de código (2026-07-22)
+# Onia Center — Auditoría de código (2026-07-22)
 
 > Auditoría read-only por subagente sobre `main`: `middleware.ts`, `lib/onia-center-auth.ts`,
 > `lib/onia-center-store.ts`, los 11 endpoints `api/onia-center/**`, `live/live-runtime.ts`, las

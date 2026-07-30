@@ -1,6 +1,6 @@
-# ONIA — Chatbot propio (el que atiende "DEMO"): spec ejecutable
+# Onia — Chatbot propio (el que atiende "DEMO"): spec ejecutable
 
-> **Fecha:** 2026-07-25 · **Estado:** diseño aprobable, **cero código escrito** · **Carril:** chatbot propio de ONIA
+> **Fecha:** 2026-07-25 · **Estado:** diseño aprobable, **cero código escrito** · **Carril:** chatbot propio de Onia
 > **Esto NO es el chatbot de Bolivian Electric.** BE se usa acá SOLO como fuente de patrones probados
 > (lectura). Ningún archivo de BE se toca ni se copia; se copian ideas.
 >
@@ -19,13 +19,13 @@
 
 ## 0. La decisión que ordena todo el diseño
 
-**El bot de ONIA no es un bot de catálogo.** El de Bolivian Electric resuelve "¿tienen cable 2x10?" sobre
-12.385 SKUs. El de ONIA resuelve **una sola cosa**: convertir a alguien que escribió la palabra `DEMO` en
+**El bot de Onia no es un bot de catálogo.** El de Bolivian Electric resuelve "¿tienen cable 2x10?" sobre
+12.385 SKUs. El de Onia resuelve **una sola cosa**: convertir a alguien que escribió la palabra `DEMO` en
 **una demo agendada en la agenda de Sergio**, con el registro de qué pieza de Lucía lo trajo.
 
 Eso cambia tres cosas respecto de BE:
 
-| | Bolivian Electric | ONIA (este bot) |
+| | Bolivian Electric | Onia (este bot) |
 |---|---|---|
 | Camino crítico de la respuesta | `availabilityReply` (matcher de catálogo) | **máquina de estados de 6 pasos** (guion fijo) |
 | Rol del LLM | central (responde consultas de producto) | **marginal**: sólo la rama "dijo algo fuera de guion" |
@@ -75,7 +75,7 @@ material de venta**.
 
 ### 1.3 Fuera de alcance de esta versión (explícito, para que no se cuele)
 
-- Multi-tenant real (G1 del playbook, 3-4 semanas). Este bot es **de ONIA, un solo tenant**.
+- Multi-tenant real (G1 del playbook, 3-4 semanas). Este bot es **de Onia, un solo tenant**.
 - Catálogo / matcher de productos. No aplica.
 - Cobros, propuestas, contratos.
 - Voz (Pipecat / WhatsApp Calling API): 0% construido, track aparte.
@@ -117,7 +117,7 @@ Las variables van entre `{{ }}`.
 
 **M0 — Bienvenida + disclosure + primera pregunta** (disparo: `DEMO`, estado `nuevo → esperando_calificacion`)
 
-> ¡Hola! Soy el asistente automático de ONIA — sí, un bot, los mismos que hacen a Lucía 🙂
+> ¡Hola! Soy el asistente automático de Onia — sí, un bot, los mismos que hacen a Lucía 🙂
 > Gracias por escribir. Te agendo la demo en 2 minutos, pero primero quiero saber si te va a servir de
 > verdad.
 >
@@ -293,7 +293,7 @@ Tres detalles de BE que hay que copiar y son fáciles de perder:
    `availabilityReply` y el FAQ salen sin filtrar porque son deterministas. Acá igual: M0-M7 no pasan
    por el filtro (los escribimos nosotros y están en el repo); sólo la rama "no entendí" pasa.
 
-**Los regex de ONIA** (reemplazan a los de stock/precio/cantidad de BE, que no aplican):
+**Los regex de Onia** (reemplazan a los de stock/precio/cantidad de BE, que no aplican):
 
 | Código | Qué caza | Regex propuestos |
 |---|---|---|
@@ -324,10 +324,10 @@ que sea (a) saliente, (b) NO privado, (c) `sender.type === "user"` (agente human
 `contact`), (d) `sender.id !== botAgentId`. Es **permanente por conversación** (no hay ventana de
 tiempo, no mira el assignee) y **falla hacia "seguir hablando"** si no hay historial.
 
-**Cambios para ONIA (dos, y son mejoras reales sobre BE):**
+**Cambios para Onia (dos, y son mejoras reales sobre BE):**
 
 1. **Fallar hacia el SILENCIO, no hacia hablar.** En BE, si la API de Chatwoot falla, `getConversationMessages`
-   devuelve `[]` y el bot habla igual. En un embudo comercial de ONIA prefiero perder una respuesta
+   devuelve `[]` y el bot habla igual. En un embudo comercial de Onia prefiero perder una respuesta
    automática que pisar a Sergio delante del prospecto. Si no puedo leer el estado → no respondo.
 2. **Persistir el flag, no recalcularlo.** Columna `bot_conversations.human_took_over boolean`. Se pone
    en `true` y **nunca vuelve a `false` automáticamente**. Sólo Sergio puede devolver la conversación al
@@ -335,7 +335,7 @@ tiempo, no mira el assignee) y **falla hacia "seguir hablando"** si no hay histo
    directo no siempre tenemos ese historial, y una lectura fallida no puede reactivar el bot.
 
    En BE hay un hueco documentado: `getConversationMessages` descarta mensajes con contenido vacío, así
-   que **una respuesta humana que sea sólo una imagen no pausa el bot**. En ONIA el flag se setea por el
+   que **una respuesta humana que sea sólo una imagen no pausa el bot**. En Onia el flag se setea por el
    evento de "salió un mensaje que no fue mío", tenga texto o no.
 
 ### 3.3 Opt-in
@@ -345,7 +345,7 @@ tiempo, no mira el assignee) y **falla hacia "seguir hablando"** si no hay histo
 y devuelve `false`** — "una falla tiene que cerrar la puerta, no abrirla". Y el consentimiento se detecta
 con un regex conservador: un "sí" pelado **no cuenta**.
 
-**Para ONIA es más simple y hay que decirlo:** el prospecto **escribió primero** ("DEMO"). Eso abre la
+**Para Onia es más simple y hay que decirlo:** el prospecto **escribió primero** ("DEMO"). Eso abre la
 ventana de servicio de 24 h de Meta y habilita responder sin plantilla. **No necesitamos opt-in para
 responder.** Lo necesitamos para **dos cosas concretas**:
 
@@ -717,13 +717,13 @@ WhatsApp.**
 Es el trabajo **P1/P2/P4** del playbook (config por cliente, `/bot-config` editable, vertical sin
 catálogo). Este bot **nace siendo el vertical sin catálogo** — que es justamente lo que el playbook
 marca como *"Sin esto DentalGest no puede usar el bot"* (P4, 3-4 días). Construirlo así no es un desvío:
-**es adelantar P4 gratis**, y encima con ONIA como primer cliente (dogfooding real).
+**es adelantar P4 gratis**, y encima con Onia como primer cliente (dogfooding real).
 
 ### 7.1 Qué se parametriza por cliente (va a config, nunca a código)
 
-| Parámetro | Ejemplo ONIA | Ejemplo clínica cliente |
+| Parámetro | Ejemplo Onia | Ejemplo clínica cliente |
 |---|---|---|
-| **Identidad y tono** | "asistente automático de ONIA", voseo boliviano, informal | "asistente de la Clínica X", usted, formal |
+| **Identidad y tono** | "asistente automático de Onia", voseo boliviano, informal | "asistente de la Clínica X", usted, formal |
 | **Disparador** | `DEMO` | `CITA`, `INFO` |
 | **Preguntas de calificación** (lista ordenada, con tipo y validación) | ¿clínica propia? / nº sillones / ciudad | ¿primera vez? / ¿qué te duele? / ¿tenés seguro? |
 | **Criterio de descarte** | no es dueño de clínica dental 1-3 sillones | fuera de zona de cobertura |
@@ -806,7 +806,7 @@ salud, §3.3 del playbook).
 
 ### ⚫ Fase 6 — Producto para clientes (3-4 días) · **NO depende de Meta para construirse**
 Config por cliente (§7.1) + `/bot-config` editable + script de onboarding. Se hace **después** de que
-el bot de ONIA agende su primera demo real. Vender un bot que todavía no nos consiguió a nosotros un
+el bot de Onia agende su primera demo real. Vender un bot que todavía no nos consiguió a nosotros un
 cliente es vender humo.
 
 ### Resumen de dependencias

@@ -1,16 +1,16 @@
-# ONIA Self-hosted Stack Runbook 2026
+# Onia Self-hosted Stack Runbook 2026
 
 Estado: desplegado por perfiles privados. No contiene secretos.
 Actualizado: 2026-06-28 America/Caracas.
 
 ## Diagnostico
 
-Hermes debe funcionar como sistema operativo de ONIA: decide, registra,
+Hermes debe funcionar como sistema operativo de Onia: decide, registra,
 orquesta y audita. Las herramientas self-hosted no deben convertirse en paneles
 sueltos; cada una debe entrar como capacidad controlada:
 
 - Supabase: memoria/base privada.
-- ONIA Center: sistema operativo interno con login por rol.
+- Onia Center: sistema operativo interno con login por rol.
 - n8n: ejecucion de procesos.
 - LiteLLM: gateway de modelos y costos.
 - Open WebUI: cockpit interno.
@@ -88,7 +88,7 @@ npm run deploy:selfhosted -- --profile prepare-firecrawl
 | Mailpit | Prepared | `127.0.0.1:3104` web / `127.0.0.1:3025` SMTP | Solo QA, no entrega productiva. |
 | Listmonk | Prepared | `127.0.0.1:3105` | Campanas/listas; SMTP pendiente de DNS/reputacion. |
 | Firecrawl | Prepared gated | `127.0.0.1:3106` si se arranca | No iniciado por defecto; workload pesado de navegador/API. |
-| ONIA Center | Publico con login | `https://center.onia.com.bo` | Contenedor `onia-center`; usa Supabase privado por red Docker. |
+| Onia Center | Publico con login | `https://center.onia.com.bo` | Contenedor `onia-center`; usa Supabase privado por red Docker. |
 
 Modelos expuestos por LiteLLM:
 
@@ -103,7 +103,7 @@ Servicios ya existentes detectados antes de este kit:
 - Supabase self-hosted privado.
 - n8n en Easypanel.
 - Cal.com self-hosted.
-- ONIA Center publico con auth.
+- Onia Center publico con auth.
 - SearXNG local en `127.0.0.1:8080`.
 - Chatwoot en stack Easypanel `onia-chatbot`.
 
@@ -288,13 +288,13 @@ puede regenerarlo. Mantener rutas manuales en archivo separado bajo el file
 provider de Traefik.
 
 Cal agenda comercial quedo configurado con usuario publico `onia`, identidad
-`business@onia.com.bo`, avatar ONIA servido desde ONIA Center, horario lun-sab
+`business@onia.com.bo`, avatar Onia servido desde Onia Center, horario lun-sab
 14:00-20:00 America/La_Paz, buffers de 15 minutos, confirmacion requerida y
 webhook activo hacia n8n solo para `BOOKING_CREATED`. La pagina publica muestra
 solo consulta comercial de 20 min y demo/diagnostico de 45 min; reunion de
 proyecto queda para link directo.
 
-ONIA Center se desplego el 2026-06-28:
+Onia Center se desplego el 2026-06-28:
 
 ```text
 DNS: center.onia.com.bo -> 187.77.16.63
@@ -319,7 +319,7 @@ Actualizacion operativa 2026-06-29:
   - `/api/onia-center/audio-intelligence` reporta `sttReachable=true`,
     Speaches responde y fallback OpenAI sigue configurado.
 
-Validacion publica ONIA Center del 2026-06-28:
+Validacion publica Onia Center del 2026-06-28:
 
 ```text
 https://center.onia.com.bo/onia-center/login -> 200
@@ -354,7 +354,7 @@ Vigilancia:
 
 - No publicar ningun panel directo a internet al inicio.
 - No exponer Supabase compartido por DNS publico.
-- ONIA Center puede ser publico solo detras de login por rol; Supabase debe
+- Onia Center puede ser publico solo detras de login por rol; Supabase debe
   seguir en red privada y no en DNS publico.
 - No montar Docker socket en agentes.
 - No guardar llaves de modelos en compose ni en repo.
@@ -362,7 +362,7 @@ Vigilancia:
   puede chocar con Easypanel/Traefik.
 - Listmonk no debe enviar correos productivos hasta tener dominio de envio,
   PTR/rDNS, SPF, DKIM, DMARC, bounces y unsubscribe.
-- Postal/Mailu/docker-mailserver deben ir en VPS/IP separado si ONIA decide
+- Postal/Mailu/docker-mailserver deben ir en VPS/IP separado si Onia decide
   operar servidor de correo propio.
 - Crawl4AI, Browser Use, Maxun y OpenHands se tratan como workloads riesgosos:
   privados, auditados y con limites.
@@ -401,7 +401,7 @@ ssh -L 3101:127.0.0.1:3101 root@187.77.16.63
 - Dify: preparar VPS o instancia separada si el VPS actual no tiene margen.
 - Firecrawl: preparar fuente y `.env`; arrancar solo con objetivo concreto de
   auditoria/research y ventana de mantenimiento.
-- Correo: decidir si Listmonk usara SMTP externo o si ONIA operara Postal en
+- Correo: decidir si Listmonk usara SMTP externo o si Onia operara Postal en
   un VPS/IP separado.
 - Auth gateway: definir Authentik o Authelia antes de abrir paneles por DNS.
 

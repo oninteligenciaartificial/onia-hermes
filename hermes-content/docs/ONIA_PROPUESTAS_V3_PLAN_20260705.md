@@ -1,4 +1,4 @@
-# ONIA Propuestas v3 — Plan de mejora de diseño y conversión
+# Onia Propuestas v3 — Plan de mejora de diseño y conversión
 
 Fecha: 2026-07-05 · Carril C (`propuestas-v2`) · Estado: Fase 1 HECHA.
 
@@ -22,7 +22,7 @@ Secciones opcionales nuevas en `generador/generar-propuestas.js` (TDD, 16 tests)
 | Resumen ejecutivo | `resumenEjecutivo` | sección #2 de la estructura ganadora (7 secciones) |
 | Imágenes con caption | `imagenes[]` | +72% cierre; ambientación IA, NO UI falsa |
 | Prueba social | `casos[]` | +34%; implementado pero VACÍO hasta tener casos reales |
-| Comparativa vs statu quo | `comparativa` | ancla visual antes del precio (TR4 vs ONIA) |
+| Comparativa vs statu quo | `comparativa` | ancla visual antes del precio (TR4 vs Onia) |
 | Próximos pasos + CTA | `proximosPasos[]` + `ctaWhatsapp` | convierte lectura en respuesta; wa.me prefilleado |
 | Polish PDF | — | font stack moderno, `page-break-inside:avoid`, figure/cta styles |
 

@@ -1,12 +1,12 @@
-# ONIA — Plan de prospección Semana 1
+# Onia — Plan de prospección Semana 1
 
 Fecha: 2026-07-04.
 Meta de la semana: **35 prospectos calificados registrados** (acuerdo 60 días).
-Foco geográfico: Santa Cruz de la Sierra (base ONIA), Bolivia.
+Foco geográfico: Santa Cruz de la Sierra (base Onia), Bolivia.
 
 > Regla dura: los prospectos se buscan en **fuentes públicas verificables**
 > (Google Maps, Instagram, Facebook, directorios). NO se inventan. Cada uno se
-> registra en ONIA Center / Notion antes de contar. NO se contacta sin que
+> registra en Onia Center / Notion antes de contar. NO se contacta sin que
 > Sergio apruebe el mensaje y el canal exactos.
 
 ## Qué cuenta como prospecto calificado
@@ -17,17 +17,17 @@ Un prospecto cuenta solo si tiene los 6 datos:
 2. Ciudad + fuente (dónde lo encontraste).
 3. Contacto público verificable (WhatsApp, IG, email, web o teléfono).
 4. Señal de dolor real (ver por segmento abajo).
-5. Oferta ONIA sugerida.
+5. Oferta Onia sugerida.
 6. Mensaje/siguiente acción propuesta.
 
 Sin esos 6 datos es un nombre suelto, no un prospecto.
 
 ## Segmentos objetivo (suman 35)
 
-| # | Segmento (rubro) | Cuota | Dolor típico | Oferta ONIA | Dónde buscar | Mensaje base |
+| # | Segmento (rubro) | Cuota | Dolor típico | Oferta Onia | Dónde buscar | Mensaje base |
 |---|---|---:|---|---|---|---|
 | 1 | Clínicas / consultorios dentales | 8 | Agenda manual, no siguen pacientes, responden lento | DentalGest (+ Landing si la web es débil) | Google Maps "odontología / dentista SCZ", Instagram | Clínica dental |
-| 2 | Estética / spa / dermatología | 5 | Consultas por IG que no siguen ni miden | Web Pro ONIA + Cuidado Web / CRM simple | Instagram, Google Maps | Negocio sin web |
+| 2 | Estética / spa / dermatología | 5 | Consultas por IG que no siguen ni miden | Web Pro Onia + Cuidado Web / CRM simple | Instagram, Google Maps | Negocio sin web |
 | 3 | Pymes comercio / distribuidoras / ferreterías | 7 | Inventario, pedidos y clientes en Excel y WhatsApp suelto | Gesti-OS (o Diagnóstico si el proceso no está claro) | Google Maps, Facebook, referidos | Negocio desordenado |
 | 4 | Negocios solo-Instagram sin web | 6 | No captan fuera de IG, sin formulario ni seguimiento | Landing de Captación | Instagram negocios locales | Negocio sin web |
 | 5 | Servicios profesionales (abogados, contadores, arquitectos) | 4 | Sin presencia clara, consultas desordenadas | Web Profesional (+ n8n si repiten trámites) | Directorios, LinkedIn, Google | Negocio sin web |
@@ -59,7 +59,7 @@ y CRM al 100%.
 
 ## Reglas de contacto (no saltarse)
 
-1. Registrar en ONIA Center / Notion ANTES de contactar.
+1. Registrar en Onia Center / Notion ANTES de contactar.
 2. Usar el mensaje base del segmento, personalizado con el nombre real y un detalle del negocio.
 3. Sergio aprueba mensaje y canal antes del primer envío.
 4. Un solo canal por prospecto; no duplicar si otro responsable ya lo tiene.

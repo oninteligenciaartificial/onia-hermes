@@ -1,7 +1,7 @@
 # Client Content Production System
 
 ## Objetivo
-Preparar a ONIA para crear contenido con IA para otras personas, negocios y clientes, usando Hermes como cerebro, ElevenLabs como audio y Higgsfield como video/render.
+Preparar a Onia para crear contenido con IA para otras personas, negocios y clientes, usando Hermes como cerebro, ElevenLabs como audio y Higgsfield como video/render.
 
 La meta comercial es vender paquetes de contenido + automatizacion:
 
@@ -46,7 +46,7 @@ Entregable base:
 - subtitulos;
 - CTA a WhatsApp, agenda o landing.
 
-### 3. Campañas ONIA para clientes
+### 3. Campañas Onia para clientes
 Video + sistema comercial.
 
 Entregable recomendado:
@@ -138,7 +138,7 @@ Para negocios que necesitan constancia.
 - 1 calendario.
 - 1 reporte simple.
 
-### Pack ONIA Growth
+### Pack Onia Growth
 Para vender servicio completo.
 
 - 8 videos al mes.
@@ -243,7 +243,7 @@ Cada proyecto debe guardar:
 
 - cliente;
 - rubro;
-- proyecto ONIA asociado: DentalGest, Gesti-OS, Web, Higgsfield;
+- proyecto Onia asociado: DentalGest, Gesti-OS, Web, Higgsfield;
 - paquete;
 - costo estimado de produccion;
 - estado;

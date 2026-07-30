@@ -1,7 +1,7 @@
-# Handoff → Sesión ONIA Platform (2026-07-26)
+# Handoff → Sesión Onia Platform (2026-07-26)
 
 > De: sesión **ONIA System** (rama `claude/onia-colaboradores-sin-inversion-d69b19`).
-> Para: sesión **ONIA Platform** (rama `claude/git-status-935f47`).
+> Para: sesión **Onia Platform** (rama `claude/git-status-935f47`).
 > Motivo: hoy tocamos **un archivo de su carril** porque bloqueaba la verificación de Meta.
 
 ---
@@ -50,7 +50,7 @@ Ruta del parche: `…/scratchpad/legal/02-jsonld-organization.patch` (scratchpad
 
 Resumen de `hermes-content/docs/ONIA_CARRILES_ACTIVOS_20260726.md` (esa es la fuente de verdad):
 
-| | ONIA System (nosotros) | ONIA Platform (ustedes) |
+| | ONIA System (nosotros) | Onia Platform (ustedes) |
 |---|---|---|
 | Rama | `claude/onia-colaboradores-sin-inversion-d69b19` | `claude/git-status-935f47` |
 | Suyo | `.claude/skills/**` · `.agents/skills/**` · `apps/site/src/app/onia-center/**` · `hermes-content/deploy/vps-ops/**` · `supabase/migrations/**` (schema `onia_center`) | `web-factory/apps/onia-platform/**` · `web-factory/docs/ONIA_BRAND_*` · `hermes-content/infra/vps-db/**` |

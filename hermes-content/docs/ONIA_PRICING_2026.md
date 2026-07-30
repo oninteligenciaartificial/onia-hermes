@@ -1,4 +1,4 @@
-# ONIA Pricing 2026
+# Onia Pricing 2026
 
 Documento canonico de precios y comisiones comerciales. Uso interno.
 
@@ -6,7 +6,7 @@ Ultima actualizacion: 2026-06-22
 
 ## Veredicto contable
 
-ONIA no vende "posts" ni "software barato". ONIA vende sistemas, seguimiento,
+Onia no vende "posts" ni "software barato". Onia vende sistemas, seguimiento,
 captacion y automatizacion para que los negocios tengan mas orden y mejores
 conversaciones comerciales.
 
@@ -20,12 +20,12 @@ Reglas actuales:
 - Consultoria: vender diagnostico, instalacion, capacitacion y acompanamiento
   como linea propia.
 - Comision: una venta cobrada, una comision.
-- Sergio y ONIA deben quedar por delante del vendedor por entrega, soporte,
+- Sergio y Onia deben quedar por delante del vendedor por entrega, soporte,
   direccion, herramientas, mantenimiento y riesgo.
 
 ## Oferta de arranque comercial - junio/julio 2026
 
-Decision operativa: ONIA necesita cerrar ventas rapido, pero sin posicionarse
+Decision operativa: Onia necesita cerrar ventas rapido, pero sin posicionarse
 como proveedor barato permanente. Por eso estos son precios de arranque con
 cupo y fecha, no nuevos precios definitivos.
 
@@ -57,7 +57,7 @@ Vigencia:
 | GestiOS Empresarial | Bs. 1,250/mes | Bs. 437.50 |
 | Landing de Captacion | Bs. 790 | Bs. 79.00 |
 | Web Profesional | Bs. 1,500 | Bs. 180.00 |
-| Web Pro ONIA | Bs. 2,900 | Bs. 348.00 |
+| Web Pro Onia | Bs. 2,900 | Bs. 348.00 |
 | Portal o Sistema Web mini | desde Bs. 6,500 | desde Bs. 650.00 |
 | Auditoria Express | Bs. 250 | Bs. 25.00 |
 | Diagnostico + Plan de Accion | Bs. 690 | Bs. 69.00 |
@@ -66,9 +66,9 @@ Vigencia:
 | Conexion de canal social | Bs. 690 setup | Bs. 69.00 |
 | Automatizacion simple n8n | Bs. 790 setup | Bs. 79.00 |
 | Flujo de aprobacion n8n | Bs. 1,200 setup | Bs. 120.00 |
-| ONIA Motor Local Starter | Bs. 1,500 setup + Bs. 790/mes | Bs. 150 setup + Bs. 79 primer mes |
-| ONIA Motor Local Growth | Bs. 2,900 setup + Bs. 1,900/mes | Bs. 290 setup + Bs. 190 primer mes |
-| ONIA Motor Local Pro | Bs. 4,900 setup + Bs. 3,900/mes | Requiere aprobacion |
+| Onia Motor Local Starter | Bs. 1,500 setup + Bs. 790/mes | Bs. 150 setup + Bs. 79 primer mes |
+| Onia Motor Local Growth | Bs. 2,900 setup + Bs. 1,900/mes | Bs. 290 setup + Bs. 190 primer mes |
+| Onia Motor Local Pro | Bs. 4,900 setup + Bs. 3,900/mes | Requiere aprobacion |
 
 Frase comercial:
 
@@ -78,20 +78,20 @@ precio queda reservado hasta [FECHA] solo con pago confirmado. Luego se aplica
 el precio vigente.
 ```
 
-## Caballito de batalla: ONIA Motor Local
+## Caballito de batalla: Onia Motor Local
 
-ONIA Motor Local es la oferta recurrente principal para sostener caja mensual.
+Onia Motor Local es la oferta recurrente principal para sostener caja mensual.
 No se vende como "posts" ni como "IA"; se vende como captacion, presencia,
 CRM simple, seguimiento y mejora mensual para negocios locales.
 
 | Plan | Precio | Uso |
 |---|---:|---|
 | Starter | Bs. 1,500 setup + Bs. 790/mes | Entrada para negocios pequenos. |
-| Growth | Bs. 2,900 setup + Bs. 1,900/mes | Paquete principal que ONIA debe empujar. |
+| Growth | Bs. 2,900 setup + Bs. 1,900/mes | Paquete principal que Onia debe empujar. |
 | Pro | Bs. 4,900 setup + Bs. 3,900/mes | Solo con aprobacion y capacidad de entrega. |
 
 Growth es el paquete recomendado. Cinco clientes Growth activos producen
-Bs. 9.500/mes y aportan Bs. 3.800 al Fondo ONIA si se aplica 40%.
+Bs. 9.500/mes y aportan Bs. 3.800 al Fondo Onia si se aplica 40%.
 
 Incluye segun plan: auditoria, Google Business Profile, landing o mejora de
 captacion, CRM simple, aviso/seguimiento n8n, reporte y mejora mensual. Pauta,
@@ -133,7 +133,7 @@ calidad de clientes, volumen y margen aprobado.
 | Paginas web | 10% a 12% del pago neto |
 | Conectores y n8n | 10% del setup neto |
 | Sistemas personalizados | 10% del primer pago neto |
-| Consultoria ONIA | 10% a 15% segun paquete |
+| Consultoria Onia | 10% a 15% segun paquete |
 | Cuidado/soporte mensual aprobado | 10% del primer mes si se vende aparte |
 
 ## DentalGest
@@ -143,7 +143,7 @@ citas, presupuestos y seguimiento.
 
 Por ahora DentalGest se vende solo como suscripcion mensual. No vender carga
 inicial, migracion, capacitacion, plan anual ni descuentos especiales hasta
-aprobacion de ONIA.
+aprobacion de Onia.
 
 | Plan | Precio | Comision vendedor |
 |---|---:|---:|
@@ -182,7 +182,7 @@ responsables, estados y reportes.
 |---|---:|---:|
 | Landing de Captacion | Bs. 790 | Bs. 79.00 |
 | Web Profesional | Bs. 1,500 | Bs. 180.00 |
-| Web Pro ONIA | Bs. 2,900 | Bs. 348.00 |
+| Web Pro Onia | Bs. 2,900 | Bs. 348.00 |
 | Portal o Sistema Web | desde Bs. 6,500 | desde Bs. 650.00 |
 | Cuidado Web Basico | Bs. 190/mes | Bs. 19.00 |
 | Cuidado Web Crecimiento | Bs. 390/mes | Bs. 39.00 |
@@ -206,7 +206,7 @@ cliente pregunta por contenido, llevarlo primero a web, auditoria o diagnostico.
 | Flujo de aprobacion n8n | Bs. 1,200 | Bs. 120.00 |
 | Soporte/cuidado de integracion | Cotizado aparte | Segun acuerdo |
 
-WhatsApp automatico queda pendiente hasta verificacion Meta. ONIA vende la
+WhatsApp automatico queda pendiente hasta verificacion Meta. Onia vende la
 implementacion del flujo, no acceso a n8n como producto independiente del
 cliente. Si el cliente necesita su propia instancia, editor, credenciales,
 retencion de logs o operacion 24/7, se cotiza infraestructura y soporte aparte.
@@ -221,7 +221,7 @@ rechazado y notificado, con registro simple de quien aprueba. Sirve para
 formularios, propuestas, contenido o leads. Si requiere APIs especiales,
 login de terceros o reglas complejas, se cotiza aparte.
 
-## Consultoria e implementaciones ONIA
+## Consultoria e implementaciones Onia
 
 | Servicio | Precio | Comision vendedor |
 |---|---:|---:|
@@ -232,7 +232,7 @@ login de terceros o reglas complejas, se cotiza aparte.
 
 Auditoria Express incluye revision de presencia digital, oferta, web/redes,
 canal de contacto y seguimiento comercial. Entrega 3 problemas concretos, 3
-acciones recomendadas y una oferta sugerida de ONIA. No incluye implementacion.
+acciones recomendadas y una oferta sugerida de Onia. No incluye implementacion.
 
 Diagnostico + Plan de Accion incluye una sesion mas profunda, mapa del proceso
 actual, prioridades, presupuesto recomendado y siguiente propuesta. Conviene

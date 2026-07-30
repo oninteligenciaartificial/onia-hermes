@@ -1,10 +1,10 @@
-# ONIA - Acuerdo de reactivación comercial: Arthur Fuentes (60 días)
+# Onia - Acuerdo de reactivación comercial: Arthur Fuentes (60 días)
 
 Fecha del documento: 2026-07-27.
 Estado: acuerdo específico, listo para revisión legal y firma.
 Reemplaza operativamente las metas y consecuencias de
 `ONIA_ACUERDO_ARTHUR_FUENTES_60_DIAS_2026.md`. Todo lo que este documento no
-cambia (economía, escala de intervención, propiedad de activos, Nuvia, ONIA
+cambia (economía, escala de intervención, propiedad de activos, Nuvia, Onia
 Media) sigue vigente tal cual está ahí.
 
 > **Por qué existe este documento.** El acuerdo anterior definía bien cómo se
@@ -18,7 +18,7 @@ Media) sigue vigente tal cual está ahí.
 - Colaborador: **Arthur Fuentes**
 - Documento de identidad: `[FALTA: CI de Arthur]`
 - Contacto: `[FALTA: número de WhatsApp y correo del colaborador]`
-- Rol: Colaborador Comercial y Operativo ONIA
+- Rol: Colaborador Comercial y Operativo Onia
 - `vendor_key` en el panel: `arthur` `[FALTA: confirmar que existe la fila en
   onia_sales.vendor_profiles con territory y start_date]`
 - Territorio primario propuesto: **clínicas dentales y consultorios de Santa
@@ -38,13 +38,13 @@ Media) sigue vigente tal cual está ahí.
 - Esto es un **acuerdo de colaboración comercial por resultado**. **NO es una
   relación laboral.** No hay salario, no hay horario impuesto, no hay
   exclusividad, no hay subordinación jerárquica.
-- **ONIA no dice cuándo ni desde dónde trabaja Arthur.** Los compromisos de las
+- **Onia no dice cuándo ni desde dónde trabaja Arthur.** Los compromisos de las
   secciones 3 y 4 son metas de producción que Arthur organiza como quiera. Si las
   cumple en tres días o en cinco, es su decisión.
 - Arthur puede trabajar en otros proyectos. La única restricción es no vender
-  servicios que compitan directamente con ONIA a clientes o prospectos de ONIA.
-- Este acuerdo **no crea sociedad de ONIA**, ni participación accionaria, ni
-  derecho sobre ingresos generales de ONIA, ni propiedad sobre Onia Dental
+  servicios que compitan directamente con Onia a clientes o prospectos de Onia.
+- Este acuerdo **no crea sociedad de Onia**, ni participación accionaria, ni
+  derecho sobre ingresos generales de Onia, ni propiedad sobre Onia Dental
   (DentalGest), GestiOS, Hermes, Web Factory, marca, código, plantillas, procesos
   ni CRM.
 - La **base recuperable** de la sección 6 no es sueldo: es un adelanto contra
@@ -72,7 +72,7 @@ El plan barbell fija, para el 31-dic-2026:
 | Webs con Cuidado Web mensual | 10 | Bs 300/mes | Bs 3.000 |
 | **Total** | **40** | | **Bs 58.000/mes** |
 
-40 clientes en 5 meses = **8 clientes cobrados por mes** para toda ONIA.
+40 clientes en 5 meses = **8 clientes cobrados por mes** para toda Onia.
 
 ### 2.2 Cuánto de eso le toca a Arthur
 
@@ -216,13 +216,13 @@ precio, y eso se corrige en la revisión del día 60, no se ignora.
 **Esta es la sección más importante del documento.** Un objetivo que no se puede
 auditar no existe. Regla que manda sobre todo lo demás y que ya está vigente:
 
-> **Si no está registrado en ONIA Center, no cuenta para actividad, comisión,
+> **Si no está registrado en Onia Center, no cuenta para actividad, comisión,
 > cierre ni evaluación.** No se aprueba nada por WhatsApp suelto, por memoria, por
 > captura incompleta ni por conversación no trazable.
 
 ### 5.1 Fuente de verdad
 
-Fuente primaria: schema **`onia_sales`** en Supabase, leído desde ONIA Center
+Fuente primaria: schema **`onia_sales`** en Supabase, leído desde Onia Center
 `/onia-center/equipo`.
 
 `[FALTA: confirmar que el schema onia_sales está aplicado en el Supabase
@@ -230,7 +230,7 @@ productivo (no solo como migración local en supabase/migrations/) y que RLS est
 activo por owner_user_key. Está marcado como pendiente en
 ONIA_COLABORADORES_PANEL_SPEC_2026.md §A.]`
 
-**Fuente interina mientras eso no esté confirmado:** Notion, CRM Vendedores ONIA,
+**Fuente interina mientras eso no esté confirmado:** Notion, CRM Vendedores Onia,
 con exactamente las mismas reglas de conteo de abajo. Sergio exporta captura del
 tablero cada viernes al cierre y la guarda. La migración de interina a primaria
 no cambia ninguna meta.
@@ -295,8 +295,8 @@ Porcentajes vigentes de Arthur sobre `base_repartible`:
 | **Onia Dental / GestiOS mensual** | venta mensual cobrada | **25% a 35%** del primer mes |
 | Onia Dental / GestiOS | onboarding o setup vendido | 8% a 10% |
 | Onia Dental / GestiOS | pago anual | 5% a 8% |
-| **Web** | trae el cliente, sin llamada de cierre, ONIA hace todo | 3% a 5% |
-| **Web** | trae el cliente, hace llamada y seguimiento de cierre, ONIA hace todo | **12% a 15%** |
+| **Web** | trae el cliente, sin llamada de cierre, Onia hace todo | 3% a 5% |
+| **Web** | trae el cliente, hace llamada y seguimiento de cierre, Onia hace todo | **12% a 15%** |
 | **Web** | cierra y ayuda con brief, copy o contenido | 15% a 20% |
 | **Web** | **cierra y produce la web completa aprobada, sin rescate** | **50%** |
 | Automatización n8n | la hace, funcionando y documentada | 25% a 35% |
@@ -313,12 +313,12 @@ la entrega sí lo baja, por niveles.
 | Caso | Cobro | base 90% | Arthur | Le queda |
 |---|---:|---:|---:|---:|
 | Onia Dental Profesional, primer mes, Arthur cierra con llamada y CRM completo, Sergio hace la demo técnica y entrega | Bs 750 | Bs 675 | 30% | **Bs 202,50** |
-| Web Profesional, Arthur cierra, ONIA produce | Bs 1.500 | Bs 1.350 | 15% | **Bs 202,50** |
+| Web Profesional, Arthur cierra, Onia produce | Bs 1.500 | Bs 1.350 | 15% | **Bs 202,50** |
 | Web Profesional, Arthur cierra **y produce completa sin rescate** | Bs 1.500 | Bs 1.350 | 50% | **Bs 675** |
 | Cuidado Web Crecimiento, primer mes, Arthur lo vende pegado a la web | Bs 390 | Bs 351 | 15% | **Bs 52,65** |
 | Onboarding Onia Dental básico | Bs 290 | Bs 261 | 10% | **Bs 26,10** |
 
-Mes tipo cumpliendo R1 (2 clínicas + 1 web + cuidado + onboardings), **con ONIA
+Mes tipo cumpliendo R1 (2 clínicas + 1 web + cuidado + onboardings), **con Onia
 produciendo la web**: alrededor de **Bs 712**. El mismo mes **produciendo Arthur
 la web completa**: alrededor de **Bs 1.185**. La diferencia entre esos dos
 números es la razón por la que conviene aprender a producir, no solo a vender.
@@ -331,13 +331,13 @@ Extensión nueva de este acuerdo, tomada de
 - **Bs 400 por mes**, solo en Fase 2 (días 31 a 60), tope 2 meses.
 - Se paga **solo si el mes cerró con 80% o más del piso semanal**.
 - Es **adelanto contra comisiones**, no sueldo: se descuenta de lo que Arthur
-  gane. Si vende, no le cuesta nada extra a ONIA. Si cumple el piso pero no
-  vende, el riesgo máximo expuesto de ONIA es Bs 400 al mes.
+  gane. Si vende, no le cuesta nada extra a Onia. Si cumple el piso pero no
+  vende, el riesgo máximo expuesto de Onia es Bs 400 al mes.
 
 ### 6.3 Bonos
 
 Extensión nueva, tomada de `ONIA_COLABORADORES_COMERCIALES_SIN_INVERSION_2026.md`
-§9. Se pagan **solo con el semáforo de caja de ONIA en verde**; en amarillo o rojo
+§9. Se pagan **solo con el semáforo de caja de Onia en verde**; en amarillo o rojo
 quedan diferidos, no anulados.
 
 | Bono | Se gatilla | Monto |
@@ -362,16 +362,16 @@ Nota honesta: la meta de R1 son 3 ventas al mes, así que el bono de meta mensua
 - No se paga si: el cliente no pagó, falta CRM, la venta no fue aprobada, hubo
   promesa no autorizada, o el cliente cancela o pide reembolso antes de 30 días.
 
-### 6.5 Qué pone ONIA
+### 6.5 Qué pone Onia
 
-Estas son obligaciones de ONIA, no favores. Si ONIA no las cumple, Arthur no
+Estas son obligaciones de Onia, no favores. Si Onia no las cumple, Arthur no
 puede fallar una semana por eso, y la semana se marca **amarilla**.
 
-| ONIA entrega | Qué es | Cuándo |
+| Onia entrega | Qué es | Cuándo |
 |---|---|---|
 | **Lista de prospectos del territorio** | Al menos 40 negocios del territorio con contacto verificable, al inicio, para que la semana 1 no arranque en cero | Antes del lunes de la semana 1 |
 | **Guion de llamada y plantillas de mensaje** | Manual de vendedor vigente, mensajes aprobados por canal | Antes del lunes de la semana 1 |
-| **Acceso a ONIA Center** | Vista `/onia-center/equipo` con su `vendor_key`, territorio y fase cargados | Antes del lunes de la semana 1 |
+| **Acceso a Onia Center** | Vista `/onia-center/equipo` con su `vendor_key`, territorio y fase cargados | Antes del lunes de la semana 1 |
 | **Propuestas generadas** | Sergio o el sistema generan el PDF con el generador oficial, dentro de **24 horas hábiles** del pedido de Arthur | Por pedido |
 | **Ambiente de demo de Onia Dental** | Instancia con datos de ejemplo, funcionando, para que Arthur pueda demostrar sin depender de Sergio | Antes del lunes de la semana 1 |
 | **Sergio en la demo técnica** | Sergio entra a las demos de Onia Dental y GestiOS cuando hay decisión técnica, y a todo ticket sobre Bs 2.900 | Con 24 horas de aviso |
@@ -395,7 +395,7 @@ ni se discute después del viernes.
 |---|---|
 | **1ª semana roja** | Feedback por escrito el viernes, con el número exacto que falló. Arthur entrega un **plan de recuperación escrito antes del lunes 09:00**: qué falló, por qué y qué cambia. Sin efecto sobre comisiones ya ganadas. Sin descuento. |
 | **2ª semana roja consecutiva** | Cuatro cosas, todas juntas: (1) los leads de Arthur sin seguimiento en los últimos 7 días **se reasignan** y pierde el derecho de origen sobre ellos; (2) **vuelve a comisión por tarea puntual**, en el piso de cada rango de la sección 6.1 (por ejemplo, web pasa de 12-15% a 12%), hasta acumular 2 semanas verdes seguidas; (3) **pierde la base recuperable** de ese mes; (4) **queda fuera de la escalera de subida de porcentaje** por 4 semanas. |
-| **3ª semana roja consecutiva** | **Corte.** El acuerdo termina ese viernes. Se liquida lo cobrado, aprobado y sin reclamo, en el cierre mensual siguiente. No hay indemnización porque no hay relación laboral. Los leads y clientes quedan con ONIA. |
+| **3ª semana roja consecutiva** | **Corte.** El acuerdo termina ese viernes. Se liquida lo cobrado, aprobado y sin reclamo, en el cierre mensual siguiente. No hay indemnización porque no hay relación laboral. Los leads y clientes quedan con Onia. |
 
 - Las semanas rojas se cuentan **consecutivas**. Dos verdes seguidas reinician el
   contador a cero.
@@ -408,14 +408,14 @@ ni se discute después del viernes.
 Estas causales terminan el acuerdo el mismo día, sin pasar por las tres semanas:
 
 - Prometer al cliente un precio, descuento, plazo o función fuera de la lista
-  aprobada, y que ONIA tenga que responder por eso.
+  aprobada, y que Onia tenga que responder por eso.
 - Registrar en el CRM actividad que no ocurrió (demo que no pasó, conversación
   inventada, captura editada). Esto es la falta más grave del acuerdo: rompe la
   única cosa que hace que todo lo demás funcione.
 - Filtrar precios internos, costos, márgenes, credenciales o datos de clientes.
 - Contactar clientes o leads de otro responsable después de que se le pidió que
   no lo haga.
-- Presentarse ante un cliente como socio o dueño de ONIA.
+- Presentarse ante un cliente como socio o dueño de Onia.
 
 ### 7.3 Consecuencias que aplican siempre, sin ser corte
 
@@ -517,7 +517,7 @@ Meta, APIs), reclamos y clientes sensibles.
 **No puede:** prometer descuentos, plazos o funciones sin aprobación; ofrecer
 WhatsApp automático antes de la verificación Meta; garantizar resultados;
 publicar o entregar material al cliente sin aprobación; tocar credenciales;
-presentarse como socio de ONIA.
+presentarse como socio de Onia.
 
 **Obligaciones de servicio:** responder el mismo día hábil, registrar cada
 interacción antes de la siguiente acción, dejar todo cliente con próximo paso
@@ -527,13 +527,13 @@ agendado, no prometer nada fuera de la lista de precios vigente.
 
 ## 11. Confidencialidad, acceso y propiedad
 
-- Arthur trabaja en los espacios saneados que ONIA le asigne (repo
+- Arthur trabaja en los espacios saneados que Onia le asigne (repo
   `onia-hermes-collab`, vista de equipo del panel). No accede a capital, deuda,
-  caja completa, márgenes, Fondo ONIA, credenciales ni estrategia interna.
-- No comparte, copia ni reutiliza fuera de ONIA la información, plantillas,
-  procesos, prompts, precios internos ni clientes de ONIA.
-- Todo lo creado para ONIA con herramientas, marca, brief, procesos o dirección
-  de ONIA es **activo de ONIA**: código, webs, automatizaciones, plantillas,
+  caja completa, márgenes, Fondo Onia, credenciales ni estrategia interna.
+- No comparte, copia ni reutiliza fuera de Onia la información, plantillas,
+  procesos, prompts, precios internos ni clientes de Onia.
+- Todo lo creado para Onia con herramientas, marca, brief, procesos o dirección
+  de Onia es **activo de Onia**: código, webs, automatizaciones, plantillas,
   prompts, guiones, contenido, CRM, bases de datos, diseños.
 - Arthur puede usar piezas en su portafolio solo con aprobación previa de Sergio y
   sin exponer datos privados, costos ni clientes sensibles.
@@ -542,12 +542,12 @@ agendado, no prometer nada fuera de la lista de precios vigente.
 
 ## 12. Datos legales de la parte contratante
 
-- ONIA opera como **empresa unipersonal a nombre de LESLIE MERCADO MORENO**.
+- Onia opera como **empresa unipersonal a nombre de LESLIE MERCADO MORENO**.
 - Denominación legal registrada: **OniaAgency**. Matrícula SEPREC / NIT:
   **5371375010**.
-- **Sergio (16 años) es quien opera** el día a día de ONIA: dirección comercial y
+- **Sergio (16 años) es quien opera** el día a día de Onia: dirección comercial y
   técnica, precios, aprobaciones, entregas y verificación de este acuerdo.
-- **La firma del lado de ONIA va a nombre de la titular, Leslie Mercado Moreno.**
+- **La firma del lado de Onia va a nombre de la titular, Leslie Mercado Moreno.**
   Ninguna firma de Sergio obliga legalmente a la empresa, dada su edad. Esto no es
   un formalismo: es lo que hace que el documento sea exigible.
 
@@ -559,7 +559,7 @@ Las partes dejan constancia expresa de que:
 
 1. Esta es una **colaboración comercial por resultado**. La retribución es
    **exclusivamente variable**, calculada sobre cobros reales de clientes.
-2. **ONIA no impone horario, jornada, lugar de trabajo ni presencialidad.** Las
+2. **Onia no impone horario, jornada, lugar de trabajo ni presencialidad.** Las
    metas de las secciones 3 y 4 son compromisos de producción que el colaborador
    organiza con total autonomía de tiempo y método.
 3. **No hay exclusividad.** El colaborador puede prestar servicios a terceros.
@@ -574,7 +574,7 @@ Las partes dejan constancia expresa de que:
 
 Riesgo conocido y asumido: en Bolivia la relación laboral se configura por
 **dependencia, subordinación y remuneración**. Las siete cláusulas de arriba
-existen para que no se configure. Si en la práctica ONIA empieza a imponer
+existen para que no se configure. Si en la práctica Onia empieza a imponer
 horarios, exigir exclusividad o pagar montos fijos no recuperables, la mitigación
 deja de servir y hay que formalizar.
 
@@ -586,11 +586,11 @@ Colaborador: **Arthur Fuentes**
 
 Firma: __________________________   CI: ______________   Fecha: ____ / ____ / 2026
 
-Por ONIA (titular): **Leslie Mercado Moreno**
+Por Onia (titular): **Leslie Mercado Moreno**
 
 Firma: __________________________   CI: ______________   Fecha: ____ / ____ / 2026
 
-Operación y verificación por ONIA: Sergio
+Operación y verificación por Onia: Sergio
 
 Firma: __________________________   Fecha: ____ / ____ / 2026
 

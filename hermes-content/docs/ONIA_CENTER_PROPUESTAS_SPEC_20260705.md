@@ -1,4 +1,4 @@
-# Spec — Propuestas comerciales dentro de ONIA Center
+# Spec — Propuestas comerciales dentro de Onia Center
 
 Fecha: 2026-07-05 · Pedido por Sergio ("quiero que esto esté en el onia-center").
 Ejecuta: carril A (web-factory `src/app/onia-center/**` + `api/onia-center/**`).
@@ -6,7 +6,7 @@ Carril C (propuestas) NO toca ese código; esta spec es el contrato entre ambos.
 
 ## Objetivo
 
-Que Sergio vea y opere desde ONIA Center (center.onia.com.bo) el pipeline
+Que Sergio vea y opere desde Onia Center (center.onia.com.bo) el pipeline
 comercial de propuestas: qué propuestas existen, sus precios ratificados,
 quién las abrió y cuándo, sin abrir el repo.
 
@@ -19,7 +19,7 @@ quién las abrió y cuándo, sin abrir el repo.
 | Pixel de apertura | workflow n8n **"ONIA - Propuesta Abierta (pixel)"** id `UMpcKi7wfMmC9KCw` — `GET /webhook/propuesta-abierta?t=<token>&s=<slug>` → Telegram a Sergio. Probado (ejecución 21418). |
 | Variante trackeada | `node generar-propuestas.js <slug> --track <token>` |
 | Precios ratificados | `onia-core/ONIA_CATALOGO_COMERCIAL_2026.md` §Decisiones (2026-07-05) |
-| Panel Agente Vendedor | ya visible en ONIA Center (sesión great-chandrasekhar 2026-07-05) |
+| Panel Agente Vendedor | ya visible en Onia Center (sesión great-chandrasekhar 2026-07-05) |
 
 ## Alcance de la vista (dentro del Agente Vendedor)
 

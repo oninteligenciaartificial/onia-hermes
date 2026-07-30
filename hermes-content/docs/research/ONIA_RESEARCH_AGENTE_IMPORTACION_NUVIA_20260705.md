@@ -21,13 +21,13 @@ riel de pago boliviano**, no solo por riesgo.
 - Sí sirve: **señales de tendencia** (AliExpress Dropshipping Center gratis, Google
   Trends, TikTok, ad libraries; spy tools Ecomhunt/Dropship Spy/ZIK) + **scraping
   dirigido** con browser-use/Skyvern (read-only, respetando ToS) + **filtro
-  ONIA-Bolivia** (peso/flete, arancel, demanda local) = el verdadero valor.
+  Onia-Bolivia** (peso/flete, arancel, demanda local) = el verdadero valor.
 - Fuentes: [Alibaba Open API](https://developer.alibaba.com/docs/doc.htm?treeId=684&articleId=118416&docType=1), [AliExpress API](https://zuplo.com/learning-center/aliexpress-api-guide), [spy tools](https://www.spocket.co/blogs/aliexpress-product-research-tools).
 
 ## 3. Contacto a proveedores
 - B2B-proveedor ≠ cold email de venta (intención legítima). Aun así: **DMARC/DKIM/SPF
   obligatorio** (Gmail rechaza sin DMARC desde nov-2025), volumen bajo (~20/día),
-  **dominio separado** (nunca el de ONIA). **Priorizar el RFQ/chat interno de
+  **dominio separado** (nunca el de Onia). **Priorizar el RFQ/chat interno de
   Alibaba** sobre email externo. El agente redacta; **el envío lo aprueba Sergio**.
 - Fuentes: [Google spam B2B](https://outboundrepublic.com/blog/what-googles-spam-changes-mean-for-b2b-cold-email-in-2025/), [safe limits](https://www.topo.io/blog/safe-sending-limits-cold-email).
 
@@ -43,7 +43,7 @@ riel de pago boliviano**, no solo por riesgo.
   términos/precio, (c) cualquier pago.** Sin excepción en el pago.
 - Fuentes: [pagar Alibaba desde Bolivia](https://www.topboxbolivia.com/post/c%C3%B3mo-pagar-a-tu-proveedor-en-alibaba-desde-bolivia-sin-complicarte), [Visa threats agentic commerce](https://corporate.visa.com/en/sites/visa-perspectives/security-trust/the-threats-landscape-of-agentic-commerce.html).
 
-## 5. Arquitectura para ONIA + v1
+## 5. Arquitectura para Onia + v1
 ```
 Hermes (n8n gateway) ── comando / aprobaciones ──► Sergio (WhatsApp)
       │
@@ -57,7 +57,7 @@ n8n (orquestador + cron + estado en Supabase)
 ```
 **v1 mínimo (2-3 semanas, sin gastar):** (1) radar de productos = cron n8n con
 browser-use sobre AliExpress Dropshipping Center + tendencias → top-N a Supabase con
-score ONIA-Bolivia (read-only); (2) ficha + comparación por producto vía Hermes a
+score Onia-Bolivia (read-only); (2) ficha + comparación por producto vía Hermes a
 Sergio; (3) draft de RFQ, Sergio aprueba envío (empezar por RFQ interno de Alibaba,
 no email); (4) órdenes = solo borrador + carrito listo, pago 100% manual.
 

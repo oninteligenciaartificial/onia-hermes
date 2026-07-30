@@ -1,4 +1,4 @@
-# ONIA Self-hosted AI Tools Research 2026
+# Onia Self-hosted AI Tools Research 2026
 
 Estado: investigacion operativa para implementacion gradual.
 Fecha: 2026-06-19.
@@ -6,7 +6,7 @@ Fecha: 2026-06-19.
 ## Objetivo
 
 Evaluar las 10 herramientas self-hosted de las capturas y convertirlas en un
-plan realista para ONIA. No instalar todo por moda: instalar solo lo que ahorre
+plan realista para Onia. No instalar todo por moda: instalar solo lo que ahorre
 tiempo, ayude a vender, mejore entregas o cree capacidad interna.
 
 Herramientas revisadas:
@@ -24,9 +24,9 @@ Herramientas revisadas:
 
 ## Decision ejecutiva corregida
 
-Supabase no es una herramienta mas: es la capa de datos de ONIA.
+Supabase no es una herramienta mas: es la capa de datos de Onia.
 
-La conclusion anterior fue demasiado conservadora en el orden. Para ONIA si
+La conclusion anterior fue demasiado conservadora en el orden. Para Onia si
 necesitamos un stack self-hosted mas amplio, pero dividido por capas. El error
 seria instalar muchas apps sueltas sin una arquitectura comun.
 
@@ -34,7 +34,7 @@ No conviene instalar las 10 herramientas de las capturas como paneles publicos
 en el VPS de produccion actual. Si conviene construir una plataforma interna
 self-hosted con Supabase como base.
 
-ONIA ya tiene una base self-hosted:
+Onia ya tiene una base self-hosted:
 
 - VPS activo.
 - Easypanel/Traefik activo.
@@ -53,7 +53,7 @@ La mejor estrategia actualizada es:
 
 ## Prioridad recomendada
 
-| Prioridad | Herramienta | Decision ONIA | Motivo |
+| Prioridad | Herramienta | Decision Onia | Motivo |
 |---|---|---|---|
 | P0 | Supabase | Ya activo, consolidar | Base privada compartida para datos, auditoria, CRM, bookings, proyectos, storage y funciones server-side. |
 | P0 | n8n | Ya activo, endurecer | Orquestador de procesos, webhooks, avisos, ETL y ventas. |
@@ -79,7 +79,7 @@ La mejor estrategia actualizada es:
 | P3 | Grafana/Prometheus | Evaluar despues de Uptime Kuma | Metricas profundas; util, pero mas pesado que monitoreo simple. |
 | P3 | PostHog/Sentry self-hosted | Evaluar, no instalar primero | Valiosos para producto/errores, pero pesados para VPS actual. |
 
-## Stack ampliado necesario para ONIA
+## Stack ampliado necesario para Onia
 
 ### Capa 1 - Datos y backend
 
@@ -199,10 +199,10 @@ Uso:
 Implementacion:
 
 - Docker simple: `langflowai/langflow`.
-- Para ONIA usar Docker Compose con Postgres persistente, no SQLite temporal.
+- Para Onia usar Docker Compose con Postgres persistente, no SQLite temporal.
 - Dominio sugerido: `langflow.onia.ai`, pero solo interno o protegido.
 
-Valor para ONIA:
+Valor para Onia:
 
 - Crear prototipos rapidos de asistentes para DentalGest, Gesti-OS, Web Factory
   o ventas.
@@ -232,7 +232,7 @@ Implementacion:
 - Instalar como worker Python privado con Playwright/Chromium.
 - Integrar con Hermes, n8n o scripts especificos.
 
-Valor para ONIA:
+Valor para Onia:
 
 - Prospeccion asistida.
 - Recoleccion de datos de sitios donde una API no existe.
@@ -265,7 +265,7 @@ Implementacion:
   - OpenAI-compatible gateway si luego instalamos LiteLLM.
   - Supabase para registrar runs solo via backend/n8n, no desde browser directo.
 
-Valor para ONIA:
+Valor para Onia:
 
 - Punto unico para probar prompts, asistentes y modelos.
 - Equipo/vendedores pueden usar IA interna sin tocar APIs.
@@ -287,7 +287,7 @@ Decision:
 Uso:
 
 - Postgres + Auth + Storage + Realtime + Edge Functions + Studio.
-- Para ONIA es la capa privada de datos compartidos.
+- Para Onia es la capa privada de datos compartidos.
 
 Estado actual:
 
@@ -295,9 +295,9 @@ Estado actual:
 - Privado/local-only.
 - Backups diarios documentados.
 
-Valor para ONIA:
+Valor para Onia:
 
-- Datos operativos de ONIA.
+- Datos operativos de Onia.
 - CRM, bookings, Web Factory, auditorias, dashboards, automatizaciones.
 - Fuente server-side para n8n y servicios internos.
 
@@ -325,7 +325,7 @@ Implementacion:
 - Activar login si hay acceso desde dominio.
 - Dominio sugerido: `pdf.onia.ai`.
 
-Valor para ONIA:
+Valor para Onia:
 
 - Preparar PDFs para vendedores.
 - Unir propuestas, firmar, redactar documentos y convertir archivos de clientes.
@@ -354,14 +354,14 @@ Implementacion:
 - Requisitos minimos oficiales: 2 CPU, 2 GB RAM, 30 GB.
 - Mejor en servidor fresco para evitar conflictos.
 
-Valor para ONIA:
+Valor para Onia:
 
 - Deploys mas ordenados de proyectos si dejamos Easypanel.
 - Puede servir para un VPS nuevo dedicado a apps de clientes.
 
 Riesgos:
 
-- ONIA ya tiene Easypanel/Traefik activo. Montar Coolify encima del mismo VPS
+- Onia ya tiene Easypanel/Traefik activo. Montar Coolify encima del mismo VPS
   duplica proxy, certificados, redes y responsabilidad operativa.
 - Migrar sin plan puede romper n8n, Supabase, Cal o dominios.
 
@@ -386,7 +386,7 @@ Implementacion:
   limites de confianza mas estrictos.
 - Mantener API key y tokens fuera del repo.
 
-Valor para ONIA:
+Valor para Onia:
 
 - Research de mercado y competidores.
 - Extraccion de contenido para propuestas y auditorias.
@@ -417,7 +417,7 @@ Implementacion:
 - La propia documentacion advierte que cualquier ruta montada read-write puede
   ser modificada por el agente.
 
-Valor para ONIA:
+Valor para Onia:
 
 - Automatizar tareas de codigo, revisiones, issues y mantenimiento.
 - Puede complementar Codex/Claude si se configura como worker especializado.
@@ -446,7 +446,7 @@ Implementacion:
 - Requiere reverse proxy para produccion.
 - Usa navegador/Playwright y puede necesitar 4 GB RAM para backend.
 
-Valor para ONIA:
+Valor para Onia:
 
 - Scraping visual para personas no tecnicas.
 - Potencial para vendedores: crear listas, investigar negocios, extraer datos
@@ -477,7 +477,7 @@ Implementacion:
 - En produccion necesita dominios, SMTP, almacenamiento, backups y revision de
   modelo/vector DB.
 
-Valor para ONIA:
+Valor para Onia:
 
 - Construir chatbots internos o demos de IA rapido.
 - Probar asistentes por vertical: DentalGest, Gesti-OS, Hato/Ganadero.
@@ -492,13 +492,13 @@ Riesgos:
 
 Decision:
 
-- P1 instalar interno/single-workspace. No usar como SaaS multi-cliente de ONIA
+- P1 instalar interno/single-workspace. No usar como SaaS multi-cliente de Onia
   sin revisar licencia comercial, rebranding y aislamiento por cliente.
 
 ## Herramientas adicionales investigadas
 
 Estas no estaban en las capturas, pero si forman parte de un stack serio para
-ONIA.
+Onia.
 
 | Herramienta | Para que sirve | Cuando instalar | Riesgo principal |
 |---|---|---|---|
@@ -507,7 +507,7 @@ ONIA.
 | Langfuse | Trazas, prompts, evaluacion y costos LLM | P2 cuando Dify/Open WebUI tengan uso real | Agrega Postgres/ClickHouse/Redis y operacion |
 | Qdrant | Vector DB dedicada para RAG grande | P2 solo si pgvector/Supabase no alcanza | Mas storage, backups y tuning |
 | SearXNG | Busqueda privada/metasearch para research y agentes | P2 interno | Bloqueos/rate limits si se abusa |
-| Chatwoot | Inbox para WhatsApp, webchat, email y soporte | P2 si ONIA centraliza conversaciones | WhatsApp oficial requiere setup y costos Meta/BSP |
+| Chatwoot | Inbox para WhatsApp, webchat, email y soporte | P2 si Onia centraliza conversaciones | WhatsApp oficial requiere setup y costos Meta/BSP |
 | Typebot | Formularios conversacionales y lead qualification | P2 si lo vamos a vender/embeber | Puede duplicar flujos con Dify/Chatwoot |
 | Uptime Kuma | Monitoreo simple y status checks | P1 inmediato | No reemplaza observabilidad profunda |
 | Infisical | Gestion de secretos y rotacion | P2 al crecer el equipo/servicios | Mala configuracion centraliza demasiado riesgo |
@@ -600,7 +600,7 @@ Supabase/n8n.
 | Supabase | sin DNS publico | No | Mantener local/private; exponer solo APIs controladas. |
 | n8n | dominio interno existente | No al inicio | Webhooks publicos solo cuando haga falta. |
 | LiteLLM | `llm.onia.ai` o `ai-gateway.onia.ai` | No | Gateway privado de modelos y llaves. |
-| Open WebUI | `chat.onia.ai` | No al inicio | Solo ONIA interno. |
+| Open WebUI | `chat.onia.ai` | No al inicio | Solo Onia interno. |
 | Dify | `dify.onia.ai` | No al inicio | Interno/single-workspace para demos y apps IA. |
 | Crawl4AI | `crawl.onia.ai` | No | API interna/MCP. |
 | Firecrawl | `firecrawl.onia.ai` | No | Solo interno/tunel; queue admin protegido. |
@@ -633,7 +633,7 @@ Supabase/n8n.
 
 ## Matriz comercial
 
-| Oferta ONIA posible | Herramientas | Se puede vender ya? | Condicion |
+| Oferta Onia posible | Herramientas | Se puede vender ya? | Condicion |
 |---|---|---|---|
 | IA interna para negocio | Open WebUI + LiteLLM + Ollama/API | Si, como implementacion interna | Sin prometer modelo propio ni rebranding falso. |
 | Chatbot/RAG vendible | Dify + Supabase + n8n + LiteLLM | Si, despues de piloto | Aclarar costos de modelos, alcance y licencia. |
@@ -646,7 +646,7 @@ Supabase/n8n.
 | Scraping no-code | Maxun | Con cautela | Solo datos permitidos/publicos y acuerdo de uso. |
 | Agente de navegador | Browser Use | Con cautela | Siempre con supervision humana. |
 | Agente dev/codigo | OpenHands | No como servicio general todavia | Primero laboratorio aislado. |
-| Plataforma deploy cliente | Coolify | No ahora | ONIA usa Easypanel; evaluar VPS dedicado. |
+| Plataforma deploy cliente | Coolify | No ahora | Onia usa Easypanel; evaluar VPS dedicado. |
 
 ## Fuentes oficiales revisadas
 

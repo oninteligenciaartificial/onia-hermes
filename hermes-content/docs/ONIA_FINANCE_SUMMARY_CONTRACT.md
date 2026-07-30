@@ -1,4 +1,4 @@
-# ONIA Center — Contrato de lectura: agentes Finanzas y Contenido (2026-07-09)
+# Onia Center — Contrato de lectura: agentes Finanzas y Contenido (2026-07-09)
 
 > **Para la sesión del panel (`onia-center-rebuild`).** El carril **infra** ESCRIBE estos
 > registros desde runtimes n8n; el **panel LEE**. Este es el único punto en común entre las
@@ -50,7 +50,7 @@ GET /rest/v1/finance_summary?select=*&order=generated_at.desc&limit=1
 | `commissions_by_status` | jsonb | `{ estimated, pending, approved, paid, blocked, discounted }` en Bs |
 | `commissions_pending_bs` | numeric | Atajo: comisiones pendientes |
 | `commissions_blocked_bs` | numeric | Atajo: comisiones bloqueadas |
-| `fund_total_bs` | numeric | Fondo ONIA acumulado (payment_type=`fund_allocation`) |
+| `fund_total_bs` | numeric | Fondo Onia acumulado (payment_type=`fund_allocation`) |
 | `expenses_pending_bs` | numeric | Gastos pendientes de aprobar |
 | `premium_pending_bs` | numeric | Uso premium (Higgsfield/IA) sin aprobar |
 | `anomaly_count` | int | Nº de anomalías detectadas |
@@ -124,7 +124,7 @@ raw.earnings: [
 ```
 
 Origen del dato: `payment_commissions.actor_role_key` + `payment_type`. **Regla clave:** la
-ganancia PERSONAL de Sergio es solo `sergio_owner_income`; el **Fondo ONIA**
+ganancia PERSONAL de Sergio es solo `sergio_owner_income`; el **Fondo Onia**
 (`payment_type=fund_allocation`) es plata de la EMPRESA, **no** ganancia personal — va aparte en
 `raw.earnings_context.company_fund_bs` (y en `fund_total_bs`). No sumarlo a Sergio en la UI.
 
@@ -134,7 +134,7 @@ lo dice y **todas las personas van en 0** (dato real, no estimado) — el panel 
 "sin ventas aún" en vez de una tabla vacía.
 
 Sugerencia de UI: tabla "Ganancias del equipo" con columnas Persona · Cobrado · Por cobrar ·
-Ventas; una fila aparte "Fondo ONIA (empresa)" con `company_fund_bs`. `person_key` es la clave
+Ventas; una fila aparte "Fondo Onia (empresa)" con `company_fund_bs`. `person_key` es la clave
 estable para ordenar/mapear avatares.
 
 ---

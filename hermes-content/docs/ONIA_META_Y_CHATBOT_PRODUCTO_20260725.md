@@ -1,20 +1,20 @@
-# ONIA — Playbook Meta + Chatbot como producto (2026-07-25)
+# Onia — Playbook Meta + Chatbot como producto (2026-07-25)
 
 > Research con fuentes. Datos legales reales del SEPREC en [[onia-datos-legales-seprec]].
 
-# PLAYBOOK ONIA — Meta, verificación y chatbot como producto
+# PLAYBOOK Onia — Meta, verificación y chatbot como producto
 **Fecha:** 2026-07-25 · **Autor:** líder técnico · **Para:** Sergio
 
 ---
 
 ## 0. Los cuatro hechos que ordenan todo el plan
 
-1. **El ad account `act_1073680778314945` NO se puede mover** entre portfolios. Meta lo prohíbe por escrito. Por lo tanto el portfolio comercial de ONIA **ya está definido**: es "OnIA Agency". Todo se acomoda alrededor de eso.
+1. **El ad account `act_1073680778314945` NO se puede mover** entre portfolios. Meta lo prohíbe por escrito. Por lo tanto el portfolio comercial de Onia **ya está definido**: es "OnIA Agency". Todo se acomoda alrededor de eso.
 2. **Sergio tiene 1 solo slot de portfolio libre** (Meta permite crear 2 por persona). Ese slot se gasta una sola vez. Va a las personas IA, no a clientes.
 3. **Sin verificación, el techo del negocio de chatbots es 2 números de WhatsApp.** Con Bolivian Electric ocupando uno, queda uno. Verificado: 20. La verificación no es papeleo, es la diferencia entre vender un chatbot y vender veinte.
 4. **El chatbot que ya existe (Bolivian Electric) es un motor real, pero vive en un worktree sin mergear, sin auth y sin multi-tenant.** Es vendible como "un deploy por cliente"; no es vendible como SaaS hoy.
 
-**Advertencia crítica y no confirmada:** el stack de BE fue onboardeado **vía Chatwoot actuando como BSP (Embedded Signup)**, no con una app de Meta propia de ONIA. Antes de asumir cualquier número del punto 3, **hay que verificar en Business Manager qué portfolio es dueño de la WABA `398983206624133`**. Si es el portfolio de Chatwoot, el cap de 2 números no aplica a ONIA sino a la relación con Chatwoot, y el camino "Tech Provider propio" es un proyecto nuevo, no una migración. `[NO CONFIRMADO - PASO 1 DE TODO]`
+**Advertencia crítica y no confirmada:** el stack de BE fue onboardeado **vía Chatwoot actuando como BSP (Embedded Signup)**, no con una app de Meta propia de Onia. Antes de asumir cualquier número del punto 3, **hay que verificar en Business Manager qué portfolio es dueño de la WABA `398983206624133`**. Si es el portfolio de Chatwoot, el cap de 2 números no aplica a Onia sino a la relación con Chatwoot, y el camino "Tech Provider propio" es un proyecto nuevo, no una migración. `[NO CONFIRMADO - PASO 1 DE TODO]`
 
 ---
 
@@ -47,7 +47,7 @@
 | Rol | **Comercial.** Todo lo que factura | **Personas IA.** Contenido sintético |
 | Ad account | `act_1073680778314945` (no se puede mover, se queda acá) | Ninguno del comercial. Si hace falta, uno nuevo y chico |
 | Páginas | Página "ONIA" (la ex "Onia Marketing") | Página de Lucía Antelo |
-| Instagram | IG de ONIA | @lu.antelo y futuras personas IA |
+| Instagram | IG de Onia | @lu.antelo y futuras personas IA |
 | WhatsApp / WABAs | Todas las de clientes | Ninguna |
 | App de Meta (Tech Provider) | **Acá va, nunca del otro lado** | Ninguna |
 | Verificación de negocio | **Sí, prioridad 1** | No hace falta |
@@ -62,9 +62,9 @@
 | **0** | **Verificar quién es dueño de la WABA `398983206624133`** (Business Manager → WhatsApp Accounts) y si aparece Chatwoot como partner | **Sergio** (login personal) | Bloquea el diseño del resto. Yo no puedo entrar a Meta con sus credenciales |
 | **1** | Reunir carpeta: **certificado SEPREC vigente** + **certificado NIT del SIN** + **factura de servicio a nombre del negocio** | **Sergio** | 30 min. Todo en español, no hace falta traducción (el español está en la lista de idiomas soportados de Meta) |
 | **2** | **Activar el requisito de 2FA** en Security Center | **Sergio** | Ya es obligatorio para portfolios de +90 días. No esperes a que te restrinjan |
-| **3** | **Agregar un segundo full control** al portfolio | **Sergio** | Meta lo recomienda explícitamente. Hoy si Sergio pierde la cuenta, ONIA pierde el ad account, la Página y el camino a las WABA |
+| **3** | **Agregar un segundo full control** al portfolio | **Sergio** | Meta lo recomienda explícitamente. Hoy si Sergio pierde la cuenta, Onia pierde el ad account, la Página y el camino a las WABA |
 | **4** | Cambiar el email de contacto del portfolio de `oninteligenciaartificial@gmail.com` a **email en dominio propio** | **Sergio** | Meta marca los dominios de email públicos como riesgo de seguridad **en su propio Security Center**. Un revisor lo ve |
-| **5** | Dejar el **sitio web impecable**: carga, HTTPS, sin links rotos, nombre de ONIA visible | **Yo** (código/deploy) + Sergio valida | Motivo de rechazo documentado: *"a website that fails to load, is not HTTPS compliant... or contains a link that leads to an error message"*. Verificarlo **el mismo día del envío** |
+| **5** | Dejar el **sitio web impecable**: carga, HTTPS, sin links rotos, nombre de Onia visible | **Yo** (código/deploy) + Sergio valida | Motivo de rechazo documentado: *"a website that fails to load, is not HTTPS compliant... or contains a link that leads to an error message"*. Verificarlo **el mismo día del envío** |
 | **6** | **Renombrar el portfolio** a "ONIA" (o al nombre comercial del SEPREC) | **Sergio** | Settings → Business info → Edit. **AHORA, antes de verificar.** Editar detalles después de verificar dispara re-verificación de 14 días hábiles |
 | **7** | **Renombrar la Página** a "ONIA" | **Sergio** | En el mismo bloque, antes de conectar nada nuevo. Hay enfriamiento entre cambios de nombre de Página (Meta no publica la cifra; ignorá el "60 días" que circula, esa regla es de perfiles personales) |
 | **8** | **Enviar la verificación de negocio** | **Sergio** | Detalle completo en la sección 2 |
@@ -96,7 +96,7 @@ El chatbot de Bolivian Electric debería correr con un **system user token**, no
 
 Regla oficial de Meta, textual: *"Create one system user for each type of access you need... if a system user token is compromised, it has limited scope and can't compromise more permissions."*
 
-**Regla ONIA:** un **regular system user por cliente**, con solo los activos de ese cliente asignados. El **admin system user** solo para asignar permisos, y su token con custodia especial. Los tokens van como **credencial de n8n** (nunca `$env`, nunca hardcodeado en el nodo - plan VPS).
+**Regla Onia:** un **regular system user por cliente**, con solo los activos de ese cliente asignados. El **admin system user** solo para asignar permisos, y su token con custodia especial. Los tokens van como **credencial de n8n** (nunca `$env`, nunca hardcodeado en el nodo - plan VPS).
 
 ---
 
@@ -133,7 +133,7 @@ Requisito transversal: *"documents you upload... are not expired and are issued 
 
 Cada uno de estos es un motivo de rechazo documentado. Revisar la lista completa, no por encima:
 
-1. **Nombre legal = SEPREC, carácter por carácter.** Incluye tildes, comas, "S.R.L.", guiones, el orden de las palabras. Si el certificado dice "SERGIO X. URCULLO - ONIA", eso va, no "ONIA".
+1. **Nombre legal = SEPREC, carácter por carácter.** Incluye tildes, comas, "S.R.L.", guiones, el orden de las palabras. Si el certificado dice "SERGIO X. URCULLO - Onia", eso va, no "ONIA".
 2. **El nombre del portfolio NO tiene que ser igual al legal.** No los fuerces. El portfolio es el nombre público; el legal es un campo aparte.
 3. **Dirección exacta del certificado.** No la dirección donde trabajás hoy si no coincide con el papel.
 4. **Teléfono al que efectivamente podés contestar** (Meta puede llamar o mandar SMS).
@@ -213,7 +213,7 @@ Ordenado por lo que bloquea la venta, no por lo que es lindo de construir.
 | # | Falta | Esfuerzo | Nota |
 |---|---|---|---|
 | G1 | **Multi-tenant real** (`tenant_id` en todas las tablas, store de catálogo por tenant, un proceso N clientes) | 3-4 semanas | **Cero avance hoy.** `catalog_products` tiene `sku` como PK global; el catálogo es un singleton en memoria del proceso. **El modelo actual es un deploy por cliente, y funciona.** Es defendible venderlo así (aislamiento = argumento comercial) mientras haya menos de 10 clientes. El costo es operativo: N contenedores, N env files, N migraciones a mano |
-| G2 | **Tech Provider propio de ONIA** (app de Meta + App Review + Embedded Signup propio) | 2-3 semanas + App Review | Depende de la verificación. Ver sección 5 |
+| G2 | **Tech Provider propio de Onia** (app de Meta + App Review + Embedded Signup propio) | 2-3 semanas + App Review | Depende de la verificación. Ver sección 5 |
 | G3 | **Facturación/planes/límites** | 2 semanas | Nada hoy |
 
 **Desalineación a corregir:** `onia-core/adapters/bolivian-electric.json` dice `status: "installing"` y describe el stack como *"Next 16 + Postgres + Kysely + Better Auth"*. En el repo de BE hay **cero código de onia-core** (`grep "onia-core"` → 0 resultados), ni Kysely ni Better Auth. El adapter describe una **intención**, no un estado. Hay que corregir el adapter o el plan, no dejarlo mintiendo.
@@ -228,7 +228,7 @@ Lo que le pedimos a una clínica o empresa antes de conectar el chatbot.
 - [ ] **Cuenta de Facebook con rol de admin** en su Business Portfolio (o se crea en el Embedded Signup)
 - [ ] **Datos legales**: razón social exacta, **NIT**, **matrícula SEPREC**, dirección física, teléfono, email corporativo, **sitio web activo en HTTPS**
 - [ ] **Documento probatorio**: matrícula de comercio o certificado NIT (nunca una declaración auto-presentada)
-- [ ] **Método de pago**: tarjeta internacional en USD, **o** acuerdo escrito de que ONIA adelanta y recobra en Bs con cláusula de ajuste cambiario
+- [ ] **Método de pago**: tarjeta internacional en USD, **o** acuerdo escrito de que Onia adelanta y recobra en Bs con cláusula de ajuste cambiario
 - [ ] **Política de privacidad publicada** en su web (URL). Obligatoria para la app y buena práctica con datos de pacientes
 
 **B. Marca y perfil**
@@ -236,7 +236,7 @@ Lo que le pedimos a una clínica o empresa antes de conectar el chatbot.
 - [ ] Logo cuadrado (mín. 640×640), descripción, dirección, email, sitio web, categoría, horarios
 
 **C. Contenido y cumplimiento**
-- [ ] **Evidencia de opt-in**: dónde y cómo lo recolecta (formulario web, ficha en recepción, IVR). ONIA entrega el texto legal sugerido. **Se guarda con timestamp, canal y texto exacto mostrado** - sin eso no hay defensa en una apelación de Meta
+- [ ] **Evidencia de opt-in**: dónde y cómo lo recolecta (formulario web, ficha en recepción, IVR). Onia entrega el texto legal sugerido. **Se guarda con timestamp, canal y texto exacto mostrado** - sin eso no hay defensa en una apelación de Meta
 - [ ] **Base de contactos** con número en formato internacional, nombre, **fecha y canal del opt-in**. Sin opt-in, el contacto no entra. Punto
 - [ ] **Casos de uso mapeados a categoría** (esto define el costo):
   - Recordatorio / confirmación de cita → **utility** (Bs ~0,13)
@@ -246,7 +246,7 @@ Lo que le pedimos a una clínica o empresa antes de conectar el chatbot.
 - [ ] **Ruta de escalamiento a humano** definida: quién atiende, en qué horario, por qué canal. **Un bot sin salida a humano es violación de política de Meta**, no un detalle de UX
 - [ ] Confirmación por escrito de que **no** enviará contenido de categorías prohibidas
 
-**⚠️ Bandera roja para el vertical dental/salud:** *"Productos médicos y de salud"* está en la lista de categorías prohibidas de Meta. Apunta a la **venta** de productos médicos, **no** a que una clínica coordine turnos. Pero en la práctica las plantillas con lenguaje médico o promesas de resultado **se rechazan**. Regla ONIA para DentalGest:
+**⚠️ Bandera roja para el vertical dental/salud:** *"Productos médicos y de salud"* está en la lista de categorías prohibidas de Meta. Apunta a la **venta** de productos médicos, **no** a que una clínica coordine turnos. Pero en la práctica las plantillas con lenguaje médico o promesas de resultado **se rechazan**. Regla Onia para DentalGest:
 - Permitido (utility): *"Hola {{1}}, te recordamos tu cita en {{2}} el {{3}} a las {{4}}. Respondé 1 para confirmar."*
 - Prohibido (marketing): *"Blanqueamiento dental 50% OFF, resultados garantizados"*
 - **Nunca** diagnóstico, tratamiento ni datos clínicos en el cuerpo de una plantilla: queda en logs de Meta y es dato sensible
@@ -257,7 +257,7 @@ Lo que le pedimos a una clínica o empresa antes de conectar el chatbot.
 - [ ] **PIN de verificación en dos pasos** generado y guardado en el gestor de secretos, **por cliente**. Sin el PIN no se puede cambiar ni borrar el número
 - [ ] System user token permanente + rotación documentada
 - [ ] Plantillas iniciales cargadas y aprobadas (con valores de muestra si llevan media, si no es imposible aprobarlas)
-- [ ] Verificación del negocio del cliente lanzada (**ONIA puede verificarlo como partner** → el cliente salta directo a 2.000 de límite)
+- [ ] Verificación del negocio del cliente lanzada (**Onia puede verificarlo como partner** → el cliente salta directo a 2.000 de límite)
 - [ ] Alertas en n8n: plantilla pausada, caída de quality rating, cambio de messaging limit, violación de política
 - [ ] **`/health` verde antes de encender la respuesta pública**
 
@@ -272,7 +272,7 @@ Lo que le pedimos a una clínica o empresa antes de conectar el chatbot.
 | Tipo de cambio | **11,37 Bs/USD** | `[VERIFICAR AL COTIZAR]` post-flotación jun-2026. Todo contrato lleva cláusula de ajuste |
 | Tarifas Meta Bolivia | Marketing **0,0740** / Utility **0,0113** / Auth **0,0113** USD | Confirmado, rate card oficial vigente 1-jul-2026 |
 | Service (respuestas dentro de 24 h) | **0,0000 hoy** → **0,0113 desde 1-oct-2026** | Meta publica tarifas exactas por mercado antes del 1-sep-2026. `[PARCIALMENTE CONFIRMADO]` |
-| Costo LLM propio | **USD 0,002 a 0,020 por mensaje** | Rango grande. Meta usa 2¢ como referencia de "IA de terceros baja complejidad"; el gasto medido en ONIA es mucho menor (~$0,006/día en litellm-db). **Hay que medirlo, es el ítem P5** |
+| Costo LLM propio | **USD 0,002 a 0,020 por mensaje** | Rango grande. Meta usa 2¢ como referencia de "IA de terceros baja complejidad"; el gasto medido en Onia es mucho menor (~$0,006/día en litellm-db). **Hay que medirlo, es el ítem P5** |
 | Clínica tipo | 250 pacientes activos/mes, 1.000 respuestas de bot, 600 utility | Estimación |
 | Infra | Un contenedor + una DB por cliente en el VPS ya pagado | Marginal ~USD 3/mes prorrateado |
 
@@ -287,7 +287,7 @@ Lo que le pedimos a una clínica o empresa antes de conectar el chatbot.
 | **Meta - subtotal sin marketing** | | **USD 4,52** | **USD 18,08** |
 | IA propia (1.000 respuestas) | | USD 2 - 20 | USD 2 - 20 |
 | Infra prorrateada | | USD 3 | USD 3 |
-| **TOTAL COSTO ONIA** | | **USD 10 - 28** | **USD 23 - 41** |
+| **TOTAL COSTO Onia** | | **USD 10 - 28** | **USD 23 - 41** |
 | **En Bs** | | **Bs 114 - 318** | **Bs 262 - 466** |
 
 Campaña de reactivación (marketing, 300 msgs): **+USD 22,20 = +Bs 252**. Va aparte siempre.
@@ -305,7 +305,7 @@ Campaña de reactivación (marketing, 300 msgs): **+USD 22,20 = +Bs 252**. Va ap
 | **Bolsa incluida** | 800 msgs salientes | 1.500 | 3.000 |
 | **Excedente utility** | Bs 0,30/msg | Bs 0,30 | Bs 0,25 |
 | **Excedente marketing** | Bs 1,50/msg | Bs 1,50 | Bs 1,30 |
-| **Costo bolsa a ONIA (post-oct)** | Bs 102 (21%) | Bs 192 (22%) | Bs 384 (20%) |
+| **Costo bolsa a Onia (post-oct)** | Bs 102 (21%) | Bs 192 (22%) | Bs 384 (20%) |
 | **Margen bruto estimado** | **60 - 78%** | **48 - 70%** | **45 - 68%** |
 | **Anual** | 10× el mensual (2 meses gratis) | 10× | 10× |
 
@@ -315,8 +315,8 @@ Campaña de reactivación (marketing, 300 msgs): **+USD 22,20 = +Bs 252**. Va ap
 2. **Campañas de marketing masivo van SIEMPRE aparte**, con presupuesto explícito del cliente, igual que la pauta. En Bolivia el marketing cuesta **6,5×** lo que cuesta utility (0,074 vs 0,0113) - es lo único que rompe la unit economics. Esto respeta la regla del CLAUDE.md de costos de terceros excluidos.
 3. **Tensión declarada con la regla de terceros:** incluyo una bolsa de mensajes en el plan (contra la letra de "mensajería WhatsApp pagada excluida") porque un cliente boliviano rechaza una factura variable. Lo resuelvo así: **bolsa incluida = producto; excedente y campañas = terceros facturados aparte.** Si preferís pureza, quitá la bolsa y bajá cada plan Bs 150.
 4. **Dos modos de pago a Meta:**
-   - **Modo A (default): ONIA pone la tarjeta.** Más fácil de vender, ONIA asume el FX. Los precios de arriba asumen esto.
-   - **Modo B: el cliente pone su tarjeta USD** (Tech Provider: Meta le factura directo). ONIA no adelanta plata ni asume FX. **Descuento de Bs 150/mes** y se quita la bolsa. Ideal para clientes grandes. Requiere tarjeta internacional - fricción real en Bolivia post-flotación.
+   - **Modo A (default): Onia pone la tarjeta.** Más fácil de vender, Onia asume el FX. Los precios de arriba asumen esto.
+   - **Modo B: el cliente pone su tarjeta USD** (Tech Provider: Meta le factura directo). Onia no adelanta plata ni asume FX. **Descuento de Bs 150/mes** y se quita la bolsa. Ideal para clientes grandes. Requiere tarjeta internacional - fricción real en Bolivia post-flotación.
 5. **🔴 El 1-oct-2026 el costo variable sube ~4×.** Todo contrato firmado antes de esa fecha **debe** traer cláusula de ajuste de costos de terceros, o cotizarse ya con el precio de octubre. Los precios de arriba **ya asumen el escenario de octubre**, así que estás cubierto.
 6. **Click-to-WhatsApp = 72 h de mensajería gratis.** Cada lead que entra por un anuncio abre una ventana Free Entry Point de 72 h con **todo gratis**. Con el motor Meta Ads ya deployado (`act_1073680778314945`), esto hace que "anuncios + chatbot" rinda más que cada uno por separado. **Es el paquete de mayor margen que podés vender** y nadie más en Bolivia lo está armando así.
 7. **NO habilitar Meta Business Agent.** La IA de Meta cuesta 4-5 ¢/mensaje (USD 2 / 1M tokens, ~20-25k tokens por mensaje) contra ~2 ¢ o menos de la nuestra, exige línea de crédito con Meta, y le regala a Meta el control de la conversación. En el propio ejemplo de Meta: 1.000 mensajes cuestan ~USD 27 con IA de terceros vs ~USD 40-50 con MBA.
@@ -365,8 +365,8 @@ Todo esto **no depende** de Meta:
 | Subir cap de WhatsApp de 2 a 20 números | Verificación |
 | Cargar más de 250 plantillas | Verificación + display name aprobado |
 | **App Review para Advanced Access** (`whatsapp_business_messaging` + `whatsapp_business_management`) | Verificación **y luego** App Review aparte: 2 videos de demostración, política de privacidad pública, webhooks funcionando |
-| **Ser Tech Provider propio** (Embedded Signup con marca ONIA, dejar de depender de Chatwoot como BSP) | Todo lo anterior. **2-3 semanas de trabajo + tiempo de review de Meta**. Límite inicial: 10 clientes nuevos por ventana de 7 días → 200 tras completar Business Verification + App Review + Access Verification |
-| Verificar clientes como partner (para que salten a 2.000 de límite) | Verificación de ONIA |
+| **Ser Tech Provider propio** (Embedded Signup con marca Onia, dejar de depender de Chatwoot como BSP) | Todo lo anterior. **2-3 semanas de trabajo + tiempo de review de Meta**. Límite inicial: 10 clientes nuevos por ventana de 7 días → 200 tras completar Business Verification + App Review + Access Verification |
+| Verificar clientes como partner (para que salten a 2.000 de límite) | Verificación de Onia |
 
 ### ⚫ PROYECTO DE SEMANAS (no ahora)
 
@@ -403,7 +403,7 @@ Lo listo junto para que no se pierda entre el resto:
 
 # Anexo A — Meta config
 
-# Configuración de Meta Business para ONIA — 2026
+# Configuración de Meta Business para Onia — 2026
 
 > Investigado el 2026-07-25 contra fuentes oficiales (Meta Business Help Center + developers.facebook.com). Marco explícitamente qué es **texto oficial citado** y qué es **recomendación mía**, para que no se mezclen.
 
@@ -417,7 +417,7 @@ Texto literal de Meta (artículo "Create a business portfolio"):
 
 > "You can personally create up to 2 business portfolios. There is no limit on the number of portfolios you can belong to."
 
-**Dos consecuencias operativas para ONIA:**
+**Dos consecuencias operativas para Onia:**
 
 - Sergio ya usó 1 slot con "OnIA Agency". Le queda **exactamente 1**. Si lo gasta en el portfolio de personas IA, no le queda ninguno para clientes ni para experimentos.
 - El límite es de **creación**, no de **pertenencia**. Un segundo humano (socio, colaborador, o una cuenta legítima de otra persona real) puede crear un portfolio y dar a Sergio control total. Eso es la vía documentada para un tercer portfolio, si algún día hace falta. No hace falta ni conviene crear perfiles falsos.
@@ -448,7 +448,7 @@ Regla base, literal: **"Business assets can only belong to 1 business portfolio.
 | **Catálogo** | Sí, vía solicitud de transferencia | https://www.facebook.com/business/help/832599310690431 |
 | **App (Meta for Developers)** | Sí, transferencia de propiedad | https://www.facebook.com/business/help/236817717885919 |
 
-**Esto es lo más importante del informe para ONIA:** el ad account `act_1073680778314945` **no se puede sacar** de "OnIA Agency". Cualquier plan que asumiera "muevo el ad account al portfolio comercial nuevo" está muerto. El portfolio comercial **tiene que ser el que ya existe**.
+**Esto es lo más importante del informe para Onia:** el ad account `act_1073680778314945` **no se puede sacar** de "OnIA Agency". Cualquier plan que asumiera "muevo el ad account al portfolio comercial nuevo" está muerto. El portfolio comercial **tiene que ser el que ya existe**.
 
 Lo que se pierde al remover y re-agregar una Página: se rompen las conexiones a IG/WhatsApp (hay que rehacerlas), y las asignaciones de personas del portfolio viejo desaparecen. Meta aclara que *"People who had access to the Page before you added it to a business portfolio can still access and manage the Page"* — es decir, los roles nativos de la Página sobreviven, los del portfolio no.
 
@@ -523,7 +523,7 @@ Prerrequisito: **tener control total (full control) del portfolio.** Literal: *"
 
 **Trampa a evitar:** *"If you edit your business details, then you need to complete the verification process again."* No arranques el trámite con datos provisorios.
 
-Si pagás por **facturación mensual (monthly invoicing)**, Meta dice que **no necesitás subir documentos**: se llena con la información de la línea de crédito. No es el caso de ONIA hoy.
+Si pagás por **facturación mensual (monthly invoicing)**, Meta dice que **no necesitás subir documentos**: se llena con la información de la línea de crédito. No es el caso de Onia hoy.
 
 Fuente: https://www.facebook.com/business/help/2058515294227817
 
@@ -539,11 +539,11 @@ Fuente: https://www.facebook.com/business/help/2058515294227817
 | **Page transparency** | Para audiencia grande en EE.UU. o ads de temas sociales/electorales |
 | **Agencias en China / servicios financieros** | Casos especiales |
 
-**El número concreto que más le importa a ONIA (WhatsApp API):** de la documentación de developers, literal —
+**El número concreto que más le importa a Onia (WhatsApp API):** de la documentación de developers, literal —
 
 > *"New business portfolios are initially capped at two registered business phone numbers."* … *"If your business becomes verified, or if you have reached a messaging limit of 2,000, Meta will automatically increase your cap to 20."*
 
-O sea: **sin verificar, ONIA solo puede registrar 2 números de WhatsApp Business API en total.** Con Bolivian Electric ya usando uno, queda **uno solo** para todos los demás clientes. Verificado saltás a 20. Esto es un techo de negocio directo, no un detalle administrativo.
+O sea: **sin verificar, Onia solo puede registrar 2 números de WhatsApp Business API en total.** Con Bolivian Electric ya usando uno, queda **uno solo** para todos los demás clientes. Verificado saltás a 20. Esto es un techo de negocio directo, no un detalle administrativo.
 
 Además, el estatus de **Official Business Account (tilde verde en WhatsApp)** requiere verificación de negocio + 30 días registrado + 2FA en el número + display name aprobado + ser un "notable business" con presencia en prensa.
 
@@ -562,13 +562,13 @@ Esta es la pregunta clave y la respuesta es mejor de lo que temías, **pero hay 
 - El **nombre del portfolio** ("OnIA Agency") es el nombre público/display. Meta solo pide: *"This should match the public name of your business or organization"* — el nombre **público**, no el legal.
 - El **legal business name** es un campo aparte dentro del formulario de verificación, y ese sí: *"Check that the details you enter exactly match the details of your legal business entity."* Ese es el que se compara contra el SEPREC.
 
-**Traducción práctica:** en el formulario poné el nombre **exacto, carácter por carácter, del certificado SEPREC** (si Sergio está registrado como empresa unipersonal, probablemente sea su nombre propio o "Sergio Urcullo — ONIA" o similar, según cómo quedó la matrícula). El portfolio puede seguir llamándose "ONIA". No los fuerces a ser iguales, y **no inventes una razón social que no exista en el certificado**.
+**Traducción práctica:** en el formulario poné el nombre **exacto, carácter por carácter, del certificado SEPREC** (si Sergio está registrado como empresa unipersonal, probablemente sea su nombre propio o "Sergio Urcullo — Onia" o similar, según cómo quedó la matrícula). El portfolio puede seguir llamándose "ONIA". No los fuerces a ser iguales, y **no inventes una razón social que no exista en el certificado**.
 
 **El riesgo real** está en el motivo de rechazo documentado: *"Attempting to claim or verify a business portfolio you don't own or have authorization to represent"* y *"Submitting, or being suspected of submitting, false or misleading information."* Si escribís un nombre legal que no aparece en ningún documento, eso es exactamente lo que dispara el rechazo — y un rechazo por sospecha de información falsa habilita a Meta a *"take additional action on the account"*.
 
 **Recomendación mía (no es política de Meta):** antes de enviar, renombrá el portfolio de **"OnIA Agency"** a **"ONIA"** — con mayúsculas correctas y sin el "Agency" que ya no describe lo que vende (software + agentes, no agencia). Dos motivos: (a) el nombre del portfolio es visible en todo Meta y "OnIA" con la n minúscula lee como error tipográfico; (b) cuanto más cerca esté el nombre público del nombre de la marca en el sitio web y en el SEPREC, menos fricción tiene el revisor humano. Hacé el renombre **antes** de iniciar la verificación, no después (después dispara re-verificación).
 
-Otro motivo documentado de rechazo que ONIA debe cerrar **antes** de enviar: *"Having a website that fails to load, is not HTTPS compliant... or contains a link that leads to an error message."* El sitio de ONIA tiene que estar arriba, en HTTPS, y sin links rotos el día del envío.
+Otro motivo documentado de rechazo que Onia debe cerrar **antes** de enviar: *"Having a website that fails to load, is not HTTPS compliant... or contains a link that leads to an error message."* El sitio de Onia tiene que estar arriba, en HTTPS, y sin links rotos el día del envío.
 
 Fuente: https://www.facebook.com/business/help/2342133782492969
 
@@ -599,10 +599,10 @@ Fuente: https://www.facebook.com/business/help/442345745885606
 ### Buenas prácticas (todas son texto oficial de Meta)
 
 - **2FA es obligatorio, no opcional.** Literal del Security Center: *"two-factor authentication is a requirement for business portfolios that are 90 days or older"*. Y en el artículo de restricciones publicitarias, uno de los motivos de restricción es: *"An advertiser doesn't meet our two-factor authentication requirements for account security."*
-- **Dos personas con full control** ("second admin approval"): *"It's recommended (but not required) that 2 active people have full control of a business portfolio... this provides additional security by adding a second layer of approval to sensitive actions."* → **Sergio no debe ser el único admin.** Si pierde la cuenta, ONIA pierde todo.
+- **Dos personas con full control** ("second admin approval"): *"It's recommended (but not required) that 2 active people have full control of a business portfolio... this provides additional security by adding a second layer of approval to sensitive actions."* → **Sergio no debe ser el único admin.** Si pierde la cuenta, Onia pierde todo.
 - **Límite de full control:** *"Limit full control to only those who need it, ideally 10 or fewer people."*
 - **Remover usuarios inactivos:** *"Remove people who haven't logged into the portfolio within the past 90 days."*
-- **Remover usuarios con dominios de email públicos:** *"Bad actors often use public email domains... Remove users whose email addresses aren't related to your business."* → ⚠️ **Esto aplica a ONIA hoy**: el portfolio está a nombre de `oninteligenciaartificial@gmail.com`. Meta lo marca como riesgo de seguridad en su propio Security Center. Hay que migrar a un email en dominio propio.
+- **Remover usuarios con dominios de email públicos:** *"Bad actors often use public email domains... Remove users whose email addresses aren't related to your business."* → ⚠️ **Esto aplica a Onia hoy**: el portfolio está a nombre de `oninteligenciaartificial@gmail.com`. Meta lo marca como riesgo de seguridad en su propio Security Center. Hay que migrar a un email en dominio propio.
 - **Passkeys:** Meta ahora recomienda passkeys por encima de contraseñas + códigos.
 - **Auditoría:** exportable desde *People* en Settings (incluye última actividad y si tienen 2FA). El *business history* se descarga desde *People* o *Business info*.
 - **Peer approval:** segunda revisión humana antes de publicar anuncios.
@@ -628,7 +628,7 @@ Las tres reglas oficiales de uso:
 > *"Use the admin system user to maintain the right roles programmatically. That way, if a system user token is compromised, it has limited scope and can't compromise more permissions."*
 > *"Limit using admin system user for administrative actions such as assigning permission. Because it has the most permissions, carefully safeguard the admin system user token."*
 
-**Por qué esto le importa directamente a ONIA:** el chatbot de Bolivian Electric (Chatwoot + n8n + WhatsApp Cloud API) debería estar corriendo con un **system user token**, no con un token de usuario de Sergio. Los tokens de usuario mueren cuando cambia la contraseña, cuando expira la sesión, o cuando Sergio pierde acceso — y ahí el chatbot del cliente deja de responder. Los system user tokens son *long-lived* y *"can represent automated services within your business that don't require any user input"*. Un system user regular por cliente = si se filtra el token de un cliente, no compromete a los demás.
+**Por qué esto le importa directamente a Onia:** el chatbot de Bolivian Electric (Chatwoot + n8n + WhatsApp Cloud API) debería estar corriendo con un **system user token**, no con un token de usuario de Sergio. Los tokens de usuario mueren cuando cambia la contraseña, cuando expira la sesión, o cuando Sergio pierde acceso — y ahí el chatbot del cliente deja de responder. Los system user tokens son *long-lived* y *"can represent automated services within your business that don't require any user input"*. Un system user regular por cliente = si se filtra el token de un cliente, no compromete a los demás.
 
 Cómo se crea: *Business settings → System Users → +Add* → nombre y rol → *Assign assets* → *Generate New Token* (elegís la app y los permisos). Se puede hacer también por API.
 
@@ -659,7 +659,7 @@ Los nombres **NO pueden ser solo**:
 
 Sí se permite: *"un nombre que sea distinto del nombre de la organización siempre que refleje con precisión sobre qué trata la página"*. Ejemplo de Meta: "Turismo en Irlanda" puede tener una página llamada "Descubre Irlanda".
 
-**Lectura para ONIA:** "Onia Marketing" es un nombre **válido** (no viola nada). Pero "ONIA" solo, o "ONIA Inteligencia Artificial", también lo serían — y describen mejor lo que vende. Ojo con el uso de mayúsculas: "ONIA" como sigla es aceptable; "OnIA" con la n minúscula en el medio es justamente el patrón de capitalización irregular que Meta desaconseja.
+**Lectura para Onia:** "Onia Marketing" es un nombre **válido** (no viola nada). Pero "ONIA" solo, o "ONIA Inteligencia Artificial", también lo serían — y describen mejor lo que vende. Ojo con el uso de mayúsculas: "ONIA" como sigla es aceptable; "OnIA" con la n minúscula en el medio es justamente el patrón de capitalización irregular que Meta desaconseja.
 
 Fuentes:
 - https://www.facebook.com/help/519912414718764 (normas de nombres)
@@ -675,7 +675,7 @@ Fuentes:
 4. Existen **límites de anuncios por Página** (https://www.facebook.com/business/help/1144239125442566) — solo relevante a alto volumen, no hoy.
 5. Cada Página necesita su propio contenido, su propia audiencia y su propio pixel/eventos para servir de algo.
 
-**Recomendación mía para ONIA (criterio, no política de Meta):**
+**Recomendación mía para Onia (criterio, no política de Meta):**
 
 - **Una sola Página madre "ONIA"** por ahora. Con 0 clientes pagando en Meta Ads y sin equipo de contenido dedicado, tres páginas medio muertas valen menos que una viva. Los productos (DentalGest, web-factory) se diferencian con **campañas y públicos**, no con Páginas.
 - **Página separada solo cuando DentalGest tenga presupuesto propio, contenido propio y un embudo propio.** Ese es el disparador real, no el organigrama.
@@ -683,7 +683,7 @@ Fuentes:
 
 ---
 
-## Lo que ONIA debe hacer, en orden
+## Lo que Onia debe hacer, en orden
 
 Estado de partida: 1 portfolio ("OnIA Agency", `1451773736711697`), 1 Página ("Onia Marketing", `1140384625819526`), 1 ad account (`act_1073680778314945`), SEPREC ya en mano, verificación pendiente.
 
@@ -701,7 +701,7 @@ Antes de que un revisor de Meta mire la cuenta:
 - Cambiar el email de contacto del portfolio de `@gmail.com` a un **email en dominio propio** (`sergio@onia.bo` o el dominio que uses). Meta marca los dominios públicos como riesgo en su propio Security Center.
 
 **Paso 2 — Dejar el sitio web impecable.**
-Un sitio que cargue, en **HTTPS**, sin links rotos, con el nombre de ONIA visible. Sitio caído o link roto = rechazo documentado. Verificalo el mismo día del envío.
+Un sitio que cargue, en **HTTPS**, sin links rotos, con el nombre de Onia visible. Sitio caído o link roto = rechazo documentado. Verificalo el mismo día del envío.
 
 **Paso 3 — Renombrar el portfolio a "ONIA".**
 En *Settings → Business info → Edit*. **Ahora, antes de verificar** — porque editar detalles después de verificar dispara re-verificación de 14 días hábiles. Sin caracteres especiales.
@@ -738,7 +738,7 @@ Exportar permisos de personas y el business history desde *Settings → People*.
 
 ### Dos advertencias que no quiero que se pierdan
 
-1. **El plan original de "mover el ad account al portfolio comercial nuevo" no es ejecutable.** Meta lo prohíbe por escrito. El portfolio comercial de ONIA ya está definido: es "OnIA Agency". Todo lo demás se acomoda alrededor de ese hecho.
+1. **El plan original de "mover el ad account al portfolio comercial nuevo" no es ejecutable.** Meta lo prohíbe por escrito. El portfolio comercial de Onia ya está definido: es "OnIA Agency". Todo lo demás se acomoda alrededor de ese hecho.
 2. **Sin verificación, el negocio de chatbots tiene techo 2.** Con Bolivian Electric ocupando un número, queda uno solo. La verificación no es papeleo administrativo — es lo que separa vender un chatbot de vender veinte.
 
 ---
@@ -779,7 +779,7 @@ Exportar permisos de personas y el business history desde *Settings → People*.
 
 # Anexo B — WhatsApp Business Platform
 
-# WhatsApp Business Platform (Cloud API) 2026 — Investigación para vender como producto ONIA
+# WhatsApp Business Platform (Cloud API) 2026 — Investigación para vender como producto Onia
 
 > Todo verificado contra documentación oficial de Meta el **2026-07-25**. Los precios salen del **rate card USD oficial descargado desde `developers.facebook.com/docs/whatsapp/pricing`** (CSV "Tarifas en USD", vigente 1-jul-2026).
 
@@ -787,7 +787,7 @@ Exportar permisos de personas y el business history desde *Settings → People*.
 
 ## 0) Resumen ejecutivo (lo que cambia el negocio)
 
-| Hallazgo | Impacto para ONIA |
+| Hallazgo | Impacto para Onia |
 |---|---|
 | **Bolivia (código 591) = mercado "Rest of Latin America"** | Marketing **USD 0,0740**/msg · Utility **0,0113** · Auth **0,0113** |
 | **Mensajes de servicio (respuestas del bot dentro de la ventana de 24 h) son GRATIS hoy** | Un chatbot que solo *responde* cuesta **USD 0** en delivery hasta el 30-sep-2026 |
@@ -795,7 +795,7 @@ Exportar permisos de personas y el business history desde *Settings → People*.
 | **🔴 Desde el 1-ago-2026 Meta cobra "Meta Business Agent" (su IA) por token: USD 2 / 1M tokens ≈ 4-5 ¢/mensaje** | Nuestra IA propia (n8n + LLM) es **más barata que la IA de Meta**: en el propio ejemplo de Meta, 1.000 mensajes con IA de terceros cuestan ~USD 27 vs ~USD 40-50 con MBA |
 | **On-Premises API murió el 23-oct-2025** | Solo existe Cloud API. Cero dudas de arquitectura |
 | **Coexistencia (Business app + Cloud API en el MISMO número)** | El dentista **no pierde su número ni su historial**. Es el mayor destrabador de ventas |
-| **Tech Provider: Meta le factura al CLIENTE, no a ONIA** | ONIA no adelanta plata ni asume FX. Crítico en Bolivia post-devaluación |
+| **Tech Provider: Meta le factura al CLIENTE, no a Onia** | Onia no adelanta plata ni asume FX. Crítico en Bolivia post-devaluación |
 | **No existe ningún "1.000 mensajes gratis/mes"** | Ese tier era del modelo viejo (conversation-based, deprecado). Hoy no hay franquicia gratuita documentada |
 
 ---
@@ -823,14 +823,14 @@ No es obligatoria para *empezar a probar*, pero **sí para operar en serio**. Lo
 | 250 plantillas por WABA | **6.000 plantillas** (con display name aprobado) |
 | Límite de mensajería 250 destinatarios/día | Salto directo a **2.000** |
 
-> Meta pide: nombre legal, dirección, teléfono, email, sitio web + documentos. **Con SEPREC en mano esto ya se puede completar** — era el bloqueo histórico de ONIA.
+> Meta pide: nombre legal, dirección, teléfono, email, sitio web + documentos. **Con SEPREC en mano esto ya se puede completar** — era el bloqueo histórico de Onia.
 
 ### 1.3 El número de teléfono — reglas duras
 Requisitos oficiales: ser **propiedad del negocio**, tener **código de país y área** (no short codes), poder **recibir SMS o llamada de voz**, y no estar ya registrado en WhatsApp.
 
 - **Fijos (landline)**: soportados **solo con verificación por voz** (requiere recibir llamadas internacionales y desactivar IVR/desvíos).
 - **VoIP**: soportado **solo por voz**.
-- **PIN de verificación en dos pasos**: obligatorio al registrar. Sin el PIN no se puede cambiar ni borrar el número. **Guardarlo en el gestor de secretos de ONIA por cliente.**
+- **PIN de verificación en dos pasos**: obligatorio al registrar. Sin el PIN no se puede cambiar ni borrar el número. **Guardarlo en el gestor de secretos de Onia por cliente.**
 
 ### 1.4 ¿Se puede usar el número que el cliente YA tiene en WhatsApp Business app?
 
@@ -843,7 +843,7 @@ Requisitos oficiales: ser **propiedad del negocio**, tener **código de país y 
 | Sigue usando el celular | ❌ No | ✅ **Sí, app y API funcionan en paralelo**, mensajes espejados en ambos |
 | Contactos | — | Sincronizan automáticamente |
 
-**Requisitos de coexistencia**: app del cliente ≥ **v2.24.17**; ONIA debe suscribirse a los webhooks `history`, `smb_app_state_sync` y `smb_message_echoes`; **24 h** para completar la sincronización tras el onboarding.
+**Requisitos de coexistencia**: app del cliente ≥ **v2.24.17**; Onia debe suscribirse a los webhooks `history`, `smb_app_state_sync` y `smb_message_echoes`; **24 h** para completar la sincronización tras el onboarding.
 **Limitaciones**: throughput tope **20 mensajes/segundo**; se desactivan mensajes temporales, ver una vez, ubicación en tiempo real y listas de difusión; **grupos no soportados** por Cloud API. Los mensajes 1-a-1 que el cliente manda desde la app **no se cobran**.
 
 > **Esto es el argumento de venta #1 al dentista:** "no cambias de número, no pierdes tus chats, y seguís contestando desde tu celular cuando quieras".
@@ -872,7 +872,7 @@ Fuente primaria: [Pricing on the WhatsApp Business Platform](https://developers.
 | **Authentication** | **0,0113** | ~0,13 |
 | **Service** (no plantilla, dentro de ventana 24 h) | **0,0000** hasta 30-sep-2026 → luego = tarifa utility (**0,0113**) | — |
 
-\* Referencia interna ONIA a ~11,37 Bs/USD post-flotación (jun-2026); **verificar tipo de cambio al cotizar** — los costos de Meta son en USD, así que todo contrato con cliente lleva cláusula de ajuste.
+\* Referencia interna Onia a ~11,37 Bs/USD post-flotación (jun-2026); **verificar tipo de cambio al cotizar** — los costos de Meta son en USD, así que todo contrato con cliente lleva cláusula de ajuste.
 
 **Comparativo regional (mismo CSV, USD):**
 
@@ -901,7 +901,7 @@ Fuente primaria: [Pricing on the WhatsApp Business Platform](https://developers.
 
 **La CSW (24 h) y la FEP (72 h) son ventanas independientes**: si la CSW se cierra, aunque la FEP siga abierta solo podés mandar plantillas.
 
-> 💡 **Palanca directa con el motor Meta Ads que ONIA ya tiene deployado (`act_1073680778314945`)**: cada lead que entra por Click-to-WhatsApp = **72 h de conversación con costo cero**. Eso es producto vendible: "tu campaña genera conversaciones que no pagan mensajería".
+> 💡 **Palanca directa con el motor Meta Ads que Onia ya tiene deployado (`act_1073680778314945`)**: cada lead que entra por Click-to-WhatsApp = **72 h de conversación con costo cero**. Eso es producto vendible: "tu campaña genera conversaciones que no pagan mensajería".
 
 ### 2.4 ¿Existen 1.000 mensajes gratis/mes?
 **No.** El tier de 1.000 conversaciones de servicio gratis pertenecía al modelo *conversation-based pricing*, hoy **deprecado**. La doc actual dice: *"As of November 1, 2024, you can open an unlimited number of service conversations at no charge"* — es decir, servicio ilimitado gratis **hasta el 30-sep-2026**, y a partir de ahí **no hay franquicia gratuita documentada**. Fuente: [Conversation-based pricing (Deprecated)](https://developers.facebook.com/documentation/business-messaging/whatsapp/pricing/conversation-based-pricing).
@@ -923,7 +923,7 @@ Fuente oficial: [Upcoming pricing updates for Meta Business Agent, service and u
 | IA de terceros, alta complejidad | ~9 ¢ | 0,68 ¢ | **~USD 97** |
 | **Meta Business Agent** | 4-5 ¢ (incluye delivery) | — | **~USD 40-50** |
 
-> **Decisión ONIA: NO habilitar Meta Business Agent.** Nuestro stack (n8n + Chatwoot + LLM propio, ya probado en Bolivian Electric) cae en la columna "IA de terceros baja complejidad" — más barato, controlable, y el margen se queda en casa. MBA además exige línea de crédito con Meta.
+> **Decisión Onia: NO habilitar Meta Business Agent.** Nuestro stack (n8n + Chatwoot + LLM propio, ya probado en Bolivian Electric) cae en la columna "IA de terceros baja complejidad" — más barato, controlable, y el margen se queda en casa. MBA además exige línea de crédito con Meta.
 
 ### 2.6 Niveles de volumen (solo utility y authentication)
 Se agregan a nivel **business portfolio** (suma de todas las WABA), se resetean cada mes, y **marketing NO tiene descuento por volumen**.
@@ -939,7 +939,7 @@ Rest of Latin America — Utility:
 | 15.000.001 – 30.000.000 | 0,0090 | −20% |
 | 30.000.001 + | 0,0085 | −25% |
 
-> Irrelevante a corto plazo (ningún dentista llega a 100k), **pero es el argumento para el modelo Solution Partner a futuro**: si ONIA agregara el volumen de todos sus clientes bajo un portfolio propio, accedería a tiers. Con Tech Provider cada cliente factura su propio volumen y nadie llega al tier.
+> Irrelevante a corto plazo (ningún dentista llega a 100k), **pero es el argumento para el modelo Solution Partner a futuro**: si Onia agregara el volumen de todos sus clientes bajo un portfolio propio, accedería a tiers. Con Tech Provider cada cliente factura su propio volumen y nadie llega al tier.
 
 ---
 
@@ -978,7 +978,7 @@ Escalera: **250 → 2.000 → 10.000 → 100.000 → ilimitado** (destinatarios 
 
 **Para llegar a 2.000**, una de tres:
 1. Verificar el negocio, **o**
-2. que el **partner verifique** el negocio (← esto lo puede hacer ONIA como Tech Provider), **o**
+2. que el **partner verifique** el negocio (← esto lo puede hacer Onia como Tech Provider), **o**
 3. entregar 2.000 mensajes a números únicos en 30 días con plantillas de **calidad alta**.
 
 **De 2.000 en adelante el escalado es automático en ~6 horas** cuando: (a) se manda alto volumen de calidad en todos los números y plantillas, y (b) se usó **al menos la mitad** del límite actual en los últimos 7 días.
@@ -996,42 +996,42 @@ Fuente: [Solution providers](https://developers.facebook.com/docs/whatsapp/solut
 | Modelo | Quién es dueño de la WABA | Quién le cobra al cliente la mensajería | Línea de crédito | Requiere ser Meta Business Partner |
 |---|---|---|---|---|
 | **Directo** | El cliente | Meta → cliente | — | No |
-| **Tech Provider** | **El cliente** | **Meta → cliente** (el cliente pone su tarjeta). ONIA factura aparte su servicio | ❌ No tiene | ❌ No |
+| **Tech Provider** | **El cliente** | **Meta → cliente** (el cliente pone su tarjeta). Onia factura aparte su servicio | ❌ No tiene | ❌ No |
 | **Tech Partner** | El cliente | Meta → cliente | ❌ | ✅ Sí |
 | **Solution Partner (BSP)** | El cliente | **El BSP → cliente** (revende con markup) | ✅ Comparte su línea | ✅ Sí, proceso largo |
 
 > En **todos** los modelos **el cliente es dueño de sus activos de WhatsApp**: *"Business customers onboarded via Embedded Signup own all of their WhatsApp assets... you cannot restrict this access in any way."* No se puede secuestrar la WABA de un cliente. Eso hay que decirlo en la propuesta — es un argumento de confianza, no una debilidad.
 
-### 4.2 ¿Puede ONIA ser Tech Provider y administrar las WABA de sus clientes? **SÍ.**
+### 4.2 ¿Puede Onia ser Tech Provider y administrar las WABA de sus clientes? **SÍ.**
 
 Ruta oficial, en orden:
 
-1. **App de Meta** tipo Business con caso de uso WhatsApp, vinculada a un **business portfolio** de ONIA.
-2. **Business Verification de ONIA** ← *ya destrabado con SEPREC*.
+1. **App de Meta** tipo Business con caso de uso WhatsApp, vinculada a un **business portfolio** de Onia.
+2. **Business Verification de Onia** ← *ya destrabado con SEPREC*.
 3. **Configurar la app**: ícono, categoría, **política de privacidad** (URL pública obligatoria), **webhooks** funcionando.
 4. **App Review** pidiendo **Advanced access** a:
    - `whatsapp_business_messaging` (mandar mensajes por cuenta de clientes)
    - `whatsapp_business_management` (administrar sus WABA y plantillas)
    Se suben **2 videos de demostración** (enviar un mensaje / crear una plantilla). *"You will not be able to onboard business customers until your app has been approved for advanced access."*
-5. **Implementar Embedded Signup** (el popup donde el cliente se loguea con su Facebook y crea/vincula su WABA en 3 minutos, sin que ONIA toque sus credenciales) + **session logging**.
+5. **Implementar Embedded Signup** (el popup donde el cliente se loguea con su Facebook y crea/vincula su WABA en 3 minutos, sin que Onia toque sus credenciales) + **session logging**.
 6. Opcional pero clave: **habilitar el flujo de onboarding de usuarios de WhatsApp Business app** (coexistencia).
 
 **Límites de onboarding**: **10 clientes nuevos por ventana móvil de 7 días** por defecto → **200 por 7 días** tras completar **Business Verification + App Review + Access Verification**. Más volumen exige postular a **Meta Business Partner**.
 
-### 4.3 Ventajas / costos de cada camino para ONIA
+### 4.3 Ventajas / costos de cada camino para Onia
 
 | | **Tech Provider propio (recomendado)** | **Vía BSP (Twilio / 360dialog / etc.)** |
 |---|---|---|
 | Costo de mensajería | **Tarifa Meta pura** (0,0113 / 0,0740) | Tarifa Meta **+ markup del BSP** (~USD 0,003-0,010/msg en los grandes, más en los chicos) o cuota fija mensual |
-| Quién paga | **El cliente pone su tarjeta**, Meta le factura directo | El BSP le factura a ONIA o al cliente |
-| Riesgo FX / caja | **Cero para ONIA** — no adelanta USD | ONIA adelanta y recobra en Bs = riesgo de devaluación |
+| Quién paga | **El cliente pone su tarjeta**, Meta le factura directo | El BSP le factura a Onia o al cliente |
+| Riesgo FX / caja | **Cero para Onia** — no adelanta USD | Onia adelanta y recobra en Bs = riesgo de devaluación |
 | Time-to-market | **Semanas** (Business Verification + App Review) | **Días** |
-| Onboarding de clientes | Embedded Signup propio, marca ONIA | Flujo del BSP, marca del BSP |
+| Onboarding de clientes | Embedded Signup propio, marca Onia | Flujo del BSP, marca del BSP |
 | Coexistencia (no perder el número) | ✅ Disponible | Solo si el BSP lo soporta |
 | Dependencia | Ninguna | Alta: precios, SLA y roadmap ajenos |
 | Escalabilidad de tiers de volumen | Cada cliente su propio volumen | El BSP agrega volumen |
 
-**Recomendación**: **Tech Provider propio**, con un BSP como plan B solo si un cliente grande no puede esperar el App Review. Un detalle a resolver de entrada: **el cliente necesita tarjeta internacional en USD** para pagarle a Meta — en Bolivia post-flotación eso es fricción real. Si el cliente no la tiene, las opciones son (a) ONIA pone la tarjeta y recobra en Bs con cláusula de ajuste (ONIA asume el FX), o (b) ir por un BSP que acepte pago local. **Decisión de negocio para Sergio, no técnica.**
+**Recomendación**: **Tech Provider propio**, con un BSP como plan B solo si un cliente grande no puede esperar el App Review. Un detalle a resolver de entrada: **el cliente necesita tarjeta internacional en USD** para pagarle a Meta — en Bolivia post-flotación eso es fricción real. Si el cliente no la tiene, las opciones son (a) Onia pone la tarjeta y recobra en Bs con cláusula de ajuste (Onia asume el FX), o (b) ir por un BSP que acepte pago local. **Decisión de negocio para Sergio, no técnica.**
 
 > **Nota de gobernanza Meta**: la app de Tech Provider debe vivir en el portfolio **comercial** ("ONIA Comercial"), nunca en el de personas IA (Lucía). Meta escala restricciones a nivel portfolio: si una cuenta de influencer IA se marca, no puede arrastrar las WABA de clientes que pagan.
 
@@ -1048,18 +1048,18 @@ Se puede escribir a alguien solo si esa persona: **(1)** dio su número de celul
 - Debe quedar claro: **que está optando por recibir comunicaciones**, y **el nombre del negocio** del que las va a recibir.
 - Se puede recolectar por: **SMS, sitio web, IVR telefónico, en persona o en papel**.
 
-**Regla operativa ONIA:** el opt-in se **guarda con timestamp, canal y texto exacto mostrado** en la base del cliente. Si Meta pide evidencia en una apelación, sin eso no hay defensa.
+**Regla operativa Onia:** el opt-in se **guarda con timestamp, canal y texto exacto mostrado** en la base del cliente. Si Meta pide evidencia en una apelación, sin eso no hay defensa.
 
 ### 5.2 Categorías prohibidas (aplican a mensajería y a comercio)
 Armas de fuego · Alcohol y tabaco · Drogas · **Productos médicos y de salud** · Especies en peligro · Animales vivos · Productos y materiales peligrosos · Moneda real, virtual o falsificada · Partes o fluidos corporales · Modelos de negocio fraudulentos · Apuestas y juegos con dinero real · Productos y servicios para adultos · Servicios de citas · Marketing multinivel · Préstamos de día de pago.
 
-> ⚠️ **Bandera roja para el vertical dental/salud**: *"Productos médicos y de salud"* está prohibido. Esto apunta a la **venta** de productos médicos (catálogo/comercio), **no** a que una clínica coordine turnos con sus pacientes. Pero en la práctica: **las plantillas que promocionan tratamientos con lenguaje médico o promesas de resultado se rechazan.** Regla ONIA para DentalGest:
+> ⚠️ **Bandera roja para el vertical dental/salud**: *"Productos médicos y de salud"* está prohibido. Esto apunta a la **venta** de productos médicos (catálogo/comercio), **no** a que una clínica coordine turnos con sus pacientes. Pero en la práctica: **las plantillas que promocionan tratamientos con lenguaje médico o promesas de resultado se rechazan.** Regla Onia para DentalGest:
 > - ✅ Utility: "Hola {{1}}, te recordamos tu cita en {{2}} el {{3}} a las {{4}}. Respondé 1 para confirmar."
 > - ❌ Marketing: "Blanqueamiento dental 50% OFF — resultados garantizados".
 > - **Nunca** incluir diagnóstico, tratamiento ni datos clínicos en el cuerpo de una plantilla (queda en logs de Meta y es dato sensible).
 
 ### 5.3 Automatización e IA — obligación de escalamiento
-La política permite automatizar dentro de la ventana de 24 h, **pero exige mantener rutas de escalamiento "rápidas, claras y directas"** a un humano: transferencia a agente, teléfono, email, formulario web, visita física o ticket. **Un bot sin botón de "hablar con una persona" es una violación de política**, no un detalle de UX. Esto ya está resuelto en el stack ONIA con Chatwoot.
+La política permite automatizar dentro de la ventana de 24 h, **pero exige mantener rutas de escalamiento "rápidas, claras y directas"** a un humano: transferencia a agente, teléfono, email, formulario web, visita física o ticket. **Un bot sin botón de "hablar con una persona" es una violación de política**, no un detalle de UX. Esto ya está resuelto en el stack Onia con Chatwoot.
 
 ### 5.4 Enforcement — qué pasa si se rompe
 Escalera: **advertencia → bloqueo temporal de mensajería (1 a 30 días) → bloqueo de cuenta → eliminación permanente de la plataforma**.
@@ -1071,7 +1071,7 @@ Escalera: **advertencia → bloqueo temporal de mensajería (1 a 30 días) → b
 
 ## 6) ✅ CHECKLIST DE REQUISITOS POR CLIENTE
 
-Lo que ONIA le pide a un dentista/empresa antes de conectar el chatbot.
+Lo que Onia le pide a un dentista/empresa antes de conectar el chatbot.
 
 ### A. Del cliente — datos y accesos
 - [ ] **Número de teléfono**: el que ya usa en WhatsApp Business app (→ coexistencia) o uno nuevo dedicado. Debe recibir SMS o llamada, con código de país (+591) y no ser short code.
@@ -1079,7 +1079,7 @@ Lo que ONIA le pide a un dentista/empresa antes de conectar el chatbot.
 - [ ] **Cuenta de Facebook con rol de admin** en su Business Portfolio (o crearlo en el Embedded Signup).
 - [ ] **Datos legales para Business Verification**: razón social exacta, **NIT**, **matrícula SEPREC / registro de comercio**, dirección física, teléfono, email corporativo del dominio, **sitio web activo**.
 - [ ] **Documento probatorio**: matrícula de comercio, certificado NIT o factura de servicio a nombre del negocio.
-- [ ] **Método de pago**: tarjeta internacional (USD) o acuerdo escrito de que ONIA adelanta y recobra en Bs con cláusula de ajuste cambiario.
+- [ ] **Método de pago**: tarjeta internacional (USD) o acuerdo escrito de que Onia adelanta y recobra en Bs con cláusula de ajuste cambiario.
 - [ ] **Política de privacidad publicada** en su web (URL) — requisito de la app y buena práctica para datos de pacientes.
 
 ### B. De marca y perfil
@@ -1087,7 +1087,7 @@ Lo que ONIA le pide a un dentista/empresa antes de conectar el chatbot.
 - [ ] Logo cuadrado (min. 640×640), descripción del negocio, dirección, email, sitio web, **categoría** correcta del perfil, horarios.
 
 ### C. De contenido y cumplimiento
-- [ ] **Evidencia de opt-in**: dónde y cómo lo recolecta (formulario web, ficha en recepción, IVR). ONIA entrega el texto legal sugerido.
+- [ ] **Evidencia de opt-in**: dónde y cómo lo recolecta (formulario web, ficha en recepción, IVR). Onia entrega el texto legal sugerido.
 - [ ] **Base de contactos exportada** con: número en formato internacional, nombre, **fecha y canal del opt-in**. Sin opt-in, el contacto no entra.
 - [ ] **Lista de casos de uso** → mapeados a categoría (define el costo):
   - Recordatorio/confirmación de cita → **utility**
@@ -1097,13 +1097,13 @@ Lo que ONIA le pide a un dentista/empresa antes de conectar el chatbot.
 - [ ] **Ruta de escalamiento a humano** definida: quién atiende, en qué horario, por qué canal (obligación de política).
 - [ ] Confirmación por escrito de que **no** enviará contenido de las categorías prohibidas.
 
-### D. Técnico (lo hace ONIA)
-- [ ] Onboarding vía **Embedded Signup** de ONIA (Tech Provider) — el cliente nunca comparte contraseña.
+### D. Técnico (lo hace Onia)
+- [ ] Onboarding vía **Embedded Signup** de Onia (Tech Provider) — el cliente nunca comparte contraseña.
 - [ ] Webhooks suscritos: `messages`, `message_template_status_update`, `account_update`, `phone_number_quality_update` (+ `history`, `smb_app_state_sync`, `smb_message_echoes` si es coexistencia).
 - [ ] **PIN de verificación en dos pasos** generado y guardado en el gestor de secretos, por cliente.
 - [ ] System user token permanente + rotación documentada.
 - [ ] Plantillas iniciales cargadas y aprobadas (con valores de muestra si llevan media).
-- [ ] Verificación del negocio del cliente lanzada (ONIA puede verificarlo como partner → salta directo a 2.000 de límite).
+- [ ] Verificación del negocio del cliente lanzada (Onia puede verificarlo como partner → salta directo a 2.000 de límite).
 - [ ] Alertas conectadas a n8n: plantilla pausada, caída de quality rating, cambio de messaging limit, violación de política.
 
 ---
@@ -1122,13 +1122,13 @@ Supuestos: clínica con ~250 pacientes activos/mes, bot que responde consultas +
 | Campaña de reactivación (marketing) — opcional | 300 | 0,0740 | +USD 22,20 | +USD 22,20 |
 | **Subtotal Meta — plan CON marketing** | | | **≈ USD 27** | **≈ USD 40** |
 | Costo IA propia (LLM, ~1.000 respuestas, referencia Meta: ~2 ¢/msg baja complejidad) | 1.000 | ~0,02 | **≈ USD 20** | ≈ USD 20 |
-| **TOTAL COSTO ONIA por cliente** | | | **≈ USD 25 – 47** | **≈ USD 38 – 60** |
+| **TOTAL COSTO Onia por cliente** | | | **≈ USD 25 – 47** | **≈ USD 38 – 60** |
 
 Referencia en Bs (~11,37/USD): **≈ Bs 280–535/mes hoy** → **≈ Bs 430–680/mes desde octubre**.
 
 ### Lecturas comerciales
 1. **El costo variable es bajísimo comparado con lo que se cobra.** Un add-on de chatbot a Bs 490-890/mes deja margen bruto alto incluso post-octubre. El precio se sostiene por el **resultado** (citas que no se pierden), no por el costo de mensajería.
-2. **El marketing masivo es el que rompe la unit economics en Bolivia** (0,074 vs 0,0113 = 6,5×). Vender el chatbot como **motor de atención y recordatorios**, y las campañas como **paquete separado con presupuesto explícito del cliente** (igual que la pauta: costo de terceros excluido del precio ONIA — regla del CLAUDE.md).
+2. **El marketing masivo es el que rompe la unit economics en Bolivia** (0,074 vs 0,0113 = 6,5×). Vender el chatbot como **motor de atención y recordatorios**, y las campañas como **paquete separado con presupuesto explícito del cliente** (igual que la pauta: costo de terceros excluido del precio Onia — regla del CLAUDE.md).
 3. **El 1-oct-2026 sube el costo ~4× en la parte de servicio.** Todo contrato firmado antes de esa fecha debe traer **cláusula de ajuste de costos de terceros**, o cotizarse ya con el precio de octubre para no comerse el aumento.
 4. **Click-to-WhatsApp = mensajería gratis 72 h.** Con el motor Meta Ads ya deployado, cada lead que llega por anuncio no paga delivery durante 3 días. Es la pieza que hace que "anuncios + chatbot" rinda más que cada uno por separado.
 5. **No habilitar Meta Business Agent**: 4-5 ¢/mensaje vs ~2 ¢ con IA propia, exige línea de crédito con Meta, y regala a Meta el control de la conversación.

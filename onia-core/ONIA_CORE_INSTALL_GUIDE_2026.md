@@ -3,7 +3,7 @@
 Fecha: 2026-07-03.
 Estado: receta canonica de instalacion, destilada de la adopcion real en
 DentalGest (Sprints 0-4, commits 612a177..6bda56a).
-Owner: ONIA / Hermes.
+Owner: Onia / Hermes.
 
 Esta guia convierte la adopcion del core en una receta repetible. El proximo
 producto (GestiOS, Ganadero OS, ProveeGest) NO investiga: sigue estos pasos.

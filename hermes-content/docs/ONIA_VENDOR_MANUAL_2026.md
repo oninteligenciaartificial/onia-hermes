@@ -1,12 +1,12 @@
-# Manual comercial ONIA 2026 - vendedores
+# Manual comercial Onia 2026 - vendedores
 
 Documento interno para vendedores nuevos. No compartir publicamente.
 
 Ultima actualizacion: 2026-06-18
 
-## 1. Que vende ONIA
+## 1. Que vende Onia
 
-ONIA vende sistemas para que un negocio consiga mas conversaciones, atienda con
+Onia vende sistemas para que un negocio consiga mas conversaciones, atienda con
 mas orden y no pierda oportunidades por desorden.
 
 El vendedor no vende "tecnologia rara". El vendedor detecta un problema simple
@@ -22,7 +22,7 @@ y ofrece una solucion concreta:
 
 ## Oferta de arranque para vender ahora
 
-ONIA esta abriendo precios de arranque para cerrar clientes reales rapido. Esto
+Onia esta abriendo precios de arranque para cerrar clientes reales rapido. Esto
 no significa vender barato para siempre ni prometer resultados imposibles.
 
 Reglas:
@@ -31,7 +31,7 @@ Reglas:
 - El precio se reserva solo con pago confirmado.
 - DentalGest y GestiOS mantienen su precio actual. No se descuentan por ahora.
 - En servicios mensuales no SaaS, el precio de arranque cubre los primeros 3
-  meses. Desde el mes 4 ONIA puede pasar al precio vigente avisando antes.
+  meses. Desde el mes 4 Onia puede pasar al precio vigente avisando antes.
 - Si el cliente paga 3 meses adelantados, se respeta ese periodo completo.
 - La comision se calcula sobre el monto neto realmente cobrado.
 - No se incluyen impuestos, pauta, dominios, hosting, herramientas, APIs,
@@ -49,7 +49,7 @@ Reglas:
 | GestiOS Empresarial | Bs. 1,250/mes | Bs. 437.50 |
 | Landing de Captacion | Bs. 790 | Bs. 79.00 |
 | Web Profesional | Bs. 1,500 | Bs. 180.00 |
-| Web Pro ONIA | Bs. 2,900 | Bs. 348.00 |
+| Web Pro Onia | Bs. 2,900 | Bs. 348.00 |
 | Portal o Sistema Web mini | desde Bs. 6,500 | desde Bs. 650.00 |
 | Auditoria Express | Bs. 250 | Bs. 25.00 |
 | Diagnostico + Plan de Accion | Bs. 690 | Bs. 69.00 |
@@ -87,7 +87,7 @@ Esto significa:
   descontarse de la siguiente liquidacion.
 
 Este plan es inicial. A medida que empecemos a vender, cobrar y validar que los
-clientes son sanos, ONIA puede subir comisiones, bonos o rol por tramos. La
+clientes son sanos, Onia puede subir comisiones, bonos o rol por tramos. La
 subida depende de ventas reales cobradas, buen seguimiento, datos completos,
 margen sano y bajo nivel de reclamos. Nada sube automaticamente.
 
@@ -101,10 +101,10 @@ margen sano y bajo nivel de reclamos. Nada sube automaticamente.
 | Paginas web | 10% a 12% | Sobre el pago neto cobrado |
 | Conectores y n8n | 10% | Sobre setup neto cobrado |
 | Sistemas personalizados | 10% | Sobre el primer pago neto |
-| Consultoria ONIA | 10% a 15% | Segun paquete y margen aprobado |
+| Consultoria Onia | 10% a 15% | Segun paquete y margen aprobado |
 | Cuidado/soporte mensual aprobado | 10% | Solo primer mes si se vende aparte y con alcance escrito |
 
-Regla contable: Sergio y ONIA siempre deben quedar por delante porque ONIA paga
+Regla contable: Sergio y Onia siempre deben quedar por delante porque Onia paga
 entrega, soporte, herramientas, mantenimiento, riesgo de cancelacion, direccion y
 operacion.
 
@@ -117,7 +117,7 @@ o presupuestos que quedan en visto.
 
 Por ahora DentalGest se vende solo como suscripcion mensual. No vender carga
 inicial, migracion, capacitacion, plan anual ni descuentos especiales hasta que
-ONIA lo apruebe.
+Onia lo apruebe.
 
 | Plan | Precio cliente | Que significa | Gana vendedor |
 |---|---:|---|---:|
@@ -130,7 +130,7 @@ ONIA lo apruebe.
 | Agenda publica en plan Basico | Bs. 150/mes | agenda publica si el cliente esta en Basico | Bs. 52.50 |
 | Usuario extra DentalGest | Bs. 70/usuario/mes | usuario adicional al limite del plan | Bs. 24.50 |
 | Insumos dentales en Basico | Bs. 80/mes | modulo de insumos si el cliente esta en Basico | Bs. 28.00 |
-| WhatsApp operativo DentalGest | Bs. 650 inst. + Bs. 350/mes + Meta | requiere aprobacion ONIA, numero, Meta y plantillas | segun aprobacion |
+| WhatsApp operativo DentalGest | Bs. 650 inst. + Bs. 350/mes + Meta | requiere aprobacion Onia, numero, Meta y plantillas | segun aprobacion |
 
 Como vender DentalGest:
 
@@ -180,7 +180,7 @@ mejor.
 |---|---:|---|---:|
 | Landing de Captacion | Bs. 790 | una pagina simple para captar consultas | Bs. 79.00 |
 | Web Profesional | Bs. 1,500 | web de negocio con formulario y secciones clave | Bs. 180.00 |
-| Web Pro ONIA | Bs. 2,900 | web completa + copy + formulario + seguimiento basico | Bs. 348.00 |
+| Web Pro Onia | Bs. 2,900 | web completa + copy + formulario + seguimiento basico | Bs. 348.00 |
 | Portal o Sistema Web | desde Bs. 6,500 | login, dashboard, base de datos o MVP pequeno | desde Bs. 650.00 |
 | Cuidado Web Basico | Bs. 190/mes | mantenimiento simple vendido aparte | Bs. 19.00 |
 | Cuidado Web Crecimiento | Bs. 390/mes | cambios ligeros y revision mensual | Bs. 39.00 |
@@ -262,7 +262,7 @@ Notas importantes:
 - no incluye WhatsApp automatico, scraping masivo, APIs pagadas, login de
   terceros ni mantenimiento continuo si no se cotiza aparte.
 
-### Consultoria e implementaciones ONIA
+### Consultoria e implementaciones Onia
 
 Esto se vende cuando el cliente no sabe que necesita o tiene un desorden que no
 se arregla solo con comprar una suscripcion.
@@ -274,7 +274,7 @@ Antes de venderte una herramienta, ONIA revisa tu proceso y te dice que conviene
 ordenar primero: web, CRM, seguimiento, contenido, automatizacion o sistema.
 ```
 
-| Servicio | Precio cliente | Que entrega ONIA | Gana vendedor |
+| Servicio | Precio cliente | Que entrega Onia | Gana vendedor |
 |---|---:|---|---:|
 | Auditoria Express | Bs. 250 | revision de web/redes/oferta/seguimiento + 3 mejoras claras | Bs. 25.00 |
 | Diagnostico + Plan de Accion | Bs. 690 | sesion, mapa del problema, prioridades y propuesta recomendada | Bs. 69.00 |
@@ -305,7 +305,7 @@ Que incluye la Auditoria Express:
 - detectar donde se pierden consultas o confianza;
 - 3 problemas concretos;
 - 3 acciones recomendadas;
-- una oferta sugerida de ONIA.
+- una oferta sugerida de Onia.
 
 Que no incluye:
 
@@ -349,7 +349,7 @@ Como venderlo:
 
 - vender primero discovery si no esta claro;
 - no prometer precio cerrado sin revisar alcance;
-- explicar que ONIA necesita entender pantallas, datos, usuarios y permisos;
+- explicar que Onia necesita entender pantallas, datos, usuarios y permisos;
 - si el cliente quiere "un sistema completo", llevarlo a llamada con Sergio.
 
 ## 5. Como saber que ofrecer
@@ -407,7 +407,7 @@ Sin registro completo, la comision queda pendiente.
 ### Paso 3: pedir aprobacion si corresponde
 
 No escribir a clientes sensibles, repetidos, asignados o grandes sin aprobacion.
-No contactar sin autorizacion si la lista fue asignada por ONIA para revision.
+No contactar sin autorizacion si la lista fue asignada por Onia para revision.
 
 ### Paso 4: mensaje inicial
 
@@ -455,10 +455,10 @@ Nunca prometer:
 - posicionamiento garantizado en Google;
 - descuentos no aprobados;
 - funciones no confirmadas;
-- fechas de entrega sin validar con ONIA;
+- fechas de entrega sin validar con Onia;
 - automatizacion de WhatsApp antes de verificacion Meta;
 - uso de musica, imagenes, estilo o marca de terceros sin permiso;
-- que el cliente puede pagar despues si ONIA no aprobo credito.
+- que el cliente puede pagar despues si Onia no aprobo credito.
 
 ## 8. Como manejar cambios de precio
 
@@ -499,7 +499,7 @@ Cada dia:
 - actualizar estado del pipeline;
 - avisar oportunidades calientes;
 - pedir apoyo si el cliente pregunta algo tecnico;
-- cerrar con pago en canal aprobado por ONIA.
+- cerrar con pago en canal aprobado por Onia.
 
 Meta diaria sugerida:
 
@@ -512,5 +512,5 @@ Meta diaria sugerida:
 ## 10. Regla final
 
 El vendedor gana cuando trae clientes reales, cobra ventas reales y deja todo
-ordenado. ONIA puede mejorar comisiones y roles, pero primero protege caja,
+ordenado. Onia puede mejorar comisiones y roles, pero primero protege caja,
 entrega, soporte y reputacion.

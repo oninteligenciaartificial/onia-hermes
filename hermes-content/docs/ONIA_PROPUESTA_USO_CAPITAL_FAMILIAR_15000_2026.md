@@ -1,12 +1,12 @@
-# Propuesta de uso del capital familiar ONIA 2026
+# Propuesta de uso del capital familiar Onia 2026
 
 Fecha: 2026-06-23.
-Responsable: Sergio / ONIA.
+Responsable: Sergio / Onia.
 Capital solicitado/recibido: Bs. 15.000.
 
 ## Resumen ejecutivo
 
-ONIA no debe usar estos Bs. 15.000 como dinero libre para comprar equipo o
+Onia no debe usar estos Bs. 15.000 como dinero libre para comprar equipo o
 probar ideas sin control. La propuesta es tratarlo como capital familiar de
 arranque, con tres objetivos:
 
@@ -38,7 +38,7 @@ nueva, cliente pagado o una bolsa de hardware separada.
 
 Lectura:
 
-- ONIA puede operar aproximadamente 3 meses si no gasta de mas.
+- Onia puede operar aproximadamente 3 meses si no gasta de mas.
 - Si el capital se consume en compras grandes, la empresa queda obligada a
   vender bajo presion.
 - La prioridad no es aparentar crecimiento, sino crear ventas cobradas y
@@ -51,7 +51,7 @@ Lectura:
 | Pago/depuracion de deuda operativa | Bs. 2.414,49 | Quitar presion y empezar el ciclo con cuentas claras. |
 | Reserva operativa 2 meses | Bs. 7.301,00 | Cubrir herramientas, VPS, IA, caja minima y continuidad. |
 | Ventas, demos y adquisicion de clientes | Bs. 1.600,00 | Producir propuestas, landings, demos, pauta controlada y material comercial. |
-| ONIA Production Studio minimo | Bs. 1.200,00 | Audio, luz, tripode, almacenamiento o props que permitan vender contenido/ads. |
+| Onia Production Studio minimo | Bs. 1.200,00 | Audio, luz, tripode, almacenamiento o props que permitan vender contenido/ads. |
 | Nuvia / producto piloto controlado | Bs. 900,00 | Solo lotes pequenos con margen medido y costos completos. |
 | Backups, seguridad y home lab ligero | Bs. 700,00 | Evitar perdida de datos, proteger proyectos y reducir dependencia externa. |
 | Contingencia | Bs. 884,51 | Imprevistos, transporte, comisiones, ajustes o gasto aprobado. |
@@ -65,7 +65,7 @@ Solo puede usarse para:
 
 - Codex/Claude si siguen produciendo trabajo real;
 - Higgsfield si produce piezas comerciales, demos o activos vendibles;
-- VPS, Supabase, n8n, Chatwoot y ONIA Center;
+- VPS, Supabase, n8n, Chatwoot y Onia Center;
 - Google Workspace/Drive/fotos si sostienen operacion;
 - caja minima, backups y continuidad del sistema.
 
@@ -127,10 +127,10 @@ Meta comercial inicial:
 | Diagnostico + Plan | Bs. 690 | Convierte dudas en implementacion. |
 | Landing de captacion | Bs. 790 | Cash rapido y base para pauta. |
 | Web Profesional | Bs. 1.500 | Ticket medio, entrega controlada. |
-| Web Pro ONIA | Bs. 2.900 | Mejor margen si el alcance esta cerrado. |
+| Web Pro Onia | Bs. 2.900 | Mejor margen si el alcance esta cerrado. |
 | Automatizacion simple n8n | Bs. 790 | Upsell natural. |
 | Implementacion Starter | Bs. 1.900 | Ticket sano con alcance corto. |
-| ONIA Motor Local Growth | Bs. 2.900 + Bs. 1.900/mes | Servicio recurrente principal. |
+| Onia Motor Local Growth | Bs. 2.900 + Bs. 1.900/mes | Servicio recurrente principal. |
 
 Regla:
 
@@ -140,7 +140,7 @@ No vender servicios sin precio, alcance, costos excluidos, evidencia, responsabl
 
 ## Control y transparencia
 
-Todo uso del capital debe registrarse en ONIA Center o fuente canonica del repo.
+Todo uso del capital debe registrarse en Onia Center o fuente canonica del repo.
 
 Cada gasto debe tener:
 
@@ -160,7 +160,7 @@ Cada semana se revisa:
 - propuestas enviadas;
 - gastos de herramientas;
 - uso de Higgsfield/IA;
-- avance de ONIA Center;
+- avance de Onia Center;
 - retorno o aprendizaje de cada gasto.
 
 ## Que puede salir mal
@@ -184,12 +184,12 @@ Sergio administra el capital con estas reglas:
 - no aprobar gastos de colaboradores sin evidencia;
 - no publicar ni entregar trabajos de clientes sin revision;
 - guardar decisiones, documentos y avances en el repo para no perder conocimiento;
-- revisar semanalmente si el dinero esta acercando a ONIA a ventas reales.
+- revisar semanalmente si el dinero esta acercando a Onia a ventas reales.
 
 ## Propuesta final para el padre
 
 La propuesta no es pedir Bs. 15.000 para gastar. Es usar Bs. 15.000 como capital
-controlado para dar a ONIA un margen de 60 a 90 dias, convertir el trabajo en
+controlado para dar a Onia un margen de 60 a 90 dias, convertir el trabajo en
 ventas cobradas y crear una empresa con sistema, clientes y disciplina.
 
 El capital se divide asi:

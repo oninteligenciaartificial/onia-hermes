@@ -1,7 +1,7 @@
 # Hermes Telegram Command Center
 
 ## Que es
-Es el centro de mando para operar ONIA desde Telegram.
+Es el centro de mando para operar Onia desde Telegram.
 
 Telegram manda el pedido. Hermes decide con contexto. n8n agenda y registra.
 Video Lab queda como laboratorio interno. Sergio aprueba antes de publicar o
@@ -69,7 +69,7 @@ Nada se publica con solo crear un brief.
 ## Lanes
 
 - Sergio: fundador, confianza, proceso real, aprendizaje.
-- ONIA: educacion, demos, sistemas, autoridad y conversion.
+- Onia: educacion, demos, sistemas, autoridad y conversion.
 - Clientes: videos seguros con oferta aprobada.
 
 ## Daily loop recomendado (agenda personal Sergio)
@@ -91,10 +91,10 @@ Nada se publica con solo crear un brief.
 |---|---|---|---|
 | DentalGest | SaaS dental | clinicas dentales | demo corta |
 | Gesti-OS | gestion operativa | pymes con Excel, tareas o reportes | tablero simple |
-| Paginas web ONIA | landing/web + formularios | negocios sin captacion clara | auditoria rapida |
-| Consultoria ONIA | diagnostico, roadmap, implementacion | negocios desordenados | auditoria corta |
-| Sergio personal | confianza y fundador | empresarios, pymes, audiencia ONIA | escribime sistema |
-| ONIA marca | autoridad y conversion | prospectos B2B | pedir demo/auditoria |
+| Paginas web Onia | landing/web + formularios | negocios sin captacion clara | auditoria rapida |
+| Consultoria Onia | diagnostico, roadmap, implementacion | negocios desordenados | auditoria corta |
+| Sergio personal | confianza y fundador | empresarios, pymes, audiencia Onia | escribime sistema |
+| Onia marca | autoridad y conversion | prospectos B2B | pedir demo/auditoria |
 
 Videos IA / Higgsfield no se ofrecen comercialmente por ahora, por eso no
 aparecen en la tabla activa.
@@ -177,7 +177,7 @@ Pendiente:
 priorizar, no ejecutar acciones sensibles. Debe incluir:
 
 - memoria local y outbox Notion;
-- proyectos ONIA conocidos;
+- proyectos Onia conocidos;
 - workflows n8n activos conocidos;
 - pendientes accionables de Video Lab;
 - prioridad operativa inmediata;

@@ -140,15 +140,15 @@ Use these Hermes local skills for project operations:
 - `descripciones-sociales-onia`: Instagram captions/descriptions, TikTok
   descriptions, YouTube Shorts metadata and LinkedIn copy.
 - `flujo-completo-carrusel`: carousel generation and publication.
-- `carruseles-onia`: ONIA carousel briefs.
+- `carruseles-onia`: Onia carousel briefs.
 - `referencias-pinterest`: style/reference extraction.
 - `seguridad-credenciales`: tokens, secrets, env vars.
 - `operaciones-dashboard`: dashboard and gateway status.
 - `centro-comando-telegram`: Telegram as the main Hermes/ONIA command center,
   general routing, n8n command center, project commands and approvals.
 - `n8n-automatizaciones-onia`: scheduling and longer automations.
-- `orquestacion-proyectos-onia`: route ONIA work across DentalGest, Gestios,
-  Web ONIA, client websites, Higgsfield marketing, CRM and outreach.
+- `orquestacion-proyectos-onia`: route Onia work across DentalGest, Gestios,
+  Web Onia, client websites, Higgsfield marketing, CRM and outreach.
 - `radar-creativo-onia`: current creative research, creator references,
   workflows, prompts, trends and strategy before content production.
 - `consultoria-onia`: consulting, audits, implementations, installations,

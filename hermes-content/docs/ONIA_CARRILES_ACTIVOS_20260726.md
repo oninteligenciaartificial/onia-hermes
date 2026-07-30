@@ -1,4 +1,4 @@
-# ONIA — Carriles activos (2026-07-26)
+# Onia — Carriles activos (2026-07-26)
 
 > Fuente de verdad de quién toca qué. Sergio: *"tenemos otra sesión de ONIA Platform… mirá los
 > carriles, mirá las sesiones, mirá los árboles y hacé que no se mezcle."*
@@ -8,7 +8,7 @@
 
 ## 1. Las DOS sesiones vivas (y qué es de cada una)
 
-| | **Sesión A — ONIA SYSTEM** (esta) | **Sesión B — ONIA PLATFORM** (la otra) |
+| | **Sesión A — ONIA SYSTEM** (esta) | **Sesión B — Onia PLATFORM** (la otra) |
 |---|---|---|
 | **Qué es** | Lo que hace funcionar la empresa **por dentro** | El **producto que se vende** + la marca |
 | **Rama** | `claude/onia-colaboradores-sin-inversion-d69b19` | `claude/git-status-935f47` |
@@ -26,7 +26,7 @@ No chocan entre sí (carpetas distintas), por eso conviven en la misma rama.
 
 | Frente | Qué es | Dónde vive | Estado |
 |---|---|---|---|
-| **V — Video / Estudio** | Que ONIA vea y edite video sin editores humanos + la campaña de Lucía | `.claude/skills/{ver-videos,editor-videos}` · `apps/site/.../onia-center/components/views/estudio/**` | Motor **terminado y probado**; campaña con 10 piezas cargadas, pieza del día 2 lista |
+| **V — Video / Estudio** | Que Onia vea y edite video sin editores humanos + la campaña de Lucía | `.claude/skills/{ver-videos,editor-videos}` · `apps/site/.../onia-center/components/views/estudio/**` | Motor **terminado y probado**; campaña con 10 piezas cargadas, pieza del día 2 lista |
 | **C — Chatbot propio** | El bot que atiende el "DEMO" del embudo (y es la demo viva del producto) | `hermes-content/deploy/vps-ops/bot/**` · `supabase/migrations/2026072*_bot_*` | **Fase 1 construida**: motor 9 estados + guardrails + simulador + 35 tests |
 | **M — Meta / cuentas** | Verificar el negocio, página, WhatsApp API, publicación de Lucía | Navegador + `hermes-content/docs/ONIA_META_*` | Portfolio y datos legales **cargados**; falta nombre de página + enviar verificación |
 

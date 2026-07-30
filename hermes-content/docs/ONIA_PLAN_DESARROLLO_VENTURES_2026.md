@@ -1,10 +1,10 @@
-# ONIA — Plan de desarrollo por venture (2026-07-22)
+# Onia — Plan de desarrollo por venture (2026-07-22)
 
 > El "plan de trabajos" por frente. Cada venture: dónde está, próximos 3 pasos, qué lo bloquea.
 > Fuente para la vista Negocio del panel. Complementa `ONIA_MAPA_PRODUCTOS_POR_RUBRO_2026.md`
 > (qué productos) y `ONIA_PLAN_ARRANQUE_LIMPIO_20260718.md` (arranque).
 
-## 0. ONIA Servicios — la máquina de plata AHORA (prioridad 1)
+## 0. Onia Servicios — la máquina de plata AHORA (prioridad 1)
 Vender webs / landings / chatbots / automatización / auditorías a negocios de Bolivia.
 - **Estado:** máquina de ventas armada y viva — Prospector (llena CRM, 14 dentales reales) → Vendedor (redacta seguimiento con link de Cal) → Cal.com (agenda → te avisa). Cero costo.
 - **Próximo:** (1) **trabajar los 14 leads → primera venta cobrada**; (2) sumar rubros al Prospector (estética, gastronomía, comercio); (3) Prospector v2 con teléfono/web reales (Google Maps, tu OK de gasto).
@@ -17,7 +17,7 @@ Vender webs / landings / chatbots / automatización / auditorías a negocios de 
 
 ## 2. Contenido · Higgsfield · Lucía (IA influencer) (prioridad 3)
 - **Estado:** Lucía (persona IA, método Soul), receta Higgsfield brand-safe, content-engine (Remotion), y ahora el **Radar YT** dejando ideas de contenido en el panel. Infra lista, NO publica aún.
-- **Próximo:** (1) **loop de producción**: idea del Radar → aprobás → genera video (Higgsfield, gasto por pieza) → agenda el post; (2) destrabar publicación en IG; (3) primeros posts de Lucía + autoridad ONIA.
+- **Próximo:** (1) **loop de producción**: idea del Radar → aprobás → genera video (Higgsfield, gasto por pieza) → agenda el post; (2) destrabar publicación en IG; (3) primeros posts de Lucía + autoridad Onia.
 - **Bloqueo:** token de Instagram (S6) para auto-publicar.
 
 ## 3. DentalGest — SaaS clínicas dentales
@@ -34,12 +34,12 @@ Vender webs / landings / chatbots / automatización / auditorías a negocios de 
 - **Estado:** fase 1 en su repo.
 - **Próximo:** avanzar R3; mapear al track vertical del core.
 
-## 6. Jarvis por voz (el ONIA Center que te habla)
+## 6. Jarvis por voz (el Onia Center que te habla)
 - **Estado:** Speaches (Whisper STT + TTS) corriendo y el panel ya cableado. Falta unir cables.
 - **Próximo:** (1) **voz por Telegram** (nota de voz → transcribe → ejecuta → responde); (2) botón mic en el asistente del panel; (3) voz premium opcional (ElevenLabs, gasto).
 - **Bloqueo:** ninguno — es cero costo, listo para construir.
 
-## 7. ONIA Center (el panel / Jarvis) — overhaul EN CURSO
+## 7. Onia Center (el panel / Jarvis) — overhaul EN CURSO
 - **Estado:** en reconstrucción (2026-07-22): ganancias reales por persona, agentes mostrados 24/7, tareas con sentido, roles de visión (Camila ≠ Sergio/Arthur), métricas reales, UI con aire.
 - **Próximo:** integrar los 3 carriles + deploy + esta vista de Plan de desarrollo en Negocio.
 

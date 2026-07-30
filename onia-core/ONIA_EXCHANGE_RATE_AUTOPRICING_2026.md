@@ -1,9 +1,9 @@
-# ONIA Exchange Rate Autopricing 2026
+# Onia Exchange Rate Autopricing 2026
 
 Fecha: 2026-07-03.
 Estado: diseno de modulo (NO core) para importadoras/distribuidoras.
 Primer cliente objetivo: Bolivian Electric (ProveeGest).
-Owner: ONIA / Hermes.
+Owner: Onia / Hermes.
 
 ## ACTUALIZACION CRITICA (investigada 2026-07-03)
 
@@ -122,7 +122,7 @@ documentadas, limitan montos, y **rechazan fondos provenientes de Binance**
 (cripto es legal en Bolivia, pero los bancos no aceptan ese origen en sus
 canales). Opciones reales:
 
-1. **Operativa de precios (lo que ONIA automatiza ya):** tasa efectiva
+1. **Operativa de precios (lo que Onia automatiza ya):** tasa efectiva
    diaria + repricing con aprobacion + **cotizaciones con vencimiento corto
    (24-48h)** usando el SLA de WorkItem — en regimen flotante, una cotizacion
    sin fecha de validez es perdida asegurada.
@@ -149,7 +149,7 @@ canales). Opciones reales:
    (host, puerto, usuario, password, SSL) — desde Windows, Mac o Linux por
    igual. Hoy ya lo hacemos: Prisma desde Windows a Supabase, MCP a prod.
 2. **Tu VPS YA es Linux** (Ubuntu): ahi corren n8n, Chatwoot, Supabase
-   selfhosted, ONIA Center. Cuando algo debe correr 24/7 o "cerca" de los
+   selfhosted, Onia Center. Cuando algo debe correr 24/7 o "cerca" de los
    datos, va al VPS — eso ya lo tenes resuelto.
 3. Para bases de datos **dentro de la red de una empresa** (ej. un ERP local
    viejo de un cliente), no se expone el puerto a internet: se instala un
@@ -160,7 +160,7 @@ canales). Opciones reales:
    endpoint. Exactamente el patron `external_gate` del contrato (asi entra
    TR4 de Bolivian Electric).
 
-Regla practica ONIA: **desarrollas en Windows, ejecutas en el VPS Linux, y a
+Regla practica Onia: **desarrollas en Windows, ejecutas en el VPS Linux, y a
 las empresas se entra por tunel o por intake — nunca exponiendo su base.**
 
 ## Fuentes

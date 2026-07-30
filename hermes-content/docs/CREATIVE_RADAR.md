@@ -1,10 +1,10 @@
-# ONIA Creative Radar
+# Onia Creative Radar
 
 ## Purpose
 
 Hermes must act as a creative radar before important content production. The
 goal is to find what is working now, understand why it works, adapt it without
-copying, and turn it into production-ready ONIA content.
+copying, and turn it into production-ready Onia content.
 
 ## When to activate
 
@@ -35,7 +35,7 @@ Priority sources:
 
 Every skill, workflow, creator pattern or prompt system should be scored:
 
-- utility for ONIA content: 1-10;
+- utility for Onia content: 1-10;
 - originality: 1-10;
 - ease of application: 1-10;
 - viral potential: 1-10;

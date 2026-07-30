@@ -1,4 +1,4 @@
-# CLAUDE.md — ONIA Hermes
+# CLAUDE.md — Onia Hermes
 
 Instrucciones de proyecto para Claude. Override sobre defaults.
 
@@ -9,7 +9,7 @@ Instrucciones de proyecto para Claude. Override sobre defaults.
 > nombra el stack de skills + subagente + docs fuente. Mapa legible + spec de repos
 > separados: `hermes-content/docs/ONIA_SKILLS_STACK_Y_SUBAGENTES_20260705.md`.
 
-- Skills ONIA propias: `onia-router` (índice), `onia-propuestas`,
+- Skills Onia propias: `onia-router` (índice), `onia-propuestas`,
   `onia-contabilidad-bolivia`, `onia-core`, `onia-web-factory`, `ver-videos`, `editor-videos`.
   Envuelven conocimiento propio y apuntan a las fuentes de verdad — al cambiar una regla,
   editar la fuente, no la skill.
@@ -20,7 +20,7 @@ Instrucciones de proyecto para Claude. Override sobre defaults.
 
 ## Video — ver y editar sin editores humanos (REGLA)
 
-> El ONIA system ve, transcribe y edita video con código (método del tutorial de Santiago).
+> El Onia system ve, transcribe y edita video con código (método del tutorial de Santiago).
 > Dos skills propias, probadas 2026-07-23. Al mejorar reglas, editar la SKILL.md, no duplicar.
 
 - **`ver-videos`** — para "ver" cualquier video que pase Sergio o un cliente: baja/recibe →
@@ -103,7 +103,7 @@ Docs internos de referencia: `PRICING_RATIONALE_INTERNO.md`,
 > Receta de instalacion en productos: `onia-core/ONIA_CORE_INSTALL_GUIDE_2026.md`.
 > DentalGest esta `installing` (9/9 entidades, wizard /setup, intake vivo).
 
-- ONIA Core es el nucleo operativo comun de los SaaS ONIA (DentalGest, GestiOS,
+- ONIA Core es el nucleo operativo comun de los SaaS Onia (DentalGest, GestiOS,
   Ganadero OS, ProveeGest). Vive SOLO en este repo hasta aprobar adopcion.
 - `policy.installInProductRepos = false`: NO crear migraciones, rutas ni UI
   dependientes del core en los repos producto sin plan de adopcion aprobado.

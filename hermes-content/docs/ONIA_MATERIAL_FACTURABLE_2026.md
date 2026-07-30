@@ -1,4 +1,4 @@
-# ONIA - Material facturable, equipo y quién vende qué 2026
+# Onia - Material facturable, equipo y quién vende qué 2026
 
 Estado: mapa comercial con el equipo real. Fuente para poner a facturar.
 Fecha: 2026-07-18.
@@ -10,7 +10,7 @@ colaboradores: `ONIA_COLABORADORES_COMERCIALES_SIN_INVERSION_2026.md`. Nuvia:
 
 | Persona | Rol | Vende | Produce contenido | Coordina |
 |---|---|---|---|---|
-| **Sergio** | Dueño, director e inversor. **Cara oficial de ONIA** | cierres grandes | autoridad y marca (es el rostro) | todo |
+| **Sergio** | Dueño, director e inversor. **Cara oficial de Onia** | cierres grandes | autoridad y marca (es el rostro) | todo |
 | **Arthur** | Operativo senior ("casi Sergio") | Nuvia, SaaS, webs | sí | a Camila y Jerónimo |
 | **Jerónimo** | Comercial-operativo (como Arthur) | Nuvia, SaaS, webs | sí (su fuerte operativo) | no |
 | **Camila** | Vendedora pura | SaaS, Nuvia | no | no |
@@ -29,7 +29,7 @@ todo Y producen contenido**. Arthur además coordina.
 
 | Tipo | Quién |
 |---|---|
-| Cara y autoridad de ONIA | **Sergio** (es el rostro de la marca) |
+| Cara y autoridad de Onia | **Sergio** (es el rostro de la marca) |
 | Producción (grabar, editar, carruseles, demos) | **Jerónimo** (principal) + Arthur |
 | Contenido AI / faceless (Lucía, canales) | pipeline AI (agentes + Higgsfield) |
 | Camila | no produce contenido |
@@ -86,11 +86,11 @@ Como Camila y Jerónimo venden lo mismo (SaaS + Nuvia), se dividen por **territo
 
 | Quién | Cómo gana |
 |---|---|
-| **Sergio** | Fondo ONIA + recuperación de capital + utilidad de dueño → va por delante (pone capital, herramientas, riesgo, dirección, marca) |
+| **Sergio** | Fondo Onia + recuperación de capital + utilidad de dueño → va por delante (pone capital, herramientas, riesgo, dirección, marca) |
 | **Camila** | Comisión: 35% SaaS · Nuvia por tabla. Solo venta |
 | **Jerónimo** | Comisión: 35% SaaS · 12% web · Nuvia por tabla · contenido en scorecard |
 | **Arthur** | Su acuerdo (comisión + coordinación) |
-| Modelos / agentes AI | No cobran — son activos de ONIA; el margen queda para ONIA |
+| Modelos / agentes AI | No cobran — son activos de Onia; el margen queda para Onia |
 
 ## Foco para empezar a facturar YA
 

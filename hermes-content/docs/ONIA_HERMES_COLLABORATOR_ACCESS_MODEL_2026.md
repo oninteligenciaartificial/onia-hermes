@@ -1,4 +1,4 @@
-# ONIA Hermes Collaborator Access Model 2026
+# Onia Hermes Collaborator Access Model 2026
 
 Estado: borrador canonico interno
 Fecha: 2026-06-20
@@ -13,7 +13,7 @@ No conviene darle acceso completo a Arthur a `onia-hermes` como esta hoy.
 Razon:
 
 - este repositorio es memoria estrategica, personal, financiera y operativa;
-- contiene decisiones internas de ONIA, acuerdos, deuda, porcentajes, precios y
+- contiene decisiones internas de Onia, acuerdos, deuda, porcentajes, precios y
   planes sensibles;
 - si alguien tiene acceso de lectura a un repo privado, no se puede ocultar una
   carpeta especifica solo con GitHub normal;
@@ -74,7 +74,7 @@ entrada revisable.
 |---|---|---|---|
 | P0 | Secreto | no | tokens, passwords, env, VPS, API keys, credenciales Meta/n8n |
 | P1 | Privado estrategico | no | finanzas, deudas, acuerdos, porcentajes, planes personales, Bolivian familiar |
-| P2 | Interno ONIA | solo version saneada | pricing general, playbooks, procesos, SOPs |
+| P2 | Interno Onia | solo version saneada | pricing general, playbooks, procesos, SOPs |
 | P3 | Colaboracion | si | leads, briefs, tareas, status, contenido, requerimientos no sensibles |
 | P4 | Publico/marketing | si | copy, posts, piezas aprobadas, portfolio publico |
 
@@ -431,9 +431,9 @@ Arthur ve lo necesario para producir su parte, no todo el contexto estrategico.
 
 - estrategia familiar de Sergio con Bolivian;
 - que Bolivian puede ser futuro patrimonio de Sergio;
-- acuerdos internos de ONIA;
+- acuerdos internos de Onia;
 - porcentajes, deudas, comisiones privadas;
-- margenes reales de ONIA;
+- margenes reales de Onia;
 - costos internos completos de Bolivian;
 - sueldos;
 - bancos;
@@ -515,7 +515,7 @@ Antes de poner un archivo en el repo colaborativo:
 - no hay datos personales innecesarios;
 - no hay cliente sensible sin permiso;
 - no hay historial Git privado;
-- el archivo puede ser leido por un colaborador sin danar a ONIA.
+- el archivo puede ser leido por un colaborador sin danar a Onia.
 
 ## Carpetas que no deben compartirse
 
