@@ -1,4 +1,4 @@
-# ONIA — Bitácora de los 155 días
+# Onia — Bitácora de los 155 días
 
 > **Documento vivo.** Del 1-ago al 31-dic-2026. Acá se registra TODO: lo que salió bien,
 > lo que salió mal, los números reales y las decisiones. Es la fuente del guion de cada
@@ -27,33 +27,37 @@
 
 ---
 
-## 1. Estado de los 18 objetivos
+## 1. Estado de los 12 objetivos
 
 > Se actualiza los domingos. Es la misma tabla que sale en pantalla al final del video
 > semanal (composición `ScoreboardFull`) y la que alimenta `scripts/hyperframes/data/serie-objetivos.json`.
 
+> **Cerrados por Sergio el 2026-07-30.** Se eliminaron cuatro: **NIT** (ya estaba resuelto
+> desde antes, no es meta del semestre), **suscriptores de YouTube**, **leads del contenido**
+> y **entrevistas con los que no compraron**. Y las tres filas de clientes (anclas / clínicas /
+> webs) se colapsaron en **un solo número: 50**.
+
 | # | Categoría | Objetivo | Meta | Actual | Estado |
 |---|---|---|---|---|---|
 | 1 | Fiscal | **Homologación SIAT** | aprobada antes del 15-sep | — | ⬜ |
-| 2 | Fiscal | **NIT desbloqueado** | ✅ | — | ⬜ |
-| 3 | Negocio | **MRR** | USD 5.000 | $0 | ⬜ |
-| 4 | Clientes | **Anclas** (empresas medianas) | 5 | 0 | ⬜ |
-| 5 | Clientes | **Clínicas** en Onia Dental | 25 | 0 | ⬜ |
-| 6 | Clientes | **Webs** con mensual | 10 | 0 | ⬜ |
-| 7 | Expansión | **Clientes internacionales** | 2 | 0 | ⬜ |
-| 8 | Retención | **Churn mensual** | <5% | — | ⬜ |
-| 9 | Negocio | **Caja neutra personal** | ✅ | — | ⬜ |
-| 10 | Equipo | **Primera contratación** | 30-nov | — | ⬜ |
-| 11 | Empresa | **Primera oficina** | MRR = 3× alquiler | — | ⬜ |
-| 12 | Aprendizaje | **Worker Cobrador IA en Python** | en producción | — | ⬜ |
-| 13 | TikTok | **Videos publicados** | 155 | 0 | ⬜ |
-| 14 | TikTok | **Seguidores** | 25.000 | — | ⬜ |
-| 15 | YouTube | **Videos publicados** | 22 | 0 | ⬜ |
-| 16 | YouTube | **Suscriptores** | 2.500 | — | ⬜ |
-| 17 | Serie | **Leads del contenido** | 25 | 0 | ⬜ |
-| 18 | Producto | **Entrevistas con los que NO compraron** | 10 | 0 | ⬜ |
+| 2 | Negocio | **MRR** | USD 5.000 | $0 | ⬜ |
+| 3 | Clientes | **Clientes activos** | 50 | 0 | ⬜ |
+| 4 | Expansión | **Clientes internacionales** | 3 | 0 | ⬜ |
+| 5 | Retención | **Churn mensual** | menor a 5% | — | ⬜ |
+| 6 | Negocio | **Caja neutra personal** | sí | — | ⬜ |
+| 7 | Equipo | **Primera contratación** | antes del 30-nov | — | ⬜ |
+| 8 | Empresa | **Primera oficina** | MRR = 3× alquiler | — | ⬜ |
+| 9 | Aprendizaje | **Worker Cobrador IA en Python** | en producción | — | ⬜ |
+| 10 | TikTok | **Videos publicados** | 155 | 0 | ⬜ |
+| 11 | TikTok | **Seguidores** | 20.000 | — | ⬜ |
+| 12 | YouTube | **Resúmenes semanales** | 22 | 0 | ⬜ |
 
-**Progreso: 0 de 18.**
+**Progreso: 0 de 12.**
+
+> **La aritmética ahora cierra sola.** Bs 56.850 ÷ 50 clientes = **Bs 1.137 por cliente**, y el
+> ARPU real del stack (plan + chatbot + cuidado web) es Bs 1.000-1.400. Con los 30 clientes del
+> plan original hacía falta Bs 1.895, que era casi el plan más caro del catálogo: el número solo
+> cerraba si TODOS compraban el tope. Con 50 cierra con una mezcla normal.
 
 Leyenda: ⬜ pendiente · 🟡 en progreso · ✅ cumplido · ❌ caído (con motivo en §7)
 

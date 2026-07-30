@@ -1,8 +1,8 @@
-# ONIA — Plan de 155 días (1-ago → 31-dic-2026): crítica y rediseño
+# Onia — Plan de 155 días (1-ago → 31-dic-2026): crítica y rediseño
 
 > 2026-07-27. Sergio pidió un consejo directivo (CEO, CTO, PM, arquitecto, creador de
 > contenido, inversionista, cliente) sobre su plan de documentar públicamente la
-> construcción de ONIA. Este doc critica el plan actual y lo rediseña.
+> construcción de Onia. Este doc critica el plan actual y lo rediseña.
 >
 > Contexto duro que usa este análisis: **0 clientes pagando** · runway **≈11 semanas
 > (a ~mediados de octubre)** · pricing ratificado Bs 390/890/1.990 (lanzamiento
@@ -203,17 +203,17 @@ Si te agarra por sorpresa, es el capítulo donde se acaba la serie.
 
 > **Corrección a §1.1 (2026-07-27, tras push-back de Sergio).** La crítica aritmética
 > era correcta pero incompleta: **asumía 30 clientes uniformes comprando solo el asiento
-> de SaaS.** Ese es el error. Con la mezcla real de lo que ONIA vende, el número cierra.
+> de SaaS.** Ese es el error. Con la mezcla real de lo que Onia vende, el número cierra.
 > El problema nunca fue la ambición: era la **forma** del plan.
 
 **Lo que se me había pasado — y es la palanca más importante del semestre:**
 
-1. **ONIA no vende un asiento, vende un stack.** Una clínica no paga solo Bs 750 del plan
+1. **Onia no vende un asiento, vende un stack.** Una clínica no paga solo Bs 750 del plan
    Pro: paga plan + chatbot IA + cuidado web. El ARPU real no es Bs 567, es **Bs 1.000-1.400**.
 2. **El chatbot y las automatizaciones NO necesitan integración fiscal.** El módulo que no
    viaja entre países es el emisor SIAT. **El chatbot viaja completo.** Bolivian Electric ya
    lo prueba: WhatsApp WABA → Chatwoot → webhook, sin tocar un solo impuesto. **Eso significa
-   que ONIA SÍ puede vender fuera de Bolivia desde el día 1** — solo que vende chatbot y
+   que Onia SÍ puede vender fuera de Bolivia desde el día 1** — solo que vende chatbot y
    automatización, no facturación.
 3. **Existe un ticket alto que ya está construido y probado.** Una empresa mediana con
    chatbot + automatizaciones + soporte no paga Bs 750: paga **miles por mes**.
@@ -241,7 +241,50 @@ anclas son 5 ventas, no 50, y las webs se cierran una vez y dejan recurrente.
 *requiere* la segunda persona hacia octubre. Eso deja de ser un lujo y pasa a ser una
 condición del plan — y es mejor historia que "contraté cuando me sentí cómodo".
 
-### Objetivos definitivos — dos tableros separados
+### 4.ter — METAS CERRADAS POR SERGIO (2026-07-30). Esto manda.
+
+> Lo de abajo (§4.bis, dos tableros) queda como el razonamiento que llevó acá. **La lista
+> vigente es esta**, y está en `scripts/hyperframes/data/serie-objetivos.json` + la
+> composición `ScoreboardFull`.
+
+| # | Objetivo | Meta |
+|---|---|---|
+| 1 | Homologación SIAT | aprobada antes del 15-sep |
+| 2 | **MRR** | **USD 5.000** |
+| 3 | **Clientes activos** | **50** |
+| 4 | Clientes internacionales | **3** |
+| 5 | Churn mensual | menor a 5% |
+| 6 | Caja neutra personal | sí |
+| 7 | Primera contratación | antes del 30-nov |
+| 8 | Primera oficina | MRR = 3× alquiler |
+| 9 | Worker Cobrador IA en Python | en producción |
+| 10 | TikToks publicados | **155** (1 por día) |
+| 11 | Seguidores TikTok | **20.000** |
+| 12 | YouTube: resúmenes semanales | 22 |
+
+**Eliminados, con motivo:**
+
+| Eliminado | Motivo |
+|---|---|
+| NIT desbloqueado | Ya estaba resuelto desde antes. No es meta del semestre |
+| Suscriptores de YouTube | Decisión de Sergio |
+| Leads que llegaron del contenido | Decisión de Sergio |
+| Entrevistas con los que NO compraron | Decisión de Sergio |
+| Anclas / Clínicas / Webs por separado | Colapsados en un solo número: **50 clientes** |
+
+> ⚠️ **Lo que se pierde al sacar "leads del contenido", para tenerlo presente:** era la única
+> métrica que conectaba la serie con la empresa. Sin ella, si al 31-dic hay 20.000 seguidores
+> y 3 clientes, **no vas a poder saber si la serie aportó o no**. No es un error tenerla
+> afuera del tablero en pantalla —son 12 filas y hay que elegir—, pero conviene medirla
+> igual en la bitácora aunque no se muestre.
+
+**La aritmética mejoró con el cambio a 50:** Bs 56.850 ÷ 50 = **Bs 1.137 por cliente**, contra
+el ARPU real del stack de Bs 1.000-1.400. Con 30 hacía falta Bs 1.895 (casi el plan tope, o
+sea que solo cerraba si todos compraban el más caro). **Con 50 cierra con una mezcla normal.**
+
+---
+
+### Objetivos definitivos — dos tableros separados *(razonamiento previo, superado por §4.ter)*
 
 **No se mezclan.** Mezclarlos es lo que corrompe las decisiones de negocio.
 
@@ -487,7 +530,7 @@ Dicho eso, hay cinco formas de que aporte desde ya:
 
 ---
 
-## 14. Cómo posicionar a ONIA como empresa de software y no como agencia
+## 14. Cómo posicionar a Onia como empresa de software y no como agencia
 
 Cinco decisiones, y son todas de fondo, no de estética:
 
