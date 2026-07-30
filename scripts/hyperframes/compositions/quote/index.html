@@ -5,7 +5,7 @@
     {"id":"text","type":"string","label":"Texto","default":"Tu equipo, atendiendo mientras vos dormís"},
     {"id":"attribution","type":"string","label":"Atribucion","default":""},
     {"id":"revealBy","type":"enum","label":"Revelado","default":"word","options":[{"value":"word","label":"Por palabra"},{"value":"line","label":"Por linea"}]},
-    {"id":"accent","type":"color","label":"Acento","default":"#FF7A00"}
+    {"id":"accent","type":"color","label":"Acento","default":"#00D26A"}
   ]'
 >
   <head>
@@ -76,7 +76,7 @@
         --stage-w: 1000;
         --stage-h: 620;
         --u: calc(var(--stage-w) / 1000 * 1px);
-        --accent: #ff7a00;
+        --accent: #00d26a;
         --accent-deep: color-mix(in srgb, var(--accent) 62%, #000000);
         --ink: #0a0c11;
         --ink2: #15181f;
@@ -347,6 +347,11 @@
 
           // ---- contenido ------------------------------------------------------
           var V = readVars();
+          // El JSON declara el acento pero el CSS lo pisaba: sin esto,
+          // --accent nunca recibia el valor de V.accent (patron de scoreboard/full).
+          var accent = String(V.accent || "").trim();
+          if (/^#[0-9a-fA-F]{3,8}$/.test(accent)) stage.style.setProperty("--accent", accent);
+
           var elCard = document.getElementById("quote-card");
           var elRail = document.getElementById("quote-rail");
           var elBody = document.getElementById("quote-body");
