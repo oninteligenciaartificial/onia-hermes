@@ -1,5 +1,17 @@
 # Marcador de la serie — el ancla visual de los 155 días
 
+Acá viven **dos piezas distintas** de la misma familia visual:
+
+1. **El marcador** (esta primera mitad) — la placa chica de esquina que va
+   encima del video en **todos** los clips de la serie.
+2. **El tablero de objetivos** ([saltar ahí](#el-tablero-de-objetivos--la-tabla-grande-del-cierre))
+   — la tabla grande con los 18 objetivos, que va **al final** del video
+   semanal de YouTube y en el resumen de fin de semana.
+
+---
+
+## El marcador
+
 Es la placa que va en **todos** los videos de la serie documental
 (1-ago → 31-dic-2026). Muestra siempre lo mismo: **DÍA 47 / 155**, el MRR, los
 clientes y el runway. Eso es lo que convierte videos sueltos en una serie: el
@@ -46,7 +58,7 @@ Es un archivo de texto: cambiá **solo lo que está después de los dos puntos**
 | `clientes`      | Clientes pagando hoy                              | Solo los que pagan, no los interesados  |
 | `runwaySemanas` | Semanas de caja que quedan                        | Entero                                  |
 | `eyebrow`       | El texto chico de arriba                          | En MAYÚSCULAS                           |
-| `accent`        | El naranja de la marca                            | No cambiarlo                            |
+| `accent`        | El verde de marca (`#00D26A`)                     | No cambiarlo                            |
 
 **Los números van sin puntos ni comas.** Escribís `8400` y la placa lo muestra
 como `Bs 8.400` sola (separador boliviano). Si escribís `8.400` también funciona:
@@ -117,9 +129,105 @@ ffmpeg -i ENTRADA.mp4 -framerate 30 -start_number 1 -i .hermes/video-lab/overlay
 
 ---
 
-## Por qué está diseñada así
+# El tablero de objetivos — la tabla grande del cierre
 
-Notas para el que la toque en el futuro — no hace falta leerlas para usarla.
+El marcador de arriba dice **dónde vamos hoy**. El tablero dice **qué falta**:
+las 18 filas del año, cada una con su meta, el valor de hoy y si está cumplida.
+Va **al final del video semanal de YouTube** y en el resumen de fin de semana —
+ocupa el cuadro entero, no es una placa de esquina.
+
+Arriba lleva el contador general (**«7 de 18 cumplidos»**) y una barra que se
+llena con esa fracción. De un vistazo se ve cuántas van.
+
+|                      | Full (16:9)              | Full vertical (9:16)          |
+| -------------------- | ------------------------ | ----------------------------- |
+| Tamaño               | 1920 × 1080              | 1080 × 1920                   |
+| Para                 | YouTube                  | TikTok · Reels · Shorts       |
+| Cómo acomoda 18 filas| 2 columnas de 9          | 1 columna de 18               |
+| Nombre en el comando | `ScoreboardFull`         | `ScoreboardFullVertical`      |
+
+Muestras: [`muestra/objetivos-full.png`](muestra/objetivos-full.png) ·
+[`muestra/objetivos-full-vertical.png`](muestra/objetivos-full-vertical.png).
+
+## Paso 1 — Actualizar el tablero
+
+Los datos salen de **`scripts/hyperframes/data/serie-objetivos.json`** (archivo
+propio; el marcador sigue usando `serie-estado.json`).
+
+Cada objetivo lleva **dos líneas**: cuánto va hoy y en qué estado está.
+
+```json
+  "clinicas": "12",
+  "clinicasEstado": "progreso",
+```
+
+| Estado      | Cómo se ve                          | Qué significa            |
+| ----------- | ----------------------------------- | ------------------------ |
+| `cumplido`  | disco verde lleno con tilde         | listo, cuenta en «X de 18» |
+| `progreso`  | anillo verde medio lleno            | arrancado, no terminado  |
+| `pendiente` | anillo gris vacío (y la fila apagada) | sin empezar            |
+
+- El estado se escribe **a mano**: no se deduce del número. Un valor que no se
+  reconozca cae en `pendiente` — nunca inventa avance.
+- También valen `hecho` / `listo` (= cumplido) y `en curso` / `en progreso`
+  (= progreso). Mayúsculas y tildes dan igual.
+- Los números van **sin puntos**: escribís `25000` y sale `25.000`.
+- El valor de hoy puede ser texto (`"en trámite"`, `"4,2%"`, `"28-nov-2026"`).
+
+**Las metas y los nombres de los objetivos NO están en el JSON**: son el
+compromiso del año y viven dentro de la composición (`ROWS`, en el `<script>`).
+Si cambia una meta, se cambia ahí — en los **dos** archivos, el `full` y el
+`full-vertical`.
+
+Las dos metas binarias (`NIT desbloqueado`, `Caja neutra personal`) dicen
+**«hecho»** y no un tilde: las fuentes de marca vienen recortadas al alfabeto
+latino y un emoji saldría como cuadradito vacío. El tilde de verdad es el que
+está dibujado en la marca de estado, que es un SVG.
+
+## Paso 2 — Generarlo
+
+Para **YouTube**:
+
+```bash
+node scripts/hyperframes/render.mjs --comp ScoreboardFull --out .hermes/video-lab/objetivos/full --props-file scripts/hyperframes/data/serie-objetivos.json --duration 10
+```
+
+Para **TikTok / Reels / Shorts**:
+
+```bash
+node scripts/hyperframes/render.mjs --comp ScoreboardFullVertical --out .hermes/video-lab/objetivos/vertical --props-file scripts/hyperframes/data/serie-objetivos.json --duration 10
+```
+
+`--duration` son los segundos que se ve el tablero. **Son 18 filas para leer:
+menos de 8 segundos no alcanza.** El default de la composición es 8; para el
+cierre de un video de YouTube, 10-12 va mejor. Alargarlo no alarga la animación,
+alarga el rato que se queda quieto.
+
+Sale una carpeta de PNGs con fondo transparente, igual que el marcador — se pega
+sobre el video con el mismo `ffmpeg` del Paso 3 de arriba.
+
+## Por qué el tablero está diseñado así
+
+- **Misma placa, mismos tokens, misma curva que el marcador.** Es la versión
+  grande de la misma pieza, no un diseño nuevo.
+- **Fila de dos líneas.** Arriba: estado + categoría + objetivo. Abajo: `meta X`
+  a la izquierda y `hoy Y` a la derecha. Las dos líneas comparten la sangría de
+  la marca y la categoría, así que `meta` y `hoy` quedan alineados en todas las
+  filas: se lee como tabla, no como lista.
+- **El estado se ve por forma Y por color**, y hay leyenda al pie. Las filas
+  pendientes se apagan (texto en gris) para que las cumplidas salten.
+- **En 16:9 van 2 columnas de 9.** A una sola columna cada fila quedaría de 38 px
+  de alto y con 1.600 px de aire muerto al medio. En 9:16 al revés: el cuadro da
+  1.530 px de alto útil, así que entran las 18 en una columna con 85 px por fila.
+- **El verde es semántico**: marca lo cumplido y llena la barra de progreso. No
+  se usa de adorno.
+
+---
+
+# Notas de diseño — lo que comparten las cuatro variantes
+
+Notas para el que las toque en el futuro — no hace falta leerlas para usarlas.
+Los ejemplos hablan del marcador, pero las reglas valen igual para el tablero.
 
 - **La placa es OPACA, no un rectángulo negro al 50%.** A media transparencia el
   contraste del texto depende de lo que haya atrás, y una pared blanca o una
@@ -155,24 +263,41 @@ Notas para el que la toque en el futuro — no hace falta leerlas para usarla.
 
 ### Editar el diseño
 
-Cada variante es un proyecto HyperFrames independiente. Para trabajar una:
+Cada variante es un proyecto HyperFrames independiente, con su propia carpeta y
+su propia copia de `fonts/`:
+
+| Carpeta                  | Composición              | Qué es                    |
+| ------------------------ | ------------------------ | ------------------------- |
+| `scoreboard/vertical`    | `Scoreboard`             | marcador 9:16             |
+| `scoreboard/horizontal`  | `ScoreboardWide`         | marcador 16:9             |
+| `scoreboard/full`        | `ScoreboardFull`         | tablero de objetivos 16:9 |
+| `scoreboard/full-vertical` | `ScoreboardFullVertical` | tablero de objetivos 9:16 |
 
 ```bash
-cd scripts/hyperframes/compositions/scoreboard/vertical
+cd scripts/hyperframes/compositions/scoreboard/full
 npx hyperframes check      # lint + runtime + layout + motion + contraste
 npx hyperframes preview    # Studio, para ver la animación
 ```
 
-Las dos variantes **declaran los mismos campos**, así que si agregás un dato hay
-que agregarlo en las dos y en el JSON.
+Las variantes de cada pieza **declaran los mismos campos**, así que si agregás un
+dato (o cambiás una meta) hay que hacerlo en las **dos** y en el JSON.
 
-Estado de los gates al momento de construirla (las dos variantes):
+Los `.woff2` se reparten desde `hermes-content/brand/fonts/build-onia-fonts.py`
+(entradas `scoreboard/full` y `scoreboard/full-vertical`): **no se copian a
+mano**, se regeneran. Si falta la carpeta, el render no falla — sale con una
+fuente del sistema y **en silencio**.
+
+Estado de los gates al construir el tablero (las dos variantes, `v0.7.85`):
 
 ```
 Layout     0 issues across 9 sample(s)
 Motion     0 errors, 0 warnings
-Contrast   67/67 text checks pass WCAG AA
+Contrast   504/504 text checks pass WCAG AA
 ```
+
+Verificado además con los 18 valores en su máximo (MRR `Bs 125.000 / USD 10.995`,
+60.000 seguidores, 155 videos, fechas largas): mismos gates en verde y nada se
+desborda — ver `muestra/prueba-ancho-objetivos-*.png`.
 
 Queda un aviso (no error) de `composition_file_too_large`: el archivo pasa las
 300 líneas contando los comentarios. Se deja así a propósito — las demás

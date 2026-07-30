@@ -71,7 +71,7 @@
         --stage-w: 1920;
         --stage-h: 1080;
         --u: calc(var(--stage-w) / 1000 * 1px);
-        --accent: #ff7a00;
+        --accent: #00D26A;
         /* El acento cuando es TEXTO — ver nota en la variante vertical. */
         --accent-ink: var(--accent);
         --ink: #0a0c11;
@@ -479,6 +479,10 @@
 
           // ---- contenido ------------------------------------------------------
           var V = readVars();
+          // Ver la nota en scoreboard/vertical: sin esto el CSS manda y el acento
+          // del JSON nunca llega a la imagen.
+          var accent = String(V.accent || "").trim();
+          if (/^#[0-9a-fA-F]{3,8}$/.test(accent)) stage.style.setProperty("--accent", accent);
           var elPlate = document.getElementById("sb-plate");
           var elEyebrow = document.getElementById("sb-eyebrow");
           var elDay = document.getElementById("sb-day");
