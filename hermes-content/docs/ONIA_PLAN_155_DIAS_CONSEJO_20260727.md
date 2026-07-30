@@ -165,7 +165,7 @@ Si te agarra por sorpresa, es el capítulo donde se acaba la serie.
 | 2 | **Un solo vertical: dental.** Ferreterías queda gateado | Onia Dental está ~90% listo; abrir dos verticales duplica soporte y no duplica ventas |
 | 3 | **MRR pasa de objetivo a resultado.** El objetivo es *clientes que renuevan* | Con 0 clientes, MRR es rezagado; lo que se controla son las conversaciones |
 | 4 | **Objetivos en tres escenarios** (base / bueno / excelente), no un número único | Un número único te hace mentir o rendirte. Tres te hacen aprender |
-| 5 | **De TikTok diario a 4-5/semana con un día libre por diseño** | Un día libre planificado deja de ser un fracaso; el "sin fallar" garantiza culpa |
+| 5 | **TikTok diario SÍ (155 de 155), pero se elimina el "sin fallar"** | El contador "Día X de 155" solo funciona si es diario. Con el sistema de batching de §16 (~7 h/semana) el diario da. Lo que se elimina es el "sin fallar": **un día perdido se recupera con doble al día siguiente, no es un fracaso**. La culpa es lo que mata la serie, no el hueco |
 | 6 | **Aprender programando sobre el stack real, no fundamentos de Python** | Aprendés más shippeando una feature de Next que haciendo ejercicios |
 | 7 | **La oficina se reemplaza por la primera contratación** | Un par de manos multiplica; un cuarto vacío no |
 | 8 | **Consentimiento escrito antes de grabar a cualquier cliente** | Sin esto, el primer episodio con un cliente real puede costarte el cliente |
@@ -264,7 +264,8 @@ condición del plan — y es mejor historia que "contraté cuando me sentí cóm
 |---|---|---|---|
 | TikTok | 8.000 | **25.000** | 60.000 |
 | YouTube | 1.000 | **2.500** | 5.000 |
-| Videos publicados | 120 | **155** | 155 |
+| **TikToks publicados** (1 por día) | 140 | **155 de 155** | 155 |
+| YouTube publicados | 15 | **22** (1/semana) | 22 |
 | **Leads calificados que llegaron del contenido** | 5 | **25** | 60 |
 | Un video sobre 500k vistas | — | **✅** | 3 |
 
@@ -572,7 +573,7 @@ hilo de X. Cambia el formato, no el contenido.
 |---|---|
 | **Empresa** | Desbloquear NIT · iniciar homologación SIAT · **50 conversaciones con clínicas** · 15 demos · **cliente #1 pagando** · escribir el criterio de corte |
 | **Producto** | Nada nuevo. Solo lo que pide el cliente #1 para poder pagar. Onboarding en <2 h |
-| **Contenido** | Episodio 0 · arranca el contador · 4 TikToks/semana · 2 YouTube |
+| **Contenido** | Episodio 0 · arranca el contador · **1 TikTok por día (31)** · 4 YouTube |
 | **Aprendizaje** | 1 feature real por semana en el stack (TypeScript/Next) |
 | **NO se hace** | Segundo vertical · segundo país · oficina · rediseños |
 
