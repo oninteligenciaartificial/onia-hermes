@@ -50,12 +50,17 @@ const fail = (msg) => {
 };
 
 // nombre publico -> carpeta de la composicion (= data-composition-id)
+// Scoreboard lleva subcarpeta por orientacion: son DOS composiciones (cada una
+// con su geometria congelada y su propio fonts/), no una con dos tamanos.
 const COMPS = {
   Stat: "stat",
   Browser: "browser",
   Phone: "phone",
   Quote: "quote",
   LowerThird: "lower-third",
+  Scoreboard: "scoreboard/vertical",
+  ScoreboardWide: "scoreboard/horizontal",
+  ScoreboardFull: "scoreboard/full",
 };
 const COMP_NAMES = Object.keys(COMPS);
 
@@ -233,7 +238,12 @@ if (declMatch) {
 }
 const variables = {};
 for (const id of declared) {
-  if (props[id] !== undefined && props[id] !== null) variables[id] = String(props[id]);
+  if (props[id] === undefined || props[id] === null) continue;
+  // Las variables de HyperFrames son STRINGS. Un objeto o una lista con String()
+  // daba "[object Object]" y la composicion recibia basura en silencio: por eso
+  // una tabla (los 18 objetivos de la serie) viaja como JSON serializado y la
+  // composicion lo parsea. El .json de datos sigue siendo JSON normal, editable.
+  variables[id] = typeof props[id] === "object" ? JSON.stringify(props[id]) : String(props[id]);
 }
 const ignored = Object.keys(props).filter(
   (k) => !declared.includes(k) && !["width", "height", "durationInSeconds", "fps", "theme"].includes(k),

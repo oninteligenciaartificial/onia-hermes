@@ -1,0 +1,25 @@
+{
+  "eyebrow": "155 DÍAS EN PÚBLICO",
+  "titulo": "LOS 18 OBJETIVOS",
+  "accent": "#00D26A",
+  "objetivos": [
+    { "cat": "FISCAL",      "obj": "Homologación SIAT",                    "meta": "antes del 15-sep", "hoy": "", "hecho": false },
+    { "cat": "FISCAL",      "obj": "NIT desbloqueado",                     "meta": "hecho",            "hoy": "", "hecho": false },
+    { "cat": "NEGOCIO",     "obj": "MRR",                                  "meta": "USD 5.000",        "hoy": "$0", "hecho": false },
+    { "cat": "CLIENTES",    "obj": "Anclas (empresas medianas)",           "meta": "5",                "hoy": "0", "hecho": false },
+    { "cat": "CLIENTES",    "obj": "Clínicas en Onia Dental",              "meta": "25",               "hoy": "0", "hecho": false },
+    { "cat": "CLIENTES",    "obj": "Webs con mensual",                     "meta": "10",               "hoy": "0", "hecho": false },
+    { "cat": "EXPANSIÓN",   "obj": "Clientes internacionales",             "meta": "2",                "hoy": "0", "hecho": false },
+    { "cat": "RETENCIÓN",   "obj": "Churn mensual",                        "meta": "menos de 5%",      "hoy": "—", "hecho": false },
+    { "cat": "NEGOCIO",     "obj": "Caja neutra personal",                 "meta": "hecho",            "hoy": "", "hecho": false },
+    { "cat": "EQUIPO",      "obj": "Primera contratación",                 "meta": "30-nov",           "hoy": "", "hecho": false },
+    { "cat": "EMPRESA",     "obj": "Primera oficina",                      "meta": "MRR = 3x alquiler","hoy": "", "hecho": false },
+    { "cat": "APRENDIZAJE", "obj": "Worker Cobrador IA en Python",         "meta": "en producción",    "hoy": "", "hecho": false },
+    { "cat": "TIKTOK",      "obj": "Videos publicados",                    "meta": "155",              "hoy": "0", "hecho": false },
+    { "cat": "TIKTOK",      "obj": "Seguidores",                           "meta": "25.000",           "hoy": "—", "hecho": false },
+    { "cat": "YOUTUBE",     "obj": "Videos publicados",                    "meta": "22",               "hoy": "0", "hecho": false },
+    { "cat": "YOUTUBE",     "obj": "Suscriptores",                         "meta": "2.500",            "hoy": "—", "hecho": false },
+    { "cat": "SERIE",       "obj": "Leads del contenido",                  "meta": "25",               "hoy": "0", "hecho": false },
+    { "cat": "PRODUCTO",    "obj": "Entrevistas con los que NO compraron", "meta": "10",               "hoy": "0", "hecho": false }
+  ]
+}
