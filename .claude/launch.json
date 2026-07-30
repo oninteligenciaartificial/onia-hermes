@@ -4,35 +4,60 @@
     {
       "name": "onia-platform",
       "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["-C", "web-factory", "--filter", "onia-platform", "dev", "-p", "3198"],
+      "runtimeArgs": [
+        "-C",
+        "web-factory",
+        "--filter",
+        "onia-platform",
+        "dev",
+        "-p",
+        "3198"
+      ],
       "port": 3198
     },
     {
       "name": "dentalgest-landing",
       "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["-C", "web-factory", "--filter", "dentalgest-landing", "dev", "-p", "3199"],
+      "runtimeArgs": [
+        "-C",
+        "web-factory",
+        "--filter",
+        "dentalgest-landing",
+        "dev",
+        "-p",
+        "3199"
+      ],
       "port": 3199
     },
     {
       "name": "site",
       "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["-C", "web-factory", "--filter", "site", "dev"],
+      "runtimeArgs": [
+        "-C",
+        "web-factory",
+        "--filter",
+        "site",
+        "dev"
+      ],
       "port": 3277,
       "autoPort": true
     },
     {
-      "name": "dentagest",
+      "name": "onia-platform-app",
       "runtimeExecutable": "cmd",
       "runtimeArgs": [
         "/c",
-        "cd /d C:\\dev\\proyectos\\DentaGest\\dental-saas && npm run dev -- --port 3210"
+        "cd /d C:\\dev\\proyectos\\onia-platform && npm run dev -- --port 3210"
       ],
       "port": 3210
     },
     {
       "name": "web-factory-out",
       "runtimeExecutable": "node",
-      "runtimeArgs": ["web-factory/scripts/serve-out.mjs", "4330"],
+      "runtimeArgs": [
+        "web-factory/scripts/serve-out.mjs",
+        "4330"
+      ],
       "port": 4330
     }
   ]
