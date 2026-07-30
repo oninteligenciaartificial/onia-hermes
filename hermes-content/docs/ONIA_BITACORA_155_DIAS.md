@@ -27,7 +27,7 @@
 
 ---
 
-## 1. Estado de los 12 objetivos
+## 1. Estado de los 13 objetivos
 
 > Se actualiza los domingos. Es la misma tabla que sale en pantalla al final del video
 > semanal (composición `ScoreboardFull`) y la que alimenta `scripts/hyperframes/data/serie-objetivos.json`.
@@ -42,17 +42,46 @@
 | 1 | Fiscal | **Homologación SIAT** | aprobada antes del 15-sep | — | ⬜ |
 | 2 | Negocio | **MRR** | USD 5.000 | $0 | ⬜ |
 | 3 | Clientes | **Clientes activos** | 50 | 0 | ⬜ |
-| 4 | Expansión | **Clientes internacionales** | 3 | 0 | ⬜ |
-| 5 | Retención | **Churn mensual** | menor a 5% | — | ⬜ |
-| 6 | Negocio | **Caja neutra personal** | sí | — | ⬜ |
-| 7 | Equipo | **Primera contratación** | antes del 30-nov | — | ⬜ |
-| 8 | Empresa | **Primera oficina** | MRR = 3× alquiler | — | ⬜ |
-| 9 | Aprendizaje | **Worker Cobrador IA en Python** | en producción | — | ⬜ |
-| 10 | TikTok | **Videos publicados** | 155 | 0 | ⬜ |
-| 11 | TikTok | **Seguidores** | 20.000 | — | ⬜ |
-| 12 | YouTube | **Resúmenes semanales** | 22 | 0 | ⬜ |
+| 4 | Ventas | **Llamadas y demos con dueños de negocio** | 250 | 0 | ⬜ |
+| 5 | Expansión | **Clientes internacionales** | 3 | 0 | ⬜ |
+| 6 | Retención | **Churn mensual** | menor a 5% | — | ⬜ |
+| 7 | Negocio | **Caja neutra personal** | sí | — | ⬜ |
+| 8 | Equipo | **Primera contratación** | antes del 30-nov | — | ⬜ |
+| 9 | Empresa | **Primera oficina** | MRR = 3× alquiler | — | ⬜ |
+| 10 | Aprendizaje | **Aprender Python: programas propios funcionando** | 15 | 0 | ⬜ |
+| 11 | TikTok | **Videos publicados** | 155 | 0 | ⬜ |
+| 12 | TikTok | **Seguidores** | 20.000 | — | ⬜ |
+| 13 | YouTube | **Resúmenes semanales** | 22 | 0 | ⬜ |
 
-**Progreso: 0 de 12.**
+**Progreso: 0 de 13.**
+
+### De dónde sale cada número
+
+**Llamadas y demos = 250.** No es un número al azar: **sale de la meta de 50 clientes.**
+```
+50 clientes ÷ 20% de cierre (1 de cada 5 demos) = 250 demos
+250 demos ÷ ~110 días hábiles                   = 2,3 por día
+```
+Con 200 demos y la misma tasa salen 40 clientes, no 50. **Es el único objetivo del tablero
+que es puro esfuerzo propio** — no depende del SIN, ni del algoritmo, ni de que el cliente
+diga que sí. Es el que se mueve todos los días y el que produce a todos los demás.
+
+**Python = 15 programas propios funcionando.** La meta es **aprender a programar**, no
+entregar un artefacto. Un programa que corre y hace algo real vale más que 40 horas de
+tutorial. Con 3 h/semana × 22 semanas (~66 h) dan 15 programas chicos que funcionen.
+El worker del Cobrador IA deja de ser la meta y pasa a ser **la graduación**: el programa
+número 15, el que corre en producción.
+
+**Churn < 5%.** Es el % de clientes que se van cada mes. Con 50 clientes y 10% se van 5 por
+mes: hay que vender 5 nuevos **solo para quedarse igual**. Importa más que el MRR porque el
+MRR avisa tarde — si entran 8 y se van 6, el MRR sube un poco y parece que va bien mientras
+el negocio se desangra.
+
+**Homologación SIAT: se queda, con la contra dicha.** Es el único objetivo que **gatea el
+producto** (sin ella no se vende la parte de facturación, que es el gancho de demanda) y el
+30-sep es un reloj nacional real. La contra honesta: es el único que **no se controla del
+todo**, porque depende del proceso del SIN. Se deja igual: un tablero donde solo están las
+cosas controlables no cuenta la verdad de construir una empresa en Bolivia.
 
 > **La aritmética ahora cierra sola.** Bs 56.850 ÷ 50 clientes = **Bs 1.137 por cliente**, y el
 > ARPU real del stack (plan + chatbot + cuidado web) es Bs 1.000-1.400. Con los 30 clientes del
