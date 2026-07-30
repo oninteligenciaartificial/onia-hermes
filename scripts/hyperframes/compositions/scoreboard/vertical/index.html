@@ -85,7 +85,6 @@
         --u: calc(var(--stage-w) / 1000 * 1px);
         /* --accent lo pisa el runtime desde data-composition-variables. */
         --accent: #ff7a00;
-        --accent-deep: color-mix(in srgb, var(--accent) 62%, #000000);
         /* --accent-ink = el acento cuando es TEXTO. En oscuro es el acento puro
            (7,4:1 contra la placa). En claro el naranja puro da 2,6:1 contra
            blanco y reprobaria AA, asi que se hunde. */
@@ -252,11 +251,16 @@
         background: var(--track);
         overflow: hidden;
       }
+      /* Relleno SOLIDO, no degradado. Con clip-path lo visible es siempre el
+         tramo IZQUIERDO del fondo, asi que un degradado accent-deep -> accent
+         pintaba la barra del color equivocado justo cuando menos avance hay
+         (al dia 47 se veia marron, no naranja de marca). Un medidor tiene que
+         leer el MISMO color con 5% o con 95%. */
       .track-fill {
         position: absolute;
         inset: 0;
         border-radius: 999px;
-        background: linear-gradient(90deg, var(--accent-deep), var(--accent));
+        background: var(--accent);
         clip-path: inset(0 calc(var(--wipe) * 1%) 0 0);
       }
 

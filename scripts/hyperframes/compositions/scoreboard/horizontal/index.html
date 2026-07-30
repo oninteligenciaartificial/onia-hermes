@@ -72,7 +72,6 @@
         --stage-h: 1080;
         --u: calc(var(--stage-w) / 1000 * 1px);
         --accent: #ff7a00;
-        --accent-deep: color-mix(in srgb, var(--accent) 62%, #000000);
         /* El acento cuando es TEXTO — ver nota en la variante vertical. */
         --accent-ink: var(--accent);
         --ink: #0a0c11;
@@ -243,11 +242,14 @@
         background: var(--track);
         overflow: hidden;
       }
+      /* Relleno SOLIDO, no degradado — ver la nota de la variante vertical: con
+         clip-path lo visible es el tramo izquierdo, y un degradado pintaba la
+         barra de color equivocado justo cuando menos avance hay. */
       .track-fill {
         position: absolute;
         inset: 0;
         border-radius: 999px;
-        background: linear-gradient(90deg, var(--accent-deep), var(--accent));
+        background: var(--accent);
         clip-path: inset(0 calc(var(--wipe) * 1%) 0 0);
       }
 
@@ -258,8 +260,10 @@
         padding-left: calc(var(--u) * 32);
         margin-left: calc(var(--u) * 32);
       }
+      /* 120u alcanza para la celda mas ancha ("Bs 8.400" ~182px en mono a 38px)
+         sin dejar aire muerto a la derecha de "RUNWAY / 9 / semanas". */
       .cell {
-        min-width: calc(var(--u) * 145);
+        min-width: calc(var(--u) * 120);
       }
       .cell + .cell {
         border-left: 1px solid var(--hairline);
