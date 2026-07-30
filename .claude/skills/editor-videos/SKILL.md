@@ -62,9 +62,8 @@ HyperFrames (render + SFX), imagen barata. Validar la idea antes de generar.
    las pausas quedan DENTRO de un segmento. Medido 2026-07-30 sobre un clip real de 15s con
    3.16s de silencio (21%): sin `--video` el plan reportaba **0.00s** y no cortaba nada; con
    `--video` corta 2.58s. Flags: `--noise -32dB --min-sil 0.45 --pad 0.08 --min-keep 0.35`.
-   (referencia vieja del comando, mismo JSON de salida)
-   → detecta silencios largos (gap > umbral), muletillas y repeticiones → imprime la **tabla**
-   (`# | Me quedo con | Tiro | Por qué`) + `keep[]` (segmentos a conservar) + el filtro ffmpeg.
+   → detecta silencios (del audio), muletillas y repeticiones → imprime la **tabla**
+   (`# | Me quedo con | Tiro | Por qué`) + escribe `cutplan.json` con `keep[]` y el filtro ffmpeg.
 3b. **PREVIEW + costuras** (la otra mitad de la regla de oro, PROBADA).
    `node scripts/preview.mjs --video raw/<crudo>.mp4 --cutplan scripts/cutplan.json --out-dir renders`
    → `renders/preview-360.mp4` (el corte YA aplicado, 360p, rápido: se mira y se ESCUCHA antes de
