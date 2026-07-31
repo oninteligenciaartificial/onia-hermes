@@ -53,6 +53,7 @@ const fail = (msg) => {
 // Scoreboard lleva subcarpeta por orientacion: son DOS composiciones (cada una
 // con su geometria congelada y su propio fonts/), no una con dos tamanos.
 const COMPS = {
+  Escena: "escena",
   Keyword: "keyword",
   Stat: "stat",
   Browser: "browser",

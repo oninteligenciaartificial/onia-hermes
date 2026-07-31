@@ -136,7 +136,14 @@ if (isMain) {
   if (p.dot && p.dot < 2) fail("--dot mínimo 2 (más chico no imprime punto, ensucia)");
 
   const filter = buildFilter(p);
-  const args = ["-y", "-i", IMAGE, "-filter_complex", filter, "-map", "[out]", "-frames:v", "1", OUT];
+  // Tambien trata VIDEO: un clip generado (Higgsfield) tiene que pasar por el MISMO
+  // tratamiento que las imagenes, o el plano generado desentona con los demas.
+  const esVideo = /\.(mp4|mov|webm|mkv|m4v)$/i.test(OUT);
+  const args = esVideo
+    ? ["-y", "-i", IMAGE, "-filter_complex", filter, "-map", "[out]", "-map", "0:a?",
+       "-c:v", "libx264", "-preset", "veryfast", "-crf", "18", "-pix_fmt", "yuv420p",
+       "-c:a", "copy", "-movflags", "+faststart", OUT]
+    : ["-y", "-i", IMAGE, "-filter_complex", filter, "-map", "[out]", "-frames:v", "1", OUT];
 
   console.log(`\nESTILO DE ILUSTRACIÓN — preset "${PRESET}"`);
   console.log(`  retícula: ${p.dot > 0 ? `punto ${p.dot}px, mezcla ${Math.round(p.mix * 100)}%` : "sin retícula"}`);
