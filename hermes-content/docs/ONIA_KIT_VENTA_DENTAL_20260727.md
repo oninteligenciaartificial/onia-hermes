@@ -131,8 +131,10 @@ Hola [Nombre], soy Sergio de ONIA — hablamos hace un tiempo por el sistema par
 En ese momento me dijiste que te quedaba corto, y tenías razón. Te escribo
 porque cambió bastante: ahora tiene un agente que trabaja solo — cuando un
 paciente falta, detecta el hueco y te propone reprogramarlo por WhatsApp, vos
-aprobás con un click y recién ahí sale el mensaje. Y la factura SIAT va
-incluida en los 3 planes, sin costo aparte.
+aprobás con un click y recién ahí sale el mensaje. Y sobre facturar: nuestro
+emisor está en homologación ante el SIN. Hasta que lo aprueben, el sistema te
+deja la venta lista y facturás por el Portal Web, que es gratis — sin tipear
+dos veces. Apenas se apruebe, sale directo de acá.
 
 ¿Te muestro en 15 minutos lo que cambió? La cuenta la hacemos con los números
 de tu clínica.
@@ -310,15 +312,15 @@ bajar la tarifa de lista.**
 
 ### 3.2 "Es caro"
 
-> "El plan que le calza es el Pro: Bs 750 al mes, precio de lanzamiento, con la
-> factura SIAT incluida. Para que el número le diga algo: es lo que cobra por
+> "El plan que le calza es el Pro: Bs 750 al mes, precio de lanzamiento. Para
+> que el número le diga algo: es lo que cobra por
 > **dos ajustes de ortodoncia**. Si el sistema le recupera dos citas al mes,
 > sale gratis — y todo lo que recupere de ahí para arriba es suyo. ¿Cuántas
 > citas se le pierden hoy al mes?"
 >
 > (Si insiste y es consultorio de 1 sillón, downsell: "Hay un plan Básico a Bs
-> 320 — lo que cobra por tres consultas — que le ordena la clínica y ya incluye
-> la factura SIAT. Sin el agente de WhatsApp, eso sí." **Nunca bajar el precio
+> 320 — lo que cobra por tres consultas — que le ordena la clínica. Sin el
+> agente de WhatsApp, eso sí." **Nunca bajar el precio
 > del Pro** — el descuento real vive en la implementación regalada.)
 
 ### 3.3 "No sé usar sistemas" / "soy de la vieja escuela"
@@ -362,8 +364,7 @@ bajar la tarifa de lista.**
 > "Al revés — cuanto más chica la clínica, más duele cada silla vacía. Hagamos
 > la cuenta: el Pro cuesta Bs 750, lo mismo que dos ajustes de ortodoncia. Si
 > el agente le recupera dos citas al mes, ya se pagó. Y si aun así le queda
-> grande, hay un plan de entrada a Bs 320 que la ordena y ya trae la factura
-> SIAT."
+> grande, hay un plan de entrada a Bs 320 que le ordena la clínica."
 
 ### 3.8 "¿Quién más lo usa? / Sos muy nuevo"
 
