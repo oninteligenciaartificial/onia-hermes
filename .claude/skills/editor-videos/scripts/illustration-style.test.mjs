@@ -26,7 +26,7 @@ test("duotono sin acento: negro→ink y blanco→surface", () => {
 });
 
 test("el acento entra en la TINTA, no en el fondo", () => {
-  const p = { accent: 0.9, accentSide: "sombras", accentTo: 0.3 };
+  const p = { accent: 0.9, accentSide: "sombras", accentTo: 0.3 }; // se prueba al maximo
   const g = (l) => evaluar(duotoneExpr("g", p), l);
   const r = (l) => evaluar(duotoneExpr("r", p), l);
   // un trazo oscuro (l=0) se va al verde: g alto, r casi nulo
@@ -54,10 +54,11 @@ test("acento 0 deja la imagen en duotono puro (sin verde en ningún tono)", () =
   }
 });
 
-test("preset onia: acento en sombras y duotono prendido", () => {
+test("preset onia: acento en sombras, duotono prendido y el 0.45 que eligio Sergio", () => {
   assert.equal(PRESETS.onia.duotone, true);
   assert.equal(PRESETS.onia.accentSide, "sombras");
-  assert.ok(PRESETS.onia.accent > 0.5);
+  assert.equal(PRESETS.onia.accent, 0.45);
+  assert.equal(PRESETS.oniaFuerte.accent, 0.9); // la variante para portadas/hitos
 });
 
 test("los presets neutros NO llevan marca (para material fuera de la serie)", () => {

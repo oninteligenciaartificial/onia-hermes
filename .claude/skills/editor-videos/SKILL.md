@@ -174,7 +174,10 @@ HyperFrames (render + SFX), imagen barata. Validar la idea antes de generar.
     ⚠ **El acento va en las SOMBRAS.** Medido 2026-07-31: en un grabado (línea sobre papel) las
     luces son el FONDO y ocupan el 85-91% del cuadro — acentuar ahí teñía casi todo y rompía el
     **60-30-10** que manda la marca (`ONIA_BRAND_IDENTITY.md` §2: *"el verde es acento de alto
-    contraste, no relleno"*). Con el acento en la tinta el verde queda en **6-15%**, medido.
+    contraste, no relleno"*). Con el acento en la tinta el verde queda en **5,5-12,2%**, medido.
+    **Estándar de la serie: `onia` (acento 0.45)** — elegido por Sergio el 2026-07-31: los trazos
+    más densos se quedan en tinta y el resto vira a verde. Para portadas o hitos que tienen que
+    gritar la marca está `oniaFuerte` (0.90).
     Presets neutros (sin marca, para material fuera de la serie): `diario` · `grabado` · `limpio`.
 
     **Qué modelo usar (medido 2026-07-30, mismo prompt y mismo tratamiento):**

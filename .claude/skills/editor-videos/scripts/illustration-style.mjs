@@ -50,7 +50,12 @@ export const PRESETS = {
   // SOLO en las luces altas. La marca manda 60-30-10 y dice literal que "el verde
   // es acento de alto contraste, no relleno": por eso `accentFrom` arranca alto
   // (0.80) y la mezcla no llega a 1 — el verde toca ~10% del cuadro, no lo tiñe.
-  onia: { dot: 3, mix: 0.72, contrast: 1.4, brightness: 0.0, grain: 4, duotone: true, accent: 0.9, accentSide: "sombras", accentTo: 0.3 },
+  // accent 0.45 = ELEGIDO por Sergio (2026-07-31) como estandar de la serie: los trazos
+  // mas densos se quedan en tinta y el resto vira a verde, que es mas fiel a "verde =
+  // acento" que teñir el dibujo entero.
+  onia: { dot: 3, mix: 0.72, contrast: 1.4, brightness: 0.0, grain: 4, duotone: true, accent: 0.45, accentSide: "sombras", accentTo: 0.3 },
+  // para cuando una pieza necesita gritar la marca (portada, hito, remate)
+  oniaFuerte: { dot: 3, mix: 0.72, contrast: 1.4, brightness: 0.0, grain: 4, duotone: true, accent: 0.9, accentSide: "sombras", accentTo: 0.3 },
   oniaClaro: { dot: 3, mix: 0.6, contrast: 1.3, brightness: 0.06, grain: 3, duotone: true, accent: 0.6, accentSide: "sombras", accentTo: 0.22 },
   // ---- neutros (sin marca): para material que NO va en la serie ------------
   diario: { dot: 4, mix: 0.78, contrast: 1.35, brightness: 0.02, grain: 6 },
