@@ -197,64 +197,38 @@ export function FlowScene({ active }: SceneProps) {
   );
 }
 
-/** Version local: el wifi se apaga y el tile sigue latiendo — ese contraste ES el mensaje. */
-export function OfflineScene({ active }: SceneProps) {
-  const reduced = useReducedMotion();
+/** Reserva publica: un horario libre que el propio paciente toma y queda confirmado. */
+export function BookingScene({ active }: SceneProps) {
+  const slots = ["09:00", "10:30", "15:00", "16:30"];
+  const tomado = 2;
   return (
-    <div className={styles.scOffline} aria-hidden>
-      <div className={styles.scWifi}>
-        <svg width="34" height="26" viewBox="0 0 34 26" fill="none">
-          {[
-            "M3 9.5C10.8 2.5 23.2 2.5 31 9.5",
-            "M8 14.5c5-4.6 13-4.6 18 0",
-            "M12.7 19.2a6.2 6.2 0 0 1 8.6 0",
-          ].map((d, i) => (
-            <m.path
-              key={d}
-              d={d}
-              stroke="currentColor"
-              strokeWidth="2.4"
-              strokeLinecap="round"
-              initial={false}
-              animate={{ opacity: active ? 0.16 : 0.7 }}
-              transition={{ duration: 0.4, delay: active ? 0.3 + i * 0.2 : 0 }}
-            />
-          ))}
-          <circle cx="17" cy="23" r="2.4" fill="currentColor" opacity="0.7" />
-        </svg>
-        <m.span
-          className={`mono ${styles.scOfflineLabel}`}
-          initial={false}
-          animate={{ opacity: active ? 1 : 0 }}
-          transition={{ delay: active ? 0.9 : 0 }}
-        >
-          sin conexión
-        </m.span>
+    <div className={styles.scBooking} aria-hidden>
+      <div className={styles.scSlots}>
+        {slots.map((t, i) => (
+          <m.span
+            key={t}
+            className={`mono ${styles.scSlot} ${
+              active && i === tomado ? styles.scSlotTaken : ""
+            }`}
+            initial={false}
+            animate={{
+              opacity: active ? 1 : 0.45,
+              scale: active && i === tomado ? 1.06 : 1,
+            }}
+            transition={{ ...springs.snappy, delay: active ? 0.12 + i * 0.09 : 0 }}
+          >
+            {t}
+          </m.span>
+        ))}
       </div>
-      <div className={styles.scHeartWrap}>
-        <m.span
-          className={styles.scHeart}
-          initial={false}
-          animate={
-            active && !reduced
-              ? { scale: [1, 1.25, 1], opacity: 1 }
-              : { scale: 1, opacity: active ? 1 : 0.4 }
-          }
-          transition={
-            active && !reduced
-              ? { duration: 1.1, repeat: Infinity, delay: 1.2 }
-              : { duration: 0.3 }
-          }
-        />
-        <m.span
-          className={`mono ${styles.scOfflineLabel}`}
-          initial={false}
-          animate={{ opacity: active ? 1 : 0 }}
-          transition={{ delay: active ? 1.2 : 0 }}
-        >
-          tu operación sigue
-        </m.span>
-      </div>
+      <m.span
+        className={`mono ${styles.scBookingNote}`}
+        initial={false}
+        animate={{ opacity: active ? 1 : 0, y: active ? 0 : 6 }}
+        transition={{ duration: 0.35, ease: easeOutExpo, delay: active ? 0.6 : 0 }}
+      >
+        reservado por el paciente · confirmado
+      </m.span>
     </div>
   );
 }

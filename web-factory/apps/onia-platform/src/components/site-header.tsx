@@ -8,9 +8,9 @@ import styles from "./site-header.module.css";
 /* hrefs absolutos ("/#...") para que la nav tambien funcione desde
    las paginas legales (/terminos, /privacidad). */
 const NAV = [
+  { href: "/#prueba", label: "La prueba" },
   { href: "/#como-funciona", label: "Cómo funciona" },
   { href: "/#rubros", label: "Rubros" },
-  { href: "/#modulos", label: "Módulos" },
   { href: "/#precios", label: "Precios" },
   { href: "/#preguntas", label: "Objeciones" },
 ] as const;
@@ -92,9 +92,15 @@ export function SiteHeader() {
           <a href={APP_URL} className={`btn btn-ghost btn-sm ${styles.appCta}`}>
             Entrar a la app
           </a>
+          {/* En pantallas de 320px el rotulo completo empujaba la fila fuera
+              del viewport y la pagina entera ganaba scroll horizontal. Ahi el
+              boton se queda en "WhatsApp": el verbo lo pone el contexto. */}
           <a href={WA_URL} className="btn btn-wa btn-sm">
             <span className="btn-dot" aria-hidden />
-            Hablanos por WhatsApp
+            <span>
+              <span className={styles.ctaLargo}>{"Hablanos por "}</span>
+              WhatsApp
+            </span>
           </a>
         </div>
       </div>

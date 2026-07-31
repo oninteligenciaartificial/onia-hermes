@@ -8,7 +8,9 @@ import { useRubro } from "@/components/rubro-context";
 import { waLink } from "@/lib/site";
 import {
   ADDONS,
+  COHORTE,
   CONDICIONES,
+  GARANTIAS,
   NOTA_FISCAL,
   NO_INCLUYE,
   RUBROS_PLANES,
@@ -134,9 +136,60 @@ export function Pricing() {
           </m.div>
         </AnimatePresence>
 
+        <Garantias />
+
         <Letra rubro={actual} />
       </div>
     </section>
+  );
+}
+
+/* ---------- el riesgo, pegado al numero ---------- */
+
+/**
+ * Va inmediatamente DESPUES del precio porque es ahi donde aparece el miedo:
+ * la persona ya vio la cifra y lo primero que piensa es "¿y si no me sirve?".
+ *
+ * Con cero clientes, la respuesta correcta no es descontar —eso no compra
+ * confianza— sino invertir el riesgo (ONIA_PRICING_MODELO §6). La banda va en
+ * verde porque en este sistema el verde marca lo que esta encendido a favor
+ * tuyo, no decora.
+ */
+function Garantias() {
+  return (
+    <Reveal className={styles.garantias}>
+      <div className={styles.garantiasHead}>
+        <h3 className={styles.garantiasTitulo}>
+          El riesgo lo ponemos nosotros.
+        </h3>
+        <p className={styles.garantiasLead}>
+          Nadie quiere ser el primero en probar un sistema nuevo. Es razonable.
+          Por eso no bajamos el precio: sacamos el riesgo de tu lado.
+        </p>
+      </div>
+
+      <ul className={styles.garantiasLista}>
+        {GARANTIAS.map((g) => (
+          <li key={g.corto} className={styles.garantiaItem}>
+            <span className={styles.garantiaCheck} aria-hidden>
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                <path
+                  d="M2 6.2 5 9l5-6"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </span>
+            <strong className={styles.garantiaTitulo}>{g.titulo}</strong>
+            <span className={styles.garantiaDetalle}>{g.detalle}</span>
+          </li>
+        ))}
+      </ul>
+
+      <p className={styles.cohorte}>{COHORTE}</p>
+    </Reveal>
   );
 }
 

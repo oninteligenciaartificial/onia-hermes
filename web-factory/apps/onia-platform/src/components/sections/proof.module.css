@@ -1,0 +1,299 @@
+.section {
+  background: var(--bg-deep);
+  border-block: 1px solid var(--line-soft);
+}
+
+/* ---- encabezado asimetrico: titular a la izquierda, la confesion al lado ---- */
+
+.head {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.4rem;
+  align-items: end;
+}
+
+@media (min-width: 900px) {
+  .head {
+    grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+    gap: clamp(2rem, 4vw, 4rem);
+  }
+}
+
+.title {
+  margin-top: 0;
+  max-width: 17ch;
+}
+
+.headAside {
+  padding-bottom: 0.4rem;
+}
+
+.headLead {
+  color: var(--ink-soft);
+  max-width: 46ch;
+}
+
+.headLead strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+/* ---- el hallazgo ---- */
+
+.huecoWrap {
+  margin-top: clamp(2.4rem, 4vw, 3.6rem);
+  border-top: 2px solid var(--ink);
+  padding-top: 1.4rem;
+}
+
+.hueco {
+  font-family: var(--font-display), sans-serif;
+  font-weight: 640;
+  font-size: clamp(1.45rem, 1rem + 1.9vw, 2.5rem);
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+  max-width: 26ch;
+}
+
+.huecoPie {
+  margin-top: 0.9rem;
+  color: var(--ink-soft);
+  max-width: 56ch;
+}
+
+/* ---- el ledger de contendientes ---- */
+
+.ledger {
+  list-style: none;
+  margin: clamp(2rem, 3vw, 2.8rem) 0 0;
+  padding: 0;
+}
+
+.fila {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  padding-block: clamp(1.4rem, 2.4vw, 2rem);
+  border-top: 1px solid var(--line);
+}
+
+.fila:last-child {
+  border-bottom: 1px solid var(--line);
+}
+
+@media (min-width: 880px) {
+  .fila {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    grid-template-areas:
+      "quien  marcas"
+      "precio marcas"
+      "vered  marcas";
+    column-gap: clamp(2rem, 4vw, 4.5rem);
+    row-gap: 0.9rem;
+    align-content: start;
+  }
+
+  .quienCol {
+    grid-area: quien;
+  }
+
+  .precioCol {
+    grid-area: precio;
+  }
+
+  .veredicto {
+    grid-area: vered;
+  }
+
+  .marcas {
+    grid-area: marcas;
+    align-self: start;
+  }
+}
+
+/* la fila de Onia sale del renglon: es la unica con superficie propia */
+.filaOnia {
+  position: relative;
+  background: var(--surface);
+  border: 1px solid color-mix(in oklab, var(--accent) 45%, var(--line));
+  box-shadow: 0 0 0 1px var(--accent-glow);
+  border-radius: var(--radius-lg);
+  padding: clamp(1.4rem, 2.4vw, 2rem) clamp(1.1rem, 2.4vw, 1.9rem);
+  margin-top: 1.2rem;
+}
+
+.fila.filaOnia:last-child {
+  border-bottom: 1px solid color-mix(in oklab, var(--accent) 45%, var(--line));
+}
+
+.quien {
+  font-size: clamp(1.15rem, 1rem + 0.6vw, 1.45rem);
+}
+
+.filaOnia .quien {
+  color: var(--accent-ink);
+}
+
+.ejemplos {
+  margin-top: 0.4rem;
+  font-size: 0.76rem;
+  color: var(--ink-soft);
+  letter-spacing: 0.01em;
+}
+
+.precio {
+  font-size: 1.05rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+.precioNota {
+  margin-top: 0.2rem;
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+  max-width: 34ch;
+}
+
+.veredicto {
+  color: var(--ink-soft);
+  font-size: 0.93rem;
+  max-width: 52ch;
+}
+
+/* ---- las tres senales ---- */
+
+.marcas {
+  display: grid;
+  gap: 0;
+}
+
+.marca {
+  display: flex;
+  align-items: baseline;
+  gap: 0.7em;
+  padding-block: 0.62rem;
+  border-bottom: 1px dashed var(--line-soft);
+  font-size: 0.9rem;
+}
+
+.marca:first-child {
+  padding-top: 0;
+}
+
+.marca:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.marcaSenal {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex: none;
+  align-self: center;
+}
+
+.marcaLabel {
+  flex: 1;
+}
+
+.marcaEstado {
+  font-size: 0.76rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  flex: none;
+}
+
+.marcaSi .marcaSenal {
+  background: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+
+.marcaSi .marcaEstado {
+  color: var(--accent-ink);
+}
+
+.marcaNo {
+  color: var(--ink-soft);
+}
+
+.marcaNo .marcaSenal {
+  background: transparent;
+  border: 1.5px solid var(--line);
+}
+
+/* mitad encendida: el estado "en tramite" se ve, no se explica */
+.marcaTramite .marcaSenal {
+  background: linear-gradient(90deg, var(--accent) 0 50%, transparent 50% 100%);
+  border: 1.5px solid var(--accent);
+}
+
+.marcaTramite .marcaEstado {
+  color: var(--accent-ink);
+}
+
+.fuente {
+  margin-top: 1.4rem;
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+  max-width: 68ch;
+}
+
+/* ---- lo que todavia no hace ---- */
+
+.noWrap {
+  margin-top: clamp(3rem, 5vw, 4.5rem);
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.6rem;
+}
+
+@media (min-width: 900px) {
+  .noWrap {
+    grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
+    column-gap: clamp(2rem, 4vw, 4.5rem);
+  }
+}
+
+.noTitle {
+  font-size: var(--text-h3);
+}
+
+.noLead {
+  margin-top: 0.7rem;
+  color: var(--ink-soft);
+  font-size: 0.93rem;
+  max-width: 34ch;
+}
+
+.noLista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+}
+
+.noItem {
+  padding-block: 1rem;
+  border-top: 1px solid var(--line-soft);
+}
+
+.noItem:last-child {
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.noQue {
+  display: block;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+
+.noDetalle {
+  display: block;
+  margin-top: 0.35rem;
+  color: var(--ink-soft);
+  font-size: 0.93rem;
+  max-width: 62ch;
+  text-wrap: pretty;
+}

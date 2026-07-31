@@ -8,10 +8,10 @@ import { WA_URL } from "@/lib/site";
 import {
   AgendaScene,
   ApprovalScene,
+  BookingScene,
   BrowserScene,
   ChatScene,
   FlowScene,
-  OfflineScene,
 } from "./module-scenes";
 import styles from "./modules.module.css";
 
@@ -65,10 +65,17 @@ const MODULES: readonly ModuleDef[] = [
     Scene: FlowScene,
   },
   {
-    id: "local",
-    name: "Versión local",
-    copy: "Para donde el internet no es confiable: Onia puede correr en tu propio equipo y sincronizar cuando vuelva la conexión. Tu operación no se detiene porque se cayó la red.",
-    Scene: OfflineScene,
+    // CORREGIDO 2026-07-30: aca habia un modulo "Version local" que prometia
+    // correr en el equipo del cliente y sincronizar sin conexion. Eso NO
+    // existe —ni en el codigo ni en ningun doc— y ademas se contradecia con
+    // lo que la propia pagina dice dos secciones mas arriba. Se reemplaza por
+    // la reserva publica de citas, que si esta construida y funcionando
+    // (ONIA_PLATFORM_ESTRUCTURA_20260730 §3: ruta /book con confirmacion por
+    // token) y ademas vende: el paciente se agenda solo, sin llamar.
+    id: "reserva",
+    name: "Reserva pública de citas",
+    copy: "Tu paciente entra, ve los horarios libres y se agenda solo — a las once de la noche, un domingo, sin que nadie atienda el teléfono. La cita cae directo en tu agenda y queda confirmada.",
+    Scene: BookingScene,
   },
 ] as const;
 

@@ -242,6 +242,59 @@ export const ADDONS: readonly AddOn[] = [
   },
 ] as const;
 
+/* ---------- las garantias: bajar el riesgo, no el precio ---------- */
+
+export interface Garantia {
+  /** Version de una linea, para el hero. */
+  corto: string;
+  titulo: string;
+  detalle: string;
+}
+
+/**
+ * Con CERO clientes, lo que frena la compra no es la plata: es que nadie
+ * quiere ser el primero. Descontar no arregla eso; garantizar si.
+ * Fuente: hermes-content/docs/ONIA_PRICING_MODELO_20260730.md §6.
+ *
+ * Van arriba de todo (hero) y otra vez pegadas al precio, porque es el punto
+ * exacto donde aparece el miedo.
+ */
+export const GARANTIAS: readonly Garantia[] = [
+  {
+    corto: "14 días de prueba, sin tarjeta",
+    titulo: "Probalo 14 días sin poner una tarjeta",
+    detalle:
+      "No pedimos datos de tarjeta para arrancar la prueba. Si al día 14 no seguís, no pasó nada y no hay nada que cancelar.",
+  },
+  {
+    corto: "Si al primer mes no sirve, se devuelve",
+    titulo: "El primer mes va con devolución",
+    detalle:
+      "Si pagaste el primer mes y el sistema no te sirvió, te devolvemos lo pagado. No es un descuento disfrazado: es que el riesgo lo ponemos nosotros y no vos.",
+  },
+  {
+    corto: "Migramos tus datos nosotros",
+    titulo: "La migración y la puesta en marcha las hacemos nosotros",
+    detalle:
+      "Cargamos tus pacientes, configuramos la cuenta y capacitamos a tu equipo. La competencia cobra la implementación entre Bs 2.274 y 9.096; en esta fase de lanzamiento va en cero.",
+  },
+  {
+    corto: "Tus datos son tuyos y te los llevás",
+    titulo: "Si te querés ir, te vas con todo",
+    detalle:
+      "Exportás tu información cuando quieras. Nadie queda rehén de un sistema por tener los datos adentro.",
+  },
+] as const;
+
+/**
+ * Cohorte fundador — el unico "apuro" que decimos, y es real: se cierra por
+ * cantidad, no por una fecha inventada. Fuente: ONIA_PRICING_MODELO §6
+ * ("nunca de por vida": con la devaluacion de 2026, prometer precio congelado
+ * para siempre seria mentir).
+ */
+export const COHORTE =
+  "Las primeras 5 clínicas que cierren en esta fase mantienen el precio de lanzamiento 12 meses. No decimos «precio congelado de por vida»: en un país donde el dólar se movió 63% en un mes, eso no lo puede prometer nadie en serio.";
+
 /* ---------- condiciones ---------- */
 
 export const CONDICIONES: readonly string[] = [

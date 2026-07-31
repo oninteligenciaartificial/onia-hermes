@@ -7,7 +7,7 @@ import styles from "./bolivia.module.css";
 /**
  * Seccion e — el foso. Dos actos: (1) el bloque SIAT con la comparacion
  * honesta "tipear vs. no tipear" como protagonista; (2) franja de tres —
- * Bs, QR, offline. Compliance: el portal del SIN es gratis y se dice DE
+ * Bs, QR, nube. Compliance: el portal del SIN es gratis y se dice DE
  * FRENTE; el gancho es timing + cero doble trabajo, nunca miedo. Los datos
  * fiscales no bailan: fechas y montos van estaticos, sin count-up.
  */
@@ -24,9 +24,13 @@ const FRANJA = [
     tag: "QR",
   },
   {
-    title: "Funciona sin internet.",
-    body: "Con el módulo local, tu operación sigue aunque la red no. Se sincroniza solita cuando vuelve la conexión.",
-    tag: "OFF",
+    // CORREGIDO 2026-07-30: aca decia "funciona sin internet · modulo local".
+    // Eso NO existe (ONIA_PLATFORM_ESTRUCTURA §3: Onia vive en la nube) y ademas
+    // se contradecia con la respuesta honesta de la seccion de objeciones, en
+    // la misma pagina. Se reemplaza por lo que si es cierto.
+    title: "Se te cae el wifi y seguís.",
+    body: "Onia vive en la nube: si el internet de la clínica falla, abrís desde el celular con datos y ahí está todo. Tus datos no viven en la PC del mostrador — si se quema o te la roban, no perdés nada.",
+    tag: "NUBE",
   },
 ] as const;
 
@@ -65,10 +69,12 @@ export function Bolivia() {
             </Reveal>
             <Reveal delay={0.14}>
               <p className={styles.siatMicro}>
-                La emisión en línea integrada se habilita según el estado de
-                homologación de cada sistema ante el SIN — en la demo te
-                decimos exactamente en qué punto está y qué te toca a vos
-                (solo tus credenciales de Oficina Virtual).
+                <strong>Y el estado real, sin vueltas:</strong> nuestro emisor
+                está en trámite de homologación ante el SIN, así que hoy la
+                factura fiscal la emitís vos en el Portal. Onia te deja el dato
+                cerrado —paciente, monto, detalle— para no tipear dos veces, y
+                cuando salga la homologación la factura sale del mismo sistema.
+                No te cobramos por algo que todavía no anda.
               </p>
             </Reveal>
           </div>
