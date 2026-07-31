@@ -50,7 +50,14 @@ caso** ([[gasto-plataformas-validar-primero]]). Por defecto todo gratis: Speache
 HyperFrames (render + SFX), imagen barata. Validar la idea antes de generar.
 
 ## Pipeline
-1. **Setup + probe.** `videos/<name>/` con `raw/ scripts/ renders/ final/`. `ffprobe` la fuente.
+1. **Setup + NORMALIZAR el crudo** (pieza propia, PROBADA). `videos/<name>/` con `raw/ scripts/ renders/ final/`.
+   `node scripts/normalize-source.mjs --video raw/IMG_xxxx.MOV --out raw/<n>.mp4`
+   ⚠ **El iPhone graba en HDR** (HEVC 10 bits, bt2020, transfer `arib-std-b67` = HLG). Pasarlo a
+   SDR sin **tone mapping** deja la imagen LAVADA: piel grisácea, todo "muy blanco". Medido
+   2026-07-30 sobre el día 1 — el brillo casi no cambia (151→147), lo que se pierde es el COLOR:
+   la saturación cayó 50.6 → recuperada a 72.7 (+44%). El script detecta HLG/PQ solo y aplica
+   la cadena correcta (`zscale` lineal → bt709 → `tonemap=hable:desat=0`); si el material es SDR
+   no toca el color. **No mires solo el histograma: mirá el cuadro.**
    Para el paso de subtítulos: rechazar clips multi-orador, con subtítulos ya quemados, o sin
    voz clara (ver decision-gate de `embedded-captions`).
 2. **Transcribir con timestamps.** Usar `ver-videos` → `scripts/transcribe.sh <audio>` (Speaches,
@@ -189,6 +196,7 @@ y se ve amateur.
 | Necesito | Herramienta | Costo |
 | --- | --- | --- |
 | Transcript + timestamps | `ver-videos` → Speaches | gratis |
+| **Normalizar el crudo (HDR del celular)** | `scripts/normalize-source.mjs` | gratis (local) |
 | Cut-list (tabla de cortes) | `scripts/cut-plan.mjs` **con `--video`** | gratis |
 | **Preview 360p + tira de costuras** | `scripts/preview.mjs` | gratis (local) |
 | **Master de audio (−14 LUFS)** | `scripts/master.mjs` | gratis (local) |
@@ -249,6 +257,9 @@ Cada transición **acorta** el video su propia duración: los dos bloques se sol
 - **Correr `cut-plan.mjs` sin `--video`.** Mide el silencio en los huecos del transcript, que en
   un talking-head real son CERO: sale una cut-list que no corta nada y parece que "no había
   silencios". Si el panel está caído, el preview igual se genera local (`preview.mjs`).
+- **Transcodificar el crudo del celular sin tone mapping.** Sale lavado y no se nota en los
+  números, solo mirando. Y ojo: si sacás los frames de control del video YA convertido, estás
+  comparando lo malo contra lo malo — el control se saca del ORIGINAL.
 - **Publicar sin masterizar el audio.** Sale a −20 LUFS y en el feed suena bajo contra todo lo demás.
 - **Cortar sin publicar la review + mostrar la tabla + preview** (viola la regla de oro). Correr
   `publish-cut-review.mjs` y esperar el OK de Sergio en el panel; el ffmpeg del corte va DESPUÉS.

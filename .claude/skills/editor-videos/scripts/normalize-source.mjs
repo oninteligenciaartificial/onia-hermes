@@ -27,15 +27,21 @@ const fail = (m) => {
   process.exit(1);
 };
 
+// Los tests IMPORTAN este módulo: sin este guard, importarlo dispara el CLI y muere
+// con "falta --video" antes de que corra un solo test.
+const isMain = process.argv[1] && process.argv[1].replace(/\\/g, "/").endsWith("normalize-source.mjs");
+
 const VIDEO = flag("video");
 const OUT = flag("out");
 const W = Number(flag("width", "1080"));
 const H = Number(flag("height", "1920"));
 const FPS = Number(flag("fps", "30"));
 const CRF = flag("crf", "20");
-if (!VIDEO) fail("falta --video <crudo.MOV>");
-if (!OUT) fail("falta --out <normalizado.mp4>");
-if (!existsSync(VIDEO)) fail(`no existe: ${VIDEO}`);
+if (isMain) {
+  if (!VIDEO) fail("falta --video <crudo.MOV>");
+  if (!OUT) fail("falta --out <normalizado.mp4>");
+  if (!existsSync(VIDEO)) fail(`no existe: ${VIDEO}`);
+}
 
 // ---- ¿es HDR? ---------------------------------------------------------------
 // HLG (arib-std-b67) es lo que graban los iPhone; PQ (smpte2084) es lo de las cámaras
@@ -55,13 +61,33 @@ export function tonemapChain() {
   ].join(",");
 }
 
+// ffprobe devuelve los campos en SU orden, no en el que se piden: leerlos por posición
+// daba `transfer = "yuv420p10le"` y el HDR pasaba como SDR (bug real, 2026-07-30).
+// Por eso se piden como clave=valor y se buscan por nombre.
+export function parseProbe(stdout) {
+  const out = {};
+  for (const line of String(stdout).trim().split(/\r?\n/)) {
+    const i = line.indexOf("=");
+    if (i > 0) out[line.slice(0, i).trim()] = line.slice(i + 1).trim();
+  }
+  return out;
+}
+export const esHdrTransfer = (t) => HDR_TRANSFERS.has(String(t || "").trim());
+
 const probe = (entries) => {
-  const r = spawnSync("ffprobe", ["-v", "error", "-select_streams", "v:0", "-show_entries", `stream=${entries}`, "-of", "default=nk=1:nw=1", VIDEO], { encoding: "utf8" });
+  const r = spawnSync("ffprobe", ["-v", "error", "-select_streams", "v:0", "-show_entries", `stream=${entries}`, "-of", "default=nk=0:nw=1", VIDEO], { encoding: "utf8" });
   if (r.status !== 0) fail(`ffprobe falló: ${(r.stderr || "").trim()}`);
-  return String(r.stdout).trim().split("\n");
+  return parseProbe(r.stdout);
 };
-const [transfer, primaries, space, pix] = probe("color_transfer,color_primaries,color_space,pix_fmt");
-const esHDR = HDR_TRANSFERS.has(String(transfer).trim()) || has("force-tonemap");
+if (!isMain) {
+  // importado por los tests: hasta acá llegan los exports, el CLI no corre
+} else {
+const info = probe("color_transfer,color_primaries,color_space,pix_fmt");
+const transfer = info.color_transfer || "";
+const primaries = info.color_primaries || "";
+const space = info.color_space || "";
+const pix = info.pix_fmt || "";
+const esHDR = esHdrTransfer(transfer) || has("force-tonemap");
 
 const filtros = [];
 if (esHDR) filtros.push(tonemapChain());
@@ -87,3 +113,4 @@ if (r.error) fail(`no pude ejecutar ffmpeg: ${r.error.message}`);
 if (typeof r.status === "number" && r.status !== 0) fail(`ffmpeg salió con código ${r.status}`);
 console.log(`normalize-source: listo → ${OUT}`);
 if (esHDR) console.log("  (si la piel sigue viéndose pálida, probá --force-tonemap sobre el ORIGINAL, no sobre esta salida)");
+}
