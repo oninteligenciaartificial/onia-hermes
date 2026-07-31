@@ -427,3 +427,36 @@ test("HTTP REAL: /health responde sin auth y firma invalida da 401 por la red", 
     await once(server, "close");
   }
 });
+
+// ---------------------------------------------------------------------------
+// Regresion: colision de `deps.config` entre transporte y motor
+// ---------------------------------------------------------------------------
+
+test("REGRESION: la config del TRANSPORTE no baja al motor (si baja, el bot no le contesta a NADIE)", async () => {
+  // En produccion `createWebhookServer` se auto-inyecta su config con `{ ...deps, config }`. Esa
+  // `config` es la del transporte (webhookSecret, pathSecret, maxBodyBytes). El motor lee
+  // `deps.config` esperando la del BOT (qualification, slots, script), asi que si se la dejamos
+  // pasar, `config.qualification` es undefined y TODO turno real muere con "reading 'fields'".
+  // Los otros tests de este archivo no lo detectan porque miran solo el `payload` del motor.
+  let depsQueRecibioElMotor = null;
+  const espia = async (_payload, deps) => {
+    depsQueRecibioElMotor = deps;
+    return { ok: true, skipped: false, duplicate: false, conversationId: "77", messageId: "4242", sent: [], warnings: [] };
+  };
+
+  const body = mensajeEntrante();
+  const res = await handleChatwootWebhook(pedido(body, sign(body)), {
+    config: CONFIG,
+    runChatwootTurn: espia,
+    nowMs: NOW_MS,
+  });
+
+  assert.equal(res.status, 200);
+  assert.ok(depsQueRecibioElMotor, "el motor tiene que haberse llamado");
+  assert.equal(
+    depsQueRecibioElMotor.config,
+    undefined,
+    "el motor NO puede recibir la config del transporte: con ella cree que no tiene qualification y el turno explota",
+  );
+  assert.equal(depsQueRecibioElMotor.nowMs, NOW_MS, "el resto de los inyectables si tienen que seguir pasando");
+});

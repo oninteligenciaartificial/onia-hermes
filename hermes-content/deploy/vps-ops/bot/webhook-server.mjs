@@ -172,7 +172,15 @@ export async function handleChatwootWebhook(request = {}, deps = {}) {
   const runFn = typeof deps.runChatwootTurn === "function" ? deps.runChatwootTurn : runChatwootTurn;
   let result;
   try {
-    result = await runFn(payload, deps);
+    // `config` se SACA a proposito antes de bajar al motor. Arriba (createWebhookServer) el
+    // servidor se inyecta a si mismo su config con `{ ...deps, config }`, pero esa `config` es la
+    // del TRANSPORTE (webhookSecret, pathSecret, maxBodyBytes). El motor lee `deps.config`
+    // esperando la config del BOT (qualification, slots, script): si le llega la del transporte,
+    // `config.qualification` es undefined y el turno muere con "reading 'fields'" — o sea, el bot
+    // no le contesta a NADIE. Sacandola, run-turn.mjs cae a `resolveConfig()`, que es justo lo que
+    // tiene que pasar en produccion. El resto de los inyectables (client, runTurn, fetch) siguen.
+    const { config: _configDelTransporte, ...depsDelTurno } = deps;
+    result = await runFn(payload, depsDelTurno);
   } catch (error) {
     // Se suelta la clave: el turno murió ANTES de mandar nada, así que un reintento de Chatwoot
     // (o que el prospecto reescriba) tiene que poder procesarse. Si se dejara reclamada, el
