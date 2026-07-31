@@ -16,10 +16,11 @@
 //        [--dot 4] [--mix 0.78] [--contrast 1.35] [--grain 6] [--dry-run]
 //
 // Presets:
-//   diario    — blanco y negro, retícula de puntos, grano de papel. El look del reel.
-//   grabado   — más contraste y retícula fina: se lee como grabado/xilografía.
-//   limpio    — solo blanco y negro + contraste, sin retícula (para cuando la imagen ya tiene
-//               mucho detalle y la trama la ensucia).
+//   onia      — EL DE LA SERIE. Duotono a la paleta de marca (ink #0A0F0D → surface #F4F5F2,
+//               que NO son negro y blanco puros) y el verde #00D26A en la TINTA. El dibujo
+//               comparte color con la etiqueta de la tarjeta: se lee como un sistema.
+//   oniaClaro — igual pero más suave, para cuando el apoyo va sobre fondo claro.
+//   diario / grabado / limpio — neutros, SIN marca. Para material que no va en la serie.
 import { existsSync, mkdirSync } from "node:fs";
 import { spawnSync } from "node:child_process";
 import { dirname, resolve } from "node:path";
@@ -35,11 +36,54 @@ const fail = (m) => {
   process.exit(1);
 };
 
+// Paleta de marca (hermes-content/brand/ONIA_BRAND_IDENTITY.md §2).
+// El Ink NO es negro puro: es un verde-negro cálido. Ese matiz es la identidad.
+export const MARCA = {
+  ink: [0x0a, 0x0f, 0x0d], // #0A0F0D  sombras
+  surface: [0xf4, 0xf5, 0xf2], // #F4F5F2  luces
+  verde: [0x00, 0xd2, 0x6a], // #00D26A  acento de la serie
+};
+
 export const PRESETS = {
+  // ---- el look de la CASA -------------------------------------------------
+  // Duotono ink→surface (no blanco y negro: el negro cálido de marca) + el verde
+  // SOLO en las luces altas. La marca manda 60-30-10 y dice literal que "el verde
+  // es acento de alto contraste, no relleno": por eso `accentFrom` arranca alto
+  // (0.80) y la mezcla no llega a 1 — el verde toca ~10% del cuadro, no lo tiñe.
+  onia: { dot: 3, mix: 0.72, contrast: 1.4, brightness: 0.0, grain: 4, duotone: true, accent: 0.9, accentSide: "sombras", accentTo: 0.3 },
+  oniaClaro: { dot: 3, mix: 0.6, contrast: 1.3, brightness: 0.06, grain: 3, duotone: true, accent: 0.6, accentSide: "sombras", accentTo: 0.22 },
+  // ---- neutros (sin marca): para material que NO va en la serie ------------
   diario: { dot: 4, mix: 0.78, contrast: 1.35, brightness: 0.02, grain: 6 },
   grabado: { dot: 3, mix: 0.92, contrast: 1.6, brightness: 0.0, grain: 4 },
   limpio: { dot: 0, mix: 0, contrast: 1.25, brightness: 0.03, grain: 3 },
 };
+
+// Duotono + acento: cada canal se interpola de ink a surface segun la luminancia,
+// y las luces por encima de `from` se empujan hacia el verde. Todo en UNA pasada
+// de geq para no encadenar filtros que redondean dos veces.
+export function duotoneExpr(canal, p, marca = MARCA) {
+  const i = { r: 0, g: 1, b: 2 }[canal];
+  const lo = marca.ink[i];
+  const hi = marca.surface[i];
+  const ac = marca.verde[i];
+  const k = Math.max(0, Math.min(1, Number(p.accent ?? 0)));
+  // OJO: geq sobre RGB no expone lum() — solo r()/g()/b(). A esta altura la imagen
+  // ya viene en gris (los tres canales iguales), asi que r(X,Y) ES la luminancia.
+  const l = "(r(X,Y)/255)";
+  const base = `(${lo}+(${hi - lo})*${l})`;
+  if (!k) return base;
+  // El acento va en la TINTA (las sombras), no en las luces. Medido 2026-07-31: en un
+  // grabado —linea sobre papel— las luces son el FONDO y ocupan el 85-91% del cuadro,
+  // asi que acentuar ahi pintaba de verde casi todo y rompia el 60-30-10 de la marca.
+  // Los trazos oscuros son ~10-20%: ese es el 10% que la marca deja para el verde.
+  const side = String(p.accentSide ?? "sombras");
+  const to = Math.max(0.01, Math.min(1, Number(p.accentTo ?? 0.35)));
+  const t =
+    side === "luces"
+      ? `clip((${l}-${1 - to})/${to}\\,0\\,1)`
+      : `clip((${to}-${l})/${to}\\,0\\,1)`;
+  return `(${base}*(1-${t}*${k})+${ac}*${t}*${k})`;
+}
 
 // Retícula de medios tonos REAL: el punto crece con la oscuridad, no es una trama fija
 // encima. El umbral sube hacia el centro de cada celda, así que en las zonas claras solo
@@ -52,13 +96,18 @@ export function halftoneExpr(dot) {
 export function buildFilter(p) {
   const base = `format=gray,eq=contrast=${p.contrast}:brightness=${p.brightness}`;
   const grain = p.grain > 0 ? `,noise=alls=${p.grain}:allf=t+u:all_seed=1312` : "";
-  if (!(p.dot > 0) || !(p.mix > 0)) return `[0:v]${base}${grain},format=rgb24[out]`;
+  // El duotono va DESPUES de la retícula: si se tiñe primero, el punto de medios
+  // tonos se calcula sobre el verde y la trama sale de otro color en cada zona.
+  const marca = p.duotone
+    ? `,format=rgb24,geq=r='${duotoneExpr("r", p)}':g='${duotoneExpr("g", p)}':b='${duotoneExpr("b", p)}'`
+    : "";
+  if (!(p.dot > 0) || !(p.mix > 0)) return `[0:v]${base}${grain}${marca},format=rgb24[out]`;
   // split → una rama con la retícula, otra sin ella, y se mezclan: 100% de trama se ve
   // durísimo en un video, y mezclada con el gris conserva la lectura de la imagen.
   return (
     `[0:v]${base},split[a][b];` +
     `[b]geq=lum='${halftoneExpr(p.dot)}'[ht];` +
-    `[a][ht]blend=all_mode=normal:all_opacity=${p.mix}${grain},format=rgb24[out]`
+    `[a][ht]blend=all_mode=normal:all_opacity=${p.mix}${grain}${marca},format=rgb24[out]`
   );
 }
 

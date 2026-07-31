@@ -165,7 +165,17 @@ HyperFrames (render + SFX), imagen barata. Validar la idea antes de generar.
     recraft devuelve una foto en blanco y negro LIMPIA, sin retícula (medido 2026-07-30). El
     modelo obedece el estilo "más o menos", y ese "más o menos" cambia entre una imagen y la
     siguiente — con 155 videos eso deja de ser una serie. La retícula, el contraste y el grano
-    los pone el script, iguales siempre. Presets: `diario` · `grabado` · `limpio`.
+    los pone el script, iguales siempre.
+    **Preset de la serie: `onia`.** Duotono a la paleta de marca (`ink #0A0F0D` → `surface
+    #F4F5F2` — que NO son negro y blanco puros: el ink es un verde-negro cálido y ahí vive la
+    identidad) y el verde `#00D26A` **en la tinta del dibujo**, no en el fondo. Así la
+    ilustración comparte color con la etiqueta de la tarjeta y el apoyo se lee como un sistema,
+    no como un grabado de stock pegado encima.
+    ⚠ **El acento va en las SOMBRAS.** Medido 2026-07-31: en un grabado (línea sobre papel) las
+    luces son el FONDO y ocupan el 85-91% del cuadro — acentuar ahí teñía casi todo y rompía el
+    **60-30-10** que manda la marca (`ONIA_BRAND_IDENTITY.md` §2: *"el verde es acento de alto
+    contraste, no relleno"*). Con el acento en la tinta el verde queda en **6-15%**, medido.
+    Presets neutros (sin marca, para material fuera de la serie): `diario` · `grabado` · `limpio`.
 
     **Qué modelo usar (medido 2026-07-30, mismo prompt y mismo tratamiento):**
 
