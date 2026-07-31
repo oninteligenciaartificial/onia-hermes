@@ -212,3 +212,40 @@ test("buildBotTurnEvent marca dry_run y el caso sin respuestas", () => {
   assert.equal(evento.messageIdRedacted, undefined);
   assert.ok(evento.createdAt, "siempre lleva fecha");
 });
+
+// ---------------------------------------------------------------------------
+// Aviso de handoff: lo unico del evento que NO es analitica
+// ---------------------------------------------------------------------------
+
+test("HANDOFF: el aviso viaja con el motivo, y NUNCA el texto del prospecto", () => {
+  const evento = buildBotTurnEvent({
+    parsed: { meta: { conversationId: "77", messageId: "4242" } },
+    rawText: "mi telefono es 78491375 y estoy re caliente con ustedes",
+    result: {
+      ok: true, stageBefore: "esperando_calificacion", stageAfter: "handoff_humano", sent: [],
+      notify: [{ kind: "handoff", reason: "queja_o_desconfianza", text: "resumen interno" }],
+    },
+    nowIso: "2026-07-31T12:00:00.000Z",
+  });
+
+  assert.equal(evento.notifyCount, 1, "sin esto n8n no sabe que hay alguien esperando");
+  assert.deepEqual(evento.notifyReasons, ["queja_o_desconfianza"]);
+
+  const plano = JSON.stringify(evento);
+  assert.ok(!plano.includes("78491375"), "el telefono del prospecto no sale del sistema");
+  assert.ok(plano.includes("telefono-redactado"), "el telefono se reemplaza, no se borra el mensaje entero");
+  // El texto SI viaja, redactado: un aviso sin contexto no sirve para decidir si atender ya.
+  // Lo que NO puede viajar es el resumen interno del motor, que no aporta nada a n8n.
+  assert.ok(!plano.includes("resumen interno"), "el resumen interno no: n8n solo necesita el motivo");
+});
+
+test("SIN handoff: notifyCount en 0 (n8n no tiene que despertar a nadie)", () => {
+  const evento = buildBotTurnEvent({
+    parsed: { meta: { conversationId: "77", messageId: "1" } },
+    rawText: "DEMO",
+    result: { ok: true, stageBefore: "nuevo", stageAfter: "esperando_calificacion", sent: [{ posted: true }] },
+    nowIso: "2026-07-31T12:00:00.000Z",
+  });
+  assert.equal(evento.notifyCount, 0);
+  assert.deepEqual(evento.notifyReasons, []);
+});

@@ -149,6 +149,16 @@ export function buildBotTurnEvent({ parsed, result, rawText, nowIso }) {
     deliveryStatus: sent.length === 0 ? "skipped" : sent.some((reply) => reply?.posted) ? "sent" : "failed",
     warningsCount: Array.isArray(result?.warnings) ? result.warnings.length : 0,
     ok: result?.ok !== false,
+    // AVISO A SERGIO. Es lo unico de este evento que NO es analitica: cuando el bot deriva a un
+    // humano hay alguien esperando del otro lado. Va por aca y no por un Telegram propio porque
+    // la credencial vive en n8n (el plan VPS no soporta $env en los nodos). Viaja el MOTIVO, no
+    // el texto del prospecto: `notifyReasons` es una lista corta de motivos ya acotados por el
+    // motor (queja_o_desconfianza, consulta_clinica_o_legal, pidio_hablar_con_humano...).
+    // `notifyCount > 0` es la senal de que n8n tiene que mandar el mensaje, no solo registrar.
+    notifyCount: Array.isArray(result?.notify) ? result.notify.length : 0,
+    notifyReasons: Array.isArray(result?.notify)
+      ? result.notify.map((n) => String(n?.reason || n?.kind || "sin_motivo")).slice(0, 5)
+      : [],
     createdAt: nowIso || new Date().toISOString(),
   };
 }

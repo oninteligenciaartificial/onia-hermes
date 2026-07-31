@@ -251,6 +251,12 @@ export async function runChatwootTurn(payload, deps = {}) {
     // señal útil; el texto del prospecto no sale del sistema.
     stageBefore: (turnResult && turnResult.stageBefore) || null,
     stageAfter: (turnResult && turnResult.stageAfter) || null,
+    // El motor emite `notify_sergio` cuando deriva a un humano, y hasta hoy ESTE archivo lo
+    // tiraba: el lead quedaba en review_queue (se ve en el panel) pero nadie avisaba. Si Sergio
+    // no abria el panel, el prospecto esperaba solo. Se propaga para que el servidor lo mande
+    // por el canal de n8n, que es donde vive la credencial de Telegram (el plan VPS no soporta
+    // $env en los nodos, asi que el token no puede vivir aca).
+    notify: (turnResult && Array.isArray(turnResult.notify) ? turnResult.notify : []),
     dryRun: Boolean(turnResult && turnResult.dryRun),
     sent,
     warnings: [...(client.warnings || []), ...((turnResult && turnResult.warnings) || [])],
