@@ -45,6 +45,7 @@ import { createBotConfig, DEFAULT_CONFIG } from "./config.mjs";
 import { createState, step, markHumanTakeover, LLM_PENDING } from "./bot-engine.mjs";
 import { createStore } from "./persistence.mjs";
 import { getAvailableSlots as getAvailableSlotsFromCalcom } from "./calcom-availability.mjs";
+import { createBooking, buildBookingNotes } from "./calcom-booking.mjs";
 
 // ---------------------------------------------------------------------------
 // Entrada
@@ -296,6 +297,45 @@ export async function runTurn(input, deps = {}) {
   const applied = await store.applySideEffects(result.sideEffects, nextState, nextState.outboundSeq);
   if (applied.leadKey) nextState = { ...nextState, leadKey: applied.leadKey };
 
+  // 6.5. LA RESERVA DE VERDAD. Hasta hoy el bot decia "Listo, agendado" y no reservaba nada:
+  // `calendar_event_id` quedaba en null, dos prospectos podian quedarse con el mismo horario y
+  // la demo no aparecia en el calendario de Sergio. Va DESPUES del motor (que es puro y no hace
+  // I/O) y ANTES de guardar, para que el uid quede persistido en el mismo estado.
+  const bookingWarnings = [];
+  const recienAgendada = stageBefore !== "demo_agendada" && nextState.botStage === "demo_agendada";
+  if (recienAgendada && nextState.scheduledAt && !nextState.calendarEventId) {
+    if (config.dryRun) {
+      // En seco NO se reserva: escribir en el calendario real es un efecto externo, y el sentido
+      // del modo seco es que no salga NADA del sistema.
+      bookingWarnings.push("calcom: no se reservo (dry run)");
+    } else {
+      const bookFn = typeof deps.createBooking === "function" ? deps.createBooking : createBooking;
+      const booking = await bookFn({
+        startAt: nextState.scheduledAt,
+        name: nextState.displayName || "Prospecto",
+        conversationKey: nextState.conversationKey,
+        notes: buildBookingNotes(nextState.qualification || {}),
+      }, deps);
+
+      bookingWarnings.push(...(booking.warnings || []));
+      if (booking.ok) {
+        nextState = { ...nextState, calendarEventId: booking.uid };
+      } else {
+        // No se puede desdecir el "Listo, agendado" que el motor ya redacto, asi que se le agrega
+        // una linea honesta y se deja el aviso: sin esto el prospecto se presenta a una reunion
+        // que no existe. `horario_tomado` (409) es el caso real de carrera: alguien gano el
+        // horario entre que se ofrecio y que el prospecto contesto.
+        const ultima = replies[replies.length - 1];
+        if (ultima && ultima.text) {
+          ultima.text += booking.reason === "horario_tomado"
+            ? "\n\n_(Ojo: justo se me ocupó ese horario. Sergio te escribe ahora para acomodarlo.)_"
+            : "\n\n_(Estoy confirmando ese horario con Sergio; si hubiera un cruce te aviso enseguida.)_";
+        }
+        bookingWarnings.push(`calcom: la demo NO quedo reservada (${booking.reason})`);
+      }
+    }
+  }
+
   // 7. Bitacora + estado.
   const saved = await store.saveConversation(nextState);
   const wrote = await store.insertOutbound(replies, nextState, { raw: { notes: result.notes } });
@@ -309,7 +349,7 @@ export async function runTurn(input, deps = {}) {
     applied,
     saved,
     wrote,
-    warnings: store.warnings,
+    warnings: [...store.warnings, ...bookingWarnings],
   });
 }
 
