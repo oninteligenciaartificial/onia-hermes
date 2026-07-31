@@ -205,6 +205,31 @@ HyperFrames (render + SFX), imagen barata. Validar la idea antes de generar.
 pegue después (mockup, karaoke) queda nítido y en su lugar. Al revés, se agranda el texto quemado
 y se ve amateur.
 
+## 🧱 El vocabulario visual (catalogado del reel, 2026-07-31)
+
+Miré el reel de @human___academy contando lo que se superpone a la imagen. Dos números que
+mandan sobre todo lo demás: **entra un elemento nuevo cada 1,2-1,8 s** y el más frecuente
+**no es una ilustración, es una palabra**. Casi todo el vocabulario se dibuja con CÓDIGO —
+generar imágenes es la excepción, no la regla.
+
+| Composición | Qué es | Veces en el reel | Cuándo |
+| --- | --- | --- | --- |
+| `Keyword` | La palabra sola, con resaltador que se abre | 8 (el más usado) | Una idea que tiene que quedar |
+| `Trazo` | Círculo, flecha o subrayado que se DIBUJA | 6 | Señalar algo dentro del cuadro (reemplaza al dedo) |
+| `Tag` | Rótulo chico con punto de anclaje y guía | 5 | Nombrar una parte de lo que se ve |
+| `Escena` | Plano COMPLETO: imagen + ken burns + palabra | 4 | Llenar un tramo largo sin nada que mostrar |
+| `Lista` | Ítems que caen uno por uno | 3 | Cuando el que habla enumera |
+
+Todas 1080×1920, alpha real, paleta de marca, y pasan `hyperframes check`.
+Se disparan por palabra con `sync-plan.mjs` como cualquier otro apoyo.
+
+**`Escena` vs. video generado** — verificado cuadro por cuadro: el tutorial **NO genera video**.
+Entre 1.70 s y 2.10 s su pintura es IDÉNTICA (pliegues, manos, caras del público); solo cambian
+el zoom y el texto. Imagen fija + ken burns cuesta **1,25 cr** contra **7,5 cr** de un clip
+generado, y sale a 1080p contra 720p. El video generado se reserva para cuando el movimiento
+ES el punto (algo que gira, fluye o se arma) — y hay que pedir la imagen fuente YA en 9:16 o
+el modelo la deforma.
+
 ## Quick reference
 | Necesito | Herramienta | Costo |
 | --- | --- | --- |

@@ -54,6 +54,9 @@ const fail = (msg) => {
 // con su geometria congelada y su propio fonts/), no una con dos tamanos.
 const COMPS = {
   Escena: "escena",
+  Lista: "lista",
+  Tag: "tag",
+  Trazo: "trazo",
   Keyword: "keyword",
   Stat: "stat",
   Browser: "browser",

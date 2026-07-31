@@ -1,0 +1,175 @@
+<!doctype html>
+<html
+  lang="es"
+  data-composition-variables='[
+    {"id":"items","type":"string","label":"Ítems separados por |","default":"CRM|Inventario|Odontograma|Mapa 3D"},
+    {"id":"titulo","type":"string","label":"Título (opcional)","default":""},
+    {"id":"posY","type":"string","label":"Altura 0-100","default":"30"},
+    {"id":"marca","type":"string","label":"Índice del ítem marcado (1..N, 0 = ninguno)","default":"0"},
+    {"id":"accent","type":"color","label":"Acento","default":"#00D26A"}
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <title>ONIA · Lista</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      /* La lista que CAE ITEM POR ITEM (3 de ~32 apariciones en el reel). Sirve cuando el
+         que habla enumera: cada renglon entra sobre su palabra y se queda, asi el que mira
+         ve la lista completarse en vivo en vez de leer un bloque ya armado.
+         Los huecos del escalonado SE ACHICAN (cut-the-curve §6): la cascada acelera. */
+      @font-face {
+        font-family: "Bricolage Grotesque";
+        src: url("fonts/BricolageGrotesque-var-latin.woff2") format("woff2");
+        font-weight: 500 700; font-style: normal; font-display: block;
+      }
+      @font-face {
+        font-family: "DM Sans";
+        src: url("fonts/DMSans-var-latin.woff2") format("woff2");
+        font-weight: 400 500; font-style: normal; font-display: block;
+      }
+      *, *::before, *::after { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; width: 1080px; height: 1920px; overflow: hidden; background: transparent; }
+      #stage {
+        position: relative; width: 1080px; height: 1920px;
+        --stage-w: 1080; --stage-h: 1920;
+        --u: calc(var(--stage-w) / 1000 * 1px);
+        --accent: #00d26a;
+        --ink: #0a0f0d;
+        --ink-text: #f6f8fb;
+        font-family: "DM Sans", sans-serif;
+      }
+      .fill {
+        position: absolute; inset: 0;
+        display: flex; flex-direction: column; align-items: flex-start;
+        padding: calc(var(--stage-h) * var(--pos-y, 0.30) * 1px) calc(var(--u) * 70) 0;
+      }
+      .titulo {
+        font-family: "Bricolage Grotesque", sans-serif; font-weight: 700;
+        font-size: calc(var(--u) * 26); letter-spacing: calc(var(--u) * 1.4);
+        text-transform: uppercase; color: rgba(246, 248, 251, 0.7);
+        margin-bottom: calc(var(--u) * 16);
+        text-shadow: 0 calc(var(--u) * 2) calc(var(--u) * 10) rgba(0, 0, 0, 0.85);
+      }
+      .titulo:empty { display: none; }
+      .item {
+        display: flex; align-items: center; gap: calc(var(--u) * 14);
+        margin-bottom: calc(var(--u) * 13);
+      }
+      .punto {
+        width: calc(var(--u) * 13); height: calc(var(--u) * 13);
+        border-radius: 50%; background: var(--accent); flex: none;
+        box-shadow: 0 0 0 calc(var(--u) * 4) rgba(0, 210, 106, 0.18);
+      }
+      .texto {
+        font-family: "Bricolage Grotesque", sans-serif; font-weight: 700;
+        font-size: calc(var(--u) * 40); line-height: 1.05;
+        letter-spacing: calc(var(--u) * -0.5);
+        color: var(--ink-text);
+        /* la placa detras es lo que lo hace legible sobre cualquier plano */
+        background: rgba(10, 15, 13, 0.82);
+        padding: calc(var(--u) * 7) calc(var(--u) * 18) calc(var(--u) * 9);
+        border-radius: calc(var(--u) * 8);
+        white-space: nowrap;
+      }
+      /* el marcado NO cambia de tamaño (eso moveria layout): cambia de color */
+      .item.marcado .texto { color: var(--accent); }
+    </style>
+  </head>
+  <body>
+    <div
+      id="stage"
+      data-composition-id="lista"
+      data-theme="dark"
+      data-start="0"
+      data-duration="3"
+      data-fps="30"
+      data-width="1080"
+      data-height="1920"
+    >
+      <div id="li-clip" class="clip" data-start="0" data-duration="3" data-track-index="0">
+        <div class="fill">
+          <div class="titulo" id="li-titulo"></div>
+          <div id="li-items"></div>
+        </div>
+      </div>
+
+      <script>
+        (function () {
+          function cubicBezier(x1, y1, x2, y2) {
+            var A = function (a, b) { return 1 - 3 * b + 3 * a; };
+            var B = function (a, b) { return 3 * b - 6 * a; };
+            var C = function (a) { return 3 * a; };
+            var sx = function (t) { return ((A(x1, x2) * t + B(x1, x2)) * t + C(x1)) * t; };
+            var sy = function (t) { return ((A(y1, y2) * t + B(y1, y2)) * t + C(y1)) * t; };
+            var slope = function (t) { return 3 * A(x1, x2) * t * t + 2 * B(x1, x2) * t + C(x1); };
+            return function (x) {
+              if (x <= 0) return 0; if (x >= 1) return 1;
+              var t = x;
+              for (var i = 0; i < 8; i++) { var d = sx(t) - x, dx = slope(t); if (Math.abs(dx) < 1e-7) break; t -= d / dx; }
+              var lo = 0, hi = 1; t = x;
+              while (hi - lo > 1e-7) { if (sx(t) < x) lo = t; else hi = t; t = (hi + lo) / 2; }
+              return sy(t);
+            };
+          }
+          gsap.registerEase("oniaOutExpo", cubicBezier(0.16, 1, 0.3, 1));
+          gsap.registerEase("oniaOutQuart", cubicBezier(0.25, 1, 0.5, 1));
+
+          var stage = document.getElementById("stage");
+          var FPS = Number(stage.dataset.fps) || 30;
+          var DUR = Number(stage.dataset.duration) || 3;
+          var TOTAL = Math.max(1, Math.round(DUR * FPS));
+          document.getElementById("li-clip").dataset.duration = String(DUR);
+
+          function readVars() {
+            var decls = [];
+            try { decls = JSON.parse(document.documentElement.dataset.compositionVariables || "[]"); } catch (e) { decls = []; }
+            var out = {};
+            for (var i = 0; i < decls.length; i++) out[decls[i].id] = decls[i].default;
+            var live = window.__hyperframes && typeof window.__hyperframes.getVariables === "function"
+              ? window.__hyperframes.getVariables() : null;
+            if (live) for (var k in out) if (live[k] !== undefined && live[k] !== null) out[k] = live[k];
+            return out;
+          }
+          var V = readVars();
+          if (V.accent) stage.style.setProperty("--accent", String(V.accent));
+          document.getElementById("li-titulo").textContent = String(V.titulo || "");
+          var py = Number(String(V.posY ?? "30").trim());
+          if (Number.isFinite(py)) stage.style.setProperty("--pos-y", Math.max(0, Math.min(85, py)) / 100);
+
+          var textos = String(V.items || "").split("|").map(function (t) { return t.trim(); }).filter(Boolean);
+          var marca = Math.round(Number(V.marca) || 0);
+          var cont = document.getElementById("li-items");
+          var nodos = [];
+          textos.forEach(function (t, i) {
+            var row = document.createElement("div");
+            row.className = "item" + (marca === i + 1 ? " marcado" : "");
+            var p = document.createElement("div"); p.className = "punto";
+            var s = document.createElement("div"); s.className = "texto"; s.textContent = t;
+            row.appendChild(p); row.appendChild(s);
+            cont.appendChild(row); nodos.push(row);
+          });
+
+          var tl = gsap.timeline({ paused: true });
+          var enterF = Math.max(1, Math.round(0.2 * FPS));
+          var exitF = Math.max(1, Math.round(0.2 * FPS));
+          var exitAt = Math.max(0.6, (TOTAL - exitF) / FPS);
+
+          // Cascada con huecos que SE ACHICAN y opacidad BINARIA por tl.set (cut-the-curve
+          // §6: en una entrada la opacidad nunca se desvanece, se prende).
+          var at = 0, gap = 4 / FPS;
+          nodos.forEach(function (n) {
+            gsap.set(n, { autoAlpha: 0 });
+            tl.set(n, { autoAlpha: 1 }, at);
+            tl.fromTo(n, { x: -18 }, { x: 0, duration: enterF / FPS, ease: "oniaOutExpo" }, at);
+            at += gap; gap *= 0.86;
+          });
+          tl.to(nodos, { autoAlpha: 0, x: -12, duration: exitF / FPS, ease: "oniaOutQuart" }, exitAt);
+
+          window.__timelines = window.__timelines || {};
+          window.__timelines["lista"] = tl;
+        })();
+      </script>
+    </div>
+  </body>
+</html>

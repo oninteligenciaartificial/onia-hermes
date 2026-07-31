@@ -1,0 +1,165 @@
+<!doctype html>
+<html
+  lang="es"
+  data-composition-variables='[
+    {"id":"tipo","type":"string","label":"circulo | flecha | subrayado","default":"circulo"},
+    {"id":"x","type":"string","label":"Centro X 0-100","default":"50"},
+    {"id":"y","type":"string","label":"Centro Y 0-100","default":"45"},
+    {"id":"ancho","type":"string","label":"Ancho 0-100","default":"46"},
+    {"id":"alto","type":"string","label":"Alto 0-100","default":"16"},
+    {"id":"giro","type":"string","label":"Giro en grados","default":"-3"},
+    {"id":"accent","type":"color","label":"Acento","default":"#00D26A"}
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <title>ONIA · Trazo</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      /* SEGUNDO elemento mas frecuente del reel (6 de ~32 apariciones): una linea que se
+         DIBUJA sobre la imagen y señala algo. No es decoracion — reemplaza al dedo del
+         que explica. Por eso se traza rapido (0.35s) y se queda: si parpadea, distrae.
+         El trazo va a mano alzada (bezier irregular), no un ovalo perfecto: un circulo
+         geometrico se lee como UI, uno torcido se lee como alguien marcando. */
+      *, *::before, *::after { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; width: 1080px; height: 1920px; overflow: hidden; background: transparent; }
+      #stage {
+        position: relative; width: 1080px; height: 1920px;
+        --stage-w: 1080; --stage-h: 1920;
+        --u: calc(var(--stage-w) / 1000 * 1px);
+        --accent: #00d26a;
+      }
+      .fill { position: absolute; inset: 0; }
+      svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+      .trazo {
+        fill: none;
+        stroke: var(--accent);
+        stroke-width: 9;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        /* sombra dura: el trazo tiene que verse sobre un plano claro tambien */
+        filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.35));
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="stage"
+      data-composition-id="trazo"
+      data-theme="dark"
+      data-start="0"
+      data-duration="2"
+      data-fps="30"
+      data-width="1080"
+      data-height="1920"
+    >
+      <div id="tz-clip" class="clip" data-start="0" data-duration="2" data-track-index="0">
+        <div class="fill">
+          <svg id="tz-svg" viewBox="0 0 1080 1920" preserveAspectRatio="none">
+            <path id="tz-path" class="trazo" d="" />
+          </svg>
+        </div>
+      </div>
+
+      <script>
+        (function () {
+          function cubicBezier(x1, y1, x2, y2) {
+            var A = function (a, b) { return 1 - 3 * b + 3 * a; };
+            var B = function (a, b) { return 3 * b - 6 * a; };
+            var C = function (a) { return 3 * a; };
+            var sx = function (t) { return ((A(x1, x2) * t + B(x1, x2)) * t + C(x1)) * t; };
+            var sy = function (t) { return ((A(y1, y2) * t + B(y1, y2)) * t + C(y1)) * t; };
+            var slope = function (t) { return 3 * A(x1, x2) * t * t + 2 * B(x1, x2) * t + C(x1); };
+            return function (x) {
+              if (x <= 0) return 0; if (x >= 1) return 1;
+              var t = x;
+              for (var i = 0; i < 8; i++) { var d = sx(t) - x, dx = slope(t); if (Math.abs(dx) < 1e-7) break; t -= d / dx; }
+              var lo = 0, hi = 1; t = x;
+              while (hi - lo > 1e-7) { if (sx(t) < x) lo = t; else hi = t; t = (hi + lo) / 2; }
+              return sy(t);
+            };
+          }
+          gsap.registerEase("oniaOutExpo", cubicBezier(0.16, 1, 0.3, 1));
+          gsap.registerEase("oniaOutQuart", cubicBezier(0.25, 1, 0.5, 1));
+
+          var stage = document.getElementById("stage");
+          var FPS = Number(stage.dataset.fps) || 30;
+          var DUR = Number(stage.dataset.duration) || 2;
+          var TOTAL = Math.max(1, Math.round(DUR * FPS));
+          document.getElementById("tz-clip").dataset.duration = String(DUR);
+
+          function readVars() {
+            var decls = [];
+            try { decls = JSON.parse(document.documentElement.dataset.compositionVariables || "[]"); } catch (e) { decls = []; }
+            var out = {};
+            for (var i = 0; i < decls.length; i++) out[decls[i].id] = decls[i].default;
+            var live = window.__hyperframes && typeof window.__hyperframes.getVariables === "function"
+              ? window.__hyperframes.getVariables() : null;
+            if (live) for (var k in out) if (live[k] !== undefined && live[k] !== null) out[k] = live[k];
+            return out;
+          }
+          var V = readVars();
+          if (V.accent) stage.style.setProperty("--accent", String(V.accent));
+
+          var W = 1080, H = 1920;
+          var cx = (Number(V.x) || 50) / 100 * W;
+          var cy = (Number(V.y) || 45) / 100 * H;
+          var rw = (Number(V.ancho) || 46) / 100 * W / 2;
+          var rh = (Number(V.alto) || 16) / 100 * H / 2;
+          var tipo = String(V.tipo || "circulo");
+
+          // Todas las curvas son FIJAS (nada de Math.random): el "a mano alzada" viene de
+          // coeficientes elegidos, no de azar — si no, cada render saldria distinto.
+          function d_circulo() {
+            var k = 0.552;
+            var ox = rw * k, oy = rh * k;
+            // arranca a la derecha, da la vuelta y se pasa un poco (como cuando uno marca)
+            return [
+              "M", cx + rw, cy - rh * 0.12,
+              "C", cx + rw, cy - rh + oy * 0.2, cx + ox * 1.05, cy - rh, cx - rw * 0.06, cy - rh,
+              "C", cx - ox * 1.1, cy - rh, cx - rw, cy - oy * 0.9, cx - rw, cy + rh * 0.08,
+              "C", cx - rw, cy + rh - oy * 0.1, cx - ox * 0.95, cy + rh, cx + rw * 0.08, cy + rh * 0.98,
+              "C", cx + ox * 1.15, cy + rh * 0.96, cx + rw * 1.04, cy + oy * 0.85, cx + rw * 0.96, cy - rh * 0.34,
+            ].join(" ");
+          }
+          function d_subrayado() {
+            return ["M", cx - rw, cy, "C", cx - rw * 0.4, cy + rh * 0.55, cx + rw * 0.35, cy - rh * 0.5, cx + rw, cy + rh * 0.1].join(" ");
+          }
+          function d_flecha() {
+            var x0 = cx - rw, y0 = cy - rh, x1 = cx + rw, y1 = cy + rh;
+            return [
+              "M", x0, y0, "C", x0 + rw * 0.7, y0 + rh * 0.2, x1 - rw * 0.5, y1 - rh * 1.1, x1, y1,
+              "M", x1, y1, "l", -rw * 0.34, -rh * 0.16,
+              "M", x1, y1, "l", -rw * 0.1, -rh * 0.62,
+            ].join(" ");
+          }
+          var path = document.getElementById("tz-path");
+          path.setAttribute("d", tipo === "flecha" ? d_flecha() : tipo === "subrayado" ? d_subrayado() : d_circulo());
+          document.getElementById("tz-svg").style.transform = "rotate(" + (Number(V.giro) || 0) + "deg)";
+          document.getElementById("tz-svg").style.transformOrigin = cx + "px " + cy + "px";
+
+          // El "draw": stroke-dashoffset va de largo total a 0. No toca layout ni pinta
+          // fuera del path, asi que cumple la doctrina igual que un clip-path.
+          var largo = path.getTotalLength();
+          path.style.strokeDasharray = largo;
+          path.style.strokeDashoffset = largo;
+
+          var tl = gsap.timeline({ paused: true });
+          var drawF = Math.max(1, Math.round(0.35 * FPS));
+          var exitF = Math.max(1, Math.round(0.18 * FPS));
+          var exitAt = Math.max(drawF, TOTAL - exitF) / FPS;
+
+          var dash = { v: largo };
+          tl.to(dash, {
+            v: 0, duration: drawF / FPS, ease: "oniaOutExpo",
+            onUpdate: function () { path.style.strokeDashoffset = dash.v; },
+          }, 0);
+          tl.to(path, { autoAlpha: 0, duration: exitF / FPS, ease: "oniaOutQuart" }, exitAt);
+
+          window.__timelines = window.__timelines || {};
+          window.__timelines["trazo"] = tl;
+        })();
+      </script>
+    </div>
+  </body>
+</html>
