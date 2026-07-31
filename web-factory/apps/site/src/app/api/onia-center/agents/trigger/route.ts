@@ -44,11 +44,21 @@ async function dispatchWebhook(
 ): Promise<{ status: "sent" | "failed"; httpStatus: number | null; detail: string }> {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 10_000);
+  // El secreto compartido. Este endpoint del panel YA exige sesion, pero el webhook de n8n del
+  // otro lado no valida nada: quien conozca la URL dispara agentes salteandose el panel entero.
+  // Todos los demas webhooks de ONIA (nuevo-lead, generar-propuesta) ya viajan con `secret` y lo
+  // validan server-side contra ONIA_CENTER_INTERNAL_API_KEY; este quedo afuera. Se manda por
+  // header Y por body: el header es lo correcto, el body mantiene la forma que ya usan los otros
+  // nodos de n8n para que la validacion sea la misma en todos.
+  const secret = process.env.ONIA_CENTER_INTERNAL_API_KEY ?? "";
   try {
     const response = await fetch(url, {
       method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify(body),
+      headers: {
+        "content-type": "application/json",
+        ...(secret ? { "x-onia-webhook-secret": secret } : {}),
+      },
+      body: JSON.stringify(secret ? { ...body, secret } : body),
       cache: "no-store",
       signal: controller.signal,
     });
