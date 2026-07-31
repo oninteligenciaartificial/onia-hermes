@@ -286,7 +286,7 @@ declarados están en `contract.json:772-828`.
 | Tipo | Construido | Vendible | Qué falta |
 |---|---|---|---|
 | T1 | 🟡 piezas sueltas | Sí, con trabajo manual | Editor de FAQ para el cliente |
-| **T2** | 🟢 **corriendo y verificado** | **Sí** | Reservar de verdad en el calendario (§10.2); apuntar el inbox; supervisión |
+| **T2** | 🟢 **corriendo, reserva de verdad** | **Sí** | Sacar el modo seco |
 | T3 | 🟡 completo pero con catálogo vacío en runtime | Solo a BE | Poblar catálogo; config por cliente (hoy hay 88 ocurrencias de "Bolivian Electric" en 30 archivos) |
 | T4 | 🔴 modelado, sin ejecución | No | Plataforma instalada + adopción del módulo aprobada |
 | T5 | 🟡 ciclo de vida y topes listos | No | El ejecutor (cron + LLM + envío) fuera del core |
@@ -302,13 +302,35 @@ declarados están en `contract.json:772-828`.
    si preferís 2 bloques fijos, se cargan por variable de entorno sin tocar código.
 3. **¿T5 se vende ya?** Es el de mayor margen y el único que puede quemar un número.
 
-### 10.2 El hueco técnico que encontré hoy
+### 10.2 El hueco de la reserva — CERRADO el 2026-07-31
 
-**El bot dice "Listo, agendado" pero no reserva nada.** El módulo de Cal.com solo **lee**
-disponibilidad (`calcom-availability.mjs` usa `slots/getSchedule`); no crea la reserva, y
-`calendar_event_id` queda en `null`. Consecuencias reales: dos prospectos pueden elegir el
-mismo horario, y la cita no aparece en tu calendario — solo en el pipeline del panel.
+Estaba: el bot decía "Listo, agendado" y no reservaba nada. `calcom-availability.mjs` solo
+**leía** disponibilidad, `calendar_event_id` quedaba en `null`, dos prospectos podían
+quedarse con el mismo horario y la demo no aparecía en el calendario.
 
-Para un producto cuyo trabajo **es** producir citas, esto es el bloqueante número uno.
-Antes de sacar el modo seco hay que cerrarlo: crear la reserva en Cal.com al confirmar, o
-declarar por escrito que el horario es tentativo hasta que un humano lo confirme.
+Resuelto con `calcom-booking.mjs`. Cómo, y por qué así:
+
+- **Reserva por `POST /api/book/event`**, el mismo camino que la página pública. No necesita
+  API key (hay 0 en la base) y, al ser el camino público, **Cal.com aplica sus propias reglas**:
+  la protección contra doble reserva no la inventamos nosotros. La API v1 (`/api/bookings`) no
+  sirve: en este self-hosted no está desplegada, devuelve 404.
+- **Dos tipos de evento a propósito.** `demo-onia` (público) exige 10 campos obligatorios
+  (empresa, presupuesto, urgencia, rol...), correcto para quien entra solo a `cal.onia.com.bo`.
+  `demo-bot` (oculto, id 5) no exige ninguno: el bot ya calificó por WhatsApp con 3 datos, y
+  pedirle 10 más lo perdería en el tercero. Comparten usuario y agenda, así que una reserva
+  bloquea al otro. La disponibilidad se lee del público (un evento oculto no publica horarios)
+  y se reserva en el oculto.
+- **Si la reserva falla, el bot no miente.** El 409 por horario tomado se distingue de un error
+  de red, y en ambos casos se agrega una línea honesta al mensaje en vez de dejar el "agendado"
+  a secas.
+- **En modo seco no reserva.** Escribir en un calendario real es un efecto externo, y el sentido
+  del modo seco es que no salga nada del sistema.
+
+Verificado contra el VPS: embudo completo con `dry_run` apagado deja `calendar_event_id`
+poblado y la reserva `accepted` en Cal.com; el horario reservado desaparece de la
+disponibilidad; un segundo intento al mismo horario devuelve 409.
+
+**Corrección a un dato de este mismo documento:** llegué a reportar que no había disponibilidad
+del 1 al 5 de agosto. Era falso: salió de una consulta que armé mal a mano. La agenda real es
+lunes a sábado, 14:00-20:00 `America/La_Paz`, y la función de producción devuelve horarios
+normalmente.
