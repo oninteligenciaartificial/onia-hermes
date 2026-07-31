@@ -120,6 +120,39 @@
 | 7.2 | **Taller gratis "facturación en línea 2026"** | 🟡 "B1 = YA, sin rama" | El gancho SIAT; se pliega al marketing |
 | 7.3 | **Escalera reto USD 39 → comunidad USD 29/mes → implementación 497-997** | 🟡 regla dura: no cobrar hasta 1.000 emails | Cobro desde Bolivia resuelto: Hotmart + QR Simple (Stripe/PayPal no operan) |
 | 7.4 | **"Onia Academy"** (sub-marca) | 🟡 | Única excepción autorizada a la marca única, si aparece comprador distinto |
+| 7.5 | **Consultoría de estructura comercial** — armarle a una empresa CÓMO vende: flujo de tienda, números, chatbot, seguimiento | 🟡 **parqueada, con gatillo** | Ver §7.5-bis. Nace de una reunión real (2026-07-31) |
+
+### 7.5-bis · Consultoría de estructura comercial — el caso que la origina
+
+**Reunión real (2026-07-31).** Un vendedor B2C con tienda **Shopify** le plantea a Sergio tres
+problemas juntos: no logra manejar sus números, **no tiene chatbot**, y **su flujo de venta en
+la tienda no está estructurado**.
+
+**Por qué se anota y no se persigue todavía.** Es un servicio: se paga con horas de Sergio y
+compite por el mismo tiempo que la plataforma, que es lo único que escala. Mientras haya cero
+clientes de suscripción, sumar un frente de consultoría atrasa el objetivo. **Se anota, no se
+arranca.**
+
+**Pero trae una señal de producto que sí vale.** Los tres dolores que describió NO son de
+Shopify: son de cualquiera que venda. Y dos de los tres ya existen en Onia:
+
+| Su dolor | Qué tiene Onia hoy |
+|---|---|
+| "No manejo mis números" | 🟡 Reportes y caja existen; **falta el tablero con alertas por umbral** (el mismo que pidió el analista de CAINCO). **Es el mismo hueco para los dos** |
+| "No tengo chatbot" | 🟢 Construido: entiende, responde y agenda. Solo falta conectarlo a un número |
+| "Mi flujo de venta no está estructurado" | 🔴 No existe: falta **embudo/pipeline** — de dónde vino el cliente, en qué paso está, qué falta para que compre |
+
+**Lo que confirma:** el **tablero con alertas** aparece pedido por dos personas distintas, de
+rubros distintos, en una misma semana. Deja de ser una idea y pasa a ser demanda observada.
+Es el candidato más fuerte a próximo módulo transversal.
+
+**Lo que NO significa:** que haya que integrarse con Shopify. Onia tiene su propio módulo de
+comercio; conectarse a Shopify es otro producto y otro comprador. Si aparecen tres pedidos más
+de Shopify, se reevalúa.
+
+**Gatillo para arrancar la consultoría:** cuando haya **3 clientes de plataforma pagando** y el
+servicio se pueda vender como *acompañamiento del sistema* —no como consultoría suelta— con
+techo de horas declarado. Antes de eso, es distracción cara.
 
 ## 8. Canales de venta y modelos comerciales
 
