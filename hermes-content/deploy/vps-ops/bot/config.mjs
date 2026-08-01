@@ -40,7 +40,7 @@ export const SCRIPT = Object.freeze({
   // y solo si ese rubro lo necesita (ver `qualification.branches`).
   // El maximo sigue siendo 3 preguntas para todos: la 4ta es de rama, no de todos.
   M0: [
-    "¡Hola! Soy el asistente automático de Onia — sí, un bot, te lo digo de entrada 🙂",
+    "¡Hola! Soy el asistente automático de Onia. Sí, un bot 🙂",
     "Gracias por escribir. Te agendo la demo en 2 minutos, pero primero quiero saber si te va a servir de verdad.",
     "",
     "Contame tres cosas rápidas:",
@@ -53,7 +53,7 @@ export const SCRIPT = Object.freeze({
   // el primer mensaje YA trae los 3 datos: el disclosure es innegociable (D2) pero preguntar lo
   // que el prospecto acaba de contestar hace quedar mal al producto.
   M0_DISCLOSURE: [
-    "¡Hola! Soy el asistente automático de Onia — sí, un bot, te lo digo de entrada 🙂",
+    "¡Hola! Soy el asistente automático de Onia. Sí, un bot 🙂",
     "Gracias por escribir.",
   ].join("\n"),
 
