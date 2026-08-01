@@ -6,6 +6,20 @@
 > Regla de la casa (CLAUDE.md): **construido ≠ terminado**. Una función solo cuenta cuando
 > está encendida en producción y verificada ahí. Nada se abre sin cerrar lo anterior.
 
+## 🎯 Objetivo vigente — empezar a ofrecer
+
+> **Un dueño de clínica entra solo, se registra, paga y queda operando, sin que Sergio
+> toque nada.**
+
+Esa frase es el criterio de "hecho": se verifica haciendo el recorrido completo en
+producción, no en localhost. Mientras no se pueda hacer ese recorrido, **no hay nada que
+ofrecer** — por más módulos que existan.
+
+**La decisión que destraba la fecha: prueba gratis de 14 días sin tarjeta.** Hoy la
+cadena de venta depende del banco, y la reunión con el BCP es recién el miércoles 5-ago.
+Con trial, la cadena funciona COMPLETA desde ya y el cobro pasa a ser una conversión, no
+un requisito para arrancar. Se puede ofrecer el lunes sin esperar al banco.
+
 ---
 
 ## Dónde vive cada cosa
@@ -40,31 +54,42 @@ Verificado, no "construido":
 | **Pack importadora** | Declarado y provisiona. **Sin pantallas ni entidades propias**: entra a un menú vacío |
 | **Chatbot** | **Dos bots en dos repos**, sin una línea compartida. Sergio está revisando cuál sobrevive |
 | **Cola de aprobación** | Las tablas existen y los flags están on. Falta que el cron genere las primeras propuestas |
-| **4 módulos del core sin portar** | `automation`, `imports`, `payroll`, `knowledge` |
-| **El espejo del core** | Espeja **un solo track**; el pack eléctrico tiene sus datos copiados a mano |
-| **Legal** | Borrador serio, pero sin anexo de tratamiento de datos y sin los plazos de retención nombrados |
+| **3 módulos del core sin portar** | `automation`, `payroll`, `knowledge` — `imports` ya se portó |
+| **Legal** | Borrador serio, pero sin anexo de tratamiento de datos y sin los plazos de retención nombrados. **Parqueado a propósito**: no bloquea la prueba gratis, sí bloquea publicar términos con datos de salud |
 
 ## 3. El orden. Una cosa a la vez.
 
-### 🔴 Ahora — el core como columna vertebral
-**Por qué primero:** mientras el producto copie el core a mano, cada rubro nuevo es escribir
-código de cero. Con el espejo multi-track, un rubro nuevo es **encender capacidades**.
+### ✅ Cerrado — el core como columna vertebral *(2026-08-01)*
+El producto ya se construye SOBRE el core en vez de copiarlo. El espejo es multi-track
+(11 packs, 9 módulos), el contrato del pack eléctrico que estaba transcrito a mano se
+borró y ahora se deriva, la máquina de estados de work items quedó alineada con el core,
+y `imports` se portó entero como prueba del camino. **791 tests verdes** y un gate que
+falla de verdad si el core y el producto se separan. Procedimiento escrito en
+`ONIA_CORE_PORT_PROCEDURE.md` para que portar los otros tres sea mecánico.
 
-1. Espejo multi-track + borrar el contrato copiado a mano del pack eléctrico.
-2. Alinear la máquina de estados de work items (el core manda).
-3. Portar **`imports`** entero como prueba del camino, y **dejar escrito el procedimiento**
-   para que portar los otros tres sea mecánico.
+### 🔴 Ahora — la cadena de venta encendida
+Tres frentes en paralelo, uno por carril:
+
+1. **La landing servida desde el VPS.** Hoy `onia.com.bo` sirve una versión vieja desde
+   Vercel. Es el bloqueo número uno: sin esto no hay nada que mostrar.
+2. **El self-service de verdad.** Tres defectos diagnosticados: el pago crea un recibo y
+   nunca toca el plan · `planEnd` se recalcula desde hoy y el cliente pierde los días que
+   pagó · el registro no usa `provisionOrganization`, así que el alta solo puede crear
+   clínicas dentales. Más el trial de 14 días y el onboarding por pasos.
+3. **El onboarding que no da vergüenza.** Sergio lo probó: *"siento que es muy pobre"*.
+   Asistente paso a paso, una decisión por paso, y que termine con **un dato real cargado**
+   — el pecado capital es caer en un dashboard vacío.
 
 ### 🟠 Miércoles 5-ago — la pasarela
 El modelo ya está decidido (§`ONIA_BCP_REUNION_20260805.md` §0-bis): **QR dinámico por cobro**
 + **lectura de movimientos por API**. De las cuatro piezas del cobro, **solo una depende del
-banco**; las otras tres se construyen igual.
+banco**; las otras tres se construyen igual. Con el trial, esta fecha ya no bloquea la oferta.
 
 ### 🟡 Después — los módulos por rubro
 Con el core como fuente, cada rubro es: encender capacidades → pantallas propias → seeder demo.
 
 ### ⚪ Al final — el 100% automatizable
-Ver §4. **No se arranca hasta que el core sea la fuente**, o se construye sobre arena.
+Ver §4. Ahora sí se puede arrancar: el core ya es la fuente.
 
 ---
 
@@ -110,7 +135,8 @@ centralizado · y cuánto cuesta cada camino por cliente y por mes.
 
 ---
 
-Detalle: `ONIA_PLATFORM_ESTRUCTURA_20260730.md` (qué existe) ·
+Detalle: `ONIA_PLANES_REQUISITOS_20260801.md` (**qué da cada plan** — la matriz a gatear) ·
+`ONIA_PLATFORM_ESTRUCTURA_20260730.md` (qué existe) ·
 `ONIA_SELF_SERVICE_ARQUITECTURA_20260731.md` (el cobro) ·
 `ONIA_CORE_Y_MODULOS_ANALISIS_20260731.md` (por qué el core no es todavía la columna) ·
 `ONIA_VALOR_Y_ESCALERA_PLANES_20260731.md` (precio por valor) ·
