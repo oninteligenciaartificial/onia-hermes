@@ -85,8 +85,12 @@ El modelo ya está decidido (§`ONIA_BCP_REUNION_20260805.md` §0-bis): **QR din
 + **lectura de movimientos por API**. De las cuatro piezas del cobro, **solo una depende del
 banco**; las otras tres se construyen igual. Con el trial, esta fecha ya no bloquea la oferta.
 
-### 🟡 Después — los módulos por rubro
-Con el core como fuente, cada rubro es: encender capacidades → pantallas propias → seeder demo.
+### 🟡 Los módulos por rubro — orden decidido
+Mapa completo en `ONIA_MODULOS_20260801.md`. Decisión 2026-08-01: **Gestios muere como
+producto y entra como módulo de comercio/inventario** (kardex, FEFO, caja, Contador Pack
+se portan; su auth/deploy no). `onia-platform` es el único repo que va a producción.
+Orden: comercio (código ya existe) → contabilidad Bolivia (transversal, sirve a todos)
+→ importadora → el resto con cliente que pague.
 
 ### ⚪ Al final — el 100% automatizable
 Ver §4. Ahora sí se puede arrancar: el core ya es la fuente.

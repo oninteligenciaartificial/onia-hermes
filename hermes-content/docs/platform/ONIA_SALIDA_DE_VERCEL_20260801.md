@@ -19,6 +19,16 @@
 
 **Costo mensual actual de Vercel: UNKNOWN.** No tengo la factura. El ahorro no está cuantificado.
 
+**Actualización 2026-08-01 (decisiones de Sergio, en sus palabras):** Gestios ya no se usa
+como producto — se porta como módulo de comercio a Onia Platform (`ONIA_MODULOS_20260801.md`),
+así que `gesti-os` **sale de la cubeta "migrar" y pasa a "borrar tras rescatar el código"**
+(el repo local es la cantera; la base y el proyecto Vercel no reciben más cambios).
+`onia-platform` es el único repo que va a producción; "todos los demás no los usamos".
+Se mantienen DOS excepciones que necesitan su OK explícito antes de borrar, porque tienen
+gente real del otro lado: `onia-forms` (clientes llenando el cuestionario hoy — se migra
+al VPS primero) y `nuvia-store` (storefront de cliente + el redirect 308 del middleware).
+`zen-zhukovsky`: bajar el fuente antes de borrar (única copia, datos bancarios).
+
 ---
 
 ## 1. Qué hace Vercel por nosotros hoy
