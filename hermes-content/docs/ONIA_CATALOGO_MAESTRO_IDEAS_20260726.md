@@ -202,7 +202,13 @@ Paquete concreto (usa lo ya construido, no construye plataforma):
 - No toca código ni repos de la plataforma; su carril son `hermes-content/references`, `channels/`, el Estudio del panel y las cuentas de contenido.
 - Prompts/tareas que "terminan y paran" (mismo formato bounded de siempre).
 
-**Pago de Arthur (PROPUESTA, decidís vos):** mantener el modelo por resultado ya firmado, cambiando la métrica a su carril: la producción de contenido se mide en **demos agendadas atribuibles** (la métrica ya decidida para Higgsfield-como-canal) + bono por hito de producción aprobada. Nunca sueldo fijo. Alternativa: % de ventas cerradas con material suyo en el funnel.
+**Pago de Arthur → DESARROLLADO 2026-08-01 en `ONIA_ARTHUR_CARRIL_CONTENIDO_Y_PAGO_20260801.md`.**
+Tres capas sobre el acuerdo firmado (que no se reemplaza): bounty por demo atribuible (puente
+antes de que exista una venta) + **20% de la base repartible durante 6 meses** de cada cliente
+de plataforma atribuible (reemplaza al "35% del primer mes", que es el instrumento equivocado
+para un ingreso recurrente) + bonos por hito, incluido uno del objetivo de la casa. La zanahoria
+larga es el revenue-share del módulo "Onia te publica" (uso 2). Nunca sueldo fijo. Quedan 4
+decisiones de plata para Sergio en §8 de ese doc.
 
 ---
 

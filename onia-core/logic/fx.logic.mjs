@@ -11,9 +11,11 @@
  * con aprobacion (ApprovalRequest) — workflow del producto, no de esta logica.
  */
 
-// Fallback historico (6.96). El oficial real FLOTA: pasar el TCO del dia a
-// officialRate() (entra como external_gate, dato del producto/BCB). Se conserva
-// como respaldo cuando aun no hay TCO inyectado, no como tasa vigente.
+// Tasa del regimen ANTERIOR (6.96), fija hasta la flotacion del 26-jun-2026.
+// NO es una tasa vigente y NO es el valor por defecto de officialRate(): sirve
+// para leer registros historicos y para que un caller que sepa lo que hace la
+// pase explicito como fallback. El oficial de hoy FLOTA con el TCO diario del
+// BCB y entra por external_gate (dato del producto).
 export const OFFICIAL_RATE_BOB_PER_USD = 6.96;
 
 // Spread bancario tipico sobre el VRD (configurable por el producto).
@@ -24,13 +26,35 @@ export function round2(value) {
 }
 
 /**
- * Tasa oficial del dia: usa el TCO diario del BCB (external_gate, dato del
- * producto) si es un numero valido y positivo; si no, cae al fallback historico.
- * Reemplaza al 6.96 fijo del regimen anterior (ahora el oficial flota).
+ * Tasa oficial del dia: el TCO diario del BCB (external_gate, dato del
+ * producto). Si no llega un TCO valido, LANZA — no inventa una tasa.
+ *
+ * Por que lanza y no cae a un default: desde la flotacion (RM 245/2026) no
+ * existe "la tasa oficial" como constante, y un default silencioso convierte un
+ * dato faltante en una factura mal declarada. Hasta el 2026-07-30 esta funcion
+ * caia a 6.96: con el oficial cerca de 11.89 eso declaraba ~41% de menos, sin
+ * error ni aviso. En una ruta de plata falla fuerte y que el producto decida
+ * (pedir el TCO, reintentar, bloquear la emision).
+ *
+ * `fallback` es opt-in: solo lo pasa quien se hace cargo (ej. recalcular un
+ * documento historico con la tasa que regia ese dia).
  */
-export function officialRate(dailyTco, fallback = OFFICIAL_RATE_BOB_PER_USD) {
+export function officialRate(dailyTco, fallback) {
   const tco = Number(dailyTco);
-  return Number.isFinite(tco) && tco > 0 ? round2(tco) : fallback;
+  if (Number.isFinite(tco) && tco > 0) {
+    return round2(tco);
+  }
+  if (fallback === undefined) {
+    throw new Error(
+      `falta el TCO del dia del BCB (recibido: ${JSON.stringify(dailyTco)}). ` +
+        "El oficial flota desde 2026-06-26: inyectar el TCO del dia o pasar un fallback explicito."
+    );
+  }
+  const rate = Number(fallback);
+  if (!Number.isFinite(rate) || rate <= 0) {
+    throw new Error(`fallback de tipo de cambio invalido: ${JSON.stringify(fallback)}`);
+  }
+  return round2(rate);
 }
 
 /** Tasa efectiva de compra/venta: VRD del BCB + spread bancario. */

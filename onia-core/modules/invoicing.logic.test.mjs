@@ -38,10 +38,11 @@ describe("moneda extranjera: TCO del BCB (RND 102600000026)", () => {
     assert.equal(r.tcoUsed, 1);
     assert.equal(r.bobTotal, 500);
   });
-  it("sin TCO del dia cae al fallback historico (6.96) sin romper", () => {
-    const r = invoiceTotalInBob(100, { currency: "USD" });
-    assert.equal(r.tcoUsed, 6.96);
-    assert.equal(r.bobTotal, 696);
+  it("moneda extranjera sin TCO del dia: LANZA en vez de subvaluar la factura", () => {
+    // El SIAT declara el importe en Bs. Si el TCO no llega, la unica salida
+    // segura es cortar: con el fallback viejo (6.96) esta factura se declaraba
+    // por Bs 696 en vez de ~Bs 1.189 y nadie se enteraba.
+    assert.throws(() => invoiceTotalInBob(100, { currency: "USD" }), /TCO/);
   });
 });
 

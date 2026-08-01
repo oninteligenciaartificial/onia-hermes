@@ -34,3 +34,8 @@ desktop.ini
 
 # NOTA: assets, fotos, briefs y outputs SÍ se suben (sincronización multi-dispositivo).
 .gstack/
+
+# Repo separado por ACCESO (colaboradores): vive clonado adentro por comodidad,
+# pero tiene su propio git y su propio remoto. Si el autosync lo barre, entra a
+# main como gitlink roto o duplica contenido. Ver CLAUDE.md "Cuando separar un repo".
+onia-hermes-collab/

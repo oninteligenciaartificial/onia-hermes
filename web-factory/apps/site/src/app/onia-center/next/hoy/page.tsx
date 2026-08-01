@@ -106,16 +106,21 @@ export default async function HoyPage() {
   const hotLeads = runtimeLeads.filter((lead) => lead.status === "reunion" || lead.status === "propuesta");
   const openTasks = runtimeTasks.filter((task) => OPEN_TASK_STATUS.has(task.status));
   const newIdeas = runtimeIdeas.filter((idea) => idea.status === "inbox" || idea.status === "queued");
-  const pendingReviews = runtimeReviews.filter((review) => review.status === "pendiente");
+  const meetings = runtimeLeads.filter(
+    (lead) => lead.meetingStatus === "solicitada" || lead.meetingStatus === "confirmada",
+  );
 
+  // La "cola de aprobacion" se elimino de la vista (2026-08-01, pedido de
+  // Sergio: 49 pendientes que nadie procesaba = ruido). El registro sigue en
+  // review_queue para agentes/n8n; la UI muestra lo que se opera de verdad.
   const kpis: KpiItem[] = [];
   if (canApprove) {
     kpis.push({
-      key: "aprobaciones",
-      label: "Aprobaciones",
-      value: String(pendingReviews.length),
-      hint: pendingReviews.length > 0 ? "esperando tu OK" : "al día",
-      tone: pendingReviews.length > 0 ? "yellow" : "green",
+      key: "reuniones",
+      label: "Reuniones",
+      value: String(meetings.length),
+      hint: "solicitadas y confirmadas",
+      tone: meetings.length > 0 ? "green" : "neutral",
     });
   }
   kpis.push({

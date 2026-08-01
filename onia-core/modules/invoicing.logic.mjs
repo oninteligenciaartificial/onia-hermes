@@ -33,8 +33,9 @@ export const computeInvoiceTotal = computeQuoteTotal;
  * operacion. Desde el regimen cambiario flexible (RM 245/2026) el oficial FLOTA, y
  * el SIAT EXIGE emitir las facturas en moneda extranjera con ese TCO diario del BCB
  * (RND 102600000026, jul-2026): lo que se declara es el importe en Bs. `dailyTco` =
- * TCO del BCB del dia (external_gate); si falta, cae al fallback historico de
- * fx.officialRate. Para facturas en BOB el TCO es 1 y el total no cambia.
+ * TCO del BCB del dia (external_gate). Si falta, LANZA: declarar con una tasa
+ * inventada es subvaluar la factura. Para facturas en BOB el TCO es 1, no hace
+ * falta TCO y el total no cambia.
  */
 export function invoiceTotalInBob(invoiceTotal, { currency = "BOB", dailyTco } = {}) {
   const total = Number(invoiceTotal ?? 0);

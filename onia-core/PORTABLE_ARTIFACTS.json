@@ -13,7 +13,7 @@
       "id": "logic/fx.logic.mjs",
       "kind": "logic",
       "path": "onia-core/logic/fx.logic.mjs",
-      "sha256": "ae446584cd6ed3155bce928b52e3e72abfa2fa32a5a5a2579074fd4432ea392b"
+      "sha256": "4e7ff739dfaefd7bae15181a722e6101fefcd44e1c352ff989560e73ea7fa16b"
     },
     {
       "id": "logic/intake.logic.mjs",
@@ -130,7 +130,7 @@
       "id": "modules/invoicing.logic.mjs",
       "kind": "logic",
       "path": "onia-core/modules/invoicing.logic.mjs",
-      "sha256": "81529859b2fcf5db2685650bc52c8e4b770700d22b8001991bf3ed5bf7190813"
+      "sha256": "95b1f358f73dc0fc4631b464d44f4b58c15e110a1f1dca5f5275a154902a5852"
     },
     {
       "id": "modules/knowledge.logic.mjs",

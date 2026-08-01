@@ -6,6 +6,7 @@ import type { CutReview, EditorProject, HiggsfieldAccount, StudioOverview } from
 import { KpiStrip, type KpiItem } from "../hoy/KpiStrip";
 import { EditorFlow } from "./EditorFlow";
 import { VideoProjectsTable } from "./VideoProjectsTable";
+import { GuionesPanel } from "./GuionesPanel";
 import { HiggsfieldPanel } from "./HiggsfieldPanel";
 import { CutApprovalRail } from "./CutApprovalRail";
 
@@ -129,6 +130,7 @@ export function EstudioView({ overview, projects, higgsfield, cutQueue }: Estudi
       {focus ? (
         <div className="grid gap-5">
           {rail}
+          <GuionesPanel />
           <VideoProjectsTable projects={projects} onOpenCuts={openCuts} />
           <HiggsfieldPanel account={higgsfield} />
         </div>
@@ -137,6 +139,7 @@ export function EstudioView({ overview, projects, higgsfield, cutQueue }: Estudi
           {/* En mobile el rail de aprobación (la compuerta) sube primero: es lo que
               necesita tu OK. En desktop vuelve a la derecha, sticky. */}
           <div className="order-2 grid min-w-0 gap-5 lg:order-1">
+            <GuionesPanel />
             <VideoProjectsTable projects={projects} onOpenCuts={openCuts} />
             <HiggsfieldPanel account={higgsfield} />
           </div>

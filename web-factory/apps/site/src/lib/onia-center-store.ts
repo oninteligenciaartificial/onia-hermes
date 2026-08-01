@@ -28,6 +28,7 @@ export type RuntimeTask = {
   priority: "alta" | "media" | "baja";
   evidence: string;
   assignedUserKey?: string;
+  dueLabel?: string;
   createdAt: string;
 };
 
@@ -140,6 +141,7 @@ type DbTask = {
   priority: RuntimeTask["priority"];
   assigned_role_key: string;
   evidence_required: boolean;
+  due_label: string | null;
   raw: Record<string, unknown> | null;
   created_at: string;
 };
@@ -468,6 +470,7 @@ function mapTask(row: DbTask): RuntimeTask {
     priority: row.priority,
     evidence: row.evidence_required ? "pendiente" : "no requerida",
     assignedUserKey: rawString(raw, "assignedUserKey"),
+    dueLabel: row.due_label ?? undefined,
     createdAt: row.created_at,
   };
 }
@@ -630,7 +633,7 @@ export async function getOniaCenterRuntime(): Promise<RuntimeSnapshot> {
       "leads?select=lead_key,company_name,public_contact,channel,source,owner_role_key,pipeline_status,suggested_service_key,private_notes,raw,created_at&order=created_at.desc&limit=80",
     ),
     supabaseRequest<DbTask[]>(
-      "tasks?select=task_key,project_key,title,status,priority,assigned_role_key,evidence_required,raw,created_at&order=created_at.desc&limit=120",
+      "tasks?select=task_key,project_key,title,status,priority,assigned_role_key,evidence_required,due_label,raw,created_at&order=created_at.desc&limit=120",
     ),
     supabaseRequest<DbReview[]>(
       "review_queue?select=review_key,source_type,source_key,title,status,sensitive&order=created_at.desc&limit=80",
@@ -712,7 +715,8 @@ export async function createOniaCenterEntity(entity: RuntimeEntity, payload: unk
         origin_role_key: roleToDb(lead.owner),
         owner_role_key: roleToDb(lead.owner),
         pipeline_status: leadStatusToDb[lead.status] ?? "Nuevo",
-        suggested_service_key: serviceToDb(lead.serviceId),
+        // FK a services: "" viola la constraint (23503); sin servicio va NULL.
+        suggested_service_key: lead.serviceId ? serviceToDb(lead.serviceId) : null,
         priority: "media",
         private_notes: lead.nextAction || null,
         raw: {
@@ -970,4 +974,74 @@ export async function updateOniaCenterEntityStatus(
   }
 
   throw new Error(`Entidad no soportada para actualizar: ${entity}`);
+}
+
+
+// --- Movimientos de plata registrados a mano (finance_entries) ---------------
+// Pedido Sergio 2026-08-01: registrar que entra y que sale, en Bs, desde el
+// panel. Solo lectura/escritura via service role; la ruta API restringe a Sergio.
+
+export type FinanceEntry = {
+  id: string;
+  kind: "ingreso" | "gasto";
+  concept: string;
+  amountBs: number;
+  entryDate: string;
+  notes?: string;
+  createdAt: string;
+};
+
+type DbFinanceEntry = {
+  entry_key: string;
+  kind: "ingreso" | "gasto";
+  concept: string;
+  amount_bs: number | string;
+  entry_date: string;
+  notes: string | null;
+  created_at: string;
+};
+
+function mapFinanceEntry(row: DbFinanceEntry): FinanceEntry {
+  return {
+    id: row.entry_key,
+    kind: row.kind,
+    concept: row.concept,
+    amountBs: Number(row.amount_bs),
+    entryDate: row.entry_date,
+    notes: row.notes ?? undefined,
+    createdAt: row.created_at,
+  };
+}
+
+export async function listFinanceEntries(): Promise<FinanceEntry[]> {
+  const rows = await supabaseRequest<DbFinanceEntry[]>(
+    "finance_entries?select=entry_key,kind,concept,amount_bs,entry_date,notes,created_at&order=entry_date.desc,created_at.desc&limit=120",
+  );
+  return rows.map(mapFinanceEntry);
+}
+
+export async function createFinanceEntry(input: {
+  kind: "ingreso" | "gasto";
+  concept: string;
+  amountBs: number;
+  entryDate?: string;
+  notes?: string;
+}): Promise<FinanceEntry> {
+  const rows = await supabaseRequest<DbFinanceEntry[]>(
+    "finance_entries?select=entry_key,kind,concept,amount_bs,entry_date,notes,created_at",
+    {
+      method: "POST",
+      headers: { prefer: "return=representation" },
+      body: JSON.stringify({
+        entry_key: makeKey("fin"),
+        kind: input.kind,
+        concept: input.concept,
+        amount_bs: input.amountBs,
+        entry_date: input.entryDate ?? undefined,
+        notes: input.notes || null,
+        created_by: "sergio",
+      }),
+    },
+  );
+  return mapFinanceEntry(rows[0]);
 }

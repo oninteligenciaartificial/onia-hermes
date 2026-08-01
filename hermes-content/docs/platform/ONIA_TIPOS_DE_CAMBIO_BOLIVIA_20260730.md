@@ -31,9 +31,14 @@
    columnas sueltas (`exchange_rate_bob`, `tco_used`) y una constante hardcodeada. El TC es la
    única variable de negocio del core sin tabla versionada por fecha, mientras aranceles e
    impuestos sí la tienen.
-4. **Hay un bug de plata en producción potencial:** `officialRate()` cae en silencio al
-   histórico **6,96** cuando no recibe TCO. Con el TCO real en **11,89** (29-jul-2026), un
-   dato faltante emite una factura **subvaluada ~41%** sin ninguna señal de error.
+4. ~~**Hay un bug de plata en producción potencial:** `officialRate()` cae en silencio al
+   histórico **6,96** cuando no recibe TCO.~~ **ARREGLADO 2026-07-31.** `officialRate()` ahora
+   **lanza** si no recibe un TCO válido, y `invoiceTotalInBob()` corta antes de declarar una
+   factura en moneda extranjera sin TCO. El 6,96 queda sólo como constante histórica
+   (registros anteriores al 26-jun-2026) y como fallback **opt-in explícito**, nunca por
+   defecto. 521/521 tests del core verdes. El producto todavía **no** había portado esta
+   lógica, así que el arreglo es preventivo — pero el manifest anti-drift
+   (`PORTABLE_ARTIFACTS.json`) ya cambió de hash, que es la señal para re-portar.
 5. **Esto es estructura de toda empresa importadora, no un pedido de un cliente.** Es
    candidata legítima a núcleo del producto, y hoy es el hueco más grande entre lo que Onia
    promete a una importadora y lo que efectivamente hace.
