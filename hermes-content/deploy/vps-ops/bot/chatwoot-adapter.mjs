@@ -45,6 +45,7 @@
 import { pathToFileURL } from "node:url";
 
 import { runTurn as realRunTurn } from "./run-turn.mjs";
+import { pickAudioAttachment, transcribeChatwootAudio } from "./audio-transcribe.mjs";
 
 const ENV_BASE_URL = () => process.env.CHATWOOT_BASE_URL || "https://onia-chatbot-chatwoot.hqdqgh.easypanel.host";
 const ENV_ACCOUNT_ID = () => process.env.CHATWOOT_ACCOUNT_ID || "2";
@@ -76,13 +77,16 @@ function displayNameOf(sender) {
   return sender.name || sender.identifier || null;
 }
 
-/** kind: text | voice | attachment — solo cuando NO hay texto y SI hay adjuntos (igual que Telegram). */
+/**
+ * kind: text | voice | attachment — solo cuando NO hay texto y SI hay adjuntos (igual que Telegram).
+ * El audio se busca en TODA la lista y no solo en el primero: un mensaje con una foto y una nota
+ * de voz sigue siendo, para el guion, una nota de voz que hay que escuchar.
+ */
 function kindOf(text, attachments) {
   if (text) return "text";
   const list = Array.isArray(attachments) ? attachments : [];
   if (list.length === 0) return "text";
-  const fileType = String(list[0]?.file_type || "").toLowerCase();
-  return fileType === "audio" ? "voice" : "attachment";
+  return pickAudioAttachment(list) ? "voice" : "attachment";
 }
 
 function buildTurn({ conversationId, messageId, content, attachments, sender, createdAtIso }) {
@@ -98,7 +102,13 @@ function buildTurn({ conversationId, messageId, content, attachments, sender, cr
       message_key: `chatwoot:${conversationId}:${messageId}`,
       received_at: createdAtIso || new Date().toISOString(),
     },
-    meta: { conversationId: String(conversationId), messageId: String(messageId) },
+    // Los adjuntos viajan en `meta` y NO en `turn`: el turno es lo que ve el motor (que es puro y
+    // no baja archivos), y los adjuntos son materia prima del transporte para transcribir el audio.
+    meta: {
+      conversationId: String(conversationId),
+      messageId: String(messageId),
+      attachments: Array.isArray(attachments) ? attachments : [],
+    },
   };
 }
 
@@ -204,6 +214,59 @@ export function createChatwootClient(options = {}) {
 }
 
 // ---------------------------------------------------------------------------
+// Nota de voz -> texto
+// ---------------------------------------------------------------------------
+
+/**
+ * Si el mensaje es una nota de voz, la transcribe con Speaches y la devuelve pegada al turno como
+ * `transcript`. Si NO es voz, o si la transcripción falla, devuelve el turno intacto: el motor ve
+ * un audio sin texto y contesta M_AUDIO_FAIL, exactamente como antes de que esto existiera. Que se
+ * rompa Speaches no puede dejar al prospecto sin ninguna respuesta.
+ *
+ * @returns {Promise<{turn: object, voice: object|null, warnings: string[]}>}
+ */
+async function transcribeIfVoice(parsed, deps = {}) {
+  const turn = parsed.turn;
+  if (turn.kind !== "voice" || String(turn.text || "").trim()) {
+    return { turn, voice: null, warnings: [] };
+  }
+
+  const transcribeFn = typeof deps.transcribeAudio === "function" ? deps.transcribeAudio : transcribeChatwootAudio;
+  let stt;
+  try {
+    stt = await transcribeFn(
+      {
+        attachments: parsed.meta.attachments,
+        // Mismas fuentes que createChatwootClient. El token NO se guarda en ningún objeto que se
+        // serialice después: se pasa, se usa en un header y se olvida.
+        token: String(deps.token ?? ENV_TOKEN()),
+        chatwootBaseUrl: String(deps.baseUrl ?? ENV_BASE_URL()),
+      },
+      deps,
+    );
+  } catch (error) {
+    // `transcribeChatwootAudio` promete no tirar, pero esta es la red de contención: acá adentro
+    // una excepción se propagaría hasta el servidor de webhook y el prospecto se quedaría MUDO
+    // por un audio. El bot tiene que poder decir "escribímelo" aunque Speaches explote.
+    stt = { ok: false, text: "", reason: "transcripcion_exploto", warnings: [`audio: ${String(error?.message || error).slice(0, 200)}`] };
+  }
+
+  const warnings = [...(stt.warnings || [])];
+  if (!stt.ok || !stt.text) {
+    warnings.push(`audio: sin transcripción (${stt.reason}) — se le pide el texto al prospecto`);
+    return { turn, voice: { transcribed: false, reason: stt.reason }, warnings };
+  }
+
+  return {
+    turn: { ...turn, transcript: stt.text },
+    // Se reporta que hubo transcripción y CUÁNTO, nunca QUÉ dijo: la respuesta del webhook la
+    // puede loguear Chatwoot, y las palabras del prospecto no tienen por qué salir del sistema.
+    voice: { transcribed: true, reason: stt.reason, chars: stt.text.length },
+    warnings,
+  };
+}
+
+// ---------------------------------------------------------------------------
 // Orquestacion de un webhook
 // ---------------------------------------------------------------------------
 
@@ -218,8 +281,15 @@ export async function runChatwootTurn(payload, deps = {}) {
     return { ok: true, skipped: true, reason: parsed.reason, duplicate: false, sent: [], warnings: [] };
   }
 
+  // LA NOTA DE VOZ, ANTES DEL MOTOR. Va acá (transporte) y no en bot-engine.mjs, que es PURO y no
+  // hace I/O — mismo criterio que la reserva de Cal.com, que vive en run-turn.mjs paso 6.5.
+  // El texto entra como `transcript`, así que el motor lo trata igual que si el prospecto lo
+  // hubiera escrito (readIncoming() usa el transcript como texto cuando kind = "voice") y el guion
+  // sigue normal: califica, agenda, todo. `kind` se deja en "voice" a propósito: en la bitácora
+  // tiene que quedar que fue un audio, no una mentira de que escribió.
+  const audio = await transcribeIfVoice(parsed, deps);
   const runTurnFn = typeof deps.runTurn === "function" ? deps.runTurn : realRunTurn;
-  const turnResult = await runTurnFn(parsed.turn, deps);
+  const turnResult = await runTurnFn(audio.turn, deps);
 
   const client = deps.client || createChatwootClient(deps);
   // Mismo "encendido en dos pasos" que Telegram (N8N_WORKFLOW.md §4.6): con ONIA_BOT_DRY_RUN=true
@@ -258,8 +328,11 @@ export async function runChatwootTurn(payload, deps = {}) {
     // $env en los nodos, asi que el token no puede vivir aca).
     notify: (turnResult && Array.isArray(turnResult.notify) ? turnResult.notify : []),
     dryRun: Boolean(turnResult && turnResult.dryRun),
+    // null = no era un audio. `{transcribed:false}` = era y no se pudo: eso es lo que hay que
+    // mirar si el bot vuelve a contestar "¿me lo escribís?" cuando no debería.
+    voice: audio.voice,
     sent,
-    warnings: [...(client.warnings || []), ...((turnResult && turnResult.warnings) || [])],
+    warnings: [...audio.warnings, ...(client.warnings || []), ...((turnResult && turnResult.warnings) || [])],
   };
 }
 

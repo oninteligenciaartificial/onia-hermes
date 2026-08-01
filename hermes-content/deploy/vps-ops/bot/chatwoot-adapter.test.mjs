@@ -500,3 +500,177 @@ test("integracion punta a punta: reenviar el MISMO webhook (reintento de Chatwoo
   assert.equal(reintento.duplicate, true, "mismo message_key -> el dedup de run-turn.mjs lo corta");
   assert.equal(posted.length, 1, "no se mando dos veces por el reintento");
 });
+
+// ---------------------------------------------------------------------------
+// NOTAS DE VOZ — el agujero de comprension mas grande que tenia el bot
+//
+// En Bolivia una parte enorme del WhatsApp son notas de voz. Hasta hoy el bot contestaba
+// "¿me lo escribís?" y ahi se perdia el prospecto. Lo que se prueba: que el texto transcrito
+// entre al motor COMO SI LO HUBIERA ESCRITO (el guion sigue igual: califica, agenda), y que
+// cuando Speaches falla el bot igual conteste algo en vez de quedarse mudo.
+// ---------------------------------------------------------------------------
+
+/** Webhook real de una nota de voz: sin `content`, con un adjunto file_type "audio". */
+function voiceFixture(overrides = {}) {
+  return incomingFixture({
+    id: 21,
+    content: "",
+    attachments: [
+      {
+        id: 7,
+        message_id: 21,
+        file_type: "audio",
+        extension: "oga",
+        file_size: 34_298,
+        data_url: "https://onia-chatbot-chatwoot.hqdqgh.easypanel.host/rails/active_storage/blobs/redirect/abc/nota.oga",
+      },
+    ],
+    ...overrides,
+  });
+}
+
+test("los adjuntos viajan en meta (el motor es puro: no baja archivos)", () => {
+  const parsed = parseChatwootWebhook(voiceFixture());
+  assert.equal(parsed.turn.kind, "voice");
+  assert.equal(parsed.meta.attachments.length, 1);
+  assert.equal(parsed.meta.attachments[0].file_type, "audio");
+  assert.equal(parsed.turn.attachments, undefined, "el turno es lo que ve el motor; los archivos no son asunto suyo");
+});
+
+test("VOZ: la transcripcion entra como `transcript` y el guion sigue normal (califica, no pide texto)", async () => {
+  const fake = memoryStore();
+  const posted = [];
+  const client = { warnings: [], async sendMessage(id, text) { posted.push(text); return { id: posted.length }; } };
+
+  const result = await runChatwootTurn(voiceFixture(), {
+    store: fake.store,
+    config: CONFIG,
+    nowIso: "2026-07-27T14:05:00Z",
+    llm: async () => "",
+    client,
+    transcribeAudio: async () => ({ ok: true, text: "DEMO", reason: "transcrito", warnings: [] }),
+  });
+
+  assert.equal(result.voice.transcribed, true);
+  assert.equal(result.voice.chars, 4);
+  assert.equal(posted.length, 1, "un audio entendido tiene que disparar el guion, no una disculpa");
+  assert.ok(!/No me llegó bien el audio/.test(posted[0]), `el bot volvio a pedir texto: ${posted[0]}`);
+  assert.match(posted[0], /Contame tres cosas/, "el audio 'DEMO' tiene que disparar M0, igual que el texto");
+  assert.equal(fake.state.botStage, "esperando_calificacion", "el audio hizo avanzar el embudo igual que un texto");
+});
+
+test("VOZ: el `transcript` es lo que se le pasa al motor, y `kind` sigue siendo voice en la bitacora", async () => {
+  let visto = null;
+  await runChatwootTurn(voiceFixture(), {
+    runTurn: async (turn) => {
+      visto = turn;
+      return { ok: true, send: [], warnings: [] };
+    },
+    client: { warnings: [], async sendMessage() { return {}; } },
+    transcribeAudio: async () => ({ ok: true, text: "hola, tengo una clinica dental", reason: "transcrito", warnings: [] }),
+  });
+
+  assert.equal(visto.transcript, "hola, tengo una clinica dental");
+  assert.equal(visto.kind, "voice", "decir que fue texto seria mentirle a la bitacora");
+  assert.equal(visto.text, "", "el texto original venia vacio: no se pisa, se agrega el transcript");
+});
+
+test("VOZ: la transcripcion recibe el adjunto, el token y la base de Chatwoot", async () => {
+  let recibido = null;
+  await runChatwootTurn(voiceFixture(), {
+    token: "tok-secreto",
+    baseUrl: "http://onia-chatbot_chatwoot:3000",
+    runTurn: async () => ({ ok: true, send: [], warnings: [] }),
+    client: { warnings: [], async sendMessage() { return {}; } },
+    transcribeAudio: async (options) => {
+      recibido = options;
+      return { ok: false, text: "", reason: "stt_fallido", warnings: [] };
+    },
+  });
+
+  assert.equal(recibido.attachments[0].file_type, "audio");
+  assert.equal(recibido.token, "tok-secreto");
+  assert.equal(recibido.chatwootBaseUrl, "http://onia-chatbot_chatwoot:3000");
+});
+
+test("VOZ QUE FALLA: cae a M_AUDIO_FAIL — el prospecto NUNCA se queda sin respuesta", async () => {
+  const fake = memoryStore();
+  const posted = [];
+  const client = { warnings: [], async sendMessage(id, text) { posted.push(text); return { id: posted.length }; } };
+
+  const result = await runChatwootTurn(voiceFixture(), {
+    store: fake.store,
+    config: CONFIG,
+    nowIso: "2026-07-27T14:05:00Z",
+    llm: async () => "",
+    client,
+    transcribeAudio: async () => ({ ok: false, text: "", reason: "stt_fallido", warnings: ["audio: Speaches no respondio"] }),
+  });
+
+  assert.equal(result.ok, true, "que se rompa el audio no puede romper el turno");
+  assert.equal(result.voice.transcribed, false);
+  assert.equal(result.voice.reason, "stt_fallido");
+  assert.equal(posted.length, 1, "el prospecto tiene que recibir ALGO");
+  assert.match(posted[0], /escrib/i, "el fallback sigue siendo el M_AUDIO_FAIL de siempre");
+  assert.match(result.warnings.join(" "), /sin transcripción/);
+});
+
+test("VOZ: si la transcripcion TIRA, el turno sigue (fail-open, no 500)", async () => {
+  const posted = [];
+  const result = await runChatwootTurn(voiceFixture(), {
+    store: memoryStore().store,
+    config: CONFIG,
+    nowIso: "2026-07-27T14:05:00Z",
+    llm: async () => "",
+    client: { warnings: [], async sendMessage(id, text) { posted.push(text); return {}; } },
+    transcribeAudio: async () => { throw new Error("speaches exploto"); },
+  }).catch((error) => ({ tiro: String(error.message) }));
+
+  assert.ok(!result.tiro, `runChatwootTurn dejo escapar una excepcion: ${result.tiro}`);
+  assert.equal(posted.length, 1, "el prospecto igual recibe el M_AUDIO_FAIL");
+});
+
+test("UN TEXTO NORMAL no gasta una transcripcion", async () => {
+  let llamadas = 0;
+  await runChatwootTurn(incomingFixture({ content: "DEMO" }), {
+    runTurn: async () => ({ ok: true, send: [], warnings: [] }),
+    client: { warnings: [], async sendMessage() { return {}; } },
+    transcribeAudio: async () => { llamadas += 1; return { ok: true, text: "x", reason: "transcrito", warnings: [] }; },
+  });
+  assert.equal(llamadas, 0, "transcribir un mensaje escrito seria 30 s de espera regalados");
+});
+
+test("UNA FOTO no se manda a transcribir (no es voz)", async () => {
+  let llamadas = 0;
+  const result = await runChatwootTurn(voiceFixture({ attachments: [{ file_type: "image", data_url: "https://x/y.png" }] }), {
+    runTurn: async () => ({ ok: true, send: [], warnings: [] }),
+    client: { warnings: [], async sendMessage() { return {}; } },
+    transcribeAudio: async () => { llamadas += 1; return { ok: true, text: "x", reason: "transcrito", warnings: [] }; },
+  });
+  assert.equal(llamadas, 0);
+  assert.equal(result.voice, null, "voice:null = no era un audio, distinto de 'era y fallo'");
+});
+
+test("VOZ en conversation_created: el primer mensaje tambien se transcribe", () => {
+  // Chatwoot manda los DOS eventos cuando alguien abre la conversacion con una nota de voz. Si
+  // los adjuntos no viajaran por este camino, el primer audio de cada prospecto se perderia.
+  const parsed = parseChatwootWebhook({
+    event: "conversation_created",
+    id: 9,
+    inbox_id: 3,
+    messages: [
+      {
+        id: 31,
+        content: "",
+        message_type: 0,
+        private: false,
+        created_at: 1785565643,
+        attachments: [{ id: 3, file_type: "audio", data_url: "https://cw/rails/x/nota.oga", file_size: 14296 }],
+      },
+    ],
+  });
+
+  assert.equal(parsed.skip, false);
+  assert.equal(parsed.turn.kind, "voice");
+  assert.equal(parsed.meta.attachments[0].file_type, "audio");
+});
