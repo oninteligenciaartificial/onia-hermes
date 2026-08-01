@@ -51,7 +51,7 @@ export default async function FinanzasPage() {
       <AppShell canSeeFinance={false}>
         <EmptyState
           title="Finanzas es solo para el equipo interno"
-          body="Tu rol no incluye la vista de Finanzas. Tu trabajo (leads, tareas y aprobaciones) esta en Hoy y Pipeline."
+          body="Tu rol no incluye la vista de Finanzas. Tu trabajo (leads y tareas) esta en Hoy y Pipeline."
           linkHref="/onia-center/next/hoy"
           linkLabel="Ir a Hoy"
         />

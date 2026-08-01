@@ -3,7 +3,9 @@ import {
   filterOniaCenterRuntimeForActor,
   getMissingOniaCenterConfig,
   getOniaCenterRuntime,
+  getOniaCenterTeam,
   isOniaCenterConfigured,
+  type TeamMember,
 } from "@/lib/onia-center-store";
 import { canActorSeeFinance, getOniaCenterActor, isSergio } from "@/lib/onia-center-auth";
 import { AppShell } from "@/app/onia-center/components/shell/AppShell";
@@ -50,9 +52,21 @@ export default async function EquipoPage() {
   try {
     const runtime = filterOniaCenterRuntimeForActor(await getOniaCenterRuntime(), auth.actor);
 
+    let team: TeamMember[] = [];
+    try {
+      team = await getOniaCenterTeam();
+    } catch {
+      // Roster ilegible: la vista muestra el estado vacio.
+    }
+
     return (
       <AppShell canSeeFinance={canSeeFinance} actorName={auth.actor.displayName}>
-        <EquipoView tasks={runtime.tasks} leads={runtime.leads} showMoney={isSergio(auth.actor)} />
+        <EquipoView
+          team={team}
+          tasks={runtime.tasks}
+          leads={runtime.leads}
+          showMoney={isSergio(auth.actor)}
+        />
       </AppShell>
     );
   } catch (error) {
