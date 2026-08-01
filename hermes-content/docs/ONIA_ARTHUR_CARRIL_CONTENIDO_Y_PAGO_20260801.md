@@ -569,6 +569,49 @@ Nada de acá se mide en el semáforo del día 30: son activos, no resultados.
 | **Taller "facturación en línea"** | Piezas de promoción y guion del taller | Es el gancho del SIAT y la ventana se cierra el 1-oct |
 | **Casos y testimonios** | Grabar al primer cliente que entre | Sin caso, la objeción "¿quién más lo usa?" no tiene respuesta |
 
+### 9.6-bis. Cuánto gana Arthur, realistamente — y qué anota para cobrar cada peso
+
+**Regla madre (ya firmada, acá aplicada):** *si no está registrado en Onia Center, no existe
+y no se paga.* Sin excepción, sin memoria, sin WhatsApp suelto.
+
+#### La tabla de ganar: concepto → qué tiene que pasar → qué anota ÉL para cobrarlo
+
+| # | Concepto | Gana | Qué tiene que pasar | Qué anota Arthur (sin esto NO se paga) |
+|---|---|---:|---|---|
+| 1 | Reunión realizada | Bs 50 | Dueño/socio, perfil correcto, Sergio estuvo | **Antes:** lead en Captura + reunión con fuente (`?src=` o outreach). **Después (mismo día):** nota con resultado y próximo paso |
+| 2 | Web que él vende, Onia produce | 12-15% | Cobro real | Lead → pipeline al día → propuesta enviada → cobro en Ingresos con comprobante y monto neto |
+| 3 | Web que él vende Y produce | 50% | Cobro + entrega aprobada sin rescate | Lo de #2 + brief, archivos, checklist de entrega y aprobación de Sergio registrados |
+| 4 | Suscripción plataforma, mes a mes | 20-25% × 6 meses | El cliente pagó ESE mes | Origen atribuible registrado desde el día 0 + cada cobro mensual en Ingresos. Se corta el mes que el cliente no paga |
+| 5 | Cuidado Web / contenido mensual | 10-20%/mes | Gestionó y reportó ese mes | Calendario cumplido + piezas aprobadas + reporte del mes. Mes sin reporte = mes sin cobro |
+| 6 | Pack video IA | 15-50% | Vendido, entregado, aprobado | Lo de #2 + costo Higgsfield registrado ANTES de generar (objetivo, piezas, OK de Sergio) |
+| 7 | Bono primer cliente | Bs 300 | Primera venta atribuible de plataforma | La atribución de #4 completa |
+| 8 | Bono retención | Bs 150 | Cliente atribuible llega al 3er mes pagado | Los 3 cobros mensuales registrados |
+| 9 | Bono objetivo casa | Bs 500 | Onia llega a 3 clientes de plataforma | Nada extra — lo gatilla la casa |
+| 10 | Bono calidad | Bs 150 | Mes sin reclamos ni rescates | CRM 100% + 4/4 reportes de viernes |
+
+#### Mes 1 realista, en números (ventana 3-ago → 1-sep, desde cero audiencia)
+
+| Escenario | Qué pasó | Cobra |
+|---|---|---:|
+| **Flojo** | 4 reuniones, 0 ventas | **Bs 200** |
+| **Base** | 8 reuniones + 1 web 1.500 vendida y producida + 1 clínica Pro cerrada fin de mes | 400 + 750 + 135 + 300 = **Bs 1.585** |
+| **Bueno** | 12 reuniones + esa web + otra web solo vendida (15%) + la clínica + calidad | 600 + 750 + 225 + 435 + 150 = **Bs 2.160** |
+
+Y lo que el mes 1 no muestra: en el escenario base, los meses 2-6 arrancan con **Bs 135/mes**
+ya ganados de la suscripción viva — antes de mover un dedo. Eso es lo que se acumula.
+
+#### El seguimiento que lo hace cobrable (no es burocracia: es su liquidación)
+
+| Ritmo | Qué hace | Si falta |
+|---|---|---|
+| Antes de contactar | Lead completo en Captura | El contacto no cuenta para nada |
+| Antes de cada reunión | Reunión registrada con fuente | No hay bounty aunque la reunión ocurra |
+| Después de cada contacto | Nota + próximo paso CON FECHA en pipeline | Lead 7 días sin seguimiento = se reasigna y **pierde el origen** (regla vigente) |
+| Antes de generar con crédito | Objetivo + costo + OK de Sergio | El costo se le descuenta de su liquidación |
+| Cada cobro | Monto, comprobante, costos directos en Ingresos | La comisión queda **Retenida** hasta completar |
+| Viernes | Reporte: piezas → fuente → reuniones → estado pipeline | Semana no cuenta para bonos; 2 seguidas = causal de pausa |
+| Fin de mes | Cierre con Sergio: aprueba/retiene/descuenta | Sin cierre no hay pago, solo el adelanto quincenal ≤20% |
+
 ### 9.7 Cuánto le cuesta a Onia esta ventana
 
 | Concepto | Peor caso (cero ventas) |
