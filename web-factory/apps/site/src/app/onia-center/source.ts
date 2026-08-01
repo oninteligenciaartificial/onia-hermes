@@ -1250,19 +1250,19 @@ export const evidenceSeed: EvidenceRecord[] = [
   },
 ];
 
+// Scorecard SEMANAL del carril contenido (ventana 30 dias, 3-ago -> 1-sep).
+// Fuente: ONIA_ARTHUR_CARRIL_CONTENIDO_Y_PAGO_20260801.md §5-bis y §9. Cada
+// pieza paga Bs 30 aprobada; cada reunion atribuible realizada Bs 50; la
+// comision paga la venta. El reporte del viernes no paga: es la condicion para
+// liquidar todo lo demas.
 export const arthurScorecard: ArthurScorecardItem[] = [
-  { id: "prospects", area: "Prospectos nuevos completos", minimum: "35", required: true },
-  { id: "contacts", area: "Contactos/mensajes/llamadas reales", minimum: "25", required: true },
-  { id: "followups", area: "Seguimientos realizados", minimum: "20", required: true },
-  { id: "calls", area: "Llamadas o audios comerciales reales", minimum: "8", required: true },
-  { id: "meetings", area: "Reuniones o demos agendadas", minimum: "3", required: true },
-  { id: "proposals", area: "Propuestas/auditorias/diagnosticos enviados", minimum: "3", required: true },
-  { id: "videos", area: "Videos grabados Onia/Nuvia", minimum: "5", required: true },
-  { id: "carousels", area: "Piezas editadas o carruseles listos", minimum: "3", required: true },
-  { id: "ready-posts", area: "Publicaciones o piezas listas para aprobar", minimum: "3", required: true },
-  { id: "improvements", area: "Mejora interna Onia/Nuvia/Onia Center", minimum: "2", required: true },
-  { id: "crm", area: "CRM/Onia Center actualizado viernes", minimum: "100%", required: true },
-  { id: "report", area: "Reporte semanal", minimum: "1", required: true },
+  { id: "pieces", area: "Piezas publicadas y aprobadas, con link ?src= propio (Bs 30 c/u)", minimum: "4", required: true },
+  { id: "meetings", area: "Reuniones atribuibles REALIZADAS (Bs 50 c/u, tope 12/mes)", minimum: "2", required: true },
+  { id: "outreach", area: "Contactos de outreach con mensaje aprobado", minimum: "15", required: true },
+  { id: "prospects", area: "Prospectos nuevos verificados FUERA de dental (bloque de 20 = Bs 60)", minimum: "15", required: true },
+  { id: "followups", area: "Seguimientos con proximo paso y fecha en pipeline", minimum: "100%", required: true },
+  { id: "crm", area: "Onia Center al dia (lead antes de contactar, nota post-reunion)", minimum: "100%", required: true },
+  { id: "report", area: "Reporte del viernes: pieza -> fuente -> reunion -> estado", minimum: "1", required: true },
 ];
 
 export const evidenceGates: EvidenceGate[] = [
