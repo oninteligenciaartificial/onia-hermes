@@ -40,7 +40,7 @@ export const SCRIPT = Object.freeze({
   // y solo si ese rubro lo necesita (ver `qualification.branches`).
   // El maximo sigue siendo 3 preguntas para todos: la 4ta es de rama, no de todos.
   M0: [
-    "¡Hola! Soy el asistente automático de Onia — sí, un bot, los mismos que hacen a Lucía 🙂",
+    "¡Hola! Soy el asistente automático de Onia — sí, un bot, te lo digo de entrada 🙂",
     "Gracias por escribir. Te agendo la demo en 2 minutos, pero primero quiero saber si te va a servir de verdad.",
     "",
     "Contame tres cosas rápidas:",
@@ -53,7 +53,7 @@ export const SCRIPT = Object.freeze({
   // el primer mensaje YA trae los 3 datos: el disclosure es innegociable (D2) pero preguntar lo
   // que el prospecto acaba de contestar hace quedar mal al producto.
   M0_DISCLOSURE: [
-    "¡Hola! Soy el asistente automático de Onia — sí, un bot, los mismos que hacen a Lucía 🙂",
+    "¡Hola! Soy el asistente automático de Onia — sí, un bot, te lo digo de entrada 🙂",
     "Gracias por escribir.",
   ].join("\n"),
 
@@ -248,7 +248,11 @@ export const DEFAULT_CONFIG = Object.freeze({
 
   followUp: Object.freeze({
     maxSteps: 1, // regla N7: UN follow-up y despues silencio
-    afterHours: 22, // 22 h, no 24: se queda dentro de la ventana de servicio de Meta
+    // 20 h, no 22 ni 24. La ventana de servicio de Meta se cuenta desde el ULTIMO MENSAJE
+    // ENTRANTE (asi lo ancla followup-run.mjs, verificado). Con 22 quedaban 2 horas de colchon:
+    // si el cron se atrasa, el mensaje cae fuera de la ventana y falla con 131047, y fuera de
+    // la ventana solo salen plantillas — que hoy no existen. Con 20 quedan 4.
+    afterHours: 20,
     staleAfterDays: 7,
   }),
 
