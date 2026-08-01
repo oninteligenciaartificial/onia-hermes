@@ -96,12 +96,39 @@ Docs internos de referencia: `PRICING_RATIONALE_INTERNO.md`,
 `PLAYBOOK_CONSTRUCCION_INTERNO.md`, `ESTRATEGIA_PLANTILLAS_WEB_INTERNO.md`,
 `BCP_PASARELA_CREDENCIALES_INTERNO.md`.
 
+## Nada a medias — cerrar antes de abrir (REGLA)
+
+> Sergio 2026-08-01: *"no dejar nada vacío... nunca arrancar algo nuevo sin concluir
+> lo anterior"*. Nace de encontrar la capa multi-rubro **construida y apagada**
+> (`PLATFORM_LAYER` vacío en producción): semanas de trabajo sin efecto.
+
+- **Construido ≠ terminado.** Una función solo está hecha cuando está **encendida en
+  producción y verificada ahí**. Un flag apagado, una migración sin aplicar, una rama sin
+  mergear o un módulo que nadie llama **son trabajo con valor CERO**, no trabajo hecho.
+- **Prohibido reportar como hecho lo que está detrás de un flag apagado.** Si queda
+  apagado, se dice explícito y se dice por qué.
+- **Antes de abrir un frente nuevo, se cierra el anterior** o se anota en el doc de
+  parqueado con su estado exacto. Nada queda flotando en la conversación.
+- **Al cerrar una sesión, dejar SIEMPRE el estado escrito:** qué quedó terminado y en
+  producción, qué quedó a medias y dónde exactamente, y qué depende de Sergio. Si él abre
+  otra sesión, tiene que poder retomar sin releer la conversación.
+- **Antinorma:** dejar una cadena de cosas al 90% y reportar avance. Una función encendida
+  vale más que cinco construidas.
+
 ## ONIA Core (REGLA)
 
 > Fuente de verdad: `onia-core/contract.json` (beta v0.5.0, congelado para
 > adopcion; ver `onia-core/CHANGELOG.md`). Docs canonicos en `onia-core/*.md`.
 > Receta de instalacion en productos: `onia-core/ONIA_CORE_INSTALL_GUIDE_2026.md`.
 > DentalGest esta `installing` (9/9 entidades, wizard /setup, intake vivo).
+
+> ⚠️ **2026-08-01 — el core NO es hoy la columna vertebral, es un catálogo que el producto
+> copia a mano.** Verificado: el producto reimplementó la máquina de estados de work items
+> con semántica DISTINTA · 4 de 9 módulos (`automation`, `imports`, `payroll`, `knowledge`)
+> no existen en el producto · y `sync-onia-core.mjs` falló en silencio durante días, así que
+> mejoras del core (el total en Bs del TCO que exige la RND 102600000026) nunca llegaron.
+> **El rumbo es al revés: un rubro nuevo debe salir de ENCENDER capacidades del core, no de
+> escribir código nuevo.** Ver `hermes-content/docs/ONIA_CORE_Y_MODULOS_ANALISIS_20260731.md`.
 
 - ONIA Core es el nucleo operativo comun de los SaaS Onia (DentalGest, GestiOS,
   Ganadero OS, ProveeGest). Vive SOLO en este repo hasta aprobar adopcion.
