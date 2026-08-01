@@ -13,7 +13,7 @@ if [ -f "$PULSE_FILE" ]; then
   PULSE_B64=$(base64 -w0 "$PULSE_FILE" 2>/dev/null || base64 "$PULSE_FILE" | tr -d '\n')
 fi
 
-MODEL="${BUILDING_PUBLIC_MODEL:-gpt-4o-mini}"
+MODEL="${BUILDING_PUBLIC_MODEL:-gpt-4.1-mini}"
 DRY="${BUILDING_PUBLIC_DRY_RUN:-false}"
 MK=$(docker exec onia_selfhosted-litellm-1 printenv LITELLM_MASTER_KEY 2>/dev/null)
 

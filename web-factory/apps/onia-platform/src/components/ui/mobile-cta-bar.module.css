@@ -1,0 +1,48 @@
+.bar {
+  position: fixed;
+  z-index: 60;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: none;
+  gap: 0.6rem;
+  padding: 0.7rem clamp(0.9rem, 4vw, 1.4rem);
+  padding-bottom: calc(0.7rem + env(safe-area-inset-bottom, 0px));
+  background: color-mix(in oklab, var(--bg) 88%, transparent);
+  backdrop-filter: blur(12px);
+  border-top: 1px solid var(--line);
+  /* fuera de pantalla hasta que se activa; sin opacity para que el
+     pointer-events sea el unico gate y no queden botones fantasma */
+  transform: translateY(110%);
+  transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+
+.bar.on {
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+@media (max-width: 899px) {
+  .bar {
+    display: flex;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bar {
+    transition: none;
+  }
+}
+
+.action {
+  flex: 1;
+  min-height: 48px;
+  font-size: 0.95rem;
+}
+
+/* el fantasma de contraste: sobre el papel claro el ghost necesita fondo
+   propio para no perderse contra el blur */
+.bar :global(.btn-ghost) {
+  background: var(--surface);
+}

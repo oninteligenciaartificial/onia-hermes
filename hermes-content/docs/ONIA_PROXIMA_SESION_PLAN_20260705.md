@@ -1,7 +1,7 @@
-# ONIA — Plan de próxima sesión (2026-07-05)
+# Onia — Plan de próxima sesión (2026-07-05)
 
 Fecha: 2026-07-05. Propósito: UN solo plan deduplicado y priorizado del backlog
-abierto de ONIA. Auditoría read-only de 3 fuentes:
+abierto de Onia. Auditoría read-only de 3 fuentes:
 
 - `onia-core/ONIA_PENDIENTES_HANDOFF_20260704.md` (incl. §0 PROGRESO 2026-07-05)
 - `ONIA_SYSTEM_TASKBOARD_2026.md`
@@ -65,9 +65,9 @@ infra única (n8n/VPS/Supabase/tokens). Aislás eso y paralelizás.
 
 **Iniciativas nuevas (2026-07-05) — pasan por el carril I antes de construirse:**
 - Analizar productos ganadores (Halter, Medvi, etc.) → extraer el patrón que
-  gana y qué es replicable por ONIA.
+  gana y qué es replicable por Onia.
 - Ventures a validar: (1) importadora automatizada con IA (cruza con M5 landed
-  cost / TR4); (2) motor de venta diaria — ONIA levanta webs y vende sus
+  cost / TR4); (2) motor de venta diaria — Onia levanta webs y vende sus
   softwares a todo negocio (ejecución = carril B web-factory + C propuestas + H
   contenido + prospección n8n); (3) empresa tipo Nuvia (storefront productizado).
 - "Propuestas dentro del sistema": acción "generar propuesta" desde el panel
@@ -142,7 +142,7 @@ Sergio confirme (ver ítem S1-PRECIOS). Verifica: node generar-propuestas.test.j
 verde antes de cerrar. Genera los PDF y reporta las rutas de salida.
 ```
 
-### P2-SANEAMIENTO-F2 — ONIA Center: quitar/ocultar módulos vacíos y seeds hardcode
+### P2-SANEAMIENTO-F2 — Onia Center: quitar/ocultar módulos vacíos y seeds hardcode
 Prioridad 1. Impacto: lo primero que Sergio ve al entrar al panel. Solo edición
 de código en `web-factory/apps/site` (sin infra). Del saneamiento handoff Fase 2 +
 Anexo. **Depende de M1 (deploy) para verse en prod, pero el código se hace ya.**
@@ -180,7 +180,7 @@ typescript-reviewer antes de cerrar. Commit conventional. NO deployar (el deploy
 a prod es el ítem M1, requiere SSH + OK humano).
 ```
 
-### P3-SANEAMIENTO-F3 — ONIA Center: quitar rutina personal rígida + rediseño
+### P3-SANEAMIENTO-F3 — Onia Center: quitar rutina personal rígida + rediseño
 Prioridad 2 (después de P2). Solo código. Saneamiento handoff Fase 3.
 
 ```
@@ -246,13 +246,13 @@ Ordenados por impacto en vender/cobrar.
 |----|--------|------------------|------------|
 | **S1-PRECIOS** | Validar precios v2 del catálogo | Confirmar pymes 390/890/1.990 Bs + Empresarial E1 4.900+490 USD; ventana lanzamiento 31-jul | P1 (enviar propuestas), P4, R4 |
 | **S3-SECRET-INTAKE** | Pegar secret en n8n "DentalGest - Email Intake" | Nodo POST → credencial "DentalGest Intake Secret" (Name x-intake-secret, Value Ctrl+V) → Publish; probar correo→/pending | Circuito email intake DentalGest completo |
-| **S2-NIT-SIAT** | Iniciar formalización NIT ONIA | Trámite NIT (bloqueo #1 del plan SIAT) | Certificación SIAT proveedor, facturación |
+| **S2-NIT-SIAT** | Iniciar formalización NIT Onia | Trámite NIT (bloqueo #1 del plan SIAT) | Certificación SIAT proveedor, facturación |
 | **S4-TR4-COLS** | Pedir a Saúl columnas del export TR4 | Columnas exactas del Excel + frecuencia | M5-LANDED-COST (landed cost v1) |
 | **S5-META** | Verificación de negocio Meta | Avanzar verificación Meta | WhatsApp→Chatwoot (TASKBOARD B6→B7) |
 | **S6-IG-TOKEN** | Token IG long-lived + Business Account ID | Generar token largo + Business Account ID | Publicación IG (TASKBOARD B1/B5) |
 | **S7-KEYS-TAVILY-FAL** | API keys Tavily + fal.ai (free tier) | Alta y cargar keys | Prospección con fuentes (Tavily) + imágenes (fal.ai) |
 | **S8-FISCAL** | Datos fiscales con contador | NIT/régimen/responsable/calendario validados | Recordatorios fiscales activos (TASKBOARD B9) |
-| **S9-PASSWORD** | Cambiar password ONIA Center | Cambiar la password (la primera se expuso en chat 2026-07-04) | Higiene de seguridad |
+| **S9-PASSWORD** | Cambiar password Onia Center | Cambiar la password (la primera se expuso en chat 2026-07-04) | Higiene de seguridad |
 
 Nota: S5/S6/S7/S8 = PENDIENTES B-bis #7/#8/#9/#10 = TASKBOARD B1/B2/B3/B6/B9
 (mismos ítems, deduplicados aquí). S2 y S8 se solapan parcialmente (ambos tocan
@@ -270,7 +270,7 @@ completo para recordatorios.
 | **R2-DENTAGEST-UI** | Completar UI del core en DentaGest (demo-able) | `C:\dev\proyectos\DentaGest\dental-saas` | ✅ CERRADO (verificado por git log real). |
 | **R4-DENTAGEST-SELFSERVE** | Pago QR/pasarela BCP + wizard /setup self-service | onia-hermes + DentaGest | ✅ CERRADO (verificado por git log real). |
 | **R7-DENTAGEST-DENTAL-MODULE** | Adoptar el módulo `dental` (clínico) en DentaGest | `C:\dev\proyectos\DentaGest\dental-saas` | NUEVO (2026-07-08, propuesto por Sergio tras cerrar R6). 6 entidades gap confirmadas contra el schema real de DentaGest (verificación 2026-07-06): `perio_chart`, `treatment_plan`, `informed_consent`, `medical_alert`, `dental_lab_case`, `tooth_image`. Traducir `onia-core/modules/dental.schema.sql` a Prisma (namespace `onia_dental_*`) + portar `dental.logic.mjs` (21 tests), mismo mecanismo de consumo de `@onia/core` que ya resolvió R6. Gate: typecheck+tests verdes, push master. |
-| **R3-BE-FASE1** | Bolivian Electric fase 1 + inbox Chatwoot + puente TR4 | `C:\dev\clientes\Bolivian Electric` | PENDIENTES C8 + TASKBOARD B (ancla Empresarial). Migrar inbox Chatwoot a SU VPS srv1793230 (NO mezclar con VPS ONIA); cerrar y documentar ticket real → ancla ONIA Empresarial; puente TR4 por planillas. Al cerrar, calibra precios Empresarial (PENDIENTES B#6). |
+| **R3-BE-FASE1** | Bolivian Electric fase 1 + inbox Chatwoot + puente TR4 | `C:\dev\clientes\Bolivian Electric` | PENDIENTES C8 + TASKBOARD B (ancla Empresarial). Migrar inbox Chatwoot a SU VPS srv1793230 (NO mezclar con VPS Onia); cerrar y documentar ticket real → ancla Onia Empresarial; puente TR4 por planillas. Al cerrar, calibra precios Empresarial (PENDIENTES B#6). |
 | **R5-EXTRACT-PKGS** | Extraer paquetes @onia/* (core-db, fiscal, ui) | monorepo/paquetes privados | PENDIENTES C7. **NO antes de que R1 (GestiOS) pruebe los patrones** (regla). Fuente: ONIA_ECOSYSTEM_INVENTORY_20260704.md. |
 
 ---
@@ -311,7 +311,7 @@ PENDIENTES A4 "PENDIENTE MENOR limpiar ~61 tareas" + A5 cola.
 ### M2-N8N-AUTONOMIZAR — Autonomizar workflows restantes + crons faltantes
 n8n MCP. PENDIENTES C10, fusiona TASKBOARD B13/B14 (importar
 onia-trend-recommendations + encadenar briefings). Regla Sergio: workflows
-autónomos, sin ONIA Center endpoints ni SearXNG localhost.
+autónomos, sin Onia Center endpoints ni SearXNG localhost.
 - Migrar `onia-center-daily-briefing` (ONIADailyBrief001) y
   `onia-trend-recommendations` al patrón autónomo del workflow de guiones
   `NDXLJiR00ciQx72V` (nodo OpenAI nativo cred "OpenAi account" + telegramApi,
@@ -331,7 +331,7 @@ n8n MCP. PENDIENTES C11.
   archivar). Estado: ONIA_N8N_CLEANUP_20260703.md.
 
 ### M4-RADAR-WORKITEM — Radar normativo → WorkItem automático
-n8n MCP. PENDIENTES C6. **Bloqueado hasta que exista org ONIA en DentaGest/GestiOS
+n8n MCP. PENDIENTES C6. **Bloqueado hasta que exista org Onia en DentaGest/GestiOS
 con intake activo** (depende de R1/R2 + S3). Extender workflow `OovRU4r0o7pvglJP`
 para POSTear cada novedad al intake (channel email_shared, "Revisar impacto
 RND-X") además de Telegram. Editar vía update_workflow (como el FX).
@@ -376,7 +376,7 @@ prioridad si sobra ventana. NO compiten con P1-P4.
   agente.
 - **Self-service DentalGest**: PENDIENTES C3 se partió en P4 (landing captación,
   web-factory, AGENTE-YA) + R4 (pago/wizard, DentaGest, OTRO-REPO).
-- **Saneamiento ONIA Center**: A5 (PENDIENTES) + "PENDIENTE MENOR 61 tareas" de
+- **Saneamiento Onia Center**: A5 (PENDIENTES) + "PENDIENTE MENOR 61 tareas" de
   A4 + Fase 1/2/3 del handoff → M1 (deploy+cleanup, infra), P2 (Fase 2, código),
   P3 (Fase 3, código).
 - **n8n briefing autónomo**: PENDIENTES C10 + TASKBOARD B13/B14 + estado n8n del

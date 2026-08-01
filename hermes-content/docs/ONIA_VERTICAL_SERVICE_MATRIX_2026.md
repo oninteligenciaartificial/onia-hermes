@@ -1,14 +1,14 @@
-# ONIA Vertical Service Matrix 2026
+# Onia Vertical Service Matrix 2026
 
 Estado: matriz canonica auditada en
 `hermes-content/docs/ONIA_VERTICAL_SERVICE_AUDIT_2026.md`.
 Fecha: 2026-06-27.
-Uso: definir como ONIA empaqueta DentalGest, GestiOS y futuras verticales por
+Uso: definir como Onia empaqueta DentalGest, GestiOS y futuras verticales por
 rubro sin crear sistemas duplicados ni vender add-ons gratis.
 
 ## Veredicto
 
-ONIA debe vender soluciones por rubro, pero construirlas por familias
+Onia debe vender soluciones por rubro, pero construirlas por familias
 operativas.
 
 La regla correcta es:
@@ -24,7 +24,7 @@ repositorio, base de datos y equipo distinto para cada rubro.
 
 ## Arquitectura comercial
 
-Cada oferta ONIA debe quedar en cuatro niveles:
+Cada oferta Onia debe quedar en cuatro niveles:
 
 ```text
 1. Familia operativa interna
@@ -61,7 +61,7 @@ Crear producto/rama propia solo si cambian al menos 4 de estos puntos:
 Si solo cambian nombres visibles, campos y plantillas, queda como configuracion
 dentro de una familia existente.
 
-## Base ONIA compartida
+## Base Onia compartida
 
 Toda vertical empresarial deberia poder usar esta base:
 

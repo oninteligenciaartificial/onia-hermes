@@ -11,8 +11,8 @@ Reference file:
 
 ## How Hermes Should Use Them
 
-These references currently belong primarily to Sergio's personal brand. ONIA may
-borrow the structure only when the user explicitly asks for an ONIA story with a
+These references currently belong primarily to Sergio's personal brand. Onia may
+borrow the structure only when the user explicitly asks for an Onia story with a
 personal/founder mood.
 
 Use story references when the user asks for:
@@ -45,7 +45,7 @@ for a Story-style carousel.
 - Add one interaction layer when useful: poll, slider, question, quiz, or CTA.
 - Never copy third-party photos, logos, text, music cards, people, brands, or
   exact layouts.
-- Convert the structure into original Sergio, ONIA, or client visuals depending
+- Convert the structure into original Sergio, Onia, or client visuals depending
   on the lane.
 
 ## Story Sequence Template

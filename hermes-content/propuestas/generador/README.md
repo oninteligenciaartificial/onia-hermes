@@ -1,4 +1,4 @@
-# Generador de Propuestas ONIA
+# Generador de Propuestas Onia
 
 Sistema para armar propuestas comerciales (HTML + PDF) desde una sola plantilla
 y datos por cliente. Objetivo: **máxima producción** — cerrar más clientes sin
@@ -35,7 +35,7 @@ node generar-propuestas.js dentalgest --track clinica-sonrisa-jul26
 
 `--track <token>` genera un archivo extra `propuesta-<slug>-<token>.html` con un
 pixel invisible que llama al webhook n8n `propuesta-abierta` (workflow
-"ONIA - Propuesta Abierta (pixel)", id `UMpcKi7wfMmC9KCw`). Al abrirlo, Sergio
+"Onia - Propuesta Abierta (pixel)", id `UMpcKi7wfMmC9KCw`). Al abrirlo, Sergio
 recibe por Telegram: token del prospecto, slug, hora y dispositivo.
 
 - Enviar al prospecto el **HTML trackeado** (o hostearlo); el PDF normal no
@@ -84,7 +84,7 @@ imágenes +72% cierre, prueba social +34%, CTA claro):
 | `resumenEjecutivo` | párrafo tras el hero (acepta `<b>`) — para compradores formales |
 | `imagenes[]` | `src` (relativo a /propuestas, ej. `assets/x.jpg`), `alt`, `caption` |
 | `casos[]` | prueba social REAL: `titulo`, `detalle`. NO fabricar — vacío hasta tener casos |
-| `comparativa` | tabla vs. statu quo: `titulo`, `columnas[2]`, `filas[][3]` (aspecto, ellos, ONIA) |
+| `comparativa` | tabla vs. statu quo: `titulo`, `columnas[2]`, `filas[][3]` (aspecto, ellos, Onia) |
 | `proximosPasos[]` | 3 pasos concretos para cerrar |
 | `ctaWhatsapp` | botón final: `url` (wa.me con texto prefilleado), `texto` |
 
@@ -97,7 +97,7 @@ screenshot real del panel, reemplaza la ambientación.
 Ver `../PRICING_RATIONALE_INTERNO.md` (interno). Resumen:
 - Línea estándar: Landing 2,000 / Web Pro 4,500.
 - Cobrar la automatización (BCP/n8n/WhatsApp/CRM), no los píxeles.
-- El margen vive en lo recurrente (Cuidado Web / GestiOS / videos).
+- El margen vive en lo recurrente (Cuidado Web / Onia Comercio / videos).
 - Dominio, hosting y comisión de pasarela los paga el cliente — nunca en precio.
 - Nunca mencionar al cliente que usamos plantillas.
 

@@ -2,101 +2,100 @@
 
 import * as m from "motion/react-m";
 import { AnimatePresence } from "motion/react";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import type { KeyboardEvent } from "react";
 import { Reveal, springs } from "@/motion";
-import {
-  DENTALGEST_URL,
-  WA_TEXT_COMERCIO,
-  WA_TEXT_PROVEEDORES,
-  WA_TEXT_SERVICIOS,
-  WA_URL,
-  waLink,
-} from "@/lib/site";
+import { useRubro } from "@/components/rubro-context";
+import { waLink } from "@/lib/site";
+import { RUBROS_PLANES, textoRubroEnConstruccion } from "@/lib/pricing";
+import type { RubroId } from "@/lib/pricing";
 import styles from "./rubros.module.css";
 
 /**
  * Seccion c — el selector de rubros ES la animacion: al cambiar de pestaña
  * los bloques del rubro anterior se desacoplan y los del nuevo se ensamblan.
  * En los "proximamente" el ensamblaje queda a medio armar A PROPOSITO
- * (2 de 4 bloques): honestidad hecha animacion.
+ * (1 de 4 bloques): honestidad hecha animacion.
+ *
+ * El rubro elegido aca MANDA en la seccion de precios y en el mensaje de
+ * WhatsApp de las puertas (contexto compartido) — el visitante dice quien es
+ * una sola vez.
+ *
+ * Nunca presentar el pack dental como una marca aparte: Onia es UNA plataforma
+ * y "dental" es su primer pack (ONIA_ENFOQUE_20260727 §4).
  */
 
-type Rubro = {
-  id: string;
-  label: string;
-  available: boolean;
+type Detalle = {
   title: string;
   body: string;
   blocks: readonly string[];
   /** Cuantos bloques estan construidos de verdad (los demas van en fantasma). */
   built: number;
-  ctaLabel: string;
-  ctaHref: string;
-  ctaSecondary?: { label: string; href: string };
   micro?: string;
 };
 
-const RUBROS: readonly Rubro[] = [
-  {
-    id: "dental",
-    label: "Dental",
-    available: true,
-    title: "DentalGest — para clínicas y consultorios dentales.",
-    body: "Agenda, historias clínicas, facturación y un agente que reprograma a los pacientes que te fallan. Es el primer rubro de Onia y ya está andando.",
-    blocks: ["Agenda", "Historias clínicas", "Facturación", "Agente IA"],
+/**
+ * Estado real por rubro — verificado contra
+ * ONIA_PLATFORM_ESTRUCTURA_20260730.md §2/§3. El primer bloque de los rubros
+ * en construccion es la base comun, que si existe; el resto, no.
+ */
+const DETALLE: Record<RubroId, Detalle> = {
+  dental: {
+    title: "Para clínicas y consultorios dentales.",
+    body: "Agenda, historia clínica con odontograma, cobros y un agente que reprograma a los pacientes que te fallan. Es el primer pack de Onia y es el que está andando hoy.",
+    blocks: ["Agenda", "Historia clínica", "Cobros y caja", "Agente que reprograma"],
     built: 4,
-    ctaLabel: "Conocer DentalGest",
-    ctaHref: DENTALGEST_URL,
-    ctaSecondary: { label: "Hablanos por WhatsApp", href: WA_URL },
-    micro: "Desde Bs 320/mes — precios de lanzamiento.",
+    micro: "Desde Bs 320/mes — precio de lanzamiento, con los tres planes publicados.",
   },
-  {
-    id: "comercio",
-    label: "Comercio",
-    available: false,
+  proveedores: {
+    title: "Para importadoras y distribuidoras.",
+    body: "El segundo pack, arrancando por material eléctrico: pedidos, entregas, cuentas por cobrar y costeo de importación. La base ya da de alta la cuenta; las pantallas del rubro se están construyendo.",
+    blocks: [
+      "Cuenta y usuarios (base común)",
+      "Pedidos y entregas",
+      "Stock y cuentas por cobrar",
+      "Costeo de importación",
+    ],
+    built: 1,
+  },
+  comercio: {
     title: "Para tiendas y comercios.",
-    body: "Inventario, ventas, cobro con QR y facturación. Lo estamos construyendo sobre el mismo motor que ya corre en DentalGest.",
-    blocks: ["Inventario", "Ventas", "Cobro QR", "Facturación"],
-    built: 2,
-    ctaLabel: "Anotate — te avisamos cuando esté",
-    ctaHref: waLink(WA_TEXT_COMERCIO),
+    body: "Inventario, ventas y cobro con QR sobre el mismo motor que ya corre en dental. Todavía no tiene pantallas propias.",
+    blocks: [
+      "Cuenta y usuarios (base común)",
+      "Inventario",
+      "Ventas y cobro QR",
+      "Facturación",
+    ],
+    built: 1,
   },
-  {
-    id: "servicios",
-    label: "Servicios",
-    available: false,
+  servicios: {
     title: "Para negocios de servicios.",
-    body: "Agenda de trabajos, presupuestos, seguimiento de clientes y cobros.",
-    blocks: ["Agenda de trabajos", "Presupuestos", "Seguimiento", "Cobros"],
-    built: 2,
-    ctaLabel: "Anotate — te avisamos cuando esté",
-    ctaHref: waLink(WA_TEXT_SERVICIOS),
+    body: "Agenda de trabajos, presupuestos, seguimiento de clientes y cobros. Está en la fila, sobre el mismo motor.",
+    blocks: [
+      "Cuenta y usuarios (base común)",
+      "Agenda de trabajos",
+      "Presupuestos",
+      "Cobros",
+    ],
+    built: 1,
   },
-  {
-    id: "proveedores",
-    label: "Proveedores",
-    available: false,
-    title: "Para distribuidores y proveedores.",
-    body: "Pedidos, entregas, cuentas por cobrar.",
-    blocks: ["Pedidos", "Entregas", "Cuentas por cobrar", "Facturación"],
-    built: 2,
-    ctaLabel: "Anotate — te avisamos cuando esté",
-    ctaHref: waLink(WA_TEXT_PROVEEDORES),
-  },
-] as const;
+};
 
 export function Rubros() {
-  const [active, setActive] = useState(0);
+  const { rubro, setRubro } = useRubro();
   const tabRefs = useRef<Array<HTMLButtonElement | null>>([]);
-  const rubro = RUBROS[active];
+  const active = RUBROS_PLANES.findIndex((r) => r.id === rubro);
+  const meta = RUBROS_PLANES[active < 0 ? 0 : active];
+  const detalle = DETALLE[meta.id];
+  const disponible = meta.estado === "disponible";
 
   function onTabKey(e: KeyboardEvent<HTMLDivElement>) {
     const dir = e.key === "ArrowRight" ? 1 : e.key === "ArrowLeft" ? -1 : 0;
     if (!dir) return;
     e.preventDefault();
-    const next = (active + dir + RUBROS.length) % RUBROS.length;
-    setActive(next);
+    const next = (active + dir + RUBROS_PLANES.length) % RUBROS_PLANES.length;
+    setRubro(RUBROS_PLANES[next].id);
     tabRefs.current[next]?.focus();
   }
 
@@ -107,9 +106,9 @@ export function Rubros() {
           <p className="kicker">Rubros</p>
           <h2 className="h2">Un sistema, tu rubro.</h2>
           <p className="lead">
-            Onia no es un software genérico con tu logo encima. Cada rubro es
-            una configuración completa: lo que se agenda, lo que se cobra, lo
-            que se factura. Esto es lo que hay hoy — sin humo.
+            Onia no es un software genérico con tu logo encima. Cada rubro es un
+            pack completo de la misma plataforma: lo que se agenda, lo que se
+            cobra, lo que se factura. Esto es lo que hay hoy — sin humo.
           </p>
         </Reveal>
 
@@ -119,7 +118,7 @@ export function Rubros() {
           className={styles.tabs}
           onKeyDown={onTabKey}
         >
-          {RUBROS.map((r, i) => (
+          {RUBROS_PLANES.map((r, i) => (
             <button
               key={r.id}
               ref={(el) => {
@@ -131,23 +130,25 @@ export function Rubros() {
               aria-controls={`panel-${r.id}`}
               tabIndex={i === active ? 0 : -1}
               className={`${styles.tab} ${i === active ? styles.tabActive : ""}`}
-              onClick={() => setActive(i)}
+              onClick={() => setRubro(r.id)}
             >
               {r.label}
-              {!r.available ? <span className={styles.tabSoon}>pronto</span> : null}
+              {r.estado !== "disponible" ? (
+                <span className={styles.tabSoon}>pronto</span>
+              ) : null}
             </button>
           ))}
         </div>
 
         <div
           role="tabpanel"
-          id={`panel-${rubro.id}`}
-          aria-labelledby={`tab-${rubro.id}`}
+          id={`panel-${meta.id}`}
+          aria-labelledby={`tab-${meta.id}`}
           className={styles.panel}
         >
           <AnimatePresence mode="wait" initial={false}>
             <m.div
-              key={rubro.id}
+              key={meta.id}
               className={styles.panelGrid}
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
@@ -155,33 +156,47 @@ export function Rubros() {
               transition={springs.gentle}
             >
               <div className={styles.panelCopy}>
-                <span
-                  className={`badge ${rubro.available ? "badge-on" : "badge-soon"}`}
-                >
-                  {rubro.available ? "DISPONIBLE" : "PRÓXIMAMENTE"}
+                <span className={`badge ${disponible ? "badge-on" : "badge-soon"}`}>
+                  {disponible ? "DISPONIBLE" : "EN CONSTRUCCIÓN"}
                 </span>
-                <h3 className={styles.panelTitle}>{rubro.title}</h3>
-                <p className={styles.panelBody}>{rubro.body}</p>
+                <h3 className={styles.panelTitle}>{detalle.title}</h3>
+                <p className={styles.panelBody}>{detalle.body}</p>
                 <div className={styles.panelCtas}>
-                  <a href={rubro.ctaHref} className="btn btn-wa">
-                    <span className="btn-dot" aria-hidden />
-                    {rubro.ctaLabel}
-                  </a>
-                  {rubro.ctaSecondary ? (
-                    <a href={rubro.ctaSecondary.href} className="btn btn-ghost">
-                      {rubro.ctaSecondary.label}
-                    </a>
-                  ) : null}
+                  {disponible ? (
+                    <>
+                      <a href="#precios" className="btn btn-wa">
+                        <span className="btn-dot" aria-hidden />
+                        Ver los planes y precios
+                      </a>
+                      <a href="/empezar" className="btn btn-ghost">
+                        Armar mi recomendación
+                      </a>
+                    </>
+                  ) : (
+                    <>
+                      <a
+                        href={waLink(textoRubroEnConstruccion(meta))}
+                        className="btn btn-wa"
+                      >
+                        <span className="btn-dot" aria-hidden />
+                        Hablemos de mi caso
+                      </a>
+                      <a href="#precios" className="btn btn-ghost">
+                        Ver qué se puede hoy
+                      </a>
+                    </>
+                  )}
                 </div>
-                {rubro.micro ? (
-                  <p className={styles.panelMicro}>{rubro.micro}</p>
-                ) : null}
+                <p className={styles.panelMicro}>
+                  {detalle.micro ??
+                    "Este rubro todavía no tiene precio publicado — no inventamos uno para llenar el cuadro."}
+                </p>
               </div>
 
               {/* el ensamblaje: bloques construidos vs. fantasma */}
               <div className={styles.assembly} aria-hidden>
-                {rubro.blocks.map((b, i) => {
-                  const ghost = i >= rubro.built;
+                {detalle.blocks.map((b, i) => {
+                  const ghost = i >= detalle.built;
                   return (
                     <m.div
                       key={b}

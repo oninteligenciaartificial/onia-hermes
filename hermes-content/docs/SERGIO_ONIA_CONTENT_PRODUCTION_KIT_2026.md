@@ -1,4 +1,4 @@
-# Sergio / ONIA Content Production Kit 2026
+# Sergio / Onia Content Production Kit 2026
 
 Estado: canonico interno para briefs, guiones y prompts de video.
 
@@ -9,7 +9,7 @@ No reemplaza aprobaciones humanas. La cara y voz de Sergio pueden usarse como re
 Tener un sistema listo para producir videos de:
 
 - Sergio como marca personal y fundador operador.
-- ONIA como empresa de automatizacion, IA y consultoria.
+- Onia como empresa de automatizacion, IA y consultoria.
 - Clientes externos con estilo UGC, demostracion o venta.
 
 Cada pieza debe elegir un carril antes de escribir: `sergio`, `onia` o `cliente`. No mezclar precios, promesas, servicios ni mensajes comerciales entre marcas.
@@ -32,7 +32,7 @@ Sergio debe verse reconocible, serio y consistente: ropa negra, limpia, simple, 
 | ID | Outfit | Uso principal | Prompt visual |
 | --- | --- | --- | --- |
 | `black_operator_basic` | Camiseta negra limpia, pantalon negro o jean oscuro, zapatos oscuros | Videos diarios, hooks directos, marca personal | `wearing a clean all-black outfit: black t-shirt, black pants, dark shoes, no visible logos` |
-| `black_consultant` | Camiseta negra con overshirt, chaqueta ligera o blazer negro | Auditorias, consultoria, ventas B2B, ONIA | `wearing a black t-shirt with a black overshirt or lightweight black jacket, professional but approachable` |
+| `black_consultant` | Camiseta negra con overshirt, chaqueta ligera o blazer negro | Auditorias, consultoria, ventas B2B, Onia | `wearing a black t-shirt with a black overshirt or lightweight black jacket, professional but approachable` |
 | `black_technical_demo` | Hoodie negro o chaqueta negra con cierre, pantalon oscuro | Demos tecnicas, n8n, Notion, IA, builds | `wearing a black hoodie or black zip jacket, practical technical operator look` |
 | `black_premium_meeting` | Blazer negro o chaqueta estructurada, camiseta negra, pantalon oscuro | Propuestas, autoridad, clientes premium | `wearing a black blazer over a black t-shirt, clean premium consultant look` |
 | `black_content_casual` | Camiseta negra, reloj sencillo, fondo real de trabajo | Clips espontaneos, reels, historias | `wearing a simple black t-shirt, natural creator setup, authentic phone-camera look` |
@@ -49,7 +49,7 @@ Evitar: logos grandes, estampados fuertes, ropa brillante, colores neon, trajes 
 - Escenas: escritorio, telefono en mano, caminando, pantalla con proceso.
 - Uso: lecciones, errores, decisiones, aprendizajes, mini historias.
 
-### Sergio consultor ONIA
+### Sergio consultor Onia
 
 - Carril: `onia`.
 - Energia: estratega practico, auditor, solucionador.
@@ -73,13 +73,13 @@ Evitar: logos grandes, estampados fuertes, ropa brillante, colores neon, trajes 
 - Escenas: noche de trabajo, cafe, escritorio, notas, dashboard.
 - Uso: autoridad humana, storytelling, confianza.
 
-### ONIA narrator/system explainer
+### Onia narrator/system explainer
 
 - Carril: `onia`.
 - Energia: claro, comercial, consultivo.
 - Outfit: no depende de Sergio; puede ser voz/narrador o avatar generico aprobado.
 - Escenas: diagramas, flujos, pantallas, CRM, WhatsApp, n8n, dashboards.
-- Uso: explicar servicios ONIA sin centrar todo en Sergio.
+- Uso: explicar servicios Onia sin centrar todo en Sergio.
 
 ### Client UGC operator
 
@@ -102,7 +102,7 @@ Evitar: logos grandes, estampados fuertes, ropa brillante, colores neon, trajes 
 | `sergio_decision_board` | Pizarra, Notion o tablero con decisiones y prioridades | Estrategia, negocio, auditoria |
 | `sergio_whatsapp_lead` | Telefono con WhatsApp/CRM simulado, sin datos reales visibles | Ventas y automatizacion |
 
-### ONIA
+### Onia
 
 | ID | Escena | Uso |
 | --- | --- | --- |
@@ -231,7 +231,7 @@ Variantes soportadas:
 | Variante | Uso | Look |
 | --- | --- | --- |
 | `black_operator_basic` | videos diarios, founder story, hooks directos | camiseta negra, pantalon oscuro, sin logos |
-| `black_consultant` | auditorias ONIA, ventas B2B, consultoria | camiseta negra con overshirt o chaqueta ligera negra |
+| `black_consultant` | auditorias Onia, ventas B2B, consultoria | camiseta negra con overshirt o chaqueta ligera negra |
 | `black_technical_demo` | n8n, Notion, prompts, demos tecnicas | hoodie negro o chaqueta negra con cierre |
 | `black_premium_meeting` | propuestas premium, autoridad, reuniones | blazer negro sobre camiseta negra |
 
@@ -252,7 +252,7 @@ Escenas listas para avatar:
 | ID | Uso | Prompt |
 | --- | --- | --- |
 | `avatar_desk_confession` | founder story | Sergio seated at a real desk, laptop open, direct eye contact, one decisive sentence, warm practical tone |
-| `avatar_audit_table` | consultoria ONIA | Sergio reviewing a simple sales audit board, sticky notes, WhatsApp-to-CRM flow with fictional data only |
+| `avatar_audit_table` | consultoria Onia | Sergio reviewing a simple sales audit board, sticky notes, WhatsApp-to-CRM flow with fictional data only |
 | `avatar_screen_operator` | demo tecnica | Sergio beside a screen overlay showing a clean automation workflow, pointing at one key step |
 | `avatar_phone_walk` | reflexion rapida | Sergio walking slowly with phone-camera selfie, black outfit, natural hallway or urban background |
 | `avatar_client_call_prep` | confianza B2B | Sergio preparing for a client call, laptop, notes, CRM checklist, calm confident body language |
@@ -272,7 +272,7 @@ Regla operativa:
 - Publicar requiere `Publicar video <job_id>`.
 - Si el video menciona que Sergio tiene 16 anos, mantener encuadre fundador/proceso/educativo; nada de adulto aspiracional, sexualizado o claims exagerados.
 
-## Prompt base ONIA
+## Prompt base Onia
 
 ```text
 Vertical business content video for ONIA, practical AI automation and sales operations consultancy, clean real workspace, WhatsApp leads, CRM board, n8n workflow and Notion dashboard shown only with fictional/safe data, consultant-led explanation, modern but realistic production, clear business problem, human sales handoff, no exaggerated claims.
@@ -373,7 +373,7 @@ Usar ropa negra como uniforme de marca. Variar textura y capas, no identidad.
 | ID | Uso | Prompt |
 | --- | --- | --- |
 | `black_operator_basic` | contenido diario, hooks, backstage | `clean black fitted t-shirt, dark straight pants or dark jeans, dark minimalist sneakers, no visible logos` |
-| `black_consultant` | auditorias, ONIA, B2B | `black t-shirt under a clean black overshirt or unstructured black blazer, tailored dark pants, professional but approachable` |
+| `black_consultant` | auditorias, Onia, B2B | `black t-shirt under a clean black overshirt or unstructured black blazer, tailored dark pants, professional but approachable` |
 | `black_technical_demo` | n8n, pantallas, sistemas | `black technical zip jacket or black hoodie, dark pants, practical operator look, no logos` |
 | `black_premium_meeting` | piezas premium, propuestas | `structured black blazer over black crew neck or black mock neck, tailored black trousers, clean black loafers or minimalist sneakers` |
 | `black_lifestyle_casual` | TikTok/Reels mas organicos | `black t-shirt, black open overshirt, dark jeans, natural creator style, no luxury flex` |
@@ -587,7 +587,7 @@ No fake celebrity, no copying a real creator identity, no unapproved logos, no c
 - Hook: error comun o contrario.
 - CTA: comentar, guardar, pedir que revise un caso.
 
-### ONIA auditoria
+### Onia auditoria
 
 - Carril: `onia`.
 - Persona: `sergio_consultor_onia`.
@@ -596,7 +596,7 @@ No fake celebrity, no copying a real creator identity, no unapproved logos, no c
 - Hook: problema directo.
 - CTA: pedir auditoria o diagnostico.
 
-### ONIA demo tecnica
+### Onia demo tecnica
 
 - Carril: `onia`.
 - Persona: `sergio_demo_tecnica`.
@@ -625,7 +625,7 @@ No fake celebrity, no copying a real creator identity, no unapproved logos, no c
 
 ## Checklist antes de producir
 
-1. Confirmar carril: Sergio, ONIA o cliente.
+1. Confirmar carril: Sergio, Onia o cliente.
 2. Confirmar si se usara cara real, avatar generico o solo B-roll.
 3. Confirmar si se usara voz real, TTS generico o subtitulos.
 4. Elegir outfit, persona, escena y hook.

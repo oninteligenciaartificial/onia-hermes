@@ -1,8 +1,8 @@
 "use client";
 
-import { BrandWordmark } from "@/components/brand-wordmark";
+import { BrandLogo } from "@/components/brand-logo";
 import { DisplayToggle } from "@/components/ui/display-toggle";
-import { APP_URL, DENTALGEST_URL, WA_URL } from "@/lib/site";
+import { APP_URL, WA_URL } from "@/lib/site";
 import styles from "./site-footer.module.css";
 
 const FOOTER_MODULES = [
@@ -31,7 +31,7 @@ export function SiteFooter() {
         <div className={styles.grid}>
           <div>
             <div className={styles.brand}>
-              <BrandWordmark height={22} />
+              <BrandLogo height={22} />
             </div>
             <p className={styles.blurb}>
               El sistema con IA que maneja tu negocio completo. Elegís tu
@@ -45,16 +45,19 @@ export function SiteFooter() {
             <a href="/#como-funciona">Cómo funciona</a>
             <a href="/#rubros">Rubros</a>
             <a href="/#modulos">Módulos</a>
+            <a href="/#precios">Precios</a>
             <a href="/#bolivia">Hecho para Bolivia</a>
-            <a href="/#preguntas">Preguntas</a>
+            <a href="/#preguntas">Objeciones</a>
           </nav>
 
-          <nav aria-label="Productos" className={styles.col}>
-            <p className={styles.colTitle}>Productos</p>
-            <a href={DENTALGEST_URL}>DentalGest — clínicas dentales</a>
-            <span className={styles.soon}>Comercio — próximamente</span>
-            <span className={styles.soon}>Servicios — próximamente</span>
-            <span className={styles.soon}>Proveedores — próximamente</span>
+          {/* Onia es UNA plataforma: los rubros son packs de la misma app, no
+              productos hermanos con marca propia. */}
+          <nav aria-label="Packs por rubro" className={styles.col}>
+            <p className={styles.colTitle}>Packs por rubro</p>
+            <a href="/#precios">Dental — disponible, con precio publicado</a>
+            <span className={styles.soon}>Importadora — en construcción</span>
+            <span className={styles.soon}>Comercio — en construcción</span>
+            <span className={styles.soon}>Servicios — en construcción</span>
           </nav>
 
           <div className={styles.col}>
@@ -83,6 +86,18 @@ export function SiteFooter() {
             <a href="/privacidad">Política de Privacidad</a>
           </nav>
           <p className="mono">© 2026 Onia</p>
+          {/* Identidad legal. La usa la verificación de negocio de Meta, que cruza
+              el sitio contra el documento (SEPREC). El domicilio fiscal es
+              particular: NO se publica — va solo en el formulario privado. */}
+          <address className={styles.legalId}>
+            OniaAgency
+            <span aria-hidden> · </span>NIT 5371375010
+            <span aria-hidden> · </span>Santa Cruz de la Sierra, Bolivia
+            <span aria-hidden> · </span>
+            <a href="tel:+59178491375">+591 78491375</a>
+            <span aria-hidden> · </span>
+            <a href="mailto:business@onia.com.bo">business@onia.com.bo</a>
+          </address>
         </div>
       </div>
     </footer>

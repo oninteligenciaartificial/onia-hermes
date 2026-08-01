@@ -1,0 +1,836 @@
+<!doctype html>
+<html
+  lang="es"
+  data-composition-variables='[
+    {"id":"eyebrow","type":"string","label":"Antetitulo","default":"155 DÍAS EN PÚBLICO"},
+    {"id":"titulo","type":"string","label":"Titulo","default":"OBJETIVOS"},
+    {"id":"accent","type":"color","label":"Acento","default":"#00D26A"},
+    {"id":"siat","type":"string","label":"Homologacion SIAT","default":"sin iniciar"},
+    {"id":"siatEstado","type":"string","label":"Homologacion SIAT — estado","default":"pendiente"},
+    {"id":"mrr","type":"string","label":"MRR","default":"USD 739"},
+    {"id":"mrrEstado","type":"string","label":"MRR — estado","default":"progreso"},
+    {"id":"clientes","type":"string","label":"Clientes activos","default":"0"},
+    {"id":"clientesEstado","type":"string","label":"Clientes activos — estado","default":"pendiente"},
+    {"id":"llamadas","type":"string","label":"Llamadas y demos","default":"0"},
+    {"id":"llamadasEstado","type":"string","label":"Llamadas y demos — estado","default":"pendiente"},
+    {"id":"internacionales","type":"string","label":"Clientes internacionales","default":"0"},
+    {"id":"internacionalesEstado","type":"string","label":"Internacionales — estado","default":"pendiente"},
+    {"id":"churn","type":"string","label":"Churn mensual","default":"sin medir"},
+    {"id":"churnEstado","type":"string","label":"Churn — estado","default":"pendiente"},
+    {"id":"caja","type":"string","label":"Caja neutra personal","default":"no"},
+    {"id":"cajaEstado","type":"string","label":"Caja neutra — estado","default":"pendiente"},
+    {"id":"oficina","type":"string","label":"Primera oficina","default":"no"},
+    {"id":"oficinaEstado","type":"string","label":"Oficina — estado","default":"pendiente"},
+    {"id":"python","type":"string","label":"Programas escritos a mano","default":"0"},
+    {"id":"pythonEstado","type":"string","label":"Programar sin IA — estado","default":"pendiente"},
+    {"id":"tiktokVideos","type":"string","label":"TikTok videos","default":"0"},
+    {"id":"tiktokVideosEstado","type":"string","label":"TikTok videos — estado","default":"pendiente"},
+    {"id":"tiktokSeguidores","type":"string","label":"TikTok seguidores","default":"0"},
+    {"id":"tiktokSeguidoresEstado","type":"string","label":"TikTok seguidores — estado","default":"pendiente"},
+    {"id":"ytVideos","type":"string","label":"YouTube resumenes semanales","default":"0"},
+    {"id":"ytVideosEstado","type":"string","label":"YouTube resumenes — estado","default":"pendiente"}
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <title>ONIA · Tablero de objetivos (16:9)</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      /* ---- Tipografia OFICIAL de marca (ONIA_BRAND_IDENTITY_2026.md §2) -----
+         Mismo contrato que las otras dos variantes del marcador: el trio se
+         AUTOHOSPEDA desde fonts/ (reparto de
+         `hermes-content/brand/fonts/build-onia-fonts.py`, entrada
+         "scoreboard/full"). HyperFrames sirve cada composicion con su carpeta
+         como raiz y rechaza por lint los assets con "../" por encima, por eso
+         cada variante lleva su propia copia.
+
+         Bricolage llega con wght 500-700: el peso 800 que el brand system
+         prohibe no existe ni por accidente. */
+      @font-face {
+        font-family: "Bricolage Grotesque";
+        src: url("fonts/BricolageGrotesque-var-latin.woff2") format("woff2");
+        font-weight: 500 700;
+        font-style: normal;
+        font-display: block;
+      }
+      @font-face {
+        font-family: "DM Sans";
+        src: url("fonts/DMSans-var-latin.woff2") format("woff2");
+        font-weight: 400 500;
+        font-style: normal;
+        font-display: block;
+      }
+      @font-face {
+        font-family: "Spline Sans Mono";
+        src: url("fonts/SplineSansMono-var-latin.woff2") format("woff2");
+        font-weight: 400 500;
+        font-style: normal;
+        font-display: block;
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: transparent;
+      }
+
+      #stage {
+        position: relative;
+        width: 1920px;
+        height: 1080px;
+        --stage-w: 1920;
+        --stage-h: 1080;
+        --u: calc(var(--stage-w) / 1000 * 1px);
+        /* ACENTO VERDE DE MARCA. Las variantes vertical/horizontal traen
+           #ff7a00 heredado y ademas nunca aplican la variable; aca el runtime
+           SI pisa --accent con el valor declarado (ver applyAccent()). */
+        --accent: #00d26a;
+        /* El acento cuando es TEXTO. En oscuro es el acento puro (8,8:1 contra
+           la placa). En claro el verde puro reprobaria AA contra blanco, asi
+           que se hunde. */
+        --accent-ink: var(--accent);
+        --ink: #0a0c11;
+        --ink2: #15181f;
+        --ink-text: #f6f8fb;
+        --muted: rgba(246, 248, 251, 0.6);
+        --hairline: rgba(255, 255, 255, 0.11);
+        --pend: rgba(255, 255, 255, 0.32);
+        --track: rgba(255, 255, 255, 0.14);
+        --gloss: rgba(255, 255, 255, 0.09);
+        --shadow:
+          0 calc(var(--u) * 26) calc(var(--u) * 60) calc(var(--u) * -16) rgba(0, 0, 0, 0.7),
+          0 calc(var(--u) * 7) calc(var(--u) * 18) rgba(0, 0, 0, 0.38);
+        /* wipe de la barra: 100 = tapada, 0 = descubierta (clip-path). */
+        --wipe: 100;
+        --font-display: "Bricolage Grotesque", sans-serif;
+        --font-body: "DM Sans", sans-serif;
+        --font-mono: "Spline Sans Mono", monospace;
+        font-family: var(--font-body);
+      }
+      #stage[data-theme="light"] {
+        --ink: #ffffff;
+        --ink2: #f4f5f7;
+        --ink-text: #0b0d12;
+        --muted: rgba(11, 13, 18, 0.62);
+        --hairline: rgba(11, 13, 18, 0.12);
+        --pend: rgba(11, 13, 18, 0.34);
+        --track: rgba(11, 13, 18, 0.14);
+        --gloss: rgba(255, 255, 255, 0.85);
+        --accent-ink: color-mix(in srgb, var(--accent) 62%, #000000);
+      }
+
+      /* El tablero grande ocupa el cuadro entero: va al final del video, no es
+         un HUD de esquina. Se centra con aire parejo. */
+      .fill {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: calc(var(--u) * 26) calc(var(--u) * 34);
+      }
+
+      /* LEGIBILIDAD SOBRE CUALQUIER FONDO: la placa es OPACA.
+         No es un rectangulo negro al 50% — a esa translucidez el contraste del
+         texto depende del plano de atras y una pared blanca lo arruina. Fondo
+         solido + filo de luz + sombra: el texto siempre cae sobre el MISMO
+         color. Tampoco es glassmorphism: no hay backdrop-filter. */
+      .plate {
+        position: relative;
+        width: 100%;
+        border-radius: calc(var(--u) * 15);
+        background: linear-gradient(158deg, var(--ink2) 0%, var(--ink) 62%);
+        border: 1px solid var(--hairline);
+        box-shadow: var(--shadow);
+        overflow: hidden;
+        padding: calc(var(--u) * 26) calc(var(--u) * 26) calc(var(--u) * 24);
+        opacity: 0;
+      }
+
+      .gloss {
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        pointer-events: none;
+        border-top: 1px solid var(--gloss);
+        -webkit-mask-image: linear-gradient(#000, transparent 42%);
+        mask-image: linear-gradient(#000, transparent 42%);
+      }
+
+      /* ---- cabecera ------------------------------------------------------ */
+      .head {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: calc(var(--u) * 24);
+      }
+
+      .eyebrow {
+        display: flex;
+        align-items: center;
+        gap: calc(var(--u) * 9);
+        font-family: var(--font-display);
+        font-size: calc(var(--u) * 12);
+        font-weight: 700;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+      .eyebrow i {
+        display: block;
+        width: calc(var(--u) * 7);
+        height: calc(var(--u) * 7);
+        border-radius: 999px;
+        background: var(--accent);
+        flex: 0 0 auto;
+      }
+
+      .title {
+        margin: calc(var(--u) * 8) 0 0;
+        font-family: var(--font-display);
+        font-size: calc(var(--u) * 25);
+        font-weight: 700;
+        line-height: 1.05;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--ink-text);
+      }
+
+      /* Contador general. No es "cifra gigante + label chiquito": las palabras
+         pesan 60% de los digitos y forman una frase que se lee entera
+         ("4 de 12 cumplidos"). */
+      .counter {
+        display: flex;
+        align-items: baseline;
+        gap: calc(var(--u) * 7);
+        white-space: nowrap;
+      }
+      .cnt-n {
+        font-family: var(--font-mono);
+        font-size: calc(var(--u) * 21);
+        font-weight: 500;
+        line-height: 1;
+        letter-spacing: -0.02em;
+        font-variant-numeric: tabular-nums;
+        color: var(--accent-ink);
+      }
+      .cnt-t {
+        font-family: var(--font-mono);
+        font-size: calc(var(--u) * 21);
+        font-weight: 400;
+        line-height: 1;
+        letter-spacing: -0.02em;
+        font-variant-numeric: tabular-nums;
+        color: var(--ink-text);
+      }
+      .cnt-w {
+        font-family: var(--font-body);
+        font-size: calc(var(--u) * 11.8);
+        font-weight: 400;
+        line-height: 1;
+        color: var(--muted);
+      }
+
+      /* La barra ES el acento: color semantico (objetivos cumplidos de 12), no
+         decorativo. Nunca una franja vertical en el borde — patron prohibido. */
+      .track {
+        position: relative;
+        margin-top: calc(var(--u) * 13);
+        height: calc(var(--u) * 4.4);
+        border-radius: 999px;
+        background: var(--track);
+        overflow: hidden;
+      }
+      /* Relleno SOLIDO, no degradado: con clip-path lo visible es el tramo
+         izquierdo, y un degradado pintaria la barra del color equivocado justo
+         cuando menos avance hay. */
+      .track-fill {
+        position: absolute;
+        inset: 0;
+        border-radius: 999px;
+        background: var(--accent);
+        clip-path: inset(0 calc(var(--wipe) * 1%) 0 0);
+      }
+
+      /* ---- tabla --------------------------------------------------------- */
+      /* En 16:9 las 12 filas van en DOS columnas de 6.
+         Por que DOS y no UNA: el cuadro deja ~655px de alto util para la tabla.
+         A una sola columna cada fila tendria 54px — MENOS que las 65px que
+         median las filas del tablero de 18 — y habria que ACHICAR la
+         tipografia, justo lo contrario de lo que pide un tablero mas corto.
+         Ademas cada fila mediria 1.690px de ancho: el ojo viajaria la pantalla
+         entera desde el objetivo hasta el "hoy".
+         Con 6+6 la fila pasa de 65 a 104px y la tipografia sube ~30%
+         (objetivo 20 -> 26px, "hoy" 19 -> 23px). Y al ser par no queda ningun
+         hueco: las dos columnas terminan a la misma altura. */
+      .grid {
+        display: flex;
+        margin-top: calc(var(--u) * 16);
+      }
+      .col {
+        flex: 1 1 0;
+        min-width: 0;
+      }
+      .col + .col {
+        border-left: 1px solid var(--hairline);
+        padding-left: calc(var(--u) * 22);
+        margin-left: calc(var(--u) * 22);
+      }
+
+      /* Fila de DOS lineas: arriba quien es el objetivo, abajo el par
+         meta / hoy. Las dos lineas comparten la sangria de la MARCA de estado,
+         asi que meta y hoy arrancan bajo la categoria y quedan alineados en
+         todas las filas: el bloque se lee como tabla.
+         La sangria NO incluye la columna de categoria (como si lo hacia el
+         tablero de 18). Con la tipografia mas grande, ese sangrado extra de
+         ~150px dejaba sin aire el peor caso de la fila SIAT
+         ("meta aprobada antes del 15-sep" + "hoy aprobada el 12-sep-2026"). */
+      .row {
+        padding: calc(var(--u) * 10) 0;
+      }
+      .row + .row {
+        border-top: 1px solid var(--hairline);
+      }
+      .row-top {
+        display: flex;
+        align-items: center;
+        gap: calc(var(--u) * 8.5);
+      }
+      .row-bot {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: calc(var(--u) * 15);
+        margin-top: calc(var(--u) * 4);
+        padding-left: calc(var(--u) * 16 + var(--u) * 8.5);
+      }
+
+      /* Estado dibujado, no emoji: el subset latin de las fuentes de marca no
+         trae pictogramas y saldria un tofu. Tres formas distinguibles de un
+         vistazo: disco lleno con tilde (cumplido), anillo medio lleno
+         (progreso), anillo vacio (pendiente). */
+      .mark {
+        flex: 0 0 auto;
+        width: calc(var(--u) * 16);
+        height: calc(var(--u) * 16);
+        display: block;
+      }
+      .mark svg {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+      .mk-ring {
+        fill: none;
+        stroke: var(--pend);
+        stroke-width: 2.2;
+      }
+      .mk-half {
+        fill: none;
+      }
+      .mk-check {
+        fill: none;
+        stroke: none;
+        stroke-width: 2.8;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      [data-state="progreso"] .mk-ring {
+        stroke: var(--accent);
+      }
+      [data-state="progreso"] .mk-half {
+        fill: var(--accent);
+      }
+      [data-state="cumplido"] .mk-ring {
+        fill: var(--accent);
+        stroke: var(--accent);
+      }
+      [data-state="cumplido"] .mk-check {
+        stroke: var(--ink);
+      }
+
+      .cat {
+        flex: 0 0 auto;
+        width: calc(var(--u) * 82);
+        font-family: var(--font-display);
+        font-size: calc(var(--u) * 8.5);
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--muted);
+        white-space: nowrap;
+        overflow: hidden;
+      }
+      .obj {
+        flex: 1 1 auto;
+        min-width: 0;
+        font-family: var(--font-body);
+        font-size: calc(var(--u) * 13.5);
+        font-weight: 500;
+        line-height: 1.2;
+        color: var(--ink-text);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      /* Lo que falta se apaga: de un vistazo se ve cuantas van. */
+      .row[data-state="pendiente"] .obj {
+        color: var(--muted);
+        font-weight: 400;
+      }
+
+      .kv {
+        display: flex;
+        align-items: baseline;
+        gap: calc(var(--u) * 6.5);
+        min-width: 0;
+      }
+      .kv-k {
+        font-family: var(--font-display);
+        font-size: calc(var(--u) * 7.4);
+        font-weight: 700;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--muted);
+        white-space: nowrap;
+      }
+      .kv-meta {
+        font-family: var(--font-body);
+        font-size: calc(var(--u) * 10);
+        font-weight: 400;
+        line-height: 1.15;
+        color: var(--muted);
+        white-space: nowrap;
+      }
+      .kv-act {
+        font-family: var(--font-mono);
+        font-size: calc(var(--u) * 12);
+        font-weight: 500;
+        line-height: 1.15;
+        letter-spacing: -0.01em;
+        font-variant-numeric: tabular-nums;
+        color: var(--ink-text);
+        white-space: nowrap;
+      }
+      .row[data-state="cumplido"] .kv-act {
+        color: var(--accent-ink);
+      }
+      .row[data-state="pendiente"] .kv-act {
+        color: var(--muted);
+      }
+
+      /* ---- leyenda ------------------------------------------------------- */
+      .legend {
+        display: flex;
+        align-items: center;
+        gap: calc(var(--u) * 24);
+        margin-top: calc(var(--u) * 14);
+        padding-top: calc(var(--u) * 12);
+        border-top: 1px solid var(--hairline);
+      }
+      .lg {
+        display: flex;
+        align-items: center;
+        gap: calc(var(--u) * 7);
+        font-family: var(--font-body);
+        font-size: calc(var(--u) * 8);
+        color: var(--muted);
+      }
+      .lg .mark {
+        width: calc(var(--u) * 11);
+        height: calc(var(--u) * 11);
+      }
+
+      [hidden] {
+        display: none !important;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="stage"
+      data-composition-id="scoreboard-full"
+      data-theme="dark"
+      data-start="0"
+      data-duration="8"
+      data-fps="30"
+      data-width="1920"
+      data-height="1080"
+    >
+      <div id="ob-clip" class="clip" data-start="0" data-duration="8" data-track-index="0">
+        <div class="fill">
+          <div class="plate" id="ob-plate">
+            <div class="gloss"></div>
+
+            <div class="head" id="ob-head">
+              <div>
+                <div class="eyebrow" id="ob-eyebrow"><i></i><span></span></div>
+                <h1 class="title" id="ob-title">OBJETIVOS</h1>
+              </div>
+              <div class="counter">
+                <span class="cnt-n" id="ob-done">0</span>
+                <span class="cnt-w">de</span>
+                <span class="cnt-t" id="ob-total">12</span>
+                <span class="cnt-w">cumplidos</span>
+              </div>
+            </div>
+
+            <div class="track">
+              <div class="track-fill" id="ob-fill"></div>
+            </div>
+
+            <div class="grid" id="ob-grid">
+              <div class="col"></div>
+              <div class="col"></div>
+            </div>
+
+            <div class="legend" id="ob-legend"></div>
+          </div>
+        </div>
+      </div>
+
+      <script>
+        // ============================================================
+        // ONIA · Tablero de objetivos (1920x1080) — la tabla GRANDE que
+        // cierra el video semanal de YouTube y el resumen de fin de semana.
+        // Misma familia visual que scoreboard/vertical y /horizontal (misma
+        // placa, mismos tokens, misma curva); esta es la version completa.
+        // Datos: scripts/hyperframes/data/serie-objetivos.json
+        // ============================================================
+        (function () {
+          "use strict";
+
+          // ---- easing de marca ------------------------------------------------
+          function cubicBezier(x1, y1, x2, y2) {
+            var cx = 3 * x1,
+              bx = 3 * (x2 - x1) - cx,
+              ax = 1 - cx - bx;
+            var cy = 3 * y1,
+              by = 3 * (y2 - y1) - cy,
+              ay = 1 - cy - by;
+            function sampleX(t) {
+              return ((ax * t + bx) * t + cx) * t;
+            }
+            function sampleY(t) {
+              return ((ay * t + by) * t + cy) * t;
+            }
+            function sampleDX(t) {
+              return (3 * ax * t + 2 * bx) * t + cx;
+            }
+            return function (x) {
+              if (x <= 0) return 0;
+              if (x >= 1) return 1;
+              var t = x,
+                i,
+                d,
+                dx;
+              for (i = 0; i < 8; i++) {
+                d = sampleX(t) - x;
+                if (Math.abs(d) < 1e-7) return sampleY(t);
+                dx = sampleDX(t);
+                if (Math.abs(dx) < 1e-7) break;
+                t -= d / dx;
+              }
+              var lo = 0,
+                hi = 1;
+              t = x;
+              while (hi - lo > 1e-7) {
+                if (sampleX(t) < x) lo = t;
+                else hi = t;
+                t = (hi + lo) / 2;
+              }
+              return sampleY(t);
+            };
+          }
+          // MISMA curva que --ease-out-expo de web-factory. Salida exponencial
+          // sin rebote: bounce.out / elastic.out prohibidos por motion-doctrine.
+          gsap.registerEase("oniaOutExpo", cubicBezier(0.16, 1, 0.3, 1));
+          gsap.registerEase("oniaOutQuart", cubicBezier(0.25, 1, 0.5, 1));
+
+          var stage = document.getElementById("stage");
+          var FPS = Number(stage.dataset.fps) || 30;
+          var DUR = Number(stage.dataset.duration) || 8;
+          var TOTAL = Math.max(1, Math.round(DUR * FPS));
+          document.getElementById("ob-clip").dataset.duration = String(DUR);
+
+          // La salida se ancla al FINAL: alargar --duration alarga el SOSTEN.
+          function enterExit(o) {
+            o = o || {};
+            var delay = o.delayFrames || 0;
+            var enterF = Math.max(1, Math.round(((o.enterMs || 320) / 1000) * FPS));
+            var exitF = Math.max(1, Math.round(((o.exitMs || 240) / 1000) * FPS));
+            var exitStart = Math.max(delay + enterF, TOTAL - exitF);
+            return {
+              enterAt: delay / FPS,
+              enterDur: enterF / FPS,
+              exitAt: exitStart / FPS,
+              exitDur: Math.max(1, TOTAL - exitStart) / FPS,
+            };
+          }
+
+          function isPureNumber(v) {
+            return /^-?\d+(\.\d+)?$/.test(String(v).trim());
+          }
+          // separador de miles "." (convencion boliviana), sin Intl
+          function formatBolivianNumber(value, decimals) {
+            var fixed = Math.abs(value).toFixed(decimals);
+            var parts = fixed.split(".");
+            var intPart = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            var body = parts[1] ? intPart + "," + parts[1] : intPart;
+            return (value < 0 ? "-" : "") + body;
+          }
+          // Sergio puede escribir 20000 o "20.000": si es numero puro lo
+          // formatea la composicion, si no se imprime tal cual.
+          function display(v) {
+            var s = String(v == null ? "" : v).trim();
+            return isPureNumber(s) ? formatBolivianNumber(Number(s), 0) : s;
+          }
+
+          function readVars() {
+            var decls = [];
+            try {
+              decls = JSON.parse(document.documentElement.dataset.compositionVariables || "[]");
+            } catch (e) {
+              decls = [];
+            }
+            var out = {};
+            for (var i = 0; i < decls.length; i++) out[decls[i].id] = decls[i].default;
+            var live =
+              window.__hyperframes && typeof window.__hyperframes.getVariables === "function"
+                ? window.__hyperframes.getVariables()
+                : null;
+            if (live) {
+              for (var k in out) {
+                if (live[k] !== undefined && live[k] !== null) out[k] = live[k];
+              }
+            }
+            return out;
+          }
+
+          // ---- las 12 filas ---------------------------------------------------
+          // Metas cerradas por Sergio el 2026-07-30: el tablero pasa de 18 a 12.
+          // Salieron "NIT desbloqueado" (ya estaba resuelto antes del semestre),
+          // "Suscriptores de YouTube", "Leads del contenido", "Entrevistas con
+          // los que NO compraron" y "Primera contratacion"; Anclas / Clinicas /
+          // Webs se colapsaron en un solo numero ("Clientes activos 50"); entro
+          // "Llamadas y demos" como fila de VENTAS; y la fila de aprendizaje
+          // dejo de ser "Worker Cobrador IA en produccion" para ser "Aprender a
+          // programar SIN IA" (15 programas escritos a mano).
+          //
+          // El "SIN IA" va en VERSALITA a proposito: es el filo del objetivo, no
+          // un detalle. Mismo recurso que usaba "los que NO compraron" en el
+          // tablero de 18.
+          //
+          // Categoria, objetivo y META son FIJOS (viven aca, no en el JSON): la
+          // meta es el compromiso del ano y no cambia semana a semana. Del JSON
+          // sale solo el par valor de hoy + estado, por la clave `key`.
+          //
+          // La meta binaria de la caja dice "si" y no un tilde: el subset latin
+          // de las fuentes de marca no trae U+2705 y saldria un tofu. El tilde
+          // dibujado vive en la marca de estado, que es SVG.
+          var ROWS = [
+            { cat: "Fiscal", obj: "Homologación SIAT", meta: "aprobada antes del 15-sep", key: "siat" },
+            { cat: "Negocio", obj: "MRR", meta: "USD 5.000", key: "mrr" },
+            { cat: "Clientes", obj: "Clientes activos", meta: "50", key: "clientes" },
+            { cat: "Ventas", obj: "Llamadas y demos con dueños de negocio", meta: "250", key: "llamadas" },
+            { cat: "Expansión", obj: "Clientes internacionales", meta: "3", key: "internacionales" },
+            { cat: "Retención", obj: "Churn mensual", meta: "menor a 5%", key: "churn" },
+            { cat: "Negocio", obj: "Caja neutra personal", meta: "sí", key: "caja" },
+            { cat: "Empresa", obj: "Primera oficina", meta: "MRR = 3x alquiler", key: "oficina" },
+            { cat: "Aprendizaje", obj: "Aprender a programar SIN IA", meta: "15 programas escritos a mano", key: "python" },
+            { cat: "TikTok", obj: "Videos publicados", meta: "155", key: "tiktokVideos" },
+            { cat: "TikTok", obj: "Seguidores", meta: "20.000", key: "tiktokSeguidores" },
+            { cat: "YouTube", obj: "Resúmenes semanales", meta: "22", key: "ytVideos" },
+          ];
+
+          // "En progreso" / "EN PROGRESO" / "en curso" son lo mismo. Cualquier
+          // valor que no se reconozca cae en pendiente (no se inventa avance).
+          function normalizeState(v) {
+            var s = String(v == null ? "" : v)
+              .toLowerCase()
+              .replace(/[áàä]/g, "a")
+              .replace(/[éèë]/g, "e")
+              .replace(/[íìï]/g, "i")
+              .replace(/[óòö]/g, "o")
+              .replace(/[úùü]/g, "u")
+              .trim();
+            if (s === "cumplido" || s === "hecho" || s === "listo" || s === "si" || s === "ok") {
+              return "cumplido";
+            }
+            if (s === "progreso" || s === "en progreso" || s === "curso" || s === "en curso") {
+              return "progreso";
+            }
+            return "pendiente";
+          }
+
+          // Marca de estado en SVG (nunca emoji, nunca glifo de fuente).
+          //  · anillo   — siempre
+          //  · semiluna — solo en progreso (mitad izquierda llena)
+          //  · tilde    — solo en cumplido, sobre el disco lleno
+          function markSvg() {
+            return (
+              '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
+              '<circle class="mk-ring" cx="12" cy="12" r="10.4" />' +
+              '<path class="mk-half" d="M12 1.6 A10.4 10.4 0 0 0 12 22.4 Z" />' +
+              '<path class="mk-check" d="M7.1 12.5 10.4 15.8 16.9 9.1" />' +
+              "</svg>"
+            );
+          }
+
+          // ---- contenido ------------------------------------------------------
+          var V = readVars();
+
+          // --accent SI se aplica (las otras dos variantes se olvidaron de esto
+          // y por eso salen naranjas aunque el JSON diga verde).
+          var accent = String(V.accent || "").trim();
+          if (/^#[0-9a-fA-F]{3,8}$/.test(accent)) stage.style.setProperty("--accent", accent);
+
+          var elEyebrow = document.getElementById("ob-eyebrow");
+          var eyebrow = String(V.eyebrow || "");
+          elEyebrow.querySelector("span").textContent = eyebrow;
+          if (!eyebrow) elEyebrow.hidden = true;
+          document.getElementById("ob-title").textContent = String(V.titulo || "OBJETIVOS");
+
+          var cols = document.querySelectorAll("#ob-grid .col");
+          var perCol = Math.ceil(ROWS.length / cols.length);
+          var rowEls = [];
+          var done = 0;
+
+          for (var i = 0; i < ROWS.length; i++) {
+            var r = ROWS[i];
+            var state = normalizeState(V[r.key + "Estado"]);
+            if (state === "cumplido") done++;
+
+            var el = document.createElement("div");
+            el.className = "row";
+            el.setAttribute("data-state", state);
+            el.innerHTML =
+              '<div class="row-top">' +
+              '<span class="mark">' +
+              markSvg() +
+              "</span>" +
+              '<span class="cat"></span>' +
+              '<span class="obj"></span>' +
+              "</div>" +
+              '<div class="row-bot">' +
+              '<span class="kv"><span class="kv-k">meta</span><span class="kv-meta"></span></span>' +
+              '<span class="kv"><span class="kv-k">hoy</span><span class="kv-act"></span></span>' +
+              "</div>";
+            el.querySelector(".cat").textContent = r.cat.toUpperCase();
+            el.querySelector(".obj").textContent = r.obj;
+            el.querySelector(".kv-meta").textContent = r.meta;
+            el.querySelector(".kv-act").textContent = display(V[r.key]);
+
+            cols[Math.min(cols.length - 1, Math.floor(i / perCol))].appendChild(el);
+            rowEls.push(el);
+          }
+
+          var elLegend = document.getElementById("ob-legend");
+          var LEGEND = [
+            ["cumplido", "cumplido"],
+            ["progreso", "en progreso"],
+            ["pendiente", "pendiente"],
+          ];
+          for (var L = 0; L < LEGEND.length; L++) {
+            var lg = document.createElement("span");
+            lg.className = "lg";
+            lg.setAttribute("data-state", LEGEND[L][0]);
+            lg.innerHTML = '<span class="mark">' + markSvg() + "</span><span></span>";
+            lg.querySelector("span:last-child").textContent = LEGEND[L][1];
+            elLegend.appendChild(lg);
+          }
+
+          document.getElementById("ob-total").textContent = String(ROWS.length);
+          var ratio = done / ROWS.length;
+
+          // ---- timeline -------------------------------------------------------
+          // Ruta de movimiento sostenido: "sequenced UI life" + "staged reveals"
+          // (motion-doctrine). El tablero arranca como instrumento — la barra se
+          // llena y el contador tickea con ella — y las 12 filas caen en cascada.
+          // Despues SE QUEDA QUIETO: son 12 filas para leer, y moverlas mientras
+          // se leen seria ruido. Nada de idle wobble.
+          var tl = gsap.timeline({ paused: true });
+          var elPlate = document.getElementById("ob-plate");
+
+          // La placa esta CENTRADA, asi que entra por el eje de la corriente de
+          // la casa (izquierda) y vuelve por el mismo camino a la salida.
+          var plate = enterExit({ enterMs: 320, exitMs: 240 }); // salida = 75% de la entrada
+          var PLATE_X = "calc(var(--u) * 12)";
+          tl.fromTo(
+            elPlate,
+            { opacity: 0, x: PLATE_X },
+            { opacity: 1, x: 0, duration: plate.enterDur, ease: "oniaOutExpo" },
+            plate.enterAt,
+          );
+          tl.to(
+            elPlate,
+            { opacity: 0, x: PLATE_X, duration: plate.exitDur, ease: "oniaOutQuart" },
+            plate.exitAt,
+          );
+
+          // Barra + contador: UN SOLO gesto de 700ms atado al mismo progreso.
+          // Por eso se lee como instrumento y no como dos adornos que coinciden.
+          // 700ms < 800ms (tope de una entrada simple).
+          var elDone = document.getElementById("ob-done");
+          var RUN_MS = 700;
+          var runF = Math.max(1, Math.round((RUN_MS / 1000) * FPS));
+          var boot = { p: 0 };
+          tl.to(
+            boot,
+            {
+              p: 1,
+              duration: runF / FPS,
+              ease: "oniaOutExpo",
+              onUpdate: function () {
+                stage.style.setProperty("--wipe", 100 - ratio * boot.p * 100);
+                elDone.textContent = String(Math.round(done * boot.p));
+              },
+            },
+            4 / FPS,
+          );
+
+          // Cascada de las 12 filas + la leyenda (waterfall entry,
+          // cut-the-curve §6): opacidad BINARIA en la entrada, huecos que SE
+          // ACHICAN (x0.84) y una sola direccion para toda la cascada.
+          // Escalonado total = suma de 2*0.84^k, k=0..12 ~= 373ms < 500ms.
+          var wave = rowEls.concat([elLegend]);
+          var cascade = enterExit({ delayFrames: 6, enterMs: 300, exitMs: 220 });
+          var ROW_X = "calc(var(--u) * 9)";
+          var gap = 2 / FPS; // 2 frames entre la 1ra y la 2da
+          var at = cascade.enterAt;
+          for (var g = 0; g < wave.length; g++) {
+            gsap.set(wave[g], { autoAlpha: 0 });
+            tl.set(wave[g], { autoAlpha: 1 }, at);
+            tl.fromTo(
+              wave[g],
+              { x: ROW_X },
+              { x: 0, duration: cascade.enterDur, ease: "oniaOutExpo" },
+              at,
+            );
+            // salida: el grupo acompana a la placa
+            tl.to(
+              wave[g],
+              { autoAlpha: 0, x: ROW_X, duration: cascade.exitDur, ease: "oniaOutQuart" },
+              cascade.exitAt,
+            );
+            at += gap;
+            gap *= 0.84;
+          }
+
+          window.__timelines = window.__timelines || {};
+          window.__timelines["scoreboard-full"] = tl;
+        })();
+      </script>
+    </div>
+  </body>
+</html>

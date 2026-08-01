@@ -1,0 +1,4 @@
+# Las fuentes son binarios: cualquier conversion de fin de linea las corrompe
+# y el render dejaria de ser identico entre Windows y el VPS.
+*.woff2 binary
+*.ttf   binary

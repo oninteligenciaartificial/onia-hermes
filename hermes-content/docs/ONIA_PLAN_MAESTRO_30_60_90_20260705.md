@@ -1,4 +1,4 @@
-# ONIA — Plan Maestro 30/60/90 días (2026-07-05)
+# Onia — Plan Maestro 30/60/90 días (2026-07-05)
 
 > Documento canónico de estrategia y ejecución. Objetivo: convertir el sistema
 > que ya existe (web factory, DentalGest, GestiOS, n8n, contenido, vendedora)
@@ -68,14 +68,14 @@ minutos de Sergio, no por trabajo técnico.
 - [ ] **S3** Pegar secret intake DentalGest en n8n (2 min) → circuito email completo.
 - [ ] **S6** Token IG long-lived + Business Account ID → publicación IG automática.
 - [ ] **S7** API keys Tavily + fal.ai (free tier) → prospección con fuentes.
-- [ ] **S9** Cambiar password ONIA Center (higiene, 2 min).
+- [ ] **S9** Cambiar password Onia Center (higiene, 2 min).
 - [ ] **S2** Iniciar trámite NIT (arranca ya: es el lead time más largo del plan).
 - [ ] **S5** Avanzar verificación Meta (idem: lead time largo, destraba WhatsApp).
 - [ ] Capturar chat ID de Arthur (escribir al bot) → todos los reportes a ambos.
 
 ### Agentes (carriles, en paralelo)
 - [ ] **P1** Propuestas oficiales v2 (DentalGest + Empresarial E1/E2) generadas.
-- [ ] **P2→P3** ONIA Center saneado (solo datos reales) — código listo.
+- [ ] **P2→P3** Onia Center saneado (solo datos reales) — código listo.
 - [ ] **P4** Landing captación DentalGest (keywords de dolor dental → CTA registro).
 - [ ] **M1** Deploy saneamiento a VPS + cleanup 61 tareas (con OK humano).
 - [ ] **M2** n8n autónomo: briefing + tendencias + cron prospección 09:00 +
@@ -176,7 +176,7 @@ Objetivo: MRR ≥ Bs 9.000 y decidir la próxima apuesta con datos.
   automatizada (cruza M5/TR4) vs motor de venta diaria vs storefront tipo
   Nuvia. Regla: el que gane tiene carril propio; los otros se archivan con
   fecha de revisión.
-- **Radar → WorkItem (M4)** activo cuando exista org ONIA con intake (R1/R2+S3).
+- **Radar → WorkItem (M4)** activo cuando exista org Onia con intake (R1/R2+S3).
 - Contenido: duplicar lo que funcionó (mirar métricas de 60 días, no gustos).
 
 ### Gate del día 90

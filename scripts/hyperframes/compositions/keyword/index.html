@@ -1,0 +1,193 @@
+<!doctype html>
+<html
+  lang="es"
+  data-composition-variables='[
+    {"id":"texto","type":"string","label":"La palabra","default":"5.000 DÓLARES"},
+    {"id":"pie","type":"string","label":"Pie (opcional)","default":""},
+    {"id":"posY","type":"string","label":"Altura 0-100 (50=centro)","default":"38"},
+    {"id":"accent","type":"color","label":"Acento","default":"#00D26A"}
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <title>ONIA · Keyword</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      /* El elemento MÁS FRECUENTE del vocabulario del reel de @human___academy: 8 de las
+         ~32 apariciones son una PALABRA que entra sola sobre la imagen (catalogado
+         2026-07-31 con visión). No es un subtítulo: el subtítulo transcribe todo, esto
+         subraya UNA idea. Por eso va grande, en display, y dura poco. */
+      @font-face {
+        font-family: "Bricolage Grotesque";
+        src: url("fonts/BricolageGrotesque-var-latin.woff2") format("woff2");
+        font-weight: 500 700;
+        font-style: normal;
+        font-display: block;
+      }
+      @font-face {
+        font-family: "DM Sans";
+        src: url("fonts/DMSans-var-latin.woff2") format("woff2");
+        font-weight: 400 500;
+        font-style: normal;
+        font-display: block;
+      }
+      *,
+      *::before,
+      *::after { box-sizing: border-box; }
+      html, body {
+        margin: 0; padding: 0; width: 1080px; height: 1920px;
+        overflow: hidden; background: transparent;
+      }
+      #stage {
+        position: relative; width: 1080px; height: 1920px;
+        --stage-w: 1080; --stage-h: 1920;
+        --u: calc(var(--stage-w) / 1000 * 1px);
+        --accent: #00d26a;
+        --ink: #0a0f0d;
+        --ink-text: #f6f8fb;
+        --font-display: "Bricolage Grotesque", sans-serif;
+        --font-body: "DM Sans", sans-serif;
+        font-family: var(--font-body);
+      }
+      /* La altura es variable: en 9:16 el centro cae sobre la CARA. El default 38 lo deja
+         arriba del mentón y abajo del marcador, que es donde no tapa nada. */
+      .fill {
+        position: absolute; inset: 0;
+        display: flex; flex-direction: column;
+        align-items: center; justify-content: flex-start;
+        padding-top: calc(var(--stage-h) * var(--pos-y, 0.38) * 1px);
+      }
+      .wrap { position: relative; display: inline-block; padding: calc(var(--u) * 6) calc(var(--u) * 14); }
+
+      /* La barra de acento se REVELA por clip-path detrás de la palabra: es el gesto de
+         resaltador. clip-path no toca layout, así que entra en la lista de propiedades
+         que la motion-doctrine permite animar. */
+      .barra {
+        position: absolute; left: 0; right: 0; top: 12%; bottom: 12%;
+        background: var(--accent);
+        clip-path: inset(0 calc(var(--wipe, 100) * 1%) 0 0);
+        border-radius: calc(var(--u) * 4);
+      }
+      .palabra {
+        position: relative;
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: calc(var(--u) * 82);
+        line-height: 0.98;
+        letter-spacing: calc(var(--u) * -1.4);
+        text-transform: uppercase;
+        color: var(--ink);
+        white-space: nowrap;
+        /* sombra dura: la palabra tiene que leerse sobre CUALQUIER plano detrás */
+        text-shadow: 0 calc(var(--u) * 2) 0 rgba(0, 0, 0, 0.18);
+      }
+      .pie {
+        margin-top: calc(var(--u) * 10);
+        font-size: calc(var(--u) * 17);
+        letter-spacing: calc(var(--u) * 1.6);
+        text-transform: uppercase;
+        color: var(--ink-text);
+        text-shadow: 0 calc(var(--u) * 2) calc(var(--u) * 8) rgba(0, 0, 0, 0.9);
+      }
+      .pie:empty { display: none; }
+    </style>
+  </head>
+  <body>
+    <div
+      id="stage"
+      data-composition-id="keyword"
+      data-theme="dark"
+      data-start="0"
+      data-duration="1.6"
+      data-fps="30"
+      data-width="1080"
+      data-height="1920"
+    >
+      <div id="kw-clip" class="clip" data-start="0" data-duration="1.6" data-track-index="0">
+        <div class="fill">
+          <div class="wrap" id="kw-wrap">
+            <div class="barra" id="kw-barra"></div>
+            <div class="palabra" id="kw-texto">5.000 DÓLARES</div>
+          </div>
+          <div class="pie" id="kw-pie"></div>
+        </div>
+      </div>
+
+      <script>
+        (function () {
+          function cubicBezier(x1, y1, x2, y2) {
+            var A = function (a, b) { return 1 - 3 * b + 3 * a; };
+            var B = function (a, b) { return 3 * b - 6 * a; };
+            var C = function (a) { return 3 * a; };
+            var sx = function (t) { return ((A(x1, x2) * t + B(x1, x2)) * t + C(x1)) * t; };
+            var sy = function (t) { return ((A(y1, y2) * t + B(y1, y2)) * t + C(y1)) * t; };
+            var slope = function (t) { return 3 * A(x1, x2) * t * t + 2 * B(x1, x2) * t + C(x1); };
+            return function (x) {
+              if (x <= 0) return 0;
+              if (x >= 1) return 1;
+              var t = x;
+              for (var i = 0; i < 8; i++) {
+                var d = sx(t) - x, dx = slope(t);
+                if (Math.abs(dx) < 1e-7) break;
+                t -= d / dx;
+              }
+              var lo = 0, hi = 1; t = x;
+              while (hi - lo > 1e-7) { if (sx(t) < x) lo = t; else hi = t; t = (hi + lo) / 2; }
+              return sy(t);
+            };
+          }
+          gsap.registerEase("oniaOutExpo", cubicBezier(0.16, 1, 0.3, 1));
+          gsap.registerEase("oniaOutQuart", cubicBezier(0.25, 1, 0.5, 1));
+
+          var stage = document.getElementById("stage");
+          var FPS = Number(stage.dataset.fps) || 30;
+          var DUR = Number(stage.dataset.duration) || 1.6;
+          var TOTAL = Math.max(1, Math.round(DUR * FPS));
+          document.getElementById("kw-clip").dataset.duration = String(DUR);
+
+          function readVars() {
+            var decls = [];
+            try { decls = JSON.parse(document.documentElement.dataset.compositionVariables || "[]"); } catch (e) { decls = []; }
+            var out = {};
+            for (var i = 0; i < decls.length; i++) out[decls[i].id] = decls[i].default;
+            var live = window.__hyperframes && typeof window.__hyperframes.getVariables === "function"
+              ? window.__hyperframes.getVariables() : null;
+            if (live) for (var k in out) if (live[k] !== undefined && live[k] !== null) out[k] = live[k];
+            return out;
+          }
+          var V = readVars();
+          if (V.accent) stage.style.setProperty("--accent", String(V.accent));
+          document.getElementById("kw-texto").textContent = String(V.texto || "");
+          document.getElementById("kw-pie").textContent = String(V.pie || "");
+          var py = Number(String(V.posY ?? "38").trim());
+          if (Number.isFinite(py)) stage.style.setProperty("--pos-y", Math.max(0, Math.min(92, py)) / 100);
+
+          // La palabra ATERRIZA: entra desde abajo con escala y frena seco (oniaOutExpo, sin
+          // rebote — la motion-doctrine prohíbe bounce/elastic). El resaltador se abre justo
+          // detrás, 60ms más tarde, para que se lea "primero la palabra, después el subrayado".
+          var tl = gsap.timeline({ paused: true });
+          var enterF = Math.max(1, Math.round(0.22 * FPS));
+          var exitF = Math.max(1, Math.round(0.18 * FPS));
+          var exitAt = Math.max(enterF, TOTAL - exitF) / FPS;
+          var wrap = document.getElementById("kw-wrap");
+
+          gsap.set(wrap, { autoAlpha: 0 });
+          tl.set(wrap, { autoAlpha: 1 }, 0);
+          tl.fromTo(wrap, { y: "calc(var(--u) * 26)", scale: 0.88 },
+            { y: 0, scale: 1, duration: enterF / FPS, ease: "oniaOutExpo" }, 0);
+
+          var wipe = { v: 100 };
+          tl.to(wipe, {
+            v: 0, duration: Math.max(1, Math.round(0.26 * FPS)) / FPS, ease: "oniaOutExpo",
+            onUpdate: function () { stage.style.setProperty("--wipe", wipe.v); },
+          }, 2 / FPS);
+
+          tl.to(wrap, { autoAlpha: 0, y: "calc(var(--u) * -14)", duration: exitF / FPS, ease: "oniaOutQuart" }, exitAt);
+
+          window.__timelines = window.__timelines || {};
+          window.__timelines["keyword"] = tl;
+        })();
+      </script>
+    </div>
+  </body>
+</html>

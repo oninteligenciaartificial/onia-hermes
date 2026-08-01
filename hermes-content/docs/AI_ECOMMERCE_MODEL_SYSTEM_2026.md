@@ -4,7 +4,7 @@ Sistema operativo para crear una modelo IA profesional, original y reutilizable
 para ecommerce, ads, UGC, catalogos, landings y contenido social.
 
 Ultima actualizacion: 2026-06-05
-Owner: Sergio / ONIA
+Owner: Sergio / Onia
 Estado: v1 lista para prueba visual interna. No publicar ni entregar a cliente
 sin aprobacion explicita.
 
@@ -338,7 +338,7 @@ Razon:
 
 La Ruta 2 resuelve el problema mas monetizable: negocios que necesitan creativos
 rapidos, claros y baratos para vender. Puede producir 8, 16 o 24 piezas al mes,
-encaja con el pricing actual de ONIA y sirve como demo para tiendas locales sin
+encaja con el pricing actual de Onia y sirve como demo para tiendas locales sin
 pedirles sesiones de fotos. Es la mejor puerta de entrada comercial.
 
 Estrategia recomendada:
@@ -474,7 +474,7 @@ No mezclar producto real de cliente hasta que la identidad este aprobada.
 ### Marca ficticia
 
 Se puede crear un perfil de Mara Vale solo si se maneja con transparencia y no
-se simula una persona real con testimonios falsos. Para ONIA, conviene mas usar
+se simula una persona real con testimonios falsos. Para Onia, conviene mas usar
 Mara como "modelo IA de producto" que como influencer independiente.
 
 ## 10. Sistema de produccion
@@ -536,7 +536,7 @@ breves y verificables. Si falta prueba comercial, usa lenguaje seguro.
 | Herramienta | Uso | Obligatoriedad | Costo estimado | Ventaja | Desventaja | Alternativa barata |
 |---|---|---|---|---|---|---|
 | ChatGPT/Codex | estrategia, prompts, docs, automatizacion | obligatoria | ya registrado Codex Pro USD 100 | cerebro operativo | costo mensual | plan menor si baja volumen |
-| Higgsfield Ultra | Soul ID, videos, UGC, imagen/video | obligatoria para ONIA | ya registrado USD 130 | stack visual integrado | consume creditos | usar menos video y mas imagen |
+| Higgsfield Ultra | Soul ID, videos, UGC, imagen/video | obligatoria para Onia | ya registrado USD 130 | stack visual integrado | consume creditos | usar menos video y mas imagen |
 | Nano Banana Pro | imagen estatica, mockups, ads | recomendado | incluido en Higgsfield segun uso local | buena base para ads | depende de creditos | Flux/SD local |
 | Soul ID/Soul 2.0 | identidad consistente | obligatorio para Mara | incluido/por creditos | consistencia de personaje | requiere QA humano | IP-Adapter/LoRA |
 | Marketing Studio Video | videos UGC y producto | obligatorio para ads | por creditos | rapido para cliente | menos control fino | Seedance/Kling |
@@ -689,7 +689,7 @@ natural pose, no fake logo, no luxury exaggeration.
 
 ## 14. Monetizacion
 
-### Paquetes comerciales ONIA
+### Paquetes comerciales Onia
 
 | Paquete | Precio sugerido | Entregables | Tiempo | Margen esperado | Cliente ideal | Como vender |
 |---|---:|---|---|---|---|---|

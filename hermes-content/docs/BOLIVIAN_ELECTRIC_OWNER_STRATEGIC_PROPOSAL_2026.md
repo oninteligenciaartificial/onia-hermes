@@ -411,7 +411,7 @@ Solo duenos/gerencia autorizada:
 | Riesgo | Control |
 |---|---|
 | Prometer chatbot antes de permisos Meta | empezar con demo interna y base aprobada |
-| Criticar sistema actual sin auditoria | posicionar ONIA como capa complementaria |
+| Criticar sistema actual sin auditoria | posicionar Onia como capa complementaria |
 | Exponer datos sensibles en IA externa | politica de IA y niveles de informacion |
 | Equipo no adopta herramientas | capacitacion por rol y SOP cortos |
 | Proyecto demasiado grande | fases cortas con pilotos medibles |
@@ -419,7 +419,7 @@ Solo duenos/gerencia autorizada:
 | Integracion directa no viable | empezar con reportes aprobados o carga controlada |
 | Automatizacion causa errores | aprobacion humana y logs |
 
-## Rol recomendado de ONIA
+## Rol recomendado de Onia
 
 Titulo:
 
@@ -439,7 +439,7 @@ Responsabilidades:
 - proteger informacion sensible;
 - coordinar con proveedores externos cuando sea necesario.
 
-Lo que ONIA no debe ser:
+Lo que Onia no debe ser:
 
 - community manager aislado;
 - soporte informal gratis;
@@ -451,7 +451,7 @@ Lo que ONIA no debe ser:
 
 1. Quien sera sponsor interno?
 2. Que areas entran en Fase 1?
-3. Que informacion puede revisar ONIA?
+3. Que informacion puede revisar Onia?
 4. Que informacion queda restringida a duenos?
 5. Cual sera el primer piloto: CRM, web/cotizacion, base de conocimiento,
    inventario o importaciones?

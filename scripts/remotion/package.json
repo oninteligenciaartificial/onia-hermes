@@ -1,0 +1,25 @@
+{
+  "name": "onia-remotion",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Apoyos visuales ANIMADOS de ONIA (Remotion) — reemplazo del PNG estático de make-mockup.mjs para overlay-visuals.mjs. Fondo transparente (WebM alpha).",
+  "type": "module",
+  "scripts": {
+    "render": "node render.mjs",
+    "studio": "remotion studio src/index.ts"
+  },
+  "dependencies": {
+    "@remotion/bundler": "4.0.499",
+    "@remotion/cli": "4.0.499",
+    "@remotion/renderer": "4.0.499",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "remotion": "4.0.499"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.5",
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.5",
+    "typescript": "^5.7.3"
+  }
+}

@@ -16,7 +16,7 @@ interface SurfaceCardProps {
 }
 
 /**
- * Panel base del panel ONIA Center (registro producto). Reproduce el `.panel` del
+ * Panel base del panel Onia Center (registro producto). Reproduce el `.panel` del
  * mockup aprobado: superficie con hairline, header en barra con divisor inferior
  * (título 14px + subtítulo + acción) y un footer opcional. El mismo componente lo
  * usan todas las vistas para que el panel se sienta un solo producto: cuando solo

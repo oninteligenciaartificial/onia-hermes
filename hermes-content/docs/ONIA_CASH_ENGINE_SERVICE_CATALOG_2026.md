@@ -1,20 +1,20 @@
-# ONIA Cash Engine y Catalogo Operativo 2026
+# Onia Cash Engine y Catalogo Operativo 2026
 
 Estado: interno Sergio/ONIA.
 Fecha: 2026-06-22.
-Uso: cargar servicios, reglas, metas y permisos en ONIA Center antes de operar.
+Uso: cargar servicios, reglas, metas y permisos en Onia Center antes de operar.
 
 ## Veredicto
 
 Los datos financieros, roles y reglas de Arthur ya estan bastante definidos,
-pero antes de llevar todo a ONIA Center faltaba una capa:
+pero antes de llevar todo a Onia Center faltaba una capa:
 
 ```text
 Catalogo operativo de servicios + caballito de batalla mensual + reglas de
 venta, entrega, evidencia, margen, herramientas y comision.
 ```
 
-Sin esta capa, el sistema puede registrar ventas, pero no obliga a ONIA a vender
+Sin esta capa, el sistema puede registrar ventas, pero no obliga a Onia a vender
 lo que mantiene caja.
 
 ## Caballito de batalla recomendado
@@ -41,7 +41,7 @@ Componentes:
 - Google Business Profile optimizado o corregido;
 - landing, web o pagina de captacion cuando haga falta;
 - formulario, WhatsApp o CTA claro;
-- CRM simple en ONIA Center, Notion o herramienta aprobada;
+- CRM simple en Onia Center, Notion o herramienta aprobada;
 - flujo n8n simple para aviso y seguimiento;
 - reporte mensual;
 - mejora mensual cerrada;
@@ -61,13 +61,13 @@ Lo que NO promete:
 
 ## Por que este es el caballito correcto
 
-El gasto conservador mensual actual de ONIA es:
+El gasto conservador mensual actual de Onia es:
 
 ```text
 Bs. 3.650,50
 ```
 
-Con Fondo ONIA de 40%, se necesita vender:
+Con Fondo Onia de 40%, se necesita vender:
 
 ```text
 Bs. 3.650,50 / 0,40 = Bs. 9.126,25 netos al mes
@@ -75,11 +75,11 @@ Bs. 3.650,50 / 0,40 = Bs. 9.126,25 netos al mes
 
 Las webs sueltas ayudan, pero no estabilizan. El servicio recurrente si.
 
-## Planes ONIA Motor Local
+## Planes Onia Motor Local
 
 | Plan | Setup | Mensualidad | Cliente ideal | Decision |
 |---|---:|---:|---|---|
-| Starter | Bs. 1.500 | Bs. 790/mes | Negocio pequeno que necesita orden minimo. | Feeder, no sostiene ONIA solo. |
+| Starter | Bs. 1.500 | Bs. 790/mes | Negocio pequeno que necesita orden minimo. | Feeder, no sostiene Onia solo. |
 | Growth | Bs. 2.900 | Bs. 1.900/mes | Negocio local con ventas por WhatsApp, redes o visitas. | Caballito principal. |
 | Pro | Bs. 4.900 | Bs. 3.900/mes | Empresa con pauta, contenido y seguimiento frecuente. | Upgrade, requiere capacidad. |
 
@@ -127,7 +127,7 @@ Limites:
 - uso premium IA limitado y registrado;
 - pauta no incluida;
 - 1 ronda de cambios por pieza;
-- si el cliente exige filmacion, se cotiza ONIA Media.
+- si el cliente exige filmacion, se cotiza Onia Media.
 
 ### Pro
 
@@ -139,7 +139,7 @@ Incluye:
 - revision quincenal;
 - reporte de leads, respuestas y oportunidades;
 - coordinacion ligera de campana;
-- mayor uso de ONIA Media, IA o automatizacion bajo cupo.
+- mayor uso de Onia Media, IA o automatizacion bajo cupo.
 
 Limites:
 
@@ -168,7 +168,7 @@ Fondo ONIA 40% = Bs. 3.800
 ```
 
 Cinco clientes Growth activos cubren la existencia mensual conservadora de
-ONIA. Esta es la meta recurrente inicial.
+Onia. Esta es la meta recurrente inicial.
 
 ### Pro
 
@@ -178,7 +178,7 @@ Fondo ONIA 40% = Bs. 4.680
 ```
 
 Es mejor financieramente, pero exige mas calidad, produccion, seguimiento y
-capacidad. Debe venderse solo cuando ONIA pueda cumplir.
+capacidad. Debe venderse solo cuando Onia pueda cumplir.
 
 ### Primeros 60 dias
 
@@ -204,7 +204,7 @@ Total = (2 x Bs. 4.800) + (2 x Bs. 1.900) = Bs. 13.400
 Fondo ONIA 40% = Bs. 5.360
 ```
 
-Al final de 60 dias, ONIA deberia tener 4 clientes Growth activos. Falta 1
+Al final de 60 dias, Onia deberia tener 4 clientes Growth activos. Falta 1
 cliente Growth o 1 venta mediana adicional para cubrir el mes solo con
 recurrencia.
 
@@ -218,20 +218,20 @@ recurrencia.
 | Diagnostico + Plan | Bs. 690 | Entrada premium | Ordena procesos y prepara implementacion. |
 | Landing de Captacion | Bs. 790 | Cash rapido | Entrega clara, sirve para ads y CRM. |
 | Web Profesional | Bs. 1.500 | Cash medio | Valor claro para negocio local. |
-| Web Pro ONIA | Bs. 2.900 | Cash sano | Mejor margen si el alcance esta cerrado. |
+| Web Pro Onia | Bs. 2.900 | Cash sano | Mejor margen si el alcance esta cerrado. |
 | Automatizacion simple n8n | Bs. 790 | Upsell | Entrada -> registro -> aviso -> tarea. |
 | Flujo de aprobacion n8n | Bs. 1.200 | Upsell | Estados simples, aprobacion y notificacion. |
 | Instalacion Starter | Bs. 1.900 | Implementacion | Ticket sano con alcance corto. |
-| ONIA Motor Local Starter | Bs. 1.500 + Bs. 790/mes | Recurrente feeder | Convierte pequenos clientes a Growth. |
-| ONIA Motor Local Growth | Bs. 2.900 + Bs. 1.900/mes | Recurrente principal | Caballito de batalla. |
+| Onia Motor Local Starter | Bs. 1.500 + Bs. 790/mes | Recurrente feeder | Convierte pequenos clientes a Growth. |
+| Onia Motor Local Growth | Bs. 2.900 + Bs. 1.900/mes | Recurrente principal | Caballito de batalla. |
 
 ### Vender con aprobacion de Sergio
 
 | Servicio | Precio | Regla |
 |---|---:|---|
 | Implementacion Operativa | Bs. 4.900-6.500 | Solo con anticipo, alcance y responsables. |
-| ONIA Motor Local Pro | Bs. 4.900 + Bs. 3.900/mes | Solo si hay capacidad de produccion. |
-| ONIA Media Studio piloto | Bs. 1.200-4.900 | Paquete cerrado, no videos sueltos. |
+| Onia Motor Local Pro | Bs. 4.900 + Bs. 3.900/mes | Solo si hay capacidad de produccion. |
+| Onia Media Studio piloto | Bs. 1.200-4.900 | Paquete cerrado, no videos sueltos. |
 | Meta Ads gestion | Desde Bs. 690/mes o dentro de Pro | Pauta aparte, tracking y CRM obligatorio. |
 | WhatsApp operativo | Setup + mensual + consumo | Solo cuando Meta, numero, plantillas y costos esten claros. |
 | DentalGest/GestiOS con adaptacion | Plan mensual + setup aprobado | No personalizar gratis. |
@@ -260,7 +260,7 @@ recurrencia.
 - promesas de ventas garantizadas;
 - soporte 24/7 sin contrato.
 
-## Campos obligatorios para ONIA Center
+## Campos obligatorios para Onia Center
 
 Cada servicio debe existir como registro con:
 
@@ -271,7 +271,7 @@ Cada servicio debe existir como registro con:
 - `precio_setup`;
 - `precio_mensual`;
 - `tipo`: unico, recurrente, upsell, SaaS, producto, media;
-- `centro_contable`: ONIA Servicios, Nuvia, ONIA Media, Fondo/Caja;
+- `centro_contable`: Onia Servicios, Nuvia, Onia Media, Fondo/Caja;
 - `fondo_onia_percent`;
 - `costos_excluidos`;
 - `herramientas_usadas`;
@@ -304,7 +304,7 @@ Si el servicio no tiene estos campos, no se vende todavia.
 
 ### Vendedor normal
 
-Para ONIA Motor Local:
+Para Onia Motor Local:
 
 - 10% del setup neto cobrado;
 - 10% del primer mes neto cobrado;
@@ -351,8 +351,8 @@ Meta semanal minima:
 - 3 auditorias o diagnosticos ofrecidos;
 - 2 propuestas Motor Local enviadas;
 - 1 cierre semanal o 1 propuesta caliente para cierre;
-- 1 mejora interna ONIA Center;
-- 1 pieza demostrativa ONIA Media o caso propio.
+- 1 mejora interna Onia Center;
+- 1 pieza demostrativa Onia Media o caso propio.
 
 Meta mensual minima:
 
@@ -363,7 +363,7 @@ Meta mensual minima:
 
 ## Reglas de calidad
 
-ONIA no debe vender Motor Local si:
+Onia no debe vender Motor Local si:
 
 - el cliente no tiene oferta clara;
 - nadie respondera leads;
@@ -386,14 +386,14 @@ ONIA no debe vender Motor Local si:
 | Ads queman dinero | Ads solo con landing, CRM y seguimiento en 24h. |
 | Cliente no responde | Pausar optimizacion y registrar bloqueo. |
 | Servicio se vuelve custom | Cambiar a implementacion o sistema con nuevo precio. |
-| Fondo ONIA no alcanza | Pausar gastos de crecimiento y volver a ventas. |
+| Fondo Onia no alcanza | Pausar gastos de crecimiento y volver a ventas. |
 
-## Que debe mostrar ONIA Center
+## Que debe mostrar Onia Center
 
 Dashboard CEO:
 
 - ventas netas del mes;
-- Fondo ONIA acumulado;
+- Fondo Onia acumulado;
 - faltante para cubrir Bs. 3.650,50;
 - numero de Growth activos;
 - MRR por plan;
@@ -430,14 +430,14 @@ Vista vendedor:
 
 ## Decision final
 
-Antes de enviar a ONIA Center, si hay que elegir una prioridad, es esta:
+Antes de enviar a Onia Center, si hay que elegir una prioridad, es esta:
 
 ```text
 Todo el sistema debe empujar ONIA Motor Local Growth.
 ```
 
 Las auditorias, webs, n8n, contenido, Google Business Profile, Meta Ads y
-ONIA Media deben funcionar como entradas, upsells o piezas de ese motor.
+Onia Media deben funcionar como entradas, upsells o piezas de ese motor.
 
 ## Fuentes externas revisadas
 

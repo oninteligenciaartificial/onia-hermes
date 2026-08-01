@@ -49,11 +49,16 @@ async function liveRequest<T>(path: string): Promise<T | null> {
     });
 
     if (!response.ok) {
+      // Degradación elegante: el panel sigue mostrando su estado vacío. Pero una
+      // caída no puede verse igual que "no hay nada", así que queda en el log del
+      // servidor con endpoint + status para poder distinguirla.
+      console.error(`[onia-center/live] ${path} → HTTP ${response.status}`);
       return null;
     }
 
     return (await response.json()) as T;
-  } catch {
+  } catch (error) {
+    console.error(`[onia-center/live] ${path} → ${error instanceof Error ? error.message : String(error)}`);
     return null;
   }
 }
@@ -755,7 +760,7 @@ export async function getContentPipelineCounts(): Promise<ContentPipelineCounts 
 
 // ---------------------------------------------------------------------------
 // 8. Costos y suscripciones — onia_center.cost_items.
-//    Cada gasto recurrente de ONIA (infra, dominios, APIs, email, tools) con su
+//    Cada gasto recurrente de Onia (infra, dominios, APIs, email, tools) con su
 //    ciclo de cobro y proximo pago. Para item_key='openai_api' el raw trae el
 //    gasto IA del mes en vivo (raw.spend_usd_mtd). El panel LEE, no escribe.
 // ---------------------------------------------------------------------------
@@ -946,4 +951,83 @@ export async function getCostItems(): Promise<CostItem[]> {
   }
   const now = new Date();
   return rows.filter((row) => row.item_key).map((row) => mapCostItem(row, now));
+}
+
+// ---------------------------------------------------------------------------
+// Estudio de Contenido — video_projects + cola de aprobacion de cortes (video_cut).
+// Lectores CRUDOS (raw DB); el mapeo a view-models vive en
+// components/views/estudio/source.ts. Ante fallo/sin config devuelven [] (nunca lanzan).
+// ---------------------------------------------------------------------------
+
+export type DbVideoProjectRow = {
+  video_key?: string;
+  title?: string;
+  lane?: string;
+  status?: string;
+  owner_role_key?: string | null;
+  format?: string;
+  duration_seconds?: number | string | null;
+  final_seconds?: number | string | null;
+  model?: string;
+  credits_est?: number | string | null;
+  source_url?: string | null;
+  preview_url?: string | null;
+  render_url?: string | null;
+  cut_plan_ref?: string | null;
+  raw?: Record<string, unknown> | null;
+  updated_at?: string;
+};
+
+export type DbVideoCutRow = {
+  review_key?: string;
+  source_key?: string;
+  title?: string;
+  priority?: string;
+  status?: string;
+  raw?: Record<string, unknown> | null;
+};
+
+export async function getVideoProjectRows(): Promise<DbVideoProjectRow[]> {
+  const rows = await liveRequest<DbVideoProjectRow[]>(
+    "video_projects?select=video_key,title,lane,status,owner_role_key,format,duration_seconds,final_seconds,model,credits_est,source_url,preview_url,render_url,cut_plan_ref,raw,updated_at&order=updated_at.desc&limit=100",
+  );
+  return rows ?? [];
+}
+
+export async function getVideoCutRows(): Promise<DbVideoCutRow[]> {
+  const rows = await liveRequest<DbVideoCutRow[]>(
+    "review_queue?select=review_key,source_key,title,priority,status,raw&source_type=eq.video_cut&status=eq.pending&order=created_at.desc&limit=80",
+  );
+  return rows ?? [];
+}
+
+// ---------------------------------------------------------------------------
+// 9. Balance de créditos de proveedores generativos — onia_center.provider_credits.
+//    Una sesión Claude Code con el MCP de Higgsfield lee el balance vivo y lo
+//    escribe (higgsfield-balance-sync.mjs); el panel LEE. Ante fallo/sin fila
+//    devuelve null y el consumidor cae a la constante (fallback graceful).
+// ---------------------------------------------------------------------------
+
+export interface ProviderBalance {
+  credits: number;
+  plan: string;
+}
+
+type DbProviderCreditsRow = {
+  credits?: unknown;
+  plan?: unknown;
+};
+
+export async function getHiggsfieldBalance(): Promise<ProviderBalance | null> {
+  const rows = await liveRequest<DbProviderCreditsRow[]>(
+    "provider_credits?select=credits,plan&provider=eq.higgsfield&limit=1",
+  );
+  const row = rows?.[0];
+  if (!row) {
+    return null;
+  }
+  return {
+    credits: toNumber(row.credits),
+    plan: typeof row.plan === "string" && row.plan.trim() !== "" ? row.plan : "",
+  };
 }

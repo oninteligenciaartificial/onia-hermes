@@ -1,4 +1,4 @@
-# ONIA Creator Video Strategy 2026
+# Onia Creator Video Strategy 2026
 
 ## Objetivo
 
@@ -47,7 +47,7 @@ curiosidad visual -> reaccion de creador -> interfaz/archivo -> tool reveal
 -> workflow proof -> segundo ejemplo
 ```
 
-Usar cuando queremos que ONIA parezca magico pero practico.
+Usar cuando queremos que Onia parezca magico pero practico.
 
 No copiar:
 
@@ -81,7 +81,7 @@ future shock -> tool reveal -> paso visual -> character lock -> storyboard
 -> frames to film
 ```
 
-Esta es la referencia mas util para vender el nivel nuevo de ONIA.
+Esta es la referencia mas util para vender el nivel nuevo de Onia.
 
 ## Skills recomendadas
 
@@ -96,12 +96,12 @@ Esta es la referencia mas util para vender el nivel nuevo de ONIA.
 
 ## Workflow recomendado
 
-### Workflow 1: referencia a video ONIA
+### Workflow 1: referencia a video Onia
 
 Entrada:
 
 - video de referencia;
-- objetivo ONIA;
+- objetivo Onia;
 - plataforma;
 - CTA.
 
@@ -109,7 +109,7 @@ Proceso:
 
 1. Extraer hook, ritmo, escenas, proof y CTA.
 2. Definir que NO se puede copiar.
-3. Crear angle original ONIA.
+3. Crear angle original Onia.
 4. Crear guion de 6 beats.
 5. Crear prompt Higgsfield.
 6. Crear caption y variantes.
@@ -153,7 +153,7 @@ Por que:
 
 - conecta con Higgsfield/Supercomputer;
 - muestra nivel;
-- vende ONIA como sistema, no como editor;
+- vende Onia como sistema, no como editor;
 - tiene potencial educativo y comercial.
 
 ### Segundo

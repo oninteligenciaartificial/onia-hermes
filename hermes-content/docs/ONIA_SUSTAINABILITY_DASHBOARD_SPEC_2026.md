@@ -1,12 +1,12 @@
-# ONIA Sustainability Dashboard Spec 2026
+# Onia Sustainability Dashboard Spec 2026
 
 Estado: interno Sergio/ONIA.
 Fecha: 2026-06-21.
-Uso: llevar estas reglas al dashboard / sistema operativo de ONIA.
+Uso: llevar estas reglas al dashboard / sistema operativo de Onia.
 
 ## Veredicto
 
-ONIA debe sobrevivir con matematica, no con intuicion.
+Onia debe sobrevivir con matematica, no con intuicion.
 
 Regla:
 
@@ -24,7 +24,7 @@ datos propios y capacidad compuesta sin bloquear ventas ni seguridad, se prioriz
 frente a una opcion gratis/hosted temporal.
 ```
 
-## Cuanto debe vender ONIA para sostenerse con 40%
+## Cuanto debe vender Onia para sostenerse con 40%
 
 Gasto conservador mensual actual:
 
@@ -34,13 +34,13 @@ Gasto conservador mensual actual:
 | Caja chica/logistica minima | Bs. 700,00 |
 | Necesidad mensual conservadora | Bs. 3.650,50 |
 
-Si el Fondo ONIA recibe 40% del ingreso neto operativo:
+Si el Fondo Onia recibe 40% del ingreso neto operativo:
 
 ```text
 Bs. 3.650,50 / 0,40 = Bs. 9.126,25
 ```
 
-ONIA necesita aproximadamente Bs. 9.126 netos al mes para que el 40% cubra la
+Onia necesita aproximadamente Bs. 9.126 netos al mes para que el 40% cubra la
 existencia mensual.
 
 Meta semanal minima:
@@ -61,23 +61,23 @@ Estos ejemplos asumen que el 40% se calcula sobre monto neto operativo. Si hay
 costos externos, pauta, dominio, hosting, comisiones o herramientas de cliente,
 se descuentan antes.
 
-| Combinacion mensual | Venta neta | Fondo ONIA 40% | Resultado |
+| Combinacion mensual | Venta neta | Fondo Onia 40% | Resultado |
 |---|---:|---:|---|
 | 37 Auditorias Express de Bs. 250 | Bs. 9.250 | Bs. 3.700 | Cubre operacion, pero exige mucho volumen. |
 | 7 Landings de Bs. 790 | Bs. 5.530 | Bs. 2.212 | No alcanza solo con landings. |
 | 7 Web Profesionales de Bs. 1.500 | Bs. 10.500 | Bs. 4.200 | Cubre operacion y deja margen. |
-| 4 Web Pro ONIA de Bs. 2.900 | Bs. 11.600 | Bs. 4.640 | Mejor equilibrio de volumen/margen. |
+| 4 Web Pro Onia de Bs. 2.900 | Bs. 11.600 | Bs. 4.640 | Mejor equilibrio de volumen/margen. |
 | 2 Implementaciones de Bs. 4.900 | Bs. 9.800 | Bs. 3.920 | Cubre operacion si el alcance esta cerrado. |
-| 5 ONIA Motor Local Growth activos | Bs. 9.500 | Bs. 3.800 | Cubre operacion con recurrencia. |
+| 5 Onia Motor Local Growth activos | Bs. 9.500 | Bs. 3.800 | Cubre operacion con recurrencia. |
 | 1 Implementacion Bs. 4.900 + 1 Web Pro Bs. 2.900 + 1 n8n Bs. 790 + 2 Auditorias | Bs. 9.090 | Bs. 3.636 | Casi cubre; falta margen pequeno. |
 | 1 Implementacion Bs. 6.500 + 1 Web Profesional + 2 Auditorias + 1 n8n | Bs. 9.290 | Bs. 3.716 | Cubre operacion. |
 
 Lectura:
 
-- ONIA no debe depender solo de auditorias.
+- Onia no debe depender solo de auditorias.
 - La mezcla sana es 1-2 tickets medianos + servicios pequenos.
 - Webs, implementaciones y n8n cerrados son los que sostienen el 40%.
-- ONIA Motor Local Growth debe ser el caballito recurrente: 5 clientes activos
+- Onia Motor Local Growth debe ser el caballito recurrente: 5 clientes activos
   cubren la existencia conservadora.
 - DentalGest/GestiOS ayudan mas por recurrencia, pero no deben comerse soporte
   no cobrado.
@@ -88,7 +88,7 @@ Meta semanal: Bs. 2.500-3.000 cobrados.
 
 Escenarios:
 
-| Semana | Ventas | Total | Fondo ONIA 40% |
+| Semana | Ventas | Total | Fondo Onia 40% |
 |---|---|---:|---:|
 | Base | 1 Web Profesional + 1 n8n + 1 Auditoria | Bs. 2.540 | Bs. 1.016 |
 | Sana | 1 Web Pro + 1 Auditoria | Bs. 3.150 | Bs. 1.260 |
@@ -122,7 +122,7 @@ costo fijo preaprobado si el margen lo permite.
 
 El dashboard debe bloquear bonos porcentuales de Nuvia bootstrap. Solo debe
 permitir pago operativo fijo si fue aprobado antes de vender y si no rompe caja,
-Fondo ONIA ni Reserva Nuvia.
+Fondo Onia ni Reserva Nuvia.
 
 ## Cierre Nuvia 80/20
 
@@ -170,7 +170,7 @@ capital real.
 | Producto vendido | -Bs. 5.000 |
 | Bolsas/transporte | -Bs. 400 |
 | Margen operativo | Bs. 2.600 |
-| Fondo ONIA 20% | -Bs. 520 |
+| Fondo Onia 20% | -Bs. 520 |
 | Caja chica Nuvia | -Bs. 200 |
 | Reserva Nuvia bootstrap 20% | -Bs. 520 |
 | Utilidad distribuible | Bs. 1.360 |
@@ -199,7 +199,7 @@ si la campana mantiene margen positivo.
 | Bolsas/transporte | -Bs. 400 |
 | Pago fijo Arthur aprobado | -Bs. 150 |
 | Margen operativo | Bs. 2.450 |
-| Fondo ONIA 20% | -Bs. 490 |
+| Fondo Onia 20% | -Bs. 490 |
 | Caja chica Nuvia | -Bs. 200 |
 | Reserva Nuvia bootstrap 20% | -Bs. 490 |
 | Utilidad distribuible | Bs. 1.270 |
@@ -209,9 +209,9 @@ si la campana mantiene margen positivo.
 
 Lectura:
 
-- Sergio sigue ganando mas porque puso 80% del capital y asume ONIA.
+- Sergio sigue ganando mas porque puso 80% del capital y asume Onia.
 - Arthur recupera por capital y cobra el trabajo solo porque se presupuesto antes.
-- ONIA ya recibio Fondo ONIA, Nuvia ya guardo caja chica y reserva antes del
+- Onia ya recibio Fondo Onia, Nuvia ya guardo caja chica y reserva antes del
   reparto.
 
 El dashboard debe bloquear bono porcentual en Nuvia bootstrap.
@@ -230,7 +230,7 @@ Ejemplo:
 | Meta Ads pagado por Sergio/ONIA | -Bs. 600 |
 | Higgsfield prorrateado Nuvia | -Bs. 250 |
 | Margen operativo | Bs. 1.750 |
-| Fondo ONIA 20% | -Bs. 350 |
+| Fondo Onia 20% | -Bs. 350 |
 | Caja chica Nuvia | -Bs. 150 |
 | Reserva Nuvia bootstrap 20% | -Bs. 350 |
 | Utilidad distribuible | Bs. 900 |
@@ -249,8 +249,8 @@ fijo si estaba presupuestado antes de la campana.
 
 Nuvia no puede usar Higgsfield como si fuera gratis.
 
-Higgsfield es gasto critico de ONIA. Si Nuvia lo consume sin control, puede
-dejar a ONIA sin capacidad para clientes, demos y ventas.
+Higgsfield es gasto critico de Onia. Si Nuvia lo consume sin control, puede
+dejar a Onia sin capacidad para clientes, demos y ventas.
 
 Regla:
 
@@ -263,9 +263,9 @@ Distribucion inicial recomendada del uso premium:
 
 | Centro | Limite mensual sugerido |
 |---|---:|
-| ONIA clientes/demos comerciales | 60% |
+| Onia clientes/demos comerciales | 60% |
 | Nuvia | 20% |
-| ONIA Media / canales | 10% |
+| Onia Media / canales | 10% |
 | Investigacion/R&D | 10% |
 
 Reglas:
@@ -284,7 +284,7 @@ Campos para dashboard `premium_tool_usage`:
 |---|---|
 | fecha | date |
 | herramienta | Higgsfield / ElevenLabs / OpenAI / otra |
-| centro | ONIA / Nuvia / ONIA Media / Cliente |
+| centro | Onia / Nuvia / Onia Media / Cliente |
 | campana_lote | texto |
 | responsable | Sergio / Arthur / otro |
 | aprobado_por | Sergio |
@@ -293,7 +293,7 @@ Campos para dashboard `premium_tool_usage`:
 | output_url | url/texto |
 | estado | borrador / usado / publicado / rechazado / perdido |
 | ingreso_asociado_bs | numero |
-| decision | cobrar a centro / asumir ONIA / descartar |
+| decision | cobrar a centro / asumir Onia / descartar |
 
 ## Self-hosted para ahorrar
 
@@ -307,7 +307,7 @@ lo que genera valor final.
 | Chat interno, prompts, SOPs | Open WebUI + modelos locales/API | Reduce uso disperso de chats pagos y centraliza prompts. | No reemplaza modelos premium para trabajo critico. |
 | Control de costos LLM | LiteLLM | Permite presupuestos por equipo/centro y llaves separadas. | Requiere configuracion y disciplina. |
 | Automatizaciones | n8n self-hosted | Evita pagar Zapier/Make por flujos propios. | Hay que controlar ejecuciones, logs y errores. |
-| Datos/CRM | Supabase privado | Base unica para ONIA Center, Nuvia, leads y cierres. | RLS, backups y server-side obligatorio. |
+| Datos/CRM | Supabase privado | Base unica para Onia Center, Nuvia, leads y cierres. | RLS, backups y server-side obligatorio. |
 | PDFs | Stirling PDF | Evita herramientas sueltas para contratos/reportes. | Debe estar protegido. |
 | Busqueda/research | SearXNG / Crawl4AI privado | Reduce investigacion manual y scraping desordenado. | No usar para abuso ni datos sensibles sin permiso. |
 | Video borrador | ComfyUI + Wan local/worker | Permite probar ideas antes de gastar Higgsfield. | Hardware actual puede limitar calidad/velocidad. |
@@ -338,7 +338,7 @@ Idea / prompt / guion
 
 ## Modulos que debe tener el dashboard
 
-### 1. Break-even ONIA
+### 1. Break-even Onia
 
 Objetivo: saber si el 40% cubre la empresa.
 
@@ -347,7 +347,7 @@ Campos:
 - gasto mensual base;
 - caja chica mensual;
 - necesidad mensual;
-- porcentaje Fondo ONIA;
+- porcentaje Fondo Onia;
 - venta neta requerida;
 - venta neta acumulada mes;
 - falta para cubrir mes;
@@ -376,12 +376,12 @@ Debe permitir combinar:
 - n8n;
 - implementaciones;
 - SaaS mensual;
-- ONIA Media Studio.
+- Onia Media Studio.
 
 Salida:
 
 - venta total;
-- Fondo ONIA 40%;
+- Fondo Onia 40%;
 - comisiones;
 - utilidad Sergio estimada;
 - riesgo de entrega;
@@ -425,7 +425,7 @@ Campos:
 - margen operativo;
 - margen real unitario;
 - margen real porcentaje;
-- Fondo ONIA 20%;
+- Fondo Onia 20%;
 - Reserva Nuvia porcentaje aplicable;
 - Reserva Nuvia monto;
 - utilidad distribuible;
@@ -476,7 +476,7 @@ Alertas:
 
 ### 6. Self-hosted savings
 
-Objetivo: medir cuanto ahorra ONIA por usar infraestructura propia.
+Objetivo: medir cuanto ahorra Onia por usar infraestructura propia.
 
 Campos:
 
@@ -491,7 +491,7 @@ Campos:
 
 ### 7. Retiro Sergio / dueno
 
-Objetivo: permitir que Sergio gane sin matar ONIA.
+Objetivo: permitir que Sergio gane sin matar Onia.
 
 Campos:
 
@@ -513,16 +513,16 @@ Verde: 20%-30% utilidad neta.
 Fuerte: hasta 40% si hay 3 meses de reserva.
 ```
 
-### 8. Recuperacion de capital ONIA
+### 8. Recuperacion de capital Onia
 
 Objetivo: que el sistema calcule cuanto puede recuperar Sergio y cuanto puede
-recuperar Arthur sin matar el Fondo ONIA.
+recuperar Arthur sin matar el Fondo Onia.
 
 Campos:
 
 - capital Sergio pendiente;
 - capital Arthur operativo pendiente;
-- Fondo ONIA del periodo;
+- Fondo Onia del periodo;
 - gastos fijos del periodo;
 - caja chica;
 - reserva minima pendiente;
@@ -558,7 +558,7 @@ hermes-content/docs/ONIA_CAPITAL_RECOVERY_AND_ARTHUR_INVESTMENT_POLICY_2026.md
 
 ## Decisiones para llevar al dashboard
 
-1. El dashboard debe mostrar primero supervivencia ONIA, no ventas brutas.
+1. El dashboard debe mostrar primero supervivencia Onia, no ventas brutas.
 2. Cada servicio debe mostrar cuanto aporta al 40%.
 3. Nuvia debe cerrar por lote y campana, no por sensacion.
 4. Arthur debe verse como capitalista proporcional cuando pone dinero, y como
@@ -566,7 +566,7 @@ hermes-content/docs/ONIA_CAPITAL_RECOVERY_AND_ARTHUR_INVESTMENT_POLICY_2026.md
 5. Higgsfield debe tener limite por centro y aprobacion Sergio.
 6. Self-hosted debe medirse por ahorro real, no por instalar herramientas.
 7. Sergio debe tener modulo de retiro/dueno con semaforo.
-8. La recuperacion de capital debe salir solo del excedente del Fondo ONIA,
+8. La recuperacion de capital debe salir solo del excedente del Fondo Onia,
    despues de gastos, caja chica y reserva.
 
 ## Fuentes tecnicas revisadas

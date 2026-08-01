@@ -1,0 +1,681 @@
+/*
+ * Precios — la escalera.
+ *
+ * Reglas: nada de tres columnas iguales. El nivel se lee por tres senales
+ * distintas (offset vertical, medidor que se llena, color del recomendado) y
+ * el precio es el elemento tipografico mas grande de la seccion despues del h2.
+ * Todo el motion va por transform/opacity.
+ */
+
+.section {
+  background: var(--bg-deep);
+  border-top: 1px solid var(--line-soft);
+  border-bottom: 1px solid var(--line-soft);
+}
+
+/* ---------- controles ---------- */
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.4rem 2rem;
+  margin-top: 2.6rem;
+}
+
+.control {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+}
+
+.legend {
+  padding: 0;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-bottom: 0.6rem;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.chipRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  min-height: 44px;
+  padding: 0.55em 1.05em;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--ink-soft);
+  font-size: 0.94rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    border-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.chip:hover {
+  border-color: var(--ink-faint);
+  transform: translateY(-1px);
+}
+
+.chip:has(:focus-visible) {
+  outline: 2px solid var(--accent-strong);
+  outline-offset: 3px;
+}
+
+.chipOn {
+  border-color: var(--accent);
+  color: var(--ink);
+  background: var(--surface);
+  box-shadow: 0 0 0 1px var(--accent-glow);
+}
+
+.chipDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--line);
+  flex: none;
+  transition: background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.chipOn .chipDot {
+  background: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+
+.chipSoon {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+/* segmentado mensual / anual */
+
+.cicloRow {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+  padding: 4px;
+  isolation: isolate;
+}
+
+.cicloPill {
+  position: absolute;
+  z-index: 0;
+  top: 4px;
+  left: 4px;
+  width: calc(50% - 4px);
+  height: calc(100% - 8px);
+  border-radius: 999px;
+  background: var(--ink);
+}
+
+.cicloOpt {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 0.35em 1.1em;
+  border-radius: 999px;
+  font-size: 0.94rem;
+  font-weight: 600;
+  color: var(--ink-soft);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color 0.2s ease;
+}
+
+.cicloRow:has(:focus-visible) {
+  outline: 2px solid var(--accent-strong);
+  outline-offset: 3px;
+}
+
+.cicloOn {
+  color: var(--bg);
+}
+
+.cicloSave {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  opacity: 0.85;
+}
+
+/* ---------- la escalera ---------- */
+
+.escalera {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  margin-top: 2.4rem;
+}
+
+@media (min-width: 900px) {
+  .escalera {
+    /* el recomendado es mas ancho: jerarquia por ancho, no por altura */
+    grid-template-columns: 1fr 1.14fr 1fr;
+    gap: 1.1rem;
+    align-items: start;
+  }
+
+  /* el escalon: cada plan arranca mas arriba que el anterior */
+  .escalera > *:nth-child(1) {
+    margin-top: 3.2rem;
+  }
+
+  .escalera > *:nth-child(2) {
+    margin-top: 1.6rem;
+  }
+}
+
+.plan {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.65rem;
+  padding: clamp(1.4rem, 2.4vw, 2rem);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+}
+
+.planTop {
+  border-color: color-mix(in oklab, var(--accent) 55%, var(--line));
+  box-shadow: 0 0 0 1px var(--accent-glow), var(--shadow-pop);
+}
+
+.planHead {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  width: 100%;
+}
+
+.planPaso {
+  font-size: 0.72rem;
+  color: var(--ink-faint);
+  letter-spacing: 0.1em;
+}
+
+.planSalto {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent-ink);
+}
+
+.planTag {
+  margin-left: auto;
+  font-size: 0.6rem;
+}
+
+.medidor {
+  display: block;
+  width: 100%;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--line-soft);
+  overflow: hidden;
+}
+
+.medidorFill {
+  display: block;
+  height: 100%;
+  width: 100%;
+  transform-origin: left center;
+  background: var(--accent);
+}
+
+.planNombre {
+  font-size: clamp(1.6rem, 1.3rem + 1vw, 2.15rem);
+  margin-top: 0.35rem;
+}
+
+.planResultado {
+  color: var(--ink-soft);
+  font-size: 1.02rem;
+  line-height: 1.5;
+  max-width: 34ch;
+}
+
+.planPrecio {
+  display: flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  margin-top: 0.5rem;
+}
+
+.planCifra {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.28rem;
+  font-size: clamp(2.4rem, 1.8rem + 2.6vw, 3.6rem);
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+.planMoneda {
+  font-size: 0.42em;
+  color: var(--ink-faint);
+  letter-spacing: 0.04em;
+}
+
+.planUnidad {
+  color: var(--ink-faint);
+  font-size: 0.95rem;
+}
+
+.planPrecioNota {
+  font-size: 0.82rem;
+  color: var(--ink-faint);
+}
+
+.planCtaWrap {
+  margin-top: 0.8rem;
+}
+
+.planCuando {
+  font-size: 0.86rem;
+  color: var(--ink-soft);
+  max-width: 32ch;
+}
+
+.planHereda {
+  margin-top: 0.9rem;
+  padding-top: 0.9rem;
+  border-top: 1px dashed var(--line);
+  width: 100%;
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.planLista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.planItem {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.6rem;
+  align-items: start;
+  font-size: 0.93rem;
+  color: var(--ink-soft);
+  line-height: 1.45;
+}
+
+.planItemDot {
+  width: 7px;
+  height: 7px;
+  margin-top: 0.5em;
+  border-radius: 50%;
+  background: var(--accent);
+  flex: none;
+}
+
+.planLimites {
+  margin-top: auto;
+  padding-top: 0.9rem;
+  font-size: 0.78rem;
+  color: var(--ink-faint);
+}
+
+.escaleraPie {
+  margin-top: 1.6rem;
+  font-size: 0.94rem;
+  color: var(--ink-soft);
+  max-width: 62ch;
+}
+
+/* ---------- rubro sin precio ---------- */
+
+.sinPrecio {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.2rem;
+  margin-top: 2.4rem;
+  padding: clamp(1.5rem, 3vw, 2.4rem);
+  border: 1px dashed var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+}
+
+@media (min-width: 900px) {
+  .sinPrecio {
+    grid-template-columns: 1.5fr 1fr;
+    gap: 2.4rem;
+    align-items: start;
+  }
+}
+
+.sinTitulo {
+  font-size: clamp(1.4rem, 1.1rem + 1.2vw, 2rem);
+  margin-top: 0.7rem;
+  max-width: 20ch;
+}
+
+.sinBody {
+  color: var(--ink-soft);
+  max-width: 56ch;
+  margin-top: 0.9rem;
+}
+
+.sinCtas {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.7rem;
+  margin-top: 1.4rem;
+}
+
+.sinHoy {
+  border-left: 2px solid var(--accent);
+  padding-left: 1.1rem;
+}
+
+.sinHoyTitulo {
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent-ink);
+}
+
+.sinHoyLista {
+  list-style: none;
+  margin: 0.8rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.5rem;
+  color: var(--ink);
+  font-size: 0.96rem;
+}
+
+.sinHoyNota {
+  margin-top: 0.9rem;
+  font-size: 0.84rem;
+  color: var(--ink-faint);
+}
+
+/* ---------- las garantias, pegadas al numero ---------- */
+
+.garantias {
+  margin-top: clamp(2.4rem, 4vw, 3.4rem);
+  padding: clamp(1.6rem, 3.2vw, 2.6rem);
+  border-radius: var(--radius-lg);
+  background: var(--accent-soft);
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.6rem;
+}
+
+@media (min-width: 940px) {
+  .garantias {
+    grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
+    column-gap: clamp(2rem, 4vw, 4rem);
+    align-items: start;
+  }
+
+  .cohorte {
+    grid-column: 1 / -1;
+  }
+}
+
+.garantiasTitulo {
+  font-size: clamp(1.5rem, 1.1rem + 1.5vw, 2.15rem);
+  color: var(--accent-ink);
+  max-width: 14ch;
+}
+
+.garantiasLead {
+  margin-top: 0.8rem;
+  color: var(--ink-soft);
+  font-size: 0.94rem;
+  max-width: 40ch;
+}
+
+.garantiasLista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0;
+}
+
+.garantiaItem {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  column-gap: 0.75rem;
+  row-gap: 0.25rem;
+  padding-block: 0.95rem;
+  border-top: 1px solid color-mix(in oklab, var(--accent) 30%, transparent);
+}
+
+.garantiaItem:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.garantiaItem:last-child {
+  padding-bottom: 0;
+}
+
+.garantiaCheck {
+  display: inline-grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--accent-strong);
+  color: var(--accent-soft);
+  margin-top: 0.15em;
+}
+
+.garantiaTitulo {
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+
+.garantiaDetalle {
+  grid-column: 2;
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+  max-width: 60ch;
+  text-wrap: pretty;
+}
+
+.cohorte {
+  font-size: 0.86rem;
+  color: var(--ink-soft);
+  border-top: 1px solid color-mix(in oklab, var(--accent) 30%, transparent);
+  padding-top: 1.1rem;
+  max-width: 78ch;
+}
+
+/* ---------- la letra ---------- */
+
+.letra {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.2rem;
+  margin-top: 3rem;
+}
+
+@media (min-width: 900px) {
+  .letra {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  /* la nota fiscal ocupa el ancho: es lo mas importante de esta zona */
+  .fiscal {
+    grid-column: 1 / -1;
+  }
+}
+
+/* La nota fiscal baja de tono: arriba ya esta la banda verde de garantias y
+   dos bloques del mismo verde pegados se leen como uno solo. Sigue primera y
+   a todo el ancho — manda el orden, no el color. */
+.fiscal {
+  padding: clamp(1.2rem, 2.2vw, 1.7rem);
+  border: 1px dashed var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.fiscalBody {
+  margin-top: 0.7rem;
+  color: var(--ink);
+  max-width: 88ch;
+  font-size: 0.96rem;
+}
+
+.bloque {
+  padding: clamp(1.2rem, 2.2vw, 1.7rem);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.bloqueTitulo {
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.noLista,
+.addLista,
+.condLista {
+  list-style: none;
+  margin: 1rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.85rem;
+}
+
+.noItem {
+  display: grid;
+  gap: 0.15rem;
+  padding-left: 1.1rem;
+  position: relative;
+  font-size: 0.93rem;
+}
+
+.noItem::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.62em;
+  width: 10px;
+  height: 1.5px;
+  background: var(--danger);
+  border-radius: 2px;
+}
+
+.noQue {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.noDetalle {
+  color: var(--ink-soft);
+}
+
+.addItem {
+  display: grid;
+  gap: 0.2rem;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid var(--line-soft);
+  font-size: 0.93rem;
+}
+
+.addItem:last-child {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.addNombre {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.addCopy {
+  color: var(--ink-soft);
+}
+
+.addPrecio {
+  margin-top: 0.2rem;
+  color: var(--accent-ink);
+  font-size: 0.86rem;
+}
+
+.condItem {
+  position: relative;
+  padding-left: 1.1rem;
+  font-size: 0.93rem;
+  color: var(--ink-soft);
+}
+
+.condItem::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  border: 1.5px solid var(--accent);
+}
+
+.condCierre {
+  margin-top: 1.1rem;
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+}
+
+.condCierre a {
+  color: var(--accent-ink);
+  text-underline-offset: 3px;
+}

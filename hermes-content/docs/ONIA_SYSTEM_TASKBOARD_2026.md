@@ -1,6 +1,6 @@
-# ONIA — Tablero de Tareas del Sistema 2026
+# Onia — Tablero de Tareas del Sistema 2026
 
-Fecha: 2026-07-03. Owner: Sergio Urcullo (ONIA). Modo: 3 tracks en paralelo.
+Fecha: 2026-07-03. Owner: Sergio Urcullo (Onia). Modo: 3 tracks en paralelo.
 
 Tablero para personas reales + agentes. Cada tarea tiene: responsable sugerido,
 agente que la ejecuta/asiste, prioridad (P0 bloqueante / P1 alta / P2 media),

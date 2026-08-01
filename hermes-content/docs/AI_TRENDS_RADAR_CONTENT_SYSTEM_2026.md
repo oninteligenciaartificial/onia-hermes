@@ -40,7 +40,7 @@ Ventajas frente a futbol:
 - Afiliados naturales: IA, automatizacion, CRM, creadores, herramientas de video, hosting, productividad.
 - Sponsors naturales: SaaS, plataformas IA, newsletters, academias, herramientas no-code.
 - Menor dependencia de calendario deportivo.
-- Mejor conexion con ONIA, aunque el canal puede seguir siendo independiente.
+- Mejor conexion con Onia, aunque el canal puede seguir siendo independiente.
 
 Riesgo:
 
@@ -283,5 +283,5 @@ Futbol Lab IA puede quedar como experimento creativo. Radar IA debe ser el canal
 - sponsors SaaS;
 - afiliados;
 - productos propios;
-- conexion con ONIA;
+- conexion con Onia;
 - automatizacion diaria.

@@ -1,0 +1,75 @@
+<!doctype html>
+<!--
+  Apoyo "recorte de diario" — el look editorial del reel de @human___academy (Claude Code + Remotion).
+  El reparto de trabajo es el del reel: la FOTO la genera un modelo de imagen; el RECORTE, la
+  RETÍCULA, la TIPOGRAFÍA y el SELLO los dibuja el CÓDIGO ("IA erra letra, código não").
+
+  Uso:
+    node make-mockup.mjs --template custom --html-file assets/html/recorte-diario.html \
+      --image capturas/foto.jpg --out assets/recorte.png --width 960 \
+      --title "Sin editor. Sin excusas." --subtitle "15 s · 0 humanos" --label "Onia · método de edición"
+
+  Tokens que reemplaza make-mockup: {{IMAGE}} {{TITLE}} {{SUBTITLE}} {{LABEL}} {{VALUE}} {{SELLO}} {{ACCENT}}.
+  El sello (--sello) va sobre el PAPEL, no sobre la foto: usa multiply y sobre un plano
+  oscuro desaparece. Sin --sello no se dibuja.
+  OJO con el transform: si lo ponés en #stage, Chromium pinta a 1x dentro de un lienzo 2x.
+  Por eso acá la rotación va en .hoja (un HIJO), nunca en #stage.
+-->
+<html><head><meta charset="utf-8"><style>
+  :root { --acento: {{ACCENT}}; --tinta:#111; }
+  body { margin:0; background:transparent; font-family:Georgia,"Times New Roman",serif; }
+  /* #stage limpio: sin transform. Solo da aire para la sombra y la rotación del hijo. */
+  #stage { display:inline-block; padding:22px 26px; }
+
+  .hoja { position:relative; width:960px; padding:26px 30px 34px; box-sizing:border-box;
+    background:#F4F1EA;
+    /* borde de papel: polígono irregular FIJO — determinista, nada de Math.random */
+    clip-path: polygon(0.6% 1.2%, 12% 0.2%, 28% 1.6%, 47% 0%, 63% 1.8%, 81% 0.4%, 99.4% 1.4%,
+                       99% 22%, 100% 44%, 99.2% 68%, 100% 88%, 98.6% 99%,
+                       78% 98.2%, 56% 99.6%, 34% 98%, 15% 99.4%, 1.4% 98.6%,
+                       0.4% 74%, 0% 52%, 1% 30%);
+    transform: rotate(-1.15deg);
+    filter: drop-shadow(0 18px 26px rgba(0,0,0,.45)); }
+
+  /* textura de papel: dos tramas suaves, cero imágenes externas */
+  .hoja::before { content:""; position:absolute; inset:0; pointer-events:none; opacity:.5;
+    background:
+      repeating-linear-gradient(96deg, rgba(0,0,0,.045) 0 1px, transparent 1px 4px),
+      repeating-linear-gradient(6deg, rgba(0,0,0,.03) 0 1px, transparent 1px 7px); }
+
+  .kicker { font-family:"Arial Narrow",Arial,sans-serif; font-weight:700; letter-spacing:.28em;
+    text-transform:uppercase; font-size:19px; color:var(--tinta); opacity:.72;
+    border-bottom:2.5px solid var(--tinta); padding-bottom:9px; margin-bottom:16px; }
+  h1 { margin:0 0 16px; font-size:74px; line-height:.94; letter-spacing:-.022em;
+    text-transform:uppercase; color:var(--tinta); font-weight:800; }
+
+  .foto { position:relative; overflow:hidden; border:1.5px solid rgba(0,0,0,.55); }
+  .foto img { display:block; width:100%; height:430px; object-fit:cover; object-position:50% 26%;
+    filter:grayscale(1) contrast(1.45) brightness(1.06); }
+  /* RETÍCULA DE DIARIO: puntos multiplicando sobre la foto (el "retícula de jornal" del reel) */
+  .foto::after { content:""; position:absolute; inset:0; mix-blend-mode:multiply; opacity:.62;
+    background-image:radial-gradient(circle at 50% 50%, #000 1.05px, transparent 1.35px);
+    background-size:4px 4px; }
+
+  .pie { display:flex; justify-content:space-between; align-items:baseline; margin-top:14px;
+    font-size:20px; color:var(--tinta); opacity:.8; }
+  .pie b { font-family:"Arial Narrow",Arial,sans-serif; letter-spacing:.12em; text-transform:uppercase; }
+
+  /* SELLO: tinta sobre papel — multiply + rotación propia */
+  .sello { position:absolute; right:34px; top:26px; transform:rotate(-11deg);
+    border:5px solid #B3271E; color:#B3271E; padding:8px 18px 10px; border-radius:6px;
+    font-family:"Arial Narrow",Arial,sans-serif; font-weight:700; font-size:38px;
+    letter-spacing:.16em; text-transform:uppercase; opacity:.82; mix-blend-mode:multiply; }
+  /* sin texto no hay sello: nada de recuadro rojo vacio */
+  .sello:empty { display:none; }
+</style></head><body>
+  <div id="stage">
+    <div class="hoja">
+      <div class="kicker">{{LABEL}}</div>
+      <h1>{{TITLE}}</h1>
+      <div class="foto"><img src="{{IMAGE}}" alt=""></div>
+      <div class="pie"><b>{{SUBTITLE}}</b><span>{{VALUE}}</span></div>
+      <div class="sello">{{SELLO}}</div>
+    </div>
+  </div>
+</body></html>

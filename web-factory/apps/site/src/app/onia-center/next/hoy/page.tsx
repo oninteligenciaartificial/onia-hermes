@@ -49,7 +49,7 @@ export default async function HoyPage() {
       <AppShell>
         <EmptyState
           title="Falta configurar Supabase"
-          body={`ONIA Center necesita estas variables de entorno: ${getMissingOniaCenterConfig().join(", ")}.`}
+          body={`Onia Center necesita estas variables de entorno: ${getMissingOniaCenterConfig().join(", ")}.`}
         />
       </AppShell>
     );
@@ -81,7 +81,7 @@ export default async function HoyPage() {
     runtimeLeads = runtime.leads;
     runtimeIdeas = runtime.ideas;
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Error leyendo ONIA Center.";
+    const message = error instanceof Error ? error.message : "Error leyendo Onia Center.";
     return (
       <AppShell canSeeFinance={canSeeFinance}>
         <EmptyState title="No se pudo cargar la cola de aprobacion" body={message} />

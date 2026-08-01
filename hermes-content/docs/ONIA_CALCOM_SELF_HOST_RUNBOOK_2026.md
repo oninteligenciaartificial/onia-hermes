@@ -1,4 +1,4 @@
-# ONIA Cal.com / Cal.diy self-host runbook 2026
+# Onia Cal.com / Cal.diy self-host runbook 2026
 
 Estado: activo en dominio final y validado publicamente, agenda comercial
 configurada, event types iniciales activos, webhook Cal -> n8n creado.
@@ -9,7 +9,7 @@ Fecha: 2026-06-29.
 ## Decision
 
 Decision operativa actual 2026-06-26: usar Cal.com self-hosted como camino
-principal de agenda ONIA. El link gratis de Cal.com hosted queda solo como
+principal de agenda Onia. El link gratis de Cal.com hosted queda solo como
 fallback si el self-host bloquea una reserva comercial real por SMTP, Google
 Calendar, DNS o webhook.
 
@@ -24,7 +24,7 @@ Conectarlo a:
 2. Webhook n8n `calcom-booking`.
 3. Google Calendar.
 4. Telegram para aviso a Sergio.
-5. Supabase privado compartido de ONIA para auditoria y seguimiento.
+5. Supabase privado compartido de Onia para auditoria y seguimiento.
 
 ## Diagnostico
 
@@ -61,15 +61,15 @@ Conectarlo a:
 - La credencial bootstrap quedo fuera del repo:
   `C:\Users\PC\.onia\calcom-admin-bootstrap.txt` y
   `/root/.hermes/calcom-admin-bootstrap.txt` en el VPS.
-- ONIA ya tiene VPS y Supabase self-hosted privado:
+- Onia ya tiene VPS y Supabase self-hosted privado:
   `/opt/onia-supabase/supabase/docker`.
-- Supabase es la capa privada compartida de datos para proyectos ONIA, no una
+- Supabase es la capa privada compartida de datos para proyectos Onia, no una
   base creada solo para Cal.
 - Supabase esta local-only segun `COORDINATION_MANIFEST.md`; no debe exponerse
   publicamente para una pagina de reservas ni desde codigo de navegador.
 - n8n ya tiene flujo documentado para `ONIA - Agenda: Cal.com Booking`.
 - Cal.com/Cal.diy cambio su modelo: Cal.diy es comunidad/MIT, pero sus docs
-  recomiendan uso personal/no-productivo bajo responsabilidad propia. Para ONIA
+  recomiendan uso personal/no-productivo bajo responsabilidad propia. Para Onia
   interna puede servir; para ofrecerlo como infraestructura comercial a clientes,
   revisar Cal.com comercial/on-prem antes.
 
@@ -86,19 +86,19 @@ Cliente/prospecto
 ```
 
 Cal debe usar su propio Postgres/Redis operativo. Supabase sigue siendo la
-plataforma privada compartida de ONIA para proyectos, operaciones y
+plataforma privada compartida de Onia para proyectos, operaciones y
 automatizaciones; para Cal solo recibe el espejo de bookings via n8n.
 
-## Rol de Supabase en ONIA
+## Rol de Supabase en Onia
 
 Supabase debe servir para mas que Cal:
 
 - Web Factory y tiendas/proyectos de clientes.
-- Reservas, reuniones y follow-ups de ONIA.
+- Reservas, reuniones y follow-ups de Onia.
 - CRM operativo y automatizaciones internas.
 - Auditoria de flujos n8n.
 - Registros de produccion de contenido/IA cuando aplique.
-- Futuros dashboards internos de ONIA.
+- Futuros dashboards internos de Onia.
 
 Regla: cada proyecto debe tener schema o tablas claramente separadas, RLS activo
 y acceso desde servidor/n8n. No usar el Supabase privado como API publica de
@@ -156,15 +156,15 @@ evitar choques.
 
 Configurado en produccion el 2026-06-29:
 
-- `https://cal.onia.com.bo/onia`: pagina publica de ONIA.
-- Perfil publico de `business@onia.com.bo`: usar logo ONIA como avatar desde
+- `https://cal.onia.com.bo/onia`: pagina publica de Onia.
+- Perfil publico de `business@onia.com.bo`: usar logo Onia como avatar desde
   `https://center.onia.com.bo/assets/onia/onia-logo-avatar.png`.
-- ONIA Center es el panel operativo: `Agenda Sergio` debe mostrar reuniones,
+- Onia Center es el panel operativo: `Agenda Sergio` debe mostrar reuniones,
   tipos, disponibilidad, perfil y enlaces directos para configurar Cal
   self-hosted sin exponer la agenda privada a vendedores.
 - `https://cal.onia.com.bo/onia/consulta-inicial`: 20 min, visible.
   Titulo publico: `Consulta comercial - proyecto nuevo`.
-  Para prospectos nuevos que quieren cotizar o validar si ONIA puede ayudar.
+  Para prospectos nuevos que quieren cotizar o validar si Onia puede ayudar.
   Aplica a paginas web, ecommerce/landing, DentalGest, GestiOS,
   automatizaciones, chatbots de WhatsApp, IA para publicidad/contenido y
   sistemas internos. No es soporte, capacitacion ni auditoria tecnica profunda.
@@ -183,7 +183,7 @@ Configurado en produccion el 2026-06-29:
   tomen una hora completa.
 - `auditoria-pagada`: 60 min, preparada pero no publica. Queda oculta y sin
   relacion publica `_user_eventtype`, por lo tanto el link directo devuelve 404
-  hasta que ONIA decida cobrar asesorias.
+  hasta que Onia decida cobrar asesorias.
 
 Reglas base:
 
@@ -200,10 +200,10 @@ Reglas base:
 - Cuenta/identidad publica Cal self-host: `business@onia.com.bo` como
   `ONIA | Agenda Comercial`.
 - Usuario publico Cal: `onia`.
-- Punto de control operativo: ONIA Center, vista `Agenda Sergio`.
-  - ONIA Center muestra tipos de reunion, links publicos, reglas de asignacion,
+- Punto de control operativo: Onia Center, vista `Agenda Sergio`.
+  - Onia Center muestra tipos de reunion, links publicos, reglas de asignacion,
     links de administracion y disponibilidad base.
-  - Por ahora ONIA Center no escribe directo en Cal: abre las pantallas
+  - Por ahora Onia Center no escribe directo en Cal: abre las pantallas
     exactas de Cal self-host para aplicar cambios reales.
   - Antes de construir escritura directa, cualquier cambio automatico debe tener
     auditoria, rol responsable y bloqueo para cambios fuera de ventana.
@@ -220,7 +220,7 @@ Reglas base:
 - Avatar publico Cal:
   `https://center.onia.com.bo/assets/onia/onia-logo-avatar.png`.
 - Asset canonico local: `hermes-content/assets/onia/onia-logo-avatar.png`.
-- Asset publico ONIA Center:
+- Asset publico Onia Center:
   `web-factory/apps/site/public/assets/onia/onia-logo-avatar.png`.
 - Los eventos activos tienen `requiresConfirmation=true`.
 - Cada evento tiene 12 campos de calificacion: empresa/negocio, WhatsApp,
@@ -271,12 +271,12 @@ Salida actual verificada del workflow:
 
 Salida objetivo pendiente:
 
-1. `BOOKING_REQUESTED` -> crear lead/reunion pendiente en ONIA Center y mandar
+1. `BOOKING_REQUESTED` -> crear lead/reunion pendiente en Onia Center y mandar
    Telegram con acciones aceptar/cancelar/reasignar.
 2. Aceptar en Cal o via flujo seguro -> disparar/registrar `BOOKING_CREATED`.
 3. `BOOKING_CREATED` -> crear evento definitivo en Google Calendar.
 4. `BOOKING_CANCELLED` / `BOOKING_RESCHEDULED` -> actualizar GCal y estado en
-   ONIA Center, no crear eventos nuevos.
+   Onia Center, no crear eventos nuevos.
 5. Insertar auditoria en `onia_ops.booking_events` y follow-up en
    `onia_ops.booking_followups`.
 
@@ -359,7 +359,7 @@ limit 5;
   vacio al 2026-06-29. Sin eso, Cal no puede bloquear horas ocupadas en Google.
 - Falta prueba end-to-end con un booking real de baja criticidad.
 - Falta convertir el workflow n8n a modelo pendiente/aceptar/cancelar por
-  Telegram y ONIA Center.
+  Telegram y Onia Center.
 - Falta que n8n escriba auditoria en Supabase `onia_ops.booking_events`.
 - Falta revisar/confirmar licencia y eleccion final de imagen Cal.com/Cal.diy
   antes de uso publico sostenido.

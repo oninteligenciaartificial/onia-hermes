@@ -4,7 +4,7 @@
 Publicar videos diarios durante el mes en ambas cuentas:
 
 - Cuenta personal de Sergio: 1 video diario.
-- Cuenta ONIA: 1 video diario.
+- Cuenta Onia: 1 video diario.
 - Cola de clientes/terceros: preparar y entregar/publicar solo con aprobacion.
 
 Hermes debe preparar, recordar, pedir aprobacion y publicar solo cuando Sergio apruebe la pieza exacta.
@@ -69,7 +69,7 @@ video-lab telegram --message "Publicar video <job_id>"
 Hermes elige las dos piezas del dia desde `JUNE_2026_VIDEO_PRODUCTION_PLAN.md`:
 
 - Sergio: contenido de confianza, founder-led, BTS, opinion o leccion.
-- ONIA: demo, oferta, DentalGest, Gestios, chatbot, CRM o automatizacion.
+- Onia: demo, oferta, DentalGest, Gestios, chatbot, CRM o automatizacion.
 
 Si hay clientes activos, Hermes tambien revisa `CLIENT_CONTENT_PRODUCTION_SYSTEM.md` y prepara:
 
@@ -139,7 +139,7 @@ META_LONG_LIVED_TOKEN
 IG_BUSINESS_ACCOUNT_ID
 ```
 
-Para publicar en Sergio y ONIA hacen falta dos perfiles seguros:
+Para publicar en Sergio y Onia hacen falta dos perfiles seguros:
 
 ```text
 SERGIO_META_LONG_LIVED_TOKEN
@@ -195,7 +195,7 @@ video-lab status --limit 5
 
 ## Checklist por dia
 - Video Sergio listo.
-- Video ONIA listo.
+- Video Onia listo.
 - Videos/briefs de clientes revisados si hay cola activa.
 - URLs MP4 publicas.
 - Captions finales.

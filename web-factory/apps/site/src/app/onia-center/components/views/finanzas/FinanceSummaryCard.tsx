@@ -21,7 +21,7 @@ export function FinanceSummaryCard({ summary }: FinanceSummaryCardProps) {
     return (
       <EmptyState
         title="El agente Finanzas aun no dejo resumen"
-        body="El Agente Finanzas y Fondo ONIA corre de lunes a sabado 07:15 (La Paz) y deja aca la caja, el Fondo ONIA y las alertas. Cuando corra, este panel se llena solo."
+        body="El Agente Finanzas y Fondo Onia corre de lunes a sabado 07:15 (La Paz) y deja aca la caja, el Fondo Onia y las alertas. Cuando corra, este panel se llena solo."
       />
     );
   }
@@ -29,7 +29,7 @@ export function FinanceSummaryCard({ summary }: FinanceSummaryCardProps) {
   const kpis = [
     { label: "Caja acumulada", value: formatBs(summary.cashTotalBs) },
     { label: "Caja 30 dias", value: formatBs(summary.cashPeriodBs) },
-    { label: "Fondo ONIA", value: formatBs(summary.fundTotalBs) },
+    { label: "Fondo Onia", value: formatBs(summary.fundTotalBs) },
     { label: "Comisiones pendientes", value: formatBs(summary.commissionsPendingBs) },
   ];
 

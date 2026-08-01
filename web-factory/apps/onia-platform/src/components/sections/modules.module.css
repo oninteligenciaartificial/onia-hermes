@@ -302,6 +302,40 @@
 }
 
 /* offline */
+/* reserva publica */
+.scBooking {
+  display: grid;
+  gap: 0.7rem;
+  align-content: center;
+}
+
+.scSlots {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.scSlot {
+  font-size: 0.72rem;
+  padding: 0.42em 0.75em;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--surface-dim);
+  color: var(--ink-soft);
+}
+
+.scSlotTaken {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent-ink);
+}
+
+.scBookingNote {
+  font-size: 0.68rem;
+  letter-spacing: 0.04em;
+  color: var(--accent-ink);
+}
+
 .scOffline {
   display: flex;
   align-items: center;

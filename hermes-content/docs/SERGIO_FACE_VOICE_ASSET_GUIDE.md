@@ -6,7 +6,7 @@ Crear una biblioteca aprobada de cara, voz y estilo de Sergio para producir
 contenido de forma controlada para:
 
 - Sergio marca personal;
-- ONIA como empresa/consultoria;
+- Onia como empresa/consultoria;
 - videos internos de prueba;
 - piezas comerciales solo con aprobacion explicita.
 
@@ -297,7 +297,7 @@ No usar:
 - videos que parezcan guru;
 - claims de clientes sin evidencia.
 
-### ONIA
+### Onia
 
 Usar:
 
@@ -361,6 +361,6 @@ Campos:
 - No publicar cara o voz AI de Sergio sin aprobacion.
 - No clonar voz sin consentimiento explicito.
 - No usar assets privados de fondo.
-- No mezclar Sergio personal con ONIA si el mensaje no corresponde.
+- No mezclar Sergio personal con Onia si el mensaje no corresponde.
 - No usar assets de Sergio para clientes.
 - Si hay duda, crear borrador y pedir aprobacion.

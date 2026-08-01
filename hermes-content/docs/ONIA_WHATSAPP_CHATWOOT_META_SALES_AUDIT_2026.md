@@ -1,32 +1,32 @@
-# ONIA WhatsApp, Chatwoot, Meta y ventas - Auditoria 2026
+# Onia WhatsApp, Chatwoot, Meta y ventas - Auditoria 2026
 
 Fecha: 2026-06-02
 
 ## Decision ejecutiva
 
-ONIA debe operar con un solo numero oficial de marca para entrada de clientes, confianza y continuidad comercial.
+Onia debe operar con un solo numero oficial de marca para entrada de clientes, confianza y continuidad comercial.
 
 No conviene comprar un segundo numero oficial ahora.
 
 La separacion correcta no es necesariamente por numero, sino por funcion:
 
-- WhatsApp oficial ONIA: recepcion, marca, inbound, calificacion, agenda y seguimiento.
+- WhatsApp oficial Onia: recepcion, marca, inbound, calificacion, agenda y seguimiento.
 - Chatwoot: bandeja multiagente cuando Cloud API este habilitada.
 - Notion CRM: fuente de verdad para lead, vendedor origen, responsable actual, estado y comision.
 - n8n: automatizacion interna, alertas, CRM, recordatorios, postventa y tareas.
 - Vendedor: cierre humano, demo, negociacion y seguimiento autorizado.
 
-Excepcion: si ONIA hara prospeccion fria agresiva o entrenamiento de vendedores, conviene tener un numero/canal de prospeccion separado como sandbox operativo. Ese numero no debe presentarse como el WhatsApp oficial de ONIA ni mezclar historial con clientes inbound.
+Excepcion: si Onia hara prospeccion fria agresiva o entrenamiento de vendedores, conviene tener un numero/canal de prospeccion separado como sandbox operativo. Ese numero no debe presentarse como el WhatsApp oficial de Onia ni mezclar historial con clientes inbound.
 
 ## Estado actual verificado
 
 Fuentes locales de Hermes y Notion confirman:
 
-- ONIA todavia no debe prometer ni activar WhatsApp automatico client-facing hasta verificacion Meta.
-- El WhatsApp principal de ONIA no debe ser un numero libre para todos los vendedores.
+- Onia todavia no debe prometer ni activar WhatsApp automatico client-facing hasta verificacion Meta.
+- El WhatsApp principal de Onia no debe ser un numero libre para todos los vendedores.
 - Notion debe ser la fuente oficial para vendedores, estados, seguimientos y comisiones.
 - Todo lead debe tener `vendedor_origen`, `responsable_actual`, estado pipeline, proximo seguimiento y datos completos.
-- n8n no tiene todavia workflow activo para WhatsApp/Chatwoot ONIA.
+- n8n no tiene todavia workflow activo para WhatsApp/Chatwoot Onia.
 
 Fuentes revisadas:
 
@@ -35,7 +35,7 @@ Fuentes revisadas:
 - `hermes-content/skills/crm-prospeccion-onia.md`
 - `NOTION_VENDOR_CRM_SCHEMA_2026.md`
 - Notion: `CRM & Contactos`
-- n8n: busqueda de workflows WhatsApp/Chatwoot/CRM ONIA
+- n8n: busqueda de workflows WhatsApp/Chatwoot/CRM Onia
 - documentacion actual de Meta/WhatsApp y Chatwoot
 
 ## Respuesta a los puntos auditados
@@ -44,7 +44,7 @@ Fuentes revisadas:
 
 Recomendacion:
 
-Usar un unico numero oficial de ONIA para inbound y marca. No comprar segundo numero oficial ahora.
+Usar un unico numero oficial de Onia para inbound y marca. No comprar segundo numero oficial ahora.
 
 Usar dos numeros solo si aparece uno de estos casos:
 
@@ -63,7 +63,7 @@ Un solo numero oficial es mejor para confianza y continuidad. Dos numeros solo s
 
 ### 2. Limitaciones de coexistencia WhatsApp Business App + Cloud API
 
-Meta ya tiene escenarios de coexistencia por Embedded Signup para conectar un numero existente de WhatsApp Business App a Cloud API y conservar uso uno-a-uno desde la app. Pero no debe asumirse como garantizado hasta probarlo en la cuenta real de ONIA.
+Meta ya tiene escenarios de coexistencia por Embedded Signup para conectar un numero existente de WhatsApp Business App a Cloud API y conservar uso uno-a-uno desde la app. Pero no debe asumirse como garantizado hasta probarlo en la cuenta real de Onia.
 
 Limitaciones clave:
 
@@ -74,9 +74,9 @@ Limitaciones clave:
 - Puede tener limites de throughput para numeros en coexistencia.
 - Los mensajes por API tienen reglas, costos y ventanas distintas a la app.
 - La disponibilidad real puede depender de cuenta, proveedor, pais, WABA, Business Manager y estado de verificacion.
-- Chatwoot Cloud puede conectar WhatsApp Cloud API por Embedded Signup, pero la prueba real debe hacerse con la cuenta de ONIA cuando exista NIT/verificacion.
+- Chatwoot Cloud puede conectar WhatsApp Cloud API por Embedded Signup, pero la prueba real debe hacerse con la cuenta de Onia cuando exista NIT/verificacion.
 
-Regla ONIA:
+Regla Onia:
 
 No vender "coexistencia garantizada". Venderlo como fase tecnica verificable despues del NIT.
 
@@ -143,7 +143,7 @@ La arquitectura comun de agencias con ventas humanas y automatizacion es:
 - Humanos para venta, objeciones, propuesta y cierre.
 - Automatizaciones internas para que el equipo no olvide nada.
 
-En ONIA, la version correcta es:
+En Onia, la version correcta es:
 
 - Chatwoot no reemplaza CRM.
 - Notion no reemplaza inbox.
@@ -258,7 +258,7 @@ La mejor practica es IA de negocio con alcance limitado:
 - hacer seguimiento con plantillas aprobadas;
 - escalar a humano cuando hay compra, objecion, precio o excepcion.
 
-Para ONIA:
+Para Onia:
 
 ```text
 IA como copiloto operativo, no como vendedor autonomo.
@@ -272,7 +272,7 @@ Esto tambien protege reputacion, cumplimiento y calidad del numero.
 
 Objetivo: vender ya sin esperar Meta.
 
-- Usar WhatsApp Business manual del numero oficial ONIA.
+- Usar WhatsApp Business manual del numero oficial Onia.
 - Completar perfil empresarial.
 - Crear catalogo o lista simple de servicios.
 - Crear respuestas rapidas.
@@ -295,7 +295,7 @@ Objetivo: preparar operacion formal.
 - Verificar negocio en Meta.
 - Revisar elegibilidad de WhatsApp Cloud API.
 - Probar Embedded Signup con Chatwoot Cloud.
-- Confirmar si coexistencia aplica al numero ONIA.
+- Confirmar si coexistencia aplica al numero Onia.
 - Crear plantillas WhatsApp basicas.
 - Definir politicas de datos, acceso y roles.
 
@@ -317,16 +317,16 @@ Objetivo: mejorar velocidad sin perder control.
 
 - Bot de calificacion.
 - Resumen automatico para vendedor.
-- Recomendacion de oferta ONIA.
+- Recomendacion de oferta Onia.
 - Handoff humano.
 - Seguimientos internos.
 - Postventa y onboarding.
 
-## Decision final para ONIA
+## Decision final para Onia
 
 Recomendacion aprobable:
 
-1. Mantener un unico numero oficial ONIA.
+1. Mantener un unico numero oficial Onia.
 2. No comprar segundo numero oficial por ahora.
 3. Empezar ventas manuales hoy.
 4. Registrar todo en Notion.
@@ -384,7 +384,7 @@ tokens por chat.
 
 Estado verificado en esta sesion:
 
-- Brave abrio Meta Business Suite con la cuenta ONIA activa.
+- Brave abrio Meta Business Suite con la cuenta Onia activa.
 - La URL directa a settings redirigio a Inicio, por lo que el flujo mas seguro
   para la llamada es navegar por la UI: `Settings` / `Administrador` / menu
   lateral.
@@ -401,7 +401,7 @@ Capturas de referencia:
 
 ### Opcion recomendada
 
-Si ONIA ya tiene Business Portfolio propio, pedir acceso como partner. Es mas
+Si Onia ya tiene Business Portfolio propio, pedir acceso como partner. Es mas
 profesional y reversible que agregar el perfil personal de Sergio a todo el
 negocio.
 
@@ -412,7 +412,7 @@ Flujo:
 3. Abre `Settings` o `Administrador`.
 4. Va a `Users` > `Partners`.
 5. Click `Add` > `Give a partner access to your assets`.
-6. Ingresa el Business ID de ONIA.
+6. Ingresa el Business ID de Onia.
 7. Asigna solo los activos necesarios:
    - WhatsApp Business Account.
    - Meta app asociada, si ya existe.
@@ -421,7 +421,7 @@ Flujo:
    hace el setup tecnico.
 9. Al terminar el setup, reducir permisos si ya no se necesita control total.
 
-### Opcion rapida si no hay Business ID ONIA
+### Opcion rapida si no hay Business ID Onia
 
 Agregar a Sergio como persona.
 
@@ -447,7 +447,7 @@ Ruta esperada:
 Settings > Accounts > WhatsApp accounts > [WABA] > People / Assign people
 ```
 
-Asignar a Sergio u ONIA:
+Asignar a Sergio u Onia:
 
 - control para administrar el WhatsApp Business Account;
 - acceso a phone numbers;
@@ -534,7 +534,7 @@ Inicio, navegar por el menu lateral:
 - Chatwoot Webhooks: https://www.chatwoot.com/docs/product/others/webhook-events
 - Chatwoot WhatsApp templates: https://www.chatwoot.com/hc/user-guide/articles/1754940076-whatsapp-templates
 
-Nota: la documentacion de coexistencia de Meta debe verificarse en el flujo real de ONIA cuando exista NIT/verificacion. No convertir esta posibilidad en promesa comercial hasta probarla.
+Nota: la documentacion de coexistencia de Meta debe verificarse en el flujo real de Onia cuando exista NIT/verificacion. No convertir esta posibilidad en promesa comercial hasta probarla.
 
 ## Caso real aplicado - Bolivian Electric
 

@@ -6,9 +6,9 @@
 
 ## 1. Objetivo
 
-Fábrica de video para ONIA: convierte un brief en una pieza lista para revisar,
+Fábrica de video para Onia: convierte un brief en una pieza lista para revisar,
 usando Higgsfield como motor reemplazable. Produce en tres lanes paralelas
-(Cliente / ONIA / Sergio) con distinta autonomía, registra estado en el
+(Cliente / Onia / Sergio) con distinta autonomía, registra estado en el
 Video Lab del brain y **nunca publica sin aprobación**.
 
 No reinventa la generación: **envuelve el MCP + las Skills oficiales de
@@ -18,11 +18,11 @@ Higgsfield** y les agrega lanes, gates, data por cliente y tracking.
 
 | # | Decisión | Elegido | Motivo |
 |---|---|---|---|
-| 1 | Enfoque | Lanes paralelas (Cliente / ONIA / Sergio) | Cubre ingreso (ads) y contenido propio desde el arranque |
+| 1 | Enfoque | Lanes paralelas (Cliente / Onia / Sergio) | Cubre ingreso (ads) y contenido propio desde el arranque |
 | 2 | Arquitectura | Híbrido: `video-factory/` produce, Video Lab trackea | Una sola fuente de estado, sin duplicar tracking |
 | 3 | Autonomía | Por lane | Cliente gate antes de gastar; ONIA/Sergio auto hasta preview |
 | 4 | Motor | MCP Higgsfield + Skills oficiales (CLI fallback) | Ya conectado; Skills hechas para Claude Code. Freepik descartado (sin API) |
-| 5 | Panel | Telegram + galería Video Lab en ONIA Center | Aprobación rápida + "Freepik propio" visual |
+| 5 | Panel | Telegram + galería Video Lab en Onia Center | Aprobación rápida + "Freepik propio" visual |
 
 ### Por qué no Freepik ni el chat del Supercomputer
 
@@ -37,7 +37,7 @@ Higgsfield** y les agrega lanes, gates, data por cliente y tracking.
 ## 3. Arquitectura — 3 capas
 
 1. **Operación / aprobación** (lo que ve Sergio): Telegram (previews + botones)
-   y galería Video Lab en ONIA Center (`web-factory/apps/site`).
+   y galería Video Lab en Onia Center (`web-factory/apps/site`).
 2. **Fábrica (lógica)**: `video-factory/` declarativa — formatos, lanes, data,
    radar, engine.
 3. **Motor + orquestación pesada**: MCP Higgsfield + Skills oficiales +
@@ -106,11 +106,11 @@ Validación en todo boundary (regla de coding-style: no confiar en input externo
 |---|---|---|---|---|
 | `ugc-ad` | Marketing Studio (`ugc`/`ugc_how_to`, hooks/settings/avatars/products) | 9:16 · 12-15s | Cliente | brief + costo |
 | `product-showcase` | Marketing Studio (`product_showcase`) o Seedance 2.0 (product refs) | 9:16/1:1 · 12-15s | Cliente | brief + costo |
-| `reel-onia` | Seedance 2.0 (std 720p) o Veo 3.1 Lite | 9:16 · 5-8s | ONIA | revisión |
-| `explainer` | workflow `video-explainer` (narrado animado, N bloques 10s) | 9:16/16:9 | ONIA | revisión |
+| `reel-onia` | Seedance 2.0 (std 720p) o Veo 3.1 Lite | 9:16 · 5-8s | Onia | revisión |
+| `explainer` | workflow `video-explainer` (narrado animado, N bloques 10s) | 9:16/16:9 | Onia | revisión |
 | `sergio-talking-head` | Soul ID: `text2image_soul_v2` still → Seedance 2.0 minimal motion | 9:16 · 5s | Sergio | identidad + revisión |
 | `viral-preset` | `higgsfield_preset` (image-to-video, presets trending) | 9:16 | ONIA/Sergio | revisión (+ identidad si Sergio) |
-| `clip-from-long` | Personal Clipper (`clipify`, 1 YouTube → 10-20 clips) | 9:16 · subtítulos | ONIA | revisión |
+| `clip-from-long` | Personal Clipper (`clipify`, 1 YouTube → 10-20 clips) | 9:16 · subtítulos | Onia | revisión |
 | `avatar-outfit` | `nano_banana` (virtual try-on / outfit edit sobre Soul ID) | 9:16 · 5s | Sergio | identidad + revisión |
 
 `generate_audio` = false por defecto (audio via ElevenLabs/editado). Negative
@@ -136,7 +136,7 @@ generated → approved_for_publish → published`. Para Sergio se usan además
 
 - **Cliente**: intake → plan(costo) → **gate: approved_for_generation** →
   generating → generated → **gate revisión** → entrega/approved_for_publish.
-- **ONIA**: intake → plan → generating (auto) → generated → **gate revisión** →
+- **Onia**: intake → plan → generating (auto) → generated → **gate revisión** →
   approved_for_publish → published.
 - **Sergio**: intake → plan → still (auto) → **gate identidad** → motion →
   generated → **gate revisión** → approved_for_publish → published.
@@ -174,7 +174,7 @@ image-to-video.
 
 - **Telegram**: preview (thumbnail/URL) + botones aprobar / rehacer, por lane.
   Vía bot Hermes o n8n.
-- **ONIA Center** (`web-factory/apps/site`): ruta nueva "Video Lab" — galería de
+- **Onia Center** (`web-factory/apps/site`): ruta nueva "Video Lab" — galería de
   jobs con preview, estado, costo y botón aprobar. Lee el Video Lab del brain.
 
 ## 12. Seguridad (reglas duras)
@@ -205,7 +205,7 @@ image-to-video.
 - Formatos restantes (`explainer`, `viral-preset`, `clip-from-long`,
   `product-showcase`).
 - `generate.mjs` completo con polling async + idempotencia.
-- Panel: galería Video Lab en ONIA Center + botones Telegram.
+- Panel: galería Video Lab en Onia Center + botones Telegram.
 - n8n: recordatorios de jobs en espera, polling, botones de aprobación.
 - CLI fallback para generación desatendida.
 

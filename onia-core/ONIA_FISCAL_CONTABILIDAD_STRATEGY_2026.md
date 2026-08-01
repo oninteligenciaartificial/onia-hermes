@@ -1,9 +1,9 @@
-# ONIA Fiscal y Contabilidad Bolivia — Estrategia 2026
+# Onia Fiscal y Contabilidad Bolivia — Estrategia 2026
 
 Fecha: 2026-07-04.
 Estado: estrategia canonica — responde "el sistema necesita contabilidad
 super amplia?" y define la mejor salida (no la mas facil) + modelo de cobro.
-Owner: ONIA / Hermes.
+Owner: Onia / Hermes.
 
 ## 1. El momento historico (por que AHORA)
 
@@ -44,7 +44,7 @@ externo con sus propias herramientas. El dueno quiere VENDER, COBRAR y
 CUMPLIR sin multas. Quien dice "se necesita contabilidad super amplia"
 describe la necesidad DEL CONTADOR, no la del dueno que nos compra.
 
-## 3. La decision: que construye ONIA y que NO
+## 3. La decision: que construye Onia y que NO
 
 ### NO construir (trampa de la contabilidad generica)
 
@@ -124,7 +124,7 @@ novedad -> WorkItem con dueno. Mismo motor para RNDs.
 
 ## 6. Prerequisitos reales para la Capa 2 (certificacion SIAT)
 
-1. **ONIA formalizada**: NIT propio, actividad economica correcta
+1. **Onia formalizada**: NIT propio, actividad economica correcta
    (desarrollo de software), registro SEPREC. Sin esto no hay
    certificacion de sistema proveedor. [accion de Sergio]
 2. Estudio tecnico de la RND 102100000011: requisitos del sistema
@@ -139,7 +139,7 @@ novedad -> WorkItem con dueno. Mismo motor para RNDs.
 | Fase | Que | Cuando |
 |---|---|---|
 | A | Contador Pack v1 (exports RCV + calendario por NIT + radar RND) — vendible YA como add-on en DentalGest | semanas |
-| B | Estudio tecnico certificacion SIAT proveedor + formalizacion ONIA | paralelo |
+| B | Estudio tecnico certificacion SIAT proveedor + formalizacion Onia | paralelo |
 | C | Piloto facturacion en linea con 1 cliente real | al pasar B |
 | D | Modulo SIAT como add-on en toda la factory (cada vertical factura legal) | tras piloto |
 | E | Evaluar contabilidad plena SOLO si un segmento la paga | 2027+ |

@@ -1,15 +1,15 @@
-# ONIA Initial Core Blueprint 2026
+# Onia Initial Core Blueprint 2026
 
 Estado: blueprint operativo inicial.
 Fecha: 2026-06-28.
-Uso: definir que se construye primero como core reutilizable de ONIA, que se
-mira desde ONIA Center y que queda dentro de cada producto vertical.
+Uso: definir que se construye primero como core reutilizable de Onia, que se
+mira desde Onia Center y que queda dentro de cada producto vertical.
 
 ## Veredicto
 
-Si, lo miramos desde ONIA Center.
+Si, lo miramos desde Onia Center.
 
-Pero ONIA Center no debe ser el producto core que usan los clientes. ONIA Center
+Pero Onia Center no debe ser el producto core que usan los clientes. Onia Center
 es el panel interno para dirigir, auditar, priorizar y registrar evidencia. El
 core se llama ONIA Core. La primera implementacion debe nacer dentro de GestiOS,
 porque ya tiene la base mas cercana a empresas reales: organizaciones, perfiles,
@@ -52,7 +52,7 @@ Verticales
 |---|---|---|
 | DentalGest | onboarding SaaS, superadmin, billing manual, plan limits, audit logs, tenant safety, runbooks, add-on discipline | pacientes, odontograma, tratamientos, agenda clinica, recetas, reglas clinicas |
 | GestiOS | base principal: organizacion, roles, planes, clientes, productos, inventario, pedidos, caja, proveedores, reportes, add-ons | promesas SIAT, WhatsApp automatico, cualquier integracion sin proveedor validado |
-| ONIA Center | control interno, proyectos, tareas, readiness, evidencia, aprobaciones, roles internos, conectores | logica operativa profunda de clientes, ERP o datos sensibles sin scope |
+| Onia Center | control interno, proyectos, tareas, readiness, evidencia, aprobaciones, roles internos, conectores | logica operativa profunda de clientes, ERP o datos sensibles sin scope |
 | Bolivian Electric OS | CRM gerencial, cotizaciones, solicitudes, SLA, imports, knowledge base, dry-run adapters | sistema cliente hardcodeado, datos reales, TR4 write, dependencia de credenciales |
 | Ganadero OS | versionado, soft delete, sync/offline, dominio separado, organizationId estricto | mezclar ganado con GestiOS general o ProveeGest |
 
@@ -230,9 +230,9 @@ No se reutiliza:
 - potreros;
 - movimientos ganaderos.
 
-## ONIA Center como tablero de construccion
+## Onia Center como tablero de construccion
 
-ONIA Center debe mostrar:
+Onia Center debe mostrar:
 
 - proyecto `ONIA Core`;
 - proyecto `ProveeGest`;
@@ -329,7 +329,7 @@ Solo despues de validar fase 1 y 2:
 
 ## Siguiente accion tecnica
 
-1. Registrar esta arquitectura en ONIA Center.
+1. Registrar esta arquitectura en Onia Center.
 2. Corregir rutas canonicas del registry.
 3. Crear backlog de auditoria core.
 4. Comparar modelos Prisma de DentalGest, GestiOS y Ganadero OS.

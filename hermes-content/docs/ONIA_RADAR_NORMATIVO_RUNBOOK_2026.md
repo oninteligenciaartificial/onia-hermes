@@ -1,8 +1,8 @@
-# ONIA Radar Normativo Bolivia — Runbook 2026
+# Onia Radar Normativo Bolivia — Runbook 2026
 
 Fecha: 2026-07-04.
 Estado: workflow listo para importar (JSON verificado + extraccion probada contra HTML real).
-Owner: ONIA / Hermes.
+Owner: Onia / Hermes.
 
 ## Que hace
 

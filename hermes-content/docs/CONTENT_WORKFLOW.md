@@ -1,7 +1,7 @@
-# ONIA Content Workflow
+# Onia Content Workflow
 
 ## Purpose
-Create original ONIA content for Instagram, LinkedIn, TikTok and future channels.
+Create original Onia content for Instagram, LinkedIn, TikTok and future channels.
 
 ## Telegram Command Center
 
@@ -25,13 +25,13 @@ idea -> brief -> aprobacion -> Higgsfield -> URL MP4 -> revision -> publicar
 Lanes:
 
 - Sergio: proceso real, fundador, confianza, aprendizaje.
-- ONIA: demos, sistemas, educacion y conversion.
+- Onia: demos, sistemas, educacion y conversion.
 - Clientes: oferta aprobada, claims seguros, entrega revisada.
 
 Loop diario recomendado:
 
 - 07:30 radar creativo.
-- 08:00 elegir 1 Sergio + 1 ONIA.
+- 08:00 elegir 1 Sergio + 1 Onia.
 - 10:00 revisar aprobaciones.
 - 15:00 captions y reutilizacion.
 - 17:00 revisar MP4.
@@ -141,7 +141,7 @@ prepares `tiktok_description`, `youtube_title`, `youtube_description` and
 `youtube_tags`, but does not publish there.
 
 ## Acceptance criteria
-- Every published asset is original or owned by ONIA.
+- Every published asset is original or owned by Onia.
 - Every Instagram URL is public and direct.
 - Hermes reports `published_id` after publishing.
 - Failed publishes include the exact Graph API error and next action.

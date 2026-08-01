@@ -1230,5 +1230,5 @@ git commit -m "feat(video-factory): CLI plan/radar + demo intake"
 
 - `generate.mjs` con runtime MCP real + polling async.
 - Formatos: `explainer`, `viral-preset`, `clip-from-long`, `product-showcase`.
-- Panel: galería Video Lab en ONIA Center + botones Telegram.
+- Panel: galería Video Lab en Onia Center + botones Telegram.
 - n8n: recordatorios, polling, botones de aprobación; CLI fallback desatendido.

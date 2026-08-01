@@ -23,7 +23,7 @@ export default function OniaCenterLoginPage() {
   useEffect(() => {
     const reason = searchParams?.get("reason");
     if (reason === "sergio_only") {
-      setNotice("ONIA Center completo esta bloqueado para Sergio. Arthur y vendedores deben entrar por /onia-center/equipo.");
+      setNotice("Onia Center completo esta bloqueado para Sergio. Arthur y vendedores deben entrar por /onia-center/equipo.");
       return;
     }
 
@@ -33,12 +33,12 @@ export default function OniaCenterLoginPage() {
     }
 
     if (reason === "auth_verify") {
-      setNotice("No pude verificar tu perfil activo en ONIA Center. Revisa el mapeo Auth -> user_profiles.");
+      setNotice("No pude verificar tu perfil activo en Onia Center. Revisa el mapeo Auth -> user_profiles.");
       return;
     }
 
     if (reason === "auth_required") {
-      setNotice("Inicia sesion para abrir ONIA Center.");
+      setNotice("Inicia sesion para abrir Onia Center.");
     }
   }, [searchParams]);
 
@@ -62,7 +62,7 @@ export default function OniaCenterLoginPage() {
       }
 
       const nextPath = searchParams?.get("next") || "/onia-center";
-      setNotice("Sesion iniciada. Abriendo ONIA Center...");
+      setNotice("Sesion iniciada. Abriendo Onia Center...");
       window.location.href = nextPath;
     } catch (error) {
       const message = error instanceof Error ? error.message : "Error desconocido.";
@@ -74,7 +74,7 @@ export default function OniaCenterLoginPage() {
 
   return (
     <main className="onia-login-page">
-      <section className="onia-login-panel" aria-label="Login ONIA Center">
+      <section className="onia-login-panel" aria-label="Login Onia Center">
         <Link className="onia-login-back" href="/onia-center">
           <ArrowLeft size={16} />
           Volver
@@ -85,7 +85,7 @@ export default function OniaCenterLoginPage() {
             <ShieldCheck size={22} />
           </span>
           <div>
-            <p>ONIA Center</p>
+            <p>Onia Center</p>
             <h1>Acceso interno</h1>
           </div>
         </div>

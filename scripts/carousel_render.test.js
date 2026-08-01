@@ -35,7 +35,7 @@ test('cover renders hook headline and account name', () => {
   const html = slideHtml({ headline: 'Perdés clientes', body: '' }, 0, 5, 'onia', '');
   assert.ok(html.includes('class="slide cover"'));
   assert.ok(html.includes('Perdés clientes'));
-  assert.ok(html.includes('@oniaagency'));
+  assert.ok(html.includes('@oniahq'));
 });
 test('save slide shows FRAMEWORK + Guardá bar', () => {
   const html = slideHtml({ headline: 'Checklist', body: 'x', save_worthy: true }, 2, 5, 'onia', '');

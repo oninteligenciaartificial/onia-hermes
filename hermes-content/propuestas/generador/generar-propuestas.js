@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Generador automático de propuestas ONIA.
+ * Generador automático de propuestas Onia.
  *
  * Lee clientes.json, arma el HTML de cada propuesta a partir de una sola
  * plantilla, y (opcional) imprime el PDF con Edge headless.
@@ -124,7 +124,7 @@ function renderComparativa(comp) {
   </table>`;
 }
 
-// Link de agenda de ONIA (Cal.com). Cada propuesta invita a reservar una llamada;
+// Link de agenda de Onia (Cal.com). Cada propuesta invita a reservar una llamada;
 // override por cliente con c.ctaAgenda = { url, texto }.
 const CAL_LINK = 'https://cal.onia.com.bo';
 
@@ -152,7 +152,7 @@ function renderPortada(p, nombre) {
   return `
   <div class="cover">
     <div>
-      <div class="kicker">Propuesta comercial · ONIA Inteligencia Artificial</div>
+      <div class="kicker">Propuesta comercial · Onia Inteligencia Artificial</div>
       <h1>${esc(p.titulo)}</h1>
       <p>${esc(p.subtitulo || '')}</p>
       <p class="meta">Preparado para: <b>${esc(p.para || nombre)}</b>${p.fecha ? ` · ${esc(p.fecha)}` : ''}</p>
@@ -184,7 +184,7 @@ function validateCliente(c, i) {
     throw new Error(`Cliente #${i} (${c.slug || 'sin slug'}): faltan campos requeridos: ${faltan.join(', ')}`);
   }
   if (!c.paquetes.some((p) => p.recomendado)) {
-    console.warn(`[ONIA] Aviso: ${c.slug} no tiene paquete recomendado (⭐).`);
+    console.warn(`[Onia] Aviso: ${c.slug} no tiene paquete recomendado (⭐).`);
   }
 }
 
@@ -204,7 +204,7 @@ function buildHtml(c, opts = {}) {
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Propuesta ONIA — ${esc(c.nombre)}</title>
+<title>Propuesta Onia — ${esc(c.nombre)}</title>
 <style>
   :root{--ink:#101827;--muted:#526172;--line:#d8e0ea;--blue:#1e5bff;--blue-dark:#1239a8;
     --green:#0f8b62;--amber:#a75b00;--bg:#f6f8fb;--white:#fff;--accent:${accent};}
@@ -260,7 +260,7 @@ function buildHtml(c, opts = {}) {
 <div class="page">
 ${renderPortada(c.portada, c.nombre)}
   <div class="hero">
-    <div class="kicker">Propuesta comercial · ONIA Inteligencia Artificial</div>
+    <div class="kicker">Propuesta comercial · Onia Inteligencia Artificial</div>
     <h1>${esc(c.titulo)}</h1>
     <p>${esc(c.subtitulo)}</p>
   </div>
@@ -295,7 +295,7 @@ ${renderValor(c.valor)}${renderCasos(c.casos)}${renderComparativa(c.comparativa)
 ${renderRequisitos(c.requisitos)}${renderProximosPasos(c.proximosPasos, c.ctaWhatsapp, c.ctaAgenda)}
   <div class="foot">
     <p class="big">Precio reservado hasta 30 días con confirmación de pago.</p>
-    <p>ONIA — Sistemas, automatización y contenido para negocios. business@onia.com.bo</p>
+    <p>Onia — Sistemas, automatización y contenido para negocios. business@onia.com.bo</p>
   </div>
 
 </div>${beacon}
@@ -319,7 +319,8 @@ function printPdf(browser, htmlPath, pdfPath) {
 
 // --- Main -------------------------------------------------------------------
 
-// Webhook n8n de aperturas (workflow "ONIA Propuesta Abierta"). El token
+// Webhook n8n de aperturas (workflow "ONIA - Propuesta Abierta (pixel)" en n8n;
+// el nombre del workflow vivo NO se renombra con la marca). El token
 // identifica al prospecto; se pasa con --track <token>.
 const TRACK_WEBHOOK = 'https://n8n-sergio-n8n.hqdqgh.easypanel.host/webhook/propuesta-abierta';
 
@@ -335,13 +336,13 @@ function parseArgs(args) {
 function main() {
   const { wantPdf, trackIdx, trackToken, only } = parseArgs(process.argv.slice(2));
   if (trackIdx !== -1 && !trackToken) {
-    console.error('[ONIA] --track requiere un token (ej: --track cliente-x-jul26)');
+    console.error('[Onia] --track requiere un token (ej: --track cliente-x-jul26)');
     process.exit(1);
   }
 
   const clientes = JSON.parse(fs.readFileSync(DATA, 'utf8'));
   const browser = wantPdf ? findBrowser() : null;
-  if (wantPdf && !browser) console.warn('[ONIA] No se encontró Edge/Chrome — solo genero HTML.');
+  if (wantPdf && !browser) console.warn('[Onia] No se encontró Edge/Chrome — solo genero HTML.');
 
   clientes.forEach((c, i) => validateCliente(c, i));
 
@@ -349,24 +350,24 @@ function main() {
     if (only.length && !only.includes(c.slug)) continue;
     const htmlPath = path.join(OUT, `propuesta-${c.slug}.html`);
     fs.writeFileSync(htmlPath, buildHtml(c), 'utf8');
-    console.log(`[ONIA] HTML  → ${htmlPath}`);
+    console.log(`[Onia] HTML  → ${htmlPath}`);
     if (browser) {
       const pdfPath = path.join(OUT, `propuesta-${c.slug}.pdf`);
       try {
         printPdf(browser, htmlPath, pdfPath);
-        console.log(`[ONIA] PDF   → ${pdfPath}`);
+        console.log(`[Onia] PDF   → ${pdfPath}`);
       } catch (e) {
-        console.warn(`[ONIA] PDF falló (${c.slug}): ${e.message}. ¿Está abierto en un visor?`);
+        console.warn(`[Onia] PDF falló (${c.slug}): ${e.message}. ¿Está abierto en un visor?`);
       }
     }
     if (trackToken) {
       const trackUrl = `${TRACK_WEBHOOK}?t=${encodeURIComponent(trackToken)}&s=${encodeURIComponent(c.slug)}`;
       const trackedPath = path.join(OUT, `propuesta-${c.slug}-${trackToken}.html`);
       fs.writeFileSync(trackedPath, buildHtml(c, { trackUrl }), 'utf8');
-      console.log(`[ONIA] TRACK → ${trackedPath} (avisa a Telegram al abrirse)`);
+      console.log(`[Onia] TRACK → ${trackedPath} (avisa a Telegram al abrirse)`);
     }
   }
-  console.log('[ONIA] Listo.');
+  console.log('[Onia] Listo.');
 }
 
 if (require.main === module) main();

@@ -18,6 +18,10 @@ export {
   useSceneProgress,
   useSceneTransform,
 } from "./sticky-scene";
+export { ScrollList, type ScrollListItem } from "./scroll-list";
+export { Coverflow, type CoverflowItem } from "./coverflow";
+export { Marquee } from "./marquee";
+export { BleedWordmark } from "./bleed-wordmark";
 export { StaggerGrid, StaggerItem } from "./stagger-grid";
 export { CountUp } from "./count-up";
 export { Magnetic, PressableCta } from "./magnetic";

@@ -1,7 +1,7 @@
-# ONIA Operating Context
+# Onia Operating Context
 
 ## Empresa
-ONIA es una agencia de diseño web e inteligencia artificial fundada por Sergio Urcullo en Santa Cruz, Bolivia.
+Onia es una agencia de diseño web e inteligencia artificial fundada por Sergio Urcullo en Santa Cruz, Bolivia.
 
 ## Oferta
 - Diseño y desarrollo web con Next.js y TypeScript.
@@ -16,7 +16,7 @@ ONIA es una agencia de diseño web e inteligencia artificial fundada por Sergio 
 - Negocios que quieren reducir trabajo manual y convertir mejor sus leads.
 
 ## Tono
-Claro, directo, consultivo y concreto. ONIA debe sonar capaz y cercana: explicar beneficios de negocio sin exagerar ni prometer resultados imposibles.
+Claro, directo, consultivo y concreto. Onia debe sonar capaz y cercana: explicar beneficios de negocio sin exagerar ni prometer resultados imposibles.
 
 ## Reglas de contenido
 - Crear piezas originales.
@@ -31,7 +31,7 @@ Claro, directo, consultivo y concreto. ONIA debe sonar capaz y cercana: explicar
 - `Genera carrusel ONIA: <tema> | <objetivo> | <audiencia>`: crear brief del carrusel con slides, caption, hashtags y prompts visuales.
 - `Investiga tendencias IA`: investigar tendencias y actualizaciones actuales de inteligencia artificial con fuentes fiables.
 - `Investiga tendencias redes`: investigar tendencias actuales en Instagram, TikTok, YouTube Shorts, LinkedIn, X/Twitter, Pinterest y Facebook con fuentes fiables.
-- `Investiga tendencias ONIA: <tema o industria>`: investigar tendencias de IA y redes aplicadas al tema indicado y convertirlas en ideas de contenido para ONIA.
+- `Investiga tendencias ONIA: <tema o industria>`: investigar tendencias de IA y redes aplicadas al tema indicado y convertirlas en ideas de contenido para Onia.
 - `Plan semanal ONIA`: crear calendario semanal de contenido con tendencias, ideas, pieza prioritaria, caption, hashtags y CTA.
 - `Plan semanal ONIA: <tema o industria>`: crear plan semanal enfocado en el tema indicado.
 - `Busca prospectos ONIA: <industria> | <ubicacion>`: buscar prospectos con fuentes publicas verificables y notas accionables.

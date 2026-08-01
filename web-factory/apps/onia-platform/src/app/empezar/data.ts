@@ -35,8 +35,8 @@ export const RUBRO_OPTIONS: readonly RubroOption[] = [
   },
   {
     id: "proveedores",
-    nombre: "Proveedores",
-    desc: "Distribuidores y proveedores",
+    nombre: "Importadora",
+    desc: "Importadoras y distribuidoras",
     disponible: false,
   },
 ] as const;
@@ -68,26 +68,33 @@ export const TIENE_OPTIONS: readonly {
   { id: "nada", label: "Nada de esto todavía", exclusiva: true },
 ] as const;
 
-/** Línea de precio por plan (spec §2.4 — única cifra permitida: Bs 320). */
+/**
+ * Línea de precio por plan. Los precios van VISIBLES (decisión 2026-07-30):
+ * son los mismos publicados en /#precios y salen de lib/pricing.ts.
+ */
 export const PRECIO_COPY: Record<Precio, string> = {
-  "desde-320": "Desde Bs 320/mes — precios de lanzamiento.",
-  cotizar:
-    "Los planes arrancan desde Bs 320/mes (lanzamiento); el tuyo se cotiza según sillones y equipo.",
-  "a-medida": "Precio a medida — lo armamos con vos.",
+  pro: "Bs 750/mes — precio de lanzamiento (la lista es Bs 890). Anual: pagás 10 meses.",
+  full: "Bs 1.500/mes — precio de lanzamiento (la lista es Bs 1.990). Anual: pagás 10 meses.",
+  // [FALTA PRECIO] — el plan de grupo clinico no tiene tarifa publicada.
+  "a-medida":
+    "Grupo clínico: con ese tamaño el precio se arma con vos. Todavía no publicamos tarifa de grupo — no inventamos una.",
 };
 
 export const PLAN_INCLUYE: readonly string[] = [
   "Agenda",
-  "Historias clínicas",
-  "Facturación",
+  "Historia clínica con odontograma",
+  "Cobros y caja",
   "Agente IA que reprograma — con tu aprobación",
 ] as const;
+
+export const NOTA_DOWNSELL =
+  "Si te queda grande, hay un plan de entrada de Bs 320/mes que ordena la agenda y las fichas — el agente que reprograma no viene ahí.";
 
 export const NOTA_CUADERNO =
   "El cuaderno se jubila: agenda digital con recordatorios, sin pasar nada en limpio.";
 
 export const NOTA_FACTURACION =
-  "La facturación va incluida. Y sí: el portal del SIN es gratis y cumple igual — la diferencia es que acá la factura sale sola del cobro, sin tipeo.";
+  "Facturación, de frente: el portal del SIN es gratis y cumple, y hoy la factura fiscal se emite ahí — nuestro emisor está en trámite de homologación. Lo que Onia hace mientras tanto es dejar la venta cerrada para que no tipees lo mismo dos veces.";
 
 export const FALTA_COPY: Record<"web" | "chatbot", { nombre: string; copy: string }> = {
   web: {
@@ -113,18 +120,33 @@ export const PROXIMO_ASSEMBLY: Record<
 > = {
   comercio: {
     nombre: "Comercio",
-    blocks: ["Inventario", "Ventas", "Cobro QR", "Facturación"],
-    built: 2,
+    blocks: [
+      "Cuenta y usuarios (base común)",
+      "Inventario",
+      "Ventas y cobro QR",
+      "Facturación",
+    ],
+    built: 1,
   },
   servicios: {
     nombre: "Servicios",
-    blocks: ["Agenda de trabajos", "Presupuestos", "Seguimiento", "Cobros"],
-    built: 2,
+    blocks: [
+      "Cuenta y usuarios (base común)",
+      "Agenda de trabajos",
+      "Presupuestos",
+      "Cobros",
+    ],
+    built: 1,
   },
   proveedores: {
-    nombre: "Proveedores",
-    blocks: ["Pedidos", "Entregas", "Cuentas por cobrar", "Facturación"],
-    built: 2,
+    nombre: "Importadora",
+    blocks: [
+      "Cuenta y usuarios (base común)",
+      "Pedidos y entregas",
+      "Stock y cuentas por cobrar",
+      "Costeo de importación",
+    ],
+    built: 1,
   },
 };
 
@@ -141,7 +163,7 @@ export const RUBRO_MSG: Record<Rubro, string> = {
   dental: "clínica dental",
   comercio: "comercio",
   servicios: "servicios",
-  proveedores: "proveedores",
+  proveedores: "importadora / material eléctrico",
 };
 
 export const EQUIPO_MSG: Record<Equipo, string> = {

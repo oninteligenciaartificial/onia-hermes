@@ -68,10 +68,10 @@ Canonical cleanup audit:
 
 Recommended now:
 
-- Keep ONIA Center daily briefing, Cal.com booking, Google Calendar reminders,
+- Keep Onia Center daily briefing, Cal.com booking, Google Calendar reminders,
   n8n health monitor and active intake forms.
 - Pause daily Video Lab/Higgsfield pushes, Mara daily content, daily OpenAI web
-  radar, demo assistant and duplicate agenda briefing until they write to ONIA
+  radar, demo assistant and duplicate agenda briefing until they write to Onia
   Center or have a clear operator owner.
 - Do not pause DentalGest/GestiOS payment, patient, onboarding or dunning flows
   without checking the product repo and production impact.
@@ -104,7 +104,7 @@ Flow:
 
 Do not migrate Hermes cron jobs to n8n until this workflow is stable.
 
-## ONIA Center Daily Briefing Workflow
+## Onia Center Daily Briefing Workflow
 
 Status 2026-06-28:
 
@@ -112,7 +112,7 @@ Status 2026-06-28:
 - Endpoint: `POST /api/onia-center/briefings/daily`
 - Model default: `gpt-5.4-mini`
 - Schedule: Monday to Saturday 06:45 `America/La_Paz`
-- Mode: creates ONIA Center tasks/notes by role and sends Telegram summary when configured.
+- Mode: creates Onia Center tasks/notes by role and sends Telegram summary when configured.
 
 Activation requirements (migrado 2026-07-03 a plan VPS, sin `$env`):
 

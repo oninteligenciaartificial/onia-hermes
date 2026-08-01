@@ -31,7 +31,7 @@ personales de Arthur/Sergio NO tienen credenciales Meta: no intentar publicar ah
 
 ## Reglas de diseno de Sergio (obligatorias)
 - **NO** mostrar el pill "ONIA" ni el numero de slide ("01/05") en la parte
-  superior. La marca va SOLO en el footer `@oniaagency`.
+  superior. La marca va SOLO en el footer `@oniahq`.
 - Titulares y objetos con tamano reducido: todo debe entrar con margen seguro,
   los callouts no se cortan en los bordes.
 - ONIA green como acento, nunca como paleta completa.
@@ -57,7 +57,7 @@ personales de Arthur/Sergio NO tienen credenciales Meta: no intentar publicar ah
 - Lenguaje claro para empresas bolivianas, sin jerga tecnica innecesaria.
 
 ## Checklist de calidad antes de publicar
-- [ ] Sin pill ONIA ni numero de slide arriba; footer `@oniaagency` presente.
+- [ ] Sin pill ONIA ni numero de slide arriba; footer `@oniahq` presente.
 - [ ] Ningun texto o callout cortado; margen seguro respetado.
 - [ ] Hook del slide 1 concreto (numero, error, resultado), no generico.
 - [ ] Caption con primera linea fuerte + CTA.

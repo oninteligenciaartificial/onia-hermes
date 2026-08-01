@@ -103,7 +103,7 @@ const JOB_SEED: JobSeed[] = [
   },
   {
     id: "vf-reel-onia-014",
-    title: "Reel ONIA — la IA que hace seguimiento sola",
+    title: "Reel Onia — la IA que hace seguimiento sola",
     lane: "onia",
     format: "reel-onia",
     model: "seedance_2_0",
@@ -133,7 +133,7 @@ const JOB_SEED: JobSeed[] = [
   },
   {
     id: "vf-reel-onia-013",
-    title: "Reel ONIA — antes y después de automatizar",
+    title: "Reel Onia — antes y después de automatizar",
     lane: "onia",
     format: "reel-onia",
     model: "seedance_2_0",
@@ -161,7 +161,7 @@ const JOB_SEED: JobSeed[] = [
   },
   {
     id: "vf-sergio-006",
-    title: "Sergio — lección de ONIA en 30 segundos",
+    title: "Sergio — lección de Onia en 30 segundos",
     lane: "sergio",
     format: "sergio-talking-head",
     model: "seedance_2_0",
@@ -193,7 +193,7 @@ export async function getVideoLabSnapshot(): Promise<VideoLabSnapshot> {
 
   const lanes: VideoLabLaneSummary[] = (["cliente", "onia", "sergio"] as VideoLabLane[]).map((id) => ({
     id,
-    label: id === "onia" ? "ONIA" : id.charAt(0).toUpperCase() + id.slice(1),
+    label: id === "onia" ? "Onia" : id.charAt(0).toUpperCase() + id.slice(1),
     blurb: LANE_BLURB[id],
     jobCount: jobs.filter((job) => job.lane === id).length,
   }));

@@ -1,7 +1,7 @@
 # Project Price Update Prompts 2026
 
 Use these prompts in each project repo so pricing, plans, landing copy, seed
-data and sales screens stay aligned with ONIA Pricing 2026.
+data and sales screens stay aligned with Onia Pricing 2026.
 
 ## DentalGest
 
@@ -100,7 +100,7 @@ Tareas:
 7. Reportar archivos modificados y precios restantes encontrados.
 ```
 
-## Web ONIA / Websites
+## Web Onia / Websites
 
 Target repo:
 

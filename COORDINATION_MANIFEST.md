@@ -76,7 +76,7 @@ This session owns:
 - Telegram Command Center routing for Hermes/ONIA operations.
 - Daily Hermes cron documentation for publishing/content operations.
 - Weekly operating system documentation and cadence.
-- ONIA Panel de Vendedores as the sales operating layer for leads, web diagnostics, notes, ideas, income and commissions.
+- Onia Panel de Vendedores as the sales operating layer for leads, web diagnostics, notes, ideas, income and commissions.
 
 Canonical files:
 - `AGENTS.md`
@@ -473,7 +473,7 @@ Session B should not edit publishing scripts unless coordinating first.
 npm run deploy:hermes-content
 ```
 
-- Audit and deploy ONIA self-hosted services by private profiles with:
+- Audit and deploy Onia self-hosted services by private profiles with:
 
 ```powershell
 npm run audit:selfhosted
@@ -542,7 +542,7 @@ npm run setup:assets
   - SaaS/tools: `SaaS & Herramientas`, page `dc6a6e27-453a-4d7c-800b-ef9c29c8d5ff`, data source `collection://5eaa8d12-823c-4b3b-96bb-e7aaeab1ff9c`.
   - CRM/contactos: `CRM & Contactos`, page `95acb20d-e7f5-4eaa-b185-7a7933ffdd1a`, data source `collection://9b4c77be-d02b-4840-8f91-827ec8007839`.
 - June 2026 base finance records in Notion include Codex Pro, Higgsfield Ultra, Google Workspace, VPS Hostinger, Google Photos and Claude Code Pro.
-- As of 2026-06-19, the ONIA self-hosted stack deploy kit exists at
+- As of 2026-06-19, the Onia self-hosted stack deploy kit exists at
   `hermes-content/deploy/selfhosted/` and targets `/opt/onia-selfhosted` on the
   VPS. It is private-first: Uptime Kuma, LiteLLM, Open WebUI, Stirling PDF and
   Crawl4AI bind to `127.0.0.1` by default. Dify is prepared only and must not
@@ -558,9 +558,9 @@ npm run setup:assets
   resources are tight: about 2.8 GiB available RAM, 3.7 GiB swap used, and 27
   active containers.
 - As of 2026-06-20, Hermes OS Control Center is the canonical Control Tower
-  direction for migrating ONIA apps into one self-hosted panel. The `mail`
+  direction for migrating Onia apps into one self-hosted panel. The `mail`
   self-hosted profile is prepared with Mailpit and Listmonk, but it must not be
-  treated as production sending until ONIA has a sending domain, PTR/rDNS, SPF,
+  treated as production sending until Onia has a sending domain, PTR/rDNS, SPF,
   DKIM, DMARC, bounce handling and an unsubscribe policy. Postal/Mailu/full
   SMTP delivery should run on a separate VPS/IP if used.
 

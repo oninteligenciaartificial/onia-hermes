@@ -1,8 +1,8 @@
-# ONIA — Orquestacion de Agentes en Paralelo (Fabrica Diaria) 2026
+# Onia — Orquestacion de Agentes en Paralelo (Fabrica Diaria) 2026
 
-Fecha: 2026-07-03. Owner: ONIA / Hermes.
+Fecha: 2026-07-03. Owner: Onia / Hermes.
 
-Objetivo: que el sistema de ONIA trabaje solo, todos los dias, en paralelo por
+Objetivo: que el sistema de Onia trabaje solo, todos los dias, en paralelo por
 frentes, y que Sergio solo apruebe. "En paralelo, todo el tiempo" se implementa
 como **cadencia diaria programada + agentes on-demand**, no como procesos
 siempre encendidos (eso seria caro y fragil). Cada frente tiene un cron que lo
@@ -11,7 +11,7 @@ dispara, un agente que lo ejecuta, una salida y un gate de aprobacion.
 ## Regla de autonomia (Sergio)
 
 Todo workflow debe ser **autonomo y no depender de nada local**: prohibido
-depender de endpoints propios de ONIA Center o de SearXNG en localhost. Los
+depender de endpoints propios de Onia Center o de SearXNG en localhost. Los
 workflows llaman APIs gestionadas externas (LLM tipo OpenAI/OpenRouter, etc.) via
 credenciales n8n (plan VPS, sin `$env`) y llevan el prompt/logica inline. Si un
 workflow todavia depende de infra local, esta pendiente de migrar.
@@ -47,7 +47,7 @@ reducen segun `plan-semanal-onia`.
 - "Trabajando todo el tiempo" = cada frente corre a diario sin que Sergio lo
   pida, y los agentes de fondo (build, migraciones, review) se despachan cuando
   hay trabajo. No hay daemons 24/7: el disparo es por cron + eventos.
-- Todo output se registra (ONIA Center / repo). Regla: "solo cuenta si queda
+- Todo output se registra (Onia Center / repo). Regla: "solo cuenta si queda
   registrado con evidencia". Un reporte que no se registra no se ejecuta.
 - Ningun frente publica, contacta cliente, paga, ni entrega pieza sin aprobacion
   explicita de Sergio.
@@ -59,11 +59,11 @@ reducen segun `plan-semanal-onia`.
 | guiones-diarios-onia (skill) | listo |
 | onia-guiones-diarios (n8n) | ACTIVO en n8n (`NDXLJiR00ciQx72V`), autonomo, testeado OK. Nodo OpenAI (cred `OpenAi account`) + Telegram (cred `Telegram account`). Cron 07:00 L-S |
 | brief-diario-onia (skill) | listo |
-| onia-center-daily-briefing (n8n) | usa ONIA Center — PENDIENTE migrar a autonomo |
+| onia-center-daily-briefing (n8n) | usa Onia Center — PENDIENTE migrar a autonomo |
 | onia-trend-recommendations (n8n) | usa SearXNG local — PENDIENTE migrar a autonomo |
 | Cron prospeccion | pendiente (skill `prospeccion-onia` existe; falta workflow autonomo) |
 | Cron propuestas | pendiente (skill `genera-propuesta` existe; falta workflow autonomo) |
-| 9 agentes ONIA (`.claude/agents/`) | listos |
+| 9 agentes Onia (`.claude/agents/`) | listos |
 
 ## Activacion (una vez, en n8n)
 

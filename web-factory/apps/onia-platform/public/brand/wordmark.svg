@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 312 116" role="img" aria-label="onia">
+  <title>onia — wordmark solo (variante silenciosa)</title>
+  <desc>Solo las letras "onia", monocromo tinta, sin cursor verde. Para footer/papeleria donde el logo debe callar (ONIA_BRAND_IDENTITY_2026.md §4.2).</desc>
+  <style>
+    .ink { stroke: #141A17; }
+    .dot { fill: #141A17; }
+    @media (prefers-color-scheme: dark) {
+      .ink { stroke: #ECEFED; }
+      .dot { fill: #ECEFED; }
+    }
+  </style>
+  <g class="ink" fill="none" stroke-width="16" stroke-linecap="round">
+    <circle cx="40" cy="76" r="32"/>
+    <path d="M112 108 V68 A24 24 0 0 1 160 68 V108"/>
+    <path d="M200 108 V44"/>
+    <circle cx="272" cy="76" r="32"/>
+    <path d="M304 44 V108"/>
+  </g>
+  <circle class="dot" cx="200" cy="10" r="10"/>
+</svg>

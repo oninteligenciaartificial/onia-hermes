@@ -1,14 +1,14 @@
-# ONIA Project Hygiene Automation 2026
+# Onia Project Hygiene Automation 2026
 
 Fecha: 2026-06-30.
 
 ## Decision
 
-La limpieza diaria de proyectos ONIA no debe depender de la computadora de
+La limpieza diaria de proyectos Onia no debe depender de la computadora de
 Sergio. La arquitectura correcta es remota:
 
 - GitHub Actions ejecuta la auditoria diaria a las 06:00 America/La_Paz.
-- ONIA Center recibe el reporte y crea tareas, notas y jobs Codex.
+- Onia Center recibe el reporte y crea tareas, notas y jobs Codex.
 - Vercel, GitHub y otras fuentes se revisan por API.
 - Sentry o un monitor equivalente avisa si el job no corre o falla.
 - Ningun proyecto, deployment, dominio, repo, base de datos o secreto se elimina
@@ -22,7 +22,7 @@ el runner debe ser GitHub Actions, n8n en VPS o un worker propio.
 - Configuracion: `hermes-content/references/onia-project-hygiene-config.json`
 - Script diario: `scripts/onia_project_hygiene.mjs`
 - Workflow GitHub Actions: `.github/workflows/onia-hygiene-daily.yml`
-- Endpoint ONIA Center: `web-factory/apps/site/src/app/api/onia-center/hygiene/daily/route.ts`
+- Endpoint Onia Center: `web-factory/apps/site/src/app/api/onia-center/hygiene/daily/route.ts`
 
 ## Flujo diario
 
@@ -44,7 +44,7 @@ el runner debe ser GitHub Actions, n8n en VPS o un worker propio.
    - `.onia-hygiene/onia-project-hygiene-report.json`
    - `.onia-hygiene/onia-project-hygiene-summary.md`
 7. Si `ONIA_CENTER_BASE_URL` y `ONIA_CENTER_INTERNAL_API_KEY` existen, registra
-   el reporte en ONIA Center.
+   el reporte en Onia Center.
 
 ## Que hace automaticamente
 
@@ -55,7 +55,7 @@ el runner debe ser GitHub Actions, n8n en VPS o un worker propio.
 - Marca repos activos sin CI reciente o con ultima Action fallida.
 - Detecta proyectos que solo existen localmente y por tanto no pueden auditarse
   si la computadora de Sergio esta apagada.
-- Crea nota diaria en ONIA Center.
+- Crea nota diaria en Onia Center.
 - Crea tareas para hallazgos altos o bloqueantes.
 - Crea jobs Codex para hallazgos que requieren codigo, CI o refactor.
 
@@ -99,7 +99,7 @@ Notas:
   quieran revisar. El `GITHUB_TOKEN` automatico solo cubre bien el repo actual.
 - `ONIA_HYGIENE_MONITOR_WEBHOOK_URL` puede apuntar a Sentry Cron, Healthchecks,
   Better Stack o un webhook n8n.
-- La API key de ONIA Center es la misma clase de secreto interno que usa el
+- La API key de Onia Center es la misma clase de secreto interno que usa el
   briefing diario.
 
 ## Activacion
@@ -110,7 +110,7 @@ Notas:
 4. Ejecutar `workflow_dispatch` con `commit=false`.
 5. Revisar artefacto `onia-project-hygiene-report`.
 6. Ejecutar con `commit=true`.
-7. Verificar que ONIA Center muestre nota, tareas y jobs Codex.
+7. Verificar que Onia Center muestre nota, tareas y jobs Codex.
 8. Activar monitor externo para missed runs.
 
 ## Politica de limpieza
@@ -130,15 +130,15 @@ Regla practica:
 
 Fuentes productivas:
 
-- ONIA Hermes / ONIA Center.
+- Onia Hermes / Onia Center.
 - DentalGest.
 - GestiOS.
-- Web ONIA.
+- Web Onia.
 - Bolivian Electric.
 
 Fuentes en revision:
 
-- ONIA Forms.
+- Onia Forms.
 - AlfredHQ.
 - Ganaderos OS.
 - TempoHomes.
@@ -162,7 +162,7 @@ codigo reutilizable.
 
 ## Siguiente fase
 
-1. Crear vista dedicada `Higiene` dentro de ONIA Center.
+1. Crear vista dedicada `Higiene` dentro de Onia Center.
 2. Conectar Sentry Cron o monitor equivalente.
 3. Agregar workflows de CI por repo donde falten.
 4. Crear jobs Codex/Claude por repo para reparar fallos detectados.

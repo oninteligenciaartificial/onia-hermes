@@ -148,7 +148,7 @@ function publicServiceContext(role: RoleId) {
 
 function assistantInstructions(role: RoleId) {
   return [
-    "Eres ONIA Bot interno dentro de ONIA Center.",
+    "Eres Onia Bot interno dentro de Onia Center.",
     "Responde en espanol, directo y accionable.",
     "Usa solo el contexto permitido que recibes. Si falta informacion, di que no esta visible o no esta registrado.",
     "No inventes estados de clientes, precios, pagos, comisiones ni decisiones.",
@@ -220,7 +220,7 @@ async function callDify({
         onia_context_json: JSON.stringify(safeContext),
       },
       query: [
-        "Actua como asistente interno de ONIA Center.",
+        "Actua como asistente interno de Onia Center.",
         "Usa solo el contexto permitido que recibiste en onia_context_json.",
         "Si falta informacion, di que no esta visible o no esta registrado.",
         "No apruebes pagos, descuentos, gastos, comisiones ni contacto sensible.",
@@ -300,7 +300,7 @@ export async function POST(request: Request) {
       {
         ok: false,
         mode: "configuration_pending",
-        message: "ONIA Center necesita Supabase server-side antes de enviar contexto al proveedor de IA.",
+        message: "Onia Center necesita Supabase server-side antes de enviar contexto al proveedor de IA.",
         missingConfiguration: getMissingOniaCenterConfig(),
         answer: null,
       },

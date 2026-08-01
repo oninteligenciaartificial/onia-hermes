@@ -1,0 +1,465 @@
+<!doctype html>
+<html
+  lang="es"
+  data-composition-variables='[
+    {"id":"text","type":"string","label":"Texto","default":"Tu equipo, atendiendo mientras vos dormís"},
+    {"id":"attribution","type":"string","label":"Atribucion","default":""},
+    {"id":"revealBy","type":"enum","label":"Revelado","default":"word","options":[{"value":"word","label":"Por palabra"},{"value":"line","label":"Por linea"}]},
+    {"id":"accent","type":"color","label":"Acento","default":"#FF7A00"}
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <title>ONIA · Quote</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      /* ---- Tipografia OFICIAL de marca (ONIA_BRAND_IDENTITY_2026.md §2) -----
+         El trio se AUTOHOSPEDA: los .woff2 viven versionados en
+         hermes-content/brand/fonts/ (con su OFL al lado) y el compilador los
+         embebe como data URI. Nada de Google Fonts en tiempo de render y nada
+         de depender de fuentes instaladas en el sistema — por eso el frame sale
+         identico en Windows (Sergio) y en Linux (VPS).
+
+         Los .woff2 estan DENTRO de la composicion (fonts/) y no referenciados
+         a la carpeta canonica: HyperFrames sirve cada composicion con su propia
+         carpeta como raiz y rechaza por lint todo asset con "../" por encima
+         (invalid_parent_traversal_in_asset_path). Las copias las reparte
+         `hermes-content/brand/fonts/build-onia-fonts.py` — no se tocan a mano,
+         se regeneran; asi no derivan de la fuente.
+
+         Los ejes vienen recortados de fabrica (ver build-onia-fonts.py):
+         Bricolage llega con wght 500-700 y wdth fijo en 100, asi que el peso
+         800 y los cortes ultra-condensed que el brand system prohibe no
+         existen ni por accidente.
+
+         font-display: block y no swap — el renderer debe ESPERAR a la fuente;
+         un swap pintaria los primeros frames con la fallback. */
+      @font-face {
+        font-family: "Bricolage Grotesque";
+        src: url("fonts/BricolageGrotesque-var-latin.woff2") format("woff2");
+        font-weight: 500 700;
+        font-style: normal;
+        font-display: block;
+      }
+      @font-face {
+        font-family: "DM Sans";
+        src: url("fonts/DMSans-var-latin.woff2") format("woff2");
+        font-weight: 400 500;
+        font-style: normal;
+        font-display: block;
+      }
+
+      /* Remotion aplica `box-sizing: border-box` de fabrica; replicarlo aca es
+         lo que hace que anchos y paddings caigan en el MISMO pixel que la
+         baseline. (Asumir content-box ensanchaba las tarjetas y sacaba a Quote
+         y LowerThird fuera del lienzo.) */
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        width: 1000px;
+        height: 620px;
+        overflow: hidden;
+        background: transparent;
+      }
+
+      #stage {
+        position: relative;
+        width: 1000px;
+        height: 620px;
+        --stage-w: 1000;
+        --stage-h: 620;
+        --u: calc(var(--stage-w) / 1000 * 1px);
+        --accent: #ff7a00;
+        --accent-deep: color-mix(in srgb, var(--accent) 62%, #000000);
+        --ink: #0a0c11;
+        --ink2: #15181f;
+        --ink-text: #f6f8fb;
+        --muted: rgba(246, 248, 251, 0.6);
+        --hairline: rgba(255, 255, 255, 0.11);
+        --gloss: rgba(255, 255, 255, 0.09);
+        --shadow:
+          0 calc(var(--u) * 46) calc(var(--u) * 96) calc(var(--u) * -24) rgba(0, 0, 0, 0.62),
+          0 calc(var(--u) * 10) calc(var(--u) * 26) rgba(0, 0, 0, 0.32);
+        /* Roles del trio: display = titulares y etiquetas · body = texto de
+           apoyo. Esta composicion no muestra cifras, asi que no carga el mono. */
+        --font-display: "Bricolage Grotesque", sans-serif;
+        --font-body: "DM Sans", sans-serif;
+        font-family: var(--font-body);
+      }
+      #stage[data-theme="light"] {
+        --ink: #ffffff;
+        --ink2: #f4f5f7;
+        --ink-text: #0b0d12;
+        --muted: rgba(11, 13, 18, 0.58);
+        --hairline: rgba(11, 13, 18, 0.1);
+        --gloss: rgba(255, 255, 255, 0.85);
+      }
+
+      .fill {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: calc(var(--u) * 44);
+      }
+
+      .card {
+        position: relative;
+        width: 100%;
+        border-radius: calc(var(--u) * 34);
+        background: linear-gradient(158deg, var(--ink2) 0%, var(--ink) 62%);
+        border: 1px solid var(--hairline);
+        box-shadow: var(--shadow);
+        overflow: hidden;
+        padding: calc(var(--u) * 78) calc(var(--u) * 80) calc(var(--u) * 66) calc(var(--u) * 86);
+        opacity: 0;
+      }
+
+      /* Regla de acento CORTA al pie (no franja vertical al borde izquierdo). */
+      .rail {
+        position: absolute;
+        left: calc(var(--u) * 84);
+        bottom: calc(var(--u) * 30);
+        width: calc(var(--u) * 132);
+        height: calc(var(--u) * 7);
+        border-radius: calc(var(--u) * 7);
+        transform-origin: left;
+        transform: scaleX(0);
+        background: linear-gradient(90deg, var(--accent), var(--accent-deep));
+      }
+
+      .gloss {
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        pointer-events: none;
+        border-top: 1px solid var(--gloss);
+        -webkit-mask-image: linear-gradient(#000, transparent 42%);
+        mask-image: linear-gradient(#000, transparent 42%);
+      }
+
+      /* comilla gigante — textura, detras del texto */
+      .quotemark {
+        position: absolute;
+        z-index: 0;
+        left: calc(var(--u) * 34);
+        top: calc(var(--u) * -46);
+        font-family: var(--font-display);
+        font-size: calc(var(--u) * 320);
+        line-height: 1;
+        font-weight: 700;
+        color: color-mix(in oklab, var(--accent) 30%, transparent);
+        pointer-events: none;
+      }
+
+      /* La cita ES el titular de la pieza -> display. */
+      .body {
+        position: relative;
+        z-index: 1;
+        font-family: var(--font-display);
+        font-size: calc(var(--u) * 62);
+        font-weight: 700;
+        line-height: 1.16;
+        letter-spacing: -0.03em;
+        color: var(--ink-text);
+        margin: 0;
+      }
+
+      /* Los tokens deben ser block-level + con tamano para que el transform
+         no sea un no-op (regla dura de determinism-rules). */
+      .tok {
+        display: inline-block;
+        opacity: 0;
+        visibility: hidden;
+      }
+      .line {
+        display: block;
+      }
+
+      .attribution {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        gap: calc(var(--u) * 18);
+        margin-top: calc(var(--u) * 40);
+        /* Atribucion = texto de apoyo -> cuerpo. DM Sans va 400/500 por
+           brand system, asi que el 600 de antes baja a 500. */
+        font-family: var(--font-body);
+        font-size: calc(var(--u) * 29);
+        font-weight: 500;
+        color: var(--muted);
+        letter-spacing: -0.01em;
+        opacity: 0;
+      }
+      .attribution i {
+        display: block;
+        width: calc(var(--u) * 58);
+        height: calc(var(--u) * 4);
+        border-radius: 999px;
+        background: var(--accent);
+        flex: 0 0 auto;
+      }
+
+      [hidden] {
+        display: none !important;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="stage"
+      data-composition-id="quote"
+      data-theme="dark"
+      data-start="0"
+      data-duration="3.4"
+      data-fps="30"
+      data-width="1000"
+      data-height="620"
+    >
+      <div id="quote-clip" class="clip" data-start="0" data-duration="3.4" data-track-index="0">
+        <div class="fill">
+          <div class="card" id="quote-card">
+            <div class="rail" id="quote-rail"></div>
+            <div class="gloss"></div>
+            <!-- la comilla es TEXTURA detras del texto: el solape es deliberado -->
+            <div class="quotemark" data-layout-allow-overflow data-layout-allow-overlap>
+              &ldquo;
+            </div>
+            <p class="body" id="quote-body"></p>
+            <div class="attribution" id="quote-attribution"><i></i><span></span></div>
+          </div>
+        </div>
+      </div>
+
+      <script>
+        // ============================================================
+        // ONIA · Quote — port de src/compositions/Quote.tsx
+        // Texto con revelado tipografico por palabra o por linea.
+        // ============================================================
+        (function () {
+          "use strict";
+
+          function cubicBezier(x1, y1, x2, y2) {
+            var cx = 3 * x1,
+              bx = 3 * (x2 - x1) - cx,
+              ax = 1 - cx - bx;
+            var cy = 3 * y1,
+              by = 3 * (y2 - y1) - cy,
+              ay = 1 - cy - by;
+            function sampleX(t) {
+              return ((ax * t + bx) * t + cx) * t;
+            }
+            function sampleY(t) {
+              return ((ay * t + by) * t + cy) * t;
+            }
+            function sampleDX(t) {
+              return (3 * ax * t + 2 * bx) * t + cx;
+            }
+            return function (x) {
+              if (x <= 0) return 0;
+              if (x >= 1) return 1;
+              var t = x,
+                i,
+                d,
+                dx;
+              for (i = 0; i < 8; i++) {
+                d = sampleX(t) - x;
+                if (Math.abs(d) < 1e-7) return sampleY(t);
+                dx = sampleDX(t);
+                if (Math.abs(dx) < 1e-7) break;
+                t -= d / dx;
+              }
+              var lo = 0,
+                hi = 1;
+              t = x;
+              while (hi - lo > 1e-7) {
+                if (sampleX(t) < x) lo = t;
+                else hi = t;
+                t = (hi + lo) / 2;
+              }
+              return sampleY(t);
+            };
+          }
+          gsap.registerEase("oniaOutExpo", cubicBezier(0.16, 1, 0.3, 1));
+          gsap.registerEase("oniaOutQuart", cubicBezier(0.25, 1, 0.5, 1));
+
+          var stage = document.getElementById("stage");
+          var FPS = Number(stage.dataset.fps) || 30;
+          var DUR = Number(stage.dataset.duration) || 3.4;
+          var TOTAL = Math.max(1, Math.round(DUR * FPS));
+          document.getElementById("quote-clip").dataset.duration = String(DUR);
+
+          function enterExit(o) {
+            o = o || {};
+            var delay = o.delayFrames || 0;
+            var enterF = Math.max(1, Math.round(((o.enterMs || 280) / 1000) * FPS));
+            var exitF = Math.max(1, Math.round(((o.exitMs || 200) / 1000) * FPS));
+            var exitStart = Math.max(delay + enterF, TOTAL - exitF);
+            return {
+              enterAt: delay / FPS,
+              enterDur: enterF / FPS,
+              exitAt: exitStart / FPS,
+              exitDur: Math.max(1, TOTAL - exitStart) / FPS,
+            };
+          }
+
+          function readVars() {
+            var decls = [];
+            try {
+              decls = JSON.parse(document.documentElement.dataset.compositionVariables || "[]");
+            } catch (e) {
+              decls = [];
+            }
+            var out = {};
+            for (var i = 0; i < decls.length; i++) out[decls[i].id] = decls[i].default;
+            var live =
+              window.__hyperframes && typeof window.__hyperframes.getVariables === "function"
+                ? window.__hyperframes.getVariables()
+                : null;
+            if (live) {
+              for (var k in out) {
+                if (live[k] !== undefined && live[k] !== null) out[k] = live[k];
+              }
+            }
+            return out;
+          }
+
+          // split determinista (src/lib/text.ts)
+          function splitWords(t) {
+            return t.split(/(\s+)/).filter(function (x) {
+              return x.length > 0;
+            });
+          }
+          function splitLines(t) {
+            return t.split(/\n+/).filter(function (x) {
+              return x.trim().length > 0;
+            });
+          }
+
+          // ---- contenido ------------------------------------------------------
+          var V = readVars();
+          var elCard = document.getElementById("quote-card");
+          var elRail = document.getElementById("quote-rail");
+          var elBody = document.getElementById("quote-body");
+          var elAttribution = document.getElementById("quote-attribution");
+
+          var text = String(V.text || "");
+          var attribution = String(V.attribution || "");
+          var revealBy = V.revealBy === "line" ? "line" : "word";
+
+          elAttribution.querySelector("span").textContent = attribution;
+          if (!attribution) elAttribution.hidden = true;
+
+          // Materializar los tokens del revelado.
+          var toks = [];
+          if (revealBy === "line") {
+            var lines = splitLines(text);
+            for (var li = 0; li < lines.length; li++) {
+              var lineWrap = document.createElement("div");
+              lineWrap.className = "line";
+              var span = document.createElement("span");
+              span.className = "tok";
+              span.textContent = lines[li];
+              lineWrap.appendChild(span);
+              elBody.appendChild(lineWrap);
+              toks.push(span);
+            }
+          } else {
+            var parts = splitWords(text);
+            for (var pi = 0; pi < parts.length; pi++) {
+              if (/^\s+$/.test(parts[pi])) {
+                elBody.appendChild(document.createTextNode(parts[pi]));
+              } else {
+                var w = document.createElement("span");
+                w.className = "tok";
+                w.textContent = parts[pi];
+                elBody.appendChild(w);
+                toks.push(w);
+              }
+            }
+          }
+
+          // ---- timeline -------------------------------------------------------
+          var tl = gsap.timeline({ paused: true });
+
+          var card = enterExit({ enterMs: 260 });
+          var CARD_Y = "calc(var(--u) * 20)";
+          tl.fromTo(
+            elCard,
+            { opacity: 0, y: CARD_Y, scale: 0.97 },
+            { opacity: 1, y: 0, scale: 1, duration: card.enterDur, ease: "oniaOutExpo" },
+            card.enterAt,
+          );
+          tl.to(
+            elCard,
+            { opacity: 0, y: CARD_Y, scale: 0.97, duration: card.exitDur, ease: "oniaOutQuart" },
+            card.exitAt,
+          );
+          tl.to(elRail, { scaleX: 1, duration: card.enterDur, ease: "oniaOutExpo" }, card.enterAt);
+
+          // ---- waterfall entry (cut-the-curve §6) -----------------------------
+          // Desviaciones DELIBERADAS respecto del original de Remotion, exigidas
+          // por motion-doctrine para una cascada de arribo en escena:
+          //  1. opacidad BINARIA en la entrada (tl.set), nunca fade — la
+          //     velocidad la lleva el recorrido en Y;
+          //  2. recorrido en Y de 44u (banda 40-50px) en vez de 16u;
+          //  3. duracion por token 150ms (banda 0.13-0.16s) en vez de 180ms;
+          //  4. los huecos SE ACHICAN x0.84 (nunca iguales) y la cascada
+          //     completa se acota a <=500ms, asi una cita larga no se arrastra.
+          var TOK_Y = "calc(var(--u) * 44)";
+          var TOK_DUR = 0.15;
+          var tokenStart = 4 / FPS; // frames de gracia tras la entrada de la tarjeta
+          var baseStep = revealBy === "line" ? 0.14 : 0.055;
+
+          var raw = 0;
+          var step = baseStep;
+          for (var s = 0; s < toks.length - 1; s++) {
+            raw += step;
+            step *= 0.84;
+          }
+          var squeeze = raw > 0.5 ? 0.5 / raw : 1;
+
+          var at = tokenStart;
+          var lastStart = tokenStart;
+          step = baseStep * squeeze;
+          for (var t2 = 0; t2 < toks.length; t2++) {
+            tl.set(toks[t2], { autoAlpha: 1 }, at);
+            tl.fromTo(
+              toks[t2],
+              { y: TOK_Y },
+              { y: 0, duration: TOK_DUR, ease: "oniaOutExpo" },
+              at,
+            );
+            lastStart = at;
+            at += step;
+            step *= 0.84;
+          }
+
+          // La atribucion entra al final, deslizandose desde la izquierda. Es un
+          // elemento suelto (no una cascada) — mantiene su fade.
+          if (attribution) {
+            var attribDelay = lastStart + (revealBy === "line" ? 10 : 8) / FPS;
+            tl.fromTo(
+              elAttribution,
+              { opacity: 0, x: "calc(var(--u) * -18)" },
+              { opacity: 1, x: 0, duration: 12 / FPS, ease: "oniaOutExpo" },
+              attribDelay,
+            );
+          }
+
+          window.__timelines = window.__timelines || {};
+          window.__timelines["quote"] = tl;
+        })();
+      </script>
+    </div>
+  </body>
+</html>

@@ -1,4 +1,4 @@
-# ONIA Open Source AI Video Lab 2026
+# Onia Open Source AI Video Lab 2026
 
 Estado: canonico operativo interno.
 Fecha base: 2026-06-15.
@@ -20,7 +20,7 @@ Higgsfield = acabado final/publicable.
 
 | Capa | Herramienta | Uso | Estado |
 |---|---|---|---|
-| Control plane | VPS ONIA actual | n8n, Supabase, Hermes, SearXNG, backups | activo |
+| Control plane | VPS Onia actual | n8n, Supabase, Hermes, SearXNG, backups | activo |
 | Router IA | LiteLLM | enrutar local, GPU y API premium | siguiente instalacion |
 | Interfaz interna | Open WebUI | chat, prompts, pruebas con Ollama/API | siguiente instalacion |
 | Modelo barato texto | Ollama + Qwen pequeno | drafts, prompts, clasificacion simple | activo con `qwen2.5:3b` |
@@ -52,7 +52,7 @@ Usar GPU por sesiones:
 | Necesidad | GPU recomendada | Regla |
 |---|---|---|
 | Imagen y pruebas simples | RTX A5000 24GB o RTX 3090 24GB | barato, limitar a 1-2h |
-| Video serio y workflows pesados | RTX A6000 48GB | opcion base para ONIA |
+| Video serio y workflows pesados | RTX A6000 48GB | opcion base para Onia |
 | Modelos grandes 80GB+ | A100 80GB | solo si hay una razon clara |
 
 Reglas operativas:
@@ -65,7 +65,7 @@ Reglas operativas:
 
 ## Reglas legales y comerciales
 
-El modelo local puede generar con menos filtros, pero ONIA mantiene control
+El modelo local puede generar con menos filtros, pero Onia mantiene control
 comercial:
 
 - Usar personajes ficticios o assets propios por defecto.

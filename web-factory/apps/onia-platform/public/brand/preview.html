@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>onia — logo v1 (candidato C) · muestra</title>
+<link rel="icon" href="./favicon.svg">
+<style>
+  :root {
+    --papel: #F9FBFA; --ink: #141A17; --ink-soft: #424A46; --line: #D4D9D6;
+    --tinta: #0C110F; --texto-dark: #ECEFED; --tinta-linea: #28302D;
+    --verde-logo: #3EA639;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    background: var(--papel); color: var(--ink);
+    padding: 48px 24px 96px; line-height: 1.5;
+  }
+  main { max-width: 1080px; margin: 0 auto; }
+  h1 { font-size: 1.6rem; letter-spacing: -0.02em; }
+  .meta { color: var(--ink-soft); font-size: 0.9rem; margin-top: 4px; }
+  h2 {
+    font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--ink-soft); margin: 56px 0 16px; padding-top: 16px;
+    border-top: 1px solid var(--line);
+  }
+  .row { display: grid; gap: 16px; }
+  .row.two { grid-template-columns: 1fr 1fr; }
+  .row.four { grid-template-columns: repeat(4, 1fr); }
+  @media (max-width: 860px) { .row.two, .row.four { grid-template-columns: 1fr; } }
+  .panel {
+    border: 1px solid var(--line); border-radius: 14px; padding: 40px 32px;
+    display: flex; flex-direction: column; gap: 24px;
+    align-items: center; justify-content: center; min-height: 160px;
+  }
+  .panel.light { background: #FFFFFF; }
+  .panel.dark  { background: var(--tinta); border-color: var(--tinta-linea); color: var(--texto-dark); }
+  .panel.green { background: var(--verde-logo); border-color: var(--verde-logo); color: #fff; }
+  .panel .cap { font-size: 0.75rem; letter-spacing: 0.05em; opacity: 0.6; font-family: ui-monospace, monospace; }
+  .strip { display: flex; align-items: flex-end; gap: 40px; flex-wrap: wrap; }
+  .strip figure { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+  .strip figcaption { font-size: 0.72rem; color: var(--ink-soft); font-family: ui-monospace, monospace; }
+  .panel.dark .strip figcaption { color: var(--texto-dark); opacity: 0.55; }
+  table { border-collapse: collapse; font-size: 0.88rem; width: 100%; }
+  td, th { border: 1px solid var(--line); padding: 8px 12px; text-align: left; vertical-align: top; }
+  th { background: #fff; font-weight: 600; }
+  code { font-family: ui-monospace, monospace; font-size: 0.85em; }
+  .note { font-size: 0.85rem; color: var(--ink-soft); margin-top: 10px; }
+  svg { display: block; }
+</style>
+</head>
+<body>
+<main>
+  <h1>onia — logo v1</h1>
+  <p class="meta">Candidato C aprobado (cursor) · verde propio del logo <code>#3EA639</code> · 2026-07-26 · dibujado a mano en SVG</p>
+
+  <h2>Lockup principal — claro y oscuro</h2>
+  <div class="row two">
+    <div class="panel light">
+      <svg viewBox="0 0 352 116" height="72" width="218" role="img" aria-label="onia">
+        <g fill="none" stroke="#141A17" stroke-width="16" stroke-linecap="round">
+          <circle cx="40" cy="76" r="32"/><path d="M112 108 V68 A24 24 0 0 1 160 68 V108"/>
+          <path d="M200 108 V44"/><circle cx="272" cy="76" r="32"/><path d="M304 44 V108"/>
+        </g>
+        <circle cx="200" cy="10" r="10" fill="#141A17"/>
+        <rect x="332" y="96" width="20" height="20" rx="2" fill="#3EA639"/>
+      </svg>
+      <span class="cap">logo.svg · sobre blanco</span>
+    </div>
+    <div class="panel dark">
+      <svg viewBox="0 0 352 116" height="72" width="218" role="img" aria-label="onia">
+        <g fill="none" stroke="#ECEFED" stroke-width="16" stroke-linecap="round">
+          <circle cx="40" cy="76" r="32"/><path d="M112 108 V68 A24 24 0 0 1 160 68 V108"/>
+          <path d="M200 108 V44"/><circle cx="272" cy="76" r="32"/><path d="M304 44 V108"/>
+        </g>
+        <circle cx="200" cy="10" r="10" fill="#ECEFED"/>
+        <rect x="332" y="96" width="20" height="20" rx="2" fill="#3EA639"/>
+      </svg>
+      <span class="cap">logo-dark.svg · sobre tinta #0C110F</span>
+    </div>
+  </div>
+
+  <h2>Variantes</h2>
+  <div class="row four">
+    <div class="panel light">
+      <svg viewBox="0 0 312 116" height="46" width="124" role="img" aria-label="onia">
+        <g fill="none" stroke="#141A17" stroke-width="16" stroke-linecap="round">
+          <circle cx="40" cy="76" r="32"/><path d="M112 108 V68 A24 24 0 0 1 160 68 V108"/>
+          <path d="M200 108 V44"/><circle cx="272" cy="76" r="32"/><path d="M304 44 V108"/>
+        </g>
+        <circle cx="200" cy="10" r="10" fill="#141A17"/>
+      </svg>
+      <span class="cap">wordmark.svg (silencioso)</span>
+    </div>
+    <div class="panel light">
+      <svg viewBox="0 0 80 80" height="56" width="56" role="img" aria-label="onia">
+        <circle cx="40" cy="40" r="32" fill="none" stroke="#141A17" stroke-width="16"/>
+        <rect x="30" y="30" width="20" height="20" rx="2" fill="#3EA639"/>
+      </svg>
+      <span class="cap">isotype.svg</span>
+    </div>
+    <div class="panel dark">
+      <svg viewBox="0 0 80 80" height="56" width="56" role="img" aria-label="onia">
+        <circle cx="40" cy="40" r="32" fill="none" stroke="#ECEFED" stroke-width="16"/>
+        <rect x="30" y="30" width="20" height="20" rx="2" fill="#3EA639"/>
+      </svg>
+      <span class="cap">isotype · oscuro</span>
+    </div>
+    <div class="panel light">
+      <img src="./favicon.svg" width="56" height="56" alt="favicon onia">
+      <span class="cap">favicon.svg</span>
+    </div>
+  </div>
+
+  <h2>Tamaños — el favicon debe leer a 16px</h2>
+  <div class="row two">
+    <div class="panel light">
+      <div class="strip">
+        <figure><img src="./favicon.svg" width="16" height="16" alt=""><figcaption>16</figcaption></figure>
+        <figure><img src="./favicon-32.png" width="32" height="32" alt=""><figcaption>32 (png)</figcaption></figure>
+        <figure><img src="./favicon.svg" width="64" height="64" alt=""><figcaption>64</figcaption></figure>
+        <figure><img src="./apple-touch-icon-180.png" width="90" height="90" alt=""><figcaption>apple 180</figcaption></figure>
+      </div>
+      <span class="cap">favicon + exports raster</span>
+    </div>
+    <div class="panel light">
+      <div class="strip">
+        <figure>
+          <svg viewBox="0 0 352 116" height="18" width="55" aria-hidden="true">
+            <g fill="none" stroke="#141A17" stroke-width="16" stroke-linecap="round">
+              <circle cx="40" cy="76" r="32"/><path d="M112 108 V68 A24 24 0 0 1 160 68 V108"/>
+              <path d="M200 108 V44"/><circle cx="272" cy="76" r="32"/><path d="M304 44 V108"/>
+            </g>
+            <circle cx="200" cy="10" r="10" fill="#141A17"/>
+            <rect x="332" y="96" width="20" height="20" rx="2" fill="#3EA639"/>
+          </svg>
+          <figcaption>18 (mín)</figcaption>
+        </figure>
+        <figure>
+          <svg viewBox="0 0 352 116" height="22" width="67" aria-hidden="true">
+            <g fill="none" stroke="#141A17" stroke-width="16" stroke-linecap="round">
+              <circle cx="40" cy="76" r="32"/><path d="M112 108 V68 A24 24 0 0 1 160 68 V108"/>
+              <path d="M200 108 V44"/><circle cx="272" cy="76" r="32"/><path d="M304 44 V108"/>
+            </g>
+            <circle cx="200" cy="10" r="10" fill="#141A17"/>
+            <rect x="332" y="96" width="20" height="20" rx="2" fill="#3EA639"/>
+          </svg>
+          <figcaption>22 (footer)</figcaption>
+        </figure>
+        <figure>
+          <svg viewBox="0 0 352 116" height="26" width="79" aria-hidden="true">
+            <g fill="none" stroke="#141A17" stroke-width="16" stroke-linecap="round">
+              <circle cx="40" cy="76" r="32"/><path d="M112 108 V68 A24 24 0 0 1 160 68 V108"/>
+              <path d="M200 108 V44"/><circle cx="272" cy="76" r="32"/><path d="M304 44 V108"/>
+            </g>
+            <circle cx="200" cy="10" r="10" fill="#141A17"/>
+            <rect x="332" y="96" width="20" height="20" rx="2" fill="#3EA639"/>
+          </svg>
+          <figcaption>26 (header)</figcaption>
+        </figure>
+        <figure>
+          <svg viewBox="0 0 352 116" height="40" width="121" aria-hidden="true">
+            <g fill="none" stroke="#141A17" stroke-width="16" stroke-linecap="round">
+              <circle cx="40" cy="76" r="32"/><path d="M112 108 V68 A24 24 0 0 1 160 68 V108"/>
+              <path d="M200 108 V44"/><circle cx="272" cy="76" r="32"/><path d="M304 44 V108"/>
+            </g>
+            <circle cx="200" cy="10" r="10" fill="#141A17"/>
+            <rect x="332" y="96" width="20" height="20" rx="2" fill="#3EA639"/>
+          </svg>
+          <figcaption>40 (máx docs)</figcaption>
+        </figure>
+      </div>
+      <span class="cap">lockup en alturas de uso (§4.2)</span>
+    </div>
+  </div>
+
+  <h2>Negativo — monocromo blanco (regla §4.3: sobre verde, sin verde)</h2>
+  <div class="row two">
+    <div class="panel dark">
+      <svg viewBox="0 0 352 116" height="56" width="170" role="img" aria-label="onia">
+        <g fill="none" stroke="#FFFFFF" stroke-width="16" stroke-linecap="round">
+          <circle cx="40" cy="76" r="32"/><path d="M112 108 V68 A24 24 0 0 1 160 68 V108"/>
+          <path d="M200 108 V44"/><circle cx="272" cy="76" r="32"/><path d="M304 44 V108"/>
+        </g>
+        <circle cx="200" cy="10" r="10" fill="#FFFFFF"/>
+        <rect x="332" y="96" width="20" height="20" rx="2" fill="#FFFFFF"/>
+      </svg>
+      <span class="cap">negativo mono sobre tinta</span>
+    </div>
+    <div class="panel green">
+      <svg viewBox="0 0 352 116" height="56" width="170" role="img" aria-label="onia">
+        <g fill="none" stroke="#FFFFFF" stroke-width="16" stroke-linecap="round">
+          <circle cx="40" cy="76" r="32"/><path d="M112 108 V68 A24 24 0 0 1 160 68 V108"/>
+          <path d="M200 108 V44"/><circle cx="272" cy="76" r="32"/><path d="M304 44 V108"/>
+        </g>
+        <circle cx="200" cy="10" r="10" fill="#FFFFFF"/>
+        <rect x="332" y="96" width="20" height="20" rx="2" fill="#FFFFFF"/>
+      </svg>
+      <span class="cap">mono sobre el verde del logo</span>
+    </div>
+  </div>
+
+  <h2>Archivos</h2>
+  <table>
+    <tr><th>Archivo</th><th>Rol</th></tr>
+    <tr><td><code>logo.svg</code></td><td>Lockup completo. Auto-adapta tinta por <code>prefers-color-scheme</code>; verde fijo #3EA639.</td></tr>
+    <tr><td><code>logo-dark.svg</code></td><td>Colores fijos para fondo negro (docs, propuestas, exports).</td></tr>
+    <tr><td><code>wordmark.svg</code></td><td>Solo letras, monocromo — variante silenciosa (footer/papelería).</td></tr>
+    <tr><td><code>isotype.svg</code></td><td>Símbolo solo: la "o" + cursor verde adentro (módulo encendido).</td></tr>
+    <tr><td><code>favicon.svg</code> / <code>favicon-32.png</code> / <code>apple-touch-icon-180.png</code></td><td>Baldosa tinta + isotipo. Colores fijos, lee en pestañas claras y oscuras.</td></tr>
+  </table>
+  <p class="note">En la web el logo va inlineado en <code>components/brand-wordmark.tsx</code> (mismo arte) para seguir el toggle manual de tema. Regenerar PNGs: <code>npm install --no-save sharp &amp;&amp; node scripts/generate-brand-icons.mjs</code> desde <code>apps/onia-platform</code>.</p>
+</main>
+</body>
+</html>

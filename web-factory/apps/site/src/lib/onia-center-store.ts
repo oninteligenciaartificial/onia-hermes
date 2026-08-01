@@ -28,6 +28,7 @@ export type RuntimeTask = {
   priority: "alta" | "media" | "baja";
   evidence: string;
   assignedUserKey?: string;
+  dueLabel?: string;
   createdAt: string;
 };
 
@@ -140,6 +141,7 @@ type DbTask = {
   priority: RuntimeTask["priority"];
   assigned_role_key: string;
   evidence_required: boolean;
+  due_label: string | null;
   raw: Record<string, unknown> | null;
   created_at: string;
 };
@@ -468,6 +470,7 @@ function mapTask(row: DbTask): RuntimeTask {
     priority: row.priority,
     evidence: row.evidence_required ? "pendiente" : "no requerida",
     assignedUserKey: rawString(raw, "assignedUserKey"),
+    dueLabel: row.due_label ?? undefined,
     createdAt: row.created_at,
   };
 }
@@ -630,7 +633,7 @@ export async function getOniaCenterRuntime(): Promise<RuntimeSnapshot> {
       "leads?select=lead_key,company_name,public_contact,channel,source,owner_role_key,pipeline_status,suggested_service_key,private_notes,raw,created_at&order=created_at.desc&limit=80",
     ),
     supabaseRequest<DbTask[]>(
-      "tasks?select=task_key,project_key,title,status,priority,assigned_role_key,evidence_required,raw,created_at&order=created_at.desc&limit=120",
+      "tasks?select=task_key,project_key,title,status,priority,assigned_role_key,evidence_required,due_label,raw,created_at&order=created_at.desc&limit=120",
     ),
     supabaseRequest<DbReview[]>(
       "review_queue?select=review_key,source_type,source_key,title,status,sensitive&order=created_at.desc&limit=80",
@@ -658,7 +661,7 @@ export async function getOniaCenterRuntime(): Promise<RuntimeSnapshot> {
 
 // Lee las personas reales del equipo desde onia_center. Fuente de verdad =
 // user_profiles activos; se conserva solo a quien tiene al menos una membresia
-// activa en alguna organizacion ONIA (eso define "el equipo"). No se asume a que
+// activa en alguna organizacion Onia (eso define "el equipo"). No se asume a que
 // organizacion concreta pertenece cada rol: basta con ser miembro activo del
 // workspace. Usa service role igual que getOniaCenterRuntime, no depende de la
 // sesion del usuario.
@@ -712,7 +715,8 @@ export async function createOniaCenterEntity(entity: RuntimeEntity, payload: unk
         origin_role_key: roleToDb(lead.owner),
         owner_role_key: roleToDb(lead.owner),
         pipeline_status: leadStatusToDb[lead.status] ?? "Nuevo",
-        suggested_service_key: serviceToDb(lead.serviceId),
+        // FK a services: "" viola la constraint (23503); sin servicio va NULL.
+        suggested_service_key: lead.serviceId ? serviceToDb(lead.serviceId) : null,
         priority: "media",
         private_notes: lead.nextAction || null,
         raw: {
@@ -758,7 +762,7 @@ export async function createOniaCenterEntity(entity: RuntimeEntity, payload: unk
 
   if (entity === "note") {
     const note = payload as RuntimeNote & { author?: string; body?: string };
-    const summary = note.title || note.body || note.detail || "Nota ONIA Center";
+    const summary = note.title || note.body || note.detail || "Nota Onia Center";
     const sensitivityScope =
       note.visibility === "team_safe"
         ? "collab_safe"

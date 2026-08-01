@@ -60,6 +60,8 @@
     0 24px 56px -20px oklch(25% 0.025 165 / 0.26);
 
   /* tipografia */
+  /* display = el titular grande condensado; vive por encima de hero */
+  --text-display: clamp(3.2rem, 0.4rem + 10vw, 8.5rem);
   --text-hero: clamp(2.7rem, 1.1rem + 5.6vw, 5.4rem);
   --text-h2: clamp(2.05rem, 1.3rem + 2.5vw, 3.3rem);
   --text-h3: clamp(1.25rem, 1.05rem + 0.7vw, 1.6rem);
@@ -162,6 +164,13 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+/* la barra de accion fija del movil no debe tapar el final de la pagina */
+@media (max-width: 899px) {
+  body {
+    padding-bottom: calc(4.6rem + env(safe-area-inset-bottom, 0px));
+  }
+}
+
 h1,
 h2,
 h3 {
@@ -171,6 +180,40 @@ h3 {
   line-height: 1.06;
   margin: 0;
   text-wrap: balance;
+}
+
+/*
+ * .display — el titular GRANDE condensado.
+ *
+ * Grotesca muy pesada con el eje de ancho comprimido: mete mas palabras por
+ * linea a un tamano que de otro modo no entraria, y al apilarse forma un
+ * bloque solido. Es el recurso central del sistema de Fanvue (ellos usan
+ * Akzidenz-Grotesk Next Cnd XBold, de pago; Archivo es el equivalente OFL).
+ *
+ * REGLAS DE USO — sin esto se rompe:
+ *  - UNO por pantalla. Si hay dos, ninguno es grande.
+ *  - Solo de --text-hero para arriba. Condensado a tamano chico no se lee
+ *    "editorial", se lee apretado.
+ *  - Maximo 4-5 palabras. Es un gesto, no un parrafo.
+ *  - line-height por debajo de 1: las lineas se tocan y forman el bloque.
+ *
+ * Sistema completo y de donde sale: docs/TIPOGRAFIA_SISTEMA_20260727.md
+ */
+.display {
+  font-family: var(--font-display-cnd), var(--font-display), sans-serif;
+  font-size: var(--text-display);
+  font-weight: 800;
+  font-stretch: 76%;
+  letter-spacing: -0.015em;
+  line-height: 0.92;
+  text-wrap: balance;
+}
+
+/* Palabra suelta destacada dentro de un .display (el contraste de Fanvue,
+   resuelto con color en vez de una 5ta familia tipografica). */
+.display em {
+  font-style: normal;
+  color: var(--accent-ink);
 }
 
 p {
@@ -242,12 +285,14 @@ svg {
   margin-top: 1.1em;
 }
 
-/* botones */
+/* botones — min-height 44px: es el minimo de area tactil y esta pagina se
+   toca con el pulgar mucho mas de lo que se clickea */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.55em;
+  min-height: 44px;
   padding: 0.78em 1.35em;
   border-radius: 999px;
   border: 1.5px solid transparent;

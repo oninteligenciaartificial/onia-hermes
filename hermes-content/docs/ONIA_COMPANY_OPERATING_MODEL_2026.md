@@ -1,4 +1,4 @@
-# ONIA Company Operating Model 2026
+# Onia Company Operating Model 2026
 
 Estado: interno Sergio/ONIA.
 Fecha: 2026-06-21.
@@ -6,7 +6,7 @@ Visibilidad: privado Sergio/ONIA. No enviar completo a colaboradores.
 
 ## Veredicto
 
-ONIA necesita operar como empresa antes de crecer como equipo.
+Onia necesita operar como empresa antes de crecer como equipo.
 
 La estructura correcta no es "todos socios" ni "todos vendedores". La estructura
 correcta es:
@@ -39,7 +39,7 @@ Riesgo importante:
   relacion laboral por medios de prueba.
 - La relacion laboral asalariada se caracteriza por dependencia/subordinacion,
   trabajo por cuenta ajena y remuneracion.
-- Si ONIA trata a alguien como empleado real, debe contemplar derechos laborales,
+- Si Onia trata a alguien como empleado real, debe contemplar derechos laborales,
   beneficios sociales, vacaciones, aguinaldo y finiquitos segun corresponda.
 
 Decision practica:
@@ -54,20 +54,20 @@ Usar:
 - "colaborador comercial-operativo en prueba";
 - "vendedor/comisionista";
 - "freelancer por entregable";
-- "empleado formal" solo cuando ONIA lo formalice.
+- "empleado formal" solo cuando Onia lo formalice.
 
 ## Estructura de propiedad
 
 | Elemento | Dueno / controlador | Regla |
 |---|---|---|
-| ONIA | Sergio | Sergio controla marca, caja, decisiones, herramientas, contratos y estrategia. |
+| Onia | Sergio | Sergio controla marca, caja, decisiones, herramientas, contratos y estrategia. |
 | DentalGest | Sergio/ONIA | Producto desarrollado por Sergio; no participa Arthur salvo venta/comision. |
 | GestiOS | Sergio/ONIA | Producto desarrollado por Sergio; no participa Arthur salvo venta/comision. |
-| ONIA Center / Hermes | Sergio/ONIA | Sistema operativo interno; acceso segun rol. |
-| ONIA Media | ONIA/Sergio | Centro contable y de activos; no empresa separada salvo decision futura. |
+| Onia Center / Hermes | Sergio/ONIA | Sistema operativo interno; acceso segun rol. |
+| Onia Media | ONIA/Sergio | Centro contable y de activos; no empresa separada salvo decision futura. |
 | Nuvia | Proyecto comercial con reglas por lote | Arthur solo tiene derechos sobre capital real aportado por lote/campana. |
 | Herramientas premium | ONIA/Sergio | Codex, Claude, Higgsfield, VPS y apps no son propiedad de colaboradores. |
-| Canales YouTube/Media | ONIA Media salvo acuerdo escrito | No se pagan comisiones por monetizacion hipotetica. |
+| Canales YouTube/Media | Onia Media salvo acuerdo escrito | No se pagan comisiones por monetizacion hipotetica. |
 
 ## Principios de empresa
 
@@ -77,14 +77,14 @@ Usar:
 4. Toda comision requiere cobro real, evidencia y margen sano.
 5. Ningun colaborador aprueba su propio pago.
 6. Ningun servicio nuevo hereda porcentaje alto.
-7. Nuvia no puede matar a ONIA.
+7. Nuvia no puede matar a Onia.
 8. Higgsfield y herramientas premium se prorratean por uso.
-9. ONIA va por la mejor solucion sostenible: mas control, calidad y capacidad
+9. Onia va por la mejor solucion sostenible: mas control, calidad y capacidad
    compuesta cuando se pueda operar bien; no se elige lo barato/rapido como
    arquitectura permanente si debilita a la empresa.
 10. Self-hosted se usa para ahorrar, controlar y subir calidad, no para instalar
     herramientas por moda.
-11. Si no esta en ONIA Center/CRM, no existe para pago, cierre o decision.
+11. Si no esta en Onia Center/CRM, no existe para pago, cierre o decision.
 
 ## Organigrama inicial
 
@@ -130,10 +130,10 @@ Duracion:
 
 Por que no llamarlo socio:
 
-- si aporta a apps o gastos de ONIA, ese aporte es operativo recuperable y no
+- si aporta a apps o gastos de Onia, ese aporte es operativo recuperable y no
   participacion societaria;
 - no desarrollo DentalGest, GestiOS ni Hermes;
-- no paga herramientas, deuda ni existencia mensual de ONIA;
+- no paga herramientas, deuda ni existencia mensual de Onia;
 - todavia esta aprendiendo desarrollo/programacion;
 - Sergio sigue corrigiendo, rescatando y dirigiendo.
 
@@ -161,8 +161,8 @@ Puede:
 - preparar carruseles;
 - apoyar capacitaciones;
 - proponer mejoras del bot/automatizaciones;
-- solicitar aportes a apps/gastos ONIA si Sergio los aprueba y registra;
-- operar tareas asignadas en ONIA Center;
+- solicitar aportes a apps/gastos Onia si Sergio los aprueba y registra;
+- operar tareas asignadas en Onia Center;
 - cerrar ventas dentro de precios y alcances aprobados;
 - ganar comisiones o pagos aprobados por trabajo real.
 
@@ -174,9 +174,9 @@ No puede:
 - prometer descuentos no aprobados;
 - prometer funciones tecnicas;
 - mover dinero de ONIA/Nuvia;
-- hablar como socio de ONIA;
+- hablar como socio de Onia;
 - decidir repartos;
-- crear canales o activos a nombre personal usando recursos ONIA sin acuerdo;
+- crear canales o activos a nombre personal usando recursos Onia sin acuerdo;
 - contactar clientes sensibles sin aprobacion;
 - publicar piezas client-facing sin aprobacion.
 
@@ -206,7 +206,7 @@ Si no cumple:
 - 2 semanas fallidas: baja de responsabilidad y pagos variables mas bajos;
 - 3 semanas fallidas: pausa de coordinacion o salida de la prueba.
 
-## Tipos de relacion con ONIA
+## Tipos de relacion con Onia
 
 ### Vendedor/comisionista
 
@@ -221,7 +221,7 @@ Pago:
 
 Riesgo:
 
-- si ONIA exige horario, subordinacion diaria y pago fijo, puede parecer empleo.
+- si Onia exige horario, subordinacion diaria y pago fijo, puede parecer empleo.
 
 ### Colaborador comercial-operativo
 
@@ -236,7 +236,7 @@ Pago:
 Riesgo:
 
 - si se le imponen horarios, subordinacion, sueldo y continuidad indefinida,
-  puede crear riesgo laboral. Si ONIA quiere ese nivel de control, debe
+  puede crear riesgo laboral. Si Onia quiere ese nivel de control, debe
   formalizar empleo.
 
 ### Freelancer por entregable
@@ -260,7 +260,7 @@ Debe tener:
 
 ### Empleado formal
 
-Solo cuando ONIA pueda asumir costo total.
+Solo cuando Onia pueda asumir costo total.
 
 Requiere analizar:
 
@@ -282,7 +282,7 @@ tiene ingresos recurrentes o ventas constantes.
 
 ## Pagos y compensacion
 
-### ONIA Servicios
+### Onia Servicios
 
 Orden:
 
@@ -315,14 +315,14 @@ Una venta cobrada = una comision.
 
 No tienen derecho a:
 
-- Fondo ONIA;
+- Fondo Onia;
 - herramientas;
 - Nuvia;
-- ONIA Media;
+- Onia Media;
 - productos desarrollados por Sergio;
 - clientes que no trabajaron.
 
-### Arthur en ONIA Servicios
+### Arthur en Onia Servicios
 
 Arthur tiene tabla distinta a vendedor porque opera mas frentes, pero su techo
 depende del riesgo y de cuanto interviene Sergio.
@@ -337,7 +337,7 @@ depende del riesgo y de cuanto interviene Sergio.
 | Sergio corrige o rescata | baja segun escala de intervencion |
 
 El 50% no es derecho permanente. Es maximo temporal si Arthur vende y entrega
-todo aprobado, sin capital ONIA y sin rescate.
+todo aprobado, sin capital Onia y sin rescate.
 
 ### Arthur en Nuvia
 
@@ -373,8 +373,8 @@ entrega o CRM, pero solo se le paga un monto fijo si:
 - fue aprobado antes de lanzar la campana;
 - esta registrado como costo directo;
 - existe margen real despues de producto, pauta, herramientas, caja chica,
-  Fondo ONIA y Reserva Nuvia;
-- no rompe la supervivencia de ONIA ni de Nuvia.
+  Fondo Onia y Reserva Nuvia;
+- no rompe la supervivencia de Onia ni de Nuvia.
 
 Techos por capital:
 
@@ -389,21 +389,21 @@ Techos por capital:
 
 | Centro | Fondo/reserva | Regla |
 |---|---:|---|
-| ONIA Servicios | 40% Fondo ONIA | Sostiene herramientas, IA, VPS, deuda, caja y capital. |
-| Nuvia | 20% Fondo ONIA + caja chica + 20% Reserva Nuvia bootstrap | Antes de repartir utilidad. Cuando Nuvia viva sola, la reserva puede bajar a 10%. |
-| ONIA Media | Fondo ONIA segun origen + costos directos | No crea fondo separado salvo decision escrita. |
+| Onia Servicios | 40% Fondo Onia | Sostiene herramientas, IA, VPS, deuda, caja y capital. |
+| Nuvia | 20% Fondo Onia + caja chica + 20% Reserva Nuvia bootstrap | Antes de repartir utilidad. Cuando Nuvia viva sola, la reserva puede bajar a 10%. |
+| Onia Media | Fondo Onia segun origen + costos directos | No crea fondo separado salvo decision escrita. |
 | Cliente/proyecto | Costos directos primero | Dominio, hosting, pauta, APIs y herramientas se cobran aparte. |
-| Sergio dueno | Retiro por semaforo | No retirar si ONIA queda en rojo. |
+| Sergio dueno | Retiro por semaforo | No retirar si Onia queda en rojo. |
 
-La recuperacion de capital y los posibles aportes Arthur a apps/gastos ONIA se
+La recuperacion de capital y los posibles aportes Arthur a apps/gastos Onia se
 calculan segun
 `hermes-content/docs/ONIA_CAPITAL_RECOVERY_AND_ARTHUR_INVESTMENT_POLICY_2026.md`.
 
 ## Sergio como dueno
 
-Sergio debe ganar por tres vias, sin descapitalizar ONIA:
+Sergio debe ganar por tres vias, sin descapitalizar Onia:
 
-1. utilidad de proyectos donde ONIA gana;
+1. utilidad de proyectos donde Onia gana;
 2. recuperacion de capital invertido;
 3. retiro/sueldo de direccion cuando la caja lo permita.
 
@@ -436,7 +436,7 @@ Semaforo:
 ## Obligaciones minimas de todo el equipo
 
 1. Registrar tareas y resultados.
-2. No prometer lo que ONIA no aprobo.
+2. No prometer lo que Onia no aprobo.
 3. No publicar sin aprobacion.
 4. No usar herramientas premium sin centro y objetivo.
 5. No contactar clientes sensibles sin permiso.
@@ -446,9 +446,9 @@ Semaforo:
 
 ## Sistemas que deben existir
 
-ONIA Center debe tener:
+Onia Center debe tener:
 
-- break-even ONIA;
+- break-even Onia;
 - capital interno;
 - CRM/leads;
 - ventas y comisiones;
@@ -495,7 +495,7 @@ Control:
 
 - rol Nivel 2 claro;
 - scorecard semanal;
-- reglas separadas para comision ONIA Servicios y pago fijo Nuvia;
+- reglas separadas para comision Onia Servicios y pago fijo Nuvia;
 - camino de crecimiento si cumple.
 
 ### Vendedores
@@ -514,7 +514,7 @@ Control:
 - reglas de calidad de lead;
 - no aprobacion sin evidencia.
 
-### ONIA
+### Onia
 
 Riesgos:
 
@@ -526,7 +526,7 @@ Riesgos:
 
 Control:
 
-- Fondo ONIA;
+- Fondo Onia;
 - precios canonicos;
 - contrato o acuerdo por rol;
 - caja por centro.
@@ -543,7 +543,7 @@ Riesgos:
 Control:
 
 - costo completo por lote;
-- Fondo ONIA 20%;
+- Fondo Onia 20%;
 - caja chica Nuvia;
 - Reserva Nuvia 20% en bootstrap y 10% cuando viva sola;
 - capital recuperado primero;
@@ -571,15 +571,15 @@ Para Arthur:
 
 - acuerdo privado de 60 dias;
 - rol: coordinador comercial-operativo en prueba;
-- no socio ONIA;
+- no socio Onia;
 - no empleado formal salvo contrato laboral posterior;
 - pagos por evidencia y aprobacion previa;
 - Nuvia por lote/campana;
-- herramientas ONIA no son propiedad ni aporte de Arthur;
+- herramientas Onia no son propiedad ni aporte de Arthur;
 - confidencialidad;
 - uso de marca aprobado;
 - no competencia/desvio de clientes segun sea viable legalmente;
-- propiedad de activos generados para ONIA.
+- propiedad de activos generados para Onia.
 
 Para vendedores:
 
@@ -610,10 +610,10 @@ Para empleados formales:
 1. Mantener PDF Arthur como acuerdo general.
 2. Crear anexo corto para Arthur sobre Nuvia y rol operativo, sin revelar
    estrategia interna de Sergio.
-3. Cargar en ONIA Center:
+3. Cargar en Onia Center:
    - rol Arthur Nivel 2;
    - scorecard semanal;
-   - reglas de comision ONIA Servicios;
+   - reglas de comision Onia Servicios;
    - permisos;
    - Nuvia por lote/campana;
    - Higgsfield usage.

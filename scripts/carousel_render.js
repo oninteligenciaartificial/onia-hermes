@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 /**
- * ONIA carousel render engine.
+ * Onia carousel render engine.
  *
  * brief JSON (from carousel_generator.py) -> branded 1080x1350 PNG slides.
  * Zero external deps: builds one HTML per slide and screenshots it with
  * Edge/Chrome headless (same approach as the propuestas generador).
  *
- * Encodes the 5 ONIA carousel rules via slide roles:
+ * Encodes the 5 Onia carousel rules via slide roles:
  *   cover  -> frena el scroll, hook gigante, contraste brutal (regla 1)
  *   stakes -> confirma el hook / sube lo que está en juego (regla 2)
  *   point  -> una idea por slide, screenshot suelto (regla 3)
@@ -44,13 +44,13 @@ const BROWSER_CANDIDATES = [
 ];
 
 const ACCOUNTS = {
-  onia: { handle: '@oniaagency', name: 'ONIA', personal: false },
+  onia: { handle: '@oniahq', name: 'Onia', personal: false },
   arthur: { handle: '@arthur', name: 'Arthur', personal: true },
   sergio: { handle: '@sergio', name: 'Sergio', personal: true },
   nuvia: { handle: '@nuvia.bo', name: 'Nuvia', personal: false },
 };
 
-// Brand kits para packs no-ONIA. Cada marca define superficie, tinta, acentos
+// Brand kits para packs no-Onia. Cada marca define superficie, tinta, acentos
 // y logo. El pack bright-retail los consume.
 const BRANDS = {
   nuvia: {
@@ -537,7 +537,7 @@ ${last ? '' : '.cue{position:absolute;right:44px;bottom:300px;z-index:3;font-siz
 
 // Ribbon multicolor continuo (eco de las franjas del logo Nuvia). Fluye de
 // borde a borde y cambia de fase por slide -> sensación de panorama/peek entre
-// slides, como la curva verde del pack dark-product de ONIA.
+// slides, como la curva verde del pack dark-product de Onia.
 function nuviaRibbon(idx, total, stripes, onAccent) {
   const first = idx === 0;
   const last = idx === total - 1;

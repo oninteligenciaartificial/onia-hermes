@@ -1,0 +1,41 @@
+{
+  "eyebrow": "155 DÍAS EN PÚBLICO",
+  "titulo": "OBJETIVOS",
+  "accent": "#00D26A",
+
+  "siat": "sin iniciar",
+  "siatEstado": "pendiente",
+
+  "mrr": "USD 0",
+  "mrrEstado": "pendiente",
+
+  "clientes": "0",
+  "clientesEstado": "pendiente",
+
+  "llamadas": "0",
+  "llamadasEstado": "pendiente",
+
+  "internacionales": "0",
+  "internacionalesEstado": "pendiente",
+
+  "churn": "sin medir",
+  "churnEstado": "pendiente",
+
+  "caja": "no",
+  "cajaEstado": "pendiente",
+
+  "oficina": "no",
+  "oficinaEstado": "pendiente",
+
+  "python": "0",
+  "pythonEstado": "pendiente",
+
+  "tiktokVideos": "0",
+  "tiktokVideosEstado": "pendiente",
+
+  "tiktokSeguidores": "0",
+  "tiktokSeguidoresEstado": "pendiente",
+
+  "ytVideos": "0",
+  "ytVideosEstado": "pendiente"
+}

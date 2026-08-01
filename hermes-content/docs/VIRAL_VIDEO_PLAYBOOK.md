@@ -73,11 +73,11 @@ Use one CTA only:
 
 - "Estoy construyendo algo que me hubiera ahorrado meses."
 - "Hoy rompi una automatizacion y esto aprendi."
-- "Esto es lo que nadie ve de construir ONIA."
+- "Esto es lo que nadie ve de construir Onia."
 - "Si vendes por WhatsApp, este error te cuesta clientes."
 - "No necesito mas herramientas, necesito un sistema."
 
-## Hooks For ONIA
+## Hooks For Onia
 
 - "Tu negocio pierde leads despues del primer mensaje."
 - "Este es el seguimiento que deberia ocurrir solo."
@@ -119,7 +119,7 @@ Use:
 
 ### Workflow Demo
 
-Best for ONIA.
+Best for Onia.
 
 Use:
 

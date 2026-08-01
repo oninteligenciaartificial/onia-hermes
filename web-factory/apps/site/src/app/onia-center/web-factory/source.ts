@@ -173,7 +173,7 @@ export type WebFactoryCenterSnapshot = {
     title: string;
     status: "ready" | "prepared" | "manual_review" | "blocked";
     statusLabel: string;
-    owner: "Arthur" | "Sergio" | "ONIA";
+    owner: "Arthur" | "Sergio" | "Onia";
     cadence: string;
     trigger: string;
     input: string;
@@ -185,7 +185,7 @@ export type WebFactoryCenterSnapshot = {
   workflowSteps: Array<{
     step: number;
     title: string;
-    owner: "Arthur" | "Sergio" | "ONIA";
+    owner: "Arthur" | "Sergio" | "Onia";
     visibleTo: Array<"arthur" | "sergio" | "area">;
     input: string;
     action: string;
@@ -778,7 +778,7 @@ const STATIC_SNAPSHOT: Omit<WebFactoryCenterSnapshot, "generatedAt"> = {
         category: "design-skill",
         description: "Skill IA para UI/UX profesional.",
         usage: "Referencia externa para razonamiento visual, decisiones anti-genericas y variedad UI.",
-        risk: "No copiar reglas ni outputs a ciegas; comparar con marca ONIA y licencias.",
+        risk: "No copiar reglas ni outputs a ciegas; comparar con marca Onia y licencias.",
       },
       {
         fullName: "VoltAgent/awesome-design-md",
@@ -804,7 +804,7 @@ const STATIC_SNAPSHOT: Omit<WebFactoryCenterSnapshot, "generatedAt"> = {
         category: "animated-components",
         description: "Componentes React animados e interactivos.",
         usage: "Inspiracion de motion y comportamiento para landings premium.",
-        risk: "Revisar licencia antes de copiar codigo; preferir reimplementar ideas dentro de ONIA.",
+        risk: "Revisar licencia antes de copiar codigo; preferir reimplementar ideas dentro de Onia.",
       },
       {
         fullName: "alexpate/awesome-design-systems",
@@ -864,7 +864,7 @@ const STATIC_SNAPSHOT: Omit<WebFactoryCenterSnapshot, "generatedAt"> = {
     },
   ],
   intakeContract: {
-    status: "Formulario operativo en ONIA Center + salida JSON compatible con data/intakes/<slug>.json.",
+    status: "Formulario operativo en Onia Center + salida JSON compatible con data/intakes/<slug>.json.",
     minimumFields: [
       "Nombre comercial, slug, rubro, ciudad y oferta principal.",
       "CTA de conversion: WhatsApp, email, formulario o reserva.",
@@ -890,7 +890,7 @@ const STATIC_SNAPSHOT: Omit<WebFactoryCenterSnapshot, "generatedAt"> = {
         label: "Nota runtime",
         target: "/api/onia-center/runtime entity=note",
         status: "prepared",
-        detail: "El formulario puede registrar el brief y faltantes en ONIA Center cuando hay login y Supabase runtime.",
+        detail: "El formulario puede registrar el brief y faltantes en Onia Center cuando hay login y Supabase runtime.",
       },
       {
         label: "Tarea de preview",
@@ -909,23 +909,23 @@ const STATIC_SNAPSHOT: Omit<WebFactoryCenterSnapshot, "generatedAt"> = {
   automationFunctions: [
     {
       id: "intake-runtime-capture",
-      title: "Guardar brief desde ONIA Center",
+      title: "Guardar brief desde Onia Center",
       status: "prepared",
       statusLabel: "Preparado",
       owner: "Arthur",
       cadence: "Cada lead web",
       trigger: "Arthur o Sergio completa el formulario Web Factory.",
       input: "Datos clave, referencias, permisos de assets y faltantes.",
-      output: "Nota auditada + tarea de preview en ONIA Center.",
+      output: "Nota auditada + tarea de preview en Onia Center.",
       approval: "No envia ni publica; solo registra trabajo interno.",
-      nextAction: "Usar el boton Guardar en ONIA Center cuando el runtime este conectado.",
+      nextAction: "Usar el boton Guardar en Onia Center cuando el runtime este conectado.",
     },
     {
       id: "reference-harvest",
       title: "Radar diario de referencias web",
       status: "ready",
       statusLabel: "Listo",
-      owner: "ONIA",
+      owner: "Onia",
       cadence: "Diario o manual antes de proyectos premium",
       trigger: "n8n en VPS dispara el worker; manual solo para pruebas controladas.",
       input: "Galerias curadas, repos permitidos, capturas, fuentes, CTAs y motion signals.",
@@ -939,7 +939,7 @@ const STATIC_SNAPSHOT: Omit<WebFactoryCenterSnapshot, "generatedAt"> = {
       title: "Actualizar inteligencia de diseno",
       status: "ready",
       statusLabel: "Listo",
-      owner: "ONIA",
+      owner: "Onia",
       cadence: "Despues de cada harvest",
       trigger: "Termina la captura de referencias.",
       input: "Galerias, screenshots y codigo local permitido.",
@@ -953,7 +953,7 @@ const STATIC_SNAPSHOT: Omit<WebFactoryCenterSnapshot, "generatedAt"> = {
       title: "Receta automatica por cliente",
       status: "ready",
       statusLabel: "Listo",
-      owner: "ONIA",
+      owner: "Onia",
       cadence: "Por cada intake aprobado",
       trigger: "Existe data/intakes/<slug>.json o data/clients/<slug>.json.",
       input: "Perfil, contexto, referencias exactas e inteligencia actual.",
@@ -967,14 +967,14 @@ const STATIC_SNAPSHOT: Omit<WebFactoryCenterSnapshot, "generatedAt"> = {
       title: "Build de preview interno",
       status: "ready",
       statusLabel: "Listo",
-      owner: "ONIA",
+      owner: "Onia",
       cadence: "Por cada receta",
       trigger: "Receta creada o actualizada.",
       input: "Perfil cliente, receta, assets aprobados o placeholders internos.",
       output: "out/<slug>/index.html y site.css revisables.",
       command: "pnpm factory:build -- <slug> --template <landing|store> --force",
       approval: "No se envia al cliente sin QA y aprobacion Sergio.",
-      nextAction: "Agregar vista de artifact/preview path en ONIA Center por intake.",
+      nextAction: "Agregar vista de artifact/preview path en Onia Center por intake.",
     },
     {
       id: "asset-gap-request",
@@ -994,9 +994,9 @@ const STATIC_SNAPSHOT: Omit<WebFactoryCenterSnapshot, "generatedAt"> = {
       title: "QA de fabrica",
       status: "ready",
       statusLabel: "Listo",
-      owner: "ONIA",
+      owner: "Onia",
       cadence: "Antes de cerrar cambios",
-      trigger: "Cambio en templates, generator, ONIA Center o recetas.",
+      trigger: "Cambio en templates, generator, Onia Center o recetas.",
       input: "Demos canonicas y proyecto Next.",
       output: "Tests, previews demo, lint y build estable.",
       command: "pnpm factory:smoke && pnpm --filter site lint && pnpm build:stable",
@@ -1021,7 +1021,7 @@ const STATIC_SNAPSHOT: Omit<WebFactoryCenterSnapshot, "generatedAt"> = {
       title: "Watcher Nuvia/catalogo",
       status: "ready",
       statusLabel: "Listo",
-      owner: "ONIA",
+      owner: "Onia",
       cadence: "Diario o antes de campanas",
       trigger: "Necesidad de revisar precios/catalogo Nuvia.",
       input: "Scrape temporal, catalogo interno y reglas de secreto proveedor.",
@@ -1056,7 +1056,7 @@ const STATIC_SNAPSHOT: Omit<WebFactoryCenterSnapshot, "generatedAt"> = {
     {
       step: 3,
       title: "Generar receta de diseno",
-      owner: "ONIA",
+      owner: "Onia",
       visibleTo: ["arthur", "sergio", "area"],
       input: "Perfil, contexto, referencias e inteligencia actual.",
       action: "Crear tesis de conversion, riesgo generico, secciones, assets, codigo referencial y warnings.",
@@ -1077,7 +1077,7 @@ const STATIC_SNAPSHOT: Omit<WebFactoryCenterSnapshot, "generatedAt"> = {
     {
       step: 5,
       title: "Construir preview interno",
-      owner: "ONIA",
+      owner: "Onia",
       visibleTo: ["arthur", "sergio", "area"],
       input: "Receta aprobable y assets disponibles.",
       action: "Generar preview para revisar estructura, copy, responsive, performance e imagenes.",

@@ -1,7 +1,7 @@
 # Higgsfield Full Capabilities Map
 
 ## Objetivo
-Definir que funciones de Higgsfield debe usar ONIA primero para crear contenido propio, contenido de Sergio y piezas comerciales para clientes.
+Definir que funciones de Higgsfield debe usar Onia primero para crear contenido propio, contenido de Sergio y piezas comerciales para clientes.
 
 Este documento es operativo: sirve para decidir modelo, flujo, comandos, limites de seguridad y plan de arranque.
 
@@ -64,7 +64,7 @@ MCP:
 - Hasta entonces, usar CLI.
 
 ### Marketing Studio
-Uso principal para ONIA: vender anuncios UGC y videos comerciales a negocios.
+Uso principal para Onia: vender anuncios UGC y videos comerciales a negocios.
 
 Funciones:
 
@@ -114,7 +114,7 @@ Presets CLI validados:
 - Settings preset utiles para UGC realista: Kitchen, Office, Gym, Street, In
   Car, Bedroom, Bathroom, Nature.
 
-Regla ONIA:
+Regla Onia:
 
 - Usar presets realistas primero.
 - Evitar presets de riesgo o fantasia para clientes serios: Airplane Wing,
@@ -175,7 +175,7 @@ Casos utiles:
 - crear briefs largos dentro de Higgsfield;
 - usar modelos como GPT, Claude y Gemini dentro de Higgsfield consumiendo creditos.
 
-Regla ONIA:
+Regla Onia:
 
 - Usar Supercomputer para investigacion creativa o clipper.
 - No reemplazar Hermes como cerebro operativo.
@@ -188,7 +188,7 @@ Regla ONIA:
 - Todo output de Supercomputer debe volver a Hermes Video Lab como brief,
   asset, referencia o URL revisable antes de generar, entregar o publicar.
 
-### Regla Supercomputer ONIA
+### Regla Supercomputer Onia
 
 Supercomputer es el estudio creativo pesado. Hermes sigue siendo el operador.
 
@@ -226,7 +226,7 @@ Devuelve todo listo para registrar en Hermes Video Lab.
 ### Apps
 Uso principal: herramientas especificas de edicion, identidad, producto y virality checks.
 
-Apps utiles para ONIA:
+Apps utiles para Onia:
 
 - Virality Predictor: revisar hook antes de publicar.
 - Similarity Score: revisar similitud/IP cuando se usan referencias.
@@ -339,7 +339,7 @@ Regla:
   2026-06-03 produjo `character_params: {}` e identidad inventada.
 - Referencia del issue publico: https://github.com/higgsfield-ai/cli/issues/4
 
-## Mejores funciones para ONIA
+## Mejores funciones para Onia
 
 Prioridad 1:
 

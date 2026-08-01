@@ -1,0 +1,52 @@
+# docker-compose.app.yml — App DentalGest (Next standalone) en el VPS
+# Destino: /opt/dentalgest-app/docker-compose.yml (Fase 2.4 del runbook)
+#
+# Pre-requisitos:
+#   1. Imagen construida en la maquina dev (`npm run selfhost:docker`) y cargada en el VPS:
+#      docker save dentalgest:selfhost | zstd | ssh root@187.77.16.63 'unzstd | docker load'
+#   2. .env.app completo (ver env.app.example) en el mismo directorio, chmod 600.
+#   3. Nombres REALES de las redes confirmados con `docker network ls` (Fase 0.4):
+#      - RED_STACK  = red del compose de /opt/dentalgest-supabase (tipicamente <dir>_default)
+#      - RED_TRAEFIK = red que usa el Traefik de Easypanel
+#   4. CERT_RESOLVER = nombre del certresolver del Traefik de Easypanel
+#      (docker inspect del contenedor traefik → args --certificatesresolvers.<NOMBRE>...)
+
+services:
+  dentalgest-app:
+    image: dentalgest:selfhost
+    container_name: dentalgest-app
+    restart: unless-stopped
+    env_file: .env.app
+    networks:
+      - supabase-stack
+      - traefik
+    # La app NO publica puertos en el host: solo Traefik la alcanza por la red.
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.dentalgest.rule=Host(`dentalgest.app`) || Host(`www.dentalgest.app`)
+      - traefik.http.routers.dentalgest.entrypoints=websecure
+      - traefik.http.routers.dentalgest.tls=true
+      - traefik.http.routers.dentalgest.tls.certresolver=<CERT_RESOLVER>
+      - traefik.http.services.dentalgest.loadbalancer.server.port=3000
+      # redirect www → apex (opcional, ajustar si Easypanel ya lo maneja)
+      - traefik.http.middlewares.dg-www.redirectregex.regex=^https?://www\.dentalgest\.app/(.*)
+      - traefik.http.middlewares.dg-www.redirectregex.replacement=https://dentalgest.app/$${1}
+      - traefik.http.routers.dentalgest.middlewares=dg-www
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://127.0.0.1:3000/ || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+networks:
+  supabase-stack:
+    external: true
+    name: <RED_STACK>        # p.ej. docker_default del stack /opt/dentalgest-supabase — confirmar en Fase 0.4
+  traefik:
+    external: true
+    name: <RED_TRAEFIK>      # red del Traefik de Easypanel — confirmar en Fase 0.4

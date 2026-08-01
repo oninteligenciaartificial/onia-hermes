@@ -1,9 +1,9 @@
-# ONIA Import Landed Cost Module 2026
+# Onia Import Landed Cost Module 2026
 
 Fecha: 2026-07-04.
 Estado: diseno de modulo (NO core) — producto clave del vertical importadoras.
 Primer cliente objetivo: Bolivian Electric (ProveeGest).
-Owner: ONIA / Hermes.
+Owner: Onia / Hermes.
 Complementa: `ONIA_EXCHANGE_RATE_AUTOPRICING_2026.md` (tipo de cambio).
 
 ## Por que es EL producto del vertical (contexto 2026)

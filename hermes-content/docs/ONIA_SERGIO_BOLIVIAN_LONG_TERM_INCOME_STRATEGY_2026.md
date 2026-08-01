@@ -1,8 +1,8 @@
-# ONIA Sergio Bolivian Long Term Income Strategy 2026
+# Onia Sergio Bolivian Long Term Income Strategy 2026
 
 Estado: borrador interno estrategico
 Fecha: 2026-06-20
-Uso: ordenar el rol de Sergio, ONIA, Bolivian Electric y los productos futuros
+Uso: ordenar el rol de Sergio, Onia, Bolivian Electric y los productos futuros
 para que todo esfuerzo genere valor, ingresos y posicionamiento a largo plazo.
 
 ## Veredicto
@@ -17,7 +17,7 @@ Consultor interno/externo de transformacion digital, IA y operaciones,
 respaldado por ONIA.
 ```
 
-La mejor posicion para ONIA:
+La mejor posicion para Onia:
 
 ```text
 Empresa que documenta, cobra, implementa y convierte aprendizajes en productos
@@ -55,7 +55,7 @@ Regla:
 Ayudar como familia, pero documentar como consultor.
 ```
 
-### 2. ONIA proveedor/consultora
+### 2. Onia proveedor/consultora
 
 Objetivo:
 
@@ -66,7 +66,7 @@ Objetivo:
 
 Riesgo:
 
-- que ONIA absorba costos de Bolivian;
+- que Onia absorba costos de Bolivian;
 - que se confunda propiedad familiar con trabajo empresarial;
 - que no haya presupuesto ni limites de alcance.
 
@@ -83,7 +83,7 @@ Objetivo:
 - convertir problemas reales de Bolivian y otros clientes en sistemas
   repetibles;
 - vender software, implementacion y acompanamiento;
-- levantar mas movimiento comercial para ONIA.
+- levantar mas movimiento comercial para Onia.
 
 Riesgo:
 
@@ -99,20 +99,20 @@ Cada sistema debe tener cliente, dolor, precio, soporte y canal de venta.
 
 ## Estructura de ingresos
 
-ONIA necesita varias fuentes, no una sola.
+Onia necesita varias fuentes, no una sola.
 
 | Linea | Quien paga | A quien ayuda | Tipo de ingreso |
 |---|---|---|---|
-| DentalGest | clinicas dentales | ONIA | mensualidad SaaS |
-| GestiOS Empresas | pymes/empresas | ONIA | mensualidad + setup |
-| Bolivian Electric OS | Bolivian | Sergio + ONIA + familia | consultoria + implementacion + soporte |
-| Paginas web ONIA | negocios locales | ONIA | cashflow rapido |
-| Chatbots/WhatsApp | clientes con Meta listo | ONIA | setup + mensualidad |
-| Automatizaciones n8n | pymes/equipos | ONIA | setup + soporte |
-| Contenido comercial | negocios con redes | ONIA | pack mensual |
-| StockCam/inventario | almacenes/distribuidoras | ONIA | setup + mensualidad |
-| Capacitaciones IA | empresas/equipos | Sergio + ONIA | sesion + paquetes |
-| Consultoria estrategica | empresas medianas | Sergio + ONIA | diagnostico + retainer |
+| DentalGest | clinicas dentales | Onia | mensualidad SaaS |
+| GestiOS Empresas | pymes/empresas | Onia | mensualidad + setup |
+| Bolivian Electric OS | Bolivian | Sergio + Onia + familia | consultoria + implementacion + soporte |
+| Paginas web Onia | negocios locales | Onia | cashflow rapido |
+| Chatbots/WhatsApp | clientes con Meta listo | Onia | setup + mensualidad |
+| Automatizaciones n8n | pymes/equipos | Onia | setup + soporte |
+| Contenido comercial | negocios con redes | Onia | pack mensual |
+| StockCam/inventario | almacenes/distribuidoras | Onia | setup + mensualidad |
+| Capacitaciones IA | empresas/equipos | Sergio + Onia | sesion + paquetes |
+| Consultoria estrategica | empresas medianas | Sergio + Onia | diagnostico + retainer |
 
 ## Bolivian como proyecto de largo plazo
 
@@ -122,13 +122,13 @@ Bolivian debe ser:
 - laboratorio real controlado;
 - caso de estudio interno;
 - escuela operativa para Sergio;
-- fuente de ingresos para ONIA;
+- fuente de ingresos para Onia;
 - base para productos reutilizables.
 
 Pero no debe ser:
 
 - proyecto gratis infinito;
-- reemplazo de todas las ventas de ONIA;
+- reemplazo de todas las ventas de Onia;
 - excusa para abandonar DentalGest, webs o clientes pequenos;
 - sistema a medida imposible de vender a otros.
 
@@ -147,7 +147,7 @@ Objetivo:
 
 Ingreso:
 
-- ONIA cobra;
+- Onia cobra;
 - Sergio lidera;
 - Bolivian obtiene claridad.
 
@@ -165,7 +165,7 @@ Objetivo:
 
 Ingreso:
 
-- ONIA cobra implementacion;
+- Onia cobra implementacion;
 - Sergio gana autoridad interna;
 - se empieza a crear propiedad intelectual reutilizable.
 
@@ -185,7 +185,7 @@ Precio sugerido:
 
 Ingreso:
 
-- ONIA cobra por sistema;
+- Onia cobra por sistema;
 - Bolivian obtiene mejora real;
 - Sergio queda como impulsor de modernizacion.
 
@@ -204,7 +204,7 @@ Incluye:
 
 Ingreso:
 
-- ONIA tiene mensualidad;
+- Onia tiene mensualidad;
 - Sergio mantiene presencia estrategica;
 - Bolivian no pierde continuidad.
 
@@ -219,16 +219,16 @@ definido dentro del acuerdo familiar/empresa.
 
 Formas sanas:
 
-1. ONIA factura y Sergio recibe utilidad/sueldo interno.
+1. Onia factura y Sergio recibe utilidad/sueldo interno.
 2. Bolivian reconoce a Sergio como consultor interno con pago o bono.
 3. Sergio recibe presupuesto aprobado para liderar transformacion.
-4. ONIA mantiene propiedad de plantillas/sistemas generales.
+4. Onia mantiene propiedad de plantillas/sistemas generales.
 5. Bolivian conserva sus datos y configuracion propia.
 
 Evitar:
 
 - cobrar informalmente sin documento;
-- mezclar gastos personales, ONIA y Bolivian;
+- mezclar gastos personales, Onia y Bolivian;
 - prometer propiedad de software sin definirla;
 - trabajar meses sin precio, alcance ni entregables.
 
@@ -246,7 +246,7 @@ Esto permite:
 
 - cuidar a Bolivian;
 - vender el sistema a otras empresas;
-- no regalar todo el producto de ONIA;
+- no regalar todo el producto de Onia;
 - evitar conflictos familiares futuros.
 
 ## Startup futura
@@ -268,7 +268,7 @@ Productos posibles:
 | GestiOS Empresas | pymes con operaciones | usar como core empresarial |
 | StockCam | almacenes/importadoras | validar con Bolivian |
 | Content Engine | empresas con redes flojas | vender como servicio mensual |
-| Chatbots ONIA | empresas con Meta verificado | vender con setup + mensualidad |
+| Chatbots Onia | empresas con Meta verificado | vender con setup + mensualidad |
 | Web Factory | negocios sin web clara | vender como cashflow |
 | Bolivian Electric OS | empresa familiar/ancla | implementar por fases |
 | Ganadero OS/HatoGest | sector ganadero | mantener vertical separado |
@@ -287,7 +287,7 @@ Orden recomendado:
 
 ## Que hacer cada semana
 
-### Bloque 1 - ONIA ventas
+### Bloque 1 - Onia ventas
 
 Objetivo:
 
@@ -354,9 +354,9 @@ Sergio debe medir:
 - que ingreso cerro;
 - que sistema reusable salio del trabajo;
 - que modulo puede venderse a otra empresa;
-- que parte de ONIA quedo mas fuerte.
+- que parte de Onia quedo mas fuerte.
 
-ONIA debe medir:
+Onia debe medir:
 
 - ingresos por linea;
 - mensualidades activas;

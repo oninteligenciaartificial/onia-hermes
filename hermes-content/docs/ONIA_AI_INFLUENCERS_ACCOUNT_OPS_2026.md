@@ -1,4 +1,4 @@
-# Administración de cuentas de influencers AI — ONIA (2026)
+# Administración de cuentas de influencers AI — Onia (2026)
 
 Cómo operamos las cuentas de las modelos AI (Lucía, y **un roster de muchas más** por venir)
 de forma **escalable, legítima y sin baneo**. Fuente para todo el equipo. Aplica a cada modelo.
@@ -27,7 +27,7 @@ operación diaria —publicar— es 100% por API oficial**, nunca simulando toqu
   bio, foto y **etiqueta "creado con IA"** (obligatorio Meta + parte de la marca híbrida).
 
 ### 2. Estructura Meta centralizada
-- **1 solo Meta Business Manager de ONIA** agrupa TODAS las cuentas (ya existe: ads
+- **1 solo Meta Business Manager de Onia** agrupa TODAS las cuentas (ya existe: ads
   `act_1073680778314945`, app `1562215408796050`).
 - Por modelo: **cuenta IG Professional (Business/Creator)** ↔ **Página de Facebook** ↔ dentro
   del Business Manager. Administrás N cuentas desde un panel, sin N teléfonos.
@@ -71,7 +71,7 @@ carrier-grade**. Opciones:
 - **SIM bank (sin celulares) + API para publicar:** más barato por número, escala a cientos,
   más limpio. **Este es el camino.** No necesitás un celular por modelo.
 
-## ⭐ SIM bank ONIA — diseño para desarrollarlo (FUTURO, IMPORTANTE — no ahora)
+## ⭐ SIM bank Onia — diseño para desarrollarlo (FUTURO, IMPORTANTE — no ahora)
 
 Cómo lo armaríamos cuando sumemos modelos (dejar listo el diseño, ejecutar en Fase 2):
 
@@ -81,7 +81,7 @@ Cómo lo armaríamos cuando sumemos modelos (dejar listo el diseño, ejecutar en
   bolivianas (Tigo/Entel/Viva) → números **+591 locales** (autenticidad local + baratos).
 - **Software:** **SMSgate** (open-source Python, gratis) u Ozeki — administra los módems, recibe
   SMS y expone una API/DB.
-- **Capa de integración ONIA** (n8n/script):
+- **Capa de integración Onia** (n8n/script):
   - Asigna una SIM libre a cada modelo nueva → registro **{modelo ↔ SIM ↔ número}** en Supabase.
   - Captura el OTP entrante y lo entrega al flujo de alta (webhook).
   - **Mantiene las SIMs vivas** (tráfico mínimo periódico; las prepago se dan de baja sin uso ~60-90d).
@@ -114,7 +114,7 @@ Crear **muchas** influencers AI puede verse como red coordinada si se hace mal. 
 **FASE 1 — Lucía (ahora, 1 modelo):**
 - Email: montar ya el **dominio propio + Zoho catch-all** → `lucia@…` (no rehacer después).
 - Número: **1 SIM prepago real** (Tigo/Entel/Viva) para verificar. Con una no hace falta SIM bank.
-- Cuenta IG Business ↔ Página FB ↔ Business Manager ONIA. Publicación por API (n8n, tras token).
+- Cuenta IG Business ↔ Página FB ↔ Business Manager Onia. Publicación por API (n8n, tras token).
 
 **FASE 2 — Roster (muchas modelos):**
 - Email: mismo dominio + catch-all, un alias por modelo (infinito).
@@ -136,7 +136,7 @@ Orden de ejecución. (H) = tarea humana de Sergio (crear cuentas / credenciales 
    etiqueta IA**, link de bio.
 5. **Professional + Página FB** (H): pasar la cuenta a Professional (Creator) + crear Página de
    Facebook + vincularlas.
-6. **Business Manager** (H con guía C): agregar la cuenta IG + la Página al Business Manager de ONIA.
+6. **Business Manager** (H con guía C): agregar la cuenta IG + la Página al Business Manager de Onia.
 7. **Etiqueta IA** (H): activar la etiqueta de contenido AI en el perfil.
 8. **Warm-up** (C/H): primeros días, actividad orgánica ligera antes de publicar por API.
 9. **API / token** (C, carril infra): con la cuenta Business + Página listas, sacar token IG
@@ -152,7 +152,7 @@ guiar el Business Manager, dejar el flujo n8n de publicación listo para el toke
   puertos) + SIMs prepago (chip + saldo mínimo para mantenerlas activas).
 - Business Manager + Graph API + n8n: $0 (infra que ya tenemos).
 
-## Conexión con infra ONIA
+## Conexión con infra Onia
 - Business Manager + app Marketing API + pixel ya existen (memoria Meta Ads engine).
 - **Verificación de negocio Meta EN PAUSA esperando SEPREC/NIT** → al salir, da confianza a las cuentas.
 - **Token IG = bloqueo S6** para publicar por API.

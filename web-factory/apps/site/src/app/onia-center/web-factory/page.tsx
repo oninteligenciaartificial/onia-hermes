@@ -34,7 +34,7 @@ import { getWebFactoryCenterSnapshot, type WebFactoryClientRecipe, type WebFacto
 export const dynamic = "force-static";
 
 export const metadata = {
-  title: "Web Factory | ONIA Center",
+  title: "Web Factory | Onia Center",
 };
 
 export default async function WebFactoryCenterPage() {
@@ -58,7 +58,7 @@ export default async function WebFactoryCenterPage() {
             <span>Modulo</span>
             <Link href="/onia-center">
               <ArrowLeft size={15} />
-              <span>ONIA Center</span>
+              <span>Onia Center</span>
               <small>Volver</small>
             </Link>
             <Link className="is-active" href="/onia-center/web-factory" aria-current="page">
@@ -94,7 +94,7 @@ export default async function WebFactoryCenterPage() {
       <section className="onia-center-main">
         <header className="onia-hero onia-webfactory-hero">
           <div>
-            <span className="onia-eyebrow">ONIA Center / IA y automatizacion</span>
+            <span className="onia-eyebrow">Onia Center / IA y automatizacion</span>
             <h1>Web Factory operativo</h1>
             <p>
               Lee recetas, capturas, codigo revisable, referencias y previews reales para producir webs con menos
@@ -419,7 +419,7 @@ export default async function WebFactoryCenterPage() {
               icon={Gauge}
               eyebrow="Control operativo"
               title="Pendientes antes de vender en automatico"
-              description="El modulo ya prepara previews internos; la entrega al cliente sigue pasando por revision ONIA."
+              description="El modulo ya prepara previews internos; la entrega al cliente sigue pasando por revision Onia."
             />
 
             <div className="onia-webfactory-action-list">

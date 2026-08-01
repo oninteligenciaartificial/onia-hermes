@@ -12,7 +12,7 @@ export default function ReglasPage() {
           <>
             <OperatingBlock
               title="Principio comercial"
-              description="ONIA no debe sonar desesperada ni prometer de mas para cerrar."
+              description="Onia no debe sonar desesperada ni prometer de mas para cerrar."
               items={[
                 "Vender valor, no horas.",
                 "Limitar alcance antes de aceptar precio bajo.",

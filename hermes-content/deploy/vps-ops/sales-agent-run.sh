@@ -7,7 +7,7 @@
 #                        SALES_AGENT_TEST_LEAD (JSON de un lead sintetico, solo dry-run).
 set -uo pipefail
 
-MODEL="${SALES_AGENT_MODEL:-gpt-4o-mini}"
+MODEL="${SALES_AGENT_MODEL:-gpt-4.1-mini}"
 LIMIT="${SALES_AGENT_LIMIT:-8}"
 DRY="${SALES_AGENT_DRY_RUN:-false}"
 TESTLEAD="${SALES_AGENT_TEST_LEAD:-}"

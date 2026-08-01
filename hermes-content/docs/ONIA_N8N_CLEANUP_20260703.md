@@ -1,4 +1,4 @@
-# ONIA n8n Cleanup — 2026-07-03
+# Onia n8n Cleanup — 2026-07-03
 
 Ejecutado via n8n MCP (`N8N_MCP_URL`/`N8N_MCP_TOKEN`) sobre `n8n-sergio_n8n`.
 Estado real observado: 58 workflows en la instancia.

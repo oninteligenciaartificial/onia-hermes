@@ -1,4 +1,4 @@
-# ONIA — Plantilla para facturar manual (Portal Web SIAT) 2026-07-10
+# Onia — Plantilla para facturar manual (Portal Web SIAT) 2026-07-10
 
 Helper para llenar cada factura en el Portal Web del SIN en ~30 seg. **No es el emisor
 automático** (eso es otro carril, en desarrollo) — esto es para facturar a mano mientras tanto.
@@ -48,6 +48,6 @@ Las genera el **SIN automáticamente** en Portal Web — **no las escribís vos*
 - Toda factura emitida es **REAL** (genera IVA débito 13% + IT 3%). No emitir de prueba.
 - Los **precios** reales salen de la lista comercial vigente (no se fijan acá — es decisión del
   carril comercial). Esto solo ayuda a **llenar** la factura rápido.
-- El **emisor automático** (facturar desde ONIA Center/DentaGest/GestiOS sin entrar al SIAT) es
+- El **emisor automático** (facturar desde Onia Center/DentaGest/GestiOS sin entrar al SIAT) es
   la modalidad Computarizada en Línea — otro carril, requiere registro + 90 días de pruebas.
 - No es asesoría contable definitiva; validar homologación y casos borde con contador matriculado.

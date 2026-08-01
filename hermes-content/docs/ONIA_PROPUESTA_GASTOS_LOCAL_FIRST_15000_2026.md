@@ -1,4 +1,4 @@
-# ONIA - gastos propuestos con Bs. 15.000
+# Onia - gastos propuestos con Bs. 15.000
 
 Fecha: 2026-06-23
 Capital disponible: Bs. 15.000
@@ -17,7 +17,7 @@ Regla: solo gastar en ventas, Nuvia, servidor local, herramientas criticas o caj
 | Nuvia - transporte/logistica | 250,00 | Alta | Registrar por lote |
 | Nuvia - muestras, fotos y contenido | 400,00 | Media | Para catalogo y anuncios |
 | Servidor local - UPS/regulador | 650,00 | Alta | Evitar cortes y danos |
-| Servidor local - SSD/HDD backup | 850,00 | Alta | Backups de ONIA Center, Supabase y media |
+| Servidor local - SSD/HDD backup | 850,00 | Alta | Backups de Onia Center, Supabase y media |
 | PC casa/servidor - RAM, SSD, cooling o mantenimiento | 1.000,00 | Alta | Solo segun diagnostico del equipo |
 | Red/energia/cables/ventilacion | 250,00 | Media | Operacion local estable |
 | Higgsfield/video IA puntual | 700,00 | Media | Solo para piezas vendibles o demos |

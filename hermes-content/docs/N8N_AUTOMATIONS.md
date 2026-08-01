@@ -183,7 +183,7 @@ Horarios:
 | Hora | Comando Hermes | Funcion |
 |---|---|---|
 | 07:30 | `Radar creativo ONIA` | radar local seguro |
-| 08:00 | `Cola contenido diaria` | cola Sergio + ONIA |
+| 08:00 | `Cola contenido diaria` | cola Sergio + Onia |
 | 08:30 | `Seguimientos ONIA hoy` | CRM sin envio automatico |
 | 10:00 | `Recordatorios Video Lab` | aprobaciones pendientes |
 | 15:00 | `Platform Copy Queue` | descripciones por canal |
@@ -350,8 +350,8 @@ n8n no debe saltarse aprobaciones.
 
 Workflow recomendado diario:
 
-1. Revisar Video Lab, plan semanal, proyectos ONIA y oportunidades.
-2. Proponer 1 pieza Sergio y 1 pieza ONIA.
+1. Revisar Video Lab, plan semanal, proyectos Onia y oportunidades.
+2. Proponer 1 pieza Sergio y 1 pieza Onia.
 3. Crear captions y reutilizacion sugerida.
 4. Enviar a Telegram con comandos exactos.
 5. Crear jobs solo si Sergio aprueba.

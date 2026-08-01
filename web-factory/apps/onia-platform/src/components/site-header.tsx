@@ -1,18 +1,18 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { BrandWordmark } from "@/components/brand-wordmark";
+import { BrandLogo } from "@/components/brand-logo";
 import { APP_URL, WA_URL } from "@/lib/site";
 import styles from "./site-header.module.css";
 
 /* hrefs absolutos ("/#...") para que la nav tambien funcione desde
    las paginas legales (/terminos, /privacidad). */
 const NAV = [
+  { href: "/#prueba", label: "La prueba" },
   { href: "/#como-funciona", label: "Cómo funciona" },
   { href: "/#rubros", label: "Rubros" },
-  { href: "/#modulos", label: "Módulos" },
-  { href: "/#bolivia", label: "Bolivia" },
-  { href: "/#preguntas", label: "Preguntas" },
+  { href: "/#precios", label: "Precios" },
+  { href: "/#preguntas", label: "Objeciones" },
 ] as const;
 
 function ThemeToggle() {
@@ -75,7 +75,7 @@ export function SiteHeader() {
     <header className={styles.header}>
       <div className={`container ${styles.inner}`}>
         <a href="/" className={styles.brand} aria-label="Onia — inicio">
-          <BrandWordmark height={26} />
+          <BrandLogo height={26} />
           <span className={styles.tagline}>El sistema con IA para tu negocio</span>
         </a>
 
@@ -92,9 +92,15 @@ export function SiteHeader() {
           <a href={APP_URL} className={`btn btn-ghost btn-sm ${styles.appCta}`}>
             Entrar a la app
           </a>
+          {/* En pantallas de 320px el rotulo completo empujaba la fila fuera
+              del viewport y la pagina entera ganaba scroll horizontal. Ahi el
+              boton se queda en "WhatsApp": el verbo lo pone el contexto. */}
           <a href={WA_URL} className="btn btn-wa btn-sm">
             <span className="btn-dot" aria-hidden />
-            Hablanos por WhatsApp
+            <span>
+              <span className={styles.ctaLargo}>{"Hablanos por "}</span>
+              WhatsApp
+            </span>
           </a>
         </div>
       </div>

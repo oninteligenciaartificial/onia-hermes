@@ -2,7 +2,7 @@
 
 Fecha: 2026-07-03.
 Estado: mapa de clientes candidatos para adopcion de ONIA Core beta v0.2.0.
-Owner: ONIA / Hermes.
+Owner: Onia / Hermes.
 
 Fuentes: `hermes-content/references/onia-projects-registry.json`,
 `CRM_AND_PROSPECTING.md`, `PROJECTS_ORCHESTRATION.md`, contrato
@@ -61,7 +61,7 @@ Cliente -> track vertical -> adapter del producto -> ONIA Core
   solo recibe work items normalizados. La capability `whatsapp` sigue
   `external_gate` — no se activa dentro del core.
 - Estado: mejor candidato para validar ProveeGest despues del beta DentalGest,
-  porque ya paga, ya tiene infraestructura ONIA (VPS, n8n) y su operacion
+  porque ya paga, ya tiene infraestructura Onia (VPS, n8n) y su operacion
   ejercita partners + approvals + saved views a fondo.
 
 ### 3. Pymes generales (GestiOS)
@@ -97,7 +97,7 @@ estetica, restaurantes y negocios locales. Mapa rapido para vendedores:
 | Importadora / mayorista / distribuidora | ProveeGest | proveegest-electrico |
 | Pyme servicios u operaciones | GestiOS | gestios-general |
 | Agro / ganaderia | Ganadero OS | ganadero-offline |
-| Negocio local solo presencia | Web ONIA / websites | (sin core; puerta de entrada) |
+| Negocio local solo presencia | Web Onia / websites | (sin core; puerta de entrada) |
 
 Regla comercial: las webs (websites/web-factory) son puerta de entrada; cuando
 el cliente pide "seguimiento", "cotizaciones" o "reportes", se escala al

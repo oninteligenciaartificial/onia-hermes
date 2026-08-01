@@ -1,8 +1,8 @@
-# ONIA - Spec de panel: colaboradores comerciales 2026
+# Onia - Spec de panel: colaboradores comerciales 2026
 
 Estado: spec de producto lista para implementar.
 Fecha: 2026-07-18.
-Uso: handoff al carril A (ONIA Center) e infra (Supabase/n8n) para administrar a
+Uso: handoff al carril A (Onia Center) e infra (Supabase/n8n) para administrar a
 los 2 colaboradores comerciales en el panel. Regla de negocio:
 `ONIA_COLABORADORES_COMERCIALES_SIN_INVERSION_2026.md`.
 
@@ -13,7 +13,7 @@ los 2 colaboradores comerciales en el panel. Regla de negocio:
 
 | Trabajo | Carril | Ruta / recurso |
 |---|---|---|
-| UI y API del panel | A - ONIA Center | `web-factory/apps/site/src/app/onia-center/**`, `.../api/onia-center/**` |
+| UI y API del panel | A - Onia Center | `web-factory/apps/site/src/app/onia-center/**`, `.../api/onia-center/**` |
 | Schema, RLS, alta de perfiles, crons | Infra | `supabase/migrations/**`, n8n VPS |
 
 ## Estado actual (ya existe, no rehacer)
@@ -87,7 +87,7 @@ Contenido y division por colaborador (territorio, dia tipo, cuotas):
   meta mensual (>4 ventas cobradas) Bs. 250; recurrencia (SaaS a 30 dias activo)
   Bs. 120; calidad (mes sin reclamos ni rescate) Bs. 150.
 - Gate: solo se marcan `aprobado` si el semaforo de caja esta verde (leer del
-  modulo finanzas / Fondo ONIA). En rojo/amarillo quedan `diferido`.
+  modulo finanzas / Fondo Onia). En rojo/amarillo quedan `diferido`.
 
 ### F. Territorio y anti-colision
 
@@ -117,6 +117,6 @@ Contenido y division por colaborador (territorio, dia tipo, cuotas):
 ## Privacidad (no romper)
 
 La vista de colaborador nunca muestra capital de Sergio, deuda, caja completa,
-Fondo ONIA %, lotes Nuvia ni estrategia interna. Eso vive en el modulo privado
+Fondo Onia %, lotes Nuvia ni estrategia interna. Eso vive en el modulo privado
 `Capital Interno`. RLS por `owner_user_key`; escritura solo server-side o n8n con
 credenciales privadas.

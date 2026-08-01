@@ -1,9 +1,14 @@
-# Kit de Ventas — Agente IA ONIA (Sprint 15 días)
+# Kit de Ventas — Agente IA Onia (Sprint 15 días)
 
+> ⚠️ **PRECIOS DESACTUALIZADOS (corregido 2026-08-01).** Este doc cita Landing Bs 1.490 y
+> flujos a 1.800: son de la lista vieja. **Manda `PRICING_RATIONALE_INTERNO.md` §0**
+> (lanzamiento: Landing **790** · Web Pro **1.500**, desde 2026-07-03) y la tabla por caso
+> de `ONIA_SERVICIOS_POR_CASO_PRECIOS_20260801.md`. Los guiones y mensajes de acá siguen
+> siendo válidos — solo reemplazar el número al usarlos.
+>
 > Objetivo: convertir las capacidades tipo "Hermes Agent" (las del video que vimos)
 > en ventas reales en menos de 15 días, usando el demo ya activo y los 60
 > prospectos Bolivia sin web.
-> Fuente de precios: `ONIA_PRICING_2026.md` (canónico). Aquí NO se inventan precios.
 > Reglas de contacto: `HERMES_TELEGRAM_COMMAND_CENTER.md` (no contactar sin
 > aprobación; WhatsApp automático bloqueado hasta verificación Meta → enviar a mano).
 
@@ -15,7 +20,7 @@ No vendemos "un bot" ni "IA". Vendemos **un asistente que trabaja solo todos los
 días** para el negocio del cliente. El demo (clima + tip a Telegram, 7am) es la
 prueba visible de que "esto llega solo, sin que nadie lo prenda".
 
-| Capacidad del agente (video) | Cómo se lo decimos al cliente | Producto ONIA que lo cobra |
+| Capacidad del agente (video) | Cómo se lo decimos al cliente | Producto Onia que lo cobra |
 |---|---|---|
 | Briefing diario programado | "Cada mañana recibís tu resumen del negocio en tu celular" | Flujo n8n / Conectores (setup Bs. 1,800) + Monitoreo Bs. 350/mes |
 | Integración de servicios (APIs) | "Conecto tus herramientas para que dejen de copiar y pegar" | Flujo de aprobación n8n Bs. 1,800 / Integración extra desde Bs. 1,900 |

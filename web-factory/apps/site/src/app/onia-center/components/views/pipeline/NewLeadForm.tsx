@@ -6,10 +6,10 @@ import type { TeamMember } from "@/lib/onia-center-store";
 import { buildAssignees, defaultAssigneeKey } from "./assignees";
 
 const SERVICE_OPTIONS: { id: string; label: string }[] = [
-  { id: "onia-motor-local-growth", label: "ONIA Motor Local Growth" },
+  { id: "onia-motor-local-growth", label: "Onia Motor Local Growth" },
   { id: "onia-motor-local-starter", label: "Motor Local Starter" },
   { id: "onia-motor-local-pro", label: "Motor Local Pro" },
-  { id: "web-pro-onia", label: "Web Pro ONIA" },
+  { id: "web-pro-onia", label: "Web Pro Onia" },
 ];
 
 const BASE_FORM = {

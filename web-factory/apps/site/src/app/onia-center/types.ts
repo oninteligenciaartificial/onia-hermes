@@ -400,7 +400,7 @@ export type ProjectStatus = "planning" | "active" | "review" | "blocked" | "paus
 //   built      -> neutral (construido pero todavia no vende)
 export type VentureStatus = "live" | "in_progress" | "attention" | "built";
 
-// Un venture es un frente de negocio ONIA (SaaS, servicio, marca o nucleo comun).
+// Un venture es un frente de negocio Onia (SaaS, servicio, marca o nucleo comun).
 // Datos curados a mano: son la foto estrategica que se revisa en el panel, no
 // runtime. `status` decide el tono del chip; `statusLabel` es el texto que se ve.
 export type VentureRecord = {

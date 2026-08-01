@@ -1,4 +1,4 @@
-# ONIA Vertical Service Audit 2026
+# Onia Vertical Service Audit 2026
 
 Estado: decision operativa inicial.
 Fecha: 2026-06-28.
@@ -8,7 +8,7 @@ CRM/ventas y cuales quedan bloqueadas hasta discovery, cliente pagado o evidenci
 
 ## Veredicto
 
-La matriz esta bien orientada, pero ONIA no debe abrir todas las marcas al mismo
+La matriz esta bien orientada, pero Onia no debe abrir todas las marcas al mismo
 tiempo.
 
 Decision:
@@ -21,7 +21,7 @@ Mantener el resto como rutas comerciales, no como promesas publicas.
 
 ## Principio de operacion
 
-ONIA debe operar como empresa real:
+Onia debe operar como empresa real:
 
 - un cliente entra por dolor concreto;
 - se asigna una oferta primaria;
@@ -47,7 +47,7 @@ exito.
 | ProveeGest | validar y vender como implementacion sobre GestiOS | Extiende GestiOS a importadoras, mayoristas y distribuidoras sin crear repo nuevo | Entrar a CRM/ventas como oferta validable |
 | ProveeGest Electrico | validar con Bolivian Electric | Caso real, rubro claro, utilidad comercial alta si no se promete integracion profunda | Usar para propuesta/piloto, no como SaaS publico aun |
 | Web + CRM + n8n | vender ahora como entrada | Cash flow rapido y puente hacia DentalGest/GestiOS/ProveeGest | Mantener en ventas como paquete de entrada |
-| Auditoria/Diagnostico ONIA | vender ahora | Convierte rubros ambiguos en alcance pagado | Usar antes de cualquier sistema dudoso |
+| Auditoria/Diagnostico Onia | vender ahora | Convierte rubros ambiguos en alcance pagado | Usar antes de cualquier sistema dudoso |
 | FarmaGest | validar | Similar a GestiOS/ProveeGest pero con vencimientos, lotes y restricciones | Solo con prospecto real o discovery |
 | BeautyGest | validar | Citas/servicios con agenda y seguimiento; puede venderse con base sencilla | Validar con esteticas/salones, sin construir separado |
 | BarberGest | esperar | Puede usar base de agenda; rubro chico y ticket probable menor | No crear producto separado aun |
@@ -202,7 +202,7 @@ offline-first.
 | Clinica dental | DentalGest | landing dental | auditoria de pacientes perdidos |
 | Pyme con Excel/tareas | GestiOS | n8n/dashboard | diagnostico + plan |
 | Importadora/distribuidora/mayorista | ProveeGest | CRM de cotizaciones | discovery pagado |
-| Negocio sin web | Web/landing ONIA | CRM simple | auditoria express |
+| Negocio sin web | Web/landing Onia | CRM simple | auditoria express |
 | Farmacia/stock con vencimientos | GestiOS/FarmaGest piloto | inventario/alertas | discovery |
 | Estetica/salon/barberia | agenda/seguimiento | landing reservas | auditoria |
 | Restaurante/comida | menu/landing + seguimiento | n8n pedidos | auditoria |

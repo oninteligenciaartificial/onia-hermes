@@ -1,0 +1,10 @@
+{ "segments": [{"start":0,"end":3.6,"text":"Encendé tu negocio con ONIA hoy mismo"}],
+  "words": [
+    {"start":0.10,"end":0.60,"word":"ENCENDÉ"},
+    {"start":0.60,"end":0.95,"word":"TU"},
+    {"start":0.95,"end":1.55,"word":"NEGOCIO"},
+    {"start":1.55,"end":1.85,"word":"CON"},
+    {"start":1.85,"end":2.40,"word":"ONIA"},
+    {"start":2.40,"end":2.80,"word":"HOY"},
+    {"start":2.80,"end":3.40,"word":"MISMO"}
+  ] }

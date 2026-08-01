@@ -1,6 +1,6 @@
 # Weekly Operating System
 
-Hermes runs a weekly operating rhythm for Sergio, ONIA and active projects.
+Hermes runs a weekly operating rhythm for Sergio, Onia and active projects.
 
 ## Daily Rhythm
 

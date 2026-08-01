@@ -1,4 +1,4 @@
-# ONIA Center Auth and RLS Activation 2026-06-23
+# Onia Center Auth and RLS Activation 2026-06-23
 
 Estado: implementado, aplicado en Supabase self-hosted y desplegado en dominio
 publico con login por rol.
@@ -7,7 +7,7 @@ administracion de miembros.
 
 ## Objetivo
 
-Convertir ONIA Center de panel interno con `service_role` server-side a sistema
+Convertir Onia Center de panel interno con `service_role` server-side a sistema
 multiusuario con rangos:
 
 - Sergio: acceso completo.
@@ -41,7 +41,7 @@ Regla: `SERVICE_ROLE_KEY` nunca va al navegador. Solo server-side.
 
 ## Deploy publico activo
 
-ONIA Center ya no depende de `localhost` para Arthur ni vendedores.
+Onia Center ya no depende de `localhost` para Arthur ni vendedores.
 
 Estado validado el 2026-06-28:
 
@@ -173,7 +173,7 @@ fallback por rol.
   APIs filtradas por rol, sin cargar fuentes privadas del panel completo.
 - Arthur no ve capital Sergio, deuda exacta, caja completa ni utilidad interna.
 - Vendedor solo ve leads/tareas propias; si hay mas de un vendedor, usar
-  `ownerUserKey`/`assignedUserKey` desde ONIA Center para evitar mezcla.
+  `ownerUserKey`/`assignedUserKey` desde Onia Center para evitar mezcla.
 - Freelancer solo ve entregables asignados.
 - Nuvia lotes queda Sergio-only por contener capital y reparto.
 - Calendario Sergio queda Sergio-only.

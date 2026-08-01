@@ -1,4 +1,4 @@
-# ONIA Imports Module 2026 — Costo de Importacion / Landed Cost (Bolivia)
+# Onia Imports Module 2026 — Costo de Importacion / Landed Cost (Bolivia)
 
 Fecha: 2026-07-21.
 Estado: modulo `imports` v0.1.0 (draft), activable SOBRE ONIA Core. NO core.

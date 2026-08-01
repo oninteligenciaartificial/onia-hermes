@@ -55,7 +55,7 @@ Avoid:
 - fake results in Sergio's voice
 - unapproved voice clone
 
-### ONIA
+### Onia
 
 Use neutral, clear Latin American Spanish.
 
@@ -87,7 +87,7 @@ Natural Spanish, direct, conversational, practical, founder-to-founder, not
 announcer, slightly fast, warm.
 ```
 
-### ONIA Educator
+### Onia Educator
 
 ```text
 Neutral Latin American Spanish, clear, consultative, educational, confident,

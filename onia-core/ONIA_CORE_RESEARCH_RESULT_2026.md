@@ -2,11 +2,11 @@
 
 Fecha: 2026-06-29.
 Estado: alpha canonico, no instalado en productos.
-Owner: ONIA / Hermes.
+Owner: Onia / Hermes.
 
 ## Veredicto CTO
 
-ONIA Core debe ser el nucleo operativo comun de ONIA, no un ERP completo.
+ONIA Core debe ser el nucleo operativo comun de Onia, no un ERP completo.
 
 La primera version tiene que resolver organizacion, responsabilidad,
 seguimiento, evidencia, actividad, alertas y cargas controladas. Esa base sirve

@@ -1,10 +1,10 @@
-# ONIA — Captura de gastos para crédito fiscal / deducción (2026-07-10)
+# Onia — Captura de gastos para crédito fiscal / deducción (2026-07-10)
 
 Empieza YA, gratis, sin trámite. Cada gasto bien capturado = plata que NO pagás de impuestos.
 Complementa `ONIA_OPTIMIZACION_FISCAL_PROPIA_2026.md`. El Agente Finanzas lee estos gastos y
 arma la postura fiscal (`finance_summary.tax_posture`).
 
-## Identidad tributaria de ONIA (poné esto en TODOS los billings)
+## Identidad tributaria de Onia (poné esto en TODOS los billings)
 
 - **Razón social:** LESLIE MERCADO MORENO (empresa unipersonal)
 - **NIT:** 5371375010
@@ -66,4 +66,4 @@ IUE estimado. El panel lo muestra en Finanzas (contrato `ONIA_FINANCE_SUMMARY_CO
 - Mejora futura: webhook/Telegram para cargar gastos sin SSH (hoy es el script, ya funcional).
 
 > Estimación operativa, no asesoría definitiva. El IUE anual y la aplicación exacta del IUE-BE
-> los valida un contador matriculado; ONIA deja todo preparado y trackeado.
+> los valida un contador matriculado; Onia deja todo preparado y trackeado.

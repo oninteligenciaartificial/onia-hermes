@@ -333,7 +333,7 @@ Use for:
 - building in public
 - behind the scenes
 - work sessions
-- lessons from ONIA
+- lessons from Onia
 
 Style:
 
@@ -345,7 +345,7 @@ Style:
 
 Do not use generated face or voice without approval.
 
-### ONIA
+### Onia
 
 Use for:
 
@@ -450,7 +450,7 @@ For Sergio:
 - profile visits
 - trust-building comments
 
-For ONIA:
+For Onia:
 
 - saves
 - DMs

@@ -1,12 +1,12 @@
-# ONIA Vertical Factory Strategy 2026
+# Onia Vertical Factory Strategy 2026
 
 Fecha: 2026-07-03.
 Estado: estrategia canonica de verticales y go-to-market.
-Owner: ONIA / Hermes.
+Owner: Onia / Hermes.
 
 ## Tesis
 
-ONIA no vende un ERP generico. Vende **sistemas especializados por rubro**
+Onia no vende un ERP generico. Vende **sistemas especializados por rubro**
 construidos sobre un solo nucleo (ONIA Core) y un solo motor (GestiOS base).
 
 ```text
@@ -54,7 +54,7 @@ Criterio de priorizacion de un rubro nuevo (en orden):
 2. Dolor pagable y repetido en el rubro (cotizaciones, citas, cobranza).
 3. Distancia al pack mas cercano (estetica esta a un paso de dental;
    ferreteria a un paso de distribucion).
-4. Capacidad de soporte de ONIA en ese momento.
+4. Capacidad de soporte de Onia en ese momento.
 
 ## Estrategia de desarrollo
 
@@ -90,7 +90,7 @@ Palancas ya existentes que la factory aprovecha:
   del rubro completo (demo con datos del rubro, testimonio, numeros).
 - **Comisiones:** vendedor origen cobra por venta nueva (regla ya definida);
   los packs nuevos amplian el catalogo vendible sin subir costo de desarrollo.
-- **Consultoria ONIA como cuña:** para negocios que no saben que comprar,
+- **Consultoria Onia como cuña:** para negocios que no saben que comprar,
   la auditoria express detecta el rubro y aterriza en el vertical correcto.
 
 ## Metricas de la factory

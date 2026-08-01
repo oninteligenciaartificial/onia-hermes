@@ -49,7 +49,7 @@ export function SellerSidebar() {
           <WalletCards size={20} />
         </span>
         <div>
-          <strong>ONIA Panel</strong>
+          <strong>Onia Panel</strong>
           <small>Vendedores</small>
         </div>
       </div>

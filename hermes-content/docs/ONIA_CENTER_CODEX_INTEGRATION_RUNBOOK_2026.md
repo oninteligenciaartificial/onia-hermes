@@ -1,30 +1,30 @@
-# ONIA Center Codex Integration Runbook 2026
+# Onia Center Codex Integration Runbook 2026
 
 Fecha: 2026-06-26.
 
 ## Decision
 
-ONIA Center debe ser el lugar donde se registra, prioriza y aprueba el trabajo.
+Onia Center debe ser el lugar donde se registra, prioriza y aprueba el trabajo.
 Codex debe ejecutar tareas tecnicas solo cuando el contexto este claro y Sergio
 apruebe el alcance.
 
-No conviene que ONIA Center ejecute Codex con acceso total desde el primer dia.
+No conviene que Onia Center ejecute Codex con acceso total desde el primer dia.
 La mejor ruta es progresiva:
 
-1. Generar prompts de Codex desde tareas ONIA Center.
+1. Generar prompts de Codex desde tareas Onia Center.
 2. Crear issues o tareas tecnicas revisables en GitHub.
 3. Usar Codex GitHub Action para checks/reviews controlados.
 4. Usar Codex SDK o `codex exec` para jobs internos aprobados.
-5. Integrar Codex App Server solo cuando ONIA necesite una experiencia profunda
+5. Integrar Codex App Server solo cuando Onia necesite una experiencia profunda
    dentro del panel y tenga seguridad/operacion madura.
 
 ## Opciones investigadas
 
-### 1. Prompt Builder dentro de ONIA Center
+### 1. Prompt Builder dentro de Onia Center
 
 Estado recomendado: implementar primero.
 
-ONIA Center genera un prompt estructurado con:
+Onia Center genera un prompt estructurado con:
 
 - repo objetivo;
 - modulo;
@@ -34,7 +34,7 @@ ONIA Center genera un prompt estructurado con:
 - criterios de aceptacion;
 - comandos de validacion;
 - reglas de seguridad;
-- evidencia que debe volver a ONIA Center.
+- evidencia que debe volver a Onia Center.
 
 Ventajas:
 
@@ -51,7 +51,7 @@ Riesgo:
 
 Estado recomendado: fase 2.
 
-ONIA Center crea issues con labels:
+Onia Center crea issues con labels:
 
 - `onia-center`;
 - `codex-ready`;
@@ -60,13 +60,13 @@ ONIA Center crea issues con labels:
 - prioridad;
 - sensibilidad.
 
-Codex puede trabajar desde una issue o PR, y ONIA Center puede leer estado,
+Codex puede trabajar desde una issue o PR, y Onia Center puede leer estado,
 comentarios, ramas y evidencias.
 
 Ventajas:
 
 - auditable;
-- no necesita exponer Codex directo a ONIA Center;
+- no necesita exponer Codex directo a Onia Center;
 - buen puente para Arthur y colaboradores;
 - separa privado de colaborativo.
 
@@ -103,7 +103,7 @@ Riesgo:
 
 Estado recomendado: fase 4, solo para trabajos aprobados.
 
-ONIA Center envia un job a un worker interno. El worker ejecuta:
+Onia Center envia un job a un worker interno. El worker ejecuta:
 
 ```text
 codex exec --sandbox workspace-write "<prompt aprobado>"
@@ -120,7 +120,7 @@ Usos:
 Ventajas:
 
 - automatizable con n8n/queue;
-- salida capturable para ONIA Center;
+- salida capturable para Onia Center;
 - permisos mas simples que App Server.
 
 Riesgo:
@@ -131,7 +131,7 @@ Riesgo:
 
 ### 5. Codex SDK
 
-Estado recomendado: fase 4/5 si ONIA necesita control programatico.
+Estado recomendado: fase 4/5 si Onia necesita control programatico.
 
 Permite iniciar/resumir threads de Codex desde Node/Python y manejar resultados.
 
@@ -157,20 +157,20 @@ Ventajas:
 
 - experiencia mas integrada;
 - control de conversaciones y eventos;
-- podria mostrar progreso dentro de ONIA Center.
+- podria mostrar progreso dentro de Onia Center.
 
 Riesgo:
 
 - mayor complejidad;
 - WebSocket experimental para algunos transportes;
 - no debe exponerse remoto sin autenticacion fuerte;
-- para ONIA hoy es sobreingenieria.
+- para Onia hoy es sobreingenieria.
 
-## Recomendacion ONIA
+## Recomendacion Onia
 
 ### Ahora
 
-Crear en ONIA Center:
+Crear en Onia Center:
 
 - boton `Preparar para Codex`;
 - prompt tecnico copiables;
@@ -184,7 +184,7 @@ Crear en ONIA Center:
 
 Conectar GitHub:
 
-- crear issue desde ONIA Center;
+- crear issue desde Onia Center;
 - importar estado de issue/PR;
 - guardar links a commits, PRs y checks;
 - separar issues privadas de issues colaborativas.
@@ -206,7 +206,7 @@ Codex worker:
 - sandbox `workspace-write`;
 - repos permitidos por lista blanca;
 - presupuesto y rate limit;
-- logs y evidencia en ONIA Center;
+- logs y evidencia en Onia Center;
 - nunca contacto con clientes.
 
 ## Reglas de seguridad
@@ -218,7 +218,7 @@ Codex worker:
 - Codex no publica, no deploya y no contacta clientes sin aprobacion explicita.
 - Todo job debe tener repo, objetivo, alcance, archivos esperados y criterio de
   validacion.
-- Todo resultado vuelve a ONIA Center con link a commit, PR, diff o resumen.
+- Todo resultado vuelve a Onia Center con link a commit, PR, diff o resumen.
 
 ## Fuentes oficiales
 

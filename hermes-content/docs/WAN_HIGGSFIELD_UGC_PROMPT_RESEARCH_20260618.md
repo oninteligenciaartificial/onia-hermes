@@ -3,7 +3,7 @@
 Estado: interno, no publicado.
 
 Objetivo: recopilar los principios y prompts mas utiles para producir videos
-UGC con modelos IA de ONIA usando primero Wan open source como laboratorio y
+UGC con modelos IA de Onia usando primero Wan open source como laboratorio y
 despues Higgsfield como motor premium/final.
 
 ## Veredicto
@@ -46,7 +46,7 @@ manos, producto y lipsync es dividir el video:
 ### Wan
 
 Wan2.2 es una familia fuerte para video open source, pero la parte util para
-ONIA no es "hacer el anuncio final completo". Lo util es probar acciones:
+Onia no es "hacer el anuncio final completo". Lo util es probar acciones:
 
 - estabilidad de rostro;
 - si la mano puede sostener producto sin romperse;
@@ -256,7 +256,7 @@ Do not invent fake dermatology claims, fake before-after results, fake
 testimonials or unreadable label text.
 ```
 
-### C. ONIA Sales Demo For Clients
+### C. Onia Sales Demo For Clients
 
 ```text
 Create a vertical 9:16 founder/operator style video for ONIA showing how an
@@ -330,7 +330,7 @@ node scripts/mara_comfyui_queue.js --workflow hermes-content\references\ai-ecomm
 
 ## Decision De Negocio
 
-Si Wan logra clips cortos aceptables, ONIA gana un laboratorio barato para:
+Si Wan logra clips cortos aceptables, Onia gana un laboratorio barato para:
 
 - vender el proceso;
 - demostrar control tecnico;

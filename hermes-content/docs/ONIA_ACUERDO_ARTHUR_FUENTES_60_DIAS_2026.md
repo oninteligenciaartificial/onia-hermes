@@ -1,4 +1,4 @@
-# ONIA - Acuerdo Arthur Fuentes 60 Dias
+# Onia - Acuerdo Arthur Fuentes 60 Dias
 
 Contrato privado operativo para ordenar trabajo, dinero, responsabilidades y
 crecimiento durante 60 dias. Es un acuerdo privado entre las partes; si alguna
@@ -13,7 +13,7 @@ Decision formal: dia 60
 
 ## Veredicto
 
-Arthur Fuentes no entra como socio de ONIA en esta etapa. Entra como
+Arthur Fuentes no entra como socio de Onia en esta etapa. Entra como
 colaborador comercial y operativo en prueba por 60 dias.
 
 ## Naturaleza del contrato privado
@@ -22,20 +22,20 @@ Este documento puede firmarse como contrato privado de colaboracion comercial y
 operativa por 60 dias entre Sergio/ONIA y Arthur Fuentes.
 
 La firma o aceptacion escrita activa el periodo de 60 dias. Este acuerdo no
-crea sociedad de ONIA, relacion laboral fija, participacion accionaria,
+crea sociedad de Onia, relacion laboral fija, participacion accionaria,
 representacion legal, exclusividad indefinida ni derecho automatico sobre
-ingresos generales de ONIA. Define reglas privadas de colaboracion, comisiones,
+ingresos generales de Onia. Define reglas privadas de colaboracion, comisiones,
 pagos, evidencia, responsabilidades, propiedad de activos y revision al dia 60.
 
 ## Reconocimiento del aporte de Arthur
 
-Arthur si aporta valor a ONIA. Su aporte actual esta en:
+Arthur si aporta valor a Onia. Su aporte actual esta en:
 
 - llamadas y contacto con clientes;
 - seguimiento comercial;
 - grabacion de contenido;
 - edicion y carruseles;
-- generacion y apoyo en videos Higgsfield/IA bajo direccion de ONIA;
+- generacion y apoyo en videos Higgsfield/IA bajo direccion de Onia;
 - apoyo en capacitaciones, onboarding y explicaciones operativas a clientes;
 - apoyo operativo en Nuvia;
 - mejora de bots y automatizaciones simples;
@@ -45,35 +45,35 @@ Arthur si aporta valor a ONIA. Su aporte actual esta en:
 
 Ese valor se reconoce con comisiones, participacion en Nuvia, porcentajes por
 entregas reales, opcion de subir porcentajes y revision al dia 60. Pero por
-ahora no se convierte en sociedad de ONIA, propiedad de sistemas, ingreso
+ahora no se convierte en sociedad de Onia, propiedad de sistemas, ingreso
 general automatico ni participacion permanente. La idea es probar durante 60
 dias si el aporte de Arthur se vuelve constante, medible, rentable y cada vez
 mas independiente.
 
-ONIA mantiene propiedad y control sobre:
+Onia mantiene propiedad y control sobre:
 
 - DentalGest.
 - GestiOS.
 - Hermes.
 - Web Factory.
-- Web ONIA.
+- Web Onia.
 - Plantillas, scripts, automatizaciones, codigo, prompts, procesos, marca,
-  documentos, CRM y activos creados con herramientas de ONIA.
+  documentos, CRM y activos creados con herramientas de Onia.
 
 Nuvia se maneja separado porque Sergio y Arthur aportaron capital 50/50 para
 inventario. Ese 50/50 aplica al capital, inventario y utilidad comercial de
-productos de Nuvia. No convierte a Arthur en socio de ONIA ni le da propiedad
-sobre DentalGest, GestiOS, Hermes, Web Factory, Web ONIA, codigo, plantillas,
-procesos, CRM o activos de ONIA.
+productos de Nuvia. No convierte a Arthur en socio de Onia ni le da propiedad
+sobre DentalGest, GestiOS, Hermes, Web Factory, Web Onia, codigo, plantillas,
+procesos, CRM o activos de Onia.
 
 La tecnologia, herramientas, sistemas y automatizaciones usadas por Nuvia son
-infraestructura de ONIA mientras ONIA las pague.
+infraestructura de Onia mientras Onia las pague.
 
 ## Contabilidad base
 
 ### Capital inicial
 
-Sergio/ONIA aporta capital operativo para sostener ONIA.
+Sergio/ONIA aporta capital operativo para sostener Onia.
 
 La caja operativa debe cubrir herramientas, apps, IA, VPS, contenido, soporte,
 pruebas, deuda y operacion mientras llegan ventas.
@@ -86,16 +86,16 @@ Arthur no asume esa deuda, no aporta mensualidades fijas y no se le descuenta de
 sus comisiones aprobadas por este concepto.
 
 La forma correcta de recuperar el capital no es cobrarle a Arthur. La forma
-correcta es que ONIA genere Fondo ONIA suficiente, pague su operacion mensual y,
-con el excedente del Fondo ONIA, vaya recuperando el capital de arranque.
+correcta es que Onia genere Fondo Onia suficiente, pague su operacion mensual y,
+con el excedente del Fondo Onia, vaya recuperando el capital de arranque.
 
 ### Regla principal
 
-Primero ONIA vive, despues se reparte.
+Primero Onia vive, despues se reparte.
 
-Solo existe un Fondo ONIA. No existe un fondo separado llamado "Fondo ONIA
-Media". Cuando Nuvia o ONIA Media aportan porcentaje al fondo, ese dinero entra
-al mismo Fondo ONIA y queda etiquetado por origen solo para contabilidad.
+Solo existe un Fondo Onia. No existe un fondo separado llamado "Fondo Onia
+Media". Cuando Nuvia o Onia Media aportan porcentaje al fondo, ese dinero entra
+al mismo Fondo Onia y queda etiquetado por origen solo para contabilidad.
 
 Cada cobro sigue este orden:
 
@@ -103,13 +103,13 @@ Cada cobro sigue este orden:
 2. Menos costos directos externos del cliente: pauta, dominio, hosting,
    pasarelas, inventario, delivery, APIs, SMS, WhatsApp, herramientas del
    cliente, impuestos u otros costos de terceros.
-3. Separar Fondo ONIA obligatorio. Minimo 30%; durante estos 60 dias, ONIA
-   Servicios usa modo proteccion con 40% de Fondo ONIA porque Sergio corre el
+3. Separar Fondo Onia obligatorio. Minimo 30%; durante estos 60 dias, Onia
+   Servicios usa modo proteccion con 40% de Fondo Onia porque Sergio corre el
    riesgo financiero, herramientas, deuda, marca y capital.
 4. Del restante se pagan Arthur, Sergio/gestion y utilidad operativa
    segun participacion real.
 5. Cuando Arthur vende y entrega todo sin ayuda operativa de Sergio, la regla
-   base durante estos 60 dias es 40% Fondo ONIA, 50% Arthur y 10% Sergio.
+   base durante estos 60 dias es 40% Fondo Onia, 50% Arthur y 10% Sergio.
 6. Si Sergio debe meter mano de forma relevante, corregir, reestructurar,
    terminar, rescatar o dirigir demasiado una entrega que parecia hecha por
    Arthur, ya no cuenta como "Arthur hizo todo" y se aplica la escala de
@@ -126,21 +126,21 @@ Pago Sergio/gestion = ingreso neto ONIA * porcentaje aplicable
 
 Importante: los porcentajes de las tablas se leen sobre el ingreso neto total.
 No se debe calcular 50% sobre el 60% restante. Por ejemplo, si el caso dice
-40% Fondo ONIA, 50% Arthur y 10% Sergio, esos tres porcentajes ya suman el
+40% Fondo Onia, 50% Arthur y 10% Sergio, esos tres porcentajes ya suman el
 100% del ingreso neto.
 
-### Modo colaborador sin capital ONIA
+### Modo colaborador sin capital Onia
 
-Arthur no aporta capital a ONIA general durante estos 60 dias. Por eso no se le
-trata como socio ni como cofinanciador de la operacion. Su techo de pago en ONIA
+Arthur no aporta capital a Onia general durante estos 60 dias. Por eso no se le
+trata como socio ni como cofinanciador de la operacion. Su techo de pago en Onia
 Servicios no le da propiedad ni control; el 50% solo aplica cuando vende,
 produce, entrega y deja evidencia completa sin que Sergio tenga que rescatar.
 
 Regla base:
 
-| Modalidad | Arthur aporta dinero a ONIA? | Techo Arthur ONIA Servicios | Fondo ONIA | Sergio/riesgo |
+| Modalidad | Arthur aporta dinero a Onia? | Techo Arthur Onia Servicios | Fondo Onia | Sergio/riesgo |
 |---|---:|---:|---:|---:|
-| Prueba actual sin capital ONIA | No | hasta 50% condicionado | 40% | 10%-50% segun intervencion |
+| Prueba actual sin capital Onia | No | hasta 50% condicionado | 40% | 10%-50% segun intervencion |
 | Proyecto especifico cofinanciado por Arthur y aprobado por escrito | Solo ese proyecto | hasta 50% | 35%-40% | 10%-15% |
 | Futuro socio/operador con capital y responsabilidades reales | Requiere contrato nuevo | se redefine | se redefine | se redefine |
 
@@ -157,7 +157,7 @@ cubre direccion general, marca, cobro, revision final, criterio comercial, QA
 basico, propiedad de activos, herramientas y riesgo. La comision de Arthur baja
 solo cuando la intervencion de Sergio supera una revision normal.
 
-| Nivel | Como se clasifica el proyecto | Fondo ONIA | Arthur | Sergio/gestion |
+| Nivel | Como se clasifica el proyecto | Fondo Onia | Arthur | Sergio/gestion |
 |---|---|---:|---:|---:|
 | 0. Entrega completa independiente | Arthur vende, produce, entrega, registra evidencia y Sergio solo aprueba/revisa sin rehacer | 40% | 50% | 10% |
 | 1. Correcciones menores | Sergio da feedback, corrige detalles, copy menor, orden visual o una ronda corta de QA | 40% | 45% | 15% |
@@ -175,56 +175,56 @@ Reglas para medir intervencion:
 - Si Sergio rehace mas de 20% del entregable, reescribe estructura principal,
   corrige errores que impiden entregar o atiende reclamos por mala ejecucion,
   Arthur baja de nivel.
-- Si Arthur no registra evidencia en ONIA Center, no puede reclamar nivel 0.
+- Si Arthur no registra evidencia en Onia Center, no puede reclamar nivel 0.
 - La categoria final se decide en cierre mensual con evidencia: tareas, CRM,
   archivos, capturas, commits, checklist, mensajes aprobados y entregable final.
 
-### Quien paga la existencia mensual de ONIA
+### Quien paga la existencia mensual de Onia
 
-Durante estos 60 dias, ONIA se sostiene en este orden:
+Durante estos 60 dias, Onia se sostiene en este orden:
 
-1. Fondo ONIA generado por ventas de ONIA Servicios.
-2. Aportes de Nuvia al Fondo ONIA, solo si Nuvia tiene utilidad aprobada.
-3. Aportes de ONIA Media al Fondo ONIA, solo cuando YouTube, sponsors o
+1. Fondo Onia generado por ventas de Onia Servicios.
+2. Aportes de Nuvia al Fondo Onia, solo si Nuvia tiene utilidad aprobada.
+3. Aportes de Onia Media al Fondo Onia, solo cuando YouTube, sponsors o
    afiliados paguen realmente.
-4. Capital de arranque de Sergio/ONIA, solo si el Fondo ONIA todavia no cubre
+4. Capital de arranque de Sergio/ONIA, solo si el Fondo Onia todavia no cubre
    herramientas, apps, deuda, caja chica y gastos criticos.
 
-Arthur no paga la existencia mensual de ONIA. Su contribucion economica es
-indirecta: antes de calcular su pago personal siempre se separa Fondo ONIA. Si
-ONIA no logra que el Fondo ONIA cubra la operacion, al dia 60 se renegocian
+Arthur no paga la existencia mensual de Onia. Su contribucion economica es
+indirecta: antes de calcular su pago personal siempre se separa Fondo Onia. Si
+Onia no logra que el Fondo Onia cubra la operacion, al dia 60 se renegocian
 porcentajes, alcance, herramientas o continuidad.
 
-### Orden mensual del Fondo ONIA
+### Orden mensual del Fondo Onia
 
-Al cierre de cada mes, el Fondo ONIA se usa en este orden:
+Al cierre de cada mes, el Fondo Onia se usa en este orden:
 
 1. Pagar herramientas, apps, IA, VPS, Google Workspace y gastos operativos
-   criticos de ONIA.
+   criticos de Onia.
 2. Cubrir caja chica aprobada de ONIA/Nuvia.
 3. Mantener reserva minima de caja para no bajar de modo caja roja.
 4. Recuperar capital de arranque de Sergio/ONIA segun control interno privado.
 5. Recién despues de cubrir lo anterior se pueden aprobar bonos, reinversiones
    no urgentes o retiros extraordinarios.
 
-El Fondo ONIA no es ganancia personal automatica de Sergio. Es caja de operacion,
+El Fondo Onia no es ganancia personal automatica de Sergio. Es caja de operacion,
 supervivencia y recuperacion de capital. Sergio gana personalmente por su 10%
-en el caso maximo de Arthur sin capital ONIA y sin rescate,
+en el caso maximo de Arthur sin capital Onia y sin rescate,
 por participacion real en desarrollo/venta/gestion y por recuperacion del
-capital que puso para mantener vivo ONIA.
+capital que puso para mantener vivo Onia.
 
 Nadie cobra comision si:
 
 - el cliente no pago;
 - el cobro no esta registrado;
 - falta CRM completo;
-- la venta no fue aprobada por ONIA;
+- la venta no fue aprobada por Onia;
 - hubo promesas no autorizadas;
 - el cliente cancela o pide reembolso antes de 30 dias.
 
-### Uso del Fondo ONIA
+### Uso del Fondo Onia
 
-El Fondo ONIA paga, en este orden:
+El Fondo Onia paga, en este orden:
 
 1. Deuda previa asumida por Sergio/ONIA.
 2. Apps, IA, VPS, Google Workspace, herramientas de desarrollo y herramientas
@@ -234,22 +234,22 @@ El Fondo ONIA paga, en este orden:
 5. Impuestos, legal, contabilidad o formalizacion cuando aplique.
 
 Mientras Sergio/ONIA pague las herramientas, las herramientas son
-infraestructura ONIA aunque tambien se usen para Nuvia.
+infraestructura Onia aunque tambien se usen para Nuvia.
 
-### Deuda y gastos ONIA
+### Deuda y gastos Onia
 
 La deuda previa, junto con las apps,
-herramientas, IA, VPS, Google Workspace, pruebas y gastos operativos de ONIA,
+herramientas, IA, VPS, Google Workspace, pruebas y gastos operativos de Onia,
 queda 100% a cargo de Sergio/ONIA.
 
-Arthur no paga deuda previa de ONIA, no paga apps de ONIA, no compensa parte de
+Arthur no paga deuda previa de Onia, no paga apps de Onia, no compensa parte de
 la deuda y no tendra retenciones de comision por este concepto.
 
-Esta decision no convierte a Arthur en socio de ONIA ni le da propiedad sobre
-herramientas, sistemas, codigo, cuentas, procesos, clientes o activos de ONIA.
-El riesgo financiero de Sergio/ONIA se protege con el 40% de Fondo ONIA durante
+Esta decision no convierte a Arthur en socio de Onia ni le da propiedad sobre
+herramientas, sistemas, codigo, cuentas, procesos, clientes o activos de Onia.
+El riesgo financiero de Sergio/ONIA se protege con el 40% de Fondo Onia durante
 la prueba, el 10% de Sergio cuando Arthur entrega todo sin rescate, la escala de
-intervencion cuando Sergio debe meter mano, la propiedad de activos ONIA y el
+intervencion cuando Sergio debe meter mano, la propiedad de activos Onia y el
 control de caja.
 
 Si Arthur genera una comision aprobada, cobra su porcentaje completo segun la
@@ -257,17 +257,17 @@ tabla aplicable, salvo que exista un reclamo, devolucion, promesa no aprobada,
 falta de entrega, falta de evidencia o gasto directo causado por su propia
 gestion y aprobado para descuento.
 
-## Plan para mantener ONIA viva
+## Plan para mantener Onia viva
 
 Diagnostico operativo actual:
 
-ONIA no puede vivir de reuniones, ideas o contenido sin
+Onia no puede vivir de reuniones, ideas o contenido sin
 ventas. El contenido, los carruseles, las llamadas y las mejoras internas son
 obligatorias, pero deben empujar ventas reales.
 
 ### Meta minima de supervivencia
 
-Como el Fondo ONIA protegido es 40% durante la prueba, ONIA debe cobrar ventas
+Como el Fondo Onia protegido es 40% durante la prueba, Onia debe cobrar ventas
 reales suficientes para cubrir herramientas, deuda, operacion y entregas sin
 depender solo del capital de Sergio.
 
@@ -275,9 +275,9 @@ Objetivo para los 60 dias de prueba:
 
 | Meta | Minimo |
 |---|---:|
-| Ingreso neto cobrado total minimo | Suficiente para sostener operacion y Fondo ONIA |
+| Ingreso neto cobrado total minimo | Suficiente para sostener operacion y Fondo Onia |
 | Ingreso neto cobrado sano | Suficiente para sostener operacion, reserva y pipeline |
-| Fondo ONIA generado minimo | Suficiente para cubrir herramientas criticas |
+| Fondo Onia generado minimo | Suficiente para cubrir herramientas criticas |
 | Ventas web/automatizacion cobradas | 6 a 8 |
 | Clientes SaaS o recurrentes nuevos | 2 a 4 |
 | Leads calificados registrados | 200 |
@@ -300,7 +300,7 @@ Prioridad 1: caja rapida y entregas controladas.
 |---|---:|---|
 | Landing de Captacion | Bs. 790 | Facil de vender, entrega corta, genera caso. |
 | Web Profesional | Bs. 1.500 | Buen ticket para caja y portafolio. |
-| Web Pro ONIA | Bs. 2.900 | Mejor margen si el cliente tiene negocio serio. |
+| Web Pro Onia | Bs. 2.900 | Mejor margen si el cliente tiene negocio serio. |
 | Auditoria Express | Bs. 250 | Entrada rapida para clientes frios. |
 | Diagnostico + Plan de Accion | Bs. 690 | Convierte confusion en propuesta pagada. |
 | Automatizacion simple n8n | Bs. 790 | Alta percepcion de valor si el flujo es claro. |
@@ -317,17 +317,17 @@ Prioridad 2: recurrencia.
 
 ### Reglas de caja
 
-- La existencia mensual de ONIA la paga el Fondo ONIA. Si el Fondo ONIA no
+- La existencia mensual de Onia la paga el Fondo Onia. Si el Fondo Onia no
   alcanza durante los 60 dias, Sergio/ONIA cubre temporalmente con capital de
   arranque y ese uso queda pendiente de recuperacion.
 - No comprar herramientas nuevas si no estan ligadas a un cliente pagado, una
   venta probable o ahorro mayor al costo mensual.
 - No pagar comision sin cobro confirmado, CRM completo y costos descontados.
-- No repartir dinero si el Fondo ONIA no puede cubrir herramientas criticas.
+- No repartir dinero si el Fondo Onia no puede cubrir herramientas criticas.
 - Los gastos raros de cada mes, como bolsas, transporte, etiquetas, muestras,
   envios, impresiones, reuniones o material de contenido, no se ignoran: salen
   de caja chica y se registran como costo operativo.
-- Si ONIA entra en modo caja roja, se
+- Si Onia entra en modo caja roja, se
   congelan compras, bonos, pruebas pagadas y entregas no vendibles.
 - Si caja disponible esta limitada, solo se financian tareas
   que ayuden a vender, entregar o cobrar.
@@ -341,7 +341,7 @@ Se crea una caja chica mensual interna:
 | Caja chica | Uso |
 |---|---|
 | Nuvia | Bolsas, etiquetas, transporte, muestras, embalaje, fotos, productos pequenos, envios no cobrados. |
-| ONIA | Movilidad, reuniones, impresiones, compras pequenas, material de contenido, pruebas urgentes. |
+| Onia | Movilidad, reuniones, impresiones, compras pequenas, material de contenido, pruebas urgentes. |
 
 Reglas:
 
@@ -349,7 +349,7 @@ Reglas:
 - Todo gasto debe tener foto, factura, recibo, captura o nota simple con fecha,
   responsable, monto y motivo.
 - Si el gasto fue para Nuvia, se carga a Nuvia antes de calcular utilidad.
-- Si el gasto fue para ONIA comercial, se carga a gasto operativo ONIA.
+- Si el gasto fue para Onia comercial, se carga a gasto operativo Onia.
 - Si el gasto fue para un cliente, debe cobrarse al cliente o descontarse como
   costo directo de ese proyecto.
 - Se repone cuando se haya usado entre 50% y 70% del fondo, siempre con
@@ -363,8 +363,8 @@ Cada viernes se debe revisar:
 |---|---|
 | Caja | Cuanto dinero real queda disponible? |
 | Cobros | Que entro esta semana? |
-| Fondo ONIA | Cuanto se separo para operar? |
-| Deuda ONIA/Sergio | Cuanto falta cubrir desde la caja de ONIA, sin cargo a Arthur? |
+| Fondo Onia | Cuanto se separo para operar? |
+| Deuda ONIA/Sergio | Cuanto falta cubrir desde la caja de Onia, sin cargo a Arthur? |
 | Comisiones | Que se debe pagar y por que evidencia? |
 | Pipeline | Que clientes estan cerca de pagar? |
 | Recurrente | Cuantos ingresos mensuales nuevos se consiguieron? |
@@ -373,7 +373,7 @@ Cada viernes se debe revisar:
 
 ## Nuvia
 
-Nuvia no se mezcla con los ingresos generales de ONIA.
+Nuvia no se mezcla con los ingresos generales de Onia.
 
 Reglas:
 
@@ -383,8 +383,8 @@ Reglas:
   producto, delivery, pasarela, devoluciones, mermas, bolsas, etiquetas,
   transporte, embalaje, muestras y gastos directos.
 - Antes de repartir utilidad de Nuvia, se separa 20% de la ganancia neta para
-  Fondo ONIA por uso de herramientas, web, IA, automatizaciones, catalogo,
-  tecnologia, direccion y operacion pagada por ONIA.
+  Fondo Onia por uso de herramientas, web, IA, automatizaciones, catalogo,
+  tecnologia, direccion y operacion pagada por Onia.
 - Antes de repartir utilidad personal, se separa tambien 15% de la ganancia
   neta como Reserva Nuvia para reposicion, mermas, muestras, devoluciones,
   caja chica, fotos, pruebas y crecimiento de inventario.
@@ -392,7 +392,7 @@ Reglas:
   video, voz, creditos, pauta, dominios, pasarelas, ads, envios o produccion
   pagada, ese costo se descuenta como costo directo antes de calcular utilidad.
 - Web, catalogo, automatizaciones, base de datos, prompts, contenido base,
-  plantillas y sistemas siguen siendo activos de ONIA salvo acuerdo escrito.
+  plantillas y sistemas siguen siendo activos de Onia salvo acuerdo escrito.
 - Tareas operativas de Nuvia no pagan comision aparte salvo que Sergio apruebe
   un pago especifico por produccion o gestion.
 
@@ -417,15 +417,15 @@ desde la utilidad personal de Sergio ni de Arthur despues del reparto.
 
 ### Herramientas caras usadas por Nuvia
 
-Nuvia no debe pagar todo Higgsfield si la herramienta tambien se usa para ONIA,
-clientes, aprendizaje o canales. Pero ONIA tampoco debe subsidiar contenido
+Nuvia no debe pagar todo Higgsfield si la herramienta tambien se usa para Onia,
+clientes, aprendizaje o canales. Pero Onia tampoco debe subsidiar contenido
 premium de Nuvia.
 
 Regla:
 
 | Uso | Como se carga |
 |---|---|
-| Uso normal de web, catalogo, Notion/CRM, plantillas y automatizaciones simples | Cubierto por el 20% Fondo ONIA. |
+| Uso normal de web, catalogo, Notion/CRM, plantillas y automatizaciones simples | Cubierto por el 20% Fondo Onia. |
 | Uso de Higgsfield, IA de video, voz, creditos IA, pauta o produccion pagada | Se descuenta como costo directo del lote/campana antes del reparto. |
 | Uso mixto de una herramienta mensual cara | Se prorratea por cantidad de piezas, campanas o uso real registrado. |
 | Herramienta usada casi solo para Nuvia | Nuvia debe asumir la mayor parte o el 100% de ese costo ese mes. |
@@ -453,11 +453,11 @@ Arthur = utilidad repartible Nuvia * 50%
 ```
 
 Si en el futuro Nuvia paga sus propias herramientas, hosting, automatizaciones y
-operacion, se puede revisar el aporte al Fondo ONIA y bajarlo nuevamente.
+operacion, se puede revisar el aporte al Fondo Onia y bajarlo nuevamente.
 
 ### Rentabilidad minima de Nuvia
 
-Nuvia solo es rentable si la ganancia neta antes de Fondo ONIA y Reserva Nuvia
+Nuvia solo es rentable si la ganancia neta antes de Fondo Onia y Reserva Nuvia
 es positiva y suficiente. No se debe confundir vender con ganar.
 
 Formula de control:
@@ -491,7 +491,7 @@ Ejemplo negativo:
 | Higgsfield/IA/pauta | -Bs. 250 |
 | Margen operativo | -Bs. 50 |
 
-Resultado: no hay Fondo ONIA, no hay Reserva Nuvia y no hay reparto 50/50. La
+Resultado: no hay Fondo Onia, no hay Reserva Nuvia y no hay reparto 50/50. La
 perdida se registra y debe recuperarse en cierres siguientes.
 
 ### Ejemplos exactos Nuvia
@@ -504,7 +504,7 @@ Ejemplo 1: Nuvia vende Bs. 1.000 sin usar Higgsfield.
 | Costo producto | -Bs. 550 |
 | Bolsas/transporte/caja chica usada | -Bs. 60 |
 | Ganancia neta antes de reservas | Bs. 390 |
-| Aporte Nuvia al Fondo ONIA 20% | -Bs. 78 |
+| Aporte Nuvia al Fondo Onia 20% | -Bs. 78 |
 | Reserva Nuvia 15% | -Bs. 58,50 |
 | Utilidad repartible | Bs. 253,50 |
 | Sergio 50% | Bs. 126,75 |
@@ -519,16 +519,16 @@ Ejemplo 2: Nuvia vende Bs. 1.000 y usa Bs. 100 prorrateados de Higgsfield/IA.
 | Bolsas/transporte/caja chica usada | -Bs. 60 |
 | Higgsfield/IA prorrateado | -Bs. 100 |
 | Ganancia neta antes de reservas | Bs. 290 |
-| Aporte Nuvia al Fondo ONIA 20% | -Bs. 58 |
+| Aporte Nuvia al Fondo Onia 20% | -Bs. 58 |
 | Reserva Nuvia 15% | -Bs. 43,50 |
 | Utilidad repartible | Bs. 188,50 |
 | Sergio 50% | Bs. 94,25 |
 | Arthur 50% | Bs. 94,25 |
 
 En Nuvia, Sergio gana por dos vias distintas: su 50% de utilidad comercial y el
-Fondo ONIA que protege herramientas, web, automatizaciones y direccion. Arthur
+Fondo Onia que protege herramientas, web, automatizaciones y direccion. Arthur
 gana su 50% de utilidad comercial, pero no gana por herramientas ni activos de
-ONIA. La Reserva Nuvia no es ganancia de ninguno; queda para que Nuvia no se
+Onia. La Reserva Nuvia no es ganancia de ninguno; queda para que Nuvia no se
 quede sin inventario ni caja operativa.
 
 ### Cierre y pago de ganancias Nuvia
@@ -549,7 +549,7 @@ Para pagar utilidad de Nuvia deben estar completos:
 - herramientas premium prorrateadas;
 - devoluciones o reclamos pendientes;
 - inventario restante;
-- Fondo ONIA 20%;
+- Fondo Onia 20%;
 - Reserva Nuvia 15%.
 
 Si hay devolucion, reclamo, falta de registro, diferencia de caja o inventario
@@ -557,28 +557,28 @@ sin cuadrar, el pago de utilidad queda retenido hasta resolver. Si la utilidad
 individual de Sergio o Arthur es menor a Bs. 100 en un cierre, puede acumularse
 al siguiente cierre para no hacer pagos pequenos desordenados.
 
-## Canales de YouTube / ONIA Media
+## Canales de YouTube / Onia Media
 
 Los canales de YouTube no se deben mezclar con Nuvia ni con comisiones de ventas
 de clientes. Son activos de media que pueden tardar meses en generar ingresos.
-ONIA Media es un centro contable y de activos, no una empresa separada ni un
+Onia Media es un centro contable y de activos, no una empresa separada ni un
 gasto externo que duplique todas las apps.
 
 Reglas base:
 
 - Los canales creados con estrategia, cuentas, herramientas, guiones, prompts,
-  edicion, direccion o recursos de ONIA son activos de ONIA Media salvo acuerdo
+  edicion, direccion o recursos de Onia son activos de Onia Media salvo acuerdo
   escrito distinto.
-- Los canales pueden usar las apps normales de ONIA: Notion/CRM, Drive,
+- Los canales pueden usar las apps normales de Onia: Notion/CRM, Drive,
   plantillas, IA general, prompts, edicion basica, web, automatizaciones y
-  direccion. Ese uso queda cubierto por el Fondo ONIA, no se
+  direccion. Ese uso queda cubierto por el Fondo Onia, no se
   descuenta dos veces como si fuera un gasto externo nuevo.
-- Solo se cargan como costo directo de ONIA Media los gastos incrementales del
+- Solo se cargan como costo directo de Onia Media los gastos incrementales del
   canal: pauta, editor externo, voz pagada, musica/licencias, dominios/marca,
   creditos comprados para ese canal, produccion externa o uso premium medible.
 - Herramientas caras compartidas, como Higgsfield, IA de video, voz o render, se
   prorratean por uso real registrado. Si el uso fue para Nuvia, va a Nuvia; si
-  fue para cliente, va al cliente; si fue para canal, va a ONIA Media.
+  fue para cliente, va al cliente; si fue para canal, va a Onia Media.
 - Nadie cobra por "posible monetizacion". Solo se reparte dinero cuando YouTube,
   afiliados, sponsors o ventas relacionadas paguen de verdad.
 - No se promete monetizacion garantizada. YouTube puede rechazar contenido
@@ -594,11 +594,11 @@ Mientras el canal no cobre:
 
 - el trabajo cuenta como obligacion de crecimiento y construccion de activo;
 - no genera comision automatica;
-- el uso normal de apps ONIA se registra como infraestructura compartida, sin
+- el uso normal de apps Onia se registra como infraestructura compartida, sin
   descontarlo otra vez del canal;
 - se registra aparte cualquier costo premium, externo o incremental del canal;
 - se revisa cada 30 dias si vale la pena continuar;
-- no puede quitar foco a ventas de caja rapida de ONIA.
+- no puede quitar foco a ventas de caja rapida de Onia.
 
 ### Cuando un canal cobre
 
@@ -610,11 +610,11 @@ Ingreso liquidable canal = ingresos cobrados - impuestos/comisiones/plataformas 
 
 Distribucion sugerida por defecto:
 
-| Caso | Fondo ONIA | Arthur | Sergio/ONIA |
+| Caso | Fondo Onia | Arthur | Sergio/ONIA |
 |---|---:|---:|---:|
 | Arthur opera el canal completo y cumple calendario | 40% | 40% | 20% |
 | Sergio y Arthur producen de forma similar | 40% | 30% | 30% |
-| ONIA paga editor, voz, guionistas o produccion externa | 40% | segun aporte real | resto |
+| Onia paga editor, voz, guionistas o produccion externa | 40% | segun aporte real | resto |
 | Arthur deja de operar el canal por 30 dias sin acuerdo | 40% | baja a 15% ese mes | resto |
 | Arthur deja de operar el canal por 60 dias sin acuerdo | 40% | 0% desde ese mes | resto |
 
@@ -628,7 +628,7 @@ cumplio calendario.
 | Concepto | Calculo | Monto |
 |---|---:|---:|
 | Ingreso liquidable canal | Bs. 1.000 | Bs. 1.000 |
-| Fondo ONIA | 40% | Bs. 400 |
+| Fondo Onia | 40% | Bs. 400 |
 | Arthur | 40% | Bs. 400 |
 | Sergio/ONIA | 20% | Bs. 200 |
 
@@ -637,7 +637,7 @@ forma similar.
 
 | Concepto | Calculo | Monto |
 |---|---:|---:|
-| Fondo ONIA | 40% | Bs. 400 |
+| Fondo Onia | 40% | Bs. 400 |
 | Arthur | 30% | Bs. 300 |
 | Sergio/ONIA | 30% | Bs. 300 |
 
@@ -647,34 +647,34 @@ Si un canal se usa para vender productos de Nuvia:
 
 - las ventas de productos siguen la formula de Nuvia;
 - los ingresos propios del canal, como YouTube, sponsors o afiliados, siguen la
-  formula de ONIA Media;
+  formula de Onia Media;
 - los costos de Higgsfield, voz, pauta o produccion se cargan al centro que los
-  uso: Nuvia, ONIA Media o cliente.
+  uso: Nuvia, Onia Media o cliente.
 
 ## Ejemplo exacto sin retencion de deuda
 
 Sergio/ONIA paga la deuda previa y sostiene las apps,
-herramientas y gastos operativos de ONIA. Arthur no compensa esta deuda y no se
-le retiene ningun porcentaje por deuda previa o apps de ONIA.
+herramientas y gastos operativos de Onia. Arthur no compensa esta deuda y no se
+le retiene ningun porcentaje por deuda previa o apps de Onia.
 
 Ejemplo: Arthur gana una comision aprobada de Bs. 900 por una web completa.
 
 | Concepto | Monto |
 |---|---:|
 | Comision generada Arthur | Bs. 900 |
-| Retencion por deuda ONIA | Bs. 0 |
+| Retencion por deuda Onia | Bs. 0 |
 | Pago Arthur ese cierre | Bs. 900 |
 | Deuda Arthur restante | Bs. 0 |
 
 Solo se descuenta o retiene si existe reclamo, devolucion, datos faltantes,
 promesa no aprobada, entrega no aprobada o gasto directo causado por su gestion
-y validado por ONIA.
+y validado por Onia.
 
-## Rol de Sergio / ONIA
+## Rol de Sergio / Onia
 
 Sergio es responsable de:
 
-- direccion de ONIA;
+- direccion de Onia;
 - precios finales;
 - estrategia comercial;
 - arquitectura tecnica;
@@ -685,7 +685,7 @@ Sergio es responsable de:
 - pago de herramientas;
 - mantenimiento de DentalGest, GestiOS, Hermes y Web Factory;
 - reuniones tecnicas, clientes grandes, reclamos o cierres complejos;
-- grabar contenido de autoridad de ONIA.
+- grabar contenido de autoridad de Onia.
 
 Obligaciones semanales de Sergio:
 
@@ -705,11 +705,11 @@ confundir utilidad, gestion, desarrollo y retorno de capital.
 
 | Fuente | Cuando aplica | Como se calcula |
 |---|---|---|
-| Direccion/gestion ONIA | Cuando Arthur vende y entrega todo aprobado sin rescate | 10% del ingreso neto ONIA durante la prueba sin capital de Arthur. |
+| Direccion/gestion Onia | Cuando Arthur vende y entrega todo aprobado sin rescate | 10% del ingreso neto Onia durante la prueba sin capital de Arthur. |
 | Produccion/desarrollo | Cuando Sergio construye, corrige, rescata o entrega una parte central | Segun tabla de participacion real. |
-| Propiedad y riesgo | Siempre que se use marca, herramientas, cobro, infraestructura o clientes de ONIA | Incluido en el porcentaje Sergio/gestion o en Fondo ONIA, segun caso. |
-| Capital operativo | Porque Sergio/ONIA sostiene deuda, apps y herramientas | Se protege con Fondo ONIA, prioridad de caja, propiedad ONIA y control de pagos. |
-| Recuperacion de capital | Cuando el Fondo ONIA ya cubrio gastos criticos y reserva minima | Excedente del Fondo ONIA segun control interno Sergio/ONIA. |
+| Propiedad y riesgo | Siempre que se use marca, herramientas, cobro, infraestructura o clientes de Onia | Incluido en el porcentaje Sergio/gestion o en Fondo Onia, segun caso. |
+| Capital operativo | Porque Sergio/ONIA sostiene deuda, apps y herramientas | Se protege con Fondo Onia, prioridad de caja, propiedad Onia y control de pagos. |
+| Recuperacion de capital | Cuando el Fondo Onia ya cubrio gastos criticos y reserva minima | Excedente del Fondo Onia segun control interno Sergio/ONIA. |
 
 El 10% de Sergio cuando Arthur hace todo no es premio por no trabajar. Es el
 pago minimo por direccion, marca, estructura, cobro, revision final, QA basico,
@@ -724,12 +724,12 @@ ese 70% no significa utilidad libre: de ahi sale su tiempo, direccion, soporte,
 desarrollo, riesgo, responsabilidad y futuras mejoras.
 
 La recuperacion de capital no se mezcla con la comision de Arthur. Arthur cobra
-por participacion aprobada; Sergio recupera capital solo desde el Fondo ONIA y
-desde sus propias utilidades, despues de pagar la existencia mensual de ONIA.
+por participacion aprobada; Sergio recupera capital solo desde el Fondo Onia y
+desde sus propias utilidades, despues de pagar la existencia mensual de Onia.
 
-## ONIA Center obligatorio
+## Onia Center obligatorio
 
-La operacion diaria se maneja desde ONIA Center:
+La operacion diaria se maneja desde Onia Center:
 
 ```text
 Control Tower -> /vendedores
@@ -749,7 +749,7 @@ Si no esta registrado en ONIA Center o Notion, no cuenta para comision,
 seguimiento, cierre, caja chica ni revision semanal.
 ```
 
-### Que se registra en ONIA Center
+### Que se registra en Onia Center
 
 | Seccion | Que debe registrar Arthur | Que revisa Sergio |
 |---|---|---|
@@ -779,7 +779,7 @@ capturas incompletas o tareas no trazables.
 
 ## Rol de Arthur Fuentes
 
-Arthur no es programador principal de ONIA. Su rol inicial es:
+Arthur no es programador principal de Onia. Su rol inicial es:
 
 ```text
 Arthur Fuentes - Colaborador Comercial y Operativo ONIA - prueba 60 dias
@@ -794,7 +794,7 @@ Responsabilidades:
 - registrar CRM;
 - grabar y editar contenido;
 - generar videos con Higgsfield/IA siguiendo prompts, guiones y referencias
-  aprobadas por ONIA;
+  aprobadas por Onia;
 - crear carruseles y piezas simples;
 - apoyar Nuvia;
 - crear webs simples con plantilla aprobada;
@@ -802,7 +802,7 @@ Responsabilidades:
   asigne;
 - documentar tareas;
 - mejorar bots, plantillas, automatizaciones simples y procesos internos;
-- gestionar clientes de marketing si ONIA lo asigna.
+- gestionar clientes de marketing si Onia lo asigna.
 
 No puede:
 
@@ -816,13 +816,13 @@ No puede:
 - dar capacitaciones tecnicas avanzadas o prometer resultados sin guion,
   alcance y aprobacion de Sergio;
 - tocar credenciales sin autorizacion;
-- representar que es socio de ONIA;
-- reclamar ingresos generales de ONIA.
+- representar que es socio de Onia;
+- reclamar ingresos generales de Onia.
 
 ## Objetivos semanales obligatorios de Arthur
 
 Estas tareas son obligatorias aunque no generen ingresos inmediatos. Potencian
-ONIA y Nuvia.
+Onia y Nuvia.
 
 | Area | Minimo semanal |
 |---|---:|
@@ -857,7 +857,7 @@ Mejoras internas validas:
 - grabar una mini explicacion operativa para cliente o equipo;
 - revisar mensajes pendientes;
 - crear checklist de entrega.
-- cargar datos o limpiar ONIA Center;
+- cargar datos o limpiar Onia Center;
 - mejorar plantilla de propuesta;
 - crear guion de llamada;
 - documentar una objecion frecuente;
@@ -882,11 +882,11 @@ Un lead calificado cuenta solo si cumple todo esto:
 4. Tiene senal de dolor real: sin web, web debil, no captura leads, usa Excel,
    atiende por WhatsApp sin estado, publica sin CTA, clinica dental con consultas
    sin seguimiento visible, etc.
-5. Tiene oferta ONIA recomendada: DentalGest, GestiOS, web, auditoria,
+5. Tiene oferta Onia recomendada: DentalGest, GestiOS, web, auditoria,
    marketing, automatizacion o consultoria.
 6. Tiene mensaje sugerido o siguiente accion.
 7. No es duplicado ni cliente ya asignado.
-8. Tiene seguimiento dentro de 48 horas si ONIA lo aprueba.
+8. Tiene seguimiento dentro de 48 horas si Onia lo aprueba.
 
 No cuenta como lead calificado:
 
@@ -912,7 +912,7 @@ Reglas:
 - Si el mensaje es tecnico, de precio especial, reclamo, descuento, contrato,
   credencial, integracion sensible o cliente grande, se escala a Sergio.
 - No se duplican mensajes a clientes con otro responsable.
-- Si Arthur deja un lead sin seguimiento por 7 dias sin motivo, ONIA
+- Si Arthur deja un lead sin seguimiento por 7 dias sin motivo, Onia
   puede reasignarlo y pierde derecho de origen.
 
 ## Reuniones
@@ -952,7 +952,7 @@ Cada proyecto, venta o cliente mensual debe tener una ficha con estos campos:
 | Calificacion | Quien detecto dolor, oferta, prioridad y siguiente accion |
 | Contacto inicial | Quien escribio o llamo primero con mensaje aprobado |
 | Seguimiento | Quien respondio mensajes, hizo follow-up y mantuvo el CRM vivo |
-| Cierre | Quien logro el pago o compromiso final aprobado por ONIA |
+| Cierre | Quien logro el pago o compromiso final aprobado por Onia |
 | Brief | Quien consiguio textos, fotos, logo, servicios, referencias y accesos |
 | Produccion | Quien construyo la web, pieza, automatizacion o entrega principal |
 | QA | Quien reviso, corrigio y dejo listo para publicar/entregar |
@@ -985,15 +985,15 @@ Reglas:
 
 ## Pagos y porcentajes
 
-Los porcentajes se calculan sobre el ingreso neto ONIA, despues de descontar
-costos directos externos. Durante la prueba el Fondo ONIA es 40% y se separa
+Los porcentajes se calculan sobre el ingreso neto Onia, despues de descontar
+costos directos externos. Durante la prueba el Fondo Onia es 40% y se separa
 primero.
 
 ### Skim de recuperacion de capital (prueba 60 dias)
 
-Mientras ONIA tenga capital operativo pendiente de recuperar, antes del reparto
+Mientras Onia tenga capital operativo pendiente de recuperar, antes del reparto
 se aparta un 10% de recuperacion de capital operativo del ingreso neto. El
-reparto (Fondo ONIA y porcentajes de Arthur/Sergio) se calcula sobre el 90%
+reparto (Fondo Onia y porcentajes de Arthur/Sergio) se calcula sobre el 90%
 restante.
 
 ```text
@@ -1005,7 +1005,7 @@ Arthur / Sergio   = base_repartible * porcentaje segun nivel de intervencion
 ```
 
 Este 10% no es ganancia personal libre ni comision de nadie: recupera capital
-que ONIA puso para existir. Se apaga automaticamente cuando el capital operativo
+que Onia puso para existir. Se apaga automaticamente cuando el capital operativo
 queda recuperado, y entonces el reparto vuelve a calcularse sobre el ingreso
 neto completo. Los montos internos de capital son privados de Sergio/ONIA; a
 Arthur se le muestra el mecanismo (10%), no las cifras internas.
@@ -1013,13 +1013,13 @@ Arthur se le muestra el mecanismo (10%), no las cifras internas.
 Nota interna (no afecta el reparto de Arthur): el 10% es un apartado contable,
 no un retiro por venta. Solo pasa a Sergio a fin de mes y solo si la caja quedo
 verde (el Fondo cubrio herramientas y reserva). En caja roja/amarilla el
-apartado se queda como caja operativa de ONIA y la recuperacion se difiere. Para
+apartado se queda como caja operativa de Onia y la recuperacion se difiere. Para
 Arthur el calculo es identico en cualquier caso: siempre sobre el 90%.
 
 ## Calendario de cierres y pagos
 
 Ningun pago se hace por promesa, conversacion o venta no cobrada. Todo pago debe
-pasar por ONIA Center/Notion y cierre de caja.
+pasar por Onia Center/Notion y cierre de caja.
 
 ### Regla de pago quincenal y cierre mensual
 
@@ -1027,7 +1027,7 @@ Los pagos variables de Arthur se manejan con dos niveles:
 
 1. Adelanto quincenal: se revisa lo ganado y registrado en los dias 1-15 y
    16-fin de mes. Si existe cobro real, CRM completo, evidencia y margen sano,
-   ONIA puede pagar como adelanto el 20% del monto ganado/aprobable de Arthur en
+   Onia puede pagar como adelanto el 20% del monto ganado/aprobable de Arthur en
    esa quincena.
 2. Cierre mensual: al final de mes se calcula el pago final aprobado segun lo
    realmente cobrado, entregado, validado y sin reclamos. Al pago final se le
@@ -1038,7 +1038,7 @@ Los pagos variables de Arthur se manejan con dos niveles:
 
 Importante: "monto ganado/aprobable de Arthur" no significa facturacion bruta.
 Significa el pago estimado que le corresponde a Arthur despues de aplicar la
-tabla de participacion, descontar costos directos y separar Fondo ONIA cuando
+tabla de participacion, descontar costos directos y separar Fondo Onia cuando
 corresponda.
 
 Ejemplo:
@@ -1058,7 +1058,7 @@ montos con reclamo.
 |---|---|---|
 | Adelanto quincenal general | Dias 1-15 y 16-fin de mes, sobre pago ganado/aprobable de Arthur | Hasta 20% como adelanto, dentro de 72 horas del corte aprobado |
 | Cierre mensual general | Fin de mes, con cobros, costos, entregas, reclamos y adelantos revisados | Se paga el saldo restante o se compensa diferencia |
-| Comision por lead/venta ONIA | Con cobro real, CRM completo y participacion probada | En adelanto quincenal y cierre mensual |
+| Comision por lead/venta Onia | Con cobro real, CRM completo y participacion probada | En adelanto quincenal y cierre mensual |
 | Web o automatizacion con anticipo y saldo | Proporcional a cada cobro recibido | Se paga solo sobre lo cobrado, no sobre el total prometido |
 | Web o automatizacion hecha por Arthur | Al cobrar y validar entrega/avance aprobado | Si falta QA o entrega, queda pendiente hasta cierre |
 | Marketing mensual | Al final de cada mes de gestion cumplida | Cierre mensual aprobado |
@@ -1080,7 +1080,7 @@ Estados de pago:
 Orden de descuentos antes de pagar a Arthur:
 
 1. Reembolsos, reclamos o descuentos causados por promesas no aprobadas.
-2. Gastos directos no registrados o causados por la gestion de Arthur que ONIA
+2. Gastos directos no registrados o causados por la gestion de Arthur que Onia
    tuvo que cubrir.
 3. Ajustes por entrega no aprobada, datos faltantes o rescate fuerte de Sergio.
 4. Pago final aprobado.
@@ -1094,13 +1094,13 @@ la distribucion maxima por defecto durante estos 60 dias es:
 
 | Concepto | Porcentaje |
 |---|---:|
-| Fondo ONIA protegido | 40% |
+| Fondo Onia protegido | 40% |
 | Arthur | 50% |
 | Sergio / direccion / propiedad / cobro / riesgo | 10% |
 
-Ese 10% para Sergio aplica aunque no haya producido la entrega, porque ONIA
+Ese 10% para Sergio aplica aunque no haya producido la entrega, porque Onia
 mantiene marca, direccion, cobro, propiedad, riesgo, herramientas, soporte y
-responsabilidad final. No se suma al Fondo ONIA.
+responsabilidad final. No se suma al Fondo Onia.
 
 Este 10% no se considera ganancia pasiva. Se justifica porque Arthur todavia
 esta aprendiendo y Sergio probablemente tendra que meter mano en direccion,
@@ -1125,7 +1125,7 @@ manda un nombre o no hace seguimiento, baja a 3%-8%.
 
 ### Webs
 
-| Caso | Fondo ONIA | Arthur | Sergio/gestion |
+| Caso | Fondo Onia | Arthur | Sergio/gestion |
 |---|---:|---:|---:|
 | Sergio vende y Sergio hace | 40% | 0% | 60% |
 | Arthur trae cliente sin llamada de cierre y Sergio/ONIA hace todo | 40% | 3%-5% | 55%-57% |
@@ -1139,7 +1139,7 @@ Si Sergio tiene que reconstruir, corregir mucho o rescatar entrega, baja segun
 la escala de intervencion de Sergio. Ver el proyecto "casi listo" no baja por
 si solo la comision; corregirlo, reestructurarlo o terminarlo si.
 
-### Ejemplos exactos ONIA
+### Ejemplos exactos Onia
 
 Ejemplo 1: Web Profesional de Bs. 1.500, Arthur trae cliente, hace llamada,
 seguimiento y CRM; Sergio/ONIA entrega todo.
@@ -1147,7 +1147,7 @@ seguimiento y CRM; Sergio/ONIA entrega todo.
 | Concepto | Calculo | Monto |
 |---|---:|---:|
 | Ingreso neto | Bs. 1.500 | Bs. 1.500 |
-| Fondo ONIA | 40% | Bs. 600 |
+| Fondo Onia | 40% | Bs. 600 |
 | Arthur | 15% | Bs. 225 |
 | Sergio/gestion/entrega | 45% | Bs. 675 |
 
@@ -1157,17 +1157,17 @@ aprobada sin rescate de Sergio.
 | Concepto | Calculo | Monto |
 |---|---:|---:|
 | Ingreso neto | Bs. 1.500 | Bs. 1.500 |
-| Fondo ONIA | 40% | Bs. 600 |
+| Fondo Onia | 40% | Bs. 600 |
 | Arthur | 50% | Bs. 750 |
 | Sergio/direccion/cobro/QA/riesgo | 10% | Bs. 150 |
 
-Ejemplo 3: Web Pro ONIA de Bs. 2.900, Arthur cierra y hace web completa
+Ejemplo 3: Web Pro Onia de Bs. 2.900, Arthur cierra y hace web completa
 aprobada.
 
 | Concepto | Calculo | Monto |
 |---|---:|---:|
 | Ingreso neto | Bs. 2.900 | Bs. 2.900 |
-| Fondo ONIA | 40% | Bs. 1.160 |
+| Fondo Onia | 40% | Bs. 1.160 |
 | Arthur | 50% | Bs. 1.450 |
 | Sergio/direccion/cobro/QA/riesgo | 10% | Bs. 290 |
 
@@ -1177,7 +1177,7 @@ seguimiento de cierre. Se toma 5%.
 | Concepto | Calculo | Monto |
 |---|---:|---:|
 | Ingreso neto | Bs. 790 | Bs. 790 |
-| Fondo ONIA | 40% | Bs. 316 |
+| Fondo Onia | 40% | Bs. 316 |
 | Arthur | 5% | Bs. 39,50 |
 | Sergio/ONIA | 55% | Bs. 434,50 |
 
@@ -1187,7 +1187,7 @@ funcionando y documentado.
 | Concepto | Calculo | Monto |
 |---|---:|---:|
 | Ingreso neto | Bs. 1.200 | Bs. 1.200 |
-| Fondo ONIA | 40% | Bs. 480 |
+| Fondo Onia | 40% | Bs. 480 |
 | Arthur | 50% | Bs. 600 |
 | Sergio/direccion/cobro/QA/riesgo | 10% | Bs. 120 |
 
@@ -1198,15 +1198,15 @@ entrega lista. Se clasifica como intervencion media: Arthur 35%, Sergio 25%.
 | Concepto | Calculo | Monto |
 |---|---:|---:|
 | Ingreso neto | Bs. 1.500 | Bs. 1.500 |
-| Fondo ONIA | 40% | Bs. 600 |
+| Fondo Onia | 40% | Bs. 600 |
 | Arthur | 35% | Bs. 525 |
 | Sergio/intervencion media | 25% | Bs. 375 |
 
 ### Marketing para empresas
 
-| Caso | Fondo ONIA | Arthur | Sergio/gestion |
+| Caso | Fondo Onia | Arthur | Sergio/gestion |
 |---|---:|---:|---:|
-| Vende cliente de marketing, ONIA entrega | 40% | 8%-10% primer pago | 50%-52% |
+| Vende cliente de marketing, Onia entrega | 40% | 8%-10% primer pago | 50%-52% |
 | Produce piezas puntuales aprobadas | 40% | 15%-25% o pago por pieza | resto |
 | Arthur gestiona cliente mensual con reportes y mensajes | 40% | 10%-20% mensual | resto |
 | Arthur vende, produce, gestiona y reporta todo aprobado sin rescate | 40% | 50% | 10% |
@@ -1230,7 +1230,7 @@ Los videos Higgsfield o IA pueden contar de tres formas:
 | Video interno ONIA/Nuvia para aprender o potenciar marca | Cumplimiento semanal y crecimiento de rol | Sin comision automatica |
 | Video incluido dentro de un cliente/web/marketing vendido | Parte de la entrega del proyecto | Se paga segun porcentaje del proyecto |
 | Pack o video IA vendido como servicio aprobado | Produccion vendida | 15%-35% Arthur segun guion, generacion, edicion y entrega aprobada |
-| Arthur vende y entrega todo el pack aprobado sin rescate | Gestion completa | 50% Arthur, 40% Fondo ONIA, 10% Sergio |
+| Arthur vende y entrega todo el pack aprobado sin rescate | Gestion completa | 50% Arthur, 40% Fondo Onia, 10% Sergio |
 
 Reglas:
 
@@ -1250,7 +1250,7 @@ Arthur puede apoyar capacitaciones si hay guion, alcance y aprobacion.
 | Capacitacion interna ONIA/Nuvia | Cumplimiento y aprendizaje | Sin comision automatica |
 | Onboarding incluido en un proyecto vendido | Parte de la entrega | Se paga dentro del porcentaje del proyecto |
 | Onboarding o capacitacion vendida aparte | Servicio cobrado | 8%-15% Arthur si apoya; 20%-35% si la ejecuta completa con aprobacion |
-| Arthur vende y dicta capacitacion completa aprobada sin rescate | Gestion completa | 50% Arthur, 40% Fondo ONIA, 10% Sergio |
+| Arthur vende y dicta capacitacion completa aprobada sin rescate | Gestion completa | 50% Arthur, 40% Fondo Onia, 10% Sergio |
 
 No puede dictar capacitaciones tecnicas avanzadas, prometer configuraciones,
 accesos, integraciones o resultados sin Sergio. Toda capacitacion debe dejar
@@ -1259,7 +1259,7 @@ siguiente paso.
 
 ### Automatizaciones
 
-| Caso | Fondo ONIA | Arthur | Sergio/gestion |
+| Caso | Fondo Onia | Arthur | Sergio/gestion |
 |---|---:|---:|---:|
 | Automatizacion simple hecha por Arthur, funcionando y documentada | 40% | 25%-35% | 25%-35% |
 | Automatizacion simple vendida y entregada completamente por Arthur sin rescate | 40% | 50% | 10% |
@@ -1279,30 +1279,30 @@ comision de esa nueva venta.
 
 ## Servicios nuevos o no listados
 
-Si ONIA agrega un servicio que no aparece en este contrato, Arthur no hereda
-automaticamente el porcentaje mas alto. Primero se clasifica el servicio en ONIA
+Si Onia agrega un servicio que no aparece en este contrato, Arthur no hereda
+automaticamente el porcentaje mas alto. Primero se clasifica el servicio en Onia
 Center y Sergio aprueba la categoria, precio, alcance, costos, responsable y
 regla de pago antes de venderlo o prometerlo.
 
 Regla de seguridad: si un servicio nuevo fue vendido sin clasificacion previa,
-ONIA puede retener el pago variable hasta clasificarlo. Si hubo promesa no
+Onia puede retener el pago variable hasta clasificarlo. Si hubo promesa no
 aprobada, descuento no autorizado, costo oculto o riesgo tecnico no revisado,
 Arthur baja a la categoria real de aporte o solo cobra como lead.
 
 ### Tabla para servicios no listados
 
-| Tipo de servicio nuevo | Ejemplos | Arthur | Fondo ONIA | Sergio/ONIA |
+| Tipo de servicio nuevo | Ejemplos | Arthur | Fondo Onia | Sergio/ONIA |
 |---|---|---:|---:|---:|
 | Lead o referido simple | contacto, nombre, oportunidad sin llamada | 3%-5% | 40% si se vende | resto |
-| Lead con llamada, seguimiento y CRM completo | cliente entiende oferta y paga; ONIA entrega | 12%-15% | 40% | 45%-48% |
+| Lead con llamada, seguimiento y CRM completo | cliente entiende oferta y paga; Onia entrega | 12%-15% | 40% | 45%-48% |
 | Venta con brief/copy/soporte comercial | Arthur ayuda a ordenar datos, textos, referencias o propuesta | 15%-20% | 40% | 40%-45% |
 | Produccion simple no tecnica | piezas, carrusel, copy, carga de contenido, ajustes menores | 15%-25% o pago por tarea | 40% si es proyecto vendido | resto |
 | Ejecucion simple aprobada por Arthur | landing simple, automatizacion no critica, setup basico, contenido entregable | 25%-35% | 40% | 25%-35% |
-| Arthur vende y entrega todo aprobado sin capital ONIA | servicio claro, bajo/medio riesgo, sin rescate de Sergio | maximo 50% | 40% | 10% |
+| Arthur vende y entrega todo aprobado sin capital Onia | servicio claro, bajo/medio riesgo, sin rescate de Sergio | maximo 50% | 40% | 10% |
 | Servicio tecnico o riesgoso | sistema, integracion, pagos, datos, API, credenciales, SaaS, cliente grande | 5%-15% si vende; 10%-25% si apoya | 40% | resto |
 | Servicio recurrente mensual | marketing, mantenimiento, soporte, contenido mensual, gestion de mensajes | 10%-20% mensual solo mientras gestione y reporte | 40% | resto |
-| Servicio de media/canal | YouTube, afiliados, sponsors, canal con activos ONIA | sigue regla ONIA Media | 40% | segun tabla ONIA Media |
-| Producto fisico/inventario | productos Nuvia u otro inventario con capital propio | sigue formula del producto | aporte al Fondo ONIA segun formula | segun capital y utilidad |
+| Servicio de media/canal | YouTube, afiliados, sponsors, canal con activos Onia | sigue regla Onia Media | 40% | segun tabla Onia Media |
+| Producto fisico/inventario | productos Nuvia u otro inventario con capital propio | sigue formula del producto | aporte al Fondo Onia segun formula | segun capital y utilidad |
 | Proyecto cofinanciado por Arthur | pauta, herramienta, inventario, experimento o canal especifico | hasta 50% solo en ese proyecto | 35%-40% | 10%-15% |
 
 Si un servicio mezcla varias categorias, se usa la categoria mas conservadora
@@ -1351,14 +1351,14 @@ Posibles mejoras:
 
 Si falla 2 semanas seguidas sin razon clara, vuelve a comision/tarea puntual.
 
-## Contenido obligatorio ONIA y Nuvia
+## Contenido obligatorio Onia y Nuvia
 
 El contenido interno no da derecho a ingresos generales. Es una obligacion del
 rol porque construye marca, confianza y ventas futuras.
 
 Contenido minimo:
 
-- ONIA: videos de autoridad, procesos, casos, errores, aprendizajes, demos,
+- Onia: videos de autoridad, procesos, casos, errores, aprendizajes, demos,
   carruseles educativos y piezas comerciales.
 - Nuvia: productos, rutinas, ofertas, fotos, videos cortos, catalogo y mensajes
   de compra asistida.
@@ -1373,8 +1373,8 @@ ONIA puede aprobar bono o comision sobre esa venta.
 
 ## Propiedad intelectual y activos
 
-Todo lo creado dentro de ONIA con herramientas, clientes, procesos, brief,
-marca, recursos o direccion de ONIA queda como activo de ONIA:
+Todo lo creado dentro de Onia con herramientas, clientes, procesos, brief,
+marca, recursos o direccion de Onia queda como activo de Onia:
 
 - codigo;
 - webs;
@@ -1415,7 +1415,7 @@ Todos los viernes:
 
 ## Causales de no pago o pausa
 
-ONIA puede pausar pagos, reasignar clientes o bajar porcentaje si:
+Onia puede pausar pagos, reasignar clientes o bajar porcentaje si:
 
 - no hay CRM;
 - no hay seguimiento;
@@ -1439,9 +1439,9 @@ Al dia 60 hay cuatro opciones:
 1. Continuar como colaborador con mejores porcentajes.
 2. Mantenerlo solo por tarea/comision.
 3. Ajustar metas, porcentajes o responsabilidades por otros 30 dias.
-4. Terminar colaboracion sin participacion en ONIA.
+4. Terminar colaboracion sin participacion en Onia.
 
-Ninguna revision otorga propiedad de ONIA automaticamente.
+Ninguna revision otorga propiedad de Onia automaticamente.
 
 ## Pendiente para contrato legal
 

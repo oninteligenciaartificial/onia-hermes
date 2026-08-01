@@ -26,7 +26,7 @@ export default async function FinanzasPage() {
       <AppShell>
         <EmptyState
           title="Falta configurar Supabase"
-          body={`ONIA Center necesita estas variables de entorno: ${getMissingOniaCenterConfig().join(", ")}.`}
+          body={`Onia Center necesita estas variables de entorno: ${getMissingOniaCenterConfig().join(", ")}.`}
         />
       </AppShell>
     );

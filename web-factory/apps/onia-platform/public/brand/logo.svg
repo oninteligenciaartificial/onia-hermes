@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 116" role="img" aria-label="onia">
+  <title>onia — logo v1 (lockup horizontal)</title>
+  <desc>Wordmark "onia" en minuscula geometrica monolinea + cursor verde a nivel de linea base: el sistema esta encendido y espera tu orden. Candidato C aprobado por Sergio 2026-07-26. Verde propio del logo #3EA639 (autocontenido, no es token de UI — ONIA_BRAND_IDENTITY_2026.md §1.4).</desc>
+  <style>
+    .ink { stroke: #141A17; }
+    .dot { fill: #141A17; }
+    @media (prefers-color-scheme: dark) {
+      .ink { stroke: #ECEFED; }
+      .dot { fill: #ECEFED; }
+    }
+  </style>
+  <g class="ink" fill="none" stroke-width="16" stroke-linecap="round">
+    <circle cx="40" cy="76" r="32"/>
+    <path d="M112 108 V68 A24 24 0 0 1 160 68 V108"/>
+    <path d="M200 108 V44"/>
+    <circle cx="272" cy="76" r="32"/>
+    <path d="M304 44 V108"/>
+  </g>
+  <circle class="dot" cx="200" cy="10" r="10"/>
+  <rect x="332" y="96" width="20" height="20" rx="2" fill="#3EA639"/>
+</svg>

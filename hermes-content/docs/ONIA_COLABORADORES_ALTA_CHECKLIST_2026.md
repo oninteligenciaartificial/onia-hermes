@@ -1,4 +1,4 @@
-# ONIA - Checklist de alta de colaborador comercial 2026
+# Onia - Checklist de alta de colaborador comercial 2026
 
 Estado: runbook operativo.
 Fecha: 2026-07-18.
@@ -19,7 +19,7 @@ Repetir para cada uno:
 
 - [ ] Acuerdo firmado (`ONIA_ACUERDO_COLABORADOR_COMERCIAL_PLANTILLA_2026.md`)
       con nombre, CI, territorio, coordinador y fecha de inicio.
-- [ ] Perfil creado en ONIA Center (`vendor_profiles`) con territorio y fase A.
+- [ ] Perfil creado en Onia Center (`vendor_profiles`) con territorio y fase A.
 - [ ] Acceso a la vista `/onia-center/equipo` por su rol (no ve capital ni caja).
 - [ ] Invitacion a `onia-hermes-collab` con permiso Triage o Write limitado.
 - [ ] Scorecard semanal cargado (metas de la seccion 3 del sistema).
@@ -28,7 +28,7 @@ Repetir para cada uno:
 
 ## Fase 2 - Primeras 72 horas
 
-- [ ] Registra sus primeros leads en ONIA Center (no en WhatsApp suelto).
+- [ ] Registra sus primeros leads en Onia Center (no en WhatsApp suelto).
 - [ ] Corre la cuota diaria completa al menos un dia con acompanamiento.
 - [ ] Entrega su primer reporte de arranque.
 - [ ] Queda claro que sin registro no hay comision.

@@ -8,7 +8,7 @@
 # Vars opcionales (env): CEO_AGENT_MODEL.
 set -uo pipefail
 
-MODEL="${CEO_AGENT_MODEL:-gpt-4o-mini}"
+MODEL="${CEO_AGENT_MODEL:-gpt-4.1-mini}"
 
 MK=$(docker exec onia_selfhosted-litellm-1 printenv LITELLM_MASTER_KEY 2>/dev/null)
 

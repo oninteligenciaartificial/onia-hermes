@@ -1,8 +1,8 @@
-# ONIA — Optimización Fiscal Propia (Bolivia) 2026
+# Onia — Optimización Fiscal Propia (Bolivia) 2026
 
-Fecha: 2026-07-10. Owner: ONIA / Hermes (rol contador interno).
+Fecha: 2026-07-10. Owner: Onia / Hermes (rol contador interno).
 Complementa `onia-core/ONIA_FISCAL_CONTABILIDAD_STRATEGY_2026.md` (que cubre el PRODUCTO
-fiscal para clientes + cumplimiento). Este doc es sobre **los impuestos PROPIOS de ONIA**:
+fiscal para clientes + cumplimiento). Este doc es sobre **los impuestos PROPIOS de Onia**:
 cómo pagar exactamente lo que la ley obliga y ni un boliviano más, con documentación impecable.
 
 > **La línea (importante).** Hacemos **planificación fiscal legítima (elusión)**: maximizar
@@ -12,9 +12,9 @@ cómo pagar exactamente lo que la ley obliga y ni un boliviano más, con documen
 > perfectos es lo que protege la plata.
 >
 > **Esto NO es asesoría contable definitiva.** El régimen, las fechas y el cierre de IUE los
-> valida un **contador matriculado**. ONIA prepara todo para que el contador solo revise y firme.
+> valida un **contador matriculado**. Onia prepara todo para que el contador solo revise y firme.
 
-## 1. Los impuestos de ONIA (régimen general — CONFIRMAR con contador)
+## 1. Los impuestos de Onia (régimen general — CONFIRMAR con contador)
 
 Fuente de rates: estrategia fiscal canónica (radar-confirmada 2026-07-04).
 
@@ -31,7 +31,7 @@ Vencimientos mensuales **por último dígito del NIT** (calendario oficial SIN �
 
 ### Palanca 1 — Crédito fiscal IVA (la que más plata deja en la mesa)
 `IVA a pagar = débito (13% de ventas) − crédito (13% de compras CON factura al NIT de ONIA)`.
-- **Pedir factura a nombre y NIT de ONIA por CADA gasto del negocio**: equipos, alquiler,
+- **Pedir factura a nombre y NIT de Onia por CADA gasto del negocio**: equipos, alquiler,
   internet, servicios, publicidad, honorarios locales, etc. Cada factura válida = 13% que NO pagás.
 - Lo que la mayoría pierde: gastos sin factura → crédito perdido → pagás IVA de más.
 - Validez del crédito: NIT correcto, gasto vinculado a la actividad gravada, dentro del período,
@@ -60,18 +60,18 @@ a servicios de software). Elegir mal = pagar de más o incumplir. CONFIRMAR con 
 ### Palanca 5 — Timing y formalidad
 - Registrar ingresos/gastos en el período correcto.
 - **Bancarizar pagos ≥ Bs 50.000** (si no, se pierde crédito/deducibilidad).
-- Facturación en línea SIAT (obligatoria grupos finales 30-sep-2026): ONIA emite factura por sus
+- Facturación en línea SIAT (obligatoria grupos finales 30-sep-2026): Onia emite factura por sus
   ventas → genera débito, pero da formalidad y permite al cliente su crédito (argumento de venta).
 
 ## 3. Disciplina de documentación (lo que guardamos SIEMPRE)
 
 Por cada **ingreso**: factura emitida (SIAT) + comprobante de cobro/banco.
-Por cada **gasto**: factura de compra a NIT ONIA + respaldo bancario (si aplica) + a qué actividad
+Por cada **gasto**: factura de compra a NIT Onia + respaldo bancario (si aplica) + a qué actividad
 corresponde (deducible sí/no).
 Mensual: **RCV** (registro de compras y ventas) al día en el SIAT. Archivo digital de respaldos.
 Anual: estados financieros para IUE (los arma/valida el contador).
 
-## 4. Cómo ONIA Center queda "al tanto" (diseño — se construye al confirmar régimen)
+## 4. Cómo Onia Center queda "al tanto" (diseño — se construye al confirmar régimen)
 
 Extiende la capa de finanzas que ya existe (`income_entries`, `expense_entries`,
 `finance_summary`) con la dimensión fiscal. **Read-only, no mueve plata, no reemplaza al contador.**
@@ -105,7 +105,7 @@ presenta ante el SIN.
 - Régimen: **General** → aplican IVA (13%), IT (3%), IUE (25%).
 - **Sin empleados en planilla** (socios/honorarios) → **RC-IVA no aplica** (reevaluar si contrata).
 - **Facturación SIAT: en trámite** (aún no emite).
-- **Sin contador matriculado**: ONIA prepara todo; un matriculado valida/firma el IUE anual.
+- **Sin contador matriculado**: Onia prepara todo; un matriculado valida/firma el IUE anual.
 
 **Falta 1 dato:** el **NIT + último dígito** (para fijar las fechas de vencimiento del calendario SIN).
 
@@ -113,7 +113,7 @@ presenta ante el SIN.
 1. **Completar la emisión SIAT** (trámite) — obligatorio para todos antes del 30-sep-2026 y necesario
    para facturar formalmente a clientes. [acción de Sergio]
 2. **Capturar crédito fiscal en las COMPRAS desde YA**, aunque todavía no se emita: cada gasto con
-   factura al NIT de ONIA acumula **saldo a favor de IVA** para cuando arranquen las ventas. Cuesta
+   factura al NIT de Onia acumula **saldo a favor de IVA** para cuando arranquen las ventas. Cuesta
    cero y es la palanca #1.
 3. Honorarios (Arthur/freelancers): con factura o retención correcta → deducibles para IUE.
 4. Separar personal vs empresa desde el primer boliviano.
@@ -123,7 +123,7 @@ Agente Finanzas (IVA/IT/IUE + crédito perdido), (c) activo los recordatorios.
 
 ## 7. Herramientas del exterior (Claude, ElevenLabs, Higgsfield, SaaS/IA) — investigado 2026-07-10
 
-Son las facturas que más gasta ONIA. Respuesta a "¿se pueden presentar?":
+Son las facturas que más gasta Onia. Respuesta a "¿se pueden presentar?":
 
 - **Crédito fiscal IVA (13%): NO.** No son facturas autorizadas por el SIN (sin CUF ni NIT
   boliviano) → no dan crédito fiscal. Ese 13% no se recupera por esa vía.
@@ -140,7 +140,7 @@ Son las facturas que más gasta ONIA. Respuesta a "¿se pueden presentar?":
   ElevenLabs y Higgsfield caen exactamente ahí; puede que ya te apliquen IVA/IT en el pago y/o que
   el proveedor deba registrarse ante el SIN. La **interacción entre este régimen y la retención
   IUE-BE es el punto más fino → validar con contador matriculado.**
-- **Práctica por proveedor:** cargar razón social + NIT de ONIA en el billing de cada herramienta
+- **Práctica por proveedor:** cargar razón social + NIT de Onia en el billing de cada herramienta
   (Anthropic/Stripe, ElevenLabs, Higgsfield lo permiten) y guardar invoice + comprobante. El
   sistema trackea cada pago al exterior con su retención.
 

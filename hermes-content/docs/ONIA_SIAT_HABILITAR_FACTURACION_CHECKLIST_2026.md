@@ -1,6 +1,6 @@
-# ONIA — Cómo seguir: habilitar la facturación en línea (checklist Oficina Virtual) 2026-07-10
+# Onia — Cómo seguir: habilitar la facturación en línea (checklist Oficina Virtual) 2026-07-10
 
-Objetivo: poder **emitir facturas de las ventas de ONIA**. Es la acción #1 de Sergio (gratis,
+Objetivo: poder **emitir facturas de las ventas de Onia**. Es la acción #1 de Sergio (gratis,
 online). El SEPREC NO bloquea esto (solo es la matrícula de comercio). Complementa
 `ONIA_OPTIMIZACION_FISCAL_PROPIA_2026.md` y el trámite técnico de emisor propio
 `onia-core/ONIA_SIAT_CERTIFICACION_PLAN_2026.md`.
@@ -16,8 +16,8 @@ online). El SEPREC NO bloquea esto (solo es la matrícula de comercio). Compleme
 
 | Camino | Qué es | Tiempo | Cuándo |
 |---|---|---|---|
-| **A. Portal Web en Línea** (recomendado YA) | Emitís facturas **manuales** desde la web del SIN. Sin sistema propio, sin certificado digital. | Inmediato | Para las primeras ventas de ONIA |
-| **B. Computarizada en Línea** (el producto de ONIA) | Tu **propio sistema** emite (CUIS/CUFD/CUF). Es lo que el padrón registró (PENDIENTE). | Necesita el emisor listo + **90 días de pruebas** | Cuando el emisor SIAT esté para piloto |
+| **A. Portal Web en Línea** (recomendado YA) | Emitís facturas **manuales** desde la web del SIN. Sin sistema propio, sin certificado digital. | Inmediato | Para las primeras ventas de Onia |
+| **B. Computarizada en Línea** (el producto de Onia) | Tu **propio sistema** emite (CUIS/CUFD/CUF). Es lo que el padrón registró (PENDIENTE). | Necesita el emisor listo + **90 días de pruebas** | Cuando el emisor SIAT esté para piloto |
 
 **Recomendación de contador:** arrancá con **A (Portal Web)** para poder facturar ya; el camino B
 sigue en desarrollo (dev) en paralelo y es el producto que después vendés.
@@ -25,7 +25,7 @@ sigue en desarrollo (dev) en paralelo y es el producto que después vendés.
 ## Checklist — Portal Web en Línea (camino A)
 
 1. **Entrar a la Oficina Virtual** del SIN (impuestos.gob.bo → "SIAT en Línea") con las
-   credenciales del NIT de ONIA.
+   credenciales del NIT de Onia.
 2. **Revisar que no haya marcas de riesgo tributario** activas (requisito Art. 19.d). Si hay
    alguna observación, resolverla primero.
 3. **Solicitar autorización de la modalidad "Portal Web en Línea"** en la opción correspondiente
@@ -35,7 +35,7 @@ sigue en desarrollo (dev) en paralelo y es el producto que después vendés.
 4. **Configurar Casa Matriz / sucursal (0)** y **al menos un Punto de Venta**.
 5. **Registrar productos/servicios y clientes**, y **sincronizar catálogos** (actividades,
    leyendas, unidades). Homologar tus servicios (ej. "desarrollo de software / servicios en la nube").
-6. **Emitir una factura de prueba** (a un cliente real o a ONIA misma) y verificar que **valida**,
+6. **Emitir una factura de prueba** (a un cliente real o a Onia misma) y verificar que **valida**,
    que llega el **PDF** y que el **XML** queda registrado en el SIN.
 
 Datos a tener a mano: NIT 5371375010 · razón social LESLIE MERCADO MORENO · actividades arriba ·
@@ -51,7 +51,7 @@ correo del negocio · datos del cliente (NIT/CI + razón social).
 - **Vencimientos:** con último dígito de NIT **0**, el estándar del calendario SIN es el **día 13
   del mes siguiente** para las declaraciones mensuales (IVA F-200 / IT F-400). ⚠️ CONFIRMAR contra
   el calendario/RND vigente antes de fijarlo como recordatorio automático.
-- **Ojo (contador):** como el NIT ya está activo, ONIA **ya tiene obligación de declarar mensual
+- **Ojo (contador):** como el NIT ya está activo, Onia **ya tiene obligación de declarar mensual
   aunque sea en cero** — no depende de emitir. Confirmá desde qué período estás obligado para no
   acumular multas por omisión.
 
@@ -59,7 +59,7 @@ correo del negocio · datos del cliente (NIT/CI + razón social).
 - La UI exacta de la Oficina Virtual puede variar; los pasos siguen la modalidad oficial "Portal
   Web en Línea" del SIAT. Confirmá cada opción en pantalla.
 - No es asesoría contable definitiva: la elección de modalidad y el alta se validan en la Oficina
-  Virtual / con contador matriculado. ONIA deja el camino y el tracking listos.
+  Virtual / con contador matriculado. Onia deja el camino y el tracking listos.
 
 ## Fuentes
 - SIAT — Portal Web en Línea: https://siatinfo.impuestos.gob.bo/index.php/informacion/modalidades-facturacion/facturacion-portal-web

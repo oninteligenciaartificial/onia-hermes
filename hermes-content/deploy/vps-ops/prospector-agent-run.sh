@@ -14,7 +14,7 @@ CATEGORY="${PROSPECTOR_CATEGORY:-dental}"
 LIMIT="${PROSPECTOR_LIMIT:-8}"
 DRY="${PROSPECTOR_DRY_RUN:-false}"
 ONLY_NO_WEB="${PROSPECTOR_ONLY_NO_WEB:-true}"
-MODEL="${PROSPECTOR_MODEL:-gpt-4o-mini}"
+MODEL="${PROSPECTOR_MODEL:-gpt-4.1-mini}"
 
 # LiteLLM master key (opcional: si no está, el agente cae a heurística sin LLM).
 MK=$(docker exec onia_selfhosted-litellm-1 printenv LITELLM_MASTER_KEY 2>/dev/null || true)

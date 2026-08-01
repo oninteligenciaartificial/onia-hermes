@@ -1,7 +1,7 @@
 # ONIA Core
 
 Estado: beta canonico (v0.7.1), instalando en DentalGest y GestiOS.
-Owner: ONIA / Hermes.
+Owner: Onia / Hermes.
 
 > Beta contract cerrado: se agregaron las 8 piezas transversales
 > (BusinessPartner, RoleAssignment, Comment, Document, ApprovalRequest,
@@ -21,7 +21,7 @@ Owner: ONIA / Hermes.
 > DEFINICION (vocabulario/checklists/KPIs/gaps), no de desarrollo.
 
 ONIA Core es el nucleo de organizacion operativa que despues se instalara en
-los sistemas de ONIA: GestiOS, DentalGest y Ganadero OS.
+los sistemas de Onia: GestiOS, DentalGest y Ganadero OS.
 
 ## Regla principal
 

@@ -1,0 +1,6 @@
+# Los scripts de las skills se ejecutan con bash (Git Bash local y el host del VPS).
+# Con CRLF, bash falla con "\r: command not found" y el script queda inservible.
+# Alcance acotado a .claude/skills/ — no toca el resto del repo.
+*.sh text eol=lf
+*.mjs text eol=lf
+*.py text eol=lf

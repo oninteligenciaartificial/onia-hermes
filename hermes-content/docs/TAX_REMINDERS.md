@@ -1,7 +1,7 @@
 # Tax Reminders
 
 ## Objetivo
-Ayudar a ONIA a recordar obligaciones fiscales de Bolivia sin inventar fechas ni reemplazar validacion contable.
+Ayudar a Onia a recordar obligaciones fiscales de Bolivia sin inventar fechas ni reemplazar validacion contable.
 
 ## Comandos
 - `Recordatorios fiscales ONIA`

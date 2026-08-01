@@ -1,8 +1,8 @@
-# ONIA Plan de Ventas 90 Dias — H2 2026 (jul-sep)
+# Onia Plan de Ventas 90 Dias — H2 2026 (jul-sep)
 
 Fecha: 2026-07-04. Vigencia: 06-jul-2026 al 03-oct-2026.
 Estado: plan comercial canonico de 90 dias, fase sin portafolio.
-Owner: Sergio / ONIA. Copiloto: Hermes.
+Owner: Sergio / Onia. Copiloto: Hermes.
 Fuentes: `hermes-content/references/onia-projects-registry.json` (precios y
 comisiones — NO se inventan otros), `ONIA_FISCAL_CONTABILIDAD_STRATEGY_2026.md`,
 `ONIA_COMPANY_BACKBONE_AND_SELF_SERVICE_2026.md`,
@@ -19,7 +19,7 @@ Tres shocks golpean a TODA empresa boliviana al mismo tiempo:
 | Dolar flotante (RM 245/2026) | 26-jun-2026 | Reprecios constantes; cotizacion vieja = margen perdido |
 | Arancel nuevo + GA -5pts (DS 5646) | 06-jul-2026 | Costos de importacion cambian; hay que recalcular |
 
-El caos es el gancho. ONIA no vende "software": vende el orden para
+El caos es el gancho. Onia no vende "software": vende el orden para
 sobrevivir 2026. Pitch madre (columna vertebral):
 
 > "Ningun mensaje de tu empresa vuelve a quedar sin responsable. Todo lo que
@@ -38,17 +38,17 @@ Pitch de 2 frases por producto:
 - **ProveeGest**: "Con el dolar flotando y arancel nuevo desde julio, cada
   cotizacion vieja es margen regalado. ProveeGest ordena catalogo, cotizaciones
   y seguimiento por vendedor y sucursal para que repreciar no sea adivinar."
-- **Web ONIA**: "Si no apareces en Google con una oferta clara, el cliente
-  compra donde si aparece. Una web ONIA captura consultas y las convierte en
+- **Web Onia**: "Si no apareces en Google con una oferta clara, el cliente
+  compra donde si aparece. Una web Onia captura consultas y las convierte en
   pendientes con responsable desde el dia uno."
-- **Consultoria ONIA**: "Te llueven obligaciones nuevas y no sabes que sistema
+- **Consultoria Onia**: "Te llueven obligaciones nuevas y no sabes que sistema
   comprar. Una auditoria de Bs. 250 te dice que instalar primero y que NO
   comprar."
 - **Contador Pack** (add-on, para el contador): "Tus clientes te mandan fotos y
-  carpetas; ONIA te manda el RCV listo. Exports mensuales estandar y calendario
+  carpetas; Onia te manda el RCV listo. Exports mensuales estandar y calendario
   por digito de NIT de cada cliente."
 
-Honestidad dura: ONIA todavia NO emite facturacion en linea (certificacion
+Honestidad dura: Onia todavia NO emite facturacion en linea (certificacion
 SIAT proveedor en estudio, piloto por venir). El gancho fiscal se vende como
 orden + Contador Pack + roadmap; el modulo SIAT se menciona "en piloto", nunca
 como incluido.
@@ -99,8 +99,8 @@ Incentivo del contador aliado (usa reglas de comision YA vigentes):
    comision de la tabla del registry (ej. DentalGest Basico Bs. 112, GestiOS
    Basico Bs. 122,50 — 35% de la primera mensualidad neta, una sola vez).
 2. **Contador Pack gratis**: acceso sin costo a exports RCV, resumen IVA/IT y
-   calendario por NIT de TODOS sus clientes que usen ONIA, mientras tenga al
-   menos 1 referido activo. Su herramienta de trabajo queda atada a ONIA.
+   calendario por NIT de TODOS sus clientes que usen Onia, mientras tenga al
+   menos 1 referido activo. Su herramienta de trabajo queda atada a Onia.
 3. **Upsells**: si luego vende web o implementacion al mismo cliente, cobra la
    comision de esa nueva venta (regla CRM existente). Sin comision recurrente
    por mensualidades futuras.
@@ -189,7 +189,7 @@ Decisiones calendarizadas para Sergio:
 > desordenados. Tenemos algo pensado para vos, no para reemplazarte: nuestros
 > sistemas exportan el RCV de compras/ventas y el resumen IVA/IT listos cada
 > mes, con calendario por digito de NIT. Para contadores aliados el pack es
-> gratis, y por cada cliente tuyo que active un sistema ONIA cobras la comision
+> gratis, y por cada cliente tuyo que active un sistema Onia cobras la comision
 > de esa venta (ej. Bs. 112-525 segun plan). Te muestro un export de ejemplo?"
 
 Reglas de guion: senal real verificada antes de escribir; nada de "ventas
@@ -221,7 +221,7 @@ se corrige, que se abandona). Todo lo demas es ejecucion del motor.
 2. WhatsApp automatico bloqueado hasta verificacion Meta; SIAT y TR4 son
    integraciones gated — se venden como piloto/roadmap, nunca como incluidas.
 3. Precios y comisiones: solo los del registry. Descuentos fuera de oferta
-   requieren aprobacion de ONIA.
+   requieren aprobacion de Onia.
 4. Dominio, hosting y costos de terceros a cargo del cliente, a su nombre.
 5. Plantillas internas = confidencial. No fabricar datos: donde no hay dato,
    se pide o se marca "estimacion".

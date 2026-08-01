@@ -1,12 +1,25 @@
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
-import { Bricolage_Grotesque, DM_Sans, Spline_Sans_Mono } from "next/font/google";
+import { Archivo, Bricolage_Grotesque, DM_Sans, Spline_Sans_Mono } from "next/font/google";
 import { MotionProvider } from "@/motion";
 import "./globals.css";
 
 const bricolage = Bricolage_Grotesque({
   subsets: ["latin"],
   variable: "--font-display",
+  display: "swap",
+});
+
+/**
+ * Titular grande condensado. Variable con eje de ancho (wdth 62-125), asi que
+ * el condensed pesado sale del mismo archivo: cero peso extra por corte.
+ * Es el sustituto libre (OFL) del Akzidenz-Grotesk Next Cnd de Fanvue.
+ * Sistema completo: web-factory/docs/TIPOGRAFIA_SISTEMA_20260727.md
+ */
+const archivo = Archivo({
+  subsets: ["latin"],
+  axes: ["wdth"],
+  variable: "--font-display-cnd",
   display: "swap",
 });
 
@@ -64,7 +77,7 @@ export default function RootLayout({
     <html
       lang="es"
       suppressHydrationWarning
-      className={`${bricolage.variable} ${dmSans.variable} ${splineMono.variable}`}
+      className={`${bricolage.variable} ${archivo.variable} ${dmSans.variable} ${splineMono.variable}`}
     >
       <body>
         <script dangerouslySetInnerHTML={{ __html: themeInit }} />

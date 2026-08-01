@@ -1,8 +1,8 @@
-# ONIA Catalogo Comercial 2026 — EL MAPA UNICO DE VENTA (v2)
+# Onia Catalogo Comercial 2026 — EL MAPA UNICO DE VENTA (v2)
 
 Fecha: 2026-07-04 (v2 — repricing con ancla real TR4 ~USD 20.000).
 Estado: documento maestro de empaquetado. Manda sobre lo comercial.
-Owner: ONIA / Sergio.
+Owner: Onia / Sergio.
 
 ## 0. Las reglas que ordenan todo
 
@@ -26,10 +26,10 @@ Owner: ONIA / Sergio.
 | # | Producto | Rubro | Estado venta |
 |---|---|---|---|
 | 1 | **DentalGest** | Clinicas dentales | ✅ vender YA |
-| 2 | **ProveeGest** | Importadoras/distribuidoras B2B | ✅ via ONIA Empresarial (BE = caso fundador) |
+| 2 | **ProveeGest** | Importadoras/distribuidoras B2B | ✅ via Onia Empresarial (BE = caso fundador) |
 | 3 | **GestiOS** | Pymes servicios/comercio | ✅ vender |
 | 4 | Ganadero OS | Agro | ⏸️ pausado (decision) |
-| 5 | Webs ONIA | Todos | ✅ puerta de entrada |
+| 5 | Webs Onia | Todos | ✅ puerta de entrada |
 | — | ONIA Core | motor interno | ❌ nunca se vende solo |
 
 ## 2. Planes pymes (Bs/mes por sucursal — TODO INCLUIDO por nivel)
@@ -62,7 +62,7 @@ regla 2: conversaciones WhatsApp API de Meta, y si el SIN cobrara algo por
 volumen. Implementacion unica: Ordenado Bs 490 / Profesional Bs 1.490 /
 Empresa Bs 3.900 (carga guiada + wizard + capacitacion).
 
-## 3. ONIA EMPRESARIAL (enterprise, cotizado en USD — ancla TR4 $20k)
+## 3. Onia EMPRESARIAL (enterprise, cotizado en USD — ancla TR4 $20k)
 
 El modelo Bolivian Electric productizado. Para empresas robustas que
 "quieren ver absolutamente TODO": multi-sucursal real, sistemas propios,
@@ -75,7 +75,7 @@ automatizaciones a medida en n8n (tipo de cambio -> reprecios con
 aprobacion, radar normativo del rubro, correos multi-sucursal ruteados) +
 **Hermes ejecutivo por Telegram** (gerencia consulta y ordena: /pendientes,
 /crm, /tarea) + bot WhatsApp con IA + SLA de vendedores con aviso a
-gerencia + usuarios ilimitados + gestion mensual ONIA (operamos,
+gerencia + usuarios ilimitados + gestion mensual Onia (operamos,
 monitoreamos, actualizamos ante cada RND).
 
 | Escala | Implementacion (unica) | Suscripcion |
@@ -116,7 +116,7 @@ Lo que las empresas necesitan vs donde estamos:
 | Automatizaciones (FX diario, radar normativo) | ✅ vivas en n8n | radar -> WorkItem automatico via intake | Q3 |
 | **Inventario MUY detallado** | basico en Dental/GestiOS | multi-almacen, lotes/vencimientos, kardex promedio ponderado (norma BO), conteos fisicos, integracion landed-cost | **Q3 — siguiente sprint grande (GestiOS/ProveeGest)** |
 | Bots WhatsApp | patron BE construido | productizar: config por org (ya hay whatsappAddon + wizard) | Q3 |
-| **Facturacion SIAT** | gated | certificacion proveedor (prerequisito: NIT ONIA) | **Q3 — antes del 30-sep** |
+| **Facturacion SIAT** | gated | certificacion proveedor (prerequisito: NIT Onia) | **Q3 — antes del 30-sep** |
 | Hermes en productos | 5 integraciones disenadas | /tarea y /dentalgest primero (usa intake vivo) | Q3 |
 | **Contabilidad** | estrategia 4 capas | capa 3 lista (Contador Pack); estados financieros basicos (balance de comprobacion exportable) en Empresa+; contabilidad plena SOLO si un segmento la paga (capa 4, 2027) | Q4 eval |
 | Puentes a ERPs (TR4-style) | disenado (planillas/tunel) | primera implementacion real con BE | con BE |
@@ -132,7 +132,7 @@ Entrada por dolor del rubro -> demo org demo -> plan 1-2 + implementacion
 ```
 
 1. DentalGest venta directa YA (cuota 90d).
-2. BE fase 1 cerrado = nace ONIA Empresarial con precio ancla real.
+2. BE fase 1 cerrado = nace Onia Empresarial con precio ancla real.
 3. GestiOS con contadores aliados (35% primera mensualidad + Pack gratis).
 4. Certificacion SIAT antes del 30-sep (deadline legal = pitch).
 5. Sprint inventario detallado (habilita ProveeGest completo).
@@ -146,4 +146,4 @@ Entrada por dolor del rubro -> demo org demo -> plan 1-2 + implementacion
       (4.900 + 490/mes) ofertable desde hoy; E2/E3 quedan como referencia y se
       calibran con el cierre de BE fase 1 (no firmar E2/E3 sin recotizar).
 - [ ] Ganadero OS: pausa formal o rescate.
-- [ ] Iniciar tramite NIT ONIA (prerequisito SIAT).
+- [ ] Iniciar tramite NIT Onia (prerequisito SIAT).

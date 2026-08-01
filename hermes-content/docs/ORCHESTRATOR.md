@@ -4,7 +4,7 @@
 
 Este archivo define como debe actuar un agente tecnico/orquestador dentro de
 Hermes antes de tocar documentacion, contenido, scripts, automatizaciones,
-publicaciones, secretos, VPS, Notion, n8n o materiales comerciales de ONIA.
+publicaciones, secretos, VPS, Notion, n8n o materiales comerciales de Onia.
 
 La regla principal es:
 
@@ -119,7 +119,7 @@ El plan debe indicar:
 Para materiales de vendedores:
 
 - Mostrar solo lo que gana el vendedor.
-- No mostrar margen, retencion ni costos internos de ONIA.
+- No mostrar margen, retencion ni costos internos de Onia.
 - Indicar si la comision es inicial.
 - Indicar que la comision puede subir por buen trabajo, rol o aprobacion.
 - Indicar que sin datos completos en Notion la comision queda pendiente.

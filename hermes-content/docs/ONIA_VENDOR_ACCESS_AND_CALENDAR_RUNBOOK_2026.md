@@ -1,11 +1,11 @@
-# ONIA Vendor Access and Calendar Runbook 2026
+# Onia Vendor Access and Calendar Runbook 2026
 
 Estado: operativo en dominio publico, con usuario vendedor inicial creado.
 Fecha: 2026-06-28
 
 ## Decision
 
-La vendedora no recibe acceso al correo principal de ONIA.
+La vendedora no recibe acceso al correo principal de Onia.
 
 - Correo publico: `business@onia.com.bo`.
 - Cuenta operativa de agenda: `business@onia.com.bo` cuando Sergio confirme acceso directo.
@@ -29,8 +29,8 @@ Si una contrasena fue compartida por chat, tratarla como expuesta:
 
 ## Acceso de la vendedora
 
-La vendedora entra con su propio usuario de ONIA Center, no con el correo de
-ONIA.
+La vendedora entra con su propio usuario de Onia Center, no con el correo de
+Onia.
 
 Ruta:
 
@@ -60,7 +60,7 @@ npm run onia-center:auth-user -- --email "vendedora@onia.com.bo" --password-env 
 ```
 
 Si todavia no existe `vendedora@onia.com.bo`, usar temporalmente un correo
-personal de ella, pero el sistema debe mostrarla como ONIA Comercial.
+personal de ella, pero el sistema debe mostrarla como Onia Comercial.
 
 ## Que ve
 
@@ -91,8 +91,8 @@ No puede ver:
 
 La agenda se maneja en dos capas:
 
-1. Solicitud interna en ONIA Center.
-2. Confirmacion real en Cal/Google Calendar despues de aprobacion de ONIA.
+1. Solicitud interna en Onia Center.
+2. Confirmacion real en Cal/Google Calendar despues de aprobacion de Onia.
 
 En el formulario de lead se registra:
 
@@ -130,21 +130,21 @@ La vendedora no debe administrar Cal con la cuenta principal.
 MVP:
 
 - Sergio/ONIA aprueba reuniones.
-- La vendedora ve sus llamadas desde ONIA Center.
-- Si necesita bloquear horario, se registra en ONIA Center o calendario
+- La vendedora ve sus llamadas desde Onia Center.
+- Si necesita bloquear horario, se registra en Onia Center o calendario
   compartido.
 
 Version profesional:
 
 - Crear `ventas@onia.com.bo` o `vendedora@onia.com.bo`.
-- Usar Cal Teams si ONIA necesita cuentas separadas, round-robin o eventos por
+- Usar Cal Teams si Onia necesita cuentas separadas, round-robin o eventos por
   persona.
 
 ## Bloqueos actuales
 
 - Falta configurar event types finales dentro de Cal.
 - Falta conectar Google Calendar real y probar disponibilidad.
-- Falta conectar webhook Cal -> n8n -> ONIA Center -> Telegram.
+- Falta conectar webhook Cal -> n8n -> Onia Center -> Telegram.
 - Falta confirmar acceso directo y 2FA de `business@onia.com.bo`.
 
 ## Checklist de activacion
@@ -158,4 +158,4 @@ Version profesional:
 7. Probar login de la vendedora en `/onia-center/equipo`. Hecho por API.
 8. Crear lead de prueba asignado a vendedora.
 9. Verificar que Sergio ve todo y vendedora solo ve lo suyo.
-10. Conectar webhook Cal -> n8n -> ONIA Center -> Telegram.
+10. Conectar webhook Cal -> n8n -> Onia Center -> Telegram.

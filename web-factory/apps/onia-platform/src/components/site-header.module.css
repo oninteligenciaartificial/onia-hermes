@@ -121,3 +121,13 @@
     display: none;
   }
 }
+
+.ctaLargo {
+  display: none;
+}
+
+@media (min-width: 400px) {
+  .ctaLargo {
+    display: inline;
+  }
+}

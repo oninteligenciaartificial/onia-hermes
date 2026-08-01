@@ -1,7 +1,7 @@
-# ONIA Projects Orchestration
+# Onia Projects Orchestration
 
 ## Objetivo
-Convertir Hermes en el centro de mando comercial de ONIA para decidir que
+Convertir Hermes en el centro de mando comercial de Onia para decidir que
 vender, a quien, con que contenido, por que canal y con que aprobacion.
 
 Hermes coordina. n8n ejecuta flujos. Los proyectos entregan valor. Sergio
@@ -13,10 +13,10 @@ aprueba acciones client-facing.
 |---|---|---|---|---|
 | DentalGest | `C:\dev\Proyectos\dental-saas` | SaaS vertical para clinicas dentales | Clinicas dentales de Bolivia | CRM, agenda, seguimiento, recordatorios y demo |
 | Gesti-OS | `C:\dev\Proyectos\Gestios` | Sistema operativo de gestion empresarial | Pymes con operaciones en Excel o WhatsApp | Tareas, clientes, estados, reportes y visibilidad |
-| Web ONIA | `C:\dev\Proyectos\Web-Onia` | Sitio y vitrina de ONIA | Prospectos que investigan antes de comprar | Autoridad, portfolio, landing y captacion |
-| Paginas web ONIA | por cliente | Servicio cash-flow | Negocios locales y profesionales | Landing/web + formulario + seguimiento |
+| Web Onia | `C:\dev\Proyectos\Web-Onia` | Sitio y vitrina de Onia | Prospectos que investigan antes de comprar | Autoridad, portfolio, landing y captacion |
+| Paginas web Onia | por cliente | Servicio cash-flow | Negocios locales y profesionales | Landing/web + formulario + seguimiento |
 | Marketing Higgsfield | Hermes Video Lab | Pausado como oferta principal | Uso interno y muestras aprobadas | No vender videos IA por ahora |
-| Consultoria ONIA | `hermes-content/docs/ONIA_CONSULTING_SERVICES_2026.md` | Diagnostico, instalacion y acompanamiento | Negocios que necesitan ordenar procesos antes de comprar herramientas | Auditoria, roadmap, instalacion, capacitacion y soporte consultivo |
+| Consultoria Onia | `hermes-content/docs/ONIA_CONSULTING_SERVICES_2026.md` | Diagnostico, instalacion y acompanamiento | Negocios que necesitan ordenar procesos antes de comprar herramientas | Auditoria, roadmap, instalacion, capacitacion y soporte consultivo |
 | AlfredHQ | `C:\dev\Proyectos\AlfredHQ` | Sistema/experimento interno | Uso interno | Evaluar antes de vender |
 
 ## Escalera comercial
@@ -37,7 +37,7 @@ cobrados:
 - Gesti-OS: Bs. 350, Bs. 530, Bs. 800 y Bs. 1250/mes.
 - Landing: Bs. 790.
 - Web Negocio: Bs. 1500.
-- Web Pro ONIA: Bs. 2900.
+- Web Pro Onia: Bs. 2900.
 - Portal o sistema web mini: desde Bs. 6500.
 - Auditoria Express: Bs. 250.
 - Diagnostico + Plan: Bs. 690.
@@ -78,7 +78,7 @@ Paginas web:
 
 - Landing Express: Bs. 790.
 - Web Negocio: Bs. 1500.
-- Web Pro ONIA: Bs. 2900.
+- Web Pro Onia: Bs. 2900.
 - SaaS / portal personalizado mini: desde Bs. 6500.
 - Care plan: Bs. 190, Bs. 390 o Bs. 690/mes.
 
@@ -99,7 +99,7 @@ Consultoria e implementaciones:
 - Instalacion Starter: Bs. 1900.
 - Implementacion Operativa: Bs. 3900-6500.
 - Acompanamiento Consultivo: Bs. 1200-2900/mes.
-- Transformacion ONIA: desde Bs. 9500.
+- Transformacion Onia: desde Bs. 9500.
 
 Referencia canonica: `ONIA_PRICING_2026.md`.
 

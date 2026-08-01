@@ -1,8 +1,8 @@
-# ONIA Stack Assessment 2026
+# Onia Stack Assessment 2026
 
 Fecha: 2026-07-03.
 Estado: evaluacion de arquitectura verificada contra los repos reales.
-Owner: ONIA / Hermes.
+Owner: Onia / Hermes.
 
 ## Veredicto
 

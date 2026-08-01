@@ -1,7 +1,7 @@
 # Hermes Closed Execution And Continuous Work 2026
 
 Estado: regla operativa.
-Owner: ONIA / Hermes.
+Owner: Onia / Hermes.
 
 ## Regla
 

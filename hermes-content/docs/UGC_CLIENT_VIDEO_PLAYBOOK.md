@@ -1,6 +1,6 @@
 # UGC And Client Video Playbook
 
-This playbook tells Hermes how to create UGC-style videos for ONIA clients and
+This playbook tells Hermes how to create UGC-style videos for Onia clients and
 businesses without making fake or risky claims.
 
 ## What UGC Means Here
@@ -132,7 +132,7 @@ every 3-5 seconds. Avoid fake testimonials, copyrighted logos, third-party
 likeness, unrealistic claims, and placeholder text.
 ```
 
-## ONIA Prompt Builder
+## Onia Prompt Builder
 
 For better Higgsfield results, build prompts from reusable blocks instead of one
 generic paragraph.
@@ -167,7 +167,7 @@ Ready characters:
 - `practical_friend`: ecommerce, product demos, services, gym.
 - `trusted_operator`: clinics, aesthetics, health-safe content, SaaS.
 - `local_explorer`: restaurants, tourism, real estate, local discovery.
-- `founder_builder`: ONIA, Sergio, founders and B2B software.
+- `founder_builder`: Onia, Sergio, founders and B2B software.
 
 Ready scenographies:
 
@@ -214,7 +214,7 @@ Hermes can package client videos as:
 - 1 caption pack
 - 1 revision round
 
-For ONIA upsell:
+For Onia upsell:
 
 - video + landing page
 - video + WhatsApp automation

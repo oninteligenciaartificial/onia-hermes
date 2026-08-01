@@ -1,0 +1,202 @@
+<!doctype html>
+<html
+  lang="es"
+  data-composition-variables='[
+    {"id":"image","type":"string","label":"Imagen (ruta; render.mjs la copia al proyecto)","default":""},
+    {"id":"texto","type":"string","label":"Palabra clave","default":"155 DÍAS"},
+    {"id":"pie","type":"string","label":"Pie (opcional)","default":""},
+    {"id":"zoomDesde","type":"string","label":"Zoom inicial","default":"1.00"},
+    {"id":"zoomHasta","type":"string","label":"Zoom final","default":"1.12"},
+    {"id":"origen","type":"string","label":"Origen del zoom: centro|arriba|abajo","default":"centro"},
+    {"id":"encuadre","type":"string","label":"cubrir (llena el cuadro) | entero (se ve completo)","default":"cubrir"},
+    {"id":"accent","type":"color","label":"Acento","default":"#00D26A"}
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <title>ONIA · Escena</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      /* EL PLANO COMPLETO, no una tarjeta sobre la cara.
+         Verificado cuadro por cuadro sobre el reel de @human___academy (2026-07-31): sus
+         "escenas animadas" NO son video generado — entre 1.70s y 2.10s la pintura es
+         IDENTICA (pliegues, manos, caras del publico). Lo unico que cambia es un zoom lento
+         y el texto. O sea: imagen fija + ken burns + texto cinetico, todo por codigo.
+         Cuesta 1.25 creditos (la imagen) contra 7.5 de un clip generado. */
+      @font-face {
+        font-family: "Bricolage Grotesque";
+        src: url("fonts/BricolageGrotesque-var-latin.woff2") format("woff2");
+        font-weight: 500 700; font-style: normal; font-display: block;
+      }
+      @font-face {
+        font-family: "DM Sans";
+        src: url("fonts/DMSans-var-latin.woff2") format("woff2");
+        font-weight: 400 500; font-style: normal; font-display: block;
+      }
+      *, *::before, *::after { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; width: 1080px; height: 1920px; overflow: hidden; background: transparent; }
+
+      #stage {
+        position: relative; width: 1080px; height: 1920px;
+        --stage-w: 1080; --stage-h: 1920;
+        --u: calc(var(--stage-w) / 1000 * 1px);
+        --accent: #00d26a;
+        --ink: #0a0f0d;
+        --surface: #f4f5f2;
+        --ink-text: #f6f8fb;
+        --font-display: "Bricolage Grotesque", sans-serif;
+        --font-body: "DM Sans", sans-serif;
+        font-family: var(--font-body);
+      }
+      .fill { position: absolute; inset: 0; overflow: hidden; background: var(--surface); }
+
+      /* La imagen se mueve con transform (compositor), nunca con width/height:
+         animar layout es justo lo que la motion-doctrine prohibe. */
+      .lienzo {
+        position: absolute; inset: 0;
+        display: flex; align-items: center; justify-content: center;
+        will-change: transform;
+      }
+      .lienzo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+      /* "entero": un diagrama recortado deja de ser un diagrama. Se ve completo sobre el
+         off-white de marca, con aire abajo para que el texto no le pise el dibujo. */
+      .lienzo.entero img { object-fit: contain; padding: calc(var(--u) * 40) calc(var(--u) * 40) calc(var(--u) * 300); }
+      .lienzo.sin-imagen { background: var(--surface); }
+
+      /* Viñeta: sin esto el texto compite con el dibujo justo donde apoya. */
+      .vineta {
+        position: absolute; inset: 0; pointer-events: none;
+        background: linear-gradient(180deg, rgba(10,15,13,0) 46%, rgba(10,15,13,.72) 88%);
+      }
+
+      .texto {
+        position: absolute; left: calc(var(--u) * 60); right: calc(var(--u) * 60);
+        bottom: calc(var(--u) * 210);
+      }
+      .palabra {
+        display: inline-block; position: relative;
+        font-family: var(--font-display); font-weight: 700;
+        font-size: calc(var(--u) * 92); line-height: 0.96;
+        letter-spacing: calc(var(--u) * -1.6);
+        text-transform: uppercase; color: var(--ink-text);
+      }
+      /* El acento subraya, no rellena (regla 60-30-10 de la marca). */
+      .subrayado {
+        position: absolute; left: 0; right: 0; bottom: calc(var(--u) * -6);
+        height: calc(var(--u) * 9); background: var(--accent);
+        clip-path: inset(0 calc(var(--wipe, 100) * 1%) 0 0);
+        border-radius: 999px;
+      }
+      .pie {
+        margin-top: calc(var(--u) * 16);
+        font-size: calc(var(--u) * 19); letter-spacing: calc(var(--u) * 1.8);
+        text-transform: uppercase; color: rgba(246,248,251,.78);
+      }
+      .pie:empty { display: none; }
+    </style>
+  </head>
+  <body>
+    <div
+      id="stage"
+      data-composition-id="escena"
+      data-theme="dark"
+      data-start="0"
+      data-duration="3.6"
+      data-fps="30"
+      data-width="1080"
+      data-height="1920"
+    >
+      <div id="es-clip" class="clip" data-start="0" data-duration="3.6" data-track-index="0">
+        <div class="fill">
+          <div class="lienzo" id="es-lienzo"><img id="es-img" alt="" /></div>
+          <div class="vineta"></div>
+          <div class="texto" id="es-texto">
+            <span class="palabra" id="es-palabra">155 DÍAS<span class="subrayado" id="es-sub"></span></span>
+            <div class="pie" id="es-pie"></div>
+          </div>
+        </div>
+      </div>
+
+      <script>
+        (function () {
+          function cubicBezier(x1, y1, x2, y2) {
+            var A = function (a, b) { return 1 - 3 * b + 3 * a; };
+            var B = function (a, b) { return 3 * b - 6 * a; };
+            var C = function (a) { return 3 * a; };
+            var sx = function (t) { return ((A(x1, x2) * t + B(x1, x2)) * t + C(x1)) * t; };
+            var sy = function (t) { return ((A(y1, y2) * t + B(y1, y2)) * t + C(y1)) * t; };
+            var slope = function (t) { return 3 * A(x1, x2) * t * t + 2 * B(x1, x2) * t + C(x1); };
+            return function (x) {
+              if (x <= 0) return 0; if (x >= 1) return 1;
+              var t = x;
+              for (var i = 0; i < 8; i++) { var d = sx(t) - x, dx = slope(t); if (Math.abs(dx) < 1e-7) break; t -= d / dx; }
+              var lo = 0, hi = 1; t = x;
+              while (hi - lo > 1e-7) { if (sx(t) < x) lo = t; else hi = t; t = (hi + lo) / 2; }
+              return sy(t);
+            };
+          }
+          gsap.registerEase("oniaOutExpo", cubicBezier(0.16, 1, 0.3, 1));
+          gsap.registerEase("oniaOutQuart", cubicBezier(0.25, 1, 0.5, 1));
+
+          var stage = document.getElementById("stage");
+          var FPS = Number(stage.dataset.fps) || 30;
+          var DUR = Number(stage.dataset.duration) || 3.6;
+          var TOTAL = Math.max(1, Math.round(DUR * FPS));
+          document.getElementById("es-clip").dataset.duration = String(DUR);
+
+          function readVars() {
+            var decls = [];
+            try { decls = JSON.parse(document.documentElement.dataset.compositionVariables || "[]"); } catch (e) { decls = []; }
+            var out = {};
+            for (var i = 0; i < decls.length; i++) out[decls[i].id] = decls[i].default;
+            var live = window.__hyperframes && typeof window.__hyperframes.getVariables === "function"
+              ? window.__hyperframes.getVariables() : null;
+            if (live) for (var k in out) if (live[k] !== undefined && live[k] !== null) out[k] = live[k];
+            return out;
+          }
+          var V = readVars();
+          if (V.accent) stage.style.setProperty("--accent", String(V.accent));
+          var img = document.getElementById("es-img");
+          var src = String(V.image || "");
+          if (src) img.src = src;
+          else { img.remove(); document.getElementById("es-lienzo").classList.add("sin-imagen"); }
+          if (String(V.encuadre || "cubrir") === "entero") document.getElementById("es-lienzo").classList.add("entero");
+          document.getElementById("es-palabra").firstChild.nodeValue = String(V.texto || "");
+          document.getElementById("es-pie").textContent = String(V.pie || "");
+
+          var z0 = Number(V.zoomDesde) || 1.0;
+          var z1 = Number(V.zoomHasta) || 1.12;
+          var origen = { centro: "50% 50%", arriba: "50% 22%", abajo: "50% 78%" }[String(V.origen || "centro")] || "50% 50%";
+          var lienzo = document.getElementById("es-lienzo");
+          lienzo.style.transformOrigin = origen;
+
+          var tl = gsap.timeline({ paused: true });
+
+          // KEN BURNS: lineal a proposito. Una curva ease aca se lee como "arranca y frena",
+          // y el plano tiene que sentirse como una camara que NO para en los 3.6s.
+          tl.fromTo(lienzo, { scale: z0 }, { scale: z1, duration: DUR, ease: "none" }, 0);
+
+          // La palabra entra despues del plano (0.25s): primero se ve QUE es, despues QUE dice.
+          var enterF = Math.max(1, Math.round(0.22 * FPS));
+          var exitF = Math.max(1, Math.round(0.2 * FPS));
+          var exitAt = Math.max(0.25 + enterF / FPS, (TOTAL - exitF) / FPS);
+          var texto = document.getElementById("es-texto");
+          gsap.set(texto, { autoAlpha: 0 });
+          tl.set(texto, { autoAlpha: 1 }, 0.25);
+          tl.fromTo(texto, { y: "calc(var(--u) * 22)" }, { y: 0, duration: enterF / FPS, ease: "oniaOutExpo" }, 0.25);
+
+          var wipe = { v: 100 };
+          tl.to(wipe, {
+            v: 0, duration: Math.max(1, Math.round(0.3 * FPS)) / FPS, ease: "oniaOutExpo",
+            onUpdate: function () { stage.style.setProperty("--wipe", wipe.v); },
+          }, 0.34);
+
+          tl.to(texto, { autoAlpha: 0, y: "calc(var(--u) * -12)", duration: exitF / FPS, ease: "oniaOutQuart" }, exitAt);
+
+          window.__timelines = window.__timelines || {};
+          window.__timelines["escena"] = tl;
+        })();
+      </script>
+    </div>
+  </body>
+</html>

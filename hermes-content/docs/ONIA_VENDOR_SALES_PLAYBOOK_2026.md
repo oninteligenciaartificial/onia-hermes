@@ -1,8 +1,8 @@
-# ONIA Vendor Sales Playbook 2026
+# Onia Vendor Sales Playbook 2026
 
 ## Veredicto
 
-ONIA vende sistemas de crecimiento, no piezas sueltas. El vendedor debe detectar
+Onia vende sistemas de crecimiento, no piezas sueltas. El vendedor debe detectar
 perdida de oportunidades, ofrecer una demo o auditoria corta y cerrar una
 primera compra rentable.
 
@@ -24,7 +24,7 @@ Politica comercial:
 ## Oferta de arranque para vender ahora
 
 Usar esta tabla cuando el objetivo sea cerrar clientes reales rapido. Es una
-oferta limitada, no una rebaja permanente de ONIA.
+oferta limitada, no una rebaja permanente de Onia.
 
 Condiciones:
 
@@ -47,9 +47,9 @@ Condiciones:
 | GestiOS Empresarial | Bs. 1.250/mes | Bs. 437,50 |
 | Landing Express | Bs. 790 | Bs. 79 |
 | Web Negocio | Bs. 1.500 | Bs. 180 |
-| Web Pro ONIA | Bs. 2.900 | Bs. 348 |
+| Web Pro Onia | Bs. 2.900 | Bs. 348 |
 | Portal / sistema web mini | desde Bs. 6.500 | desde Bs. 650 |
-| Auditoria Express ONIA | Bs. 250 | Bs. 25 |
+| Auditoria Express Onia | Bs. 250 | Bs. 25 |
 | Diagnostico + Plan de Accion | Bs. 690 | Bs. 69 |
 | Instalacion de Flujo Simple | Bs. 1.500 | Bs. 150 |
 | Implementacion Operativa | desde Bs. 3.900 | desde Bs. 390 |
@@ -85,9 +85,9 @@ precio vigente.
 | GestiOS Empresarial | Bs. 1.250/mes | Bs. 437,50 |
 | Landing Express | Bs. 790 | Bs. 79 |
 | Web Negocio | Bs. 1.500 | Bs. 180 |
-| Web Pro ONIA | Bs. 2.900 | Bs. 348 |
+| Web Pro Onia | Bs. 2.900 | Bs. 348 |
 | Portal / sistema web | desde Bs. 6.500 | desde Bs. 650 |
-| Auditoria Express ONIA | Bs. 250 | Bs. 25 |
+| Auditoria Express Onia | Bs. 250 | Bs. 25 |
 | Diagnostico + Plan de Accion | Bs. 690 | Bs. 69 |
 | Instalacion de Flujo Simple | Bs. 1.900 | Bs. 190 |
 | Implementacion Operativa | Bs. 4.900-6.500 | Bs. 490-650 |
@@ -98,7 +98,7 @@ precio vigente.
 ## Crecimiento del vendedor
 
 La tabla anterior es inicial. A medida que empecemos a vender, cobrar y validar
-clientes sanos, ONIA puede mejorar comisiones, bonos o rol por tramos cuando el
+clientes sanos, Onia puede mejorar comisiones, bonos o rol por tramos cuando el
 vendedor demuestra:
 
 - datos completos en Notion;
@@ -142,7 +142,7 @@ Oferta recomendada:
 - Basico para consultorio pequeno.
 - Profesional para clinica en crecimiento.
 - Clinica para multiples sedes o equipo grande.
-- Add-on real: WhatsApp operativo solo si ONIA valida Meta, numero, plantillas
+- Add-on real: WhatsApp operativo solo si Onia valida Meta, numero, plantillas
   y costos por mensaje.
 
 Mensaje base:
@@ -201,7 +201,7 @@ Si te sirve, te muestro como se veria tu operacion en un tablero simple:
 responsables, estados y reportes en un solo lugar.
 ```
 
-## Como vender paginas web ONIA
+## Como vender paginas web Onia
 
 Cliente ideal:
 
@@ -223,7 +223,7 @@ Oferta recomendada:
 
 - Landing Express para validar rapido.
 - Web Negocio para presencia seria.
-- Web Pro ONIA para presencia completa + copy + formulario + seguimiento basico.
+- Web Pro Onia para presencia completa + copy + formulario + seguimiento basico.
 - Portal/SaaS para productos propios o procesos internos.
 
 Mensaje base:
@@ -254,7 +254,7 @@ Cliente ideal:
 Regla:
 
 - Se vende setup cerrado; soporte recurrente se cotiza aparte segun alcance.
-- ONIA vende la implementacion del flujo, no acceso a n8n como plataforma.
+- Onia vende la implementacion del flujo, no acceso a n8n como plataforma.
 - No se promete aprobacion de plataforma.
 - WhatsApp queda fuera hasta verificacion de negocio Meta.
 - La automatizacion simple n8n cuesta Bs. 790 y cubre un flujo: entrada ->
@@ -272,7 +272,7 @@ tabla/CRM y llega un aviso para hacer seguimiento. Si necesitan aprobacion,
 tambien podemos armar pasos de revisar, aprobar y notificar.
 ```
 
-## Como vender Consultoria ONIA
+## Como vender Consultoria Onia
 
 Cliente ideal:
 
@@ -301,7 +301,7 @@ Si quieres, empezamos con una auditoria express.
 
 La Auditoria Express cuesta Bs. 250 e incluye revision de web/redes/oferta,
 canal de contacto y seguimiento. Entrega 3 problemas concretos, 3 acciones
-recomendadas y una oferta sugerida de ONIA. No incluye implementacion.
+recomendadas y una oferta sugerida de Onia. No incluye implementacion.
 
 El Diagnostico + Plan cuesta Bs. 690 e incluye sesion, mapa simple del proceso,
 prioridades, presupuesto recomendado y siguiente propuesta.
@@ -309,7 +309,7 @@ prioridades, presupuesto recomendado y siguiente propuesta.
 Regla para vendedores:
 
 - El vendedor puede ofrecer auditoria o diagnostico.
-- No debe prometer una arquitectura tecnica cerrada sin revision de ONIA.
+- No debe prometer una arquitectura tecnica cerrada sin revision de Onia.
 - No debe incluir herramientas, dominios, hosting, pauta, creditos IA o APIs en
   el precio salvo que la propuesta lo diga.
 - Sergio lidera la parte consultiva cuando el ticket o la complejidad lo amerita.
@@ -318,13 +318,13 @@ Regla para vendedores:
 
 | Objecion | Respuesta |
 |---|---|
-| "Ya usamos WhatsApp" | Perfecto. ONIA no reemplaza al equipo; ordena lo que entra y evita que se pierda seguimiento. WhatsApp automatico se activa solo cuando Meta lo permita. |
+| "Ya usamos WhatsApp" | Perfecto. Onia no reemplaza al equipo; ordena lo que entra y evita que se pierda seguimiento. WhatsApp automatico se activa solo cuando Meta lo permita. |
 | "No necesito sistema" | Entonces empecemos por una auditoria: vemos donde se pierden consultas y si hay suficiente dolor para justificarlo. |
 | "Esta caro" | Lo caro es perder consultas de alto valor sin saberlo. Podemos empezar por el plan minimo o una landing/auditoria. |
 | "No tengo tiempo" | Justamente por eso la demo dura poco: mostramos flujo actual vs flujo ordenado. |
 | "Quiero resultados garantizados" | No prometemos ventas garantizadas. Prometemos sistema, contenido y seguimiento para mejorar conversion y visibilidad. |
 | "Solo necesito que me instalen algo" | Perfecto. Primero definimos el flujo exacto y lo instalamos con prueba, mini SOP y entrega. |
-| "Eso lo puedo hacer yo" | Si, pero ONIA cobra por decidir bien, instalar ordenado y dejar el proceso usable para el equipo. |
+| "Eso lo puedo hacer yo" | Si, pero Onia cobra por decidir bien, instalar ordenado y dejar el proceso usable para el equipo. |
 
 ## Secuencia de venta
 
@@ -341,7 +341,7 @@ Regla para vendedores:
 
 1. DentalGest con clinicas de prioridad alta.
 2. Web + DentalGest para clinicas con web debil o solo Facebook.
-3. Web ONIA para negocios sin presencia clara.
+3. Web Onia para negocios sin presencia clara.
 4. Auditoria Express para negocios que no saben por donde empezar.
 5. GestiOS para pymes fuera del rubro dental.
 6. Automatizacion simple n8n como upsell despues de web, formulario o CRM.

@@ -1,4 +1,4 @@
-# Research (Carril I) — Productos ganadores + 3 ventures ONIA (2026-07-05)
+# Research (Carril I) — Productos ganadores + 3 ventures Onia (2026-07-05)
 
 Investigación con fuentes citadas. No fabricar datos. Decisión, no construcción.
 
@@ -11,7 +11,7 @@ Investigación con fuentes citadas. No fabricar datos. Decisión, no construcci�
   labor ahorrada; **suscripción por cabeza/mes (US$5–8 por vaca)** → recurrente que
   escala con el rebaño, no con el cliente; foso = hardware (lock-in) + datos. 1M
   collares, Serie E US$220M a ~US$2B. ([agtechnavigator](https://www.agtechnavigator.com/Article/2025/08/22/whats-behind-halters-hefty-market-value/), [TNW](https://thenextweb.com/news/halter-series-e-virtual-fencing-cattle))
-- **Patrón para ONIA:** cobrar por **unidad de trabajo recurrente** (por vaca / diente
+- **Patrón para Onia:** cobrar por **unidad de trabajo recurrente** (por vaca / diente
   / SKU / trámite), no licencia plana. = "cobrar el resultado, no los píxeles".
 
 ### Medvi (telehealth GLP-1 EEUU) — el más replicable
@@ -22,7 +22,7 @@ Investigación con fuentes citadas. No fabricar datos. Decisión, no construcci�
   colapsa el costo de operar. ([Forbes](https://www.forbes.com/sites/josipamajic/2026/04/02/ai-and-20000-helped-one-man-build-a-18-billion-telehealth-startup/))
 - **Precaución (foso):** admite que **no tiene foso**; cualquiera lo copia, compite
   solo por velocidad; ya recibió carta FDA (feb-2026). ([telecareaware](https://telecareaware.com/ny-times-highly-questionable-but-glowing-and-viral-portrait-of-ai-created-glp-1-e-prescriber-and-marketer-medvi/))
-- **Patrón para ONIA:** dueño de la relación con el cliente; alquilás la infra
+- **Patrón para Onia:** dueño de la relación con el cliente; alquilás la infra
   regulada/física; la IA baja el costo. **Pero el foso hay que fabricarlo** con
   datos propietarios o lock-in de integración.
 

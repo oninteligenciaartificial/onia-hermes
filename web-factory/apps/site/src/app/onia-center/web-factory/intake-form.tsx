@@ -66,7 +66,7 @@ const initialState: IntakeFormState = {
   primaryCtaText: "Solicitar informacion",
   whatsappMessage: "",
   domain: "",
-  hosting: "ONIA Web Factory",
+  hosting: "Onia Web Factory",
   paymentMethods: "",
   legalName: "",
   missing: "",
@@ -121,7 +121,7 @@ export function WebFactoryIntakeForm() {
     const missingText = missing.length ? missing.join(", ") : "sin faltantes criticos para preview interno";
 
     setIsSavingRuntime(true);
-    setRuntimeStatus("Guardando intake en ONIA Center...");
+    setRuntimeStatus("Guardando intake en Onia Center...");
 
     try {
       const noteResponse = await postRuntimeEntity("note", {
@@ -167,7 +167,7 @@ export function WebFactoryIntakeForm() {
         return;
       }
 
-      setRuntimeStatus("Intake guardado como nota y tarea en ONIA Center.");
+      setRuntimeStatus("Intake guardado como nota y tarea en Onia Center.");
     } catch (error) {
       const message = error instanceof Error ? error.message : "No se pudo guardar el intake.";
       setRuntimeStatus(message);
@@ -240,7 +240,7 @@ export function WebFactoryIntakeForm() {
             <select value={form.assetPermission} onChange={(event) => update("assetPermission", event.target.value as IntakeFormState["assetPermission"])}>
               <option value="pending">Pendiente</option>
               <option value="client-owned">Cliente envia assets propios</option>
-              <option value="generate-ai">ONIA puede generar imagenes IA</option>
+              <option value="generate-ai">Onia puede generar imagenes IA</option>
               <option value="stock-licensed">Usar stock/licencia aprobada</option>
             </select>
           </label>
@@ -313,7 +313,7 @@ export function WebFactoryIntakeForm() {
               Descargar JSON
             </button>
             <button type="button" onClick={saveToOniaCenter} disabled={isSavingRuntime}>
-              {isSavingRuntime ? "Guardando..." : "Guardar en ONIA Center"}
+              {isSavingRuntime ? "Guardando..." : "Guardar en Onia Center"}
             </button>
           </div>
           {runtimeStatus ? <p className="onia-webfactory-runtime-status">{runtimeStatus}</p> : null}
@@ -337,7 +337,7 @@ async function postRuntimeEntity(entity: "note" | "task", data: unknown): Promis
     const mode = result?.mode ? `${result.mode}: ` : "";
     return {
       ok: false,
-      message: `${mode}${result?.message ?? "Runtime ONIA Center no disponible. Copia/descarga el JSON y guardalo manualmente."}`,
+      message: `${mode}${result?.message ?? "Runtime Onia Center no disponible. Copia/descarga el JSON y guardalo manualmente."}`,
     };
   }
 
@@ -378,7 +378,7 @@ function buildIntake(form: IntakeFormState) {
       slug: form.slug || slugify(form.name) || "cliente-web",
       template: form.template,
       package: "web-factory",
-      owner: "ONIA",
+      owner: "Onia",
     },
     business: {
       name: form.name,
@@ -465,7 +465,7 @@ function buildClientRequest(form: IntakeFormState, missing: string[]) {
     "",
     missing.length ? `Pendiente ahora: ${missing.join(", ")}.` : "Con esto ya se puede preparar preview interno.",
     "",
-    "Nota: ONIA revisa alcance, precio y permisos antes de enviar o publicar la web.",
+    "Nota: Onia revisa alcance, precio y permisos antes de enviar o publicar la web.",
   ].join("\n");
 }
 

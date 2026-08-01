@@ -6,7 +6,7 @@ Fecha: 2026-06-27
 
 Bolivian Electric esta en proceso de verificacion de negocio en Meta para poder avanzar hacia WhatsApp Cloud API, Chatwoot Cloud y automatizacion comercial con n8n.
 
-La decision operativa para ONIA queda confirmada:
+La decision operativa para Onia queda confirmada:
 
 - usar un solo numero oficial de la marca;
 - conservar el numero actual si Meta permite Embedded Signup/coexistencia;
@@ -48,7 +48,7 @@ La solicitud de partner entre portfolios puede crear loops si la relacion ya exi
 
 Ruta practica:
 
-1. Intentar partner con Business ID de ONIA cuando se necesita control de agencia.
+1. Intentar partner con Business ID de Onia cuando se necesita control de agencia.
 2. Si hay loop, aceptar la solicitud desde `Usuarios > Socios`.
 3. Si no se puede asignar WABA como socio, revisar asset por asset.
 4. Para recuperar una persona eliminada, agregarla desde `Usuarios > Personas` o desde el asset `Paginas > Personas`.
@@ -97,11 +97,11 @@ Para MVP:
 - Chatwoot Cloud dedicado para Bolivian Electric;
 - OpenAI API como proveedor inicial de IA;
 - n8n dedicado cuando haya datos reales;
-- ONIA n8n compartido solo para pruebas con datos redacted;
+- Onia n8n compartido solo para pruebas con datos redacted;
 - IA local solo como fase futura, cuando el flujo comercial este probado.
 
 Si el servidor interno de Bolivian no esta listo o no tiene acceso publico,
-usar temporalmente el puente administrado por ONIA documentado en
+usar temporalmente el puente administrado por Onia documentado en
 `BOLIVIAN_ELECTRIC_ONIA_MANAGED_BRIDGE_20260629.md`: VPS dedicado para Bolivian,
 n8n self-hosted, Chatwoot Cloud dedicado y plan de traspaso.
 
@@ -128,9 +128,9 @@ n8n self-hosted, Chatwoot Cloud dedicado y plan de traspaso.
 8. Agregar vendedores y probar con numeros allowlist.
 9. Configurar webhook a backend/n8n.
 
-## Aplicacion para ONIA
+## Aplicacion para Onia
 
-Este caso confirma que ONIA debe vender la configuracion WhatsApp como fase tecnica verificable, no como promesa automatica.
+Este caso confirma que Onia debe vender la configuracion WhatsApp como fase tecnica verificable, no como promesa automatica.
 
 La oferta comercial debe separar:
 

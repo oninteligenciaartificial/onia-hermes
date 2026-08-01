@@ -1,4 +1,4 @@
-# ONIA Notion Vendor CRM Schema 2026
+# Onia Notion Vendor CRM Schema 2026
 
 ## Veredicto
 
@@ -29,7 +29,7 @@ SIN DATOS COMPLETOS, NO HAY COMISION APROBADA.
 El vendedor puede organizarse como quiera dentro de Notion, pero cada lead debe
 tener los campos minimos completos antes de pasar a demo, propuesta o comision.
 
-## Base: CRM Vendedores ONIA
+## Base: CRM Vendedores Onia
 
 ### Propiedades obligatorias
 
@@ -136,7 +136,7 @@ Checklist:
 - Adjuntar o referenciar comprobante si aplica.
 - Calcular comision.
 - Marcar estado comision: pendiente.
-- Pasar cliente a ONIA para entrega/soporte.
+- Pasar cliente a Onia para entrega/soporte.
 - Crear proximo paso de onboarding.
 
 ## Reglas de comision en Notion
@@ -144,7 +144,7 @@ Checklist:
 ### SaaS mensual
 
 - Se paga 35% solo del primer pago mensual cobrado.
-- Los meses siguientes quedan para ONIA.
+- Los meses siguientes quedan para Onia.
 - No hay comision eterna por mensualidad.
 
 ### Nueva venta al mismo cliente
@@ -165,9 +165,9 @@ relacionada al cliente.
 
 ## Como hablaran los vendedores con clientes
 
-### WhatsApp ONIA
+### WhatsApp Onia
 
-El numero principal de ONIA debe funcionar como chatbot de entrada:
+El numero principal de Onia debe funcionar como chatbot de entrada:
 
 1. Recibe al prospecto.
 2. Pregunta rubro, ciudad y necesidad.
@@ -247,4 +247,4 @@ Auth required
 ```
 
 Cuando se reconecte Notion, aplicar este esquema en la base `CRM Vendedores
-ONIA` o adaptar la base existente `CRM & Contactos`.
+Onia` o adaptar la base existente `CRM & Contactos`.

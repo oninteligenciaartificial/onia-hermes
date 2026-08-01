@@ -12,7 +12,7 @@ y suficientes dependencias para entender tecnologia, runtime, modulos, tablas
 referenciadas y documentacion historica. No contiene codigo fuente
 PowerBuilder, base de datos productiva ni configuracion final de conexion.
 
-El hallazgo mas importante para ONIA es que TR4 debe mantenerse como sistema
+El hallazgo mas importante para Onia es que TR4 debe mantenerse como sistema
 externo/adaptador. La ruta comercial y tecnica correcta sigue siendo:
 exportaciones manuales, importadores asistidos o conectores read-only aprobados
 por Bolivian; no prometer escritura ni integracion en tiempo real antes de una
@@ -419,13 +419,13 @@ No se encontro una cadena de conexion completa en claro. Si existe configuracion
 real de conexion, probablemente vive en el entorno de la maquina cliente,
 registro de Windows, DSN ODBC, archivos no copiados o parametros del servidor.
 
-## Hallazgos clave para ONIA
+## Hallazgos clave para Onia
 
 1. Si hay suficiente evidencia para documentar TR4 como ERP legado
    PowerBuilder/Appeon.
 2. Si hay suficiente evidencia para mapear modulos de negocio y preparar una
    entrevista tecnica con Bolivian.
-3. Si hay suficiente evidencia para disenar un adaptador ONIA alrededor de
+3. Si hay suficiente evidencia para disenar un adaptador Onia alrededor de
    exportaciones/importaciones aprobadas.
 4. No hay suficiente evidencia para prometer integracion directa a base de
    datos ni ejecucion local completa.
@@ -442,7 +442,7 @@ registro de Windows, DSN ODBC, archivos no copiados o parametros del servidor.
 - Propuesta de "TR4 Adapter" read-only/manual.
 - Base para Bolivian Electric OS sin tocar TR4 productivo.
 
-### Producto ONIA viable
+### Producto Onia viable
 
 Primera version vendible:
 
@@ -482,7 +482,7 @@ Acciones:
 4. Mapear que se hace dentro de TR4 y que se hace fuera en Excel/WhatsApp/papel.
 5. Definir 3 reportes gerenciales iniciales de alto valor.
 
-### Fase 1 - Capa ONIA sin integracion directa
+### Fase 1 - Capa Onia sin integracion directa
 
 Objetivo: entregar valor sin riesgo tecnico.
 
@@ -590,5 +590,5 @@ No es suficiente para:
 - prometer integracion automatica;
 - reemplazar la operacion actual.
 
-La mejor decision para ONIA es usar este hallazgo como base de una fase formal
+La mejor decision para Onia es usar este hallazgo como base de una fase formal
 de auditoria y no como excusa para tocar servidores productivos.

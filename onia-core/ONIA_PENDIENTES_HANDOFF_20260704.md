@@ -1,4 +1,4 @@
-# ONIA Pendientes — Handoff 2026-07-04 (act. 2026-07-05)
+# Onia Pendientes — Handoff 2026-07-04 (act. 2026-07-05)
 
 Fecha: 2026-07-04. Proposito: lista maestra para abrir sesiones nuevas y
 terminar todo. Cualquier sesion arranca leyendo ESTE doc + memoria.
@@ -8,9 +8,9 @@ push multi-sesion: add solo tus archivos -> commit -> pull --rebase
 
 ## 0. PROGRESO 2026-07-05 (cerrado desde el handoff)
 
-- **A4 ONIA Center spam briefing**: HECHO y DEPLOYADO al VPS (commit 3d87f093).
+- **A4 Onia Center spam briefing**: HECHO y DEPLOYADO al VPS (commit 3d87f093).
   Briefing ya no apila prefijos.
-- **A5 saneamiento ONIA Center dashboard**: sesion corrio; handoff en
+- **A5 saneamiento Onia Center dashboard**: sesion corrio; handoff en
   `hermes-content/docs/ONIA_CENTER_SANEAMIENTO_HANDOFF_20260705.md` (n8n
   briefing desactivado 2026-07-05, tasks en Supabase onia_center.tasks).
 - **Panel vendedora (NUEVO)**: cotizador `/vendedores/cotizador` (precios +
@@ -22,7 +22,7 @@ push multi-sesion: add solo tus archivos -> commit -> pull --rebase
 - **Arthur colaborador 60 dias**: arranque, skim de capital, acuerdo HTML
   sellado (dia 0 2026-07-03 / dia 60 2026-09-01), inversion obsoleta,
   recuperacion 100% Sergio. Commiteado.
-- **Cuenta Arthur ONIA Center**: CREADA y verificada — tukomaluko2310@gmail.com,
+- **Cuenta Arthur Onia Center**: CREADA y verificada — tukomaluko2310@gmail.com,
   alias arthur, rol arthur (internal_restricted), org onia. Login 200 + token.
   Stray arthur@onia.com.bo borrado. (Password temporal en chat -> B-bis #11.)
 - **Plan prospeccion Semana 1**:
@@ -35,8 +35,8 @@ push multi-sesion: add solo tus archivos -> commit -> pull --rebase
 | A1 | ✅ Logica pura COMPLETA en Gestios main (77172ce+1563731): kardex promedio ponderado, FEFO+alertas, conteos, tax-calendar+cron, RCV ventas (NIT=Customer.rfc) y compras interino, iva-summary, balance cuadrado; 544/544 tests. **BLOQUEADO por baseline sucio**: sin _prisma_migrations, drift bidireccional (falta qr_payments, sobra personal_subscriptions), DIRECT_URL con credenciales invalidas, migraciones se aplican A MANO (docs/DATABASE.md). Faltan modelos Warehouse/StockLot/StockMovement/PurchaseInvoice + APIs de persistencia | Gestios | **C1-bis: sanear baseline GestiOS** (runbook DentaGest DATABASE_MIGRATION_BASELINE_2026.md; conseguir DIRECT_URL valida via vercel env del proyecto gesti-os o dashboard Supabase jafxylfocvvlflpqfsix) y conectar la logica ya testeada |
 | A2 | ✅ VIVO y probado e2e: /tarea y /dentalgest desde Telegram (DentaGest 189b312 + hermes c8660a38 + claves en VPS /root/.hermes/.env + fix proxy.ts 307). Pulido pendiente: titulo de /tarea = texto de la tarea | DentaGest+hermes | listo |
 | A3 | ✅ ONIA_SIAT_CERTIFICACION_PLAN_2026.md en main (69714a15): computarizada sin certificado por cliente, sandbox pilotosiat, cronograma al 30-sep, bloqueo #1 = NIT (SEPREC+MASI 07-jul) | onia-hermes | listo |
-| A4 | ~~ONIA Center: fix spam de tareas del briefing~~ HECHO 2026-07-05: mergeado a main (3d87f093) y DEPLOYADO al VPS (backup runtime-next.bak5-20260705162820; rollback = mv de vuelta + docker restart). El briefing ya no apila prefijos ni duplica; tarjetas en 0 ocultas. PENDIENTE MENOR: limpiar las ~61 tareas viejas ya acumuladas (lo cubre A5). |
-| A5 | ONIA Center: rediseno completo (datos reales, quitar modulos vacios, simplificar UI) | onia-hermes (web-factory) | sesion del chip task_4be0c81c corriendo independiente — verificar sus commits antes de duplicar; diagnostico completo en el prompt del chip |
+| A4 | ~~Onia Center: fix spam de tareas del briefing~~ HECHO 2026-07-05: mergeado a main (3d87f093) y DEPLOYADO al VPS (backup runtime-next.bak5-20260705162820; rollback = mv de vuelta + docker restart). El briefing ya no apila prefijos ni duplica; tarjetas en 0 ocultas. PENDIENTE MENOR: limpiar las ~61 tareas viejas ya acumuladas (lo cubre A5). |
+| A5 | Onia Center: rediseno completo (datos reales, quitar modulos vacios, simplificar UI) | onia-hermes (web-factory) | sesion del chip task_4be0c81c corriendo independiente — verificar sus commits antes de duplicar; diagnostico completo en el prompt del chip |
 
 ## B. ACCIONES DE SERGIO (nadie mas puede)
 
@@ -46,7 +46,7 @@ push multi-sesion: add solo tus archivos -> commit -> pull --rebase
    Luego probar: correo a oninteligenciaartificial@gmail.com -> /pending.
 2. **Validar precios v2** (catalogo): pymes 390/890/1.990 Bs + Empresarial
    E1 4.900+490 USD. Ventana lanzamiento 31-jul.
-3. **NIT ONIA**: iniciar formalizacion (bloqueo #1 de SIAT).
+3. **NIT Onia**: iniciar formalizacion (bloqueo #1 de SIAT).
 4. **TR4**: pedir a Saul columnas exactas del export Excel + frecuencia.
 5. **Ganadero OS**: pausa formal o rescate.
 6. **Ticket BE fase 1**: al cerrar, calibrar precios Empresarial.
@@ -165,7 +165,7 @@ hermes-content/docs/ONIA_N8N_CLEANUP_20260703.md (18 archivados, 2 pausados).
 8. **API keys Tavily y fal.ai** (prospeccion con fuentes + imagenes).
 9. **Verificacion negocio Meta** (desbloquea WhatsApp -> Chatwoot).
 10. **Datos fiscales con contador** (activa recordatorios fiscales).
-11. **Cambiar password ONIA Center** (la primera se expuso en chat 2026-07-04).
+11. **Cambiar password Onia Center** (la primera se expuso en chat 2026-07-04).
 
 ## D. AUTOMATIZACIONES VIVAS (no tocar sin razon)
 
@@ -173,7 +173,7 @@ hermes-content/docs/ONIA_N8N_CLEANUP_20260703.md (18 archivados, 2 pausados).
 - n8n `OovRU4r0o7pvglJP` Radar Normativo 08:00 L-V (memoria staticData).
 - n8n `NDXLJiR00ciQx72V` Guiones Diarios 07:00 L-S (autonomo, testeado OK).
 - n8n `ONIADailyBrief001` Briefing diario 06:45 (apila tareas hasta deploy A4).
-- ONIA Center vivo en center.onia.com.bo (VPS; memoria onia-center-hosting).
+- Onia Center vivo en center.onia.com.bo (VPS; memoria onia-center-hosting).
 - Crons Vercel DentaGest: reminders, recurring, onia-core-workitems 07:00.
 - Autosync git en sesiones Claude (hook Stop).
 

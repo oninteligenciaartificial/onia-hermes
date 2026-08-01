@@ -79,7 +79,7 @@ export function SalesKitSection({
       <SectionPanel
         label="CRM"
         title="Datos que debe registrar"
-        description="Sin estos datos no hay comision aprobada ni seguimiento. Se cargan en ONIA Center / Notion."
+        description="Sin estos datos no hay comision aprobada ni seguimiento. Se cargan en Onia Center / Notion."
         icon={ClipboardList}
         density="compact"
       >

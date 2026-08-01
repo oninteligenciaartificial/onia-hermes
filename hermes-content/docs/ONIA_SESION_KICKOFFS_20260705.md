@@ -1,4 +1,4 @@
-# ONIA — Prompts de arranque por sesión (2026-07-05)
+# Onia — Prompts de arranque por sesión (2026-07-05)
 
 Copiá/pegá el bloque al abrir cada sesión. Cada carril = 1 sesión = 1 worktree =
 1 rama = 1 carpeta/repo. Modelo de carriles: `COORDINATION_MANIFEST.md` (arriba).

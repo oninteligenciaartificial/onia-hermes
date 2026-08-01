@@ -5,7 +5,7 @@ Actualizado: 2026-06-20.
 
 ## Diagnostico
 
-ONIA no necesita otro panel suelto. Necesita un control center que ordene los
+Onia no necesita otro panel suelto. Necesita un control center que ordene los
 servicios self-hosted, diga que esta activo, que falta, que puede migrarse y
 que no debe tocarse todavia.
 
@@ -65,11 +65,11 @@ Separar tres cosas:
 | Newsletters/listas/campanas simples | Listmonk | Recomendado primero |
 | Marketing automation completo | Mautic | Mas adelante si hay journeys, scoring y landing pages |
 | SMTP propio tipo SendGrid/Mailgun | Postal | Solo en VPS/IP separado |
-| Mailbox completo IMAP/SMTP | Mailu o docker-mailserver | Solo si ONIA quiere operar servidor de correo real |
+| Mailbox completo IMAP/SMTP | Mailu o docker-mailserver | Solo si Onia quiere operar servidor de correo real |
 
 Regla: Listmonk/Mautic son paneles de campanas. El envio real depende de SMTP,
 dominio, reputacion y DNS. Postal/Mailu/docker-mailserver no deben compartir el
-IP del VPS principal de ONIA.
+IP del VPS principal de Onia.
 
 Requisitos minimos para enviar correos productivos:
 
@@ -105,7 +105,7 @@ Dify de crawlers.
 
 ### VPS correo
 
-Uso: Postal, Mailu o docker-mailserver si ONIA decide operar envio propio.
+Uso: Postal, Mailu o docker-mailserver si Onia decide operar envio propio.
 
 Minimo recomendado:
 

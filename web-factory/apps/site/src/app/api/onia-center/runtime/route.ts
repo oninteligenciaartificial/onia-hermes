@@ -19,7 +19,7 @@ function configurationPendingResponse() {
     {
       ok: false,
       mode: "configuration_pending",
-      message: "ONIA Center aun no tiene Supabase server-side configurado.",
+      message: "Onia Center aun no tiene Supabase server-side configurado.",
       missingConfiguration: getMissingOniaCenterConfig(),
       data: null,
     },
@@ -111,7 +111,7 @@ export async function GET(request: Request) {
     return NextResponse.json({
       ok: true,
       mode: "supabase",
-      message: "ONIA Center conectado a Supabase self-hosted.",
+      message: "Onia Center conectado a Supabase self-hosted.",
       missingConfiguration: [],
       actor: {
         userKey: auth.actor.userKey,
@@ -121,7 +121,7 @@ export async function GET(request: Request) {
       data,
     });
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Error leyendo ONIA Center.";
+    const message = error instanceof Error ? error.message : "Error leyendo Onia Center.";
     return NextResponse.json(
       {
         ok: false,
@@ -161,7 +161,7 @@ export async function POST(request: Request) {
     const data = await createOniaCenterEntity(payload.entity, actorScopedPayload(payload.entity, payload.data, auth.actor));
     return NextResponse.json({ ok: true, mode: "supabase", data });
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Error guardando ONIA Center.";
+    const message = error instanceof Error ? error.message : "Error guardando Onia Center.";
     return NextResponse.json({ ok: false, mode: "supabase_error", message }, { status: 500 });
   }
 }
@@ -211,7 +211,7 @@ export async function PATCH(request: Request) {
     const data = await updateOniaCenterEntityStatus(payload.entity, payload.id, payload.status, auth.actor.role, auth.actor.userKey);
     return NextResponse.json({ ok: true, mode: "supabase", data });
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Error actualizando ONIA Center.";
+    const message = error instanceof Error ? error.message : "Error actualizando Onia Center.";
     return NextResponse.json({ ok: false, mode: "supabase_error", message }, { status: 500 });
   }
 }

@@ -1,7 +1,7 @@
 # Estrategia de plantillas web — INTERNO (NO mostrar al cliente)
 
 Última actualización: 2026-06-10
-Documento interno ONIA. Confidencial. Nunca decir al cliente "es plantilla".
+Documento interno Onia. Confidencial. Nunca decir al cliente "es plantilla".
 
 ---
 
@@ -34,7 +34,7 @@ solo se personaliza marca + contenido + integraciones.
 | `landing` | Landing de captación / venta de 1 producto | hero, CTA, form, sección precio |
 | `web-pro` | Web multipágina profesional | nav, secciones, casos, contacto |
 | `catalogo` | Tienda con catálogo + carrito + checkout | grid productos, carrito, checkout BCP |
-| `crm-captacion` | Web + formularios → CRM/embudo | forms, integración GestiOS/n8n |
+| `crm-captacion` | Web + formularios → CRM/embudo | forms, integración Onia Comercio/n8n |
 
 ### Tokens de diseño (igual que las propuestas)
 

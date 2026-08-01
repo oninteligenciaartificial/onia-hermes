@@ -1,22 +1,22 @@
-# ONIA Consulting Services 2026
+# Onia Consulting Services 2026
 
 ## Decision
 
-ONIA debe vender tambien consultoria e implementaciones. No solo cobramos por
+Onia debe vender tambien consultoria e implementaciones. No solo cobramos por
 "hacer una web", "hacer videos" o "instalar un sistema"; cobramos por diagnostico,
 criterio, configuracion, proceso, capacitacion y acompanamiento.
 
 La marca correcta es:
 
-- ONIA: empresa, contrato, entrega, sistema, metodologia y continuidad.
+- Onia: empresa, contrato, entrega, sistema, metodologia y continuidad.
 - Sergio: cara consultiva, operador principal, autoridad y confianza.
 
-Sergio no debe reemplazar a ONIA. Sergio abre la relacion, explica el criterio y
-puede liderar las consultorias premium. ONIA cobra y documenta el servicio.
+Sergio no debe reemplazar a Onia. Sergio abre la relacion, explica el criterio y
+puede liderar las consultorias premium. Onia cobra y documenta el servicio.
 
 ## Por que vender consultoria
 
-Los gastos fijos de ONIA obligan a proteger margen. Los servicios consultivos
+Los gastos fijos de Onia obligan a proteger margen. Los servicios consultivos
 permiten cobrar por pensamiento, instalacion y mejora operativa, no solo por
 produccion.
 
@@ -113,7 +113,7 @@ Componentes posibles:
 | Entrega | 2 reuniones, revision de metricas, mejoras pequenas y priorizacion |
 | Regla | No reemplaza desarrollo grande ni produccion ilimitada |
 
-### 7. Transformacion ONIA
+### 7. Transformacion Onia
 
 | Campo | Detalle |
 |---|---|
@@ -146,7 +146,7 @@ Componentes posibles:
 | Implementacion Operativa | 8-10% del pago neto |
 | Sprint n8n y Seguimiento | 10% del pago neto |
 | Acompanamiento Consultivo | 15% del primer mes neto |
-| Transformacion ONIA | 8% del primer pago neto |
+| Transformacion Onia | 8% del primer pago neto |
 
 Regla: si la venta requiere mucha participacion estrategica de Sergio antes de
 cobrar, mantener comision en 8-10% para proteger margen.
@@ -178,7 +178,7 @@ Te agendo una auditoria corta con Sergio/ONIA y vemos que flujo conviene instala
 primero.
 ```
 
-## Sergio vs ONIA
+## Sergio vs Onia
 
 Usar Sergio cuando:
 
@@ -188,7 +188,7 @@ Usar Sergio cuando:
 - se graba contenido de autoridad;
 - se explica el criterio de negocio.
 
-Usar ONIA cuando:
+Usar Onia cuando:
 
 - se cotiza;
 - se firma;

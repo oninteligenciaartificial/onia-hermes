@@ -1,4 +1,4 @@
-# ONIA - Instagram Publishing (Hermes + VPS)
+# Onia - Instagram Publishing (Hermes + VPS)
 
 This repo contains SSH deploy scripts to install an Instagram Graph API publisher on your Hermes VPS.
 
@@ -18,13 +18,13 @@ This repo contains SSH deploy scripts to install an Instagram Graph API publishe
 
 ## Deploy Instagram publisher
 
-ONIA Meta IDs:
+Onia Meta IDs:
 
 ```text
 META_APP_ID=2160241918102061
 FB_PAGE_ID=1140384625819526
 IG_BUSINESS_ACCOUNT_ID=17841423363059652
-IG_USERNAME=oniaagency
+IG_USERNAME=oniahq
 ```
 
 Token rules:
@@ -132,7 +132,7 @@ Rules:
 - One CTA only.
 - No invented results, medical guarantees, fake urgency or client private data.
 - Sergio account: first person, practical, building in public.
-- ONIA account: educational, system-oriented, conversion-focused.
+- Onia account: educational, system-oriented, conversion-focused.
 - Client accounts: approved claims and offer only.
 
 ## Prepare public assets hosting

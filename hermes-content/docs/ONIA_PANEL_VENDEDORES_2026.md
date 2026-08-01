@@ -1,4 +1,4 @@
-# ONIA Panel de Vendedores 2026
+# Onia Panel de Vendedores 2026
 
 Estado: MVP principal definido, UI inicial implementada en `/vendedores` y
 tablero de operacion 60 dias agregado en `/vendedores/operacion`.
@@ -87,16 +87,16 @@ Debe mostrar:
 - deuda previa como responsabilidad Sergio/ONIA, sin monto visible;
 - capital interno como privado Sergio/ONIA;
 - caja chica por centro, sin monto visible para colaboradores;
-- meta operativa por ventas, evidencia y Fondo ONIA;
-- centros separados: ONIA Servicios, Nuvia, ONIA Media y Fondo/Caja;
-- ONIA Media como centro contable de ingresos/activos, usando apps ONIA base
+- meta operativa por ventas, evidencia y Fondo Onia;
+- centros separados: Onia Servicios, Nuvia, Onia Media y Fondo/Caja;
+- Onia Media como centro contable de ingresos/activos, usando apps Onia base
   sin duplicar gasto;
-- costos directos de ONIA Media solo cuando sean externos, incrementales o
+- costos directos de Onia Media solo cuando sean externos, incrementales o
   premium prorrateados por uso real;
-- un solo Fondo ONIA para ONIA Servicios, Nuvia y ONIA Media, con origen
+- un solo Fondo Onia para Onia Servicios, Nuvia y Onia Media, con origen
   etiquetado por centro;
-- modo proteccion 60 dias para ONIA Servicios: 40% Fondo ONIA, Arthur hasta
-  50% sin capital ONIA solo si entrega todo aprobado sin rescate y
+- modo proteccion 60 dias para Onia Servicios: 40% Fondo Onia, Arthur hasta
+  50% sin capital Onia solo si entrega todo aprobado sin rescate y
   Sergio/riesgo minimo 10%;
 - escala de intervencion de Sergio: si Sergio corrige, reestructura, termina,
   rescata o dirige demasiado una entrega que Arthur marco como casi hecha,
@@ -104,9 +104,9 @@ Debe mostrar:
 - clasificacion obligatoria de servicios nuevos o no listados antes de vender:
   categoria, precio, alcance, costos, herramientas, responsable, riesgo y
   porcentaje Arthur/Fondo ONIA/Sergio;
-- existencia mensual pagada por Fondo ONIA y cubierta temporalmente por Sergio
+- existencia mensual pagada por Fondo Onia y cubierta temporalmente por Sergio
   solo si el fondo no alcanza durante los 60 dias;
-- recuperacion interna de capital desde excedente de Fondo ONIA antes de bonos
+- recuperacion interna de capital desde excedente de Fondo Onia antes de bonos
   o retiros extraordinarios, sin mostrar monto a colaboradores;
 - reglas de reparto por participacion real;
 - evidencias obligatorias para que algo cuente;
@@ -152,7 +152,7 @@ Higgsfield y mejoras internas; pero abajo de direccion porque no aprueba
 precios, gastos, descuentos, pagos, uso premium de herramientas, contactos
 sensibles ni reparto de utilidades.
 
-Regla laboral: si ONIA formaliza a alguien como empleado, el sistema debe pasar
+Regla laboral: si Onia formaliza a alguien como empleado, el sistema debe pasar
 ese perfil a ruta legal/laboral con contrato, presupuesto y obligaciones. Si no
 esta formalizado, usar las categorias colaborador comercial, comisionista o
 freelancer por entregable y pagar solo por resultado/evidencia aprobada.
@@ -182,7 +182,7 @@ Debe manejar:
 - compras aprobadas;
 - inventario y activos;
 - inversiones Nuvia por lote y propietario real del capital;
-- contabilidad Nuvia por lote/campana: costos, Fondo ONIA, Reserva Nuvia,
+- contabilidad Nuvia por lote/campana: costos, Fondo Onia, Reserva Nuvia,
   variable Arthur y utilidad Sergio/ONIA;
 - excepcion Lote Nuvia 001 con Bs. 300 Arthur y Bs. 300 Sergio;
 - campanas Meta Ads;
@@ -202,9 +202,9 @@ Para la semana del 22 al 28 de junio de 2026, el modulo privado debe priorizar:
 - diagnosticos + plan;
 - landings/webs cerradas;
 - n8n simple como upsell;
-- ONIA Motor Local Growth como caballito de batalla recurrente;
+- Onia Motor Local Growth como caballito de batalla recurrente;
 - implementaciones solo con anticipo y alcance escrito;
-- ONIA Media Studio solo como paquete cerrado, no videos sueltos;
+- Onia Media Studio solo como paquete cerrado, no videos sueltos;
 - Nuvia solo con costo completo y margen bruto minimo 40%;
 - YouTube/ONIA Media channels como activo de largo plazo, no caja inmediata;
 - home lab solo si reduce costo o riesgo;
@@ -249,7 +249,7 @@ Salida recomendada:
 
 - Landing de Captacion.
 - Web Profesional.
-- Web Pro ONIA.
+- Web Pro Onia.
 - Auditoria Express.
 - CRM simple.
 - Portal/Sistema Web si hay login, dashboard o base de datos.
@@ -290,12 +290,12 @@ Registrar:
 - estado de comision: pendiente, aprobada, pagada, retenida o descontada;
 - estado de entrega/onboarding.
 
-Regla: la comision estimada no es pago aprobado. ONIA aprueba despues de validar
+Regla: la comision estimada no es pago aprobado. Onia aprueba despues de validar
 cobro real, datos completos y margen sano.
 
 ### Catalogo operativo y caballito de batalla
 
-Antes de vender un servicio desde ONIA Center, debe existir como registro del
+Antes de vender un servicio desde Onia Center, debe existir como registro del
 catalogo operativo. El servicio prioritario es `ONIA Motor Local Growth`:
 
 ```text
@@ -309,7 +309,7 @@ Objetivo:
 Fondo ONIA 40% = Bs. 3.800/mes
 ```
 
-Eso cubre la existencia mensual conservadora de ONIA. Starter sirve como
+Eso cubre la existencia mensual conservadora de Onia. Starter sirve como
 entrada, Pro sirve como upgrade, pero Growth es el paquete que el tablero debe
 empujar por defecto.
 

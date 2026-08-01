@@ -1,4 +1,4 @@
-# ONIA - Arranque Arthur 60 dias (sin capital)
+# Onia - Arranque Arthur 60 dias (sin capital)
 
 Estado: interno Sergio/ONIA.
 Fecha de decision: 2026-07-03.
@@ -6,7 +6,7 @@ Dia 0: 2026-07-03.
 Dia 60 / revision formal: 2026-09-01.
 
 Este documento activa el acuerdo de 60 dias con Arthur en modo **colaborador sin
-capital ONIA**. Manda sobre conversaciones previas para el arranque. No cambia el
+capital Onia**. Manda sobre conversaciones previas para el arranque. No cambia el
 contrato base; lo pone en marcha con la variante correcta.
 
 Documentos que complementa:
@@ -17,20 +17,20 @@ Documentos que complementa:
 
 ## 1. Decision confirmada
 
-Arthur **no aporta dinero a ONIA**. Sergio financia la operacion completa.
+Arthur **no aporta dinero a Onia**. Sergio financia la operacion completa.
 
 Consecuencias directas:
 
 | Tema | Resultado |
 |---|---|
 | Figura de Arthur | Colaborador comercial y operativo, prueba 60 dias. No socio, no inversor. |
-| Capital recuperable de Arthur en ONIA | Cero. No se abre linea de aporte recuperable. |
-| Nuvia | Sigue 50/50 solo en inventario/producto. Separado de ONIA. Bs. 300 Lote 001. |
-| Excedente Fondo ONIA | 100% recupera capital de Sergio (no hay split 70/30). |
-| Propiedad de activos ONIA | 100% Sergio/ONIA, sin cambios. |
+| Capital recuperable de Arthur en Onia | Cero. No se abre linea de aporte recuperable. |
+| Nuvia | Sigue 50/50 solo en inventario/producto. Separado de Onia. Bs. 300 Lote 001. |
+| Excedente Fondo Onia | 100% recupera capital de Sergio (no hay split 70/30). |
+| Propiedad de activos Onia | 100% Sergio/ONIA, sin cambios. |
 | Comision de Arthur | Solo variable segun tabla de intervencion (10%-50%), con evidencia. |
 
-Nada del contrato base se rompe: "Modo colaborador sin capital ONIA" ya era el
+Nada del contrato base se rompe: "Modo colaborador sin capital Onia" ya era el
 caso previsto. Esta decision solo elimina la contabilidad de aportes de Arthur y
 acelera la recuperacion de Sergio.
 
@@ -45,7 +45,7 @@ Montos vigentes (`FINANCE_LOG_2026.md`):
 | Capital de arranque | 15.000,00 |
 
 Modelo elegido: **skim de capital como apartado contable** (2026-07-03,
-corregido). Regla inviolable: *primero ONIA vive, despues se recupera capital.*
+corregido). Regla inviolable: *primero Onia vive, despues se recupera capital.*
 El skim nunca se paga si el mes no cubrio su propia operacion.
 
 **Paso 1 - Apartado en cada venta.** Mientras haya capital pendiente, de cada
@@ -99,7 +99,7 @@ Semaforo de caja (decide que se puede hacer cada cierre):
 Regla dura: la deuda (2.414,49) se cubre antes que el capital de arranque, y el
 capital de arranque antes que cualquier retiro personal de Sergio.
 
-## 3. Setup ONIA Center (ya existe, solo activar)
+## 3. Setup Onia Center (ya existe, solo activar)
 
 La infraestructura ya esta construida:
 
@@ -140,7 +140,7 @@ cierre, caja chica ni revision del viernes.
 ```
 
 Mientras el panel termina de conectar datos reales, la fuente oficial sigue
-siendo Notion -> CRM Vendedores ONIA.
+siendo Notion -> CRM Vendedores Onia.
 
 ## 4. Semana 1 operativa (2026-07-03 al 2026-07-10)
 
@@ -171,14 +171,14 @@ seguimientos y reporte.
 | Diagnostico + Plan | 690 | Convierte confusion en venta. |
 | Automatizacion simple n8n | 790 | Alta percepcion de valor. |
 | Web Profesional | 1.500 | Buen ticket para caja y portafolio. |
-| Web Pro ONIA | 2.900 | Mejor margen, negocio serio. |
+| Web Pro Onia | 2.900 | Mejor margen, negocio serio. |
 
 Recurrencia (segundo foco): DentalGest (320-1.500/mes), GestiOS (350-1.250/mes),
 Cuidado Web (190-690/mes).
 
 Nota: estos son los **precios oficiales de lanzamiento** (fase sin portafolio),
 decididos 2026-07-03. Landing 790 / Web Pro 1.500 mandan para clientes nuevos.
-La linea premium (Landing 2.000 / Web Pro 4.500) es el objetivo cuando ONIA
+La linea premium (Landing 2.000 / Web Pro 4.500) es el objetivo cuando Onia
 tenga 3-5 casos en portafolio. Fuente: `propuestas/PRICING_RATIONALE_INTERNO.md`
 seccion 0.
 
@@ -200,14 +200,14 @@ Si al dia 60 no hay ventas ni pipeline real, se vuelve a pago por tarea.
 - **Diario:** Arthur revisa Inicio, registra leads en Captura, actualiza
   Pipeline antes de llamar, deja Nota despues de cada llamada, registra cobros
   en Ingresos como pendiente.
-- **Viernes (cierre):** revisar caja, cobros, Fondo ONIA, comisiones con
+- **Viernes (cierre):** revisar caja, cobros, Fondo Onia, comisiones con
   evidencia, pipeline caliente, entregas pendientes, seguimientos en riesgo.
 
 ### Checklist de cierre del viernes
 
 - [ ] CRM/ONIA Center al 100%.
 - [ ] Cobros de la semana registrados con comprobante.
-- [ ] Fondo ONIA separado (40%) y anotado.
+- [ ] Fondo Onia separado (40%) y anotado.
 - [ ] Comisiones de Arthur clasificadas por nivel de intervencion.
 - [ ] Pipeline: quien esta cerca de pagar.
 - [ ] Entregas vendidas pero pendientes.
@@ -228,8 +228,8 @@ Preguntas de decision:
 1. Arthur cumplio el scorecard semanal?
 2. Genero ventas cobradas reales?
 3. Hay pipeline vivo y CRM ordenado?
-4. ONIA recupero parte del capital?
+4. Onia recupero parte del capital?
 
 Opciones al dia 60: continuar con mejores porcentajes, mantener solo por
-tarea/comision, ajustar 30 dias mas, o terminar sin participacion en ONIA.
-Ninguna revision otorga propiedad de ONIA.
+tarea/comision, ajustar 30 dias mas, o terminar sin participacion en Onia.
+Ninguna revision otorga propiedad de Onia.

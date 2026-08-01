@@ -1,4 +1,4 @@
-# ONIA — Mapa de Productos por Rubro (2026)
+# Onia — Mapa de Productos por Rubro (2026)
 
 > **Fuente de verdad:** generado a partir de `onia-core/contract.json` **v0.7.1 (beta)**
 > + `system-map.mjs` + `report.mjs` + `vertical-extensions.json` + adapters.
@@ -11,7 +11,7 @@
 
 ---
 
-## 0. Cómo se arma un producto ONIA (las 4 capas)
+## 0. Cómo se arma un producto Onia (las 4 capas)
 
 | Capa | Qué es | Dónde vive | Se comparte entre productos |
 |---|---|---|---|
@@ -45,7 +45,7 @@
 ### 🦷 DentalGest — clínica odontológica
 - **Track:** `dentagest-clinical` · **Estado core:** `first_beta_active` · **Adapter:** `installing` (9/9 entidades core instaladas)
 - **A quién sirve:** clínicas y consultorios dentales. **Usuario principal:** el dueño.
-- **Estado real:** **EN VIVO** (`www.dentalgest.app`). Producto PROPIO de ONIA (repo git `C:\dev\proyectos\DentaGest\dental-saas`, rama `pricing-ratificado-jul26`; Next.js 16 + Prisma 7 + Postgres). `lib/onia-core/` ya bastante portado (work-items, intake, roles, collab, schedule, bridge…).
+- **Estado real:** **EN VIVO** (`www.dentalgest.app`). Producto PROPIO de Onia (repo git `C:\dev\proyectos\DentaGest\dental-saas`, rama `pricing-ratificado-jul26`; Next.js 16 + Prisma 7 + Postgres). `lib/onia-core/` ya bastante portado (work-items, intake, roles, collab, schedule, bridge…).
 - **Módulos:** commerce · accounting · invoicing · payroll · automation · **dental**
 - **Funciones propias del rubro (11):**
   - ✅ Implementadas: `patient` (`Patient`), `clinical_record` (`ClinicalRecord`), `patient_treatment` (`PatientTreatment`), `prescription` (`Prescription`), `odontogram_entry` (`ToothRecord`, numeración Universal 1-32, versión simple por diente)
@@ -111,7 +111,7 @@ Ya tienen pack de vocabulario en el contrato (roadmap, sin producto todavía):
 
 | Bloqueo | Afecta | Estado / dueño |
 |---|---|---|
-| **SIAT** (factura electrónica) | los 4 | Portal SIAT activo (facturación manual); certificación como sistema proveedor + NIT ONIA = pendiente Sergio |
+| **SIAT** (factura electrónica) | los 4 | Portal SIAT activo (facturación manual); certificación como sistema proveedor + NIT Onia = pendiente Sergio |
 | **WhatsApp** | GestiOS, ProveeGest, Ganadero | Meta business verification / token (bloqueo S5/S6) |
 | **TR4** | ProveeGest (BE) | Puente por export/adapter (ERP local del cliente, solo lectura) |
 

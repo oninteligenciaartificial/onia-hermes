@@ -38,7 +38,7 @@ export const sellerNavigation: SellerNavigationItem[] = [
 export const sellerScreens: Record<string, SellerScreen> = {
   inicio: {
     label: "Sales Desk operativo",
-    title: "ONIA Panel de Vendedores",
+    title: "Onia Panel de Vendedores",
     description:
       "Centro diario para saber que vender, a quien llamar, que falta validar y cuanto dinero/comision esta en juego.",
     tags: ["Notion oficial hoy", "Supabase preparado", "Seguimiento diario"],
@@ -46,7 +46,7 @@ export const sellerScreens: Record<string, SellerScreen> = {
   },
   operacion: {
     label: "Acuerdo operativo",
-    title: "Operacion 60 dias Arthur / ONIA / Nuvia",
+    title: "Operacion 60 dias Arthur / Onia / Nuvia",
     description:
       "Vista de control para que roles, caja, Nuvia, comisiones, contenido obligatorio y pagos se manejen con evidencia y sin discusiones.",
     tags: ["60 dias", "Caja primero", "Evidencia obligatoria"],
@@ -78,7 +78,7 @@ export const sellerScreens: Record<string, SellerScreen> = {
   },
   cotizador: {
     label: "Precio por proyecto",
-    title: "Cotizador ONIA",
+    title: "Cotizador Onia",
     description:
       "Arma el precio de un proyecto sumando componentes del catalogo. Muestra total unico, mensual y la comision de la vendedora (primer pago). El catalogo es el piso; Sergio aprueba el precio final.",
     tags: ["Kit vendedora", "Unico + mensual", "Comision primer pago"],
@@ -104,7 +104,7 @@ export const sellerScreens: Record<string, SellerScreen> = {
     label: "Control financiero",
     title: "Ingresos y comisiones",
     description:
-      "Pantalla para distinguir venta hablada, cobro real, comision estimada y comision aprobada por ONIA.",
+      "Pantalla para distinguir venta hablada, cobro real, comision estimada y comision aprobada por Onia.",
     tags: ["Cobro validado", "Primer pago", "Margen sano"],
     primaryAction: { href: "/vendedores/requerimientos", label: "Que falta para usar" },
   },
@@ -119,7 +119,7 @@ export const sellerScreens: Record<string, SellerScreen> = {
     label: "Arranque operativo",
     title: "Requerimientos para empezar a usar",
     description:
-      "Lista concreta de datos, accesos, reglas y decisiones que ONIA necesita para pasar de maqueta operativa a panel real.",
+      "Lista concreta de datos, accesos, reglas y decisiones que Onia necesita para pasar de maqueta operativa a panel real.",
     tags: ["Notion", "Supabase", "Roles", "Comisiones"],
   },
 };
@@ -133,7 +133,7 @@ export const initialLeads: Lead[] = [
     canal: "WhatsApp",
     estado: "Demo agendada",
     prioridad: "alta",
-    producto: "DentalGest + landing",
+    producto: "Onia Dental + landing",
     dolor: "Pierde consultas por agenda manual, respuestas lentas y falta de seguimiento.",
     seguimiento: "Hoy 16:30",
     contacto: "Dra. responsable",
@@ -149,7 +149,7 @@ export const initialLeads: Lead[] = [
     canal: "Instagram",
     estado: "Respondio",
     prioridad: "alta",
-    producto: "Web Pro ONIA + CRM simple",
+    producto: "Web Pro Onia + CRM simple",
     dolor: "Recibe mensajes por Instagram pero no sabe que prospectos vuelven o compran.",
     seguimiento: "Manana 10:00",
     contacto: "Admin IG",
@@ -165,7 +165,7 @@ export const initialLeads: Lead[] = [
     canal: "Llamada",
     estado: "Propuesta enviada",
     prioridad: "media",
-    producto: "GestiOS + automatizacion",
+    producto: "Onia Comercio + automatizacion",
     dolor: "Inventario, pedidos y clientes dependen de Excel y mensajes sueltos.",
     seguimiento: "Viernes 09:00",
     contacto: "Gerente operativo",
@@ -214,7 +214,7 @@ export const initialIdeas: Idea[] = [
   {
     id: "idea-clinicas-pequenas",
     title: "Paquete clinicas pequenas",
-    body: "Landing + agenda + mensajes preparados + seguimiento en CRM simple para clinicas que no estan listas para DentalGest completo.",
+    body: "Landing + agenda + mensajes preparados + seguimiento en CRM simple para clinicas que no estan listas para Onia Dental completo.",
     signal: "3 consultas similares",
     stage: "revisar",
   },
@@ -238,7 +238,7 @@ export const incomes: Income[] = [
   {
     id: "income-dental-norte",
     client: "Clinica Dental Norte",
-    service: "DentalGest primer mes",
+    service: "Onia Dental primer mes",
     charged: "Bs. 750",
     netAmount: "Por validar",
     commission: "Pendiente",
@@ -299,7 +299,7 @@ export const webDiagnostics: WebDiagnostic[] = [
   {
     id: "followup-system",
     label: "Seguimiento despues del contacto",
-    whyItMatters: "ONIA vende sistemas, no solo paginas. El seguimiento convierte consultas en dinero.",
+    whyItMatters: "Onia vende sistemas, no solo paginas. El seguimiento convierte consultas en dinero.",
     missingSignal: "Nadie sabe quien respondio, cuando llamar o que se prometio.",
     offer: "Pipeline simple + recordatorios n8n/Telegram.",
   },
@@ -317,7 +317,7 @@ export const dailyActions: DailyAction[] = [
   {
     id: "action-demo-dental",
     time: "16:30",
-    title: "Demo DentalGest",
+    title: "Demo Onia Dental",
     detail: "Confirmar agenda, dolor principal y si pagaria primer mes hoy.",
     owner: "Vendedora",
     tone: "success",
@@ -367,15 +367,15 @@ export const serviceScopes: ServiceScope[] = [
 export const playbook: PlaybookItem[] = [
   {
     id: "rule-onia-center",
-    title: "ONIA Center manda",
-    body: "Si no esta en ONIA Center o Notion, no cuenta para comision, cierre, Nuvia ni revision semanal.",
+    title: "Onia Center manda",
+    body: "Si no esta en Onia Center o Notion, no cuenta para comision, cierre, Nuvia ni revision semanal.",
     detail: "El sistema debe guardar prueba, fecha, responsable y estado aprobado.",
     tone: "danger",
   },
   {
     id: "rule-commission",
     title: "Regla de comision",
-    body: "La comision aplica solo sobre el primer pago realmente cobrado y validado por ONIA.",
+    body: "La comision aplica solo sobre el primer pago realmente cobrado y validado por Onia.",
     detail: "Si faltan datos, comprobante o margen, queda pendiente.",
     tone: "success",
   },
@@ -403,14 +403,14 @@ export const playbook: PlaybookItem[] = [
   {
     id: "rule-comision-primer-pago",
     title: "Comision = primer pago",
-    body: "La comision se paga una sola vez, sobre el primer cobro neto real y comprobado. Los pagos siguientes son de ONIA.",
+    body: "La comision se paga una sola vez, sobre el primer cobro neto real y comprobado. Los pagos siguientes son de Onia.",
     detail: "Primer mes de SaaS, enganche, anticipo o setup. No es comision recurrente.",
     tone: "success",
   },
   {
     id: "rule-descuentos",
     title: "No improvisar precios",
-    body: "DentalGest y Gesti-OS mantienen precio actual. Cualquier descuento requiere aprobacion de Sergio.",
+    body: "Onia Dental y Onia Comercio mantienen precio actual. Cualquier descuento requiere aprobacion de Sergio.",
     detail: "El catalogo es el piso; se sube por alcance, no se baja por regatear.",
     tone: "warning",
   },
@@ -424,8 +424,8 @@ export const playbook: PlaybookItem[] = [
 ];
 
 export const salesDecisionGuide: SalesDecision[] = [
-  { id: "dec-dental", situation: "Clinica dental", offer: "DentalGest primero. Si la web es debil, agregar Landing o Web Profesional." },
-  { id: "dec-excel", situation: "Negocio con Excel o WhatsApp suelto", offer: "Gesti-OS. Si el proceso no esta claro, empezar con Diagnostico + Plan." },
+  { id: "dec-dental", situation: "Clinica dental", offer: "Onia Dental primero. Si la web es debil, agregar Landing o Web Profesional." },
+  { id: "dec-excel", situation: "Negocio con Excel o WhatsApp suelto", offer: "Onia Comercio. Si el proceso no esta claro, empezar con Diagnostico + Plan." },
   { id: "dec-web-debil", situation: "Web debil o incompleta", offer: "Landing si necesita captar rapido; Web Profesional si necesita presencia completa." },
   { id: "dec-claridad", situation: "Necesita claridad antes de comprar", offer: "Auditoria Express (gancho gratis). Abre una venta mayor." },
   { id: "dec-automatizar", situation: "Quiere automatizar", offer: "n8n solo si hay flujo claro: entrada, regla, salida y responsable." },
@@ -439,19 +439,19 @@ export const openingMessages: OpeningMessage[] = [
     id: "msg-dental",
     audience: "Clinica dental",
     message:
-      "Hola, soy de ONIA. Vi que reciben consultas y probablemente manejan agenda, pacientes y seguimiento por varios canales. Estamos mostrando DentalGest, un sistema para ordenar pacientes, citas y seguimiento. Si les sirve, les muestro una demo corta y vemos si encaja con su flujo.",
+      "Hola, soy de Onia. Vi que reciben consultas y probablemente manejan agenda, pacientes y seguimiento por varios canales. Estamos mostrando Onia Dental, un sistema para ordenar pacientes, citas y seguimiento. Si les sirve, les muestro una demo corta y vemos si encaja con su flujo.",
   },
   {
     id: "msg-sin-web",
     audience: "Negocio sin web clara",
     message:
-      "Hola, soy de ONIA. Vi su presencia digital y creo que hay una mejora simple: una pagina clara para captar consultas y un seguimiento basico para no perder oportunidades. Si quieres, te preparo una auditoria corta con 2 o 3 mejoras puntuales.",
+      "Hola, soy de Onia. Vi su presencia digital y creo que hay una mejora simple: una pagina clara para captar consultas y un seguimiento basico para no perder oportunidades. Si quieres, te preparo una auditoria corta con 2 o 3 mejoras puntuales.",
   },
   {
     id: "msg-desordenado",
     audience: "Negocio desordenado",
     message:
-      "Hola, soy de ONIA. Vi que su negocio maneja clientes, pedidos o tareas que se pueden perder entre chats y planillas. Podemos mostrarles Gesti-OS o revisar su proceso primero con un diagnostico corto para proponer algo concreto.",
+      "Hola, soy de Onia. Vi que su negocio maneja clientes, pedidos o tareas que se pueden perder entre chats y planillas. Podemos mostrarles Onia Comercio o revisar su proceso primero con un diagnostico corto para proponer algo concreto.",
   },
 ];
 
@@ -467,28 +467,28 @@ export const sellerDataChecklist: string[] = [
 export const operationSnapshot: OperationSnapshot = {
   trial: "60 dias",
   debt: "Control interno",
-  initialInvestment: "Privado Sergio/ONIA",
-  operatingCashAfterDebt: "Privado Sergio/ONIA",
-  monthlyBaseExpense: "Privado Sergio/ONIA",
+  initialInvestment: "Privado Sergio/Onia",
+  operatingCashAfterDebt: "Privado Sergio/Onia",
+  monthlyBaseExpense: "Privado Sergio/Onia",
   pettyCash: "Segun centro aprobado",
-  conservativeMonthlyNeed: "Privado Sergio/ONIA",
+  conservativeMonthlyNeed: "Privado Sergio/Onia",
   runway: "No visible para colaboradores",
-  monthlyNetTarget: "Ventas cobradas + Fondo ONIA",
+  monthlyNetTarget: "Ventas cobradas + Fondo Onia",
   healthySixtyDayTarget: "Pipeline, caja y entregas aprobadas",
 };
 
 export const operatingCenters: OperatingCenter[] = [
   {
     id: "center-onia-services",
-    title: "ONIA Servicios",
+    title: "Onia Servicios",
     owner: "Sergio direccion / Arthur ventas-operacion",
     status: "activo",
     tone: "success",
-    purpose: "Webs, automatizaciones, marketing, DentalGest, GestiOS, auditorias y sistemas.",
+    purpose: "Webs, automatizaciones, marketing, Onia Dental, Onia Comercio, auditorias y sistemas.",
     rules: [
-      "40% Fondo ONIA protegido durante 60 dias para sostener operacion y riesgo.",
+      "40% Fondo Onia protegido durante 60 dias para sostener operacion y riesgo.",
       "Arthur solo cobra si hay cobro real, CRM completo y participacion probada.",
-      "Si Arthur vende y entrega todo aprobado sin capital ONIA y sin rescate: 50% Arthur, 40% Fondo ONIA, 10% Sergio.",
+      "Si Arthur vende y entrega todo aprobado sin capital Onia y sin rescate: 50% Arthur, 40% Fondo Onia, 10% Sergio.",
       "Si Sergio corrige, reestructura, termina, rescata o dirige demasiado una entrega, Arthur baja de categoria y Sergio sube segun evidencia.",
     ],
   },
@@ -500,41 +500,41 @@ export const operatingCenters: OperatingCenter[] = [
     tone: "warning",
     purpose: "Producto fisico, catalogo, contenido, ventas, inventario, caja chica y cierres quincenales.",
     rules: [
-      "No se mezcla con ingresos generales de ONIA.",
+      "No se mezcla con ingresos generales de Onia.",
       "Primero se descuentan producto, transporte, bolsas, envios, caja chica y herramientas caras prorrateadas.",
-      "Despues se separa 20% Fondo ONIA y 15% Reserva Nuvia.",
+      "Despues se separa 20% Fondo Onia y 15% Reserva Nuvia.",
       "La utilidad repartible restante se divide 50% Sergio y 50% Arthur.",
     ],
   },
   {
     id: "center-media",
-    title: "ONIA Media / YouTube",
-    owner: "ONIA como activo base",
+    title: "Onia Media / YouTube",
+    owner: "Onia como activo base",
     status: "vigilado",
     tone: "info",
     purpose: "Canales de YouTube, contenido monetizable, sponsors, afiliados y piezas de largo plazo.",
     rules: [
       "No se paga por monetizacion hipotetica.",
       "Solo se calcula cuando plataforma, afiliado o sponsor paga realmente.",
-      "Usa apps ONIA base sin duplicar gasto; solo se cargan costos incrementales o premium prorrateados.",
-      "Si Arthur opera canal completo aprobado: 40% Arthur, 40% Fondo ONIA unico, 20% Sergio.",
-      "Activos, guiones, prompts y cuentas quedan como ONIA Media salvo acuerdo escrito.",
+      "Usa apps Onia base sin duplicar gasto; solo se cargan costos incrementales o premium prorrateados.",
+      "Si Arthur opera canal completo aprobado: 40% Arthur, 40% Fondo Onia unico, 20% Sergio.",
+      "Activos, guiones, prompts y cuentas quedan como Onia Media salvo acuerdo escrito.",
     ],
   },
   {
     id: "center-cash",
-    title: "Fondo ONIA y Caja Chica",
+    title: "Fondo Onia y Caja Chica",
     owner: "Sergio / Administracion",
     status: "activo",
     tone: "danger",
     purpose: "Mantener viva la empresa, pagar deuda, herramientas, pruebas necesarias y gastos chicos.",
     rules: [
-      "Deuda previa, apps y gastos generales son asumidos por Sergio/ONIA.",
-      "Arthur no paga deuda previa ni apps de ONIA y no tiene retencion por este concepto.",
-      "La existencia mensual se paga con Fondo ONIA; si no alcanza, Sergio/ONIA cubre temporalmente con capital de arranque.",
-      "Excedente del Fondo ONIA recupera capital interno antes de bonos o retiros grandes.",
+      "Deuda previa, apps y gastos generales son asumidos por Sergio/Onia.",
+      "Arthur no paga deuda previa ni apps de Onia y no tiene retencion por este concepto.",
+      "La existencia mensual se paga con Fondo Onia; si no alcanza, Sergio/Onia cubre temporalmente con capital de arranque.",
+      "Excedente del Fondo Onia recupera capital interno antes de bonos o retiros grandes.",
       "Caja chica se asigna por centro y necesita comprobante, responsable y motivo.",
-      "Si ONIA entra en caja roja, se congelan compras y pagos no criticos.",
+      "Si Onia entra en caja roja, se congelan compras y pagos no criticos.",
       "Todo gasto debe tener comprobante, responsable, motivo y centro asignado.",
     ],
   },
@@ -547,11 +547,11 @@ export const payoutRules: PayoutRule[] = [
     fund: "40%",
     arthur: "3%-5%",
     sergio: "55%-57%",
-    condition: "Cuenta solo si el contacto era util, registrable y ONIA logra cerrar despues.",
+    condition: "Cuenta solo si el contacto era util, registrable y Onia logra cerrar despues.",
   },
   {
     id: "payout-sales-delivered-onia",
-    case: "Arthur llama, cierra y Sergio/ONIA entrega",
+    case: "Arthur llama, cierra y Sergio/Onia entrega",
     fund: "40%",
     arthur: "12%-15%",
     sergio: "45%-48%",
@@ -603,14 +603,14 @@ export const payoutRules: PayoutRule[] = [
     fund: "35%-40%",
     arthur: "hasta 50%",
     sergio: "10%-15%",
-    condition: "Solo si existe aprobacion escrita previa; no crea propiedad sobre ONIA general.",
+    condition: "Solo si existe aprobacion escrita previa; no crea propiedad sobre Onia general.",
   },
 ];
 
 export const evidenceGates: EvidenceGate[] = [
   {
     id: "gate-crm",
-    title: "CRM / ONIA Center completo",
+    title: "CRM / Onia Center completo",
     requiredProof: "Lead, responsable, estado, siguiente accion, fecha y notas de seguimiento.",
     blocks: "Comision, semana aprobada y cierre si falta informacion.",
     owner: "Arthur registra / Sergio aprueba",
@@ -620,7 +620,7 @@ export const evidenceGates: EvidenceGate[] = [
     title: "Cobro real",
     requiredProof: "Comprobante, monto, fecha, cliente, servicio, costos directos y estado de pago.",
     blocks: "Ningun pago se hace sobre promesas o saldos no cobrados.",
-    owner: "Administracion ONIA",
+    owner: "Administracion Onia",
   },
   {
     id: "gate-delivery",
@@ -633,13 +633,13 @@ export const evidenceGates: EvidenceGate[] = [
     id: "gate-costs",
     title: "Costos y caja chica",
     requiredProof: "Foto, factura, recibo, captura o nota simple con responsable y motivo.",
-    blocks: "Utilidad de Nuvia, Fondo ONIA y pago personal si el gasto no esta claro.",
+    blocks: "Utilidad de Nuvia, Fondo Onia y pago personal si el gasto no esta claro.",
     owner: "Quien hizo el gasto",
   },
   {
     id: "gate-week",
     title: "Cierre semanal",
-    requiredProof: "Reporte de avances, 80% de metas, CRM viernes 100% y tareas ONIA/Nuvia.",
+    requiredProof: "Reporte de avances, 80% de metas, CRM viernes 100% y tareas Onia/Nuvia.",
     blocks: "Subida de porcentaje, pagos variables y continuidad despues de 60 dias.",
     owner: "Arthur / Sergio",
   },
@@ -662,7 +662,7 @@ export const weeklyTargets: WeeklyTarget[] = [
   },
   {
     id: "week-content",
-    area: "Contenido ONIA/Nuvia",
+    area: "Contenido Onia/Nuvia",
     arthur: "5 videos grabados, 2 videos Higgsfield/IA y 3 piezas/carruseles listos.",
     sergio: "Definir direccion, aprobar guiones y asegurar que el contenido venda o mejore marca.",
     status: "obligatorio",
@@ -704,9 +704,9 @@ export const nuviaClosureRules: NuviaClosureRule[] = [
   },
   {
     id: "nuvia-onia-fund",
-    item: "Aporte Nuvia al Fondo ONIA",
+    item: "Aporte Nuvia al Fondo Onia",
     value: "20%",
-    rule: "Cubre web, catalogo, IA, automatizaciones, direccion y herramientas pagadas por ONIA.",
+    rule: "Cubre web, catalogo, IA, automatizaciones, direccion y herramientas pagadas por Onia.",
   },
   {
     id: "nuvia-reserve",
@@ -718,7 +718,7 @@ export const nuviaClosureRules: NuviaClosureRule[] = [
     id: "nuvia-distribution",
     item: "Utilidad repartible",
     value: "50% Sergio / 50% Arthur",
-    rule: "Solo despues de costos, Fondo ONIA, Reserva Nuvia y recuperacion de perdidas previas.",
+    rule: "Solo despues de costos, Fondo Onia, Reserva Nuvia y recuperacion de perdidas previas.",
   },
 ];
 
@@ -749,15 +749,15 @@ export const paymentCadence: PaymentCadence[] = [
   },
   {
     id: "pay-media",
-    incomeType: "ONIA Media / YouTube",
+    incomeType: "Onia Media / YouTube",
     calculation: "Solo sobre ingreso liquidable: cobro real menos plataforma, impuestos, costos externos y uso premium prorrateado.",
-    payment: "Cierre mensual dentro de 7 dias del dinero recibido y conciliado; apps ONIA base no se descuentan dos veces.",
+    payment: "Cierre mensual dentro de 7 dias del dinero recibido y conciliado; apps Onia base no se descuentan dos veces.",
   },
   {
     id: "pay-onia-expenses",
-    incomeType: "Deuda y apps ONIA",
-    calculation: "Sergio/ONIA asume deuda previa, apps, herramientas y gastos operativos ONIA.",
-    payment: "No se retiene ni descuenta comision de Arthur por deuda previa o apps de ONIA.",
+    incomeType: "Deuda y apps Onia",
+    calculation: "Sergio/Onia asume deuda previa, apps, herramientas y gastos operativos Onia.",
+    payment: "No se retiene ni descuenta comision de Arthur por deuda previa o apps de Onia.",
   },
 ];
 
@@ -805,15 +805,15 @@ export const startupRequirements: RequirementGroup[] = [
     priority: "obligatorio",
     items: [
       "Registrar 35 prospectos completos, 25 contactos reales, 20 seguimientos y 8 llamadas o audios comerciales.",
-      "Agendar 3 reuniones o demos, enviar 3 propuestas/auditorias/diagnosticos y dejar 5 videos grabados para ONIA/Nuvia.",
-      "Mantener CRM/ONIA Center al 100% cada viernes; sin registro no hay comision ni semana aprobada.",
+      "Agendar 3 reuniones o demos, enviar 3 propuestas/auditorias/diagnosticos y dejar 5 videos grabados para Onia/Nuvia.",
+      "Mantener CRM/Onia Center al 100% cada viernes; sin registro no hay comision ni semana aprobada.",
     ],
-    why: "El acuerdo de 60 dias necesita volumen, evidencia y seguimiento para saber si ONIA se mantiene viva.",
+    why: "El acuerdo de 60 dias necesita volumen, evidencia y seguimiento para saber si Onia se mantiene viva.",
   },
   {
     id: "req-services",
     title: "Catalogo de servicios vendibles",
-    owner: "ONIA",
+    owner: "Onia",
     priority: "operativo",
     items: [
       "Confirmar paquetes base: landing, web profesional, CRM simple, chatbot, automatizacion, auditoria y sistemas.",

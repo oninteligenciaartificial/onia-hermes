@@ -194,7 +194,7 @@ Inversion referencial:
 Bs. 1.900 a Bs. 2.900
 ```
 
-Recomendacion comercial ONIA:
+Recomendacion comercial Onia:
 
 - usar Bs. 1.900 si se quiere abrir la oportunidad rapido y con alcance cerrado;
 - usar Bs. 2.900 si incluye entrevistas con varias areas y documento ejecutivo
@@ -276,7 +276,7 @@ De Bolivian Electric:
 - responsable de almacen;
 - responsable tecnico de sistema actual o proveedor si se requiere integracion.
 
-De ONIA:
+De Onia:
 
 ```text
 Responsable externo de IA, automatizacion y mejora operativa.

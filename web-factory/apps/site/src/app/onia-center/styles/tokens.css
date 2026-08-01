@@ -1,5 +1,5 @@
 /* ==========================================================================
-   ONIA Center — capa de diseño del panel (registro PRODUCTO).
+   Onia Center — capa de diseño del panel (registro PRODUCTO).
    Porta FIEL el mockup aprobado de la vista "Hoy": neutrales grafito tintados,
    segunda capa (--surface-2) para nav/paneles, acento esmeralda para acción y
    "vivo", ámbar (--gate) SOLO para "necesita tu OK", más semánticos.
@@ -47,6 +47,8 @@
   --accent-wash: oklch(0.955 0.03 162);
   --gate: oklch(0.62 0.12 74); /* ámbar: SOLO "necesita tu aprobación" */
   --gate-wash: oklch(0.96 0.045 78);
+  --gate-strong: oklch(0.5 0.12 74); /* ámbar fuerte: texto/acento de compuerta */
+  --gate-line: oklch(0.86 0.06 82); /* hairline ámbar: borde del rail de aprobación */
   --info: oklch(0.55 0.11 245);
   --info-wash: oklch(0.955 0.03 245);
 
@@ -54,6 +56,11 @@
   --panel-shadow:
     0 1px 2px oklch(0.4 0.03 250 / 0.05),
     0 12px 28px -18px oklch(0.35 0.04 250 / 0.22);
+  /* Elevación cálida del rail de aprobación (el "corazón" del Estudio): el ámbar
+     de compuerta lo separa del resto sin recurrir a otro color de alerta. */
+  --panel-shadow-gate:
+    0 1px 2px oklch(0.5 0.09 74 / 0.1),
+    0 14px 30px -18px oklch(0.55 0.1 74 / 0.18);
 
   /* Escala de tonos semánticos (la consumen Badge, KPIs, timeline, etc.):
      verde -> esmeralda del acento, amarillo -> ámbar de compuerta, azul -> info. */
@@ -100,6 +107,8 @@
     --accent-wash: oklch(0.32 0.05 162);
     --gate: oklch(0.75 0.12 78);
     --gate-wash: oklch(0.33 0.06 78);
+    --gate-strong: oklch(0.8 0.11 82);
+    --gate-line: oklch(0.42 0.07 80);
     --info: oklch(0.66 0.1 245);
     --info-wash: oklch(0.32 0.04 245);
 
@@ -107,6 +116,9 @@
     --panel-shadow:
       0 1px 2px oklch(0 0 0 / 0.3),
       0 14px 30px -18px oklch(0 0 0 / 0.55);
+    --panel-shadow-gate:
+      0 1px 2px oklch(0 0 0 / 0.3),
+      0 16px 34px -18px oklch(0.6 0.1 74 / 0.2);
 
     --center-tone-green: oklch(0.78 0.13 162);
     --center-tone-green-bg: oklch(0.32 0.05 162);

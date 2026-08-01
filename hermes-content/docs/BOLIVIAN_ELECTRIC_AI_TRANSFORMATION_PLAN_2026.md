@@ -1,6 +1,6 @@
 # Bolivian Electric AI Transformation Plan 2026
 
-Estado: borrador interno ONIA
+Estado: borrador interno Onia
 Fecha: 2026-06-20
 Uso: estrategia comercial, diagnostico inicial y plan de entrada para Sergio/ONIA.
 No enviar completo al cliente sin convertirlo en propuesta.
@@ -12,7 +12,7 @@ real es mucho mas grande: capacitacion en IA, orden comercial, seguimiento de
 cotizaciones, mejora de contenido tecnico, automatizacion de tareas repetitivas y
 una capa operativa simple encima de los sistemas que ya usan.
 
-La entrada correcta para ONIA es:
+La entrada correcta para Onia es:
 
 1. Diagnostico ejecutivo pagado.
 2. Capacitacion inicial de IA para equipo clave.
@@ -32,7 +32,7 @@ no quedar atrapado como soporte informal sin pago claro.
 ## Correccion narrativa sensible
 
 No hacer enfasis en sistema actual ni nombrarlo como problema en propuestas, presentaciones
-o conversaciones con equipos operativos. ONIA no sabe todavia quienes administran
+o conversaciones con equipos operativos. Onia no sabe todavia quienes administran
 ese sistema, que relacion contractual existe ni que tensiones internas podria
 generar mencionarlo directamente.
 
@@ -67,7 +67,7 @@ Fuentes publicas:
 - Sistema actual de la empresa: tratarlo solo como contexto interno; no citar
   proveedor ni analizarlo frente al equipo sin autorizacion de dueno/gerencia.
 
-Fuentes internas ONIA:
+Fuentes internas Onia:
 
 - `hermes-content/docs/ONIA_CONSULTING_SERVICES_2026.md`
 - `ONIA_PRICING_2026.md`
@@ -121,7 +121,7 @@ Dolores probables:
 - Sistema ERP util, pero probablemente dificil de explicar o usar para tareas
   rapidas.
 
-Hipotesis comercial: ONIA puede vender mas valor si se posiciona como la capa de
+Hipotesis comercial: Onia puede vender mas valor si se posiciona como la capa de
 adopcion, automatizacion, IA, capacitacion y seguimiento encima de lo que ya
 tienen, sin nombrar ni criticar proveedores.
 
@@ -136,7 +136,7 @@ tienen, sin nombrar ni criticar proveedores.
 - No entregar una estrategia completa gratis antes de cobrar diagnostico o
   aprobar un piloto.
 
-## Oportunidad para ONIA
+## Oportunidad para Onia
 
 Oferta primaria:
 
@@ -152,7 +152,7 @@ pilotos funcionando para mejorar seguimiento comercial, velocidad de respuesta,
 contenido tecnico y visibilidad gerencial.
 ```
 
-Areas donde ONIA puede aportar:
+Areas donde Onia puede aportar:
 
 - capacitacion de IA para ventas, marketing, administracion y gerencia;
 - mapa de procesos repetitivos;
@@ -177,7 +177,7 @@ Alternativas:
 
 - Consultor externo de Transformacion Digital e IA.
 - Coordinador externo de Automatizacion Comercial.
-- Lider de Implementacion IA, por ONIA.
+- Lider de Implementacion IA, por Onia.
 
 No usar de entrada:
 
@@ -191,7 +191,7 @@ Razones:
 - El problema atraviesa ventas, operaciones, marketing y sistemas.
 - El valor esta en criterio, procesos y adopcion, no solo en herramientas.
 - Un titulo bajo reduce autoridad para pedir informacion y coordinar areas.
-- ONIA necesita cobrar por diagnostico, implementacion y acompanamiento.
+- Onia necesita cobrar por diagnostico, implementacion y acompanamiento.
 
 Autoridad minima que debe pedir el rol:
 
@@ -205,7 +205,7 @@ Autoridad minima que debe pedir el rol:
 
 ## Plan de entrada
 
-### Fase 0 - Preparacion interna ONIA
+### Fase 0 - Preparacion interna Onia
 
 Duracion: 1-2 dias.
 
@@ -311,7 +311,7 @@ Problema probable:
 - las consultas llegan por web, redes, telefono, correo y sucursales;
 - no todas quedan con responsable, estado y proximo paso.
 
-Solucion ONIA:
+Solucion Onia:
 
 - tablero simple: nuevo, contactado, cotizado, pendiente, ganado, perdido;
 - campos: cliente, sucursal, producto, urgencia, vendedor, monto estimado,
@@ -379,7 +379,7 @@ Senal publica:
 - Bolivian Electric ya tiene contenido educativo potencial: workshops, marcas,
   manuales, catalogos, FAQ, alquileres y lineas de producto.
 
-Plan ONIA:
+Plan Onia:
 
 - calendario de contenido por lineas: seguridad, ahorro de tiempo, errores
   comunes, seleccion de producto, mantenimiento, casos de uso;
@@ -501,14 +501,14 @@ Regla comercial:
 ## Riesgos
 
 - Accesos Meta incompletos para WhatsApp.
-- Resistencia interna si se percibe que ONIA llega a criticar el trabajo actual.
+- Resistencia interna si se percibe que Onia llega a criticar el trabajo actual.
 - El sistema actual puede no tener APIs o acceso facil; no prometer integracion
   sin auditoria y autorizacion.
 - Datos sensibles industriales/comerciales: se necesita politica de IA antes de
   cargar informacion en herramientas externas.
 - Si no hay sponsor interno, el proyecto queda delegado a una sola persona y se
   frena.
-- Si ONIA entra gratis, terminara haciendo soporte y estrategia sin cobrar.
+- Si Onia entra gratis, terminara haciendo soporte y estrategia sin cobrar.
 
 ## Siguiente accion recomendada
 
@@ -542,4 +542,4 @@ Resultado esperado:
 - [ ] No prometer WhatsApp automatico.
 - [ ] Pedir sponsor interno.
 - [ ] Pedir permiso para hacer diagnostico pagado.
-- [ ] Registrar oportunidad en CRM ONIA si avanza.
+- [ ] Registrar oportunidad en CRM Onia si avanza.

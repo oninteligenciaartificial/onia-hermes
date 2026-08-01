@@ -1,6 +1,6 @@
-# Hermes VPS Tools for ONIA
+# Hermes VPS Tools for Onia
 
-This repo contains deployment helpers and operating docs for the ONIA Hermes agent running on the VPS at `187.77.16.63`.
+This repo contains deployment helpers and operating docs for the Onia Hermes agent running on the VPS at `187.77.16.63`.
 
 ## Current state
 - Hermes lives on the VPS and is used from Telegram.

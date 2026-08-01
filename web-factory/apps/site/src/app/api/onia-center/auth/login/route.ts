@@ -71,7 +71,7 @@ export async function POST(request: Request) {
       {
         ok: false,
         mode: "configuration_pending",
-        message: "Falta configuracion Auth para iniciar sesion en ONIA Center.",
+        message: "Falta configuracion Auth para iniciar sesion en Onia Center.",
         missingConfiguration: getMissingOniaCenterAuthConfig({ requireAnon: true }),
       },
       { status: 200 },
@@ -101,7 +101,7 @@ export async function POST(request: Request) {
       {
         ok: false,
         mode: "auth_unavailable",
-        message: "No pude consultar los usuarios de ONIA Center. Revisa que el tunel local a Supabase este activo.",
+        message: "No pude consultar los usuarios de Onia Center. Revisa que el tunel local a Supabase este activo.",
       },
       { status: 503 },
     );
@@ -134,7 +134,7 @@ export async function POST(request: Request) {
       {
         ok: false,
         mode: "auth_error",
-        message: "Credenciales invalidas o usuario no permitido en ONIA Center.",
+        message: "Credenciales invalidas o usuario no permitido en Onia Center.",
       },
       { status: 401 },
     );

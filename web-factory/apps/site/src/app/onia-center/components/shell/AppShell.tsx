@@ -29,7 +29,7 @@ export function AppShell({ children, canSeeFinance = true, actorName }: AppShell
           >
             O
           </span>
-          <span className="text-[15px] font-semibold tracking-tight">ONIA Center</span>
+          <span className="text-[15px] font-semibold tracking-tight">Onia Center</span>
         </div>
         <TopNav canSeeFinance={canSeeFinance} />
         <div className="ml-auto flex items-center gap-2">

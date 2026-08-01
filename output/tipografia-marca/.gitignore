@@ -1,0 +1,9 @@
+# Regenerables y pesados: la secuencia PNG y el metraje sintetico de prueba se
+# vuelven a generar con render.mjs / ffmpeg en segundos. Las pruebas visuales
+# (PNG y el mp4 neutro con subtitulos) SI se versionan para poder compararlas
+# desde cualquier dispositivo.
+secuencia-stat/
+metraje-prueba.mp4
+metraje-neutro.mp4
+subtitulos-bricolage.mp4
+_fonts/

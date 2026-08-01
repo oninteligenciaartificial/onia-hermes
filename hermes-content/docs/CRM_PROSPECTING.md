@@ -1,7 +1,7 @@
 # CRM Prospecting
 
 ## Objetivo
-Ayudar a ONIA a encontrar prospectos, calificarlos, preparar mensajes y mantener seguimiento comercial ordenado.
+Ayudar a Onia a encontrar prospectos, calificarlos, preparar mensajes y mantener seguimiento comercial ordenado.
 
 ## Comandos
 - `Busca prospectos ONIA: <industria> | <ubicacion>`
@@ -33,7 +33,7 @@ Para cada prospecto:
 - Fuente.
 - Contacto publico.
 - Dolor probable.
-- Oferta ONIA recomendada.
+- Oferta Onia recomendada.
 - Prioridad.
 - Siguiente accion.
 
@@ -62,7 +62,7 @@ Cada prospecto debe tener dos responsables:
 Reglas:
 
 - Si el lead compra, cobra comision el vendedor_origen de esa venta.
-- Despues del primer pago, el cliente pasa a ONIA para soporte y operacion.
+- Despues del primer pago, el cliente pasa a Onia para soporte y operacion.
 - El vendedor no cobra mensualidades futuras por defecto.
 - Si vende un upsell, cross-sell, anualidad, web, video, conector o sistema adicional, cobra la comision de esa nueva venta.
 - Si otro vendedor quiere trabajar el mismo cliente, debe existir reasignacion en CRM.
@@ -104,9 +104,9 @@ Reglas:
 - `comision_estado`
 - `notas`
 
-## WhatsApp ONIA y vendedores
+## WhatsApp Onia y vendedores
 
-El WhatsApp principal de ONIA debe funcionar como chatbot de entrada y calificacion, no como numero libre para todos los vendedores.
+El WhatsApp principal de Onia debe funcionar como chatbot de entrada y calificacion, no como numero libre para todos los vendedores.
 
 Flujo:
 
@@ -131,9 +131,9 @@ Reglas:
 |---|---|---|---|
 | Clinica dental | DentalGest | landing dental + contenido Higgsfield | "Te muestro una demo corta." |
 | Empresa con Excel/reportes/tareas | Gesti-OS | automatizacion n8n + dashboard | "Te muestro tu operacion en un tablero." |
-| Negocio sin web clara | Pagina web ONIA | CRM simple + contenido de lanzamiento | "Te hago una auditoria rapida de captacion." |
+| Negocio sin web clara | Pagina web Onia | CRM simple + contenido de lanzamiento | "Te hago una auditoria rapida de captacion." |
 | Negocio publica poco | Marketing con Higgsfield | landing + seguimiento | "Te preparo 3 ideas de videos para vender mejor." |
-| Prospecto aun ambiguo | Auditoria ONIA | recomendacion personalizada | "Te comparto 2 mejoras puntuales." |
+| Prospecto aun ambiguo | Auditoria Onia | recomendacion personalizada | "Te comparto 2 mejoras puntuales." |
 
 ## Comandos Hermes
 - `Busca prospectos ONIA: <industria> | <ubicacion>`
@@ -190,5 +190,5 @@ Flujo completo: audio Telegram → Whisper → Claude Haiku extracción → gene
 ## Criterios de calidad
 - Priorizar calidad sobre cantidad.
 - No hacer spam.
-- Cada recomendacion debe explicar por que esa empresa podria necesitar ONIA.
+- Cada recomendacion debe explicar por que esa empresa podria necesitar Onia.
 - El mensaje sugerido debe ser breve, consultivo y personalizado.

@@ -132,7 +132,7 @@ profundidad, uso de ejemplos, CTA y principios de produccion.
 ## Regla de direccion visual y contenido relevante
 Para propuestas comerciales, presentaciones, landing pages, webs de clientes y
 superficies client-facing, Hermes debe usar como benchmark interno los disenos
-aprobados de ONIA:
+aprobados de Onia:
 
 - Bench.
 - Garabato.

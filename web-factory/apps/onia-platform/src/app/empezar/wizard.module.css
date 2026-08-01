@@ -576,3 +576,10 @@
     flex: 1;
   }
 }
+
+/* enlaces dentro de las notas del plan (precios publicados) */
+.planNote a {
+  color: var(--accent-ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}

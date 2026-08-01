@@ -173,7 +173,7 @@ function taskFromLead(lead: RuntimeLead, role: DailyAudience, index: number): Da
     projectId: "project-webs",
     priority: index === 0 ? "alta" : "media",
     timeBlock: role === "sergio" ? "08:30-10:30" : "manana comercial",
-    evidence: "Registrar llamada, mensaje, nota o resultado en ONIA Center.",
+    evidence: "Registrar llamada, mensaje, nota o resultado en Onia Center.",
     reason: `Lead activo para ${serviceName(lead.serviceId)} con estado ${lead.status}.`,
     calendarIntent: "sales",
   };
@@ -211,7 +211,7 @@ function baseTasksForRole(snapshot: RuntimeSnapshot, role: DailyAudience): Daily
       ...leadTasks,
       ...runtimeTasks,
       {
-        title: "Cierre operativo: actualizar ONIA Center antes de apagar trabajo",
+        title: "Cierre operativo: actualizar Onia Center antes de apagar trabajo",
         assignedRole: "sergio" as const,
         projectId: "project-onia-center",
         priority: "media",
@@ -233,7 +233,7 @@ function baseTasksForRole(snapshot: RuntimeSnapshot, role: DailyAudience): Daily
         projectId: "project-onia-center",
         priority: "alta",
         timeBlock: "cierre del dia",
-        evidence: "Evidencia en ONIA Center o Notion.",
+        evidence: "Evidencia en Onia Center o Notion.",
         reason: "Regla 60 dias: si no esta registrado, no cuenta.",
         calendarIntent: "review",
       } satisfies DailyBriefingTask,
@@ -357,7 +357,7 @@ async function improveBriefingWithOpenAI(base: DailyBriefing, snapshot: RuntimeS
     body: JSON.stringify({
       model: config.model,
       instructions: [
-        "Eres el planificador diario interno de ONIA Center.",
+        "Eres el planificador diario interno de Onia Center.",
         "Devuelve exclusivamente JSON valido con la misma forma del briefing recibido.",
         "No inventes clientes, pagos, precios ni aprobaciones.",
         "Prioriza ventas, entrega real, evidencia y calendario saludable.",
@@ -474,7 +474,7 @@ export async function POST(request: Request) {
       {
         ok: false,
         mode: "configuration_pending",
-        message: "ONIA Center necesita Supabase server-side antes de ejecutar briefing diario.",
+        message: "Onia Center necesita Supabase server-side antes de ejecutar briefing diario.",
         missingConfiguration: getMissingOniaCenterConfig(),
         data: null,
       },
@@ -504,7 +504,7 @@ export async function POST(request: Request) {
     return NextResponse.json({
       ok: true,
       mode: commit ? "daily_briefing_committed" : "daily_briefing_dry_run",
-      message: commit ? "Briefing diario creado y registrado en ONIA Center." : "Briefing diario generado en modo prueba.",
+      message: commit ? "Briefing diario creado y registrado en Onia Center." : "Briefing diario generado en modo prueba.",
       model: briefing.model,
       data: briefing,
       result,

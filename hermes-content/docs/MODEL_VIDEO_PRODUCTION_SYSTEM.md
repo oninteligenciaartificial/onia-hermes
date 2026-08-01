@@ -1,8 +1,8 @@
-# ONIA — Sistema de Producción de Videos con Modelos IA
+# Onia — Sistema de Producción de Videos con Modelos IA
 
 **Versión:** 1.0  
 **Actualizado:** 2026-06-09  
-**Responsable:** Hermes / ONIA  
+**Responsable:** Hermes / Onia  
 
 ---
 
