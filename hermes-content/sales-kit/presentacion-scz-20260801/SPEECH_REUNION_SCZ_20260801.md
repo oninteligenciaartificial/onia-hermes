@@ -38,8 +38,10 @@
 > opera con IA**. Todo lo que les voy a ofrecer hoy, lo usamos nosotros primero.
 > Somos nuestro propio cliente más exigente."
 
-Números del slide: una plataforma núcleo, 11 agentes de IA corriendo 24/7,
-503 tests automáticos que verifican el núcleo cada vez que lo tocamos.
+> "Los números que ven ahí son de hoy: **once agentes de IA trabajando en Onia,
+> las 24 horas — ni de noche ni en feriado paran. Y cero acciones enviadas sin
+> aprobación humana.** Esa última es la que más me importa, y en un minuto les
+> explico por qué."
 
 ## Slide 03 — El problema
 
@@ -196,7 +198,7 @@ seguidor en la sala es un lead que no se pierde.)*
 - No prometer facturación SIAT "ya en vivo" (está en homologación).
 - No mencionar nombres de prospectos ni clientes en conversación (el pipeline es interno).
 - No decir que usamos plantillas en las webs (confidencial interno).
-- No inventar métricas: los números públicos son los del deck (11 agentes, 9 módulos, 11 rubros, 503 tests).
+- No inventar métricas. Los únicos números que se dicen son los del deck: 11 agentes, 24/7, cero envíos sin aprobación humana. Si preguntan cuántas horas ahorra o cuánto factura un cliente, la respuesta honesta es "todavía no tengo ese dato medido — lo sacamos juntos en la demo con sus números".
 
 ---
 
