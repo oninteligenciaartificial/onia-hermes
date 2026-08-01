@@ -162,14 +162,15 @@ function renderPortada(p, nombre) {
 
 // Bloque opcional: requisitos a cargo del cliente (cobros online en Bolivia).
 // Ver hermes-content/propuestas/REQUISITOS_LEGALES_BOLIVIA_INTERNO.md
-function renderRequisitos(req) {
+function renderRequisitos(req, intro) {
   if (!req || !req.length) return '';
   const items = req.map((r) => `<li>${esc(r)}</li>`).join('');
+  const texto = intro || `Para habilitar los pagos en línea, el negocio deberá contar con la
+    siguiente documentación a su nombre (lo acompañamos en cada paso):`;
   return `
   <h2>Requisitos a cargo del cliente</h2>
   <div class="card">
-    <p>Para habilitar los pagos en línea, el negocio deberá contar con la
-    siguiente documentación a su nombre (lo acompañamos en cada paso):</p>
+    <p>${esc(texto)}</p>
     <ul>${items}</ul>
   </div>`;
 }
@@ -292,7 +293,7 @@ ${renderValor(c.valor)}${renderCasos(c.casos)}${renderComparativa(c.comparativa)
     <div class="tag amber">Importante — costos de terceros</div>
     <p>${c.terceros}</p>
   </div>
-${renderRequisitos(c.requisitos)}${renderProximosPasos(c.proximosPasos, c.ctaWhatsapp, c.ctaAgenda)}
+${renderRequisitos(c.requisitos, c.requisitosIntro)}${renderProximosPasos(c.proximosPasos, c.ctaWhatsapp, c.ctaAgenda)}
   <div class="foot">
     <p class="big">Precio reservado hasta 30 días con confirmación de pago.</p>
     <p>Onia — Sistemas, automatización y contenido para negocios. business@onia.com.bo</p>

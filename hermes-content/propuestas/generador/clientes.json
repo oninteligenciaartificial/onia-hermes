@@ -1339,6 +1339,18 @@
     "ctaAgenda": {
       "url": "https://wa.me/59178491375?text=Hola%20Onia%2C%20quiero%20agendar%20una%20llamada%20por%20la%20propuesta%20de%20Premium%20Cars",
       "texto": "Agendá una llamada"
-    }
+    },
+    "requisitosIntro": "Para montar el chatbot vamos a necesitar de Premium Cars lo siguiente (te acompañamos y guiamos en cada paso):",
+    "requisitos": [
+      "El número de WhatsApp donde va a atender el bot: puede ser el actual de Premium Cars o uno nuevo. Debe poder recibir un SMS o una llamada de verificación.",
+      "Acceso como administrador a la cuenta de Facebook/Meta del negocio (si no existe, la creamos juntos).",
+      "Datos del negocio para la verificación de Meta: NIT o matrícula de comercio, nombre legal, dirección, teléfono y correo del negocio.",
+      "La flota completa: cada vehículo con foto, tarifa por día y disponibilidad.",
+      "Los requisitos que le pedís al cliente para alquilar: licencia, edad mínima, garantía o depósito, documentos.",
+      "Las condiciones de alquiler: combustible, kilometraje, seguro/cobertura, zonas y costo de la entrega a domicilio, horarios de atención.",
+      "Las preguntas que más te hacen y cómo las respondés hoy (si tenés chats guardados, mejor: con eso el bot aprende a responder igual que vos).",
+      "A qué número te derivamos los clientes calificados y en qué horarios preferís recibirlos.",
+      "Tu visto bueno a los textos del bot antes de encenderlo con clientes reales."
+    ]
   }
 ]
