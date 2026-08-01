@@ -38,6 +38,7 @@ carril, cargá su stack, respetá las reglas duras. Fuente viva del mapa complet
 | **onia-core** | `database-migrations` `postgres-patterns` `api-design` `backend-patterns` `verification-loop` | `onia-core-guardian` | `onia-core` |
 | **comercial/CRM** | `deep-research` (prospección con señal) | `onia-crm-prospeccion` | `onia-propuestas` |
 | **fiscal / contable (propio + features ERP)** | `deep-research` (validar RND/DS vigentes) | — | `onia-contabilidad-bolivia` |
+| **extracción web** (alta por URL · prospección) | **NO instalar scrapers nuevos** (ScrapeGraphAI evaluado y descartado). Crawl4AI del VPS + LiteLLM ya resuelven: `scripts/alta-por-extraccion.py`. Doc: `docs/platform/ONIA_EXTRACCION_WEB_DECISION.md` | `onia-crm-prospeccion` · `hermes-automation` | — |
 
 ## Reglas duras que aplican SIEMPRE (de CLAUDE.md)
 - **Objetivo único por sesión.** Definirlo al inicio; no descarrilar; terminarlo antes de cerrar.
