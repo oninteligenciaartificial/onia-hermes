@@ -308,7 +308,7 @@ Esto importa para el volumen: casi todo se produce **sin quemar créditos**.
 | **Estudio de Contenido** (panel) | Cola de piezas y aprobación | **0** |
 | Higgsfield / ElevenLabs / imagen paga | Generación | **OK por pieza** |
 
-### Semana 1 (4-10 ago) — que exista el material y la atribución
+### Semana 1 (3-9 ago) — que exista el material y la atribución
 
 | # | Entregable | Usa | Listo cuando |
 |---|---|---|---|
@@ -320,7 +320,7 @@ Esto importa para el volumen: casi todo se produce **sin quemar créditos**.
 **Meta: 2 demos.** Los 5 tibios valen más que las 50 frías: ya se registraron y se fueron.
 Saber por qué se fueron es lo más barato que podemos aprender.
 
-### Semana 2 (11-17 ago) — las objeciones
+### Semana 2 (10-16 ago) — las objeciones
 
 | # | Entregable | Usa |
 |---|---|---|
@@ -330,7 +330,7 @@ Saber por qué se fueron es lo más barato que podemos aprender.
 **Meta: 3 demos.** Ojo con §3.1 y §3.10: son las del SIAT. Se usa la versión corregida —
 emisor en homologación, Portal Web gratis mientras tanto. **Nunca "obligatorio por ley".**
 
-### Semana 3 (18-24 ago) — la cuenta, y abrir T2
+### Semana 3 (17-23 ago) — la cuenta, y abrir T2
 
 | # | Entregable | Usa |
 |---|---|---|
@@ -343,7 +343,7 @@ emisor en homologación, Portal Web gratis mientras tanto. **Nunca "obligatorio 
 antes por una razón: primero hay que tener piezas y atribución andando. Si en las semanas 1-2
 el carril dental no da señales, T2 se adelanta.
 
-### Semana 4 (25-31 ago) — la ventana
+### Semana 4 (24-30 ago) — la ventana
 
 | # | Entregable | Usa |
 |---|---|---|
@@ -453,6 +453,113 @@ Tope duro **Bs 600/mes**. Eso es lo peor que puede pasar si no entra un solo pes
 **Se puede arrancar hoy sin esperar D1-D4:** los links `?src=` por pieza y el registro de
 fuente en Onia Center. Sin eso ningún modelo de atribución se puede liquidar, y es media hora
 de trabajo.
+
+---
+
+## 9. Ventana de validación: 30 días (lunes 3-ago al martes 1-sep)
+
+> Sergio 2026-08-01: *"definamos porcentajes, hitos y metas para 30 días, ahí validamos si lo
+> metemos."* Esto es esa ventana. Al día 30 hay una decisión de tres salidas, no una charla.
+
+**Nota de calendario:** el acuerdo viejo cumple su día 60 el **19-ago**, que cae adentro de
+esta ventana (día 17). Ese día no se decide nada: solo se confirma que seguimos con este plan
+hasta el 1-sep. La decisión real se corre al día 30.
+
+### 9.1 Los porcentajes, todos juntos
+
+Se calculan sobre el ingreso neto (cobro menos costos directos), con Fondo Onia 40% separado
+primero. Eso no cambia. Solo la línea de plataforma es nueva; el resto ya está firmado.
+
+| Línea de ingreso | Qué hizo Arthur | Se lleva |
+|---|---|---:|
+| **Plataforma** (dental, comercio, distribución) | Trajo la reunión; Sergio cierra y entrega | **20% mensual × 6 meses** |
+| **Plataforma** | Trajo, calificó y acompañó el cierre | **25% mensual × 6 meses** |
+| Web (790 / 1.500 / 2.900) | Solo pasó el contacto | 3-5% |
+| Web | Trajo y cerró; Onia produce | 12-15% |
+| Web | Cerró y aportó brief, copy y contenido | 15-20% |
+| Web | Vendió y produjo completa, sin rescate | 50% |
+| Automatización n8n (790-1.900) | Vendió; Sergio entrega | 10-15% |
+| Automatización n8n | La hizo funcionando y documentada | 25-35% |
+| Automatización n8n | Vendió y entregó completa | 50% |
+| Cuidado Web mensual (190-690) | Gestiona y reporta | 10-20% mensual mientras gestione |
+| Contenido a cliente | Produjo las piezas | 15-25% |
+| Contenido mensual a cliente | Gestiona, publica y reporta | 10-20% mensual mientras gestione |
+| Pack de video IA (Higgsfield) | Guion, generación, edición y entrega | 15-35% |
+| Pack de video IA | Vendió y entregó todo | 50% |
+| Reunión atribuible realizada | Cualquier carril | Bs 50 fijos (tope 600/mes) |
+
+### 9.2 Las metas de los 30 días
+
+| Meta | Número | Por qué ese número |
+|---|---:|---|
+| Reuniones atribuibles **realizadas** | **8** | 2 por semana partiendo de cero audiencia |
+| **Ventas de servicio cobradas** | **1** | Es la prueba de que puede generar plata, no solo actividad |
+| Clientes de plataforma cerrados | 1 | Con 8 reuniones, 1 es realista. Si sale 0 pero hay pipeline, cuenta como amarillo |
+| Piezas publicadas y aprobadas | 16 | 4 por semana con la fábrica gratis |
+| Prospectos nuevos listados **fuera de dental** | 60 | Hoy no existe ninguna lista que no sea dental |
+| Reportes de viernes entregados | 4 de 4 | Sin esto no se puede liquidar nada, y es causal de no pago |
+
+### 9.3 Los hitos
+
+| Día | Fecha | Hito |
+|---:|---|---|
+| 7 | 9-ago | Atribución andando (`?src=`), demo de 15 min grabada, los 5 tibios contactados |
+| 14 | 16-ago | 10 videos de objeciones publicados, 4 reuniones acumuladas |
+| 17 | 19-ago | Día 60 del acuerdo viejo: se confirma continuidad con este plan, no se decide |
+| 21 | 23-ago | T2 abierto: 15 negocios contactados, 1 propuesta de web o n8n enviada |
+| 30 | 1-sep | Cierre y decisión |
+
+### 9.4 El semáforo del día 30
+
+| Resultado | Qué pasó | Decisión |
+|---|---|---|
+| **Verde** | 8+ reuniones **y** 1+ venta cobrada **y** CRM al día | **Entra.** Se firma el modelo completo y se abre la escalera del §2 |
+| **Amarillo** | 4-7 reuniones, o venta no cerrada pero con pipeline real y registrado | Se extiende 30 días con metas ajustadas |
+| **Rojo** | Menos de 4 reuniones, sin venta, sin registro | **No entra.** Vuelve a pago por tarea puntual |
+
+La venta de servicio es el filtro duro. Ocho reuniones sin una sola venta en 30 días no es un
+problema de Arthur: es la señal de que el carril de contenido no está trayendo compradores.
+
+### 9.5 Higgsfield: presupuesto cerrado y para qué
+
+Sergio pidió meterlo. Entra así, no como barra libre:
+
+- **Presupuesto cerrado** para los 30 días, definido antes de arrancar (propuesta: el
+  equivalente a **6 piezas**). Se acaba y no se repone hasta el día 30.
+- **Solo para lo que no se puede grabar ni hacer por código.** Los mockups, textos, marcadores
+  y overlays ya salen gratis con HyperFrames. Higgsfield es para el hook imposible: la silla
+  vacía, el escritorio con facturas, el b-roll que no tenemos.
+- Cada pieza con objetivo, costo estimado y aprobación **antes** de generar. Regla vigente.
+- **Prohibido:** pruebas de estilo, experimentos y piezas sin destino en el embudo.
+
+Entregable de Higgsfield en los 30 días: **4 hooks** para la serie de plataforma + **1 pieza
+de marca** + la cola de Lucía preparada sin publicar.
+
+### 9.6 El trabajo que siembra lo que viene
+
+Esto es lo que hace con el tiempo que le sobra, y es lo que lo conecta con las metas futuras.
+Nada de acá se mide en el semáforo del día 30: son activos, no resultados.
+
+| Proyecto futuro | Qué hace ahora | Por qué ahora |
+|---|---|---|
+| **Onia Comercio** (2º vertical) | La lista de 60 ferreterías y distribuidoras con señal de dolor | Cuando se abra el vertical, la lista ya existe. Hoy no hay ninguna |
+| **Módulo "Onia te publica"** | Banco de contenido reusable + plantillas por rubro | Es el add-on que después le paga 20% × 12 meses. Le conviene que quede bien |
+| **Canal "Onia Automatiza"** | 8 guiones en cola, sin publicar | Cuando Sergio abra el canal y el OAuth, se publica de una |
+| **Lucía / roster** | Cola de piezas sin publicar | Destraba con el token de IG (S6) |
+| **Taller "facturación en línea"** | Piezas de promoción y guion del taller | Es el gancho del SIAT y la ventana se cierra el 1-oct |
+| **Casos y testimonios** | Grabar al primer cliente que entre | Sin caso, la objeción "¿quién más lo usa?" no tiene respuesta |
+
+### 9.7 Cuánto le cuesta a Onia esta ventana
+
+| Concepto | Peor caso (cero ventas) |
+|---|---:|
+| Reuniones (8 × 50) | Bs 400 |
+| Tope del bounty si saca 12 | Bs 600 |
+| Higgsfield (6 piezas) | según presupuesto que fije Sergio |
+| Comisiones | Bs 0 (no hay ventas) |
+| **Exposición máxima** | **Bs 600 + Higgsfield** |
+
+Si vende, todo lo demás sale de plata que ya entró.
 
 ---
 
