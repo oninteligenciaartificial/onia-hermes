@@ -511,7 +511,7 @@ Herramientas nuevas, con lo que ya existe y lo que falta:
 | Herramienta | ¿Sensible? | Qué hay hoy | Qué falta |
 |---|---|---|---|
 | **Consultar stock** (por sucursal) | No (lectura) | `onia_commerce_stock_items` + `stock_movements` en Prisma, **sin uso**; `availability-reply.ts` (1.013 líneas) en la rama BE | Enchufar tabla ↔ herramienta; decidir si expone stock exacto o "hay/no hay/consultar" |
-| **Precio con tipo de cambio del día** | No (lectura) | `logic/fx.logic.mjs`: `officialRate(dailyTco)`, `effectiveRate(vrd, spread)`, `repriceUsdToBob` — **NO portado** (0 referencias). El BE catalog adapter tampoco lo tiene | Portar fx + **una fuente diaria del TCO del BCB**. Sin eso el precio en USD es fantasía |
+| **Precio con tipo de cambio del día** | No (lectura) | `logic/fx.logic.mjs`: `officialRate(dailyTco)`, `effectiveRate`, `repriceUsdToBob` — **NO portado** (0 referencias). El BE catalog adapter tampoco lo tiene | Portar fx + **una fuente diaria del TCO del BCB**. `officialRate` ahora **lanza** sin TCO: sin la fuente, portarlo rompe la ruta de precio |
 | **Cotizar** (generar cotización) | **SÍ** | `onia_commerce_quotes` + `quote_lines` en Prisma (sin uso); `computeQuoteTotal` portado; `canTransitionQuote`/`isQuoteExpired` **no portados** | Portar máquina de estados + `approval_request` para el descuento + numeración (`logic/numbering.logic.mjs`, no portado) |
 | **Estado de un pedido** | No | `onia_commerce_orders` (sin uso) | Enchufar |
 | **Saldo / cuentas por cobrar** | No | `paymentBalance` en el core, **no portado** | Portar + política de qué saldo se muestra por WhatsApp |
@@ -520,11 +520,15 @@ Herramientas nuevas, con lo que ya existe y lo que falta:
 Dos advertencias que valen más que la lista:
 
 1. **El tipo de cambio es un riesgo de plata, no una feature.** Desde la flotación
-   (RM 245/2026, RD BCB 88/2026) el oficial dejó de ser 6,96 — el core ya lo corrigió
-   (`OFFICIAL_RATE_BOB_PER_USD = 6.96` quedó como *fallback histórico*,
-   `logic/fx.logic.mjs:17,31`). Un bot que cotiza en Bs con la tasa vieja **cotiza barato y
-   pierde margen en cada mensaje**. Antes de darle la herramienta de precio hay que tener el
-   TCO diario. **[NO VERIFICADO]** no encontré ninguna fuente automática de TCO diario ni en
+   (RM 245/2026, RD BCB 88/2026) el oficial dejó de ser 6,96, y el core endureció esto **durante
+   esta misma sesión** (commit `a760f7e7`, 2026-07-30): `officialRate(dailyTco)` ahora **lanza**
+   si no llega un TCO válido, en vez de caer a 6,96 — con el oficial cerca de 11,89 ese fallback
+   silencioso declaraba ~41% de menos (`onia-core/logic/fx.logic.mjs:19,42`). Un bot que cotiza
+   en Bs con la tasa vieja **cotiza barato y pierde margen en cada mensaje**.
+   Consecuencia práctica: **portar `fx` sin resolver antes la fuente diaria del TCO rompe la
+   ruta de precio en vez de dar un número malo** — lo cual es correcto, pero significa que el
+   orden es `fuente de TCO` → `portar fx` → `herramienta de precio`, no al revés.
+   **[NO VERIFICADO]** no encontré ninguna fuente automática de TCO diario ni en
    `onia-platform` ni en `onia-core` — solo el parámetro `dailyTco` que alguien debe alimentar.
 2. **Cotizar es una acción sensible.** Un precio por WhatsApp es una oferta. Debe pasar por
    `routeAction` → `approval_request` (o por un rango de descuento pre-aprobado), no
@@ -638,3 +642,20 @@ comando canónico que dice `CLAUDE.md` no ejecuta los cuatro validadores que el 
 | Core no está en `main` de Bolivian Electric | `git ls-files \| grep onia_core` → vacío; vive en `claude/onia-core-avance` |
 | Segundo chatbot, con intents y data-sources | `Bolivian Electric/.claude/worktrees/bolivian-electric-chatbot-1e39da/apps/web/lib/whatsapp-chatbot.ts` + `lib/types.ts:130-135` |
 | Rama 37 commits adelante de `origin/master` | `git rev-list --left-right --count origin/master...HEAD` → `0  37` |
+| `officialRate` lanza sin TCO (endurecido 2026-07-30) | `onia-core/logic/fx.logic.mjs:19,42` (commit `a760f7e7`) |
+
+---
+
+## Nota de concurrencia (honestidad sobre las condiciones del análisis)
+
+Este worktree tuvo **otra sesión trabajando en paralelo** mientras se hacía el análisis:
+
+- La rama avanzó de `79b2f57a` a `e87d5aba` durante la sesión.
+- El commit `a760f7e7 fix(core): sin TCO del dia la factura en moneda extranjera CORTA, no
+  inventa 6.96` **modificó `onia-core/logic/fx.logic.mjs` después** de que yo lo leyera. Volví a
+  verificar y corregí las citas (§3.4). El validador sigue verde tras ese cambio.
+- Este documento **fue commiteado por un proceso ajeno a este análisis** (el hook de auto-sync o
+  la sesión paralela), dentro de `e87d5aba`, junto a otro doc. No lo commiteé yo.
+
+Todo lo demás citado (`onia-platform`, Bolivian Electric, resto del core) se leyó y verificó
+sin cambios concurrentes detectados.
