@@ -674,3 +674,19 @@ test("VOZ en conversation_created: el primer mensaje tambien se transcribe", () 
   assert.equal(parsed.turn.kind, "voice");
   assert.equal(parsed.meta.attachments[0].file_type, "audio");
 });
+
+test("VOZ: un transcriptor que devuelve basura tampoco tumba el turno", async () => {
+  const posted = [];
+  const result = await runChatwootTurn(voiceFixture(), {
+    store: memoryStore().store,
+    config: CONFIG,
+    nowIso: "2026-07-27T14:05:00Z",
+    llm: async () => "",
+    client: { warnings: [], async sendMessage(id, text) { posted.push(text); return {}; } },
+    transcribeAudio: async () => undefined,
+  });
+
+  assert.equal(result.ok, true);
+  assert.equal(result.voice.transcribed, false);
+  assert.equal(posted.length, 1, "el prospecto igual recibe el M_AUDIO_FAIL");
+});

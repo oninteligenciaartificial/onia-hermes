@@ -143,6 +143,13 @@ test("resolveAttachmentUrl: una ruta relativa se pega a la base; sin base no se 
   assert.equal(resolveAttachmentUrl("/rails/x/nota.oga", ""), null);
 });
 
+test("resolveAttachmentUrl: SIN base falla CERRADO, no devuelve la URL cruda del webhook", () => {
+  // Si devolviera el absoluto, un `baseUrl: \"\"` mal cableado desarmaria en silencio toda la
+  // defensa de arriba: volveriamos a pedir el host que diga el payload.
+  assert.equal(resolveAttachmentUrl("http://169.254.169.254/latest/meta-data/", ""), null);
+  assert.equal(resolveAttachmentUrl(BLOB, undefined), null);
+});
+
 test("resolveAttachmentUrl: conserva el querystring (el blob va firmado ahi)", () => {
   assert.equal(resolveAttachmentUrl("https://pub.host/x/n.oga?sig=abc", CHATWOOT), `${CHATWOOT}/x/n.oga?sig=abc`);
 });
@@ -151,6 +158,14 @@ test("filenameFor: whisper decodifica por extension, asi que nunca queda sin una
   assert.equal(filenameFor(`${CHATWOOT}/rails/x/nota.oga`), "nota.oga");
   assert.equal(filenameFor(`${CHATWOOT}/rails/x/blob`, "ogg"), "nota-de-voz.ogg");
   assert.equal(filenameFor("", ""), "nota-de-voz.ogg");
+  assert.equal(filenameFor(`${CHATWOOT}/rails/x/nota%20de%20voz.oga`), "nota de voz.oga");
+});
+
+test("filenameFor: un `%` roto en el nombre NO puede tirar (URIError en medio del turno)", () => {
+  // Un adjunto llamado "100%off.mp3" alcanza para que decodeURIComponent reviente. Si escapara,
+  // el prospecto se quedaria sin respuesta por el NOMBRE de su archivo.
+  assert.equal(filenameFor(`${CHATWOOT}/rails/x/100%off.mp3`), "100%off.mp3");
+  assert.equal(filenameFor(`${CHATWOOT}/rails/x/nota%.oga`, "oga"), "nota%.oga");
 });
 
 // ---------------------------------------------------------------------------
@@ -322,6 +337,23 @@ test("transcribeChatwootAudio: si falla la descarga NO se llama a Speaches", asy
   assert.equal(r.reason, "descarga_fallida");
   assert.equal(r.text, "", "el contrato dice que `text` siempre es string, tambien al fallar");
   assert.equal(f.llamadas.length, 1);
+});
+
+test("CONTRATO, camino COMPLETO: descarga OK + nombre con `%` roto -> transcribe igual, no tira", async () => {
+  // Este es el unico camino interno que podia lanzar (decodeURIComponent en filenameFor), y los
+  // casos de abajo no lo tocaban: todos cortan antes de la descarga. Acá se llega hasta Speaches.
+  const f = fetchMock([
+    res({ body: audioBytes(), headers: { "content-type": "audio/mpeg" } }),
+    res({ json: { text: "hola, quiero ver la demo" } }),
+  ]);
+  const r = await transcribeChatwootAudio(
+    { attachments: [{ file_type: "audio", data_url: "https://pub.host/rails/x/100%off.mp3" }], chatwootBaseUrl: CHATWOOT },
+    { fetch: f, env: {} },
+  );
+
+  assert.equal(r.ok, true);
+  assert.equal(r.text, "hola, quiero ver la demo");
+  assert.equal(f.llamadas[1].init.body.get("file").name, "100%off.mp3", "el nombre viaja sin decodificar, pero viaja");
 });
 
 test("CONTRATO: pase lo que pase devuelve {ok,text,reason,warnings} y NUNCA tira", async () => {

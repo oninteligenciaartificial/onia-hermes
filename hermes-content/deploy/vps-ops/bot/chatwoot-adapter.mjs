@@ -240,7 +240,9 @@ async function transcribeIfVoice(parsed, deps = {}) {
         // Mismas fuentes que createChatwootClient. El token NO se guarda en ningún objeto que se
         // serialice después: se pasa, se usa en un header y se olvida.
         token: String(deps.token ?? ENV_TOKEN()),
-        chatwootBaseUrl: String(deps.baseUrl ?? ENV_BASE_URL()),
+        // `||` y NO `??`: con `??`, un `deps.baseUrl` vacío ("" de una env sin completar) pasaría
+        // tal cual y desarmaría la defensa contra SSRF del adjunto. Vacío = usar el default.
+        chatwootBaseUrl: String(deps.baseUrl || ENV_BASE_URL()),
       },
       deps,
     );
@@ -250,6 +252,10 @@ async function transcribeIfVoice(parsed, deps = {}) {
     // por un audio. El bot tiene que poder decir "escribímelo" aunque Speaches explote.
     stt = { ok: false, text: "", reason: "transcripcion_exploto", warnings: [`audio: ${String(error?.message || error).slice(0, 200)}`] };
   }
+
+  // Un transcriptor que devuelve `undefined` (un mock mal escrito, una versión futura) no puede
+  // tumbar el turno con un "cannot read properties of undefined" a esta altura del pipeline.
+  if (!stt || typeof stt !== "object") stt = { ok: false, text: "", reason: "respuesta_invalida", warnings: [] };
 
   const warnings = [...(stt.warnings || [])];
   if (!stt.ok || !stt.text) {

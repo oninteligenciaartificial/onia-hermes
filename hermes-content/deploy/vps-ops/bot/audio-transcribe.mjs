@@ -146,14 +146,28 @@ export function resolveAttachmentUrl(dataUrl, chatwootBaseUrl) {
   }
   // Solo http(s): un `data:` o un `file:` en un adjunto no es un audio legitimo.
   if (parsed.protocol !== "http:" && parsed.protocol !== "https:") return null;
-  if (!base) return parsed.toString();
+  // FALLA CERRADO. Sin base configurada NO se devuelve la URL cruda del webhook: si algun dia
+  // alguien pasa `baseUrl: ""`, devolver el absoluto anularia en silencio toda la defensa de
+  // arriba y volveriamos a pedir el host que diga el payload. Sin base, no se baja nada.
+  if (!base) return null;
   return `${base}${parsed.pathname}${parsed.search}`;
 }
 
-/** Nombre de archivo para el form. Whisper usa la extension para saber como decodificar. */
+/**
+ * Nombre de archivo para el form. Whisper usa la extension para saber como decodificar.
+ * NO TIRA: `decodeURIComponent` revienta con URIError ante un `%` que no es un escape valido
+ * (un adjunto llamado "100%off.mp3" alcanza). Como esto corre en medio del turno, una excepcion
+ * acá dejaria al prospecto sin respuesta por un detalle de nombre de archivo.
+ */
 export function filenameFor(url, extension) {
   const fromUrl = String(url || "").split("?")[0].split("/").filter(Boolean).pop() || "";
-  if (/\.[a-z0-9]{2,5}$/i.test(fromUrl)) return decodeURIComponent(fromUrl).slice(0, 120);
+  if (/\.[a-z0-9]{2,5}$/i.test(fromUrl)) {
+    try {
+      return decodeURIComponent(fromUrl).slice(0, 120);
+    } catch {
+      return fromUrl.slice(0, 120); // sin decodificar sirve igual: lo que importa es la extension
+    }
+  }
   const ext = String(extension || "").replace(/^\./, "").toLowerCase() || "ogg";
   return `nota-de-voz.${ext}`;
 }
