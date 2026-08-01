@@ -17,20 +17,34 @@ import {
 } from "./fx.logic.mjs";
 
 describe("tipo de cambio Bolivia", () => {
-  it("el fallback oficial historico es 6.96 y el spread por defecto 0.10", () => {
+  it("6.96 es la tasa del regimen ANTERIOR, no una tasa vigente", () => {
+    // Se conserva para leer registros anteriores al 26-jun-2026 (flotacion).
+    // Ya no es el valor por defecto de officialRate: ver el test de abajo.
     assert.equal(OFFICIAL_RATE_BOB_PER_USD, 6.96);
     assert.equal(DEFAULT_BANK_SPREAD, 0.1);
   });
 
-  it("officialRate usa el TCO diario del BCB y cae al fallback si no hay dato", () => {
+  it("officialRate usa el TCO diario del BCB", () => {
     assert.equal(officialRate(10.9), 10.9); // TCO del dia (external_gate)
-    assert.equal(officialRate(undefined), 6.96); // sin TCO -> fallback historico
-    assert.equal(officialRate(null), 6.96);
-    assert.equal(officialRate(0), 6.96); // 0 no es tasa valida -> fallback
-    assert.equal(officialRate(-1), 6.96); // negativo -> fallback
-    assert.equal(officialRate("no-numero"), 6.96);
-    assert.equal(officialRate(9.83, 7), 9.83); // fallback custom, TCO valido igual gana
-    assert.equal(officialRate(undefined, 7), 7); // fallback custom
+    assert.equal(officialRate(9.83, 7), 9.83); // un TCO valido le gana al fallback
+  });
+
+  it("sin TCO valido LANZA: nunca inventa una tasa", () => {
+    // Regresion con riesgo de plata: antes caia en silencio a 6.96. Con el
+    // oficial cerca de 11.89 eso emitia una factura ~41% subvaluada sin aviso.
+    // En una ruta de plata el patron correcto es fallar fuerte.
+    assert.throws(() => officialRate(undefined), /TCO/);
+    assert.throws(() => officialRate(null), /TCO/);
+    assert.throws(() => officialRate(0), /TCO/);
+    assert.throws(() => officialRate(-1), /TCO/);
+    assert.throws(() => officialRate("no-numero"), /TCO/);
+  });
+
+  it("el fallback es opt-in explicito y tiene que ser una tasa valida", () => {
+    assert.equal(officialRate(undefined, 7), 7); // el que lo pasa se hace cargo
+    assert.throws(() => officialRate(undefined, 0), /fallback/);
+    assert.throws(() => officialRate(undefined, -1), /fallback/);
+    assert.throws(() => officialRate(undefined, "no-numero"), /fallback/);
   });
 
   it("tasa efectiva = VRD + spread", () => {

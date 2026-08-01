@@ -88,11 +88,10 @@ Doc: `hermes-content/docs/ONIA_TIPOS_DE_CAMBIO_BOLIVIA_20260730.md`.
 - **Consecuencia:** la misma mercadería se nacionaliza a un TC y se factura a otro.
 - **TCO al 29-jul-2026: Bs 11,89.** Cambia todos los días; nunca citarlo de memoria.
 
-**🔴 BUG ABIERTO, riesgo de plata:** `onia-core/logic/fx.logic.mjs:31` — `officialRate()`
-cae en silencio al fallback **6,96** si no le inyectan el TCO. Con el oficial en 11,89 emite
-una factura **41,5% subvaluada, sin error ni aviso**. Está fijado por tests, o sea que es
-deliberado. En una ruta de plata el patrón correcto es fallar fuerte.
-**Si Onia Platform va a facturar, esto DEJA de estar parqueado.**
+**✅ CERRADO 2026-07-31.** Era: `officialRate()` caía en silencio al fallback **6,96** si no
+le inyectaban el TCO → factura 41,5% subvaluada sin aviso. Ahora **lanza** cuando no hay TCO
+válido; el fallback quedó opt-in explícito y el 6,96 sólo como constante histórica. Los tests
+que fijaban el comportamiento viejo se reescribieron para fijar el nuevo (suite 521/521).
 
 **Brechas del core:** no existe entidad de tipos de cambio (ni tabla, ni serie de tiempo) ·
 `journal_entry_lines` no tiene `currency` ni `exchange_rate` · `exchangeDifference` está
