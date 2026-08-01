@@ -712,7 +712,8 @@ export async function createOniaCenterEntity(entity: RuntimeEntity, payload: unk
         origin_role_key: roleToDb(lead.owner),
         owner_role_key: roleToDb(lead.owner),
         pipeline_status: leadStatusToDb[lead.status] ?? "Nuevo",
-        suggested_service_key: serviceToDb(lead.serviceId),
+        // FK a services: "" viola la constraint (23503); sin servicio va NULL.
+        suggested_service_key: lead.serviceId ? serviceToDb(lead.serviceId) : null,
         priority: "media",
         private_notes: lead.nextAction || null,
         raw: {
