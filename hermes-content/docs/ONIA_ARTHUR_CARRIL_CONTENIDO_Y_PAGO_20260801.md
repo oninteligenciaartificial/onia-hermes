@@ -535,6 +535,26 @@ Sergio pidió meterlo. Entra así, no como barra libre:
 Entregable de Higgsfield en los 30 días: **4 hooks** para la serie de plataforma + **1 pieza
 de marca** + la cola de Lucía preparada sin publicar.
 
+### 9.5-bis. ¿Para qué cuenta es cada cosa? (definido de una vez)
+
+Regla: **el crédito pago se gasta solo donde hay embudo con atribución. Hoy eso es la cuenta
+de Onia y nada más.**
+
+| Cuenta | De quién es | ¿Higgsfield/crédito pago? | Qué publica Arthur ahí |
+|---|---|---|---|
+| **Onia** (IG/TikTok/FB) | Onia | **SÍ — acá va TODO el presupuesto de los 30 días** | Serie plataforma, 10 objeciones, demo 40 s, piezas T2, SIAT. Todo con `?src=` |
+| **Marca personal de Sergio** | Sergio (sirve a Onia) | **NO** — es cara real grabada con celular, costo 0. Higgsfield no aporta ahí | Edita los crudos de Sergio con `editor-videos` (cortes+subtítulos). Sergio graba, Arthur monta |
+| **Lucía** (@lu.antelo) | Onia (activo) | Solo si sobra presupuesto — **cola sin publicar** hasta token IG (S6) | Nada publicado. Cola lista |
+| **Cuenta personal de Arthur** | Arthur | **NO — nunca con crédito de Onia** | Lo que quiera por su cuenta; si menciona Onia, con aprobación |
+| **Canales YT** (Onia Media) | Onia | NO — parqueados | Solo guiones en cola, gratis |
+
+Tres consecuencias:
+- El bounty y la atribución **solo corren en la cuenta de Onia** — es la única con links `?src=`.
+- La marca personal de Sergio no es carril de Arthur: es materia prima (Sergio graba) + montaje
+  (Arthur edita, gratis). Sin generación paga.
+- Si un crédito se gasta en una cuenta que no es Onia sin OK escrito, se descuenta de su
+  liquidación como costo directo (regla vigente del acuerdo).
+
 ### 9.6 El trabajo que siembra lo que viene
 
 Esto es lo que hace con el tiempo que le sobra, y es lo que lo conecta con las metas futuras.
