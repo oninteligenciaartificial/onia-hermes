@@ -68,6 +68,8 @@ h2 { font-family: var(--font-display); font-weight:700; font-size: clamp(1.9rem,
 
 .grow { flex:1; display:flex; flex-direction:column; justify-content:center; }
 .row { display:flex; gap: clamp(1.5rem, 3vw, 3rem); align-items:center; }
+.row.grow { flex-direction: row; }
+.shot img { max-height: 62vh; object-fit: cover; object-position: top; }
 .col { flex:1; min-width:0; }
 
 /* screenshots con marco navegador */
@@ -131,7 +133,7 @@ h2 { font-family: var(--font-display); font-weight:700; font-size: clamp(1.9rem,
   <div class="grow">
     <img src="onia-logo-dark.svg" alt="Onia" style="height:clamp(2.6rem,5vw,4.2rem); align-self:flex-start; margin-bottom:2.6rem;">
     <h1>Sistemas con <span class="accent">IA</span><br>para negocios<br>bolivianos.</h1>
-    <p class="sub" style="margin-top:1.6rem;">Facturá al SIAT, agendá y cobrá sin tipear una sola línea.</p>
+    <p class="sub" style="margin-top:1.6rem;">Automatizamos tu negocio con agentes de IA que trabajan 24/7. La IA hace el trabajo — vos solo aprobás.</p>
     <div class="stats">
       <div class="stat"><b>Santa Cruz</b><span>Bolivia · agosto 2026</span></div>
     </div>
@@ -161,7 +163,7 @@ h2 { font-family: var(--font-display); font-weight:700; font-size: clamp(1.9rem,
   <div class="grow">
     <h2>El trabajo repetitivo se come el día del dueño.</h2>
     <ul class="biglist" style="margin-top:1rem;">
-      <li><span class="n">01</span><div>Facturas tipeadas a mano, dos y tres veces.<small>Y desde el 1 de octubre de 2026 solo se emite factura en línea (plazo vigente del SIN).</small></div></li>
+      <li><span class="n">01</span><div>Horas en tareas que una máquina hace mejor.<small>Facturas, planillas y reportes tipeados a mano, dos y tres veces.</small></div></li>
       <li><span class="n">02</span><div>Citas y pedidos que se pierden en silencio.<small>Cada hueco en la agenda es plata que no vuelve.</small></div></li>
       <li><span class="n">03</span><div>WhatsApp lleno de consultas sin responder.<small>El cliente boliviano compra por WhatsApp — y no espera.</small></div></li>
       <li><span class="n">04</span><div>La información del negocio partida en cuadernos y Excel.<small>Nadie sabe el número real hasta fin de mes.</small></div></li>
@@ -201,63 +203,68 @@ h2 { font-family: var(--font-display); font-weight:700; font-size: clamp(1.9rem,
   <div class="slide-num">05 / 14</div>
 </section>
 
-<!-- 06 · DentalGest -->
+<!-- 06 · Módulos de la plataforma -->
 <section class="slide">
+  <div class="kicker">Qué hace Onia Platform</div>
   <div class="row grow">
-    <div class="col" style="flex:.8;">
-      <div class="kicker">Onia Platform · pack salud dental</div>
-      <h2 style="font-size:clamp(1.7rem,3.4vw,2.8rem);">La clínica ordenada, los pacientes que vuelven.</h2>
-      <p class="sub">El pack dental de Onia Platform: agenda con odontograma, historial y consentimientos. Cuando un paciente falta, el agente detecta el hueco y propone la reprogramación por WhatsApp — el doctor aprueba con un click. Desde la plataforma manejamos la operación completa de la clínica.</p>
-      <div style="margin-top:1.4rem;"><span class="pill">Factura SIAT sin re-tipear, incluida</span></div>
+    <div class="col" style="flex:.85;">
+      <h2 style="font-size:clamp(1.7rem,3.4vw,2.8rem);">Los módulos que ya operan.</h2>
+      <ul class="biglist" style="margin-top:.2rem;">
+        <li><span class="n">01</span><div>Agenda y clientes<small>Turnos, fichas, historial y documentos en un solo lugar</small></div></li>
+        <li><span class="n">02</span><div>Ventas e inventario<small>Punto de venta, stock con alertas, pedidos</small></div></li>
+        <li><span class="n">03</span><div>Cobranzas y facturación<small>Quién te debe, cuánto y desde cuándo</small></div></li>
+        <li><span class="n">04</span><div>Agentes de IA<small>Trabajan solos y dejan todo listo para tu aprobación</small></div></li>
+        <li><span class="n">05</span><div>Panel del dueño<small>Tu negocio en 30 segundos cada mañana</small></div></li>
+      </ul>
     </div>
     <div class="col">
-      <div class="shot"><div class="bar"><i></i><i></i><i></i><span>onia platform · pack dental</span></div><img src="capturas/dental-gest.png" alt="Onia Platform — pack dental"></div>
+      <div class="shot"><div class="bar"><i></i><i></i><i></i><span>onia platform</span></div><img src="capturas/onia-platform-hero.png" alt="Onia Platform"></div>
     </div>
   </div>
+  <img class="brandmark" src="onia-logomark.svg" alt="">
   <div class="slide-num">06 / 14</div>
 </section>
 
-<!-- 07 · GestiOS -->
+<!-- 07 · Packs por rubro -->
 <section class="slide">
-  <div class="row grow">
-    <div class="col">
-      <div class="shot"><div class="bar"><i></i><i></i><i></i><span>onia platform · pack comercio</span></div><img src="capturas/gesti-os.png" alt="Onia Platform — pack comercio"></div>
-    </div>
-    <div class="col" style="flex:.8;">
-      <div class="kicker">Onia Platform · pack comercio</div>
-      <h2 style="font-size:clamp(1.7rem,3.4vw,2.8rem);">Punto de venta, inventario y clientes para el comercio.</h2>
-      <p class="sub">El pack de comercio de Onia Platform: POS, stock con alertas de reposición, pedidos y reportes. Con atributos específicos por tipo de comercio: ropa, farmacia, electrónica, ferretería y más. El mismo núcleo, otro traje.</p>
-    </div>
+  <div class="kicker">Se enciende por rubro</div>
+  <div class="grow">
+    <h2>El mismo núcleo, el traje de tu industria.</h2>
+    <ul class="biglist" style="margin-top:1rem;">
+      <li><span class="n">SALUD</span><div>Clínicas y consultorios<small>Agenda por profesional, ficha clínica, consentimientos, recordatorios y reprogramación automática</small></div></li>
+      <li><span class="n">COMERCIO</span><div>Tiendas, ferreterías, farmacias, electrónica<small>Punto de venta, inventario con atributos por tipo de producto, pedidos y reportes</small></div></li>
+      <li><span class="n">SERVICIOS</span><div>Importadoras, distribuidoras y empresas de servicio<small>Cotizaciones, órdenes, cobranzas y seguimiento de clientes</small></div></li>
+    </ul>
+    <p class="sub" style="margin-top:1.4rem; max-width:62ch;">¿Tu rubro no está en la lista? Se arma sobre el mismo núcleo — por eso podemos movernos rápido y a precio boliviano.</p>
   </div>
+  <img class="brandmark" src="onia-logomark.svg" alt="">
   <div class="slide-num">07 / 14</div>
 </section>
 
-<!-- 08 · Onia Center: hoy -->
+<!-- 08 · Los agentes -->
 <section class="slide dark">
-  <div class="kicker">Así operamos nosotros</div>
-  <div class="row grow">
-    <div class="col" style="flex:.75;">
-      <h2 style="font-size:clamp(1.7rem,3.4vw,2.8rem);">Onia Center: nuestra propia empresa corre sobre agentes.</h2>
-      <p class="sub">Este es nuestro panel real, hoy. Los agentes prospectan, redactan seguimientos, escriben contenido y auditan el código — y todo queda en una cola esperando el OK humano.</p>
-      <div style="margin-top:1.4rem;"><span class="pill">La IA propone · el humano aprueba</span></div>
-    </div>
-    <div class="col">
-      <div class="shot"><div class="bar"><i></i><i></i><i></i><span>center.onia.com.bo — Hoy</span></div><img src="capturas/panel-hoy.png" alt="Onia Center"></div>
-    </div>
+  <div class="kicker">Lo que nos hace distintos</div>
+  <div class="grow">
+    <h2>Agentes que trabajan solos.<br><span class="accent">La IA propone, vos aprobás.</span></h2>
+    <ul class="biglist" style="margin-top:.6rem;">
+      <li><span class="n">01</span><div>Detectan lo que se está por perder.<small>Un turno que quedó libre, un cliente que dejó de venir, una cuenta sin cobrar</small></div></li>
+      <li><span class="n">02</span><div>Redactan la acción completa.<small>El mensaje exacto, a quién y por qué canal — listo para salir</small></div></li>
+      <li><span class="n">03</span><div>Esperan tu OK. Siempre.<small>Nada sale sin aprobación humana: es la regla número uno del sistema</small></div></li>
+      <li><span class="n">04</span><div>Ejecutan y dejan registro.<small>Se envía por WhatsApp y queda anotado quién aprobó y cuándo</small></div></li>
+    </ul>
   </div>
   <div class="slide-num">08 / 14</div>
 </section>
 
-<!-- 09 · Agentes -->
-<section class="slide dark">
-  <div class="kicker">El equipo autónomo</div>
-  <div class="row grow">
-    <div class="col">
-      <div class="shot"><div class="bar"><i></i><i></i><i></i><span>center.onia.com.bo — Agentes</span></div><img src="capturas/panel-agentes.png" alt="Agentes Onia"></div>
-    </div>
-    <div class="col" style="flex:.75;">
-      <h2 style="font-size:clamp(1.7rem,3.4vw,2.8rem);">11 agentes activos, cada uno con su horario.</h2>
-      <p class="sub">Prospector busca negocios reales por rubro y ciudad. Radar detecta tendencias. El Auditor revisa nuestro propio código cada semana. El Vendedor da seguimiento de lunes a sábado. Lo mismo que hacemos para nosotros, lo instalamos en tu negocio.</p>
+<!-- 09 · Nosotros somos el caso -->
+<section class="slide green">
+  <div class="kicker">La prueba</div>
+  <div class="grow">
+    <h2>Nuestra propia empresa ya corre con estos agentes.</h2>
+    <p class="sub" style="max-width:58ch;">No lo contamos en teoría. Onia opera todos los días con agentes que buscan clientes, redactan los seguimientos, producen contenido y hasta auditan nuestro propio código — cada uno con su horario, y todo pasando por una aprobación humana antes de salir. Lo que probamos en casa es lo que instalamos en tu negocio.</p>
+    <div class="stats">
+      <div class="stat"><b style="color:var(--onia-ink)">11</b><span style="color:var(--onia-ink-2)">agentes corriendo 24/7</span></div>
+      <div class="stat"><b style="color:var(--onia-ink)">0</b><span style="color:var(--onia-ink-2)">mensajes enviados sin aprobación humana</span></div>
     </div>
   </div>
   <div class="slide-num">09 / 14</div>

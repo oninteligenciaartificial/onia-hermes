@@ -21,10 +21,11 @@
 ## Slide 01 — Portada
 
 > "Buenas. Soy Sergio, de **Onia**. Somos una empresa cruceña que construye
-> sistemas con inteligencia artificial para negocios bolivianos. Hoy les voy a
-> mostrar — con pantallas reales, no con diapositivas teóricas — qué construimos,
-> cómo lo usamos nosotros mismos todos los días, y qué puede hacer por un negocio
-> como el de ustedes."
+> sistemas con inteligencia artificial para negocios bolivianos: **agentes de IA
+> que trabajan 24/7 y hacen el trabajo repetitivo — la persona solo aprueba**.
+> Hoy les voy a mostrar, con pantallas reales y no con diapositivas teóricas,
+> qué construimos, cómo lo usamos nosotros mismos todos los días, y qué puede
+> hacer por un negocio como el de ustedes."
 
 *(Pausa. Avanzar.)*
 
@@ -43,15 +44,15 @@ Números del slide: una plataforma núcleo, 11 agentes de IA corriendo 24/7,
 ## Slide 03 — El problema
 
 > "Antes del qué, el porqué. En casi todos los rubros vemos el mismo patrón:
-> el dueño se pasa el día en trabajo repetitivo. Facturas que se tipean dos y
-> tres veces. Citas y pedidos que se caen en silencio. Un WhatsApp lleno de
-> consultas sin responder — y el cliente boliviano compra por WhatsApp, no espera.
-> Y la información del negocio partida entre cuadernos y Excel."
+> el dueño se pasa el día en trabajo que una máquina hace mejor. Facturas,
+> planillas y reportes tipeados dos y tres veces. Citas y pedidos que se caen
+> en silencio. Un WhatsApp lleno de consultas sin responder — y el cliente
+> boliviano compra por WhatsApp, no espera. Y la información del negocio
+> partida entre cuadernos y Excel."
 
-> "Y hay un dato de contexto que a varios les toca directo: **desde el 1 de
-> octubre de este año, la factura solo se emite en modalidad en línea** — es el
-> plazo vigente del Servicio de Impuestos. Se puede cumplir gratis tipeando en el
-> portal del SIN; nuestro trabajo es que no tengan que tipear."
+> "La pregunta que le hacemos a cada dueño es simple: **¿cuántas horas de tu
+> semana se van en eso?** Porque cada una de esas horas hoy se puede automatizar
+> con IA — y eso es exactamente lo que hacemos."
 
 *(Este slide es el gancho emocional. Mirar a la sala, no a la pantalla.)*
 
@@ -81,45 +82,51 @@ Números del slide: una plataforma núcleo, 11 agentes de IA corriendo 24/7,
 > primeros packs ya operan, y cada avance lo mostramos en redes, todos los días.
 > Lo que van a ver ahora son pantallas reales de la plataforma."
 
-## Slide 06 — Onia Platform · pack dental
+## Slide 06 — Los módulos que ya operan
 
-> "Primer rubro encendido en la plataforma: salud dental. Desde Onia Platform
-> manejamos la operación completa de la clínica: agenda con odontograma,
-> historial clínico, consentimientos. Y la parte que más le gusta a los doctores:
-> cuando un paciente falta, el agente detecta el hueco en la agenda y **le propone
-> la reprogramación por WhatsApp — el doctor aprueba con un click**. No manda
-> recorditos: llena huecos. Cada hueco recuperado es plata que vuelve."
+> "Concretamente, esto es lo que hace hoy la plataforma: **agenda y clientes**
+> — turnos, fichas, historial y documentos en un solo lugar. **Ventas e
+> inventario** — punto de venta y stock que te avisa antes de que te quedes sin
+> nada. **Cobranzas y facturación** — quién te debe, cuánto y desde cuándo.
+> **Agentes de IA**, que es la parte que vamos a ver en un minuto. Y el **panel
+> del dueño**: su negocio entero en 30 segundos cada mañana."
 
-*(Si preguntan por SIAT aquí: "la emisión en línea está en homologación ante el
-SIN; mientras tanto el sistema deja la venta lista y se factura por el portal.
-El estado real se lo cuento de frente a quien le interese.")*
+*(A la derecha está la pantalla real del producto — señalarla.)*
 
-## Slide 07 — Onia Platform · pack comercio
+## Slide 07 — Se enciende por rubro
 
-> "Segundo rubro: comercio. El mismo núcleo con otro traje — punto de venta,
-> inventario con alertas de reposición, clientes y reportes. Con atributos
-> específicos por tipo de comercio: ropa, farmacia, electrónica, ferretería.
-> No son productos separados: es **la misma plataforma** encendida para otro rubro."
+> "Y esto es lo importante: **no es un producto por industria, es el mismo
+> núcleo con el traje de cada una**. En salud: agenda por profesional, ficha
+> clínica, consentimientos y reprogramación automática. En comercio: punto de
+> venta e inventario con los atributos de cada tipo de producto — no es lo mismo
+> vender ropa por talla que remedios por vencimiento. En servicios: cotizaciones,
+> órdenes y cobranzas."
 
-## Slide 08 — Onia Center (panel real)
+> "Si su rubro no está en la lista, se arma sobre el mismo núcleo. Por eso
+> podemos movernos rápido y a **precio boliviano**, no de software importado
+> en dólares."
 
-> "Ahora lo que les prometí: cómo nos operamos **nosotros**. Esto no es un mockup
-> — es una captura de nuestro panel real, de esta semana. Miren los números de
-> arriba: 80 propuestas esperando aprobación, 45 leads abiertos, **11 agentes
-> corriendo 24/7**. Los agentes prospectan, redactan seguimientos, escriben
-> contenido, auditan nuestro propio código… y todo cae en esa cola de la
-> izquierda, esperando que un humano apriete 'Aprobar'."
+## Slide 08 — Los agentes (lo que nos hace distintos)
 
-> "Esa es nuestra filosofía con la IA, y es la que instalamos en cada cliente:
-> **la IA hace el trabajo; la decisión es tuya.**"
+> "Acá está la diferencia real con cualquier sistema que ya hayan visto. Un
+> sistema común **guarda** información. Los nuestros **actúan**:"
 
-## Slide 09 — Los agentes
+> "**Uno**: detectan lo que se está por perder — un turno que quedó libre, un
+> cliente que dejó de venir, una cuenta sin cobrar. **Dos**: redactan la acción
+> completa, el mensaje exacto, a quién y por qué canal. **Tres** — y esta es la
+> regla número uno del sistema — **esperan su OK. Siempre.** Nada sale sin
+> aprobación humana. **Cuatro**: se envía y queda anotado quién aprobó y cuándo."
 
-> "Algunos de esos agentes, con nombre: el **Prospector** busca negocios reales
-> por rubro y ciudad y los deja en el CRM. El **Radar** detecta tendencias para
-> contenido. El **Auditor** revisa nuestro código cada semana y prioriza la deuda
-> técnica. El **Vendedor** da seguimiento de lunes a sábado. Cada uno con su
-> horario, como un empleado más — uno que no duerme y no se olvida."
+> "Resumido en una frase: **la IA hace el trabajo, la decisión sigue siendo suya.**"
+
+## Slide 09 — La prueba: nosotros mismos
+
+> "¿Y cómo sé que esto funciona? Porque **nuestra propia empresa ya corre así**.
+> No se los cuento en teoría: Onia opera todos los días con agentes que buscan
+> clientes, redactan los seguimientos, producen contenido y hasta auditan nuestro
+> propio código — cada uno con su horario. **Once agentes corriendo 24/7. Y cero
+> mensajes enviados sin que un humano los apruebe.** Lo que probamos en casa es
+> exactamente lo que instalamos en su negocio."
 
 ## Slide 10 — Webs
 
@@ -177,7 +184,8 @@ seguidor en la sala es un lead que no se pierde.)*
 | Pregunta | Respuesta |
 |---|---|
 | "¿Cuánto cuesta?" | "Depende del pack y del tamaño. Rango de referencia: los planes arrancan en unos cientos de bolivianos al mes — menos que un empleado de medio tiempo. La cifra exacta se las doy en la demo con su caso; no me gusta tirar números sin ver el negocio." |
-| "¿La factura electrónica ya funciona?" | "El emisor está en homologación ante el SIN. Hasta que salga, el sistema deja la venta lista y se factura por el portal gratuito del SIN. Cuando salga, se factura desde el sistema sin tipear dos veces. Se los digo de frente porque así trabajamos." |
+| "¿La factura electrónica ya funciona?" | "El emisor está en homologación ante el SIN. Hasta que salga, el sistema deja la venta lista y se factura por el portal gratuito del SIN. Se los digo de frente porque así trabajamos. Igual, facturar lo hace cualquier sistema: **nuestro diferencial son los agentes que trabajan solos**." |
+| "¿Me puedo meter a ver el sistema hoy?" | "Se los muestro en vivo en la demo, con datos de su rubro. La plataforma está en desarrollo activo y prefiero mostrarles el sistema andando conmigo al lado, no un login vacío." |
 | "¿Y si la IA responde algo indebido a mi cliente?" | "No puede: nada sale sin aprobación humana. La IA redacta el borrador; usted lo ve y aprueba con un click. Es la regla número uno del sistema." |
 | "¿Mis datos quedan presos en su sistema?" | "No. Sus datos son suyos y son exportables cuando quiera." |
 | "¿Sirve para mi rubro (que no es dental ni comercio)?" | "El núcleo es el mismo; hay 11 rubros mapeados. Si el suyo todavía no tiene pack, se arma sobre el núcleo — conversémoslo en la demo, sin compromiso." |
