@@ -36,7 +36,17 @@ un requisito para arrancar. Se puede ofrecer el lunes sin esperar al banco.
 
 ## 1. Qué está VIVO en producción hoy
 
-Verificado, no "construido". **Deploy del 2026-08-01 (tarde): master entero en el VPS.**
+Verificado, no "construido". **2026-08-01, 5 deploys en el día — el último con todo:**
+
+- **Registro multirubro con configuración previa**: arranca en "¿Qué tipo de negocio
+  tenés?" (dental · comercio · 9 rubros "pronto"); el copy sigue al rubro elegido.
+- **Contabilidad Bolivia transversal** (`/contabilidad`): RCV dental y comercio,
+  resumen IVA 13%/IT 3% (Ley 843 citada), vencimiento por dígito de NIT (D.S. 25619),
+  balance, CSV para el contador. Resumen en Básico, completo desde Profesional.
+- **Identidad Onia en toda la app**: tokens verdes de la web, logos oficiales v2 por
+  lámina (tinta+punto verde / claro+punto verde), cero "DentalGest" visible, la raíz
+  redirige a /login (la landing dental interna murió). Trial dice 14 días en todos lados.
+- **Backup diario de la base real** (03:00, guarda 7, probado) — antes NO existía.
 
 - La app corre en el VPS con HTTPS y su propia base (Supabase self-hosted).
 - **Registro y login funcionan** de punta a punta.
