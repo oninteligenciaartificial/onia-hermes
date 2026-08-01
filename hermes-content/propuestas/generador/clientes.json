@@ -1327,7 +1327,7 @@
       "En 1–2 semanas probás el bot vos mismo — recién con tu OK lo encendemos con clientes reales."
     ],
     "ctaWhatsapp": {
-      "url": "https://wa.me/59175470140?text=Hola%20Onia%2C%20quiero%20el%20chatbot%20para%20Premium%20Cars",
+      "url": "https://wa.me/59178491375?text=Hola%20Onia%2C%20quiero%20el%20chatbot%20para%20Premium%20Cars",
       "texto": "Quiero el chatbot para Premium Cars →"
     },
     "terceros": "No incluidos: excedentes de mensajería de WhatsApp Business API por encima de la bolsa del plan, campañas de marketing por WhatsApp (van siempre aparte), y dominio + hosting de la web (a nombre de Premium Cars; te guiamos en la compra). El número de WhatsApp y la cuenta Meta Business quedan a nombre de Premium Cars.",
@@ -1335,6 +1335,10 @@
       "Confirmar ciudad y link de Facebook/Instagram de Premium Cars (no se encontró presencia digital indexada — refuerza la venta de la web)",
       "S1: validar con Sergio los precios Esencial/Comercial/Full del chatbot antes de enviar",
       "Confirmar con el dueño: coexistencia con su WhatsApp Business actual (+591 75625187) o número nuevo"
-    ]
+    ],
+    "ctaAgenda": {
+      "url": "https://wa.me/59178491375?text=Hola%20Onia%2C%20quiero%20agendar%20una%20llamada%20por%20la%20propuesta%20de%20Premium%20Cars",
+      "texto": "Agendá una llamada"
+    }
   }
 ]
