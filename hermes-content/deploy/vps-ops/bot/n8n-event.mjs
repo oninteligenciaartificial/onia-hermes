@@ -139,7 +139,10 @@ export function buildBotTurnEvent({ parsed, result, rawText, nowIso }) {
     mode: result?.dryRun ? "dry_run" : "production",
     conversationRefRedacted: redactConversationRef(parsed?.meta?.conversationId),
     messageIdRedacted: parsed?.meta?.messageId ? "chatwoot-mensaje-redactado" : undefined,
-    bodyPreviewRedacted: redactMessagePreview(rawText),
+    // Nota de voz: el transcript NO sale del sistema (a propósito), pero sin esta marca n8n no
+    // distingue un audio de un mensaje vacío y la analítica cuenta mal el canal.
+    bodyPreviewRedacted: result?.voice ? "[nota de voz transcrita]" : redactMessagePreview(rawText),
+    voiceNote: Boolean(result?.voice),
     stageBefore: result?.stageBefore ?? null,
     stageAfter: result?.stageAfter ?? null,
     duplicate: Boolean(result?.duplicate),
