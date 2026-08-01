@@ -204,6 +204,91 @@ No está prohibido para siempre — está gateado por el mismo número que todo 
 
 ---
 
+## 5-bis. El backlog concreto — en qué trabaja, pieza por pieza
+
+> "8-10 piezas por semana" es una cuota, no trabajo. Esto es el trabajo.
+
+**El hallazgo que ahorra dos semanas:** la serie *"Clínicas Sin Pacientes Perdidos"* está
+nombrada en la estrategia pero **nunca se escribió** — no hay episodios ni calendario. Y no
+hace falta inventarla: **el kit de ventas ya la contiene.** Las 10 objeciones de
+`ONIA_KIT_VENTA_DENTAL_20260727.md` §3 son 10 videos con el guion ya escrito y aprobado; el
+guion de demo §2 son 6 clips (está partido minuto a minuto); el orden de contacto §4 es la
+lista de distribución. **Son ~20 piezas sin inventar una sola línea.**
+
+### Su stack es gratis por defecto
+
+Esto importa para el volumen: casi todo se produce **sin quemar créditos**.
+
+| Herramienta | Qué hace | Costo |
+|---|---|---|
+| **HyperFrames** (`scripts/hyperframes/compositions/`) | Video por código. Ya existen: `keyword`, `trazo`, `tag`, `lista`, `escena`, `stat`, `quote`, `scoreboard`, `lower-third`, `browser`, `phone` | **0** |
+| **`editor-videos`** (skill) | Corta silencios y muletillas, subtítulos karaoke, overlays sincronizados a la palabra, zoom-punch | **0** |
+| **`ver-videos`** + Speaches | Transcribe con timestamps en el VPS | **0** |
+| **Estudio de Contenido** (panel) | Cola de piezas y aprobación | **0** |
+| Higgsfield / ElevenLabs / imagen paga | Generación | **OK por pieza** |
+
+### Semana 1 (4-10 ago) — que exista el material y la atribución
+
+| # | Entregable | Usa | Listo cuando |
+|---|---|---|---|
+| 1 | **Links `?src=` por pieza + fuente en Onia Center** | Landing con Cal.com (ya está) | Una demo agendada muestra de qué pieza vino |
+| 2 | **Grabar la demo de 15 min con Sergio** | Guion §2 del kit, minuto a minuto | Master en bruto |
+| 3 | **6 clips del master** (uno por bloque del guion) | `editor-videos` | 6 MP4 verticales con subtítulos |
+| 4 | **Outreach a los 5 tibios REALES** — Ianclinic, Mila dent, clínica uwu, Dr. Manzanillo, Clínica Camila | Mensaje §1.3 (ya corregido) | 5 conversaciones abiertas |
+
+**Meta: 2 demos.** Los 5 tibios valen más que las 50 frías: ya se registraron y se fueron.
+Saber por qué se fueron es lo más barato que podemos aprender.
+
+### Semana 2 (11-17 ago) — las objeciones
+
+| # | Entregable | Usa |
+|---|---|---|
+| 5 | **10 videos de 30-45 s**, uno por objeción §3.1-3.10 | Guion ya escrito · `keyword` + `tag` + `trazo` sobre talking-head |
+| 6 | **Outreach a las 12 primeras clínicas** del §4 del kit | Mensaje §1.1 (el de frío, el único validado) |
+
+**Meta: 3 demos.** Ojo con §3.1 y §3.10: son las del SIAT. Se usa la versión corregida —
+emisor en homologación, Portal Web gratis mientras tanto. **Nunca "obligatorio por ley".**
+
+### Semana 3 (18-24 ago) — la cuenta
+
+| # | Entregable | Usa |
+|---|---|---|
+| 7 | **Piezas de número**: "una silla vacía te cuesta Bs X al mes" | `stat` + `scoreboard` · supuestos de `ONIA_PRICING_MODELO_20260730.md`, **marcados como supuestos** |
+| 8 | **Demo pública de 40 s**: el agente en `/pending` | `browser` + `phone` (mockups por código) · es el minuto 7-11 del guion, el momento que cierra |
+
+**Meta: 3 demos.**
+
+### Semana 4 (25-31 ago) — la ventana
+
+| # | Entregable | Usa |
+|---|---|---|
+| 9 | **La fecha del 1-oct**: qué cambia y qué no | El pitch es *"no tengas que tipear"*, jamás *"es obligatorio"* — el Portal del SIN es gratis y cumple |
+| 10 | **Caso o building-in-public** | Si hay cliente, el caso. Si no, la serie del marcador que ya arrancó Sergio (`scoreboard`) |
+
+**Meta: 4 demos.**
+
+### Continuo, todas las semanas
+
+- Operar la cola del **Estudio** del panel: nada se publica sin aprobación de Sergio.
+- **Reporte del viernes** con la tabla de atribución: pieza → fuente → demo → estado.
+- **Definición de "pieza terminada"** (para que las tareas terminen y paren): MP4 vertical +
+  copy + link `?src=` propio + registrada en el Estudio + aprobada. Sin las cinco, no cuenta.
+
+### Lo que NO hace este mes (y por qué)
+
+| Tentación | Por qué no |
+|---|---|
+| **Serie "Radar IA"** (ep.001 producido, espera aprobación) | Le habla a la audiencia **D**, no al dueño de clínica. No trae demos |
+| **Lucía / roster** | No publica hasta el token de IG. Cola sí, publicación no |
+| **Canal de salud** | Parqueado: audiencia que nunca convierte a Onia |
+| **Meta Ads** | Sin caja aprobada y sin embudo probado, es quemar plata |
+| **Nuvia** | Es su negocio lateral 50/50, no cuenta como carril Onia |
+
+Son cinco cosas atractivas y ninguna acerca un pago en agosto. Se anotan y se retoman con su
+gatillo — la misma regla que aplica a todo lo demás.
+
+---
+
 ## 6. Los números: ¿esto se paga solo?
 
 Tres escenarios sobre 6 meses. Precios de lanzamiento, plan Pro (Bs 750) como caso típico.
