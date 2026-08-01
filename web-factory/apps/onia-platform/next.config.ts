@@ -20,10 +20,13 @@ const nextConfig: NextConfig = {
    * 500. En Vercel no se nota porque Vercel no usa este bundle: el fallo
    * aparece recien al auto-hospedar.
    *
-   * En Next 15.5.19 webpack YA es el default de `next build`: alcanza con
-   * `next build` a secas. Turbopack es opt-in via `--turbopack`, asi que lo
-   * que hay que hacer es NO pasar ese flag. (`--webpack` no existe como flag;
-   * pasarlo falla.) La clave `turbopack` de arriba solo afecta a `next dev`.
+   * En ESTA app (Next 15.5.19) webpack YA es el default de `next build`:
+   * alcanza con `next build` a secas, y `--webpack` no existe como flag.
+   * OJO: el producto (onia-platform, Next 16) es lo CONTRARIO — alla Turbopack
+   * es el default y hay que pasar `--webpack` obligatorio (2026-08-01:
+   * /register clavado en el loading por un build Turbopack). Dos apps, dos
+   * majors de Next, defaults opuestos. La clave `turbopack` de arriba solo
+   * afecta a `next dev`.
    */
   output: "standalone",
 
