@@ -67,6 +67,24 @@
   --text-h3: clamp(1.25rem, 1.05rem + 0.7vw, 1.6rem);
   --text-body: clamp(1rem, 0.95rem + 0.2vw, 1.0925rem);
 
+  /*
+   * PISO DE LEGIBILIDAD EN MOVIL — regla del sistema, no un parche.
+   *
+   * En 375px la pagina se lee con el pulgar a 30cm, no en un monitor. La
+   * escala chica de escritorio (0.6–0.86rem, que ahi funciona) caia hasta
+   * 9.6px en el telefono. Regla:
+   *   - texto INFORMATIVO (precio, links, notas, prosa) nunca baja de 14px;
+   *   - etiquetas mono/MAYUSCULA decorativas y el cromo de las maquetas de
+   *     producto pueden quedar en 12px, nunca menos.
+   *
+   * Se aplica con max() en cada tamano chico para que ESCRITORIO NO CAMBIE
+   * (en desktop el piso vale 0). Uso:
+   *   font-size: max(0.68rem, var(--fs-label-min));   // etiqueta
+   *   font-size: max(0.82rem, var(--fs-micro-min));   // texto informativo
+   */
+  --fs-micro-min: 0rem;
+  --fs-label-min: 0rem;
+
   --space-section: clamp(4.5rem, 3rem + 6vw, 9rem);
   --radius: 14px;
   --radius-lg: 22px;
@@ -132,6 +150,14 @@
     --shadow-pop:
       0 2px 4px oklch(0% 0 0 / 0.4),
       0 26px 60px -20px oklch(0% 0 0 / 0.65);
+  }
+}
+
+/* piso de legibilidad: solo en telefono (ver bloque en :root) */
+@media (max-width: 599px) {
+  :root {
+    --fs-micro-min: 0.875rem; /* 14px */
+    --fs-label-min: 0.75rem; /* 12px */
   }
 }
 
@@ -257,7 +283,7 @@ svg {
   align-items: center;
   gap: 0.6em;
   font-family: var(--font-mono), monospace;
-  font-size: 0.78rem;
+  font-size: max(0.78rem, var(--fs-label-min));
   font-weight: 500;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -336,7 +362,7 @@ svg {
 .badge {
   display: inline-block;
   font-family: var(--font-mono), monospace;
-  font-size: 0.68rem;
+  font-size: max(0.68rem, var(--fs-label-min));
   font-weight: 500;
   letter-spacing: 0.12em;
   padding: 0.35em 0.8em;

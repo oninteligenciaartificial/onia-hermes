@@ -34,7 +34,7 @@
 .legend {
   padding: 0;
   font-family: var(--font-mono), monospace;
-  font-size: 0.68rem;
+  font-size: max(0.68rem, var(--fs-label-min));
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--ink-faint);
@@ -110,7 +110,7 @@
 
 .chipSoon {
   font-family: var(--font-mono), monospace;
-  font-size: 0.62rem;
+  font-size: max(0.62rem, var(--fs-label-min));
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--ink-faint);
@@ -169,7 +169,7 @@
 
 .cicloSave {
   font-family: var(--font-mono), monospace;
-  font-size: 0.6rem;
+  font-size: max(0.6rem, var(--fs-label-min));
   letter-spacing: 0.06em;
   text-transform: uppercase;
   opacity: 0.85;
@@ -227,14 +227,14 @@
 }
 
 .planPaso {
-  font-size: 0.72rem;
+  font-size: max(0.72rem, var(--fs-label-min));
   color: var(--ink-faint);
   letter-spacing: 0.1em;
 }
 
 .planSalto {
   font-family: var(--font-mono), monospace;
-  font-size: 0.68rem;
+  font-size: max(0.68rem, var(--fs-label-min));
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--accent-ink);
@@ -242,7 +242,7 @@
 
 .planTag {
   margin-left: auto;
-  font-size: 0.6rem;
+  font-size: max(0.6rem, var(--fs-label-min));
 }
 
 .medidor {
@@ -304,7 +304,7 @@
 }
 
 .planPrecioNota {
-  font-size: 0.82rem;
+  font-size: max(0.82rem, var(--fs-micro-min));
   color: var(--ink-faint);
 }
 
@@ -313,7 +313,7 @@
 }
 
 .planCuando {
-  font-size: 0.86rem;
+  font-size: max(0.86rem, var(--fs-micro-min));
   color: var(--ink-soft);
   max-width: 32ch;
 }
@@ -323,7 +323,7 @@
   padding-top: 0.9rem;
   border-top: 1px dashed var(--line);
   width: 100%;
-  font-size: 0.68rem;
+  font-size: max(0.68rem, var(--fs-label-min));
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--ink-faint);
@@ -359,7 +359,7 @@
 .planLimites {
   margin-top: auto;
   padding-top: 0.9rem;
-  font-size: 0.78rem;
+  font-size: max(0.78rem, var(--fs-micro-min));
   color: var(--ink-faint);
 }
 
@@ -417,7 +417,7 @@
 }
 
 .sinHoyTitulo {
-  font-size: 0.68rem;
+  font-size: max(0.68rem, var(--fs-label-min));
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--accent-ink);
@@ -435,7 +435,7 @@
 
 .sinHoyNota {
   margin-top: 0.9rem;
-  font-size: 0.84rem;
+  font-size: max(0.84rem, var(--fs-micro-min));
   color: var(--ink-faint);
 }
 
@@ -527,7 +527,7 @@
 }
 
 .cohorte {
-  font-size: 0.86rem;
+  font-size: max(0.86rem, var(--fs-micro-min));
   color: var(--ink-soft);
   border-top: 1px solid color-mix(in oklab, var(--accent) 30%, transparent);
   padding-top: 1.1rem;
@@ -579,7 +579,7 @@
 }
 
 .bloqueTitulo {
-  font-size: 0.68rem;
+  font-size: max(0.68rem, var(--fs-label-min));
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--ink-faint);
@@ -648,7 +648,7 @@
 .addPrecio {
   margin-top: 0.2rem;
   color: var(--accent-ink);
-  font-size: 0.86rem;
+  font-size: max(0.86rem, var(--fs-micro-min));
 }
 
 .condItem {

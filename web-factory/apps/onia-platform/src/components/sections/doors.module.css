@@ -35,7 +35,7 @@
 }
 
 .despuesTag {
-  font-size: 0.66rem;
+  font-size: max(0.66rem, var(--fs-label-min));
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--ink-faint);
@@ -68,7 +68,7 @@
   border-radius: 50%;
   border: 1px solid var(--accent);
   color: var(--accent-ink);
-  font-size: 0.72rem;
+  font-size: max(0.72rem, var(--fs-label-min));
 }
 
 .door {
@@ -92,7 +92,7 @@
 }
 
 .doorTag {
-  font-size: 0.66rem;
+  font-size: max(0.66rem, var(--fs-label-min));
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--ink-faint);
@@ -116,7 +116,7 @@
 }
 
 .doorMicro {
-  font-size: 0.82rem;
+  font-size: max(0.82rem, var(--fs-micro-min));
   color: var(--ink-faint);
 }
 
@@ -132,7 +132,7 @@
   border: 1px solid color-mix(in oklab, var(--ok) 40%, transparent);
   border-radius: 14px 14px 4px 14px;
   padding: 0.5rem 0.9rem;
-  font-size: 0.82rem;
+  font-size: max(0.82rem, var(--fs-label-min));
   color: var(--ink);
   opacity: 0.85;
   transform: translateY(0);
@@ -157,7 +157,7 @@
 }
 
 .formTitulo {
-  font-size: 0.68rem;
+  font-size: max(0.68rem, var(--fs-label-min));
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--ink-faint);
@@ -182,7 +182,7 @@
 }
 
 .label {
-  font-size: 0.8rem;
+  font-size: max(0.8rem, var(--fs-micro-min));
   color: var(--ink-soft);
 }
 
@@ -215,7 +215,7 @@
 }
 
 .error {
-  font-size: 0.78rem;
+  font-size: max(0.78rem, var(--fs-micro-min));
   color: var(--danger);
 }
 
@@ -224,7 +224,7 @@
 }
 
 .formNota {
-  font-size: 0.8rem;
+  font-size: max(0.8rem, var(--fs-micro-min));
   color: var(--ink-faint);
   max-width: 46ch;
 }

@@ -17,7 +17,7 @@
   align-items: center;
   gap: 0.55rem;
   font-family: var(--font-mono), monospace;
-  font-size: 0.72rem;
+  font-size: max(0.72rem, var(--fs-label-min));
   letter-spacing: 0.08em;
   color: var(--ink-faint);
 }
@@ -60,6 +60,22 @@
   text-decoration: none;
 }
 
+/* En el telefono el pie es una lista de links que se tocan: 44px de alto
+   cada uno. La separacion baja para que la columna no crezca de mas — el
+   blanco tactil se lo come el propio link, no el hueco entre links. */
+@media (max-width: 599px) {
+  .col {
+    gap: 0.1rem;
+  }
+
+  .col a,
+  .legalNav a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+}
+
 .col a:hover {
   color: var(--ink);
   text-decoration: underline;
@@ -68,7 +84,7 @@
 
 .colTitle {
   font-family: var(--font-mono), monospace;
-  font-size: 0.7rem;
+  font-size: max(0.7rem, var(--fs-label-min));
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--ink-faint);
@@ -85,7 +101,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  font-size: 0.82rem;
+  font-size: max(0.82rem, var(--fs-micro-min));
   color: var(--ink-faint);
 }
 
@@ -109,7 +125,7 @@
    resto del pie: es informacion de cumplimiento, no de venta. */
 .legalId {
   font-style: normal;
-  font-size: 0.75rem;
+  font-size: max(0.75rem, var(--fs-micro-min));
   line-height: 1.7;
   color: var(--ink-faint);
   text-wrap: pretty;

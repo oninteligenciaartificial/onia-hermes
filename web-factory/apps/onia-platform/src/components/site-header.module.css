@@ -15,16 +15,19 @@
   height: 100%;
 }
 
+/* min-height 44px: el logo es el link "volver al inicio" y con 26px de alto
+   era el blanco mas chico del header. Entra dentro de los 60px del header. */
 .brand {
   display: inline-flex;
   align-items: center;
   gap: 0.7rem;
+  min-height: 44px;
   text-decoration: none;
 }
 
 .tagline {
   font-family: var(--font-mono), monospace;
-  font-size: 0.62rem;
+  font-size: max(0.62rem, var(--fs-label-min));
   font-weight: 400;
   letter-spacing: 0.08em;
   color: var(--ink-faint);
@@ -83,20 +86,34 @@
   margin-left: auto;
 }
 
+/* El boton mide 44x44 (area tactil) pero el aro visible sigue siendo de 34px:
+   el circulo lo dibuja el ::before, no el borde del boton. */
 .themeBtn {
+  position: relative;
   display: inline-grid;
   place-items: center;
-  width: 34px;
-  height: 34px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
-  border: 1px solid var(--line);
+  border: 0;
   background: transparent;
   color: var(--ink-soft);
   cursor: pointer;
 }
 
+.themeBtn::before {
+  content: "";
+  position: absolute;
+  inset: 5px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+}
+
 .themeBtn:hover {
   color: var(--ink);
+}
+
+.themeBtn:hover::before {
   border-color: var(--ink-faint);
 }
 

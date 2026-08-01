@@ -52,7 +52,7 @@
 
 .tabSoon {
   font-family: var(--font-mono), monospace;
-  font-size: 0.6rem;
+  font-size: max(0.6rem, var(--fs-label-min));
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--ink-faint);
@@ -105,7 +105,7 @@
 .panelMicro {
   margin-top: 1rem;
   font-family: var(--font-mono), monospace;
-  font-size: 0.8rem;
+  font-size: max(0.8rem, var(--fs-micro-min));
   color: var(--accent-ink);
 }
 
@@ -158,7 +158,7 @@
 
 .aGhostNote {
   font-family: var(--font-mono), monospace;
-  font-size: 0.62rem;
+  font-size: max(0.62rem, var(--fs-label-min));
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--ink-faint);

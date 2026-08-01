@@ -67,6 +67,15 @@
   font-size: 1.35rem;
 }
 
+/* El interruptor mide 56x32 (lo pinta el kit): visualmente correcto, pero
+   corto para el pulgar. El ::after le estira el area tactil a 44px de alto
+   sin mover un pixel del dibujo. */
+.tileToggle::after {
+  content: "";
+  position: absolute;
+  inset: -8px -2px;
+}
+
 /* colores del ModuleToggle del kit (data-attributes) */
 .tileToggle :global([data-track-off]) {
   background: var(--line-soft);
@@ -99,7 +108,7 @@
 }
 
 .tileOffNote {
-  font-size: 0.7rem;
+  font-size: max(0.7rem, var(--fs-label-min));
   letter-spacing: 0.08em;
   color: var(--ink-faint);
   text-align: center;
@@ -136,7 +145,7 @@
 }
 
 .scAgendaTime {
-  font-size: 0.68rem;
+  font-size: max(0.68rem, var(--fs-label-min));
   color: var(--ink-faint);
   width: 3.2em;
 }
@@ -176,13 +185,13 @@
   border-radius: var(--radius);
   background: var(--surface-dim);
   padding: 0.6rem 0.9rem;
-  font-size: 0.85rem;
+  font-size: max(0.85rem, var(--fs-label-min));
   font-weight: 550;
 }
 
 .scProposalTag {
   font-family: var(--font-mono), monospace;
-  font-size: 0.6rem;
+  font-size: max(0.6rem, var(--fs-label-min));
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--accent-ink);
@@ -197,7 +206,7 @@
   border-radius: 999px;
   padding: 0.45em 1em;
   font-weight: 650;
-  font-size: 0.85rem;
+  font-size: max(0.85rem, var(--fs-label-min));
 }
 
 .scCheck {
@@ -218,7 +227,7 @@
 
 .scBubbleIn,
 .scBubbleOut {
-  font-size: 0.85rem;
+  font-size: max(0.85rem, var(--fs-label-min));
   padding: 0.5rem 0.85rem;
   max-width: 24ch;
 }
@@ -266,7 +275,7 @@
 
 .scBrowserBar span {
   margin-left: 0.4rem;
-  font-size: 0.62rem;
+  font-size: max(0.62rem, var(--fs-label-min));
   color: var(--ink-faint);
 }
 
@@ -316,7 +325,7 @@
 }
 
 .scSlot {
-  font-size: 0.72rem;
+  font-size: max(0.72rem, var(--fs-label-min));
   padding: 0.42em 0.75em;
   border-radius: 999px;
   border: 1px solid var(--line);
@@ -331,7 +340,7 @@
 }
 
 .scBookingNote {
-  font-size: 0.68rem;
+  font-size: max(0.68rem, var(--fs-label-min));
   letter-spacing: 0.04em;
   color: var(--accent-ink);
 }
@@ -353,7 +362,7 @@
 }
 
 .scOfflineLabel {
-  font-size: 0.62rem;
+  font-size: max(0.62rem, var(--fs-label-min));
   letter-spacing: 0.08em;
   color: var(--ink-faint);
 }
