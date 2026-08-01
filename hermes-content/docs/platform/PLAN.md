@@ -36,25 +36,34 @@ un requisito para arrancar. Se puede ofrecer el lunes sin esperar al banco.
 
 ## 1. Qué está VIVO en producción hoy
 
-Verificado, no "construido":
+Verificado, no "construido". **Deploy del 2026-08-01 (tarde): master entero en el VPS.**
 
-- La app corre en el VPS con HTTPS y su propia base (Supabase self-hosted). 112 MB de RAM.
+- La app corre en el VPS con HTTPS y su propia base (Supabase self-hosted).
 - **Registro y login funcionan** de punta a punta.
-- **`PLATFORM_LAYER=1` y `AGENTS_RUNTIME=1`** — encendidos el 2026-08-01. Antes estaban
-  vacíos: toda la capa multi-rubro y el módulo de agentes estaban **inertes**.
-- Aislamiento por rubro en pantallas **y** en las 86 rutas de API.
-- Permisos por rol: recepción ya **no** ve la historia clínica y **sí** ve la caja.
+- **Trial de 14 días sin tarjeta** — estado derivado de fechas (`trialing→active→past_due→canceled`),
+  migración `planCanceledAt` aplicada en prod. La degradación no borra nada: lectura+exportar.
+- **El alta entra por `provisionOrganization`** — el rubro sale del contrato del core.
+- **Módulo comercio vivo**: `/comercio` (catálogo·inventario·caja) responde en prod detrás
+  del gate; migración kardex/lotes/caja aplicada; kardex al promedio ponderado (D.S. 24051).
+- **Onboarding por pasos** que termina con datos reales cargados (servicios con precio → Treatment).
+- Review pre-merge: 0 CRITICAL; 3 HIGH cerrados + 1 propio (baja invisible al guard de
+  TODAS las rutas — arreglado en el select compartido de auth).
+- `PLATFORM_LAYER=1` y `AGENTS_RUNTIME=1` encendidos. Aislamiento por rubro en pantallas
+  y en las rutas de API. Landing en el VPS (:8091). `onia-forms` en el VPS (:8189).
 - Agenda propia (Cal.com) conectada a la landing con los datos precargados.
 
 ## 2. Qué está a medias, y dónde exactamente
 
 | Qué | Estado real |
 |---|---|
-| **La landing nueva** | Construida y verificada, **no desplegada**. `onia.com.bo` sirve una versión vieja desde Vercel |
+| **DNS** | La landing y forms están vivos en el VPS pero `onia.com.bo` sigue resolviendo a Vercel. **Los 4 registros A son de Sergio** (zona DNS = Vercel, pestaña Domains → DNS Records) |
+| **Registro sin selector de rubro** | La API acepta `verticalTrackId`; el formulario público aún no lo ofrece. El alta comercio entra por API/demo/operador |
+| **FEFO y conteos** | Lógica portada y testeada, **sin UI** — la venta no descuenta por lotes todavía |
+| **Título/branding** | La app sirve `<title>DentalGest…` — branding viejo, el producto es Onia Platform |
 | **Pack importadora** | Declarado y provisiona. **Sin pantallas ni entidades propias**: entra a un menú vacío |
 | **Chatbot** | **Dos bots en dos repos**, sin una línea compartida. Sergio está revisando cuál sobrevive |
 | **Cola de aprobación** | Las tablas existen y los flags están on. Falta que el cron genere las primeras propuestas |
-| **3 módulos del core sin portar** | `automation`, `payroll`, `knowledge` — `imports` ya se portó |
+| **Contador Pack (Gestios)** | Siguiente porte — transversal a todos los rubros. `automation`, `payroll`, `knowledge` del core también pendientes |
 | **Legal** | Borrador serio, pero sin anexo de tratamiento de datos y sin los plazos de retención nombrados. **Parqueado a propósito**: no bloquea la prueba gratis, sí bloquea publicar términos con datos de salud |
 
 ## 3. El orden. Una cosa a la vez.
