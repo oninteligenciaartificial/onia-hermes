@@ -115,6 +115,53 @@ lo suyo, deja de importarle si Onia llega o no.
 
 Se pagan con semáforo verde (el Fondo ya cubrió herramientas y reserva), igual que hoy.
 
+### Cómo se combinan las tres (la pregunta de Sergio: "¿gana por porcentaje o por bono?")
+
+**Por las dos, y cada una paga por una cosa distinta.**
+
+| Concepto | Tipo | Cuánto | Se cobra |
+|---|---|---|---|
+| Reunión atribuible que se hizo | **Monto fijo por unidad** | Bs 50 (tope 600/mes) | Aunque nadie compre |
+| Venta de servicio (web, n8n, chatbot) | **Porcentaje del cobro, una vez** | 12% a 50% según cuánto haga | Cuando el cliente paga |
+| Suscripción de plataforma | **Porcentaje mensual, 6 meses** | 20% de la base repartible | Cada mes que el cliente paga |
+| Hitos | **Bono fijo** | 300 / 150 / 500 | Cuando ocurre el hito |
+
+Por qué las tres y no una sola:
+
+- **Solo porcentaje** = cobra Bs 0 durante las primeras semanas. El contenido tarda. Se va antes de cobrar el primero.
+- **Solo bono** = no escala. Si trae 10 clientes en vez de 2, un monto fijo no lo premia.
+- **Solo monto por reunión** = le conviene el volumen de reuniones, no que alguien compre.
+
+Traducido: **el monto fijo es el piso, el porcentaje es el motor, el bono es el empujón** en los
+tres momentos que el porcentaje no premia solo (el primer cliente, que el cliente se quede, y
+que Onia llegue a la meta).
+
+### Ejemplo de un mes real
+
+Arthur saca 8 reuniones, vende y produce una Web Pro, y una de esas reuniones se convierte en
+una clínica que toma el plan Pro.
+
+| Origen | Tipo | Bs |
+|---|---|---:|
+| 8 reuniones × 50 | fijo | 400 |
+| Web Pro 1.500, la vende y la produce (50%) | porcentaje | 750 |
+| Clínica Pro 750/mes, primer mes (20%) | porcentaje | 135 |
+| Bono primer cliente atribuible | bono | 300 |
+| **Total del mes** | | **1.585** |
+
+Y así siguen los meses:
+
+| Mes | Qué cobra | Bs |
+|---|---|---:|
+| 2 | 8 reuniones + la suscripción que sigue viva | 535 |
+| 3 | igual + bono de retención (la clínica llegó al 3er mes) | 685 |
+| 4-6 | igual, y sube por cada cliente nuevo que se acumula | 535+ |
+
+**Lo que muestra el ejemplo:** la plata grande del mes 1 vino del **servicio** (Bs 750), no de
+la plataforma (Bs 135). Eso es correcto y es el diseño: los servicios pagan rápido mientras la
+suscripción se acumula. Al 4º cliente de plataforma vivo, la suscripción ya le paga sola sin
+depender de vender una web nueva cada mes.
+
 ### La escalera (esto no es bono, es estructura)
 
 | Logro | Qué se desbloquea |
