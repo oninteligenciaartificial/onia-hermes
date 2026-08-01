@@ -93,9 +93,9 @@ Al mes 7 el cliente queda 100% de Onia. Arthur no cobra renta infinita por un tr
 dental.
 
 **Los servicios (T2) NO cambian: sigue la tabla ya firmada.** Web, Cuidado Web, n8n, chatbot y
-marketing se pagan como están en el acuerdo (3-5% si solo trae el contacto, 12-15% si trae y
-cierra, 15-20% si además ayuda con brief y copy, hasta 50% si vende y produce completo sin
-rescate). No se toca nada de eso. Y es importante que quede separado: **T2 le puede pagar en
+marketing se pagan como están en el acuerdo (5% si solo trae el contacto, 12% si trae y
+cierra, 18% si además ayuda con brief y copy, 50% si vende y produce completo sin
+rescate — números únicos, ver §9.1). No se toca nada de eso. Y es importante que quede separado: **T2 le puede pagar en
 la primera semana**, mucho antes de que la plataforma cierre a nadie. Una Web Pro de Bs 1.500
 que él vende y produce = Bs 750 para él. Eso es más que 5 meses de comisión de una suscripción
 Pro.
@@ -122,7 +122,7 @@ Se pagan con semáforo verde (el Fondo ya cubrió herramientas y reserva), igual
 | Concepto | Tipo | Cuánto | Se cobra |
 |---|---|---|---|
 | Reunión atribuible que se hizo | **Monto fijo por unidad** | Bs 50 (tope 600/mes) | Aunque nadie compre |
-| Venta de servicio (web, n8n, chatbot) | **Porcentaje del cobro, una vez** | 12% a 50% según cuánto haga | Cuando el cliente paga |
+| Venta de servicio (web, n8n, chatbot) | **Porcentaje del cobro, una vez** | número fijo por caso (tabla §9.1) | Cuando el cliente paga |
 | Suscripción de plataforma | **Porcentaje mensual, 6 meses** | 20% de la base repartible | Cada mes que el cliente paga |
 | Hitos | **Bono fijo** | 300 / 150 / 500 | Cuando ocurre el hito |
 
@@ -468,23 +468,28 @@ hasta el 1-sep. La decisión real se corre al día 30.
 ### 9.1 Los porcentajes, todos juntos
 
 Se calculan sobre el ingreso neto (cobro menos costos directos), con Fondo Onia 40% separado
-primero. Eso no cambia. Solo la línea de plataforma es nueva; el resto ya está firmado.
+primero. Eso no cambia. Solo la línea de plataforma es nueva; el resto viene del acuerdo.
+
+**Regla anti-discusión (Sergio 2026-08-01): un solo número por caso, nunca un rango.** Los
+rangos del acuerdo viejo ("12-15%") se fijan acá en un número único. El número solo baja por
+la escala de intervención de Sergio (que ya está definida en el acuerdo), nunca se negocia
+por venta.
 
 | Línea de ingreso | Qué hizo Arthur | Se lleva |
 |---|---|---:|
 | **Plataforma** (dental, comercio, distribución) | Trajo la reunión; Sergio cierra y entrega | **20% mensual × 6 meses** |
 | **Plataforma** | Trajo, calificó y acompañó el cierre | **25% mensual × 6 meses** |
-| Web (790 / 1.500 / 2.900) | Solo pasó el contacto | 3-5% |
-| Web | Trajo y cerró; Onia produce | 12-15% |
-| Web | Cerró y aportó brief, copy y contenido | 15-20% |
+| Web (790 / 1.500 / 2.900) | Solo pasó el contacto | 5% |
+| Web | Trajo y cerró; Onia produce | 12% |
+| Web | Cerró y aportó brief, copy y contenido | 18% |
 | Web | Vendió y produjo completa, sin rescate | 50% |
-| Automatización n8n (790-1.900) | Vendió; Sergio entrega | 10-15% |
-| Automatización n8n | La hizo funcionando y documentada | 25-35% |
+| Automatización n8n (790-1.900) | Vendió; Sergio entrega | 12% |
+| Automatización n8n | La hizo funcionando y documentada | 30% |
 | Automatización n8n | Vendió y entregó completa | 50% |
-| Cuidado Web mensual (190-690) | Gestiona y reporta | 10-20% mensual mientras gestione |
-| Contenido a cliente | Produjo las piezas | 15-25% |
-| Contenido mensual a cliente | Gestiona, publica y reporta | 10-20% mensual mientras gestione |
-| Pack de video IA (Higgsfield) | Guion, generación, edición y entrega | 15-35% |
+| Cuidado Web mensual (190-690) | Gestiona y reporta | 15% mensual mientras gestione |
+| Contenido a cliente | Produjo las piezas | 20% |
+| Contenido mensual a cliente | Gestiona, publica y reporta | 15% mensual mientras gestione |
+| Pack de video IA (Higgsfield) | Guion, generación, edición y entrega | 25% |
 | Pack de video IA | Vendió y entregó todo | 50% |
 | Reunión atribuible realizada | Cualquier carril | Bs 50 fijos (tope 600/mes) |
 
@@ -579,11 +584,11 @@ y no se paga.* Sin excepción, sin memoria, sin WhatsApp suelto.
 | # | Concepto | Gana | Qué tiene que pasar | Qué anota Arthur (sin esto NO se paga) |
 |---|---|---:|---|---|
 | 1 | Reunión realizada | Bs 50 | Dueño/socio, perfil correcto, Sergio estuvo | **Antes:** lead en Captura + reunión con fuente (`?src=` o outreach). **Después (mismo día):** nota con resultado y próximo paso |
-| 2 | Web que él vende, Onia produce | 12-15% | Cobro real | Lead → pipeline al día → propuesta enviada → cobro en Ingresos con comprobante y monto neto |
+| 2 | Web que él vende, Onia produce | 12% | Cobro real | Lead → pipeline al día → propuesta enviada → cobro en Ingresos con comprobante y monto neto |
 | 3 | Web que él vende Y produce | 50% | Cobro + entrega aprobada sin rescate | Lo de #2 + brief, archivos, checklist de entrega y aprobación de Sergio registrados |
-| 4 | Suscripción plataforma, mes a mes | 20-25% × 6 meses | El cliente pagó ESE mes | Origen atribuible registrado desde el día 0 + cada cobro mensual en Ingresos. Se corta el mes que el cliente no paga |
-| 5 | Cuidado Web / contenido mensual | 10-20%/mes | Gestionó y reportó ese mes | Calendario cumplido + piezas aprobadas + reporte del mes. Mes sin reporte = mes sin cobro |
-| 6 | Pack video IA | 15-50% | Vendido, entregado, aprobado | Lo de #2 + costo Higgsfield registrado ANTES de generar (objetivo, piezas, OK de Sergio) |
+| 4 | Suscripción plataforma, mes a mes | 20% (25% si acompañó el cierre) × 6 meses | El cliente pagó ESE mes | Origen atribuible registrado desde el día 0 + cada cobro mensual en Ingresos. Se corta el mes que el cliente no paga |
+| 5 | Cuidado Web / contenido mensual | 15%/mes | Gestionó y reportó ese mes | Calendario cumplido + piezas aprobadas + reporte del mes. Mes sin reporte = mes sin cobro |
+| 6 | Pack video IA | 25% (50% si vendió y entregó todo) | Vendido, entregado, aprobado | Lo de #2 + costo Higgsfield registrado ANTES de generar (objetivo, piezas, OK de Sergio) |
 | 7 | Bono primer cliente | Bs 300 | Primera venta atribuible de plataforma | La atribución de #4 completa |
 | 8 | Bono retención | Bs 150 | Cliente atribuible llega al 3er mes pagado | Los 3 cobros mensuales registrados |
 | 9 | Bono objetivo casa | Bs 500 | Onia llega a 3 clientes de plataforma | Nada extra — lo gatilla la casa |
