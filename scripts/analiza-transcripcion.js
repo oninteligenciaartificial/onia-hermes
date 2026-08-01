@@ -8,7 +8,7 @@
  *   cat transcript.txt | node scripts/analiza-transcripcion.js
  *
  * Variables de entorno:
- *   OPENAI_API_KEY
+ *   OPENAI_API_KEY (del shell o de <repo>/.env)
  */
 
 'use strict';
@@ -17,6 +17,8 @@ const fs = require('fs');
 const path = require('path');
 const https = require('https');
 const { execSync } = require('child_process');
+
+require('./lib/env').loadEnv();
 
 const OPENAI_KEY = process.env.OPENAI_API_KEY;
 
