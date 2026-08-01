@@ -249,3 +249,141 @@ export function summarizeRun(actions = []) {
   }
   return counts;
 }
+
+/* --- Motor de agentes: evaluadores de candidatos + orquestador de corrida -----
+ * Puros, sin IO, sin reloj (now por parametro). Deciden A QUIEN contacta el agente
+ * (Recall reactiva, Cobrador persigue saldos) y convierten esos candidatos en
+ * acciones ruteadas por la cola de aprobacion. El core NO envia: el producto aporta
+ * los registros normalizados + umbrales y ejecuta el envio real (external_gate).
+ * Estos evaluadores son GENERICOS: sirven a dental, estetica, veterinaria, gestios,
+ * cualquier SaaS con clientes recurrentes o cuentas por cobrar.
+ */
+
+const DAY_MS = 86400000;
+
+function daysBetween(fromIso, toIso) {
+  return Math.floor((new Date(toIso).getTime() - new Date(fromIso).getTime()) / DAY_MS);
+}
+
+/**
+ * Recall (reactivacion): clientes/pacientes que no vuelven hace >= recallAfterDays,
+ * SIN proxima cita/visita agendada, respetando un cooldown de contacto. Excluye a
+ * quien nunca vino (no hay a que reactivar) y a quien se dio de baja (optedOut).
+ * record: { id, lastVisitAt, hasFutureAppointment, lastContactedAt, optedOut }
+ * -> candidatos ordenados por dias sin volver (desc):
+ *    [{ targetType, targetId, daysSinceVisit, reason }]
+ */
+export function evaluateRecallCandidates(records = [], { nowIso, recallAfterDays = 180, cooldownDays = 30, targetType = "patient" } = {}) {
+  if (!nowIso) throw new Error("evaluateRecallCandidates requiere nowIso (no usa reloj)");
+  const out = [];
+  for (const r of records) {
+    if (r?.optedOut) continue;
+    if (r?.hasFutureAppointment) continue;
+    if (!r?.lastVisitAt) continue;
+    const daysSinceVisit = daysBetween(r.lastVisitAt, nowIso);
+    if (daysSinceVisit < Number(recallAfterDays)) continue;
+    if (r?.lastContactedAt && daysBetween(r.lastContactedAt, nowIso) < Number(cooldownDays)) continue;
+    out.push({
+      targetType,
+      targetId: r.id,
+      daysSinceVisit,
+      reason: `sin volver hace ${daysSinceVisit} dias`,
+    });
+  }
+  return out.sort((a, b) => b.daysSinceVisit - a.daysSinceVisit);
+}
+
+/**
+ * Cobrador: cuentas por cobrar vencidas (dueDate + graceDays < now) con saldo >
+ * minBalance, que NO estan en plan de pago, respetando cooldown de contacto.
+ * Ordena por dias vencido (desc), luego por saldo (desc): la deuda mas vieja/grande
+ * primero. Moneda por defecto BOB (Bolivia). NO es asesoria financiera: solo avisa.
+ * record: { id, customerId, dueDate, balanceDue, inPaymentPlan, lastContactedAt, currency }
+ * -> [{ targetType, targetId, customerId, daysOverdue, balanceDue, currency, reason }]
+ */
+export function evaluateCollectorCandidates(records = [], { nowIso, minBalance = 0, graceDays = 0, cooldownDays = 7, targetType = "receivable" } = {}) {
+  if (!nowIso) throw new Error("evaluateCollectorCandidates requiere nowIso (no usa reloj)");
+  const out = [];
+  for (const r of records) {
+    const balanceDue = Number(r?.balanceDue ?? 0);
+    if (!(balanceDue > Number(minBalance))) continue;
+    if (r?.inPaymentPlan) continue;
+    if (!r?.dueDate) continue;
+    const daysOverdue = daysBetween(r.dueDate, nowIso);
+    if (daysOverdue <= Number(graceDays)) continue;
+    if (r?.lastContactedAt && daysBetween(r.lastContactedAt, nowIso) < Number(cooldownDays)) continue;
+    const currency = r?.currency ?? "BOB";
+    out.push({
+      targetType,
+      targetId: r.id,
+      customerId: r?.customerId ?? null,
+      daysOverdue,
+      balanceDue,
+      currency,
+      reason: `saldo vencido ${balanceDue} ${currency} hace ${daysOverdue} dias`,
+    });
+  }
+  return out.sort((a, b) => b.daysOverdue - a.daysOverdue || b.balanceDue - a.balanceDue);
+}
+
+/**
+ * Orquestador generico de una corrida: convierte candidatos en acciones FINALES,
+ * aplicando en orden (1) dedupe cross-run e intra-run via agentActionKey, (2) tope
+ * de acciones por corrida (maxActionsPerRun), (3) guardrails (topes diarios /
+ * prohibidas), (4) la REGLA DURA de ruteo (routeAction). Cada accion sale con su
+ * estado sellado por applyActionTransition (pending_approval / auto_executed /
+ * discarded). Puro, inmutable, now por parametro.
+ * -> { actions, summary }  (summary = summarizeRun(actions))
+ */
+export function planAgentRun(agent, candidates = [], config = {}, {
+  nowIso = new Date().toISOString(),
+  actionType = "draft_message",
+  runId = null,
+  existingKeys = [],
+  actionsToday = 0,
+  messagesToday = 0,
+  buildSummary,
+} = {}) {
+  const maxPerRun = config?.guardrails?.maxActionsPerRun ?? Infinity;
+  const seen = existingKeys instanceof Set ? new Set(existingKeys) : new Set(existingKeys);
+  const actions = [];
+  let runActions = Number(actionsToday);
+  let runMessages = Number(messagesToday);
+  let acceptedThisRun = 0;
+
+  for (const candidate of candidates) {
+    const base = {
+      agentId: agent?.id ?? null,
+      runId,
+      actionType,
+      targetType: candidate?.targetType ?? null,
+      targetId: candidate?.targetId ?? null,
+      summary: typeof buildSummary === "function" ? buildSummary(candidate) : (candidate?.reason ?? null),
+      payload: candidate,
+      status: "proposed",
+    };
+    const key = agentActionKey(base);
+
+    if (isDuplicateAction(key, seen)) {
+      actions.push(applyActionTransition(base, "discarded", { now: nowIso, reason: "duplicada: ya propuesta en otra corrida" }));
+      continue;
+    }
+    if (acceptedThisRun >= maxPerRun) {
+      actions.push(applyActionTransition(base, "discarded", { now: nowIso, reason: "tope de acciones por corrida alcanzado" }));
+      continue;
+    }
+    const guard = evaluateGuardrails(base, agent, config, { actionsToday: runActions, messagesToday: runMessages });
+    if (!guard.allowed) {
+      actions.push(applyActionTransition(base, "discarded", { now: nowIso, reason: guard.reason }));
+      continue;
+    }
+    const route = routeAction(base, agent, config);
+    actions.push(applyActionTransition(base, route.target, { now: nowIso, reason: route.reason }));
+    seen.add(key);
+    acceptedThisRun += 1;
+    runActions += 1;
+    if (actionType === "send_message" || actionType === "draft_message") runMessages += 1;
+  }
+
+  return { actions, summary: summarizeRun(actions) };
+}

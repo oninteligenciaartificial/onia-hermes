@@ -30,7 +30,11 @@ const has = (n) => args.includes("--" + n);
 const flag = (n, def) => { const i = args.indexOf("--" + n); return i >= 0 && args[i + 1] && !args[i + 1].startsWith("--") ? args[i + 1] : def; };
 
 const SEGMENTS = flag("segments", args.find((a) => !a.startsWith("--") && /\.json$/i.test(a)));
-const VIDEO = flag("video", null);
+// ABSOLUTA a propósito: más abajo ffmpeg corre con `cwd: assDir` (para que el filtro
+// subtitles encuentre el .ass sin pelear con el escapado de rutas en Windows). Si --video
+// llega relativa, ffmpeg la resuelve contra assDir y no la encuentra: el script moría con
+// "No such file" aunque el archivo existiera. Roto medido el 2026-07-30 en la cadena del día 1.
+const VIDEO = flag("video", null) ? resolve(flag("video")) : null;
 if (!SEGMENTS || !VIDEO) {
   console.error("uso: node karaoke-captions.mjs --segments <segments.json> --video <in.mp4> [--out final.mp4] [--dry-run]");
   process.exit(1);

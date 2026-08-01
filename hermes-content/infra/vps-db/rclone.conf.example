@@ -1,0 +1,16 @@
+# rclone.conf.example — remote R2 para backups off-site (Fase 1 / decision D4 del runbook).
+# Destino: /root/.config/rclone/rclone.conf (chmod 600, root-only). CERO credenciales reales aqui.
+#
+# Crear en Cloudflare: R2 → bucket `onia-backups` → API token (Object Read & Write, scoped al bucket).
+# Retencion 14d/8w/12m: configurar LIFECYCLE RULES en el bucket (R2 dashboard), no en rclone.
+
+[r2]
+type = s3
+provider = Cloudflare
+access_key_id = <R2_ACCESS_KEY_ID>
+secret_access_key = <R2_SECRET_ACCESS_KEY>
+endpoint = https://<CLOUDFLARE_ACCOUNT_ID>.r2.cloudflarestorage.com
+acl = private
+no_check_bucket = true
+
+# Prueba (tras configurar): rclone lsd r2:onia-backups

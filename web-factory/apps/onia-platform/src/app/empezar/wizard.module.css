@@ -1,0 +1,585 @@
+/*
+ * Wizard /empezar — modo foco (spec §0: contenedor angosto, blanco dominante,
+ * una pregunta centrada). El verde SOLO marca seleccionado/encendido/progreso
+ * (ONIA_BRAND_IDENTITY_2026.md, regla 1: el verde es un estado).
+ */
+
+/* ---- shell ---- */
+
+.shell {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+.top {
+  height: var(--header-h);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-inline: clamp(1rem, 4vw, 2.5rem);
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  color: inherit;
+  text-decoration: none;
+}
+
+.volver {
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+  text-decoration: none;
+  padding: 0.35em 0.6em;
+  border-radius: 8px;
+  white-space: nowrap;
+}
+
+.volver:hover {
+  color: var(--ink);
+  background: var(--surface-dim);
+}
+
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.footMicro {
+  padding: 1rem clamp(1rem, 4vw, 2.5rem) 1.2rem;
+  font-size: 0.8rem;
+  color: var(--ink-faint);
+  text-align: center;
+  border-top: 1px solid var(--line-soft);
+}
+
+/* ---- wizard ---- */
+
+.wizard {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.progressZone {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.8rem clamp(1rem, 4vw, 2.5rem) 0.4rem;
+}
+
+.track {
+  flex: 1;
+  height: 4px;
+  border-radius: 999px;
+  background: var(--line-soft);
+  overflow: hidden;
+}
+
+.fill {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--accent);
+  transform-origin: left;
+}
+
+.pasoLabel {
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  white-space: nowrap;
+}
+
+.stage {
+  flex: 1;
+  width: min(640px, 100% - clamp(2rem, 8vw, 3rem));
+  margin-inline: auto;
+  padding-block: clamp(2rem, 6vh, 4.5rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* ---- pregunta ---- */
+
+.q {
+  font-size: clamp(1.75rem, 1.2rem + 2.4vw, 2.7rem);
+  margin-top: 0.5em;
+  outline: none;
+}
+
+.sub {
+  margin-top: 0.9em;
+  color: var(--ink-soft);
+  max-width: 52ch;
+}
+
+.fieldset {
+  border: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* ---- opciones (radio y check) ---- */
+
+.opts {
+  display: grid;
+  gap: 0.7rem;
+  margin-top: 1.8rem;
+}
+
+.optPress {
+  width: 100%;
+}
+
+.opt {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  width: 100%;
+  border: 1.5px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  padding: 0.95rem 1.1rem;
+  cursor: pointer;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.opt:focus-within {
+  outline: 2px solid var(--accent-strong);
+  outline-offset: 3px;
+}
+
+.optOn {
+  border-color: color-mix(in oklab, var(--accent) 55%, var(--line));
+  box-shadow: 0 0 0 1px var(--accent-glow), var(--shadow-card);
+}
+
+/* LED de selección — mismo lenguaje que aDot de rubros.tsx */
+.optLed {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  background: var(--line);
+  flex: none;
+  transition: background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.optOn .optLed {
+  background: var(--accent);
+  box-shadow: 0 0 0 4px var(--accent-glow);
+}
+
+.optBody {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.optName {
+  font-weight: 650;
+  line-height: 1.3;
+}
+
+.optDesc {
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+}
+
+.optBadge {
+  margin-left: auto;
+  flex: none;
+}
+
+.notaSoon {
+  margin-top: 0.45rem;
+  padding: 0.6rem 0.9rem;
+  border-left: 3px solid var(--line);
+  font-size: 0.88rem;
+  color: var(--ink-soft);
+}
+
+.escape {
+  margin-top: 1.4rem;
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+}
+
+.escape a {
+  color: var(--accent-ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* checkbox */
+.checkBox {
+  width: 22px;
+  height: 22px;
+  border: 1.5px solid var(--line);
+  border-radius: 6px;
+  background: var(--surface);
+  display: grid;
+  place-items: center;
+  flex: none;
+  transition: border-color 0.2s ease;
+}
+
+.optOn .checkBox {
+  border-color: var(--accent);
+}
+
+.checkFill {
+  width: 14px;
+  height: 14px;
+  display: block;
+}
+
+/* input URL */
+.urlReveal {
+  margin-top: 1.1rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface-dim);
+  padding: 1rem 1.1rem;
+}
+
+.urlLabel {
+  display: block;
+  font-weight: 650;
+  font-size: 0.95rem;
+}
+
+.urlInput {
+  width: 100%;
+  margin-top: 0.6rem;
+  padding: 0.7em 0.9em;
+  border: 1.5px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.92rem;
+}
+
+.urlInput::placeholder {
+  color: var(--ink-faint);
+}
+
+.urlInput:focus-visible {
+  outline: 2px solid var(--accent-strong);
+  outline-offset: 2px;
+  border-color: var(--accent);
+}
+
+.urlMicro {
+  margin-top: 0.55rem;
+  font-size: 0.8rem;
+  color: var(--ink-faint);
+}
+
+/* ---- navegación ---- */
+
+.navRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  margin-top: 2rem;
+}
+
+.btnPrimary {
+  background: var(--ink);
+  color: var(--bg);
+}
+
+.btnPrimary:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* ---- resultado ---- */
+
+.planCard {
+  margin-top: 2rem;
+  border: 1.5px solid color-mix(in oklab, var(--accent) 45%, var(--line));
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: 0 0 0 1px var(--accent-glow), var(--shadow-card);
+  padding: clamp(1.2rem, 3vw, 1.7rem);
+}
+
+.planName {
+  font-size: var(--text-h3);
+  margin-top: 0.7em;
+}
+
+.planPrice {
+  margin-top: 0.5rem;
+  font-size: 0.88rem;
+  color: var(--accent-ink);
+}
+
+.chips {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 1.1rem 0 0;
+  padding: 0;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0.35em 0.9em;
+  font-size: 0.85rem;
+  font-weight: 550;
+  background: var(--surface);
+}
+
+.chipDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  background: var(--accent);
+  flex: none;
+}
+
+.planNote {
+  margin-top: 0.9rem;
+  padding-top: 0.9rem;
+  border-top: 1px dashed var(--line-soft);
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+}
+
+.block {
+  margin-top: 2.2rem;
+}
+
+.blockTitle {
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.mods {
+  display: grid;
+  gap: 0.8rem;
+  margin-top: 1rem;
+}
+
+/* módulo fantasma → encendido (mecánica tileOn de modules.tsx) */
+.mod {
+  border: 1px dashed var(--line);
+  border-radius: var(--radius);
+  background: transparent;
+  padding: 1.05rem 1.15rem;
+  transition: border-color 0.35s ease, box-shadow 0.35s ease, background 0.35s ease;
+}
+
+.modOn {
+  border-style: solid;
+  background: var(--surface);
+  border-color: color-mix(in oklab, var(--accent) 42%, var(--line));
+  box-shadow: 0 0 0 1px var(--accent-glow), var(--shadow-card);
+}
+
+.modName {
+  font-size: 1.05rem;
+}
+
+.modCopy {
+  margin-top: 0.45rem;
+  color: var(--ink-soft);
+  font-size: 0.92rem;
+  line-height: 1.55;
+}
+
+.modTag {
+  margin-top: 0.7rem;
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+/* "ya lo tenés" — tinta, check estático, SIN verde (no está encendido en Onia) */
+.have {
+  list-style: none;
+  margin: 1rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.7rem;
+}
+
+.haveItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+}
+
+.haveCheck {
+  flex: none;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.5;
+}
+
+/* ensamblaje variante B — patrón aBlock/aGhost de rubros.module.css */
+.assembly {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.8rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  padding: clamp(1.1rem, 2vw, 1.6rem);
+  margin-top: 2rem;
+}
+
+.aBlock {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 0.45rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 0.9rem 1rem 1rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  background: var(--surface-dim);
+  min-height: 4.6rem;
+}
+
+.aDot {
+  width: 9px;
+  height: 9px;
+  border-radius: 2px;
+  background: var(--accent);
+}
+
+.aGhost {
+  border-style: dashed;
+  background: transparent;
+  font-weight: 500;
+  color: var(--ink-faint);
+}
+
+.aGhost .aDot {
+  background: var(--line);
+}
+
+.aGhostNote {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+/* cierre */
+.cierre {
+  margin-top: 2.4rem;
+}
+
+.ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+}
+
+/* CTAs largos ("Anotarme — avísenme cuando esté") deben envolver en 320px */
+.ctas :global(.btn) {
+  white-space: normal;
+  text-align: center;
+  max-width: 100%;
+}
+
+.ctaMicro {
+  margin-top: 0.9rem;
+  font-size: 0.85rem;
+  color: var(--ink-faint);
+  max-width: 48ch;
+}
+
+.reset {
+  margin-top: 1.4rem;
+  border: none;
+  background: none;
+  padding: 0.3em 0;
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.reset:hover {
+  color: var(--ink);
+}
+
+/* ---- a11y y responsive ---- */
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .opt,
+  .optLed,
+  .checkBox,
+  .mod {
+    transition: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .opt {
+    flex-wrap: wrap;
+  }
+
+  .optBadge {
+    margin-left: calc(10px + 0.9rem);
+    order: 3;
+  }
+
+  .assembly {
+    grid-template-columns: 1fr;
+  }
+
+  .navRow :global(.btn) {
+    flex: 1;
+  }
+}
+
+/* enlaces dentro de las notas del plan (precios publicados) */
+.planNote a {
+  color: var(--accent-ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}

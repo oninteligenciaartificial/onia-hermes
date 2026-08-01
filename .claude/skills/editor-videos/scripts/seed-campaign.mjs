@@ -1,7 +1,7 @@
 // editor-videos — SEED de campaña: cargar las piezas APROBADAS EN ESTRUCTURA de una
 // campaña como los primeros `onia_center.video_projects` del Estudio de Contenido.
 //
-// Campaña embebida: "Lucía vende Onia Dental" (carril H, tanda de 2 semanas / 10 piezas).
+// Campaña embebida: "Lucía vende DentalGest" (carril H, tanda de 2 semanas / 10 piezas).
 // Fuente ÚNICA de los datos de abajo: hermes-content/docs/ONIA_CARRIL_H_LUCIA_PLAN_20260725.md
 // (sección 1 = calendario/costos, sección 2 = los 10 guiones, sección 3 = presupuesto).
 // Nada acá se inventa: hook, CTA, formato, pilar y costo salen textuales del doc.
@@ -12,7 +12,7 @@
 // Contrato de datos respetado (ver supabase/migrations/20260723_onia_center_video_studio.sql
 // y web-factory/apps/site/src/app/onia-center/components/views/estudio/source.ts):
 //   • lane: la columna sólo acepta client|onia|sergio → va 'onia'. El carril FINO va en
-//     raw.lane='onia-ig' + raw.lane_label='Onia · Lucía IG' (el panel prioriza raw en laneInfo).
+//     raw.lane='onia-ig' + raw.lane_label='ONIA · Lucía IG' (el panel prioriza raw en laneInfo).
 //   • raw.raw_label: subtítulo que el panel muestra bajo el título en la tabla
 //     (mapProject → strField(raw,"raw_label")). Ej: "carrusel 7 slides · P4".
 //   • format: 'vertical' (todo 9:16).
@@ -52,7 +52,7 @@ const DOC = "ONIA_CARRIL_H_LUCIA_PLAN_20260725.md";
 const KEY_PREFIX = "lucia-d";
 const LANE_DB = "onia"; // CHECK: client|onia|sergio
 const LANE_FINE = "onia-ig"; // FINE_LANES del panel
-const LANE_LABEL = "Onia · Lucía IG";
+const LANE_LABEL = "ONIA · Lucía IG";
 const FORMAT = "vertical"; // 9:16 en las 10 piezas
 const STATUS = "intake"; // ninguna pieza está producida
 const CREDITS_BASIS = "tope del rango · escenario (a) Mínimo-gasto (sección 3 del doc)";
@@ -189,7 +189,7 @@ const PIECES = [
     rawLabel: "carrusel 6 slides · P3",
     pilar: "P3",
     duracionTarget: null,
-    hook: "El plan Pro de Onia Dental cuesta 2 ajustes de ortodoncia al mes.",
+    hook: "El plan Pro de DentalGest cuesta 2 ajustes de ortodoncia al mes.",
     cta: "DEMO al WhatsApp",
     credits: 0,
     costNote: "0 — Remotion",

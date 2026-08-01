@@ -1,7 +1,7 @@
 {
   "name": "ONIA Core",
-  "version": "0.7.1",
-  "status": "beta",
+  "version": "1.0.0",
+  "status": "stable",
   "sourceOfTruth": "onia-hermes/onia-core",
   "researchResult": "onia-core/ONIA_CORE_RESEARCH_RESULT_2026.md",
   "betaDirection": "onia-core/ONIA_CORE_DENTALGEST_BETA_DIRECTION_2026.md",
@@ -16,7 +16,7 @@
   ],
   "policy": {
     "installInProductRepos": false,
-    "reason": "Core beta congelado para adopcion. DentalGest y GestiOS instalando via plan aprobado; Ganadero OS sigue bloqueado hasta su propio plan.",
+    "reason": "Core v1.0.0 FEATURE-COMPLETO y congelado (solo cambios aditivos). El foco ya NO es desarrollar el core sino la ADOPCION en productos + la venta. DentalGest y GestiOS instalando via plan aprobado; Ganadero OS sigue bloqueado hasta su propio plan.",
     "nextDistributionStage": "dentagest_and_gestios_adoption"
   },
   "researchSources": [

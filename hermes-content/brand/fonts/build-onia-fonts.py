@@ -151,8 +151,6 @@ NEEDS = {
     "lower-third": ("display", "body"),
     "scoreboard/vertical": ("display", "body", "mono"),    # marcador de la serie
     "scoreboard/horizontal": ("display", "body", "mono"),  # idem, 16:9
-    "scoreboard/full": ("display", "body", "mono"),           # tablero de objetivos 16:9
-    "scoreboard/full-vertical": ("display", "body", "mono"),  # idem, 9:16
 }
 
 

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" role="img" aria-label="onia">
+  <title>onia — isotipo</title>
+  <desc>La "o" del wordmark con el cursor verde adentro: el modulo encendido. Mismos dos primitivos del lockup (anillo monolinea 16 + bloque 20x20 rx2).</desc>
+  <style>
+    .ink { stroke: #141A17; }
+    @media (prefers-color-scheme: dark) {
+      .ink { stroke: #ECEFED; }
+    }
+  </style>
+  <circle class="ink" cx="40" cy="40" r="32" fill="none" stroke-width="16"/>
+  <rect x="30" y="30" width="20" height="20" rx="2" fill="#3EA639"/>
+</svg>

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 116" role="img" aria-label="onia">
+  <title>onia — logo v1 sobre fondo oscuro</title>
+  <desc>Version de colores fijos para fondo negro/tinta: tinta clara #ECEFED + cursor verde #3EA639 (6.1:1 sobre #0C110F, AA componente). Mismo viewBox que logo.svg.</desc>
+  <g fill="none" stroke="#ECEFED" stroke-width="16" stroke-linecap="round">
+    <circle cx="40" cy="76" r="32"/>
+    <path d="M112 108 V68 A24 24 0 0 1 160 68 V108"/>
+    <path d="M200 108 V44"/>
+    <circle cx="272" cy="76" r="32"/>
+    <path d="M304 44 V108"/>
+  </g>
+  <circle cx="200" cy="10" r="10" fill="#ECEFED"/>
+  <rect x="332" y="96" width="20" height="20" rx="2" fill="#3EA639"/>
+</svg>

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="onia">
+  <title>onia — favicon</title>
+  <desc>Baldosa tinta redondeada con el isotipo (o + cursor verde). Colores fijos: lee igual en pestañas claras y oscuras.</desc>
+  <rect width="64" height="64" rx="14" fill="#0C110F"/>
+  <g transform="translate(32 32) scale(0.475) translate(-40 -40)">
+    <circle cx="40" cy="40" r="32" fill="none" stroke="#ECEFED" stroke-width="16"/>
+    <rect x="30" y="30" width="20" height="20" rx="2" fill="#3EA639"/>
+  </g>
+</svg>

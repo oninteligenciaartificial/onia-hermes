@@ -5,7 +5,7 @@
     {"id":"title","type":"string","label":"Titulo","default":"Reservá tu cita"},
     {"id":"subtitle","type":"string","label":"Subtitulo","default":"en 2 toques"},
     {"id":"image","type":"string","label":"Captura (ruta)","default":""},
-    {"id":"accent","type":"color","label":"Acento","default":"#00D26A"}
+    {"id":"accent","type":"color","label":"Acento","default":"#FF7A00"}
   ]'
 >
   <head>
@@ -76,7 +76,7 @@
         --stage-w: 640;
         --stage-h: 1200;
         --u: calc(var(--stage-w) / 1000 * 1px);
-        --accent: #00d26a;
+        --accent: #ff7a00;
         --accent-deep: color-mix(in srgb, var(--accent) 62%, #000000);
         --ink: #0a0c11;
         --ink2: #15181f;
@@ -315,11 +315,6 @@
 
           // ---- contenido ------------------------------------------------------
           var V = readVars();
-          // El JSON declara el acento pero el CSS lo pisaba: sin esto,
-          // --accent nunca recibia el valor de V.accent (patron de scoreboard/full).
-          var accent = String(V.accent || "").trim();
-          if (/^#[0-9a-fA-F]{3,8}$/.test(accent)) stage.style.setProperty("--accent", accent);
-
           var elPhone = document.getElementById("phone-frame");
           var elImage = document.getElementById("phone-image");
           var elPlaceholder = document.getElementById("phone-placeholder");

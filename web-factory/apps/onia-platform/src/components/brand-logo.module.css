@@ -1,0 +1,41 @@
+/*
+ * Intercambio de variante por tema. Una sola variante esta en el flujo a la
+ * vez (`display`), y las dos miden lo mismo: el logo no salta ni cambia de
+ * tamano al togglear el tema.
+ */
+
+.logo {
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+}
+
+.img {
+  display: block;
+  max-width: none; /* el tamano lo fija el componente, no el reset global */
+}
+
+/* por defecto (papel claro) va el wordmark tinta */
+.onDark {
+  display: none;
+}
+
+/* toggle manual a oscuro */
+:global(html[data-theme="dark"]) .onLight {
+  display: none;
+}
+
+:global(html[data-theme="dark"]) .onDark {
+  display: block;
+}
+
+/* preferencia del sistema, salvo que el toggle pida claro */
+@media (prefers-color-scheme: dark) {
+  :global(html:not([data-theme="light"])) .onLight {
+    display: none;
+  }
+
+  :global(html:not([data-theme="light"])) .onDark {
+    display: block;
+  }
+}

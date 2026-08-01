@@ -6,7 +6,7 @@
     {"id":"label","type":"string","label":"Etiqueta","default":"DOCTORES"},
     {"id":"eyebrow","type":"string","label":"Antetitulo","default":""},
     {"id":"sublabel","type":"string","label":"Subetiqueta","default":""},
-    {"id":"accent","type":"color","label":"Acento","default":"#00D26A"}
+    {"id":"accent","type":"color","label":"Acento","default":"#FF7A00"}
   ]'
 >
   <head>
@@ -88,7 +88,7 @@
         --stage-w: 900;
         --u: calc(var(--stage-w) / 1000 * 1px);
         /* --accent lo pisa el runtime desde data-composition-variables. */
-        --accent: #00d26a;
+        --accent: #ff7a00;
         --accent-deep: color-mix(in srgb, var(--accent) 62%, #000000);
         --ink: #0a0c11;
         --ink2: #15181f;
@@ -403,11 +403,6 @@
 
           // ---- contenido ------------------------------------------------------
           var V = readVars();
-          // El JSON declara el acento pero el CSS lo pisaba: sin esto,
-          // --accent nunca recibia el valor de V.accent (patron de scoreboard/full).
-          var accent = String(V.accent || "").trim();
-          if (/^#[0-9a-fA-F]{3,8}$/.test(accent)) stage.style.setProperty("--accent", accent);
-
           var elCard = document.getElementById("stat-card");
           var elRail = document.getElementById("stat-rail");
           var elHalo = document.getElementById("stat-halo");

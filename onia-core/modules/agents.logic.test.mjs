@@ -17,12 +17,18 @@ import {
   buildWorkItem,
   canTransitionAction,
   canTransitionRun,
+  evaluateCollectorCandidates,
   evaluateGuardrails,
+  evaluateRecallCandidates,
   isDuplicateAction,
+  planAgentRun,
   routeAction,
   shouldRunAgent,
   summarizeRun,
 } from "./agents.logic.mjs";
+
+const NOW = "2026-07-22T12:00:00Z";
+const daysAgo = (n) => new Date(Date.parse(NOW) - n * 86400000).toISOString();
 
 const config = getModule(loadModules(), "agents").agentsConfig;
 
@@ -282,5 +288,161 @@ describe("config real del modulo (agentsConfig)", () => {
   });
   it("no es asesoria financiera", () => {
     assert.equal(config.notFinancialAdvice, true);
+  });
+});
+
+describe("evaluateRecallCandidates (motor Recall: reactivacion)", () => {
+  it("marca candidato al que no vuelve hace >= recallAfterDays sin proxima cita", () => {
+    const out = evaluateRecallCandidates(
+      [{ id: "p1", lastVisitAt: daysAgo(200), hasFutureAppointment: false, lastContactedAt: null }],
+      { nowIso: NOW, recallAfterDays: 180, cooldownDays: 30 },
+    );
+    assert.equal(out.length, 1);
+    assert.equal(out[0].targetId, "p1");
+    assert.equal(out[0].targetType, "patient");
+    assert.equal(out[0].daysSinceVisit, 200);
+    assert.match(out[0].reason, /200 dias/);
+  });
+  it("excluye a quien todavia esta dentro del umbral", () => {
+    const out = evaluateRecallCandidates(
+      [{ id: "p2", lastVisitAt: daysAgo(100), hasFutureAppointment: false }],
+      { nowIso: NOW, recallAfterDays: 180 },
+    );
+    assert.deepEqual(out, []);
+  });
+  it("excluye a quien ya tiene proxima cita, se dio de baja, o nunca vino", () => {
+    const out = evaluateRecallCandidates(
+      [
+        { id: "p3", lastVisitAt: daysAgo(300), hasFutureAppointment: true },
+        { id: "p4", lastVisitAt: daysAgo(300), optedOut: true },
+        { id: "p6", lastVisitAt: null },
+      ],
+      { nowIso: NOW, recallAfterDays: 180 },
+    );
+    assert.deepEqual(out, []);
+  });
+  it("respeta el cooldown de contacto", () => {
+    const out = evaluateRecallCandidates(
+      [
+        { id: "p5", lastVisitAt: daysAgo(300), lastContactedAt: daysAgo(10) },
+        { id: "p7", lastVisitAt: daysAgo(400), lastContactedAt: daysAgo(60) },
+      ],
+      { nowIso: NOW, recallAfterDays: 180, cooldownDays: 30 },
+    );
+    assert.deepEqual(out.map((c) => c.targetId), ["p7"]);
+  });
+  it("ordena por dias sin volver descendente (mas frio primero)", () => {
+    const out = evaluateRecallCandidates(
+      [
+        { id: "p1", lastVisitAt: daysAgo(200) },
+        { id: "p7", lastVisitAt: daysAgo(400) },
+      ],
+      { nowIso: NOW, recallAfterDays: 180 },
+    );
+    assert.deepEqual(out.map((c) => c.targetId), ["p7", "p1"]);
+  });
+  it("exige nowIso (no usa reloj)", () => {
+    assert.throws(() => evaluateRecallCandidates([], {}), /nowIso/);
+  });
+});
+
+describe("evaluateCollectorCandidates (motor Cobrador: cobranza)", () => {
+  it("marca cuenta vencida con saldo > 0 fuera del periodo de gracia", () => {
+    const out = evaluateCollectorCandidates(
+      [{ id: "r1", customerId: "c1", dueDate: daysAgo(40), balanceDue: 500, currency: "BOB" }],
+      { nowIso: NOW, graceDays: 10, cooldownDays: 7 },
+    );
+    assert.equal(out.length, 1);
+    assert.equal(out[0].targetId, "r1");
+    assert.equal(out[0].targetType, "receivable");
+    assert.equal(out[0].customerId, "c1");
+    assert.equal(out[0].daysOverdue, 40);
+    assert.equal(out[0].balanceDue, 500);
+    assert.match(out[0].reason, /500 BOB/);
+  });
+  it("excluye dentro de gracia, sin saldo, en plan de pago, o con cooldown activo", () => {
+    const out = evaluateCollectorCandidates(
+      [
+        { id: "r2", dueDate: daysAgo(5), balanceDue: 500 },
+        { id: "r3", dueDate: daysAgo(40), balanceDue: 0 },
+        { id: "r4", dueDate: daysAgo(40), balanceDue: 500, inPaymentPlan: true },
+        { id: "r5", dueDate: daysAgo(40), balanceDue: 500, lastContactedAt: daysAgo(2) },
+      ],
+      { nowIso: NOW, graceDays: 10, cooldownDays: 7 },
+    );
+    assert.deepEqual(out, []);
+  });
+  it("ordena por dias vencido descendente (deuda mas vieja primero)", () => {
+    const out = evaluateCollectorCandidates(
+      [
+        { id: "r1", dueDate: daysAgo(40), balanceDue: 500 },
+        { id: "r6", dueDate: daysAgo(90), balanceDue: 1200 },
+      ],
+      { nowIso: NOW, graceDays: 0 },
+    );
+    assert.deepEqual(out.map((c) => c.targetId), ["r6", "r1"]);
+  });
+  it("moneda por defecto BOB (Bolivia)", () => {
+    const out = evaluateCollectorCandidates(
+      [{ id: "r1", dueDate: daysAgo(40), balanceDue: 500 }],
+      { nowIso: NOW },
+    );
+    assert.equal(out[0].currency, "BOB");
+  });
+  it("exige nowIso (no usa reloj)", () => {
+    assert.throws(() => evaluateCollectorCandidates([], {}), /nowIso/);
+  });
+});
+
+describe("planAgentRun (orquestador: candidatos -> acciones ruteadas)", () => {
+  const recallAgent = { id: "recall-1", autonomyLevel: "suggest" };
+  const candidates = [
+    { targetType: "patient", targetId: "p7", reason: "sin volver hace 400 dias" },
+    { targetType: "patient", targetId: "p1", reason: "sin volver hace 200 dias" },
+  ];
+
+  it("draft_message SIEMPRE va a la cola de aprobacion (human-in-the-loop)", () => {
+    const { actions, summary } = planAgentRun(recallAgent, candidates, config, { nowIso: NOW });
+    assert.equal(actions.length, 2);
+    assert.ok(actions.every((a) => a.status === "pending_approval"));
+    assert.ok(actions.every((a) => a.actionType === "draft_message"));
+    assert.ok(actions.every((a) => a.routedAt === NOW));
+    assert.equal(actions[0].targetId, "p7");
+    assert.equal(summary.pendingApproval, 2);
+  });
+  it("dedupe cross-run: descarta la accion ya propuesta en otra corrida", () => {
+    const dupKey = agentActionKey({ agentId: "recall-1", actionType: "draft_message", targetType: "patient", targetId: "p7" });
+    const { actions, summary } = planAgentRun(recallAgent, candidates, config, { nowIso: NOW, existingKeys: [dupKey] });
+    const byTarget = Object.fromEntries(actions.map((a) => [a.targetId, a.status]));
+    assert.equal(byTarget.p7, "discarded");
+    assert.equal(byTarget.p1, "pending_approval");
+    assert.equal(summary.discarded, 1);
+    assert.equal(summary.pendingApproval, 1);
+  });
+  it("dedupe intra-run: dos candidatos al mismo target => el segundo se descarta", () => {
+    const dup = [
+      { targetType: "patient", targetId: "p9", reason: "x" },
+      { targetType: "patient", targetId: "p9", reason: "x" },
+    ];
+    const { summary } = planAgentRun(recallAgent, dup, config, { nowIso: NOW });
+    assert.equal(summary.pendingApproval, 1);
+    assert.equal(summary.discarded, 1);
+  });
+  it("guardrail: al tope diario de mensajes, descarta todos los drafts", () => {
+    const { actions } = planAgentRun(recallAgent, candidates, config, {
+      nowIso: NOW,
+      messagesToday: config.guardrails.maxMessagesPerDay,
+    });
+    assert.ok(actions.every((a) => a.status === "discarded"));
+    assert.match(actions[0].reason, /mensajes/);
+  });
+  it("tope por corrida (maxActionsPerRun): acciones internas auto se ejecutan hasta el tope, resto descartado", () => {
+    const autoAgent = { id: "qual-1", autonomyLevel: "auto" };
+    const many = Array.from({ length: 30 }, (_, i) => ({ targetType: "business_partner", targetId: `bp-${i}`, reason: "califica" }));
+    const { actions, summary } = planAgentRun(autoAgent, many, config, { nowIso: NOW, actionType: "qualify_lead" });
+    assert.equal(actions.length, 30);
+    assert.equal(summary.autoExecuted, config.guardrails.maxActionsPerRun);
+    assert.equal(summary.discarded, 30 - config.guardrails.maxActionsPerRun);
+    assert.match(actions.find((a) => a.status === "discarded").reason, /corrida/);
   });
 });

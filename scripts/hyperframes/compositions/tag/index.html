@@ -1,0 +1,189 @@
+<!doctype html>
+<html
+  lang="es"
+  data-composition-variables='[
+    {"id":"texto","type":"string","label":"Etiqueta","default":"LOCALHOST"},
+    {"id":"pie","type":"string","label":"Aclaración (opcional)","default":""},
+    {"id":"x","type":"string","label":"X 0-100 (dónde apunta)","default":"50"},
+    {"id":"y","type":"string","label":"Y 0-100 (dónde apunta)","default":"55"},
+    {"id":"lado","type":"string","label":"izquierda | derecha","default":"derecha"},
+    {"id":"accent","type":"color","label":"Acento","default":"#00D26A"}
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <title>ONIA · Tag</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      /* El rotulo chico que SEÑALA algo dentro del cuadro (5 de ~32 apariciones en el reel:
+         "P&B", "retícula de jornal", "borda de papel"). No es un subtitulo ni un titulo:
+         nombra una parte de lo que se ve. Por eso lleva punto de anclaje + guia, y es chico. */
+      @font-face {
+        font-family: "DM Sans";
+        src: url("fonts/DMSans-var-latin.woff2") format("woff2");
+        font-weight: 400 500; font-style: normal; font-display: block;
+      }
+      *, *::before, *::after { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; width: 1080px; height: 1920px; overflow: hidden; background: transparent; }
+      #stage {
+        position: relative; width: 1080px; height: 1920px;
+        --stage-w: 1080; --stage-h: 1920;
+        --u: calc(var(--stage-w) / 1000 * 1px);
+        --accent: #00d26a;
+        --ink: #0a0f0d;
+        --ink-text: #f6f8fb;
+        font-family: "DM Sans", sans-serif;
+      }
+      .fill { position: absolute; inset: 0; }
+
+      .ancla {
+        position: absolute;
+        width: calc(var(--u) * 14); height: calc(var(--u) * 14);
+        margin: calc(var(--u) * -7) 0 0 calc(var(--u) * -7);
+        border-radius: 50%;
+        border: calc(var(--u) * 3.5) solid var(--accent);
+        background: rgba(10, 15, 13, 0.55);
+      }
+      .guia {
+        position: absolute; height: calc(var(--u) * 2.5);
+        background: var(--accent);
+        transform-origin: left center;
+        clip-path: inset(0 calc(var(--wipe, 100) * 1%) 0 0);
+      }
+      .caja {
+        position: absolute;
+        display: inline-flex; flex-direction: column;
+        padding: calc(var(--u) * 9) calc(var(--u) * 16) calc(var(--u) * 10);
+        background: var(--ink);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: calc(var(--u) * 8);
+        box-shadow: 0 calc(var(--u) * 10) calc(var(--u) * 26) rgba(0, 0, 0, 0.5);
+        white-space: nowrap;
+      }
+      .caja.izq { transform: translateX(-100%); }
+      .txt {
+        font-weight: 500; font-size: calc(var(--u) * 21);
+        letter-spacing: calc(var(--u) * 1.7); text-transform: uppercase;
+        color: var(--accent);
+      }
+      .pie {
+        margin-top: calc(var(--u) * 3);
+        font-size: calc(var(--u) * 16); color: rgba(246, 248, 251, 0.66);
+      }
+      .pie:empty { display: none; }
+    </style>
+  </head>
+  <body>
+    <div
+      id="stage"
+      data-composition-id="tag"
+      data-theme="dark"
+      data-start="0"
+      data-duration="2.2"
+      data-fps="30"
+      data-width="1080"
+      data-height="1920"
+    >
+      <div id="tg-clip" class="clip" data-start="0" data-duration="2.2" data-track-index="0">
+        <div class="fill">
+          <div class="ancla" id="tg-ancla"></div>
+          <div class="guia" id="tg-guia"></div>
+          <div class="caja" id="tg-caja">
+            <span class="txt" id="tg-txt">LOCALHOST</span>
+            <span class="pie" id="tg-pie"></span>
+          </div>
+        </div>
+      </div>
+
+      <script>
+        (function () {
+          function cubicBezier(x1, y1, x2, y2) {
+            var A = function (a, b) { return 1 - 3 * b + 3 * a; };
+            var B = function (a, b) { return 3 * b - 6 * a; };
+            var C = function (a) { return 3 * a; };
+            var sx = function (t) { return ((A(x1, x2) * t + B(x1, x2)) * t + C(x1)) * t; };
+            var sy = function (t) { return ((A(y1, y2) * t + B(y1, y2)) * t + C(y1)) * t; };
+            var slope = function (t) { return 3 * A(x1, x2) * t * t + 2 * B(x1, x2) * t + C(x1); };
+            return function (x) {
+              if (x <= 0) return 0; if (x >= 1) return 1;
+              var t = x;
+              for (var i = 0; i < 8; i++) { var d = sx(t) - x, dx = slope(t); if (Math.abs(dx) < 1e-7) break; t -= d / dx; }
+              var lo = 0, hi = 1; t = x;
+              while (hi - lo > 1e-7) { if (sx(t) < x) lo = t; else hi = t; t = (hi + lo) / 2; }
+              return sy(t);
+            };
+          }
+          gsap.registerEase("oniaOutExpo", cubicBezier(0.16, 1, 0.3, 1));
+          gsap.registerEase("oniaOutQuart", cubicBezier(0.25, 1, 0.5, 1));
+
+          var stage = document.getElementById("stage");
+          var FPS = Number(stage.dataset.fps) || 30;
+          var DUR = Number(stage.dataset.duration) || 2.2;
+          var TOTAL = Math.max(1, Math.round(DUR * FPS));
+          document.getElementById("tg-clip").dataset.duration = String(DUR);
+
+          function readVars() {
+            var decls = [];
+            try { decls = JSON.parse(document.documentElement.dataset.compositionVariables || "[]"); } catch (e) { decls = []; }
+            var out = {};
+            for (var i = 0; i < decls.length; i++) out[decls[i].id] = decls[i].default;
+            var live = window.__hyperframes && typeof window.__hyperframes.getVariables === "function"
+              ? window.__hyperframes.getVariables() : null;
+            if (live) for (var k in out) if (live[k] !== undefined && live[k] !== null) out[k] = live[k];
+            return out;
+          }
+          var V = readVars();
+          if (V.accent) stage.style.setProperty("--accent", String(V.accent));
+          document.getElementById("tg-txt").textContent = String(V.texto || "");
+          document.getElementById("tg-pie").textContent = String(V.pie || "");
+
+          var W = 1080, H = 1920;
+          var px = (Number(V.x) || 50) / 100 * W;
+          var py = (Number(V.y) || 55) / 100 * H;
+          var derecha = String(V.lado || "derecha") !== "izquierda";
+          var LARGO = 150; // largo de la guia en px de lienzo
+
+          var ancla = document.getElementById("tg-ancla");
+          var guia = document.getElementById("tg-guia");
+          var caja = document.getElementById("tg-caja");
+          ancla.style.left = px + "px";
+          ancla.style.top = py + "px";
+          guia.style.left = px + "px";
+          guia.style.top = py + "px";
+          guia.style.width = LARGO + "px";
+          guia.style.transform = "rotate(" + (derecha ? -18 : 198) + "deg)";
+          var dx = Math.cos((derecha ? -18 : 198) * Math.PI / 180) * LARGO;
+          var dy = Math.sin((derecha ? -18 : 198) * Math.PI / 180) * LARGO;
+          caja.style.left = px + dx + "px";
+          caja.style.top = py + dy + "px";
+          caja.style.marginTop = "-26px";
+          if (!derecha) caja.classList.add("izq");
+
+          // Orden causal: primero el punto (aparece DONDE mirar), despues la guia se
+          // estira, despues la caja. Al reves se lee como tres cosas sueltas.
+          var tl = gsap.timeline({ paused: true });
+          var f = function (s) { return Math.max(1, Math.round(s * FPS)) / FPS; };
+          var exitAt = Math.max(f(0.5), (TOTAL - Math.round(0.18 * FPS)) / FPS);
+
+          gsap.set([ancla, caja], { autoAlpha: 0 });
+          tl.set(ancla, { autoAlpha: 1 }, 0);
+          tl.fromTo(ancla, { scale: 0.3 }, { scale: 1, duration: f(0.18), ease: "oniaOutExpo" }, 0);
+
+          var wipe = { v: 100 };
+          tl.to(wipe, {
+            v: 0, duration: f(0.16), ease: "oniaOutQuart",
+            onUpdate: function () { stage.style.setProperty("--wipe", wipe.v); },
+          }, f(0.1));
+
+          tl.set(caja, { autoAlpha: 1 }, f(0.2));
+          tl.fromTo(caja, { y: 14 }, { y: 0, duration: f(0.2), ease: "oniaOutExpo" }, f(0.2));
+
+          tl.to([ancla, caja], { autoAlpha: 0, duration: f(0.18), ease: "oniaOutQuart" }, exitAt);
+
+          window.__timelines = window.__timelines || {};
+          window.__timelines["tag"] = tl;
+        })();
+      </script>
+    </div>
+  </body>
+</html>
