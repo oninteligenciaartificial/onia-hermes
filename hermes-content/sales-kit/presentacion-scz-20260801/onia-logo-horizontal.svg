@@ -1,0 +1,14 @@
+<svg width="640" height="200" viewBox="0 0 640 200" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="ONIA">
+  <title>ONIA</title>
+  <!-- logomark -->
+  <g transform="translate(20,40)">
+    <circle cx="60" cy="60" r="43" stroke="#0A0F0D" stroke-width="13" fill="none"/>
+    <path d="M60 17 A43 43 0 0 1 98 43" stroke="#10C26B" stroke-width="13" fill="none" stroke-linecap="round"/>
+    <circle cx="98" cy="43" r="11" fill="#10C26B"/>
+    <circle cx="98" cy="43" r="4.5" fill="#0A0F0D"/>
+  </g>
+  <!-- wordmark: ON in ink, IA in green (IA = inteligencia artificial) -->
+  <text x="170" y="132" font-family="'Space Grotesk','Archivo','Arial Black',Arial,sans-serif" font-size="120" font-weight="700" letter-spacing="-4">
+    <tspan fill="#0A0F0D">ON</tspan><tspan fill="#10C26B">IA</tspan>
+  </text>
+</svg>

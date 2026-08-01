@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Onia — Sistemas con IA para negocios bolivianos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+/* Tokens de marca — fuente: hermes-content/brand/tokens.css */
+:root {
+  --onia-green: #10C26B;
+  --onia-green-deep: #0B8F4F;
+  --onia-green-soft: #D6F5E5;
+  --onia-ink: #0A0F0D;
+  --onia-ink-2: #1C2622;
+  --onia-surface: #F4F5F2;
+  --onia-white: #FFFFFF;
+  --onia-muted: #6B756F;
+  --onia-muted-dark: #9FB0A8;
+  --font-display: 'Space Grotesk','Archivo','Arial Black',Arial,sans-serif;
+  --font-body: 'Inter','Segoe UI',system-ui,Arial,sans-serif;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html, body { height:100%; background: var(--onia-ink); }
+body { font-family: var(--font-body); color: var(--onia-ink); }
+
+.slide {
+  width:100vw; height:100vh;
+  display:none;
+  flex-direction:column;
+  background: var(--onia-surface);
+  padding: clamp(2rem, 5vh, 4.5rem) clamp(2.5rem, 6vw, 6.5rem);
+  position:relative;
+  overflow:hidden;
+}
+.slide.active { display:flex; }
+.slide.dark { background: var(--onia-ink); color: var(--onia-white); }
+.slide.green { background: var(--onia-green); color: var(--onia-ink); }
+
+/* marco */
+.slide-num {
+  position:absolute; bottom: 2.2rem; right: clamp(2.5rem, 6vw, 6.5rem);
+  font-family: var(--font-display); font-weight:500; font-size: .85rem;
+  color: var(--onia-muted); letter-spacing:.08em;
+}
+.dark .slide-num { color: var(--onia-muted-dark); }
+.green .slide-num { color: var(--onia-ink-2); }
+.brandmark {
+  position:absolute; bottom: 2rem; left: clamp(2.5rem, 6vw, 6.5rem);
+  height: 1.4rem; opacity:.85;
+}
+.kicker {
+  font-family: var(--font-display); font-weight:500; font-size: clamp(.8rem, 1.3vw, 1rem);
+  letter-spacing:.14em; text-transform:uppercase; color: var(--onia-green-deep);
+  margin-bottom: 1.2rem;
+}
+.dark .kicker { color: var(--onia-green); }
+.green .kicker { color: var(--onia-ink); }
+
+h1 { font-family: var(--font-display); font-weight:700; font-size: clamp(2.6rem, 6.5vw, 5.6rem); line-height:1.05; letter-spacing:-.02em; }
+h2 { font-family: var(--font-display); font-weight:700; font-size: clamp(1.9rem, 4.2vw, 3.4rem); line-height:1.08; letter-spacing:-.015em; margin-bottom: 1.6rem; }
+.accent { color: var(--onia-green); }
+.dark .accent { color: var(--onia-green); }
+.sub { font-size: clamp(1rem, 1.7vw, 1.35rem); line-height:1.5; color: var(--onia-muted); max-width: 46ch; }
+.dark .sub { color: var(--onia-muted-dark); }
+.green .sub { color: var(--onia-ink-2); }
+
+.grow { flex:1; display:flex; flex-direction:column; justify-content:center; }
+.row { display:flex; gap: clamp(1.5rem, 3vw, 3rem); align-items:center; }
+.col { flex:1; min-width:0; }
+
+/* screenshots con marco navegador */
+.shot {
+  background: var(--onia-white); border-radius: 14px; overflow:hidden;
+  box-shadow: 0 24px 60px rgba(10,15,13,.18), 0 2px 8px rgba(10,15,13,.08);
+  border: 1px solid rgba(10,15,13,.07);
+}
+.shot .bar {
+  display:flex; align-items:center; gap:.45rem; padding:.55rem .9rem;
+  background:#ECEEE9; border-bottom:1px solid rgba(10,15,13,.06);
+}
+.shot .bar i { width:.65rem; height:.65rem; border-radius:50%; background:#D3D7CF; display:block; }
+.shot .bar i:first-child { background: var(--onia-green); }
+.shot .bar span {
+  font-size:.7rem; color:var(--onia-muted); margin-left:.6rem;
+  background:var(--onia-white); border-radius:6px; padding:.15rem .7rem; flex:1; text-align:center;
+}
+.shot img { display:block; width:100%; height:auto; }
+
+/* listas editoriales */
+.biglist { list-style:none; display:flex; flex-direction:column; gap: clamp(.9rem, 2vh, 1.5rem); }
+.biglist li {
+  display:flex; align-items:baseline; gap:1.1rem;
+  font-size: clamp(1.05rem, 1.9vw, 1.5rem); line-height:1.35; font-weight:600;
+}
+.biglist li .n {
+  font-family: var(--font-display); font-weight:700; color: var(--onia-green-deep);
+  font-size: clamp(.95rem, 1.5vw, 1.2rem); min-width:2.2rem;
+}
+.dark .biglist li .n { color: var(--onia-green); }
+.biglist li small { display:block; font-weight:400; color:var(--onia-muted); font-size: clamp(.85rem, 1.3vw, 1.05rem); margin-top:.2rem; }
+.dark .biglist li small { color: var(--onia-muted-dark); }
+
+/* stats */
+.stats { display:flex; gap: clamp(2rem, 5vw, 4.5rem); margin-top: 2.2rem; }
+.stat b { font-family: var(--font-display); font-weight:700; font-size: clamp(2.2rem, 4.5vw, 3.8rem); color: var(--onia-green); display:block; line-height:1; }
+.stat span { font-size: clamp(.8rem, 1.2vw, 1rem); color: var(--onia-muted); }
+.dark .stat span { color: var(--onia-muted-dark); }
+
+.pill {
+  display:inline-block; background: var(--onia-green-soft); color: var(--onia-green-deep);
+  border-radius: 999px; padding: .45rem 1.1rem; font-weight:600; font-size: clamp(.85rem,1.3vw,1rem);
+}
+.dark .pill { background: rgba(16,194,107,.12); color: var(--onia-green); }
+
+.hint {
+  position:fixed; bottom:.6rem; left:50%; transform:translateX(-50%);
+  color:var(--onia-muted); font-size:.7rem; opacity:.6; z-index:10;
+}
+@media print {
+  .slide { display:flex !important; height: 100vh; page-break-after: always; }
+  .hint { display:none; }
+}
+</style>
+</head>
+<body>
+
+<!-- 01 · Portada -->
+<section class="slide dark active">
+  <div class="grow">
+    <img src="onia-logo-dark.svg" alt="Onia" style="height:clamp(2.6rem,5vw,4.2rem); align-self:flex-start; margin-bottom:2.6rem;">
+    <h1>Sistemas con <span class="accent">IA</span><br>para negocios<br>bolivianos.</h1>
+    <p class="sub" style="margin-top:1.6rem;">Facturá al SIAT, agendá y cobrá sin tipear una sola línea.</p>
+    <div class="stats">
+      <div class="stat"><b>Santa Cruz</b><span>Bolivia · agosto 2026</span></div>
+    </div>
+  </div>
+  <div class="slide-num">01 / 13</div>
+</section>
+
+<!-- 02 · Quiénes somos -->
+<section class="slide">
+  <div class="kicker">Quiénes somos</div>
+  <div class="grow">
+    <h2>Una empresa boliviana que construye <span class="accent">software con IA</span> — y que se opera a sí misma con IA.</h2>
+    <p class="sub">No revendemos herramientas de afuera. Diseñamos, programamos y operamos sistemas propios desde Santa Cruz, hechos para cómo funciona un negocio en Bolivia: SIAT, impuestos nacionales, WhatsApp y bolivianos.</p>
+    <div class="stats">
+      <div class="stat"><b>1</b><span>plataforma núcleo propia</span></div>
+      <div class="stat"><b>11</b><span>agentes IA operando 24/7</span></div>
+      <div class="stat"><b>503</b><span>tests automáticos del núcleo</span></div>
+    </div>
+  </div>
+  <img class="brandmark" src="onia-logomark.svg" alt="">
+  <div class="slide-num">02 / 13</div>
+</section>
+
+<!-- 03 · El problema -->
+<section class="slide dark">
+  <div class="kicker">El problema</div>
+  <div class="grow">
+    <h2>El trabajo repetitivo se come el día del dueño.</h2>
+    <ul class="biglist" style="margin-top:1rem;">
+      <li><span class="n">01</span><div>Facturas tipeadas a mano, dos y tres veces.<small>Y desde el 1 de octubre de 2026 solo se emite factura en línea (plazo vigente del SIN).</small></div></li>
+      <li><span class="n">02</span><div>Citas y pedidos que se pierden en silencio.<small>Cada hueco en la agenda es plata que no vuelve.</small></div></li>
+      <li><span class="n">03</span><div>WhatsApp lleno de consultas sin responder.<small>El cliente boliviano compra por WhatsApp — y no espera.</small></div></li>
+      <li><span class="n">04</span><div>La información del negocio partida en cuadernos y Excel.<small>Nadie sabe el número real hasta fin de mes.</small></div></li>
+    </ul>
+  </div>
+  <div class="slide-num">03 / 13</div>
+</section>
+
+<!-- 04 · Qué construimos -->
+<section class="slide">
+  <div class="kicker">Qué construimos</div>
+  <div class="grow">
+    <h2>Un sistema, cuatro frentes.</h2>
+    <ul class="biglist" style="margin-top:1rem;">
+      <li><span class="n">A</span><div>Onia Platform — el sistema operativo del negocio.<small>Agenda, ventas, inventario, facturación SIAT y contabilidad boliviana, en packs por rubro.</small></div></li>
+      <li><span class="n">B</span><div>Agentes IA que trabajan solos, 24/7.<small>Proponen la acción; el dueño aprueba con un click. Nada sale sin aprobación humana.</small></div></li>
+      <li><span class="n">C</span><div>Webs y tiendas que convierten.<small>Diseñadas y construidas con nuestro propio motor, en días, no meses.</small></div></li>
+      <li><span class="n">D</span><div>Contenido y video con IA.<small>Guiones, ediciones y piezas para redes, producidas por el mismo sistema.</small></div></li>
+    </ul>
+  </div>
+  <img class="brandmark" src="onia-logomark.svg" alt="">
+  <div class="slide-num">04 / 13</div>
+</section>
+
+<!-- 05 · El núcleo -->
+<section class="slide green">
+  <div class="kicker">Onia Platform</div>
+  <div class="grow">
+    <h2>Un núcleo, muchos rubros.<br>Hecho para Bolivia.</h2>
+    <p class="sub" style="max-width:56ch;">El mismo motor — agenda, ventas, inventario, cobranzas, facturación electrónica SIAT, contabilidad con IVA/IT/IUE y agentes — se enciende por rubro. No empezamos de cero con cada cliente: activamos el pack de su industria.</p>
+    <div class="stats">
+      <div class="stat"><b style="color:var(--onia-ink)">9</b><span style="color:var(--onia-ink-2)">módulos del núcleo</span></div>
+      <div class="stat"><b style="color:var(--onia-ink)">11</b><span style="color:var(--onia-ink-2)">rubros mapeados</span></div>
+      <div class="stat"><b style="color:var(--onia-ink)">100%</b><span style="color:var(--onia-ink-2)">normativa boliviana vigente, con fuente</span></div>
+    </div>
+  </div>
+  <div class="slide-num">05 / 13</div>
+</section>
+
+<!-- 06 · DentalGest -->
+<section class="slide">
+  <div class="row grow">
+    <div class="col" style="flex:.8;">
+      <div class="kicker">Pack salud dental</div>
+      <h2 style="font-size:clamp(1.7rem,3.4vw,2.8rem);">DentalGest: la clínica ordenada, los pacientes que vuelven.</h2>
+      <p class="sub">Agenda con odontograma, historial y consentimientos. Cuando un paciente falta, el agente detecta el hueco y propone la reprogramación por WhatsApp — el doctor aprueba con un click.</p>
+      <div style="margin-top:1.4rem;"><span class="pill">Factura SIAT sin re-tipear, incluida</span></div>
+    </div>
+    <div class="col">
+      <div class="shot"><div class="bar"><i></i><i></i><i></i><span>dentalgest — software dental para Bolivia</span></div><img src="capturas/dental-gest.png" alt="DentalGest"></div>
+    </div>
+  </div>
+  <div class="slide-num">06 / 13</div>
+</section>
+
+<!-- 07 · GestiOS -->
+<section class="slide">
+  <div class="row grow">
+    <div class="col">
+      <div class="shot"><div class="bar"><i></i><i></i><i></i><span>gestios — el sistema que se adapta a tu negocio</span></div><img src="capturas/gesti-os.png" alt="GestiOS"></div>
+    </div>
+    <div class="col" style="flex:.8;">
+      <div class="kicker">Pack comercio</div>
+      <h2 style="font-size:clamp(1.7rem,3.4vw,2.8rem);">GestiOS: punto de venta, inventario y clientes para el comercio.</h2>
+      <p class="sub">POS, stock con alertas de reposición, pedidos y reportes. Con atributos específicos por tipo de comercio: ropa, farmacia, electrónica, ferretería y más.</p>
+    </div>
+  </div>
+  <div class="slide-num">07 / 13</div>
+</section>
+
+<!-- 08 · Onia Center: hoy -->
+<section class="slide dark">
+  <div class="kicker">Así operamos nosotros</div>
+  <div class="row grow">
+    <div class="col" style="flex:.75;">
+      <h2 style="font-size:clamp(1.7rem,3.4vw,2.8rem);">Onia Center: nuestra propia empresa corre sobre agentes.</h2>
+      <p class="sub">Este es nuestro panel real, hoy. Los agentes prospectan, redactan seguimientos, escriben contenido y auditan el código — y todo queda en una cola esperando el OK humano.</p>
+      <div style="margin-top:1.4rem;"><span class="pill">La IA propone · el humano aprueba</span></div>
+    </div>
+    <div class="col">
+      <div class="shot"><div class="bar"><i></i><i></i><i></i><span>center.onia.com.bo — Hoy</span></div><img src="capturas/panel-hoy.png" alt="Onia Center"></div>
+    </div>
+  </div>
+  <div class="slide-num">08 / 13</div>
+</section>
+
+<!-- 09 · Agentes -->
+<section class="slide dark">
+  <div class="kicker">El equipo autónomo</div>
+  <div class="row grow">
+    <div class="col">
+      <div class="shot"><div class="bar"><i></i><i></i><i></i><span>center.onia.com.bo — Agentes</span></div><img src="capturas/panel-agentes.png" alt="Agentes Onia"></div>
+    </div>
+    <div class="col" style="flex:.75;">
+      <h2 style="font-size:clamp(1.7rem,3.4vw,2.8rem);">11 agentes activos, cada uno con su horario.</h2>
+      <p class="sub">Prospector busca negocios reales por rubro y ciudad. Radar detecta tendencias. El Auditor revisa nuestro propio código cada semana. El Vendedor da seguimiento de lunes a sábado. Lo mismo que hacemos para nosotros, lo instalamos en tu negocio.</p>
+    </div>
+  </div>
+  <div class="slide-num">09 / 13</div>
+</section>
+
+<!-- 10 · Webs -->
+<section class="slide">
+  <div class="kicker">Webs que venden</div>
+  <div class="row grow">
+    <div class="col">
+      <div class="shot"><div class="bar"><i></i><i></i><i></i><span>onia.com.bo</span></div><img src="capturas/web-onia.png" alt="Web Onia"></div>
+      <p class="sub" style="margin-top:.8rem; font-size:clamp(.85rem,1.2vw,1rem);">Nuestra propia web, construida con el motor.</p>
+    </div>
+    <div class="col">
+      <div class="shot"><div class="bar"><i></i><i></i><i></i><span>nuvia-store — tienda con carrito y cotización</span></div><img src="capturas/nuvia-store.png" alt="Nuvia Store"></div>
+      <p class="sub" style="margin-top:.8rem; font-size:clamp(.85rem,1.2vw,1rem);">Tienda real de cliente: catálogo, carrito y compra asistida por WhatsApp.</p>
+    </div>
+  </div>
+  <div class="slide-num">10 / 13</div>
+</section>
+
+<!-- 11 · Redes -->
+<section class="slide">
+  <div class="row grow">
+    <div class="col" style="flex:.75;">
+      <div class="kicker">Seguinos</div>
+      <h2 style="font-size:clamp(1.7rem,3.4vw,2.8rem);">Todo lo que mostramos hoy está documentado en nuestras redes.</h2>
+      <ul class="biglist" style="margin-top:1rem;">
+        <li><span class="n">IG</span><div>@oniahq<small>Casos, sistemas y contenido sobre IA para negocios</small></div></li>
+        <li><span class="n">TK</span><div>oniahq<small>TikTok</small></div></li>
+        <li><span class="n">WEB</span><div>onia.com.bo</div></li>
+      </ul>
+    </div>
+    <div class="col">
+      <div class="shot"><div class="bar"><i></i><i></i><i></i><span>instagram.com/oniahq</span></div><img src="capturas/instagram-oniahq.png" alt="Instagram @oniahq"></div>
+    </div>
+  </div>
+  <img class="brandmark" src="onia-logomark.svg" alt="">
+  <div class="slide-num">11 / 13</div>
+</section>
+
+<!-- 12 · Cómo continuar -->
+<section class="slide green">
+  <div class="kicker">Cómo podemos continuar</div>
+  <div class="grow">
+    <h2>El siguiente paso son 20 minutos con TUS números.</h2>
+    <ul class="biglist" style="margin-top:1rem;">
+      <li><span class="n" style="color:var(--onia-ink)">01</span><div>Demo de 20 minutos, en tu negocio o por videollamada.<small style="color:var(--onia-ink-2)">Traé tus números del mes pasado — la cuenta la hacemos con datos reales, no con promesas.</small></div></li>
+      <li><span class="n" style="color:var(--onia-ink)">02</span><div>Si tu rubro ya tiene pack, lo ves funcionando esa misma semana.<small style="color:var(--onia-ink-2)">Salud dental y comercio ya están construidos; otros rubros se activan sobre el mismo núcleo.</small></div></li>
+      <li><span class="n" style="color:var(--onia-ink)">03</span><div>Implementación acompañada: carga de datos, configuración y capacitación.<small style="color:var(--onia-ink-2)">Tus datos son tuyos, exportables cuando quieras.</small></div></li>
+    </ul>
+  </div>
+  <div class="slide-num">12 / 13</div>
+</section>
+
+<!-- 13 · Cierre -->
+<section class="slide dark">
+  <div class="grow" style="align-items:flex-start;">
+    <img src="onia-logo-dark.svg" alt="Onia" style="height:clamp(2.4rem,4.5vw,3.8rem); margin-bottom:2.4rem;">
+    <h1 style="font-size:clamp(2.2rem,5.5vw,4.6rem);">Hacemos el trabajo<br>repetitivo de tu negocio.<br><span class="accent">Hablemos.</span></h1>
+    <div class="stats">
+      <div class="stat"><b style="font-size:clamp(1.4rem,2.6vw,2.2rem);">WhatsApp</b><span>+591 784 91375</span></div>
+      <div class="stat"><b style="font-size:clamp(1.4rem,2.6vw,2.2rem);">@oniahq</b><span>Instagram · TikTok</span></div>
+      <div class="stat"><b style="font-size:clamp(1.4rem,2.6vw,2.2rem);">onia.com.bo</b><span>web</span></div>
+    </div>
+  </div>
+  <div class="slide-num">13 / 13</div>
+</section>
+
+<div class="hint">← → para navegar · F11 pantalla completa</div>
+
+<script>
+const slides = [...document.querySelectorAll('.slide')];
+let i = 0;
+function show(n) {
+  i = Math.max(0, Math.min(slides.length - 1, n));
+  slides.forEach((s, k) => s.classList.toggle('active', k === i));
+}
+addEventListener('keydown', e => {
+  if (['ArrowRight',' ','PageDown','Enter'].includes(e.key)) { e.preventDefault(); show(i+1); }
+  if (['ArrowLeft','PageUp','Backspace'].includes(e.key)) { e.preventDefault(); show(i-1); }
+  if (e.key === 'Home') show(0);
+  if (e.key === 'End') show(slides.length-1);
+});
+addEventListener('click', e => { if (!e.target.closest('a')) show(i+1); });
+</script>
+</body>
+</html>
