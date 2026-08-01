@@ -49,6 +49,11 @@ export function LeadCard({ lead }: LeadCardProps) {
     <div className="rounded-lg border border-border bg-background p-2.5">
       <p className="text-sm font-medium">{lead.company}</p>
       <p className="mt-0.5 text-xs text-muted-foreground">{lead.contact || lead.source}</p>
+      {lead.source && lead.contact ? (
+        <span className="mt-1 inline-block rounded bg-muted px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground">
+          src: {lead.source}
+        </span>
+      ) : null}
       {lead.nextAction ? <p className="mt-1 text-xs text-muted-foreground">{lead.nextAction}</p> : null}
       <select
         value={lead.status}

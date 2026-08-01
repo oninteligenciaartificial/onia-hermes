@@ -46,12 +46,35 @@ function validar(c: Campos): Errores {
  * Lo que viaja en las notas de la reserva, para llegar a la demo sabiendo de
  * quien se trata en vez de gastar los primeros minutos preguntando lo basico.
  */
-function notas(c: Campos, rubro: RubroId): string {
+function notas(c: Campos, rubro: RubroId, src: string): string {
   return [
     `Negocio: ${c.negocio.trim()}`,
     `Rubro: ${rubroPlanes(rubro).mensaje}`,
     `WhatsApp: ${c.whatsapp.trim()}`,
+    ...(src ? [`Fuente: ${src}`] : []),
   ].join(" · ");
+}
+
+/**
+ * Fuente de atribucion (?src= en la URL de cada pieza de contenido).
+ *
+ * Se lee al momento del submit y se persiste en sessionStorage: si la persona
+ * navega dentro del sitio antes de agendar, la fuente de la pieza que la trajo
+ * no se pierde. Es el dato que liquida el bounty por demo atribuible — sin
+ * fuente registrada, la demo no cuenta para nadie.
+ */
+function fuenteAtribucion(): string {
+  if (typeof window === "undefined") return "";
+  try {
+    const enUrl = new URLSearchParams(window.location.search).get("src")?.trim() ?? "";
+    if (enUrl) {
+      window.sessionStorage.setItem("onia_src", enUrl);
+      return enUrl;
+    }
+    return window.sessionStorage.getItem("onia_src") ?? "";
+  } catch {
+    return "";
+  }
 }
 
 export function AgendaForm() {
@@ -71,9 +94,32 @@ export function AgendaForm() {
     setErrores(errs);
     if (Object.keys(errs).length > 0) return;
     setAbierto(true);
+
+    const src = fuenteAtribucion();
+
+    // Registro best-effort del lead en Onia Center con su fuente. keepalive
+    // para que sobreviva a la apertura de la pestana nueva; si falla, el flujo
+    // de la persona no se entera.
+    try {
+      void fetch("/api/agenda-intake", {
+        method: "POST",
+        keepalive: true,
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          nombre: campos.nombre.trim(),
+          negocio: campos.negocio.trim(),
+          whatsapp: campos.whatsapp.trim(),
+          rubro,
+          src,
+        }),
+      }).catch(() => {});
+    } catch {
+      // sin red o sin fetch: la reserva sigue igual
+    }
+
     const url = calLink(CAL_DEMO_URL, {
       name: campos.nombre.trim(),
-      notes: notas(campos, rubro),
+      notes: notas(campos, rubro, src),
     });
     window.open(url, "_blank", "noopener,noreferrer");
   }
