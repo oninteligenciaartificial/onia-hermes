@@ -44,10 +44,14 @@
 | Landing | **Bs 790** | **Bs 1.490** |
 | Flujo aprobación n8n | Bs 1.200 | Bs 1.800 |
 
-El vigente según CLAUDE.md y `PRICING_RATIONALE_INTERNO.md` §0 es el de lanzamiento
-(**790 / 1.500**, desde 2026-07-03). El kit de agentes quedó con precios viejos.
-**Decisión pendiente de Sergio: cuál manda — y el otro doc se corrige.** Un vendedor con
-dos listas de precios es una discusión asegurada.
+**RESUELTO 2026-08-01:** manda el canónico ya declarado en CLAUDE.md →
+`PRICING_RATIONALE_INTERNO.md` §0: **lanzamiento 790 / 1.500** (desde 2026-07-03). No era
+una decisión nueva — era aplicar la existente. `KIT_VENTAS_AGENTE_IA_2026.md` quedó
+corregido con nota al tope apuntando al canónico.
+
+**Y los precios de la plataforma (320/750/1.500) son PROVISIONALES** — Sergio 2026-08-01:
+"aún está en veremos". Se usan como referencia de trabajo (comisiones de Arthur, simulaciones)
+pero no se publican como definitivos hasta la decisión post-BCP.
 
 ---
 
@@ -99,6 +103,59 @@ siempre. El que los quiere, compra la plataforma.
 | "Que nada se caiga" | Monitoreo automatizaciones | 350/mes | **350/mes** |
 
 ---
+
+## 2-bis. Infraestructura y costos de terceros, servicio por servicio
+
+> Pedido de Sergio 2026-08-01: "poner en precios la infraestructura que haga falta —
+> VPS, Meta cobra, y todo lo extra de cada cosa."
+>
+> Regla vigente que esto cuantifica: **los costos de terceros van EXCLUIDOS del precio y
+> a nombre del cliente** (dominio, hosting, pasarela, créditos IA, WhatsApp pagado, pauta).
+> ⚠️ Casi todos son en **USD con TC flotante (~Bs 11,9 hoy)** — cotizar con el TC del día
+> y contrato con cláusula de ajuste, nunca "precio fijo de por vida".
+
+### Los números base
+
+| Insumo | Costo real | Quién paga | Fuente |
+|---|---|---|---|
+| **VPS Onia** (Easypanel, corre n8n + chatbot + Speaches + Cal.com + Chatwoot) | fijo mensual `[FALTA DATO: factura real]` — costo **marginal por cliente ≈ 0** hasta saturar RAM | Onia (Fondo) | infra propia |
+| **WhatsApp API — respuestas** (ventana de servicio 24 h) | **GRATIS** | — | Meta, jul-2026 |
+| **WhatsApp API — utility** (recordatorios, confirmaciones) | USD 0,0119/msg ≈ **Bs 0,14** | cliente (dentro del mensual, con tope) | Meta "Rest of Latin America" (incluye Bolivia), jul-2026 |
+| **WhatsApp API — marketing** (reactivación, promos) | USD 0,0777/msg ≈ **Bs 0,92** | **cliente, SIEMPRE aparte** | ídem |
+| **IA del chatbot** (gpt-4o-mini vía LiteLLM) | medido: centavos de USD/día → ≈ **Bs 5-15/mes** por cliente activo `[ESTIMADO sobre uso real propio]` | dentro del mensual | litellm-db |
+| **Dominio .com** | ≈ USD 12/año ≈ **Bs 145/año** | **cliente, a su nombre** (regla dura) | registradores |
+| **Hosting web cliente** | Bs 0 (Vercel free / VPS Onia) hasta que el sitio pese | Onia mientras sea 0 | — |
+| **Transcripción (Speaches)** | Bs 0 (VPS propio) | — | — |
+| **ElevenLabs voz** (si un servicio la usa) | starter ≈ USD 5/mes ≈ **Bs 60** | cliente del servicio que la use | plan actual |
+| **Higgsfield / generación** | por pieza, con OK previo | el proyecto que la usa | regla de gasto |
+| **Pauta Meta Ads** | presupuesto del cliente | **cliente, SIEMPRE aparte** | — |
+| **Pasarela QR (cobrar al cliente)** | comisión 0 (QR simple) | — | acuerdo BNB/BCP en curso |
+
+### Qué infra carga cada servicio (y el margen real del mensual)
+
+| Servicio | Infra que consume | Costo/mes estimado | Mensual | Margen |
+|---|---|---:|---:|---|
+| Landing / Web | hosting 0 + dominio del cliente | ~0 | — | setup puro |
+| Cuidado Web 290/mes | hosting + monitoreo (VPS) | ~0 | 290 | ~100% |
+| **Agente Recepcionista** 350/mes | respuestas gratis + IA Bs 10 + ~200 utility Bs 28 | **~Bs 40** | 350 | **~88%** |
+| **Agente Reportero** 350/mes | n8n (0) + IA Bs 5 + utility Bs 15 | ~Bs 20 | 350 | ~94% |
+| **Agente Prospectador** 590/mes | harvester (VPS) + IA Bs 15 | ~Bs 15 | 590 | ~97% |
+| Conector / Aprobaciones | n8n (0) + utility del flujo | ~Bs 10 | 350 monitoreo | ~97% |
+| Packs de video | Higgsfield por pieza (visible en la cotización) | variable | — | fijar por pack |
+| Plataforma (provisional) | VPS compartido + IA + utility del tenant | ~Bs 30-60/tenant | 320-1.500 | alto |
+
+**Las tres reglas que salen de esta tabla:**
+
+1. **El mensual de cada agente incluye un TOPE de mensajes utility** (propuesta: 300/mes).
+   Pasado el tope, se factura el excedente a Bs 0,25/msg (0,14 de Meta + margen). Sin tope,
+   un cliente con volumen te come el margen y no te enterás.
+2. **Marketing por WhatsApp NUNCA va incluido** en ningún mensual: Bs 0,92/msg lo convierte
+   en un servicio aparte con presupuesto propio (igual que la pauta). El Recall de la
+   plataforma manda utility (recordatorio de cita = Bs 0,14), no marketing.
+3. **El VPS es costo fijo de Onia, no del cliente** — pero cada servicio nuevo que corre en
+   él debe declararlo (RAM/proceso). El día que un cliente necesite VPS propio (on-premise
+   o dedicado), ese VPS va **a nombre y cuenta del cliente** desde el día 1, igual que el
+   dominio.
 
 ## 3. Cuándo sube cada precio (gatillos, no fechas)
 
