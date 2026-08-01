@@ -123,10 +123,13 @@ export function stateFromRow(row) {
 
 /** Nombre de empresa SIN inventar: si no lo dio, se dice que no lo dio. */
 function leadCompanyName(state) {
+  // Ya NO se asume que todo lead es una clinica: el bot atiende cualquier rubro. Antes esto
+  // escribia "Clinica de X" para TODOS, asi que una ferreteria entraba al CRM como consultorio.
   const city = state.qualification?.city ? ` (${state.qualification.city})` : "";
   const who = state.displayName ? String(state.displayName).trim() : "";
-  const name = who ? `Clínica de ${who}${city}` : `Clínica dental sin nombre — ${state.conversationKey}`;
-  return name.slice(0, 300);
+  const rubro = state.qualification?.industry ? String(state.qualification.industry).trim() : "";
+  if (who) return `${who}${rubro ? ` — ${rubro}` : ""}${city}`.slice(0, 300);
+  return `Negocio sin nombre${rubro ? ` — ${rubro}` : ""} — ${state.conversationKey}`.slice(0, 300);
 }
 
 /**
@@ -144,12 +147,15 @@ function leadCompanyName(state) {
  */
 export function buildLeadRow(payload, state) {
   const q = { ...(state.qualification || {}), ...(payload.qualification || {}) };
-  const complete = Boolean(q.ownsClinic !== undefined && q.chairs && q.city);
+  // Los 3 campos de calificacion cambiaron (rubro/tamano/ciudad). Con los viejos esto daba
+  // SIEMPRE false y ningun lead se marcaba completo. `chairs` ahora es dato de rama dental,
+  // NO requisito: exigirlo dejaria incompleto a todo negocio que no sea consultorio.
+  const complete = Boolean(q.industry && q.teamSize && q.city);
   const status = safePipelineStatus(payload.pipelineStatus, "Nuevo");
   return {
     lead_key: state.leadKey || payload.leadKey || leadKeyFor(state.conversationKey),
     company_name: leadCompanyName(state),
-    business_type: "Clínica dental",
+    business_type: q.industry || null,
     city: q.city || null,
     country: "Bolivia",
     public_contact: state.contactRef || null,

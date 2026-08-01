@@ -76,17 +76,23 @@ test("botAttendeeEmail: correo propio y trazable, nunca uno con pinta de real", 
 });
 
 test("buildBookingNotes: solo pone lo que el bot capturo de verdad", () => {
-  const completo = buildBookingNotes({ ownsClinic: true, chairs: 2, city: "Santa Cruz" });
-  assert.match(completo, /clinica propia: si/);
-  assert.match(completo, /sillones: 2/);
+  const completo = buildBookingNotes({ industry: "ferreteria", teamSize: 4, city: "Santa Cruz" });
+  assert.match(completo, /rubro: ferreteria/);
+  assert.match(completo, /personas: 4/);
   assert.match(completo, /ciudad: Santa Cruz/);
+  assert.ok(!/sillones/.test(completo), "un no-dental no puede llevar sillones en la reserva");
+
+  // `chairs` es dato de RAMA: suma cuando esta, no se nombra cuando no.
+  const dental = buildBookingNotes({ industry: "dental", teamSize: 3, city: "La Paz", chairs: 2 });
+  assert.match(dental, /sillones: 2/);
 
   const vacio = buildBookingNotes({});
-  assert.ok(!/sillones/.test(vacio), "sin dato no se inventa el campo");
+  assert.ok(!/rubro/.test(vacio), "sin dato no se inventa el campo");
   assert.match(vacio, /asistente automatico/);
 
-  // chairs: 0 es un dato REAL, no un vacio: no se puede perder por un chequeo de verdad/falsedad.
+  // 0 es un dato REAL, no un vacio: no se puede perder por un chequeo de verdad/falsedad.
   assert.match(buildBookingNotes({ chairs: 0 }), /sillones: 0/);
+  assert.match(buildBookingNotes({ teamSize: 0 }), /personas: 0/);
 });
 
 // ---------------------------------------------------------------------------

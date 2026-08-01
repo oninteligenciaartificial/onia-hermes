@@ -347,7 +347,8 @@ test("el lead se inserta una vez y despues se PATCHea (no se duplica ni se pisan
   assert.equal(await nuevo.store.upsertLead({ pipelineStatus: "Contactado" }, state), "bot-telegram-777");
   assert.equal(nuevo.requests[1].method, "POST");
   assert.equal(nuevo.requests[1].body.pipeline_status, "Contactado");
-  assert.equal(nuevo.requests[1].body.business_type, "Clínica dental");
+  // El rubro sale de la calificacion, ya no se asume dental para todos.
+  assert.equal(nuevo.requests[1].body.business_type, null);
   assert.equal(nuevo.requests[1].body.city, "Santa Cruz");
 
   const viejo = recorder([{ status: 200, body: [{ lead_key: "bot-telegram-777", raw: { humano: "no tocar" } }] }, { status: 200, body: [{}] }]);
@@ -432,11 +433,21 @@ test("al agendar la demo el lead queda en 'Reunion' (valor exacto del CHECK del 
   assert.equal(row.next_followup_at, "2026-07-30T19:00:00Z");
 });
 
-test("el lead nunca inventa el nombre de la clinica", () => {
+test("el lead nunca inventa el nombre NI el rubro del negocio", () => {
   const anonimo = buildLeadRow({}, createState({ channel: "telegram", contactRef: "777" }));
   assert.match(anonimo.company_name, /sin nombre/);
-  const conNombre = buildLeadRow({}, { ...createState({ channel: "telegram", contactRef: "777" }), displayName: "Ana", qualification: { city: "Tarija" } });
-  assert.equal(conNombre.company_name, "Clínica de Ana (Tarija)");
+  assert.equal(anonimo.business_type, null, "sin rubro capturado no se inventa uno");
+
+  // El bot atiende cualquier rubro: llamar "Clinica de X" a una ferreteria metia un dato falso
+  // en el CRM. Ahora el nombre lleva el rubro real cuando esta, y nada cuando no.
+  const base = createState({ channel: "telegram", contactRef: "777" });
+  const soloCiudad = buildLeadRow({}, { ...base, displayName: "Ana", qualification: { city: "Tarija" } });
+  assert.equal(soloCiudad.company_name, "Ana (Tarija)");
+  assert.ok(!/Clínica/.test(soloCiudad.company_name), "no se asume clinica");
+
+  const conRubro = buildLeadRow({}, { ...base, displayName: "Ana", qualification: { city: "Tarija", industry: "ferreteria" } });
+  assert.equal(conRubro.company_name, "Ana — ferreteria (Tarija)");
+  assert.equal(conRubro.business_type, "ferreteria");
 });
 
 test("el permiso de contacto sigue al opt-in / opt-out, no al humor del bot", () => {
