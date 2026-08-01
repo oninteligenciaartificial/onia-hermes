@@ -28,6 +28,7 @@ export type RuntimeTask = {
   priority: "alta" | "media" | "baja";
   evidence: string;
   assignedUserKey?: string;
+  dueLabel?: string;
   createdAt: string;
 };
 
@@ -140,6 +141,7 @@ type DbTask = {
   priority: RuntimeTask["priority"];
   assigned_role_key: string;
   evidence_required: boolean;
+  due_label: string | null;
   raw: Record<string, unknown> | null;
   created_at: string;
 };
@@ -468,6 +470,7 @@ function mapTask(row: DbTask): RuntimeTask {
     priority: row.priority,
     evidence: row.evidence_required ? "pendiente" : "no requerida",
     assignedUserKey: rawString(raw, "assignedUserKey"),
+    dueLabel: row.due_label ?? undefined,
     createdAt: row.created_at,
   };
 }
@@ -630,7 +633,7 @@ export async function getOniaCenterRuntime(): Promise<RuntimeSnapshot> {
       "leads?select=lead_key,company_name,public_contact,channel,source,owner_role_key,pipeline_status,suggested_service_key,private_notes,raw,created_at&order=created_at.desc&limit=80",
     ),
     supabaseRequest<DbTask[]>(
-      "tasks?select=task_key,project_key,title,status,priority,assigned_role_key,evidence_required,raw,created_at&order=created_at.desc&limit=120",
+      "tasks?select=task_key,project_key,title,status,priority,assigned_role_key,evidence_required,due_label,raw,created_at&order=created_at.desc&limit=120",
     ),
     supabaseRequest<DbReview[]>(
       "review_queue?select=review_key,source_type,source_key,title,status,sensitive&order=created_at.desc&limit=80",

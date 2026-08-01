@@ -47,7 +47,7 @@ Ninguna capa es sueldo. Las tres se pagan con plata que **ya entró**.
 
 ### Capa 1 — Bounty por demo atribuible (el puente)
 
-**Bs 50 por cada demo atribuible que efectivamente se realizó.** Tope 12/mes (Bs 600).
+**Bs 50 por cada demo atribuible que efectivamente se realizó.** ~~Tope 12/mes~~ **SIN tope** (Sergio 2026-08-01: "hay que ganar lo que se tenga que ganar").
 
 Es la métrica que ya se decidió el 26-jul ("demos agendadas atribuibles") y es lo único que
 le paga **antes** de que exista una venta. Barato: 12 demos = Bs 600, y 12 demos con este
@@ -100,7 +100,10 @@ la primera semana**, mucho antes de que la plataforma cierre a nadie. Una Web Pr
 que él vende y produce = Bs 750 para él. Eso es más que 5 meses de comisión de una suscripción
 Pro.
 
-### Capa 3 — Bonos por hito (contra el desfase y por el objetivo)
+### Capa 3 — Bonos por hito ~~(tabla fija)~~ → DISCRECIONALES (ver §9.6-ter)
+
+> **Corregido 2026-08-01:** la tabla de abajo quedó como referencia histórica. El bono es
+> mensual y discrecional de Sergio, decidido con el trabajo registrado en el panel.
 
 | Bono | Se gatilla | Monto |
 |---|---|---:|
@@ -617,64 +620,49 @@ ya ganados de la suscripción viva — antes de mover un dedo. Eso es lo que se 
 | Viernes | Reporte: piezas → fuente → reuniones → estado pipeline | Semana no cuenta para bonos; 2 seguidas = causal de pausa |
 | Fin de mes | Cierre con Sergio: aprueba/retiene/descuenta | Sin cierre no hay pago, solo el adelanto quincenal ≤20% |
 
-### 9.6-ter. Pagos por tarea + bonos pensados para VOLUMEN (Sergio 2026-08-01)
+### 9.6-ter. El modelo FINAL de pago (Sergio, 2026-08-01 — segunda corrección)
 
-> Sergio: *"los bonos piénsalos si empezamos a vender en cantidad, y los pagos también por
-> cada tarea."* Esto reemplaza la tabla de bonos fijos del §2 para Arthur.
+> Sergio: *"no tiene que tener un tope, hay que ganar lo que se tenga que ganar. No hay que
+> pagarle por las demos grabadas ni por las piezas que publica — eso es su trabajo, quiere
+> ser socio de Onia. Va a ganar en base a lo que trabaje. Y si trabaja muy bien el mes, yo
+> puedo ver de darle un bono."*
+>
+> Esto REEMPLAZA la versión anterior de esta sección (pagos por tarea + bonos en escalera).
 
-**La regla anti doble pago, primero:** cada hecho paga UNA vez y por UN concepto.
-La **tarea** paga la pieza · el **bounty** paga la reunión · la **comisión** paga la venta ·
-el **bono** paga el volumen. Nada se cobra dos veces por dos tablas.
+**El principio:** la **producción no se paga por unidad**. Grabar demos, publicar piezas,
+armar listas: eso ES el rol de alguien que quiere ser socio. Se gana por lo que ese trabajo
+**genera** — y sin techo.
 
-#### Pagos por tarea (producción aprobada — números únicos)
+| Concepto | Paga | Tope |
+|---|---:|---|
+| Reunión atribuible REALIZADA (registrada antes, con fuente, con quien decide) | **Bs 50** | **SIN tope** |
+| Suscripción de plataforma atribuible | **20% × 6 meses** (25% si acompañó el cierre) | **SIN tope** |
+| Servicios (web, n8n, chatbot, packs) | según la tabla §9.1 | **SIN tope** |
+| Retención: cliente atribuible que llega al 3er mes pagado | **Bs 150 por cliente** | SIN tope |
+| **Bono mensual** | **DISCRECIONAL de Sergio** — lo decide a fin de mes viendo el trabajo registrado en el panel | — |
 
-| Tarea terminada y aprobada | Paga |
-|---|---:|
-| Pieza publicada con su `?src=` (video, carrusel) | **Bs 30** |
-| Demo de 15 min grabada + 6 clips (paquete, una vez) | **Bs 120** |
-| Bloque de 20 prospectos nuevos verificados fuera de dental | **Bs 60** |
-| Guion aprobado en cola (canal YT / Lucía) | **Bs 15** |
-| Reporte del viernes | **Bs 0** — no paga: es la CONDICIÓN para liquidar todo lo demás |
-| **Tope mensual de pagos por tarea** | **Bs 1.000** |
+**Lo que NO paga (porque es el rol):** piezas publicadas, demos grabadas, clips, guiones,
+listas de prospectos, reportes. Todo eso es la obligación semanal del scorecard — la
+condición para estar en el juego, no un ítem facturable.
 
-Una pieza sin `?src=`, sin aprobación o sin registro en el Estudio **no es una tarea
-terminada** y no paga. La definición de terminado ya está en §5-bis.
+**El bono discrecional no es una fórmula a gamear:** Sergio mira el mes completo en el
+panel (tareas hechas, calidad, registro, reuniones, ventas) y decide monto y si hay bono.
+Se paga con semáforo verde, como todo.
 
-#### Bonos por volumen (escalera — se paga el tramo alcanzado, no se suman entre sí)
+**Por qué sin topes es sano igual:** todo lo que paga está atado a un resultado que a Onia
+le conviene multiplicar. Más reuniones reales = más ventas; más comisión = más cobrado. El
+único pago sin venta detrás es el de reunión — y una reunión real con un dueño que decide
+vale más que Bs 50.
 
-| Ventas cerradas atribuibles en el mes (cualquier carril) | Bono |
-|---|---:|
-| 3 o más | **Bs 250** |
-| 6 o más | **Bs 600** |
-| 10 o más | **Bs 1.200** |
-
-| Hito de la casa (clientes de plataforma pagando, los traiga quien los traiga) | Bono (una sola vez) |
-|---|---:|
-| 3 clientes | **Bs 500** |
-| 10 clientes | **Bs 1.500** |
-| 25 clientes | **Bs 3.000** |
-
-| Otros | |
-|---|---:|
-| Retención: cada cliente atribuible que llega a su 3er mes pagado | **Bs 150 por cliente** (escala solo con el volumen) |
-| Calidad: mes sin reclamos ni rescates | **Bs 150** |
-| Tope del bounty de reuniones | 12/mes; **sube a 20/mes** (Bs 1.000) el mes siguiente a un mes con 2+ ventas cerradas |
-
-**Por qué esta forma escala sin romper la caja:** los pagos fijos (tareas + bounty) tienen
-tope duro — máximo **Bs 2.000/mes** aunque produzca infinito. Todo lo demás es % de plata
-cobrada o bono gatillado por ventas ya cobradas. Si Arthur gana Bs 8.000 en un mes, es
-porque Onia cobró ~Bs 20.000+ ese mes — el escenario donde eso "duele" es exactamente el
-escenario que queremos.
-
-#### Dónde vive esto en producción (para que lo USE, no lo lea)
+#### Dónde vive en producción (para usarlo, no leerlo)
 
 | Qué | Dónde |
 |---|---|
-| Sus tareas de las 4 semanas, con el pago en el título | Panel → **tareas** (12 cargadas, proyecto `content_onia`, revisor Sergio) |
-| Su scorecard semanal (7 líneas, carril contenido) | Panel → lo lee también el **asistente** |
-| Catálogo de precios/comisiones por servicio | Panel → vista de reglas de comisión (actualizado hoy) |
-| El pipeline con fuente (`src:`) | Panel → **pipeline** — ahí se liquida el bounty |
-| Registro de cobros | Panel → **ingresos** — ahí se liquidan comisión y bonos |
+| **Vista Equipo** (nueva): scorecard + plan de tareas + leads con fuente + bounty estimado del mes | Panel → pestaña **Equipo** — Sergio ve todo, incluida la liquidación estimada |
+| Sus 12 tareas de las 4 semanas | Panel → tareas (proyecto `content_onia`, revisor Sergio) |
+| Catálogo de precios y comisiones | Panel → reglas de comisión |
+| Pipeline con fuente (`src:`) | Panel → pipeline |
+| Registro de cobros | Panel → ingresos |
 
 ### 9.7 Cuánto le cuesta a Onia esta ventana
 

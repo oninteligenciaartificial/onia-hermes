@@ -1251,15 +1251,16 @@ export const evidenceSeed: EvidenceRecord[] = [
 ];
 
 // Scorecard SEMANAL del carril contenido (ventana 30 dias, 3-ago -> 1-sep).
-// Fuente: ONIA_ARTHUR_CARRIL_CONTENIDO_Y_PAGO_20260801.md §5-bis y §9. Cada
-// pieza paga Bs 30 aprobada; cada reunion atribuible realizada Bs 50; la
-// comision paga la venta. El reporte del viernes no paga: es la condicion para
-// liquidar todo lo demas.
+// Fuente: ONIA_ARTHUR_CARRIL_CONTENIDO_Y_PAGO_20260801.md §5-bis y §9.
+// Decision Sergio 2026-08-01: la produccion NO paga por unidad (es el trabajo
+// del rol); se gana por resultado — Bs 50 por reunion atribuible realizada
+// (sin tope), comisiones sin tope, bono mensual discrecional de Sergio. El
+// reporte del viernes es la condicion para liquidar todo lo demas.
 export const arthurScorecard: ArthurScorecardItem[] = [
-  { id: "pieces", area: "Piezas publicadas y aprobadas, con link ?src= propio (Bs 30 c/u)", minimum: "4", required: true },
-  { id: "meetings", area: "Reuniones atribuibles REALIZADAS (Bs 50 c/u, tope 12/mes)", minimum: "2", required: true },
+  { id: "pieces", area: "Piezas publicadas y aprobadas, con link ?src= propio", minimum: "4", required: true },
+  { id: "meetings", area: "Reuniones atribuibles REALIZADAS (Bs 50 c/u, sin tope)", minimum: "2", required: true },
   { id: "outreach", area: "Contactos de outreach con mensaje aprobado", minimum: "15", required: true },
-  { id: "prospects", area: "Prospectos nuevos verificados FUERA de dental (bloque de 20 = Bs 60)", minimum: "15", required: true },
+  { id: "prospects", area: "Prospectos nuevos verificados FUERA de dental", minimum: "15", required: true },
   { id: "followups", area: "Seguimientos con proximo paso y fecha en pipeline", minimum: "100%", required: true },
   { id: "crm", area: "Onia Center al dia (lead antes de contactar, nota post-reunion)", minimum: "100%", required: true },
   { id: "report", area: "Reporte del viernes: pieza -> fuente -> reunion -> estado", minimum: "1", required: true },
