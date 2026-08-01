@@ -306,9 +306,11 @@ bajar la tarifa de lista.**
 
 > "Tiene razón, es gratis y cumple. La pregunta no es el SIAT — es cuánto
 > tiempo pierde tipeando cada factura a mano, paciente por paciente. DentalGest
-> no le cobra por facturar (va incluido en los 3 planes): lo que le vende es
-> que la factura salga sola de la misma atención, sin tipear dos veces. El
-> portal gratis del SIN sigue ahí de respaldo si algún día lo necesita."
+> no le cobra nada extra por facturar: nuestro emisor está en homologación ante
+> el SIN, así que por ahora el sistema le deja la venta lista y usted factura
+> por el Portal Web, que es gratis, sin tipear dos veces. Apenas se apruebe, la
+> factura sale directo del sistema y no cambia nada de su lado. El portal del
+> SIN sigue ahí de respaldo si algún día lo necesita."
 
 ### 3.2 "Es caro"
 
