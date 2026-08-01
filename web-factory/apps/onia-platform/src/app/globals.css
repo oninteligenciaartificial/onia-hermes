@@ -213,8 +213,9 @@ h3 {
  *
  * Grotesca muy pesada con el eje de ancho comprimido: mete mas palabras por
  * linea a un tamano que de otro modo no entraria, y al apilarse forma un
- * bloque solido. Es el recurso central del sistema de Fanvue (ellos usan
- * Akzidenz-Grotesk Next Cnd XBold, de pago; Archivo es el equivalente OFL).
+ * bloque solido. Recurso PROPIO de Onia. (Corrección 2026-08-01: NO es el
+ * sistema de Fanvue — ellos usan AG Next MEDIUM a ancho normal, lh 1.0, una
+ * sola familia para todo; ver docs/TIPOGRAFIA_SISTEMA_20260727.md §2.)
  *
  * REGLAS DE USO — sin esto se rompe:
  *  - UNO por pantalla. Si hay dos, ninguno es grande.

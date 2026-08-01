@@ -13,8 +13,10 @@ const bricolage = Bricolage_Grotesque({
 /**
  * Titular grande condensado. Variable con eje de ancho (wdth 62-125), asi que
  * el condensed pesado sale del mismo archivo: cero peso extra por corte.
- * Es el sustituto libre (OFL) del Akzidenz-Grotesk Next Cnd de Fanvue.
- * Sistema completo: web-factory/docs/TIPOGRAFIA_SISTEMA_20260727.md
+ * Sustituto libre (OFL) del genero Akzidenz-Grotesk Next. OJO: el look actual
+ * de Fanvue es AG Next MEDIUM a ancho NORMAL (wdth 100, weight 500, lh 1.0),
+ * no el condensado. Sistema: web-factory/docs/TIPOGRAFIA_SISTEMA_20260727.md
+
  */
 const archivo = Archivo({
   subsets: ["latin"],
