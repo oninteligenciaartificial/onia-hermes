@@ -77,9 +77,14 @@ Números del slide: una plataforma núcleo, 11 agentes de IA corriendo 24/7,
 > normativa boliviana **vigente y con fuente citada** — resoluciones del SIN,
 > decretos. No es un sistema gringo adaptado a los apurones."
 
-## Slide 06 — DentalGest
+> "Y les hablo con honestidad: **Onia Platform está en desarrollo activo**. Los
+> primeros packs ya operan, y cada avance lo mostramos en redes, todos los días.
+> Lo que van a ver ahora son pantallas reales de la plataforma."
 
-> "Primer rubro construido: salud dental. **DentalGest**. Agenda con odontograma,
+## Slide 06 — Onia Platform · pack dental
+
+> "Primer rubro encendido en la plataforma: salud dental. Desde Onia Platform
+> manejamos la operación completa de la clínica: agenda con odontograma,
 > historial clínico, consentimientos. Y la parte que más le gusta a los doctores:
 > cuando un paciente falta, el agente detecta el hueco en la agenda y **le propone
 > la reprogramación por WhatsApp — el doctor aprueba con un click**. No manda
@@ -89,11 +94,12 @@ Números del slide: una plataforma núcleo, 11 agentes de IA corriendo 24/7,
 SIN; mientras tanto el sistema deja la venta lista y se factura por el portal.
 El estado real se lo cuento de frente a quien le interese.")*
 
-## Slide 07 — GestiOS
+## Slide 07 — Onia Platform · pack comercio
 
-> "Segundo rubro: comercio. **GestiOS** — punto de venta, inventario con alertas
-> de reposición, clientes y reportes. Con atributos específicos por tipo de
-> comercio: ropa, farmacia, electrónica, ferretería. El mismo núcleo, otro traje."
+> "Segundo rubro: comercio. El mismo núcleo con otro traje — punto de venta,
+> inventario con alertas de reposición, clientes y reportes. Con atributos
+> específicos por tipo de comercio: ropa, farmacia, electrónica, ferretería.
+> No son productos separados: es **la misma plataforma** encendida para otro rubro."
 
 ## Slide 08 — Onia Center (panel real)
 
@@ -123,11 +129,29 @@ El estado real se lo cuento de frente a quien le interese.")*
 
 ## Slide 11 — Redes
 
-> "Todo lo que vieron hoy lo venimos documentando en redes: **@oniahq** en
-> Instagram y TikTok. Ahí van los casos y los sistemas en acción. Si quieren
-> evaluar con calma después de esta reunión, ese es el lugar."
+> "Como les dije, la plataforma está en desarrollo — y no lo escondemos, al
+> contrario: **construimos en público**. Cada avance de Onia Platform queda
+> documentado en **@oniahq**, en Instagram y TikTok, todos los días. Si quieren
+> evaluar con calma después de esta reunión, ese es el lugar: van a ver el
+> sistema creciendo semana a semana."
 
-## Slide 12 — Cómo podemos continuar (verde)
+## Slide 12 — Quiénes están detrás (Sergio y Arthur)
+
+> "Detrás de todo esto estamos dos personas — más los 11 agentes que no duermen.
+> Yo soy **Sergio Urcullo**: diseño y construyo la plataforma y sus agentes; todo
+> lo que vieron hoy salió de este teclado. Y **Arthur Fuentes** es nuestra cara
+> comercial: él acompaña a cada empresa desde la demo hasta la implementación —
+> si avanzamos, van a hablar mucho con él."
+
+> "Los dos estamos en Instagram: **@sergio_urcullo** y **@arthur_fuentes09**.
+> Ahí mostramos el detrás de cámaras, respondemos preguntas y coordinamos demos
+> directo por DM. Síganos ahora mismo si quieren — así quedamos conectados y no
+> dependemos de que anoten un número."
+
+*(Momento de venta personal: pedir que saquen el celular y los sigan AHÍ. Un
+seguidor en la sala es un lead que no se pierde.)*
+
+## Slide 13 — Cómo podemos continuar (verde)
 
 > "¿Y cómo seguimos? Simple, y sin compromiso: **20 minutos con SUS números**.
 > Me traen el dato de citas perdidas, o de horas tipeando facturas, o de
@@ -137,11 +161,12 @@ El estado real se lo cuento de frente a quien le interese.")*
 > configuramos y capacitamos a su equipo. Sus datos son suyos, exportables
 > cuando quieran."
 
-## Slide 13 — Cierre
+## Slide 14 — Cierre
 
 > "Onia. Hacemos el trabajo repetitivo de tu negocio. Este es mi WhatsApp —
 > escríbanme ahora si quieren que agendemos la demo esta semana; los primeros
-> en escribir eligen día. Gracias."
+> en escribir eligen día. Y si prefieren primero mirar de lejos: @oniahq,
+> @sergio_urcullo, @arthur_fuentes09. Gracias."
 
 *(Dejar el slide de contacto proyectado durante las preguntas.)*
 
