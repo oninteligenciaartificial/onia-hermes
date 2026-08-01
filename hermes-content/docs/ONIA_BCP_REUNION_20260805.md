@@ -16,6 +16,42 @@
 
 ---
 
+## 0-bis. 🔑 El modelo que Sergio quiere — decidido, llevarlo escrito
+
+> Definido por Sergio el 2026-08-01. **Esto no se pregunta: se pide.** Lo que se pregunta es
+> si el banco puede darlo y cómo.
+
+**QR dinámico, uno por cobro. No un QR fijo.**
+
+Cada suscripción a pagar genera **su propio QR**, con su monto. Eso resuelve por sí solo el
+problema más difícil del alta automática: **saber quién pagó**. Con un QR fijo, dos clínicas
+que pagan Bs 750 el mismo día son indistinguibles; con un QR por cobro, cada pago ya viene
+atado a una suscripción antes de que ocurra.
+
+**Y del lado de la confirmación, dos caminos que no se excluyen:**
+
+1. **Que el banco avise** (webhook) cuando el pago se acredita — lo ideal.
+2. **Que podamos leer la cuenta por API**: movimientos, monto, número de cuenta de origen,
+   fecha. Con eso Onia concilia sola, aunque el banco no avise.
+
+**El segundo camino es el que hace que esto funcione igual sin webhook**, y por eso hay que
+pedir explícitamente **acceso a movimientos de la cuenta**, no solo "una pasarela".
+
+**Qué pasa cuando el pago se confirma:** se abre la cuenta de la empresa en el momento. Para
+los planes donde tenga sentido es self-service puro; donde el cliente prefiera acompañamiento,
+lo hacemos nosotros. **La infraestructura es la misma; lo que cambia es quién aprieta el botón.**
+
+**Lo que hay que pedirle al banco, entonces, en orden:**
+
+| # | Qué | Por qué |
+|---|---|---|
+| 1 | **Generar QR dinámico por API**, con monto y con un identificador nuestro | Es el corazón del modelo |
+| 2 | **Consultar movimientos de la cuenta** por rango de fechas, con monto, origen y fecha | Es el plan B que vuelve innecesario el webhook |
+| 3 | **Webhook al acreditarse**, si existe | Convierte "en unos minutos" en "al instante" |
+| 4 | **Sandbox** para construirlo antes de tener producción | Sin esto no se puede integrar antes del cliente 1 |
+
+---
+
 ## 0. Las 5 preguntas que más cambian el producto
 
 Si la reunión se corta a los 10 minutos, que sean estas cinco. Cada una cambia **qué se
