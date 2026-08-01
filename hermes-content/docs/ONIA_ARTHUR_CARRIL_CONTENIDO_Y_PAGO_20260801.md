@@ -89,6 +89,17 @@ cosas buenas de golpe:
 
 Al mes 7 el cliente queda 100% de Onia. Arthur no cobra renta infinita por un trabajo de una vez.
 
+**Esto aplica a cualquier rubro de la plataforma** (dental, comercio, distribución), no solo
+dental.
+
+**Los servicios (T2) NO cambian: sigue la tabla ya firmada.** Web, Cuidado Web, n8n, chatbot y
+marketing se pagan como están en el acuerdo (3-5% si solo trae el contacto, 12-15% si trae y
+cierra, 15-20% si además ayuda con brief y copy, hasta 50% si vende y produce completo sin
+rescate). No se toca nada de eso. Y es importante que quede separado: **T2 le puede pagar en
+la primera semana**, mucho antes de que la plataforma cierre a nadie. Una Web Pro de Bs 1.500
+que él vende y produce = Bs 750 para él. Eso es más que 5 meses de comisión de una suscripción
+Pro.
+
 ### Capa 3 — Bonos por hito (contra el desfase y por el objetivo)
 
 | Bono | Se gatilla | Monto |
@@ -159,12 +170,35 @@ habitación #2 antes de tener inquilino en la #1.
 
 ### Abiertos — acá va su semana
 
+**Corrección 2026-08-01 (Sergio): "NO solo vendemos a clínicas dentales."** Es cierto y este
+doc lo tenía mal. Onia vende dos cosas distintas a dos compradores distintos, y Arthur genera
+demanda para **las dos**:
+
+| Carril | Qué se vende | A quién | Cuánto tarda en pagar |
+|---|---|---|---|
+| **T1 · Plataforma** | Suscripción 320-1.500/mes | Negocio formal con volumen: clínica, **ferretería, distribuidora** | Semanas-meses |
+| **T2 · Servicios** | Web 790/1.500/2.900 · Cuidado Web 190-690/mes · n8n 790-1.900 · chatbot | Cualquier negocio (cliente B) | **Días** |
+
+**Dental va primero en T1 por una razón operativa, no porque sea el único rubro:** el producto
+está terminado, hay 150 prospectos listados y 5 leads tibios. Comercio y distribución están
+gateados hasta 3 clínicas pagando (regla de la habitación #1), pero **el contenido base sirve
+igual a los tres**: el dolor es el mismo (clientes que no vuelven, cobros que se olvidan,
+facturas tipeadas a mano). Cambia el ejemplo en pantalla, no el mensaje.
+
+**T2 no es un premio consuelo: es lo que paga en días.** Y resuelve el desfase mejor que
+cualquier bounty, porque una web cobrada esta semana es plata esta semana.
+
 | # | Frente | Qué produce | Se mide en |
 |---|---|---|---|
-| **A1** | **Serie dental "Clínicas Sin Pacientes Perdidos"** | 8-10 piezas/semana con la fábrica ya construida (Estudio, HyperFrames, editor-videos) | Demos atribuibles |
-| **A2** | **Material de venta** | Demo de 15 min grabada, clips de las 10 objeciones del kit, casos | Uso real en ventas |
-| **A3** | **Outreach con el contenido como prueba** | DMs a las 50 clínicas del CSV + comentarios/comunidad, con mensaje aprobado | Demos atribuibles |
-| **A4** | **Contenido a clientes B** *(caja)* | Solo paquetes que ya existen, sin inventar servicios nuevos | Bs cobrados |
+| **A1** | **Contenido T1** (plataforma) | El dolor del dueño de negocio, con ejemplo dental por ahora | Demos atribuibles |
+| **A2** | **Material de venta T1** | Demo de 15 min grabada, clips de las 10 objeciones del kit | Uso real en ventas |
+| **A3** | **Contenido T2** (servicios) | Casos de web, antes/después, "tu negocio sin web", automatización que ahorra horas | Reuniones + Bs cobrados |
+| **A4** | **Outreach a los dos carriles** | T1: los 150 prospectos dentales listados. T2: negocios sin web o con web muerta, que es **cualquier rubro** | Reuniones atribuibles |
+
+⚠️ **Hueco real:** las 150 listas de prospectos que existen son **todas dentales**. Para T2 y
+para los rubros nuevos no hay lista. Armarla es parte del trabajo de Arthur, no un
+prerrequisito que lo frene: para T2 el criterio es simple y se ve desde el celular (negocio
+que factura y no tiene web, o la tiene muerta).
 
 **A3 no es un desvío del carril: es la parte que da resultado rápido.** Contenido desde cero
 tarda semanas en traer una demo; el outreach trae demos esta semana y el contenido lo hace
@@ -249,14 +283,18 @@ Saber por qué se fueron es lo más barato que podemos aprender.
 **Meta: 3 demos.** Ojo con §3.1 y §3.10: son las del SIAT. Se usa la versión corregida —
 emisor en homologación, Portal Web gratis mientras tanto. **Nunca "obligatorio por ley".**
 
-### Semana 3 (18-24 ago) — la cuenta
+### Semana 3 (18-24 ago) — la cuenta, y abrir T2
 
 | # | Entregable | Usa |
 |---|---|---|
 | 7 | **Piezas de número**: "una silla vacía te cuesta Bs X al mes" | `stat` + `scoreboard` · supuestos de `ONIA_PRICING_MODELO_20260730.md`, **marcados como supuestos** |
 | 8 | **Demo pública de 40 s**: el agente en `/pending` | `browser` + `phone` (mockups por código) · es el minuto 7-11 del guion, el momento que cierra |
+| 9 | **3 piezas de T2 (servicios)**: antes/después de una web, "tu negocio sin web", una automatización que ahorra horas | Galería de Web Factory · `browser` · casos ya construidos |
+| 10 | **Outreach T2**: 15 negocios sin web o con web muerta, **cualquier rubro** | Mensaje corto propio, aprobado por Sergio |
 
-**Meta: 3 demos.**
+**Meta: 3 demos de plataforma + 2 reuniones de servicios.** T2 entra en la semana 3 y no
+antes por una razón: primero hay que tener piezas y atribución andando. Si en las semanas 1-2
+el carril dental no da señales, T2 se adelanta.
 
 ### Semana 4 (25-31 ago) — la ventana
 
