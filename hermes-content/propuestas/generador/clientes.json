@@ -1176,7 +1176,7 @@
     "heroGrad": "linear-gradient(135deg,#14100a 0%,#2a2410 55%,#d9a400 160%)",
     "titulo": "Premium Cars — Chatbot IA en WhatsApp que filtra clientes y te deja solo los que van en serio",
     "subtitulo": "Un asistente con IA que responde precios, requisitos y condiciones 24/7, pregunta qué vehículo busca el cliente, para qué fecha y si lo quiere con entrega a domicilio — y te pasa solo al interesado real, con su ficha lista.",
-    "resumenEjecutivo": "Premium Cars atiende hoy todo por WhatsApp, a mano. Esta propuesta convierte ese canal en uno que trabaja solo, en tres etapas: <b>(1) el chatbot IA</b> que responde y filtra clientes 24/7 — exactamente lo que pediste; <b>(2) tu página web</b> con la flota, para que te encuentren en Google y el bot reciba también clientes nuevos, no solo los que ya tienen tu número; <b>(3) a futuro, el sistema de gestión Onia</b>: reservas, contratos, cobros y recordatorios en un solo lugar. Cada etapa funciona por sí sola — empezás por el bot.",
+    "resumenEjecutivo": "Premium Cars atiende hoy todo por WhatsApp, a mano. Esta propuesta convierte ese canal en uno que trabaja solo, en tres etapas: <b>(1) el chatbot IA</b> que responde y filtra clientes 24/7 — exactamente lo que pediste; <b>(2) tu página web</b> con la flota, para que te encuentren en Google y el bot reciba también clientes nuevos, no solo los que ya tienen tu número; <b>(3) el sistema de gestión Onia, hoy en desarrollo</b>: una sola plataforma para manejar TODO el rent a car — reservas, flota, contratos, cobros — <b>conectada a tu chatbot</b> y con <b>agentes de inteligencia artificial</b> que automatizan cada vez más procesos. Como cliente del chatbot tenés acceso cuando salga <b>pagando solo la suscripción — el chatbot no se paga de nuevo</b>: se vincula directo. Cada etapa funciona por sí sola — empezás por el bot.",
     "problema": "Cada consulta de alquiler llega a tu WhatsApp y casi todas preguntan lo mismo: precio, requisitos, condiciones. Entre curiosos y clientes serios, atender a mano quema horas — y el que escribe de noche o en fin de semana no espera: alquila con otra rentadora. Montamos un <b>chatbot con IA en tu WhatsApp</b> que responde al instante, hace las preguntas clave (vehículo, fechas, entrega o recojo) y te deja solo al cliente que en verdad está interesado — 24/7.",
     "incluye": [
       {
@@ -1316,9 +1316,9 @@
         "mensual": "190–690"
       },
       {
-        "nombre": "Sistema de gestión Onia — reservas, flota, contratos, cobros y recordatorios en un solo panel (siguiente etapa, cuando el bot y la web ya estén rindiendo)",
-        "setup": "a convenir",
-        "mensual": "desde 350"
+        "nombre": "Sistema de gestión Onia (en desarrollo) — una sola plataforma para todo tu rent a car: reservas, flota, contratos, cobros y agentes de IA que automatizan más procesos, conectada a tu chatbot. Siendo cliente del bot, entrás pagando solo la suscripción — el chatbot no se vuelve a pagar",
+        "setup": "—",
+        "mensual": "suscripción, desde 350"
       }
     ],
     "proximosPasos": [
