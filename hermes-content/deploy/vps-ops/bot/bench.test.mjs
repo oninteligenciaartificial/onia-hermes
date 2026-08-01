@@ -102,14 +102,26 @@ test("cambiar la config cambia lo que mide el banco (no hay guion copiado adentr
 test("M0 realmente pregunta los 3 datos: la suposicion del probe se verifica contra el guion", () => {
   // fieldsAsked da por hecho que M0 pide los tres. Si alguien edita M0 y saca una pregunta,
   // este test cae ANTES de que el banco empiece a contar re-preguntas que no existen.
+  // Las 3 preguntas se leen del propio config: si el guion deja de nombrar un `missLabel` con
+  // esas palabras, el probe deja de reconocerlo y la medicion mentiria.
   const m0 = normalize(BENCH_CONFIG.script.M0);
-  assert.match(m0, /clinica es tuya/);
-  assert.match(m0, /cuantos sillones/);
-  assert.match(m0, /ciudad/);
+  for (const field of BENCH_CONFIG.qualification.fields) {
+    assert.ok(m0.includes(normalize(field.missLabel)), `M0 ya no pregunta ${field.key}`);
+  }
   assert.deepEqual(
     [...fieldsAsked([{ templateKey: "M0", text: BENCH_CONFIG.script.M0 }], BENCH_CONFIG)].sort(),
-    ["chairs", "city", "ownsClinic"],
+    ["city", "industry", "teamSize"],
   );
+  assert.match(m0, /a que se dedica/, "la pregunta 1 es el RUBRO: es lo que abre el bot a todos los negocios");
+  assert.match(m0, /cuantas personas/, "la pregunta 2 es el TAMAÑO: el unico proxy que entiende cualquier rubro");
+});
+
+test("el dato de rama NO se le pregunta a todos: M0 sigue siendo 3 preguntas", () => {
+  // La cuarta pregunta (los sillones) es de rama. Si se colara en M0, el bot volveria a hablarle
+  // solo a clinicas dentales — que es exactamente lo que este cambio vino a arreglar.
+  assert.equal(BENCH_CONFIG.qualification.fields.length, 3);
+  assert.ok(!normalize(BENCH_CONFIG.script.M0).includes("sillon"), "M0 no puede nombrar el dato de un rubro");
+  assert.equal(BENCH_CONFIG.qualification.branches.dental.field.key, "chairs");
 });
 
 test("fieldsAsked deriva las etiquetas de config: con otros missLabel, sigue a la config", () => {
@@ -155,15 +167,18 @@ test("un dato que el prospecto NUNCA dijo y quedo guardado es dato inventado", (
 });
 
 test("un dato que el prospecto dijo y no quedo guardado es dato perdido", () => {
-  const bench = { ...CASO_BASE, said: { ownsClinic: true }, expect: { route: "repregunta" } };
+  const bench = { ...CASO_BASE, said: { industry: "dental" }, expect: { route: "repregunta" } };
   const outcome = evaluateCase(bench, BENCH_CONFIG, fakeTurn({ notes: ["repregunta:1"], qualification: {} }));
   assert.match(outcome.problems[0].detail, /no quedo guardado/);
 });
 
-test("ownsClinic=false cuenta como dato guardado (missingFields del motor lo trata igual)", () => {
-  const bench = { ...CASO_BASE, said: { ownsClinic: false }, expect: { route: "descartado" } };
-  const outcome = evaluateCase(bench, BENCH_CONFIG, fakeTurn({ notes: ["descartado"], qualification: { ownsClinic: false }, botStage: "descartado" }));
-  assert.equal(outcome.status, "hit");
+test("el dato de RAMA tambien se juzga: perder los sillones de una clinica es un dato perdido", () => {
+  // Si el juez mirara solo los 3 universales, el dato de rama se podria perder o inventar sin
+  // que la medicion se entere — y es el unico dato con el que Sergio prepara una demo dental.
+  const bench = { ...CASO_BASE, said: { chairs: 3 }, expect: { route: "repregunta" } };
+  const outcome = evaluateCase(bench, BENCH_CONFIG, fakeTurn({ notes: ["repregunta:1"], qualification: {} }));
+  assert.equal(outcome.status, "dato_mal_extraido");
+  assert.match(outcome.problems[0].detail, /chairs/);
 });
 
 // ---------------------------------------------------------------------------
@@ -171,11 +186,11 @@ test("ownsClinic=false cuenta como dato guardado (missingFields del motor lo tra
 // ---------------------------------------------------------------------------
 
 test("avanzar a ofrecer horarios con un dato inventado es la violacion de la regla de oro", () => {
-  const bench = { ...CASO_BASE, said: { ownsClinic: true, city: "La Paz" }, expect: { route: "calificado" } };
+  const bench = { ...CASO_BASE, said: { industry: "comercio", city: "La Paz" }, expect: { route: "calificado" } };
   const outcome = evaluateCase(
     bench,
     BENCH_CONFIG,
-    fakeTurn({ notes: ["calificado"], botStage: "esperando_horario", qualification: { ownsClinic: true, chairs: 1, city: "La Paz" } }),
+    fakeTurn({ notes: ["calificado"], botStage: "esperando_horario", qualification: { industry: "comercio", teamSize: 1, city: "La Paz" } }),
   );
   assert.equal(outcome.status, "avanzo_sin_dato");
 });
@@ -223,7 +238,7 @@ test("hablarle a quien pidio la baja es hablo_sin_permiso", () => {
 test("contestar cuando la respuesta correcta era el silencio tambien se marca", () => {
   // Un 'gracias' despues de agendar: la conversacion ya esta calificada y agendada, asi que el
   // unico fallo posible es haber abierto la boca.
-  const calificado = { ownsClinic: true, chairs: 2, city: "Santa Cruz" };
+  const calificado = { industry: "comercio", teamSize: 5, city: "Santa Cruz" };
   const bench = { ...CASO_BASE, said: calificado, expect: { route: "cortesia_sin_respuesta" } };
   const outcome = evaluateCase(
     bench,

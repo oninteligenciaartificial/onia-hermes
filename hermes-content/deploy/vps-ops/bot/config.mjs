@@ -21,18 +21,31 @@ export const DEMO_SLOTS = Object.freeze([
 ]);
 
 // ---------------------------------------------------------------------------
-// Guion — texto EXACTO de la spec §2.2. Es texto fijo: NO pasa por el LLM y NO pasa por el
-// guardrail (lo escribimos nosotros y esta versionado). Variables entre {{ }}.
+// Guion. Es texto fijo: NO pasa por el LLM y NO pasa por el guardrail (lo escribimos nosotros y
+// esta versionado). Variables entre {{ }}.
+//
+// SUPERSEDE a la spec §2.2 / D3, que estaba escrita cuando el bot le hablaba SOLO a clinicas
+// dentales (¿la clinica es tuya? · ¿cuantos sillones? · ¿que ciudad?). Onia se vende como
+// plataforma por modulos, asi que las 3 preguntas ahora son universales (rubro · tamaño · ciudad)
+// y el dato de un rubro se pide en una RAMA. Lo que NO cambia y no se negocia: el disclosure de
+// bot en la primera linea de M0 (D2), el opt-out (M6 + triggers), que el guion sea texto fijo y
+// versionado, y que el bot NUNCA cotice (M4_BODY / N1).
 // ---------------------------------------------------------------------------
 export const SCRIPT = Object.freeze({
   // M0 — bienvenida + disclosure + las 3 preguntas juntas.
+  // Las 3 preguntas son UNIVERSALES (rubro · tamaño · ciudad): Onia es una plataforma por modulos,
+  // no un producto dental. Preguntar por sillones a todo el mundo dejaba afuera al 95% del mercado.
+  // El tamaño del equipo es el proxy universal de capacidad: lo entiende una ferreteria, un
+  // restaurante y una clinica. El dato fino del rubro (sillones, cajas, mesas) se pregunta DESPUES
+  // y solo si ese rubro lo necesita (ver `qualification.branches`).
+  // El maximo sigue siendo 3 preguntas para todos: la 4ta es de rama, no de todos.
   M0: [
     "¡Hola! Soy el asistente automático de Onia — sí, un bot, los mismos que hacen a Lucía 🙂",
     "Gracias por escribir. Te agendo la demo en 2 minutos, pero primero quiero saber si te va a servir de verdad.",
     "",
     "Contame tres cosas rápidas:",
-    "1️⃣ ¿La clínica es tuya o trabajás en la de alguien más?",
-    "2️⃣ ¿Cuántos sillones tenés? (1, 2, 3 o más)",
+    "1️⃣ ¿A qué se dedica tu negocio?",
+    "2️⃣ ¿Cuántas personas trabajan ahí, contándote a vos?",
     "3️⃣ ¿En qué ciudad estás?",
   ].join("\n"),
 
@@ -47,11 +60,20 @@ export const SCRIPT = Object.freeze({
   // M1a — falta algun dato. Maximo 2 re-preguntas; a la tercera, handoff.
   M1a: "Perfecto, anotado {{datos_que_si_dio}}. Me falta sólo {{dato_faltante}} — ¿me lo pasás?",
 
-  // M1b — calificado, ofrece los 2 horarios.
+  // M1_RAMA_DENTAL — pregunta EXTRA de rama, no del guion general. Solo la ve el rubro que la
+  // necesita; el resto pasa derecho a los horarios. Tiene que decir el `missLabel` del campo de
+  // rama con esas mismas palabras (el banco lee de ahi que dato se esta pidiendo).
+  M1_RAMA_DENTAL: [
+    "Perfecto, eso me sirve. Una sola cosa más antes de pasarte los horarios: ¿cuántos sillones tenés? (1, 2, 3 o más)",
+  ].join("\n"),
+
+  // M1b — calificado, ofrece los 2 horarios. Habla del TAMAÑO del equipo, que es lo que se le
+  // pregunta a cualquier rubro. {{nota_modulo}} agrega la frase del modulo SOLO si ese rubro
+  // tiene uno armado de verdad (hoy: odontologia). Vacio para el resto: no se nombra lo que no hay.
   M1b: [
-    "Buenísimo. Con {{sillones}} {{sillon_palabra}} en {{ciudad}} esto te sirve, sí.",
+    "Buenísimo. {{tamano_frase}} en {{ciudad}}, esto te sirve, sí.{{nota_modulo}}",
     "",
-    "La demo la da {{humano}} (humano, esta vez 😄): son 15-20 minutos por videollamada — o presencial si estás en Santa Cruz. Te muestra la agenda, el agente que reprograma solo por WhatsApp, y hacen la cuenta con TUS números.",
+    "La demo la da {{humano}} (humano, esta vez 😄): son 15-20 minutos por videollamada — o presencial si estás en Santa Cruz. Te muestra tu panel, el agente que responde y reprograma solo por WhatsApp, y hacen la cuenta con TUS números.",
     "",
     "¿Cuál te va mejor?",
     "**A)** {{slot_a}}",
@@ -60,18 +82,21 @@ export const SCRIPT = Object.freeze({
     "(Si ninguno te sirve, decime y lo coordina {{humano}} directo.)",
   ].join("\n"),
 
-  // M1c — descalificado suave.
+  // M1c — descalificado suave. YA NO se descarta por rubro ni por tamaño (Onia es una plataforma
+  // por modulos: una ferreteria de 12 personas es mejor cliente, no peor). Este texto queda solo
+  // para quien claramente NO es un negocio: alguien buscando trabajo o alguien que nos quiere
+  // vender algo. Ante la duda NO se descarta: se deriva a un humano.
   M1c: [
-    "Gracias por contarme. Hoy {{producto}} está armado para clínicas dentales de 1 a 3 sillones, así que no te quiero hacer perder 20 minutos si no es tu caso.",
+    "Gracias por contarme. {{producto}} es el sistema que usa un negocio para trabajar, así que por acá no te voy a poder ayudar — no es una bolsa de trabajo ni un lugar para ofrecernos servicios.",
     "",
-    "Si en algún momento manejás vos la clínica, o conocés a alguien a quien le sirva, escribime y lo agendamos. Y si querés ver cómo funciona igual, todo está en el feed de Lucía.",
+    "Si más adelante manejás un negocio (o trabajás en uno al que le sirva), escribime DEMO y lo agendamos igual.",
   ].join("\n"),
 
   // M2 — confirmacion + pre-arma la demo.
   M2: [
     "Listo, agendado: **{{dia_hora_elegida}}**. Te llega el link el mismo día por acá.",
     "",
-    "Para que {{humano}} llegue con la demo armada para vos: ¿qué es lo que más tiempo te come hoy — la **agenda**, los **cobros**, o los **pacientes que no vuelven**?",
+    "Para que {{humano}} llegue con la demo armada para vos: ¿qué es lo que más tiempo te come hoy — la **agenda**, los **cobros**, o los **clientes que no vuelven**?",
     "",
     "(Respondé con una palabra y listo. Si no, igual nos vemos {{dia}}.)",
   ].join("\n"),
@@ -82,7 +107,7 @@ export const SCRIPT = Object.freeze({
 
   // M3 — follow-up unico a las 22 h (dentro de la ventana de servicio de 24 h de Meta).
   M3: [
-    "¡Hola de nuevo! Te escribí ayer por la demo de {{producto}} y quedó a medias — sé que la clínica no para.",
+    "¡Hola de nuevo! Te escribí ayer por la demo de {{producto}} y quedó a medias — sé que el negocio no para.",
     "",
     "Te dejo dos opciones nuevas por si te sirven: **{{slot_a}}** o **{{slot_b}}**.",
     "Si preferís que te escriba en otro momento, decime \"después\" y no te molesto más.",
@@ -91,9 +116,9 @@ export const SCRIPT = Object.freeze({
   // M4 — el prospecto trae el precio. El cuerpo NUNCA cotiza; el cierre lo pone el motor segun
   // el estado (spec §2.3 + regla de oro §2.1: el estado no avanza sin dato capturado).
   M4_BODY: [
-    "Buena pregunta, y te la contesto derecho: **el número exacto te lo pasa {{humano}} en la demo**, porque depende de cuántos sillones tenés y de qué necesitás activar. No te quiero tirar una cifra que después no sea la tuya.",
+    "Buena pregunta, y te la contesto derecho: **el número exacto te lo pasa {{humano}} en la demo**, porque depende del tamaño de tu equipo y de qué módulos necesitás activar. No te quiero tirar una cifra que después no sea la tuya.",
     "",
-    "Lo que sí te adelanto: en la demo se hace la cuenta con TUS números — cuánto te cuesta hoy un hueco en la agenda contra lo que cuesta el sistema. Si no cierra, te lo decimos ahí mismo.",
+    "Lo que sí te adelanto: en la demo se hace la cuenta con TUS números — cuánto te cuesta hoy el trabajo que se hace a mano contra lo que cuesta el sistema. Si no cierra, te lo decimos ahí mismo.",
   ].join("\n"),
 
   // M5 — handoff a humano.
@@ -103,8 +128,18 @@ export const SCRIPT = Object.freeze({
     "Ya le pasé tu consulta con todo lo que me contaste. Te escribe él desde este mismo número, en horario de oficina (lun-vie, 9:00-18:00). Si es urgente, decime \"urgente\" y lo marco.",
   ].join("\n"),
 
+  // M8_SOPORTE — SEGUNDO CAMINO: el que escribe YA es cliente (o dice que ya tiene el sistema, o
+  // que algo no le anda, o pregunta como configurarlo). Ofrecerle la demo COMERCIAL a alguien que
+  // pide ayuda es el peor error posible del bot: le dice "comprame" a quien ya compro. Este texto
+  // reemplaza a M5 en ese handoff, y el bot igual se presenta como bot (D2).
+  M8_SOPORTE: [
+    "Pará — si ya estás usando {{producto}}, esto no es una demo de venta: es soporte. Y el soporte no te lo puedo dar yo, que soy un bot.",
+    "",
+    "Le paso tu mensaje a {{humano}} tal cual me lo contaste. Te responde desde este mismo número en horario de oficina (lun-vie, 9:00-18:00) y, si hace falta, te coordina una llamada corta para dejarlo funcionando. Si te está frenando el trabajo ahora mismo, decime \"urgente\" y lo marco.",
+  ].join("\n"),
+
   // M6 — opt-out.
-  M6: "Listo, no te escribo más. Si algún día querés verlo, escribí DEMO y arrancamos de nuevo. ¡Éxitos con la clínica!",
+  M6: "Listo, no te escribo más. Si algún día querés verlo, escribí DEMO y arrancamos de nuevo. ¡Éxitos con el negocio!",
 
   // M7 — fuera de horario. Se APENDEA a la respuesta que corresponda, no la reemplaza.
   M7: "_(Estoy respondiendo automático fuera de horario de oficina. {{humano}} te confirma en la mañana.)_",
@@ -134,8 +169,11 @@ export const DEFAULT_CONFIG = Object.freeze({
   tenant: "onia",
 
   identity: Object.freeze({
+    // La marca es `Onia`, siempre asi escrita (nunca ONIA ni OnIA). El producto que se vende es
+    // LA PLATAFORMA, no el pack de un rubro: "Onia Dental" era el nombre de un modulo puesto en
+    // el lugar del producto. El modulo se nombra aparte y solo cuando aplica (ver branches).
     botName: "el asistente automático de Onia",
-    productName: "Onia Dental",
+    productName: "Onia",
     humanName: "Sergio",
     tone: "voseo-boliviano-informal",
   }),
@@ -148,14 +186,32 @@ export const DEFAULT_CONFIG = Object.freeze({
 
   qualification: Object.freeze({
     maxReAsks: 2, // a la 3ra re-pregunta sin datos -> handoff (spec D3)
+    // Los 3 datos UNIVERSALES que se le piden a cualquier negocio. El `missLabel` es el texto con
+    // el que el guion nombra el dato: M0 y M1a lo escriben literal, y el banco lee de ahi que se
+    // esta preguntando. Si cambia uno, cambia el guion.
     fields: Object.freeze([
-      Object.freeze({ key: "ownsClinic", missLabel: "si la clínica es tuya" }),
-      Object.freeze({ key: "chairs", missLabel: "cuántos sillones tenés" }),
+      Object.freeze({ key: "industry", missLabel: "a qué se dedica tu negocio" }),
+      Object.freeze({ key: "teamSize", missLabel: "cuántas personas trabajan ahí" }),
       Object.freeze({ key: "city", missLabel: "en qué ciudad estás" }),
     ]),
-    // Publico objetivo: clinicas dentales. NO se descarta por cantidad de sillones (una clinica
-    // de 6 sillones es un cliente mejor, no peor); se descarta por no ser el publico (spec §2.2 M1c).
-    targetChairs: Object.freeze({ min: 1, max: 3 }),
+    // RAMIFICACION POR RUBRO. Un rubro puede pedir UN dato extra despues de los 3 universales.
+    // Hoy solo odontologia: el sillon es su unidad de capacidad y Sergio llega a la demo sabiendo
+    // de que tamaño hablar. Cualquier otro rubro pasa DERECHO a los horarios — una pregunta de
+    // mas antes de ofrecer la reunion cuesta demos.
+    // El dato de rama NO bloquea: si el prospecto no lo contesta, igual se le ofrecen los horarios.
+    branches: Object.freeze({
+      dental: Object.freeze({
+        key: "dental",
+        askKey: "M1_RAMA_DENTAL",
+        field: Object.freeze({ key: "chairs", missLabel: "cuántos sillones tenés" }),
+        // Se nombra el modulo SOLO donde existe de verdad. Nombrar un modulo que no esta armado
+        // es prometer una feature (N2) con otro disfraz.
+        moduleNote: " El módulo dental ya está armado justo para eso.",
+      }),
+    }),
+    // NO se descarta por tamaño ni por rubro: con la plataforma por modulos, un negocio grande es
+    // mejor cliente, no peor. Solo se descarta lo que claramente NO es un negocio (ver intents.mjs
+    // isDisqualified). Ante la duda, NO se descarta: se deriva a un humano.
   }),
 
   slots: DEMO_SLOTS,
@@ -214,6 +270,32 @@ export function createBotConfig(overrides = {}) {
     }
   }
   return Object.freeze(merged);
+}
+
+/**
+ * La rama del rubro, si ese rubro tiene una. `null` = el rubro no pide nada extra y el prospecto
+ * pasa derecho a los horarios (que es el caso de casi todos).
+ */
+export function branchFor(industry, config = DEFAULT_CONFIG) {
+  if (!industry) return null;
+  return (config.qualification && config.qualification.branches && config.qualification.branches[industry]) || null;
+}
+
+/**
+ * Los 3 campos universales + los campos de rama, sin repetidos.
+ * Lo usa el banco para juzgar QUE dato se guardo y cual se volvio a preguntar: si mirara solo los
+ * 3 universales, perder o inventar el dato de rama no contaria como fallo.
+ */
+export function allQualificationFields(config = DEFAULT_CONFIG) {
+  const fields = [...(config.qualification.fields || [])];
+  const seen = new Set(fields.map((field) => field.key));
+  for (const branch of Object.values(config.qualification.branches || {})) {
+    if (branch && branch.field && !seen.has(branch.field.key)) {
+      fields.push(branch.field);
+      seen.add(branch.field.key);
+    }
+  }
+  return fields;
 }
 
 /** true si los 2 horarios siguen siendo el placeholder (Sergio no los definio todavia). */

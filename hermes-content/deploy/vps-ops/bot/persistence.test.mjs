@@ -239,7 +239,7 @@ test("camino feliz por runTurn: califica, agenda, crea el lead y avisa a Sergio"
   const deps = { store: fake.store, config: CONFIG, nowIso: T0, llm: async () => "" };
 
   const uno = await runTurn(turn(), deps);
-  const dos = await runTurn(turn({ text: "es mia, tengo 2 sillones y estoy en Santa Cruz", message_key: "telegram:2" }), deps);
+  const dos = await runTurn(turn({ text: "tengo una ferreteria, somos 5 y estoy en Santa Cruz", message_key: "telegram:2" }), deps);
   const tres = await runTurn(turn({ text: "A", message_key: "telegram:3" }), deps);
 
   assert.equal(uno.stageAfter, "esperando_calificacion");
@@ -249,7 +249,7 @@ test("camino feliz por runTurn: califica, agenda, crea el lead y avisa a Sergio"
   assert.match(tres.send[0].text, /jueves 15:00/);
   assert.equal(tres.calendar.length, 1, "el evento de calendario queda para n8n");
   assert.equal(tres.notify.length, 1, "y el aviso a Sergio tambien");
-  assert.deepEqual(fake.state.qualification, { ownsClinic: true, chairs: 2, city: "Santa Cruz" });
+  assert.deepEqual(fake.state.qualification, { industry: "comercio", teamSize: 5, city: "Santa Cruz" });
 });
 
 test("un humano tomo la conversacion: el ejecutor no devuelve nada para enviar", async () => {

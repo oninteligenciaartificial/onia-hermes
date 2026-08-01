@@ -1,7 +1,8 @@
-// ONIA — Chatbot propio: BANCO DE MEDICION (cuanto entiende el bot a un dentista REAL).
+// ONIA — Chatbot propio: BANCO DE MEDICION (cuanto entiende el bot a un dueño de negocio REAL,
+// del rubro que sea: dental, ferreteria, restaurante, servicios).
 //
-// Por que existe: los 141 tests unitarios prueban que el codigo hace lo que dice el codigo.
-// Ninguno dice si el bot entiende a alguien que escribe "cuanto sale?" a secas, "son 3" o
+// Por que existe: los tests unitarios prueban que el codigo hace lo que dice el codigo.
+// Ninguno dice si el bot entiende a alguien que escribe "cuanto sale?" a secas, "somos 3" o
 // "estoy en reunion, te escribo mas tarde". Sin este numero, "el bot mejoro" es una opinion.
 //
 // Que se mide, y por que asi (los dos principios, copiados del banco de Bolivian Electric):
@@ -31,7 +32,7 @@ import { dirname, join } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
 import { STAGES, createState, step } from "./bot-engine.mjs";
-import { createBotConfig } from "./config.mjs";
+import { allQualificationFields, createBotConfig } from "./config.mjs";
 import { normalize } from "./guardrails.mjs";
 
 // ---------------------------------------------------------------------------
@@ -117,6 +118,7 @@ export const PRIMARY_ROUTES = Object.freeze([
   "bienvenida",
   "calificado",
   "descartado",
+  "rama_rubro",
   "repregunta",
   "off_guion",
   "demo_agendada",
@@ -136,6 +138,9 @@ export const INTENT_HANDOFF_REASONS = new Set([
   "queja_o_desconfianza",
   "consulta_clinica_o_legal",
   "detalle_tecnico_de_producto",
+  // Mandar a soporte a quien venia a comprar es un falso positivo caro (le corta la demo), no un
+  // handoff de mas: por eso se clasifica con la severidad de una deteccion equivocada.
+  "soporte_cliente",
 ]);
 
 /** Estados en los que el bot YA dio por buena la calificacion. */
@@ -166,13 +171,14 @@ function hasValue(value) {
  */
 export function fieldsAsked(replies, config) {
   const asked = new Set();
+  const fields = allQualificationFields(config); // incluye el dato de rama (sillones)
   for (const reply of replies || []) {
     if (reply.templateKey === "M0") {
       for (const field of config.qualification.fields) asked.add(field.key);
       continue;
     }
     const text = normalize(reply.text || "");
-    for (const field of config.qualification.fields) {
+    for (const field of fields) {
       if (text.includes(normalize(field.missLabel))) asked.add(field.key);
     }
   }
@@ -203,7 +209,9 @@ export function runConversation(bench, config = BENCH_CONFIG) {
 function dataProblems(bench, state, config) {
   const said = bench.said || {};
   const problems = [];
-  for (const field of config.qualification.fields) {
+  // Los 3 universales + el dato de rama: perder o inventar los sillones de una clinica tiene que
+  // contar como fallo igual que perder la ciudad.
+  for (const field of allQualificationFields(config)) {
     const key = field.key;
     const stored = state.qualification ? state.qualification[key] : undefined;
     const declared = Object.prototype.hasOwnProperty.call(said, key);
@@ -387,7 +395,7 @@ function formatOutcome(outcome, position) {
 
 export function formatBenchReport(summary, outcomes, worstCount = 8, meta = {}) {
   const lines = [];
-  lines.push("BANCO DE MEDICION — chatbot ONIA (agenda demos con dueños de clinicas dentales)");
+  lines.push("BANCO DE MEDICION — chatbot Onia (agenda demos con dueños de negocios, cualquier rubro)");
   if (meta.fingerprint) lines.push(`codigo medido: ${meta.fingerprint}`);
   if (meta.slots) lines.push(`horarios de la config medida: ${meta.slots}`);
   lines.push("");
@@ -442,7 +450,7 @@ export function formatBenchReport(summary, outcomes, worstCount = 8, meta = {}) 
 export function validateCases(cases, config = BENCH_CONFIG) {
   const errors = [];
   const ids = new Set();
-  const fieldKeys = new Set(config.qualification.fields.map((field) => field.key));
+  const fieldKeys = new Set(allQualificationFields(config).map((field) => field.key));
 
   for (const bench of cases) {
     const where = bench.id || "(sin id)";
