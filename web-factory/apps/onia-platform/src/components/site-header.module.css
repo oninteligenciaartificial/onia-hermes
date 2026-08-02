@@ -8,6 +8,7 @@
  */
 
 .header {
+  font-family: var(--font-display-cnd), system-ui, sans-serif;
   position: sticky;
   top: 0;
   z-index: 30;
@@ -19,11 +20,14 @@
   border-bottom: 1px solid var(--line-soft);
 }
 
+/* sin width:100% a proposito: el ancho lo pone .container (global), asi la
+   marca y el CTA quedan alineados con el resto de la pagina. En el mockup ese
+   100% pisaba al container y la marca terminaba pegada al borde. */
 .inner {
   display: flex;
   align-items: center;
   gap: clamp(1rem, 3vw, 2.5rem);
-  width: 100%;
+  height: 100%;
 }
 
 /* min-height 44px: el logo es el link "volver al inicio" y con 26px de alto

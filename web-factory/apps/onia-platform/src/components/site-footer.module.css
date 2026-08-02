@@ -4,6 +4,7 @@
  */
 
 .footer {
+  font-family: var(--font-display-cnd), system-ui, sans-serif;
   border-top: 1px solid var(--line-soft);
   padding-block: 2.5rem 3rem;
   color: var(--ink-faint);
@@ -63,4 +64,14 @@
 .legalId a:hover,
 .legalId a:focus-visible {
   color: var(--ink);
+}
+
+/* En el telefono el telefono y el mail SE TOCAN: 44px de area tactil. El alto
+   se lo come el propio link, no un hueco entre lineas. */
+@media (max-width: 899px) {
+  .legalId a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
 }
