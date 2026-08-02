@@ -239,7 +239,7 @@ test("camino feliz por runTurn: califica, agenda, crea el lead y avisa a Sergio"
   const deps = { store: fake.store, config: CONFIG, nowIso: T0, llm: async () => "" };
 
   const uno = await runTurn(turn(), deps);
-  const dos = await runTurn(turn({ text: "es mia, tengo 2 sillones y estoy en Santa Cruz", message_key: "telegram:2" }), deps);
+  const dos = await runTurn(turn({ text: "tengo una ferreteria, somos 5 y estoy en Santa Cruz", message_key: "telegram:2" }), deps);
   const tres = await runTurn(turn({ text: "A", message_key: "telegram:3" }), deps);
 
   assert.equal(uno.stageAfter, "esperando_calificacion");
@@ -249,7 +249,7 @@ test("camino feliz por runTurn: califica, agenda, crea el lead y avisa a Sergio"
   assert.match(tres.send[0].text, /jueves 15:00/);
   assert.equal(tres.calendar.length, 1, "el evento de calendario queda para n8n");
   assert.equal(tres.notify.length, 1, "y el aviso a Sergio tambien");
-  assert.deepEqual(fake.state.qualification, { ownsClinic: true, chairs: 2, city: "Santa Cruz" });
+  assert.deepEqual(fake.state.qualification, { industry: "comercio", teamSize: 5, city: "Santa Cruz" });
 });
 
 test("un humano tomo la conversacion: el ejecutor no devuelve nada para enviar", async () => {
@@ -330,13 +330,13 @@ test("si el CAS no reserva ninguna fila, NO se manda el follow-up", async () => 
   assert.equal(await store.reserveFollowUp("telegram:777"), false);
 });
 
-test("el barrido pide solo conversaciones vivas entre 22 h y 7 dias", async () => {
+test("el barrido pide solo conversaciones vivas entre 20 h y 7 dias", async () => {
   const { store, requests } = recorder([{ status: 200, body: [] }]);
   await store.sweepFollowUpCandidates("2026-07-28T14:05:00Z");
 
   assert.match(requests[0].url, /followup_step=eq\.0/);
   assert.match(requests[0].url, /bot_stage=in\.\(esperando_calificacion,esperando_horario\)/);
-  assert.match(requests[0].url, /last_inbound_at=lte\.2026-07-27T16:05:00\.000Z/);
+  assert.match(requests[0].url, /last_inbound_at=lte\.2026-07-27T18:05:00\.000Z/);
   assert.match(requests[0].url, /last_inbound_at=gte\.2026-07-21T14:05:00\.000Z/);
 });
 
@@ -347,7 +347,8 @@ test("el lead se inserta una vez y despues se PATCHea (no se duplica ni se pisan
   assert.equal(await nuevo.store.upsertLead({ pipelineStatus: "Contactado" }, state), "bot-telegram-777");
   assert.equal(nuevo.requests[1].method, "POST");
   assert.equal(nuevo.requests[1].body.pipeline_status, "Contactado");
-  assert.equal(nuevo.requests[1].body.business_type, "Clínica dental");
+  // El rubro sale de la calificacion, ya no se asume dental para todos.
+  assert.equal(nuevo.requests[1].body.business_type, null);
   assert.equal(nuevo.requests[1].body.city, "Santa Cruz");
 
   const viejo = recorder([{ status: 200, body: [{ lead_key: "bot-telegram-777", raw: { humano: "no tocar" } }] }, { status: 200, body: [{}] }]);
@@ -432,11 +433,21 @@ test("al agendar la demo el lead queda en 'Reunion' (valor exacto del CHECK del 
   assert.equal(row.next_followup_at, "2026-07-30T19:00:00Z");
 });
 
-test("el lead nunca inventa el nombre de la clinica", () => {
+test("el lead nunca inventa el nombre NI el rubro del negocio", () => {
   const anonimo = buildLeadRow({}, createState({ channel: "telegram", contactRef: "777" }));
   assert.match(anonimo.company_name, /sin nombre/);
-  const conNombre = buildLeadRow({}, { ...createState({ channel: "telegram", contactRef: "777" }), displayName: "Ana", qualification: { city: "Tarija" } });
-  assert.equal(conNombre.company_name, "Clínica de Ana (Tarija)");
+  assert.equal(anonimo.business_type, null, "sin rubro capturado no se inventa uno");
+
+  // El bot atiende cualquier rubro: llamar "Clinica de X" a una ferreteria metia un dato falso
+  // en el CRM. Ahora el nombre lleva el rubro real cuando esta, y nada cuando no.
+  const base = createState({ channel: "telegram", contactRef: "777" });
+  const soloCiudad = buildLeadRow({}, { ...base, displayName: "Ana", qualification: { city: "Tarija" } });
+  assert.equal(soloCiudad.company_name, "Ana (Tarija)");
+  assert.ok(!/Clínica/.test(soloCiudad.company_name), "no se asume clinica");
+
+  const conRubro = buildLeadRow({}, { ...base, displayName: "Ana", qualification: { city: "Tarija", industry: "ferreteria" } });
+  assert.equal(conRubro.company_name, "Ana — ferreteria (Tarija)");
+  assert.equal(conRubro.business_type, "ferreteria");
 });
 
 test("el permiso de contacto sigue al opt-in / opt-out, no al humor del bot", () => {

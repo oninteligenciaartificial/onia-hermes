@@ -174,7 +174,7 @@ export const dataModelTables: DataModelTable[] = [
   },
   {
     name: "onia_center.projects",
-    purpose: "Proyectos Onia: DentalGest, GestiOS, webs, chatbots, automatizaciones, Bolivian, contenido y StockCam.",
+    purpose: "Proyectos Onia: Onia Dental, Onia Comercio, webs, chatbots, automatizaciones, Bolivian, contenido y StockCam.",
     requiredForPhase: 1,
     implementedInSql: true,
     implementedInApp: true,
@@ -651,7 +651,7 @@ export const vendorCommissionRules: VendorCommissionRule[] = [
   {
     id: "vendor-dentagest-basico",
     category: "dentagest",
-    serviceName: "DentalGest Basico",
+    serviceName: "Onia Dental Basico",
     clientPriceLabel: "Bs. 320/mes",
     commissionType: "percent",
     commissionRatePercent: 35,
@@ -665,7 +665,7 @@ export const vendorCommissionRules: VendorCommissionRule[] = [
   {
     id: "vendor-dentagest-profesional",
     category: "dentagest",
-    serviceName: "DentalGest Profesional",
+    serviceName: "Onia Dental Pro",
     clientPriceLabel: "Bs. 750/mes",
     commissionType: "percent",
     commissionRatePercent: 35,
@@ -679,7 +679,7 @@ export const vendorCommissionRules: VendorCommissionRule[] = [
   {
     id: "vendor-dentagest-clinica",
     category: "dentagest",
-    serviceName: "DentalGest Clinica",
+    serviceName: "Onia Dental Clinica",
     clientPriceLabel: "Bs. 1.500/mes",
     commissionType: "percent",
     commissionRatePercent: 35,
@@ -693,7 +693,7 @@ export const vendorCommissionRules: VendorCommissionRule[] = [
   {
     id: "vendor-dentagest-onboarding",
     category: "dentagest",
-    serviceName: "Onboarding DentalGest",
+    serviceName: "Onboarding Onia Dental",
     clientPriceLabel: "Bs. 290 / 690 / 1.490",
     commissionType: "percent",
     commissionRatePercent: 10,
@@ -707,7 +707,7 @@ export const vendorCommissionRules: VendorCommissionRule[] = [
   {
     id: "vendor-dentagest-whatsapp-operativo",
     category: "whatsapp",
-    serviceName: "WhatsApp operativo DentalGest",
+    serviceName: "WhatsApp operativo Onia Dental",
     clientPriceLabel: "Bs. 650 inst. + Bs. 350/mes + Meta",
     commissionType: "approval",
     commissionLabel: "Aprobar",
@@ -1307,7 +1307,7 @@ export const evidenceGates: EvidenceGate[] = [
 export const premiumToolPolicies: PremiumToolPolicy[] = [
   {
     id: "premium-services",
-    center: "Onia Servicios / Web / DentalGest / GestiOS",
+    center: "Onia Servicios / Web / Onia Dental / Onia Comercio",
     allocation: "60%",
     rule: "Uso de base operativa, ventas, demos, entregas y soporte.",
     visibility: ["sergio", "area", "arthur"],

@@ -13,6 +13,7 @@
 
 import {
   DEFAULT_CONFIG,
+  branchFor,
   renderTemplate,
   joinEs,
   isOutsideBusinessHours,
@@ -67,6 +68,10 @@ export function createState(input = {}) {
     followupStep: Number.isInteger(input.followupStep) ? input.followupStep : 0,
     offScriptCount: Number.isInteger(input.offScriptCount) ? input.offScriptCount : 0,
     qualifyAsks: Number.isInteger(input.qualifyAsks) ? input.qualifyAsks : 0,
+    // La pregunta EXTRA del rubro se hace UNA sola vez y no bloquea: si el prospecto no la
+    // contesta, igual se le ofrecen los horarios. Perder una demo por un dato opcional seria
+    // cambiar una reunion por un campo del CRM.
+    branchAsked: Boolean(input.branchAsked),
     outboundSeq: Number.isInteger(input.outboundSeq) ? input.outboundSeq : 0,
     lastInboundAt: input.lastInboundAt || null,
     lastOutboundAt: input.lastOutboundAt || null,
@@ -111,6 +116,7 @@ export function toConversationRow(state) {
       qualifyAsks: state.qualifyAsks,
       outboundSeq: state.outboundSeq,
       scheduledLabel: state.scheduledLabel,
+      branchAsked: state.branchAsked,
     },
   };
 }
@@ -148,6 +154,7 @@ function varsFor(state, config, extra = {}) {
   const q = state.qualification || {};
   const slots = activeSlots(state, config);
   const label = state.scheduledLabel || "";
+  const branch = branchFor(q.industry, config);
   return {
     humano: config.identity.humanName,
     producto: config.identity.productName,
@@ -155,6 +162,15 @@ function varsFor(state, config, extra = {}) {
     slot_a: slotLabel(slots, "A"),
     slot_b: slotLabel(slots, "B"),
     ciudad: q.city || "",
+    rubro: intents.industryLabel(q.industry) || "",
+    personas: q.teamSize ?? "",
+    persona_palabra: q.teamSize === 1 ? "persona" : "personas",
+    // "Con 1 persona" suena a formulario. El que trabaja solo lo dice asi, y es la mitad del
+    // mercado boliviano al que le hablamos.
+    tamano_frase: q.teamSize === 1 ? "Trabajando por tu cuenta" : `Con ${q.teamSize ?? ""} personas`,
+    // Se nombra el modulo del rubro SOLO si ese rubro tiene uno de verdad. Para el resto queda
+    // vacio: nombrar un modulo que no existe es prometer una feature (N2) con otro disfraz.
+    nota_modulo: (branch && branch.moduleNote) || "",
     sillones: q.chairs ?? "",
     sillon_palabra: q.chairs === 1 ? "sillón" : "sillones",
     dia_hora_elegida: label,
@@ -178,20 +194,40 @@ function missingFields(qualification, config) {
 
 function capturedLabels(qualification) {
   const labels = [];
-  if (qualification.ownsClinic === true) labels.push("que la clínica es tuya");
-  if (qualification.ownsClinic === "socio") labels.push("que la manejás con un socio");
+  if (qualification.industry) {
+    const label = intents.industryLabel(qualification.industry);
+    labels.push(label ? `que te dedicás a ${label}` : "a qué te dedicás");
+  }
+  if (qualification.teamSize) {
+    labels.push(qualification.teamSize === 1 ? "que trabajás por tu cuenta" : `que son ${qualification.teamSize} personas`);
+  }
+  if (qualification.city) labels.push(`que estás en ${qualification.city}`);
   if (qualification.chairs) {
     labels.push(`que tenés ${qualification.chairs} ${qualification.chairs === 1 ? "sillón" : "sillones"}`);
   }
-  if (qualification.city) labels.push(`que estás en ${qualification.city}`);
   return labels;
+}
+
+/**
+ * La pregunta EXTRA que este rubro todavia debe, o null.
+ * Se pregunta una sola vez (`branchAsked`): si el prospecto no la contesta, el embudo sigue.
+ */
+function pendingBranch(state, config) {
+  if (state.branchAsked) return null;
+  const branch = branchFor((state.qualification || {}).industry, config);
+  if (!branch) return null;
+  const value = (state.qualification || {})[branch.field.key];
+  return value === undefined || value === null || value === "" ? branch : null;
 }
 
 /** La pregunta pendiente del estado actual: con esto una respuesta off-guion vuelve al embudo. */
 function pendingAsk(state, config) {
   if (state.botStage === "esperando_calificacion") {
     const missing = missingFields(state.qualification, config);
-    if (missing.length === 0) return null;
+    if (missing.length === 0) {
+      const branch = pendingBranch(state, config);
+      return branch ? say(branch.askKey, state, config).text : null;
+    }
     return say("PENDING_CALIFICACION", state, config, {
       dato_faltante: joinEs(missing.map((field) => field.missLabel)),
     }).text;
@@ -224,9 +260,10 @@ function auditEffect(prev, next, reason) {
 function summarize(state, msg, reason) {
   const q = state.qualification || {};
   const datos = [
-    q.ownsClinic === true ? "clínica propia" : q.ownsClinic === "socio" ? "con socio" : q.ownsClinic === false ? "no es dueño" : null,
-    q.chairs ? `${q.chairs} sillones` : null,
+    q.industry ? `rubro: ${intents.industryLabel(q.industry) || "otro"}` : null,
+    q.teamSize ? `${q.teamSize} ${q.teamSize === 1 ? "persona" : "personas"}` : null,
     q.city || null,
+    q.chairs ? `${q.chairs} sillones` : null,
   ].filter(Boolean);
   return [
     `Conversación ${state.conversationKey} (${state.channel}).`,
@@ -308,7 +345,12 @@ function finalize(ctx, next, replies, effects = [], notes = []) {
 // Ramas compuestas
 // ---------------------------------------------------------------------------
 
-function handoffResult(ctx, base, reason, leadingReplies = []) {
+/**
+ * @param {string} [bodyKey]  el mensaje con el que se anuncia el handoff. Por defecto M5 ("eso lo
+ *   ve un humano"); el camino de SOPORTE usa el suyo porque decirle "eso lo ve Sergio en la demo"
+ *   a un cliente que pide ayuda es contestarle con el guion de venta.
+ */
+function handoffResult(ctx, base, reason, leadingReplies = [], bodyKey = "M5") {
   const { config, prev, msg } = ctx;
   const next = { ...base, botStage: "handoff_humano" };
   const summary = summarize(next, msg, reason);
@@ -326,7 +368,7 @@ function handoffResult(ctx, base, reason, leadingReplies = []) {
     { type: "notify_sergio", payload: { kind: "handoff", reason, conversationKey: next.conversationKey, text: summary } },
     auditEffect(prev, next, reason),
   ];
-  return finalize(ctx, next, [...leadingReplies, say("M5", next, config)], effects, [`handoff:${reason}`]);
+  return finalize(ctx, next, [...leadingReplies, say(bodyKey, next, config)], effects, [`handoff:${reason}`]);
 }
 
 /** Respuesta off-guion (precio / SIAT / archivo): cuerpo fijo + la pregunta pendiente del embudo. */
@@ -336,7 +378,7 @@ function composeWithFunnel(ctx, base, bodyKey, reason) {
 
   // El mismo mensaje trajo la pregunta Y los 3 datos: se contesta y se sigue al horario. Volver
   // a pedir lo que el prospecto acaba de contestar es lo que hace parecer que el bot no lee.
-  if (intake && missingFields(base.qualification, config).length === 0 && !intents.isDisqualified(msg.norm, base.qualification)) {
+  if (intake && missingFields(base.qualification, config).length === 0 && !intents.isDisqualified(msg.norm)) {
     const staged = {
       ...base,
       botStage: "esperando_calificacion",
@@ -346,7 +388,7 @@ function composeWithFunnel(ctx, base, bodyKey, reason) {
     const leading = base.botStage === "nuevo"
       ? [say("M0_DISCLOSURE", staged, config), say(bodyKey, staged, config)]
       : [say(bodyKey, staged, config)];
-    return qualifiedResult(ctx, staged, leading, [reason]);
+    return afterQualification(ctx, staged, leading, [reason]);
   }
 
   // En 'nuevo' el disclosure manda (D2, sin excepción): primero M0, despues el cuerpo.
@@ -452,6 +494,14 @@ export function step(state, incoming, options = {}) {
 
   if (intents.isComplaint(msg.norm)) return handoffResult(ctx, withData, "queja_o_desconfianza");
 
+  // SEGUNDO CAMINO — el que escribe ya es cliente / necesita ayuda con el sistema. No es venta:
+  // no se le ofrece la demo comercial ni se le contesta con el guion del embudo. Va a un humano
+  // con el aviso a Sergio, que es quien puede resolverlo o coordinarle la reunion de ayuda.
+  // Va ANTES que precio y SIAT: "ya soy cliente y no me anda la factura" trae las dos palabras.
+  if (intents.isSupportRequest(msg.norm)) {
+    return handoffResult(ctx, withData, "soporte_cliente", [], "M8_SOPORTE");
+  }
+
   if (intents.isPriceQuestion(msg.norm)) return composeWithFunnel(ctx, withData, "M4_BODY", "pregunta_precio");
 
   if (intents.isSiatQuestion(msg.norm)) return composeWithFunnel(ctx, withData, "M_SIAT_BODY", "pregunta_siat");
@@ -499,9 +549,9 @@ function handleNuevo(ctx, base) {
   const optIn = { optInAt: base.optInAt || msg.receivedAt, optInSource: base.optInSource || "inbound_demo" };
 
   // El primer mensaje ya trajo los 3 datos: disclosure + oferta de horarios, sin re-preguntar.
-  if (missingFields(qualification, config).length === 0 && !intents.isDisqualified(msg.norm, qualification)) {
+  if (missingFields(qualification, config).length === 0 && !intents.isDisqualified(msg.norm)) {
     const staged = { ...base, ...optIn, qualification, botStage: "esperando_calificacion" };
-    return qualifiedResult(ctx, staged, [say("M0_DISCLOSURE", staged, config)]);
+    return afterQualification(ctx, staged, [say("M0_DISCLOSURE", staged, config)]);
   }
 
   const next = { ...base, ...optIn, qualification, botStage: "esperando_calificacion" };
@@ -513,8 +563,8 @@ function handleCalificacion(ctx, base) {
   const found = ctx.found || {};
   const qualification = base.qualification;
 
-  // Descarte suave: claramente no es el publico (o dijo que trabaja en la clinica de otro).
-  if (intents.isDisqualified(msg.norm, qualification)) {
+  // Descarte suave: claramente no es un negocio (busca trabajo / nos quiere vender algo).
+  if (intents.isDisqualified(msg.norm)) {
     const next = { ...base, qualification, botStage: "descartado" };
     const effects = [stageEffect(prev, next, "descartado_fuera_de_publico"), auditEffect(prev, next, "descartado")];
     if (next.leadKey) {
@@ -528,7 +578,7 @@ function handleCalificacion(ctx, base) {
 
   const missing = missingFields(qualification, config);
 
-  if (missing.length === 0) return qualifiedResult(ctx, { ...base, qualification });
+  if (missing.length === 0) return afterQualification(ctx, { ...base, qualification });
 
   // Ya se re-pregunto el maximo y siguen faltando datos: "no insistimos una tercera vez" (spec M1a).
   // El tope se evalua ANTES de la rama LLM: reformular la pregunta seria insistir igual.
@@ -546,6 +596,28 @@ function handleCalificacion(ctx, base) {
     dato_faltante: joinEs(missing.map((field) => field.missLabel)),
   });
   return finalize(ctx, next, [reply], [], [`repregunta:${asks}`]);
+}
+
+/**
+ * Los 3 datos universales ya estan. Antes de ofrecer los horarios, el rubro puede pedir UN dato
+ * extra (hoy: los sillones de una clinica dental). Cualquier otro rubro pasa derecho.
+ *
+ * La pregunta de rama NO es un gate: se hace una sola vez y, conteste o no, la proxima vez que
+ * pase por aca se ofrecen los horarios igual. Un dato lindo para el CRM no vale una demo.
+ */
+function afterQualification(ctx, base, leadingReplies = [], leadingNotes = []) {
+  const { config } = ctx;
+  const branch = pendingBranch(base, config);
+  if (!branch) return qualifiedResult(ctx, base, leadingReplies, leadingNotes);
+
+  const next = { ...base, botStage: "esperando_calificacion", branchAsked: true, offScriptCount: 0 };
+  return finalize(
+    ctx,
+    next,
+    [...leadingReplies, say(branch.askKey, next, config)],
+    [],
+    [...leadingNotes, `rama_rubro:${branch.key}`],
+  );
 }
 
 /** Paso por `calificado` -> ofrece los 2 horarios y queda en `esperando_horario` (spec §2.1). */

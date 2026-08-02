@@ -84,11 +84,15 @@ export function buildBookingPayload(options = {}) {
 
 /** Lo que el bot ya sabe del prospecto, en una linea para el calendario. Nunca inventa. */
 export function buildBookingNotes(qualification = {}) {
+  // Los campos de calificacion son rubro/tamano/ciudad, iguales para todos los rubros. `chairs`
+  // sobrevive como dato de RAMA (solo dental): si esta, suma; si no, no se nombra. Antes esto
+  // escribia \"clinica propia\" y \"sillones\" siempre, asi que la reserva de una ferreteria
+  // llegaba al calendario vacia.
   const parts = [];
-  if (qualification.ownsClinic === true) parts.push("clinica propia: si");
-  else if (qualification.ownsClinic === false) parts.push("clinica propia: no");
-  if (qualification.chairs !== undefined && qualification.chairs !== null) parts.push(`sillones: ${qualification.chairs}`);
+  if (qualification.industry) parts.push(`rubro: ${qualification.industry}`);
+  if (qualification.teamSize !== undefined && qualification.teamSize !== null) parts.push(`personas: ${qualification.teamSize}`);
   if (qualification.city) parts.push(`ciudad: ${qualification.city}`);
+  if (qualification.chairs !== undefined && qualification.chairs !== null) parts.push(`sillones: ${qualification.chairs}`);
   parts.push("agendado por el asistente automatico de Onia");
   return parts.join(" | ");
 }

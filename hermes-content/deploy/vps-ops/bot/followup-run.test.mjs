@@ -3,7 +3,7 @@
 //
 // Lo que se cubre y por que:
 //   1. LAS 4 CONDICIONES DEL BARRIDO (spec §4.6): paso 0, sin humano, sin opt-out y en un estado
-//      donde el follow-up tiene sentido — mas la ventana 22 h / 7 dias. Se verifica en los dos
+//      donde el follow-up tiene sentido — mas la ventana 20 h / 7 dias. Se verifica en los dos
 //      lados: el filtro que sale a PostgREST Y el re-chequeo en memoria (si la base devuelve una
 //      fila que no corresponde, igual no se manda).
 //   2. EL CAS IMPIDE EL DOBLE ENVIO: dos barridos seguidos mandan UNO. Si la reserva devuelve 0
@@ -38,7 +38,7 @@ const CONFIG = createBotConfig({
 });
 
 const T0 = "2026-07-27T14:05:00Z"; // lunes 10:05 en La Paz
-const NOW = "2026-07-28T14:05:00Z"; // exactamente 24 h despues: pasadas las 22 h
+const NOW = "2026-07-28T14:05:00Z"; // exactamente 24 h despues: pasadas las 20 h
 
 /** Fila de bot_conversations tal como la devuelve el barrido. */
 function row(extra = {}) {
@@ -118,7 +118,7 @@ const sweep = (rows, options = {}, config = CONFIG) =>
 // 1. Las 4 condiciones del barrido — filtro que sale a PostgREST
 // ---------------------------------------------------------------------------
 
-test("el barrido pide las 4 condiciones + la ventana 22 h / 7 dias, ordenado y con limite", async () => {
+test("el barrido pide las 4 condiciones + la ventana 20 h / 7 dias, ordenado y con limite", async () => {
   const requests = [];
   const store = createStore({
     url: "https://sb.test",
@@ -136,15 +136,15 @@ test("el barrido pide las 4 condiciones + la ventana 22 h / 7 dias, ordenado y c
   assert.match(url, /human_took_over=is\.false/, "2) ningun humano tomo la conversacion");
   assert.match(url, /opt_out_at=is\.null/, "3) no pidio la baja");
   assert.match(url, /bot_stage=in\.\(esperando_calificacion,esperando_horario\)/, "4) estado donde tiene sentido");
-  assert.match(url, /last_inbound_at=lte\.2026-07-27T16:05:00\.000Z/, "22 h, no 24 (ventana de Meta)");
+  assert.match(url, /last_inbound_at=lte\.2026-07-27T18:05:00\.000Z/, "20 h: 4 h de colchon contra la ventana de 24 de Meta");
   assert.match(url, /last_inbound_at=gte\.2026-07-21T14:05:00\.000Z/, "techo de 7 dias");
   assert.match(url, /order=last_inbound_at\.asc/);
   assert.match(url, /limit=20/);
 });
 
-test("la ventana es de 22 h: a las 21,9 h todavia no, a las 22 h si", async () => {
-  const justoAntes = new Date(Date.parse(T0) + 21.9 * 3600000).toISOString();
-  const justo = new Date(Date.parse(T0) + 22 * 3600000).toISOString();
+test("la ventana es de 20 h: a las 19,9 h todavia no, a las 20 h si", async () => {
+  const justoAntes = new Date(Date.parse(T0) + 19.9 * 3600000).toISOString();
+  const justo = new Date(Date.parse(T0) + 20 * 3600000).toISOString();
 
   const antes = await sweep([row()], { nowIso: justoAntes });
   assert.deepEqual(antes.send, []);
@@ -307,7 +307,7 @@ test("el mensaje del dry-run es M3 con los 2 horarios, y no lleva ninguna cifra"
   assert.equal(result.send[0].replySource, "script", "texto fijo: no pasa por el LLM");
   assert.match(text, /jueves 15:00/);
   assert.match(text, /viernes 10:00/);
-  assert.match(text, /Onia Dental/);
+  assert.match(text, /\bOnia\b/, "el follow-up nombra el producto: la plataforma, no el modulo de un rubro");
   assert.ok(!/\d+\s*(bs|bolivianos|\$)/i.test(text), "el follow-up no cotiza");
   assert.ok(!text.includes("{{"), "todas las variables renderizadas");
 });

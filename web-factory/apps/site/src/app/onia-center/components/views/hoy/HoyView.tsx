@@ -4,7 +4,6 @@ import type { LiveAgentStatus, ReviewBody } from "@/app/onia-center/live/live-ru
 import { AgentRosterTile } from "./AgentRosterTile";
 import { DayTimeline } from "./DayTimeline";
 import { KpiStrip, type KpiItem } from "./KpiStrip";
-import { ReviewQueueTile } from "./ReviewQueueTile";
 import { TeamWorkPanel } from "./TeamWorkPanel";
 
 interface HoyViewProps {
@@ -65,7 +64,6 @@ export function HoyView({
 
       <div className="grid items-start gap-[18px] lg:grid-cols-[minmax(0,1.55fr)_minmax(0,1fr)]">
         <div className="grid content-start gap-[18px]">
-          <ReviewQueueTile reviews={reviews} bodies={reviewBodies} canApprove={canApprove} />
           {showSchedule ? <DayTimeline blocks={scheduleBlocks} referenceDate={referenceDate} /> : null}
         </div>
         <div className="grid content-start gap-[18px]">

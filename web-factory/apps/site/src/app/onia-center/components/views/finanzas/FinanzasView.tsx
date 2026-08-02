@@ -6,6 +6,7 @@ import { SurfaceCard } from "../../ui/SurfaceCard";
 import { CostsCard } from "./CostsCard";
 import { EarningsCard } from "./EarningsCard";
 import { FinanceSummaryCard } from "./FinanceSummaryCard";
+import { MovimientosCard } from "./MovimientosCard";
 import { TaxPostureCard } from "./TaxPostureCard";
 
 interface FinanzasViewProps {
@@ -22,9 +23,11 @@ export function FinanzasView({ role, summary, costItems }: FinanzasViewProps) {
       <header className="grid gap-1">
         <h1 className="text-[22px] font-semibold tracking-tight text-foreground">Finanzas</h1>
         <p className="max-w-2xl text-sm leading-relaxed text-muted-foreground">
-          Caja, Fondo Onia, postura fiscal y lo que gana cada persona. Lo deja el agente Finanzas al correr.
+          Caja, Fondo Onia, postura fiscal y lo que gana cada persona. Lo que entra y sale lo
+          registras vos; el resto lo deja el agente Finanzas al correr.
         </p>
       </header>
+      {role === "sergio" ? <MovimientosCard /> : null}
       <div className="grid items-start gap-6 lg:grid-cols-2">
         <FinanceSummaryCard summary={summary} />
         <EarningsCard earnings={summary?.earnings ?? []} />

@@ -33,7 +33,7 @@
 
 > "Dos cosas nos hacen distintos. La primera: **no revendemos herramientas de
 > afuera** — diseñamos y programamos sistemas propios, desde Santa Cruz, hechos
-> para cómo funciona un negocio aquí: SIAT, impuestos nacionales y WhatsApp.
+> para cómo se trabaja acá: en bolivianos, con nuestros impuestos y por WhatsApp.
 > La segunda, y esta es la que más me gusta contar: **nuestra propia empresa se
 > opera con IA**. Todo lo que les voy a ofrecer hoy, lo usamos nosotros primero.
 > Somos nuestro propio cliente más exigente."
@@ -58,14 +58,24 @@
 
 *(Este slide es el gancho emocional. Mirar a la sala, no a la pantalla.)*
 
-## Slide 04 — Qué construimos
+## Slide 04 — Todo lo que hacemos (el catálogo)
 
-> "Contra eso construimos un sistema con cuatro frentes. Uno: **Onia Platform**,
-> el sistema operativo del negocio — agenda, ventas, inventario, facturación y
-> contabilidad boliviana. Dos: **agentes de IA** que trabajan solos las 24 horas,
-> con una regla sagrada: la IA propone, el dueño aprueba. Nada sale sin un OK
-> humano. Tres: **webs y tiendas** que convierten, construidas con nuestro propio
-> motor. Y cuatro: **contenido y video con IA** para redes."
+> "Contra eso tenemos siete formas de sacarles trabajo de encima. No hace falta
+> tomarlas todas: se empieza por donde más duele."
+
+> "**Onia Platform**, el sistema del negocio. **Agentes de IA autónomos** que
+> trabajan 24/7 y esperan su aprobación. **Agentes conversacionales** — un
+> chatbot que atiende su WhatsApp, y ya vamos a ver ese en detalle porque es el
+> que más rápido se nota. **Automatizaciones a medida**, para conectar lo que ya
+> usan y matar el copiar y pegar entre sistemas. **Webs y tiendas online**.
+> **Contenido y video con IA** para redes. Y **cuidado mensual**: alguien que se
+> ocupa de que todo siga andando."
+
+*(No leer los siete de corrido como lista de supermercado. Nombrarlos rápido y
+rematar:)*
+
+> "Si algo de esto lo están haciendo hoy a mano, ahí hay una hora suya que se
+> puede recuperar."
 
 ## Slide 05 — Onia Platform (verde)
 
@@ -121,7 +131,26 @@
 
 > "Resumido en una frase: **la IA hace el trabajo, la decisión sigue siendo suya.**"
 
-## Slide 09 — La prueba: nosotros mismos
+## Slide 09 — Agentes conversacionales (el chatbot)
+
+> "Este es el que más rápido se nota, y por eso lo separo. **Su WhatsApp
+> atendido, aunque estén durmiendo.** Acá el cliente pregunta por WhatsApp y no
+> espera: si no le contestás en diez minutos, ya le escribió al de al lado."
+
+> "Y ojo, no hablo de un menú de opciones — 'marque 1 para horarios' — eso ya
+> existe hace años y todos lo odiamos. Hablo de un agente que **conversa**:
+> responde precios, horarios y disponibilidad a cualquier hora; **agenda y cotiza
+> dentro de la misma conversación**, sin que el cliente espere a mañana; y sabe
+> **cuándo dejar de responder y pasártelo a vos**, con el contexto completo de la
+> charla, para que no empieces de cero."
+
+> "Va en WhatsApp, y también en Instagram, en su web o por Telegram."
+
+*(Si preguntan si pueden verlo funcionando: "el chatbot está construido y se
+configura por cliente, con el tono y los datos de su negocio. En la demo se los
+muestro andando con su caso.")*
+
+## Slide 10 — La prueba: nosotros mismos
 
 > "¿Y cómo sé que esto funciona? Porque **nuestra propia empresa ya corre así**.
 > No se los cuento en teoría: Onia opera todos los días con agentes que buscan
@@ -130,13 +159,13 @@
 > mensajes enviados sin que un humano los apruebe.** Lo que probamos en casa es
 > exactamente lo que instalamos en su negocio."
 
-## Slide 10 — Webs
+## Slide 11 — Webs y tiendas
 
 > "El tercer frente: presencia. Nuestra propia web y las de clientes salen del
 > mismo motor. A la derecha, una tienda real de un cliente: catálogo, carrito y
 > compra asistida por WhatsApp. Esto se construye en **días**, no en meses."
 
-## Slide 11 — Redes
+## Slide 12 — Redes
 
 > "Como les dije, la plataforma está en desarrollo — y no lo escondemos, al
 > contrario: **construimos en público**. Cada avance de Onia Platform queda
@@ -144,7 +173,7 @@
 > evaluar con calma después de esta reunión, ese es el lugar: van a ver el
 > sistema creciendo semana a semana."
 
-## Slide 12 — Quiénes están detrás (Sergio y Arthur)
+## Slide 13 — Quiénes están detrás (Sergio y Arthur)
 
 > "Detrás de todo esto estamos dos personas — más los 11 agentes que no duermen.
 > Yo soy **Sergio Urcullo**: diseño y construyo la plataforma y sus agentes; todo
@@ -160,7 +189,7 @@
 *(Momento de venta personal: pedir que saquen el celular y los sigan AHÍ. Un
 seguidor en la sala es un lead que no se pierde.)*
 
-## Slide 13 — Cómo podemos continuar (verde)
+## Slide 14 — Cómo podemos continuar (verde)
 
 > "¿Y cómo seguimos? Simple, y sin compromiso: **20 minutos con SUS números**.
 > Me traen el dato de citas perdidas, o de horas tipeando facturas, o de
@@ -170,7 +199,7 @@ seguidor en la sala es un lead que no se pierde.)*
 > configuramos y capacitamos a su equipo. Sus datos son suyos, exportables
 > cuando quieran."
 
-## Slide 14 — Cierre
+## Slide 15 — Cierre
 
 > "Onia. Hacemos el trabajo repetitivo de tu negocio. Este es mi WhatsApp —
 > escríbanme ahora si quieren que agendemos la demo esta semana; los primeros
@@ -188,7 +217,8 @@ seguidor en la sala es un lead que no se pierde.)*
 | "¿Cuánto cuesta?" | "Depende del pack y del tamaño. Rango de referencia: los planes arrancan en unos cientos de bolivianos al mes — menos que un empleado de medio tiempo. La cifra exacta se las doy en la demo con su caso; no me gusta tirar números sin ver el negocio." |
 | "¿La factura electrónica ya funciona?" | "El emisor está en homologación ante el SIN. Hasta que salga, el sistema deja la venta lista y se factura por el portal gratuito del SIN. Se los digo de frente porque así trabajamos. Igual, facturar lo hace cualquier sistema: **nuestro diferencial son los agentes que trabajan solos**." |
 | "¿Me puedo meter a ver el sistema hoy?" | "Se los muestro en vivo en la demo, con datos de su rubro. La plataforma está en desarrollo activo y prefiero mostrarles el sistema andando conmigo al lado, no un login vacío." |
-| "¿Y si la IA responde algo indebido a mi cliente?" | "No puede: nada sale sin aprobación humana. La IA redacta el borrador; usted lo ve y aprueba con un click. Es la regla número uno del sistema." |
+| "¿Y si la IA responde algo indebido a mi cliente?" | "En los agentes autónomos no puede: nada sale sin aprobación humana. En el chatbot, que sí conversa solo, se configura qué puede decir y qué no, y todo lo delicado se lo pasa a una persona. Además usted ve todas las conversaciones." |
+| "¿El chatbot es el mismo botón de WhatsApp?" | "No, y conviene distinguirlo: el botón que abre el chat va incluido gratis en cualquier web que hagamos. El chatbot es un agente que responde, agenda y cotiza solo — ese es un servicio aparte porque hay que configurarlo con los datos y el tono de su negocio." |
 | "¿Mis datos quedan presos en su sistema?" | "No. Sus datos son suyos y son exportables cuando quiera." |
 | "¿Sirve para mi rubro (que no es dental ni comercio)?" | "El núcleo es el mismo; hay 11 rubros mapeados. Si el suyo todavía no tiene pack, se arma sobre el núcleo — conversémoslo en la demo, sin compromiso." |
 | "¿Precio fijo para siempre?" | "Precio de fase de lanzamiento respetado 12 meses; después, ajuste indexado al tipo de cambio oficial o al IPC. En un país donde el dólar se movió 63% en un mes, cualquiera que le prometa precio congelado de por vida le está mintiendo." |

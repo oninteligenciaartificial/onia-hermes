@@ -249,3 +249,15 @@ test("SIN handoff: notifyCount en 0 (n8n no tiene que despertar a nadie)", () =>
   assert.equal(evento.notifyCount, 0);
   assert.deepEqual(evento.notifyReasons, []);
 });
+
+test("NOTA DE VOZ: el evento la marca sin filtrar el transcript", () => {
+  const evento = buildBotTurnEvent({
+    parsed: { meta: { conversationId: "9", messageId: "1" } },
+    rawText: "tengo una ferreteria en santa cruz",
+    result: { ok: true, sent: [], voice: { transcribed: true, chars: 34 } },
+    nowIso: "2026-08-01T12:00:00.000Z",
+  });
+  assert.equal(evento.voiceNote, true);
+  assert.equal(evento.bodyPreviewRedacted, "[nota de voz transcrita]");
+  assert.ok(!JSON.stringify(evento).includes("ferreteria"), "el transcript no sale del sistema");
+});
