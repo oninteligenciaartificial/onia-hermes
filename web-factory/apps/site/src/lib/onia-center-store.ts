@@ -357,7 +357,13 @@ async function supabaseRequest<T>(path: string, init: RequestInit = {}): Promise
     return null as T;
   }
 
-  return (await response.json()) as T;
+  // Un POST con prefer return=minimal responde 201 SIN body: parsearlo como
+  // JSON explota ("Unexpected end of JSON input") DESPUES de haber insertado.
+  const text = await response.text();
+  if (!text) {
+    return null as T;
+  }
+  return JSON.parse(text) as T;
 }
 
 function serviceToDb(serviceId: string) {
