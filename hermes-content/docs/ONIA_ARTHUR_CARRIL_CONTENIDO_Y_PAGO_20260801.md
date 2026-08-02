@@ -260,7 +260,7 @@ Sergio (*"soy Sergio de ONIA"*) — hay que hacer la versión de Arthur o mandar
 | # | Frente | Por qué está frenado | Gatillo |
 |---|---|---|---|
 | **G1** | **Meta Ads** | El motor está deployado en DRY (cero gasto). Pauta necesita caja y un embudo que ya convierta | Presupuesto explícito de Sergio. ⚠️ **El token USER vence el 2026-09-05** → migrar a System User antes, o el motor muere solo |
-| **G2** | **Lucía / modelos IA** | Infra lista, **no publica**: falta token IG (S6) | Token IG. Mientras: cola de contenido sin publicar |
+| **G2** | **Lucía / modelos IA** | ~~falta token IG (S6)~~ → **DESBLOQUEADO 2026-08-01**: Meta Standard Access permite publicar hoy en cuentas propias sin App Review | Sacar el token (1-2 h, sin trámite externo). Ver `research/ONIA_STACK_OPEN_SOURCE_PUBLICACION_COSTOS_20260801.md` |
 | **G3** | **Higgsfield / generación paga** | Regla de gasto vigente | OK explícito de Sergio, pieza por pieza |
 | **G4** | **Contenido masivo para empresas** | Es el "uso 3" con techo declarado: *nunca agencia-para-terceros antes de validar la plataforma* | 3-5 clínicas pagando |
 

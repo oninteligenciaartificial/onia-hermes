@@ -154,8 +154,17 @@ guiar el Business Manager, dejar el flujo n8n de publicación listo para el toke
 
 ## Conexión con infra Onia
 - Business Manager + app Marketing API + pixel ya existen (memoria Meta Ads engine).
-- **Verificación de negocio Meta EN PAUSA esperando SEPREC/NIT** → al salir, da confianza a las cuentas.
-- **Token IG = bloqueo S6** para publicar por API.
+- **Verificación de negocio Meta**: ya no está bloqueada por SEPREC — la matrícula salió
+  (`OniaAgency`, 5371375010). ⚠️ Al tramitarla, el nombre legal y la titular (Leslie Mercado
+  Moreno) deben coincidir con los documentos, o Meta rechaza.
+- ~~**Token IG = bloqueo S6** para publicar por API.~~ **CORREGIDO 2026-08-01: para cuentas
+  PROPIAS no hay bloqueo.** El Standard Access de Meta permite publicar hoy en cuentas de
+  Instagram y Páginas que administra el propio negocio (más hasta 25 testers), **sin App Review
+  y sin verificación de negocio**. Ambos trámites son obligatorios solo para publicar en cuentas
+  de CLIENTES externos, que hoy está gateado por la regla de la habitación #1. Fuente:
+  [Access Levels](https://developers.facebook.com/docs/graph-api/overview/access-levels) ·
+  [Content Publishing](https://developers.facebook.com/docs/instagram-platform/content-publishing).
+  Detalle y plan: `research/ONIA_STACK_OPEN_SOURCE_PUBLICACION_COSTOS_20260801.md`.
 - Carril **infra (n8n)** agrega el flujo de content publishing con cola de aprobación.
 - Regla dura: **nada se publica sin OK de Sergio**.
 
@@ -168,4 +177,5 @@ guiar el Business Manager, dejar el flujo n8n de publicación listo para el toke
 ## Pendiente de decidir/hacer
 - Comprar dominio para las modelos (nombre del dominio) — humano/Sergio.
 - Fase 2: comprar SIM bank cuando sumemos modelos (gasto → OK de Sergio).
-- Conseguir token IG (S6) para encender la publicación por API.
+- ~~Conseguir token IG (S6)~~ → **Desbloqueado.** Crear app propia en Meta Developer + pasar la
+  cuenta a Instagram Business/Creator y sacar el token. Sin trámite externo, ~1-2 h de trabajo.
