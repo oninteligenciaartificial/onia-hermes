@@ -118,6 +118,15 @@ export default function Home() {
       <a href="#contenido" className="skip-link">
         Saltar al contenido
       </a>
+      {/*
+        Sin JS no puede quedar una seccion en blanco (regla del mockup y
+        anti-referencia de la casa: nada de contenido escondido detras de una
+        animacion). Los reveal salen del servidor con opacity:0 en linea, asi
+        que el unico que puede ganarles es un !important.
+      */}
+      <noscript>
+        <style>{`.${styles.page} [style*="opacity:0"]{opacity:1!important;transform:none!important}`}</style>
+      </noscript>
       <SiteHeader />
       <main id="contenido" className={styles.page}>
         <Hero />
