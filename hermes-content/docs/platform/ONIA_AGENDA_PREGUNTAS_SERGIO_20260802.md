@@ -27,13 +27,13 @@
 
 ## B. DECIDIDO POR MÍ — ESPERA TU RATIFICACIÓN (punto por punto AHORA)
 
-| # | Punto | Mi decisión propuesta | Tu palabra |
+| # | Punto | Decisión | Ratificado |
 |---|---|---|---|
-| B1 | **Webs de clientes** | 3 niveles: mini-web automática (Pro) · web completa hecha por nosotros (add-on) · NO builder self-service | ☐ |
-| B2 | **Agentes WhatsApp** | PRE-ARMADOS por rubro (ni Dapta-style ni artesanal): cliente conecta su número + aprueba | ☐ |
-| B3 | **Pricing/promos** | mensual (no semanal) · fundadores 10 con precio congelado · referidos 1 mes · nunca descuento permanente | ☐ |
-| B4 | **Orden de rubros siguientes** | estética + veterinaria primero (90% del set dental, días) · importadora después (2 capacidades por portar) | ☐ |
-| B5 | **Landing: "Comercio"** | cambiar "pronto" → "disponible" (ya es verdad: registro + venta + contabilidad viven) | ☐ |
+| B1 | **Webs de clientes** | 3 niveles: mini-web automática (Pro) · web completa nuestra (add-on) · NO builder | ✅ 2026-08-02 |
+| B2 | **Agentes WhatsApp** | PRE-ARMADOS por rubro: cliente conecta su número + aprueba | ✅ 2026-08-02 |
+| B3 | **Pricing/promos** | ✅ mensual + fundadores + referidos **Y ADEMÁS plan semanal** (negocios de caja diaria) **+ revisar montos contra el cálculo de valor** — Sergio juntó las opciones | ✅ con tarea |
+| B4 | **Orden de rubros** | **IMPORTADORA primero** (cotizaciones B2B + knowledge; Bolivian Electric = caso real) — estética/vet después | ✅ 2026-08-02 |
+| B5 | **Landing: "Comercio" pronto→disponible** | NO ratificado aún (la opción elegida no lo incluía) — sigue "pronto" hasta su palabra | ☐ |
 
 ## C. EN DESARROLLO (mío, con fecha de hoy)
 

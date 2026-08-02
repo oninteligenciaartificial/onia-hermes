@@ -104,6 +104,40 @@ Estados del plan: `trialing` → `active` → `past_due` → `canceled`.
 
 ---
 
+## 3-bis. Plan SEMANAL + revisión de montos contra el valor (ratificado 2026-08-02)
+
+Sergio juntó las dos opciones: mensual + promos **y además** semanal, con revisión de
+montos contra el cálculo de valor.
+
+**Revisión contra el valor** (`ONIA_VALOR_Y_ESCALERA_PLANES_20260731.md`):
+
+| Plan | Precio lanz. | Valor conservador | Valor medio | Captura del valor |
+|---|---|---|---|---|
+| Básico 320 | vs 911 | 35% | — | ✅ sano |
+| Pro 750 | vs 911 conservador | 82% ⚠️ | vs 3.527 → **21%** | ✅ sano en el caso medio |
+| Full 1.500 | — | — | vs 13.599 optimista → 11% | ✅ holgado |
+
+**Veredicto: los montos NO cambian.** Pro captura solo 21% del valor del caso medio —
+regla sana de SaaS (cobrar 20-30% del valor entregado). El único caso apretado es la
+clínica chica del escenario conservador, y para ella existe Básico. El problema que el
+cálculo señala sigue siendo targeting (a quién se le vende Pro), no precio. Falta el
+ticket promedio real de SCZ (D1) para afinar el argumento, no el monto.
+
+**Plan semanal** — puerta de entrada para negocios de caja diaria (mercados,
+ferreterías chicas): la plata entra por día, comprometer un mes asusta.
+
+| Plan | Mensual | **Semanal** | Prima |
+|---|---|---|---|
+| Básico | Bs 320 | **Bs 89/sem** | ~20% — la flexibilidad se paga |
+| Pro | Bs 750 | **Bs 199/sem** | ~15% |
+| Full | Bs 1.500 | — solo mensual/anual | el plan de compromiso no se fracciona |
+
+Reglas: semanal se cobra por adelantado · sin trial encima (el trial ES la puerta
+gratis; semanal es la puerta barata — no se apilan) · al 2º mes seguido en semanal,
+el sistema le propone pasar a mensual mostrándole cuánto ahorraría. Pendiente de
+código: ciclo `weekly` en la suscripción (extensión de `plan-state`/activación) —
+anotado en C de la agenda.
+
 ## 4. La prueba gratis
 
 **14 días, sin tarjeta, plan Profesional completo.**
