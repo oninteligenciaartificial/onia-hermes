@@ -293,7 +293,10 @@ if (!DRY) {
 
 const vf = `subtitles=${assName}:fontsdir=${FONTS_SUBDIR}`;
 const ffArgs = ["-y", "-hide_banner", "-i", VIDEO, "-vf", vf,
-  "-c:v", "libx264", "-preset", "veryfast", "-crf", "20", "-pix_fmt", "yuv420p",
+  // El karaoke es el ULTIMO paso que re-encodea la imagen, asi que su CRF fija la calidad
+  // final de la pieza. Con 20 fijo un crudo 4K terminaba peor que uno 1080p (medido
+  // 2026-08-02: 16.9 Mbps despues del corte → 5.4 Mbps despues de quemar los subtitulos).
+  "-c:v", "libx264", "-preset", flag("preset", "veryfast"), "-crf", flag("crf", "20"), "-pix_fmt", "yuv420p",
   ...audioArgs, "-movflags", "+faststart", OUT];
 // Versión copy-paste (path del .ass escapado como lo quiere el filtro: / y \: )
 const assFilterPath = ASS_OUT.replace(/\\/g, "/").replace(/:/g, "\\:");

@@ -1,9 +1,11 @@
 {
-  "dia": 1,
+  "dia": 3,
   "diasTotal": 155,
   "mrrBs": 0,
   "mrrUsd": 0,
   "clientes": 0,
+  "propuestasEnviadas": 1,
+  "reuniones": 1,
   "runwaySemanas": 11,
   "eyebrow": "155 DÍAS EN PÚBLICO",
   "accent": "#00D26A"

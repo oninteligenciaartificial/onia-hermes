@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <style>
+      /* Tarjeta para montar una CAPTURA REAL (pantallazo, foto de pantalla) sobre el plano.
+         Existe porque una captura pegada al aire se lee como error de edicion: necesita un
+         borde que la separe del video y una etiqueta que diga QUE es. El fondo va
+         transparente — lo pega overlay-visuals sobre el plano. */
+      *, *::before, *::after { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; background: transparent; }
+      #stage {
+        width: 1000px; padding: 26px;
+        font-family: "Segoe UI", system-ui, sans-serif;
+      }
+      .marco {
+        position: relative;
+        border-radius: 22px;
+        overflow: hidden;
+        /* doble borde: el verde de marca por fuera, un hairline claro por dentro para
+           despegar la captura de su propio contenido cuando es casi blanca */
+        border: 3px solid var(--accent, #00D26A);
+        box-shadow: 0 22px 60px rgba(0, 0, 0, .55), 0 0 0 1px rgba(255, 255, 255, .10) inset;
+        background: #0A0F0D;
+      }
+      .marco img { display: block; width: 100%; height: auto; }
+      .etiqueta {
+        position: absolute; left: 0; top: 0;
+        display: inline-block;
+        padding: 9px 18px 10px;
+        background: var(--accent, #00D26A);
+        color: #0A0F0D;
+        font-weight: 700; font-size: 21px;
+        letter-spacing: 1.4px; text-transform: uppercase;
+        border-radius: 0 0 14px 0;
+      }
+      .etiqueta:empty { display: none; }
+    </style>
+  </head>
+  <body>
+    <div id="stage" style="--accent: {{ACCENT}}">
+      <div class="marco">
+        <img src="{{IMAGE}}" alt="" />
+        <span class="etiqueta">{{LABEL}}</span>
+      </div>
+    </div>
+  </body>
+</html>
