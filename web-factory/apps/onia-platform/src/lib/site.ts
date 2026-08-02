@@ -30,6 +30,15 @@ export function waLink(text: string): string {
 /** CTA general de toda la pagina. */
 export const WA_URL = waLink("Hola, quiero conocer Onia");
 
+/**
+ * CTA de la landing. El texto lo fijo el mockup aprobado: entra ya diciendo
+ * de donde viene y que quiere resolver, para que la respuesta arranque en el
+ * problema y no en "hola, en que te ayudo".
+ */
+export const WA_URL_LANDING = waLink(
+  "Hola, vengo de la web de Onia. Quiero saber si me sirve para mi negocio.",
+);
+
 export const WA_TEXT_COMERCIO =
   "Hola, quiero que me avisen cuando Onia para comercio esté listo";
 export const WA_TEXT_SERVICIOS =

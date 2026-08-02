@@ -1,44 +1,116 @@
+import type { Metadata } from "next";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
-import { RubroProvider } from "@/components/rubro-context";
-import { Hero } from "@/components/sections/hero";
-import { Proof } from "@/components/sections/proof";
-import { HowItWorks } from "@/components/sections/how-it-works";
-import { Rubros } from "@/components/sections/rubros";
-import { Modules } from "@/components/sections/modules";
-import { Bolivia } from "@/components/sections/bolivia";
-import { AgentStory } from "@/components/sections/agent-story";
-import { Pricing } from "@/components/sections/pricing";
-import { Faq } from "@/components/sections/faq";
-import { Doors } from "@/components/sections/doors";
-import {
-  RailDemo,
-  RailFiscal,
-  RailPrecio,
-} from "@/components/sections/cta-rails";
-import { MobileCtaBar } from "@/components/ui/mobile-cta-bar";
+import { Hero } from "@/components/landing/hero";
+import { HowItWorks } from "@/components/landing/how-it-works";
+import { Features } from "@/components/landing/features";
+import { Pricing } from "@/components/landing/pricing";
+import { Closing, Honesty } from "@/components/landing/closing";
+import { MobileBar } from "@/components/landing/mobile-bar";
+import styles from "@/components/landing/landing.module.css";
+
+const SITE_URL = "https://onia.com.bo/";
+const TITLE = "Onia Platform · Sistema de gestión con IA para negocios en Bolivia";
+const DESCRIPTION =
+  "Onia Platform es el sistema de gestión con inteligencia artificial para negocios en Bolivia: agenda, clientes, cobros y agentes que trabajan 24/7 con tu aprobación. Desde Bs 320 al mes. Probalo 14 días gratis, sin tarjeta.";
 
 /**
- * Orden del embudo, pensado para CERRAR y no solo para explicar:
+ * La imagen social es una captura REAL del sistema (el selector de rubro de
+ * app.onia.com.bo), no un mockup. Regla de la casa: nada de pantallas
+ * dibujadas haciendo de prueba.
+ */
+const OG_IMAGE = "/og/onia-rubros.jpg";
+
+export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
+  title: TITLE,
+  description: DESCRIPTION,
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "website",
+    locale: "es_BO",
+    siteName: "Onia Platform",
+    title: "Sistema de gestión con IA para negocios en Bolivia",
+    description:
+      "Agenda, clientes, cobros y agentes con IA en una sola cuenta. Desde Bs 320/mes. 14 días gratis.",
+    url: "/",
+    images: [
+      {
+        url: OG_IMAGE,
+        width: 1200,
+        height: 630,
+        alt: "Pantalla real de Onia: elegís el rubro de tu negocio al crear la cuenta.",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Sistema de gestión con IA para negocios en Bolivia",
+    description:
+      "Agenda, clientes, cobros y agentes con IA en una sola cuenta. Desde Bs 320/mes. 14 días gratis.",
+    images: [OG_IMAGE],
+  },
+};
+
+/**
+ * Datos estructurados: Organization + SoftwareApplication con los tres precios
+ * en BOB. Si los precios cambian, cambian en <Pricing> y ACA — es el mismo
+ * numero dicho dos veces, una para la persona y otra para el buscador.
+ */
+const JSON_LD = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": `${SITE_URL}#org`,
+      name: "Onia",
+      legalName: "OniaAgency",
+      url: SITE_URL,
+      areaServed: { "@type": "Country", name: "Bolivia" },
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: "Santa Cruz de la Sierra",
+        addressCountry: "BO",
+      },
+    },
+    {
+      "@type": "SoftwareApplication",
+      name: "Onia Platform",
+      applicationCategory: "BusinessApplication",
+      operatingSystem: "Web",
+      url: SITE_URL,
+      publisher: { "@id": `${SITE_URL}#org` },
+      description:
+        "Sistema de gestión con IA para negocios en Bolivia: agenda, clientes, cobros, facturación y agentes con aprobación humana.",
+      offers: [
+        { name: "Básico", price: "320" },
+        { name: "Pro", price: "750" },
+        { name: "Full", price: "1500" },
+      ].map((plan) => ({
+        "@type": "Offer",
+        name: plan.name,
+        price: plan.price,
+        priceCurrency: "BOB",
+        category: "Suscripción mensual",
+        availability: "https://schema.org/InStock",
+      })),
+    },
+  ],
+};
+
+/**
+ * Landing Onia Platform — porte fiel del mockup aprobado por Sergio
+ * (2026-08-01). Seis secciones, en este orden y no en otro:
  *
- *   promesa (que gana el dueño)
- *   -> PRUEBA (el mapa de la categoria + lo que todavia no hace)  ← temprano
- *   -> salida: ver el precio
- *   -> como funciona -> tu rubro -> que enciende
- *   -> por que Bolivia -> salida: la duda del NIT
- *   -> el agente trabajando -> SALIDA FUERTE: agendar la demo
- *   -> PRECIO + garantias (el riesgo pegado al numero)
- *   -> objeciones -> las dos puertas de compra.
+ *   hero (promesa + una pantalla)
+ *   -> como funciona (3 pasos, con la captura real del selector de rubro)
+ *   -> modulos (carrusel de funciones, sobre verde hondo)
+ *   -> precios (en bolivianos, con la letra chica plegada)
+ *   -> honestidad (cero clientes y factura en tramite, sobre tinta)
+ *   -> cierre.
  *
- * Dos decisiones que valen la pena escribir:
- *  - La prueba va SEGUNDA. Con cero clientes, lo primero que hay que resolver
- *    no es "que hace" sino "por que te creo". Si eso no se resuelve arriba,
- *    todo lo de abajo se lee como folleto.
- *  - Despues de cada bloque de valor hay una salida a la accion, no una sola
- *    al final. Alternan tono (quiet/loud) para no leerse como spam.
- *
- * RubroProvider envuelve todo lo que comparte el rubro elegido: se elige una
- * vez y manda en precios, objeciones, puertas y en cada mensaje de WhatsApp.
+ * Lo denso que salio del home no se borro: la comparacion con la competencia
+ * vive en /comparativa y la letra chica quedo plegada dentro de precios.
  */
 export default function Home() {
   return (
@@ -47,25 +119,20 @@ export default function Home() {
         Saltar al contenido
       </a>
       <SiteHeader />
-      <main id="contenido">
-        <RubroProvider>
-          <Hero />
-          <Proof />
-          <RailPrecio />
-          <HowItWorks />
-          <Rubros />
-          <Modules />
-          <Bolivia />
-          <RailFiscal />
-          <AgentStory />
-          <RailDemo />
-          <Pricing />
-          <Faq />
-          <Doors />
-          <MobileCtaBar />
-        </RubroProvider>
+      <main id="contenido" className={styles.page}>
+        <Hero />
+        <HowItWorks />
+        <Features />
+        <Pricing />
+        <Honesty />
+        <Closing />
       </main>
       <SiteFooter />
+      <MobileBar />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD) }}
+      />
     </>
   );
 }

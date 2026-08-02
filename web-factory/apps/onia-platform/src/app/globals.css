@@ -37,6 +37,15 @@
   --line: #D4D9D6;
   --line-soft: #E2E5E3;
 
+  /*
+   * Lamina de marca del CTA: verde senal sobre tinta. Es el par que usa el
+   * boton principal en toda la superficie publica (header, landing, barra
+   * movil) — 9,2:1 de contraste. No cambia con el tema: el CTA se ve igual
+   * de encendido en claro y en oscuro.
+   */
+  --senal: #00d26a;
+  --tinta: #12100e;
+
   /* encendido (verde ONIA) — mismos nombres, valores nuevos */
   --accent: var(--verde-500);
   --accent-strong: var(--verde-700);

@@ -1,134 +1,57 @@
+/*
+ * Pie — porte del mockup aprobado (2026-08-01). Una fila de destinos y la
+ * firma; debajo, la identidad legal en chico (cumplimiento, no venta).
+ */
+
 .footer {
   border-top: 1px solid var(--line-soft);
-  background: var(--bg-deep);
-  padding-block: clamp(3rem, 2rem + 3vw, 5rem) 2rem;
-}
-
-.toggleRow {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1.2rem 2rem;
-  padding-bottom: 2.4rem;
-  border-bottom: 1px solid var(--line-soft);
-}
-
-.toggleItem {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.55rem;
-  font-family: var(--font-mono), monospace;
-  font-size: max(0.72rem, var(--fs-label-min));
-  letter-spacing: 0.08em;
+  padding-block: 2.5rem 3rem;
   color: var(--ink-faint);
 }
 
-.grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 2.4rem;
-  padding-block: 2.6rem;
-}
-
-@media (min-width: 760px) {
-  .grid {
-    grid-template-columns: 1.4fr 1fr 1.2fr 1.1fr;
-  }
+.inner {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 2rem;
+  align-items: center;
 }
 
 .brand {
   display: inline-flex;
   align-items: center;
+  min-height: 44px;
+  margin-right: 1.5rem;
 }
 
-.blurb {
-  margin-top: 0.8rem;
-  color: var(--ink-soft);
-  max-width: 34ch;
-  font-size: 0.95rem;
-}
-
-.col {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0.7rem;
-  font-size: 0.93rem;
-}
-
-.col a {
+/* 44px de area tactil tambien en el pie */
+.inner a {
   color: var(--ink-soft);
   text-decoration: none;
+  font-size: max(0.9rem, var(--fs-micro-min));
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
 }
 
-/* En el telefono el pie es una lista de links que se tocan: 44px de alto
-   cada uno. La separacion baja para que la columna no crezca de mas — el
-   blanco tactil se lo come el propio link, no el hueco entre links. */
-@media (max-width: 599px) {
-  .col {
-    gap: 0.1rem;
-  }
-
-  .col a,
-  .legalNav a {
-    display: inline-flex;
-    align-items: center;
-    min-height: 44px;
-  }
-}
-
-.col a:hover {
+.inner a:hover {
   color: var(--ink);
   text-decoration: underline;
   text-underline-offset: 3px;
 }
 
-.colTitle {
-  font-family: var(--font-mono), monospace;
-  font-size: max(0.7rem, var(--fs-label-min));
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--ink-faint);
-  margin-bottom: 0.3rem;
+.firma {
+  font-size: max(0.75rem, var(--fs-label-min));
+  font-variant-numeric: tabular-nums;
+  margin-left: auto;
 }
 
-.soon {
-  color: var(--ink-faint);
-}
-
-.legal {
-  border-top: 1px solid var(--line-soft);
-  padding-top: 1.6rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  font-size: max(0.82rem, var(--fs-micro-min));
-  color: var(--ink-faint);
-}
-
-.legalNav {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem 1.1rem;
-}
-
-.legalNav a {
-  color: var(--ink-faint);
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-
-.legalNav a:hover {
-  color: var(--ink);
-}
-
-/* Identidad legal (razon social, NIT, contacto). Mas chica y atenuada que el
-   resto del pie: es informacion de cumplimiento, no de venta. */
 .legalId {
   font-style: normal;
-  font-size: max(0.75rem, var(--fs-micro-min));
+  font-size: max(0.75rem, var(--fs-label-min));
   line-height: 1.7;
   color: var(--ink-faint);
   text-wrap: pretty;
+  margin-top: 0.6rem;
 }
 
 .legalId a {
@@ -140,16 +63,4 @@
 .legalId a:hover,
 .legalId a:focus-visible {
   color: var(--ink);
-}
-
-@media (min-width: 900px) {
-  .legal {
-    flex-direction: row;
-    justify-content: space-between;
-    gap: 2rem;
-  }
-
-  .legal p {
-    max-width: 44ch;
-  }
 }
