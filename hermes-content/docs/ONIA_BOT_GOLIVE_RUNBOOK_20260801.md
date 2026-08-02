@@ -50,33 +50,22 @@ la cuenta lo cubre. Con pegar ese bloque y redeployar, el bot atiende la web.
 (El mismo snippet ya quedó commiteado en el repo Web-Onia por si el dominio
 vuelve a Vercel algún día.)
 
-## 3. Número interino del bot — chip nuevo (DECIDIDO 2026-08-01)
+## 3. Decisión sobre WhatsApp mientras dura la disputa (2026-08-01)
 
-> Sergio decidió no esperar la disputa: el bot sale a WhatsApp **hoy** con un
-> número nuevo por Cloud API oficial, y migra al 78491375 cuando Meta lo libere
-> (§4). La disputa sigue corriendo en paralelo — no se cancela nada.
-
-**Lo que compra Sergio (única tarea física):**
-- Chip prepago Entel o Tigo (Bs 10–20). Solo necesita **recibir SMS/llamadas**.
-- Registrarlo a su nombre o el del negocio (el SIM es la llave del número).
-- **REGLA DURA: NO activar la app de WhatsApp con ese chip, nunca.** Un número
-  registrado en la app no puede entrar a Cloud API sin liberarlo antes (el mismo
-  pozo del 78491375). El chip solo recibe el SMS de verificación.
-- Recargarle algo cada 2–3 meses para que la línea no se recicle.
-
-**Lo que hago yo cuando el chip esté en mano (~10 min + SMS):**
-1. WhatsApp Manager → WABA verificada (1730104971691715) → Agregar número →
-   verificación por SMS (Sergio me pasa el código) → display name **"Onia"**.
-2. Token permanente de system user en Business Settings + `phone_number_id`.
-3. Chatwoot → Inbox WhatsApp (Cloud API). El webhook de la cuenta ya lo cubre →
-   el bot atiende al instante.
-4. Zona horaria de la WABA → `America/La_Paz`.
-5. Leads nuevos al bot: setear `NEXT_PUBLIC_WA_PHONE=<numero-bot>` en el build
-   de la landing y redeployar (`swap-and-verify.sh`). Es build-time: sin rebuild
-   no cambia. El 78491375 sigue siendo el número del negocio (SEPREC, legal,
-   la app de Sergio); solo el CTA wa.me de la web apunta al bot.
-6. Plantillas (§4 paso 4) apenas esté el método de pago.
-7. Prueba real del embudo desde otro número → M0 → calificar → reserva Cal.com.
+> Se evaluaron con Sergio las 3 salidas rápidas y **descartó las tres** con
+> criterio firme — dejar escrito para NO reabrirlas:
+>
+> 1. **Chip nuevo / número interino** — descartado: "solo quiero tener un
+>    número, no dos". La identidad del negocio es el 78491375.
+> 2. **Evolution API (puente no oficial) sobre el 78491375** — descartado:
+>    no asume el riesgo de ban sobre el número de SEPREC/impuestos.
+> 3. **Liberar el número borrando la app** — bloqueado igual por el portfolio
+>    fantasma; ni siquiera es opción hasta que Meta responda.
+>
+> **Estado vigente:** el bot atiende SOLO la web (producción, onia.com.bo);
+> WhatsApp al 78491375 lo atiende Sergio a mano; el CTA wa.me de la web sigue
+> apuntando a su número. Todo el go-live de WhatsApp queda gateado por la
+> disputa (§4). No montar nada interino sin decisión explícita nueva.
 
 ## 4. El día que Meta libere el número (+591 78491375)
 
@@ -104,8 +93,8 @@ Prerrequisito: correo de resolución en `business@onia.com.bo` del caso
 6. **Probar el embudo real**: mandar "hola quiero info" desde otro número →
    M0 → calificar → horario → verificar reserva en Cal.com.
 
-Al liberarse: decidir si el interino queda como número de soporte/backup o se
-recicla. La migración del CTA de la web es el mismo env `NEXT_PUBLIC_WA_PHONE`.
+Nota: si algún día el CTA de la web debe apuntar a otro número, es el env
+`NEXT_PUBLIC_WA_PHONE` en el build de la landing (build-time: exige rebuild).
 
 ## 5. Pendientes que NO dependen de Meta
 
