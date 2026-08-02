@@ -50,24 +50,34 @@ la cuenta lo cubre. Con pegar ese bloque y redeployar, el bot atiende la web.
 (El mismo snippet ya quedó commiteado en el repo Web-Onia por si el dominio
 vuelve a Vercel algún día.)
 
-## 3. Decisión sobre WhatsApp mientras dura la disputa (2026-08-01)
+## 3. DECISIÓN FINAL (2026-08-01, tarde): cambio TOTAL de número
 
-> Se evaluaron con Sergio las 3 salidas rápidas y **descartó las tres** con
-> criterio firme — dejar escrito para NO reabrirlas:
->
-> 1. **Chip nuevo / número interino** — descartado: "solo quiero tener un
->    número, no dos". La identidad del negocio es el 78491375.
-> 2. **Evolution API (puente no oficial) sobre el 78491375** — descartado:
->    no asume el riesgo de ban sobre el número de SEPREC/impuestos.
-> 3. **Liberar el número borrando la app** — bloqueado igual por el portfolio
->    fantasma; ni siquiera es opción hasta que Meta responda.
->
-> **Estado vigente:** el bot atiende SOLO la web (producción, onia.com.bo);
-> WhatsApp al 78491375 lo atiende Sergio a mano; el CTA wa.me de la web sigue
-> apuntando a su número. Todo el go-live de WhatsApp queda gateado por la
-> disputa (§4). No montar nada interino sin decisión explícita nueva.
+> Tras descartar el número interino ("solo quiero un número"), Evolution API
+> (riesgo de ban) y la espera pasiva (muy lenta), Sergio decidió el corte
+> limpio: **un número NUEVO pasa a ser EL número del negocio.** Un solo
+> número, oficial, sin esperar a Meta.
 
-## 4. El día que Meta libere el número (+591 78491375)
+- Sergio compra el chip y pasa el número **el 2026-08-02**.
+- El número entra **directo a Cloud API** en la WABA verificada (NUNCA
+  registrarlo en la app de WhatsApp — el chip solo recibe el SMS del alta).
+- El bot lo atiende 24/7; Sergio responde los handoffs **desde el celular con
+  la app de Chatwoot** (self-hosted, ya corre en el VPS). No hay app de
+  WhatsApp para ese número: Chatwoot ES la interfaz. Eso es exactamente lo
+  que se le venderá al cliente.
+- El CTA wa.me de la web pasa al número nuevo (`NEXT_PUBLIC_WA_PHONE` +
+  rebuild de la landing).
+- Legal: actualizar el teléfono en SIAT (padrón) y SEPREC + demás puntos —
+  checklist con fuentes en `ONIA_CAMBIO_NUMERO_PLAN_20260801.md` (research
+  en curso al escribir esto).
+- El 78491375 queda como línea personal de Sergio (app intacta) y la disputa
+  con Meta sigue en paralelo como vía de recuperación, ya sin urgencia.
+
+## 4. Si Meta libera el 78491375 (ya NO es el gate — fallback opcional)
+
+> Con la decisión de §3, el negocio migra a un número nuevo y esta sección
+> deja de ser la ruta crítica. Si la disputa se gana, el 78491375 vuelve
+> entero a manos de Sergio como línea personal; usarlo comercialmente de
+> nuevo sería una decisión nueva. Los pasos quedan por si acaso:
 
 Prerrequisito: correo de resolución en `business@onia.com.bo` del caso
 1047562948135567. **No intentar antes** — dispara el mismo error y quema SMS.
