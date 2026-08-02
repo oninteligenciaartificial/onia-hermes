@@ -1,0 +1,147 @@
+# Onia Voz — Contestar y hacer llamadas de WhatsApp con IA (arquitectura + producto)
+
+> Research 2026-08-02 (workflow 4 agentes, docs oficiales de Meta + benchmarks
+> con fuentes). Objetivo: el bot CONTESTA llamadas de WhatsApp, LLAMA con
+> permiso del usuario, y esto se vende como add-on del catálogo de chatbots.
+
+## 0. Los dos hallazgos que cambian el juego
+
+1. **Recibir llamadas de WhatsApp es GRATIS e ilimitado** (doc oficial: "All
+   user-initiated calls are free"), y **Bolivia está soportada** en ambas
+   direcciones (no aparece en ninguna lista de exclusión; solo US/CA/EG/VN/NG
+   no pueden originar). En un país donde Twilio ni vende números, **WhatsApp
+   ES la telefonía** — el problema #1 de todo competidor gringo ("telefonía
+   local") a nosotros no nos existe.
+2. **Pipecat (open source, BSD) tiene soporte OFICIAL de WhatsApp Calling** —
+   transporte dedicado + ejemplo listo para clonar (`pipecat-examples/
+   whatsapp`). No hay que inventar el puente WebRTC: está mantenido por Daily.
+
+## 1. Cómo funciona técnicamente
+
+### Contestar (user-initiated, GRATIS)
+
+```
+Cliente aprieta 📞 en el chat de WhatsApp del negocio
+  → webhook "calls" (event=connect + SDP offer)
+  → nuestro backend responde pre_accept → accept (SDP answer, <30 s)
+  → sesión WebRTC directa (OPUS 48 kHz, cifrada SRTP)
+  → Pipecat: VAD Silero → STT streaming → LLM → TTS streaming
+  → con barge-in (el cliente interrumpe y el bot se calla)
+```
+
+- Habilitación: `POST /<PHONE_NUMBER_ID>/settings` con `calling.status=
+  ENABLED` + `callback_permission_status=ENABLED`. **Requisito duro: tier de
+  mensajería ≥2.000/día** — nuestro portfolio verificado da 2.000 de piso,
+  pero VERIFICAR el tier real del número el día del alta (el número de test
+  está exento → F0 arranca ya).
+- El webhook `calls` llega a la misma app de Meta que `messages` → hace falta
+  un **router de webhooks** (ya tenemos el webhook-server del bot en el VPS:
+  messages → Chatwoot, calls → backend de voz). Alternativa: vía SIP
+  (wa.meta.vc:5061 TLS) si algún día queremos Asterisk/FreeSWITCH.
+- Si el bot no contesta: WhatsApp ofrece **voicemail** nativo (el cliente
+  deja audio en el chat → nuestro bot ya transcribe notas de voz → nunca se
+  pierde una llamada, ni caído).
+
+### Llamar (business-initiated, se paga por minuto)
+
+```
+1. Pedir permiso: mensaje interactivo call_permission_request
+   (gratis dentro de la ventana de 24 h; plantilla si está fría)
+2. Usuario acepta → permiso 7 días (o permanente)
+   BONUS: si el cliente nos llamó primero, permiso automático 7 días
+3. POST /calls con action=connect → suena su WhatsApp → mismo pipeline
+```
+
+- Límites de pedido de permiso: 1/24 h y 2/7 días por usuario (se resetea con
+  cada llamada conectada). Tope: 100 llamadas conectadas/24 h.
+- Precio: por minuto en pulsos de 6 s, tarifa por país del consumidor; el
+  monto exacto para Bolivia está en el rate card logueado de Meta —
+  **confirmar antes de cotizar a clientes**. Referencia general del research
+  previo: ~USD 0,01/min. Requiere método de pago en la WABA.
+- 4 llamadas salientes no contestadas seguidas = permiso revocado automático:
+  las salientes se usan con criterio (confirmar cita, no spam).
+
+## 2. El stack (todo en el VPS, $0 de software)
+
+| Pieza | Elección | Estado |
+|---|---|---|
+| Orquestador | **Pipecat** (BSD, soporte WhatsApp oficial) | a instalar (Python) |
+| VAD / turnos | Silero VAD + smart-turn (incluidos en Pipecat, CPU) | incluido |
+| STT | **Speaches / faster-whisper-small** (ya corre en :3108; regla: JAMÁS distil) | ✔ vivo |
+| LLM | LiteLLM → gpt-4o-mini streaming (el mismo del bot) | ✔ vivo |
+| TTS demo | **Piper es_MX-claude-high** (local, gratis, RTF ~0.2 CPU) | a instalar |
+| TTS producto | Azure **es-BO-SofiaNeural** (~$0.014/min) o gpt-4o-mini-tts (~$0.015/min) — GASTO: pedir OK primero | gateado |
+| Cerebro | el MISMO motor del bot (calificación + Cal.com + handoff), variante voz | ✔ existe |
+| Registro | transcripción de la llamada → conversación en Chatwoot + CRM | diseño |
+
+**Honestidad sobre el VPS (4 cores, 16 GB, sin GPU):** la estimación es 2–3
+llamadas simultáneas con STT+TTS local; 1–2 cómodas con todo el stack actual
+corriendo. Latencia objetivo <800 ms voz-a-voz; el STT local en CPU puede
+empujarla a ~1–1,5 s ("se siente bot pero funciona"). **El benchmark real en
+el VPS es obligatorio antes de prometer nada** — los números vienen de CPUs
+distintos. Límite duro de concurrencia en el orquestador + cola.
+
+Descartados con motivo: LiveKit (conector WhatsApp en beta, exige servidor
+propio pesado), Vocode (muerto desde nov-2024), Bolna (sin WhatsApp), XTTS
+(RTF>1 en CPU + licencia no comercial), Kokoro (español de segunda, bug
+conocido).
+
+## 3. Fases
+
+- **F0 — Prueba con el número de test (exento de tier, sin gasto):** clonar
+  `pipecat-examples/whatsapp`, webhook con dominio propio, pipeline Speaches
+  + Piper + gpt-4o-mini. Entregable: llamada de WhatsApp real contestada por
+  la IA + medición de latencia con 1/2/3 llamadas. ~1 día.
+- **F1 — Número real (cuando esté el alta del chip):** router de webhooks
+  (messages→Chatwoot, calls→voz), cerebro del bot en modo voz (guion corto:
+  saludo → qué necesita → agendar demo con Cal.com → o derivar a Sergio),
+  transcripción a Chatwoot. Gate: tier ≥2.000 verificado.
+- **F2 — Salientes:** plantilla `call_permission_request` aprobada +
+  confirmación de citas por llamada (el caso dental). Gate: método de pago +
+  rate card Bolivia confirmado.
+- **F3 — Producto:** empaque comercial, demo grabada, entrada en el catálogo
+  de chatbots como add-on.
+
+## 4. Producto — "Onia Voz" (add-on sobre el chatbot)
+
+**Nuestra ventaja de costo es brutal:** Vapi/Retell cobran USD 0,09–0,15/min
+all-in (Bs 1–1,7/min). Nuestro stack: STT local gratis + LLM centavos + TTS
+cloud ~Bs 0,17/min + infra ya paga → **costo propio ~Bs 0,2–0,3/min**, y las
+entrantes casi gratis. Margen 80%+ donde los revendedores de Vapi tienen 50%.
+
+Propuesta de precios (DECIDE SERGIO — referencia: pymes LatAm ya pagan USD
+90–300/mes por "recepcionista IA"; agencias cobran setup $297–997 + mensual
+$297–497):
+
+| Add-on | Setup | Mensual | Incluye |
+|---|---|---|---|
+| **Voz Entrante** — el bot contesta las llamadas de WhatsApp del negocio | Bs 990 | Bs 490 | 300 min entrantes, transcripción al CRM, voicemail |
+| **Voz Completa** — contesta + llama a confirmar citas | Bs 1.500 | Bs 790 | 500 min + confirmación de citas + reporte de no-shows |
+| Overage | — | Bs 2,5/min | — |
+
+Reglas: precio en Bs con **cláusula de ajuste cambiario** (los costos son
+100% USD y el boliviano flota); minutos incluidos por DEBAJO del uso típico.
+
+**Pitch por rubro (con los números del research):**
+- **Dental (liderar acá — encaja DentalGest):** "confirmación de citas que
+  baja el no-show 40–60%" — pacientes que confirman faltan 3–5% vs 25–35%
+  los que no responden. Se vende el resultado, no el robot.
+- **Universal:** "el 62% de las llamadas a negocios chicos no se contesta y
+  el 85% de esos clientes no vuelve a llamar" — el bot atiende 24/7 la
+  llamada de WhatsApp que hoy se pierde.
+- Advertencia comercial: estos números son de vendors del rubro — sirven de
+  argumento, NO se prometen como garantía.
+
+## 5. Gates y pendientes
+
+1. F0 puede arrancar YA (número de test, sin gasto, sin permisos nuevos).
+2. TTS cloud (Azure/OpenAI) = plataforma paga → **OK explícito de Sergio**
+   antes de crear cuenta (regla gasto-plataformas). Piper local no paga nada.
+3. Rate card Bolivia (precio/min saliente) → confirmar logueado en Meta antes
+   de cotizar F2 a clientes.
+4. Grabación de llamadas: la API lo permite técnicamente; revisar política de
+   Meta + consentimiento (normativa boliviana) antes de grabar — la
+   transcripción con aviso es el camino seguro.
+5. Precios del add-on: propuesta arriba, la ratifica Sergio (bloqueo S1).
+6. Al validar el producto: agregar "Onia Voz" al catálogo
+   `ONIA_CATALOGO_TIPOS_CHATBOT_20260731.md` como add-on de T2/T3.
