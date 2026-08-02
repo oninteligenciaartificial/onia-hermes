@@ -39,7 +39,7 @@
 | **Estética** (`esteticagest`) | 🟢 CASI GRATIS | mismo set que dental (agenda+ficha+aprobaciones). Es: copy/vocabulario + ficha genérica en vez de odontograma + seeder. ~días, no semanas |
 | **Veterinaria** (`vetgest`) | 🟢 CASI GRATIS | ídem estética (la "ficha del paciente" es la mascota + dueño) |
 | **Gastronomía · Servicios profesionales · Educación · Turismo** (`gestios-*`) | 🟢 BARATOS | mismo set que comercio (catálogo+caja). Es: habilitar track + vocabulario + seeder por rubro. El de servicios/educación se beneficia de agenda (ya existe) |
-| **Importadora** (`proveegest-electrico`) | 🟠 TRABAJO REAL | necesita las 2 capacidades NO portadas: **cotizaciones B2B** + **base de conocimiento**, más el costeo de importación (`import_costing` ya está en el core) y TR4 (S4). Provisiona pero entra a menú vacío |
+| **Importadora** (`proveegest-electrico`) | ✅ VENDIBLE núcleo (2026-08-02) | cotizaciones B2B completas + costeo DS 5646 + catálogo reusado + contabilidad. Pendiente: TCO automático diario · entrega con salida de stock · TR4 (S4) |
 | **Construcción** (`proveegest-construccion`) | 🟠 | mismas 2 capacidades que importadora — un solo porte sirve a ambos |
 | **Ganadero** (`ganadero-offline`) | 🔴 EL MÁS LEJOS | exige **modo offline** — arquitectura, no pantallas. Último a propósito |
 

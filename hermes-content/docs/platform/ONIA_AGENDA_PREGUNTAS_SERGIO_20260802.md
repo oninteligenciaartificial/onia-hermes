@@ -32,7 +32,7 @@
 | B1 | **Webs de clientes** | 3 niveles: mini-web automática (Pro) · web completa nuestra (add-on) · NO builder | ✅ 2026-08-02 |
 | B2 | **Agentes WhatsApp** | PRE-ARMADOS por rubro: cliente conecta su número + aprueba | ✅ 2026-08-02 |
 | B3 | **Pricing/promos** | ✅ mensual + fundadores + referidos **Y ADEMÁS plan semanal** (negocios de caja diaria) **+ revisar montos contra el cálculo de valor** — Sergio juntó las opciones | ✅ con tarea |
-| B4 | **Orden de rubros** | **IMPORTADORA primero** (cotizaciones B2B + knowledge; Bolivian Electric = caso real) — estética/vet después | ✅ 2026-08-02 |
+| B4 | **Orden de rubros** | **IMPORTADORA primero** — ✅ EJECUTADO Y EN PRODUCCIÓN 2026-08-02: cotizaciones B2B completas + costeo DS 5646 + card en registro + demo (+56 tests, 1.026 total). Estética/vet después | ✅ hecho |
 | B5 | **Landing: "Comercio" pronto→disponible** | NO ratificado aún (la opción elegida no lo incluía) — sigue "pronto" hasta su palabra | ☐ |
 
 ## C. EN DESARROLLO (mío, con fecha de hoy)
