@@ -96,7 +96,7 @@ export const CONTENDIENTES: readonly Contendiente[] = [
   {
     id: "onia",
     quien: "Onia",
-    ejemplos: "el pack dental, andando hoy",
+    ejemplos: "una plataforma, el rubro dental andando hoy",
     precio: "Bs 320 – 1.500 / mes",
     precioNota: "precio de lanzamiento, publicado más abajo",
     estados: { gestion: "si", siat: "tramite", agentes: "si" },
