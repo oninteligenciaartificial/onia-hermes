@@ -4,10 +4,18 @@ import { Archivo, Bricolage_Grotesque, DM_Sans, Spline_Sans_Mono } from "next/fo
 import { MotionProvider } from "@/motion";
 import "./globals.css";
 
+/*
+ * preload:false en las tres familias que NO usa la home. Desde el porte del
+ * mockup, la landing (y su cromo: header y pie) es UNA sola familia, Archivo.
+ * Bricolage, DM Sans y el mono siguen vivos para /empezar y las paginas
+ * legales — pero precargarlos en la home costaba cuatro fuentes en el camino
+ * del LCP para usar una.
+ */
 const bricolage = Bricolage_Grotesque({
   subsets: ["latin"],
   variable: "--font-display",
   display: "swap",
+  preload: false,
 });
 
 /**
@@ -29,6 +37,7 @@ const dmSans = DM_Sans({
   subsets: ["latin"],
   variable: "--font-sans",
   display: "swap",
+  preload: false,
 });
 
 const splineMono = Spline_Sans_Mono({
