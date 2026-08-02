@@ -1045,3 +1045,104 @@ export async function createFinanceEntry(input: {
   );
   return mapFinanceEntry(rows[0]);
 }
+
+
+// --- Reservas de Cal.com (calcom_bookings) -----------------------------------
+// El webhook de nuestro Cal self-hosted escribe aca cada reserva; el panel las
+// muestra y confirma la reunion del lead que corresponda. Cero API paga.
+
+export type CalcomBooking = {
+  uid: string;
+  title: string;
+  startTime: string;
+  endTime?: string;
+  attendeeName?: string;
+  notes?: string;
+  status: string;
+};
+
+type DbCalcomBooking = {
+  booking_uid: string;
+  title: string | null;
+  start_time: string;
+  end_time: string | null;
+  attendee_name: string | null;
+  notes: string | null;
+  status: string;
+};
+
+function mapCalcomBooking(row: DbCalcomBooking): CalcomBooking {
+  return {
+    uid: row.booking_uid,
+    title: row.title ?? "Reunion",
+    startTime: row.start_time,
+    endTime: row.end_time ?? undefined,
+    attendeeName: row.attendee_name ?? undefined,
+    notes: row.notes ?? undefined,
+    status: row.status,
+  };
+}
+
+export async function listUpcomingCalcomBookings(limit = 8): Promise<CalcomBooking[]> {
+  const nowIso = new Date().toISOString();
+  const rows = await supabaseRequest<DbCalcomBooking[]>(
+    `calcom_bookings?select=booking_uid,title,start_time,end_time,attendee_name,notes,status&start_time=gte.${encodeURIComponent(nowIso)}&status=neq.cancelada&order=start_time.asc&limit=${limit}`,
+  );
+  return rows.map(mapCalcomBooking);
+}
+
+export async function upsertCalcomBooking(input: {
+  uid: string;
+  title?: string;
+  startTime: string;
+  endTime?: string;
+  attendeeName?: string;
+  attendeeEmail?: string;
+  notes?: string;
+  status: "confirmada" | "cancelada";
+  matchedLeadKey?: string;
+  raw?: unknown;
+}): Promise<void> {
+  await supabaseRequest(
+    "calcom_bookings?on_conflict=booking_uid",
+    {
+      method: "POST",
+      headers: { prefer: "resolution=merge-duplicates,return=minimal" },
+      body: JSON.stringify({
+        booking_uid: input.uid,
+        title: input.title ?? null,
+        start_time: input.startTime,
+        end_time: input.endTime ?? null,
+        attendee_name: input.attendeeName ?? null,
+        attendee_email: input.attendeeEmail ?? null,
+        notes: input.notes ?? null,
+        status: input.status,
+        matched_lead_key: input.matchedLeadKey ?? null,
+        raw: input.raw ?? null,
+        updated_at: new Date().toISOString(),
+      }),
+    },
+  );
+}
+
+/**
+ * Marca la reunion de un lead como confirmada, buscandolo por nombre de negocio
+ * (el agenda-form mete "Negocio: X" en las notas de la reserva). Devuelve el
+ * lead_key si hubo UN solo match; con 0 o varios no toca nada.
+ */
+export async function confirmLeadMeetingByCompany(company: string): Promise<string | null> {
+  const clean = company.trim();
+  if (clean.length < 3) return null;
+  const rows = await supabaseRequest<Array<{ lead_key: string; raw: Record<string, unknown> | null }>>(
+    `leads?select=lead_key,raw&company_name=ilike.${encodeURIComponent(`*${clean}*`)}&limit=2`,
+  );
+  if (rows.length !== 1) return null;
+  const lead = rows[0];
+  const nextRaw = { ...(lead.raw ?? {}), meetingStatus: "confirmada" };
+  await supabaseRequest(`leads?lead_key=eq.${encodeURIComponent(lead.lead_key)}`, {
+    method: "PATCH",
+    headers: { prefer: "return=minimal" },
+    body: JSON.stringify({ raw: nextRaw }),
+  });
+  return lead.lead_key;
+}
