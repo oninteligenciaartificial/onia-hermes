@@ -243,6 +243,104 @@ Dos cosas más, gratis y legales, que sí valen:
 
 ---
 
+## 7-bis. Celulares con SIMs + scroll y likes automáticos (pregunta de Sergio, 2026-08-01)
+
+> *"¿Y los celulares para los SIMs? ¿Y para que scrolleen para que no nos baneen y hagan
+> interacciones como likes?"*
+
+Son **dos cosas distintas** y tienen veredictos opuestos. Hay que separarlas.
+
+### (a) SIMs para verificar cuentas — ✅ legítimo y barato, ya estaba decidido
+
+Verificar una cuenta nueva con un número real es un uso normal y previsto. Ya está en
+`ONIA_AI_INFLUENCERS_ACCOUNT_OPS_2026.md`: SIM real (nunca VoIP) por modelo.
+
+**No hace falta un celular por cuenta.** El SMS de verificación se recibe una vez, en cualquier
+teléfono; después la cuenta vive en la app o se opera por API. Para lo que Onia necesita hoy
+(cuenta de Onia + Lucía) alcanza con un teléfono que ya existe y 1-2 chips.
+
+| Ítem | Costo real Bolivia |
+|---|---:|
+| SIM prepago Entel/Tigo (activación) | **Bs 0-50** |
+| Datos 3 GB / 10 GB | Bs 30 / Bs 70-100 al mes |
+| **Total para las cuentas de hoy** | **~Bs 50-100 una vez** |
+
+### (b) Automatizar scroll y likes para "calentar" — 🔴 prohibido en texto literal
+
+Acá no hay zona gris, y es la diferencia exacta con publicar por API. **Publicar por API oficial
+está expresamente contemplado por Meta; automatizar interacciones está expresamente prohibido
+por ambas plataformas**, con estas palabras:
+
+**TikTok** ([Community Guidelines](https://www.tiktok.com/community-guidelines/en-GB/integrity-authenticity)):
+> *"Using bots or scripts to write fake reviews or comments, or to increase likes or shares."* (prohibido)
+> *"We strictly prohibit automation tools, scripts, or other tricks designed to bypass our systems."*
+
+**Meta** ([Spam](https://transparency.meta.com/policies/community-standards/spam/)):
+> *"Posting, sharing, engaging with content or creating accounts... either manually or
+> automatically, at very high frequencies."* (prohibido)
+
+**Meta** ([Account Integrity](https://transparency.meta.com/policies/community-standards/account-integrity/)):
+> *"Creating or using an account or other entity through automated means, such as scripting"*
+> — salvo autorización.
+
+### La paradoja que hace inútil el calentamiento automatizado
+
+El calentamiento existe **para evitar el ban**. Pero la detección de 2026 busca exactamente lo
+que el calentamiento automatizado produce: patrones a intervalos fijos, actividad sostenida sin
+pausas humanas, falta de aleatoriedad contextual, y **muchas cuentas compartiendo device
+fingerprint o IP**. Automatizar el calentamiento **genera la huella que dispara el ban que se
+quería evitar.**
+
+Y el punto de fondo: **solo necesitás calentar una cuenta que parece falsa.** Una cuenta real,
+operada desde un teléfono real por una persona que publica contenido genuino, no tiene nada que
+calentar. El calentamiento es la solución a un problema que solo existe si creás cuentas en masa.
+
+Vale marcar quién lo dice: casi toda la literatura sobre "cómo calentar cuentas" viene de
+vendedores de antidetect browsers. **Incluso GoLogin, que vende la herramienta**, admite que
+llamarlo obligatorio es *"excesivo… un capricho de geeks que poco a poco se está volviendo
+necesidad"* ([gologin.com](https://gologin.com/blog/account-warming-up/)).
+
+### Señal de mercado: los propios proveedores se están retirando
+
+El enforcement se endureció desde fines de 2025. Varios vendedores **ya eliminaron las funciones
+de auto-engagement** y pivotearon a analytics y programación, alejándose de cualquier cosa
+interpretable como bot. Cuando los que venden la herramienta sacan la función, es porque el
+costo de mantenerla superó al beneficio.
+
+Además, un detalle técnico que importa: **cualquier herramienta que pida usuario y contraseña de
+Instagram opera fuera del contrato de API de Meta**. Aunque funcione, el patrón de login se
+marca como sospechoso. Las herramientas legítimas usan OAuth, nunca la contraseña.
+
+### El riesgo específico para Onia
+
+Meta puede restringir Business Managers y cuentas publicitarias por *"close linkage with a
+network of accounts that violate or evade our policies"* (§4). La cuenta publicitaria
+`act_1073680778314945` y el futuro acceso a WhatsApp Business API viven en ese Business Manager.
+**Automatizar likes desde cuentas vinculadas pone en riesgo el activo comercial, no las cuentas
+de contenido.**
+
+### Costo si se hiciera igual (para tenerlo escrito)
+
+| Concepto | 10 cuentas |
+|---|---:|
+| Celulares Android básicos (Bs 1.300-2.100 c/u) | **Bs 13.000-21.000** |
+| SIMs + datos | Bs 300-1.000/mes |
+| Proxies móviles dedicados | ~US$650/mes = **Bs ~7.900/mes** |
+| Tiempo de operación | **23-47 h/semana** |
+
+Contra un runway de 11 semanas y un gasto base de Bs 2.950/mes, la inversión inicial en
+celulares sola equivale a **4-7 meses de operación de Onia**.
+
+### Lo que sí funciona, es gratis y es legal
+
+El engagement que sirve para un mercado de ~150 clínicas nombrables **no es masivo, es dirigido**:
+comentar y responder DMs a mano en las cuentas de esos 150 negocios, 15-20 minutos por día.
+Diez mil likes automáticos repartidos por LatAm no valen lo que veinte comentarios reales en las
+cuentas de los dueños que queremos como clientes. Y no hay nada que automatizar: **es la lista
+que ya tenemos.**
+
+---
+
 ## 8. Lo que aprendí sobre cómo respondí la primera vez
 
 Mi veredicto original llegó a una conclusión defendible por un camino flojo: afirmé una
